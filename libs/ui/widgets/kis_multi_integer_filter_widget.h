@@ -25,9 +25,11 @@
 #include <QVector>
 #include <QSpinBox>
 
+#include "kis_intparsespinbox.h"
+
 #include <vector>
 
-class KisDelayedActionIntegerInput : public QSpinBox
+class KisDelayedActionIntegerInput : public KisIntParseSpinBox
 {
     Q_OBJECT
 

@@ -41,7 +41,7 @@
     </widget>
    </item>
    <item row="0" column="2">
-    <widget class="QSpinBox" name="intLevel"/>
+    <widget class="KisIntParseSpinBox" name="intLevel"/>
    </item>
    <item row="1" column="1">
     <widget class="QLabel" name="textLabel1_2">
@@ -57,7 +57,7 @@
     </widget>
    </item>
    <item row="1" column="2">
-    <widget class="QSpinBox" name="intWindowSize"/>
+    <widget class="KisIntParseSpinBox" name="intWindowSize"/>
    </item>
    <item row="2" column="1">
     <widget class="QLabel" name="textLabel2">
@@ -73,7 +73,7 @@
     </widget>
    </item>
    <item row="2" column="2">
-    <widget class="QSpinBox" name="intOpacity"/>
+    <widget class="KisIntParseSpinBox" name="intOpacity"/>
    </item>
    <item row="3" column="2">
     <spacer>
@@ -93,6 +93,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KisIntParseSpinBox</class>
+   <extends>QSpinBox</extends>
+   <header>kis_intparsespinbox.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>395</width>
+    <width>406</width>
     <height>188</height>
    </rect>
   </property>
@@ -42,7 +42,7 @@
    <item row="0" column="0">
     <widget class="QLabel" name="lblType">
      <property name="text">
-      <string>Type:</string>
+      <string>&amp;Type:</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -105,7 +105,7 @@
     </widget>
    </item>
    <item row="4" column="2">
-    <widget class="QSpinBox" name="saturationSpinBox">
+    <widget class="KisIntParseSpinBox" name="saturationSpinBox">
      <property name="maximum">
       <number>100</number>
      </property>
@@ -198,7 +198,7 @@
     </widget>
    </item>
    <item row="5" column="2">
-    <widget class="QSpinBox" name="valueSpinBox">
+    <widget class="KisIntParseSpinBox" name="valueSpinBox">
      <property name="minimum">
       <number>-100</number>
      </property>
@@ -208,7 +208,7 @@
     </widget>
    </item>
    <item row="2" column="2">
-    <widget class="QSpinBox" name="hueSpinBox">
+    <widget class="KisIntParseSpinBox" name="hueSpinBox">
      <property name="minimum">
       <number>-180</number>
      </property>
@@ -219,6 +219,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KisIntParseSpinBox</class>
+   <extends>QSpinBox</extends>
+   <header>kis_intparsespinbox.h</header>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>cmbType</tabstop>
   <tabstop>chkColorize</tabstop>

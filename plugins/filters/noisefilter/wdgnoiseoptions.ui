@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>174</width>
-    <height>63</height>
+    <height>66</height>
    </rect>
   </property>
   <layout class="QGridLayout">
@@ -50,10 +50,10 @@
     </widget>
    </item>
    <item row="1" column="1">
-    <widget class="QSpinBox" name="intOpacity"/>
+    <widget class="KisIntParseSpinBox" name="intOpacity"/>
    </item>
    <item row="0" column="1">
-    <widget class="QSpinBox" name="intLevel"/>
+    <widget class="KisIntParseSpinBox" name="intLevel"/>
    </item>
    <item row="1" column="2">
     <spacer>
@@ -89,6 +89,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KisIntParseSpinBox</class>
+   <extends>QSpinBox</extends>
+   <header>kis_intparsespinbox.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

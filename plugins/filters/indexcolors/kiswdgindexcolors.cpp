@@ -26,6 +26,8 @@
 #include "palettegeneratorconfig.h"
 #include "ui_kiswdgindexcolors.h"
 
+#include "kis_intparsespinbox.h"
+
 #include <kcolorbutton.h>
 
 KisWdgIndexColors::KisWdgIndexColors(QWidget* parent, Qt::WFlags f, int delay): KisConfigWidget(parent, f, delay)
@@ -81,7 +83,7 @@ void KisWdgIndexColors::setup(QStringList shadesLabels, int ramps)
         QLabel* l1 = new QLabel(QString::fromUtf8("↔"));
         QLabel* l2 = new QLabel(shadesLabels[row]);
 
-        QSpinBox* s = new QSpinBox();
+		QSpinBox* s = new KisIntParseSpinBox();
         s->setMinimum(0);
         s->setMaximum(32);
         s->setValue(2);

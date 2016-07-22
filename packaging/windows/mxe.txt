@@ -42,3 +42,8 @@ make -j4 install
 # WINEARCH=win64 WINEPREFIX=~/.wine64 winecfg
 # Go to the bin directory and test krita:
 # WINEPREFIX=~/.wine64 wine ./krita.exe
+
+
+NOTE: Windragon's patch to vc does not work when cross-building vc from
+ext_vc. The patch also needs to be added to mxe/vc. The reason is wrong
+defines for determining whether we're using mingw.

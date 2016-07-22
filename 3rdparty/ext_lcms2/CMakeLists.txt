@@ -1,5 +1,5 @@
 SET(PREFIX_ext_lcms2 "${EXTPREFIX}" )
-if (MSVC)
+if (MSVC OR MINGW)
 ExternalProject_Add( ext_lcms2
 	DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
 	URL http://files.kde.org/krita/build/dependencies/lcms2-2.8rc1.tar.gz
@@ -13,7 +13,7 @@ ExternalProject_Add( ext_lcms2
 	ALWAYS 0
 	DEPENDS ext_patch
 )
-else (MSVC)
+else (MSVC OR MINGW)
 ExternalProject_Add( ext_lcms2
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
 	URL http://files.kde.org/krita/build/dependencies/lcms2-2.8rc1.tar.gz
@@ -26,4 +26,4 @@ ExternalProject_Add( ext_lcms2
     UPDATE_COMMAND ""
     ALWAYS 0
 )
-endif (MSVC)
+endif (MSVC OR MINGW)

@@ -1,5 +1,5 @@
 SET(PREFIX_ext_zlib "${EXTPREFIX}" )
-if (MSVC)
+if (MSVC OR MINGW)
 ExternalProject_Add(
     ext_zlib
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}

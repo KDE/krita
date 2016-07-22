@@ -1,5 +1,5 @@
 SET(PREFIX_ext_libxslt "${EXTPREFIX}" )
-if (MSVC)
+if (MSVC OR MINGW)
 ExternalProject_Add( ext_libxslt
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
         URL http://files.kde.org/krita/build/dependencies/libxslt-1.1.29.tar.gz
@@ -13,7 +13,7 @@ ExternalProject_Add( ext_libxslt
         ALWAYS 0
         DEPENDS ext_patch ext_libxml2
 )
-else (MSVC)
+else (MSVC OR MINGW)
 ExternalProject_Add( ext_libxslt
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
         URL http://files.kde.org/krita/build/dependencies/libxslt-1.1.29.tar.gz
@@ -27,4 +27,4 @@ ExternalProject_Add( ext_libxslt
         ALWAYS 0
         DEPENDS ext_libxml2
 )
-endif (MSVC)
+endif (MSVC OR MINGW)

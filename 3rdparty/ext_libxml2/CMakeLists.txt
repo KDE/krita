@@ -1,5 +1,5 @@
 SET(PREFIX_ext_libxml2 "${EXTPREFIX}" )
-if (MSVC)
+if (MSVC OR MINGW)
     ExternalProject_Add( ext_libxml2
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
         URL http://files.kde.org/krita/build/dependencies/libxml2-sources-2.9.3.tar.gz
@@ -13,7 +13,7 @@ if (MSVC)
         ALWAYS 0
         DEPENDS ext_patch ext_iconv ext_zlib
     )
-else (MSVC)
+else (MSVC OR MINGW)
     ExternalProject_Add( ext_libxml2
             DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
             URL http://files.kde.org/krita/build/dependencies/libxml2-sources-2.9.3.tar.gz
@@ -28,4 +28,4 @@ else (MSVC)
             ALWAYS 0
             DEPENDS ext_iconv ext_zlib
     )
-endif (MSVC)
+endif (MSVC OR MINGW)

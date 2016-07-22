@@ -1,5 +1,5 @@
 SET(PREFIX_ext_gettext "${EXTPREFIX}" )
-if (MSVC)
+if (MSVC OR MINGW)
 ExternalProject_Add(
     ext_gettext
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
@@ -14,7 +14,7 @@ ExternalProject_Add(
     ALWAYS 0
     DEPENDS ext_patch ext_iconv
 )
-else (MSVC)
+else (MSVC OR MINGW)
 ExternalProject_Add( ext_gettext
 	DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
     URL http://files.kde.org/krita/build/dependencies/gettext-0.19.8.tar.gz
@@ -29,4 +29,4 @@ ExternalProject_Add( ext_gettext
 	ALWAYS 0
 	DEPENDS ext_iconv
 )
-endif (MSVC)
+endif (MSVC OR MINGW)

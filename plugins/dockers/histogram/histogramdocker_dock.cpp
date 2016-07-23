@@ -32,7 +32,7 @@
 HistogramDockerDock::HistogramDockerDock()
     : QDockWidget(i18n("Histogram")),
       m_imageIdleWatcher(new KisIdleWatcher(500, this)),
-      m_canvas(0), m_needsUpdate(true)
+      m_canvas(0)
 {
     QWidget *page = new QWidget(this);
     m_layout = new QVBoxLayout(page);
@@ -70,8 +70,7 @@ void HistogramDockerDock::setCanvas(KoCanvasBase * canvas)
 
         connect(m_canvas->image(), SIGNAL(sigImageUpdated(QRect)), this, SLOT(startUpdateCanvasProjection()), Qt::UniqueConnection);
         connect(m_canvas->image(), SIGNAL(sigColorSpaceChanged(const KoColorSpace*)), this, SLOT(sigColorSpaceChanged(const KoColorSpace*)), Qt::UniqueConnection);
-        m_needsUpdate = true;
-        updateHistogram();
+        m_imageIdleWatcher->startCountdown();
     }
 }
 
@@ -79,27 +78,32 @@ void HistogramDockerDock::unsetCanvas()
 {
     setEnabled(false);
     m_canvas = 0;
-    m_needsUpdate = false;
 }
 
 void HistogramDockerDock::startUpdateCanvasProjection()
 {
     if (isVisible()) {
-        m_needsUpdate = true;
+        m_imageIdleWatcher->startCountdown();
     }
 }
+
+void HistogramDockerDock::showEvent(QShowEvent *event)
+{
+    Q_UNUSED(event);
+    m_imageIdleWatcher->startCountdown();
+}
+
 
 void HistogramDockerDock::sigColorSpaceChanged(const KoColorSpace *cs)
 {
     if (isVisible()) {
-        m_needsUpdate = true;
+        m_imageIdleWatcher->startCountdown();
     }
 }
 
 void HistogramDockerDock::updateHistogram()
 {
-    if (isVisible() && m_needsUpdate) {
+    if (isVisible()) {
         m_histogramWidget->updateHistogram();
-        m_needsUpdate = false;
     }
 }

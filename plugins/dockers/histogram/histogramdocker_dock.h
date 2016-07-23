@@ -43,12 +43,14 @@ public Q_SLOTS:
     void sigColorSpaceChanged(const KoColorSpace* cs);
     void updateHistogram();
 
+protected:
+    void showEvent(QShowEvent *event);
+
 private:
     QVBoxLayout *m_layout;
     KisIdleWatcher *m_imageIdleWatcher;
     HistogramDockerWidget *m_histogramWidget;
     KisCanvas2 *m_canvas;
-    bool m_needsUpdate;
 };
 
 

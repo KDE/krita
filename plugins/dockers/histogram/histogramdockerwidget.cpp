@@ -153,6 +153,10 @@ void HistogramComputationThread::run()
         bin.resize(std::numeric_limits<quint8>::max()+1);
     }
 
+    QRect bounds = m_dev->exactBounds();
+    if( bounds.isEmpty() )
+        return;
+
     KisSequentialConstIterator it(m_dev, m_dev->exactBounds());
     int i;
     quint32 toSkip = nSkip;

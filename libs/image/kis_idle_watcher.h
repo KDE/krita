@@ -40,6 +40,8 @@ public:
     void setTrackedImages(const QVector<KisImageSP> &images);
     void setTrackedImage(KisImageSP image);
 
+    //Force to image modified state and start countdown to event
+    void startCountdown(void) { slotImageModified(); }
 
 Q_SIGNALS:
     void startedIdleMode();

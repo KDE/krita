@@ -48,7 +48,6 @@ private:
     KisCanvas2 *m_canvas;
     QTableView *m_channelTable;
     ChannelModel *m_model;
-    bool m_needsUpdate;
 };
 
 

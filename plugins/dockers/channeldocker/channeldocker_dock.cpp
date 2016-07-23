@@ -39,8 +39,7 @@
 ChannelDockerDock::ChannelDockerDock( ) :
     QDockWidget(i18n("Channels")),
     m_imageIdleWatcher(new KisIdleWatcher(500, this)),
-    m_compressor(new KisSignalCompressor(500, KisSignalCompressor::POSTPONE, this)),
-    m_canvas(0), m_needsUpdate(true)
+    m_canvas(0)
 {
     m_channelTable = new QTableView(this);
     m_model = new ChannelModel(this);
@@ -54,8 +53,6 @@ ChannelDockerDock::ChannelDockerDock( ) :
     setWidget(m_channelTable);
 
     connect(m_channelTable,&QTableView::activated, m_model, &ChannelModel::rowActivated);
-
-    connect(m_compressor, SIGNAL(timeout()),SLOT(startUpdateCanvasProjection()));
 }
 
 void ChannelDockerDock::setCanvas(KoCanvasBase * canvas)
@@ -82,33 +79,25 @@ void ChannelDockerDock::setCanvas(KoCanvasBase * canvas)
         m_imageIdleWatcher->setTrackedImage(m_canvas->image());
         connect(m_imageIdleWatcher, &KisIdleWatcher::startedIdleMode, this, &ChannelDockerDock::updateChannelTable);
 
-        connect(m_canvas->image(), SIGNAL(sigImageUpdated(QRect)), m_compressor, SLOT(start()), Qt::UniqueConnection);
         connect(dev, SIGNAL(colorSpaceChanged(const KoColorSpace*)), m_model, SLOT(slotColorSpaceChanged(const KoColorSpace*)));
         connect(dev, SIGNAL(colorSpaceChanged(const KoColorSpace*)), m_canvas, SLOT(channelSelectionChanged()));
         connect(m_model, SIGNAL(channelFlagsChanged()), m_canvas, SLOT(channelSelectionChanged()));
-        m_needsUpdate=true;
-        updateChannelTable();
+        m_imageIdleWatcher->startCountdown();
     }
 
 }
 
 void ChannelDockerDock::startUpdateCanvasProjection()
 {
-    m_needsUpdate = true;
+    m_imageIdleWatcher->startCountdown();
 }
 
 void ChannelDockerDock::updateChannelTable()
 {
-    if (isVisible() && m_needsUpdate && m_canvas && m_canvas->image()){
-        if( m_canvas->image()->currentLevelOfDetail() !=0 ){
-            m_compressor->start();
-            return;
-        }
-
+    if (isVisible() && m_canvas && m_canvas->image()){
         m_model->updateData(m_canvas);
         m_channelTable->resizeRowsToContents();
         m_channelTable->resizeColumnsToContents();
-        m_needsUpdate=false;
     }
 }
 

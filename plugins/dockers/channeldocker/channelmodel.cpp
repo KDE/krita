@@ -157,7 +157,6 @@ void ChannelModel::rowActivated(const QModelIndex &index)
 
         emit channelFlagsChanged();
         emit dataChanged(this->index(0, 0), this->index(channels.count(), 0));
-
     }
 }
 
@@ -213,29 +212,33 @@ void ChannelModel::updateThumbnails(void)
         const KoColorSpace* cs = canvas_image->colorSpace();
         quint32 channelCount = cs->channelCount();
 
-        KisPaintDeviceSP dev = canvas_image->projection();        
-        KisPaintDeviceSP thumbnailDev = dev->createThumbnailDeviceOversampled(m_thumbnailSizeLimit.width(), m_thumbnailSizeLimit.height(),
+        KisPaintDeviceSP dev = canvas_image->projection();
+
+        //make sure thumbnail maintains aspect ratio of the original image
+        QSize thumbnailSize(canvas_image->bounds().size());
+        thumbnailSize.scale(m_thumbnailSizeLimit, Qt::KeepAspectRatio);
+
+        KisPaintDeviceSP thumbnailDev = dev->createThumbnailDeviceOversampled(thumbnailSize.width(), thumbnailSize.height(),
                                                                               m_oversampleRatio, canvas_image->bounds());
 
-        QSize thumbnailSizeOversample = thumbnailDev->extent().size();
+        QRect thumbnailRect = thumbnailDev->exactBounds();
+        QSize thumbnailSizeOversample = thumbnailRect.size();
 
         m_thumbnails.resize(channelCount);
 
-        QVector<uchar*> image_cache(channelCount);
-        auto image_cache_iterator = image_cache.begin();
-        for (auto &img : m_thumbnails) {
-            img = QImage(thumbnailSizeOversample, QImage::Format_Grayscale8);
-            *(image_cache_iterator++) = img.bits();
+        QVector<uchar*> image_cache = thumbnailDev->readPlanarBytes(0,0,thumbnailSize.width(), thumbnailSize.height());
+        Q_ASSERT(image_cache.size() == channelCount);
+
+        for (quint32 i = 0; i < channelCount; ++i) {
+            m_thumbnails[i] = QImage(thumbnailSizeOversample, QImage::Format_Grayscale8);
+            QImage &img = m_thumbnails[i];
+
+            for (int y = 0; y < img.height(); y++)
+            {
+                memcpy(img.scanLine(y), image_cache[i]+y*thumbnailSize.width(), img.bytesPerLine());
+            }
         }
 
-        KisSequentialConstIterator it(thumbnailDev, thumbnailDev->extent());
-
-        do {
-            const quint8* pixel = it.rawDataConst();
-            for (quint32 i = 0; i < channelCount; ++i) {
-                *(image_cache[i]++) = cs->scaleToU8(pixel, i);
-            }
-        } while (it.nextPixel());
     }
 }
 

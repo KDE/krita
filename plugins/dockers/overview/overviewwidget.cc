@@ -86,7 +86,6 @@ OverviewWidget::OverviewWidget(QWidget * parent)
     , m_canvas(0)
     , m_dragging(false)
     , m_imageIdleWatcher(500)
-    , m_thumbnailNeedsUpdate(true)
 {
     setMouseTracking(true);
     KisConfig cfg;
@@ -115,7 +114,6 @@ void OverviewWidget::setCanvas(KoCanvasBase * canvas)
         connect(m_canvas->image(), SIGNAL(sigSizeChanged(QPointF, QPointF)),SLOT(startUpdateCanvasProjection()));
 
         connect(m_canvas->canvasController()->proxyObject, SIGNAL(canvasOffsetXChanged(int)), this, SLOT(update()), Qt::UniqueConnection);
-        m_thumbnailNeedsUpdate = true;
         generateThumbnail();
     }
 }
@@ -156,17 +154,13 @@ QTransform OverviewWidget::imageToPreviewTransform()
 
 void OverviewWidget::startUpdateCanvasProjection()
 {
-    if (!m_canvas) return;
-
-    m_thumbnailNeedsUpdate = true;
+    m_imageIdleWatcher.startCountdown();
 }
 
 void OverviewWidget::showEvent(QShowEvent *event)
 {
     Q_UNUSED(event);
-    if (!m_canvas) return;
-    m_thumbnailNeedsUpdate = true;
-    generateThumbnail();
+    m_imageIdleWatcher.startCountdown();
 }
 
 void OverviewWidget::resizeEvent(QResizeEvent *event)
@@ -177,7 +171,7 @@ void OverviewWidget::resizeEvent(QResizeEvent *event)
             QSize newSize = calculatePreviewSize();
             m_pixmap = m_pixmap.scaled(newSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
         }
-        m_thumbnailNeedsUpdate=true;
+        m_imageIdleWatcher.startCountdown();
     }
 }
 
@@ -240,7 +234,7 @@ void OverviewWidget::generateThumbnail()
     QSize previewSize = calculatePreviewSize();
     if (isVisible() && previewSize.isValid()) {
         QMutexLocker locker(&mutex);
-        if (m_canvas && m_thumbnailNeedsUpdate) { //this happens in gui thread, so we don't need a mutex to protect m_thumbnailNeedsUpdate
+        if (m_canvas) {
             KisImageSP image = m_canvas->image();
 
             if (!strokeId.isNull()) {
@@ -263,7 +257,6 @@ void OverviewWidget::generateThumbnail()
                 image->addJob(strokeId, jd);
             }
             image->endStroke(strokeId);
-            m_thumbnailNeedsUpdate = false;
         }
     }
 }
@@ -342,8 +335,6 @@ OverviewThumbnailStrokeStrategy::~OverviewThumbnailStrokeStrategy()
 void OverviewThumbnailStrokeStrategy::initStrokeCallback()
 {
 }
-
-#include <QThread>
 
 void OverviewThumbnailStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
 {

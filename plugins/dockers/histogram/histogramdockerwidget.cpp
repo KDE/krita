@@ -89,7 +89,7 @@ void HistogramDockerWidget::paintEvent(QPaintEvent *event)
         for (int chan = 0; chan < channels.size(); chan++) {
             if( channels.at(chan)->channelType() != KoChannelInfo::ALPHA ){
                 std::vector<quint32> histogramTemp = m_histogramData.at(chan);
-                //use 95th percentile, rather than max for better visual appearance
+                //use 98th percentile, rather than max for better visual appearance
                 int nthPercentile = 2*histogramTemp.size()/100;
                 //unsigned int max = *std::max_element(m_histogramData.at(chan).begin(),m_histogramData.at(chan).end());
                 std::nth_element(histogramTemp.begin(),

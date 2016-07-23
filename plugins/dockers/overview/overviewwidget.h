@@ -101,7 +101,6 @@ private:
 
     QColor m_outlineColor;
     KisIdleWatcher m_imageIdleWatcher;
-    bool m_thumbnailNeedsUpdate;
     KisStrokeId strokeId;
     QMutex mutex;
 };

@@ -569,7 +569,7 @@ PerformanceTab::PerformanceTab(QWidget *parent, const char *name)
     SliderAndSpinBoxSync *sync2 =
         new SliderAndSpinBoxSync(sliderPoolLimit,
                                  intPoolLimit,
-                                 std::bind(&QSpinBox::value,
+								 std::bind(&KisIntParseSpinBox::value,
                                              intMemoryLimit));
 
 

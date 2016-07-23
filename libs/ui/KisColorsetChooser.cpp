@@ -42,6 +42,8 @@
 #include <QLineEdit>
 #include <kis_canvas_resource_provider.h>
 
+#include "kis_intparsespinbox.h"
+
 class ColorSetDelegate : public QAbstractItemDelegate
 {
 public:
@@ -101,7 +103,7 @@ KisColorsetChooser::KisColorsetChooser(QWidget* parent): QWidget(parent)
     m_nameEdit->setPlaceholderText(i18n("Insert name"));
     m_nameEdit->setClearButtonEnabled(true);
 
-    m_columnEdit = new QSpinBox(this);
+	m_columnEdit = new KisIntParseSpinBox(this);
     m_columnEdit->setRange(1, 30);
     m_columnEdit->setValue(10);
 

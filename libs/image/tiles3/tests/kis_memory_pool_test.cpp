@@ -31,7 +31,7 @@
 
 class TestingClass
 {
-private:
+public:
     quint8 m_data[OBJECT_SIZE];
 };
 

@@ -231,7 +231,7 @@ static bool endsWithHashNumber(const QString &s)
 
 static inline bool isValidDBusObjectPathCharacter(const QChar &c)
 {
-    register ushort u = c.unicode();
+    ushort u = c.unicode();
     return (u >= QLatin1Char('a') && u <= QLatin1Char('z'))
            || (u >= QLatin1Char('A') && u <= QLatin1Char('Z'))
            || (u >= QLatin1Char('0') && u <= QLatin1Char('9'))

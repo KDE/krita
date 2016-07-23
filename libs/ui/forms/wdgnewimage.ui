@@ -41,7 +41,7 @@
       </sizepolicy>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tab">
       <property name="sizePolicy">
@@ -418,7 +418,7 @@
         </widget>
        </item>
        <item row="1" column="2">
-        <widget class="QSpinBox" name="intNumLayers">
+        <widget class="KisIntParseSpinBox" name="intNumLayers">
          <property name="minimumSize">
           <size>
            <width>0</width>
@@ -666,6 +666,11 @@
    <extends>QWidget</extends>
    <header>kis_slider_spin_box.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KisIntParseSpinBox</class>
+   <extends>QSpinBox</extends>
+   <header>kis_intparsespinbox.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

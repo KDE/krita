@@ -94,6 +94,11 @@ void ChannelDockerDock::unsetCanvas()
     m_model->unsetCanvas();
 }
 
+void ChannelDockerDock::showEvent(QShowEvent *event)
+{
+    Q_UNUSED(event);
+    m_imageIdleWatcher->startCountdown();
+}
 
 void ChannelDockerDock::startUpdateCanvasProjection()
 {

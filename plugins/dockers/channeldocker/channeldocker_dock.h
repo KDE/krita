@@ -35,6 +35,7 @@ public:
     QString observerName() { return "ChannelDockerDock"; }
     void setCanvas(KoCanvasBase *canvas);
     void unsetCanvas();
+    void showEvent(QShowEvent *event);
 
 public Q_SLOTS:
     void startUpdateCanvasProjection();

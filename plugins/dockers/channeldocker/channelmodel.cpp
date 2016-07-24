@@ -209,6 +209,48 @@ void ChannelModel::updateData(KisCanvas2 *canvas)
     endResetModel();
 }
 
+void convert(QImage img, uchar* colorPlane, int width, KoID colorDepth)
+{
+    if (colorDepth == Integer8BitsColorDepthID) {
+        for (int y = 0; y < img.height(); y++) {
+            memcpy(img.scanLine(y), colorPlane + y * width, img.bytesPerLine());
+        }
+    } else if (colorDepth == Integer16BitsColorDepthID) {
+
+        for (int y = 0; y < img.height(); y++) {
+            quint16* src = ((quint16*) colorPlane) + y * width;
+            uchar* dst = img.scanLine(y);
+            for (int x = 0; x < img.bytesPerLine(); x++) {
+                *(dst++) = (uchar)(*(src+x));
+            }
+        }
+    } else if (colorDepth == Float16BitsColorDepthID) {
+        for (int y = 0; y < img.height(); y++) {
+            float* src = ((float*) colorPlane) + y * width;
+            uchar* dst = img.scanLine(y);
+            for (int x = 0; x < img.bytesPerLine(); x++) {
+                *(dst++) = (uchar)(*(src+x));
+            }
+        }
+    } else  if (colorDepth == Float32BitsColorDepthID) {
+        for (int y = 0; y < img.height(); y++) {
+            double* src = ((double*) colorPlane) + y * width;
+            uchar* dst = img.scanLine(y);
+            for (int x = 0; x < img.bytesPerLine(); x++) {
+                *(dst++) = (uchar)(*(src+x));
+            }
+        }
+    } else if (colorDepth == Float64BitsColorDepthID) {
+        for (int y = 0; y < img.height(); y++) {
+            long double* src = ((long double*) colorPlane) + y * width;
+            uchar* dst = img.scanLine(y);
+            for (int x = 0; x < img.bytesPerLine(); x++) {
+                *(dst++) = (uchar)(*(src+x));
+            }
+        }
+    }
+}
+
 //Create thumbnails from full image.
 //Assumptions: thumbnail size is small compared to the original image and thumbnail quality
 //doesn't need to be high, so we use fast but not very accurate algorithm.
@@ -227,22 +269,18 @@ void ChannelModel::updateThumbnails(void)
         thumbnailSize.scale(m_thumbnailSizeLimit, Qt::KeepAspectRatio);
 
         KisPaintDeviceSP thumbnailDev = dev->createThumbnailDeviceOversampled(thumbnailSize.width(), thumbnailSize.height(),
-                                                                              m_oversampleRatio, canvas_image->bounds());
+                                        m_oversampleRatio, canvas_image->bounds());
 
 
         m_thumbnails.resize(channelCount);
 
-        QVector<uchar*> image_cache = thumbnailDev->readPlanarBytes(0,0,thumbnailSize.width(), thumbnailSize.height());
+        QVector<uchar*> image_cache = thumbnailDev->readPlanarBytes(0, 0, thumbnailSize.width(), thumbnailSize.height());
         Q_ASSERT(image_cache.size() == channelCount);
 
         for (quint32 i = 0; i < channelCount; ++i) {
             m_thumbnails[i] = QImage(thumbnailSize, QImage::Format_Grayscale8);
             QImage &img = m_thumbnails[i];
-
-            for (int y = 0; y < img.height(); y++)
-            {
-                memcpy(img.scanLine(y), image_cache[i]+y*thumbnailSize.width(), img.bytesPerLine());
-            }
+            convert(img, image_cache[i], thumbnailSize.width(), cs->colorDepthId());
         }
 
     }

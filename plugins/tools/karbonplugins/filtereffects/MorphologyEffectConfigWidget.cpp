@@ -29,6 +29,8 @@
 #include <QRadioButton>
 #include <QButtonGroup>
 
+#include "kis_doubleparsespinbox.h"
+
 MorphologyEffectConfigWidget::MorphologyEffectConfigWidget(QWidget *parent)
     : KoFilterEffectConfigWidgetBase(parent)
     , m_effect(0)
@@ -45,13 +47,13 @@ MorphologyEffectConfigWidget::MorphologyEffectConfigWidget(QWidget *parent)
     g->addWidget(dilate, 0, 2);
 
     g->addWidget(new QLabel(i18n("Radius x:"), this), 1, 0);
-    m_radiusX = new QDoubleSpinBox(this);
+	m_radiusX = new KisDoubleParseSpinBox(this);
     m_radiusX->setRange(0.0, 100);
     m_radiusX->setSingleStep(0.5);
     g->addWidget(m_radiusX, 1, 1, 1, 2);
 
     g->addWidget(new QLabel(i18n("Radius y:"), this), 2, 0);
-    m_radiusY = new QDoubleSpinBox(this);
+	m_radiusY = new KisDoubleParseSpinBox(this);
     m_radiusY->setRange(0.0, 100);
     m_radiusY->setSingleStep(0.5);
     g->addWidget(m_radiusY, 2, 1, 1, 2);

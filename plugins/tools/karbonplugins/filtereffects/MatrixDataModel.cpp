@@ -19,6 +19,8 @@
 
 #include "MatrixDataModel.h"
 
+#include "kis_numparser.h"
+
 MatrixDataModel::MatrixDataModel(QObject *parent)
     : QAbstractTableModel(parent)
     , m_rows(0)
@@ -69,7 +71,7 @@ bool MatrixDataModel::setData(const QModelIndex &index, const QVariant &value, i
 {
     int element = index.row() * m_cols + index.column();
     bool valid = false;
-    qreal elementValue = value.toDouble(&valid);
+	qreal elementValue = KisNumericParser::parseSimpleMathExpr(value.toString(), &valid);
     if (!valid) {
         return false;
     }

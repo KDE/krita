@@ -62,9 +62,7 @@ void HistogramDockerDock::setCanvas(KoCanvasBase * canvas)
 
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
     if (m_canvas) {
-
-        KisPaintDeviceSP dev = m_canvas->image()->projection();
-        m_histogramWidget->setPaintDevice(dev, m_canvas->image()->bounds());
+        m_histogramWidget->setPaintDevice(m_canvas);
 
         m_imageIdleWatcher->setTrackedImage(m_canvas->image());
 
@@ -78,6 +76,7 @@ void HistogramDockerDock::unsetCanvas()
 {
     setEnabled(false);
     m_canvas = 0;
+    m_imageIdleWatcher->startCountdown();
 }
 
 void HistogramDockerDock::startUpdateCanvasProjection()

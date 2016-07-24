@@ -26,6 +26,8 @@
 #include "kis_types.h"
 #include <vector>
 
+class KisCanvas2;
+
 typedef std::vector<std::vector<quint32> > HistVector; //Don't use QVector here - it's too slow for this purpose
 
 
@@ -55,7 +57,7 @@ class HistogramDockerWidget : public QLabel
 public:
     HistogramDockerWidget(QWidget *parent = 0, const char *name = 0, Qt::WindowFlags f = 0);
     ~HistogramDockerWidget();
-    void setPaintDevice(KisPaintDeviceSP dev, const QRect &bounds );
+    void setPaintDevice(KisCanvas2* canvas);
     void paintEvent(QPaintEvent *event);
 
 public Q_SLOTS:

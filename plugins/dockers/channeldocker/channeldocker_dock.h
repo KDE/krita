@@ -33,11 +33,11 @@ public:
     ChannelDockerDock();
 
     QString observerName() { return "ChannelDockerDock"; }
-    virtual void setCanvas(KoCanvasBase *canvas);
-    virtual void unsetCanvas() { m_canvas = 0; setEnabled(false);}
+    void setCanvas(KoCanvasBase *canvas);
+    void unsetCanvas();
 
 public Q_SLOTS:
-    virtual void startUpdateCanvasProjection();
+    void startUpdateCanvasProjection();
 
 private Q_SLOTS:
     void updateChannelTable(void);

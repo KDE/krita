@@ -87,6 +87,14 @@ void ChannelDockerDock::setCanvas(KoCanvasBase * canvas)
 
 }
 
+void ChannelDockerDock::unsetCanvas()
+{
+    setEnabled(false);
+    m_canvas = 0;
+    m_model->unsetCanvas();
+}
+
+
 void ChannelDockerDock::startUpdateCanvasProjection()
 {
     m_imageIdleWatcher->startCountdown();

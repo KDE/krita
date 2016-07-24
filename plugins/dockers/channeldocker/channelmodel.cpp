@@ -42,11 +42,11 @@ ChannelModel::~ChannelModel()
 QVariant ChannelModel::data(const QModelIndex& index, int role) const
 {
     if (m_canvas && index.isValid()) {
-        auto rootLayer = m_canvas->image()->rootLayer();
-        auto cs = rootLayer->colorSpace();
-        auto channels = cs->channels();
+        KisGroupLayerSP rootLayer = m_canvas->image()->rootLayer();
+        const KoColorSpace* cs = rootLayer->colorSpace();
+        QList<KoChannelInfo*> channels = cs->channels();
 
-        int channelIndex = KoChannelInfo::displayPositionToChannelIndex(index.row(), channels);
+        int channelIndex = index.row();
 
         switch (role) {
         case Qt::DisplayRole: {
@@ -108,7 +108,7 @@ bool ChannelModel::setData(const QModelIndex& index, const QVariant& value, int 
         auto channels = cs->channels();
         Q_ASSERT(index.row() <= channels.count());
 
-        int channelIndex = KoChannelInfo::displayPositionToChannelIndex(index.row(), channels);
+        int channelIndex = index.row();
 
         if (role == Qt::CheckStateRole) {
             QBitArray flags = cs->channelFlags(true, true);
@@ -135,12 +135,12 @@ bool ChannelModel::setData(const QModelIndex& index, const QVariant& value, int 
 void ChannelModel::rowActivated(const QModelIndex &index)
 {
     if (m_canvas && m_canvas->image()) {
-        auto rootLayer = m_canvas->image()->rootLayer();
-        auto cs = rootLayer->colorSpace();
-        auto channels = cs->channels();
+        KisGroupLayerWSP rootLayer = m_canvas->image()->rootLayer();
+        const KoColorSpace* cs = rootLayer->colorSpace();
+        QList<KoChannelInfo*> channels = cs->channels();
         Q_ASSERT(index.row() <= channels.count());
 
-        int channelIndex = KoChannelInfo::displayPositionToChannelIndex(index.row(), channels);
+        int channelIndex = index.row();
 
         QBitArray flags = cs->channelFlags(true, true);
         Q_ASSERT(!flags.isEmpty());
@@ -165,6 +165,14 @@ Qt::ItemFlags ChannelModel::flags(const QModelIndex& /*index*/) const
 {
     Qt::ItemFlags flags = Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsUserCheckable;
     return flags;
+}
+
+void ChannelModel::unsetCanvas()
+{
+    beginResetModel();
+    m_canvas = 0;
+    updateThumbnails();
+    endResetModel();
 }
 
 void ChannelModel::setThumbnailSizeLimit(QSize size)

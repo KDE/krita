@@ -38,7 +38,7 @@
 
 ChannelDockerDock::ChannelDockerDock( ) :
     QDockWidget(i18n("Channels")),
-    m_imageIdleWatcher(new KisIdleWatcher(500, this)),
+    m_imageIdleWatcher(new KisIdleWatcher(250, this)),
     m_canvas(0)
 {
     m_channelTable = new QTableView(this);

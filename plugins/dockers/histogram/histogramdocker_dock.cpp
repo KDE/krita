@@ -31,7 +31,7 @@
 
 HistogramDockerDock::HistogramDockerDock()
     : QDockWidget(i18n("Histogram")),
-      m_imageIdleWatcher(new KisIdleWatcher(500, this)),
+      m_imageIdleWatcher(new KisIdleWatcher(250, this)),
       m_canvas(0)
 {
     QWidget *page = new QWidget(this);

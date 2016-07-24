@@ -221,8 +221,6 @@ void ChannelModel::updateThumbnails(void)
         KisPaintDeviceSP thumbnailDev = dev->createThumbnailDeviceOversampled(thumbnailSize.width(), thumbnailSize.height(),
                                                                               m_oversampleRatio, canvas_image->bounds());
 
-        QRect thumbnailRect = thumbnailDev->exactBounds();
-        QSize thumbnailSizeOversample = thumbnailRect.size();
 
         m_thumbnails.resize(channelCount);
 
@@ -230,7 +228,7 @@ void ChannelModel::updateThumbnails(void)
         Q_ASSERT(image_cache.size() == channelCount);
 
         for (quint32 i = 0; i < channelCount; ++i) {
-            m_thumbnails[i] = QImage(thumbnailSizeOversample, QImage::Format_Grayscale8);
+            m_thumbnails[i] = QImage(thumbnailSize, QImage::Format_Grayscale8);
             QImage &img = m_thumbnails[i];
 
             for (int y = 0; y < img.height(); y++)

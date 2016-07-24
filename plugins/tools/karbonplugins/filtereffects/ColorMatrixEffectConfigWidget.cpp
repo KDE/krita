@@ -32,6 +32,8 @@
 #include <QTableView>
 #include <QHeaderView>
 
+#include "kis_doubleparsespinbox.h"
+
 ColorMatrixEffectConfigWidget::ColorMatrixEffectConfigWidget(QWidget *parent)
     : KoFilterEffectConfigWidgetBase(parent)
     , m_effect(0)
@@ -62,7 +64,7 @@ ColorMatrixEffectConfigWidget::ColorMatrixEffectConfigWidget(QWidget *parent)
     QWidget *saturateWidget = new QWidget(m_stack);
     QGridLayout *saturateLayout = new QGridLayout(saturateWidget);
     saturateLayout->addWidget(new QLabel(i18n("Saturate value"), saturateWidget), 0, 0);
-    m_saturate = new QDoubleSpinBox(saturateWidget);
+	m_saturate = new KisDoubleParseSpinBox(saturateWidget);
     m_saturate->setRange(0.0, 1.0);
     m_saturate->setSingleStep(0.05);
     saturateLayout->addWidget(m_saturate, 0, 1);
@@ -73,7 +75,7 @@ ColorMatrixEffectConfigWidget::ColorMatrixEffectConfigWidget(QWidget *parent)
     QWidget *hueRotateWidget = new QWidget(m_stack);
     QGridLayout *hueRotateLayout = new QGridLayout(hueRotateWidget);
     hueRotateLayout->addWidget(new QLabel(i18n("Angle"), hueRotateWidget), 0, 0);
-    m_hueRotate = new QDoubleSpinBox(hueRotateWidget);
+	m_hueRotate = new KisDoubleParseSpinBox(hueRotateWidget);
     m_hueRotate->setRange(0.0, 360.0);
     m_hueRotate->setSingleStep(1.0);
     hueRotateLayout->addWidget(m_hueRotate, 0, 1);

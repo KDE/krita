@@ -103,20 +103,18 @@ int ChannelModel::columnCount(const QModelIndex& /*parent*/) const
 bool ChannelModel::setData(const QModelIndex& index, const QVariant& value, int role)
 {
     if (m_canvas && m_canvas->image()) {
-        auto rootLayer = m_canvas->image()->rootLayer();
-        auto cs = rootLayer->colorSpace();
-        auto channels = cs->channels();
+        KisGroupLayerSP rootLayer = m_canvas->image()->rootLayer();
+        const KoColorSpace* cs = rootLayer->colorSpace();
+        QList<KoChannelInfo*> channels = cs->channels();
         Q_ASSERT(index.row() <= channels.count());
 
         int channelIndex = index.row();
 
         if (role == Qt::CheckStateRole) {
-            QBitArray flags = cs->channelFlags(true, true);
+            QBitArray flags = rootLayer->channelFlags();
+            flags = flags.isEmpty() ? cs->channelFlags(true, true) : flags;
             Q_ASSERT(!flags.isEmpty());
-            if (flags.isEmpty())
-                return false;
 
-            //flags = flags.isEmpty() ? cs->channelFlags(true, true) : flags;
             flags.setBit(channelIndex, value.toInt() == Qt::Checked);
             rootLayer->setChannelFlags(flags);
 
@@ -142,10 +140,9 @@ void ChannelModel::rowActivated(const QModelIndex &index)
 
         int channelIndex = index.row();
 
-        QBitArray flags = cs->channelFlags(true, true);
+        QBitArray flags = rootLayer->channelFlags();
+        flags = flags.isEmpty() ? cs->channelFlags(true, true) : flags;
         Q_ASSERT(!flags.isEmpty());
-        if (flags.isEmpty())
-            return;
 
         for (int i = 0; i < channels.count(); ++i) {
             if (channels[i]->channelType() != KoChannelInfo::ALPHA) {

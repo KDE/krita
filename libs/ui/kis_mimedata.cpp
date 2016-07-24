@@ -128,8 +128,6 @@ QVariant KisMimeData::retrieveData(const QString &mimetype, QVariant::Type prefe
         KisConfig cfg;
 
         KisDocument *doc = createDocument(m_nodes);
-        doc->image()->refreshGraph();
-        doc->image()->waitForDone();
 
         return doc->image()->projection()->convertToQImage(cfg.displayProfile(QApplication::desktop()->screenNumber(qApp->activeWindow())),
                                                            KoColorConversionTransformation::internalRenderingIntent(),

@@ -29,6 +29,7 @@
 
 #include "KoColorSpaceConstants.h"
 #include "KoColorConversionTransformation.h"
+#include "KoColorProofingConversionTransformation.h"
 #include "KoCompositeOp.h"
 #include <KoID.h>
 #include "kritapigment_export.h"
@@ -107,17 +108,17 @@ public:
      * maybe convert to 3d space in future?
      */
     QPolygonF gamutXYY() const;
-    
+
     /*
      * @returns a polygon with 5 samples per channel converted to xyY, but unlike
      * gamutxyY it focuses on the luminance. This then can be used to visualise
      * the approximate trc of a given colorspace.
      */
     QPolygonF estimatedTRCXYY() const;
-    
+
     QVector <qreal> colorants() const;
     QVector <qreal> lumaCoefficients() const;
-    
+
     //========== Channels =====================================================//
 
     /// Return a list describing all the channels this color model has. The order
@@ -370,6 +371,31 @@ public:
                                  quint32 numPixels,
                                  KoColorConversionTransformation::Intent renderingIntent,
                                  KoColorConversionTransformation::ConversionFlags conversionFlags) const;
+
+    virtual KoColorConversionTransformation *createProofingTransform(const KoColorSpace * dstColorSpace,
+                                                             const KoColorSpace * proofingSpace,
+                                                             KoColorConversionTransformation::Intent renderingIntent,
+                                                             KoColorConversionTransformation::Intent proofingIntent,
+                                                             KoColorConversionTransformation::ConversionFlags conversionFlags,
+                                                             quint8 *gamutWarning, double adaptationState) const;
+    /**
+     * @brief proofPixelsTo
+     * @param src
+     * @param dst
+     * @param dstColorSpace the colorspace to which we go to.
+     * @param proofingSpace the proofing space.
+     * @param numPixels the amount of pixels.
+     * @param renderingIntent the rendering intent used for rendering.
+     * @param proofingIntent the intent used for proofing.
+     * @param conversionFlags the conversion flags.
+     * @param gamutWarning the data() of a KoColor.
+     * @param adaptationState the state of adaptation, only affects absolute colorimetric.
+     * @return
+     */
+    virtual bool proofPixelsTo(const quint8 * src,
+                               quint8 * dst,
+                               quint32 numPixels,
+                               KoColorConversionTransformation *proofingTransform) const;
 
 //============================== Manipulation functions ==========================//
 

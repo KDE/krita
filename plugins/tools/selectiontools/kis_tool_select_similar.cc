@@ -75,12 +75,13 @@ void selectByColor(KisPaintDeviceSP dev, KisPixelSelectionSP selection, const qu
 
 
 KisToolSelectSimilar::KisToolSelectSimilar(KoCanvasBase * canvas)
-    : KisToolSelectBase(canvas,
-                        KisCursor::load("tool_similar_selection_cursor.png", 6, 6),
-                        i18n("Similar Color Selection")),
-     m_fuzziness(20)
+    : KisToolSelect(canvas,
+                    KisCursor::load("tool_similar_selection_cursor.png", 6, 6),
+                    i18n("Similar Color Selection")),
+      m_fuzziness(20)
 {
-    connect(&m_widgetHelper, SIGNAL(selectionActionChanged(int)), this, SLOT(setSelectionAction(int)));
+    connect(&m_widgetHelper, &KisSelectionToolConfigWidgetHelper::selectionActionChanged,
+            this, &KisToolSelectSimilar::setSelectionAction);
 }
 
 void KisToolSelectSimilar::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
@@ -166,16 +167,7 @@ QWidget* KisToolSelectSimilar::createOptionWidget()
     return selectionWidget;
 }
 
-void KisToolSelectSimilar::setSelectionAction(int newSelectionAction)
+void KisToolSelectSimilar::setSelectionAction(int action)
 {
-    if(newSelectionAction >= SELECTION_REPLACE && newSelectionAction <= SELECTION_INTERSECT && m_selectionAction != newSelectionAction)
-    {
-      if(m_widgetHelper.optionWidget())
-      {
-          m_widgetHelper.slotSetAction(newSelectionAction);
-      }
-      m_selectionAction = (SelectionAction)newSelectionAction;
-      emit selectionActionChanged();
-    }
+    changeSelectionAction(action);
 }
-

@@ -56,12 +56,13 @@
 
 
 KisToolSelectOutline::KisToolSelectOutline(KoCanvasBase * canvas)
-        : KisToolSelectBase(canvas,
-                  KisCursor::load("tool_outline_selection_cursor.png", 5, 5),
-                  i18n("Outline Selection")),
-          m_paintPath(new QPainterPath())
+    : KisToolSelect(canvas,
+                    KisCursor::load("tool_outline_selection_cursor.png", 5, 5),
+                    i18n("Outline Selection")),
+      m_paintPath(new QPainterPath())
 {
-    connect(&m_widgetHelper, SIGNAL(selectionActionChanged(int)), this, SLOT(setSelectionAction(int)));
+    connect(&m_widgetHelper, &KisSelectionToolConfigWidgetHelper::selectionActionChanged,
+            this, &KisToolSelectOutline::setSelectionAction);
 }
 
 KisToolSelectOutline::~KisToolSelectOutline()
@@ -189,15 +190,7 @@ void KisToolSelectOutline::deactivate()
     KisTool::deactivate();
 }
 
-void KisToolSelectOutline::setSelectionAction(int newSelectionAction)
+void KisToolSelectOutline::setSelectionAction(int action)
 {
-    if(newSelectionAction >= SELECTION_REPLACE && newSelectionAction <= SELECTION_INTERSECT && m_selectionAction != newSelectionAction)
-    {
-        if(m_widgetHelper.optionWidget())
-        {
-            m_widgetHelper.slotSetAction(newSelectionAction);
-        }
-        m_selectionAction = (SelectionAction)newSelectionAction;
-        emit selectionActionChanged();
-    }
+    changeSelectionAction(action);
 }

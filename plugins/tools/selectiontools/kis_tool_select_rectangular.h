@@ -47,15 +47,13 @@ private:
 };
 
 
-class KisToolSelectRectangular : public SelectionActionHandler<__KisToolSelectRectangularLocal>
+class KisToolSelectRectangular : public KisToolSelectBase<__KisToolSelectRectangularLocal>
 {
     Q_OBJECT
-    Q_PROPERTY(int selectionAction READ selectionAction WRITE setSelectionAction NOTIFY selectionActionChanged)
 public:
     KisToolSelectRectangular(KoCanvasBase* canvas);
-    Q_SIGNALS: void selectionActionChanged();
 public Q_SLOTS:
-    void setSelectionAction(int newSelectionAction);
+    void setSelectionAction(int);
 };
 
 class KisToolSelectRectangularFactory : public KoToolFactoryBase
@@ -63,7 +61,8 @@ class KisToolSelectRectangularFactory : public KoToolFactoryBase
 
 public:
     KisToolSelectRectangularFactory()
-            : KoToolFactoryBase("KisToolSelectRectangular") {
+        : KoToolFactoryBase("KisToolSelectRectangular")
+    {
         setToolTip(i18n("Rectangular Selection Tool"));
         setToolType(TOOL_TYPE_SELECTED);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);

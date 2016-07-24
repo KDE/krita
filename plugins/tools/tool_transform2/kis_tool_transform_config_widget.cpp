@@ -45,6 +45,10 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
     setupUi(this);
     showDecorationsBox->setIcon(KisIconUtils::loadIcon("krita_tool_transform"));
     chkWorkRecursively->setIcon(KisIconUtils::loadIcon("krita_tool_transform_recursive"));
+    flipXButton->setIcon(KisIconUtils::loadIcon("transform_icons_mirror_x"));
+    flipYButton->setIcon(KisIconUtils::loadIcon("transform_icons_mirror_y"));
+    rotateCWButton->setIcon(KisIconUtils::loadIcon("transform_icons_rotate_cw"));
+    rotateCCWButton->setIcon(KisIconUtils::loadIcon("transform_icons_rotate_ccw"));
 
     chkWorkRecursively->setChecked(workRecursively);
     connect(chkWorkRecursively, SIGNAL(toggled(bool)), this, SIGNAL(sigRestartTransform()));
@@ -128,12 +132,15 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
     aXBox->setSuffix(QChar(Qt::Key_degree));
     aYBox->setSuffix(QChar(Qt::Key_degree));
     aZBox->setSuffix(QChar(Qt::Key_degree));
-    aXBox->setRange(0.0, 360.0, 0);
-    aYBox->setRange(0.0, 360.0, 0);
-    aZBox->setRange(0.0, 360.0, 0);
+    aXBox->setRange(0.0, 360.0, 2);
+    aYBox->setRange(0.0, 360.0, 2);
+    aZBox->setRange(0.0, 360.0, 2);
     aXBox->setValue(0.0);
     aYBox->setValue(0.0);
     aZBox->setValue(0.0);
+    aXBox->setSingleStep(1.0);
+    aYBox->setSingleStep(1.0);
+    aZBox->setSingleStep(1.0);
 
 
 
@@ -151,6 +158,10 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
     connect(aYBox, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetAY(qreal)));
     connect(aZBox, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetAZ(qreal)));
     connect(aspectButton, SIGNAL(keepAspectRatioChanged(bool)), this, SLOT(slotSetKeepAspectRatio(bool)));
+    connect(flipXButton, SIGNAL(clicked(bool)), this, SLOT(slotFlipX()));
+    connect(flipYButton, SIGNAL(clicked(bool)), this, SLOT(slotFlipY()));
+    connect(rotateCWButton, SIGNAL(clicked(bool)), this, SLOT(slotRotateCW()));
+    connect(rotateCCWButton, SIGNAL(clicked(bool)), this, SLOT(slotRotateCCW()));
 
     // toggle visibility of different free buttons
     connect(freeMoveRadioButton, SIGNAL(clicked(bool)), SLOT(slotTransformAreaVisible(bool)));
@@ -509,6 +520,8 @@ void KisToolTransformConfigWidget::updateConfig(const ToolTransformArgs &config)
 
     if (config.mode() == ToolTransformArgs::FREE_TRANSFORM ||
         config.mode() == ToolTransformArgs::PERSPECTIVE_4POINT) {
+
+        quickTransformGroup->setEnabled(config.mode() == ToolTransformArgs::FREE_TRANSFORM);
 
         stackedWidget->setCurrentIndex(0);
 
@@ -937,6 +950,38 @@ void KisToolTransformConfigWidget::slotSetAZ(qreal value)
 
     ToolTransformArgs *config = m_transaction->currentConfig();
     config->setAZ(degreeToRadian((double)value));
+    notifyConfigChanged();
+    notifyEditingFinished();
+}
+
+void KisToolTransformConfigWidget::slotFlipX()
+{
+    ToolTransformArgs *config = m_transaction->currentConfig();
+    config->setScaleX(config->scaleX() * -1);
+    notifyConfigChanged();
+    notifyEditingFinished();
+}
+
+void KisToolTransformConfigWidget::slotFlipY()
+{
+    ToolTransformArgs *config = m_transaction->currentConfig();
+    config->setScaleY(config->scaleY() * -1);
+    notifyConfigChanged();
+    notifyEditingFinished();
+}
+
+void KisToolTransformConfigWidget::slotRotateCW()
+{
+    ToolTransformArgs *config = m_transaction->currentConfig();
+    config->setAZ(normalizeAngle(config->aZ() + M_PI_2));
+    notifyConfigChanged();
+    notifyEditingFinished();
+}
+
+void KisToolTransformConfigWidget::slotRotateCCW()
+{
+    ToolTransformArgs *config = m_transaction->currentConfig();
+    config->setAZ(normalizeAngle(config->aZ() - M_PI_2));
     notifyConfigChanged();
     notifyEditingFinished();
 }

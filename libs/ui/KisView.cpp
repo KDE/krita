@@ -147,6 +147,9 @@ public:
     QPointer<KisFloatingMessage> savedFloatingMessage;
     KisSignalCompressor floatingMessageCompressor;
 
+    bool softProofing = false;
+    bool gamutCheck = false;
+
     // Hmm sorry for polluting the private class with such a big inner class.
     // At the beginning it was a little struct :)
     class StatusBarItem
@@ -803,6 +806,58 @@ KisSelectionSP KisView::selection()
         return image()->globalSelection();
     }
     return 0;
+}
+
+void KisView::slotSoftProofing(bool softProofing)
+{
+    d->softProofing = softProofing;
+    QString message;
+    if (canvasBase()->image()->colorSpace()->colorDepthId().id().contains("F"))
+    {
+        message = i18n("Soft Proofing doesn't work in floating point.");
+        viewManager()->showFloatingMessage(message,QIcon());
+        return;
+    }
+    if (softProofing){
+        message = i18n("Soft Proofing turned on.");
+    } else {
+        message = i18n("Soft Proofing turned off.");
+    }
+    viewManager()->showFloatingMessage(message,QIcon());
+    canvasBase()->slotSoftProofing(softProofing);
+}
+
+void KisView::slotGamutCheck(bool gamutCheck)
+{
+    d->gamutCheck = gamutCheck;
+    QString message;
+    if (canvasBase()->image()->colorSpace()->colorDepthId().id().contains("F"))
+    {
+        message = i18n("Gamut Warnings don't work in floating point.");
+        viewManager()->showFloatingMessage(message,QIcon());
+        return;
+    }
+
+    if (gamutCheck){
+        message = i18n("Gamut Warnings turned on.");
+        if (!d->softProofing){
+            message += "\n "+i18n("But Soft Proofing is still off.");
+        }
+    } else {
+        message = i18n("Gamut Warnings turned off.");
+    }
+    viewManager()->showFloatingMessage(message,QIcon());
+    canvasBase()->slotGamutCheck(gamutCheck);
+}
+
+bool KisView::softProofing()
+{
+    return d->softProofing;
+}
+
+bool KisView::gamutCheck()
+{
+    return d->gamutCheck;
 }
 
 void KisView::slotLoadingFinished()

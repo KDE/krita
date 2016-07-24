@@ -26,11 +26,13 @@
 #include <QLabel>
 #include <kis_paint_device.h>
 #include "kis_node_query_path_editor.h"
+#include <KoColorSpaceRegistry.h>
 #include <recorder/kis_node_query_path.h>
 
-KisRecordedFilterActionEditor::KisRecordedFilterActionEditor(QWidget* parent, KisRecordedAction* action) : QWidget(parent),
-        m_action(dynamic_cast<KisRecordedFilterAction*>(action)),
-        m_gridLayout(new QGridLayout(this))
+KisRecordedFilterActionEditor::KisRecordedFilterActionEditor(QWidget* parent, KisRecordedAction* action)
+    : QWidget(parent)
+    , m_action(dynamic_cast<KisRecordedFilterAction*>(action))
+    , m_gridLayout(new QGridLayout(this))
 {
     Q_ASSERT(m_action);
 
@@ -41,7 +43,7 @@ KisRecordedFilterActionEditor::KisRecordedFilterActionEditor(QWidget* parent, Ki
     m_gridLayout->addWidget(m_nodeQueryPathEditor, 1, 0);
 
     // Create the filter editor
-    m_configWidget = m_action->filter()->createConfigurationWidget(this, 0);
+    m_configWidget = m_action->filter()->createConfigurationWidget(this, new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8()));
     if (m_configWidget) {
         m_gridLayout->addWidget(m_configWidget);
 

@@ -71,20 +71,10 @@ KoFileDialog::KoFileDialog(QWidget *parent,
                            const QString &dialogName)
     : d(new Private(parent, type, "", getUsedDir(dialogName), dialogName))
 {
-    if (qgetenv("XDG_CURRENT_DESKTOP") == "GNOME") {
-        // The GTK file dialog interferes with the Qt clipboard; so disable that
-        QClipboard *cb = QApplication::clipboard();
-        cb->blockSignals(true);
-    }
 }
 
 KoFileDialog::~KoFileDialog()
 {
-    if (qgetenv("XDG_CURRENT_DESKTOP") == "GNOME") {
-        // And re-enable the clipboard.
-        QClipboard *cb = QApplication::clipboard();
-        cb->blockSignals(false);
-    }
     delete d;
 }
 
@@ -141,10 +131,16 @@ QString KoFileDialog::selectedMimeType() const
 
 void KoFileDialog::createFileDialog()
 {
-    //qDebug() << "createFIleDialog. Parent:" << d->parent << "Caption:" << d->caption << "Default directory:" << d->defaultDirectory << "Default iflter:" << d->defaultFilter;
+    //qDebug() << "createFileDialog. Parent:" << d->parent << "Caption:" << d->caption << "Default directory:" << d->defaultDirectory << "Default iflter:" << d->defaultFilter;
 
     d->fileDialog.reset(new QFileDialog(d->parent, d->caption, d->defaultDirectory));
-    d->fileDialog->setOption(QFileDialog::DontUseNativeDialog, false);
+    bool dontUseNative = false;
+#ifdef Q_OS_UNIX
+    if (qgetenv("XDG_CURRENT_DESKTOP") != "KDE") {
+        dontUseNative = true;
+    }
+#endif
+    d->fileDialog->setOption(QFileDialog::DontUseNativeDialog, dontUseNative);
     d->fileDialog->setOption(QFileDialog::DontConfirmOverwrite, false);
     d->fileDialog->setOption(QFileDialog::HideNameFilterDetails, true);
 

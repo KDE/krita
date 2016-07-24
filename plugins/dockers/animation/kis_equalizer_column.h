@@ -42,6 +42,8 @@ public:
     bool state() const;
     void setState(bool value);
 
+    void setForceDisabled(bool value);
+
 Q_SIGNALS:
     void sigColumnChanged(int id, bool state, int value);
 
@@ -52,6 +54,8 @@ private Q_SLOTS:
 private:
     struct Private;
     const QScopedPointer<Private> m_d;
+
+    void updateState();
 };
 
 #endif /* __KIS_EQUALIZER_COLUMN_H */

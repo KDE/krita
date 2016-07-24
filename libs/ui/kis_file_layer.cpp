@@ -41,9 +41,9 @@ KisFileLayer::KisFileLayer(KisImageWSP image, const QString &basePath, const QSt
      * the file does not exist anymore. Or course, this can happen only
      * in the failing execution path.
      */
-    m_image = new KisPaintDevice(image->colorSpace());
+    m_paintDevice = new KisPaintDevice(image->colorSpace());
 
-    connect(&m_loader, SIGNAL(loadingFinished(KisImageSP)), SLOT(slotLoadingFinished(KisImageSP)));
+    connect(&m_loader, SIGNAL(loadingFinished(KisPaintDeviceSP,int,int)), SLOT(slotLoadingFinished(KisPaintDeviceSP,int,int)));
 
     QFileInfo fi(path());
     if (fi.exists()) {
@@ -65,9 +65,9 @@ KisFileLayer::KisFileLayer(const KisFileLayer &rhs)
 
     m_scalingMethod = rhs.m_scalingMethod;
 
-    m_image = new KisPaintDevice(rhs.image()->colorSpace());
+    m_paintDevice = new KisPaintDevice(rhs.image()->colorSpace());
 
-    connect(&m_loader, SIGNAL(loadingFinished(KisImageSP)), SLOT(slotLoadingFinished(KisImageSP)));
+    connect(&m_loader, SIGNAL(loadingFinished(KisPaintDeviceSP,int,int)), SLOT(slotLoadingFinished(KisPaintDeviceSP,int,int)));
     m_loader.setPath(path());
     m_loader.reloadImage();
 }
@@ -84,12 +84,12 @@ void KisFileLayer::resetCache()
 
 const KoColorSpace *KisFileLayer::colorSpace() const
 {
-    return m_image->colorSpace();
+    return m_paintDevice->colorSpace();
 }
 
 KisPaintDeviceSP KisFileLayer::original() const
 {
-    return m_image;
+    return m_paintDevice;
 }
 
 KisPaintDeviceSP KisFileLayer::paintDevice() const
@@ -133,40 +133,43 @@ KisFileLayer::ScalingMethod KisFileLayer::scalingMethod() const
     return m_scalingMethod;
 }
 
-void KisFileLayer::slotLoadingFinished(KisImageSP importedImage)
+void KisFileLayer::slotLoadingFinished(KisPaintDeviceSP projection, int xRes, int yRes)
 {
     qint32 oldX = x();
     qint32 oldY = y();
 
-    m_image->makeCloneFrom(importedImage->projection(), importedImage->projection()->extent());
-    m_image->setDefaultBounds(new KisDefaultBounds(image()));
+    m_paintDevice->makeCloneFrom(projection, projection->extent());
+    m_paintDevice->setDefaultBounds(new KisDefaultBounds(image()));
 
-    if (m_scalingMethod == ToImagePPI && (image()->xRes() != importedImage->xRes()
-                                          || image()->yRes() != importedImage->yRes())) {
-        qreal xscale = image()->xRes() / importedImage->xRes();
-        qreal yscale = image()->yRes() / importedImage->yRes();
+    QSize size = projection->exactBounds().size();
 
-        KisTransformWorker worker(m_image, xscale, yscale, 0.0, 0.0, 0.0, 0, 0, 0, 0, 0, KisFilterStrategyRegistry::instance()->get("Bicubic"));
+    if (m_scalingMethod == ToImagePPI && (image()->xRes() != xRes
+                                          || image()->yRes() != yRes)) {
+        qreal xscale = image()->xRes() / xRes;
+        qreal yscale = image()->yRes() / yRes;
+
+        KisTransformWorker worker(m_paintDevice, xscale, yscale, 0.0, 0.0, 0.0, 0, 0, 0, 0, 0, KisFilterStrategyRegistry::instance()->get("Bicubic"));
         worker.run();
     }
     else if (m_scalingMethod == ToImageSize) {
-        QSize sz = importedImage->size();
+        QSize sz = size;
         sz.scale(image()->size(), Qt::KeepAspectRatio);
-        qreal xscale =  (qreal)sz.width() / (qreal)importedImage->width();
-        qreal yscale = (qreal)sz.height() / (qreal)importedImage->height();
+        qreal xscale =  (qreal)sz.width() / (qreal)size.width();
+        qreal yscale = (qreal)sz.height() / (qreal)size.height();
 
-        KisTransformWorker worker(m_image, xscale, yscale, 0.0, 0.0, 0.0, 0, 0, 0, 0, 0, KisFilterStrategyRegistry::instance()->get("Bicubic"));
+        KisTransformWorker worker(m_paintDevice, xscale, yscale, 0.0, 0.0, 0.0, 0, 0, 0, 0, 0, KisFilterStrategyRegistry::instance()->get("Bicubic"));
         worker.run();
     }
 
-    m_image->setX(oldX);
-    m_image->setY(oldY);
+    m_paintDevice->setX(oldX);
+    m_paintDevice->setY(oldY);
 
     setDirty();
 }
 
 KisNodeSP KisFileLayer::clone() const
 {
+    qDebug() << "Cloning KisFileLayer" << m_filename;
     return KisNodeSP(new KisFileLayer(*this));
 }
 

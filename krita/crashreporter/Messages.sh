@@ -1,4 +1,6 @@
 #! /bin/sh
 source ../../krita_xgettext.sh
 
-krita_xgettext crashhandler.pot *.cpp
+$EXTRACTRC `find . -name \*.ui` >> rc.cpp
+
+krita_xgettext kritacrashhandler.pot  *.cpp

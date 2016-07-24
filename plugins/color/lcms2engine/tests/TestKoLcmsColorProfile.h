@@ -11,6 +11,8 @@ class TestKoLcmsColorProfile : public QObject
     void testProfileCreationFromChromaticities();
 private Q_SLOTS:
     void testConversion();
+    void testProofingConversion();
+
 };
 
 #endif

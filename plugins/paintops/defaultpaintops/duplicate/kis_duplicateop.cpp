@@ -124,6 +124,7 @@ KisSpacingInformation KisDuplicateOp::paintAt(const KisPaintInformation& info)
 
     qreal scale = m_sizeOption.apply(info);
     if (checkSizeTooSmall(scale)) return KisSpacingInformation();
+    KisDabShape shape(scale, 1.0, 0.0);
 
 
     static const KoColorSpace *cs = KoColorSpaceRegistry::instance()->alpha8();
@@ -132,7 +133,7 @@ KisSpacingInformation KisDuplicateOp::paintAt(const KisPaintInformation& info)
     QRect dstRect;
     KisFixedPaintDeviceSP dab =
         m_dabCache->fetchDab(cs, color, info.pos(),
-                             scale, scale, 0.0,
+                             shape,
                              info, 1.0,
                              &dstRect);
 
@@ -145,7 +146,7 @@ KisSpacingInformation KisDuplicateOp::paintAt(const KisPaintInformation& info)
         srcPoint = (dstRect.topLeft() - m_settings->offset()).toPoint();
     }
     else {
-        QPointF hotSpot = brush->hotSpot(scale, scale, 0, info);
+        QPointF hotSpot = brush->hotSpot(shape, info);
         srcPoint = (m_settings->position() - hotSpot).toPoint();
     }
 
@@ -252,7 +253,7 @@ KisSpacingInformation KisDuplicateOp::paintAt(const KisPaintInformation& info)
             } while (err > 0.00001 && iter < 100);
         }
 
-        // Finaly multiply
+        // Finally multiply
         KisHLineIteratorSP tmpIt2 = m_srcdev->createHLineIteratorNG(0, 0, healSW);
         matrixIt = &matrix[0];
         for (int j = 0; j < healSH; j++) {

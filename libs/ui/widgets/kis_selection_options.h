@@ -55,10 +55,14 @@ public:
     void disableAntiAliasSelectionOption();
     void disableSelectionModeOption();
     void setAction(int);
+    void setMode(int);
 
 Q_SIGNALS:
     void actionChanged(int);
     void modeChanged(int);
+
+private Q_SLOTS:
+    void hideActionsForSelectionMode(int mode);
 
 private:
     WdgSelectionOptions * m_page;

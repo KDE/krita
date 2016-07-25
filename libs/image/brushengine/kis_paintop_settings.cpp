@@ -39,6 +39,8 @@
 #include "kis_paintop_settings_update_proxy.h"
 #include <time.h>
 #include<kis_types.h>
+#include <kis_signals_blocker.h>
+
 
 struct Q_DECL_HIDDEN KisPaintOpSettings::Private {
     Private() : disableDirtyNotifications(false) {}
@@ -46,8 +48,7 @@ struct Q_DECL_HIDDEN KisPaintOpSettings::Private {
     QPointer<KisPaintOpConfigWidget> settingsWidget;
     QString modelName;
     KisPaintOpPresetWSP preset;
-    QScopedPointer<KisPaintopSettingsUpdateProxy> updateProxy;
-    QList<KisUniformPaintOpPropertySP> uniformProperties;
+    QList<KisUniformPaintOpPropertyWSP> uniformProperties;
 
 
     bool disableDirtyNotifications;
@@ -70,6 +71,14 @@ struct Q_DECL_HIDDEN KisPaintOpSettings::Private {
         bool m_oldNotificationsState;
         Q_DISABLE_COPY(DirtyNotificationsLocker)
     };
+
+    KisPaintopSettingsUpdateProxy* updateProxyNoCreate() const {
+        return preset ? preset->updateProxyNoCreate() : 0;
+    }
+
+    KisPaintopSettingsUpdateProxy* updateProxyCreate() const {
+        return preset ? preset->updateProxy() : 0;
+    }
 };
 
 
@@ -149,23 +158,6 @@ void KisPaintOpSettings::activate()
 {
 }
 
-void KisPaintOpSettings::changePaintOpSize(qreal x, qreal y)
-{
-    if (!d->settingsWidget.isNull()) {
-        d->settingsWidget.data()->changePaintOpSize(x, y);
-        d->settingsWidget.data()->writeConfiguration(this);
-    }
-}
-
-
-QSizeF KisPaintOpSettings::paintOpSize() const
-{
-    if (!d->settingsWidget.isNull()) {
-        return d->settingsWidget.data()->paintOpSize();
-    }
-    return QSizeF(1.0, 1.0);
-}
-
 void KisPaintOpSettings::setPaintOpOpacity(qreal value)
 {
     setProperty("OpacityValue", value);
@@ -189,6 +181,31 @@ qreal KisPaintOpSettings::paintOpOpacity() const
 qreal KisPaintOpSettings::paintOpFlow() const
 {
     return getDouble("FlowValue", 1.0);
+}
+
+void KisPaintOpSettings::setPaintOpSize(qreal value)
+{
+    if (d->settingsWidget) {
+        const qreal sizeDiff = value - paintOpSize();
+
+        {
+            KisSignalsBlocker b(d->settingsWidget);
+            d->settingsWidget.data()->setConfigurationSafe(this);
+            d->settingsWidget.data()->changePaintOpSize(sizeDiff, 0);
+        }
+        d->settingsWidget.data()->writeConfigurationSafe(this);
+    }
+}
+
+qreal KisPaintOpSettings::paintOpSize() const
+{
+    qreal size = 1.0;
+
+    if (d->settingsWidget) {
+        size = d->settingsWidget.data()->paintOpSize().width();
+    }
+
+    return size;
 }
 
 QString KisPaintOpSettings::paintOpCompositeOp() const
@@ -340,8 +357,10 @@ void KisPaintOpSettings::setProperty(const QString & name, const QVariant & valu
 
 void KisPaintOpSettings::onPropertyChanged()
 {
-    if (d->updateProxy) {
-        d->updateProxy->notifySettingsChanged();
+    KisPaintopSettingsUpdateProxy *proxy = d->updateProxyNoCreate();
+
+    if (proxy) {
+        proxy->notifySettingsChanged();
     }
 }
 
@@ -355,44 +374,23 @@ void KisPaintOpSettings::setLodUserAllowed(KisPropertiesConfiguration *config, b
     config->setProperty("lodUserAllowed", value);
 }
 
-KisPaintopSettingsUpdateProxy* KisPaintOpSettings::updateProxy() const
-{
-    if (!d->updateProxy) {
-        d->updateProxy.reset(new KisPaintopSettingsUpdateProxy());
-    }
-    return d->updateProxy.data();
-}
-
-#include "kis_callback_based_paintop_property.h"
-#include "kis_slider_based_paintop_property.h"
+#include "kis_standard_uniform_properties_factory.h"
 
 QList<KisUniformPaintOpPropertySP> KisPaintOpSettings::uniformProperties()
 {
-    if (0 && d->uniformProperties.isEmpty()) {
-        typedef KisCallbackBasedPaintopProperty<KisIntSliderBasedPaintOpProperty> IntSliderProp;
-        typedef KisCallbackBasedPaintopProperty<KisDoubleSliderBasedPaintOpProperty> DoubleSliderProp;
+    QList<KisUniformPaintOpPropertySP> props =
+        listWeakToStrong(d->uniformProperties);
 
-        DoubleSliderProp *prop =
-            new DoubleSliderProp(DoubleSliderProp::Double,
-                                 "opacity",
-                                 i18n("Opacity"),
-                                 this, 0);
-        prop->setRange(0.0, 1.0);
-        prop->setSingleStep(0.01);
 
-        prop->setReadCallback(
-            [](KisUniformPaintOpProperty *prop) {
-                prop->setValue(prop->settings()->paintOpOpacity());
-            });
-        prop->setWriteCallback(
-            [](KisUniformPaintOpProperty *prop) {
-                prop->settings()->setPaintOpOpacity(prop->value().toReal());
-            });
+    if (props.isEmpty()) {
+        using namespace KisStandardUniformPropertiesFactory;
 
-        QObject::connect(updateProxy(), SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
-        prop->requestReadValue();
-        d->uniformProperties.append(toQShared(prop));
+        props.append(createProperty(opacity, this, d->updateProxyCreate()));
+        props.append(createProperty(size, this, d->updateProxyCreate()));
+        props.append(createProperty(flow, this, d->updateProxyCreate()));
+
+        d->uniformProperties = listStrongToWeak(props);
     }
 
-    return d->uniformProperties;
+    return props;
 }

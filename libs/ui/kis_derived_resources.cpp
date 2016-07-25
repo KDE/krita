@@ -18,9 +18,44 @@
 
 #include "kis_derived_resources.h"
 
+#include "kis_signal_auto_connection.h"
 #include "kis_canvas_resource_provider.h"
 #include "kis_paintop_preset.h"
 #include "kis_paintop_settings.h"
+#include "kis_paintop_settings_update_proxy.h"
+
+struct KisPresetUpdateMediator::Private
+{
+    KisSignalAutoConnectionsStore connections;
+};
+
+KisPresetUpdateMediator::KisPresetUpdateMediator()
+    : KoResourceUpdateMediator(KisCanvasResourceProvider::CurrentPaintOpPreset),
+      m_d(new Private)
+{
+}
+
+KisPresetUpdateMediator::~KisPresetUpdateMediator()
+{
+}
+
+void KisPresetUpdateMediator::connectResource(QVariant sourceResource)
+{
+    KisPaintOpPresetSP preset = sourceResource.value<KisPaintOpPresetSP>();
+    if (!preset) return;
+
+    m_d->connections.clear();
+    m_d->connections.addUniqueConnection(
+        preset->updateProxy(),
+        SIGNAL(sigSettingsChanged()),
+        this,
+        SLOT(slotSettingsChanged()));
+}
+
+void KisPresetUpdateMediator::slotSettingsChanged()
+{
+    emit sigResourceChanged(key());
+}
 
 
 /*********************************************************************/
@@ -99,6 +134,56 @@ QVariant KisOpacityResourceConverter::toSource(const QVariant &value, const QVar
     if (!preset) return sourceValue;
 
     preset->settings()->setPaintOpOpacity(value.toReal());
+    return QVariant::fromValue(preset);
+}
+
+/*********************************************************************/
+/*          KisFlowResourceConverter                              */
+/*********************************************************************/
+
+KisFlowResourceConverter::KisFlowResourceConverter()
+    : KoDerivedResourceConverter(KisCanvasResourceProvider::Flow,
+                                 KisCanvasResourceProvider::CurrentPaintOpPreset)
+{
+}
+
+QVariant KisFlowResourceConverter::fromSource(const QVariant &value)
+{
+    KisPaintOpPresetSP preset = value.value<KisPaintOpPresetSP>();
+    return preset ? preset->settings()->paintOpFlow() : QVariant();
+}
+
+QVariant KisFlowResourceConverter::toSource(const QVariant &value, const QVariant &sourceValue)
+{
+    KisPaintOpPresetSP preset = sourceValue.value<KisPaintOpPresetSP>();
+    if (!preset) return sourceValue;
+
+    preset->settings()->setPaintOpFlow(value.toReal());
+    return QVariant::fromValue(preset);
+}
+
+/*********************************************************************/
+/*          KisSizeResourceConverter                              */
+/*********************************************************************/
+
+KisSizeResourceConverter::KisSizeResourceConverter()
+    : KoDerivedResourceConverter(KisCanvasResourceProvider::Size,
+                                 KisCanvasResourceProvider::CurrentPaintOpPreset)
+{
+}
+
+QVariant KisSizeResourceConverter::fromSource(const QVariant &value)
+{
+    KisPaintOpPresetSP preset = value.value<KisPaintOpPresetSP>();
+    return preset ? preset->settings()->paintOpSize() : QVariant();
+}
+
+QVariant KisSizeResourceConverter::toSource(const QVariant &value, const QVariant &sourceValue)
+{
+    KisPaintOpPresetSP preset = sourceValue.value<KisPaintOpPresetSP>();
+    if (!preset) return sourceValue;
+
+    preset->settings()->setPaintOpSize(value.toReal());
     return QVariant::fromValue(preset);
 }
 

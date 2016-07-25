@@ -37,6 +37,8 @@
 #include <brushengine/kis_locked_properties.h>
 #include "kritaui_export.h"
 #include "kis_signal_auto_connection.h"
+#include "kis_signal_compressor.h"
+
 
 
 class QToolButton;
@@ -146,7 +148,6 @@ private Q_SLOTS:
     void slotSlider2Changed();
     void slotSlider3Changed();
     void slotToolChanged(KoCanvasController* canvas, int toolId);
-    void slotOpacityChanged(qreal);
     void slotPreviousFavoritePreset();
     void slotNextFavoritePreset();
     void slotSwitchToPreviousPreset();
@@ -168,7 +169,7 @@ private Q_SLOTS:
     void slotHideDecorationMirrorX(bool);
     void slotHideDecorationMirrorY(bool);
 
-
+    void slotUpdateOptionsWidget();
 
 private:
     KisCanvasResourceProvider*          m_resourceProvider;
@@ -200,8 +201,6 @@ private:
 
     KisAction* m_hMirrorAction;
     KisAction* m_vMirrorAction;
-
-    KisSignalAutoConnectionsStore m_presetConnections;
 
     struct TabletToolID {
         TabletToolID(const KoInputDevice& dev) {
@@ -243,7 +242,8 @@ private:
     bool             m_dirtyPresetsEnabled;
     bool             m_eraserBrushSizeEnabled;
 
-
+    KisSignalAutoConnectionsStore m_presetConnections;
+    KisSignalCompressor m_presetUpdateCompressor;
 };
 
 #endif //KIS_PAINTOP_BOX_H_

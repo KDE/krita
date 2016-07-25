@@ -16,39 +16,16 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KIS_BRUSH_HUD_H
-#define __KIS_BRUSH_HUD_H
+#ifndef __KIS_DERIVED_RESOURCES_TEST_H
+#define __KIS_DERIVED_RESOURCES_TEST_H
 
-#include <QScopedPointer>
-#include <QWidget>
+#include <QtTest/QtTest>
 
-class KisCanvasResourceProvider;
-
-class KisBrushHud : public QWidget
+class KisDerivedResourcesTest : public QObject
 {
     Q_OBJECT
-public:
-    KisBrushHud(KisCanvasResourceProvider *provider, QWidget *parent);
-    ~KisBrushHud();
-
-    void updateProperties();
-
-protected:
-    void paintEvent(QPaintEvent *event);
-    bool event(QEvent *event);
-    void showEvent(QShowEvent *event);
-    void hideEvent(QHideEvent *event);
-
 private Q_SLOTS:
-    void slotCanvasResourceChanged(int key, const QVariant &resource);
-    void slotReloadProperties();
-
-private:
-    void clearProperties() const;
-
-private:
-    struct Private;
-    const QScopedPointer<Private> m_d;
+    void test();
 };
 
-#endif /* __KIS_BRUSH_HUD_H */
+#endif /* __KIS_DERIVED_RESOURCES_TEST_H */

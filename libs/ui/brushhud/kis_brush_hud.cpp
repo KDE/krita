@@ -33,6 +33,7 @@
 #include "kis_paintop_preset.h"
 #include "kis_paintop_settings.h"
 #include "kis_signal_auto_connection.h"
+#include "kis_paintop_settings_update_proxy.h"
 
 #include "kis_debug.h"
 
@@ -47,6 +48,7 @@ struct KisBrushHud::Private
     KisCanvasResourceProvider *provider;
 
     KisSignalAutoConnectionsStore connections;
+    KisSignalAutoConnectionsStore presetConnections;
 
     KisPaintOpPresetSP currentPreset;
 };
@@ -87,17 +89,35 @@ KisBrushHud::~KisBrushHud()
 {
 }
 
+void KisBrushHud::slotReloadProperties()
+{
+    m_d->presetConnections.clear();
+    clearProperties();
+    updateProperties();
+}
+
+void KisBrushHud::clearProperties() const
+{
+    Q_FOREACH (QWidget *w, m_d->wdgProperties->findChildren<QWidget*>()) {
+        w->deleteLater();
+    }
+    m_d->currentPreset.clear();
+}
+
 void KisBrushHud::updateProperties()
 {
     KisPaintOpPresetSP preset = m_d->provider->currentPreset();
     KisPaintOpSettingsSP settings = preset->settings();
 
     if (preset == m_d->currentPreset) return;
-    m_d->currentPreset = preset;
 
-    Q_FOREACH (QWidget *w, m_d->wdgProperties->findChildren<QWidget*>()) {
-        w->deleteLater();
-    }
+    m_d->presetConnections.clear();
+    clearProperties();
+
+    m_d->currentPreset = preset;
+    m_d->presetConnections.addConnection(
+        m_d->currentPreset->updateProxy(), SIGNAL(sigUniformPropertiesChanged()),
+        this, SLOT(slotReloadProperties()));
 
     m_d->lblPresetName->setText(preset->name());
 
@@ -125,6 +145,8 @@ void KisBrushHud::showEvent(QShowEvent *event)
         m_d->provider->resourceManager(), SIGNAL(canvasResourceChanged(int, QVariant)),
         this, SLOT(slotCanvasResourceChanged(int, QVariant)));
 
+    updateProperties();
+
     QWidget::showEvent(event);
 }
 
@@ -132,12 +154,17 @@ void KisBrushHud::hideEvent(QHideEvent *event)
 {
     m_d->connections.clear();
     QWidget::hideEvent(event);
+
+    clearProperties();
 }
 
 void KisBrushHud::slotCanvasResourceChanged(int key, const QVariant &resource)
 {
-    if (key != KisCanvasResourceProvider::CurrentPaintOpPreset) return;
-    updateProperties();
+    Q_UNUSED(resource);
+
+    if (key == KisCanvasResourceProvider::CurrentPaintOpPreset) {
+        updateProperties();
+    }
 }
 
 void KisBrushHud::paintEvent(QPaintEvent *event)

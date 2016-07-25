@@ -32,9 +32,11 @@ public:
     ~KisPaintopSettingsUpdateProxy();
 
     void notifySettingsChanged();
+    void notifyUniformPropertiesChanged();
 
 Q_SIGNALS:
     void sigSettingsChanged();
+    void sigUniformPropertiesChanged();
 
 private:
     struct Private;

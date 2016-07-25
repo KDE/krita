@@ -42,3 +42,8 @@ void KisPaintopSettingsUpdateProxy::notifySettingsChanged()
 {
     m_d->updatesCompressor.start();
 }
+
+void KisPaintopSettingsUpdateProxy::notifyUniformPropertiesChanged()
+{
+    emit sigUniformPropertiesChanged();
+}

@@ -29,6 +29,8 @@
 #include <KoColor.h>
 #include <KoUnit.h>
 #include "KoDerivedResourceConverter.h"
+#include "KoResourceUpdateMediator.h"
+
 
 class KoShape;
 class QVariant;
@@ -144,7 +146,7 @@ public:
     void clearResource(int key);
 
     /**
-     * Some of the resources may be "derive" from the other. For
+     * Some of the resources may be "derived" from the others. For
      * example opacity, composite op and erase mode properties are
      * contained inside a paintop preset, so we need not create a
      * separate resource for them. Instead we created a derived resource,
@@ -152,7 +154,7 @@ public:
      * "resource changed" signal (via a different key).
      *
      * When a parent resource changes, the resource manager emits
-     * update signals for all its derived resources. 
+     * update signals for all its derived resources.
      */
     void addDerivedResourceConverter(KoDerivedResourceConverterSP converter);
 
@@ -172,11 +174,35 @@ public:
      */
     void removeDerivedResourceConverter(int key);
 
+    /**
+     * Some resources can "mutate", that is they value doesn't change
+     * (a pointer), whereas the contents changes. But we should still
+     * notify all the derived resources subscribers that the resource
+     * has changed. For that purpose we use a special mediator class
+     * that connects the resource (which is not a QObject at all) and
+     * the resource manager controls that connection.
+     */
+    void addResourceUpdateMediator(KoResourceUpdateMediatorSP mediator);
+
+    /**
+     * \see addResourceUpdateMediator()
+     */
+    bool hasResourceUpdateMediator(int key);
+
+    /**
+     * \see addResourceUpdateMediator()
+     */
+    void removeResourceUpdateMediator(int key);
+
 Q_SIGNALS:
     void resourceChanged(int key, const QVariant &value);
 
 private:
     void notifyResourceChanged(int key, const QVariant &value);
+    void notifyDerivedResourcesChanged(int key, const QVariant &value);
+
+private Q_SLOTS:
+    void slotResourceInternalsChanged(int key);
 
 private:
     KoResourceManager(const KoResourceManager&);
@@ -186,6 +212,8 @@ private:
 
     QHash<int, KoDerivedResourceConverterSP> m_derivedResources;
     QMultiHash<int, KoDerivedResourceConverterSP> m_derivedFromSource;
+
+    QHash<int, KoResourceUpdateMediatorSP> m_updateMediators;
 };
 
 #endif

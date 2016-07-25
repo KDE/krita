@@ -40,8 +40,8 @@ struct KisUniformPaintOpProperty::Private
 
     QVariant value;
 
+    KisPaintOpSettingsSP settings;
     bool isReadingValue;
-    KisWeakSharedPtr<KisPaintOpSettings> settings;
 };
 
 KisUniformPaintOpProperty::KisUniformPaintOpProperty(Type type,

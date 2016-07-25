@@ -259,3 +259,9 @@ target_link_libraries(ResourceBundleTest kritaui kritalibbrush kritalibpaintop Q
 set(kis_stabilized_events_sampler_test_SRCS kis_stabilized_events_sampler_test.cpp)
 kde4_add_unit_test(KisStabilizedEventsSamplerTest TESTNAME krita-ui-StabilizedEventsSamplerTest ${kis_stabilized_events_sampler_test_SRCS})
 target_link_libraries(KisStabilizedEventsSamplerTest kritaui Qt5::Test)
+
+########### next target ###############
+
+set(kis_derived_resources_test_SRCS kis_derived_resources_test.cpp)
+kde4_add_unit_test(KisDerivedResourcesTest TESTNAME krita-ui-DerivedResourcesTest ${kis_derived_resources_test_SRCS})
+target_link_libraries(KisDerivedResourcesTest kritaui Qt5::Test)

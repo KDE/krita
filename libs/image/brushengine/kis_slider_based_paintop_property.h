@@ -104,4 +104,9 @@ private:
 typedef KisSliderBasedPaintOpProperty<int> KisIntSliderBasedPaintOpProperty;
 typedef KisSliderBasedPaintOpProperty<qreal> KisDoubleSliderBasedPaintOpProperty;
 
+#include "kis_callback_based_paintop_property.h"
+
+typedef KisCallbackBasedPaintopProperty<KisIntSliderBasedPaintOpProperty> KisIntSliderBasedPaintOpPropertyCallback;
+typedef KisCallbackBasedPaintopProperty<KisDoubleSliderBasedPaintOpProperty> KisDoubleSliderBasedPaintOpPropertyCallback;
+
 #endif /* __KIS_SLIDER_BASED_PAINTOP_PROPERTY_H */

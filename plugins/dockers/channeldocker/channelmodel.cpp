@@ -30,7 +30,7 @@
 
 ChannelModel::ChannelModel(QObject* parent):
     QAbstractTableModel(parent),
-    m_canvas(nullptr), m_oversampleRatio(2)
+    m_canvas(nullptr), m_oversampleRatio(2), m_channelCount(0)
 {
     setThumbnailSizeLimit(QSize(64, 64));
 }
@@ -88,7 +88,7 @@ int ChannelModel::rowCount(const QModelIndex& /*parent*/) const
 {
     if (!m_canvas) return 0;
 
-    return m_canvas->image() ? (m_canvas->image()->colorSpace()->channelCount()) : 0;
+    return m_channelCount;
 }
 
 int ChannelModel::columnCount(const QModelIndex& /*parent*/) const
@@ -166,10 +166,8 @@ Qt::ItemFlags ChannelModel::flags(const QModelIndex& /*index*/) const
 
 void ChannelModel::unsetCanvas()
 {
-    beginResetModel();
+    qDebug() << "unsetCanvas\n\n";
     m_canvas = 0;
-    updateThumbnails();
-    endResetModel();
 }
 
 void ChannelModel::setThumbnailSizeLimit(QSize size)
@@ -184,7 +182,10 @@ void ChannelModel::slotSetCanvas(KisCanvas2 *canvas)
         beginResetModel();
         m_canvas = canvas;
         if (m_canvas && m_canvas->image()) {
+            m_channelCount = m_canvas->image()->colorSpace()->channelCount();
             updateThumbnails();
+        } else {
+            m_channelCount = 0;
         }
         endResetModel();
     }
@@ -202,6 +203,7 @@ void ChannelModel::updateData(KisCanvas2 *canvas)
 {
     beginResetModel();
     m_canvas = canvas;
+    m_channelCount = (m_canvas) ? m_canvas->image()->colorSpace()->channelCount() : 0;
     updateThumbnails();
     endResetModel();
 }
@@ -217,7 +219,7 @@ void ChannelModel::updateThumbnails(void)
     if (m_canvas && m_canvas->image()) {
         KisImageSP canvas_image = m_canvas->image();
         const KoColorSpace* cs = canvas_image->colorSpace();
-        quint32 channelCount = cs->channelCount();
+        m_channelCount = cs->channelCount();
 
         KisPaintDeviceSP dev = canvas_image->projection();
 
@@ -228,9 +230,9 @@ void ChannelModel::updateThumbnails(void)
         KisPaintDeviceSP thumbnailDev = dev->createThumbnailDeviceOversampled(thumbnailSize.width(), thumbnailSize.height(),
                                         m_oversampleRatio, canvas_image->bounds());
 
-        m_thumbnails.resize(channelCount);
+        m_thumbnails.resize(m_channelCount);
 
-        for (quint32 i = 0; i < channelCount; ++i) {
+        for (quint32 i = 0; i < m_channelCount; ++i) {
             m_thumbnails[i] = QImage(thumbnailSize, QImage::Format_Grayscale8);
         }
 
@@ -239,13 +241,15 @@ void ChannelModel::updateThumbnails(void)
         for (int y = 0; y < thumbnailSize.height(); y++) {
             for (int x = 0; x < thumbnailSize.width(); x++) {
                 const quint8* pixel = it.rawDataConst();
-                for (int chan = 0; chan < (int)channelCount; ++chan) {
+                for (int chan = 0; chan < m_channelCount; ++chan) {
                     QImage &img = m_thumbnails[chan];
                     *(img.scanLine(y) + x) = cs->scaleToU8(pixel, chan);
                 }
                 it.nextPixel();
             }
         }
+    } else {
+        m_channelCount = 0;
     }
 }
 

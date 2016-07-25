@@ -166,7 +166,6 @@ Qt::ItemFlags ChannelModel::flags(const QModelIndex& /*index*/) const
 
 void ChannelModel::unsetCanvas()
 {
-    qDebug() << "unsetCanvas\n\n";
     m_canvas = 0;
 }
 

@@ -89,7 +89,6 @@ void ChannelDockerDock::setCanvas(KoCanvasBase * canvas)
 
 void ChannelDockerDock::unsetCanvas()
 {
-    qDebug()<<"ChannelDockerDock::unsetCanvas\n\n";
     setEnabled(false);
     m_canvas = 0;
     m_model->unsetCanvas();
@@ -98,7 +97,6 @@ void ChannelDockerDock::unsetCanvas()
 void ChannelDockerDock::showEvent(QShowEvent *event)
 {
     Q_UNUSED(event);
-    qDebug()<<"ChannelDockerDock::showEvent";
     m_imageIdleWatcher->startCountdown();
 }
 

@@ -64,6 +64,7 @@ public:
     QSpinBox* dummySpinBox;
     Style style;
     bool blockUpdateSignalOnDrag;
+    bool isDragging;
 };
 
 KisAbstractSliderSpinBox::KisAbstractSliderSpinBox(QWidget* parent, KisAbstractSliderSpinBoxPrivate* _d)
@@ -103,6 +104,7 @@ KisAbstractSliderSpinBox::KisAbstractSliderSpinBox(QWidget* parent, KisAbstractS
     d->slowFactor = 0.1;
     d->shiftMode = false;
     d->blockUpdateSignalOnDrag = false;
+    d->isDragging = false;
 
     setExponentRatio(1.0);
 
@@ -401,6 +403,8 @@ void KisAbstractSliderSpinBox::mouseReleaseEvent(QMouseEvent* e)
     Q_D(KisAbstractSliderSpinBox);
     QStyleOptionSpinBox spinOpts = spinBoxOptions();
 
+    d->isDragging = false;
+
     //Step up/down for buttons
     //Emualting mouse grab too
     if (upButtonRect(spinOpts).contains(e->pos()) && d->upButtonDown) {
@@ -437,6 +441,7 @@ void KisAbstractSliderSpinBox::mouseMoveEvent(QMouseEvent* e)
     //Respect emulated mouse grab.
     if (e->buttons() & Qt::LeftButton &&
             !(d->downButtonDown || d->upButtonDown)) {
+        d->isDragging = true;
         setInternalValue(valueForX(e->pos().x(),e->modifiers()), d->blockUpdateSignalOnDrag);
         update();
     }
@@ -767,6 +772,12 @@ void KisAbstractSliderSpinBox::editLostFocus()
 void KisAbstractSliderSpinBox::setInternalValue(int value)
 {
     setInternalValue(value, false);
+}
+
+bool KisAbstractSliderSpinBox::isDragging() const
+{
+    Q_D(const KisAbstractSliderSpinBox);
+    return d->isDragging;
 }
 
 class KisSliderSpinBoxPrivate : public KisAbstractSliderSpinBoxPrivate {

@@ -61,6 +61,8 @@ public:
     virtual QSize minimumSizeHint() const;
     virtual QSize minimumSize() const;
 
+    bool isDragging() const;
+
 protected:
     virtual void paintEvent(QPaintEvent* e);
     virtual void mousePressEvent(QMouseEvent* e);

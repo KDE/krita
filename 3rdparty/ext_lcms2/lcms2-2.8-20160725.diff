@@ -1,11 +1,19 @@
-diff -Nru -x '*~' lcms2-2.4.orig/CMakeLists.txt lcms2-2.4/CMakeLists.txt
---- lcms2-2.4.orig/CMakeLists.txt	1970-01-01 01:00:00.000000000 +0100
-+++ lcms2-2.4/CMakeLists.txt	2013-01-24 11:35:17.013861600 +0100
+commit 519aa536ae8984fd9620391be4f7ed39c4e5cc7e
+Author: Boudewijn Rempt <boud@valdyas.org>
+Date:   Mon Jul 25 12:33:13 2016 +0200
+
+    lcms-2.8 cmake patch
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+new file mode 100644
+index 0000000..90cee70
+--- /dev/null
++++ b/CMakeLists.txt
 @@ -0,0 +1,22 @@
 +project(lcms2)
 +
-+option(BUILD_TESTS "build the test executable" OFF)
-+option(BUILD_STATIC "build the static library" OFF)
++option(BUILD_TESTS "build the test executable" ON)
++option(BUILD_STATIC "build the static library" ON)
 +option(BUILD_UTILS "build the utilities executables" ON)
 +
 +set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
@@ -24,55 +32,30 @@ diff -Nru -x '*~' lcms2-2.4.orig/CMakeLists.txt lcms2-2.4/CMakeLists.txt
 +if(BUILD_UTILS)
 +    add_subdirectory(utils)
 +endif(BUILD_UTILS)
-diff -Nru -x '*~' lcms2-2.4.orig/include/lcms2.h lcms2-2.4/include/lcms2.h
---- lcms2-2.4.orig/include/lcms2.h	2012-09-10 18:01:51.000000000 +0200
-+++ lcms2-2.4/include/lcms2.h	2013-01-24 11:35:17.022862100 +0100
-@@ -199,25 +199,25 @@
+diff --git a/include/lcms2.h b/include/lcms2.h
+index 739e6e1..76f5f37 100644
+--- a/include/lcms2.h
++++ b/include/lcms2.h
+@@ -215,12 +215,12 @@ typedef int                  cmsBool;
  
  // Calling convention -- this is hardly platform and compiler dependent
  #ifdef CMS_IS_WINDOWS_
 -#  if defined(CMS_DLL) || defined(CMS_DLL_BUILD)
--#     ifdef __BORLANDC__
--#        define CMSEXPORT       __stdcall _export
--#        define CMSAPI
--#     else
--#        define CMSEXPORT      _stdcall
--#        ifdef CMS_DLL_BUILD
-+#   if !defined(CMS_STATIC)
-+#      ifdef __BORLANDC__
-+#         define CMSEXPORT       __stdcall _export
-+#         define CMSAPI
-+#      else
-+#         define CMSEXPORT
-+#         ifdef CMS_DLL_BUILD
++#     if defined(CMS_STATIC)
+ #     ifdef __BORLANDC__
+ #        define CMSEXPORT       __stdcall _export
+ #        define CMSAPI
+ #     else
+-#        define CMSEXPORT      __stdcall
++#        define CMSEXPORT   
+ #        ifdef CMS_DLL_BUILD
  #            define CMSAPI    __declspec(dllexport)
--#        else
--#           define CMSAPI     __declspec(dllimport)
--#       endif
--#     endif
--#  else
--#       define CMSEXPORT
--#       define CMSAPI
--#  endif
-+#         else
-+#            define CMSAPI     __declspec(dllimport)
-+#         endif
-+#      endif
-+#   else
-+#      define CMSEXPORT
-+#      define CMSAPI
-+#   endif
- #else
--# define CMSEXPORT
--# define CMSAPI
-+#   define CMSEXPORT
-+#   define CMSAPI
- #endif
- 
- // Some common definitions
-diff -Nru -x '*~' lcms2-2.4.orig/src/CMakeLists.txt lcms2-2.4/src/CMakeLists.txt
---- lcms2-2.4.orig/src/CMakeLists.txt	1970-01-01 01:00:00.000000000 +0100
-+++ lcms2-2.4/src/CMakeLists.txt	2013-01-24 11:42:39.515171300 +0100
+ #        else
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+new file mode 100644
+index 0000000..6a359fe
+--- /dev/null
++++ b/src/CMakeLists.txt
 @@ -0,0 +1,63 @@
 +# some configure checks:
 +if(WIN32)
@@ -137,20 +120,23 @@ diff -Nru -x '*~' lcms2-2.4.orig/src/CMakeLists.txt lcms2-2.4/src/CMakeLists.txt
 +                                    LIBRARY DESTINATION lib
 +                                    ARCHIVE DESTINATION lib)
 +install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/../include/lcms2.h ${CMAKE_CURRENT_SOURCE_DIR}/../include/lcms2_plugin.h DESTINATION include)
-diff -Nru -x '*~' lcms2-2.4.orig/testbed/CMakeLists.txt lcms2-2.4/testbed/CMakeLists.txt
---- lcms2-2.4.orig/testbed/CMakeLists.txt	1970-01-01 01:00:00.000000000 +0100
-+++ lcms2-2.4/testbed/CMakeLists.txt	2013-01-24 11:35:17.033862800 +0100
+diff --git a/testbed/CMakeLists.txt b/testbed/CMakeLists.txt
+new file mode 100644
+index 0000000..ca9008b
+--- /dev/null
++++ b/testbed/CMakeLists.txt
 @@ -0,0 +1,5 @@
 +include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../include ${CMAKE_CURRENT_SOURCE_DIR}/../src)
 +
-+add_executable(testcms testcms2.c)
++add_executable(testcms testcms2.c testplugin.c zoo_icc.c)
 +target_link_libraries(testcms lcms_static)
 +set_target_properties(testcms PROPERTIES COMPILE_FLAGS -DCMS_STATIC)
-diff -Nru -x '*~' lcms2-2.4.orig/testbed/testcms2.c lcms2-2.4/testbed/testcms2.c
---- lcms2-2.4.orig/testbed/testcms2.c	2012-09-10 18:01:51.000000000 +0200
-+++ lcms2-2.4/testbed/testcms2.c	2013-01-24 11:35:17.043863300 +0100
-@@ -31,7 +31,7 @@
- #include "lcms2_internal.h"
+diff --git a/testbed/testcms2.c b/testbed/testcms2.c
+index 203e53c..9b37774 100644
+--- a/testbed/testcms2.c
++++ b/testbed/testcms2.c
+@@ -28,7 +28,7 @@
+ #include "testcms2.h"
  
  // On Visual Studio, use debug CRT
 -#ifdef _MSC_VER
@@ -158,9 +144,27 @@ diff -Nru -x '*~' lcms2-2.4.orig/testbed/testcms2.c lcms2-2.4/testbed/testcms2.c
  #     include "crtdbg.h"
  #     include <io.h>
  #endif
-diff -Nru -x '*~' lcms2-2.4.orig/utils/CMakeLists.txt lcms2-2.4/utils/CMakeLists.txt
---- lcms2-2.4.orig/utils/CMakeLists.txt	1970-01-01 01:00:00.000000000 +0100
-+++ lcms2-2.4/utils/CMakeLists.txt	2013-01-24 11:35:17.050863800 +0100
+diff --git a/testbed/zoo_icc.c b/testbed/zoo_icc.c
+index b9e1efe..97e3294 100755
+--- a/testbed/zoo_icc.c
++++ b/testbed/zoo_icc.c
+@@ -27,6 +27,11 @@
+ 
+ #include "testcms2.h"
+ 
++#ifdef _WIN32
++#     include "crtdbg.h"
++#     include <io.h>
++#endif
++
+ 
+ // ZOO checks ------------------------------------------------------------------------------------------------------------
+ 
+diff --git a/utils/CMakeLists.txt b/utils/CMakeLists.txt
+new file mode 100644
+index 0000000..c3be5bf
+--- /dev/null
++++ b/utils/CMakeLists.txt
 @@ -0,0 +1,78 @@
 +include_directories(
 +    ${CMAKE_CURRENT_SOURCE_DIR}/../include

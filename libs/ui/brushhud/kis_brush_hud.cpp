@@ -129,6 +129,8 @@ void KisBrushHud::updateProperties()
             w = new KisUniformPaintOpPropertyIntSlider(property, m_d->wdgProperties);
         } else if (property->type() == KisUniformPaintOpProperty::Double) {
             w = new KisUniformPaintOpPropertyDoubleSlider(property, m_d->wdgProperties);
+        } else if (property->type() == KisUniformPaintOpProperty::Bool) {
+            w = new KisUniformPaintOpPropertyCheckBox(property, m_d->wdgProperties);
         }
 
         if (w) {

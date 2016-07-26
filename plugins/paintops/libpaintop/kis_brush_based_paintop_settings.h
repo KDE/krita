@@ -55,6 +55,15 @@ public:
     void setAngle(qreal value);
     qreal angle() const;
 
+    void setSpacing(qreal spacing);
+    qreal spacing() const;
+
+    void setAutoSpacing(bool active, qreal coeff);
+
+    bool autoSpacingActive() const;
+    qreal autoSpacingCoeff() const;
+
+
     QList<KisUniformPaintOpPropertySP> uniformProperties();
 
 protected:

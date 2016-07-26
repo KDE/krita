@@ -19,11 +19,16 @@
 #include "kis_uniform_paintop_property_widget.h"
 
 #include <QVBoxLayout>
+#include <QCheckBox>
 
 #include "kis_slider_spin_box.h"
 #include "kis_acyclic_signal_connector.h"
 #include "kis_slider_based_paintop_property.h"
 #include "kis_debug.h"
+
+/****************************************************************/
+/*      KisUniformPaintOpPropertyWidget                         */
+/****************************************************************/
 
 struct KisUniformPaintOpPropertyWidget::Private
 {
@@ -54,6 +59,10 @@ KisUniformPaintOpPropertySP KisUniformPaintOpPropertyWidget::property() const
 {
     return m_d->property;
 }
+
+/****************************************************************/
+/*      KisUniformPaintOpPropertyIntSlider                      */
+/****************************************************************/
 
 KisUniformPaintOpPropertyIntSlider::KisUniformPaintOpPropertyIntSlider(KisUniformPaintOpPropertySP property, QWidget *parent)
     : KisUniformPaintOpPropertyWidget(property, parent)
@@ -90,6 +99,10 @@ void KisUniformPaintOpPropertyIntSlider::slotSliderChanged(int value)
     emit valueChanged(value);
 }
 
+/****************************************************************/
+/*      KisUniformPaintOpPropertyDoubleSlider                   */
+/****************************************************************/
+
 KisUniformPaintOpPropertyDoubleSlider::KisUniformPaintOpPropertyDoubleSlider(KisUniformPaintOpPropertySP property, QWidget *parent)
     : KisUniformPaintOpPropertyWidget(property, parent)
 {
@@ -120,6 +133,33 @@ void KisUniformPaintOpPropertyDoubleSlider::setValue(const QVariant &value)
 }
 
 void KisUniformPaintOpPropertyDoubleSlider::slotSliderChanged(qreal value)
+{
+    emit valueChanged(value);
+}
+
+/****************************************************************/
+/*      KisUniformPaintOpPropertyCheckBox                   */
+/****************************************************************/
+
+KisUniformPaintOpPropertyCheckBox::KisUniformPaintOpPropertyCheckBox(KisUniformPaintOpPropertySP property, QWidget *parent)
+    : KisUniformPaintOpPropertyWidget(property, parent)
+{
+    QVBoxLayout *layout = new QVBoxLayout(this);
+
+    m_checkBox = new QCheckBox(property->name(), this);
+    m_checkBox->setChecked(property->value().toBool());
+    connect(m_checkBox, SIGNAL(toggled(bool)), SLOT(slotCheckBoxChanged(bool)));
+
+    layout->addWidget(m_checkBox);
+    setLayout(layout);
+}
+
+void KisUniformPaintOpPropertyCheckBox::setValue(const QVariant &value)
+{
+    m_checkBox->setChecked(value.toBool());
+}
+
+void KisUniformPaintOpPropertyCheckBox::slotCheckBoxChanged(bool value)
 {
     emit valueChanged(value);
 }

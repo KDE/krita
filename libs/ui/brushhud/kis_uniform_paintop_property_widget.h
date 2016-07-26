@@ -48,6 +48,8 @@ private:
 
 class KisSliderSpinBox;
 class KisDoubleSliderSpinBox;
+class QCheckBox;
+
 template <typename T> class KisSliderBasedPaintOpProperty;
 typedef KisSliderBasedPaintOpProperty<int> KisIntSliderBasedPaintOpProperty;
 typedef KisSliderBasedPaintOpProperty<qreal> KisDoubleSliderBasedPaintOpProperty;
@@ -80,6 +82,21 @@ private Q_SLOTS:
 
 private:
     KisDoubleSliderSpinBox *m_slider;
+};
+
+class KisUniformPaintOpPropertyCheckBox : public KisUniformPaintOpPropertyWidget
+{
+    Q_OBJECT
+public:
+    KisUniformPaintOpPropertyCheckBox(KisUniformPaintOpPropertySP property, QWidget *parent);
+
+    virtual void setValue(const QVariant &value);
+
+private Q_SLOTS:
+    void slotCheckBoxChanged(bool value);
+
+private:
+    QCheckBox *m_checkBox;
 };
 
 #endif /* __KIS_UNIFORM_PAINTOP_PROPERTY_WIDGET_H */

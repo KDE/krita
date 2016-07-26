@@ -576,6 +576,8 @@ void KisPaintopBox::setCurrentPaintop(const KoID& paintop, KisPaintOpPresetSP pr
 
     m_optionWidget = m_paintopOptionWidgets[paintop];
 
+    KisSignalsBlocker b(m_optionWidget);
+
     preset->setOptionsWidget(m_optionWidget);
 
     m_optionWidget->setImage(m_viewManager->image());
@@ -622,7 +624,9 @@ void KisPaintopBox::slotUpdateOptionsWidget()
     KIS_SAFE_ASSERT_RECOVER_RETURN(preset);
     KIS_SAFE_ASSERT_RECOVER_RETURN(m_optionWidget);
 
+    KisSignalsBlocker b(m_optionWidget);
     m_optionWidget->setConfigurationSafe(preset->settings().data());
+
     m_presetsPopup->resourceSelected(preset.data());
     m_presetsPopup->updateViewSettings();
 

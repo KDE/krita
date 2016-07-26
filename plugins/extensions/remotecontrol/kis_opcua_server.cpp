@@ -41,6 +41,7 @@ QString uaStringToQString(const UA_String& uaString)
 
 static UA_StatusCode readVariable(void *handle, const UA_NodeId nodeid, UA_Boolean sourceTimeStamp,
                                  const UA_NumericRange *range, UA_DataValue *dataValue) {
+
     dataValue->hasValue = true;
 
     QString id = uaStringToQString(nodeid.identifier.string);
@@ -77,6 +78,7 @@ static UA_StatusCode readVariable(void *handle, const UA_NodeId nodeid, UA_Boole
 
 static UA_StatusCode writeVariable(void *handle, const UA_NodeId nodeid,
                                    const UA_Variant *data, const UA_NumericRange *range) {
+
 
     QString id = uaStringToQString(nodeid.identifier.string);
 
@@ -167,23 +169,9 @@ void KisOpcUaServer::run()
         objectIndex++;
     }
 
-    UA_Server_run_startup(server);
-//    if(retval != UA_STATUSCODE_GOOD)
-//    {
-//        UA_Server_delete(server);
-//        nl.deleteMembers(&nl);
-//        return;
-//    }
-
-    while(running) {
-        UA_UInt16 timeout = UA_Server_run_iterate(server, false);
-
-        struct timeval tv;
-        tv.tv_sec = 0;
-        tv.tv_usec = timeout * 1000;
-        select(0, NULL, NULL, NULL, &tv);
-    }
-    UA_Server_run_shutdown(server);
+    UA_StatusCode retval = UA_Server_run(server, &running);
+    UA_Server_delete(server);
+    nl.deleteMembers(&nl);
 }
 
 void KisOpcUaServer::addObject(QObject *object)

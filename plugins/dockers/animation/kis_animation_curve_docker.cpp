@@ -101,6 +101,7 @@ void KisAnimationCurveDocker::setCanvas(KoCanvasBase * canvas)
     if (m_d->canvas) {
         m_d->canvasConnections.clear();
         m_d->canvas->disconnectCanvasObserver(this);
+        m_d->channelListModel->selectedNodesChanged(KisNodeList());
     }
 
     m_d->canvas = dynamic_cast<KisCanvas2*>(canvas);

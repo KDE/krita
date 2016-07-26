@@ -196,6 +196,8 @@ void TimelineFramesModel::setDummiesFacade(KisDummiesFacadeBase *dummiesFacade, 
     }
 
     m_d->image = image;
+    KisTimeBasedItemModel::setImage(image);
+
     m_d->dummiesFacade = dummiesFacade;
     m_d->converter.reset();
 

@@ -1689,3 +1689,13 @@ void KisConfig::setCustomFFMpegPath(const QString &value) const
 {
     m_cfg.writeEntry("ffmpegExecutablePath", value);
 }
+
+bool KisConfig::showBrushHud(bool defaultValue) const
+{
+    return defaultValue ? false : m_cfg.readEntry("showBrushHud", false);
+}
+
+void KisConfig::setShowBrushHud(bool value)
+{
+    m_cfg.writeEntry("showBrushHud", value);
+}

@@ -164,13 +164,14 @@ KisPopupPalette::KisPopupPalette(KisFavoriteResourceManager* manager, const KoCo
 
     connect(m_settingsButton, SIGNAL(clicked()), SLOT(slotShowTagsPopup()));
 
+    KisConfig cfg;
     m_brushHudButton = new KisRoundHudButton(this);
     m_brushHudButton->setCheckable(true);
     m_brushHudButton->setOnOffIcons(KisIconUtils::loadIcon("arrow-left"), KisIconUtils::loadIcon("arrow-right"));
     m_brushHudButton->setGeometry(widgetSize - 1.0 * auxButtonSize, widgetSize - auxButtonSize,
                                   auxButtonSize, auxButtonSize);
-
     connect(m_brushHudButton, SIGNAL(toggled(bool)), SLOT(showHudWidget(bool)));
+    m_brushHudButton->setChecked(cfg.showBrushHud());
 
     setVisible(true);
     setVisible(false);
@@ -266,6 +267,9 @@ void KisPopupPalette::showHudWidget(bool visible)
 
     m_brushHud->setVisible(reallyVisible);
     adjustLayout(m_lastCenterPoint);
+
+    KisConfig cfg;
+    cfg.setShowBrushHud(visible);
 }
 
 void KisPopupPalette::showPopupPalette(const QPoint &p)
@@ -420,19 +424,6 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
             painter.rotate(selectedColor() * -1 * rotationAngle);
         }
     }
-
-    // //painting configure background, then icon
-    // QPainterPath configureContainer;
-    // int side = qMin(width(), height());
-
-
-    // configureContainer.addEllipse( side / 2 - 38 , side / 2 - 38 , 35 , 35 );
-    // painter.fillPath(configureContainer,palette().brush(QPalette::Window));
-    // painter.drawPath(configureContainer);
-
-
-    // QPixmap settingIcon = KisIconUtils::loadIcon("configure").pixmap(QSize(22,22));
-    // painter.drawPixmap(side / 2 - 40 + 9, side / 2 - 40 + 9, settingIcon);
 }
 
 QPainterPath KisPopupPalette::drawDonutPathFull(int x, int y, int inner_radius, int outer_radius)

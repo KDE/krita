@@ -57,7 +57,7 @@
       </widget>
      </item>
      <item row="0" column="1">
-      <widget class="KisDoubleSliderSpinBox" name="angleKisDoubleSliderSpinBox">
+      <widget class="KisDoubleSliderSpinBox" name="angleKisDoubleSliderSpinBox" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
          <horstretch>1</horstretch>
@@ -95,7 +95,7 @@
       </widget>
      </item>
      <item row="1" column="1">
-      <widget class="KisDoubleSliderSpinBox" name="separationKisDoubleSliderSpinBox">
+      <widget class="KisDoubleSliderSpinBox" name="separationKisDoubleSliderSpinBox" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
          <horstretch>1</horstretch>
@@ -133,7 +133,7 @@
       </widget>
      </item>
      <item row="2" column="1">
-      <widget class="KisDoubleSliderSpinBox" name="thicknessKisDoubleSliderSpinBox">
+      <widget class="KisDoubleSliderSpinBox" name="thicknessKisDoubleSliderSpinBox" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
          <horstretch>1</horstretch>
@@ -171,7 +171,7 @@
       </widget>
      </item>
      <item row="3" column="1">
-      <widget class="KisDoubleSliderSpinBox" name="originXKisDoubleSliderSpinBox">
+      <widget class="KisDoubleSliderSpinBox" name="originXKisDoubleSliderSpinBox" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
          <horstretch>1</horstretch>
@@ -209,7 +209,7 @@
       </widget>
      </item>
      <item row="4" column="1">
-      <widget class="KisDoubleSliderSpinBox" name="originYKisDoubleSliderSpinBox">
+      <widget class="KisDoubleSliderSpinBox" name="originYKisDoubleSliderSpinBox" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
          <horstretch>1</horstretch>
@@ -265,7 +265,7 @@
          </size>
         </property>
         <property name="text">
-         <string>No crosshatching</string>
+         <string>No crosshatch&amp;ing</string>
         </property>
         <property name="checked">
          <bool>true</bool>
@@ -287,7 +287,7 @@
          </size>
         </property>
         <property name="text">
-         <string>Perpendicular plane only</string>
+         <string>Pe&amp;rpendicular plane only</string>
         </property>
         <property name="checked">
          <bool>false</bool>
@@ -309,7 +309,7 @@
          </size>
         </property>
         <property name="text">
-         <string>-45° plane then +45° plane</string>
+         <string>-&amp;45° plane then +45° plane</string>
         </property>
        </widget>
       </item>
@@ -328,7 +328,7 @@
          </size>
         </property>
         <property name="text">
-         <string>+45° plane then -45° plane</string>
+         <string>+45° plane &amp;then -45° plane</string>
         </property>
        </widget>
       </item>
@@ -347,7 +347,7 @@
          </size>
         </property>
         <property name="text">
-         <string>Moiré pattern</string>
+         <string>&amp;Moiré pattern</string>
         </property>
        </widget>
       </item>
@@ -383,7 +383,7 @@
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="QSpinBox" name="separationIntervalSpinBox">
+       <widget class="KisIntParseSpinBox" name="separationIntervalSpinBox">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
           <horstretch>0</horstretch>
@@ -426,6 +426,11 @@
   </layout>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>KisIntParseSpinBox</class>
+   <extends>QSpinBox</extends>
+   <header>kis_intparsespinbox.h</header>
+  </customwidget>
   <customwidget>
    <class>KisDoubleSliderSpinBox</class>
    <extends>QWidget</extends>

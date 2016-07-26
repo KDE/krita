@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>527</width>
+    <width>537</width>
     <height>300</height>
    </rect>
   </property>
@@ -100,7 +100,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QDoubleSpinBox" name="sizeToStartFromSpinBox">
+      <widget class="KisDoubleParseSpinBox" name="sizeToStartFromSpinBox">
        <property name="suffix">
         <string> px</string>
        </property>
@@ -123,7 +123,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QDoubleSpinBox" name="deltaValueSpinBox">
+      <widget class="KisDoubleParseSpinBox" name="deltaValueSpinBox">
        <property name="suffix">
         <string> px</string>
        </property>
@@ -153,7 +153,7 @@
       </widget>
      </item>
      <item>
-      <widget class="KisSliderSpinBox" name="sliderPrecision">
+      <widget class="KisSliderSpinBox" name="sliderPrecision" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
          <horstretch>0</horstretch>
@@ -167,6 +167,11 @@
   </layout>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>KisDoubleParseSpinBox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header>kis_doubleparsespinbox.h</header>
+  </customwidget>
   <customwidget>
    <class>KisSliderSpinBox</class>
    <extends>QWidget</extends>

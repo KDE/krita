@@ -27,14 +27,17 @@
 #include <QMouseEvent>
 #include <QApplication>
 #include <qpainter.h>
+#include <QtMath>
 
 struct KisAnimationCurvesView::Private
 {
     Private()
-        : isDraggingKeyframe(false),
-          isAdjustingHandle(false)
+        : model(0)
+        , isDraggingKeyframe(false)
+        , isAdjustingHandle(false)
     {}
 
+    KisAnimationCurvesModel *model;
     TimelineRulerHeader *horizontalHeader;
     KisAnimationCurvesValueRuler *verticalHeader;
     KisAnimationCurvesKeyframeDelegate *itemDelegate;
@@ -63,6 +66,8 @@ KisAnimationCurvesView::~KisAnimationCurvesView()
 
 void KisAnimationCurvesView::setModel(QAbstractItemModel *model)
 {
+    m_d->model = dynamic_cast<KisAnimationCurvesModel*>(model);
+
     QAbstractItemView::setModel(model);
     m_d->horizontalHeader->setModel(model);
 
@@ -152,6 +157,8 @@ void KisAnimationCurvesView::paintCurve(int channel, int firstFrame, int lastFra
     QPointF rightTangent = m_d->itemDelegate->rightHandle(index, index == currentIndex());
 
     while(index.column() <= lastFrame) {
+        int interpolationMode = index.data(KisAnimationCurvesModel::InterpolationModeRole).toInt();
+
         int time = (m_d->isDraggingKeyframe && selectionModel()->isSelected(index)) ? index.column() + selectionOffset : index.column();
         index = findNextKeyframeIndex(channel, time, selectionOffset, false);
         if (!index.isValid()) return;
@@ -160,7 +167,13 @@ void KisAnimationCurvesView::paintCurve(int channel, int firstFrame, int lastFra
         QPointF nextKeyPos = m_d->itemDelegate->nodeCenter(index, selectionModel()->isSelected(index));
         QPointF leftTangent = m_d->itemDelegate->leftHandle(index, active);
 
-        paintCurveSegment(painter, previousKeyPos, rightTangent, leftTangent, nextKeyPos);
+        if (interpolationMode == KisKeyframe::Constant) {
+            painter.drawLine(previousKeyPos, QPointF(nextKeyPos.x(), previousKeyPos.y()));
+        } else if (interpolationMode == KisKeyframe::Linear) {
+            painter.drawLine(previousKeyPos, nextKeyPos);
+        } else {
+            paintCurveSegment(painter, previousKeyPos, rightTangent, leftTangent, nextKeyPos);
+        }
 
         previousKeyPos = nextKeyPos;
         rightTangent = m_d->itemDelegate->rightHandle(index, active);
@@ -371,11 +384,30 @@ void KisAnimationCurvesView::mouseReleaseEvent(QMouseEvent *e)
             viewport()->update();
         } else if (m_d->isAdjustingHandle) {
             QModelIndex index = currentIndex();
-            KisAnimationCurvesModel::ItemDataRole role = (m_d->adjustedHandle == 0) ?
-                        KisAnimationCurvesModel::LeftTangentRole : KisAnimationCurvesModel::RightTangentRole;
+            int mode = index.data(KisAnimationCurvesModel::TangentsModeRole).toInt();
 
-            QPointF adjustedTangent = m_d->itemDelegate->adjustedTangent(index, m_d->adjustedHandle);
-            model()->setData(index, adjustedTangent, role);
+            m_d->model->beginCommand(kundo2_i18n("Adjust tangent"));
+
+            if (mode == KisKeyframe::Smooth) {
+                QPointF leftHandle = m_d->itemDelegate->leftHandle(index, true);
+                QPointF rightHandle = m_d->itemDelegate->rightHandle(index, true);
+
+                QPointF leftTangent = m_d->itemDelegate->unscaledTangent(leftHandle);
+                QPointF rightTangent = m_d->itemDelegate->unscaledTangent(rightHandle);
+
+                model()->setData(index, leftTangent, KisAnimationCurvesModel::LeftTangentRole);
+                model()->setData(index, rightTangent, KisAnimationCurvesModel::RightTangentRole);
+            } else {
+                if (m_d->adjustedHandle == 0) {
+                    QPointF leftHandle = m_d->itemDelegate->leftHandle(index, true);
+                    model()->setData(index, m_d->itemDelegate->unscaledTangent(leftHandle), KisAnimationCurvesModel::LeftTangentRole);
+                } else {
+                    QPointF rightHandle = m_d->itemDelegate->rightHandle(index, true);
+                    model()->setData(index, m_d->itemDelegate->unscaledTangent(rightHandle), KisAnimationCurvesModel::RightTangentRole);
+                }
+            }
+
+            m_d->model->endCommand();
 
             m_d->isAdjustingHandle = false;
             m_d->itemDelegate->setHandleAdjustment(QPointF(), m_d->adjustedHandle);
@@ -418,4 +450,68 @@ void KisAnimationCurvesView::slotDataChanged(const QModelIndex &topLeft, const Q
 void KisAnimationCurvesView::slotHeaderDataChanged(Qt::Orientation orientation, int first, int last)
 {
     viewport()->update();
+}
+
+void KisAnimationCurvesView::applyConstantMode()
+{
+    m_d->model->beginCommand(kundo2_i18n("Set interpolation mode"));
+    Q_FOREACH(QModelIndex index, selectedIndexes()) {
+        m_d->model->setData(index, KisKeyframe::Constant, KisAnimationCurvesModel::InterpolationModeRole);
+    }
+    m_d->model->endCommand();
+}
+
+void KisAnimationCurvesView::applyLinearMode()
+{
+    m_d->model->beginCommand(kundo2_i18n("Set interpolation mode"));
+    Q_FOREACH(QModelIndex index, selectedIndexes()) {
+        m_d->model->setData(index, KisKeyframe::Linear, KisAnimationCurvesModel::InterpolationModeRole);
+    }
+    m_d->model->endCommand();
+}
+
+void KisAnimationCurvesView::applyBezierMode()
+{
+    m_d->model->beginCommand(kundo2_i18n("Set interpolation mode"));
+    Q_FOREACH(QModelIndex index, selectedIndexes()) {
+        m_d->model->setData(index, KisKeyframe::Bezier, KisAnimationCurvesModel::InterpolationModeRole);
+    }
+    m_d->model->endCommand();
+}
+
+void KisAnimationCurvesView::applySmoothMode()
+{
+    m_d->model->beginCommand(kundo2_i18n("Set interpolation mode"));
+    Q_FOREACH(QModelIndex index, selectedIndexes()) {
+        QVector2D leftVisualTangent(m_d->itemDelegate->leftHandle(index, false));
+        QVector2D rightVisualTangent(m_d->itemDelegate->rightHandle(index, false));
+
+        if (leftVisualTangent.lengthSquared() > 0 && rightVisualTangent.lengthSquared() > 0) {
+            float leftAngle = qAtan2(-leftVisualTangent.y(), -leftVisualTangent.x());
+            float rightAngle = qAtan2(rightVisualTangent.y(), rightVisualTangent.x());
+            float angle = (leftAngle + rightAngle) / 2;
+            QVector2D unit(qCos(angle), qSin(angle));
+
+            leftVisualTangent = -unit * QVector2D(leftVisualTangent).length();
+            rightVisualTangent = unit * QVector2D(rightVisualTangent).length();
+
+            QPointF leftTangent = m_d->itemDelegate->unscaledTangent(leftVisualTangent.toPointF());
+            QPointF rightTangent = m_d->itemDelegate->unscaledTangent(rightVisualTangent.toPointF());
+
+            model()->setData(index, leftTangent, KisAnimationCurvesModel::LeftTangentRole);
+            model()->setData(index, rightTangent, KisAnimationCurvesModel::RightTangentRole);
+        }
+
+        model()->setData(index, KisKeyframe::Smooth, KisAnimationCurvesModel::TangentsModeRole);
+    }
+    m_d->model->endCommand();
+}
+
+void KisAnimationCurvesView::applySharpMode()
+{
+    m_d->model->beginCommand(kundo2_i18n("Set interpolation mode"));
+    Q_FOREACH(QModelIndex index, selectedIndexes()) {
+        model()->setData(index, KisKeyframe::Sharp, KisAnimationCurvesModel::TangentsModeRole);
+    }
+    m_d->model->endCommand();
 }

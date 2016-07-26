@@ -39,6 +39,7 @@ public:
     void setMainWindow(KisViewManager *kisview);
 
 private Q_SLOTS:
+    void slotUpdateIcons();
     void slotListRowsInserted(const QModelIndex &parentIndex, int first, int last);
 
 private:

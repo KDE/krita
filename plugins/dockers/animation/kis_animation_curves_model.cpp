@@ -68,9 +68,11 @@ struct KisAnimationCurvesModel::Private
 {
     QList<KisAnimationCurve*> curves;
     int nextColorHue;
+    KUndo2Command *undoCommand;
 
     Private()
         : nextColorHue(0)
+        , undoCommand(0)
     {}
 
     KisAnimationCurve * getCurveAt(const QModelIndex& index) {
@@ -194,11 +196,45 @@ bool KisAnimationCurvesModel::setData(const QModelIndex &index, const QVariant &
             QPointF leftTangent = (role == LeftTangentRole ? value.toPointF() : keyframe->leftTangent());
             QPointF rightTangent = (role == RightTangentRole ? value.toPointF() : keyframe->rightTangent());
 
-            KUndo2Command *command = new KUndo2Command(kundo2_i18n("Adjust tangent"));
-            channel->setInterpolationTangents(keyframe, leftTangent, rightTangent, command);
-            image()->postExecutionUndoAdapter()->addCommand(toQShared(command));
+            KUndo2Command *command = m_d->undoCommand ? m_d->undoCommand : new KUndo2Command(kundo2_i18n("Adjust tangent"));
+            channel->setInterpolationTangents(keyframe, keyframe->tangentsMode(), leftTangent, rightTangent, command);
+
+            if (!m_d->undoCommand) {
+                image()->postExecutionUndoAdapter()->addCommand(toQShared(command));
+            }
 
             return true;
+        }
+    }
+        break;
+    case InterpolationModeRole:
+    {
+        KisKeyframeSP keyframe = channel->keyframeAt(index.column());
+        if (keyframe) {
+            KUndo2Command *command = m_d->undoCommand ? m_d->undoCommand : new KUndo2Command(kundo2_i18n("Set interpolation mode"));
+            channel->setInterpolationMode(keyframe, (KisKeyframe::InterpolationMode)value.toInt(), command);
+
+            if (!m_d->undoCommand) {
+                image()->postExecutionUndoAdapter()->addCommand(toQShared(command));
+            }
+        }
+    }
+        break;
+    case TangentsModeRole:
+    {
+        KisKeyframeSP keyframe = channel->keyframeAt(index.column());
+        if (keyframe) {
+            KUndo2Command *command = m_d->undoCommand ? m_d->undoCommand : new KUndo2Command(kundo2_i18n("Set interpolation mode"));
+
+            KisKeyframe::InterpolationTangentsMode mode = (KisKeyframe::InterpolationTangentsMode)value.toInt();
+            QPointF leftTangent = keyframe->leftTangent();
+            QPointF rightTangent = keyframe->rightTangent();
+
+            channel->setInterpolationTangents(keyframe, mode, leftTangent, rightTangent, command);
+
+            if (!m_d->undoCommand) {
+                image()->postExecutionUndoAdapter()->addCommand(toQShared(command));
+            }
         }
     }
         break;
@@ -213,6 +249,20 @@ QVariant KisAnimationCurvesModel::headerData(int section, Qt::Orientation orient
 {
     // TODO
     return KisTimeBasedItemModel::headerData(section, orientation, role);
+}
+
+void KisAnimationCurvesModel::beginCommand(const KUndo2MagicString &text)
+{
+    KIS_ASSERT_RECOVER_RETURN(!m_d->undoCommand);
+    m_d->undoCommand = new KUndo2Command(text);
+}
+
+void KisAnimationCurvesModel::endCommand()
+{
+    KIS_ASSERT_RECOVER_RETURN(m_d->undoCommand);
+    image()->postExecutionUndoAdapter()->addCommand(toQShared(m_d->undoCommand));
+
+    m_d->undoCommand = 0;
 }
 
 bool KisAnimationCurvesModel::removeFrames(const QModelIndexList &indexes)

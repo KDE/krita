@@ -40,7 +40,8 @@ public:
     qreal scalarValue(const KisKeyframeSP keyframe) const;
     void setScalarValue(KisKeyframeSP keyframe, qreal value, KUndo2Command *parentCommand = 0);
 
-    void setInterpolationTangents(KisKeyframeSP keyframe, QPointF leftTangent, QPointF rightTangent, KUndo2Command *parentCommand = 0);
+    void setInterpolationMode(KisKeyframeSP keyframe, KisKeyframe::InterpolationMode mode, KUndo2Command *parentCommand = 0);
+    void setInterpolationTangents(KisKeyframeSP keyframe, KisKeyframe::InterpolationTangentsMode, QPointF leftTangent, QPointF rightTangent, KUndo2Command *parentCommand);
 
     qreal interpolatedValue(int time) const;
     qreal currentValue() const;
@@ -59,8 +60,7 @@ protected:
     KisKeyframeSP loadKeyframe(const QDomElement &keyframeNode);
 
 private:
-    void setScalarValueImpl(KisKeyframeSP keyframe, qreal value);
-    void setTangentsImpl(KisKeyframeSP keyframe, QPointF leftTangent, QPointF rightTangent);
+    void notifyKeyframeChanged(KisKeyframeSP keyframe);
 
     struct Private;
     QScopedPointer<Private> m_d;

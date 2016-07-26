@@ -20,8 +20,10 @@
 
 #include <QPainter>
 #include <QApplication>
+#include <QVector2D>
 
 #include "kis_animation_curves_model.h"
+#include "kis_keyframe.h"
 
 const int NODE_RENDER_RADIUS = 2;
 const int NODE_UI_RADIUS = 8;
@@ -35,8 +37,9 @@ struct KisAnimationCurvesKeyframeDelegate::Private
     const TimelineRulerHeader *horizontalRuler;
     const KisAnimationCurvesValueRuler *verticalRuler;
     QPointF selectionOffset;
-    QPointF leftHandleOffset;
-    QPointF rightHandleOffset;
+
+    int adjustedHandle;
+    QPointF handleAdjustment;
 };
 
 KisAnimationCurvesKeyframeDelegate::KisAnimationCurvesKeyframeDelegate(const TimelineRulerHeader *horizontalRuler, const KisAnimationCurvesValueRuler *verticalRuler, QObject *parent)
@@ -98,25 +101,33 @@ QPointF KisAnimationCurvesKeyframeDelegate::nodeCenter(const QModelIndex index, 
 
 QPointF KisAnimationCurvesKeyframeDelegate::leftHandle(const QModelIndex index, bool active) const
 {
-    QPointF tangent = index.data(KisAnimationCurvesModel::LeftTangentRole).toPointF();
-
-    float x = tangent.x() * m_d->horizontalRuler->defaultSectionSize();
-    float y = tangent.y() * m_d->verticalRuler->scaleFactor();
-
-    QPointF handlePos = QPointF(x, y);
-    if (active) handlePos += m_d->leftHandleOffset;
-    return handlePos;
+    return handlePosition(index, active, 0);
 }
 
 QPointF KisAnimationCurvesKeyframeDelegate::rightHandle(const QModelIndex index, bool active) const
 {
-    QPointF tangent = index.data(KisAnimationCurvesModel::RightTangentRole).toPointF();
+    return handlePosition(index, active, 1);
+}
+
+QPointF KisAnimationCurvesKeyframeDelegate::handlePosition(const QModelIndex index, bool active, int handle) const
+{
+    int role = (handle == 0) ? KisAnimationCurvesModel::LeftTangentRole : KisAnimationCurvesModel::RightTangentRole;
+    QPointF tangent = index.data(role).toPointF();
 
     float x = tangent.x() * m_d->horizontalRuler->defaultSectionSize();
     float y = tangent.y() * m_d->verticalRuler->scaleFactor();
-
     QPointF handlePos = QPointF(x, y);
-    if (active) handlePos += m_d->rightHandleOffset;
+
+    if (active && !m_d->handleAdjustment.isNull()) {
+        if (handle == m_d->adjustedHandle) {
+            handlePos += m_d->handleAdjustment;
+        } else if (index.data(KisAnimationCurvesModel::TangentsModeRole).toInt() == KisKeyframe::Smooth) {
+            qreal length = QVector2D(handlePos).length();
+            QVector2D opposite(handlePosition(index, active, 1-handle));
+            handlePos = (-length * opposite.normalized()).toPointF();
+        }
+    }
+
     return handlePos;
 }
 
@@ -127,19 +138,14 @@ void KisAnimationCurvesKeyframeDelegate::setSelectedItemVisualOffset(QPointF off
 
 void KisAnimationCurvesKeyframeDelegate::setHandleAdjustment(QPointF offset, int handle)
 {
-    if (handle == 0) {
-        m_d->leftHandleOffset = offset;
-    } else {
-        m_d->rightHandleOffset = offset;
-    }
+    m_d->adjustedHandle = handle;
+    m_d->handleAdjustment = offset;
 }
 
-QPointF KisAnimationCurvesKeyframeDelegate::adjustedTangent(const QModelIndex &index, int handle) const
+QPointF KisAnimationCurvesKeyframeDelegate::unscaledTangent(QPointF handlePosition) const
 {
-    QPointF handlePos = (handle == 0) ? leftHandle(index, true) : rightHandle(index, true);
-
-    qreal x = handlePos.x() / m_d->horizontalRuler->defaultSectionSize();
-    qreal y = handlePos.y() / m_d->verticalRuler->scaleFactor();
+    qreal x = handlePosition.x() / m_d->horizontalRuler->defaultSectionSize();
+    qreal y = handlePosition.y() / m_d->verticalRuler->scaleFactor();
 
     return QPointF(x, y);
 }

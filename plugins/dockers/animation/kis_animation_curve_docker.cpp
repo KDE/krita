@@ -18,6 +18,7 @@
 
 #include <QTreeView>
 #include <QSplitter>
+#include <QToolBar>
 
 #include "kis_animation_curve_docker.h"
 #include "kis_animation_curves_model.h"
@@ -33,31 +34,25 @@
 #include "kis_node_manager.h"
 #include "kis_animation_frame_cache.h"
 #include "klocalizedstring.h"
+#include "kis_icon_utils.h"
+
+#include "ui_wdg_animation_curves.h"
 
 struct KisAnimationCurveDocker::Private
 {
     Private(QWidget *parent)
-        : curvesModel(new KisAnimationCurvesModel(parent))
-        , curvesView(new KisAnimationCurvesView(parent))
-        , channelListView(new QTreeView(parent))
+        : curvesWidget()
+        , curvesModel(new KisAnimationCurvesModel(parent))
     {
         channelListModel = new KisAnimationCurveChannelListModel(curvesModel, parent);
-        curvesView->setModel(curvesModel);
-        channelListView->setModel(channelListModel);
-
-        KisAnimationCurveChannelListDelegate *listDelegate = new KisAnimationCurveChannelListDelegate(channelListView);
-        channelListView->setItemDelegate(listDelegate);
-        channelListView->setHeaderHidden(true);
     }
 
-    KisAnimationCurvesModel *curvesModel;
-    KisAnimationCurvesView *curvesView;
+    Ui_WdgAnimationCurves curvesWidget;
 
+    KisAnimationCurvesModel *curvesModel;
     KisAnimationCurveChannelListModel *channelListModel;
-    QTreeView *channelListView;
 
     QPointer<KisCanvas2> canvas;
-
     KisSignalAutoConnectionsStore canvasConnections;
 };
 
@@ -65,16 +60,35 @@ KisAnimationCurveDocker::KisAnimationCurveDocker()
     : QDockWidget(i18n("Animation curves"))
     , m_d(new Private(this))
 {
-    QSplitter *splitter = new QSplitter(this);
+    QWidget *mainWidget = new QWidget(this);
+    setWidget(mainWidget);
+    m_d->curvesWidget.setupUi(mainWidget);
 
-    splitter->addWidget(m_d->channelListView);
-    splitter->addWidget(m_d->curvesView);
-    splitter->setStretchFactor(0, 1);
-    splitter->setStretchFactor(1, 4);
-    setWidget(splitter);
+    KisAnimationCurvesView *curvesView = m_d->curvesWidget.curvesView;
+    QTreeView *channelListView = m_d->curvesWidget.channelListView;
+    KisAnimationCurveChannelListDelegate *listDelegate = new KisAnimationCurveChannelListDelegate(channelListView);
+
+    curvesView->setModel(m_d->curvesModel);
+    channelListView->setModel(m_d->channelListModel);
+    channelListView->setItemDelegate(listDelegate);
+    channelListView->setHeaderHidden(true);
+
+    m_d->curvesWidget.splitter->setStretchFactor(0, 1);
+    m_d->curvesWidget.splitter->setStretchFactor(1, 4);
 
     connect(m_d->channelListModel, &KisAnimationCurveChannelListModel::rowsInserted,
             this, &KisAnimationCurveDocker::slotListRowsInserted);
+
+    connect(m_d->curvesWidget.btnConstantInterpolation, &QToolButton::clicked,
+            curvesView, &KisAnimationCurvesView::applyConstantMode);
+    connect(m_d->curvesWidget.btnLinearInterpolation, &QToolButton::clicked,
+            curvesView, &KisAnimationCurvesView::applyLinearMode);
+    connect(m_d->curvesWidget.btnBezierInterpolation, &QToolButton::clicked,
+            curvesView, &KisAnimationCurvesView::applyBezierMode);
+    connect(m_d->curvesWidget.btnSmooth, &QToolButton::clicked,
+            curvesView, &KisAnimationCurvesView::applySmoothMode);
+    connect(m_d->curvesWidget.btnSharp, &QToolButton::clicked,
+            curvesView, &KisAnimationCurvesView::applySharpMode);
 }
 
 KisAnimationCurveDocker::~KisAnimationCurveDocker()
@@ -117,7 +131,17 @@ void KisAnimationCurveDocker::unsetCanvas()
 
 void KisAnimationCurveDocker::setMainWindow(KisViewManager *kisview)
 {
+    connect(kisview->mainWindow(), SIGNAL(themeChanged()), this, SLOT(slotUpdateIcons()));
+    slotUpdateIcons();
+}
 
+void KisAnimationCurveDocker::slotUpdateIcons()
+{
+    m_d->curvesWidget.btnConstantInterpolation->setIcon(KisIconUtils::loadIcon("interpolation_constant"));
+    m_d->curvesWidget.btnLinearInterpolation->setIcon(KisIconUtils::loadIcon("interpolation_linear"));
+    m_d->curvesWidget.btnBezierInterpolation->setIcon(KisIconUtils::loadIcon("interpolation_bezier"));
+    m_d->curvesWidget.btnSmooth->setIcon(KisIconUtils::loadIcon("interpolation_smooth"));
+    m_d->curvesWidget.btnSharp->setIcon(KisIconUtils::loadIcon("interpolation_sharp"));
 }
 
 void KisAnimationCurveDocker::slotListRowsInserted(const QModelIndex &parentIndex, int first, int last)
@@ -126,6 +150,6 @@ void KisAnimationCurveDocker::slotListRowsInserted(const QModelIndex &parentInde
 
     for (int r=first; r<=last; r++) {
         QModelIndex index = m_d->channelListModel->index(r, 0, parentIndex);
-        m_d->channelListView->expand(index);
+        m_d->curvesWidget.channelListView->expand(index);
     }
 }

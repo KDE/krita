@@ -80,7 +80,16 @@
         <file>light_landscape.svg</file>
         <file>light_portrait.svg</file>
         
-        
+        <file>dark_interpolation_constant.svg</file>
+        <file>dark_interpolation_linear.svg</file>
+        <file>dark_interpolation_bezier.svg</file>
+        <file>dark_interpolation_sharp.svg</file>
+        <file>dark_interpolation_smooth.svg</file>
 
+        <file>light_interpolation_bezier.svg</file>
+        <file>light_interpolation_constant.svg</file>
+        <file>light_interpolation_linear.svg</file>
+        <file>light_interpolation_sharp.svg</file>
+        <file>light_interpolation_smooth.svg</file>
     </qresource>
 </RCC>

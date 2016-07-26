@@ -40,7 +40,7 @@ public:
     QPointF rightHandle(const QModelIndex index, bool active) const;
     void setSelectedItemVisualOffset(QPointF offset);
     void setHandleAdjustment(QPointF offset, int handle);
-    QPointF adjustedTangent(const QModelIndex &index, int handle) const;
+    QPointF unscaledTangent(QPointF handlePosition) const;
 
     QRect itemRect(const QModelIndex index) const;
     QRect visualRect(const QModelIndex index) const;
@@ -50,6 +50,7 @@ private:
     const QScopedPointer<Private> m_d;
 
     void paintHandle(QPainter *painter, QPointF nodePos, QPointF tangent) const;
+    QPointF handlePosition(const QModelIndex index, bool active, int handle) const;
 };
 
 #endif

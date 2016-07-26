@@ -25,6 +25,7 @@
 
 #include "kis_time_based_item_model.h"
 #include "kis_types.h"
+#include "kundo2command.h"
 
 class KisScalarKeyframeChannel;
 
@@ -59,6 +60,13 @@ public:
     QVariant data(const QModelIndex &index, int role) const;
     bool setData(const QModelIndex &index, const QVariant &value, int role);
     QVariant headerData(int section, Qt::Orientation orientation, int role) const;
+
+    /**
+     * Begins a block of commands. The following calls to setData will be grouped to a single undo step.
+     * Note: MUST be followed by a call to endCommand().
+     */
+    void beginCommand(const KUndo2MagicString &text);
+    void endCommand();
 
     bool removeFrames(const QModelIndexList &indexes);
     bool adjustKeyframes(const QModelIndexList &indexes, int timeOffset, qreal valueOffset);

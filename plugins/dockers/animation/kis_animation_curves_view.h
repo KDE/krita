@@ -52,6 +52,13 @@ protected:
     void mouseMoveEvent(QMouseEvent *);
     void mouseReleaseEvent(QMouseEvent *);
 
+public Q_SLOTS:
+    void applyConstantMode();
+    void applyLinearMode();
+    void applyBezierMode();
+    void applySmoothMode();
+    void applySharpMode();
+
 protected Q_SLOTS:
     void updateGeometries();
 

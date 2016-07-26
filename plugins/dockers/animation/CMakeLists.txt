@@ -44,6 +44,7 @@ set(KRITA_ANIMATIONDOCKER_SOURCES
 ki18n_wrap_ui(KRITA_ANIMATIONDOCKER_SOURCES
     wdg_animation.ui
     onion_skins_docker.ui
+    wdg_animation_curves.ui
 )
 
 add_library(kritaanimationdocker MODULE ${KRITA_ANIMATIONDOCKER_SOURCES})

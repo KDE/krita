@@ -166,7 +166,7 @@ void KisKeyframingTest::testScalarInterpolation()
 
     // Bezier
 
-    key1->setInterpolationMode(KisKeyframe::Sharp);
+    key1->setInterpolationMode(KisKeyframe::Bezier);
     key1->setInterpolationTangents(QPointF(), QPointF(1,4));
     key2->setInterpolationTangents(QPointF(-4,2), QPointF());
 

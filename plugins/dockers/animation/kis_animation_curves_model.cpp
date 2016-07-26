@@ -142,6 +142,8 @@ QVariant KisAnimationCurvesModel::data(const QModelIndex &index, int role) const
             return (keyframe.isNull()) ? QVariant() : keyframe->rightTangent();
         case InterpolationModeRole:
             return (keyframe.isNull()) ? QVariant() : keyframe->interpolationMode();
+        case TangentsModeRole:
+            return (keyframe.isNull()) ? QVariant() : keyframe->tangentsMode();
         case CurveColorRole:
             return curve->color();
         case CurveVisibleRole:

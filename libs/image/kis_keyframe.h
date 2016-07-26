@@ -33,6 +33,10 @@ public:
     enum InterpolationMode {
         Constant,
         Linear,
+        Bezier
+    };
+
+    enum InterpolationTangentsMode {
         Sharp,
         Smooth
     };
@@ -45,6 +49,8 @@ public:
 
     void setInterpolationMode(InterpolationMode mode);
     InterpolationMode interpolationMode() const;
+    void setTangentsMode(InterpolationTangentsMode mode);
+    InterpolationTangentsMode tangentsMode() const;
     void setInterpolationTangents(QPointF leftTangent, QPointF rightTangent);
     QPointF leftTangent() const;
     QPointF rightTangent() const;

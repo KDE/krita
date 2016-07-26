@@ -262,29 +262,50 @@ qreal findCubicCurveParameter(int time0, qreal delta0, qreal delta1, int time1, 
 qreal KisScalarKeyframeChannel::interpolatedValue(int time) const
 {
     KisKeyframeSP activeKey = activeKeyframeAt(time);
-    if (activeKey.isNull()) {
-        return qQNaN();
-    }
-
-    if (activeKey->interpolationMode() == KisKeyframe::Constant) return scalarValue(activeKey);
+    if (activeKey.isNull()) return qQNaN();
 
     KisKeyframeSP nextKey = nextKeyframe(activeKey);
-    if (nextKey.isNull()) return scalarValue(activeKey);
 
-    QPointF point0 = QPointF(activeKey->time(), scalarValue(activeKey));
-    QPointF point1 = QPointF(nextKey->time(), scalarValue(nextKey));
+    qreal result = qQNaN();
+    if (time == activeKey->time() || nextKey.isNull()) {
+        result = scalarValue(activeKey);
+    } else {
+        switch (activeKey->interpolationMode()) {
+        case KisKeyframe::Constant:
+            result = scalarValue(activeKey);
+            break;
+        case KisKeyframe::Linear:
+        {
+            int time0 = activeKey->time();
+            int time1 = nextKey->time();
+            qreal value0 = scalarValue(activeKey);
+            qreal value1 = scalarValue(nextKey);
+            result = value0 + (value1 - value0) * (time - time0) / (time1 - time0);
+        }
+            break;
+        case KisKeyframe::Bezier:
+        {
+            QPointF point0 = QPointF(activeKey->time(), scalarValue(activeKey));
+            QPointF point1 = QPointF(nextKey->time(), scalarValue(nextKey));
 
-    QPointF tangent0 = activeKey->rightTangent();
-    QPointF tangent1 = nextKey->leftTangent();
+            QPointF tangent0 = activeKey->rightTangent();
+            QPointF tangent1 = nextKey->leftTangent();
 
-    normalizeTangents(point0, tangent0, tangent1, point1);
-    qreal t = findCubicCurveParameter(point0.x(), tangent0.x(), tangent1.x(), point1.x(), time);
-    qreal res = interpolate(point0, tangent0, tangent1, point1, t).y();
+            normalizeTangents(point0, tangent0, tangent1, point1);
+            qreal t = findCubicCurveParameter(point0.x(), tangent0.x(), tangent1.x(), point1.x(), time);
+            result = interpolate(point0, tangent0, tangent1, point1, t).y();
+        }
+            break;
+        default:
+            KIS_ASSERT_RECOVER_BREAK(false);
+            break;
+        }
+    }
 
-    if (res > m_d->maxValue) return m_d->maxValue;
-    if (res < m_d->minValue) return m_d->minValue;
+    if (result > m_d->maxValue) return m_d->maxValue;
+    if (result < m_d->minValue) return m_d->minValue;
 
-    return res;
+    return result;
 }
 
 qreal KisScalarKeyframeChannel::currentValue() const
@@ -340,36 +361,44 @@ void KisScalarKeyframeChannel::saveKeyframe(KisKeyframeSP keyframe, QDomElement 
     Q_UNUSED(layerFilename);
     keyframeElement.setAttribute("value", KisDomUtils::toString(scalarValue(keyframe)));
 
-    QString interpolation;
-    if (keyframe->interpolationMode() == KisKeyframe::Linear) interpolation = "linear";
-    if (keyframe->interpolationMode() == KisKeyframe::Sharp) interpolation = "sharp";
-    if (keyframe->interpolationMode() == KisKeyframe::Smooth) interpolation = "smooth";
+    QString interpolationMode;
+    if (keyframe->interpolationMode() == KisKeyframe::Constant) interpolationMode = "constant";
+    if (keyframe->interpolationMode() == KisKeyframe::Linear) interpolationMode = "linear";
+    if (keyframe->interpolationMode() == KisKeyframe::Bezier) interpolationMode = "bezier";
 
-    if (!interpolation.isEmpty()) {
-        keyframeElement.setAttribute("interpolation", interpolation);
-        KisDomUtils::saveValue(&keyframeElement, "leftTangent", keyframe->leftTangent());
-        KisDomUtils::saveValue(&keyframeElement, "rightTangent", keyframe->rightTangent());
-    }
+    QString tangentsMode;
+    if (keyframe->tangentsMode() == KisKeyframe::Smooth) tangentsMode = "smooth";
+    if (keyframe->tangentsMode() == KisKeyframe::Sharp) tangentsMode = "sharp";
+
+    keyframeElement.setAttribute("interpolation", interpolationMode);
+    keyframeElement.setAttribute("tangents", tangentsMode);
+    KisDomUtils::saveValue(&keyframeElement, "leftTangent", keyframe->leftTangent());
+    KisDomUtils::saveValue(&keyframeElement, "rightTangent", keyframe->rightTangent());
 }
 
 KisKeyframeSP KisScalarKeyframeChannel::loadKeyframe(const QDomElement &keyframeNode)
 {
     int time = keyframeNode.toElement().attribute("time").toUInt();
     qreal value = KisDomUtils::toDouble(keyframeNode.toElement().attribute("value"));
-    QString interpolation = keyframeNode.toElement().attribute("interpolation");
 
     KUndo2Command tempParentCommand;
     KisKeyframeSP keyframe = createKeyframe(time, KisKeyframeSP(), &tempParentCommand);
     setScalarValue(keyframe, value);
 
-    if (interpolation == "constant") {
+    QString interpolationMode = keyframeNode.toElement().attribute("interpolation");
+    if (interpolationMode == "constant") {
         keyframe->setInterpolationMode(KisKeyframe::Constant);
-    } else if (interpolation == "linear") {
+    } else if (interpolationMode == "linear") {
         keyframe->setInterpolationMode(KisKeyframe::Linear);
-    } else if (interpolation == "sharp") {
-        keyframe->setInterpolationMode(KisKeyframe::Sharp);
-    } else if (interpolation == "smooth") {
-        keyframe->setInterpolationMode(KisKeyframe::Smooth);
+    } else if (interpolationMode == "bezier") {
+        keyframe->setInterpolationMode(KisKeyframe::Bezier);
+    }
+
+    QString tangentsMode = keyframeNode.toElement().attribute("tangents");
+    if (tangentsMode == "smooth") {
+        keyframe->setTangentsMode(KisKeyframe::Smooth);
+    } else if (tangentsMode == "sharp") {
+        keyframe->setTangentsMode(KisKeyframe::Sharp);
     }
 
     QPointF leftTangent;

@@ -67,6 +67,7 @@ public:
     {
         ScalarValueRole = KisTimeBasedItemModel::UserRole + 101,
         InterpolationModeRole,
+        TangentsModeRole,
         LeftTangentRole,
         RightTangentRole,
         CurveColorRole,

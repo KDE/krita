@@ -28,6 +28,7 @@ struct KisKeyframe::Private
     int time;
 
     InterpolationMode interpolationMode;
+    InterpolationTangentsMode tangentsMode;
     QPointF leftTangent;
     QPointF rightTangent;
 
@@ -62,6 +63,16 @@ void KisKeyframe::setInterpolationMode(KisKeyframe::InterpolationMode mode)
 KisKeyframe::InterpolationMode KisKeyframe::interpolationMode() const
 {
     return m_d->interpolationMode;
+}
+
+void KisKeyframe::setTangentsMode(KisKeyframe::InterpolationTangentsMode mode)
+{
+    m_d->tangentsMode = mode;
+}
+
+KisKeyframe::InterpolationTangentsMode KisKeyframe::tangentsMode() const
+{
+    return m_d->tangentsMode;
 }
 
 void KisKeyframe::setInterpolationTangents(QPointF leftTangent, QPointF rightTangent)

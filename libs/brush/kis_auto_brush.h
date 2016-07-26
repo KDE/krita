@@ -42,19 +42,22 @@ public:
 
 public:
 
+    qint32 maskHeight(KisDabShape const& shape, qreal subPixelX, qreal subPixelY,
+        const KisPaintInformation& info) const Q_DECL_OVERRIDE;
+
     virtual KisFixedPaintDeviceSP paintDevice(const KoColorSpace*,
-            double, double,
+            KisDabShape const&,
             const KisPaintInformation&,
-            double = 0, double = 0) const {
+            double = 0, double = 0) const Q_DECL_OVERRIDE {
         return 0; // The autobrush does NOT support images!
     }
 
     virtual void generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
             KisBrush::ColoringInformation* src,
-            double scaleX, double scaleY, double angle,
+            KisDabShape const&,
             const KisPaintInformation& info,
             double subPixelX = 0, double subPixelY = 0,
-            qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR) const;
+            qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR) const Q_DECL_OVERRIDE;
 
     virtual QPainterPath outline() const;
 

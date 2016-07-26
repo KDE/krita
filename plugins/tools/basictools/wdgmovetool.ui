@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>246</width>
-    <height>130</height>
+    <width>269</width>
+    <height>394</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
@@ -57,69 +57,190 @@
     </widget>
    </item>
    <item row="1" column="0">
-    <widget class="QWidget" name="SpecialSpacer"/>
-   </item>
-   <item row="2" column="0">
     <widget class="QGroupBox" name="grpMoveStep">
      <property name="title">
       <string>Shortcut Move Distance</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_3">
-       <item row="0" column="0">
-         <widget class="QDoubleSpinBox" name="spinMoveStep">
-           <property name="minimum">
-             <number>1</number>
-           </property>
-           <property name="maximum">
-             <number>100000</number>
-           </property>
-           <property name="value">
-             <number>1</number>
-           </property>
-           <property name="toolTip">
-             <string>Number of pixels to move after move shortcut keypress.</string>
-           </property>
-         </widget>
-       </item>
+      <item row="0" column="0">
+       <widget class="QDoubleSpinBox" name="spinMoveStep">
+        <property name="toolTip">
+         <string>Number of pixels to move after move shortcut keypress.</string>
+        </property>
+        <property name="minimum">
+         <double>1.000000000000000</double>
+        </property>
+        <property name="maximum">
+         <double>100000.000000000000000</double>
+        </property>
+        <property name="value">
+         <double>1.000000000000000</double>
+        </property>
+       </widget>
+      </item>
       <item row="0" column="1">
-        <widget class="QComboBox" name="cmbUnit"/>
+       <widget class="QComboBox" name="cmbUnit"/>
       </item>
       <item row="1" column="0">
-        <widget class="QDoubleSpinBox" name="spinMoveScale">
-          <property name="minimum">
-            <number>1</number>
-          </property>
-          <property name="maximum">
-            <number>1000</number>
-          </property>
-          <property name="value">
-            <number>10</number>
-          </property>
-          <property name="toolTip">
-            <string>When holding shift, move keyboard shortcuts scale up by this amount.</string>
-          </property>
-        </widget>
+       <widget class="QDoubleSpinBox" name="spinMoveScale">
+        <property name="toolTip">
+         <string>When holding shift, move keyboard shortcuts scale up by this amount.</string>
+        </property>
+        <property name="minimum">
+         <double>1.000000000000000</double>
+        </property>
+        <property name="maximum">
+         <double>1000.000000000000000</double>
+        </property>
+        <property name="value">
+         <double>10.000000000000000</double>
+        </property>
+       </widget>
       </item>
       <item row="1" column="1">
-        <widget class="QLabel" name="scaleLabel">
-          <property name="text">
-            <string>Large Move Scale</string>
-          </property>
-        </widget>
+       <widget class="QLabel" name="scaleLabel">
+        <property name="text">
+         <string>Large Move Scale</string>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>
    </item>
+   <item row="2" column="0">
+    <widget class="QCheckBox" name="chkShowCoordinates">
+     <property name="toolTip">
+      <string>Show coordinates on canvas</string>
+     </property>
+     <property name="text">
+      <string>Show coordinates</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0">
+    <widget class="QGroupBox" name="moveGroup">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>240</width>
+       <height>70</height>
+      </size>
+     </property>
+     <property name="title">
+      <string>Position</string>
+     </property>
+     <property name="flat">
+      <bool>false</bool>
+     </property>
+     <property name="checkable">
+      <bool>false</bool>
+     </property>
+     <property name="checked">
+      <bool>false</bool>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_11">
+      <property name="spacing">
+       <number>2</number>
+      </property>
+      <property name="leftMargin">
+       <number>5</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <item>
+       <layout class="QFormLayout" name="formLayout_3">
+        <property name="fieldGrowthPolicy">
+         <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+        </property>
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_offsetX">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="toolTip">
+           <string>Horizontal Translation</string>
+          </property>
+          <property name="layoutDirection">
+           <enum>Qt::LeftToRight</enum>
+          </property>
+          <property name="text">
+           <string>x:</string>
+          </property>
+          <property name="buddy">
+           <cstring>translateXBox</cstring>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QSpinBox" name="translateXBox">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="toolTip">
+           <string>Horizontal Translation</string>
+          </property>
+          <property name="layoutDirection">
+           <enum>Qt::LeftToRight</enum>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QSpinBox" name="translateYBox">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="toolTip">
+           <string>Vertical Translation</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QLabel" name="label_offsetY">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="toolTip">
+           <string>Vertical Translation</string>
+          </property>
+          <property name="text">
+           <string>y:</string>
+          </property>
+          <property name="buddy">
+           <cstring>translateYBox</cstring>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="4" column="0">
+    <widget class="QWidget" name="SpecialSpacer" native="true"/>
+   </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>KisSliderSpinBox</class>
-   <extends>QWidget</extends>
-   <header location="global">kis_slider_spin_box.h</header>
-   <container>1</container>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
 </ui>

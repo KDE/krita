@@ -34,6 +34,7 @@
 
 class KoCanvasBase;
 class MoveToolOptionsWidget;
+class KisDocument;
 
 class KisToolMove : public KisTool
 {
@@ -88,12 +89,21 @@ public:
 
     MoveToolMode moveToolMode() const;
     bool moveInProgress() const;
+
+    void setShowCoordinates(bool value);
+
 public Q_SLOTS:
     void moveDiscrete(MoveDirection direction, bool big);
+
+    void moveBySpinX(int newX);
+    void moveBySpinY(int newY);
+
+    void slotNodeChanged(KisNodeList nodes);
 
 Q_SIGNALS:
     void moveToolModeChanged();
     void moveInProgressChanged();
+    void moveInNewPosition(QPoint);
 
 private:
     void drag(const QPoint& newPos);
@@ -109,8 +119,12 @@ private:
 
     MoveToolOptionsWidget* m_optionsWidget;
 
+    QPoint m_totalTopLeft;
+
     QPoint m_dragStart; ///< Point where current cursor dragging began
     QPoint m_accumulatedOffset; ///< Total offset including multiple clicks, up/down/left/right keys, etc. added together
+
+    QPoint m_startPosition;
 
     KisStrokeId m_strokeId;
 
@@ -118,6 +132,8 @@ private:
     KisNodeList m_currentlyProcessingNodes;
 
     int m_resolution;
+
+    QAction *m_showCoordinatesAction;
 };
 
 

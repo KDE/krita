@@ -48,6 +48,9 @@ public:
         setWindowFlags(Qt::ToolTip);
         setQColor(QColor(0,0,0));
         setMouseTracking(true);
+        m_baseColor = QColor(0,0,0,0);
+        m_previousColor = QColor(0,0,0,0);
+        m_lastUsedColor = QColor(0,0,0,0);
     }
 
     void show()
@@ -70,7 +73,8 @@ public:
         } else {
             targetPos =  QPoint(parentPos.x(), parentPos.y() + m_parent->height());
         }
-        setGeometry(targetPos.x(), targetPos.y(), 100, 100);
+        setGeometry(targetPos.x(), targetPos.y(), 100, 150);
+        setAttribute(Qt::WA_TranslucentBackground);
     }
 
     void setQColor(const QColor& color)
@@ -79,16 +83,38 @@ public:
         update();
     }
 
+    void setPreviousColor()
+    {
+        m_previousColor = m_baseColor;
+    }
+
+    void setBaseColor(const QColor& color)
+    {
+        m_baseColor = color;
+        update();
+    }
+
+    void setLastUsedColor(const QColor& color)
+    {
+        m_lastUsedColor = color;
+        update();
+    }
+
 protected:
     void paintEvent(QPaintEvent *e) {
         Q_UNUSED(e);
         QPainter p(this);
-        p.fillRect(0,0, width(), width(), m_color);
+        p.fillRect(0, 0, width(), width(), m_color);
+        p.fillRect(50, width(), width(), height(), m_previousColor);
+        p.fillRect(0, width(), 50, height(), m_lastUsedColor);
     }
 
 private:
     KisColorSelectorBase* m_parent;
     QColor m_color;
+    QColor m_baseColor;
+    QColor m_previousColor;
+    QColor m_lastUsedColor;
 };
 
 KisColorSelectorBase::KisColorSelectorBase(QWidget *parent) :
@@ -150,6 +176,9 @@ void KisColorSelectorBase::setCanvas(KisCanvas2 *canvas)
 
         connect(m_canvas->displayColorConverter(), SIGNAL(displayConfigurationChanged()),
                 SLOT(reset()));
+
+        connect(canvas->imageView()->resourceProvider(), SIGNAL(sigFGColorUsed(KoColor)),
+                this,                               SLOT(updateLastUsedColorPreview(KoColor)), Qt::UniqueConnection);
 
         if (m_canvas->viewManager() && m_canvas->viewManager()->resourceProvider()) {
             setColor(Acs::currentColor(m_canvas->viewManager()->resourceProvider(), Acs::Foreground));
@@ -474,6 +503,21 @@ void KisColorSelectorBase::updateSettings()
 void KisColorSelectorBase::reset()
 {
     update();
+}
+
+void KisColorSelectorBase::updateBaseColorPreview(const KoColor &color)
+{
+    m_colorPreviewPopup->setBaseColor(converter()->toQColor(color));
+}
+
+void KisColorSelectorBase::updatePreviousColorPreview()
+{
+    m_colorPreviewPopup->setPreviousColor();
+}
+
+void KisColorSelectorBase::updateLastUsedColorPreview(const KoColor &color)
+{
+    m_colorPreviewPopup->setLastUsedColor(converter()->toQColor(color));
 }
 
 KisDisplayColorConverter* KisColorSelectorBase::converter() const

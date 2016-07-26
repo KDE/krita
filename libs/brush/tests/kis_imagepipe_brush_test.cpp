@@ -78,11 +78,12 @@ inline void KisImagePipeBrushTest::checkConsistency(KisImagePipeBrush *brush)
     qreal subPixelX = 0;
     qreal subPixelY = 0;
 
-    int maskWidth = brush->maskWidth(realScale, realAngle, subPixelX, subPixelY, info);
-    int maskHeight = brush->maskHeight(realScale, realAngle, subPixelX, subPixelY, info);
+    int maskWidth = brush->maskWidth(KisDabShape(realScale, 1.0, realAngle), subPixelX, subPixelY, info);
+    int maskHeight = brush->maskHeight(KisDabShape(realScale, 1.0, realAngle), subPixelX, subPixelY, info);
 
     const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
-    KisFixedPaintDeviceSP dev = brush->testingGetCurrentBrush(info)->paintDevice(cs, realScale, realAngle, info, subPixelX, subPixelY);
+    KisFixedPaintDeviceSP dev = brush->testingGetCurrentBrush(info)->paintDevice(
+        cs, KisDabShape(realScale, 1.0, realAngle), info, subPixelX, subPixelY);
 
     QCOMPARE(maskWidth, dev->bounds().width());
     QCOMPARE(maskHeight, dev->bounds().height());
@@ -136,15 +137,15 @@ void checkIncrementalPainting(KisBrush *brush, const QString &prefix)
     KisPaintInformation info(QPointF(100.0, 100.0), 0.5, 0, 0, rotation);
 
     for (int i = 0; i < 20; i++) {
-        int maskWidth = brush->maskWidth(realScale, realAngle, subPixelX, subPixelY, info);
-        int maskHeight = brush->maskHeight(realScale, realAngle, subPixelX, subPixelY, info);
+        int maskWidth = brush->maskWidth(KisDabShape(realScale, 1.0, realAngle), subPixelX, subPixelY, info);
+        int maskHeight = brush->maskHeight(KisDabShape(realScale, 1.0, realAngle), subPixelX, subPixelY, info);
         QRect fillRect(0, 0, maskWidth, maskHeight);
 
         fixedDab->setRect(fillRect);
         fixedDab->initialize();
         fixedDab->fill(fillRect.x(), fillRect.y(), fillRect.width(), fillRect.height(), fillColor.data());
 
-        brush->mask(fixedDab, realScale, realScale, realAngle, info);
+        brush->mask(fixedDab, KisDabShape(realScale, 1.0, realAngle), info);
         QCOMPARE(fixedDab->bounds(), fillRect);
 
         QImage result = fixedDab->convertToQImage(0);
@@ -218,7 +219,7 @@ void KisImagePipeBrushTest::testColoredDabWash()
 
     const QVector<KisGbrBrush*> gbrs = brush->brushes();
 
-    KisFixedPaintDeviceSP dab = gbrs.at(0)->paintDevice(cs, 2.0, 0.0, info);
+    KisFixedPaintDeviceSP dab = gbrs.at(0)->paintDevice(cs, KisDabShape(2.0, 1.0, 0.0), info);
     painter.bltFixed(0, 0, dab, 0, 0, dab->bounds().width(), dab->bounds().height());
     painter.bltFixed(80, 60, dab, 0, 0, dab->bounds().width(), dab->bounds().height());
 

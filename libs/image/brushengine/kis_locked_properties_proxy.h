@@ -52,4 +52,7 @@ private:
     const KisPropertiesConfiguration *m_parent;
 };
 
+typedef QSharedPointer<KisLockedPropertiesProxy> KisLockedPropertiesProxySP;
+typedef QWeakPointer<KisLockedPropertiesProxy> KisLockedPropertiesProxyWSP;
+
 #endif // KIS_LOCKED_PROPERTIES_PROXY_H

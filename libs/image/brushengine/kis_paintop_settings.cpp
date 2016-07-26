@@ -41,6 +41,9 @@
 #include<kis_types.h>
 #include <kis_signals_blocker.h>
 
+#include <brushengine/kis_locked_properties_server.h>
+#include <brushengine/kis_locked_properties_proxy.h>
+
 
 struct Q_DECL_HIDDEN KisPaintOpSettings::Private {
     Private() : disableDirtyNotifications(false) {}
@@ -160,31 +163,51 @@ void KisPaintOpSettings::activate()
 
 void KisPaintOpSettings::setPaintOpOpacity(qreal value)
 {
-    setProperty("OpacityValue", value);
+    KisLockedPropertiesProxySP proxy(
+        KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(this));
+
+    proxy->setProperty("OpacityValue", value);
 }
 
 void KisPaintOpSettings::setPaintOpFlow(qreal value)
 {
-    setProperty("FlowValue", value);
+    KisLockedPropertiesProxySP proxy(
+        KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(this));
+
+    proxy->setProperty("FlowValue", value);
 }
 
 void KisPaintOpSettings::setPaintOpCompositeOp(const QString &value)
 {
-    setProperty("CompositeOp", value);
+    KisLockedPropertiesProxySP proxy(
+        KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(this));
+
+    proxy->setProperty("CompositeOp", value);
 }
 
 qreal KisPaintOpSettings::paintOpOpacity() const
 {
-    return getDouble("OpacityValue", 1.0);
+    KisLockedPropertiesProxySP proxy(
+        KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(this));
+
+    return proxy->getDouble("OpacityValue", 1.0);
 }
 
 qreal KisPaintOpSettings::paintOpFlow() const
 {
-    return getDouble("FlowValue", 1.0);
+    KisLockedPropertiesProxySP proxy(
+        KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(this));
+
+    return proxy->getDouble("FlowValue", 1.0);
 }
 
 void KisPaintOpSettings::setPaintOpSize(qreal value)
 {
+    /**
+     * The widget already has the wrapping for the locked setings
+     * functionality, so just request it.
+     */
+
     if (d->settingsWidget) {
         const qreal sizeDiff = value - paintOpSize();
 
@@ -199,6 +222,8 @@ void KisPaintOpSettings::setPaintOpSize(qreal value)
 
 qreal KisPaintOpSettings::paintOpSize() const
 {
+    // see a comment about locked settings in setPaintOpSize()
+
     qreal size = 1.0;
 
     if (d->settingsWidget) {
@@ -210,17 +235,26 @@ qreal KisPaintOpSettings::paintOpSize() const
 
 QString KisPaintOpSettings::paintOpCompositeOp() const
 {
-    return getString("CompositeOp", COMPOSITE_OVER);
+    KisLockedPropertiesProxySP proxy(
+        KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(this));
+
+    return proxy->getString("CompositeOp", COMPOSITE_OVER);
 }
 
 void KisPaintOpSettings::setEraserMode(bool value)
 {
-    setProperty("EraserMode", value);
+    KisLockedPropertiesProxySP proxy(
+        KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(this));
+
+    proxy->setProperty("EraserMode", value);
 }
 
 bool KisPaintOpSettings::eraserMode() const
 {
-    return getBool("EraserMode", false);
+    KisLockedPropertiesProxySP proxy(
+        KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(this));
+
+    return proxy->getBool("EraserMode", false);
 }
 
 QString KisPaintOpSettings::effectivePaintOpCompositeOp() const

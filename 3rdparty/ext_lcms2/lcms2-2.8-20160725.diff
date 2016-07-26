@@ -1,8 +1,8 @@
-commit 519aa536ae8984fd9620391be4f7ed39c4e5cc7e
+commit 116c40dba0d0781dec022ee22711844c1f7c4899
 Author: Boudewijn Rempt <boud@valdyas.org>
-Date:   Mon Jul 25 12:33:13 2016 +0200
+Date:   Tue Jul 26 10:12:27 2016 +0200
 
-    lcms-2.8 cmake patch
+    ...
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
 new file mode 100644
@@ -53,10 +53,10 @@ index 739e6e1..76f5f37 100644
  #        else
 diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
 new file mode 100644
-index 0000000..6a359fe
+index 0000000..ac575c7
 --- /dev/null
 +++ b/src/CMakeLists.txt
-@@ -0,0 +1,63 @@
+@@ -0,0 +1,64 @@
 +# some configure checks:
 +if(WIN32)
 +    if(MSVC)
@@ -102,6 +102,7 @@ index 0000000..6a359fe
 +    cmsps2.c
 +    cmsopt.c
 +    cmshalf.c
++    cmsalpha.c
 +)
 +
 +include_directories(${CMAKE_BINARY_DIR})

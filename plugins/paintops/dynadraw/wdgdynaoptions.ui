@@ -26,7 +26,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tab">
       <attribute name="title">
@@ -46,7 +46,7 @@
           </widget>
          </item>
          <item row="0" column="1">
-          <widget class="QDoubleSpinBox" name="initWidthSPBox">
+          <widget class="KisDoubleParseSpinBox" name="initWidthSPBox">
            <property name="minimum">
             <double>-99.000000000000000</double>
            </property>
@@ -69,7 +69,7 @@
           </widget>
          </item>
          <item row="1" column="1">
-          <widget class="QDoubleSpinBox" name="massSPBox">
+          <widget class="KisDoubleParseSpinBox" name="massSPBox">
            <property name="minimum">
             <double>-99.000000000000000</double>
            </property>
@@ -92,7 +92,7 @@
           </widget>
          </item>
          <item row="2" column="1">
-          <widget class="QDoubleSpinBox" name="dragSPBox">
+          <widget class="KisDoubleParseSpinBox" name="dragSPBox">
            <property name="minimum">
             <double>-99.000000000000000</double>
            </property>
@@ -115,7 +115,7 @@
           </widget>
          </item>
          <item row="3" column="1">
-          <widget class="QDoubleSpinBox" name="widthRangeSPBox">
+          <widget class="KisDoubleParseSpinBox" name="widthRangeSPBox">
            <property name="minimum">
             <double>-99.000000000000000</double>
            </property>
@@ -229,7 +229,7 @@
            <item>
             <widget class="QRadioButton" name="circleRBox">
              <property name="text">
-              <string>Circle</string>
+              <string>C&amp;ircle</string>
              </property>
              <property name="checked">
               <bool>true</bool>
@@ -255,7 +255,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QDoubleSpinBox" name="lineSpacingSPBox">
+            <widget class="KisDoubleParseSpinBox" name="lineSpacingSPBox">
              <property name="toolTip">
               <string>Line spacing</string>
              </property>
@@ -265,7 +265,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QSpinBox" name="lineCountSPBox">
+            <widget class="KisIntParseSpinBox" name="lineCountSPBox">
              <property name="toolTip">
               <string>Line count</string>
              </property>
@@ -279,14 +279,14 @@
          <item>
           <widget class="QRadioButton" name="polygonRBox">
            <property name="text">
-            <string>Polygon</string>
+            <string>Poly&amp;gon</string>
            </property>
           </widget>
          </item>
          <item>
           <widget class="QRadioButton" name="wireRBox">
            <property name="text">
-            <string>Wire</string>
+            <string>Wi&amp;re</string>
            </property>
           </widget>
          </item>
@@ -322,6 +322,16 @@
   </layout>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>KisIntParseSpinBox</class>
+   <extends>QSpinBox</extends>
+   <header>kis_intparsespinbox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KisDoubleParseSpinBox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header>kis_doubleparsespinbox.h</header>
+  </customwidget>
   <customwidget>
    <class>KisDoubleSliderSpinBox</class>
    <extends>QWidget</extends>

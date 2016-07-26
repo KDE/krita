@@ -27,7 +27,7 @@
     <rect>
      <x>300</x>
      <y>0</y>
-     <width>102</width>
+     <width>113</width>
      <height>391</height>
     </rect>
    </property>
@@ -43,7 +43,7 @@
      </widget>
     </item>
     <item>
-     <widget class="QSpinBox" name="inkAmountSpinBox">
+     <widget class="KisIntParseSpinBox" name="inkAmountSpinBox">
       <property name="maximum">
        <number>10000</number>
       </property>
@@ -130,7 +130,7 @@
    <property name="title">
     <string>Ink Depletion Curve</string>
    </property>
-   <widget class="KisCurveWidget" name="inkCurve">
+   <widget class="KisCurveWidget" name="inkCurve" native="true">
     <property name="geometry">
      <rect>
       <x>9</x>
@@ -176,7 +176,7 @@
      </widget>
     </item>
     <item row="2" column="2">
-     <widget class="KisDoubleSliderSpinBox" name="bristleInkAmountSlider">
+     <widget class="KisDoubleSliderSpinBox" name="bristleInkAmountSlider" native="true">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
         <horstretch>0</horstretch>
@@ -193,7 +193,7 @@
      </widget>
     </item>
     <item row="3" column="2">
-     <widget class="KisDoubleSliderSpinBox" name="bristleLengthSlider">
+     <widget class="KisDoubleSliderSpinBox" name="bristleLengthSlider" native="true">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
         <horstretch>0</horstretch>
@@ -203,7 +203,7 @@
      </widget>
     </item>
     <item row="1" column="2">
-     <widget class="KisDoubleSliderSpinBox" name="pressureSlider">
+     <widget class="KisDoubleSliderSpinBox" name="pressureSlider" native="true">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
         <horstretch>0</horstretch>
@@ -220,7 +220,7 @@
      </widget>
     </item>
     <item row="4" column="2">
-     <widget class="KisDoubleSliderSpinBox" name="inkDepletionSlider">
+     <widget class="KisDoubleSliderSpinBox" name="inkDepletionSlider" native="true">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
         <horstretch>0</horstretch>
@@ -233,6 +233,11 @@
   </widget>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>KisIntParseSpinBox</class>
+   <extends>QSpinBox</extends>
+   <header>kis_intparsespinbox.h</header>
+  </customwidget>
   <customwidget>
    <class>KisDoubleSliderSpinBox</class>
    <extends>QWidget</extends>

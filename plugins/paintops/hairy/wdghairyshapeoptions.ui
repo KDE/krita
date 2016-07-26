@@ -22,7 +22,7 @@
     <height>285</height>
    </size>
   </property>
-  <widget class="QWidget">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>50</x>
@@ -43,7 +43,7 @@
      </widget>
     </item>
     <item row="0" column="1">
-     <widget class="QSpinBox" name="radiusSpinBox">
+     <widget class="KisIntParseSpinBox" name="radiusSpinBox">
       <property name="value">
        <number>5</number>
       </property>
@@ -60,7 +60,7 @@
      </widget>
     </item>
     <item row="1" column="1">
-     <widget class="QDoubleSpinBox" name="sigmaSpinBox">
+     <widget class="KisDoubleParseSpinBox" name="sigmaSpinBox">
       <property name="value">
        <double>20.000000000000000</double>
       </property>
@@ -68,7 +68,7 @@
     </item>
    </layout>
   </widget>
-  <widget class="QWidget">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>50</x>
@@ -87,7 +87,7 @@
        <item row="0" column="0">
         <widget class="QRadioButton" name="oneDimBrushBtn">
          <property name="text">
-          <string>1D</string>
+          <string>&amp;1D</string>
          </property>
          <property name="checked">
           <bool>false</bool>
@@ -97,7 +97,7 @@
        <item row="1" column="0">
         <widget class="QRadioButton" name="twoDimBrushBtn">
          <property name="text">
-          <string>2D</string>
+          <string>&amp;2D</string>
          </property>
          <property name="checked">
           <bool>true</bool>
@@ -123,6 +123,18 @@
    </layout>
   </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KisIntParseSpinBox</class>
+   <extends>QSpinBox</extends>
+   <header>kis_intparsespinbox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KisDoubleParseSpinBox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header>kis_doubleparsespinbox.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

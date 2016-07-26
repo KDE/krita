@@ -1,4 +1,4 @@
-commit 116c40dba0d0781dec022ee22711844c1f7c4899
+commit fa73cd1733b3cf122489d2c757485db0ac7b5cd3
 Author: Boudewijn Rempt <boud@valdyas.org>
 Date:   Tue Jul 26 10:12:27 2016 +0200
 
@@ -33,21 +33,24 @@ index 0000000..90cee70
 +    add_subdirectory(utils)
 +endif(BUILD_UTILS)
 diff --git a/include/lcms2.h b/include/lcms2.h
-index 739e6e1..76f5f37 100644
+index 739e6e1..969bc3a 100644
 --- a/include/lcms2.h
 +++ b/include/lcms2.h
-@@ -215,12 +215,12 @@ typedef int                  cmsBool;
+@@ -212,15 +212,14 @@ typedef int                  cmsBool;
  
+ #endif  // CMS_USE_BIG_ENDIAN
+ 
+-
  // Calling convention -- this is hardly platform and compiler dependent
  #ifdef CMS_IS_WINDOWS_
 -#  if defined(CMS_DLL) || defined(CMS_DLL_BUILD)
-+#     if defined(CMS_STATIC)
++#   if !defined(CMS_STATIC)
  #     ifdef __BORLANDC__
  #        define CMSEXPORT       __stdcall _export
  #        define CMSAPI
  #     else
 -#        define CMSEXPORT      __stdcall
-+#        define CMSEXPORT   
++#         define CMSEXPORT
  #        ifdef CMS_DLL_BUILD
  #            define CMSAPI    __declspec(dllexport)
  #        else

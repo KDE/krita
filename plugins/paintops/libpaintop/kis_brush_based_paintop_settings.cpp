@@ -24,6 +24,7 @@
 #include <kis_boundary.h>
 #include "kis_brush_server.h"
 #include <QLineF>
+#include "kis_signals_blocker.h"
 
 
 KisBrushBasedPaintOpSettings::KisBrushBasedPaintOpSettings()
@@ -122,4 +123,71 @@ bool KisBrushBasedPaintOpSettings::isValid() const
 bool KisBrushBasedPaintOpSettings::isLoadable()
 {
     return (KisBrushServer::instance()->brushServer()->resources().count() > 0);
+}
+
+void KisBrushBasedPaintOpSettings::setAngle(qreal value)
+{
+    KisBrushSP brush = this->brush();
+    KIS_SAFE_ASSERT_RECOVER_RETURN(brush);
+
+    brush->setAngle(value);
+
+    KIS_ASSERT_RECOVER_RETURN(optionsWidget());
+    optionsWidget()->writeConfigurationSafe(this);
+}
+
+qreal KisBrushBasedPaintOpSettings::angle() const
+{
+    KIS_ASSERT_RECOVER(optionsWidget()) { return 0.0; }
+    KisSignalsBlocker b(optionsWidget());
+    optionsWidget()->setConfigurationSafe(this);
+
+    KisBrushSP brush = this->brush();
+    KIS_SAFE_ASSERT_RECOVER(brush) { return 0.0; }
+
+    return brush->angle();
+}
+
+#include <brushengine/kis_slider_based_paintop_property.h>
+#include "kis_paintop_preset.h"
+#include "kis_paintop_settings_update_proxy.h"
+
+
+QList<KisUniformPaintOpPropertySP> KisBrushBasedPaintOpSettings::uniformProperties()
+{
+    QList<KisUniformPaintOpPropertySP> props =
+        listWeakToStrong(m_uniformProperties);
+
+    if (props.isEmpty()) {
+        KisIntSliderBasedPaintOpPropertyCallback *prop =
+            new KisIntSliderBasedPaintOpPropertyCallback(
+                KisIntSliderBasedPaintOpPropertyCallback::Int,
+                "angle",
+                "Angle",
+                this, 0);
+
+            prop->setRange(0, 360);
+
+            prop->setReadCallback(
+                [](KisUniformPaintOpProperty *prop) {
+                    KisBrushBasedPaintOpSettings *s =
+                        dynamic_cast<KisBrushBasedPaintOpSettings*>(prop->settings().data());
+
+                    const qreal angleResult = kisRadiansToDegrees(s->angle());
+                    prop->setValue(angleResult);
+                });
+            prop->setWriteCallback(
+                [](KisUniformPaintOpProperty *prop) {
+                    KisBrushBasedPaintOpSettings *s =
+                        dynamic_cast<KisBrushBasedPaintOpSettings*>(prop->settings().data());
+
+                    s->setAngle(kisDegreesToRadians(prop->value().toReal()));
+                });
+
+            QObject::connect(preset()->updateProxy(), SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
+            prop->requestReadValue();
+            props << toQShared(prop);
+    }
+
+    return KisPaintOpSettings::uniformProperties() + props;
 }

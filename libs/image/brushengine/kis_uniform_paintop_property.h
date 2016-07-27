@@ -53,7 +53,7 @@ public:
 
     QWidget *createPropertyWidget();
 
-    KisPaintOpSettingsSP settings();
+    KisPaintOpSettingsSP settings() const;
 
     virtual bool isVisible() const;
 

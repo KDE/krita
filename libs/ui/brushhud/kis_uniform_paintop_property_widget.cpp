@@ -83,6 +83,7 @@ KisUniformPaintOpPropertyIntSlider::KisUniformPaintOpPropertyIntSlider(KisUnifor
     m_slider->setPageStep(sliderProperty->pageStep());
     m_slider->setPrefix(prefix);
     m_slider->setSuffix(sliderProperty->suffix());
+    m_slider->setExponentRatio(sliderProperty->exponentRatio());
 
     m_slider->setValue(sliderProperty->value().toInt());
     connect(m_slider, SIGNAL(valueChanged(int)), SLOT(slotSliderChanged(int)));
@@ -121,6 +122,7 @@ KisUniformPaintOpPropertyDoubleSlider::KisUniformPaintOpPropertyDoubleSlider(Kis
     m_slider->setSingleStep(sliderProperty->singleStep());
     m_slider->setPrefix(prefix);
     m_slider->setSuffix(sliderProperty->suffix());
+    m_slider->setExponentRatio(sliderProperty->exponentRatio());
 
     m_slider->setValue(sliderProperty->value().toReal());
     connect(m_slider, SIGNAL(valueChanged(qreal)), SLOT(slotSliderChanged(qreal)));

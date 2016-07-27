@@ -40,17 +40,21 @@ public:
     : ParentClass(id, name, settings, parent) {}
 
     typedef std::function<void (KisUniformPaintOpProperty*)> Callback;
+    typedef std::function<bool (const KisUniformPaintOpProperty*)> VisibleCallback;
 
     void setReadCallback(Callback func) { m_readFunc = func; }
     void setWriteCallback(Callback func) { m_writeFunc = func; }
+    void setIsVisibleCallback(VisibleCallback func) { m_visibleFunc = func; }
 
 protected:
     virtual void readValueImpl() { if (m_readFunc) m_readFunc(this); }
     virtual void writeValueImpl() { if (m_writeFunc) m_writeFunc(this); }
+    virtual bool isVisible() const { return m_visibleFunc ? m_visibleFunc(this) : true; }
 
 private:
     Callback m_readFunc;
     Callback m_writeFunc;
+    VisibleCallback m_visibleFunc;
 };
 
 #endif /* __KIS_CALLBACK_BASED_PAINTOP_PROPERTY_H */

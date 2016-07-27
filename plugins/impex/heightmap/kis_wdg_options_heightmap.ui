@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>177</width>
-    <height>100</height>
+    <width>191</width>
+    <height>145</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
@@ -32,7 +32,7 @@
     </widget>
    </item>
    <item row="0" column="1">
-    <widget class="QSpinBox" name="intSize">
+    <widget class="KisIntParseSpinBox" name="intSize">
      <property name="maximum">
       <number>1000000</number>
      </property>
@@ -62,7 +62,7 @@
            <string>Big Endian</string>
           </property>
           <property name="text">
-           <string>Mac</string>
+           <string>&amp;Mac</string>
           </property>
          </widget>
         </item>
@@ -83,6 +83,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KisIntParseSpinBox</class>
+   <extends>QSpinBox</extends>
+   <header>kis_intparsespinbox.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

@@ -199,13 +199,25 @@ void KisDoubleParseSpinBox::setErrorStyle()
 		}
 		_areOldMarginsSaved = true;
 
-		QMargins newMargins = _oldMargins;
-		newMargins.setLeft( newMargins.left() + height() - 4 );
-		lineEdit()->setTextMargins(newMargins);
+		if (width() - height() >= 3*height()) { //if we have twice as much place as needed by the warning icon then display it.
+			QMargins newMargins = _oldMargins;
+			newMargins.setLeft( newMargins.left() + height() - 4 );
+			lineEdit()->setTextMargins(newMargins);
 
-		_warningIcon->resize(height()-2, height()-2);
-		_warningIcon->move(_oldMargins.left()+5, 1);
-		_warningIcon->setVisible(true);
+			int h = _warningIcon->height();
+			int hp = height()-2;
+
+			if (h != hp) {
+				_warningIcon->resize(hp, hp);
+
+				if (QFile(":/./16_light_warning.svg").exists()) {
+					_warningIcon->setPixmap(QIcon(":/./16_light_warning.svg").pixmap(hp-7, hp-7));
+				}
+			}
+
+			_warningIcon->move(_oldMargins.left()+4, 1);
+			_warningIcon->setVisible(true);
+		}
 	}
 }
 

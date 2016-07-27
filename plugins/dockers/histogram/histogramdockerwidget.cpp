@@ -49,6 +49,7 @@ void HistogramDockerWidget::setPaintDevice(KisCanvas2* canvas)
     } else {
         m_paintDevice.clear();
         m_bounds = QRect();
+        m_histogramData.clear();
     }
 }
 

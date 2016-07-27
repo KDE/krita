@@ -231,32 +231,34 @@ void OverviewWidget::wheelEvent(QWheelEvent* event)
 
 void OverviewWidget::generateThumbnail()
 {
-    QSize previewSize = calculatePreviewSize();
-    if (isVisible() && previewSize.isValid()) {
+    if (isVisible()) {
         QMutexLocker locker(&mutex);
         if (m_canvas) {
-            KisImageSP image = m_canvas->image();
+            QSize previewSize = calculatePreviewSize();
+            if(previewSize.isValid()){
+                KisImageSP image = m_canvas->image();
 
-            if (!strokeId.isNull()) {
-                image->cancelStroke(strokeId);
-                image->waitForDone();
+                if (!strokeId.isNull()) {
+                    image->cancelStroke(strokeId);
+                    image->waitForDone();
+                }
+
+                OverviewThumbnailStrokeStrategy* stroke = new OverviewThumbnailStrokeStrategy(image);
+                connect(stroke, SIGNAL(thumbnailUpdated(QImage)), this, SLOT(updateThumbnail(QImage)));
+
+                strokeId = image->startStroke(stroke);
+                KisPaintDeviceSP dev = image->projection();
+                KisPaintDeviceSP thumbDev = new KisPaintDevice(dev->colorSpace());
+
+                //creating a special stroke that computes thumbnail image in small chunks that can be quickly interrupted
+                //if user starts painting
+                QList<KisStrokeJobData*> jobs = OverviewThumbnailStrokeStrategy::createJobsData(dev, image->bounds(), thumbDev, previewSize);
+
+                Q_FOREACH (KisStrokeJobData *jd, jobs) {
+                    image->addJob(strokeId, jd);
+                }
+                image->endStroke(strokeId);
             }
-
-            OverviewThumbnailStrokeStrategy* stroke = new OverviewThumbnailStrokeStrategy(image);
-            connect(stroke, SIGNAL(thumbnailUpdated(QImage)), this, SLOT(updateThumbnail(QImage)));
-
-            strokeId = image->startStroke(stroke);
-            KisPaintDeviceSP dev = image->projection();
-            KisPaintDeviceSP thumbDev = new KisPaintDevice(dev->colorSpace());
-
-            //creating a special stroke that computes thumbnail image in small chunks that can be quickly interrupted
-            //if user starts painting
-            QList<KisStrokeJobData*> jobs = OverviewThumbnailStrokeStrategy::createJobsData(dev, image->bounds(), thumbDev, previewSize);
-
-            Q_FOREACH (KisStrokeJobData *jd, jobs) {
-                image->addJob(strokeId, jd);
-            }
-            image->endStroke(strokeId);
         }
     }
 }

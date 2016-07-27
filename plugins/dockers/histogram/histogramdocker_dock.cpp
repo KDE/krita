@@ -37,11 +37,10 @@ HistogramDockerDock::HistogramDockerDock()
     QWidget *page = new QWidget(this);
     m_layout = new QVBoxLayout(page);
 
-    //m_histogramWidget = new KisHistogramView(this);
     m_histogramWidget = new HistogramDockerWidget(this);
 
     m_histogramWidget->setMinimumHeight(50);
-    //m_histogramWidget->setSmoothHistogram(true);
+    //m_histogramWidget->setSmoothHistogram(false);
     m_layout->addWidget(m_histogramWidget, 1);
     setWidget(page);
     connect(m_imageIdleWatcher, &KisIdleWatcher::startedIdleMode, this, &HistogramDockerDock::updateHistogram);
@@ -76,6 +75,7 @@ void HistogramDockerDock::unsetCanvas()
 {
     setEnabled(false);
     m_canvas = 0;
+    m_histogramWidget->setPaintDevice(m_canvas);
     m_imageIdleWatcher->startCountdown();
 }
 

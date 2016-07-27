@@ -26,7 +26,7 @@
          <item row="0" column="0">
           <widget class="QLabel" name="label">
            <property name="text">
-            <string>Brightness value:</string>
+            <string>&amp;Brightness value:</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -42,7 +42,7 @@
          <item row="1" column="0">
           <widget class="QLabel" name="label_2">
            <property name="text">
-            <string>ISO:</string>
+            <string>&amp;ISO:</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -53,7 +53,7 @@
           </widget>
          </item>
          <item row="1" column="1">
-          <widget class="QSpinBox" name="editISO">
+          <widget class="KisIntParseSpinBox" name="editISO">
            <property name="maximum">
             <number>3600</number>
            </property>
@@ -68,7 +68,7 @@
          <item row="2" column="0">
           <widget class="QLabel" name="label_16">
            <property name="text">
-            <string>Exposure time:</string>
+            <string>Exposure &amp;time:</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -84,7 +84,7 @@
          <item row="3" column="0">
           <widget class="QLabel" name="label_3">
            <property name="text">
-            <string>Exposure mode:</string>
+            <string>E&amp;xposure mode:</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -116,7 +116,7 @@
          <item row="4" column="0">
           <widget class="QLabel" name="label_14">
            <property name="text">
-            <string>Exposure program:</string>
+            <string>Exposure pro&amp;gram:</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -210,7 +210,7 @@
          <item row="7" column="0">
           <widget class="QLabel" name="label_9">
            <property name="text">
-            <string>Aperture:</string>
+            <string>Ape&amp;rture:</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -242,7 +242,7 @@
          <item row="9" column="0">
           <widget class="QLabel" name="label_25">
            <property name="text">
-            <string>F Number:</string>
+            <string>&amp;F Number:</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -282,7 +282,7 @@
          <item row="0" column="0">
           <widget class="QLabel" name="label_6">
            <property name="text">
-            <string>Focal length:</string>
+            <string>&amp;Focal length:</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -293,7 +293,7 @@
           </widget>
          </item>
          <item row="0" column="1">
-          <widget class="QSpinBox" name="editFocalLength">
+          <widget class="KisIntParseSpinBox" name="editFocalLength">
            <property name="maximum">
             <number>1000</number>
            </property>
@@ -308,7 +308,7 @@
          <item row="1" column="0">
           <widget class="QLabel" name="label_5">
            <property name="text">
-            <string>Focal length (35mm equivalent):</string>
+            <string>Focal length (&amp;35mm equivalent):</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -319,7 +319,7 @@
           </widget>
          </item>
          <item row="1" column="1">
-          <widget class="QSpinBox" name="editFocalLengthIn35mmFilm">
+          <widget class="KisIntParseSpinBox" name="editFocalLengthIn35mmFilm">
            <property name="maximum">
             <number>1000</number>
            </property>
@@ -374,7 +374,7 @@
          <item row="0" column="0">
           <widget class="QLabel" name="label_17">
            <property name="text">
-            <string>Subject distance:</string>
+            <string>Su&amp;bject distance:</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -390,7 +390,7 @@
          <item row="1" column="0">
           <widget class="QLabel" name="label_11">
            <property name="text">
-            <string>Metering mode:</string>
+            <string>Meterin&amp;g mode:</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -447,7 +447,7 @@
          <item row="2" column="0">
           <widget class="QLabel" name="label_24">
            <property name="text">
-            <string>Distance range:</string>
+            <string>D&amp;istance range:</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -515,7 +515,7 @@
          <item row="1" column="0">
           <widget class="QLabel" name="label_22">
            <property name="text">
-            <string>Strobe return:</string>
+            <string>Stro&amp;be return:</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -603,7 +603,7 @@
          <item row="5" column="0">
           <widget class="QLabel" name="label_23">
            <property name="text">
-            <string>Flash energy:</string>
+            <string>Flash ener&amp;gy:</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -643,7 +643,7 @@
          <item row="0" column="0">
           <widget class="QLabel" name="label_13">
            <property name="text">
-            <string>Gain control:</string>
+            <string>&amp;Gain control:</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -691,7 +691,7 @@
          <item row="1" column="0">
           <widget class="QLabel" name="label_15">
            <property name="text">
-            <string>Light source:</string>
+            <string>L&amp;ight source:</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -902,7 +902,7 @@
          <item row="4" column="0">
           <widget class="QLabel" name="label_28">
            <property name="text">
-            <string>White balance:</string>
+            <string>White &amp;balance:</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -953,7 +953,7 @@
          <item row="0" column="0">
           <widget class="QLabel" name="label_4">
            <property name="text">
-            <string>Scene capture type:</string>
+            <string>Scene capture t&amp;ype:</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -990,7 +990,7 @@
          <item row="1" column="0">
           <widget class="QLabel" name="label_19">
            <property name="text">
-            <string>Maker:</string>
+            <string>Ma&amp;ker:</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -1022,7 +1022,7 @@
          <item row="3" column="0">
           <widget class="QLabel" name="label_27">
            <property name="text">
-            <string>Sensing method type:</string>
+            <string>Sens&amp;ing method type:</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -1097,6 +1097,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KisIntParseSpinBox</class>
+   <extends>QSpinBox</extends>
+   <header>kis_intparsespinbox.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

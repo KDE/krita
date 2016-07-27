@@ -14,7 +14,7 @@
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
-      <widget class="QSpinBox" name="intCurrentTime">
+      <widget class="KisIntParseSpinBox" name="intCurrentTime">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
          <horstretch>0</horstretch>
@@ -516,14 +516,14 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KisIntParseSpinBox</class>
-   <extends>QSpinBox</extends>
-   <header>kis_intparsespinbox.h</header>
-  </customwidget>
-  <customwidget>
    <class>KisDoubleParseSpinBox</class>
    <extends>QDoubleSpinBox</extends>
    <header>kis_doubleparsespinbox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KisIntParseSpinBox</class>
+   <extends>QSpinBox</extends>
+   <header>kis_intparsespinbox.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

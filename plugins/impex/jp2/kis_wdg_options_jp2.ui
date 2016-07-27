@@ -52,15 +52,15 @@
       </widget>
      </item>
      <item>
-      <widget class="QSpinBox" name="intQuality">
-       <property name="value">
-        <number>100</number>
-       </property>
+      <widget class="KisIntParseSpinBox" name="intQuality">
        <property name="minimum">
         <number>0</number>
        </property>
        <property name="maximum">
         <number>100</number>
+       </property>
+       <property name="value">
+        <number>99</number>
        </property>
       </widget>
      </item>
@@ -79,7 +79,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QSpinBox" name="numberResolutions">
+      <widget class="KisIntParseSpinBox" name="numberResolutions">
        <property name="minimum">
         <number>1</number>
        </property>
@@ -108,6 +108,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KisIntParseSpinBox</class>
+   <extends>QSpinBox</extends>
+   <header>kis_intparsespinbox.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections>
   <connection>

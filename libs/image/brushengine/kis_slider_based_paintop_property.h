@@ -19,7 +19,6 @@
 #ifndef __KIS_SLIDER_BASED_PAINTOP_PROPERTY_H
 #define __KIS_SLIDER_BASED_PAINTOP_PROPERTY_H
 
-#include <QScopedPointer>
 #include "kis_uniform_paintop_property.h"
 
 

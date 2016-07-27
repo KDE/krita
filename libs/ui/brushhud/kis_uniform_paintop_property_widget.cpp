@@ -20,10 +20,12 @@
 
 #include <QVBoxLayout>
 #include <QCheckBox>
+#include <QComboBox>
 
 #include "kis_slider_spin_box.h"
 #include "kis_acyclic_signal_connector.h"
 #include "kis_slider_based_paintop_property.h"
+#include "kis_combo_based_paintop_property.h"
 #include "kis_debug.h"
 
 /****************************************************************/
@@ -138,7 +140,7 @@ void KisUniformPaintOpPropertyDoubleSlider::slotSliderChanged(qreal value)
 }
 
 /****************************************************************/
-/*      KisUniformPaintOpPropertyCheckBox                   */
+/*      KisUniformPaintOpPropertyCheckBox                       */
 /****************************************************************/
 
 KisUniformPaintOpPropertyCheckBox::KisUniformPaintOpPropertyCheckBox(KisUniformPaintOpPropertySP property, QWidget *parent)
@@ -160,6 +162,62 @@ void KisUniformPaintOpPropertyCheckBox::setValue(const QVariant &value)
 }
 
 void KisUniformPaintOpPropertyCheckBox::slotCheckBoxChanged(bool value)
+{
+    emit valueChanged(value);
+}
+
+/****************************************************************/
+/*      KisUniformPaintOpPropertyComboBox                       */
+/****************************************************************/
+
+KisUniformPaintOpPropertyComboBox::KisUniformPaintOpPropertyComboBox(KisUniformPaintOpPropertySP property, QWidget *parent)
+    : KisUniformPaintOpPropertyWidget(property, parent)
+{
+    QVBoxLayout *layout = new QVBoxLayout(this);
+
+    KisComboBasedPaintOpProperty *comboProperty =
+        dynamic_cast<KisComboBasedPaintOpProperty*>(property.data());
+    KIS_ASSERT_RECOVER_RETURN(comboProperty);
+
+    const QList<QString> items = comboProperty->items();
+    const QList<QIcon> icons = comboProperty->icons();
+
+    m_comboBox = new QComboBox(this);
+
+    KIS_SAFE_ASSERT_RECOVER_RETURN(icons.isEmpty() ||
+                                   items.size() == icons.size());
+
+    if (!icons.isEmpty()) {
+        auto itemIt = items.constBegin();
+        auto iconIt = icons.constBegin();
+
+        while (itemIt != items.constEnd() &&
+               iconIt != icons.constEnd()) {
+
+            m_comboBox->addItem(*iconIt, *itemIt);
+
+            ++itemIt;
+            ++iconIt;
+        }
+    } else {
+        Q_FOREACH (const QString &item, items) {
+            m_comboBox->addItem(item);
+        }
+    }
+
+    m_comboBox->setCurrentIndex(property->value().toInt());
+    connect(m_comboBox, SIGNAL(currentIndexChanged(int)), SLOT(slotComboBoxChanged(int)));
+
+    layout->addWidget(m_comboBox);
+    setLayout(layout);
+}
+
+void KisUniformPaintOpPropertyComboBox::setValue(const QVariant &value)
+{
+    m_comboBox->setCurrentIndex(value.toInt());
+}
+
+void KisUniformPaintOpPropertyComboBox::slotComboBoxChanged(int value)
 {
     emit valueChanged(value);
 }

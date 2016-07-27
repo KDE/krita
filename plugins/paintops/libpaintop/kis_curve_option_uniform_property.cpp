@@ -58,6 +58,12 @@ void KisCurveOptionUniformProperty::readValueImpl()
 
 void KisCurveOptionUniformProperty::writeValueImpl()
 {
+    m_option->readOptionSetting(settings().data());
     m_option->setValue(value().toReal());
     m_option->writeOptionSetting(settings().data());
+}
+
+bool KisCurveOptionUniformProperty::isVisible() const
+{
+    return !m_option->isCheckable() || m_option->isChecked();
 }

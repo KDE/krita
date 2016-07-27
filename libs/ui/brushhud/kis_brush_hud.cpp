@@ -125,12 +125,16 @@ void KisBrushHud::updateProperties()
     Q_FOREACH(auto property, properties) {
         QWidget *w = 0;
 
+        if (!property->isVisible()) continue;
+
         if (property->type() == KisUniformPaintOpProperty::Int) {
             w = new KisUniformPaintOpPropertyIntSlider(property, m_d->wdgProperties);
         } else if (property->type() == KisUniformPaintOpProperty::Double) {
             w = new KisUniformPaintOpPropertyDoubleSlider(property, m_d->wdgProperties);
         } else if (property->type() == KisUniformPaintOpProperty::Bool) {
             w = new KisUniformPaintOpPropertyCheckBox(property, m_d->wdgProperties);
+        } else if (property->type() == KisUniformPaintOpProperty::Combo) {
+            w = new KisUniformPaintOpPropertyComboBox(property, m_d->wdgProperties);
         }
 
         if (w) {

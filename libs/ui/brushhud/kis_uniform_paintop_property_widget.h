@@ -99,4 +99,21 @@ private:
     QCheckBox *m_checkBox;
 };
 
+class QComboBox;
+
+class KisUniformPaintOpPropertyComboBox : public KisUniformPaintOpPropertyWidget
+{
+    Q_OBJECT
+public:
+    KisUniformPaintOpPropertyComboBox(KisUniformPaintOpPropertySP property, QWidget *parent);
+
+    virtual void setValue(const QVariant &value);
+
+private Q_SLOTS:
+    void slotComboBoxChanged(int value);
+
+private:
+    QComboBox *m_comboBox;
+};
+
 #endif /* __KIS_UNIFORM_PAINTOP_PROPERTY_WIDGET_H */

@@ -33,6 +33,12 @@ public:
                                     QObject *parent)
         : ParentClass(type, id, name, settings, parent) {}
 
+    KisCallbackBasedPaintopProperty(const QString &id,
+                                const QString &name,
+                                KisPaintOpSettingsSP settings,
+                                QObject *parent)
+    : ParentClass(id, name, settings, parent) {}
+
     typedef std::function<void (KisUniformPaintOpProperty*)> Callback;
 
     void setReadCallback(Callback func) { m_readFunc = func; }

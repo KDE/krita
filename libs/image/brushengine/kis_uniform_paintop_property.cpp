@@ -32,7 +32,8 @@ struct KisUniformPaintOpProperty::Private
           id(_id),
           name(_name),
           settings(_settings),
-          isReadingValue(false) {}
+          isReadingValue(false),
+          isWritingValue(false) {}
 
     Type type;
     QString id;
@@ -42,6 +43,7 @@ struct KisUniformPaintOpProperty::Private
 
     KisPaintOpSettingsSP settings;
     bool isReadingValue;
+    bool isWritingValue;
 };
 
 KisUniformPaintOpProperty::KisUniformPaintOpProperty(Type type,
@@ -91,12 +93,16 @@ void KisUniformPaintOpProperty::setValue(const QVariant &value)
     emit valueChanged(value);
 
     if (!m_d->isReadingValue) {
+        m_d->isWritingValue = true;
         writeValueImpl();
+        m_d->isWritingValue = false;
     }
 }
 
 void KisUniformPaintOpProperty::requestReadValue()
 {
+    if (m_d->isWritingValue) return;
+
     m_d->isReadingValue = true;
     readValueImpl();
     m_d->isReadingValue = false;
@@ -106,6 +112,11 @@ KisPaintOpSettingsSP KisUniformPaintOpProperty::settings()
 {
     // correct conversion weak-to-strong shared pointer
     return m_d->settings ? m_d->settings : 0;
+}
+
+bool KisUniformPaintOpProperty::isVisible() const
+{
+    return true;
 }
 
 void KisUniformPaintOpProperty::readValueImpl()

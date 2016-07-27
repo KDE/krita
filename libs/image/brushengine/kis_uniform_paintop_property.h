@@ -55,6 +55,8 @@ public:
 
     KisPaintOpSettingsSP settings();
 
+    virtual bool isVisible() const;
+
 public Q_SLOTS:
     void setValue(const QVariant &value);
     void requestReadValue();

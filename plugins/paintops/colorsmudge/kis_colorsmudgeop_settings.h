@@ -16,32 +16,24 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KIS_CURVE_OPTION_UNIFORM_PROPERTY_H
-#define __KIS_CURVE_OPTION_UNIFORM_PROPERTY_H
+#ifndef __KIS_COLORSMUDGEOP_SETTINGS_H
+#define __KIS_COLORSMUDGEOP_SETTINGS_H
 
 #include <QScopedPointer>
-#include "kis_slider_based_paintop_property.h"
-#include <kritapaintop_export.h>
-
-class KisCurveOption;
+#include <kis_brush_based_paintop_settings.h>
 
 
-class PAINTOP_EXPORT KisCurveOptionUniformProperty : public KisDoubleSliderBasedPaintOpProperty
+class KisColorSmudgeOpSettings : public KisBrushBasedPaintOpSettings
 {
 public:
-    KisCurveOptionUniformProperty(const QString &name,
-                                  KisCurveOption *option,
-                                  KisPaintOpSettingsSP settings,
-                                  QObject *parent);
-    ~KisCurveOptionUniformProperty();
+    KisColorSmudgeOpSettings();
+    ~KisColorSmudgeOpSettings();
 
-    virtual void readValueImpl();
-    virtual void writeValueImpl();
-
-    virtual bool isVisible() const;
+    QList<KisUniformPaintOpPropertySP> uniformProperties();
 
 private:
-    QScopedPointer<KisCurveOption> m_option;
+    struct Private;
+    const QScopedPointer<Private> m_d;
 };
 
-#endif /* __KIS_CURVE_OPTION_UNIFORM_PROPERTY_H */
+#endif /* __KIS_COLORSMUDGEOP_SETTINGS_H */

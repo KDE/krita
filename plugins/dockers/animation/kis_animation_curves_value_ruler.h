@@ -33,6 +33,9 @@ public:
     float mapValueToView(float value) const;
     float mapViewToValue(float y) const;
 
+    void setOffset(float offset);
+    float offset() const;
+
     QSize sizeHint() const;
     void paintEvent(QPaintEvent *e);
 

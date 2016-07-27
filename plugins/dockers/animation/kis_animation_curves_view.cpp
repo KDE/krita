@@ -26,8 +26,11 @@
 #include <QPaintEvent>
 #include <QMouseEvent>
 #include <QApplication>
+#include <QScrollBar>
 #include <qpainter.h>
 #include <QtMath>
+
+const int VERTICAL_PADDING = 30;
 
 struct KisAnimationCurvesView::Private
 {
@@ -59,6 +62,8 @@ KisAnimationCurvesView::KisAnimationCurvesView(QWidget *parent)
 
     setSelectionMode(QAbstractItemView::ExtendedSelection);
 
+    setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
+    setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
 }
 
 KisAnimationCurvesView::~KisAnimationCurvesView()
@@ -96,6 +101,8 @@ void KisAnimationCurvesView::scrollTo(const QModelIndex &index, QAbstractItemVie
 
 QModelIndex KisAnimationCurvesView::indexAt(const QPoint &point) const
 {
+    if (!model()) return QModelIndex();
+
     int time = m_d->horizontalHeader->logicalIndexAt(point.x());
 
     int rows = model()->rowCount();
@@ -261,6 +268,38 @@ QModelIndex KisAnimationCurvesView::findNextKeyframeIndex(int channel, int time,
     }
 }
 
+void KisAnimationCurvesView::updateVerticalRange()
+{
+    if (!model()) return;
+
+    qreal min = 0;
+    qreal max = 0;
+
+    int rows = model()->rowCount();
+    for (int row = 0; row < rows; row++) {
+        QModelIndex index = model()->index(row, 0);
+        QVariant nextTime;
+
+        do {
+            qreal value = index.data(KisAnimationCurvesModel::ScalarValueRole).toReal();
+
+            if (value < min) min = value;
+            if (value > max) max = value;
+
+            nextTime = index.data(KisAnimationCurvesModel::NextKeyframeTime);
+            if (nextTime.isValid()) index = model()->index(row, nextTime.toInt());
+        } while (nextTime.isValid());
+    }
+
+    int viewMin = max * m_d->verticalHeader->scaleFactor();
+    int viewMax = min * m_d->verticalHeader->scaleFactor();
+
+    viewMin -= VERTICAL_PADDING;
+    viewMax += VERTICAL_PADDING;
+
+    verticalScrollBar()->setRange(viewMin, viewMax - viewport()->height());
+}
+
 QModelIndex KisAnimationCurvesView::moveCursor(QAbstractItemView::CursorAction cursorAction, Qt::KeyboardModifiers modifiers)
 {
     // TODO
@@ -274,7 +313,7 @@ int KisAnimationCurvesView::horizontalOffset() const
 
 int KisAnimationCurvesView::verticalOffset() const
 {
-    return 0;
+    return m_d->verticalHeader->offset();
 }
 
 bool KisAnimationCurvesView::isIndexHidden(const QModelIndex &index) const
@@ -417,6 +456,15 @@ void KisAnimationCurvesView::mouseReleaseEvent(QMouseEvent *e)
     QAbstractItemView::mouseReleaseEvent(e);
 }
 
+void KisAnimationCurvesView::scrollContentsBy(int dx, int dy)
+{
+    m_d->horizontalHeader->setOffset(horizontalScrollBar()->value());
+    m_d->verticalHeader->setOffset(verticalScrollBar()->value());
+
+    scrollDirtyRegion(dx, dy);
+    viewport()->scroll(dx, dy);
+}
+
 void KisAnimationCurvesView::updateGeometries()
 {
     int topMargin = qMax(m_d->horizontalHeader->minimumHeight(),
@@ -430,6 +478,9 @@ void KisAnimationCurvesView::updateGeometries()
     m_d->horizontalHeader->setGeometry(leftMargin, 0, viewRect.width(), topMargin);
     m_d->verticalHeader->setGeometry(0, topMargin, leftMargin, viewRect.height());
 
+    horizontalScrollBar()->setRange(0, m_d->horizontalHeader->length() - viewport()->width());
+    updateVerticalRange();
+
     QAbstractItemView::updateGeometries();
 }
 
@@ -439,11 +490,13 @@ void KisAnimationCurvesView::slotRowsChanged(const QModelIndex &parentIndex, int
     Q_UNUSED(first);
     Q_UNUSED(last);
 
+    updateVerticalRange();
     viewport()->update();
 }
 
 void KisAnimationCurvesView::slotDataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight)
 {
+    updateVerticalRange();
     viewport()->update();
 }
 

@@ -47,6 +47,7 @@ protected:
     bool isIndexHidden(const QModelIndex &index) const;
     void setSelection(const QRect &rect, QItemSelectionModel::SelectionFlags command);
     QRegion visualRegionForSelection(const QItemSelection &selection) const;
+    void scrollContentsBy(int dx, int dy);
 
     void mousePressEvent(QMouseEvent *);
     void mouseMoveEvent(QMouseEvent *);
@@ -76,6 +77,8 @@ private:
     void paintCurveSegment(QPainter &painter, QPointF pos1, QPointF rightTangent, QPointF leftTangent, QPointF pos2);
     void paintKeyframes(QPainter &painter, int firstFrame, int lastFrame);
     QModelIndex findNextKeyframeIndex(int channel, int time, int selectionOffset, bool backward);
+
+    void updateVerticalRange();
 };
 
 #endif

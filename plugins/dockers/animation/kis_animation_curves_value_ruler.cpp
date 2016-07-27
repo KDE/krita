@@ -25,7 +25,7 @@
 struct KisAnimationCurvesValueRuler::Private
 {
     Private()
-        : offset(300)
+        : offset(-300)
         , scale(1.0)
     {}
 
@@ -48,12 +48,22 @@ float KisAnimationCurvesValueRuler::scaleFactor() const
 
 float KisAnimationCurvesValueRuler::mapValueToView(float value) const
 {
-    return m_d->offset - m_d->scale * value;
+    return -m_d->offset - m_d->scale * value;
 }
 
 float KisAnimationCurvesValueRuler::mapViewToValue(float y) const
 {
-    return (m_d->offset - y) / m_d->scale;
+    return (-m_d->offset - y) / m_d->scale;
+}
+
+void KisAnimationCurvesValueRuler::setOffset(float offset)
+{
+    m_d->offset = offset;
+}
+
+float KisAnimationCurvesValueRuler::offset() const
+{
+    return m_d->offset;
 }
 
 QSize KisAnimationCurvesValueRuler::sizeHint() const

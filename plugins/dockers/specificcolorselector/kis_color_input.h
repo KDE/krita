@@ -26,6 +26,7 @@ class QWidget;
 class QSpinBox;
 class QDoubleSpinBox;
 class KisIntParseSpinBox;
+class KisDoubleParseSpinBox;
 class KoColorSlider;
 class QLineEdit;
 #include "KoColorDisplayRendererInterface.h"
@@ -57,7 +58,7 @@ protected:
     virtual QWidget* createInput();
 public Q_SLOTS:
     void setValue(int);
-    void update();
+	void update();
 private:
 	KisIntParseSpinBox* m_intNumInput;
 };
@@ -72,10 +73,10 @@ protected:
     virtual QWidget* createInput();
 public Q_SLOTS:
     void setValue(double);
-    void sliderChanged(int);
-    void update();
+	void sliderChanged(int);
+	void update();
 private:
-    QDoubleSpinBox* m_dblNumInput;
+	KisDoubleParseSpinBox* m_dblNumInput;
     qreal m_minValue;
     qreal m_maxValue;
 };

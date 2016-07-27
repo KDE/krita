@@ -122,7 +122,7 @@ QList<KisUniformPaintOpPropertySP> KisHatchingPaintOpSettings::uniformProperties
                     i18n("Hatching Angle"),
                     this, 0);
 
-            QString degree = QChar(Qt::Key_degree);
+            const QString degree = QChar(Qt::Key_degree);
             prop->setRange(-90, 90);
             prop->setSingleStep(0.01);
             prop->setDecimals(2);

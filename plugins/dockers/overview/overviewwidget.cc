@@ -356,9 +356,9 @@ void OverviewThumbnailStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
     if (d_fp) {
         QImage overviewImage;
 
-        QPointer<KoUpdater> updater = new KoDummyUpdater();
+        KoDummyUpdater updater;
         KisTransformWorker worker(d_fp->thumbDev, 1 / oversample, 1 / oversample, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-                                  updater, KisFilterStrategyRegistry::instance()->value("Bilinear"));
+                                  &updater, KisFilterStrategyRegistry::instance()->value("Bilinear"));
         worker.run();
 
         overviewImage = d_fp->thumbDev->convertToQImage(KoColorSpaceRegistry::instance()->rgb8()->profile());

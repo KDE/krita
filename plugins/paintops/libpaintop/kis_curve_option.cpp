@@ -44,8 +44,6 @@ KisCurveOption::KisCurveOption(const QString& name, KisPaintOpOption::PaintopCat
 
 KisCurveOption::~KisCurveOption()
 {
-    m_curveCache.clear();
-    m_sensorMap.clear();
 }
 
 const QString& KisCurveOption::name() const

@@ -51,13 +51,21 @@ void KisPaintingAssistantsManager::setup(KisActionManager * actionManager)
 
 void KisPaintingAssistantsManager::setView(QPointer<KisView> imageView)
 {
+
+    // set view is called twice when a document is open, so we need to disconnect the original signals
+    // if m_imageView has already been created. This prevents double signal events firing
     if (m_imageView) {
         m_toggleAssistant->disconnect();
+        m_togglePreview->disconnect();
+
         if (decoration()) {
             decoration()->disconnect(this);
         }
     }
+
     m_imageView = imageView;
+
+
     if (m_imageView && !decoration()) {
         KisPaintingAssistantsDecoration* deco = new KisPaintingAssistantsDecoration(m_imageView);
         m_imageView->canvasBase()->addDecoration(deco);

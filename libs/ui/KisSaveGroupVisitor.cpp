@@ -25,14 +25,14 @@
 KisSaveGroupVisitor::KisSaveGroupVisitor(KisImageWSP image,
                                          bool saveInvisible,
                                          bool saveTopLevelOnly,
-                                         const QUrl &url,
+                                         const QString &path,
                                          const QString &baseName,
                                          const QString &extension,
                                          const QString &mimeFilter)
     : m_image(image)
     , m_saveInvisible(saveInvisible)
     , m_saveTopLevelOnly(saveTopLevelOnly)
-    , m_url(url)
+    , m_path(path)
     , m_baseName(baseName)
     , m_extension(extension)
     , m_mimeFilter(mimeFilter)
@@ -116,11 +116,8 @@ bool KisSaveGroupVisitor::visit(KisGroupLayer *layer)
         exportDocument->setOutputMimeType(m_mimeFilter.toLatin1());
         exportDocument->setFileBatchMode(true);
 
-        QUrl url = m_url;
-
-        url = url.adjusted(QUrl::RemoveFilename);
-        url.setPath(url.path() + m_baseName + '_' + layer->name().replace(' ', '_') + '.' + m_extension);
-
+        QString path = m_path + "/" + m_baseName + "_" + layer->name().replace(' ', '_') + '.' + m_extension;
+        QUrl url = QUrl::fromLocalFile(path);
         exportDocument->exportDocument(url);
 
         if (!m_saveTopLevelOnly) {

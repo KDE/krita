@@ -32,6 +32,12 @@ public:
     int moveStep();
     double moveScale();
     KisToolMove::MoveToolMode mode();
+    bool showCoordinates() const;
+
+public Q_SLOTS:
+    void setShowCoordinates(bool value);
+
+    void slotSetTranslate(QPoint newPos);
 
 private Q_SLOTS:
     void on_spinMoveStep_valueChanged(double UIMoveStep);
@@ -46,6 +52,18 @@ private Q_SLOTS:
 
     void on_radioGroup_toggled(bool checked);
 
+    void on_chkShowCoordinates_toggled(bool checked);
+
+    void on_translateXBox_valueChanged(int arg1);
+
+    void on_translateYBox_valueChanged(int arg1);
+
+Q_SIGNALS:
+    void showCoordinatesChanged(bool value);
+
+    void sigSetTranslateX(int value);
+    void sigSetTranslateY(int value);
+
 private:
     void updateUIUnit(int newUnit);
     void setMoveToolMode(KisToolMove::MoveToolMode newMode);
@@ -54,6 +72,10 @@ private:
     int m_moveStepUnit;
     qreal m_moveScale;
     KisToolMove::MoveToolMode m_moveToolMode;
+    bool m_showCoordinates;
+
+    int m_TranslateX;
+    int m_TranslateY;
 
     KConfigGroup m_configGroup;
 };

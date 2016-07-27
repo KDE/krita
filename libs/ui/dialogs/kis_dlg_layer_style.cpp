@@ -1081,7 +1081,7 @@ InnerGlow::InnerGlow(Mode mode, KisCanvasResourceProvider *resourceProvider, QWi
     ui.intSize->setRange(0, 250);
     ui.intSize->setSuffix(i18n(" px"));
 
-    ui.intRange->setRange(0, 100);
+    ui.intRange->setRange(1, 100);
     ui.intRange->setSuffix(i18n(" %"));
 
     ui.intJitter->setRange(0, 100);

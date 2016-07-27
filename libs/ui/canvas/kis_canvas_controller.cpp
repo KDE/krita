@@ -276,7 +276,7 @@ void KisCanvasController::slotToggleLevelOfDetailMode(bool value)
             QString filteringMode =
                 kritaCanvas->openGLFilterMode() == KisOpenGL::BilinearFilterMode ?
                 i18n("Bilinear") : i18n("Nearest Neighbour");
-            reason = i18n("Instant Preview is supported\n in Trilinear of High Quality filtering modes.\nCurrent mode is %1", filteringMode);
+            reason = i18n("Instant Preview is supported\n in Trilinear or High Quality filtering modes.\nCurrent mode is %1", filteringMode);
         }
 
         m_d->view->viewManager()->showFloatingMessage(

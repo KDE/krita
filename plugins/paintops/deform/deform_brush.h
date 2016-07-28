@@ -23,6 +23,7 @@
 #include <brushengine/kis_paint_information.h>
 
 #include <kis_brush_size_option.h>
+#include <kis_deform_option.h>
 
 #include <time.h>
 
@@ -205,10 +206,10 @@ public:
                                     qreal scale, qreal rotation, QPointF pos,
                                     qreal subPixelX, qreal subPixelY, int dabX, int dabY);
 
-    void setSizeProperties(KisBrushSizeProperties * properties) {
+    void setSizeProperties(BrushSizeOption * properties) {
         m_sizeProperties = properties;
     }
-    void setProperties(DeformProperties * properties) {
+    void setProperties(DeformOption * properties) {
         m_properties = properties;
     }
     void initDeformAction();
@@ -221,11 +222,11 @@ private:
     void debugColor(const quint8* data, KoColorSpace * cs);
 
     qreal maskWidth(qreal scale) {
-        return m_sizeProperties->diameter * scale;
+        return m_sizeProperties->brush_diameter * scale;
     }
 
     qreal maskHeight(qreal scale) {
-        return m_sizeProperties->diameter * m_sizeProperties->aspect  * scale;
+        return m_sizeProperties->brush_diameter * m_sizeProperties->brush_aspect  * scale;
     }
 
     inline qreal norme(qreal x, qreal y) {
@@ -243,8 +244,8 @@ private:
 
     DeformBase * m_deformAction;
 
-    DeformProperties * m_properties;
-    KisBrushSizeProperties * m_sizeProperties;
+    DeformOption * m_properties;
+    BrushSizeOption * m_sizeProperties;
 };
 
 

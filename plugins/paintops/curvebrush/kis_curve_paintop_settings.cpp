@@ -145,6 +145,34 @@ QList<KisUniformPaintOpPropertySP> KisCurvePaintOpSettings::uniformProperties()
             prop->requestReadValue();
             props << toQShared(prop);
         }
+
+        {
+            KisUniformPaintOpPropertyCallback *prop =
+                new KisUniformPaintOpPropertyCallback(
+                    KisUniformPaintOpPropertyCallback::Bool,
+                    "curve_connectionline",
+                    i18n("Connection Line"),
+                    this, 0);
+
+            prop->setReadCallback(
+                [](KisUniformPaintOpProperty *prop) {
+                    CurveOption option;
+                    option.readOptionSetting(prop->settings().data());
+
+                    prop->setValue(option.curve_paint_connection_line);
+                });
+            prop->setWriteCallback(
+                [](KisUniformPaintOpProperty *prop) {
+                    CurveOption option;
+                    option.readOptionSetting(prop->settings().data());
+                    option.curve_paint_connection_line = prop->value().toBool();
+                    option.writeOptionSetting(prop->settings().data());
+                });
+
+            QObject::connect(preset()->updateProxy(), SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
+            prop->requestReadValue();
+            props << toQShared(prop);
+        }
     }
 
     {

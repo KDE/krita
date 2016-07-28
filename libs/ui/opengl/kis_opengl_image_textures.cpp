@@ -83,7 +83,6 @@ KisOpenGLImageTextures::KisOpenGLImageTextures(KisImageWSP image,
     , m_proofingTransform(0)
     , m_createNewProofingTransform(true)
     , m_tilesDestinationColorSpace(0)
-    , m_createNewProofingTransform(true)
     , m_internalColorManagementActive(true)
     , m_checkerTexture(0)
     , m_glFuncs(0)

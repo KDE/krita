@@ -1000,7 +1000,7 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
             dialog.setDefaultDir(suggestedURL.toLocalFile(), true);
         }
         // Default to all supported file types if user is exporting, otherwise use Krita default
-        dialog.setMimeTypeFilters(mimeFilter);
+        dialog.setMimeTypeFilters(mimeFilter, QString(_native_format));
         QUrl newURL = QUrl::fromUserInput(dialog.filename());
 
         if (newURL.isLocalFile()) {

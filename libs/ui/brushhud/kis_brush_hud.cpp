@@ -59,7 +59,7 @@ KisBrushHud::KisBrushHud(KisCanvasResourceProvider *provider, QWidget *parent)
 {
     m_d->provider = provider;
 
-    QVBoxLayout *layout = new QVBoxLayout(this);
+    QVBoxLayout *layout = new QVBoxLayout();
     m_d->lblPresetName = new QLabel("<Preset Name>", this);
     layout->addWidget(m_d->lblPresetName);
 

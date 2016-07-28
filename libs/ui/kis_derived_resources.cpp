@@ -138,7 +138,7 @@ QVariant KisOpacityResourceConverter::toSource(const QVariant &value, const QVar
 }
 
 /*********************************************************************/
-/*          KisFlowResourceConverter                              */
+/*          KisFlowResourceConverter                                 */
 /*********************************************************************/
 
 KisFlowResourceConverter::KisFlowResourceConverter()
@@ -163,7 +163,7 @@ QVariant KisFlowResourceConverter::toSource(const QVariant &value, const QVarian
 }
 
 /*********************************************************************/
-/*          KisSizeResourceConverter                              */
+/*          KisSizeResourceConverter                                 */
 /*********************************************************************/
 
 KisSizeResourceConverter::KisSizeResourceConverter()

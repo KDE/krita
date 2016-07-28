@@ -33,9 +33,17 @@ namespace KisStandardUniformPropertiesFactory
     static const KoID angle("angle", i18n("Angle"));
     static const KoID spacing("spacing", i18n("Spacing"));
 
+    /**
+     * Overload of createProperty(const QString &id, ...)
+     */
     KisUniformPaintOpPropertySP createProperty(const KoID &id,
                                                KisPaintOpSettingsSP settings,
                                                KisPaintopSettingsUpdateProxy *updateProxy);
+
+    /**
+     * Factory for creating standard uniform properties. Right now
+     * it supports only size, opacity and flow.
+     */
     KisUniformPaintOpPropertySP createProperty(const QString &id,
                                                KisPaintOpSettingsSP settings,
                                                KisPaintopSettingsUpdateProxy *updateProxy);

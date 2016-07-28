@@ -111,7 +111,9 @@ namespace KisStandardUniformPropertiesFactory {
             prop->requestReadValue();
             result = toQShared(prop);
         } else if (id == angle.id()) {
+            qFatal("Not implemented");
         } else if (id == spacing.id()) {
+            qFatal("Not implemented");
         }
 
         if (!result) {

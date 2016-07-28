@@ -175,7 +175,7 @@ public:
     void removeDerivedResourceConverter(int key);
 
     /**
-     * Some resources can "mutate", that is they value doesn't change
+     * Some resources can "mutate", that is their value doesn't change
      * (a pointer), whereas the contents changes. But we should still
      * notify all the derived resources subscribers that the resource
      * has changed. For that purpose we use a special mediator class

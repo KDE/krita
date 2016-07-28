@@ -22,6 +22,16 @@
 #include "kis_uniform_paintop_property.h"
 
 
+/**
+ * This is a general class for the properties that can be represented
+ * in the GUI as an integer or double slider. The GUI representation
+ * creates a slider and connects it to this property using all the
+ * information contained in it.
+ *
+ * Methods of this property basically copy the methods of
+ * Kis{,Double}SliderSpinbox
+ */
+
 template <typename T>
 class KisSliderBasedPaintOpProperty : public KisUniformPaintOpProperty
 {

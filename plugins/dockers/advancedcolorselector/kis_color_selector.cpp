@@ -256,6 +256,7 @@ void KisColorSelector::mousePressEvent(QMouseEvent* e)
             m_grabbingComponent=m_subComponent;
 
         mouseEvent(e);
+        updatePreviousColorPreview();
         e->accept();
     }
 }
@@ -280,6 +281,7 @@ void KisColorSelector::mouseReleaseEvent(QMouseEvent* e)
         m_lastColorRole = Acs::buttonToRole(e->button());
 
         updateColor(m_lastRealColor, m_lastColorRole, false);
+        updateBaseColorPreview(m_currentRealColor);
         e->accept();
     }
 

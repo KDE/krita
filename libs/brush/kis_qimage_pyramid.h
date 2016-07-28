@@ -21,6 +21,7 @@
 
 #include <QImage>
 #include <QVector>
+#include <kis_dab_shape.h>
 #include <kritabrush_export.h>
 
 
@@ -31,13 +32,12 @@ public:
     ~KisQImagePyramid();
 
     static QSize imageSize(const QSize &originalSize,
-                           qreal scale, qreal rotation,
+                           KisDabShape const&,
                            qreal subPixelX, qreal subPixelY);
 
-    static QSizeF characteristicSize(const QSize &originalSize,
-                                     qreal scale, qreal rotation);
+    static QSizeF characteristicSize(const QSize &originalSize, KisDabShape const&);
 
-    QImage createImage(qreal scale, qreal rotation,
+    QImage createImage(KisDabShape const&,
                        qreal subPixelX, qreal subPixelY) const;
 
 private:
@@ -45,12 +45,12 @@ private:
     int findNearestLevel(qreal scale, qreal *baseScale) const;
     void appendPyramidLevel(const QImage &image);
 
-    static void calculateParams(qreal scale, qreal rotation,
+    static void calculateParams(KisDabShape const& shape,
                                 qreal subPixelX, qreal subPixelY,
                                 const QSize &originalSize,
                                 QTransform *outputTransform, QSize *outputSize);
 
-    static void calculateParams(qreal scale, qreal rotation,
+    static void calculateParams(KisDabShape shape,
                                 qreal subPixelX, qreal subPixelY,
                                 const QSize &originalSize,
                                 qreal baseScale, const QSize &baseSize,

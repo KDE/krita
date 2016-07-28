@@ -70,6 +70,7 @@ KisBrushOp::KisBrushOp(const KisPaintOpSettingsSP settings, KisPainter *painter,
     m_opacityOption.readOptionSetting(settings);
     m_flowOption.readOptionSetting(settings);
     m_sizeOption.readOptionSetting(settings);
+    m_ratioOption.readOptionSetting(settings);
     m_spacingOption.readOptionSetting(settings);
     m_softnessOption.readOptionSetting(settings);
     m_sharpnessOption.readOptionSetting(settings);
@@ -81,6 +82,7 @@ KisBrushOp::KisBrushOp(const KisPaintOpSettingsSP settings, KisPainter *painter,
     m_opacityOption.resetAllSensors();
     m_flowOption.resetAllSensors();
     m_sizeOption.resetAllSensors();
+    m_ratioOption.resetAllSensors();
     m_softnessOption.resetAllSensors();
     m_sharpnessOption.resetAllSensors();
     m_darkenOption.resetAllSensors();
@@ -114,16 +116,17 @@ KisSpacingInformation KisBrushOp::paintAt(const KisPaintInformation& info)
     scale *= KisLodTransform::lodToScale(painter()->device());
     if (checkSizeTooSmall(scale)) return KisSpacingInformation();
 
+    qreal rotation = m_rotationOption.apply(info);
+    qreal ratio = m_ratioOption.apply(info);
 
     KisPaintDeviceSP device = painter()->device();
 
-    qreal rotation = m_rotationOption.apply(info);
 
-
+    KisDabShape shape(scale, ratio, rotation);
     QPointF cursorPos =
         m_scatterOption.apply(info,
-                              brush->maskWidth(scale, rotation, 0, 0, info),
-                              brush->maskHeight(scale, rotation, 0, 0, info));
+                              brush->maskWidth(shape, 0, 0, info),
+                              brush->maskHeight(shape, 0, 0, info));
 
     quint8 origOpacity = painter()->opacity();
 
@@ -143,8 +146,7 @@ KisSpacingInformation KisBrushOp::paintAt(const KisPaintInformation& info)
     KisFixedPaintDeviceSP dab = m_dabCache->fetchDab(device->compositionSourceColorSpace(),
                                 m_colorSource,
                                 cursorPos,
-                                scale, scale,
-                                rotation,
+                                shape,
                                 info,
                                 m_softnessOption.apply(info),
                                 &dabRect);

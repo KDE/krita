@@ -95,11 +95,9 @@ KisSpacingInformation KisFilterOp::paintAt(const KisPaintInformation& info)
 
     qreal scale = m_sizeOption.apply(info);
     scale *= KisLodTransform::lodToScale(painter()->device());
-
     if (checkSizeTooSmall(scale)) return KisSpacingInformation();
-
-
     qreal rotation = m_rotationOption.apply(info);
+    KisDabShape shape(scale, 1.0, rotation);
 
     static const KoColorSpace *cs = KoColorSpaceRegistry::instance()->alpha8();
     static KoColor color(Qt::black, cs);
@@ -107,7 +105,7 @@ KisSpacingInformation KisFilterOp::paintAt(const KisPaintInformation& info)
     QRect dstRect;
     KisFixedPaintDeviceSP dab =
         m_dabCache->fetchDab(cs, color, info.pos(),
-                             scale, scale, rotation,
+                             shape,
                              info, 1.0,
                              &dstRect);
 

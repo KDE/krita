@@ -101,7 +101,7 @@ KisSpacingInformation KisHatchingPaintOp::paintAt(const KisPaintInformation& inf
     const qreal additionalScale = KisLodTransform::lodToScale(painter()->device());
     const double scale = additionalScale * m_sizeOption.apply(info);
     if ((scale * brush->width()) <= 0.01 || (scale * brush->height()) <= 0.01) return KisSpacingInformation(1.0);
-
+    KisDabShape shape(scale, 1.0, 0.0);
 
     quint8 origOpacity = m_opacityOption.apply(painter(), info);
 
@@ -112,7 +112,7 @@ KisSpacingInformation KisHatchingPaintOp::paintAt(const KisPaintInformation& inf
     QRect dstRect;
     KisFixedPaintDeviceSP maskDab =
         m_dabCache->fetchDab(cs, color, info.pos(),
-                             scale, scale, 0.0,
+                             shape,
                              info, 1.0, &dstRect);
 
     // sanity check

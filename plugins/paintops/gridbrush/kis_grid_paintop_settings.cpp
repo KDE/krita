@@ -58,6 +58,7 @@ QPainterPath KisGridPaintOpSettings::brushOutline(const KisPaintInformation &inf
         path = outlineFetcher()->fetchOutline(info, this, path);
 
         if (mode == CursorTiltOutline) {
+            QPainterPath tiltLine = makeTiltIndicator(info, QPointF(0.0, 0.0), sizex * 0.5, 3.0);
             path.addPath(outlineFetcher()->fetchOutline(info, this, tiltLine, 1.0, 0.0, true, 0, 0));
         }
     }

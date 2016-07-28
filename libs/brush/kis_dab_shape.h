@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2010, Dmitry Kazakov <dimula73@gmail.com>
+ *  Copyright (c) 2016 Nishant Rodrigues <nishantjr@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,7 +16,29 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_texture_tile_update_info.h"
+#pragma once
+#include <QtGlobal>
 
-ConversionCache KisTextureTileUpdateInfo::m_patchPixelsCache;
-ConversionCache KisTextureTileUpdateInfo::m_conversionCache;
+class KisDabShape {
+    qreal m_scale;
+    qreal m_ratio;
+    qreal m_rotation;
+
+public:
+
+    KisDabShape()
+        : m_scale(1.0)
+        , m_ratio(1.0)
+        , m_rotation(0.0)
+    {}
+    KisDabShape(qreal scale, qreal ratio, qreal rotation)
+        : m_scale(scale)
+        , m_ratio(ratio)
+        , m_rotation(rotation)
+    {}
+    qreal scale()    const { return m_scale; }
+    qreal scaleX()   const { return scale(); }
+    qreal scaleY()   const { return m_scale * m_ratio; }
+    qreal ratio()    const { return m_ratio; }
+    qreal rotation() const { return m_rotation; }
+};

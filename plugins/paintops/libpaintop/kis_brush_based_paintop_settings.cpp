@@ -129,13 +129,16 @@ struct BrushReader {
     BrushReader(const KisBrushBasedPaintOpSettings *parent)
         : m_parent(parent)
     {
-        KIS_ASSERT_RECOVER_RETURN(m_parent->optionsWidget());
-        KisSignalsBlocker b(m_parent->optionsWidget());
-        m_parent->optionsWidget()->setConfigurationSafe(m_parent);
+        if (m_parent->optionsWidget()) {
+            KisSignalsBlocker b(m_parent->optionsWidget());
+            m_parent->optionsWidget()->setConfigurationSafe(m_parent);
+        } else {
+            m_parent = 0;
+        }
     }
 
     KisBrushSP brush() {
-        return m_parent->brush();
+        return m_parent ? m_parent->brush() : 0;
     }
 
     const KisBrushBasedPaintOpSettings *m_parent;
@@ -145,15 +148,19 @@ struct BrushWriter {
     BrushWriter(KisBrushBasedPaintOpSettings *parent)
         : m_parent(parent)
     {
+        if (!m_parent->optionsWidget()) {
+            m_parent = 0;
+        }
     }
 
     ~BrushWriter() {
-        KIS_ASSERT_RECOVER_RETURN(m_parent->optionsWidget());
-        m_parent->optionsWidget()->writeConfigurationSafe(m_parent);
+        if (m_parent && m_parent->optionsWidget()) {
+            m_parent->optionsWidget()->writeConfigurationSafe(m_parent);
+        }
     }
 
     KisBrushSP brush() {
-        return m_parent->brush();
+        return m_parent ? m_parent->brush() : 0;
     }
 
     KisBrushBasedPaintOpSettings *m_parent;

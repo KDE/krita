@@ -76,6 +76,9 @@ if (UNIX AND NOT APPLE)
 endif ()
 
 # this list must be dependency-ordered
+if (UNIX AND NOT APPLE)
+    add_subdirectory( ext_python )
+endif ()
 if (MSVC)
     add_subdirectory( ext_patch )
     add_subdirectory( ext_png2ico )

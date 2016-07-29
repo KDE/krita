@@ -1,10 +1,10 @@
 SET(PREFIX_ext_expat "${EXTPREFIX}" )
 
-if (MSVC OR MINGW)
+if (WIN32)
 ExternalProject_Add( ext_expat
 	DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-	URL http://files.kde.org/krita/build/dependencies/expat-2.2.0.tar.bz2
-	URL_MD5 2f47841c829facb346eb6e3fab5212e2
+	URL http://files.kde.org/krita/build/dependencies/expat-2.1.0.tar.gz
+	URL_MD5 dd7dab7a5fea97d2a6a43f511449b7cd
 
 	PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/expat-2.1.0-20130311.diff
 	INSTALL_DIR ${PREFIX_ext_expat}
@@ -19,8 +19,8 @@ else()
 
 ExternalProject_Add( ext_expat
 	DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-	URL http://files.kde.org/krita/build/dependencies/expat-2.2.0.tar.bz2
-	URL_MD5 2f47841c829facb346eb6e3fab5212e2
+	URL http://files.kde.org/krita/build/dependencies/expat-2.1.0.tar.gz
+	URL_MD5 dd7dab7a5fea97d2a6a43f511449b7cd
 
 	INSTALL_DIR ${PREFIX_ext_expat}
     CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${PREFIX_ext_expat}  ${GLOBAL_AUTOMAKE_PROFILE}

@@ -25,7 +25,7 @@ Note: on all operating systems the entire procedure is done in a terminal window
 3. Make sure you have a compiler:
     * Linux: gcc, minimum version 4.8
     * OSX: clang, you need to install xcode for this
-    * Windows: MSVC 2015 Community Edition: https://www.visualstudio.com/en-us/products/visual-studio-community-vs.aspx or MingW (http://tdm-gcc.tdragon.net/, version 5.1). MSVC cannot build G'Mic correctly.
+    * Windows: (http://tdm-gcc.tdragon.net/, version 5.1). MSVC cannot build G'Mic correctly. For some reason, cmake wants to use nmake even when using mingw, so copy mingw32-make.exe to nmake.exe.
 4. If you compile Qt on Windows, you will also need Python 2.7: https://www.python.org/download/releases/2.7/. Make sure to have python.exe in your path.
 
 == Setup your environment ==
@@ -77,7 +77,7 @@ Windows Only:
 Note that the cmake command needs to point to your BUILDROOT like /dev/d, not c:\dev\d.
 
     set PATH=BUILDROOT\i\bin\;BUILDROOT\i\lib;%PATH%
-    cmake ..\krita\3rdparty -DEXTERNALS_DOWNLOAD_DIR=/dev/d -DINSTALL_ROOT=/dev/i   -G "Visual Studio 14 Win64" 
+    cmake ..\krita\3rdparty -DEXTERNALS_DOWNLOAD_DIR=/dev/d -DINSTALL_ROOT=/dev/i   -G "MinGW Makefiles"
 
 3. build the packages:
 
@@ -87,11 +87,12 @@ On Windows:
 
     cmake --build . --config RelWithDebInfo --target ext_patch
     cmake --build . --config RelWithDebInfo --target ext_png2ico
-    cmake --build . --config RelWithDebInfo --target ext_pthreads
+    cmake --build . --config RelWithDebInfo --target ext_gettext
     
 On all operating systems:
 
     cmake --build . --config RelWithDebInfo --target ext_qt
+    cmake --build . --config RelWithDebInfo --target ext_zlib
     cmake --build . --config RelWithDebInfo --target ext_boost
     cmake --build . --config RelWithDebInfo --target ext_eigen3
     cmake --build . --config RelWithDebInfo --target ext_exiv2
@@ -120,7 +121,7 @@ On All operating systems:
 
 On Windows and OSX
 
-    cmake --build . --config RelWithDebInfo --target ext_kwindowsystem
+    cmake --build . --config RelWithDebInfo --target ext_kcrash
 
 On Windows
 

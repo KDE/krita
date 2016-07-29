@@ -27,6 +27,6 @@ KisPressureRatioOption::KisPressureRatioOption()
 double KisPressureRatioOption::apply(const KisPaintInformation & info) const
 {
     if (!isChecked()) return 1.0;
-    return computeSizeLikeValue();
+    return computeSizeLikeValue(info);
 }
 

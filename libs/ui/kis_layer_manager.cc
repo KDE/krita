@@ -350,7 +350,7 @@ void KisLayerManager::convertNodeToPaintLayer(KisNodeSP source)
     if (!image) return;
 
 
-    KisLayer *srcLayer = dynamic_cast<KisLayer*>(source.data());
+    KisGroupLayer *srcLayer = dynamic_cast<KisGroupLayer*>(source.data());
     if (srcLayer) {
         image->flattenLayer(srcLayer);
         return;

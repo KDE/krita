@@ -73,8 +73,7 @@ public:
     KisFixedPaintDeviceSP fetchDab(const KoColorSpace *cs,
                                    const KisColorSource *colorSource,
                                    const QPointF &cursorPoint,
-                                   double scaleX, double scaleY,
-                                   double angle,
+                                   KisDabShape const&,
                                    const KisPaintInformation& info,
                                    qreal softnessFactor,
                                    QRect *dstDabRect);
@@ -82,8 +81,7 @@ public:
     KisFixedPaintDeviceSP fetchDab(const KoColorSpace *cs,
                                    const KoColor& color,
                                    const QPointF &cursorPoint,
-                                   double scaleX, double scaleY,
-                                   double angle,
+                                   KisDabShape const&,
                                    const KisPaintInformation& info,
                                    qreal softnessFactor,
                                    QRect *dstDabRect);
@@ -94,16 +92,14 @@ private:
     struct DabPosition;
 private:
     inline SavedDabParameters getDabParameters(const KoColor& color,
-            double scaleX, double scaleY,
-            double angle,
+            KisDabShape const&,
             const KisPaintInformation& info,
             double subPixelX, double subPixelY,
             qreal softnessFactor,
             MirrorProperties mirrorProperties);
     inline KisDabCache::DabPosition
     calculateDabRect(const QPointF &cursorPoint,
-                     double scaleX, double scaleY,
-                     double angle,
+                     KisDabShape,
                      const KisPaintInformation& info,
                      const MirrorProperties &mirrorProperties);
 
@@ -119,8 +115,7 @@ private:
             const KisColorSource *colorSource,
             const KoColor& color,
             const QPointF &cursorPoint,
-            double scaleX, double scaleY,
-            double angle,
+            KisDabShape,
             const KisPaintInformation& info,
             qreal softnessFactor,
             QRect *dstDabRect);

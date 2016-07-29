@@ -55,6 +55,8 @@ public:
     void updateColor(const KoColor &color, Acs::ColorRole role, bool needsExplicitColorReset);
     void updateColorPreview(const KoColor &color);
     void showColorPreview();
+    void updateBaseColorPreview(const KoColor &color);
+    void updatePreviousColorPreview();
 
     virtual void setColor(const KoColor& color);
 
@@ -93,6 +95,8 @@ protected Q_SLOTS:
 
     /// if you overwrite this, keep in mind, that you should set the colour only, if m_colorUpdateAllowed is true
     virtual void canvasResourceChanged(int key, const QVariant& v);
+
+    void updateLastUsedColorPreview(const KoColor &color);
 
 public:
     // This is a private interface for signal compressor, don't use it.

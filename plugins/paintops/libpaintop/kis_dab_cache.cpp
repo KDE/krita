@@ -140,8 +140,7 @@ void KisDabCache::disableSubpixelPrecision()
 
 inline KisDabCache::SavedDabParameters
 KisDabCache::getDabParameters(const KoColor& color,
-                              double scaleX, double scaleY,
-                              double angle,
+                              KisDabShape const& shape,
                               const KisPaintInformation& info,
                               double subPixelX, double subPixelY,
                               qreal softnessFactor,
@@ -150,9 +149,9 @@ KisDabCache::getDabParameters(const KoColor& color,
     SavedDabParameters params;
 
     params.color = color;
-    params.angle = angle;
-    params.width = m_d->brush->maskWidth(scaleX, angle, subPixelX, subPixelY, info);
-    params.height = m_d->brush->maskHeight(scaleY, angle, subPixelX, subPixelY, info);
+    params.angle = shape.rotation();
+    params.width = m_d->brush->maskWidth(shape, subPixelX, subPixelY, info);
+    params.height = m_d->brush->maskHeight(shape, subPixelX, subPixelY, info);
     params.subPixelX = subPixelX;
     params.subPixelY = subPixelY;
     params.softnessFactor = softnessFactor;
@@ -165,15 +164,14 @@ KisDabCache::getDabParameters(const KoColor& color,
 KisFixedPaintDeviceSP KisDabCache::fetchDab(const KoColorSpace *cs,
         const KisColorSource *colorSource,
         const QPointF &cursorPoint,
-        double scaleX, double scaleY,
-        double angle,
+        KisDabShape const& shape,
         const KisPaintInformation& info,
         qreal softnessFactor,
         QRect *dstDabRect)
 {
     return fetchDabCommon(cs, colorSource, KoColor(),
                           cursorPoint,
-                          scaleX, scaleY, angle,
+                          shape,
                           info,
                           softnessFactor,
                           dstDabRect);
@@ -182,15 +180,14 @@ KisFixedPaintDeviceSP KisDabCache::fetchDab(const KoColorSpace *cs,
 KisFixedPaintDeviceSP KisDabCache::fetchDab(const KoColorSpace *cs,
         const KoColor& color,
         const QPointF &cursorPoint,
-        double scaleX, double scaleY,
-        double angle,
+        KisDabShape const& shape,
         const KisPaintInformation& info,
         qreal softnessFactor,
         QRect *dstDabRect)
 {
     return fetchDabCommon(cs, 0, color,
                           cursorPoint,
-                          scaleX, scaleY, angle,
+                          shape,
                           info,
                           softnessFactor,
                           dstDabRect);
@@ -262,8 +259,7 @@ qreal positiveFraction(qreal x) {
 inline
 KisDabCache::DabPosition
 KisDabCache::calculateDabRect(const QPointF &cursorPoint,
-                              double scaleX, double scaleY,
-                              double angle,
+                              KisDabShape shape,
                               const KisPaintInformation& info,
                               const MirrorProperties &mirrorProperties)
 {
@@ -271,10 +267,10 @@ KisDabCache::calculateDabRect(const QPointF &cursorPoint,
     qreal subPixelX = 0.0, subPixelY = 0.0;
 
     if (mirrorProperties.coordinateSystemFlipped) {
-        angle = 2 * M_PI - angle;
+        shape = KisDabShape(shape.scale(), shape.ratio(), 2 * M_PI - shape.rotation());
     }
 
-    QPointF hotSpot = m_d->brush->hotSpot(scaleX, scaleY, angle, info);
+    QPointF hotSpot = m_d->brush->hotSpot(shape, info);
     QPointF pt = cursorPoint - hotSpot;
 
     if (m_d->sharpnessOption) {
@@ -298,24 +294,24 @@ KisDabCache::calculateDabRect(const QPointF &cursorPoint,
         subPixelY = 0;
     }
 
-    int width = m_d->brush->maskWidth(scaleX, angle, subPixelX, subPixelY, info);
-    int height = m_d->brush->maskHeight(scaleY, angle, subPixelX, subPixelY, info);
+    int width = m_d->brush->maskWidth(shape, subPixelX, subPixelY, info);
+    int height = m_d->brush->maskHeight(shape, subPixelX, subPixelY, info);
 
     if (mirrorProperties.horizontalMirror) {
         subPixelX = positiveFraction(-(cursorPoint.x() + hotSpot.x()));
-        width = m_d->brush->maskWidth(scaleX, angle, subPixelX, subPixelY, info);
+        width = m_d->brush->maskWidth(shape, subPixelX, subPixelY, info);
         x = qRound(cursorPoint.x() + subPixelX + hotSpot.x()) - width;
     }
 
     if (mirrorProperties.verticalMirror) {
         subPixelY = positiveFraction(-(cursorPoint.y() + hotSpot.y()));
-        height = m_d->brush->maskHeight(scaleY, angle, subPixelX, subPixelY, info);
+        height = m_d->brush->maskHeight(shape, subPixelX, subPixelY, info);
         y = qRound(cursorPoint.y() + subPixelY + hotSpot.y()) - height;
     }
 
     return DabPosition(QRect(x, y, width, height),
                        QPointF(subPixelX, subPixelY),
-                       angle);
+                       shape.rotation());
 }
 
 inline
@@ -323,8 +319,7 @@ KisFixedPaintDeviceSP KisDabCache::fetchDabCommon(const KoColorSpace *cs,
         const KisColorSource *colorSource,
         const KoColor& color,
         const QPointF &cursorPoint,
-        double scaleX, double scaleY,
-        double initialAngle,
+        KisDabShape shape,
         const KisPaintInformation& info,
         qreal softnessFactor,
         QRect *dstDabRect)
@@ -337,11 +332,10 @@ KisFixedPaintDeviceSP KisDabCache::fetchDabCommon(const KoColorSpace *cs,
     }
 
     DabPosition position = calculateDabRect(cursorPoint,
-                                            scaleX, scaleY,
-                                            initialAngle,
+                                            shape,
                                             info,
                                             mirrorProperties);
-
+    shape = KisDabShape(shape.scale(), shape.ratio(), position.realAngle);
     *dstDabRect = position.rect;
 
     bool cachingIsPossible = !colorSource || colorSource->isUniformColor();
@@ -349,8 +343,7 @@ KisFixedPaintDeviceSP KisDabCache::fetchDabCommon(const KoColorSpace *cs,
                          colorSource->uniformColor() : color;
 
     SavedDabParameters newParams = getDabParameters(paintColor,
-                                   scaleX, scaleY,
-                                   position.realAngle, info,
+                                   shape, info,
                                    position.subPixel.x(),
                                    position.subPixel.y(),
                                    softnessFactor,
@@ -367,13 +360,13 @@ KisFixedPaintDeviceSP KisDabCache::fetchDabCommon(const KoColorSpace *cs,
     }
 
     if (m_d->brush->brushType() == IMAGE || m_d->brush->brushType() == PIPE_IMAGE) {
-        m_d->dab = m_d->brush->paintDevice(cs, scaleX, position.realAngle, info,
+        m_d->dab = m_d->brush->paintDevice(cs, shape, info,
                                            position.subPixel.x(),
                                            position.subPixel.y());
     }
     else if (cachingIsPossible) {
         *m_d->cachedDabParameters = newParams;
-        m_d->brush->mask(m_d->dab, paintColor, scaleX, scaleY, position.realAngle,
+        m_d->brush->mask(m_d->dab, paintColor, shape,
                          info,
                          position.subPixel.x(), position.subPixel.y(),
                          softnessFactor);
@@ -390,7 +383,7 @@ KisFixedPaintDeviceSP KisDabCache::fetchDabCommon(const KoColorSpace *cs,
         colorSource->colorize(m_d->colorSourceDevice, maskRect, info.pos().toPoint());
         delete m_d->colorSourceDevice->convertTo(cs);
 
-        m_d->brush->mask(m_d->dab, m_d->colorSourceDevice, scaleX, scaleY, position.realAngle,
+        m_d->brush->mask(m_d->dab, m_d->colorSourceDevice, shape,
                          info,
                          position.subPixel.x(), position.subPixel.y(),
                          softnessFactor);

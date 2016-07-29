@@ -12,6 +12,6 @@ ExternalProject_Add( ext_openexr
             
         UPDATE_COMMAND ""
         ALWAYS 0
-        DEPENDS ext_ilmbase
+        DEPENDS ext_ilmbase ext_zlib
 )
 

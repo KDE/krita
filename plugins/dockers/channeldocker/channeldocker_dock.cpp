@@ -74,6 +74,8 @@ void ChannelDockerDock::setCanvas(KoCanvasBase * canvas)
 
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
     if ( m_canvas && m_canvas->image() ) {
+        m_model->slotSetCanvas(m_canvas);
+
         KisPaintDeviceSP dev = m_canvas->image()->projection();
 
         m_imageIdleWatcher->setTrackedImage(m_canvas->image());

@@ -214,7 +214,6 @@ void ChannelModel::updateData(KisCanvas2 *canvas)
 //doesn't need to be high, so we use fast but not very accurate algorithm.
 void ChannelModel::updateThumbnails(void)
 {
-
     if (m_canvas && m_canvas->image()) {
         KisImageSP canvas_image = m_canvas->image();
         const KoColorSpace* cs = canvas_image->colorSpace();

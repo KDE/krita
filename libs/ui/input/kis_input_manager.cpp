@@ -340,6 +340,17 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
         QWheelEvent *wheelEvent = static_cast<QWheelEvent*>(event);
         KisSingleActionShortcut::WheelAction action;
 
+        /**
+         * Ignore delta 0 events on OSX, since they are triggered by tablet
+         * proximity when using Wacom devices.
+         */
+#ifdef Q_OS_MAC
+        if(wheelEvent->delta() == 0) {
+            retval = true;
+            break;
+        }
+#endif
+
         if(wheelEvent->orientation() == Qt::Horizontal) {
             if(wheelEvent->delta() < 0) {
                 action = KisSingleActionShortcut::WheelRight;

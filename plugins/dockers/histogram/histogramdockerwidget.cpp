@@ -80,6 +80,7 @@ void HistogramDockerWidget::paintEvent(QPaintEvent *event)
 {
     if (!m_histogramData.empty()) {
         int nBins = m_histogramData.at(0).size();
+        const KoColorSpace* cs = m_paintDevice->colorSpace();
 
         QLabel::paintEvent(event);
         QPainter painter(this);
@@ -91,8 +92,8 @@ void HistogramDockerWidget::paintEvent(QPaintEvent *event)
             painter.drawLine(0., this->height()*i / NGRID, this->width(), this->height()*i / NGRID);
         }
 
-        unsigned int nChannels = m_paintDevice->colorSpace()->channelCount();
-        QList<KoChannelInfo *> channels = m_paintDevice->colorSpace()->channels();
+        unsigned int nChannels = cs->channelCount();
+        QList<KoChannelInfo *> channels = cs->channels();
         unsigned int highest = 0;
         //find the most populous bin in the histogram to scale it properly
         for (int chan = 0; chan < channels.size(); chan++) {
@@ -115,6 +116,12 @@ void HistogramDockerWidget::paintEvent(QPaintEvent *event)
         for (int chan = 0; chan < nChannels; chan++) {
             if (channels.at(chan)->channelType() != KoChannelInfo::ALPHA) {
                 QColor color = channels.at(chan)->color();
+
+                //special handling of grayscale color spaces. can't use color returned above.
+                if(cs->colorChannelCount()==1){
+                    color = QColor(Qt::gray);
+                }
+
                 QColor fill_color = color;
                 fill_color.setAlphaF(.25);
                 painter.setBrush(fill_color);

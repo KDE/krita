@@ -52,8 +52,8 @@ elseif(MINGW)
        ext_boost
 
        DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-       URL http://files.kde.org/krita/build/dependencies/boost_1_55_0.zip
-       URL_MD5 8aca361a4713a1f491b0a5e33fee0f1f
+       URL http://files.kde.org/krita/build/dependencies/boost_1_61_0.zip
+       URL_MD5 015ae4afa6f3e597232bfe1dab949ace
 
        CONFIGURE_COMMAND <SOURCE_DIR>/bootstrap.bat mingw --prefix=${PREFIX_ext_boost}
        BUILD_COMMAND <SOURCE_DIR>/b2.exe --with-system --build-dir=build-dir --prefix=${PREFIX_ext_boost} toolset=gcc variant=release link=shared  threading=multi architecture=x86 variant=release install

@@ -4,14 +4,16 @@
 # ocio on Windows.
 #
 SET(EXTPREFIX_ocio "${EXTPREFIX}" )
-if (MSVC)
+if (MSVC OR MINGW)
 ExternalProject_Add(
     ext_ocio
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL http://files.kde.org/krita/build/dependencies/ext_ocio.zip
-    URL_MD5 e0bc2c7177dc02bdc82e8f38f52b1058
+    URL http://files.kde.org/krita/build/dependencies/OpenColorIO-master.zip
+    URL_MD5 7065faa41103ed27f5ea9b01b9e14c91
 
     INSTALL_DIR ${EXTPREFIX_ocio}
+    PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/patch.diff
+
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_ocio} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} -DOCIO_BUILD_APPS=OFF -DOCIO_BUILD_TRUELIGHT=OFF -DOCIO_BUILD_NUKE=OFF -DOCIO_BUILD_DOCS=OFF -DOCIO_BUILD_TESTS=OFF -DOCIO_BUILD_PYGLUE=OFF -DOCIO_BUILD_STATIC_JNIGLUE=OFF 
 
     UPDATE_COMMAND ""
@@ -22,8 +24,8 @@ else()
 ExternalProject_Add(
     ext_ocio
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL http://files.kde.org/krita/build/dependencies/opencolorio-a557a85454ee1ffa8cb66f8a96238e079c452f08.tgz
-    URL_MD5 c7db4cdcac40ab12870cdeb6bbd0b875
+    URL http://files.kde.org/krita/build/dependencies/OpenColorIO-master.zip
+    URL_MD5 7065faa41103ed27f5ea9b01b9e14c91
 
     INSTALL_DIR ${EXTPREFIX_ocio}
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_ocio} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE} -DOCIO_BUILD_APPS=OFF -DOCIO_BUILD_TRUELIGHT=OFF -DOCIO_BUILD_NUKE=OFF -DOCIO_BUILD_DOCS=OFF -DOCIO_BUILD_TESTS=OFF -DOCIO_BUILD_PYGLUE=OFF -DOCIO_BUILD_STATIC_JNIGLUE=OFF

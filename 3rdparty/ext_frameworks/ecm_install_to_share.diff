@@ -1,0 +1,32 @@
+commit a4170399404bf32e874e35d35f8a66703b2fff92
+Author: Boudewijn Rempt <boud@valdyas.org>
+Date:   Sat Jul 30 14:33:10 2016 +0200
+
+    Revert "Use "${BIN_INSTALL_DIR}/data" for DATAROOTDIR on Windows."
+    
+    This reverts commit 2503481e4537b88d76b4a596f519cb3311e1ca2a.
+
+diff --git a/kde-modules/KDEInstallDirs.cmake b/kde-modules/KDEInstallDirs.cmake
+index e84c0b3..1773706 100644
+--- a/kde-modules/KDEInstallDirs.cmake
++++ b/kde-modules/KDEInstallDirs.cmake
+@@ -489,15 +489,10 @@ _define_absolute(SHAREDSTATEDIR "com"
+ 
+ 
+ 
+-if (WIN32)
+-    _define_relative(DATAROOTDIR BINDIR "data"
+-        "read-only architecture-independent data root"
+-        SHARE_INSTALL_PREFIX)
+-else()
+-    _define_absolute(DATAROOTDIR "share"
+-        "read-only architecture-independent data root"
+-        SHARE_INSTALL_PREFIX)
+-endif()
++
++_define_absolute(DATAROOTDIR "share"
++    "read-only architecture-independent data root"
++    SHARE_INSTALL_PREFIX)
+ 
+ _define_relative(DATADIR DATAROOTDIR ""
+     "read-only architecture-independent data"

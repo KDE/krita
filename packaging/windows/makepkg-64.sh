@@ -6,8 +6,8 @@ set -e
 # Be verbose
 set -x
 
-BUILDROOT=/data2/cross
-MXEROOT=/data2/cross/mxe/usr/x86_64-w64-mingw32.shared
+BUILDROOT=/data2/cross2
+MXEROOT=/data2/cross2/mxe/usr/x86_64-w64-mingw32.shared
 APP=krita
 
 cd $BUILDROOT
@@ -24,6 +24,7 @@ echo $VERSION
 
 PACKAGENAME=$APP"-"$VERSION"-x64"
 
+rm -rf $BUILDROOT/out/$PACKAGENAME
 mkdir -p $BUILDROOT/out/$PACKAGENAME
 mkdir -p $BUILDROOT/out/$PACKAGENAME/bin/data
 mkdir -p $BUILDROOT/out/$PACKAGENAME/lib
@@ -49,7 +50,6 @@ cp $MXEROOT/qt5/bin/Qt5Quick.dll $BUILDROOT/out/$PACKAGENAME/bin
 cp $MXEROOT/qt5/bin/Qt5Script.dll $BUILDROOT/out/$PACKAGENAME/bin
 cp $MXEROOT/qt5/bin/Qt5ScriptTools.dll $BUILDROOT/out/$PACKAGENAME/bin
 cp $MXEROOT/qt5/bin/Qt5Svg.dll $BUILDROOT/out/$PACKAGENAME/bin
-cp $MXEROOT/qt5/bin/Qt5SystemInfo.dll $BUILDROOT/out/$PACKAGENAME/bin
 cp $MXEROOT/qt5/bin/Qt5Widgets.dll $BUILDROOT/out/$PACKAGENAME/bin
 cp $MXEROOT/qt5/bin/Qt5WinExtras.dll $BUILDROOT/out/$PACKAGENAME/bin
 cp $MXEROOT/qt5/bin/Qt5Xml.dll $BUILDROOT/out/$PACKAGENAME/bin
@@ -63,11 +63,11 @@ cp -r $MXEROOT/lib/plugins/imageformats/* $BUILDROOT/out/$PACKAGENAME/bin/imagef
 mkdir $BUILDROOT/out/$PACKAGENAME/bin/translations
 cp -r $BUILDROOT/qt-translations/qt_* $BUILDROOT/out/$PACKAGENAME/bin/translations
 
-cp -r $MXEROOT/share/color $BUILDROOT/out/$PACKAGENAME/share
-cp -r $MXEROOT/share/color-schemes $BUILDROOT/out/$PACKAGENAME/share
-cp -r $MXEROOT/share/kf5 $BUILDROOT/out/$PACKAGENAME/share
-cp -r $MXEROOT/share/krita $BUILDROOT/out/$PACKAGENAME/share
-cp -r $MXEROOT/share/locale $BUILDROOT/out/$PACKAGENAME/bin/data
+cp -r $MXEROOT/bin/data/color $BUILDROOT/out/$PACKAGENAME/bin/data
+cp -r $MXEROOT/bin/data/color-schemes $BUILDROOT/out/$PACKAGENAME/bin/data
+cp -r $MXEROOT/bin/data/kf5 $BUILDROOT/out/$PACKAGENAME/bin/data
+cp -r $MXEROOT/bin/data/krita $BUILDROOT/out/$PACKAGENAME/share
+cp -r $MXEROOT/bin/data/locale $BUILDROOT/out/$PACKAGENAME/bin/data
 cp -r $MXEROOT/share/ocio $BUILDROOT/out/$PACKAGENAME/share
 
 cd $BUILDROOT

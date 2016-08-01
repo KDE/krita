@@ -41,13 +41,14 @@
 #include "kis_icon_utils.h"
 #include "kis_dlg_brush_hud_config.h"
 #include "kis_brush_hud_properties_config.h"
+#include "kis_elided_label.h"
 
 #include "kis_debug.h"
 
 
 struct KisBrushHud::Private
 {
-    QPointer<QLabel> lblPresetName;
+    QPointer<KisElidedLabel> lblPresetName;
     QPointer<QLabel> lblPresetIcon;
     QPointer<QWidget> wdgProperties;
     QPointer<QScrollArea> wdgPropertiesArea;
@@ -77,7 +78,7 @@ KisBrushHud::KisBrushHud(KisCanvasResourceProvider *provider, QWidget *parent)
     m_d->lblPresetIcon->setMaximumSize(iconSize);
     m_d->lblPresetIcon->setScaledContents(true);
 
-    m_d->lblPresetName = new QLabel("<Preset Name>", this);
+    m_d->lblPresetName = new KisElidedLabel("<Preset Name>", Qt::ElideMiddle, this);
 
     m_d->btnConfigure = new QToolButton(this);
     m_d->btnConfigure->setAutoRaise(true);
@@ -161,7 +162,7 @@ void KisBrushHud::updateProperties()
         this, SLOT(slotReloadProperties()));
 
     m_d->lblPresetIcon->setPixmap(QPixmap::fromImage(preset->image()));
-    m_d->lblPresetName->setText(preset->name());
+    m_d->lblPresetName->setLongText(preset->name());
 
     QList<KisUniformPaintOpPropertySP> properties;
 

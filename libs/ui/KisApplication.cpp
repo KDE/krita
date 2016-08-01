@@ -159,17 +159,22 @@ KisApplication::KisApplication(const QString &key, int &argc, char **argv)
     setApplicationVersion(version);
     setWindowIcon(KisIconUtils::loadIcon("calligrakrita"));
 
-    QStringList styles = QStringList() << "fusion" << "plastique";
-    if (!styles.contains(style()->objectName().toLower())) {
-        Q_FOREACH (const QString & style, styles) {
-            if (!setStyle(style)) {
-                qDebug() << "No" << style << "available.";
-            }
-            else {
-                qDebug() << "Set style" << style;
-                break;
+    if (qgetenv("KRITA_NO_STYLE_OVERRIDE").isEmpty()) {
+        QStringList styles = QStringList() << "breeze" << "fusion" << "plastique";
+        if (!styles.contains(style()->objectName().toLower())) {
+            Q_FOREACH (const QString & style, styles) {
+                if (!setStyle(style)) {
+                    qDebug() << "No" << style << "available.";
+                }
+                else {
+                    qDebug() << "Set style" << style;
+                    break;
+                }
             }
         }
+    }
+    else {
+        qDebug() << "Style override disabled, using" << style()->objectName();
     }
 
     KisOpenGL::initialize();

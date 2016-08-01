@@ -18,6 +18,7 @@
 
 #include "kis_brush_hud.h"
 
+#include <QGuiApplication>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QPointer>
@@ -47,6 +48,7 @@
 struct KisBrushHud::Private
 {
     QPointer<QLabel> lblPresetName;
+    QPointer<QLabel> lblPresetIcon;
     QPointer<QWidget> wdgProperties;
     QPointer<QScrollArea> wdgPropertiesArea;
     QPointer<QVBoxLayout> propertiesLayout;
@@ -69,6 +71,12 @@ KisBrushHud::KisBrushHud(KisCanvasResourceProvider *provider, QWidget *parent)
     QVBoxLayout *layout = new QVBoxLayout();
 
     QHBoxLayout *labelLayout = new QHBoxLayout();
+    m_d->lblPresetIcon = new QLabel(this);
+    const QSize iconSize = QSize(22,22) * qApp->devicePixelRatio();
+    m_d->lblPresetIcon->setMinimumSize(iconSize);
+    m_d->lblPresetIcon->setMaximumSize(iconSize);
+    m_d->lblPresetIcon->setScaledContents(true);
+
     m_d->lblPresetName = new QLabel("<Preset Name>", this);
 
     m_d->btnConfigure = new QToolButton(this);
@@ -76,6 +84,7 @@ KisBrushHud::KisBrushHud(KisCanvasResourceProvider *provider, QWidget *parent)
     m_d->btnConfigure->setIcon(KisIconUtils::loadIcon("applications-system"));
     connect(m_d->btnConfigure, SIGNAL(clicked()), SLOT(slotConfigBrushHud()));
 
+    labelLayout->addWidget(m_d->lblPresetIcon);
     labelLayout->addWidget(m_d->lblPresetName);
     labelLayout->addWidget(m_d->btnConfigure);
 
@@ -151,6 +160,7 @@ void KisBrushHud::updateProperties()
         m_d->currentPreset->updateProxy(), SIGNAL(sigUniformPropertiesChanged()),
         this, SLOT(slotReloadProperties()));
 
+    m_d->lblPresetIcon->setPixmap(QPixmap::fromImage(preset->image()));
     m_d->lblPresetName->setText(preset->name());
 
     QList<KisUniformPaintOpPropertySP> properties;

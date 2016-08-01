@@ -19,12 +19,15 @@
 #include "kis_brush_hud.h"
 
 #include <QVBoxLayout>
+#include <QHBoxLayout>
 #include <QPointer>
 #include <QLabel>
 #include <QPainter>
 #include <QPaintEvent>
 #include <QScrollArea>
 #include <QEvent>
+#include <QToolButton>
+
 
 #include "kis_uniform_paintop_property.h"
 #include "kis_slider_based_paintop_property.h"
@@ -34,6 +37,9 @@
 #include "kis_paintop_settings.h"
 #include "kis_signal_auto_connection.h"
 #include "kis_paintop_settings_update_proxy.h"
+#include "kis_icon_utils.h"
+#include "kis_dlg_brush_hud_config.h"
+#include "kis_brush_hud_properties_config.h"
 
 #include "kis_debug.h"
 
@@ -44,6 +50,7 @@ struct KisBrushHud::Private
     QPointer<QWidget> wdgProperties;
     QPointer<QScrollArea> wdgPropertiesArea;
     QPointer<QVBoxLayout> propertiesLayout;
+    QPointer<QToolButton> btnConfigure;
 
     KisCanvasResourceProvider *provider;
 
@@ -60,8 +67,19 @@ KisBrushHud::KisBrushHud(KisCanvasResourceProvider *provider, QWidget *parent)
     m_d->provider = provider;
 
     QVBoxLayout *layout = new QVBoxLayout();
+
+    QHBoxLayout *labelLayout = new QHBoxLayout();
     m_d->lblPresetName = new QLabel("<Preset Name>", this);
-    layout->addWidget(m_d->lblPresetName);
+
+    m_d->btnConfigure = new QToolButton(this);
+    m_d->btnConfigure->setAutoRaise(true);
+    m_d->btnConfigure->setIcon(KisIconUtils::loadIcon("applications-system"));
+    connect(m_d->btnConfigure, SIGNAL(clicked()), SLOT(slotConfigBrushHud()));
+
+    labelLayout->addWidget(m_d->lblPresetName);
+    labelLayout->addWidget(m_d->btnConfigure);
+
+    layout->addLayout(labelLayout);
 
     m_d->wdgPropertiesArea = new QScrollArea(this);
     m_d->wdgPropertiesArea->setAlignment(Qt::AlignLeft | Qt::AlignTop);
@@ -121,7 +139,19 @@ void KisBrushHud::updateProperties()
 
     m_d->lblPresetName->setText(preset->name());
 
-    QList<KisUniformPaintOpPropertySP> properties = settings->uniformProperties();
+    QList<KisUniformPaintOpPropertySP> properties;
+
+    {
+        QList<KisUniformPaintOpPropertySP> allProperties = settings->uniformProperties();
+        QList<KisUniformPaintOpPropertySP> discardedProperties;
+
+        KisBrushHudPropertiesConfig cfg;
+        cfg.filterProperties(preset->paintOp().id(),
+                             allProperties,
+                             &properties,
+                             &discardedProperties);
+    }
+
     Q_FOREACH(auto property, properties) {
         QWidget *w = 0;
 
@@ -199,4 +229,14 @@ bool KisBrushHud::event(QEvent *event)
     }
 
     return QWidget::event(event);
+}
+
+void KisBrushHud::slotConfigBrushHud()
+{
+    if (!m_d->currentPreset) return;
+
+    KisDlgConfigureBrushHud dlg(m_d->currentPreset);
+    dlg.exec();
+
+    slotReloadProperties();
 }

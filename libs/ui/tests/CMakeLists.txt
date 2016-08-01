@@ -265,3 +265,9 @@ target_link_libraries(KisStabilizedEventsSamplerTest kritaui Qt5::Test)
 set(kis_derived_resources_test_SRCS kis_derived_resources_test.cpp)
 kde4_add_unit_test(KisDerivedResourcesTest TESTNAME krita-ui-DerivedResourcesTest ${kis_derived_resources_test_SRCS})
 target_link_libraries(KisDerivedResourcesTest kritaui Qt5::Test)
+
+########### next target ###############
+
+set(kis_brush_hud_properties_config_test_SRCS kis_brush_hud_properties_config_test.cpp)
+kde4_add_unit_test(KisBrushHudPropertiesConfigTest TESTNAME krita-ui-BrushHudPropertiesConfigTest ${kis_brush_hud_properties_config_test_SRCS})
+target_link_libraries(KisBrushHudPropertiesConfigTest kritaui Qt5::Test)

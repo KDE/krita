@@ -16,40 +16,28 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KIS_BRUSH_HUD_H
-#define __KIS_BRUSH_HUD_H
+#ifndef __KIS_BRUSH_HUD_PROPERTIES_LIST_H
+#define __KIS_BRUSH_HUD_PROPERTIES_LIST_H
 
 #include <QScopedPointer>
-#include <QWidget>
+#include <QListWidget>
+#include "kis_uniform_paintop_property.h"
 
-class KisCanvasResourceProvider;
 
-class KisBrushHud : public QWidget
+class KisBrushHudPropertiesList : public QListWidget
 {
-    Q_OBJECT
 public:
-    KisBrushHud(KisCanvasResourceProvider *provider, QWidget *parent);
-    ~KisBrushHud();
+    KisBrushHudPropertiesList(QWidget *parent);
+    ~KisBrushHudPropertiesList();
 
-    void updateProperties();
+    void addProperties(const QList<KisUniformPaintOpPropertySP> &properties);
+    QList<QString> selectedPropertiesIds() const;
 
-protected:
-    void paintEvent(QPaintEvent *event);
-    bool event(QEvent *event);
-    void showEvent(QShowEvent *event);
-    void hideEvent(QHideEvent *event);
-
-private Q_SLOTS:
-    void slotCanvasResourceChanged(int key, const QVariant &resource);
-    void slotReloadProperties();
-    void slotConfigBrushHud();
-
-private:
-    void clearProperties() const;
+    Qt::DropActions supportedDropActions() const;
 
 private:
     struct Private;
     const QScopedPointer<Private> m_d;
 };
 
-#endif /* __KIS_BRUSH_HUD_H */
+#endif /* __KIS_BRUSH_HUD_PROPERTIES_LIST_H */

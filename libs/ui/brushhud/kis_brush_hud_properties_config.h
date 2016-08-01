@@ -16,40 +16,39 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KIS_BRUSH_HUD_H
-#define __KIS_BRUSH_HUD_H
+#ifndef __KIS_BRUSH_HUD_PROPERTIES_CONFIG_H
+#define __KIS_BRUSH_HUD_PROPERTIES_CONFIG_H
 
 #include <QScopedPointer>
-#include <QWidget>
+#include "kritaui_export.h"
 
-class KisCanvasResourceProvider;
+#include "brushengine/kis_uniform_paintop_property.h"
 
-class KisBrushHud : public QWidget
+class QDomDocument;
+class QStringList;
+class QString;
+
+
+class KRITAUI_EXPORT KisBrushHudPropertiesConfig
 {
-    Q_OBJECT
 public:
-    KisBrushHud(KisCanvasResourceProvider *provider, QWidget *parent);
-    ~KisBrushHud();
+    KisBrushHudPropertiesConfig();
+    ~KisBrushHudPropertiesConfig();
 
-    void updateProperties();
+    void setSelectedProperties(const QString &paintOpId, const QList<QString> &ids);
+    QList<QString> selectedProperties(const QString &paintOpId) const;
 
-protected:
-    void paintEvent(QPaintEvent *event);
-    bool event(QEvent *event);
-    void showEvent(QShowEvent *event);
-    void hideEvent(QHideEvent *event);
+    void filterProperties(const QString &paintOpId,
+                          const QList<KisUniformPaintOpPropertySP> &allProperties,
+                          QList<KisUniformPaintOpPropertySP> *chosenProperties,
+                          QList<KisUniformPaintOpPropertySP> *skippedProperties) const;
 
-private Q_SLOTS:
-    void slotCanvasResourceChanged(int key, const QVariant &resource);
-    void slotReloadProperties();
-    void slotConfigBrushHud();
-
-private:
-    void clearProperties() const;
+public:
+    QDomDocument *testingGetDocument();
 
 private:
     struct Private;
     const QScopedPointer<Private> m_d;
 };
 
-#endif /* __KIS_BRUSH_HUD_H */
+#endif /* __KIS_BRUSH_HUD_PROPERTIES_CONFIG_H */

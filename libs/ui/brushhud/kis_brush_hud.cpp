@@ -91,7 +91,7 @@ KisBrushHud::KisBrushHud(KisCanvasResourceProvider *provider, QWidget *parent)
     m_d->propertiesLayout = new QVBoxLayout(this);
     m_d->propertiesLayout->setSpacing(0);
     m_d->propertiesLayout->setContentsMargins(0, 0, 22, 0);
-    m_d->propertiesLayout->setSizeConstraint(QLayout::SetMinAndMaxSize);
+    m_d->propertiesLayout->setSizeConstraint(QLayout::SetMinimumSize);
 
     // not adding any widgets until explicitly requested
 
@@ -107,6 +107,12 @@ KisBrushHud::~KisBrushHud()
 {
 }
 
+QSize KisBrushHud::sizeHint() const
+{
+    QSize size = QWidget::sizeHint();
+    return QSize(size.width(), parentWidget()->height());
+}
+
 void KisBrushHud::slotReloadProperties()
 {
     m_d->presetConnections.clear();
@@ -116,9 +122,17 @@ void KisBrushHud::slotReloadProperties()
 
 void KisBrushHud::clearProperties() const
 {
-    Q_FOREACH (QWidget *w, m_d->wdgProperties->findChildren<QWidget*>()) {
-        w->deleteLater();
+    while (m_d->propertiesLayout->count()) {
+        QLayoutItem *item = m_d->propertiesLayout->takeAt(0);
+
+        QWidget *w = item->widget();
+        if (w) {
+            w->deleteLater();
+        }
+
+        delete item;
     }
+
     m_d->currentPreset.clear();
 }
 
@@ -172,6 +186,8 @@ void KisBrushHud::updateProperties()
             m_d->propertiesLayout->addWidget(w);
         }
     }
+
+    m_d->propertiesLayout->addStretch();
 }
 
 void KisBrushHud::showEvent(QShowEvent *event)

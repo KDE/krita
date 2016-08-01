@@ -32,6 +32,7 @@ public:
     ~KisBrushHud();
 
     void updateProperties();
+    QSize sizeHint() const;
 
 protected:
     void paintEvent(QPaintEvent *event);

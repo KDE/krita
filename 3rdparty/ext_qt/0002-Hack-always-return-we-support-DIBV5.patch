@@ -7,13 +7,13 @@ Asking for the entire image may be too expensive
 
 Change-Id: I44c38fad73f1bb5859eb58b941054eeb6c3c6b66
 ---
- src/plugins/platforms/windows/qwindowsmime.cpp | 4 +---
+ qtbase/src/plugins/platforms/windows/qwindowsmime.cpp | 4 +---
  1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/src/plugins/platforms/windows/qwindowsmime.cpp b/src/plugins/platforms/windows/qwindowsmime.cpp
+diff --git a/qtbase/src/plugins/platforms/windows/qwindowsmime.cpp b/qtbase/src/plugins/platforms/windows/qwindowsmime.cpp
 index 90d646b..ef97db7 100644
---- a/src/plugins/platforms/windows/qwindowsmime.cpp
-+++ b/src/plugins/platforms/windows/qwindowsmime.cpp
+--- a/qtbase/src/plugins/platforms/windows/qwindowsmime.cpp
++++ b/qtbase/src/plugins/platforms/windows/qwindowsmime.cpp
 @@ -1052,9 +1052,7 @@ QVector<FORMATETC> QWindowsMimeImage::formatsForMime(const QString &mimeType, co
      QVector<FORMATETC> formatetcs;
      if (mimeData->hasImage() && mimeType == QLatin1String("application/x-qt-image")) {

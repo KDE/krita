@@ -6,13 +6,13 @@ Subject: [PATCH 1/2] Don't request the MIME image every time Windows asks for
 
 Change-Id: I05516d83dc4e0f192bc94f92cefc722f25dae4d4
 ---
- src/plugins/platforms/windows/qwindowsmime.cpp | 9 ++++++---
+ qtbase/src/plugins/platforms/windows/qwindowsmime.cpp | 9 ++++++---
  1 file changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/src/plugins/platforms/windows/qwindowsmime.cpp b/src/plugins/platforms/windows/qwindowsmime.cpp
+diff --git a/qtbase/src/plugins/platforms/windows/qwindowsmime.cpp b/qtbase/src/plugins/platforms/windows/qwindowsmime.cpp
 index a8264b5..90d646b 100644
---- a/src/plugins/platforms/windows/qwindowsmime.cpp
-+++ b/src/plugins/platforms/windows/qwindowsmime.cpp
+--- a/qtbase/src/plugins/platforms/windows/qwindowsmime.cpp
++++ b/qtbase/src/plugins/platforms/windows/qwindowsmime.cpp
 @@ -1081,12 +1081,15 @@ bool QWindowsMimeImage::canConvertToMime(const QString &mimeType, IDataObject *p
  bool QWindowsMimeImage::canConvertFromMime(const FORMATETC &formatetc, const QMimeData *mimeData) const
  {

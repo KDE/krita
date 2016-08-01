@@ -54,7 +54,7 @@ new file mode 100644
 index 0000000..ee25058
 --- /dev/null
 +++ b/ConfigureChecks.cmake
-@@ -0,0 +1,181 @@
+@@ -0,0 +1,199 @@
 +# configure checks.
 +find_package(OpenGL)
 +
@@ -157,6 +157,7 @@ index 0000000..ee25058
 +check_symbol_exists("int8" "stdint.h" HAVE_INT8)
 +check_symbol_exists("int16" "stdint.h" HAVE_INT16)
 +check_symbol_exists("int32" "stdint.h" HAVE_INT32)
++check_symbol_exists("int64" "stdint.h" HAVE_INT64)
 +
 +
 +set(PACKAGE "tiff")
@@ -196,12 +197,29 @@ index 0000000..ee25058
 +    set(STRIP_SIZE_DEFAULT 8192)
 +endif(STRIPCHOP_DEFAULT AND NOT WIN32)
 +
-+if(WIN32)
++if(MSVC)
++    set(TIFF_INT8_T "signed char")
++    set(TIFF_UINT8_T "unsigned char")
++    set(TIFF_INT16_T "signed short")
++    set(TIFF_UINT16_T "unsigned short")
++    set(TIFF_INT32_T "signed int")
++    set(TIFF_UINT32_T "unsigned int")
 +    set(TIFF_INT64_FORMAT "\"%I64d\"")
 +    set(TIFF_INT64_T "signed __int64")
 +    set(TIFF_UINT64_FORMAT "\"%I64u\"")
 +    set(TIFF_UINT64_T "unsigned __int64")
-+endif(WIN32)
++elseif(MINGW)
++    set(TIFF_INT8_T "signed char")
++    set(TIFF_UINT8_T "unsigned char")
++    set(TIFF_INT16_T "signed short")
++    set(TIFF_UINT16_T "unsigned short")
++    set(TIFF_INT32_T "signed int")
++    set(TIFF_UINT32_T "unsigned int")
++    set(TIFF_INT64_FORMAT "\"%lld\"")
++    set(TIFF_INT64_T "signed long long")
++    set(TIFF_UINT64_FORMAT "\"%llu\"")
++    set(TIFF_UINT64_T "unsigned long long")
++endif()
 +
 +check_symbol_exists("tm" "sys/time.h" TM_IN_SYS_TIME)
 +
@@ -231,10 +249,10 @@ index 0000000..ee25058
 +#cmakedefine _LARGE_FILES
 +#***************************************************************************************
 +
-+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/libtiff/tif_config.vc.h ${CMAKE_CURRENT_BINARY_DIR}/tif_config.h @COPYONLY)
-+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/libtiff/tiffconf.vc.h ${CMAKE_CURRENT_BINARY_DIR}/tiffconf.h @COPYONLY)
-+#configure_file(${CMAKE_SOURCE_DIR}/libtiff/tif_config.h.cmake ${CMAKE_BINARY_DIR}/tif_config.h)
-+#configure_file(${CMAKE_SOURCE_DIR}/libtiff/tiffconf.h.cmake ${CMAKE_BINARY_DIR}/tiffconf.h)
++#configure_file(${CMAKE_CURRENT_SOURCE_DIR}/libtiff/tif_config.vc.h ${CMAKE_CURRENT_BINARY_DIR}/tif_config.h @COPYONLY)
++#configure_file(${CMAKE_CURRENT_SOURCE_DIR}/libtiff/tiffconf.vc.h ${CMAKE_CURRENT_BINARY_DIR}/tiffconf.h @COPYONLY)
++configure_file(${CMAKE_SOURCE_DIR}/libtiff/tif_config.h.cmake ${CMAKE_BINARY_DIR}/tif_config.h)
++configure_file(${CMAKE_SOURCE_DIR}/libtiff/tiffconf.h.cmake ${CMAKE_BINARY_DIR}/tiffconf.h)
 +
 diff --git a/libtiff/CMakeLists.txt b/libtiff/CMakeLists.txt
 new file mode 100644
@@ -311,7 +329,7 @@ new file mode 100644
 index 0000000..d3e8f98
 --- /dev/null
 +++ b/libtiff/tif_config.h.cmake
-@@ -0,0 +1,320 @@
+@@ -0,0 +1,323 @@
 +/* libtiff/tif_config.h.in.  Generated from configure.ac by autoheader.  */
 +#ifndef TIF_CONFIG_H
 +#define TIF_CONFIG_H
@@ -361,6 +379,9 @@ index 0000000..d3e8f98
 +
 +/* Define to 1 if the system has the type `int32'. */
 +#cmakedefine HAVE_INT32
++
++/* Define to 1 if the system has the type `int64'. */
++#cmakedefine HAVE_INT64
 +
 +/* Define to 1 if the system has the type `int8'. */
 +#cmakedefine HAVE_INT8
@@ -659,42 +680,12 @@ index 2cf1de9..e07ca59 100644
  #endif
  
  static void
-diff --git a/libtiff/tiff.h b/libtiff/tiff.h
-index 19b4e79..718f9e9 100644
---- a/libtiff/tiff.h
-+++ b/libtiff/tiff.h
-@@ -65,17 +65,17 @@
-  * strings              unsigned char*
-  */
- 
--typedef TIFF_INT8_T   int8;
--typedef TIFF_UINT8_T  uint8;
-+typedef __int8   int8;
-+typedef unsigned __int8  uint8;
- 
--typedef TIFF_INT16_T  int16;
--typedef TIFF_UINT16_T uint16;
-+typedef __int16  int16;
-+typedef unsigned __int16 uint16;
- 
--typedef TIFF_INT32_T  int32;
--typedef TIFF_UINT32_T uint32;
-+typedef __int32 int32;
-+typedef unsigned __int32 uint32;
- 
--typedef TIFF_INT64_T  int64;
--typedef TIFF_UINT64_T uint64;
-+typedef __int64 int64;
-+typedef unsigned __int64 uint64;
- 
- /*
-  * Some types as promoted in a variable argument list
 diff --git a/libtiff/tiffconf.h.cmake b/libtiff/tiffconf.h.cmake
 new file mode 100644
 index 0000000..aef040b
 --- /dev/null
 +++ b/libtiff/tiffconf.h.cmake
-@@ -0,0 +1,103 @@
+@@ -0,0 +1,150 @@
 +/*
 +  Configuration defines for installed libtiff.
 +  This file maintained for backward compatibility. Do not use definitions
@@ -710,8 +701,55 @@ index 0000000..aef040b
 +/* Define to 1 if the system has the type `int32'. */
 +#cmakedefine HAVE_INT32
 +
++/* Define to 1 if the system has the type `int64'. */
++#cmakedefine HAVE_INT64
++
 +/* Define to 1 if the system has the type `int8'. */
 +#cmakedefine HAVE_INT8
++
++/* Signed 8-bit type */
++#cmakedefine TIFF_INT8_T @TIFF_INT8_T@
++
++/* Unsigned 8-bit type */
++#cmakedefine TIFF_UINT8_T @TIFF_UINT8_T@
++
++/* Signed 16-bit type */
++#cmakedefine TIFF_INT16_T @TIFF_INT16_T@
++
++/* Unsigned 16-bit type */
++#cmakedefine TIFF_UINT16_T @TIFF_UINT16_T@
++
++/* Signed 32-bit type */
++#cmakedefine TIFF_INT32_T @TIFF_INT32_T@
++
++/* Unsigned 32-bit type */
++#cmakedefine TIFF_UINT32_T @TIFF_UINT32_T@
++
++/* Signed 64-bit type formatter */
++#cmakedefine TIFF_INT64_FORMAT @TIFF_INT64_FORMAT@
++
++/* Signed 64-bit type */
++#cmakedefine TIFF_INT64_T @TIFF_INT64_T@
++
++/* Unsigned 64-bit type formatter */
++#cmakedefine TIFF_UINT64_FORMAT @TIFF_UINT64_FORMAT@
++
++/* Unsigned 64-bit type */
++#cmakedefine TIFF_UINT64_T @TIFF_UINT64_T@
++
++/* Signed size type */
++#if defined(_WIN64)
++#define TIFF_SSIZE_T TIFF_INT64_T
++#else
++#define TIFF_SSIZE_T TIFF_INT32_T
++#endif
++
++/* Signed size type formatter */
++#if defined(_WIN64)
++#define TIFF_SSIZE_FORMAT TIFF_INT64_FORMAT
++#else
++#define TIFF_SSIZE_FORMAT "%ld"
++#endif
 +
 +/* The size of a `int', as computed by sizeof. */
 +#cmakedefine SIZEOF_INT @SIZEOF_INT@

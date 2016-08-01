@@ -162,7 +162,7 @@ rm -f usr/lib/libxcb.so.1
 
 # We don't bundle the developer stuff
 rm -rf usr/include || true
-rm -rf usr/lib/cmake || true
+rm -rf usr/lib/cmake3 || true
 rm -rf usr/lib/pkgconfig || true
 rm -rf usr/share/ECM/ || true
 rm -rf usr/share/gettext || true
@@ -193,7 +193,7 @@ sed -i -e 's|././/share/X11/|/usr/share/X11/|g' ./usr/lib/libQt5XcbQpa.so.5
 rm -f ./usr/lib/libdbus-1.so.3 || true
 
 cp ../AppImageKit/AppRun .
-cp ./usr/share/applications/krita.desktop krita.desktop
+cp ./usr/share/applications/org.kde.krita.desktop krita.desktop
 cp /krita/krita/pics/app/64-apps-calligrakrita.png calligrakrita.png
 
 #
@@ -217,10 +217,9 @@ APP=krita
 
 VER=$(grep "#define KRITA_VERSION_STRING" krita_build/libs/version/kritaversion.h | cut -d '"' -f 2)
 cd krita
-BRANCH=$( git branch | cut -d ' ' -f 2)
 REVISION=$(git rev-parse --short HEAD)
 cd ..
-VERSION=$VER-$BRANCH-$REVISION
+VERSION=$VER-$REVISION
 VERSION="$(sed s/\ /-/g <<<$VERSION)"
 echo $VERSION
 
@@ -238,6 +237,14 @@ rm -f /out/*.AppImage || true
 AppImageKit/AppImageAssistant.AppDir/package /krita.appdir/ /out/$APPIMAGE
 
 chmod a+rwx /out/$APPIMAGE # So that we can edit the AppImage outside of the Docker container
+
+# Source functions
+wget -q https://github.com/probonopd/AppImages/raw/master/functions.sh -O ./functions.sh
+. ./functions.sh
+
+# Install desktopintegration in usr/bin/krita.wrapper -- feel free to edit it
+cd Krita.AppDir/
+get_desktopintegration krita
 
 cd /krita.appdir
 mv AppRun krita

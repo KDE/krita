@@ -1,5 +1,5 @@
 SET(EXTPREFIX_tiff "${EXTPREFIX}" )
-if (MSVC)
+if (MSVC OR MINGW)
 ExternalProject_Add( ext_tiff
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
     URL http://files.kde.org/krita/build/dependencies/tiff-4.0.3.tar.gz
@@ -13,11 +13,11 @@ ExternalProject_Add( ext_tiff
     ALWAYS 0
     DEPENDS ext_patch ext_zlib ext_jpeg
 )
-else (MSVC)
+else (MSVC OR MINGW)
 ExternalProject_Add( ext_tiff
 	DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-	URL http://files.kde.org/krita/build/dependencies/tiff-4.0.3.tar.gz
-	URL_MD5 051c1068e6a0627f461948c365290410
+	URL http://files.kde.org/krita/build/dependencies/tiff-4.0.6.tar.gz
+	URL_MD5 d1d2e940dea0b5ad435f21f03d96dd72
 
     CONFIGURE_COMMAND <SOURCE_DIR>/configure -prefix ${EXTPREFIX_tiff}  ${GLOBAL_AUTOMAKE_PROFILE}
     BUILD_COMMAND make
@@ -27,4 +27,4 @@ ExternalProject_Add( ext_tiff
 	ALWAYS 0
 	DEPENDS ext_zlib ext_jpeg
 )
-endif (MSVC)
+endif (MSVC OR MINGW)

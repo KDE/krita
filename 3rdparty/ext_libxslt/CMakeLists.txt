@@ -1,9 +1,9 @@
 SET(PREFIX_ext_libxslt "${EXTPREFIX}" )
-if (MSVC)
+if (MSVC OR MINGW)
 ExternalProject_Add( ext_libxslt
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL http://files.kde.org/krita/build/dependencies/libxslt-1.1.26.tar.gz
-        URL_MD5 e61d0364a30146aaa3001296f853b2b9
+        URL http://files.kde.org/krita/build/dependencies/libxslt-1.1.29.tar.gz
+        URL_MD5 a129d3c44c022de3b9dcf6d6f288d72e
 
         PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/libxslt-1.1.26-20101102.diff
         INSTALL_DIR ${PREFIX_ext_libxslt}
@@ -13,11 +13,11 @@ ExternalProject_Add( ext_libxslt
         ALWAYS 0
         DEPENDS ext_patch ext_libxml2
 )
-else (MSVC)
+else (MSVC OR MINGW)
 ExternalProject_Add( ext_libxslt
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL http://files.kde.org/krita/build/dependencies/libxslt-1.1.26.tar.gz
-        URL_MD5 e61d0364a30146aaa3001296f853b2b9
+        URL http://files.kde.org/krita/build/dependencies/libxslt-1.1.29.tar.gz
+        URL_MD5 a129d3c44c022de3b9dcf6d6f288d72e
 
         CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${PREFIX_ext_libxslt}  ${GLOBAL_AUTOMAKE_PROFILE}
         BUILD_COMMAND make
@@ -27,4 +27,4 @@ ExternalProject_Add( ext_libxslt
         ALWAYS 0
         DEPENDS ext_libxml2
 )
-endif (MSVC)
+endif (MSVC OR MINGW)

@@ -1,5 +1,5 @@
 SET(PREFIX_ext_gettext "${EXTPREFIX}" )
-if (MSVC)
+if (MSVC OR MINGW)
 ExternalProject_Add(
     ext_gettext
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
@@ -14,14 +14,14 @@ ExternalProject_Add(
     ALWAYS 0
     DEPENDS ext_patch ext_iconv
 )
-else (MSVC)
+else (MSVC OR MINGW)
 ExternalProject_Add( ext_gettext
 	DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL http://files.kde.org/krita/build/dependencies/gettext-0.19.6.tar.gz
-    URL_MD5 6d1447f8c5c45c329371ef4bfe7d79a5
+    URL http://files.kde.org/krita/build/dependencies/gettext-0.19.8.tar.gz
+    URL_MD5 e4fffc004f21596becd1055cf36be31d
 	
 	INSTALL_DIR ${PREFIX_ext_gettext}
-	CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${PREFIX_ext_gettext} --disable-java   ${GLOBAL_AUTOMAKE_PROFILE}
+	CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${PREFIX_ext_gettext} --disable-java   ${GLOBAL_AUTOMAKE_PROFILE} --disable-native-java 
         BUILD_COMMAND make
         INSTALL_COMMAND make install
 
@@ -29,4 +29,4 @@ ExternalProject_Add( ext_gettext
 	ALWAYS 0
 	DEPENDS ext_iconv
 )
-endif (MSVC)
+endif (MSVC OR MINGW)

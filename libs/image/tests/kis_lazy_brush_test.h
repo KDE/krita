@@ -25,7 +25,7 @@ class KisLazyBrushTest : public QObject
 {
     Q_OBJECT
 private Q_SLOTS:
-    void test();
+    //void test();
     void testGraph();
     void testGraphStandardIterators();
     void testGraphConcepts();

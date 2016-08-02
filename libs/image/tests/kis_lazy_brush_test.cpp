@@ -34,6 +34,8 @@
 
 #include "lazybrush/kis_lazy_fill_graph.h"
 
+#if 0
+
 int
 doSomething()
 {
@@ -331,6 +333,8 @@ void KisLazyBrushTest::test()
     doSomethingElse();
 }
 
+#endif /*0*/
+
 bool verifyNormalVertex(const KisLazyFillGraph::vertex_descriptor &v, int x, int y)
 {
     bool result = v.type == KisLazyFillGraph::vertex_descriptor::NORMAL &&
@@ -338,6 +342,54 @@ bool verifyNormalVertex(const KisLazyFillGraph::vertex_descriptor &v, int x, int
 
     if (!result) {
         qDebug() << ppVar(v) << ppVar(x) << ppVar(y);
+    }
+
+    return result;
+}
+
+bool verifyVertexIndex(KisLazyFillGraph &g,
+                       KisLazyFillGraph::vertex_descriptor v,
+                       KisLazyFillGraph::vertices_size_type index)
+{
+    bool result = true;
+
+    const KisLazyFillGraph::vertices_size_type actualIndex = g.index_of(v);
+    const KisLazyFillGraph::vertex_descriptor actualVertex = g.vertex_at(index);
+
+    if (index >= 0) {
+        result &= v == actualVertex;
+    }
+
+    result &= index == actualIndex;
+
+    if (!result) {
+        qDebug() << "Vertex failed:";
+        qDebug() << v << "->" << actualIndex << "( expected:" << index << ")";
+        qDebug() << index << "->" << actualVertex << "( expected:" << v << ")";
+    }
+
+    return result;
+}
+
+bool verifyEdgeIndex(KisLazyFillGraph &g,
+                       KisLazyFillGraph::edge_descriptor v,
+                       KisLazyFillGraph::edges_size_type index)
+{
+    bool result = true;
+
+    const KisLazyFillGraph::edges_size_type actualIndex = g.index_of(v);
+    const KisLazyFillGraph::edge_descriptor actualEdge = g.edge_at(index);
+
+    if (index >= 0) {
+        result &= v == actualEdge;
+    }
+
+    result &= index == actualIndex;
+
+    if (!result) {
+        qDebug() << "Edge failed:";
+        qDebug() << v << "->" << actualIndex << "( expected:" << index << ")";
+        qDebug() << index << "->" << actualEdge << "( expected:" << v << ")";
     }
 
     return result;
@@ -356,6 +408,9 @@ void KisLazyBrushTest::testGraph()
 
     qDebug() << ppVar(numVertices);
     qDebug() << ppVar(numEdges);
+
+    QCOMPARE(numVertices, 10002);
+    QCOMPARE(numEdges, 41200);
 
     for (int i = 0; i < numVertices; i++) {
         KisLazyFillGraph::vertex_descriptor vertex = g.vertex_at(i);
@@ -381,35 +436,52 @@ void KisLazyBrushTest::testGraph()
     KisLazyFillGraph::vertex_descriptor vA(0, 0, KisLazyFillGraph::vertex_descriptor::LABEL_A);
     KisLazyFillGraph::vertex_descriptor vB(0, 0, KisLazyFillGraph::vertex_descriptor::LABEL_B);
 
-    QCOMPARE(g.index_of(std::make_pair(v1, v2)), long(0));
-    QCOMPARE(g.index_of(std::make_pair(v3, v4)), long(99));
+    // Verify vertex index mapping
 
-    QCOMPARE(g.index_of(std::make_pair(v1, v3)), long(19800));
-    QCOMPARE(g.index_of(std::make_pair(v2, v4)), long(19801));
+    QVERIFY(verifyVertexIndex(g, v1, 0));
+    QVERIFY(verifyVertexIndex(g, v2, 1));
+    QVERIFY(verifyVertexIndex(g, v3, 100));
+    QVERIFY(verifyVertexIndex(g, v4, 101));
+    QVERIFY(verifyVertexIndex(g, v5, 2));
+    QVERIFY(verifyVertexIndex(g, v6, 1121));
+    QVERIFY(verifyVertexIndex(g, v7, 5151));
+    QVERIFY(verifyVertexIndex(g, v8, -1));
 
-    QCOMPARE(g.index_of(std::make_pair(v2, v1)), long(9900));
-    QCOMPARE(g.index_of(std::make_pair(v4, v3)), long(9999));
+    QVERIFY(verifyVertexIndex(g, vA, numVertices - 2));
+    QVERIFY(verifyVertexIndex(g, vB, numVertices - 1));
 
-    QCOMPARE(g.index_of(std::make_pair(v3, v1)), long(29700));
-    QCOMPARE(g.index_of(std::make_pair(v4, v2)), long(29701));
+    // Verify edge index mapping
 
-    QCOMPARE(g.index_of(std::make_pair(vA, vA)), long(-1));
-    QCOMPARE(g.index_of(std::make_pair(vB, vB)), long(-1));
-    QCOMPARE(g.index_of(std::make_pair(v1, v8)), long(-1));
-    QCOMPARE(g.index_of(std::make_pair(v1, v4)), long(-1));
-    QCOMPARE(g.index_of(std::make_pair(v4, v1)), long(-1));
-    QCOMPARE(g.index_of(std::make_pair(v1, v5)), long(-1));
+    QVERIFY(verifyEdgeIndex(g, std::make_pair(v1, v2), 0));
+    QVERIFY(verifyEdgeIndex(g, std::make_pair(v3, v4), 99));
 
-    QCOMPARE(g.index_of(std::make_pair(v6, vA)), long(39621));
-    QCOMPARE(g.index_of(std::make_pair(vA, v6)), long(40021));
+    QVERIFY(verifyEdgeIndex(g, std::make_pair(v1, v3), 19800));
+    QVERIFY(verifyEdgeIndex(g, std::make_pair(v2, v4), 19801));
 
-    QCOMPARE(g.index_of(std::make_pair(v1, vA)), long(-1));
-    QCOMPARE(g.index_of(std::make_pair(v7, vA)), long(-1));
-    QCOMPARE(g.index_of(std::make_pair(vA, vB)), long(-1));
-    QCOMPARE(g.index_of(std::make_pair(vB, vA)), long(-1));
+    QVERIFY(verifyEdgeIndex(g, std::make_pair(v2, v1), 9900));
+    QVERIFY(verifyEdgeIndex(g, std::make_pair(v4, v3), 9999));
 
-    QCOMPARE(g.index_of(std::make_pair(v7, vB)), long(40421));
-    QCOMPARE(g.index_of(std::make_pair(vB, v7)), long(40821));
+    QVERIFY(verifyEdgeIndex(g, std::make_pair(v3, v1), 29700));
+    QVERIFY(verifyEdgeIndex(g, std::make_pair(v4, v2), 29701));
+
+    QVERIFY(verifyEdgeIndex(g, std::make_pair(vA, vA), -1));
+    QVERIFY(verifyEdgeIndex(g, std::make_pair(vB, vB), -1));
+    QVERIFY(verifyEdgeIndex(g, std::make_pair(v1, v8), -1));
+    QVERIFY(verifyEdgeIndex(g, std::make_pair(v1, v4), -1));
+    QVERIFY(verifyEdgeIndex(g, std::make_pair(v4, v1), -1));
+    QVERIFY(verifyEdgeIndex(g, std::make_pair(v1, v5), -1));
+
+    QVERIFY(verifyEdgeIndex(g, std::make_pair(v6, vA), 39621));
+    QVERIFY(verifyEdgeIndex(g, std::make_pair(vA, v6), 40021));
+
+    QVERIFY(verifyEdgeIndex(g, std::make_pair(v1, vA), -1));
+    QVERIFY(verifyEdgeIndex(g, std::make_pair(v7, vA), -1));
+    QVERIFY(verifyEdgeIndex(g, std::make_pair(vA, vB), -1));
+    QVERIFY(verifyEdgeIndex(g, std::make_pair(vB, vA), -1));
+
+    QVERIFY(verifyEdgeIndex(g, std::make_pair(v7, vB), 40421));
+    QVERIFY(verifyEdgeIndex(g, std::make_pair(vB, v7), 40821));
+
 
     QCOMPARE(g.out_degree(v1), long(2));
     QVERIFY(verifyNormalVertex(g.out_edge_at(v1, 0).second, 11, 10));

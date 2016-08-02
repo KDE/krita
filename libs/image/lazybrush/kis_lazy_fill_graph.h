@@ -338,7 +338,9 @@ public:
     KisLazyFillGraph(const QRect &mainRect,
                      const QRect &aLabelRect,
                      const QRect &bLabelRect)
-        : m_width(mainRect.width()),
+        : m_x(mainRect.x()),
+          m_y(mainRect.y()),
+          m_width(mainRect.width()),
           m_height(mainRect.height())
     {
         m_mainArea = mainRect;
@@ -370,6 +372,10 @@ public:
     }
 
     QSize size() const { return QSize(m_width, m_height); }
+
+
+    vertices_size_type m_x;
+    vertices_size_type m_y;
 
     vertices_size_type m_width;
     vertices_size_type m_height;
@@ -436,9 +442,6 @@ public:
             const bool srcColoredB = src_vertex.type == vertex_descriptor::LABEL_B;
             const bool dstColoredB = dst_vertex.type == vertex_descriptor::LABEL_B;
 
-            //ENTER_FUNCTION() << ppVar(edge);
-            //qDebug() << ppVar(srcColoredB) << ppVar(dstColoredB);
-
             if (srcColoredA || dstColoredA) {
                 const bool edgeReversed = srcColoredA;
 
@@ -452,14 +455,10 @@ public:
             } else if (srcColoredB || dstColoredB) {
                 const bool edgeReversed = srcColoredB;
 
-                //qDebug() << ppVar(isReversed) << ppVar(edgeReversed) << ppVar(binId) << ppVar(src_vertex) << ppVar(dst_vertex);
-
                 if (isReversed != edgeReversed ||
                     (binId != LABEL_B && binId != LABEL_B_REVERSED) ||
                     (srcColoredB && (dst_vertex.type != vertex_descriptor::NORMAL)) ||
                     (dstColoredB && (src_vertex.type != vertex_descriptor::NORMAL))) {
-
-                    //qDebug() << "returning..";
 
                     return -1;
                 }
@@ -485,16 +484,9 @@ public:
                 std::swap(src_vertex, dst_vertex);
             }
 
-            //qDebug() << "*** Success" << ppVar(src_vertex) << ppVar(xOffset) << ppVar(yOffset) << ppVar(stride);
-
-            //KIS_ASSERT(src_vertex.x >= xOffset);
-            //KIS_ASSERT(src_vertex.y >= yOffset);
-
             edges_size_type internalIndex =
                 (src_vertex.x - xOffset) +
                 (src_vertex.y - yOffset) * stride;
-
-
 
             if (internalIndex < 0 || internalIndex >= size) {
                 return -1;
@@ -515,16 +507,20 @@ public:
             const edges_size_type y = localOffset / stride + yOffset;
 
             vertex_descriptor src_vertex(x, y, vertex_descriptor::NORMAL);
-            vertex_descriptor dst_vertex(x, y, vertex_descriptor::NORMAL);
+            vertex_descriptor dst_vertex;
 
             switch (binId) {
             case HORIZONTAL:
             case HORIZONTAL_REVERSED:
-                dst_vertex.x++;
+                dst_vertex.x = x + 1;
+                dst_vertex.y = y;
+                dst_vertex.type = vertex_descriptor::NORMAL;
                 break;
             case VERTICAL:
             case VERTICAL_REVERSED:
-                dst_vertex.y++;
+                dst_vertex.x = x;
+                dst_vertex.y = y + 1;
+                dst_vertex.type = vertex_descriptor::NORMAL;
                 break;
             case LABEL_A:
             case LABEL_A_REVERSED:
@@ -577,7 +573,7 @@ public:
 
         switch (vertex.type) {
         case vertex_descriptor::NORMAL:
-            vertex_index = vertex.x + vertex.y * m_width;
+            vertex_index = vertex.x - m_x + (vertex.y - m_y) * m_width;
             break;
         case vertex_descriptor::LABEL_A:
             vertex_index = m_numVertices - 2;
@@ -587,10 +583,6 @@ public:
             break;
         }
 
-        //qDebug() << ppVar(vertex_index) << ppVar(m_numVertices) << ppVar(vertex);
-
-//KIS_ASSERT(vertex_index >= 0);
-
         return vertex_index;
     }
 
@@ -599,14 +591,14 @@ public:
     vertex_descriptor vertex_at (vertices_size_type vertex_index) const {
         vertex_descriptor vertex;
 
-        if (vertex_index >= 0) {
-            vertex.x = vertex_index % m_width;
-            vertex.y = vertex_index / m_width;
-            vertex.type = vertex_descriptor::NORMAL;
-        } else if (vertex_index == m_numVertices - 2) {
+        if (vertex_index == m_numVertices - 2) {
             vertex.type = vertex_descriptor::LABEL_A;
         } else if (vertex_index == m_numVertices - 1) {
             vertex.type = vertex_descriptor::LABEL_B;
+        } else if (vertex_index >= 0) {
+            vertex.x = vertex_index % m_width + m_x;
+            vertex.y = vertex_index / m_width + m_y;
+            vertex.type = vertex_descriptor::NORMAL;
         }
 
       return vertex;
@@ -648,7 +640,7 @@ public:
         return index;
     }
 
-
+private:
     vertices_size_type numVacantEdges(const vertex_descriptor &vertex, const QRect &rc) const {
         vertices_size_type vacantEdges = 4;
 
@@ -670,7 +662,7 @@ public:
 
         return vacantEdges;
     }
-
+public:
     // Returns the number of out-edges for [vertex]
     degree_size_type out_degree(vertex_descriptor vertex) const {
         degree_size_type out_edge_count = 0;

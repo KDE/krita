@@ -57,6 +57,7 @@ KisCurveOptionWidget::KisCurveOptionWidget(KisCurveOption* curveOption, const QS
 
     connect(m_curveOptionWidget->curveWidget, SIGNAL(modified()), this, SLOT(transferCurve()));
     connect(m_curveOptionWidget->sensorSelector, SIGNAL(parametersChanged()), SLOT(emitSettingChanged()));
+    connect(m_curveOptionWidget->sensorSelector, SIGNAL(parametersChanged()), SLOT(updateLabelsOfCurrentSensor()));
     connect(m_curveOptionWidget->sensorSelector, SIGNAL(highlightedSensorChanged(KisDynamicSensorSP )), SLOT(updateSensorCurveLabels(KisDynamicSensorSP )));
     connect(m_curveOptionWidget->sensorSelector, SIGNAL(highlightedSensorChanged(KisDynamicSensorSP )), SLOT(updateCurve(KisDynamicSensorSP )));
     connect(m_curveOptionWidget->checkBoxUseSameCurve, SIGNAL(stateChanged(int)), SLOT(transferCurve()));
@@ -80,6 +81,7 @@ KisCurveOptionWidget::KisCurveOptionWidget(KisCurveOption* curveOption, const QS
 KisCurveOptionWidget::~KisCurveOptionWidget()
 {
     delete m_curveOption;
+    delete m_curveOptionWidget;
 }
 
 void KisCurveOptionWidget::writeOptionSetting(KisPropertiesConfiguration* setting) const
@@ -156,6 +158,12 @@ void KisCurveOptionWidget::updateCurve(KisDynamicSensorSP sensor)
         m_curveOptionWidget->curveWidget->setCurve(sensor->curve());
         m_curveOptionWidget->curveWidget->blockSignals(blockSignal);
     }
+}
+
+void KisCurveOptionWidget::updateLabelsOfCurrentSensor()
+{
+    updateSensorCurveLabels(m_curveOptionWidget->sensorSelector->currentHighlighted());
+    updateCurve(m_curveOptionWidget->sensorSelector->currentHighlighted());
 }
 
 void KisCurveOptionWidget::updateValues()

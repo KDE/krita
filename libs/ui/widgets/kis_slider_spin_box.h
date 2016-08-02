@@ -80,6 +80,8 @@ protected:
 
     int valueForX(int x, Qt::KeyboardModifiers modifiers = Qt::NoModifier) const;
 
+    void commitEnteredValue();
+
     virtual QString valueString() const = 0;
     /**
      * Sets the slider internal value. Inheriting classes should respect blockUpdateSignal

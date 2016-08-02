@@ -65,6 +65,7 @@
 #include <QTextLayout>
 #include <QTextCursor>
 #include <QTime>
+#include "kis_painting_tweaks.h"
 
 extern int qt_defaultDpiY();
 Q_DECLARE_METATYPE(QTextDocument *)
@@ -91,7 +92,7 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
     painter->translate(0, d->verticalAlignOffset);
 
     painter->setPen(context.textContext.palette.color(QPalette::Text)); // for text that has no color.
-    const QRegion clipRegion = painter->clipRegion(); // fetch after painter->translate so the clipRegion is correct
+    const QRegion clipRegion = KisPaintingTweaks::safeClipRegion(*painter); // fetch after painter->translate so the clipRegion is correct
     KoTextBlockBorderData *lastBorder = 0;
     QRectF lastBorderRect;
 

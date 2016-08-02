@@ -99,7 +99,7 @@ void StylesDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option
         if (!m_editButtonPressed) {
             optEdit.state |= QStyle::State_Enabled;
         }
-        optEdit.icon = koIcon("document-properties");
+        optEdit.icon = koIcon("configure");
         optEdit.features |= QStyleOptionButton::Flat;
         optEdit.rect = option.rect.adjusted(dx1 - scrollBarWidth, dy1, dx2 - scrollBarWidth, dy2);
         view->style()->drawControl(QStyle::CE_PushButton, &optEdit, painter, 0);

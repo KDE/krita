@@ -24,7 +24,7 @@
 
 #include <KoDialog.h>
 #include <kpluginfactory.h>
-#include <QUrl>
+#include <QFileInfo>
 
 #include <KoColorSpaceConstants.h>
 #include <KisFilterChain.h>
@@ -61,8 +61,8 @@ KisImportExportFilter::ConversionStatus jp2Export::convert(const QByteArray& fro
     if (from != "application/x-krita")
         return KisImportExportFilter::NotImplemented;
 
-    KisDocument *input = m_chain->inputDocument();
-    QString filename = m_chain->outputFile();
+    KisDocument *input = inputDocument();
+    QString filename = outputFile();
 
     if (!input)
         return KisImportExportFilter::NoDocumentCreated;
@@ -86,20 +86,16 @@ KisImportExportFilter::ConversionStatus jp2Export::convert(const QByteArray& fro
     cfg.fromXML(filterConfig);
     optionsJP2.numberResolutions->setValue(cfg.getInt("number_resolutions", 6));
     optionsJP2.qualityLevel->setValue(cfg.getInt("quality", 100));
-    
+
     kdb->setMainWidget(wdg);
     QApplication::restoreOverrideCursor();
 
-    if (!m_chain->manager()->getBatchMode()) {
+    if (!getBatchMode()) {
         if (kdb->exec() == QDialog::Rejected) {
             return KisImportExportFilter::UserCancelled;
         }
     }
-    else {
-        qApp->processEvents(); // For vector layers to be updated
-    }
-    image->waitForDone();
-    
+
     JP2ConvertOptions options;
     options.numberresolution = optionsJP2.numberResolutions->value();
     cfg.setProperty("number_resolutions", options.numberresolution);
@@ -108,20 +104,17 @@ KisImportExportFilter::ConversionStatus jp2Export::convert(const QByteArray& fro
 
     KisConfig().setExportConfiguration("JP2", cfg);
 
-    QUrl url = QUrl::fromLocalFile(filename);
 
-    image->refreshGraph();
-    image->lock();
-
+    // the image must be locked at the higher levels
+    KIS_SAFE_ASSERT_RECOVER_NOOP(input->image()->locked());
     jp2Converter kpc(input);
 
     KisPaintDeviceSP pd = new KisPaintDevice(*image->projection());
     KisPaintLayerSP l = new KisPaintLayer(image, "projection", OPACITY_OPAQUE_U8, pd);
-    image->unlock();
 
     KisImageBuilder_Result res;
 
-    if ((res = kpc.buildFile(url, l, options)) == KisImageBuilder_RESULT_OK) {
+    if ((res = kpc.buildFile(filename, l, options)) == KisImageBuilder_RESULT_OK) {
         dbgFile << "success !";
         return KisImportExportFilter::OK;
     }

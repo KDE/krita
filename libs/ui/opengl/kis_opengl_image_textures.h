@@ -18,10 +18,6 @@
 #ifndef KIS_OPENGL_IMAGE_TEXTURES_H_
 #define KIS_OPENGL_IMAGE_TEXTURES_H_
 
-#include <KoConfig.h> // for HAVE_OPENGL
-
-#ifdef HAVE_OPENGL
-
 #include <QVector>
 #include <QMap>
 
@@ -31,12 +27,16 @@
 
 #include "canvas/kis_update_info.h"
 #include "opengl/kis_texture_tile.h"
+#include "KisProofingConfiguration.h"
+#include <KoColorProofingConversionTransformation.h>
 
 class KisOpenGLImageTextures;
 class QOpenGLFunctions;
 typedef KisSharedPtr<KisOpenGLImageTextures> KisOpenGLImageTexturesSP;
 
 class KoColorProfile;
+class KisTextureTileUpdateInfoPoolCollection;
+typedef QSharedPointer<KisTextureTileInfoPool> KisTextureTileInfoPoolSP;
 
 /**
  * A set of OpenGL textures that contains the projection of a KisImage.
@@ -83,6 +83,7 @@ public:
     void initGL(QOpenGLFunctions *f);
 
     void setChannelFlags(const QBitArray &channelFlags);
+    void setProofingConfig(KisProofingConfiguration*);
 
     bool internalColorManagementActive() const;
     bool setInternalColorManagementActive(bool value);
@@ -122,10 +123,6 @@ public:
             return m_textureTiles[tile];
         }
         return 0;
-    }
-
-    inline KisTextureTile* getTextureTile(int x, int y) {
-        return getTextureTileCR(xToCol(x), yToRow(y));
     }
 
     inline qreal texelSize() const {
@@ -168,12 +165,16 @@ private:
     KoColorConversionTransformation::Intent m_renderingIntent;
     KoColorConversionTransformation::ConversionFlags m_conversionFlags;
 
+    KisProofingConfiguration *m_proofingConfig;
+    KoColorConversionTransformation *m_proofingTransform;
+    bool m_createNewProofingTransform;
+
     /**
      * If the destination color space coincides with the one of the image,
      * then effectively, there is no conversion happens. That is used
      * for working with OCIO.
      */
-    const KoColorSpace* m_tilesDestinationColorSpace;
+    const KoColorSpace *m_tilesDestinationColorSpace;
 
     /**
      * Shows whether the internal color management should be enabled or not.
@@ -198,12 +199,12 @@ private:
     bool m_useOcio;
     bool m_initialized;
 
+    KisTextureTileInfoPoolSP m_infoChunksPool;
+
 private:
     typedef QMap<KisImageWSP, KisOpenGLImageTextures*> ImageTexturesMap;
     static ImageTexturesMap imageTexturesMap;
 };
-
-#endif // HAVE_OPENGL
 
 #endif // KIS_OPENGL_IMAGE_TEXTURES_H_
 

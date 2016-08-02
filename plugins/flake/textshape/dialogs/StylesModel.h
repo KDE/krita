@@ -103,7 +103,7 @@ public:
     /** Return a @class QModelIndex for the specified @param style.
       * @param style may be either a character or paragraph style.
     */
-    QModelIndex indexOf(const KoCharacterStyle &style) const;
+    QModelIndex indexOf(const KoCharacterStyle *style) const;
 
     /** Returns a QImage which is a preview of the style specified by @param row of the given @param size.
       * If size isn't specified, the default size of the given @class KoStyleThumbnailer is used.

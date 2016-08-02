@@ -21,8 +21,6 @@
 
 #include <opengl/kis_opengl.h>
 
-#ifdef HAVE_OPENGL
-
 /**
  * This is a workaround for a very slow updates in OpenGL canvas (~6ms).
  * The delay happens because of VSync in the swapBuffers() call. At first
@@ -31,133 +29,6 @@
  *
  * This file is effectively a bit of copy-paste from qgl_x11.cpp
  */
-
-
-#if defined Q_OS_LINUX
-
-#include <QByteArray>
-#include <QVector>
-#include <QLibrary>
-#include <QX11Info>
-#include <QOpenGLContext>
-#include <QApplication>
-
-#ifndef GL_NUM_EXTENSIONS
-#define GL_NUM_EXTENSIONS 0x821D
-#endif
-
-QString gl_library_name() {
-#if defined (QT_OPENGL_ES_2)
-    return QLatin1String("GLESv2");
-#else
-    return QLatin1String("GL");
-#endif
-}
-
-namespace VSyncWorkaround {
-
-    bool tryDisableVSync(QOpenGLContext* ctx) {
-        bool result = false;
-
-        bool triedDisable = false;
-        Display *dpy = QX11Info::display();
-        dbgUI << "OpenGL architecture is" << gl_library_name();
-
-        if (ctx->hasExtension("GLX_EXT_swap_control")) {
-            dbgUI << "Swap control extension found.";
-            typedef WId (*k_glXGetCurrentDrawable)(void);
-            typedef void (*kis_glXSwapIntervalEXT)(Display*, WId, int);
-            k_glXGetCurrentDrawable kis_glXGetCurrentDrawable = (k_glXGetCurrentDrawable)ctx->getProcAddress("glXGetCurrentDrawable");
-            kis_glXSwapIntervalEXT glXSwapIntervalEXT = (kis_glXSwapIntervalEXT)ctx->getProcAddress("glXSwapIntervalEXT");
-            WId wid = kis_glXGetCurrentDrawable();
-
-            if (glXSwapIntervalEXT) {
-                glXSwapIntervalEXT(dpy, wid, 0);
-                triedDisable = true;
-
-                unsigned int swap = 1;
-
-#ifdef GLX_SWAP_INTERVAL_EXT
-                typedef int (*k_glXQueryDrawable)(Display *, WId, int, unsigned int *);
-                k_glXQueryDrawable kis_glXQueryDrawable = (k_glXQueryDrawable)ctx->getProcAddress("glXQueryDrawable");
-                kis_glXQueryDrawable(dpy, wid, GLX_SWAP_INTERVAL_EXT, &swap);
-#endif
-
-                result = !swap;
-            } else {
-                dbgUI << "Couldn't load glXSwapIntervalEXT extension function";
-            }
-        } else if (ctx->hasExtension("GLX_MESA_swap_control")) {
-            dbgUI << "MESA swap control extension found.";
-            typedef int (*kis_glXSwapIntervalMESA)(unsigned int);
-            typedef int (*kis_glXGetSwapIntervalMESA)(void);
-
-            kis_glXSwapIntervalMESA glXSwapIntervalMESA = (kis_glXSwapIntervalMESA)ctx->getProcAddress("glXSwapIntervalMESA");
-            kis_glXGetSwapIntervalMESA glXGetSwapIntervalMESA = (kis_glXGetSwapIntervalMESA)ctx->getProcAddress("glXGetSwapIntervalMESA");
-
-            if (glXSwapIntervalMESA) {
-                int retval = glXSwapIntervalMESA(0);
-                triedDisable = true;
-
-                int swap = 1;
-
-                if (glXGetSwapIntervalMESA) {
-                    swap = glXGetSwapIntervalMESA();
-                } else {
-                    dbgUI << "Couldn't load glXGetSwapIntervalMESA extension function";
-                }
-
-                result = !retval && !swap;
-            } else {
-                dbgUI << "Couldn't load glXSwapIntervalMESA extension function";
-            }
-        } else {
-            dbgUI << "There is neither GLX_EXT_swap_control or GLX_MESA_swap_control extension supported";
-        }
-
-        if (triedDisable && !result) {
-            errUI;
-            errUI << "CRITICAL: Your video driver forbids disabling VSync!";
-            errUI << "CRITICAL: Try toggling some VSync- or VBlank-related options in your driver configuration dialog.";
-            errUI << "CRITICAL: NVIDIA users can do:";
-            errUI << "CRITICAL: sudo nvidia-settings  >  (tab) OpenGL settings > Sync to VBlank  ( unchecked )";
-            errUI;
-        }
-        return result;
-    }
-}
-
-#elif defined Q_OS_WIN
-namespace VSyncWorkaround {
-    bool tryDisableVSync(QOpenGLContext *ctx) {
-        bool retval = false;
-
-        if (ctx->hasExtension("WGL_EXT_swap_control")) {
-            typedef void (*wglSwapIntervalEXT)(int);
-            typedef int  (*wglGetSwapIntervalEXT)(void);
-            ((wglSwapIntervalEXT)ctx->getProcAddress("wglSwapIntervalEXT"))(0);
-            int interval = ((wglGetSwapIntervalEXT)ctx->getProcAddress("wglGetSwapIntervalEXT"))();
-
-            if (interval) {
-                warnUI << "Failed to disable VSync with WGL_EXT_swap_control";
-            }
-
-            retval = !interval;
-        } else {
-            warnUI << "WGL_EXT_swap_control extension is not available. Found extensions" << ctx->extensions();
-        }
-        return retval;
-    }
-}
-
-#else  // !defined Q_OS_LINUX && !defined Q_OS_WIN
-
-namespace VSyncWorkaround {
-  bool tryDisableVSync(QOpenGLContext *) {
-        return false;
-    }
-}
-#endif // defined Q_OS_LINUX
 
 namespace Sync {
     //For checking sync status
@@ -248,5 +119,4 @@ namespace Sync {
     }
 }
 
-#endif // HAVE_OPENGL
 #endif // KIS_OPENGL_CANVAS_2_P_H

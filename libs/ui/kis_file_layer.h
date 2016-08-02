@@ -58,7 +58,7 @@ public:
     QString path() const;
 
     ScalingMethod scalingMethod() const;
-    
+
     KisNodeSP clone() const;
     bool allowAsChild(KisNodeSP) const;
 
@@ -69,14 +69,14 @@ public:
     KUndo2Command* transform(const QTransform &transform);
 
 public Q_SLOTS:
-    void slotLoadingFinished(KisImageSP importedImage);
+    void slotLoadingFinished(KisPaintDeviceSP projection, int xRes, int yRes);
 
 private:
     QString m_basePath;
     QString m_filename;
     ScalingMethod m_scalingMethod;
 
-    KisPaintDeviceSP m_image;
+    KisPaintDeviceSP m_paintDevice;
     KisSafeDocumentLoader m_loader;
 };
 

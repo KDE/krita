@@ -17,21 +17,6 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_composition_benchmark.h"
-
-#include <QTest>
-
-#include <KoColorSpace.h>
-#include <KoCompositeOp.h>
-#include <KoColorSpaceRegistry.h>
-
-#include <KoColorSpaceTraits.h>
-#include <KoCompositeOpAlphaDarken.h>
-#include <KoCompositeOpOver.h>
-#include "KoOptimizedCompositeOpFactory.h"
-
-
-
 // for calculation of the needed alignment
 #include <config-vc.h>
 #ifdef HAVE_VC
@@ -52,10 +37,30 @@
 #include <KoOptimizedCompositeOpAlphaDarken32.h>
 #endif
 
+#include "kis_composition_benchmark.h"
+#include <QTest>
+
+#include <KoColorSpace.h>
+#include <KoCompositeOp.h>
+#include <KoColorSpaceRegistry.h>
+
+#include <KoColorSpaceTraits.h>
+#include <KoCompositeOpAlphaDarken.h>
+#include <KoCompositeOpOver.h>
+#include "KoOptimizedCompositeOpFactory.h"
+
 // for posix_memalign()
 #include <stdlib.h>
 
 #include <kis_debug.h>
+
+#if defined _MSC_VER
+#define MEMALIGN_ALLOC(p, a, s) ((*(p)) = _aligned_malloc((s), (a)), *(p) ? 0 : errno)
+#define MEMALIGN_FREE(p) _aligned_free((p))
+#else
+#define MEMALIGN_ALLOC(p, a, s) posix_memalign((p), (a), (s))
+#define MEMALIGN_FREE(p) free((p))
+#endif
 
 const int alpha_pos = 3;
 
@@ -222,7 +227,7 @@ QVector<Tile> generateTiles(int size,
     QVector<Tile> tiles(size);
 
 #ifdef HAVE_VC
-    const int vecSize = Vc::float_v::Size;
+    const int vecSize = Vc::float_v::size();
 #else
     const int vecSize = 1;
 #endif
@@ -231,18 +236,18 @@ QVector<Tile> generateTiles(int size,
     const size_t pixelAlignment = qMax(size_t(vecSize * sizeof(float)), size_t(256));
     const size_t maskAlignment = qMax(size_t(vecSize), size_t(256));
     for (int i = 0; i < size; i++) {
-        void *ptr = NULL;
-        int error = posix_memalign(&ptr, pixelAlignment, numPixels * pixelSize + srcAlignmentShift);
+        void *ptr = 0;
+        int error = MEMALIGN_ALLOC(&ptr, pixelAlignment, numPixels * pixelSize + srcAlignmentShift);
         if (error) {
             qFatal("posix_memalign failed: %d", error);
         }
         tiles[i].src = (quint8*)ptr + srcAlignmentShift;
-        error = posix_memalign(&ptr, pixelAlignment, numPixels * pixelSize + dstAlignmentShift);
+        error = MEMALIGN_ALLOC(&ptr, pixelAlignment, numPixels * pixelSize + dstAlignmentShift);
         if (error) {
             qFatal("posix_memalign failed: %d", error);
         }
         tiles[i].dst = (quint8*)ptr + dstAlignmentShift;
-        error = posix_memalign(&ptr, maskAlignment, numPixels);
+        error = MEMALIGN_ALLOC(&ptr, maskAlignment, numPixels);
         if (error) {
             qFatal("posix_memalign failed: %d", error);
         }
@@ -265,9 +270,9 @@ void freeTiles(QVector<Tile> tiles,
                const int dstAlignmentShift)
 {
     Q_FOREACH (const Tile &tile, tiles) {
-        free(tile.src - srcAlignmentShift);
-        free(tile.dst - dstAlignmentShift);
-        free(tile.mask);
+        MEMALIGN_FREE(tile.src - srcAlignmentShift);
+        MEMALIGN_FREE(tile.dst - dstAlignmentShift);
+        MEMALIGN_FREE(tile.mask);
     }
 }
 
@@ -350,7 +355,7 @@ bool compareTwoOps(bool haveMask, const KoCompositeOp *op1, const KoCompositeOp 
         compareResult = compareTwoOpsPixels<quint8>(tiles, 10);
     }
     else if (pixelSize == 16) {
-        compareResult = compareTwoOpsPixels<float>(tiles, 0);
+        compareResult = compareTwoOpsPixels<float>(tiles, 2e-7);
     }
     else {
         qFatal("Pixel size %i is not implemented", pixelSize);
@@ -467,7 +472,7 @@ void checkRounding(qreal opacity, qreal flow, qreal averageOpacity = -1, quint32
     QVector<Tile> tiles =
         generateTiles(2, 0, 0, ALPHA_RANDOM, ALPHA_RANDOM, pixelSize);
 
-    const int vecSize = Vc::float_v::Size;
+    const int vecSize = Vc::float_v::size();
 
     const int numBlocks = numPixels / vecSize;
 
@@ -494,7 +499,7 @@ void checkRounding(qreal opacity, qreal flow, qreal averageOpacity = -1, quint32
     // The error count is needed as 38.5 gets rounded to 38 instead of 39 in the vc version.
     int errorcount = 0;
     for (int i = 0; i < numBlocks; i++) {
-        Compositor::template compositeVector<true,true, VC_IMPL>(src1, dst1, msk1, params.opacity, optionalParams);
+        Compositor::template compositeVector<true,true, Vc::CurrentImplementation::current()>(src1, dst1, msk1, params.opacity, optionalParams);
         for (int j = 0; j < vecSize; j++) {
 
             //if (8 * i + j == 7080) {
@@ -503,7 +508,7 @@ void checkRounding(qreal opacity, qreal flow, qreal averageOpacity = -1, quint32
             //    dbgKrita << "msk:" << msk2[0];
             //}
 
-            Compositor::template compositeOnePixelScalar<true, VC_IMPL>(src2, dst2, msk2, params.opacity, optionalParams);
+            Compositor::template compositeOnePixelScalar<true, Vc::CurrentImplementation::current()>(src2, dst2, msk2, params.opacity, optionalParams);
 
             bool compareResult = true;
             if (pixelSize == 4) {
@@ -584,6 +589,41 @@ void KisCompositionBenchmark::checkRoundingAlphaDarken_05_10_08()
 #endif
 }
 
+void KisCompositionBenchmark::checkRoundingAlphaDarkenF32_05_03()
+{
+#ifdef HAVE_VC
+    checkRounding<OverCompositor128<float, float, false, true> >(0.5, 0.3, -1, 16);
+#endif
+}
+
+void KisCompositionBenchmark::checkRoundingAlphaDarkenF32_05_05()
+{
+#ifdef HAVE_VC
+    checkRounding<OverCompositor128<float, float, false, true> >(0.5, 0.5, -1, 16);
+#endif
+}
+
+void KisCompositionBenchmark::checkRoundingAlphaDarkenF32_05_07()
+{
+#ifdef HAVE_VC
+    checkRounding<OverCompositor128<float, float, false, true> >(0.5, 0.7, -1, 16);
+#endif
+}
+
+void KisCompositionBenchmark::checkRoundingAlphaDarkenF32_05_10()
+{
+#ifdef HAVE_VC
+    checkRounding<OverCompositor128<float, float, false, true> >(0.5, 1.0, -1, 16);
+#endif
+}
+
+void KisCompositionBenchmark::checkRoundingAlphaDarkenF32_05_10_08()
+{
+#ifdef HAVE_VC
+    checkRounding<OverCompositor128<float, float, false, true> >(0.5, 1.0, 0.8, 16);
+#endif
+}
+
 void KisCompositionBenchmark::checkRoundingOver()
 {
 #ifdef HAVE_VC
@@ -603,6 +643,18 @@ void KisCompositionBenchmark::compareAlphaDarkenOps()
     const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
     KoCompositeOp *opAct = KoOptimizedCompositeOpFactory::createAlphaDarkenOp32(cs);
     KoCompositeOp *opExp = new KoCompositeOpAlphaDarken<KoBgrU8Traits>(cs);
+
+    QVERIFY(compareTwoOps(true, opAct, opExp));
+
+    delete opExp;
+    delete opAct;
+}
+
+void KisCompositionBenchmark::compareRgbF32AlphaDarkenOps()
+{
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->colorSpace("RGBA", "F32", "");
+    KoCompositeOp *opAct = KoOptimizedCompositeOpFactory::createAlphaDarkenOp128(cs);
+    KoCompositeOp *opExp = new KoCompositeOpAlphaDarken<KoRgbF32Traits>(cs);
 
     QVERIFY(compareTwoOps(true, opAct, opExp));
 
@@ -690,6 +742,22 @@ void KisCompositionBenchmark::testRgb8CompositeOverOptimized()
     delete op;
 }
 
+void KisCompositionBenchmark::testRgbF32CompositeAlphaDarkenLegacy()
+{
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->colorSpace("RGBA", "F32", "");
+    KoCompositeOp *op = new KoCompositeOpAlphaDarken<KoRgbF32Traits>(cs);
+    benchmarkCompositeOp(op, "Legacy");
+    delete op;
+}
+
+void KisCompositionBenchmark::testRgbF32CompositeAlphaDarkenOptimized()
+{
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->colorSpace("RGBA", "F32", "");
+    KoCompositeOp *op = KoOptimizedCompositeOpFactory::createAlphaDarkenOp128(cs);
+    benchmarkCompositeOp(op, "Optimized");
+    delete op;
+}
+
 void KisCompositionBenchmark::testRgbF32CompositeOverLegacy()
 {
     const KoColorSpace *cs = KoColorSpaceRegistry::instance()->colorSpace("RGBA", "F32", "");
@@ -742,7 +810,7 @@ void KisCompositionBenchmark::benchmarkMemcpy()
 }
 
 #ifdef HAVE_VC
-    const int vecSize = Vc::float_v::Size;
+    const int vecSize = Vc::float_v::size();
     const size_t uint8VecAlignment = qMax(vecSize * sizeof(quint8), sizeof(void*));
     const size_t uint32VecAlignment = qMax(vecSize * sizeof(quint32), sizeof(void*));
     const size_t floatVecAlignment = qMax(vecSize * sizeof(float), sizeof(void*));
@@ -751,120 +819,130 @@ void KisCompositionBenchmark::benchmarkMemcpy()
 void KisCompositionBenchmark::benchmarkUintFloat()
 {
 #ifdef HAVE_VC
+    using uint_v = Vc::SimdArray<unsigned int, Vc::float_v::size()>;
+
     const int dataSize = 4096;
-    void *ptr = NULL;
-    int error = posix_memalign(&ptr, uint8VecAlignment, dataSize);
+    void *ptr = 0;
+    int error = MEMALIGN_ALLOC(&ptr, uint8VecAlignment, dataSize);
     if (error) {
         qFatal("posix_memalign failed: %d", error);
     }
     quint8 *iData = (quint8*)ptr;
-    error = posix_memalign(&ptr, floatVecAlignment, dataSize * sizeof(float));
+    error = MEMALIGN_ALLOC(&ptr, floatVecAlignment, dataSize * sizeof(float));
     if (error) {
         qFatal("posix_memalign failed: %d", error);
     }
     float *fData = (float*)ptr;
 
     QBENCHMARK {
-        for (int i = 0; i < dataSize; i += Vc::float_v::Size) {
+        for (int i = 0; i < dataSize; i += Vc::float_v::size()) {
             // convert uint -> float directly, this causes
             // static_cast helper be called
-            Vc::float_v b(Vc::uint_v(iData + i));
+            Vc::float_v b(uint_v(iData + i));
             b.store(fData + i);
         }
     }
 
-    free(iData);
-    free(fData);
+    MEMALIGN_FREE(iData);
+    MEMALIGN_FREE(fData);
 #endif
 }
 
 void KisCompositionBenchmark::benchmarkUintIntFloat()
 {
 #ifdef HAVE_VC
+    using int_v = Vc::SimdArray<int, Vc::float_v::size()>;
+    using uint_v = Vc::SimdArray<unsigned int, Vc::float_v::size()>;
+
     const int dataSize = 4096;
-    void *ptr = NULL;
-    int error = posix_memalign(&ptr, uint8VecAlignment, dataSize);
+    void *ptr = 0;
+    int error = MEMALIGN_ALLOC(&ptr, uint8VecAlignment, dataSize);
     if (error) {
         qFatal("posix_memalign failed: %d", error);
     }
     quint8 *iData = (quint8*)ptr;
-    error = posix_memalign(&ptr, floatVecAlignment, dataSize * sizeof(float));
+    error = MEMALIGN_ALLOC(&ptr, floatVecAlignment, dataSize * sizeof(float));
     if (error) {
         qFatal("posix_memalign failed: %d", error);
     }
     float *fData = (float*)ptr;
 
     QBENCHMARK {
-        for (int i = 0; i < dataSize; i += Vc::float_v::Size) {
+        for (int i = 0; i < dataSize; i += Vc::float_v::size()) {
             // convert uint->int->float, that avoids special sign
             // treating, and gives 2.6 times speedup
-            Vc::float_v b(Vc::int_v(Vc::uint_v(iData + i)));
+            Vc::float_v b(int_v(uint_v(iData + i)));
             b.store(fData + i);
         }
     }
 
-    free(iData);
-    free(fData);
+    MEMALIGN_FREE(iData);
+    MEMALIGN_FREE(fData);
 #endif
 }
 
 void KisCompositionBenchmark::benchmarkFloatUint()
 {
 #ifdef HAVE_VC
+    using uint_v = Vc::SimdArray<unsigned int, Vc::float_v::size()>;
+
     const int dataSize = 4096;
-    void *ptr = NULL;
-    int error = posix_memalign(&ptr, uint32VecAlignment, dataSize * sizeof(quint32));
+    void *ptr = 0;
+    int error = MEMALIGN_ALLOC(&ptr, uint32VecAlignment, dataSize * sizeof(quint32));
     if (error) {
         qFatal("posix_memalign failed: %d", error);
     }
     quint32 *iData = (quint32*)ptr;
-    error = posix_memalign(&ptr, floatVecAlignment, dataSize * sizeof(float));
+    error = MEMALIGN_ALLOC(&ptr, floatVecAlignment, dataSize * sizeof(float));
     if (error) {
         qFatal("posix_memalign failed: %d", error);
     }
     float *fData = (float*)ptr;
 
     QBENCHMARK {
-        for (int i = 0; i < dataSize; i += Vc::float_v::Size) {
+        for (int i = 0; i < dataSize; i += Vc::float_v::size()) {
             // conversion float -> uint
-            Vc::uint_v b(Vc::float_v(fData + i));
+            uint_v b(Vc::float_v(fData + i));
 
             b.store(iData + i);
         }
     }
 
-    free(iData);
-    free(fData);
+    MEMALIGN_FREE(iData);
+    MEMALIGN_FREE(fData);
 #endif
 }
 
 void KisCompositionBenchmark::benchmarkFloatIntUint()
 {
 #ifdef HAVE_VC
+    using int_v = Vc::SimdArray<int, Vc::float_v::size()>;
+    using uint_v = Vc::SimdArray<unsigned int, Vc::float_v::size()>;
+
     const int dataSize = 4096;
-    void *ptr = NULL;
-    int error = posix_memalign(&ptr, uint32VecAlignment, dataSize * sizeof(quint32));
+    void *ptr = 0;
+    int error = MEMALIGN_ALLOC(&ptr, uint32VecAlignment, dataSize * sizeof(quint32));
     if (error) {
         qFatal("posix_memalign failed: %d", error);
     }
     quint32 *iData = (quint32*)ptr;
-    error = posix_memalign(&ptr, floatVecAlignment, dataSize * sizeof(float));
+    error = MEMALIGN_ALLOC(&ptr, floatVecAlignment, dataSize * sizeof(float));
     if (error) {
         qFatal("posix_memalign failed: %d", error);
     }
     float *fData = (float*)ptr;
 
     QBENCHMARK {
-        for (int i = 0; i < dataSize; i += Vc::float_v::Size) {
+        for (int i = 0; i < dataSize; i += Vc::float_v::size()) {
             // conversion float -> int -> uint
-            Vc::uint_v b(Vc::int_v(Vc::float_v(fData + i)));
+            uint_v b(int_v(Vc::float_v(fData + i)));
 
             b.store(iData + i);
         }
     }
 
-    free(iData);
-    free(fData);
+    MEMALIGN_FREE(iData);
+    MEMALIGN_FREE(fData);
 #endif
 }
 

@@ -20,7 +20,7 @@
 
 #include "KoJsonTrader.h"
 
-#include <QDebug>
+#include "KritaPluginDebug.h"
 
 #include <QCoreApplication>
 #include <QPluginLoader>
@@ -45,7 +45,7 @@ KoJsonTrader::KoJsonTrader()
         QDir appDir(qApp->applicationDirPath());
         appDir.cdUp();
 #ifdef Q_OS_MAC
-        // Help Krita run without deplo
+        // Help Krita run without deployment
         QDir d(appDir);
         d.cd("../../../");
         searchDirs << d;
@@ -59,7 +59,11 @@ KoJsonTrader::KoJsonTrader()
             Q_FOREACH (QString entry, dir.entryList()) {
                 QFileInfo info(dir, entry);
 #ifdef Q_OS_MAC
-                if (info.isDir() && (info.fileName().contains("lib") || info.fileName().contains("PlugIns"))) {
+                if (info.isDir() && info.fileName().contains("PlugIns")) {
+                    m_pluginPath = info.absoluteFilePath();
+                    break;
+                }
+                else if (info.isDir() && (info.fileName().contains("lib"))) {
 #else
                 if (info.isDir() && info.fileName().contains("lib")) {
 #endif
@@ -72,7 +76,7 @@ KoJsonTrader::KoJsonTrader()
                     }
 
                     // on debian at least the actual libdir is a subdir named like "lib/x86_64-linux-gnu"
-                    // so search there for the calligra subdir which will contain our plugins
+                    // so search there for the Krita subdir which will contain our plugins
                     Q_FOREACH (QString subEntry, libDir.entryList()) {
                         QFileInfo subInfo(libDir, subEntry);
                         if (subInfo.isDir()) {
@@ -110,14 +114,15 @@ QList<QPluginLoader *> KoJsonTrader::query(const QString &servicetype, const QSt
     QDirIterator dirIter(m_pluginPath, QDirIterator::Subdirectories);
     while (dirIter.hasNext()) {
         dirIter.next();
-        if (dirIter.fileInfo().isFile()) {
-            //qDebug() << dirIter.fileName();
+        if (dirIter.fileInfo().isFile() && dirIter.fileName().startsWith("krita")) {
+            debugPlugin << dirIter.fileName();
             QPluginLoader *loader = new QPluginLoader(dirIter.filePath());
             QJsonObject json = loader->metaData().value("MetaData").toObject();
 
-            //qDebug() << mimetype << json << json.value("X-KDE-ServiceTypes");
+            debugPlugin << mimetype << json << json.value("X-KDE-ServiceTypes");
 
             if (json.isEmpty()) {
+                delete loader;
                 qWarning() << dirIter.filePath() << "has no json!";
             }
             else {
@@ -126,7 +131,7 @@ QList<QPluginLoader *> KoJsonTrader::query(const QString &servicetype, const QSt
                     qWarning() << dirIter.fileName() << "has no X-KDE-ServiceTypes";
                 }
                 if (!serviceTypes.contains(QJsonValue(servicetype))) {
-
+                    delete loader;
                     continue;
                 }
 
@@ -136,6 +141,7 @@ QList<QPluginLoader *> KoJsonTrader::query(const QString &servicetype, const QSt
                     mimeTypes += json.value("X-KDE-NativeMimeType").toString();
                     if (! mimeTypes.contains(mimetype)) {
                         qWarning() << dirIter.filePath() << "doesn't contain mimetype" << mimetype << "in" << mimeTypes;
+                        delete loader;
                         continue;
                     }
                 }
@@ -145,20 +151,4 @@ QList<QPluginLoader *> KoJsonTrader::query(const QString &servicetype, const QSt
 
     }
     return list;
-}
-
-QStringList KoJsonTrader::mimeTypes(const QString &extension) const
-{
-    QStringList mimeTypes;
-    QList<QPluginLoader *>list = query("Krita/FileFilter", "");
-    Q_FOREACH(QPluginLoader *loader, list) {
-        QJsonObject json = loader->metaData().value("MetaData").toObject();
-        QStringList extensions = json.value("X-KDE-Extensions").toString().split(",");
-        if (extensions.contains(extension)) {
-            mimeTypes += json.value("X-KDE-ExtraNativeMimeTypes").toString().split(',');
-            mimeTypes += json.value("MimeType").toString().split(';');
-            mimeTypes += json.value("X-KDE-NativeMimeType").toString();
-        }
-    }
-    return mimeTypes;
 }

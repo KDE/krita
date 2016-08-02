@@ -88,7 +88,7 @@ public:
     /**
      * Makes a copy of this brush.
      */
-    virtual KisGbrBrush* clone() const;
+    virtual KisBrush* clone() const;
 
     /**
      * @return default file extension for saving the brush

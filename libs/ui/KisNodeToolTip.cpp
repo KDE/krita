@@ -68,5 +68,3 @@ QTextDocument *KisNodeToolTip::createDocument(const QModelIndex &index)
 
     return doc;
 }
-
-#include <KisNodeToolTip.moc>

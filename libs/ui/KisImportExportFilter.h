@@ -24,10 +24,13 @@ Boston, MA 02110-1301, USA.
 #include <QObject>
 #include <QMap>
 #include <QPointer>
+#include <QString>
 
 #include "kritaui_export.h"
+
 class KisFilterChain;
 class KoUpdater;
+class KisDocument;
 
 /**
  * @brief The base class for import and export filters.
@@ -72,6 +75,7 @@ public:
                             UnexpectedOpcode, UserCancelled, OutOfMemory,
                             PasswordProtected, InvalidFormat, FilterEntryNull,
                             NoDocumentCreated, DownloadFailed, FilterCreationError,
+                            ProgressCancelled,
                             JustInCaseSomeBrokenCompilerUsesLessThanAByte = 255
                           };
 
@@ -96,6 +100,11 @@ public:
      */
     void setUpdater(const QPointer<KoUpdater>& updater);
 
+    /**
+     * Get the text version of the status value
+     */
+    static QString conversionStatusString(ConversionStatus status);
+
 Q_SIGNALS:
     /**
      * Emit this signal with a value in the range of 1...100 to have some
@@ -112,6 +121,13 @@ protected:
      */
     KisImportExportFilter(QObject *parent = 0);
 
+    KisDocument *inputDocument() const;
+    KisDocument *outputDocument() const;
+    QString inputFile() const;
+    QString outputFile() const;
+    bool getBatchMode() const;
+
+private:
     /**
      * Use this pointer to access all information about input/output
      * during the conversion. @em Don't use it in the constructor -

@@ -148,6 +148,23 @@ public:
         }
     }
 
+    bool tryGetValue(T &result) const {
+        KisCacheStateValue::SeqValue seqValue;
+        bool isValid = false;
+        T newValue;
+
+        if (m_state.startRead(&seqValue)) {
+            newValue = m_value;
+            isValid = m_state.endRead(seqValue);
+        }
+
+        if (isValid) {
+            result = newValue;
+        }
+
+        return isValid;
+    }
+
 protected:
     /**
      * Calculate the value. Used by the cache

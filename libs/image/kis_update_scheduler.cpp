@@ -64,8 +64,6 @@ struct Q_DECL_HIDDEN KisUpdateScheduler::Private {
     QAtomicInt updatesLockCounter;
     QReadWriteLock updatesStartLock;
     KisLazyWaitCondition updatesFinishedCondition;
-
-    void unlockImpl(bool resetLodLevels);
 };
 
 KisUpdateScheduler::KisUpdateScheduler(KisProjectionUpdateListener *projectionUpdateListener)
@@ -83,6 +81,7 @@ KisUpdateScheduler::KisUpdateScheduler()
 KisUpdateScheduler::~KisUpdateScheduler()
 {
     delete m_d->progressUpdater;
+    delete m_d;
 }
 
 void KisUpdateScheduler::connectSignals()
@@ -167,7 +166,7 @@ void KisUpdateScheduler::fullRefresh(KisNodeSP root, const QRect& rc, const QRec
     m_d->updaterContext.waitForDone();
 
     m_d->updaterContext.unlock();
-    if(needLock) unlock();
+    if(needLock) unlock(true);
 }
 
 void KisUpdateScheduler::addSpontaneousJob(KisSpontaneousJob *spontaneousJob)
@@ -251,17 +250,17 @@ int KisUpdateScheduler::currentLevelOfDetail() const
     return levelOfDetail;
 }
 
-void KisUpdateScheduler::setLod0ToNStrokeStrategyFactory(const KisStrokeStrategyFactory &factory)
+void KisUpdateScheduler::setLod0ToNStrokeStrategyFactory(const KisLodSyncStrokeStrategyFactory &factory)
 {
     m_d->strokesQueue.setLod0ToNStrokeStrategyFactory(factory);
 }
 
-void KisUpdateScheduler::setSuspendUpdatesStrokeStrategyFactory(const KisStrokeStrategyFactory &factory)
+void KisUpdateScheduler::setSuspendUpdatesStrokeStrategyFactory(const KisSuspendResumeStrategyFactory &factory)
 {
     m_d->strokesQueue.setSuspendUpdatesStrokeStrategyFactory(factory);
 }
 
-void KisUpdateScheduler::setResumeUpdatesStrokeStrategyFactory(const KisStrokeStrategyFactory &factory)
+void KisUpdateScheduler::setResumeUpdatesStrokeStrategyFactory(const KisSuspendResumeStrategyFactory &factory)
 {
     m_d->strokesQueue.setResumeUpdatesStrokeStrategyFactory(factory);
 }
@@ -280,23 +279,18 @@ void KisUpdateScheduler::lock()
     m_d->updaterContext.waitForDone();
 }
 
-void KisUpdateScheduler::Private::unlockImpl(bool resetLodLevels)
+void KisUpdateScheduler::unlock(bool resetLodLevels)
 {
     if (resetLodLevels) {
         /**
          * Legacy strokes may have changed the image while we didn't
          * control it. Notify the queue to take it into account.
          */
-        this->strokesQueue.notifyUFOChangedImage();
+        m_d->strokesQueue.notifyUFOChangedImage();
     }
 
-    this->processingBlocked = false;
-    q->processQueues();
-}
-
-void KisUpdateScheduler::unlock()
-{
-    m_d->unlockImpl(true);
+    m_d->processingBlocked = false;
+    processQueues();
 }
 
 bool KisUpdateScheduler::isIdle()
@@ -305,7 +299,7 @@ bool KisUpdateScheduler::isIdle()
 
     if (tryBarrierLock()) {
         result = true;
-        m_d->unlockImpl(false);
+        unlock(false);
     }
 
     return result;

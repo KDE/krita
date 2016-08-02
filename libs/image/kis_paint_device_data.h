@@ -198,6 +198,16 @@ public:
             m_cache.setupCache();
         } else {
             m_dataManager->clear();
+            const quint8 *srcDefPixel = srcData->dataManager()->defaultPixel();
+
+            const int cmp =
+                memcmp(srcDefPixel,
+                       m_dataManager->defaultPixel(),
+                       m_dataManager->pixelSize());
+
+            if (cmp != 0) {
+                m_dataManager->setDefaultPixel(srcDefPixel);
+            }
         }
 
         m_levelOfDetail = srcData->levelOfDetail();

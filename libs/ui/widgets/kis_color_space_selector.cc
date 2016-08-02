@@ -1,4 +1,4 @@
-    /*
+/*
  *  Copyright (C) 2007 Cyrille Berger <cberger@cberger.net>
  *  Copyright (C) 2011 Boudewijn Rempt <boud@valdyas.org>
  *  Copyright (C) 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
@@ -163,6 +163,10 @@ void KisColorSpaceSelector::setCurrentColorSpace(const KoColorSpace* colorSpace)
   setCurrentProfile(colorSpace->profile()->name());
 }
 
+void KisColorSpaceSelector::showColorBrowserButton(bool showButton) {
+ d->colorSpaceSelector->bnAdvanced->setVisible(showButton);
+}
+
 void KisColorSpaceSelector::colorSpaceChanged()
 {
     bool valid = d->colorSpaceSelector->cmbProfile->count() != 0;
@@ -177,11 +181,11 @@ void KisColorSpaceSelector::colorSpaceChanged()
 void KisColorSpaceSelector::installProfile()
 {
     QStringList mime;
-    mime << "*.icm" <<  "*.icc";
     KoFileDialog dialog(this, KoFileDialog::OpenFiles, "OpenDocumentICC");
     dialog.setCaption(i18n("Install Color Profiles"));
     dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::HomeLocation));
-    dialog.setNameFilters(mime);
+    dialog.setMimeTypeFilters(QStringList() << "application/vnd.iccprofile", "application/vnd.iccprofile");
+    
     QStringList profileNames = dialog.filenames();
 
     KoColorSpaceEngine *iccEngine = KoColorSpaceEngineRegistry::instance()->get("icc");

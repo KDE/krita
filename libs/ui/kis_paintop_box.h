@@ -66,7 +66,7 @@ class KisAction;
  * To incorporate the dirty preset functionality and locked settings
  * the following slots are added
  *  void slotReloadPreset();
-    void slotConfigurationItemChanged();
+    void slotGuiChangedCurrentPreset();
     void slotSaveLockedOptionToPreset(KisPropertiesConfiguration* p);
     void slotDropLockedOption(KisPropertiesConfiguration* p);
     void slotDirtyPresetToggled(bool);
@@ -109,6 +109,8 @@ public:
      */
     void newOptionWidgets(const QList<QPointer<QWidget> > & optionWidgetList);
 
+    KisFavoriteResourceManager *favoriteResourcesManager() { return m_favoriteResourceManager; }
+
 public Q_SLOTS:
 
     void slotColorSpaceChanged(const KoColorSpace* colorSpace);
@@ -116,20 +118,14 @@ public Q_SLOTS:
     void slotCanvasResourceChanged(int key, const QVariant& v);
     void resourceSelected(KoResource* resource);
 
-    KisFavoriteResourceManager *favoriteResourcesManager() { return m_favoriteResourceManager; }
-
 private:
-
-    KoID currentPaintop();
 
     void setCurrentPaintop(const KoID& paintop, KisPaintOpPresetSP preset = 0);
     void setCurrentPaintopAndReload(const KoID& paintop, KisPaintOpPresetSP preset);
 
-    QPixmap paintopPixmap(const KoID& paintop);
-    KoID defaultPaintOp();
     KisPaintOpPresetSP defaultPreset(const KoID& paintOp);
     KisPaintOpPresetSP activePreset(const KoID& paintOp);
-    void updateCompositeOp(QString compositeOpID, bool localUpdate = false);
+    void updateCompositeOp(QString compositeOpID);
     void setWidgetState(int flags);
     void setSliderValue(const QString& sliderID, qreal value);
     void sliderChanged(int n);
@@ -156,15 +152,22 @@ private Q_SLOTS:
     void slotUnsetEraseMode();
     void slotToggleAlphaLockMode(bool);
 
-    void toggleHighlightedButton(QToolButton* m_tool);
-
     void slotReloadPreset();
-    void slotConfigurationItemChanged();
+    void slotGuiChangedCurrentPreset();
     void slotSaveLockedOptionToPreset(KisPropertiesConfiguration* p);
     void slotDropLockedOption(KisPropertiesConfiguration* p);
     void slotDirtyPresetToggled(bool);
     void slotEraserBrushSizeToggled(bool);    
     void slotUpdateSelectionIcon();
+
+    void slotLockXMirrorToggle(bool);
+    void slotLockYMirrorToggle(bool);
+    void slotMoveToCenterMirrorX();
+    void slotMoveToCenterMirrorY();
+    void slotHideDecorationMirrorX(bool);
+    void slotHideDecorationMirrorY(bool);
+
+
 
 private:
     KisCanvasResourceProvider*          m_resourceProvider;
@@ -191,12 +194,8 @@ private:
     KisAction*                          m_eraseAction;
     KisAction*                          m_reloadAction;
 
-    QString             m_prevCompositeOpID;
     QString             m_currCompositeOpID;
     KisNodeWSP          m_previousNode;
-
-    qreal normalBrushSize; // when toggling between eraser mode
-    qreal eraserBrushSize;
 
     KisAction* m_hMirrorAction;
     KisAction* m_vMirrorAction;

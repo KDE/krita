@@ -45,6 +45,9 @@ public:
     void setTransformedCage(const QVector<QPointF> &transformedCage);
     void run();
 
+    QRect approxChangeRect(const QRect &rc);
+    QRect approxNeedRect(const QRect &rc, const QRect &fullBounds);
+
     QImage runOnQImage(QPointF *newOffset);
 
 private:

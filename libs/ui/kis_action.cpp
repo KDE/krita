@@ -83,7 +83,10 @@ KisAction *makeKisAction(QString name, QObject *parent)
 void KisAction::setDefaultShortcut(const QKeySequence &shortcut)
 {
     QList<QKeySequence> listifiedShortcut;
-    listifiedShortcut.append(shortcut);
+    // Use the empty list to represent no shortcut
+    if (shortcut != QKeySequence("")) {
+        listifiedShortcut.append(shortcut);
+    }
     setProperty("defaultShortcuts", qVariantFromValue(listifiedShortcut));
 }
 

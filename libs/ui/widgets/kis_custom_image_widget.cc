@@ -29,8 +29,6 @@
 #include <QClipboard>
 #include <QDesktopWidget>
 #include <QFile>
-#include <QGraphicsPixmapItem>
-#include <QGraphicsScene>
 #include <QSpacerItem>
 
 #include <QMessageBox>
@@ -68,6 +66,8 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget* parent, qint32 defWidth, qin
     : WdgNewImage(parent)
 {
     setObjectName("KisCustomImageWidget");
+    m_openPane = qobject_cast<KisOpenPane*>(parent);
+    Q_ASSERT(m_openPane);
 
     txtName->setText(imageName);
     m_widthUnit = KoUnit(KoUnit::Pixel, resolution);
@@ -125,25 +125,32 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget* parent, qint32 defWidth, qin
     connect(QApplication::clipboard(), SIGNAL(dataChanged()), this, SLOT(clipboardDataChanged()));
     connect(QApplication::clipboard(), SIGNAL(selectionChanged()), this, SLOT(clipboardDataChanged()));
     connect(QApplication::clipboard(), SIGNAL(changed(QClipboard::Mode)), this, SLOT(clipboardDataChanged()));
-
-    connect(bnScreenSize, SIGNAL(clicked()), this, SLOT(screenSizeClicked()));
     connect(colorSpaceSelector, SIGNAL(selectionChanged(bool)), createButton, SLOT(setEnabled(bool)));
 
     KisConfig cfg;
     intNumLayers->setValue(cfg.numDefaultLayers());
     cmbColor->setColor(cfg.defaultBackgroundColor());
     setBackgroundOpacity(cfg.defaultBackgroundOpacity());
-    
+
     KisConfig::BackgroundStyle bgStyle = cfg.defaultBackgroundStyle();
-    
+
     if (bgStyle == KisConfig::LAYER) {
       radioBackgroundAsLayer->setChecked(true);
     } else {
       radioBackgroundAsProjection->setChecked(true);
     }
-    
+
     fillPredefined();
     switchPortraitLandscape();
+
+    // this makes the portrait and landscape buttons more
+    // obvious what is selected by changing the higlight color
+    QPalette p = QApplication::palette();
+    QPalette palette_highlight(p );
+    QColor c = p.color(QPalette::Highlight);
+    palette_highlight.setColor(QPalette::Button, c);
+    bnLandscape->setPalette(palette_highlight);
+    bnPortrait->setPalette(palette_highlight);
 }
 
 void KisCustomImageWidget::showEvent(QShowEvent *)
@@ -223,7 +230,7 @@ void KisCustomImageWidget::createImage()
     KisDocument *doc = createNewImage();
     if (doc) {
         doc->setModified(false);
-        emit documentSelected(doc);
+        emit m_openPane->documentSelected(doc);
     }
 }
 
@@ -310,28 +317,17 @@ void KisCustomImageWidget::clipboardDataChanged()
 {
 }
 
-void KisCustomImageWidget::screenSizeClicked()
-{
-    QSize sz = QApplication::desktop()->screenGeometry(this).size();
 
-    const int index = KoUnit(KoUnit::Pixel).indexInListForUi(KoUnit::ListAll);
-    cmbWidthUnit->setCurrentIndex(index);
-    cmbHeightUnit->setCurrentIndex(index);
-    widthUnitChanged(cmbWidthUnit->currentIndex());
-    heightUnitChanged(cmbHeightUnit->currentIndex());
-
-    doubleWidth->setValue(sz.width());
-    doubleHeight->setValue(sz.height());
-}
 
 void KisCustomImageWidget::fillPredefined()
 {
     cmbPredefined->clear();
+    qDeleteAll(m_predefined);
     m_predefined.clear();
 
     cmbPredefined->addItem("");
 
-    QStringList definitions = KoResourcePaths::findAllResources("data", "krita/predefined_image_sizes/*.predefinedimage", KoResourcePaths::Recursive | KoResourcePaths::NoDuplicates);
+    QStringList definitions = KoResourcePaths::findAllResources("data", "predefined_image_sizes/*.predefinedimage", KoResourcePaths::Recursive);
     definitions.sort();
 
     if (!definitions.empty()) {
@@ -385,7 +381,7 @@ void KisCustomImageWidget::saveAsPredefined()
     if (fileName.isEmpty()) {
         return;
     }
-    QString saveLocation = KoResourcePaths::saveLocation("data", "krita/predefined_image_sizes/", true);
+    QString saveLocation = KoResourcePaths::saveLocation("data", "predefined_image_sizes/", true);
     QFile f(saveLocation + '/' + fileName.replace(' ', '_').replace('(', '_').replace(')', '_') + ".predefinedimage");
 
     f.open(QIODevice::WriteOnly | QIODevice::Truncate);

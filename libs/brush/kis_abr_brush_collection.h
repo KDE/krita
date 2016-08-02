@@ -50,6 +50,8 @@ public:
     /// Construct brush to load filename later as brush
     KisAbrBrushCollection(const QString& filename);
 
+    KisBrush* clone() const;
+
     virtual ~KisAbrBrushCollection() {}
 
     virtual bool load();
@@ -75,6 +77,7 @@ public:
     }
 
 protected:
+    KisAbrBrushCollection(const KisAbrBrushCollection& rhs);
 
     void toXML(QDomDocument& d, QDomElement& e) const;
 

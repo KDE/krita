@@ -45,16 +45,13 @@ private:
 private:
 };
 
-class KisToolSelectPolygonal : public SelectionActionHandler<__KisToolSelectPolygonalLocal>
+class KisToolSelectPolygonal : public KisToolSelectBase<__KisToolSelectPolygonalLocal>
 {
     Q_OBJECT
-    Q_PROPERTY(int selectionAction READ selectionAction WRITE setSelectionAction NOTIFY selectionActionChanged)
 public:
     KisToolSelectPolygonal(KoCanvasBase* canvas);
-
-    Q_SIGNALS: void selectionActionChanged();
-    public Q_SLOTS:
-    void setSelectionAction(int newSelectionAction);
+public Q_SLOTS:
+    void setSelectionAction(int);
 };
 
 
@@ -63,7 +60,8 @@ class KisToolSelectPolygonalFactory : public KoToolFactoryBase
 {
 public:
     KisToolSelectPolygonalFactory()
-            : KoToolFactoryBase("KisToolSelectPolygonal") {
+        : KoToolFactoryBase("KisToolSelectPolygonal")
+    {
         setToolTip(i18n("Polygonal Selection Tool"));
         setToolType(TOOL_TYPE_SELECTED);
         setIconName(koIconNameCStr("tool_polygonal_selection"));

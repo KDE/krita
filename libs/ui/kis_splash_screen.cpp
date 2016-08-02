@@ -36,17 +36,20 @@
 #include <QIcon>
 
 KisSplashScreen::KisSplashScreen(const QString &version, const QPixmap &pixmap, bool themed, QWidget *parent, Qt::WindowFlags f)
-    : QWidget(parent, Qt::SplashScreen | Qt::FramelessWindowHint | f)
+    : QWidget(parent, Qt::SplashScreen | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint | f),
+      m_themed(themed)
 {
     setupUi(this);
     setWindowIcon(KisIconUtils::loadIcon("calligrakrita"));
 
-    QString color = "#FFFFFF";
-    if (themed && qApp->palette().background().color().value() >100) {
-        color = "#000000";
-    }
+    QString color = colorString();
 
+    // Maintain the aspect ratio on high DPI screens when scaling
+#ifdef Q_OS_MAC
     lblSplash->setPixmap(pixmap);
+#else
+    lblSplash->setPixmap(pixmap.scaled(lblSplash->width(),lblSplash->height(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
+#endif
     bnClose->hide();
     connect(bnClose, SIGNAL(clicked()), this, SLOT(close()));
     chkShowAtStartup->hide();
@@ -62,21 +65,39 @@ KisSplashScreen::KisSplashScreen(const QString &version, const QPixmap &pixmap, 
                            "<body>"
                            "<p align=\"center\"><span style=\" color:%1;\"><b>Links</b></span></p>"
 
-                           "<p><a href=\"https://krita.org/support-us/donations/\"><span style=\" text-decoration: underline; color:%1;\">Support Krita</span></a></p>"
+                           "<p><a href=\"https://krita.org/support-us/\"><span style=\" text-decoration: underline; color:%1;\">Support Krita</span></a></p>"
 
-                           "<p><a href=\"http://krita.org/resources\"><span style=\" text-decoration: underline; color:%1;\">Getting Started</span></a></p>"
-                           "<p><a href=\"http://userbase.kde.org/Krita/Manual\"><span style=\" text-decoration: underline; color:%1;\">Manual</span></a></p>"
-                           "<p><a href=\"http://krita.org\"><span style=\" text-decoration: underline; color:%1;\">Krita Website</span></a></p>"
-                           "<p><a href=\"http://forum.kde.org/viewforum.php?f=136\"><span style=\" text-decoration: underline; color:%1;\">User Community</span></a></p>"
+                           "<p><a href=\"https://docs.krita.org/Category:Getting_Started\"><span style=\" text-decoration: underline; color:%1;\">Getting Started</span></a></p>"
+                           "<p><a href=\"https://docs.krita.org/\"><span style=\" text-decoration: underline; color:%1;\">Manual</span></a></p>"
+                           "<p><a href=\"https://krita.org/\"><span style=\" text-decoration: underline; color:%1;\">Krita Website</span></a></p>"
+                           "<p><a href=\"https://forum.kde.org/viewforum.php?f=136\"><span style=\" text-decoration: underline; color:%1;\">User Community</span></a></p>"
 
-                           "<p><a href=\"https://projects.kde.org/projects/calligra\"><span style=\" text-decoration: underline; color:%1;\">Source Code</span></a></p>"
+                           "<p><a href=\"https://quickgit.kde.org/?p=krita.git\"><span style=\" text-decoration: underline; color:%1;\">Source Code</span></a></p>"
 
-                           "<p><a href=\"http://store.steampowered.com/app/280680/\"><span style=\" text-decoration: underline; color:%1;\">Krita on Steam</span></a></p>"
+                           "<p><a href=\"https://store.steampowered.com/app/280680/\"><span style=\" text-decoration: underline; color:%1;\">Krita on Steam</span></a></p>"
                            "</body>"
                            "</html>", color));
 
     lblVersion->setText(i18n("Version: %1", version));
     lblVersion->setStyleSheet("color:" + color);
+
+    updateText();
+
+    connect(lblRecent, SIGNAL(linkActivated(QString)), SLOT(linkClicked(QString)));
+    connect(&m_timer, SIGNAL(timeout()), SLOT(raise()));
+    m_timer.setSingleShot(true);
+    m_timer.start(10);
+}
+
+void KisSplashScreen::resizeEvent(QResizeEvent *event)
+{
+    QWidget::resizeEvent(event);
+    updateText();
+}
+
+void KisSplashScreen::updateText()
+{
+    QString color = colorString();
 
     KConfigGroup cfg2( KSharedConfig::openConfig(), "RecentFiles");
     int i = 1;
@@ -89,13 +110,18 @@ KisSplashScreen::KisSplashScreen(const QString &version, const QPixmap &pixmap, 
     QString path;
     QStringList recentfiles;
 
+    QFontMetrics metrics(lblRecent->font());
+
     do {
         path = cfg2.readPathEntry(QString("File%1").arg(i), QString());
         if (!path.isEmpty()) {
             QString name = cfg2.readPathEntry(QString("Name%1").arg(i), QString());
             QUrl url(path);
-            if (name.isEmpty())
+            if (name.isEmpty()) {
                 name = url.fileName();
+            }
+
+            name = metrics.elidedText(name, Qt::ElideMiddle, lblRecent->width());
 
             if (!url.isLocalFile() || QFile::exists(url.toLocalFile())) {
                 recentfiles.insert(0, QString("<p><a href=\"%1\"><span style=\"color:%3;\">%2</span></a></p>").arg(path).arg(name).arg(color));
@@ -107,9 +133,18 @@ KisSplashScreen::KisSplashScreen(const QString &version, const QPixmap &pixmap, 
 
     recent += recentfiles.join("\n");
     recent += "</body>"
-            "</html>";
+        "</html>";
     lblRecent->setText(recent);
-    connect(lblRecent, SIGNAL(linkActivated(QString)), SLOT(linkClicked(QString)));
+}
+
+QString KisSplashScreen::colorString() const
+{
+    QString color = "#FFFFFF";
+    if (m_themed && qApp->palette().background().color().value() > 100) {
+        color = "#000000";
+    }
+
+    return color;
 }
 
 
@@ -127,7 +162,9 @@ void KisSplashScreen::show()
     if (isVisible()) {
         repaint();
     }
-
+    m_timer.setSingleShot(true);
+    m_timer.start(1);
+    QWidget::show();
 }
 
 void KisSplashScreen::toggleShowAtStartup(bool toggle)

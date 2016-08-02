@@ -5,7 +5,7 @@ set(XCFTOOLS_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/xcftools")
 include_directories( ${XCFTOOLS_SOURCE_DIR})
 
 if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
-    add_definitions(-Wno-undef -Wno-missing-format-attribute -Wno-sign-compare)
+    list(APPEND COMPILE_FLAGS -Wno-undef -Wno-missing-format-attribute -Wno-sign-compare)
 endif ()
 
 set(kritaxcfimport_SOURCES
@@ -29,5 +29,5 @@ if (WIN32)
     target_link_libraries(kritaxcfimport kritaui ${WIN32_PLATFORM_NET_LIBS})
 endif ()
 
-install(TARGETS kritaxcfimport  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS kritaxcfimport  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 install( PROGRAMS  krita_xcf.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})

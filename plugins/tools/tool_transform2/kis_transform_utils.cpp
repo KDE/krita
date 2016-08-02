@@ -63,11 +63,11 @@ qreal KisTransformUtils::effectiveSize(const QRectF &rc) {
     return 0.5 * (rc.width(), rc.height());
 }
 
-QRectF KisTransformUtils::handleRect(qreal radius, const QTransform &t, const QRectF &limitingRect, qreal *dOut) {
+QRectF handleRectImpl(qreal radius, const QTransform &t, const QRectF &limitingRect, const QPointF &basePoint, qreal *dOut) {
     qreal handlesExtraScale =
-        scaleFromPerspectiveMatrix(t, limitingRect.center());
+        KisTransformUtils::scaleFromPerspectiveMatrix(t, basePoint);
 
-    const qreal maxD = 0.2 * effectiveSize(limitingRect);
+    const qreal maxD = 0.2 * KisTransformUtils::effectiveSize(limitingRect);
     const qreal d = qMin(maxD, radius / handlesExtraScale);
 
     QRectF handleRect(-0.5 * d, -0.5 * d, d, d);
@@ -77,6 +77,15 @@ QRectF KisTransformUtils::handleRect(qreal radius, const QTransform &t, const QR
     }
 
     return handleRect;
+
+}
+
+QRectF KisTransformUtils::handleRect(qreal radius, const QTransform &t, const QRectF &limitingRect, qreal *dOut) {
+    return handleRectImpl(radius, t, limitingRect, limitingRect.center(), dOut);
+}
+
+QRectF KisTransformUtils::handleRect(qreal radius, const QTransform &t, const QRectF &limitingRect, const QPointF &basePoint) {
+    return handleRectImpl(radius, t, limitingRect, basePoint, 0);
 }
 
 QPointF KisTransformUtils::clipInRect(QPointF p, QRectF r)
@@ -280,4 +289,70 @@ void KisTransformUtils::transformDevice(const ToolTransformArgs &config,
             perspectiveWorker.run();
         }
     }
+}
+
+QRect KisTransformUtils::needRect(const ToolTransformArgs &config,
+                                  const QRect &rc,
+                                  const QRect &srcBounds)
+{
+    QRect result = rc;
+
+    if (config.mode() == ToolTransformArgs::WARP) {
+        KisWarpTransformWorker worker(config.warpType(),
+                                      0,
+                                      config.origPoints(),
+                                      config.transfPoints(),
+                                      config.alpha(),
+                                      0);
+
+        result = worker.approxNeedRect(rc, srcBounds);
+
+    } else if (config.mode() == ToolTransformArgs::CAGE) {
+        KisCageTransformWorker worker(0,
+                                      config.origPoints(),
+                                      0,
+                                      8);
+        worker.setTransformedCage(config.transfPoints());
+        result = worker.approxNeedRect(rc, srcBounds);
+    } else if (config.mode() == ToolTransformArgs::LIQUIFY) {
+        result = config.liquifyWorker() ?
+            config.liquifyWorker()->approxNeedRect(rc, srcBounds) : rc;
+    } else {
+        KIS_ASSERT_RECOVER_NOOP(0 && "this works for non-affine transformations only!");
+    }
+
+    return result;
+}
+
+QRect KisTransformUtils::changeRect(const ToolTransformArgs &config,
+                                    const QRect &rc)
+{
+    QRect result = rc;
+
+    if (config.mode() == ToolTransformArgs::WARP) {
+        KisWarpTransformWorker worker(config.warpType(),
+                                      0,
+                                      config.origPoints(),
+                                      config.transfPoints(),
+                                      config.alpha(),
+                                      0);
+
+        result = worker.approxChangeRect(rc);
+
+    } else if (config.mode() == ToolTransformArgs::CAGE) {
+        KisCageTransformWorker worker(0,
+                                      config.origPoints(),
+                                      0,
+                                      8);
+
+        worker.setTransformedCage(config.transfPoints());
+        result = worker.approxChangeRect(rc);
+    } else if (config.mode() == ToolTransformArgs::LIQUIFY) {
+        result = config.liquifyWorker() ?
+            config.liquifyWorker()->approxChangeRect(rc) : rc;
+    } else {
+        KIS_ASSERT_RECOVER_NOOP(0 && "this works for non-affine transformations only!");
+    }
+
+    return result;
 }

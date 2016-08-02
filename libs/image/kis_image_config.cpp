@@ -21,13 +21,16 @@
 #include <ksharedconfig.h>
 
 #include <KoConfig.h>
+#include <KoColorProfile.h>
+#include <KoColorSpaceRegistry.h>
+#include <KoColorConversionTransformation.h>
 
 #include "kis_debug.h"
 
 #include <QThread>
 #include <QApplication>
 #include <QColor>
-#include <QStandardPaths>
+#include <QDir>
 
 #include "kis_global.h"
 #include <cmath>
@@ -218,7 +221,7 @@ void KisImageConfig::setMemoryPoolLimitPercent(qreal value)
 
 QString KisImageConfig::swapDir(bool requestDefault)
 {
-    QString swap = QStandardPaths::locate(QStandardPaths::TempLocation, "krita", QStandardPaths::LocateDirectory);
+    QString swap = QDir::tempPath();
     return !requestDefault ?
             m_config.readEntry("swaplocation", swap) : swap;
 }
@@ -240,7 +243,7 @@ void KisImageConfig::setNumberOfOnionSkins(int value)
 
 int KisImageConfig::onionSkinTintFactor() const
 {
-    return m_config.readEntry("onionSkinTintFactor", 0);
+    return m_config.readEntry("onionSkinTintFactor", 192);
 }
 
 void KisImageConfig::setOnionSkinTintFactor(int value)
@@ -268,7 +271,8 @@ void KisImageConfig::setOnionSkinOpacity(int offset, int value)
 
 bool KisImageConfig::onionSkinState(int offset) const
 {
-    return m_config.readEntry("onionSkinState_" + QString::number(offset), false);
+    bool enableByDefault = (qAbs(offset) <= 2);
+    return m_config.readEntry("onionSkinState_" + QString::number(offset), enableByDefault);
 }
 
 void KisImageConfig::setOnionSkinState(int offset, bool value)
@@ -310,7 +314,7 @@ void KisImageConfig::setLazyFrameCreationEnabled(bool value)
 
 #if defined Q_OS_LINUX
 #include <sys/sysinfo.h>
-#elif defined Q_OS_FREEBSD
+#elif defined Q_OS_FREEBSD || defined Q_OS_NETBSD || defined Q_OS_OPENBSD
 #include <sys/sysctl.h>
 #elif defined Q_OS_WIN
 #include <windows.h>
@@ -334,12 +338,16 @@ int KisImageConfig::totalRAM()
     if(!error) {
         totalMemory = info.totalram * info.mem_unit / (1UL << 20);
     }
-#elif defined Q_OS_FREEBSD
+#elif defined Q_OS_FREEBSD || defined Q_OS_NETBSD || defined Q_OS_OPENBSD
     u_long physmem;
+#   if defined HW_PHYSMEM64 // NetBSD only
+    int mib[] = {CTL_HW, HW_PHYSMEM64};
+#   else
     int mib[] = {CTL_HW, HW_PHYSMEM};
+#   endif
     size_t len = sizeof(physmem);
 
-    error = sysctl(mib, 2, &physmem, &len, NULL, 0);
+    error = sysctl(mib, 2, &physmem, &len, 0, 0);
     if(!error) {
         totalMemory = physmem >> 20;
     }
@@ -363,7 +371,7 @@ int KisImageConfig::totalRAM()
     size_t len = sizeof(size);
 
     errno = 0;
-    if (sysctl(mib, namelen, &size, &len, NULL, 0) >= 0) {
+    if (sysctl(mib, namelen, &size, &len, 0, 0) >= 0) {
         totalMemory = size >> 20;
         error = 0;
     }
@@ -388,4 +396,39 @@ bool KisImageConfig::showAdditionalOnionSkinsSettings(bool requestDefault) const
 void KisImageConfig::setShowAdditionalOnionSkinsSettings(bool value)
 {
     m_config.writeEntry("showAdditionalOnionSkinsSettings", value);
+}
+
+KisProofingConfiguration *KisImageConfig::defaultProofingconfiguration()
+{
+    KisProofingConfiguration *proofingConfig= new KisProofingConfiguration();
+    proofingConfig->proofingProfile = m_config.readEntry("defaultProofingProfileName", "Chemical proof");
+    proofingConfig->proofingModel = m_config.readEntry("defaultProofingProfileModel", "CMYKA");
+    proofingConfig->proofingDepth = m_config.readEntry("defaultProofingProfileDepth", "U8");
+    proofingConfig->intent = (KoColorConversionTransformation::Intent)m_config.readEntry("defaultProofingProfileIntent", 3);
+    if (m_config.readEntry("defaultProofingBlackpointCompensation", true)) {
+        proofingConfig->conversionFlags  |= KoColorConversionTransformation::ConversionFlag::BlackpointCompensation;
+    } else {
+                proofingConfig->conversionFlags  = proofingConfig->conversionFlags & ~KoColorConversionTransformation::ConversionFlag::BlackpointCompensation;
+    }
+    QColor def;
+    def =  m_config.readEntry("defaultProofingGamutwarning", QColor(Qt::gray));
+    KoColor col(KoColorSpaceRegistry::instance()->rgb8());
+    col.fromQColor(def);
+    col.setOpacity(1.0);
+    proofingConfig->warningColor = col;
+    proofingConfig->adaptationState = (double)m_config.readEntry("defaultProofingAdaptationState", 1.0);
+    return proofingConfig;
+}
+
+void KisImageConfig::setDefaultProofingConfig(const KoColorSpace *proofingSpace, int proofingIntent, bool blackPointCompensation, KoColor warningColor, double adaptationState)
+{
+    m_config.writeEntry("defaultProofingProfileName", proofingSpace->profile()->name());
+    m_config.writeEntry("defaultProofingProfileModel", proofingSpace->colorModelId().id());
+    m_config.writeEntry("defaultProofingProfileDepth", proofingSpace->colorDepthId().id());
+    m_config.writeEntry("defaultProofingProfileIntent", proofingIntent);
+    m_config.writeEntry("defaultProofingBlackpointCompensation", blackPointCompensation);
+    QColor c;
+    warningColor.toQColor(&c);
+    m_config.writeEntry("defaultProofingGamutwarning", c);
+    m_config.writeEntry("defaultProofingAdaptationState",adaptationState);
 }

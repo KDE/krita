@@ -1,7 +1,0 @@
-[Desktop Entry]
-Type=Service
-X-KDE-ServiceTypes=QImageIOPlugins
-X-KDE-ImageFormat=ora
-X-KDE-MimeType=image/openraster
-X-KDE-Read=true
-X-KDE-Write=false

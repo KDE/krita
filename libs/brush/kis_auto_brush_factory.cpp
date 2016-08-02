@@ -24,42 +24,19 @@
 
 #include "kis_auto_brush.h"
 #include "kis_mask_generator.h"
+#include <kis_dom_utils.h>
 
-KisBrushSP KisAutoBrushFactory::getOrCreateBrush(const QDomElement& brushDefinition)
+KisBrushSP KisAutoBrushFactory::getOrCreateBrush(const QDomElement& brushDefinition, bool forceCopy)
 {
+    Q_UNUSED(forceCopy);
+
     KisMaskGenerator* mask = KisMaskGenerator::fromXML(brushDefinition.firstChildElement("MaskGenerator"));
-    bool result;
-    QLocale c(QLocale::German);
-
-    double angle = brushDefinition.attribute("angle", "0.0").toDouble(&result);
-    if (!result) {
-        angle = c.toDouble(brushDefinition.attribute("angle"));
-    }
-
-    double randomness = brushDefinition.attribute("randomness", "0.0").toDouble(&result);
-    if (!result) {
-        randomness = c.toDouble(brushDefinition.attribute("randomness"));
-    }
-
-    qreal density = brushDefinition.attribute("density", "1.0").toDouble(&result);
-    if (!result) {
-        density = c.toDouble(brushDefinition.attribute("density"));
-    }
-
-    double spacing = brushDefinition.attribute("spacing", "1.0").toDouble(&result);
-    if (!result) {
-        spacing = c.toDouble(brushDefinition.attribute("spacing"));
-    }
-
-    bool useAutoSpacing = brushDefinition.attribute("useAutoSpacing", "0").toInt(&result);
-    if (!result) {
-        useAutoSpacing = c.toInt(brushDefinition.attribute("useAutoSpacing"));
-    }
-
-    qreal autoSpacingCoeff = brushDefinition.attribute("autoSpacingCoeff", "1.0").toDouble(&result);
-    if (!result) {
-        autoSpacingCoeff = c.toDouble(brushDefinition.attribute("autoSpacingCoeff"));
-    }
+    double angle = KisDomUtils::toDouble(brushDefinition.attribute("angle", "0.0"));
+    double randomness = KisDomUtils::toDouble(brushDefinition.attribute("randomness", "0.0"));
+    qreal density = KisDomUtils::toDouble(brushDefinition.attribute("density", "1.0"));
+    double spacing = KisDomUtils::toDouble(brushDefinition.attribute("spacing", "1.0"));
+    bool useAutoSpacing = KisDomUtils::toInt(brushDefinition.attribute("useAutoSpacing", "0"));
+    qreal autoSpacingCoeff = KisDomUtils::toDouble(brushDefinition.attribute("autoSpacingCoeff", "1.0"));
 
     KisBrushSP brush = new KisAutoBrush(mask, angle, randomness, density);
     brush->setSpacing(spacing);

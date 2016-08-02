@@ -26,15 +26,15 @@ Q_GLOBAL_STATIC(KisLayerPropertiesIcons, s_instance)
 #include <kis_icon_utils.h>
 
 
-const KoID KisLayerPropertiesIcons::locked("locked", i18n("Locked"));
-const KoID KisLayerPropertiesIcons::visible("visible", i18n("Visible"));
-const KoID KisLayerPropertiesIcons::layerStyle("layer-style", i18n("Layer Style"));
-const KoID KisLayerPropertiesIcons::inheritAlpha("inherit-alpha", i18n("Inherit Alpha"));
-const KoID KisLayerPropertiesIcons::alphaLocked("alpha-locked", i18n("Alpha Locked"));
-const KoID KisLayerPropertiesIcons::onionSkins("onion-skins", i18n("Onion Skins"));
-const KoID KisLayerPropertiesIcons::passThrough("pass-through", i18n("Pass Through"));
-const KoID KisLayerPropertiesIcons::selectionActive("selection-active", i18n("Active"));
-const KoID KisLayerPropertiesIcons::colorLabelIndex("color-label", i18n("Color Label"));
+const KoID KisLayerPropertiesIcons::locked("locked", ki18n("Locked"));
+const KoID KisLayerPropertiesIcons::visible("visible", ki18n("Visible"));
+const KoID KisLayerPropertiesIcons::layerStyle("layer-style", ki18n("Layer Style"));
+const KoID KisLayerPropertiesIcons::inheritAlpha("inherit-alpha", ki18n("Inherit Alpha"));
+const KoID KisLayerPropertiesIcons::alphaLocked("alpha-locked", ki18n("Alpha Locked"));
+const KoID KisLayerPropertiesIcons::onionSkins("onion-skins", ki18n("Onion Skins"));
+const KoID KisLayerPropertiesIcons::passThrough("pass-through", ki18n("Pass Through"));
+const KoID KisLayerPropertiesIcons::selectionActive("selection-active", ki18n("Active"));
+const KoID KisLayerPropertiesIcons::colorLabelIndex("color-label", ki18n("Color Label"));
 
 
 struct IconsPair {

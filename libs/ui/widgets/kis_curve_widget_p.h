@@ -19,6 +19,8 @@
 #ifndef _KIS_CURVE_WIDGET_P_H_
 #define _KIS_CURVE_WIDGET_P_H_
 #include <kis_cubic_curve.h>
+#include <QApplication>
+#include <QPalette>
 
 enum enumState {
     ST_NORMAL,
@@ -202,7 +204,9 @@ void KisCurveWidget::Private::drawGrid(QPainter &p, int wWidth, int wHeight)
      * That is not mandatory but desirable
      */
 
-    p.setPen(QPen(Qt::gray, 1, Qt::SolidLine));
+    QPalette appPalette = QApplication::palette();
+
+    p.setPen(QPen(appPalette.color(QPalette::Background), 1, Qt::SolidLine));
     p.drawLine(div4_round(wWidth), 0, div4_round(wWidth), wHeight);
     p.drawLine(div2_round(wWidth), 0, div2_round(wWidth), wHeight);
     p.drawLine(div4_round(3*wWidth), 0, div4_round(3*wWidth), wHeight);

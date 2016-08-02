@@ -22,7 +22,11 @@
 #ifndef KIS_GRID_DECORATION_H
 #define KIS_GRID_DECORATION_H
 
+#include <QScopedPointer>
 #include <kis_canvas_decoration.h>
+
+class KisGridConfig;
+
 
 class KisGridDecoration : public KisCanvasDecoration
 {
@@ -31,9 +35,14 @@ public:
     KisGridDecoration(KisView* parent);
     virtual ~KisGridDecoration();
 
+    void setGridConfig(const KisGridConfig &config);
+
 protected:
     virtual void drawDecoration(QPainter& gc, const QRectF& updateArea, const KisCoordinatesConverter* converter, KisCanvas2* canvas);
-    
+
+private:
+    struct Private;
+    const QScopedPointer<Private> m_d;
 };
 
 #endif // KIS_GRID_DECORATION_H

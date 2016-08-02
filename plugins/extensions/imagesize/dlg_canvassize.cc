@@ -522,15 +522,17 @@ void DlgCanvasSize::updateYOffsetUIValue(double value)
 
 void DlgCanvasSize::loadAnchorIcons()
 {
-    m_anchorIcons[NORTH_WEST] =  KisIconUtils::loadIcon("arrow_north_west");
-    m_anchorIcons[NORTH] = KisIconUtils::loadIcon("arrow_north");
-    m_anchorIcons[NORTH_EAST] = KisIconUtils::loadIcon("arrow_north_east");
-    m_anchorIcons[EAST] = KisIconUtils::loadIcon("arrow_east");
+
+    m_anchorIcons[NORTH_WEST] =  KisIconUtils::loadIcon("arrow-topleft");
+    m_anchorIcons[NORTH] = KisIconUtils::loadIcon("arrow-up");
+    m_anchorIcons[NORTH_EAST] = KisIconUtils::loadIcon("arrow-topright");
+    m_anchorIcons[EAST] = KisIconUtils::loadIcon("arrow-right");
     m_anchorIcons[CENTER] = KisIconUtils::loadIcon("arrow_center");
-    m_anchorIcons[WEST] = KisIconUtils::loadIcon("arrow_west");
-    m_anchorIcons[SOUTH_WEST] = KisIconUtils::loadIcon("arrow_south_west");
-    m_anchorIcons[SOUTH] = KisIconUtils::loadIcon("arrow_south");
-    m_anchorIcons[SOUTH_EAST] = KisIconUtils::loadIcon("arrow_south_east");
+    m_anchorIcons[WEST] = KisIconUtils::loadIcon("arrow-left");
+    m_anchorIcons[SOUTH_WEST] = KisIconUtils::loadIcon("arrow-downleft");
+    m_anchorIcons[SOUTH] = KisIconUtils::loadIcon("arrow-down");
+    m_anchorIcons[SOUTH_EAST] = KisIconUtils::loadIcon("arrow-downright");
+
 }
 
 void DlgCanvasSize::updateAnchorIcons(int id)

@@ -40,13 +40,13 @@ KisGridOpOption::KisGridOpOption()
     // initialize slider values
     m_options->gridWidthSPBox->setRange(1, 999, 0);
     m_options->gridWidthSPBox->setValue(25);
-    m_options->gridWidthSPBox->setSuffix(" px");
+    m_options->gridWidthSPBox->setSuffix(i18n(" px"));
     m_options->gridWidthSPBox->setExponentRatio(3.0);
 
 
     m_options->gridHeightSPBox->setRange(1, 999, 0);
     m_options->gridHeightSPBox->setValue(25);
-    m_options->gridHeightSPBox->setSuffix(" px");
+    m_options->gridHeightSPBox->setSuffix(i18n(" px"));
     m_options->gridHeightSPBox->setExponentRatio(3.0);
 
     m_options->divisionLevelSPBox->setRange(0, 25, 0);

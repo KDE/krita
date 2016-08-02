@@ -48,6 +48,8 @@
 #include <QTimer>
 #include <FlakeDebug.h>
 
+#include "kis_painting_tweaks.h"
+
 
 void KoShapeManager::Private::updateTree()
 {
@@ -227,7 +229,7 @@ void KoShapeManager::paint(QPainter &painter, const KoViewConverter &converter, 
 
     QList<KoShape*> unsortedShapes;
     if (painter.hasClipping()) {
-        QRectF rect = converter.viewToDocument(painter.clipRegion().boundingRect());
+        QRectF rect = converter.viewToDocument(KisPaintingTweaks::safeClipBoundingRect(painter));
         unsortedShapes = d->tree.intersects(rect);
     } else {
         unsortedShapes = shapes();

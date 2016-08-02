@@ -35,6 +35,7 @@
 
 #include <kis_types.h>
 #include <kis_image.h>
+#include "kis_signal_compressor_with_param.h"
 #include <brushengine/kis_paintop_settings.h>
 
 #include <resources/KoPattern.h>
@@ -158,6 +159,8 @@ private Q_SLOTS:
 
     void activatePickColorDelayed();
 
+    void slotColorPickingFinished(const KoColor &color);
+
 protected Q_SLOTS:
     void updateTabletPressureSamples();
 
@@ -187,6 +190,21 @@ private:
     int colorPreviewResourceId(AlternateAction action);
     QRectF colorPreviewDocRect(const QPointF &outlineDocPoint);
 
+    bool isPickingAction(AlternateAction action);
+
+
+    struct PickingJob {
+        PickingJob() {}
+        PickingJob(QPointF _documentPixel,
+                   AlternateAction _action)
+            : documentPixel(_documentPixel),
+              action(_action) {}
+
+        QPointF documentPixel;
+        AlternateAction action;
+    };
+    void addPickerJob(const PickingJob &pickingJob);
+
 private:
 
     bool m_specialHoverModifier;
@@ -204,6 +222,11 @@ private:
 
     bool m_isOutlineEnabled;
     std::vector<int> m_standardBrushSizes;
+
+    KisStrokeId m_pickerStrokeId;
+    int m_pickingResource;
+    typedef KisSignalCompressorWithParam<PickingJob> PickingCompressor;
+    QScopedPointer<PickingCompressor> m_colorPickingCompressor;
 
 Q_SIGNALS:
     void sigPaintingFinished();

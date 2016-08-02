@@ -20,6 +20,7 @@
 
 #include <limits.h>
 
+#include <QtGlobal>
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QMutex>
@@ -32,6 +33,7 @@
 
 #include <KisDocument.h>
 
+#include <KoColor.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorModelStandardIds.h>
 #include <KoColorProfile.h>
@@ -40,6 +42,7 @@
 
 #include "kis_canvas_resource_provider.h"
 #include "kis_config_notifier.h"
+#include "kis_snap_config.h"
 
 #include <config-ocio.h>
 
@@ -541,6 +544,15 @@ void KisConfig::setShowRulers(bool rulers) const
     m_cfg.writeEntry("showrulers", rulers);
 }
 
+bool KisConfig::rulersTrackMouse(bool defaultValue) const
+{
+    return (defaultValue ? true : m_cfg.readEntry("rulersTrackMouse", true));
+}
+
+void KisConfig::setRulersTrackMouse(bool value) const
+{
+    m_cfg.writeEntry("rulersTrackMouse", value);
+}
 
 qint32 KisConfig::pasteBehaviour(bool defaultValue) const
 {
@@ -570,29 +582,13 @@ void KisConfig::setRenderIntent(qint32 renderIntent) const
 
 bool KisConfig::useOpenGL(bool defaultValue) const
 {
-
-    if (qApp->applicationName() == "krita") {
-        if (defaultValue) {
-#ifdef Q_WS_MAC
-            return false;
-#else
-            return true;
-#endif
-        }
-
-        //dbgKrita << "use opengl" << m_cfg.readEntry("useOpenGL", true) << "success" << m_cfg.readEntry("canvasState", "OPENGL_SUCCESS");
-        QString canvasState = m_cfg.readEntry("canvasState", "OPENGL_SUCCESS");
-#ifdef Q_WS_MAC
-        return (m_cfg.readEntry("useOpenGL", false) && (canvasState == "OPENGL_SUCCESS" || canvasState == "TRY_OPENGL"));
-#else
-        return (m_cfg.readEntry("useOpenGL", true) && (canvasState == "OPENGL_SUCCESS" || canvasState == "TRY_OPENGL"));
-#endif
+    if (defaultValue) {
+        return true;
     }
-    else if (qApp->applicationName() == "kritasketch" || qApp->applicationName() == "kritagemini") {
-        return true; // for sketch and gemini
-    } else {
-        return false;
-    }
+
+    //dbgKrita << "use opengl" << m_cfg.readEntry("useOpenGL", true) << "success" << m_cfg.readEntry("canvasState", "OPENGL_SUCCESS");
+    QString canvasState = m_cfg.readEntry("canvasState", "OPENGL_SUCCESS");
+    return (m_cfg.readEntry("useOpenGL", true) && (canvasState == "OPENGL_SUCCESS" || canvasState == "TRY_OPENGL"));
 }
 
 void KisConfig::setUseOpenGL(bool useOpenGL) const
@@ -623,17 +619,6 @@ void KisConfig::setUseOpenGLTextureBuffer(bool useBuffer)
 int KisConfig::openGLTextureSize(bool defaultValue) const
 {
     return (defaultValue ? 256 : m_cfg.readEntry("textureSize", 256));
-}
-
-
-bool KisConfig::disableDoubleBuffering(bool defaultValue) const
-{
-    return (defaultValue ? true : m_cfg.readEntry("disableDoubleBuffering", true));
-}
-
-void KisConfig::setDisableDoubleBuffering(bool disableDoubleBuffering)
-{
-    m_cfg.writeEntry("disableDoubleBuffering", disableDoubleBuffering);
 }
 
 bool KisConfig::disableVSync(bool defaultValue) const
@@ -678,9 +663,8 @@ void KisConfig::setMaxNumberOfThreads(qint32 maxThreads)
 
 quint32 KisConfig::getGridMainStyle(bool defaultValue) const
 {
-    quint32 v = m_cfg.readEntry("gridmainstyle", 0);
-    if (v > 2)
-        v = 2;
+    int v = m_cfg.readEntry("gridmainstyle", 0);
+    v = qBound(0, v, 2);
     return (defaultValue ? 0 : v);
 }
 
@@ -723,79 +707,56 @@ void KisConfig::setGridSubdivisionColor(const QColor & v) const
     m_cfg.writeEntry("gridsubdivisioncolor", v);
 }
 
-quint32 KisConfig::getGridHSpacing(bool defaultValue) const
+quint32 KisConfig::guidesLineStyle(bool defaultValue) const
 {
-    qint32 v = m_cfg.readEntry("gridhspacing", 10);
-    return (defaultValue ? 10 : (quint32)qMax(1, v));
+    int v = m_cfg.readEntry("guidesLineStyle", 0);
+    v = qBound(0, v, 2);
+    return (defaultValue ? 0 : v);
 }
 
-void KisConfig::setGridHSpacing(quint32 v) const
+void KisConfig::setGuidesLineStyle(quint32 v) const
 {
-    m_cfg.writeEntry("gridhspacing", v);
+    m_cfg.writeEntry("guidesLineStyle", v);
 }
 
-quint32 KisConfig::getGridVSpacing(bool defaultValue) const
+QColor KisConfig::guidesColor(bool defaultValue) const
 {
-    qint32 v = m_cfg.readEntry("gridvspacing", 10);
-    return (defaultValue ? 10 : (quint32)qMax(1, v));
+    QColor col(99, 99, 99);
+    return (defaultValue ? col : m_cfg.readEntry("guidesColor", col));
 }
 
-void KisConfig::setGridVSpacing(quint32 v) const
+void KisConfig::setGuidesColor(const QColor & v) const
 {
-    m_cfg.writeEntry("gridvspacing", v);
+    m_cfg.writeEntry("guidesColor", v);
 }
 
-bool KisConfig::getGridSpacingAspect(bool defaultValue) const
+void KisConfig::loadSnapConfig(KisSnapConfig *config, bool defaultValue) const
 {
-    return (defaultValue ? false : m_cfg.readEntry("gridspacingaspect", false));
+    KisSnapConfig defaultConfig(false);
+
+    if (defaultValue) {
+        *config = defaultConfig;
+        return;
+    }
+
+    config->setOrthogonal(m_cfg.readEntry("globalSnapOrthogonal", defaultConfig.orthogonal()));
+    config->setNode(m_cfg.readEntry("globalSnapNode", defaultConfig.node()));
+    config->setExtension(m_cfg.readEntry("globalSnapExtension", defaultConfig.extension()));
+    config->setIntersection(m_cfg.readEntry("globalSnapIntersection", defaultConfig.intersection()));
+    config->setBoundingBox(m_cfg.readEntry("globalSnapBoundingBox", defaultConfig.boundingBox()));
+    config->setImageBounds(m_cfg.readEntry("globalSnapImageBounds", defaultConfig.imageBounds()));
+    config->setImageCenter(m_cfg.readEntry("globalSnapImageCenter", defaultConfig.imageCenter()));
 }
 
-void KisConfig::setGridSpacingAspect(bool v) const
+void KisConfig::saveSnapConfig(const KisSnapConfig &config)
 {
-    m_cfg.writeEntry("gridspacingaspect", v);
-}
-
-quint32 KisConfig::getGridSubdivisions(bool defaultValue) const
-{
-    qint32 v = m_cfg.readEntry("gridsubsivisons", 2);
-    return (defaultValue ? 2 : (quint32)qMax(1, v));
-}
-
-void KisConfig::setGridSubdivisions(quint32 v) const
-{
-    m_cfg.writeEntry("gridsubsivisons", v);
-}
-
-quint32 KisConfig::getGridOffsetX(bool defaultValue) const
-{
-    qint32 v = m_cfg.readEntry("gridoffsetx", 0);
-    return (defaultValue ? 0 : (quint32)qMax(0, v));
-}
-
-void KisConfig::setGridOffsetX(quint32 v) const
-{
-    m_cfg.writeEntry("gridoffsetx", v);
-}
-
-quint32 KisConfig::getGridOffsetY(bool defaultValue) const
-{
-    qint32 v = m_cfg.readEntry("gridoffsety", 0);
-    return (defaultValue ? 0 : (quint32)qMax(0, v));
-}
-
-void KisConfig::setGridOffsetY(quint32 v) const
-{
-    m_cfg.writeEntry("gridoffsety", v);
-}
-
-bool KisConfig::getGridOffsetAspect(bool defaultValue) const
-{
-    return (defaultValue ? false : m_cfg.readEntry("gridoffsetaspect", false));
-}
-
-void KisConfig::setGridOffsetAspect(bool v) const
-{
-    m_cfg.writeEntry("gridoffsetaspect", v);
+    m_cfg.writeEntry("globalSnapOrthogonal", config.orthogonal());
+    m_cfg.writeEntry("globalSnapNode", config.node());
+    m_cfg.writeEntry("globalSnapExtension", config.extension());
+    m_cfg.writeEntry("globalSnapIntersection", config.intersection());
+    m_cfg.writeEntry("globalSnapBoundingBox", config.boundingBox());
+    m_cfg.writeEntry("globalSnapImageBounds", config.imageBounds());
+    m_cfg.writeEntry("globalSnapImageCenter", config.imageCenter());
 }
 
 qint32 KisConfig::checkSize(bool defaultValue) const
@@ -1112,6 +1073,16 @@ void KisConfig::setShowDockerTitleBars(const bool value) const
     m_cfg.writeEntry("showDockerTitleBars", value);
 }
 
+bool KisConfig::showStatusBar(bool defaultValue) const
+{
+    return (defaultValue ? true : m_cfg.readEntry("showStatusBar", true));
+}
+
+void KisConfig::setShowStatusBar(const bool value) const
+{
+    m_cfg.writeEntry("showStatusBar", value);
+}
+
 bool KisConfig::hideMenuFullscreen(bool defaultValue) const
 {
     return (defaultValue ? true: m_cfg.readEntry("hideMenuFullScreen", true));
@@ -1199,6 +1170,7 @@ bool KisConfig::useOcio(bool defaultValue) const
 #ifdef HAVE_OCIO
     return (defaultValue ? false : m_cfg.readEntry("Krita/Ocio/UseOcio", false));
 #else
+    Q_UNUSED(defaultValue);
     return false;
 #endif
 }
@@ -1402,7 +1374,7 @@ QColor KisConfig::defaultBackgroundColor(bool defaultValue) const
   return (defaultValue ? QColor(Qt::white) : m_cfg.readEntry("BackgroundColorForNewImage", QColor(Qt::white)));
 }
 
-void KisConfig::setDefaultBackgroundColor(QColor value) 
+void KisConfig::setDefaultBackgroundColor(QColor value)
 {
   m_cfg.writeEntry("BackgroundColorForNewImage", value);
 }
@@ -1537,6 +1509,11 @@ void KisConfig::setTestingAcceptCompressedTabletEvents(bool value)
     m_cfg.writeEntry("testingAcceptCompressedTabletEvents", value);
 }
 
+bool KisConfig::shouldEatDriverShortcuts(bool defaultValue) const
+{
+    return (defaultValue ? false : m_cfg.readEntry("shouldEatDriverShortcuts", false));
+}
+
 bool KisConfig::testingCompressBrushEvents(bool defaultValue) const
 {
     return (defaultValue ? false : m_cfg.readEntry("testingCompressBrushEvents", false));
@@ -1655,6 +1632,16 @@ bool KisConfig::animationDropFrames(bool defaultValue) const
     return (defaultValue ? true : m_cfg.readEntry("animationDropFrames", true));
 }
 
+int KisConfig::scribbingUpdatesDelay(bool defaultValue) const
+{
+    return (defaultValue ? 30 : m_cfg.readEntry("scribbingUpdatesDelay", 30));
+}
+
+void KisConfig::setScribbingUpdatesDelay(int value)
+{
+    m_cfg.writeEntry("scribbingUpdatesDelay", value);
+}
+
 bool KisConfig::switchSelectionCtrlAlt(bool defaultValue) const
 {
     return defaultValue ? false : m_cfg.readEntry("switchSelectionCtrlAlt", false);
@@ -1664,4 +1651,41 @@ void KisConfig::setSwitchSelectionCtrlAlt(bool value)
 {
     m_cfg.writeEntry("switchSelectionCtrlAlt", value);
     KisConfigNotifier::instance()->notifyConfigChanged();
+}
+
+bool KisConfig::convertToImageColorspaceOnImport(bool defaultValue) const
+{
+    return defaultValue ? false : m_cfg.readEntry("ConvertToImageColorSpaceOnImport", false);
+}
+
+void KisConfig::setConvertToImageColorspaceOnImport(bool value)
+{
+    m_cfg.writeEntry("ConvertToImageColorSpaceOnImport", value);
+}
+
+int KisConfig::stabilizerSampleSize(bool defaultValue) const
+{
+#ifdef Q_OS_WIN
+    const int defaultSampleSize = 50;
+#else
+    const int defaultSampleSize = 15;
+#endif
+
+    return defaultValue ?
+        defaultSampleSize : m_cfg.readEntry("stabilizerSampleSize", defaultSampleSize);
+}
+
+void KisConfig::setStabilizerSampleSize(int value)
+{
+    m_cfg.writeEntry("stabilizerSampleSize", value);
+}
+
+QString KisConfig::customFFMpegPath(bool defaultValue) const
+{
+    return defaultValue ? QString() : m_cfg.readEntry("ffmpegExecutablePath", QString());
+}
+
+void KisConfig::setCustomFFMpegPath(const QString &value) const
+{
+    m_cfg.writeEntry("ffmpegExecutablePath", value);
 }

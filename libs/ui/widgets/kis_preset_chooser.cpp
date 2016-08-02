@@ -37,6 +37,7 @@
 #include <KoResourceModel.h>
 #include <KoResourceServerAdapter.h>
 #include <KoResourceItemChooserSync.h>
+#include "KoResourceItemView.h"
 
 #include <brushengine/kis_paintop_settings.h>
 #include <brushengine/kis_paintop_preset.h>
@@ -112,9 +113,15 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
     }
     if (option.state & QStyle::State_Selected) {
         painter->setCompositionMode(QPainter::CompositionMode_HardLight);
-        painter->setOpacity(0.65);
+        painter->setOpacity(1.0);
         painter->fillRect(option.rect, option.palette.highlight());
-    }
+
+        // highlight is not strong enough to pick out preset. draw border around it.
+        painter->setCompositionMode(QPainter::CompositionMode_SourceOver);
+        painter->setPen(QPen(option.palette.highlight(), 4, Qt::SolidLine, Qt::FlatCap, Qt::MiterJoin));
+        QRect selectedBorder = option.rect.adjusted(2 , 2, -2, -2); // constrict the rectangle so it doesn't bleed into other presets
+        painter->drawRect(selectedBorder);
+       }
     painter->restore();
 }
 
@@ -236,6 +243,8 @@ void KisPresetChooser::updateViewSettings()
     } else if (m_mode == STRIP) {
         m_chooser->setSynced(false);
         m_chooser->setRowCount(1);
+        m_chooser->itemView()->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        m_chooser->itemView()->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
         // An offset of 7 keeps the cell exactly square, TODO: use constants, not hardcoded numbers
         m_chooser->setColumnWidth(m_chooser->viewSize().height() - 7);
         m_delegate->setShowText(false);

@@ -201,6 +201,46 @@ void KisConstrainedRect::moveHandle(HandleType handle, const QPoint &offset, con
     emit sigValuesChanged();
 }
 
+QPointF KisConstrainedRect::handleSnapPoint(HandleType handle, const QPointF &cursorPos)
+{
+    QPointF snapPoint = cursorPos;
+
+    switch (handle) {
+    case UpperLeft:
+        snapPoint = m_rect.topLeft();
+        break;
+    case UpperRight:
+        snapPoint = m_rect.topRight() + QPointF(1, 0);
+        break;
+    case Creation:
+        break;
+    case LowerRight:
+        snapPoint = m_rect.bottomRight() + QPointF(1, 1);
+        break;
+    case LowerLeft:
+        snapPoint = m_rect.bottomLeft() + QPointF(0, 1);
+        break;
+    case Upper:
+        snapPoint.ry() = m_rect.y();
+        break;
+    case Right:
+        snapPoint.rx() = m_rect.right() + 1;
+        break;
+    case Lower:
+        snapPoint.ry() = m_rect.bottom() + 1;
+        break;
+    case Left:
+        snapPoint.rx() = m_rect.x();
+        break;
+    case Inside:
+        break;
+    case None: // should never happen
+        break;
+    }
+
+    return snapPoint;
+}
+
 void KisConstrainedRect::normalize()
 {
     setRectInitial(m_rect.normalized());

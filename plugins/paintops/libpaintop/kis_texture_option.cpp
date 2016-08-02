@@ -83,7 +83,7 @@ public:
         QBoxLayout *offsetLayoutX = new QBoxLayout(QBoxLayout::LeftToRight);
         offsetSliderX = new KisSliderSpinBox(this);
         offsetSliderX->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-        offsetSliderX->setSuffix(" px");
+        offsetSliderX->setSuffix(i18n(" px"));
         randomOffsetX = new QCheckBox(i18n("Random Offset"),this);
         offsetLayoutX->addWidget(offsetSliderX,1,0);
         offsetLayoutX->addWidget(randomOffsetX,0,0);
@@ -93,7 +93,7 @@ public:
         QBoxLayout *offsetLayoutY = new QBoxLayout(QBoxLayout::LeftToRight);
         offsetSliderY = new KisSliderSpinBox(this);
         offsetSliderY->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-        offsetSliderY->setSuffix(" px");
+        offsetSliderY->setSuffix(i18n(" px"));
         randomOffsetY = new QCheckBox(i18n("Random Offset"),this);
         offsetLayoutY->addWidget(offsetSliderY,1,0);
         offsetLayoutY->addWidget(randomOffsetY,0,0);
@@ -248,6 +248,8 @@ void KisTextureOption::readOptionSetting(const KisPropertiesConfiguration* setti
     m_optionWidget->scaleSlider->setValue(setting->getDouble("Texture/Pattern/Scale", 1.0));
     m_optionWidget->offsetSliderX->setValue(setting->getInt("Texture/Pattern/OffsetX"));
     m_optionWidget->offsetSliderY->setValue(setting->getInt("Texture/Pattern/OffsetY"));
+    m_optionWidget->randomOffsetX->setChecked(setting->getBool("Texture/Pattern/isRandomOffsetX"));
+    m_optionWidget->randomOffsetY->setChecked(setting->getBool("Texture/Pattern/isRandomOffsetY"));
     m_optionWidget->cmbTexturingMode->setCurrentIndex(setting->getInt("Texture/Pattern/TexturingMode", KisTextureProperties::MULTIPLY));
     m_optionWidget->cmbCutoffPolicy->setCurrentIndex(setting->getInt("Texture/Pattern/CutoffPolicy"));
     m_optionWidget->cutoffSlider->slotModifyBlack(setting->getInt("Texture/Pattern/CutoffLeft", 0));

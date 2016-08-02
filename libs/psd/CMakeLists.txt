@@ -1,5 +1,6 @@
-include_directories(${CMAKE_BINARY_DIR}/libs/psd)  #For kispsd_include.h
-include_directories(${Boost_INCLUDE_DIRS})
+include_directories( ${CMAKE_BINARY_DIR}/libs/psd  #For kispsd_include.h
+                     ${Boost_INCLUDE_DIRS}
+)
 
 set(kritapsd_LIB_SRCS
     psd_utils.cpp
@@ -28,10 +29,8 @@ else (WIN32)
 endif (WIN32)
 
 target_link_libraries(kritapsd LINK_INTERFACE_LIBRARIES kritaglobal ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY})
-
-
 set_target_properties(kritapsd PROPERTIES
-    VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
+    VERSION ${GENERIC_KRITA_LIB_VERSION} SOVERSION ${GENERIC_KRITA_LIB_SOVERSION}
 )
 
 install(TARGETS kritapsd  ${INSTALL_TARGETS_DEFAULT_ARGS})

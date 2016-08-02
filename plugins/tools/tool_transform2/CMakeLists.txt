@@ -1,6 +1,8 @@
-add_subdirectory(tests)
+if (NOT WIN32 AND NOT APPLE)
+    add_subdirectory(tests)
+endif()
 
-include_directories(${Boost_INCLUDE_DIR})
+include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
 
 set(kritatooltransform_SOURCES
     tool_transform.cc
@@ -28,6 +30,7 @@ qt5_add_resources(kritatooltransform_SOURCES tool_transform.qrc)
 ki18n_wrap_ui(kritatooltransform_SOURCES wdg_tool_transform.ui)
 
 add_library(kritatooltransform MODULE ${kritatooltransform_SOURCES})
+
 generate_export_header(kritatooltransform BASE_NAME kritatooltransform)
 
 if (NOT GSL_FOUND)
@@ -37,7 +40,7 @@ else ()
   target_link_libraries(kritatooltransform kritaui ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES})
 endif ()
 
-install(TARGETS kritatooltransform  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS kritatooltransform  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 
 
 install( FILES

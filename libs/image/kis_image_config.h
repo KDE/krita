@@ -21,6 +21,7 @@
 
 #include <kconfiggroup.h>
 #include "kritaimage_export.h"
+#include "KisProofingConfiguration.h"
 
 
 class KRITAIMAGE_EXPORT KisImageConfig
@@ -100,6 +101,10 @@ public:
 
     bool showAdditionalOnionSkinsSettings(bool requestDefault = false) const;
     void setShowAdditionalOnionSkinsSettings(bool value);
+
+    KisProofingConfiguration *defaultProofingconfiguration();
+    void setDefaultProofingConfig(const KoColorSpace *proofingSpace, int proofingIntent, bool blackPointCompensation, KoColor warningColor, double adaptationState);
+
 
 private:
     Q_DISABLE_COPY(KisImageConfig)

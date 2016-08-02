@@ -40,7 +40,7 @@ KisChalkOpOption::KisChalkOpOption()
     // initialize values
     m_options->radiusSpinBox->setRange(0, 400);
     m_options->radiusSpinBox->setValue(5);
-    m_options->radiusSpinBox->setSuffix(" px");
+    m_options->radiusSpinBox->setSuffix(i18n(" px"));
 
     connect(m_options->radiusSpinBox, SIGNAL(valueChanged(int)), SLOT(emitSettingChanged()));
     connect(m_options->inkDepletionCHBox, SIGNAL(clicked(bool)), SLOT(emitSettingChanged()));

@@ -21,16 +21,14 @@
 
 #include <qglobal.h>
 #include <qmetatype.h>
-#include <QObject>
+#include <QScopedPointer>
 
 #include "kritaimage_export.h"
-#include "kis_keyframe.h"
 
 class KisKeyframeChannel;
 
-class KRITAIMAGE_EXPORT KisKeyframe : public QObject {
-    Q_OBJECT
-
+class KRITAIMAGE_EXPORT KisKeyframe
+{
 public:
     KisKeyframe(KisKeyframeChannel *channel, int time, void *data);
     KisKeyframe(KisKeyframeChannel *channel, int time, quint32 value);

@@ -44,7 +44,7 @@ public:
     QRect changeRect(const QRect &rect, KisNode::PositionToFilthy pos) const;
     QRect accessRect(const QRect &rect, KisNode::PositionToFilthy pos) const;
 
-    void syncLodCache();
+    KisPaintDeviceList getLodCapableDevices() const;
 
 private:
     struct Private;

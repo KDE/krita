@@ -123,7 +123,7 @@ void KisControlFrame::setup(QWidget *parent)
     connect(m_viewManager->resourceProvider(), SIGNAL(sigBGColorChanged(KoColor)), dual, SLOT(setBackgroundColor(KoColor)));
     connect(m_viewManager->resourceProvider(), SIGNAL(sigFGColorChanged(KoColor)), m_gradientWidget, SLOT(update()));
     connect(m_viewManager->resourceProvider(), SIGNAL(sigBGColorChanged(KoColor)), m_gradientWidget, SLOT(update()));
-    dual->setFixedSize(32, 32);
+    dual->setFixedSize(28, 28);
 
     m_paintopBox = new KisPaintopBox(m_viewManager, parent, "paintopbox");
 

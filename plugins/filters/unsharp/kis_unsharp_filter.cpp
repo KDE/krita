@@ -159,8 +159,8 @@ void KisUnsharpFilter::processRaw(KisPaintDeviceSP device,
         dstIt->nextRow();
     }
 
-    delete colors[0];
-    delete colors[1];
+    delete[] colors[0];
+    delete[] colors[1];
 }
 
 void KisUnsharpFilter::processLightnessOnly(KisPaintDeviceSP device,

@@ -1,0 +1,593 @@
+diff -Nru -x '*~' pthreads-w32-2-9-1-release.orig/CMakeLists.txt pthreads-w32-2-9-1-release/CMakeLists.txt
+--- pthreads-w32-2-9-1-release.orig/CMakeLists.txt	1970-01-01 01:00:00.000000000 +0100
++++ pthreads-w32-2-9-1-release/CMakeLists.txt	2013-09-01 13:00:26.055970400 +0200
+@@ -0,0 +1,224 @@
++project(pthreads)
++
++cmake_minimum_required(VERSION 2.8)
++
++option(BUILD_STATIC "build pthreads as a static library" OFF)
++option(BUILD_INLINED "build pthreads as with inlined functions" ON)
++option(BUILD_TESTS "build test executables for pthreads" ON)
++
++if(BUILD_TESTS)
++    enable_testing()
++endif(BUILD_TESTS)
++
++if(MSVC)
++    add_definitions(-D_CRT_SECURE_NO_WARNINGS)
++endif(MSVC)
++
++include(ConfigureChecks.cmake)
++
++set(pthreads_SRCS
++    attr.c
++    barrier.c
++    cancel.c
++    cleanup.c
++    condvar.c
++    create.c
++    dll.c
++    exit.c
++    global.c
++    misc.c
++    mutex.c
++    nonportable.c
++    private.c
++    rwlock.c
++    sched.c
++    semaphore.c
++    spin.c
++    sync.c
++    tsd.c
++)
++
++if(MSVC)
++    add_custom_command(OUTPUT ${CMAKE_BINARY_DIR}/version.rc COMMAND cl /EP ${CMAKE_SOURCE_DIR}/version.rc > ${CMAKE_BINARY_DIR}/version.rc)
++    list(APPEND ${pthreads_SRCS} ${CMAKE_BINARY_DIR}/version.rc)
++endif(MSVC)
++set(pthreads_HDRS
++    sched.h
++    pthread.h
++    semaphore.h
++)
++include_directories(${CMAKE_SOURCE_DIR})
++
++if(BUILD_STATIC)
++    set(_SHARED STATIC)
++    add_definitions(-DPTW32_STATIC_LIB)
++else(BUILD_STATIC)
++    set(_SHARED SHARED)
++endif(BUILD_STATIC)
++
++add_library(pthreads ${_SHARED} ${pthreads_SRCS})
++if(BUILD_INLINED)
++    set_target_properties(pthreads PROPERTIES COMPILE_FLAGS -DPTW32_BUILD_INLINED)
++endif(BUILD_INLINED)
++target_link_libraries(pthreads ws2_32)
++
++###############################################################################
++if(BUILD_TESTS)
++set(pthreads_TESTS
++    loadfree
++    self1
++    mutex5
++    mutex1
++    mutex1n
++    mutex1e
++    mutex1r
++    semaphore1
++    semaphore2
++    semaphore3
++    mutex2
++    mutex3
++    mutex2r
++    mutex2e
++    mutex3r
++    mutex3e
++    condvar1
++    condvar1_1
++    condvar1_2
++    condvar2
++    condvar2_1
++    exit1
++    create1
++    create2
++    reuse1
++    reuse2
++    equal1
++    kill1
++    valid1
++    valid2
++    exit2
++    exit3
++    exit4
++    exit5
++    join0
++    join1
++    detach1
++    join2
++    join3
++    mutex4
++    mutex6
++    mutex6n
++    mutex6e
++    mutex6r
++    mutex6s
++    mutex6es
++    mutex6rs
++    mutex7
++    mutex7n
++    mutex7e
++    mutex7r
++    mutex8
++    mutex8n
++    mutex8e
++    mutex8r
++    count1
++    once1
++    once2
++    once3
++    once4
++    self2
++    cancel1
++    cancel2
++    semaphore4
++    semaphore4t
++#    semaphore5
++    barrier1
++    barrier2
++    barrier3
++    barrier4
++    barrier5
++    tsd1
++    tsd2
++    delay1
++    delay2
++    eyal1
++    condvar3
++    condvar3_1
++    condvar3_2
++    condvar3_3
++    condvar4
++    condvar5
++    condvar6
++    condvar7
++    condvar8
++    condvar9
++    errno1
++    rwlock1
++    rwlock2
++    rwlock3
++    rwlock4
++    rwlock5
++    rwlock6
++    rwlock7
++    rwlock8
++    rwlock2_t
++    rwlock3_t
++    rwlock4_t
++    rwlock5_t
++    rwlock6_t
++    rwlock6_t2
++    context1
++    cancel3
++    cancel4
++    cancel5
++    cancel6a
++    cancel6d
++    cancel7
++    cancel8
++    cleanup0
++    cleanup1
++    cleanup2
++    cleanup3
++    priority1
++    priority2
++    inherit1
++    spin1
++    spin2
++    spin3
++    spin4
++    exception1
++    exception2
++    exception3
++    cancel9
++    create3
++    stress1
++)
++
++foreach(_test ${pthreads_TESTS})
++    add_executable(${_test} tests/${_test}.c)
++    target_link_libraries(${_test} pthreads)
++    add_test(${_test} ${_test})
++endforeach(_test ${pthreads_TESTS})
++
++set(pthreads_ADD_TESTS
++    benchtest1
++    benchtest2
++    benchtest3
++    benchtest4
++    benchtest5
++)
++
++add_library(bench STATIC tests/benchlib.c)
++foreach(_test ${pthreads_ADD_TESTS})
++    add_executable(${_test} tests/${_test}.c)
++    target_link_libraries(${_test} pthreads bench)
++    add_test(${_test} ${_test})
++endforeach(_test ${pthreads_ADD_TESTS})
++
++endif(BUILD_TESTS)
++
++###############################################################################
++install(TARGETS pthreads RUNTIME DESTINATION bin
++                         LIBRARY DESTINATION lib
++                         ARCHIVE DESTINATION lib)
++
++install(FILES ${pthreads_HDRS} DESTINATION include)
+\ Kein Zeilenumbruch am Dateiende.
+diff -Nru -x '*~' pthreads-w32-2-9-1-release.orig/config.h pthreads-w32-2-9-1-release/config.h
+--- pthreads-w32-2-9-1-release.orig/config.h	2011-05-30 02:31:00.000000000 +0200
++++ pthreads-w32-2-9-1-release/config.h	1970-01-01 01:00:00.000000000 +0100
+@@ -1,153 +0,0 @@
+-/* config.h  */
+-
+-#ifndef PTW32_CONFIG_H
+-#define PTW32_CONFIG_H
+-
+-/*********************************************************************
+- * Defaults: see target specific redefinitions below.
+- *********************************************************************/
+-
+-/* We're building the pthreads-win32 library */
+-#define PTW32_BUILD
+-
+-/* Do we know about the C type sigset_t? */
+-#undef HAVE_SIGSET_T
+-
+-/* Define if you have the <signal.h> header file.  */
+-#undef HAVE_SIGNAL_H
+-
+-/* Define if you have the Borland TASM32 or compatible assembler.  */
+-#undef HAVE_TASM32
+-
+-/* Define if you don't have Win32 DuplicateHandle. (eg. WinCE) */
+-#undef NEED_DUPLICATEHANDLE
+-
+-/* Define if you don't have Win32 _beginthreadex. (eg. WinCE) */
+-#undef NEED_CREATETHREAD
+-
+-/* Define if you don't have Win32 errno. (eg. WinCE) */
+-#undef NEED_ERRNO
+-
+-/* Define if you don't have Win32 calloc. (eg. WinCE)  */
+-#undef NEED_CALLOC
+-
+-/* Define if you don't have Win32 ftime. (eg. WinCE)  */
+-#undef NEED_FTIME
+-
+-/* Define if you don't have Win32 semaphores. (eg. WinCE 2.1 or earlier)  */
+-#undef NEED_SEM
+-
+-/* Define if you need to convert string parameters to unicode. (eg. WinCE)  */
+-#undef NEED_UNICODE_CONSTS
+-
+-/* Define if your C (not C++) compiler supports "inline" functions. */
+-#undef HAVE_C_INLINE
+-
+-/* Do we know about type mode_t? */
+-#undef HAVE_MODE_T
+-
+-/* 
+- * Define if GCC has atomic builtins, i.e. __sync_* intrinsics
+- * __sync_lock_* is implemented in mingw32 gcc 4.5.2 at least
+- * so this define does not turn those on or off. If you get an
+- * error from __sync_lock* then consider upgrading your gcc.
+- */
+-#undef HAVE_GCC_ATOMIC_BUILTINS
+-
+-/* Define if you have the timespec struct */
+-#undef HAVE_STRUCT_TIMESPEC
+-
+-/* Define if you don't have the GetProcessAffinityMask() */
+-#undef NEED_PROCESS_AFFINITY_MASK
+-
+-/* Define if your version of Windows TLSGetValue() clears WSALastError
+- * and calling SetLastError() isn't enough restore it. You'll also need to
+- * link against wsock32.lib (or libwsock32.a for MinGW).
+- */
+-#undef RETAIN_WSALASTERROR
+-
+-/*
+-# ----------------------------------------------------------------------
+-# The library can be built with some alternative behaviour to better
+-# facilitate development of applications on Win32 that will be ported
+-# to other POSIX systems.
+-#
+-# Nothing described here will make the library non-compliant and strictly
+-# compliant applications will not be affected in any way, but
+-# applications that make assumptions that POSIX does not guarantee are
+-# not strictly compliant and may fail or misbehave with some settings.
+-#
+-# PTW32_THREAD_ID_REUSE_INCREMENT
+-# Purpose:
+-# POSIX says that applications should assume that thread IDs can be
+-# recycled. However, Solaris (and some other systems) use a [very large]
+-# sequence number as the thread ID, which provides virtual uniqueness.
+-# This provides a very high but finite level of safety for applications
+-# that are not meticulous in tracking thread lifecycles e.g. applications
+-# that call functions which target detached threads without some form of
+-# thread exit synchronisation.
+-#
+-# Usage:
+-# Set to any value in the range: 0 <= value < 2^wordsize.
+-# Set to 0 to emulate reusable thread ID behaviour like Linux or *BSD.
+-# Set to 1 for unique thread IDs like Solaris (this is the default).
+-# Set to some factor of 2^wordsize to emulate smaller word size types
+-# (i.e. will wrap sooner). This might be useful to emulate some embedded
+-# systems.
+-#
+-# define PTW32_THREAD_ID_REUSE_INCREMENT 0
+-#
+-# ----------------------------------------------------------------------
+- */
+-#undef PTW32_THREAD_ID_REUSE_INCREMENT
+-
+-
+-/*********************************************************************
+- * Target specific groups
+- *
+- * If you find that these are incorrect or incomplete please report it
+- * to the pthreads-win32 maintainer. Thanks.
+- *********************************************************************/
+-#if defined(WINCE)
+-#define NEED_DUPLICATEHANDLE
+-#define NEED_CREATETHREAD
+-#define NEED_ERRNO
+-#define NEED_CALLOC
+-#define NEED_FTIME
+-/* #define NEED_SEM */
+-#define NEED_UNICODE_CONSTS
+-#define NEED_PROCESS_AFFINITY_MASK
+-/* This may not be needed */
+-#define RETAIN_WSALASTERROR
+-#endif
+-
+-#if defined(_UWIN)
+-#define HAVE_MODE_T
+-#define HAVE_STRUCT_TIMESPEC
+-#endif
+-
+-#if defined(__GNUC__)
+-#define HAVE_C_INLINE
+-#endif
+-
+-#if defined(__MINGW64__)
+-#define HAVE_MODE_T
+-#define HAVE_STRUCT_TIMESPEC
+-#elif defined(__MINGW32__)
+-#define HAVE_MODE_T
+-#endif
+-
+-#if defined(__BORLANDC__)
+-#endif
+-
+-#if defined(__WATCOMC__)
+-#endif
+-
+-#if defined(__DMC__)
+-#define HAVE_SIGNAL_H
+-#define HAVE_C_INLINE
+-#endif
+-
+-
+-
+-#endif
+diff -Nru -x '*~' pthreads-w32-2-9-1-release.orig/config.h.cmake pthreads-w32-2-9-1-release/config.h.cmake
+--- pthreads-w32-2-9-1-release.orig/config.h.cmake	1970-01-01 01:00:00.000000000 +0100
++++ pthreads-w32-2-9-1-release/config.h.cmake	2013-09-01 13:19:57.134952300 +0200
+@@ -0,0 +1,148 @@
++/* config.h  */
++
++#ifndef PTW32_CONFIG_H
++#define PTW32_CONFIG_H
++
++/*********************************************************************
++ * Defaults: see target specific redefinitions below.
++ *********************************************************************/
++
++/* We're building the pthreads-win32 library */
++#define PTW32_BUILD
++
++/* Do we know about the C type sigset_t? */
++#undef HAVE_SIGSET_T
++
++/* Define if you have the <signal.h> header file.  */
++#undef HAVE_SIGNAL_H
++
++/* Define if you have the Borland TASM32 or compatible assembler.  */
++#undef HAVE_TASM32
++
++/* Define if you don't have Win32 DuplicateHandle. (eg. WinCE) */
++#undef NEED_DUPLICATEHANDLE
++
++/* Define if you don't have Win32 _beginthreadex. (eg. WinCE) */
++#undef NEED_CREATETHREAD
++
++/* Define if you don't have Win32 errno. (eg. WinCE) */
++#undef NEED_ERRNO
++
++/* Define if you don't have Win32 calloc. (eg. WinCE)  */
++#undef NEED_CALLOC
++
++/* Define if you don't have Win32 ftime. (eg. WinCE)  */
++#undef NEED_FTIME
++
++/* Define if you don't have Win32 semaphores. (eg. WinCE 2.1 or earlier)  */
++#undef NEED_SEM
++
++/* Define if you need to convert string parameters to unicode. (eg. WinCE)  */
++#undef NEED_UNICODE_CONSTS
++
++/* Define if your C (not C++) compiler supports "inline" functions. */
++#undef HAVE_C_INLINE
++
++/* Do we know about type mode_t? */
++#undef HAVE_MODE_T
++
++/*
++ * Define if GCC has atomic builtins, i.e. __sync_* intrinsics
++ * __sync_lock_* is implemented in mingw32 gcc 4.5.2 at least
++ * so this define does not turn those on or off. If you get an
++ * error from __sync_lock* then consider upgrading your gcc.
++ */
++#undef HAVE_GCC_ATOMIC_BUILTINS
++
++/* Define if you have the timespec struct */
++#cmakedefine HAVE_STRUCT_TIMESPEC
++
++/* Define if you don't have the GetProcessAffinityMask() */
++#undef NEED_PROCESS_AFFINITY_MASK
++
++/* Define if your version of Windows TLSGetValue() clears WSALastError
++ * and calling SetLastError() isn't enough restore it. You'll also need to
++ * link against wsock32.lib (or libwsock32.a for MinGW).
++ */
++#undef RETAIN_WSALASTERROR
++
++/*
++# ----------------------------------------------------------------------
++# The library can be built with some alternative behaviour to better
++# facilitate development of applications on Win32 that will be ported
++# to other POSIX systems.
++#
++# Nothing described here will make the library non-compliant and strictly
++# compliant applications will not be affected in any way, but
++# applications that make assumptions that POSIX does not guarantee are
++# not strictly compliant and may fail or misbehave with some settings.
++#
++# PTW32_THREAD_ID_REUSE_INCREMENT
++# Purpose:
++# POSIX says that applications should assume that thread IDs can be
++# recycled. However, Solaris (and some other systems) use a [very large]
++# sequence number as the thread ID, which provides virtual uniqueness.
++# This provides a very high but finite level of safety for applications
++# that are not meticulous in tracking thread lifecycles e.g. applications
++# that call functions which target detached threads without some form of
++# thread exit synchronisation.
++#
++# Usage:
++# Set to any value in the range: 0 <= value < 2^wordsize.
++# Set to 0 to emulate reusable thread ID behaviour like Linux or *BSD.
++# Set to 1 for unique thread IDs like Solaris (this is the default).
++# Set to some factor of 2^wordsize to emulate smaller word size types
++# (i.e. will wrap sooner). This might be useful to emulate some embedded
++# systems.
++#
++# define PTW32_THREAD_ID_REUSE_INCREMENT 0
++#
++# ----------------------------------------------------------------------
++ */
++#undef PTW32_THREAD_ID_REUSE_INCREMENT
++
++
++/*********************************************************************
++ * Target specific groups
++ *
++ * If you find that these are incorrect or incomplete please report it
++ * to the pthreads-win32 maintainer. Thanks.
++ *********************************************************************/
++#ifdef WINCE
++#define NEED_DUPLICATEHANDLE
++#define NEED_CREATETHREAD
++#define NEED_ERRNO
++#define NEED_CALLOC
++#define NEED_FTIME
++//#define NEED_SEM
++#define NEED_UNICODE_CONSTS
++#define NEED_PROCESS_AFFINITY_MASK
++#endif
++
++#ifdef _UWIN
++#define HAVE_MODE_T
++#define HAVE_STRUCT_TIMESPEC
++#endif
++
++#ifdef __GNUC__
++#define HAVE_C_INLINE
++#endif
++
++#ifdef __MINGW32__
++#define HAVE_MODE_T
++#endif
++
++#ifdef __BORLANDC__
++#endif
++
++#ifdef __WATCOMC__
++#endif
++
++#ifdef __DMC__
++#define HAVE_SIGNAL_H
++#define HAVE_C_INLINE
++#endif
++
++
++
++#endif
+diff -Nru -x '*~' pthreads-w32-2-9-1-release.orig/ConfigureChecks.cmake pthreads-w32-2-9-1-release/ConfigureChecks.cmake
+--- pthreads-w32-2-9-1-release.orig/ConfigureChecks.cmake	1970-01-01 01:00:00.000000000 +0100
++++ pthreads-w32-2-9-1-release/ConfigureChecks.cmake	2013-09-01 13:39:02.982491000 +0200
+@@ -0,0 +1,16 @@
++# Configure checks for the config.h
++
++include(CheckIncludeFile)
++include(CheckFunctionExists)
++include(CheckSymbolExists)
++INCLUDE (CheckTypeSize)
++
++SET(CMAKE_EXTRA_INCLUDE_FILES time.h)
++CHECK_TYPE_SIZE("struct timespec" STRUCT_TIMESPEC)
++SET(CMAKE_EXTRA_INCLUDE_FILES)
++
++
++add_definitions(-DHAVE_PTW32_CONFIG_H)
++
++configure_file(config.h.cmake ${CMAKE_SOURCE_DIR}/config.h)
++
+diff -Nru -x '*~' pthreads-w32-2-9-1-release.orig/create.c pthreads-w32-2-9-1-release/create.c
+--- pthreads-w32-2-9-1-release.orig/create.c	2012-03-18 06:11:43.000000000 +0100
++++ pthreads-w32-2-9-1-release/create.c	2013-09-01 13:00:26.086972100 +0200
+@@ -94,6 +94,11 @@
+   int priority;
+   pthread_t self;
+ 
++  if(!tid)
++    {
++      result = EINVAL;
++      goto FAIL0;
++    }
+   /*
+    * Before doing anything, check that tid can be stored through
+    * without invoking a memory protection error (segfault).
+diff -Nru -x '*~' pthreads-w32-2-9-1-release.orig/implement.h pthreads-w32-2-9-1-release/implement.h
+--- pthreads-w32-2-9-1-release.orig/implement.h	2012-03-18 06:11:43.000000000 +0100
++++ pthreads-w32-2-9-1-release/implement.h	2013-09-01 13:00:26.098972800 +0200
+@@ -55,6 +55,7 @@
+  * note: ETIMEDOUT is correctly defined in winsock.h
+  */
+ #include <winsock.h>
++#include <errno.h>
+ 
+ /*
+  * In case ETIMEDOUT hasn't been defined above somehow.
+@@ -78,6 +79,8 @@
+ /* use local include files during development */
+ #include "semaphore.h"
+ #include "sched.h"
++#include "pthread.h"
++
+ 
+ #if defined(HAVE_C_INLINE) || defined(__cplusplus)
+ #define INLINE inline

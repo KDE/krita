@@ -30,15 +30,14 @@ struct KisNodeViewColorScheme::Private
     Private() {
         if (colorLabels.isEmpty()) {
             colorLabels << Qt::transparent;
-            colorLabels << QColor(252, 235, 87);
-            colorLabels << QColor(251, 183, 76);
-            colorLabels << QColor(160, 127, 110);
-            colorLabels << QColor(151, 202, 63);
-            colorLabels << QColor(123, 166, 209);
-            colorLabels << QColor(178, 138, 173);
-            colorLabels << QColor(238, 50, 51);
-            colorLabels << QColor(216, 218, 213);
-            colorLabels << QColor(145, 147, 142);
+            colorLabels << QColor(91,173,220);
+            colorLabels << QColor(151,202,63);
+            colorLabels << QColor(247,229,61);
+            colorLabels << QColor(255,170,63);
+            colorLabels << QColor(177,102,63);
+            colorLabels << QColor(238,50,51);
+            colorLabels << QColor(191,106,209);
+            colorLabels << QColor(118,119,114);
         }
     }
 
@@ -138,11 +137,8 @@ int KisNodeViewColorScheme::indentation() const
 {
     return
         2 * thumbnailMargin() + thumbnailSize() +
-        border() +
-        2 * decorationMargin() + decorationSize() +
         border();
 }
-
 
 QRect KisNodeViewColorScheme::relThumbnailRect() const
 {
@@ -154,7 +150,7 @@ QRect KisNodeViewColorScheme::relThumbnailRect() const
 
 QRect KisNodeViewColorScheme::relDecorationRect() const
 {
-    return QRect(-border() - decorationMargin() - decorationSize(),
+    return QRect(border() + decorationMargin(),
                  border() + decorationMargin(),
                  decorationSize(),
                  decorationSize());

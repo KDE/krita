@@ -82,6 +82,7 @@ public:
     bool floating;
     QMap<QAction*,int> contextIconSizes;
     QMenu* contextSize;
+    Qt::Orientation orientation;
 };
 
 void KoToolBox::Private::addSection(Section *section, const QString &name)
@@ -134,7 +135,8 @@ void KoToolBox::addButton(KoToolAction *toolAction)
     int toolbuttonSize = buttonSize(qApp->desktop()->screenNumber(this));
     KConfigGroup cfg =  KSharedConfig::openConfig()->group("KoToolBox");
     int iconSize = cfg.readEntry("iconSize", toolbuttonSize);
-    button->setIconSize(QSize(iconSize, iconSize));
+
+   button->setIconSize(QSize(iconSize, iconSize));
     foreach (Section *section, d->sections.values())  {
         section->setButtonSize(QSize(iconSize + BUTTON_MARGIN, iconSize + BUTTON_MARGIN));
     }
@@ -166,9 +168,11 @@ void KoToolBox::addButton(KoToolAction *toolAction)
 void KoToolBox::setActiveTool(KoCanvasController *canvas, int id)
 {
     Q_UNUSED(canvas);
+
     QAbstractButton *button = d->buttonGroup->button(id);
     if (button) {
         button->setChecked(true);
+        (qobject_cast<KoToolBoxButton*>(button))->setHighlightColor();
     }
     else {
         warnWidgets << "KoToolBox::setActiveTool(" << id << "): no such button found";
@@ -251,14 +255,25 @@ void KoToolBox::paintEvent(QPaintEvent *)
 
 void KoToolBox::resizeEvent(QResizeEvent* event)
 {
+    QRect availableRc = qApp->desktop()->availableGeometry(this);
+    QSize layoutSize = layout()->minimumSize();
+
     QWidget::resizeEvent(event);
-    if (!d->floating) {
-        setMinimumSize(layout()->minimumSize()); // This enforces the minimum size on the widget
+
+    if (layoutSize.height() > availableRc.height()) {
+        setMinimumWidth(layout()->minimumSize().width() * 2); // This enforces the minimum size on the widget
+        adjustToFit();
     }
+    else if (layoutSize.width() > availableRc.width()) {
+        setMinimumHeight(layout()->minimumSize().height() * 2); // This enforces the minimum size on the widget
+        adjustToFit();
+    }
+
 }
 
 void KoToolBox::setOrientation(Qt::Orientation orientation)
 {
+    d->orientation = orientation;
     d->layout->setOrientation(orientation);
     QTimer::singleShot(0, this, SLOT(update()));
     Q_FOREACH (Section* section, d->sections) {
@@ -283,6 +298,7 @@ void KoToolBox::toolAdded(KoToolAction *toolAction, KoCanvasController *canvas)
 void KoToolBox::adjustToFit()
 {
     int newWidth = width() - (width() % layout()->minimumSize().width());
+
     if (newWidth != width() && newWidth >= layout()->minimumSize().width()) {
         setMaximumWidth(newWidth);
         QTimer::singleShot(0, this, SLOT(resizeUnlock()));

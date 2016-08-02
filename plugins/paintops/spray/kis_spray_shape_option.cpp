@@ -21,7 +21,7 @@
 #include <QImage>
 #include <QFile>
 #include <KisImportExportManager.h>
-#include <kis_url_requester.h>
+#include <kis_file_name_requester.h>
 
 #include "ui_wdgsprayshapeoptions.h"
 
@@ -31,7 +31,7 @@ public:
     KisShapeOptionsWidget(QWidget *parent = 0)
         : QWidget(parent) {
         setupUi(this);
-        imageUrl->setMimeTypeFilters(KisImportExportManager::mimeFilter("application/x-krita", KisImportExportManager::Import));
+        imageUrl->setMimeTypeFilters(KisImportExportManager::mimeFilter(KisImportExportManager::Import));
     }
 
 };
@@ -54,11 +54,11 @@ KisSprayShapeOption::KisSprayShapeOption()
     //initializer slider values
     m_options->widthSpin->setRange(1, 1000, 0);
     m_options->widthSpin->setValue(6);
-    m_options->widthSpin->setSuffix(" px");
+    m_options->widthSpin->setSuffix(i18n(" px"));
 
     m_options->heightSpin->setRange(1, 1000, 0);
     m_options->heightSpin->setValue(6);
-    m_options->heightSpin->setSuffix(" px");
+    m_options->heightSpin->setSuffix(i18n(" px"));
 
 
     // UI signals
@@ -107,7 +107,7 @@ void KisSprayShapeOption::writeOptionSetting(KisPropertiesConfiguration* setting
     setting->setProperty(SPRAYSHAPE_PROPORTIONAL, m_options->proportionalBox->isChecked());
     setting->setProperty(SPRAYSHAPE_WIDTH, m_options->widthSpin->value());
     setting->setProperty(SPRAYSHAPE_HEIGHT, m_options->heightSpin->value());
-    setting->setProperty(SPRAYSHAPE_IMAGE_URL, m_options->imageUrl->url().toLocalFile());
+    setting->setProperty(SPRAYSHAPE_IMAGE_URL, m_options->imageUrl->fileName());
 }
 
 
@@ -120,13 +120,13 @@ void KisSprayShapeOption::readOptionSetting(const KisPropertiesConfiguration* se
     m_options->aspectButton->setKeepAspectRatio(setting->getBool(SPRAYSHAPE_USE_ASPECT, false));
     m_options->widthSpin->setValue(setting->getInt(SPRAYSHAPE_WIDTH));
     m_options->heightSpin->setValue(setting->getInt(SPRAYSHAPE_HEIGHT));
-    m_options->imageUrl->setUrl(QUrl::fromUserInput(setting->getString(SPRAYSHAPE_IMAGE_URL)));
+    m_options->imageUrl->setFileName(setting->getString(SPRAYSHAPE_IMAGE_URL));
 }
 
 
 void KisSprayShapeOption::prepareImage()
 {
-    QString path = m_options->imageUrl->url().toLocalFile();
+    QString path = m_options->imageUrl->fileName();
     if (QFile::exists(path)) {
         QImage image(path);
         if (!image.isNull()) {
@@ -189,9 +189,9 @@ void KisSprayShapeOption::changeSizeUI(bool proportionalSize)
     // if proportionalSize is false, pixel size is used
     if (!proportionalSize) {
         m_options->widthSpin->setMaximum(m_maxSize);
-        m_options->widthSpin->setSuffix(" px");
+        m_options->widthSpin->setSuffix(i18n(" px"));
         m_options->heightSpin->setMaximum(m_maxSize);
-        m_options->heightSpin->setSuffix(" px");
+        m_options->heightSpin->setSuffix(i18n(" px"));
     }
     else {
         m_options->widthSpin->setMaximum(100);

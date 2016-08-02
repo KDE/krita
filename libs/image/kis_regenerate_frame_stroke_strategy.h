@@ -57,12 +57,15 @@ public:
     ~KisRegenerateFrameStrokeStrategy();
 
     void initStrokeCallback();
+    void doStrokeCallback(KisStrokeJobData *data);
     void finishStrokeCallback();
     void cancelStrokeCallback();
 
     KisStrokeStrategy* createLodClone(int levelOfDetail);
     void suspendStrokeCallback();
     void resumeStrokeCallback();
+
+    static QList<KisStrokeJobData*> createJobsData(KisImageWSP image);
 
 private:
     struct Private;

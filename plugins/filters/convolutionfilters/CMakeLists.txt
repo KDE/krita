@@ -3,4 +3,4 @@ set(kritaconvolutionfilters_SOURCES
    kis_convolution_filter.cpp )
 add_library(kritaconvolutionfilters MODULE ${kritaconvolutionfilters_SOURCES})
 target_link_libraries(kritaconvolutionfilters kritaui)
-install(TARGETS kritaconvolutionfilters  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS kritaconvolutionfilters  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})

@@ -20,7 +20,7 @@
 
 #include "kis_types.h"
 #include "ui_wdghistogram.h"
-
+#include "KoHistogramProducer.h"
 
 class WdgHistogram : public QWidget, public Ui::WdgHistogram
 {
@@ -47,17 +47,45 @@ public:
 
     void setPaintDevice(KisPaintDeviceSP dev, const QRect &bounds);
 
+    /** Sets the currently displayed channels to channels of the producer with producerID as ID*/
+    void setCurrentChannels(const KoID& producerID, QList<KoChannelInfo *> channels);
+
+    /** Be careful, producer will be modified */
+    void setCurrentChannels(KoHistogramProducer *producer, QList<KoChannelInfo *> channels);
+
 private Q_SLOTS:
     void setActiveChannel(int channel);
-    void slotTypeSwitched(int id);
+    void slotTypeSwitched(void);
     void slotZoomIn();
     void slotZoomOut();
     void slide(int val);
 
 private:
+    void setChannels(void);
+    void addProducerChannels(KoHistogramProducer *producer);
+
+    typedef struct {
+        bool isProducer;
+        KoHistogramProducer *producer;
+        KoChannelInfo * channel;
+    } ComboboxInfo;
+
+    QVector<ComboboxInfo> m_comboInfo;
+    // Maps the channels in m_channels to a real channel offset in the producer->channels()
+    QVector<qint32> m_channelToOffset;
+    QStringList m_channelStrings;
+    QList<KoChannelInfo *> m_channels;
+    const KoColorSpace* m_cs;
+
+    QStringList channelStrings();
+    /** Lists all producers currently available */
+    QList<QString> producers();
+
     void setView(double from, double size);
     void updateEnabled();
     double m_from, m_width;
+    KoHistogramProducer* m_currentProducer;
+    bool m_color;
 };
 
 

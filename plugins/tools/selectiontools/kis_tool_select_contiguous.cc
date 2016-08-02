@@ -54,16 +54,17 @@
 #include "tiles3/kis_hline_iterator.h"
 
 KisToolSelectContiguous::KisToolSelectContiguous(KoCanvasBase *canvas)
-        : KisToolSelectBase(canvas,
-                            KisCursor::load("tool_contiguous_selection_cursor.png", 6, 6),
-                            i18n("Contiguous Area Selection")),
-          m_fuzziness(20),
-          m_sizemod(0),
-          m_feather(0),
-          m_limitToCurrentLayer(false)
+    : KisToolSelectBase<KisTool>(canvas,
+                                 KisCursor::load("tool_contiguous_selection_cursor.png", 6, 6),
+                                 i18n("Contiguous Area Selection")),
+    m_fuzziness(20),
+    m_sizemod(0),
+    m_feather(0),
+    m_limitToCurrentLayer(false)
 {
-    setObjectName("tool_select_contiguous");    
-    connect(&m_widgetHelper, SIGNAL(selectionActionChanged(int)), this, SLOT(setSelectionAction(int)));
+    setObjectName("tool_select_contiguous");
+    connect(&m_widgetHelper, &KisSelectionToolConfigWidgetHelper::selectionActionChanged,
+            this, &KisToolSelectContiguous::setSelectionAction);
 }
 
 KisToolSelectContiguous::~KisToolSelectContiguous()
@@ -184,40 +185,40 @@ QWidget* KisToolSelectContiguous::createOptionWidget()
         input->setRange(0, 200);
         input->setSingleStep(10);
         hbox->addWidget(input);
-        
+
         hbox = new QHBoxLayout();
         Q_CHECK_PTR(hbox);
         l->insertLayout(2, hbox);
-        
+
         lbl = new QLabel(i18n("Grow/shrink selection: "), selectionWidget);
         hbox->addWidget(lbl);
-        
+
         KisSliderSpinBox *sizemod = new KisSliderSpinBox(selectionWidget);
         Q_CHECK_PTR(sizemod);
         sizemod->setObjectName("sizemod"); //grow/shrink selection
         sizemod->setRange(-40, 40);
-        sizemod->setSingleStep(1);       
+        sizemod->setSingleStep(1);
         hbox->addWidget(sizemod);
-        
+
         hbox = new QHBoxLayout();
         Q_CHECK_PTR(hbox);
         l->insertLayout(3, hbox);
-        
+
         hbox->addWidget(new QLabel(i18n("Feathering radius: "), selectionWidget));
-        
+
         KisSliderSpinBox *feather = new KisSliderSpinBox(selectionWidget);
         Q_CHECK_PTR(feather);
         feather->setObjectName("feathering");
         feather->setRange(0, 40);
-        feather->setSingleStep(1);       
+        feather->setSingleStep(1);
         hbox->addWidget(feather);
-        
+
         connect (input  , SIGNAL(valueChanged(int)), this, SLOT(slotSetFuzziness(int) ));
         connect (sizemod, SIGNAL(valueChanged(int)), this, SLOT(slotSetSizemod(int)   ));
         connect (feather, SIGNAL(valueChanged(int)), this, SLOT(slotSetFeather(int)   ));
 
         QCheckBox* limitToCurrentLayer = new QCheckBox(i18n("Limit to current layer"), selectionWidget);
-        l->insertWidget(4, limitToCurrentLayer);       
+        l->insertWidget(4, limitToCurrentLayer);
         connect (limitToCurrentLayer, SIGNAL(stateChanged(int)), this, SLOT(slotLimitToCurrentLayer(int)));
 
 
@@ -225,10 +226,10 @@ QWidget* KisToolSelectContiguous::createOptionWidget()
         // load configuration settings into tool options
         input->setValue(m_configGroup.readEntry("fuzziness", 20)); // fuzziness
         sizemod->setValue( m_configGroup.readEntry("sizemod", 0)); //grow/shrink
-        sizemod->setSuffix(" px");
+        sizemod->setSuffix(i18n(" px"));
 
         feather->setValue(m_configGroup.readEntry("feather", 0));
-        feather->setSuffix(" px");
+        feather->setSuffix(i18n(" px"));
 
         limitToCurrentLayer->setChecked(m_configGroup.readEntry("limitToCurrentLayer", false));
     }
@@ -243,15 +244,8 @@ void KisToolSelectContiguous::slotLimitToCurrentLayer(int state)
     m_configGroup.writeEntry("limitToCurrentLayer", state);
 }
 
-void KisToolSelectContiguous::setSelectionAction(int newSelectionAction)
+
+void KisToolSelectContiguous::setSelectionAction(int action)
 {
-    if(newSelectionAction >= SELECTION_REPLACE && newSelectionAction <= SELECTION_INTERSECT && m_selectionAction != newSelectionAction)
-    {
-        if(m_widgetHelper.optionWidget())
-        {
-            m_widgetHelper.slotSetAction(newSelectionAction);
-        }
-        m_selectionAction = (SelectionAction)newSelectionAction;
-        emit selectionActionChanged();
-    }
+    changeSelectionAction(action);
 }

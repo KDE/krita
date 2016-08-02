@@ -86,19 +86,12 @@ void __KisToolSelectEllipticalLocal::finishRect(const QRectF &rect)
 KisToolSelectElliptical::KisToolSelectElliptical(KoCanvasBase *canvas):
     KisToolSelectEllipticalTemplate(canvas, i18n("Elliptical Selection"))
 {
-    connect(&m_widgetHelper, SIGNAL(selectionActionChanged(int)), this, SLOT(setSelectionAction(int)));
+    connect(&m_widgetHelper, &KisSelectionToolConfigWidgetHelper::selectionActionChanged,
+            this, &KisToolSelectElliptical::setSelectionAction);
 }
 
-void KisToolSelectElliptical::setSelectionAction(int newSelectionAction)
+
+void KisToolSelectElliptical::setSelectionAction(int action)
 {
-    if(newSelectionAction >= SELECTION_REPLACE && newSelectionAction <= SELECTION_INTERSECT && m_selectionAction != newSelectionAction)
-    {
-        if(m_widgetHelper.optionWidget())
-        {
-            m_widgetHelper.slotSetAction(newSelectionAction);
-        }
-        m_selectionAction = (SelectionAction)newSelectionAction;
-        emit selectionActionChanged();
-    }
+    changeSelectionAction(action);
 }
-

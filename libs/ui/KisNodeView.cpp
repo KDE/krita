@@ -62,7 +62,7 @@ class Q_DECL_HIDDEN KisNodeView::Private
 public:
     Private(KisNodeView* _q)
         : delegate(_q, _q)
-	, mode(DetailedMode)
+    , mode(DetailedMode)
 #ifdef DRAG_WHILE_DRAG_WORKAROUND
         , isDragging(false)
 #endif
@@ -182,6 +182,16 @@ QItemSelectionModel::SelectionFlags KisNodeView::selectionCommand(const QModelIn
         }
     }
 
+    /**
+     * Qt 5.6 has a bug: it reads global modifiers, not the ones
+     * passed from event.  So if you paste an item using Ctrl+V it'll
+     * select multiple layers for you
+     */
+    Qt::KeyboardModifiers globalModifiers = QApplication::keyboardModifiers();
+    if (!event && globalModifiers != Qt::NoModifier) {
+        return QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows;
+    }
+
     return QAbstractItemView::selectionCommand(index, event);
 }
 
@@ -190,6 +200,11 @@ QRect KisNodeView::visualRect(const QModelIndex &index) const
     QRect rc = QTreeView::visualRect(index);
     rc.setLeft(0);
     return rc;
+}
+
+QRect KisNodeView::originalVisualRect(const QModelIndex &index) const
+{
+    return QTreeView::visualRect(index);
 }
 
 QModelIndex KisNodeView::indexAt(const QPoint &point) const
@@ -400,7 +415,7 @@ QPixmap KisNodeView::createDragPixmap() const
     int y = 0;
     Q_FOREACH (const QModelIndex &selectedIndex, selectedIndexes) {
         const QImage img = selectedIndex.data(int(KisNodeModel::BeginThumbnailRole) + size).value<QImage>();
-        painter.drawPixmap(x, y, QPixmap().fromImage(img.scaled(QSize(size, size), Qt::KeepAspectRatio)));
+        painter.drawPixmap(x, y, QPixmap().fromImage(img.scaled(QSize(size, size), Qt::KeepAspectRatio, Qt::SmoothTransformation)));
 
         x += size + 1;
         if (x >= dragPixmap.width()) {
@@ -547,5 +562,3 @@ void KisNodeView::setDraggingFlag(bool flag)
 {
     m_draggingFlag = flag;
 }
-
-#include <KisNodeView.moc>

@@ -76,7 +76,7 @@ void KisBrushDelegate::paint(QPainter * painter, const QStyleOptionViewItem & op
     QImage thumbnail = brush->image();
 
     if (thumbnail.height() > itemRect.height() || thumbnail.width() > itemRect.width()) {
-        thumbnail = thumbnail.scaled(itemRect.size() , Qt::KeepAspectRatio);
+        thumbnail = thumbnail.scaled(itemRect.size() , Qt::KeepAspectRatio, Qt::SmoothTransformation);
     }
 
     painter->save();
@@ -108,7 +108,7 @@ KisBrushChooser::KisBrushChooser(QWidget *parent, const char *name)
     m_slSize->setRange(0, 1000, 2);
     m_slSize->setValue(5);
     m_slSize->setExponentRatio(3.0);
-    m_slSize->setSuffix(" px");
+    m_slSize->setSuffix(i18n(" px"));
 
 
     m_slSize->setExponentRatio(3.0);
@@ -140,6 +140,7 @@ KisBrushChooser::KisBrushChooser(QWidget *parent, const char *name)
     m_itemChooser->setRowHeight(30);
     m_itemChooser->setItemDelegate(new KisBrushDelegate(this));
     m_itemChooser->setCurrentItem(0, 0);
+    m_itemChooser->setSynced(true);
 
     connect(m_itemChooser, SIGNAL(resourceSelected(KoResource *)), this, SLOT(update(KoResource *)));
 

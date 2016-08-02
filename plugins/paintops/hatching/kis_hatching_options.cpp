@@ -30,7 +30,7 @@ public:
         setupUi(this);
 
         QString degree = QChar(Qt::Key_degree);
-        QString px = " px";
+        QString px = i18n(" px");
 
         //setRange(minimum, maximum, decimals)
 

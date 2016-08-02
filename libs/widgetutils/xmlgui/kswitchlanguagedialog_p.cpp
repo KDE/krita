@@ -50,14 +50,14 @@ static QSettingsPtr localeOverridesSettings()
     if (!configDir.exists()) {
         configDir.mkpath(QStringLiteral("."));
     }
-
-    return QSettingsPtr(new QSettings(configPath + QStringLiteral("/klanguageoverridesrc"), QSettings::NativeFormat));
+    return QSettingsPtr(new QSettings(configPath + QStringLiteral("/klanguageoverridesrc"), QSettings::IniFormat));
 }
 
 static QByteArray getApplicationSpecificLanguage(const QByteArray &defaultCode = QByteArray())
 {
     QSettingsPtr settings = localeOverridesSettings();
     settings->beginGroup(QStringLiteral("Language"));
+    //qDebug() << "our language" << settings->value(qAppName(), defaultCode).toByteArray();
     return settings->value(qAppName(), defaultCode).toByteArray();
 }
 
@@ -85,6 +85,8 @@ static void initializeLanguages()
             qputenv("LANGUAGE", languageCode + ":" + languages);
         }
     }
+    //qDebug() << ">>>>>>>>>>>>>> LANGUAGE" << qgetenv("LANGUAGE");
+    //qDebug() << ">>>>>>>>>>>>>> DATADIRS" << qgetenv("XDG_DATA_DIRS");
 }
 
 Q_COREAPP_STARTUP_FUNCTION(initializeLanguages)
@@ -276,12 +278,9 @@ void KSwitchLanguageDialog::slotOk()
         //list is different from defaults or saved languages list
         setApplicationSpecificLanguage(languageString.toLatin1());
 
-        KMessageBox::information(
-            this,
-            i18n("The language for this application has been changed. The change will take effect the next time the application is started."), //text
-            i18n("Application Language Changed"), //caption
-            QStringLiteral("ApplicationLanguageChangedWarning") //dontShowAgainName
-        );
+        QMessageBox::information(this,
+                                 i18nc("@title:window:", "Application Language Changed"), //caption
+                                 i18n("The language for this application has been changed. The change will take effect the next time the application is started."));
     }
 
     accept();
@@ -339,12 +338,17 @@ void KSwitchLanguageDialogPrivate::fillApplicationLanguages(KLanguageButton *but
     Q_FOREACH (const QLocale &l, allLocales) {
         QString languageCode = l.name();
         if (l != cLocale) {
+            const QString nativeName = l.nativeLanguageName();
+            // For some languages the native name might be empty.
+            // In this case use the non native language name as fallback.
+            // See: QTBUG-51323
+            const QString languageName = nativeName.isEmpty() ? QLocale::languageToString(l.language()) : nativeName;
             if (!insertedLanguges.contains(languageCode) && KLocalizedString::isApplicationTranslatedInto(languageCode)) {
-                button->insertLanguage(languageCode, l.nativeLanguageName());
+                button->insertLanguage(languageCode, languageName);
                 insertedLanguges << languageCode;
             } else if (stripCountryCode(&languageCode)) {
                 if (!insertedLanguges.contains(languageCode) && KLocalizedString::isApplicationTranslatedInto(languageCode)) {
-                    button->insertLanguage(languageCode, l.nativeLanguageName());
+                    button->insertLanguage(languageCode, languageName);
                     insertedLanguges << languageCode;
                 }
             }

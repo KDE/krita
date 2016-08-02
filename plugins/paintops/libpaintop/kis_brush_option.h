@@ -32,7 +32,7 @@ class PAINTOP_EXPORT KisBrushOption
 public:
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;
 
-    void readOptionSetting(const KisPropertiesConfiguration* setting);
+    void readOptionSetting(const KisPropertiesConfiguration* setting, bool forceCopy);
 
     KisBrushSP brush() const;
     void setBrush(KisBrushSP brush);

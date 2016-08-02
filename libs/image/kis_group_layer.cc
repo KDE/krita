@@ -269,6 +269,11 @@ KisPaintDeviceSP KisGroupLayer::original() const
     return realOriginal;
 }
 
+bool KisGroupLayer::projectionIsValid() const
+{
+    return !tryObligeChild();
+}
+
 void KisGroupLayer::setDefaultProjectionColor(KoColor color)
 {
     color.convertTo(m_d->paintDevice->colorSpace());

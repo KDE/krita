@@ -38,6 +38,8 @@ public:
     static QCursor upArrowCursor();       // upwards arrow
     static QCursor crossCursor();         // crosshair
     static QCursor roundCursor();         // small open circle
+    static QCursor pixelBlackCursor();    // black single pixel
+    static QCursor pixelWhiteCursor();    // white single pixel
     static QCursor waitCursor();          // hourglass/watch
     static QCursor ibeamCursor();         // ibeam/text entry
     static QCursor sizeVerCursor();       // vertical resize
@@ -81,15 +83,15 @@ public:
     static QCursor closedHandCursor();    // Pan tool cursor
     static QCursor rotateCursor();    // Transform tool cursor
 
+
     // Load a cursor from an image file. The image should have an alpha channel
-    // and will be converted to black and white on loading. Any format loadable by
-    // QImage can be used.
+    // and will be converted to black and white on loading. Any format loadable
+    // by QImage can be used. The file will be stored in the KisIconCache, so
+    // each file will be loaded only once.
     static QCursor load(const QString & cursorName, int hotspotX = -1, int hotspotY = -1);
 
 private:
 
-    // Makes a 32x32 bitmap that is compatible with different platforms
-    static QBitmap bitmapFromData(const QSize& size, const unsigned char* data);
 
 };
 #endif // __kis_cursor_h__

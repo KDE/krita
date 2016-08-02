@@ -22,10 +22,6 @@
 
 #include <KoConfig.h>
 
-#if defined(_WIN32) || defined(_WIN64)
-#include <windows.h>
-#endif
-
 #include <QtGlobal>
 class QOpenGLContext;
 
@@ -39,12 +35,21 @@ class QOpenGLContext;
 class KRITAUI_EXPORT KisOpenGL
 {
 public:
+    enum FilterMode {
+        NearestFilterMode,  // nearest
+        BilinearFilterMode, // linear, no mipmap
+        TrilinearFilterMode, // LINEAR_MIPMAP_LINEAR
+        HighQualityFiltering // Mipmaps + custom shader
+    };
+public:
 
     /// Request OpenGL version 3.2
     static void initialize();
 
     /// Initialize shared OpenGL context
-    static int initializeContext(QOpenGLContext* s);
+    static void initializeContext(QOpenGLContext *ctx);
+
+    static bool supportsGLSL13();
 
     /// Check for OpenGL
     static bool hasOpenGL();
@@ -61,9 +66,10 @@ public:
      */
     static bool needsFenceWorkaround();
 
-    static QString renderer();
-
 private:
+
+    static void setDefaultFormat();
+
     KisOpenGL();
 
 

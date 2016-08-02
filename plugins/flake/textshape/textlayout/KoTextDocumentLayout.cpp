@@ -772,7 +772,7 @@ bool KoTextDocumentLayout::doLayout()
         // Build our request for our rootArea provider
         RootAreaConstraint constraints = constraintsForPosition(d->layoutPosition->it, currentAreaNumber > 0);
 
-        // Request a new root-area. If NULL is returned then layouting is finished.
+        // Request a new root-area. If 0 is returned then layouting is finished.
         bool newRootArea = false;
         rootArea = d->provider->provide(this, constraints, currentAreaNumber, &newRootArea);
         if (!rootArea) {

@@ -48,7 +48,7 @@ public:
 
     //KisFilterEntry() : weight( 0 ) { m_service = 0; } // for QList
     explicit KisFilterEntry(QPluginLoader *loader);
-    ~KisFilterEntry() { }
+    ~KisFilterEntry();
 
     KisImportExportFilter* createFilter(KisFilterChain* chain, QObject* parent = 0);
 

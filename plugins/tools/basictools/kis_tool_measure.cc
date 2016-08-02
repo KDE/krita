@@ -49,8 +49,8 @@ KisToolMeasureOptionsWidget::KisToolMeasureOptionsWidget(QWidget* parent, double
     Q_CHECK_PTR(optionLayout);
     optionLayout->setMargin(0);
 
-    optionLayout->addWidget(new QLabel(i18n("Distance: "), this), 0, 0);
-    optionLayout->addWidget(new QLabel(i18n("Angle: "), this), 1, 0);
+    optionLayout->addWidget(new QLabel(i18n("Distance:"), this), 0, 0);
+    optionLayout->addWidget(new QLabel(i18n("Angle:"), this), 1, 0);
 
     m_distanceLabel = new QLabel(this);
     m_distanceLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
@@ -66,7 +66,7 @@ KisToolMeasureOptionsWidget::KisToolMeasureOptionsWidget(QWidget* parent, double
     unitBox->setCurrentIndex(m_unit.indexInListForUi(KoUnit::ListAll));
 
     optionLayout->addWidget(unitBox, 0, 2);
-    optionLayout->addWidget(new QLabel("deg", this), 1, 2);
+    optionLayout->addWidget(new QLabel(i18n("Degree:"), this), 1, 2);
     optionLayout->addItem(new QSpacerItem(1, 1, QSizePolicy::Fixed, QSizePolicy::Expanding), 2, 0, 1, 2);
 }
 

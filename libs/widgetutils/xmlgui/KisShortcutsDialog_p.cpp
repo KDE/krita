@@ -49,6 +49,8 @@ KisShortcutsDialog::KisShortcutsDialogPrivate::KisShortcutsDialogPrivate(KisShor
 
 void KisShortcutsDialog::KisShortcutsDialogPrivate::changeShortcutScheme(const QString &schemeName)
 {
+    // KTreeWidgetSearchLine is unhappy if the contents of the tree change
+    m_shortcutsEditor->clearSearch();
 
     QString dialogText = i18n("The current shortcut scheme is modified. Save before switching to the new one?");
     if (m_shortcutsEditor->isModified() &&
@@ -86,7 +88,6 @@ void KisShortcutsDialog::KisShortcutsDialogPrivate::undo()
 void KisShortcutsDialog::KisShortcutsDialogPrivate::save()
 {
     m_shortcutsEditor->save();
-    emit q->saved();
 };
 
 #include "moc_KisShortcutsDialog_p.cpp"

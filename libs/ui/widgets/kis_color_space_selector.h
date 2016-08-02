@@ -38,6 +38,7 @@ public:
     void setCurrentColorDepth(const KoID& id);
     void setCurrentProfile(const QString& name);
     void setCurrentColorSpace(const KoColorSpace* colorSpace);
+    void showColorBrowserButton(bool showButton);
 Q_SIGNALS:
     /**
      * This signal is emitted when a new color space is selected.

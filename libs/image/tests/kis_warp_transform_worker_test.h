@@ -34,6 +34,8 @@ private Q_SLOTS:
     void testBackwardInterpolatorRoundTrip();
     void testGridSize();
     void testBackwardInterpolatorExtrapolation();
+
+    void testNeedChangeRects();
 };
 
 #endif /* __KIS_WARP_TRANSFORM_WORKER_TEST_H */

@@ -60,11 +60,11 @@ const KisCoordinatesConverter* getCoordinatesConverter(KoCanvasBase * canvas)
 
 KisToolLine::KisToolLine(KoCanvasBase * canvas)
     : KisToolPaint(canvas, KisCursor::load("tool_line_cursor.png", 6, 6)),
-      m_showOutline(false),
+      m_showGuideline(true),
       m_strokeIsRunning(false),
       m_infoBuilder(new KisConverterPaintingInformationBuilder(getCoordinatesConverter(canvas))),
       m_helper(new KisToolLineHelper(m_infoBuilder.data(), kundo2_i18n("Draw Line"))),
-      m_strokeUpdateCompressor(500, KisSignalCompressor::FIRST_ACTIVE),
+      m_strokeUpdateCompressor(500, KisSignalCompressor::POSTPONE),
       m_longStrokeUpdateCompressor(1000, KisSignalCompressor::FIRST_INACTIVE)
 {
     setObjectName("tool_line");
@@ -110,17 +110,22 @@ QWidget* KisToolLine::createOptionWidget()
     m_chkUseSensors = new QCheckBox(i18n("Use sensors"));
     addOptionWidgetOption(m_chkUseSensors);
 
-    m_chkShowOutline = new QCheckBox(i18n("Preview"));
-    addOptionWidgetOption(m_chkShowOutline);
+    m_chkShowPreview = new QCheckBox(i18n("Show Preview"));
+    addOptionWidgetOption(m_chkShowPreview);
+
+    m_chkShowGuideline = new QCheckBox(i18n("Show Guideline"));
+    addOptionWidgetOption(m_chkShowGuideline);
 
     // hook up connections for value changing
     connect(m_chkUseSensors, SIGNAL(clicked(bool)), this, SLOT(setUseSensors(bool)) );
-    connect(m_chkShowOutline, SIGNAL(clicked(bool)), this, SLOT(setShowOutline(bool)) );
+    connect(m_chkShowPreview, SIGNAL(clicked(bool)), this, SLOT(setShowPreview(bool)) );
+    connect(m_chkShowGuideline, SIGNAL(clicked(bool)), this, SLOT(setShowGuideline(bool)) );
 
 
     // read values in from configuration
     m_chkUseSensors->setChecked(configGroup.readEntry("useSensors", true));
-    m_chkShowOutline->setChecked(configGroup.readEntry("showOutline", false));
+    m_chkShowPreview->setChecked(configGroup.readEntry("showPreview", true));
+    m_chkShowGuideline->setChecked(configGroup.readEntry("showGuideline", true));
 
     return widget;
 }
@@ -130,9 +135,15 @@ void KisToolLine::setUseSensors(bool value)
     configGroup.writeEntry("useSensors", value);
 }
 
-void KisToolLine::setShowOutline(bool value)
+void KisToolLine::setShowGuideline(bool value)
 {
-    configGroup.writeEntry("showOutline", value);
+    m_showGuideline = value;
+    configGroup.writeEntry("showGuideline", value);
+}
+
+void KisToolLine::setShowPreview(bool value)
+{
+    configGroup.writeEntry("showPreview", value);
 }
 
 void KisToolLine::requestStrokeCancellation()
@@ -142,8 +153,23 @@ void KisToolLine::requestStrokeCancellation()
 
 void KisToolLine::requestStrokeEnd()
 {
-    endStroke();
+    // Terminate any in-progress strokes
+    if (nodePaintAbility() == PAINT && m_helper->isRunning()) {
+        endStroke();
+    }
 }
+
+void KisToolLine::updatePreviewTimer(bool showGuideline)
+{
+    // If the user disables the guideline, we will want to try to draw some
+    // preview lines even if they're slow, so set the timer to FIRST_ACTIVE.
+    if (showGuideline) {
+        m_strokeUpdateCompressor.setMode(KisSignalCompressor::POSTPONE);
+    } else {
+        m_strokeUpdateCompressor.setMode(KisSignalCompressor::FIRST_ACTIVE);
+    }
+}
+
 
 void KisToolLine::paint(QPainter& gc, const KoViewConverter &converter)
 {
@@ -165,12 +191,14 @@ void KisToolLine::beginPrimaryAction(KoPointerEvent *event)
 
     setMode(KisTool::PAINT_MODE);
 
-    m_showOutline = m_chkShowOutline->isChecked() || nodeAbility != PAINT;
+    // Always show guideline on vector layers
+    m_showGuideline = m_chkShowGuideline->isChecked() || nodeAbility != PAINT;
+    updatePreviewTimer(m_showGuideline);
     m_helper->setEnabled(nodeAbility == PAINT);
     m_helper->setUseSensors(m_chkUseSensors->isChecked());
     m_helper->start(event);
 
-    m_startPoint = convertToPixelCoord(event);
+    m_startPoint = convertToPixelCoordAndSnap(event);
     m_endPoint = m_startPoint;
     m_lastUpdatedPoint = m_startPoint;
 
@@ -193,10 +221,10 @@ void KisToolLine::continuePrimaryAction(KoPointerEvent *event)
     CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
     if (!m_strokeIsRunning) return;
 
-    // First ensure the old temp line is deleted
-    updatePreview();
+    // First ensure the old guideline is deleted
+    updateGuideline();
 
-    QPointF pos = convertToPixelCoord(event);
+    QPointF pos = convertToPixelCoordAndSnap(event);
 
     if (event->modifiers() == Qt::AltModifier) {
         QPointF trans = pos - m_endPoint;
@@ -207,19 +235,27 @@ void KisToolLine::continuePrimaryAction(KoPointerEvent *event)
         pos = straightLine(pos);
         m_helper->addPoint(event, pos);
     } else {
-        m_helper->addPoint(event);
-    }
-
-    if ((pixelToView(m_lastUpdatedPoint) - pixelToView(pos)).manhattanLength() > 10) {
-        m_longStrokeUpdateCompressor.stop();
-        m_strokeUpdateCompressor.start();
-        m_lastUpdatedPoint = pos;
-    } else {
-        m_longStrokeUpdateCompressor.start();
+        m_helper->addPoint(event, pos);
     }
     m_endPoint = pos;
 
-    updatePreview();
+    // Draw preview if requested
+    if (m_chkShowPreview->isChecked()) {
+        // If the cursor has moved a significant amount, immediately clear the
+        // current preview and redraw. Otherwise, do slow redraws periodically.
+        auto updateDistance = (pixelToView(m_lastUpdatedPoint) - pixelToView(pos)).manhattanLength(); 
+        if (updateDistance > 10) {
+            m_helper->clearPaint();
+            m_longStrokeUpdateCompressor.stop();
+            m_strokeUpdateCompressor.start();
+            m_lastUpdatedPoint = pos;
+        } else if (updateDistance > 1) {
+            m_longStrokeUpdateCompressor.start();
+        }
+    }
+
+
+    updateGuideline();
     KisToolPaint::requestUpdateOutline(event->point, event);
 }
 
@@ -229,8 +265,7 @@ void KisToolLine::endPrimaryAction(KoPointerEvent *event)
     CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
     setMode(KisTool::HOVER_MODE);
 
-    updatePreview();
-
+    updateGuideline();
     endStroke();
 }
 
@@ -238,11 +273,7 @@ void KisToolLine::endStroke()
 {
     NodePaintAbility nodeAbility = nodePaintAbility();
 
-    if (!m_strokeIsRunning ||
-        (nodeAbility == PAINT && !m_helper->isRunning())||
-        m_startPoint == m_endPoint ||
-        nodeAbility == NONE) {
-
+    if (!m_strokeIsRunning || m_startPoint == m_endPoint || nodeAbility == NONE) {
         return;
     }
 
@@ -314,7 +345,7 @@ QPointF KisToolLine::straightLine(QPointF point)
 }
 
 
-void KisToolLine::updatePreview()
+void KisToolLine::updateGuideline()
 {
     if (canvas()) {
         QRectF bound(m_startPoint, m_endPoint);
@@ -328,7 +359,7 @@ void KisToolLine::paintLine(QPainter& gc, const QRect&)
     QPointF viewStartPos = pixelToView(m_startPoint);
     QPointF viewStartEnd = pixelToView(m_endPoint);
 
-    if (m_showOutline && canvas()) {
+    if (m_showGuideline && canvas()) {
         QPainterPath path;
         path.moveTo(viewStartPos);
         path.lineTo(viewStartEnd);

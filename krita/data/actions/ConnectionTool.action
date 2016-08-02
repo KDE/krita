@@ -11,7 +11,6 @@
       <statusTip></statusTip>
       <isCheckable>true</isCheckable>
       <text>Edit connection points</text>
-      <defaultShortcut></defaultShortcut>
     </Action>
     <Action name="align-relative">
       <iconText>%</iconText>
@@ -22,7 +21,6 @@
       <statusTip></statusTip>
       <isCheckable>true</isCheckable>
       <text>%</text>
-      <defaultShortcut></defaultShortcut>
     </Action>
     <Action name="align-left">
       <iconText>Align to left edge</iconText>
@@ -33,7 +31,6 @@
       <statusTip></statusTip>
       <isCheckable>true</isCheckable>
       <text>Align to left edge</text>
-      <defaultShortcut></defaultShortcut>
     </Action>
     <Action name="align-centerh">
       <iconText>Align to horizontal center</iconText>
@@ -44,7 +41,6 @@
       <statusTip></statusTip>
       <isCheckable>true</isCheckable>
       <text>Align to horizontal center</text>
-      <defaultShortcut></defaultShortcut>
     </Action>
     <Action name="align-right">
       <iconText>Align to right edge</iconText>
@@ -55,7 +51,6 @@
       <statusTip></statusTip>
       <isCheckable>true</isCheckable>
       <text>Align to right edge</text>
-      <defaultShortcut></defaultShortcut>
     </Action>
     <Action name="align-top">
       <iconText>Align to top edge</iconText>
@@ -66,7 +61,6 @@
       <statusTip></statusTip>
       <isCheckable>true</isCheckable>
       <text>Align to top edge</text>
-      <defaultShortcut></defaultShortcut>
     </Action>
     <Action name="align-centerv">
       <iconText>Align to vertical center</iconText>
@@ -77,7 +71,6 @@
       <statusTip></statusTip>
       <isCheckable>true</isCheckable>
       <text>Align to vertical center</text>
-      <defaultShortcut></defaultShortcut>
     </Action>
     <Action name="align-bottom">
       <iconText>Align to bottom edge</iconText>
@@ -88,7 +81,6 @@
       <statusTip></statusTip>
       <isCheckable>true</isCheckable>
       <text>Align to bottom edge</text>
-      <defaultShortcut></defaultShortcut>
     </Action>
     <Action name="escape-all">
       <iconText>Escape in all directions</iconText>
@@ -99,7 +91,6 @@
       <statusTip></statusTip>
       <isCheckable>true</isCheckable>
       <text>Escape in all directions</text>
-      <defaultShortcut></defaultShortcut>
     </Action>
     <Action name="escape-horizontal">
       <iconText>Escape in horizontal directions</iconText>
@@ -110,7 +101,6 @@
       <statusTip></statusTip>
       <isCheckable>true</isCheckable>
       <text>Escape in horizontal directions</text>
-      <defaultShortcut></defaultShortcut>
     </Action>
     <Action name="escape-vertical">
       <iconText>Escape in vertical directions</iconText>
@@ -121,7 +111,6 @@
       <statusTip></statusTip>
       <isCheckable>true</isCheckable>
       <text>Escape in vertical directions</text>
-      <defaultShortcut></defaultShortcut>
     </Action>
     <Action name="escape-left">
       <iconText>Escape in left direction</iconText>
@@ -132,7 +121,6 @@
       <statusTip></statusTip>
       <isCheckable>true</isCheckable>
       <text>Escape in left direction</text>
-      <defaultShortcut></defaultShortcut>
     </Action>
     <Action name="escape-right">
       <iconText>Escape in right direction</iconText>
@@ -143,7 +131,6 @@
       <statusTip></statusTip>
       <isCheckable>true</isCheckable>
       <text>Escape in right direction</text>
-      <defaultShortcut></defaultShortcut>
     </Action>
     <Action name="escape-up">
       <iconText>Escape in up direction</iconText>
@@ -154,7 +141,6 @@
       <statusTip></statusTip>
       <isCheckable>true</isCheckable>
       <text>Escape in up direction</text>
-      <defaultShortcut></defaultShortcut>
     </Action>
     <Action name="escape-down">
       <iconText>Escape in down direction</iconText>
@@ -165,7 +151,6 @@
       <statusTip></statusTip>
       <isCheckable>true</isCheckable>
       <text>Escape in down direction</text>
-      <defaultShortcut></defaultShortcut>
     </Action>
   </Actions>
 </ActionCollection>

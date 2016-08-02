@@ -110,7 +110,7 @@ void KisToolGradient::beginPrimaryAction(KoPointerEvent *event)
 
     setMode(KisTool::PAINT_MODE);
 
-    m_startPos = convertToPixelCoord(event);
+    m_startPos = convertToPixelCoordAndSnap(event, QPointF(), false);
     m_endPos = m_startPos;
 }
 
@@ -124,7 +124,7 @@ void KisToolGradient::continuePrimaryAction(KoPointerEvent *event)
      */
     //CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
 
-    QPointF pos = convertToPixelCoord(event);
+    QPointF pos = convertToPixelCoordAndSnap(event, QPointF(), false);
 
     QRectF bound(m_startPos, m_endPos);
     canvas()->updateCanvas(convertToPt(bound.normalized()));

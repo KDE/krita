@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>425</width>
-    <height>298</height>
+    <width>564</width>
+    <height>409</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -214,10 +214,10 @@
      <property name="title">
       <string>Tilt Options</string>
      </property>
-     <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
-       <layout class="QGridLayout" name="gridLayout">
-        <item row="0" column="0">
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <item>
          <widget class="QRadioButton" name="optionTilt">
           <property name="toolTip">
            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Use the tilt of the tablet to determine the normals.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -230,7 +230,7 @@
           </property>
          </widget>
         </item>
-        <item row="0" column="1">
+        <item>
          <widget class="QRadioButton" name="optionDirection">
           <property name="toolTip">
            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Use the drawing direction to determine the X and Y-axes, while tilt-elevation is used for the Z-axis.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -240,7 +240,7 @@
           </property>
          </widget>
         </item>
-        <item row="0" column="2">
+        <item>
          <widget class="QRadioButton" name="optionRotation">
           <property name="toolTip">
            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Use the rotation sensor available in certain pens to determine the X and Y-axes, while tilt-elevation is used for the Z-axis.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -250,7 +250,7 @@
           </property>
          </widget>
         </item>
-        <item row="0" column="3">
+        <item>
          <widget class="QRadioButton" name="optionMix">
           <property name="toolTip">
            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Mix Tilt and Drawing angle to determine the X and Y-axes, while tilt-elevation is used for the Z-axis.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -260,22 +260,19 @@
           </property>
          </widget>
         </item>
-        <item row="2" column="0">
-         <widget class="QLabel" name="L_mix">
-          <property name="text">
-           <string>Direction/Tilt Mix Value</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="0">
+       </layout>
+      </item>
+      <item>
+       <layout class="QFormLayout" name="formLayout">
+        <item row="0" column="0">
          <widget class="QLabel" name="L_elevation">
           <property name="text">
            <string>Elevation Sensitivity</string>
           </property>
          </widget>
         </item>
-        <item row="2" column="1" colspan="3">
-         <widget class="KisDoubleSliderSpinBox" name="sliderMixValue">
+        <item row="0" column="1">
+         <widget class="KisDoubleSliderSpinBox" name="sliderElevationSensitivity" native="true">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
             <horstretch>0</horstretch>
@@ -284,8 +281,15 @@
           </property>
          </widget>
         </item>
-        <item row="1" column="1" colspan="3">
-         <widget class="KisDoubleSliderSpinBox" name="sliderElevationSensitivity">
+        <item row="1" column="0">
+         <widget class="QLabel" name="L_mix">
+          <property name="text">
+           <string>Direction/Tilt Mix Value</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="KisDoubleSliderSpinBox" name="sliderMixValue" native="true">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
             <horstretch>0</horstretch>

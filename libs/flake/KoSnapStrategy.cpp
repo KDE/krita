@@ -25,7 +25,6 @@
 #include <KoPathSegment.h>
 #include <KoCanvasBase.h>
 #include <KoViewConverter.h>
-#include <KoGuidesData.h>
 
 #include <QPainter>
 
@@ -434,27 +433,28 @@ bool GridSnapStrategy::snap(const QPointF &mousePosition, KoSnapProxy *proxy, qr
     // The 1e-10 here is a workaround for some weird division problem.
     // 360.00062366 / 2.83465058 gives 127 'exactly' when shown as a qreal,
     // but when casting into an int, we get 126. In fact it's 127 - 5.64e-15 !
-    qreal gridX, gridY;
-    proxy->canvas()->gridSize(&gridX, &gridY);
+    QPointF offset;
+    QSizeF spacing;
+    proxy->canvas()->gridSize(&offset, &spacing);
 
     // we want to snap to the nearest grid point, so calculate
     // the grid rows/columns before and after the points position
-    int col = static_cast<int>(mousePosition.x() / gridX + 1e-10);
+    int col = static_cast<int>((mousePosition.x() - offset.x()) / spacing.width() + 1e-10);
     int nextCol = col + 1;
-    int row = static_cast<int>(mousePosition.y() / gridY + 1e-10);
+    int row = static_cast<int>((mousePosition.y() - offset.y()) / spacing.height() + 1e-10);
     int nextRow = row + 1;
 
     // now check which grid line has less distance to the point
-    qreal distToCol = qAbs(col * gridX - mousePosition.x());
-    qreal distToNextCol = qAbs(nextCol * gridX - mousePosition.x());
+    qreal distToCol = qAbs(offset.x() + col * spacing.width() - mousePosition.x());
+    qreal distToNextCol = qAbs(offset.x() + nextCol * spacing.width() - mousePosition.x());
 
     if (distToCol > distToNextCol) {
         col = nextCol;
         distToCol = distToNextCol;
     }
 
-    qreal distToRow = qAbs(row * gridY - mousePosition.y());
-    qreal distToNextRow = qAbs(nextRow * gridY - mousePosition.y());
+    qreal distToRow = qAbs(offset.y() + row * spacing.height() - mousePosition.y());
+    qreal distToNextRow = qAbs(offset.y() + nextRow * spacing.height() - mousePosition.y());
     if (distToRow > distToNextRow) {
         row = nextRow;
         distToRow = distToNextRow;
@@ -462,16 +462,25 @@ bool GridSnapStrategy::snap(const QPointF &mousePosition, KoSnapProxy *proxy, qr
 
     QPointF snappedPoint = mousePosition;
 
-    const qreal distance = distToCol * distToCol + distToRow * distToRow;
-    const qreal maxDistance = maxSnapDistance * maxSnapDistance;
+    bool pointIsSnapped = false;
+
+    const qreal sqDistance = distToCol * distToCol + distToRow * distToRow;
+    const qreal maxSqDistance = maxSnapDistance * maxSnapDistance;
     // now check if we are inside the snap distance
-    if (distance < maxDistance) {
-        snappedPoint = QPointF(col * gridX, row * gridY);
+    if (sqDistance < maxSqDistance) {
+        snappedPoint = QPointF(offset.x() + col * spacing.width(), offset.y() + row * spacing.height());
+        pointIsSnapped = true;
+    } else if (distToRow < maxSnapDistance) {
+        snappedPoint.ry() = offset.y() + row * spacing.height();
+        pointIsSnapped = true;
+    } else if (distToCol < maxSnapDistance) {
+        snappedPoint.rx() = offset.x() + col * spacing.width();
+        pointIsSnapped = true;
     }
 
     setSnappedPosition(snappedPoint);
 
-    return (distance < maxDistance);
+    return pointIsSnapped;
 }
 
 QPainterPath GridSnapStrategy::decoration(const KoViewConverter &converter) const
@@ -572,59 +581,61 @@ QPainterPath BoundingBoxSnapStrategy::decoration(const KoViewConverter &converte
     return decoration;
 }
 
-LineGuideSnapStrategy::LineGuideSnapStrategy()
-    : KoSnapStrategy(KoSnapGuide::GuideLineSnapping)
-{
-}
+// KoGuidesData has been moved into Krita. Please port this class!
 
-bool LineGuideSnapStrategy::snap(const QPointF &mousePosition, KoSnapProxy * proxy, qreal maxSnapDistance)
-{
-    Q_ASSERT(std::isfinite(maxSnapDistance));
+// LineGuideSnapStrategy::LineGuideSnapStrategy()
+//     : KoSnapStrategy(KoSnapGuide::GuideLineSnapping)
+// {
+// }
 
-    KoGuidesData * guidesData = proxy->canvas()->guidesData();
+// bool LineGuideSnapStrategy::snap(const QPointF &mousePosition, KoSnapProxy * proxy, qreal maxSnapDistance)
+// {
+//     Q_ASSERT(std::isfinite(maxSnapDistance));
 
-    if (!guidesData || !guidesData->showGuideLines())
-        return false;
+//     KoGuidesData * guidesData = proxy->canvas()->guidesData();
 
-    QPointF snappedPoint = mousePosition;
-    m_orientation = 0;
+//     if (!guidesData || !guidesData->showGuideLines())
+//         return false;
 
-    qreal minHorzDistance = maxSnapDistance;
-    Q_FOREACH (qreal guidePos, guidesData->horizontalGuideLines()) {
-        qreal distance = qAbs(guidePos - mousePosition.y());
-        if (distance < minHorzDistance) {
-            snappedPoint.setY(guidePos);
-            minHorzDistance = distance;
-            m_orientation |= Qt::Horizontal;
-        }
-    }
-    qreal minVertSnapDistance = maxSnapDistance;
-    Q_FOREACH (qreal guidePos, guidesData->verticalGuideLines()) {
-        qreal distance = qAbs(guidePos - mousePosition.x());
-        if (distance < minVertSnapDistance) {
-            snappedPoint.setX(guidePos);
-            minVertSnapDistance = distance;
-            m_orientation |= Qt::Vertical;
-        }
-    }
-    setSnappedPosition(snappedPoint);
-    return (minHorzDistance < maxSnapDistance || minVertSnapDistance < maxSnapDistance);
-}
+//     QPointF snappedPoint = mousePosition;
+//     m_orientation = 0;
 
-QPainterPath LineGuideSnapStrategy::decoration(const KoViewConverter &converter) const
-{
-    QSizeF unzoomedSize = converter.viewToDocument(QSizeF(5, 5));
-    Q_ASSERT(unzoomedSize.isValid());
+//     qreal minHorzDistance = maxSnapDistance;
+//     Q_FOREACH (qreal guidePos, guidesData->horizontalGuideLines()) {
+//         qreal distance = qAbs(guidePos - mousePosition.y());
+//         if (distance < minHorzDistance) {
+//             snappedPoint.setY(guidePos);
+//             minHorzDistance = distance;
+//             m_orientation |= Qt::Horizontal;
+//         }
+//     }
+//     qreal minVertSnapDistance = maxSnapDistance;
+//     Q_FOREACH (qreal guidePos, guidesData->verticalGuideLines()) {
+//         qreal distance = qAbs(guidePos - mousePosition.x());
+//         if (distance < minVertSnapDistance) {
+//             snappedPoint.setX(guidePos);
+//             minVertSnapDistance = distance;
+//             m_orientation |= Qt::Vertical;
+//         }
+//     }
+//     setSnappedPosition(snappedPoint);
+//     return (minHorzDistance < maxSnapDistance || minVertSnapDistance < maxSnapDistance);
+// }
 
-    QPainterPath decoration;
-    if (m_orientation & Qt::Horizontal) {
-        decoration.moveTo(snappedPosition() - QPointF(unzoomedSize.width(), 0));
-        decoration.lineTo(snappedPosition() + QPointF(unzoomedSize.width(), 0));
-    }
-    if (m_orientation & Qt::Vertical) {
-        decoration.moveTo(snappedPosition() - QPointF(0, unzoomedSize.height()));
-        decoration.lineTo(snappedPosition() + QPointF(0, unzoomedSize.height()));
-    }
+// QPainterPath LineGuideSnapStrategy::decoration(const KoViewConverter &converter) const
+// {
+//     QSizeF unzoomedSize = converter.viewToDocument(QSizeF(5, 5));
+//     Q_ASSERT(unzoomedSize.isValid());
 
-    return decoration;
-}
+//     QPainterPath decoration;
+//     if (m_orientation & Qt::Horizontal) {
+//         decoration.moveTo(snappedPosition() - QPointF(unzoomedSize.width(), 0));
+//         decoration.lineTo(snappedPosition() + QPointF(unzoomedSize.width(), 0));
+//     }
+//     if (m_orientation & Qt::Vertical) {
+//         decoration.moveTo(snappedPosition() - QPointF(0, unzoomedSize.height()));
+//         decoration.lineTo(snappedPosition() + QPointF(0, unzoomedSize.height()));
+//     }
+
+//     return decoration;
+// }

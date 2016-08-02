@@ -56,7 +56,8 @@ KoPageLayoutDialog::KoPageLayoutDialog(QWidget *parent, const KoPageLayout &layo
     lay->addWidget(d->pageLayoutWidget,1);
 
     KoPagePreviewWidget *prev = new KoPagePreviewWidget(widget);
-    prev->setPageLayout(layout);
+    // use not original layout, but "fixed" one (e.g. with 0 values) as now hold by pageLayoutWidget
+    prev->setPageLayout(d->pageLayoutWidget->pageLayout());
     lay->addWidget(prev, 1);
 
     connect (d->pageLayoutWidget, SIGNAL(layoutChanged(const KoPageLayout&)),

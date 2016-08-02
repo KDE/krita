@@ -83,6 +83,8 @@ public:
     KisShortcutMatcher();
     ~KisShortcutMatcher();
 
+    bool hasRunningShortcut() const;
+
     void addShortcut(KisSingleActionShortcut *shortcut);
     void addShortcut(KisStrokeShortcut *shortcut);
     void addShortcut(KisTouchShortcut *shortcut);

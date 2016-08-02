@@ -34,12 +34,10 @@
  * The 'magic wand' selection tool -- in fact just
  * a floodfill that only creates a selection.
  */
-class KisToolSelectContiguous : public KisToolSelectBase
+class KisToolSelectContiguous : public KisToolSelectBase<KisTool>
 {
 
     Q_OBJECT
-    Q_PROPERTY(int selectionAction READ selectionAction WRITE setSelectionAction NOTIFY selectionActionChanged)
-    Q_SIGNALS: void selectionActionChanged();
 
 public:
     KisToolSelectContiguous(KoCanvasBase *canvas);
@@ -60,8 +58,8 @@ public Q_SLOTS:
     virtual void slotSetSizemod(int);
     virtual void slotSetFeather(int);
     virtual void slotLimitToCurrentLayer(int);
+    void setSelectionAction(int);
     //virtual bool antiAliasSelection();
-    void setSelectionAction(int newSelectionAction);
 
 protected:
     using KisToolSelectBase::m_widgetHelper;
@@ -78,7 +76,8 @@ class KisToolSelectContiguousFactory : public KoToolFactoryBase
 {
 public:
     KisToolSelectContiguousFactory()
-            : KoToolFactoryBase("KisToolSelectContiguous") {
+        : KoToolFactoryBase("KisToolSelectContiguous")
+    {
         setToolTip(i18n("Contiguous Selection Tool"));
         setToolType(TOOL_TYPE_SELECTED);
         setIconName(koIconNameCStr("tool_contiguous_selection"));

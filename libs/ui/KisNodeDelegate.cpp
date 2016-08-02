@@ -115,10 +115,71 @@ void KisNodeDelegate::paint(QPainter *p, const QStyleOptionViewItem &o, const QM
         drawVisibilityIconHijack(p, option, index);
         drawDecoration(p, option, index);
         drawExpandButton(p, option, index);
+        drawBranch(p, option, index);
 
         drawProgressBar(p, option, index);
     }
     p->restore();
+}
+
+void KisNodeDelegate::drawBranch(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const {
+    Q_UNUSED(index);
+
+    KisNodeViewColorScheme scm;
+    const QPoint base = scm.relThumbnailRect().translated(option.rect.topLeft()).topLeft() - QPoint( scm.indentation(), 0);
+
+    // there is no indention if we are starting negative, so don't draw a branch
+    if (base.x() < 0) {
+        return;
+    }
+
+
+    QPen oldPen = p->pen();
+    const qreal oldOpacity = p->opacity(); // remember previous opacity
+    p->setOpacity(1.0);
+
+    QColor color = scm.gridColor(option, d->view);
+    QColor bgColor = option.state & QStyle::State_Selected ?
+        qApp->palette().color(QPalette::Base) :
+        qApp->palette().color(QPalette::Text);
+    color = KritaUtils::blendColors(color, bgColor, 0.9);
+
+
+    // TODO: if we are a mask type, use dotted lines for the branch style
+    // p->setPen(QPen(p->pen().color(), 2, Qt::DashLine, Qt::RoundCap, Qt::RoundJoin));
+    p->setPen(QPen(color, 0, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+
+    QPoint p2 = base + QPoint(scm.iconSize() - scm.decorationMargin()*2, scm.iconSize()*0.45);
+    QPoint p3 =  base + QPoint(scm.iconSize() - scm.decorationMargin()*2, scm.iconSize());
+    QPoint p4 = base + QPoint(scm.iconSize()*1.4, scm.iconSize());
+    p->drawLine(p2, p3);
+    p->drawLine(p3, p4);
+
+
+
+     // draw parent lines (keep drawing until x position is less than 0
+    QPoint p5 = p2 - QPoint(scm.indentation(), 0);
+    QPoint p6 = p3 - QPoint(scm.indentation(), 0);
+
+     QPoint parentBase1 = p5;
+     QPoint parentBase2 = p6;
+
+     // indent lines needs to be very subtle to avoid making the docker busy looking
+     color = KritaUtils::blendColors(color, bgColor, 0.9); // makes it a little lighter than L lines
+     p->setPen(QPen(color, 0, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+
+     while (parentBase1.x() > scm.visibilityColumnWidth()) {
+         p->drawLine(parentBase1, parentBase2);
+
+         parentBase1 = parentBase1 - QPoint(scm.indentation(), 0);
+         parentBase2 = parentBase2 - QPoint(scm.indentation(), 0);
+     }
+
+
+
+
+     p->setPen(oldPen);
+     p->setOpacity(oldOpacity);
 }
 
 void KisNodeDelegate::drawColorLabel(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const
@@ -129,7 +190,7 @@ void KisNodeDelegate::drawColorLabel(QPainter *p, const QStyleOptionViewItem &op
     if (color.alpha() <= 0) return;
 
     QColor bgColor = qApp->palette().color(QPalette::Base);
-    color = KritaUtils::blendColors(color, bgColor, 0.2);
+    color = KritaUtils::blendColors(color, bgColor, 0.3);
 
     const QRect rect = option.state & QStyle::State_Selected ?
         iconsRect(option, index) :
@@ -148,13 +209,25 @@ void KisNodeDelegate::drawFrame(QPainter *p, const QStyleOptionViewItem &option,
     const QPoint base = option.rect.topLeft();
 
     QPoint p2 = base + QPoint(-scm.indentation() - 1, 0);
-    QPoint p3 = base + QPoint(-2 * scm.border() - 2 * scm.decorationMargin() - scm.decorationSize(), 0);
+    QPoint p3 = base + QPoint(2 * scm.decorationMargin() + scm.decorationSize(), 0);
     QPoint p4 = base + QPoint(-1, 0);
     QPoint p5(iconsRect(option,
                            index).left() - 1, base.y());
     QPoint p6(option.rect.right(), base.y());
 
     QPoint v(0, option.rect.height());
+
+
+    // draw a line that goes the length of the entire frame. one for the
+    // top, and one for the bottom
+    QPoint pTopLeft(0, option.rect.topLeft().y());
+    QPoint pTopRight(option.rect.bottomRight().x(),option.rect.topLeft().y() );
+    p->drawLine(pTopLeft, pTopRight);
+
+    QPoint pBottomLeft(0, option.rect.topLeft().y() + scm.rowHeight());
+    QPoint pBottomRight(option.rect.bottomRight().x(),option.rect.topLeft().y() + scm.rowHeight() );
+    p->drawLine(pBottomLeft, pBottomRight);
+
 
     const bool paintForParent =
         index.parent().isValid() &&
@@ -196,10 +269,11 @@ void KisNodeDelegate::drawThumbnail(QPainter *p, const QStyleOptionViewItem &opt
     KisNodeViewColorScheme scm;
 
     const int thumbSize = scm.thumbnailSize();
+    const qreal oldOpacity = p->opacity(); // remember previous opacity
 
     QImage img = index.data(int(KisNodeModel::BeginThumbnailRole) + thumbSize).value<QImage>();
     if (!(option.state & QStyle::State_Enabled)) {
-        img = KritaUtils::convertQImageToGrayA(img);
+        p->setOpacity(0.35);
     }
 
     QRect fitRect = scm.relThumbnailRect().translated(option.rect.topLeft());
@@ -209,21 +283,23 @@ void KisNodeDelegate::drawThumbnail(QPainter *p, const QStyleOptionViewItem &opt
     offset.setY((fitRect.height() - img.height()) / 2);
     offset += fitRect.topLeft();
 
-    // {   // paint the checkers: we need a proper GUI design for them to be uncommented
-    //     const int step = scm.thumbnailSize() / 4;
-    //     QImage checkers(2 * step, 2 * step, QImage::Format_ARGB32);
-    //     QPainter gc(&checkers);
-    //     gc.fillRect(QRect(0, 0, step, step), Qt::white);
-    //     gc.fillRect(QRect(step, 0, step, step), Qt::gray);
-    //     gc.fillRect(QRect(step, step, step, step), Qt::white);
-    //     gc.fillRect(QRect(0, step, step, step), Qt::gray);
-    //     QBrush brush(checkers);
-    //     p->setBrushOrigin(offset);
-    //     p->fillRect(img.rect().translated(offset), brush);*/
-    // }
+    KisConfig cfg;
 
-    p->fillRect(img.rect().translated(offset), Qt::white);
+    // paint in a checkerboard pattern behind the layer contents to represent transparent
+    const int step = scm.thumbnailSize() / 6;
+    QImage checkers(2 * step, 2 * step, QImage::Format_ARGB32);
+    QPainter gc(&checkers);
+    gc.fillRect(QRect(0, 0, step, step), cfg.checkersColor1());
+    gc.fillRect(QRect(step, 0, step, step), cfg.checkersColor2());
+    gc.fillRect(QRect(step, step, step, step), cfg.checkersColor1());
+    gc.fillRect(QRect(0, step, step, step), cfg.checkersColor2());
+
+    QBrush brush(checkers);
+    p->setBrushOrigin(offset);
+    p->fillRect(img.rect().translated(offset), brush);
+
     p->drawImage(offset, img);
+    p->setOpacity(oldOpacity); // restore old opacity
 
     QRect borderRect = kisGrowRect(img.rect(), 1).translated(offset);
     KritaUtils::renderExactRect(p, borderRect, scm.gridColor(option, d->view));
@@ -259,11 +335,16 @@ QRect KisNodeDelegate::textRect(const QStyleOptionViewItem &option, const QModel
         minbearing = option.fontMetrics.minLeftBearing() + option.fontMetrics.minRightBearing();
     }
 
+    const int decorationOffset =
+        2 * scm.border() +
+        2 * scm.decorationMargin() +
+        scm.decorationSize();
+
     const int width =
         iconsRect(option, index).left() - option.rect.x() -
-        scm.border() + minbearing;
+        scm.border() + minbearing - decorationOffset;
 
-    return QRect(option.rect.x() - minbearing,
+    return QRect(option.rect.x() - minbearing + decorationOffset,
                  option.rect.y() + scm.border(),
                  width,
                  scm.rowHeight() - scm.border());
@@ -276,14 +357,23 @@ void KisNodeDelegate::drawText(QPainter *p, const QStyleOptionViewItem &option, 
         .adjusted(scm.textMargin(), 0, -scm.textMargin(), 0);
 
     QPen oldPen = p->pen();
-    QPalette::ColorGroup cg = (option.state & QStyle::State_Enabled) ? QPalette::Active : QPalette::Disabled;
-    QPalette::ColorRole cr = (option.state & QStyle::State_Selected) ? QPalette::HighlightedText : QPalette::Text;
-    p->setPen(option.palette.color(cg, cr));
+    const qreal oldOpacity = p->opacity(); // remember previous opacity
+
+    p->setPen(option.palette.color(QPalette::Active,QPalette::Text ));
+
+
+
+    if (!(option.state & QStyle::State_Enabled)) {
+        p->setOpacity(0.55);
+    }
+
 
     const QString text = index.data(Qt::DisplayRole).toString();
     const QString elided = elidedText(p->fontMetrics(), rc.width(), Qt::ElideRight, text);
     p->drawText(rc, Qt::AlignLeft | Qt::AlignVCenter, elided);
-    p->setPen(oldPen);
+
+    p->setPen(oldPen); // restore pen settings
+    p->setOpacity(oldOpacity);
 }
 
 QList<OptionalProperty> KisNodeDelegate::Private::rightmostProperties(const KisBaseNode::PropertyList &props) const
@@ -382,7 +472,20 @@ void KisNodeDelegate::drawIcons(QPainter *p, const QStyleOptionViewItem &option,
         if (prop) {
             QIcon icon = prop->state.toBool() ? prop->onIcon : prop->offIcon;
             bool fullColor = prop->state.toBool() && option.state & QStyle::State_Enabled;
-            p->drawPixmap(x, y, icon.pixmap(scm.iconSize(), fullColor ? QIcon::Normal : QIcon::Disabled));
+            const qreal oldOpacity = p->opacity(); // remember previous opacity
+
+
+            if (fullColor) {              
+                 p->setOpacity(1.0);
+            }
+            else {
+                p->setOpacity(0.35);
+            }
+
+            p->drawPixmap(x, y, icon.pixmap(scm.iconSize(), QIcon::Normal));
+            p->setOpacity(oldOpacity); // restore old opacity
+
+
         }
         x += scm.iconSize() + scm.iconMargin();
         p->drawLine(x, 0, x, scm.rowHeight() - scm.border());
@@ -399,6 +502,19 @@ QRect KisNodeDelegate::visibilityClickRect(const QStyleOptionViewItem &option, c
     KisNodeViewColorScheme scm;
     return QRect(scm.border(), scm.border() + option.rect.top(),
                  2 * scm.visibilityMargin() + scm.visibilitySize(),
+                 scm.rowHeight() - scm.border());
+}
+
+QRect KisNodeDelegate::decorationClickRect(const QStyleOptionViewItem &option, const QModelIndex &index) const
+{
+    Q_UNUSED(option);
+    Q_UNUSED(index);
+    KisNodeViewColorScheme scm;
+
+    QRect realVisualRect = d->view->originalVisualRect(index);
+
+    return QRect(realVisualRect.left(), scm.border() + realVisualRect.top(),
+                 2 * scm.decorationMargin() + scm.decorationSize(),
                  scm.rowHeight() - scm.border());
 }
 
@@ -421,7 +537,8 @@ void KisNodeDelegate::drawVisibilityIconHijack(QPainter *p, const QStyleOptionVi
     const int y = option.rect.top() + (scm.rowHeight() - scm.border() - scm.visibilitySize()) / 2;
 
     QIcon icon = prop->state.toBool() ? prop->onIcon : prop->offIcon;
-    p->drawPixmap(x, y, icon.pixmap(scm.visibilitySize(), (option.state & QStyle::State_Enabled) ? QIcon::Normal : QIcon::Disabled));
+    p->setOpacity(1.0);
+    p->drawPixmap(x, y, icon.pixmap(scm.visibilitySize(),  QIcon::Normal));
 
     //// For debugging purposes only
     // p->save();
@@ -442,7 +559,15 @@ void KisNodeDelegate::drawDecoration(QPainter *p, const QStyleOptionViewItem &op
                         QIcon::Normal : QIcon::Disabled);
 
         const QRect rc = scm.relDecorationRect().translated(option.rect.topLeft());
+        const qreal oldOpacity = p->opacity(); // remember previous opacity
+
+        if (!(option.state & QStyle::State_Enabled)) {
+            p->setOpacity(0.35);
+        }
+
+
         p->drawPixmap(rc.topLeft(), pixmap);
+        p->setOpacity(oldOpacity); // restore old opacity
     }
 }
 
@@ -544,6 +669,10 @@ bool KisNodeDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, cons
         const bool visibilityClicked = visibilityRect.isValid() &&
             visibilityRect.contains(mouseEvent->pos());
 
+        const QRect decorationRect = decorationClickRect(option, index);
+        const bool decorationClicked = decorationRect.isValid() &&
+            decorationRect.contains(mouseEvent->pos());
+
         const bool leftButton = mouseEvent->buttons() & Qt::LeftButton;
 
         if (leftButton && iconsClicked) {
@@ -572,6 +701,13 @@ bool KisNodeDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, cons
             if (!clickedProperty) return false;
             d->toggleProperty(props, clickedProperty, mouseEvent->modifiers() == Qt::ControlModifier, index);
             return true;
+        } else if (leftButton && decorationClicked) {
+            bool isExpandable = model->hasChildren(index);
+            if (isExpandable) {
+                bool isExpanded = d->view->isExpanded(index);
+                d->view->setExpanded(index, !isExpanded);
+                return true;
+            }
         }
 
         if (mouseEvent->button() == Qt::LeftButton &&
@@ -621,6 +757,7 @@ void KisNodeDelegate::setModelData(QWidget *widget, QAbstractItemModel *model, c
 
 void KisNodeDelegate::updateEditorGeometry(QWidget *widget, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
+    Q_UNUSED(index);
     widget->setGeometry(option.rect);
 }
 
@@ -634,8 +771,10 @@ bool KisNodeDelegate::eventFilter(QObject *object, QEvent *event)
     case QEvent::MouseButtonPress: {
         if (d->edit) {
             QMouseEvent *me = static_cast<QMouseEvent*>(event);
-            if (!QRect(d->edit->mapToGlobal(QPoint()), d->edit->size()).contains(me->globalPos()))
+            if (!QRect(d->edit->mapToGlobal(QPoint()), d->edit->size()).contains(me->globalPos())) {
+                emit commitData(d->edit);
                 emit closeEditor(d->edit);
+            }
         }
     } break;
     case QEvent::KeyPress: {
@@ -731,6 +870,3 @@ void KisNodeDelegate::drawProgressBar(QPainter *p, const QStyleOptionViewItem &o
         p->restore();
     }
 }
-
-
-#include <KisNodeDelegate.moc>

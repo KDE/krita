@@ -117,8 +117,6 @@ KisSpacingInformation KisDeformPaintOp::paintAt(const KisPaintInformation& info)
     // so no additional checks for 'zero'ness are needed
     qreal scale = m_sizeOption.apply(info);
 
-    setCurrentRotation(rotation);
-    setCurrentScale(scale);
 
     rotation += m_sizeProperties.rotation;
     scale *= m_sizeProperties.scale;

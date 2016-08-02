@@ -182,6 +182,7 @@ public:
      * default bounds object
      */
     virtual void syncLodCache();
+    virtual KisPaintDeviceList getLodCapableDevices() const;
 
     /**
      * The rendering of the image may not always happen in the order
@@ -343,6 +344,13 @@ public: // Graph methods
      * KisNodeBase::check(properties) returns true will be returned.
      */
     QList<KisNodeSP> childNodes(const QStringList & nodeTypes, const KoProperties & properties) const;
+
+    /**
+     * @brief findChildByName finds the first child that has the given name
+     * @param name the name to look for
+     * @return the first child with the given name
+     */
+    KisNodeSP findChildByName(const QString &name);
 
 public:
 

@@ -32,6 +32,8 @@
 #include <kis_transform_mask.h>
 #include "kis_transform_mask_adapter.h"
 #include "kis_transform_utils.h"
+#include "kis_abstract_projection_plane.h"
+#include "kis_recalculate_transform_mask_job.h"
 
 #include "kis_projection_leaf.h"
 
@@ -48,34 +50,40 @@ public:
     void redo() {
         m_mask->setTransformParams(m_params);
 
-        /**
-         * NOTE: this code "duplicates" the functionality provided
-         * by KisRecalculateTransformMaskJob, but there is not much
-         * reason for starting a separate stroke when a transformation
-         * has happened
-         */
-
-        m_mask->recaclulateStaticImage();
-        updateMask();
+        updateMask(m_params->isHidden());
     }
 
     void undo() {
         m_mask->setTransformParams(m_oldParams);
 
-        m_mask->recaclulateStaticImage();
-        updateMask();
+        updateMask(m_oldParams->isHidden());
     }
 
 private:
-    void updateMask() {
-        QRect updateRect = m_mask->extent();
+    void updateMask(bool isHidden) {
+        /**
+         * Depending on whether the mask is hidden we should either
+         * update it entirely via the setDirty() call, or we can use a
+         * lightweight approach by directly regenerating the
+         * precalculated static image using
+         * KisRecalculateTransformMaskJob.
+         */
 
-        KisNodeSP parent = m_mask->parent();
-        if (parent && parent->original()) {
-            updateRect |= parent->original()->defaultBounds()->bounds();
+        if (!isHidden) {
+            KisRecalculateTransformMaskJob updateJob(m_mask);
+            updateJob.run();
+        } else {
+            m_mask->recaclulateStaticImage();
+
+            QRect updateRect = m_mask->extent();
+
+            KisNodeSP parent = m_mask->parent();
+            if (parent && parent->original()) {
+                updateRect |= parent->original()->defaultBounds()->bounds();
+            }
+
+            m_mask->setDirty(updateRect);
         }
-
-        m_mask->setDirty(updateRect);
     }
 
 private:

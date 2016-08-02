@@ -212,6 +212,7 @@ public Q_SLOTS:
 
     void createQuickGroup();
     void createQuickClippingGroup();
+    void quickUngroup();
 
     void selectAllNodes();
     void selectVisibleNodes();
@@ -227,7 +228,6 @@ public:
     void scale(double sx, double sy, KisFilterStrategy *filterStrategy);
 
     void removeSingleNode(KisNodeSP node);
-    KisLayerSP constructDefaultLayer();
     KisLayerSP createPaintLayer();
 
 private:

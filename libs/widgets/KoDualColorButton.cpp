@@ -238,16 +238,16 @@ void KoDualColorButton::mousePressEvent( QMouseEvent *event )
     d->foregroundColor = d->backgroundColor;
     d->backgroundColor = tmp;
 
-    emit foregroundColorChanged( d->foregroundColor );
     emit backgroundColorChanged( d->backgroundColor );
+    emit foregroundColorChanged( d->foregroundColor );
 
     d->miniCtlFlag = true;
   } else if ( event->pos().x() < backgroundRect.x() ) {
     d->foregroundColor = d->displayRenderer->approximateFromRenderedQColor(Qt::black);
     d->backgroundColor = d->displayRenderer->approximateFromRenderedQColor(Qt::white);
 
-    emit foregroundColorChanged( d->foregroundColor );
     emit backgroundColorChanged( d->backgroundColor );
+    emit foregroundColorChanged( d->foregroundColor );
 
     d->miniCtlFlag = true;
   }
@@ -320,4 +320,17 @@ void KoDualColorButton::mouseReleaseEvent( QMouseEvent *event )
     }
 
     repaint();
+}
+
+void KoDualColorButton::changeEvent(QEvent *event)
+{
+    QWidget::changeEvent(event);
+
+    switch (event->type()) {
+    case QEvent::StyleChange:
+    case QEvent::PaletteChange:
+        d->updateArrows();
+    default:
+        break;
+    }
 }

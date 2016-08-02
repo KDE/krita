@@ -1,4 +1,4 @@
-include_directories(${FONTCONFIG_INCLUDE_DIR}/fontconfig
+include_directories(${FONTCONFIG_INCLUDE_DIR}
                     ${FREETYPE_INCLUDE_DIRS})
 
 set(kritatext_LIB_SRCS
@@ -131,6 +131,6 @@ target_include_directories(kritatext
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/styles>
 )
 set_target_properties(kritatext PROPERTIES
-   VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
+   VERSION ${GENERIC_KRITA_LIB_VERSION} SOVERSION ${GENERIC_KRITA_LIB_SOVERSION}
 )
 install(TARGETS kritatext  ${INSTALL_TARGETS_DEFAULT_ARGS})

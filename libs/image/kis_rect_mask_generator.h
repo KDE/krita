@@ -19,6 +19,7 @@
 #ifndef _KIS_RECT_MASK_GENERATOR_H_
 #define _KIS_RECT_MASK_GENERATOR_H_
 
+#include <QScopedPointer>
 #include "kritaimage_export.h"
 
 
@@ -33,7 +34,10 @@ class KRITAIMAGE_EXPORT KisRectangleMaskGenerator : public KisMaskGenerator
 public:
 
     KisRectangleMaskGenerator(qreal radius, qreal ratio, qreal fh, qreal fv, int spikes, bool antialiasEdges);
+    KisRectangleMaskGenerator(const KisRectangleMaskGenerator &rhs);
     virtual ~KisRectangleMaskGenerator();
+
+    KisMaskGenerator* clone() const;
 
     virtual bool shouldSupersample() const;
     virtual quint8 valueAt(qreal x, qreal y) const;
@@ -42,7 +46,7 @@ public:
 
 private:
     struct Private;
-    Private* const d;
+    const QScopedPointer<Private> d;
 };
 
 #endif

@@ -102,6 +102,8 @@ public:
     QRect extent() const;
     QRect exactBounds() const;
 
+    bool projectionIsValid() const;
+
 protected:
     KisLayer* onlyMeaningfulChild() const;
     KisPaintDeviceSP tryObligeChild() const;

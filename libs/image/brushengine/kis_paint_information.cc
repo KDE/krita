@@ -25,6 +25,7 @@
 #include "kis_algebra_2d.h"
 #include "kis_lod_transform.h"
 
+#include <kis_dom_utils.h>
 
 struct KisPaintInformation::Private {
     EIGEN_MAKE_ALIGNED_OPERATOR_NEW
@@ -213,8 +214,8 @@ KisPaintInformation::createHoveringModeInfo(const QPointF &pos,
         qreal tangentialPressure,
         qreal perspective,
         qreal speed,
-	    int canvasrotation,
-	    bool canvasMirroredH)
+        int canvasrotation,
+        bool canvasMirroredH)
 {
     KisPaintInformation info(pos,
                              pressure,
@@ -241,8 +242,8 @@ void KisPaintInformation::setCanvasRotation(int rotation)
     } else {
         d->canvasRotation= rotation % 360;
     }
-    
-} 
+
+}
 
 bool KisPaintInformation::canvasMirroredH() const
 {
@@ -252,7 +253,7 @@ bool KisPaintInformation::canvasMirroredH() const
 void KisPaintInformation::setCanvasHorizontalMirrorState(bool mir)
 {
     d->canvasMirroredH = mir;
-    
+
 }
 
 void KisPaintInformation::toXML(QDomDocument&, QDomElement& e) const
@@ -268,22 +269,22 @@ void KisPaintInformation::toXML(QDomDocument&, QDomElement& e) const
     e.setAttribute("rotation", QString::number(rotation(), 'g', 15));
     e.setAttribute("tangentialPressure", QString::number(tangentialPressure(), 'g', 15));
     e.setAttribute("perspective", QString::number(perspective(), 'g', 15));
-    e.setAttribute("time", d->time);
-    e.setAttribute("speed", d->speed);
+    e.setAttribute("time", QString::number(d->time, 'g', 15));
+    e.setAttribute("speed", QString::number(d->speed, 'g', 15));
 }
 
 KisPaintInformation KisPaintInformation::fromXML(const QDomElement& e)
 {
-    qreal pointX = qreal(e.attribute("pointX", "0.0").toDouble());
-    qreal pointY = qreal(e.attribute("pointY", "0.0").toDouble());
-    qreal pressure = qreal(e.attribute("pressure", "0.0").toDouble());
-    qreal rotation = qreal(e.attribute("rotation", "0.0").toDouble());
-    qreal tangentialPressure = qreal(e.attribute("tangentialPressure", "0.0").toDouble());
-    qreal perspective = qreal(e.attribute("perspective", "0.0").toDouble());
-    qreal xTilt = qreal(e.attribute("xTilt", "0.0").toDouble());
-    qreal yTilt = qreal(e.attribute("yTilt", "0.0").toDouble());
-    qreal time = e.attribute("time", "0").toDouble();
-    qreal speed = e.attribute("speed", "0").toDouble();
+    qreal pointX = qreal(KisDomUtils::toDouble(e.attribute("pointX", "0.0")));
+    qreal pointY = qreal(KisDomUtils::toDouble(e.attribute("pointY", "0.0")));
+    qreal pressure = qreal(KisDomUtils::toDouble(e.attribute("pressure", "0.0")));
+    qreal rotation = qreal(KisDomUtils::toDouble(e.attribute("rotation", "0.0")));
+    qreal tangentialPressure = qreal(KisDomUtils::toDouble(e.attribute("tangentialPressure", "0.0")));
+    qreal perspective = qreal(KisDomUtils::toDouble(e.attribute("perspective", "0.0")));
+    qreal xTilt = qreal(KisDomUtils::toDouble(e.attribute("xTilt", "0.0")));
+    qreal yTilt = qreal(KisDomUtils::toDouble(e.attribute("yTilt", "0.0")));
+    qreal time = KisDomUtils::toDouble(e.attribute("time", "0"));
+    qreal speed = KisDomUtils::toDouble(e.attribute("speed", "0"));
 
     return KisPaintInformation(QPointF(pointX, pointY), pressure, xTilt, yTilt,
                                rotation, tangentialPressure, perspective, time, speed);
@@ -347,8 +348,43 @@ qreal KisPaintInformation::drawingAngle() const
         return 0.0;
     }
 
+    if (d->currentDistanceInfo->hasLockedDrawingAngle()) {
+        return d->currentDistanceInfo->lockedDrawingAngle();
+    }
+
     QVector2D diff(pos() - d->currentDistanceInfo->lastPosition());
     return atan2(diff.y(), diff.x());
+}
+
+void KisPaintInformation::lockCurrentDrawingAngle(qreal alpha_unused) const
+{
+    Q_UNUSED(alpha_unused);
+
+    if (!d->currentDistanceInfo) {
+        warnKrita << "KisPaintInformation::lockCurrentDrawingAngle()" << "Cannot access Distance Info last dab data";
+        return;
+    }
+
+    const QVector2D diff(pos() - d->currentDistanceInfo->lastPosition());
+    const qreal angle = atan2(diff.y(), diff.x());
+
+    qreal newAngle = angle;
+
+    if (d->currentDistanceInfo->hasLockedDrawingAngle()) {
+        const qreal stabilizingCoeff = 20.0;
+        const qreal dist = stabilizingCoeff * d->currentDistanceInfo->currentSpacing().scalarApprox();
+        const qreal alpha = qMax(0.0, dist - d->currentDistanceInfo->scalarDistanceApprox()) / dist;
+
+        const qreal oldAngle = d->currentDistanceInfo->lockedDrawingAngle();
+
+        if (shortestAngularDistance(oldAngle, newAngle) < M_PI / 6) {
+            newAngle = (1.0 - alpha) * oldAngle + alpha * newAngle;
+        } else {
+            newAngle = oldAngle;
+        }
+    }
+
+    d->currentDistanceInfo->setLockedDrawingAngle(newAngle);
 }
 
 QPointF KisPaintInformation::drawingDirectionVector() const
@@ -412,7 +448,6 @@ qreal KisPaintInformation::currentTime() const
 KisRandomSourceSP KisPaintInformation::randomSource() const
 {
     if (!d->randomSource) {
-        qWarning() << "WARNING: accessing a paint info object without a random source!";
         d->randomSource = new KisRandomSource();
     }
 

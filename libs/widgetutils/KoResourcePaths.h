@@ -28,12 +28,12 @@
 /**
  * DEBUGGING KoResourcePaths:
  *
- * The usual place to look for resources is Qt's GenericDataLocation.
+ * The usual place to look for resources is Qt's AppDataLocation.
  * This corresponds to XDG_DATA_DIRS on Linux. To ensure your installation and
  * path are configured correctly, ensure your files are located in the directories
  * contained in this variable:
  *
- * QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation);
+ * QStandardPaths::standardLocations(QStandardPaths::AppDataLocation);
  *
  * There are many debug lines that can be uncommented for more specific installation
  * checks. In the future these should be converted to qloggingcategory to enable
@@ -49,7 +49,6 @@ public:
 
     enum SearchOption { NoSearchOptions = 0,
                         Recursive = 1,
-                        NoDuplicates = 2,
                         IgnoreExecBit = 4
                       };
     Q_DECLARE_FLAGS(SearchOptions, SearchOption)
@@ -155,8 +154,7 @@ public:
      *        wildcard expression. E.g. <tt>"images\*.jpg"</tt>.
      *        Use QString() if you do not want a filter.
      * @param options if the flags passed include Recursive, subdirectories
-     *        will also be search; if NoDuplicates is passed then only entries with
-     *        unique filenames will be returned eliminating duplicates.
+     *        will also be search.
      *
      * @return List of all the files whose filename matches the
      *         specified filter.

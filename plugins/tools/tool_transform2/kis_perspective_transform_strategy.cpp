@@ -110,9 +110,10 @@ struct KisPerspectiveTransformStrategy::Private
 };
 
 KisPerspectiveTransformStrategy::KisPerspectiveTransformStrategy(const KisCoordinatesConverter *converter,
+                                                                 KoSnapGuide *snapGuide,
                                                    ToolTransformArgs &currentArgs,
                                                    TransformTransactionProperties &transaction)
-    : KisSimplifiedActionPolicyStrategy(converter),
+    : KisSimplifiedActionPolicyStrategy(converter, snapGuide),
       m_d(new Private(this, converter, currentArgs, transaction))
 {
 }
@@ -213,11 +214,6 @@ void KisPerspectiveTransformStrategy::paint(QPainter &gc)
     gc.restore();
 
     // Draw Handles
-    QRectF handleRect =
-        KisTransformUtils::handleRect(KisTransformUtils::handleVisualRadius,
-                                      m_d->handlesTransform,
-                                      m_d->transaction.originalRect());
-
     QPainterPath handles;
 
     handles.moveTo(m_d->transaction.originalTopLeft());
@@ -226,11 +222,20 @@ void KisPerspectiveTransformStrategy::paint(QPainter &gc)
     handles.lineTo(m_d->transaction.originalBottomLeft());
     handles.lineTo(m_d->transaction.originalTopLeft());
 
-    handles.addRect(handleRect.translated(m_d->transaction.originalTopLeft()));
-    handles.addRect(handleRect.translated(m_d->transaction.originalTopRight()));
-    handles.addRect(handleRect.translated(m_d->transaction.originalBottomLeft()));
-    handles.addRect(handleRect.translated(m_d->transaction.originalBottomRight()));
 
+    auto addHandleRectFunc =
+        [&](const QPointF &pt) {
+            handles.addRect(
+                KisTransformUtils::handleRect(KisTransformUtils::handleVisualRadius,
+                                              m_d->handlesTransform,
+                                              m_d->transaction.originalRect(), pt)
+                .translated(pt));
+    };
+
+    addHandleRectFunc(m_d->transaction.originalTopLeft());
+    addHandleRectFunc(m_d->transaction.originalTopRight());
+    addHandleRectFunc(m_d->transaction.originalBottomLeft());
+    addHandleRectFunc(m_d->transaction.originalBottomRight());
 
     gc.save();
 
@@ -262,6 +267,11 @@ void KisPerspectiveTransformStrategy::paint(QPainter &gc)
 
     { // painting perspective handles
         QPainterPath perspectiveHandles;
+
+        QRectF handleRect =
+            KisTransformUtils::handleRect(KisTransformUtils::handleVisualRadius,
+                                          QTransform(),
+                                          m_d->transaction.originalRect());
 
         if (m_d->transformedHandles.xVanishingExists) {
             QRectF rc = handleRect.translated(m_d->transformedHandles.xVanishing);

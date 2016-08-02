@@ -22,6 +22,8 @@
 #include "kritabrush_export.h"
 #include "kis_brush.h"
 
+#include <QScopedPointer>
+
 class KisMaskGenerator;
 
 /**
@@ -33,24 +35,29 @@ class BRUSH_EXPORT KisAutoBrush : public KisBrush
 public:
 
     KisAutoBrush(KisMaskGenerator* as, qreal angle, qreal randomness, qreal density = 1.0);
+    KisAutoBrush(const KisAutoBrush& rhs);
+    KisBrush* clone() const;
 
     virtual ~KisAutoBrush();
 
 public:
 
+    qint32 maskHeight(KisDabShape const& shape, qreal subPixelX, qreal subPixelY,
+        const KisPaintInformation& info) const Q_DECL_OVERRIDE;
+
     virtual KisFixedPaintDeviceSP paintDevice(const KoColorSpace*,
-            double, double,
+            KisDabShape const&,
             const KisPaintInformation&,
-            double = 0, double = 0) const {
+            double = 0, double = 0) const Q_DECL_OVERRIDE {
         return 0; // The autobrush does NOT support images!
     }
 
     virtual void generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
             KisBrush::ColoringInformation* src,
-            double scaleX, double scaleY, double angle,
+            KisDabShape const&,
             const KisPaintInformation& info,
             double subPixelX = 0, double subPixelY = 0,
-            qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR) const;
+            qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR) const Q_DECL_OVERRIDE;
 
     virtual QPainterPath outline() const;
 
@@ -83,7 +90,8 @@ private:
 
     QImage createBrushPreview();
 
+private:
     struct Private;
-    Private* const d;
+    const QScopedPointer<Private> d;
 };
 #endif // _KIS_AUTOBRUSH_RESOURCE_H_

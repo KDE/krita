@@ -602,16 +602,16 @@ void KoChangeTracker::insertDeleteFragment(QTextCursor &cursor)
         int docOutlineLevel = cursor.block().blockFormat().property(KoParagraphStyle::OutlineLevel).toInt();
         if (docOutlineLevel) {
             //Even though we got a list, it is actually a list for storing headings. So don't consider it
-            currentList = NULL;
+            currentList = 0;
         }
 
-        QTextList *previousTextList = currentBlock.previous().isValid() ? QTextCursor(currentBlock.previous()).currentList():NULL;
+        QTextList *previousTextList = currentBlock.previous().isValid() ? QTextCursor(currentBlock.previous()).currentList():0;
         if (textList && previousTextList && (textList != previousTextList) && (KoList::level(currentBlock) == KoList::level(currentBlock.previous()))) {
             //Even though we are already in a list, the QTextList* of the current block is differnt from that of the previous block
             //Also the levels of the list-items ( previous and current ) are the same.
             //This can happen only when two lists are merged together without any intermediate content.
             //So we need to create a new list.
-            currentList = NULL;
+            currentList = 0;
         }
 
         if (textList) {

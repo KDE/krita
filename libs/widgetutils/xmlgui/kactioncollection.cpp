@@ -75,7 +75,7 @@ public:
     QString m_componentName;
     QString m_componentDisplayName;
 
-    //! Remove a action from our internal bookkeeping. Returns NULL if the
+    //! Remove a action from our internal bookkeeping. Returns 0 if the
     //! action doesn't belong to us.
     QAction *unlistAction(QAction *);
 
@@ -351,7 +351,7 @@ void KActionCollection::removeAction(QAction *action)
 QAction *KActionCollection::takeAction(QAction *action)
 {
     if (!d->unlistAction(action)) {
-        return NULL;
+        return 0;
     }
 
     // Remove the action from all widgets
@@ -587,16 +587,9 @@ void KActionCollection::writeSettings(KConfigGroup *config,
                 // not set to its default value. Write it
                 QString s = QKeySequence::listToString(action->shortcuts());
                 if (s.isEmpty()) {
-                    if (writeScheme) {
-                        // A scheme file should explicitly set "none" for the shortcut
-                        s = QStringLiteral("none");
-                        config->writeEntry(actionName, s, flags);
-                    } else {
-                        config->deleteEntry(actionName, flags);
-                    }
-                } else {
-                    config->writeEntry(actionName, s, flags);
+                    s = QStringLiteral("none");
                 }
+                config->writeEntry(actionName, s, flags);
             } else if (bConfigHasAction) {
                 // This key is the same as default but exists in config file.
                 // Remove it.
@@ -717,7 +710,7 @@ QAction *KActionCollectionPrivate::unlistAction(QAction *action)
 
     // Action not found.
     if (index == -1) {
-        return NULL;
+        return 0;
     }
 
     // An action collection can't have the same action twice.

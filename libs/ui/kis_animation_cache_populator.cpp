@@ -52,13 +52,13 @@ struct KisAnimationCachePopulator::Private
     int idleCounter;
     static const int IDLE_COUNT_THRESHOLD = 4;
     static const int IDLE_CHECK_INTERVAL = 500;
-    static const int WAITING_FOR_FRAME_TIMEOUT = 3000;
+    static const int WAITING_FOR_FRAME_TIMEOUT = 10000;
     static const int BETWEEN_FRAMES_INTERVAL = 10;
 
     int requestedFrame;
     KisAnimationFrameCacheSP requestCache;
     KisOpenGLUpdateInfoSP requestInfo;
-    QScopedPointer<KisSignalAutoConnection> imageRequestConnection;
+    KisSignalAutoConnectionsStore imageRequestConnections;
 
     QFutureWatcher<void> infoConversionWatcher;
 
@@ -96,7 +96,7 @@ struct KisAnimationCachePopulator::Private
     {
         if (frame != requestedFrame) return;
 
-        imageRequestConnection.reset();
+        imageRequestConnections.clear();
         requestInfo = requestCache->fetchFrameData(frame);
 
         /**
@@ -130,7 +130,7 @@ struct KisAnimationCachePopulator::Private
             break;
         case WaitingForFrame:
             // Request timed out :(
-            imageRequestConnection.reset();
+            imageRequestConnections.clear();
             enterState(WaitingForIdle);
             break;
         case WaitingForConvertedFrame:
@@ -180,14 +180,22 @@ struct KisAnimationCachePopulator::Private
                 if (activeNode) {
                     int currentTime = activeCanvas->currentImage()->animationInterface()->currentUITime();
 
-                    KisKeyframeChannel *channel;
-                    Q_FOREACH (channel, activeNode->keyframeChannels()) {
-                        skipRange |= channel->affectedFrames(currentTime);
+                    const QList<KisKeyframeChannel*> channels =
+                        activeNode->keyframeChannels();
+
+                    if (!channels.isEmpty()) {
+                        Q_FOREACH (const KisKeyframeChannel *channel, channels) {
+                            skipRange |= channel->affectedFrames(currentTime);
+                        }
+                    } else {
+                        skipRange = KisTimeRange::infinite(0);
                     }
                 }
 
-                bool requested = tryRequestGeneration(activeDocumentCache, skipRange);
-                if (requested) return true;
+                if (!skipRange.isInfinite()) {
+                    bool requested = tryRequestGeneration(activeDocumentCache, skipRange);
+                    if (requested) return true;
+                }
             }
         }
 
@@ -214,6 +222,8 @@ struct KisAnimationCachePopulator::Private
         KisImageAnimationInterface *animation = image->animationInterface();
         KisTimeRange currentRange = animation->fullClipRange();
 
+        if (!animation->hasAnimation()) return false;
+
         if (currentRange.isValid()) {
             Q_ASSERT(!currentRange.isInfinite());
 
@@ -229,7 +239,7 @@ struct KisAnimationCachePopulator::Private
                     }
                 }
 
-                if (!cache->frameStatus(frame) == KisAnimationFrameCache::Cached) {
+                if (cache->frameStatus(frame) != KisAnimationFrameCache::Cached) {
                     return regenerate(cache, frame);
                 }
             }
@@ -252,11 +262,16 @@ struct KisAnimationCachePopulator::Private
         requestCache = cache;
         requestedFrame = frame;
 
-        imageRequestConnection.reset(
-            new KisSignalAutoConnection(
-                image->animationInterface(), SIGNAL(sigFrameReady(int)),
-                q, SLOT(slotFrameReady(int)),
-                Qt::DirectConnection));
+        imageRequestConnections.clear();
+        imageRequestConnections.addConnection(
+            image->animationInterface(), SIGNAL(sigFrameReady(int)),
+            q, SLOT(slotFrameReady(int)),
+            Qt::DirectConnection);
+
+        imageRequestConnections.addConnection(
+            image->animationInterface(), SIGNAL(sigFrameCancelled()),
+            q, SLOT(slotFrameCancelled()),
+            Qt::AutoConnection);
 
         /**
          * We should enter the state before the frame is
@@ -354,6 +369,15 @@ void KisAnimationCachePopulator::slotFrameReady(int frame)
     m_d->frameReceived(frame);
 }
 
+void KisAnimationCachePopulator::slotFrameCancelled()
+{
+    KIS_ASSERT_RECOVER_RETURN(m_d->state == Private::WaitingForFrame);
+
+    m_d->timer.stop();
+    m_d->imageRequestConnections.clear();
+    m_d->enterState(Private::NotWaitingForAnything);
+}
+
 void KisAnimationCachePopulator::slotInfoConverted()
 {
     m_d->infoConverted();
@@ -377,5 +401,3 @@ void KisAnimationCachePopulator::slotPrivateStartWaitingForConvertedFrame()
 
     m_d->infoConversionWatcher.setFuture(requestFuture);
 }
-
-#include "kis_animation_cache_populator.moc"

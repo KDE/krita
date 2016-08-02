@@ -20,7 +20,7 @@
 #ifndef _KIS_TIFF_READER_H_
 #define _KIS_TIFF_READER_H_
 
-// On some platforms, tiffio.h #defines NULL in a bad
+// On some platforms, tiffio.h #defines 0 in a bad
 // way for C++, as (void *)0 instead of using the correct
 // C++ value 0. Include stdio.h first to get the right one.
 #include <stdio.h>

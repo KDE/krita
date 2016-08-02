@@ -36,6 +36,8 @@ public:
     QRect calculateFullExtent(const KisPaintDeviceSP device);
     QRect calculateExtent(const KisPaintDeviceSP device);
 
+    int configSeqNo() const;
+
 public Q_SLOTS:
     void configChanged();
 

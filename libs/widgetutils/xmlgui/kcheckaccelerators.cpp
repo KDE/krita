@@ -47,6 +47,12 @@
 class KCheckAcceleratorsInitializer : public QObject
 {
     Q_OBJECT
+public:
+    explicit KCheckAcceleratorsInitializer(QObject *parent = Q_NULLPTR)
+        : QObject(parent)
+    {
+    }
+
 public Q_SLOTS:
     void initiateIfNeeded()
     {
@@ -62,6 +68,7 @@ public Q_SLOTS:
         const bool autoCheck = cg.readEntry("AutoCheckAccelerators", true);
         const bool copyWidgetText = cg.readEntry("CopyWidgetText", false);
         if (!copyWidgetText && key == 0 && !autoCheck) {
+            deleteLater();
             return;
         }
 
@@ -74,7 +81,8 @@ static void startupFunc()
 {
     // Call initiateIfNeeded once we're in the event loop
     // This is to prevent using KSharedConfig before main() can set the app name
-    KCheckAcceleratorsInitializer *initializer = new KCheckAcceleratorsInitializer;
+    QCoreApplication *app = QCoreApplication::instance();
+    KCheckAcceleratorsInitializer *initializer = new KCheckAcceleratorsInitializer(app);
     QMetaObject::invokeMethod(initializer, "initiateIfNeeded", Qt::QueuedConnection);
 }
 
@@ -223,7 +231,7 @@ void KCheckAccelerators::createDialog(QWidget *actWin, bool automatic)
     QVBoxLayout *layout = new QVBoxLayout(drklash);
     drklash_view = new QTextBrowser(drklash);
     layout->addWidget(drklash_view);
-    QCheckBox *disableAutoCheck = NULL;
+    QCheckBox *disableAutoCheck = 0;
     if (automatic)  {
         disableAutoCheck = new QCheckBox(i18nc("@option:check", "Disable automatic checking"), drklash);
         connect(disableAutoCheck, SIGNAL(toggled(bool)), SLOT(slotDisableCheck(bool)));

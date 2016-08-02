@@ -52,7 +52,7 @@ public:
         , borderColor(Qt::gray)
     {}
 
-    QList<KisCanvasDecoration*> decorations;
+    QList<KisCanvasDecorationSP> decorations;
     KisCanvas2 * canvas;
     KisCoordinatesConverter *coordinatesConverter;
     const KoViewConverter * viewConverter;
@@ -71,6 +71,14 @@ KisCanvasWidgetBase::KisCanvasWidgetBase(KisCanvas2 * canvas, KisCoordinatesConv
 
 KisCanvasWidgetBase::~KisCanvasWidgetBase()
 {
+    /**
+     * Clear all the attached decoration. Oherwise they might decide
+     * to process some events or signals after the canvas has been
+     * destroyed
+     */
+    //5qDeleteAll(m_d->decorations);
+    m_d->decorations.clear();
+
     delete m_d;
 }
 
@@ -140,28 +148,21 @@ void KisCanvasWidgetBase::drawDecorations(QPainter & gc, const QRect &updateWidg
     gc.restore();
 
     // ask the decorations to paint themselves
-    Q_FOREACH (KisCanvasDecoration* deco, m_d->decorations) {
+    Q_FOREACH (KisCanvasDecorationSP deco, m_d->decorations) {
         deco->paint(gc, m_d->coordinatesConverter->widgetToDocument(updateWidgetRect), m_d->coordinatesConverter,m_d->canvas);
     }
-
-    // then paint the guides
-    if (m_d->canvas && m_d->canvas->viewManager() && m_d->canvas->viewManager()->document()) {
-        m_d->canvas->viewManager()->document()->guidesData().paintGuides(gc,
-                                                                         *m_d->viewConverter,
-                                                                         updateWidgetRect);
-    }   
 
     gc.restore();
 }
 
-void KisCanvasWidgetBase::addDecoration(KisCanvasDecoration* deco)
+void KisCanvasWidgetBase::addDecoration(KisCanvasDecorationSP deco)
 {
     m_d->decorations.push_back(deco);
 }
 
-KisCanvasDecoration* KisCanvasWidgetBase::decoration(const QString& id) const
+KisCanvasDecorationSP KisCanvasWidgetBase::decoration(const QString& id) const
 {
-    Q_FOREACH (KisCanvasDecoration* deco, m_d->decorations) {
+    Q_FOREACH (KisCanvasDecorationSP deco, m_d->decorations) {
         if (deco->id() == id) {
             return deco;
         }
@@ -169,12 +170,12 @@ KisCanvasDecoration* KisCanvasWidgetBase::decoration(const QString& id) const
     return 0;
 }
 
-void KisCanvasWidgetBase::setDecorations(const QList<KisCanvasDecoration*> &decorations)
+void KisCanvasWidgetBase::setDecorations(const QList<KisCanvasDecorationSP > &decorations)
 {
     m_d->decorations=decorations;
 }
 
-QList<KisCanvasDecoration*> KisCanvasWidgetBase::decorations() const
+QList<KisCanvasDecorationSP > KisCanvasWidgetBase::decorations() const
 {
     return m_d->decorations;
 }

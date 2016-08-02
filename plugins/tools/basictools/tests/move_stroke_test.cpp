@@ -40,7 +40,7 @@ protected:
     void initImage(KisImageWSP image, KisNodeSP activeNode) {
         Q_UNUSED(image);
 
-        QImage src(QString(FILES_DATA_DIR) + QDir::separator() + "lena.png");
+        QImage src(QString(FILES_DATA_DIR) + QDir::separator() + "carrot.png");
         activeNode->original()->convertFromQImage(src, 0);
     }
 
@@ -51,7 +51,7 @@ protected:
         Q_UNUSED(indirectPainting);
 
         KisNodeSP node = resources->currentNode();
-        return new MoveStrokeStrategy(node, image.data(), resources->postExecutionUndoAdapter());
+        return new MoveStrokeStrategy({node}, image.data(), resources->postExecutionUndoAdapter());
     }
 
     using utils::StrokeTester::addPaintingJobs;
@@ -88,4 +88,4 @@ void MoveStrokeTest::testMoveStroke()
     tester.test();
 }
 
-QTEST_MAIN(MoveStrokeTest)
+QTEST_GUILESS_MAIN(MoveStrokeTest)

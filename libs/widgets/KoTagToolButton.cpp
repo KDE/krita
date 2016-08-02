@@ -53,7 +53,9 @@ KoTagToolButton::KoTagToolButton(QWidget* parent)
     buttonLayout->setSpacing(0);
 
     d->tagToolButton = new QToolButton(this);
-    d->tagToolButton->setIcon(koIcon("list-add"));
+    d->tagToolButton->setIcon(koIcon("bookmarks"));
+    d->tagToolButton->setText(i18n("Tag"));
+    d->tagToolButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     d->tagToolButton->setToolTip(i18nc("@info:tooltip", "<qt>Show the tag box options.</qt>"));
     d->tagToolButton->setPopupMode(QToolButton::InstantPopup);
     d->tagToolButton->setEnabled(true);

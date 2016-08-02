@@ -30,5 +30,5 @@ KisPressureMixOption::KisPressureMixOption()
 double KisPressureMixOption::apply(const KisPaintInformation & info) const
 {
     if (!isChecked()) return 1.0;
-    return computeValue(info);
+    return computeSizeLikeValue(info);
 }

@@ -19,13 +19,13 @@
 
 #include "kis_jpeg_import.h"
 
+#include <QFileInfo>
+
 #include <kpluginfactory.h>
 
 #include <KisFilterChain.h>
-
 #include <KisDocument.h>
 #include <kis_image.h>
-
 #include <KisViewManager.h>
 #include <KisImportExportManager.h>
 
@@ -48,28 +48,27 @@ KisImportExportFilter::ConversionStatus KisJPEGImport::convert(const QByteArray&
     if (to != "application/x-krita")
         return KisImportExportFilter::BadMimeType;
 
-    KisDocument * doc = m_chain->outputDocument();
+    KisDocument * doc = outputDocument();
 
     if (!doc)
         return KisImportExportFilter::NoDocumentCreated;
 
-    QString filename = m_chain->inputFile();
+    QString filename = inputFile();
 
     doc->prepareForImport();
 
     if (!filename.isEmpty()) {
 
-        QUrl url = QUrl::fromLocalFile(filename);
-
-        if (url.isEmpty())
+        if (!QFileInfo(filename).exists()) {
             return KisImportExportFilter::FileNotFound;
+        }
 
-        KisJPEGConverter ib(doc, m_chain->manager()->getBatchMode());
+        KisJPEGConverter ib(doc, getBatchMode());
 
 //        if (view != 0)
 //            view -> canvasSubject() ->  progressDisplay() -> setSubject(&ib, false, true);
 
-        switch (ib.buildImage(url)) {
+        switch (ib.buildImage(filename)) {
         case KisImageBuilder_RESULT_UNSUPPORTED:
         case KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE:
             return KisImportExportFilter::NotImplemented;

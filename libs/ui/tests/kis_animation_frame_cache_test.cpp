@@ -101,5 +101,3 @@ void KisAnimationFrameCacheTest::testCache()
 }
 
 QTEST_MAIN(KisAnimationFrameCacheTest)
-#include "kis_animation_frame_cache_test.moc"
-

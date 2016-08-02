@@ -27,8 +27,6 @@ KisDensityOption::KisDensityOption()
 
 double KisDensityOption::apply(const KisPaintInformation & info, double probability) const
 {
-    if (!isChecked()) {
-        return probability;
-    }
-    return computeValue(info) * probability;
+    if (!isChecked()) return probability;
+    return computeSizeLikeValue(info) * probability;
 }

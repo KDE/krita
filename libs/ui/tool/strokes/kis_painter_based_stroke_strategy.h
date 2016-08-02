@@ -40,11 +40,22 @@ public:
     public:
         PainterInfo();
         PainterInfo(const QPointF &lastPosition, int lastTime);
-        PainterInfo(const PainterInfo &rhs, int levelOfDetail);
+        PainterInfo(PainterInfo *rhs, int levelOfDetail);
         ~PainterInfo();
 
         KisPainter *painter;
         KisDistanceInformation *dragDistance;
+
+        /**
+         * The distance inforametion of the associated LodN
+         * stroke. Returns zero if LodN stroke has already finished
+         * execution or does not exist.
+         */
+        KisDistanceInformation* buddyDragDistance();
+
+    private:
+        PainterInfo *m_parentPainterInfo;
+        PainterInfo *m_childPainterInfo;
     };
 
 public:

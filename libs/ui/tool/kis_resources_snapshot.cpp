@@ -45,7 +45,7 @@ struct KisResourcesSnapshot::Private {
     {
     }
 
-    KisImageWSP image;
+    KisImageSP image;
     KisDefaultBoundsBaseSP bounds;
     KisPostExecutionUndoAdapter *undoAdapter;
     KoColor currentFgColor;
@@ -73,7 +73,7 @@ struct KisResourcesSnapshot::Private {
     bool presetAllowsLod;
 };
 
-KisResourcesSnapshot::KisResourcesSnapshot(KisImageWSP image, KisNodeSP currentNode, KisPostExecutionUndoAdapter *undoAdapter, KoCanvasResourceManager *resourceManager, KisDefaultBoundsBaseSP bounds)
+KisResourcesSnapshot::KisResourcesSnapshot(KisImageSP image, KisNodeSP currentNode, KisPostExecutionUndoAdapter *undoAdapter, KoCanvasResourceManager *resourceManager, KisDefaultBoundsBaseSP bounds)
     : m_d(new Private())
 {
     m_d->image = image;
@@ -87,7 +87,15 @@ KisResourcesSnapshot::KisResourcesSnapshot(KisImageWSP image, KisNodeSP currentN
     m_d->currentBgColor = resourceManager->resource(KoCanvasResourceManager::BackgroundColor).value<KoColor>();
     m_d->currentPattern = resourceManager->resource(KisCanvasResourceProvider::CurrentPattern).value<KoPattern*>();
     m_d->currentGradient = resourceManager->resource(KisCanvasResourceProvider::CurrentGradient).value<KoAbstractGradient*>();
-    m_d->currentPaintOpPreset = resourceManager->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
+
+    /**
+     * We should deep-copy the preset, so that long-runnign actions
+     * will have correct brush parameters. Theoretically this cloniong
+     * can be expensive, but according to measurements, it takes
+     * something like 0.1 ms for an average preset.
+     */
+    m_d->currentPaintOpPreset = resourceManager->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>()->clone();
+
 #ifdef HAVE_THREADED_TEXT_RENDERING_WORKAROUND
     KisPaintOpRegistry::instance()->preinitializePaintOpIfNeeded(m_d->currentPaintOpPreset);
 #endif /* HAVE_THREADED_TEXT_RENDERING_WORKAROUND */
@@ -108,7 +116,7 @@ KisResourcesSnapshot::KisResourcesSnapshot(KisImageWSP image, KisNodeSP currentN
     qreal normOpacity = resourceManager->resource(KisCanvasResourceProvider::Opacity).toDouble();
     m_d->opacity = quint8(normOpacity * OPACITY_OPAQUE_U8);
 
-    m_d->compositeOpId = resourceManager->resource(KisCanvasResourceProvider::CurrentCompositeOp).toString();
+    m_d->compositeOpId = resourceManager->resource(KisCanvasResourceProvider::CurrentEffectiveCompositeOp).toString();
     setCurrentNode(currentNode);
 
     /**
@@ -208,7 +216,7 @@ KisNodeSP KisResourcesSnapshot::currentNode() const
     return m_d->currentNode;
 }
 
-KisImageWSP KisResourcesSnapshot::image() const
+KisImageSP KisResourcesSnapshot::image() const
 {
     return m_d->image;
 }

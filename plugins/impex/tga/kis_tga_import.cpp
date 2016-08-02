@@ -25,7 +25,7 @@
 #include <QApplication>
 
 #include <kpluginfactory.h>
-#include <QUrl>
+#include <QFileInfo>
 
 #include <KoColorSpace.h>
 #include <KisFilterChain.h>
@@ -244,29 +244,22 @@ KisImportExportFilter::ConversionStatus KisTGAImport::convert(const QByteArray& 
     if (to != "application/x-krita")
         return KisImportExportFilter::BadMimeType;
 
-    KisDocument * doc = m_chain->outputDocument();
+    KisDocument * doc = outputDocument();
 
     if (!doc)
         return KisImportExportFilter::NoDocumentCreated;
 
-    QString filename = m_chain->inputFile();
+    QString filename = inputFile();
 
     doc->prepareForImport();
 
     if (!filename.isEmpty()) {
-        QUrl url(filename);
 
-        if (url.isEmpty())
-            return KisImportExportFilter::FileNotFound;
-
-        if (!url.isLocalFile()) {
+        if (!QFileInfo(filename).exists()) {
             return KisImportExportFilter::FileNotFound;
         }
 
-
-        QString localFile = url.toLocalFile();
-
-        QFile f(localFile);
+        QFile f(filename);
         f.open(QIODevice::ReadOnly);
         QDataStream s(&f);
         s.setByteOrder(QDataStream::LittleEndian);

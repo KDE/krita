@@ -18,7 +18,6 @@
 
 #include "kis_doc2_test.h"
 
-#include <KisDocumentEntry.h>
 #include <KisMainWindow.h>
 
 #include <QTest>

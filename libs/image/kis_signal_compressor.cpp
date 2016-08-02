@@ -23,55 +23,67 @@
 
 KisSignalCompressor::KisSignalCompressor()
     : QObject(0)
+    , m_timer(new QTimer(this))
+    , m_mode(UNDEFINED)
     , m_gotSignals(false)
 {
-    m_timer.setSingleShot(true);
-    connect(&m_timer, SIGNAL(timeout()), SLOT(slotTimerExpired()));
+    m_timer->setSingleShot(true);
+    connect(m_timer, SIGNAL(timeout()), SLOT(slotTimerExpired()));
 }
 
 KisSignalCompressor::KisSignalCompressor(int delay, Mode mode, QObject *parent)
     : QObject(parent),
+      m_timer(new QTimer(this)),
       m_mode(mode),
       m_gotSignals(false)
 {
-    m_timer.setSingleShot(true);
-    m_timer.setInterval(delay);
-    connect(&m_timer, SIGNAL(timeout()), SLOT(slotTimerExpired()));
+    m_timer->setSingleShot(true);
+    m_timer->setInterval(delay);
+    connect(m_timer, SIGNAL(timeout()), SLOT(slotTimerExpired()));
 }
 
 void KisSignalCompressor::setDelay(int delay)
 {
-    m_timer.setInterval(delay);
+    m_timer->setInterval(delay);
 }
 
 void KisSignalCompressor::start()
 {
+    Q_ASSERT(m_mode != UNDEFINED);
+
     switch (m_mode) {
     case POSTPONE:
-        m_timer.start();
+        m_timer->start();
         break;
+    case FIRST_ACTIVE_POSTPONE_NEXT:
     case FIRST_ACTIVE:
-        if (!m_timer.isActive()) {
+        if (!m_timer->isActive()) {
             m_gotSignals = false;
-            m_timer.start();
+            m_timer->start();
             emit timeout();
         } else {
             m_gotSignals = true;
+            if (m_mode == FIRST_ACTIVE_POSTPONE_NEXT) {
+                m_timer->start();
+            }
         }
         break;
     case FIRST_INACTIVE:
-        if (!m_timer.isActive()) {
-            m_timer.start();
+        if (!m_timer->isActive()) {
+            m_timer->start();
         }
+    case UNDEFINED:
+        ; // Should never happen, but do nothing
     };
 
-    if (m_mode == POSTPONE || !m_timer.isActive()) {
-        m_timer.start();
+    if (m_mode == POSTPONE || !m_timer->isActive()) {
+        m_timer->start();
     }
 }
 
 void KisSignalCompressor::slotTimerExpired()
 {
+    Q_ASSERT(m_mode != UNDEFINED);
     if (m_mode != FIRST_ACTIVE || m_gotSignals) {
         m_gotSignals = false;
         emit timeout();
@@ -80,12 +92,12 @@ void KisSignalCompressor::slotTimerExpired()
 
 void KisSignalCompressor::stop()
 {
-    m_timer.stop();
+    m_timer->stop();
 }
 
 bool KisSignalCompressor::isActive() const
 {
-    return m_timer.isActive() && (m_mode != FIRST_ACTIVE || m_gotSignals);
+    return m_timer->isActive() && (m_mode != FIRST_ACTIVE || m_gotSignals);
 }
 
 void KisSignalCompressor::setMode(KisSignalCompressor::Mode mode)

@@ -66,15 +66,16 @@
 #include "kis_exposure_gamma_correction_interface.h"
 #include "KisView.h"
 #include "kis_canvas_controller.h"
+#include "kis_grid_config.h"
 
-#ifdef HAVE_OPENGL
 #include "kis_animation_player.h"
 #include "kis_animation_frame_cache.h"
 #include "opengl/kis_opengl_canvas2.h"
-#endif
-
 #include "opengl/kis_opengl.h"
 #include "kis_fps_decoration.h"
+
+#include "KoColorConversionTransformation.h"
+#include "KisProofingConfiguration.h"
 
 #include <kis_favorite_resource_manager.h>
 #include <kis_popup_palette.h>
@@ -103,9 +104,7 @@ public:
     KisAbstractCanvasWidget *canvasWidget = 0;
     KoShapeManager shapeManager;
     bool currentCanvasIsOpenGL;
-#ifdef HAVE_OPENGL
     int openGLFilterMode;
-#endif
     KisToolProxy toolProxy;
     KisPrescaledProjectionSP prescaledProjection;
     bool vastScrolling;
@@ -114,20 +113,22 @@ public:
     QRect savedUpdateRect;
 
     QBitArray channelFlags;
+    KisProofingConfiguration *proofingConfig = 0;
+    bool softProofing = false;
+    bool gamutCheck = false;
+    bool proofingConfigUpdated = false;
 
     KisPopupPalette *popupPalette = 0;
     KisDisplayColorConverter displayColorConverter;
 
     KisCanvasUpdatesCompressor projectionUpdatesCompressor;
-#ifdef HAVE_OPENGL
     KisAnimationPlayer *animationPlayer;
     KisAnimationFrameCacheSP frameCache;
-#endif
     bool lodAllowedInCanvas;
-    bool bootsrapLodBlocked;
+    bool bootstrapLodBlocked;
 
     bool effectiveLodAllowedInCanvas() {
-        return lodAllowedInCanvas && !bootsrapLodBlocked;
+        return lodAllowedInCanvas && !bootstrapLodBlocked;
     }
 };
 
@@ -140,9 +141,12 @@ KisCanvas2::KisCanvas2(KisCoordinatesConverter *coordConverter, KoCanvasResource
      * loading and zoom level settled down, LoD is given a green
      * light.
      */
-    m_d->bootsrapLodBlocked = true;
-    connect(view->mainWindow(), SIGNAL(guiLoadingFinished()),
-            SLOT(bootstrapFinished()));
+    m_d->bootstrapLodBlocked = true;
+    connect(view->mainWindow(), SIGNAL(guiLoadingFinished()), SLOT(bootstrapFinished()));
+
+    m_d->updateSignalCompressor.setDelay(10);
+    m_d->updateSignalCompressor.setMode(KisSignalCompressor::FIRST_ACTIVE);
+
 
 }
 
@@ -156,9 +160,7 @@ void KisCanvas2::setup()
     createCanvas(cfg.useOpenGL());
 
     setLodAllowedInCanvas(m_d->lodAllowedInCanvas);
-#ifdef HAVE_OPENGL
     m_d->animationPlayer = new KisAnimationPlayer(this);
-#endif
     connect(m_d->view->canvasController()->proxyObject, SIGNAL(moveDocumentOffset(QPoint)), SLOT(documentOffsetMoved(QPoint)));
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
 
@@ -185,19 +187,14 @@ void KisCanvas2::setup()
     connect(kritaShapeController, SIGNAL(currentLayerChanged(const KoShapeLayer*)),
             globalShapeManager()->selection(), SIGNAL(currentLayerChanged(const KoShapeLayer*)));
 
-
-    m_d->updateSignalCompressor.setDelay(10);
-    m_d->updateSignalCompressor.setMode(KisSignalCompressor::FIRST_ACTIVE);
     connect(&m_d->updateSignalCompressor, SIGNAL(timeout()), SLOT(slotDoCanvasUpdate()));
 }
 
 KisCanvas2::~KisCanvas2()
 {
-#ifdef HAVE_OPENGL
     if (m_d->animationPlayer->isPlaying()) {
         m_d->animationPlayer->forcedStopOnExit();
     }
-#endif
     delete m_d;
 }
 
@@ -243,25 +240,33 @@ void KisCanvas2::setCanvasWidget(QWidget * widget)
     }
 }
 
-bool KisCanvas2::canvasIsOpenGL()
+bool KisCanvas2::canvasIsOpenGL() const
 {
     return m_d->currentCanvasIsOpenGL;
 }
 
-void KisCanvas2::gridSize(qreal *horizontal, qreal *vertical) const
+KisOpenGL::FilterMode KisCanvas2::openGLFilterMode() const
 {
-    Q_ASSERT(horizontal);
-    Q_ASSERT(vertical);
+    return KisOpenGL::FilterMode(m_d->openGLFilterMode);
+}
+
+void KisCanvas2::gridSize(QPointF *offset, QSizeF *spacing) const
+{
     QTransform transform = coordinatesConverter()->imageToDocumentTransform();
 
-    QPointF size = transform.map(QPointF(m_d->view->document()->gridData().gridX(), m_d->view->document()->gridData().gridY()));
-    *horizontal = size.x();
-    *vertical = size.y();
+    const QPoint intSpacing = m_d->view->document()->gridConfig().spacing();
+    const QPoint intOffset = m_d->view->document()->gridConfig().offset();
+
+    QPointF size = transform.map(QPointF(intSpacing));
+    spacing->rwidth() = size.x();
+    spacing->rheight() = size.y();
+
+    *offset = transform.map(QPointF(intOffset));
 }
 
 bool KisCanvas2::snapToGrid() const
 {
-    return m_d->view->document()->gridData().snapToGrid();
+    return m_d->view->document()->gridConfig().snapToGrid();
 }
 
 qreal KisCanvas2::rotationAngle() const
@@ -398,7 +403,6 @@ void KisCanvas2::createQPainterCanvas()
 
 void KisCanvas2::createOpenGLCanvas()
 {
-#ifdef HAVE_OPENGL
     KisConfig cfg;
     m_d->openGLFilterMode = cfg.openGLFilteringMode();
     m_d->currentCanvasIsOpenGL = true;
@@ -411,18 +415,13 @@ void KisCanvas2::createOpenGLCanvas()
     if (canvasWidget->needsFpsDebugging() && !decoration(KisFpsDecoration::idTag)) {
         addDecoration(new KisFpsDecoration(imageView()));
     }
-#else
-    qFatal("Bad use of createOpenGLCanvas(). It shouldn't have happened =(");
-#endif
 }
 
 void KisCanvas2::createCanvas(bool useOpenGL)
 {
     // deinitialize previous canvas structures
     m_d->prescaledProjection = 0;
-#ifdef HAVE_OPENGL
     m_d->frameCache = 0;
-#endif
 
     KisConfig cfg;
     QDesktopWidget dw;
@@ -430,7 +429,6 @@ void KisCanvas2::createCanvas(bool useOpenGL)
     m_d->displayColorConverter.setMonitorProfile(profile);
 
     if (useOpenGL) {
-#ifdef HAVE_OPENGL
         if (KisOpenGL::hasOpenGL()) {
             createOpenGLCanvas();
             if (cfg.canvasState() == "OPENGL_FAILED") {
@@ -442,13 +440,11 @@ void KisCanvas2::createCanvas(bool useOpenGL)
             warnKrita << "Tried to create OpenGL widget when system doesn't have OpenGL\n";
             createQPainterCanvas();
         }
-#else
-        warnKrita << "User requested an OpenGL canvas, but Krita was compiled without OpenGL support. Falling back to QPainter.";
-        createQPainterCanvas();
-#endif
-    } else {
+    }
+    else {
         createQPainterCanvas();
     }
+
     if (m_d->popupPalette) {
         m_d->popupPalette->setParent(m_d->canvasWidget->widget());
     }
@@ -463,6 +459,7 @@ void KisCanvas2::initializeImage()
 
     connect(image, SIGNAL(sigImageUpdated(QRect)), SLOT(startUpdateCanvasProjection(QRect)), Qt::DirectConnection);
     connect(this, SIGNAL(sigCanvasCacheUpdated()), SLOT(updateCanvasProjection()));
+    connect(image, SIGNAL(sigProofingConfigChanged()), SLOT(slotChangeProofingConfig()));
     connect(image, SIGNAL(sigSizeChanged(const QPointF&, const QPointF&)), SLOT(startResizingImage()), Qt::DirectConnection);
     connect(this, SIGNAL(sigContinueResizeImage(qint32,qint32)), SLOT(finishResizingImage(qint32,qint32)));
 
@@ -491,7 +488,6 @@ void KisCanvas2::resetCanvas(bool useOpenGL)
     if (!m_d->canvasWidget) {
         return;
     }
-#ifdef HAVE_OPENGL
     KisConfig cfg;
     bool needReset = (m_d->currentCanvasIsOpenGL != useOpenGL) ||
         (m_d->currentCanvasIsOpenGL &&
@@ -502,10 +498,6 @@ void KisCanvas2::resetCanvas(bool useOpenGL)
         connectCurrentCanvas();
         notifyZoomChanged();
     }
-#else
-    Q_UNUSED(useOpenGL)
-#endif
-
     updateCanvasWidgetImpl();
 }
 
@@ -557,6 +549,73 @@ KisExposureGammaCorrectionInterface* KisCanvas2::exposureGammaCorrectionInterfac
     return displayFilter ?
         displayFilter->correctionInterface() :
         KisDumbExposureGammaCorrectionInterface::instance();
+}
+
+void KisCanvas2::setProofingOptions(bool softProof, bool gamutCheck)
+{
+    m_d->proofingConfig = this->image()->proofingConfiguration();
+    if (!m_d->proofingConfig) {
+        qDebug()<<"Canvas: No proofing config found, generating one.";
+        KisImageConfig cfg;
+        m_d->proofingConfig = cfg.defaultProofingconfiguration();
+    }
+    KoColorConversionTransformation::ConversionFlags conversionFlags = m_d->proofingConfig->conversionFlags;
+
+    if (softProof && this->image()->colorSpace()->colorDepthId().id().contains("U")) {
+        conversionFlags |= KoColorConversionTransformation::SoftProofing;
+    } else {
+        conversionFlags = conversionFlags &  ~KoColorConversionTransformation::SoftProofing;
+    }
+    if (gamutCheck && softProof && this->image()->colorSpace()->colorDepthId().id().contains("U")) {
+        conversionFlags |= KoColorConversionTransformation::GamutCheck;
+    } else {
+        conversionFlags = conversionFlags & ~KoColorConversionTransformation::GamutCheck;
+    }
+    m_d->proofingConfig->conversionFlags = conversionFlags;
+
+    m_d->proofingConfigUpdated = true;
+    startUpdateInPatches(this->image()->bounds());
+
+}
+
+void KisCanvas2::slotSoftProofing(bool softProofing)
+{
+    m_d->softProofing = softProofing;
+    setProofingOptions(m_d->softProofing, m_d->gamutCheck);
+}
+
+void KisCanvas2::slotGamutCheck(bool gamutCheck)
+{
+    m_d->gamutCheck = gamutCheck;
+    setProofingOptions(m_d->softProofing, m_d->gamutCheck);
+}
+
+void KisCanvas2::slotChangeProofingConfig()
+{
+    setProofingOptions(m_d->softProofing, m_d->gamutCheck);
+}
+
+void KisCanvas2::setProofingConfigUpdated(bool updated)
+{
+    m_d->proofingConfigUpdated = updated;
+}
+
+bool KisCanvas2::proofingConfigUpdated()
+{
+    return m_d->proofingConfigUpdated;
+}
+
+KisProofingConfiguration *KisCanvas2::proofingConfiguration() const
+{
+    if (!m_d->proofingConfig) {
+        m_d->proofingConfig = this->image()->proofingConfiguration();
+        if (!m_d->proofingConfig) {
+            qDebug()<<"Canvas: No proofing config found, generating one.";
+            KisImageConfig cfg;
+            m_d->proofingConfig = cfg.defaultProofingconfiguration();
+        }
+    }
+    return m_d->proofingConfig;
 }
 
 void KisCanvas2::startResizingImage()
@@ -756,21 +815,21 @@ void KisCanvas2::slotSetDisplayProfile(const KoColorProfile *monitorProfile)
 
     m_d->displayColorConverter.setMonitorProfile(monitorProfile);
 
-    KisImageWSP image = this->image();
-
-    image->barrierLock();
-
-    m_d->canvasWidget->setDisplayProfile(&m_d->displayColorConverter);
+    {
+        KisImageSP image = this->image();
+        KisImageBarrierLocker l(image);
+        m_d->canvasWidget->setDisplayProfile(&m_d->displayColorConverter);
+    }
 
     refetchDataFromImage();
 }
 
-void KisCanvas2::addDecoration(KisCanvasDecoration* deco)
+void KisCanvas2::addDecoration(KisCanvasDecorationSP deco)
 {
     m_d->canvasWidget->addDecoration(deco);
 }
 
-KisCanvasDecoration* KisCanvas2::decoration(const QString& id) const
+KisCanvasDecorationSP KisCanvas2::decoration(const QString& id) const
 {
     return m_d->canvasWidget->decoration(id);
 }
@@ -803,7 +862,6 @@ void KisCanvas2::setCursor(const QCursor &cursor)
     canvasWidget()->setCursor(cursor);
 }
 
-#ifdef HAVE_OPENGL
 KisAnimationFrameCacheSP KisCanvas2::frameCache() const
 {
     return m_d->frameCache;
@@ -813,7 +871,7 @@ KisAnimationPlayer *KisCanvas2::animationPlayer() const
 {
     return m_d->animationPlayer;
 }
-#endif
+
 void KisCanvas2::slotSelectionChanged()
 {
     KisShapeLayer* shapeLayer = dynamic_cast<KisShapeLayer*>(viewManager()->activeLayer().data());
@@ -837,7 +895,7 @@ bool KisCanvas2::isPopupPaletteVisible() const
 
 void KisCanvas2::setWrapAroundViewingMode(bool value)
 {
-    KisCanvasDecoration *infinityDecoration =
+    KisCanvasDecorationSP infinityDecoration =
         m_d->canvasWidget->decoration(INFINITY_DECORATION_ID);
 
     if (infinityDecoration) {
@@ -849,7 +907,7 @@ void KisCanvas2::setWrapAroundViewingMode(bool value)
 
 bool KisCanvas2::wrapAroundViewingMode() const
 {
-    KisCanvasDecoration *infinityDecoration =
+    KisCanvasDecorationSP infinityDecoration =
         m_d->canvasWidget->decoration(INFINITY_DECORATION_ID);
 
     if (infinityDecoration) {
@@ -860,22 +918,24 @@ bool KisCanvas2::wrapAroundViewingMode() const
 
 void KisCanvas2::bootstrapFinished()
 {
-    if (!m_d->bootsrapLodBlocked) return;
+    if (!m_d->bootstrapLodBlocked) return;
 
-    m_d->bootsrapLodBlocked = false;
+    m_d->bootstrapLodBlocked = false;
     setLodAllowedInCanvas(m_d->lodAllowedInCanvas);
 }
 
 void KisCanvas2::setLodAllowedInCanvas(bool value)
 {
-#ifdef HAVE_OPENGL
+    if (!KisOpenGL::supportsGLSL13()) {
+        qWarning() << "WARNING: Level of Detail functionality is available only with openGL + GLSL 1.3 support";
+    }
+
     m_d->lodAllowedInCanvas =
-        value &&
-        m_d->currentCanvasIsOpenGL;
-#else
-    Q_UNUSED(value);
-    m_d->lodAllowedInCanvas = false;
-#endif
+            value &&
+            m_d->currentCanvasIsOpenGL &&
+            KisOpenGL::supportsGLSL13() &&
+            (m_d->openGLFilterMode == KisOpenGL::TrilinearFilterMode ||
+             m_d->openGLFilterMode == KisOpenGL::HighQualityFiltering);
 
     KisImageSP image = this->image();
 
@@ -894,11 +954,6 @@ bool KisCanvas2::lodAllowedInCanvas() const
     return m_d->lodAllowedInCanvas;
 }
 
-KoGuidesData *KisCanvas2::guidesData()
-{
-    return &m_d->view->document()->guidesData();
-}
-
 void KisCanvas2::slotShowPopupPalette(const QPoint &p)
 {
     if (!m_d->popupPalette) {
@@ -908,8 +963,8 @@ void KisCanvas2::slotShowPopupPalette(const QPoint &p)
     m_d->popupPalette->showPopupPalette(p);
 }
 
-KisPaintingAssistantsDecoration* KisCanvas2::paintingAssistantsDecoration() const
+KisPaintingAssistantsDecorationSP KisCanvas2::paintingAssistantsDecoration() const
 {
-    KisCanvasDecoration* deco = decoration("paintingAssistantsDecoration");
-    return qobject_cast<KisPaintingAssistantsDecoration*>(deco);
+    KisCanvasDecorationSP deco = decoration("paintingAssistantsDecoration");
+    return qobject_cast<KisPaintingAssistantsDecoration*>(deco.data());
 }

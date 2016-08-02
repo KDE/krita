@@ -15,7 +15,7 @@ add_library(kritasketchpaintop MODULE ${kritasketchpaintop_SOURCES})
 
 target_link_libraries(kritasketchpaintop kritalibpaintop)
 
-install(TARGETS kritasketchpaintop  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS kritasketchpaintop  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

@@ -72,6 +72,15 @@ public:
      */
     bool requestsOtherStrokesToEnd() const;
 
+    /**
+     * Returns true if the update scheduler can cancel this stroke
+     * when some other stroke is going to be started. This make the
+     * "forgettable" stroke very low priority.
+     *
+     * Default is 'false'.
+     */
+    bool canForgetAboutMe() const;
+
     QString id() const;
     KUndo2MagicString name() const;
 
@@ -100,6 +109,7 @@ protected:
     void setIndirectPaintingCompositeOp(const QString &id);
     void setClearsRedoOnStart(bool value);
     void setRequestsOtherStrokesToEnd(bool value);
+    void setCanForgetAboutMe(bool value);
 
 protected:
     /**
@@ -114,6 +124,7 @@ private:
     QString m_indirectPaintingCompositeOp;
     bool m_clearsRedoOnStart;
     bool m_requestsOtherStrokesToEnd;
+    bool m_canForgetAboutMe;
 
     QString m_id;
     KUndo2MagicString m_name;

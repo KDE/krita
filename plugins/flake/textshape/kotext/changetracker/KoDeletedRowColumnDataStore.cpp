@@ -34,7 +34,7 @@ KoDeletedRowData *KoDeletedRowColumnDataStore::addDeletedRow(QTextTable *table, 
 {
     KoDeletedRowData *deletedRowData = new KoDeletedRowData(rowNumber);
     deletedRowDataMap.insert(changeId, deletedRowData);
-    QVector<int> *tableChangeIds = tableChangeIdsMap.value(table, NULL);
+    QVector<int> *tableChangeIds = tableChangeIdsMap.value(table, 0);
     if (!tableChangeIds) {
         tableChangeIds = new QVector<int>();
         tableChangeIdsMap.insert(table, tableChangeIds);
@@ -47,7 +47,7 @@ KoDeletedColumnData *KoDeletedRowColumnDataStore::addDeletedColumn(QTextTable *t
 {
     KoDeletedColumnData *deletedColumnData = new KoDeletedColumnData(columnNumber);
     deletedColumnDataMap.insert(changeId, deletedColumnData);
-    QVector<int> *tableChangeIds = tableChangeIdsMap.value(table, NULL);
+    QVector<int> *tableChangeIds = tableChangeIdsMap.value(table, 0);
     if (!tableChangeIds) {
         tableChangeIds = new QVector<int>();
         tableChangeIdsMap.insert(table, tableChangeIds);
@@ -58,15 +58,15 @@ KoDeletedColumnData *KoDeletedRowColumnDataStore::addDeletedColumn(QTextTable *t
 
 const QVector<int> *KoDeletedRowColumnDataStore::deletedRowColumnChangeIds(QTextTable *table)
 {
-    return tableChangeIdsMap.value(table, NULL);
+    return tableChangeIdsMap.value(table, 0);
 }
 
 KoDeletedRowColumnDataStore::DeleteType KoDeletedRowColumnDataStore::deleteType(int changeId)
 {
     KoDeletedRowColumnDataStore::DeleteType retValue;
-    if (deletedRowDataMap.value(changeId, NULL)) {
+    if (deletedRowDataMap.value(changeId, 0)) {
         retValue = KoDeletedRowColumnDataStore::eDeletedRow;
-    } else if(deletedColumnDataMap.value(changeId, NULL)) {
+    } else if(deletedColumnDataMap.value(changeId, 0)) {
         retValue = KoDeletedRowColumnDataStore::eDeletedColumn;
     } else {
         retValue = KoDeletedRowColumnDataStore::eUnknownDeleteType;
@@ -77,11 +77,11 @@ KoDeletedRowColumnDataStore::DeleteType KoDeletedRowColumnDataStore::deleteType(
 
 KoDeletedRowData *KoDeletedRowColumnDataStore::deletedRowData(int changeId)
 {
-    return deletedRowDataMap.value(changeId, NULL);
+    return deletedRowDataMap.value(changeId, 0);
 }
 
 KoDeletedColumnData *KoDeletedRowColumnDataStore::deletedColumnData(int changeId)
 {
-    return deletedColumnDataMap.value(changeId, NULL);
+    return deletedColumnDataMap.value(changeId, 0);
 }
 

@@ -39,6 +39,11 @@ struct KisAnimationFrameCache::Private
         image = textures->image();
     }
 
+    ~Private()
+    {
+        qDeleteAll(frames);
+    }
+
     KisOpenGLImageTexturesSP textures;
     KisImageWSP image;
 
@@ -54,7 +59,7 @@ struct KisAnimationFrameCache::Private
 
     QMap<int, Frame*> frames;
 
-    Frame * getFrame(int time)
+    Frame *getFrame(int time)
     {
         if (frames.isEmpty()) return 0;
 
@@ -220,7 +225,7 @@ KisOpenGLUpdateInfoSP KisAnimationFrameCache::fetchFrameData(int time) const
         qWarning() << "    "  << ppVar(m_d->image->animationInterface()->currentTime()) << ppVar(time);
     }
 
-    return m_d->textures->updateCacheNoConversion(m_d->image->bounds());
+    return m_d->textures->updateCache(m_d->image->bounds());
 }
 
 void KisAnimationFrameCache::addConvertedFrameData(KisOpenGLUpdateInfoSP info, int time)

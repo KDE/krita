@@ -47,14 +47,14 @@
 #include <kis_brush_server.h>
 #include <kis_debug.h>
 
-#include <CalligraVersionWrapper.h>
+#include <KritaVersionWrapper.h>
 
 KisResourceBundle::KisResourceBundle(QString const& fileName)
     : KoResource(fileName),
       m_bundleVersion("1")
 {
     setName(QFileInfo(fileName).baseName());
-    m_metadata["generator"] = "Krita (" + CalligraVersionWrapper::versionString(true) + ")";
+    m_metadata["generator"] = "Krita (" + KritaVersionWrapper::versionString(true) + ")";
 }
 
 KisResourceBundle::~KisResourceBundle()
@@ -180,7 +180,7 @@ bool KisResourceBundle::load()
             warnKrita << "Could not load meta.xml";
             return false;
         }
-        
+
         if (resourceStore->open("preview.png")) {
             // Workaround for some OS (Debian, Ubuntu), where loading directly from the QIODevice
             // fails with "libpng error: IDAT: CRC error"
@@ -282,7 +282,7 @@ bool KisResourceBundle::save()
 
     addMeta("updated", QDate::currentDate().toString("dd/MM/yyyy"));
 
-    QDir bundleDir = KoResourcePaths::saveLocation("data", "krita/bundles");
+    QDir bundleDir = KoResourcePaths::saveLocation("data", "bundles");
     bundleDir.cdUp();
 
     QScopedPointer<KoStore> store(KoStore::createStore(filename(), KoStore::Write, "application/x-krita-resourcebundle", KoStore::Zip));
@@ -444,18 +444,18 @@ bool KisResourceBundle::install()
                     continue;
                 }
                 dbgResources << "\t\tresource:" << res->name();
-                
+
                 KoAbstractGradient *res2 = gradientServer->resourceByName(res->name());
                 if (!res2)  {//if it doesn't exist...
-                    gradientServer->addResource(res, false);//add it!   
-                    
+                    gradientServer->addResource(res, false);//add it!
+
                     if (!m_gradientsMd5Installed.contains(res->md5())) {
                         m_gradientsMd5Installed.append(res->md5());
                     }
                     if (ref.md5sum!=res->md5()) {
                         md5Mismatch.append(res->name());
                     }
-                    
+
                     Q_FOREACH (const QString &tag, ref.tagList) {
                         gradientServer->addTag(res, tag);
                     }
@@ -464,7 +464,7 @@ bool KisResourceBundle::install()
                 else {
                     //warnKrita << "Didn't install" << res->name()<<"It already exists on the server";
                 }
-                
+
             }
         }
         else if (resType  == "patterns") {
@@ -488,24 +488,24 @@ bool KisResourceBundle::install()
                     continue;
                 }
                 dbgResources << "\t\tresource:" << res->name();
-                
+
                 KoPattern *res2 = patternServer->resourceByName(res->name());
                 if (!res2)  {//if it doesn't exist...
                     patternServer->addResource(res, false);//add it!
-                    
+
                     if (!m_patternsMd5Installed.contains(res->md5())) {
                         m_patternsMd5Installed.append(res->md5());
                     }
                     if (ref.md5sum!=res->md5()) {
                         md5Mismatch.append(res->name());
                     }
-                       
+
                     Q_FOREACH (const QString &tag, ref.tagList) {
                         patternServer->addTag(res, tag);
                     }
                     patternServer->addTag(res, name());
                 }
-                
+
             }
         }
         else if (resType  == "brushes") {
@@ -529,19 +529,19 @@ bool KisResourceBundle::install()
                     continue;
                 }
                 dbgResources << "\t\tresource:" << res->name();
-                
+
                 //find the resouce on the server
                 KisBrushSP res2 = brushServer->resourceByName(res->name());
                 if (!res2)  {//if it doesn't exist...
                     brushServer->addResource(res, false);//add it!
-                    
+
                     if (!m_brushesMd5Installed.contains(res->md5())) {
                         m_brushesMd5Installed.append(res->md5());
                     }
                     if (ref.md5sum!=res->md5()) {
                         md5Mismatch.append(res->name());
                     }
-                       
+
                     Q_FOREACH (const QString &tag, ref.tagList) {
                         brushServer->addTag(res.data(), tag);
                     }
@@ -574,19 +574,19 @@ bool KisResourceBundle::install()
                     continue;
                 }
                 dbgResources << "\t\tresource:" << res->name();
-                
+
                 //find the resouce on the server
                 KoColorSet *res2 = paletteServer->resourceByName(res->name());
                 if (!res2)  {//if it doesn't exist...
-                    paletteServer->addResource(res, false);//add it!   
-                    
+                    paletteServer->addResource(res, false);//add it!
+
                     if (!m_palettesMd5Installed.contains(res->md5())) {
                         m_palettesMd5Installed.append(res->md5());
                     }
                     if (ref.md5sum!=res->md5()) {
                         md5Mismatch.append(res->name());
                     }
-                    
+
                     Q_FOREACH (const QString &tag, ref.tagList) {
                         paletteServer->addTag(res, tag);
                     }
@@ -622,15 +622,15 @@ bool KisResourceBundle::install()
                 //the following tries to find the resource by name.
                 KisWorkspaceResource *res2 = workspaceServer->resourceByName(res->name());
                 if (!res2)  {//if it doesn't exist...
-                    workspaceServer->addResource(res, false);//add it! 
-                    
+                    workspaceServer->addResource(res, false);//add it!
+
                     if (!m_workspacesMd5Installed.contains(res->md5())) {
                         m_workspacesMd5Installed.append(res->md5());
                     }
                     if (ref.md5sum!=res->md5()) {
                         md5Mismatch.append(res->name());
                     }
-                      
+
                     Q_FOREACH (const QString &tag, ref.tagList) {
                         workspaceServer->addTag(res, tag);
                     }
@@ -639,7 +639,7 @@ bool KisResourceBundle::install()
                 else {
                     //warnKrita << "Didn't install" << res->name()<<"It already exists on the server";
                 }
-               
+
             }
         }
         else if (resType  == "paintoppresets") {
@@ -679,7 +679,7 @@ bool KisResourceBundle::install()
                     if (ref.md5sum!=res->md5()) {
                         md5Mismatch.append(res->name());
                     }
-                    
+
                     Q_FOREACH (const QString &tag, ref.tagList) {
                         paintoppresetServer->addTag(res.data(), tag);
                     }
@@ -688,7 +688,7 @@ bool KisResourceBundle::install()
                 else {
                     //warnKrita << "Didn't install" << res->name()<<"It already exists on the server";
                 }
-                
+
             }
         }
     }

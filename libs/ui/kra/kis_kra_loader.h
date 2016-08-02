@@ -58,7 +58,7 @@ public:
     vKisNodeSP selectedNodes() const;
 
     // it's neater to follow the same design as with selectedNodes, so let's have a getter here
-    QList<KisPaintingAssistant*> assistants() const;
+    QList<KisPaintingAssistantSP> assistants() const;
 
     /// if empty, loading didn't fail...
     QStringList errorMessages() const;
@@ -101,6 +101,8 @@ private:
     void loadCompositions(const KoXmlElement& elem, KisImageWSP image);
 
     void loadAssistantsList(const KoXmlElement& elem);
+    void loadGrid(const KoXmlElement& elem);
+    void loadGuides(const KoXmlElement& elem);
 private:
 
     struct Private;

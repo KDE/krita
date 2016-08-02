@@ -35,11 +35,12 @@
 
 #define ICON_SIZE 48
 
-DlgBundleManager::DlgBundleManager(KisActionManager* actionMgr, QWidget *parent)
+DlgBundleManager::DlgBundleManager(ResourceManager *resourceManager, KisActionManager* actionMgr, QWidget *parent)
     : KoDialog(parent)
     , m_page(new QWidget())
     , m_ui(new Ui::WdgDlgBundleManager)
     , m_currentBundle(0)
+    , m_resourceManager(resourceManager)
 {
     setCaption(i18n("Manage Resource Bundles"));
     m_ui->setupUi(m_page);
@@ -73,7 +74,15 @@ DlgBundleManager::DlgBundleManager(KisActionManager* actionMgr, QWidget *parent)
 
     connect(m_ui->bnEditBundle, SIGNAL(clicked()), SLOT(editBundle()));
 
-    connect(m_ui->importBundleButton, SIGNAL(clicked()), SLOT(slotImportResource()));
+    connect(m_ui->bnImportBrushes, SIGNAL(clicked()), SLOT(slotImportResource()));
+    connect(m_ui->bnImportGradients, SIGNAL(clicked()), SLOT(slotImportResource()));
+    connect(m_ui->bnImportPalettes, SIGNAL(clicked()), SLOT(slotImportResource()));
+    connect(m_ui->bnImportPatterns, SIGNAL(clicked()), SLOT(slotImportResource()));
+    connect(m_ui->bnImportPresets, SIGNAL(clicked()), SLOT(slotImportResource()));
+    connect(m_ui->bnImportWorkspaces, SIGNAL(clicked()), SLOT(slotImportResource()));
+    connect(m_ui->bnImportBundles, SIGNAL(clicked()), SLOT(slotImportResource()));
+
+
     connect(m_ui->createBundleButton, SIGNAL(clicked()), SLOT(slotCreateBundle()));
     connect(m_ui->deleteBackupFilesButton, SIGNAL(clicked()), SLOT(slotDeleteBackupFiles()));
     connect(m_ui->openResourceFolderButton, SIGNAL(clicked()), SLOT(slotOpenResourceFolder()));
@@ -118,7 +127,7 @@ void DlgBundleManager::accept()
         QMessageBox bundleFeedback;
         bundleFeedback.setIcon(QMessageBox::Warning);
         QString feedback = "bundlefeedback";
-        
+
         if (!bundle) {
             // Get it from the blacklisted bundles
             Q_FOREACH (KisResourceBundle *b2, m_blacklistedBundles.values()) {
@@ -128,13 +137,13 @@ void DlgBundleManager::accept()
                 }
             }
         }
-        
+
         if (bundle) {
             if(!bundle->isInstalled()){
                 bundle->install();
                 //this removes the bundle from the blacklist and add it to the server without saving or putting it in front//
                 if(!bundleServer->addResource(bundle, false, false)){
-                
+
                     feedback = i18n("Couldn't add bundle to resource server");
                     bundleFeedback.setText(feedback);
                     bundleFeedback.exec();
@@ -154,7 +163,7 @@ void DlgBundleManager::accept()
         QString feedback = i18n("Bundle doesn't exist!");
         bundleFeedback.setText(feedback);
         bundleFeedback.exec();
-        
+
         }
     }
 
@@ -289,6 +298,7 @@ void DlgBundleManager::editBundle()
         if (dlg.exec() != QDialog::Accepted) {
             return;
         }
+        m_resourceManager->saveBundle(dlg);
     }
 }
 
@@ -318,11 +328,38 @@ void DlgBundleManager::fillListWidget(QList<KisResourceBundle *> bundles, QListW
 }
 
 
-void DlgBundleManager::slotImportResource() {
+void DlgBundleManager::slotImportResource()
+{
+    if (m_actionManager) {
+        QObject *button = sender();
+        QString buttonName = button->objectName();
+        KisAction *action = 0;
+        if (buttonName == "bnImportBundles") {
+            action = m_actionManager->actionByName("import_bundles");
+        }
+        else if (buttonName == "bnImportBrushes") {
+            action = m_actionManager->actionByName("import_brushes");
+        }
+        else if (buttonName == "bnImportGradients") {
+            action = m_actionManager->actionByName("import_gradients");
+        }
+        else if (buttonName == "bnImportPalettes") {
+            action = m_actionManager->actionByName("import_palettes");
+        }
+        else if (buttonName == "bnImportPatterns") {
+            action = m_actionManager->actionByName("import_patterns");
+        }
+        else if (buttonName == "bnImportPresets") {
+            action = m_actionManager->actionByName("import_presets");
+        }
+        else if (buttonName == "bnImportWorkspaces") {
+            action = m_actionManager->actionByName("import_workspaces");
+        }
+        else {
+            warnUI << "Unhandled bundle manager import button " << buttonName;
+            return;
+        }
 
-    if (m_actionManager)
-    {
-        KisAction *action = m_actionManager->actionByName("import_resources");
         action->trigger();
         refreshListData();
     }
@@ -330,8 +367,7 @@ void DlgBundleManager::slotImportResource() {
 
 void DlgBundleManager::slotCreateBundle() {
 
-    if (m_actionManager)
-    {
+    if (m_actionManager) {
         KisAction *action = m_actionManager->actionByName("create_bundle");
         action->trigger();
     }
@@ -339,8 +375,7 @@ void DlgBundleManager::slotCreateBundle() {
 
 void DlgBundleManager::slotDeleteBackupFiles() {
 
-    if (m_actionManager)
-    {
+    if (m_actionManager) {
         KisAction *action = m_actionManager->actionByName("edit_blacklist_cleanup");
         action->trigger();
     }
@@ -348,8 +383,7 @@ void DlgBundleManager::slotDeleteBackupFiles() {
 
 void DlgBundleManager::slotOpenResourceFolder() {
 
-    if (m_actionManager)
-    {
+    if (m_actionManager) {
         KisAction *action = m_actionManager->actionByName("open_resources_directory");
         action->trigger();
     }

@@ -96,7 +96,7 @@ KisRandomGeneratorDemo::KisRandomGeneratorDemo(QWidget* parent) : QWidget(parent
     _noUpdate = true;
     setupUi(this);
 
-    srand(time(NULL));
+    srand(time(0));
     seed1->setValue(rand() & 0xFFFF);
     seed2->setValue(rand() & 0xFFFF);
     seed3->setValue(rand() & 0xFFFF);

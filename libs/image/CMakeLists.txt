@@ -17,7 +17,9 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/recorder
 
     ${CMAKE_SOURCE_DIR}/sdk/tests
-    
+)
+
+include_directories(SYSTEM
     ${EIGEN3_INCLUDE_DIR}
     ${Boost_INCLUDE_DIRS}
 )
@@ -27,7 +29,7 @@ if(FFTW3_FOUND)
 endif()
 
 if(HAVE_VC)
-  include_directories(${Vc_INCLUDE_DIR} ${Qt5Core_INCLUDE_DIRS} ${Qt5Gui_INCLUDE_DIRS})
+  include_directories(SYSTEM ${Vc_INCLUDE_DIR} ${Qt5Core_INCLUDE_DIRS} ${Qt5Gui_INCLUDE_DIRS})
   ko_compile_for_all_implementations(__per_arch_circle_mask_generator_objs kis_brush_mask_applicator_factories.cpp)
 else()
   set(__per_arch_circle_mask_generator_objs kis_brush_mask_applicator_factories.cpp)
@@ -77,7 +79,6 @@ set(kritaimage_LIB_SRCS
    commands/kis_image_layer_remove_command_impl.cpp
    commands/kis_image_lock_command.cpp
    commands/kis_layer_command.cpp
-   commands/kis_layer_props_command.cpp
    commands/kis_node_command.cpp
    commands/kis_node_compositeop_command.cpp
    commands/kis_node_opacity_command.cpp
@@ -93,6 +94,7 @@ set(kritaimage_LIB_SRCS
    commands_new/kis_selection_move_command2.cpp
    commands_new/kis_update_command.cpp
    commands_new/kis_switch_current_time_command.cpp
+   commands_new/kis_change_projection_color_command.cpp
    commands_new/kis_activate_selection_mask_command.cpp
    processing/kis_do_nothing_processing_visitor.cpp
    processing/kis_simple_processing_visitor.cpp
@@ -179,6 +181,7 @@ set(kritaimage_LIB_SRCS
    kis_signal_compressor_with_param.cpp
    kis_thread_safe_signal_compressor.cpp
    kis_acyclic_signal_connector.cpp
+   kis_timed_signal_threshold.cpp
    kis_layer.cc
    kis_indirect_painting_support.cpp
    kis_abstract_projection_plane.cpp
@@ -208,7 +211,6 @@ set(kritaimage_LIB_SRCS
    kis_paint_device_debug_utils.cpp
    kis_fixed_paint_device.cpp
    kis_paint_layer.cc
-   kis_perspective_grid.cpp
    kis_perspective_math.cpp
    kis_pixel_selection.cpp
    kis_processing_information.cpp
@@ -246,6 +248,7 @@ set(kritaimage_LIB_SRCS
    kis_outline_generator.cpp
    kis_layer_composition.cpp
    kis_selection_filters.cpp
+   KisProofingConfiguration.h
    metadata/kis_meta_data_entry.cc
    metadata/kis_meta_data_filter.cc
    metadata/kis_meta_data_filter_p.cc
@@ -283,6 +286,7 @@ set(kritaimage_LIB_SRCS
    kis_scalar_keyframe_channel.cpp
    kis_raster_keyframe_channel.cpp
    kis_onion_skin_compositor.cpp
+   kis_onion_skin_cache.cpp
    kis_idle_watcher.cpp
 
    kis_psd_layer_style.cpp
@@ -337,6 +341,9 @@ endif()
 
 if(HAVE_VC)
   target_link_libraries(kritaimage PUBLIC ${Vc_LIBRARIES})
+  if (NOT PACKAGERS_BUILD)
+      set_property(TARGET kritaimage APPEND PROPERTY COMPILE_OPTIONS "${Vc_ARCHITECTURE_FLAGS}")
+  endif()
 endif()
 
 if (NOT GSL_FOUND)
@@ -352,13 +359,12 @@ target_include_directories(kritaimage
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/generator>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/layerstyles>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/metadata>
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/metadata/schemes>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/processing>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/recorder>
 )
 
 set_target_properties(kritaimage PROPERTIES
-    VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
+    VERSION ${GENERIC_KRITA_LIB_VERSION} SOVERSION ${GENERIC_KRITA_LIB_SOVERSION}
 )
 install(TARGETS kritaimage  ${INSTALL_TARGETS_DEFAULT_ARGS})
 

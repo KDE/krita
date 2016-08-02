@@ -114,7 +114,7 @@ protected:
         m_sel3->initSelection(m_layer3);
         initPaintDevice(m_sel1, 100);
         initPaintDevice(m_sel2, 200);
-        const quint8 defPixel(750);
+        const quint8 defPixel(quint8(750));
         m_sel3->paintDevice()->setDefaultPixel(&defPixel);
     }
 

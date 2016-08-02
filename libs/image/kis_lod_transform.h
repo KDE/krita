@@ -82,17 +82,6 @@ public:
         return pi;
     }
 
-    /*vQPointF map(vQPointF v) const {
-        vQPointF::iterator it = v.begin();
-        vQPointF::iterator end = v.end();
-
-        while (it != end) {
-            *it = m_transform.map(*it);
-        }
-
-        return v;
-        }*/
-
     template <class T>
     T map(const T &object) const {
         return m_transform.map(object);
@@ -169,7 +158,7 @@ private:
     static inline void alignByPow2ButOneHi(qint32 &value, qint32 alignment)
     {
         qint32 mask = alignment - 1;
-        value = value > 0 ? value | mask : -( -value | mask);
+        value |= mask;
     }
 
     /**
@@ -179,7 +168,7 @@ private:
     static inline void alignByPow2Lo(qint32 &value, qint32 alignment)
     {
         qint32 mask = alignment - 1;
-        value = value > 0 ? value & ~mask : -( -value & ~mask);
+         value &= ~mask;
     }
 
     static inline int divideSafe(int x, int lod) {

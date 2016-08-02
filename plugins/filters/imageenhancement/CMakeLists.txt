@@ -5,4 +5,4 @@ set(kritaimageenhancement_SOURCES
     )
 add_library(kritaimageenhancement MODULE ${kritaimageenhancement_SOURCES})
 target_link_libraries(kritaimageenhancement kritaui)
-install(TARGETS kritaimageenhancement  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS kritaimageenhancement  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})

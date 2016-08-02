@@ -6,6 +6,8 @@
     <file>dark_fillLayer.svg</file>
     <file>dark_filterLayer.svg</file>
     <file>dark_filterMask.svg</file>
+    <file>dark_groupClosed.svg</file>
+    <file>dark_groupOpened.svg</file>
     <file>dark_groupLayer.svg</file>
     <file>dark_paintLayer.svg</file>
     <file>dark_selectionMask.svg</file>
@@ -17,6 +19,8 @@
     <file>light_fillLayer.svg</file>
     <file>light_filterLayer.svg</file>
     <file>light_filterMask.svg</file>
+    <file>light_groupClosed.svg</file>
+    <file>light_groupOpened.svg</file>
     <file>light_groupLayer.svg</file>
     <file>light_paintLayer.svg</file>
     <file>light_selectionMask.svg</file>

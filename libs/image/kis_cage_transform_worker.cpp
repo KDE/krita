@@ -27,13 +27,9 @@
 #include "kis_selection.h"
 #include "kis_painter.h"
 #include "kis_image.h"
+#include "krita_utils.h"
 
-#ifdef Q_OS_WIN
-#include <float.h>
-#ifndef __MINGW32__
-#define isnan _isnan
-#endif
-#endif
+#include <qnumeric.h>
 
 struct Q_DECL_HIDDEN KisCageTransformWorker::Private
 {
@@ -213,15 +209,9 @@ QVector<QPointF> KisCageTransformWorker::Private::calculateTransformedPoints()
     for (int i = 0; i < numValidPoints; i++) {
         transformedPoints[i] = cage.transformedPoint(i, transfCage);
 
-#ifdef Q_CC_MSVC
-        if (isnan(transformedPoints[i].x()) ||
-            isnan(transformedPoints[i].y())) {
-#else
-        if (std::isnan(transformedPoints[i].x()) ||
-            std::isnan(transformedPoints[i].y())) {
-#endif
-
-            warnKrita << "WARNING:     One grid point has been removed from consideration" << validPoints[i];
+        if (qIsNaN(transformedPoints[i].x()) ||
+            qIsNaN(transformedPoints[i].y())) {
+            warnKrita << "WARNING: One grid point has been removed from consideration" << validPoints[i];
             transformedPoints[i] = validPoints[i];
         }
 
@@ -252,13 +242,15 @@ int KisCageTransformWorker::Private::
 tryGetValidIndex(const QPoint &cellPt)
 {
     int index = -1;
-
-    return
-        cellPt.x() >= 0 &&
+    if (cellPt.x() >= 0 &&
         cellPt.y() >= 0 &&
         cellPt.x() < gridSize.width() - 1 &&
-        cellPt.y() < gridSize.height() - 1 &&
-        (index = allToValidPointsMap[GridIterationTools::pointToIndex(cellPt, gridSize)]) >= 0, index;
+        cellPt.y() < gridSize.height() - 1) {
+
+        index = allToValidPointsMap[GridIterationTools::pointToIndex(cellPt, gridSize)];
+    }
+
+    return index;
 }
 
 
@@ -291,6 +283,65 @@ struct KisCageTransformWorker::Private::MapIndexesOp {
     KisCageTransformWorker::Private *m_d;
     QPolygonF m_srcCagePolygon;
 };
+
+QRect KisCageTransformWorker::approxChangeRect(const QRect &rc)
+{
+    const qreal margin = 0.30;
+
+    QVector<QPointF> cageSamplePoints;
+
+    const int minStep = 3;
+    const int maxSamples = 200;
+
+    const int totalPixels = rc.width() * rc.height();
+    const int realStep = qMax(minStep, totalPixels / maxSamples);
+    const QPolygonF cagePolygon(m_d->origCage);
+
+    for (int i = 0; i < totalPixels; i += realStep) {
+        const int x = rc.x() + i % rc.width();
+        const int y = rc.y() + i / rc.width();
+
+        const QPointF pt(x, y);
+        if (cagePolygon.containsPoint(pt, Qt::OddEvenFill)) {
+            cageSamplePoints << pt;
+        }
+    }
+
+    if (cageSamplePoints.isEmpty()) {
+        return rc;
+    }
+
+    KisGreenCoordinatesMath cage;
+    cage.precalculateGreenCoordinates(m_d->origCage, cageSamplePoints);
+    cage.generateTransformedCageNormals(m_d->transfCage);
+
+    const int numValidPoints = cageSamplePoints.size();
+    QVector<QPointF> transformedPoints(numValidPoints);
+
+    int failedPoints = 0;
+
+    for (int i = 0; i < numValidPoints; i++) {
+        transformedPoints[i] = cage.transformedPoint(i, m_d->transfCage);
+
+        if (qIsNaN(transformedPoints[i].x()) ||
+            qIsNaN(transformedPoints[i].y())) {
+
+            transformedPoints[i] = cageSamplePoints[i];
+            failedPoints++;
+        }
+    }
+
+    QRect resultRect =
+        KritaUtils::approximateRectFromPoints(transformedPoints).toAlignedRect();
+
+    return KisAlgebra2D::blowRect(resultRect | rc, margin);
+}
+
+QRect KisCageTransformWorker::approxNeedRect(const QRect &rc, const QRect &fullBounds)
+{
+    Q_UNUSED(rc);
+    return fullBounds;
+}
 
 void KisCageTransformWorker::run()
 {

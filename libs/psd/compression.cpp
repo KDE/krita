@@ -21,7 +21,7 @@
 #include <QBuffer>
 #include "psd_utils.h"
 #include "kis_debug.h"
-#include <netinet/in.h> // htonl
+#include <QtEndian>
 
 // from gimp's psd-save.c
 static quint32 pack_pb_line (const QByteArray &src,
@@ -223,7 +223,7 @@ QByteArray Compression::uncompress(quint32 unpacked_len, QByteArray bytes, Compr
 
         QByteArray b;
         QBuffer buf(&b);
-        quint32 val = ntohl(unpacked_len);
+        quint32 val = qFromBigEndian(unpacked_len);
         buf.write((char*)&val, 4);
         b.append(bytes);
 

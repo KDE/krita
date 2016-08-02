@@ -95,7 +95,6 @@
 #include <QTextDocumentFragment>
 #include <QToolTip>
 #include <QSignalMapper>
-#include <QGraphicsObject>
 #include <QLinearGradient>
 #include <QBitmap>
 #include <QDrag>
@@ -471,8 +470,7 @@ void TextTool::createActions()
 #ifndef NDEBUG
 #include "tests/MockShapes.h"
 #include <kundo2stack.h>
-#include <QMimeDatabase>
-#include <QMimeType>
+#include <KisMimeDatabase.h>
 
 TextTool::TextTool(MockCanvas *canvas)  // constructor for our unit tests;
     : KoToolBase(canvas),
@@ -586,7 +584,7 @@ void TextTool::showEditTip()
 
 void TextTool::blinkCaret()
 {
-    if (!(canvas()->canvasWidget() ? canvas()->canvasWidget()->hasFocus() : canvas()->canvasItem()->hasFocus())) {
+    if (!(canvas()->canvasWidget() && canvas()->canvasWidget()->hasFocus())) {
         m_caretTimer.stop();
         m_caretTimerState = false; // not visible.
     } else {
@@ -611,9 +609,7 @@ void TextTool::paint(QPainter &painter, const KoViewConverter &converter)
         return;
     }
     if (canvas()
-            && ((canvas()->canvasWidget() && canvas()->canvasWidget()->hasFocus())
-                || (canvas()->canvasItem() && canvas()->canvasItem()->hasFocus())
-               )
+            && (canvas()->canvasWidget() && canvas()->canvasWidget()->hasFocus())
             && !m_caretTimer.isActive()) { // make sure we blink
         m_caretTimer.start();
         m_caretTimerState = true;
@@ -855,18 +851,14 @@ void TextTool::mousePressEvent(KoPointerEvent *event)
     if (event->button() == Qt::LeftButton && qApp->autoSipEnabled()) {
         QStyle::RequestSoftwareInputPanel behavior = QStyle::RequestSoftwareInputPanel(qApp->style()->styleHint(QStyle::SH_RequestSoftwareInputPanel));
         // the two following bools just make it all a lot easier to read in the following if()
-        // basically, we require a widget for this to work (passing NULL to QApplication::sendEvent
+        // basically, we require a widget for this to work (passing 0 to QApplication::sendEvent
         // crashes) and there are three tests any one of which can be true to trigger the event
         const bool hasWidget = canvas()->canvasWidget();
-        const bool hasItem = canvas()->canvasItem();
-        if ((behavior == QStyle::RSIP_OnMouseClick && (hasWidget || hasItem)) ||
-                (hasWidget && canvas()->canvasWidget()->hasFocus()) ||
-                (hasItem && canvas()->canvasItem()->hasFocus())) {
+        if ((behavior == QStyle::RSIP_OnMouseClick && hasWidget) ||
+                (hasWidget && canvas()->canvasWidget()->hasFocus())) {
             QEvent event(QEvent::RequestSoftwareInputPanel);
             if (hasWidget) {
                 QApplication::sendEvent(canvas()->canvasWidget(), &event);
-            } else {
-                QApplication::sendEvent(canvas()->canvasItem(), &event);
             }
         }
     }
@@ -1437,9 +1429,6 @@ void TextTool::mouseMoveEvent(KoPointerEvent *event)
                 if (canvas()->canvasWidget()) {
                     canvas()->canvasWidget()->update();
                 }
-                if (canvas()->canvasItem()) {
-                    canvas()->canvasItem()->update();
-                }
             }
             m_tableDraggedOnce = true;
         } else if (m_tableDragInfo.tableHit == KoPointedAt::RowDivider) {
@@ -1465,9 +1454,6 @@ void TextTool::mouseMoveEvent(KoPointerEvent *event)
                     //we need to redraw like this so we update outside the textshape too
                     if (canvas()->canvasWidget()) {
                         canvas()->canvasWidget()->update();
-                    }
-                    if (canvas()->canvasItem()) {
-                        canvas()->canvasItem()->update();
                     }
                 }
                 m_tableDraggedOnce = true;
@@ -1525,9 +1511,6 @@ void TextTool::mouseReleaseEvent(KoPointerEvent *event)
         //we need to redraw like this so we update outside the textshape too
         if (canvas()->canvasWidget()) {
             canvas()->canvasWidget()->update();
-        }
-        if (canvas()->canvasItem()) {
-            canvas()->canvasItem()->update();
         }
     }
 
@@ -2489,7 +2472,7 @@ void TextTool::setFontFamily(const QString &font)
 
 void TextTool::setFontSize(qreal size)
 {
-    if (!m_allowActions || !m_textEditor.data()) {
+    if (!m_allowActions || !m_textEditor.data() || m_textEditor.isNull()) {
         return;
     }
     m_textEditor.data()->setFontSize(size);

@@ -267,7 +267,7 @@ void KUndo2Command::undo()
 
 QString KUndo2Command::actionText() const
 {
-    if(d->actionText!=NULL)
+    if(d->actionText!=0)
         return d->actionText;
     else
         return QString();
@@ -1038,7 +1038,7 @@ QString KUndo2QStack::undoText() const
 {
     if (!m_macro_stack.isEmpty())
         return QString();
-    if (m_index > 0 && m_command_list.at(m_index-1)!=NULL)
+    if (m_index > 0 && m_command_list.at(m_index-1)!=0)
 
         return m_command_list.at(m_index - 1)->actionText();
     return QString();

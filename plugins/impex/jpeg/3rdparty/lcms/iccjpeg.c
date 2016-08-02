@@ -198,7 +198,7 @@ read_icc_profile (j_decompress_ptr cinfo,
   unsigned int data_length[MAX_SEQ_NO+1]; /* size of profile data in marker */
   unsigned int data_offset[MAX_SEQ_NO+1]; /* offset for data in marker */
 
-  *icc_data_ptr = NULL;		/* avoid confusion if FALSE return */
+  *icc_data_ptr = 0;		/* avoid confusion if FALSE return */
   *icc_data_len = 0;
 
   /* This first pass over the saved markers discovers whether there are
@@ -208,7 +208,7 @@ read_icc_profile (j_decompress_ptr cinfo,
   for (seq_no = 1; seq_no <= MAX_SEQ_NO; seq_no++)
     marker_present[seq_no] = 0;
 
-  for (marker = cinfo->marker_list; marker != NULL; marker = marker->next) {
+  for (marker = cinfo->marker_list; marker != 0; marker = marker->next) {
     if (marker_is_icc(marker)) {
       if (num_markers == 0)
 	num_markers = GETJOCTET(marker->data[13]);
@@ -244,11 +244,11 @@ read_icc_profile (j_decompress_ptr cinfo,
 
   /* Allocate space for assembled data */
   icc_data = (JOCTET *) malloc(total_length * sizeof(JOCTET));
-  if (icc_data == NULL)
+  if (icc_data == 0)
     return FALSE;		/* oops, out of memory */
 
   /* and fill it in */
-  for (marker = cinfo->marker_list; marker != NULL; marker = marker->next) {
+  for (marker = cinfo->marker_list; marker != 0; marker = marker->next) {
     if (marker_is_icc(marker)) {
       JOCTET FAR *src_ptr;
       JOCTET *dst_ptr;

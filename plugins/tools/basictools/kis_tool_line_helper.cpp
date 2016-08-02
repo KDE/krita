@@ -46,6 +46,7 @@ KisToolLineHelper::KisToolLineHelper(KisPaintingInformationBuilder *infoBuilder,
 
 KisToolLineHelper::~KisToolLineHelper()
 {
+    delete m_d;
 }
 
 void KisToolLineHelper::setEnabled(bool value)
@@ -160,4 +161,12 @@ void KisToolLineHelper::cancel()
 
     cancelPaint();
     m_d->linePoints.clear();
+}
+
+
+void KisToolLineHelper::clearPaint()
+{
+    if (!m_d->enabled) return;
+
+    cancelPaint();
 }

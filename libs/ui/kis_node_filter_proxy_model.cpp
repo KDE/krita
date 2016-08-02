@@ -24,6 +24,8 @@
 #include "kis_node_manager.h"
 #include "kis_signal_compressor.h"
 
+#include "kis_image.h"
+
 
 struct KisNodeFilterProxyModel::Private
 {
@@ -116,7 +118,7 @@ void KisNodeFilterProxyModel::setActiveNode(KisNodeSP node)
 {
     m_d->pendingActiveNode = node;
 
-    if (indexFromNode(node).isValid()) {
+    if (node && indexFromNode(node).isValid()) {
         m_d->activeNodeCompressor.start();
     } else {
         slotUpdateCurrentNodeFilter();
@@ -127,4 +129,11 @@ void KisNodeFilterProxyModel::slotUpdateCurrentNodeFilter()
 {
     m_d->activeNode = m_d->pendingActiveNode;
     invalidateFilter();
+}
+
+void KisNodeFilterProxyModel::unsetDummiesFacade()
+{
+    m_d->nodeModel->setDummiesFacade(0, 0, 0, 0, 0);
+    m_d->pendingActiveNode = 0;
+    m_d->activeNode = 0;
 }

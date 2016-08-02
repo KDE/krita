@@ -25,7 +25,7 @@
 #include <QFile>
 
 #include <kpluginfactory.h>
-#include <QUrl>
+#include <QFileInfo>
 
 #include <KoColorSpaceRegistry.h>
 #include <KisFilterChain.h>
@@ -61,33 +61,25 @@ KisImportExportFilter::ConversionStatus KisPPMImport::convert(const QByteArray& 
     if (to != "application/x-krita")
         return KisImportExportFilter::BadMimeType;
 
-    KisDocument * doc = m_chain->outputDocument();
+    KisDocument * doc = outputDocument();
 
     if (!doc)
         return KisImportExportFilter::NoDocumentCreated;
 
-    QString filename = m_chain->inputFile();
+    QString filename = inputFile();
 
     if (filename.isEmpty()) {
         return KisImportExportFilter::FileNotFound;
     }
 
-    QUrl url = QUrl::fromLocalFile(filename);
-
-    if (url.isEmpty())
-        return KisImportExportFilter::FileNotFound;
-
-    if (!url.isLocalFile()) {
+    if (!QFileInfo(filename).exists()) {
         return KisImportExportFilter::FileNotFound;
     }
 
-    QFile fp(url.toLocalFile());
-    if (fp.exists()) {
-        doc->prepareForImport();
-        return loadFromDevice(&fp, doc);
-    }
 
-    return KisImportExportFilter::CreationError;
+    QFile fp(filename);
+    doc->prepareForImport();
+    return loadFromDevice(&fp, doc);
 }
 
 int readNumber(QIODevice* device)

@@ -9,9 +9,9 @@ if (MSVC)
             INSTALL_DIR ${PREFIX_ext_fftw3}
             CONFIGURE_COMMAND ""
             BUILD_COMMAND ${CMAKE_COMMAND} -E echo deploying fftw3 64 binary
-            INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_directory bin ${PREFIX_ext_fftw3}
-                    COMMAND ${CMAKE_COMMAND} -E copy_directory lib ${PREFIX_ext_fftw3}
-                    COMMAND ${CMAKE_COMMAND} -E copy_directory include ${PREFIX_ext_fftw3}
+            INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_directory <SOURCE_DIR>/bin ${PREFIX_ext_fftw3}/bin
+                    COMMAND ${CMAKE_COMMAND} -E copy_directory <SOURCE_DIR>/lib ${PREFIX_ext_fftw3}/lib
+                    COMMAND ${CMAKE_COMMAND} -E copy_directory <SOURCE_DIR>/include ${PREFIX_ext_fftw3}/include
 
             UPDATE_COMMAND ""
             ALWAYS 0
@@ -25,15 +25,31 @@ if (MSVC)
             INSTALL_DIR ${PREFIX_ext_fftw3}
             CONFIGURE_COMMAND ""
             BUILD_COMMAND ${CMAKE_COMMAND} -E echo deploying fftw3 32 binary
-            INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_directory bin ${PREFIX_ext_fftw3}
-                    COMMAND ${CMAKE_COMMAND} -E copy_directory lib ${PREFIX_ext_fftw3}
-                    COMMAND ${CMAKE_COMMAND} -E copy_directory include ${PREFIX_ext_fftw3}
+            INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_directory <SOURCE_DIR>/bin ${PREFIX_ext_fftw3}/bin
+                    COMMAND ${CMAKE_COMMAND} -E copy_directory <SOURCE_DIR>/lib ${PREFIX_ext_fftw3}/lib
+                    COMMAND ${CMAKE_COMMAND} -E copy_directory <SOURCE_DIR>/include ${PREFIX_ext_fftw3}/include
 
             UPDATE_COMMAND ""
             ALWAYS 0
         )
     endif()
-else (MSVC)
+elseif (MINGW)
+        ExternalProject_Add( ext_fftw3
+            DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+            URL http://files.kde.org/krita/build/dependencies/fftw-3.3.4-dll64.zip
+            URL_MD5 c4ec1e6d84e7a8b1cd61121d11d44ee4
+
+            INSTALL_DIR ${PREFIX_ext_fftw3}
+            CONFIGURE_COMMAND ""
+            BUILD_COMMAND ${CMAKE_COMMAND} -E echo deploying fftw3 64 binary
+            INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_directory <SOURCE_DIR>/bin ${PREFIX_ext_fftw3}/bin
+                    COMMAND ${CMAKE_COMMAND} -E copy_directory <SOURCE_DIR>/lib ${PREFIX_ext_fftw3}/lib
+                    COMMAND ${CMAKE_COMMAND} -E copy_directory <SOURCE_DIR>/include ${PREFIX_ext_fftw3}/include
+
+            UPDATE_COMMAND ""
+            ALWAYS 0
+        )
+else ()
 ExternalProject_Add( ext_fftw3
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
 	URL http://files.kde.org/krita/build/dependencies/fftw-3.3.4.tar.gz
@@ -47,4 +63,4 @@ ExternalProject_Add( ext_fftw3
         UPDATE_COMMAND ""
         ALWAYS 0
 )
-endif (MSVC)
+endif ()

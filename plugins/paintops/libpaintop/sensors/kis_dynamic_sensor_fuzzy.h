@@ -36,22 +36,18 @@ class KisDynamicSensorFuzzy : public QObject, public KisDynamicSensor
 public:
     bool dependsOnCanvasRotation() const;
 
-    using KisSerializableConfiguration::fromXML;
-    using KisSerializableConfiguration::toXML;
-    void toXML(QDomDocument&, QDomElement&) const;
-    void fromXML(const QDomElement&);
-
     bool isAdditive() const;
 
-    KisDynamicSensorFuzzy();
+    KisDynamicSensorFuzzy(bool fuzzyPerStroke = false);
     virtual ~KisDynamicSensorFuzzy() {}
     qreal value(const KisPaintInformation &info);
 
-    void setRotationModeEnabled(int state);
+    void reset();
 
 private:
-    bool m_rotationModeEnabled;
-
+    const bool m_fuzzyPerStroke;
+    bool m_isInitialized;
+    qreal m_savedValue;
 };
 
 #endif // KIS_DYNAMIC_SENSOR_FUZZY_H

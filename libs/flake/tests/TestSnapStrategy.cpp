@@ -29,7 +29,6 @@
 
 //#include <PointProperties.h>
 #include <KoSnapData.h>
-#include <KoGuidesData.h>
 
 void TestSnapStrategy::testOrthogonalSnap()
 {
@@ -330,45 +329,47 @@ void TestSnapStrategy::testBoundingBoxSnap()
 }
 void TestSnapStrategy::testLineGuideSnap()
 {
-    //Testing so the snap does not work without horizontal and vertial lines
-    LineGuideSnapStrategy toTest;
-    const QPointF paramMousePos;
-    MockShapeController fakeShapeControllerBase;
-    MockCanvas fakeKoCanvasBase(&fakeShapeControllerBase);
-    KoSnapGuide aKoSnapGuide(&fakeKoCanvasBase);
-    KoSnapProxy paramProxy(&aKoSnapGuide);
-    qreal paramSnapDistance = 0;
-    bool didSnap = toTest.snap(paramMousePos, &paramProxy, paramSnapDistance);
-    QVERIFY(!didSnap);
+    // KoGuides data has been moved into Krita
+    // 
+    // //Testing so the snap does not work without horizontal and vertial lines
+    // LineGuideSnapStrategy toTest;
+    // const QPointF paramMousePos;
+    // MockShapeController fakeShapeControllerBase;
+    // MockCanvas fakeKoCanvasBase(&fakeShapeControllerBase);
+    // KoSnapGuide aKoSnapGuide(&fakeKoCanvasBase);
+    // KoSnapProxy paramProxy(&aKoSnapGuide);
+    // qreal paramSnapDistance = 0;
+    // bool didSnap = toTest.snap(paramMousePos, &paramProxy, paramSnapDistance);
+    // QVERIFY(!didSnap);
 
-    //Test case that covers the path of the snap by providing horizontal and vertical lines for the GuidesData
-    LineGuideSnapStrategy toTestTwo;
-    const QPointF paramMousePosTwo;
-    MockShapeController fakeShapeControllerBaseTwo;
-    MockCanvas fakeKoCanvasBaseTwo(&fakeShapeControllerBaseTwo);
+    // //Test case that covers the path of the snap by providing horizontal and vertical lines for the GuidesData
+    // LineGuideSnapStrategy toTestTwo;
+    // const QPointF paramMousePosTwo;
+    // MockShapeController fakeShapeControllerBaseTwo;
+    // MockCanvas fakeKoCanvasBaseTwo(&fakeShapeControllerBaseTwo);
 
-    KoGuidesData guidesData;
+    // KoGuidesData guidesData;
 
-    QList<qreal> horzLines;
-    horzLines.push_back(2);
-    horzLines.push_back(3);
-    horzLines.push_back(4);
-    horzLines.push_back(5);
+    // QList<qreal> horzLines;
+    // horzLines.push_back(2);
+    // horzLines.push_back(3);
+    // horzLines.push_back(4);
+    // horzLines.push_back(5);
 
-    QList<qreal> vertLines;
-    vertLines.push_back(1);
-    vertLines.push_back(2);
-    vertLines.push_back(3);
-    vertLines.push_back(4);
+    // QList<qreal> vertLines;
+    // vertLines.push_back(1);
+    // vertLines.push_back(2);
+    // vertLines.push_back(3);
+    // vertLines.push_back(4);
 
-    guidesData.setHorizontalGuideLines(horzLines);
-    guidesData.setVerticalGuideLines(vertLines);
-    fakeKoCanvasBaseTwo.setGuidesData(&guidesData);
-    qreal paramSnapDistanceTwo = 8;
-    KoSnapGuide aKoSnapGuideTwo(&fakeKoCanvasBaseTwo);
-    KoSnapProxy paramProxyTwo(&aKoSnapGuideTwo);
-    bool didSnapTwo = toTestTwo.snap(paramMousePosTwo, &paramProxyTwo, paramSnapDistanceTwo);
-    QVERIFY(didSnapTwo);
+    // guidesData.setHorizontalGuideLines(horzLines);
+    // guidesData.setVerticalGuideLines(vertLines);
+    // fakeKoCanvasBaseTwo.setGuidesData(&guidesData);
+    // qreal paramSnapDistanceTwo = 8;
+    // KoSnapGuide aKoSnapGuideTwo(&fakeKoCanvasBaseTwo);
+    // KoSnapProxy paramProxyTwo(&aKoSnapGuideTwo);
+    // bool didSnapTwo = toTestTwo.snap(paramMousePosTwo, &paramProxyTwo, paramSnapDistanceTwo);
+    // QVERIFY(didSnapTwo);
 }
 
 void TestSnapStrategy::testOrhogonalDecoration()
@@ -509,43 +510,45 @@ void TestSnapStrategy::testBoundingBoxDecoration()
 
 void TestSnapStrategy::testLineGuideDecoration()
 {
-    //tests the decoration by making sure there are horizontal and vertical lines in the guidesData
-    LineGuideSnapStrategy toTest;
+    // KoGuides data has been moved into Krita
+    //
+    // //tests the decoration by making sure there are horizontal and vertical lines in the guidesData
+    // LineGuideSnapStrategy toTest;
 
-    const QPointF paramMousePosTwo;
-    MockShapeController fakeShapeControllerBaseTwo;
-    MockCanvas fakeKoCanvasBaseTwo(&fakeShapeControllerBaseTwo);
+    // const QPointF paramMousePosTwo;
+    // MockShapeController fakeShapeControllerBaseTwo;
+    // MockCanvas fakeKoCanvasBaseTwo(&fakeShapeControllerBaseTwo);
 
-    KoGuidesData guidesData;
-    //firstSnapPointList.push_back(
-    QList<qreal> horzLines;
-    horzLines.push_back(2);
-    horzLines.push_back(3);
-    horzLines.push_back(4);
-    horzLines.push_back(5);
+    // KoGuidesData guidesData;
+    // //firstSnapPointList.push_back(
+    // QList<qreal> horzLines;
+    // horzLines.push_back(2);
+    // horzLines.push_back(3);
+    // horzLines.push_back(4);
+    // horzLines.push_back(5);
 
-    QList<qreal> vertLines;
-    vertLines.push_back(1);
-    vertLines.push_back(2);
-    vertLines.push_back(3);
-    vertLines.push_back(4);
+    // QList<qreal> vertLines;
+    // vertLines.push_back(1);
+    // vertLines.push_back(2);
+    // vertLines.push_back(3);
+    // vertLines.push_back(4);
 
-    guidesData.setHorizontalGuideLines(horzLines);
-    guidesData.setVerticalGuideLines(vertLines);
-    fakeKoCanvasBaseTwo.setGuidesData(&guidesData);
-    qreal paramSnapDistanceTwo = 8;
-    KoSnapGuide aKoSnapGuideTwo(&fakeKoCanvasBaseTwo);
-    KoSnapProxy paramProxyTwo(&aKoSnapGuideTwo);
-    toTest.snap(paramMousePosTwo, &paramProxyTwo, paramSnapDistanceTwo);
+    // guidesData.setHorizontalGuideLines(horzLines);
+    // guidesData.setVerticalGuideLines(vertLines);
+    // fakeKoCanvasBaseTwo.setGuidesData(&guidesData);
+    // qreal paramSnapDistanceTwo = 8;
+    // KoSnapGuide aKoSnapGuideTwo(&fakeKoCanvasBaseTwo);
+    // KoSnapProxy paramProxyTwo(&aKoSnapGuideTwo);
+    // toTest.snap(paramMousePosTwo, &paramProxyTwo, paramSnapDistanceTwo);
 
-    KoViewConverter parameterConverter;
-    QSizeF unzoomedSize = parameterConverter.viewToDocument(QSizeF(5, 5));
-    QPointF snappedPos(1,2);
-    QPointF originalEndPointOne(snappedPos + QPointF(unzoomedSize.width(), 0));
-    QPointF originalEndPointTwo(snappedPos + QPointF(0, unzoomedSize.height()));
-    QPainterPath resultingDecoration = toTest.decoration(parameterConverter);
+    // KoViewConverter parameterConverter;
+    // QSizeF unzoomedSize = parameterConverter.viewToDocument(QSizeF(5, 5));
+    // QPointF snappedPos(1,2);
+    // QPointF originalEndPointOne(snappedPos + QPointF(unzoomedSize.width(), 0));
+    // QPointF originalEndPointTwo(snappedPos + QPointF(0, unzoomedSize.height()));
+    // QPainterPath resultingDecoration = toTest.decoration(parameterConverter);
 
-    QVERIFY( (resultingDecoration.currentPosition() == originalEndPointOne) || (resultingDecoration.currentPosition() == originalEndPointTwo ) );
+    // QVERIFY( (resultingDecoration.currentPosition() == originalEndPointOne) || (resultingDecoration.currentPosition() == originalEndPointTwo ) );
 }
 
 void TestSnapStrategy::testSquareDistance()

@@ -130,16 +130,18 @@ void KisMultipleProjection::apply(KisPaintDeviceSP dstDevice, const QRect &rect)
     }
 }
 
-void KisMultipleProjection::syncLodCache()
+KisPaintDeviceList KisMultipleProjection::getLodCapableDevices() const
 {
     QReadLocker readLocker(&m_d->lock);
 
     PlanesMap::const_iterator it = m_d->planes.constBegin();
     PlanesMap::const_iterator end = m_d->planes.constEnd();
 
+    KisPaintDeviceList list;
     for (; it != end; ++it) {
-        KisPaintDeviceSP device = it->device;
-        QRegion dirtyRegion = device->syncLodCache(device->defaultBounds()->currentLevelOfDetail());
-        Q_UNUSED(dirtyRegion);
+        list << it->device;
     }
+
+    return list;
 }
+

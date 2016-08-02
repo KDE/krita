@@ -29,6 +29,10 @@ class KisInputProfile::Private
 {
 public:
     Private() { }
+    ~Private()
+    {
+        qDeleteAll(shortcuts);
+    }
 
     QString name;
     QMultiHash<KisAbstractInputAction *, KisShortcutConfiguration *> shortcuts;
@@ -42,7 +46,7 @@ KisInputProfile::KisInputProfile(QObject *parent)
 
 KisInputProfile::~KisInputProfile()
 {
-
+    delete d;
 }
 
 QString KisInputProfile::name() const

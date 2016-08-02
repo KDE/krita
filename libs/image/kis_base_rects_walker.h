@@ -297,7 +297,7 @@ protected:
     virtual void registerChangeRect(KisProjectionLeafSP leaf, NodePosition position) {
         // We do not work with masks here. It is KisLayer's job.
         if(!leaf->isLayer()) return;
-        if(!leaf->visible()) return;
+        if(!(position & N_FILTHY) && !leaf->visible()) return;
 
         QRect currentChangeRect = leaf->projectionPlane()->changeRect(m_resultChangeRect,
                                                                       convertPositionToFilthy(position));

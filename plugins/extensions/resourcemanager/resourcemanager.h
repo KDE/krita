@@ -21,11 +21,15 @@
 #define RESOURCEMANAGER_H
 
 #include <QVariant>
-#include <KoResourceServer.h>
-#
-#include <kis_view_plugin.h>
+#include <QStringList>
+#include <QString>
 
+#include <KoResourceServer.h>
+
+#include <kis_view_plugin.h>
 #include "KisResourceBundle.h"
+
+#include "dlg_create_bundle.h"
 
 class ResourceManager : public KisViewPlugin
 {
@@ -33,15 +37,27 @@ class ResourceManager : public KisViewPlugin
 public:
     ResourceManager(QObject *parent, const QVariantList &);
     virtual ~ResourceManager();
+    void saveBundle(const DlgCreateBundle &dlgCreateBundle);
 
 private Q_SLOTS:
-    void slotImport();
     void slotCreateBundle();
     void slotManageBundles();
 
+    void slotImportBrushes();
+    void slotImportGradients();
+    void slotImportPalettes();
+    void slotImportPatterns();
+    void slotImportPresets();
+    void slotImportWorkspaces();
+    void slotImportBundles();
+
+
 private:
+    
+    QStringList importResources(const QString &title, const QStringList &mimes) const;
+
     class Private;
-    Private *const d;
+    QScopedPointer<Private> d;
 };
 
 #endif // RESOURCEMANAGER_H

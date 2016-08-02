@@ -26,7 +26,7 @@
 
 #include "kis_post_execution_undo_adapter.h"
 #include "commands_new/kis_switch_current_time_command.h"
-
+#include "kis_layer_utils.h"
 
 
 struct KisImageAnimationInterface::Private
@@ -67,6 +67,19 @@ KisImageAnimationInterface::KisImageAnimationInterface(KisImage *image)
 
 KisImageAnimationInterface::~KisImageAnimationInterface()
 {
+}
+
+bool KisImageAnimationInterface::hasAnimation() const
+{
+    bool hasAnimation = false;
+
+    KisLayerUtils::recursiveApplyNodes(
+        m_d->image->root(),
+        [&hasAnimation](KisNodeSP node) {
+            hasAnimation |= node->isAnimated();
+        });
+
+    return hasAnimation;
 }
 
 int KisImageAnimationInterface::currentTime() const
@@ -132,6 +145,16 @@ void KisImageAnimationInterface::requestTimeSwitchWithUndo(int time)
     m_d->image->postExecutionUndoAdapter()->addCommand(toQShared(cmd));
 }
 
+void KisImageAnimationInterface::setDefaultProjectionColor(const KoColor &color)
+{
+    int savedTime = 0;
+    saveAndResetCurrentTime(currentTime(), &savedTime);
+
+    m_d->image->setDefaultProjectionColor(color);
+
+    restoreCurrentTime(&savedTime);
+}
+
 void KisImageAnimationInterface::requestTimeSwitchNonGUI(int time)
 {
     emit sigInternalRequestTimeSwitch(time);
@@ -162,7 +185,12 @@ void KisImageAnimationInterface::requestFrameRegeneration(int frameId, const QRe
                                              dirtyRegion,
                                              this);
 
+    QList<KisStrokeJobData*> jobs = KisRegenerateFrameStrokeStrategy::createJobsData(m_d->image);
+
     KisStrokeId stroke = m_d->image->startStroke(strategy);
+    Q_FOREACH (KisStrokeJobData* job, jobs) {
+        m_d->image->addJob(stroke, job);
+    }
     m_d->image->endStroke(stroke);
 }
 
@@ -182,6 +210,11 @@ void KisImageAnimationInterface::restoreCurrentTime(int *savedValue)
 void KisImageAnimationInterface::notifyFrameReady()
 {
     emit sigFrameReady(m_d->currentTime);
+}
+
+void KisImageAnimationInterface::notifyFrameCancelled()
+{
+    emit sigFrameCancelled();
 }
 
 KisUpdatesFacade* KisImageAnimationInterface::updatesFacade() const

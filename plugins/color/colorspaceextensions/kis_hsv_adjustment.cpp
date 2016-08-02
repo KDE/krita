@@ -83,7 +83,15 @@ class KisHSVAdjustment : public KoColorTransformation
     typedef typename RGBTrait::Pixel RGBPixel;
 
 public:
-    KisHSVAdjustment()
+    KisHSVAdjustment() :
+        m_adj_h(0.0),
+        m_adj_s(0.0),
+        m_adj_v(0.0),
+        m_lumaRed(0.0),
+        m_lumaGreen(0.0),
+        m_lumaBlue(0.0),
+        m_type(0),
+        m_colorize(false)
     {
     }
 
@@ -144,7 +152,7 @@ public:
                         s += m_adj_s;
                         v += m_adj_v;
                         HSVToRGB(h, s, v, &r, &g, &b);
-                    } else if (abs(m_type) == 1) {
+                    } else if (m_type == 1) {
 
                         RGBToHSL(SCALE_TO_FLOAT(src->red), SCALE_TO_FLOAT(src->green), SCALE_TO_FLOAT(src->blue), &h, &s, &v);
 
@@ -360,18 +368,15 @@ public:
             m_lumaBlue = parameter.toDouble();
             break;
         default:
+            KIS_ASSERT_RECOVER_NOOP(false && "Unknown parameter ID. Ignored!");
             ;
         }
-    }
-    void setLuma(qreal R, qreal G, qreal B){
-        
     }
 
 private:
 
     double m_adj_h, m_adj_s, m_adj_v;
     qreal m_lumaRed, m_lumaGreen, m_lumaBlue;
-    QString model;
     int m_type;
     bool m_colorize;
 };

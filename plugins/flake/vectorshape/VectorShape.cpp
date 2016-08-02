@@ -57,6 +57,8 @@
 #include "SvmParser.h"
 #include "SvmPainterBackend.h"
 
+#include "kis_painting_tweaks.h"
+
 // Comment out to get uncached painting, which is good for debugging
 //#define VECTORSHAPE_PAINT_UNCACHED
 
@@ -247,7 +249,7 @@ void VectorShape::paint(QPainter &painter, const KoViewConverter &converter, KoS
     QImage *cache = render(converter, asynchronous, useCache);
     if (cache) { // paint cached image
         Q_ASSERT(!cache->isNull());
-        QVector<QRect> clipRects = painter.clipRegion().rects();
+        QVector<QRect> clipRects = KisPaintingTweaks::safeClipRegion(painter).rects();
         foreach (const QRect &rc, clipRects) {
             painter.drawImage(rc.topLeft(), *cache, rc);
         }

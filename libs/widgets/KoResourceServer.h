@@ -82,7 +82,7 @@ public:
         QStringList fileNames;
 
         foreach (const QString &extension, extensionList) {
-            fileNames += KoResourcePaths::findAllResources(type().toLatin1(), extension, KoResourcePaths::Recursive | KoResourcePaths::NoDuplicates);
+            fileNames += KoResourcePaths::findAllResources(type().toLatin1(), extension, KoResourcePaths::Recursive);
 
         }
         return fileNames;
@@ -134,7 +134,7 @@ public:
     KoResourceServer(const QString& type, const QString& extensions)
         : KoResourceServerBase(type, extensions)
     {
-        m_blackListFile = KoResourcePaths::locateLocal("data", "krita/" + type + ".blacklist");
+        m_blackListFile = KoResourcePaths::locateLocal("data", type + ".blacklist");
         m_blackListFileNames = readBlackListFile();
         m_tagStore = new KoResourceTagStore(this);
         m_tagStore->loadTags();

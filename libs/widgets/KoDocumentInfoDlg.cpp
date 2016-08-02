@@ -38,8 +38,7 @@
 
 #include <QLineEdit>
 #include <QDateTime>
-#include <QMimeDatabase>
-#include <QMimeType>
+#include <KisMimeDatabase.h>
 
 class KoPageWidgetItemAdapter : public KPageWidgetItem
 {
@@ -101,11 +100,7 @@ KoDocumentInfoDlg::KoDocumentInfoDlg(QWidget* parent, KoDocumentInfo* docInfo)
     // Ugly hack, the mimetype should be a parameter, instead
     KoDocumentBase* doc = dynamic_cast< KoDocumentBase* >(d->info->parent());
     if (doc) {
-        QMimeDatabase db;
-        QMimeType mime = db.mimeTypeForName(doc->mimeType());
-        if (mime.isValid()) {
-            page->setIcon(KisIconUtils::loadIcon(mime.iconName()));
-        }
+        page->setIcon(KisIconUtils::loadIcon(KisMimeDatabase::iconNameForMimeType(doc->mimeType())));
     } else {
         // hide all entries not used in pages for KoDocumentInfoPropsPage
         d->aboutUi->filePathInfoLabel->setVisible(false);
@@ -184,12 +179,9 @@ void KoDocumentInfoDlg::initAboutTab()
     if (!d->info->aboutInfo("keyword").isEmpty())
         d->aboutUi->leKeywords->setText(d->info->aboutInfo("keyword"));
 
-    d->aboutUi->meComments->setPlainText(d->info->aboutInfo("description"));
+    d->aboutUi->meDescription->setPlainText(d->info->aboutInfo("abstract"));
     if (doc && !doc->mimeType().isEmpty()) {
-        QMimeDatabase db;
-        QMimeType docmime = db.mimeTypeForName(doc->mimeType());
-        if (docmime.isValid())
-            d->aboutUi->lblType->setText(docmime.comment());
+        d->aboutUi->lblType->setText(KisMimeDatabase::descriptionForMimeType(doc->mimeType()));
     }
     if (!d->info->aboutInfo("creation-date").isEmpty()) {
         QDateTime t = QDateTime::fromString(d->info->aboutInfo("creation-date"),
@@ -235,7 +227,7 @@ void KoDocumentInfoDlg::saveAboutData()
     d->info->setAboutInfo("keyword", d->aboutUi->leKeywords->text());
     d->info->setAboutInfo("title", d->aboutUi->leTitle->text());
     d->info->setAboutInfo("subject", d->aboutUi->leSubject->text());
-    d->info->setAboutInfo("description", d->aboutUi->meComments->toPlainText());
+    d->info->setAboutInfo("abstract", d->aboutUi->meDescription->toPlainText());
     d->info->setAboutInfo("language", KoGlobal::tagOfLanguage(d->aboutUi->cbLanguage->currentText()));
 }
 
@@ -272,7 +264,7 @@ QList<KPageWidgetItem*> KoDocumentInfoDlg::pages() const
 
 void KoDocumentInfoDlg::setReadOnly(bool ro)
 {
-    d->aboutUi->meComments->setReadOnly(ro);
+    d->aboutUi->meDescription->setReadOnly(ro);
 
     Q_FOREACH(KPageWidgetItem* page, d->pages) {
         Q_FOREACH(QLineEdit* le, page->widget()->findChildren<QLineEdit *>()) {

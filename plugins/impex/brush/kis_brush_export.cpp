@@ -26,7 +26,7 @@
 #include <KoProperties.h>
 #include <KoDialog.h>
 #include <kpluginfactory.h>
-#include <QUrl>
+#include <QFileInfo>
 
 #include <KisFilterChain.h>
 
@@ -64,8 +64,8 @@ KisBrushExport::~KisBrushExport()
 
 KisImportExportFilter::ConversionStatus KisBrushExport::convert(const QByteArray& from, const QByteArray& to)
 {
-    KisDocument *input = m_chain->inputDocument();
-    QString filename = m_chain->outputFile();
+    KisDocument *input = inputDocument();
+    QString filename = outputFile();
 
     if (!input)
         return KisImportExportFilter::NoDocumentCreated;
@@ -95,9 +95,9 @@ KisImportExportFilter::ConversionStatus KisBrushExport::convert(const QByteArray
     if (input->image()->dynamicPropertyNames().contains("brushspacing")) {
         exportOptions.spacing = input->image()->property("brushspacing").toFloat();
     }
-    KisGbrBrush *brush;
+    KisGbrBrush *brush = 0;
 
-    if (!m_chain->manager()->getBatchMode()) {
+    if (!getBatchMode()) {
 
         KoDialog* dlgBrushExportOptions = new KoDialog(0);
         dlgBrushExportOptions->setWindowTitle(i18n("Brush Tip Export Options"));
@@ -141,11 +141,10 @@ KisImportExportFilter::ConversionStatus KisBrushExport::convert(const QByteArray
         qApp->processEvents(); // For vector layers to be updated
     }
 
+    // the image must be locked at the higher levels
+    KIS_SAFE_ASSERT_RECOVER_NOOP(input->image()->locked());
 
-    input->image()->waitForDone();
     QRect rc = input->image()->bounds();
-    input->image()->refreshGraph();
-    input->image()->lock();
 
     brush->setName(exportOptions.name);
     brush->setSpacing(exportOptions.spacing);
@@ -199,8 +198,6 @@ KisImportExportFilter::ConversionStatus KisBrushExport::convert(const QByteArray
 
     brush->setWidth(w);
     brush->setHeight(h);
-
-    input->image()->unlock();
 
     QFile f(filename);
     f.open(QIODevice::WriteOnly);

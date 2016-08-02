@@ -79,6 +79,11 @@ public:
     KisSavedMacroCommand(const KUndo2MagicString &name, KisStrokesFacade *strokesFacade);
     ~KisSavedMacroCommand();
 
+    int id() const;
+    bool mergeWith(const KUndo2Command* command);
+
+    void setMacroId(int value);
+
     void addCommand(KUndo2CommandSP command,
                     KisStrokeJobData::Sequentiality sequentiality = KisStrokeJobData::SEQUENTIAL,
                     KisStrokeJobData::Exclusivity exclusivity = KisStrokeJobData::NORMAL);

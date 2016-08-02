@@ -32,10 +32,10 @@
 
 
 KisToolSelectPath::KisToolSelectPath(KoCanvasBase * canvas)
-    : SelectionActionHandler<KisDelegatedSelectPathWrapper>(canvas,
-                                                            KisCursor::load("tool_polygonal_selection_cursor.png", 6, 6),
-                                                            i18n("Select path"),
-                                                            (KisTool*) (new __KisToolSelectPathLocalTool(canvas, this)))
+    : KisToolSelectBase<KisDelegatedSelectPathWrapper>(canvas,
+                                                       KisCursor::load("tool_polygonal_selection_cursor.png", 6, 6),
+                                                       i18n("Select path"),
+                                                       (KisTool*) (new __KisToolSelectPathLocalTool(canvas, this)))
 {
 }
 
@@ -56,13 +56,20 @@ void KisToolSelectPath::mousePressEvent(KoPointerEvent* event)
 }
 
 // Install an event filter to catch right-click events.
+// This code is duplicated in kis_tool_path.cc
 bool KisToolSelectPath::eventFilter(QObject *obj, QEvent *event)
 {
-    Q_UNUSED(obj)
+    Q_UNUSED(obj);
     if (event->type() == QEvent::MouseButtonPress ||
-            event->type() == QEvent::MouseButtonDblClick) {
+        event->type() == QEvent::MouseButtonDblClick) {
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
         if (mouseEvent->button() == Qt::RightButton) {
+            localTool()->removeLastPoint();
+            return true;
+        }
+    } else if (event->type() == QEvent::TabletPress) {
+        QTabletEvent *tabletEvent = static_cast<QTabletEvent*>(event);
+        if (tabletEvent->button() == Qt::RightButton) {
             localTool()->removeLastPoint();
             return true;
         }
@@ -81,7 +88,7 @@ void KisToolSelectPath::setAlternateSelectionAction(SelectionAction action)
 {
     // We will turn off the ability to change the selection in the middle of drawing a path.
     if (!m_localTool->listeningToModifiers()) {
-        SelectionActionHandler<KisDelegatedSelectPathWrapper>::setAlternateSelectionAction(action);
+        KisToolSelectBase<KisDelegatedSelectPathWrapper>::setAlternateSelectionAction(action);
     }
 }
 

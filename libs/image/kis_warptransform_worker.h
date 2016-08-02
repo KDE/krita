@@ -63,8 +63,11 @@ public:
     // Prepare the transformation on dev
     KisWarpTransformWorker(WarpType warpType, KisPaintDeviceSP dev, QVector<QPointF> origPoint, QVector<QPointF> transfPoint, qreal alpha, KoUpdater *progress);
     ~KisWarpTransformWorker();
-    // Perform the prepated transformation
+    // Perform the prepared transformation
     void run();
+
+    QRect approxChangeRect(const QRect &rc);
+    QRect approxNeedRect(const QRect &rc, const QRect &fullBounds);
 
 private:
     struct FunctionTransformOp;

@@ -48,7 +48,6 @@ public:
     bool exportAs() const;
     bool exportAsPdf() const;
     QString exportFileName() const;
-    QString profileFileName() const;
 
 private:
 

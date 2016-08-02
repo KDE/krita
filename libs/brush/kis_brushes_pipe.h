@@ -32,7 +32,10 @@ public:
         qDeleteAll(m_brushes);
         m_brushes.clear();
         Q_FOREACH (BrushType * brush, rhs.m_brushes) {
-            m_brushes.append(brush->clone());
+            BrushType *clonedBrush = dynamic_cast<BrushType*>(brush->clone());
+            KIS_ASSERT_RECOVER(clonedBrush) {continue;}
+
+            m_brushes.append(clonedBrush);
         }
     }
 
@@ -61,14 +64,14 @@ public:
         return chooseNextBrush(info);
     }
 
-    qint32 maskWidth(double scale, double angle, double subPixelX, double subPixelY, const KisPaintInformation& info) {
+    qint32 maskWidth(KisDabShape const& shape, double subPixelX, double subPixelY, const KisPaintInformation& info) {
         BrushType *brush = currentBrush(info);
-        return brush ? brush->maskWidth(scale, angle, subPixelX, subPixelY, info) : 0;
+        return brush ? brush->maskWidth(shape, subPixelX, subPixelY, info) : 0;
     }
 
-    qint32 maskHeight(double scale, double angle, double subPixelX, double subPixelY, const KisPaintInformation& info) {
+    qint32 maskHeight(KisDabShape const& shape, double subPixelX, double subPixelY, const KisPaintInformation& info) {
         BrushType *brush = currentBrush(info);
-        return brush ? brush->maskHeight(scale, angle, subPixelX, subPixelY, info) : 0;
+        return brush ? brush->maskHeight(shape, subPixelX, subPixelY, info) : 0;
     }
 
     void setAngle(qreal angle) {
@@ -101,7 +104,8 @@ public:
     }
 
     void generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst, KisBrush::ColoringInformation* coloringInformation,
-            double scaleX, double scaleY, double angle, const KisPaintInformation& info,
+            KisDabShape const& shape,
+            const KisPaintInformation& info,
             double subPixelX , double subPixelY,
             qreal softnessFactor) {
 
@@ -109,20 +113,19 @@ public:
         if (!brush) return;
 
 
-        brush->generateMaskAndApplyMaskOrCreateDab(dst, coloringInformation, scaleX, scaleY, angle, info, subPixelX, subPixelY, softnessFactor);
+        brush->generateMaskAndApplyMaskOrCreateDab(dst, coloringInformation, shape, info, subPixelX, subPixelY, softnessFactor);
         updateBrushIndexes(info);
     }
 
     KisFixedPaintDeviceSP paintDevice(const KoColorSpace * colorSpace,
-                                      double scale, double angle,
+                                      KisDabShape const& shape,
                                       const KisPaintInformation& info,
                                       double subPixelX, double subPixelY) {
 
         BrushType *brush = currentBrush(info);
         if (!brush) return 0;
 
-
-        KisFixedPaintDeviceSP device = brush->paintDevice(colorSpace, scale, angle, info, subPixelX, subPixelY);
+        KisFixedPaintDeviceSP device = brush->paintDevice(colorSpace, shape, info, subPixelX, subPixelY);
         updateBrushIndexes(info);
         return device;
     }

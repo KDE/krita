@@ -53,6 +53,9 @@
 #include "KisDocument.h"
 #include <string>
 #include "kis_dom_utils.h"
+#include "kis_grid_config.h"
+#include "kis_guides_config.h"
+#include "KisProofingConfiguration.h"
 
 
 using namespace KRA;
@@ -90,16 +93,22 @@ QDomElement KisKraSaver::saveXML(QDomDocument& doc,  KisImageWSP image)
     Q_ASSERT(image);
     imageElement.setAttribute(NAME, m_d->imageName);
     imageElement.setAttribute(MIME, NATIVE_MIMETYPE);
-    imageElement.setAttribute(WIDTH, image->width());
-    imageElement.setAttribute(HEIGHT, image->height());
+    imageElement.setAttribute(WIDTH, KisDomUtils::toString(image->width()));
+    imageElement.setAttribute(HEIGHT, KisDomUtils::toString(image->height()));
     imageElement.setAttribute(COLORSPACE_NAME, image->colorSpace()->id());
     imageElement.setAttribute(DESCRIPTION, m_d->doc->documentInfo()->aboutInfo("comment"));
     // XXX: Save profile as blob inside the image, instead of the product name.
     if (image->profile() && image->profile()-> valid()) {
         imageElement.setAttribute(PROFILE, image->profile()->name());
     }
-    imageElement.setAttribute(X_RESOLUTION, image->xRes()*72.0);
-    imageElement.setAttribute(Y_RESOLUTION, image->yRes()*72.0);
+    imageElement.setAttribute(X_RESOLUTION, KisDomUtils::toString(image->xRes()*72.0));
+    imageElement.setAttribute(Y_RESOLUTION, KisDomUtils::toString(image->yRes()*72.0));
+    //now the proofing options:
+    imageElement.setAttribute(PROOFINGPROFILENAME, KisDomUtils::toString(image->proofingConfiguration()->proofingProfile));
+    imageElement.setAttribute(PROOFINGMODEL, KisDomUtils::toString(image->proofingConfiguration()->proofingModel));
+    imageElement.setAttribute(PROOFINGDEPTH, KisDomUtils::toString(image->proofingConfiguration()->proofingDepth));
+    imageElement.setAttribute(PROOFINGINTENT, KisDomUtils::toString(image->proofingConfiguration()->intent));
+    imageElement.setAttribute(PROOFINGADAPTATIONSTATE, KisDomUtils::toString(image->proofingConfiguration()->adaptationState));
 
     quint32 count = 1; // We don't save the root layer, but it does count
     KisSaveXmlVisitor visitor(doc, imageElement, count, m_d->doc->url().toLocalFile(), true);
@@ -112,8 +121,11 @@ QDomElement KisKraSaver::saveXML(QDomDocument& doc,  KisImageWSP image)
     m_d->keyframeFilenames = visitor.keyframeFileNames();
 
     saveBackgroundColor(doc, imageElement, image);
+    saveWarningColor(doc, imageElement, image);
     saveCompositions(doc, imageElement, image);
     saveAssistantsList(doc,imageElement);
+    saveGrid(doc,imageElement);
+    saveGuides(doc,imageElement);
 
     QDomElement animationElement = doc.createElement("animation");
     KisDomUtils::saveValue(&animationElement, "framerate", image->animationInterface()->framerate());
@@ -221,6 +233,26 @@ bool KisKraSaver::saveBinaryData(KoStore* store, KisImageWSP image, const QStrin
         }
     }
 
+    //This'll embed the profile used for proofing into the kra file.
+    if (image->proofingConfiguration()) {
+        const KoColorProfile *proofingProfile = KoColorSpaceRegistry::instance()->profileByName(image->proofingConfiguration()->proofingProfile);
+        if (proofingProfile && proofingProfile->valid()) {
+            QByteArray proofingProfileRaw = proofingProfile->rawData();
+            if (!proofingProfileRaw.isEmpty()) {
+                annotation = new KisAnnotation(ICCPROOFINGPROFILE, proofingProfile->name(), proofingProfile->rawData());
+            }
+        }
+        if (annotation) {
+            location = external ? QString() : uri;
+            location += m_d->imageName + ICC_PROOFING_PATH;
+            if (store->open(location)) {
+                store->write(annotation->annotation());
+                store->close();
+            }
+        }
+
+    }
+
     {
         KisPSDLayerStyleCollectionResource collection("not-nexists.asl");
         KIS_ASSERT_RECOVER_NOOP(!collection.valid());
@@ -263,11 +295,23 @@ QStringList KisKraSaver::errorMessages() const
 
 void KisKraSaver::saveBackgroundColor(QDomDocument& doc, QDomElement& element, KisImageWSP image)
 {
-    QDomElement e = doc.createElement("ProjectionBackgroundColor");
+    QDomElement e = doc.createElement(CANVASPROJECTIONCOLOR);
     KoColor color = image->defaultProjectionColor();
     QByteArray colorData = QByteArray::fromRawData((const char*)color.data(), color.colorSpace()->pixelSize());
-    e.setAttribute("ColorData", QString(colorData.toBase64()));
+    e.setAttribute(COLORBYTEDATA, QString(colorData.toBase64()));
     element.appendChild(e);
+}
+
+void KisKraSaver::saveWarningColor(QDomDocument& doc, QDomElement& element, KisImageWSP image)
+{
+    if (image->proofingConfiguration()) {
+        QDomElement e = doc.createElement(PROOFINGWARNINGCOLOR);
+        KoColor color = image->proofingConfiguration()->warningColor;
+        color.toXML(doc, e);
+        //QByteArray colorData = QByteArray::fromRawData((const char*)color.data(), color.colorSpace()->pixelSize());
+        //e.setAttribute("ColorData", QString(colorData.toBase64()));
+        element.appendChild(e);
+    }
 }
 
 void KisKraSaver::saveCompositions(QDomDocument& doc, QDomElement& element, KisImageWSP image)
@@ -286,10 +330,10 @@ bool KisKraSaver::saveAssistants(KoStore* store, QString uri, bool external)
     QString location;
     QMap<QString, int> assistantcounters;
     QByteArray data;
-    QList<KisPaintingAssistant*> assistants =  m_d->doc->assistants();
+    QList<KisPaintingAssistantSP> assistants =  m_d->doc->assistants();
     QMap<KisPaintingAssistantHandleSP, int> handlemap;
     if (!assistants.isEmpty()) {
-        Q_FOREACH (KisPaintingAssistant* assist, assistants){
+        Q_FOREACH (KisPaintingAssistantSP assist, assistants){
             if (!assistantcounters.contains(assist->id())){
                 assistantcounters.insert(assist->id(),0);
             }
@@ -310,10 +354,10 @@ bool KisKraSaver::saveAssistants(KoStore* store, QString uri, bool external)
 bool KisKraSaver::saveAssistantsList(QDomDocument& doc, QDomElement& element)
 {
     int count_ellipse = 0, count_perspective = 0, count_ruler = 0, count_vanishingpoint = 0,count_infiniteruler = 0, count_parallelruler = 0, count_concentricellipse = 0, count_fisheyepoint = 0, count_spline = 0;
-    QList<KisPaintingAssistant*> assistants =  m_d->doc->assistants();
+    QList<KisPaintingAssistantSP> assistants =  m_d->doc->assistants();
     if (!assistants.isEmpty()) {
         QDomElement assistantsElement = doc.createElement("assistants");
-        Q_FOREACH (KisPaintingAssistant* assist, assistants){
+        Q_FOREACH (KisPaintingAssistantSP assist, assistants){
             if (assist->id() == "ellipse"){
                 assist->saveXmlList(doc, assistantsElement, count_ellipse);
                 count_ellipse++;
@@ -353,6 +397,30 @@ bool KisKraSaver::saveAssistantsList(QDomDocument& doc, QDomElement& element)
         }
         element.appendChild(assistantsElement);
     }
+    return true;
+}
+
+bool KisKraSaver::saveGrid(QDomDocument& doc, QDomElement& element)
+{
+    KisGridConfig config = m_d->doc->gridConfig();
+
+    if (!config.isDefault()) {
+        QDomElement gridElement = config.saveDynamicDataToXml(doc, "grid");
+        element.appendChild(gridElement);
+    }
+
+    return true;
+}
+
+bool KisKraSaver::saveGuides(QDomDocument& doc, QDomElement& element)
+{
+    KisGuidesConfig guides = m_d->doc->guidesConfig();
+
+    if (guides.hasGuides()) {
+        QDomElement guidesElement = guides.saveToXml(doc, "guides");
+        element.appendChild(guidesElement);
+    }
+
     return true;
 }
 

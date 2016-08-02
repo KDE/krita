@@ -38,8 +38,10 @@
 #include <KoViewConverter.h>
 #include <KoSelection.h>
 #include <resources/KoAbstractGradient.h>
+#include <KoSnapGuide.h>
 
 #include <KisViewManager.h>
+#include "kis_node_manager.h"
 #include <kis_selection.h>
 #include <kis_image.h>
 #include <kis_group_layer.h>
@@ -50,12 +52,9 @@
 #include <brushengine/kis_paintop_preset.h>
 #include <brushengine/kis_paintop_settings.h>
 #include <resources/KoPattern.h>
-#include <kis_transaction.h>
 #include <kis_floating_message.h>
 
-#ifdef HAVE_OPENGL
 #include "opengl/kis_opengl_canvas2.h"
-#endif
 #include "kis_canvas_resource_provider.h"
 #include "canvas/kis_canvas2.h"
 #include "kis_coordinates_converter.h"
@@ -68,6 +67,7 @@
 #include "kis_resources_snapshot.h"
 #include <KisView.h>
 #include "kis_action_registry.h"
+#include "kis_tool_utils.h"
 
 
 
@@ -266,6 +266,28 @@ QPointF KisTool::convertToPixelCoord(const QPointF& pt)
     return image()->documentToPixel(pt);
 }
 
+QPointF KisTool::convertToPixelCoordAndSnap(KoPointerEvent *e, const QPointF &offset, bool useModifiers)
+{
+    if (!image())
+        return e->point;
+
+    KoSnapGuide *snapGuide = canvas()->snapGuide();
+    QPointF pos = snapGuide->snap(e->point, offset, useModifiers ? e->modifiers() : Qt::NoModifier);
+
+    return image()->documentToPixel(pos);
+}
+
+QPointF KisTool::convertToPixelCoordAndSnap(const QPointF& pt, const QPointF &offset)
+{
+    if (!image())
+        return pt;
+
+    KoSnapGuide *snapGuide = canvas()->snapGuide();
+    QPointF pos = snapGuide->snap(pt, offset, Qt::NoModifier);
+
+    return image()->documentToPixel(pos);
+}
+
 QPoint KisTool::convertToIntPixelCoord(KoPointerEvent *e)
 {
     if (!image())
@@ -389,6 +411,13 @@ KisNodeSP KisTool::currentNode()
 {
     KisNodeSP node = canvas()->resourceManager()->resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeWSP>();
     return node;
+}
+
+KisNodeList KisTool::selectedNodes() const
+{
+    KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
+    KisViewManager* viewManager = kiscanvas->viewManager();
+    return viewManager->nodeManager()->selectedNodes();
 }
 
 KoColor KisTool::currentFgColor()
@@ -522,30 +551,7 @@ void KisTool::deleteSelection()
     KisResourcesSnapshotSP resources =
         new KisResourcesSnapshot(image(), currentNode(), 0, this->canvas()->resourceManager());
 
-    KisSelectionSP selection = resources->activeSelection();
-    KisNodeSP node = resources->currentNode();
-
-    if(node && node->hasEditablePaintDevice()) {
-        KisPaintDeviceSP device = node->paintDevice();
-
-        image()->barrierLock();
-        KisTransaction transaction(kundo2_i18n("Clear"), device);
-
-        QRect dirtyRect;
-        if (selection) {
-            dirtyRect = selection->selectedRect();
-            device->clearSelection(selection);
-        }
-        else {
-            dirtyRect = device->extent();
-            device->clear();
-        }
-
-        transaction.commit(image()->undoAdapter());
-        device->setDirty(dirtyRect);
-        image()->unlock();
-    }
-    else {
+    if (!KisToolUtils::clearImage(image(), resources->currentNode(), resources->activeSelection())) {
         KoToolBase::deleteSelection();
     }
 }
@@ -569,16 +575,13 @@ QWidget* KisTool::createOptionWidget()
 
 void KisTool::paintToolOutline(QPainter* painter, const QPainterPath &path)
 {
-#ifdef HAVE_OPENGL
     KisOpenGLCanvas2 *canvasWidget = dynamic_cast<KisOpenGLCanvas2 *>(canvas()->canvasWidget());
     if (canvasWidget)  {
         painter->beginNativePainting();
         canvasWidget->paintToolOutline(path);
         painter->endNativePainting();
     }
-    else
-#endif // HAVE_OPENGL
-    {
+    else {
         painter->setCompositionMode(QPainter::RasterOp_SourceXorDestination);
         painter->setPen(QColor(128, 255, 128));
         painter->drawPath(path);

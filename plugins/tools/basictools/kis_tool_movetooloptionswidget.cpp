@@ -25,6 +25,7 @@
 MoveToolOptionsWidget::MoveToolOptionsWidget(QWidget *parent, int resolution, QString toolId)
   : QWidget(parent)
   , m_resolution(resolution)
+  , m_showCoordinates(false)
 {
     setupUi(this);
     m_configGroup = KSharedConfig::openConfig()->group(toolId);
@@ -45,6 +46,24 @@ MoveToolOptionsWidget::MoveToolOptionsWidget(QWidget *parent, int resolution, QS
     cmbUnit->addItems(KoUnit::listOfUnitNameForUi());
     cmbUnit->setCurrentIndex(m_moveStepUnit);
     updateUIUnit(m_moveStepUnit);
+
+    // Scale for large moves
+    m_moveScale = m_configGroup.readEntry<int>("moveToolScale", 10.0);
+    spinMoveScale->blockSignals(true);
+    spinMoveScale->setValue(m_moveScale);
+    spinMoveScale->setSuffix("x");
+    spinMoveScale->blockSignals(false);
+
+    // Switch mode for showing coordinates
+    m_showCoordinates = m_configGroup.readEntry("moveToolShowCoordinates", false);
+    connect(chkShowCoordinates, SIGNAL(toggled(bool)), SIGNAL(showCoordinatesChanged(bool)));
+
+    chkShowCoordinates->setChecked(m_showCoordinates);
+
+    translateXBox->setSuffix(i18n(" px"));
+    translateYBox->setSuffix(i18n(" px"));
+    translateXBox->setRange(-10000, 10000);
+    translateYBox->setRange(-10000, 10000);
 }
 
 void MoveToolOptionsWidget::updateUIUnit(int newUnit)
@@ -77,6 +96,13 @@ void MoveToolOptionsWidget::on_spinMoveStep_valueChanged(double UIMoveStep)
     m_configGroup.writeEntry("moveToolStep", m_moveStep);
 }
 
+void MoveToolOptionsWidget::on_spinMoveScale_valueChanged(double UIMoveScale)
+{
+    m_moveScale = UIMoveScale;
+    m_configGroup.writeEntry("moveToolScale", m_moveScale);
+}
+
+
 void MoveToolOptionsWidget::on_cmbUnit_currentIndexChanged(int newUnit)
 {
     m_moveStepUnit = newUnit;
@@ -108,6 +134,12 @@ void MoveToolOptionsWidget::setMoveToolMode(KisToolMove::MoveToolMode newMode)
     m_configGroup.writeEntry("moveToolMode", static_cast<int>(newMode));
 }
 
+void MoveToolOptionsWidget::on_chkShowCoordinates_toggled(bool checked)
+{
+    m_showCoordinates = checked;
+    m_configGroup.writeEntry("moveToolShowCoordinates", m_showCoordinates);
+}
+
 KisToolMove::MoveToolMode MoveToolOptionsWidget::mode()
 {
     return m_moveToolMode;
@@ -116,4 +148,39 @@ KisToolMove::MoveToolMode MoveToolOptionsWidget::mode()
 int MoveToolOptionsWidget::moveStep()
 {
   return m_moveStep;
+}
+
+double MoveToolOptionsWidget::moveScale()
+{
+    return m_moveScale;
+}
+
+bool MoveToolOptionsWidget::showCoordinates() const
+{
+    return m_showCoordinates;
+}
+
+void MoveToolOptionsWidget::setShowCoordinates(bool value)
+{
+    chkShowCoordinates->setChecked(value);
+}
+
+void MoveToolOptionsWidget::slotSetTranslate(QPoint newPos)
+{
+    translateXBox->setValue(newPos.x());
+    translateYBox->setValue(newPos.y());
+}
+
+void MoveToolOptionsWidget::on_translateXBox_valueChanged(int arg1)
+{
+    m_TranslateX = arg1;
+    m_configGroup.writeEntry("moveToolChangedValueX", m_TranslateX);
+    emit sigSetTranslateX(arg1);
+}
+
+void MoveToolOptionsWidget::on_translateYBox_valueChanged(int arg1)
+{
+    m_TranslateY = arg1;
+    m_configGroup.writeEntry("moveToolChangedValueY", m_TranslateY);
+    emit sigSetTranslateY(arg1);
 }

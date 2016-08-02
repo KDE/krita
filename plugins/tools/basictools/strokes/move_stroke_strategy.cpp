@@ -23,40 +23,61 @@
 #include "kis_node.h"
 #include "commands_new/kis_update_command.h"
 #include "commands_new/kis_node_move_command2.h"
+#include "kis_layer_utils.h"
+#include "krita_utils.h"
 
 
-MoveStrokeStrategy::MoveStrokeStrategy(KisNodeSP node,
+MoveStrokeStrategy::MoveStrokeStrategy(KisNodeList nodes,
                                        KisUpdatesFacade *updatesFacade,
                                        KisPostExecutionUndoAdapter *undoAdapter)
     : KisStrokeStrategyUndoCommandBased(kundo2_i18n("Move"), false, undoAdapter),
-      m_node(node),
+      m_nodes(),
       m_updatesFacade(updatesFacade),
       m_undoEnabled(true),
       m_updatesEnabled(true)
 {
+    m_nodes = KisLayerUtils::sortAndFilterMergableInternalNodes(nodes, true);
+
+    KritaUtils::filterContainer<KisNodeList>(m_nodes,
+                                             [this](KisNodeSP node) {
+                                                 return
+                                                     !KisLayerUtils::checkIsCloneOf(node, m_nodes) &&
+                                                     node->isEditable();
+                                             });
+
+    Q_FOREACH(KisNodeSP subtree, m_nodes) {
+        KisLayerUtils::recursiveApplyNodes(
+            subtree,
+            [this](KisNodeSP node) {
+                if (KisLayerUtils::checkIsCloneOf(node, m_nodes) ||
+                    !node->isEditable()) {
+
+                    m_blacklistedNodes.insert(node);
+                }
+            });
+    }
+
     setSupportsWrapAroundMode(true);
 }
 
 MoveStrokeStrategy::MoveStrokeStrategy(const MoveStrokeStrategy &rhs, bool suppressUndo)
     : KisStrokeStrategyUndoCommandBased(rhs, suppressUndo),
-      m_node(rhs.m_node),
+      m_nodes(rhs.m_nodes),
+      m_blacklistedNodes(rhs.m_blacklistedNodes),
       m_updatesFacade(rhs.m_updatesFacade),
       m_finalOffset(rhs.m_finalOffset),
       m_dirtyRect(rhs.m_dirtyRect),
+      m_dirtyRects(rhs.m_dirtyRects),
       m_undoEnabled(rhs.m_undoEnabled),
       m_updatesEnabled(rhs.m_updatesEnabled)
 {
 }
 
-void MoveStrokeStrategy::setNode(KisNodeSP node)
-{
-    Q_ASSERT(!m_node);
-    m_node = node;
-}
-
 void MoveStrokeStrategy::saveInitialNodeOffsets(KisNodeSP node)
 {
-    m_initialNodeOffsets.insert(node, QPoint(node->x(), node->y()));
+    if (!m_blacklistedNodes.contains(node)) {
+        m_initialNodeOffsets.insert(node, QPoint(node->x(), node->y()));
+    }
 
     KisNodeSP child = node->firstChild();
     while(child) {
@@ -67,8 +88,8 @@ void MoveStrokeStrategy::saveInitialNodeOffsets(KisNodeSP node)
 
 void MoveStrokeStrategy::initStrokeCallback()
 {
-    if (m_node) {
-        saveInitialNodeOffsets(m_node);
+    Q_FOREACH(KisNodeSP node, m_nodes) {
+        saveInitialNodeOffsets(node);
     }
 
     KisStrokeStrategyUndoCommandBased::initStrokeCallback();
@@ -76,19 +97,23 @@ void MoveStrokeStrategy::initStrokeCallback()
 
 void MoveStrokeStrategy::finishStrokeCallback()
 {
-    if(m_node && m_undoEnabled) {
-        KUndo2Command *updateCommand =
-            new KisUpdateCommand(m_node, m_dirtyRect, m_updatesFacade, true);
+    if (m_undoEnabled) {
+        Q_FOREACH (KisNodeSP node, m_nodes) {
+            KUndo2Command *updateCommand =
+                new KisUpdateCommand(node, m_dirtyRects[node], m_updatesFacade, true);
 
-        addMoveCommands(m_node, updateCommand);
+            addMoveCommands(node, updateCommand);
 
-        notifyCommandDone(KUndo2CommandSP(updateCommand),
-                          KisStrokeJobData::SEQUENTIAL,
-                          KisStrokeJobData::EXCLUSIVE);
+            notifyCommandDone(KUndo2CommandSP(updateCommand),
+                              KisStrokeJobData::SEQUENTIAL,
+                              KisStrokeJobData::EXCLUSIVE);
+        }
     }
 
-    if (m_node && !m_updatesEnabled) {
-        m_updatesFacade->refreshGraphAsync(m_node, m_dirtyRect);
+    if (!m_updatesEnabled) {
+        Q_FOREACH (KisNodeSP node, m_nodes) {
+            m_updatesFacade->refreshGraphAsync(node, m_dirtyRects[node]);
+        }
     }
 
     KisStrokeStrategyUndoCommandBased::finishStrokeCallback();
@@ -96,8 +121,7 @@ void MoveStrokeStrategy::finishStrokeCallback()
 
 void MoveStrokeStrategy::cancelStrokeCallback()
 {
-    if(m_node) {
-
+    if (!m_nodes.isEmpty()) {
         // FIXME: make cancel job exclusive instead
         m_updatesFacade->blockUpdates();
         moveAndUpdate(QPoint());
@@ -111,7 +135,7 @@ void MoveStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
 {
     Data *d = dynamic_cast<Data*>(data);
 
-    if(m_node && d) {
+    if(!m_nodes.isEmpty() && d) {
         moveAndUpdate(d->offset);
 
         /**
@@ -127,29 +151,35 @@ void MoveStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
 
 void MoveStrokeStrategy::moveAndUpdate(QPoint offset)
 {
-    QRect dirtyRect = moveNode(m_node, offset);
-    m_dirtyRect |= dirtyRect;
+    Q_FOREACH (KisNodeSP node, m_nodes) {
+        QRect dirtyRect = moveNode(node, offset);
+        m_dirtyRects[node] |= dirtyRect;
 
-    if (m_updatesEnabled) {
-        m_updatesFacade->refreshGraphAsync(m_node, dirtyRect);
+        if (m_updatesEnabled) {
+            m_updatesFacade->refreshGraphAsync(node, dirtyRect);
+        }
     }
 }
 
 QRect MoveStrokeStrategy::moveNode(KisNodeSP node, QPoint offset)
 {
-    QRect dirtyRect = node->extent();
-    QPoint newOffset = m_initialNodeOffsets[node] + offset;
+    QRect dirtyRect;
 
-    /**
-     * Some layers, e.g. clones need an update to change extent(), so
-     * calculate the dirty rect manually
-     */
-    QPoint currentOffset(node->x(), node->y());
-    dirtyRect |= dirtyRect.translated(newOffset - currentOffset);
+    if (!m_blacklistedNodes.contains(node)) {
+        dirtyRect = node->extent();
+        QPoint newOffset = m_initialNodeOffsets[node] + offset;
 
-    node->setX(newOffset.x());
-    node->setY(newOffset.y());
-    KisNodeMoveCommand2::tryNotifySelection(node);
+        /**
+         * Some layers, e.g. clones need an update to change extent(), so
+         * calculate the dirty rect manually
+         */
+        QPoint currentOffset(node->x(), node->y());
+        dirtyRect |= dirtyRect.translated(newOffset - currentOffset);
+
+        node->setX(newOffset.x());
+        node->setY(newOffset.y());
+        KisNodeMoveCommand2::tryNotifySelection(node);
+    }
 
     KisNodeSP child = node->firstChild();
     while(child) {
@@ -162,9 +192,10 @@ QRect MoveStrokeStrategy::moveNode(KisNodeSP node, QPoint offset)
 
 void MoveStrokeStrategy::addMoveCommands(KisNodeSP node, KUndo2Command *parent)
 {
-    QPoint nodeOffset(node->x(), node->y());
-
-    new KisNodeMoveCommand2(node, nodeOffset - m_finalOffset, nodeOffset, parent);
+    if (!m_blacklistedNodes.contains(node)) {
+        QPoint nodeOffset(node->x(), node->y());
+        new KisNodeMoveCommand2(node, nodeOffset - m_finalOffset, nodeOffset, parent);
+    }
 
     KisNodeSP child = node->firstChild();
     while(child) {
@@ -183,27 +214,22 @@ void MoveStrokeStrategy::setUpdatesEnabled(bool value)
     m_updatesEnabled = value;
 }
 
-bool checkSupportsLodMoves(KisNodeSP node)
+bool checkSupportsLodMoves(KisNodeSP subtree)
 {
-    if (!node->supportsLodMoves()) {
-        return false;
-    }
-
-    KisNodeSP child = node->firstChild();
-    while(child) {
-        if (!checkSupportsLodMoves(child)) {
-            return false;
-        }
-        child = child->nextSibling();
-    }
-
-    return true;
+    return
+        !KisLayerUtils::recursiveFindNode(
+            subtree,
+            [](KisNodeSP node) -> bool {
+                return !node->supportsLodMoves();
+            });
 }
 
 
 KisStrokeStrategy* MoveStrokeStrategy::createLodClone(int levelOfDetail)
 {
-    if (!checkSupportsLodMoves(m_node)) return 0;
+    Q_FOREACH (KisNodeSP node, m_nodes) {
+        if (!checkSupportsLodMoves(node)) return 0;
+    }
 
     MoveStrokeStrategy *clone = new MoveStrokeStrategy(*this, levelOfDetail > 0);
     clone->setUndoEnabled(false);

@@ -65,7 +65,7 @@ public:
      *
      * \see processQueues()
      */
-    void unlock();
+    void unlock(bool resetLodLevels = true);
 
     /**
      * Called when it is necessary to reread configuration
@@ -160,19 +160,19 @@ public:
      * every time when the scheduler needs to synchronize LOD caches
      * of all the paint devices of the image.
      */
-    void setLod0ToNStrokeStrategyFactory(const KisStrokeStrategyFactory &factory);
+    void setLod0ToNStrokeStrategyFactory(const KisLodSyncStrokeStrategyFactory &factory);
 
     /**
      * Install a factory of a stroke strategy, that will be started
      * every time when the scheduler needs to postpone all the updates
      * of the *LOD0* strokes.
      */
-    void setSuspendUpdatesStrokeStrategyFactory(const KisStrokeStrategyFactory &factory);
+    void setSuspendUpdatesStrokeStrategyFactory(const KisSuspendResumeStrategyFactory &factory);
 
     /**
      * \see setSuspendUpdatesStrokeStrategyFactory()
      */
-    void setResumeUpdatesStrokeStrategyFactory(const KisStrokeStrategyFactory &factory);
+    void setResumeUpdatesStrokeStrategyFactory(const KisSuspendResumeStrategyFactory &factory);
 
     /**
      * tryCancelCurrentStrokeAsync() checks whether there is a

@@ -37,8 +37,7 @@
 #include <FlakeDebug.h>
 #include <QUuid>
 #include <QImage>
-#include <QMimeDatabase>
-#include <QMimeType>
+#include <KisMimeDatabase.h>
 
 class KoShapeSavingContextPrivate {
 public:
@@ -293,8 +292,7 @@ bool KoShapeSavingContext::saveDataCenter(KoStore *store, KoXmlWriter* manifestW
             store->close();
             // TODO error handling
             if (ok) {
-                QMimeDatabase db;
-                const QString mimetype(db.mimeTypeForFile(it.key(), QMimeDatabase::MatchExtension).name());
+                const QString mimetype = KisMimeDatabase::mimeTypeForFile(it.key());
                 manifestWriter->addManifestEntry(it.key(), mimetype);
             }
             else {

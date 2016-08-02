@@ -28,7 +28,7 @@
 
 #include <KoDialog.h>
 #include <kpluginfactory.h>
-#include <QUrl>
+#include <QFileInfo>
 
 #include <KoColorSpace.h>
 #include <KoColorProfile.h>
@@ -72,7 +72,7 @@ KisImportExportFilter::ConversionStatus KisJPEGExport::convert(const QByteArray&
     if (from != "application/x-krita")
         return KisImportExportFilter::NotImplemented;
 
-    KisDocument *input = m_chain->inputDocument();
+    KisDocument *input = inputDocument();
     if (!input)
         return KisImportExportFilter::NoDocumentCreated;
 
@@ -128,16 +128,12 @@ KisImportExportFilter::ConversionStatus KisJPEGExport::convert(const QByteArray&
     kdb->setMainWidget(wdg);
     QApplication::restoreOverrideCursor();
 
-    if (!m_chain->manager()->getBatchMode()) {
+    if (!getBatchMode()) {
         if (kdb->exec() == QDialog::Rejected) {
             delete kdb;
             return KisImportExportFilter::UserCancelled;
         }
     }
-    else {
-        qApp->processEvents(); // For vector layers to be updated
-    }
-    image->waitForDone();
 
     KisJPEGOptions options;
     options.progressive = wdgUi.progressive->isChecked();
@@ -191,19 +187,15 @@ KisImportExportFilter::ConversionStatus KisJPEGExport::convert(const QByteArray&
     delete kdb;
     // XXX: Add dialog about flattening layers here
 
-    QString filename = m_chain->outputFile();
+    QString filename = outputFile();
 
     if (filename.isEmpty()) return KisImportExportFilter::FileNotFound;
 
-    QUrl url = QUrl::fromLocalFile(filename);
-
-    image->refreshGraph();
-    image->lock();
-
-    KisJPEGConverter kpc(input, m_chain->manager()->getBatchMode());
-
+    // the image must be locked at the higher levels
+    KIS_SAFE_ASSERT_RECOVER_NOOP(input->image()->locked());
     KisPaintDeviceSP pd = new KisPaintDevice(*image->projection());
-    image->unlock();
+
+    KisJPEGConverter kpc(input, getBatchMode());
     KisPaintLayerSP l = new KisPaintLayer(image, "projection", OPACITY_OPAQUE_U8, pd);
 
     vKisAnnotationSP_it beginIt = image->beginAnnotations();
@@ -220,7 +212,7 @@ KisImportExportFilter::ConversionStatus KisJPEGExport::convert(const QByteArray&
         KisMetaData::Store* copy = new KisMetaData::Store(*eI);
         eI = copy;
     }
-    if ((res = kpc.buildFile(url, l, beginIt, endIt, options, eI)) == KisImageBuilder_RESULT_OK) {
+    if ((res = kpc.buildFile(filename, l, beginIt, endIt, options, eI)) == KisImageBuilder_RESULT_OK) {
         dbgFile << "success !";
         delete eI;
         return KisImportExportFilter::OK;

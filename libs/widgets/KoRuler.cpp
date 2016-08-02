@@ -141,6 +141,9 @@ QRectF HorizontalPaintingStrategy::drawBackground(const KoRulerPrivate *d, QPain
     activeRangeRectangle.setHeight(rectangle.height() - 2);
 
     painter.setPen(d->ruler->palette().color(QPalette::Mid));
+
+
+    painter.fillRect(rectangle,d->ruler->palette().color(QPalette::AlternateBase)); // make background slightly different so it is easier to see
     painter.drawRect(rectangle);
 
     if(d->effectiveActiveRangeStart() != d->effectiveActiveRangeEnd())
@@ -457,6 +460,8 @@ QRectF VerticalPaintingStrategy::drawBackground(const KoRulerPrivate *d, QPainte
         d->viewConverter->documentToViewY(d->effectiveActiveRangeEnd()) + d->offset));
 
     painter.setPen(d->ruler->palette().color(QPalette::Mid));
+
+    painter.fillRect(rectangle,d->ruler->palette().color(QPalette::AlternateBase));
     painter.drawRect(rectangle);
 
     if(d->effectiveActiveRangeStart() != d->effectiveActiveRangeEnd())
@@ -700,7 +705,8 @@ KoRulerPrivate::KoRulerPrivate(KoRuler *parent, const KoViewConverter *vc, Qt::O
             (PaintingStrategy*)new HorizontalPaintingStrategy() : (PaintingStrategy*)new VerticalPaintingStrategy()),
     distancesPaintingStrategy((PaintingStrategy*)new HorizontalDistancesPaintingStrategy()),
     paintingStrategy(normalPaintingStrategy),
-    ruler(parent)
+    ruler(parent),
+    guideCreationStarted(false)
 {
 }
 
@@ -927,6 +933,11 @@ void KoRuler::setShowMousePosition(bool show)
     update();
 }
 
+bool KoRuler::showMousePosition() const
+{
+    return d->showMousePosition;
+}
+
 void KoRuler::setRightToLeft(bool isRightToLeft)
 {
     d->rightToLeft = isRightToLeft;
@@ -1062,6 +1073,15 @@ void KoRuler::mousePressEvent ( QMouseEvent* ev )
         return;
     }
 
+    /**
+     * HACK ALERT: We don't need all that indentation stuff in Krita.
+     *             Just ensure the rulers are created correctly.
+     */
+    if (d->selected == KoRulerPrivate::None) {
+        d->guideCreationStarted = true;
+        return;
+    }
+
     QPoint pos = ev->pos();
 
     if (d->showTabs) {
@@ -1130,7 +1150,10 @@ void KoRuler::mousePressEvent ( QMouseEvent* ev )
 void KoRuler::mouseReleaseEvent ( QMouseEvent* ev )
 {
     ev->accept();
-    if (d->selected == KoRulerPrivate::Tab) {
+    if (d->selected == KoRulerPrivate::None && d->guideCreationStarted) {
+        d->guideCreationStarted = false;
+        emit guideCreationFinished(d->orientation, ev->globalPos());
+    } else if (d->selected == KoRulerPrivate::Tab) {
         if (d->originalIndex >= 0 && !d->tabMoved) {
             int type = d->tabs[d->currentIndex].type;
             type++;
@@ -1153,6 +1176,13 @@ void KoRuler::mouseReleaseEvent ( QMouseEvent* ev )
 void KoRuler::mouseMoveEvent ( QMouseEvent* ev )
 {
     QPoint pos = ev->pos();
+
+    if (d->selected == KoRulerPrivate::None && d->guideCreationStarted) {
+        emit guideCreationInProgress(d->orientation, ev->globalPos());
+        ev->accept();
+        update();
+        return;
+    }
 
     qreal activeLength = d->effectiveActiveRangeEnd() - d->effectiveActiveRangeStart();
 

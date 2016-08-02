@@ -21,7 +21,7 @@
 #include <resources/KoPattern.h>
 
 #include <sys/types.h>
-#include <netinet/in.h>
+#include <QtEndian>
 
 #include <limits.h>
 #include <stdlib.h>
@@ -120,12 +120,12 @@ bool KoPattern::savePatToDevice(QIODevice* dev) const
     char const* name = utf8Name.data();
     int nameLength = qstrlen(name);
 
-    ph.header_size = htonl(sizeof(GimpPatternHeader) + nameLength + 1); // trailing 0
-    ph.version = htonl(1);
-    ph.width = htonl(width());
-    ph.height = htonl(height());
-    ph.bytes = htonl(4);
-    ph.magic_number = htonl(GimpPatternMagic);
+    ph.header_size = qToBigEndian((quint32)sizeof(GimpPatternHeader) + nameLength + 1); // trailing 0
+    ph.version = qToBigEndian((quint32)1);
+    ph.width = qToBigEndian((quint32)width());
+    ph.height = qToBigEndian((quint32)height());
+    ph.bytes = qToBigEndian((quint32)4);
+    ph.magic_number = qToBigEndian((quint32)GimpPatternMagic);
 
     QByteArray bytes = QByteArray::fromRawData(reinterpret_cast<char*>(&ph), sizeof(GimpPatternHeader));
     int wrote = dev->write(bytes);
@@ -230,12 +230,12 @@ bool KoPattern::init(QByteArray& bytes)
     }
 
     memcpy(&bh, data, sizeof(GimpPatternHeader));
-    bh.header_size = ntohl(bh.header_size);
-    bh.version = ntohl(bh.version);
-    bh.width = ntohl(bh.width);
-    bh.height = ntohl(bh.height);
-    bh.bytes = ntohl(bh.bytes);
-    bh.magic_number = ntohl(bh.magic_number);
+    bh.header_size = qFromBigEndian(bh.header_size);
+    bh.version = qFromBigEndian(bh.version);
+    bh.width = qFromBigEndian(bh.width);
+    bh.height = qFromBigEndian(bh.height);
+    bh.bytes = qFromBigEndian(bh.bytes);
+    bh.magic_number = qFromBigEndian(bh.magic_number);
 
     if ((int)bh.header_size > dataSize || bh.header_size == 0) {
         return false;

@@ -26,6 +26,7 @@
 
 #include <kis_types.h>
 #include <kis_shared.h>
+#include <kis_dab_shape.h>
 #include <kritabrush_export.h>
 
 class KisQImagemask;
@@ -38,7 +39,6 @@ class KoColorSpace;
 class KisPaintInformation;
 class KisBoundary;
 class KisPaintopLodLimitations;
-
 
 enum enumBrushType {
     INVALID,
@@ -175,12 +175,12 @@ public:
     /**
      * @return the width of the mask for the given scale and angle
      */
-    virtual qint32 maskWidth(double scale, double angle, qreal subPixelX, qreal subPixelY, const KisPaintInformation& info) const;
+    virtual qint32 maskWidth(KisDabShape const&, qreal subPixelX, qreal subPixelY, const KisPaintInformation& info) const;
 
     /**
      * @return the height of the mask for the given scale and angle
      */
-    virtual qint32 maskHeight(double scale, double angle, qreal subPixelX, qreal subPixelY, const KisPaintInformation& info) const;
+    virtual qint32 maskHeight(KisDabShape const&, qreal subPixelX, qreal subPixelY, const KisPaintInformation& info) const;
 
     /**
      * @return the logical size of the brush, that is the size measured
@@ -209,7 +209,7 @@ public:
      */
     virtual enumBrushType brushType() const;
 
-    QPointF hotSpot(double scaleX, double scaleY, double rotation, const KisPaintInformation& info) const;
+    QPointF hotSpot(KisDabShape const&, const KisPaintInformation& info) const;
 
     /**
      * Returns true if this brush can return something useful for the info. This is used
@@ -240,7 +240,7 @@ public:
      * Return a fixed paint device that contains a correctly scaled image dab.
      */
     virtual KisFixedPaintDeviceSP paintDevice(const KoColorSpace * colorSpace,
-            double scale, double angle,
+            KisDabShape const&,
             const KisPaintInformation& info,
             double subPixelX = 0, double subPixelY = 0) const;
 
@@ -248,7 +248,7 @@ public:
      * Apply the brush mask to the pixels in dst. Dst should be big enough!
      */
     void mask(KisFixedPaintDeviceSP dst,
-              double scaleX, double scaleY, double angle,
+              KisDabShape const& shape,
               const KisPaintInformation& info,
               double subPixelX = 0, double subPixelY = 0, qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR) const;
 
@@ -257,7 +257,7 @@ public:
      */
     void mask(KisFixedPaintDeviceSP dst,
               const KoColor& color,
-              double scaleX, double scaleY, double angle,
+              KisDabShape const& shape,
               const KisPaintInformation& info,
               double subPixelX = 0, double subPixelY = 0, qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR) const;
 
@@ -266,7 +266,7 @@ public:
      */
     void mask(KisFixedPaintDeviceSP dst,
               const KisPaintDeviceSP src,
-              double scaleX, double scaleY, double angle,
+              KisDabShape const& shape,
               const KisPaintInformation& info,
               double subPixelX = 0, double subPixelY = 0, qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR) const;
 
@@ -295,7 +295,7 @@ public:
      */
     virtual void generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
             ColoringInformation* coloringInfo,
-            double scaleX, double scaleY, double angle,
+            KisDabShape const&,
             const KisPaintInformation& info,
             double subPixelX = 0, double subPixelY = 0, qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR) const;
 
@@ -305,7 +305,7 @@ public:
      */
     virtual void toXML(QDomDocument& , QDomElement&) const;
 
-    static KisBrushSP fromXML(const QDomElement& element);
+    static KisBrushSP fromXML(const QDomElement& element, bool forceCopy = false);
 
     virtual const KisBoundary* boundary() const;
     virtual QPainterPath outline() const;
@@ -319,6 +319,8 @@ public:
     void clearBrushPyramid();
 
     virtual void lodLimitations(KisPaintopLodLimitations *l) const;
+
+    virtual KisBrush* clone() const = 0;
 
 //protected:
 

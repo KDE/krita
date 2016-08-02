@@ -52,8 +52,6 @@ void KoShapeRubberSelectStrategy::paint(QPainter &painter, const KoViewConverter
     QRectF paintRect = converter.documentToView(d->selectedRect());
     paintRect = paintRect.normalized();
     paintRect.adjust(0., -0.5, 0.5, 0.);
-    if (painter.hasClipping())
-        paintRect = paintRect.intersect(painter.clipRegion().boundingRect());
     painter.drawRect(paintRect);
 }
 

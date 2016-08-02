@@ -62,6 +62,7 @@ void KoToolRegistry::init()
     KConfigGroup cfg =  KSharedConfig::openConfig()->group("calligra");
     QStringList toolsBlacklist = cfg.readEntry("ToolsBlacklist", QStringList());
     foreach (const QString& toolID, toolsBlacklist) {
+        delete value(toolID);
         remove(toolID);
     }
 }

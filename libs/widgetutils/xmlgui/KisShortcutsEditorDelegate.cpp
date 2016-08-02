@@ -81,9 +81,7 @@ KisShortcutsEditorDelegate::KisShortcutsEditorDelegate(QTreeWidget *parent, bool
     connect(parent, SIGNAL(collapsed(QModelIndex)), this, SLOT(itemCollapsed(QModelIndex)));
 }
 
-void KisShortcutsEditorDelegate::stealShortcut(
-    const QKeySequence &seq,
-    QAction *action)
+void KisShortcutsEditorDelegate::stealShortcut(const QKeySequence &seq, QAction *action)
 {
     QTreeWidget *view = static_cast<QTreeWidget *>(parent());
 

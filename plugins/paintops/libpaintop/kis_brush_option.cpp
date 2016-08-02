@@ -56,12 +56,12 @@ QDomElement getBrushXMLElement(const KisPropertiesConfiguration* setting)
     return element;
 }
 
-void KisBrushOption::readOptionSetting(const KisPropertiesConfiguration* setting)
+void KisBrushOption::readOptionSetting(const KisPropertiesConfiguration* setting, bool forceCopy)
 {
     QDomElement element = getBrushXMLElement(setting);
 
     if (!element.isNull()) {
-        m_brush = KisBrush::fromXML(element);
+        m_brush = KisBrush::fromXML(element, forceCopy);
     }
 }
 

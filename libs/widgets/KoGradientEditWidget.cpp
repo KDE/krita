@@ -242,10 +242,13 @@ void KoGradientEditWidget::updateUI()
             break;
         }
     }
-    if (equalOpacity)
+
+    m_opacity->setEnabled(equalOpacity);
+    if (equalOpacity) {
         m_opacity->setValue(opacity * 100);
-    else
-        m_opacity->setValue(100);
+    }
+
+
 
     // now update the stop color and opacity
     const bool colorStopSelected = m_stopIndex >= 0 && m_stopIndex < m_stops.count();

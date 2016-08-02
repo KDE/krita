@@ -24,6 +24,6 @@ public:
     KisMD5Generator();
     ~KisMD5Generator();
 
-    QByteArray generateHash(QString filename);
+    QByteArray generateHash(const QString &filename);
     using KoMD5Generator::generateHash;
 };

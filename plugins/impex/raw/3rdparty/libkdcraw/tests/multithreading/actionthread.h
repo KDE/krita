@@ -29,7 +29,7 @@
 
 // Qt includes
 
-#include <QUrl>
+#include <QFileInfo>
 
 // Libkdcraw includes
 

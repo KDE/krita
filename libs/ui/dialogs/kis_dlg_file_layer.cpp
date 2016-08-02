@@ -28,7 +28,7 @@
 #include <KoFileDialog.h>
 #include <KisApplication.h>
 #include <KisImportExportManager.h>
-#include <kis_url_requester.h>
+#include <kis_file_name_requester.h>
 #include <kis_config_widget.h>
 #include <kis_paint_device.h>
 #include <kis_transaction.h>
@@ -43,7 +43,7 @@ KisDlgFileLayer::KisDlgFileLayer(const QString &basePath, const QString & name, 
     setDefaultButton(Ok);
     QWidget * page = new QWidget(this);
     dlgWidget.setupUi(page);
-    dlgWidget.wdgUrlRequester->setMimeTypeFilters(KisImportExportManager::mimeFilter("application/x-krita", KisImportExportManager::Import));
+    dlgWidget.wdgUrlRequester->setMimeTypeFilters(KisImportExportManager::mimeFilter(KisImportExportManager::Import));
     setMainWidget(page);
 
     //dlgWidget.wdgUrlRequester->setBasePath(m_basePath);
@@ -82,7 +82,7 @@ KisFileLayer::ScalingMethod KisDlgFileLayer::scaleToImageResolution() const
 
 QString KisDlgFileLayer::fileName() const
 {
-    QString path = dlgWidget.wdgUrlRequester->url().path();
+    QString path = dlgWidget.wdgUrlRequester->fileName();
 
     if (!m_basePath.isEmpty() && QFileInfo(path).isAbsolute()) {
         QDir directory(m_basePath);

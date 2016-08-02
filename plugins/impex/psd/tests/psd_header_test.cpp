@@ -22,7 +22,7 @@
 #include <QCoreApplication>
 #include <klocalizedstring.h>
 #include <QTest>
-#include "../psd_header.h"
+#include <psd_header.h>
 #ifndef FILES_DATA_DIR
 #error "FILES_DATA_DIR not set. A directory with the data used for testing the importing of files in krita"
 #endif

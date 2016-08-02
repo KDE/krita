@@ -37,6 +37,12 @@
 #include "strokes/move_selection_stroke_strategy.h"
 #include "kis_resources_snapshot.h"
 #include "kis_action_registry.h"
+#include "krita_utils.h"
+
+#include <KisViewManager.h>
+#include <KisDocument.h>
+
+#include "kis_node_manager.h"
 
 KisToolMove::KisToolMove(KoCanvasBase * canvas)
         :  KisTool(canvas, KisCursor::moveCursor())
@@ -44,23 +50,43 @@ KisToolMove::KisToolMove(KoCanvasBase * canvas)
     setObjectName("tool_move");
     m_optionsWidget = 0;
     m_moveInProgress = false;
+    QAction *a;
 
     KisActionRegistry *actionRegistry = KisActionRegistry::instance();
-    m_actionMoveUp = actionRegistry->makeQAction("movetool-move-up", this);
-    addAction("movetool-move-up", m_actionMoveUp);
-    connect(m_actionMoveUp, &QAction::triggered, [&](){moveDiscrete(MoveDirection::Up);});
+    a = actionRegistry->makeQAction("movetool-move-up", this);
+    addAction("movetool-move-up", a);
+    connect(a, &QAction::triggered, [&](){moveDiscrete(MoveDirection::Up, false);});
 
-    m_actionMoveDown = actionRegistry->makeQAction("movetool-move-down", this);
-    addAction("movetool-move-down", m_actionMoveDown);
-    connect(m_actionMoveDown, &QAction::triggered, [&](){moveDiscrete(MoveDirection::Down);});
+    a = actionRegistry->makeQAction("movetool-move-down", this);
+    addAction("movetool-move-down", a);
+    connect(a, &QAction::triggered, [&](){moveDiscrete(MoveDirection::Down, false);});
 
-    m_actionMoveLeft = actionRegistry->makeQAction("movetool-move-left", this);
-    addAction("movetool-move-left", m_actionMoveLeft);
-    connect(m_actionMoveLeft, &QAction::triggered, [&](){moveDiscrete(MoveDirection::Left);});
+    a = actionRegistry->makeQAction("movetool-move-left", this);
+    addAction("movetool-move-left", a);
+    connect(a, &QAction::triggered, [&](){moveDiscrete(MoveDirection::Left, false);});
 
-    m_actionMoveRight = actionRegistry->makeQAction("movetool-move-right", this);
-    addAction("movetool-move-right", m_actionMoveRight);
-    connect(m_actionMoveRight, &QAction::triggered, [&](){moveDiscrete(MoveDirection::Right);});
+    a = actionRegistry->makeQAction("movetool-move-right", this);
+    addAction("movetool-move-right", a);
+    connect(a, &QAction::triggered, [&](){moveDiscrete(MoveDirection::Right, false);});
+
+    a = actionRegistry->makeQAction("movetool-move-up-more", this);
+    addAction("movetool-move-up-more", a);
+    connect(a, &QAction::triggered, [&](){moveDiscrete(MoveDirection::Up, true);});
+
+    a = actionRegistry->makeQAction("movetool-move-down-more", this);
+    addAction("movetool-move-down-more", a);
+    connect(a, &QAction::triggered, [&](){moveDiscrete(MoveDirection::Down, true);});
+
+    a = actionRegistry->makeQAction("movetool-move-left-more", this);
+    addAction("movetool-move-left-more", a);
+    connect(a, &QAction::triggered, [&](){moveDiscrete(MoveDirection::Left, true);});
+
+    a = actionRegistry->makeQAction("movetool-move-right-more", this);
+    addAction("movetool-move-right-more", a);
+    connect(a, &QAction::triggered, [&](){moveDiscrete(MoveDirection::Right, true);});
+
+    m_showCoordinatesAction = actionRegistry->makeQAction("movetool-show-coordinates", this);
+    addAction("movetool-show-coordinates", m_showCoordinatesAction);
 }
 
 KisToolMove::~KisToolMove()
@@ -75,66 +101,132 @@ void KisToolMove::resetCursorStyle()
     overrideCursorIfNotEditable();
 }
 
-void KisToolMove::moveDiscrete(MoveDirection direction)
+bool KisToolMove::startStrokeImpl(MoveToolMode mode, const QPoint *pos)
 {
-    if (mode() == KisTool::PAINT_MODE) return;  // Don't interact with dragging
-
-    setMode(KisTool::PAINT_MODE);
+    if (!currentNode()->isEditable()) return false;
 
     KisNodeSP node;
+    KisNodeList nodes;
     KisImageSP image = this->image();
 
     KisResourcesSnapshotSP resources =
         new KisResourcesSnapshot(image, currentNode(), 0, this->canvas()->resourceManager());
     KisSelectionSP selection = resources->activeSelection();
 
-    // Move current layer by default.
-    if ((!node && !(node = resources->currentNode())) || !node->isEditable()) {
-        return;
+    if (mode != MoveSelectedLayer && pos) {
+        bool wholeGroup = !selection &&  mode == MoveGroup;
+        node = KisToolUtils::findNode(image->root(), *pos, wholeGroup);
+        if (node) {
+            nodes = {node};
+        }
     }
 
+    if (nodes.isEmpty()) {
+        nodes = this->selectedNodes();
 
-    // If node has changed, end current stroke.
-    if (m_strokeId && (node != m_currentlyProcessingNode)) {
-        endStroke();
+        KritaUtils::filterContainer<KisNodeList>(nodes,
+                                                 [](KisNodeSP node) {
+                                                     return node->isEditable();
+                                                 });
     }
 
+    if (nodes.size() == 1) {
+        node = nodes.first();
+    }
+
+    if (nodes.isEmpty()) {
+        return false;
+    }
 
     /**
-     * Begin a new stroke if necessary.
+     * If the target node has changed, the stroke should be
+     * restarted. Otherwise just continue processing current node.
      */
-    if (!m_strokeId) {
-        KisStrokeStrategy *strategy;
+    if (m_strokeId) {
+        if (KritaUtils::compareListsUnordered(nodes, m_currentlyProcessingNodes)) {
+            QRect totalBounds;
 
-        KisPaintLayerSP paintLayer =
-            dynamic_cast<KisPaintLayer*>(node.data());
+            Q_FOREACH (KisNodeSP node, m_currentlyProcessingNodes) {
+                totalBounds |= node->projection()->nonDefaultPixelArea();
+            }
 
-        if (paintLayer && selection &&
-            !selection->isTotallyUnselected(image->bounds())) {
+            m_totalTopLeft = totalBounds.topLeft();
 
-            strategy =
-                new MoveSelectionStrokeStrategy(paintLayer,
-                                                selection,
-                                                image.data(),
-                                                image->postExecutionUndoAdapter());
+            return true;
         } else {
-            strategy =
-                new MoveStrokeStrategy(node, image.data(),
-                                       image->postExecutionUndoAdapter());
+            endStroke();
         }
-
-        m_strokeId = image->startStroke(strategy);
-        m_currentlyProcessingNode = node;
-        m_accumulatedOffset = QPoint();
     }
 
-    int moveStep = m_optionsWidget->moveStep();
+    KisStrokeStrategy *strategy;
+
+    KisPaintLayerSP paintLayer = node ?
+        dynamic_cast<KisPaintLayer*>(node.data()) : 0;
+
+    if (paintLayer && selection &&
+        !selection->isTotallyUnselected(image->bounds())) {
+
+        strategy =
+            new MoveSelectionStrokeStrategy(paintLayer,
+                                            selection,
+                                            image.data(),
+                                            image->postExecutionUndoAdapter());
+    } else {
+        strategy =
+            new MoveStrokeStrategy(nodes, image.data(),
+                                   image->postExecutionUndoAdapter());
+    }
+
+    m_strokeId = image->startStroke(strategy);
+    m_currentlyProcessingNodes = nodes;
+    m_accumulatedOffset = QPoint();
+
+    QRect totalBounds;
+
+    Q_FOREACH (KisNodeSP node, m_currentlyProcessingNodes) {
+        totalBounds |= node->projection()->nonDefaultPixelArea();
+    }
+
+    m_totalTopLeft = totalBounds.topLeft();
+
+    return true;
+}
+
+void KisToolMove::moveDiscrete(MoveDirection direction, bool big)
+{
+    if (mode() == KisTool::PAINT_MODE) return;  // Don't interact with dragging
+    if (!currentNode()->isEditable()) return; // Don't move invisible nodes
+
+    if (startStrokeImpl(MoveSelectedLayer, 0)) {
+        setMode(KisTool::PAINT_MODE);
+    }
+
+    // Larger movement if "shift" key is pressed.
+    qreal scale = big ? m_optionsWidget->moveScale() : 1.0;
+    qreal moveStep = m_optionsWidget->moveStep() * scale;
+
     QPoint offset = direction == Up   ? QPoint( 0, -moveStep) :
                     direction == Down ? QPoint( 0,  moveStep) :
                     direction == Left ? QPoint(-moveStep,  0) :
                                         QPoint( moveStep,  0) ;
 
-    image->addJob(m_strokeId, new MoveStrokeStrategy::Data(m_accumulatedOffset + offset));
+    const bool showCoordinates =
+        m_optionsWidget ? m_optionsWidget->showCoordinates() : true;
+
+    if (showCoordinates) {
+        KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
+        kisCanvas->viewManager()->
+            showFloatingMessage(
+                i18nc("floating message in move tool",
+                      "X: %1 px, Y: %2 px",
+                      (m_totalTopLeft + offset).x(),
+                      (m_totalTopLeft + offset).y()),
+                QIcon(), 1000, KisFloatingMessage::High);
+    }
+
+    emit moveInNewPosition(m_totalTopLeft + offset);
+
+    image()->addJob(m_strokeId, new MoveStrokeStrategy::Data(m_accumulatedOffset + offset));
     m_accumulatedOffset += offset;
 
 
@@ -146,6 +238,16 @@ void KisToolMove::moveDiscrete(MoveDirection direction)
 void KisToolMove::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
     KisTool::activate(toolActivation, shapes);
+    QRect totalBounds;
+
+    Q_FOREACH (KisNodeSP node, this->selectedNodes()) {
+        totalBounds |= node->projection()->nonDefaultPixelArea();
+    }
+
+    m_startPosition = totalBounds.topLeft();
+
+    if (m_optionsWidget)
+        m_optionsWidget->slotSetTranslate(m_startPosition);
 }
 
 
@@ -189,101 +291,46 @@ void KisToolMove::endPrimaryAction(KoPointerEvent *event)
 
 void KisToolMove::beginAlternateAction(KoPointerEvent *event, AlternateAction action)
 {
-    if (action == PickFgNode) {
+    // Ctrl+Right click toggles between moving current layer and moving layer w/ content
+    if (action == PickFgNode || action == PickBgImage) {
         MoveToolMode mode = moveToolMode();
 
-        if (mode == MoveSelectedLayer || mode == MoveGroup) {
+        if (mode == MoveSelectedLayer) {
             mode = MoveFirstLayer;
         } else if (mode == MoveFirstLayer) {
             mode = MoveSelectedLayer;
         }
 
         startAction(event, mode);
-    } else if (action == PickFgImage) {
-        startAction(event, MoveGroup);
     } else {
-        KisTool::beginAlternateAction(event, action);
+        startAction(event, MoveGroup);
     }
 }
 
 void KisToolMove::continueAlternateAction(KoPointerEvent *event, AlternateAction action)
 {
-    if (action == PickFgNode || action == PickFgImage) {
-        continueAction(event);
-    } else {
-        KisTool::continueAlternateAction(event, action);
-    }
+    Q_UNUSED(action)
+    continueAction(event);
 }
 
 void KisToolMove::endAlternateAction(KoPointerEvent *event, AlternateAction action)
 {
-    if (action == PickFgNode || action == PickFgImage) {
-        endAction(event);
-    } else {
-        KisTool::endAlternateAction(event, action);
-    }
+    Q_UNUSED(action)
+    endAction(event);
 }
 
 void KisToolMove::startAction(KoPointerEvent *event, MoveToolMode mode)
 {
-    QPoint pos = convertToPixelCoord(event).toPoint();
+    QPoint pos = convertToPixelCoordAndSnap(event).toPoint();
     m_dragStart = pos;
     m_moveInProgress = true;
     emit moveInProgressChanged();
 
-    KisNodeSP node;
-    KisImageSP image = this->image();
-
-    KisResourcesSnapshotSP resources =
-        new KisResourcesSnapshot(image, currentNode(), 0, this->canvas()->resourceManager());
-    KisSelectionSP selection = resources->activeSelection();
-
-    if (mode != MoveSelectedLayer) {
-        bool wholeGroup = !selection &&  mode == MoveGroup;
-        node = KisToolUtils::findNode(image->root(), pos, wholeGroup);
-    }
-
-    if ((!node && !(node = resources->currentNode())) || !node->isEditable()) {
-        event->ignore();
-        return;
-    }
-
-    setMode(KisTool::PAINT_MODE);
-
-    /**
-     * If the target node has changed, the stroke should be
-     * restarted. Otherwise just continue processing current node.
-     */
-    if (m_strokeId) {
-        if (node == m_currentlyProcessingNode) {
-            return;
-        } else {
-            endStroke();
-        }
-    }
-
-    KisStrokeStrategy *strategy;
-
-    KisPaintLayerSP paintLayer =
-        dynamic_cast<KisPaintLayer*>(node.data());
-
-    if (paintLayer && selection &&
-        !selection->isTotallyUnselected(image->bounds())) {
-
-        strategy =
-            new MoveSelectionStrokeStrategy(paintLayer,
-                                            selection,
-                                            image.data(),
-                                            image->postExecutionUndoAdapter());
+    if (startStrokeImpl(mode, &pos)) {
+        setMode(KisTool::PAINT_MODE);
     } else {
-        strategy =
-            new MoveStrokeStrategy(node, image.data(),
-                                   image->postExecutionUndoAdapter());
+        event->ignore();
     }
-
-    m_strokeId = image->startStroke(strategy);
-    m_currentlyProcessingNode = node;
-    m_accumulatedOffset = QPoint();
 }
 
 void KisToolMove::continueAction(KoPointerEvent *event)
@@ -292,7 +339,24 @@ void KisToolMove::continueAction(KoPointerEvent *event)
 
     if (!m_strokeId) return;
 
-    QPoint pos = convertToPixelCoord(event).toPoint();
+    QPoint pos = convertToPixelCoordAndSnap(event).toPoint();
+
+    const bool showCoordinates =
+        m_optionsWidget ? m_optionsWidget->showCoordinates() : true;
+
+    if (showCoordinates) {
+        KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
+        kisCanvas->viewManager()->
+                showFloatingMessage(
+                    i18nc("floating message in move tool",
+                          "X: %1 px, Y: %2 px",
+                          (m_totalTopLeft + (pos - m_dragStart)).x(),
+                          (m_totalTopLeft + (pos - m_dragStart)).y()),
+                    QIcon(), 1000, KisFloatingMessage::High);
+    }
+
+    emit moveInNewPosition(m_totalTopLeft + (pos - m_dragStart));
+
     pos = applyModifiers(event->modifiers(), pos);
     drag(pos);
 }
@@ -303,7 +367,7 @@ void KisToolMove::endAction(KoPointerEvent *event)
     setMode(KisTool::HOVER_MODE);
     if (!m_strokeId) return;
 
-    QPoint pos = convertToPixelCoord(event).toPoint();
+    QPoint pos = convertToPixelCoordAndSnap(event).toPoint();
     pos = applyModifiers(event->modifiers(), pos);
     drag(pos);
 
@@ -327,7 +391,7 @@ void KisToolMove::endStroke()
     KisImageWSP image = currentImage();
     image->endStroke(m_strokeId);
     m_strokeId.clear();
-    m_currentlyProcessingNode.clear();
+    m_currentlyProcessingNodes.clear();
     m_moveInProgress = false;
     emit moveInProgressChanged();
 }
@@ -339,7 +403,7 @@ void KisToolMove::cancelStroke()
     KisImageWSP image = currentImage();
     image->cancelStroke(m_strokeId);
     m_strokeId.clear();
-    m_currentlyProcessingNode.clear();
+    m_currentlyProcessingNodes.clear();
     m_moveInProgress = false;
     emit moveInProgressChanged();
 }
@@ -358,6 +422,23 @@ QWidget* KisToolMove::createOptionWidget()
 
     m_optionsWidget->setFixedHeight(m_optionsWidget->sizeHint().height());
 
+    connect(m_showCoordinatesAction, SIGNAL(triggered(bool)), m_optionsWidget, SLOT(setShowCoordinates(bool)));
+    connect(m_optionsWidget, SIGNAL(showCoordinatesChanged(bool)), m_showCoordinatesAction, SLOT(setChecked(bool)));
+
+    m_showCoordinatesAction->setChecked(m_optionsWidget->showCoordinates());
+
+    m_optionsWidget->slotSetTranslate(m_startPosition);
+
+    connect(m_optionsWidget, SIGNAL(sigSetTranslateX(int)), SLOT(moveBySpinX(int)));
+    connect(m_optionsWidget, SIGNAL(sigSetTranslateY(int)), SLOT(moveBySpinY(int)));
+
+    connect(this, SIGNAL(moveInNewPosition(QPoint)), m_optionsWidget, SLOT(slotSetTranslate(QPoint)));
+
+    KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
+
+    connect(kisCanvas->viewManager()->nodeManager(), SIGNAL(sigUiNeedChangeSelectedNodes(KisNodeList)),
+            this, SLOT(slotNodeChanged(KisNodeList)));
+
     return m_optionsWidget;
 }
 
@@ -375,13 +456,72 @@ bool KisToolMove::moveInProgress() const
 
 QPoint KisToolMove::applyModifiers(Qt::KeyboardModifiers modifiers, QPoint pos)
 {
-    QPoint adjustedPos = pos;
-    if (modifiers & Qt::AltModifier || modifiers & Qt::ControlModifier) {
+    QPoint move = pos - m_dragStart;
 
-        if (qAbs(pos.x() - m_dragStart.x()) > qAbs(pos.y() - m_dragStart.y()))
-            adjustedPos.setY(m_dragStart.y());
-        else
-            adjustedPos.setX(m_dragStart.x());
+    // Snap to axis
+    if (modifiers & Qt::ShiftModifier) {
+        move = snapToClosestAxis(move);
     }
-    return adjustedPos;
+
+    // "Precision mode" - scale down movement by 1/5
+    if (modifiers & Qt::AltModifier) {
+        const qreal SCALE_FACTOR = .2;
+        move = SCALE_FACTOR * move;
+    }
+
+    return m_dragStart + move;
+}
+
+void KisToolMove::moveBySpinX(int newX)
+{
+    if (mode() == KisTool::PAINT_MODE) return;  // Don't interact with dragging
+    if (!currentNode()->isEditable()) return;   // Don't move invisible nodes
+
+    if (startStrokeImpl(MoveSelectedLayer, 0)) {
+        setMode(KisTool::PAINT_MODE);
+    }
+
+    KisImageWSP image = currentImage();
+
+    QPoint offset = QPoint(newX, m_totalTopLeft.y()) - m_totalTopLeft;
+
+    image->addJob(m_strokeId,
+                  new MoveStrokeStrategy::Data(m_accumulatedOffset + offset));
+    m_accumulatedOffset += offset;
+
+    setMode(KisTool::HOVER_MODE);
+}
+
+void KisToolMove::moveBySpinY(int newY)
+{
+    if (mode() == KisTool::PAINT_MODE) return;  // Don't interact with dragging
+    if (!currentNode()->isEditable()) return;   // Don't move invisible nodes
+
+    if (startStrokeImpl(MoveSelectedLayer, 0)) {
+        setMode(KisTool::PAINT_MODE);
+    }
+
+    KisImageWSP image = currentImage();
+
+    QPoint offset = QPoint(m_totalTopLeft.x(), newY) - m_totalTopLeft;
+
+    image->addJob(m_strokeId,
+                  new MoveStrokeStrategy::Data(m_accumulatedOffset + offset));
+    m_accumulatedOffset += offset;
+
+    setMode(KisTool::HOVER_MODE);
+}
+
+void KisToolMove::slotNodeChanged(KisNodeList nodes)
+{
+    QRect totalBounds;
+
+    Q_FOREACH (KisNodeSP node, nodes) {
+        totalBounds |= node->projection()->nonDefaultPixelArea();
+    }
+
+    m_startPosition = totalBounds.topLeft();
+
+    if (m_optionsWidget)
+        m_optionsWidget->slotSetTranslate(m_startPosition);
 }

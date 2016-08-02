@@ -87,7 +87,6 @@ KoToolBase::~KoToolBase()
    //         addElement("toolTip" , action->toolTip());
    //         addElement("iconText" , action->iconText());
    //         addElement("shortcut" , action->shortcut().toString());
-   //         addElement("defaultShortcut" , action->shortcut().toString());
    //         addElement("isCheckable" , QString((action->isChecked() ? "true" : "false")));
    //         addElement("statusTip", action->statusTip());
    //         e.appendChild(a);
@@ -102,6 +101,7 @@ KoToolBase::~KoToolBase()
 //    else {
 //        qDebug() << "Tool" << toolId() << "has no actions";
 //    }
+    qDeleteAll(d_ptr->optionWidgets);
     delete d_ptr;
 }
 

@@ -30,7 +30,7 @@
 #include "generator/kis_generator.h"
 #include "kis_node_visitor.h"
 #include "kis_processing_visitor.h"
-#include "kis_signal_compressor.h"
+#include "kis_thread_safe_signal_compressor.h"
 #include "kis_recalculate_generator_layer_job.h"
 
 
@@ -43,7 +43,7 @@ struct Q_DECL_HIDDEN KisGeneratorLayer::Private
     {
     }
 
-    KisSignalCompressor updateSignalCompressor;
+    KisThreadSafeSignalCompressor updateSignalCompressor;
 };
 
 

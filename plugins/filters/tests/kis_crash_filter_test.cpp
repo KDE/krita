@@ -31,7 +31,7 @@
 bool KisCrashFilterTest::applyFilter(const KoColorSpace * cs,  KisFilterSP f)
 {
 
-    QImage qimage(QString(FILES_DATA_DIR) + QDir::separator() + "lena.png");
+    QImage qimage(QString(FILES_DATA_DIR) + QDir::separator() + "carrot.png");
 
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
 //    dev->fill(0, 0, 100, 100, dev->defaultPixel());

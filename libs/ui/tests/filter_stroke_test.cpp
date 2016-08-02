@@ -43,7 +43,7 @@ protected:
     using utils::StrokeTester::addPaintingJobs;
 
     void initImage(KisImageWSP image, KisNodeSP activeNode) {
-        QImage src(QString(FILES_DATA_DIR) + QDir::separator() + "lena.png");
+        QImage src(QString(FILES_DATA_DIR) + QDir::separator() + "carrot.png");
         activeNode->original()->convertFromQImage(src, 0);
 
         image->refreshGraph();

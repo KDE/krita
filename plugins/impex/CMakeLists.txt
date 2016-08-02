@@ -14,6 +14,7 @@ endif()
 
 if(PNG_FOUND)
     add_subdirectory(png)
+    add_subdirectory(csv)
 endif()
 
 if(OPENEXR_FOUND)
@@ -42,3 +43,5 @@ add_subdirectory(qml)
 add_subdirectory(tga)
 add_subdirectory(heightmap)
 add_subdirectory(brush)
+add_subdirectory(spriter)
+add_subdirectory(video)

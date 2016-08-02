@@ -19,6 +19,7 @@
 #ifndef _KIS_CURVE_CIRCLE_MASK_GENERATOR_H_
 #define _KIS_CURVE_CIRCLE_MASK_GENERATOR_H_
 
+#include <QScopedPointer>
 #include "kritaimage_export.h"
 
 #include <QList>
@@ -41,7 +42,9 @@ class KRITAIMAGE_EXPORT KisCurveCircleMaskGenerator : public KisMaskGenerator
 public:
 
     KisCurveCircleMaskGenerator(qreal radius, qreal ratio, qreal fh, qreal fv, int spikes,const KisCubicCurve& curve, bool antialiasEdges);
+    KisCurveCircleMaskGenerator(const KisCurveCircleMaskGenerator &rhs);
     virtual ~KisCurveCircleMaskGenerator();
+    KisMaskGenerator* clone() const;
 
     virtual quint8 valueAt(qreal x, qreal y) const;
 
@@ -62,7 +65,7 @@ private:
 
 private:
     struct Private;
-    Private* const d;
+    const QScopedPointer<Private> d;
 };
 
 #endif

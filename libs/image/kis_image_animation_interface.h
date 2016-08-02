@@ -27,6 +27,7 @@
 
 class KisUpdatesFacade;
 class KisTimeRange;
+class KoColor;
 
 namespace KisLayerUtils {
     struct SwitchFrameCommand;
@@ -39,6 +40,11 @@ class KRITAIMAGE_EXPORT KisImageAnimationInterface : public QObject
 public:
     KisImageAnimationInterface(KisImage *image);
     ~KisImageAnimationInterface();
+
+    /**
+     * Returns true of the image has at least one animated layer
+     */
+    bool hasAnimation() const;
 
     /**
      * Returns currently active frame of the underlying image. Some strokes
@@ -97,6 +103,13 @@ public:
     void invalidateFrames(const KisTimeRange &range, const QRect &rect);
 
     /**
+     * Changes the default color of the "external frame" projection of
+     * the image's root layer. Please note that this command should be
+     * executed from a context of an exclusive job!
+     */
+    void setDefaultProjectionColor(const KoColor &color);
+
+    /**
      * The current time range selected by user.
      * @return current time range
      */
@@ -124,12 +137,14 @@ private:
     void saveAndResetCurrentTime(int frameId, int *savedValue);
     void restoreCurrentTime(int *savedValue);
     void notifyFrameReady();
+    void notifyFrameCancelled();
     KisUpdatesFacade* updatesFacade() const;
 
     void blockFrameInvalidation(bool value);
 
 Q_SIGNALS:
     void sigFrameReady(int time);
+    void sigFrameCancelled();
     void sigTimeChanged(int newTime);
     void sigFramesChanged(const KisTimeRange &range, const QRect &rect);
 

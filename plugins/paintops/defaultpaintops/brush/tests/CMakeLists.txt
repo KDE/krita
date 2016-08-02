@@ -6,5 +6,5 @@ macro_add_unittest_definitions()
 ########### next target ###############
 
 set(kis_brushop_test_SRCS kis_brushop_test.cpp ../../../../../sdk/tests/stroke_testing_utils.cpp)
-kde4_add_unit_test(KisBrushOpTest TESTNAME krita-plugins-KisBrushOpTest ${kis_brushop_test_SRCS})
+kde4_add_broken_unit_test(KisBrushOpTest TESTNAME krita-plugins-KisBrushOpTest ${kis_brushop_test_SRCS})
 target_link_libraries(KisBrushOpTest   kritaimage kritaui kritalibpaintop Qt5::Test)

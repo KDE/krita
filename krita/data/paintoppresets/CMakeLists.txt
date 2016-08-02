@@ -117,6 +117,10 @@ Texture_hair.kpp
 Texture_leaves_fuzzy.kpp
 ink_precision_03.kpp
 pixel1.kpp
+Pixelart_dither.kpp
+Pixelart_round.kpp
+Pixelart_square.kpp
+
 DESTINATION  ${DATA_INSTALL_DIR}/krita/paintoppresets)
 
 install( FILES

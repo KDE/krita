@@ -19,7 +19,6 @@ Boston, MA 02110-1301, USA.
 #include "KisFilterGraph.h"
 
 #include "KisImportExportManager.h"  // KisImportExportManager::filterAvailable, private API
-#include "KisDocumentEntry.h"
 #include "KisFilterEntry.h"
 #include "KisDocument.h"
 
@@ -39,9 +38,9 @@ Boston, MA 02110-1301, USA.
 namespace CalligraFilter {
 
 Graph::Graph(const QByteArray& from)
-        : m_from(from)
-        , m_graphValid(false)
-        , d(0)
+    : m_from(from)
+    , m_graphValid(false)
+    , d(0)
 {
     buildGraph();
     shortestPaths();  // Will return after a single lookup if "from" is invalid (->no check here)
@@ -75,11 +74,7 @@ KisFilterChainSP Graph::chain(const KisImportExportManager* manager, QByteArray&
     if (!isValid() || !manager)
         return KisFilterChainSP();
 
-    if (to.isEmpty()) {    // if the destination is empty we search the closest Calligra part
-        to = findCalligraPart();
-        if (to.isEmpty())    // still empty? strange stuff...
-            return KisFilterChainSP();
-    }
+    Q_ASSERT(!to.isEmpty());
 
     const Vertex* vertex = m_vertices.value(to);
     if (!vertex || vertex->key() == UINT_MAX)
@@ -115,21 +110,6 @@ void Graph::dump() const
 // available mime types and filters.
 void Graph::buildGraph()
 {
-    // Make sure that all available parts are added to the graph
-    const QList<KisDocumentEntry> parts(KisDocumentEntry::query());
-
-    Q_FOREACH (const KisDocumentEntry& part, parts) {
-
-        QStringList nativeMimeTypes = part.loader()->metaData().value("MetaData").toObject().value("X-KDE-ExtraNativeMimeTypes").toString().split(',');
-        nativeMimeTypes += part.loader()->metaData().value("MetaData").toObject().value("X-KDE-NativeMimeType").toString();
-
-        Q_FOREACH (const QString& nativeMimeType, nativeMimeTypes) {
-            const QByteArray key = nativeMimeType.toLatin1();
-            if (!m_vertices.contains(key))
-                m_vertices[key] = new Vertex(key);
-        }
-    }
-
     // no constraint here - we want *all* :)
     const QList<KisFilterEntrySP> filters(KisFilterEntry::query());
 
@@ -143,25 +123,21 @@ void Graph::buildGraph()
                 m_vertices.insert(key, new Vertex(key));
         }
 
-        // Are we allowed to use this filter at all?
-        if (KisImportExportManager::filterAvailable(filter)) {
+        Q_FOREACH (const QString& exportIt, filter->export_) {
 
-            Q_FOREACH (const QString& exportIt, filter->export_) {
-
-                // First make sure the export vertex is in place
-                const QByteArray key = exportIt.toLatin1();    // latin1 is okay here
-                Vertex* exp = m_vertices.value(key);
-                if (!exp) {
-                    exp = new Vertex(key);
-                    m_vertices.insert(key, exp);
-                }
-                // Then create the appropriate edges
-                Q_FOREACH (const QString& import, filter->import) {
-                    m_vertices[import.toLatin1()]->addEdge(new Edge(exp, filter));
-                }
+            // First make sure the export vertex is in place
+            const QByteArray key = exportIt.toLatin1();    // latin1 is okay here
+            Vertex* exp = m_vertices.value(key);
+            if (!exp) {
+                exp = new Vertex(key);
+                m_vertices.insert(key, exp);
             }
-        } else
-            dbgFile << "Filter:" << filter->loader()->fileName() << " doesn't apply.";
+            // Then create the appropriate edges
+            Q_FOREACH (const QString& import, filter->import) {
+                m_vertices[import.toLatin1()]->addEdge(new Edge(exp, filter));
+            }
+
+        }
     }
 }
 
@@ -196,50 +172,4 @@ void Graph::shortestPaths()
     m_graphValid = true;
 }
 
-QByteArray Graph::findCalligraPart() const
-{
-    // Here we simply try to find the closest Calligra mimetype
-    const QList<KisDocumentEntry> parts(KisDocumentEntry::query());
-    QList<KisDocumentEntry>::ConstIterator partIt(parts.constBegin());
-    QList<KisDocumentEntry>::ConstIterator partEnd(parts.constEnd());
-
-    const Vertex *v = 0;
-
-    // Be sure that v gets initialized correctly
-    while (!v && partIt != partEnd) {
-        QStringList nativeMimeTypes = (*partIt).loader()->metaData().value("MetaData").toObject().value("X-KDE-ExtraNativeMimeTypes").toString().split(',');
-        nativeMimeTypes += (*partIt).loader()->metaData().value("MetaData").toObject().value("X-KDE-NativeMimeType").toString();
-        QStringList::ConstIterator it = nativeMimeTypes.constBegin();
-        QStringList::ConstIterator end = nativeMimeTypes.constEnd();
-        for (; !v && it != end; ++it)
-            if (!(*it).isEmpty())
-                v = m_vertices.value((*it).toLatin1());
-        ++partIt;
-    }
-    if (!v)
-        return "";
-
-    // Now we try to find the "cheapest" Calligra vertex
-    while (partIt != partEnd) {
-        QStringList nativeMimeTypes = (*partIt).loader()->metaData().value("MetaData").toObject().value("X-KDE-ExtraNativeMimeTypes").toString().split(',');
-        nativeMimeTypes += (*partIt).loader()->metaData().value("MetaData").toObject().value("X-KDE-NativeMimeType").toString();
-        QStringList::ConstIterator it = nativeMimeTypes.constBegin();
-        QStringList::ConstIterator end = nativeMimeTypes.constEnd();
-        for (; !v && it != end; ++it) {
-            QString key = *it;
-            if (!key.isEmpty()) {
-                Vertex* tmp = m_vertices.value(key.toLatin1());
-                if (!v || (tmp && tmp->key() < v->key()))
-                    v = tmp;
-            }
-        }
-        ++partIt;
-    }
-
-    // It seems it already is a Calligra part
-    if (v->key() == 0)
-        return "";
-
-    return v->mimeType();
-}
 }

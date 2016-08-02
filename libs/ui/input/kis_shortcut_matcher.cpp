@@ -54,6 +54,13 @@ public:
         , usingTouch(false)
     {}
 
+    ~Private()
+    {
+        qDeleteAll(singleActionShortcuts);
+        qDeleteAll(strokeShortcuts);
+        qDeleteAll(touchShortcuts);
+    }
+
     QList<KisSingleActionShortcut*> singleActionShortcuts;
     QList<KisStrokeShortcut*> strokeShortcuts;
     QList<KisTouchShortcut*> touchShortcuts;
@@ -74,6 +81,10 @@ public:
     inline bool actionsSuppressed() const {
         return suppressAllActions || !cursorEntered;
     }
+
+    inline bool actionsSuppressedIgnoreFocus() const {
+        return suppressAllActions;
+    }
 };
 
 KisShortcutMatcher::KisShortcutMatcher()
@@ -82,9 +93,12 @@ KisShortcutMatcher::KisShortcutMatcher()
 
 KisShortcutMatcher::~KisShortcutMatcher()
 {
-    qDeleteAll(m_d->singleActionShortcuts);
-    qDeleteAll(m_d->strokeShortcuts);
     delete m_d;
+}
+
+bool KisShortcutMatcher::hasRunningShortcut() const
+{
+    return m_d->runningShortcut;
 }
 
 void KisShortcutMatcher::addShortcut(KisSingleActionShortcut *shortcut)
@@ -333,8 +347,10 @@ void KisShortcutMatcher::clearShortcuts()
     qDeleteAll(m_d->singleActionShortcuts);
     m_d->singleActionShortcuts.clear();
     qDeleteAll(m_d->strokeShortcuts);
+    qDeleteAll(m_d->touchShortcuts);
     m_d->strokeShortcuts.clear();
     m_d->candidateShortcuts.clear();
+    m_d->touchShortcuts.clear();
     m_d->runningShortcut = 0;
     m_d->readyShortcut = 0;
 }
@@ -348,7 +364,7 @@ bool KisShortcutMatcher::tryRunWheelShortcut(KisSingleActionShortcut::WheelActio
 template<typename T, typename U>
 bool KisShortcutMatcher::tryRunSingleActionShortcutImpl(T param, U *event, const QSet<Qt::Key> &keysState)
 {
-    if (m_d->actionsSuppressed()) {
+    if (m_d->actionsSuppressedIgnoreFocus()) {
         DEBUG_EVENT_ACTION("Event suppressed", event)
         return false;
     }

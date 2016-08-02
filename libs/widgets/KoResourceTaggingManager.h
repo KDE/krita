@@ -38,22 +38,32 @@ class KoTagChooserWidget;
 class KoResourceModel;
 class KoResource;
 
+/**
+ * @brief The KoResourceTaggingManager class is ...
+ *
+ * XXX: this needs to be documented!
+ */
 class KoResourceTaggingManager : public QObject
 {
     Q_OBJECT
 
 public:
+
     explicit KoResourceTaggingManager(KoResourceModel* model, QWidget* parent);
     ~KoResourceTaggingManager();
     void showTaggingBar(bool show);
     QStringList availableTags() const;
-    QString currentTag();
     void contextMenuRequested(KoResource* currentResource, QPoint pos);
     void allowTagModification( bool set );
     bool allowTagModification();
     KoTagFilterWidget* tagFilterWidget();
     KoTagChooserWidget* tagChooserWidget();
+
+Q_SIGNALS:
+    void updateView();
+    
 private Q_SLOTS:
+
     void undeleteTag(const QString& tagToUndelete);
     void purgeTagUndeleteList();
     void contextCreateNewTag(KoResource* resource, const QString& tag);

@@ -11,7 +11,6 @@
       <activationFlags>0</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -24,7 +23,6 @@
       <activationFlags>0</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -37,7 +35,6 @@
       <activationFlags>10</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -50,44 +47,6 @@
       <activationFlags>10</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-    <Action name="windows_next">
-      <icon></icon>
-      <text>N&amp;ext</text>
-      <whatsThis></whatsThis>
-      <toolTip>Next</toolTip>
-      <iconText>Next</iconText>
-      <activationFlags>10</activationFlags>
-      <activationConditions>0</activationConditions>
-      <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-    <Action name="windows_previous">
-      <icon></icon>
-      <text>Previous</text>
-      <whatsThis></whatsThis>
-      <toolTip>Previous</toolTip>
-      <iconText>Previous</iconText>
-      <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-    <Action name="view_newwindow">
-      <icon>window-new</icon>
-      <text>&amp;New Window</text>
-      <whatsThis></whatsThis>
-      <toolTip>New Window</toolTip>
-      <iconText>New Window</iconText>
-      <activationFlags>0</activationFlags>
-      <activationConditions>0</activationConditions>
-      <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -100,7 +59,6 @@
       <activationFlags>0</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -113,7 +71,6 @@
       <activationFlags>0</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -124,7 +81,6 @@
       <toolTip>Show File Toolbar</toolTip>
       <iconText>Show File Toolbar</iconText>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -136,7 +92,6 @@
       <toolTip>Show color selector</toolTip>
       <iconText>Show color selector</iconText>
       <shortcut>Shift+I</shortcut>
-      <defaultShortcut>Shift+I</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -147,7 +102,6 @@
       <toolTip>Show MyPaint shade selector</toolTip>
       <iconText>Show MyPaint shade selector</iconText>
       <shortcut>Shift+M</shortcut>
-      <defaultShortcut>Shift+M</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -158,7 +112,6 @@
       <toolTip>Show minimal shade selector</toolTip>
       <iconText>Show minimal shade selector</iconText>
       <shortcut>Shift+N</shortcut>
-      <defaultShortcut>Shift+N</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -169,7 +122,6 @@
       <toolTip>Show color history</toolTip>
       <iconText>Show color history</iconText>
       <shortcut>H</shortcut>
-      <defaultShortcut>H</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -180,7 +132,6 @@
       <toolTip>Show common colors</toolTip>
       <iconText>Show common colors</iconText>
       <shortcut>U</shortcut>
-      <defaultShortcut>U</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -190,8 +141,7 @@
       <whatsThis></whatsThis>
       <toolTip>Show Tool Options</toolTip>
       <iconText>Show Tool Options</iconText>
-      <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
+      <shortcut>\</shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -201,8 +151,7 @@
       <whatsThis></whatsThis>
       <toolTip>Show Brush Editor</toolTip>
       <iconText>Show Brush Editor</iconText>
-      <shortcut>i</shortcut>
-      <defaultShortcut></defaultShortcut>
+      <shortcut>F5</shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -212,8 +161,7 @@
       <whatsThis></whatsThis>
       <toolTip>Show Brush Presets</toolTip>
       <iconText>Show Brush Presets</iconText>
-      <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
+      <shortcut>F6</shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -226,7 +174,6 @@
       <activationFlags>0</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>Ctrl+Shift+T</shortcut>
-      <defaultShortcut>Ctrl+Shift+T</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -239,7 +186,6 @@
       <activationFlags>0</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -256,7 +202,6 @@
       <activationFlags>0</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>L</shortcut>
-      <defaultShortcut>L</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -269,7 +214,6 @@
       <activationFlags>0</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>K</shortcut>
-      <defaultShortcut>K</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -280,7 +224,6 @@
       <toolTip>Make brush color more saturated</toolTip>
       <iconText>Make brush color more saturated</iconText>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -291,7 +234,6 @@
       <toolTip>Make brush color more desaturated</toolTip>
       <iconText>Make brush color more desaturated</iconText>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -302,7 +244,6 @@
       <toolTip>Shift brush color hue clockwise</toolTip>
       <iconText>Shift brush color hue clockwise</iconText>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -313,7 +254,6 @@
       <toolTip>Shift brush color hue counter-clockwise</toolTip>
       <iconText>Shift brush color hue counter-clockwise</iconText>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -324,7 +264,6 @@
       <toolTip>Make brush color more red</toolTip>
       <iconText>Make brush color more red</iconText>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -335,7 +274,6 @@
       <toolTip>Make brush color more green</toolTip>
       <iconText>Make brush color more green</iconText>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -346,7 +284,6 @@
       <toolTip>Make brush color more blue</toolTip>
       <iconText>Make brush color more blue</iconText>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -357,7 +294,6 @@
       <toolTip>Make brush color more yellow</toolTip>
       <iconText>Make brush color more yellow</iconText>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -370,7 +306,6 @@
       <activationFlags>0</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>O</shortcut>
-      <defaultShortcut>O</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -383,7 +318,6 @@
       <activationFlags>0</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>I</shortcut>
-      <defaultShortcut>I</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -396,7 +330,6 @@
       <activationFlags>10000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>E</shortcut>
-      <defaultShortcut>E</defaultShortcut>
       <isCheckable>true</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -408,7 +341,6 @@
       <iconText>Reload Original Preset</iconText>
       <activationFlags>10000</activationFlags>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -420,31 +352,28 @@
       <iconText>Preserve Alpha</iconText>
       <activationFlags>10000</activationFlags>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>true</isCheckable>
       <statusTip></statusTip>
     </Action>
     <Action name="hmirror_action">
       <icon>symmetry-horizontal</icon>
-      <text>Set horizontal mirror mode</text>
+      <text>Horizontal Mirror Tool</text>
       <whatsThis></whatsThis>
-      <toolTip>Set horizontal mirror mode</toolTip>
-      <iconText>Set horizontal mirror mode</iconText>
+      <toolTip>Horizontal Mirror Tool</toolTip>
+      <iconText>Horizontal Mirror Tool</iconText>
       <activationFlags>10000</activationFlags>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>true</isCheckable>
       <statusTip></statusTip>
     </Action>
     <Action name="vmirror_action">
       <icon>symmetry-vertical</icon>
-      <text>Set vertical mirror mode</text>
+      <text>Vertical Mirror Tool</text>
       <whatsThis></whatsThis>
-      <toolTip>Set vertical mirror mode</toolTip>
-      <iconText>Set vertical mirror mode</iconText>
+      <toolTip>Vertical Mirror Tool</toolTip>
+      <iconText>Vertical Mirror Tool</iconText>
       <activationFlags>10000</activationFlags>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>true</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -457,7 +386,6 @@
       <activationFlags>0</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -465,12 +393,11 @@
       <icon></icon>
       <text>&amp;Invert Selection</text>
       <whatsThis></whatsThis>
-      <toolTip>foo</toolTip>
+      <toolTip>Invert current selection</toolTip>
       <iconText>Invert Selection</iconText>
       <activationFlags>10000000000</activationFlags>
       <activationConditions>100</activationConditions>
       <shortcut>Ctrl+Shift+I</shortcut>
-      <defaultShortcut>Ctrl+Shift+I</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -483,7 +410,6 @@
       <activationFlags>10000</activationFlags>
       <activationConditions>1</activationConditions>
       <shortcut>Ctrl+Shift+Backspace</shortcut>
-      <defaultShortcut>Ctrl+Shift+Backspace</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -496,7 +422,6 @@
       <activationFlags>10000</activationFlags>
       <activationConditions>1</activationConditions>
       <shortcut>Ctrl+Backspace</shortcut>
-      <defaultShortcut>Ctrl+Backspace</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -509,7 +434,6 @@
       <activationFlags>10000</activationFlags>
       <activationConditions>1</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -522,7 +446,6 @@
       <activationFlags>0</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -533,7 +456,6 @@
       <toolTip>Next Favourite Preset</toolTip>
       <iconText>Next Favourite Preset</iconText>
       <shortcut>,</shortcut>
-      <defaultShortcut>,</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -544,7 +466,6 @@
       <toolTip>Previous Favourite Preset</toolTip>
       <iconText>Previous Favourite Preset</iconText>
       <shortcut>.</shortcut>
-      <defaultShortcut>.</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -555,7 +476,6 @@
       <toolTip>Switch to Previous Preset</toolTip>
       <iconText>Switch to Previous Preset</iconText>
       <shortcut>/</shortcut>
-      <defaultShortcut>/</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -566,7 +486,6 @@
       <toolTip>Hide Brushes and Stuff Toolbar</toolTip>
       <iconText>Hide Brushes and Stuff Toolbar</iconText>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>true</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -577,7 +496,6 @@
       <toolTip>Zoom In</toolTip>
       <iconText>Zoom In</iconText>
       <shortcut>Ctrl++; Ctrl+=</shortcut>
-      <defaultShortcut>Ctrl++; Ctrl+=</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -588,7 +506,6 @@
       <toolTip>Zoom Out</toolTip>
       <iconText>Zoom Out</iconText>
       <shortcut>Ctrl+-</shortcut>
-      <defaultShortcut>Ctrl+-</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -599,7 +516,6 @@
       <toolTip>Reset Foreground and Background Color</toolTip>
       <iconText>Reset Foreground and Background Color</iconText>
       <shortcut>D</shortcut>
-      <defaultShortcut>D</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -610,7 +526,6 @@
       <toolTip>Swap Foreground and Background Color</toolTip>
       <iconText>Swap Foreground and Background Color</iconText>
       <shortcut>X</shortcut>
-      <defaultShortcut>X</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -621,7 +536,6 @@
       <toolTip>Brush Smoothing: Weighted</toolTip>
       <iconText>Brush Smoothing: Weighted</iconText>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -632,7 +546,6 @@
       <toolTip>Brush Smoothing: Disabled</toolTip>
       <iconText>Brush Smoothing: Disabled</iconText>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -643,7 +556,6 @@
       <toolTip>Brush Smoothing: Stabilizer</toolTip>
       <iconText>Brush Smoothing: Stabilizer</iconText>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -655,8 +567,7 @@
       <iconText>Decrease Brush Size</iconText>
       <activationFlags>0</activationFlags>
       <activationConditions>0</activationConditions>
-      <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
+      <shortcut>[</shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -667,7 +578,6 @@
       <toolTip>Brush Smoothing: Basic</toolTip>
       <iconText>Brush Smoothing: Basic</iconText>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -679,8 +589,7 @@
       <iconText>Increase Brush Size</iconText>
       <activationFlags>0</activationFlags>
       <activationConditions>0</activationConditions>
-      <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
+      <shortcut>]</shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -691,7 +600,6 @@
       <toolTip>Toggle Assistant</toolTip>
       <iconText>ToggleAssistant</iconText>
       <shortcut>Ctrl+Shift+L</shortcut>
-      <defaultShortcut>Ctrl+Shift+L</defaultShortcut>
       <isCheckable>true</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -702,7 +610,6 @@
       <toolTip>Undo Polygon Selection Points</toolTip>
       <iconText>Undo Polygon Selection Points</iconText>
       <shortcut>Shift+Z</shortcut>
-      <defaultShortcut>Shift+Z</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -715,7 +622,6 @@
       <activationFlags>10000</activationFlags>
       <activationConditions>1</activationConditions>
       <shortcut>Ctrl+Shift+Backspace</shortcut>
-      <defaultShortcut>Ctrl+Shift+Backspace</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -728,7 +634,6 @@
       <activationFlags>10000</activationFlags>
       <activationConditions>1</activationConditions>
       <shortcut>Ctrl+Backspace</shortcut>
-      <defaultShortcut>Ctrl+Backspace</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -741,7 +646,6 @@
       <activationFlags>10000</activationFlags>
       <activationConditions>1</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -754,7 +658,6 @@
       <activationFlags>10000000000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -767,7 +670,6 @@
       <activationFlags>100000</activationFlags>
       <activationConditions>100</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -780,7 +682,6 @@
       <activationFlags>0</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>true</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -797,7 +698,6 @@
       <activationFlags>10000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -810,7 +710,6 @@
       <activationFlags>10000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -823,7 +722,6 @@
       <activationFlags>10000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -836,7 +734,6 @@
       <activationFlags>10000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -849,7 +746,6 @@
       <activationFlags>10000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -862,7 +758,6 @@
       <activationFlags>10000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -875,7 +770,6 @@
       <activationFlags>10000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -888,7 +782,6 @@
       <activationFlags>10000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -901,7 +794,6 @@
       <activationFlags>10000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -914,7 +806,6 @@
       <activationFlags>10000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -927,7 +818,6 @@
       <activationFlags>10000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -940,7 +830,6 @@
       <activationFlags>10000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>Ctrl+L</shortcut>
-      <defaultShortcut>Ctrl+L</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -953,7 +842,6 @@
       <activationFlags>10000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -966,7 +854,6 @@
       <activationFlags>10000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -979,7 +866,6 @@
       <activationFlags>10000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -992,7 +878,6 @@
       <activationFlags>10000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>Ctrl+M</shortcut>
-      <defaultShortcut>Ctrl+M</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -1005,7 +890,6 @@
       <activationFlags>10000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -1018,7 +902,6 @@
       <activationFlags>10000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -1031,7 +914,6 @@
       <activationFlags>10000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -1044,7 +926,6 @@
       <activationFlags>10000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -1057,7 +938,6 @@
       <activationFlags>10000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -1070,7 +950,6 @@
       <activationFlags>10000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -1083,7 +962,6 @@
       <activationFlags>10000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -1096,7 +974,6 @@
       <activationFlags>10000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -1109,7 +986,6 @@
       <activationFlags>10000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>Ctrl+B</shortcut>
-      <defaultShortcut>Ctrl+B</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -1122,7 +998,6 @@
       <activationFlags>10000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -1135,7 +1010,6 @@
       <activationFlags>10000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>Ctrl+Shift+U</shortcut>
-      <defaultShortcut>Ctrl+Shift+U</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -1148,7 +1022,6 @@
       <activationFlags>10000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -1161,7 +1034,6 @@
       <activationFlags>10000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -1174,7 +1046,6 @@
       <activationFlags>10000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -1187,7 +1058,6 @@
       <activationFlags>10000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -1200,7 +1070,6 @@
       <activationFlags>10000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -1213,7 +1082,6 @@
       <activationFlags>10000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -1226,7 +1094,6 @@
       <activationFlags>10000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -1239,7 +1106,6 @@
       <activationFlags>10000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -1252,7 +1118,6 @@
       <activationFlags>10000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -1265,7 +1130,6 @@
       <activationFlags>10000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -1278,7 +1142,6 @@
       <activationFlags>10000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -1291,7 +1154,6 @@
       <activationFlags>10000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -1304,7 +1166,6 @@
       <activationFlags>10000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -1317,7 +1178,6 @@
       <activationFlags>10000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -1330,7 +1190,6 @@
       <activationFlags>10000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -1343,7 +1202,6 @@
       <activationFlags>10000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -1356,7 +1214,6 @@
       <activationFlags>10000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>Ctrl+U</shortcut>
-      <defaultShortcut>Ctrl+U</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -1371,7 +1228,6 @@
       <toolTip>Dynamic Brush Tool</toolTip>
       <iconText>Dynamic Brush Tool</iconText>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -1382,18 +1238,6 @@
       <toolTip>Crop the image to an area</toolTip>
       <iconText>Crop the image to an area</iconText>
       <shortcut>C</shortcut>
-      <defaultShortcut>C</defaultShortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-    <Action name="KisToolPerspectiveGrid">
-      <icon></icon>
-      <text>Perspective Grid</text>
-      <whatsThis></whatsThis>
-      <toolTip>Edit the perspective grid</toolTip>
-      <iconText>Edit the perspective grid</iconText>
-      <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -1404,7 +1248,6 @@
       <toolTip>Polygon Tool. Shift-mouseclick ends the polygon.</toolTip>
       <iconText>Polygon Tool. Shift-mouseclick ends the polygon.</iconText>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -1415,7 +1258,6 @@
       <toolTip>References</toolTip>
       <iconText>References</iconText>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -1426,7 +1268,6 @@
       <toolTip>Rectangle Tool</toolTip>
       <iconText>Rectangle Tool</iconText>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -1437,7 +1278,6 @@
       <toolTip>Multibrush Tool</toolTip>
       <iconText>Multibrush Tool</iconText>
       <shortcut>Q</shortcut>
-      <defaultShortcut>Q</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -1448,7 +1288,6 @@
       <toolTip>Shape Manipulation Tool</toolTip>
       <iconText>Shape Manipulation Tool</iconText>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -1459,7 +1298,6 @@
       <toolTip>Select a color from the image or current layer</toolTip>
       <iconText>Select a color from the image or current layer</iconText>
       <shortcut>P</shortcut>
-      <defaultShortcut>P</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -1470,7 +1308,6 @@
       <toolTip>Text editing</toolTip>
       <iconText>Text editing</iconText>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -1481,7 +1318,6 @@
       <toolTip>Outline Selection Tool</toolTip>
       <iconText>Outline Selection Tool</iconText>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -1492,7 +1328,6 @@
       <toolTip>Artistic text editing</toolTip>
       <iconText>Artistic text editing</iconText>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -1503,7 +1338,6 @@
       <toolTip>Select a </toolTip>
       <iconText>Bezier Curve Selection Tool</iconText>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -1514,7 +1348,6 @@
       <toolTip>Select a </toolTip>
       <iconText>Similar Color Selection Tool</iconText>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -1525,7 +1358,6 @@
       <toolTip>Fill a contiguous area of color with a color, or fill a selection.</toolTip>
       <iconText>Fill a contiguous area of color with a color, or fill a selection.</iconText>
       <shortcut>F</shortcut>
-      <defaultShortcut>F</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -1536,7 +1368,6 @@
       <toolTip>Line Tool</toolTip>
       <iconText>Line Tool</iconText>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -1547,7 +1378,6 @@
       <toolTip>Freehand Path Tool</toolTip>
       <iconText>Freehand Path Tool</iconText>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -1558,7 +1388,6 @@
       <toolTip>Bezier Curve Tool. Shift-mouseclick ends the curve.</toolTip>
       <iconText>Bezier Curve Tool. Shift-mouseclick ends the curve.</iconText>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -1569,7 +1398,6 @@
       <toolTip>Ellipse Tool</toolTip>
       <iconText>Ellipse Tool</iconText>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -1580,7 +1408,6 @@
       <toolTip>Freehand Brush Tool</toolTip>
       <iconText>Freehand Brush Tool</iconText>
       <shortcut>B</shortcut>
-      <defaultShortcut>B</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -1591,7 +1418,6 @@
       <toolTip>Create object</toolTip>
       <iconText>Create object</iconText>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -1602,7 +1428,6 @@
       <toolTip>Elliptical Selection Tool</toolTip>
       <iconText>Elliptical Selection Tool</iconText>
       <shortcut>J</shortcut>
-      <defaultShortcut>J</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -1613,7 +1438,6 @@
       <toolTip>Contiguous Selection Tool</toolTip>
       <iconText>Contiguous Selection Tool</iconText>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -1624,7 +1448,6 @@
       <toolTip>Pattern editing</toolTip>
       <iconText>Pattern editing</iconText>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -1635,7 +1458,6 @@
       <toolTip>Review</toolTip>
       <iconText>Review</iconText>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -1646,18 +1468,6 @@
       <toolTip>Draw a gradient.</toolTip>
       <iconText>Draw a gradient.</iconText>
       <shortcut>G</shortcut>
-      <defaultShortcut>G</defaultShortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-    <Action name="KisToolGrid">
-      <icon></icon>
-      <text>Edit the grid</text>
-      <whatsThis></whatsThis>
-      <toolTip>Edit the grid</toolTip>
-      <iconText>Edit the grid</iconText>
-      <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -1668,7 +1478,6 @@
       <toolTip>Polygonal Selection Tool</toolTip>
       <iconText>Polygonal Selection Tool</iconText>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -1679,7 +1488,6 @@
       <toolTip>Measure the distance between two points</toolTip>
       <iconText>Measure the distance between two points</iconText>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -1690,7 +1498,6 @@
       <toolTip>Rectangular Selection Tool</toolTip>
       <iconText>Rectangular Selection Tool</iconText>
       <shortcut>Ctrl+R</shortcut>
-      <defaultShortcut>Ctrl+R</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -1701,7 +1508,6 @@
       <toolTip>Move a layer</toolTip>
       <iconText>Move a layer</iconText>
       <shortcut>T</shortcut>
-      <defaultShortcut>T</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -1712,7 +1518,6 @@
       <toolTip>Vector Image (EMF/WMF/SVM/SVG) tool</toolTip>
       <iconText>Vector Image (EMF/WMF/SVM/SVG) tool</iconText>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -1723,7 +1528,6 @@
       <toolTip>Calligraphy</toolTip>
       <iconText>Calligraphy</iconText>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -1734,7 +1538,6 @@
       <toolTip>Path editing</toolTip>
       <iconText>Path editing</iconText>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -1745,7 +1548,6 @@
       <toolTip>Polyline Tool. Shift-mouseclick ends the polyline.</toolTip>
       <iconText>Polyline Tool. Shift-mouseclick ends the polyline.</iconText>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -1756,7 +1558,6 @@
       <toolTip>Transform a layer or a selection</toolTip>
       <iconText>Transform a layer or a selection</iconText>
       <shortcut>Ctrl+T</shortcut>
-      <defaultShortcut>Ctrl+T</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -1767,7 +1568,6 @@
       <toolTip>Ruler assistant editor tool</toolTip>
       <iconText>Ruler assistant editor tool</iconText>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -1778,7 +1578,6 @@
       <toolTip>Text tool</toolTip>
       <iconText>Text tool</iconText>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -1789,7 +1588,6 @@
       <toolTip>Gradient editing</toolTip>
       <iconText>Gradient editing</iconText>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -1800,7 +1598,6 @@
       <toolTip>Brush Selection Tool</toolTip>
       <iconText>Brush Selection Tool</iconText>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -1815,7 +1612,6 @@
       <toolTip>Next Blending Mode</toolTip>
       <iconText>Next Blending Mode</iconText>
       <shortcut>Alt+Shift++</shortcut>
-      <defaultShortcut>Alt+Shift++</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -1826,7 +1622,6 @@
       <toolTip>Previous Blending Mode</toolTip>
       <iconText>Previous Blending Mode</iconText>
       <shortcut>Alt+Shift+-</shortcut>
-      <defaultShortcut>Alt+Shift+-</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -1839,7 +1634,6 @@
       <activationFlags>0</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>Alt+Shift+N</shortcut>
-      <defaultShortcut>Alt+Shift+N</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -1852,7 +1646,6 @@
       <activationFlags>0</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>Alt+Shift+I</shortcut>
-      <defaultShortcut>Alt+Shift+I</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -1865,7 +1658,6 @@
       <activationFlags>0</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>Alt+Shift+Q</shortcut>
-      <defaultShortcut>Alt+Shift+Q</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -1878,7 +1670,6 @@
       <activationFlags>0</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>Alt+Shift+R</shortcut>
-      <defaultShortcut>Alt+Shift+R</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -1891,7 +1682,6 @@
       <activationFlags>0</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>Alt+Shift+K</shortcut>
-      <defaultShortcut>Alt+Shift+K</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -1904,7 +1694,6 @@
       <activationFlags>0</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>Alt+Shift+M</shortcut>
-      <defaultShortcut>Alt+Shift+M</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -1917,7 +1706,6 @@
       <activationFlags>0</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>Alt+Shift+B</shortcut>
-      <defaultShortcut>Alt+Shift+B</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -1930,7 +1718,6 @@
       <activationFlags>0</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>Alt+Shift+A</shortcut>
-      <defaultShortcut>Alt+Shift+A</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -1943,7 +1730,6 @@
       <activationFlags>0</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>Alt+Shift+G</shortcut>
-      <defaultShortcut>Alt+Shift+G</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -1956,7 +1742,6 @@
       <activationFlags>0</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>Alt+Shift+S</shortcut>
-      <defaultShortcut>Alt+Shift+S</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -1969,7 +1754,6 @@
       <activationFlags>0</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>Alt+Shift+D</shortcut>
-      <defaultShortcut>Alt+Shift+D</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -1982,7 +1766,6 @@
       <activationFlags>0</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>Alt+Shift+W</shortcut>
-      <defaultShortcut>Alt+Shift+W</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -1995,7 +1778,6 @@
       <activationFlags>0</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>Alt+Shift+O</shortcut>
-      <defaultShortcut>Alt+Shift+O</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -2008,7 +1790,6 @@
       <activationFlags>0</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>Alt+Shift+F</shortcut>
-      <defaultShortcut>Alt+Shift+F</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -2021,7 +1802,6 @@
       <activationFlags>0</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>Alt+Shift+H</shortcut>
-      <defaultShortcut>Alt+Shift+H</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -2034,7 +1814,6 @@
       <activationFlags>0</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>Alt+Shift+V</shortcut>
-      <defaultShortcut>Alt+Shift+V</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -2047,7 +1826,6 @@
       <activationFlags>0</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>Alt+Shift+J</shortcut>
-      <defaultShortcut>Alt+Shift+J</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -2060,7 +1838,6 @@
       <activationFlags>0</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>Alt+Shift+Z</shortcut>
-      <defaultShortcut>Alt+Shift+Z</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -2073,7 +1850,6 @@
       <activationFlags>0</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>Alt+Shift+L</shortcut>
-      <defaultShortcut>Alt+Shift+L</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -2086,7 +1862,6 @@
       <activationFlags>0</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>Alt+Shift+E</shortcut>
-      <defaultShortcut>Alt+Shift+E</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -2099,7 +1874,6 @@
       <activationFlags>0</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>Alt+Shift+X</shortcut>
-      <defaultShortcut>Alt+Shift+X</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -2112,7 +1886,6 @@
       <activationFlags>0</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>Alt+Shift+U</shortcut>
-      <defaultShortcut>Alt+Shift+U</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -2125,7 +1898,6 @@
       <activationFlags>0</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>Alt+Shift+T</shortcut>
-      <defaultShortcut>Alt+Shift+T</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -2138,7 +1910,6 @@
       <activationFlags>0</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>Alt+Shift+C</shortcut>
-      <defaultShortcut>Alt+Shift+C</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -2151,7 +1922,6 @@
       <activationFlags>0</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>Alt+Shift+Y</shortcut>
-      <defaultShortcut>Alt+Shift+Y</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -2168,7 +1938,6 @@
       <activationFlags>1</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -2181,7 +1950,6 @@
       <activationFlags>1</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -2194,7 +1962,6 @@
       <activationFlags>1</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -2207,7 +1974,6 @@
       <activationFlags>100000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -2220,7 +1986,6 @@
       <activationFlags>100000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -2233,7 +1998,6 @@
       <activationFlags>100000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -2244,7 +2008,6 @@
       <toolTip></toolTip>
       <iconText></iconText>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -2255,7 +2018,6 @@
       <toolTip></toolTip>
       <iconText></iconText>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -2266,7 +2028,6 @@
       <toolTip></toolTip>
       <iconText></iconText>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -2277,7 +2038,6 @@
       <toolTip></toolTip>
       <iconText></iconText>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -2288,7 +2048,6 @@
       <toolTip></toolTip>
       <iconText></iconText>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>true</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -2299,7 +2058,6 @@
       <toolTip></toolTip>
       <iconText></iconText>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>true</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -2312,7 +2070,6 @@
       <activationFlags>100000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -2323,7 +2080,6 @@
       <toolTip></toolTip>
       <iconText></iconText>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>true</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -2341,7 +2097,6 @@
       <activationFlags>100000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>PgUp</shortcut>
-      <defaultShortcut>PgUp</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -2354,12 +2109,11 @@
       <activationFlags>100000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>PgDown</shortcut>
-      <defaultShortcut>PgDown</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
     <Action name="add_new_group_layer">
-      <icon>folder</icon>
+      <icon>groupLayer</icon>
       <text>&amp;Group Layer</text>
       <whatsThis></whatsThis>
       <toolTip>Group Layer</toolTip>
@@ -2367,12 +2121,11 @@
       <activationFlags>1000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
     <Action name="add_new_clone_layer">
-      <icon>edit-copy</icon>
+      <icon>cloneLayer</icon>
       <text>&amp;Clone Layer</text>
       <whatsThis></whatsThis>
       <toolTip>Clone Layer</toolTip>
@@ -2380,12 +2133,11 @@
       <activationFlags>1000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
     <Action name="add_new_shape_layer">
-      <icon>bookmarks</icon>
+      <icon>vectorLayer</icon>
       <text>&amp;Vector Layer</text>
       <whatsThis></whatsThis>
       <toolTip>Vector Layer</toolTip>
@@ -2393,12 +2145,11 @@
       <activationFlags>1000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
     <Action name="add_new_adjustment_layer">
-      <icon>view-filter</icon>
+      <icon>filterLayer</icon>
       <text>&amp;Filter Layer...</text>
       <whatsThis></whatsThis>
       <toolTip>Filter Layer</toolTip>
@@ -2406,12 +2157,11 @@
       <activationFlags>1000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
     <Action name="add_new_fill_layer">
-      <icon>krita_tool_color_fill</icon>
+      <icon>fillLayer</icon>
       <text>&amp;Fill Layer...</text>
       <whatsThis></whatsThis>
       <toolTip>Fill Layer</toolTip>
@@ -2419,12 +2169,11 @@
       <activationFlags>1000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
     <Action name="add_new_file_layer">
-      <icon>document-open</icon>
+      <icon>fileLayer</icon>
       <text>&amp;File Layer...</text>
       <whatsThis></whatsThis>
       <toolTip>File Layer</toolTip>
@@ -2432,12 +2181,11 @@
       <activationFlags>1000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
     <Action name="add_new_transparency_mask">
-      <icon>edit-copy</icon>
+      <icon>transparencyMask</icon>
       <text>&amp;Transparency Mask</text>
       <whatsThis></whatsThis>
       <toolTip>Transparency Mask</toolTip>
@@ -2445,12 +2193,11 @@
       <activationFlags>100000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
     <Action name="add_new_filter_mask">
-      <icon>bookmarks</icon>
+      <icon>filterMask</icon>
       <text>&amp;Filter Mask...</text>
       <whatsThis></whatsThis>
       <toolTip>Filter Mask</toolTip>
@@ -2458,12 +2205,11 @@
       <activationFlags>100000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
     <Action name="add_new_transform_mask">
-      <icon>bookmarks</icon>
+      <icon>transformMask</icon>
       <text>&amp;Transform Mask...</text>
       <whatsThis></whatsThis>
       <toolTip>Transform Mask</toolTip>
@@ -2471,12 +2217,11 @@
       <activationFlags>100000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
     <Action name="add_new_selection_mask">
-      <icon>edit-paste</icon>
+      <icon>selectionMask</icon>
       <text>&amp;Local Selection</text>
       <whatsThis></whatsThis>
       <toolTip>Local Selection</toolTip>
@@ -2484,7 +2229,6 @@
       <activationFlags>100000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -2497,20 +2241,18 @@
       <activationFlags>1000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>true</isCheckable>
       <statusTip></statusTip>
     </Action>
     <Action name="add_new_paint_layer">
-      <icon>document-new</icon>
+      <icon>paintLayer</icon>
       <text>&amp;Paint Layer</text>
       <whatsThis></whatsThis>
       <toolTip>Paint Layer</toolTip>
       <iconText>Paint Layer</iconText>
       <activationFlags>1000</activationFlags>
       <activationConditions>0</activationConditions>
-      <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
+      <shortcut>Insert</shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -2523,7 +2265,6 @@
       <activationFlags>1000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>Ctrl+J</shortcut>
-      <defaultShortcut>Ctrl+J</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -2536,7 +2277,6 @@
       <activationFlags>100000000</activationFlags>
       <activationConditions>1</activationConditions>
       <shortcut>Ctrl+Shift+J</shortcut>
-      <defaultShortcut>Ctrl+Shift+J</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -2549,7 +2289,6 @@
       <activationFlags>100000000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>Ctrl+Alt+J</shortcut>
-      <defaultShortcut>Ctrl+Alt+J</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -2562,7 +2301,6 @@
       <activationFlags>0</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -2575,7 +2313,6 @@
       <activationFlags>0</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -2588,7 +2325,6 @@
       <activationFlags>100000000000000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -2601,7 +2337,18 @@
       <activationFlags>0</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>Ctrl+G</shortcut>
-      <defaultShortcut>Ctrl+G</defaultShortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="quick_ungroup">
+      <icon></icon>
+      <text>Quick Ungroup</text>
+      <whatsThis></whatsThis>
+      <toolTip>Remove grouping of the layers or remove one layer out of the group</toolTip>
+      <iconText>Quick Ungroup</iconText>
+      <activationFlags>0</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut>Ctrl+Alt+G</shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -2614,7 +2361,6 @@
       <activationFlags>0</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>Ctrl+Shift+G</shortcut>
-      <defaultShortcut>Ctrl+Shift+G</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -2627,7 +2373,6 @@
       <activationFlags>0</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -2640,7 +2385,6 @@
       <activationFlags>0</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -2653,7 +2397,6 @@
       <activationFlags>0</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -2666,7 +2409,6 @@
       <activationFlags>0</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -2679,7 +2421,6 @@
       <activationFlags>0</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -2692,7 +2433,6 @@
       <activationFlags>1000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -2705,7 +2445,18 @@
       <activationFlags>100000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="convert_group_to_animated">
+      <icon></icon>
+      <text>Convert group to &amp;animated layer</text>
+      <whatsThis></whatsThis>
+      <toolTip>Convert child layers into animation frames</toolTip>
+      <iconText>Convert child layers into animation frames</iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -2718,12 +2469,11 @@
       <activationFlags>100000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
     <Action name="import_layer_as_paint_layer">
-      <icon>document-new</icon>
+      <icon>paintLayer</icon>
       <text>&amp;as Paint Layer...</text>
       <whatsThis></whatsThis>
       <toolTip>as Paint Layer</toolTip>
@@ -2731,12 +2481,11 @@
       <activationFlags>1000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
     <Action name="import_layer_as_transparency_mask">
-      <icon>edit-copy</icon>
+      <icon>transparencyMask</icon>
       <text>as &amp;Transparency Mask...</text>
       <whatsThis></whatsThis>
       <toolTip>as Transparency Mask</toolTip>
@@ -2744,12 +2493,11 @@
       <activationFlags>1000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
     <Action name="import_layer_as_filter_mask">
-      <icon>bookmarks</icon>
+      <icon>filterMask</icon>
       <text>as &amp;Filter Mask...</text>
       <whatsThis></whatsThis>
       <toolTip>as Filter Mask</toolTip>
@@ -2757,12 +2505,11 @@
       <activationFlags>1000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
     <Action name="import_layer_as_selection_mask">
-      <icon>edit-paste</icon>
+      <icon>selectionMask</icon>
       <text>as &amp;Selection Mask...</text>
       <whatsThis></whatsThis>
       <toolTip>as Selection Mask</toolTip>
@@ -2770,12 +2517,11 @@
       <activationFlags>1000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
     <Action name="convert_to_paint_layer">
-      <icon>document-new</icon>
+      <icon>paintLayer</icon>
       <text>to &amp;Paint Layer</text>
       <whatsThis></whatsThis>
       <toolTip>to Paint Layer</toolTip>
@@ -2783,12 +2529,11 @@
       <activationFlags>1000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
     <Action name="convert_to_transparency_mask">
-      <icon>edit-copy</icon>
+      <icon>transparencyMask</icon>
       <text>to &amp;Transparency Mask</text>
       <whatsThis></whatsThis>
       <toolTip>to Transparency Mask</toolTip>
@@ -2796,12 +2541,11 @@
       <activationFlags>1000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
     <Action name="convert_to_filter_mask">
-      <icon>bookmarks</icon>
+      <icon>filterMask</icon>
       <text>to &amp;Filter Mask...</text>
       <whatsThis></whatsThis>
       <toolTip>to Filter Mask</toolTip>
@@ -2809,12 +2553,11 @@
       <activationFlags>1000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
     <Action name="convert_to_selection_mask">
-      <icon>edit-paste</icon>
+      <icon>selectionMask</icon>
       <text>to &amp;Selection Mask</text>
       <whatsThis></whatsThis>
       <toolTip>to Selection Mask</toolTip>
@@ -2822,12 +2565,11 @@
       <activationFlags>1000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
     <Action name="split_alpha_into_mask">
-      <icon>edit-copy</icon>
+      <icon>transparencyMask</icon>
       <text>&amp;Alpha into Mask</text>
       <whatsThis></whatsThis>
       <toolTip>Alpha into Mask</toolTip>
@@ -2835,7 +2577,6 @@
       <activationFlags>100000</activationFlags>
       <activationConditions>10</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -2848,7 +2589,6 @@
       <activationFlags>1000000</activationFlags>
       <activationConditions>1</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -2861,7 +2601,6 @@
       <activationFlags>1000000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -2874,7 +2613,6 @@
       <activationFlags>1000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -2887,7 +2625,6 @@
       <activationFlags>1000</activationFlags>
       <activationConditions>1</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -2900,7 +2637,6 @@
       <activationFlags>1000</activationFlags>
       <activationConditions>1</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -2913,7 +2649,6 @@
       <activationFlags>100000</activationFlags>
       <activationConditions>1</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -2926,7 +2661,6 @@
       <activationFlags>100000</activationFlags>
       <activationConditions>1</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -2939,7 +2673,6 @@
       <activationFlags>100000</activationFlags>
       <activationConditions>1</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -2952,7 +2685,6 @@
       <activationFlags>100000</activationFlags>
       <activationConditions>1</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -2965,7 +2697,6 @@
       <activationFlags>100000</activationFlags>
       <activationConditions>1</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -2978,7 +2709,6 @@
       <activationFlags>100000</activationFlags>
       <activationConditions>1</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -2991,7 +2721,6 @@
       <activationFlags>100000</activationFlags>
       <activationConditions>1</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -3004,7 +2733,6 @@
       <activationFlags>100000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -3017,7 +2745,6 @@
       <activationFlags>100000</activationFlags>
       <activationConditions>1</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -3030,7 +2757,6 @@
       <activationFlags>100000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -3043,7 +2769,6 @@
       <activationFlags>100000</activationFlags>
       <activationConditions>1</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -3056,7 +2781,6 @@
       <activationFlags>100000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>Ctrl+E</shortcut>
-      <defaultShortcut>Ctrl+E</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -3069,7 +2793,6 @@
       <activationFlags>100000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -3082,7 +2805,6 @@
       <activationFlags>10000000</activationFlags>
       <activationConditions>1</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -3095,7 +2817,6 @@
       <activationFlags>100000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>Ctrl+Shift+E</shortcut>
-      <defaultShortcut>Ctrl+Shift+E</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -3106,7 +2827,6 @@
       <toolTip>Merge Selected Layers</toolTip>
       <iconText>Merge Selected Layers</iconText>
       <shortcut>Ctrl+Alt+E</shortcut>
-      <defaultShortcut>Ctrl+Alt+E</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -3119,7 +2839,6 @@
       <activationFlags>100000</activationFlags>
       <activationConditions>1</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -3132,7 +2851,6 @@
       <activationFlags>0</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -3145,7 +2863,6 @@
       <activationFlags>0</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -3158,7 +2875,6 @@
       <activationFlags>100000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>F2</shortcut>
-      <defaultShortcut>F2</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -3171,7 +2887,6 @@
       <activationFlags>1000</activationFlags>
       <activationConditions>1</activationConditions>
       <shortcut>Shift+Delete</shortcut>
-      <defaultShortcut>Shift+Delete</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -3182,7 +2897,6 @@
       <toolTip>Move Layer or Mask Up</toolTip>
       <iconText></iconText>
       <shortcut>Ctrl+PgUp</shortcut>
-      <defaultShortcut>Ctrl+PgUp</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -3193,7 +2907,6 @@
       <toolTip>Move Layer or Mask Down</toolTip>
       <iconText></iconText>
       <shortcut>Ctrl+PgDown</shortcut>
-      <defaultShortcut>Ctrl+PgDown</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -3206,7 +2919,6 @@
       <activationFlags>1000</activationFlags>
       <activationConditions>1</activationConditions>
       <shortcut>F3</shortcut>
-      <defaultShortcut>F3</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>

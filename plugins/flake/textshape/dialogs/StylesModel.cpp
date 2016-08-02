@@ -180,11 +180,12 @@ void StylesModel::setProvideStyleNone(bool provide)
     }
 }
 
-QModelIndex StylesModel::indexOf(const KoCharacterStyle &style) const
+QModelIndex StylesModel::indexOf(const KoCharacterStyle *style) const
 {
-    if (&style) {
-        return createIndex(m_styleList.indexOf(style.styleId()), 0, style.styleId());
-    } else {
+    if (style) {
+        return createIndex(m_styleList.indexOf(style->styleId()), 0, style->styleId());
+    }
+    else {
         return QModelIndex();
     }
 }
@@ -205,7 +206,7 @@ QImage StylesModel::stylePreview(int row, const QSize &size)
         }
     } else {
         KoCharacterStyle *usedStyle = 0;
-        if (index(row).internalId() == NoneStyleId) {
+        if (index(row).internalId() == (quintptr)NoneStyleId) {
             usedStyle = static_cast<KoCharacterStyle *>(m_currentParagraphStyle);
             if (!usedStyle) {
                 usedStyle = m_defaultCharacterStyle;

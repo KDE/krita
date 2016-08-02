@@ -65,6 +65,8 @@ KoGradientBackground::KoGradientBackground(const QGradient & gradient, const QTr
 
 KoGradientBackground::~KoGradientBackground()
 {
+    Q_D(KoGradientBackground);
+    delete d->gradient;
 }
 
 void KoGradientBackground::setTransform(const QTransform &matrix)

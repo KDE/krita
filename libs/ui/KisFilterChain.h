@@ -126,7 +126,6 @@ private:
 
     explicit KisFilterChain(const KisImportExportManager* manager);
 
-    void appendChainLink(KisFilterEntrySP filterEntry, const QByteArray& from, const QByteArray& to);
     void prependChainLink(KisFilterEntrySP filterEntry, const QByteArray& from, const QByteArray& to);
 
     // These methods are friends of KisFilterManager and provide access
@@ -136,11 +135,10 @@ private:
     QString filterManagerExportFile() const;
     KisDocument* filterManagerKisDocument() const;
     int filterManagerDirection() const;
-    KisFilterChain* filterManagerParentChain() const;
 
 
-    // Helper methods which keep track of all the temp files, documents,
-    // storages,... and properly delete them as soon as they are not
+    // Helper methods which keep track of all the temp files and documents,
+    // and properly delete them as soon as they are not
     // needed anymore.
     void manageIO();
     void finalizeIO();
@@ -149,15 +147,6 @@ private:
 
     void inputFileHelper(KisDocument* document, const QString& alternativeFile);
     void outputFileHelper(bool autoDelete);
-    KoStoreDevice* storageNewStreamHelper(KoStore** storage, KoStoreDevice** device, const QString& name);
-    KoStoreDevice* storageHelper(const QString& file, const QString& streamName,
-                                 KoStore::Mode mode, KoStore** storage, KoStoreDevice** device);
-    void storageInit(const QString& file, KoStore::Mode mode, KoStore** storage);
-    KoStoreDevice* storageCreateFirstStream(const QString& streamName, KoStore** storage, KoStoreDevice** device);
-    KoStoreDevice* storageCleanupHelper(KoStore** storage);
-
-    KisDocument* createDocument(const QString& file);
-    KisDocument* createDocument(const QByteArray& mimeType);
 
     // "A whole is that which has beginning, middle, and end" - Aristotle
     // ...but we also need to signal "Done" state, Mr. Aristotle
@@ -177,11 +166,6 @@ private:
     QString m_inputFile;              // Did we pass around plain files?
     QString m_outputFile;
 
-    KoStore* m_inputStorage;          // ...or was it a storage+device?
-    KoStoreDevice* m_inputStorageDevice;
-    KoStore* m_outputStorage;
-    KoStoreDevice* m_outputStorageDevice;
-
     KisDocument* m_inputDocument;      // ...or even documents?
     KisDocument* m_outputDocument;
 
@@ -190,7 +174,7 @@ private:
 
     // These two flags keep track of the input/output the
     // filter (=user) asked for
-    enum IOState { Nil, File, Storage, Document };
+    enum IOState { Nil, File, Document };
     IOState m_inputQueried, m_outputQueried;
 
     class Private;

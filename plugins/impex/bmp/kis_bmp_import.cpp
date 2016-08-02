@@ -22,9 +22,10 @@
 #include <QCheckBox>
 #include <QSlider>
 #include <QApplication>
+#include <QFileInfo>
 
 #include <kpluginfactory.h>
-#include <QUrl>
+
 
 #include <KoColorSpace.h>
 #include <KisFilterChain.h>
@@ -56,24 +57,23 @@ KisImportExportFilter::ConversionStatus KisBMPImport::convert(const QByteArray& 
     if (to != "application/x-krita")
         return KisImportExportFilter::BadMimeType;
 
-        KisDocument * doc = m_chain->outputDocument();
+    KisDocument * doc = outputDocument();
 
     if (!doc)
         return KisImportExportFilter::NoDocumentCreated;
 
-    QString filename = m_chain->inputFile();
+    QString filename = inputFile();
 
     doc->prepareForImport();
 
     if (!filename.isEmpty()) {
-        QUrl url = QUrl::fromLocalFile(filename);
-
-        if (url.isEmpty() || !url.isLocalFile()) {
+        
+        QFileInfo fi(filename);
+        if (!fi.exists()) {
             return KisImportExportFilter::FileNotFound;
         }
 
-        QString localFile = url.toLocalFile();
-        QImage img(localFile);
+        QImage img(filename);
 
         const KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->rgb8();
         KisImageSP image = new KisImage(doc->createUndoStore(), img.width(), img.height(), colorSpace, "imported from bmp");

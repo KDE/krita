@@ -57,11 +57,13 @@ KisAutoBrushWidget::KisAutoBrushWidget(QWidget *parent, const char* name)
     inputRadius->setSingleStep(1);
     inputRadius->setValue(5);
     inputRadius->setSuffix(i18n(" px"));
+    inputRadius->setBlockUpdateSignalOnDrag(true);
     connect(inputRadius, SIGNAL(valueChanged(qreal)), m_updateCompressor.data(), SLOT(start()));
 
     inputRatio->setRange(0.0, 1.0, 2);
     inputRatio->setSingleStep(0.1);
     inputRatio->setValue(1.0);
+    inputRatio->setBlockUpdateSignalOnDrag(true);
     connect(inputRatio, SIGNAL(valueChanged(qreal)), m_updateCompressor.data(), SLOT(start()));
 
     inputHFade->setRange(0.0, 1.0, 2);
@@ -81,15 +83,18 @@ KisAutoBrushWidget::KisAutoBrushWidget(QWidget *parent, const char* name)
 
     inputSpikes->setRange(2, 20);
     inputSpikes->setValue(2);
+    inputSpikes->setBlockUpdateSignalOnDrag(true);
     connect(inputSpikes, SIGNAL(valueChanged(int)), m_updateCompressor.data(), SLOT(start()));
 
     inputRandomness->setRange(0, 100);
     inputRandomness->setValue(0);
+    inputRandomness->setBlockUpdateSignalOnDrag(true);
     connect(inputRandomness, SIGNAL(valueChanged(qreal)), m_updateCompressor.data(), SLOT(start()));
 
     inputAngle->setRange(0, 360);
     inputAngle->setSuffix(QChar(Qt::Key_degree));
     inputAngle->setValue(0);
+    inputAngle->setBlockUpdateSignalOnDrag(true);
     connect(inputAngle, SIGNAL(valueChanged(int)), m_updateCompressor.data(), SLOT(start()));
 
     connect(spacingWidget, SIGNAL(sigSpacingChanged()), m_updateCompressor.data(), SLOT(start()));
@@ -98,6 +103,7 @@ KisAutoBrushWidget::KisAutoBrushWidget(QWidget *parent, const char* name)
     density->setSingleStep(1);
     density->setValue(100);
     density->setSuffix("%");
+    density->setBlockUpdateSignalOnDrag(true);
     connect(density, SIGNAL(valueChanged(qreal)), m_updateCompressor.data(), SLOT(start()));
 
     KisCubicCurve topLeftBottomRightLinearCurve;
@@ -117,6 +123,7 @@ KisAutoBrushWidget::KisAutoBrushWidget(QWidget *parent, const char* name)
 
     connect(comboBoxMaskType, SIGNAL(activated(int)), m_updateCompressor.data(), SLOT(start()));
     connect(comboBoxMaskType, SIGNAL(currentIndexChanged(int)), SLOT(setStackedWidget(int)));
+    setStackedWidget(comboBoxMaskType->currentIndex());
 
     brushPreview->setIconSize(QSize(100, 100));
 
@@ -233,7 +240,10 @@ void KisAutoBrushWidget::setBrush(KisBrushSP brush)
     else {
         comboBoxShape->setCurrentIndex(2);
     }
-    comboBoxMaskType->setCurrentIndex(comboBoxMaskType->findText(aBrush->maskGenerator()->name()));
+
+    const int mastTypeIndex = comboBoxMaskType->findText(aBrush->maskGenerator()->name());
+    comboBoxMaskType->setCurrentIndex(mastTypeIndex);
+    setStackedWidget(mastTypeIndex); // adjusting manually because the signals are blocked
 
     inputRadius->setValue(aBrush->maskGenerator()->diameter());
     inputRatio->setValue(aBrush->maskGenerator()->ratio());

@@ -77,7 +77,7 @@ set(kritawidgets_LIB_SRCS
     
     WidgetsDebug.cpp
 
-    kis_url_requester.cpp
+    kis_file_name_requester.cpp
 )
 
 ki18n_wrap_ui( kritawidgets_LIB_SRCS
@@ -87,7 +87,7 @@ ki18n_wrap_ui( kritawidgets_LIB_SRCS
     KoEditColorSet.ui
     KoPageLayoutWidget.ui
     KoShadowConfigWidget.ui
-    wdg_url_requester.ui
+    wdg_file_name_requester.ui
 )
 
 add_library(kritawidgets SHARED ${kritawidgets_LIB_SRCS})
@@ -101,7 +101,7 @@ endif()
 target_link_libraries(kritawidgets LINK_INTERFACE_LIBRARIES  kritaodf kritaflake kritapigment kritawidgetutils Qt5::PrintSupport KF5::CoreAddons KF5::ConfigGui KF5::GuiAddons KF5::WidgetsAddons KF5::ConfigCore KF5::Completion)
 
 set_target_properties(kritawidgets PROPERTIES
-    VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
+    VERSION ${GENERIC_KRITA_LIB_VERSION} SOVERSION ${GENERIC_KRITA_LIB_SOVERSION}
 )
 
 install(TARGETS kritawidgets  ${INSTALL_TARGETS_DEFAULT_ARGS})

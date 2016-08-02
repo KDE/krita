@@ -15,5 +15,5 @@ add_library(kritacurvepaintop MODULE ${kritacurvepaintop_SOURCES})
 
 target_link_libraries(kritacurvepaintop kritalibpaintop)
 
-install(TARGETS kritacurvepaintop  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS kritacurvepaintop  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 install( FILES  krita-curve.png DESTINATION ${DATA_INSTALL_DIR}/krita/images)

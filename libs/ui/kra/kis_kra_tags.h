@@ -37,6 +37,7 @@ const QString SEPARATOR = "/";
 const QString SHAPE_LAYER_PATH = "/shapelayers/";
 const QString EXIF_PATH = "/annotations/exif";
 const QString ICC_PATH = "/annotations/icc";
+const QString ICC_PROOFING_PATH = "/annotations/proofing/icc";
 const QString LAYER_STYLES_PATH = "/annotations/layerstyles.asl";
 const QString ASSISTANTS_PATH = "/assistants/";
 const QString LAYER_PATH = "/layers/";
@@ -83,6 +84,7 @@ const QString MIME = "mime";
 const QString NAME = "name";
 const QString OPACITY = "opacity";
 const QString COLLAPSED = "collapsed";
+const QString COLOR_LABEL = "colorlabel";
 const QString PAINT_LAYER = "paintlayer";
 const QString PROFILE = "profile";
 const QString ROTATION = "rotation";
@@ -108,6 +110,15 @@ const QString ACTIVE = "active";
 const QString LAYER_STYLE_UUID = "layerstyle";
 const QString PASS_THROUGH_MODE = "passthrough";
 const QString KEYFRAME_FILE = "keyframes";
+const QString PROOFINGPROFILENAME = "proofing-profile-name";
+const QString PROOFINGMODEL = "proofing-model";
+const QString PROOFINGDEPTH = "proofing-depth";
+const QString PROOFINGINTENT = "proofing-intent";
+const QString PROOFINGWARNINGCOLOR ="ProofingWarningColor";
+const QString PROOFINGADAPTATIONSTATE = "proofing-adaptation-state";
+const QString ICCPROOFINGPROFILE ="icc-proofing-profile";
+const QString CANVASPROJECTIONCOLOR = "ProjectionBackgroundColor";
+const QString COLORBYTEDATA = "ColorData";
 }
 
 

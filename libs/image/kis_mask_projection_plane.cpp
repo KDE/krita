@@ -58,9 +58,10 @@ void KisMaskProjectionPlane::apply(KisPainter *painter, const QRect &rect)
     KIS_ASSERT_RECOVER_NOOP(0 && "KisMaskProjectionPlane::apply() is not defined!");
 }
 
-void KisMaskProjectionPlane::syncLodCache()
+KisPaintDeviceList KisMaskProjectionPlane::getLodCapableDevices() const
 {
     // masks have no projection
+    return KisPaintDeviceList();
 }
 
 QRect KisMaskProjectionPlane::needRect(const QRect &rect, KisNode::PositionToFilthy pos) const

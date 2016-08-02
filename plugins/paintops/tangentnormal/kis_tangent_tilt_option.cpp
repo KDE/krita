@@ -130,7 +130,7 @@ double KisTangentTiltOption::mixValue() const
     return m_options->sliderMixValue->value();
 }
 
-void KisTangentTiltOption::swizzleAssign(qreal const horizontal, qreal const vertical, qreal const depth, quint8 *component, int index, qreal maxvalue)
+void KisTangentTiltOption::swizzleAssign(qreal const horizontal, qreal const vertical, qreal const depth, qreal *component, int index, qreal maxvalue)
 {
     switch(index) {
     case 0: *component = horizontal; break;
@@ -142,7 +142,7 @@ void KisTangentTiltOption::swizzleAssign(qreal const horizontal, qreal const ver
     }
 }
 
-void KisTangentTiltOption::apply(const KisPaintInformation& info,quint8 *r,quint8 *g,quint8 *b)
+void KisTangentTiltOption::apply(const KisPaintInformation& info,qreal *r,qreal *g,qreal *b)
 {
     //formula based on http://www.cerebralmeltdown.com/programming_projects/Altitude%20and%20Azimuth%20to%20Vector/index.html
 
@@ -150,8 +150,8 @@ void KisTangentTiltOption::apply(const KisPaintInformation& info,quint8 *r,quint
      * Instead we make sure in the paintAt function of kis_tangent_normal_paintop to pick an 8bit space of the current
      * color space if the space is an RGB space. If not, it'll pick sRGB 8bit.
      */
-    qreal halfvalue = 128;
-    qreal maxvalue = 255;
+    qreal halfvalue = 0.5;
+    qreal maxvalue = 1.0;
 
     //have the azimuth and altitude in degrees.
     qreal direction = KisPaintInformation::tiltDirection(info, true)*360.0;

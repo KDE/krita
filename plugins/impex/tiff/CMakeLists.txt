@@ -18,7 +18,7 @@ add_library(kritatiffimport MODULE ${kritatiffimport_SOURCES})
 
 target_link_libraries(kritatiffimport kritaui  ${TIFF_LIBRARIES})
 
-install(TARGETS kritatiffimport  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS kritatiffimport  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 
 set(kritatiffexport_SOURCES
     ${libkritatiffconverter_LIB_SRCS}
@@ -32,6 +32,6 @@ add_library(kritatiffexport MODULE ${kritatiffexport_SOURCES})
 
 target_link_libraries(kritatiffexport kritaui  ${TIFF_LIBRARIES})
 
-install(TARGETS kritatiffexport  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS kritatiffexport  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 install( PROGRAMS  krita_tiff.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
 

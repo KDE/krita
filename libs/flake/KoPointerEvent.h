@@ -30,8 +30,6 @@ class QTabletEvent;
 class QMouseEvent;
 class QWheelEvent;
 class KoInputDeviceHandlerEvent;
-class QGraphicsSceneMouseEvent;
-class QGraphicsSceneWheelEvent;
 
 #include "kritaflake_export.h"
 
@@ -61,22 +59,6 @@ public:
      * @param point the zoomed point in the normal coordinate system.
      */
     KoPointerEvent(QMouseEvent *event, const QPointF &point);
-
-    /**
-     * Constructor.
-     *
-     * @param event the mouse event that is the base of this event.
-     * @param point the zoomed point in the normal coordinate system.
-     */
-    KoPointerEvent(QGraphicsSceneMouseEvent *event, const QPointF &point);
-
-    /**
-     * Constructor.
-     *
-     * @param event the mouse event that is the base of this event.
-     * @param point the zoomed point in the normal coordinate system.
-     */
-    KoPointerEvent(QGraphicsSceneWheelEvent *event, const QPointF &point);
 
     /**
      * Constructor.

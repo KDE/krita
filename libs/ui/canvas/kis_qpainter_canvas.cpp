@@ -52,7 +52,6 @@
 #include "KisDocument.h"
 #include "kis_selection_manager.h"
 #include "kis_selection.h"
-#include "kis_perspective_grid_manager.h"
 #include "kis_canvas_updates_compressor.h"
 #include "kis_config_notifier.h"
 #include "kis_group_layer.h"
@@ -80,7 +79,11 @@ KisQPainterCanvas::KisQPainterCanvas(KisCanvas2 *canvas, KisCoordinatesConverter
     setAttribute(Qt::WA_InputMethodEnabled, true);
     setAttribute(Qt::WA_StaticContents);
     setAttribute(Qt::WA_OpaquePaintEvent);
-
+#ifdef Q_OS_MAC
+    setAttribute(Qt::WA_AcceptTouchEvents, false);
+#else
+    setAttribute(Qt::WA_AcceptTouchEvents, true);
+#endif
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
     slotConfigChanged();
 }

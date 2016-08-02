@@ -52,8 +52,7 @@
 #include <QGradient>
 #include <QLinearGradient>
 #include <QRadialGradient>
-#include <QMimeDatabase>
-#include <QMimeType>
+#include <KisMimeDatabase.h>
 
 void SvgStyleWriter::saveSvgStyle(KoShape *shape, SvgSavingContext &context)
 {
@@ -357,8 +356,7 @@ QString SvgStyleWriter::saveSvgPattern(QSharedPointer<KoPatternBackground> patte
     QBuffer buffer(&ba);
     buffer.open(QIODevice::WriteOnly);
     if (pattern->pattern().save(&buffer, "PNG")) {
-        QMimeDatabase db;
-        const QString mimeType = db.mimeTypeForData(ba).name();
+        const QString mimeType = KisMimeDatabase::mimeTypeForSuffix("*.png");
         context.styleWriter().addAttribute("xlink:href", "data:"+ mimeType + ";base64," + ba.toBase64());
     }
 

@@ -5,4 +5,4 @@ set(kritafastcolortransferfilter_SOURCES
 ki18n_wrap_ui(kritafastcolortransferfilter_SOURCES wdgfastcolortransfer.ui)
 add_library(kritafastcolortransferfilter MODULE ${kritafastcolortransferfilter_SOURCES})
 target_link_libraries(kritafastcolortransferfilter kritaui)
-install(TARGETS kritafastcolortransferfilter  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS kritafastcolortransferfilter  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})

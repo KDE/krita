@@ -37,4 +37,4 @@ add_library(krita_shape_paths MODULE ${pathshapes_SOURCES})
 
 target_link_libraries(krita_shape_paths kritaflake kritawidgets)
 
-install(TARGETS krita_shape_paths  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS krita_shape_paths  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})

@@ -30,7 +30,7 @@
 #include "generator/kis_generator.h"
 #include "kis_node_visitor.h"
 #include "kis_processing_visitor.h"
-#include "kis_signal_compressor.h"
+#include "kis_thread_safe_signal_compressor.h"
 #include "kis_recalculate_generator_layer_job.h"
 
 
@@ -43,7 +43,7 @@ struct Q_DECL_HIDDEN KisGeneratorLayer::Private
     {
     }
 
-    KisSignalCompressor updateSignalCompressor;
+    KisThreadSafeSignalCompressor updateSignalCompressor;
 };
 
 
@@ -132,7 +132,7 @@ void KisGeneratorLayer::accept(KisProcessingVisitor &visitor, KisUndoAdapter *un
 
 QIcon KisGeneratorLayer::icon() const
 {
-    return KisIconUtils::loadIcon("krita_tool_color_fill");
+    return KisIconUtils::loadIcon("fillLayer");
 }
 
 KisBaseNode::PropertyList KisGeneratorLayer::sectionModelProperties() const
@@ -140,8 +140,9 @@ KisBaseNode::PropertyList KisGeneratorLayer::sectionModelProperties() const
     KisSafeFilterConfigurationSP filterConfig = filter();
 
     KisBaseNode::PropertyList l = KisLayer::sectionModelProperties();
-    l << KisBaseNode::Property(i18n("Generator"),
-                                          KisGeneratorRegistry::instance()->value(filterConfig->name())->name());
+    l << KisBaseNode::Property(KoID("generator", i18n("Generator")),
+                               KisGeneratorRegistry::instance()->value(filterConfig->name())->name());
+
     return l;
 }
 

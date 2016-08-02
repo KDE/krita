@@ -125,6 +125,8 @@ public:
      */
     virtual bool supportsLevelOfDetail(const KisFilterConfiguration *config, int lod) const;
 
+    virtual bool needsTransparentPixels(const KisFilterConfiguration *config, const KoColorSpace *cs) const;
+
 protected:
 
     QString configEntryGroup() const;

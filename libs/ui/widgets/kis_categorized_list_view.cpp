@@ -25,7 +25,7 @@
 #include <kconfig.h>
 #include <klocalizedstring.h>
 #include <kis_icon.h>
-
+#include "kis_debug.h"
 
 KisCategorizedListView::KisCategorizedListView(bool useCheckBoxHack, QWidget* parent):
     QListView(parent), m_useCheckBoxHack(useCheckBoxHack)
@@ -42,6 +42,14 @@ void KisCategorizedListView::setModel(QAbstractItemModel* model)
     QListView::setModel(model);
     updateRows(0, model->rowCount());
     model->sort(0);
+}
+
+QSize KisCategorizedListView::sizeHint() const
+{
+    const QSize sh = QListView::sizeHint();
+    const int width = sizeHintForColumn(0);
+
+    return QSize(width, sh.height());
 }
 
 void KisCategorizedListView::updateRows(int begin, int end)

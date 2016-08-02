@@ -84,6 +84,7 @@ void KisNodePropertyListCommand::setNodePropertiesNoUndo(KisNodeSP node, KisImag
 {
     bool undo = true;
     Q_FOREACH (const KisBaseNode::Property &prop, proplist) {
+        if (prop.isInStasis) undo = false;
         if (prop.name == i18n("Visible") && node->visible() != prop.state.toBool()) undo = false;
         if (prop.name == i18n("Locked") && node->userLocked() != prop.state.toBool()) undo = false;
         if (prop.name == i18n("Active")) {

@@ -73,8 +73,8 @@ KisImportExportFilter::ConversionStatus KisPNGExport::convert(const QByteArray& 
     dbgFile << "Png export! From:" << from << ", To:" << to << "";
 
 
-    KisDocument *input = m_chain->inputDocument();
-    QString filename = m_chain->outputFile();
+    KisDocument *input = inputDocument();
+    QString filename = outputFile();
 
     if (!input)
         return KisImportExportFilter::NoDocumentCreated;
@@ -82,7 +82,6 @@ KisImportExportFilter::ConversionStatus KisPNGExport::convert(const QByteArray& 
 
     if (filename.isEmpty()) return KisImportExportFilter::FileNotFound;
 
-    QUrl url = QUrl::fromLocalFile(filename);
     if (from != "application/x-krita")
         return KisImportExportFilter::NotImplemented;
 
@@ -93,19 +92,16 @@ KisImportExportFilter::ConversionStatus KisPNGExport::convert(const QByteArray& 
     kdb->setButtons(KoDialog::Ok | KoDialog::Cancel);
 
     KisImageWSP image = input->image();
-    qApp->processEvents(); // For vector layers to be updated
-    input->image()->waitForDone();
 
-    image->refreshGraph();
-    image->lock();
+    // the image must be locked at the higher levels
+    KIS_SAFE_ASSERT_RECOVER_NOOP(image->locked());
     KisPaintDeviceSP pd;
     pd = new KisPaintDevice(*image->projection());
     KisPaintLayerSP l = new KisPaintLayer(image, "projection", OPACITY_OPAQUE_U8, pd);
-    image->unlock();
 
 
     if (!KisPNGConverter::isColorSpaceSupported(pd->colorSpace())) {
-        if (!m_chain->manager()->getBatchMode()) {
+        if (!getBatchMode()) {
             QMessageBox::critical(0, i18nc("@title:window", "Krita PNG Export"), i18n("You can only save grayscale and RGB images to PNG. Convert your image before exporting to PNG."));
         }
         return KisImportExportFilter::UsageError;
@@ -124,7 +120,7 @@ KisImportExportFilter::ConversionStatus KisPNGExport::convert(const QByteArray& 
         }
     } while (it.nextPixel());
 
-    if (qApp->applicationName() != "qttest") {
+    if (!qApp->applicationName().toLower().contains("test")) {
 
         bool sRGB = (cs->profile()->name().contains(QLatin1String("srgb"), Qt::CaseInsensitive)
                      && !cs->profile()->name().contains(QLatin1String("g10")));
@@ -171,7 +167,7 @@ KisImportExportFilter::ConversionStatus KisPNGExport::convert(const QByteArray& 
         kdb->setMainWidget(wdg);
         QApplication::restoreOverrideCursor();
         if (hasVisibleWidgets()) {
-            if (!m_chain->manager()->getBatchMode()) {
+            if (!getBatchMode()) {
                 if (kdb->exec() == QDialog::Rejected) {
                     return KisImportExportFilter::UserCancelled;
                 }
@@ -205,7 +201,7 @@ KisImportExportFilter::ConversionStatus KisPNGExport::convert(const QByteArray& 
 
     }
     else {
-        options.alpha = isThereAlpha;
+        options.alpha = true;
         options.interlace = false;
         options.compression = 9;
         options.tryToSaveAsIndexed = false;
@@ -233,7 +229,7 @@ KisImportExportFilter::ConversionStatus KisPNGExport::convert(const QByteArray& 
         KisMetaData::Store* copy = new KisMetaData::Store(*eI);
         eI = copy;
     }
-    if ((res = kpc.buildFile(url, image->bounds(), image->xRes(), image->yRes(), l->paintDevice(), beginIt, endIt, options, eI)) == KisImageBuilder_RESULT_OK) {
+    if ((res = kpc.buildFile(filename, image->bounds(), image->xRes(), image->yRes(), l->paintDevice(), beginIt, endIt, options, eI)) == KisImageBuilder_RESULT_OK) {
         dbgFile << "success !";
         delete eI;
         return KisImportExportFilter::OK;

@@ -56,7 +56,7 @@ ShortcutEditWidget::ShortcutEditWidget(QWidget *viewport, const QKeySequence &de
     : QWidget(viewport),
       m_defaultKeySequence(defaultSeq),
       m_isUpdating(false),
-      m_action(Q_NULLPTR)
+      m_action(0)
 {
     QGridLayout *layout = new QGridLayout(this);
 
@@ -177,7 +177,7 @@ void ShortcutEditWidget::setCustom(const QKeySequence &seq)
 
 void ShortcutEditWidget::setKeySequence(const QKeySequence &activeSeq)
 {
-    if (activeSeq.toString(QKeySequence::NativeText) == m_defaultLabel->text()) {
+    if (activeSeq.toString(QKeySequence::NativeText) == m_defaultKeySequence.toString(QKeySequence::NativeText)) {
         m_defaultRadio->setChecked(true);
         m_customEditor->clearKeySequence();
     } else {

@@ -107,6 +107,36 @@ struct KisSuspendProjectionUpdatesStrokeStrategy::Private
         RectsHash m_requestsHash;
         QMutex m_mutex;
     };
+
+    class SuspendData : public KisStrokeJobData {
+    public:
+        SuspendData()
+            : KisStrokeJobData(SEQUENTIAL)
+            {}
+    };
+
+    class ResumeAndIssueGraphUpdatesData : public KisStrokeJobData {
+    public:
+        ResumeAndIssueGraphUpdatesData()
+            : KisStrokeJobData(SEQUENTIAL)
+            {}
+    };
+
+    class UpdatesBarrierData : public KisStrokeJobData {
+    public:
+        UpdatesBarrierData()
+            : KisStrokeJobData(BARRIER)
+            {}
+    };
+
+    class IssueCanvasUpdatesData : public KisStrokeJobData {
+    public:
+        IssueCanvasUpdatesData(QRect _updateRect)
+            : KisStrokeJobData(CONCURRENT),
+              updateRect(_updateRect)
+            {}
+        QRect updateRect;
+    };
 };
 
 KisSuspendProjectionUpdatesStrokeStrategy::KisSuspendProjectionUpdatesStrokeStrategy(KisImageWSP image, bool suspend)
@@ -116,8 +146,7 @@ KisSuspendProjectionUpdatesStrokeStrategy::KisSuspendProjectionUpdatesStrokeStra
     m_d->image = image;
     m_d->suspend = suspend;
 
-    // TODO: exclusive
-    enableJob(JOB_FINISH, true);
+    enableJob(JOB_DOSTROKE, true);
     enableJob(JOB_CANCEL, true);
 }
 
@@ -125,26 +154,104 @@ KisSuspendProjectionUpdatesStrokeStrategy::~KisSuspendProjectionUpdatesStrokeStr
 {
 }
 
-void KisSuspendProjectionUpdatesStrokeStrategy::finishStrokeCallback()
-{
-    KIS_ASSERT_RECOVER_RETURN(m_d->image);
+/**
+ * When the Lod0 stroke is being recalculated in the background we
+ * should block all the updates it issues to avoid user distraction.
+ * The result of the final stroke should be shown to the user in the
+ * very end when everything is fully ready. Ideally the use should not
+ * notice that the image has changed :)
+ *
+ * (Don't mix this process with suspend/resume capabilities of a
+ * single stroke. That is a different system!)
+ *
+ * The process of the Lod0 regeneration consists of the following:
+ *
+ * 1) Suspend stroke executes. It sets a special updates filter on the
+ *    image. The filter blocks all the updates and saves them in an
+ *    internal structure to be emitted in the future.
+ *
+ * 2) Lod0 strokes are being recalculated. All their updates are
+ *    blocked and saved in the filter.
+ *
+ * 3) Resume stroke starts:
+ *
+ *     3.1) First it disables emitting of sigImageUpdated() so the gui
+ *          will not get any update notifications.
+ *
+ *     3.2) Then it enables updates themselves.
+ *
+ *     3.3) Initiates all the updates that were requested by the Lod0
+ *          stroke. The node graph is regenerated, but the GUI does
+ *          not get this change.
+ *
+ *     3.4) Special barrier job waits for all the updates to finish
+ *          and, when they are done, enables GUI notifications again.
+ *
+ *     3.5) In a multithreaded way emits the GUI notifications for the
+ *          entire image. Multithreaded way is used to conform the
+ *          double-stage update principle of KisCanvas2.
+ */
 
-    if (m_d->suspend) {
+void KisSuspendProjectionUpdatesStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
+{
+    Private::SuspendData *suspendData = dynamic_cast<Private::SuspendData*>(data);
+    Private::ResumeAndIssueGraphUpdatesData *resumeData = dynamic_cast<Private::ResumeAndIssueGraphUpdatesData*>(data);
+    Private::UpdatesBarrierData *barrierData = dynamic_cast<Private::UpdatesBarrierData*>(data);
+    Private::IssueCanvasUpdatesData *canvasUpdates = dynamic_cast<Private::IssueCanvasUpdatesData*>(data);
+
+    if (suspendData) {
         m_d->image->setProjectionUpdatesFilter(
             KisProjectionUpdatesFilterSP(new Private::SuspendLod0Updates()));
-    } else {
-        KisProjectionUpdatesFilterSP filter =
-            m_d->image->projectionUpdatesFilter();
+    } else if (resumeData) {
+        m_d->image->disableUIUpdates();
+        resumeAndIssueUpdates(false);
+    } else if (barrierData) {
+        m_d->image->enableUIUpdates();
+    } else if (canvasUpdates) {
+        m_d->image->notifyProjectionUpdated(canvasUpdates->updateRect);
+    }
+}
 
-        if (!filter) return;
+QList<KisStrokeJobData*> KisSuspendProjectionUpdatesStrokeStrategy::createSuspendJobsData(KisImageWSP image)
+{
+    QList<KisStrokeJobData*> jobsData;
+    jobsData << new Private::SuspendData();
+    return jobsData;
+}
 
-        Private::SuspendLod0Updates *localFilter =
-            dynamic_cast<Private::SuspendLod0Updates*>(filter.data());
+QList<KisStrokeJobData*> KisSuspendProjectionUpdatesStrokeStrategy::createResumeJobsData(KisImageWSP _image)
+{
+    QList<KisStrokeJobData*> jobsData;
 
-        KIS_ASSERT_RECOVER_NOOP(localFilter);
+    jobsData << new Private::ResumeAndIssueGraphUpdatesData();
+    jobsData << new Private::UpdatesBarrierData();
 
-        if (localFilter) {
-            m_d->image->setProjectionUpdatesFilter(KisProjectionUpdatesFilterSP());
+    using KritaUtils::splitRectIntoPatches;
+    using KritaUtils::optimalPatchSize;
+    KisImageSP image = _image;
+
+    QVector<QRect> rects = splitRectIntoPatches(image->bounds(), optimalPatchSize());
+    Q_FOREACH (const QRect &rc, rects) {
+        jobsData << new Private::IssueCanvasUpdatesData(rc);
+    }
+
+    return jobsData;
+}
+
+void KisSuspendProjectionUpdatesStrokeStrategy::resumeAndIssueUpdates(bool dropUpdates)
+{
+    KisProjectionUpdatesFilterSP filter =
+        m_d->image->projectionUpdatesFilter();
+
+    if (!filter) return;
+
+    Private::SuspendLod0Updates *localFilter =
+        dynamic_cast<Private::SuspendLod0Updates*>(filter.data());
+
+    if (localFilter) {
+        m_d->image->setProjectionUpdatesFilter(KisProjectionUpdatesFilterSP());
+
+        if (!dropUpdates) {
             localFilter->notifyUpdates(m_d->image.data());
         }
     }
@@ -152,7 +259,14 @@ void KisSuspendProjectionUpdatesStrokeStrategy::finishStrokeCallback()
 
 void KisSuspendProjectionUpdatesStrokeStrategy::cancelStrokeCallback()
 {
-    finishStrokeCallback();
+    /**
+     * We shouldn't emit any ad-hoc updates when cancelling the
+     * stroke.  It generates weird temporary holes on the canvas,
+     * making the user feel awful, thinking his image got
+     * corrupted. We will just emit a common refreshGraphAsync() that
+     * will do all the work in a beautiful way
+     */
+    resumeAndIssueUpdates(true);
 
     if (!m_d->suspend) {
         // FIXME: optimize

@@ -49,12 +49,11 @@ class KisImageSignalRouter;
 class KisPostExecutionUndoAdapter;
 class KisFilterStrategy;
 class KoColorProfile;
-class KisPerspectiveGrid;
 class KisLayerComposition;
 class KisSpontaneousJob;
 class KisImageAnimationInterface;
 class KUndo2MagicString;
-
+class KisProofingConfiguration;
 
 namespace KisMetaData
 {
@@ -152,11 +151,6 @@ public:
      * Set the automatic layer name counter one back.
      */
     void rollBackLayerName();
-
-    /**
-     * @return the perspective grid associated to this image
-     */
-    KisPerspectiveGrid* perspectiveGrid();
 
     /**
      * Resize the image to the specified rect. The resize
@@ -422,9 +416,15 @@ public:
      */
     void mergeMultipleLayers(QList<KisNodeSP> mergedLayers, KisNodeSP putAfter);
 
-    /// This overrides interface for KisDefaultBounds
     /// @return the exact bounds of the image in pixel coordinates.
     QRect bounds() const;
+
+    /**
+     * Returns the actual bounds of the image, taking LevelOfDetail
+     * into account.  This value is used as a bounds() value of
+     * KisDefaultBounds object.
+     */
+    QRect effectiveLodBounds() const;
 
     /// use if the layers have changed _completely_ (eg. when flattening)
     void notifyLayersChanged();
@@ -562,6 +562,18 @@ public:
     void notifyNodeCollpasedChanged();
 
     KisImageAnimationInterface *animationInterface() const;
+
+    /**
+     * @brief setProofingConfiguration, this sets the image's proofing configuration, and signals
+     * the proofingConfiguration has changed.
+     * @param proofingConfig - the kis proofing config that will be used instead.
+     */
+    void setProofingConfiguration(KisProofingConfiguration *proofingConfig);
+    /**
+     * @brief proofingConfiguration
+     * @return the proofing configuration of the image.
+     */
+    KisProofingConfiguration *proofingConfiguration() const;
 
 public:
     bool startIsolatedMode(KisNodeSP node);
@@ -709,13 +721,19 @@ Q_SIGNALS:
      */
     void sigNodeCollapsedChanged();
 
+    /**
+     * Emitted when the proofing configuration of the image is being changed.
+     *
+     */
+    void sigProofingConfigChanged();
+
 public Q_SLOTS:
     KisCompositeProgressProxy* compositeProgressProxy();
 
     bool isIdle();
 
-    void barrierLock();
-    bool tryBarrierLock();
+    void barrierLock(bool readOnly = false);
+    bool tryBarrierLock(bool readOnly = false);
     void waitForDone();
 
     KisStrokeId startStroke(KisStrokeStrategy *strokeStrategy);

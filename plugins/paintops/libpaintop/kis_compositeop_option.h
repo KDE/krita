@@ -53,9 +53,9 @@ private:
     QLabel*                   m_label;
     QPushButton*              m_bnEraser;
     KisCompositeOpListWidget* m_list;
-    QString                   m_prevCompositeOpID;
     QString                   m_currCompositeOpID;
     bool                      m_createConfigWidget;
+    bool                      m_eraserMode;
 
 };
 

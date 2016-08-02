@@ -44,7 +44,6 @@ public:
     virtual quint32 priority() {
         return 3;
     }
-
     void beginPrimaryAction(KoPointerEvent *event);
     void continuePrimaryAction(KoPointerEvent *event);
     void endPrimaryAction(KoPointerEvent *event);
@@ -54,14 +53,15 @@ public:
 
 private:
     void addAssistant();
-    void removeAssistant(KisPaintingAssistant *assistant);
-    void snappingOn(KisPaintingAssistant* assistant);
-    void snappingOff(KisPaintingAssistant* assistant);
-    void outlineOn(KisPaintingAssistant* assistant);
-    void outlineOff(KisPaintingAssistant* assistant);
+    void removeAssistant(KisPaintingAssistantSP assistant);
+    void snappingOn(KisPaintingAssistantSP assistant);
+    void snappingOff(KisPaintingAssistantSP assistant);
+    void outlineOn(KisPaintingAssistantSP assistant);
+    void outlineOff(KisPaintingAssistantSP assistant);
     bool mouseNear(const QPointF& mousep, const QPointF& point);
-    QPointF straightLine(QPointF point, QPointF compare);
-    KisPaintingAssistantHandleSP nodeNearPoint(KisPaintingAssistant* grid, QPointF point);
+    KisPaintingAssistantHandleSP nodeNearPoint(KisPaintingAssistantSP grid, QPointF point);
+    QPointF snapToGuide(KoPointerEvent *e, const QPointF &offset, bool useModifiers);
+    QPointF snapToGuide(const QPointF& pt, const QPointF &offset);
 
 public Q_SLOTS:
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
@@ -81,9 +81,10 @@ protected:
     QList<KisPaintingAssistantHandleSP> m_handles, m_sideHandles;
     KisPaintingAssistantHandleSP m_handleDrag;
     KisPaintingAssistantHandleSP m_handleCombine;
-    KisPaintingAssistant* m_assistantDrag;
-    KisPaintingAssistant* m_newAssistant;
-    QPointF m_mousePosition;
+    KisPaintingAssistantSP m_assistantDrag;
+    KisPaintingAssistantSP m_newAssistant;
+    QPointF m_cursorStart;
+    QPointF m_currentAdjustment;
     Ui::AssistantsToolOptions m_options;
     QWidget* m_optionsWidget;
     QPointF m_dragStart;
@@ -95,6 +96,7 @@ private:
     PerspectiveAssistantEditionMode m_internalMode;
     qint32 m_handleSize, m_handleHalfSize;
     KisPaintingAssistantHandleSP m_selectedNode1, m_selectedNode2, m_higlightedNode;
+    int m_assistantHelperYOffset;
 };
 
 

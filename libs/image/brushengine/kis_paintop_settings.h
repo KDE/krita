@@ -142,9 +142,20 @@ public:
     virtual QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode) const;
 
     /**
-    * Useful for simple elliptical brush outline.
+    * Helpers for drawing the brush outline
     */
-    QPainterPath ellipseOutline(qreal width, qreal height, qreal scale, qreal rotation) const;
+    static QPainterPath ellipseOutline(qreal width, qreal height, qreal scale, qreal rotation);
+
+    /**
+     * Helper for drawing a triangle representing the tilt of the stylus.
+     *
+     * @param start is the offset from the brush's outline's bounding box
+     * @param lengthScale is used for deciding the size of the triangle.
+     * Brush diameter or width are common choices for this.
+     * @param angle is the angle between the two sides of the triangle.
+     */
+    static QPainterPath makeTiltIndicator(KisPaintInformation const& info,
+        QPointF const& start, qreal lengthScale, qreal angle);
 
     /**
      * The behaviour might be different per paintop. Most of the time
@@ -193,9 +204,29 @@ public:
      */
     QString paintOpCompositeOp() const;
 
+    void setEraserMode(bool value);
+    bool eraserMode() const;
+
+    qreal savedEraserSize() const;
+    void setSavedEraserSize(qreal value);
+    qreal savedBrushSize() const;
+    void setSavedBrushSize(qreal value);
+
+    QString effectivePaintOpCompositeOp() const;
+
     void setPreset(KisPaintOpPresetWSP preset);
 
     KisPaintOpPresetWSP preset() const;
+
+    /**
+     * @return filename of the 3D brush model, empty if no brush is set
+     */
+    virtual QString modelName() const;
+
+    /**
+    * Set filename of 3D brush model. By default no brush is set
+    */
+    void setModelName(const QString & modelName);
 
     /// Check if the settings are valid, setting might be invalid through missing brushes etc
     /// Overwrite if the settings of a paintop can be invalid

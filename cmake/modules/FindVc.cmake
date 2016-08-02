@@ -29,4 +29,4 @@
 find_package(Vc ${Vc_FIND_VERSION} QUIET NO_MODULE PATHS $ENV{HOME} /opt/Vc)
 
 include(FindPackageHandleStandardArgs)
-find_package_handle_standard_args(Vc CONFIG_MODE)
+find_package_handle_standard_args(Vc CONFIG_MODE REQUIRED_VARS Vc_LIBRARIES)

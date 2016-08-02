@@ -63,6 +63,9 @@
 
 #include <QDebug>
 
+#include "kis_painting_tweaks.h"
+
+
 TextShape::TextShape(KoInlineTextObjectManager *inlineTextObjectManager, KoTextRangeManager *textRangeManager)
     : KoShapeContainer(new KoTextShapeContainerModel())
     , KoFrameShape(KoXmlNS::draw, "text-box")
@@ -137,7 +140,7 @@ void TextShape::paintComponent(QPainter &painter, const KoViewConverter &convert
         KoTextPage *page = m_pageProvider->page(this);
         if (page) {
             // this is used to not trigger repaints if layout during the painting is done
-            m_paintRegion = painter.clipRegion();
+            m_paintRegion = KisPaintingTweaks::safeClipRegion(painter);
             if (!m_textShapeData->rootArea()->page() || page->pageNumber() != m_textShapeData->rootArea()->page()->pageNumber()) {
                 m_textShapeData->rootArea()->setPage(page); // takes over ownership of the page
             } else {

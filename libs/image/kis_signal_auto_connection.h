@@ -25,6 +25,23 @@
 /**
  * A special wrapper class that represents a connection between two QObject objects.
  * It creates the connection on the construction and disconnects it on destruction.
+ *
+ * WARNING: never use QScopedPointer::reset() for updating the
+ *          connection like:
+ *
+ * QScopedPointer<KisSignalAutoConnection> conn;
+ * ...
+ * void Something::setCanvas(KoCanvasBase * canvas) {
+ *     conn.reset(new KisSignalAutoConnection(...));
+ * }
+ *
+ * The object stored in a scoped pointer will be destructed *after*
+ * the new object created which will cause you object to become
+ * disconnected.
+ *
+ * Intead use two-stage updates:
+ * conn.reset();
+ * conn.reset(new KisSignalAutoConnection(...));
  */
 class KisSignalAutoConnection
 {

@@ -50,8 +50,6 @@ struct Q_DECL_HIDDEN KisApplicationArguments::Private
     bool exportAs;
     bool exportAsPdf;
     QString exportFileName;
-    QString profileFileName;
-
 };
 
 KisApplicationArguments::KisApplicationArguments(const QApplication &app)
@@ -66,7 +64,6 @@ KisApplicationArguments::KisApplicationArguments(const QApplication &app)
     parser.addOption(QCommandLineOption(QStringList() << QLatin1String("export-pdf"), i18n("Only export to PDF and exit")));
     parser.addOption(QCommandLineOption(QStringList() << QLatin1String("export"), i18n("Export to the given filename and exit")));
     parser.addOption(QCommandLineOption(QStringList() << QLatin1String("export-filename"), i18n("Filename for export/export-pdf"), QLatin1String("filename")));
-    parser.addOption(QCommandLineOption(QStringList() << QLatin1String("profile-filename"), i18n("Filename to write profiling information into."), QLatin1String("filename")));
     parser.addPositionalArgument(QLatin1String("[file(s)]"), i18n("File(s) or URL(s) to open"));
     parser.process(app);
 
@@ -96,7 +93,6 @@ KisApplicationArguments::KisApplicationArguments(const QApplication &app)
     d->exportAs = parser.isSet("export");
     d->exportAsPdf = parser.isSet("export-pdf");
     d->exportFileName = parser.value("export-filename");
-    d->profileFileName = parser.value("profile-filename");
 }
 
 KisApplicationArguments::KisApplicationArguments(const KisApplicationArguments &rhs)
@@ -110,7 +106,6 @@ KisApplicationArguments::KisApplicationArguments(const KisApplicationArguments &
     d->exportAs = rhs.exportAs();
     d->exportAsPdf = rhs.exportAsPdf();
     d->exportFileName = rhs.exportFileName();
-    d->profileFileName = rhs.profileFileName();
 }
 
 KisApplicationArguments::~KisApplicationArguments()
@@ -127,7 +122,6 @@ void KisApplicationArguments::operator=(const KisApplicationArguments &rhs)
     d->exportAs = rhs.exportAs();
     d->exportAsPdf = rhs.exportAsPdf();
     d->exportFileName = rhs.exportFileName();
-    d->profileFileName = rhs.profileFileName();
 }
 
 QByteArray KisApplicationArguments::serialize()
@@ -148,7 +142,6 @@ QByteArray KisApplicationArguments::serialize()
     ds << d->exportAs;
     ds << d->exportAsPdf;
     ds << d->exportFileName;
-    ds << d->profileFileName;
 
     buf.close();
 
@@ -177,7 +170,6 @@ KisApplicationArguments KisApplicationArguments::deserialize(QByteArray &seriali
     ds >> args.d->exportAs;
     ds >> args.d->exportAsPdf;
     ds >> args.d->exportFileName;
-    ds >> args.d->profileFileName;
 
     buf.close();
 
@@ -222,11 +214,6 @@ bool KisApplicationArguments::exportAsPdf() const
 QString KisApplicationArguments::exportFileName() const
 {
     return d->exportFileName;
-}
-
-QString KisApplicationArguments::profileFileName() const
-{
-    return d->profileFileName;
 }
 
 KisApplicationArguments::KisApplicationArguments()

@@ -61,16 +61,14 @@ public:
     {
     }
 
-    QList<QWidget*> createItemWidgets(const QModelIndex& /*index*/) const
+    QList<QWidget*> createItemWidgets(const QModelIndex& index) const
     {
         // a lump of coal and a piece of elastic will get you through the world
-        QModelIndex idx = property("goya:creatingWidgetForIndex").value<QModelIndex>();
-
         QWidget *page = new QWidget;
         QHBoxLayout *layout = new QHBoxLayout(page);
 
         QCheckBox *checkBox = new QCheckBox;
-        checkBox->setProperty("fileitem", idx.data());
+        checkBox->setProperty("fileitem", index.data());
 
         connect(checkBox, SIGNAL(toggled(bool)), m_parent, SLOT(toggleFileItem(bool)));
         QLabel *thumbnail = new QLabel;
@@ -210,18 +208,21 @@ KisAutoSaveRecoveryDialog::KisAutoSaveRecoveryDialog(const QStringList &filename
         QString path = QDir::homePath() + "/" + filename;
 #endif
 
-        // get thumbnail -- all calligra apps save a thumbnail
+        // get thumbnail -- almost all Krita-supported formats save a thumbnail
         KoStore* store = KoStore::createStore(path, KoStore::Read);
 
-        if (store && (store->open(QString("Thumbnails/thumbnail.png"))
-                          || store->open(QString("preview.png")))) {
-            // Hooray! No long delay for the user...
-            QByteArray bytes = store->read(store->size());
-            store->close();
+        if (store) {
+            if(store->open(QString("Thumbnails/thumbnail.png"))
+               || store->open(QString("preview.png"))) {
+                // Hooray! No long delay for the user...
+                QByteArray bytes = store->read(store->size());
+                store->close();
+                QImage img;
+                img.loadFromData(bytes);
+                file->thumbnail = img.scaled(QSize(200,200), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+            }
+
             delete store;
-            QImage img;
-            img.loadFromData(bytes);
-            file->thumbnail = img.scaled(QSize(200,200), Qt::KeepAspectRatio, Qt::SmoothTransformation);
         }
 
         // get the date
@@ -239,6 +240,13 @@ KisAutoSaveRecoveryDialog::KisAutoSaveRecoveryDialog(const QStringList &filename
     
     setAttribute(Qt::WA_DeleteOnClose, false);
     connect( this, SIGNAL( user1Clicked() ), this, SLOT( slotDeleteAll() ) );
+}
+
+KisAutoSaveRecoveryDialog::~KisAutoSaveRecoveryDialog()
+{
+    delete m_listView->itemDelegate();
+    delete m_model;
+    delete m_listView;
 }
 
 void KisAutoSaveRecoveryDialog::slotDeleteAll()

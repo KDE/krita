@@ -157,13 +157,14 @@ public:
      */
     virtual bool hasTRC() const = 0;
     /**
-     * Linearizes a QVector of 3 doubles long, if it's possible to Linearize
-     * if not, returns the same QVector
+     * Linearizes first 3 values of QVector, leaving other values unchanged.
+     * Returns the same QVector if it is not possible to linearize.
      */
     virtual void linearizeFloatValue(QVector <qreal> & Value) const = 0;
     /**
-     * Delinearizes a QVector of 3 doubles long, if it's possible to delinearize
-     * if not, returns the same QVector. Effectively undoes LinearizeFloatValue.
+     * Delinearizes first 3 values of QVector, leaving other values unchanged.
+     * Returns the same QVector if it is not possible to delinearize.
+     * Effectively undoes LinearizeFloatValue.
      */
     virtual void delinearizeFloatValue(QVector <qreal> & Value) const = 0;
     /**

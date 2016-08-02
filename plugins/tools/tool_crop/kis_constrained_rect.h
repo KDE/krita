@@ -61,6 +61,7 @@ public:
     qreal ratio() const;
 
     void moveHandle(HandleType handle, const QPoint &offset, const QRect &oldRect);
+    QPointF handleSnapPoint(HandleType handle, const QPointF &cursorPos);
 
     void setRatio(qreal value);
     void setOffset(const QPoint &offset);

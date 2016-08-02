@@ -94,6 +94,7 @@ KoColorTransformation* KisLevelFilter::createTransformation(const KoColorSpace* 
 KisLevelConfigWidget::KisLevelConfigWidget(QWidget * parent, KisPaintDeviceSP dev)
         : KisConfigWidget(parent)
 {
+    Q_ASSERT(dev);
     m_page.setupUi(this);
 
     m_page.ingradient->enableGamma(true);
@@ -163,8 +164,10 @@ void KisLevelConfigWidget::slotDrawHistogram(bool logarithmic)
         m_histlog = logarithmic;
     }
 
+    QPalette appPalette = QApplication::palette();
     QPixmap pix(wWidth-100, wHeight);
-    pix.fill();
+
+    pix.fill(QColor(appPalette.color(QPalette::Base)));
     QPainter p(&pix);
 
     p.setPen(QPen(Qt::gray, 1, Qt::SolidLine));

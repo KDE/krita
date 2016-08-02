@@ -95,7 +95,7 @@ QPointF KisPressureScatterOption::apply(const KisPaintInformation& info, qreal w
 
     // just use the most significant dimension for calculations
     qreal diameter = qMax(width, height);
-    qreal sensorValue = computeValue(info);
+    qreal sensorValue = computeSizeLikeValue(info);
 
     qreal jitter = (2.0 * info.randomSource()->generateNormalized() - 1.0) * diameter * sensorValue;
     QPointF result(0.0, 0.0);

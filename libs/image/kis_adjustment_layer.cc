@@ -119,7 +119,7 @@ void KisAdjustmentLayer::accept(KisProcessingVisitor &visitor, KisUndoAdapter *u
 
 QIcon KisAdjustmentLayer::icon() const
 {
-    return KisIconUtils::loadIcon("view-filter");
+    return KisIconUtils::loadIcon("filterLayer");
 }
 
 KisBaseNode::PropertyList KisAdjustmentLayer::sectionModelProperties() const
@@ -127,7 +127,8 @@ KisBaseNode::PropertyList KisAdjustmentLayer::sectionModelProperties() const
     KisSafeFilterConfigurationSP filterConfig = filter();
     KisBaseNode::PropertyList l = KisLayer::sectionModelProperties();
     if (filterConfig)
-        l << KisBaseNode::Property(i18nc("property of a filter layer, noun", "Filter"), KisFilterRegistry::instance()->value(filterConfig->name())->name());
+        l << KisBaseNode::Property(KoID("filter", i18nc("property of a filter layer, noun", "Filter")), KisFilterRegistry::instance()->value(filterConfig->name())->name());
+
     return l;
 }
 

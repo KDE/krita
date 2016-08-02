@@ -133,7 +133,7 @@ const KoColorSpace * KisGroupLayer::colorSpace() const
 
 QIcon KisGroupLayer::icon() const
 {
-    return KisIconUtils::loadIcon("folder");
+    return KisIconUtils::loadIcon("groupLayer");
 }
 
 void KisGroupLayer::setImage(KisImageWSP image)
@@ -267,6 +267,11 @@ KisPaintDeviceSP KisGroupLayer::original() const
     }
 
     return realOriginal;
+}
+
+bool KisGroupLayer::projectionIsValid() const
+{
+    return !tryObligeChild();
 }
 
 void KisGroupLayer::setDefaultProjectionColor(KoColor color)

@@ -100,14 +100,14 @@ void StylesFilteredModelBase::setStyleThumbnailer(KoStyleThumbnailer *thumbnaile
     Q_UNUSED(thumbnailer);
 }
 
-QModelIndex StylesFilteredModelBase::indexOf(const KoCharacterStyle &style) const
+QModelIndex StylesFilteredModelBase::indexOf(const KoCharacterStyle *style) const
 {
     QModelIndex sourceIndex(m_sourceModel->indexOf(style));
 
-    if (!sourceIndex.isValid() || m_sourceToProxy.at(sourceIndex.row()) < 0) {
+    if (!style || !sourceIndex.isValid() || m_sourceToProxy.at(sourceIndex.row()) < 0) {
         return QModelIndex();
     }
-    return createIndex(m_sourceToProxy.at(sourceIndex.row()), 0, style.styleId());
+    return createIndex(m_sourceToProxy.at(sourceIndex.row()), 0, style->styleId());
 }
 
 QImage StylesFilteredModelBase::stylePreview(int row, const QSize &size)

@@ -27,6 +27,8 @@
 
 #include <klocalizedstring.h>
 #include <OdfDebug.h>
+#include <QtGlobal>
+
 
 // ensure the same order as in KoUnit::Unit
 static const char* const unitNameList[KoUnit::TypeCount] =
@@ -373,7 +375,7 @@ qreal KoUnit::parseAngle(const QString& _value, qreal defaultVal)
 
 qreal KoUnit::approxTransformScale(const QTransform &t)
 {
-    return std::sqrt(t.determinant());
+    return std::sqrt(qAbs(t.determinant()));
 }
 
 void KoUnit::adjustByPixelTransform(const QTransform &t)

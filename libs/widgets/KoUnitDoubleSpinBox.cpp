@@ -26,13 +26,7 @@
 #include <WidgetsDebug.h>
 
 #include <klocalizedstring.h>
-
-#ifdef Q_OS_WIN
-#include <float.h>
-#ifndef __MINGW32__
-#define isnan _isnan
-#endif
-#endif
+#include <qnumeric.h>
 
 // #define DEBUG_VALIDATOR
 // #define DEBUG_VALUEFROMTEXT
@@ -101,7 +95,7 @@ QValidator::State KoUnitDoubleSpinBox::validate(QString &input, int &pos) const
 
     const double value = valueFromText( number );
     double newVal = 0.0;
-    if (!isnan(value)) {
+    if (!qIsNaN(value)) {
         bool ok;
         const KoUnit unit = KoUnit::fromSymbol(unitName, &ok);
         if ( ok )
@@ -200,12 +194,14 @@ QString KoUnitDoubleSpinBox::textFromValue( double value ) const
     //debugWidgets <<"textFromValue:" << QString::number( value, 'f', 12 ) <<" =>" << num;
     //const QString num(QString("%1%2").arg(QLocale().toString(value, d->precision ), m_unit.symbol()));
     //const QString num ( QString( "%1").arg( QLocale().toString( value, d->precision )) );
-    return QLocale().toString( value, decimals() );
+    return QLocale().toString( value, 'f', decimals() );
 }
 
 double KoUnitDoubleSpinBox::valueFromText( const QString& str ) const
 {
-    return QLocale().toDouble(str);
+    QString str2( str );
+    str2.remove(d->unit.symbol());
+    return QLocale().toDouble(str2);
 //    QString str2( str );
 //    /* KLocale::readNumber wants the thousand separator exactly at 1000.
 //       But when editing, it might be anywhere. So we need to remove it. */

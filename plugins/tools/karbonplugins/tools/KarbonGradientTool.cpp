@@ -345,8 +345,6 @@ void KarbonGradientTool::activate(ToolActivation toolActivation, const QSet<KoSh
     m_oldSnapStrategies = canvas()->snapGuide()->enabledSnapStrategies();
     canvas()->snapGuide()->enableSnapStrategies(KoSnapGuide::BoundingBoxSnapping);
     canvas()->snapGuide()->reset();
-
-    connect(canvas()->shapeManager(), SIGNAL(selectionContentChanged()), this, SLOT(initialize()));
 }
 
 void KarbonGradientTool::initialize()
@@ -475,9 +473,6 @@ void KarbonGradientTool::initialize()
 
 void KarbonGradientTool::deactivate()
 {
-    // we are not interested in selection content changes when not active
-    disconnect(canvas()->shapeManager(), SIGNAL(selectionContentChanged()), this, SLOT(initialize()));
-
     delete m_gradient;
     m_gradient = 0;
 

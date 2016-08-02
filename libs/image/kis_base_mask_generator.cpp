@@ -36,9 +36,46 @@
 #include "kis_cubic_curve.h"
 #include "kis_curve_circle_mask_generator.h"
 #include "kis_curve_rect_mask_generator.h"
-
+#include <kis_dom_utils.h>
 
 struct KisMaskGenerator::Private {
+    Private()
+        : diameter(1.0),
+          ratio(1.0),
+          softness(1.0),
+          fh(1.0),
+          fv(1.0),
+          cs(0.0),
+          ss(0.0),
+          cachedSpikesAngle(0.0),
+          spikes(2),
+          empty(true),
+          antialiasEdges(false),
+          type(CIRCLE),
+          scaleX(1.0),
+          scaleY(1.0)
+    {
+    }
+
+    Private(const Private &rhs)
+        : diameter(rhs.diameter),
+          ratio(rhs.ratio),
+          softness(rhs.softness),
+          fh(rhs.fh),
+          fv(rhs.fv),
+          cs(rhs.cs),
+          ss(rhs.ss),
+          cachedSpikesAngle(rhs.cachedSpikesAngle),
+          spikes(rhs.spikes),
+          empty(rhs.empty),
+          antialiasEdges(rhs.antialiasEdges),
+          type(rhs.type),
+          curveString(rhs.curveString),
+          scaleX(rhs.scaleX),
+          scaleY(rhs.scaleY)
+    {
+    }
+
     qreal diameter, ratio;
     qreal softness;
     qreal fh, fv;
@@ -51,7 +88,7 @@ struct KisMaskGenerator::Private {
     QString curveString;
     qreal scaleX;
     qreal scaleY;
-    KisBrushMaskApplicatorBase *defaultMaskProcessor;
+    QScopedPointer<KisBrushMaskApplicatorBase> defaultMaskProcessor;
 };
 
 
@@ -66,7 +103,6 @@ KisMaskGenerator::KisMaskGenerator(qreal diameter, qreal ratio, qreal fh, qreal 
     d->spikes = spikes;
     d->cachedSpikesAngle = M_PI / d->spikes;
     d->type = type;
-    d->defaultMaskProcessor = 0;
     d->antialiasEdges = antialiasEdges;
     d->scaleX = 1.0;
     d->scaleY = 1.0;
@@ -75,8 +111,12 @@ KisMaskGenerator::KisMaskGenerator(qreal diameter, qreal ratio, qreal fh, qreal 
 
 KisMaskGenerator::~KisMaskGenerator()
 {
-    delete d->defaultMaskProcessor;
-    delete d;
+}
+
+KisMaskGenerator::KisMaskGenerator(const KisMaskGenerator &rhs)
+    : d(new Private(*rhs.d)),
+      m_id(rhs.m_id)
+{
 }
 
 void KisMaskGenerator::init()
@@ -105,11 +145,11 @@ bool KisMaskGenerator::isEmpty() const
 KisBrushMaskApplicatorBase* KisMaskGenerator::applicator()
 {
     if (!d->defaultMaskProcessor) {
-        d->defaultMaskProcessor =
-            createOptimizedClass<MaskApplicatorFactory<KisMaskGenerator, KisBrushMaskScalarApplicator> >(this);
+        d->defaultMaskProcessor.reset(
+            createOptimizedClass<MaskApplicatorFactory<KisMaskGenerator, KisBrushMaskScalarApplicator> >(this));
     }
 
-    return d->defaultMaskProcessor;
+    return d->defaultMaskProcessor.data();
 }
 
 void KisMaskGenerator::toXML(QDomDocument& doc, QDomElement& e) const
@@ -128,34 +168,17 @@ void KisMaskGenerator::toXML(QDomDocument& doc, QDomElement& e) const
 
 KisMaskGenerator* KisMaskGenerator::fromXML(const QDomElement& elt)
 {
-    QLocale c(QLocale::German);
-    bool result;
-
     double diameter = 1.0;
     // backward compatibility -- it was mistakenly named radius for 2.2
     if (elt.hasAttribute("radius")){
-        diameter = elt.attribute("radius", "1.0").toDouble(&result);
-        if (!result) {
-            diameter = c.toDouble(elt.attribute("radius"));
-        }
-    }else /*if (elt.hasAttribute("diameter"))*/{
-        diameter = elt.attribute("diameter", "1.0").toDouble(&result);
-        if (!result) {
-            diameter = c.toDouble(elt.attribute("diameter"));
-        }
+        diameter = KisDomUtils::toDouble(elt.attribute("radius", "1.0"));
     }
-    double ratio = elt.attribute("ratio", "1.0").toDouble(&result);
-    if (!result) {
-        ratio = c.toDouble(elt.attribute("ratio"));
+    else /*if (elt.hasAttribute("diameter"))*/{
+        diameter = KisDomUtils::toDouble(elt.attribute("diameter", "1.0"));
     }
-    double hfade = elt.attribute("hfade", "0.0").toDouble(&result);
-    if (!result) {
-        hfade = c.toDouble(elt.attribute("hfade"));
-    }
-    double vfade = elt.attribute("vfade", "0.0").toDouble(&result);
-    if (!result) {
-        vfade = c.toDouble(elt.attribute("vfade"));
-    }
+    double ratio = KisDomUtils::toDouble(elt.attribute("ratio", "1.0"));
+    double hfade = KisDomUtils::toDouble(elt.attribute("hfade", "0.0"));
+    double vfade = KisDomUtils::toDouble(elt.attribute("vfade", "0.0"));
 
     int spikes = elt.attribute("spikes", "2").toInt();
     QString typeShape = elt.attribute("type", "circle");
@@ -218,7 +241,7 @@ qreal KisMaskGenerator::effectiveSrcHeight() const
      * don't take spikes into account, they will be generated from
      * this data.
      */
-    return d->diameter * d->ratio * d->scaleX;
+    return d->diameter * d->ratio * d->scaleY;
 }
 
 qreal KisMaskGenerator::diameter() const

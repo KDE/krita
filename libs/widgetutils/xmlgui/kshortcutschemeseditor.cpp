@@ -76,7 +76,7 @@ KShortcutSchemesEditor::KShortcutSchemesEditor(KisShortcutsDialog *parent)
     m_deleteScheme = new QPushButton(i18n("Delete"));
     addWidget(m_deleteScheme);
 
-    QPushButton *moreActions = new QPushButton(i18n("More Actions"));
+    QPushButton *moreActions = new QPushButton(i18n("Save/Load"));
     addWidget(moreActions);
 
     QMenu *moreActionsMenu = new QMenu(m_dialog);
@@ -91,8 +91,6 @@ KShortcutSchemesEditor::KShortcutSchemesEditor(KisShortcutsDialog *parent)
                                this, SLOT(exportShortcutsScheme()));
     moreActionsMenu->addAction(i18n("Import Scheme..."),
                                this, SLOT(importShortcutsScheme()));
-    moreActionsMenu->addAction(i18n("Restore Defaults"),
-                               m_dialog, SLOT(allDefault()));
     moreActions->setMenu(moreActionsMenu);
 
     addStretch(1);
@@ -118,10 +116,11 @@ void KShortcutSchemesEditor::newScheme()
         return;
     }
 
-    const QString newSchemeFileName = KShortcutSchemesHelper::shortcutSchemeFileName(newName);
+    const QString newSchemeFileName = KShortcutSchemesHelper::shortcutSchemeFileName(newName) + ".shortcuts";
 
     QFile schemeFile(newSchemeFileName);
     if (!schemeFile.open(QFile::WriteOnly | QFile::Truncate)) {
+        qDebug() << "Could not open scheme file.";
         return;
     }
     schemeFile.close();
@@ -164,15 +163,14 @@ void KShortcutSchemesEditor::exportShortcutsScheme()
                     i18n("Shortcuts (*.shortcuts)"));
     dlg.setDefaultSuffix(QStringLiteral(".shortcuts"));
     dlg.setAcceptMode(QFileDialog::AcceptSave);
-    dlg.exec();
-    auto path = dlg.selectedFiles().first();
+    if (dlg.exec()) {
+        auto path = dlg.selectedFiles().first();
 
-    // Parent, caption, dir, filter
-    if (path.isEmpty()) {
-        return;
+        if (!path.isEmpty()) {
+            m_dialog->exportConfiguration(path);
+        }
+
     }
-
-    m_dialog->exportConfiguration(path);
 }
 
 void KShortcutSchemesEditor::saveCustomShortcuts()
@@ -184,14 +182,13 @@ void KShortcutSchemesEditor::saveCustomShortcuts()
                     i18n("Shortcuts (*.shortcuts)"));
     dlg.setDefaultSuffix(QStringLiteral(".shortcuts"));
     dlg.setAcceptMode(QFileDialog::AcceptSave);
-    dlg.exec();
-    auto path = dlg.selectedFiles().first();
+    if (dlg.exec()) {
+        auto path = dlg.selectedFiles().first();
 
-    if (path.isEmpty()) {
-        return;
+        if (!path.isEmpty()) {
+            m_dialog->saveCustomShortcuts(path);
+        }
     }
-
-    m_dialog->saveCustomShortcuts(path);
 }
 
 

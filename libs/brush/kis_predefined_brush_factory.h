@@ -32,7 +32,7 @@ public:
     KisPredefinedBrushFactory(const QString &brushType);
 
     QString id() const;
-    KisBrushSP getOrCreateBrush(const QDomElement& brushDefinition);
+    KisBrushSP getOrCreateBrush(const QDomElement& brushDefinition, bool forceCopy);
 
 private:
     const QString m_id;

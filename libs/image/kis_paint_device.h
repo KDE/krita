@@ -63,8 +63,8 @@ typedef KisSharedPtr<KisDataManager> KisDataManagerSP;
  * when pixels are accessed by an iterator.
  */
 class KRITAIMAGE_EXPORT KisPaintDevice
-        : public QObject
-        , public KisShared
+    : public QObject
+    , public KisShared
 {
 
     Q_OBJECT
@@ -206,6 +206,15 @@ public:
      * \see calculateExactBounds()
      */
     QRect exactBounds() const;
+
+    /**
+     * Relaxed version of the exactBounds() that can be used in tight
+     * loops.  If the exact bounds value is present in the paint
+     * device cache, returns this value.  If the cache is invalidated,
+     * returns extent() and tries to recalculate the exact bounds not
+     * faster than once in 1000 ms.
+     */
+    QRect exactBoundsAmortized() const;
 
     /**
      * Retuns exact rectangle of the paint device that contains
@@ -504,8 +513,8 @@ public:
      * like sRGB).
      */
     QImage convertToQImage(const KoColorProfile *  dstProfile,
-                                   KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::internalRenderingIntent(),
-                                   KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::internalConversionFlags()) const;
+                           KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::internalRenderingIntent(),
+                           KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::internalConversionFlags()) const;
 
     /**
      * Creates a paint device thumbnail of the paint device, retaining
@@ -517,7 +526,8 @@ public:
      * @param rect: only this rect will be used for the thumbnail
      *
      */
-    KisPaintDeviceSP createThumbnailDevice(qint32 w, qint32 h, QRect rect = QRect()) const;
+    KisPaintDeviceSP createThumbnailDevice(qint32 w, qint32 h, QRect rect = QRect(), QRect outputRect = QRect()) const;
+    KisPaintDeviceSP createThumbnailDeviceOversampled(qint32 w, qint32 h, qreal oversample, QRect rect = QRect(),  QRect outputRect = QRect()) const;
 
     /**
      * Creates a thumbnail of the paint device, retaining the aspect ratio.
@@ -527,17 +537,18 @@ public:
      * @param maxw: maximum width
      * @param maxh: maximum height
      * @param rect: only this rect will be used for the thumbnail
+     * @param oversample: ratio used for antialiasing
      */
-    QImage createThumbnail(qint32 maxw, qint32 maxh, QRect rect,
-                                   KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::internalRenderingIntent(),
-                                   KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::internalConversionFlags());
+    QImage createThumbnail(qint32 maxw, qint32 maxh, QRect rect, qreal oversample = 1,
+                           KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::internalRenderingIntent(),
+                           KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::internalConversionFlags());
 
     /**
      * Cached version of createThumbnail(qint32 maxw, qint32 maxh, const KisSelection *selection, QRect rect)
      */
-    QImage createThumbnail(qint32 maxw, qint32 maxh,
-                                   KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::internalRenderingIntent(),
-                                   KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::internalConversionFlags());
+    QImage createThumbnail(qint32 maxw, qint32 maxh, qreal oversample = 1,
+                           KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::internalRenderingIntent(),
+                           KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::internalConversionFlags());
 
     /**
      * Fill c and opacity with the values found at x and y.
@@ -787,15 +798,22 @@ public:
     QRect calculateExactBounds(bool nonDefaultOnly) const;
 
 public:
-    struct MemoryReleaseObject : public QObject
-    {
+    struct MemoryReleaseObject : public QObject {
         ~MemoryReleaseObject();
     };
 
     static MemoryReleaseObject* createMemoryReleaseObject();
 
 public:
-    QRegion syncLodCache(int levelOfDetail);
+    struct LodDataStruct {
+        virtual ~LodDataStruct();
+    };
+
+    QRegion regionForLodSyncing() const;
+    LodDataStruct* createLodDataStruct(int lod);
+    void updateLodDataStruct(LodDataStruct *dst, const QRect &srcRect);
+    void uploadLodDataStruct(LodDataStruct *dst);
+
     void setProjectionDevice(bool value);
     void tesingFetchLodDevice(KisPaintDeviceSP targetDevice);
 

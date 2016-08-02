@@ -36,7 +36,6 @@
 #include <QImage>
 #include <qmath.h>
 
-
 class KoOdfGradientBackgroundPrivate : public KoShapeBackgroundPrivate
 {
 public:

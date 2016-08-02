@@ -56,8 +56,8 @@
   -             group: optional group name, for named merging (?)
   -             hidden: if true, the toolbar is initially hidden. There should be a menu entry for showing it.
   -             noEdit: if true, the toolbar won't appear in the toolbar editor
-  -             noMerge: if true, the standard toolbar layout from ui_standards.rc won't be used.
-  -             deleted: if true, the toolbar will not be created, even if ui_standards.rc mentions it
+  -             noMerge: if true, the standard toolbar layout from ui_standards.xmlgui won't be used.
+  -             deleted: if true, the toolbar will not be created, even if ui_standards.xmlgui mentions it
   -->
 <!ELEMENT ToolBar (text?, (Action | Separator | ActionList | Merge | MergeLocal | DefineGroup)*)>
 <!ATTLIST ToolBar
@@ -76,8 +76,8 @@
 >
 
 <!-- A Menu such as the "File" or "Edit" menu. Can be used to define popup menus as well.
-  -             noMerge: if true, the standard menu layout from ui_standards.rc won't be used.
-  -             deleted: if true, the menu will not be created, even if ui_standards.rc mentions it
+  -             noMerge: if true, the standard menu layout from ui_standards.xmlgui won't be used.
+  -             deleted: if true, the menu will not be created, even if ui_standards.xmlgui mentions it
 -->
 <!ELEMENT Menu (text?, (title | Action | ActionList | Separator | TearOffHandle | Merge | MergeLocal | DefineGroup | Menu )*)>
 <!ATTLIST Menu
@@ -96,7 +96,7 @@
      - group: this is used to control the placement of the action when merging 
               e.g. a part, it matches the name of a DefineGroup in the mainwindow's rc file.
      - append: this is used to control the placement of the action during the
-               merging with ui_standards.rc. This is mapped to MergeLocal tags there.
+               merging with ui_standards.xmlgui. This is mapped to MergeLocal tags there.
                Note that this feature is currently only available for the mainwindow, not for parts/plugins.
      - text, whatsThis, toolTip, iconText, shortcut, icon, priority: all those are mapped
        to KAction properties.
@@ -165,8 +165,8 @@
 >
 
 <!-- Specifies an entry index for merging application defined actions into
-     those with positions fixed by the style guide and ui_standards.rc. This
-     tag should not be used anywhere except ui_standards.rc. -->
+     those with positions fixed by the style guide and ui_standards.xmlgui. This
+     tag should not be used anywhere except ui_standards.xmlgui. -->
 <!ELEMENT MergeLocal EMPTY>
 <!ATTLIST MergeLocal
   name CDATA #IMPLIED

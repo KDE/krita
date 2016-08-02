@@ -20,24 +20,27 @@
 #ifndef KIS_APPLICATION_H
 #define KIS_APPLICATION_H
 
+#include <QPointer>
 #include <qtsingleapplication/qtsingleapplication.h>
 #include "kritaui_export.h"
+#include <KisAutoSaveRecoveryDialog.h>
 
 class KisMainWindow;
 class KisApplicationPrivate;
 class QWidget;
 class KisApplicationArguments;
+class KisAutoSaveRecoveryDialog;
 
 #include <KisImportExportManager.h>
 
 /**
- *  @brief Base class for all %Calligra apps
+ *  @brief Base class for the %Krita app
  *
  *  This class handles arguments given on the command line and
- *  shows a generic about dialog for all Calligra apps.
+ *  shows a generic about dialog for the Krita app.
  *
- *  In addition it adds the standard directories where Calligra applications
- *  can find their images etc.
+ *  In addition it adds the standard directories where Krita
+ *  can find its images etc.
  *
  *  If the last mainwindow becomes closed, KisApplication automatically
  *  calls QApplication::quit.
@@ -81,9 +84,13 @@ public:
     /**
      * Tell KisApplication to show this splashscreen when you call start();
      * when start returns, the splashscreen is hidden. Use KSplashScreen
-     * to have the splash show correctly on Xinerama displays. 
+     * to have the splash show correctly on Xinerama displays.
      */
     void setSplashScreen(QWidget *splash);
+
+    void setSplashScreenLoadingText(QString);
+
+    void hideSplashScreen();
 
     /// Overridden to handle exceptions from event handlers.
     bool notify(QObject *receiver, QEvent *event);
@@ -93,16 +100,24 @@ public Q_SLOTS:
     void remoteArguments(QByteArray message, QObject*socket);
     void fileOpenRequested(const QString & url);
 
+    void onAutoSaveFinished(int result);
+
 private:
     /// @return the number of autosavefiles opened
-    QList<QUrl> checkAutosaveFiles();
-    bool createNewDocFromTemplate(const QString &fileName, KisMainWindow *mainWindow);
+    void checkAutosaveFiles();
+    bool createNewDocFromTemplate(const QString &fileName, KisMainWindow *m_mainWindow);
     void clearConfig();
+    void loadResources();
+    void loadPlugins();
 
 private:
     KisApplicationPrivate * const d;
     class ResetStarting;
     friend class ResetStarting;
+    KisAutoSaveRecoveryDialog *m_autosaveDialog;
+    QStringList m_autosaveFiles;
+    QPointer<KisMainWindow> m_mainWindow; // The first mainwindow we create on startup
+    bool m_batchRun;
 };
 
 #endif

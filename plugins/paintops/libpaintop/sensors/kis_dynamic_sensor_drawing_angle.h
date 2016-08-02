@@ -21,6 +21,9 @@
 
 #include "kis_dynamic_sensor.h"
 
+class QCheckBox;
+class KisSliderSpinBox;
+
 
 class KisDynamicSensorDrawingAngle : public QObject, public KisDynamicSensor
 {
@@ -29,6 +32,7 @@ public:
     KisDynamicSensorDrawingAngle();
     qreal value(const KisPaintInformation& info);
     bool dependsOnCanvasRotation() const;
+    bool isAbsoluteRotation() const;
 
     QWidget* createConfigurationWidget(QWidget* parent, QWidget*);
 
@@ -41,15 +45,27 @@ public:
     int fanCornersStep() const;
     int angleOffset() const;
 
+    void reset();
+
 public Q_SLOTS:
     void setFanCornersEnabled(int state);
     void setFanCornersStep(int angle);
     void setAngleOffset(int angle);
+    void setLockedAngleMode(int value);
+
+    void updateGUI();
 
 private:
     bool m_fanCornersEnabled;
     int m_fanCornersStep;
     int m_angleOffset; // in degrees
+    int m_dabIndex;
+    qreal m_lockedAngle;
+    bool m_lockedAngleMode;
+
+    QCheckBox *m_chkLockedMode;
+    QCheckBox *m_chkFanCorners;
+    KisSliderSpinBox *m_intFanCornersStep;
 };
 
 #endif /* __KIS_DYNAMIC_SENSOR_DRAWING_ANGLE_H */

@@ -21,6 +21,8 @@
 #define _KOCOLORSPACE_P_H_
 
 #include "KoColorSpace.h"
+#include "KoColorSpaceEngine.h"
+#include "KoColorConversionTransformation.h"
 #include <QThreadStorage>
 #include <QPolygonF>
 
@@ -44,6 +46,8 @@ struct Q_DECL_HIDDEN KoColorSpace::Private {
     QPolygonF TRCXYY;
     QVector <qreal> colorants;
     QVector <qreal> lumaCoefficients;
+
+    KoColorSpaceEngine *iccEngine;
 
     Deletability deletability;
 };

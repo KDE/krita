@@ -50,40 +50,6 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
-    <Action name="windows_next">
-      <icon></icon>
-      <text>N&amp;ext</text>
-      <whatsThis></whatsThis>
-      <toolTip>Next</toolTip>
-      <iconText>Next</iconText>
-      <activationFlags>10</activationFlags>
-      <activationConditions>0</activationConditions>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-    <Action name="windows_previous">
-      <icon></icon>
-      <text>Previous</text>
-      <whatsThis></whatsThis>
-      <toolTip>Previous</toolTip>
-      <iconText>Previous</iconText>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-    <Action name="view_newwindow">
-      <icon>window-new</icon>
-      <text>&amp;New Window</text>
-      <whatsThis></whatsThis>
-      <toolTip>New Window</toolTip>
-      <iconText>New Window</iconText>
-      <activationFlags>0</activationFlags>
-      <activationConditions>0</activationConditions>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
     <Action name="import_resources">
       <icon></icon>
       <text>Import Resources or Bundles...</text>
@@ -175,7 +141,7 @@
       <whatsThis></whatsThis>
       <toolTip>Show Tool Options</toolTip>
       <iconText>Show Tool Options</iconText>
-      <shortcut></shortcut>
+      <shortcut>\</shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -185,7 +151,7 @@
       <whatsThis></whatsThis>
       <toolTip>Show Brush Editor</toolTip>
       <iconText>Show Brush Editor</iconText>
-      <shortcut>i</shortcut>
+      <shortcut>F5</shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -195,7 +161,7 @@
       <whatsThis></whatsThis>
       <toolTip>Show Brush Presets</toolTip>
       <iconText>Show Brush Presets</iconText>
-      <shortcut></shortcut>
+      <shortcut>F6</shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -391,10 +357,10 @@
     </Action>
     <Action name="hmirror_action">
       <icon>symmetry-horizontal</icon>
-      <text>Set horizontal mirror mode</text>
+      <text>Horizontal Mirror Tool</text>
       <whatsThis></whatsThis>
-      <toolTip>Set horizontal mirror mode</toolTip>
-      <iconText>Set horizontal mirror mode</iconText>
+      <toolTip>Horizontal Mirror Tool</toolTip>
+      <iconText>Horizontal Mirror Tool</iconText>
       <activationFlags>10000</activationFlags>
       <shortcut></shortcut>
       <isCheckable>true</isCheckable>
@@ -402,10 +368,10 @@
     </Action>
     <Action name="vmirror_action">
       <icon>symmetry-vertical</icon>
-      <text>Set vertical mirror mode</text>
+      <text>Vertical Mirror Tool</text>
       <whatsThis></whatsThis>
-      <toolTip>Set vertical mirror mode</toolTip>
-      <iconText>Set vertical mirror mode</iconText>
+      <toolTip>Vertical Mirror Tool</toolTip>
+      <iconText>Vertical Mirror Tool</iconText>
       <activationFlags>10000</activationFlags>
       <shortcut></shortcut>
       <isCheckable>true</isCheckable>
@@ -427,7 +393,7 @@
       <icon></icon>
       <text>&amp;Invert Selection</text>
       <whatsThis></whatsThis>
-      <toolTip>foo</toolTip>
+      <toolTip>Invert current selection</toolTip>
       <iconText>Invert Selection</iconText>
       <activationFlags>10000000000</activationFlags>
       <activationConditions>100</activationConditions>
@@ -1275,16 +1241,6 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
-    <Action name="KisToolPerspectiveGrid">
-      <icon></icon>
-      <text>Perspective Grid</text>
-      <whatsThis></whatsThis>
-      <toolTip>Edit the perspective grid</toolTip>
-      <iconText>Edit the perspective grid</iconText>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
     <Action name="KisToolPolygon">
       <icon></icon>
       <text>Polygon Tool</text>
@@ -1512,16 +1468,6 @@
       <toolTip>Draw a gradient.</toolTip>
       <iconText>Draw a gradient.</iconText>
       <shortcut>G</shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-    <Action name="KisToolGrid">
-      <icon></icon>
-      <text>Edit the grid</text>
-      <whatsThis></whatsThis>
-      <toolTip>Edit the grid</toolTip>
-      <iconText>Edit the grid</iconText>
-      <shortcut></shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -2167,7 +2113,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="add_new_group_layer">
-      <icon>folder</icon>
+      <icon>groupLayer</icon>
       <text>&amp;Group Layer</text>
       <whatsThis></whatsThis>
       <toolTip>Group Layer</toolTip>
@@ -2179,7 +2125,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="add_new_clone_layer">
-      <icon>edit-copy</icon>
+      <icon>cloneLayer</icon>
       <text>&amp;Clone Layer</text>
       <whatsThis></whatsThis>
       <toolTip>Clone Layer</toolTip>
@@ -2191,7 +2137,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="add_new_shape_layer">
-      <icon>bookmarks</icon>
+      <icon>vectorLayer</icon>
       <text>&amp;Vector Layer</text>
       <whatsThis></whatsThis>
       <toolTip>Vector Layer</toolTip>
@@ -2203,7 +2149,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="add_new_adjustment_layer">
-      <icon>view-filter</icon>
+      <icon>filterLayer</icon>
       <text>&amp;Filter Layer...</text>
       <whatsThis></whatsThis>
       <toolTip>Filter Layer</toolTip>
@@ -2215,7 +2161,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="add_new_fill_layer">
-      <icon>krita_tool_color_fill</icon>
+      <icon>fillLayer</icon>
       <text>&amp;Fill Layer...</text>
       <whatsThis></whatsThis>
       <toolTip>Fill Layer</toolTip>
@@ -2227,7 +2173,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="add_new_file_layer">
-      <icon>document-open</icon>
+      <icon>fileLayer</icon>
       <text>&amp;File Layer...</text>
       <whatsThis></whatsThis>
       <toolTip>File Layer</toolTip>
@@ -2239,7 +2185,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="add_new_transparency_mask">
-      <icon>edit-copy</icon>
+      <icon>transparencyMask</icon>
       <text>&amp;Transparency Mask</text>
       <whatsThis></whatsThis>
       <toolTip>Transparency Mask</toolTip>
@@ -2251,7 +2197,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="add_new_filter_mask">
-      <icon>bookmarks</icon>
+      <icon>filterMask</icon>
       <text>&amp;Filter Mask...</text>
       <whatsThis></whatsThis>
       <toolTip>Filter Mask</toolTip>
@@ -2263,7 +2209,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="add_new_transform_mask">
-      <icon>bookmarks</icon>
+      <icon>transformMask</icon>
       <text>&amp;Transform Mask...</text>
       <whatsThis></whatsThis>
       <toolTip>Transform Mask</toolTip>
@@ -2275,7 +2221,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="add_new_selection_mask">
-      <icon>edit-paste</icon>
+      <icon>selectionMask</icon>
       <text>&amp;Local Selection</text>
       <whatsThis></whatsThis>
       <toolTip>Local Selection</toolTip>
@@ -2299,7 +2245,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="add_new_paint_layer">
-      <icon>document-new</icon>
+      <icon>paintLayer</icon>
       <text>&amp;Paint Layer</text>
       <whatsThis></whatsThis>
       <toolTip>Paint Layer</toolTip>
@@ -2391,6 +2337,18 @@
       <activationFlags>0</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>Ctrl+G</shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="quick_ungroup">
+      <icon></icon>
+      <text>Quick Ungroup</text>
+      <whatsThis></whatsThis>
+      <toolTip>Remove grouping of the layers or remove one layer out of the group</toolTip>
+      <iconText>Quick Ungroup</iconText>
+      <activationFlags>0</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut>Ctrl+Alt+G</shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -2490,6 +2448,18 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
+    <Action name="convert_group_to_animated">
+      <icon></icon>
+      <text>Convert group to &amp;animated layer</text>
+      <whatsThis></whatsThis>
+      <toolTip>Convert child layers into animation frames</toolTip>
+      <iconText>Convert child layers into animation frames</iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
     <Action name="import_layer_from_file">
       <icon></icon>
       <text>I&amp;mport Layer...</text>
@@ -2503,7 +2473,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="import_layer_as_paint_layer">
-      <icon>document-new</icon>
+      <icon>paintLayer</icon>
       <text>&amp;as Paint Layer...</text>
       <whatsThis></whatsThis>
       <toolTip>as Paint Layer</toolTip>
@@ -2515,7 +2485,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="import_layer_as_transparency_mask">
-      <icon>edit-copy</icon>
+      <icon>transparencyMask</icon>
       <text>as &amp;Transparency Mask...</text>
       <whatsThis></whatsThis>
       <toolTip>as Transparency Mask</toolTip>
@@ -2527,7 +2497,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="import_layer_as_filter_mask">
-      <icon>bookmarks</icon>
+      <icon>filterMask</icon>
       <text>as &amp;Filter Mask...</text>
       <whatsThis></whatsThis>
       <toolTip>as Filter Mask</toolTip>
@@ -2539,7 +2509,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="import_layer_as_selection_mask">
-      <icon>edit-paste</icon>
+      <icon>selectionMask</icon>
       <text>as &amp;Selection Mask...</text>
       <whatsThis></whatsThis>
       <toolTip>as Selection Mask</toolTip>
@@ -2551,7 +2521,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="convert_to_paint_layer">
-      <icon>document-new</icon>
+      <icon>paintLayer</icon>
       <text>to &amp;Paint Layer</text>
       <whatsThis></whatsThis>
       <toolTip>to Paint Layer</toolTip>
@@ -2563,7 +2533,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="convert_to_transparency_mask">
-      <icon>edit-copy</icon>
+      <icon>transparencyMask</icon>
       <text>to &amp;Transparency Mask</text>
       <whatsThis></whatsThis>
       <toolTip>to Transparency Mask</toolTip>
@@ -2575,7 +2545,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="convert_to_filter_mask">
-      <icon>bookmarks</icon>
+      <icon>filterMask</icon>
       <text>to &amp;Filter Mask...</text>
       <whatsThis></whatsThis>
       <toolTip>to Filter Mask</toolTip>
@@ -2587,7 +2557,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="convert_to_selection_mask">
-      <icon>edit-paste</icon>
+      <icon>selectionMask</icon>
       <text>to &amp;Selection Mask</text>
       <whatsThis></whatsThis>
       <toolTip>to Selection Mask</toolTip>
@@ -2599,7 +2569,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="split_alpha_into_mask">
-      <icon>edit-copy</icon>
+      <icon>transparencyMask</icon>
       <text>&amp;Alpha into Mask</text>
       <whatsThis></whatsThis>
       <toolTip>Alpha into Mask</toolTip>

@@ -12,6 +12,7 @@ set(kritaglobal_LIB_SRCS
     kis_memory_leak_tracker.cpp
     kis_shared.cpp
     kis_dom_utils.cpp
+    kis_painting_tweaks.cpp
 )
 
 add_library(kritaglobal SHARED ${kritaglobal_LIB_SRCS} )
@@ -28,7 +29,7 @@ target_link_libraries(kritaglobal
 )
 
 set_target_properties(kritaglobal PROPERTIES
-    VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
+    VERSION ${GENERIC_KRITA_LIB_VERSION} SOVERSION ${GENERIC_KRITA_LIB_SOVERSION}
 )
 
 install(TARGETS kritaglobal  ${INSTALL_TARGETS_DEFAULT_ARGS})

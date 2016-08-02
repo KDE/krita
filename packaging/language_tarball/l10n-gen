@@ -1,0 +1,173 @@
+#!/usr/bin/env python3
+
+import sys
+import os
+import optparse
+import subprocess
+import re
+import requests
+import fnmatch
+import shutil
+import tarfile
+import datetime
+import subprocess
+from tempfile import TemporaryDirectory
+
+class OptionParser(optparse.OptionParser):
+    def __init__(self):
+        super().__init__(self.usage)
+
+        self.add_option('--ppa-testing', action="store_true", dest='ppa_testing')
+        self.add_option('--ppa-2.9', action="store_true", dest='ppa_2_9')
+        self.add_option('--win-2.9', action="store_true", dest='win_2_9')
+        self.add_option('--win-3.0', action="store_true", dest='win_3_0')
+
+    def parse(self):
+        (self.options, self.args) = self.parse_args()
+
+    usage = ''
+
+
+def get(filename, target, branch, base = 'svn://anonsvn.kde.org/home/kde'):
+    print('GET: ' + os.path.join(target, filename), end='')
+    url = os.path.join(base, branch, filename)
+
+
+    with TemporaryDirectory() as temp_dir:
+         error_code = subprocess.call(['svn', 'export', url, temp_dir],
+	 	    stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
+         if (not error_code):
+              target_path = os.path.join(target, os.path.dirname(filename))
+              target_filename = os.path.join(target, filename)
+              os.makedirs(target_path, exist_ok=True)
+              shutil.move(os.path.join(temp_dir, os.path.basename(filename)), target_filename)
+              print(' [OK]')
+         else:
+              print(' [NA]')
+              #import pdb; pdb.set_trace()
+              return False
+
+    return True
+
+def get_translations(target, branch = 'branches/stable/l10n-kde4', build = False):
+    shutil.rmtree(target)
+
+    if get('subdirs', target, branch):
+        with open(os.path.join(target, 'subdirs'), 'r') as subdirs_file:
+            subdirs = subdirs_file.read()
+
+        if target.endswith('win'):
+            all_languages = 'https://quickgit.kde.org/?o=plain&a=blob&p=kdelibs.git&f=kdecore/localization/all_languages.desktop'
+            print('GET: ' + all_languages, end='')
+            req = requests.get(all_languages)
+            if (req.status_code == 200):
+                os.makedirs(os.path.join(target, 'locale'), exist_ok=True)
+                with open(os.path.join(target, 'locale', 'all_languages'), 'wb') as file_all_languages:
+                    file_all_languages.write(req.content)
+                    print(' [OK]')
+            else:
+                print(' [NA]')
+                return False
+
+        languages = []
+        if build and target.endswith('win'):
+            os.makedirs(os.path.join(target, 'locale'), exist_ok=True)
+
+        for lang in subdirs.split('\n'):
+            if lang in ['', 'x-test']:
+                continue
+
+            if not get(lang + '/messages/calligra/krita.po', target, branch):
+                continue
+
+            if build:
+                if not msgfmt(os.path.join(target, lang, 'messages/calligra/krita.po'), target, lang):
+                    return False
+
+            ## these files are prepared by scripty
+            #
+            #po_files = [ 'calligra/desktop_calligra_krita.po',
+            #             'calligra/krita.appdata.po',
+            #]
+
+            po_files = []
+
+            if target.endswith('win'):
+		## these files are now installed by the 'ext_*' scripts
+                # po_files.append('frameworks/desktop_frameworks_kconfig.po')
+		# po_files.append('frameworks/kconfig5_qt.po')
+                # po_files.append('frameworks/kwidgetsaddons5_qt.po')
+                # po_files.append('frameworks/kcompletion5_qt.po')
+                # po_files.append('frameworks/kcoreaddons5_qt.po')
+                # po_files.append('frameworks/kitemviews5_qt.po')
+                # po_files.append('frameworks/kwindowsystem5_qt.po')
+                # po_files.append('frameworks/kwidgetsaddons5_qt.po')
+
+                if get(os.path.join(lang, 'messages', 'entry.desktop'), target, branch) and build:
+                    os.rename(os.path.join(target, lang, 'messages', 'entry.desktop'), os.path.join(target, 'locale', lang, 'entry.desktop'))
+
+            for po_file in po_files:
+                if get(os.path.join(lang, 'messages', po_file), target, branch) and build:
+                    if not msgfmt(os.path.join(target, lang, 'messages', po_file), target, lang):
+                        return False
+
+            if build:
+                shutil.rmtree(os.path.join(target, lang))
+
+            languages.append(lang)
+
+        if target.endswith('win'):
+            os.remove(os.path.join(target, 'subdirs'))
+            if build:
+                now = datetime.datetime.now()
+                packagename = '{0}-{1}_{2}_{3}.tar.gz'.format(target, now.year, now.month, now.day)
+                with tarfile.open(packagename, "w:gz") as tar:
+                    tar.add(os.path.join(target, 'locale'), arcname='locale')
+        else:
+            with open(os.path.join(target, 'subdirs'), 'w') as subdirs_file:
+                subdirs_file.write('\n'.join(languages))
+
+    else:
+        print('\nCouldn\'t fetch subdirs. Aborting')
+        return False
+
+    return True
+
+def msgfmt(po_filename, target, lang):
+    mo_filename = os.path.splitext(os.path.basename(po_filename))[0] + '.mo'
+    mo_dirname = os.path.join(target, 'locale', lang, 'LC_MESSAGES')
+    print('BLD: ' + os.path.join(mo_dirname, mo_filename), end = '')
+    os.makedirs(mo_dirname, exist_ok=True)
+    ret = subprocess.call(['msgfmt','-o', os.path.join(mo_dirname, mo_filename), po_filename])
+    if (ret == 0):
+        os.remove(po_filename)
+        print(' [OK]')
+    else:
+        print(' [FAILED]')
+        return False
+    return True
+
+if __name__ == '__main__':
+    parser = OptionParser()
+    parser.parse()
+
+    if len(sys.argv) == 1:
+        parser.print_help()
+        sys.exit(0)
+
+
+    if parser.options.ppa_testing:
+        get_translations('krita-testing-l10n')
+
+    elif parser.options.ppa_2_9:
+        get_translations('krita-2.9-l10n')
+
+    elif parser.options.win_2_9:
+        get_translations('krita-2.9-l10n-win', build=True)
+
+    elif parser.options.win_3_0:
+        get_translations('krita-3.0-l10n-win', branch = 'trunk/l10n-kf5', build = True)
+
+    else:
+        parser.print_help()

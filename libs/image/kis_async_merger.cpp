@@ -52,7 +52,7 @@
 
 #ifdef DEBUG_MERGER
 #define DEBUG_NODE_ACTION(message, type, leaf, rect)            \
-    dbgKrita << message << type << ":" << leaf->node()->name() << rect
+    qDebug() << message << type << ":" << leaf->node()->name() << rect
 #else
 #define DEBUG_NODE_ACTION(message, type, leaf, rect)
 #endif
@@ -61,7 +61,7 @@
 class KisUpdateOriginalVisitor : public KisNodeVisitor
 {
 public:
-    KisUpdateOriginalVisitor(QRect updateRect, KisPaintDeviceSP projection, QRect cropRect)
+    KisUpdateOriginalVisitor(const QRect &updateRect, KisPaintDeviceSP projection, const QRect &cropRect)
         : m_updateRect(updateRect),
           m_cropRect(cropRect),
           m_projection(projection)
@@ -327,7 +327,7 @@ void KisAsyncMerger::setupProjection(KisProjectionLeafSP currentLeaf, const QRec
     }
 }
 
-void KisAsyncMerger::writeProjection(KisProjectionLeafSP topmostLeaf, bool useTempProjection, QRect rect) {
+void KisAsyncMerger::writeProjection(KisProjectionLeafSP topmostLeaf, bool useTempProjection, const QRect &rect) {
     Q_UNUSED(useTempProjection);
     Q_UNUSED(topmostLeaf);
     if (!m_currentProjection) return;

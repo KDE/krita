@@ -221,6 +221,7 @@ public:
         QSize oneIcon = static_cast<Section*> (m_sections[0]->widget())->iconSize();
         return oneIcon;
     }
+
     QSize minimumSize() const
     {
         QSize s = sizeHint();

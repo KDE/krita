@@ -24,7 +24,6 @@
 #include <kundo2command.h>
 
 #include <KisMainWindow.h>
-#include <KisDocumentEntry.h>
 #include <KisDocument.h>
 #include <KisPart.h>
 #include <KoPathShape.h>
@@ -417,7 +416,7 @@ void KisPasteNewActionFactory::run(KisViewManager *viewManager)
                                     clip->colorSpace(),
                                     i18n("Pasted"));
     KisPaintLayerSP layer =
-        new KisPaintLayer(image.data(), clip->objectName(),
+        new KisPaintLayer(image.data(), image->nextLayerName() + i18n("(pasted)"),
                           OPACITY_OPAQUE_U8, clip->colorSpace());
 
     KisPainter::copyAreaOptimized(QPoint(), clip, layer->paintDevice(), rect);

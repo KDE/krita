@@ -20,8 +20,6 @@
 #define GL_GLEXT_PROTOTYPES
 
 #include "opengl/kis_opengl_canvas2.h"
-
-#ifdef HAVE_OPENGL
 #include "opengl/kis_opengl_canvas2_p.h"
 
 #include "opengl/kis_opengl_canvas_debugger.h"
@@ -95,7 +93,8 @@ public:
     int cursorShaderModelViewProjectionUniform;
 
     KisDisplayFilter* displayFilter;
-    KisTextureTile::FilterMode filterMode;
+    KisOpenGL::FilterMode filterMode;
+    bool proofingConfigIsUpdated=false;
 
     GLsync glSyncObject{0};
 
@@ -135,6 +134,8 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas,
     , d(new Private())
 {
 
+
+
     QSurfaceFormat format;
     format.setDepthBufferSize(24);
     setFormat(format);
@@ -143,16 +144,21 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas,
     cfg.writeEntry("canvasState", "OPENGL_STARTED");
 
     d->openGLImageTextures =
-        KisOpenGLImageTextures::getImageTextures(image,
-                                                 colorConverter->monitorProfile(),
-                                                 colorConverter->renderingIntent(),
-                                                 colorConverter->conversionFlags());
+            KisOpenGLImageTextures::getImageTextures(image,
+                                                     colorConverter->monitorProfile(),
+                                                     colorConverter->renderingIntent(),
+                                                     colorConverter->conversionFlags());
+
     setAcceptDrops(true);
-    setFocusPolicy(Qt::StrongFocus);
-    setAttribute(Qt::WA_NoSystemBackground);
-    setAttribute(Qt::WA_AcceptTouchEvents);
     setAutoFillBackground(false);
 
+    setFocusPolicy(Qt::StrongFocus);
+    setAttribute(Qt::WA_NoSystemBackground, true);
+#ifdef Q_OS_MAC
+    setAttribute(Qt::WA_AcceptTouchEvents, false);
+#else
+    setAttribute(Qt::WA_AcceptTouchEvents, true);
+#endif
     setAttribute(Qt::WA_InputMethodEnabled, true);
     setAttribute(Qt::WA_DontCreateNativeAncestors, true);
 
@@ -179,12 +185,10 @@ void KisOpenGLCanvas2::setDisplayFilter(KisDisplayFilter* displayFilter) {
 
 void KisOpenGLCanvas2::setDisplayFilterImpl(KisDisplayFilter* displayFilter, bool initializing)
 {
-
     bool needsInternalColorManagement =
-        !displayFilter || displayFilter->useInternalColorManagement();
+            !displayFilter || displayFilter->useInternalColorManagement();
 
-    bool needsFullRefresh = d->openGLImageTextures->
-        setInternalColorManagementActive(needsInternalColorManagement);
+    bool needsFullRefresh = d->openGLImageTextures->setInternalColorManagementActive(needsInternalColorManagement);
 
     d->displayFilter = displayFilter;
     if (d->canvasInitialized) {
@@ -210,36 +214,11 @@ void KisOpenGLCanvas2::setWrapAroundViewingMode(bool value)
 
 void KisOpenGLCanvas2::initializeGL()
 {
-//    KisConfig cfg;
-//    if (cfg.disableVSync()) {
-//        if (!VSyncWorkaround::tryDisableVSync(this)) {
-//            warnUI;
-//            warnUI << "WARNING: We didn't manage to switch off VSync on your graphics adapter.";
-//            warnUI << "WARNING: It means either your hardware or driver doesn't support it,";
-//            warnUI << "WARNING: or we just don't know about this hardware. Please report us a bug";
-//            warnUI << "WARNING: with the output of \'glxinfo\' for your card.";
-//            warnUI;
-//            warnUI << "WARNING: Trying to workaround it by disabling Double Buffering.";
-//            warnUI << "WARNING: You may see some flickering when painting with some tools. It doesn't";
-//            warnUI << "WARNING: affect the quality of the final image, though.";
-//            warnUI;
-
-//            if (cfg.disableDoubleBuffering() && QOpenGLContext::currentContext()->format().swapBehavior() == QSurfaceFormat::DoubleBuffer) {
-//                errUI << "CRITICAL: Failed to disable Double Buffering. Lines may look \"bended\" on your image.";
-//                errUI << "CRITICAL: Your graphics card or driver does not fully support Krita's OpenGL canvas.";
-//                errUI << "CRITICAL: For an optimal experience, please disable OpenGL";
-//                errUI;
-//            }
-//        }
-//    }
+    KisOpenGL::initializeContext(context());
+    initializeOpenGLFunctions();
 
     KisConfig cfg;
-    dbgUI << "OpenGL: Preparing to initialize OpenGL for KisCanvas";
-    int glVersion = KisOpenGL::initializeContext(context());
-    dbgUI << "OpenGL: Version found" << glVersion;
-    initializeOpenGLFunctions();
-    VSyncWorkaround::tryDisableVSync(context());
-
+    d->openGLImageTextures->setProofingConfig(canvas()->proofingConfiguration());
     d->openGLImageTextures->initGL(context()->functions());
     d->openGLImageTextures->generateCheckerTexture(createCheckersImage(cfg.checkSize()));
     initializeCheckerShader();
@@ -330,6 +309,8 @@ void KisOpenGLCanvas2::paintToolOutline(const QPainterPath &path)
 
     // XXX: glLogicOp not in ES 2.0 -- it would be better to use another method.
     // It is defined in 3.1 core profile onward.
+    // Actually, https://www.opengl.org/sdk/docs/man/html/glLogicOp.xhtml says it's in 2.0 onwards,
+    // only not in ES, but we don't care about ES, so we could use the function directly.
     glEnable(GL_COLOR_LOGIC_OP);
     if (ptr_glLogicOp) {
         ptr_glLogicOp(GL_XOR);
@@ -368,12 +349,12 @@ bool KisOpenGLCanvas2::isBusy() const
 
 inline void rectToVertices(QVector3D* vertices, const QRectF &rc)
 {
-     vertices[0] = QVector3D(rc.left(),  rc.bottom(), 0.f);
-     vertices[1] = QVector3D(rc.left(),  rc.top(),    0.f);
-     vertices[2] = QVector3D(rc.right(), rc.bottom(), 0.f);
-     vertices[3] = QVector3D(rc.left(),  rc.top(), 0.f);
-     vertices[4] = QVector3D(rc.right(), rc.top(), 0.f);
-     vertices[5] = QVector3D(rc.right(), rc.bottom(),    0.f);
+    vertices[0] = QVector3D(rc.left(),  rc.bottom(), 0.f);
+    vertices[1] = QVector3D(rc.left(),  rc.top(),    0.f);
+    vertices[2] = QVector3D(rc.right(), rc.bottom(), 0.f);
+    vertices[3] = QVector3D(rc.left(),  rc.top(), 0.f);
+    vertices[4] = QVector3D(rc.right(), rc.top(), 0.f);
+    vertices[5] = QVector3D(rc.right(), rc.bottom(),    0.f);
 }
 
 inline void rectToTexCoords(QVector2D* texCoords, const QRectF &rc)
@@ -399,8 +380,8 @@ void KisOpenGLCanvas2::drawCheckers()
     QRectF modelRect;
 
     QRectF viewportRect = !d->wrapAroundMode ?
-        converter->imageRectInViewportPixels() :
-        converter->widgetToViewport(this->rect());
+                converter->imageRectInViewportPixels() :
+                converter->widgetToViewport(this->rect());
 
     converter->getOpenGLCheckersInfo(viewportRect,
                                      &textureTransform, &modelTransform, &textureRect, &modelRect, d->scrollCheckers);
@@ -432,7 +413,7 @@ void KisOpenGLCanvas2::drawCheckers()
     d->checkerShader->enableAttributeArray(PROGRAM_TEXCOORD_ATTRIBUTE);
     d->checkerShader->setAttributeArray(PROGRAM_TEXCOORD_ATTRIBUTE, d->texCoords);
 
-     // render checkers
+    // render checkers
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, d->openGLImageTextures->checkerTexture());
 
@@ -569,16 +550,16 @@ void KisOpenGLCanvas2::drawImage()
                 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
                 switch(d->filterMode) {
-                case KisTextureTile::NearestFilterMode:
+                case KisOpenGL::NearestFilterMode:
                     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
                     break;
-                case KisTextureTile::BilinearFilterMode:
+                case KisOpenGL::BilinearFilterMode:
                     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
                     break;
-                case KisTextureTile::TrilinearFilterMode:
+                case KisOpenGL::TrilinearFilterMode:
                     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
                     break;
-                case KisTextureTile::HighQualityFiltering:
+                case KisOpenGL::HighQualityFiltering:
                     if (SCALE_LESS_THAN(scaleX, scaleY, 0.5)) {
                         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
                     } else {
@@ -620,14 +601,26 @@ void KisOpenGLCanvas2::initializeCheckerShader()
 
     delete d->checkerShader;
     d->checkerShader = new QOpenGLShaderProgram();
+    QString vertexShaderName;
+    QString fragmentShaderName;
 
     bool result;
 
-    result = d->checkerShader->addShaderFromSourceFile(QOpenGLShader::Vertex, ":/matrix_transform.vert");
+    if (KisOpenGL::supportsGLSL13()) {
+        vertexShaderName = ":/matrix_transform.vert";
+        fragmentShaderName = ":/simple_texture.frag";
+    }
+    else {
+        vertexShaderName = ":/matrix_transform_legacy.vert";
+        fragmentShaderName = ":/simple_texture_legacy.frag";
+    }
+
+    result = d->checkerShader->addShaderFromSourceFile(QOpenGLShader::Vertex, vertexShaderName);
     reportShaderLinkFailedAndExit(result, "Checker vertex shader", d->checkerShader->log());
 
-    result = d->checkerShader->addShaderFromSourceFile(QOpenGLShader::Fragment, ":/simple_texture.frag");
+    result = d->checkerShader->addShaderFromSourceFile(QOpenGLShader::Fragment, fragmentShaderName);
     reportShaderLinkFailedAndExit(result, "Checker fragment shader", d->checkerShader->log());
+
 
     d->checkerShader->bindAttributeLocation("a_vertexPosition", PROGRAM_VERTEX_ATTRIBUTE);
     d->checkerShader->bindAttributeLocation("a_textureCoordinate", PROGRAM_TEXCOORD_ATTRIBUTE);
@@ -647,21 +640,29 @@ QByteArray KisOpenGLCanvas2::buildFragmentShader()
     QByteArray shaderText;
 
     bool haveDisplayFilter = d->displayFilter && !d->displayFilter->program().isEmpty();
-    bool useHiQualityFiltering = d->filterMode == KisTextureTile::HighQualityFiltering;
+    bool useHiQualityFiltering = d->filterMode == KisOpenGL::HighQualityFiltering;
+    bool haveGLSL13 = KisOpenGL::supportsGLSL13();
 
-    QString filename = "highq_downscale.frag";
-    // FIXME is this necessary?
-    shaderText.append("#version 130\n");
+    QString filename;
+
+    if (haveGLSL13) {
+        filename = "highq_downscale.frag";
+        shaderText.append("#version 130\n");
+    } else {
+        filename = "simple_texture_legacy.frag";
+    }
 
     if (haveDisplayFilter) {
         shaderText.append("#define USE_OCIO\n");
         shaderText.append(d->displayFilter->program().toLatin1());
     }
 
-    if (useHiQualityFiltering) {
+    if (haveGLSL13 && useHiQualityFiltering) {
         shaderText.append("#define HIGHQ_SCALING\n");
     }
-    shaderText.append("#define DIRECT_LOD_FETCH\n");
+    if (haveGLSL13) {
+        shaderText.append("#define DIRECT_LOD_FETCH\n");
+    }
 
     {
         QFile prefaceFile(":/" + filename);
@@ -682,7 +683,12 @@ void KisOpenGLCanvas2::initializeDisplayShader()
     bool result = d->displayShader->addShaderFromSourceCode(QOpenGLShader::Fragment, buildFragmentShader());
     reportShaderLinkFailedAndExit(result, "Display fragment shader", d->displayShader->log());
 
-    result = d->displayShader->addShaderFromSourceFile(QOpenGLShader::Vertex, ":/matrix_transform.vert");
+    if (KisOpenGL::supportsGLSL13()) {
+        result = d->displayShader->addShaderFromSourceFile(QOpenGLShader::Vertex, ":/matrix_transform.vert");
+    }
+    else {
+        result = d->displayShader->addShaderFromSourceFile(QOpenGLShader::Vertex, ":/matrix_transform_legacy.vert");
+    }
 
     reportShaderLinkFailedAndExit(result, "Display vertex shader", d->displayShader->log());
 
@@ -707,12 +713,13 @@ void KisOpenGLCanvas2::initializeDisplayShader()
     // highq
     d->displayUniformLocationTexelSize = d->displayShader->uniformLocation("texelSize");
 
-
     // TODO: The trilinear filtering mode is having issues when that is set in the application. It sometimes causes Krita to crash
     // I cannot tell where that is at in here... Scott P (11/8/2015)
 
     // lod
-    d->displayUniformLocationFixedLodLevel = d->displayShader->uniformLocation("fixedLodLevel");
+    d->displayUniformLocationFixedLodLevel =
+            KisOpenGL::supportsGLSL13() ?
+                d->displayShader->uniformLocation("fixedLodLevel") : -1;
 }
 
 void KisOpenGLCanvas2::slotConfigChanged()
@@ -723,7 +730,7 @@ void KisOpenGLCanvas2::slotConfigChanged()
 
     d->openGLImageTextures->generateCheckerTexture(createCheckersImage(cfg.checkSize()));
     d->openGLImageTextures->updateConfig(cfg.useOpenGLTextureBuffer(), cfg.numMipmapLevels());
-    d->filterMode = (KisTextureTile::FilterMode) cfg.openGLFilteringMode();
+    d->filterMode = (KisOpenGL::FilterMode) cfg.openGLFilteringMode();
 
     notifyConfigChanged();
 }
@@ -744,6 +751,10 @@ void KisOpenGLCanvas2::renderCanvasGL()
     QColor widgetBackgroundColor = borderColor();
     glClearColor(widgetBackgroundColor.redF(), widgetBackgroundColor.greenF(), widgetBackgroundColor.blueF(), 1.0);
     glClear(GL_COLOR_BUFFER_BIT);
+
+    if (d->displayFilter) {
+        d->displayFilter->updateShader();
+    }
 
     drawCheckers();
     drawImage();
@@ -779,6 +790,10 @@ void KisOpenGLCanvas2::finishResizingImage(qint32 w, qint32 h)
 KisUpdateInfoSP KisOpenGLCanvas2::startUpdateCanvasProjection(const QRect & rc, const QBitArray &channelFlags)
 {
     d->openGLImageTextures->setChannelFlags(channelFlags);
+    if (canvas()->proofingConfigUpdated()) {
+        d->openGLImageTextures->setProofingConfig(canvas()->proofingConfiguration());
+        canvas()->setProofingConfigUpdated(false);
+    }
     return d->openGLImageTextures->updateCache(rc);
 }
 
@@ -802,5 +817,3 @@ KisOpenGLImageTexturesSP KisOpenGLCanvas2::openGLImageTextures() const
 {
     return d->openGLImageTextures;
 }
-
-#endif // HAVE_OPENGL

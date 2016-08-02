@@ -257,7 +257,7 @@ QSize RAdjustableLabel::minimumSizeHint() const
 
 QSize RAdjustableLabel::sizeHint() const
 {
-    QFontMetrics fm(fontMetrics());    
+    QFontMetrics fm(fontMetrics());
     int maxW     = QApplication::desktop()->screenGeometry(this).width() * 3 / 4;
     int currentW = fm.width(d->ajdText);
 
@@ -339,10 +339,10 @@ public:
         fdMode    = QFileDialog::ExistingFile;
         fdOptions = QFileDialog::DontUseNativeDialog;
     }
- 
+
     QLineEdit*            edit;
     QPushButton*          btn;
-    
+
     QFileDialog::FileMode fdMode;
     QString               fdFilter;
     QString               fdTitle;
@@ -356,7 +356,7 @@ RFileSelector::RFileSelector(QWidget* const parent)
     d->edit    = new QLineEdit(this);
     d->btn     = new QPushButton(i18n("Browse..."), this);
     setStretchFactor(d->edit, 10);
-    
+
     connect(d->btn, SIGNAL(clicked()),
             this, SLOT(slotBtnClicked()));
 }
@@ -424,7 +424,7 @@ void RFileSelector::slotBtnClicked()
             d->edit->setText(sel.first());
         }
     }
-    
+
     delete fileDlg;
 }
 
@@ -432,7 +432,7 @@ void RFileSelector::slotBtnClicked()
 
 WorkingPixmap::WorkingPixmap()
 {
-    QPixmap pix(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("libkdcraw/pics/process-working.png")));
+    QPixmap pix(QStandardPaths::locate(QStandardPaths::AppDataLocation, QLatin1String("libkdcraw/pics/process-working.png")));
     QSize   size(22, 22);
 
     if (pix.isNull())
@@ -513,7 +513,7 @@ public:
     Private()
     {
     }
- 
+
     QColor color;
 };
 
@@ -537,12 +537,12 @@ void RColorSelector::setColor(const QColor& color)
         d->color = color;
         update();
     }
-}    
+}
 
 QColor RColorSelector::color() const
 {
     return d->color;
-}    
+}
 
 void RColorSelector::slotBtnClicked()
 {
@@ -584,11 +584,11 @@ void RColorSelector::paintEvent(QPaintEvent*)
 
     QColor fillCol = isEnabled() ? d->color : palette().color(backgroundRole());
     qDrawShadePanel(&painter, x, y, w, h, palette(), true, 1, 0);
-    
+
     if (fillCol.isValid())
     {
         const QRect rect(x + 1, y + 1, w - 2, h - 2);
-        
+
         if (fillCol.alpha() < 255)
         {
             QPixmap chessboardPattern(16, 16);

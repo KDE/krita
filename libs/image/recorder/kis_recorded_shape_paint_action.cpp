@@ -40,6 +40,7 @@
 #include "kis_image.h"
 #include "kis_layer.h"
 #include "kis_node_query_path.h"
+#include <kis_dom_utils.h>
 
 struct Q_DECL_HIDDEN KisRecordedShapePaintAction::Private {
     Shape shape;
@@ -97,10 +98,10 @@ void KisRecordedShapePaintAction::toXML(QDomDocument& doc, QDomElement& elt, Kis
 {
     KisRecordedPaintAction::toXML(doc, elt, context);
     QDomElement rectangleElt = doc.createElement("Rectangle");
-    rectangleElt.setAttribute("x", d->rectangle.x());
-    rectangleElt.setAttribute("y", d->rectangle.y());
-    rectangleElt.setAttribute("width", d->rectangle.width());
-    rectangleElt.setAttribute("height", d->rectangle.height());
+    rectangleElt.setAttribute("x", KisDomUtils::toString(d->rectangle.x()));
+    rectangleElt.setAttribute("y", KisDomUtils::toString(d->rectangle.y()));
+    rectangleElt.setAttribute("width", KisDomUtils::toString(d->rectangle.width()));
+    rectangleElt.setAttribute("height", KisDomUtils::toString(d->rectangle.height()));
     elt.appendChild(rectangleElt);
     switch(d->shape)
     {
@@ -139,11 +140,12 @@ KisRecordedAction* KisRecordedShapePaintActionFactory::fromXML(const QDomElement
     QDomElement ellipseElt = elt.firstChildElement("Rectangle");
     qreal x, y, width, height;
     if (!ellipseElt.isNull()) {
-        x = ellipseElt.attribute("x", "0.0").toDouble();
-        y = ellipseElt.attribute("y", "0.0").toDouble();
-        width = ellipseElt.attribute("width", "0.0").toDouble();
-        height = ellipseElt.attribute("height", "0.0").toDouble();
-    } else {
+        x = KisDomUtils::toDouble(ellipseElt.attribute("x", "0.0"));
+        y = KisDomUtils::toDouble(ellipseElt.attribute("y", "0.0"));
+        width = KisDomUtils::toDouble(ellipseElt.attribute("width", "0.0"));
+        height = KisDomUtils::toDouble(ellipseElt.attribute("height", "0.0"));
+    }
+    else {
         x = 0;
         y = 0;
         width = 0;

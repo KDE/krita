@@ -60,10 +60,12 @@ public:
 
     bool isInitialized() const;
     bool isEnded() const;
+    bool isCancelled() const;
 
     bool isExclusive() const;
     bool supportsWrapAroundMode() const;
     int worksOnLevelOfDetail() const;
+    bool canForgetAboutMe() const;
 
     bool prevJobSequential() const;
     bool nextJobSequential() const;

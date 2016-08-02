@@ -41,7 +41,7 @@ public:
     QRect changeRect(const QRect &rect, KisLayer::PositionToFilthy pos) const;
     QRect accessRect(const QRect &rect, KisLayer::PositionToFilthy pos) const;
 
-    void syncLodCache();
+    KisPaintDeviceList getLodCapableDevices() const;
 
 
     // a method for registering on KisLayerStyleProjectionPlaneFactory

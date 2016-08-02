@@ -6,9 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>739</width>
-    <height>586</height>
+    <width>505</width>
+    <height>270</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
    <item>
@@ -21,10 +27,16 @@
        <item>
         <widget class="QTreeWidget" name="m_sectionList">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>170</width>
+           <height>0</height>
+          </size>
          </property>
          <property name="iconSize">
           <size>
@@ -55,13 +67,6 @@
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="m_openExistingButton">
-         <property name="text">
-          <string>Open Existing Document</string>
-         </property>
-        </widget>
-       </item>
-       <item>
         <widget class="QPushButton" name="cancelButton">
          <property name="text">
           <string>Cancel</string>
@@ -75,7 +80,7 @@
        <bool>true</bool>
       </property>
       <property name="sizePolicy">
-       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+       <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
         <horstretch>1</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>

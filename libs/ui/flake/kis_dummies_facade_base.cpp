@@ -138,7 +138,7 @@ void KisDummiesFacadeBase::slotContinueAddNode(KisNodeSP node, KisNodeSP parent,
     // Add one because this node does not exist yet
     int index = parentDummy && aboveThisDummy ?
         parentDummy->indexOf(aboveThisDummy) + 1 : 0;
-    emit sigBeginInsertDummy(parentDummy, index, node->metaObject()->className(), node->isAnimated());
+    emit sigBeginInsertDummy(parentDummy, index, node->metaObject()->className());
 
     addNodeImpl(node, parent, aboveThis);
 

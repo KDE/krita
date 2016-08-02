@@ -7,29 +7,11 @@ if (CMAKE_COMPILER_IS_GNUCXX)
 endif ()
 
 include_directories(
-    ${CMAKE_CURRENT_SOURCE_DIR}/flake
-    ${CMAKE_CURRENT_SOURCE_DIR}/ora
-    ${CMAKE_CURRENT_SOURCE_DIR}/qtsingleapplication
     ${CMAKE_CURRENT_SOURCE_DIR}/qtlockedfile
-    ${CMAKE_CURRENT_SOURCE_DIR}/actions
-    ${CMAKE_CURRENT_SOURCE_DIR}/canvas
-    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs
-    ${CMAKE_CURRENT_SOURCE_DIR}/forms
-    ${CMAKE_CURRENT_SOURCE_DIR}/input
-    ${CMAKE_CURRENT_SOURCE_DIR}/input/config
-    ${CMAKE_CURRENT_SOURCE_DIR}/input/wintab
-    ${CMAKE_CURRENT_SOURCE_DIR}/kisexiv2
-    ${CMAKE_CURRENT_SOURCE_DIR}/kra
-    ${CMAKE_CURRENT_SOURCE_DIR}/layerstyles
-    ${CMAKE_CURRENT_SOURCE_DIR}/opengl
-    ${CMAKE_CURRENT_SOURCE_DIR}/operations
-    ${CMAKE_CURRENT_SOURCE_DIR}/processing
-    ${CMAKE_CURRENT_SOURCE_DIR}/recorder
-    ${CMAKE_CURRENT_SOURCE_DIR}/resourcemanager
-    ${CMAKE_CURRENT_SOURCE_DIR}/tool
-    ${CMAKE_CURRENT_SOURCE_DIR}/tool/strokes
-    ${CMAKE_CURRENT_SOURCE_DIR}/widgets
     ${EXIV2_INCLUDE_DIR}
+)
+
+include_directories(SYSTEM
     ${EIGEN3_INCLUDE_DIR}
     ${OCIO_INCLUDE_DIR}
     ${Boost_INCLUDE_DIRS}
@@ -55,9 +37,7 @@ set(kritaui_LIB_SRCS
     canvas/kis_coordinates_converter.cpp
     canvas/kis_grid_manager.cpp
     canvas/kis_grid_decoration.cpp
-    canvas/kis_grid_painter_configuration.cpp
-    canvas/kis_perspective_grid_manager.cpp
-    canvas/kis_perspective_grid_decoration.cpp
+    canvas/kis_grid_config.cpp
     canvas/kis_prescaled_projection.cpp
     canvas/kis_qpainter_canvas.cpp
     canvas/kis_projection_backend.cpp
@@ -65,6 +45,12 @@ set(kritaui_LIB_SRCS
     canvas/kis_image_patch.cpp
     canvas/kis_image_pyramid.cpp
     canvas/kis_infinity_manager.cpp
+    canvas/kis_change_guides_command.cpp
+    canvas/kis_guides_decoration.cpp
+    canvas/kis_guides_manager.cpp
+    canvas/kis_guides_config.cpp
+    canvas/kis_snap_config.cpp
+    canvas/kis_snap_line_strategy.cpp
     dialogs/kis_about_application.cpp
     dialogs/kis_dlg_adj_layer_props.cc
     dialogs/kis_dlg_adjustment_layer.cc
@@ -92,11 +78,13 @@ set(kritaui_LIB_SRCS
     flake/kis_shape_selection_canvas.cpp
     flake/kis_shape_selection_model.cpp
     flake/kis_take_all_shapes_command.cpp
+    kis_aspect_ratio_locker.cpp
     kis_autogradient.cc
     kis_bookmarked_configurations_editor.cc
     kis_bookmarked_configurations_model.cc
     kis_bookmarked_filter_configurations_model.cc
     kis_canvas_resource_provider.cpp
+    kis_derived_resources.cpp
     kis_categories_mapper.cpp
     kis_categorized_list_model.cpp
     kis_categorized_item_delegate.cpp
@@ -107,6 +95,7 @@ set(kritaui_LIB_SRCS
     kis_composite_ops_model.cc
     kis_paint_ops_model.cpp
     kis_cursor.cc
+    kis_cursor_cache.cpp
     kis_custom_pattern.cc
     kis_file_layer.cpp
     kis_safe_document_loader.cpp
@@ -126,6 +115,7 @@ set(kritaui_LIB_SRCS
     kis_node_selection_adapter.cpp
     kis_node_insertion_adapter.cpp
     kis_node_model.cpp
+    kis_node_filter_proxy_model.cpp
     kis_model_index_converter_base.cpp
     kis_model_index_converter.cpp
     kis_model_index_converter_show_all.cpp
@@ -168,7 +158,6 @@ set(kritaui_LIB_SRCS
     opengl/kis_opengl_canvas_debugger.cpp
     opengl/kis_opengl_image_textures.cpp
     opengl/kis_texture_tile.cpp
-    opengl/kis_texture_tile_update_info.cpp
     kis_fps_decoration.cpp
     ora/kis_open_raster_stack_load_visitor.cpp
     ora/kis_open_raster_stack_save_visitor.cpp
@@ -192,6 +181,7 @@ set(kritaui_LIB_SRCS
     tool/kis_tool_freehand.cc
     tool/kis_speed_smoother.cpp
     tool/kis_painting_information_builder.cpp
+    tool/kis_stabilized_events_sampler.cpp
     tool/kis_tool_freehand_helper.cpp
     tool/kis_tool_multihand_helper.cpp
     tool/kis_figure_painting_tool_helper.cpp
@@ -207,6 +197,7 @@ set(kritaui_LIB_SRCS
     tool/strokes/freehand_stroke.cpp
     tool/strokes/kis_painter_based_stroke_strategy.cpp
     tool/strokes/kis_filter_stroke_strategy.cpp
+    tool/strokes/kis_color_picker_stroke_strategy.cpp
     widgets/kis_cmb_composite.cc
     widgets/kis_cmb_contour.cpp
     widgets/kis_cmb_gradient.cpp
@@ -242,7 +233,6 @@ set(kritaui_LIB_SRCS
     widgets/kis_scratch_pad.cpp
     widgets/kis_scratch_pad_event_filter.cpp
     widgets/kis_preset_selector_strip.cpp
-    widgets/kis_tree_view_popup.cc
     widgets/kis_slider_spin_box.cpp
     widgets/kis_size_group.cpp
     widgets/kis_size_group_p.cpp
@@ -254,6 +244,8 @@ set(kritaui_LIB_SRCS
     widgets/kis_tool_button.cpp
     widgets/kis_floating_message.cpp
     widgets/kis_lod_availability_widget.cpp
+    widgets/kis_color_label_selector_widget.cpp
+    widgets/kis_color_filter_combo.cpp
     input/kis_input_manager.cpp
     input/kis_input_manager_p.cpp
     input/kis_extended_modifiers_mapper.cpp
@@ -312,10 +304,11 @@ set(kritaui_LIB_SRCS
     KisAutoSaveRecoveryDialog.cpp
     KisDetailsPane.cpp
     KisDocument.cpp
-    KisDocumentEntry.cpp
     KisNodeDelegate.cpp
+    kis_node_view_visibility_delegate.cpp
     KisNodeToolTip.cpp
     KisNodeView.cpp
+    kis_node_view_color_scheme.cpp
     KisFilterChain.cpp
     KisFilterChainLink.cpp
     KisFilterChainLinkList.cpp
@@ -324,7 +317,6 @@ set(kritaui_LIB_SRCS
     KisFilterEntry.cpp
     KisFilterGraph.cpp
     KisImportExportManager.cpp
-    KisImportExportManager_p.cpp
     KisFilterVertex.cpp
     KisMainWindow.cpp
     KisOpenPane.cpp
@@ -357,14 +349,18 @@ set(kritaui_LIB_SRCS
     KisApplicationArguments.cpp
 
     KisNetworkAccessManager.cpp
-    KisWelcomeScreen.cpp
     KisMultiFeedRSSModel.cpp
+    KisRemoteFileFetcher.cpp
 
     KisPaletteModel.cpp
     KisColorsetChooser.cpp
+    KisSaveGroupVisitor.cpp
 )
 
 if(WIN32)
+    if (NOT Qt5Gui_PRIVATE_INCLUDE_DIRS)
+        message(FATAL_ERROR "Qt5Gui Private header are missing!")
+    endif()
     set(kritaui_LIB_SRCS
         ${kritaui_LIB_SRCS}
         input/kis_tablet_event.cpp
@@ -374,7 +370,6 @@ if(WIN32)
         )
       include_directories(${Qt5Gui_PRIVATE_INCLUDE_DIRS})
 endif()
-if (HAVE_OPENGL)
     set(kritaui_LIB_SRCS
         ${kritaui_LIB_SRCS}
         kis_animation_frame_cache.cpp
@@ -383,7 +378,6 @@ if (HAVE_OPENGL)
         kis_animation_exporter.cpp
         kis_animation_importer.cpp
     )
-endif()
 
 if(UNIX)
     set(kritaui_LIB_SRCS
@@ -403,8 +397,6 @@ if(UNIX)
     endif()
 endif()
 
-kde_enable_exceptions()
-
 if(WIN32)
     #ki18n_wrap_ui(
     #    input/wintab/kis_screen_size_choice_dialog.ui
@@ -419,7 +411,6 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
     forms/wdgautogradient.ui
     forms/wdggeneralsettings.ui
     forms/wdgperformancesettings.ui
-    forms/wdggridsettings.ui
     forms/wdggenerators.ui
     forms/wdgcustompalette.ui
     forms/wdgbookmarkedconfigurationseditor.ui
@@ -507,15 +498,11 @@ if(APPLE)
 endif ()
 
 
-if(HAVE_OPENEXR)
-    target_link_libraries(kritaui ${OPENEXR_LIBRARIES})
-endif()
+target_link_libraries(kritaui ${OPENEXR_LIBRARIES})
 
-if(HAVE_OPENGL)
-    # Add VSync disable workaround
-    if(NOT WIN32 AND NOT APPLE)
-      target_link_libraries(kritaui ${CMAKE_DL_LIBS} Qt5::X11Extras)
-    endif()
+# Add VSync disable workaround
+if(NOT WIN32 AND NOT APPLE)
+    target_link_libraries(kritaui ${CMAKE_DL_LIBS} Qt5::X11Extras)
 endif()
 
 if(X11_FOUND)
@@ -535,7 +522,7 @@ target_include_directories(kritaui
 )
 
 set_target_properties(kritaui
-    PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
+    PROPERTIES VERSION ${GENERIC_KRITA_LIB_VERSION} SOVERSION ${GENERIC_KRITA_LIB_SOVERSION}
 )
 install(TARGETS kritaui  ${INSTALL_TARGETS_DEFAULT_ARGS})
 

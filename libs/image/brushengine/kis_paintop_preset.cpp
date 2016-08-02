@@ -71,7 +71,7 @@ KisPaintOpPresetSP KisPaintOpPreset::clone() const
     KisPaintOpPresetSP preset = new KisPaintOpPreset();
 
     if (settings()) {
-        preset->setSettings(settings()->clone());
+        preset->setSettings(settings()); // the settings are cloned inside!
     }
     preset->setPresetDirty(isPresetDirty());
     // only valid if we could clone the settings
@@ -114,13 +114,16 @@ void KisPaintOpPreset::setSettings(KisPaintOpSettingsSP settings)
 
     DirtyStateSaver dirtyStateSaver(this);
 
+    if (m_d->settings) {
+        m_d->settings->setPreset(0);
+        m_d->settings = 0;
+    }
+
     if (settings) {
         m_d->settings = settings->clone();
         m_d->settings->setPreset(KisPaintOpPresetWSP(this));
-    } else {
-        m_d->settings = 0;
-        m_d->settings->setPreset(0);
     }
+
     setValid(m_d->settings);
 }
 

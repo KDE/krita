@@ -25,6 +25,7 @@
 #include <QObject>
 #include <QImage>
 #include <QMessageBox>
+#include <QCheckBox>
 #include <QBuffer>
 #include <QGlobalStatic>
 
@@ -250,23 +251,38 @@ KisPaintDeviceSP KisClipboard::clip(const QRect &imageBounds, bool showPopup)
             return KisPaintDeviceSP(0);
 
         KisConfig cfg;
-
         quint32 behaviour = cfg.pasteBehaviour();
+        bool saveColorSetting = false;
+
 
         if (behaviour == PASTE_ASK && showPopup) {
             // Ask user each time.
             QMessageBox mb(qApp->activeWindow());
-            mb.setWindowTitle(i18nc("@title:window", "Pasting data from simple source"));
-            mb.setText(i18n("The image data you are trying to paste has no color profile information.\n\nOn the web and in simple applications the data are supposed to be in sRGB color format.\nImporting as web will show it as it is supposed to look.\nMost monitors are not perfect though so if you made the image yourself\nyou might want to import it as it looked on you monitor.\n\nHow do you want to interpret these data?"));
+            QCheckBox dontPrompt(i18n("Remember"), &mb);
+
+            dontPrompt.blockSignals(true);
+
+
+
+            mb.setWindowTitle(i18nc("@title:window", "Missing Color Profile"));
+            mb.setText(i18n("The image data you are trying to paste has no color profile information. How do you want to interpret these data? \n\n As Web (sRGB) -  Use standard colors that are displayed from computer monitors.  This is the most common way that images are stored. \n\nAs on Monitor - If you know a bit about color management and want to use your monitor to determine the color profile.\n\n"));
+
+            // the order of how you add these buttons matters as it determines the index.
             mb.addButton(i18n("As &Web"), QMessageBox::AcceptRole);
             mb.addButton(i18n("As on &Monitor"), QMessageBox::AcceptRole);
             mb.addButton(i18n("Cancel"), QMessageBox::RejectRole);
+            mb.addButton(&dontPrompt, QMessageBox::ActionRole);
+
+
 
             behaviour = mb.exec();
 
             if (behaviour > 1) {
                 return 0;
             }
+
+            saveColorSetting = dontPrompt.isChecked(); // should we save this option to the config for next time?
+
 
         }
 
@@ -289,6 +305,12 @@ KisPaintDeviceSP KisClipboard::clip(const QRect &imageBounds, bool showPopup)
         QPoint diff = imageBounds.center() - clipBounds.center();
         clip->setX(diff.x());
         clip->setY(diff.y());
+
+        // save the persion's selection to the configuration if the option is checked
+        if (saveColorSetting) {
+            cfg.setPasteBehaviour(behaviour);
+        }
+
     }
 
     return clip;
@@ -387,7 +409,10 @@ QSize KisClipboard::clipSize() const
 
 void KisClipboard::setLayers(KisNodeList nodes, KisNodeSP imageRoot, bool forceCopy)
 {
-    QMimeData *data = KisMimeData::mimeForLayers(nodes, imageRoot, forceCopy);
+    /**
+     * See a comment in KisMimeData::deepCopyNodes()
+     */
+    QMimeData *data = KisMimeData::mimeForLayersDeepCopy(nodes, imageRoot, forceCopy);
     if (!data) return;
 
     QClipboard *cb = QApplication::clipboard();

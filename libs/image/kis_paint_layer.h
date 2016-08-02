@@ -148,6 +148,8 @@ public:
 
     void enableAnimation();
 
+    KisPaintDeviceList getLodCapableDevices() const;
+
 public Q_SLOTS:
     void slotExternalUpdateOnionSkins();
 

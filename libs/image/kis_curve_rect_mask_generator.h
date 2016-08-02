@@ -36,7 +36,9 @@ class KRITAIMAGE_EXPORT KisCurveRectangleMaskGenerator : public KisMaskGenerator
 public:
 
     KisCurveRectangleMaskGenerator(qreal radius, qreal ratio, qreal fh, qreal fv, int spikes, const KisCubicCurve& curve, bool antialiasEdges);
+    KisCurveRectangleMaskGenerator(const KisCurveRectangleMaskGenerator &rhs);
     virtual ~KisCurveRectangleMaskGenerator();
+    KisMaskGenerator* clone() const;
 
     virtual quint8 valueAt(qreal x, qreal y) const;
 

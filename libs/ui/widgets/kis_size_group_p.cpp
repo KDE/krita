@@ -50,7 +50,7 @@ void KisSizeGroupPrivate::addWidget(QWidget *widget)
         QLayout *layout = parent->layout();
         if (layout) {
             // Search for the widget index and the QLayoutItem inside of the layout
-            QLayoutItem *layoutItem =  NULL;
+            QLayoutItem *layoutItem =  0;
             int layoutWidgetIndex = 0;
             for(int i = 0; i < layout->count(); ++i) {
                 layoutItem = layout->itemAt(layoutWidgetIndex);
@@ -126,7 +126,7 @@ void KisSizeGroupPrivate::removeWidget(QWidget *widget)
         QLayout *layout = parent->layout();
         if (layout) {
             // Search the GroupItem of the widget inside of the GroupItem list
-            GroupItem *widgetGroupItem = NULL;
+            GroupItem *widgetGroupItem = 0;
             Q_FOREACH(GroupItem * groupItem, m_groupItems) {
                 if (groupItem->widget() == widget) {
                     widgetGroupItem = groupItem;

@@ -33,8 +33,8 @@ SpiralShapeConfigWidget::SpiralShapeConfigWidget()
     widget.fade->setMaximum(1.0);
 
     widget.clockWise->clear();
-    widget.clockWise->addItem("ClockWise");
-    widget.clockWise->addItem("Anti-ClockWise");
+    widget.clockWise->addItem(i18n("Clockwise"));
+    widget.clockWise->addItem(i18n("Anticlockwise"));
 
     connect(widget.spiralType, SIGNAL(currentIndexChanged(int)), this, SIGNAL(propertyChanged()));
     connect(widget.clockWise, SIGNAL(currentIndexChanged(int)), this, SIGNAL(propertyChanged()));

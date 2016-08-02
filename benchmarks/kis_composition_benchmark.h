@@ -30,12 +30,18 @@ private Q_SLOTS:
     void checkRoundingAlphaDarken_05_07();
     void checkRoundingAlphaDarken_05_10();
     void checkRoundingAlphaDarken_05_10_08();
+    void checkRoundingAlphaDarkenF32_05_03();
+    void checkRoundingAlphaDarkenF32_05_05();
+    void checkRoundingAlphaDarkenF32_05_07();
+    void checkRoundingAlphaDarkenF32_05_10();
+    void checkRoundingAlphaDarkenF32_05_10_08();
 
     void checkRoundingOver();
     void checkRoundingOverRgbaF32();
 
     void compareAlphaDarkenOps();
     void compareAlphaDarkenOpsNoMask();
+    void compareRgbF32AlphaDarkenOps();
     void compareOverOps();
     void compareOverOpsNoMask();
     void compareRgbF32OverOps();
@@ -45,6 +51,9 @@ private Q_SLOTS:
 
     void testRgb8CompositeOverLegacy();
     void testRgb8CompositeOverOptimized();
+
+    void testRgbF32CompositeAlphaDarkenLegacy();
+    void testRgbF32CompositeAlphaDarkenOptimized();
 
     void testRgbF32CompositeOverLegacy();
     void testRgbF32CompositeOverOptimized();

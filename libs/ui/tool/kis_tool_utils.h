@@ -23,15 +23,10 @@
 #include <KoColor.h>
 #include <kis_types.h>
 #include <kritaui_export.h>
+#include <kis_selection.h>
 
 
 namespace KisToolUtils {
-
-/**
- * return the color at the given position on the given paint device.
- * NOTE: the function takes wraparound mode and image locking into account
- */
-bool pickWrapped(KisPaintDeviceSP dev, QPoint pos, KoColor *color, KisImageSP image);
 
 /**
  * return the color at the given position on the given paint device.
@@ -43,6 +38,11 @@ bool KRITAUI_EXPORT pick(KisPaintDeviceSP dev, const QPoint& pos, KoColor *color
  */
 KisNodeSP KRITAUI_EXPORT findNode(KisNodeSP node, const QPoint &point, bool wholeGroup, bool editableOnly = true);
 
+/**
+ * return true if success
+ * Clears the image. Selection is optional, use 0 to clear everything.
+ */
+bool KRITAUI_EXPORT clearImage(KisImageSP image, KisNodeSP node, KisSelectionSP selection);
 }
 
 #endif // KIS_TOOL_UTILS_H

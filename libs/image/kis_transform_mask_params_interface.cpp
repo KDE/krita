@@ -136,6 +136,17 @@ void KisDumbTransformMaskParams::translate(const QPointF &offset)
     m_d->transform *= QTransform::fromTranslate(offset.x(), offset.y());
 }
 
+QRect KisDumbTransformMaskParams::nonAffineChangeRect(const QRect &rc)
+{
+    return rc;
+}
+
+QRect KisDumbTransformMaskParams::nonAffineNeedRect(const QRect &rc, const QRect &srcBounds)
+{
+    Q_UNUSED(srcBounds);
+    return rc;
+}
+
 QTransform KisDumbTransformMaskParams::testingGetTransform() const
 {
     return m_d->transform;

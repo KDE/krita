@@ -94,6 +94,16 @@ void KisTransformMaskAdapter::translate(const QPointF &offset)
     m_d->args.translate(offset);
 }
 
+QRect KisTransformMaskAdapter::nonAffineChangeRect(const QRect &rc)
+{
+    return KisTransformUtils::changeRect(m_d->args, rc);
+}
+
+QRect KisTransformMaskAdapter::nonAffineNeedRect(const QRect &rc, const QRect &srcBounds)
+{
+    return KisTransformUtils::needRect(m_d->args, rc, srcBounds);
+}
+
 #include "kis_transform_mask_params_factory_registry.h"
 
 struct ToolTransformParamsRegistrar {

@@ -32,6 +32,11 @@ KisLockedProperties::KisLockedProperties(KisPropertiesConfiguration *p)
         m_lockedProperties->setProperty(i.key(), i.value());
     }
 }
+
+KisLockedProperties::~KisLockedProperties()
+{
+    delete m_lockedProperties;
+}
 void KisLockedProperties::addToLockedProperties(KisPropertiesConfiguration *p)
 {
     QMapIterator<QString, QVariant> i(p->getProperties());

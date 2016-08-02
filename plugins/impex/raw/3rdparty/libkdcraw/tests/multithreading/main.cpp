@@ -30,7 +30,7 @@
 #include <QStringList>
 #include <QApplication>
 #include <QStandardPaths>
-#include <QUrl>
+#include <QFileInfo>
 #include <QDebug>
 #include <QFileDialog>
 

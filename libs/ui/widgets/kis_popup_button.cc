@@ -28,6 +28,7 @@
 #include <QStyleOption>
 #include <QStylePainter>
 
+#include "kis_global.h"
 #include <kis_debug.h>
 #include <kis_paintop_presets_popup.h>
 
@@ -150,16 +151,7 @@ void KisPopupButton::adjustPosition()
     // Get the available geometry of the screen which contains this KisPopupButton
     QDesktopWidget* desktopWidget = QApplication::desktop();
     QRect screenRect = desktopWidget->availableGeometry(this);
-
-    // Make sure the popup is not drawn outside the screen area
-    if (popupRect.right() > screenRect.right())
-        popupRect.translate(screenRect.right() - popupRect.right(), 0);
-    if (popupRect.left() < screenRect.left())
-        popupRect.translate(screenRect.left() - popupRect.left(), 0);
-    if (popupRect.bottom() > screenRect.bottom())
-        popupRect.translate(0, -m_d->frame->height());
-    if (popupRect.top() < screenRect.top())
-        popupRect.moveTo(0,0);
+    popupRect = kisEnsureInRect(popupRect, screenRect);
 
     m_d->frame->setGeometry(popupRect);
 }

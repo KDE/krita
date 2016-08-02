@@ -30,8 +30,6 @@
 #include <QClipboard>
 #include <QDesktopWidget>
 #include <QFile>
-#include <QGraphicsPixmapItem>
-#include <QGraphicsScene>
 
 #include <kis_debug.h>
 
@@ -99,7 +97,7 @@ void KisImageFromClipboard::createImage()
 
     }
     doc->setModified(true);
-    emit documentSelected(doc);
+    emit m_openPane->documentSelected(doc);
 }
 
 

@@ -47,9 +47,11 @@ if (Threads_FOUND)
 endif()
 
 #OpenMP
-if(OPENMP_FOUND)
+if (CMAKE_COMPILER_IS_GNUCC AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 4.8.3 AND OPENMP_FOUND)
     message("G'Mic: using OpenMP")
     set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+    add_definitions(-Dcimg_use_openmp)
+    add_definitions(-fopenmp)
 endif()
 
 #FFTW
@@ -64,13 +66,13 @@ endif()
 if (PNG_FOUND)
     add_definitions(${PNG_DEFINITIONS})
     add_definitions(-Dcimg_use_png)
-    include_directories(${PNG_INCLUDE_DIR})
+    include_directories(SYSTEM ${PNG_INCLUDE_DIR})
 endif()
 
 # ZLIB
 if (ZLIB_FOUND)
     add_definitions(-Dcimg_use_zlib)
-    include_directories( ${ZLIB_INCLUDE_DIRS} )
+    include_directories(SYSTEM ${ZLIB_INCLUDE_DIRS} )
 endif()
 
 
@@ -78,7 +80,7 @@ endif()
 if (CURL_FOUND)
     message("G'Mic: using Curl")
     add_definitions(-Dcimg_use_curl)
-    include_directories( ${CURL_INCLUDE_DIRS} )
+    include_directories(SYSTEM ${CURL_INCLUDE_DIRS} )
 endif()
 
 # X11
@@ -99,6 +101,11 @@ if(APPLE)
     add_definitions(-D_APPLE)
 endif()
 
+if (MSYS)
+    add_definitions(-Dcimg_OS=2)
+    add_definitions(-Dcimg_display=2)
+endif()
+
 add_library(gmic STATIC ${gmic_sources_SRCS} ${gmic_headers_SRCS})
 
 if(FFTW3_FOUND)
@@ -112,6 +119,12 @@ endif()
 
 if(CURL_FOUND)
     target_link_libraries(gmic ${CURL_LIBRARIES})
+endif()
+
+# Only build gmic with gcc; msvc is broken, and now dtschump tells is that on OSX
+# gcc should be used as well because clang is broken.
+if (CMAKE_COMPILER_IS_GNUCC AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 4.8.3 AND OPENMP_FOUND)
+    target_link_libraries(gmic ${OPENMP_LIBRARIES})
 endif()
 
 target_link_libraries(gmic ${ZLIB_LIBRARIES})
@@ -172,10 +185,10 @@ target_link_libraries(gmicparser Qt5::Core Qt5::Gui Qt5::Network kritaui gmic ${
 ########### install files ###############
 set(GMIC_INSTALL_DIR ${DATA_INSTALL_DIR}/krita/gmic)
 
-install(TARGETS kritagmic  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS kritagmic  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 install(TARGETS gmicparser  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
-install( FILES  gmic.rc DESTINATION ${DATA_INSTALL_DIR}/kritaplugins)
+install( FILES  gmic.xmlgui DESTINATION ${DATA_INSTALL_DIR}/kritaplugins)
 install( FILES
   #${GMIC_SOURCE_DIR}/gmic_def.gmic
   #${GMIC_SOURCE_DIR}/update1610.gmic

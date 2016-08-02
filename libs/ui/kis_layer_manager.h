@@ -92,8 +92,8 @@ private Q_SLOTS:
     bool activeLayerHasSelection();
 
     void convertNodeToPaintLayer(KisNodeSP source);
+    void convertGroupToAnimated();
 
-    KisLayerSP constructDefaultLayer();
     KisLayerSP addLayer(KisNodeSP activeNode);
     void addGroupLayer(KisNodeSP activeNode);
 
@@ -122,6 +122,7 @@ private:
     KisAction *m_imageFlatten;
     KisAction *m_imageMergeLayer;
     KisAction *m_groupLayersSave;
+    KisAction *m_convertGroupAnimated;
     KisAction *m_imageResizeToLayer;
     KisAction *m_flattenLayer;
     KisAction *m_rasterizeLayer;

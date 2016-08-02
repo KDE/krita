@@ -37,6 +37,7 @@
 #include <QKeyEvent>
 #include <QPaintEvent>
 #include <QList>
+#include <QApplication>
 
 #include <QSpinBox>
 
@@ -66,11 +67,11 @@ KisCurveWidget::KisCurveWidget(QWidget *parent, Qt::WFlags f)
     d->m_readOnlyMode   = false;
     d->m_guideVisible   = false;
     d->m_pixmapDirty = true;
-    d->m_pixmapCache = NULL;
+    d->m_pixmapCache = 0;
     d->setState(ST_NORMAL);
 
-    d->m_intIn = NULL;
-    d->m_intOut = NULL;
+    d->m_intIn = 0;
+    d->m_intOut = 0;
 
     setMouseTracking(true);
     setAutoFillBackground(false);
@@ -117,7 +118,7 @@ void KisCurveWidget::dropInOutControls()
     disconnect(d->m_intIn, SIGNAL(valueChanged(int)), this, SLOT(inOutChanged(int)));
     disconnect(d->m_intOut, SIGNAL(valueChanged(int)), this, SLOT(inOutChanged(int)));
 
-    d->m_intIn = d->m_intOut = NULL;
+    d->m_intIn = d->m_intOut = 0;
 
 }
 
@@ -262,13 +263,15 @@ void KisCurveWidget::paintEvent(QPaintEvent *)
 
     QPainter p(this);
 
+    QPalette appPalette = QApplication::palette();
+
     // Antialiasing is not a good idea here, because
     // the grid will drift one pixel to any side due to rounding of int
     // FIXME: let's user tell the last word (in config)
     //p.setRenderHint(QPainter::Antialiasing);
 
     // fill with color to show widget bounds
-     p.fillRect(rect(), palette().base());
+     p.fillRect(rect(), appPalette.color(QPalette::Base));
 
     //  draw background
     if (!d->m_pix.isNull()) {
@@ -297,7 +300,7 @@ void KisCurveWidget::paintEvent(QPaintEvent *)
 
     QPolygonF poly;
 
-    p.setPen(QPen(Qt::black, 1, Qt::SolidLine));
+    p.setPen(QPen(appPalette.color(QPalette::Text), 2, Qt::SolidLine));
     for (x = 0 ; x < wWidth ; x++) {
         normalizedX = double(x) / wWidth;
         curY = wHeight - d->m_curve.value(normalizedX) * wHeight;
@@ -321,11 +324,11 @@ void KisCurveWidget::paintEvent(QPaintEvent *)
             curveY = d->m_curve.points().at(i).y();
 
             if (i == d->m_grab_point_index) {
-                p.setPen(QPen(Qt::red, 3, Qt::SolidLine));
+                p.setPen(QPen(appPalette.color(QPalette::Text), 6, Qt::SolidLine));
                 p.drawEllipse(QRectF(curveX * wWidth - 2,
                                      wHeight - 2 - curveY * wHeight, 4, 4));
             } else {
-                p.setPen(QPen(Qt::red, 1, Qt::SolidLine));
+                p.setPen(QPen(appPalette.color(QPalette::Text), 2, Qt::SolidLine));
                 p.drawEllipse(QRectF(curveX * wWidth - 3,
                                      wHeight - 3 - curveY * wHeight, 6, 6));
             }

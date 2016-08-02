@@ -30,9 +30,16 @@
 
 KisTemplate::KisTemplate(const QString &name, const QString &description, const QString &file,
                        const QString &picture, const QString &fileName, const QString &_measureSystem,
-                       bool hidden, bool touched) :
-        m_name(name), m_descr(description), m_file(file), m_picture(picture), m_fileName(fileName),
-        m_hidden(hidden), m_touched(touched), m_cached(false), m_measureSystem(_measureSystem)
+                       bool hidden, bool touched)
+    : m_name(name)
+    , m_descr(description)
+    , m_file(file)
+    , m_picture(picture)
+    , m_fileName(fileName)
+    , m_hidden(hidden)
+    , m_touched(touched)
+    , m_cached(false)
+    , m_measureSystem(_measureSystem)
 {
 }
 
@@ -40,7 +47,9 @@ const QPixmap &KisTemplate::loadPicture()
 {
     if (m_cached)
         return m_pixmap;
+
     m_cached = true;
+
     if (m_picture[ 0 ] == '/') {
         QImage img(m_picture);
         if (img.isNull()) {
@@ -54,8 +63,12 @@ const QPixmap &KisTemplate::loadPicture()
         }
         m_pixmap = QPixmap::fromImage(img);
         return m_pixmap;
-    } else { // relative path
+    }
+    else { // relative path
         QString filename = KoResourcePaths::findResource("kis_pics", m_picture + ".png");
+        if (filename.isEmpty()) {
+
+        }
         m_pixmap = QPixmap(filename);
         return m_pixmap;
     }

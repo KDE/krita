@@ -21,6 +21,8 @@
 
 #include <KoToolManager.h>
 #include <QIcon>
+#include <QPalette>
+#include <QApplication>
 #include <klocalizedstring.h>
 #include <QKeySequence>
 #include <KoIcon.h>
@@ -41,6 +43,19 @@ KoToolBoxButton::KoToolBoxButton(KoToolAction *toolAction, QWidget *parent)
     connect(m_toolAction, SIGNAL(changed()), SLOT(setDataFromToolAction()));
 }
 
+void KoToolBoxButton::setHighlightColor()
+{
+    QPalette p = qApp->palette();
+    if (isChecked()) {
+        QPalette palette_highlight(p);
+        QColor c = p.color(QPalette::Highlight);
+        palette_highlight.setColor(QPalette::Button, c);
+        setPalette(palette_highlight);
+    }
+    else {
+        setPalette(p);
+    }
+}
 
 void KoToolBoxButton::setDataFromToolAction()
 {

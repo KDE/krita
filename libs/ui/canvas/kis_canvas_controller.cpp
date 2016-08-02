@@ -30,38 +30,43 @@
 #include "kis_image.h"
 #include "KisViewManager.h"
 #include "KisView.h"
-#include "input/kis_tablet_event.h"
 #include "krita_utils.h"
+#include "kis_signal_compressor_with_param.h"
 
+static const int gRulersUpdateDelay = 80 /* ms */;
 
 struct KisCanvasController::Private {
     Private(KisCanvasController *qq)
         : q(qq),
           paintOpTransformationConnector(0)
     {
+        using namespace std::placeholders;
+
+        std::function<void (QPoint)> callback(
+            std::bind(&KisCanvasController::Private::emitPointerPositionChangedSignals, this, _1));
+
+        mousePositionCompressor.reset(
+            new KisSignalCompressorWithParam<QPoint>(
+                gRulersUpdateDelay,
+                callback,
+                KisSignalCompressor::FIRST_ACTIVE));
     }
 
-    QPointer<KisView>view;
+    QPointer<KisView> view;
     KisCoordinatesConverter *coordinatesConverter;
     KisCanvasController *q;
     KisPaintopTransformationConnector *paintOpTransformationConnector;
+    QScopedPointer<KisSignalCompressorWithParam<QPoint> > mousePositionCompressor;
 
-    void emitPointerPositionChangedSignals(QEvent *event);
+    void emitPointerPositionChangedSignals(QPoint pointerPos);
     void updateDocumentSizeAfterTransform();
     void showRotationValueOnCanvas();
     void showMirrorStateOnCanvas();
 };
 
-void KisCanvasController::Private::emitPointerPositionChangedSignals(QEvent *event)
+void KisCanvasController::Private::emitPointerPositionChangedSignals(QPoint pointerPos)
 {
     if (!coordinatesConverter) return;
-
-    QPoint pointerPos;
-    if (QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent*>(event)) {
-        pointerPos = mouseEvent->pos();
-    } else if (QTabletEvent *tabletEvent = dynamic_cast<QTabletEvent*>(event)) {
-        pointerPos = tabletEvent->pos();
-    }
 
     QPointF documentPos = coordinatesConverter->widgetToDocument(pointerPos);
 
@@ -105,7 +110,6 @@ void KisCanvasController::setCanvas(KoCanvasBase *canvas)
 
     m_d->paintOpTransformationConnector =
         new KisPaintopTransformationConnector(kritaCanvas, this);
-
 }
 
 void KisCanvasController::changeCanvasWidget(QWidget *widget)
@@ -141,14 +145,17 @@ void KisCanvasController::wheelEvent(QWheelEvent *event)
 bool KisCanvasController::eventFilter(QObject *watched, QEvent *event)
 {
     KoCanvasBase *canvas = this->canvas();
-    if (canvas && canvas->canvasWidget() && (watched == canvas->canvasWidget())) {
-        if (event->type() == QEvent::MouseMove || event->type() == QEvent::TabletMove) {
-            m_d->emitPointerPositionChangedSignals(event);
-            return false;
-        }
+    if (!canvas || !canvas->canvasWidget() || canvas->canvasWidget() != watched) return false;
+
+    if (event->type() == QEvent::MouseMove) {
+        QMouseEvent *mevent = static_cast<QMouseEvent*>(event);
+        m_d->mousePositionCompressor->start(mevent->pos());
+    } else if (event->type() == QEvent::TabletMove) {
+        QTabletEvent *tevent = static_cast<QTabletEvent*>(event);
+        m_d->mousePositionCompressor->start(tevent->pos());
     }
 
-    return KoCanvasControllerWidget::eventFilter(watched, event);
+    return false;
 }
 
 void KisCanvasController::updateDocumentSize(const QSize &sz, bool recalculateCenter)
@@ -171,7 +178,7 @@ void KisCanvasController::Private::showMirrorStateOnCanvas()
 
 void KisCanvasController::mirrorCanvas(bool enable)
 {
-    KisCanvasDecoration *decorator = dynamic_cast<KisCanvas2*>(this->canvas())->decoration("mirror_axis");
+    KisCanvasDecorationSP decorator = dynamic_cast<KisCanvas2*>(this->canvas())->decoration("mirror_axis");
     KIS_ASSERT_RECOVER_RETURN(decorator);
     decorator->setVisible(enable);
 
@@ -251,12 +258,33 @@ void KisCanvasController::slotToggleLevelOfDetailMode(bool value)
 
     kritaCanvas->setLodAllowedInCanvas(value);
 
-    int result = levelOfDetailMode();
+    bool result = levelOfDetailMode();
 
-    m_d->view->viewManager()->showFloatingMessage(
-        i18n("Instant Preview Mode: %1", result ?
-             i18n("ON") : i18n("OFF")),
-             QIcon(), 500, KisFloatingMessage::Low);
+    if (!value || result) {
+        m_d->view->viewManager()->showFloatingMessage(
+            i18n("Instant Preview Mode: %1", result ?
+                 i18n("ON") : i18n("OFF")),
+            QIcon(), 500, KisFloatingMessage::Low);
+    } else {
+        QString reason;
+
+        if (!kritaCanvas->canvasIsOpenGL()) {
+            reason = i18n("Instant Preview is only supported with OpenGL activated");
+        }
+        else if (kritaCanvas->openGLFilterMode() == KisOpenGL::BilinearFilterMode ||
+                   kritaCanvas->openGLFilterMode() == KisOpenGL::NearestFilterMode) {
+            QString filteringMode =
+                kritaCanvas->openGLFilterMode() == KisOpenGL::BilinearFilterMode ?
+                i18n("Bilinear") : i18n("Nearest Neighbour");
+            reason = i18n("Instant Preview is supported\n in Trilinear or High Quality filtering modes.\nCurrent mode is %1", filteringMode);
+        }
+
+        m_d->view->viewManager()->showFloatingMessage(
+            i18n("Failed activating Instant Preview mode!\n\n%1", reason),
+            QIcon(), 5000, KisFloatingMessage::Low);
+    }
+
+
 }
 
 bool KisCanvasController::levelOfDetailMode() const

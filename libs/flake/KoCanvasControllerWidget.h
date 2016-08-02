@@ -48,9 +48,6 @@ public:
     explicit KoCanvasControllerWidget(KActionCollection * actionCollection, QWidget *parent = 0);
     virtual ~KoCanvasControllerWidget();
 
-    /// Reimplemented from QObject
-    virtual bool eventFilter(QObject *watched, QEvent *event);
-
     /**
      * Reimplemented from QAbstractScrollArea.
      */
@@ -147,13 +144,6 @@ public:
      */
     class Private;
     KoCanvasControllerWidget::Private *priv();
-
-Q_SIGNALS:
-
-    /**
-     * Emit the new tool option widgets to be used with this canvas.
-     */
-    void toolOptionWidgetsChanged(const QList<QPointer<QWidget> > &widgets);
 
 private Q_SLOTS:
 

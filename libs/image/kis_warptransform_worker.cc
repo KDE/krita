@@ -200,7 +200,7 @@ KisWarpTransformWorker::KisWarpTransformWorker(WarpType warpType, KisPaintDevice
         m_warpMathFunction = &rigidTransformMath;
         break;
     default:
-        m_warpMathFunction = NULL;
+        m_warpMathFunction = 0;
         break;
     }
 }
@@ -260,6 +260,24 @@ void KisWarpTransformWorker::run()
     GridIterationTools::PaintDevicePolygonOp polygonOp(srcdev, m_dev);
     GridIterationTools::processGrid(polygonOp, functionOp,
                                     srcBounds, pixelPrecision);
+}
+
+#include "krita_utils.h"
+
+QRect KisWarpTransformWorker::approxChangeRect(const QRect &rc)
+{
+    const qreal margin = 0.05;
+
+    FunctionTransformOp functionOp(m_warpMathFunction, m_origPoint, m_transfPoint, m_alpha);
+    QRect resultRect = KritaUtils::approximateRectWithPointTransform(rc, functionOp);
+
+    return KisAlgebra2D::blowRect(resultRect, margin);
+}
+
+QRect KisWarpTransformWorker::approxNeedRect(const QRect &rc, const QRect &fullBounds)
+{
+    Q_UNUSED(rc);
+    return fullBounds;
 }
 
 QImage KisWarpTransformWorker::transformQImage(WarpType warpType,

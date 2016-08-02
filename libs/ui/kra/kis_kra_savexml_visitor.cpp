@@ -314,6 +314,10 @@ void KisSaveXmlVisitor::loadLayerAttributes(const QDomElement &el, KisLayer *lay
         layer->setCollapsed(el.attribute(COLLAPSED).toInt());
     }
 
+    if (el.hasAttribute(COLOR_LABEL)) {
+        layer->setColorLabelIndex(el.attribute(COLOR_LABEL).toInt());
+    }
+
     if (el.hasAttribute(LAYER_STYLE_UUID)) {
         QString uuidString = el.attribute(LAYER_STYLE_UUID);
         QUuid uuid(uuidString);
@@ -343,6 +347,7 @@ void KisSaveXmlVisitor::saveLayer(QDomElement & el, const QString & layerType, c
     el.setAttribute(Y, layer->y());
     el.setAttribute(UUID, layer->uuid().toString());
     el.setAttribute(COLLAPSED, layer->collapsed());
+    el.setAttribute(COLOR_LABEL, layer->colorLabelIndex());
 
     if (layer->layerStyle()) {
         el.setAttribute(LAYER_STYLE_UUID, layer->layerStyle()->uuid().toString());

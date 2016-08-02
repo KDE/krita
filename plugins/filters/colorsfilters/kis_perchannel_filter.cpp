@@ -93,10 +93,11 @@ KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintD
 
     m_dev = dev;
     m_activeVChannel = 0;
+    const KoColorSpace *targetColorSpace = dev->compositionSourceColorSpace();
 
     // fill in the channel chooser, in the display order, but store the pixel index as well.
 
-    m_virtualChannels = getVirtualChannels(dev->colorSpace());
+    m_virtualChannels = getVirtualChannels(targetColorSpace);
     const int virtualChannelCount = m_virtualChannels.size();
 
     KisPerChannelFilterConfiguration::initDefaultCurves(m_curves,
@@ -116,7 +117,7 @@ KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintD
 
     // init histogram calculator
     QList<QString> keys =
-        KoHistogramProducerFactoryRegistry::instance()->keysCompatibleWith(m_dev->colorSpace());
+        KoHistogramProducerFactoryRegistry::instance()->keysCompatibleWith(targetColorSpace);
 
     if(keys.size() > 0) {
         KoHistogramProducerFactory *hpf;
@@ -170,9 +171,15 @@ inline QPixmap KisPerChannelConfigWidget::getHistogram()
     int i;
     int height = 256;
     QPixmap pix(256, height);
-    pix.fill();
+
+    QPalette appPalette = QApplication::palette();
+
+    pix.fill(QColor(appPalette.color(QPalette::Base)));
+
     QPainter p(&pix);
-    p.setPen(QPen(Qt::gray, 1, Qt::SolidLine));
+    p.setPen(QColor(appPalette.color(QPalette::Text)));
+    p.save();
+    p.setOpacity(0.2);
 
     const VirtualChannelInfo &info = m_virtualChannels[m_activeVChannel];
 
@@ -195,6 +202,9 @@ inline QPixmap KisPerChannelConfigWidget::getHistogram()
             }
         }
     }
+
+    p.restore();
+
     return pix;
 }
 
@@ -320,7 +330,7 @@ KisPerChannelFilterConfiguration::~KisPerChannelFilterConfiguration()
 
 bool KisPerChannelFilterConfiguration::isCompatible(const KisPaintDeviceSP dev) const
 {
-    return (int)dev->colorSpace()->channelCount() == m_curves.size();
+    return (int)dev->compositionSourceColorSpace()->channelCount() == m_curves.size();
 }
 
 void KisPerChannelFilterConfiguration::setCurves(QList<KisCubicCurve> &curves)
@@ -574,10 +584,15 @@ KoColorTransformation* KisPerChannelFilter::createTransformation(const KoColorSp
     }
 
     QVector<KoColorTransformation*> allTransforms;
-    allTransforms << lightnessTransform;
-    allTransforms << allColorsTransform;
     allTransforms << colorTransform;
+    allTransforms << allColorsTransform;
+    allTransforms << lightnessTransform;
 
     return KoCompositeColorTransformation::createOptimizedCompositeTransform(allTransforms);
 }
 
+bool KisPerChannelFilter::needsTransparentPixels(const KisFilterConfiguration *config, const KoColorSpace *cs) const
+{
+    Q_UNUSED(config);
+    return cs->colorModelId() == AlphaColorModelID;
+}

@@ -21,7 +21,7 @@
 #include <QDomDocument>
 #include "kis_brush_server.h"
 #include "kis_gbr_brush.h"
-
+#include <kis_dom_utils.h>
 
 KisPredefinedBrushFactory::KisPredefinedBrushFactory(const QString &brushType)
     : m_id(brushType)
@@ -33,7 +33,7 @@ QString KisPredefinedBrushFactory::id() const
     return m_id;
 }
 
-KisBrushSP KisPredefinedBrushFactory::getOrCreateBrush(const QDomElement& brushDefinition)
+KisBrushSP KisPredefinedBrushFactory::getOrCreateBrush(const QDomElement& brushDefinition, bool forceCopy)
 {
     KisBrushResourceServer *rServer = KisBrushServer::instance()->brushServer();
     QString brushFileName = brushDefinition.attribute("filename", "");
@@ -51,17 +51,21 @@ KisBrushSP KisPredefinedBrushFactory::getOrCreateBrush(const QDomElement& brushD
 
     Q_ASSERT(brush);
 
-    double spacing = brushDefinition.attribute("spacing", "0.25").toDouble();
+    if (forceCopy) {
+        brush = brush->clone();
+    }
+
+    double spacing = KisDomUtils::toDouble(brushDefinition.attribute("spacing", "0.25"));
     brush->setSpacing(spacing);
 
-    bool useAutoSpacing = brushDefinition.attribute("useAutoSpacing", "0").toInt();
-    qreal autoSpacingCoeff = brushDefinition.attribute("autoSpacingCoeff", "1.0").toDouble();
+    bool useAutoSpacing = KisDomUtils::toInt(brushDefinition.attribute("useAutoSpacing", "0"));
+    qreal autoSpacingCoeff = KisDomUtils::toDouble(brushDefinition.attribute("autoSpacingCoeff", "1.0"));
     brush->setAutoSpacing(useAutoSpacing, autoSpacingCoeff);
 
-    double angle = brushDefinition.attribute("angle", "0.0").toDouble();
+    double angle = KisDomUtils::toDouble(brushDefinition.attribute("angle", "0.0"));
     brush->setAngle(angle);
 
-    double scale = brushDefinition.attribute("scale", "1.0").toDouble();
+    double scale = KisDomUtils::toDouble(brushDefinition.attribute("scale", "1.0"));
     brush->setScale(scale);
 
     if (m_id == "gbr_brush") {

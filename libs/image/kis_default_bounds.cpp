@@ -55,7 +55,7 @@ QRect KisDefaultBounds::bounds() const
     /**
      * By default return infinite rect to cover everything
      */
-    return m_d->image ? m_d->image->bounds() : infiniteRect;
+    return m_d->image ? m_d->image->effectiveLodBounds() : infiniteRect;
 }
 
 bool KisDefaultBounds::wrapAroundMode() const
@@ -86,7 +86,7 @@ bool KisDefaultBounds::externalFrameActive() const
 
 struct Q_DECL_HIDDEN KisSelectionDefaultBounds::Private
 {
-    KisPaintDeviceSP parentDevice;
+    KisPaintDeviceWSP parentDevice;
 };
 
 KisSelectionDefaultBounds::KisSelectionDefaultBounds(KisPaintDeviceSP parentDevice, KisImageWSP image)

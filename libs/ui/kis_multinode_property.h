@@ -99,6 +99,21 @@ private:
     }
 };
 
+struct ColorLabelAdapter : public BaseAdapter {
+    typedef int ValueType;
+    typedef MultinodePropertyBaseConnector ConnectorType;
+    static const bool forceIgnoreByDefault = false;
+
+    static ValueType propForNode(KisNodeSP node) {
+        return node->colorLabelIndex();
+    }
+
+    static void setPropForNode(KisNodeSP node, const ValueType &value, int index) {
+        Q_UNUSED(index);
+        node->setColorLabelIndex(value);
+    }
+};
+
 struct OpacityAdapter : public BaseAdapter {
     typedef int ValueType;
     typedef MultinodePropertyBaseConnector ConnectorType;
@@ -292,6 +307,14 @@ public:
     virtual void connectIgnoreCheckBox(QCheckBox *ignoreBox) = 0;
     void connectValueChangedSignal(const QObject *receiver, const char *method, Qt::ConnectionType type = Qt::AutoConnection);
 
+    /**
+     * Clicking on this widget will automatically enable it,
+     * setting "Ignored" property to false.
+     *
+     * Default implementation does nothing.
+     */
+    virtual void connectAutoEnableWidget(QWidget *widget);
+
 Q_SIGNALS:
     void sigValueChanged();
 
@@ -317,6 +340,8 @@ public:
 
     void connectIgnoreCheckBox(QCheckBox *ignoreBox);
     void notifyIgnoreChanged();
+
+    void connectAutoEnableWidget(QWidget *widget);
 
 protected:
     void slotIgnoreCheckBoxChanged(int state);
@@ -452,6 +477,8 @@ public:
     virtual void connectValueChangedSignal(const QObject *receiver, const char *method, Qt::ConnectionType type = Qt::AutoConnection) = 0;
     virtual void connectIgnoreCheckBox(QCheckBox *ignoreBox) = 0;
 
+    virtual void connectAutoEnableWidget(QWidget *widget) = 0;
+
     virtual KUndo2Command* createPostExecutionUndoCommand() = 0;
 };
 
@@ -579,6 +606,10 @@ public:
         m_connector->connectValueChangedSignal(receiver, method, type);
     }
 
+    void connectAutoEnableWidget(QWidget *widget) {
+        m_connector->connectAutoEnableWidget(widget);
+    }
+
     /**
      * Interface for the connector
      */
@@ -612,5 +643,6 @@ private:
 typedef KisMultinodeProperty<CompositeOpAdapter> KisMultinodeCompositeOpProperty;
 typedef KisMultinodeProperty<OpacityAdapter> KisMultinodeOpacityProperty;
 typedef KisMultinodeProperty<NameAdapter> KisMultinodeNameProperty;
+typedef KisMultinodeProperty<ColorLabelAdapter> KisMultinodeColorLabelProperty;
 
 #endif /* __KIS_MULTINODE_PROPERTY_H */

@@ -128,6 +128,11 @@ public:
     void clearCollections();
 
     /**
+     * Clears search area
+     */
+    void clearSearch();
+
+    /**
      * Note: the reason this is so damn complicated is because it's supposed to
      * support having multiple applications running inside of each other through
      * KisParts. That means we have to be able to separate sections within each
@@ -227,6 +232,11 @@ public Q_SLOTS:
      * Opens a printing dialog to print all the shortcuts
      */
     void printShortcuts() const;
+
+    /**
+     * Expand or collapse the tree view when the search text changes
+     */
+    void searchUpdated(QString s);
 
 private:
     Q_PRIVATE_SLOT(d, void capturedShortcut(QVariant, const QModelIndex &))

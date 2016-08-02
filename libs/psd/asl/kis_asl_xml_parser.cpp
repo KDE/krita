@@ -89,7 +89,7 @@ QColor parseRGBColorObject(QDomElement parent)
             return Qt::red;
         }
 
-        double value = KisDomUtils::Private::stringToDouble(childEl.attribute("value", "0"));
+        double value = KisDomUtils::toDouble(childEl.attribute("value", "0"));
 
         if (key == "Rd  ") {
             color.setRed(value);
@@ -133,11 +133,11 @@ void parseColorStopsList(QDomElement parent,
                 QString classId = childEl.attribute("classId", "");
 
                 if (type == "Integer" && key == "Lctn") {
-                    int value = KisDomUtils::Private::stringToInt(childEl.attribute("value", "0"));
+                    int value = KisDomUtils::toInt(childEl.attribute("value", "0"));
                     startLocations.append(qreal(value) / 4096.0);
 
                 } else if (type == "Integer" && key == "Mdpn") {
-                    int value = KisDomUtils::Private::stringToInt(childEl.attribute("value", "0"));
+                    int value = KisDomUtils::toInt(childEl.attribute("value", "0"));
                     middleOffsets.append(qreal(value) / 100.0);
 
                 } else if (type == "Descriptor" && key == "Clr ") {
@@ -190,10 +190,10 @@ void parseTransparencyStopsList(QDomElement parent,
                 QString key = childEl.attribute("key", "");
 
                 if (type == "Integer" && key == "Lctn") {
-                    int value = KisDomUtils::Private::stringToInt(childEl.attribute("value", "0"));
+                    int value = KisDomUtils::toInt(childEl.attribute("value", "0"));
                     startLocations.append(qreal(value) / 4096.0);
                 } else if (type == "Integer" && key == "Mdpn") {
-                    int value = KisDomUtils::Private::stringToInt(childEl.attribute("value", "0"));
+                    int value = KisDomUtils::toInt(childEl.attribute("value", "0"));
                     middleOffsets.append(qreal(value) / 100.0);
                 } else if (type == "UnitFloat" && key == "Opct") {
                     QString unit = childEl.attribute("unit", "");
@@ -201,7 +201,7 @@ void parseTransparencyStopsList(QDomElement parent,
                         warnKrita << "WARNING: Invalid unit of a greadient stop transparency" << unit;
                     }
 
-                    qreal value = KisDomUtils::Private::stringToDouble(childEl.attribute("value", "100"));
+                    qreal value = KisDomUtils::toDouble(childEl.attribute("value", "100"));
                     transparencies.append(value / 100.0);
                 }
 
@@ -270,7 +270,7 @@ bool tryParseDescriptor(const QDomElement &el,
                 return false;
             }
 
-            double value = KisDomUtils::Private::stringToDouble(childEl.attribute("value", "0"));
+            double value = KisDomUtils::toDouble(childEl.attribute("value", "0"));
 
             if (key == "Hrzn") {
                 point.setX(value);
@@ -303,7 +303,7 @@ bool tryParseDescriptor(const QDomElement &el,
                 return false;
             }
 
-            double value = KisDomUtils::Private::stringToDouble(childEl.attribute("value", "0"));
+            double value = KisDomUtils::toDouble(childEl.attribute("value", "0"));
 
             if (key == "Hrzn") {
                 point.setX(value);
@@ -428,7 +428,7 @@ bool tryParseDescriptor(const QDomElement &el,
                     return true;
                 }
             } else if (type == "Double" && key == "Intr") {
-                double value = KisDomUtils::Private::stringToDouble(childEl.attribute("value", "4096"));
+                double value = KisDomUtils::toDouble(childEl.attribute("value", "4096"));
                 gradientSmoothness = 100.0 * value / 4096.0;
             } else if (type == "List" && key == "Clrs") {
                 parseColorStopsList(childEl, startLocations, middleOffsets, colors);
@@ -515,11 +515,11 @@ void parseElement(const QDomElement &el, const QString &parentPath, KisAslObject
 
         catcher.setArrayMode(false);
     } else if (type == "Double") {
-        double v = KisDomUtils::Private::stringToDouble(el.attribute("value", "0"));
+        double v = KisDomUtils::toDouble(el.attribute("value", "0"));
         catcher.addDouble(buildPath(parentPath, key), v);
     } else if (type == "UnitFloat") {
         QString unit = el.attribute("unit", "<unknown>");
-        double v = KisDomUtils::Private::stringToDouble(el.attribute("value", "0"));
+        double v = KisDomUtils::toDouble(el.attribute("value", "0"));
         catcher.addUnitFloat(buildPath(parentPath, key), unit, v);
     } else if (type == "Text") {
         QString v = el.attribute("value", "");
@@ -529,10 +529,10 @@ void parseElement(const QDomElement &el, const QString &parentPath, KisAslObject
         QString typeId = el.attribute("typeId", "<unknown>");
         catcher.addEnum(buildPath(parentPath, key), typeId, v);
     } else if (type == "Integer") {
-        int v = KisDomUtils::Private::stringToInt(el.attribute("value", "0"));
+        int v = KisDomUtils::toInt(el.attribute("value", "0"));
         catcher.addInteger(buildPath(parentPath, key), v);
     } else if (type == "Boolean") {
-        int v = KisDomUtils::Private::stringToInt(el.attribute("value", "0"));
+        int v = KisDomUtils::toInt(el.attribute("value", "0"));
         catcher.addBoolean(buildPath(parentPath, key), v);
     } else {
         warnKrita << "WARNING: XML (ASL) Unknown element type:" << type << ppVar(parentPath) << ppVar(key);

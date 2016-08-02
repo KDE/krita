@@ -47,9 +47,12 @@ public:
 
 private:
     void saveBackgroundColor(QDomDocument& doc, QDomElement& element, KisImageWSP image);
+    void saveWarningColor(QDomDocument& doc, QDomElement& element, KisImageWSP image);
     void saveCompositions(QDomDocument& doc, QDomElement& element, KisImageWSP image);
     bool saveAssistants(KoStore *store,QString uri, bool external);
     bool saveAssistantsList(QDomDocument& doc, QDomElement& element);
+    bool saveGrid(QDomDocument& doc, QDomElement& element);
+    bool saveGuides(QDomDocument& doc, QDomElement& element);
     bool saveNodeKeyframes(KoStore *store, QString location, const KisNode *node);
     struct Private;
     Private * const m_d;

@@ -213,10 +213,10 @@ void KisLayer::setLayerStyle(KisPSDLayerStyleSP layerStyle)
 KisBaseNode::PropertyList KisLayer::sectionModelProperties() const
 {
     KisBaseNode::PropertyList l = KisBaseNode::sectionModelProperties();
-    l << KisBaseNode::Property(i18n("Opacity"), i18n("%1%", percentOpacity()));
+    l << KisBaseNode::Property(KoID("opacity", i18n("Opacity")), i18n("%1%", percentOpacity()));
 
     if (compositeOp()) {
-        l << KisBaseNode::Property(i18n("Composite Mode"), compositeOp()->description());
+        l << KisBaseNode::Property(KoID("compositeop", i18n("Composite Mode")), compositeOp()->description());
     }
 
     if (m_d->layerStyle && !m_d->layerStyle->isEmpty()) {
@@ -233,11 +233,11 @@ void KisLayer::setSectionModelProperties(const KisBaseNode::PropertyList &proper
     KisBaseNode::setSectionModelProperties(properties);
 
     Q_FOREACH (const KisBaseNode::Property &property, properties) {
-        if (property.name == i18n("Inherit Alpha")) {
+        if (property.id == KisLayerPropertiesIcons::inheritAlpha.id()) {
             disableAlphaChannel(property.state.toBool());
         }
 
-        if (property.name == i18n("Layer Style")) {
+        if (property.id == KisLayerPropertiesIcons::layerStyle.id()) {
             if (m_d->layerStyle &&
                 m_d->layerStyle->isEnabled() != property.state.toBool()) {
 
@@ -742,9 +742,24 @@ QRect KisLayer::changeRect(const QRect &rect, PositionToFilthy pos) const
     changeRect = incomingChangeRect(changeRect);
 
     if(pos == KisNode::N_FILTHY) {
+        QRect projectionToBeUpdated = projection()->exactBoundsAmortized() & changeRect;
+
         bool changeRectVaries;
         changeRect = outgoingChangeRect(changeRect);
         changeRect = masksChangeRect(effectMasks(), changeRect, changeRectVaries);
+
+        /**
+         * If the projection contains some dirty areas we should also
+         * add them to the change rect, because they might have
+         * changed. E.g. when a visibility of the mask has chnaged
+         * while the parent layer was invinisble.
+         */
+
+        if (!projectionToBeUpdated.isEmpty() &&
+            !changeRect.contains(projectionToBeUpdated)) {
+
+            changeRect |= projectionToBeUpdated;
+        }
     }
 
     // TODO: string comparizon: optimize!
@@ -773,7 +788,7 @@ QImage KisLayer::createThumbnail(qint32 w, qint32 h)
     KisPaintDeviceSP originalDevice = original();
 
     return originalDevice ?
-           originalDevice->createThumbnail(w, h,
+           originalDevice->createThumbnail(w, h, 1,
                                            KoColorConversionTransformation::internalRenderingIntent(),
                                            KoColorConversionTransformation::internalConversionFlags()) : QImage();
 }

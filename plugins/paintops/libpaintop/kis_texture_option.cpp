@@ -248,6 +248,8 @@ void KisTextureOption::readOptionSetting(const KisPropertiesConfiguration* setti
     m_optionWidget->scaleSlider->setValue(setting->getDouble("Texture/Pattern/Scale", 1.0));
     m_optionWidget->offsetSliderX->setValue(setting->getInt("Texture/Pattern/OffsetX"));
     m_optionWidget->offsetSliderY->setValue(setting->getInt("Texture/Pattern/OffsetY"));
+    m_optionWidget->randomOffsetX->setChecked(setting->getBool("Texture/Pattern/isRandomOffsetX"));
+    m_optionWidget->randomOffsetY->setChecked(setting->getBool("Texture/Pattern/isRandomOffsetY"));
     m_optionWidget->cmbTexturingMode->setCurrentIndex(setting->getInt("Texture/Pattern/TexturingMode", KisTextureProperties::MULTIPLY));
     m_optionWidget->cmbCutoffPolicy->setCurrentIndex(setting->getInt("Texture/Pattern/CutoffPolicy"));
     m_optionWidget->cutoffSlider->slotModifyBlack(setting->getInt("Texture/Pattern/CutoffLeft", 0));

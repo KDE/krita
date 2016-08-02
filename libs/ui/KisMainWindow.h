@@ -166,6 +166,9 @@ Q_SIGNALS:
 
     void guiLoadingFinished();
 
+    /// This signal is emitted when the user clicked on the progressbar cancel
+    void sigProgressCanceled();
+
 public Q_SLOTS:
 
     /**
@@ -239,6 +242,7 @@ private Q_SLOTS:
     void slotSaveCanceled(const QString &);
     void forceDockTabFonts();
 
+    void slotProgressCanceled();
 
     /**
      * @internal
@@ -281,11 +285,6 @@ private Q_SLOTS:
      *  Closes the mainwindow.
      */
     void slotFileQuit();
-
-    /**
-     *  Configure key bindings.
-     */
-    void slotConfigureKeys();
 
     /**
      *  Configure toolbars.
@@ -359,6 +358,7 @@ private Q_SLOTS:
 
 protected:
 
+    void showEvent(QShowEvent * e);
     void closeEvent(QCloseEvent * e);
     void resizeEvent(QResizeEvent * e);
 
@@ -448,6 +448,20 @@ private Q_SLOTS:
     void switchTab(int index);
 
 private:
+
+
+    /**
+     * Struct used in the list created by createCustomDocumentWidgets()
+     */
+    struct CustomDocumentWidgetItem {
+        /// Pointer to the custom document widget
+        QWidget *widget;
+        /// title used in the sidebar. If left empty it will be displayed as "Custom Document"
+        QString title;
+        /// icon used in the sidebar. If left empty it will use the unknown icon
+        QString icon;
+    };
+
     class Private;
     Private * const d;
 

@@ -15,6 +15,7 @@ set(kritaflake_SRCS
     KoFlake.cpp
     KoCanvasBase.cpp
     KoResourceManager_p.cpp
+    KoDerivedResourceConverter.cpp
     KoCanvasResourceManager.cpp
     KoDocumentResourceManager.cpp
     KoCanvasObserverBase.cpp
@@ -23,8 +24,6 @@ set(kritaflake_SRCS
     KoDockRegistry.cpp
     KoDataCenterBase.cpp
     KoInsets.cpp
-    KoGuidesData.cpp
-    KoGridData.cpp
     KoPathShape.cpp
     KoPathPoint.cpp
     KoPathSegment.cpp
@@ -93,7 +92,6 @@ set(kritaflake_SRCS
     KoSnapProxy.cpp
     KoSnapStrategy.cpp
     KoSnapData.cpp
-    SnapGuideConfigWidget.cpp
     KoShapeShadow.cpp
     KoSharedLoadingData.cpp
     KoSharedSavingData.cpp
@@ -204,7 +202,6 @@ set(kritaflake_SRCS
 ki18n_wrap_ui(kritaflake_SRCS
     tools/PathToolOptionWidgetBase.ui
     KoConnectionShapeConfigWidget.ui
-    SnapGuideConfigWidget.ui
     tools/KoZoomToolWidget.ui
 )
 
@@ -222,7 +219,7 @@ target_link_libraries(kritaflake kritapigment kritawidgetutils kritaodf kritaund
 target_link_libraries(kritaflake LINK_INTERFACE_LIBRARIES kritapigment kritawidgetutils kritaodf kritaundo2 KF5::WidgetsAddons )
 
 set_target_properties(kritaflake PROPERTIES
-    VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
+    VERSION ${GENERIC_KRITA_LIB_VERSION} SOVERSION ${GENERIC_KRITA_LIB_SOVERSION}
 )
 
 install(TARGETS kritaflake  ${INSTALL_TARGETS_DEFAULT_ARGS})

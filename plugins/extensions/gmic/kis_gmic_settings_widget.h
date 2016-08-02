@@ -72,8 +72,8 @@ private Q_SLOTS:
     void setChoiceIndex(int index);
     void setColorValue(const QColor &color);
     void setTextValue();
-    void setFolderPathValue(const QUrl &kurl);
-    void setFilePathValue(const QUrl &kurl);
+    void setFolderPathValue(const QString &path);
+    void setFilePathValue(const QString &path);
 
 };
 

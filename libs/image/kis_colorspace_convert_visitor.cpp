@@ -20,7 +20,6 @@
 #include "kis_image.h"
 #include "kis_paint_device.h"
 #include "kis_undo_adapter.h"
-#include "commands/kis_layer_props_command.h"
 #include "kis_adjustment_layer.h"
 #include "kis_paint_layer.h"
 #include "kis_group_layer.h"
@@ -30,7 +29,7 @@
 #include "filter/kis_filter.h"
 #include "generator/kis_generator_layer.h"
 #include "kis_time_range.h"
-
+#include <kundo2command.h>
 
 KisColorSpaceConvertVisitor::KisColorSpaceConvertVisitor(KisImageWSP image,
                                                          const KoColorSpace *srcColorSpace,
@@ -86,13 +85,6 @@ bool KisColorSpaceConvertVisitor::visit(KisAdjustmentLayer * layer)
         layer->setFilter(f->defaultConfiguration(0));
     }
 
-    KisLayerPropsCommand* propsCommand = new KisLayerPropsCommand(layer,
-                                                                  layer->opacity(), layer->opacity(),
-                                                                  layer->compositeOpId(), layer->compositeOpId(),
-                                                                  layer->name(), layer->name(),
-                                                                  m_emptyChannelFlags, m_emptyChannelFlags, false);
-    m_image->undoAdapter()->addCommand(propsCommand);
-
     layer->resetCache();
     return true;
 }
@@ -108,20 +100,16 @@ bool KisColorSpaceConvertVisitor::convertPaintDevice(KisLayer* layer)
 
     if (*m_dstColorSpace == *layer->colorSpace()) return true;
 
+    bool alphaLock = false;
+
     if (m_srcColorSpace->colorModelId() != m_dstColorSpace->colorModelId()) {
         layer->setChannelFlags(m_emptyChannelFlags);
         KisPaintLayer *paintLayer = 0;
         if ((paintLayer = dynamic_cast<KisPaintLayer*>(layer))) {
+            alphaLock = paintLayer->alphaLocked();
             paintLayer->setChannelLockFlags(QBitArray());
         }
-
     }
-
-    KisLayerPropsCommand* propsCommand = new KisLayerPropsCommand(layer,
-                                                                  layer->opacity(), layer->opacity(),
-                                                                  layer->compositeOpId(), layer->compositeOpId(),
-                                                                  layer->name(), layer->name(),
-                                                                  m_emptyChannelFlags, m_emptyChannelFlags, false);
 
     if (layer->original()) {
         KUndo2Command* cmd = layer->original()->convertTo(m_dstColorSpace, m_renderingIntent, m_conversionFlags);
@@ -147,9 +135,10 @@ bool KisColorSpaceConvertVisitor::convertPaintDevice(KisLayer* layer)
             delete cmd;
     }
 
-
-    m_image->undoAdapter()->addCommand(propsCommand);
-
+    KisPaintLayer *paintLayer = 0;
+    if ((paintLayer = dynamic_cast<KisPaintLayer*>(layer))) {
+        paintLayer->setAlphaLocked(alphaLock);
+    }
     layer->setDirty();
     layer->invalidateFrames(KisTimeRange::infinite(0), layer->extent());
 

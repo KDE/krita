@@ -38,6 +38,7 @@
 #include <QBoxLayout>
 #include <QDesktopServices>
 #include <QStandardPaths>
+#include <QDebug>
 
 #include "kaboutkdedialog_p.h"
 #include "kbugreport.h"
@@ -86,7 +87,7 @@ public:
     KAboutKdeDialog *mAboutKDE;
     KBugReport *mBugReport;
     KSwitchLanguageDialog *mSwitchApplicationLanguage;
-// TODO evaluate if we use static_cast<QWidget*>(parent()) instead of mParent to win that bit of memory
+    // TODO evaluate if we use static_cast<QWidget*>(parent()) instead of mParent to win that bit of memory
     QWidget *mParent;
     QString mAboutAppText;
 
@@ -130,30 +131,18 @@ void KHelpMenuPrivate::createActions(KHelpMenu *q)
         return;
     }
     mActionsCreated = true;
-    if (KAuthorized::authorizeKAction(QStringLiteral("help_contents"))) {
-        mHandBookAction = KStandardAction::helpContents(q, SLOT(appHelpActivated()), q);
-    }
-    if (mShowWhatsThis && KAuthorized::authorizeKAction(QStringLiteral("help_whats_this"))) {
+    mHandBookAction = KStandardAction::helpContents(q, SLOT(appHelpActivated()), q);
+    if (mShowWhatsThis) {
         mWhatsThisAction = KStandardAction::whatsThis(q, SLOT(contextHelpActivated()), q);
     }
 
-    if (KAuthorized::authorizeKAction(QStringLiteral("help_report_bug")) && !mAboutData.bugAddress().isEmpty()) {
+    if (!mAboutData.bugAddress().isEmpty()) {
         mReportBugAction = KStandardAction::reportBug(q, SLOT(reportBug()), q);
     }
 
-    if (KAuthorized::authorizeKAction(QStringLiteral("switch_application_language"))) {
-        if (KLocalizedString::availableApplicationTranslations().count() > 1) {
-            mSwitchApplicationLanguageAction = KStandardAction::create(KStandardAction::SwitchApplicationLanguage, q, SLOT(switchApplicationLanguage()), q);
-        }
-    }
-
-    if (KAuthorized::authorizeKAction(QStringLiteral("help_about_app"))) {
-        mAboutAppAction = KStandardAction::aboutApp(q, SLOT(aboutApplication()), q);
-    }
-
-    if (KAuthorized::authorizeKAction(QStringLiteral("help_about_kde"))) {
-        mAboutKDEAction = KStandardAction::aboutKDE(q, SLOT(aboutKDE()), q);
-    }
+    mSwitchApplicationLanguageAction = KStandardAction::create(KStandardAction::SwitchApplicationLanguage, q, SLOT(switchApplicationLanguage()), q);
+    mAboutAppAction = KStandardAction::aboutApp(q, SLOT(aboutApplication()), q);
+    mAboutKDEAction = KStandardAction::aboutKDE(q, SLOT(aboutKDE()), q);
 }
 
 // Used in the non-xml-gui case, like kfind or ksnapshot's help button.

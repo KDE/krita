@@ -44,5 +44,5 @@ target_link_libraries(compression_test ${PSD_TEST_LIBS})
 
 ########### next target ###############
 set(kis_psd_test_SRCS kis_psd_test.cpp )
-kde4_add_unit_test(kis_psd_test TESTNAME krita-plugins-formats-psd_test ${kis_psd_test_SRCS})
+kde4_add_broken_unit_test(kis_psd_test TESTNAME krita-plugins-formats-psd_test ${kis_psd_test_SRCS})
 target_link_libraries(kis_psd_test ${PSD_TEST_LIBS} kritaui)

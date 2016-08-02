@@ -43,8 +43,8 @@
 
 #ifdef SHOULD_BUILD_FONT_CONVERSION
 #include <string.h>
-#include <fontconfig.h>
-#include <fcfreetype.h>
+#include <fontconfig/fontconfig.h>
+#include <fontconfig/fcfreetype.h>
 #include <ft2build.h>
 #include FT_FREETYPE_H
 #include FT_GLYPH_H
@@ -219,7 +219,7 @@ qreal KoCharacterStyle::Private::calculateFontYStretch(const QString &fontFamily
 
     //TODO http://freedesktop.org/software/fontconfig/fontconfig-devel/x19.html
     // we should specify slant and weight too
-    FcPattern *font = FcPatternBuild (0, FC_FAMILY, FcTypeString,fontName.data(), FC_SIZE, FcTypeDouble, (qreal)11, NULL);
+    FcPattern *font = FcPatternBuild (0, FC_FAMILY, FcTypeString,fontName.data(), FC_SIZE, FcTypeDouble, (qreal)11, 0);
     if (font == 0) {
         return 1;
     }

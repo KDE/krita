@@ -44,7 +44,7 @@
 #include <kis_workspace_resource.h>
 #include <brushengine/kis_paintop_preset.h>
 #include <kis_brush_server.h>
-
+#include <kis_paintop_settings.h>
 #include "dlg_bundle_manager.h"
 #include "dlg_create_bundle.h"
 
@@ -77,9 +77,33 @@ ResourceManager::ResourceManager(QObject *parent, const QVariantList &)
     : KisViewPlugin(parent)
     , d(new Private())
 {
-    KisAction *action = new KisAction(i18n("Import Resources or Bundles..."), this);
-    addAction("import_resources", action);
-    connect(action, SIGNAL(triggered()), this, SLOT(slotImport()));
+    KisAction *action = new KisAction(i18n("Import Bundles..."), this);
+    addAction("import_bundles", action);
+    connect(action, SIGNAL(triggered()), this, SLOT(slotImportBundles()));
+
+    action = new KisAction(i18n("Import Brushes..."), this);
+    addAction("import_brushes", action);
+    connect(action, SIGNAL(triggered()), this, SLOT(slotImportBrushes()));
+
+    action = new KisAction(i18n("Import Gradients..."), this);
+    addAction("import_gradients", action);
+    connect(action, SIGNAL(triggered()), this, SLOT(slotImportGradients()));
+
+    action = new KisAction(i18n("Import Palettes..."), this);
+    addAction("import_palettes", action);
+    connect(action, SIGNAL(triggered()), this, SLOT(slotImportPalettes()));
+
+    action = new KisAction(i18n("Import Patterns..."), this);
+    addAction("import_patterns", action);
+    connect(action, SIGNAL(triggered()), this, SLOT(slotImportPatterns()));
+
+    action = new KisAction(i18n("Import Presets..."), this);
+    addAction("import_presets", action);
+    connect(action, SIGNAL(triggered()), this, SLOT(slotImportPresets()));
+
+    action = new KisAction(i18n("Import Workspaces..."), this);
+    addAction("import_workspaces", action);
+    connect(action, SIGNAL(triggered()), this, SLOT(slotImportWorkspaces()));
 
     action = new KisAction(i18n("Create Resource Bundle..."), this);
     addAction("create_bundle", action);
@@ -95,117 +119,19 @@ ResourceManager::~ResourceManager()
 {
 }
 
-void ResourceManager::slotImport()
-{
-    KoFileDialog dialog(m_view->mainWindow(), KoFileDialog::OpenFiles, "krita_resources");
-    dialog.setCaption(i18n("Add Resources"));
-
-    QMap<QString, QString> filterToTypeMap;
-    filterToTypeMap[i18n("Krita Brush Presets (*.kpp)")] = "presets";
-    filterToTypeMap[i18n("GIMP Brushes (*.gbr)")] = "brushes";
-    filterToTypeMap[i18n("Imagepipe Brushes (*.gih)")] = "brushes";
-    filterToTypeMap[i18n("Photoshop Brushes (*.abr)")] = "brushes";
-    filterToTypeMap[i18n("PNG Brushes (*.png)")] = "brushes";
-    filterToTypeMap[i18n("SVG Brushes (*.svg)")] = "brushes";
-    filterToTypeMap[i18n("GIMP Gradients (*.ggr)")] = "gradients";
-    filterToTypeMap[i18n("SVG Gradients (*.svg)")] = "gradients";
-    filterToTypeMap[i18n("Karbon Gradients (*.kgr)")] = "gradients";
-    filterToTypeMap[i18n("Resource Bundles (*.bundle)")] = "bundles";
-    filterToTypeMap[i18n("GIMP Patterns (*.pat)")] = "patterns";
-    filterToTypeMap[i18n("JPEG Patterns (*.jpg)")] = "patterns";
-    filterToTypeMap[i18n("GIF Patterns (*.gif)")] = "patterns";
-    filterToTypeMap[i18n("PNG Patterns (*.png)")] = "patterns";
-    filterToTypeMap[i18n("TIFF Patterns (*.tif)")] = "patterns";
-    filterToTypeMap[i18n("XPM Patterns (*.xpm)")] = "patterns";
-    filterToTypeMap[i18n("BMP Patterns (*.bmp)")] = "patterns";
-    filterToTypeMap[i18n("Palettes (*.gpl *.pal *.act *.aco *.colors)")] = "palettes";
-    filterToTypeMap[i18n("Workspaces (*.kts)")] = "workspaces";
-
-    QStringList nameFilters = filterToTypeMap.keys();
-
-    dialog.setNameFilters(nameFilters, nameFilters[13]);  // start with resource bundle as default type (filterToTypeMap is alphabetized)
-
-    QStringList resources = dialog.filenames();
-    QString resourceType = dialog.selectedNameFilter();
-    if (!filterToTypeMap.contains(resourceType)) {
-        QMessageBox::warning(0, i18nc("@title:window", "Krita"), i18n("The selected resource type is unknown."));
-        return;
-    }
-
-    resourceType = filterToTypeMap[resourceType];
-
-    if (resourceType == "brushes") {
-        Q_FOREACH (const QString &res, resources) {
-            d->brushServer->importResourceFile(res);
-        }
-    }
-    else if (resourceType == "presets") {
-        Q_FOREACH (const QString &res, resources) {
-            d->paintopServer->importResourceFile(res);
-        }
-    }
-    else if (resourceType == "gradients") {
-        Q_FOREACH (const QString &res, resources) {
-            d->gradientServer->importResourceFile(res);
-        }
-    }
-    else if (resourceType == "bundles") {
-        Q_FOREACH (const QString &res, resources) {
-            KisResourceBundle *bundle = KisResourceServerProvider::instance()->resourceBundleServer()->createResource(res);
-            bundle->load();
-            if (bundle->valid()) {
-                if (!bundle->install()) {
-                    QMessageBox::warning(0, i18nc("@title:window", "Krita"), i18n("Could not install the resources for bundle %1.").arg(res));
-                }
-            }
-            else {
-                QMessageBox::warning(0, i18nc("@title:window", "Krita"), i18n("Could not load bundle %1.").arg(res));
-            }
-
-            QFileInfo fi(res);
-            QString newFilename = KisResourceServerProvider::instance()->resourceBundleServer()->saveLocation() + fi.baseName() + bundle->defaultFileExtension();
-            QFileInfo fileInfo(newFilename);
-
-            int i = 1;
-            while (fileInfo.exists()) {
-                fileInfo.setFile(KisResourceServerProvider::instance()->resourceBundleServer()->saveLocation() + fi.baseName() + QString("%1").arg(i) + bundle->defaultFileExtension());
-                i++;
-            }
-            bundle->setFilename(fileInfo.filePath());
-            QFile::copy(res, newFilename);
-            KisResourceServerProvider::instance()->resourceBundleServer()->addResource(bundle, false);
-        }
-    }
-    else if (resourceType == "patterns") {
-         Q_FOREACH (const QString &res, resources) {
-            d->patternServer->importResourceFile(res);
-        }
-    }
-    else if (resourceType == "palettes") {
-        Q_FOREACH (const QString &res, resources) {
-            d->paletteServer->importResourceFile(res);
-        }
-    }
-    else if (resourceType == "workspaces") {
-        Q_FOREACH (const QString &res, resources) {
-            d->workspaceServer->importResourceFile(res);
-        }
-    }
-    else {
-        warnKrita << "Trying to add a resource of an undefined type";
-    }
-
-}
-
 void ResourceManager::slotCreateBundle()
 {
     DlgCreateBundle dlgCreateBundle;
     if (dlgCreateBundle.exec() != QDialog::Accepted) {
         return;
     }
+    saveBundle(dlgCreateBundle);
+}
 
+void ResourceManager::saveBundle(const DlgCreateBundle &dlgCreateBundle)
+{
     QString bundlePath =  dlgCreateBundle.saveLocation() + "/" + dlgCreateBundle.bundleName() + ".bundle";
-    KisResourceBundle* newBundle = new KisResourceBundle(bundlePath);
+    KisResourceBundle *newBundle = new KisResourceBundle(bundlePath);
 
     newBundle->addMeta("name", dlgCreateBundle.bundleName());
     newBundle->addMeta("author", dlgCreateBundle.authorName());
@@ -243,6 +169,18 @@ void ResourceManager::slotCreateBundle()
         KisPaintOpPresetSP preset = d->paintopServer->resourceByFilename(r);
         KoResource *res = preset.data();
         newBundle->addResource("kis_paintoppresets", res->filename(), d->paintopServer->assignedTagsList(res), res->md5());
+        KisPaintOpSettingsSP settings = preset->settings();
+        if (settings->hasProperty("requiredBrushFile")) {
+            QString brushFile = settings->getString("requiredBrushFile");
+            KisBrush *brush = d->brushServer->resourceByFilename(brushFile).data();
+            if (brush) {
+                newBundle->addResource("kis_brushes", brushFile, d->brushServer->assignedTagsList(brush), brush->md5());
+            }
+            else {
+                qWarning() << "There is no brush with name" << brushFile;
+            }
+        }
+
     }
 
     res = dlgCreateBundle.selectedWorkspaces();
@@ -265,14 +203,108 @@ void ResourceManager::slotCreateBundle()
 
 void ResourceManager::slotManageBundles()
 {
-
-
-    DlgBundleManager* dlg = new DlgBundleManager(m_view->actionManager());
+    DlgBundleManager* dlg = new DlgBundleManager(this, m_view->actionManager());
     if (dlg->exec() != QDialog::Accepted) {
         return;
     }
-
 }
 
+QStringList ResourceManager::importResources(const QString &title, const QStringList &mimes) const
+{
+    KoFileDialog dialog(m_view->mainWindow(), KoFileDialog::OpenFiles, "krita_resources");
+    dialog.setCaption(title);
+    dialog.setMimeTypeFilters(mimes);
+    return dialog.filenames();
+}
+
+void ResourceManager::slotImportBrushes()
+{
+    QStringList resources = importResources(i18n("Import Brushes"), QStringList() << "image/x-gimp-brush"
+                                   << "image/x-gimp-x-gimp-brush-animated"
+                                   << "image/x-adobe-brushlibrary"
+                                   << "image/png"
+                                   << "image/svg+xml");
+    Q_FOREACH (const QString &res, resources) {
+        d->brushServer->importResourceFile(res);
+    }
+}
+
+void ResourceManager::slotImportPresets()
+{
+    QStringList resources = importResources(i18n("Import Presets"), QStringList() << "application/x-krita-paintoppreset");
+    Q_FOREACH (const QString &res, resources) {
+        d->paintopServer->importResourceFile(res);
+    }
+}
+
+void ResourceManager::slotImportGradients()
+{
+    QStringList resources = importResources(i18n("Import Gradients"), QStringList() << "image/svg+xml"
+                                   << "application/x-gimp-gradient"
+                                   << "applicaition/x-karbon-gradient");
+    Q_FOREACH (const QString &res, resources) {
+        d->gradientServer->importResourceFile(res);
+    }
+}
+
+void ResourceManager::slotImportBundles()
+{
+    QStringList resources = importResources(i18n("Import Bundles"), QStringList() << "application/x-krita-bundle");
+    Q_FOREACH (const QString &res, resources) {
+        KisResourceBundle *bundle = KisResourceServerProvider::instance()->resourceBundleServer()->createResource(res);
+        bundle->load();
+        if (bundle->valid()) {
+            if (!bundle->install()) {
+                QMessageBox::warning(0, i18nc("@title:window", "Krita"), i18n("Could not install the resources for bundle %1.").arg(res));
+            }
+        }
+        else {
+            QMessageBox::warning(0, i18nc("@title:window", "Krita"), i18n("Could not load bundle %1.").arg(res));
+        }
+
+        QFileInfo fi(res);
+        QString newFilename = KisResourceServerProvider::instance()->resourceBundleServer()->saveLocation() + fi.baseName() + bundle->defaultFileExtension();
+        QFileInfo fileInfo(newFilename);
+
+        int i = 1;
+        while (fileInfo.exists()) {
+            fileInfo.setFile(KisResourceServerProvider::instance()->resourceBundleServer()->saveLocation() + fi.baseName() + QString("%1").arg(i) + bundle->defaultFileExtension());
+            i++;
+        }
+        bundle->setFilename(fileInfo.filePath());
+        QFile::copy(res, newFilename);
+        KisResourceServerProvider::instance()->resourceBundleServer()->addResource(bundle, false);
+    }
+}
+
+void ResourceManager::slotImportPatterns()
+{
+    QStringList resources = importResources(i18n("Import Patterns"), QStringList() << "image/png"
+                                   << "image/svg+xml"
+                                   << "application/x-gimp-pattern"
+                                   << "image/jpeg"
+                                   << "image/tiff"
+                                   << "image/bmp"
+                                   << "image/xpg");
+    Q_FOREACH (const QString &res, resources) {
+        d->patternServer->importResourceFile(res);
+    }
+}
+
+void ResourceManager::slotImportPalettes()
+{
+    QStringList resources = importResources(i18n("Import Palettes"), QStringList() << "image/x-gimp-color-palette");
+    Q_FOREACH (const QString &res, resources) {
+        d->paletteServer->importResourceFile(res);
+    }
+}
+
+void ResourceManager::slotImportWorkspaces()
+{
+    QStringList resources = importResources(i18n("Import Workspaces"), QStringList() << "application/x-krita-workspace");
+    Q_FOREACH (const QString &res, resources) {
+        d->workspaceServer->importResourceFile(res);
+    }
+}
 
 #include "resourcemanager.moc"

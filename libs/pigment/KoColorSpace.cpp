@@ -36,6 +36,7 @@
 #include "KoMixColorsOp.h"
 #include "KoConvolutionOp.h"
 #include "KoCompositeOpRegistry.h"
+#include "KoColorSpaceEngine.h"
 
 #include <QThreadStorage>
 #include <QByteArray>
@@ -66,6 +67,7 @@ KoColorSpace::KoColorSpace(const QString &id, const QString &name, KoMixColorsOp
     d->TRCXYY = QPolygonF();
     d->colorants = QVector <qreal> (0);
     d->lumaCoefficients = QVector <qreal> (0);
+    d->iccEngine = 0;
     d->deletability = NotOwnedByRegistry;
 }
 
@@ -119,41 +121,44 @@ QPolygonF KoColorSpace::gamutXYY() const
         if ((colorModelId().id()=="CMYKA" || colorModelId().id()=="LABA") && colorDepthId().id()=="F32") {
             //boundaries for cmyka/laba have trouble getting the max values for Float, and are pretty awkward in general.
             max = this->channels()[0]->getUIMax();
-            
+
         }
         int samples = 5;//amount of samples in our color space.
-        QString name = KoColorSpaceRegistry::instance()->colorSpaceFactory("XYZAF16")->defaultProfile();
-        const KoColorSpace* xyzColorSpace = KoColorSpaceRegistry::instance()->colorSpace("XYZA", "F16", name);
-        quint8 *data = new quint8(channelCount());
-        quint8 data2[4];//xyza is 4.
+        QString name = KoColorSpaceRegistry::instance()->colorSpaceFactory("XYZAF32")->defaultProfile();
+        const KoColorSpace* xyzColorSpace = KoColorSpaceRegistry::instance()->colorSpace("XYZA", "F32", name);
+        quint8 *data = new quint8[pixelSize()];
+        quint8 data2[16]; // xyza f32 is 4 floats, that is 16 bytes per pixel.
         //QVector <qreal> sampleCoordinates(pow(colorChannelCount(),samples));
         //sampleCoordinates.fill(0.0);
-        QVector <float> channelValuesF(channelCount());//for getting the coordinates.
+
+        // This is fixed to 5 since the maximum number of channels are 5 for CMYKA
+        QVector <float> channelValuesF(5);//for getting the coordinates.
+
         for(int x=0;x<samples;x++){
             if (colorChannelCount()==1) {//gray
                 channelValuesF[0]=(max/(samples-1))*(x);
                 channelValuesF[1]=max;
                 fromNormalisedChannelsValue(data, channelValuesF);
                 convertPixelsTo(data, data2, xyzColorSpace, 1, KoColorConversionTransformation::IntentAbsoluteColorimetric, KoColorConversionTransformation::adjustmentConversionFlags());
-                xyzColorSpace->normalisedChannelsValue(data2,channelValuesF);
+                xyzColorSpace->normalisedChannelsValue(data2, channelValuesF);
                 qreal x = channelValuesF[0]/(channelValuesF[0]+channelValuesF[1]+channelValuesF[2]);
                 qreal y = channelValuesF[1]/(channelValuesF[0]+channelValuesF[1]+channelValuesF[2]);
-                d->gamutXYY<< QPointF(x,y);
+                d->gamutXYY << QPointF(x,y);
             } else {
                 for(int y=0;y<samples;y++){
                     for(int z=0;z<samples;z++){
                         if (colorChannelCount()==4) {
                             for(int k=0;k<samples;k++){
-                                channelValuesF[0]=(max/(samples-1))*(x);
-                                channelValuesF[1]=(max/(samples-1))*(y);
-                                channelValuesF[2]=(max/(samples-1))*(z);
-                                channelValuesF[3]=(max/(samples-1))*(k);
-                                channelValuesF[4]=max;
+                                channelValuesF[0] = (max / (samples - 1)) * (x);
+                                channelValuesF[1] = (max / (samples - 1)) * (y);
+                                channelValuesF[2] = (max / (samples - 1)) * (z);
+                                channelValuesF[3] = (max / (samples - 1)) * (k);
+                                channelValuesF[4] = max;
                                 fromNormalisedChannelsValue(data, channelValuesF);
                                 convertPixelsTo(data, data2, xyzColorSpace, 1, KoColorConversionTransformation::IntentAbsoluteColorimetric, KoColorConversionTransformation::adjustmentConversionFlags());
-                                xyzColorSpace->normalisedChannelsValue(data2,channelValuesF);
-                                qreal x = channelValuesF[0]/(channelValuesF[0]+channelValuesF[1]+channelValuesF[2]);
-                                qreal y = channelValuesF[1]/(channelValuesF[0]+channelValuesF[1]+channelValuesF[2]);
+                                xyzColorSpace->normalisedChannelsValue(data2, channelValuesF);
+                                qreal x = channelValuesF[0] / (channelValuesF[0] + channelValuesF[1] + channelValuesF[2]);
+                                qreal y = channelValuesF[1] / (channelValuesF[0] + channelValuesF[1] + channelValuesF[2]);
                                 d->gamutXYY<< QPointF(x,y);
                             }
                         } else {
@@ -172,10 +177,10 @@ QPolygonF KoColorSpace::gamutXYY() const
                         }
                     }
                 }
-                
+
             }
         }
-        delete data;
+        delete[] data;
         //if we ever implement a boundary-checking thing I'd add it here.
         return d->gamutXYY;
     } else {
@@ -193,10 +198,13 @@ QPolygonF KoColorSpace::estimatedTRCXYY() const
         }
         QString name = KoColorSpaceRegistry::instance()->colorSpaceFactory("XYZAF16")->defaultProfile();
         const KoColorSpace* xyzColorSpace = KoColorSpaceRegistry::instance()->colorSpace("XYZA", "F16", name);
-        quint8 *data = new quint8(channelCount());
-        quint8 data2[4];//xyza is 4.
-        QVector <float> channelValuesF(channelCount());
-        for (int i=0; i<colorChannelCount(); i++) {
+        quint8 *data = new quint8[pixelSize()];
+        quint8 data2[8]; // xyza is 8 bytes per pixel.
+
+        // This is fixed to 5 since the maximum number of channels are 5 for CMYKA
+        QVector <float> channelValuesF(5);//for getting the coordinates.
+
+        for (quint32 i=0; i<colorChannelCount(); i++) {
             qreal colorantY=1.0;
             if (colorModelId().id()!="CMYKA") {
                 for (int j=5; j>0; j--){
@@ -224,7 +232,7 @@ QPolygonF KoColorSpace::estimatedTRCXYY() const
                 for (int j=0; j<5; j++){
                     channelValuesF.fill(0.0);
                     channelValuesF[i] = ((max/4)*(j));
-                    
+
                     fromNormalisedChannelsValue(data, channelValuesF);
 
                     convertPixelsTo(data, data2, xyzColorSpace, 1, KoColorConversionTransformation::IntentAbsoluteColorimetric,         KoColorConversionTransformation::adjustmentConversionFlags());
@@ -244,6 +252,8 @@ QPolygonF KoColorSpace::estimatedTRCXYY() const
                 }
             }
         }
+
+        delete[] data;
         return d->TRCXYY;
     } else {
         return d->TRCXYY;
@@ -333,8 +343,10 @@ KoConvolutionOp* KoColorSpace::convolutionOp() const
 
 const KoCompositeOp * KoColorSpace::compositeOp(const QString & id) const
 {
-    if (d->compositeOps.contains(id))
-        return d->compositeOps.value(id);
+    const QHash<QString, KoCompositeOp*>::ConstIterator it = d->compositeOps.constFind(id);
+    if (it != d->compositeOps.constEnd()) {
+        return it.value();
+    }
     else {
         warnPigment << "Asking for non-existent composite operation " << id << ", returning " << COMPOSITE_OVER;
         return d->compositeOps.value(COMPOSITE_OVER);
@@ -425,6 +437,26 @@ bool KoColorSpace::convertPixelsTo(const quint8 * src,
     return true;
 }
 
+KoColorConversionTransformation * KoColorSpace::createProofingTransform(const KoColorSpace *dstColorSpace, const KoColorSpace *proofingSpace, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::Intent proofingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags, quint8 *gamutWarning, double adaptationState) const
+{
+    if (!d->iccEngine) {
+        d->iccEngine = KoColorSpaceEngineRegistry::instance()->get("icc");
+    }
+    if (!d->iccEngine) return 0;
+
+    return d->iccEngine->createColorProofingTransformation(this, dstColorSpace, proofingSpace, renderingIntent, proofingIntent, conversionFlags, gamutWarning, adaptationState);
+}
+
+bool KoColorSpace::proofPixelsTo(const quint8 *src,
+                                 quint8 *dst,
+                                 quint32 numPixels,
+                                 KoColorConversionTransformation *proofingTransform) const
+{
+    proofingTransform->transform(src, dst, numPixels);
+
+    //the transform is deleted in the destructor.
+    return true;
+}
 
 void KoColorSpace::bitBlt(const KoColorSpace* srcSpace, const KoCompositeOp::ParameterInfo& params, const KoCompositeOp* op,
                           KoColorConversionTransformation::Intent renderingIntent,
@@ -535,14 +567,14 @@ void KoColorSpace::increaseLuminosity(quint8 * pixel, qreal step) const{
         qreal hue, sat, luma = 0.0;
         toHSY(channelValues, &hue, &sat, &luma);
         luma = pow(luma, 1/2.2);
-        luma += step;
+        luma = qMin(1.0, luma + step);
         luma = pow(luma, 2.2);
         channelValues = fromHSY(&hue, &sat, &luma);
     profile()->delinearizeFloatValue(channelValues);
     } else {
         qreal hue, sat, luma = 0.0;
         toHSY(channelValues, &hue, &sat, &luma);
-        luma += step;
+        luma = qMin(1.0, luma + step);
         channelValues = fromHSY(&hue, &sat, &luma);
     }
     for (int i=0;i<channelnumber;i++){
@@ -572,7 +604,7 @@ void KoColorSpace::decreaseLuminosity(quint8 * pixel, qreal step) const {
         }
         luma = pow(luma, 2.2);
         channelValues = fromHSY(&hue, &sat, &luma);
-    profile()->delinearizeFloatValue(channelValues);
+        profile()->delinearizeFloatValue(channelValues);
     } else {
         qreal hue, sat, luma = 0.0;
         toHSY(channelValues, &hue, &sat, &luma);

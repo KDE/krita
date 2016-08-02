@@ -152,7 +152,7 @@ void KisRecordedPaintActionEditor::setPaintOpPreset()
         //m_configWidget->setConfiguration(m_action->paintOpPreset()->settings());
         connect(m_configWidget, SIGNAL(sigConfigurationUpdated()), SLOT(configurationUpdated()));
     } else {
-        m_gridLayout->addWidget(new QLabel("No configuration option.", this));
+        m_gridLayout->addWidget(new QLabel(i18n("No configuration option."), this));
     }
 }
 

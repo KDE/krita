@@ -11,6 +11,5 @@
  */
 
 #pragma message("winquirk: no netinet/in.h!")
-#include <Winsock2.h>
-
+#include <winsock2.h>
 #endif

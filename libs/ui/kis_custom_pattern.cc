@@ -89,7 +89,7 @@ void KisCustomPattern::slotUpdateCurrentPattern()
                 if (scaledHeight == 0) scaledHeight++;
 
                 QPixmap scaledPixmap = QPixmap::fromImage(m_pattern->pattern());
-                preview->setPixmap(scaledPixmap.scaled(scaledWidth, scaledHeight));
+                preview->setPixmap(scaledPixmap.scaled(scaledWidth, scaledHeight, Qt::KeepAspectRatio, Qt::SmoothTransformation));
             } else {
                 preview->setPixmap(QPixmap::fromImage(m_pattern->pattern()));
             }
@@ -167,7 +167,7 @@ void KisCustomPattern::createPattern()
     }
 
     QString dir = KoResourceServerProvider::instance()->patternServer()->saveLocation();
-    m_pattern = new KoPattern(dev->createThumbnail(size.width(), size.height(), rc,
+    m_pattern = new KoPattern(dev->createThumbnail(size.width(), size.height(), rc, /*oversample*/ 1,
                                                     KoColorConversionTransformation::internalRenderingIntent(),
                                                     KoColorConversionTransformation::internalConversionFlags()), name, dir);
 }

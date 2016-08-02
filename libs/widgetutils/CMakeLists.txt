@@ -7,6 +7,8 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/xmlgui)
 
 set(kritawidgetutils_LIB_SRCS
 
+    WidgetUtilsDebug.cpp
+
     kis_icon_utils.cpp
     kis_action_registry.cpp
     KoGroupButton.cpp
@@ -112,11 +114,12 @@ target_link_libraries(kritawidgetutils
         KF5::GuiAddons
         KF5::WidgetsAddons
         KF5::WindowSystem
+        kritaplugin
         ${KRITA_WIDGET_UTILS_EXTRA_LIBS}
 )
 
 set_target_properties(kritawidgetutils
-    PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
+    PROPERTIES VERSION ${GENERIC_KRITA_LIB_VERSION} SOVERSION ${GENERIC_KRITA_LIB_SOVERSION}
 )
 
 install(TARGETS kritawidgetutils ${INSTALL_TARGETS_DEFAULT_ARGS})

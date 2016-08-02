@@ -92,6 +92,12 @@ void KisShortcutsEditor::clearCollections()
     QTimer::singleShot(0, this, SLOT(resizeColumns()));
 }
 
+void KisShortcutsEditor::clearSearch()
+{
+    d->ui.searchFilter->searchLine()->clear();
+}
+
+
 void KisShortcutsEditor::addCollection(KActionCollection *collection, const QString &title)
 {
     // KXmlGui add action collections unconditionally. If some plugin doesn't
@@ -126,7 +132,7 @@ void KisShortcutsEditor::addCollection(KActionCollection *collection, const QStr
     hierarchy[KisShortcutsEditorPrivate::Root] = d->ui.list->invisibleRootItem();
     hierarchy[KisShortcutsEditorPrivate::Program] =
       d->findOrMakeItem(hierarchy[KisShortcutsEditorPrivate::Root], collectionTitle);
-    hierarchy[KisShortcutsEditorPrivate::Action] = NULL;
+    hierarchy[KisShortcutsEditorPrivate::Action] = 0;
 
     // Remember which actions we have seen. We will be adding categorized
     // actions first, so this will help us keep track of which actions haven't
@@ -216,8 +222,7 @@ void KisShortcutsEditor::exportConfiguration(KConfigBase *config) const
     }
 
     if (d->actionTypes) {
-        QString groupName(QStringLiteral("Shortcuts"));
-        KConfigGroup group(config, groupName);
+        KConfigGroup group(config,QStringLiteral("Shortcuts"));
         foreach (KActionCollection *collection, d->actionCollections) {
             collection->writeSettings(&group, true);
         }
@@ -289,6 +294,17 @@ void KisShortcutsEditor::allDefault()
 void KisShortcutsEditor::printShortcuts() const
 {
     d->printShortcuts();
+}
+
+void KisShortcutsEditor::searchUpdated(QString s)
+{
+    if (s.isEmpty()) {
+        // Reset the tree area
+        d->ui.list->collapseAll();
+        d->ui.list->expandToDepth(0);
+    } else {
+        d->ui.list->expandAll();
+    }
 }
 
 KisShortcutsEditor::ActionTypes KisShortcutsEditor::actionTypes() const

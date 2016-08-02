@@ -55,7 +55,10 @@ void KisSmudgeRadiusOption::apply(KisPainter& painter,
                                   qreal posy,
                                   KisPaintDeviceSP dev) const
 {
-    double sliderValue = computeValue(info);
+    if (!isChecked()) return;
+
+    qreal sliderValue = computeSizeLikeValue(info);
+
     int smudgeRadius = ((sliderValue * diameter) * 0.5) / 100.0;
 
 

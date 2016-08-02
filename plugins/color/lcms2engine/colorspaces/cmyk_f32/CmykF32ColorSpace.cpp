@@ -25,6 +25,7 @@
 
 #include "compositeops/KoCompositeOps.h"
 #include <KoColorConversions.h>
+#include <kis_dom_utils.h>
 
 CmykF32ColorSpace::CmykF32ColorSpace(const QString &name, KoColorProfile *p)
     : LcmsColorSpace<KoCmykF32Traits>(colorSpaceId(), name,  TYPE_CMYKA_FLT, cmsSigCmykData, p)
@@ -63,10 +64,10 @@ void CmykF32ColorSpace::colorToXML(const quint8 *pixel, QDomDocument &doc, QDomE
 {
     const KoCmykF32Traits::Pixel *p = reinterpret_cast<const KoCmykF32Traits::Pixel *>(pixel);
     QDomElement labElt = doc.createElement("CMYK");
-    labElt.setAttribute("c", KoColorSpaceMaths< KoCmykF32Traits::channels_type, qreal>::scaleToA(p->cyan));
-    labElt.setAttribute("m", KoColorSpaceMaths< KoCmykF32Traits::channels_type, qreal>::scaleToA(p->magenta));
-    labElt.setAttribute("y", KoColorSpaceMaths< KoCmykF32Traits::channels_type, qreal>::scaleToA(p->yellow));
-    labElt.setAttribute("k", KoColorSpaceMaths< KoCmykF32Traits::channels_type, qreal>::scaleToA(p->black));
+    labElt.setAttribute("c", KisDomUtils::toString(KoColorSpaceMaths<  KoCmykF32Traits::channels_type, qreal>::scaleToA(p->cyan)));
+    labElt.setAttribute("m", KisDomUtils::toString(KoColorSpaceMaths< KoCmykF32Traits::channels_type, qreal>::scaleToA(p->magenta)));
+    labElt.setAttribute("y", KisDomUtils::toString(KoColorSpaceMaths< KoCmykF32Traits::channels_type, qreal>::scaleToA(p->yellow)));
+    labElt.setAttribute("k", KisDomUtils::toString(KoColorSpaceMaths< KoCmykF32Traits::channels_type, qreal>::scaleToA(p->black)));
     labElt.setAttribute("space", profile()->name());
     colorElt.appendChild(labElt);
 }
@@ -74,21 +75,25 @@ void CmykF32ColorSpace::colorToXML(const quint8 *pixel, QDomDocument &doc, QDomE
 void CmykF32ColorSpace::colorFromXML(quint8 *pixel, const QDomElement &elt) const
 {
     KoCmykF32Traits::Pixel *p = reinterpret_cast<KoCmykF32Traits::Pixel *>(pixel);
-    p->cyan = KoColorSpaceMaths< qreal, KoCmykF32Traits::channels_type >::scaleToA(elt.attribute("c").toDouble());
-    p->magenta = KoColorSpaceMaths< qreal, KoCmykF32Traits::channels_type >::scaleToA(elt.attribute("m").toDouble());
-    p->yellow = KoColorSpaceMaths< qreal, KoCmykF32Traits::channels_type >::scaleToA(elt.attribute("y").toDouble());
-    p->black = KoColorSpaceMaths< qreal, KoCmykF32Traits::channels_type >::scaleToA(elt.attribute("k").toDouble());
+    p->cyan = KoColorSpaceMaths< qreal, KoCmykF32Traits::channels_type >::scaleToA(KisDomUtils::toDouble(elt.attribute("c")));
+    p->magenta = KoColorSpaceMaths< qreal, KoCmykF32Traits::channels_type >::scaleToA(KisDomUtils::toDouble(elt.attribute("m")));
+    p->yellow = KoColorSpaceMaths< qreal, KoCmykF32Traits::channels_type >::scaleToA(KisDomUtils::toDouble(elt.attribute("y")));
+    p->black = KoColorSpaceMaths< qreal, KoCmykF32Traits::channels_type >::scaleToA(KisDomUtils::toDouble(elt.attribute("k")));
     p->alpha = 1.0;
 }
 
-void CmykF32ColorSpace::toHSY(QVector <double> channelValues, qreal *hue, qreal *sat, qreal *luma) const
+void CmykF32ColorSpace::toHSY(const QVector<double> &channelValues, qreal *hue, qreal *sat, qreal *luma) const
 {
+    qreal c0 = channelValues[0];
+    qreal c1 = channelValues[1];
+    qreal c2 = channelValues[2];
+    qreal c3 = channelValues[3];
     //we use HSI here because we can't linearise CMYK, and HSY doesn't work right with...
-    CMYKToCMY(&channelValues[0],&channelValues[1],&channelValues[2],&channelValues[3]);
-    channelValues[0] = 1.0-channelValues[0];
-    channelValues[1] = 1.0-channelValues[1];
-    channelValues[2] = 1.0-channelValues[2];
-    RGBToHSI(channelValues[0],channelValues[1],channelValues[2], hue, sat, luma);
+    CMYKToCMY(&c0, &c1, &c2, &c3);
+    c0 = 1.0 - c0;
+    c1 = 1.0 - c1;
+    c2 = 1.0 - c2;
+    RGBToHSI(c0, c1, c2, hue, sat, luma);
 }
 
 QVector <double> CmykF32ColorSpace::fromHSY(qreal *hue, qreal *sat, qreal *luma) const
@@ -103,13 +108,17 @@ QVector <double> CmykF32ColorSpace::fromHSY(qreal *hue, qreal *sat, qreal *luma)
     return channelValues;
 }
 
-void CmykF32ColorSpace::toYUV(QVector <double> channelValues, qreal *y, qreal *u, qreal *v) const
+void CmykF32ColorSpace::toYUV(const QVector<double> &channelValues, qreal *y, qreal *u, qreal *v) const
 {
-    CMYKToCMY(&channelValues[0],&channelValues[1],&channelValues[2],&channelValues[3]);
-    channelValues[0] = 1.0-channelValues[0];
-    channelValues[1] = 1.0-channelValues[1];
-    channelValues[2] = 1.0-channelValues[2];
-    RGBToYUV(channelValues[0],channelValues[1],channelValues[2], y, u, v, (1.0 - 0.299),(1.0 - 0.587), (1.0 - 0.114));
+    qreal c0 = channelValues[0];
+    qreal c1 = channelValues[1];
+    qreal c2 = channelValues[2];
+    qreal c3 = channelValues[3];
+    CMYKToCMY(&c0, &c1, &c2, &c3);
+    c0 = 1.0 - c0;
+    c1 = 1.0 - c1;
+    c2 = 1.0 - c2;
+    RGBToYUV(c0, c1, c2, y, u, v, (1.0 - 0.299),(1.0 - 0.587), (1.0 - 0.114));
 }
 
 QVector <double> CmykF32ColorSpace::fromYUV(qreal *y, qreal *u, qreal *v) const

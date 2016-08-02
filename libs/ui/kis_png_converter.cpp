@@ -342,7 +342,7 @@ public:
         delete[] row_pointer;
     }
     virtual png_bytep readLine() {
-        png_read_row(png_ptr, row_pointer, NULL);
+        png_read_row(png_ptr, row_pointer, 0);
         return row_pointer;
     }
 private:
@@ -437,14 +437,14 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
 
     png_infop info_ptr = png_create_info_struct(png_ptr);
     if (!info_ptr) {
-        png_destroy_read_struct(&png_ptr, (png_infopp)NULL, (png_infopp)NULL);
+        png_destroy_read_struct(&png_ptr, (png_infopp)0, (png_infopp)0);
         iod->close();
         return (KisImageBuilder_RESULT_FAILURE);
     }
 
     png_infop end_info = png_create_info_struct(png_ptr);
     if (!end_info) {
-        png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp)NULL);
+        png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp)0);
         iod->close();
         return (KisImageBuilder_RESULT_FAILURE);
     }
@@ -485,7 +485,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
     // Read information about the png
     png_uint_32 width, height;
     int color_nb_bits, color_type, interlace_type;
-    png_get_IHDR(png_ptr, info_ptr, &width, &height, &color_nb_bits, &color_type, &interlace_type, NULL, NULL);
+    png_get_IHDR(png_ptr, info_ptr, &width, &height, &color_nb_bits, &color_type, &interlace_type, 0, 0);
     dbgFile << "width = " << width << " height = " << height << " color_nb_bits = " << color_nb_bits << " color_type = " << color_type << " interlace_type = " << interlace_type << endl;
     // swap byteorder on little endian machines.
 #ifndef WORDS_BIGENDIAN
@@ -512,6 +512,47 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
     int compression_type;
     png_uint_32 proflen;
 
+    // Get the various optional chunks
+
+    // https://www.w3.org/TR/PNG/#11cHRM
+#if defined(PNG_cHRM_SUPPORTED)
+    double whitePointX, whitePointY;
+    double redX, redY;
+    double greenX, greenY;
+    double blueX, blueY;
+    png_get_cHRM(png_ptr,info_ptr, &whitePointX, &whitePointY, &redX, &redY, &greenX, &greenY, &blueX, &blueY);
+    qDebug() << "cHRM:" << whitePointX << whitePointY << redX << redY << greenX << greenY << blueX << blueY;
+#endif
+
+    // https://www.w3.org/TR/PNG/#11gAMA
+#if defined(PNG_GAMMA_SUPPORTED)
+    double gamma;
+    png_get_gAMA(png_ptr, info_ptr, &gamma);
+    qDebug() << "gAMA" << gamma;
+#endif
+
+    // https://www.w3.org/TR/PNG/#11sRGB
+#if defined(PNG_sRGB_SUPPORTED)
+    int sRGBIntent;
+    png_get_sRGB(png_ptr, info_ptr, &sRGBIntent);
+    qDebug() << "sRGB" << sRGBIntent;
+#endif
+
+bool fromBlender = false;
+
+png_text* text_ptr;
+    int num_comments;
+png_get_text(png_ptr, info_ptr, &text_ptr, &num_comments);
+
+        for (int i = 0; i < num_comments; i++) {
+            QString key = QString(text_ptr[i].key).toLower();
+            if (key == "file") {
+                QString relatedFile = text_ptr[i].text;
+                if (relatedFile.contains(".blend", Qt::CaseInsensitive)){
+                    fromBlender=true;
+                }
+            }
+        }
 
     const KoColorProfile* profile = 0;
     if (png_get_iCCP(png_ptr, info_ptr, &profile_name, &compression_type, &profile_data, &proflen)) {
@@ -530,7 +571,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
     }
     else {
         dbgFile << "no embedded profile, will use the default profile";
-        if (color_nb_bits == 16 && !qAppName().toLower().contains("test") && !m_batchMode) {
+        if (color_nb_bits == 16 && !fromBlender && !qAppName().toLower().contains("test") && !m_batchMode) {
             KisConfig cfg;
             quint32 behaviour = cfg.pasteBehaviour();
             if (behaviour == PASTE_ASK) {
@@ -612,20 +653,19 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
     KisPaintLayerSP layer = new KisPaintLayer(m_image.data(), m_image -> nextLayerName(), UCHAR_MAX);
 
     // Read comments/texts...
-    png_text* text_ptr;
-    int num_comments;
     png_get_text(png_ptr, info_ptr, &text_ptr, &num_comments);
     if (m_doc) {
         KoDocumentInfo * info = m_doc->documentInfo();
         dbgFile << "There are " << num_comments << " comments in the text";
         for (int i = 0; i < num_comments; i++) {
-            QString key = text_ptr[i].key;
+            QString key = QString(text_ptr[i].key).toLower();
             dbgFile << "key is |" << text_ptr[i].key << "| containing " << text_ptr[i].text << " " << (key ==  "Raw profile type exif ");
             if (key == "title") {
                 info->setAboutInfo("title", text_ptr[i].text);
-            } else if (key == "abstract") {
-                info->setAboutInfo("description", text_ptr[i].text);
+            } else if (key == "description") {
+                info->setAboutInfo("comment", text_ptr[i].text);
             } else if (key == "author") {
+		qDebug()<<"Author:"<<text_ptr[i].text;
                 info->setAuthorInfo("creator", text_ptr[i].text);
             } else if (key.contains("Raw profile type exif")) {
                 decode_meta_data(text_ptr + i, layer->metaData(), "exif", 6);
@@ -672,7 +712,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
         if (color_type == PNG_COLOR_TYPE_PALETTE) {
             png_bytep alpha_ptr;
             int num_alpha;
-            png_get_tRNS(png_ptr, info_ptr, &alpha_ptr, &num_alpha, NULL);
+            png_get_tRNS(png_ptr, info_ptr, &alpha_ptr, &num_alpha, 0);
             for (int i = 0; i < num_alpha; ++i) {
                 palette_alpha[i] = alpha_ptr[i];
             }
@@ -775,19 +815,11 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
 
 }
 
-KisImageBuilder_Result KisPNGConverter::buildImage(const QUrl &uri)
+KisImageBuilder_Result KisPNGConverter::buildImage(const QString &filename)
 {
-    dbgFile << QFile::encodeName(uri.path()) << " " << uri.path() << " " << uri;
-    if (uri.isEmpty())
-        return KisImageBuilder_RESULT_NO_URI;
+    m_path = filename;
 
-    if (!uri.isLocalFile()) {
-        return KisImageBuilder_RESULT_NOT_LOCAL;
-    }
-
-    m_path = uri.toDisplayString();
-
-    QFile fp(uri.toLocalFile());
+    QFile fp(filename);
     if (fp.exists()) {
         return buildImage(&fp);
     }
@@ -840,18 +872,13 @@ bool KisPNGConverter::saveDeviceToStore(const QString &filename, const QRect &im
 }
 
 
-KisImageBuilder_Result KisPNGConverter::buildFile(const QUrl &uri, const QRect &imageRect, const qreal xRes, const qreal yRes, KisPaintDeviceSP device, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisPNGOptions options, KisMetaData::Store* metaData)
+KisImageBuilder_Result KisPNGConverter::buildFile(const QString &filename, const QRect &imageRect, const qreal xRes, const qreal yRes, KisPaintDeviceSP device, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisPNGOptions options, KisMetaData::Store* metaData)
 {
-    dbgFile << "Start writing PNG File " << uri;
-    if (uri.isEmpty())
-        return KisImageBuilder_RESULT_NO_URI;
-
-    if (!uri.isLocalFile())
-        return KisImageBuilder_RESULT_NOT_LOCAL;
+    dbgFile << "Start writing PNG File " << filename;
     // Open a QIODevice for writing
-    QFile *fp = new QFile(uri.toLocalFile());
-    KisImageBuilder_Result result = buildFile(fp, imageRect, xRes, yRes, device, annotationsStart, annotationsEnd, options, metaData);
-    delete fp;
+    QFile fp (filename);
+    KisImageBuilder_Result result = buildFile(&fp, imageRect, xRes, yRes, device, annotationsStart, annotationsEnd, options, metaData);
+
     return result;
 }
 
@@ -898,7 +925,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, const QRe
 
     png_infop info_ptr = png_create_info_struct(png_ptr);
     if (!info_ptr) {
-        png_destroy_write_struct(&png_ptr, (png_infopp)NULL);
+        png_destroy_write_struct(&png_ptr, (png_infopp)0);
         return (KisImageBuilder_RESULT_FAILURE);
     }
 
@@ -991,9 +1018,14 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, const QRe
     // set sRGB only if the profile is sRGB  -- http://www.w3.org/TR/PNG/#11sRGB says sRGB and iCCP should not both be present
 
     bool sRGB = device->colorSpace()->profile()->name().contains(QLatin1String("srgb"), Qt::CaseInsensitive);
-    if (!options.saveSRGBProfile && sRGB) {
-        png_set_sRGB(png_ptr, info_ptr, PNG_sRGB_INTENT_ABSOLUTE);
-    }
+    /*
+     * This automatically writes the correct gamma and chroma chunks along with the sRGB chunk, but firefox's
+     * color management is bugged, so once you give it any incentive to start color managing an sRGB image it
+     * will turn, for example, a nice desaturated rusty red into bright poppy red. So this is disabled for now.
+     */    
+    /*if (!options.saveSRGBProfile && sRGB) {
+	    png_set_sRGB_gAMA_and_cHRM(png_ptr, info_ptr, PNG_sRGB_INTENT_PERCEPTUAL);
+    }*/
     // set the palette
     if (color_type == PNG_COLOR_TYPE_PALETTE) {
         png_set_PLTE(png_ptr, info_ptr, palette, num_palette);
@@ -1041,23 +1073,24 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, const QRe
     }
 
     // read comments from the document information
+    // warning: according to the official png spec, the keys need to be capitalised!
     if (m_doc) {
         png_text texts[3];
         int nbtexts = 0;
         KoDocumentInfo * info = m_doc->documentInfo();
-        QString title = info->aboutInfo("creator");
+        QString title = info->aboutInfo("title");
         if (!title.isEmpty()) {
-            fillText(texts + nbtexts, "title", title);
+            fillText(texts + nbtexts, "Title", title);
             nbtexts++;
         }
-        QString abstract = info->aboutInfo("description");
+        QString abstract = info->aboutInfo("comment");
         if (!abstract.isEmpty()) {
-            fillText(texts + nbtexts, "abstract", abstract);
+            fillText(texts + nbtexts, "Description", abstract);
             nbtexts++;
         }
         QString author = info->authorInfo("creator");
         if (!author.isEmpty()) {
-            fillText(texts + nbtexts, "author", author);
+            fillText(texts + nbtexts, "Author", author);
             nbtexts++;
         }
 
@@ -1121,28 +1154,28 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, const QRe
 #endif
 
     // Write the PNG
-    //     png_write_png(png_ptr, info_ptr, PNG_TRANSFORM_IDENTITY, NULL);
+    //     png_write_png(png_ptr, info_ptr, PNG_TRANSFORM_IDENTITY, 0);
 
     // Fill the data structure
     png_byte** row_pointers = new png_byte*[imageRect.height()];
-    for (int y = imageRect.y(); y < imageRect.y() + imageRect.height(); y++) {
-
+    int row = 0;
+    for (int y = imageRect.y(); y < imageRect.y() + imageRect.height(); y++, row++) {
         KisHLineConstIteratorSP it = device->createHLineConstIteratorNG(imageRect.x(), y, imageRect.width());
 
-        row_pointers[y] = new png_byte[imageRect.width() * device->pixelSize()];
+        row_pointers[row] = new png_byte[imageRect.width() * device->pixelSize()];
 
         switch (color_type) {
         case PNG_COLOR_TYPE_GRAY:
         case PNG_COLOR_TYPE_GRAY_ALPHA:
             if (color_nb_bits == 16) {
-                quint16 *dst = reinterpret_cast<quint16 *>(row_pointers[y]);
+                quint16 *dst = reinterpret_cast<quint16 *>(row_pointers[row]);
                 do {
                     const quint16 *d = reinterpret_cast<const quint16 *>(it->oldRawData());
                     *(dst++) = d[0];
                     if (options.alpha) *(dst++) = d[1];
                 } while (it->nextPixel());
             } else {
-                quint8 *dst = row_pointers[y];
+                quint8 *dst = row_pointers[row];
                 do {
                     const quint8 *d = it->oldRawData();
                     *(dst++) = d[0];
@@ -1153,7 +1186,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, const QRe
         case PNG_COLOR_TYPE_RGB:
         case PNG_COLOR_TYPE_RGB_ALPHA:
             if (color_nb_bits == 16) {
-                quint16 *dst = reinterpret_cast<quint16 *>(row_pointers[y]);
+                quint16 *dst = reinterpret_cast<quint16 *>(row_pointers[row]);
                 do {
                     const quint16 *d = reinterpret_cast<const quint16 *>(it->oldRawData());
                     *(dst++) = d[2];
@@ -1162,7 +1195,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, const QRe
                     if (options.alpha) *(dst++) = d[3];
                 } while (it->nextPixel());
             } else {
-                quint8 *dst = row_pointers[y];
+                quint8 *dst = row_pointers[row];
                 do {
                     const quint8 *d = it->oldRawData();
                     *(dst++) = d[2];
@@ -1173,7 +1206,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, const QRe
             }
             break;
         case PNG_COLOR_TYPE_PALETTE: {
-            quint8 *dst = row_pointers[y];
+            quint8 *dst = row_pointers[row];
             KisPNGWriteStream writestream(dst, color_nb_bits);
             do {
                 const quint8 *d = it->oldRawData();
@@ -1222,7 +1255,7 @@ void KisPNGConverter::cancel()
 
 void KisPNGConverter::progress(png_structp png_ptr, png_uint_32 row_number, int pass)
 {
-    if (png_ptr == NULL || row_number > PNG_MAX_UINT || pass > 7) return;
+    if (png_ptr == 0 || row_number > PNG_MAX_UINT || pass > 7) return;
     //     setProgress(row_number);
 }
 

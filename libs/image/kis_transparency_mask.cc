@@ -90,7 +90,7 @@ QRect KisTransparencyMask::needRect(const QRect &rect, PositionToFilthy pos) con
 
 QIcon KisTransparencyMask::icon() const
 {
-    return KisIconUtils::loadIcon("view-filter");
+    return KisIconUtils::loadIcon("transparencyMask");
 }
 
 bool KisTransparencyMask::accept(KisNodeVisitor &v)

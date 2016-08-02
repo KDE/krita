@@ -20,7 +20,6 @@
 #include "kis_texture_tile.h"
 #include "kis_texture_tile_update_info.h"
 
-#ifdef HAVE_OPENGL
 #include <kis_debug.h>
 #if !defined(QT_OPENGL_ES)
 #include <QOpenGLBuffer>
@@ -57,7 +56,7 @@ inline QRectF relativeRect(const QRect &br /* baseRect */,
 
 
 KisTextureTile::KisTextureTile(const QRect &imageRect, const KisGLTexturesInfo *texturesInfo,
-                               const QByteArray &fillData, FilterMode filter,
+                               const QByteArray &fillData, KisOpenGL::FilterMode filter,
                                bool useBuffer, int numMipmapLevels, QOpenGLFunctions *fcn)
 
     : m_textureId(0)
@@ -129,11 +128,8 @@ void KisTextureTile::bindToActiveTexture()
 
 void KisTextureTile::setNeedsMipmapRegeneration()
 {
-    // TODO: when a switch for LoD is implemented, put it there to
-    //       allow mipmapping in that case
-
-    if (m_filter == TrilinearFilterMode ||
-        m_filter == HighQualityFiltering) {
+    if (m_filter == KisOpenGL::TrilinearFilterMode ||
+        m_filter == KisOpenGL::HighQualityFiltering) {
 
         m_needsMipmapRegeneration = true;
     }
@@ -169,6 +165,37 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo)
         createTextureBuffer((const char*)updateInfo.data(), updateInfo.patchPixelsLength());
     }
 #endif
+
+    /**
+     * In some special case, when the Lod0 stroke is cancelled the
+     * following situation is possible:
+     *
+     * 1)  The stroke  is  cancelled,  Lod0 update  is  issued by  the
+     *     image. LodN level of the openGL times is still dirty.
+     *
+     * 2) [here, ideally, the canvas should be re-rendered, so that
+     *     the mipmap would be regenerated in bindToActiveTexture()
+     *     call, by in some cases (if you cancel and paint to quickly,
+     *     that doesn't have time to happen]
+     *
+     * 3) The new LodN stroke issues a *partial* update of a LodN
+     *    plane of the tile. But the plane is still *dirty*! We update
+     *    a part of it, but we cannot regenerate the mipmap anymore,
+     *    because the Lod0 level is not known yet!
+     *
+     * To avoid this issue, we should regenerate the dirty mipmap
+     * *before* doing anything with the low-resolution plane.
+     */
+    if (patchLevelOfDetail > 0 &&
+        m_needsMipmapRegeneration &&
+        !updateInfo.isEntireTileUpdated()) {
+
+        f->glBindTexture(GL_TEXTURE_2D, m_textureId);
+        f->glGenerateMipmap(GL_TEXTURE_2D);
+        f->glBindTexture(GL_TEXTURE_2D, 0);
+        m_needsMipmapRegeneration = false;
+    }
+
 
     if (updateInfo.isEntireTileUpdated()) {
 
@@ -326,6 +353,15 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo)
         }
     }
 
+    //// Uncomment this warning if you see any weird flickering when
+    //// Instant Preview updates
+    //
+    // if (!patchLevelOfDetail &&
+    //     m_currentLodPlane &&
+    //     !updateInfo.isEntireTileUpdated()) {
+    //     qDebug() << "WARNING: LodN -> Lod0 switch is requested for the partial tile udpate! Flickering is possible..." << ppVar(patchSize);
+    // }
+
     if (!patchLevelOfDetail) {
         setNeedsMipmapRegeneration();
     } else {
@@ -355,6 +391,3 @@ void KisTextureTile::createTextureBuffer(const char *data, int size)
     }
 }
 #endif
-
-#endif /* HAVE_OPENGL */
-

@@ -23,7 +23,6 @@
 
 #include "kis_stroke_strategy_undo_command_based.h"
 #include "kis_types.h"
-#include "kritadefaulttools_export.h"
 #include "kis_lod_transform.h"
 
 
@@ -31,10 +30,10 @@ class KisUpdatesFacade;
 class KisPostExecutionUndoAdapter;
 
 
-class KRITADEFAULTTOOLS_EXPORT MoveStrokeStrategy : public KisStrokeStrategyUndoCommandBased
+class MoveStrokeStrategy : public KisStrokeStrategyUndoCommandBased
 {
 public:
-    class KRITADEFAULTTOOLS_EXPORT Data : public KisStrokeJobData {
+    class Data : public KisStrokeJobData {
     public:
         Data(QPoint _offset)
             : KisStrokeJobData(SEQUENTIAL, EXCLUSIVE),
@@ -58,18 +57,8 @@ public:
     };
 
 public:
-    MoveStrokeStrategy(KisNodeSP node, KisUpdatesFacade *updatesFacade,
+    MoveStrokeStrategy(KisNodeList nodes, KisUpdatesFacade *updatesFacade,
                        KisPostExecutionUndoAdapter *undoAdapter);
-
-    /**
-     * You can use deferred initialization of the node pointer
-     * To use it you need to pass NULL to the constructor, and
-     * set the node with setNode layer.
-     * NOTE: once set, you cannot change the node anymore,
-     *       you'll get an assert
-     */
-
-    void setNode(KisNodeSP node);
 
     void initStrokeCallback();
     void finishStrokeCallback();
@@ -89,10 +78,12 @@ private:
     void saveInitialNodeOffsets(KisNodeSP node);
 
 private:
-    KisNodeSP m_node;
+    KisNodeList m_nodes;
+    QSet<KisNodeSP> m_blacklistedNodes;
     KisUpdatesFacade *m_updatesFacade;
     QPoint m_finalOffset;
     QRect m_dirtyRect;
+    QHash<KisNodeSP, QRect> m_dirtyRects;
     bool m_undoEnabled;
     bool m_updatesEnabled;
     QHash<KisNodeSP, QPoint> m_initialNodeOffsets;

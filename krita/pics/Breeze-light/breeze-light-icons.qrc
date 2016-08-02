@@ -5,6 +5,10 @@
         <file>light_application-pdf.svg</file>
         <file>light_applications-system.svg</file>
         <file>light_arrow-down.svg</file>
+        <file>light_arrow-downright.svg</file>
+        <file>light_arrow-downleft.svg</file>
+        <file>light_arrow-topright.svg</file>
+        <file>light_arrow-topleft.svg</file>
         <file>light_arrow-left.svg</file>
         <file>light_arrow-right.svg</file>
         <file>light_arrow-up.svg</file>
@@ -24,6 +28,7 @@
         <file>light_document-open.svg</file>
         <file>light_document-print-preview.svg</file>
         <file>light_document-print.svg</file>
+        <file>light_document-properties.svg</file>       
         <file>light_document-save-as.svg</file>
         <file>light_document-save.svg</file>
         <file>light_download.svg</file>
@@ -40,6 +45,9 @@
         <file>light_folder.svg</file>
         <file>light_format-list-unordered.svg</file>
         <file>light_go-home.svg</file>
+        <file>light_go-next.svg</file>
+        <file>light_go-previous.svg</file>
+        <file>light_go-up.svg</file>
         <file>light_help-contents.svg</file>
         <file>light_im-user.svg</file>
         <file>light_kde.svg</file>

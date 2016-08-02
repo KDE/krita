@@ -13,7 +13,7 @@ add_library(kritatangentnormalpaintop MODULE ${kritatangentnormalpaintop_SOURCES
 
 target_link_libraries(kritatangentnormalpaintop kritalibpaintop)
 
-install(TARGETS kritatangentnormalpaintop  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS kritatangentnormalpaintop  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 ########### install files ###############
 
 install( FILES  krita-tangetnormal.png DESTINATION ${DATA_INSTALL_DIR}/krita/images)

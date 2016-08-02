@@ -20,7 +20,7 @@ target_link_libraries(zoomcontroller_test  kritawidgets Qt5::Test)
 ########### next target ###############
 
 set(KoResourceTaggingTest_SRCS KoResourceTaggingTest.cpp )
-kde4_add_unit_test(KoResourceTaggingTest TESTNAME libs-widgets-KoResourceTaggingTest  ${KoResourceTaggingTest_SRCS})
+kde4_add_broken_unit_test(KoResourceTaggingTest TESTNAME libs-widgets-KoResourceTaggingTest  ${KoResourceTaggingTest_SRCS})
 target_link_libraries(KoResourceTaggingTest  kritawidgets Qt5::Test)
 
 ########### end ###############

@@ -14,7 +14,7 @@ add_library(kritadynapaintop MODULE ${kritadynapaintop_SOURCES})
 
 target_link_libraries(kritadynapaintop kritalibpaintop)
 
-install(TARGETS kritadynapaintop  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS kritadynapaintop  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 install( FILES
     krita-dyna.png DESTINATION ${DATA_INSTALL_DIR}/krita/images)
 

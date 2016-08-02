@@ -36,6 +36,7 @@ public:
 
     float handleSize() const;
     void setHandleSize(float newSize);
+    void setVisible(bool v);
 
 Q_SIGNALS:
     void handleSizeChanged();
@@ -50,6 +51,8 @@ private:
 
 private Q_SLOTS:
     void mirrorModeChanged();
+    void moveHorizontalAxisToCenter();
+    void moveVerticalAxisToCenter();
 };
 
 #endif // KISMIRRORAXIS_H

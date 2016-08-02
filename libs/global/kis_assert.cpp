@@ -26,6 +26,7 @@
 #include <klocalizedstring.h>
 #include <kis_assert_exception.h>
 #include <string>
+#include "config-hide-safe-asserts.h"
 
 /**
  * TODO: Add automatic saving of the documents
@@ -40,13 +41,14 @@
  *    lead to an infinite loop.
  */
 
-void kis_assert_common(const char *assertion, const char *file, int line, bool throwException)
+void kis_assert_common(const char *assertion, const char *file, int line, bool throwException, bool isIgnorable)
 {
     QString shortMessage =
-        QString("ASSERT (krita): \"%1\" in file %2, line %3")
+        QString("%4ASSERT (krita): \"%1\" in file %2, line %3")
         .arg(assertion)
         .arg(file)
-        .arg(line);
+        .arg(line)
+        .arg(isIgnorable ? "SAFE " : "");
 
     QString longMessage =
         QString(
@@ -65,7 +67,16 @@ void kis_assert_common(const char *assertion, const char *file, int line, bool t
         disableAssertMsg = true;
     }
 
-    QMessageBox::StandardButton button = QMessageBox::Abort;
+#ifdef HIDE_SAFE_ASSERTS
+    const bool shouldIgnoreAsserts = HIDE_SAFE_ASSERTS;
+#else
+    const bool shouldIgnoreAsserts = false;
+#endif
+
+    disableAssertMsg |= shouldIgnoreAsserts;
+
+    QMessageBox::StandardButton button =
+        isIgnorable ? QMessageBox::Ignore : QMessageBox::Abort;
 
     if (!disableAssertMsg) {
         button =
@@ -77,6 +88,10 @@ void kis_assert_common(const char *assertion, const char *file, int line, bool t
 
     if (button == QMessageBox::Abort) {
         qFatal("%s", shortMessage.toLatin1().data());
+    } else if (isIgnorable) {
+        // Assert is a bug! Please don't change this line to warnKrita,
+        // the user must see it!
+        qWarning("%s", shortMessage.toLatin1().data());
     } else if (throwException) {
         throw KisAssertException(shortMessage.toLatin1().data());
     }
@@ -85,12 +100,17 @@ void kis_assert_common(const char *assertion, const char *file, int line, bool t
 
 void kis_assert_recoverable(const char *assertion, const char *file, int line)
 {
-    kis_assert_common(assertion, file, line, false);
+    kis_assert_common(assertion, file, line, false, false);
+}
+
+void kis_safe_assert_recoverable(const char *assertion, const char *file, int line)
+{
+    kis_assert_common(assertion, file, line, false, true);
 }
 
 void kis_assert_exception(const char *assertion, const char *file, int line)
 {
-    kis_assert_common(assertion, file, line, true);
+    kis_assert_common(assertion, file, line, true, false);
 }
 
 void kis_assert_x_exception(const char *assertion,
@@ -104,5 +124,5 @@ void kis_assert_x_exception(const char *assertion,
         .arg(what)
         .arg(assertion);
 
-    kis_assert_common(res.toLatin1().data(), file, line, true);
+    kis_assert_common(res.toLatin1().data(), file, line, true, false);
 }

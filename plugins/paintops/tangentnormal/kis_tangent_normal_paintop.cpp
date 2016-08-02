@@ -82,24 +82,38 @@ KisSpacingInformation KisTangentNormalPaintOp::paintAt(const KisPaintInformation
     if (currentSpace != "RGBA") {
 	rgbColorSpace = KoColorSpaceRegistry::instance()->rgb8();
     } else {
-	QString bit = rgbColorSpace->colorDepthId().id();//let Krita tell you what the bit depth string is.
-	rgbColorSpace = KoColorSpaceRegistry::instance()->colorSpace("RGBA", bit, currentColor.profile() );
+	rgbColorSpace = currentColor.colorSpace();
+    }
+    QVector <float> channelValues(4);
+    qreal r, g, b;
+
+    if (currentColor.colorSpace()->colorDepthId().id()=="F16" || currentColor.colorSpace()->colorDepthId().id()=="F32"){
+        channelValues[0] = 0.5;//red
+        channelValues[1] = 0.5;//green
+        channelValues[2] = 1.0;//blue
+        channelValues[3] = 1.0;//alpha, leave alone.
+
+
+        m_tangentTiltOption.apply(info, &r, &g, &b);
+
+        channelValues[0] = r;//red
+        channelValues[1] = g;//green
+        channelValues[2] = b;//blue
+    } else {
+        channelValues[0] = 1.0;//blue
+        channelValues[1] = 0.5;//green
+        channelValues[2] = 0.5;//red
+        channelValues[3] = 1.0;//alpha, leave alone.
+
+        m_tangentTiltOption.apply(info, &r, &g, &b);
+
+        channelValues[0] = b;//blue
+        channelValues[1] = g;//green
+        channelValues[2] = r;//red
     }
 
     quint8 data[4];
-
-    data[0] = 255;//blue
-    data[1] = 128;//green
-    data[2] = 128;//red
-    data[3] = 255;//alpha, leave alone.
-
-    quint8 r, g, b;
-    m_tangentTiltOption.apply(info, &r, &g, &b);
-
-    data[0] = b;//blue
-    data[1] = g;//green
-    data[2] = r;//red
-
+    rgbColorSpace->fromNormalisedChannelsValue(data, channelValues);
     KoColor color(data, rgbColorSpace);//Should be default RGB(0.5,0.5,1.0)
     //draw stuff here, return kisspacinginformation.
     KisBrushSP brush = m_brush;
@@ -110,22 +124,19 @@ KisSpacingInformation KisTangentNormalPaintOp::paintAt(const KisPaintInformation
 
     qreal scale    = m_sizeOption.apply(info);
     scale *= KisLodTransform::lodToScale(painter()->device());
-
     qreal rotation = m_rotationOption.apply(info);
-
     if (checkSizeTooSmall(scale)) return KisSpacingInformation();
+    KisDabShape shape(scale, 1.0, rotation);
 
-    setCurrentScale(scale);
-    setCurrentRotation(rotation);
 
     QPointF cursorPos =
         m_scatterOption.apply(info,
-                              brush->maskWidth(scale, rotation, 0, 0, info),
-                              brush->maskHeight(scale, rotation, 0, 0, info));
+                              brush->maskWidth(shape, 0, 0, info),
+                              brush->maskHeight(shape, 0, 0, info));
 
     m_maskDab =
         m_dabCache->fetchDab(rgbColorSpace, color, cursorPos,
-                             scale, scale, rotation,
+                             shape,
                              info, m_softnessOption.apply(info),
                              &m_dstDabRect);
 
@@ -175,23 +186,38 @@ void KisTangentNormalPaintOp::paintLine(const KisPaintInformation& pi1, const Ki
 	if (currentSpace != "RGBA") {
 	    rgbColorSpace = KoColorSpaceRegistry::instance()->rgb8();
 	} else {
-	    QString bit = rgbColorSpace->colorDepthId().id();//let Krita tell you what the bit depth string is.
-	    rgbColorSpace = KoColorSpaceRegistry::instance()->colorSpace("RGBA", bit, currentColor.profile() );
+	    rgbColorSpace = currentColor.colorSpace();
 	}
+	QVector <float> channelValues(4);
+    qreal r, g, b;
+
+	if (currentColor.colorSpace()->colorDepthId().id()=="F16" || currentColor.colorSpace()->colorDepthId().id()=="F32"){
+        channelValues[0] = 0.5;//red
+        channelValues[1] = 0.5;//green
+        channelValues[2] = 1.0;//blue
+        channelValues[3] = 1.0;//alpha, leave alone.
+
+
+        m_tangentTiltOption.apply(pi2, &r, &g, &b);
+
+        channelValues[0] = r;//red
+        channelValues[1] = g;//green
+        channelValues[2] = b;//blue
+    } else {
+        channelValues[0] = 1.0;//blue
+        channelValues[1] = 0.5;//green
+        channelValues[2] = 0.5;//red
+        channelValues[3] = 1.0;//alpha, leave alone.
+
+        m_tangentTiltOption.apply(pi2, &r, &g, &b);
+
+        channelValues[0] = b;//blue
+        channelValues[1] = g;//green
+        channelValues[2] = r;//red
+    }
+
 	quint8 data[4];
-
-	data[0] = 255;//blue
-	data[1] = 128;//green
-	data[2] = 128;//red
-	data[3] = 255;//alpha, leave alone.
-
-	quint8 r, g, b;
-	m_tangentTiltOption.apply(pi2, &r, &g, &b);
-
-	data[0] = b;//blue
-	data[1] = g;//green
-	data[2] = r;//red
-
+	rgbColorSpace->fromNormalisedChannelsValue(data, channelValues);
 	KoColor color(data, rgbColorSpace);
         p.setPaintColor(color);
         p.drawDDALine(pi1.pos(), pi2.pos());

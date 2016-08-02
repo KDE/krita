@@ -22,6 +22,8 @@
 
 #include "KoShapeFactoryBase.h"
 
+#include <QDebug>
+
 #include "KoDocumentResourceManager.h"
 #include "KoDeferredShapeFactoryBase.h"
 #include "KoShape.h"
@@ -36,7 +38,7 @@
 #include <QPluginLoader>
 #include <QMutexLocker>
 #include <QMutex>
-
+#include <QPointer>
 
 
 #include <FlakeDebug.h>
@@ -72,7 +74,7 @@ public:
     int loadingPriority;
     QList<QPair<QString, QStringList> > xmlElements; // xml name space -> xml element names
     bool hidden;
-    QList<KoDocumentResourceManager *> resourceManagers;
+    QList<QPointer<KoDocumentResourceManager> > resourceManagers;
 };
 
 
@@ -180,11 +182,6 @@ void KoShapeFactoryBase::newDocumentResourceManager(KoDocumentResourceManager *m
     connect(manager, SIGNAL(destroyed(QObject *)), this, SLOT(pruneDocumentResourceManager(QObject*)));
 }
 
-QList<KoDocumentResourceManager *> KoShapeFactoryBase::documentResourceManagers() const
-{
-    return d->resourceManagers;
-}
-
 KoShape *KoShapeFactoryBase::createDefaultShape(KoDocumentResourceManager *documentResources) const
 {
     if (!d->deferredPluginName.isEmpty()) {
@@ -247,11 +244,16 @@ void KoShapeFactoryBase::getDeferredPlugin()
             d->deferredFactory = plugin;
         }
     }
-
+    qDeleteAll(offers);
 }
 
-void KoShapeFactoryBase::pruneDocumentResourceManager(QObject *obj)
+void KoShapeFactoryBase::pruneDocumentResourceManager(QObject *)
 {
-    KoDocumentResourceManager *r = qobject_cast<KoDocumentResourceManager*>(obj);
-    d->resourceManagers.removeAll(r);
+    QList<QPointer<KoDocumentResourceManager> > rms;
+    Q_FOREACH(QPointer<KoDocumentResourceManager> rm, d->resourceManagers) {
+        if (rm) {
+            rms << rm;
+        }
+    }
+    d->resourceManagers = rms;
 }

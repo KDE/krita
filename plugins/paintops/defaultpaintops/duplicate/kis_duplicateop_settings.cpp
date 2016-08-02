@@ -37,7 +37,7 @@
 #include <kis_pressure_opacity_option.h>
 #include <kis_pressure_size_option.h>
 #include <kis_paint_action_type_option.h>
-#include <kis_perspective_grid.h>
+#include <kis_dom_utils.h>
 
 KisDuplicateOpSettings::KisDuplicateOpSettings()
     : m_isOffsetNotUptodate(false)
@@ -106,8 +106,8 @@ void KisDuplicateOpSettings::fromXML(const QDomElement& elt)
     // properties are saved to the map
     KisPaintOpSettings::fromXML(elt);
 
-    m_offset.setX(elt.attribute("OffsetX", "0.0").toDouble());
-    m_offset.setY(elt.attribute("OffsetY", "0.0").toDouble());
+    m_offset.setX(KisDomUtils::toDouble(elt.attribute("OffsetX", "0.0")));
+    m_offset.setY(KisDomUtils::toDouble(elt.attribute("OffsetY", "0.0")));
     m_isOffsetNotUptodate = false;
 }
 
@@ -123,7 +123,7 @@ void KisDuplicateOpSettings::toXML(QDomDocument& doc, QDomElement& rootElt) cons
 
 KisPaintOpSettingsSP KisDuplicateOpSettings::clone() const
 {
-    KisPaintOpSettingsSP setting = KisPaintOpSettings::clone();
+    KisPaintOpSettingsSP setting = KisBrushBasedPaintOpSettings::clone();
     KisDuplicateOpSettings* s = dynamic_cast<KisDuplicateOpSettings*>(setting.data());
     s->m_offset = m_offset;
     s->m_isOffsetNotUptodate = m_isOffsetNotUptodate;

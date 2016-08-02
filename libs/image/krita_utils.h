@@ -26,16 +26,28 @@ class QPen;
 class QPointF;
 class QPainterPath;
 class QBitArray;
+class QPainter;
 
 #include <QVector>
 #include "kritaimage_export.h"
 #include "kis_types.h"
+#include <functional>
+
 
 namespace KritaUtils
 {
     QSize KRITAIMAGE_EXPORT optimalPatchSize();
 
     QVector<QRect> KRITAIMAGE_EXPORT splitRectIntoPatches(const QRect &rc, const QSize &patchSize);
+    QVector<QRect> KRITAIMAGE_EXPORT splitRegionIntoPatches(const QRegion &region, const QSize &patchSize);
+
+    QVector<QPoint> KRITAIMAGE_EXPORT sampleRectWithPoints(const QRect &rect);
+    QVector<QPointF> KRITAIMAGE_EXPORT sampleRectWithPoints(const QRectF &rect);
+
+    QRect KRITAIMAGE_EXPORT approximateRectFromPoints(const QVector<QPoint> &points);
+    QRectF KRITAIMAGE_EXPORT approximateRectFromPoints(const QVector<QPointF> &points);
+
+    QRect KRITAIMAGE_EXPORT approximateRectWithPointTransform(const QRect &rect, std::function<QPointF(QPointF)> func);
 
     QRegion KRITAIMAGE_EXPORT splitTriangles(const QPointF &center,
                                              const QVector<QPointF> &points);
@@ -80,6 +92,47 @@ namespace KritaUtils
 
         return true;
     }
+
+    template <class C>
+        void makeContainerUnique(C &container) {
+        std::sort(container.begin(), container.end());
+        auto newEnd = std::unique(container.begin(), container.end());
+
+        while (newEnd != container.end()) {
+            newEnd = container.erase(newEnd);
+        }
+    }
+
+
+    template <class C>
+        void filterContainer(C &container, std::function<bool(typename C::reference)> keepIf) {
+
+            auto newEnd = std::remove_if(container.begin(), container.end(), std::unary_negate<decltype(keepIf)>(keepIf));
+            while (newEnd != container.end()) {
+               newEnd = container.erase(newEnd);
+            }
+    }
+
+
+    /**
+     * When drawing a rect Qt uses quite a weird algorithm. It
+     * draws 4 lines:
+     *  o at X-es: rect.x() and rect.right() + 1
+     *  o at Y-s: rect.y() and rect.bottom() + 1
+     *
+     *  Which means that bottom and right lines of the rect are painted
+     *  outside the virtual rectangle the rect defines. This methods overcome this issue by
+     *  painting the adjusted rect.
+     */
+    void KRITAIMAGE_EXPORT renderExactRect(QPainter *p, const QRect &rc);
+
+    /**
+     * \see renderExactRect(QPainter *p, const QRect &rc)
+     */
+    void KRITAIMAGE_EXPORT renderExactRect(QPainter *p, const QRect &rc, const QPen &pen);
+
+    QImage KRITAIMAGE_EXPORT convertQImageToGrayA(const QImage &image);
+    QColor KRITAIMAGE_EXPORT blendColors(const QColor &c1, const QColor &c2, qreal r1);
 }
 
 #endif /* __KRITA_UTILS_H */

@@ -28,7 +28,7 @@
 #include <KoColorSpaceTraits.h>
 #include <KoCmykColorSpaceTraits.h>
 
-#include <netinet/in.h> // htonl
+#include <QtEndian>
 
 #include "kis_global.h"
 #include <asl/kis_asl_writer_utils.h>
@@ -56,12 +56,12 @@ inline quint8 convertByteOrder<KoGrayU8Traits>(quint8 value) {
 
 template <>
 inline quint16 convertByteOrder<KoGrayU16Traits>(quint16 value) {
-    return ntohs(value);
+    return qFromBigEndian((quint16)value);
 }
 
 template <>
 inline quint32 convertByteOrder<KoGrayU32Traits>(quint32 value) {
-    return ntohs(value);
+    return qFromBigEndian((quint32)value);
 }
 
 template <>
@@ -71,12 +71,12 @@ inline quint8 convertByteOrder<KoBgrU8Traits>(quint8 value) {
 
 template <>
 inline quint16 convertByteOrder<KoBgrU16Traits>(quint16 value) {
-    return ntohs(value);
+    return qFromBigEndian((quint16)value);
 }
 
 template <>
 inline quint32 convertByteOrder<KoBgrU32Traits>(quint32 value) {
-    return ntohs(value);
+    return qFromBigEndian((quint32)value);
 }
 
 template <>
@@ -86,12 +86,12 @@ inline quint8 convertByteOrder<KoCmykU8Traits>(quint8 value) {
 
 template <>
 inline quint16 convertByteOrder<KoCmykU16Traits>(quint16 value) {
-    return ntohs(value);
+    return qFromBigEndian((quint16)value);
 }
 
 template <>
 inline float convertByteOrder<KoCmykF32Traits>(float value) {
-    return ntohs(value);
+    return qFromBigEndian((quint32)value);
 }
 
 template <>
@@ -101,12 +101,12 @@ inline quint8 convertByteOrder<KoLabU8Traits>(quint8 value) {
 
 template <>
 inline quint16 convertByteOrder<KoLabU16Traits>(quint16 value) {
-    return ntohs(value);
+    return qFromBigEndian((quint16)value);
 }
 
 template <>
 inline float convertByteOrder<KoLabF32Traits>(float value) {
-    return ntohs(value);
+    return qFromBigEndian((quint32)value);
 }
 
 template <class Traits>
@@ -271,7 +271,7 @@ typedef quint8 psd_uchar;
 typedef int psd_int;
 typedef quint8 Bytef;
 
-psd_status psd_unzip_without_prediction(psd_uchar *src_buf, psd_int src_len, 
+psd_status psd_unzip_without_prediction(psd_uchar *src_buf, psd_int src_len,
                                         psd_uchar *dst_buf, psd_int dst_len)
 {
 #ifdef HAVE_ZLIB
@@ -307,8 +307,8 @@ psd_status psd_unzip_without_prediction(psd_uchar *src_buf, psd_int src_len,
     return 0;
 }
 
-psd_status psd_unzip_with_prediction(psd_uchar *src_buf, psd_int src_len, 
-                                     psd_uchar *dst_buf, psd_int dst_len, 
+psd_status psd_unzip_with_prediction(psd_uchar *src_buf, psd_int src_len,
+                                     psd_uchar *dst_buf, psd_int dst_len,
                                      psd_int row_size, psd_int color_depth)
 {
     psd_status status;
@@ -560,7 +560,7 @@ inline void preparePixelForWrite(quint8 *dataPlane,
             quint16 *pixelPtr = reinterpret_cast<quint16*>(dataPlane) + i;
 
             val = *pixelPtr;
-            val = ntohs(val);
+            val = qFromBigEndian(val);
             if (channelId >= 0 && (colorMode == CMYK || colorMode == CMYK64)) {
                 val = quint16_MAX - val;
             }
@@ -573,7 +573,7 @@ inline void preparePixelForWrite(quint8 *dataPlane,
             quint32 *pixelPtr = reinterpret_cast<quint32*>(dataPlane) + i;
 
             val = *pixelPtr;
-            val = ntohl(val);
+            val = qFromBigEndian(val);
             if (channelId >= 0 && (colorMode == CMYK || colorMode == CMYK64)) {
                 val = quint16_MAX - val;
             }

@@ -36,6 +36,8 @@ public:
     bool initializationDebugEnabled() const;
     bool debugRawTabletValues() const;
 
+    bool shouldEatDriverShortcuts() const;
+
     QString eventToString(const QMouseEvent &ev, const QString &prefix);
     QString eventToString(const QKeyEvent &ev, const QString &prefix);
     QString eventToString(const QWheelEvent &ev, const QString &prefix);
@@ -50,6 +52,7 @@ public:
 
 private:
     bool m_debugEnabled;
+    bool m_shouldEatDriverShortcuts;
 };
 
 #endif /* __KIS_TABLET_DEBUGGER_H */

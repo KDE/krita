@@ -34,14 +34,14 @@
 #include <kundo2command.h>
 #include <KoColorSpaceRegistry.h>
 #include <KisImportExportManager.h>
-#include <kis_url_requester.h>
+#include <kis_file_name_requester.h>
 #include "ui_wdgfastcolortransfer.h"
 
 KisWdgFastColorTransfer::KisWdgFastColorTransfer(QWidget * parent) : KisConfigWidget(parent)
 {
     m_widget = new Ui_WdgFastColorTransfer();
     m_widget->setupUi(this);
-    m_widget->fileNameURLRequester->setMimeTypeFilters(KisImportExportManager::mimeFilter("application/x-krita", KisImportExportManager::Import));
+    m_widget->fileNameURLRequester->setMimeTypeFilters(KisImportExportManager::mimeFilter(KisImportExportManager::Import));
     connect(m_widget->fileNameURLRequester, SIGNAL(textChanged(const QString&)), this, SIGNAL(sigConfigurationItemChanged()));
 }
 
@@ -55,7 +55,7 @@ void KisWdgFastColorTransfer::setConfiguration(const KisPropertiesConfiguration*
 {
     QVariant value;
     if (config->getProperty("filename", value)) {
-        widget()->fileNameURLRequester->setUrl(QUrl::fromUserInput(value.toString()));
+        widget()->fileNameURLRequester->setFileName(value.toString());
     }
 
 }
@@ -63,7 +63,7 @@ void KisWdgFastColorTransfer::setConfiguration(const KisPropertiesConfiguration*
 KisPropertiesConfiguration* KisWdgFastColorTransfer::configuration() const
 {
     KisFilterConfiguration* config = new KisFilterConfiguration("colortransfer", 1);
-    QString fileName = this->widget()->fileNameURLRequester->url().url();
+    QString fileName = this->widget()->fileNameURLRequester->fileName();
 
     if (fileName.isEmpty()) return config;
 

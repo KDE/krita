@@ -25,6 +25,64 @@
 #include <kis_processing_information.h>
 #include <KoColorProfile.h>
 
+namespace {
+struct SliderConfig {
+    QString m_text;
+    int m_minimum;
+    int m_maximum;
+
+    inline void apply(QSpinBox* spinBox, QSlider* slider, QLabel* label) const
+    {
+        label->setText(m_text);
+        slider->setMinimum(m_minimum);
+        slider->setMaximum(m_maximum);
+        spinBox->setMinimum(m_minimum);
+        spinBox->setMaximum(m_maximum);
+
+        int sliderValue = slider->value();
+        if (sliderValue < m_minimum || sliderValue > m_maximum) {
+            slider->setValue((m_minimum + m_maximum) / 2);
+        }
+    }
+
+    inline double normalize(int value) const
+    {
+        return (double)value / (double)m_maximum;
+    }
+};
+
+struct WidgetSlidersConfig {
+    SliderConfig m_sliders[3];
+};
+
+#define PERCENT_FIELD_REL(x) {x, -100, 100}
+#define PERCENT_FIELD_ABS(x) {x,    0, 100}
+#define DEGREES_FIELD_REL(x) {x, -180, 180}
+#define DEGREES_FIELD_ABS(x) {x,    0, 360}
+#define HSX_CONFIGS(x) { \
+        { {DEGREES_FIELD_REL(i18n("Hue:")), PERCENT_FIELD_REL(i18n("Saturation:")), PERCENT_FIELD_REL(x)} }, \
+        { {DEGREES_FIELD_ABS(i18n("Hue:")), PERCENT_FIELD_ABS(i18n("Saturation:")), PERCENT_FIELD_REL(x)} } \
+}
+
+const WidgetSlidersConfig WIDGET_CONFIGS[][2] = {
+    // Hue/Saturation/Value
+    HSX_CONFIGS(i18n("Value:")),
+    // Hue/Saturation/Lightness
+    HSX_CONFIGS(i18n("Lightness:")),
+    // Hue/Saturation/Intensity
+    HSX_CONFIGS(i18n("Intensity:")),
+    // Hue/Saturation/Luminosity
+    HSX_CONFIGS(i18n("Luma:")),
+    // Blue Chroma/Red Chroma/Luma
+    {{ {PERCENT_FIELD_REL(i18n("Yellow-Blue:")), PERCENT_FIELD_REL(i18n("Green-Red:")), PERCENT_FIELD_REL(i18n("Luma:"))} },
+        { {PERCENT_FIELD_ABS(i18n("Yellow-Blue:")), PERCENT_FIELD_ABS(i18n("Green-Red:")), PERCENT_FIELD_REL(i18n("Luma:"))} }}
+};
+
+inline const WidgetSlidersConfig& getCurrentWidgetConfig(int type, bool colorize) {
+    return WIDGET_CONFIGS[type][colorize ? 1 : 0];
+}
+}
+
 KisHSVAdjustmentFilter::KisHSVAdjustmentFilter()
         : KisColorTransformationFilter(id(), categoryAdjust(), i18n("&HSV Adjustment..."))
 {
@@ -42,18 +100,16 @@ KoColorTransformation* KisHSVAdjustmentFilter::createTransformation(const KoColo
 {
     QHash<QString, QVariant> params;
     if (config) {
-        if (config->getBool("colorize")) {
-               params["h"] = config->getDouble("h", 0.5) / 360.0;
-        }
-        else {
-            params["h"] = config->getDouble("h", 0) / 180.0;
+        int type = config->getInt("type", 1);
+        bool colorize = config->getBool("colorize", false);
+        const WidgetSlidersConfig& widgetConfig = getCurrentWidgetConfig(type, colorize);
 
-        }
-        params["s"] = config->getInt("s", 0) * 0.01;
-        params["v"] = config->getInt("v", 0) * 0.01;
+        params["h"] = widgetConfig.m_sliders[0].normalize(config->getInt("h", 0));
+        params["s"] = widgetConfig.m_sliders[1].normalize(config->getInt("s", 0));
+        params["v"] = widgetConfig.m_sliders[2].normalize(config->getInt("v", 0));
 
-        params["type"] = config->getInt("type", 1);
-        params["colorize"] = config->getBool("colorize", false);
+        params["type"] = type;
+        params["colorize"] = colorize;
         params["lumaRed"]   = cs->lumaCoefficients()[0];
         params["lumaGreen"] = cs->lumaCoefficients()[1];
         params["lumaBlue"]  = cs->lumaCoefficients()[2];
@@ -77,20 +133,23 @@ KisHSVConfigWidget::KisHSVConfigWidget(QWidget * parent, Qt::WFlags f) : KisConf
     m_page = new Ui_WdgHSVAdjustment();
     m_page->setupUi(this);
 
-    m_page->hue->setRange(-180, 180, 0);
-    m_page->hue->setValue(0);
+    connect(m_page->cmbType, SIGNAL(activated(int)), this, SLOT(configureSliderLimitsAndLabels()));
+    connect(m_page->chkColorize, SIGNAL(toggled(bool)), this, SLOT(configureSliderLimitsAndLabels()));
 
-    m_page->saturation->setRange(-100, 100, 0);
-    m_page->saturation->setValue(0);
 
-    m_page->value->setRange(-100, 100, 0);
-    m_page->value->setValue(0);
+    // connect horizontal sliders
+    connect(m_page->hueSlider, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
+    connect(m_page->saturationSlider, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
+    connect(m_page->valueSlider, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
 
-    connect(m_page->cmbType, SIGNAL(activated(int)), SLOT(switchType(int)));
-    connect(m_page->hue, SIGNAL(valueChanged(qreal)), SIGNAL(sigConfigurationItemChanged()));
-    connect(m_page->value, SIGNAL(valueChanged(qreal)), SIGNAL(sigConfigurationItemChanged()));
-    connect(m_page->saturation, SIGNAL(valueChanged(qreal)), SIGNAL(sigConfigurationItemChanged()));
-    connect(m_page->chkColorize, SIGNAL(toggled(bool)), SLOT(switchColorize(bool)));
+    connect(m_page->hueSpinBox, SIGNAL(valueChanged(int)), m_page->hueSlider, SLOT(setValue(int)));
+    connect(m_page->saturationSpinBox, SIGNAL(valueChanged(int)), m_page->saturationSlider, SLOT(setValue(int)));
+    connect(m_page->valueSpinBox, SIGNAL(valueChanged(int)), m_page->valueSlider, SLOT(setValue(int)));
+
+    connect(m_page->hueSlider, SIGNAL(valueChanged(int)), m_page->hueSpinBox, SLOT(setValue(int)));
+    connect(m_page->saturationSlider, SIGNAL(valueChanged(int)), m_page->saturationSpinBox, SLOT(setValue(int)));
+    connect(m_page->valueSlider, SIGNAL(valueChanged(int)), m_page->valueSpinBox, SLOT(setValue(int)));
+
 }
 
 KisHSVConfigWidget::~KisHSVConfigWidget()
@@ -101,9 +160,9 @@ KisHSVConfigWidget::~KisHSVConfigWidget()
 KisPropertiesConfiguration * KisHSVConfigWidget::configuration() const
 {
     KisColorTransformationConfiguration* c = new KisColorTransformationConfiguration(KisHSVAdjustmentFilter::id().id(), 0);
-    c->setProperty("h", m_page->hue->value());
-    c->setProperty("s", m_page->saturation->value());
-    c->setProperty("v", m_page->value->value());
+    c->setProperty("h", m_page->hueSlider->value());
+    c->setProperty("s", m_page->saturationSlider->value());
+    c->setProperty("v", m_page->valueSlider->value());
     c->setProperty("type", m_page->cmbType->currentIndex());
     c->setProperty("colorize", m_page->chkColorize->isChecked());
     return c;
@@ -112,64 +171,20 @@ KisPropertiesConfiguration * KisHSVConfigWidget::configuration() const
 void KisHSVConfigWidget::setConfiguration(const KisPropertiesConfiguration * config)
 {
     m_page->cmbType->setCurrentIndex(config->getInt("type", 1));
-    m_page->hue->setValue(config->getInt("h", 0));
-    m_page->saturation->setValue(config->getInt("s", 0));
-    m_page->value->setValue(config->getInt("v", 0));
     m_page->chkColorize->setChecked(config->getBool("colorize", false));
-    switchType(m_page->cmbType->currentIndex());
+    m_page->hueSlider->setValue(config->getInt("h", 0));
+    m_page->saturationSlider->setValue(config->getInt("s", 0));
+    m_page->valueSlider->setValue(config->getInt("v", 0));
+    configureSliderLimitsAndLabels();
 }
 
-void KisHSVConfigWidget::switchType(int index)
+void KisHSVConfigWidget::configureSliderLimitsAndLabels()
 {
-    emit sigConfigurationItemChanged();
-    m_page->label->setText(i18n("Hue:"));
-    m_page->label_2->setText(i18n("Saturation:"));
-    m_page->hue->setMinimum(-180);
-    m_page->hue->setMaximum(180);
-    switch(index) {
-    case 0:
-        m_page->label_3->setText(i18n("Value:"));
-        return;
-    case 1:
-        m_page->label_3->setText(i18n("Lightness:"));
-        return;
-    case 2:
-        m_page->label_3->setText(i18n("Intensity:"));
-        return;
-    case 3:
-        m_page->label_3->setText(i18n("Luma:"));
-        return;
-    case 4:
-        m_page->label->setText(i18n("Yellow-Blue:"));
-        m_page->label_2->setText(i18n("Green-Red:"));
-        m_page->label_3->setText(i18n("Luma:"));
-        m_page->hue->setRange(-100, 100, 0);
-        m_page->hue->setValue(0);
-    default:
-        m_page->label_3->setText(i18n("Lightness:"));
-    }
-    
+    const WidgetSlidersConfig& widget = getCurrentWidgetConfig(m_page->cmbType->currentIndex(), m_page->chkColorize->isChecked());
 
-}
+    widget.m_sliders[0].apply(m_page->hueSpinBox,        m_page->hueSlider,        m_page->label);
+    widget.m_sliders[1].apply(m_page->saturationSpinBox, m_page->saturationSlider, m_page->label_2);
+    widget.m_sliders[2].apply(m_page->valueSpinBox,      m_page->valueSlider,      m_page->label_3);
 
-void KisHSVConfigWidget::switchColorize(bool toggle)
-{
-    if (toggle) {
-        m_page->hue->setMinimum(0);
-        m_page->hue->setMaximum(360);
-        m_page->saturation->setMinimum(0);
-        m_page->saturation->setMaximum(100);
-        if (m_page->saturation->value() < m_page->saturation->minimum() || m_page->saturation->value() > m_page->saturation->maximum()) {
-            m_page->saturation->setValue(50);
-        }
-        switchType(1);
-    }
-    else {
-        m_page->hue->setMinimum(-180);
-        m_page->hue->setMaximum(180);
-        m_page->saturation->setMinimum(-100);
-        m_page->saturation->setMaximum(100);
-
-    }
     emit sigConfigurationItemChanged();
 }

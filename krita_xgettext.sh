@@ -15,11 +15,39 @@ function krita_xgettext() {
     fi
 }
 
+# How to unit test:
+#   export podir=.
+#   cp init-sample.pot sample.pot
+#   source krita_xgettext.sh
+#   add_ctxt_qtundo sample.pot
+#
+#   Then check that all messages in sample.pot have "(qtundo-format)" in msgctxt.
+function add_ctxt_qtundo() {
+    POT_PART_QUNDOFORMAT="$1"
+    POT_PART_QUNDOFORMAT2="`mktemp $podir/_qundoformat2_XXXXXXXX.pot`"
+
+    # Prepend "(qtundo-format)" to existing msgctxt properties of messages
+    sed -i -e 's/^msgctxt "/msgctxt "(qtundo-format) /' "${POT_PART_QUNDOFORMAT}"
+
+    # Add msgctxt "(qtundo-format)" to messages not having msgctxt yet
+    #
+    # lastLine != "#, fuzzy" is the check for the .pot header.
+    mv "${POT_PART_QUNDOFORMAT}" "${POT_PART_QUNDOFORMAT2}"
+    cat "${POT_PART_QUNDOFORMAT2}" | awk '
+        /^msgid "/ {
+            if (lastLine !~ /^msgctxt/ && lastLine !~ /^"/ && lastLine != "#, fuzzy") {
+                print "msgctxt \"(qtundo-format)\""
+            }
+        }
+        { print ; lastLine = $0 }' > "${POT_PART_QUNDOFORMAT}"
+
+    rm -f "${POT_PART_QUNDOFORMAT2}"
+}
+
 function krita_xgettext_internal() {
     SRC_FILES="$*"
     POT_PART_NORMAL="`mktemp $podir/_normal_XXXXXXXX.pot`"
     POT_PART_QUNDOFORMAT="`mktemp $podir/_qundoformat_XXXXXXXX.pot`"
-    POT_PART_QUNDOFORMAT2="`mktemp $podir/_qundoformat2_XXXXXXXX.pot`"
     POT_MERGED="`mktemp $podir/_merged_XXXXXXXX.pot`"
 
     $XGETTEXT ${CXG_EXTRA_ARGS} ${SRC_FILES} -o "${POT_PART_NORMAL}" --force-po
@@ -31,20 +59,7 @@ function krita_xgettext_internal() {
     fi
 
     if [ -s "${POT_PART_QUNDOFORMAT}" ]; then
-        # Prepend "(qtundo-format)" to existing msgctxt properties of messages
-        sed -i -e 's/^msgctxt "/msgctxt "(qtundo-format) /' "${POT_PART_QUNDOFORMAT}"
-
-        # Add msgctxt "(qtundo-format)" to messages not having msgctxt yet
-        #
-        # lastLine != "#, fuzzy" is the check for the .pot header.
-        mv "${POT_PART_QUNDOFORMAT}" "${POT_PART_QUNDOFORMAT2}"
-        cat "${POT_PART_QUNDOFORMAT2}" | awk '
-            /^msgid "/ {
-                if (lastLine !~ /^msgctxt/ && lastLine != "#, fuzzy") {
-                    print "msgctxt \"(qtundo-format)\""
-                }
-            }
-            { print ; lastLine = $0 }' > "${POT_PART_QUNDOFORMAT}"
+        add_ctxt_qtundo "${POT_PART_QUNDOFORMAT}"
     fi
 
     if [ -s "${POT_PART_NORMAL}" -a -s "${POT_PART_QUNDOFORMAT}" ]; then
@@ -63,7 +78,7 @@ function krita_xgettext_internal() {
         cat "${POT_PART_QUNDOFORMAT}"
     fi
 
-    rm -f "${POT_PART_NORMAL}" "${POT_PART_QUNDOFORMAT}" "${POT_PART_QUNDOFORMAT2}" "${POT_MERGED}"
+    rm -f "${POT_PART_NORMAL}" "${POT_PART_QUNDOFORMAT}" "${POT_MERGED}"
 }
 
 # Sets EXCLUDE variable to excludes compatible with the find(1) command, e.g. '-path a -o -path b'.

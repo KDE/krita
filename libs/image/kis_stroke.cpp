@@ -144,11 +144,17 @@ void KisStroke::cancelStroke()
 
     if(!m_strokeInitialized) {
         /**
-         * FIXME: this assert is probably a bit too optimistic,
-         *        because the LODN stroke that suspends the other one
-         *        can be easily non-initialized
+         * Lod0 stroke cannot be suspended and !initialized at the
+         * same time, because the suspend job is created iff the
+         * stroke has already done some meaningful work.
+         *
+         * At the same time, LodN stroke can be prepended with a
+         * 'suspend' job even when it has not been started yet. That
+         * is obvious: we should suspend the other stroke before doing
+         * anything else.
          */
-        KIS_ASSERT_RECOVER_NOOP(sanityCheckAllJobsAreCancellable());
+        KIS_ASSERT_RECOVER_NOOP(type() == LODN ||
+                                sanityCheckAllJobsAreCancellable());
         clearQueueOnCancel();
     }
     else if(m_strokeInitialized &&
@@ -179,9 +185,8 @@ bool KisStroke::sanityCheckAllJobsAreCancellable() const
 void KisStroke::clearQueueOnCancel()
 {
     QQueue<KisStrokeJob*>::iterator it = m_jobsQueue.begin();
-    QQueue<KisStrokeJob*>::iterator end = m_jobsQueue.end();
 
-    while (it != end) {
+    while (it != m_jobsQueue.end()) {
         if ((*it)->isCancellable()) {
             delete (*it);
             it = m_jobsQueue.erase(it);
@@ -201,6 +206,11 @@ bool KisStroke::isEnded() const
     return m_strokeEnded;
 }
 
+bool KisStroke::isCancelled() const
+{
+    return m_isCancelled;
+}
+
 bool KisStroke::isExclusive() const
 {
     return m_strokeStrategy->isExclusive();
@@ -214,6 +224,11 @@ bool KisStroke::supportsWrapAroundMode() const
 int KisStroke::worksOnLevelOfDetail() const
 {
     return m_worksOnLevelOfDetail;
+}
+
+bool KisStroke::canForgetAboutMe() const
+{
+    return m_strokeStrategy->canForgetAboutMe();
 }
 
 bool KisStroke::prevJobSequential() const

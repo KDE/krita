@@ -42,9 +42,14 @@ public:
 public:
     KisUpdateJobItem(QReadWriteLock *exclusiveJobLock)
         : m_exclusiveJobLock(exclusiveJobLock),
-          m_type(EMPTY)
+          m_type(EMPTY),
+          m_runnableJob(0)
     {
         setAutoDelete(false);
+    }
+    ~KisUpdateJobItem()
+    {
+        delete m_runnableJob;
     }
 
     void run() {
@@ -60,6 +65,7 @@ public:
             Q_ASSERT(m_type == STROKE || m_type == SPONTANEOUS);
             m_runnableJob->run();
             delete m_runnableJob;
+            m_runnableJob = 0;
         }
 
         setDone();

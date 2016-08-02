@@ -2,9 +2,14 @@ add_subdirectory(tests)
 
 set(ICCJPEG_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/lcms")
 
-include_directories(${ICCJPEG_SOURCE_DIR})
+include_directories(
+    ${ICCJPEG_SOURCE_DIR}
+    ${EXIV2_INCLUDE_DIR}
+)
 
-include_directories( ${LCMS2_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/krita/image/metadata ${EXIV2_INCLUDE_DIR})
+include_directories(SYSTEM
+    ${LCMS2_INCLUDE_DIR}
+)
 
 set(libkritaconverter_LIB_SRCS
     kis_jpeg_converter.cc
@@ -22,7 +27,7 @@ add_library(kritajpegimport MODULE ${kritajpegimport_SOURCES})
 
 target_link_libraries(kritajpegimport kritaui  ${JPEG_LIBRARIES} ${LCMS2_LIBRARIES} ${EXIV2_LIBRARIES} )
 
-install(TARGETS kritajpegimport  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS kritajpegimport  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 
 set(kritajpegexport_SOURCES
     kis_jpeg_export.cc
@@ -35,5 +40,5 @@ add_library(kritajpegexport MODULE ${kritajpegexport_SOURCES})
 
 target_link_libraries(kritajpegexport kritaui   ${JPEG_LIBRARIES} ${LCMS2_LIBRARIES} ${EXIV2_LIBRARIES} )
 
-install(TARGETS kritajpegexport  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS kritajpegexport  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 install( PROGRAMS  krita_jpeg.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})

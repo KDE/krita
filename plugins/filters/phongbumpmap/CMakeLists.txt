@@ -8,4 +8,4 @@ set(kritaphongbumpmap_SOURCES
 ki18n_wrap_ui(kritaphongbumpmap_SOURCES wdgphongbumpmap.ui)
 add_library(kritaphongbumpmap MODULE ${kritaphongbumpmap_SOURCES})
 target_link_libraries(kritaphongbumpmap kritaui)
-install(TARGETS kritaphongbumpmap  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS kritaphongbumpmap  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})

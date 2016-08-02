@@ -17,7 +17,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#include <netinet/in.h>
+#include <QtEndian>
 
 #include "kis_abr_brush_collection.h"
 #include "kis_abr_brush.h"
@@ -525,6 +525,22 @@ qint32 KisAbrBrushCollection::abr_brush_load(QDataStream & abr, AbrInfo *abr_hdr
 KisAbrBrushCollection::KisAbrBrushCollection(const QString& filename)
     : KisBrush(filename)
 {
+}
+
+KisAbrBrushCollection::KisAbrBrushCollection(const KisAbrBrushCollection& rhs)
+    : KisBrush(rhs)
+{
+    for (auto it = rhs.m_abrBrushes.begin();
+         it != rhs.m_abrBrushes.end();
+         ++it) {
+
+        m_abrBrushes.insert(it.key(), new KisAbrBrush(*it.value(), this));
+    }
+}
+
+KisBrush* KisAbrBrushCollection::clone() const
+{
+    return new KisAbrBrushCollection(*this);
 }
 
 bool KisAbrBrushCollection::load()

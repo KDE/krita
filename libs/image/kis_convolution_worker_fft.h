@@ -169,7 +169,7 @@ public:
 
     struct FFTInfo {
         FFTInfo(qreal _fftScale,
-                QList<KoChannelInfo*> _convChannelList,
+                const QList<KoChannelInfo*> &_convChannelList,
                 const KisConvolutionKernelSP kernel,
                 const KoColorSpace */*colorSpace*/)
             : fftScale(_fftScale),
@@ -229,14 +229,23 @@ public:
                                                         rect.x(), rect.y(), rect.width(),
                                                         dataRect);
 
-        QVector<double*> channelPtr(info.numChannels());
+        const int channelCount = info.numChannels();
+        QVector<double*> channelPtr(channelCount);
+        const auto channelPtrBegin = channelPtr.begin();
+        const auto channelPtrEnd = channelPtr.end();
 
-        for (int k = 0; k < channelPtr.size(); ++k) {
-            channelPtr[k] = (double*)m_channelFFT[k];
+        auto iFFt = m_channelFFT.constBegin();
+        for (auto i = channelPtrBegin; i != channelPtrEnd; ++i, ++iFFt) {
+            *i = (double*)*iFFt;
         }
 
+        // prepare cache, reused in all loops
+        QVector<double*> cacheRowStart(channelCount);
+        const auto cacheRowStartBegin = cacheRowStart.begin();
+
         for (int y = 0; y < rect.height(); ++y) {
-            QVector<double*> cacheRowStart(channelPtr);
+            // cache current channelPtr in cacheRowStart
+            memcpy(cacheRowStart.data(), channelPtr.data(), channelCount * sizeof(double*));
 
             for (int x = 0; x < rect.width(); ++x) {
                 const quint8 *data = hitSrc->oldRawData();
@@ -244,23 +253,24 @@ public:
                 // no alpha is a rare case, so just multiply by 1.0 in that case
                 double alphaValue = info.alphaRealPos >= 0 ?
                     info.toDoubleFuncPtr[info.alphaCachePos](data, info.alphaRealPos) : 1.0;
-
-                for (int k = 0; k < channelPtr.size(); ++k) {
+                int k = 0;
+                for (auto i = channelPtrBegin; i != channelPtrEnd; ++i, ++k) {
                     if (k != info.alphaCachePos) {
                         const quint32 channelPos = info.convChannelList[k]->pos();
-                        *channelPtr[k] = info.toDoubleFuncPtr[k](data, channelPos) * alphaValue;
+                        **i = info.toDoubleFuncPtr[k](data, channelPos) * alphaValue;
                     } else {
-                        *channelPtr[k] = alphaValue;
+                        **i = alphaValue;
                     }
 
-                    channelPtr[k]++;
+                    ++(*i);
                 }
 
                 hitSrc->nextPixel();
             }
 
-            for (int k = 0; k < channelPtr.size(); ++k) {
-                channelPtr[k] = cacheRowStart[k] + cacheRowStride;
+            auto iRowStart = cacheRowStartBegin;
+            for (auto i = channelPtrBegin; i != channelPtrEnd; ++i, ++iRowStart) {
+                *i = *iRowStart + cacheRowStride;
             }
 
             hitSrc->nextRow();
@@ -268,11 +278,11 @@ public:
 
     }
 
-
     inline void limitValue(qreal *value, qreal lowBound, qreal highBound) {
         if (*value > highBound) {
             *value = highBound;
-        } else if (*value < lowBound){
+        } else if (!(*value >= lowBound)) {  // value < lowBound or value == NaN
+            // IEEE compliant comparisons with NaN are always false
             *value = lowBound;
         }
     }
@@ -280,21 +290,20 @@ public:
     template <bool additionalMultiplierActive>
     inline qreal writeOneChannelFromCache(quint8* dstPtr,
                                           const quint32 channel,
-                                          const int channelPos,
                                           const FFTInfo &info,
-                                          const QVector<double*> &channelPtr,
+                                          double* channelValuePtr,
                                           const qreal additionalMultiplier = 0.0) {
         qreal channelPixelValue;
 
         if (additionalMultiplierActive) {
-            channelPixelValue = (*(channelPtr[channel]) * info.fftScale + info.absoluteOffset[channel]) * additionalMultiplier;
+            channelPixelValue = (*channelValuePtr * info.fftScale + info.absoluteOffset[channel]) * additionalMultiplier;
         } else {
-            channelPixelValue = *(channelPtr[channel]) * info.fftScale + info.absoluteOffset[channel];
+            channelPixelValue = *channelValuePtr * info.fftScale + info.absoluteOffset[channel];
         }
 
         limitValue(&channelPixelValue, info.minClamp[channel], info.maxClamp[channel]);
 
-        info.fromDoubleFuncPtr[channel](dstPtr, channelPos, channelPixelValue);
+        info.fromDoubleFuncPtr[channel](dstPtr, info.convChannelList[channel]->pos(), channelPixelValue);
 
         return channelPixelValue;
     }
@@ -313,14 +322,23 @@ public:
 
         int initialOffset = cacheRowStride * halfKernelHeight + halfKernelWidth;
 
-        QVector<double*> channelPtr(info.numChannels());
+        const int channelCount = info.numChannels();
+        QVector<double*> channelPtr(channelCount);
+        const auto channelPtrBegin = channelPtr.begin();
+        const auto channelPtrEnd = channelPtr.end();
 
-        for (int k = 0; k < channelPtr.size(); ++k) {
-            channelPtr[k] = (double*)m_channelFFT[k] + initialOffset;
+        auto iFFt = m_channelFFT.constBegin();
+        for (auto i = channelPtrBegin; i != channelPtrEnd; ++i, ++iFFt) {
+            *i = (double*)*iFFt + initialOffset;
         }
 
+        // prepare cache, reused in all loops
+        QVector<double*> cacheRowStart(channelCount);
+        const auto cacheRowStartBegin = cacheRowStart.begin();
+
         for (int y = 0; y < rect.height(); ++y) {
-            QVector<double*> cacheRowStart(channelPtr);
+            // cache current channelPtr in cacheRowStart
+            memcpy(cacheRowStart.data(), channelPtr.data(), channelCount * sizeof(double*));
 
             for (int x = 0; x < rect.width(); ++x) {
                 quint8 *dstPtr = hitDst->rawData();
@@ -329,38 +347,51 @@ public:
                     qreal alphaValue =
                         writeOneChannelFromCache<false>(dstPtr,
                                                         info.alphaCachePos,
-                                                        info.convChannelList[info.alphaCachePos]->pos(),
                                                         info,
-                                                        channelPtr);
-                    qreal alphaValueInv = 1.0 / alphaValue;
+                                                        channelPtr.at(info.alphaCachePos));
 
-                    for (int k = 0; k < channelPtr.size(); ++k) {
-                        if (k != info.alphaCachePos) {
-                            writeOneChannelFromCache<true>(dstPtr,
-                                                           k,
-                                                           info.convChannelList[k]->pos(),
-                                                           info,
-                                                           channelPtr,
-                                                           alphaValueInv);
+                    if (alphaValue > std::numeric_limits<qreal>::epsilon()) {
+                        qreal alphaValueInv = 1.0 / alphaValue;
+
+                        int k = 0;
+                        for (auto i = channelPtrBegin; i != channelPtrEnd; ++i, ++k) {
+                            if (k != info.alphaCachePos) {
+                                writeOneChannelFromCache<true>(dstPtr,
+                                                               k,
+                                                               info,
+                                                               *i,
+                                                               alphaValueInv);
+                            }
+                            ++(*i);
                         }
-                        ++channelPtr[k];
+                    } else {
+                        int k = 0;
+                        for (auto i = channelPtrBegin; i != channelPtrEnd; ++i, ++k) {
+                            if (k != info.alphaCachePos) {
+                                info.fromDoubleFuncPtr[k](dstPtr,
+                                info.convChannelList[k]->pos(),
+                                0.0);
+                            }
+                            ++(*i);
+                        }
                     }
                 } else {
-                    for (int k = 0; k < channelPtr.size(); ++k) {
+                    int k = 0;
+                    for (auto i = channelPtrBegin; i != channelPtrEnd; ++i, ++k) {
                         writeOneChannelFromCache<false>(dstPtr,
                                                         k,
-                                                        info.convChannelList[k]->pos(),
                                                         info,
-                                                        channelPtr);
-                        ++channelPtr[k];
+                                                        *i);
+                       ++(*i);
                     }
                 }
 
                 hitDst->nextPixel();
             }
 
-            for (int k = 0; k < channelPtr.size(); ++k) {
-                channelPtr[k] = cacheRowStart[k] + cacheRowStride;
+            auto iRowStart = cacheRowStartBegin;
+            for (auto i = channelPtrBegin; i != channelPtrEnd; ++i, ++iRowStart) {
+                *i = *iRowStart + cacheRowStride;
             }
 
             hitDst->nextRow();
@@ -439,7 +470,7 @@ private:
         }
     }
 
-    void fftLogMatrix(double* channel, QString f)
+    void fftLogMatrix(double* channel, const QString &f)
     {
         KisConvolutionWorkerFFTLock::fftwMutex.lock();
         QString filename(QDir::homePath() + "/log_" + f + ".txt");

@@ -72,8 +72,10 @@ void KoCreatePathTool::paint(QPainter &painter, const KoViewConverter &converter
 
         KoShape::applyConversion(painter, converter);
 
-        painter.setPen(Qt::blue);
-        painter.setBrush(Qt::white);   //TODO make configurable
+        QPen pen(QBrush(Qt::blue), 1);
+        pen.setCosmetic(true);
+        painter.setPen(pen);
+        painter.setBrush(Qt::white);
 
         const bool firstPoint = (d->firstPoint == d->activePoint);
 
@@ -90,9 +92,9 @@ void KoCreatePathTool::paint(QPainter &painter, const KoViewConverter &converter
 
         // check if we have to color the first point
         if (d->mouseOverFirstPoint) {
-            painter.setBrush(Qt::red);     //TODO make configurable
+            painter.setBrush(Qt::red);
         } else {
-            painter.setBrush(Qt::white);   //TODO make configurable
+            painter.setBrush(Qt::white);
         }
 
         d->firstPoint->paint(painter, d->handleRadius, KoPathPoint::Node);
@@ -104,8 +106,10 @@ void KoCreatePathTool::paint(QPainter &painter, const KoViewConverter &converter
         painter.save();
         painter.setTransform(d->hoveredPoint->parent()->absoluteTransformation(&converter), true);
         KoShape::applyConversion(painter, converter);
-        painter.setPen(Qt::blue);
-        painter.setBrush(Qt::white);   //TODO make configurable
+        QPen pen(QBrush(Qt::blue), 1);
+        pen.setCosmetic(true);
+        painter.setPen(pen);
+        painter.setBrush(Qt::white);
         d->hoveredPoint->paint(painter, d->handleRadius, KoPathPoint::Node);
         painter.restore();
     }

@@ -88,6 +88,3 @@ void KisPrintJob::startPrinting(RemovePolicy removePolicy)
     if (removePolicy == DeleteWhenDone)
         deleteLater();
 }
-
-
-#include <KisPrintJob.moc>

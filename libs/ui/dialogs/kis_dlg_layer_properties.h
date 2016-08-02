@@ -65,6 +65,9 @@ protected Q_SLOTS:
     void slotCompositeOpValueChangedInternally();
     void slotCompositeOpValueChangedExternally();
 
+    void slotColorLabelValueChangedInternally();
+    void slotColorLabelValueChangedExternally();
+
     void slotOpacityValueChangedInternally();
     void slotOpacityValueChangedExternally();
 

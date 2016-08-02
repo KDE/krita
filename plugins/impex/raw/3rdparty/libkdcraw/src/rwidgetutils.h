@@ -29,7 +29,7 @@
 // Qt includes
 
 #include <QLabel>
-#include <QUrl>
+#include <QFileInfo>
 #include <QString>
 #include <QFrame>
 #include <QLineEdit>

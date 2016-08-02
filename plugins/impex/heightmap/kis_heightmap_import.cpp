@@ -27,7 +27,7 @@
 #include <QCursor>
 
 #include <kpluginfactory.h>
-#include <QUrl>
+#include <QFileInfo>
 #include <KoDialog.h>
 
 #include <KisImportExportManager.h>
@@ -63,7 +63,7 @@ KisHeightMapImport::~KisHeightMapImport()
 KisImportExportFilter::ConversionStatus KisHeightMapImport::convert(const QByteArray& from, const QByteArray& to)
 {
 
-    KisDocument * doc = m_chain->outputDocument();
+    KisDocument * doc = outputDocument();
 
     if (!doc) {
         return KisImportExportFilter::NoDocumentCreated;
@@ -86,22 +86,17 @@ KisImportExportFilter::ConversionStatus KisHeightMapImport::convert(const QByteA
         return KisImportExportFilter::BadMimeType;
     }
 
-    QString filename = m_chain->inputFile();
+    QString filename = inputFile();
 
     if (filename.isEmpty()) {
         return KisImportExportFilter::FileNotFound;
     }
 
-    QUrl url = QUrl::fromLocalFile(filename);
-
-
-    dbgFile << "Import: " << url;
-    if (url.isEmpty())
-        return KisImportExportFilter::FileNotFound;
-
-    if (!url.isLocalFile()) {
+    QFileInfo fi(filename);
+    if (!fi.exists()) {
         return KisImportExportFilter::FileNotFound;
     }
+
 
     QApplication::restoreOverrideCursor();
 
@@ -120,7 +115,7 @@ KisImportExportFilter::ConversionStatus KisHeightMapImport::convert(const QByteA
     KisPropertiesConfiguration cfg;
     cfg.fromXML(filterConfig);
 
-    QFile f(url.toLocalFile());
+    QFile f(filename);
 
     int w = 0;
     int h = 0;
@@ -143,7 +138,7 @@ KisImportExportFilter::ConversionStatus KisHeightMapImport::convert(const QByteA
         optionsHeightMap.radioPC->setChecked(true);
     }
 
-    if (!m_chain->manager()->getBatchMode()) {
+    if (!getBatchMode()) {
         if (kdb->exec() == QDialog::Rejected) {
             return KisImportExportFilter::UserCancelled;
         }

@@ -1,7 +1,7 @@
-diff --git a/src/macdeployqt/macdeployqt/main.cpp b/src/macdeployqt/macdeployqt/main.cpp
+diff --git a/qttools/src/macdeployqt/macdeployqt/main.cpp b/qttools/src/macdeployqt/macdeployqt/main.cpp
 index 81639f2..a7b28d1 100644
---- a/src/macdeployqt/macdeployqt/main.cpp
-+++ b/src/macdeployqt/macdeployqt/main.cpp
+--- a/qttools/src/macdeployqt/macdeployqt/main.cpp
++++ b/qttools/src/macdeployqt/macdeployqt/main.cpp
 @@ -57,6 +57,7 @@ int main(int argc, char **argv)
          qDebug() << "   -always-overwrite  : Copy files even if the target file exists";
          qDebug() << "   -codesign=<ident>  : Run codesign with the given identity on all executables";
@@ -48,10 +48,10 @@ index 81639f2..a7b28d1 100644
          createQtConf(appBundlePath);
      }
  
-diff --git a/src/macdeployqt/shared/shared.cpp b/src/macdeployqt/shared/shared.cpp
+diff --git a/qttools/src/macdeployqt/shared/shared.cpp b/qttools/src/macdeployqt/shared/shared.cpp
 index d20b219..4a9aa1f 100644
---- a/src/macdeployqt/shared/shared.cpp
-+++ b/src/macdeployqt/shared/shared.cpp
+--- a/qttools/src/macdeployqt/shared/shared.cpp
++++ b/qttools/src/macdeployqt/shared/shared.cpp
 @@ -1020,6 +1020,43 @@ void deployPlugins(const ApplicationBundleInfo &appBundleInfo, const QString &pl
      }
  }
@@ -113,10 +113,10 @@ index d20b219..4a9aa1f 100644
  void deployQmlImport(const QString &appBundlePath, const QSet<QString> &rpaths, const QString &importSourcePath, const QString &importName)
  {
      QString importDestinationPath = appBundlePath + "/Contents/Resources/qml/" + importName;
-diff --git a/src/macdeployqt/shared/shared.h b/src/macdeployqt/shared/shared.h
+diff --git a/qttools/src/macdeployqt/shared/shared.h b/qttools/src/macdeployqt/shared/shared.h
 index ea678c2..f10efd3 100644
---- a/src/macdeployqt/shared/shared.h
-+++ b/src/macdeployqt/shared/shared.h
+--- a/qttools/src/macdeployqt/shared/shared.h
++++ b/qttools/src/macdeployqt/shared/shared.h
 @@ -100,6 +100,7 @@ DeploymentInfo deployQtFrameworks(const QString &appBundlePath, const QStringLis
  DeploymentInfo deployQtFrameworks(QList<FrameworkInfo> frameworks,const QString &bundlePath, const QStringList &binaryPaths, bool useDebugLibs, bool useLoaderPath);
  void createQtConf(const QString &appBundlePath);

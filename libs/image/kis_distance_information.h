@@ -35,21 +35,18 @@ class KisSpacingInformation {
 public:
     explicit KisSpacingInformation()
         : m_spacing(0.0, 0.0)
-        , m_isIsotropic(true)
         , m_rotation(0.0)
     {
     }
 
     explicit KisSpacingInformation(qreal isotropicSpacing)
         : m_spacing(isotropicSpacing, isotropicSpacing)
-        , m_isIsotropic(true)
         , m_rotation(0.0)
     {
     }
 
     explicit KisSpacingInformation(const QPointF &anisotropicSpacing, qreal rotation)
         : m_spacing(anisotropicSpacing)
-        , m_isIsotropic(anisotropicSpacing.x() == anisotropicSpacing.y())
         , m_rotation(rotation)
     {
     }
@@ -59,11 +56,11 @@ public:
     }
 
     inline bool isIsotropic() const {
-        return m_isIsotropic;
+        return m_spacing.x() == m_spacing.y();
     }
 
     inline qreal scalarApprox() const {
-        return m_isIsotropic ? m_spacing.x() : QVector2D(m_spacing).length();
+        return isIsotropic() ? m_spacing.x() : QVector2D(m_spacing).length();
     }
 
     inline qreal rotation() const {
@@ -72,7 +69,6 @@ public:
 
 private:
     QPointF m_spacing;
-    bool m_isIsotropic;
     qreal m_rotation;
 };
 
@@ -110,6 +106,14 @@ public:
      *         distance information
      */
     bool isStarted() const;
+
+    bool hasLockedDrawingAngle() const;
+    qreal lockedDrawingAngle() const;
+    void setLockedDrawingAngle(qreal angle);
+
+    qreal scalarDistanceApprox() const;
+
+    void overrideLastValues(const QPointF &lastPosition, qreal lastTime);
 
 private:
     qreal getNextPointPositionIsotropic(const QPointF &start,

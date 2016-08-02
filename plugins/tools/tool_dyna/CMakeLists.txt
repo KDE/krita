@@ -8,5 +8,5 @@ add_library(kritatooldyna MODULE ${kritatooldyna_SOURCES})
 
 target_link_libraries(kritatooldyna kritaui)
 
-install(TARGETS kritatooldyna  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS kritatooldyna  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 

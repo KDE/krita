@@ -23,7 +23,7 @@
 #include <QSlider>
 
 #include <kpluginfactory.h>
-#include <QUrl>
+#include <QFileInfo>
 
 #include <KisFilterChain.h>
 #include <KoColorSpace.h>
@@ -59,7 +59,7 @@ KisImportExportFilter::ConversionStatus KisTIFFExport::convert(const QByteArray&
     if (from != "application/x-krita")
         return KisImportExportFilter::NotImplemented;
 
-    KisDocument *input = m_chain->inputDocument();
+    KisDocument *input = inputDocument();
     if (!input) {
         return KisImportExportFilter::NoDocumentCreated;
     }
@@ -79,16 +79,11 @@ KisImportExportFilter::ConversionStatus KisTIFFExport::convert(const QByteArray&
         dlg.optionswdg->alpha->setEnabled(false);
     }
 
-    if (!m_chain->manager()->getBatchMode()) {
+    if (!getBatchMode()) {
         if (dlg.exec() == QDialog::Rejected) {
             return KisImportExportFilter::UserCancelled;
         }
     }
-    else {
-        qApp->processEvents(); // For vector layers to be updated
-
-    }
-    input->image()->waitForDone();
 
     KisTIFFOptions options = dlg.options();
 
@@ -96,11 +91,11 @@ KisImportExportFilter::ConversionStatus KisTIFFExport::convert(const QByteArray&
         options.predictor = 3;
     }
 
-    QString filename = m_chain->outputFile();
+    QString filename = outputFile();
 
-    if (filename.isEmpty()) return KisImportExportFilter::FileNotFound;
-
-    QUrl url = QUrl::fromLocalFile(filename);
+    if (filename.isEmpty()) {
+        return KisImportExportFilter::FileNotFound;
+    }
 
     KisImageSP image;
 
@@ -114,19 +109,16 @@ KisImportExportFilter::ConversionStatus KisTIFFExport::convert(const QByteArray&
         image = input->image();
     }
 
-    image->refreshGraph();
-    image->lock();
+    // the image must be locked at the higher levels
+    KIS_SAFE_ASSERT_RECOVER_NOOP(input->image()->locked());
 
     KisTIFFConverter ktc(input);
-    /*    vKisAnnotationSP_it beginIt = image->beginAnnotations();
-        vKisAnnotationSP_it endIt = image->endAnnotations();*/
     KisImageBuilder_Result res;
-    if ((res = ktc.buildFile(url, image, options)) == KisImageBuilder_RESULT_OK) {
+    if ((res = ktc.buildFile(filename, image, options)) == KisImageBuilder_RESULT_OK) {
         dbgFile << "success !";
-        image->unlock();
         return KisImportExportFilter::OK;
     }
-    image->unlock();
+
     dbgFile << " Result =" << res;
     return KisImportExportFilter::InternalError;
 }

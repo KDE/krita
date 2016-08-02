@@ -24,12 +24,19 @@
 #include <QByteArray>
 #include <QBuffer>
 
+#include <kis_dom_utils.h>
+
 KisPngBrush::KisPngBrush(const QString& filename)
     : KisBrush(filename)
 {
     setBrushType(INVALID);
     setSpacing(0.25);
     setHasColor(false);
+}
+
+KisBrush* KisPngBrush::clone() const
+{
+    return new KisPngBrush(*this);
 }
 
 bool KisPngBrush::load()
@@ -61,7 +68,7 @@ bool KisPngBrush::loadFromDevice(QIODevice *dev)
     }
 
     if (reader.textKeys().contains("brush_spacing")) {
-        setSpacing(reader.text("brush_spacing").toDouble());
+        setSpacing(KisDomUtils::toDouble(reader.text("brush_spacing")));
     }
 
     if (reader.textKeys().contains("brush_name")) {

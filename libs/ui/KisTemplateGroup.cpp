@@ -24,8 +24,10 @@
 #include <QFile>
 
 KisTemplateGroup::KisTemplateGroup(const QString &name, const QString &dir,
-                                 int _sortingWeight, bool touched) :
-        m_name(name), m_touched(touched), m_sortingWeight(_sortingWeight)
+                                   int _sortingWeight, bool touched)
+    : m_name(name)
+    , m_touched(touched)
+    , m_sortingWeight(_sortingWeight)
 {
     m_dirs.append(dir);
 }
@@ -63,7 +65,8 @@ bool KisTemplateGroup::add(KisTemplate *t, bool force, bool touch)
         m_templates.append(t);
         m_touched = touch;
         return true;
-    } else if (myTemplate && force) {
+    }
+    else if (myTemplate && force) {
         //dbgUI <<"removing :" << myTemplate->fileName();
         QFile::remove(myTemplate->fileName());
         QFile::remove(myTemplate->picture());
@@ -80,7 +83,7 @@ bool KisTemplateGroup::add(KisTemplate *t, bool force, bool touch)
 KisTemplate *KisTemplateGroup::find(const QString &name) const
 {
     QList<KisTemplate*>::const_iterator it = m_templates.begin();
-    KisTemplate* ret = NULL;
+    KisTemplate* ret = 0;
 
     while (it != m_templates.end()) {
         if ((*it)->name() == name) {

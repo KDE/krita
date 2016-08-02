@@ -1,4 +1,4 @@
-/* This file is part of the KDE project
+﻿/* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
                  2000, 2001 Werner Trobin <trobin@kde.org>
    Copyright (C) 2004 Nicolas Goutte <goutte@kde.org>
@@ -59,8 +59,7 @@ public:
     /**
      * Create a filter manager for a document
      */
-    explicit KisImportExportManager(KisDocument *document,
-                             KoProgressUpdater *progressUpdater = 0);
+    explicit KisImportExportManager(KisDocument *document);
 
     /**
      * Create a filter manager for the Shape Collection docker.
@@ -75,15 +74,8 @@ public:
      * the file to the destination mimetype you prefer.
      *
      * @param path The location you want to export
-     * @param mimetypeHint The mimetype of the file you want to export. You have
-     *        to specify this information only if the automatic detection will
-     *        fail because e.g. you saved an embedded stream to a *.tmp file.
-     *        Most likely you do not have to care about that.
-     * @param parentChain The parent filter chain of this filter manager. Used
-     *        to allow embedding for filters. Most likely you do not have to care.
      */
-    explicit KisImportExportManager(const QString& location, const QByteArray& mimetypeHint = QByteArray(),
-                             KisFilterChain * const parentChain = 0);
+    explicit KisImportExportManager(const QString& location);
 
     virtual ~KisImportExportManager();
 
@@ -118,25 +110,8 @@ public:
      * information here.
      * Optionally, @p extraNativeMimeTypes are added after the native mimetype.
      */
-    static QStringList mimeFilter(const QByteArray& mimetype, Direction direction,
-                                  const QStringList& extraNativeMimeTypes = QStringList());
+    static QStringList mimeFilter(Direction direction);
 
-    /**
-     * The same method as KisFilterManager::mimeFilter but suited for KoShell.
-     * We do not need the mimetype, as we will simply use all available
-     * %Calligra mimetypes. The Direction enum is omitted, as we only
-     * call this for importing. When saving from KoShell we already
-     * know the Calligra part we are using.
-     */
-    static QStringList mimeFilter();
-
-    /**
-     * Method used to check if that filter is available at all.
-     * @note Slow, but cached
-     */
-    static bool filterAvailable(KisFilterEntrySP entry);
-
-    //@}
 
     /**
      * Set the filter manager is batch mode (no dialog shown)
@@ -150,8 +125,10 @@ public:
      */
     bool getBatchMode(void) const;
 
+    void setProgresUpdater(KoProgressUpdater *updater);
+
     /**
-     * Return the KoProgressUpdater or NULL if there is none.
+     * Return the KoProgressUpdater or 0 if there is none.
      **/
     KoProgressUpdater *progressUpdater() const;
 
@@ -162,11 +139,11 @@ private:
     // pretty safe.
     friend QString KisFilterChain::filterManagerImportFile() const;
     QString importFile() const {
-        return m_importUrl.toLocalFile();
+        return m_importFileName;
     }
     friend QString KisFilterChain::filterManagerExportFile() const;
     QString exportFile() const {
-        return m_exportUrl.toLocalFile();
+        return m_exportFileName;
     }
     friend KisDocument *KisFilterChain::filterManagerKisDocument() const;
     KisDocument *document() const {
@@ -175,10 +152,6 @@ private:
     friend int KisFilterChain::filterManagerDirection() const;
     int direction() const {
         return static_cast<int>(m_direction);
-    }
-    friend KisFilterChain *KisFilterChain::filterManagerParentChain() const;
-    KisFilterChain *parentChain() const {
-        return m_parentChain;
     }
 
     // Private API
@@ -191,15 +164,14 @@ private:
     void importErrorHelper(const QString& mimeType, const bool suppressDialog = false);
 
     KisDocument *m_document;
-    KisFilterChain *const m_parentChain;
-    QUrl m_importUrl;
-    QUrl m_exportUrl;
-    QByteArray m_importUrlMimetypeHint;  ///< suggested mimetype
+    QString m_importFileName;
+    QString m_exportFileName;
     CalligraFilter::Graph m_graph;
     Direction m_direction;
 
     /// A static cache for the availability checks of filters
-    static QMap<QString, bool> m_filterAvailable;
+    static QStringList m_importMimeTypes;
+    static QStringList m_exportMimeTypes;
 
     class Private;
     Private * const d;

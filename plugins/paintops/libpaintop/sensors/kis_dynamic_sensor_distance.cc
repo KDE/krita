@@ -42,7 +42,7 @@ qreal KisDynamicSensorDistance::value(const KisPaintInformation&  pi)
                          fmod(m_measuredDistance, m_length) :
                          qMin(m_measuredDistance, (qreal)m_length);
 
-    return 1.0 - m_measuredDistance / m_length;
+    return m_measuredDistance / m_length;
 }
 
 void KisDynamicSensorDistance::reset()

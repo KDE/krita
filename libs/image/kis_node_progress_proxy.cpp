@@ -23,13 +23,20 @@
 #include "kis_node.h"
 
 struct Q_DECL_HIDDEN KisNodeProgressProxy::Private {
-    Private() : minimum(0), maximum(100), value(100), percentage(-1) {
-    };
+    Private()
+        : minimum(0)
+        , maximum(100)
+        , value(100)
+        , percentage(-1)
+    {
+    }
+
     KisNodeWSP node;
     int minimum;
     int maximum;
     int value;
     int percentage;
+
     bool computePercentage() {
         int old_percentage = percentage;
         if (value == maximum) {
@@ -44,7 +51,8 @@ struct Q_DECL_HIDDEN KisNodeProgressProxy::Private {
     }
 };
 
-KisNodeProgressProxy::KisNodeProgressProxy(KisNode* _node) : d(new Private)
+KisNodeProgressProxy::KisNodeProgressProxy(KisNode* _node)
+    : d(new Private)
 {
     d->node = _node;
 }
@@ -54,10 +62,11 @@ KisNodeProgressProxy::~KisNodeProgressProxy()
     delete d;
 }
 
-const KisNodeSP KisNodeProgressProxy::node() const
+void KisNodeProgressProxy::prepareDestroying()
 {
-    return d->node;
+    d->node = 0;
 }
+
 
 int KisNodeProgressProxy::maximum() const
 {
@@ -71,7 +80,6 @@ int KisNodeProgressProxy::percentage() const
 
 void KisNodeProgressProxy::setValue(int _value)
 {
-    //QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
     d->value = _value;
     if (d->node && d->computePercentage()) {
         emit(percentageChanged(d->percentage, d->node));

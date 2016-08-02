@@ -13,4 +13,4 @@ add_library(kritatooltext MODULE ${kritatooltext_SOURCES})
 
 target_link_libraries(kritatooltext kritaui)
 
-install(TARGETS kritatooltext  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS kritatooltext  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})

@@ -45,6 +45,7 @@
 
 #include "kis_image_config.h"
 
+//#include "kis_paint_device_debug_utils.h"
 //#define DEBUG_RENDERING
 //#define DUMP_RECT QRect(0,0,512,512)
 
@@ -115,7 +116,7 @@ KisPaintDeviceSP KisTransformMask::paintDevice() const
 
 QIcon KisTransformMask::icon() const
 {
-    return KisIconUtils::loadIcon("edit-cut");
+    return KisIconUtils::loadIcon("transformMask");
 }
 
 void KisTransformMask::setTransformParams(KisTransformMaskParamsInterfaceSP params)
@@ -241,7 +242,7 @@ QRect KisTransformMask::decorateRect(KisPaintDeviceSP &src,
         KisPainter::copyAreaOptimized(updatedRect.topLeft(), m_d->staticCacheDevice, dst, updatedRect);
 
 #ifdef DEBUG_RENDERING
-        dbgKrita << "Recalculate" << name() << ppVar(src->exactBounds()) << ppVar(dst->exactBounds()) << ppVar(rc);
+        qDebug() << "Recalculate" << name() << ppVar(src->exactBounds()) << ppVar(dst->exactBounds()) << ppVar(rc);
         KIS_DUMP_DEVICE_2(src, DUMP_RECT, "recalc_src", "dd");
         KIS_DUMP_DEVICE_2(dst, DUMP_RECT, "recalc_dst", "dd");
 #endif /* DEBUG_RENDERING */
@@ -250,7 +251,7 @@ QRect KisTransformMask::decorateRect(KisPaintDeviceSP &src,
         m_d->worker.runPartialDst(src, dst, rc);
 
 #ifdef DEBUG_RENDERING
-        dbgKrita << "Partial" << name() << ppVar(src->exactBounds()) << ppVar(src->extent()) << ppVar(dst->exactBounds()) << ppVar(dst->extent()) << ppVar(rc);
+        qDebug() << "Partial" << name() << ppVar(src->exactBounds()) << ppVar(src->extent()) << ppVar(dst->exactBounds()) << ppVar(dst->extent()) << ppVar(rc);
         KIS_DUMP_DEVICE_2(src, DUMP_RECT, "partial_src", "dd");
         KIS_DUMP_DEVICE_2(dst, DUMP_RECT, "partial_dst", "dd");
 #endif /* DEBUG_RENDERING */
@@ -259,7 +260,7 @@ QRect KisTransformMask::decorateRect(KisPaintDeviceSP &src,
         KisPainter::copyAreaOptimized(rc.topLeft(), m_d->staticCacheDevice, dst, rc);
 
 #ifdef DEBUG_RENDERING
-        dbgKrita << "Fetch" << name() << ppVar(src->exactBounds()) << ppVar(dst->exactBounds()) << ppVar(rc);
+        qDebug() << "Fetch" << name() << ppVar(src->exactBounds()) << ppVar(dst->exactBounds()) << ppVar(rc);
         KIS_DUMP_DEVICE_2(src, DUMP_RECT, "fetch_src", "dd");
         KIS_DUMP_DEVICE_2(dst, DUMP_RECT, "fetch_dst", "dd");
 #endif /* DEBUG_RENDERING */
@@ -291,27 +292,35 @@ QRect KisTransformMask::changeRect(const QRect &rect, PositionToFilthy pos) cons
      * on the higher/lower level
      */
     if (rect.isEmpty()) return rect;
-    if (!m_d->params->isAffine()) return rect;
 
-    QRect bounds;
-    QRect interestRect;
-    KisNodeSP parentNode = parent();
+    QRect changeRect = rect;
 
-    if (parentNode) {
-        bounds = parentNode->original()->defaultBounds()->bounds();
-        interestRect = parentNode->original()->extent();
+    if (m_d->params->isAffine()) {
+        QRect bounds;
+        QRect interestRect;
+        KisNodeSP parentNode = parent();
+
+        if (parentNode) {
+            bounds = parentNode->original()->defaultBounds()->bounds();
+            interestRect = parentNode->original()->extent();
+        } else {
+            bounds = QRect(0,0,777,777);
+            interestRect = QRect(0,0,888,888);
+            warnKrita << "WARNING: transform mask has no parent (change rect)."
+                      << "Cannot run safe transformations."
+                      << "Will limit bounds to" << ppVar(bounds);
+        }
+
+        const QRect limitingRect = KisAlgebra2D::blowRect(bounds, m_d->offBoundsReadArea);
+
+        KisSafeTransform transform(m_d->worker.forwardTransform(), limitingRect, interestRect);
+        changeRect = transform.mapRectForward(rect);
     } else {
-        bounds = QRect(0,0,777,777);
-        interestRect = QRect(0,0,888,888);
-        warnKrita << "WARNING: transform mask has no parent (change rect)."
-                   << "Cannot run safe transformations."
-                   << "Will limit bounds to" << ppVar(bounds);
+        QRect interestRect;
+        interestRect = parent() ? parent()->original()->extent() : QRect();
+
+        changeRect = m_d->params->nonAffineChangeRect(rect);
     }
-
-    const QRect limitingRect = KisAlgebra2D::blowRect(bounds, m_d->offBoundsReadArea);
-
-    KisSafeTransform transform(m_d->worker.forwardTransform(), limitingRect, interestRect);
-    QRect changeRect = transform.mapRectForward(rect);
 
     return changeRect;
 }
@@ -342,10 +351,17 @@ QRect KisTransformMask::needRect(const QRect& rect, PositionToFilthy pos) const
                    << "Will limit bounds to" << ppVar(bounds);
     }
 
-    const QRect limitingRect = KisAlgebra2D::blowRect(bounds, m_d->offBoundsReadArea);
+    QRect needRect = rect;
 
-    KisSafeTransform transform(m_d->worker.forwardTransform(), limitingRect, interestRect);
-    QRect needRect = transform.mapRectBackward(rect);
+    if (m_d->params->isAffine()) {
+        const QRect limitingRect = KisAlgebra2D::blowRect(bounds, m_d->offBoundsReadArea);
+
+        KisSafeTransform transform(m_d->worker.forwardTransform(), limitingRect, interestRect);
+        needRect = transform.mapRectBackward(rect);
+
+    } else {
+        needRect = m_d->params->nonAffineNeedRect(rect, interestRect);
+    }
 
     return needRect;
 }

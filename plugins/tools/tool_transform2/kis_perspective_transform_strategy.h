@@ -36,6 +36,7 @@ class KisPerspectiveTransformStrategy : public KisSimplifiedActionPolicyStrategy
     Q_OBJECT
 public:
     KisPerspectiveTransformStrategy(const KisCoordinatesConverter *converter,
+                                    KoSnapGuide *snapGuide,
                                     ToolTransformArgs &currentArgs,
                                     TransformTransactionProperties &transaction);
     ~KisPerspectiveTransformStrategy();

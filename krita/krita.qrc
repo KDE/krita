@@ -3,6 +3,9 @@
     <qresource prefix="/kconfig">
         <file alias="kritarc">data/kritarc</file>
     </qresource>
+    <qresource prefix="/kxmlgui5">
+        <file alias="krita.xmlgui">krita.xmlgui</file>
+    </qresource>
     <qresource>
         <file>pics/broken-preset.png</file>
         <file>pics/dark_layer-locked.png</file>

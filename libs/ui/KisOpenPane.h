@@ -24,14 +24,15 @@
 #include <QPixmap>
 #include <QList>
 
-class KisOpenPanePrivate;
-class QPixmap;
-class KisTemplatesPane;
 class KisDetailsPane;
-class QUrl;
-class QTreeWidgetItem;
+class KisDocument;
+class KisOpenPanePrivate;
+class KisTemplatesPane;
+class QPixmap;
 class QString;
 class QStringList;
+class QTreeWidgetItem;
+class QUrl;
 
 /// \internal
 class KisOpenPane : public QDialog
@@ -60,6 +61,10 @@ public:
      */
     void addCustomDocumentWidget(QWidget *widget, const QString& title = QString(), const QString& icon = QString());
 
+
+Q_SIGNALS:
+    /// this signal is emitted (as defined by KisDocument) the moment the document is 'ready'
+    void documentSelected(KisDocument*);
 
 protected Q_SLOTS:
     void updateSelectedWidget();

@@ -125,7 +125,7 @@ QString KXMLGUIFactory::readConfigFile(const QString &filename, const QString &_
         xml_file = filename;
     } else {
         // KF >= 5.1 (KXMLGUI_INSTALL_DIR)
-        xml_file = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QStringLiteral("kxmlgui5/") + componentName + QLatin1Char('/') + filename);
+        xml_file = QStandardPaths::locate(QStandardPaths::AppDataLocation, QStringLiteral("kxmlgui5/") + componentName + QLatin1Char('/') + filename);
         if (!QFile::exists(xml_file)) {
             // KF >= 5.4 (resource file)
             xml_file = QStringLiteral(":/kxmlgui5/") + componentName + QLatin1Char('/') + filename;
@@ -134,7 +134,7 @@ QString KXMLGUIFactory::readConfigFile(const QString &filename, const QString &_
         bool warn = false;
         if (!QFile::exists(xml_file)) {
             // kdelibs4 / KF 5.0 solution
-            xml_file = QStandardPaths::locate(QStandardPaths::GenericDataLocation, componentName + QLatin1Char('/') + filename);
+            xml_file = QStandardPaths::locate(QStandardPaths::AppDataLocation, componentName + QLatin1Char('/') + filename);
             warn = true;
         }
 
@@ -142,7 +142,7 @@ QString KXMLGUIFactory::readConfigFile(const QString &filename, const QString &_
             // kdelibs4 / KF 5.0 solution, and the caller includes the component name
             // This was broken (lead to component/component/ in kdehome) and unnecessary
             // (they can specify it with setComponentName instead)
-            xml_file = QStandardPaths::locate(QStandardPaths::GenericDataLocation, filename);
+            xml_file = QStandardPaths::locate(QStandardPaths::AppDataLocation, filename);
             warn = true;
         }
 
@@ -168,7 +168,7 @@ bool KXMLGUIFactory::saveConfigFile(const QDomDocument &doc,
     QString xml_file(filename);
 
     if (QDir::isRelativePath(xml_file))
-        xml_file = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) +
+        xml_file = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) +
             QStringLiteral("/kxmlgui5/") + componentName + QLatin1Char('/') + filename;
 
     QFileInfo fileInfo(xml_file);
@@ -365,7 +365,7 @@ void KXMLGUIFactoryPrivate::saveDefaultActionProperties(const QList<QAction *> &
     // kxmlguiclient. We only want to execute the following code only once in
     // the lifetime of an action.
     Q_FOREACH (QAction *action, actions) {
-        // Skip NULL actions or those we have seen already.
+        // Skip 0 actions or those we have seen already.
         if (!action || action->property("_k_DefaultShortcut").isValid()) {
             continue;
         }

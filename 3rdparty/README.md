@@ -25,16 +25,17 @@ Note: on all operating systems the entire procedure is done in a terminal window
 3. Make sure you have a compiler:
     * Linux: gcc, minimum version 4.8
     * OSX: clang, you need to install xcode for this
-    * Windows: MSVC 2015 Community Edition: https://www.visualstudio.com/en-us/products/visual-studio-community-vs.aspx
+    * Windows: (http://tdm-gcc.tdragon.net/, version 5.1). MSVC cannot build G'Mic correctly. For some reason, cmake wants to use nmake even when using mingw, so copy mingw32-make.exe to nmake.exe. And remember to install the OpenMP plugin in tdm-gcc.
+4. If you compile Qt on Windows, you will also need Python 2.7: https://www.python.org/download/releases/2.7/. Make sure to have python.exe in your path.
 
 == Setup your environment ==
 
 Windows Only:
-    When launching the commands from the console, run first "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\amd64\vcvars64.bat" in it, this way all the environment variables for the compiler will be ready.
+    When launching the commands from the console, run first "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\amd64\vcvars64.bat" in it (include the quotes). This way all the environment variables for the compiler will be ready.
 
 == Prepare your directory layout ==
 
-1. Make a toplevel build directory, say $HOME/dev or c:\dev. We'll refer to this directory as BUILDROOT. You can use a variable for this, on WINDOWS %BUILDROOT%, on OSX and Linux $BUILDROOT. 
+1. Make a toplevel build directory, say $HOME/dev or c:\dev. We'll refer to this directory as BUILDROOT. You can use a variable for this, on WINDOWS %BUILDROOT%, on OSX and Linux $BUILDROOT. You will have to replace BUILDROOT with $BUILDROOT or %BUILDROOT whenever you copy and paste a command, depending on your operating system.
 
 2. Checkout krita in BUILDROOT
     cd BUILDROOT
@@ -46,123 +47,56 @@ Windows Only:
 5. Create the install directory
     mkdir BUILDROOT/i
 
-== Qt ==
-
-Install Qt. Either build from source or with the qt.io installer. Make sure qmake is in your path. You need qtbase, qtsvg, qttools, qtscript, qtdeclarative, qtgraphicaleffects, qttranslations. On Windows, you also need qtwinextras, on Linux qtx11extras.
-
-When installing from source, you can use these example configure commands:
- 
-* Linux:
-
-    ./configure \
-        -skip qt3d \
-        -skip qtactiveqt \
-        -skip qtcanvas3d \
-        -skip qtconnectivity \
-        -skip qtdoc \
-        -skip qtenginio \
-        -skip qtgraphicaleffects \
-        -skip qtlocation \
-        -skip qtmultimedia \
-        -skip qtsensors \
-        -skip qtserialport \
-        -skip qtwayland \
-        -skip qtwebchannel \
-        -skip qtwebengine \
-        -skip qtwebkit \
-        -skip qtwebkit-examples \
-        -skip qtwebsockets \
-        -skip qtxmlpatterns \
-        -opensource -confirm-license -release \
-        -no-qml-debug -no-mtdev -no-journald \
-        -no-openssl -no-libproxy \
-        -no-pulseaudio -no-alsa -no-nis \
-        -no-cups -no-tslib -no-pch \
-        -no-dbus  -no-gstreamer -no-system-proxies \
-        -no-openssl -no-libproxy -no-pulseaudio \
-        -qt-xcb  -xcb -qt-freetype -qt-harfbuzz \
-        -qt-pcre -qt-xkbcommon-x11 -xcb-xlib  \
-        -prefix BUILDROOT/i
-    make -j8
-
-* OSX
-
-./configure \
-    -skip qt3d \
-    -skip qtactiveqt \
-    -skip qtcanvas3d \
-    -skip qtconnectivity \
-    -skip qtdeclarative \
-    -skip qtdoc \
-    -skip qtenginio \
-    -skip qtgraphicaleffects \
-    -skip qtlocation \
-    -skip qtmultimedia \
-    -skip qtsensors \
-    -skip qtserialport \
-    -skip qtwayland \
-    -skip qtwebchannel \
-    -skip qtwebengine \
-    -skip qtwebsockets \
-    -skip qtxmlpatterns \
-    -opensource -confirm-license -release \
-    -no-qml-debug -no-mtdev -no-journald \
-    -no-openssl -no-libproxy \
-    -no-pulseaudio -no-alsa -no-nis \
-    -no-cups -no-tslib -no-pch \
-    -no-dbus  -no-gstreamer -no-system-proxies \
-    -no-openssl -no-libproxy -no-pulseaudio \
-    -nomake examples -nomake demos \
-    -prefix $BUILDROOT/i
-
-* Windows
-
-    configure -skip qt3d -skip qtactiveqt -skip qtcanvas3d -skip qtconnectivity -skip qtdoc -skip qtenginio -skip qtgraphicaleffects -skip qtlocation -skip qtmultimedia -skip qtsensors -skip qtserialport -skip qtwayland -skip qtwebchannel -skip qtwebengine -skip qtwebsockets -skip qtxmlpatterns -opensource -confirm-license -release -no-qml-debug -no-mtdev -no-openssl -no-libproxy -no-nis -no-dbus  -no-system-proxies -no-libproxy -opengl desktop -prefix %BUILDROOT%\i
-
 == Prepare the externals build ==
 
 1. enter the BUILDROOT/b directory
 2. run cmake:
+
     * Linux:
-    cmake ../krita/3rdparty -DINSTALL_ROOT=BUILDROOT/i -DEXTERNALS_DOWNLOAD_DIR=BUILDROOT/d -DCMAKE_INSTALL_PREFIX=BUILDROOT/i
-:
+    export PATH=$BUILDROOT/i/bin
+    cmake ../krita/3rdparty \
+        -DINSTALL_ROOT=$BUILDROOT/i \
+        -DEXTERNALS_DOWNLOAD_DIR=$BUILDROOT/d \
+        -DCMAKE_INSTALL_PREFIX=BUILDROOT/i
+
     * OSX:
+    
+    export PATH=$BUILDROOT/i/bin
+    cmake ../krita/3rdparty/  \
+        -DCMAKE_INSTALL_PREFIX=$BUILDROOT/i \
+        -DEXTERNALS_DOWNLOAD_DIR=$BUILDROOT/d  \
+        -DINSTALL_ROOT=$BUILDROOT/i 
+
+
     * Windows 32 bits:
+    
+    TODO
 
     * Windows 64 bits:
 
-Note that the cmake command needs to point to your buildroot like /dev/d, not c:\dev\d.
+Note that the cmake command needs to point to your BUILDROOT like /dev/d, not c:\dev\d.
 
     set PATH=BUILDROOT\i\bin\;BUILDROOT\i\lib;%PATH%
-    cmake ..\krita\3rdparty -DEXTERNALS_DOWNLOAD_DIR=/dev/d -DINSTALL_ROOT=/dev/i   -G "Visual Studio 14 Win64" 
-    
+    cmake ..\krita\3rdparty -DEXTERNALS_DOWNLOAD_DIR=/dev/d -DINSTALL_ROOT=/dev/i   -G "MinGW Makefiles"
 
 3. build the packages:
 
-With a judicious application of DEPENDS statements, it's possible to build it all in one go, but in my experience that fails anyway, so it's better to build the dependencies indepdendently.
+With a judicious application of DEPENDS statements, it's possible to build it all in one go, but in my experience that fails always, so it's better to build the dependencies independently.
 
 On Windows:
 
     cmake --build . --config RelWithDebInfo --target ext_patch
     cmake --build . --config RelWithDebInfo --target ext_png2ico
-    cmake --build . --config RelWithDebInfo --target ext_pthreads
-
-
+    cmake --build . --config RelWithDebInfo --target ext_gettext
+    
 On all operating systems:
 
+    cmake --build . --config RelWithDebInfo --target ext_qt
+    cmake --build . --config RelWithDebInfo --target ext_zlib
     cmake --build . --config RelWithDebInfo --target ext_boost
     cmake --build . --config RelWithDebInfo --target ext_eigen3
     cmake --build . --config RelWithDebInfo --target ext_exiv2
     cmake --build . --config RelWithDebInfo --target ext_fftw3
-
-Note for Windows:
-
-fftw3 is still broken, don't know why. Copy the bin, lib and include folders from 
-
-    \b\ext_fftw3\ext_fftw3-prefix\src\ext_fftw3
-
-manuall to BUILDROOT\i
-
     cmake --build . --config RelWithDebInfo --target ext_ilmbase
     cmake --build . --config RelWithDebInfo --target ext_jpeg
     cmake --build . --config RelWithDebInfo --target ext_lcms2
@@ -171,20 +105,10 @@ manuall to BUILDROOT\i
 
 Note for OSX:
 
-On OSX, you need to first build openexr; that will fail; then you need to set the rpath
-for the two utilities correctly, then try to build openexr again.
+On OSX, you need to first build openexr; that will fail; then you need to set the rpath for the two utilities correctly, then try to build openexr again.
 
     install_name_tool -add_rpath $BUILD_ROOT/i/lib $BUILD_ROOT/b/ext_openexr/ext_openexr-prefix/src/ext_openexr-build/IlmImf/./b44ExpLogTable
     install_name_tool -add_rpath $BUILD_ROOT/i/lib $BUILD_ROOT/b/ext_openexr/ext_openexr-prefix/src/ext_openexr-build/IlmImf/./dwaLookups
-
-Note for Windows:
-
-With MSVC 2015, the boost library has a name that later on makes the libraries unfindable, so you need to copy them.
-
-    cd BUILDROOT\i\lib
-    copy boost_system-vc-mt-1_55.dll boost_system-vc140-mt-1_55.dll
-    copy boost_system-vc-mt-1_55.lib boost_system-vc140-mt-1_55.lib
-
 
 On All operating systems:
 
@@ -197,7 +121,7 @@ On All operating systems:
 
 On Windows and OSX
 
-    cmake --build . --config RelWithDebInfo --target ext_kwindowsystem
+    cmake --build . --config RelWithDebInfo --target ext_kcrash
 
 On Windows
 
@@ -226,17 +150,18 @@ Note 2: libcurl still isn't available.
 3. Run 
 
 On Windows
-    Depending on what you want to use, run this command for MSBuild (slower compiling, since it doesn't properly use all the CPU cores, but ships with Visual Studio)
+
+Depending on what you want to use, run this command for MSBuild: 
 
     cmake ..\krita -G "Visual Studio 14 Win64" -DBoost_DEBUG=OFF -DBOOST_INCLUDEDIR=c:\dev\i\include -DBOOST_DEBUG=ON -DBOOST_ROOT=c:\dev\i -DBOOST_LIBRARYDIR=c:\dev\i\lib -DCMAKE_INSTALL_PREFIX=c:\dev\i -DCMAKE_PREFIX_PATH=c:\dev\i -DCMAKE_BUILD_TYPE=RelWithDebInfo -DBUILD_TESTING=OFF -DKDE4_BUILD_TESTS=OFF -DHAVE_MEMORY_LEAK_TRACKER=OFF -DPACKAGERS_BUILD=ON -Wno-dev -DDEFINE_NO_DEPRECATED=1
 
-    Or this to later use jom (faster compiling, uses all cores, ships with QtCreator/pre-built Qt binaries):
+Or this to use jom (faster compiling, uses all cores, ships with QtCreator/pre-built Qt binaries):
 
     cmake ..\krita -G "NMake Makefiles" -DBoost_DEBUG=OFF -DBOOST_INCLUDEDIR=c:\dev\i\include -DBOOST_DEBUG=ON -DBOOST_ROOT=c:\dev\i -DBOOST_LIBRARYDIR=c:\dev\i\lib -DCMAKE_INSTALL_PREFIX=c:\dev\i -DCMAKE_PREFIX_PATH=c:\dev\i -DCMAKE_BUILD_TYPE=RelWithDebInfo -DBUILD_TESTING=OFF -DKDE4_BUILD_TESTS=OFF -DHAVE_MEMORY_LEAK_TRACKER=OFF -DPACKAGERS_BUILD=ON -Wno-dev -DDEFINE_NO_DEPRECATED=1
 
 On Linux
 
-    cmake ../krita -DCMAKE_INSTALL_PREFIX=BUILDROOT/i -DDEFINE_NO_DEPRECATED=1 -DPACKAGERS_BUILD=ON -DBUILD_TESTING=OFF -DKDE4_BUILD_TESTS=OFF -DCMAKE_BUILD_TYPE=RelWithDebInfo
+    cmake ../krita -DCMAKE_INSTALL_PREFIX=BUILDROOT/i -DDEFINE_NO_DEPRECATED=1 -DPACKAGERS_BUILD=ON -DBUILD_TESTING=OFF -DKDE4_BUILD_TESTS=OFF -DCMAKE_BUILD_TYPE=RelWithDebInfobg
 
 On OSX
 
@@ -246,13 +171,15 @@ On OSX
 4. Run 
 
 On Linux and OSX
+
     make
     make install
 
 On Windows
-    Either use MSBuild to build:
 
-    cmake --build . --config RelWithDebInfo --target INSTALL
+    Either use MSBuild to build (-- /m tells msbuild to use all your cores):
+
+    cmake --build . --config RelWithDebInfo --target INSTALL -- /m
 
     Or use jom which should be in a path similar to C:\Qt\Qt5.6.0\Tools\QtCreator\bin\jom.exe.
     So, from the same folder, instead of running cmake run:
@@ -273,11 +200,17 @@ On OSX
 
     BUILDROOT/i/bin/krita.app/Contents/MacOS/krita
 
+== Packaging a Windows Build ==
+
+If you want to create a stripped down version of Krita to distribute, after building everything just copy the makepkg.bat file from the "windows" folder inside krita root source folder to BUILDROOT and run it.
+
+That will copy the necessary files into the specified folder and leave behind developer related files, so the resulting folder will be a smaller install folder.
+
 == Common Issues ==
-On Windows, if you get a 'mspdb140.dll' missing alert window, it means you did not run the bat file. Make sure to include the quotes in the command.
 
-"C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\amd64\vcvars64.bat"
+- On Windows, if you get a 'mspdb140.dll' missing alert window, it means you did not run the bat file. Make sure to include the quotes in the command:
+  "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\amd64\vcvars64.bat"
 
+- On Windows, if you get an error about Qt5Core.dll missing/not found or nmake exit with an error that mention QT_PLUGIN_PATH, you have to copy a couple of dlls in the Qt build directory, look for the N.B. in the Qt instructions at the start of the Readme.
 
- 
-
+- If you receive an error while compiling about "missing QtCore5.cmake", or something similar, check to make sure qmake is in your PATH. Restart your command line after any changes are made.

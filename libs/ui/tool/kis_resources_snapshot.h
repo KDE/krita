@@ -33,10 +33,16 @@ class KisPostExecutionUndoAdapter;
 class KisRecordedPaintAction;
 class KoPattern;
 
+/**
+ * @brief The KisResourcesSnapshot class takes a snapshot of the various resources
+ * like colors and settings used at the begin of a stroke or a recording so subsequent
+ * changes don't impact the running stroke. The main reason for the snapshot is that the
+ * user can *change* the options while the stroke is being executed in the background.
+ */
 class KRITAUI_EXPORT KisResourcesSnapshot : public KisShared
 {
 public:
-    KisResourcesSnapshot(KisImageWSP image, KisNodeSP currentNode, KisPostExecutionUndoAdapter *undoAdapter, KoCanvasResourceManager *resourceManager, KisDefaultBoundsBaseSP bounds = 0);
+    KisResourcesSnapshot(KisImageSP image, KisNodeSP currentNode, KisPostExecutionUndoAdapter *undoAdapter, KoCanvasResourceManager *resourceManager, KisDefaultBoundsBaseSP bounds = 0);
     ~KisResourcesSnapshot();
 
     void setupPainter(KisPainter *painter);
@@ -50,7 +56,7 @@ public:
     void setFillStyle(KisPainter::FillStyle fillStyle);
 
     KisNodeSP currentNode() const;
-    KisImageWSP image() const;
+    KisImageSP image() const;
     bool needsIndirectPainting() const;
     QString indirectPaintingCompositeOp() const;
 

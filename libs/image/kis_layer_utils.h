@@ -27,6 +27,7 @@
 #include "kis_command_utils.h"
 
 class KoProperties;
+class KoColor;
 
 namespace KisMetaData
 {
@@ -37,21 +38,35 @@ namespace KisLayerUtils
 {
     KRITAIMAGE_EXPORT void sortMergableNodes(KisNodeSP root, QList<KisNodeSP> &inputNodes, QList<KisNodeSP> &outputNodes);
     KRITAIMAGE_EXPORT KisNodeList sortMergableNodes(KisNodeSP root, KisNodeList nodes);
-    KRITAIMAGE_EXPORT void filterMergableNodes(QList<KisNodeSP> &nodes, bool allowMasks = false);
+    KRITAIMAGE_EXPORT void filterMergableNodes(KisNodeList &nodes, bool allowMasks = false);
+    KRITAIMAGE_EXPORT bool checkIsChildOf(KisNodeSP node, const KisNodeList &parents);
+
+    /**
+     * Returns true if:
+     *     o \p node is a clone of some layer in \p nodes
+     *     o \p node is a clone any child layer of any layer in \p nodes
+     *     o \p node is a clone of a clone of a ..., that in the end points
+     *       to any layer in \p nodes of their children.
+     */
+    KRITAIMAGE_EXPORT bool checkIsCloneOf(KisNodeSP node, const KisNodeList &nodes);
+
+    KRITAIMAGE_EXPORT KisNodeList sortAndFilterMergableInternalNodes(KisNodeList nodes, bool allowMasks = false);
 
     KRITAIMAGE_EXPORT void mergeDown(KisImageSP image, KisLayerSP layer, const KisMetaData::MergeStrategy* strategy);
 
     KRITAIMAGE_EXPORT QSet<int> fetchLayerFrames(KisNodeSP node);
     KRITAIMAGE_EXPORT QSet<int> fetchLayerFramesRecursive(KisNodeSP rootNode);
 
-    KRITAIMAGE_EXPORT void mergeMultipleLayers(KisImageSP image, QList<KisNodeSP> mergedNodes, KisNodeSP putAfter);
-    KRITAIMAGE_EXPORT bool tryMergeSelectionMasks(KisImageSP image, QList<KisNodeSP> mergedNodes, KisNodeSP putAfter);
+    KRITAIMAGE_EXPORT void mergeMultipleLayers(KisImageSP image, KisNodeList mergedNodes, KisNodeSP putAfter);
+    KRITAIMAGE_EXPORT bool tryMergeSelectionMasks(KisImageSP image, KisNodeList mergedNodes, KisNodeSP putAfter);
 
     KRITAIMAGE_EXPORT void flattenLayer(KisImageSP image, KisLayerSP layer);
     KRITAIMAGE_EXPORT void flattenImage(KisImageSP image);
 
     KRITAIMAGE_EXPORT void addCopyOfNameTag(KisNodeSP node);
     KRITAIMAGE_EXPORT KisNodeList findNodesWithProps(KisNodeSP root, const KoProperties &props, bool excludeRoot);
+
+    KRITAIMAGE_EXPORT void changeImageDefaultProjectionColor(KisImageSP image, const KoColor &color);
 
     typedef QMap<int, QSet<KisNodeSP> > FrameJobs;
     void updateFrameJobs(FrameJobs *jobs, KisNodeSP node);
@@ -83,15 +98,58 @@ namespace KisLayerUtils
         SharedStorageSP m_storage;
     };
 
+    /**
+     * A command to keep correct set of selected/active nodes thoroughout
+     * the action.
+     */
+    class KRITAIMAGE_EXPORT KeepNodesSelectedCommand : public KisCommandUtils::FlipFlopCommand
+    {
+    public:
+    KeepNodesSelectedCommand(const KisNodeList &selectedBefore,
+                             const KisNodeList &selectedAfter,
+                             KisNodeSP activeBefore,
+                             KisNodeSP activeAfter,
+                             KisImageSP image,
+                             bool finalize, KUndo2Command *parent = 0);
+    void end();
+
+    private:
+        KisNodeList m_selectedBefore;
+        KisNodeList m_selectedAfter;
+        KisNodeSP m_activeBefore;
+        KisNodeSP m_activeAfter;
+        KisImageWSP m_image;
+    };
+
+    KRITAIMAGE_EXPORT KisLayerSP constructDefaultLayer(KisImageSP image);
+
     class KRITAIMAGE_EXPORT RemoveNodeHelper {
     public:
         virtual ~RemoveNodeHelper();
     protected:
         virtual void addCommandImpl(KUndo2Command *cmd) = 0;
-        void safeRemoveMultipleNodes(QList<KisNodeSP> nodes, KisImageSP image);
+        void safeRemoveMultipleNodes(KisNodeList nodes, KisImageSP image);
     private:
-        bool checkIsSourceForClone(KisNodeSP src, const QList<KisNodeSP> &nodes);
+        bool checkIsSourceForClone(KisNodeSP src, const KisNodeList &nodes);
+        static bool scanForLastLayer(KisImageWSP image, KisNodeList nodesToRemove);
     };
+
+    struct SimpleRemoveLayers : private KisLayerUtils::RemoveNodeHelper, public KisCommandUtils::AggregateCommand {
+        SimpleRemoveLayers(const KisNodeList &nodes,
+                           KisImageSP image);
+
+        void populateChildCommands();
+
+    protected:
+        virtual void addCommandImpl(KUndo2Command *cmd);
+
+    private:
+        KisNodeList m_nodes;
+        KisImageSP m_image;
+        KisNodeList m_selectedNodes;
+        KisNodeSP m_activeNode;
+    };
+
 
     class KRITAIMAGE_EXPORT KisSimpleUpdateCommand : public KisCommandUtils::FlipFlopCommand
     {
@@ -120,6 +178,19 @@ namespace KisLayerUtils
         }
         return valueDiffers;
     }
+
+    /**
+     * Applies \p func to \p node and all its children recursively
+     */
+    void KRITAIMAGE_EXPORT recursiveApplyNodes(KisNodeSP node, std::function<void(KisNodeSP)> func);
+
+    /**
+     * Walks through \p node and all its children recursively until
+     * \p func returns true. When \p func returns true, the node is
+     * considered to be found, the search is stopped and the found
+     * node is returned to the caller.
+     */
+    KisNodeSP KRITAIMAGE_EXPORT recursiveFindNode(KisNodeSP node, std::function<bool(KisNodeSP)> func);
 };
 
 #endif /* __KIS_LAYER_UTILS_H */

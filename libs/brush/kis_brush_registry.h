@@ -42,7 +42,7 @@ public:
 
     static KisBrushRegistry* instance();
 
-    KisBrushSP getOrCreateBrush(const QDomElement& element);
+    KisBrushSP getOrCreateBrush(const QDomElement& element, bool forceCopy = false);
 
 private:
     KisBrushRegistry(const KisBrushRegistry&);

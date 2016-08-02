@@ -18,11 +18,12 @@
  */
 
 #include "kis_painting_assistants_manager.h"
-#include "kis_painting_assistants_decoration.h"
+
 #include "KisViewManager.h"
 #include "kis_action_manager.h"
 #include "kis_action.h"
 
+#include "kis_canvas2.h"
 #include <klocalizedstring.h>
 #include <kguiitem.h>
 #include <ktoggleaction.h>
@@ -50,13 +51,21 @@ void KisPaintingAssistantsManager::setup(KisActionManager * actionManager)
 
 void KisPaintingAssistantsManager::setView(QPointer<KisView> imageView)
 {
+
+    // set view is called twice when a document is open, so we need to disconnect the original signals
+    // if m_imageView has already been created. This prevents double signal events firing
     if (m_imageView) {
         m_toggleAssistant->disconnect();
+        m_togglePreview->disconnect();
+
         if (decoration()) {
             decoration()->disconnect(this);
         }
     }
+
     m_imageView = imageView;
+
+
     if (m_imageView && !decoration()) {
         KisPaintingAssistantsDecoration* deco = new KisPaintingAssistantsDecoration(m_imageView);
         m_imageView->canvasBase()->addDecoration(deco);
@@ -82,7 +91,7 @@ void KisPaintingAssistantsManager::updateAction()
     }
 }
 
-KisPaintingAssistantsDecoration* KisPaintingAssistantsManager::decoration()
+KisPaintingAssistantsDecorationSP KisPaintingAssistantsManager::decoration()
 {
     if (m_imageView) {
         return m_imageView->canvasBase()->paintingAssistantsDecoration();

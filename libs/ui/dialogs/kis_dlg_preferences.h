@@ -25,16 +25,17 @@
 #include <QWidget>
 
 #include <kpagedialog.h>
+#include "KoColorPopupAction.h"
 
 #include "kis_global.h"
 
 #include "ui_wdggeneralsettings.h"
 #include "ui_wdgdisplaysettings.h"
-#include "ui_wdggridsettings.h"
 #include "ui_wdgcolorsettings.h"
 #include "ui_wdgtabletsettings.h"
 #include "ui_wdgperformancesettings.h"
 #include "ui_wdgfullscreensettings.h"
+#include "KisShortcutsDialog.h"
 
 class KoID;
 class KisInputConfigurationPage;
@@ -79,13 +80,54 @@ public:
     bool compressKra();
     bool toolOptionsInDocker();
     bool switchSelectionCtrlAlt();
+    bool convertToImageColorspaceOnImport();
 private Q_SLOTS:
     void getBackgroundImage();
     void clearBackgroundImage();
 
 };
 
-//=======================
+
+
+/**
+ *  "Shortcuts" tab for preferences dialog
+ */
+
+class WdgShortcutSettings : public KisShortcutsDialog
+{
+    Q_OBJECT
+
+public:
+    WdgShortcutSettings(QWidget *parent)
+        : KisShortcutsDialog(KisShortcutsEditor::AllActions,
+                             KisShortcutsEditor::LetterShortcutsAllowed,
+                             parent)
+    { }
+};
+
+class ShortcutSettingsTab : public QWidget
+{
+    Q_OBJECT
+
+public:
+
+    ShortcutSettingsTab(QWidget *parent = 0, const char *name = 0);
+
+public:
+    void setDefault();
+    WdgShortcutSettings  *m_page;
+
+
+public Q_SLOTS:
+    void saveChanges();
+    void revertChanges();
+};
+
+
+
+/**
+ *  "Color" tab for preferences dialog
+ */
 
 class WdgColorSettings : public QWidget, public Ui::WdgColorSettings
 {
@@ -108,13 +150,13 @@ public:
 private Q_SLOTS:
 
     void refillMonitorProfiles(const KoID & s);
-    void refillPrintProfiles(const KoID & s);
     void installProfile();
     void toggleAllowMonitorProfileSelection(bool useSystemProfile);
 
 public:
     void setDefault();
     WdgColorSettings  *m_page;
+    KoColorPopupAction *m_gamutWarning;
     QButtonGroup m_pasteBehaviourGroup;
     QList<QLabel*> m_monitorProfileLabels;
     QList<SqueezedComboBox*> m_monitorProfileWidgets;
@@ -223,40 +265,6 @@ public:
 //=======================
 
 /**
- *  Grid settings tab for preferences dialog
- */
-
-class WdgGridSettingsBase : public QWidget, public Ui::WdgGridSettingsBase
-{
-    Q_OBJECT
-
-public:
-    WdgGridSettingsBase(QWidget *parent) : QWidget(parent) {
-        setupUi(this);
-    }
-};
-
-class GridSettingsTab : public WdgGridSettingsBase
-{
-    Q_OBJECT
-public:
-    GridSettingsTab(QWidget *parent);
-public:
-    void setDefault();
-private Q_SLOTS:
-    void linkSpacingToggled(bool);
-    void spinBoxHSpacingChanged(int);
-    void spinBoxVSpacingChanged(int);
-    void linkOffsetToggled(bool);
-    void spinBoxXOffsetChanged(int);
-    void spinBoxYOffsetChanged(int);
-private:
-    bool m_linkSpacing, m_linkOffset;
-};
-
-//=======================
-
-/**
  *  Full screen settings tab for preferences dialog
  */
 
@@ -303,10 +311,10 @@ protected:
 protected:
 
     GeneralTab *m_general;
+    ShortcutSettingsTab  *m_shortcutSettings;
     ColorSettingsTab *m_colorSettings;
     PerformanceTab *m_performanceSettings;
     DisplaySettingsTab  *m_displaySettings;
-    GridSettingsTab *m_gridSettings;
     TabletSettingsTab *m_tabletSettings;
     FullscreenSettingsTab *m_fullscreenSettings;
     KisInputConfigurationPage *m_inputConfiguration;

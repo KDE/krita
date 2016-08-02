@@ -25,7 +25,7 @@
 
 #include <QMessageBox>
 
-#include <QUrl>
+#include <QFileInfo>
 
 #include <KoColorSpaceRegistry.h>
 #include <KoColorSpaceTraits.h>
@@ -82,18 +82,18 @@ info_callback(const char *msg, void *client_data)
     fprintf(stdout, "[INFO] %s", msg);
 }
 
-KisImageBuilder_Result jp2Converter::decode(const QUrl &uri)
+KisImageBuilder_Result jp2Converter::decode(const QString &filename)
 {
     // decompression parameters
     opj_dparameters_t parameters;
     opj_set_default_decoder_parameters(&parameters);
     // Determine the type
-    parameters.decod_format = getFileFormat(uri); // TODO isn't there some magic code ?
+    parameters.decod_format = getFileFormat(filename); // TODO isn't there some magic code ?
     if (parameters.decod_format == -1) {
         return KisImageBuilder_RESULT_UNSUPPORTED;
     }
     // open the file
-    QFile fp(uri.toLocalFile());
+    QFile fp(filename);
     fp.open(QIODevice::ReadOnly);
     QByteArray src = fp.readAll();
     fp.close();
@@ -267,15 +267,9 @@ KisImageBuilder_Result jp2Converter::decode(const QUrl &uri)
 
 
 
-KisImageBuilder_Result jp2Converter::buildImage(const QUrl &uri)
+KisImageBuilder_Result jp2Converter::buildImage(const QString &filename)
 {
-    if (uri.isEmpty())
-        return KisImageBuilder_RESULT_NO_URI;
-
-    if (!uri.isLocalFile()) {
-        return KisImageBuilder_RESULT_NOT_EXIST;
-    }
-    return decode(uri);
+    return decode(filename);
 }
 
 
@@ -285,7 +279,7 @@ KisImageWSP jp2Converter::getImage()
 }
 
 
-KisImageBuilder_Result jp2Converter::buildFile(const QUrl &uri, KisPaintLayerSP layer, const JP2ConvertOptions& options)
+KisImageBuilder_Result jp2Converter::buildFile(const QString &filename, KisPaintLayerSP layer, const JP2ConvertOptions& options)
 {
     if (!layer)
         return KisImageBuilder_RESULT_INVALID_ARG;
@@ -293,12 +287,6 @@ KisImageBuilder_Result jp2Converter::buildFile(const QUrl &uri, KisPaintLayerSP 
     KisImageWSP kisimage = layer->image();
     if (!kisimage)
         return KisImageBuilder_RESULT_EMPTY;
-
-    if (uri.isEmpty())
-        return KisImageBuilder_RESULT_NO_URI;
-
-    if (!uri.isLocalFile())
-        return KisImageBuilder_RESULT_NOT_LOCAL;
 
     // Init parameters
     opj_cparameters_t parameters;
@@ -394,7 +382,7 @@ KisImageBuilder_Result jp2Converter::buildFile(const QUrl &uri, KisPaintLayerSP 
     }
 
     // coding format
-    parameters.decod_format = getFileFormat(uri); // TODO isn't there some magic code ?
+    parameters.decod_format = getFileFormat(filename); // TODO isn't there some magic code ?
 
     // Decode the file
     opj_cinfo_t *cinfo = 0;
@@ -445,7 +433,7 @@ KisImageBuilder_Result jp2Converter::buildFile(const QUrl &uri, KisPaintLayerSP 
     }
 
     // Write to the file
-    QFile fp(uri.path());
+    QFile fp(filename);
     fp.open(QIODevice::WriteOnly);
     int length = cio_tell(cio);
     dbgFile << "Length of the file to save: " << length;
@@ -464,9 +452,9 @@ void jp2Converter::cancel()
     m_stop = true;
 }
 
-int jp2Converter::getFileFormat(const QUrl &uri) const
+int jp2Converter::getFileFormat(const QString &filename) const
 {
-    QString extension = QFileInfo(uri.fileName()).suffix().toLower();
+    QString extension = QFileInfo(filename).suffix().toLower();
     if (extension == "j2k" || extension == "j2c") {
         return J2K_CFMT;
     } else if (extension == "jp2") {

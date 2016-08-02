@@ -169,7 +169,7 @@ private:
     KisAction *m_toggleSelectionOverlayMode;
 
     QList<QAction*> m_pluginActions;
-    KisSelectionDecoration *m_selectionDecoration;
+    QPointer<KisSelectionDecoration> m_selectionDecoration;
 
 };
 

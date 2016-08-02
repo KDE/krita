@@ -49,7 +49,7 @@
 KisShortcutsDialog::KisShortcutsDialog(KisShortcutsEditor::ActionTypes types,
                                        KisShortcutsEditor::LetterShortcuts allowLetterShortcuts,
                                        QWidget *parent)
-    : QDialog(parent)
+    : QWidget(parent)
     , d(new KisShortcutsDialogPrivate(this))
 {
 
@@ -58,9 +58,6 @@ KisShortcutsDialog::KisShortcutsDialog(KisShortcutsEditor::ActionTypes types,
 
 
     /*  Construct & Connect UI  */
-    setWindowTitle(i18n("Configure Shortcuts"));
-    setModal(true);
-
     QVBoxLayout *mainLayout = new QVBoxLayout;
     setLayout(mainLayout);
     mainLayout->addWidget(d->m_shortcutsEditor);
@@ -77,21 +74,12 @@ KisShortcutsDialog::KisShortcutsDialog(KisShortcutsEditor::ActionTypes types,
 
     QDialogButtonBox *buttonBox = new QDialogButtonBox(this);
     buttonBox->addButton(printButton, QDialogButtonBox::ActionRole);
-    buttonBox->setStandardButtons(QDialogButtonBox::Ok |
-                                  QDialogButtonBox::Cancel);
-    KGuiItem::assign(buttonBox->button(QDialogButtonBox::Ok),
-                     KStandardGuiItem::ok());
-    KGuiItem::assign(buttonBox->button(QDialogButtonBox::Cancel),
-                     KStandardGuiItem::cancel());
     bottomLayout->addWidget(buttonBox);
 
 
     mainLayout->addLayout(bottomLayout);
 
     connect(printButton, SIGNAL(clicked()), d->m_shortcutsEditor, SLOT(printShortcuts()));
-    connect(buttonBox, SIGNAL(rejected()), this, SLOT(undo()));
-    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
-    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 
     KConfigGroup group(KSharedConfig::openConfig(), "KisShortcutsDialog Settings");
     resize(group.readEntry("Dialog Size", sizeHint()));
@@ -110,43 +98,20 @@ void KisShortcutsDialog::addCollection(KActionCollection *collection, const QStr
     d->m_collections.insert(title, collection);
 }
 
+
+void KisShortcutsDialog::save()
+{
+    d->save();
+}
+
 QList<KActionCollection *> KisShortcutsDialog::actionCollections() const
 {
     return d->m_collections.values();
 }
 
-bool KisShortcutsDialog::configure(bool saveSettings)
-{
-    d->m_saveSettings = saveSettings;
-    if (isModal()) {
-        int retcode = exec();
-        return retcode;
-    } else {
-        show();
-        return false;
-    }
-}
-
-void KisShortcutsDialog::accept()
-{
-    if (d->m_saveSettings) {
-        d->save();
-    }
-    QDialog::accept();
-}
-
 QSize KisShortcutsDialog::sizeHint() const
 {
     return QSize(600, 480);
-}
-
-int KisShortcutsDialog::configure(KActionCollection *collection,
-                                  KisShortcutsEditor::LetterShortcuts allowLetterShortcuts,
-                                  QWidget *parent, bool saveSettings)
-{
-    KisShortcutsDialog dlg(KisShortcutsEditor::AllActions, allowLetterShortcuts, parent);
-    dlg.d->m_shortcutsEditor->addCollection(collection);
-    return dlg.configure(saveSettings);
 }
 
 void KisShortcutsDialog::allDefault()
@@ -156,27 +121,27 @@ void KisShortcutsDialog::allDefault()
 
 void KisShortcutsDialog::importConfiguration(const QString &path)
 {
-    KConfig config(path);
-    d->m_shortcutsEditor->importConfiguration(static_cast<KConfigBase *>(&config), true);
+    auto config = KSharedConfig::openConfig(path);
+    d->m_shortcutsEditor->importConfiguration(config.data(), true);
 }
 
 void KisShortcutsDialog::exportConfiguration(const QString &path) const
 {
-    KConfig config(path);
-    d->m_shortcutsEditor->exportConfiguration(static_cast<KConfigBase *>(&config));
+    auto config = KSharedConfig::openConfig(path);
+    d->m_shortcutsEditor->exportConfiguration(config.data());
 }
 
 void KisShortcutsDialog::saveCustomShortcuts(const QString &path) const
 {
-  KConfig config(path);
-  KConfigGroup cg(&config, QStringLiteral("Shortcuts"));
-  d->m_shortcutsEditor->saveShortcuts(&cg);
+    auto cg = KSharedConfig::openConfig(path)->group(QStringLiteral("Shortcuts"));
+    d->m_shortcutsEditor->saveShortcuts(&cg);
+    d->m_shortcutsEditor->commit();
 }
 
 void KisShortcutsDialog::loadCustomShortcuts(const QString &path)
 {
-    KConfig config(path);
-    d->m_shortcutsEditor->importConfiguration(static_cast<KConfigBase *>(&config), false);
+    auto config = KSharedConfig::openConfig(path);
+    d->m_shortcutsEditor->importConfiguration(config.data(), false);
 }
 
 #include "moc_KisShortcutsDialog.cpp"

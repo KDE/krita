@@ -20,7 +20,7 @@
 #include "exr_import.h"
 
 #include <kpluginfactory.h>
-#include <QUrl>
+#include <QFileInfo>
 
 #include <KisFilterChain.h>
 #include <KisImportExportManager.h>
@@ -47,26 +47,25 @@ KisImportExportFilter::ConversionStatus exrImport::convert(const QByteArray&, co
     if (to != "application/x-krita")
         return KisImportExportFilter::BadMimeType;
 
-    KisDocument * doc = m_chain->outputDocument();
+    KisDocument * doc = outputDocument();
 
     if (!doc)
         return KisImportExportFilter::NoDocumentCreated;
 
-    QString filename = m_chain->inputFile();
+    QString filename = inputFile();
 
     doc->prepareForImport();
 
     if (!filename.isEmpty()) {
 
-        QUrl url = QUrl::fromLocalFile(filename);
-
-        if (url.isEmpty())
+        if (!QFileInfo(filename).exists()) {
             return KisImportExportFilter::FileNotFound;
+        }
 
-        exrConverter ib(doc, !m_chain->manager()->getBatchMode());
+        exrConverter ib(doc, !getBatchMode());
 
 
-        switch (ib.buildImage(url)) {
+        switch (ib.buildImage(filename)) {
         case KisImageBuilder_RESULT_UNSUPPORTED:
         case KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE:
             doc->setErrorMessage(i18n("Krita does support this type of EXR file."));

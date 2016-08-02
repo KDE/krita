@@ -379,7 +379,7 @@ void KisAdvancedColorSpaceSelector::fillDescription()
     } else if (currentModelStr == "CMYKA") {
         d->colorSpaceSelector->textProfileDescription->append("<p>"+i18nc("If the selected model is CMYK",
                                                                     "<b><a href=\"https://en.wikipedia.org/wiki/CMYK_color_model\">CMYK (Cyan, Magenta, Yellow, Key)</a></b>, "
-                                                                    "is the model used by printers and other ink-based media.</br>"
+                                                                    "is the model used by printers and other ink-based media.<br/>"
                                                                     "CMYK is a subtractive model, meaning that adding colors together will turn them darker. Because of CMYK "
                                                                     "profiles being very specific per printer, it is recommended to work in RGB space, and then later convert "
                                                                     "to a CMYK profile, preferably one delivered by your printer. <br/>"
@@ -770,12 +770,10 @@ void KisAdvancedColorSpaceSelector::colorSpaceChanged()
 
 void KisAdvancedColorSpaceSelector::installProfile()
 {
-    QStringList mime;
-    mime << "*.icm" <<  "*.icc";
     KoFileDialog dialog(this, KoFileDialog::OpenFiles, "OpenDocumentICC");
     dialog.setCaption(i18n("Install Color Profiles"));
     dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::HomeLocation));
-    dialog.setNameFilters(mime);
+    dialog.setMimeTypeFilters(QStringList() << "application/vnd.iccprofile", "application/vnd.iccprofile");
     QStringList profileNames = dialog.filenames();
 
     KoColorSpaceEngine *iccEngine = KoColorSpaceEngineRegistry::instance()->get("icc");

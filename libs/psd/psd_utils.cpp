@@ -22,7 +22,7 @@
 #include <QIODevice>
 #include <QString>
 
-#include <netinet/in.h> // htonl
+#include <QtEndian>
 #include "psd.h"
 
 bool psdwrite(QIODevice* io, quint8 v)
@@ -33,21 +33,21 @@ bool psdwrite(QIODevice* io, quint8 v)
 
 bool psdwrite(QIODevice* io, quint16 v)
 {
-    quint16 val = htons(v);
+    quint16 val = qToBigEndian((quint16)v);
     int written = io->write((char*)&val, 2);
     return written == 2;
 }
 
 bool psdwrite(QIODevice* io, qint16 v)
 {
-    qint16 val = htons(v);
+    qint16 val = qToBigEndian((qint16)v);
     int written = io->write((char*)&val, 2);
     return written == 2;
 }
 
 bool psdwrite(QIODevice* io, quint32 v)
 {
-    quint32 val = htonl(v);
+    quint32 val = qToBigEndian((quint32)v);
     int written = io->write((char*)&val, 4);
     return written == 4;
 }
@@ -149,7 +149,7 @@ bool psdread(QIODevice* io, quint16* v)
     quint16 val;
     quint64 read = io->read((char*)&val, 2);
     if (read != 2) return false;
-    *v = ntohs(val);
+    *v = qFromBigEndian(val);
     return true;
 }
 
@@ -158,7 +158,7 @@ bool psdread(QIODevice* io, qint16* v)
     qint16 val;
     quint64 read = io->read((char*)&val, 2);
     if (read != 2) return false;
-    *v = ntohs(val);
+    *v = qFromBigEndian(val);
     return true;
 }
 
@@ -168,7 +168,7 @@ bool psdread(QIODevice* io, quint32* v)
     quint32 val;
     quint64 read = io->read((char*)&val, 4);
     if (read != 4) return false;
-    *v = ntohl(val);
+    *v = qFromBigEndian(val);
     return true;
 }
 
@@ -178,7 +178,7 @@ bool psdread(QIODevice* io, qint32* v)
     qint32 val;
     quint64 read = io->read((char*)&val, 4);
     if (read != 4) return false;
-    *v = ntohl(val);
+    *v = qFromBigEndian(val);
     return true;
 }
 

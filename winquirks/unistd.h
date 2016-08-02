@@ -1,5 +1,10 @@
 #ifndef QUIRK_UNISTD_H
 #define QUIRK_UNISTD_H
+
+#ifndef _MSC_VER
+#include <unistd.h>
+#else
+
 #pragma message("winquirk: no unistd.h!")
 
 #include <winsock2.h>
@@ -113,8 +118,10 @@ static int gethostname(char *__name, size_t __len) {
 #define STDERR_FILENO 2
 #endif
 
+#if defined _MSC_VER
 #if _MSC_VER < 1600
 #define ENOTSUP       ENOSYS
+#endif
 #endif
 typedef unsigned int gid_t;
 typedef unsigned int uid_t;
@@ -178,4 +185,5 @@ static int sleep(unsigned int sec) {
 	return 0;
 }
 
+#endif
 #endif

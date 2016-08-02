@@ -50,6 +50,7 @@ public Q_SLOTS:
 private Q_SLOTS:
     void slotTimer();
     void slotFrameReady(int frame);
+    void slotFrameCancelled();
     void slotInfoConverted();
 
     void slotPrivateStartWaitingForConvertedFrame();

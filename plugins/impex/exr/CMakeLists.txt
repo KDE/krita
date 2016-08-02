@@ -1,6 +1,6 @@
 add_subdirectory(tests)
 
-include_directories( ${OPENEXR_INCLUDE_DIR} )
+include_directories(SYSTEM ${OPENEXR_INCLUDE_DIR} )
 
 add_definitions(${OPENEXR_DEFINITIONS})
 
@@ -19,7 +19,7 @@ add_library(kritaexrimport MODULE ${kritaexrimport_SOURCES})
 
 target_link_libraries(kritaexrimport kritaui  ${OPENEXR_LIBRARIES} )
 
-install(TARGETS kritaexrimport  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS kritaexrimport  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 
 set(kritaexrexport_SOURCES
     exr_export.cc
@@ -32,7 +32,7 @@ add_library(kritaexrexport MODULE ${kritaexrexport_SOURCES})
 
 target_link_libraries(kritaexrexport kritaui  ${OPENEXR_LIBRARIES} )
 
-install(TARGETS kritaexrexport  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS kritaexrexport  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 
 install( FILES
     exrchannels.schema

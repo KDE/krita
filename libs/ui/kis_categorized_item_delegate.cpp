@@ -31,10 +31,10 @@
 #include <KoIcon.h>
 
 #include <kis_icon.h>
+#include "kis_debug.h"
 
-KisCategorizedItemDelegate::KisCategorizedItemDelegate(bool indicateError, QObject *parent)
+KisCategorizedItemDelegate::KisCategorizedItemDelegate(QObject *parent)
     : QStyledItemDelegate(parent),
-      m_indicateError(indicateError),
       m_minimumItemHeight(0)
 {
 }
@@ -46,16 +46,19 @@ void KisCategorizedItemDelegate::paint(QPainter* painter, const QStyleOptionView
     if(!index.data(__CategorizedListModelBase::IsHeaderRole).toBool()) {
         QStyleOptionViewItem sovi(option);
 
-        if(m_indicateError)
-            sovi.decorationPosition = QStyleOptionViewItem::Right;
-
-        QStyledItemDelegate::paint(painter, sovi, index);
         if (index.data(__CategorizedListModelBase::isLockableRole).toBool()) {
             bool locked = index.data(__CategorizedListModelBase::isLockedRole).toBool();
             const QIcon icon = locked ? KisIconUtils::loadIcon(koIconName("locked")) : KisIconUtils::loadIcon(koIconName("unlocked"));
-            QPixmap pixmap = icon.pixmap(QSize(sovi.rect.height() - 8, sovi.rect.height() -8));
-            painter->drawPixmap(sovi.rect.width() - pixmap.width(), sovi.rect.y() + 4, pixmap);
+            const int iconSize = qMax(16, m_minimumItemHeight - 2);
+
+            sovi.decorationPosition = QStyleOptionViewItem::Right;
+            sovi.decorationAlignment = Qt::AlignRight;
+            sovi.decorationSize = QSize(iconSize, iconSize);
+            sovi.features |= QStyleOptionViewItem::HasDecoration;
+            sovi.icon = icon;
         }
+
+        QStyledItemDelegate::paint(painter, sovi, index);
         painter->setOpacity(1);
     }
     else {
@@ -98,7 +101,14 @@ QSize KisCategorizedItemDelegate::sizeHint(const QStyleOptionViewItem& option, c
             m_minimumItemHeight = qMax(size.height(), m_minimumItemHeight);
         }
     }
-    return QSize(QStyledItemDelegate::sizeHint(option, index).width(), m_minimumItemHeight);
+
+    int width = QStyledItemDelegate::sizeHint(option, index).width();
+
+    if (index.data(__CategorizedListModelBase::isLockableRole).toBool()) {
+        width += m_minimumItemHeight;
+    }
+
+    return QSize(width, m_minimumItemHeight);
 }
 
 void KisCategorizedItemDelegate::paintTriangle(QPainter* painter, qint32 x, qint32 y, qint32 size, bool rotate) const

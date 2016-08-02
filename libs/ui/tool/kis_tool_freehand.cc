@@ -58,7 +58,8 @@
 
 
 KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, const KUndo2MagicString &transactionText)
-    : KisToolPaint(canvas, cursor)
+    : KisToolPaint(canvas, cursor),
+      m_paintopBasedPickingInAction(false)
 {
     m_assistant = false;
     m_magnetism = 1.0;
@@ -109,6 +110,12 @@ void KisToolFreehand::resetCursorStyle()
         break;
     case CURSOR_STYLE_TRIANGLE_LEFTHANDED:
         useCursor(KisCursor::triangleLeftHandedCursor());
+        break;
+    case CURSOR_STYLE_BLACK_PIXEL:
+        useCursor(KisCursor::pixelBlackCursor());
+        break;
+    case CURSOR_STYLE_WHITE_PIXEL:
+        useCursor(KisCursor::pixelWhiteCursor());
         break;
     case CURSOR_STYLE_TOOLICON:
     default:
@@ -301,7 +308,10 @@ void KisToolFreehand::deactivateAlternateAction(AlternateAction action)
 
 void KisToolFreehand::beginAlternateAction(KoPointerEvent *event, AlternateAction action)
 {
-    if (tryPickByPaintOp(event, action)) return;
+    if (tryPickByPaintOp(event, action)) {
+        m_paintopBasedPickingInAction = true;
+        return;
+    }
 
     if (action != ChangeSize) {
         KisToolPaint::beginAlternateAction(event, action);
@@ -317,7 +327,7 @@ void KisToolFreehand::beginAlternateAction(KoPointerEvent *event, AlternateActio
 
 void KisToolFreehand::continueAlternateAction(KoPointerEvent *event, AlternateAction action)
 {
-    if (tryPickByPaintOp(event, action)) return;
+    if (tryPickByPaintOp(event, action) || m_paintopBasedPickingInAction) return;
 
     if (action != ChangeSize) {
         KisToolPaint::continueAlternateAction(event, action);
@@ -345,7 +355,10 @@ void KisToolFreehand::continueAlternateAction(KoPointerEvent *event, AlternateAc
 
 void KisToolFreehand::endAlternateAction(KoPointerEvent *event, AlternateAction action)
 {
-    if (tryPickByPaintOp(event, action)) return;
+    if (tryPickByPaintOp(event, action) || m_paintopBasedPickingInAction) {
+        m_paintopBasedPickingInAction = false;
+        return;
+    }
 
     if (action != ChangeSize) {
         KisToolPaint::endAlternateAction(event, action);

@@ -32,7 +32,7 @@ class KRITAIMAGE_EXPORT KisIdleWatcher : public QObject
 {
     Q_OBJECT
 public:
-    KisIdleWatcher(int delay);
+    KisIdleWatcher(int delay, QObject* parent = 0);
     ~KisIdleWatcher();
 
     bool isIdle() const;
@@ -40,6 +40,8 @@ public:
     void setTrackedImages(const QVector<KisImageSP> &images);
     void setTrackedImage(KisImageSP image);
 
+    //Force to image modified state and start countdown to event
+    void startCountdown(void) { slotImageModified(); }
 
 Q_SIGNALS:
     void startedIdleMode();

@@ -82,6 +82,7 @@ struct KoColorConversionSystem::Node {
     bool isEngine;
     const KoColorSpaceEngine* engine;
 };
+Q_DECLARE_TYPEINFO(KoColorConversionSystem::Node, Q_MOVABLE_TYPE);
 
 struct KoColorConversionSystem::Vertex {
 
@@ -149,6 +150,7 @@ struct KoColorConversionSystem::NodeKey {
     QString depthId;
     QString profileName;
 };
+Q_DECLARE_TYPEINFO(KoColorConversionSystem::NodeKey, Q_MOVABLE_TYPE);
 
 struct KoColorConversionSystem::Path {
 
@@ -163,7 +165,7 @@ struct KoColorConversionSystem::Path {
         return (vertexes.first())->srcNode;
     }
 
-    bool operator==(const Path &other) {
+    bool operator==(const Path &other) const {
       return other.vertexes == vertexes;
     }
 
@@ -235,6 +237,7 @@ struct KoColorConversionSystem::Path {
     bool isGood;
     int cost;
 };
+Q_DECLARE_TYPEINFO(KoColorConversionSystem::Path, Q_MOVABLE_TYPE);
 
 typedef QHash<KoColorConversionSystem::Node*, KoColorConversionSystem::Path > Node2PathHash;
 
@@ -280,7 +283,7 @@ struct PathQualityChecker {
     /**
      * Compare two paths.
      */
-    inline bool lessWorseThan(KoColorConversionSystem::Path &path1, KoColorConversionSystem::Path &path2) const {
+    inline bool lessWorseThan(const KoColorConversionSystem::Path &path1, const KoColorConversionSystem::Path &path2) const {
         // There is no point in comparing two paths which doesn't start from the same node or doesn't end at the same node
         if (!ignoreHdr) {
             CHECK_ONE_AND_NOT_THE_OTHER(keepDynamicRange)

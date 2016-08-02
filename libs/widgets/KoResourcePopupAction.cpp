@@ -54,14 +54,14 @@ public:
 };
 
 KoResourcePopupAction::KoResourcePopupAction(QSharedPointer<KoAbstractResourceServerAdapter>resourceAdapter, QObject *parent)
-:  QAction(parent)
-, d(new Private())
+    :  QAction(parent)
+    , d(new Private())
 {
     Q_ASSERT(resourceAdapter);
 
     d->menu = new QMenu();
-    QWidget *widget = new QWidget(d->menu);
-    QWidgetAction *wdgAction = new QWidgetAction(widget);
+    QWidget *widget = new QWidget();
+    QWidgetAction *wdgAction = new QWidgetAction(this);
 
     d->resourceList = new KoResourceItemView(widget);
     d->resourceList->setModel(new KoResourceModel(resourceAdapter, widget));
@@ -106,6 +106,17 @@ KoResourcePopupAction::KoResourcePopupAction(QSharedPointer<KoAbstractResourceSe
 
 KoResourcePopupAction::~KoResourcePopupAction()
 {
+    /* Removing the actions here make them be deleted together with their default widget.
+     * This happens only if the actions are QWidgetAction, and we know they are since
+     * the only ones added are in KoResourcePopupAction constructor. */
+    int i = 0;
+    while(d->menu->actions().size() > 0) {
+        d->menu->removeAction(d->menu->actions()[i]);
+        ++i;
+    }
+
+    delete d->menu;
+
     delete d;
 }
 

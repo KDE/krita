@@ -37,8 +37,7 @@
 
 // Qt
 #include <QStandardPaths>
-#include <QMimeDatabase>
-#include <QMimeType>
+#include <KisMimeDatabase.h>
 #include <QFile>
 
 
@@ -86,7 +85,7 @@ KoOdfLoadingContext::KoOdfLoadingContext(KoOdfStylesReader &stylesReader, KoStor
     if (!defaultStylesResourcePath.isEmpty()) {
         Q_ASSERT(defaultStylesResourcePath.endsWith(QLatin1Char('/')));
         const QString fileName =
-            QStandardPaths::locate(QStandardPaths::GenericDataLocation,
+            QStandardPaths::locate(QStandardPaths::AppDataLocation,
                                    defaultStylesResourcePath + "defaultstyles.xml");
         if ( ! fileName.isEmpty() ) {
             QFile file( fileName );
@@ -279,9 +278,7 @@ QString KoOdfLoadingContext::mimeTypeForPath(const QString& path, bool guess) co
                 KoStoreDevice device(d->store);
                 QByteArray data = device.read(16384);
                 d->store->close();
-                QMimeDatabase db;
-                QMimeType mtp = db.mimeTypeForData(data);
-                mimeType = mtp.name();
+                mimeType = KisMimeDatabase::mimeTypeForData(data);
                 if (!mimeType.isEmpty()) {
                     it.value()->setMediaType(mimeType);
                 }

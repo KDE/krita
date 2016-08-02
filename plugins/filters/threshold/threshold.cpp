@@ -61,7 +61,7 @@ KritaThreshold::~KritaThreshold()
 }
 
 KisFilterThreshold::KisFilterThreshold()
-    : KisFilter(id(), categoryAdjust(), i18n("&Threshold"))
+    : KisFilter(id(), categoryAdjust(), i18n("&Threshold..."))
 {
     setColorSpaceIndependence(FULLY_INDEPENDENT);
 
@@ -90,12 +90,13 @@ void KisFilterThreshold::processImpl(KisPaintDeviceSP device,
 
     KisSequentialIterator it(device, applyRect);
     int p = 0;
+    const int pixelSize = device->colorSpace()->pixelSize();
     do {
         if (device->colorSpace()->intensity8(it.oldRawData()) > threshold) {
-            memcpy(it.rawData(), white.data(), device->colorSpace()->pixelSize());
+            memcpy(it.rawData(), white.data(), pixelSize);
         }
         else {
-            memcpy(it.rawData(), black.data(), device->colorSpace()->pixelSize());
+            memcpy(it.rawData(), black.data(), pixelSize);
         }
 
         if (progressUpdater) progressUpdater->setValue(p++);

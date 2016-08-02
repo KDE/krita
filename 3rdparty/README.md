@@ -25,7 +25,7 @@ Note: on all operating systems the entire procedure is done in a terminal window
 3. Make sure you have a compiler:
     * Linux: gcc, minimum version 4.8
     * OSX: clang, you need to install xcode for this
-    * Windows: (http://tdm-gcc.tdragon.net/, version 5.1). MSVC cannot build G'Mic correctly. For some reason, cmake wants to use nmake even when using mingw, so copy mingw32-make.exe to nmake.exe.
+    * Windows: (http://tdm-gcc.tdragon.net/, version 5.1). MSVC cannot build G'Mic correctly. For some reason, cmake wants to use nmake even when using mingw, so copy mingw32-make.exe to nmake.exe. And remember to install the OpenMP plugin in tdm-gcc.
 4. If you compile Qt on Windows, you will also need Python 2.7: https://www.python.org/download/releases/2.7/. Make sure to have python.exe in your path.
 
 == Setup your environment ==

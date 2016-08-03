@@ -22,6 +22,7 @@
 #include <QPluginLoader>
 #include <QJsonObject>
 #include <QMessageBox>
+#include <QStringList>
 
 #include <klocalizedstring.h>
 #include <kpluginfactory.h>
@@ -87,7 +88,8 @@ DlgAnimationRenderer::DlgAnimationRenderer(KisImageWSP image, QWidget *parent)
     QList<QPluginLoader *>list = trader.query("Krita/AnimationExporter", "");
     Q_FOREACH(QPluginLoader *loader, list) {
         QJsonObject json = loader->metaData().value("MetaData").toObject();
-        Q_FOREACH(const QString &mime, json.value("X-KDE-Export").toString().split(",")) {
+        QStringList mimetypes = json.value("X-KDE-Export").toString().split(",");
+        Q_FOREACH(const QString &mime, mimetypes) {
 
             KLibFactory *factory = qobject_cast<KLibFactory *>(loader->instance());
             if (!factory) {
@@ -114,8 +116,11 @@ DlgAnimationRenderer::DlgAnimationRenderer(KisImageWSP image, QWidget *parent)
                 description = mime;
             }
             m_page->cmbRenderType->addItem(description, mime);
+
         }
     }
+    m_page->videoFilename->setMode(KoFileDialog::SaveFile);
+
     qDeleteAll(list);
     connect(m_page->cmbRenderType, SIGNAL(activated(int)), this, SLOT(selectRenderType(int)));
     selectRenderType(m_page->cmbRenderType->currentIndex());
@@ -126,6 +131,7 @@ DlgAnimationRenderer::DlgAnimationRenderer(KisImageWSP image, QWidget *parent)
     KisConfig cfg;
     QString ffmpeg = cfg.readEntry<QString>("ffmpeg_location", "");
     m_page->ffmpegLocation->setFileName(ffmpeg);
+    m_page->ffmpegLocation->setMode(KoFileDialog::OpenFile);
     connect(m_page->ffmpegLocation, SIGNAL(fileSelected(QString)), this, SLOT(ffmpegLocationChanged(QString)));
 }
 
@@ -235,6 +241,7 @@ void DlgAnimationRenderer::selectRenderType(int index)
 
     QSharedPointer<KisImportExportFilter> filter = m_renderFilters[index];
     QString mimetype = m_page->cmbRenderType->itemData(index).toString();
+    m_page->videoFilename->setMimeTypeFilters(QStringList() << mimetype);
 
     if (filter) {
         m_encoderConfigWidget = filter->createConfigurationWidget(m_page->grpExportOptions, KisDocument::nativeFormatMimeType(), mimetype.toLatin1());

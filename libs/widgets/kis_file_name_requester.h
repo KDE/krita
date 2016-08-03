@@ -60,8 +60,7 @@ public:
      * If this is not called, the default list is used, which simply selects all the image
      * file formats Krita can load.
      */
-    void setMimeTypeFilters(const QStringList &filterList,
-                            QString defaultFilter = QString());
+    void setMimeTypeFilters(const QStringList &filterList, QString defaultFilter = QString());
 
 public Q_SLOTS:
     void slotSelectFile();

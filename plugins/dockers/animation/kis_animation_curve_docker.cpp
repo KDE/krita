@@ -69,6 +69,7 @@ KisAnimationCurveDocker::KisAnimationCurveDocker()
     KisAnimationCurveChannelListDelegate *listDelegate = new KisAnimationCurveChannelListDelegate(channelListView);
 
     curvesView->setModel(m_d->curvesModel);
+    curvesView->setZoomButtons(m_d->curvesWidget.btnHorizontalZoom, m_d->curvesWidget.btnVerticalZoom);
     channelListView->setModel(m_d->channelListModel);
     channelListView->setItemDelegate(listDelegate);
     channelListView->setHeaderHidden(true);
@@ -143,6 +144,9 @@ void KisAnimationCurveDocker::slotUpdateIcons()
     m_d->curvesWidget.btnBezierInterpolation->setIcon(KisIconUtils::loadIcon("interpolation_bezier"));
     m_d->curvesWidget.btnSmooth->setIcon(KisIconUtils::loadIcon("interpolation_smooth"));
     m_d->curvesWidget.btnSharp->setIcon(KisIconUtils::loadIcon("interpolation_sharp"));
+
+    m_d->curvesWidget.btnHorizontalZoom->setIcon(KisIconUtils::loadIcon("zoom-in"));
+    m_d->curvesWidget.btnVerticalZoom->setIcon(KisIconUtils::loadIcon("zoom-in"));
 }
 
 void KisAnimationCurveDocker::slotListRowsInserted(const QModelIndex &parentIndex, int first, int last)

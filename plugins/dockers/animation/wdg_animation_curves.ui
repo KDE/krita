@@ -17,6 +17,26 @@
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
+      <widget class="KisZoomButton" name="btnHorizontalZoom">
+       <property name="toolTip">
+        <string>Zoom time</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="KisZoomButton" name="btnVerticalZoom">
+       <property name="toolTip">
+        <string>Zoom values</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item>
       <spacer name="horizontalSpacer_2">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
@@ -127,6 +147,11 @@
    <extends>QFrame</extends>
    <header>kis_animation_curves_view.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KisZoomButton</class>
+   <extends>QToolButton</extends>
+   <header>kis_zoom_button.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

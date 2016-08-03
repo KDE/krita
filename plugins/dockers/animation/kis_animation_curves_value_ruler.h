@@ -29,12 +29,14 @@ public:
     KisAnimationCurvesValueRuler(QWidget *parent);
     ~KisAnimationCurvesValueRuler();
 
+    void setScale(float scale);
     float scaleFactor() const;
-    float mapValueToView(float value) const;
-    float mapViewToValue(float y) const;
 
     void setOffset(float offset);
     float offset() const;
+
+    float mapValueToView(float value) const;
+    float mapViewToValue(float y) const;
 
     QSize sizeHint() const;
     void paintEvent(QPaintEvent *e);

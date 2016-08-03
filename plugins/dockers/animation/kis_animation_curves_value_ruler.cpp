@@ -66,6 +66,11 @@ float KisAnimationCurvesValueRuler::offset() const
     return m_d->offset;
 }
 
+void KisAnimationCurvesValueRuler::setScale(float scale)
+{
+    m_d->scale = scale;
+}
+
 QSize KisAnimationCurvesValueRuler::sizeHint() const
 {
     return QSize(16, 0);

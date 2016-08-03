@@ -17,18 +17,20 @@
  */
 #include "kis_animation_curves_view.h"
 
-#include "kis_animation_curves_model.h"
-#include "timeline_ruler_header.h"
-#include "kis_animation_curves_value_ruler.h"
-#include "kis_animation_curves_keyframe_delegate.h"
-#include "kis_scalar_keyframe_channel.h"
-
 #include <QPaintEvent>
 #include <QMouseEvent>
 #include <QApplication>
 #include <QScrollBar>
 #include <qpainter.h>
 #include <QtMath>
+
+#include "kis_animation_curves_model.h"
+#include "timeline_ruler_header.h"
+#include "kis_animation_curves_value_ruler.h"
+#include "kis_animation_curves_keyframe_delegate.h"
+#include "kis_scalar_keyframe_channel.h"
+#include "kis_zoom_button.h"
+#include "kis_custom_modifiers_catcher.h"
 
 const int VERTICAL_PADDING = 30;
 
@@ -44,12 +46,20 @@ struct KisAnimationCurvesView::Private
     TimelineRulerHeader *horizontalHeader;
     KisAnimationCurvesValueRuler *verticalHeader;
     KisAnimationCurvesKeyframeDelegate *itemDelegate;
+    KisZoomButton *horizontalZoomButton;
+    KisZoomButton *verticalZoomButton;
+    KisCustomModifiersCatcher *modifiersCatcher;
 
     bool isDraggingKeyframe;
     bool isAdjustingHandle;
     int adjustedHandle; // 0 = left, 1 = right
     QPoint dragStart;
     QPoint dragOffset;
+
+    int horizontalZoomStillPointIndex;
+    int horizontalZoomStillPointOriginalOffset;
+    qreal verticalZoomStillPoint;
+    qreal verticalZoomStillPointOriginalOffset;
 };
 
 KisAnimationCurvesView::KisAnimationCurvesView(QWidget *parent)
@@ -59,6 +69,9 @@ KisAnimationCurvesView::KisAnimationCurvesView(QWidget *parent)
     m_d->horizontalHeader = new TimelineRulerHeader(this);
     m_d->verticalHeader = new KisAnimationCurvesValueRuler(this);
     m_d->itemDelegate = new KisAnimationCurvesKeyframeDelegate(m_d->horizontalHeader, m_d->verticalHeader, this);
+
+    m_d->modifiersCatcher = new KisCustomModifiersCatcher(this);
+    m_d->modifiersCatcher->addModifier("pan-zoom", Qt::Key_Space);
 
     setSelectionMode(QAbstractItemView::ExtendedSelection);
 
@@ -87,6 +100,17 @@ void KisAnimationCurvesView::setModel(QAbstractItemModel *model)
 
     connect(model, &QAbstractItemModel::headerDataChanged,
             this, &KisAnimationCurvesView::slotHeaderDataChanged);
+}
+
+void KisAnimationCurvesView::setZoomButtons(KisZoomButton *horizontal, KisZoomButton *vertical)
+{
+    m_d->horizontalZoomButton = horizontal;
+    m_d->verticalZoomButton = vertical;
+
+    connect(horizontal, &KisZoomButton::zoomStarted, this, &KisAnimationCurvesView::slotHorizontalZoomStarted);
+    connect(horizontal, &KisZoomButton::zoomLevelChanged, this, &KisAnimationCurvesView::slotHorizontalZoomLevelChanged);
+    connect(vertical, &KisZoomButton::zoomStarted, this, &KisAnimationCurvesView::slotVerticalZoomStarted);
+    connect(vertical, &KisZoomButton::zoomLevelChanged, this, &KisAnimationCurvesView::slotVerticalZoomLevelChanged);
 }
 
 QRect KisAnimationCurvesView::visualRect(const QModelIndex &index) const
@@ -130,6 +154,7 @@ void KisAnimationCurvesView::paintEvent(QPaintEvent *e)
 
     int firstFrame = m_d->horizontalHeader->logicalIndexAt(r.left());
     int lastFrame = m_d->horizontalHeader->logicalIndexAt(r.right());
+    if (lastFrame == -1) lastFrame = model()->columnCount();
 
     paintCurves(painter, firstFrame, lastFrame);
     paintKeyframes(painter, firstFrame, lastFrame);
@@ -359,7 +384,17 @@ QRegion KisAnimationCurvesView::visualRegionForSelection(const QItemSelection &s
 
 void KisAnimationCurvesView::mousePressEvent(QMouseEvent *e)
 {
-    if (e->button() == Qt::LeftButton) {
+    if (m_d->modifiersCatcher->modifierPressed("pan-zoom")) {
+        if (e->button() == Qt::LeftButton) {
+            // TODO: pan
+        } else {
+            qreal horizontalStaticPoint = m_d->horizontalHeader->logicalIndexAt(e->pos().x());
+            qreal verticalStaticPoint = m_d->verticalHeader->mapViewToValue(e->pos().y());
+
+            m_d->horizontalZoomButton->beginZoom(QPoint(e->pos().x(), 0), horizontalStaticPoint);
+            m_d->verticalZoomButton->beginZoom(QPoint(0, e->pos().y()), verticalStaticPoint);
+        }
+    } else if (e->button() == Qt::LeftButton) {
         m_d->dragStart = e->pos();
 
         Q_FOREACH(QModelIndex index, selectedIndexes()) {
@@ -386,7 +421,14 @@ void KisAnimationCurvesView::mousePressEvent(QMouseEvent *e)
 
 void KisAnimationCurvesView::mouseMoveEvent(QMouseEvent *e)
 {
-    if (e->buttons() & Qt::LeftButton) {
+    if (m_d->modifiersCatcher->modifierPressed("pan-zoom")) {
+        if (e->buttons() & Qt::LeftButton) {
+            // TODO: pan
+        } else {
+            m_d->horizontalZoomButton->continueZoom(QPoint(e->pos().x(), 0));
+            m_d->verticalZoomButton->continueZoom(QPoint(0, e->pos().y()));
+        }
+    } else if (e->buttons() & Qt::LeftButton) {
         m_d->dragOffset = e->pos() - m_d->dragStart;
 
         if (m_d->isAdjustingHandle) {
@@ -503,6 +545,49 @@ void KisAnimationCurvesView::slotDataChanged(const QModelIndex &topLeft, const Q
 void KisAnimationCurvesView::slotHeaderDataChanged(Qt::Orientation orientation, int first, int last)
 {
     viewport()->update();
+}
+
+void KisAnimationCurvesView::slotHorizontalZoomStarted(qreal staticPoint)
+{
+    m_d->horizontalZoomStillPointIndex =
+        qIsNaN(staticPoint) ? currentIndex().column() : staticPoint;
+
+    const int w = m_d->horizontalHeader->defaultSectionSize();
+
+    m_d->horizontalZoomStillPointOriginalOffset =
+        w * m_d->horizontalZoomStillPointIndex -
+        horizontalScrollBar()->value();
+}
+
+void KisAnimationCurvesView::slotHorizontalZoomLevelChanged(qreal zoomLevel)
+{
+    if (m_d->horizontalHeader->setZoom(zoomLevel)) {
+        const int w = m_d->horizontalHeader->defaultSectionSize();
+        horizontalScrollBar()->setValue(w * m_d->horizontalZoomStillPointIndex - m_d->horizontalZoomStillPointOriginalOffset);
+
+        viewport()->update();
+    }
+}
+
+void KisAnimationCurvesView::slotVerticalZoomStarted(qreal staticPoint)
+{
+    m_d->verticalZoomStillPoint = qIsNaN(staticPoint) ? 0 : staticPoint;
+
+    const float scale = m_d->verticalHeader->scaleFactor();
+
+    m_d->verticalZoomStillPointOriginalOffset =
+        scale * m_d->verticalZoomStillPoint - m_d->verticalHeader->offset();
+}
+
+void KisAnimationCurvesView::slotVerticalZoomLevelChanged(qreal zoomLevel)
+{
+    if (!qFuzzyCompare((float)zoomLevel, m_d->verticalHeader->scaleFactor())) {
+        m_d->verticalHeader->setScale(zoomLevel);
+        m_d->verticalHeader->setOffset(-zoomLevel * m_d->verticalZoomStillPoint - m_d->verticalZoomStillPointOriginalOffset);
+        verticalScrollBar()->setValue(m_d->verticalHeader->offset());
+
+        viewport()->update();
+    }
 }
 
 void KisAnimationCurvesView::applyConstantMode()

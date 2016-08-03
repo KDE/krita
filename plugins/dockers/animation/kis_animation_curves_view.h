@@ -23,7 +23,7 @@
 #include <QTableView>
 
 class KisAction;
-class TimelineWidget;
+class KisZoomButton;
 
 class KisAnimationCurvesView : public QAbstractItemView
 {
@@ -33,8 +33,8 @@ public:
     ~KisAnimationCurvesView();
 
     void setModel(QAbstractItemModel *model);
+    void setZoomButtons(KisZoomButton *horizontal, KisZoomButton *vertical);
 
-public:
     QRect visualRect(const QModelIndex &index) const;
     void scrollTo(const QModelIndex &index, ScrollHint hint);
     QModelIndex indexAt(const QPoint &point) const;
@@ -67,6 +67,11 @@ private Q_SLOTS:
     void slotRowsChanged(const QModelIndex &parentIndex, int first, int last);
     void slotDataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight);
     void slotHeaderDataChanged(Qt::Orientation orientation, int first, int last);
+
+    void slotHorizontalZoomStarted(qreal staticPoint);
+    void slotVerticalZoomStarted(qreal staticPoint);
+    void slotHorizontalZoomLevelChanged(qreal level);
+    void slotVerticalZoomLevelChanged(qreal level);
 
 private:
     struct Private;

@@ -117,22 +117,30 @@ QString KisFilterChain::inputFile()
     m_inputQueried = File;
 
     if (m_state & Beginning) {
-        if (static_cast<KisImportExportManager::Direction>(filterManagerDirection()) ==
-                KisImportExportManager::Import)
+        if (static_cast<KisImportExportManager::Direction>(filterManagerDirection()) == KisImportExportManager::Import) {
             m_inputFile = filterManagerImportFile();
-        else
+        }
+        else {
             inputFileHelper(filterManagerKisDocument(), filterManagerImportFile());
-    } else
-        if (m_inputFile.isEmpty())
+        }
+    }
+    else {
+        if (m_inputFile.isEmpty()) {
             inputFileHelper(m_inputDocument, QString());
+        }
+    }
 
     return m_inputFile;
 }
 
 QString KisFilterChain::outputFile()
 {
-    if (m_outputQueried == File)
+    qDebug() << m_outputQueried << m_outputFile;
+
+    if (m_outputQueried == File) {
         return m_outputFile;
+    }
+
     else if (m_outputQueried != Nil) {
         warnFile << "You already asked for some different destination.";
         return QString();
@@ -140,35 +148,38 @@ QString KisFilterChain::outputFile()
     m_outputQueried = File;
 
     if (m_state & End) {
-        if (static_cast<KisImportExportManager::Direction>(filterManagerDirection()) ==
-                KisImportExportManager::Import)
+        if (static_cast<KisImportExportManager::Direction>(filterManagerDirection()) == KisImportExportManager::Import) {
             outputFileHelper(false);    // This (last) one gets deleted by the caller
-        else
+        }
+        else {
             m_outputFile = filterManagerExportFile();
-    } else
+        }
+    }
+    else {
         outputFileHelper(true);
+    }
 
     return m_outputFile;
 }
 
-
-KisDocument* KisFilterChain::inputDocument()
+void KisFilterChain::setOutputFile(const QString &outputFile)
 {
-    if (m_inputQueried == Document)
+    m_outputQueried = File;
+    m_outputFile = outputFile;
+}
+
+
+KisDocument *KisFilterChain::inputDocument()
+{
+    if (m_inputQueried == Document) {
         return m_inputDocument;
-    else if (m_inputQueried != Nil) {
+    }
+    else if (m_inputQueried) {
         warnFile << "You already asked for some different source.";
         return 0;
     }
 
-    if ((m_state & Beginning) &&
-            static_cast<KisImportExportManager::Direction>(filterManagerDirection()) == KisImportExportManager::Export &&
-            filterManagerKisDocument()) {
-        m_inputDocument = filterManagerKisDocument();
-    }
-    else if (!m_inputDocument) {
-        m_inputDocument = KisPart::instance()->createDocument();
-    }
+    m_inputDocument = filterManagerKisDocument();
 
     m_inputQueried = Document;
     return m_inputDocument;

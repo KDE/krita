@@ -65,59 +65,20 @@ KisImportExportFilter::ConversionStatus KisVideoExport::convert(const QByteArray
     KisDocument *input = inputDocument();
     QString filename = outputFile();
 
+    qDebug() << "inputDocument" << input << "output filename" << filename;
+
     if (!input)
         return KisImportExportFilter::NoDocumentCreated;
 
     if (filename.isEmpty()) return KisImportExportFilter::FileNotFound;
 
-    bool askForOptions = false;
+    VideoSaver videoSaver(input, getBatchMode());
 
-    const QFileInfo fileInfo(filename);
-    const QString suffix = fileInfo.suffix().toLower();
-
-    VideoExportOptionsDialog::CodecIndex codecIndex = VideoExportOptionsDialog::CODEC_H264;
-
-    if (suffix == "mkv" || suffix == "mp4") {
-        codecIndex = VideoExportOptionsDialog::CODEC_H264;
-        askForOptions = true;
-    } else if (suffix == "ogv") {
-        codecIndex = VideoExportOptionsDialog::CODEC_THEORA;
-        askForOptions = true;
-    }
-
-    QStringList additionalOptionsList;
-
-    askForOptions &=
-            !qApp->applicationName().toLower().contains("test") &
-            !getBatchMode();
-
-    if (askForOptions) {
-        KisCursorOverrideHijacker badGuy;
-
-        KoDialog kdb(0);
-        kdb.setCaption(i18n("Video Export Options"));
-        kdb.setModal(true);
-        kdb.setButtons(KoDialog::Ok | KoDialog::Cancel);
-
-        VideoExportOptionsDialog dlg;
-        dlg.setCodec(codecIndex);
-
-        kdb.setMainWidget(&dlg);
-
-        if (kdb.exec() == QDialog::Accepted) {
-            additionalOptionsList = dlg.customUserOptions();
-        } else {
-            return KisImportExportFilter::UserCancelled;
-        }
-    }
-
-    VideoSaver kpc(input, getBatchMode());
-
-    if (!kpc.hasFFMpeg()) {
+    if (!videoSaver.hasFFMpeg()) {
         const QString warningMessage =
                 i18n("Couldn not find \'ffmpeg\' binary. Saving to video formats is impossible.");
 
-        if (askForOptions) {
+        if (!getBatchMode()) {
             QMessageBox::critical(KisPart::instance()->currentMainwindow(),
                                   i18n("Video Export Error"),
                                   warningMessage);
@@ -128,11 +89,12 @@ KisImportExportFilter::ConversionStatus KisVideoExport::convert(const QByteArray
         return KisImportExportFilter::UsageError;
     }
 
-    KisImageBuilder_Result res = kpc.encode(filename, additionalOptionsList);
+    KisImageBuilder_Result res = videoSaver.encode(filename, configuration);
 
     if (res == KisImageBuilder_RESULT_OK) {
         return KisImportExportFilter::OK;
-    } else if (res == KisImageBuilder_RESULT_CANCEL) {
+    }
+    else if (res == KisImageBuilder_RESULT_CANCEL) {
         return KisImportExportFilter::ProgressCancelled;
     }
 

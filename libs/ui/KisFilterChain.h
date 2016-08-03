@@ -87,11 +87,13 @@ public:
      * is for the filters in our chain.
      */
     QString inputFile();
+
     /**
      * Get the current file to write to. This part of the API
      * is for the filters in our chain.
      */
     QString outputFile();
+    void setOutputFile(const QString &outputFile);
 
     /**
      * This method allows your filter to work directly on the
@@ -99,7 +101,7 @@ public:
      * This part of the API is for the filters in our chain.
      * @return The document containing the data. May return 0 on error.
      */
-    KisDocument* inputDocument();
+    KisDocument *inputDocument();
 
     /**
      * This method allows your filter to work directly on the
@@ -107,7 +109,7 @@ public:
      * This part of the API is for the filters in our chain.
      * @return The document you have to write to. May return 0 on error.
      */
-    KisDocument* outputDocument();
+    KisDocument *outputDocument();
 
     KisPropertiesConfigurationSP filterManagerExportConfiguration() const;
 

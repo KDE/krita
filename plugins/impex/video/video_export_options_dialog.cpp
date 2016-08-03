@@ -140,6 +140,7 @@ KisPropertiesConfigurationSP VideoExportOptionsDialog::configuration() const
     cfg->setProperty("h264TuneIndex", ui->cmbTune->currentIndex());
     cfg->setProperty("TheoraBitrate", ui->intBitrate->value());
     cfg->setProperty("CustomLineValue", ui->txtCustomLine->text());
+    cfg->setProperty("customUserOptions", customUserOptions().join(' '));
 
     return cfg;
 }

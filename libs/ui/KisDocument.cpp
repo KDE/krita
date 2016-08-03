@@ -624,7 +624,6 @@ bool KisDocument::exportDocument(const QUrl &_url, KisPropertiesConfigurationSP 
     // save...
     ret = saveAs(_url, exportConfiguration);
 
-
     //
     // This is sooooo hacky :(
     // Hopefully we will restore enough state.
@@ -642,7 +641,6 @@ bool KisDocument::exportDocument(const QUrl &_url, KisPropertiesConfigurationSP 
         setModified(wasModified);
         d->mimeType = oldMimeType;
     }
-
 
     d->isExporting = false;
 
@@ -2124,9 +2122,6 @@ bool KisDocument::saveAs(const QUrl &kurl, KisPropertiesConfigurationSP exportCo
 
     return result;
 }
-
-
-
 
 bool KisDocument::save(KisPropertiesConfigurationSP exportConfiguration)
 {

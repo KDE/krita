@@ -42,11 +42,15 @@
 #include <KisImportExportFilter.h>
 #include <kis_config.h>
 #include <kis_file_name_requester.h>
+#include <KisDocument.h>
 
-DlgAnimationRenderer::DlgAnimationRenderer(KisImageWSP image, QWidget *parent)
+DlgAnimationRenderer::DlgAnimationRenderer(KisDocument *doc, QWidget *parent)
     : KoDialog(parent)
-    , m_image(image)
+    , m_image(doc->image())
+    , m_defaultFileName(QFileInfo(doc->url().toLocalFile()).completeBaseName())
 {
+    KisConfig cfg;
+
     setCaption(i18n("Render Animation"));
     setButtons(Ok | Cancel);
     setDefaultButton(Ok);
@@ -54,15 +58,16 @@ DlgAnimationRenderer::DlgAnimationRenderer(KisImageWSP image, QWidget *parent)
     m_page = new WdgAnimaterionRenderer(this);
     m_page->layout()->setMargin(0);
     m_page->dirRequester->setMode(KoFileDialog::OpenDirectory);
-    m_page->dirRequester->setFileName(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation));
+    QString lastLocation = cfg.readEntry<QString>("last_sequence_export_location", QStandardPaths::writableLocation(QStandardPaths::PicturesLocation));
+    m_page->dirRequester->setFileName(lastLocation);
 
-    m_page->intStart->setMinimum(image->animationInterface()->fullClipRange().start());
-    m_page->intStart->setMaximum(image->animationInterface()->fullClipRange().end());
-    m_page->intStart->setValue(image->animationInterface()->playbackRange().start());
+    m_page->intStart->setMinimum(doc->image()->animationInterface()->fullClipRange().start());
+    m_page->intStart->setMaximum(doc->image()->animationInterface()->fullClipRange().end());
+    m_page->intStart->setValue(doc->image()->animationInterface()->playbackRange().start());
 
-    m_page->intEnd->setMinimum(image->animationInterface()->fullClipRange().start());
-    m_page->intEnd->setMaximum(image->animationInterface()->fullClipRange().end());
-    m_page->intEnd->setValue(image->animationInterface()->playbackRange().end());
+    m_page->intEnd->setMinimum(doc->image()->animationInterface()->fullClipRange().start());
+    m_page->intEnd->setMaximum(doc->image()->animationInterface()->fullClipRange().end());
+    m_page->intEnd->setValue(doc->image()->animationInterface()->playbackRange().end());
 
     m_sequenceConfigLayout = new QHBoxLayout(m_page->grpExportOptions);
     m_encoderConfigLayout = new QHBoxLayout(m_page->grpRenderOptions);
@@ -120,24 +125,30 @@ DlgAnimationRenderer::DlgAnimationRenderer(KisImageWSP image, QWidget *parent)
         }
     }
     m_page->videoFilename->setMode(KoFileDialog::SaveFile);
-    m_page->dirRequester->setStartDir(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation));
+    m_page->videoFilename->setStartDir(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation));
 
     qDeleteAll(list);
     connect(m_page->cmbRenderType, SIGNAL(activated(int)), this, SLOT(selectRenderType(int)));
     selectRenderType(m_page->cmbRenderType->currentIndex());
+
     connect(m_page->grpRender, SIGNAL(toggled(bool)), this, SLOT(toggleSequenceType(bool)));
     connect(m_page->cmbMimetype, SIGNAL(activated(int)), this, SLOT(sequenceMimeTypeSelected(int)));
     sequenceMimeTypeSelected(m_page->cmbMimetype->currentIndex());
 
-    KisConfig cfg;
-    QString ffmpeg = cfg.readEntry<QString>("ffmpeg_location", "");
+    QString ffmpeg = cfg.customFFMpegPath();
     m_page->ffmpegLocation->setFileName(ffmpeg);
     m_page->ffmpegLocation->setMode(KoFileDialog::OpenFile);
     connect(m_page->ffmpegLocation, SIGNAL(fileSelected(QString)), this, SLOT(ffmpegLocationChanged(QString)));
+
+    m_page->grpRender->setChecked(cfg.readEntry<bool>("render_animation", false));
 }
 
 DlgAnimationRenderer::~DlgAnimationRenderer()
 {
+    KisConfig cfg;
+    cfg.writeEntry<bool>("render_animation", m_page->grpRender->isChecked());
+    cfg.writeEntry<QString>("last_sequence_export_location", m_page->dirRequester->fileName());
+    cfg.setCustomFFMpegPath(m_page->ffmpegLocation->fileName());
     m_encoderConfigWidget->setParent(0);
     m_encoderConfigWidget->deleteLater();
     m_frameExportConfigWidget->setParent(0);
@@ -179,6 +190,13 @@ void DlgAnimationRenderer::setSequenceConfiguration(KisPropertiesConfigurationSP
 KisPropertiesConfigurationSP DlgAnimationRenderer::getFrameExportConfiguration() const
 {
     if (m_frameExportConfigWidget) {
+        KisPropertiesConfigurationSP cfg = m_frameExportConfigWidget->configuration();
+        cfg->setProperty("basename", m_page->txtBasename->text());
+        cfg->setProperty("directory", m_page->dirRequester->fileName());
+        cfg->setProperty("first_frame", m_page->intStart->value());
+        cfg->setProperty("last_frame", m_page->intEnd->value());
+        cfg->setProperty("sequence_start", m_page->sequenceStart->value());
+
         return m_frameExportConfigWidget->configuration();
     }
     return 0;
@@ -200,7 +218,7 @@ KisPropertiesConfigurationSP DlgAnimationRenderer::getVideoConfiguration() const
     return cfg;
 }
 
-void DlgAnimationRenderer::setVideoConfiguration(KisPropertiesConfigurationSP cfg)
+void DlgAnimationRenderer::setVideoConfiguration(KisPropertiesConfigurationSP /*cfg*/)
 {
 }
 
@@ -215,7 +233,7 @@ KisPropertiesConfigurationSP DlgAnimationRenderer::getEncoderConfiguration() con
     return cfg;
 }
 
-void DlgAnimationRenderer::setEncoderConfiguration(KisPropertiesConfigurationSP cfg)
+void DlgAnimationRenderer::setEncoderConfiguration(KisPropertiesConfigurationSP /*cfg*/)
 {
 
 }
@@ -242,7 +260,12 @@ void DlgAnimationRenderer::selectRenderType(int index)
 
     QSharedPointer<KisImportExportFilter> filter = m_renderFilters[index];
     QString mimetype = m_page->cmbRenderType->itemData(index).toString();
+
+    if (!m_page->videoFilename->fileName().isEmpty() && QFileInfo(m_page->videoFilename->fileName()).completeBaseName() != m_defaultFileName) {
+        m_defaultFileName = QFileInfo(m_page->videoFilename->fileName()).completeBaseName();
+    }
     m_page->videoFilename->setMimeTypeFilters(QStringList() << mimetype, mimetype);
+    m_page->videoFilename->setFileName(m_defaultFileName + "." + KisMimeDatabase::suffixesForMimeType(mimetype).first());
 
     if (filter) {
         m_encoderConfigWidget = filter->createConfigurationWidget(m_page->grpExportOptions, KisDocument::nativeFormatMimeType(), mimetype.toLatin1());
@@ -298,7 +321,7 @@ void DlgAnimationRenderer::sequenceMimeTypeSelected(int index)
 void DlgAnimationRenderer::ffmpegLocationChanged(const QString &s)
 {
     KisConfig cfg;
-    cfg.writeEntry<QString>("ffmpeg_location", s);
+    cfg.setCustomFFMpegPath(s);
 }
 
 void DlgAnimationRenderer::slotButtonClicked(int button)

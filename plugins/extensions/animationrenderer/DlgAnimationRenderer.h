@@ -26,6 +26,7 @@
 #include <QSharedPointer>
 #include <kis_types.h>
 
+class KisDocument;
 class KisImportExportFilter;
 class KisConfigWidget;
 class QHBoxLayout;
@@ -49,7 +50,7 @@ class DlgAnimationRenderer: public KoDialog
 
 public:
 
-    DlgAnimationRenderer(KisImageWSP image, QWidget *parent = 0);
+    DlgAnimationRenderer(KisDocument *doc, QWidget *parent = 0);
     ~DlgAnimationRenderer();
 
     KisPropertiesConfigurationSP getSequenceConfiguration() const;
@@ -87,6 +88,7 @@ private:
     KisConfigWidget *m_encoderConfigWidget {0};
     QHBoxLayout *m_sequenceConfigLayout;
     KisConfigWidget *m_frameExportConfigWidget {0};
+    QString m_defaultFileName;
 };
 
 #endif // DLG_ANIMATIONRENDERERIMAGE

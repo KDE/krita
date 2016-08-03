@@ -229,9 +229,9 @@ void KisAnimationExporter::frameReadyToSave()
                                         (m_d->lastFrame - m_d->firstFrame));
     }
 
-    if (result == KisImportExportFilter::OK &&
-        time < m_d->lastFrame) {
+    qDebug() << result << time << m_d->lastFrame;
 
+    if (result == KisImportExportFilter::OK && time < m_d->lastFrame) {
         m_d->currentFrame = time + 1;
         m_d->image->animationInterface()->requestFrameRegeneration(m_d->currentFrame, m_d->image->bounds());
     } else {
@@ -266,8 +266,6 @@ struct KisAnimationExportSaver::Private
 
         tmpDevice = paintLayer->paintDevice();
     }
-
-
 
     KisDocument *document;
     KisImageWSP image;
@@ -316,6 +314,7 @@ KisImportExportFilter::ConversionStatus KisAnimationExportSaver::exportAnimation
 
 KisImportExportFilter::ConversionStatus KisAnimationExportSaver::saveFrameCallback(int time, KisPaintDeviceSP frame, KisPropertiesConfigurationSP exportConfiguration)
 {
+    qDebug() << ">>>>>>>>>> saveFrameCallback" << time << frame << exportConfiguration;
     KisImportExportFilter::ConversionStatus status = KisImportExportFilter::OK;
 
     QString frameNumber = QString("%1").arg(time + m_d->sequenceNumberingOffset, 4, 10, QChar('0'));
@@ -324,7 +323,10 @@ KisImportExportFilter::ConversionStatus KisAnimationExportSaver::saveFrameCallba
     QRect rc = m_d->image->bounds();
     KisPainter::copyAreaOptimized(rc.topLeft(), frame, m_d->tmpDevice, rc);
 
-    if (!m_d->tmpDoc->exportDocument(QUrl::fromLocalFile(filename)), exportConfiguration) {
+    qDebug() << "filename" << filename << exportConfiguration->toXML();
+
+    if (!m_d->tmpDoc->exportDocument(QUrl::fromLocalFile(filename), exportConfiguration)) {
+        qDebug() << "eeek" << m_d->tmpDoc->errorMessage();
         status = KisImportExportFilter::InternalError;
     }
 

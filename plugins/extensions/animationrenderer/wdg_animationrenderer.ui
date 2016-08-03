@@ -209,7 +209,7 @@
            <string>FF&amp;Mpeg: </string>
           </property>
           <property name="buddy">
-           <cstring>txtLayerName</cstring>
+           <cstring>videoFileName</cstring>
           </property>
          </widget>
         </item>

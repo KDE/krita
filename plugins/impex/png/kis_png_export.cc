@@ -71,7 +71,7 @@ bool hasVisibleWidgets()
 
 KisImportExportFilter::ConversionStatus KisPNGExport::convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration)
 {
-    dbgFile << "Png export! From:" << from << ", To:" << to;
+    dbgFile << "Png export! From:" << from << ", To:" << to << "";
 
     KisDocument *input = inputDocument();
     QString filename = outputFile();

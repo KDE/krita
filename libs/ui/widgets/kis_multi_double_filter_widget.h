@@ -26,7 +26,7 @@
 #include <kis_config_widget.h>
 #include "kritaui_export.h"
 
-#include "kis_doubleparsespinbox.h"
+#include "kis_double_parse_spin_box.h"
 
 class KisDelayedActionDoubleInput : public KisDoubleParseSpinBox
 {

@@ -27,7 +27,7 @@
 #include <QGridLayout>
 #include <QLabel>
 
-#include "kis_doubleparsespinbox.h"
+#include "kis_double_parse_spin_box.h"
 
 BlurEffectConfigWidget::BlurEffectConfigWidget(QWidget *parent)
     : KoFilterEffectConfigWidgetBase(parent), m_effect(0)

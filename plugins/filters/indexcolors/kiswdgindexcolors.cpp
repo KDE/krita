@@ -26,7 +26,7 @@
 #include "palettegeneratorconfig.h"
 #include "ui_kiswdgindexcolors.h"
 
-#include "kis_intparsespinbox.h"
+#include "kis_int_parse_spin_box.h"
 
 #include <kcolorbutton.h>
 

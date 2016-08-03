@@ -25,7 +25,7 @@
 #include <QVector>
 #include <QSpinBox>
 
-#include "kis_intparsespinbox.h"
+#include "kis_int_parse_spin_box.h"
 
 #include <vector>
 

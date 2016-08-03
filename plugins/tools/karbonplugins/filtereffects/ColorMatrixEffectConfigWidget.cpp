@@ -32,7 +32,7 @@
 #include <QTableView>
 #include <QHeaderView>
 
-#include "kis_doubleparsespinbox.h"
+#include "kis_double_parse_spin_box.h"
 
 ColorMatrixEffectConfigWidget::ColorMatrixEffectConfigWidget(QWidget *parent)
     : KoFilterEffectConfigWidgetBase(parent)

@@ -27,8 +27,7 @@ target_link_libraries(kritabasicflakes
     PUBLIC
         kritawidgets 
         kritaflake 
-        kritapigment
-		kritaui
+		kritapigment
 )
 
 set_target_properties(kritabasicflakes PROPERTIES

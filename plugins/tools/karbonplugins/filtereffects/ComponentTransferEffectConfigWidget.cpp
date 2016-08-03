@@ -31,7 +31,7 @@
 #include <QRadioButton>
 #include <QButtonGroup>
 
-#include "kis_doubleparsespinbox.h"
+#include "kis_double_parse_spin_box.h"
 
 const qreal ValueStep = 0.1;
 

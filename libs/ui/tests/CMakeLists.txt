@@ -259,15 +259,3 @@ target_link_libraries(ResourceBundleTest kritaui kritalibbrush kritalibpaintop Q
 set(kis_stabilized_events_sampler_test_SRCS kis_stabilized_events_sampler_test.cpp)
 kde4_add_unit_test(KisStabilizedEventsSamplerTest TESTNAME krita-ui-StabilizedEventsSamplerTest ${kis_stabilized_events_sampler_test_SRCS})
 target_link_libraries(KisStabilizedEventsSamplerTest kritaui Qt5::Test)
-
-########### next target ###############
-
-set(kis_simplemathparsertest_SRCS kis_simplemathparsertest.cpp)
-kde4_add_unit_test(KisSimpleMathParserTest TESTNAME krita-ui-KisSimpleMathParserTest ${kis_simplemathparsertest_SRCS})
-target_link_libraries(KisSimpleMathParserTest kritaui Qt5::Test)
-
-########### next target ###############
-
-set(kis_parsespinboxestest_SRCS kis_parsespinboxestest.cpp)
-kde4_add_unit_test(KisParseSpinBoxesTest TESTNAME krita-ui-KisParseSpinBoxesTest ${kis_parsespinboxestest_SRCS})
-target_link_libraries(KisParseSpinBoxesTest kritaui Qt5::Test)

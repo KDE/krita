@@ -64,6 +64,15 @@ set(kritawidgets_LIB_SRCS
     KoToolBoxFactory.cpp
     KoToolDocker.cpp
     
+
+	KoPageLayoutWidget.cpp
+	KoPageLayoutDialog.cpp
+	KoShadowConfigWidget.cpp
+	KoStrokeConfigWidget.cpp
+	KoMarkerSelector.cpp
+	KoMarkerModel.cpp
+	KoMarkerItemDelegate.cpp
+
     KoDocumentInfoDlg.cpp
     KoGlobal.cpp
     KoTableView.cpp
@@ -71,6 +80,10 @@ set(kritawidgets_LIB_SRCS
     WidgetsDebug.cpp
 
     kis_file_name_requester.cpp
+
+	kis_double_parse_spin_box.cpp
+	kis_double_parse_unit_spin_box.cpp
+	kis_int_parse_spin_box.cpp
 )
 
 ki18n_wrap_ui( kritawidgets_LIB_SRCS

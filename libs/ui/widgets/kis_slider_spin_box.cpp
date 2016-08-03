@@ -36,7 +36,7 @@
 #include "KisPart.h"
 #include "input/kis_input_manager.h"
 
-#include "kis_numparser.h"
+#include "kis_num_parser.h"
 
 class KisAbstractSliderSpinBoxPrivate {
 public:

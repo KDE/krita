@@ -29,7 +29,7 @@
 #include <QRadioButton>
 #include <QButtonGroup>
 
-#include "kis_doubleparsespinbox.h"
+#include "kis_double_parse_spin_box.h"
 
 MorphologyEffectConfigWidget::MorphologyEffectConfigWidget(QWidget *parent)
     : KoFilterEffectConfigWidgetBase(parent)

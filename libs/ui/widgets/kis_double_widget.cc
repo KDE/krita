@@ -26,7 +26,7 @@
 #include <QHBoxLayout>
 #include <QDoubleSpinBox>
 
-#include "kis_doubleparsespinbox.h"
+#include "kis_double_parse_spin_box.h"
 
 KisDoubleWidget::KisDoubleWidget(QWidget* parent, const char* name)
         : QWidget(parent)

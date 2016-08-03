@@ -55,7 +55,7 @@
 #include <QPushButton>
 #include <QVBoxLayout>
 
-#include "kis_doubleparsespinbox.h"
+#include "kis_double_parse_spin_box.h"
 
 class KarbonFilterEffectsTool::Private
 {

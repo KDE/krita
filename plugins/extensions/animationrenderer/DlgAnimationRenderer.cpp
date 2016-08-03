@@ -302,10 +302,13 @@ void DlgAnimationRenderer::ffmpegLocationChanged(const QString &s)
 
 void DlgAnimationRenderer::slotButtonClicked(int button)
 {
-
     if (button == KoDialog::Ok && m_page->grpRender->isChecked()) {
         QString ffmpeg = m_page->ffmpegLocation->fileName();
-        if (ffmpeg.isEmpty()) {
+        if (m_page->videoFilename->fileName().isEmpty()) {
+            QMessageBox::warning(this, i18nc("@title:window", "Krita"), i18n("Please enter a file name to render to."));
+            return;
+        }
+        else if (ffmpeg.isEmpty()) {
             QMessageBox::warning(this, i18nc("@title:window", "Krita"), i18n("The location of FFmpeg is unknown. Please install FFmpeg first: Krita cannot render animations without FFmpeg. (<a href=\"https://www.ffmpeg.org\">www.ffmpeg.org</a>)"));
             return;
         }
@@ -313,8 +316,8 @@ void DlgAnimationRenderer::slotButtonClicked(int button)
             QFileInfo fi(ffmpeg);
             if (!fi.exists()) {
                 QMessageBox::warning(this, i18nc("@title:window", "Krita"), i18n("The location of FFmpeg is invalid. Please select the correct location of the FFmpeg executable on your system."));
+                return;
             }
-            return;
         }
     }
     KoDialog::slotButtonClicked(button);

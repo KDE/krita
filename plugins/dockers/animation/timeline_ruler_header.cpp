@@ -320,6 +320,26 @@ void TimelineRulerHeader::setFramePerSecond(int fps)
     update();
 }
 
+bool TimelineRulerHeader::setZoom(qreal zoom)
+{
+    const int minSectionSize = 4;
+    const int unitSectionSize = 18;
+
+    int newSectionSize = zoom * unitSectionSize;
+
+    if (newSectionSize < minSectionSize) {
+        newSectionSize = minSectionSize;
+        zoom = qreal(newSectionSize) / unitSectionSize;
+    }
+
+    if (newSectionSize != defaultSectionSize()) {
+        setDefaultSectionSize(newSectionSize);
+        return true;
+    }
+
+    return false;
+}
+
 void TimelineRulerHeader::updateMinimumSize()
 {
     QFontMetrics metrics(this->font());

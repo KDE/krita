@@ -24,6 +24,7 @@ set(KRITA_ANIMATIONDOCKER_SOURCES
     timeline_color_scheme.cpp
 
     kis_draggable_tool_button.cpp
+    kis_zoom_button.cpp
     kis_animation_utils.cpp
     kis_custom_modifiers_catcher.cpp
 

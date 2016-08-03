@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2015 Dmitry Kazakov <dimula73@gmail.com>
+ *  Copyright (c) 2016 Jouni Pentikäinen <joupent@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,33 +16,36 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KIS_DRAGGABLE_TOOL_BUTTON_H
-#define __KIS_DRAGGABLE_TOOL_BUTTON_H
+#ifndef _KIS_ZOOM_BUTTON_H
+#define _KIS_ZOOM_BUTTON_H
 
-#include <QToolButton>
+#include "kis_draggable_tool_button.h"
 
-
-class KisDraggableToolButton : public QToolButton
+class KisZoomButton : public KisDraggableToolButton
 {
     Q_OBJECT
 public:
-    KisDraggableToolButton(QWidget *parent);
-    ~KisDraggableToolButton();
+    KisZoomButton(QWidget *parent);
+    ~KisZoomButton();
+
+    qreal zoomLevel() const;
+    void setZoomLevel(qreal level);
+
+    void beginZoom(QPoint mousePos, qreal staticPoint);
+    void continueZoom(QPoint mousePos);
 
     void mousePressEvent(QMouseEvent *e);
-    void mouseMoveEvent(QMouseEvent *e);
-
-    static int unitRadius();
-
-    void beginDrag(const QPoint &pos);
-    int continueDrag(const QPoint &pos);
 
 Q_SIGNALS:
-    void valueChanged(int value);
+    void zoomStarted(qreal staticPoint);
+    void zoomLevelChanged(qreal level);
+
+private Q_SLOTS:
+    void slotValueChanged(int value);
 
 private:
-    Qt::Orientation m_orientation;
-    QPoint m_startPoint;
+    qreal m_zoomLevel;
+    qreal m_initialDragZoomLevel;
 };
 
-#endif /* __KIS_DRAGGABLE_TOOL_BUTTON_H */
+#endif

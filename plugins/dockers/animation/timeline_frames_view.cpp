@@ -40,7 +40,7 @@
 #include "kis_debug.h"
 #include "timeline_frames_item_delegate.h"
 
-#include "kis_draggable_tool_button.h"
+#include "kis_zoom_button.h"
 
 #include "kis_icon_utils.h"
 
@@ -58,8 +58,6 @@ struct TimelineFramesView::Private
     Private(TimelineFramesView *_q)
         : q(_q),
           fps(1),
-          zoom(1.0),
-          initialDragZoomValue(1.0),
           zoomStillPointIndex(-1),
           zoomStillPointOriginalOffset(0),
           dragInProgress(false),
@@ -74,12 +72,10 @@ struct TimelineFramesView::Private
     TimelineRulerHeader *horizontalRuler;
     TimelineLayersHeader *layersHeader;
     int fps;
-    qreal zoom;
-    qreal initialDragZoomValue;
     int zoomStillPointIndex;
     int zoomStillPointOriginalOffset;
     QPoint initialDragPanValue;
-    QPoint startZoomPanDragPos;
+    QPoint initialDragPanPos;
 
     QToolButton *addLayersButton;
     KisAction *showHideLayerAction;
@@ -92,8 +88,7 @@ struct TimelineFramesView::Private
     QMenu *multipleFrameEditingMenu;
     QMap<QString, KisAction*> globalActions;
 
-
-    KisDraggableToolButton *zoomDragButton;
+    KisZoomButton *zoomDragButton;
 
     bool dragInProgress;
     bool dragWasSuccessful;
@@ -181,14 +176,14 @@ TimelineFramesView::TimelineFramesView(QWidget *parent)
     m_d->multipleFrameEditingMenu = new QMenu(this);
     m_d->multipleFrameEditingMenu->addAction(KisAnimationUtils::removeFramesActionName, this, SLOT(slotRemoveFrame()));
 
-    m_d->zoomDragButton = new KisDraggableToolButton(this);
+    m_d->zoomDragButton = new KisZoomButton(this);
     m_d->zoomDragButton->setAutoRaise(true);
     m_d->zoomDragButton->setIcon(KisIconUtils::loadIcon("zoom-in"));
     m_d->zoomDragButton->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     m_d->zoomDragButton->setToolTip(i18nc("@info:tooltip", "Zoom Timeline. Hold down and drag left or right."));
     m_d->zoomDragButton->setPopupMode(QToolButton::InstantPopup);
-    connect(m_d->zoomDragButton, SIGNAL(valueChanged(int)), SLOT(slotZoomButtonChanged(int)));
-    connect(m_d->zoomDragButton, SIGNAL(pressed()), SLOT(slotZoomButtonPressed()));
+    connect(m_d->zoomDragButton, SIGNAL(zoomLevelChanged(qreal)), SLOT(slotZoomButtonChanged(qreal)));
+    connect(m_d->zoomDragButton, SIGNAL(zoomStarted(qreal)), SLOT(slotZoomButtonPressed(qreal)));
 
     setFramesPerSecond(12);
     setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
@@ -269,66 +264,28 @@ void TimelineFramesView::setFramesPerSecond(int fps)
     // m_d->horizontalRuler->reset();
 }
 
-qreal TimelineFramesView::zoom() const
+void TimelineFramesView::slotZoomButtonPressed(qreal staticPoint)
 {
-    return m_d->zoom;
-}
+    m_d->zoomStillPointIndex =
+        qIsNaN(staticPoint) ? currentIndex().column() : staticPoint;
 
-void TimelineFramesView::setZoom(qreal zoom)
-{
-    const int minSectionSize = 4;
-    const int unitSectionSize = 18;
-
-    int newSectionSize = zoom * unitSectionSize;
-
-    if (newSectionSize < minSectionSize) {
-        newSectionSize = minSectionSize;
-        zoom = qreal(newSectionSize) / unitSectionSize;
-    }
-
-    if (!qFuzzyCompare(m_d->zoom, zoom)) {
-        m_d->zoom = zoom;
-        m_d->horizontalRuler->setDefaultSectionSize(newSectionSize);
-
-        // For some reason simple update doesn't work here,
-        // so reset the whole header
-        QPersistentModelIndex index = currentIndex();
-        m_d->horizontalRuler->reset();
-        setCurrentIndex(index);
-
-        slotUpdateInfiniteFramesCount();
-    }
-}
-
-void TimelineFramesView::setZoomDouble(double zoom)
-{
-    setZoom(zoom);
-}
-
-void TimelineFramesView::slotZoomButtonPressed()
-{
-    m_d->zoomStillPointIndex = currentIndex().column();
-    slotZoomButtonPressedImpl();
-}
-
-void TimelineFramesView::slotZoomButtonPressedImpl()
-{
     const int w = m_d->horizontalRuler->defaultSectionSize();
 
     m_d->zoomStillPointOriginalOffset =
         w * m_d->zoomStillPointIndex -
         horizontalScrollBar()->value();
-
-    m_d->initialDragZoomValue = zoom();
 }
 
-void TimelineFramesView::slotZoomButtonChanged(int value)
+void TimelineFramesView::slotZoomButtonChanged(qreal zoomLevel)
 {
-    qreal zoomCoeff = std::pow(2.0, qreal(value) / KisDraggableToolButton::unitRadius());
-    setZoom(m_d->initialDragZoomValue * zoomCoeff);
+    if (m_d->horizontalRuler->setZoom(zoomLevel)) {
+        slotUpdateInfiniteFramesCount();
 
-    const int w = m_d->horizontalRuler->defaultSectionSize();
-    horizontalScrollBar()->setValue(w * m_d->zoomStillPointIndex - m_d->zoomStillPointOriginalOffset);
+        const int w = m_d->horizontalRuler->defaultSectionSize();
+        horizontalScrollBar()->setValue(w * m_d->zoomStillPointIndex - m_d->zoomStillPointOriginalOffset);
+
+        viewport()->update();
+    }
 }
 
 void TimelineFramesView::slotUpdateInfiniteFramesCount()
@@ -684,16 +641,14 @@ void TimelineFramesView::mousePressEvent(QMouseEvent *event)
     QPersistentModelIndex index = indexAt(event->pos());
 
     if (m_d->modifiersCatcher->modifierPressed("pan-zoom")) {
-        m_d->startZoomPanDragPos = event->pos();
 
         if (event->button() == Qt::RightButton) {
             // TODO: try calculate index under mouse cursor even when
             //       it is outside any visible row
-            m_d->zoomStillPointIndex =
-                index.isValid() ? index.column() : currentIndex().column();
-
-            slotZoomButtonPressedImpl();
+            qreal staticPoint = index.isValid() ? index.column() : currentIndex().column();
+            m_d->zoomDragButton->beginZoom(event->pos(), staticPoint);
         } else if (event->button() == Qt::LeftButton) {
+            m_d->initialDragPanPos = event->pos();
             m_d->initialDragPanValue =
                 QPoint(horizontalScrollBar()->value(),
                        verticalScrollBar()->value());
@@ -737,12 +692,11 @@ void TimelineFramesView::mousePressEvent(QMouseEvent *event)
 void TimelineFramesView::mouseMoveEvent(QMouseEvent *e)
 {
     if (m_d->modifiersCatcher->modifierPressed("pan-zoom")) {
-        QPoint diff = e->pos() - m_d->startZoomPanDragPos;
 
         if (e->buttons() & Qt::RightButton) {
-            slotZoomButtonChanged(m_d->zoomDragButton->calculateValue(diff));
+            m_d->zoomDragButton->continueZoom(e->pos());
         } else if (e->buttons() & Qt::LeftButton) {
-
+            QPoint diff = e->pos() - m_d->initialDragPanPos;
             QPoint offset = QPoint(m_d->initialDragPanValue.x() - diff.x(),
                                    m_d->initialDragPanValue.y() - diff.y());
 

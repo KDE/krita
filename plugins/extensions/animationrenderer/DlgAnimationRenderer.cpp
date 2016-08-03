@@ -120,6 +120,7 @@ DlgAnimationRenderer::DlgAnimationRenderer(KisImageWSP image, QWidget *parent)
         }
     }
     m_page->videoFilename->setMode(KoFileDialog::SaveFile);
+    m_page->dirRequester->setStartDir(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation));
 
     qDeleteAll(list);
     connect(m_page->cmbRenderType, SIGNAL(activated(int)), this, SLOT(selectRenderType(int)));
@@ -241,7 +242,7 @@ void DlgAnimationRenderer::selectRenderType(int index)
 
     QSharedPointer<KisImportExportFilter> filter = m_renderFilters[index];
     QString mimetype = m_page->cmbRenderType->itemData(index).toString();
-    m_page->videoFilename->setMimeTypeFilters(QStringList() << mimetype);
+    m_page->videoFilename->setMimeTypeFilters(QStringList() << mimetype, mimetype);
 
     if (filter) {
         m_encoderConfigWidget = filter->createConfigurationWidget(m_page->grpExportOptions, KisDocument::nativeFormatMimeType(), mimetype.toLatin1());

@@ -54,7 +54,7 @@ KisVideoExport::~KisVideoExport()
 {
 }
 
-KisImportExportFilter::ConversionStatus KisVideoExport::convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration)
+KisImportExportFilter::ConversionStatus KisVideoExport::convert(const QByteArray &from, const QByteArray &to, KisPropertiesConfigurationSP configuration)
 {
     Q_UNUSED(to);
     Q_UNUSED(configuration);
@@ -62,7 +62,7 @@ KisImportExportFilter::ConversionStatus KisVideoExport::convert(const QByteArray
     if (from != "application/x-krita")
         return KisImportExportFilter::NotImplemented;
 
-    KisDocument* input = inputDocument();
+    KisDocument *input = inputDocument();
     QString filename = outputFile();
 
     if (!input)

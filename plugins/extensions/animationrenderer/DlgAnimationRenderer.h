@@ -72,6 +72,11 @@ private Q_SLOTS:
     void selectRenderType(int renderType);
     void toggleSequenceType(bool toggle);
     void sequenceMimeTypeSelected(int index);
+    void ffmpegLocationChanged(const QString&);
+
+protected Q_SLOTS:
+
+    void slotButtonClicked(int button);
 
 private:
 

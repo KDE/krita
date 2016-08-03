@@ -21,6 +21,7 @@
 #include <QStandardPaths>
 #include <QPluginLoader>
 #include <QJsonObject>
+#include <QMessageBox>
 
 #include <klocalizedstring.h>
 #include <kpluginfactory.h>
@@ -38,6 +39,8 @@
 #include <KisDocument.h>
 #include <QHBoxLayout>
 #include <KisImportExportFilter.h>
+#include <kis_config.h>
+#include <kis_file_name_requester.h>
 
 DlgAnimationRenderer::DlgAnimationRenderer(KisImageWSP image, QWidget *parent)
     : KoDialog(parent)
@@ -119,6 +122,11 @@ DlgAnimationRenderer::DlgAnimationRenderer(KisImageWSP image, QWidget *parent)
     connect(m_page->grpRender, SIGNAL(toggled(bool)), this, SLOT(toggleSequenceType(bool)));
     connect(m_page->cmbMimetype, SIGNAL(activated(int)), this, SLOT(sequenceMimeTypeSelected(int)));
     sequenceMimeTypeSelected(m_page->cmbMimetype->currentIndex());
+
+    KisConfig cfg;
+    QString ffmpeg = cfg.readEntry<QString>("ffmpeg_location", "");
+    m_page->ffmpegLocation->setFileName(ffmpeg);
+    connect(m_page->ffmpegLocation, SIGNAL(fileSelected(QString)), this, SLOT(ffmpegLocationChanged(QString)));
 }
 
 DlgAnimationRenderer::~DlgAnimationRenderer()
@@ -277,5 +285,31 @@ void DlgAnimationRenderer::sequenceMimeTypeSelected(int index)
         }
         delete filter;
     }
+}
+
+void DlgAnimationRenderer::ffmpegLocationChanged(const QString &s)
+{
+    KisConfig cfg;
+    cfg.writeEntry<QString>("ffmpeg_location", s);
+}
+
+void DlgAnimationRenderer::slotButtonClicked(int button)
+{
+
+    if (button == KoDialog::Ok && m_page->grpRender->isChecked()) {
+        QString ffmpeg = m_page->ffmpegLocation->fileName();
+        if (ffmpeg.isEmpty()) {
+            QMessageBox::warning(this, i18nc("@title:window", "Krita"), i18n("The location of FFmpeg is unknown. Please install FFmpeg first: Krita cannot render animations without FFmpeg. (<a href=\"https://www.ffmpeg.org\">www.ffmpeg.org</a>)"));
+            return;
+        }
+        else {
+            QFileInfo fi(ffmpeg);
+            if (!fi.exists()) {
+                QMessageBox::warning(this, i18nc("@title:window", "Krita"), i18n("The location of FFmpeg is invalid. Please select the correct location of the FFmpeg executable on your system."));
+            }
+            return;
+        }
+    }
+    KoDialog::slotButtonClicked(button);
 }
 

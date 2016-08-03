@@ -19,7 +19,7 @@
 
 #include "MatrixDataModel.h"
 
-#include "kis_numparser.h"
+#include "kis_num_parser.h"
 
 MatrixDataModel::MatrixDataModel(QObject *parent)
     : QAbstractTableModel(parent)

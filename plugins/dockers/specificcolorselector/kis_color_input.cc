@@ -41,8 +41,8 @@
 #include <KoColorSlider.h>
 #include <KoColorSpace.h>
 
-#include "kis_doubleparsespinbox.h"
-#include "kis_intparsespinbox.h"
+#include "kis_double_parse_spin_box.h"
+#include "kis_int_parse_spin_box.h"
 
 KisColorInput::KisColorInput(QWidget* parent, const KoChannelInfo* channelInfo, KoColor* color, KoColorDisplayRendererInterface *displayRenderer) : QWidget(parent), m_channelInfo(channelInfo), m_color(color), m_displayRenderer(displayRenderer)
 {

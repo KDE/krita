@@ -123,12 +123,12 @@
   <customwidget>
    <class>KisIntParseSpinBox</class>
    <extends>QSpinBox</extends>
-   <header>kis_intparsespinbox.h</header>
+   <header>kis_int_parse_spin_box.h</header>
   </customwidget>
   <customwidget>
    <class>KisDoubleParseSpinBox</class>
    <extends>QDoubleSpinBox</extends>
-   <header>kis_doubleparsespinbox.h</header>
+   <header>kis_double_parse_spin_box.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

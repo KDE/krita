@@ -109,7 +109,7 @@
   <customwidget>
    <class>KisDoubleParseUnitSpinBox</class>
    <extends>QDoubleSpinBox</extends>
-   <header>kis_doubleparseunitspinbox.h</header>
+   <header>kis_double_parse_unit_spin_box.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

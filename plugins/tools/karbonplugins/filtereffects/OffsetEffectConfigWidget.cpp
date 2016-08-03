@@ -25,7 +25,7 @@
 #include <QGridLayout>
 #include <QLabel>
 
-#include "kis_doubleparsespinbox.h"
+#include "kis_double_parse_spin_box.h"
 
 const qreal OffsetLimit = 100.0;
 

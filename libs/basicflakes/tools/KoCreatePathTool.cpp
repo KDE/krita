@@ -30,7 +30,7 @@
 #include "KoShapeStroke.h"
 #include "KoStrokeConfigWidget.h"
 #include "KoCanvasBase.h"
-#include "kis_intparsespinbox.h"
+#include "kis_int_parse_spin_box.h"
 #include <KoColor.h>
 
 #include <klocalizedstring.h>

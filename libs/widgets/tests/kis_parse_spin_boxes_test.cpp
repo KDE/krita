@@ -16,11 +16,11 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_parsespinboxestest.h"
+#include "kis_parse_spin_boxes_test.h"
 
-#include "kis_numparser.h"
-#include "kis_doubleparsespinbox.h"
-#include "kis_intparsespinbox.h"
+#include "kis_num_parser.h"
+#include "kis_double_parse_spin_box.h"
+#include "kis_int_parse_spin_box.h"
 
 #include <QString>
 #include <QtTest>

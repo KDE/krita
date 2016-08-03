@@ -50,7 +50,7 @@
 #include <math.h>
 
 #include "KoCreatePathTool_p.h"
-#include "kis_doubleparsespinbox.h"
+#include "kis_double_parse_spin_box.h"
 
 KoPencilTool::KoPencilTool(KoCanvasBase *canvas)
     : KoToolBase(canvas)

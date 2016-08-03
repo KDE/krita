@@ -28,7 +28,7 @@
 #include <QGridLayout>
 #include <QLabel>
 
-#include "kis_doubleparsespinbox.h"
+#include "kis_double_parse_spin_box.h"
 
 CompositeEffectConfigWidget::CompositeEffectConfigWidget(QWidget *parent)
     : KoFilterEffectConfigWidgetBase(parent)

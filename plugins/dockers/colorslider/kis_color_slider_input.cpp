@@ -44,7 +44,7 @@
 #include "kis_hsv_slider.h"
 #include "kis_display_color_converter.h"
 
-#include "kis_doubleparsespinbox.h"
+#include "kis_double_parse_spin_box.h"
 
 KisColorSliderInput::KisColorSliderInput(QWidget* parent, KoColor* color, const int type, KoColorDisplayRendererInterface *displayRenderer, KisCanvas2* canvas)
     : QWidget(parent),

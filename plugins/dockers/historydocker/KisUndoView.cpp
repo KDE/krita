@@ -73,8 +73,8 @@
 #include <QGridLayout>
 #include <kis_config.h>
 
-#include "kis_doubleparsespinbox.h"
-#include "kis_intparsespinbox.h"
+#include "kis_double_parse_spin_box.h"
+#include "kis_int_parse_spin_box.h"
 
 /*!
     \class KisUndoView

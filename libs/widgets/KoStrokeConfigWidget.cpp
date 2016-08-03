@@ -67,7 +67,7 @@
 #include <KoShapeStrokeModel.h>
 
 // Krita
-#include "kis_doubleparseunitspinbox.h"
+#include "kis_double_parse_unit_spin_box.h"
 
 class CapNJoinMenu : public QMenu
 {

@@ -355,7 +355,7 @@
   <customwidget>
    <class>KisIntParseSpinBox</class>
    <extends>QSpinBox</extends>
-   <header>kis_intparsespinbox.h</header>
+   <header>kis_int_parse_spin_box.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

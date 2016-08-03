@@ -19,9 +19,9 @@
 #ifndef _KIS_ANIMATION_CURVES_VALUE_RULER_H
 #define _KIS_ANIMATION_CURVES_VALUE_RULER_H
 
-#include <QWidget>
+#include <QHeaderView>
 
-class KisAnimationCurvesValueRuler : public QWidget
+class KisAnimationCurvesValueRuler : public QHeaderView
 {
     Q_OBJECT
 

@@ -21,6 +21,9 @@
 #include <QPaintEvent>
 #include <QPainter>
 #include <QApplication>
+#include <QStyle>
+
+const int MIN_LABEL_SEPARATION = 24;
 
 struct KisAnimationCurvesValueRuler::Private
 {
@@ -34,7 +37,7 @@ struct KisAnimationCurvesValueRuler::Private
 };
 
 KisAnimationCurvesValueRuler::KisAnimationCurvesValueRuler(QWidget *parent)
-    : QWidget(parent)
+    : QHeaderView(Qt::Vertical, parent)
     , m_d(new Private())
 {}
 
@@ -59,6 +62,7 @@ float KisAnimationCurvesValueRuler::mapViewToValue(float y) const
 void KisAnimationCurvesValueRuler::setOffset(float offset)
 {
     m_d->offset = offset;
+    viewport()->update();
 }
 
 float KisAnimationCurvesValueRuler::offset() const
@@ -69,19 +73,63 @@ float KisAnimationCurvesValueRuler::offset() const
 void KisAnimationCurvesValueRuler::setScale(float scale)
 {
     m_d->scale = scale;
+    viewport()->update();
 }
 
 QSize KisAnimationCurvesValueRuler::sizeHint() const
 {
-    return QSize(16, 0);
+    return QSize(32, 0);
 }
 
 void KisAnimationCurvesValueRuler::paintEvent(QPaintEvent *e)
 {
-    QPainter painter(this);
+    QPalette palette = qApp->palette();
+    QPainter painter(viewport());
 
-    float zeroLine = mapValueToView(0.0);
-    QColor color = qApp->palette().color(QPalette::ButtonText);
-    painter.setPen(QPen(color, 1));
-    painter.drawLine(e->rect().left(), zeroLine, e->rect().right(), zeroLine);
+    painter.fillRect(e->rect(), palette.color(QPalette::Button));
+
+    QColor textColor = qApp->palette().color(QPalette::ButtonText);
+    const QPen labelPen = QPen(textColor);
+
+    QStyleOptionViewItemV4 option = viewOptions();
+    const int gridHint = style()->styleHint(QStyle::SH_Table_GridLineColor, &option, this);
+    const QColor gridColor = static_cast<QRgb>(gridHint);
+    const QPen gridPen = QPen(gridColor);
+
+    qreal minStep = MIN_LABEL_SEPARATION / m_d->scale;
+    int minExp = ceil(log10(minStep));
+    qreal majorStep = pow(10, minExp);
+    qreal minorStep = 0.1 * majorStep;
+
+    if (0.2 * majorStep * m_d->scale > MIN_LABEL_SEPARATION) {
+        majorStep *= 0.2;
+        minExp--;
+    } else if (0.5 * majorStep * m_d->scale > MIN_LABEL_SEPARATION) {
+        majorStep *= 0.5;
+        minExp--;
+    }
+
+    qreal min = mapViewToValue(e->rect().bottom());
+    qreal max = mapViewToValue(e->rect().top());
+    qreal value = majorStep * floor(min/majorStep);
+
+    while (value < max) {
+        painter.setPen(gridPen);
+        int y = mapValueToView(value);
+        painter.drawLine(24, y, 32, y);
+
+        qreal nextMajor = value + majorStep;
+        while (value < nextMajor) {
+            value += minorStep;
+            int y = mapValueToView(value);
+            painter.drawLine(30, y, 32, y);
+        }
+
+        painter.setPen(labelPen);
+        const QString label = QString::number(value, 'f', qMax(0,-minExp));
+        const QRect textRect = QRect(0, y, 30, MIN_LABEL_SEPARATION);
+        painter.drawText(textRect, label, QTextOption(Qt::AlignRight));
+
+        value = nextMajor;
+    }
 }

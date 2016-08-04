@@ -25,10 +25,6 @@ if(POPPLER_FOUND)
     add_subdirectory(pdf)
 endif()
 
-if(OPENJPEG_FOUND)
-    add_subdirectory(jp2)
-endif()
-
 if(LIBRAW_FOUND)
     add_subdirectory(raw)
 endif()

@@ -92,6 +92,8 @@ ki18n_wrap_ui( kritawidgets_LIB_SRCS
     koDocumentInfoAuthorWidget.ui
 	KoEditColorSet.ui
     wdg_file_name_requester.ui
+    KoPageLayoutWidget.ui
+    KoShadowConfigWidget.ui
 )
 
 add_library(kritawidgets SHARED ${kritawidgets_LIB_SRCS})

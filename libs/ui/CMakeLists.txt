@@ -448,8 +448,6 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
     forms/wdgimportimagesequence.ui
     forms/KisDetailsPaneBase.ui
     forms/KisOpenPaneBase.ui
-	forms/KoPageLayoutWidget.ui
-	forms/KoShadowConfigWidget.ui
     dialogs/kis_delayed_save_dialog.ui
     input/config/kis_input_configuration_page.ui
     input/config/kis_edit_profiles_dialog.ui

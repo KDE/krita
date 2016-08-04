@@ -454,12 +454,7 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
     forms/wdgimportimagesequence.ui
     forms/KisDetailsPaneBase.ui
     forms/KisOpenPaneBase.ui
-<<<<<<< 6d57fdea805a41f1d7ca38b919123fd3f70770ff
     brushhud/kis_dlg_brush_hud_config.ui
-=======
-	forms/KoPageLayoutWidget.ui
-	forms/KoShadowConfigWidget.ui
->>>>>>> Move the classes that use KoUnitSpinBox from lib/widget in lib/ui/widget.
     dialogs/kis_delayed_save_dialog.ui
     input/config/kis_input_configuration_page.ui
     input/config/kis_edit_profiles_dialog.ui

@@ -50,6 +50,14 @@ public:
                               qreal xRadius, qreal yRadius,
                               const QBitArray &channelFlags,
                               KoUpdater *updater);
+
+    static Matrix<qreal, Dynamic, Dynamic> createLoGMatrix(qreal radius);
+
+    static void applyLoG(KisPaintDeviceSP device,
+                         const QRect& rect,
+                         qreal radius,
+                         const QBitArray &channelFlags,
+                         KoUpdater *progressUpdater);
 };
 
 #endif /* __KIS_GAUSSIAN_KERNEL_H */

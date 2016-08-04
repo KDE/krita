@@ -807,4 +807,281 @@ void KisLazyBrushTest::testCutOnGraph()
     result.save("result.png");
 }
 
+#include "lazybrush/kis_lazy_fill_capacity_map.h"
+#include <KoColorSpaceRegistry.h>
+#include "testutil.h"
+#include <KoColor.h>
+
+
+void writeColors(KisLazyFillGraph &graph, const std::vector<int> &groups, KisPaintDeviceSP dst)
+{
+    KisSequentialIterator dstIt(dst, graph.rect());
+
+    KoColor blue(Qt::blue, dst->colorSpace());
+    KoColor green(Qt::red, dst->colorSpace());
+    KoColor red(Qt::red, dst->colorSpace());
+    KoColor gray(Qt::gray, dst->colorSpace());
+    const int pixelSize = dst->colorSpace()->pixelSize();
+
+    do {
+        KisLazyFillGraph::vertex_descriptor v(dstIt.x(), dstIt.y());
+        long vertex_idx = get(boost::vertex_index, graph, v);
+        int label = groups[vertex_idx];
+
+        KoColor &color =
+            label == 0 ? blue :
+            label == 4 ? green :
+            label == 1 ? gray :
+            red;
+
+        quint8 *dstPtr = dstIt.rawData();
+        memcpy(dstPtr, color.data(), pixelSize);
+    } while (dstIt.nextPixel());
+}
+
+void writeStat(KisLazyFillGraph &graph,
+               const std::vector<int> &groups,
+               const std::vector<float> &residual_capacity,
+               KisLazyFillCapacityMap &capacityMap)
+{
+
+    typedef KisLazyFillGraph::vertex_descriptor VertexDescriptor;
+
+    const int cell = 10;
+    const int half = cell / 2;
+    QImage result(cell * graph.size(), QImage::Format_ARGB32);
+    QPainter resultPainter(&result);
+
+    BGL_FORALL_VERTICES(v, graph, KisLazyFillGraph) {
+        if (v.type != VertexDescriptor::NORMAL) continue;
+
+        long vertex_idx = get(boost::vertex_index, graph, v);
+        int label = groups[vertex_idx];
+
+        QColor color =
+            label == 0 ? Qt::blue :
+            label == 4 ? Qt::green :
+            label == 1 ? Qt::gray :
+            Qt::red;
+
+        QRect rc(cell * v.x, cell * v.y, cell, cell);
+        resultPainter.fillRect(rc, color);
+    }
+
+    BGL_FORALL_EDGES(e,graph,KisLazyFillGraph) {
+        long egdeIndex = get(boost::edge_index, graph, e);
+        const int cap = residual_capacity[egdeIndex];
+        const int fullCap = get(capacityMap, e);
+
+
+        QColor color(Qt::red);
+        if (cap > 0 || fullCap == 0) continue;
+/*
+        if (fullCap != 0) {
+            const int gray = fullCap / capacityMap.maxCapacity() * 50.0;
+            color.setAlpha(gray);
+        } else {
+            continue;
+        }
+*/
+        VertexDescriptor src = source(e,graph);
+        VertexDescriptor tgt = target(e,graph);
+
+        if (src.type != VertexDescriptor::NORMAL ||
+            tgt.type != VertexDescriptor::NORMAL) {
+/*
+            VertexDescriptor &v = src.type != VertexDescriptor::NORMAL ? tgt : src;
+            QPoint p0(half + cell * v.x, half + cell * v.y);
+
+            resultPainter.setPen(QPen(color, 4));
+            resultPainter.drawEllipse(p0, 0.5 * half, 0.5 * half);
+*/
+        } else {
+            QPoint p0(half + cell * src.x, half + cell * src.y);
+            QPoint p1(half + cell * tgt.x, half + cell * tgt.y);
+
+            resultPainter.setPen(QPen(color, 4));
+            resultPainter.drawLine(p0, p1);
+        }
+    }
+
+    BGL_FORALL_EDGES(e,graph,KisLazyFillGraph) {
+        long egdeIndex = get(boost::edge_index, graph, e);
+        const int cap = residual_capacity[egdeIndex];
+
+
+        QColor color(Qt::black);
+        if (cap != 0) {
+            const int fullCap = get(capacityMap, e);
+            const int gray = qreal(cap) / fullCap * 50.0;
+            color.setAlpha(gray);
+        } else {
+            continue;
+        }
+
+        VertexDescriptor src = source(e,graph);
+        VertexDescriptor tgt = target(e,graph);
+
+        if (src.type != VertexDescriptor::NORMAL ||
+            tgt.type != VertexDescriptor::NORMAL) {
+
+            VertexDescriptor &v = src.type != VertexDescriptor::NORMAL ? tgt : src;
+            QPoint p0(half + cell * v.x, half + cell * v.y);
+
+            resultPainter.setPen(QPen(color, 2));
+            resultPainter.drawEllipse(p0, 0.5 * half, 0.5 * half);
+
+        } else {
+            QPoint p0(half + cell * src.x, half + cell * src.y);
+            QPoint p1(half + cell * tgt.x, half + cell * tgt.y);
+
+            resultPainter.setPen(QPen(color, 2));
+            resultPainter.drawLine(p0, p1);
+        }
+    }
+
+    resultPainter.save();
+    resultPainter.setTransform(QTransform::fromScale(cell, cell));
+    resultPainter.setBrush(Qt::transparent);
+    //resultPainter.setPen(QPen(Qt::yellow, 0));
+    //resultPainter.drawRect(o1Rect);
+    //resultPainter.drawRect(o2Rect);
+    //resultPainter.setPen(QPen(Qt::red, 0));
+    //resultPainter.drawRect(aLabelRect);
+    //resultPainter.drawRect(bLabelRect);
+    resultPainter.restore();
+
+    result.save("result.png");
+}
+
+#include "kis_paint_device_debug_utils.h"
+#include "kis_gaussian_kernel.h"
+#include "krita_utils.h"
+
+void normalizeAndInvertAlpha8Device(KisPaintDeviceSP dev, const QRect &rect)
+{
+    quint8 maxPixel = std::numeric_limits<quint8>::min();
+    quint8 minPixel = std::numeric_limits<quint8>::max();
+    KritaUtils::applyToAlpha8Device(dev, rect,
+                                    [&minPixel, &maxPixel](quint8 pixel) {
+                                        if (pixel > maxPixel) {
+                                            maxPixel = pixel;
+                                        }
+                                        if (pixel < minPixel) {
+                                            minPixel = pixel;
+                                        }
+                                    });
+
+    const qreal scale = 255.0 / (maxPixel - minPixel);
+    KritaUtils::filterAlpha8Device(dev, rect,
+                                   [minPixel, scale](quint8 pixel) {
+                                       return pow2(255 - quint8((pixel - minPixel) * scale)) / 255;
+                                   });
+}
+
+void KisLazyBrushTest::testCutOnGraphDevice()
+{
+    BOOST_CONCEPT_ASSERT(( ReadablePropertyMapConcept<KisLazyFillCapacityMap, KisLazyFillGraph::edge_descriptor> ));
+
+    QImage mainImage(TestUtil::fetchDataFileLazy("fill1_main.png"));
+    QImage aLabelImage(TestUtil::fetchDataFileLazy("fill1_a.png"));
+    QImage bLabelImage(TestUtil::fetchDataFileLazy("fill1_b.png"));
+
+    QVERIFY(!mainImage.isNull());
+    QVERIFY(!aLabelImage.isNull());
+    QVERIFY(!bLabelImage.isNull());
+
+    KisPaintDeviceSP mainDev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
+    KisPaintDeviceSP aLabelDev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
+    KisPaintDeviceSP bLabelDev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
+
+    mainDev->convertFromQImage(mainImage, 0);
+    aLabelDev->convertFromQImage(aLabelImage, 0);
+    bLabelDev->convertFromQImage(bLabelImage, 0);
+
+    KisPaintDeviceSP filteredMainDev = KisPainter::convertToAlphaAsGray(mainDev);
+    const QRect filterRect = filteredMainDev->exactBounds();
+    KisGaussianKernel::applyLoG(filteredMainDev,
+                                filterRect,
+                                5,
+                                QBitArray(), 0);
+
+    normalizeAndInvertAlpha8Device(filteredMainDev, filterRect);
+
+    KIS_DUMP_DEVICE_2(filteredMainDev, mainImage.rect(), "2filtered", "dd");
+
+    KisLazyFillCapacityMap capacityMap(filteredMainDev, aLabelDev, bLabelDev);
+    KisLazyFillGraph &graph = capacityMap.graph();
+
+    std::vector<int> groups(num_vertices(graph), 0);
+    std::vector<float> residual_capacity(num_edges(graph), 0);
+
+    std::vector<typename graph_traits<KisLazyFillGraph>::vertices_size_type> distance_vec(num_vertices(graph), 0);
+    std::vector<typename graph_traits<KisLazyFillGraph>::edge_descriptor> predecessor_vec(num_vertices(graph));
+
+    auto vertexIndexMap = get(boost::vertex_index, graph);
+
+    typedef KisLazyFillGraph::vertex_descriptor VertexDescriptor;
+
+    VertexDescriptor s(VertexDescriptor::LABEL_A);
+    VertexDescriptor t(VertexDescriptor::LABEL_B);
+
+    float maxFlow =
+        boykov_kolmogorov_max_flow(graph,
+                                   capacityMap,
+                                   make_iterator_property_map(&residual_capacity[0], get(boost::edge_index, graph)),
+                                   get(boost::edge_reverse, graph),
+                                   make_iterator_property_map(&predecessor_vec[0], vertexIndexMap),
+                                   make_iterator_property_map(&groups[0], vertexIndexMap),
+                                   make_iterator_property_map(&distance_vec[0], vertexIndexMap),
+                                   vertexIndexMap,
+                                   s,
+                                   t);
+
+    qDebug() << ppVar(maxFlow);
+
+    KisPaintDeviceSP resultColoring = new KisPaintDevice(*mainDev);
+    writeColors(graph, groups, resultColoring);
+
+    KIS_DUMP_DEVICE_2(resultColoring, graph.rect(), "0result", "dd");
+    KIS_DUMP_DEVICE_2(mainDev, graph.rect(), "1main", "dd");
+    KIS_DUMP_DEVICE_2(aLabelDev, graph.rect(), "3aLabel", "dd");
+    KIS_DUMP_DEVICE_2(bLabelDev, graph.rect(), "4bLabel", "dd");
+
+    writeStat(graph,
+              groups,
+              residual_capacity,
+              capacityMap);
+}
+
+void KisLazyBrushTest::testLoG()
+{
+    QImage mainImage(TestUtil::fetchDataFileLazy("fill1_main.png"));
+     QVERIFY(!mainImage.isNull());
+     KisPaintDeviceSP mainDev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
+     mainDev->convertFromQImage(mainImage, 0);
+     QRect rect = mainDev->exactBounds();
+
+    // KisPaintDeviceSP mainDev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
+    // const QRect rect(0,0,10,10);
+    // const QRect fillRect(0,0,5,10);
+    // KoColor bg(Qt::white, mainDev->colorSpace());
+    // KoColor fg(Qt::black, mainDev->colorSpace());
+    // mainDev->fill(rect, bg);
+    // mainDev->fill(fillRect, fg);
+
+    KisPaintDeviceSP filteredMainDev = KisPainter::convertToAlphaAsGray(mainDev);
+    KisGaussianKernel::applyLoG(filteredMainDev,
+                                rect,
+                                4.0,
+                                QBitArray(), 0);
+
+    normalizeAndInvertAlpha8Device(filteredMainDev, rect);
+
+
+
+    KIS_DUMP_DEVICE_2(mainDev, rect, "1main", "dd");
+    KIS_DUMP_DEVICE_2(filteredMainDev, rect, "2filtered", "dd");
+}
+
 QTEST_MAIN(KisLazyBrushTest)

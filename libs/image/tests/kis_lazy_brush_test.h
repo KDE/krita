@@ -30,6 +30,8 @@ private Q_SLOTS:
     void testGraphStandardIterators();
     void testGraphConcepts();
     void testCutOnGraph();
+    void testCutOnGraphDevice();
+    void testLoG();
 };
 
 #endif /* __KIS_LAZY_BRUSH_TEST_H */

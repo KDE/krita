@@ -103,6 +103,9 @@ public:
                                   const QRect &originalSrcRect,
                                   KisSelectionSP selection);
 
+    static KisPaintDeviceSP convertToAlphaAsAlpha(KisPaintDeviceSP src);
+    static KisPaintDeviceSP convertToAlphaAsGray(KisPaintDeviceSP src);
+
     /**
      * Start painting on the specified device. Not undoable.
      */

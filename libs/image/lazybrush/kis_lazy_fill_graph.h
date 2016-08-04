@@ -280,6 +280,9 @@ public:
         VertexDescriptor(vertices_size_type _x, vertices_size_type _y, VertexType _type = NORMAL)
             : x(_x), y(_y), type(_type) {}
 
+        VertexDescriptor(VertexType _type)
+            : x(0), y(0), type(_type) {}
+
         VertexDescriptor()
             : x(0), y(0), type(NORMAL) {}
 
@@ -372,6 +375,7 @@ public:
     }
 
     QSize size() const { return QSize(m_width, m_height); }
+    QRect rect() const { return QRect(m_x, m_y, m_width, m_height); }
 
 
     vertices_size_type m_x;

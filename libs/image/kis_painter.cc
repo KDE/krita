@@ -264,6 +264,44 @@ void KisPainter::copyAreaOptimized(const QPoint &dstPt,
     }
 }
 
+KisPaintDeviceSP KisPainter::convertToAlphaAsAlpha(KisPaintDeviceSP src)
+{
+    const KoColorSpace *srcCS = src->colorSpace();
+    const QRect processRect = src->extent();
+    KisPaintDeviceSP dst = new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8());
+
+    KisSequentialIterator srcIt(src, processRect);
+    KisSequentialIterator dstIt(dst, processRect);
+
+    do {
+        quint8 *srcPtr = srcIt.rawData();
+        quint8 *alpha8Ptr = dstIt.rawData();
+
+        *alpha8Ptr = srcCS->opacityU8(srcPtr);
+    } while (srcIt.nextPixel() && dstIt.nextPixel());
+
+    return dst;
+}
+
+KisPaintDeviceSP KisPainter::convertToAlphaAsGray(KisPaintDeviceSP src)
+{
+    const KoColorSpace *srcCS = src->colorSpace();
+    const QRect processRect = src->extent();
+    KisPaintDeviceSP dst = new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8());
+
+    KisSequentialIterator srcIt(src, processRect);
+    KisSequentialIterator dstIt(dst, processRect);
+
+    do {
+        quint8 *srcPtr = srcIt.rawData();
+        quint8 *alpha8Ptr = dstIt.rawData();
+
+        *alpha8Ptr = srcCS->intensity8(srcPtr);
+    } while (srcIt.nextPixel() && dstIt.nextPixel());
+
+    return dst;
+}
+
 void KisPainter::begin(KisPaintDeviceSP device)
 {
     begin(device, d->selection);

@@ -38,6 +38,7 @@
 #include "kis_image_config.h"
 #include "kis_debug.h"
 #include "kis_node.h"
+#include "kis_sequential_iterator.h"
 
 
 namespace KritaUtils
@@ -505,5 +506,21 @@ namespace KritaUtils
             c1.redF() * r1 + c2.redF() * r2,
             c1.greenF() * r1 + c2.greenF() * r2,
             c1.blueF() * r1 + c2.blueF() * r2);
+    }
+
+    void applyToAlpha8Device(KisPaintDeviceSP dev, const QRect &rc, std::function<void(quint8)> func) {
+        KisSequentialConstIterator dstIt(dev, rc);
+        do {
+            const quint8 *dstPtr = dstIt.rawDataConst();
+            func(*dstPtr);
+        } while (dstIt.nextPixel());
+    }
+
+    void filterAlpha8Device(KisPaintDeviceSP dev, const QRect &rc, std::function<quint8(quint8)> func) {
+        KisSequentialIterator dstIt(dev, rc);
+        do {
+            quint8 *dstPtr = dstIt.rawData();
+            *dstPtr = func(*dstPtr);
+        } while (dstIt.nextPixel());
     }
 }

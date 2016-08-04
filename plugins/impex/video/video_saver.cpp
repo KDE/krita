@@ -61,8 +61,6 @@ public:
 
 private Q_SLOTS:
     void slotFileChanged() {
-        //qDebug() << "=== progress changed ===";
-
         int currentFrame = -1;
         bool isEnded = false;
 
@@ -75,7 +73,6 @@ private Q_SLOTS:
             } else if (var[0] == "progress") {
                 isEnded = var[1] == "end";
             }
-            //qDebug() << var;
         }
 
         if (isEnded) {
@@ -107,7 +104,12 @@ public:
     KisImageBuilder_Result runFFMpeg(const QStringList &specialArgs,
                                      const QString &actionName,
                                      const QString &logPath,
-                                     int totalFrames) {
+                                     int totalFrames)
+    {
+//        qDebug() << "runFFMpeg: specialArgs" << specialArgs
+//                 << "actionName" << actionName
+//                 << "logPath" << logPath
+//                 << "totalFrames" << totalFrames;
 
         QTemporaryFile progressFile("KritaFFmpegProgress.XXXXXX");
         progressFile.open();
@@ -134,7 +136,8 @@ private:
     KisImageBuilder_Result waitForFFMpegProcess(const QString &message,
                                                 QFile &progressFile,
                                                 QProcess &ffmpegProcess,
-                                                int totalFrames) {
+                                                int totalFrames)
+    {
 
         KisFFMpegProgressWatcher watcher(progressFile, totalFrames);
 
@@ -183,7 +186,6 @@ VideoSaver::VideoSaver(KisDocument *doc, bool batchMode)
     , m_ffmpegPath(findFFMpeg())
     , m_runner(new KisFFMpegRunner(m_ffmpegPath))
 {
-
 }
 
 VideoSaver::~VideoSaver()
@@ -237,29 +239,28 @@ QString VideoSaver::findFFMpeg()
 KisImageBuilder_Result VideoSaver::encode(const QString &filename, KisPropertiesConfigurationSP configuration)
 {
 
-    qDebug() << "ffmpeg" << m_ffmpegPath << "filename" << filename << "configuration";
-    configuration->dump();
+    //qDebug() << "ffmpeg" << m_ffmpegPath << "filename" << filename << "configuration" << configuration->toXML();
 
     if (m_ffmpegPath.isEmpty()) return KisImageBuilder_RESULT_FAILURE;
 
-    KisImageBuilder_Result retval = KisImageBuilder_RESULT_OK;
+    KisImageBuilder_Result result = KisImageBuilder_RESULT_OK;
 
     KisImageAnimationInterface *animation = m_image->animationInterface();
     const KisTimeRange fullRange = animation->fullClipRange();
     const KisTimeRange clipRange(configuration->getInt("firstframe", fullRange.start()), configuration->getInt("lastFrame"), fullRange.end());
     const int frameRate = animation->framerate();
 
-    const QString resultFile = filename;
+    const QDir framesDir(configuration->getString("directory"));
 
+    const QString resultFile = framesDir.absolutePath() + "/" + filename;
     const QFileInfo info(resultFile);
     const QString suffix = info.suffix().toLower();
 
-    const QDir framesDir(configuration->getString("directory"));
     const QString palettePath = framesDir.filePath("palette.png");
 
     const QString savedFilesMask = configuration->getString("savedFilesMask");
 
-    const QStringList additionalOptionsList = configuration->getString("customUserOptions").split(' ');
+    const QStringList additionalOptionsList = configuration->getString("customUserOptions").split(' ', QString::SkipEmptyParts);
 
     if (suffix == "gif") {
         {
@@ -304,17 +305,12 @@ KisImageBuilder_Result VideoSaver::encode(const QString &filename, KisProperties
              << additionalOptionsList
              << "-y" << resultFile;
 
-        KisImageBuilder_Result result =
-            m_runner->runFFMpeg(args, i18n("Encoding frames..."),
-                                framesDir.filePath("log_encode.log"),
-                                clipRange.duration());
-
-        if (result) {
-            return result;
-        }
+        result = m_runner->runFFMpeg(args, i18n("Encoding frames..."),
+                                     framesDir.filePath("log_encode.log"),
+                                     clipRange.duration());
     }
 
-    return retval;
+    return result;
 }
 
 void VideoSaver::cancel()

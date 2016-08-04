@@ -189,11 +189,17 @@ QStringList VideoExportOptionsDialog::customUserOptions() const
 void VideoExportOptionsDialog::setConfiguration(const KisPropertiesConfigurationSP cfg)
 {
     m_d->defaultPreset = cfg->getInt("h264PresetIndex", 5);
+    ui->cmbPreset->setCurrentIndex(m_d->defaultPreset);
     m_d->defaultConstantRateFactor = cfg->getInt("h264ConstantRateFactor", 23);
+    ui->intConstantRateFactor->setValue(m_d->defaultConstantRateFactor);
     m_d->defaultProfile = cfg->getInt("h264ProfileIndex", 4);
+    ui->cmbProfile->setCurrentIndex(m_d->defaultProfile);
     m_d->defaultTune = cfg->getInt("h264TuneIndex", 1);
+    ui->cmbTune->setCurrentIndex(m_d->defaultTune);
     m_d->defaultBitrate = cfg->getInt("TheoraBitrate", 5000);
+    ui->intBitrate->setValue(m_d->defaultBitrate);
     m_d->defaultCustomLine = cfg->getString("CustomLineValue", "");
+    ui->txtCustomLine->setText(m_d->defaultCustomLine);
     if (cfg->hasProperty("CodecIndex")) {
         setCodec((VideoExportOptionsDialog::CodecIndex)cfg->getInt("CodecIndex"));
     }
@@ -210,7 +216,7 @@ QStringList VideoExportOptionsDialog::generateCustomLine() const
         options << "-crf" << QString::number(ui->intConstantRateFactor->value());
 
         const int presetIndex = ui->cmbPreset->currentIndex();
-        qDebug() << "presetIndex" << presetIndex << m_d->presets;
+        //qDebug() << "presetIndex" << presetIndex << m_d->presets;
         options << "-preset" << m_d->presets[presetIndex].id();
 
         const int profileIndex = ui->cmbProfile->currentIndex();

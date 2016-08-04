@@ -57,15 +57,12 @@ KisVideoExport::~KisVideoExport()
 KisImportExportFilter::ConversionStatus KisVideoExport::convert(const QByteArray &from, const QByteArray &to, KisPropertiesConfigurationSP configuration)
 {
     Q_UNUSED(to);
-    Q_UNUSED(configuration);
 
     if (from != "application/x-krita")
         return KisImportExportFilter::NotImplemented;
 
     KisDocument *input = inputDocument();
     QString filename = outputFile();
-
-    qDebug() << "inputDocument" << input << "output filename" << filename;
 
     if (!input)
         return KisImportExportFilter::NoDocumentCreated;
@@ -96,6 +93,9 @@ KisImportExportFilter::ConversionStatus KisVideoExport::convert(const QByteArray
     }
     else if (res == KisImageBuilder_RESULT_CANCEL) {
         return KisImportExportFilter::ProgressCancelled;
+    }
+    else {
+        input->setErrorMessage(i18n("FFMpeg failed to convert the image sequence. Check the logfile in your output directory for more information."));
     }
 
     return KisImportExportFilter::InternalError;

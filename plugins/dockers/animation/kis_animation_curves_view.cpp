@@ -653,3 +653,20 @@ void KisAnimationCurvesView::applySharpMode()
     }
     m_d->model->endCommand();
 }
+
+void KisAnimationCurvesView::createKeyframe()
+{
+    QModelIndex active = currentIndex();
+    int channel = active.isValid() ? active.row() : 0;
+
+    int time = m_d->model->currentTime();
+    QModelIndex index = m_d->model->index(channel, time);
+
+    qreal value = index.data(KisAnimationCurvesModel::ScalarValueRole).toReal();
+    m_d->model->setData(index, value, KisAnimationCurvesModel::ScalarValueRole);
+}
+
+void KisAnimationCurvesView::removeKeyframes()
+{
+    m_d->model->removeFrames(selectedIndexes());
+}

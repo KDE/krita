@@ -68,7 +68,6 @@ public:
     void beginCommand(const KUndo2MagicString &text);
     void endCommand();
 
-    bool removeFrames(const QModelIndexList &indexes);
     bool adjustKeyframes(const QModelIndexList &indexes, int timeOffset, qreal valueOffset);
 
     enum ItemDataRole

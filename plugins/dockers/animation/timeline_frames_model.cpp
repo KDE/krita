@@ -606,35 +606,3 @@ bool TimelineFramesModel::copyFrame(const QModelIndex &dstIndex)
 
     return result;
 }
-
-bool TimelineFramesModel::removeFrames(const QModelIndexList &indexes)
-{
-    KisAnimationUtils::FrameItemList frameItems;
-
-    Q_FOREACH (const QModelIndex &index, indexes) {
-        KisNodeDummy *dummy = m_d->converter->dummyFromRow(index.row());
-        if (!dummy) continue;
-
-        int time = index.column();
-
-        QList<KisKeyframeChannel*> channels = dummy->node()->keyframeChannels();
-        Q_FOREACH(KisKeyframeChannel *channel, channels) {
-            if (channel->keyframeAt(time)) {
-                frameItems << KisAnimationUtils::FrameItem(dummy->node(), channel->id(), index.column());
-            }
-        }
-    }
-
-    if (frameItems.isEmpty()) return false;
-
-
-    KisAnimationUtils::removeKeyframes(m_d->image, frameItems);
-
-    Q_FOREACH (const QModelIndex &index, indexes) {
-        if (index.isValid()) {
-            emit dataChanged(index, index);
-        }
-    }
-
-    return true;
-}

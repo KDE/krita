@@ -60,6 +60,9 @@ public Q_SLOTS:
     void applySmoothMode();
     void applySharpMode();
 
+    void createKeyframe();
+    void removeKeyframes();
+
 protected Q_SLOTS:
     void updateGeometries();
 

@@ -90,6 +90,10 @@ KisAnimationCurveDocker::KisAnimationCurveDocker()
             curvesView, &KisAnimationCurvesView::applySmoothMode);
     connect(m_d->curvesWidget.btnSharp, &QToolButton::clicked,
             curvesView, &KisAnimationCurvesView::applySharpMode);
+    connect(m_d->curvesWidget.btnAddKeyframe, &QToolButton::clicked,
+            curvesView, &KisAnimationCurvesView::createKeyframe);
+    connect(m_d->curvesWidget.btnRemoveKeyframes, &QToolButton::clicked,
+            curvesView, &KisAnimationCurvesView::removeKeyframes);
 }
 
 KisAnimationCurveDocker::~KisAnimationCurveDocker()
@@ -147,6 +151,9 @@ void KisAnimationCurveDocker::slotUpdateIcons()
 
     m_d->curvesWidget.btnHorizontalZoom->setIcon(KisIconUtils::loadIcon("zoom-in"));
     m_d->curvesWidget.btnVerticalZoom->setIcon(KisIconUtils::loadIcon("zoom-in"));
+
+    m_d->curvesWidget.btnAddKeyframe->setIcon(KisIconUtils::loadIcon("addlayer"));
+    m_d->curvesWidget.btnRemoveKeyframes->setIcon(KisIconUtils::loadIcon("deletelayer"));
 }
 
 void KisAnimationCurveDocker::slotListRowsInserted(const QModelIndex &parentIndex, int first, int last)

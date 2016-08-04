@@ -51,7 +51,7 @@ public:
     virtual QVariant headerData(int section, Qt::Orientation orientation, int role) const;
     virtual bool setHeaderData(int section, Qt::Orientation orientation, const QVariant &value, int role);
 
-    virtual bool removeFrames(const QModelIndexList &indexes) = 0;
+    bool removeFrames(const QModelIndexList &indexes);
     bool offsetFrames(QModelIndexList srcIndexes, const QPoint &offset, bool copyFrames, KUndo2Command *parentCommand=0);
 
     void setScrubState(bool active);
@@ -59,6 +59,7 @@ public:
 
     void setPlaybackRange(const KisTimeRange &range);
     bool isPlaybackActive() const;
+    int currentTime() const;
 
     enum ItemDataRole
     {
@@ -77,7 +78,7 @@ protected:
     KisImageWSP image() const;
 
 private Q_SLOTS:
-        void slotFramerateChanged();
+    void slotFramerateChanged();
     void slotCurrentTimeChanged(int time);
 
     void slotCacheChanged();

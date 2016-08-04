@@ -251,6 +251,34 @@ bool KisTimeBasedItemModel::setHeaderData(int section, Qt::Orientation orientati
     return false;
 }
 
+bool KisTimeBasedItemModel::removeFrames(const QModelIndexList &indexes)
+{
+    KisAnimationUtils::FrameItemList frameItems;
+
+    Q_FOREACH (const QModelIndex &index, indexes) {
+        int time = index.column();
+
+        QList<KisKeyframeChannel*> channels = channelsAt(index);
+        Q_FOREACH(KisKeyframeChannel *channel, channels) {
+            if (channel->keyframeAt(time)) {
+                frameItems << KisAnimationUtils::FrameItem(channel->node(), channel->id(), index.column());
+            }
+        }
+    }
+
+    if (frameItems.isEmpty()) return false;
+
+    KisAnimationUtils::removeKeyframes(m_d->image, frameItems);
+
+    Q_FOREACH (const QModelIndex &index, indexes) {
+        if (index.isValid()) {
+            emit dataChanged(index, index);
+        }
+    }
+
+    return true;
+}
+
 bool KisTimeBasedItemModel::offsetFrames(QModelIndexList srcIndexes, const QPoint &offset, bool copyFrames, KUndo2Command *parentCommand)
 {
     bool result = false;
@@ -390,6 +418,11 @@ void KisTimeBasedItemModel::setPlaybackRange(const KisTimeRange &range)
 bool KisTimeBasedItemModel::isPlaybackActive() const
 {
     return m_d->animationPlayer && m_d->animationPlayer->isPlaying();
+}
+
+int KisTimeBasedItemModel::currentTime() const
+{
+    return m_d->image->animationInterface()->currentUITime();
 }
 
 KisImageWSP KisTimeBasedItemModel::image() const

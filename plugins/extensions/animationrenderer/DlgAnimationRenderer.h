@@ -82,11 +82,11 @@ protected Q_SLOTS:
 private:
 
     KisImageWSP m_image;
-    WdgAnimaterionRenderer *m_page;
+    WdgAnimaterionRenderer *m_page {0};
     QList<QSharedPointer<KisImportExportFilter>> m_renderFilters;
     QHBoxLayout *m_encoderConfigLayout;
     KisConfigWidget *m_encoderConfigWidget {0};
-    QHBoxLayout *m_sequenceConfigLayout;
+    QHBoxLayout *m_sequenceConfigLayout {0};
     KisConfigWidget *m_frameExportConfigWidget {0};
     QString m_defaultFileName;
 };

@@ -58,7 +58,7 @@ DlgAnimationRenderer::DlgAnimationRenderer(KisDocument *doc, QWidget *parent)
     m_page = new WdgAnimaterionRenderer(this);
     m_page->layout()->setMargin(0);
     m_page->dirRequester->setMode(KoFileDialog::OpenDirectory);
-    QString lastLocation = cfg.readEntry<QString>("last_sequence_export_location", QStandardPaths::writableLocation(QStandardPaths::PicturesLocation));
+    QString lastLocation = cfg.readEntry<QString>("AnimationRenderer/last_sequence_export_location", QStandardPaths::writableLocation(QStandardPaths::PicturesLocation));
     m_page->dirRequester->setFileName(lastLocation);
 
     m_page->intStart->setMinimum(doc->image()->animationInterface()->fullClipRange().start());
@@ -129,7 +129,6 @@ DlgAnimationRenderer::DlgAnimationRenderer(KisDocument *doc, QWidget *parent)
 
     qDeleteAll(list);
     connect(m_page->cmbRenderType, SIGNAL(activated(int)), this, SLOT(selectRenderType(int)));
-    selectRenderType(m_page->cmbRenderType->currentIndex());
 
     connect(m_page->grpRender, SIGNAL(toggled(bool)), this, SLOT(toggleSequenceType(bool)));
     connect(m_page->cmbMimetype, SIGNAL(activated(int)), this, SLOT(sequenceMimeTypeSelected(int)));
@@ -140,19 +139,29 @@ DlgAnimationRenderer::DlgAnimationRenderer(KisDocument *doc, QWidget *parent)
     m_page->ffmpegLocation->setMode(KoFileDialog::OpenFile);
     connect(m_page->ffmpegLocation, SIGNAL(fileSelected(QString)), this, SLOT(ffmpegLocationChanged(QString)));
 
-    m_page->grpRender->setChecked(cfg.readEntry<bool>("render_animation", false));
+    m_page->grpRender->setChecked(cfg.readEntry<bool>("AnimationRenderer/render_animation", false));
+    m_page->chkDeleteSequence->setChecked(cfg.readEntry<bool>("AnimationRenderer/delete_sequence", false));
+    m_page->cmbRenderType->setCurrentIndex(cfg.readEntry<int>("AnimationRenderer/render_type", 0));
+    selectRenderType(m_page->cmbRenderType->currentIndex());
 }
 
 DlgAnimationRenderer::~DlgAnimationRenderer()
 {
     KisConfig cfg;
-    cfg.writeEntry<bool>("render_animation", m_page->grpRender->isChecked());
-    cfg.writeEntry<QString>("last_sequence_export_location", m_page->dirRequester->fileName());
+    cfg.writeEntry<bool>("AnimationRenderer/render_animation", m_page->grpRender->isChecked());
+    cfg.writeEntry<QString>("AnimationRenderer/last_sequence_export_location", m_page->dirRequester->fileName());
+    cfg.writeEntry<int>("AnimationRenderer/render_type", m_page->cmbRenderType->currentIndex());
+    cfg.writeEntry<bool>("AnimationRenderer/delete_sequence", m_page->chkDeleteSequence->isChecked());
     cfg.setCustomFFMpegPath(m_page->ffmpegLocation->fileName());
-    m_encoderConfigWidget->setParent(0);
-    m_encoderConfigWidget->deleteLater();
-    m_frameExportConfigWidget->setParent(0);
-    m_frameExportConfigWidget->deleteLater();
+
+    if (m_encoderConfigWidget)  {
+        m_encoderConfigWidget->setParent(0);
+        m_encoderConfigWidget->deleteLater();
+    }
+    if (m_frameExportConfigWidget) {
+        m_frameExportConfigWidget->setParent(0);
+        m_frameExportConfigWidget->deleteLater();
+    }
 
     delete m_page;
 
@@ -228,8 +237,15 @@ KisPropertiesConfigurationSP DlgAnimationRenderer::getEncoderConfiguration() con
         return 0;
     }
     KisPropertiesConfigurationSP cfg = new KisPropertiesConfiguration();
-
+    if (m_encoderConfigWidget) {
+        cfg = m_encoderConfigWidget->configuration();
+    }
     cfg->setProperty("mimetype", m_page->cmbRenderType->currentData().toString());
+    cfg->setProperty("directory", m_page->dirRequester->fileName());
+    cfg->setProperty("first_frame", m_page->intStart->value());
+    cfg->setProperty("last_frame", m_page->intEnd->value());
+    cfg->setProperty("sequence_start", m_page->sequenceStart->value());
+
     return cfg;
 }
 

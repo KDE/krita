@@ -125,6 +125,14 @@ void AnimaterionRenderer::slotRenderAnimation()
             if (res != KisImportExportFilter::OK) {
                 QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Could not render animation:\n%1", doc->errorMessage()));
             }
+
+            if (videoConfig->getBool("delete_sequence", false)) {
+                QDir d(sequenceConfig->getString("directory"));
+                QStringList sequenceFiles = d.entryList(QStringList() << sequenceConfig->getString("basename") + "*." + extension, QDir::Files);
+                Q_FOREACH(const QString &f, sequenceFiles) {
+                    d.remove(f);
+                }
+            }
         }
     }
 

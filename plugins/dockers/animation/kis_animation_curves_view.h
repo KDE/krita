@@ -87,6 +87,8 @@ private:
     QModelIndex findNextKeyframeIndex(int channel, int time, int selectionOffset, bool backward);
 
     void updateVerticalRange();
+
+    void startPan(QPoint mousePos);
 };
 
 #endif

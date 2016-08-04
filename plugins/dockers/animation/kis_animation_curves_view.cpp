@@ -40,6 +40,7 @@ struct KisAnimationCurvesView::Private
         : model(0)
         , isDraggingKeyframe(false)
         , isAdjustingHandle(false)
+        , panning(false)
     {}
 
     KisAnimationCurvesModel *model;
@@ -60,6 +61,9 @@ struct KisAnimationCurvesView::Private
     int horizontalZoomStillPointOriginalOffset;
     qreal verticalZoomStillPoint;
     qreal verticalZoomStillPointOriginalOffset;
+
+    bool panning;
+    QPoint panStartOffset;
 };
 
 KisAnimationCurvesView::KisAnimationCurvesView(QWidget *parent)
@@ -325,6 +329,13 @@ void KisAnimationCurvesView::updateVerticalRange()
     verticalScrollBar()->setRange(viewMin, viewMax - viewport()->height());
 }
 
+void KisAnimationCurvesView::startPan(QPoint mousePos)
+{
+    m_d->dragStart = mousePos;
+    m_d->panStartOffset = QPoint(horizontalOffset(), verticalOffset());
+    m_d->panning = true;
+}
+
 QModelIndex KisAnimationCurvesView::moveCursor(QAbstractItemView::CursorAction cursorAction, Qt::KeyboardModifiers modifiers)
 {
     // TODO
@@ -386,7 +397,7 @@ void KisAnimationCurvesView::mousePressEvent(QMouseEvent *e)
 {
     if (m_d->modifiersCatcher->modifierPressed("pan-zoom")) {
         if (e->button() == Qt::LeftButton) {
-            // TODO: pan
+            startPan(e->pos());
         } else {
             qreal horizontalStaticPoint = m_d->horizontalHeader->logicalIndexAt(e->pos().x());
             qreal verticalStaticPoint = m_d->verticalHeader->mapViewToValue(e->pos().y());
@@ -423,7 +434,15 @@ void KisAnimationCurvesView::mouseMoveEvent(QMouseEvent *e)
 {
     if (m_d->modifiersCatcher->modifierPressed("pan-zoom")) {
         if (e->buttons() & Qt::LeftButton) {
-            // TODO: pan
+            if (!m_d->panning) startPan(e->pos());
+
+            QPoint diff = e->pos() - m_d->dragStart;
+            QPoint newOffset = m_d->panStartOffset - diff;
+
+            horizontalScrollBar()->setValue(newOffset.x());
+            verticalScrollBar()->setValue(newOffset.y());
+            m_d->verticalHeader->setOffset(newOffset.y());
+            viewport()->update();
         } else {
             m_d->horizontalZoomButton->continueZoom(QPoint(e->pos().x(), 0));
             m_d->verticalZoomButton->continueZoom(QPoint(0, e->pos().y()));
@@ -452,6 +471,8 @@ void KisAnimationCurvesView::mouseMoveEvent(QMouseEvent *e)
 void KisAnimationCurvesView::mouseReleaseEvent(QMouseEvent *e)
 {
     if (e->button() == Qt::LeftButton) {
+        m_d->panning = false;
+
         if (m_d->isDraggingKeyframe) {
             QModelIndexList indexes = selectedIndexes();
             int timeOffset = m_d->dragOffset.x() / m_d->horizontalHeader->defaultSectionSize();

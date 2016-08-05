@@ -71,7 +71,7 @@ private:
 protected:
     QHBoxLayout* m_layout;
     QSlider* m_slider;
-	KisDoubleParseSpinBox *m_spinBox;
+    KisDoubleParseSpinBox *m_spinBox;
 };
 
 #endif // KIS_DOUBLE_WIDGET_H

@@ -253,6 +253,7 @@ set(kritaui_LIB_SRCS
     widgets/kis_color_label_selector_widget.cpp
     widgets/kis_color_filter_combo.cpp
     widgets/kis_elided_label.cpp
+
     input/kis_input_manager.cpp
     input/kis_input_manager_p.cpp
     input/kis_extended_modifiers_mapper.cpp
@@ -361,7 +362,7 @@ set(kritaui_LIB_SRCS
 
     KisPaletteModel.cpp
     KisColorsetChooser.cpp
-	KisSaveGroupVisitor.cpp
+    KisSaveGroupVisitor.cpp
 )
 
 if(WIN32)

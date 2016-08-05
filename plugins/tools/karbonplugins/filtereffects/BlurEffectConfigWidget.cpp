@@ -35,7 +35,7 @@ BlurEffectConfigWidget::BlurEffectConfigWidget(QWidget *parent)
     QGridLayout *g = new QGridLayout(this);
 
     g->addWidget(new QLabel(i18n("Radius"), this), 0, 0);
-	m_stdDeviation = new KisDoubleParseSpinBox(this);
+    m_stdDeviation = new KisDoubleParseSpinBox(this);
     m_stdDeviation->setRange(0.0, 100);
     m_stdDeviation->setSingleStep(0.5);
     g->addWidget(m_stdDeviation, 0, 1);

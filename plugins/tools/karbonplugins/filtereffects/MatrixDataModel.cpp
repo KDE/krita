@@ -71,7 +71,7 @@ bool MatrixDataModel::setData(const QModelIndex &index, const QVariant &value, i
 {
     int element = index.row() * m_cols + index.column();
     bool valid = false;
-	qreal elementValue = KisNumericParser::parseSimpleMathExpr(value.toString(), &valid);
+    qreal elementValue = KisNumericParser::parseSimpleMathExpr(value.toString(), &valid);
     if (!valid) {
         return false;
     }

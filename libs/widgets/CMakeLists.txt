@@ -13,7 +13,7 @@ set(kritawidgets_LIB_SRCS
     KoTagFilterWidget.cpp
     KoResourceTaggingManager.cpp
     KoResourceItemChooserContextMenu.cpp
-	KoAspectButton.cpp
+    KoAspectButton.cpp
     KoPagePreviewWidget.cpp
     KoPositionSelector.cpp
     KoSliderCombo.cpp
@@ -34,8 +34,8 @@ set(kritawidgets_LIB_SRCS
     KoDualColorButton.cpp
     KoEditColorSetDialog.cpp
     KoTriangleColorSelector.cpp
-	KoResourcePopupAction.cpp
-	KoFillConfigWidget.cpp
+    KoResourcePopupAction.cpp
+    KoFillConfigWidget.cpp
     KoIconToolTip.cpp
     KoResourceItemChooser.cpp
     KoResourceItemChooserSync.cpp
@@ -52,7 +52,7 @@ set(kritawidgets_LIB_SRCS
     KoResourceServerProvider.cpp
     KoLineStyleSelector.cpp
     KoLineStyleItemDelegate.cpp
-	KoLineStyleModel.cpp
+    KoLineStyleModel.cpp
     KoDockWidgetTitleBar.cpp
     KoDockWidgetTitleBarButton.cpp
     KoResourceFiltering.cpp
@@ -65,13 +65,13 @@ set(kritawidgets_LIB_SRCS
     KoToolDocker.cpp
     
 
-	KoPageLayoutWidget.cpp
-	KoPageLayoutDialog.cpp
-	KoShadowConfigWidget.cpp
-	KoStrokeConfigWidget.cpp
-	KoMarkerSelector.cpp
-	KoMarkerModel.cpp
-	KoMarkerItemDelegate.cpp
+    KoPageLayoutWidget.cpp
+    KoPageLayoutDialog.cpp
+    KoShadowConfigWidget.cpp
+    KoStrokeConfigWidget.cpp
+    KoMarkerSelector.cpp
+    KoMarkerModel.cpp
+    KoMarkerItemDelegate.cpp
 
     KoDocumentInfoDlg.cpp
     KoGlobal.cpp
@@ -81,16 +81,16 @@ set(kritawidgets_LIB_SRCS
 
     kis_file_name_requester.cpp
 
-	kis_double_parse_spin_box.cpp
-	kis_double_parse_unit_spin_box.cpp
-	kis_int_parse_spin_box.cpp
+    kis_double_parse_spin_box.cpp
+    kis_double_parse_unit_spin_box.cpp
+    kis_int_parse_spin_box.cpp
 )
 
 ki18n_wrap_ui( kritawidgets_LIB_SRCS
     KoConfigAuthorPage.ui
     koDocumentInfoAboutWidget.ui
     koDocumentInfoAuthorWidget.ui
-	KoEditColorSet.ui
+    KoEditColorSet.ui
     wdg_file_name_requester.ui
     KoPageLayoutWidget.ui
     KoShadowConfigWidget.ui

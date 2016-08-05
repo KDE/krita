@@ -26,31 +26,31 @@
 #include <QtTest>
 
 const QStringList KisParseSpinBoxesTest::doubleExprs = {"1",
-														"-12",
-														"7.9 - 12",
-														"cos(90)*2",
-														"cos(acos(-1)+1*3^2.0)*2 + sin(3)/2"};
+                                                        "-12",
+                                                        "7.9 - 12",
+                                                        "cos(90)*2",
+                                                        "cos(acos(-1)+1*3^2.0)*2 + sin(3)/2"};
 
 const QStringList KisParseSpinBoxesTest::doubleWrongExprs = {"abc",
-															 "1/",
-															 "7.9 + 12*",
-															 "cos(90)*2 + ",
-															 "23.0/0",
-															 "0.0/0.0"};
+                                                             "1/",
+                                                             "7.9 + 12*",
+                                                             "cos(90)*2 + ",
+                                                             "23.0/0",
+                                                             "0.0/0.0"};
 
 const QStringList KisParseSpinBoxesTest::intExprs = {"12",
-													 "-12",
-													 "-12.3",
-													 "12.7 - 25",
-													 "12.7",
-													 "12*1.5",
-													 "12/2.5",
-													 "518*2/3"};
+                                                     "-12",
+                                                     "-12.3",
+                                                     "12.7 - 25",
+                                                     "12.7",
+                                                     "12*1.5",
+                                                     "12/2.5",
+                                                     "518*2/3"};
 
 const QStringList KisParseSpinBoxesTest::intWrongExprs = {"abc",
-														  "12.5/2 +",
-														  "12*",
-														  "12/0"};
+                                                          "12.5/2 +",
+                                                          "12*",
+                                                          "12/0"};
 
 KisParseSpinBoxesTest::KisParseSpinBoxesTest() : QObject()
 {
@@ -60,29 +60,29 @@ KisParseSpinBoxesTest::KisParseSpinBoxesTest() : QObject()
 void KisParseSpinBoxesTest::testDoubleParseNormal()
 {
 
-	KisDoubleParseSpinBox spinBox;
-	spinBox.setDecimals(3);
-	spinBox.setMaximum(9999.0);
-	spinBox.setMinimum(-9999.0);
+    KisDoubleParseSpinBox spinBox;
+    spinBox.setDecimals(3);
+    spinBox.setMaximum(9999.0);
+    spinBox.setMinimum(-9999.0);
 
-	for (int i = 0; i < doubleExprs.size(); i++) {
+    for (int i = 0; i < doubleExprs.size(); i++) {
 
-		spinBox.clearFocus();
-		spinBox.clear(); //clear all
-		QTest::keyClicks(&spinBox, doubleExprs[i]);
-		spinBox.clearFocus();
+        spinBox.clearFocus();
+        spinBox.clear(); //clear all
+        QTest::keyClicks(&spinBox, doubleExprs[i]);
+        spinBox.clearFocus();
 
-		double resultParser = KisNumericParser::parseSimpleMathExpr(doubleExprs[i]);
-		double valueSpinBox = spinBox.value();
+        double resultParser = KisNumericParser::parseSimpleMathExpr(doubleExprs[i]);
+        double valueSpinBox = spinBox.value();
 
-		bool test = resultParser == valueSpinBox || qAbs(resultParser - valueSpinBox) < 1e-2;
+        bool test = resultParser == valueSpinBox || qAbs(resultParser - valueSpinBox) < 1e-2;
 
-		QVERIFY2(test, QString("Failed with expression %1, result is %2, value is %3")
-				 .arg(doubleExprs[i]).arg(resultParser).arg(valueSpinBox).toStdString().c_str());
+        QVERIFY2(test, QString("Failed with expression %1, result is %2, value is %3")
+                 .arg(doubleExprs[i]).arg(resultParser).arg(valueSpinBox).toStdString().c_str());
 
-		spinBox.setValue(0);
+        spinBox.setValue(0);
 
-	}
+    }
 
 
 }
@@ -90,275 +90,275 @@ void KisParseSpinBoxesTest::testDoubleParseNormal()
 void KisParseSpinBoxesTest::testDoubleParseProblem()
 {
 
-	//error can happen with incomplete or incorrect expressions, inf or nan values.
+    //error can happen with incomplete or incorrect expressions, inf or nan values.
 
-	KisDoubleParseSpinBox spinBox;
-	spinBox.setMaximum(9999.0);
-	spinBox.setMinimum(-9999.0);
+    KisDoubleParseSpinBox spinBox;
+    spinBox.setMaximum(9999.0);
+    spinBox.setMinimum(-9999.0);
 
-	for (int i = 0; i < doubleWrongExprs.size(); i++) {
+    for (int i = 0; i < doubleWrongExprs.size(); i++) {
 
-		spinBox.clearFocus();
-		spinBox.clear(); //clear all
-		QTest::keyClicks(&spinBox, doubleWrongExprs[i]);
-		spinBox.clearFocus();
+        spinBox.clearFocus();
+        spinBox.clear(); //clear all
+        QTest::keyClicks(&spinBox, doubleWrongExprs[i]);
+        spinBox.clearFocus();
 
-		QVERIFY2(!spinBox.isLastValid(), QString("SpinBox is in a valid state with expression %1, but shouldn't.")
-				 .arg(doubleWrongExprs[i]).toStdString().c_str());
+        QVERIFY2(!spinBox.isLastValid(), QString("SpinBox is in a valid state with expression %1, but shouldn't.")
+                 .arg(doubleWrongExprs[i]).toStdString().c_str());
 
-		spinBox.setValue(0.0);
+        spinBox.setValue(0.0);
 
-		QVERIFY2(spinBox.isLastValid(), QString("SpinBox unsable to recover error free state after a value reset.")
-				 .toStdString().c_str());
+        QVERIFY2(spinBox.isLastValid(), QString("SpinBox unsable to recover error free state after a value reset.")
+                 .toStdString().c_str());
 
-		spinBox.setValue(0);
+        spinBox.setValue(0);
 
-	}
+    }
 
 }
 void KisParseSpinBoxesTest::testDoubleParseWithSuffix(){
 
-	QString suff = "px";
+    QString suff = "px";
 
-	KisDoubleParseSpinBox spinBox;
-	spinBox.setDecimals(3);
-	spinBox.setMaximum(9999.0);
-	spinBox.setMinimum(-9999.0);
-	spinBox.setSuffix(suff);
+    KisDoubleParseSpinBox spinBox;
+    spinBox.setDecimals(3);
+    spinBox.setMaximum(9999.0);
+    spinBox.setMinimum(-9999.0);
+    spinBox.setSuffix(suff);
 
-	for (int i = 0; i < doubleExprs.size(); i++) {
+    for (int i = 0; i < doubleExprs.size(); i++) {
 
-		spinBox.clearFocus();
-		spinBox.clear(); //clear all
-		QTest::keyClicks(&spinBox, doubleExprs[i]);
-		spinBox.clearFocus();
+        spinBox.clearFocus();
+        spinBox.clear(); //clear all
+        QTest::keyClicks(&spinBox, doubleExprs[i]);
+        spinBox.clearFocus();
 
-		double resultParser = KisNumericParser::parseSimpleMathExpr(doubleExprs[i]);
-		double valueSpinBox = spinBox.value();
+        double resultParser = KisNumericParser::parseSimpleMathExpr(doubleExprs[i]);
+        double valueSpinBox = spinBox.value();
 
-		bool test = resultParser == valueSpinBox || qAbs(resultParser - valueSpinBox) < 1e-2;
+        bool test = resultParser == valueSpinBox || qAbs(resultParser - valueSpinBox) < 1e-2;
 
-		QVERIFY2(test, QString("Failed with expression %1, result is %2, value is %3")
-				 .arg(doubleExprs[i]).arg(resultParser).arg(valueSpinBox).toStdString().c_str());
+        QVERIFY2(test, QString("Failed with expression %1, result is %2, value is %3")
+                 .arg(doubleExprs[i]).arg(resultParser).arg(valueSpinBox).toStdString().c_str());
 
-		spinBox.setValue(0);
+        spinBox.setValue(0);
 
-	}
+    }
 
-	//verify that the suffix don't appear in the clean text in case of error.
-	for (int i = 0; i < doubleWrongExprs.size(); i++) {
+    //verify that the suffix don't appear in the clean text in case of error.
+    for (int i = 0; i < doubleWrongExprs.size(); i++) {
 
-		if (doubleWrongExprs[i].endsWith(suff)) {
-			continue;
-		}
+        if (doubleWrongExprs[i].endsWith(suff)) {
+            continue;
+        }
 
-		spinBox.clearFocus();
-		spinBox.clear(); //clear all
-		QTest::keyClicks(&spinBox, doubleWrongExprs[i]);
-		spinBox.clearFocus();
+        spinBox.clearFocus();
+        spinBox.clear(); //clear all
+        QTest::keyClicks(&spinBox, doubleWrongExprs[i]);
+        spinBox.clearFocus();
 
-		QVERIFY2(!spinBox.cleanText().endsWith(suff), "SpinBox failed to remove suffix from clean text in error state.");
+        QVERIFY2(!spinBox.cleanText().endsWith(suff), "SpinBox failed to remove suffix from clean text in error state.");
 
-		spinBox.setValue(0.0);
+        spinBox.setValue(0.0);
 
-	}
+    }
 }
 void KisParseSpinBoxesTest::testDoubleParseWithPrefix()
 {
 
-	QString preff = "px";
+    QString preff = "px";
 
-	KisDoubleParseSpinBox spinBox;
-	spinBox.setDecimals(3);
-	spinBox.setMaximum(9999.0);
-	spinBox.setMinimum(-9999.0);
-	spinBox.setPrefix(preff);
+    KisDoubleParseSpinBox spinBox;
+    spinBox.setDecimals(3);
+    spinBox.setMaximum(9999.0);
+    spinBox.setMinimum(-9999.0);
+    spinBox.setPrefix(preff);
 
-	for (int i = 0; i < doubleExprs.size(); i++) {
+    for (int i = 0; i < doubleExprs.size(); i++) {
 
-		spinBox.clearFocus();
-		spinBox.clear(); //clear all
-		QTest::keyClicks(&spinBox, doubleExprs[i]);
-		spinBox.clearFocus();
+        spinBox.clearFocus();
+        spinBox.clear(); //clear all
+        QTest::keyClicks(&spinBox, doubleExprs[i]);
+        spinBox.clearFocus();
 
-		double resultParser = KisNumericParser::parseSimpleMathExpr(doubleExprs[i]);
-		double valueSpinBox = spinBox.value();
+        double resultParser = KisNumericParser::parseSimpleMathExpr(doubleExprs[i]);
+        double valueSpinBox = spinBox.value();
 
-		bool test = resultParser == valueSpinBox || qAbs(resultParser - valueSpinBox) < 1e-2;
+        bool test = resultParser == valueSpinBox || qAbs(resultParser - valueSpinBox) < 1e-2;
 
-		QVERIFY2(test, QString("Failed with expression %1, result is %2, value is %3")
-				 .arg(doubleExprs[i]).arg(resultParser).arg(valueSpinBox).toStdString().c_str());
+        QVERIFY2(test, QString("Failed with expression %1, result is %2, value is %3")
+                 .arg(doubleExprs[i]).arg(resultParser).arg(valueSpinBox).toStdString().c_str());
 
-		spinBox.setValue(0);
+        spinBox.setValue(0);
 
-	}
+    }
 
-	//verify that the prefix don't appear in the clean text in case of error.
-	for (int i = 0; i < doubleWrongExprs.size(); i++) {
+    //verify that the prefix don't appear in the clean text in case of error.
+    for (int i = 0; i < doubleWrongExprs.size(); i++) {
 
-		if (doubleWrongExprs[i].endsWith(preff)) {
-			continue;
-		}
+        if (doubleWrongExprs[i].endsWith(preff)) {
+            continue;
+        }
 
-		spinBox.clearFocus();
-		spinBox.clear(); //clear all
-		QTest::keyClicks(&spinBox, doubleWrongExprs[i]);
-		spinBox.clearFocus();
+        spinBox.clearFocus();
+        spinBox.clear(); //clear all
+        QTest::keyClicks(&spinBox, doubleWrongExprs[i]);
+        spinBox.clearFocus();
 
-		QVERIFY2(!spinBox.cleanText().startsWith(preff), "SpinBox failed to remove prefix from clean text in error state.");
+        QVERIFY2(!spinBox.cleanText().startsWith(preff), "SpinBox failed to remove prefix from clean text in error state.");
 
-		spinBox.setValue(0.0);
+        spinBox.setValue(0.0);
 
-	}
+    }
 }
 
 void KisParseSpinBoxesTest::testIntParseNormal()
 {
 
-	KisIntParseSpinBox spinBox;
-	spinBox.setMaximum(999);
-	spinBox.setMinimum(-999);
+    KisIntParseSpinBox spinBox;
+    spinBox.setMaximum(999);
+    spinBox.setMinimum(-999);
 
-	for (int i = 0; i < intExprs.size(); i++) {
+    for (int i = 0; i < intExprs.size(); i++) {
 
-		spinBox.clearFocus();
-		spinBox.clear(); //clear all
-		QTest::keyClicks(&spinBox, intExprs[i]);
-		spinBox.clearFocus();
+        spinBox.clearFocus();
+        spinBox.clear(); //clear all
+        QTest::keyClicks(&spinBox, intExprs[i]);
+        spinBox.clearFocus();
 
-		int resultParser = KisNumericParser::parseIntegerMathExpr(intExprs[i]);
-		int valueSpinBox = spinBox.value();
+        int resultParser = KisNumericParser::parseIntegerMathExpr(intExprs[i]);
+        int valueSpinBox = spinBox.value();
 
-		bool test = resultParser == valueSpinBox;
+        bool test = resultParser == valueSpinBox;
 
-		QVERIFY2(test, QString("Failed with expression %1, result is %2, value is %3")
-				 .arg(intExprs[i]).arg(resultParser).arg(valueSpinBox).toStdString().c_str());
+        QVERIFY2(test, QString("Failed with expression %1, result is %2, value is %3")
+                 .arg(intExprs[i]).arg(resultParser).arg(valueSpinBox).toStdString().c_str());
 
-		spinBox.setValue(0);
-	}
+        spinBox.setValue(0);
+    }
 
 }
 
 void KisParseSpinBoxesTest::testIntParseProblem()
 {
 
-	//errors can happen with incorrect or incomplete expressions, or division by 0.
+    //errors can happen with incorrect or incomplete expressions, or division by 0.
 
-	KisIntParseSpinBox spinBox;
-	spinBox.setMaximum(999);
-	spinBox.setMinimum(-999);
+    KisIntParseSpinBox spinBox;
+    spinBox.setMaximum(999);
+    spinBox.setMinimum(-999);
 
-	for (int i = 0; i < intWrongExprs.size(); i++) {
+    for (int i = 0; i < intWrongExprs.size(); i++) {
 
-		spinBox.clearFocus();
-		spinBox.clear(); //clear all
-		QTest::keyClicks(&spinBox, intWrongExprs[i]);
-		spinBox.clearFocus();
+        spinBox.clearFocus();
+        spinBox.clear(); //clear all
+        QTest::keyClicks(&spinBox, intWrongExprs[i]);
+        spinBox.clearFocus();
 
-		QVERIFY2(!spinBox.isLastValid(), QString("SpinBox is in a valid state with expression %1, but shouldn't.")
-				 .arg(intWrongExprs[i]).toStdString().c_str());
+        QVERIFY2(!spinBox.isLastValid(), QString("SpinBox is in a valid state with expression %1, but shouldn't.")
+                 .arg(intWrongExprs[i]).toStdString().c_str());
 
-		spinBox.setValue(0);
+        spinBox.setValue(0);
 
-		QVERIFY2(spinBox.isLastValid(), QString("SpinBox unsable to recover error free state after a value reset.")
-				 .toStdString().c_str());
+        QVERIFY2(spinBox.isLastValid(), QString("SpinBox unsable to recover error free state after a value reset.")
+                 .toStdString().c_str());
 
-		spinBox.setValue(0);
+        spinBox.setValue(0);
 
-	}
+    }
 
 }
 
 void KisParseSpinBoxesTest::testIntParseWithSuffix()
 {
-	QString suff = "px";
+    QString suff = "px";
 
-	KisIntParseSpinBox spinBox;
-	spinBox.setMaximum(999);
-	spinBox.setMinimum(-999);
-	spinBox.setSuffix(suff);
+    KisIntParseSpinBox spinBox;
+    spinBox.setMaximum(999);
+    spinBox.setMinimum(-999);
+    spinBox.setSuffix(suff);
 
-	for (int i = 0; i < intExprs.size(); i++) {
+    for (int i = 0; i < intExprs.size(); i++) {
 
-		spinBox.clearFocus();
-		spinBox.clear(); //clear all
-		QTest::keyClicks(&spinBox, intExprs[i]);
-		spinBox.clearFocus();
+        spinBox.clearFocus();
+        spinBox.clear(); //clear all
+        QTest::keyClicks(&spinBox, intExprs[i]);
+        spinBox.clearFocus();
 
-		int resultParser = KisNumericParser::parseIntegerMathExpr(intExprs[i]);
-		int valueSpinBox = spinBox.value();
+        int resultParser = KisNumericParser::parseIntegerMathExpr(intExprs[i]);
+        int valueSpinBox = spinBox.value();
 
-		bool test = resultParser == valueSpinBox;
+        bool test = resultParser == valueSpinBox;
 
-		QVERIFY2(test, QString("Failed with expression %1, result is %2, value is %3")
-				 .arg(intExprs[i]).arg(resultParser).arg(valueSpinBox).toStdString().c_str());
+        QVERIFY2(test, QString("Failed with expression %1, result is %2, value is %3")
+                 .arg(intExprs[i]).arg(resultParser).arg(valueSpinBox).toStdString().c_str());
 
-		spinBox.setValue(0);
-	}
+        spinBox.setValue(0);
+    }
 
-	//verify that the suffix don't appear in the clean text in case of error.
-	for (int i = 0; i < intWrongExprs.size(); i++) {
+    //verify that the suffix don't appear in the clean text in case of error.
+    for (int i = 0; i < intWrongExprs.size(); i++) {
 
-		if (intWrongExprs[i].endsWith(suff)) {
-			continue;
-		}
+        if (intWrongExprs[i].endsWith(suff)) {
+            continue;
+        }
 
-		spinBox.clearFocus();
-		spinBox.clear(); //clear all
-		QTest::keyClicks(&spinBox, intWrongExprs[i]);
-		spinBox.clearFocus();
+        spinBox.clearFocus();
+        spinBox.clear(); //clear all
+        QTest::keyClicks(&spinBox, intWrongExprs[i]);
+        spinBox.clearFocus();
 
-		QVERIFY2(!spinBox.cleanText().endsWith(suff), "SpinBox failed to remove suffix from clean text in error state.");
+        QVERIFY2(!spinBox.cleanText().endsWith(suff), "SpinBox failed to remove suffix from clean text in error state.");
 
-		spinBox.setValue(0.0);
+        spinBox.setValue(0.0);
 
-	}
+    }
 
 }
 void KisParseSpinBoxesTest::testIntParseWithPrefix()
 {
-	QString preff = "px";
+    QString preff = "px";
 
-	KisIntParseSpinBox spinBox;
-	spinBox.setMaximum(999);
-	spinBox.setMinimum(-999);
-	spinBox.setPrefix(preff);
+    KisIntParseSpinBox spinBox;
+    spinBox.setMaximum(999);
+    spinBox.setMinimum(-999);
+    spinBox.setPrefix(preff);
 
-	for (int i = 0; i < intExprs.size(); i++) {
+    for (int i = 0; i < intExprs.size(); i++) {
 
-		spinBox.clearFocus();
-		spinBox.clear(); //clear all
-		QTest::keyClicks(&spinBox, intExprs[i]);
-		spinBox.clearFocus();
+        spinBox.clearFocus();
+        spinBox.clear(); //clear all
+        QTest::keyClicks(&spinBox, intExprs[i]);
+        spinBox.clearFocus();
 
-		int resultParser = KisNumericParser::parseIntegerMathExpr(intExprs[i]);
-		int valueSpinBox = spinBox.value();
+        int resultParser = KisNumericParser::parseIntegerMathExpr(intExprs[i]);
+        int valueSpinBox = spinBox.value();
 
-		bool test = resultParser == valueSpinBox;
+        bool test = resultParser == valueSpinBox;
 
-		QVERIFY2(test, QString("Failed with expression %1, result is %2, value is %3")
-				 .arg(intExprs[i]).arg(resultParser).arg(valueSpinBox).toStdString().c_str());
+        QVERIFY2(test, QString("Failed with expression %1, result is %2, value is %3")
+                 .arg(intExprs[i]).arg(resultParser).arg(valueSpinBox).toStdString().c_str());
 
-		spinBox.setValue(0);
-	}
+        spinBox.setValue(0);
+    }
 
-	//verify that the prefix don't appear in the clean text in case of error.
-	for (int i = 0; i < intWrongExprs.size(); i++) {
+    //verify that the prefix don't appear in the clean text in case of error.
+    for (int i = 0; i < intWrongExprs.size(); i++) {
 
-		if (intWrongExprs[i].startsWith(preff)) {
-			continue;
-		}
+        if (intWrongExprs[i].startsWith(preff)) {
+            continue;
+        }
 
-		spinBox.clearFocus();
-		spinBox.clear(); //clear all
-		QTest::keyClicks(&spinBox, intWrongExprs[i]);
-		spinBox.clearFocus();
+        spinBox.clearFocus();
+        spinBox.clear(); //clear all
+        QTest::keyClicks(&spinBox, intWrongExprs[i]);
+        spinBox.clearFocus();
 
-		QVERIFY2(!spinBox.cleanText().startsWith(preff), "SpinBox failed to remove prefix from clean text in error state.");
+        QVERIFY2(!spinBox.cleanText().startsWith(preff), "SpinBox failed to remove prefix from clean text in error state.");
 
-		spinBox.setValue(0.0);
+        spinBox.setValue(0.0);
 
-	}
+    }
 
 }
 

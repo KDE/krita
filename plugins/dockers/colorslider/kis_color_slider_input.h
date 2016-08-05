@@ -77,7 +77,7 @@ Q_SIGNALS:
     void satUpdated(int, int);
     void toneUpdated(int, int);
 private:
-	KisDoubleParseSpinBox* m_NumInput;
+    KisDoubleParseSpinBox* m_NumInput;
     qreal m_hue;
     qreal m_sat;
     qreal m_val;

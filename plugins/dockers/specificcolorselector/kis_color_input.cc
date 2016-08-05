@@ -58,7 +58,7 @@ void KisColorInput::init()
     m_layout->addWidget(m_label);
 
     m_colorSlider = new KoColorSlider(Qt::Horizontal, this, m_displayRenderer);
-	m_colorSlider->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    m_colorSlider->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     m_layout->addWidget(m_colorSlider);
 
     QWidget* m_input = createInput();
@@ -124,9 +124,9 @@ void KisIntegerColorInput::update()
 
 QWidget* KisIntegerColorInput::createInput()
 {
-	m_intNumInput = new KisIntParseSpinBox(this);
+    m_intNumInput = new KisIntParseSpinBox(this);
     m_intNumInput->setMinimum(0);
-	m_colorSlider->setMinimum(0);
+    m_colorSlider->setMinimum(0);
     switch (m_channelInfo->channelValueType()) {
     case KoChannelInfo::UINT8:
         m_intNumInput->setMaximum(0xFF);
@@ -174,14 +174,14 @@ void KisFloatColorInput::setValue(double v)
 
 QWidget* KisFloatColorInput::createInput()
 {
-	m_dblNumInput = new KisDoubleParseSpinBox(this);
+    m_dblNumInput = new KisDoubleParseSpinBox(this);
     m_dblNumInput->setMinimum(0);
     m_dblNumInput->setMaximum(1.0);
     connect(m_colorSlider, SIGNAL(valueChanged(int)), this, SLOT(sliderChanged(int)));
-	connect(m_dblNumInput, SIGNAL(valueChanged(double)), this, SLOT(setValue(double)));
-	m_dblNumInput->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
-	m_dblNumInput->setMinimumWidth(60);
-	m_dblNumInput->setMaximumWidth(60);
+    connect(m_dblNumInput, SIGNAL(valueChanged(double)), this, SLOT(setValue(double)));
+    m_dblNumInput->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
+    m_dblNumInput->setMinimumWidth(60);
+    m_dblNumInput->setMaximumWidth(60);
     return m_dblNumInput;
 }
 
@@ -228,11 +228,11 @@ void KisFloatColorInput::update()
     m_dblNumInput->setMaximum(m_maxValue);
 
     // ensure at least 3 significant digits are always shown
-	int newPrecision = 2 + qMax(qreal(0.0), std::ceil(-std::log10(m_maxValue)));
-	if (newPrecision != m_dblNumInput->decimals()) {
-		m_dblNumInput->setDecimals(newPrecision);
-		m_dblNumInput->updateGeometry();
-	}
+    int newPrecision = 2 + qMax(qreal(0.0), std::ceil(-std::log10(m_maxValue)));
+    if (newPrecision != m_dblNumInput->decimals()) {
+        m_dblNumInput->setDecimals(newPrecision);
+        m_dblNumInput->updateGeometry();
+    }
 
     m_colorSlider->setColors(min, max);
 
@@ -252,7 +252,7 @@ KisHexColorInput::KisHexColorInput(QWidget* parent, KoColor* color, KoColorDispl
     m_layout->addWidget(m_label);
 
     QWidget* m_input = createInput();
-	m_input->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
+    m_input->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
     m_layout->addWidget(m_input);
 }
 

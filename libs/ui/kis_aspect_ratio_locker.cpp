@@ -27,6 +27,8 @@
 #include "kis_assert.h"
 #include "kis_debug.h"
 #include "kis_slider_spin_box.h"
+#include "kis_int_parse_spin_box.h"
+#include "kis_double_parse_spin_box.h"
 
 
 struct SliderWrapper
@@ -137,6 +139,8 @@ template void KisAspectRatioLocker::connectSpinBoxes(QSpinBox *spinOne, QSpinBox
 template void KisAspectRatioLocker::connectSpinBoxes(QDoubleSpinBox *spinOne, QDoubleSpinBox *spinTwo, KoAspectButton *aspectButton);
 template void KisAspectRatioLocker::connectSpinBoxes(KisSliderSpinBox *spinOne, KisSliderSpinBox *spinTwo, KoAspectButton *aspectButton);
 template void KisAspectRatioLocker::connectSpinBoxes(KisDoubleSliderSpinBox *spinOne, KisDoubleSliderSpinBox *spinTwo, KoAspectButton *aspectButton);
+template void KisAspectRatioLocker::connectSpinBoxes(KisIntParseSpinBox *spinOne, KisIntParseSpinBox *spinTwo, KoAspectButton *aspectButton);
+template void KisAspectRatioLocker::connectSpinBoxes(KisDoubleParseSpinBox *spinOne, KisDoubleParseSpinBox *spinTwo, KoAspectButton *aspectButton);
 
 void KisAspectRatioLocker::slotSpinOneChanged()
 {

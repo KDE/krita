@@ -46,12 +46,12 @@ Q_SIGNALS:
     void requestActivateLine(QWidget *widget);
 
 private:
-	KisDoubleParseSpinBox* m_hueDelta;
-	KisDoubleParseSpinBox* m_saturationDelta;
-	KisDoubleParseSpinBox* m_valueDelta;
-	KisDoubleParseSpinBox* m_hueShift;
-	KisDoubleParseSpinBox* m_saturationShift;
-	KisDoubleParseSpinBox* m_valueShift;
+    KisDoubleParseSpinBox* m_hueDelta;
+    KisDoubleParseSpinBox* m_saturationDelta;
+    KisDoubleParseSpinBox* m_valueDelta;
+    KisDoubleParseSpinBox* m_hueShift;
+    KisDoubleParseSpinBox* m_saturationShift;
+    KisDoubleParseSpinBox* m_valueShift;
 };
 
 #endif /* __KIS_SHADE_SELECTOR_LINE_EDITOR_H */

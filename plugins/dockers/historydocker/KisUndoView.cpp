@@ -308,7 +308,7 @@ void KisUndoView::mousePressEvent(QMouseEvent *event)
         QAction* action1 = menu.addAction(KisIconUtils::loadIcon("link"),stack()->useCumulativeUndoRedo()?i18n("Disable Cumulative Undo"):i18n("Enable Cumulative Undo"));
         connect(action1, SIGNAL(triggered()), this, SLOT(toggleCumulativeUndoRedo()));
         QLabel *l = new QLabel(i18n("Start merging time"));
-		QDoubleSpinBox *s = new KisDoubleParseSpinBox();
+        QDoubleSpinBox *s = new KisDoubleParseSpinBox();
         s->setToolTip(i18nc("@info:tooltip", "The amount of time after a merged stroke before merging again"));
         s->setRange(3,10);
         s->setValue(stack()->timeT1());
@@ -323,7 +323,7 @@ void KisUndoView::mousePressEvent(QMouseEvent *event)
         connect(s,SIGNAL(valueChanged(double)),SLOT(setStackT1(double)));
 
         QLabel *l1 = new QLabel(i18n("Group time"));
-		QDoubleSpinBox *s1 = new KisDoubleParseSpinBox();
+        QDoubleSpinBox *s1 = new KisDoubleParseSpinBox();
         s1->setToolTip(i18nc("@info:tooltip", "The amount of time every stroke should be apart from its previous stroke to be classified in one group"));
         s1->setRange(0.3,s->value());
         s1->setValue(stack()->timeT2());
@@ -338,7 +338,7 @@ void KisUndoView::mousePressEvent(QMouseEvent *event)
         connect(s1,SIGNAL(valueChanged(double)),SLOT(setStackT2(double)));
 
         QLabel *l2 = new QLabel(i18n("Split Strokes"));
-		QSpinBox *s2 = new KisIntParseSpinBox();
+        QSpinBox *s2 = new KisIntParseSpinBox();
         s2->setToolTip(i18nc("@info:tooltip", "The number of last strokes which Krita should store separately"));
         s2->setRange(1,stack()->undoLimit());
         s2->setValue(stack()->strokesN());

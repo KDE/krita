@@ -24,28 +24,28 @@
 
 class KisParseSpinBoxesTest : public QObject
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	explicit KisParseSpinBoxesTest();
+    explicit KisParseSpinBoxesTest();
 
 private Q_SLOTS:
 
-	void testDoubleParseNormal();
-	void testDoubleParseProblem();
-	void testDoubleParseWithSuffix();
-	void testDoubleParseWithPrefix();
-	void testIntParseNormal();
-	void testIntParseProblem();
-	void testIntParseWithSuffix();
-	void testIntParseWithPrefix();
+    void testDoubleParseNormal();
+    void testDoubleParseProblem();
+    void testDoubleParseWithSuffix();
+    void testDoubleParseWithPrefix();
+    void testIntParseNormal();
+    void testIntParseProblem();
+    void testIntParseWithSuffix();
+    void testIntParseWithPrefix();
 
 private:
 
-	const static QStringList doubleExprs;
-	const static QStringList doubleWrongExprs;
-	const static QStringList intExprs;
-	const static QStringList intWrongExprs;
+    const static QStringList doubleExprs;
+    const static QStringList doubleWrongExprs;
+    const static QStringList intExprs;
+    const static QStringList intWrongExprs;
 };
 
 #endif // KISPARSESPINBOXESTEST_H

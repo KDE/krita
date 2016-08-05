@@ -157,14 +157,14 @@ void TimelineModelTest::testView()
     font.setPointSizeF(9);
     dlg.setFont(font);
 
-	QSpinBox *intFps = new KisIntParseSpinBox(&dlg);
+    QSpinBox *intFps = new KisIntParseSpinBox(&dlg);
     intFps->setValue(12);
 
-	QSpinBox *intTime = new KisIntParseSpinBox(&dlg);
+    QSpinBox *intTime = new KisIntParseSpinBox(&dlg);
     intTime->setValue(0);
     intTime->setMaximum(10000);
 
-	QSpinBox *intLayer = new KisIntParseSpinBox(&dlg);
+    QSpinBox *intLayer = new KisIntParseSpinBox(&dlg);
     intLayer->setValue(0);
     intLayer->setMaximum(100);
 

@@ -95,7 +95,6 @@ KisAbstractSliderSpinBox::KisAbstractSliderSpinBox(QWidget* parent, KisAbstractS
     connect(d->edit, SIGNAL(editingFinished()), this, SLOT(editLostFocus()));
 
     d->validator = new QDoubleValidator(d->edit);
-    //d->edit->setValidator(d->validator);
 
     d->value = 0;
     d->minimum = 0;

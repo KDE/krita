@@ -22,6 +22,16 @@
       <isCheckable>false</isCheckable>
       <text>Move down</text>
     </Action>
+    <Action name="movetool-show-coordinates">
+      <iconText>Show Coordinates</iconText>
+      <shortcut>Ctrl+Alt+Shift+C</shortcut>
+      <toolTip>Show absolute coordinates and offset while move action</toolTip>
+      <icon></icon>
+      <whatsThis></whatsThis>
+      <statusTip></statusTip>
+      <isCheckable>true</isCheckable>
+      <text>Show Coordinates</text>
+    </Action>
     <Action name="movetool-move-left">
       <iconText>Move left</iconText>
       <shortcut>Left</shortcut>

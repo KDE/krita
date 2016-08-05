@@ -138,7 +138,7 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
     KisCrossDeviceColorPicker colorPicker(source, m_inkColor);
 
     // apply size sensor
-    m_radius = m_properties->radius * scale * additionalScale;
+    m_radius = m_properties->radius() * scale * additionalScale;
 
     // jitter movement
     if (m_properties->jitterMovement) {
@@ -336,9 +336,8 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
             // Auto-brush
         }
         else {
-            QPointF hotSpot = m_brush->hotSpot(particleScale * additionalScale,
-                                               particleScale * additionalScale,
-                                               -rotationZ, info);
+            KisDabShape shape(particleScale * additionalScale, 1.0, -rotationZ);
+            QPointF hotSpot = m_brush->hotSpot(shape, info);
             QPointF pos(nx + x, ny + y);
             QPointF pt = pos - hotSpot;
 
@@ -354,8 +353,7 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
             if (m_brush->brushType() == IMAGE ||
                     m_brush->brushType() == PIPE_IMAGE) {
                 m_fixedDab = m_brush->paintDevice(m_fixedDab->colorSpace(),
-                                                  particleScale * additionalScale,
-                                                  -rotationZ, info, xFraction, yFraction);
+                          shape, info, xFraction, yFraction);
 
                 if (m_colorProperties->useRandomHSV && m_transfo) {
                     quint8 * dabPointer = m_fixedDab->data();
@@ -365,10 +363,8 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
 
             }
             else {
-                m_brush->mask(m_fixedDab, m_inkColor,
-                              particleScale * additionalScale,
-                              particleScale * additionalScale,
-                              -rotationZ, info, xFraction, yFraction);
+                m_brush->mask(m_fixedDab, m_inkColor, shape,
+                              info, xFraction, yFraction);
             }
             m_painter->bltFixed(QPoint(ix, iy), m_fixedDab, m_fixedDab->bounds());
         }

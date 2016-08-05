@@ -21,6 +21,8 @@
 
 #include <QObject>
 #include <QPointer>
+#include <QVector>
+
 
 /**
  * A special wrapper class that represents a connection between two QObject objects.

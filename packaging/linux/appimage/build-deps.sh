@@ -40,11 +40,13 @@ yum -y install epel-release
 # we need to be up to date in order to install the xcb-keysyms dependency
 yum -y update
 # base dependencies and Qt5.
-yum -y install wget tar bzip2 git libtool which fuse fuse-devel libpng-devel automake libtool mesa-libEGL cppunit-devel cmake glibc-headers libstdc++-devel gcc-c++ freetype-devel fontconfig-devel libxml2-devel libstdc++-devel libXrender-devel patch xcb-util-keysyms-devel libXi-devel mesa-libGL-devel libxcb libxcb-devel xcb-util xcb-util-devel
+yum -y install wget tar bzip2 git libtool which fuse fuse-devel libpng-devel automake libtool mesa-libEGL cppunit-devel cmake3 glibc-headers libstdc++-devel gcc-c++ freetype-devel fontconfig-devel libxml2-devel libstdc++-devel libXrender-devel patch xcb-util-keysyms-devel libXi-devel mesa-libGL-devel libxcb libxcb-devel xcb-util xcb-util-devel
+
 
 # Newer compiler than what comes with CentOS 6
-wget http://people.centos.org/tru/devtools-2/devtools-2.repo -O /etc/yum.repos.d/devtools-2.repo
-yum -y install devtoolset-2-gcc devtoolset-2-gcc-c++ devtoolset-2-binutils
+yum -y install centos-release-scl-rh
+yum -y install devtoolset-3-gcc devtoolset-3-gcc-c++
+. /opt/rh/devtoolset-3/enable
 
 # Make sure we build from the /, parts of this script depends on that. We also need to run as root...
 cd  /
@@ -60,12 +62,6 @@ git_pull_rebase_helper
 cd /
 
 
-# Workaround for:
-# /usr/lib/librevenge-stream-0.0.so: undefined reference to `std::__detail::_List_node_base::_M_hook(std::__detail::_List_node_base*)'
-# Use the new compiler
-. /opt/rh/devtoolset-2/enable
-
-
 # Workaround for: On CentOS 6, .pc files in /usr/lib/pkgconfig are not recognized
 # However, this is where .pc files get installed when bulding libraries... (FIXME)
 # I found this by comparing the output of librevenge's "make install" command
@@ -75,7 +71,7 @@ ln -sf /usr/share/pkgconfig /usr/lib/pkgconfig
 
 # A krita build layout looks like this:
 # krita/ -- the source directory
-# krita/3rdparty -- the cmake definitions for the dependencies
+# krita/3rdparty -- the cmake3 definitions for the dependencies
 # d -- downloads of the dependencies from files.kde.org
 # b -- build directory for the dependencies
 # krita_build -- build directory for krita itself
@@ -102,27 +98,27 @@ cd /b
 
 rm -rf /b/* || true
 
-cmake /krita/3rdparty \
+cmake3 /krita/3rdparty \
     -DCMAKE_INSTALL_PREFIX:PATH=/usr \
     -DINSTALL_ROOT=/usr \
     -DEXTERNALS_DOWNLOAD_DIR=/d
     
-cmake --build . --config RelWithDebInfo --target ext_qt
-cmake --build . --config RelWithDebInfo --target ext_boost
-cmake --build . --config RelWithDebInfo --target ext_eigen3
-cmake --build . --config RelWithDebInfo --target ext_exiv2
-cmake --build . --config RelWithDebInfo --target ext_fftw3
-cmake --build . --config RelWithDebInfo --target ext_lcms2
-cmake --build . --config RelWithDebInfo --target ext_ocio
-cmake --build . --config RelWithDebInfo --target ext_openexr
-cmake --build . --config RelWithDebInfo --target ext_vc
-#cmake --build . --config RelWithDebInfo --target ext_png
-cmake --build . --config RelWithDebInfo --target ext_tiff
-cmake --build . --config RelWithDebInfo --target ext_jpeg
-cmake --build . --config RelWithDebInfo --target ext_libraw
-# XXX: this builds, but cmake never manages to find the library
-#cmake --build . --config RelWithDebInfo --target ext_openjpeg
-cmake --build . --config RelWithDebInfo --target ext_kcrash
-cmake --build . --config RelWithDebInfo --target ext_poppler
-cmake --build . --config RelWithDebInfo --target ext_gsl
+cmake3 --build . --config RelWithDebInfo --target ext_qt
+cmake3 --build . --config RelWithDebInfo --target ext_boost
+cmake3 --build . --config RelWithDebInfo --target ext_eigen3
+cmake3 --build . --config RelWithDebInfo --target ext_exiv2
+cmake3 --build . --config RelWithDebInfo --target ext_fftw3
+cmake3 --build . --config RelWithDebInfo --target ext_lcms2
+cmake3 --build . --config RelWithDebInfo --target ext_ocio
+cmake3 --build . --config RelWithDebInfo --target ext_openexr
+cmake3 --build . --config RelWithDebInfo --target ext_vc
+#cmake3 --build . --config RelWithDebInfo --target ext_png
+cmake3 --build . --config RelWithDebInfo --target ext_tiff
+cmake3 --build . --config RelWithDebInfo --target ext_jpeg
+cmake3 --build . --config RelWithDebInfo --target ext_libraw
+# XXX: this builds, but cmake3 never manages to find the library
+#cmake3 --build . --config RelWithDebInfo --target ext_openjpeg
+cmake3 --build . --config RelWithDebInfo --target ext_kcrash
+cmake3 --build . --config RelWithDebInfo --target ext_poppler
+cmake3 --build . --config RelWithDebInfo --target ext_gsl
 

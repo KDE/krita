@@ -131,7 +131,7 @@ void KisCommonColors::recalculate()
 
     KisImageWSP kisImage = m_canvas->image();
 
-    QImage image = kisImage->projection()->createThumbnail(1024, 1024, kisImage->bounds(), KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
+    QImage image = kisImage->projection()->createThumbnail(1024, 1024, kisImage->bounds(), 1, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
 
     KisCommonColorsRecalculationRunner* runner = new KisCommonColorsRecalculationRunner(image, patchCount(), this);
     QThreadPool::globalInstance()->start(runner);

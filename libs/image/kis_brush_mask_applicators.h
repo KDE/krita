@@ -115,7 +115,7 @@ void KisBrushMaskVectorApplicator<MaskGenerator, _impl>::processVector(const QRe
     }
     int simdWidth = width + alignOffset;
 
-    float *buffer = Vc::malloc<float, Vc::AlignOnVector>(simdWidth);
+    float *buffer = Vc::malloc<float, Vc::AlignOnCacheline>(simdWidth);
 
     typename MaskGenerator::FastRowProcessor processor(m_maskGenerator);
 

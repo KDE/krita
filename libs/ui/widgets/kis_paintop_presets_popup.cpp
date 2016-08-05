@@ -264,6 +264,8 @@ QImage KisPaintOpPresetsPopup::cutOutOverlay()
 
 void KisPaintOpPresetsPopup::contextMenuEvent(QContextMenuEvent *e)
 {
+    Q_UNUSED(e);
+
 #if 0
     QMenu menu(this);
     QAction* action = menu.addAction(m_d->detached ? i18n("Attach to Toolbar") : i18n("Detach from Toolbar"));

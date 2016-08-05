@@ -58,7 +58,7 @@ if (APPLE)
     set(KDE_SKIP_RPATH_SETTINGS TRUE)
     set(CMAKE_MACOSX_RPATH 1)
     set(BUILD_WITH_INSTALL_RPATH 1)
-    add_definitions(-Wno-deprecated-register)
+    add_definitions(-mmacosx-version-min=10.9 -Wno-deprecated-register)
 endif()
 
 # QT5TODO: remove KDE4_BUILD_TESTS once all kde4_add_unit_test have been converted

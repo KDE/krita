@@ -55,9 +55,10 @@ KisSprayOpOption::KisSprayOpOption()
     m_options->spacingSpin->setRange(0.0, 5.0, 2);
     m_options->spacingSpin->setValue(0.5);
 
-    m_options->coverageSpin->setRange(0.0, 100.0, 1);
+    m_options->coverageSpin->setRange(0.0, 100.0, 2);
     m_options->coverageSpin->setValue(0.1);
     m_options->coverageSpin->setSuffix("%");
+    m_options->coverageSpin->setExponentRatio(3);
 
 
     m_options->particlesSpinBox->setRange(1.0, 1000.0, 0);
@@ -95,33 +96,40 @@ KisSprayOpOption::~KisSprayOpOption()
 
 void KisSprayOpOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
 {
-    setting->setProperty(SPRAY_DIAMETER, m_options->diameterSpinBox->value());
-    setting->setProperty(SPRAY_ASPECT, m_options->aspectSPBox->value());
-    setting->setProperty(SPRAY_COVERAGE, m_options->coverageSpin->value());
-    setting->setProperty(SPRAY_SCALE, m_options->scaleSpin->value());
-    setting->setProperty(SPRAY_ROTATION, m_options->rotationSPBox->value());
-    setting->setProperty(SPRAY_PARTICLE_COUNT, m_options->particlesSpinBox->value());
-    setting->setProperty(SPRAY_JITTER_MOVE_AMOUNT, m_options->jitterMovementSpin->value());
-    setting->setProperty(SPRAY_JITTER_MOVEMENT, m_options->jitterMoveBox->isChecked());
-    setting->setProperty(SPRAY_SPACING, m_options->spacingSpin->value());
-    setting->setProperty(SPRAY_GAUSS_DISTRIBUTION, m_options->gaussianBox->isChecked());
-    setting->setProperty(SPRAY_USE_DENSITY, m_options->densityRadioButton->isChecked());
+    KisSprayProperties op;
+
+    op.diameter = m_options->diameterSpinBox->value();
+    op.particleCount = m_options->particlesSpinBox->value();
+    op.aspect = m_options->aspectSPBox->value();
+    op.coverage = m_options->coverageSpin->value();
+    op.amount = m_options->jitterMovementSpin->value();
+    op.spacing = m_options->spacingSpin->value();
+    op.scale = m_options->scaleSpin->value();
+    op.brushRotation = m_options->rotationSPBox->value();
+    op.jitterMovement = m_options->jitterMoveBox->isChecked();
+    op.useDensity = m_options->densityRadioButton->isChecked();
+    op.gaussian = m_options->gaussianBox->isChecked();
+
+    op.writeOptionSetting(setting);
 }
 
 void KisSprayOpOption::readOptionSetting(const KisPropertiesConfiguration* setting)
 {
-    m_options->diameterSpinBox->setValue(setting->getInt(SPRAY_DIAMETER));
-    m_options->aspectSPBox->setValue(setting->getDouble(SPRAY_ASPECT));
-    m_options->coverageSpin->setValue(setting->getDouble(SPRAY_COVERAGE));
-    m_options->scaleSpin->setValue(setting->getDouble(SPRAY_SCALE));
-    m_options->rotationSPBox->setValue(setting->getDouble(SPRAY_ROTATION));
-    m_options->particlesSpinBox->setValue(setting->getDouble(SPRAY_PARTICLE_COUNT));
-    m_options->jitterMovementSpin->setValue(setting->getDouble(SPRAY_JITTER_MOVE_AMOUNT));
-    m_options->jitterMoveBox->setChecked(setting->getBool(SPRAY_JITTER_MOVEMENT));
-    m_options->spacingSpin->setValue(setting->getDouble(SPRAY_SPACING));
-    m_options->gaussianBox->setChecked(setting->getBool(SPRAY_GAUSS_DISTRIBUTION));
+    KisSprayProperties op;
+    op.readOptionSetting(setting);
+
+    m_options->diameterSpinBox->setValue(op.diameter);
+    m_options->aspectSPBox->setValue(op.aspect);
+    m_options->coverageSpin->setValue(op.coverage);
+    m_options->scaleSpin->setValue(op.scale);
+    m_options->rotationSPBox->setValue(op.brushRotation);
+    m_options->particlesSpinBox->setValue(op.particleCount);
+    m_options->jitterMovementSpin->setValue(op.amount);
+    m_options->jitterMoveBox->setChecked(op.jitterMovement);
+    m_options->spacingSpin->setValue(op.spacing);
+    m_options->gaussianBox->setChecked(op.gaussian);
     //TODO: come on, do this nicer! e.g. button group or something
-    bool useDensity = setting->getBool(SPRAY_USE_DENSITY);
+    bool useDensity = op.useDensity;
     m_options->densityRadioButton->setChecked(useDensity);
     m_options->countRadioButton->setChecked(!useDensity);
 }

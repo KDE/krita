@@ -25,8 +25,14 @@
 #include "kis_grid_shape_option.h"
 #include <kis_color_option.h>
 
+struct KisGridPaintOpSettings::Private
+{
+    QList<KisUniformPaintOpPropertyWSP> uniformProperties;
+};
+
 KisGridPaintOpSettings::KisGridPaintOpSettings()
-    : KisOutlineGenerationPolicy<KisPaintOpSettings>(KisCurrentOutlineFetcher::NO_OPTION)
+    : KisOutlineGenerationPolicy<KisPaintOpSettings>(KisCurrentOutlineFetcher::NO_OPTION),
+    m_d(new Private)
 {
 }
 
@@ -44,22 +50,61 @@ QPainterPath KisGridPaintOpSettings::brushOutline(const KisPaintInformation &inf
         QRectF rc(0, 0, sizex, sizey);
         rc.translate(-rc.center());
         path.addRect(rc);
-        
-        QPainterPath tiltLine;
-        QLineF tiltAngle(QPointF(0.0,0.0), QPointF(0.0,sizex));
-        tiltAngle.setLength(qMax(sizex*0.5, 50.0) * (1 - info.tiltElevation(info, 60.0, 60.0, true)));
-        tiltAngle.setAngle((360.0 - fmod(KisPaintInformation::tiltDirection(info, true) * 360.0 + 270.0, 360.0))-3.0);
-        tiltLine.moveTo(tiltAngle.p1());
-        tiltLine.lineTo(tiltAngle.p2());
-        tiltAngle.setAngle((360.0 - fmod(KisPaintInformation::tiltDirection(info, true) * 360.0 + 270.0, 360.0))+3.0);
-        tiltLine.lineTo(tiltAngle.p2());
-        tiltLine.lineTo(tiltAngle.p1());
-
         path = outlineFetcher()->fetchOutline(info, this, path);
         
         if (mode == CursorTiltOutline) {
+            QPainterPath tiltLine = makeTiltIndicator(info, QPointF(0.0, 0.0), sizex * 0.5, 3.0);
             path.addPath(outlineFetcher()->fetchOutline(info, this, tiltLine, 1.0, 0.0, true, 0, 0));
         }
     }
     return path;
+}
+
+
+#include <brushengine/kis_slider_based_paintop_property.h>
+#include "kis_paintop_preset.h"
+#include "kis_paintop_settings_update_proxy.h"
+#include "kis_gridop_option.h"
+typedef KisCallbackBasedPaintopProperty<KisUniformPaintOpProperty> KisUniformPaintOpPropertyCallback;
+
+
+QList<KisUniformPaintOpPropertySP> KisGridPaintOpSettings::uniformProperties()
+{
+    QList<KisUniformPaintOpPropertySP> props =
+        listWeakToStrong(m_d->uniformProperties);
+
+    if (props.isEmpty()) {
+        {
+            KisIntSliderBasedPaintOpPropertyCallback *prop =
+                new KisIntSliderBasedPaintOpPropertyCallback(
+                    KisIntSliderBasedPaintOpPropertyCallback::Int,
+                    "grid_divisionlevel",
+                    i18n("Division Level"),
+                    this, 0);
+
+            prop->setRange(1, 25);
+            prop->setSingleStep(1);
+
+            prop->setReadCallback(
+                [](KisUniformPaintOpProperty *prop) {
+                    GridOption option;
+                    option.readOptionSetting(prop->settings().data());
+
+                    prop->setValue(int(option.grid_division_level));
+                });
+            prop->setWriteCallback(
+                [](KisUniformPaintOpProperty *prop) {
+                    GridOption option;
+                    option.readOptionSetting(prop->settings().data());
+                    option.grid_division_level = prop->value().toInt();
+                    option.writeOptionSetting(prop->settings().data());
+                });
+
+            QObject::connect(preset()->updateProxy(), SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
+            prop->requestReadValue();
+            props << toQShared(prop);
+        }
+    }
+
+    return KisPaintOpSettings::uniformProperties() + props;
 }

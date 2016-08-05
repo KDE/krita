@@ -47,7 +47,7 @@ private:
     KisPaintDeviceSP m_dab;
     KisPaintDeviceSP m_dev;
 
-    CurveProperties m_curveProperties;
+    CurveOption m_curveProperties;
     KisPressureOpacityOption m_opacityOption;
     KisLineWidthOption m_lineWidthOption;
     KisCurvesOpacityOption m_curvesOpacityOption;

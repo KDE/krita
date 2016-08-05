@@ -1,5 +1,5 @@
 name: krita
-version: 3.0-snap11
+version: 3.0.1-alpha-snap11
 summary: Krita is the digital painting studio for artists
 description: Krita is a creative application for raster images. Whether you want to create
  from scratch or work with existing images, Krita is for you. You can work with
@@ -40,6 +40,7 @@ parts:
         - libkf5itemviews5
         - libkf5widgetsaddons5
         - libkf5windowsystem5
+        - libkf5crash5
     after: [qt]
     
   krita:

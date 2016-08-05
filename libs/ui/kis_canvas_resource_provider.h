@@ -71,6 +71,8 @@ public:
         MirrorHorizontalHideDecorations,
         MirrorAxesCenter,
         Opacity,
+        Flow,
+        Size,
         HdrGamma,
         GlobalAlphaLock,
         PreviousPaintOpPreset,
@@ -153,6 +155,12 @@ public:
 
     void setOpacity(qreal opacity);
     qreal opacity() const;
+
+    void setFlow(qreal opacity);
+    qreal flow() const;
+
+    void setSize(qreal size);
+    qreal size() const;
 
     void setGlobalAlphaLock(bool lock);
     bool globalAlphaLock() const;

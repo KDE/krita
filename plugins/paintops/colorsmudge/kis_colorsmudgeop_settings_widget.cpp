@@ -38,6 +38,7 @@
 #include "kis_curve_option_widget.h"
 #include <kis_pressure_mirror_option_widget.h>
 #include "kis_pressure_texture_strength_option.h"
+#include "kis_colorsmudgeop_settings.h"
 
 
 KisColorSmudgeOpSettingsWidget::KisColorSmudgeOpSettingsWidget(QWidget* parent):
@@ -72,7 +73,7 @@ KisColorSmudgeOpSettingsWidget::~KisColorSmudgeOpSettingsWidget() { }
 
 KisPropertiesConfiguration* KisColorSmudgeOpSettingsWidget::configuration() const
 {
-    KisBrushBasedPaintOpSettings *config = new KisBrushBasedPaintOpSettings();
+    KisColorSmudgeOpSettings *config = new KisColorSmudgeOpSettings();
     config->setOptionsWidget(const_cast<KisColorSmudgeOpSettingsWidget*>(this));
     config->setProperty("paintop", "colorsmudge");
     writeConfiguration(config);

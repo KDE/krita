@@ -21,6 +21,7 @@
 #include <cmath>
 #include <QTest>
 
+#include <kis_filter_configuration.h>
 #include "testutil.h"
 #include "qimage_based_test.h"
 

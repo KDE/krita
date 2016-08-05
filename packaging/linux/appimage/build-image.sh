@@ -215,8 +215,18 @@ cd /
 
 APP=krita
 
+# Source functions
+wget -q https://github.com/probonopd/AppImages/raw/master/functions.sh -O ./functions.sh
+. ./functions.sh
+
+# Install desktopintegration in usr/bin/krita.wrapper -- feel free to edit it
+cd /krita.appdir
+get_desktopintegration krita
+
+cd /
+
 VER=$(grep "#define KRITA_VERSION_STRING" krita_build/libs/version/kritaversion.h | cut -d '"' -f 2)
-cd krita
+cd /krita
 REVISION=$(git rev-parse --short HEAD)
 cd ..
 VERSION=$VER-$REVISION
@@ -238,15 +248,8 @@ AppImageKit/AppImageAssistant.AppDir/package /krita.appdir/ /out/$APPIMAGE
 
 chmod a+rwx /out/$APPIMAGE # So that we can edit the AppImage outside of the Docker container
 
-# Source functions
-wget -q https://github.com/probonopd/AppImages/raw/master/functions.sh -O ./functions.sh
-. ./functions.sh
-
-# Install desktopintegration in usr/bin/krita.wrapper -- feel free to edit it
-cd Krita.AppDir/
-get_desktopintegration krita
-
 cd /krita.appdir
 mv AppRun krita
 cd /
 mv krita.appdir $APP"-"$VERSION"-x86_64
+tar -czf $APP"-"$VERSION"-x86_64.tgz $APP"-"$VERSION"-x86_64

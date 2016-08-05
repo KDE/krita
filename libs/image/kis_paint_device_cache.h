@@ -82,11 +82,11 @@ public:
         return m_regionCache.getValue();
     }
 
-    QImage createThumbnail(qint32 w, qint32 h, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags) {
+    QImage createThumbnail(qint32 w, qint32 h, qreal oversample, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags) {
         QImage thumbnail;
 
         if(m_thumbnailsValid) {
-            thumbnail = findThumbnail(w, h);
+            thumbnail = findThumbnail(w, h, oversample);
         }
         else {
             m_thumbnails.clear();
@@ -94,8 +94,8 @@ public:
         }
 
         if(thumbnail.isNull()) {
-            thumbnail = m_paintDevice->createThumbnail(w, h, QRect(), renderingIntent, conversionFlags);
-            cacheThumbnail(w, h, thumbnail);
+            thumbnail = m_paintDevice->createThumbnail(w, h, QRect(), oversample, renderingIntent, conversionFlags);
+            cacheThumbnail(w, h, oversample, thumbnail);
         }
 
         Q_ASSERT(!thumbnail.isNull() || m_paintDevice->extent().isEmpty());
@@ -103,16 +103,16 @@ public:
     }
 
 private:
-    inline QImage findThumbnail(qint32 w, qint32 h) {
+    inline QImage findThumbnail(qint32 w, qint32 h, qreal oversample) {
         QImage resultImage;
-        if (m_thumbnails.contains(w) && m_thumbnails[w].contains(h)) {
-            resultImage = m_thumbnails[w][h];
+        if (m_thumbnails.contains(w) && m_thumbnails[w].contains(h) && m_thumbnails[w][h].contains(oversample)) {
+            resultImage = m_thumbnails[w][h][oversample];
         }
         return resultImage;
     }
 
-    inline void cacheThumbnail(qint32 w, qint32 h, QImage image) {
-        m_thumbnails[w][h] = image;
+    inline void cacheThumbnail(qint32 w, qint32 h, qreal oversample, QImage image) {
+        m_thumbnails[w][h][oversample] = image;
     }
 
 private:
@@ -153,7 +153,7 @@ private:
     RegionCache m_regionCache;
 
     bool m_thumbnailsValid;
-    QMap<int, QMap<int, QImage> > m_thumbnails;
+    QMap<int, QMap<int, QMap<qreal,QImage> > > m_thumbnails;
 };
 
 #endif /* __KIS_PAINT_DEVICE_CACHE_H */

@@ -5,13 +5,13 @@ Subject: [PATCH 3/4] Hack for fullscreen workaround
 
 https://bugreports.qt.io/browse/QTBUG-41309
 ---
- src/plugins/platforms/windows/qwindowswindow.cpp | 2 +-
+ qtbase/src/plugins/platforms/windows/qwindowswindow.cpp | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/src/plugins/platforms/windows/qwindowswindow.cpp b/src/plugins/platforms/windows/qwindowswindow.cpp
+diff --git a/qtbase/src/plugins/platforms/windows/qwindowswindow.cpp b/qtbase/src/plugins/platforms/windows/qwindowswindow.cpp
 index 9c6cb53..d0829e3 100644
---- a/src/plugins/platforms/windows/qwindowswindow.cpp
-+++ b/src/plugins/platforms/windows/qwindowswindow.cpp
+--- a/qtbase/src/plugins/platforms/windows/qwindowswindow.cpp
++++ b/qtbase/src/plugins/platforms/windows/qwindowswindow.cpp
 @@ -1769,7 +1769,7 @@ void QWindowsWindow::setWindowState_sys(Qt::WindowState newState)
              const UINT swpf = SWP_FRAMECHANGED | SWP_NOACTIVATE;
              const bool wasSync = testFlag(SynchronousGeometryChangeEvent);

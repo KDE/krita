@@ -25,6 +25,7 @@
 #include "dcolorreset.xpm"
 
 #include <QColorDialog>
+#include "dialogs/kis_internal_color_selector.h"
 
 #include <QBrush>
 #include <QDrag>
@@ -80,6 +81,7 @@ class Q_DECL_HIDDEN KoDualColorButton::Private
     bool dragFlag, miniCtlFlag;
     KoColor foregroundColor;
     KoColor backgroundColor;
+    KisInternalColorSelector *colorSelectorDialog;
     QPoint dragPosition;
     Selection tmpSelection;
     bool popDialog;
@@ -94,6 +96,10 @@ void KoDualColorButton::Private::init(KoDualColorButton *q)
         q->setMinimumSize( q->sizeHint() );
 
     q->setAcceptDrops( true );
+    QString caption = "Select a color";
+    colorSelectorDialog = new KisInternalColorSelector(q, foregroundColor, caption);
+    connect(colorSelectorDialog, SIGNAL(signalForegroundColorChosen(KoColor)), q, SLOT(slotSetForeGroundColorFromDialog(KoColor)));
+    connect(q, SIGNAL(foregroundColorChanged(KoColor)), colorSelectorDialog, SLOT(slotColorUpdated(KoColor)));
 }
 
 KoDualColorButton::KoDualColorButton(const KoColor &foregroundColor, const KoColor &backgroundColor, QWidget *parent, QWidget* dialogParent )
@@ -144,6 +150,7 @@ QSize KoDualColorButton::sizeHint() const
 void KoDualColorButton::setForegroundColor( const KoColor &color )
 {
   d->foregroundColor = color;
+  d->colorSelectorDialog->slotColorUpdated(color);
   repaint();
 }
 
@@ -211,6 +218,14 @@ void KoDualColorButton::dropEvent( QDropEvent *event )
     repaint();
   }
 */
+}
+
+void KoDualColorButton::slotSetForeGroundColorFromDialog(const KoColor color)
+{
+    d->foregroundColor = color;
+    repaint();
+    qDebug()<<"Color as sent by the dual color button: "<<KoColor::toQString(color);
+    emit foregroundColorChanged(d->foregroundColor);
 }
 
 void KoDualColorButton::mousePressEvent( QMouseEvent *event )
@@ -287,12 +302,13 @@ void KoDualColorButton::mouseReleaseEvent( QMouseEvent *event )
     if ( foregroundRect.contains( event->pos() )) {
         if(d->tmpSelection == Foreground ) {
             if( d->popDialog) {
-                QColor c = d->displayRenderer->toQColor(d->foregroundColor);
-                c = QColorDialog::getColor(c, this) ;
-                if (c.isValid()) {
-                    d->foregroundColor = d->displayRenderer->approximateFromRenderedQColor(c);
-                    emit foregroundColorChanged(d->foregroundColor);
-                }
+                d->colorSelectorDialog->show();
+                //QColor c = d->displayRenderer->toQColor(d->foregroundColor);
+                //c = QColorDialog::getColor(c, this) ;
+                //if (c.isValid()) {
+                //    d->foregroundColor = d->displayRenderer->approximateFromRenderedQColor(c);
+                //    emit foregroundColorChanged(d->foregroundColor);
+                //}
             }
             else
                 emit pleasePopDialog( d->foregroundColor);

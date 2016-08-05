@@ -37,11 +37,14 @@ struct KisSpinboxColorSelector::Private
     KisSignalCompressor *compressUpdates;
 };
 
-KisSpinboxColorSelector::KisSpinboxColorSelector(QWidget *parent) : QWidget(parent) , m_d(new Private)
+KisSpinboxColorSelector::KisSpinboxColorSelector(QWidget *parent, KoColor color) : QWidget(parent) , m_d(new Private)
 {
 
-    QFormLayout *layout = new QFormLayout();
+    QFormLayout *layout = new QFormLayout(this);
     this->setLayout(layout);
+
+    m_d->color = color;
+    slotSetColorSpace(m_d->color.colorSpace());
 
     m_d->compressUpdates  = new KisSignalCompressor(500 /* ms */, KisSignalCompressor::POSTPONE, this);
     connect(m_d->compressUpdates, SIGNAL(timeout()), this, SLOT(slotFinishUpdate()));
@@ -54,6 +57,12 @@ KisSpinboxColorSelector::~KisSpinboxColorSelector()
 void KisSpinboxColorSelector::slotSetColor(KoColor color)
 {
     m_d->color = color;
+    if (m_d->color.colorSpace() != m_d->cs) {
+        slotSetColorSpace(m_d->color.colorSpace());
+    }
+    if (m_d->allowUpdates || QObject::sender() != this) {
+        updateSpinboxesWithNewValues();
+    }
 }
 
 void KisSpinboxColorSelector::slotSetColorSpace(const KoColorSpace *cs)
@@ -87,7 +96,7 @@ void KisSpinboxColorSelector::slotSetColorSpace(const KoColorSpace *cs)
                 m_d->spinBoxList.append(input);
                 this->layout()->addWidget(input);
                 if (input) {
-                    connect(input, SIGNAL(updated()), this,  SLOT(updateFromSpinBoxes()));
+                    connect(input, SIGNAL(valueChanged(int)), this,  SLOT(slotUpdateFromSpinBoxes()));
                 }
             }
             break;
@@ -98,7 +107,7 @@ void KisSpinboxColorSelector::slotSetColorSpace(const KoColorSpace *cs)
                 m_d->spinBoxList.append(input);
                 this->layout()->addWidget(input);
                 if (input) {
-                    connect(input, SIGNAL(updated()), this,  SLOT(updateFromSpinBoxes()));
+                    connect(input, SIGNAL(valueChanged(int)), this,  SLOT(slotUpdateFromSpinBoxes()));
                 }
             }
             break;
@@ -109,7 +118,7 @@ void KisSpinboxColorSelector::slotSetColorSpace(const KoColorSpace *cs)
                 m_d->spinBoxList.append(input);
                 this->layout()->addWidget(input);
                 if (input) {
-                    connect(input, SIGNAL(updated()), this,  SLOT(updateFromSpinBoxes()));
+                    connect(input, SIGNAL(valueChanged(int)), this,  SLOT(slotUpdateFromSpinBoxes()));
                 }
             }
             break;
@@ -121,7 +130,7 @@ void KisSpinboxColorSelector::slotSetColorSpace(const KoColorSpace *cs)
                 m_d->doubleSpinBoxList.append(input);
                 this->layout()->addWidget(input);
                 if (input) {
-                    connect(input, SIGNAL(updated()), this,  SLOT(updateFromSpinBoxes()));
+                    connect(input, SIGNAL(valueChanged(double)), this,  SLOT(slotUpdateFromSpinBoxes()));
                 }
             }
             break;
@@ -137,15 +146,16 @@ void KisSpinboxColorSelector::createColorFromSpinboxValues()
 {
     KoColor newColor;
     int channelcount = m_d->cs->channelCount();
-    quint8 *data;
+    quint8 *data = new quint8[m_d->cs->pixelSize()];
     QVector <float> channelValues(channelcount);
     channelValues.fill(1.0);
     QList<KoChannelInfo *> channels = KoChannelInfo::displayOrderSorted(m_d->cs->channels());
 
-    for (int i=0; i<channelcount; i++) {
+    for (int i=0; i<qMin(channelcount, m_d->spinBoxList.size()); i++) {
         if (m_d->spinBoxList.at(i)) {
             if (channels.at(i)->channelValueType()==KoChannelInfo::UINT8){
-                channelValues[i] = KoColorSpaceMaths<quint8,float>::scaleToA(m_d->spinBoxList.at(i)->value());
+                int value = m_d->spinBoxList.at(i)->value();
+                channelValues[i] = KoColorSpaceMaths<quint8,float>::scaleToA(value);
             } else if (channels.at(i)->channelValueType()==KoChannelInfo::UINT16){
                 channelValues[i] = KoColorSpaceMaths<quint16,float>::scaleToA(m_d->spinBoxList.at(i)->value());
             }
@@ -182,10 +192,11 @@ void KisSpinboxColorSelector::updateSpinboxesWithNewValues()
     m_d->cs->normalisedChannelsValue(m_d->color.data(), channelValues);
     QList<KoChannelInfo *> channels = KoChannelInfo::displayOrderSorted(m_d->cs->channels());
 
-    for (int i=0; i<channelcount; i++) {
+    for (int i=0; i<qMin(channelcount, m_d->spinBoxList.size()); i++) {
         if (m_d->spinBoxList.at(i)) {
             if (channels.at(i)->channelValueType() == KoChannelInfo::UINT8) {
-                m_d->spinBoxList.at(i)->setValue(KoColorSpaceMaths<float, quint8>::scaleToA(channelValues[i]));
+                int value = KoColorSpaceMaths<float, quint8>::scaleToA(channelValues[i]);
+                m_d->spinBoxList.at(i)->setValue(value);
             } else if (channels.at(i)->channelValueType() == KoChannelInfo::UINT16) {
                 m_d->spinBoxList.at(i)->setValue(KoColorSpaceMaths<float, quint16>::scaleToA(channelValues[i]));
             }

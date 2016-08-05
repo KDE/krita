@@ -20,7 +20,6 @@
 #define KISINTERNALCOLORSELECTOR_H
 
 #include "kritaui_export.h"
-#include "kis_mainwindow_observer.h"
 #include "kis_canvas2.h"
 #include "KoColor.h"
 #include "KoColorSpace.h"
@@ -33,23 +32,18 @@
  *
  * A non-modal color selector dialog that is not a plugin and can thus be used for filters.
  */
-class KRITAUI_EXPORT KisInternalColorSelector : public QDialog, public KisMainwindowObserver
+class KRITAUI_EXPORT KisInternalColorSelector : public QDialog
 {
     Q_OBJECT
 public:
-    KisInternalColorSelector(QWidget* parent, const QString &caption);
+    KisInternalColorSelector(QWidget* parent, KoColor color, const QString &caption);
     ~KisInternalColorSelector();
+
     /**
-     * @brief setCanvas
-     * reimplemented from the canvasobserver class.
-     * @param canvas
+     * @brief slotColorSpaceChanged
+     * Color space has changed.
      */
-    virtual void setCanvas(KisCanvas2 *canvas);
-    /**
-     * @brief unsetCanvas
-     * reimplemented from the canvas observer class.
-     */
-    virtual void unsetCanvas();
+    void slotColorSpaceChanged(const KoColorSpace *cs);
 
 Q_SIGNALS:
     /**
@@ -80,11 +74,6 @@ private Q_SLOTS:
     void slotLockSelector();
 
     /**
-     * @brief slotColorSpaceChanged
-     * Color space has changed.
-     */
-    void slotColorSpaceChanged(const KoColorSpace *cs);
-    /**
      * @brief slotConfigurationChanged
      * Wrapper slot for changes to the colorspace.
      */
@@ -102,7 +91,7 @@ private:
      * Updates each widget with the new element, and if it's responsible for the update sents
      * a signal out that there's a new color.
      */
-    void updateAllElements();
+    void updateAllElements(QObject *source);
 };
 
 #endif // KISINTERNALCOLORSELECTOR_H

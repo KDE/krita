@@ -66,6 +66,7 @@
 
 #include "kis_transform_worker.h"
 #include "kis_filter_strategy.h"
+#include "krita_utils.h"
 
 
 struct KisPaintDeviceSPStaticRegistrar {
@@ -1287,6 +1288,28 @@ QRect KisPaintDevice::calculateExactBounds(bool nonDefaultOnly) const
     return endRect;
 }
 
+QRegion KisPaintDevice::regionExact() const
+{
+    QRegion resultRegion;
+    QVector<QRect> rects = region().rects();
+
+    Impl::CheckNonDefault compareOp(pixelSize(), defaultPixel());
+
+    Q_FOREACH (const QRect &rc1, rects) {
+        const int patchSize = 64;
+        QVector<QRect> smallerRects = KritaUtils::splitRectIntoPatches(rc1, QSize(patchSize, patchSize));
+        Q_FOREACH (const QRect &rc2, smallerRects) {
+
+            const QRect result =
+                Impl::calculateExactBoundsImpl(this, rc2, QRect(), compareOp);
+
+            if (!result.isEmpty()) {
+                resultRegion += result;
+            }
+        }
+    }
+    return resultRegion;
+}
 
 void KisPaintDevice::crop(qint32 x, qint32 y, qint32 w, qint32 h)
 {

@@ -512,6 +512,157 @@ void KisLazyBrushTest::testGraph()
     QVERIFY(verifyNormalVertex(g.out_edge_at(vA, 1).second, 31, 20));
 }
 
+void KisLazyBrushTest::testGraphMultilabel()
+{
+    QRect mainRect(10, 10, 100, 100);
+
+    QRect aLabelRect1(30, 20, 20, 20);
+    QRect aLabelRect2(70, 30, 20, 20);
+
+    QRect bLabelRect1(60, 60, 20, 20);
+    QRect bLabelRect2(20, 80, 20, 20);
+    QRect bLabelRect3(60, 40, 20, 30);
+
+    QRegion aLabelRegion;
+    aLabelRegion += aLabelRect1;
+    aLabelRegion += aLabelRect2;
+
+    QRegion bLabelRegion;
+    bLabelRegion += bLabelRect1;
+    bLabelRegion += bLabelRect2;
+    bLabelRegion += bLabelRect3;
+
+    KisLazyFillGraph g(mainRect, aLabelRegion, bLabelRegion);
+
+    const int numVertices = g.num_vertices();
+    const int numEdges = g.num_edges();
+
+    qDebug() << ppVar(numVertices);
+    qDebug() << ppVar(numEdges);
+
+    QCOMPARE(numVertices, 10002);
+    QCOMPARE(numEdges, 43600);
+
+    for (int i = 0; i < numVertices; i++) {
+        KisLazyFillGraph::vertex_descriptor vertex = g.vertex_at(i);
+        int newVertexIndex = g.index_of(vertex);
+        QCOMPARE(newVertexIndex, i);
+    }
+
+    for (int i = 0; i < numEdges; i++) {
+        KisLazyFillGraph::edge_descriptor edge = g.edge_at(i);
+        int newEdgeIndex = g.index_of(edge);
+        if (i != newEdgeIndex) {
+            qDebug() << ppVar(edge);
+        }
+        QCOMPARE(newEdgeIndex, i);
+    }
+
+    typedef KisLazyFillGraph::vertex_descriptor Vert;
+
+    Vert v1(10, 10);
+    Vert v2(11, 10);
+    Vert v3(10, 11);
+    Vert v4(11, 11);
+    Vert v5(12, 10);
+    Vert v6(31, 21);
+    Vert v7(61, 61);
+    Vert v8(9, 10);
+
+    Vert vA(0, 0, Vert::LABEL_A);
+    Vert vB(0, 0, Vert::LABEL_B);
+
+    // Verify vertex index mapping
+
+    QVERIFY(verifyVertexIndex(g, v1, 0));
+    QVERIFY(verifyVertexIndex(g, v2, 1));
+    QVERIFY(verifyVertexIndex(g, v3, 100));
+    QVERIFY(verifyVertexIndex(g, v4, 101));
+    QVERIFY(verifyVertexIndex(g, v5, 2));
+    QVERIFY(verifyVertexIndex(g, v6, 1121));
+    QVERIFY(verifyVertexIndex(g, v7, 5151));
+    QVERIFY(verifyVertexIndex(g, v8, -1));
+
+    QVERIFY(verifyVertexIndex(g, vA, numVertices - 2));
+    QVERIFY(verifyVertexIndex(g, vB, numVertices - 1));
+
+    // Verify edge index mapping
+
+    QVERIFY(verifyEdgeIndex(g, std::make_pair(v1, v2), 0));
+    QVERIFY(verifyEdgeIndex(g, std::make_pair(v3, v4), 99));
+
+    QVERIFY(verifyEdgeIndex(g, std::make_pair(v1, v3), 19800));
+    QVERIFY(verifyEdgeIndex(g, std::make_pair(v2, v4), 19801));
+
+    QVERIFY(verifyEdgeIndex(g, std::make_pair(v2, v1), 9900));
+    QVERIFY(verifyEdgeIndex(g, std::make_pair(v4, v3), 9999));
+
+    QVERIFY(verifyEdgeIndex(g, std::make_pair(v3, v1), 29700));
+    QVERIFY(verifyEdgeIndex(g, std::make_pair(v4, v2), 29701));
+
+    QVERIFY(verifyEdgeIndex(g, std::make_pair(vA, vA), -1));
+    QVERIFY(verifyEdgeIndex(g, std::make_pair(vB, vB), -1));
+    QVERIFY(verifyEdgeIndex(g, std::make_pair(v1, v8), -1));
+    QVERIFY(verifyEdgeIndex(g, std::make_pair(v1, v4), -1));
+    QVERIFY(verifyEdgeIndex(g, std::make_pair(v4, v1), -1));
+    QVERIFY(verifyEdgeIndex(g, std::make_pair(v1, v5), -1));
+
+    QVERIFY(verifyEdgeIndex(g, std::make_pair(v6, vA), 39621));
+    QVERIFY(verifyEdgeIndex(g, std::make_pair(vA, v6), 40421));
+
+    QVERIFY(verifyEdgeIndex(g, std::make_pair(v1, vA), -1));
+    QVERIFY(verifyEdgeIndex(g, std::make_pair(v7, vA), -1));
+    QVERIFY(verifyEdgeIndex(g, std::make_pair(vA, vB), -1));
+    QVERIFY(verifyEdgeIndex(g, std::make_pair(vB, vA), -1));
+
+    QVERIFY(verifyEdgeIndex(g, std::make_pair(v7, vB), 41621));
+    QVERIFY(verifyEdgeIndex(g, std::make_pair(vB, v7), 42821));
+
+    QVERIFY(verifyEdgeIndex(g, std::make_pair(Vert(70, 30), vA), 40000));
+    QVERIFY(verifyEdgeIndex(g, std::make_pair(vA, Vert(70, 30)), 40800));
+
+    QVERIFY(verifyEdgeIndex(g, std::make_pair(Vert(70, 30), vB), -1));
+    QVERIFY(verifyEdgeIndex(g, std::make_pair(vB, Vert(70, 30)), -1));
+
+    QVERIFY(verifyEdgeIndex(g, std::make_pair(Vert(70, 49), vA), 40380));
+    QVERIFY(verifyEdgeIndex(g, std::make_pair(vA, Vert(70, 49)), 41180));
+
+    QVERIFY(verifyEdgeIndex(g, std::make_pair(Vert(70, 49), vB), 41390));
+    QVERIFY(verifyEdgeIndex(g, std::make_pair(vB, Vert(70, 49)), 42590));
+
+    QCOMPARE(g.out_degree(v1), long(2));
+    QVERIFY(verifyNormalVertex(g.out_edge_at(v1, 0).second, 11, 10));
+    QVERIFY(verifyNormalVertex(g.out_edge_at(v1, 1).second, 10, 11));
+
+    QCOMPARE(g.out_degree(v4), long(4));
+    QVERIFY(verifyNormalVertex(g.out_edge_at(v4, 0).second, 10, 11));
+    QVERIFY(verifyNormalVertex(g.out_edge_at(v4, 1).second, 11, 10));
+    QVERIFY(verifyNormalVertex(g.out_edge_at(v4, 2).second, 12, 11));
+    QVERIFY(verifyNormalVertex(g.out_edge_at(v4, 3).second, 11, 12));
+
+    QCOMPARE(g.out_degree(v6), long(5));
+    QVERIFY(verifyNormalVertex(g.out_edge_at(v6, 0).second, 30, 21));
+    QVERIFY(verifyNormalVertex(g.out_edge_at(v6, 1).second, 31, 20));
+    QVERIFY(verifyNormalVertex(g.out_edge_at(v6, 2).second, 32, 21));
+    QVERIFY(verifyNormalVertex(g.out_edge_at(v6, 3).second, 31, 22));
+    QCOMPARE(g.out_edge_at(v6, 4).second, vA);
+
+    QCOMPARE(g.out_degree(v7), long(5));
+    QVERIFY(verifyNormalVertex(g.out_edge_at(v7, 0).second, 60, 61));
+    QVERIFY(verifyNormalVertex(g.out_edge_at(v7, 1).second, 61, 60));
+    QVERIFY(verifyNormalVertex(g.out_edge_at(v7, 2).second, 62, 61));
+    QVERIFY(verifyNormalVertex(g.out_edge_at(v7, 3).second, 61, 62));
+    QCOMPARE(g.out_edge_at(v7, 4).second, vB);
+
+    QCOMPARE(g.out_degree(vA), long(800));
+    QVERIFY(verifyNormalVertex(g.out_edge_at(vA, 0).second, 30, 20));
+    QVERIFY(verifyNormalVertex(g.out_edge_at(vA, 1).second, 31, 20));
+
+    // check second island
+    QVERIFY(verifyNormalVertex(g.out_edge_at(vA, 400).second, 70, 30));
+    QVERIFY(verifyNormalVertex(g.out_edge_at(vA, 401).second, 71, 30));
+}
+
 void KisLazyBrushTest::testGraphStandardIterators()
 {
     QRect mainRect(10, 10, 100, 100);
@@ -929,7 +1080,7 @@ void writeStat(KisLazyFillGraph &graph,
             QPoint p0(half + cell * v.x, half + cell * v.y);
 
             resultPainter.setPen(QPen(color, 2));
-            resultPainter.drawEllipse(p0, 0.5 * half, 0.5 * half);
+            resultPainter.drawEllipse(QPointF(p0), 0.5 * half, 0.5 * half);
 
         } else {
             QPoint p0(half + cell * src.x, half + cell * src.y);
@@ -979,37 +1130,59 @@ void normalizeAndInvertAlpha8Device(KisPaintDeviceSP dev, const QRect &rect)
                                    });
 }
 
+KisPaintDeviceSP loadTestImage(const QString &name, bool convertToAlpha)
+{
+    QImage image(TestUtil::fetchDataFileLazy(name));
+    KisPaintDeviceSP dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
+    dev->convertFromQImage(image, 0);
+
+    if (convertToAlpha) {
+        dev = KisPainter::convertToAlphaAsAlpha(dev);
+    }
+
+    return dev;
+}
+
+#include "lazybrush/kis_lazy_fill_tools.h"
 void KisLazyBrushTest::testCutOnGraphDevice()
 {
     BOOST_CONCEPT_ASSERT(( ReadablePropertyMapConcept<KisLazyFillCapacityMap, KisLazyFillGraph::edge_descriptor> ));
 
-    QImage mainImage(TestUtil::fetchDataFileLazy("fill1_main.png"));
-    QImage aLabelImage(TestUtil::fetchDataFileLazy("fill1_a.png"));
-    QImage bLabelImage(TestUtil::fetchDataFileLazy("fill1_b.png"));
-
-    QVERIFY(!mainImage.isNull());
-    QVERIFY(!aLabelImage.isNull());
-    QVERIFY(!bLabelImage.isNull());
-
-    KisPaintDeviceSP mainDev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
-    KisPaintDeviceSP aLabelDev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
-    KisPaintDeviceSP bLabelDev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
-
-    mainDev->convertFromQImage(mainImage, 0);
-    aLabelDev->convertFromQImage(aLabelImage, 0);
-    bLabelDev->convertFromQImage(bLabelImage, 0);
+    KisPaintDeviceSP mainDev = loadTestImage("fill2_main.png", false);
+    KisPaintDeviceSP aLabelDev = loadTestImage("fill2_a.png", true);
+    KisPaintDeviceSP bLabelDev = loadTestImage("fill2_b.png", true);
 
     KisPaintDeviceSP filteredMainDev = KisPainter::convertToAlphaAsGray(mainDev);
     const QRect filterRect = filteredMainDev->exactBounds();
-    KisGaussianKernel::applyLoG(filteredMainDev,
-                                filterRect,
-                                5,
-                                QBitArray(), 0);
+    // KisGaussianKernel::applyLoG(filteredMainDev,
+    //                             filterRect,
+    //                             5,
+    //                             QBitArray(), 0);
 
-    normalizeAndInvertAlpha8Device(filteredMainDev, filterRect);
+    // normalizeAndInvertAlpha8Device(filteredMainDev, filterRect);
 
-    KIS_DUMP_DEVICE_2(filteredMainDev, mainImage.rect(), "2filtered", "dd");
+    KIS_DUMP_DEVICE_2(filteredMainDev, filterRect, "2filtered", "dd");
 
+    KoColor color(Qt::red, mainDev->colorSpace());
+    KisPaintDeviceSP resultColoring = new KisPaintDevice(mainDev->colorSpace());
+    KisPaintDeviceSP maskDevice = new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8());
+
+    maskDevice->fill(QRect(0,0,640,40), KoColor(Qt::gray, maskDevice->colorSpace()));
+
+    KisLazyFillTools::cutOneWay(color,
+                                filteredMainDev,
+                                aLabelDev,
+                                bLabelDev,
+                                resultColoring,
+                                maskDevice);
+
+    KIS_DUMP_DEVICE_2(resultColoring, filterRect, "00result", "dd");
+    KIS_DUMP_DEVICE_2(maskDevice, filterRect, "01mask", "dd");
+    KIS_DUMP_DEVICE_2(mainDev, filterRect, "1main", "dd");
+    KIS_DUMP_DEVICE_2(aLabelDev, filterRect, "3aLabel", "dd");
+    KIS_DUMP_DEVICE_2(bLabelDev, filterRect, "4bLabel", "dd");
+
+#if 0
     KisLazyFillCapacityMap capacityMap(filteredMainDev, aLabelDev, bLabelDev);
     KisLazyFillGraph &graph = capacityMap.graph();
 
@@ -1052,6 +1225,49 @@ void KisLazyBrushTest::testCutOnGraphDevice()
               groups,
               residual_capacity,
               capacityMap);
+#endif
+}
+
+#include "lazybrush/kis_multiway_cut.h"
+
+void KisLazyBrushTest::testCutOnGraphDeviceMulti()
+{
+    BOOST_CONCEPT_ASSERT(( ReadablePropertyMapConcept<KisLazyFillCapacityMap, KisLazyFillGraph::edge_descriptor> ));
+
+    KisPaintDeviceSP mainDev = loadTestImage("fill4_main.png", false);
+    KisPaintDeviceSP aLabelDev = loadTestImage("fill4_a.png", true);
+    KisPaintDeviceSP bLabelDev = loadTestImage("fill4_b.png", true);
+    KisPaintDeviceSP cLabelDev = loadTestImage("fill4_c.png", true);
+    KisPaintDeviceSP dLabelDev = loadTestImage("fill4_d.png", true);
+    KisPaintDeviceSP eLabelDev = loadTestImage("fill4_e.png", true);
+
+
+    KisPaintDeviceSP filteredMainDev = KisPainter::convertToAlphaAsGray(mainDev);
+    const QRect filterRect = filteredMainDev->exactBounds();
+    KisGaussianKernel::applyLoG(filteredMainDev,
+                                filterRect,
+                                2,
+                                QBitArray(), 0);
+
+    normalizeAndInvertAlpha8Device(filteredMainDev, filterRect);
+
+
+    KisPaintDeviceSP resultColoring = new KisPaintDevice(mainDev->colorSpace());
+
+    KisMultiwayCut cut(filteredMainDev, resultColoring);
+
+    cut.addScribble(aLabelDev, KoColor(Qt::red, mainDev->colorSpace()));
+    cut.addScribble(bLabelDev, KoColor(Qt::green, mainDev->colorSpace()));
+    cut.addScribble(cLabelDev, KoColor(Qt::blue, mainDev->colorSpace()));
+    cut.addScribble(dLabelDev, KoColor(Qt::yellow, mainDev->colorSpace()));
+    cut.addScribble(eLabelDev, KoColor(Qt::magenta, mainDev->colorSpace()));
+
+    cut.run();
+
+
+    KIS_DUMP_DEVICE_2(resultColoring, filterRect, "00result", "dd");
+    KIS_DUMP_DEVICE_2(mainDev, filterRect, "1main", "dd");
+    KIS_DUMP_DEVICE_2(filteredMainDev, filterRect, "2filtered", "dd");
 }
 
 void KisLazyBrushTest::testLoG()
@@ -1082,6 +1298,29 @@ void KisLazyBrushTest::testLoG()
 
     KIS_DUMP_DEVICE_2(mainDev, rect, "1main", "dd");
     KIS_DUMP_DEVICE_2(filteredMainDev, rect, "2filtered", "dd");
+}
+
+void KisLazyBrushTest::testSplitIntoConnectedComponents()
+{
+    const QRect rc1(10, 10, 10, 10);
+    const QRect rc2(30, 10, 10, 10);
+    const QRect boundingRect(0,0,100,100);
+
+    KisPaintDeviceSP dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
+
+    dev->fill(rc1, KoColor(Qt::red, dev->colorSpace()));
+    dev->fill(rc2, KoColor(Qt::green, dev->colorSpace()));
+
+    QCOMPARE(dev->exactBounds(), rc1 | rc2);
+
+    QVector<QPoint> points =
+        KisLazyFillTools::splitIntoConnectedComponents(dev);
+
+    qDebug() << ppVar(points);
+
+    QCOMPARE(points.size(), 2);
+    QCOMPARE(points[0], QPoint(10,10));
+    QCOMPARE(points[1], QPoint(30,10));
 }
 
 QTEST_MAIN(KisLazyBrushTest)

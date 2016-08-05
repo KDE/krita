@@ -113,6 +113,8 @@ set(kritaimage_LIB_SRCS
    floodfill/kis_fill_interval_map.cpp
    floodfill/kis_scanline_fill.cpp
    lazybrush/kis_min_cut_worker.cpp
+   lazybrush/kis_lazy_fill_tools.cpp
+   lazybrush/kis_multiway_cut.cpp
    kis_adjustment_layer.cc
    kis_selection_based_layer.cpp
    kis_node_filter_interface.cpp

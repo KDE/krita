@@ -21,11 +21,15 @@
 
 #include <numeric>
 #include <boost/limits.hpp>
+#include <boost/operators.hpp>
 
 #include <boost/graph/graph_traits.hpp>
 #include <boost/graph/properties.hpp>
 #include <boost/iterator/counting_iterator.hpp>
 #include <boost/iterator/transform_iterator.hpp>
+
+#include <QRegion>
+
 
 using namespace boost;
 
@@ -339,16 +343,18 @@ public:
     KisLazyFillGraph() {}
 
     KisLazyFillGraph(const QRect &mainRect,
-                     const QRect &aLabelRect,
-                     const QRect &bLabelRect)
+                     const QRegion &aLabelRegion,
+                     const QRegion &bLabelRegion)
         : m_x(mainRect.x()),
           m_y(mainRect.y()),
           m_width(mainRect.width()),
           m_height(mainRect.height())
     {
         m_mainArea = mainRect;
-        m_aLabelArea = aLabelRect;
-        m_bLabelArea = bLabelRect;
+        m_aLabelArea = aLabelRegion.boundingRect();
+        m_bLabelArea = bLabelRegion.boundingRect();
+        m_aLabelRects = aLabelRegion.rects();
+        m_bLabelRects = bLabelRegion.rects();
 
         KIS_ASSERT(m_mainArea.contains(m_aLabelArea));
         KIS_ASSERT(m_mainArea.contains(m_bLabelArea));
@@ -361,11 +367,31 @@ public:
         m_edgeBins << EdgeIndexBin(m_edgeBins.last(), m_mainArea.adjusted(0, 0, 0, -1), VERTICAL);
         m_edgeBins << EdgeIndexBin(m_edgeBins.last(), m_mainArea.adjusted(0, 0, 0, -1), VERTICAL_REVERSED);
 
-        m_edgeBins << EdgeIndexBin(m_edgeBins.last(), m_aLabelArea, LABEL_A);
-        m_edgeBins << EdgeIndexBin(m_edgeBins.last(), m_aLabelArea, LABEL_A_REVERSED);
+        Q_FOREACH (const QRect &rc, m_aLabelRects) {
+            m_edgeBins << EdgeIndexBin(m_edgeBins.last(), rc, LABEL_A);
+        }
 
-        m_edgeBins << EdgeIndexBin(m_edgeBins.last(), m_bLabelArea, LABEL_B);
-        m_edgeBins << EdgeIndexBin(m_edgeBins.last(), m_bLabelArea, LABEL_B_REVERSED);
+        // out_edge_at relies on the sequential layout of reversed edges of one type
+        m_aReversedEdgesStart = m_edgeBins.last().last() + 1;
+
+        Q_FOREACH (const QRect &rc, m_aLabelRects) {
+            m_edgeBins << EdgeIndexBin(m_edgeBins.last(), rc, LABEL_A_REVERSED);
+        }
+
+        m_numAEdges = m_edgeBins.last().last() + 1 - m_aReversedEdgesStart;
+
+        Q_FOREACH (const QRect &rc, m_bLabelRects) {
+            m_edgeBins << EdgeIndexBin(m_edgeBins.last(), rc, LABEL_B);
+        }
+
+        // out_edge_at relies on the sequential layout of reversed edges of one type
+        m_bReversedEdgesStart = m_edgeBins.last().last() + 1;
+
+        Q_FOREACH (const QRect &rc, m_bLabelRects) {
+            m_edgeBins << EdgeIndexBin(m_edgeBins.last(), rc, LABEL_B_REVERSED);
+        }
+
+        m_numBEdges = m_edgeBins.last().last() + 1 - m_bReversedEdgesStart;
 
         m_numEdges = m_edgeBins.last().last() + 1;
     }
@@ -387,6 +413,11 @@ public:
     vertices_size_type m_numVertices;
     vertices_size_type m_numEdges;
 
+    vertices_size_type m_aReversedEdgesStart;
+    vertices_size_type m_bReversedEdgesStart;
+    vertices_size_type m_numAEdges;
+    vertices_size_type m_numBEdges;
+
     enum EdgeIndexBinId {
         HORIZONTAL,
         HORIZONTAL_REVERSED,
@@ -403,26 +434,28 @@ public:
             : start(0), stride(0), size(0) {}
 
         EdgeIndexBin(edges_size_type _start,
-                     const QRect &rect,
+                     const QRect &_rect,
                      EdgeIndexBinId _binId)
             : start(_start),
-              stride(rect.width()),
-              size(rect.width() * rect.height()),
-              xOffset(rect.x()),
-              yOffset(rect.y()),
+              stride(_rect.width()),
+              size(_rect.width() * _rect.height()),
+              xOffset(_rect.x()),
+              yOffset(_rect.y()),
               binId(_binId),
-              isReversed(int(_binId) & 0x1) {}
+              isReversed(int(_binId) & 0x1),
+              rect(_rect) {}
 
         EdgeIndexBin(const EdgeIndexBin &putAfter,
-                     const QRect &rect,
+                     const QRect &_rect,
                      EdgeIndexBinId _binId)
             : start(putAfter.last() + 1),
-              stride(rect.width()),
-              size(rect.width() * rect.height()),
-              xOffset(rect.x()),
-              yOffset(rect.y()),
+              stride(_rect.width()),
+              size(_rect.width() * _rect.height()),
+              xOffset(_rect.x()),
+              yOffset(_rect.y()),
               binId(_binId),
-              isReversed(int(_binId) & 0x1) {}
+              isReversed(int(_binId) & 0x1),
+              rect(_rect) {}
 
         edges_size_type last() const {
             return start + size - 1;
@@ -488,11 +521,15 @@ public:
                 std::swap(src_vertex, dst_vertex);
             }
 
+            if (!rect.contains(QPoint(src_vertex.x, src_vertex.y))) {
+                return -1;
+            }
+
             edges_size_type internalIndex =
                 (src_vertex.x - xOffset) +
                 (src_vertex.y - yOffset) * stride;
 
-            if (internalIndex < 0 || internalIndex >= size) {
+            KIS_ASSERT_RECOVER(internalIndex >= 0 && internalIndex < size) {
                 return -1;
             }
 
@@ -550,6 +587,7 @@ public:
         edges_size_type yOffset;
         EdgeIndexBinId binId;
         bool isReversed;
+        QRect rect;
     };
 
     QVector<EdgeIndexBin> m_edgeBins;
@@ -557,6 +595,9 @@ public:
     QRect m_aLabelArea;
     QRect m_bLabelArea;
     QRect m_mainArea;
+
+    QVector<QRect> m_aLabelRects;
+    QVector<QRect> m_bLabelRects;
 
 protected:
 public:
@@ -645,7 +686,7 @@ public:
     }
 
 private:
-    vertices_size_type numVacantEdges(const vertex_descriptor &vertex, const QRect &rc) const {
+    static vertices_size_type numVacantEdges(const vertex_descriptor &vertex, const QRect &rc) {
         vertices_size_type vacantEdges = 4;
 
         if (vertex.x == rc.x()) {
@@ -666,6 +707,17 @@ private:
 
         return vacantEdges;
     }
+
+    static inline bool findInRects(const QVector<QRect> &rects, const QPoint &pt) {
+        bool result = false;
+        Q_FOREACH (const QRect &rc, rects) {
+            if (rc.contains(pt)) {
+                result = true;
+                break;
+            }
+        }
+        return result;
+    }
 public:
     // Returns the number of out-edges for [vertex]
     degree_size_type out_degree(vertex_descriptor vertex) const {
@@ -673,22 +725,26 @@ public:
         if (index_of(vertex) < 0) return out_edge_count;
 
         switch (vertex.type) {
-        case vertex_descriptor::NORMAL:
+        case vertex_descriptor::NORMAL: {
             out_edge_count = numVacantEdges(vertex, m_mainArea);
 
-            if (m_aLabelArea.contains(QPoint(vertex.x, vertex.y))) {
+            const QPoint pt = QPoint(vertex.x, vertex.y);
+
+            if (m_aLabelArea.contains(pt) && findInRects(m_aLabelRects, pt)) {
                 out_edge_count++;
             }
 
-            if (m_bLabelArea.contains(QPoint(vertex.x, vertex.y))) {
+            if (m_bLabelArea.contains(pt) && findInRects(m_bLabelRects, pt)) {
                 out_edge_count++;
             }
+
             break;
+        }
         case vertex_descriptor::LABEL_A:
-            out_edge_count = m_edgeBins[LABEL_A].size;
+            out_edge_count = m_numAEdges;
             break;
         case vertex_descriptor::LABEL_B:
-            out_edge_count = m_edgeBins[LABEL_B].size;
+            out_edge_count = m_numBEdges;
             break;
         }
 
@@ -700,6 +756,7 @@ public:
     edge_descriptor out_edge_at (vertex_descriptor vertex,
                                  degree_size_type out_edge_index) const {
 
+        const QPoint pt = QPoint(vertex.x, vertex.y);
         vertex_descriptor dst_vertex = vertex;
 
         switch (vertex.type) {
@@ -712,9 +769,9 @@ public:
                 dst_vertex.x++;
             } else if (vertex.y < m_mainArea.bottom() && !out_edge_index--) {
                 dst_vertex.y++;
-            } else if (m_aLabelArea.contains(QPoint(vertex.x, vertex.y)) && !out_edge_index--) {
+            } else if (m_aLabelArea.contains(pt) && findInRects(m_aLabelRects, pt) && !out_edge_index--) {
                 dst_vertex = vertex_descriptor(0, 0, vertex_descriptor::LABEL_A);
-            } else if (m_bLabelArea.contains(QPoint(vertex.x, vertex.y)) && !out_edge_index--) {
+            } else if (m_bLabelArea.contains(pt) && findInRects(m_bLabelRects, pt) && !out_edge_index--) {
                 dst_vertex = vertex_descriptor(0, 0, vertex_descriptor::LABEL_B);
             } else {
                 qDebug() << ppVar(vertex) << ppVar(out_edge_index) << ppVar(out_degree(vertex));
@@ -722,19 +779,13 @@ public:
             }
             break;
         case vertex_descriptor::LABEL_A: {
-            const vertices_size_type stride = m_aLabelArea.width();
-            const vertices_size_type x = out_edge_index % stride + m_aLabelArea.x();
-            const vertices_size_type y = out_edge_index / stride + m_aLabelArea.y();
-            KIS_ASSERT(m_aLabelArea.contains(QPoint(x,y)));
-            dst_vertex = vertex_descriptor(x, y);
+            edge_descriptor edge = edge_at(m_aReversedEdgesStart + out_edge_index);
+            dst_vertex = edge.second;
             break;
         }
         case vertex_descriptor::LABEL_B: {
-            const vertices_size_type stride = m_bLabelArea.width();
-            const vertices_size_type x = out_edge_index % stride + m_bLabelArea.x();
-            const vertices_size_type y = out_edge_index / stride + m_bLabelArea.y();
-            KIS_ASSERT(m_bLabelArea.contains(QPoint(x,y)));
-            dst_vertex = vertex_descriptor(x, y);
+            edge_descriptor edge = edge_at(m_bReversedEdgesStart + out_edge_index);
+            dst_vertex = edge.second;
             break;
         }
         }
@@ -749,7 +800,7 @@ public:
     //================
 
     friend inline std::pair<typename type::vertex_iterator,
-                            typename type::vertex_iterator> 
+                            typename type::vertex_iterator>
     vertices(const type& graph) {
         typedef typename type::vertex_iterator vertex_iterator;
         typedef typename type::vertex_function vertex_function;
@@ -923,6 +974,7 @@ public:
     friend inline lazy_fill_graph_reverse_edge_map<
         typename type::edge_descriptor>
     get(edge_reverse_t, const type& graph) {
+        Q_UNUSED(graph);
         return (lazy_fill_graph_reverse_edge_map<
                 typename type::edge_descriptor>());
     }

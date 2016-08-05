@@ -16,26 +16,30 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KIS_LAZY_BRUSH_TEST_H
-#define __KIS_LAZY_BRUSH_TEST_H
+#ifndef __KIS_MULTIWAY_CUT_H
+#define __KIS_MULTIWAY_CUT_H
 
-#include <QtTest/QtTest>
+#include <QScopedPointer>
 
-class KisLazyBrushTest : public QObject
+#include "kis_types.h"
+#include "kritaimage_export.h"
+
+class KoColor;
+
+class KRITAIMAGE_EXPORT KisMultiwayCut
 {
-    Q_OBJECT
-private Q_SLOTS:
-    //void test();
-    void testGraph();
-    void testGraphMultilabel();
-    void testGraphStandardIterators();
-    void testGraphConcepts();
-    void testCutOnGraph();
-    void testCutOnGraphDevice();
-    void testCutOnGraphDeviceMulti();
-    void testLoG();
+public:
+    KisMultiwayCut(KisPaintDeviceSP src,
+                   KisPaintDeviceSP dst);
+    ~KisMultiwayCut();
 
-    void testSplitIntoConnectedComponents();
+    void addScribble(KisPaintDeviceSP dev, const KoColor &color);
+
+    void run();
+
+private:
+    struct Private;
+    const QScopedPointer<Private> m_d;
 };
 
-#endif /* __KIS_LAZY_BRUSH_TEST_H */
+#endif /* __KIS_MULTIWAY_CUT_H */

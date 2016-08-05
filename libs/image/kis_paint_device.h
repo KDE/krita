@@ -243,6 +243,12 @@ public:
     QRegion region() const;
 
     /**
+     * The slow version of region() that searches for exact bounds of
+     * each rectangle in the region
+     */
+    QRegion regionExact() const;
+
+    /**
      * Cut the paint device down to the specified rect. If the crop
      * area is bigger than the paint device, nothing will happen.
      */

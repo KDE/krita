@@ -43,22 +43,30 @@ public:
 
     KisLazyFillCapacityMap(KisPaintDeviceSP mainImage,
                            KisPaintDeviceSP aLabelImage,
-                           KisPaintDeviceSP bLabelImage)
+                           KisPaintDeviceSP bLabelImage,
+                           KisPaintDeviceSP maskImage)
         : m_mainImage(mainImage),
-          m_aLabelImage(KisPainter::convertToAlphaAsAlpha(aLabelImage)),
-          m_bLabelImage(KisPainter::convertToAlphaAsAlpha(bLabelImage)),
+          m_aLabelImage(aLabelImage),
+          m_bLabelImage(bLabelImage),
+          m_maskImage(maskImage),
           m_mainRect(m_mainImage->exactBounds()),
           m_aLabelRect(m_aLabelImage->exactBounds()),
           m_bLabelRect(m_bLabelImage->exactBounds()),
           m_colorSpace(mainImage->colorSpace()),
           m_pixelSize(m_colorSpace->pixelSize()),
-          m_graph(m_mainRect, m_aLabelRect, m_bLabelRect)
+          m_graph(m_mainRect, m_aLabelImage->regionExact(), m_bLabelImage->regionExact())
     {
+        KIS_ASSERT_RECOVER_NOOP(m_mainImage->colorSpace()->pixelSize() == 1);
+        KIS_ASSERT_RECOVER_NOOP(m_aLabelImage->colorSpace()->pixelSize() == 1);
+        KIS_ASSERT_RECOVER_NOOP(m_bLabelImage->colorSpace()->pixelSize() == 1);
+
+
         const QPoint pt = m_mainRect.topLeft();
 
         m_mainAccessor = m_mainImage->createRandomConstAccessorNG(pt.x(), pt.y());
         m_aAccessor = m_aLabelImage->createRandomConstAccessorNG(pt.x(), pt.y());
         m_bAccessor = m_bLabelImage->createRandomConstAccessorNG(pt.x(), pt.y());
+        m_maskAccessor = m_maskImage->createRandomConstAccessorNG(pt.x(), pt.y());
         m_srcPixelBuf.resize(m_pixelSize);
     }
 
@@ -72,6 +80,20 @@ public:
         {
             VertexDescriptor src = source(key, map.m_graph);
             VertexDescriptor dst = target(key, map.m_graph);
+
+            if (src.type == VertexDescriptor::NORMAL) {
+                map.m_maskAccessor->moveTo(src.x, src.y);
+                if (*map.m_maskAccessor->rawDataConst()) {
+                    return 0;
+                }
+            }
+
+            if (dst.type == VertexDescriptor::NORMAL) {
+                map.m_maskAccessor->moveTo(dst.x, dst.y);
+                if (*map.m_maskAccessor->rawDataConst()) {
+                    return 0;
+                }
+            }
 
             bool srcLabelA = src.type == VertexDescriptor::LABEL_A;
             bool srcLabelB = src.type == VertexDescriptor::LABEL_B;
@@ -119,7 +141,7 @@ public:
                 const qreal diffPenalty = qBound(0.0, qreal(diff) / 10.0, 1.0);
                 const qreal intensityPenalty = 1.0 - i1 / 255.0;
 
-                const qreal totalPenalty = qMax(diffPenalty, intensityPenalty);
+                const qreal totalPenalty = qMax(0.0 * diffPenalty, intensityPenalty);
 
                 value = 1.0 + k * (1.0 - pow2(totalPenalty));
             }
@@ -135,6 +157,7 @@ private:
     KisPaintDeviceSP m_mainImage;
     KisPaintDeviceSP m_aLabelImage;
     KisPaintDeviceSP m_bLabelImage;
+    KisPaintDeviceSP m_maskImage;
 
     QRect m_mainRect;
     QRect m_aLabelRect;
@@ -145,17 +168,10 @@ private:
     KisRandomConstAccessorSP m_mainAccessor;
     KisRandomConstAccessorSP m_aAccessor;
     KisRandomConstAccessorSP m_bAccessor;
+    KisRandomConstAccessorSP m_maskAccessor;
     QByteArray m_srcPixelBuf;
 
     KisLazyFillGraph m_graph;
 };
-
-template <class Graph>
-ComplexCapacityMap<Graph>
-MakeComplexCapacityMap(KisPaintDeviceSP mainImage,
-                       KisPaintDeviceSP aLabelImage,
-                       KisPaintDeviceSP bLabelImage) {
-    return KisLazyFillCapacityMap(mainImage, aLabelImage, bLabelImage);
-}
 
 #endif /* __KIS_LAZY_FILL_CAPACITY_MAP_H */

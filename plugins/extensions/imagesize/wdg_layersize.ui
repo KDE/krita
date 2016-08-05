@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>348</width>
-    <height>198</height>
+    <width>366</width>
+    <height>201</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -24,7 +24,7 @@
      </property>
      <layout class="QGridLayout" name="gridLayout_3">
       <item row="0" column="4" rowspan="2">
-       <widget class="KoAspectButton" name="aspectRatioBtn">
+       <widget class="KoAspectButton" name="aspectRatioBtn" native="true">
         <property name="text" stdset="0">
          <string/>
         </property>
@@ -55,7 +55,7 @@
       <item row="0" column="1">
        <widget class="QLabel" name="lblNewWidth">
         <property name="text">
-         <string>Width:</string>
+         <string>W&amp;idth:</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -66,7 +66,7 @@
        </widget>
       </item>
       <item row="0" column="2">
-       <widget class="QDoubleSpinBox" name="newWidthDouble">
+       <widget class="KisDoubleParseSpinBox" name="newWidthDouble">
         <property name="minimumSize">
          <size>
           <width>80</width>
@@ -88,7 +88,7 @@
        </widget>
       </item>
       <item row="1" column="2">
-       <widget class="QDoubleSpinBox" name="newHeightDouble">
+       <widget class="KisDoubleParseSpinBox" name="newHeightDouble">
         <property name="minimumSize">
          <size>
           <width>80</width>
@@ -110,7 +110,7 @@
        </widget>
       </item>
       <item row="1" column="2">
-       <widget class="QSpinBox" name="newHeight">
+       <widget class="KisIntParseSpinBox" name="newHeight">
         <property name="minimumSize">
          <size>
           <width>80</width>
@@ -126,7 +126,7 @@
        </widget>
       </item>
       <item row="0" column="2">
-       <widget class="QSpinBox" name="newWidth">
+       <widget class="KisIntParseSpinBox" name="newWidth">
         <property name="minimum">
          <number>1</number>
         </property>
@@ -136,7 +136,7 @@
        </widget>
       </item>
       <item row="2" column="2" colspan="2">
-       <widget class="KisCmbIDList" name="filterCmb"/>
+       <widget class="KisCmbIDList" name="filterCmb" native="true"/>
       </item>
       <item row="2" column="1">
        <widget class="QLabel" name="lblFilter">
@@ -151,7 +151,7 @@
       <item row="1" column="1">
        <widget class="QLabel" name="lblNewHeight">
         <property name="text">
-         <string>Height:</string>
+         <string>&amp;Height:</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -222,6 +222,16 @@
    <extends>QWidget</extends>
    <header>KoAspectButton.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KisIntParseSpinBox</class>
+   <extends>QSpinBox</extends>
+   <header>kis_int_parse_spin_box.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KisDoubleParseSpinBox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header>kis_double_parse_spin_box.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

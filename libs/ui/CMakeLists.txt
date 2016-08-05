@@ -253,6 +253,7 @@ set(kritaui_LIB_SRCS
     widgets/kis_color_label_selector_widget.cpp
     widgets/kis_color_filter_combo.cpp
     widgets/kis_elided_label.cpp
+
     input/kis_input_manager.cpp
     input/kis_input_manager_p.cpp
     input/kis_extended_modifiers_mapper.cpp
@@ -479,6 +480,7 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
 
     wdgsplash.ui
     input/wintab/kis_screen_size_choice_dialog.ui
+
 )
 
 
@@ -525,6 +527,7 @@ target_include_directories(kritaui
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/flake>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/ora>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/tool>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/utils>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/widgets>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/input/wintab>
 )

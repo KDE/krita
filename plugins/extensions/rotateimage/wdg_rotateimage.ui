@@ -56,7 +56,7 @@
       <item>
        <widget class="QRadioButton" name="radio180">
         <property name="text">
-         <string>180 d&amp;egrees</string>
+         <string>&amp;180 degrees</string>
         </property>
        </widget>
       </item>
@@ -69,7 +69,16 @@
       </item>
       <item>
        <layout class="QHBoxLayout">
-        <property name="margin">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
          <number>0</number>
         </property>
         <item>
@@ -83,7 +92,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QDoubleSpinBox" name="doubleCustom">
+         <widget class="KisDoubleParseSpinBox" name="doubleCustom">
           <property name="maximum">
            <double>360.000000000000000</double>
           </property>
@@ -115,6 +124,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KisDoubleParseSpinBox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header>kis_double_parse_spin_box.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

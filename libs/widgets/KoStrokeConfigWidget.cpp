@@ -66,13 +66,16 @@
 #include <KoShapeStrokeCommand.h>
 #include <KoShapeStrokeModel.h>
 
+// Krita
+#include "kis_double_parse_unit_spin_box.h"
+
 class CapNJoinMenu : public QMenu
 {
 public:
     CapNJoinMenu(QWidget *parent = 0);
     virtual QSize sizeHint() const;
 
-    KoUnitDoubleSpinBox *miterLimit;
+    KisDoubleParseUnitSpinBox *miterLimit;
     QButtonGroup        *capGroup;
     QButtonGroup        *joinGroup;
 };
@@ -137,7 +140,7 @@ CapNJoinMenu::CapNJoinMenu(QWidget *parent)
 
     // Miter limit
     // set min/max/step and value in points, then set actual unit
-    miterLimit = new KoUnitDoubleSpinBox(this);
+    miterLimit = new KisDoubleParseUnitSpinBox(this);
     miterLimit->setMinMaxStep(0.0, 1000.0, 0.5);
     miterLimit->setDecimals(2);
     miterLimit->setUnit(KoUnit(KoUnit::Point));
@@ -164,7 +167,7 @@ public:
     }
 
     KoLineStyleSelector *lineStyle;
-    KoUnitDoubleSpinBox *lineWidth;
+    KisDoubleParseUnitSpinBox *lineWidth;
     KoMarkerSelector    *startMarkerSelector;
     KoMarkerSelector    *endMarkerSelector;
 
@@ -218,7 +221,7 @@ KoStrokeConfigWidget::KoStrokeConfigWidget(QWidget * parent)
     secondLineLayout->addWidget(l);
 
     // set min/max/step and value in points, then set actual unit
-    d->lineWidth = new KoUnitDoubleSpinBox(this);
+    d->lineWidth = new KisDoubleParseUnitSpinBox(this);
     d->lineWidth->setMinMaxStep(0.0, 1000.0, 0.5);
     d->lineWidth->setDecimals(2);
     d->lineWidth->setUnit(KoUnit(KoUnit::Point));

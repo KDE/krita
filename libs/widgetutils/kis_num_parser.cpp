@@ -18,7 +18,7 @@
 
 #include "kis_num_parser.h"
 
-//#include <QtMath>
+#include <qnumeric.h> // for qIsNaN
 #include <qmath.h>
 #include <QVector>
 #include <QRegExp>
@@ -513,7 +513,7 @@ double treatLevel2Int(const QString &expr, bool &noProblem)
 
         double val = treatFuncsInt(part, noProblem);
 
-        if(std::isinf(result/val) || std::isnan(result/val)){
+        if(std::isinf(result/val) || qIsNaN(result/val)){
         noProblem = false;
         return 0.0;
         }

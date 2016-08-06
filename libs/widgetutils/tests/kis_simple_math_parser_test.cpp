@@ -19,7 +19,7 @@
 #include "kis_simple_math_parser_test.h"
 
 #include "kis_num_parser.h"
-
+#include <qnumeric.h> // for qIsNaN
 #include <QString>
 #include <QtTest>
 
@@ -81,7 +81,7 @@ void KisSimpleMathParserTest::testDoubleComputation()
 
         double result = KisNumericParser::parseSimpleMathExpr(exprs[i]);
 
-        bool test = result == expected[i] || qAbs(result - expected[i]) < 1e-12 || (std::isnan(result) && std::isnan(expected[i]));
+        bool test = result == expected[i] || qAbs(result - expected[i]) < 1e-12 || (qIsNaN(result) && qIsNaN(expected[i]));
 
         QVERIFY2(test, QString("Failed when %1 should equal %2 but evaluated to %3.").arg(exprs[i]).arg(expected[i]).arg(result).toStdString().c_str());
     }

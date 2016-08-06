@@ -346,7 +346,9 @@ void KisToolFreehand::continueAlternateAction(KoPointerEvent *event, AlternateAc
     QPointF scaledOffset = canvas()->viewConverter()->viewToDocument(offset);
 
     if (qRound(scaledOffset.x()) != 0) {
-        currentPaintOpPreset()->settings()->changePaintOpSize(scaledOffset.x(), scaledOffset.y());
+        KisPaintOpSettingsSP settings = currentPaintOpPreset()->settings();
+        const qreal newSize = settings->paintOpSize() + scaledOffset.x();
+        settings->setPaintOpSize(newSize);
         requestUpdateOutline(m_initialGestureDocPoint, 0);
 
         m_lastDocumentPoint = event->point;

@@ -62,4 +62,39 @@ private:
 
 };
 
+struct GridOption
+{
+    int grid_width;
+    int grid_height;
+    int grid_division_level;
+    bool grid_pressure_division;
+    qreal grid_scale;
+    qreal grid_vertical_border;
+    qreal grid_horizontal_border;
+    bool grid_random_border;
+
+
+    void readOptionSetting(const KisPropertiesConfigurationSP setting) {
+        grid_width = setting->getInt(GRID_WIDTH);
+        grid_height = setting->getInt(GRID_HEIGHT);
+        grid_division_level = setting->getInt(GRID_DIVISION_LEVEL);
+        grid_pressure_division = setting->getBool(GRID_PRESSURE_DIVISION);
+        grid_scale = setting->getDouble(GRID_SCALE);
+        grid_vertical_border = setting->getDouble(GRID_VERTICAL_BORDER);
+        grid_horizontal_border = setting->getDouble(GRID_HORIZONTAL_BORDER);
+        grid_random_border = setting->getBool(GRID_RANDOM_BORDER);
+    }
+
+    void writeOptionSetting(KisPropertiesConfigurationSP setting) const {
+        setting->setProperty(GRID_WIDTH, grid_width);
+        setting->setProperty(GRID_HEIGHT, grid_height);
+        setting->setProperty(GRID_DIVISION_LEVEL, grid_division_level);
+        setting->setProperty(GRID_PRESSURE_DIVISION, grid_pressure_division);
+        setting->setProperty(GRID_SCALE, grid_scale);
+        setting->setProperty(GRID_VERTICAL_BORDER, grid_vertical_border);
+        setting->setProperty(GRID_HORIZONTAL_BORDER, grid_horizontal_border);
+        setting->setProperty(GRID_RANDOM_BORDER, grid_random_border);
+    }
+};
+
 #endif

@@ -19,6 +19,8 @@
 #ifndef KIS_GRID_PAINTOP_SETTINGS_H_
 #define KIS_GRID_PAINTOP_SETTINGS_H_
 
+#include <QScopedPointer>
+
 #include <brushengine/kis_paintop_settings.h>
 #include <kis_types.h>
 
@@ -31,12 +33,18 @@ class KisGridPaintOpSettings : public KisOutlineGenerationPolicy<KisPaintOpSetti
 {
 public:
     KisGridPaintOpSettings();
-    virtual ~KisGridPaintOpSettings() {}
+    ~KisGridPaintOpSettings();
 
     QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode);
     bool paintIncremental();
+
+    QList<KisUniformPaintOpPropertySP> uniformProperties();
+
 private:
-    Q_DISABLE_COPY(KisGridPaintOpSettings)
+
+    struct Private;
+    const QScopedPointer<Private> m_d;
+
 };
 
 typedef KisSharedPtr<KisGridPaintOpSettings> KisGridPaintOpSettingsSP;

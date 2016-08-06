@@ -85,36 +85,43 @@ KisHatchingOptions::~KisHatchingOptions()
 
 void KisHatchingOptions::writeOptionSetting(KisPropertiesConfigurationSP setting) const
 {
-    setting->setProperty("Hatching/angle", m_options->angleKisDoubleSliderSpinBox->value());
-    setting->setProperty("Hatching/separation", m_options->separationKisDoubleSliderSpinBox->value());
-    setting->setProperty("Hatching/thickness", m_options->thicknessKisDoubleSliderSpinBox->value());
-    setting->setProperty("Hatching/origin_x", m_options->originXKisDoubleSliderSpinBox->value());
-    setting->setProperty("Hatching/origin_y", m_options->originYKisDoubleSliderSpinBox->value());
+    HatchingOption op;
 
-    setting->setProperty("Hatching/bool_nocrosshatching", m_options->noCrosshatchingRadioButton->isChecked());
-    setting->setProperty("Hatching/bool_perpendicular", m_options->perpendicularRadioButton->isChecked());
-    setting->setProperty("Hatching/bool_minusthenplus", m_options->minusThenPlusRadioButton->isChecked());
-    setting->setProperty("Hatching/bool_plusthenminus", m_options->plusThenMinusRadioButton->isChecked());
-    setting->setProperty("Hatching/bool_moirepattern", m_options->moirePatternRadioButton->isChecked());
+    op.angle = m_options->angleKisDoubleSliderSpinBox->value();
+    op.separation = m_options->separationKisDoubleSliderSpinBox->value();
+    op.thickness = m_options->thicknessKisDoubleSliderSpinBox->value();
+    op.origin_x = m_options->originXKisDoubleSliderSpinBox->value();
+    op.origin_y = m_options->originYKisDoubleSliderSpinBox->value();
 
-    setting->setProperty("Hatching/separationintervals", m_options->separationIntervalSpinBox->value());
+    op.bool_nocrosshatching = m_options->noCrosshatchingRadioButton->isChecked();
+    op.bool_perpendicular = m_options->perpendicularRadioButton->isChecked();
+    op.bool_minusthenplus = m_options->minusThenPlusRadioButton->isChecked();
+    op.bool_plusthenminus = m_options->plusThenMinusRadioButton->isChecked();
+    op.bool_moirepattern = m_options->moirePatternRadioButton->isChecked();
+
+    op.separationintervals = m_options->separationIntervalSpinBox->value();
+
+    op.writeOptionSetting(setting);
 }
 
 void KisHatchingOptions::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
-    m_options->angleKisDoubleSliderSpinBox->setValue(setting->getDouble("Hatching/angle"));
-    m_options->separationKisDoubleSliderSpinBox->setValue(setting->getDouble("Hatching/separation"));
-    m_options->thicknessKisDoubleSliderSpinBox->setValue(setting->getDouble("Hatching/thickness"));
-    m_options->originXKisDoubleSliderSpinBox->setValue(setting->getDouble("Hatching/origin_x"));
-    m_options->originYKisDoubleSliderSpinBox->setValue(setting->getDouble("Hatching/origin_y"));
+    HatchingOption op;
+    op.readOptionSetting(setting);
 
-    m_options->noCrosshatchingRadioButton->setChecked(setting->getBool("Hatching/bool_nocrosshatching"));
-    m_options->perpendicularRadioButton->setChecked(setting->getBool("Hatching/bool_perpendicular"));
-    m_options->minusThenPlusRadioButton->setChecked(setting->getBool("Hatching/bool_minusthenplus"));
-    m_options->plusThenMinusRadioButton->setChecked(setting->getBool("Hatching/bool_plusthenminus"));
-    m_options->moirePatternRadioButton->setChecked(setting->getBool("Hatching/bool_moirepattern"));
+    m_options->angleKisDoubleSliderSpinBox->setValue(op.angle);
+    m_options->separationKisDoubleSliderSpinBox->setValue(op.separation);
+    m_options->thicknessKisDoubleSliderSpinBox->setValue(op.thickness);
+    m_options->originXKisDoubleSliderSpinBox->setValue(op.origin_x);
+    m_options->originYKisDoubleSliderSpinBox->setValue(op.origin_y);
 
-    m_options->separationIntervalSpinBox->setValue(setting->getInt("Hatching/separationintervals"));
+    m_options->noCrosshatchingRadioButton->setChecked(op.bool_nocrosshatching);
+    m_options->perpendicularRadioButton->setChecked(op.bool_perpendicular);
+    m_options->minusThenPlusRadioButton->setChecked(op.bool_minusthenplus);
+    m_options->plusThenMinusRadioButton->setChecked(op.bool_plusthenminus);
+    m_options->moirePatternRadioButton->setChecked(op.bool_moirepattern);
+
+    m_options->separationIntervalSpinBox->setValue(op.separationintervals);
 }
 
 void KisHatchingOptions::lodLimitations(KisPaintopLodLimitations *l) const

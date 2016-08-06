@@ -138,7 +138,7 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
     KisCrossDeviceColorPicker colorPicker(source, m_inkColor);
 
     // apply size sensor
-    m_radius = m_properties->radius * scale * additionalScale;
+    m_radius = m_properties->radius() * scale * additionalScale;
 
     // jitter movement
     if (m_properties->jitterMovement) {

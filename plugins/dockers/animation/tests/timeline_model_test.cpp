@@ -43,6 +43,8 @@
 #include "commands/kis_image_layer_add_command.h"
 #include "commands/kis_image_layer_remove_command.h"
 
+#include "kis_double_parse_spin_box.h"
+#include "kis_int_parse_spin_box.h"
 
 void TimelineModelTest::init()
 {
@@ -155,14 +157,14 @@ void TimelineModelTest::testView()
     font.setPointSizeF(9);
     dlg.setFont(font);
 
-    QSpinBox *intFps = new QSpinBox(&dlg);
+    QSpinBox *intFps = new KisIntParseSpinBox(&dlg);
     intFps->setValue(12);
 
-    QSpinBox *intTime = new QSpinBox(&dlg);
+    QSpinBox *intTime = new KisIntParseSpinBox(&dlg);
     intTime->setValue(0);
     intTime->setMaximum(10000);
 
-    QSpinBox *intLayer = new QSpinBox(&dlg);
+    QSpinBox *intLayer = new KisIntParseSpinBox(&dlg);
     intLayer->setValue(0);
     intLayer->setMaximum(100);
 

@@ -27,7 +27,7 @@
 #include <klocalizedstring.h>
 
 KisDelayedActionIntegerInput::KisDelayedActionIntegerInput(QWidget * parent, const QString & name)
-    : QSpinBox(parent)
+    : KisIntParseSpinBox(parent)
 {
     setObjectName(name);
     m_timer = new QTimer(this);

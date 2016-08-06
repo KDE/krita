@@ -414,7 +414,7 @@ void KisUpdateSchedulerTest::testTimeMonitor()
 void KisUpdateSchedulerTest::testLodSync()
 {
     KisImageSP image = buildTestingImage();
-    QRect imageRect = image->bounds();
+
     KisNodeSP rootLayer = image->root();
     KisNodeSP paintLayer1 = rootLayer->firstChild();
 

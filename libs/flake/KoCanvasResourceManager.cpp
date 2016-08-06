@@ -180,3 +180,18 @@ void KoCanvasResourceManager::removeDerivedResourceConverter(int key)
 {
     d->manager.removeDerivedResourceConverter(key);
 }
+
+void KoCanvasResourceManager::addResourceUpdateMediator(KoResourceUpdateMediatorSP mediator)
+{
+    d->manager.addResourceUpdateMediator(mediator);
+}
+
+bool KoCanvasResourceManager::hasResourceUpdateMediator(int key)
+{
+    return d->manager.hasResourceUpdateMediator(key);
+}
+
+void KoCanvasResourceManager::removeResourceUpdateMediator(int key)
+{
+    d->manager.removeResourceUpdateMediator(key);
+}

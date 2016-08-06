@@ -29,9 +29,9 @@
 #include "deform_brush.h"
 
 #include "kis_deform_paintop_settings.h"
+#include "kis_deform_option.h"
 
 class KisPainter;
-class KisBrushSizeProperties;
 
 class KisDeformPaintOp : public KisPaintOp
 {
@@ -48,8 +48,8 @@ private:
     KisPaintDeviceSP m_dev;
 
     DeformBrush m_deformBrush;
-    DeformProperties m_properties;
-    KisBrushSizeProperties m_sizeProperties;
+    DeformOption m_properties;
+    BrushSizeOption m_sizeProperties;
 
     KisPressureSizeOption m_sizeOption;
     KisPressureOpacityOption m_opacityOption;

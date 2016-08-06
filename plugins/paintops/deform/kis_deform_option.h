@@ -53,4 +53,29 @@ private:
 
 };
 
+struct DeformOption {
+    qreal deform_amount;
+    bool deform_use_bilinear;
+    bool deform_use_counter;
+    bool deform_use_old_data;
+    int deform_action;
+
+    void readOptionSetting(const KisPropertiesConfigurationSP config) {
+        deform_amount = config->getDouble(DEFORM_AMOUNT);
+        deform_use_bilinear = config->getBool(DEFORM_USE_BILINEAR);
+        deform_use_counter = config->getBool(DEFORM_USE_COUNTER);
+        deform_use_old_data = config->getBool(DEFORM_USE_OLD_DATA);
+        deform_action = config->getInt(DEFORM_ACTION);
+    }
+
+
+    void writeOptionSetting(KisPropertiesConfigurationSP config) const {
+        config->setProperty(DEFORM_AMOUNT, deform_amount);
+        config->setProperty(DEFORM_ACTION, deform_action);
+        config->setProperty(DEFORM_USE_BILINEAR, deform_use_bilinear);
+        config->setProperty(DEFORM_USE_COUNTER, deform_use_counter);
+        config->setProperty(DEFORM_USE_OLD_DATA, deform_use_old_data);
+    }
+};
+
 #endif

@@ -39,12 +39,19 @@ public:
     KisPaintOpConfigWidget(QWidget * parent = 0, Qt::WFlags f = 0);
     virtual ~KisPaintOpConfigWidget();
 
+    void writeConfigurationSafe(KisPropertiesConfigurationSP config) const;
+    void setConfigurationSafe(const KisPropertiesConfigurationSP config);
+
+protected:
     /**
      * Write the settings in this widget to the given properties
      * configuration, which is cleared first.
      */
     virtual void writeConfiguration(KisPropertiesConfigurationSP config) const;
     virtual void setConfiguration(const KisPropertiesConfigurationSP  config);
+
+public:
+
 
     virtual KisPaintopLodLimitations lodLimitations() const = 0;
 
@@ -91,6 +98,8 @@ protected:
     KisImageWSP m_image;
     KisNodeWSP m_node;
     bool m_userAllowedLod;
+
+    mutable int m_isInsideUpdateCall;
 };
 
 #endif

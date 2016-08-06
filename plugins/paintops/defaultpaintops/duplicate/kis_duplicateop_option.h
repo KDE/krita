@@ -58,4 +58,25 @@ private:
 
 };
 
+struct DuplicateOption {
+    bool duplicate_healing;
+    bool duplicate_correct_perspective;
+    bool duplicate_move_source_point;
+    bool duplicate_clone_from_projection;
+
+    void readOptionSetting(const KisPropertiesConfiguration* setting) {
+        duplicate_healing = setting->getBool(DUPLICATE_HEALING, false);
+        duplicate_correct_perspective = setting->getBool(DUPLICATE_CORRECT_PERSPECTIVE, false);
+        duplicate_move_source_point = setting->getBool(DUPLICATE_MOVE_SOURCE_POINT, true);
+        duplicate_clone_from_projection = setting->getBool(DUPLICATE_CLONE_FROM_PROJECTION, false);
+    }
+
+    void writeOptionSetting(KisPropertiesConfigurationSP setting) const {
+        setting->setProperty(DUPLICATE_HEALING, duplicate_healing);
+        setting->setProperty(DUPLICATE_CORRECT_PERSPECTIVE, duplicate_correct_perspective);
+        setting->setProperty(DUPLICATE_MOVE_SOURCE_POINT, duplicate_move_source_point);
+        setting->setProperty(DUPLICATE_CLONE_FROM_PROJECTION, duplicate_clone_from_projection);
+    }
+};
+
 #endif

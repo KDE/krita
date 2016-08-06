@@ -56,38 +56,41 @@ private:
     KisBrushSizeOptionsWidget * m_options;
 };
 
-class KisBrushSizeProperties
+class BrushSizeOption
 {
 
 public:
-    quint16 shape;
-    quint16 diameter;
-    qreal aspect;
-    qreal scale;
-    qreal rotation;
-    qreal spacing;
-    qreal density;
-
-    qreal jitterMovementAmount;
-    bool jitterEnabled;
+    qreal brush_diameter;
+    qreal brush_aspect;
+    qreal brush_rotation;
+    qreal brush_scale;
+    qreal brush_spacing;
+    qreal brush_density;
+    qreal brush_jitter_movement;
+    bool brush_jitter_movement_enabled;
 
 public:
-    void readOptionSetting(const KisPropertiesConfigurationSP  settings) {
-        //TODO: shape
-        shape = 0;
-        diameter = quint16(settings->getDouble(BRUSH_DIAMETER));
-        aspect = settings->getDouble(BRUSH_ASPECT);
-        rotation = settings->getDouble(BRUSH_ROTATION) * (M_PI / 180.0);
-        scale = settings->getDouble(BRUSH_SCALE);
-        density = settings->getDouble(BRUSH_DENSITY) * 0.01;
-        spacing = settings->getDouble(BRUSH_SPACING);
-        
-        if ((jitterEnabled = settings->getBool(BRUSH_JITTER_MOVEMENT_ENABLED))) {
-            jitterMovementAmount = settings->getDouble(BRUSH_JITTER_MOVEMENT);
-        }
-        else {
-            jitterMovementAmount = 0.0;
-        }
+
+    void readOptionSetting(const KisPropertiesConfigurationSP setting) {
+        brush_diameter = setting->getDouble(BRUSH_DIAMETER);
+        brush_aspect = setting->getDouble(BRUSH_ASPECT);
+        brush_rotation = setting->getDouble(BRUSH_ROTATION);
+        brush_scale = setting->getDouble(BRUSH_SCALE);
+        brush_spacing = setting->getDouble(BRUSH_SPACING);
+        brush_density = setting->getDouble(BRUSH_DENSITY);
+        brush_jitter_movement = setting->getDouble(BRUSH_JITTER_MOVEMENT);
+        brush_jitter_movement_enabled = setting->getBool(BRUSH_JITTER_MOVEMENT_ENABLED);
+    }
+
+    void writeOptionSetting(KisPropertiesConfigurationSP setting) const {
+        setting->setProperty(BRUSH_DIAMETER, brush_diameter);
+        setting->setProperty(BRUSH_ASPECT, brush_aspect);
+        setting->setProperty(BRUSH_ROTATION, brush_rotation);
+        setting->setProperty(BRUSH_SCALE, brush_scale);
+        setting->setProperty(BRUSH_SPACING, brush_spacing);
+        setting->setProperty(BRUSH_DENSITY, brush_density);
+        setting->setProperty(BRUSH_JITTER_MOVEMENT, brush_jitter_movement);
+        setting->setProperty(BRUSH_JITTER_MOVEMENT_ENABLED, brush_jitter_movement_enabled);
     }
 };
 

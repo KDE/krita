@@ -61,7 +61,7 @@ KisSprayPaintOp::KisSprayPaintOp(const KisPaintOpSettingsSP settings, KisPainter
     m_brushOption.readOptionSetting(settings, true);
 
     m_colorProperties.fillProperties(settings);
-    m_properties.loadSettings(settings);
+    m_properties.readOptionSetting(settings);
     // first load tip properties as shape properties are dependent on diameter/scale/aspect
     m_shapeProperties.loadSettings(settings, m_properties.diameter * m_properties.scale, m_properties.diameter * m_properties.aspect * m_properties.scale);
 

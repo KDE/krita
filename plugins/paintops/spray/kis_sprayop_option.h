@@ -49,7 +49,7 @@ public:
     void readOptionSetting(const KisPropertiesConfigurationSP setting);
 
 private:
-    KisSprayOpOptionsWidget * m_options;
+    KisSprayOpOptionsWidget *m_options;
 
 };
 
@@ -57,7 +57,6 @@ class KisSprayProperties
 {
 public:
     quint16 diameter;
-    quint16 radius;
     quint16 particleCount;
     qreal aspect;
     qreal coverage;
@@ -69,10 +68,14 @@ public:
     bool useDensity;
     bool gaussian;
 
+    int radius() const {
+        return diameter / 2;
+    }
+
 public:
-    void loadSettings(const KisPropertiesConfigurationSP settings) {
+
+    void readOptionSetting(const KisPropertiesConfigurationSP settings) {
         diameter = settings->getInt(SPRAY_DIAMETER);
-        radius =  qRound(0.5 * diameter);
         aspect = settings->getDouble(SPRAY_ASPECT);
         particleCount = settings->getDouble(SPRAY_PARTICLE_COUNT);
         coverage = (settings->getDouble(SPRAY_COVERAGE) / 100.0);
@@ -83,6 +86,20 @@ public:
         jitterMovement = settings->getBool(SPRAY_JITTER_MOVEMENT);
         useDensity = settings->getBool(SPRAY_USE_DENSITY);
         gaussian = settings->getBool(SPRAY_GAUSS_DISTRIBUTION);
+    }
+
+    void writeOptionSetting(KisPropertiesConfigurationSP setting) const {
+        setting->setProperty(SPRAY_DIAMETER, diameter);
+        setting->setProperty(SPRAY_ASPECT, aspect);
+        setting->setProperty(SPRAY_COVERAGE, coverage * 100.0);
+        setting->setProperty(SPRAY_SCALE, scale);
+        setting->setProperty(SPRAY_ROTATION, brushRotation);
+        setting->setProperty(SPRAY_PARTICLE_COUNT, particleCount);
+        setting->setProperty(SPRAY_JITTER_MOVE_AMOUNT, amount);
+        setting->setProperty(SPRAY_JITTER_MOVEMENT, jitterMovement);
+        setting->setProperty(SPRAY_SPACING, spacing);
+        setting->setProperty(SPRAY_GAUSS_DISTRIBUTION, gaussian);
+        setting->setProperty(SPRAY_USE_DENSITY, useDensity);
     }
 };
 

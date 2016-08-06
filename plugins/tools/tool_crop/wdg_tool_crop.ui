@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>230</width>
-    <height>200</height>
+    <width>288</width>
+    <height>242</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -72,7 +72,7 @@
             <string>Vertical Position</string>
            </property>
            <property name="text">
-            <string>Y:</string>
+            <string>&amp;Y:</string>
            </property>
            <property name="buddy">
             <cstring>intY</cstring>
@@ -85,7 +85,7 @@
             <string>Horizontal Position</string>
            </property>
            <property name="text">
-            <string>X:</string>
+            <string>&amp;X:</string>
            </property>
            <property name="buddy">
             <cstring>intX</cstring>
@@ -93,7 +93,7 @@
           </widget>
          </item>
          <item row="0" column="1">
-          <widget class="QSpinBox" name="intX">
+          <widget class="KisIntParseSpinBox" name="intX">
            <property name="minimumSize">
             <size>
              <width>60</width>
@@ -118,7 +118,7 @@
           </widget>
          </item>
          <item row="1" column="1">
-          <widget class="QSpinBox" name="intY">
+          <widget class="KisIntParseSpinBox" name="intY">
            <property name="minimumSize">
             <size>
              <width>60</width>
@@ -226,7 +226,7 @@
         </widget>
        </item>
        <item row="1" column="4">
-        <widget class="QSpinBox" name="intHeight">
+        <widget class="KisIntParseSpinBox" name="intHeight">
          <property name="minimumSize">
           <size>
            <width>60</width>
@@ -251,7 +251,7 @@
         </widget>
        </item>
        <item row="0" column="4">
-        <widget class="QSpinBox" name="intWidth">
+        <widget class="KisIntParseSpinBox" name="intWidth">
          <property name="minimumSize">
           <size>
            <width>60</width>
@@ -276,7 +276,7 @@
         </widget>
        </item>
        <item row="2" column="4">
-        <widget class="QDoubleSpinBox" name="doubleRatio">
+        <widget class="KisDoubleParseSpinBox" name="doubleRatio">
          <property name="minimumSize">
           <size>
            <width>60</width>
@@ -473,6 +473,18 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KisIntParseSpinBox</class>
+   <extends>QSpinBox</extends>
+   <header>kis_int_parse_spin_box.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KisDoubleParseSpinBox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header>kis_double_parse_spin_box.h</header>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>intX</tabstop>
   <tabstop>intY</tabstop>

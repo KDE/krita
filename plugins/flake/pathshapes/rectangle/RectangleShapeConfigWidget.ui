@@ -1,44 +1,45 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>RectangleShapeConfigWidget</class>
- <widget class="QWidget" name="RectangleShapeConfigWidget" >
-  <property name="geometry" >
+ <widget class="QWidget" name="RectangleShapeConfigWidget">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>198</width>
+    <width>200</width>
     <height>108</height>
    </rect>
   </property>
-  <property name="windowTitle" >
+  <property name="windowTitle">
    <string>Rectangle Shape</string>
   </property>
-  <layout class="QGridLayout" >
-   <item row="0" column="0" >
-    <widget class="QLabel" name="label" >
-     <property name="text" >
+  <layout class="QGridLayout">
+   <item row="0" column="0">
+    <widget class="QLabel" name="label">
+     <property name="text">
       <string>Corner radius x:</string>
      </property>
     </widget>
    </item>
-   <item row="0" column="1" >
-    <widget class="KoUnitDoubleSpinBox" name="cornerRadiusX" />
+   <item row="0" column="1">
+    <widget class="KisDoubleParseUnitSpinBox" name="cornerRadiusX"/>
    </item>
-   <item row="1" column="0" >
-    <widget class="QLabel" name="label_2" >
-     <property name="text" >
+   <item row="1" column="0">
+    <widget class="QLabel" name="label_2">
+     <property name="text">
       <string>Corner radius y:</string>
      </property>
     </widget>
    </item>
-   <item row="1" column="1" >
-    <widget class="KoUnitDoubleSpinBox" name="cornerRadiusY" />
+   <item row="1" column="1">
+    <widget class="KisDoubleParseUnitSpinBox" name="cornerRadiusY"/>
    </item>
-   <item row="2" column="0" >
+   <item row="2" column="0">
     <spacer>
-     <property name="orientation" >
+     <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>
-     <property name="sizeHint" >
+     <property name="sizeHint" stdset="0">
       <size>
        <width>20</width>
        <height>40</height>
@@ -50,9 +51,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KoUnitDoubleSpinBox</class>
+   <class>KisDoubleParseUnitSpinBox</class>
    <extends>QDoubleSpinBox</extends>
-   <header location="global" >KoUnitDoubleSpinBox.h</header>
+   <header>kis_double_parse_unit_spin_box.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

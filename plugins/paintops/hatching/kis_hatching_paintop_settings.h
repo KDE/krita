@@ -25,13 +25,15 @@
 
 #include "kis_hatching_paintop_settings_widget.h"
 
+#include <QScopedPointer>
+
 
 class KisHatchingPaintOpSettings : public KisBrushBasedPaintOpSettings
 {
 
 public:
     KisHatchingPaintOpSettings();
-    virtual ~KisHatchingPaintOpSettings();
+    ~KisHatchingPaintOpSettings();
 
     //Dialogs enabled
     bool enabledcurvecrosshatching;
@@ -69,8 +71,15 @@ public:
     void initializeTwin(KisPaintOpSettingsSP convenienttwin) const;
     using KisPropertiesConfiguration::fromXML;
     virtual void fromXML(const QDomElement&);
+
+    QList<KisUniformPaintOpPropertySP> uniformProperties();
+
 private:
     Q_DISABLE_COPY(KisHatchingPaintOpSettings)
+
+    struct Private;
+    const QScopedPointer<Private> m_d;
+
 };
 
 typedef KisSharedPtr<KisHatchingPaintOpSettings> KisHatchingPaintOpSettingsSP;

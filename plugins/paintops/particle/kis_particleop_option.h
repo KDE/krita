@@ -50,4 +50,32 @@ private:
     KisParticleOpOptionsWidget * m_options;
 };
 
+struct ParticleOption {
+    int particle_count;
+    int particle_iterations;
+    qreal particle_gravity;
+    qreal particle_weight;
+    qreal particle_scale_x;
+    qreal particle_scale_y;
+
+
+    void readOptionSetting(const KisPropertiesConfigurationSP setting) {
+        particle_count = setting->getInt(PARTICLE_COUNT);
+        particle_iterations = setting->getInt(PARTICLE_ITERATIONS);
+        particle_gravity = setting->getDouble(PARTICLE_GRAVITY);
+        particle_weight = setting->getDouble(PARTICLE_WEIGHT);
+        particle_scale_x = setting->getDouble(PARTICLE_SCALE_X);
+        particle_scale_y = setting->getDouble(PARTICLE_SCALE_Y);
+    }
+
+    void writeOptionSetting(KisPropertiesConfigurationSP setting) const {
+        setting->setProperty(PARTICLE_COUNT, particle_count);
+        setting->setProperty(PARTICLE_ITERATIONS, particle_iterations);
+        setting->setProperty(PARTICLE_GRAVITY, particle_gravity);
+        setting->setProperty(PARTICLE_WEIGHT, particle_weight);
+        setting->setProperty(PARTICLE_SCALE_X, particle_scale_x);
+        setting->setProperty(PARTICLE_SCALE_Y, particle_scale_y);
+    }
+};
+
 #endif

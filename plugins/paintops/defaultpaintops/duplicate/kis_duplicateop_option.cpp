@@ -104,18 +104,25 @@ void KisDuplicateOpOption::setCloneFromProjection(bool cloneFromProjection)
 
 void KisDuplicateOpOption::writeOptionSetting(KisPropertiesConfigurationSP setting) const
 {
+    DuplicateOption op;
+
     setting->setProperty(DUPLICATE_HEALING, healing());
     setting->setProperty(DUPLICATE_CORRECT_PERSPECTIVE, correctPerspective());
     setting->setProperty(DUPLICATE_MOVE_SOURCE_POINT, moveSourcePoint());
     setting->setProperty(DUPLICATE_CLONE_FROM_PROJECTION, cloneFromProjection());
+
+    op.writeOptionSetting(setting);
 }
 
 void KisDuplicateOpOption::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
-    m_optionWidget->cbHealing->setChecked(setting->getBool(DUPLICATE_HEALING, false));
-    m_optionWidget->cbPerspective->setChecked(setting->getBool(DUPLICATE_CORRECT_PERSPECTIVE, false));
-    m_optionWidget->cbSourcePoint->setChecked(setting->getBool(DUPLICATE_MOVE_SOURCE_POINT, true));
-    m_optionWidget->chkCloneProjection->setChecked(setting->getBool(DUPLICATE_CLONE_FROM_PROJECTION, false));
+    DuplicateOption op;
+    op.readOptionSetting(setting);
+
+    m_optionWidget->cbHealing->setChecked(op.duplicate_healing);
+    m_optionWidget->cbPerspective->setChecked(op.duplicate_correct_perspective);
+    m_optionWidget->cbSourcePoint->setChecked(op.duplicate_move_source_point);
+    m_optionWidget->chkCloneProjection->setChecked(op.duplicate_clone_from_projection);
 }
 
 void KisDuplicateOpOption::setImage(KisImageWSP image)

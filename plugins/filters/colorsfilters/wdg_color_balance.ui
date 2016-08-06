@@ -14,7 +14,16 @@
    <property name="spacing">
     <number>3</number>
    </property>
-   <property name="margin">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
     <number>0</number>
    </property>
    <item>
@@ -102,7 +111,7 @@
       </widget>
      </item>
      <item row="1" column="3">
-      <widget class="QSpinBox" name="magentaGreenShadowsSpinbox"/>
+      <widget class="KisIntParseSpinBox" name="magentaGreenShadowsSpinbox"/>
      </item>
      <item row="2" column="0">
       <widget class="QLabel" name="label_9">
@@ -146,10 +155,10 @@
       </widget>
      </item>
      <item row="2" column="3">
-      <widget class="QSpinBox" name="yellowBlueShadowsSpinbox"/>
+      <widget class="KisIntParseSpinBox" name="yellowBlueShadowsSpinbox"/>
      </item>
      <item row="0" column="3">
-      <widget class="QSpinBox" name="cyanRedShadowsSpinbox"/>
+      <widget class="KisIntParseSpinBox" name="cyanRedShadowsSpinbox"/>
      </item>
     </layout>
    </item>
@@ -201,13 +210,13 @@
       <number>3</number>
      </property>
      <item row="0" column="3">
-      <widget class="QSpinBox" name="cyanRedMidtonesSpinbox"/>
+      <widget class="KisIntParseSpinBox" name="cyanRedMidtonesSpinbox"/>
      </item>
      <item row="2" column="3">
-      <widget class="QSpinBox" name="yellowBlueMidtonesSpinbox"/>
+      <widget class="KisIntParseSpinBox" name="yellowBlueMidtonesSpinbox"/>
      </item>
      <item row="1" column="3">
-      <widget class="QSpinBox" name="magentaGreenMidtonesSpinbox"/>
+      <widget class="KisIntParseSpinBox" name="magentaGreenMidtonesSpinbox"/>
      </item>
      <item row="0" column="1">
       <widget class="QSlider" name="cyanRedMidtonesSlider">
@@ -327,11 +336,11 @@
    </item>
    <item>
     <layout class="QGridLayout" name="gridLayout_3">
-     <property name="verticalSpacing">
-      <number>3</number>
-     </property>
      <property name="topMargin">
       <number>0</number>
+     </property>
+     <property name="verticalSpacing">
+      <number>3</number>
      </property>
      <item row="2" column="2">
       <widget class="QLabel" name="label_15">
@@ -341,7 +350,7 @@
       </widget>
      </item>
      <item row="0" column="3">
-      <widget class="QSpinBox" name="cyanRedHighlightsSpinbox"/>
+      <widget class="KisIntParseSpinBox" name="cyanRedHighlightsSpinbox"/>
      </item>
      <item row="3" column="0" colspan="2">
       <widget class="QCheckBox" name="chkPreserveLuminosity">
@@ -351,7 +360,7 @@
       </widget>
      </item>
      <item row="1" column="3">
-      <widget class="QSpinBox" name="magentaGreenHighlightsSpinbox"/>
+      <widget class="KisIntParseSpinBox" name="magentaGreenHighlightsSpinbox"/>
      </item>
      <item row="0" column="0">
       <widget class="QLabel" name="label_10">
@@ -395,7 +404,7 @@
       </widget>
      </item>
      <item row="2" column="3">
-      <widget class="QSpinBox" name="yellowBlueHighlightsSpinbox"/>
+      <widget class="KisIntParseSpinBox" name="yellowBlueHighlightsSpinbox"/>
      </item>
      <item row="0" column="1">
       <widget class="QSlider" name="cyanRedHighlightsSlider">
@@ -438,6 +447,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KisIntParseSpinBox</class>
+   <extends>QSpinBox</extends>
+   <header>kis_int_parse_spin_box.h</header>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>cyanRedShadowsSpinbox</tabstop>
   <tabstop>magentaGreenShadowsSpinbox</tabstop>

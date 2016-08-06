@@ -314,7 +314,6 @@ KisImportExportFilter::ConversionStatus KisAnimationExportSaver::exportAnimation
 
 KisImportExportFilter::ConversionStatus KisAnimationExportSaver::saveFrameCallback(int time, KisPaintDeviceSP frame, KisPropertiesConfigurationSP exportConfiguration)
 {
-    qDebug() << ">>>>>>>>>> saveFrameCallback" << time << frame << exportConfiguration;
     KisImportExportFilter::ConversionStatus status = KisImportExportFilter::OK;
 
     QString frameNumber = QString("%1").arg(time + m_d->sequenceNumberingOffset, 4, 10, QChar('0'));
@@ -322,11 +321,7 @@ KisImportExportFilter::ConversionStatus KisAnimationExportSaver::saveFrameCallba
 
     QRect rc = m_d->image->bounds();
     KisPainter::copyAreaOptimized(rc.topLeft(), frame, m_d->tmpDevice, rc);
-
-    qDebug() << "filename" << filename << exportConfiguration->toXML();
-
     if (!m_d->tmpDoc->exportDocument(QUrl::fromLocalFile(filename), exportConfiguration)) {
-        qDebug() << "eeek" << m_d->tmpDoc->errorMessage();
         status = KisImportExportFilter::InternalError;
     }
 

@@ -26,7 +26,14 @@
 
 const QString HATCHING_VERSION = "Hatching/Version";
 
+struct KisHatchingPaintOpSettings::Private
+{
+    QList<KisUniformPaintOpPropertyWSP> uniformProperties;
+};
+
+
 KisHatchingPaintOpSettings::KisHatchingPaintOpSettings()
+    : m_d(new Private)
 {
     setProperty(HATCHING_VERSION, "2");
 }
@@ -98,3 +105,115 @@ void KisHatchingPaintOpSettings::fromXML(const QDomElement& elt)
     }
     setProperty(HATCHING_VERSION, "2"); // make sure it's saved as version 2 next time
 }
+
+#include <brushengine/kis_slider_based_paintop_property.h>
+#include "kis_paintop_preset.h"
+#include "kis_paintop_settings_update_proxy.h"
+#include "kis_hatching_options.h"
+
+
+QList<KisUniformPaintOpPropertySP> KisHatchingPaintOpSettings::uniformProperties()
+{
+    QList<KisUniformPaintOpPropertySP> props =
+        listWeakToStrong(m_d->uniformProperties);
+
+    if (props.isEmpty()) {
+        {
+            KisDoubleSliderBasedPaintOpPropertyCallback *prop =
+                new KisDoubleSliderBasedPaintOpPropertyCallback(
+                    KisDoubleSliderBasedPaintOpPropertyCallback::Double,
+                    "hatching_angle",
+                    i18n("Hatching Angle"),
+                    this, 0);
+
+            const QString degree = QChar(Qt::Key_degree);
+            prop->setRange(-90, 90);
+            prop->setSingleStep(0.01);
+            prop->setDecimals(2);
+            prop->setSuffix(degree);
+
+            prop->setReadCallback(
+                [](KisUniformPaintOpProperty *prop) {
+                    HatchingOption option;
+                    option.readOptionSetting(prop->settings().data());
+                    prop->setValue(option.angle);
+                });
+            prop->setWriteCallback(
+                [](KisUniformPaintOpProperty *prop) {
+                    HatchingOption option;
+                    option.readOptionSetting(prop->settings().data());
+                    option.angle = prop->value().toReal();
+                    option.writeOptionSetting(prop->settings().data());
+                });
+
+            QObject::connect(preset()->updateProxy(), SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
+            prop->requestReadValue();
+            props << toQShared(prop);
+        }
+        {
+            KisDoubleSliderBasedPaintOpPropertyCallback *prop =
+                new KisDoubleSliderBasedPaintOpPropertyCallback(
+                    KisDoubleSliderBasedPaintOpPropertyCallback::Double,
+                    "hatching_separation",
+                    i18n("Separation"),
+                    this, 0);
+
+            prop->setRange(1.0, 30);
+            prop->setSingleStep(0.01);
+            prop->setDecimals(2);
+            prop->setSuffix(i18n(" px"));
+
+            prop->setReadCallback(
+                [](KisUniformPaintOpProperty *prop) {
+                    HatchingOption option;
+                    option.readOptionSetting(prop->settings().data());
+                    prop->setValue(option.separation);
+                });
+            prop->setWriteCallback(
+                [](KisUniformPaintOpProperty *prop) {
+                    HatchingOption option;
+                    option.readOptionSetting(prop->settings().data());
+                    option.separation = prop->value().toReal();
+                    option.writeOptionSetting(prop->settings().data());
+                });
+
+            QObject::connect(preset()->updateProxy(), SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
+            prop->requestReadValue();
+            props << toQShared(prop);
+        }
+        {
+            KisDoubleSliderBasedPaintOpPropertyCallback *prop =
+                new KisDoubleSliderBasedPaintOpPropertyCallback(
+                    KisDoubleSliderBasedPaintOpPropertyCallback::Double,
+                    "hatching_thickness",
+                    i18n("Thickness"),
+                    this, 0);
+
+            prop->setRange(1.0, 30);
+            prop->setSingleStep(0.01);
+            prop->setDecimals(2);
+            prop->setSuffix(i18n(" px"));
+
+            prop->setReadCallback(
+                [](KisUniformPaintOpProperty *prop) {
+                    HatchingOption option;
+                    option.readOptionSetting(prop->settings().data());
+                    prop->setValue(option.thickness);
+                });
+            prop->setWriteCallback(
+                [](KisUniformPaintOpProperty *prop) {
+                    HatchingOption option;
+                    option.readOptionSetting(prop->settings().data());
+                    option.thickness = prop->value().toReal();
+                    option.writeOptionSetting(prop->settings().data());
+                });
+
+            QObject::connect(preset()->updateProxy(), SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
+            prop->requestReadValue();
+            props << toQShared(prop);
+        }
+    }
+
+    return KisPaintOpSettings::uniformProperties() + props;
+}
+

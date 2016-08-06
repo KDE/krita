@@ -54,6 +54,8 @@ public:
 
     KisNodeWSP sourceNode() const;
 
+    QList<KisUniformPaintOpPropertySP> uniformProperties();
+
 public:
 
     Q_DISABLE_COPY(KisDuplicateOpSettings)
@@ -62,6 +64,7 @@ public:
     bool m_isOffsetNotUptodate;
     QPointF m_position; // Give the position of the last alt-click
     KisNodeWSP m_sourceNode;
+    QList<KisUniformPaintOpPropertyWSP> m_uniformProperties;
 };
 
 typedef KisSharedPtr<KisDuplicateOpSettings> KisDuplicateOpSettingsSP;

@@ -19,6 +19,8 @@
 #ifndef KIS_SPRAY_PAINTOP_SETTINGS_H_
 #define KIS_SPRAY_PAINTOP_SETTINGS_H_
 
+#include <QScopedPointer>
+
 #include <brushengine/kis_paintop_settings.h>
 #include <kis_types.h>
 
@@ -30,6 +32,7 @@ class KisSprayPaintOpSettings : public KisOutlineGenerationPolicy<KisPaintOpSett
 {
 public:
     KisSprayPaintOpSettings();
+    ~KisSprayPaintOpSettings();
 
 
     QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode) const;
@@ -41,6 +44,12 @@ public:
     bool paintIncremental();
     bool isAirbrushing() const;
     int rate() const;
+
+    QList<KisUniformPaintOpPropertySP> uniformProperties();
+
+private:
+    struct Private;
+    const QScopedPointer<Private> m_d;
 };
 
 #endif

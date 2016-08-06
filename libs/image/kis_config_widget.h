@@ -86,7 +86,6 @@ private Q_SLOTS:
 
 private:
     KisSignalCompressor m_compressor;
-    int m_delay;
 };
 
 

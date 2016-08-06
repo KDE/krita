@@ -29,7 +29,7 @@
    <item row="0" column="0">
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>3</number>
      </property>
      <widget class="QWidget" name="tab">
       <attribute name="title">
@@ -427,7 +427,7 @@
             <item>
              <widget class="QRadioButton" name="m_radioToolOptionsInToolbar">
               <property name="text">
-               <string>In Toolbar</string>
+               <string>In Tool&amp;bar</string>
               </property>
               <property name="checked">
                <bool>true</bool>
@@ -546,7 +546,7 @@
           </widget>
          </item>
          <item row="5" column="1">
-          <widget class="QSpinBox" name="m_favoritePresetsSpinBox">
+          <widget class="KisIntParseSpinBox" name="m_favoritePresetsSpinBox">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -584,7 +584,7 @@
           </widget>
          </item>
          <item row="0" column="1">
-          <widget class="QSpinBox" name="m_autosaveSpinBox">
+          <widget class="KisIntParseSpinBox" name="m_autosaveSpinBox">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -615,7 +615,7 @@
           </widget>
          </item>
          <item row="4" column="1">
-          <widget class="QSpinBox" name="m_undoStackSize">
+          <widget class="KisIntParseSpinBox" name="m_undoStackSize">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -698,6 +698,11 @@
   </layout>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>KisIntParseSpinBox</class>
+   <extends>QSpinBox</extends>
+   <header>kis_int_parse_spin_box.h</header>
+  </customwidget>
   <customwidget>
    <class>KColorButton</class>
    <extends>QPushButton</extends>

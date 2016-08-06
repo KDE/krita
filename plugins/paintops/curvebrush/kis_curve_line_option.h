@@ -43,21 +43,29 @@ private:
 
 };
 
-class CurveProperties
+class CurveOption
 {
 public:
-    int lineWidth;
-    int historySize;
-    qreal curvesOpacity;
-    bool paintConnectionLine;
-    bool smoothing;
+    bool curve_paint_connection_line;
+    bool curve_smoothing;
+    int curve_stroke_history_size;
+    int curve_line_width;
+    qreal curve_curves_opacity;
 
-    void readOptionSetting(const KisPropertiesConfiguration* settings) {
-        lineWidth = settings->getInt(CURVE_LINE_WIDTH);
-        historySize = settings->getInt(CURVE_STROKE_HISTORY_SIZE);
-        paintConnectionLine = settings->getBool(CURVE_PAINT_CONNECTION_LINE);
-        smoothing = settings->getBool(CURVE_SMOOTHING);
-        curvesOpacity = settings->getDouble(CURVE_CURVES_OPACITY);
+    void readOptionSetting(const KisPropertiesConfiguration* config) {
+        curve_paint_connection_line = config->getBool(CURVE_PAINT_CONNECTION_LINE);
+        curve_smoothing = config->getBool(CURVE_SMOOTHING);
+        curve_stroke_history_size = config->getInt(CURVE_STROKE_HISTORY_SIZE);
+        curve_line_width = config->getInt(CURVE_LINE_WIDTH);
+        curve_curves_opacity = config->getDouble(CURVE_CURVES_OPACITY);
+    }
+
+    void writeOptionSetting(KisPropertiesConfiguration* config) const {
+        config->setProperty(CURVE_PAINT_CONNECTION_LINE, curve_paint_connection_line);
+        config->setProperty(CURVE_SMOOTHING, curve_smoothing);
+        config->setProperty(CURVE_STROKE_HISTORY_SIZE, curve_stroke_history_size);
+        config->setProperty(CURVE_LINE_WIDTH, curve_line_width);
+        config->setProperty(CURVE_CURVES_OPACITY, curve_curves_opacity);
     }
 };
 

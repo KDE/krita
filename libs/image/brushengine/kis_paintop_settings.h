@@ -28,9 +28,12 @@
 #include "kis_shared.h"
 #include "kis_properties_configuration.h"
 #include <brushengine/kis_paint_information.h>
+#include <brushengine/kis_uniform_paintop_property.h>
+
 
 
 class KisPaintOpConfigWidget;
+class KisPaintopSettingsUpdateProxy;
 
 /**
  * This class is used to cache the settings for a paintop
@@ -158,23 +161,6 @@ public:
         QPointF const& start, qreal lengthScale, qreal angle);
 
     /**
-     * The behaviour might be different per paintop. Most of the time
-     * the brush diameter is increased by x pixels, y ignored
-     *
-     * @param x is add to the diameter or radius (according the paintop)
-     *  It might be also negative, to decrease the value of the brush diameter/radius.
-     *  x is in pixels
-     * @param y is unused, it supposed to be used to change some different attribute
-     * of the brush like softness or density
-     */
-    virtual void changePaintOpSize(qreal x, qreal y);
-
-    /**
-     * @return The width and the height of the brush mask/dab in pixels
-     */
-    virtual QSizeF paintOpSize() const;
-
-    /**
      * Set paintop opacity directly in the properties
      */
     void setPaintOpOpacity(qreal value);
@@ -203,6 +189,16 @@ public:
      * @return composite mode saved in the properties
      */
     QString paintOpCompositeOp() const;
+
+    /**
+     * Set paintop size directly in the properties
+     */
+    void setPaintOpSize(qreal value);
+
+    /**
+     * @return size saved in the properties
+     */
+    qreal paintOpSize() const;
 
     void setEraserMode(bool value);
     bool eraserMode() const;
@@ -253,14 +249,17 @@ public:
      */
     void setProperty(const QString & name, const QVariant & value);
 
+    virtual QList<KisUniformPaintOpPropertySP> uniformProperties();
+
     static bool isLodUserAllowed(const KisPropertiesConfiguration *config);
     static void setLodUserAllowed(KisPropertiesConfiguration *config, bool value);
 
-protected:
     /**
     * @return the option widget of the paintop (can be 0 is no option widgets is set)
     */
     KisPaintOpConfigWidget* optionsWidget() const;
+
+protected:
 
     /**
      * The callback is called every time when a property changes

@@ -19,15 +19,25 @@
 #ifndef KIS_DYNA_PAINTOP_SETTINGS_H_
 #define KIS_DYNA_PAINTOP_SETTINGS_H_
 
+#include <QScopedPointer>
 #include <brushengine/kis_paintop_settings.h>
 
 class KisDynaPaintOpSettings : public KisPaintOpSettings
 {
 
 public:
+    KisDynaPaintOpSettings();
+    ~KisDynaPaintOpSettings();
+
     bool paintIncremental();
     virtual bool isAirbrushing() const;
     virtual int rate() const;
+
+    QList<KisUniformPaintOpPropertySP> uniformProperties();
+
+private:
+    struct Private;
+    const QScopedPointer<Private> m_d;
 };
 
 #endif

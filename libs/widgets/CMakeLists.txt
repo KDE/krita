@@ -14,8 +14,6 @@ set(kritawidgets_LIB_SRCS
     KoResourceTaggingManager.cpp
     KoResourceItemChooserContextMenu.cpp
     KoAspectButton.cpp
-    KoPageLayoutDialog.cpp
-    KoPageLayoutWidget.cpp
     KoPagePreviewWidget.cpp
     KoPositionSelector.cpp
     KoSliderCombo.cpp
@@ -36,9 +34,7 @@ set(kritawidgets_LIB_SRCS
     KoEditColorSetDialog.cpp
     KoTriangleColorSelector.cpp
     KoResourcePopupAction.cpp
-    KoStrokeConfigWidget.cpp
     KoFillConfigWidget.cpp
-    KoShadowConfigWidget.cpp
     KoIconToolTip.cpp
     KoResourceItemChooser.cpp
     KoResourceItemChooserSync.cpp
@@ -56,9 +52,6 @@ set(kritawidgets_LIB_SRCS
     KoLineStyleSelector.cpp
     KoLineStyleItemDelegate.cpp
     KoLineStyleModel.cpp
-    KoMarkerModel.cpp
-    KoMarkerItemDelegate.cpp
-    KoMarkerSelector.cpp
     KoDockWidgetTitleBar.cpp
     KoDockWidgetTitleBarButton.cpp
     KoResourceFiltering.cpp
@@ -70,6 +63,15 @@ set(kritawidgets_LIB_SRCS
     KoToolBoxFactory.cpp
     KoToolDocker.cpp
     
+
+    KoPageLayoutWidget.cpp
+    KoPageLayoutDialog.cpp
+    KoShadowConfigWidget.cpp
+    KoStrokeConfigWidget.cpp
+    KoMarkerSelector.cpp
+    KoMarkerModel.cpp
+    KoMarkerItemDelegate.cpp
+
     KoDocumentInfoDlg.cpp
     KoGlobal.cpp
     KoTableView.cpp
@@ -77,6 +79,10 @@ set(kritawidgets_LIB_SRCS
     WidgetsDebug.cpp
 
     kis_file_name_requester.cpp
+
+    kis_double_parse_spin_box.cpp
+    kis_double_parse_unit_spin_box.cpp
+    kis_int_parse_spin_box.cpp
 )
 
 ki18n_wrap_ui( kritawidgets_LIB_SRCS
@@ -84,9 +90,9 @@ ki18n_wrap_ui( kritawidgets_LIB_SRCS
     koDocumentInfoAboutWidget.ui
     koDocumentInfoAuthorWidget.ui
     KoEditColorSet.ui
+    wdg_file_name_requester.ui
     KoPageLayoutWidget.ui
     KoShadowConfigWidget.ui
-    wdg_file_name_requester.ui
 )
 
 add_library(kritawidgets SHARED ${kritawidgets_LIB_SRCS})

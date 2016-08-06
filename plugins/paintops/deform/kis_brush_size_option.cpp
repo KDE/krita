@@ -112,26 +112,33 @@ qreal KisBrushSizeOption::brushAspect() const
 
 void KisBrushSizeOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
 {
-    setting->setProperty(BRUSH_DIAMETER, m_options->diameter->value());
-    setting->setProperty(BRUSH_ASPECT, m_options->aspectBox->value());
-    setting->setProperty(BRUSH_ROTATION, m_options->rotationBox->value());
-    setting->setProperty(BRUSH_SCALE, m_options->scale->value());
-    setting->setProperty(BRUSH_SPACING, m_options->spacing->value());
-    setting->setProperty(BRUSH_DENSITY, m_options->densityBox->value());
-    setting->setProperty(BRUSH_JITTER_MOVEMENT, m_options->jitterMove->value());
-    setting->setProperty(BRUSH_JITTER_MOVEMENT_ENABLED, m_options->jitterMoveBox->isChecked());
+    BrushSizeOption op;
+
+    op.brush_diameter = m_options->diameter->value();
+    op.brush_aspect = m_options->aspectBox->value();
+    op.brush_rotation = m_options->rotationBox->value();
+    op.brush_scale = m_options->scale->value();
+    op.brush_spacing = m_options->spacing->value();
+    op.brush_density = m_options->densityBox->value() / 100.0;
+    op.brush_jitter_movement = m_options->jitterMove->value();
+    op.brush_jitter_movement_enabled = m_options->jitterMoveBox->isChecked();
+
+    op.writeOptionSetting(setting);
 }
 
 void KisBrushSizeOption::readOptionSetting(const KisPropertiesConfiguration* setting)
 {
-    m_options->diameter->setValue(setting->getDouble(BRUSH_DIAMETER));
-    m_options->aspectBox->setValue(setting->getDouble(BRUSH_ASPECT));
-    m_options->rotationBox->setValue(setting->getDouble(BRUSH_ROTATION));
-    m_options->scale->setValue(setting->getDouble(BRUSH_SCALE));
-    m_options->spacing->setValue(setting->getDouble(BRUSH_SPACING));
-    m_options->densityBox->setValue(setting->getDouble(BRUSH_DENSITY));
-    m_options->jitterMove->setValue(setting->getDouble(BRUSH_JITTER_MOVEMENT));
-    m_options->jitterMoveBox->setChecked(setting->getBool(BRUSH_JITTER_MOVEMENT_ENABLED));
+    BrushSizeOption op;
+    op.readOptionSetting(setting);
+
+    m_options->diameter->setValue(op.brush_diameter);
+    m_options->aspectBox->setValue(op.brush_aspect);
+    m_options->rotationBox->setValue(op.brush_rotation);
+    m_options->scale->setValue(op.brush_scale);
+    m_options->spacing->setValue(op.brush_spacing);
+    m_options->densityBox->setValue(op.brush_density * 100.0);
+    m_options->jitterMove->setValue(op.brush_jitter_movement);
+    m_options->jitterMoveBox->setChecked(op.brush_jitter_movement_enabled);
 
 }
 

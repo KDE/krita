@@ -769,7 +769,7 @@ void KisToolTransform::initThumbnailImage(KisPaintDeviceSP previewDevice)
         origImg = m_selectedPortionCache->
             createThumbnail(thumbRect.width(),
                             thumbRect.height(),
-                            srcRect,
+                            srcRect, 1,
                             KoColorConversionTransformation::internalRenderingIntent(),
                             KoColorConversionTransformation::internalConversionFlags());
         thumbToImageTransform = scaleTransform.inverted();

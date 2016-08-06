@@ -47,7 +47,6 @@ public Q_SLOTS:
     void slotSetColor(KoColor color);
 private Q_SLOTS:
     void slotUpdateFromSpinBoxes();
-    void slotFinishUpdate();
 private:
     struct Private;
     const QScopedPointer<Private> m_d;

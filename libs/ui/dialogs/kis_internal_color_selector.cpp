@@ -60,7 +60,7 @@ KisInternalColorSelector::KisInternalColorSelector(QWidget *parent, KoColor colo
     connect(m_d->spinBoxSelector, SIGNAL(sigNewColor(KoColor)), this, SLOT(slotColorUpdated(KoColor)));
 
     connect(this, SIGNAL(signalForegroundColorChosen(KoColor)), this, SLOT(slotLockSelector()));
-    m_d->compressColorChanges = new KisSignalCompressor(500 /* ms */, KisSignalCompressor::POSTPONE, this);
+    m_d->compressColorChanges = new KisSignalCompressor(100 /* ms */, KisSignalCompressor::POSTPONE, this);
     connect(m_d->compressColorChanges, SIGNAL(timeout()), this, SLOT(endUpdateWithNewColor()));
 }
 

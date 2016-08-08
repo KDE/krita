@@ -33,7 +33,7 @@ public:
                    KisPaintDeviceSP dst);
     ~KisMultiwayCut();
 
-    void addScribble(KisPaintDeviceSP dev, const KoColor &color);
+    void addKeyStroke(KisPaintDeviceSP dev, const KoColor &color);
 
     void run();
 

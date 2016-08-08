@@ -21,9 +21,10 @@
 
 #include "kis_types.h"
 #include "kritaimage_export.h"
+#include <KoColor.h>
+
 
 class KoColor;
-
 
 namespace KisLazyFillTools
 {
@@ -56,6 +57,14 @@ namespace KisLazyFillTools
 
     KRITAIMAGE_EXPORT
     QVector<QPoint> splitIntoConnectedComponents(KisPaintDeviceSP src);
+
+    struct KeyStroke {
+        KeyStroke();
+        KeyStroke(KisPaintDeviceSP _dev, const KoColor &_color);
+
+        KisPaintDeviceSP dev;
+        KoColor color;
+    };
 };
 
 #endif /* __KIS_LAZY_FILL_TOOLS_H */

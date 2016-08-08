@@ -18,8 +18,6 @@
 
 #include "kis_lazy_fill_tools.h"
 
-#include <KoColor.h>
-
 #include <numeric>
 #include <boost/limits.hpp>
 
@@ -132,6 +130,14 @@ QVector<QPoint> splitIntoConnectedComponents(KisPaintDeviceSP dev)
 }
 
 
+KeyStroke::KeyStroke()
+{
+}
+
+KeyStroke::KeyStroke(KisPaintDeviceSP _dev, const KoColor &_color)
+    : dev(_dev), color(_color)
+{
+}
 
 
 

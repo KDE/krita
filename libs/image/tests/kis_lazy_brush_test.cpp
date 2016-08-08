@@ -1256,11 +1256,11 @@ void KisLazyBrushTest::testCutOnGraphDeviceMulti()
 
     KisMultiwayCut cut(filteredMainDev, resultColoring);
 
-    cut.addScribble(aLabelDev, KoColor(Qt::red, mainDev->colorSpace()));
-    cut.addScribble(bLabelDev, KoColor(Qt::green, mainDev->colorSpace()));
-    cut.addScribble(cLabelDev, KoColor(Qt::blue, mainDev->colorSpace()));
-    cut.addScribble(dLabelDev, KoColor(Qt::yellow, mainDev->colorSpace()));
-    cut.addScribble(eLabelDev, KoColor(Qt::magenta, mainDev->colorSpace()));
+    cut.addKeyStroke(aLabelDev, KoColor(Qt::red, mainDev->colorSpace()));
+    cut.addKeyStroke(bLabelDev, KoColor(Qt::green, mainDev->colorSpace()));
+    cut.addKeyStroke(cLabelDev, KoColor(Qt::blue, mainDev->colorSpace()));
+    cut.addKeyStroke(dLabelDev, KoColor(Qt::yellow, mainDev->colorSpace()));
+    cut.addKeyStroke(eLabelDev, KoColor(Qt::magenta, mainDev->colorSpace()));
 
     cut.run();
 

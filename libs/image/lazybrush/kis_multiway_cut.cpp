@@ -29,7 +29,7 @@
 #include <floodfill/kis_scanline_fill.h>
 
 
-typedef std::pair<KisPaintDeviceSP, KoColor> Scribble;
+using namespace KisLazyFillTools;
 
 struct KisMultiwayCut::Private
 {
@@ -37,9 +37,9 @@ struct KisMultiwayCut::Private
     KisPaintDeviceSP dst;
     KisPaintDeviceSP mask;
 
-    QVector<Scribble> scribbles;
+    QVector<KeyStroke> keyStrokes;
 
-    static void maskOutScribble(KisPaintDeviceSP scribble, KisPaintDeviceSP mask);
+    static void maskOutKeyStroke(KisPaintDeviceSP keyStrokeDevice, KisPaintDeviceSP mask);
 };
 
 KisMultiwayCut::KisMultiwayCut(KisPaintDeviceSP src,
@@ -55,21 +55,21 @@ KisMultiwayCut::~KisMultiwayCut()
 {
 }
 
-void KisMultiwayCut::addScribble(KisPaintDeviceSP dev, const KoColor &color)
+void KisMultiwayCut::addKeyStroke(KisPaintDeviceSP dev, const KoColor &color)
 {
-    m_d->scribbles << Scribble(dev, color);
+    m_d->keyStrokes << KeyStroke(dev, color);
 }
 
 
-void KisMultiwayCut::Private::maskOutScribble(KisPaintDeviceSP scribble, KisPaintDeviceSP mask)
+void KisMultiwayCut::Private::maskOutKeyStroke(KisPaintDeviceSP keyStrokeDevice, KisPaintDeviceSP mask)
 {
-    KIS_ASSERT_RECOVER_RETURN(scribble->pixelSize() == 1);
+    KIS_ASSERT_RECOVER_RETURN(keyStrokeDevice->pixelSize() == 1);
     KIS_ASSERT_RECOVER_RETURN(mask->pixelSize() == 1);
 
-    QRegion region = scribble->region() & mask->exactBounds();
+    QRegion region = keyStrokeDevice->region() & mask->exactBounds();
 
     Q_FOREACH (const QRect &rc, region.rects()) {
-        KisSequentialIterator dstIt(scribble, rc);
+        KisSequentialIterator dstIt(keyStrokeDevice, rc);
         KisSequentialConstIterator mskIt(mask, rc);
 
         do {
@@ -84,18 +84,18 @@ void KisMultiwayCut::run()
 {
     KisPaintDeviceSP other = new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8());
 
-    while (m_d->scribbles.size() > 1) {
-        Scribble current = m_d->scribbles.takeFirst();
+    while (m_d->keyStrokes.size() > 1) {
+        KeyStroke current = m_d->keyStrokes.takeFirst();
         KisPainter gc(other);
 
-        Q_FOREACH (const Scribble &s, m_d->scribbles) {
-            const QRect rc = s.first->extent();
-            gc.bitBlt(rc.topLeft(), s.first, rc);
+        Q_FOREACH (const KeyStroke &s, m_d->keyStrokes) {
+            const QRect rc = s.dev->extent();
+            gc.bitBlt(rc.topLeft(), s.dev, rc);
         }
 
-        KisLazyFillTools::cutOneWay(current.second,
+        KisLazyFillTools::cutOneWay(current.color,
                                     m_d->src,
-                                    current.first,
+                                    current.dev,
                                     other,
                                     m_d->dst,
                                     m_d->mask);
@@ -108,17 +108,17 @@ void KisMultiwayCut::run()
 
     // TODO: check if one can use the last cut for this purpose!
 
-    if (m_d->scribbles.size() == 1) {
-        Scribble current = m_d->scribbles.takeLast();
+    if (m_d->keyStrokes.size() == 1) {
+        KeyStroke current = m_d->keyStrokes.takeLast();
 
-        m_d->maskOutScribble(current.first, m_d->mask);
+        m_d->maskOutKeyStroke(current.dev, m_d->mask);
 
         QVector<QPoint> points =
-            KisLazyFillTools::splitIntoConnectedComponents(current.first);
+            KisLazyFillTools::splitIntoConnectedComponents(current.dev);
 
         Q_FOREACH (const QPoint &pt, points) {
             KisScanlineFill fill(m_d->mask, pt, boundingRect);
-            fill.fillColor(current.second, m_d->dst);
+            fill.fillColor(current.color, m_d->dst);
         }
     }
 }

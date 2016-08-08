@@ -355,6 +355,17 @@
       <isCheckable>true</isCheckable>
       <statusTip></statusTip>
     </Action>
+    <Action name="disable_pressure">
+      <icon>transform_icons_penPressure</icon>
+      <text>Use Pen Pressure</text>
+      <whatsThis></whatsThis>
+      <toolTip>Use Pen Pressure</toolTip>
+      <iconText>Use Pen Pressure</iconText>
+      <activationFlags>10000</activationFlags>
+      <shortcut></shortcut>
+      <isCheckable>true</isCheckable>
+      <statusTip></statusTip>
+    </Action>
     <Action name="hmirror_action">
       <icon>symmetry-horizontal</icon>
       <text>Horizontal Mirror Tool</text>

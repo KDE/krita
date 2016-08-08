@@ -30,6 +30,7 @@ class KoPointerEvent;
 class KisToolFreehand;
 class KisCoordinatesConverter;
 class KisSpeedSmoother;
+class KoCanvasResourceManager;
 
 class KRITAUI_EXPORT KisPaintingInformationBuilder : public QObject
 {
@@ -39,7 +40,7 @@ public:
     KisPaintingInformationBuilder();
     ~KisPaintingInformationBuilder();
 
-    KisPaintInformation startStroke(KoPointerEvent *event, int timeElapsed);
+    KisPaintInformation startStroke(KoPointerEvent *event, int timeElapsed, const KoCanvasResourceManager *manager);
 
     KisPaintInformation continueStroke(KoPointerEvent *event,
                                        int timeElapsed);
@@ -72,6 +73,7 @@ private:
     QVector<qreal> m_pressureSamples;
     QPointF m_startPoint;
     QScopedPointer<KisSpeedSmoother> m_speedSmoother;
+    bool m_pressureDisabled;
 };
 
 class KRITAUI_EXPORT KisConverterPaintingInformationBuilder : public KisPaintingInformationBuilder

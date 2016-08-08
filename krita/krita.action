@@ -2616,6 +2616,18 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
+    <Action name="waveletdecompose">
+      <icon></icon>
+      <text>Wavelet Decompose ...</text>
+      <whatsThis></whatsThis>
+      <toolTip>Wavelet Decompose</toolTip>
+      <iconText>Wavelet Decompose</iconText>
+      <activationFlags>1000</activationFlags>
+      <activationConditions>1</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
     <Action name="mirrorNodeX">
       <icon>symmetry-horizontal</icon>
       <text>Mirror Layer Hori&amp;zontally</text>

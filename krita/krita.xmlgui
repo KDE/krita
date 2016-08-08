@@ -147,6 +147,7 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
       <Action name="canvassize"/>
       <Separator/>
       <Action name="imagesplit"/>
+      <Action name="waveletdecompose"/>
       <Action name="separate"/>
     </Menu>
     <Menu name="Layer">

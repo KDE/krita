@@ -17,9 +17,8 @@
  */
 #include "kis_spinbox_color_selector.h"
 #include <QFormLayout>
-#include <QAbstractSpinBox>
-#include <QSpinBox>
-#include <QDoubleSpinBox>
+#include "kis_double_parse_spin_box.h"
+#include "kis_int_parse_spin_box.h"
 #include "kis_signal_compressor.h"
 
 #include "KoChannelInfo.h"
@@ -29,8 +28,8 @@
 
 struct KisSpinboxColorSelector::Private
 {
-    QList <QSpinBox*> spinBoxList;
-    QList <QDoubleSpinBox*> doubleSpinBoxList;
+    QList <KisIntParseSpinBox*> spinBoxList;
+    QList <KisDoubleParseSpinBox*> doubleSpinBoxList;
     KoColor color;
     const KoColorSpace *cs;
 };
@@ -68,12 +67,12 @@ void KisSpinboxColorSelector::slotSetColorSpace(const KoColorSpace *cs)
     m_d->cs = KoColorSpaceRegistry::instance()->colorSpace(cs->colorModelId().id(), cs->colorDepthId().id(), cs->profile());
 
     //remake spinboxes
-    Q_FOREACH (QSpinBox *input, m_d->spinBoxList) {
+    Q_FOREACH (KisIntParseSpinBox *input, m_d->spinBoxList) {
         this->layout()->removeWidget(input);
         delete input;
     }
     m_d->spinBoxList.clear();
-    Q_FOREACH (QDoubleSpinBox *input, m_d->doubleSpinBoxList) {
+    Q_FOREACH (KisDoubleParseSpinBox *input, m_d->doubleSpinBoxList) {
         this->layout()->removeWidget(input);
         delete input;
     }
@@ -84,7 +83,7 @@ void KisSpinboxColorSelector::slotSetColorSpace(const KoColorSpace *cs)
         if (channel->channelType() == KoChannelInfo::COLOR) {
             switch (channel->channelValueType()) {
             case KoChannelInfo::UINT8: {
-                QSpinBox *input = new QSpinBox(this);
+                KisIntParseSpinBox *input = new KisIntParseSpinBox(this);
                 input->setMinimum(0);
                 input->setMaximum(0xFF);
                 m_d->spinBoxList.append(input);
@@ -95,7 +94,7 @@ void KisSpinboxColorSelector::slotSetColorSpace(const KoColorSpace *cs)
             }
             break;
             case KoChannelInfo::UINT16: {
-                QSpinBox *input = new QSpinBox(this);
+                KisIntParseSpinBox *input = new KisIntParseSpinBox(this);
                 input->setMinimum(0);
                 input->setMaximum(0xFFFF);
                 m_d->spinBoxList.append(input);
@@ -106,7 +105,7 @@ void KisSpinboxColorSelector::slotSetColorSpace(const KoColorSpace *cs)
             }
             break;
             case KoChannelInfo::UINT32: {
-                QSpinBox *input = new QSpinBox(this);
+                KisIntParseSpinBox *input = new KisIntParseSpinBox(this);
                 input->setMinimum(0);
                 input->setMaximum(0xFFFFFFFF);
                 m_d->spinBoxList.append(input);
@@ -118,7 +117,7 @@ void KisSpinboxColorSelector::slotSetColorSpace(const KoColorSpace *cs)
             break;
             case KoChannelInfo::FLOAT16:
             case KoChannelInfo::FLOAT32: {
-                QDoubleSpinBox *input = new QDoubleSpinBox(this);
+                KisDoubleParseSpinBox *input = new KisDoubleParseSpinBox(this);
                 input->setMinimum(0);
                 input->setMaximum(1.0);
                 m_d->doubleSpinBoxList.append(input);

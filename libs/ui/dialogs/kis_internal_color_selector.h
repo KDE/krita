@@ -61,7 +61,6 @@ public:
     KoColor getCurrentColor();
 
     void chooseAlpha(bool chooseAlpha);
-    void setDialogModal(bool modal);
 
 Q_SIGNALS:
     /**

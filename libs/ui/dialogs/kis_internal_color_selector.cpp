@@ -38,7 +38,6 @@ struct KisInternalColorSelector::Private
     KoColor currentColor;
     const KoColorSpace *currentColorSpace;
     bool chooseAlpha = false;
-    //KisSpinboxColorSelector *spinBoxSelector;
     KisSignalCompressor *compressColorChanges;
 };
 
@@ -92,7 +91,6 @@ void KisInternalColorSelector::colorSpaceChanged(const KoColorSpace *cs)
     }
 
     m_d->currentColorSpace = KoColorSpaceRegistry::instance()->colorSpace(cs->colorModelId().id(), cs->colorDepthId().id(), cs->profile());
-    //Empty the layout.
     m_ui->spinboxselector->slotSetColorSpace(m_d->currentColorSpace);
 
 }
@@ -113,12 +111,6 @@ KoColor KisInternalColorSelector::getCurrentColor()
 void KisInternalColorSelector::chooseAlpha(bool chooseAlpha)
 {
     m_d->chooseAlpha = chooseAlpha;
-}
-
-void KisInternalColorSelector::setDialogModal(bool modal)
-{
-    m_ui->buttonBox->show();
-    setModal(true);
 }
 
 void KisInternalColorSelector::slotConfigurationChanged()

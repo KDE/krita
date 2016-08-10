@@ -37,6 +37,8 @@ public:
     explicit KisSpinboxColorSelector(QWidget *parent);
     ~KisSpinboxColorSelector();
 
+    void chooseAlpha(bool chooseAlpha);
+
 Q_SIGNALS:
 
     void sigNewColor(KoColor color);

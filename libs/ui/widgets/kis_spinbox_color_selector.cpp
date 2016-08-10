@@ -35,12 +35,13 @@ struct KisSpinboxColorSelector::Private
     const KoColorSpace *cs;
 };
 
-KisSpinboxColorSelector::KisSpinboxColorSelector(QWidget *parent, KoColor color) : QWidget(parent) , m_d(new Private)
+KisSpinboxColorSelector::KisSpinboxColorSelector(QWidget *parent) : QWidget(parent) , m_d(new Private)
 {
     QFormLayout *layout = new QFormLayout(this);
     this->setLayout(layout);
     this->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
 
+    KoColor color = KoColor();
     m_d->color = color;
     slotSetColorSpace(m_d->color.colorSpace());
 }

@@ -97,7 +97,7 @@ void KoDualColorButton::Private::init(KoDualColorButton *q)
 
     q->setAcceptDrops( true );
     QString caption = "Select a color";
-    colorSelectorDialog = new KisInternalColorSelector(q, foregroundColor, caption);
+    colorSelectorDialog = new KisInternalColorSelector(q, foregroundColor, false, caption);
     connect(colorSelectorDialog, SIGNAL(signalForegroundColorChosen(KoColor)), q, SLOT(slotSetForeGroundColorFromDialog(KoColor)));
     connect(q, SIGNAL(foregroundColorChanged(KoColor)), colorSelectorDialog, SLOT(slotColorUpdated(KoColor)));
 }
@@ -303,8 +303,10 @@ void KoDualColorButton::mouseReleaseEvent( QMouseEvent *event )
         if(d->tmpSelection == Foreground ) {
             if( d->popDialog) {
                 d->colorSelectorDialog->show();
+
                 //QColor c = d->displayRenderer->toQColor(d->foregroundColor);
                 //c = QColorDialog::getColor(c, this) ;
+
                 //if (c.isValid()) {
                 //    d->foregroundColor = d->displayRenderer->approximateFromRenderedQColor(c);
                 //    emit foregroundColorChanged(d->foregroundColor);
@@ -320,12 +322,16 @@ void KoDualColorButton::mouseReleaseEvent( QMouseEvent *event )
     } else if ( backgroundRect.contains( event->pos() )) {
         if(d->tmpSelection == Background ) {
             if( d->popDialog) {
-                QColor c = d->displayRenderer->toQColor(d->backgroundColor);
+                KoColor c = d->backgroundColor;
+                c = KisInternalColorSelector::getModalColorDialog(c, false, this);
+                d->backgroundColor = c;
+                emit backgroundColorChanged(d->backgroundColor);
+                /*QColor c = d->displayRenderer->toQColor(d->backgroundColor);
                 c = QColorDialog::getColor(c, this);
                 if (c.isValid()) {
                     d->backgroundColor = d->displayRenderer->approximateFromRenderedQColor(c);
                     emit backgroundColorChanged(d->backgroundColor);
-                }
+                }*/
             }
             else
                 emit pleasePopDialog( d->backgroundColor);

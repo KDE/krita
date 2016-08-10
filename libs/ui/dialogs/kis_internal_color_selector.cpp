@@ -24,49 +24,54 @@
 #include "KoColorSpaceRegistry.h"
 
 #include "kis_signal_compressor.h"
-#include "kis_canvas_resource_provider.h"
 #include "KisViewManager.h"
 #include "KoColorDisplayRendererInterface.h"
 #include "kis_display_color_converter.h"
 #include "kis_spinbox_color_selector.h"
 
 #include "kis_internal_color_selector.h"
+#include "ui_wdgdlginternalcolorselector.h"
 
 struct KisInternalColorSelector::Private
 {
     bool allowUpdates = true;
     KoColor currentColor;
     const KoColorSpace *currentColorSpace;
-
-
-    KisSpinboxColorSelector *spinBoxSelector;
+    bool chooseAlpha = false;
+    //KisSpinboxColorSelector *spinBoxSelector;
     KisSignalCompressor *compressColorChanges;
 };
 
-KisInternalColorSelector::KisInternalColorSelector(QWidget *parent, KoColor color, const QString &caption)
+KisInternalColorSelector::KisInternalColorSelector(QWidget *parent, KoColor color, bool modal, const QString &caption)
     : QDialog(parent)
      ,m_d(new Private)
 {
-    setModal(false);
+    setModal(modal);
+    m_ui = new Ui_WdgDlgInternalColorSelector();
+    m_ui->setupUi(this);
+    if (!modal) {
+        m_ui->buttonBox->hide();
+    }
+
     setWindowTitle(caption);
-    this->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
 
     m_d->currentColor = color;
     m_d->currentColorSpace = m_d->currentColor.colorSpace();
-    m_d->spinBoxSelector = new KisSpinboxColorSelector(this, m_d->currentColor);
-    if (m_d->spinBoxSelector) {qDebug()<<"valid";}
-    //ui->base->addWidget(m_d->spinBoxSelector);
-    //ui->verticalLayout->addWidget(m_d->spinBoxSelector);
-    connect(m_d->spinBoxSelector, SIGNAL(sigNewColor(KoColor)), this, SLOT(slotColorUpdated(KoColor)));
+
+    m_ui->spinboxselector->slotSetColor(color);
+    connect(m_ui->spinboxselector, SIGNAL(sigNewColor(KoColor)), this, SLOT(slotColorUpdated(KoColor)));
 
     connect(this, SIGNAL(signalForegroundColorChosen(KoColor)), this, SLOT(slotLockSelector()));
     m_d->compressColorChanges = new KisSignalCompressor(100 /* ms */, KisSignalCompressor::POSTPONE, this);
     connect(m_d->compressColorChanges, SIGNAL(timeout()), this, SLOT(endUpdateWithNewColor()));
+
+    connect(m_ui->buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(m_ui->buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 }
 
 KisInternalColorSelector::~KisInternalColorSelector()
 {
-    delete ui;
+    delete m_ui;
     //TODO: Does the scoped pointer also need to be deleted???
 }
 
@@ -80,7 +85,7 @@ void KisInternalColorSelector::slotColorUpdated(KoColor newColor)
     }
 }
 
-void KisInternalColorSelector::slotColorSpaceChanged(const KoColorSpace *cs)
+void KisInternalColorSelector::colorSpaceChanged(const KoColorSpace *cs)
 {
     if (cs == m_d->currentColorSpace) {
         return;
@@ -88,8 +93,32 @@ void KisInternalColorSelector::slotColorSpaceChanged(const KoColorSpace *cs)
 
     m_d->currentColorSpace = KoColorSpaceRegistry::instance()->colorSpace(cs->colorModelId().id(), cs->colorDepthId().id(), cs->profile());
     //Empty the layout.
-    m_d->spinBoxSelector->slotSetColorSpace(m_d->currentColorSpace);
+    m_ui->spinboxselector->slotSetColorSpace(m_d->currentColorSpace);
 
+}
+
+KoColor KisInternalColorSelector::getModalColorDialog(const KoColor color, bool chooseAlpha, QWidget* parent, QString caption)
+{
+    KisInternalColorSelector dialog(parent, color, true, caption);
+    dialog.chooseAlpha(chooseAlpha);
+    dialog.exec();
+    return dialog.getCurrentColor();
+}
+
+KoColor KisInternalColorSelector::getCurrentColor()
+{
+    return m_d->currentColor;
+}
+
+void KisInternalColorSelector::chooseAlpha(bool chooseAlpha)
+{
+    m_d->chooseAlpha = chooseAlpha;
+}
+
+void KisInternalColorSelector::setDialogModal(bool modal)
+{
+    m_ui->buttonBox->show();
+    setModal(true);
 }
 
 void KisInternalColorSelector::slotConfigurationChanged()
@@ -106,8 +135,8 @@ void KisInternalColorSelector::slotLockSelector()
 void KisInternalColorSelector::updateAllElements(QObject *source)
 {
     //update everything!!!
-    if (source != m_d->spinBoxSelector) {
-        m_d->spinBoxSelector->slotSetColor(m_d->currentColor);
+    if (source != m_ui->spinboxselector) {
+        m_ui->spinboxselector->slotSetColor(m_d->currentColor);
     }
 
     if (source != this->parent()) {
@@ -115,6 +144,7 @@ void KisInternalColorSelector::updateAllElements(QObject *source)
         m_d->compressColorChanges->start();
     }
 }
+
 
 void KisInternalColorSelector::endUpdateWithNewColor()
 {

@@ -20,7 +20,6 @@
 #define KISINTERNALCOLORSELECTOR_H
 
 #include "kritaui_export.h"
-#include "kis_canvas2.h"
 #include "KoColor.h"
 #include "KoColorSpace.h"
 #include <QScopedPointer>
@@ -36,14 +35,33 @@ class KRITAUI_EXPORT KisInternalColorSelector : public QDialog
 {
     Q_OBJECT
 public:
-    KisInternalColorSelector(QWidget* parent, KoColor color, const QString &caption);
+    KisInternalColorSelector(QWidget* parent, KoColor color, bool modal, const QString &caption);
     ~KisInternalColorSelector();
 
     /**
      * @brief slotColorSpaceChanged
-     * Color space has changed.
+     * Color space has changed, use this dialog to change the colorspace.
      */
-    void slotColorSpaceChanged(const KoColorSpace *cs);
+    void colorSpaceChanged(const KoColorSpace *cs);
+
+    /**
+     * @brief getModalColorDialog
+     * Excecute this dialog modally. The function returns
+     * the KoColor you want.
+     * @param color - The current color. Make sure this is in the color space you want your
+     * end color to be in.
+     * @param chooseAlpha - Whether or not the alpha-choosing functionality should be used.
+     */
+    static KoColor getModalColorDialog(const KoColor color, bool chooseAlpha = false, QWidget* parent = Q_NULLPTR, QString caption = QString());
+
+    /**
+     * @brief getCurrentColor
+     * @return gives currently active color;
+     */
+    KoColor getCurrentColor();
+
+    void chooseAlpha(bool chooseAlpha);
+    void setDialogModal(bool modal);
 
 Q_SIGNALS:
     /**
@@ -82,7 +100,7 @@ private Q_SLOTS:
     void endUpdateWithNewColor();
 
 private:
-    Ui::WdgDlgInternalColorSelector *ui; //the UI
+    Ui_WdgDlgInternalColorSelector *m_ui; //the UI
     struct Private; //The private struct
     const QScopedPointer<Private> m_d; //the private pointer
 

@@ -34,7 +34,7 @@ class KRITAUI_EXPORT KisSpinboxColorSelector : public QWidget
 {
     Q_OBJECT
 public:
-    explicit KisSpinboxColorSelector(QWidget *parent, KoColor color);
+    explicit KisSpinboxColorSelector(QWidget *parent);
     ~KisSpinboxColorSelector();
 
 Q_SIGNALS:

@@ -1,0 +1,9 @@
+{
+    "Id": "Wavelet decomposer",
+    "Type": "Service",
+    "X-KDE-Library": "kritawaveletdecompose",
+    "X-KDE-ServiceTypes": [
+        "Krita/ViewPlugin"
+    ],
+    "X-Krita-Version": "28"
+}

@@ -75,6 +75,7 @@ public:
         Size,
         HdrGamma,
         GlobalAlphaLock,
+        DisablePressure,
         PreviousPaintOpPreset,
         EffectiveZoom, ///<-Used only by painting tools for non-displaying purposes
         PresetAllowsLod,
@@ -165,6 +166,8 @@ public:
     void setGlobalAlphaLock(bool lock);
     bool globalAlphaLock() const;
 
+    void setDisablePressure(bool value);
+    bool disablePressure() const;
 
     ///Notify that the workspace is saved and settings should be saved to it
     void notifySavingWorkspace(KisWorkspaceResource* workspace);

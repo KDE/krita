@@ -355,6 +355,17 @@
       <isCheckable>true</isCheckable>
       <statusTip></statusTip>
     </Action>
+    <Action name="disable_pressure">
+      <icon>transform_icons_penPressure</icon>
+      <text>Use Pen Pressure</text>
+      <whatsThis></whatsThis>
+      <toolTip>Use Pen Pressure</toolTip>
+      <iconText>Use Pen Pressure</iconText>
+      <activationFlags>10000</activationFlags>
+      <shortcut></shortcut>
+      <isCheckable>true</isCheckable>
+      <statusTip></statusTip>
+    </Action>
     <Action name="hmirror_action">
       <icon>symmetry-horizontal</icon>
       <text>Horizontal Mirror Tool</text>
@@ -2612,6 +2623,18 @@
       <iconText>Split Layer</iconText>
       <activationFlags>1000</activationFlags>
       <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="waveletdecompose">
+      <icon></icon>
+      <text>Wavelet Decompose ...</text>
+      <whatsThis></whatsThis>
+      <toolTip>Wavelet Decompose</toolTip>
+      <iconText>Wavelet Decompose</iconText>
+      <activationFlags>1000</activationFlags>
+      <activationConditions>1</activationConditions>
       <shortcut></shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>

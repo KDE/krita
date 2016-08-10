@@ -194,7 +194,7 @@ void KisToolFreehandHelper::initPaint(KoPointerEvent *event,
                                       KisDefaultBoundsBaseSP bounds)
 {
     KisPaintInformation pi =
-        m_d->infoBuilder->startStroke(event, elapsedStrokeTime());
+        m_d->infoBuilder->startStroke(event, elapsedStrokeTime(), resourceManager);
 
     initPaintImpl(pi,
                   resourceManager,

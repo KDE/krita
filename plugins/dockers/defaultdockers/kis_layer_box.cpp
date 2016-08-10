@@ -504,16 +504,19 @@ void KisLayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex 
             }
             menu.addAction(m_colorSelectorAction);
 
-            if (singleLayer) {
-                menu.addSeparator();
-                addActionToMenu(&menu, "show_in_timeline");
-            }
-
             menu.addSeparator();
 
             addActionToMenu(&menu, "cut_layer_clipboard");
             addActionToMenu(&menu, "copy_layer_clipboard");
-            addActionToMenu(&menu, "paste_layer_from_clipboard");
+            addActionToMenu(&menu, "paste_layer_from_clipboard");    
+            menu.addAction(m_removeAction);
+            addActionToMenu(&menu, "duplicatelayer");
+            addActionToMenu(&menu, "merge_layer");
+
+            if (singleLayer) {
+                addActionToMenu(&menu, "flatten_image");
+                addActionToMenu(&menu, "flatten_layer");         
+            }
 
             menu.addSeparator();
             QMenu *selectMenu = menu.addMenu(i18n("&Select"));
@@ -522,19 +525,17 @@ void KisLayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex 
             addActionToMenu(selectMenu, "select_invisible_layers");
             addActionToMenu(selectMenu, "select_locked_layers");
             addActionToMenu(selectMenu, "select_unlocked_layers");
-            menu.addSeparator();
-            addActionToMenu(&menu, "create_quick_group");
-            addActionToMenu(&menu, "create_quick_clipping_group");
-            addActionToMenu(&menu, "quick_ungroup");
-            menu.addSeparator();
+            QMenu *groupMenu = menu.addMenu(i18n("&Group"));
+            addActionToMenu(groupMenu, "create_quick_group");
+            addActionToMenu(groupMenu, "create_quick_clipping_group");
+            addActionToMenu(groupMenu, "quick_ungroup");
 
-            menu.addAction(m_removeAction);
-            addActionToMenu(&menu, "duplicatelayer");
-            addActionToMenu(&menu, "merge_layer");
             if (singleLayer) {
-                addActionToMenu(&menu, "flatten_image");
-                addActionToMenu(&menu, "flatten_layer");
-                menu.addSeparator();
+                QMenu *addLayerMenu = menu.addMenu(i18n("&Add"));
+                addActionToMenu(addLayerMenu, "add_new_transparency_mask");
+                addActionToMenu(addLayerMenu, "add_new_filter_mask");
+                addActionToMenu(addLayerMenu, "add_new_transform_mask");
+                addActionToMenu(addLayerMenu, "add_new_selection_mask");
 
                 QMenu *convertToMenu = menu.addMenu(i18n("&Convert"));
                 addActionToMenu(convertToMenu, "convert_to_paint_layer");
@@ -546,22 +547,20 @@ void KisLayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex 
                 addActionToMenu(splitAlphaMenu, "split_alpha_into_mask");
                 addActionToMenu(splitAlphaMenu, "split_alpha_write");
                 addActionToMenu(splitAlphaMenu, "split_alpha_save_merged");
+            }
+
+            menu.addSeparator();
+
+            if (singleLayer) {
+                addActionToMenu(&menu, "show_in_timeline");
 
                 KisNodeSP node = m_filteringModel->nodeFromIndex(index);
                 if (node && !node->inherits("KisTransformMask")) {
                     addActionToMenu(&menu, "isolate_layer");
                 }
-            }
-        }
 
-        if (singleLayer) {
-            menu.addSeparator();
-            addActionToMenu(&menu, "add_new_transparency_mask");
-            addActionToMenu(&menu, "add_new_filter_mask");
-            addActionToMenu(&menu, "add_new_transform_mask");
-            addActionToMenu(&menu, "add_new_selection_mask");
-            menu.addSeparator();
-            menu.addAction(m_selectOpaque);
+                menu.addAction(m_selectOpaque);
+            }
         }
 
         menu.exec(pos);

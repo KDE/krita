@@ -147,10 +147,15 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
       <Action name="canvassize"/>
       <Separator/>
       <Action name="imagesplit"/>
+      <Action name="waveletdecompose"/>
       <Action name="separate"/>
     </Menu>
     <Menu name="Layer">
       <text>&amp;Layer</text>
+      <Action name="cut_layer_clipboard"/>
+      <Action name="copy_layer_clipboard"/>
+      <Action name="paste_layer_from_clipboard"/>
+      <Separator/>
       <Menu name="LayerNew">
         <text>New</text>
         <Action name="add_new_paint_layer"/>
@@ -180,6 +185,7 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
         <Action name="convert_to_filter_mask"/>
         <Action name="convert_to_selection_mask"/>
         <Action name="convert_group_to_animated"/>
+        <Action name="layercolorspaceconversion"/>
       </Menu>
       <Separator/>
       <Menu name="LayerSelect">
@@ -190,37 +196,43 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
         <Action name="select_locked_layers"/>
         <Action name="select_unlocked_layers"/>
       </Menu>
-      <Separator/>
-        <Action name="cut_layer_clipboard"/>
-        <Action name="copy_layer_clipboard"/>
-        <Action name="paste_layer_from_clipboard"/>
-      <Separator/>
+      <Menu name="LayerGroup">
+         <text>&amp;Group</text>
+         <Action name="create_quick_group"/>
+         <Action name="create_quick_clipping_group"/>
+         <Action name="quick_ungroup"/>
+      </Menu>
+      <Menu name="LayerTransform">
+         <text>&amp;Transform</text>
+	 <Action name="mirrorNodeX"/>
+	 <Action name="mirrorNodeY"/>
+	 <Action name="layersize"/>
+	 <Menu name="Rotate">
+	     <text>&amp;Rotate</text>
+	     <Action name="rotatelayer"/>
+	     <Separator/>
+	     <Action name="rotateLayerCW90"/>
+	     <Action name="rotateLayerCCW90"/>
+	     <Action name="rotateLayer180"/>
+	 </Menu>      
+         <Action name="shearlayer"/>
+         <Action name="offsetlayer"/>         
+      </Menu>    
       <Menu name="LayerSplitAlpha">
-        <text>S&amp;plit Alpha</text>
-        <Action name="split_alpha_into_mask"/>
-        <Action name="split_alpha_write"/>
-        <Action name="split_alpha_save_merged"/>
+         <text>S&amp;plit</text>
+	 <Menu name="LayerSplitAlpha">
+	     <text>S&amp;plit Alpha</text>
+	     <Action name="split_alpha_into_mask"/>
+	     <Action name="split_alpha_write"/>
+	     <Action name="split_alpha_save_merged"/>
+	 </Menu>
+	 <Action name="layersplit"/>
+         <Action name="clones_array"/>
       </Menu>
-      <Action name="layersplit"/>
-      <Separator/>
-      <Action name="mirrorNodeX"/>
-      <Action name="mirrorNodeY"/>
-      <Menu name="Rotate">
-        <text>&amp;Rotate</text>
-        <Action name="rotatelayer"/>
-        <Separator/>
-        <Action name="rotateLayerCW90"/>
-        <Action name="rotateLayerCCW90"/>
-        <Action name="rotateLayer180"/>
-      </Menu>
-      <Action name="layersize"/>
-      <Action name="shearlayer"/>
-      <Action name="offsetlayer"/>
-      <Action name="clones_array"/>
+
       <Separator/>
       <Action name="EditLayerMetaData"/>
       <Action name="histogram"/>
-      <Action name="layercolorspaceconversion"/>
       <Separator/>
       <Action name="merge_layer"/>
       <Action name="flatten_layer"/>
@@ -230,10 +242,7 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
       <Action name="merge_selected_layers"/>
       <Separator/>
       <Action name="layer_style"/>
-      <Separator/>
-      <Action name="create_quick_group"/>
-      <Action name="create_quick_clipping_group"/>
-      <Action name="quick_ungroup"/>
+
     </Menu>
     <Menu name="Select">
       <text>&amp;Select</text>

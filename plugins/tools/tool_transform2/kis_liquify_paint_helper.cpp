@@ -85,13 +85,13 @@ void KisLiquifyPaintHelper::configurePaintOp(const KisLiquifyProperties &props,
     m_d->paintOp.reset(new KisLiquifyPaintop(props, worker));
 }
 
-void KisLiquifyPaintHelper::startPaint(KoPointerEvent *event)
+void KisLiquifyPaintHelper::startPaint(KoPointerEvent *event, const KoCanvasResourceManager *manager)
 {
     KIS_ASSERT_RECOVER_RETURN(m_d->paintOp);
 
     m_d->strokeTime.start();
     KisPaintInformation pi =
-        m_d->infoBuilder->startStroke(event, m_d->strokeTime.elapsed());
+        m_d->infoBuilder->startStroke(event, m_d->strokeTime.elapsed(), manager);
 
     m_d->updatePreviousPaintInfo(pi);
     m_d->hasPaintedAtLeastOnce = false;

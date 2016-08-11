@@ -19,7 +19,6 @@
 #ifndef __KIS_WAVELET_KERNEL_H
 #define __KIS_WAVELET_KERNEL_H
 
-#include "kritaimage_export.h"
 #include "kis_types.h"
 
 #include <Eigen/Core>
@@ -27,7 +26,7 @@ using namespace Eigen;
 
 class QRect;
 
-class KRITAIMAGE_EXPORT KisWaveletKernel
+class KisWaveletKernel
 {
 public:
     static Matrix<qreal, Dynamic, Dynamic>

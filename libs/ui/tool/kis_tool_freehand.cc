@@ -323,6 +323,7 @@ void KisToolFreehand::beginAlternateAction(KoPointerEvent *event, AlternateActio
     m_initialGestureGlobalPoint = QCursor::pos();
 
     m_lastDocumentPoint = event->point;
+    m_lastPaintOpSize = currentPaintOpPreset()->settings()->paintOpSize();
 }
 
 void KisToolFreehand::continueAlternateAction(KoPointerEvent *event, AlternateAction action)
@@ -347,11 +348,16 @@ void KisToolFreehand::continueAlternateAction(KoPointerEvent *event, AlternateAc
 
     if (qRound(scaledOffset.x()) != 0) {
         KisPaintOpSettingsSP settings = currentPaintOpPreset()->settings();
-        const qreal newSize = settings->paintOpSize() + scaledOffset.x();
+        const qreal newSize = m_lastPaintOpSize + scaledOffset.x();
         settings->setPaintOpSize(newSize);
         requestUpdateOutline(m_initialGestureDocPoint, 0);
 
         m_lastDocumentPoint = event->point;
+        /**
+         * We re-request the size from the paintop itself, because
+         * the size might be cropped by some internals of a brush
+         */
+        m_lastPaintOpSize = currentPaintOpPreset()->settings()->paintOpSize();
     }
 }
 

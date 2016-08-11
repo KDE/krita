@@ -155,6 +155,25 @@ void KisPixelSelection::applySelection(KisPixelSelectionSP selection, SelectionA
     }
 }
 
+void KisPixelSelection::copyAlphaFrom(KisPaintDeviceSP src, const QRect &processRect)
+{
+    const KoColorSpace *srcCS = src->colorSpace();
+
+    KisSequentialConstIterator srcIt(src, processRect);
+    KisSequentialIterator dstIt(this, processRect);
+
+    do {
+        const quint8 *srcPtr = srcIt.rawDataConst();
+        quint8 *alpha8Ptr = dstIt.rawData();
+
+        *alpha8Ptr = srcCS->opacityU8(srcPtr);
+    } while (srcIt.nextPixel() && dstIt.nextPixel());
+
+    m_d->outlineCacheValid = false;
+    m_d->outlineCache = QPainterPath();
+    m_d->invalidateThumbnailImage();
+}
+
 void KisPixelSelection::addSelection(KisPixelSelectionSP selection)
 {
     QRect r = selection->selectedRect();

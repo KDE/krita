@@ -36,19 +36,22 @@ struct KisMultiwayCut::Private
     KisPaintDeviceSP src;
     KisPaintDeviceSP dst;
     KisPaintDeviceSP mask;
+    QRect boundingRect;
 
     QVector<KeyStroke> keyStrokes;
 
-    static void maskOutKeyStroke(KisPaintDeviceSP keyStrokeDevice, KisPaintDeviceSP mask);
+    static void maskOutKeyStroke(KisPaintDeviceSP keyStrokeDevice, KisPaintDeviceSP mask, const QRect &boundingRect);
 };
 
 KisMultiwayCut::KisMultiwayCut(KisPaintDeviceSP src,
-                               KisPaintDeviceSP dst)
+                               KisPaintDeviceSP dst,
+                               const QRect &boundingRect)
     : m_d(new Private)
 {
     m_d->src = src;
     m_d->dst = dst;
     m_d->mask = new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8());
+    m_d->boundingRect = boundingRect;
 }
 
 KisMultiwayCut::~KisMultiwayCut()
@@ -61,12 +64,14 @@ void KisMultiwayCut::addKeyStroke(KisPaintDeviceSP dev, const KoColor &color)
 }
 
 
-void KisMultiwayCut::Private::maskOutKeyStroke(KisPaintDeviceSP keyStrokeDevice, KisPaintDeviceSP mask)
+void KisMultiwayCut::Private::maskOutKeyStroke(KisPaintDeviceSP keyStrokeDevice, KisPaintDeviceSP mask, const QRect &boundingRect)
 {
     KIS_ASSERT_RECOVER_RETURN(keyStrokeDevice->pixelSize() == 1);
     KIS_ASSERT_RECOVER_RETURN(mask->pixelSize() == 1);
 
-    QRegion region = keyStrokeDevice->region() & mask->exactBounds();
+    QRegion region =
+        keyStrokeDevice->region() &
+        mask->exactBounds() & boundingRect;
 
     Q_FOREACH (const QRect &rc, region.rects()) {
         KisSequentialIterator dstIt(keyStrokeDevice, rc);
@@ -89,7 +94,7 @@ void KisMultiwayCut::run()
         KisPainter gc(other);
 
         Q_FOREACH (const KeyStroke &s, m_d->keyStrokes) {
-            const QRect rc = s.dev->extent();
+            const QRect rc = s.dev->extent() & m_d->boundingRect;
             gc.bitBlt(rc.topLeft(), s.dev, rc);
         }
 
@@ -98,27 +103,35 @@ void KisMultiwayCut::run()
                                     current.dev,
                                     other,
                                     m_d->dst,
-                                    m_d->mask);
+                                    m_d->mask,
+                                    m_d->boundingRect);
 
         other->clear();
     }
-
-    // TODO: make configurable!
-    const QRect boundingRect = m_d->src->exactBounds();
 
     // TODO: check if one can use the last cut for this purpose!
 
     if (m_d->keyStrokes.size() == 1) {
         KeyStroke current = m_d->keyStrokes.takeLast();
 
-        m_d->maskOutKeyStroke(current.dev, m_d->mask);
+        m_d->maskOutKeyStroke(current.dev, m_d->mask, m_d->boundingRect);
 
         QVector<QPoint> points =
-            KisLazyFillTools::splitIntoConnectedComponents(current.dev);
+            KisLazyFillTools::splitIntoConnectedComponents(current.dev, m_d->boundingRect);
 
         Q_FOREACH (const QPoint &pt, points) {
-            KisScanlineFill fill(m_d->mask, pt, boundingRect);
+            KisScanlineFill fill(m_d->mask, pt, m_d->boundingRect);
             fill.fillColor(current.color, m_d->dst);
         }
     }
+}
+
+KisPaintDeviceSP KisMultiwayCut::srcDevice() const
+{
+    return m_d->src;
+}
+
+KisPaintDeviceSP KisMultiwayCut::dstDevice() const
+{
+    return m_d->dst;
 }

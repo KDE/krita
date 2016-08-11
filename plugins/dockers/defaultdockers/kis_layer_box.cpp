@@ -350,6 +350,7 @@ void KisLayerBox::setCanvas(KoCanvasBase *canvas)
         m_newLayerMenu->addSeparator();
         addActionToMenu(m_newLayerMenu, "add_new_transparency_mask");
         addActionToMenu(m_newLayerMenu, "add_new_filter_mask");
+        addActionToMenu(m_newLayerMenu, "add_new_colorize_mask");
         addActionToMenu(m_newLayerMenu, "add_new_transform_mask");
         addActionToMenu(m_newLayerMenu, "add_new_selection_mask");
     }
@@ -558,6 +559,7 @@ void KisLayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex 
             menu.addSeparator();
             addActionToMenu(&menu, "add_new_transparency_mask");
             addActionToMenu(&menu, "add_new_filter_mask");
+            addActionToMenu(&menu, "add_new_colorize_mask");
             addActionToMenu(&menu, "add_new_transform_mask");
             addActionToMenu(&menu, "add_new_selection_mask");
             menu.addSeparator();

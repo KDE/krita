@@ -28,6 +28,9 @@ class KoColor;
 
 namespace KisLazyFillTools
 {
+    KRITAIMAGE_EXPORT
+    void normalizeAndInvertAlpha8Device(KisPaintDeviceSP dev, const QRect &rect);
+
     /**
      * Uses Boykov-Kolmogorov Max-Flow/Min-Cut algorithm to split the
      * device \src into two parts. The first part is defined by \p
@@ -46,7 +49,8 @@ namespace KisLazyFillTools
                    KisPaintDeviceSP colorScribble,
                    KisPaintDeviceSP backgroundScribble,
                    KisPaintDeviceSP resultDevice,
-                   KisPaintDeviceSP maskDevice);
+                   KisPaintDeviceSP maskDevice,
+                   const QRect &boundingRect);
 
     /**
      * Returns one pixel from each connected component of \p src.
@@ -56,9 +60,9 @@ namespace KisLazyFillTools
      */
 
     KRITAIMAGE_EXPORT
-    QVector<QPoint> splitIntoConnectedComponents(KisPaintDeviceSP src);
+    QVector<QPoint> splitIntoConnectedComponents(KisPaintDeviceSP src, const QRect &boundingRect);
 
-    struct KeyStroke {
+    struct KRITAIMAGE_EXPORT KeyStroke {
         KeyStroke();
         KeyStroke(KisPaintDeviceSP _dev, const KoColor &_color);
 

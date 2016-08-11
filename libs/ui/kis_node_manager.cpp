@@ -300,6 +300,8 @@ void KisNodeManager::setup(KActionCollection * actionCollection, KisActionManage
 
     NEW_LAYER_ACTION("add_new_filter_mask", "KisFilterMask");
 
+    NEW_LAYER_ACTION("add_new_colorize_mask", "KisColorizeMask");
+
     NEW_LAYER_ACTION("add_new_transform_mask", "KisTransformMask");
 
     NEW_LAYER_ACTION("add_new_selection_mask", "KisSelectionMask");
@@ -486,6 +488,8 @@ void KisNodeManager::createNode(const QString & nodeType, bool quiet, KisPaintDe
         m_d->maskManager.createTransparencyMask(activeNode, copyFrom, false);
     } else if (nodeType == "KisFilterMask") {
         m_d->maskManager.createFilterMask(activeNode, copyFrom, quiet, false);
+    } else if (nodeType == "KisColorizeMask") {
+        m_d->maskManager.createColorizeMask(activeNode);
     } else if (nodeType == "KisTransformMask") {
         m_d->maskManager.createTransformMask(activeNode);
     } else if (nodeType == "KisSelectionMask") {

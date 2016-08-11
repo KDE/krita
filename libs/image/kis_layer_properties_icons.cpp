@@ -35,6 +35,9 @@ const KoID KisLayerPropertiesIcons::onionSkins("onion-skins", ki18n("Onion Skins
 const KoID KisLayerPropertiesIcons::passThrough("pass-through", ki18n("Pass Through"));
 const KoID KisLayerPropertiesIcons::selectionActive("selection-active", ki18n("Active"));
 const KoID KisLayerPropertiesIcons::colorLabelIndex("color-label", ki18n("Color Label"));
+const KoID KisLayerPropertiesIcons::colorizeNeedsUpdate("colorize-needs-update", ki18n("Update"));
+const KoID KisLayerPropertiesIcons::colorizeShowKeyStrokes("colorize-show-key-strokes", ki18n("Show Key Strokes"));
+const KoID KisLayerPropertiesIcons::colorizeShowColoring("colorize-show-coloring", ki18n("Show Coloring"));
 
 
 struct IconsPair {
@@ -80,6 +83,9 @@ void KisLayerPropertiesIcons::updateIcons()
     m_d->icons.insert(onionSkins.id(), IconsPair(KisIconUtils::loadIcon("onionOn"), KisIconUtils::loadIcon("onionOff")));
     m_d->icons.insert(passThrough.id(), IconsPair(KisIconUtils::loadIcon("passthrough-enabled"), KisIconUtils::loadIcon("passthrough-disabled")));
     m_d->icons.insert(selectionActive.id(), IconsPair(KisIconUtils::loadIcon("local_selection_active"), KisIconUtils::loadIcon("local_selection_inactive")));
+    m_d->icons.insert(colorizeNeedsUpdate.id(), IconsPair(KisIconUtils::loadIcon("local_selection_active"), KisIconUtils::loadIcon("local_selection_inactive")));
+    m_d->icons.insert(colorizeShowKeyStrokes.id(), IconsPair(KisIconUtils::loadIcon("onionOn"), KisIconUtils::loadIcon("onionOff")));
+    m_d->icons.insert(colorizeShowColoring.id(), IconsPair(KisIconUtils::loadIcon("transparency-locked"), KisIconUtils::loadIcon("transparency-unlocked")));
 }
 
 KisBaseNode::Property KisLayerPropertiesIcons::getProperty(const KoID &id, bool state)

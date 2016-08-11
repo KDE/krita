@@ -277,6 +277,11 @@ const KoCompositeOp* KisResourcesSnapshot::compositeOp() const
     return m_d->compositeOp;
 }
 
+QString KisResourcesSnapshot::compositeOpId() const
+{
+    return m_d->compositeOpId;
+}
+
 KoPattern* KisResourcesSnapshot::currentPattern() const
 {
     return m_d->currentPattern;

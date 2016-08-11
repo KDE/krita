@@ -35,7 +35,7 @@
 struct Q_DECL_HIDDEN KisIndirectPaintingSupport::Private {
     // To simulate the indirect painting
     KisPaintDeviceSP temporaryTarget;
-    const KoCompositeOp* compositeOp;
+    QString compositeOp;
     quint8 compositeOpacity;
     QBitArray channelFlags;
     KisSelectionSP selection;
@@ -47,7 +47,6 @@ struct Q_DECL_HIDDEN KisIndirectPaintingSupport::Private {
 KisIndirectPaintingSupport::KisIndirectPaintingSupport()
     : d(new Private)
 {
-    d->compositeOp = 0;
 }
 
 KisIndirectPaintingSupport::~KisIndirectPaintingSupport()
@@ -55,14 +54,19 @@ KisIndirectPaintingSupport::~KisIndirectPaintingSupport()
     delete d;
 }
 
+void KisIndirectPaintingSupport::setCurrentColor(const KoColor &color)
+{
+    Q_UNUSED(color);
+}
+
 void KisIndirectPaintingSupport::setTemporaryTarget(KisPaintDeviceSP t)
 {
     d->temporaryTarget = t;
 }
 
-void KisIndirectPaintingSupport::setTemporaryCompositeOp(const KoCompositeOp* c)
+void KisIndirectPaintingSupport::setTemporaryCompositeOp(const QString &id)
 {
-    d->compositeOp = c;
+    d->compositeOp = id;
 }
 
 void KisIndirectPaintingSupport::setTemporaryOpacity(quint8 o)
@@ -85,17 +89,17 @@ void KisIndirectPaintingSupport::lockTemporaryTarget() const
     d->lock.lockForRead();
 }
 
+void KisIndirectPaintingSupport::lockTemporaryTargetForWrite() const
+{
+    d->lock.lockForWrite();
+}
+
 void KisIndirectPaintingSupport::unlockTemporaryTarget() const
 {
     d->lock.unlock();
 }
 
-KisPaintDeviceSP KisIndirectPaintingSupport::temporaryTarget()
-{
-    return d->temporaryTarget;
-}
-
-const KisPaintDeviceSP KisIndirectPaintingSupport::temporaryTarget() const
+KisPaintDeviceSP KisIndirectPaintingSupport::temporaryTarget() const
 {
     return d->temporaryTarget;
 }
@@ -112,32 +116,24 @@ bool KisIndirectPaintingSupport::hasTemporaryTarget() const
 
 void KisIndirectPaintingSupport::setupTemporaryPainter(KisPainter *painter) const
 {
-    painter->setOpacity(d->compositeOpacity);
-    painter->setCompositeOp(d->compositeOp);
-    painter->setChannelFlags(d->channelFlags);
-    painter->setSelection(d->selection);
-}
-
-void KisIndirectPaintingSupport::mergeToLayer(KisNodeSP layer, KisUndoAdapter *undoAdapter, const KUndo2MagicString &transactionText,int timedID)
-{
-    mergeToLayerImpl(layer, undoAdapter, transactionText,timedID);
+     painter->setOpacity(d->compositeOpacity);
+     painter->setCompositeOp(d->compositeOp);
+     painter->setChannelFlags(d->channelFlags);
+     painter->setSelection(d->selection);
 }
 
 void KisIndirectPaintingSupport::mergeToLayer(KisNodeSP layer, KisPostExecutionUndoAdapter *undoAdapter, const KUndo2MagicString &transactionText,int timedID)
 {
-    mergeToLayerImpl(layer, undoAdapter, transactionText,timedID);
+    mergeToLayerImpl(layer->paintDevice(), undoAdapter, transactionText, timedID);
 }
 
-template<class UndoAdapter>
-void KisIndirectPaintingSupport::mergeToLayerImpl(KisNodeSP layer,
-                                                  UndoAdapter *undoAdapter,
-                                                  const KUndo2MagicString &transactionText,int timedID)
+void KisIndirectPaintingSupport::mergeToLayerImpl(KisPaintDeviceSP dst, KisPostExecutionUndoAdapter *undoAdapter, const KUndo2MagicString &transactionText, int timedID)
 {
     /**
      * We do not apply selection here, because it has already
      * been taken into account in a tool code
      */
-    KisPainter gc(layer->paintDevice());
+    KisPainter gc(dst);
     setupTemporaryPainter(&gc);
 
     d->lock.lockForWrite();
@@ -148,9 +144,9 @@ void KisIndirectPaintingSupport::mergeToLayerImpl(KisNodeSP layer,
     if(undoAdapter) {
         gc.beginTransaction(transactionText,timedID);
     }
-    Q_FOREACH (const QRect &rc, d->temporaryTarget->region().rects()) {
-        gc.bitBlt(rc.topLeft(), d->temporaryTarget, rc);
-    }
+
+    writeMergeData(&gc, d->temporaryTarget);
+
     releaseResources();
 
     if(undoAdapter) {
@@ -158,6 +154,13 @@ void KisIndirectPaintingSupport::mergeToLayerImpl(KisNodeSP layer,
     }
 
     d->lock.unlock();
+}
+
+void KisIndirectPaintingSupport::writeMergeData(KisPainter *painter, KisPaintDeviceSP src)
+{
+    Q_FOREACH (const QRect &rc, src->region().rects()) {
+        painter->bitBlt(rc.topLeft(), src, rc);
+    }
 }
 
 void KisIndirectPaintingSupport::releaseResources()

@@ -16,34 +16,38 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KIS_MULTIWAY_CUT_H
-#define __KIS_MULTIWAY_CUT_H
+#ifndef __KIS_COLORIZE_JOB_H
+#define __KIS_COLORIZE_JOB_H
 
 #include <QScopedPointer>
+#include <QObject>
 
-#include "kis_types.h"
-#include "kritaimage_export.h"
+#include "kis_spontaneous_job.h"
+#include "kis_multiway_cut.h"
 
-class KoColor;
 
-class KRITAIMAGE_EXPORT KisMultiwayCut
+class KisColorizeJob : public QObject, public KisSpontaneousJob
 {
+    Q_OBJECT
 public:
-    KisMultiwayCut(KisPaintDeviceSP src,
+    KisColorizeJob(KisPaintDeviceSP src,
                    KisPaintDeviceSP dst,
+                   KisPaintDeviceSP filteredSource,
                    const QRect &boundingRect);
-    ~KisMultiwayCut();
+    ~KisColorizeJob();
 
     void addKeyStroke(KisPaintDeviceSP dev, const KoColor &color);
 
     void run();
+    bool overrides(const KisSpontaneousJob *otherJob);
+    int levelOfDetail() const;
 
-    KisPaintDeviceSP srcDevice() const;
-    KisPaintDeviceSP dstDevice() const;
+Q_SIGNALS:
+    void sigFinished();
 
 private:
     struct Private;
     const QScopedPointer<Private> m_d;
 };
 
-#endif /* __KIS_MULTIWAY_CUT_H */
+#endif /* __KIS_COLORIZE_JOB_H */

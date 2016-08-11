@@ -1109,27 +1109,6 @@ void writeStat(KisLazyFillGraph &graph,
 #include "kis_gaussian_kernel.h"
 #include "krita_utils.h"
 
-void normalizeAndInvertAlpha8Device(KisPaintDeviceSP dev, const QRect &rect)
-{
-    quint8 maxPixel = std::numeric_limits<quint8>::min();
-    quint8 minPixel = std::numeric_limits<quint8>::max();
-    KritaUtils::applyToAlpha8Device(dev, rect,
-                                    [&minPixel, &maxPixel](quint8 pixel) {
-                                        if (pixel > maxPixel) {
-                                            maxPixel = pixel;
-                                        }
-                                        if (pixel < minPixel) {
-                                            minPixel = pixel;
-                                        }
-                                    });
-
-    const qreal scale = 255.0 / (maxPixel - minPixel);
-    KritaUtils::filterAlpha8Device(dev, rect,
-                                   [minPixel, scale](quint8 pixel) {
-                                       return pow2(255 - quint8((pixel - minPixel) * scale)) / 255;
-                                   });
-}
-
 KisPaintDeviceSP loadTestImage(const QString &name, bool convertToAlpha)
 {
     QImage image(TestUtil::fetchDataFileLazy(name));
@@ -1159,7 +1138,7 @@ void KisLazyBrushTest::testCutOnGraphDevice()
     //                             5,
     //                             QBitArray(), 0);
 
-    // normalizeAndInvertAlpha8Device(filteredMainDev, filterRect);
+    // KisLazyFillTools::normalizeAndInvertAlpha8Device(filteredMainDev, filterRect);
 
     KIS_DUMP_DEVICE_2(filteredMainDev, filterRect, "2filtered", "dd");
 
@@ -1174,7 +1153,8 @@ void KisLazyBrushTest::testCutOnGraphDevice()
                                 aLabelDev,
                                 bLabelDev,
                                 resultColoring,
-                                maskDevice);
+                                maskDevice,
+                                filterRect);
 
     KIS_DUMP_DEVICE_2(resultColoring, filterRect, "00result", "dd");
     KIS_DUMP_DEVICE_2(maskDevice, filterRect, "01mask", "dd");
@@ -1249,12 +1229,12 @@ void KisLazyBrushTest::testCutOnGraphDeviceMulti()
                                 2,
                                 QBitArray(), 0);
 
-    normalizeAndInvertAlpha8Device(filteredMainDev, filterRect);
+    KisLazyFillTools::normalizeAndInvertAlpha8Device(filteredMainDev, filterRect);
 
 
     KisPaintDeviceSP resultColoring = new KisPaintDevice(mainDev->colorSpace());
 
-    KisMultiwayCut cut(filteredMainDev, resultColoring);
+    KisMultiwayCut cut(filteredMainDev, resultColoring, filterRect);
 
     cut.addKeyStroke(aLabelDev, KoColor(Qt::red, mainDev->colorSpace()));
     cut.addKeyStroke(bLabelDev, KoColor(Qt::green, mainDev->colorSpace()));
@@ -1292,7 +1272,7 @@ void KisLazyBrushTest::testLoG()
                                 4.0,
                                 QBitArray(), 0);
 
-    normalizeAndInvertAlpha8Device(filteredMainDev, rect);
+    KisLazyFillTools::normalizeAndInvertAlpha8Device(filteredMainDev, rect);
 
 
 
@@ -1314,7 +1294,7 @@ void KisLazyBrushTest::testSplitIntoConnectedComponents()
     QCOMPARE(dev->exactBounds(), rc1 | rc2);
 
     QVector<QPoint> points =
-        KisLazyFillTools::splitIntoConnectedComponents(dev);
+        KisLazyFillTools::splitIntoConnectedComponents(dev, boundingRect);
 
     qDebug() << ppVar(points);
 

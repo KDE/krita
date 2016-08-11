@@ -76,7 +76,7 @@ void MoveSelectionStrokeStrategy::initStrokeCallback()
     KisIndirectPaintingSupport *indirect =
         static_cast<KisIndirectPaintingSupport*>(m_paintLayer.data());
     indirect->setTemporaryTarget(movedDevice);
-    indirect->setTemporaryCompositeOp(paintDevice->colorSpace()->compositeOp(COMPOSITE_OVER));
+    indirect->setTemporaryCompositeOp(COMPOSITE_OVER);
     indirect->setTemporaryOpacity(OPACITY_OPAQUE_U8);
 
     m_initialDeviceOffset = QPoint(movedDevice->x(), movedDevice->y());
@@ -90,7 +90,7 @@ void MoveSelectionStrokeStrategy::finishStrokeCallback()
         static_cast<KisIndirectPaintingSupport*>(m_paintLayer.data());
 
     KisTransaction transaction(name(), m_paintLayer->paintDevice());
-    indirect->mergeToLayer(m_paintLayer, (KisUndoAdapter*)0, KUndo2MagicString());
+    indirect->mergeToLayer(m_paintLayer, (KisPostExecutionUndoAdapter*)0, KUndo2MagicString());
 
     if (m_undoEnabled) {
         runAndSaveCommand(KUndo2CommandSP(transaction.endAndTake()),

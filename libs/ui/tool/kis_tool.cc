@@ -70,7 +70,6 @@
 #include "kis_tool_utils.h"
 
 
-
 struct Q_DECL_HIDDEN KisTool::Private {
     QCursor cursor; // the cursor that should be shown on tool activation.
 
@@ -651,7 +650,10 @@ bool KisTool::nodeEditable()
     if (!node) {
         return false;
     }
-    if (!node->isEditable()) {
+
+    bool nodeEditable = node->isEditable();
+
+    if (!nodeEditable) {
         KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
         QString message;
         if (!node->visible() && node->userLocked()) {
@@ -665,7 +667,7 @@ bool KisTool::nodeEditable()
         }
         kiscanvas->viewManager()->showFloatingMessage(message, KisIconUtils::loadIcon("object-locked"));
     }
-    return node->isEditable();
+    return nodeEditable;
 }
 
 bool KisTool::selectionEditable()

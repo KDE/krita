@@ -33,6 +33,7 @@
 #include <kis_clone_layer.h>
 #include <kis_group_layer.h>
 #include <kis_filter_mask.h>
+#include <lazybrush/kis_colorize_mask.h>
 #include <kis_transform_mask.h>
 #include <kis_transparency_mask.h>
 #include <kis_selection_mask.h>
@@ -232,6 +233,12 @@ void KisMaskManager::createFilterMask(KisNodeSP activeNode, KisPaintDeviceSP cop
     } else {
         m_commandsAdapter->undoLastCommand();
     }
+}
+
+void KisMaskManager::createColorizeMask(KisNodeSP activeNode)
+{
+    KisMaskSP mask = new KisColorizeMask();
+    createMaskCommon(mask, activeNode, 0, kundo2_i18n("Add Colorize Mask"), "KisColorizeMask", i18n("Colorize Mask"), true, false);
 }
 
 void KisMaskManager::createTransformMask(KisNodeSP activeNode)

@@ -19,6 +19,7 @@
 #include "kis_painter_based_stroke_strategy.h"
 
 #include <KoColorSpace.h>
+#include <KoColor.h>
 #include <KoCompositeOp.h>
 #include "kis_painter.h"
 #include "kis_paint_device.h"
@@ -189,8 +190,10 @@ void KisPainterBasedStrokeStrategy::initStrokeCallback()
         if (indirect) {
             targetDevice = paintDevice->createCompositionSourceDevice();
             targetDevice->setParentNode(node);
+            indirect->setCurrentColor(m_resources->currentFgColor());
             indirect->setTemporaryTarget(targetDevice);
-            indirect->setTemporaryCompositeOp(m_resources->compositeOp());
+
+            indirect->setTemporaryCompositeOp(m_resources->compositeOpId());
             indirect->setTemporaryOpacity(m_resources->opacity());
             indirect->setTemporarySelection(selection);
 
@@ -227,7 +230,6 @@ void KisPainterBasedStrokeStrategy::initStrokeCallback()
 void KisPainterBasedStrokeStrategy::finishStrokeCallback()
 {
     KisNodeSP node = m_resources->currentNode();
-    KisLayerSP layer = dynamic_cast<KisLayer*>(node.data());
     KisIndirectPaintingSupport *indirect =
         dynamic_cast<KisIndirectPaintingSupport*>(node.data());
 
@@ -245,16 +247,16 @@ void KisPainterBasedStrokeStrategy::finishStrokeCallback()
         undoAdapter = dumbUndoAdapter.data();
     }
 
-    if(layer && indirect && indirect->hasTemporaryTarget()) {
+    if (indirect && indirect->hasTemporaryTarget()) {
         KUndo2MagicString transactionText = m_transaction->text();
         m_transaction->end();
         if(m_useMergeID){
-            indirect->mergeToLayer(layer,
+            indirect->mergeToLayer(node,
                                    undoAdapter,
                                    transactionText,timedID(this->id()));
         }
         else{
-            indirect->mergeToLayer(layer,
+            indirect->mergeToLayer(node,
                                    undoAdapter,
                                    transactionText);
         }
@@ -304,9 +306,10 @@ void KisPainterBasedStrokeStrategy::resumeStrokeCallback()
         dynamic_cast<KisIndirectPaintingSupport*>(node.data());
 
     if(indirect) {
+        // todo: don't ask about paint device
         if (node->paintDevice() != m_targetDevice) {
             indirect->setTemporaryTarget(m_targetDevice);
-            indirect->setTemporaryCompositeOp(m_resources->compositeOp());
+            indirect->setTemporaryCompositeOp(m_resources->compositeOpId());
             indirect->setTemporaryOpacity(m_resources->opacity());
             indirect->setTemporarySelection(m_activeSelection);
         }

@@ -44,17 +44,20 @@ public:
     KisLazyFillCapacityMap(KisPaintDeviceSP mainImage,
                            KisPaintDeviceSP aLabelImage,
                            KisPaintDeviceSP bLabelImage,
-                           KisPaintDeviceSP maskImage)
+                           KisPaintDeviceSP maskImage,
+                           const QRect &boundingRect)
         : m_mainImage(mainImage),
           m_aLabelImage(aLabelImage),
           m_bLabelImage(bLabelImage),
           m_maskImage(maskImage),
-          m_mainRect(m_mainImage->exactBounds()),
-          m_aLabelRect(m_aLabelImage->exactBounds()),
-          m_bLabelRect(m_bLabelImage->exactBounds()),
+          m_mainRect(boundingRect),
+          m_aLabelRect(m_aLabelImage->exactBounds() & boundingRect),
+          m_bLabelRect(m_bLabelImage->exactBounds() & boundingRect),
           m_colorSpace(mainImage->colorSpace()),
           m_pixelSize(m_colorSpace->pixelSize()),
-          m_graph(m_mainRect, m_aLabelImage->regionExact(), m_bLabelImage->regionExact())
+          m_graph(m_mainRect,
+                  m_aLabelImage->regionExact() & boundingRect,
+                  m_bLabelImage->regionExact() & boundingRect)
     {
         KIS_ASSERT_RECOVER_NOOP(m_mainImage->colorSpace()->pixelSize() == 1);
         KIS_ASSERT_RECOVER_NOOP(m_aLabelImage->colorSpace()->pixelSize() == 1);

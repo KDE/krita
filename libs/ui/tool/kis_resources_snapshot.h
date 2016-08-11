@@ -74,6 +74,7 @@ public:
     void setOpacity(qreal opacity);
     quint8 opacity() const;
     const KoCompositeOp* compositeOp() const;
+    QString compositeOpId() const;
 
     KoPattern* currentPattern() const;
     KoColor currentFgColor() const;

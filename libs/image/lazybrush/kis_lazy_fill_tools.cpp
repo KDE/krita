@@ -36,15 +36,38 @@
 #include "kis_sequential_iterator.h"
 #include <floodfill/kis_scanline_fill.h>
 
+#include "krita_utils.h"
+
 namespace KisLazyFillTools {
 
+void normalizeAndInvertAlpha8Device(KisPaintDeviceSP dev, const QRect &rect)
+{
+    quint8 maxPixel = std::numeric_limits<quint8>::min();
+    quint8 minPixel = std::numeric_limits<quint8>::max();
+    KritaUtils::applyToAlpha8Device(dev, rect,
+                                    [&minPixel, &maxPixel](quint8 pixel) {
+                                        if (pixel > maxPixel) {
+                                            maxPixel = pixel;
+                                        }
+                                        if (pixel < minPixel) {
+                                            minPixel = pixel;
+                                        }
+                                    });
+
+    const qreal scale = 255.0 / (maxPixel - minPixel);
+    KritaUtils::filterAlpha8Device(dev, rect,
+                                   [minPixel, scale](quint8 pixel) {
+                                       return pow2(255 - quint8((pixel - minPixel) * scale)) / 255;
+                                   });
+}
 
 void cutOneWay(const KoColor &color,
-                   KisPaintDeviceSP src,
-                   KisPaintDeviceSP colorScribble,
-                   KisPaintDeviceSP backgroundScribble,
-                   KisPaintDeviceSP resultDevice,
-                   KisPaintDeviceSP maskDevice)
+               KisPaintDeviceSP src,
+               KisPaintDeviceSP colorScribble,
+               KisPaintDeviceSP backgroundScribble,
+               KisPaintDeviceSP resultDevice,
+               KisPaintDeviceSP maskDevice,
+               const QRect &boundingRect)
 {
     using namespace boost;
 
@@ -54,7 +77,7 @@ void cutOneWay(const KoColor &color,
     KIS_ASSERT_RECOVER_RETURN(maskDevice->pixelSize() == 1);
     KIS_ASSERT_RECOVER_RETURN(*resultDevice->colorSpace() == *color.colorSpace());
 
-    KisLazyFillCapacityMap capacityMap(src, colorScribble, backgroundScribble, maskDevice);
+    KisLazyFillCapacityMap capacityMap(src, colorScribble, backgroundScribble, maskDevice, boundingRect);
     KisLazyFillGraph &graph = capacityMap.graph();
 
     std::vector<default_color_type> groups(num_vertices(graph));
@@ -100,12 +123,13 @@ void cutOneWay(const KoColor &color,
     } while (dstIt.nextPixel() && mskIt.nextPixel());
 }
 
-QVector<QPoint> splitIntoConnectedComponents(KisPaintDeviceSP dev)
+    QVector<QPoint> splitIntoConnectedComponents(KisPaintDeviceSP dev,
+                                                 const QRect &boundingRect)
 {
     QVector<QPoint> points;
     const KoColorSpace *cs = dev->colorSpace();
 
-    const QRect rect = dev->exactBounds();
+    const QRect rect = dev->exactBounds() & boundingRect;
     if (rect.isEmpty()) return points;
 
     /**
@@ -138,11 +162,5 @@ KeyStroke::KeyStroke(KisPaintDeviceSP _dev, const KoColor &_color)
     : dev(_dev), color(_color)
 {
 }
-
-
-
-
-
-
 
 }

@@ -688,3 +688,15 @@ set(kis_asl_parser_test_SRCS kis_asl_parser_test.cpp )
 kde4_add_unit_test(KisAslParserTest TESTNAME kritalibpsd-asl_parser_test ${kis_asl_parser_test_SRCS})
 target_link_libraries(KisAslParserTest kritapsd kritapigment kritawidgetutils  ${QT_QTXML_LIBRARY} Qt5::Test)
 
+########### next target ###############
+
+set(kis_algebra_2d_test_SRCS kis_algebra_2d_test.cpp )
+kde4_add_unit_test(KisAlgebra2DTest TESTNAME kritaimage-algebra_2d_test ${kis_algebra_2d_test_SRCS})
+target_link_libraries(KisAlgebra2DTest kritaimage ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
+set(kis_marker_painter_test_SRCS kis_marker_painter_test.cpp )
+kde4_add_unit_test(KisMarkerPainterTest TESTNAME kritaimage-marker_painter_test ${kis_marker_painter_test_SRCS})
+target_link_libraries(KisMarkerPainterTest kritaimage ${QT_QTTEST_LIBRARY})
+

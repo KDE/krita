@@ -56,6 +56,7 @@ set(kritaimage_LIB_SRCS
     tiles3/swap/kis_tile_data_swapper.cpp
    kis_distance_information.cpp
    kis_painter.cc
+   kis_marker_painter.cpp
    kis_progress_updater.cpp
    brushengine/kis_paint_information.cc
    brushengine/kis_random_source.cpp

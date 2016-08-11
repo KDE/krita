@@ -235,7 +235,10 @@ QRect KisColorizeMask::decorateRect(KisPaintDeviceSP &src,
     // Draw the filling and the original layer
     {
         KisPainter gc(dst);
-        gc.setOpacity(128);
+
+        if (m_d->showKeyStrokes) {
+            gc.setOpacity(128);
+        }
         if (m_d->showColoring && m_d->coloringProjection) {
             gc.bitBlt(rect.topLeft(), m_d->coloringProjection, rect);
         }

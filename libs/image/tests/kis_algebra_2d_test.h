@@ -30,6 +30,7 @@ private Q_SLOTS:
 
     void testQuadraticEquation();
     void testIntersections();
+    void testWeirdIntersections();
 };
 
 #endif /* __KIS_ALGEBRA_2D_TEST_H */

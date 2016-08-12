@@ -32,3 +32,6 @@ KisRoundMarkerOpSettings::~KisRoundMarkerOpSettings()
 {
 }
 
+bool KisRoundMarkerOpSettings::paintIncremental() {
+    return false;
+}

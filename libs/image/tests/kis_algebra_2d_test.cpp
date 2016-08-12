@@ -21,6 +21,7 @@
 #include <QTest>
 
 #include "kis_algebra_2d.h"
+#include "kis_debug.h"
 
 namespace KisAlgebra2D {
 
@@ -136,5 +137,19 @@ void KisAlgebra2DTest::testIntersections()
     QCOMPARE(points.size(), 0);
 }
 
+void KisAlgebra2DTest::testWeirdIntersections()
+{
+    QVector<QPointF> points;
+
+    QPointF c1 = QPointF(5369.14,3537.98);
+    QPointF c2 = QPointF(5370.24,3536.71);
+    qreal r1 = 8.5;
+    qreal r2 = 10;
+
+    points = KisAlgebra2D::intersectTwoCircles(c1, r1, c2, r2);
+
+    QCOMPARE(points.size(), 2);
+    //QCOMPARE(points[0], QPointF(15, 10));
+}
 
 QTEST_MAIN(KisAlgebra2DTest)

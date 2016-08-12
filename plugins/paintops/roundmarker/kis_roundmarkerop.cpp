@@ -37,12 +37,14 @@
 #include <kis_cross_device_color_picker.h>
 #include <kis_fixed_paint_device.h>
 #include <kis_lod_transform.h>
+#include "kis_marker_painter.h"
 
 
 KisRoundMarkerOp::KisRoundMarkerOp(const KisBrushBasedPaintOpSettings* settings, KisPainter* painter, KisNodeSP node, KisImageSP image)
     : KisBrushBasedPaintOp(settings, painter)
     , m_firstRun(true)
     , m_image(image)
+    , m_lastRadius(1.0)
 {
     Q_UNUSED(node);
 
@@ -76,12 +78,32 @@ KisSpacingInformation KisRoundMarkerOp::paintAt(const KisPaintInformation& info)
     if (checkSizeTooSmall(scale)) return KisSpacingInformation();
     KisDabShape shape(scale, 1.0, rotation);
 
+    qreal radius = 0.5 * brush->maskWidth(shape, 0, 0, info);
+    QPointF pos = info.pos();
+
+    KisMarkerPainter gc(painter()->device(), painter()->paintColor());
+
+    if (m_firstRun) {
+        gc.fillFullCircle(pos, radius);
+    } else {
+        gc.fillCirclesDiff(m_lastPaintPos, m_lastRadius,
+                           pos, radius);
+    }
+
+    m_firstRun = false;
+    m_lastPaintPos = pos;
+    m_lastRadius = radius;
+
+    QRectF dirtyRect(pos.x() - radius, pos.y() - radius,
+                     2 * radius, 2 * radius);
+    painter()->addDirtyRect(dirtyRect.toAlignedRect());
+
     // QPointF scatteredPos =
     //     m_scatterOption.apply(info,
     //                           brush->maskWidth(shape, 0, 0, info),
     //                           brush->maskHeight(shape, 0, 0, info));
 
-    QPointF hotSpot = brush->hotSpot(shape, info);
+
 
     //updateMask(info, scale, rotation, scatteredPos);
 

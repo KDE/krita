@@ -22,7 +22,6 @@
 #include <kis_debug.h>
 #include "krita_utils.h"
 
-
 #define SANITY_CHECKS
 
 namespace KisAlgebra2D {
@@ -271,33 +270,42 @@ int quadraticEquation(qreal a, qreal b, qreal c, qreal *x1, qreal *x2)
     return numSolutions;
 }
 
-QVector<QPointF> intersectTwoCircles(const QPointF &c1, qreal r1,
-                                     const QPointF &c2, qreal r2)
+QVector<QPointF> intersectTwoCircles(const QPointF &center1, qreal r1,
+                                     const QPointF &center2, qreal r2)
 {
     QVector<QPointF> points;
-    if (kisSquareDistance(c1, c2) > pow2(r1 + r2)) return points;
 
-    const qreal x_k = c1.x();
-    const qreal x_kp1 = c2.x();
-    const qreal y_k = c1.y();
-    const qreal y_kp1 = c2.y();
+    const QPointF diff = (center2 - center1);
+    const QPointF c1;
+    const QPointF c2 = diff;
+
+    const qreal centerDistance = norm(diff);
+
+    if (centerDistance > r1 + r2) return points;
+    if (centerDistance < qAbs(r1 - r2)) return points;
+
+    if (centerDistance < qAbs(r1 - r2) + 0.001) {
+        qDebug() << "Skipping intersection" << ppVar(center1) << ppVar(center2) << ppVar(r1) << ppVar(r2) << ppVar(centerDistance) << ppVar(qAbs(r1-r2));
+        return points;
+    }
+
+    const qreal x_kp1 = diff.x();
+    const qreal y_kp1 = diff.y();
 
     const qreal F2 =
-        0.5 * (pow2(x_kp1) - pow2(x_k) +
-               pow2(y_kp1) - pow2(y_k) - pow2(r1) + pow2(r2));
-
-    const QPointF diff = c2 - c1;
+        0.5 * (pow2(x_kp1) +
+               pow2(y_kp1) + pow2(r1) - pow2(r2));
 
     if (qFuzzyCompare(diff.y(), 0)) {
         qreal x = F2 / diff.x();
         qreal y1, y2;
         int result = KisAlgebra2D::quadraticEquation(
-            1, -2 * y_k,
-            pow2(x) + pow2(x_k) -
-            2 * x * x_k + pow2(y_k) - pow2(r2),
+            1, 0,
+            pow2(x) - pow2(r2),
             &y1, &y2);
 
-        KIS_ASSERT_RECOVER(result > 0) { return points; }
+        KIS_SAFE_ASSERT_RECOVER(result > 0) { return points; }
+
         if (result == 1) {
             points << QPointF(x, y1);
         } else if (result == 2) {
@@ -320,11 +328,11 @@ QVector<QPointF> intersectTwoCircles(const QPointF &c1, qreal r1,
 
         qreal x1, x2;
         int result = KisAlgebra2D::quadraticEquation(
-            1 + pow2(A), -2 * (x_k + A * C - y_k * A),
-            pow2(x_k) + pow2(y_k) + pow2(C) - 2 * y_k * C - pow2(r1),
+            1 + pow2(A), -2 * A * C,
+            pow2(C) - pow2(r1),
             &x1, &x2);
 
-        KIS_ASSERT_RECOVER(result > 0) { return points; }
+        KIS_SAFE_ASSERT_RECOVER(result > 0) { return points; }
 
         if (result == 1) {
             points << QPointF(x1, C - x1 * A);
@@ -342,6 +350,10 @@ QVector<QPointF> intersectTwoCircles(const QPointF &c1, qreal r1,
                 points << p1;
             }
         }
+    }
+
+    for (int i = 0; i < points.size(); i++) {
+        points[i] = center1 + points[i];
     }
 
     return points;

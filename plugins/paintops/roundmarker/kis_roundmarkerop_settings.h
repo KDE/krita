@@ -29,6 +29,8 @@ public:
     KisRoundMarkerOpSettings();
     ~KisRoundMarkerOpSettings();
 
+    bool paintIncremental();
+
 private:
     struct Private;
     const QScopedPointer<Private> m_d;

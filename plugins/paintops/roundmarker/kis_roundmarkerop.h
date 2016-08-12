@@ -45,6 +45,7 @@ private:
     KisPressureSizeOption     m_sizeOption;
     KisPressureSpacingOption  m_spacingOption;
     QPointF                   m_lastPaintPos;
+    qreal                     m_lastRadius;
 };
 
 #endif // _KIS_ROUNDMARKEROP_H_

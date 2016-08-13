@@ -25,6 +25,9 @@
     </widget>
    </item>
    <item>
+    <widget class="KisScreenColorPicker" name="screenColorPicker" native="true"/>
+   </item>
+   <item>
     <widget class="QDialogButtonBox" name="buttonBox">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -41,6 +44,12 @@
    <class>KisSpinboxColorSelector</class>
    <extends>QWidget</extends>
    <header>kis_spinbox_color_selector.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KisScreenColorPicker</class>
+   <extends>QWidget</extends>
+   <header>kis_screen_color_picker.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

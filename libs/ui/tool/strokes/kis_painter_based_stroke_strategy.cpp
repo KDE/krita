@@ -272,13 +272,17 @@ void KisPainterBasedStrokeStrategy::cancelStrokeCallback()
     KisIndirectPaintingSupport *indirect =
         dynamic_cast<KisIndirectPaintingSupport*>(node.data());
 
-    if(indirect && indirect->hasTemporaryTarget()) {
-        delete m_transaction;
-        deletePainters();
 
-        QRegion region = indirect->temporaryTarget()->region();
-        indirect->setTemporaryTarget(0);
-        node->setDirty(region);
+    if (indirect) {
+        KisPaintDeviceSP t = indirect->temporaryTarget();
+        if (t) {
+            delete m_transaction;
+            deletePainters();
+
+            QRegion region = t->region();
+            indirect->setTemporaryTarget(0);
+            node->setDirty(region);
+        }
     } else {
         m_transaction->revert();
         delete m_transaction;

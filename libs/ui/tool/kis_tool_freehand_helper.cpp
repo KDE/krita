@@ -680,7 +680,6 @@ void KisToolFreehandHelper::stabilizerPollAndPaint()
             m_d->stabilizerDeque.dequeue();
             m_d->stabilizerDeque.enqueue(sampledInfo);
 
-
             emit requestExplicitUpdateOutline();
         } else if (m_d->stabilizerDeque.head().pos() != m_d->previousPaintInformation.pos()) {
 
@@ -699,21 +698,17 @@ void KisToolFreehandHelper::stabilizerPollAndPaint()
 
 void KisToolFreehandHelper::stabilizerEnd()
 {
-    // FIXME: Ugly hack, this is no a "distance" in any way
-    int sampleSize = m_d->smoothingOptions->smoothnessDistance();
-    assert(sampleSize > 0);
-
     // Stop the timer
     m_d->stabilizerPollTimer.stop();
 
     // Finish the line
-    for (int i = sampleSize; i > 0; i--) {
+    if (m_d->smoothingOptions->finishStabilizedCurve()) {
         // In each iteration we add the latest paint info and delete the oldest
         // After `sampleSize` iterations the deque will be filled with the latest
         // value and we will have reached the end point.
-        if (m_d->smoothingOptions->finishStabilizedCurve()) {
-            stabilizerPollAndPaint();
-        }
+
+        m_d->stabilizedSampler.addFinishingEvent(m_d->stabilizerDeque.size());
+        stabilizerPollAndPaint();
     }
 }
 

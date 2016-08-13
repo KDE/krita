@@ -425,9 +425,6 @@ macro_log_feature(TIFF_FOUND "tiff" "TIFF Library and Utilities" "http://www.rem
 macro_optional_find_package(JPEG)
 macro_log_feature(JPEG_FOUND "jpeg" "Free library for JPEG image compression. Note: libjpeg8 is NOT supported." "http://www.libjpeg-turbo.org" FALSE "" "Required by the Krita JPEG filter")
 
-macro_optional_find_package(OpenJPEG)
-macro_log_feature(OPENJPEG_FOUND "openjpeg" "Free library for JPEG 2000 image compression" "http://www.openjpeg.org" FALSE "" "Required by the Krita JPEG 2000 filter")
-
 set(LIBRAW_MIN_VERSION  "0.16")
 macro_optional_find_package(LibRaw ${LIBRAW_MIN_VERSION})
 macro_log_feature(LIBRAW_FOUND "LibRaw" "Library to decode RAW images" "http://www.libraw.org" FALSE "" "Required to build the raw import plugin")

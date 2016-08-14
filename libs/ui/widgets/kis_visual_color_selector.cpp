@@ -239,12 +239,7 @@ KoColor KisVisualColorSelectorShape::convertShapeCoordinateToKoColor(QPointF coo
     if (m_d->channel2==0) {
         huedivider2 = 360.0;
     }
-    if (m_d->model == ColorModel::Channel) {
-        channelValues[m_d->channel1] = coordinates.x();
-        if (m_d->dimension == Dimensions::twodimensional) {
-            channelValues[m_d->channel2] = coordinates.y();
-        }
-    } else {
+    if (m_d->model != ColorModel::Channel && c.colorSpace()->colorModelId().id() == "RGBA") {
         if (c.colorSpace()->colorModelId().id() == "RGBA") {
             QVector <float> inbetween(3);
             if (m_d->model == ColorModel::HSV){
@@ -262,6 +257,11 @@ KoColor KisVisualColorSelectorShape::convertShapeCoordinateToKoColor(QPointF coo
                 }
                 HSLToRGB(inbetween[0], inbetween[1], inbetween[2],&channelValues[0],&channelValues[1], &channelValues[2]);
             }
+        }
+    } else {
+        channelValues[m_d->channel1] = coordinates.x();
+        if (m_d->dimension == Dimensions::twodimensional) {
+            channelValues[m_d->channel2] = coordinates.y();
         }
     }
     c.colorSpace()->fromNormalisedChannelsValue(c.data(), channelValues);
@@ -285,12 +285,7 @@ QPointF KisVisualColorSelectorShape::convertKoColorToShapeCoordinate(KoColor c)
     if (m_d->channel2==0) {
         huedivider2 = 360.0;
     }
-    if (m_d->model == ColorModel::Channel) {
-        coordinates.setX(channelValues[m_d->channel1]);
-        if (m_d->dimension == Dimensions::twodimensional) {
-            coordinates.setY(channelValues[m_d->channel2]);
-        }
-    } else {
+    if (m_d->model != ColorModel::Channel && c.colorSpace()->colorModelId().id() == "RGBA") {
         if (c.colorSpace()->colorModelId().id() == "RGBA") {
             QVector <float> inbetween(3);
             if (m_d->model == ColorModel::HSV){
@@ -306,6 +301,11 @@ QPointF KisVisualColorSelectorShape::convertKoColorToShapeCoordinate(KoColor c)
                     coordinates.setY(inbetween[m_d->channel2]/huedivider2);
                 }
             }
+        }
+    } else {
+        coordinates.setX(channelValues[m_d->channel1]);
+        if (m_d->dimension == Dimensions::twodimensional) {
+            coordinates.setY(channelValues[m_d->channel2]);
         }
     }
     return coordinates;

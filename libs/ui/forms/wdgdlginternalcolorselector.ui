@@ -15,6 +15,22 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
+    <widget class="KisVisualColorSelector" name="visualSelector" native="true">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>400</width>
+       <height>400</height>
+      </size>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="KisSpinboxColorSelector" name="spinboxselector" native="true">
      <property name="sizePolicy">
       <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
@@ -50,6 +66,12 @@
    <class>KisScreenColorPicker</class>
    <extends>QWidget</extends>
    <header>kis_screen_color_picker.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KisVisualColorSelector</class>
+   <extends>QWidget</extends>
+   <header>kis_visual_color_selector.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

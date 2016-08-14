@@ -60,8 +60,10 @@ KisInternalColorSelector::KisInternalColorSelector(QWidget *parent, KoColor colo
     m_ui->spinboxselector->slotSetColor(color);
     connect(m_ui->spinboxselector, SIGNAL(sigNewColor(KoColor)), this, SLOT(slotColorUpdated(KoColor)));
 
+    m_ui->visualSelector->slotSetColor(color);
+    connect(m_ui->visualSelector, SIGNAL(sigNewColor(KoColor)), this, SLOT(slotColorUpdated(KoColor)));
     connect(m_ui->screenColorPicker, SIGNAL(sigNewColorPicked(KoColor)),this, SLOT(slotColorUpdated(KoColor)));
-    //TODO: Add disable signal as well.
+    //TODO: Add disable signal as well. Might be not necessary...?
 
     connect(this, SIGNAL(signalForegroundColorChosen(KoColor)), this, SLOT(slotLockSelector()));
     m_d->compressColorChanges = new KisSignalCompressor(100 /* ms */, KisSignalCompressor::POSTPONE, this);
@@ -132,6 +134,9 @@ void KisInternalColorSelector::updateAllElements(QObject *source)
     //update everything!!!
     if (source != m_ui->spinboxselector) {
         m_ui->spinboxselector->slotSetColor(m_d->currentColor);
+    }
+    if (source != m_ui->visualSelector) {
+        m_ui->visualSelector->slotSetColor(m_d->currentColor);
     }
 
     if (source != this->parent()) {

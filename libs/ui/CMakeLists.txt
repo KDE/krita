@@ -256,6 +256,7 @@ set(kritaui_LIB_SRCS
     widgets/kis_elided_label.cpp
     widgets/kis_spinbox_color_selector.cpp
     widgets/kis_screen_color_picker.cpp
+    widgets/kis_visual_color_selector.cpp
     widgets/KoDualColorButton.cpp
     input/kis_input_manager.cpp
     input/kis_input_manager_p.cpp

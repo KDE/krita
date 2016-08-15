@@ -163,6 +163,7 @@ void KisScratchPad::pointerPress(KoPointerEvent *event)
         event->accept();
     }
     else if (m_toolMode == PICKING) {
+        pick(event);
         event->accept();
     }
 }
@@ -351,6 +352,8 @@ void KisScratchPad::setupScratchPad(KisCanvasResourceProvider* resourceProvider,
 
     connect(m_resourceProvider, SIGNAL(sigOnScreenResolutionChanged(qreal,qreal)),
             SLOT(setOnScreenResolution(qreal,qreal)));
+    connect(this, SIGNAL(colorSelected(const KoColor&)),
+            m_resourceProvider, SLOT(slotSetFGColor(const KoColor&)));
 
     m_defaultColor = KoColor(defaultColor, KoColorSpaceRegistry::instance()->rgb8());
 

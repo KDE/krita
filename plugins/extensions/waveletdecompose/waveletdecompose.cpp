@@ -84,10 +84,7 @@ void WaveletDecompose::slotWaveletDecompose()
 
         image->barrierLock();
 
-        KisLayerSP layer = m_view->activeLayer();
-        if (!layer) return;
-
-        KisPaintDeviceSP projection = new KisPaintDevice(*(layer->projection()), false, 0);
+        KisPaintDeviceSP projection = new KisPaintDevice(*(image->projection()), false, 0);
         if (!projection) return;
        
         const KoColorSpace *cs = projection->colorSpace();
@@ -133,7 +130,7 @@ void WaveletDecompose::slotWaveletDecompose()
 
         //add layer goup              
         KisGroupLayerSP grp = new KisGroupLayer(image, i18n("Wavelet decompose"), OPACITY_OPAQUE_U8);
-        adapter.addNode(grp, baseGroup, 1);
+        adapter.addNode(grp, baseGroup, baseGroup->lastChild());
         baseGroup = grp;
 
         //add scales

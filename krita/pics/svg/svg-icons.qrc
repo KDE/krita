@@ -80,7 +80,12 @@
         <file>light_landscape.svg</file>
         <file>light_portrait.svg</file>
         
-        
+        <file>dark_showColoring.svg</file>
+        <file>dark_showMarks.svg</file>
+        <file>dark_updateColorize.svg</file>
+        <file>light_showColoring.svg</file>
+        <file>light_showMarks.svg</file>
+        <file>light_updateColorize.svg</file>        
 
     </qresource>
 </RCC>

@@ -21,6 +21,7 @@
 #include <QPixmap>
 #include <QPainter>
 #include <QPainterPath>
+#include <QRect>
 #include <QVector>
 #include <QVBoxLayout>
 #include <QList>
@@ -243,19 +244,19 @@ KoColor KisVisualColorSelectorShape::convertShapeCoordinateToKoColor(QPointF coo
         if (c.colorSpace()->colorModelId().id() == "RGBA") {
             QVector <float> inbetween(3);
             if (m_d->model == ColorModel::HSV){
-                RGBToHSV(channelValues[0],channelValues[1], channelValues[2], &inbetween[0], &inbetween[1], &inbetween[2]);
+                RGBToHSV(channelValues[2],channelValues[1], channelValues[0], &inbetween[0], &inbetween[1], &inbetween[2]);
                 inbetween[m_d->channel1] = coordinates.x()*huedivider;
                 if (m_d->dimension == Dimensions::twodimensional) {
                     inbetween[m_d->channel2] = coordinates.y()*huedivider2;
                 }
-                HSVToRGB(inbetween[0], inbetween[1], inbetween[2], &channelValues[0], &channelValues[1], &channelValues[2]);
+                HSVToRGB(inbetween[0], inbetween[1], inbetween[2], &channelValues[2], &channelValues[1], &channelValues[0]);
             } else /*(m_d->model == KisVisualColorSelectorShape::ColorModel::HSL)*/{
-                RGBToHSL(channelValues[0],channelValues[1], channelValues[2], &inbetween[0], &inbetween[1], &inbetween[2]);
+                RGBToHSL(channelValues[2],channelValues[1], channelValues[0], &inbetween[0], &inbetween[1], &inbetween[2]);
                 inbetween[m_d->channel1] = coordinates.x()*huedivider;
                 if (m_d->dimension == Dimensions::twodimensional) {
                     inbetween[m_d->channel2] = coordinates.y()*huedivider2;
                 }
-                HSLToRGB(inbetween[0], inbetween[1], inbetween[2],&channelValues[0],&channelValues[1], &channelValues[2]);
+                HSLToRGB(inbetween[0], inbetween[1], inbetween[2],&channelValues[2],&channelValues[1], &channelValues[0]);
             }
         }
     } else {
@@ -289,13 +290,13 @@ QPointF KisVisualColorSelectorShape::convertKoColorToShapeCoordinate(KoColor c)
         if (c.colorSpace()->colorModelId().id() == "RGBA") {
             QVector <float> inbetween(3);
             if (m_d->model == ColorModel::HSV){
-                RGBToHSV(channelValues[0],channelValues[1], channelValues[2], &inbetween[0], &inbetween[1], &inbetween[2]);
+                RGBToHSV(channelValues[2],channelValues[1], channelValues[0], &inbetween[0], &inbetween[1], &inbetween[2]);
                 coordinates.setX(inbetween[m_d->channel1]/huedivider);
                 if (m_d->dimension == Dimensions::twodimensional) {
                     coordinates.setY(inbetween[m_d->channel2]/huedivider2);
                 }
             } else {
-                RGBToHSL(channelValues[0],channelValues[1], channelValues[2], &inbetween[0], &inbetween[1], &inbetween[2]);
+                RGBToHSL(channelValues[2],channelValues[1], channelValues[0], &inbetween[0], &inbetween[1], &inbetween[2]);
                 coordinates.setX(inbetween[m_d->channel1]/huedivider);
                 if (m_d->dimension == Dimensions::twodimensional) {
                     coordinates.setY(inbetween[m_d->channel2]/huedivider2);
@@ -425,16 +426,45 @@ void KisVisualRectangleSelectorShape::drawCursor()
     painter.setRenderHint(QPainter::Antialiasing);
     //QPainterPath path;
     QBrush fill;
-    painter.setPen(Qt::white);
     fill.setStyle(Qt::SolidPattern);
-    fill.setColor(Qt::white);
-    painter.setBrush(fill);
-    painter.drawEllipse(cursorPoint, 5, 5);
-    //set filter conversion!
-    fill.setColor(getCurrentColor().toQColor());
-    painter.setPen(Qt::black);
-    painter.setBrush(fill);
-    painter.drawEllipse(cursorPoint, 4, 4);
+
+    int cursorwidth = 5;
+    QRect rect(cursorPoint.toPoint().x()-cursorwidth,cursorPoint.toPoint().y()-cursorwidth,
+               cursorwidth*2,cursorwidth*2);
+    if (m_type==KisVisualRectangleSelectorShape::vertical){
+        int x = ( cursorPoint.x()-(width()/2)+1 );
+        int y = ( cursorPoint.y()-cursorwidth );
+        rect.setCoords(x, y, x+width()-2, y+(cursorwidth*2));
+    } else {
+        int x = cursorPoint.x()-cursorwidth;
+        int y = cursorPoint.y()-(height()/2)+1;
+        rect.setCoords(x, y, x+(cursorwidth*2), y+cursorwidth-2);
+    }
+
+    if (getDimensions() == KisVisualColorSelectorShape::onedimensional) {
+        painter.setPen(Qt::white);
+        fill.setColor(Qt::white);
+        painter.setBrush(fill);
+        painter.drawRect(rect);
+        //set filter conversion!
+        fill.setColor(getCurrentColor().toQColor());
+        painter.setPen(Qt::black);
+        painter.setBrush(fill);
+        rect.setCoords(rect.topLeft().x()+1, rect.topLeft().y()+1,
+                       rect.topLeft().x()+rect.width()-2, rect.topLeft().y()+rect.height()-2);
+        painter.drawRect(rect);
+
+    } else {
+        painter.setPen(Qt::white);
+        fill.setColor(Qt::white);
+        painter.setBrush(fill);
+        painter.drawEllipse(cursorPoint, cursorwidth, cursorwidth);
+        //set filter conversion!
+        fill.setColor(getCurrentColor().toQColor());
+        painter.setPen(Qt::black);
+        painter.setBrush(fill);
+        painter.drawEllipse(cursorPoint, cursorwidth-1.0, cursorwidth-1.0);
+    }
     painter.end();
     setFullImage(fullSelector);
 }

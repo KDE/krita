@@ -27,6 +27,8 @@
 #include <QList>
 
 #include "KoColorConversions.h"
+#include "KoColorDisplayRendererInterface.h"
+#include <QPointer>
 #include "kis_signal_compressor.h"
 
 struct KisVisualColorSelector::Private
@@ -35,7 +37,7 @@ struct KisVisualColorSelector::Private
     const KoColorSpace *currentCS;
     QList <KisVisualColorSelectorShape*> widgetlist;
     bool updateSelf = false;
-
+    QPointer<KoColorDisplayRendererInterface> displayRenderer;
     //Current coordinates.
     QVector <float> currentCoordinates;
 };
@@ -118,6 +120,16 @@ void KisVisualColorSelector::slotsetColorSpace(const KoColorSpace *cs)
 
 }
 
+
+void KisVisualColorSelector::setDisplayRenderer (KoColorDisplayRendererInterface *displayRenderer) {
+    m_d->displayRenderer = displayRenderer;
+    if (m_d->widgetlist.size()>0) {
+        Q_FOREACH (KisVisualColorSelectorShape *shape, m_d->widgetlist) {
+            shape->setDisplayRenderer(displayRenderer);
+        }
+    }
+}
+
 void KisVisualColorSelector::updateSelectorElements()
 {
     //first lock all elements from sending updates, then update all elements.
@@ -165,6 +177,7 @@ struct KisVisualColorSelectorShape::Private
     int channel2;
     KisSignalCompressor *updateTimer;
     bool mousePressActive = false;
+    QPointer<KoColorDisplayRendererInterface> displayRenderer;
 };
 
 KisVisualColorSelectorShape::KisVisualColorSelectorShape(QWidget *parent,
@@ -172,8 +185,11 @@ KisVisualColorSelectorShape::KisVisualColorSelectorShape(QWidget *parent,
                                                          KisVisualColorSelectorShape::ColorModel model,
                                                          const KoColorSpace *cs,
                                                          int channel1,
-                                                         int channel2): QWidget(parent), m_d(new Private)
+                                                         int channel2,
+                                                         KoColorDisplayRendererInterface *displayRenderer): QWidget(parent), m_d(new Private)
 {
+    m_d->displayRenderer = displayRenderer;
+    connect(m_d->displayRenderer, SIGNAL(displayConfigurationChanged()), SLOT(update()));
     m_d->dimension = dimension;
     m_d->model = model;
     m_d->cs = cs;
@@ -226,6 +242,20 @@ void KisVisualColorSelectorShape::setColorFromSibling(KoColor c)
     update();
 }
 
+void KisVisualColorSelectorShape::setDisplayRenderer (KoColorDisplayRendererInterface *displayRenderer) {
+    m_d->displayRenderer = displayRenderer;
+}
+
+QColor KisVisualColorSelectorShape::getColorFromConverter(KoColor c){
+    QColor col;
+    if (m_d->displayRenderer) {
+        col = m_d->displayRenderer->toQColor(c);
+    } else {
+        col = c.toQColor();
+    }
+    return col;
+}
+
 void KisVisualColorSelectorShape::slotSetActiveChannels(int channel1, int channel2)
 {
     int maxchannel = m_d->cs->colorChannelCount()-1;
@@ -249,8 +279,7 @@ QPixmap KisVisualColorSelectorShape::getPixmap()
                 QPoint widgetPoint(x,y);
                 QPointF newcoordinate = convertWidgetCoordinateToShapeCoordinate(widgetPoint);
                 KoColor c = convertShapeCoordinateToKoColor(newcoordinate);
-                //put displayconverter here
-                QColor col = c.toQColor();
+                QColor col = getColorFromConverter(c);
                 img.setPixel(widgetPoint, col.rgb());
             }
         }
@@ -413,8 +442,8 @@ KisVisualRectangleSelectorShape::KisVisualRectangleSelectorShape(QWidget *parent
                                                                  ColorModel model,
                                                                  const KoColorSpace *cs,
                                                                  int channel1, int channel2,
-                                                                 singelDTypes d)
-    : KisVisualColorSelectorShape(parent, dimension, model, cs, channel1, channel2)
+                                                                 singelDTypes d, KoColorDisplayRendererInterface *displayRenderer)
+    : KisVisualColorSelectorShape(parent, dimension, model, cs, channel1, channel2, displayRenderer)
 {
     m_type = d;
 }
@@ -467,7 +496,7 @@ void KisVisualRectangleSelectorShape::drawCursor()
 {
     QPointF cursorPoint = convertShapeCoordinateToWidgetCoordinate(getCursorPosition());
     QPixmap fullSelector = getPixmap();
-
+    QColor col = getColorFromConverter(getCurrentColor());
     QPainter painter;
     painter.begin(&fullSelector);
     painter.setRenderHint(QPainter::Antialiasing);
@@ -494,7 +523,7 @@ void KisVisualRectangleSelectorShape::drawCursor()
         painter.setBrush(fill);
         painter.drawRect(rect);
         //set filter conversion!
-        fill.setColor(getCurrentColor().toQColor());
+        fill.setColor(col);
         painter.setPen(Qt::black);
         painter.setBrush(fill);
         rect.setCoords(rect.topLeft().x()+1, rect.topLeft().y()+1,
@@ -506,8 +535,7 @@ void KisVisualRectangleSelectorShape::drawCursor()
         fill.setColor(Qt::white);
         painter.setBrush(fill);
         painter.drawEllipse(cursorPoint, cursorwidth, cursorwidth);
-        //set filter conversion!
-        fill.setColor(getCurrentColor().toQColor());
+        fill.setColor(col);
         painter.setPen(Qt::black);
         painter.setBrush(fill);
         painter.drawEllipse(cursorPoint, cursorwidth-1.0, cursorwidth-1.0);

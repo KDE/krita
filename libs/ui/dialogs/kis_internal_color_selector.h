@@ -22,6 +22,8 @@
 #include "kritaui_export.h"
 #include "KoColor.h"
 #include "KoColorSpace.h"
+#include "KoColorDisplayRendererInterface.h"
+
 #include <QScopedPointer>
 
 #include "ui_wdgdlginternalcolorselector.h"
@@ -35,7 +37,7 @@ class KRITAUI_EXPORT KisInternalColorSelector : public QDialog
 {
     Q_OBJECT
 public:
-    KisInternalColorSelector(QWidget* parent, KoColor color, bool modal, const QString &caption);
+    KisInternalColorSelector(QWidget* parent, KoColor color, bool modal, const QString &caption, KoColorDisplayRendererInterface *displayRenderer = KoDumbColorDisplayRenderer::instance());
     ~KisInternalColorSelector();
 
     /**

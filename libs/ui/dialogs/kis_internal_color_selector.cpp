@@ -20,13 +20,14 @@
 #include <QAbstractSpinBox>
 #include <QSpinBox>
 #include <QDoubleSpinBox>
+#include <QPointer>
 
 #include "KoColorSpaceRegistry.h"
 
 #include "kis_signal_compressor.h"
 #include "KisViewManager.h"
 #include "KoColorDisplayRendererInterface.h"
-#include "kis_display_color_converter.h"
+
 #include "kis_spinbox_color_selector.h"
 
 #include "kis_internal_color_selector.h"
@@ -39,9 +40,10 @@ struct KisInternalColorSelector::Private
     const KoColorSpace *currentColorSpace;
     bool chooseAlpha = false;
     KisSignalCompressor *compressColorChanges;
+    QPointer<KoColorDisplayRendererInterface> displayRenderer;
 };
 
-KisInternalColorSelector::KisInternalColorSelector(QWidget *parent, KoColor color, bool modal, const QString &caption)
+KisInternalColorSelector::KisInternalColorSelector(QWidget *parent, KoColor color, bool modal, const QString &caption, KoColorDisplayRendererInterface *displayRenderer)
     : QDialog(parent)
      ,m_d(new Private)
 {
@@ -56,11 +58,13 @@ KisInternalColorSelector::KisInternalColorSelector(QWidget *parent, KoColor colo
 
     m_d->currentColor = color;
     m_d->currentColorSpace = m_d->currentColor.colorSpace();
+    m_d->displayRenderer = displayRenderer;
 
     m_ui->spinboxselector->slotSetColor(color);
     connect(m_ui->spinboxselector, SIGNAL(sigNewColor(KoColor)), this, SLOT(slotColorUpdated(KoColor)));
 
     m_ui->visualSelector->slotSetColor(color);
+    m_ui->visualSelector->setDisplayRenderer(displayRenderer);
     connect(m_ui->visualSelector, SIGNAL(sigNewColor(KoColor)), this, SLOT(slotColorUpdated(KoColor)));
     connect(m_ui->screenColorPicker, SIGNAL(sigNewColorPicked(KoColor)),this, SLOT(slotColorUpdated(KoColor)));
     //TODO: Add disable signal as well. Might be not necessary...?

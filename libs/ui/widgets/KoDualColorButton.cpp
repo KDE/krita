@@ -97,7 +97,7 @@ void KoDualColorButton::Private::init(KoDualColorButton *q)
 
     q->setAcceptDrops( true );
     QString caption = "Select a color";
-    colorSelectorDialog = new KisInternalColorSelector(q, foregroundColor, false, caption);
+    colorSelectorDialog = new KisInternalColorSelector(q, foregroundColor, false, caption, KoDumbColorDisplayRenderer::instance());
     connect(colorSelectorDialog, SIGNAL(signalForegroundColorChosen(KoColor)), q, SLOT(slotSetForeGroundColorFromDialog(KoColor)));
     connect(q, SIGNAL(foregroundColorChanged(KoColor)), colorSelectorDialog, SLOT(slotColorUpdated(KoColor)));
 }

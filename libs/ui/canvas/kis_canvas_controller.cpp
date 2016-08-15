@@ -178,10 +178,6 @@ void KisCanvasController::Private::showMirrorStateOnCanvas()
 
 void KisCanvasController::mirrorCanvas(bool enable)
 {
-    KisCanvasDecorationSP decorator = dynamic_cast<KisCanvas2*>(this->canvas())->decoration("mirror_axis");
-    KIS_ASSERT_RECOVER_RETURN(decorator);
-    decorator->setVisible(enable);
-
     QPoint newOffset = m_d->coordinatesConverter->mirror(m_d->coordinatesConverter->widgetCenterPoint(), enable, false);
     m_d->updateDocumentSizeAfterTransform();
     setScrollBarValue(newOffset);
@@ -192,8 +188,6 @@ void KisCanvasController::mirrorCanvas(bool enable)
 void KisCanvasController::Private::showRotationValueOnCanvas()
 {
     qreal rotationAngle = coordinatesConverter->rotationAngle();
-
-
     view->viewManager()->
         showFloatingMessage(
             i18nc("floating message about rotation", "Rotation: %1° ",

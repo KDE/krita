@@ -139,26 +139,38 @@ KisScratchPad::~KisScratchPad() {
     delete m_nodeListener;
 }
 
+KisScratchPad::Mode KisScratchPad::modeFromButton(Qt::MouseButton button) const
+{
+    return
+        button == Qt::NoButton ? HOVERING :
+        button == Qt::MidButton ? PANNING :
+        button == Qt::RightButton ? PICKING :
+        PAINTING;
+}
+
 void KisScratchPad::pointerPress(KoPointerEvent *event)
 {
-    if (event->button() == Qt::LeftButton) {
-        m_toolMode = PAINTING;
+    if (m_toolMode != HOVERING) return;
+
+    m_toolMode = modeFromButton(event->button());
+
+    if (m_toolMode == PAINTING) {
         beginStroke(event);
         event->accept();
     }
-    else if (event->button() == Qt::MidButton) {
-        m_toolMode = PANNING;
+    else if (m_toolMode == PANNING) {
         beginPan(event);
         event->accept();
     }
-    else if (event->button() == Qt::RightButton) {
-        m_toolMode = PICKING;
+    else if (m_toolMode == PICKING) {
         event->accept();
     }
 }
 
 void KisScratchPad::pointerRelease(KoPointerEvent *event)
 {
+    if (modeFromButton(event->button()) != m_toolMode) return;
+
     if (m_toolMode == PAINTING) {
         endStroke(event);
         m_toolMode = HOVERING;

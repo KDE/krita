@@ -50,7 +50,8 @@ public Q_SLOTS:
     void slotsetColorSpace(const KoColorSpace *cs);
 private Q_SLOTS:
     void updateFromWidgets(KoColor c);
-
+protected:
+    void leaveEvent(QEvent *);
 private:
     struct Private;
     const QScopedPointer<Private> m_d;
@@ -80,7 +81,7 @@ public:
                                          int channel1, int channel2);
     ~KisVisualColorSelectorShape();
 
-    QPointF getShapeCoordinates();
+    QPointF getCursorPosition();
 
     Dimensions getDimensions();
     ColorModel getColorModel();
@@ -92,6 +93,7 @@ Q_SIGNALS:
 
 public Q_SLOTS:
     void setColor(KoColor c);
+    void setColorFromSibling(KoColor c);
     void slotSetActiveChannels(int channel1, int channel2);
 protected:
     void mousePressEvent(QMouseEvent *e);
@@ -111,10 +113,16 @@ private:
 
     /**
      * @brief convertWidgetCoordinateToShapeCoordinate
-     * Convert a coordinate in the widget's height width to a shape coordinate.
+     * Convert a coordinate in the widget's height/width to a shape coordinate.
      * @param coordinate the position your wish to have the shape coordinates of.
      */
     virtual QPointF convertWidgetCoordinateToShapeCoordinate(QPoint coordinate) = 0;
+
+    /**
+     * @brief updateCursor
+     * Update the cursor position.
+     */
+    void updateCursor();
 
     QPointF convertKoColorToShapeCoordinate(KoColor c);
     KoColor convertShapeCoordinateToKoColor(QPointF coordinates);
@@ -147,8 +155,8 @@ private:
     virtual QPointF convertWidgetCoordinateToShapeCoordinate(QPoint coordinate);
 
     singelDTypes m_type;
-    QRegion getMaskMap();
-    void drawCursor();
+    virtual QRegion getMaskMap();
+    virtual void drawCursor();
 };
 
 #endif // KISVISUALCOLORSELECTOR_H

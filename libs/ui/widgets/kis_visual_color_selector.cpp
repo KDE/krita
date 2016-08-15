@@ -34,6 +34,7 @@ struct KisVisualColorSelector::Private
     KoColor currentcolor;
     const KoColorSpace *currentCS;
     QList <KisVisualColorSelectorShape*> widgetlist;
+    bool updateSelf = false;
 
     //Current coordinates.
     QVector <float> currentCoordinates;
@@ -44,6 +45,7 @@ KisVisualColorSelector::KisVisualColorSelector(QWidget *parent) : QWidget(parent
 
     QVBoxLayout *layout = new QVBoxLayout;
     this->setLayout(layout);
+    //m_d->updateSelf = new KisSignalCompressor(100 /* ms */, KisSignalCompressor::POSTPONE, this);
 }
 
 KisVisualColorSelector::~KisVisualColorSelector()
@@ -53,9 +55,11 @@ KisVisualColorSelector::~KisVisualColorSelector()
 
 void KisVisualColorSelector::slotSetColor(KoColor c)
 {
-    m_d->currentcolor = c;
-    if (m_d->currentCS != c.colorSpace()) {
-        slotsetColorSpace(c.colorSpace());
+    if (m_d->updateSelf==false) {
+        m_d->currentcolor = c;
+        if (m_d->currentCS != c.colorSpace()) {
+            slotsetColorSpace(c.colorSpace());
+        }
     }
     updateSelectorElements();
 }
@@ -85,7 +89,9 @@ void KisVisualColorSelector::slotsetColorSpace(const KoColorSpace *cs)
             bar->setMaximumHeight(height());
             block->setMaximumWidth(width()*0.9);
             block->setMaximumHeight(height());
-            connect (bar, SIGNAL(sigNewColor(KoColor)), block, SLOT(setColor(KoColor)));
+            bar->setColor(m_d->currentcolor);
+            block->setColor(m_d->currentcolor);
+            connect (bar, SIGNAL(sigNewColor(KoColor)), block, SLOT(setColorFromSibling(KoColor)));
             connect (block, SIGNAL(sigNewColor(KoColor)), SLOT(updateFromWidgets(KoColor)));
             layout->addWidget(bar);
             layout->addWidget(block);
@@ -98,7 +104,9 @@ void KisVisualColorSelector::slotsetColorSpace(const KoColorSpace *cs)
             block->setMaximumHeight(height());
             block2->setMaximumWidth(width()*0.5);
             block2->setMaximumHeight(height());
-            connect (block, SIGNAL(sigNewColor(KoColor)), block2, SLOT(setColor(KoColor)));
+            block->setColor(m_d->currentcolor);
+            block2->setColor(m_d->currentcolor);
+            connect (block, SIGNAL(sigNewColor(KoColor)), block2, SLOT(setColorFromSibling(KoColor)));
             connect (block2, SIGNAL(sigNewColor(KoColor)), SLOT(updateFromWidgets(KoColor)));
             layout->addWidget(block);
             layout->addWidget(block2);
@@ -112,14 +120,17 @@ void KisVisualColorSelector::slotsetColorSpace(const KoColorSpace *cs)
 
 void KisVisualColorSelector::updateSelectorElements()
 {
-    qDebug()<<"Sending updates: "<<m_d->currentcolor.toQString(m_d->currentcolor);
     //first lock all elements from sending updates, then update all elements.
     Q_FOREACH (KisVisualColorSelectorShape *shape, m_d->widgetlist) {
         shape->blockSignals(true);
     }
 
     Q_FOREACH (KisVisualColorSelectorShape *shape, m_d->widgetlist) {
-        shape->setColor(m_d->currentcolor);
+        if (m_d->updateSelf==false) {
+            shape->setColor(m_d->currentcolor);
+        } else {
+            shape->setColorFromSibling(m_d->currentcolor);
+        }
     }
     Q_FOREACH (KisVisualColorSelectorShape *shape, m_d->widgetlist) {
         shape->blockSignals(false);
@@ -131,6 +142,12 @@ void KisVisualColorSelector::updateFromWidgets(KoColor c)
 {
     m_d->currentcolor = c;
     Q_EMIT sigNewColor(c);
+    m_d->updateSelf = true;
+}
+
+void KisVisualColorSelector::leaveEvent(QEvent *)
+{
+    m_d->updateSelf = false;
 }
 
 /*------------Selector shape------------*/
@@ -175,12 +192,16 @@ KisVisualColorSelectorShape::~KisVisualColorSelectorShape()
 
 }
 
-QPointF KisVisualColorSelectorShape::getShapeCoordinates() {
+void KisVisualColorSelectorShape::updateCursor()
+{
     QPointF point1 = convertKoColorToShapeCoordinate(m_d->currentColor);
     if (point1 != m_d->currentCoordinates) {
         m_d->currentCoordinates = point1;
     }
-    return point1;
+}
+
+QPointF KisVisualColorSelectorShape::getCursorPosition() {
+    return m_d->currentCoordinates;
 }
 
 void KisVisualColorSelectorShape::setColor(KoColor c)
@@ -189,6 +210,18 @@ void KisVisualColorSelectorShape::setColor(KoColor c)
         c.convertTo(m_d->cs);
     }
     m_d->currentColor = c;
+    updateCursor();
+    m_d->pixmapsNeedUpdate = true;
+    update();
+}
+
+void KisVisualColorSelectorShape::setColorFromSibling(KoColor c)
+{
+    if (c.colorSpace() != m_d->cs) {
+        c.convertTo(m_d->cs);
+    }
+    m_d->currentColor = c;
+    Q_EMIT sigNewColor(c);
     m_d->pixmapsNeedUpdate = true;
     update();
 }
@@ -432,7 +465,7 @@ QRegion KisVisualRectangleSelectorShape::getMaskMap()
 
 void KisVisualRectangleSelectorShape::drawCursor()
 {
-    QPointF cursorPoint = convertShapeCoordinateToWidgetCoordinate(getShapeCoordinates());
+    QPointF cursorPoint = convertShapeCoordinateToWidgetCoordinate(getCursorPosition());
     QPixmap fullSelector = getPixmap();
 
     QPainter painter;

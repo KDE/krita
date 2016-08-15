@@ -95,7 +95,8 @@ public Q_SLOTS:
     void slotSetActiveChannels(int channel1, int channel2);
 protected:
     void mousePressEvent(QMouseEvent *e);
-    void mouseReleaseEvent(QMouseEvent *);
+    void mouseMoveEvent(QMouseEvent *e);
+    void mouseReleaseEvent(QMouseEvent *e);
     void paintEvent(QPaintEvent*);
     void resizeEvent(QResizeEvent *);
 private:

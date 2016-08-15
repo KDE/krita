@@ -27,6 +27,7 @@
 #include <QList>
 
 #include "KoColorConversions.h"
+#include "kis_signal_compressor.h"
 
 struct KisVisualColorSelector::Private
 {
@@ -145,6 +146,8 @@ struct KisVisualColorSelectorShape::Private
     KoColor currentColor;
     int channel1;
     int channel2;
+    KisSignalCompressor *updateTimer;
+    bool mousePressActive = false;
 };
 
 KisVisualColorSelectorShape::KisVisualColorSelectorShape(QWidget *parent,
@@ -164,9 +167,7 @@ KisVisualColorSelectorShape::KisVisualColorSelectorShape(QWidget *parent,
     m_d->channel1 = qBound(0, channel1, maxchannel);
     m_d->channel2 = qBound(0, channel2, maxchannel);
     this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    //m_d->gradient = QPixmap(size());
-    //m_d->pixmapsNeedUpdate = true;
-    //getPixmap();
+    m_d->updateTimer = new KisSignalCompressor(100 /* ms */, KisSignalCompressor::POSTPONE, this);
 }
 
 KisVisualColorSelectorShape::~KisVisualColorSelectorShape()
@@ -314,14 +315,27 @@ QPointF KisVisualColorSelectorShape::convertKoColorToShapeCoordinate(KoColor c)
 
 void KisVisualColorSelectorShape::mousePressEvent(QMouseEvent *e)
 {
-    QPointF coordinates = convertWidgetCoordinateToShapeCoordinate(e->pos());
-    KoColor col = convertShapeCoordinateToKoColor(coordinates);
-    setColor(col);
-    Q_EMIT sigNewColor(col);
+    m_d->mousePressActive = true;
 }
+
+void KisVisualColorSelectorShape::mouseMoveEvent(QMouseEvent *e)
+{
+    if (m_d->mousePressActive==true && this->mask().contains(e->pos())) {
+        QPointF coordinates = convertWidgetCoordinateToShapeCoordinate(e->pos());
+        KoColor col = convertShapeCoordinateToKoColor(coordinates);
+        setColor(col);
+        if (!m_d->updateTimer->isActive()) {
+            Q_EMIT sigNewColor(col);
+            m_d->updateTimer->start();
+        }
+    } else {
+        e->ignore();
+    }
+}
+
 void KisVisualColorSelectorShape::mouseReleaseEvent(QMouseEvent *)
 {
-
+    m_d->mousePressActive = false;
 }
 void KisVisualColorSelectorShape::paintEvent(QPaintEvent*)
 {

@@ -31,15 +31,15 @@
 struct KisCoordinatesConverter::Private {
     Private():
         isXAxisMirrored(false), isYAxisMirrored(false), rotationAngle(0.0) { }
-    
+
     KisImageWSP image;
-    
+
     bool isXAxisMirrored;
     bool isYAxisMirrored;
     qreal rotationAngle;
     QSizeF canvasWidgetSize;
     QPointF documentOffset;
-    
+
     QTransform flakeToWidget;
     QTransform imageToDocument;
     QTransform documentToFlake;
@@ -159,7 +159,7 @@ void KisCoordinatesConverter::setImage(KisImageWSP image)
 void KisCoordinatesConverter::setDocumentOffset(const QPoint& offset)
 {
     QPointF diff = m_d->documentOffset - offset;
-    
+
     m_d->documentOffset = offset;
     m_d->flakeToWidget *= QTransform::fromTranslate(diff.x(), diff.y());
     recalculateTransformations();
@@ -210,32 +210,38 @@ QPoint KisCoordinatesConverter::rotate(QPointF center, qreal angle)
     return m_d->documentOffset.toPoint();
 }
 
-QPoint KisCoordinatesConverter::mirror(QPointF center, bool mirrorXAxis, bool mirrorYAxis, bool keepOrientation)
+QPoint KisCoordinatesConverter::mirror(QPointF center, bool mirrorXAxis, bool mirrorYAxis)
 {
+    bool keepOrientation = false; // XXX: Keep here for now, maybe some day we can restore the parameter again.
+
     bool       doXMirroring = m_d->isXAxisMirrored ^ mirrorXAxis;
     bool       doYMirroring = m_d->isYAxisMirrored ^ mirrorYAxis;
     qreal      scaleX       = doXMirroring ? -1.0 : 1.0;
     qreal      scaleY       = doYMirroring ? -1.0 : 1.0;
     QTransform mirror       = QTransform::fromScale(scaleX, scaleY);
-    
+
     QTransform rot;
     rot.rotate(m_d->rotationAngle);
-    
+
     m_d->flakeToWidget *= QTransform::fromTranslate(-center.x(),-center.y());
-    
-    if(keepOrientation)
+
+    if (keepOrientation) {
         m_d->flakeToWidget *= rot.inverted();
-    
+    }
+
     m_d->flakeToWidget *= mirror;
-    
-    if(keepOrientation)
+
+    if (keepOrientation) {
         m_d->flakeToWidget *= rot;
-    
+    }
+
     m_d->flakeToWidget *= QTransform::fromTranslate(center.x(),center.y());
-    
-    if(!keepOrientation && (doXMirroring ^ doYMirroring))
+
+
+    if (!keepOrientation && (doXMirroring ^ doYMirroring)) {
         m_d->rotationAngle = -m_d->rotationAngle;
-    
+    }
+
     m_d->isXAxisMirrored = mirrorXAxis;
     m_d->isYAxisMirrored = mirrorYAxis;
 
@@ -259,7 +265,7 @@ QPoint KisCoordinatesConverter::resetRotation(QPointF center)
 {
     QTransform rot;
     rot.rotate(-m_d->rotationAngle);
-    
+
     m_d->flakeToWidget *= QTransform::fromTranslate(-center.x(), -center.y());
     m_d->flakeToWidget *= rot;
     m_d->flakeToWidget *= QTransform::fromTranslate(center.x(), center.y());
@@ -353,7 +359,7 @@ QPointF KisCoordinatesConverter::imageCenterInWidgetPixel() const
 {
     if(!m_d->image)
         return QPointF();
-    
+
     QPolygonF poly = imageToWidget(QPolygon(m_d->image->bounds()));
     return (poly[0] + poly[1] + poly[2] + poly[3]) / 4.0;
 }

@@ -152,8 +152,6 @@ public:
     void mirrorVerticalMoveCanvasToCenter();
     void mirrorHorizontalMoveCanvasToCenter();
 
-
-
     void setOpacity(qreal opacity);
     qreal opacity() const;
 

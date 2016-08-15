@@ -40,10 +40,10 @@ struct KisInternalColorSelector::Private
     const KoColorSpace *currentColorSpace;
     bool chooseAlpha = false;
     KisSignalCompressor *compressColorChanges;
-    QPointer<KoColorDisplayRendererInterface> displayRenderer;
+    const KoColorDisplayRendererInterface *displayRenderer;
 };
 
-KisInternalColorSelector::KisInternalColorSelector(QWidget *parent, KoColor color, bool modal, const QString &caption, KoColorDisplayRendererInterface *displayRenderer)
+KisInternalColorSelector::KisInternalColorSelector(QWidget *parent, KoColor color, bool modal, const QString &caption, const KoColorDisplayRendererInterface *displayRenderer)
     : QDialog(parent)
      ,m_d(new Private)
 {

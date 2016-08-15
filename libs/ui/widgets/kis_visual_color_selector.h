@@ -50,7 +50,7 @@ public Q_SLOTS:
 
     void slotSetColor(KoColor c);
     void slotsetColorSpace(const KoColorSpace *cs);
-    void setDisplayRenderer (KoColorDisplayRendererInterface *displayRenderer);
+    void setDisplayRenderer (const KoColorDisplayRendererInterface *displayRenderer);
 private Q_SLOTS:
     void updateFromWidgets(KoColor c);
 protected:
@@ -82,7 +82,7 @@ public:
                                          KisVisualColorSelectorShape::ColorModel model,
                                          const KoColorSpace *cs,
                                          int channel1, int channel2,
-                                         KoColorDisplayRendererInterface *displayRenderer = KoDumbColorDisplayRenderer::instance());
+                                         const KoColorDisplayRendererInterface *displayRenderer = KoDumbColorDisplayRenderer::instance());
     ~KisVisualColorSelectorShape();
 
     QPointF getCursorPosition();
@@ -92,7 +92,7 @@ public:
     QPixmap getPixmap();
     void setFullImage(QPixmap full);
     KoColor getCurrentColor();
-    void setDisplayRenderer (KoColorDisplayRendererInterface *displayRenderer);
+    void setDisplayRenderer (const KoColorDisplayRendererInterface *displayRenderer);
     QColor getColorFromConverter(KoColor c);
 Q_SIGNALS:
     void sigNewColor(KoColor col);
@@ -151,8 +151,9 @@ public:
                                          ColorModel model,
                                          const KoColorSpace *cs,
                                          int channel1, int channel2,
-                                         KisVisualRectangleSelectorShape::singelDTypes d = KisVisualRectangleSelectorShape::vertical,
-                                         KoColorDisplayRendererInterface *displayRenderer = KoDumbColorDisplayRenderer::instance());
+                                         const KoColorDisplayRendererInterface *displayRenderer = KoDumbColorDisplayRenderer::instance(),
+                                         KisVisualRectangleSelectorShape::singelDTypes d = KisVisualRectangleSelectorShape::vertical
+                                         );
     ~KisVisualRectangleSelectorShape();
 
     void setBarWidth();

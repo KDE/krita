@@ -37,7 +37,7 @@ class KRITAUI_EXPORT KisInternalColorSelector : public QDialog
 {
     Q_OBJECT
 public:
-    KisInternalColorSelector(QWidget* parent, KoColor color, bool modal, const QString &caption, KoColorDisplayRendererInterface *displayRenderer = KoDumbColorDisplayRenderer::instance());
+    KisInternalColorSelector(QWidget* parent, KoColor color, bool modal, const QString &caption, const KoColorDisplayRendererInterface *displayRenderer = KoDumbColorDisplayRenderer::instance());
     ~KisInternalColorSelector();
 
     /**

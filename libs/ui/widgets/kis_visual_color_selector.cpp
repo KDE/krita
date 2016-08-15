@@ -37,7 +37,7 @@ struct KisVisualColorSelector::Private
     const KoColorSpace *currentCS;
     QList <KisVisualColorSelectorShape*> widgetlist;
     bool updateSelf = false;
-    QPointer<KoColorDisplayRendererInterface> displayRenderer;
+    const KoColorDisplayRendererInterface *displayRenderer = 0;
     //Current coordinates.
     QVector <float> currentCoordinates;
 };
@@ -85,8 +85,15 @@ void KisVisualColorSelector::slotsetColorSpace(const KoColorSpace *cs)
             layout->addWidget(bar);
             m_d->widgetlist.append(bar);
         } else if (m_d->currentCS->colorChannelCount() == 3) {
-            KisVisualRectangleSelectorShape *bar =  new KisVisualRectangleSelectorShape(this, KisVisualRectangleSelectorShape::onedimensional,KisVisualColorSelectorShape::HSL, cs, 0, 0);
-            KisVisualRectangleSelectorShape *block =  new KisVisualRectangleSelectorShape(this, KisVisualRectangleSelectorShape::twodimensional,KisVisualColorSelectorShape::HSL, cs, 1, 2);
+            KisVisualRectangleSelectorShape *bar =  new KisVisualRectangleSelectorShape(this,
+                                                                                        KisVisualRectangleSelectorShape::onedimensional,
+                                                                                        KisVisualColorSelectorShape::HSL,
+                                                                                        cs, 0, 0,
+                                                                                        m_d->displayRenderer);
+            KisVisualRectangleSelectorShape *block =  new KisVisualRectangleSelectorShape(this, KisVisualRectangleSelectorShape::twodimensional,
+                                                                                          KisVisualColorSelectorShape::HSL,
+                                                                                          cs, 1, 2,
+                                                                                          m_d->displayRenderer);
             bar->setMaximumWidth(width()*0.1);
             bar->setMaximumHeight(height());
             block->setMaximumWidth(width()*0.9);
@@ -121,7 +128,7 @@ void KisVisualColorSelector::slotsetColorSpace(const KoColorSpace *cs)
 }
 
 
-void KisVisualColorSelector::setDisplayRenderer (KoColorDisplayRendererInterface *displayRenderer) {
+void KisVisualColorSelector::setDisplayRenderer (const KoColorDisplayRendererInterface *displayRenderer) {
     m_d->displayRenderer = displayRenderer;
     if (m_d->widgetlist.size()>0) {
         Q_FOREACH (KisVisualColorSelectorShape *shape, m_d->widgetlist) {
@@ -177,7 +184,7 @@ struct KisVisualColorSelectorShape::Private
     int channel2;
     KisSignalCompressor *updateTimer;
     bool mousePressActive = false;
-    QPointer<KoColorDisplayRendererInterface> displayRenderer;
+    const KoColorDisplayRendererInterface *displayRenderer = 0;
 };
 
 KisVisualColorSelectorShape::KisVisualColorSelectorShape(QWidget *parent,
@@ -186,10 +193,8 @@ KisVisualColorSelectorShape::KisVisualColorSelectorShape(QWidget *parent,
                                                          const KoColorSpace *cs,
                                                          int channel1,
                                                          int channel2,
-                                                         KoColorDisplayRendererInterface *displayRenderer): QWidget(parent), m_d(new Private)
+                                                         const KoColorDisplayRendererInterface *displayRenderer): QWidget(parent), m_d(new Private)
 {
-    m_d->displayRenderer = displayRenderer;
-    connect(m_d->displayRenderer, SIGNAL(displayConfigurationChanged()), SLOT(update()));
     m_d->dimension = dimension;
     m_d->model = model;
     m_d->cs = cs;
@@ -201,6 +206,13 @@ KisVisualColorSelectorShape::KisVisualColorSelectorShape(QWidget *parent,
     m_d->channel2 = qBound(0, channel2, maxchannel);
     this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     m_d->updateTimer = new KisSignalCompressor(100 /* ms */, KisSignalCompressor::POSTPONE, this);
+    if (displayRenderer) {
+        m_d->displayRenderer = displayRenderer;
+        connect(m_d->displayRenderer, SIGNAL(displayConfigurationChanged()), this, SLOT(update()), Qt::UniqueConnection);
+    } else {
+        KoDumbColorDisplayRenderer::instance();
+    }
+
 }
 
 KisVisualColorSelectorShape::~KisVisualColorSelectorShape()
@@ -242,8 +254,18 @@ void KisVisualColorSelectorShape::setColorFromSibling(KoColor c)
     update();
 }
 
-void KisVisualColorSelectorShape::setDisplayRenderer (KoColorDisplayRendererInterface *displayRenderer) {
-    m_d->displayRenderer = displayRenderer;
+void KisVisualColorSelectorShape::setDisplayRenderer (const KoColorDisplayRendererInterface *displayRenderer)
+{
+    if (displayRenderer) {
+        if (m_d->displayRenderer) {
+            m_d->displayRenderer->disconnect(this);
+        }
+        m_d->displayRenderer = displayRenderer;
+        connect(m_d->displayRenderer, SIGNAL(displayConfigurationChanged()),
+                SLOT(update()), Qt::UniqueConnection);
+    } else {
+        m_d->displayRenderer = KoDumbColorDisplayRenderer::instance();
+    }
 }
 
 QColor KisVisualColorSelectorShape::getColorFromConverter(KoColor c){
@@ -442,7 +464,8 @@ KisVisualRectangleSelectorShape::KisVisualRectangleSelectorShape(QWidget *parent
                                                                  ColorModel model,
                                                                  const KoColorSpace *cs,
                                                                  int channel1, int channel2,
-                                                                 singelDTypes d, KoColorDisplayRendererInterface *displayRenderer)
+                                                                 const KoColorDisplayRendererInterface *displayRenderer,
+                                                                 singelDTypes d)
     : KisVisualColorSelectorShape(parent, dimension, model, cs, channel1, channel2, displayRenderer)
 {
     m_type = d;

@@ -139,6 +139,9 @@ private:
      */
     virtual QRegion getMaskMap() = 0;
     virtual void drawCursor() = 0;
+
+    QVector <float> convertvectorqrealTofloat(QVector<qreal> real);
+    QVector <qreal> convertvectorfloatToqreal(QVector <float> vloat);
 };
 
 class KisVisualRectangleSelectorShape : public KisVisualColorSelectorShape

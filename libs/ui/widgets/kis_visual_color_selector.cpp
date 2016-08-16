@@ -327,21 +327,45 @@ KoColor KisVisualColorSelectorShape::convertShapeCoordinateToKoColor(QPointF coo
     }
     if (m_d->model != ColorModel::Channel && c.colorSpace()->colorModelId().id() == "RGBA") {
         if (c.colorSpace()->colorModelId().id() == "RGBA") {
-            QVector <float> inbetween(3);
             if (m_d->model == ColorModel::HSV){
+                QVector <float> inbetween(3);
                 RGBToHSV(channelValues[2],channelValues[1], channelValues[0], &inbetween[0], &inbetween[1], &inbetween[2]);
                 inbetween[m_d->channel1] = coordinates.x()*huedivider;
                 if (m_d->dimension == Dimensions::twodimensional) {
                     inbetween[m_d->channel2] = coordinates.y()*huedivider2;
                 }
                 HSVToRGB(inbetween[0], inbetween[1], inbetween[2], &channelValues[2], &channelValues[1], &channelValues[0]);
-            } else /*(m_d->model == KisVisualColorSelectorShape::ColorModel::HSL)*/{
+            } else if (m_d->model == ColorModel::HSL) {
+                QVector <float> inbetween(3);
                 RGBToHSL(channelValues[2],channelValues[1], channelValues[0], &inbetween[0], &inbetween[1], &inbetween[2]);
                 inbetween[m_d->channel1] = coordinates.x()*huedivider;
                 if (m_d->dimension == Dimensions::twodimensional) {
                     inbetween[m_d->channel2] = coordinates.y()*huedivider2;
                 }
                 HSLToRGB(inbetween[0], inbetween[1], inbetween[2],&channelValues[2],&channelValues[1], &channelValues[0]);
+            } else if (m_d->model == ColorModel::HSI) {
+                QVector <qreal> chan2 = convertvectorfloatToqreal(channelValues);
+                QVector <qreal> inbetween(3);
+                RGBToHSI(chan2[2],chan2[1], chan2[0], &inbetween[0], &inbetween[1], &inbetween[2]);
+                inbetween[m_d->channel1] = coordinates.x();
+                if (m_d->dimension == Dimensions::twodimensional) {
+                    inbetween[m_d->channel2] = coordinates.y();
+                }
+                HSIToRGB(inbetween[0], inbetween[1], inbetween[2],&chan2[2],&chan2[1], &chan2[0]);
+                channelValues = convertvectorqrealTofloat(chan2);
+            } else /*if (m_d->model == ColorModel::HSY)*/ {
+                QVector <qreal> luma= m_d->cs->lumaCoefficients();
+                QVector <qreal> chan2 = convertvectorfloatToqreal(channelValues);
+                QVector <qreal> inbetween(3);
+                RGBToHSY(chan2[2],chan2[1], chan2[0], &inbetween[0], &inbetween[1], &inbetween[2],
+                        luma[0], luma[1], luma[2]);
+                inbetween[m_d->channel1] = coordinates.x();
+                if (m_d->dimension == Dimensions::twodimensional) {
+                    inbetween[m_d->channel2] = coordinates.y();
+                }
+                HSYToRGB(inbetween[0], inbetween[1], inbetween[2],&chan2[2],&chan2[1], &chan2[0],
+                        luma[0], luma[1], luma[2]);
+                channelValues = convertvectorqrealTofloat(chan2);
             }
         }
     } else {
@@ -373,18 +397,36 @@ QPointF KisVisualColorSelectorShape::convertKoColorToShapeCoordinate(KoColor c)
     }
     if (m_d->model != ColorModel::Channel && c.colorSpace()->colorModelId().id() == "RGBA") {
         if (c.colorSpace()->colorModelId().id() == "RGBA") {
-            QVector <float> inbetween(3);
             if (m_d->model == ColorModel::HSV){
+                QVector <float> inbetween(3);
                 RGBToHSV(channelValues[2],channelValues[1], channelValues[0], &inbetween[0], &inbetween[1], &inbetween[2]);
                 coordinates.setX(inbetween[m_d->channel1]/huedivider);
                 if (m_d->dimension == Dimensions::twodimensional) {
                     coordinates.setY(inbetween[m_d->channel2]/huedivider2);
                 }
-            } else {
+            } else if (m_d->model == ColorModel::HSL) {
+                QVector <float> inbetween(3);
                 RGBToHSL(channelValues[2],channelValues[1], channelValues[0], &inbetween[0], &inbetween[1], &inbetween[2]);
                 coordinates.setX(inbetween[m_d->channel1]/huedivider);
                 if (m_d->dimension == Dimensions::twodimensional) {
                     coordinates.setY(inbetween[m_d->channel2]/huedivider2);
+                }
+            } else if (m_d->model == ColorModel::HSI) {
+                QVector <qreal> chan2 = convertvectorfloatToqreal(channelValues);
+                QVector <qreal> inbetween(3);
+                RGBToHSI(chan2[2],chan2[1], chan2[0], &inbetween[0], &inbetween[1], &inbetween[2]);
+                coordinates.setX(inbetween[m_d->channel1]);
+                if (m_d->dimension == Dimensions::twodimensional) {
+                    coordinates.setY(inbetween[m_d->channel2]);
+                }
+            } else /*if (m_d->model == ColorModel::HSY)*/ {
+                QVector <qreal> luma = m_d->cs->lumaCoefficients();
+                QVector <qreal> chan2 = convertvectorfloatToqreal(channelValues);
+                QVector <qreal> inbetween(3);
+                RGBToHSY(chan2[2],chan2[1], chan2[0], &inbetween[0], &inbetween[1], &inbetween[2], luma[0], luma[1], luma[2]);
+                coordinates.setX(inbetween[m_d->channel1]);
+                if (m_d->dimension == Dimensions::twodimensional) {
+                    coordinates.setY(inbetween[m_d->channel2]);
                 }
             }
         }
@@ -395,6 +437,24 @@ QPointF KisVisualColorSelectorShape::convertKoColorToShapeCoordinate(KoColor c)
         }
     }
     return coordinates;
+}
+
+QVector<float> KisVisualColorSelectorShape::convertvectorqrealTofloat(QVector<qreal> real)
+{
+    QVector <float> vloat(real.size());
+    for (int i=0; i<real.size(); i++) {
+        vloat[i] = real[i];
+    }
+    return vloat;
+}
+
+QVector<qreal> KisVisualColorSelectorShape::convertvectorfloatToqreal(QVector <float> vloat)
+{
+    QVector <qreal> real(vloat.size());
+    for (int i=0; i<vloat.size(); i++) {
+        real[i] = vloat[i];
+    }
+    return real;
 }
 
 void KisVisualColorSelectorShape::mousePressEvent(QMouseEvent *e)

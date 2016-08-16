@@ -573,12 +573,13 @@ void KisPaintopBox::setCurrentPaintopAndReload(const KoID& paintop, KisPaintOpPr
 
 void KisPaintopBox::setCurrentPaintop(const KoID& paintop, KisPaintOpPresetSP preset)
 {
+    m_presetConnections.clear();
+
     if (m_resourceProvider->currentPreset()) {
 
         m_resourceProvider->setPreviousPaintOpPreset(m_resourceProvider->currentPreset());
 
         if (m_optionWidget) {
-            m_optionWidget->disconnect(this);
             m_optionWidget->hide();
         }
 
@@ -608,11 +609,10 @@ void KisPaintopBox::setCurrentPaintop(const KoID& paintop, KisPaintOpPresetSP pr
 
     Q_ASSERT(m_optionWidget && m_presetSelectorPopupButton);
 
-    connect(m_optionWidget, SIGNAL(sigConfigurationUpdated()), this, SLOT(slotGuiChangedCurrentPreset()));
-    connect(&m_presetUpdateCompressor, SIGNAL(timeout()), this, SLOT(slotUpdateOptionsWidget()));
-
-    connect(m_optionWidget, SIGNAL(sigSaveLockedConfig(KisPropertiesConfiguration*)), this, SLOT(slotSaveLockedOptionToPreset(KisPropertiesConfiguration*)));
-    connect(m_optionWidget, SIGNAL(sigDropLockedConfig(KisPropertiesConfiguration*)), this, SLOT(slotDropLockedOption(KisPropertiesConfiguration*)));
+    m_presetConnections.addConnection(m_optionWidget, SIGNAL(sigConfigurationUpdated()), this, SLOT(slotGuiChangedCurrentPreset()));
+    m_presetConnections.addConnection(&m_presetUpdateCompressor, SIGNAL(timeout()), this, SLOT(slotUpdateOptionsWidget()));
+    m_presetConnections.addConnection(m_optionWidget, SIGNAL(sigSaveLockedConfig(KisPropertiesConfiguration*)), this, SLOT(slotSaveLockedOptionToPreset(KisPropertiesConfiguration*)));
+    m_presetConnections.addConnection(m_optionWidget, SIGNAL(sigDropLockedConfig(KisPropertiesConfiguration*)), this, SLOT(slotDropLockedOption(KisPropertiesConfiguration*)));
 
 
     // load the current brush engine icon for the brush editor toolbar button
@@ -627,8 +627,6 @@ void KisPaintopBox::setCurrentPaintop(const KoID& paintop, KisPaintOpPresetSP pr
         // by the new colorspace.
         dbgKrita << "current paintop " << paintop.name() << " was not set, not supported by colorspace";
     }
-
-    m_presetConnections.clear();
 
     // preset -> compressor
     m_presetConnections.addConnection(

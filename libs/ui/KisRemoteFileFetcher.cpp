@@ -20,7 +20,6 @@
 
 #include <QApplication>
 #include <QMessageBox>
-#include <QTemporaryFile>
 
 #include <klocalizedstring.h>
 

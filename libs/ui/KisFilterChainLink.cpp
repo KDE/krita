@@ -19,7 +19,6 @@ Boston, MA 02110-1301, USA.
 #include "KisFilterChainLink.h"
 #include <QMetaMethod>
 #include <QPluginLoader>
-#include <QTemporaryFile>
 #include <kis_debug.h>
 #include "KisFilterEntry.h"
 #include "KisImportExportManager.h"

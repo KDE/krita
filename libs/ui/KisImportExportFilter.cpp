@@ -21,7 +21,6 @@ Boston, MA 02110-1301, USA.
 #include "KisImportExportFilter.h"
 
 #include <QFile>
-#include <QTemporaryFile>
 #include <kis_debug.h>
 #include <QStack>
 #include "KisImportExportManager.h"

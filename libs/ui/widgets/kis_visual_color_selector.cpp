@@ -262,22 +262,23 @@ void KisVisualColorSelectorShape::setDisplayRenderer (const KoColorDisplayRender
             m_d->displayRenderer->disconnect(this);
         }
         m_d->displayRenderer = displayRenderer;
-        connect(m_d->displayRenderer, SIGNAL(displayConfigurationChanged()),
-                SLOT(updateFromChangedDisplayRenderer()), Qt::UniqueConnection);
     } else {
         m_d->displayRenderer = KoDumbColorDisplayRenderer::instance();
     }
+    connect(m_d->displayRenderer, SIGNAL(displayConfigurationChanged()),
+            SLOT(updateFromChangedDisplayRenderer()), Qt::UniqueConnection);
 }
 
 void KisVisualColorSelectorShape::updateFromChangedDisplayRenderer()
 {
     m_d->pixmapsNeedUpdate = true;
-    repaint();
+    updateCursor();
+    update();
 }
 
 QColor KisVisualColorSelectorShape::getColorFromConverter(KoColor c){
     QColor col;
-    if (m_d->displayRenderer) {
+    if (m_d->displayRenderer && m_d->displayRenderer->getPaintingColorSpace()==m_d->cs) {
         col = m_d->displayRenderer->toQColor(c);
     } else {
         col = c.toQColor();
@@ -326,7 +327,7 @@ KoColor KisVisualColorSelectorShape::convertShapeCoordinateToKoColor(QPointF coo
     c.colorSpace()->normalisedChannelsValue(c.data(), channelValues);
     QVector <qreal> maxvalue(c.colorSpace()->channelCount());
     maxvalue.fill(1.0);
-    if (m_d->displayRenderer) {
+    if (m_d->displayRenderer && m_d->displayRenderer->getPaintingColorSpace()==m_d->cs) {
         for (int ch = 0; ch<maxvalue.size(); ch++) {
             KoChannelInfo *channel = m_d->cs->channels()[ch];
             maxvalue[ch] = m_d->displayRenderer->maxVisibleFloatValue(channel);
@@ -408,7 +409,7 @@ QPointF KisVisualColorSelectorShape::convertKoColorToShapeCoordinate(KoColor c)
     m_d->cs->normalisedChannelsValue(c.data(), channelValues);
     QVector <qreal> maxvalue(c.colorSpace()->channelCount());
     maxvalue.fill(1.0);
-    if (m_d->displayRenderer) {
+    if (m_d->displayRenderer && m_d->displayRenderer->getPaintingColorSpace()==m_d->cs) {
         for (int ch = 0; ch<maxvalue.size(); ch++) {
             KoChannelInfo *channel = m_d->cs->channels()[ch];
             maxvalue[ch] = m_d->displayRenderer->maxVisibleFloatValue(channel);
@@ -514,8 +515,9 @@ void KisVisualColorSelectorShape::paintEvent(QPaintEvent*)
 {
     QPainter painter(this);
 
+    //check if old and new colors differ.
+
     if (m_d->pixmapsNeedUpdate) {
-        getPixmap();
         setMask(getMaskMap());
     }
     drawCursor();

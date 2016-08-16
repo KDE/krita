@@ -309,7 +309,6 @@ else()
 endif()
 
 add_definitions(
-  -DTRANSLATION_DOMAIN=\"krita\"
   -DQT_USE_QSTRINGBUILDER
   -DQT_STRICT_ITERATORS
   -DQT_NO_SIGNALS_SLOTS_KEYWORDS
@@ -657,6 +656,12 @@ add_subdirectory(plugins)
 
 add_subdirectory( benchmarks )
 
+add_definitions(-DTRANSLATION_DOMAIN=\"krita\")
+if (IS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/po")
+    ki18n_install(po)
+endif()
+
+
 macro_display_feature_log()
 
 calligra_product_deps_report("product_deps")
@@ -668,3 +673,5 @@ configure_file(config-ocio.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-ocio.h )
 
 check_function_exists(powf HAVE_POWF)
 configure_file(config-powf.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-powf.h)
+
+

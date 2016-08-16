@@ -276,7 +276,9 @@ void KisCloneLayerTest::testUndoingRemovingSource()
     QCOMPARE(image->root()->lastChild(), reincarnatedLayer);
     QVERIFY(image->root()->lastChild() != KisNodeSP(cloneLayer1));
 
+    image->barrierLock();
     cmd2->redo();
+    image->unlock();
 
     delete cmd1;
     delete cmd2;

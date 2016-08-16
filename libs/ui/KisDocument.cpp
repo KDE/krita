@@ -649,8 +649,6 @@ bool KisDocument::exportDocument(const QUrl &_url, KisPropertiesConfigurationSP 
 
 bool KisDocument::saveFile(KisPropertiesConfigurationSP exportConfiguration)
 {
-    dbgUI << "doc=" << url().url();
-
     // Save it to be able to restore it after a failed save
     const bool wasModified = isModified();
 
@@ -674,12 +672,19 @@ bool KisDocument::saveFile(KisPropertiesConfigurationSP exportConfiguration)
 
     setFileProgressUpdater(i18n("Saving Document"));
 
-    if (!isNativeFormat(outputMimeType)) {
-        dbgUI << "Saving to format" << outputMimeType << "in" << localFilePath();
+    QFileInfo fi(localFilePath());
+    QString tempororaryFileName;
+    {
+        QTemporaryFile tf(QDir::tempPath() + "/XXXXXX" + fi.baseName() + "." + fi.completeSuffix());
+        tf.open();
+        tempororaryFileName = tf.fileName();
+    }
+    Q_ASSERT(!tempororaryFileName.isEmpty());
 
+    if (!isNativeFormat(outputMimeType)) {
         Private::SafeSavingLocker locker(d);
         if (locker.successfullyLocked()) {
-            status = d->importExportManager->exportDocument(localFilePath(), outputMimeType, exportConfiguration);
+            status = d->importExportManager->exportDocument(tempororaryFileName, outputMimeType, exportConfiguration);
         } else {
             status = KisImportExportFilter::UsageError;
         }
@@ -689,10 +694,8 @@ bool KisDocument::saveFile(KisPropertiesConfigurationSP exportConfiguration)
         dbgFile << "Export status was" << status;
     } else {
         // Native format => normal save
-        Q_ASSERT(!localFilePath().isEmpty());
-        ret = saveNativeFormat(localFilePath());
+        ret = saveNativeFormat(tempororaryFileName);
     }
-
 
     if (ret) {
         if (!d->suppressProgress) {
@@ -703,15 +706,58 @@ bool KisDocument::saveFile(KisPropertiesConfigurationSP exportConfiguration)
         } else {
             d->undoStack->setClean();
         }
-        removeAutoSaveFiles();
+
+        QFile tempFile(tempororaryFileName);
+        QString s = localFilePath();
+        QFile dstFile(s);
+        while (QFileInfo(s).exists()) {
+            s.append("_");
+        }
+        bool r;
+        if (s != localFilePath()) {
+            r = dstFile.rename(s);
+            if (!r) {
+               setErrorMessage(i18n("Could not rename original file to %1: %2", dstFile.fileName(), dstFile. errorString()));
+            }
+         }
+
+        if (tempFile.exists()) {
+
+            r = tempFile.copy(localFilePath());
+            if (!r) {
+                setErrorMessage(i18n("Copying the temporary file failed: %1 to %2: %3", tempFile.fileName(), dstFile.fileName(), tempFile.errorString()));
+            }
+            else {
+                r = tempFile.remove();
+                if (!r) {
+                    setErrorMessage(i18n("Could not remove temporary file %1: %2", tempFile.fileName(), tempFile.errorString()));
+                }
+                else if (s != localFilePath()) {
+                    r = dstFile.remove();
+                    if (!r) {
+                        setErrorMessage(i18n("Could not remove saved original file: %1", dstFile.errorString()));
+                    }
+                }
+            }
+        }
+        else {
+            setErrorMessage(i18n("The temporary file %1 is gone before we could copy it!", tempFile.fileName()));
+        }
+
+        if (errorMessage().isEmpty()) {
+            removeAutoSaveFiles();
+        }
+        else {
+            qWarning() << "Error while saving:" << errorMessage();
+        }
         // Restart the autosave timer
         // (we don't want to autosave again 2 seconds after a real save)
         setAutoSave(d->autoSaveDelay);
-    }
-    clearFileProgressUpdater();
 
-    QApplication::restoreOverrideCursor();
-    if (!ret) {
+        d->mimeType = outputMimeType;
+        setConfirmNonNativeSave(isExporting(), false);
+    }
+    else {
         if (!suppressErrorDialog) {
 
             if (errorMessage().isEmpty()) {
@@ -742,10 +788,9 @@ bool KisDocument::saveFile(KisPropertiesConfigurationSP exportConfiguration)
         setModified(wasModified);
     }
 
-    if (ret) {
-        d->mimeType = outputMimeType;
-        setConfirmNonNativeSave(isExporting(), false);
-    }
+    clearFileProgressUpdater();
+
+    QApplication::restoreOverrideCursor();
 
     return ret;
 }
@@ -2125,6 +2170,7 @@ bool KisDocument::saveAs(const QUrl &kurl, KisPropertiesConfigurationSP exportCo
 
 bool KisDocument::save(KisPropertiesConfigurationSP exportConfiguration)
 {
+    qDebug() << "Saving!";
     d->m_saveOk = false;
     if ( d->m_file.isEmpty() ) { // document was created empty
         d->prepareSaving();

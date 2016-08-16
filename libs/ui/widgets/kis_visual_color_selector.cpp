@@ -323,17 +323,16 @@ KoColor KisVisualColorSelectorShape::convertShapeCoordinateToKoColor(QPointF coo
     KoColor c = m_d->currentColor;
     QVector <float> channelValues (c.colorSpace()->channelCount());
     channelValues.fill(1.0);
+    c.colorSpace()->normalisedChannelsValue(c.data(), channelValues);
     QVector <qreal> maxvalue(c.colorSpace()->channelCount());
     maxvalue.fill(1.0);
     if (m_d->displayRenderer) {
         for (int ch = 0; ch<maxvalue.size(); ch++) {
-            //KoChannelInfo *channel = m_d->cs->channels()[ch];
-            //maxvalue[ch] = m_d->displayRenderer->maxVisibleFloatValue(channel);
+            KoChannelInfo *channel = m_d->cs->channels()[ch];
+            maxvalue[ch] = m_d->displayRenderer->maxVisibleFloatValue(channel);
             channelValues[ch] = channelValues[ch]/(maxvalue[ch]);
         }
     }
-
-    c.colorSpace()->normalisedChannelsValue(c.data(), channelValues);
     qreal huedivider = 1.0;
     qreal huedivider2 = 1.0;
 
@@ -411,8 +410,8 @@ QPointF KisVisualColorSelectorShape::convertKoColorToShapeCoordinate(KoColor c)
     maxvalue.fill(1.0);
     if (m_d->displayRenderer) {
         for (int ch = 0; ch<maxvalue.size(); ch++) {
-            //KoChannelInfo *channel = m_d->cs->channels()[ch];
-            //maxvalue[ch] = m_d->displayRenderer->maxVisibleFloatValue(channel);
+            KoChannelInfo *channel = m_d->cs->channels()[ch];
+            maxvalue[ch] = m_d->displayRenderer->maxVisibleFloatValue(channel);
             channelValues[ch] = channelValues[ch]/(maxvalue[ch]);
         }
     }

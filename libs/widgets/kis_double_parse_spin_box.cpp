@@ -25,6 +25,7 @@
 #include <QIcon>
 #include <QFile>
 #include <QLineEdit>
+#include <qnumeric.h> // for qIsNaN
 
 KisDoubleParseSpinBox::KisDoubleParseSpinBox(QWidget *parent) :
     QDoubleSpinBox(parent),
@@ -102,7 +103,7 @@ double KisDoubleParseSpinBox::valueFromText(const QString & text) const
 
     }
 
-    if(std::isnan(ret) || std::isinf(ret)){
+    if(qIsNaN(ret) || qIsInf(ret)){
         ok = false;
     }
 

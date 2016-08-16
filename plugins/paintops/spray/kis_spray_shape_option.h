@@ -31,6 +31,7 @@ const QString SPRAYSHAPE_USE_ASPECT = "SprayShape/useAspect";
 
 
 class KisShapeOptionsWidget;
+class KisAspectRatioLocker;
 
 class KisSprayShapeOption : public KisPaintOpOption
 {
@@ -47,20 +48,11 @@ public:
 
 private:
     KisShapeOptionsWidget * m_options;
-    bool m_useAspect;
-    qreal m_aspect;
     int m_maxSize;
-
-private:
-    void setupBrushPreviewSignals();
-    void computeAspect();
+    KisAspectRatioLocker *m_sizeRatioLocker;
 
 private Q_SLOTS:
     void prepareImage();
-    void aspectToggled(bool toggled);
-    void updateHeight(qreal value);
-    void updateWidth(qreal value);
-
     void changeSizeUI(bool proportionalSize);
 };
 

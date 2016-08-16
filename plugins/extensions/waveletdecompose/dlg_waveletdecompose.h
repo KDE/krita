@@ -1,5 +1,6 @@
 /*
- * Copyright (c) 2009 Lukáš Tvrdý (lukast.dev@gmail.com)
+ *
+ *  Copyright (c) 2016 Miroslav Talasek <miroslav.talasek@seznam.cz>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,39 +16,45 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#ifndef DLG_WAVELETDECOMPOSE
+#define DLG_WAVELETDECOMPOSE
 
-#ifndef RANDOM_GAUSS_H_
-#define RANDOM_GAUSS_H_
+#include <KoDialog.h>
 
-#include <cstdlib>
+#include "ui_wdg_waveletdecompose.h"
 
-#if defined(_WIN32) || defined(_WIN64)
-#define srand48 srand
-#endif
-
-class RandomGauss
+class WdgWaveletDecompose : public QWidget, public Ui::WdgWaveletDecompose
 {
+    Q_OBJECT
 
 public:
-    RandomGauss() {
-        srand48(0);
-        m_next = false;
+    WdgWaveletDecompose(QWidget *parent) : QWidget(parent) {
+        setupUi(this);
     }
-
-    RandomGauss(int seed) {
-        srand48(seed);
-        m_next = false;
-    }
-private:
-    bool m_next;
-    double m_gauss;
-
-public:
-    /**
-     * Generates a random Gaussian value with the mean and sigma
-     */
-    double nextGaussian(double mean = 0.0, double sigma = 1.0);
 };
 
-#endif
+class DlgWaveletDecompose: public KoDialog
+{
 
+    Q_OBJECT
+
+public:
+
+    DlgWaveletDecompose(QWidget * parent = 0,
+                               const char* name = 0);
+    ~DlgWaveletDecompose();
+
+    void setScales(quint32 scales);
+    qint32 scales();
+
+private Q_SLOTS:
+
+    void okClicked();
+
+private:
+
+    WdgWaveletDecompose * m_page;
+
+};
+
+#endif // DLG_WAVELETDECOMPOSE

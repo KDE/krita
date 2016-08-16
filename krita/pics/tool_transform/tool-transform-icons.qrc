@@ -1,6 +1,5 @@
-<!DOCTYPE RCC>
-<RCC version="1.0">
-    <qresource>
+<RCC>
+    <qresource prefix="/">
         <file>dark_transform_icons_cage.png</file>
         <file>dark_transform_icons_liquify_erase.png</file>
         <file>dark_transform_icons_liquify_main.png</file>
@@ -18,7 +17,6 @@
         <file>dark_transform_icons_mirror_y.svg</file>
         <file>dark_transform_icons_rotate_cw.svg</file>
         <file>dark_transform_icons_rotate_ccw.svg</file>
-
         <file>light_transform_icons_cage.png</file>
         <file>light_transform_icons_liquify_erase.png</file>
         <file>light_transform_icons_liquify_main.png</file>
@@ -36,5 +34,7 @@
         <file>light_transform_icons_mirror_y.svg</file>
         <file>light_transform_icons_rotate_cw.svg</file>
         <file>light_transform_icons_rotate_ccw.svg</file>
+        <file>dark_transform_icons_penPressure_locked.png</file>
+        <file>light_transform_icons_penPressure_locked.png</file>
     </qresource>
 </RCC>

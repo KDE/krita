@@ -39,7 +39,9 @@ public:
         ZoomOutShortcut, ///< Zoom out by a fixed amount.
         ZoomResetShortcut, ///< Reset zoom to 100%.
         ZoomToPageShortcut, ///< Zoom fit to page.
-        ZoomToWidthShortcut ///< Zoom fit to width.
+        ZoomToWidthShortcut, ///< Zoom fit to width.
+        RelativeZoomModeShortcut, ///< Toggle zoom mode relative to cursor
+        RelativeDiscreteZoomModeShortcut ///< Toggle discrete zoom mode relative to cursor
     };
     explicit KisZoomAction();
     virtual ~KisZoomAction();

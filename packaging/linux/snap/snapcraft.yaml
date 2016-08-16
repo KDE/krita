@@ -72,7 +72,6 @@ parts:
         - libjpeg-dev
         - liblcms2-dev
         - libopenexr-dev
-        - libopenjpeg-dev
         - libpng12-dev
         - libpoppler-qt4-dev
         - libtiff5-dev

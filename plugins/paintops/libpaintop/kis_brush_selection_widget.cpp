@@ -300,6 +300,8 @@ void KisBrushSelectionWidget::setPrecisionEnabled(bool value)
 
 void KisBrushSelectionWidget::setCurrentWidget(QWidget* widget)
 {
+    if (widget == m_currentBrushWidget) return;
+
     if (m_currentBrushWidget) {
         m_layout->removeWidget(m_currentBrushWidget);
         m_currentBrushWidget->setParent(this);

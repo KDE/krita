@@ -153,6 +153,7 @@ private Q_SLOTS:
     void slotSwitchToPreviousPreset();
     void slotUnsetEraseMode();
     void slotToggleAlphaLockMode(bool);
+    void slotDisablePressureMode(bool);
 
     void slotReloadPreset();
     void slotGuiChangedCurrentPreset();
@@ -182,6 +183,7 @@ private:
     KisCompositeOpComboBox*             m_cmbCompositeOp;
     QToolButton*                        m_eraseModeButton;
     QToolButton*                        m_alphaLockButton;
+    QToolButton*                        m_disablePressureButton;
     QToolButton*                        m_hMirrorButton;
     QToolButton*                        m_vMirrorButton;
     KisToolOptionsPopup*                m_toolOptionsPopup;
@@ -195,6 +197,7 @@ private:
     QToolButton*                        m_reloadButton;
     KisAction*                          m_eraseAction;
     KisAction*                          m_reloadAction;
+    KisAction*                          m_disablePressureAction;
 
     QString             m_currCompositeOpID;
     KisNodeWSP          m_previousNode;

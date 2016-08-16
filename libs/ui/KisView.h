@@ -213,6 +213,8 @@ public:
     void setShowFloatingMessage(bool show);
     void showFloatingMessageImpl(const QString &message, const QIcon& icon, int timeout, KisFloatingMessage::Priority priority, int alignment);
 
+    bool canvasIsMirrored() const;
+
 public Q_SLOTS:
 
     /**

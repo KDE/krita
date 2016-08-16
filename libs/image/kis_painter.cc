@@ -65,6 +65,8 @@
 #include "kis_perspective_math.h"
 #include "tiles3/kis_random_accessor.h"
 #include <kis_distance_information.h>
+#include "kis_lod_transform.h"
+
 
 
 // Maximum distance from a Bezier control point to the line through the start
@@ -1277,8 +1279,11 @@ void KisPainter::fillPainterPath(const QPainterPath& path)
 void KisPainter::fillPainterPath(const QPainterPath& path, const QRect &requestedRect)
 {
     if (d->mirrorHorizontally || d->mirrorVertically) {
-        QTransform C1 = QTransform::fromTranslate(-d->axesCenter.x(), -d->axesCenter.y());
-        QTransform C2 = QTransform::fromTranslate(d->axesCenter.x(), d->axesCenter.y());
+        KisLodTransform lod(d->device);
+        QPointF effectiveAxesCenter = lod.map(d->axesCenter);
+
+        QTransform C1 = QTransform::fromTranslate(-effectiveAxesCenter.x(), -effectiveAxesCenter.y());
+        QTransform C2 = QTransform::fromTranslate(effectiveAxesCenter.x(), effectiveAxesCenter.y());
 
         QTransform t;
         QPainterPath newPath;
@@ -2691,8 +2696,11 @@ void KisPainter::renderMirrorMask(QRect rc, KisFixedPaintDeviceSP dab)
     int x = rc.topLeft().x();
     int y = rc.topLeft().y();
 
-    int mirrorX = -((x+rc.width()) - d->axesCenter.x()) + d->axesCenter.x();
-    int mirrorY = -((y+rc.height()) - d->axesCenter.y()) + d->axesCenter.y();
+    KisLodTransform t(d->device);
+    QPointF effectiveAxesCenter = t.map(d->axesCenter);
+
+    int mirrorX = -((x+rc.width()) - effectiveAxesCenter.x()) + effectiveAxesCenter.x();
+    int mirrorY = -((y+rc.height()) - effectiveAxesCenter.y()) + effectiveAxesCenter.y();
 
     if (d->mirrorHorizontally && d->mirrorVertically){
         dab->mirror(true, false);
@@ -2719,8 +2727,11 @@ void KisPainter::renderMirrorMask(QRect rc, KisFixedPaintDeviceSP dab, KisFixedP
     int x = rc.topLeft().x();
     int y = rc.topLeft().y();
 
-    int mirrorX = -((x+rc.width()) - d->axesCenter.x()) + d->axesCenter.x();
-    int mirrorY = -((y+rc.height()) - d->axesCenter.y()) + d->axesCenter.y();
+    KisLodTransform t(d->device);
+    QPointF effectiveAxesCenter = t.map(d->axesCenter);
+
+    int mirrorX = -((x+rc.width()) - effectiveAxesCenter.x()) + effectiveAxesCenter.x();
+    int mirrorY = -((y+rc.height()) - effectiveAxesCenter.y()) + effectiveAxesCenter.y();
 
     if (d->mirrorHorizontally && d->mirrorVertically){
         dab->mirror(true, false);
@@ -2780,8 +2791,12 @@ void KisPainter::renderDabWithMirroringNonIncremental(QRect rc, KisPaintDeviceSP
 
     int x = rc.topLeft().x();
     int y = rc.topLeft().y();
-    int mirrorX = -((x+rc.width()) - d->axesCenter.x()) + d->axesCenter.x();
-    int mirrorY = -((y+rc.height()) - d->axesCenter.y()) + d->axesCenter.y();
+
+    KisLodTransform t(d->device);
+    QPointF effectiveAxesCenter = t.map(d->axesCenter);
+
+    int mirrorX = -((x+rc.width()) - effectiveAxesCenter.x()) + effectiveAxesCenter.x();
+    int mirrorY = -((y+rc.height()) - effectiveAxesCenter.y()) + effectiveAxesCenter.y();
 
     rects << rc;
 

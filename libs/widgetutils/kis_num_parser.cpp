@@ -18,7 +18,7 @@
 
 #include "kis_num_parser.h"
 
-//#include <QtMath>
+#include <qnumeric.h> // for qIsNaN
 #include <qmath.h>
 #include <QVector>
 #include <QRegExp>
@@ -34,7 +34,7 @@ const QVector<char> opLevel2 = {'*', '/'};
 
 const QStringList supportedFuncs = {"", "cos", "sin", "tan", "acos", "asin", "atan", "exp", "ln", "log10", "abs"};
 
-const QRegExp funcExpr("(-)?([a-zA-Z]*)?\\((.+)\\)");
+const QRegExp funcExpr("(-)?([a-zA-Z]*[0-9]*)?\\((.+)\\)");
 const QRegExp numberExpr("(-)?([0-9]+\\.?[0-9]*(e[0-9]*)?)");
 
 const QRegExp funcExprInteger("(-)?\\((.+)\\)");
@@ -513,7 +513,7 @@ double treatLevel2Int(const QString &expr, bool &noProblem)
 
         double val = treatFuncsInt(part, noProblem);
 
-        if(std::isinf(result/val) || std::isnan(result/val)){
+        if(std::isinf(result/val) || qIsNaN(result/val)){
         noProblem = false;
         return 0.0;
         }

@@ -142,6 +142,17 @@ public:
 
     QStringList showOpenFileDialog();
 
+    /**
+     * Shows if the main window is saving anything right now. If the
+     * user presses Ctrl+W too fast, then the document can be close
+     * before the saving is completed. I'm not sure if it is fixable
+     * in any way without avoiding using porcessEvents()
+     * everywhere (DK)
+     *
+     * Don't use it unless you have no option.
+     */
+    bool hackIsSaving() const;
+
 Q_SIGNALS:
 
     /**

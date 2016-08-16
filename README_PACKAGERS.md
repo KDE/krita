@@ -53,7 +53,6 @@ Krita depends on:
   * libraw    
   * opencolorio
   * openexr   
-  * openjpeg   
   * png        
   * poppler-qt5
   * pthreads   

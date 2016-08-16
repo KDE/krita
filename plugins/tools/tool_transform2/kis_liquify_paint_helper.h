@@ -26,7 +26,7 @@ class KisCoordinatesConverter;
 class KoPointerEvent;
 class KisLiquifyProperties;
 class QPainterPath;
-
+class KoCanvasResourceManager;
 
 class KisLiquifyPaintHelper
 {
@@ -37,7 +37,7 @@ public:
     void configurePaintOp(const KisLiquifyProperties &_props,
                           KisLiquifyTransformWorker *worker);
 
-    void startPaint(KoPointerEvent *event);
+    void startPaint(KoPointerEvent *event, const KoCanvasResourceManager *manager);
     void continuePaint(KoPointerEvent *event);
     bool endPaint(KoPointerEvent *event);
 

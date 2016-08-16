@@ -35,7 +35,7 @@ void initImage(KisImageSP *image, KoZoomHandler *zoomHandler)
     const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
     *image = new KisImage(0, 1000, 1000, cs, "projection test");
     (*image)->setResolution(100, 100);
-    
+
     zoomHandler->setResolution(100, 100);
 }
 
@@ -49,7 +49,7 @@ void KisCoordinatesConverterTest::testConversion()
     converter.setDocumentOffset(QPoint(20,20));
     converter.setCanvasWidgetSize(QSize(500,500));
     converter.setZoom(1.);
-    
+
     QRectF testRect(100,100,100,100);
 
     QCOMPARE(converter.imageToViewport(testRect), QRectF(80,80,100,100));
@@ -210,17 +210,17 @@ void KisCoordinatesConverterTest::testMirroring()
     initImage(&image, &converter);
 
     QSize widgetSize(500,400);
-    QSize flakeSize(1000,1000);
+//    QSize flakeSize(1000,1000);
     QRectF testRect(300, 100, 200, 200);
 
     converter.setImage(image);
     converter.setDocumentOffset(QPoint(200,100));
     converter.setCanvasWidgetSize(widgetSize);
 
-    QTransform imageToWidget;
-    QTransform documentToWidget;
-    QTransform flakeToWidget;
-    QTransform viewportToWidget;
+//    QTransform imageToWidget;
+//    QTransform documentToWidget;
+//    QTransform flakeToWidget;
+//    QTransform viewportToWidget;
 
     converter.mirror(converter.imageCenterInWidgetPixel(), true, false);
     converter.setZoom(1.);
@@ -244,17 +244,17 @@ void KisCoordinatesConverterTest::testMirroringCanvasBiggerThanImage()
     initImage(&image, &converter);
 
     QSize widgetSize(2000,2000);
-    QSize flakeSize(1000,1000);
+//    QSize flakeSize(1000,1000);
     QRectF testRect(300, 100, 200, 200);
 
     converter.setImage(image);
     converter.setDocumentOffset(QPoint(-50,-50));
     converter.setCanvasWidgetSize(widgetSize);
 
-    QTransform imageToWidget;
-    QTransform documentToWidget;
-    QTransform flakeToWidget;
-    QTransform viewportToWidget;
+//    QTransform imageToWidget;
+//    QTransform documentToWidget;
+//    QTransform flakeToWidget;
+//    QTransform viewportToWidget;
 
     converter.mirror(converter.imageCenterInWidgetPixel(), true, false);
     converter.setZoom(1.);

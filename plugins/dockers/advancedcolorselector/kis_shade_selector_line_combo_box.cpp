@@ -17,6 +17,9 @@
 
 #include "kis_shade_selector_line_combo_box.h"
 
+#include <QApplication>
+#include <QDesktopWidget>
+
 #include <QGridLayout>
 #include <QPainter>
 
@@ -25,6 +28,8 @@
 #include "kis_shade_selector_line.h"
 #include "kis_shade_selector_line_combo_box_popup.h"
 #include "kis_color_selector_base_proxy.h"
+
+#include "kis_global.h"
 
 
 KisShadeSelectorLineComboBox::KisShadeSelectorLineComboBox(QWidget *parent) :
@@ -57,10 +62,16 @@ void KisShadeSelectorLineComboBox::hidePopup()
 
 void KisShadeSelectorLineComboBox::showPopup()
 {
-    // only show if this is not the popup
     QComboBox::showPopup();
-    m_popup->move(mapToGlobal(QPoint(0,-300)));
     m_popup->show();
+
+    const int widgetMargin = 20;
+    const QRect fitRect = kisGrowRect(QApplication::desktop()->screenGeometry(), -widgetMargin);
+    QRect popupRect = m_popup->rect();
+    popupRect.moveTo(mapToGlobal(QPoint()));
+    popupRect = kisEnsureInRect(popupRect, fitRect);
+
+    m_popup->move(popupRect.topLeft());
     m_popup->setConfiguration(m_currentLine->toString());
 }
 

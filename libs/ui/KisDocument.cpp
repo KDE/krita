@@ -686,7 +686,7 @@ bool KisDocument::saveFile()
     if (!isNativeFormat(outputMimeType)) {
         Private::SafeSavingLocker locker(d);
         if (locker.successfullyLocked()) {
-            status = d->importExportManager->exportDocument(tempororaryFileName, outputMimeType);
+            status = d->filterManager->exportDocument(tempororaryFileName, outputMimeType);
         } else {
             status = KisImportExportFilter::UsageError;
         }

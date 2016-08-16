@@ -83,8 +83,7 @@ xcopy /Y /S /I %BUILDDIR_INSTALL%\share\mime %pkg_root%\share\mime
 xcopy /Y /S /I %BUILDDIR_INSTALL%\share\ocio %pkg_root%\share\ocio
 
 ::Link
-:: requres admin rights so no
-mklink %pkg_root%\krita.exe bin\krita.exe
+copy %BUILDROOT%\krita\packaging\windows\krita.lnk %pkg_root%
 
 %BUILDDIR_INSTALL%\bin\windeployqt.exe %pkg_root%\bin\krita.exe
 

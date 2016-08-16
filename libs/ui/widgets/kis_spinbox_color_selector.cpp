@@ -127,7 +127,8 @@ void KisSpinboxColorSelector::slotSetColorSpace(const KoColorSpace *cs)
         case KoChannelInfo::FLOAT32: {
             KisDoubleParseSpinBox *input = new KisDoubleParseSpinBox(this);
             input->setMinimum(0);
-            input->setMaximum(1.0);
+            input->setMaximum(KoColorSpaceMathsTraits<float>::max);
+            input->setSingleStep(0.1);
             m_d->doubleSpinBoxList.append(input);
             layout->addRow(inputLabel,input);
             if (input) {

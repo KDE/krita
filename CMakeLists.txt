@@ -83,12 +83,12 @@ endif()
 
 # define common versions of Krita applications, used to generate kritaversion.h
 # update these version for every release:
-set(KRITA_VERSION_STRING "3.0.1 Alpha")
+set(KRITA_VERSION_STRING "3.0.1 Betas")
 set(KRITA_STABLE_VERSION_MAJOR 3) # 3 for 3.x, 4 for 4.x, etc.
 set(KRITA_STABLE_VERSION_MINOR 0) # 0 for 3.0, 1 for 3.1, etc.
-set(KRITA_VERSION_RELEASE 89)     # 89 for Alpha, increase for next test releases, set 0 for first Stable, etc.
-set(KRITA_ALPHA 1) # uncomment only for Alpha
-#set(KRITA_BETA 1) # uncomment only for Beta
+set(KRITA_VERSION_RELEASE 90)     # 89 for Alpha, increase for next test releases, set 0 for first Stable, etc.
+#set(KRITA_ALPHA 1) # uncomment only for Alpha
+set(KRITA_BETA 1) # uncomment only for Beta
 #set(KRITA_RC 1) # uncomment only for RC
 set(KRITA_YEAR 2016) # update every year
 
@@ -309,7 +309,6 @@ else()
 endif()
 
 add_definitions(
-  -DTRANSLATION_DOMAIN=\"krita\"
   -DQT_USE_QSTRINGBUILDER
   -DQT_STRICT_ITERATORS
   -DQT_NO_SIGNALS_SLOTS_KEYWORDS
@@ -657,6 +656,12 @@ add_subdirectory(plugins)
 
 add_subdirectory( benchmarks )
 
+add_definitions(-DTRANSLATION_DOMAIN=\"krita\")
+if (IS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/po")
+    ki18n_install(po)
+endif()
+
+
 macro_display_feature_log()
 
 calligra_product_deps_report("product_deps")
@@ -668,3 +673,5 @@ configure_file(config-ocio.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-ocio.h )
 
 check_function_exists(powf HAVE_POWF)
 configure_file(config-powf.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-powf.h)
+
+

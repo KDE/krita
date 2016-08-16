@@ -137,6 +137,10 @@ private:
         PICKING
     };
 
+    Mode modeFromButton(Qt::MouseButton button) const;
+
+private:
+
     KoColor m_defaultColor;
     Mode m_toolMode;
     KisPaintLayerSP m_paintLayer;

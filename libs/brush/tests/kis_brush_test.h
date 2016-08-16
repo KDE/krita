@@ -38,9 +38,10 @@ private Q_SLOTS:
     void benchmarkPyramidCreation();
     void benchmarkScaling();
     void benchmarkRotation();
-
     void benchmarkMaskScaling();
+
     void testPyramidLevelRounding();
+    void testPyramidDabTransform();
 
     void testQPainterTransformationBorder();
 };

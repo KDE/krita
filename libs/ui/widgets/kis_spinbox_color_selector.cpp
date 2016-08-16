@@ -130,6 +130,7 @@ void KisSpinboxColorSelector::slotSetColorSpace(const KoColorSpace *cs)
             input->setMaximum(KoColorSpaceMathsTraits<float>::max);
             input->setSingleStep(0.1);
             m_d->doubleSpinBoxList.append(input);
+            qDebug()<<"add "<<channel->name()<<"doubleSpinBoxList "<<m_d->doubleSpinBoxList.size();
             layout->addRow(inputLabel,input);
             if (input) {
                 connect(input, SIGNAL(valueChanged(double)), this,  SLOT(slotUpdateFromSpinBoxes()));
@@ -159,15 +160,22 @@ void KisSpinboxColorSelector::createColorFromSpinboxValues()
 
     for (int i=0; i<abs(m_d->cs->colorChannelCount()); i++) {
         int channelposition = KoChannelInfo::displayPositionToChannelIndex(i, m_d->cs->channels());
-        if (m_d->spinBoxList.at(i)) {
-            if (channels.at(i)->channelValueType()==KoChannelInfo::UINT8){
-                int value = m_d->spinBoxList.at(i)->value();
-                channelValues[channelposition] = KoColorSpaceMaths<quint8,float>::scaleToA(value);
-            } else if (channels.at(i)->channelValueType()==KoChannelInfo::UINT16){
-                channelValues[channelposition] = KoColorSpaceMaths<quint16,float>::scaleToA(m_d->spinBoxList.at(i)->value());
-            }
-        } else if (m_d->doubleSpinBoxList.at(i)){
+
+        if (channels.at(i)->channelValueType()==KoChannelInfo::UINT8 && m_d->spinBoxList.at(i)){
+
+            int value = m_d->spinBoxList.at(i)->value();
+            channelValues[channelposition] = KoColorSpaceMaths<quint8,float>::scaleToA(value);
+
+        } else if (channels.at(i)->channelValueType()==KoChannelInfo::UINT16 && m_d->spinBoxList.at(i)){
+
+            channelValues[channelposition] = KoColorSpaceMaths<quint16,float>::scaleToA(m_d->spinBoxList.at(i)->value());
+
+        } else if ((channels.at(i)->channelValueType()==KoChannelInfo::FLOAT16 ||
+                    channels.at(i)->channelValueType()==KoChannelInfo::FLOAT32 ||
+                    channels.at(i)->channelValueType()==KoChannelInfo::FLOAT64) && m_d->doubleSpinBoxList.at(i)) {
+
             channelValues[channelposition] = m_d->doubleSpinBoxList.at(i)->value();
+
         }
     }
 
@@ -206,14 +214,14 @@ void KisSpinboxColorSelector::updateSpinboxesWithNewValues()
 
     for (i=0; i<abs(m_d->cs->colorChannelCount()); i++) {
         int channelposition = KoChannelInfo::displayPositionToChannelIndex(i, m_d->cs->channels());
-        if (m_d->spinBoxList.at(i)) {
-            if (channels.at(i)->channelValueType() == KoChannelInfo::UINT8) {
-                int value = KoColorSpaceMaths<float, quint8>::scaleToA(channelValues[channelposition]);
-                m_d->spinBoxList.at(i)->setValue(value);
-            } else if (channels.at(i)->channelValueType() == KoChannelInfo::UINT16) {
-                m_d->spinBoxList.at(i)->setValue(KoColorSpaceMaths<float, quint16>::scaleToA(channelValues[channelposition]));
-            }
-        } else if (m_d->doubleSpinBoxList.at(i)) {
+        if (channels.at(i)->channelValueType() == KoChannelInfo::UINT8 && m_d->spinBoxList.at(i)) {
+            int value = KoColorSpaceMaths<float, quint8>::scaleToA(channelValues[channelposition]);
+            m_d->spinBoxList.at(i)->setValue(value);
+        } else if (channels.at(i)->channelValueType() == KoChannelInfo::UINT16 && m_d->spinBoxList.at(i)) {
+            m_d->spinBoxList.at(i)->setValue(KoColorSpaceMaths<float, quint16>::scaleToA(channelValues[channelposition]));
+        } else if ((channels.at(i)->channelValueType()==KoChannelInfo::FLOAT16 ||
+                    channels.at(i)->channelValueType()==KoChannelInfo::FLOAT32 ||
+                    channels.at(i)->channelValueType()==KoChannelInfo::FLOAT64) && m_d->doubleSpinBoxList.at(i)) {
             m_d->doubleSpinBoxList.at(i)->setValue(channelValues[channelposition]);
         }
     }

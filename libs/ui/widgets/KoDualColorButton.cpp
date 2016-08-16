@@ -160,6 +160,14 @@ void KoDualColorButton::setBackgroundColor( const KoColor &color )
   repaint();
 }
 
+void KoDualColorButton::setDisplayRenderer(const KoColorDisplayRendererInterface *displayRenderer)
+{
+    if (displayRenderer) {
+        d->displayRenderer = displayRenderer;
+        d->colorSelectorDialog->setDisplayRenderer(displayRenderer);
+    }
+}
+
 void KoDualColorButton::setPopDialog( bool popDialog )
 {
   d->popDialog = popDialog;

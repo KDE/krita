@@ -47,6 +47,13 @@ public:
     void colorSpaceChanged(const KoColorSpace *cs);
 
     /**
+     * @brief setDisplayRenderer
+     * Set the display renderer. This is necessary for HDR color manage support.
+     * @param displayRenderer
+     */
+    void setDisplayRenderer(const KoColorDisplayRendererInterface *displayRenderer);
+
+    /**
      * @brief getModalColorDialog
      * Excecute this dialog modally. The function returns
      * the KoColor you want.

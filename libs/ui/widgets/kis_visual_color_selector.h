@@ -101,6 +101,7 @@ public Q_SLOTS:
     void setColor(KoColor c);
     void setColorFromSibling(KoColor c);
     void slotSetActiveChannels(int channel1, int channel2);
+    void updateFromChangedDisplayRenderer();
 protected:
     void mousePressEvent(QMouseEvent *e);
     void mouseMoveEvent(QMouseEvent *e);

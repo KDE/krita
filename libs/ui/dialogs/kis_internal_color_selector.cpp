@@ -104,6 +104,16 @@ void KisInternalColorSelector::colorSpaceChanged(const KoColorSpace *cs)
 
 }
 
+void KisInternalColorSelector::setDisplayRenderer(const KoColorDisplayRendererInterface *displayRenderer)
+{
+    if (displayRenderer) {
+        m_d->displayRenderer = displayRenderer;
+        m_ui->visualSelector->setDisplayRenderer(displayRenderer);
+    } else {
+        m_d->displayRenderer = KoDumbColorDisplayRenderer::instance();
+    }
+}
+
 KoColor KisInternalColorSelector::getModalColorDialog(const KoColor color, bool chooseAlpha, QWidget* parent, QString caption)
 {
     KisInternalColorSelector dialog(parent, color, true, caption);

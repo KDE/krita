@@ -117,6 +117,8 @@ class KRITAWIDGETS_EXPORT KoDualColorButton : public QWidget
 
     void slotSetForeGroundColorFromDialog (const KoColor color);
 
+    void setDisplayRenderer(const KoColorDisplayRendererInterface *displayRenderer);
+
     /**
      * Sets if a dialog with a color chooser should be popped up when clicking
      * If you set this to false then you could connect to the pleasePopDialog signal

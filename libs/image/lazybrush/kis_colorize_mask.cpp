@@ -194,7 +194,7 @@ void KisColorizeMask::setSectionModelProperties(const KisBaseNode::PropertyList 
 
 KisPaintDeviceSP KisColorizeMask::paintDevice() const
 {
-    return m_d->fakePaintDevice;
+    return m_d->showKeyStrokes ? m_d->fakePaintDevice : 0;
 }
 
 KisPaintDeviceSP KisColorizeMask::original() const

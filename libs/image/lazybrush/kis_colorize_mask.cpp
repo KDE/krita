@@ -420,8 +420,14 @@ bool KisColorizeMask::showColoring() const
 void KisColorizeMask::setShowColoring(bool value)
 {
     QRect savedExtent;
-    if (m_d->showColoring && !value) {
+    if (m_d->showKeyStrokes && !value) {
+        KisNodeSP parentLayer = parent();
+
         savedExtent = extent();
+
+        if (parentLayer) {
+            savedExtent |= parentLayer->extent();
+        }
     }
 
     m_d->showColoring = value;
@@ -440,7 +446,13 @@ void KisColorizeMask::setShowKeyStrokes(bool value)
 {
     QRect savedExtent;
     if (m_d->showKeyStrokes && !value) {
+        KisNodeSP parentLayer = parent();
+
         savedExtent = extent();
+
+        if (parentLayer) {
+            savedExtent |= parentLayer->extent();
+        }
     }
 
     m_d->showKeyStrokes = value;

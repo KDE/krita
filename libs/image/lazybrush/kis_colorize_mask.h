@@ -38,8 +38,6 @@ public:
     KisColorizeMask(const KisColorizeMask& rhs);
 
     KisPaintDeviceSP paintDevice() const;
-    KisPaintDeviceSP original() const;
-    KisPaintDeviceSP projection() const;
 
     KisNodeSP clone() const {
         return KisNodeSP(new KisColorizeMask(*this));

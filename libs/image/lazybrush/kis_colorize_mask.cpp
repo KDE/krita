@@ -203,16 +203,6 @@ KisPaintDeviceSP KisColorizeMask::paintDevice() const
     return m_d->showKeyStrokes ? m_d->fakePaintDevice : 0;
 }
 
-KisPaintDeviceSP KisColorizeMask::original() const
-{
-    return 0;
-}
-
-KisPaintDeviceSP KisColorizeMask::projection() const
-{
-    return 0;
-}
-
 QIcon KisColorizeMask::icon() const
 {
     return KisIconUtils::loadIcon("filterMask");
@@ -480,9 +470,10 @@ void KisColorizeMask::mergeToLayer(KisNodeSP layer, KisPostExecutionUndoAdapter 
         }
     }
 
+    mergeToLayerImpl(m_d->fakePaintDevice, &fakeUndoAdapter, transactionText, timedID, false);
+
     m_d->currentKeyStrokeDevice = 0;
     m_d->currentColor = KoColor();
-    m_d->fakePaintDevice->clear();
     releaseResources();
 
     /**
@@ -514,15 +505,23 @@ void KisColorizeMask::mergeToLayer(KisNodeSP layer, KisPostExecutionUndoAdapter 
 
 void KisColorizeMask::writeMergeData(KisPainter *painter, KisPaintDeviceSP src)
 {
-    KisSelectionSP conversionSelection = m_d->cachedConversionSelection.getSelection();
-    KisPixelSelectionSP tempSelection = conversionSelection->pixelSelection();
+    const KoColorSpace *alpha8 = KoColorSpaceRegistry::instance()->alpha8();
+    const bool nonAlphaDst = !(*painter->device()->colorSpace() == *alpha8);
 
-    Q_FOREACH (const QRect &rc, src->region().rects()) {
-        tempSelection->copyAlphaFrom(src, rc);
-        painter->bitBlt(rc.topLeft(), tempSelection, rc);
+    if (nonAlphaDst) {
+        Q_FOREACH (const QRect &rc, src->region().rects()) {
+            painter->bitBlt(rc.topLeft(), src, rc);
+        }
+    } else {
+        KisSelectionSP conversionSelection = m_d->cachedConversionSelection.getSelection();
+        KisPixelSelectionSP tempSelection = conversionSelection->pixelSelection();
+
+        Q_FOREACH (const QRect &rc, src->region().rects()) {
+            tempSelection->copyAlphaFrom(src, rc);
+            painter->bitBlt(rc.topLeft(), tempSelection, rc);
+        }
+        m_d->cachedSelection.putSelection(conversionSelection);
     }
-
-    m_d->cachedSelection.putSelection(conversionSelection);
 }
 
 bool KisColorizeMask::showColoring() const

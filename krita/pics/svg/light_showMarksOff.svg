@@ -15,7 +15,7 @@
    height="18"
    id="svg6190"
    inkscape:version="0.91 r13725"
-   sodipodi:docname="light_showMarks.svg">
+   sodipodi:docname="light_showMarksOff.svg">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -30,7 +30,7 @@
      id="namedview4440"
      showgrid="true"
      inkscape:zoom="21.454546"
-     inkscape:cx="6.1241286"
+     inkscape:cx="-2.7551085"
      inkscape:cy="6.9325935"
      inkscape:window-x="0"
      inkscape:window-y="0"
@@ -1464,5 +1464,11 @@
        d="m 7.9745766,1049.0995 0,2 2,0 0,-2 z"
        style="fill:#cacaca;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        sodipodi:nodetypes="ccccc" />
+    <path
+       style="fill:#cacaca;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 8.9745764,1038.0995 1.0000004,0 0,1 -13.0000002,13 -1,0 0,-1 z"
+       id="path4461"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccccccc" />
   </g>
 </svg>

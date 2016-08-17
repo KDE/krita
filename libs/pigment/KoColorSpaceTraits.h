@@ -157,8 +157,10 @@ struct KoColorSpaceTrait {
         Q_ASSERT((int)values.count() == (int)channels_nb);
         channels_type c;
         for (uint i = 0; i < channels_nb; i++) {
-            c = qBound(KoColorSpaceMathsTraits<channels_type>::min,(channels_type)
-                    ((float)KoColorSpaceMathsTraits<channels_type>::unitValue * values[i]), KoColorSpaceMathsTraits<channels_type>::max);
+            float b = qBound((float)KoColorSpaceMathsTraits<channels_type>::min * values[i],
+                             (float)KoColorSpaceMathsTraits<channels_type>::unitValue * values[i],
+                             (float)KoColorSpaceMathsTraits<channels_type>::max * values[i]);
+            c = (channels_type)b;
             nativeArray(pixel)[i] = c;
 
         }

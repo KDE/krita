@@ -84,8 +84,8 @@ void KisLayerPropertiesIcons::updateIcons()
     m_d->icons.insert(passThrough.id(), IconsPair(KisIconUtils::loadIcon("passthrough-enabled"), KisIconUtils::loadIcon("passthrough-disabled")));
     m_d->icons.insert(selectionActive.id(), IconsPair(KisIconUtils::loadIcon("local_selection_active"), KisIconUtils::loadIcon("local_selection_inactive")));
     m_d->icons.insert(colorizeNeedsUpdate.id(), IconsPair(KisIconUtils::loadIcon("updateColorize"), KisIconUtils::loadIcon("updateColorize")));
-    m_d->icons.insert(colorizeShowKeyStrokes.id(), IconsPair(KisIconUtils::loadIcon("showMarks"), KisIconUtils::loadIcon("showMarks")));
-    m_d->icons.insert(colorizeShowColoring.id(), IconsPair(KisIconUtils::loadIcon("showColoring"), KisIconUtils::loadIcon("showColoring")));
+    m_d->icons.insert(colorizeShowKeyStrokes.id(), IconsPair(KisIconUtils::loadIcon("showMarks"), KisIconUtils::loadIcon("showMarksOff")));
+    m_d->icons.insert(colorizeShowColoring.id(), IconsPair(KisIconUtils::loadIcon("showColoring"), KisIconUtils::loadIcon("showColoringOff")));
 }
 
 KisBaseNode::Property KisLayerPropertiesIcons::getProperty(const KoID &id, bool state)

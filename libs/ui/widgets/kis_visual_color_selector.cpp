@@ -207,12 +207,7 @@ KisVisualColorSelectorShape::KisVisualColorSelectorShape(QWidget *parent,
     m_d->channel2 = qBound(0, channel2, maxchannel);
     this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     m_d->updateTimer = new KisSignalCompressor(100 /* ms */, KisSignalCompressor::POSTPONE, this);
-    if (displayRenderer) {
-        m_d->displayRenderer = displayRenderer;
-        connect(m_d->displayRenderer, SIGNAL(displayConfigurationChanged()), this, SLOT(update()), Qt::UniqueConnection);
-    } else {
-        KoDumbColorDisplayRenderer::instance();
-    }
+    setDisplayRenderer(displayRenderer);
 
 }
 
@@ -267,12 +262,15 @@ void KisVisualColorSelectorShape::setDisplayRenderer (const KoColorDisplayRender
     }
     connect(m_d->displayRenderer, SIGNAL(displayConfigurationChanged()),
             SLOT(updateFromChangedDisplayRenderer()), Qt::UniqueConnection);
+
 }
 
 void KisVisualColorSelectorShape::updateFromChangedDisplayRenderer()
 {
+    qDebug()<<"update from changed display renderer";
     m_d->pixmapsNeedUpdate = true;
     updateCursor();
+    //m_d->currentColor = convertShapeCoordinateToKoColor(getCursorPosition());
     update();
 }
 

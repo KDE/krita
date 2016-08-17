@@ -39,6 +39,9 @@
 #include "kis_multiway_cut.h"
 #include "kis_image.h"
 #include "kis_layer.h"
+#include "kis_macro_based_undo_store.h"
+#include "kis_post_execution_undo_adapter.h"
+#include "kis_command_utils.h"
 
 
 using namespace KisLazyFillTools;
@@ -46,13 +49,15 @@ using namespace KisLazyFillTools;
 struct KisColorizeMask::Private
 {
     Private()
-        : showKeyStrokes(true), showColoring(true), needsUpdate(true),
+        : needAddCurrentKeyStroke(false),
+          showKeyStrokes(true), showColoring(true), needsUpdate(true),
           updateCompressor(1000, KisSignalCompressor::POSTPONE)
     {
     }
 
     Private(const Private &rhs)
-        : showKeyStrokes(rhs.showKeyStrokes),
+        : needAddCurrentKeyStroke(rhs.needAddCurrentKeyStroke),
+          showKeyStrokes(rhs.showKeyStrokes),
           showColoring(rhs.showColoring),
           cachedSelection(),
           needsUpdate(false),
@@ -67,6 +72,7 @@ struct KisColorizeMask::Private
 
     KoColor currentColor;
     KisPaintDeviceSP currentKeyStrokeDevice;
+    bool needAddCurrentKeyStroke;
 
     bool showKeyStrokes;
     bool showColoring;
@@ -264,13 +270,29 @@ QRect KisColorizeMask::decorateRect(KisPaintDeviceSP &src,
         KisSelectionSP conversionSelection = m_d->cachedConversionSelection.getSelection();
         KisPixelSelectionSP tempSelection = conversionSelection->pixelSelection();
 
+        KisPaintDeviceSP temporaryTarget = this->temporaryTarget();
+        const bool isTemporaryTargetErasing = temporaryCompositeOp() == COMPOSITE_ERASE;
+        const QRect temporaryExtent = temporaryTarget ? temporaryTarget->extent() : QRect();
+
+
         KisFillPainter gc(dst);
-        Q_FOREACH (const KeyStroke &stroke, m_d->keyStrokes) {
+
+        QList<KeyStroke> extendedStrokes = m_d->keyStrokes;
+
+        if (m_d->currentKeyStrokeDevice &&
+            m_d->needAddCurrentKeyStroke &&
+            !isTemporaryTargetErasing) {
+
+            extendedStrokes << KeyStroke(m_d->currentKeyStrokeDevice, m_d->currentColor);
+        }
+
+        Q_FOREACH (const KeyStroke &stroke, extendedStrokes) {
             selection->pixelSelection()->makeCloneFromRough(stroke.dev, rect);
             gc.setSelection(selection);
 
-            if (stroke.color == m_d->currentColor) {
-                KisPaintDeviceSP temporaryTarget = this->temporaryTarget();
+            if (stroke.color == m_d->currentColor ||
+                (isTemporaryTargetErasing &&
+                 temporaryExtent.intersects(selection->pixelSelection()->selectedRect()))) {
 
                 if (temporaryTarget) {
                     tempSelection->copyAlphaFrom(temporaryTarget, rect);
@@ -296,6 +318,9 @@ QRect KisColorizeMask::decorateRect(KisPaintDeviceSP &src,
 QRect KisColorizeMask::extent() const
 {
     QRect rc;
+
+    // TODO: take care about the filtered device, which can be painted
+    //       semi-transparent sometimes
 
     if (m_d->showColoring && m_d->coloringProjection) {
         rc |= m_d->coloringProjection->extent();
@@ -372,27 +397,119 @@ void KisColorizeMask::setCurrentColor(const KoColor &color)
                      });
 
     KisPaintDeviceSP activeDevice;
+    bool newKeyStroke = false;
 
     if (it == m_d->keyStrokes.constEnd()) {
         activeDevice = new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8());
         activeDevice->setParentNode(this);
         activeDevice->setDefaultBounds(new KisDefaultBounds(fetchImage()));
-        m_d->keyStrokes.append(KeyStroke(activeDevice, color));
+        newKeyStroke = true;
     } else {
         activeDevice = it->dev;
     }
 
     m_d->currentColor = color;
     m_d->currentKeyStrokeDevice = activeDevice;
+    m_d->needAddCurrentKeyStroke = newKeyStroke;
     m_d->fakePaintDevice->convertTo(colorSpace());
 
     unlockTemporaryTarget();
 }
 
+
+
+struct KeyStrokeAddRemoveCommand : public KisCommandUtils::FlipFlopCommand {
+    KeyStrokeAddRemoveCommand(bool add, int index, KeyStroke stroke, QList<KeyStroke> *list, KisNodeSP node)
+        : FlipFlopCommand(!add),
+          m_index(index), m_stroke(stroke),
+          m_list(list), m_node(node) {}
+
+    void init() {
+        m_list->insert(m_index, m_stroke);
+    }
+
+    void end() {
+        KIS_ASSERT_RECOVER_RETURN((*m_list)[m_index] == m_stroke);
+        m_list->removeAt(m_index);
+    }
+
+private:
+    int m_index;
+    KeyStroke m_stroke;
+    QList<KeyStroke> *m_list;
+    // just a pointer to keep the node from deleting
+    KisNodeSP m_node;
+};
+
 void KisColorizeMask::mergeToLayer(KisNodeSP layer, KisPostExecutionUndoAdapter *undoAdapter, const KUndo2MagicString &transactionText,int timedID)
 {
     Q_UNUSED(layer);
-    mergeToLayerImpl(m_d->currentKeyStrokeDevice, undoAdapter, transactionText, timedID);
+
+    KisPaintDeviceSP temporaryTarget = this->temporaryTarget();
+    const bool isTemporaryTargetErasing = temporaryCompositeOp() == COMPOSITE_ERASE;
+    const QRect temporaryExtent = temporaryTarget ? temporaryTarget->extent() : QRect();
+
+    KisSavedMacroCommand *macro = undoAdapter->createMacro(transactionText);
+    KisMacroBasedUndoStore store(macro);
+    KisPostExecutionUndoAdapter fakeUndoAdapter(&store, undoAdapter->strokesFacade());
+
+    /**
+     * Add a new key stroke plane
+     */
+    if (m_d->needAddCurrentKeyStroke && !isTemporaryTargetErasing) {
+        KeyStroke key(m_d->currentKeyStrokeDevice, m_d->currentColor);
+
+        KUndo2Command *cmd =
+            new KeyStrokeAddRemoveCommand(
+                true, m_d->keyStrokes.size(), key, &m_d->keyStrokes, layer);
+        cmd->redo();
+        fakeUndoAdapter.addCommand(toQShared(cmd));
+    }
+
+    /**
+     * When erasing, the brush affects all the key strokes, not only
+     * the current one.
+     */
+    if (!isTemporaryTargetErasing) {
+        mergeToLayerImpl(m_d->currentKeyStrokeDevice, &fakeUndoAdapter, transactionText, timedID, false);
+    } else {
+        Q_FOREACH (const KeyStroke &stroke, m_d->keyStrokes) {
+            if (temporaryExtent.intersects(stroke.dev->extent())) {
+                mergeToLayerImpl(stroke.dev, &fakeUndoAdapter, transactionText, timedID, false);
+            }
+        }
+    }
+
+    m_d->currentKeyStrokeDevice = 0;
+    m_d->currentColor = KoColor();
+    m_d->fakePaintDevice->clear();
+    releaseResources();
+
+    /**
+     * Try removing the key strokes that has been completely erased
+     */
+    if (isTemporaryTargetErasing) {
+        lockTemporaryTargetForWrite();
+
+        int index = 0;
+        auto it = m_d->keyStrokes.begin();
+        while (it != m_d->keyStrokes.end()) {
+            if (it->dev->exactBounds().isEmpty()) {
+                fakeUndoAdapter.addCommand(
+                    toQShared(
+                        new KeyStrokeAddRemoveCommand(
+                            false, index, *it, &m_d->keyStrokes, layer)));
+                it = m_d->keyStrokes.erase(it);
+            } else {
+                ++it;
+                ++index;
+            }
+        }
+
+        unlockTemporaryTarget();
+    }
+
+    undoAdapter->addMacro(macro);
 }
 
 void KisColorizeMask::writeMergeData(KisPainter *painter, KisPaintDeviceSP src)
@@ -406,10 +523,6 @@ void KisColorizeMask::writeMergeData(KisPainter *painter, KisPaintDeviceSP src)
     }
 
     m_d->cachedSelection.putSelection(conversionSelection);
-
-    m_d->currentKeyStrokeDevice = 0;
-    m_d->currentColor = KoColor();
-    m_d->fakePaintDevice->clear();
 }
 
 bool KisColorizeMask::showColoring() const
@@ -420,14 +533,8 @@ bool KisColorizeMask::showColoring() const
 void KisColorizeMask::setShowColoring(bool value)
 {
     QRect savedExtent;
-    if (m_d->showKeyStrokes && !value) {
-        KisNodeSP parentLayer = parent();
-
+    if (m_d->showColoring && !value) {
         savedExtent = extent();
-
-        if (parentLayer) {
-            savedExtent |= parentLayer->extent();
-        }
     }
 
     m_d->showColoring = value;
@@ -446,13 +553,7 @@ void KisColorizeMask::setShowKeyStrokes(bool value)
 {
     QRect savedExtent;
     if (m_d->showKeyStrokes && !value) {
-        KisNodeSP parentLayer = parent();
-
         savedExtent = extent();
-
-        if (parentLayer) {
-            savedExtent |= parentLayer->extent();
-        }
     }
 
     m_d->showKeyStrokes = value;

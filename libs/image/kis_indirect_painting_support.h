@@ -67,7 +67,7 @@ public:
      * Writes the temporary target into the paint device of the layer.
      * This action will lock the temporary target itself.
      */
-    virtual void mergeToLayer(KisNodeSP layer, KisPostExecutionUndoAdapter *undoAdapter, const KUndo2MagicString &transactionText,int timedID = -1);
+    virtual void mergeToLayer(KisNodeSP layer, KisPostExecutionUndoAdapter *undoAdapter, const KUndo2MagicString &transactionText, int timedID = -1);
 
 
     /**
@@ -88,9 +88,12 @@ public:
     KisPaintDeviceSP temporaryTarget() const;
 
 protected:
-    void mergeToLayerImpl(KisPaintDeviceSP dst, KisPostExecutionUndoAdapter *undoAdapter, const KUndo2MagicString &transactionText, int timedID = -1);
+    void mergeToLayerImpl(KisPaintDeviceSP dst, KisPostExecutionUndoAdapter *undoAdapter, const KUndo2MagicString &transactionText, int timedID = -1, bool cleanResources = true);
     virtual void writeMergeData(KisPainter *painter, KisPaintDeviceSP src);
     void lockTemporaryTargetForWrite() const;
+
+    QString temporaryCompositeOp() const;
+    void releaseResources();
 
 private:
     friend class KisPainterBasedStrokeStrategy;
@@ -100,14 +103,6 @@ private:
      * instead.
      */
     KisSelectionSP temporarySelection() const;
-
-private:
-
-    template<class UndoAdapter>
-        void mergeToLayerImpl(KisNodeSP layer,
-                              UndoAdapter *undoAdapter,
-                              const KUndo2MagicString &transactionText,int timedID = -1);
-    void releaseResources();
 
 private:
     struct Private;

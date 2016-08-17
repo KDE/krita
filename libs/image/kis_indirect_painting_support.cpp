@@ -104,6 +104,11 @@ KisPaintDeviceSP KisIndirectPaintingSupport::temporaryTarget() const
     return d->temporaryTarget;
 }
 
+QString KisIndirectPaintingSupport::temporaryCompositeOp() const
+{
+    return d->compositeOp;
+}
+
 KisSelectionSP KisIndirectPaintingSupport::temporarySelection() const
 {
     return d->selection;
@@ -127,7 +132,7 @@ void KisIndirectPaintingSupport::mergeToLayer(KisNodeSP layer, KisPostExecutionU
     mergeToLayerImpl(layer->paintDevice(), undoAdapter, transactionText, timedID);
 }
 
-void KisIndirectPaintingSupport::mergeToLayerImpl(KisPaintDeviceSP dst, KisPostExecutionUndoAdapter *undoAdapter, const KUndo2MagicString &transactionText, int timedID)
+void KisIndirectPaintingSupport::mergeToLayerImpl(KisPaintDeviceSP dst, KisPostExecutionUndoAdapter *undoAdapter, const KUndo2MagicString &transactionText, int timedID, bool cleanResources)
 {
     /**
      * We do not apply selection here, because it has already
@@ -147,7 +152,9 @@ void KisIndirectPaintingSupport::mergeToLayerImpl(KisPaintDeviceSP dst, KisPostE
 
     writeMergeData(&gc, d->temporaryTarget);
 
-    releaseResources();
+    if (cleanResources) {
+        releaseResources();
+    }
 
     if(undoAdapter) {
         gc.endTransaction(undoAdapter);

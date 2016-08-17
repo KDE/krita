@@ -65,7 +65,6 @@ namespace KisCommandUtils
     private:
         bool m_finalize;
         bool m_firstRedo;
-        KisSurrogateUndoStore m_store;
     };
 }
 

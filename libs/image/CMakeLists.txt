@@ -243,6 +243,7 @@ set(kritaimage_LIB_SRCS
    kis_undo_store.cpp
    kis_undo_stores.cpp
    kis_undo_adapter.cpp
+   kis_macro_based_undo_store.cpp
    kis_surrogate_undo_adapter.cpp
    kis_legacy_undo_adapter.cpp
    kis_post_execution_undo_adapter.cpp

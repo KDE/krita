@@ -23,6 +23,9 @@
 #include "kritaimage_export.h"
 #include <KoColor.h>
 
+#include <boost/operators.hpp>
+
+
 
 class KoColor;
 
@@ -62,9 +65,12 @@ namespace KisLazyFillTools
     KRITAIMAGE_EXPORT
     QVector<QPoint> splitIntoConnectedComponents(KisPaintDeviceSP src, const QRect &boundingRect);
 
-    struct KRITAIMAGE_EXPORT KeyStroke {
+    struct KRITAIMAGE_EXPORT KeyStroke : public boost::equality_comparable<KeyStroke>
+    {
         KeyStroke();
         KeyStroke(KisPaintDeviceSP _dev, const KoColor &_color);
+
+        friend bool operator==(const KeyStroke& t1, const KeyStroke&t2);
 
         KisPaintDeviceSP dev;
         KoColor color;

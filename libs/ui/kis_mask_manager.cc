@@ -87,14 +87,8 @@ KisMaskSP KisMaskManager::activeMask()
 
 KisPaintDeviceSP KisMaskManager::activeDevice()
 {
-    // XXX: we may also need to have a possibility of getting the vector
-    // part of selection here
-    if (m_imageView) {
-        KisSelectionSP selection;
-        KisMaskSP mask = m_imageView->currentMask();
-        return mask && (selection = mask->selection()) ? selection->pixelSelection() : 0;
-    }
-    return 0;
+    KisMaskSP mask = activeMask();
+    return mask ? mask->paintDevice() : 0;
 }
 
 void KisMaskManager::activateMask(KisMaskSP mask)

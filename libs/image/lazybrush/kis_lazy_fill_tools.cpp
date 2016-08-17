@@ -163,4 +163,9 @@ KeyStroke::KeyStroke(KisPaintDeviceSP _dev, const KoColor &_color)
 {
 }
 
+bool operator==(const KeyStroke& t1, const KeyStroke&t2)
+{
+    return t1.dev == t2.dev && t1.color == t2.color;
+}
+
 }

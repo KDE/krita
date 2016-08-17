@@ -107,6 +107,12 @@ private Q_SLOTS:
 
     void endUpdateWithNewColor();
 
+    /**
+     * @brief setPreviousColor
+     * triggered when the dialog is either accepted or hidden.
+     */
+    void setPreviousColor();
+
 private:
     Ui_WdgDlgInternalColorSelector *m_ui; //the UI
     struct Private; //The private struct
@@ -118,6 +124,8 @@ private:
      * a signal out that there's a new color.
      */
     void updateAllElements(QObject *source);
+
+    virtual void leaveEvent(QEvent *);
 };
 
 #endif // KISINTERNALCOLORSELECTOR_H

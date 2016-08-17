@@ -23,6 +23,9 @@
 #include <QPointer>
 
 #include "KoColorSpaceRegistry.h"
+#include <KoColorSet.h>
+#include <KoResourceServerProvider.h>
+#include <KoResourceServer.h>
 
 #include "kis_signal_compressor.h"
 #include "KisViewManager.h"
@@ -32,11 +35,13 @@
 
 #include "kis_internal_color_selector.h"
 #include "ui_wdgdlginternalcolorselector.h"
+#include "kis_config.h"
 
 struct KisInternalColorSelector::Private
 {
     bool allowUpdates = true;
     KoColor currentColor;
+    KoColor previousColor;
     const KoColorSpace *currentColorSpace;
     bool chooseAlpha = false;
     KisSignalCompressor *compressColorChanges;
@@ -68,6 +73,23 @@ KisInternalColorSelector::KisInternalColorSelector(QWidget *parent, KoColor colo
     connect(m_ui->visualSelector, SIGNAL(sigNewColor(KoColor)), this, SLOT(slotColorUpdated(KoColor)));
     connect(m_ui->screenColorPicker, SIGNAL(sigNewColorPicked(KoColor)),this, SLOT(slotColorUpdated(KoColor)));
     //TODO: Add disable signal as well. Might be not necessary...?
+    KisConfig cfg;
+    QString paletteName = cfg.readEntry("internal_selector_active_color_set", QString());
+    KoResourceServer<KoColorSet>* rServer = KoResourceServerProvider::instance()->paletteServer(false);
+    KoColorSet *savedPal = rServer->resourceByName(paletteName);
+    if (savedPal) {
+        m_ui->paletteBox->setColorSet(savedPal);
+    } else {
+        savedPal = rServer->resources().first();
+        if (savedPal) {
+            m_ui->paletteBox->setColorSet(savedPal);
+        }
+    }
+    connect(m_ui->paletteBox, SIGNAL(colorChanged(KoColor,bool)), this, SLOT(slotColorUpdated(KoColor)));
+
+    m_ui->currentColor->setColor(m_d->currentColor);
+    m_ui->previousColor->setColor(m_d->currentColor);
+    connect(this, SIGNAL(accepted()), this, SLOT(setPreviousColor()));
 
     connect(this, SIGNAL(signalForegroundColorChosen(KoColor)), this, SLOT(slotLockSelector()));
     m_d->compressColorChanges = new KisSignalCompressor(100 /* ms */, KisSignalCompressor::POSTPONE, this);
@@ -87,7 +109,6 @@ void KisInternalColorSelector::slotColorUpdated(KoColor newColor)
 {
     //if the update did not come from this selector...
     if (m_d->allowUpdates || QObject::sender() == this->parent()) {
-        qDebug()<<"Color as received by the internal color selector" << KoColor::toQString(newColor);
         m_d->currentColor = newColor;
         updateAllElements(QObject::sender());
     }
@@ -143,6 +164,15 @@ void KisInternalColorSelector::slotLockSelector()
     m_d->allowUpdates = false;
 }
 
+void KisInternalColorSelector::setPreviousColor()
+{
+    m_d->previousColor = m_d->currentColor;
+    KisConfig cfg;
+    if (m_ui->paletteBox->colorSet()) {
+        cfg.writeEntry("internal_selector_active_color_set", m_ui->paletteBox->colorSet()->name());
+    }
+}
+
 void KisInternalColorSelector::updateAllElements(QObject *source)
 {
     //update everything!!!
@@ -152,6 +182,10 @@ void KisInternalColorSelector::updateAllElements(QObject *source)
     if (source != m_ui->visualSelector) {
         m_ui->visualSelector->slotSetColor(m_d->currentColor);
     }
+
+    m_ui->previousColor->setColor(m_d->previousColor);
+
+    m_ui->currentColor->setColor(m_d->currentColor);
 
     if (source != this->parent()) {
         emit(signalForegroundColorChosen(m_d->currentColor));
@@ -163,4 +197,10 @@ void KisInternalColorSelector::updateAllElements(QObject *source)
 void KisInternalColorSelector::endUpdateWithNewColor()
 {
     m_d->allowUpdates = true;
+}
+
+void KisInternalColorSelector::leaveEvent(QEvent *)
+{
+    setPreviousColor();
+
 }

@@ -88,12 +88,12 @@ void KisVisualColorSelector::slotsetColorSpace(const KoColorSpace *cs)
         } else if (m_d->currentCS->colorChannelCount() == 3) {
             KisVisualRectangleSelectorShape *bar =  new KisVisualRectangleSelectorShape(this,
                                                                                         KisVisualRectangleSelectorShape::onedimensional,
-                                                                                        KisVisualColorSelectorShape::HSV,
-                                                                                        cs, 2, 2,
+                                                                                        KisVisualColorSelectorShape::HSL,
+                                                                                        cs, 0, 0,
                                                                                         m_d->displayRenderer);
             KisVisualRectangleSelectorShape *block =  new KisVisualRectangleSelectorShape(this, KisVisualRectangleSelectorShape::twodimensional,
-                                                                                          KisVisualColorSelectorShape::HSV,
-                                                                                          cs, 0, 1,
+                                                                                          KisVisualColorSelectorShape::HSL,
+                                                                                          cs, 1, 2,
                                                                                           m_d->displayRenderer);
             bar->setMaximumWidth(width()*0.1);
             bar->setMaximumHeight(height());

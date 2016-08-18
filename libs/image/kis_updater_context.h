@@ -23,11 +23,16 @@
 #include <QMutex>
 #include <QReadWriteLock>
 #include <QThreadPool>
+#include <QWaitCondition>
 
 #include "kis_base_rects_walker.h"
 #include "kis_async_merger.h"
 #include "kis_lock_free_lod_counter.h"
 
+// TODO: uncomment ifndef for release on 3.0.1
+// #ifndef QT_NO_DEBUG
+#define SANITY_CHECK_CONTEXT_LOCKING
+// #endif // QT_NO_DEBUG
 
 class KisUpdateJobItem;
 class KisSpontaneousJob;
@@ -128,6 +133,9 @@ protected Q_SLOTS:
 protected:
     static bool walkerIntersectsJob(KisBaseRectsWalkerSP walker,
                                     const KisUpdateJobItem* job);
+
+    qint32 defaultThreadCount() const;
+
     qint32 findSpareThread();
 
 protected:
@@ -141,8 +149,14 @@ protected:
 
     QMutex m_lock;
     QVector<KisUpdateJobItem*> m_jobs;
+    QWaitCondition m_waitAllCond;
     QThreadPool m_threadPool;
     KisLockFreeLodCounter m_lodCounter;
+
+#ifdef SANITY_CHECK_CONTEXT_LOCKING
+    // Thread ID of the owner or -1 if not locked
+    volatile Qt::HANDLE m_lockedBy;
+#endif
 };
 
 class KRITAIMAGE_EXPORT KisTestableUpdaterContext : public KisUpdaterContext

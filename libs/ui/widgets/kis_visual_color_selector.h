@@ -178,7 +178,6 @@ protected:
     void mouseMoveEvent(QMouseEvent *e);
     void mouseReleaseEvent(QMouseEvent *e);
     void paintEvent(QPaintEvent*);
-    void resizeEvent(QResizeEvent *);
 private:
     struct Private;
     const QScopedPointer<Private> m_d;
@@ -258,4 +257,61 @@ private:
     virtual void drawCursor();
 };
 
+class KisVisualEllipticalSelectorShape : public KisVisualColorSelectorShape
+{
+    Q_OBJECT
+public:
+    enum singelDTypes{border, borderMirrored};
+    explicit KisVisualEllipticalSelectorShape(QWidget *parent,
+                                         Dimensions dimension,
+                                         ColorModel model,
+                                         const KoColorSpace *cs,
+                                         int channel1, int channel2,
+                                         const KoColorDisplayRendererInterface *displayRenderer = KoDumbColorDisplayRenderer::instance(), int borwidth=20,
+                                         KisVisualEllipticalSelectorShape::singelDTypes d = KisVisualEllipticalSelectorShape::border
+                                         );
+    ~KisVisualEllipticalSelectorShape();
+
+    void setBarWidth(int width);
+
+private:
+    virtual QPointF convertShapeCoordinateToWidgetCoordinate(QPointF coordinate);
+    virtual QPointF convertWidgetCoordinateToShapeCoordinate(QPoint coordinate);
+
+    singelDTypes m_type;
+    int m_barWidth;
+    virtual QRegion getMaskMap();
+    virtual void drawCursor();
+    QSize sizeHint() const;
+};
+
+class KisVisualTriangleSelectorShape : public KisVisualColorSelectorShape
+{
+    Q_OBJECT
+public:
+    enum singelDTypes{border, borderMirrored};
+    explicit KisVisualTriangleSelectorShape(QWidget *parent,
+                                         Dimensions dimension,
+                                         ColorModel model,
+                                         const KoColorSpace *cs,
+                                         int channel1, int channel2,
+                                         const KoColorDisplayRendererInterface *displayRenderer = KoDumbColorDisplayRenderer::instance(),
+                                         int borwidth=20
+                                         );
+    ~KisVisualTriangleSelectorShape();
+
+    void setBarWidth(int width);
+    void setTriangle();
+    QRect setGeometryByRadius(QLineF radius);
+
+private:
+    virtual QPointF convertShapeCoordinateToWidgetCoordinate(QPointF coordinate);
+    virtual QPointF convertWidgetCoordinateToShapeCoordinate(QPoint coordinate);
+
+    singelDTypes m_type;
+    int m_barWidth;
+    QPolygon m_triangle;
+    virtual QRegion getMaskMap();
+    virtual void drawCursor();
+};
 #endif // KISVISUALCOLORSELECTOR_H

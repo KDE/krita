@@ -27,6 +27,7 @@
 #include <QList>
 #include <QPolygon>
 #include <QRect>
+#include <QtMath>
 
 #include "KoColorConversions.h"
 #include "KoColorDisplayRendererInterface.h"
@@ -47,7 +48,7 @@ struct KisVisualColorSelector::Private
 
 KisVisualColorSelector::KisVisualColorSelector(QWidget *parent) : QWidget(parent), m_d(new Private)
 {
-
+    this->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
     QVBoxLayout *layout = new QVBoxLayout;
     this->setLayout(layout);
     //m_d->updateSelf = new KisSignalCompressor(100 /* ms */, KisSignalCompressor::POSTPONE, this);
@@ -74,11 +75,11 @@ void KisVisualColorSelector::slotsetColorSpace(const KoColorSpace *cs)
     if (m_d->currentCS != cs)
     {
         m_d->currentCS = cs;
-        if (this->layout()) {
+        if (this->children().at(0)) {
             qDeleteAll(this->children());
         }
         m_d->widgetlist.clear();
-        QHBoxLayout *layout = new QHBoxLayout;
+        QLayout *layout = new QHBoxLayout;
         //redraw all the widgets.
         if (m_d->currentCS->colorChannelCount() == 1) {
             KisVisualRectangleSelectorShape *bar =  new KisVisualRectangleSelectorShape(this, KisVisualRectangleSelectorShape::onedimensional,KisVisualColorSelectorShape::Channel, cs, 0, 0);
@@ -88,7 +89,7 @@ void KisVisualColorSelector::slotsetColorSpace(const KoColorSpace *cs)
             layout->addWidget(bar);
             m_d->widgetlist.append(bar);
         } else if (m_d->currentCS->colorChannelCount() == 3) {
-            KisVisualRectangleSelectorShape *bar =  new KisVisualRectangleSelectorShape(this,
+            /*KisVisualRectangleSelectorShape *bar =  new KisVisualRectangleSelectorShape(this,
                                                                                         KisVisualRectangleSelectorShape::onedimensional,
                                                                                         KisVisualColorSelectorShape::HSL,
                                                                                         cs, 0, 0,
@@ -96,19 +97,37 @@ void KisVisualColorSelector::slotsetColorSpace(const KoColorSpace *cs)
             KisVisualRectangleSelectorShape *block =  new KisVisualRectangleSelectorShape(this, KisVisualRectangleSelectorShape::twodimensional,
                                                                                           KisVisualColorSelectorShape::HSL,
                                                                                           cs, 1, 2,
+                                                                                          m_d->displayRenderer);*/
+            int sizeValue = qMin(width(), height());
+            int borderWidth = qMax(sizeValue*0.1, 20.0);
+            KisVisualEllipticalSelectorShape *bar =  new KisVisualEllipticalSelectorShape(this,
+                                                                                        KisVisualColorSelectorShape::onedimensional,
+                                                                                        KisVisualColorSelectorShape::HSV,
+                                                                                        cs, 0, 0,
+                                                                                        m_d->displayRenderer, borderWidth,KisVisualEllipticalSelectorShape::border);
+            KisVisualTriangleSelectorShape *block =  new KisVisualTriangleSelectorShape(this, KisVisualColorSelectorShape::twodimensional,
+                                                                                          KisVisualColorSelectorShape::HSV,
+                                                                                          cs, 1, 2,
                                                                                           m_d->displayRenderer);
-            bar->setMaximumWidth(width()*0.5);
-            bar->setMaximumHeight(height());
-            block->setMaximumWidth(width()*0.5);
-            block->setMaximumHeight(height());
+            bar->resize(sizeValue, sizeValue);
+            QLineF barInnerRadius(bar->geometry().center(), QPointF(bar->geometry().right()-borderWidth, bar->geometry().center().y()));
+            QRect geom = block->setGeometryByRadius(barInnerRadius);
+            block->setGeometry(geom);
+            block->setTriangle();
+            //There's a really weird bug where touching the geometry makes the widget hide itself??? This didn't happen with layouts so, I am confused.//
+            block->show();
+            bar->show();
+            qDebug()<<bar->geometry();
+            qDebug()<<bar->pos();
+            qDebug()<<block->geometry();
+            qDebug()<<this->geometry();
             bar->setColor(m_d->currentcolor);
             block->setColor(m_d->currentcolor);
             connect (bar, SIGNAL(sigNewColor(KoColor)), block, SLOT(setColorFromSibling(KoColor)));
             connect (block, SIGNAL(sigNewColor(KoColor)), SLOT(updateFromWidgets(KoColor)));
-            layout->addWidget(bar);
-            layout->addWidget(block);
             m_d->widgetlist.append(bar);
             m_d->widgetlist.append(block);
+            this->adjustSize();
         } else if (m_d->currentCS->colorChannelCount() == 4) {
             KisVisualRectangleSelectorShape *block =  new KisVisualRectangleSelectorShape(this, KisVisualRectangleSelectorShape::twodimensional,KisVisualColorSelectorShape::Channel, cs, 0, 1);
             KisVisualRectangleSelectorShape *block2 =  new KisVisualRectangleSelectorShape(this, KisVisualRectangleSelectorShape::twodimensional,KisVisualColorSelectorShape::Channel, cs, 2, 3);
@@ -561,11 +580,6 @@ void KisVisualColorSelectorShape::paintEvent(QPaintEvent*)
     painter.drawPixmap(0,0,m_d->fullSelector);
 }
 
-void KisVisualColorSelectorShape::resizeEvent(QResizeEvent *)
-{
-    m_d->pixmapsNeedUpdate = true;
-}
-
 KisVisualColorSelectorShape::Dimensions KisVisualColorSelectorShape::getDimensions()
 {
     return m_d->dimension;
@@ -879,6 +893,270 @@ void KisVisualRectangleSelectorShape::drawCursor()
         painter.setBrush(fill);
         painter.drawEllipse(cursorPoint, cursorwidth-1.0, cursorwidth-1.0);
     }
+    painter.end();
+    setFullImage(fullSelector);
+}
+
+//----------------Elliptical--------------------------//
+KisVisualEllipticalSelectorShape::KisVisualEllipticalSelectorShape(QWidget *parent,
+                                                                 Dimensions dimension,
+                                                                 ColorModel model,
+                                                                 const KoColorSpace *cs,
+                                                                 int channel1, int channel2,
+                                                                 const KoColorDisplayRendererInterface *displayRenderer,
+                                                                 int borwidth,
+                                                                 singelDTypes d)
+    : KisVisualColorSelectorShape(parent, dimension, model, cs, channel1, channel2, displayRenderer)
+{
+    m_type = d;
+    m_barWidth = borwidth;
+}
+
+KisVisualEllipticalSelectorShape::~KisVisualEllipticalSelectorShape()
+{
+
+}
+
+QSize KisVisualEllipticalSelectorShape::sizeHint() const
+{
+    return QSize(180,180);
+}
+void KisVisualEllipticalSelectorShape::setBarWidth(int width)
+{
+    m_barWidth = width;
+}
+
+QPointF KisVisualEllipticalSelectorShape::convertShapeCoordinateToWidgetCoordinate(QPointF coordinate)
+{
+    qreal x = width()/2;
+    qreal y = height()/2;
+    QRect total(0, 0, width(), height());
+    qreal a = total.width()/2;
+    if (m_type!=KisVisualEllipticalSelectorShape::borderMirrored) {
+        QLineF line(total.center(), total.topLeft());
+        line.setAngle(coordinate.x()*360.0);
+        //qreal totalLength = ( (a*b) / qSqrt( qPow( b*qCos(line.angle()),2 ) + qPow(a*qSin(line.angle()),2 ) ));
+        line.setLength(coordinate.y()*a);
+        if (getDimensions()==KisVisualColorSelectorShape::onedimensional) {
+            line.setLength(a-m_barWidth);
+        }
+        x = qRound(line.p2().x());
+        y = qRound(line.p2().y());
+
+    }
+    qDebug()<<QPoint(x,y);
+    return QPointF(x,y);
+}
+
+QPointF KisVisualEllipticalSelectorShape::convertWidgetCoordinateToShapeCoordinate(QPoint coordinate)
+{
+    //default implementation:
+    qreal x = 0.5;
+    qreal y = 1.0;
+    if (mask().contains(coordinate)) {
+        QRect total(0, 0, width(), height());
+        QLineF line(total.center(), coordinate);
+        qreal a = total.width()/2;
+        //qreal b = qMin(total.width()/2,total.height()/2);
+        //qreal totalLength = ( (a*b) / qSqrt( qPow( b*qCos(line.angle()),2 ) + qPow(a*qSin(line.angle()),2 ) ));
+        if (m_type!=KisVisualEllipticalSelectorShape::borderMirrored){
+            x = line.angle()/360.0;
+            y = qBound(0.0,line.length()/a, 1.0);
+
+        } else {
+            x = (line.angle()/360.0)/2;
+            y = line.length()/a;
+        }
+
+    }
+    return QPointF(x, y);
+}
+
+QRegion KisVisualEllipticalSelectorShape::getMaskMap()
+{
+    QRegion mask = QRegion(0,0,width(),height(), QRegion::Ellipse);
+    if (getDimensions()==KisVisualColorSelectorShape::onedimensional) {
+        mask = mask.subtracted(QRegion(m_barWidth, m_barWidth, width()-(m_barWidth*2), height()-(m_barWidth*2), QRegion::Ellipse));
+    }
+    return mask;
+}
+
+void KisVisualEllipticalSelectorShape::drawCursor()
+{
+    QPointF cursorPoint = convertShapeCoordinateToWidgetCoordinate(getCursorPosition());
+    QPixmap fullSelector = getPixmap();
+    QColor col = getColorFromConverter(getCurrentColor());
+    QPainter painter;
+    painter.begin(&fullSelector);
+    painter.setRenderHint(QPainter::Antialiasing);
+    //QPainterPath path;
+    QBrush fill;
+    fill.setStyle(Qt::SolidPattern);
+
+    int cursorwidth = 5;
+    QRect innerRect(m_barWidth, m_barWidth, width()-(m_barWidth*2), height()-(m_barWidth*2));
+    if(m_type==KisVisualEllipticalSelectorShape::borderMirrored){
+        painter.setPen(Qt::white);
+        fill.setColor(Qt::white);
+        painter.setBrush(fill);
+        painter.drawEllipse(cursorPoint, cursorwidth, cursorwidth);
+        QPoint mirror(innerRect.center().x()+(innerRect.center().x()-cursorPoint.x()),cursorPoint.y());
+        painter.drawEllipse(mirror, cursorwidth, cursorwidth);
+        fill.setColor(col);
+        painter.setPen(Qt::black);
+        painter.setBrush(fill);
+        painter.drawEllipse(cursorPoint, cursorwidth-1, cursorwidth-1);
+        painter.drawEllipse(mirror, cursorwidth-1, cursorwidth-1);
+
+    } else {
+        painter.setPen(Qt::white);
+        fill.setColor(Qt::white);
+        painter.setBrush(fill);
+        painter.drawEllipse(cursorPoint, cursorwidth, cursorwidth);
+        fill.setColor(col);
+        painter.setPen(Qt::black);
+        painter.setBrush(fill);
+        painter.drawEllipse(cursorPoint, cursorwidth-1.0, cursorwidth-1.0);
+    }
+    painter.end();
+    setFullImage(fullSelector);
+}
+
+//----------------Elliptical--------------------------//
+KisVisualTriangleSelectorShape::KisVisualTriangleSelectorShape(QWidget *parent,
+                                                                 Dimensions dimension,
+                                                                 ColorModel model,
+                                                                 const KoColorSpace *cs,
+                                                                 int channel1, int channel2,
+                                                                 const KoColorDisplayRendererInterface *displayRenderer,
+                                                                 int borwidth)
+    : KisVisualColorSelectorShape(parent, dimension, model, cs, channel1, channel2, displayRenderer)
+{
+    m_barWidth = borwidth;
+    QRect total(0,0,width()*0.9,width()*0.9);
+    setTriangle();
+}
+
+KisVisualTriangleSelectorShape::~KisVisualTriangleSelectorShape()
+{
+
+}
+
+void KisVisualTriangleSelectorShape::setBarWidth(int width)
+{
+    m_barWidth = width;
+}
+
+void KisVisualTriangleSelectorShape::setTriangle()
+{
+    QPoint apex = QPoint (width(),height()/2);
+    QPolygon triangle;
+    triangle<< QPoint(0,0) << apex << QPoint(0,height()) << QPoint(0,0);
+    m_triangle = triangle;
+
+}
+
+QRect KisVisualTriangleSelectorShape::setGeometryByRadius(QLineF radius)
+{
+    QPolygon triangle;
+    radius.setAngle(120);//point at yellow :)
+    QPointF tl = radius.p2();
+    radius.setAngle(0);//point to cyan :)
+    QPointF mr = radius.p2();
+    radius.setAngle(240);//point to magenta :)
+    QPointF bl = radius.p2();
+    QPointF br = QPoint(mr.x(),bl.y());
+    QRect r(tl.toPoint(), br.toPoint());
+    return r;
+}
+
+QPointF KisVisualTriangleSelectorShape::convertShapeCoordinateToWidgetCoordinate(QPointF coordinate)
+{
+    qreal x = width()/2;
+    qreal y = height()/2;
+    return QPointF(x,y);
+}
+
+QPointF KisVisualTriangleSelectorShape::convertWidgetCoordinateToShapeCoordinate(QPoint coordinate)
+{
+    //default implementation: gotten from the kotrianglecolorselector.
+    qreal x = 0.5;
+    qreal y = 1.0;
+    /*qreal triangleRadius = (width()/2) * 0.9;
+    qreal triangleLength = 3.0 / sqrt(3.0) * triangleRadius;
+    qreal triangleHeight = triangleLength * sqrt(3.0) * 0.5;
+    qreal triangleTop = 0.5 * width() - triangleRadius;
+    qreal triangleBottom = triangleHeight + triangleTop;
+
+    qreal ynormalize = ( triangleTop - coordinate.y() ) / ( triangleTop - triangleBottom );
+    qreal ls_ = (ynormalize) * triangleLength;
+    qreal startx_ = center.x() - 0.5 * ls_;
+    */
+    QLineF valLine(m_triangle.at(2), m_triangle.at(1));
+    QLineF satLine(m_triangle.at(0), m_triangle.at(2));
+    QLineF coordinateLine(coordinate, m_triangle.at(0));
+    coordinateLine.setAngle(satLine.angle()+90);
+    QPointF intersect(0.0,0.0);
+    if (valLine.intersect(coordinateLine, &intersect)!=QLineF::NoIntersection) {
+        y = coordinateLine.length()/ QLineF(m_triangle.at(0),intersect).length();
+    }
+    coordinateLine.setP2(m_triangle.at(1));
+    coordinateLine.setAngle(valLine.angle()+90);
+    if (valLine.intersect(coordinateLine, &intersect)!=QLineF::NoIntersection) {
+        x = QLineF(valLine.p1(), intersect).length()/valLine.length();
+    }
+    //x = ((qreal)coordinate.x()/width() );
+
+    return QPointF(x, y);
+}
+
+QRegion KisVisualTriangleSelectorShape::getMaskMap()
+{
+    QRegion mask = QRegion(m_triangle);
+    //QRegion mask =  QRegion();
+    //if (getDimensions()==KisVisualColorSelectorShape::onedimensional) {
+    //    mask = mask.subtracted(QRegion(m_barWidth, m_barWidth, width()-(m_barWidth*2), height()-(m_barWidth*2)));
+    //}
+    return mask;
+}
+
+void KisVisualTriangleSelectorShape::drawCursor()
+{
+    QPointF cursorPoint = convertShapeCoordinateToWidgetCoordinate(getCursorPosition());
+    QPixmap fullSelector = getPixmap();
+    QColor col = getColorFromConverter(getCurrentColor());
+    QPainter painter;
+    painter.begin(&fullSelector);
+    painter.setRenderHint(QPainter::Antialiasing);
+    //QPainterPath path;
+    QBrush fill;
+    fill.setStyle(Qt::SolidPattern);
+
+    int cursorwidth = 5;
+    QRect innerRect(m_barWidth, m_barWidth, width()-(m_barWidth*2), height()-(m_barWidth*2));
+    /*if(m_type==KisVisualTriangleSelectorShape::borderMirrored){
+        painter.setPen(Qt::white);
+        fill.setColor(Qt::white);
+        painter.setBrush(fill);
+        painter.drawEllipse(cursorPoint, cursorwidth, cursorwidth);
+        QPoint mirror(innerRect.center().x()+(innerRect.center().x()-cursorPoint.x()),cursorPoint.y());
+        painter.drawEllipse(mirror, cursorwidth, cursorwidth);
+        fill.setColor(col);
+        painter.setPen(Qt::black);
+        painter.setBrush(fill);
+        painter.drawEllipse(cursorPoint, cursorwidth-1, cursorwidth-1);
+        painter.drawEllipse(mirror, cursorwidth-1, cursorwidth-1);
+
+    } else {*/
+        painter.setPen(Qt::white);
+        fill.setColor(Qt::white);
+        painter.setBrush(fill);
+        painter.drawEllipse(cursorPoint, cursorwidth, cursorwidth);
+        fill.setColor(col);
+        painter.setPen(Qt::black);
+        painter.setBrush(fill);
+        painter.drawEllipse(cursorPoint, cursorwidth-1.0, cursorwidth-1.0);
+    //}
     painter.end();
     setFullImage(fullSelector);
 }

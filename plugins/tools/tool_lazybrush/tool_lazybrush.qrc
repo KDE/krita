@@ -1,0 +1,7 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+    <qresource>
+        <file>dark_krita_tool_lazy_brush_stub.svg</file>
+        <file>light_krita_tool_lazy_brush_stub.svg</file>
+    </qresource>
+</RCC>

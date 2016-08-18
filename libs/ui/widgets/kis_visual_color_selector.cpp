@@ -25,6 +25,8 @@
 #include <QVector>
 #include <QVBoxLayout>
 #include <QList>
+#include <QPolygon>
+#include <QRect>
 
 #include "KoColorConversions.h"
 #include "KoColorDisplayRendererInterface.h"
@@ -90,14 +92,14 @@ void KisVisualColorSelector::slotsetColorSpace(const KoColorSpace *cs)
                                                                                         KisVisualRectangleSelectorShape::onedimensional,
                                                                                         KisVisualColorSelectorShape::HSL,
                                                                                         cs, 0, 0,
-                                                                                        m_d->displayRenderer);
+                                                                                        m_d->displayRenderer, width()*0.05,KisVisualRectangleSelectorShape::border);
             KisVisualRectangleSelectorShape *block =  new KisVisualRectangleSelectorShape(this, KisVisualRectangleSelectorShape::twodimensional,
                                                                                           KisVisualColorSelectorShape::HSL,
                                                                                           cs, 1, 2,
                                                                                           m_d->displayRenderer);
-            bar->setMaximumWidth(width()*0.1);
+            bar->setMaximumWidth(width()*0.5);
             bar->setMaximumHeight(height());
-            block->setMaximumWidth(width()*0.9);
+            block->setMaximumWidth(width()*0.5);
             block->setMaximumHeight(height());
             bar->setColor(m_d->currentcolor);
             block->setColor(m_d->currentcolor);
@@ -612,10 +614,12 @@ KisVisualRectangleSelectorShape::KisVisualRectangleSelectorShape(QWidget *parent
                                                                  const KoColorSpace *cs,
                                                                  int channel1, int channel2,
                                                                  const KoColorDisplayRendererInterface *displayRenderer,
+                                                                 int width,
                                                                  singelDTypes d)
     : KisVisualColorSelectorShape(parent, dimension, model, cs, channel1, channel2, displayRenderer)
 {
     m_type = d;
+    m_barWidth = width;
 }
 
 KisVisualRectangleSelectorShape::~KisVisualRectangleSelectorShape()
@@ -623,15 +627,50 @@ KisVisualRectangleSelectorShape::~KisVisualRectangleSelectorShape()
 
 }
 
+void KisVisualRectangleSelectorShape::setBarWidth(int width)
+{
+    m_barWidth = width;
+}
+
 QPointF KisVisualRectangleSelectorShape::convertShapeCoordinateToWidgetCoordinate(QPointF coordinate)
 {
     qreal x = width()/2;
     qreal y = height()/2;
     KisVisualColorSelectorShape::Dimensions dimension = getDimensions();
-    if (dimension == KisVisualColorSelectorShape::onedimensional && m_type == KisVisualRectangleSelectorShape::vertical) {
-        y = coordinate.x()*height();
-    } else if (dimension == KisVisualColorSelectorShape::onedimensional && m_type == KisVisualRectangleSelectorShape::horizontal) {
-        x = coordinate.x()*width();
+    if (dimension == KisVisualColorSelectorShape::onedimensional) {
+        if ( m_type == KisVisualRectangleSelectorShape::vertical) {
+            y = coordinate.x()*height();
+        } else if (m_type == KisVisualRectangleSelectorShape::horizontal) {
+            x = coordinate.x()*width();
+        } else /*if (m_type == KisVisualRectangleSelectorShape::border) */ {
+
+            QRectF innerRect(m_barWidth/2, m_barWidth/2, width()-m_barWidth, height()-m_barWidth);
+            QPointF left (innerRect.left(),innerRect.center().y());
+            QList <QLineF> polygonLines;
+            polygonLines.append(QLineF(left, innerRect.topLeft()));
+            polygonLines.append(QLineF(innerRect.topLeft(), innerRect.topRight()));
+            polygonLines.append(QLineF(innerRect.topRight(), innerRect.bottomRight()));
+            polygonLines.append(QLineF(innerRect.bottomRight(), innerRect.bottomLeft()));
+            polygonLines.append(QLineF(innerRect.bottomLeft(), left));
+
+            qreal totalLength =0.0;
+            Q_FOREACH(QLineF line, polygonLines) {
+                totalLength += line.length();
+            }
+
+            qreal length = coordinate.x()*totalLength;
+            QPointF intersect(x,y);
+            Q_FOREACH(QLineF line, polygonLines) {
+                if (line.length()>length && length>0){
+                    intersect = line.pointAt(length/line.length());
+
+                }
+                length-=line.length();
+            }
+            x = qRound(intersect.x());
+            y = qRound(intersect.y());
+
+        }
     } else {
         x = coordinate.x()*width();
         y = coordinate.y()*height();
@@ -645,20 +684,60 @@ QPointF KisVisualRectangleSelectorShape::convertWidgetCoordinateToShapeCoordinat
     qreal x = 0.5;
     qreal y = 0.5;
     KisVisualColorSelectorShape::Dimensions dimension = getDimensions();
-    if (dimension == KisVisualColorSelectorShape::onedimensional && m_type == KisVisualRectangleSelectorShape::vertical) {
-        x = (qreal)coordinate.y()/(qreal)height();
-    } else if (dimension == KisVisualColorSelectorShape::onedimensional && m_type == KisVisualRectangleSelectorShape::horizontal) {
-        x = (qreal)coordinate.x()/(qreal)width();
-    } else {
-        x = (qreal)coordinate.x()/(qreal)width();
-        y = (qreal)coordinate.y()/(qreal)height();
-    }
+    if (getMaskMap().contains(coordinate)){
+        if (dimension == KisVisualColorSelectorShape::onedimensional ){
+            if (m_type == KisVisualRectangleSelectorShape::vertical) {
+                x = (qreal)coordinate.y()/(qreal)height();
+            } else if (m_type == KisVisualRectangleSelectorShape::horizontal) {
+                x = (qreal)coordinate.x()/(qreal)width();
+            } else /*if (m_type == KisVisualRectangleSelectorShape::border) */{
+                //border
+
+                QRectF innerRect(m_barWidth, m_barWidth, width()-(m_barWidth*2), height()-(m_barWidth*2));
+                QPointF left (innerRect.left(),innerRect.center().y());
+                QList <QLineF> polygonLines;
+                polygonLines.append(QLineF(left, innerRect.topLeft()));
+                polygonLines.append(QLineF(innerRect.topLeft(), innerRect.topRight()));
+                polygonLines.append(QLineF(innerRect.topRight(), innerRect.bottomRight()));
+                polygonLines.append(QLineF(innerRect.bottomRight(), innerRect.bottomLeft()));
+                polygonLines.append(QLineF(innerRect.bottomLeft(), left));
+
+                QLineF radius(coordinate, this->geometry().center());
+                QPointF intersect(0.5,0.5);
+                qreal length = 0.0;
+                qreal totalLength = 0.0;
+                bool foundIntersect = false;
+                for(int i=0; i<polygonLines.size();i++) {
+                    QLineF line = polygonLines.at(i);
+                    if (line.intersect(radius,&intersect)==QLineF::BoundedIntersection && foundIntersect==false)
+                    {
+                        foundIntersect = true;
+                        length+=QLineF(line.p1(), intersect).length();
+
+                    }
+                    if (foundIntersect==false) {
+                        length+=line.length();
+                    }
+                    totalLength+=line.length();
+                }
+
+                x = length/totalLength;
+
+            }
+        }
+        else {
+            x = (qreal)coordinate.x()/(qreal)width();
+            y = (qreal)coordinate.y()/(qreal)height();
+        }}
     return QPointF(x, y);
 }
 
 QRegion KisVisualRectangleSelectorShape::getMaskMap()
 {
     QRegion mask = QRegion(0,0,width(),height());
+    if (m_type==KisVisualRectangleSelectorShape::border) {
+        mask = mask.subtracted(QRegion(m_barWidth, m_barWidth, width()-(m_barWidth*2), height()-(m_barWidth*2)));
+    }
     return mask;
 }
 
@@ -687,7 +766,7 @@ void KisVisualRectangleSelectorShape::drawCursor()
         rect.setCoords(x, y, x+(cursorwidth*2), y+cursorwidth-2);
     }
 
-    if (getDimensions() == KisVisualColorSelectorShape::onedimensional) {
+    if (getDimensions() == KisVisualColorSelectorShape::onedimensional && m_type!=KisVisualRectangleSelectorShape::border) {
         painter.setPen(Qt::white);
         fill.setColor(Qt::white);
         painter.setBrush(fill);

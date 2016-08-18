@@ -241,18 +241,19 @@ public:
                                          ColorModel model,
                                          const KoColorSpace *cs,
                                          int channel1, int channel2,
-                                         const KoColorDisplayRendererInterface *displayRenderer = KoDumbColorDisplayRenderer::instance(),
+                                         const KoColorDisplayRendererInterface *displayRenderer = KoDumbColorDisplayRenderer::instance(), int width=20,
                                          KisVisualRectangleSelectorShape::singelDTypes d = KisVisualRectangleSelectorShape::vertical
                                          );
     ~KisVisualRectangleSelectorShape();
 
-    void setBarWidth();
+    void setBarWidth(int width);
 
 private:
     virtual QPointF convertShapeCoordinateToWidgetCoordinate(QPointF coordinate);
     virtual QPointF convertWidgetCoordinateToShapeCoordinate(QPoint coordinate);
 
     singelDTypes m_type;
+    int m_barWidth;
     virtual QRegion getMaskMap();
     virtual void drawCursor();
 };

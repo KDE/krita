@@ -235,7 +235,7 @@ class KisVisualRectangleSelectorShape : public KisVisualColorSelectorShape
 {
     Q_OBJECT
 public:
-    enum singelDTypes{vertical, horizontal, border};
+    enum singelDTypes{vertical, horizontal, border, borderMirrored};
     explicit KisVisualRectangleSelectorShape(QWidget *parent,
                                          Dimensions dimension,
                                          ColorModel model,

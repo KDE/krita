@@ -23,6 +23,7 @@ CSVLayerRecord::CSVLayerRecord()
     : layer(0)
     , channel(0)
     , last("")
+    , path()
     , frame(0)
 {
 }

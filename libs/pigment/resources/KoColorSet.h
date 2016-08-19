@@ -27,6 +27,10 @@
 #include "KoColor.h"
 
 struct KoColorSetEntry {
+    KoColorSetEntry() {}
+    KoColorSetEntry(const KoColor &_color, const QString &_name)
+        : color(_color), name(_name) {}
+
     KoColor color;
     QString name;
     bool operator==(const KoColorSetEntry& rhs) const {
@@ -84,6 +88,7 @@ public:
     void removeAt(quint32 index);
     KoColorSetEntry getColor(quint32 index);
     qint32 nColors();
+    void clear();
 
 private:
 

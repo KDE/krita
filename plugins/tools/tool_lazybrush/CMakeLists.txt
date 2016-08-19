@@ -3,9 +3,10 @@
 set(kritatoollazybrush_SOURCES
     tool_lazybrush.cpp
     kis_tool_lazy_brush.cpp
+    kis_tool_lazy_brush_options_widget.cpp
     )
 
-#ki18n_wrap_ui(kritatoollazybrush_SOURCES wdgcolorpicker.ui wdgmovetool.ui)
+ki18n_wrap_ui(kritatoollazybrush_SOURCES kis_tool_lazy_brush_options_widget.ui)
 qt5_add_resources(kritatoollazybrush_SOURCES tool_lazybrush.qrc )
 
 add_library(kritatoollazybrush MODULE ${kritatoollazybrush_SOURCES})

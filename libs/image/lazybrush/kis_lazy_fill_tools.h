@@ -68,12 +68,13 @@ namespace KisLazyFillTools
     struct KRITAIMAGE_EXPORT KeyStroke : public boost::equality_comparable<KeyStroke>
     {
         KeyStroke();
-        KeyStroke(KisPaintDeviceSP _dev, const KoColor &_color);
+        KeyStroke(KisPaintDeviceSP _dev, const KoColor &_color, bool isTransparent = false);
 
         friend bool operator==(const KeyStroke& t1, const KeyStroke&t2);
 
         KisPaintDeviceSP dev;
         KoColor color;
+        bool isTransparent;
     };
 };
 

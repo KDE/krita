@@ -26,9 +26,14 @@
 #include <KoCanvasBase.h>
 #include <KoCanvasController.h>
 
+#include <KisViewManager.h>
+#include "kis_canvas2.h"
 #include "kis_cursor.h"
 #include "kis_config.h"
 #include "kundo2magicstring.h"
+
+#include "kis_tool_lazy_brush_options_widget.h"
+
 
 KisToolLazyBrush::KisToolLazyBrush(KoCanvasBase * canvas)
     : KisToolFreehand(canvas,
@@ -59,7 +64,9 @@ void KisToolLazyBrush::resetCursorStyle()
 
 QWidget * KisToolLazyBrush::createOptionWidget()
 {
-    QWidget *optionsWidget = KisToolFreehand::createOptionWidget();
+    KisCanvas2 * kiscanvas = dynamic_cast<KisCanvas2*>(canvas());
+
+    QWidget *optionsWidget = new KisToolLazyBrushOptionsWidget(kiscanvas->viewManager()->resourceProvider(), 0);
     optionsWidget->setObjectName(toolId() + "option widget");
 
     // // See https://bugs.kde.org/show_bug.cgi?id=316896

@@ -42,6 +42,7 @@
 #include "kis_macro_based_undo_store.h"
 #include "kis_post_execution_undo_adapter.h"
 #include "kis_command_utils.h"
+#include "kis_processing_applicator.h"
 
 
 using namespace KisLazyFillTools;
@@ -151,7 +152,12 @@ void KisColorizeMask::slotUpdateRegenerateFilling()
     if (image) {
         KisColorizeJob *job = new KisColorizeJob(src, m_d->coloringProjection, m_d->filteredSource, image->bounds());
         Q_FOREACH (const KeyStroke &stroke, m_d->keyStrokes) {
-            job->addKeyStroke(stroke.dev, stroke.color);
+            const KoColor color =
+                !stroke.isTransparent ?
+                stroke.color :
+                KoColor(Qt::transparent, stroke.color.colorSpace());
+
+            job->addKeyStroke(stroke.dev, color);
         }
 
         connect(job, SIGNAL(sigFinished()), SLOT(slotRegenerationFinished()));
@@ -409,26 +415,27 @@ void KisColorizeMask::setCurrentColor(const KoColor &color)
 
 
 struct KeyStrokeAddRemoveCommand : public KisCommandUtils::FlipFlopCommand {
-    KeyStrokeAddRemoveCommand(bool add, int index, KeyStroke stroke, QList<KeyStroke> *list, KisNodeSP node)
+    KeyStrokeAddRemoveCommand(bool add, int index, KeyStroke stroke, QList<KeyStroke> *list, KisColorizeMaskSP node)
         : FlipFlopCommand(!add),
           m_index(index), m_stroke(stroke),
           m_list(list), m_node(node) {}
 
     void init() {
         m_list->insert(m_index, m_stroke);
+        emit m_node->sigKeyStrokesListChanged();
     }
 
     void end() {
         KIS_ASSERT_RECOVER_RETURN((*m_list)[m_index] == m_stroke);
         m_list->removeAt(m_index);
+        emit m_node->sigKeyStrokesListChanged();
     }
 
 private:
     int m_index;
     KeyStroke m_stroke;
     QList<KeyStroke> *m_list;
-    // just a pointer to keep the node from deleting
-    KisNodeSP m_node;
+    KisColorizeMaskSP m_node;
 };
 
 void KisColorizeMask::mergeToLayer(KisNodeSP layer, KisPostExecutionUndoAdapter *undoAdapter, const KUndo2MagicString &transactionText,int timedID)
@@ -451,7 +458,7 @@ void KisColorizeMask::mergeToLayer(KisNodeSP layer, KisPostExecutionUndoAdapter 
 
         KUndo2Command *cmd =
             new KeyStrokeAddRemoveCommand(
-                true, m_d->keyStrokes.size(), key, &m_d->keyStrokes, layer);
+                true, m_d->keyStrokes.size(), key, &m_d->keyStrokes, this);
         cmd->redo();
         fakeUndoAdapter.addCommand(toQShared(cmd));
     }
@@ -482,18 +489,19 @@ void KisColorizeMask::mergeToLayer(KisNodeSP layer, KisPostExecutionUndoAdapter 
     if (isTemporaryTargetErasing) {
         lockTemporaryTargetForWrite();
 
-        int index = 0;
-        auto it = m_d->keyStrokes.begin();
-        while (it != m_d->keyStrokes.end()) {
-            if (it->dev->exactBounds().isEmpty()) {
-                fakeUndoAdapter.addCommand(
-                    toQShared(
-                        new KeyStrokeAddRemoveCommand(
-                            false, index, *it, &m_d->keyStrokes, layer)));
-                it = m_d->keyStrokes.erase(it);
+        for (int index = 0; index < m_d->keyStrokes.size(); /*noop*/) {
+            const KeyStroke &stroke = m_d->keyStrokes[index];
+
+            if (stroke.dev->exactBounds().isEmpty()) {
+                KUndo2Command *cmd =
+                    new KeyStrokeAddRemoveCommand(
+                        false, index, stroke, &m_d->keyStrokes, this);
+
+                cmd->redo();
+                fakeUndoAdapter.addCommand(toQShared(cmd));
+
             } else {
-                ++it;
-                ++index;
+                index++;
             }
         }
 
@@ -562,3 +570,92 @@ void KisColorizeMask::setShowKeyStrokes(bool value)
     }
 }
 
+KisColorizeMask::KeyStrokeColors KisColorizeMask::keyStrokesColors() const
+{
+    KeyStrokeColors colors;
+
+    // TODO: thread safety!
+    for (int i = 0; i < m_d->keyStrokes.size(); i++) {
+        colors.colors << m_d->keyStrokes[i].color;
+
+        if (m_d->keyStrokes[i].isTransparent) {
+            colors.transparentIndex = i;
+        }
+    }
+
+    return colors;
+}
+
+struct SetKeyStrokeColorsCommand : public KUndo2Command {
+    SetKeyStrokeColorsCommand(const QList<KeyStroke> newList, QList<KeyStroke> *list, KisColorizeMaskSP node)
+        : m_newList(newList),
+          m_oldList(*list),
+          m_list(list),
+          m_node(node) {}
+
+    void redo() {
+        *m_list = m_newList;
+
+        emit m_node->sigKeyStrokesListChanged();
+        m_node->setDirty();
+    }
+
+    void undo() {
+        *m_list = m_oldList;
+
+        emit m_node->sigKeyStrokesListChanged();
+        m_node->setDirty();
+    }
+
+private:
+    QList<KeyStroke> m_newList;
+    QList<KeyStroke> m_oldList;
+    QList<KeyStroke> *m_list;
+    KisColorizeMaskSP m_node;
+};
+
+void KisColorizeMask::setKeyStrokesColors(KeyStrokeColors colors)
+{
+    KIS_ASSERT_RECOVER_RETURN(colors.colors.size() == m_d->keyStrokes.size());
+
+    QList<KeyStroke> newList = m_d->keyStrokes;
+
+    for (int i = 0; i < newList.size(); i++) {
+        newList[i].color = colors.colors[i];
+        newList[i].isTransparent = colors.transparentIndex == i;
+    }
+
+    KisProcessingApplicator applicator(fetchImage(), this,
+                                       KisProcessingApplicator::NONE,
+                                       KisImageSignalVector(),
+                                       kundo2_i18n("Change Key Stroke Color"));
+    applicator.applyCommand(
+        new SetKeyStrokeColorsCommand(
+            newList, &m_d->keyStrokes, this));
+
+    applicator.end();
+}
+
+void KisColorizeMask::removeKeyStroke(const KoColor &color)
+{
+    QList<KeyStroke>::iterator it =
+        std::find_if(m_d->keyStrokes.begin(),
+                     m_d->keyStrokes.end(),
+                     [color] (const KeyStroke &s) {
+                         return s.color == color;
+                     });
+
+    KIS_SAFE_ASSERT_RECOVER_RETURN(it != m_d->keyStrokes.end());
+
+    const int index = it - m_d->keyStrokes.begin();
+
+    KisProcessingApplicator applicator(fetchImage(), this,
+                                       KisProcessingApplicator::NONE,
+                                       KisImageSignalVector(),
+                                       kundo2_i18n("Remove Key Stroke"));
+    applicator.applyCommand(
+        new KeyStrokeAddRemoveCommand(
+            false, index, *it, &m_d->keyStrokes, this));
+
+    applicator.end();
+}

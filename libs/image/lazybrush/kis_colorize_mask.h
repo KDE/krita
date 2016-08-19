@@ -32,6 +32,12 @@ class KRITAIMAGE_EXPORT KisColorizeMask : public KisEffectMask
 {
     Q_OBJECT
 public:
+    struct KeyStrokeColors {
+        QVector<KoColor> colors;
+        int transparentIndex;
+    };
+
+public:
     KisColorizeMask();
     ~KisColorizeMask();
 
@@ -61,6 +67,24 @@ public:
     QRect exactBounds() const;
     QRect extent() const;
 
+    void setSectionModelProperties(const KisBaseNode::PropertyList &properties);
+    KisBaseNode::PropertyList sectionModelProperties() const;
+
+    KeyStrokeColors keyStrokesColors() const;
+    void setKeyStrokesColors(KeyStrokeColors colors);
+
+    void removeKeyStroke(const KoColor &color);
+
+private Q_SLOTS:
+    void slotUpdateRegenerateFilling();
+    void slotRegenerationFinished();
+
+Q_SIGNALS:
+    void sigKeyStrokesListChanged();
+
+private:
+    // NOTE: please access this methods using model properties only!
+
     bool needsUpdate() const;
     void setNeedsUpdate(bool value);
 
@@ -69,14 +93,6 @@ public:
 
     bool showKeyStrokes() const;
     void setShowKeyStrokes(bool value);
-
-    void setSectionModelProperties(const KisBaseNode::PropertyList &properties);
-    KisBaseNode::PropertyList sectionModelProperties() const;
-
-
-private Q_SLOTS:
-    void slotUpdateRegenerateFilling();
-    void slotRegenerationFinished();
 
 private:
     KisImageSP fetchImage() const;

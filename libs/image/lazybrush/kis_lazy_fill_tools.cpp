@@ -155,17 +155,21 @@ void cutOneWay(const KoColor &color,
 
 
 KeyStroke::KeyStroke()
+    : isTransparent(false)
 {
 }
 
-KeyStroke::KeyStroke(KisPaintDeviceSP _dev, const KoColor &_color)
-    : dev(_dev), color(_color)
+KeyStroke::KeyStroke(KisPaintDeviceSP _dev, const KoColor &_color, bool _isTransparent)
+    : dev(_dev), color(_color), isTransparent(_isTransparent)
 {
 }
 
 bool operator==(const KeyStroke& t1, const KeyStroke&t2)
 {
-    return t1.dev == t2.dev && t1.color == t2.color;
+    return
+        t1.dev == t2.dev &&
+        t1.color == t2.color &&
+        t1.isTransparent == t2.isTransparent;
 }
 
 }

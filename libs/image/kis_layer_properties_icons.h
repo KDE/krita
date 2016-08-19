@@ -50,6 +50,16 @@ public:
     static KisBaseNode::Property getProperty(const KoID &id, bool state,
                                               bool isInStasis, bool stateInStasis);
 
+    /**
+     * Sets the specified property of the node and updates it
+     */
+    static void setNodeProperty(KisNodeSP node, const KoID &id, const QVariant &value, KisImageSP image);
+
+    /**
+     * Gets the specified property of the node
+     */
+    static QVariant nodeProperty(KisNodeSP node, const KoID &id, const QVariant &defaultValue);
+
 private:
     void updateIcons();
 

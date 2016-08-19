@@ -353,6 +353,8 @@ set(kritaui_LIB_SRCS
     KisRemoteFileFetcher.cpp
 
     KisPaletteModel.cpp
+    kis_palette_delegate.cpp
+    kis_palette_view.cpp
     KisColorsetChooser.cpp
     KisSaveGroupVisitor.cpp
 )

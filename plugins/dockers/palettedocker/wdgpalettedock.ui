@@ -14,11 +14,20 @@
    <property name="spacing">
     <number>1</number>
    </property>
-   <property name="margin">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
     <number>0</number>
    </property>
    <item>
-    <widget class="KoTableView" name="paletteView">
+    <widget class="KisPaletteView" name="paletteView">
      <property name="minimumSize">
       <size>
        <width>0</width>
@@ -117,9 +126,9 @@
    <header>kis_popup_button.h</header>
   </customwidget>
   <customwidget>
-   <class>KoTableView</class>
+   <class>KisPaletteView</class>
    <extends>QTableView</extends>
-   <header location="global">KoTableView.h</header>
+   <header location="global">kis_palette_view.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

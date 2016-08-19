@@ -36,6 +36,7 @@ class KoCanvasBase;
 
 class KisToolLazyBrush : public KisToolFreehand
 {
+    Q_OBJECT
 public:
     KisToolLazyBrush(KoCanvasBase * canvas);
     virtual ~KisToolLazyBrush();
@@ -43,7 +44,7 @@ public:
     QWidget * createOptionWidget();
 
 protected Q_SLOTS:
-    virtual void resetCursorStyle();
+    void resetCursorStyle();
 
 public Q_SLOTS:
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);

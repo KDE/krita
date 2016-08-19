@@ -97,6 +97,10 @@ class KisTransparencyMask;
 typedef KisSharedPtr<KisTransparencyMask> KisTransparencyMaskSP;
 typedef KisWeakSharedPtr<KisTransparencyMask> KisTransparencyMaskWSP;
 
+class KisColorizeMask;
+typedef KisSharedPtr<KisColorizeMask> KisColorizeMaskSP;
+typedef KisWeakSharedPtr<KisColorizeMask> KisColorizeMaskWSP;
+
 class KisLayer;
 typedef KisSharedPtr<KisLayer> KisLayerSP;
 typedef KisWeakSharedPtr<KisLayer> KisLayerWSP;

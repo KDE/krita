@@ -24,6 +24,9 @@
 Q_GLOBAL_STATIC(KisLayerPropertiesIcons, s_instance)
 
 #include <kis_icon_utils.h>
+#include <kis_node.h>
+#include <commands/kis_node_property_list_command.h>
+#include "kis_image.h"
 
 
 const KoID KisLayerPropertiesIcons::locked("locked", ki18n("Locked"));
@@ -102,4 +105,35 @@ KisBaseNode::Property KisLayerPropertiesIcons::getProperty(const KoID &id, bool 
     return KisBaseNode::Property(id,
                                  pair.on, pair.off, state,
                                  isInStasis, stateInStasis);
+}
+
+void KisLayerPropertiesIcons::setNodeProperty(KisNodeSP node, const KoID &id, const QVariant &value, KisImageSP image)
+{
+    KisBaseNode::PropertyList props = node->sectionModelProperties();
+
+    KisBaseNode::PropertyList::iterator it = props.begin();
+    KisBaseNode::PropertyList::iterator end = props.end();
+    for (; it != end; ++it) {
+        if (it->id == id.id()) {
+            it->state = value;
+            break;
+        }
+    }
+
+    KisNodePropertyListCommand::setNodePropertiesNoUndo(node, image, props);
+}
+
+QVariant KisLayerPropertiesIcons::nodeProperty(KisNodeSP node, const KoID &id, const QVariant &defaultValue)
+{
+    KisBaseNode::PropertyList props = node->sectionModelProperties();
+
+    KisBaseNode::PropertyList::const_iterator it = props.constBegin();
+    KisBaseNode::PropertyList::const_iterator end = props.constEnd();
+    for (; it != end; ++it) {
+        if (it->id == id.id()) {
+            return it->state;
+        }
+    }
+
+    return defaultValue;
 }

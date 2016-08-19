@@ -115,8 +115,8 @@ void KisVisualColorSelector::slotsetColorSpace(const KoColorSpace *cs)
             block->setGeometry(geom);
             block->setTriangle();
             //There's a really weird bug where touching the geometry makes the widget hide itself??? This didn't happen with layouts so, I am confused.//
-            block->show();
-            bar->show();
+            //block->show();
+            //bar->show();
             qDebug()<<bar->geometry();
             qDebug()<<bar->pos();
             qDebug()<<block->geometry();
@@ -232,6 +232,7 @@ KisVisualColorSelectorShape::KisVisualColorSelectorShape(QWidget *parent,
     this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     m_d->updateTimer = new KisSignalCompressor(100 /* ms */, KisSignalCompressor::POSTPONE, this);
     setDisplayRenderer(displayRenderer);
+    show();
 
 }
 

@@ -56,7 +56,10 @@ KisColorizeJob::~KisColorizeJob()
 
 void KisColorizeJob::addKeyStroke(KisPaintDeviceSP dev, const KoColor &color)
 {
-    m_d->keyStrokes << KeyStroke(dev, color);
+    KoColor convertedColor(color);
+    convertedColor.convertTo(m_d->dst->colorSpace());
+
+    m_d->keyStrokes << KeyStroke(dev, convertedColor);
 }
 
 void KisColorizeJob::run()

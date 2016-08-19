@@ -323,9 +323,9 @@ QPixmap KisVisualColorSelectorShape::getPixmap()
     if (m_d->pixmapsNeedUpdate == true) {
         m_d->pixmapsNeedUpdate = false;
         m_d->gradient = QPixmap(width(), height());
-        m_d->gradient.fill(Qt::black);
+        m_d->gradient.fill(Qt::transparent);
         QImage img(width(), height(), QImage::Format_RGB32);
-        img.fill(Qt::black);
+        img.fill(Qt::transparent);;
 
         for (int y = 0; y<img.height(); y++) {
             for (int x=0; x<img.width(); x++) {
@@ -989,7 +989,19 @@ void KisVisualEllipticalSelectorShape::drawCursor()
     QPainter painter;
     painter.begin(&fullSelector);
     painter.setRenderHint(QPainter::Antialiasing);
-    //QPainterPath path;
+
+    painter.save();
+    //painter.setCompositionMode(QPainter::CompositionMode_Clear);
+    QPen pen;
+    pen.setColor(this->palette().background().color());
+    pen.setWidth(5);
+    painter.setPen(pen);
+    painter.drawEllipse(this->geometry());
+    if (getDimensions()==KisVisualColorSelectorShape::onedimensional) {
+        painter.drawEllipse(QRect(this->geometry().top()+m_barWidth, this->geometry().left()+m_barWidth, this->geometry().width()-(m_barWidth*2), this->geometry().height()-(m_barWidth*2)));
+    }
+    painter.restore();
+
     QBrush fill;
     fill.setStyle(Qt::SolidPattern);
 
@@ -1128,6 +1140,16 @@ void KisVisualTriangleSelectorShape::drawCursor()
     QPainter painter;
     painter.begin(&fullSelector);
     painter.setRenderHint(QPainter::Antialiasing);
+
+    painter.save();
+    //painter.setCompositionMode(QPainter::CompositionMode_Clear);
+    QPen pen;
+    pen.setColor(this->palette().background().color());
+    pen.setWidth(5);
+    painter.setPen(pen);
+    painter.drawPolygon(m_triangle);
+    painter.restore();
+
     //QPainterPath path;
     QBrush fill;
     fill.setStyle(Qt::SolidPattern);

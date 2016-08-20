@@ -120,13 +120,13 @@ public:
      * the pixmap will not change unless 'm_d->setPixmap=true' which is toggled by
      * refresh and update functions.
      */
-    QPixmap getPixmap();
+    QImage getImageMap();
     /**
      * @brief setFullImage
      * Set the full widget image to be painted.
      * @param full this should be the full image.
      */
-    void setFullImage(QPixmap full);
+    void setFullImage(QImage full);
     /**
      * @brief getCurrentColor
      * @return the current kocolor

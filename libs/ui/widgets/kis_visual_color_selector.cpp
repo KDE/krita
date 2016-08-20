@@ -194,9 +194,9 @@ void KisVisualColorSelector::leaveEvent(QEvent *)
 /*------------Selector shape------------*/
 struct KisVisualColorSelectorShape::Private
 {
-    QPixmap gradient;
-    QPixmap fullSelector;
-    bool pixmapsNeedUpdate = true;
+    QImage gradient;
+    QImage fullSelector;
+    bool imagesNeedUpdate= true;
     QPointF currentCoordinates;
     Dimensions dimension;
     ColorModel model;
@@ -261,7 +261,7 @@ void KisVisualColorSelectorShape::setColor(KoColor c)
     m_d->currentColor = c;
     updateCursor();
     convertShapeCoordinateToKoColor(getCursorPosition(), true);
-    m_d->pixmapsNeedUpdate = true;
+    m_d->imagesNeedUpdate = true;
     update();
 }
 
@@ -272,7 +272,7 @@ void KisVisualColorSelectorShape::setColorFromSibling(KoColor c)
     }
     m_d->currentColor = c;
     Q_EMIT sigNewColor(c);
-    m_d->pixmapsNeedUpdate = true;
+    m_d->imagesNeedUpdate = true;
     update();
 }
 
@@ -294,7 +294,7 @@ void KisVisualColorSelectorShape::setDisplayRenderer (const KoColorDisplayRender
 void KisVisualColorSelectorShape::updateFromChangedDisplayRenderer()
 {
     qDebug()<<"update from changed display renderer";
-    m_d->pixmapsNeedUpdate = true;
+    m_d->imagesNeedUpdate = true;
     updateCursor();
     //m_d->currentColor = convertShapeCoordinateToKoColor(getCursorPosition());
     update();
@@ -315,30 +315,30 @@ void KisVisualColorSelectorShape::slotSetActiveChannels(int channel1, int channe
     int maxchannel = m_d->cs->colorChannelCount()-1;
     m_d->channel1 = qBound(0, channel1, maxchannel);
     m_d->channel2 = qBound(0, channel2, maxchannel);
-    m_d->pixmapsNeedUpdate = true;
+    m_d->imagesNeedUpdate = true;
     update();
 }
 
-QPixmap KisVisualColorSelectorShape::getPixmap()
+QImage KisVisualColorSelectorShape::getImageMap()
 {
-    if (m_d->pixmapsNeedUpdate == true) {
-        m_d->pixmapsNeedUpdate = false;
-        m_d->gradient = QPixmap(width(), height());
+    if (m_d->imagesNeedUpdate == true) {
+        m_d->imagesNeedUpdate = false;
+        m_d->gradient = QImage(width(), height(), QImage::Format_ARGB32);
         m_d->gradient.fill(Qt::transparent);
-        QImage img(width(), height(), QImage::Format_RGB32);
-        img.fill(Qt::transparent);;
-
+        QImage img(width(), height(), QImage::Format_ARGB32);
+        img.fill(Qt::transparent);
         for (int y = 0; y<img.height(); y++) {
-            for (int x=0; x<img.width(); x++) {
+            uint* data = reinterpret_cast<uint*>(img.scanLine(y));
+            for (int x=0; x<img.width(); x++,  ++data) {
                 QPoint widgetPoint(x,y);
                 QPointF newcoordinate = convertWidgetCoordinateToShapeCoordinate(widgetPoint);
                 KoColor c = convertShapeCoordinateToKoColor(newcoordinate);
                 QColor col = getColorFromConverter(c);
-                img.setPixel(widgetPoint, col.rgb());
+                *data = col.rgba();
             }
         }
 
-        m_d->gradient = QPixmap::fromImage(img, Qt::AvoidDither);
+        m_d->gradient = img;
     }
     return m_d->gradient;
 }
@@ -574,11 +574,11 @@ void KisVisualColorSelectorShape::paintEvent(QPaintEvent*)
 
     //check if old and new colors differ.
 
-    if (m_d->pixmapsNeedUpdate) {
+    if (m_d->imagesNeedUpdate) {
         setMask(getMaskMap());
     }
     drawCursor();
-    painter.drawPixmap(0,0,m_d->fullSelector);
+    painter.drawImage(0,0,m_d->fullSelector);
 }
 
 KisVisualColorSelectorShape::Dimensions KisVisualColorSelectorShape::getDimensions()
@@ -591,7 +591,7 @@ KisVisualColorSelectorShape::ColorModel KisVisualColorSelectorShape::getColorMod
     return m_d->model;
 }
 
-void KisVisualColorSelectorShape::setFullImage(QPixmap full)
+void KisVisualColorSelectorShape::setFullImage(QImage full)
 {
     m_d->fullSelector = full;
 }
@@ -836,7 +836,7 @@ QRegion KisVisualRectangleSelectorShape::getMaskMap()
 void KisVisualRectangleSelectorShape::drawCursor()
 {
     QPointF cursorPoint = convertShapeCoordinateToWidgetCoordinate(getCursorPosition());
-    QPixmap fullSelector = getPixmap();
+    QImage fullSelector = getImageMap();
     QColor col = getColorFromConverter(getCurrentColor());
     QPainter painter;
     painter.begin(&fullSelector);
@@ -984,16 +984,15 @@ QRegion KisVisualEllipticalSelectorShape::getMaskMap()
 void KisVisualEllipticalSelectorShape::drawCursor()
 {
     QPointF cursorPoint = convertShapeCoordinateToWidgetCoordinate(getCursorPosition());
-    QPixmap fullSelector = getPixmap();
+    QImage fullSelector = getImageMap();
     QColor col = getColorFromConverter(getCurrentColor());
     QPainter painter;
     painter.begin(&fullSelector);
     painter.setRenderHint(QPainter::Antialiasing);
 
     painter.save();
-    //painter.setCompositionMode(QPainter::CompositionMode_Clear);
+    painter.setCompositionMode(QPainter::CompositionMode_Clear);
     QPen pen;
-    pen.setColor(this->palette().background().color());
     pen.setWidth(5);
     painter.setPen(pen);
     painter.drawEllipse(this->geometry());
@@ -1135,16 +1134,15 @@ QRegion KisVisualTriangleSelectorShape::getMaskMap()
 void KisVisualTriangleSelectorShape::drawCursor()
 {
     QPointF cursorPoint = convertShapeCoordinateToWidgetCoordinate(getCursorPosition());
-    QPixmap fullSelector = getPixmap();
+    QImage fullSelector = getImageMap();
     QColor col = getColorFromConverter(getCurrentColor());
     QPainter painter;
     painter.begin(&fullSelector);
     painter.setRenderHint(QPainter::Antialiasing);
 
     painter.save();
-    //painter.setCompositionMode(QPainter::CompositionMode_Clear);
+    painter.setCompositionMode(QPainter::CompositionMode_Clear);
     QPen pen;
-    pen.setColor(this->palette().background().color());
     pen.setWidth(5);
     painter.setPen(pen);
     painter.drawPolygon(m_triangle);

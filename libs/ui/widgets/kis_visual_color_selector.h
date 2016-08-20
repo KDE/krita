@@ -311,6 +311,8 @@ private:
     singelDTypes m_type;
     int m_barWidth;
     QPolygon m_triangle;
+    QPointF m_center;
+    qreal m_radius;
     virtual QRegion getMaskMap();
     virtual void drawCursor();
 };

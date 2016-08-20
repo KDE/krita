@@ -1062,63 +1062,63 @@ void KisVisualTriangleSelectorShape::setBarWidth(int width)
 
 void KisVisualTriangleSelectorShape::setTriangle()
 {
-    QPoint apex = QPoint (width(),height()/2);
+    QPoint apex = QPoint (width()*0.5,0);
     QPolygon triangle;
-    triangle<< QPoint(0,0) << apex << QPoint(0,height()) << QPoint(0,0);
+    triangle<< QPoint(0,height()) << apex << QPoint(width(),height()) << QPoint(0,height());
     m_triangle = triangle;
-
+    QLineF a(triangle.at(0),triangle.at(1));
+    QLineF b(triangle.at(0),triangle.at(2));
+    QLineF ap(triangle.at(2), a.pointAt(0.5));
+    QLineF bp(triangle.at(1), b.pointAt(0.5));
+    QPointF intersect;
+    ap.intersect(bp,&intersect);
+    m_center = intersect;
+    QLineF r(triangle.at(0), intersect);
+    m_radius = r.length();
 }
 
 QRect KisVisualTriangleSelectorShape::setGeometryByRadius(QLineF radius)
 {
-    QPolygon triangle;
-    radius.setAngle(120);//point at yellow :)
-    QPointF tl = radius.p2();
-    radius.setAngle(0);//point to cyan :)
-    QPointF mr = radius.p2();
-    radius.setAngle(240);//point to magenta :)
+    radius.setAngle(90);//point at yellowgreen :)
+    QPointF t = radius.p2();
+    radius.setAngle(330);//point to purple :)
+    QPointF br = radius.p2();
+    radius.setAngle(210);//point to cerulean :)
     QPointF bl = radius.p2();
-    QPointF br = QPoint(mr.x(),bl.y());
+    QPointF tl = QPoint(bl.x(),t.y());
     QRect r(tl.toPoint(), br.toPoint());
     return r;
 }
 
 QPointF KisVisualTriangleSelectorShape::convertShapeCoordinateToWidgetCoordinate(QPointF coordinate)
 {
-    qreal x = width()/2;
-    qreal y = height()/2;
+    qreal y = coordinate.y()*height();
+
+    qreal triWidth = width();
+    qreal horizontalLineLength = y*(2./sqrt(3.));
+    qreal horizontalLineStart = triWidth/2.-horizontalLineLength/2.;
+    qreal relativeX = coordinate.x()*horizontalLineLength;
+    qreal x = relativeX + horizontalLineStart;
+
+
     return QPointF(x,y);
 }
 
 QPointF KisVisualTriangleSelectorShape::convertWidgetCoordinateToShapeCoordinate(QPoint coordinate)
 {
-    //default implementation: gotten from the kotrianglecolorselector.
+    //default implementation: gotten from the kotrianglecolorselector/kis_color_selector_triangle.
     qreal x = 0.5;
-    qreal y = 1.0;
-    /*qreal triangleRadius = (width()/2) * 0.9;
-    qreal triangleLength = 3.0 / sqrt(3.0) * triangleRadius;
-    qreal triangleHeight = triangleLength * sqrt(3.0) * 0.5;
-    qreal triangleTop = 0.5 * width() - triangleRadius;
-    qreal triangleBottom = triangleHeight + triangleTop;
+    qreal y = 0.5;
 
-    qreal ynormalize = ( triangleTop - coordinate.y() ) / ( triangleTop - triangleBottom );
-    qreal ls_ = (ynormalize) * triangleLength;
-    qreal startx_ = center.x() - 0.5 * ls_;
-    */
-    QLineF valLine(m_triangle.at(2), m_triangle.at(1));
-    QLineF satLine(m_triangle.at(0), m_triangle.at(2));
-    QLineF coordinateLine(coordinate, m_triangle.at(0));
-    coordinateLine.setAngle(satLine.angle()+90);
-    QPointF intersect(0.0,0.0);
-    if (valLine.intersect(coordinateLine, &intersect)!=QLineF::NoIntersection) {
-        y = coordinateLine.length()/ QLineF(m_triangle.at(0),intersect).length();
-    }
-    coordinateLine.setP2(m_triangle.at(1));
-    coordinateLine.setAngle(valLine.angle()+90);
-    if (valLine.intersect(coordinateLine, &intersect)!=QLineF::NoIntersection) {
-        x = QLineF(valLine.p1(), intersect).length()/valLine.length();
-    }
-    //x = ((qreal)coordinate.x()/width() );
+
+    y = (qreal)coordinate.y()/height();
+
+    qreal triWidth = width();
+    qreal horizontalLineLength = ((qreal)coordinate.y())*(2./sqrt(3.));
+    qreal horizontalLineStart = (triWidth*0.5)-(horizontalLineLength*0.5);
+
+    qreal relativeX = (qreal)coordinate.x()-horizontalLineStart;
+    x = relativeX/horizontalLineLength;
 
     return QPointF(x, y);
 }

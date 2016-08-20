@@ -113,6 +113,9 @@ private Q_SLOTS:
      */
     void setPreviousColor();
 
+    void slotSetColorFromPatch(KoColorPatch* patch);
+
+
 private:
     Ui_WdgDlgInternalColorSelector *m_ui; //the UI
     struct Private; //The private struct
@@ -125,7 +128,7 @@ private:
      */
     void updateAllElements(QObject *source);
 
-    virtual void leaveEvent(QEvent *);
+    virtual void focusInEvent(QFocusEvent *e);
 };
 
 #endif // KISINTERNALCOLORSELECTOR_H

@@ -53,6 +53,7 @@ KisInternalColorSelector::KisInternalColorSelector(QWidget *parent, KoColor colo
      ,m_d(new Private)
 {
     setModal(modal);
+    this->setFocusPolicy(Qt::ClickFocus);
     m_ui = new Ui_WdgDlgInternalColorSelector();
     m_ui->setupUi(this);
     if (!modal) {
@@ -90,9 +91,12 @@ KisInternalColorSelector::KisInternalColorSelector(QWidget *parent, KoColor colo
 
     m_ui->currentColor->setColor(m_d->currentColor);
     m_ui->currentColor->setDisplayRenderer(displayRenderer);
+    m_ui->currentColor->setFrameStyle(QFrame::StyledPanel);
     m_ui->previousColor->setColor(m_d->currentColor);
     m_ui->previousColor->setDisplayRenderer(displayRenderer);
+    m_ui->previousColor->setFrameStyle(QFrame::StyledPanel);
     connect(this, SIGNAL(accepted()), this, SLOT(setPreviousColor()));
+    connect(m_ui->previousColor, SIGNAL(triggered(KoColorPatch*)), SLOT(slotSetColorFromPatch(KoColorPatch*)));
 
     connect(this, SIGNAL(signalForegroundColorChosen(KoColor)), this, SLOT(slotLockSelector()));
     m_d->compressColorChanges = new KisSignalCompressor(100 /* ms */, KisSignalCompressor::POSTPONE, this);
@@ -205,8 +209,12 @@ void KisInternalColorSelector::endUpdateWithNewColor()
     m_d->allowUpdates = true;
 }
 
-void KisInternalColorSelector::leaveEvent(QEvent *)
+void KisInternalColorSelector::focusInEvent(QFocusEvent *e)
 {
-    setPreviousColor();
+        setPreviousColor();
+}
 
+void KisInternalColorSelector::slotSetColorFromPatch(KoColorPatch* patch)
+{
+    slotColorUpdated(patch->color());
 }

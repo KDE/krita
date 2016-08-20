@@ -165,7 +165,21 @@ void KoDualColorButton::setDisplayRenderer(const KoColorDisplayRendererInterface
     if (displayRenderer) {
         d->displayRenderer = displayRenderer;
         d->colorSelectorDialog->setDisplayRenderer(displayRenderer);
+    } else {
+        d->displayRenderer = KoDumbColorDisplayRenderer::instance();
     }
+}
+
+QColor KoDualColorButton::getColorFromDisplayRenderer(KoColor c)
+{
+    QColor col;
+    if (d->displayRenderer) {
+        c.convertTo(d->displayRenderer->getPaintingColorSpace());
+        col = d->displayRenderer->toQColor(c);
+    } else {
+        col = c.toQColor();
+    }
+    return col;
 }
 
 void KoDualColorButton::setPopDialog( bool popDialog )
@@ -189,8 +203,8 @@ void KoDualColorButton::paintEvent(QPaintEvent *)
   metrics( foregroundRect, backgroundRect );
 
   QBrush defBrush = palette().brush( QPalette::Button );
-  QBrush foregroundBrush( d->displayRenderer->toQColor(d->foregroundColor), Qt::SolidPattern );
-  QBrush backgroundBrush( d->displayRenderer->toQColor(d->backgroundColor), Qt::SolidPattern );
+  QBrush foregroundBrush( getColorFromDisplayRenderer(d->foregroundColor), Qt::SolidPattern );
+  QBrush backgroundBrush( getColorFromDisplayRenderer(d->backgroundColor), Qt::SolidPattern );
 
   qDrawShadeRect( &painter, backgroundRect, palette(), false, 1, 0,
                   isEnabled() ? &backgroundBrush : &defBrush );
@@ -286,8 +300,8 @@ void KoDualColorButton::mouseMoveEvent( QMouseEvent *event )
     if ( event->x() >= d->dragPosition.x() + delay || event->x() <= d->dragPosition.x() - delay ||
          event->y() >= d->dragPosition.y() + delay || event->y() <= d->dragPosition.y() - delay ) {
       KColorMimeData::createDrag( d->tmpSelection == Foreground ?
-                                  d->displayRenderer->toQColor(d->foregroundColor) :
-                                  d->displayRenderer->toQColor(d->backgroundColor),
+                                  getColorFromDisplayRenderer(d->foregroundColor) :
+                                  getColorFromDisplayRenderer(d->backgroundColor),
                                   this )->start();
       d->dragFlag = true;
     }

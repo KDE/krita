@@ -120,6 +120,15 @@ class KRITAWIDGETS_EXPORT KoDualColorButton : public QWidget
     void setDisplayRenderer(const KoColorDisplayRendererInterface *displayRenderer);
 
     /**
+     * @brief getColorFromDisplayRenderer
+     * convenience function to get the right qcolor from the display renderer, including checking
+     * whether the display renderer actually exists.
+     * @param c the kocolor to convert.
+     * @return the qcolor to use for display.
+     */
+    QColor getColorFromDisplayRenderer(KoColor c);
+
+    /**
      * Sets if a dialog with a color chooser should be popped up when clicking
      * If you set this to false then you could connect to the pleasePopDialog signal
      * and pop your own dialog. Just set the current color afterwards.

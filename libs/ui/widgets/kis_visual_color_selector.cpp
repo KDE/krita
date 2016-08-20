@@ -929,22 +929,22 @@ void KisVisualEllipticalSelectorShape::setBarWidth(int width)
 
 QPointF KisVisualEllipticalSelectorShape::convertShapeCoordinateToWidgetCoordinate(QPointF coordinate)
 {
-    qreal x = width()/2;
-    qreal y = height()/2;
-    QRect total(0, 0, width(), height());
-    qreal a = total.width()/2;
-    if (m_type!=KisVisualEllipticalSelectorShape::borderMirrored) {
-        QLineF line(total.center(), total.topLeft());
-        line.setAngle(coordinate.x()*360.0);
-        //qreal totalLength = ( (a*b) / qSqrt( qPow( b*qCos(line.angle()),2 ) + qPow(a*qSin(line.angle()),2 ) ));
-        line.setLength(coordinate.y()*a);
-        if (getDimensions()==KisVisualColorSelectorShape::onedimensional) {
-            line.setLength(a-m_barWidth);
-        }
-        x = qRound(line.p2().x());
-        y = qRound(line.p2().y());
+    qreal x;
+    qreal y;
+    qreal a = (qreal)width()*0.5;
+    QPointF center(a, a);
+    QLineF line(center, QPoint((m_barWidth*0.5),a));
+    qreal angle = coordinate.x()*360.0;
+    angle = fmod(angle+180.0,360.0);
+    line.setAngle(angle);
+    if (getDimensions()!=KisVisualColorSelectorShape::onedimensional) {
 
+        if (m_type!=KisVisualEllipticalSelectorShape::borderMirrored) {
+            line.setLength(coordinate.y()*a);
+        }
     }
+    x = qRound(line.p2().x());
+    y = qRound(line.p2().y());
     qDebug()<<QPoint(x,y);
     return QPointF(x,y);
 }
@@ -958,14 +958,13 @@ QPointF KisVisualEllipticalSelectorShape::convertWidgetCoordinateToShapeCoordina
         QRect total(0, 0, width(), height());
         QLineF line(total.center(), coordinate);
         qreal a = total.width()/2;
-        //qreal b = qMin(total.width()/2,total.height()/2);
-        //qreal totalLength = ( (a*b) / qSqrt( qPow( b*qCos(line.angle()),2 ) + qPow(a*qSin(line.angle()),2 ) ));
+
         if (m_type!=KisVisualEllipticalSelectorShape::borderMirrored){
-            x = line.angle()/360.0;
+            x = fmod((line.angle()+180.0), 360.0)/360.0;
             y = qBound(0.0,line.length()/a, 1.0);
 
         } else {
-            x = (line.angle()/360.0)/2;
+            x = (fmod((line.angle()+180.0), 360.0)/360.0)/2;
             y = line.length()/a;
         }
 

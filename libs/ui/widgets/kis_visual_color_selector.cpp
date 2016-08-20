@@ -353,7 +353,7 @@ KoColor KisVisualColorSelectorShape::convertShapeCoordinateToKoColor(QPointF coo
     maxvalue.fill(1.0);
     if (m_d->displayRenderer
             && m_d->displayRenderer->getPaintingColorSpace()==m_d->cs
-            && m_d->cs->colorDepthId().id().contains("f")) {
+            && m_d->cs->colorDepthId().id().contains("F")) {
         for (int ch = 0; ch<maxvalue.size(); ch++) {
             KoChannelInfo *channel = m_d->cs->channels()[ch];
             maxvalue[ch] = m_d->displayRenderer->maxVisibleFloatValue(channel);
@@ -462,7 +462,7 @@ QPointF KisVisualColorSelectorShape::convertKoColorToShapeCoordinate(KoColor c)
     maxvalue.fill(1.0);
     if (m_d->displayRenderer
             && m_d->displayRenderer->getPaintingColorSpace()==m_d->cs
-            && m_d->cs->colorDepthId().id().contains("f")) {
+            && m_d->cs->colorDepthId().id().contains("F")) {
         for (int ch = 0; ch<maxvalue.size(); ch++) {
             KoChannelInfo *channel = m_d->cs->channels()[ch];
             maxvalue[ch] = m_d->displayRenderer->maxVisibleFloatValue(channel);

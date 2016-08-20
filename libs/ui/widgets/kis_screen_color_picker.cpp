@@ -53,6 +53,7 @@ KisScreenColorPicker::KisScreenColorPicker(QWidget *parent) : QWidget(parent), m
     this->setLayout(layout);
     m_d->screenColorPickerButton = new QPushButton();
     m_d->screenColorPickerButton->setIcon(kisIcon("krita_tool_color_picker"));
+    m_d->screenColorPickerButton->setMinimumHeight(25);
     this->layout()->addWidget(m_d->screenColorPickerButton);
     m_d->lblScreenColorInfo = new QLabel(QLatin1String("\n"));
     this->layout()->addWidget(m_d->lblScreenColorInfo);

@@ -41,6 +41,7 @@
 #include <WidgetsDebug.h>
 
 #include <resources/KoColorSet.h>
+#include <KoColorDisplayRendererInterface.h>
 
 class KoColorPatch;
 
@@ -64,6 +65,10 @@ public:
     void activateRecent(int i);
     void fillColors();
     void addRemoveColors();
+
+    QList<KoColorPatch*> patchWidgetList;
+    const KoColorDisplayRendererInterface *displayRenderer;
+
 };
 
 #endif

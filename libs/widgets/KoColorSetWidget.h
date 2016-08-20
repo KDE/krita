@@ -25,6 +25,7 @@
 #include <QFrame>
 
 #include "kritawidgets_export.h"
+#include <KoColorDisplayRendererInterface.h>
 
 class KoColor;
 class KoColorSet;
@@ -60,6 +61,13 @@ public:
      */
     void setColorSet(KoColorSet *colorSet);
     
+    /**
+     * @brief setDisplayRenderer
+     * Set the display renderer of this object.
+     * @param displayRenderer
+     */
+    void setDisplayRenderer(const KoColorDisplayRendererInterface *displayRenderer);
+
     /**
      * Gets the current color set
      * @returns current color set,, 0 if none set

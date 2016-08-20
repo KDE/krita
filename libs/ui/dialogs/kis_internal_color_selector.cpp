@@ -86,9 +86,12 @@ KisInternalColorSelector::KisInternalColorSelector(QWidget *parent, KoColor colo
         }
     }
     connect(m_ui->paletteBox, SIGNAL(colorChanged(KoColor,bool)), this, SLOT(slotColorUpdated(KoColor)));
+    m_ui->paletteBox->setDisplayRenderer(displayRenderer);
 
     m_ui->currentColor->setColor(m_d->currentColor);
+    m_ui->currentColor->setDisplayRenderer(displayRenderer);
     m_ui->previousColor->setColor(m_d->currentColor);
+    m_ui->previousColor->setDisplayRenderer(displayRenderer);
     connect(this, SIGNAL(accepted()), this, SLOT(setPreviousColor()));
 
     connect(this, SIGNAL(signalForegroundColorChosen(KoColor)), this, SLOT(slotLockSelector()));
@@ -130,6 +133,9 @@ void KisInternalColorSelector::setDisplayRenderer(const KoColorDisplayRendererIn
     if (displayRenderer) {
         m_d->displayRenderer = displayRenderer;
         m_ui->visualSelector->setDisplayRenderer(displayRenderer);
+        m_ui->currentColor->setDisplayRenderer(displayRenderer);
+        m_ui->previousColor->setDisplayRenderer(displayRenderer);
+        m_ui->paletteBox->setDisplayRenderer(displayRenderer);
     } else {
         m_d->displayRenderer = KoDumbColorDisplayRenderer::instance();
     }

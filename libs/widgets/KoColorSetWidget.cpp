@@ -66,6 +66,8 @@ void KoColorSetWidget::KoColorSetWidgetPrivate::fillColors()
             patch->setColor(colorSet->getColor(i).color);
             connect(patch, SIGNAL(triggered(KoColorPatch *)), thePublic, SLOT(colorTriggered(KoColorPatch *)));
             colorSetLayout->addWidget(patch, p/16, p%16);
+            patch->setDisplayRenderer(displayRenderer);
+            patchWidgetList.append(patch);
             ++p;
         }
     }
@@ -115,6 +117,7 @@ void KoColorSetWidget::KoColorSetWidgetPrivate::addRecent(const KoColor &color)
     if(numRecents<6) {
         recentPatches[numRecents] = new KoColorPatch(thePublic);
         recentPatches[numRecents]->setFrameShape(QFrame::Box);
+        recentPatches[numRecents]->setDisplayRenderer(displayRenderer);
         recentsLayout->insertWidget(numRecents+1, recentPatches[numRecents]);
         connect(recentPatches[numRecents], SIGNAL(triggered(KoColorPatch *)), thePublic, SLOT(colorTriggered(KoColorPatch *)));
         numRecents++;
@@ -226,6 +229,21 @@ void KoColorSetWidget::setColorSet(KoColorSet *colorSet)
 KoColorSet* KoColorSetWidget::colorSet()
 {
     return d->colorSet;
+}
+
+void KoColorSetWidget::setDisplayRenderer(const KoColorDisplayRendererInterface *displayRenderer)
+{
+    if (displayRenderer) {
+        d->displayRenderer = displayRenderer;
+        Q_FOREACH(KoColorPatch *p, d->patchWidgetList) {
+            p->setDisplayRenderer(displayRenderer);
+        }
+        for (int i=0; i<6; i++) {
+            if (d->recentPatches[i]) {
+                d->recentPatches[i]->setDisplayRenderer(displayRenderer);
+            }
+        }
+    }
 }
 
 void KoColorSetWidget::resizeEvent(QResizeEvent *event)

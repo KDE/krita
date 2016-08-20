@@ -19,6 +19,8 @@
 #ifndef KIS_GRID_PAINTOP_SETTINGS_H_
 #define KIS_GRID_PAINTOP_SETTINGS_H_
 
+#include <QScopedPointer>
+
 #include <brushengine/kis_paintop_settings.h>
 #include <kis_types.h>
 
@@ -35,6 +37,11 @@ public:
     QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode) const;
     bool paintIncremental();
 
+    QList<KisUniformPaintOpPropertySP> uniformProperties();
+
+private:
+    struct Private;
+    const QScopedPointer<Private> m_d;
 };
 
 #endif

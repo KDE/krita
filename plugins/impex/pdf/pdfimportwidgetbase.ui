@@ -23,7 +23,7 @@
       <item>
        <widget class="QRadioButton" name="boolAllPages">
         <property name="text">
-         <string>&amp;All pages</string>
+         <string>All pa&amp;ges</string>
         </property>
        </widget>
       </item>
@@ -40,7 +40,7 @@
       <item>
        <widget class="QRadioButton" name="boolSelectionPage">
         <property name="text">
-         <string>&amp;Selection of page</string>
+         <string>Selec&amp;tion of page</string>
         </property>
        </widget>
       </item>
@@ -136,7 +136,7 @@
            <number>0</number>
           </property>
           <item row="1" column="1">
-           <widget class="QSpinBox" name="intHeight">
+           <widget class="KisIntParseSpinBox" name="intHeight">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -168,7 +168,7 @@
            </widget>
           </item>
           <item row="0" column="1">
-           <widget class="QSpinBox" name="intWidth">
+           <widget class="KisIntParseSpinBox" name="intWidth">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -202,7 +202,7 @@
          </layout>
         </item>
         <item>
-         <widget class="KoAspectButton" name="pixelAspectRatioBtn">
+         <widget class="KoAspectButton" name="pixelAspectRatioBtn" native="true">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
             <horstretch>0</horstretch>
@@ -283,7 +283,7 @@
            <number>0</number>
           </property>
           <item row="0" column="1">
-           <widget class="QSpinBox" name="intResolution">
+           <widget class="KisIntParseSpinBox" name="intResolution">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -351,6 +351,11 @@
    <extends>QWidget</extends>
    <header>KoAspectButton.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KisIntParseSpinBox</class>
+   <extends>QSpinBox</extends>
+   <header>kis_int_parse_spin_box.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

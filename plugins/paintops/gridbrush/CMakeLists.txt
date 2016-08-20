@@ -5,7 +5,6 @@ set(kritagridpaintop_SOURCES
     kis_grid_shape_option.cpp
     kis_grid_paintop_settings.cpp
     kis_grid_paintop_settings_widget.cpp
-    random_gauss.cpp
     )
 
 ki18n_wrap_ui(kritagridpaintop_SOURCES wdggridoptions.ui wdggridbrushshapeoptions.ui )

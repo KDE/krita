@@ -35,6 +35,7 @@
 #include "kis_transform_utils.h"
 #include "kis_liquify_paint_helper.h"
 #include "kis_liquify_transform_worker.h"
+#include "KoCanvasResourceManager.h"
 
 
 struct KisLiquifyTransformStrategy::Private
@@ -42,8 +43,10 @@ struct KisLiquifyTransformStrategy::Private
     Private(KisLiquifyTransformStrategy *_q,
             const KisCoordinatesConverter *_converter,
             ToolTransformArgs &_currentArgs,
-            TransformTransactionProperties &_transaction)
-        : q(_q),
+            TransformTransactionProperties &_transaction,
+            const KoCanvasResourceManager *_manager)
+        : manager(_manager),
+          q(_q),
           converter(_converter),
           currentArgs(_currentArgs),
           transaction(_transaction),
@@ -51,6 +54,8 @@ struct KisLiquifyTransformStrategy::Private
           recalculateOnNextRedraw(false)
     {
     }
+
+    const KoCanvasResourceManager *manager;
 
     KisLiquifyTransformStrategy * const q;
 
@@ -87,9 +92,10 @@ struct KisLiquifyTransformStrategy::Private
 
 KisLiquifyTransformStrategy::KisLiquifyTransformStrategy(const KisCoordinatesConverter *converter,
                                                          ToolTransformArgs &currentArgs,
-                                                         TransformTransactionProperties &transaction)
+                                                         TransformTransactionProperties &transaction,
+                                                         const KoCanvasResourceManager *manager)
 
-    : m_d(new Private(this, converter, currentArgs, transaction))
+    : m_d(new Private(this, converter, currentArgs, transaction, manager))
 {
 }
 
@@ -144,7 +150,7 @@ bool KisLiquifyTransformStrategy::acceptsClicks() const
 bool KisLiquifyTransformStrategy::beginPrimaryAction(KoPointerEvent *event)
 {
     m_d->helper.configurePaintOp(*m_d->currentArgs.liquifyProperties(), m_d->currentArgs.liquifyWorker());
-    m_d->helper.startPaint(event);
+    m_d->helper.startPaint(event, m_d->manager);
 
     m_d->recalculateTransformations();
 

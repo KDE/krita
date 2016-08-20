@@ -24,8 +24,6 @@
 
 #include <QBrush>
 #include <QColor>
-#include <QFontInfo>
-#include <QFontMetrics>
 #include <QPen>
 #include <QMatrix>
 #include <QImage>

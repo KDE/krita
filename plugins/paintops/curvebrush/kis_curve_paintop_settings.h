@@ -19,6 +19,7 @@
 #ifndef KIS_CURVE_PAINTOP_SETTINGS_H_
 #define KIS_CURVE_PAINTOP_SETTINGS_H_
 
+#include <QScopedPointer>
 #include <brushengine/kis_paintop_settings.h>
 
 class KisCurvePaintOpSettings : public KisPaintOpSettings
@@ -26,8 +27,14 @@ class KisCurvePaintOpSettings : public KisPaintOpSettings
 
 public:
     KisCurvePaintOpSettings();
-    virtual ~KisCurvePaintOpSettings() {}
+    virtual ~KisCurvePaintOpSettings();
 
     virtual bool paintIncremental();
+
+    QList<KisUniformPaintOpPropertySP> uniformProperties();
+
+private:
+    struct Private;
+    const QScopedPointer<Private> m_d;
 };
 #endif

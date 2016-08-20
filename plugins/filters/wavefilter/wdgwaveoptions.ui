@@ -11,7 +11,16 @@
    </rect>
   </property>
   <layout class="QGridLayout">
-   <property name="margin">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
     <number>0</number>
    </property>
    <property name="verticalSpacing">
@@ -39,14 +48,23 @@
       <string>Horizontal Wave</string>
      </property>
      <layout class="QGridLayout">
-      <property name="margin">
+      <property name="leftMargin">
+       <number>9</number>
+      </property>
+      <property name="topMargin">
+       <number>9</number>
+      </property>
+      <property name="rightMargin">
+       <number>9</number>
+      </property>
+      <property name="bottomMargin">
        <number>9</number>
       </property>
       <item row="2" column="3">
-       <widget class="QSpinBox" name="intHAmplitude"/>
+       <widget class="KisIntParseSpinBox" name="intHAmplitude"/>
       </item>
       <item row="1" column="3">
-       <widget class="QSpinBox" name="intHShift"/>
+       <widget class="KisIntParseSpinBox" name="intHShift"/>
       </item>
       <item row="3" column="1">
        <widget class="QLabel" name="textLabel1_2">
@@ -127,7 +145,7 @@
        </widget>
       </item>
       <item row="0" column="3">
-       <widget class="QSpinBox" name="intHWavelength"/>
+       <widget class="KisIntParseSpinBox" name="intHWavelength"/>
       </item>
       <item row="3" column="0">
        <spacer name="horizontalSpacer">
@@ -151,7 +169,16 @@
       <string>Vertical Wave</string>
      </property>
      <layout class="QGridLayout">
-      <property name="margin">
+      <property name="leftMargin">
+       <number>9</number>
+      </property>
+      <property name="topMargin">
+       <number>9</number>
+      </property>
+      <property name="rightMargin">
+       <number>9</number>
+      </property>
+      <property name="bottomMargin">
        <number>9</number>
       </property>
       <item row="0" column="1" colspan="2">
@@ -207,7 +234,7 @@
        </widget>
       </item>
       <item row="1" column="3">
-       <widget class="QSpinBox" name="intVShift"/>
+       <widget class="KisIntParseSpinBox" name="intVShift"/>
       </item>
       <item row="2" column="1" colspan="2">
        <widget class="QLabel" name="textLabel2_2_2">
@@ -236,10 +263,10 @@
        </widget>
       </item>
       <item row="0" column="3">
-       <widget class="QSpinBox" name="intVWavelength"/>
+       <widget class="KisIntParseSpinBox" name="intVWavelength"/>
       </item>
       <item row="2" column="3">
-       <widget class="QSpinBox" name="intVAmplitude"/>
+       <widget class="KisIntParseSpinBox" name="intVAmplitude"/>
       </item>
       <item row="3" column="0">
        <spacer name="horizontalSpacer_2">
@@ -260,6 +287,11 @@
   </layout>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>KisIntParseSpinBox</class>
+   <extends>QSpinBox</extends>
+   <header>kis_int_parse_spin_box.h</header>
+  </customwidget>
   <customwidget>
    <class>KComboBox</class>
    <extends>QComboBox</extends>

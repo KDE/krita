@@ -14,6 +14,5 @@ cmake --build . --config RelWithDebInfo --target ext_png
 cmake --build . --config RelWithDebInfo --target ext_tiff
 cmake --build . --config RelWithDebInfo --target ext_vc
 cmake --build . --config RelWithDebInfo --target ext_libraw
-cmake --build . --config RelWithDebInfo --target ext_openjpeg
 cmake --build . --config RelWithDebInfo --target ext_kwindowsystem
 cmake --build . --config RelWithDebInfo --target ext_gsl

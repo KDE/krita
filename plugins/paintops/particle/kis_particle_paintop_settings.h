@@ -19,6 +19,7 @@
 #ifndef KIS_PARTICLE_PAINTOP_SETTINGS_H_
 #define KIS_PARTICLE_PAINTOP_SETTINGS_H_
 
+#include <QScopedPointer>
 #include <brushengine/kis_paintop_settings.h>
 #include <kis_types.h>
 
@@ -26,10 +27,19 @@ class KisParticlePaintOpSettings : public KisPaintOpSettings
 {
 
 public:
+
+    KisParticlePaintOpSettings();
+    ~KisParticlePaintOpSettings();
+
     bool paintIncremental();
     bool isAirbrushing() const;
     int rate() const;
 
+    QList<KisUniformPaintOpPropertySP> uniformProperties();
+
+private:
+    struct Private;
+    const QScopedPointer<Private> m_d;
 };
 
 #endif

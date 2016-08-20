@@ -28,7 +28,6 @@ Boston, MA 02110-1301, USA.
 #include "KisFilterVertex.h"
 
 #include <QMetaMethod>
-#include <QTemporaryFile>
 #include <QPluginLoader>
 #include <kis_debug.h>
 

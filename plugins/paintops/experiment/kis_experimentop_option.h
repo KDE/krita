@@ -80,6 +80,17 @@ public:
         hardEdge = setting->getBool(EXPERIMENT_HARD_EDGE);
     }
 
+    void writeOptionSetting(KisPropertiesConfiguration* setting) const {
+        setting->setProperty(EXPERIMENT_DISPLACEMENT_ENABLED, isDisplacementEnabled);
+        setting->setProperty(EXPERIMENT_DISPLACEMENT_VALUE, displacement);
+        setting->setProperty(EXPERIMENT_SPEED_ENABLED, isSpeedEnabled);
+        setting->setProperty(EXPERIMENT_SPEED_VALUE, speed);
+        setting->setProperty(EXPERIMENT_SMOOTHING_ENABLED, isSmoothingEnabled);
+        setting->setProperty(EXPERIMENT_SMOOTHING_VALUE, smoothing);
+        setting->setProperty(EXPERIMENT_WINDING_FILL, windingFill);
+        setting->setProperty(EXPERIMENT_HARD_EDGE, hardEdge);
+    }
+
 
 
 };

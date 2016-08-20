@@ -114,7 +114,9 @@ void KisStrokesQueueTest::testExclusiveStrokes()
     KisTestableUpdaterContext context(2);
     QVector<KisUpdateJobItem*> jobs;
 
+    context.lock();
     context.addMergeJob(walker);
+    context.unlock();
     queue.processQueue(context, false);
 
     jobs = context.getJobs();
@@ -139,7 +141,9 @@ void KisStrokesQueueTest::testExclusiveStrokes()
     QCOMPARE(queue.needsExclusiveAccess(), true);
 
     context.clear();
+    context.lock();
     context.addMergeJob(walker);
+    context.unlock();
     queue.processQueue(context, false);
 
     COMPARE_WALKER(jobs[0], walker);
@@ -201,7 +205,9 @@ void KisStrokesQueueTest::testBarrierStrokeJobs()
     VERIFY_EMPTY(jobs[2]);
 
     // Now some updates has come...
+    context.lock();
     context.addMergeJob(walker);
+    context.unlock();
 
     jobs = context.getJobs();
     COMPARE_NAME(jobs[0], "nor_dab");
@@ -239,7 +245,9 @@ void KisStrokesQueueTest::testBarrierStrokeJobs()
     VERIFY_EMPTY(jobs[2]);
 
     // Process the last update...
+    context.lock();
     context.addMergeJob(walker);
+    context.unlock();
     externalJobsPending = false;
 
     // Yep, the queue is still waiting
@@ -416,7 +424,9 @@ void KisStrokesQueueTest::testStrokesLevelOfDetail()
     KisTestableUpdaterContext context(2);
     QVector<KisUpdateJobItem*> jobs;
 
+    context.lock();
     context.addMergeJob(walker);
+    context.unlock();
     queue.processQueue(context, false);
 
     jobs = context.getJobs();
@@ -439,10 +449,14 @@ void KisStrokesQueueTest::testStrokesLevelOfDetail()
     QCOMPARE(queue.needsExclusiveAccess(), false);
 
     // walker of a different LOD must not be allowed
+    context.lock();
     QCOMPARE(context.isJobAllowed(walker), false);
+    context.unlock();
 
     context.clear();
+    context.lock();
     context.addMergeJob(walker);
+    context.unlock();
     queue.processQueue(context, false);
 
     jobs = context.getJobs();

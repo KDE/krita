@@ -246,7 +246,6 @@ void KoDualColorButton::slotSetForeGroundColorFromDialog(const KoColor color)
 {
     d->foregroundColor = color;
     repaint();
-    qDebug()<<"Color as sent by the dual color button: "<<KoColor::toQString(color);
     emit foregroundColorChanged(d->foregroundColor);
 }
 

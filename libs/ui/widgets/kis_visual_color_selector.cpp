@@ -117,10 +117,6 @@ void KisVisualColorSelector::slotsetColorSpace(const KoColorSpace *cs)
             //There's a really weird bug where touching the geometry makes the widget hide itself??? This didn't happen with layouts so, I am confused.//
             //block->show();
             //bar->show();
-            qDebug()<<bar->geometry();
-            qDebug()<<bar->pos();
-            qDebug()<<block->geometry();
-            qDebug()<<this->geometry();
             bar->setColor(m_d->currentcolor);
             block->setColor(m_d->currentcolor);
             connect (bar, SIGNAL(sigNewColor(KoColor)), block, SLOT(setColorFromSibling(KoColor)));
@@ -205,6 +201,7 @@ struct KisVisualColorSelectorShape::Private
     int channel1;
     int channel2;
     KisSignalCompressor *updateTimer;
+    KisSignalCompressor *siblingTimer;
     bool mousePressActive = false;
     const KoColorDisplayRendererInterface *displayRenderer = 0;
     qreal hue = 0.0;
@@ -231,6 +228,7 @@ KisVisualColorSelectorShape::KisVisualColorSelectorShape(QWidget *parent,
     m_d->channel2 = qBound(0, channel2, maxchannel);
     this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     m_d->updateTimer = new KisSignalCompressor(100 /* ms */, KisSignalCompressor::POSTPONE, this);
+    m_d->siblingTimer = new KisSignalCompressor(100 /* ms */, KisSignalCompressor::POSTPONE, this);
     setDisplayRenderer(displayRenderer);
     show();
 
@@ -293,7 +291,6 @@ void KisVisualColorSelectorShape::setDisplayRenderer (const KoColorDisplayRender
 
 void KisVisualColorSelectorShape::updateFromChangedDisplayRenderer()
 {
-    qDebug()<<"update from changed display renderer";
     m_d->imagesNeedUpdate = true;
     updateCursor();
     //m_d->currentColor = convertShapeCoordinateToKoColor(getCursorPosition());
@@ -359,11 +356,11 @@ KoColor KisVisualColorSelectorShape::convertShapeCoordinateToKoColor(QPointF coo
             KoChannelInfo *channel = m_d->cs->channels()[ch];
             maxvalue[ch] = m_d->displayRenderer->maxVisibleFloatValue(channel);
             channelValues[ch] = channelValues[ch]/(maxvalue[ch]);
-            channelValuesDisplay[KoChannelInfo::displayPositionToChannelIndex(ch, m_d->cs->channels())] = channelValues[ch];
+            channelValuesDisplay[KoChannelInfo::displayPositionToChannelIndex(ch, m_d->cs->channels())] = qBound((float)0.0,channelValues[ch], (float)1.0);
         }
     } else {
         for (int i =0; i<channelValues.size();i++) {
-            channelValuesDisplay[KoChannelInfo::displayPositionToChannelIndex(i, m_d->cs->channels())] = channelValues[i];
+            channelValuesDisplay[KoChannelInfo::displayPositionToChannelIndex(i, m_d->cs->channels())] = qBound((float)0.0,channelValues[i], (float)1.0);
         }
     }
     qreal huedivider = 1.0;
@@ -450,7 +447,7 @@ KoColor KisVisualColorSelectorShape::convertShapeCoordinateToKoColor(QPointF coo
         }
     }
     for (int i=0; i<channelValues.size();i++) {
-        channelValues[i] = channelValuesDisplay[KoChannelInfo::displayPositionToChannelIndex(i, m_d->cs->channels())]*(maxvalue[i]);
+        channelValues[i] = qBound(0.0,channelValuesDisplay[KoChannelInfo::displayPositionToChannelIndex(i, m_d->cs->channels())]*(maxvalue[i]),1.0);
     }
     c.colorSpace()->fromNormalisedChannelsValue(c.data(), channelValues);
     return c;
@@ -474,11 +471,11 @@ QPointF KisVisualColorSelectorShape::convertKoColorToShapeCoordinate(KoColor c)
             KoChannelInfo *channel = m_d->cs->channels()[ch];
             maxvalue[ch] = m_d->displayRenderer->maxVisibleFloatValue(channel);
             channelValues[ch] = channelValues[ch]/(maxvalue[ch]);
-            channelValuesDisplay[KoChannelInfo::displayPositionToChannelIndex(ch, m_d->cs->channels())] = channelValues[ch];
+            channelValuesDisplay[KoChannelInfo::displayPositionToChannelIndex(ch, m_d->cs->channels())] = qBound((float)0.0,channelValues[ch], (float)1.0);
         }
     } else {
         for (int i =0; i<channelValues.size();i++) {
-            channelValuesDisplay[KoChannelInfo::displayPositionToChannelIndex(i, m_d->cs->channels())] = channelValues[i];
+            channelValuesDisplay[KoChannelInfo::displayPositionToChannelIndex(i, m_d->cs->channels())] = qBound((float)0.0,channelValues[i], (float)1.0);
         }
     }
     QPointF coordinates(0.0,0.0);
@@ -614,10 +611,10 @@ KoColor KisVisualColorSelectorShape::getCurrentColor()
 
 QVector <qreal> KisVisualColorSelectorShape::getHSX(QVector<qreal> hsx)
 {
-    if ((hsx[2]<=0.0 || hsx[2]>=1.0) && m_d->channel1!=2 && m_d->channel2!=2) {
+    if ((hsx[2]<=0.0 || hsx[2]>1.0) && hsx[1]<=0.0 && m_d->channel1!=2 && m_d->channel2!=2) {
         hsx[1] = m_d->sat;
-        hsx[0]=m_d->hue;
-    } else if (hsx[1]<=0.0  && m_d->channel1!=1 && m_d->channel2!=1){
+    }
+    if (hsx[1]<=0.0 && m_d->channel1!=1 && m_d->channel2!=1){
         hsx[0]=m_d->hue;
     }
     return hsx;
@@ -625,7 +622,7 @@ QVector <qreal> KisVisualColorSelectorShape::getHSX(QVector<qreal> hsx)
 
 void KisVisualColorSelectorShape::setHSX(QVector<qreal> hsx)
 {
-    if (hsx[2]>0.0 && hsx[2<1.0]){
+    if (hsx[2]>0.0 && hsx[2<=1.0] && m_d->channel1!=2 && m_d->channel2!=2){
         m_d->sat = hsx[1];
     }
     if (hsx[1]>0.0) {
@@ -960,7 +957,6 @@ QPointF KisVisualEllipticalSelectorShape::convertShapeCoordinateToWidgetCoordina
     }
     x = qRound(line.p2().x());
     y = qRound(line.p2().y());
-    qDebug()<<QPoint(x,y);
     return QPointF(x,y);
 }
 
@@ -980,7 +976,9 @@ QPointF KisVisualEllipticalSelectorShape::convertWidgetCoordinateToShapeCoordina
             angle = 180.0-angle;
             angle = angle+180.0;
             x = angle/360.0;
-            y = qBound(0.0,line.length()/a, 1.0);
+            if (getDimensions()==KisVisualColorSelectorShape::twodimensional) {
+                y = qBound(0.0,line.length()/a, 1.0);
+            }
 
         } else {
             angle = fmod((line.angle()+270.0), 360.0);
@@ -989,7 +987,9 @@ QPointF KisVisualEllipticalSelectorShape::convertWidgetCoordinateToShapeCoordina
                 angle = angle+180;
             }
             x = (angle/360.0)*2;
-            y = line.length()/a;
+            if (getDimensions()==KisVisualColorSelectorShape::twodimensional) {
+                y = line.length()/a;
+            }
         }
 
     }
@@ -1114,14 +1114,17 @@ QRect KisVisualTriangleSelectorShape::setGeometryByRadius(QLineF radius)
 
 QPointF KisVisualTriangleSelectorShape::convertShapeCoordinateToWidgetCoordinate(QPointF coordinate)
 {
-    qreal y = coordinate.y()*height();
+    qreal offset=7.0;//the offset is so we get a nice little border that allows selecting extreme colors better.
+    qreal y = qMin(coordinate.y()*(height()-offset*2)+offset+5.0, (qreal)height()-offset);
 
     qreal triWidth = width();
     qreal horizontalLineLength = y*(2./sqrt(3.));
     qreal horizontalLineStart = triWidth/2.-horizontalLineLength/2.;
-    qreal relativeX = coordinate.x()*horizontalLineLength;
-    qreal x = relativeX + horizontalLineStart;
-
+    qreal relativeX = coordinate.x()*(horizontalLineLength-offset*2);
+    qreal x = qMin(relativeX + horizontalLineStart + offset, (qreal)width()-offset*2);
+    if (y<offset){
+        x = 0.5*width();
+    }
 
     return QPointF(x,y);
 }
@@ -1131,17 +1134,19 @@ QPointF KisVisualTriangleSelectorShape::convertWidgetCoordinateToShapeCoordinate
     //default implementation: gotten from the kotrianglecolorselector/kis_color_selector_triangle.
     qreal x = 0.5;
     qreal y = 0.5;
+    qreal offset=7.0; //the offset is so we get a nice little border that allows selecting extreme colors better.
 
-
-    y = (qreal)coordinate.y()/height();
+    y = qMax((qreal)coordinate.y()-offset,0.0)/(height()-offset*2);
 
     qreal triWidth = width();
-    qreal horizontalLineLength = ((qreal)coordinate.y())*(2./sqrt(3.));
+    qreal horizontalLineLength = ((qreal)coordinate.y())*(2./sqrt(3.))-(offset*2);
     qreal horizontalLineStart = (triWidth*0.5)-(horizontalLineLength*0.5);
 
-    qreal relativeX = (qreal)coordinate.x()-horizontalLineStart;
+    qreal relativeX = qMax((qreal)coordinate.x()-offset,0.0)-horizontalLineStart;
     x = relativeX/horizontalLineLength;
-
+    if (coordinate.y()<offset){
+        x = 0.5;
+    }
     return QPointF(x, y);
 }
 
@@ -1167,7 +1172,7 @@ void KisVisualTriangleSelectorShape::drawCursor()
     painter.save();
     painter.setCompositionMode(QPainter::CompositionMode_Clear);
     QPen pen;
-    pen.setWidth(5);
+    pen.setWidth(10);
     painter.setPen(pen);
     painter.drawPolygon(m_triangle);
     painter.restore();

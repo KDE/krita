@@ -54,9 +54,14 @@ void KoColorSetWidget::KoColorSetWidgetPrivate::fillColors()
     colorSetLayout->setSpacing(0); // otherwise the use can click where there is none
     colorSetContainer->setBackgroundRole(QPalette::Dark);
 
-    for(int i = 0; i<16; i++) {
+    int columns = 16;
+    if (colorSet) {
+        columns = colorSet->columnCount();
+    }
+    for(int i = 0; i<columns; i++) {
         colorSetLayout->setColumnMinimumWidth(i, 12);
     }
+    colorSetContainer->setMinimumWidth(columns*12+6);
     colorSetContainer->setLayout(colorSetLayout);
 
     if (colorSet) {
@@ -67,7 +72,7 @@ void KoColorSetWidget::KoColorSetWidgetPrivate::fillColors()
             patch->setColor(colorSet->getColor(i).color);
             patch->setToolTip(colorSet->getColor(i).name);
             connect(patch, SIGNAL(triggered(KoColorPatch *)), thePublic, SLOT(colorTriggered(KoColorPatch *)));
-            colorSetLayout->addWidget(patch, p/16, p%16);
+            colorSetLayout->addWidget(patch, p/columns, p%columns);
             patch->setDisplayRenderer(displayRenderer);
             patchWidgetList.append(patch);
             ++p;

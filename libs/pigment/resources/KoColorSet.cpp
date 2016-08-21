@@ -259,10 +259,7 @@ void KoColorSet::setColumnCount(int columns)
 
 int KoColorSet::columnCount()
 {
-    if (m_columns){
-        return m_columns;
-    }
-    return 16;
+    return m_columns;
 }
 
 QString KoColorSet::defaultFileExtension() const

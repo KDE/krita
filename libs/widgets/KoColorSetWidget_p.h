@@ -36,6 +36,7 @@
 #include <QDir>
 #include <QPointer>
 #include <QScrollArea>
+#include <QComboBox>
 
 #include <klocalizedstring.h>
 #include <WidgetsDebug.h>
@@ -58,6 +59,8 @@ public:
     QHBoxLayout *recentsLayout;
     KoColorPatch *recentPatches[6];
     QToolButton *addRemoveButton;
+    QComboBox *colorNameCmb;
+    QStringList colornames;
     int numRecents;
 
     void colorTriggered(KoColorPatch *patch);
@@ -65,6 +68,7 @@ public:
     void activateRecent(int i);
     void fillColors();
     void addRemoveColors();
+    void setColorFromString(QString s);
 
     QList<KoColorPatch*> patchWidgetList;
     const KoColorDisplayRendererInterface *displayRenderer;

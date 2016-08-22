@@ -98,6 +98,7 @@ Q_SIGNALS:
 private:
     Q_PRIVATE_SLOT(d, void colorTriggered(KoColorPatch *))
     Q_PRIVATE_SLOT(d, void addRemoveColors())
+    Q_PRIVATE_SLOT(d, void setColorFromString(QString s))
 
     class KoColorSetWidgetPrivate;
     KoColorSetWidgetPrivate * const d;

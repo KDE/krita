@@ -7,6 +7,7 @@ ExternalProject_Add( ext_python
     CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${PREFIX_ext_python}  ${GLOBAL_AUTOMAKE_PROFILE}
     BUILD_COMMAND make
     INSTALL_COMMAND make install
+                    COMMAND ${CMAKE_COMMAND} -E copy ${PREFIX_ext_python}/bin/python3 ${PREFIX_ext_python}/bin/python
 
     UPDATE_COMMAND ""
 	ALWAYS 0

@@ -54,6 +54,7 @@ Windows Only:
 
     * Linux:
     export PATH=$BUILDROOT/i/bin
+    export PYTHONHOME=$BUILDROOT/i (only if you want to build your own python)
     cmake ../krita/3rdparty \
         -DINSTALL_ROOT=$BUILDROOT/i \
         -DEXTERNALS_DOWNLOAD_DIR=$BUILDROOT/d \
@@ -62,6 +63,7 @@ Windows Only:
     * OSX:
     
     export PATH=$BUILDROOT/i/bin
+    export PYTHONHOME=$BUILDROOT/i (only if you want to build your own python)
     cmake ../krita/3rdparty/  \
         -DCMAKE_INSTALL_PREFIX=$BUILDROOT/i \
         -DEXTERNALS_DOWNLOAD_DIR=$BUILDROOT/d  \
@@ -76,12 +78,16 @@ Windows Only:
 
 Note that the cmake command needs to point to your BUILDROOT like /dev/d, not c:\dev\d.
 
-    set PATH=BUILDROOT\i\bin\;BUILDROOT\i\lib;%PATH%
-    cmake ..\krita\3rdparty -DEXTERNALS_DOWNLOAD_DIR=/dev/d -DINSTALL_ROOT=/dev/i   -G "MinGW Makefiles"
-
+    set PATH=%BUILDROOT%\i\bin\;%BUILDROOT%\i\lib;%PATH%
+    set PYTHONHOME=%BUILDROOT%/i (only if you want to build your own python)
+    cmake ..\krita\3rdparty -DEXTERNALS_DOWNLOAD_DIR=%BUILDROOT%/d -DINSTALL_ROOT=%BUILDROOT%/i -G "MinGW Makefiles"
 3. build the packages:
 
 With a judicious application of DEPENDS statements, it's possible to build it all in one go, but in my experience that fails always, so it's better to build the dependencies independently.
+
+If you want to use the included version of Python (can be used on Windows to build Qt instead of installing Python separately):
+    
+    cmake --build . --config RelWithDebInfo --target ext_python
 
 On Windows:
 

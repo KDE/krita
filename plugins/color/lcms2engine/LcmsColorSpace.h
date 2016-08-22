@@ -24,6 +24,8 @@
 
 #include <colorprofiles/LcmsColorProfileContainer.h>
 #include <KoColorSpaceAbstract.h>
+#include <QMutex>
+#include <QMutexLocker>
 
 class LcmsColorProfileContainer;
 
@@ -160,6 +162,7 @@ class LcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsInfo
         mutable cmsHTRANSFORM lastFromRGB;     // Last used transform to transform from RGB
         LcmsColorProfileContainer *profile;
         KoColorProfile *colorProfile;
+        QMutex mutex;
     };
 
 protected:
@@ -245,6 +248,7 @@ public:
 
     virtual void fromQColor(const QColor &color, quint8 *dst, const KoColorProfile *koprofile = 0) const
     {
+        QMutexLocker locker(&d->mutex);
         d->qcolordata[2] = color.red();
         d->qcolordata[1] = color.green();
         d->qcolordata[0] = color.blue();
@@ -280,6 +284,7 @@ public:
             Q_ASSERT(d->defaultTransformations && d->defaultTransformations->toRGB);
             cmsDoTransform(d->defaultTransformations->toRGB, const_cast <quint8 *>(src), d->qcolordata, 1);
         } else {
+            QMutexLocker locker(&d->mutex);
             if (d->lastToRGB == 0 || (d->lastToRGB != 0 && d->lastRGBProfile != profile->lcmsProfile())) {
                 d->lastToRGB = cmsCreateTransform(d->profile->lcmsProfile(), this->colorSpaceType(),
                                                   profile->lcmsProfile(), TYPE_BGR_8,

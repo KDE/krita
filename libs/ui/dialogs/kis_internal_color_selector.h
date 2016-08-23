@@ -47,6 +47,13 @@ public:
     void colorSpaceChanged(const KoColorSpace *cs);
 
     /**
+     * @brief lockUsedColorSpace
+     * Lock the used colorspace of this selector.
+     * @param cs
+     */
+    void lockUsedColorSpace(const KoColorSpace *cs);
+
+    /**
      * @brief setDisplayRenderer
      * Set the display renderer. This is necessary for HDR color manage support.
      * @param displayRenderer

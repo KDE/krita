@@ -22,12 +22,11 @@
 #define KODUALCOLORBUTTON_H
 
 #include "kritawidgets_export.h"
-
+#include <KoColorDisplayRendererInterface.h>
 #include <QWidget>
 
 class KoColor;
-class KoColorDisplayRendererInterface;
-
+class KoColorSpace;
 /**
  * @short A widget for selecting two related colors.
  *
@@ -117,7 +116,14 @@ class KRITAWIDGETS_EXPORT KoDualColorButton : public QWidget
 
     void slotSetForeGroundColorFromDialog (const KoColor color);
 
-    void setDisplayRenderer(const KoColorDisplayRendererInterface *displayRenderer);
+    void setDisplayRenderer(const KoColorDisplayRendererInterface *displayRenderer = KoDumbColorDisplayRenderer::instance());
+
+    /**
+     * @brief setColorSpace
+     * set ColorSpace so we can lock the selector. Right now this'll be changed per view-change.
+     * @param cs
+     */
+    void setColorSpace(const KoColorSpace *cs);
 
     /**
      * @brief getColorFromDisplayRenderer

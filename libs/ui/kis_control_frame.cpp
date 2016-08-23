@@ -46,6 +46,7 @@
 #include <KoResourceServerAdapter.h>
 #include <KoResourceServerProvider.h>
 #include <KoColorSpaceRegistry.h>
+#include <kis_image.h>
 
 #include <resources/KoPattern.h>
 #include "kis_resource_server_provider.h"
@@ -138,6 +139,9 @@ void KisControlFrame::slotUpdateDisplayRenderer()
 {
     if (m_viewManager->canvasBase()){
         m_dual->setDisplayRenderer(m_viewManager->canvasBase()->displayColorConverter()->displayRendererInterface());
+        m_dual->setColorSpace(m_viewManager->canvasBase()->image()->colorSpace());
+    } else if (m_viewManager->viewCount()==0) {
+        m_dual->setDisplayRenderer();
     }
 }
 

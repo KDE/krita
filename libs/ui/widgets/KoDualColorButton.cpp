@@ -165,9 +165,15 @@ void KoDualColorButton::setDisplayRenderer(const KoColorDisplayRendererInterface
     if (displayRenderer) {
         d->displayRenderer = displayRenderer;
         d->colorSelectorDialog->setDisplayRenderer(displayRenderer);
+        connect(d->displayRenderer, SIGNAL(destroyed()), this, SLOT(setDisplayRenderer()), Qt::UniqueConnection);
     } else {
         d->displayRenderer = KoDumbColorDisplayRenderer::instance();
     }
+}
+
+void KoDualColorButton::setColorSpace(const KoColorSpace *cs)
+{
+    d->colorSelectorDialog->lockUsedColorSpace(cs);
 }
 
 QColor KoDualColorButton::getColorFromDisplayRenderer(KoColor c)

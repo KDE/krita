@@ -43,6 +43,7 @@ struct KisInternalColorSelector::Private
     KoColor currentColor;
     KoColor previousColor;
     const KoColorSpace *currentColorSpace;
+    bool lockUsedCS = false;
     bool chooseAlpha = false;
     KisSignalCompressor *compressColorChanges;
     const KoColorDisplayRendererInterface *displayRenderer;
@@ -113,7 +114,12 @@ void KisInternalColorSelector::slotColorUpdated(KoColor newColor)
 {
     //if the update did not come from this selector...
     if (m_d->allowUpdates || QObject::sender() == this->parent()) {
-        m_d->currentColor = newColor;
+        if (m_d->lockUsedCS){
+            newColor.convertTo(m_d->currentColorSpace);
+            m_d->currentColor = newColor;
+        } else {
+            m_d->currentColor = newColor;
+        }
         updateAllElements(QObject::sender());
     }
 }
@@ -126,7 +132,14 @@ void KisInternalColorSelector::colorSpaceChanged(const KoColorSpace *cs)
 
     m_d->currentColorSpace = KoColorSpaceRegistry::instance()->colorSpace(cs->colorModelId().id(), cs->colorDepthId().id(), cs->profile());
     m_ui->spinboxselector->slotSetColorSpace(m_d->currentColorSpace);
+    m_ui->visualSelector->slotsetColorSpace(m_d->currentColorSpace);
 
+}
+
+void KisInternalColorSelector::lockUsedColorSpace(const KoColorSpace *cs)
+{
+    colorSpaceChanged(cs);
+    m_d->lockUsedCS = true;
 }
 
 void KisInternalColorSelector::setDisplayRenderer(const KoColorDisplayRendererInterface *displayRenderer)

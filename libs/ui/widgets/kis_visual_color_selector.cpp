@@ -29,6 +29,9 @@
 #include <QRect>
 #include <QtMath>
 
+#include <KSharedConfig>
+#include <KConfigGroup>
+
 #include "KoColorConversions.h"
 #include "KoColorDisplayRendererInterface.h"
 #include "KoChannelInfo.h"
@@ -43,6 +46,7 @@ struct KisVisualColorSelector::Private
     QList <KisVisualColorSelectorShape*> widgetlist;
     bool updateSelf = false;
     const KoColorDisplayRendererInterface *displayRenderer = 0;
+    KisVisualColorSelector::Configuration acs_config;
     //Current coordinates.
     QVector <float> currentCoordinates;
 };
@@ -52,6 +56,9 @@ KisVisualColorSelector::KisVisualColorSelector(QWidget *parent) : QWidget(parent
     this->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
     QVBoxLayout *layout = new QVBoxLayout;
     this->setLayout(layout);
+
+    KConfigGroup cfg =  KSharedConfig::openConfig()->group("advancedColorSelector");
+    m_d->acs_config = Configuration::fromString(cfg.readEntry("colorSelectorConfiguration", KisVisualColorSelector::Configuration().toString()));
     //m_d->updateSelf = new KisSignalCompressor(100 /* ms */, KisSignalCompressor::POSTPONE, this);
 }
 
@@ -90,40 +97,164 @@ void KisVisualColorSelector::slotsetColorSpace(const KoColorSpace *cs)
             layout->addWidget(bar);
             m_d->widgetlist.append(bar);
         } else if (m_d->currentCS->colorChannelCount() == 3) {
-            /*KisVisualRectangleSelectorShape *bar =  new KisVisualRectangleSelectorShape(this,
-                                                                                        KisVisualRectangleSelectorShape::onedimensional,
-                                                                                        KisVisualColorSelectorShape::HSL,
-                                                                                        cs, 0, 0,
-                                                                                        m_d->displayRenderer, width()*0.05,KisVisualRectangleSelectorShape::borderMirrored);
-            KisVisualRectangleSelectorShape *block =  new KisVisualRectangleSelectorShape(this, KisVisualRectangleSelectorShape::twodimensional,
-                                                                                          KisVisualColorSelectorShape::HSL,
-                                                                                          cs, 1, 2,
-                                                                                          m_d->displayRenderer);*/
             int sizeValue = qMin(width(), height());
             int borderWidth = qMax(sizeValue*0.1, 20.0);
-            KisVisualEllipticalSelectorShape *bar =  new KisVisualEllipticalSelectorShape(this,
-                                                                                        KisVisualColorSelectorShape::onedimensional,
-                                                                                        KisVisualColorSelectorShape::HSV,
-                                                                                        cs, 0, 0,
-                                                                                        m_d->displayRenderer, borderWidth,KisVisualEllipticalSelectorShape::borderMirrored);
-            KisVisualTriangleSelectorShape *block =  new KisVisualTriangleSelectorShape(this, KisVisualColorSelectorShape::twodimensional,
-                                                                                          KisVisualColorSelectorShape::HSV,
-                                                                                          cs, 1, 2,
-                                                                                          m_d->displayRenderer);
-            bar->resize(sizeValue, sizeValue);
-            QLineF barInnerRadius(bar->geometry().center(), QPointF(bar->geometry().right()-borderWidth, bar->geometry().center().y()));
-            QRect geom = block->setGeometryByRadius(barInnerRadius);
-            block->setGeometry(geom);
-            block->setTriangle();
-            //There's a really weird bug where touching the geometry makes the widget hide itself??? This didn't happen with layouts so, I am confused.//
-            //block->show();
-            //bar->show();
-            bar->setColor(m_d->currentcolor);
-            block->setColor(m_d->currentcolor);
-            connect (bar, SIGNAL(sigNewColor(KoColor)), block, SLOT(setColorFromSibling(KoColor)));
-            connect (block, SIGNAL(sigNewColor(KoColor)), SLOT(updateFromWidgets(KoColor)));
-            m_d->widgetlist.append(bar);
-            m_d->widgetlist.append(block);
+
+            KisVisualColorSelectorShape::ColorModel modelS = KisVisualColorSelectorShape::HSV;
+            int channel1 = 0;
+            int channel2 = 1;
+            int channel3 = 2;
+
+            switch(m_d->acs_config.subTypeParameter)
+            {
+            case H:
+                channel1 = 0; break;
+            case hsyS:
+            case hsiS:
+            case hslS:
+            case hsvS:
+                channel1 = 1; break;
+            case V:
+            case L:
+            case I:
+            case Y:
+                channel1 = 2; break;
+            }
+
+            switch(m_d->acs_config.mainTypeParameter)
+            {
+            case hsySH:
+                modelS = KisVisualColorSelectorShape::HSY;
+                channel2 = 0;
+                channel3 = 1;
+                break;
+            case hsiSH:
+                modelS = KisVisualColorSelectorShape::HSL;
+                channel2 = 0;
+                channel3 = 1;
+                break;
+            case hslSH:
+                modelS = KisVisualColorSelectorShape::HSI;
+                channel2 = 0;
+                channel3 = 1;
+                break;
+            case hsvSH:
+                modelS = KisVisualColorSelectorShape::HSV;
+                channel2 = 0;
+                channel3 = 1;
+                break;
+            case SY:
+                modelS = KisVisualColorSelectorShape::HSY;
+                channel2 = 1;
+                channel3 = 2;
+                break;
+            case SI:
+                modelS = KisVisualColorSelectorShape::HSI;
+                channel2 = 1;
+                channel3 = 2;
+                break;
+            case SL:
+                modelS = KisVisualColorSelectorShape::HSL;
+                channel2 = 1;
+                channel3 = 2;
+                break;
+            case SV:
+                modelS = KisVisualColorSelectorShape::HSV;
+                channel2 = 1;
+                channel3 = 2;
+                break;
+            }
+
+            if (m_d->acs_config.subType==Ring) {
+                KisVisualEllipticalSelectorShape *bar =  new KisVisualEllipticalSelectorShape(this,
+                                                                                              KisVisualColorSelectorShape::onedimensional,
+                                                                                              modelS,
+                                                                                              cs, channel1, channel1,
+                                                                                             m_d->displayRenderer, borderWidth,KisVisualEllipticalSelectorShape::border);
+                bar->resize(sizeValue, sizeValue);
+                bar->setColor(m_d->currentcolor);
+                m_d->widgetlist.append(bar);
+
+                if (m_d->acs_config.mainType==Triangle) {
+                    KisVisualTriangleSelectorShape *block =  new KisVisualTriangleSelectorShape(this, KisVisualColorSelectorShape::twodimensional,
+                                                                                                modelS,
+                                                                                                cs, channel2, channel3,
+                                                                                                m_d->displayRenderer);
+                    block->setGeometry(bar->getSpaceForTriangle(this->geometry()));
+                    block->setTriangle();
+                    block->setColor(m_d->currentcolor);
+                    connect (bar, SIGNAL(sigNewColor(KoColor)), block, SLOT(setColorFromSibling(KoColor)));
+                    connect (block, SIGNAL(sigNewColor(KoColor)), SLOT(updateFromWidgets(KoColor)));
+                    m_d->widgetlist.append(block);
+                } else if (m_d->acs_config.mainType==Square) {
+                    KisVisualRectangleSelectorShape *block =  new KisVisualRectangleSelectorShape(this, KisVisualColorSelectorShape::twodimensional,
+                                                                                                  modelS,
+                                                                                                  cs, channel2, channel3,
+                                                                                                  m_d->displayRenderer);
+                    block->setGeometry(bar->getSpaceForSquare(this->geometry()));
+                    block->setColor(m_d->currentcolor);
+                    connect (bar, SIGNAL(sigNewColor(KoColor)), block, SLOT(setColorFromSibling(KoColor)));
+                    connect (block, SIGNAL(sigNewColor(KoColor)), SLOT(updateFromWidgets(KoColor)));
+                    m_d->widgetlist.append(block);
+                } else {
+                    KisVisualEllipticalSelectorShape *block =  new KisVisualEllipticalSelectorShape(this, KisVisualColorSelectorShape::twodimensional,
+                                                                                                    modelS,
+                                                                                                    cs, channel2, channel3,
+                                                                                                    m_d->displayRenderer);
+                    block->setGeometry(bar->getSpaceForCircle(this->geometry()));
+                    block->setColor(m_d->currentcolor);
+                    connect (bar, SIGNAL(sigNewColor(KoColor)), block, SLOT(setColorFromSibling(KoColor)));
+                    connect (block, SIGNAL(sigNewColor(KoColor)), SLOT(updateFromWidgets(KoColor)));
+                    m_d->widgetlist.append(block);
+
+                }
+            } else if (m_d->acs_config.subType==Slider) {
+                KisVisualRectangleSelectorShape *bar =  new KisVisualRectangleSelectorShape(this,
+                                                                                            KisVisualRectangleSelectorShape::onedimensional,
+                                                                                            modelS,
+                                                                                            cs, channel1, channel2,
+                                                                                            m_d->displayRenderer, borderWidth);
+                bar->setMaximumWidth(borderWidth);
+                bar->setMinimumWidth(borderWidth);
+                bar->setMinimumHeight(sizeValue);
+                bar->setColor(m_d->currentcolor);
+                m_d->widgetlist.append(bar);
+
+                if (m_d->acs_config.mainType==Triangle) {
+                    KisVisualTriangleSelectorShape *block =  new KisVisualTriangleSelectorShape(this, KisVisualColorSelectorShape::twodimensional,
+                                                                                                modelS,
+                                                                                                cs, channel2, channel3,
+                                                                                                m_d->displayRenderer);
+                    block->setGeometry(bar->getSpaceForTriangle(this->geometry()));
+                    block->setTriangle();
+                    block->setColor(m_d->currentcolor);
+                    connect (bar, SIGNAL(sigNewColor(KoColor)), block, SLOT(setColorFromSibling(KoColor)));
+                    connect (block, SIGNAL(sigNewColor(KoColor)), SLOT(updateFromWidgets(KoColor)));
+                    m_d->widgetlist.append(block);
+                } else if (m_d->acs_config.mainType==Square) {
+                    KisVisualRectangleSelectorShape *block =  new KisVisualRectangleSelectorShape(this, KisVisualColorSelectorShape::twodimensional,
+                                                                                                  modelS,
+                                                                                                  cs, channel2, channel3,
+                                                                                                  m_d->displayRenderer);
+                    block->setGeometry(bar->getSpaceForSquare(this->geometry()));
+                    block->setColor(m_d->currentcolor);
+                    connect (bar, SIGNAL(sigNewColor(KoColor)), block, SLOT(setColorFromSibling(KoColor)));
+                    connect (block, SIGNAL(sigNewColor(KoColor)), SLOT(updateFromWidgets(KoColor)));
+                    m_d->widgetlist.append(block);
+                } else {
+                    KisVisualEllipticalSelectorShape *block =  new KisVisualEllipticalSelectorShape(this, KisVisualColorSelectorShape::twodimensional,
+                                                                                                    modelS,
+                                                                                                    cs, channel2, channel3,
+                                                                                                    m_d->displayRenderer);
+                    block->setGeometry(bar->getSpaceForCircle(this->geometry()));
+                    block->setColor(m_d->currentcolor);
+                    connect (bar, SIGNAL(sigNewColor(KoColor)), block, SLOT(setColorFromSibling(KoColor)));
+                    connect (block, SIGNAL(sigNewColor(KoColor)), SLOT(updateFromWidgets(KoColor)));
+                    m_d->widgetlist.append(block);
+
+                }
+
+            }
             this->adjustSize();
         } else if (m_d->currentCS->colorChannelCount() == 4) {
             KisVisualRectangleSelectorShape *block =  new KisVisualRectangleSelectorShape(this, KisVisualRectangleSelectorShape::twodimensional,KisVisualColorSelectorShape::Channel, cs, 0, 1);
@@ -161,6 +292,7 @@ void KisVisualColorSelector::updateSelectorElements()
     //first lock all elements from sending updates, then update all elements.
     Q_FOREACH (KisVisualColorSelectorShape *shape, m_d->widgetlist) {
         shape->blockSignals(true);
+        qDebug()<<shape->geometry();
     }
 
     Q_FOREACH (KisVisualColorSelectorShape *shape, m_d->widgetlist) {
@@ -440,7 +572,7 @@ KoColor KisVisualColorSelectorShape::convertShapeCoordinateToKoColor(QPointF coo
                     inbetween[m_d->channel2] = coordinates.y();
                 }
                 if (cursor==true){setHSX(inbetween);}
-                HSYToRGB(inbetween[0], inbetween[1], inbetween[2],&chan2[0],&chan2[1], &chan2[1],
+                HSYToRGB(inbetween[0], inbetween[1], inbetween[2],&chan2[0],&chan2[1], &chan2[2],
                         luma[0], luma[1], luma[2]);
                 channelValuesDisplay = convertvectorqrealTofloat(chan2);
             }
@@ -523,7 +655,7 @@ QPointF KisVisualColorSelectorShape::convertKoColorToShapeCoordinate(KoColor c)
                 if (m_d->dimension == Dimensions::twodimensional) {
                     coordinates.setY(inbetween[m_d->channel2]);
                 }
-            } else /*if (m_d->model == ColorModel::HSY)*/ {
+            } else if (m_d->model == ColorModel::HSY) {
                 QVector <qreal> luma = m_d->cs->lumaCoefficients();
                 QVector <qreal> chan2 = convertvectorfloatToqreal(channelValuesDisplay);
                 QVector <qreal> inbetween(3);
@@ -670,10 +802,41 @@ void KisVisualRectangleSelectorShape::setBarWidth(int width)
     m_barWidth = width;
 }
 
+QRect KisVisualRectangleSelectorShape::getSpaceForSquare(QRect geom)
+{
+    QPointF tl;
+    QPointF br;
+
+    if (m_type==KisVisualRectangleSelectorShape::vertical) {
+        br = geom.bottomRight();
+        tl = QPoint(geom.topLeft().x()+m_barWidth, geom.topLeft().y());
+    } else if (m_type==KisVisualRectangleSelectorShape::horizontal) {
+        br = geom.bottomRight();
+        tl = QPoint(geom.topLeft().x(), geom.topLeft().y()+m_barWidth);
+    } else {
+        tl = QPointF (geom.topLeft().x()+m_barWidth, geom.topLeft().y()+m_barWidth);
+        br = QPointF (geom.bottomRight().x()-m_barWidth, geom.bottomRight().y()-m_barWidth);
+
+    }
+    QRect a(tl.toPoint(), br.toPoint());
+    QRect r(a.left(), a.top(), qMin(a.height(), a.width()), qMin(a.height(), a.width()));
+    return r;
+}
+
+QRect KisVisualRectangleSelectorShape::getSpaceForCircle(QRect geom)
+{
+    return getSpaceForSquare(geom);
+}
+
+QRect KisVisualRectangleSelectorShape::getSpaceForTriangle(QRect geom)
+{
+    return getSpaceForSquare(geom);
+}
+
 QPointF KisVisualRectangleSelectorShape::convertShapeCoordinateToWidgetCoordinate(QPointF coordinate)
 {
-    qreal x = width()/2;
-    qreal y = height()/2;
+    qreal x = m_barWidth/2;
+    qreal y = m_barWidth/2;
     KisVisualColorSelectorShape::Dimensions dimension = getDimensions();
     if (dimension == KisVisualColorSelectorShape::onedimensional) {
         if ( m_type == KisVisualRectangleSelectorShape::vertical) {
@@ -950,6 +1113,39 @@ void KisVisualEllipticalSelectorShape::setBarWidth(int width)
     m_barWidth = width;
 }
 
+QRect KisVisualEllipticalSelectorShape::getSpaceForSquare(QRect geom)
+{
+    QLineF radius(geom.center(), QPointF(geom.left()-m_barWidth, geom.center().y()) );
+    radius.setAngle(135);
+    QPointF tl = radius.p2();
+    radius.setAngle(315);
+    QPointF br = radius.p2();
+    QRect r(tl.toPoint(), br.toPoint());
+    return r;
+}
+
+QRect KisVisualEllipticalSelectorShape::getSpaceForCircle(QRect geom)
+{
+    QPointF tl = QPointF (geom.topLeft().x()+m_barWidth, geom.topLeft().y()+m_barWidth);
+    QPointF br = QPointF (geom.bottomRight().x()-m_barWidth, geom.bottomRight().y()-m_barWidth);
+    QRect r(tl.toPoint(), br.toPoint());
+    return r;
+}
+
+QRect KisVisualEllipticalSelectorShape::getSpaceForTriangle(QRect geom)
+{
+    QLineF radius(geom.center(), QPointF(geom.left()-m_barWidth, geom.center().y()));
+    radius.setAngle(90);//point at yellowgreen :)
+    QPointF t = radius.p2();
+    radius.setAngle(330);//point to purple :)
+    QPointF br = radius.p2();
+    radius.setAngle(210);//point to cerulean :)
+    QPointF bl = radius.p2();
+    QPointF tl = QPoint(bl.x(),t.y());
+    QRect r(tl.toPoint(), br.toPoint());
+    return r;
+}
+
 QPointF KisVisualEllipticalSelectorShape::convertShapeCoordinateToWidgetCoordinate(QPointF coordinate)
 {
     qreal x;
@@ -1032,7 +1228,7 @@ void KisVisualEllipticalSelectorShape::drawCursor()
     QPen pen;
     pen.setWidth(5);
     painter.setPen(pen);
-    painter.drawEllipse(this->geometry());
+    painter.drawEllipse(QRect(0,0,width(),height()));
     if (getDimensions()==KisVisualColorSelectorShape::onedimensional) {
         painter.drawEllipse(QRect(this->geometry().top()+m_barWidth, this->geometry().left()+m_barWidth, this->geometry().width()-(m_barWidth*2), this->geometry().height()-(m_barWidth*2)));
     }
@@ -1070,7 +1266,7 @@ void KisVisualEllipticalSelectorShape::drawCursor()
     setFullImage(fullSelector);
 }
 
-//----------------Elliptical--------------------------//
+//----------------Triangle--------------------------//
 KisVisualTriangleSelectorShape::KisVisualTriangleSelectorShape(QWidget *parent,
                                                                  Dimensions dimension,
                                                                  ColorModel model,
@@ -1095,6 +1291,20 @@ void KisVisualTriangleSelectorShape::setBarWidth(int width)
     m_barWidth = width;
 }
 
+QRect KisVisualTriangleSelectorShape::getSpaceForSquare(QRect geom)
+{
+    return geom;
+}
+
+QRect KisVisualTriangleSelectorShape::getSpaceForCircle(QRect geom)
+{
+    return geom;
+}
+
+QRect KisVisualTriangleSelectorShape::getSpaceForTriangle(QRect geom)
+{
+    return geom;
+}
 void KisVisualTriangleSelectorShape::setTriangle()
 {
     QPoint apex = QPoint (width()*0.5,0);
@@ -1110,19 +1320,6 @@ void KisVisualTriangleSelectorShape::setTriangle()
     m_center = intersect;
     QLineF r(triangle.at(0), intersect);
     m_radius = r.length();
-}
-
-QRect KisVisualTriangleSelectorShape::setGeometryByRadius(QLineF radius)
-{
-    radius.setAngle(90);//point at yellowgreen :)
-    QPointF t = radius.p2();
-    radius.setAngle(330);//point to purple :)
-    QPointF br = radius.p2();
-    radius.setAngle(210);//point to cerulean :)
-    QPointF bl = radius.p2();
-    QPointF tl = QPoint(bl.x(),t.y());
-    QRect r(tl.toPoint(), br.toPoint());
-    return r;
 }
 
 QPointF KisVisualTriangleSelectorShape::convertShapeCoordinateToWidgetCoordinate(QPointF coordinate)

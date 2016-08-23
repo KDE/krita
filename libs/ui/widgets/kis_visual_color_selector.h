@@ -40,6 +40,58 @@ class KRITAUI_EXPORT KisVisualColorSelector : public QWidget
 {
     Q_OBJECT
 public:
+    //Copied directly from the advanced color selector:
+    enum Type {Ring, Square, Wheel, Triangle, Slider};
+    enum Parameters {H, hsvS, V, hslS, L, SL, SV, SV2, hsvSH, hslSH, VH, LH, SI, SY, hsiSH, hsySH, I, Y, IH, YH, hsiS, hsyS};
+    struct Configuration {
+        Type mainType;
+        Type subType;
+        Parameters mainTypeParameter;
+        Parameters subTypeParameter;
+        Configuration(Type mainT = Triangle,
+                              Type subT = Ring,
+                              Parameters mainTP = SL,
+                              Parameters subTP = H)
+                                  : mainType(mainT),
+                                  subType(subT),
+                                  mainTypeParameter(mainTP),
+                                  subTypeParameter(subTP)
+        {}
+        Configuration(QString string)
+        {
+            readString(string);
+        }
+
+        QString toString() const
+        {
+            return QString("%1|%2|%3|%4").arg(mainType).arg(subType).arg(mainTypeParameter).arg(subTypeParameter);
+        }
+        void readString(QString string)
+        {
+            QStringList strili = string.split('|');
+            if(strili.length()!=4) return;
+
+            int imt=strili.at(0).toInt();
+            int ist=strili.at(1).toInt();
+            int imtp=strili.at(2).toInt();
+            int istp=strili.at(3).toInt();
+
+            if(imt>Slider || ist>Slider || imtp>hsyS || istp>hsyS)//this was LH before
+                return;
+
+            mainType = Type(imt);
+            subType = Type(ist);
+            mainTypeParameter = Parameters(imtp);
+            subTypeParameter = Parameters(istp);
+        }
+        static Configuration fromString(QString string)
+        {
+            Configuration ret;
+            ret.readString(string);
+            return ret;
+        }
+    };
+
     explicit KisVisualColorSelector(QWidget *parent = 0);
     ~KisVisualColorSelector();
 
@@ -144,13 +196,22 @@ public:
      * @return get the qcolor from the given kocolorusing this widget's display renderer.
      */
     QColor getColorFromConverter(KoColor c);
+
+    /**
+     * @brief getSpaceForSquare
+     * @param geom the full widget rectangle
+     * @return rectangle with enough space for second widget
+     */
+    virtual QRect getSpaceForSquare(QRect geom) = 0;
+    virtual QRect getSpaceForCircle(QRect geom) = 0;
+    virtual QRect getSpaceForTriangle(QRect geom) = 0;
 Q_SIGNALS:
     void sigNewColor(KoColor col);
 
 public Q_SLOTS:
     /**
      * @brief setColor
-     * Set this widget's current color and chang ethe cursor position.
+     * Set this widget's current color and change the cursor position.
      * @param c
      */
     void setColor(KoColor c);
@@ -247,6 +308,15 @@ public:
 
     void setBarWidth(int width);
 
+    /**
+     * @brief getSpaceForSquare
+     * @param geom the full widget rectangle
+     * @return rectangle with enough space for second widget
+     */
+    virtual QRect getSpaceForSquare(QRect geom);
+    virtual QRect getSpaceForCircle(QRect geom);
+    virtual QRect getSpaceForTriangle(QRect geom);
+
 private:
     virtual QPointF convertShapeCoordinateToWidgetCoordinate(QPointF coordinate);
     virtual QPointF convertWidgetCoordinateToShapeCoordinate(QPoint coordinate);
@@ -274,9 +344,19 @@ public:
 
     void setBarWidth(int width);
 
+    /**
+     * @brief getSpaceForSquare
+     * @param geom the full widget rectangle
+     * @return rectangle with enough space for second widget
+     */
+    virtual QRect getSpaceForSquare(QRect geom);
+    virtual QRect getSpaceForCircle(QRect geom);
+    virtual QRect getSpaceForTriangle(QRect geom);
+
 private:
     virtual QPointF convertShapeCoordinateToWidgetCoordinate(QPointF coordinate);
     virtual QPointF convertWidgetCoordinateToShapeCoordinate(QPoint coordinate);
+
 
     singelDTypes m_type;
     int m_barWidth;
@@ -302,7 +382,15 @@ public:
 
     void setBarWidth(int width);
     void setTriangle();
-    QRect setGeometryByRadius(QLineF radius);
+
+    /**
+     * @brief getSpaceForSquare
+     * @param geom the full widget rectangle
+     * @return rectangle with enough space for second widget
+     */
+    virtual QRect getSpaceForSquare(QRect geom);
+    virtual QRect getSpaceForCircle(QRect geom);
+    virtual QRect getSpaceForTriangle(QRect geom);
 
 private:
     virtual QPointF convertShapeCoordinateToWidgetCoordinate(QPointF coordinate);

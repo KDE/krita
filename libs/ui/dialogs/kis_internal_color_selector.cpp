@@ -36,17 +36,20 @@
 #include "kis_internal_color_selector.h"
 #include "ui_wdgdlginternalcolorselector.h"
 #include "kis_config.h"
+#include "kis_color_input.h"
 
 struct KisInternalColorSelector::Private
 {
     bool allowUpdates = true;
     KoColor currentColor;
     KoColor previousColor;
+    KoColor sRGB = KoColor(KoColorSpaceRegistry::instance()->rgb8());
     const KoColorSpace *currentColorSpace;
     bool lockUsedCS = false;
     bool chooseAlpha = false;
     KisSignalCompressor *compressColorChanges;
     const KoColorDisplayRendererInterface *displayRenderer;
+    KisHexColorInput *hexColorInput;
 };
 
 KisInternalColorSelector::KisInternalColorSelector(QWidget *parent, KoColor color, bool modal, const QString &caption, const KoColorDisplayRendererInterface *displayRenderer)
@@ -95,6 +98,12 @@ KisInternalColorSelector::KisInternalColorSelector(QWidget *parent, KoColor colo
     m_ui->previousColor->setFrameStyle(QFrame::StyledPanel);
     connect(this, SIGNAL(accepted()), this, SLOT(setPreviousColor()));
     connect(m_ui->previousColor, SIGNAL(triggered(KoColorPatch*)), SLOT(slotSetColorFromPatch(KoColorPatch*)));
+
+    m_d->sRGB.fromKoColor(m_d->currentColor);
+    m_d->hexColorInput = new KisHexColorInput(this, &m_d->sRGB);
+    connect(m_d->hexColorInput, SIGNAL(updated()), SLOT(slotSetColorFromHex()));
+    m_ui->leftPane->addWidget(m_d->hexColorInput);
+    m_d->hexColorInput->setToolTip(i18n("This is a hexcode input, for webcolors. It can only get colors in the sRGB space."));
 
     connect(this, SIGNAL(signalForegroundColorChosen(KoColor)), this, SLOT(slotLockSelector()));
     m_d->compressColorChanges = new KisSignalCompressor(100 /* ms */, KisSignalCompressor::POSTPONE, this);
@@ -203,6 +212,11 @@ void KisInternalColorSelector::updateAllElements(QObject *source)
         m_ui->visualSelector->slotSetColor(m_d->currentColor);
     }
 
+    if (source != m_d->hexColorInput) {
+        m_d->sRGB.fromKoColor(m_d->currentColor);
+        m_d->hexColorInput->update();
+    }
+
     m_ui->previousColor->setColor(m_d->previousColor);
 
     m_ui->currentColor->setColor(m_d->currentColor);
@@ -227,4 +241,9 @@ void KisInternalColorSelector::focusInEvent(QFocusEvent *e)
 void KisInternalColorSelector::slotSetColorFromPatch(KoColorPatch* patch)
 {
     slotColorUpdated(patch->color());
+}
+
+void KisInternalColorSelector::slotSetColorFromHex()
+{
+    slotColorUpdated(m_d->sRGB);
 }

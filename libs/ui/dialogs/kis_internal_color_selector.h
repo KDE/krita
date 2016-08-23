@@ -120,7 +120,18 @@ private Q_SLOTS:
      */
     void setPreviousColor();
 
+    /**
+     * @brief slotSetColorFromPatch
+     * update current color from kocolorpatch.
+     * @param patch
+     */
     void slotSetColorFromPatch(KoColorPatch* patch);
+
+    /**
+     * @brief slotSetColorFromHex
+     * Update from the hex color input.
+     */
+    void slotSetColorFromHex();
 
 
 private:

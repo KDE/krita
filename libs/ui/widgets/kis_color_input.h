@@ -37,7 +37,7 @@ class KRITAUI_EXPORT KisColorInput : public QWidget
 {
     Q_OBJECT
 public:
-    KisColorInput(QWidget* parent, const KoChannelInfo*, KoColor* color, KoColorDisplayRendererInterface *displayRenderer);
+    KisColorInput(QWidget* parent, const KoChannelInfo*, KoColor* color, KoColorDisplayRendererInterface *displayRenderer = KoDumbColorDisplayRenderer::instance());
 protected:
     void init();
     virtual QWidget* createInput() = 0;
@@ -54,7 +54,7 @@ class KRITAUI_EXPORT KisIntegerColorInput : public KisColorInput
 {
     Q_OBJECT
 public:
-    KisIntegerColorInput(QWidget* parent, const KoChannelInfo*, KoColor* color, KoColorDisplayRendererInterface *displayRenderer);
+    KisIntegerColorInput(QWidget* parent, const KoChannelInfo*, KoColor* color, KoColorDisplayRendererInterface *displayRenderer = KoDumbColorDisplayRenderer::instance());
 protected:
     virtual QWidget* createInput();
 public Q_SLOTS:
@@ -69,7 +69,7 @@ class KRITAUI_EXPORT KisFloatColorInput : public KisColorInput
 {
     Q_OBJECT
 public:
-    KisFloatColorInput(QWidget* parent, const KoChannelInfo*, KoColor* color, KoColorDisplayRendererInterface *displayRenderer);
+    KisFloatColorInput(QWidget* parent, const KoChannelInfo*, KoColor* color, KoColorDisplayRendererInterface *displayRenderer = KoDumbColorDisplayRenderer::instance());
 protected:
     virtual QWidget* createInput();
 public Q_SLOTS:
@@ -86,7 +86,7 @@ class KRITAUI_EXPORT KisHexColorInput : public KisColorInput
 {
     Q_OBJECT
 public:
-    KisHexColorInput(QWidget* parent, KoColor* color, KoColorDisplayRendererInterface *displayRenderer);
+    KisHexColorInput(QWidget* parent, KoColor* color, KoColorDisplayRendererInterface *displayRenderer = KoDumbColorDisplayRenderer::instance());
 protected:
     virtual QWidget* createInput();
 public Q_SLOTS:

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>430</width>
+    <width>505</width>
     <height>483</height>
    </rect>
   </property>
@@ -17,7 +17,7 @@
    <item>
     <layout class="QHBoxLayout" name="horizontal">
      <item>
-      <layout class="QVBoxLayout" name="rightPane">
+      <layout class="QVBoxLayout" name="leftPane">
        <item>
         <widget class="KisVisualColorSelector" name="visualSelector" native="true">
          <property name="sizePolicy">
@@ -47,7 +47,7 @@
       </layout>
      </item>
      <item>
-      <layout class="QVBoxLayout" name="leftPane">
+      <layout class="QVBoxLayout" name="rightPane">
        <item>
         <widget class="KoColorSetWidget" name="paletteBox">
          <property name="sizePolicy">

@@ -32,6 +32,7 @@
 #include "KoColorConversions.h"
 #include "KoColorDisplayRendererInterface.h"
 #include "KoChannelInfo.h"
+#include <KoColorModelStandardIds.h>
 #include <QPointer>
 #include "kis_signal_compressor.h"
 
@@ -351,7 +352,11 @@ KoColor KisVisualColorSelectorShape::convertShapeCoordinateToKoColor(QPointF coo
     maxvalue.fill(1.0);
     if (m_d->displayRenderer
             && m_d->displayRenderer->getPaintingColorSpace()==m_d->cs
-            && m_d->cs->colorDepthId().id().contains("F")) {
+            && m_d->cs->colorDepthId() == Float16BitsColorDepthID
+            && m_d->cs->colorDepthId() == Float32BitsColorDepthID
+            && m_d->cs->colorDepthId() == Float64BitsColorDepthID
+            && m_d->cs->colorModelId() != LABAColorModelID
+            && m_d->cs->colorModelId() != CMYKAColorModelID) {
         for (int ch = 0; ch<maxvalue.size(); ch++) {
             KoChannelInfo *channel = m_d->cs->channels()[ch];
             maxvalue[ch] = m_d->displayRenderer->maxVisibleFloatValue(channel);
@@ -466,7 +471,11 @@ QPointF KisVisualColorSelectorShape::convertKoColorToShapeCoordinate(KoColor c)
     maxvalue.fill(1.0);
     if (m_d->displayRenderer
             && m_d->displayRenderer->getPaintingColorSpace()==m_d->cs
-            && m_d->cs->colorDepthId().id().contains("F")) {
+            && m_d->cs->colorDepthId() == Float16BitsColorDepthID
+            && m_d->cs->colorDepthId() == Float32BitsColorDepthID
+            && m_d->cs->colorDepthId() == Float64BitsColorDepthID
+            && m_d->cs->colorModelId() != LABAColorModelID
+            && m_d->cs->colorModelId() != CMYKAColorModelID) {
         for (int ch = 0; ch<maxvalue.size(); ch++) {
             KoChannelInfo *channel = m_d->cs->channels()[ch];
             maxvalue[ch] = m_d->displayRenderer->maxVisibleFloatValue(channel);

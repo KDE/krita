@@ -29,10 +29,11 @@ class KisIntParseSpinBox;
 class KisDoubleParseSpinBox;
 class KoColorSlider;
 class QLineEdit;
-#include "KoColorDisplayRendererInterface.h"
 
+#include <KoColorDisplayRendererInterface.h>
+#include "kritaui_export.h"
 
-class KisColorInput : public QWidget
+class KRITAUI_EXPORT KisColorInput : public QWidget
 {
     Q_OBJECT
 public:
@@ -49,7 +50,7 @@ protected:
     KoColorDisplayRendererInterface *m_displayRenderer;
 };
 
-class KisIntegerColorInput : public KisColorInput
+class KRITAUI_EXPORT KisIntegerColorInput : public KisColorInput
 {
     Q_OBJECT
 public:
@@ -64,7 +65,7 @@ private:
 };
 
 
-class KisFloatColorInput : public KisColorInput
+class KRITAUI_EXPORT KisFloatColorInput : public KisColorInput
 {
     Q_OBJECT
 public:
@@ -81,7 +82,7 @@ private:
     qreal m_maxValue;
 };
 
-class KisHexColorInput : public KisColorInput
+class KRITAUI_EXPORT KisHexColorInput : public KisColorInput
 {
     Q_OBJECT
 public:

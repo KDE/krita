@@ -66,6 +66,11 @@ public:
      */
     static bool needsFenceWorkaround();
 
+    /**
+     * @see a comment in initializeContext()
+     */
+    static bool needsPixmapCacheWorkaround();
+
 private:
 
     static void setDefaultFormat();

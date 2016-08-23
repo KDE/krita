@@ -108,23 +108,29 @@ qreal KisParticleOpOption::gravity() const
 
 void KisParticleOpOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
 {
-    setting->setProperty(PARTICLE_COUNT, particleCount());
-    setting->setProperty(PARTICLE_ITERATIONS, iterations());
-    setting->setProperty(PARTICLE_GRAVITY, gravity());
-    setting->setProperty(PARTICLE_WEIGHT, weight());
-    setting->setProperty(PARTICLE_SCALE_X, scale().x());
-    setting->setProperty(PARTICLE_SCALE_Y, scale().y());
+    ParticleOption op;
+
+    op.particle_count = particleCount();
+    op.particle_iterations = iterations();
+    op.particle_gravity = gravity();
+    op.particle_weight = weight();
+    op.particle_scale_x = scale().x();
+    op.particle_scale_y = scale().y();
+
+    op.writeOptionSetting(setting);
 }
 
 void KisParticleOpOption::readOptionSetting(const KisPropertiesConfiguration* setting)
 {
+    ParticleOption op;
+    op.readOptionSetting(setting);
 
-    m_options->particleSpinBox->setValue((qreal)setting->getInt(PARTICLE_COUNT));
-    m_options->itersSPBox->setValue((qreal)setting->getInt(PARTICLE_ITERATIONS));
-    m_options->gravSPBox->setValue((qreal)setting->getDouble(PARTICLE_GRAVITY));
-    m_options->weightSPBox->setValue((qreal)setting->getDouble(PARTICLE_WEIGHT));
-    m_options->dxSPBox->setValue((qreal)setting->getDouble(PARTICLE_SCALE_X));
-    m_options->dySPBox->setValue((qreal)setting->getDouble(PARTICLE_SCALE_Y));
+    m_options->particleSpinBox->setValue(op.particle_count);
+    m_options->itersSPBox->setValue(op.particle_iterations);
+    m_options->gravSPBox->setValue(op.particle_gravity);
+    m_options->weightSPBox->setValue(op.particle_weight);
+    m_options->dxSPBox->setValue(op.particle_scale_x);
+    m_options->dySPBox->setValue(op.particle_scale_y);
 }
 
 void KisParticleOpOption::lodLimitations(KisPaintopLodLimitations *l) const

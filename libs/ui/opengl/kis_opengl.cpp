@@ -22,6 +22,9 @@
 #include <QOpenGLFunctions>
 
 #include <QApplication>
+#include <QDesktopWidget>
+#include <QPixmapCache>
+
 #include <QDir>
 #include <QFile>
 #include <QDesktopServices>
@@ -40,6 +43,7 @@ namespace
 {
     bool initialized = false;
     bool NeedsFenceWorkaround = false;
+    bool NeedsPixmapCacheWorkaround = false;
     int glMajorVersion = 0;
     int glMinorVersion = 0;
     bool supportsDeprecatedFunctions = false;
@@ -116,6 +120,32 @@ void KisOpenGL::initializeContext(QOpenGLContext *ctx)
     if ((isOnX11 && Renderer.startsWith("AMD")) || cfg.forceOpenGLFenceWorkaround()) {
         NeedsFenceWorkaround = true;
     }
+
+
+    /**
+     * NVidia + Qt's openGL don't play well together and one cannot
+     * draw a pixmap on a widget more than once in one rendering cycle.
+     *
+     * It can be workarounded by drawing strictly via QPixmapCache and
+     * only when the pixmap size in bigger than doubled size of the
+     * display framebuffer. That is for 8-bit HD display, you should have
+     * a cache bigger than 16 MiB. Don't ask me why. (DK)
+     *
+     * See bug: https://bugs.kde.org/show_bug.cgi?id=361709
+     *
+     * TODO: check if this workaround is still needed after merging
+     *       Qt5+openGL3 branch.
+     */
+
+    if (vendor.toUpper().contains("NVIDIA")) {
+        NeedsPixmapCacheWorkaround = true;
+
+        const QRect screenSize = QApplication::desktop()->screenGeometry();
+        const int minCacheSize = 20 * 1024;
+        const int cacheSize = 2048 + 2 * 4 * screenSize.width() * screenSize.height() / 1024; //KiB
+
+        QPixmapCache::setCacheLimit(qMax(minCacheSize, cacheSize));
+    }
 }
 
 bool KisOpenGL::hasOpenGL3()
@@ -134,6 +164,12 @@ bool KisOpenGL::needsFenceWorkaround()
 {
     initialize();
     return NeedsFenceWorkaround;
+}
+
+bool KisOpenGL::needsPixmapCacheWorkaround()
+{
+    initialize();
+    return NeedsPixmapCacheWorkaround;
 }
 
 void KisOpenGL::setDefaultFormat()

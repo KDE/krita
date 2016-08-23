@@ -2,6 +2,14 @@
 <ui version="4.0">
  <class>WdgLevel</class>
  <widget class="QWidget" name="WdgLevel">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>259</width>
+    <height>332</height>
+   </rect>
+  </property>
   <property name="sizePolicy">
    <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
     <horstretch>0</horstretch>
@@ -108,7 +116,7 @@
     </layout>
    </item>
    <item>
-    <widget class="KisGradientSlider" name="ingradient">
+    <widget class="KisGradientSlider" name="ingradient" native="true">
      <property name="minimumSize">
       <size>
        <width>256</width>
@@ -120,7 +128,7 @@
    <item>
     <layout class="QHBoxLayout">
      <item>
-      <widget class="QSpinBox" name="blackspin">
+      <widget class="KisIntParseSpinBox" name="blackspin">
        <property name="buttonSymbols">
         <enum>QAbstractSpinBox::PlusMinus</enum>
        </property>
@@ -146,7 +154,7 @@
       </spacer>
      </item>
      <item>
-      <widget class="QDoubleSpinBox" name="gammaspin">
+      <widget class="KisDoubleParseSpinBox" name="gammaspin">
        <property name="buttonSymbols">
         <enum>QAbstractSpinBox::PlusMinus</enum>
        </property>
@@ -181,7 +189,7 @@
       </spacer>
      </item>
      <item>
-      <widget class="QSpinBox" name="whitespin">
+      <widget class="KisIntParseSpinBox" name="whitespin">
        <property name="buttonSymbols">
         <enum>QAbstractSpinBox::PlusMinus</enum>
        </property>
@@ -219,7 +227,7 @@
     </widget>
    </item>
    <item>
-    <widget class="KisGradientSlider" name="outgradient">
+    <widget class="KisGradientSlider" name="outgradient" native="true">
      <property name="minimumSize">
       <size>
        <width>256</width>
@@ -231,7 +239,7 @@
    <item>
     <layout class="QHBoxLayout">
      <item>
-      <widget class="QSpinBox" name="outblackspin">
+      <widget class="KisIntParseSpinBox" name="outblackspin">
        <property name="buttonSymbols">
         <enum>QAbstractSpinBox::PlusMinus</enum>
        </property>
@@ -257,7 +265,7 @@
       </spacer>
      </item>
      <item>
-      <widget class="QSpinBox" name="outwhitespin">
+      <widget class="KisIntParseSpinBox" name="outwhitespin">
        <property name="buttonSymbols">
         <enum>QAbstractSpinBox::PlusMinus</enum>
        </property>
@@ -309,9 +317,19 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>KisIntParseSpinBox</class>
+   <extends>QSpinBox</extends>
+   <header>kis_int_parse_spin_box.h</header>
+  </customwidget>
+  <customwidget>
    <class>KisGradientSlider</class>
    <extends>QWidget</extends>
    <header>kis_gradient_slider.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KisDoubleParseSpinBox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header>kis_double_parse_spin_box.h</header>
   </customwidget>
  </customwidgets>
  <includes>

@@ -32,37 +32,90 @@
 #include <kis_group_layer.h>
 #include <kis_layer.h>
 #include <kis_paint_device.h>
+#include "kis_signal_compressor.h"
 #include <KisView.h>
+#include <kis_idle_watcher.h>
 
-ChannelDockerDock::ChannelDockerDock( ) : QDockWidget(i18n("Channels")), m_canvas(0)
+ChannelDockerDock::ChannelDockerDock( ) :
+    QDockWidget(i18n("Channels")),
+    m_imageIdleWatcher(new KisIdleWatcher(250, this)),
+    m_canvas(0)
 {
     m_channelTable = new QTableView(this);
     m_model = new ChannelModel(this);
     m_channelTable->setModel(m_model);
     m_channelTable->setShowGrid(false);
+    m_channelTable->horizontalHeader()->setStretchLastSection(true);
     m_channelTable->verticalHeader()->setVisible(false);
+    m_channelTable->horizontalHeader()->setVisible(false);
+    m_channelTable->setSelectionBehavior( QAbstractItemView::SelectRows );
+
     setWidget(m_channelTable);
+
+    connect(m_channelTable,&QTableView::activated, m_model, &ChannelModel::rowActivated);
 }
 
 void ChannelDockerDock::setCanvas(KoCanvasBase * canvas)
 {
+    if(m_canvas == canvas)
+        return;
+
     setEnabled(canvas != 0);
+
+    if (m_canvas) {
+        m_canvas->disconnectCanvasObserver(this);
+        m_canvas->image()->disconnect(this);
+    }
 
     if (!canvas) {
         m_canvas = 0;
         return;
     }
+
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
-    if (m_canvas && m_canvas->imageView() && m_canvas->imageView()->image()) {
-        QPointer<KisView> view = m_canvas->imageView();
-        m_model->slotLayerActivated(view->image()->rootLayer());
-        KisPaintDeviceSP dev = view->image()->projection();
+    if ( m_canvas && m_canvas->image() ) {
+        m_model->slotSetCanvas(m_canvas);
+
+        KisPaintDeviceSP dev = m_canvas->image()->projection();
+
+        m_imageIdleWatcher->setTrackedImage(m_canvas->image());
+        connect(m_imageIdleWatcher, &KisIdleWatcher::startedIdleMode, this, &ChannelDockerDock::updateChannelTable);
+
         connect(dev, SIGNAL(colorSpaceChanged(const KoColorSpace*)), m_model, SLOT(slotColorSpaceChanged(const KoColorSpace*)));
         connect(dev, SIGNAL(colorSpaceChanged(const KoColorSpace*)), m_canvas, SLOT(channelSelectionChanged()));
+        connect(m_model, SIGNAL(channelFlagsChanged()), m_canvas, SLOT(channelSelectionChanged()));
+        m_imageIdleWatcher->startCountdown();
     }
 
-    connect(m_model, SIGNAL(channelFlagsChanged()), m_canvas, SLOT(channelSelectionChanged()));
 }
+
+void ChannelDockerDock::unsetCanvas()
+{
+    setEnabled(false);
+    m_canvas = 0;
+    m_model->unsetCanvas();
+}
+
+void ChannelDockerDock::showEvent(QShowEvent *event)
+{
+    Q_UNUSED(event);
+    m_imageIdleWatcher->startCountdown();
+}
+
+void ChannelDockerDock::startUpdateCanvasProjection()
+{
+    m_imageIdleWatcher->startCountdown();
+}
+
+void ChannelDockerDock::updateChannelTable()
+{
+    if (isVisible() && m_canvas && m_canvas->image()){
+        m_model->updateData(m_canvas);
+        m_channelTable->resizeRowsToContents();
+        m_channelTable->resizeColumnsToContents();
+    }
+}
+
 
 
 

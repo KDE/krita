@@ -1,8 +1,8 @@
 SET(EXTPREFIX_eigen3 "${EXTPREFIX}" )
 ExternalProject_Add( ext_eigen3
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL http://files.kde.org/krita/build/dependencies/eigen3-3.2.6.tar.gz
-    URL_MD5 9f93bfc14ba0816220c9674e99b8c418
+    URL http://files.kde.org/krita/build/dependencies/eigen-eigen-07105f7124f9.tar.gz
+    URL_MD5 135d8d43aaee5fb54cf5f3e981b1a6db
 
     INSTALL_DIR ${EXTPREFIX_eigen3}
     PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/dart.diff

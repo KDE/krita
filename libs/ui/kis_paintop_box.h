@@ -36,6 +36,9 @@
 #include <brushengine/kis_locked_properties_server.h>
 #include <brushengine/kis_locked_properties.h>
 #include "kritaui_export.h"
+#include "kis_signal_auto_connection.h"
+#include "kis_signal_compressor.h"
+
 
 
 class QToolButton;
@@ -145,12 +148,12 @@ private Q_SLOTS:
     void slotSlider2Changed();
     void slotSlider3Changed();
     void slotToolChanged(KoCanvasController* canvas, int toolId);
-    void slotOpacityChanged(qreal);
     void slotPreviousFavoritePreset();
     void slotNextFavoritePreset();
     void slotSwitchToPreviousPreset();
     void slotUnsetEraseMode();
     void slotToggleAlphaLockMode(bool);
+    void slotDisablePressureMode(bool);
 
     void slotReloadPreset();
     void slotGuiChangedCurrentPreset();
@@ -167,7 +170,7 @@ private Q_SLOTS:
     void slotHideDecorationMirrorX(bool);
     void slotHideDecorationMirrorY(bool);
 
-
+    void slotUpdateOptionsWidget();
 
 private:
     KisCanvasResourceProvider*          m_resourceProvider;
@@ -180,6 +183,7 @@ private:
     KisCompositeOpComboBox*             m_cmbCompositeOp;
     QToolButton*                        m_eraseModeButton;
     QToolButton*                        m_alphaLockButton;
+    QToolButton*                        m_disablePressureButton;
     QToolButton*                        m_hMirrorButton;
     QToolButton*                        m_vMirrorButton;
     KisToolOptionsPopup*                m_toolOptionsPopup;
@@ -193,6 +197,7 @@ private:
     QToolButton*                        m_reloadButton;
     KisAction*                          m_eraseAction;
     KisAction*                          m_reloadAction;
+    KisAction*                          m_disablePressureAction;
 
     QString             m_currCompositeOpID;
     KisNodeWSP          m_previousNode;
@@ -240,7 +245,8 @@ private:
     bool             m_dirtyPresetsEnabled;
     bool             m_eraserBrushSizeEnabled;
 
-
+    KisSignalAutoConnectionsStore m_presetConnections;
+    KisSignalCompressor m_presetUpdateCompressor;
 };
 
 #endif //KIS_PAINTOP_BOX_H_

@@ -69,6 +69,11 @@ public:
      */
     qreal generateNormalized() const;
 
+    /**
+     * Generates a number from the Gaussian distribution
+     */
+    qreal generateGaussian(qreal mean, qreal sigma) const;
+
 private:
     struct Private;
     const QScopedPointer<Private> m_d;

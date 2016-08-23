@@ -126,6 +126,17 @@ bool findOnlyElement(const QDomElement &parent, const QString &tag, QDomElement 
     return true;
 }
 
+bool removeElements(QDomElement &parent, const QString &tag) {
+    QDomNodeList list = parent.elementsByTagName(tag);
+    KIS_SAFE_ASSERT_RECOVER_NOOP(list.size() <= 1);
+
+    for (int i = 0; i < list.size(); i++) {
+        parent.removeChild(list.at(i));
+    }
+
+    return list.size() > 0;
+}
+
 namespace Private {
     bool checkType(const QDomElement &e, const QString &expectedType)
     {

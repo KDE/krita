@@ -196,7 +196,7 @@ void KisToolLine::beginPrimaryAction(KoPointerEvent *event)
     updatePreviewTimer(m_showGuideline);
     m_helper->setEnabled(nodeAbility == PAINT);
     m_helper->setUseSensors(m_chkUseSensors->isChecked());
-    m_helper->start(event);
+    m_helper->start(event, canvas()->resourceManager());
 
     m_startPoint = convertToPixelCoordAndSnap(event);
     m_endPoint = m_startPoint;

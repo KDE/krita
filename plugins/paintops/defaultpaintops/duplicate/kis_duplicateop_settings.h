@@ -54,12 +54,15 @@ public:
 
     KisNodeWSP sourceNode() const;
 
+    QList<KisUniformPaintOpPropertySP> uniformProperties();
+
 public:
 
     QPointF m_offset;
     bool m_isOffsetNotUptodate;
     QPointF m_position; // Give the position of the last alt-click
     KisNodeWSP m_sourceNode;
+    QList<KisUniformPaintOpPropertyWSP> m_uniformProperties;
 };
 
 

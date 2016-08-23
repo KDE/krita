@@ -74,6 +74,8 @@ public:
     void enableGamma(bool b);
     double getGamma(void);
 
+    void enableWhite(bool b);
+
 private:
     int m_leftmost;
     int m_rightmost;
@@ -89,9 +91,8 @@ private:
 
     double m_gamma;
     bool m_gammaEnabled;
-
+    bool m_whiteEnabled;
     bool m_feedback;
 };
-
 
 #endif /* KIS_GRADIENT_SLIDER_H */

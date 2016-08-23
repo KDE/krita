@@ -52,73 +52,77 @@
         </layout>
        </item>
        <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_5">
-         <item>
-          <layout class="QFormLayout" name="formLayout">
-           <item row="0" column="0">
-            <widget class="QLabel" name="lblXSpacing">
-             <property name="text">
-              <string>X spacing:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="1">
-            <widget class="QSpinBox" name="intHSpacing">
-             <property name="suffix">
-              <string> px</string>
-             </property>
-             <property name="minimum">
-              <number>1</number>
-             </property>
-             <property name="maximum">
-              <number>500</number>
-             </property>
-             <property name="value">
-              <number>10</number>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0">
-            <widget class="QLabel" name="lblYSpacing">
-             <property name="text">
-              <string>Y spacing:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="1">
-            <widget class="QSpinBox" name="intVSpacing">
-             <property name="suffix">
-              <string> px</string>
-             </property>
-             <property name="minimum">
-              <number>1</number>
-             </property>
-             <property name="maximum">
-              <number>500</number>
-             </property>
-             <property name="value">
-              <number>10</number>
-             </property>
-            </widget>
-           </item>
-          </layout>
+        <layout class="QGridLayout" name="gridLayout_2">
+         <item row="0" column="0">
+         <widget class="QLabel" name="lblXSpacing">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string>X spacing:</string>
+          </property>
+         </widget>
+        </item>
+         <item row="0" column="1">
+          <widget class="KisIntParseSpinBox" name="intHSpacing">
+           <property name="suffix">
+            <string> px</string>
+           </property>
+           <property name="minimum">
+            <number>1</number>
+           </property>
+           <property name="maximum">
+            <number>500</number>
+           </property>
+           <property name="value">
+            <number>10</number>
+           </property>
+          </widget>
          </item>
-         <item>
+         <item row="0" column="2" rowspan="2">
           <widget class="KoAspectButton" name="spacingAspectButton" native="true"/>
          </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QFormLayout" name="formLayout_3">
-         <item row="0" column="0">
+         <item row="1" column="0">
+          <widget class="QLabel" name="lblYSpacing">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string>Y spacing:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="KisIntParseSpinBox" name="intVSpacing">
+           <property name="suffix">
+            <string> px</string>
+           </property>
+           <property name="minimum">
+            <number>1</number>
+           </property>
+           <property name="maximum">
+            <number>500</number>
+           </property>
+           <property name="value">
+            <number>10</number>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
           <widget class="QLabel" name="lblSubdivision">
            <property name="text">
             <string>Subdivision:</string>
            </property>
           </widget>
          </item>
-         <item row="0" column="1">
-          <widget class="QSpinBox" name="intSubdivision">
+         <item row="2" column="1" colspan="2">
+          <widget class="KisIntParseSpinBox" name="intSubdivision">
            <property name="minimum">
             <number>1</number>
            </property>
@@ -130,32 +134,31 @@
            </property>
           </widget>
          </item>
-        </layout>
-       </item>
-       <item>
-        <widget class="QCheckBox" name="chkOffset">
-         <property name="text">
-          <string>Grid Offset</string>
-         </property>
-         <property name="checked">
-          <bool>false</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="KoAspectButton" name="offsetAspectButton" native="true"/>
-       </item>
-       <item>
-        <layout class="QFormLayout" name="formLayout_2">
-         <item row="0" column="0">
+         <item row="3" column="0" colspan="3">
+          <widget class="QCheckBox" name="chkOffset">
+           <property name="text">
+            <string>Grid Offset</string>
+           </property>
+           <property name="checked">
+            <bool>false</bool>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="0">
           <widget class="QLabel" name="lblXOffset">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="text">
             <string>X offset:</string>
            </property>
           </widget>
          </item>
-         <item row="0" column="1">
-          <widget class="QSpinBox" name="intXOffset">
+         <item row="4" column="1">
+          <widget class="KisIntParseSpinBox" name="intXOffset">
            <property name="suffix">
             <string> px</string>
            </property>
@@ -167,15 +170,24 @@
            </property>
           </widget>
          </item>
-         <item row="1" column="0">
+         <item row="4" column="2" rowspan="2">
+          <widget class="KoAspectButton" name="offsetAspectButton" native="true"/>
+         </item>
+         <item row="5" column="0">
           <widget class="QLabel" name="lblYOffset">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="text">
             <string>Y offset:</string>
            </property>
           </widget>
          </item>
-         <item row="1" column="1">
-          <widget class="QSpinBox" name="intYOffset">
+         <item row="5" column="1">
+          <widget class="KisIntParseSpinBox" name="intYOffset">
            <property name="suffix">
             <string> px</string>
            </property>
@@ -187,8 +199,14 @@
            </property>
           </widget>
          </item>
-         <item row="2" column="0">
+         <item row="6" column="0">
           <widget class="QLabel" name="lblMainStyle">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="text">
             <string>Main Style:</string>
            </property>
@@ -197,7 +215,7 @@
            </property>
           </widget>
          </item>
-         <item row="2" column="1">
+         <item row="6" column="1" colspan="2">
           <layout class="QHBoxLayout" name="horizontalLayout_4">
            <item>
             <widget class="KComboBox" name="selectMainStyle">
@@ -224,7 +242,7 @@
            <item>
             <widget class="KColorButton" name="colorMain">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
+              <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
@@ -256,8 +274,14 @@
            </item>
           </layout>
          </item>
-         <item row="3" column="0">
+         <item row="7" column="0">
           <widget class="QLabel" name="lblSubdivisionStyle">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="text">
             <string>Div Style:</string>
            </property>
@@ -266,7 +290,7 @@
            </property>
           </widget>
          </item>
-         <item row="3" column="1">
+         <item row="7" column="1" colspan="2">
           <layout class="QHBoxLayout" name="horizontalLayout_3">
            <item>
             <widget class="KComboBox" name="selectSubdivisionStyle">
@@ -293,7 +317,7 @@
            <item>
             <widget class="KColorButton" name="colorSubdivision">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
+              <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
@@ -472,20 +496,26 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>KoAspectButton</class>
+   <extends>QWidget</extends>
+   <header>KoAspectButton.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KisIntParseSpinBox</class>
+   <extends>QSpinBox</extends>
+   <header>kis_int_parse_spin_box.h</header>
+  </customwidget>
+  <customwidget>
    <class>KColorButton</class>
    <extends>QPushButton</extends>
    <header>kcolorbutton.h</header>
+   <container>1</container>
   </customwidget>
   <customwidget>
    <class>KComboBox</class>
    <extends>QComboBox</extends>
    <header>kcombobox.h</header>
-  </customwidget>
-  <customwidget>
-   <class>KoAspectButton</class>
-   <extends>QWidget</extends>
-   <header>KoAspectButton.h</header>
-   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

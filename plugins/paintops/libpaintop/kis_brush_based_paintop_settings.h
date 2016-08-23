@@ -52,9 +52,24 @@ public:
 
     KisPaintOpSettingsSP clone() const;
 
+    void setAngle(qreal value);
+    qreal angle() const;
+
+    void setSpacing(qreal spacing);
+    qreal spacing() const;
+
+    void setAutoSpacing(bool active, qreal coeff);
+
+    bool autoSpacingActive() const;
+    qreal autoSpacingCoeff() const;
+
+
+    QList<KisUniformPaintOpPropertySP> uniformProperties();
+
 protected:
     QPainterPath brushOutlineImpl(const KisPaintInformation &info, OutlineMode mode, qreal additionalScale, bool forceOutline = false) const;
     KisBrushSP m_savedBrush;
+    QList<KisUniformPaintOpPropertyWSP> m_uniformProperties;
 };
 
 #endif // KIS_BRUSH_BASED_PAINTOP_SETTINGS_H

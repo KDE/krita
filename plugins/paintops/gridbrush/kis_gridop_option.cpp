@@ -145,24 +145,31 @@ qreal KisGridOpOption::scale() const
 
 void KisGridOpOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
 {
-    setting->setProperty(GRID_WIDTH, gridWidth());
-    setting->setProperty(GRID_HEIGHT, gridHeight());
-    setting->setProperty(GRID_DIVISION_LEVEL, divisionLevel());
-    setting->setProperty(GRID_PRESSURE_DIVISION, pressureDivision());
-    setting->setProperty(GRID_SCALE, scale());
-    setting->setProperty(GRID_VERTICAL_BORDER, vertBorder());
-    setting->setProperty(GRID_HORIZONTAL_BORDER, horizBorder());
-    setting->setProperty(GRID_RANDOM_BORDER, randomBorder());
+    GridOption op;
+
+    op.grid_width = gridWidth();
+    op.grid_height = gridHeight();
+    op.grid_division_level = divisionLevel();
+    op.grid_pressure_division = pressureDivision();
+    op.grid_scale = scale();
+    op.grid_vertical_border = vertBorder();
+    op.grid_horizontal_border = horizBorder();
+    op.grid_random_border = randomBorder();
+
+    op.writeOptionSetting(setting);
 }
 
 void KisGridOpOption::readOptionSetting(const KisPropertiesConfiguration* setting)
 {
-    m_options->gridWidthSPBox->setValue(setting->getInt(GRID_WIDTH));
-    m_options->gridHeightSPBox->setValue(setting->getInt(GRID_HEIGHT));
-    m_options->divisionLevelSPBox->setValue(setting->getInt(GRID_DIVISION_LEVEL));
-    m_options->divisionPressureCHBox->setChecked(setting->getBool(GRID_PRESSURE_DIVISION));
-    m_options->scaleDSPBox->setValue(setting->getDouble(GRID_SCALE));
-    m_options->vertBorderDSPBox->setValue(setting->getDouble(GRID_VERTICAL_BORDER));
-    m_options->horizBorderDSPBox->setValue(setting->getDouble(GRID_HORIZONTAL_BORDER));
-    m_options->jitterBorderCHBox->setChecked(setting->getBool(GRID_RANDOM_BORDER));
+    GridOption op;
+    op.readOptionSetting(setting);
+
+    m_options->gridWidthSPBox->setValue(op.grid_width);
+    m_options->gridHeightSPBox->setValue(op.grid_height);
+    m_options->divisionLevelSPBox->setValue(op.grid_division_level);
+    m_options->divisionPressureCHBox->setChecked(op.grid_pressure_division);
+    m_options->scaleDSPBox->setValue(op.grid_scale);
+    m_options->vertBorderDSPBox->setValue(op.grid_vertical_border);
+    m_options->horizBorderDSPBox->setValue(op.grid_horizontal_border);
+    m_options->jitterBorderCHBox->setChecked(op.grid_random_border);
 }

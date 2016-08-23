@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>221</width>
-    <height>78</height>
+    <width>238</width>
+    <height>98</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -72,7 +72,7 @@
       </widget>
      </item>
      <item row="0" column="2">
-      <widget class="KoUnitDoubleSpinBox" name="shadowBlur"/>
+      <widget class="KisDoubleParseUnitSpinBox" name="shadowBlur"/>
      </item>
     </layout>
    </item>
@@ -89,12 +89,12 @@
       </widget>
      </item>
      <item row="0" column="1">
-      <widget class="KoUnitDoubleSpinBox" name="shadowOffset"/>
+      <widget class="KisDoubleParseUnitSpinBox" name="shadowOffset"/>
      </item>
     </layout>
    </item>
    <item row="2" column="1">
-    <widget class="QWidget" name="SpecialSpacer">
+    <widget class="QWidget" name="SpecialSpacer" native="true">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
        <horstretch>0</horstretch>
@@ -107,9 +107,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KoUnitDoubleSpinBox</class>
+   <class>KisDoubleParseUnitSpinBox</class>
    <extends>QDoubleSpinBox</extends>
-   <header location="global">KoUnitDoubleSpinBox.h</header>
+   <header>kis_double_parse_unit_spin_box.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

@@ -78,6 +78,7 @@
 #include "kis_guides_config.h"
 #include "kis_image_config.h"
 #include "KisProofingConfiguration.h"
+#include "kis_node_view_color_scheme.h"
 
 /*
 
@@ -652,7 +653,11 @@ KisNodeSP KisKraLoader::loadNode(const KoXmlElement& element, KisImageWSP image,
     const bool visible = element.attribute(VISIBLE, "1") == "0" ? false : true;
     const bool locked = element.attribute(LOCKED, "0") == "0" ? false : true;
     const bool collapsed = element.attribute(COLLAPSED, "0") == "0" ? false : true;
-    const int colorLabelIndex = element.attribute(COLOR_LABEL, "0").toInt();
+    int colorLabelIndex = element.attribute(COLOR_LABEL, "0").toInt();
+    QVector<QColor> labels = KisNodeViewColorScheme::instance()->allColorLabels();
+    if (colorLabelIndex >= labels.size()) {
+        colorLabelIndex = labels.size() - 1;
+    }
 
     // Now find out the layer type and do specific handling
     QString nodeType;

@@ -19,7 +19,7 @@
 #ifndef KIS_DEFORM_PAINTOP_SETTINGS_H_
 #define KIS_DEFORM_PAINTOP_SETTINGS_H_
 
-
+#include <QScopedPointer>
 #include <brushengine/kis_paintop_settings.h>
 #include <kis_types.h>
 #include <kis_outline_generation_policy.h>
@@ -29,6 +29,7 @@ class KisDeformPaintOpSettings : public KisOutlineGenerationPolicy<KisPaintOpSet
 
 public:
     KisDeformPaintOpSettings();
+    ~KisDeformPaintOpSettings();
 
     QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode) const;
 
@@ -36,5 +37,10 @@ public:
     bool isAirbrushing() const;
     int rate() const;
 
+    QList<KisUniformPaintOpPropertySP> uniformProperties();
+
+private:
+    struct Private;
+    const QScopedPointer<Private> m_d;
 };
 #endif

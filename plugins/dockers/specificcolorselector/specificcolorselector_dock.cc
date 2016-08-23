@@ -45,9 +45,8 @@ void SpecificColorSelectorDock::setCanvas(KoCanvasBase * canvas)
 
     if (m_canvas) {
         m_canvas->disconnectCanvasObserver(this);
-        m_canvas->image()->disconnect(m_colorSelector);
     }
-    
+
     KisCanvas2* kisCanvas = dynamic_cast<KisCanvas2*>(canvas);
     m_canvas = kisCanvas;
 
@@ -55,20 +54,14 @@ void SpecificColorSelectorDock::setCanvas(KoCanvasBase * canvas)
         return;
     }
 
-    connect(kisCanvas->image(), SIGNAL(sigColorSpaceChanged(const KoColorSpace*)), m_colorSelector, SLOT(setColorSpace(const KoColorSpace*)));
-    m_colorSelector->setDisplayRenderer(kisCanvas->displayColorConverter()->displayRendererInterface());
-
-    if (m_view && m_view->activeNode()) {
-        m_colorSelector->setColorSpace(m_view->activeNode()->colorSpace());
-    }
-
+    m_colorSelector->setDisplayConverter(kisCanvas->displayColorConverter());
 }
 
 void SpecificColorSelectorDock::unsetCanvas()
 {
     setEnabled(false);
     m_canvas = 0;
-    m_colorSelector->setDisplayRenderer(0);
+    m_colorSelector->setDisplayConverter(0);
 }
 
 void SpecificColorSelectorDock::setMainWindow(KisViewManager* kisview)
@@ -76,22 +69,6 @@ void SpecificColorSelectorDock::setMainWindow(KisViewManager* kisview)
     m_view = kisview;
     connect(m_view->resourceProvider(), SIGNAL(sigFGColorChanged(const KoColor&)), m_colorSelector, SLOT(setColor(const KoColor&)));
     connect(m_colorSelector, SIGNAL(colorChanged(const KoColor&)), m_view->resourceProvider(), SLOT(slotSetFGColor(const KoColor&)));
-    connect(m_view->resourceProvider(), SIGNAL(sigNodeChanged(const KisNodeSP)), this, SLOT(layerChanged(const KisNodeSP)));
-}
-
-void SpecificColorSelectorDock::layerChanged(const KisNodeSP node)
-{
-    if (!node) return;
-    if (!node->projection()) return;
-    if (!m_colorSelector) return;
-    if (!m_colorSelector->customColorSpaceUsed()) {
-        const KoColorSpace *cs = node->projection() ?
-            node->projection()->compositionSourceColorSpace() :
-            node->colorSpace();
-
-        m_colorSelector->setColorSpace(cs);
-    }
-    m_colorSelector->setColor(m_view->resourceProvider()->fgColor());
 }
 
 #include "moc_specificcolorselector_dock.cpp"

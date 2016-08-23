@@ -227,8 +227,8 @@ KisVisualColorSelectorShape::KisVisualColorSelectorShape(QWidget *parent,
     m_d->channel1 = qBound(0, channel1, maxchannel);
     m_d->channel2 = qBound(0, channel2, maxchannel);
     this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    m_d->updateTimer = new KisSignalCompressor(100 /* ms */, KisSignalCompressor::POSTPONE, this);
-    m_d->siblingTimer = new KisSignalCompressor(100 /* ms */, KisSignalCompressor::POSTPONE, this);
+    m_d->updateTimer = new KisSignalCompressor(30 /* ms */, KisSignalCompressor::POSTPONE, this);
+    m_d->siblingTimer = new KisSignalCompressor(30 /* ms */, KisSignalCompressor::POSTPONE, this);
     setDisplayRenderer(displayRenderer);
     show();
 
@@ -556,6 +556,11 @@ QVector<qreal> KisVisualColorSelectorShape::convertvectorfloatToqreal(QVector <f
 void KisVisualColorSelectorShape::mousePressEvent(QMouseEvent *e)
 {
     m_d->mousePressActive = true;
+    QPointF coordinates = convertWidgetCoordinateToShapeCoordinate(e->pos());
+    KoColor col = convertShapeCoordinateToKoColor(coordinates);
+    setColor(col);
+    Q_EMIT sigNewColor(col);
+    m_d->updateTimer->start();
 }
 
 void KisVisualColorSelectorShape::mouseMoveEvent(QMouseEvent *e)

@@ -965,34 +965,33 @@ QPointF KisVisualEllipticalSelectorShape::convertWidgetCoordinateToShapeCoordina
     //default implementation:
     qreal x = 0.5;
     qreal y = 1.0;
-    if (mask().contains(coordinate)) {
-        QRect total(0, 0, width(), height());
-        QLineF line(total.center(), coordinate);
-        qreal a = total.width()/2;
-        qreal angle;
+    QRect total(0, 0, width(), height());
+    QLineF line(total.center(), coordinate);
+    qreal a = total.width()/2;
+    qreal angle;
 
-        if (m_type!=KisVisualEllipticalSelectorShape::borderMirrored){
-            angle = fmod((line.angle()+180.0), 360.0);
-            angle = 180.0-angle;
-            angle = angle+180.0;
-            x = angle/360.0;
-            if (getDimensions()==KisVisualColorSelectorShape::twodimensional) {
-                y = qBound(0.0,line.length()/a, 1.0);
-            }
-
-        } else {
-            angle = fmod((line.angle()+270.0), 360.0);
-            if (angle>180.0) {
-                angle = 180.0-angle;
-                angle = angle+180;
-            }
-            x = (angle/360.0)*2;
-            if (getDimensions()==KisVisualColorSelectorShape::twodimensional) {
-                y = line.length()/a;
-            }
+    if (m_type!=KisVisualEllipticalSelectorShape::borderMirrored){
+        angle = fmod((line.angle()+180.0), 360.0);
+        angle = 180.0-angle;
+        angle = angle+180.0;
+        x = angle/360.0;
+        if (getDimensions()==KisVisualColorSelectorShape::twodimensional) {
+            y = qBound(0.0,line.length()/a, 1.0);
         }
 
+    } else {
+        angle = fmod((line.angle()+270.0), 360.0);
+        if (angle>180.0) {
+            angle = 180.0-angle;
+            angle = angle+180;
+        }
+        x = (angle/360.0)*2;
+        if (getDimensions()==KisVisualColorSelectorShape::twodimensional) {
+            y = line.length()/a;
+        }
     }
+
+
     return QPointF(x, y);
 }
 

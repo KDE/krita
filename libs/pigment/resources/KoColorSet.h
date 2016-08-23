@@ -85,6 +85,26 @@ public:
     KoColorSetEntry getColor(quint32 index);
     qint32 nColors();
 
+    /**
+     * @brief getIndexClosestColor
+     * function that matches the color to all colors in the colorset, and returns the index
+     * of the closest match.
+     * @param color the color you wish to compare.
+     * @param useGivenColorSpace whether to use the color space of the color given
+     * when the two colors' colorspaces don't match. Else it'll use the entry's colorspace.
+     * @return returns the int of the closest match.
+     */
+    qint32 getIndexClosestColor(KoColor color, bool useGivenColorSpace = true);
+
+    /**
+     * @brief closestColorName
+     * convenience function to get the name of the closest match.
+     * @param color
+     * @param useGivenColorSpace
+     * @return
+     */
+    QString closestColorName(KoColor color, bool useGivenColorSpace = true);
+
 private:
 
 

@@ -65,7 +65,7 @@ wget http://files.kde.org/krita/3/source/$RELEASE.tar.xz
 tar -xf $RELEASE.tar.xz
 cd /krita_build
 rm -rf *
-cmake3 ../$RELEASE \I
+cmake3 ../$RELEASE \
     -DCMAKE_INSTALL_PREFIX:PATH=/krita.appdir/usr \
     -DDEFINE_NO_DEPRECATED=1 \
     -DCMAKE_BUILD_TYPE=RelWithDebInfo \
@@ -233,10 +233,7 @@ get_desktopintegration krita
 cd /
 
 VER=$(grep "#define KRITA_VERSION_STRING" krita_build/libs/version/kritaversion.h | cut -d '"' -f 2)
-cd /krita
-REVISION=$(git rev-parse --short HEAD)
-cd ..
-VERSION=$VER-$REVISION
+VERSION=$VER
 VERSION="$(sed s/\ /-/g <<<$VERSION)"
 echo $VERSION
 

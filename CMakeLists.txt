@@ -318,6 +318,8 @@ add_definitions(
   -DQT_DISABLE_DEPRECATED_BEFORE=0
 )
 
+add_definitions(-DTRANSLATION_DOMAIN=\"krita\")
+
 #
 # The reason for this mode is that the Debug mode disable inlining
 #
@@ -655,11 +657,6 @@ add_subdirectory(libs)
 add_subdirectory(plugins)
 
 add_subdirectory( benchmarks )
-
-add_definitions(-DTRANSLATION_DOMAIN=\"krita\")
-if (IS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/po")
-    ki18n_install(po)
-endif()
 
 
 macro_display_feature_log()

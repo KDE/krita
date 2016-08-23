@@ -56,9 +56,6 @@ KisInternalColorSelector::KisInternalColorSelector(QWidget *parent, KoColor colo
     this->setFocusPolicy(Qt::ClickFocus);
     m_ui = new Ui_WdgDlgInternalColorSelector();
     m_ui->setupUi(this);
-    if (!modal) {
-        m_ui->buttonBox->hide();
-    }
 
     setWindowTitle(caption);
 

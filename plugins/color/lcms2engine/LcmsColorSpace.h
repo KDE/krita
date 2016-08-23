@@ -278,13 +278,13 @@ public:
 
     virtual void toQColor(const quint8 *src, QColor *c, const KoColorProfile *koprofile = 0) const
     {
+        QMutexLocker locker(&d->mutex);
         LcmsColorProfileContainer *profile = asLcmsProfile(koprofile);
         if (profile == 0) {
             // Default sRGB transform
             Q_ASSERT(d->defaultTransformations && d->defaultTransformations->toRGB);
             cmsDoTransform(d->defaultTransformations->toRGB, const_cast <quint8 *>(src), d->qcolordata, 1);
         } else {
-            QMutexLocker locker(&d->mutex);
             if (d->lastToRGB == 0 || (d->lastToRGB != 0 && d->lastRGBProfile != profile->lcmsProfile())) {
                 d->lastToRGB = cmsCreateTransform(d->profile->lcmsProfile(), this->colorSpaceType(),
                                                   profile->lcmsProfile(), TYPE_BGR_8,

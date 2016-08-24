@@ -103,6 +103,7 @@ public Q_SLOTS:
     void slotSetColor(KoColor c);
     void slotsetColorSpace(const KoColorSpace *cs);
     void slotRebuildSelectors();
+    void ConfigurationChanged();
     void setDisplayRenderer (const KoColorDisplayRendererInterface *displayRenderer);
 private Q_SLOTS:
     void updateFromWidgets(KoColor c);

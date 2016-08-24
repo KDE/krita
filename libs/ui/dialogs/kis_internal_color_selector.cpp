@@ -74,7 +74,7 @@ KisInternalColorSelector::KisInternalColorSelector(QWidget *parent, KoColor colo
     m_ui->visualSelector->slotSetColor(color);
     m_ui->visualSelector->setDisplayRenderer(displayRenderer);
     connect(m_ui->visualSelector, SIGNAL(sigNewColor(KoColor)), this, SLOT(slotColorUpdated(KoColor)));
-    connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), m_ui->visualSelector, SLOT(slotRebuildSelectors()));
+    connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), m_ui->visualSelector, SLOT(ConfigurationChanged()));
 
     connect(m_ui->screenColorPicker, SIGNAL(sigNewColorPicked(KoColor)),this, SLOT(slotColorUpdated(KoColor)));
     //TODO: Add disable signal as well. Might be not necessary...?

@@ -48,6 +48,7 @@ struct KisVisualColorSelector::Private
     const KoColorDisplayRendererInterface *displayRenderer = 0;
     KisVisualColorSelector::Configuration acs_config;
     //Current coordinates.
+    KisSignalCompressor *updateTimer = 0;
     QVector <qreal> currentCoordinates;
 };
 
@@ -59,7 +60,7 @@ KisVisualColorSelector::KisVisualColorSelector(QWidget *parent) : QWidget(parent
 
     KConfigGroup cfg =  KSharedConfig::openConfig()->group("advancedColorSelector");
     m_d->acs_config = Configuration::fromString(cfg.readEntry("colorSelectorConfiguration", KisVisualColorSelector::Configuration().toString()));
-    //m_d->updateSelf = new KisSignalCompressor(100 /* ms */, KisSignalCompressor::POSTPONE, this);
+
 }
 
 KisVisualColorSelector::~KisVisualColorSelector()
@@ -88,8 +89,18 @@ void KisVisualColorSelector::slotsetColorSpace(const KoColorSpace *cs)
 
 }
 
+void KisVisualColorSelector::ConfigurationChanged()
+{
+    m_d->updateTimer =  new KisSignalCompressor(100 /* ms */, KisSignalCompressor::POSTPONE, this);
+    m_d->updateTimer->start();
+    connect(m_d->updateTimer, SIGNAL(timeout()), SLOT(slotRebuildSelectors()), Qt::UniqueConnection);
+}
+
 void KisVisualColorSelector::slotRebuildSelectors()
 {
+    KConfigGroup cfg =  KSharedConfig::openConfig()->group("advancedColorSelector");
+    m_d->acs_config = Configuration::fromString(cfg.readEntry("colorSelectorConfiguration", KisVisualColorSelector::Configuration().toString()));
+
     if (this->children().at(0)) {
         qDeleteAll(this->children());
     }
@@ -106,6 +117,8 @@ void KisVisualColorSelector::slotRebuildSelectors()
     } else if (m_d->currentCS->colorChannelCount() == 3) {
         int sizeValue = qMin(width(), height());
         int borderWidth = qMax(sizeValue*0.1, 20.0);
+        QRect newrect(0,0, this->geometry().width(), this->geometry().height());
+
 
         KisVisualColorSelectorShape::ColorModel modelS = KisVisualColorSelectorShape::HSV;
         int channel1 = 0;
@@ -224,19 +237,19 @@ void KisVisualColorSelector::slotRebuildSelectors()
                                                                                         modelS,
                                                                                         m_d->currentCS, channel2, channel3,
                                                                                         m_d->displayRenderer);
-            block->setGeometry(bar->getSpaceForTriangle(this->geometry()));
+            block->setGeometry(bar->getSpaceForTriangle(newrect));
         } else if (m_d->acs_config.mainType==Square) {
             block =  new KisVisualRectangleSelectorShape(this, KisVisualColorSelectorShape::twodimensional,
                                                                                           modelS,
                                                                                           m_d->currentCS, channel2, channel3,
                                                                                           m_d->displayRenderer);
-            block->setGeometry(bar->getSpaceForSquare(this->geometry()));
+            block->setGeometry(bar->getSpaceForSquare(newrect));
          } else {
             block =  new KisVisualEllipticalSelectorShape(this, KisVisualColorSelectorShape::twodimensional,
                                                                                             modelS,
                                                                                             m_d->currentCS, channel2, channel3,
                                                                                             m_d->displayRenderer);
-            block->setGeometry(bar->getSpaceForCircle(this->geometry()));
+            block->setGeometry(bar->getSpaceForCircle(newrect));
 
         }
 
@@ -342,7 +355,7 @@ void KisVisualColorSelector::HSXwrangler()
 
     QVector <qreal> w1 = m_d->widgetlist.at(0)->getHSX(m_d->currentCoordinates, true);
     QVector <qreal> w2 = m_d->widgetlist.at(1)->getHSX(m_d->currentCoordinates, true);
-    QVector <int> ch(3);q
+    QVector <int> ch(3);
 
     ch[0] = m_d->widgetlist.at(0)->getChannels().at(0);
     ch[1] = m_d->widgetlist.at(1)->getChannels().at(0);

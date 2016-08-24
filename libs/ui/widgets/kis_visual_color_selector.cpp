@@ -149,12 +149,12 @@ void KisVisualColorSelector::slotRebuildSelectors()
             channel3 = 1;
             break;
         case hsiSH:
-            modelS = KisVisualColorSelectorShape::HSL;
+            modelS = KisVisualColorSelectorShape::HSI;
             channel2 = 0;
             channel3 = 1;
             break;
         case hslSH:
-            modelS = KisVisualColorSelectorShape::HSI;
+            modelS = KisVisualColorSelectorShape::HSL;
             channel2 = 0;
             channel3 = 1;
             break;
@@ -365,8 +365,8 @@ void KisVisualColorSelector::HSXwrangler()
     m_d->currentCoordinates[ch[1]] = w2[ch[1]];
     m_d->currentCoordinates[ch[2]] = w2[ch[2]];
 
-    m_d->widgetlist.at(0)->setHSX(m_d->currentCoordinates);
-    m_d->widgetlist.at(1)->setHSX(m_d->currentCoordinates);
+    m_d->widgetlist.at(0)->setHSX(m_d->currentCoordinates, true);
+    m_d->widgetlist.at(1)->setHSX(m_d->currentCoordinates, true);
 }
 
 /*------------Selector shape------------*/
@@ -388,6 +388,7 @@ struct KisVisualColorSelectorShape::Private
     const KoColorDisplayRendererInterface *displayRenderer = 0;
     qreal hue = 0.0;
     qreal sat = 0.0;
+    qreal tone = 0.0;
 
 };
 
@@ -440,7 +441,7 @@ void KisVisualColorSelectorShape::setColor(KoColor c)
     }
     m_d->currentColor = c;
     updateCursor();
-    convertShapeCoordinateToKoColor(getCursorPosition());
+    convertShapeCoordinateToKoColor(getCursorPosition(), true);
     m_d->imagesNeedUpdate = true;
     update();
 }
@@ -586,14 +587,14 @@ KoColor KisVisualColorSelectorShape::convertShapeCoordinateToKoColor(QPointF coo
                  * but you might want to manually clamp for floating point values.
                  */
                 QVector <float> inbetween(3);
-                RGBToHSL(channelValuesDisplay[1],channelValuesDisplay[1], channelValuesDisplay[2], &inbetween[0], &inbetween[1], &inbetween[2]);
+                RGBToHSL(channelValuesDisplay[0],channelValuesDisplay[1], channelValuesDisplay[2], &inbetween[0], &inbetween[1], &inbetween[2]);
                 inbetween = convertvectorqrealTofloat(getHSX(convertvectorfloatToqreal(inbetween)));
-                inbetween[m_d->channel1] = coordinates.x()*huedivider;
+                inbetween[m_d->channel1] = fmod(coordinates.x()*huedivider, 360.0);
                 if (m_d->dimension == Dimensions::twodimensional) {
                     inbetween[m_d->channel2] = coordinates.y()*huedivider2;
                 }
                 if (cursor==true){setHSX(convertvectorfloatToqreal(inbetween));Q_EMIT sigHSXchange();}
-                HSLToRGB(inbetween[0], inbetween[1], inbetween[2],&channelValuesDisplay[0],&channelValuesDisplay[1], &channelValuesDisplay[2]);
+                HSLToRGB(qMax(inbetween[0],(float)0.0), inbetween[1], inbetween[2],&channelValuesDisplay[0],&channelValuesDisplay[1], &channelValuesDisplay[2]);
             } else if (m_d->model == ColorModel::HSI) {
                 /*
                  * HSI is a modified HSY function.
@@ -813,6 +814,7 @@ QVector <qreal> KisVisualColorSelectorShape::getHSX(QVector<qreal> hsx, bool wra
 {
     QVector <qreal> ihsx = hsx;
     if (!wrangler){
+        ihsx[2] = m_d->tone;
         if (m_d->model==HSV){
             if (hsx[2]<=0.0) {
                 ihsx[1] = m_d->sat;
@@ -822,20 +824,38 @@ QVector <qreal> KisVisualColorSelectorShape::getHSX(QVector<qreal> hsx, bool wra
                 ihsx[1] = m_d->sat;
             }
         }
-        if ((hsx[1]<0.0 || hsx[0]<0.0)){
+        if ((hsx[1]<=0.0 || hsx[0]<0.0)){
             ihsx[0]=m_d->hue;
         }
     } else {
         ihsx[0]=m_d->hue;
         ihsx[1]=m_d->sat;
+        ihsx[2]=m_d->tone;
     }
     return ihsx;
 }
 
-void KisVisualColorSelectorShape::setHSX(QVector<qreal> hsx)
+void KisVisualColorSelectorShape::setHSX(QVector<qreal> hsx, bool wrangler)
 {
-    m_d->sat = hsx[1];
-    m_d->hue = hsx[0];
+    if (wrangler){
+        m_d->tone = hsx[2];
+        m_d->sat = hsx[1];
+        m_d->hue = hsx[0];
+    } else {
+        m_d->tone = hsx[2];
+        if (m_d->model==HSV){
+            if (hsx[2]>0.0) {
+                 m_d->sat = hsx[1];
+            }
+        } else {
+            if ((hsx[2]>0.0 || hsx[2]<1.0)) {
+                m_d->sat = hsx[1];
+            }
+        }
+        if ((hsx[1]>0.0 && hsx[0]>=0.0)){
+            m_d->hue = hsx[0];
+        }
+    }
 }
 
 QVector <int> KisVisualColorSelectorShape::getChannels()

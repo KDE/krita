@@ -236,7 +236,7 @@ public:
      * black, white, and desaturated values. Will not change the non-native values.
      * @param hsx the hsx value.
      */
-    void setHSX(QVector <qreal> hsx);
+    void setHSX(QVector <qreal> hsx, bool wrangler=false);
     /**
      * @brief getHSX sets the sat and hue so they won't
      * switch around much.

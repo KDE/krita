@@ -28,8 +28,8 @@
          </property>
          <property name="minimumSize">
           <size>
-           <width>250</width>
-           <height>250</height>
+           <width>55</width>
+           <height>50</height>
           </size>
          </property>
         </widget>

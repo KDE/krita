@@ -102,11 +102,13 @@ public Q_SLOTS:
 
     void slotSetColor(KoColor c);
     void slotsetColorSpace(const KoColorSpace *cs);
+    void slotRebuildSelectors();
     void setDisplayRenderer (const KoColorDisplayRendererInterface *displayRenderer);
 private Q_SLOTS:
     void updateFromWidgets(KoColor c);
 protected:
     void leaveEvent(QEvent *);
+    void resizeEvent(QResizeEvent *);
 private:
     struct Private;
     const QScopedPointer<Private> m_d;
@@ -205,6 +207,9 @@ public:
     virtual QRect getSpaceForSquare(QRect geom) = 0;
     virtual QRect getSpaceForCircle(QRect geom) = 0;
     virtual QRect getSpaceForTriangle(QRect geom) = 0;
+
+    void forceImageUpdate();
+    virtual void setBorderWidth(int width) = 0;
 Q_SIGNALS:
     void sigNewColor(KoColor col);
 
@@ -306,7 +311,7 @@ public:
                                          );
     ~KisVisualRectangleSelectorShape();
 
-    void setBarWidth(int width);
+    void setBorderWidth(int width);
 
     /**
      * @brief getSpaceForSquare
@@ -316,7 +321,8 @@ public:
     virtual QRect getSpaceForSquare(QRect geom);
     virtual QRect getSpaceForCircle(QRect geom);
     virtual QRect getSpaceForTriangle(QRect geom);
-
+protected:
+    void resizeEvent(QResizeEvent *);
 private:
     virtual QPointF convertShapeCoordinateToWidgetCoordinate(QPointF coordinate);
     virtual QPointF convertWidgetCoordinateToShapeCoordinate(QPoint coordinate);
@@ -342,7 +348,7 @@ public:
                                          );
     ~KisVisualEllipticalSelectorShape();
 
-    void setBarWidth(int width);
+    void setBorderWidth(int width);
 
     /**
      * @brief getSpaceForSquare
@@ -352,7 +358,8 @@ public:
     virtual QRect getSpaceForSquare(QRect geom);
     virtual QRect getSpaceForCircle(QRect geom);
     virtual QRect getSpaceForTriangle(QRect geom);
-
+protected:
+    void resizeEvent(QResizeEvent *);
 private:
     virtual QPointF convertShapeCoordinateToWidgetCoordinate(QPointF coordinate);
     virtual QPointF convertWidgetCoordinateToShapeCoordinate(QPoint coordinate);
@@ -380,7 +387,7 @@ public:
                                          );
     ~KisVisualTriangleSelectorShape();
 
-    void setBarWidth(int width);
+    void setBorderWidth(int width);
     void setTriangle();
 
     /**
@@ -391,7 +398,8 @@ public:
     virtual QRect getSpaceForSquare(QRect geom);
     virtual QRect getSpaceForCircle(QRect geom);
     virtual QRect getSpaceForTriangle(QRect geom);
-
+protected:
+    void resizeEvent(QResizeEvent *);
 private:
     virtual QPointF convertShapeCoordinateToWidgetCoordinate(QPointF coordinate);
     virtual QPointF convertWidgetCoordinateToShapeCoordinate(QPoint coordinate);

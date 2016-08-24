@@ -441,7 +441,6 @@ void KisVisualColorSelectorShape::setColor(KoColor c)
     }
     m_d->currentColor = c;
     updateCursor();
-    convertShapeCoordinateToKoColor(getCursorPosition(), true);
     m_d->imagesNeedUpdate = true;
     update();
 }
@@ -814,7 +813,9 @@ QVector <qreal> KisVisualColorSelectorShape::getHSX(QVector<qreal> hsx, bool wra
 {
     QVector <qreal> ihsx = hsx;
     if (!wrangler){
-        ihsx[2] = m_d->tone;
+        if (hsx[2]>m_d->tone-0.01 && hsx[2]<m_d->tone+0.01) {
+            ihsx[2] = m_d->tone;
+        }
         if (m_d->model==HSV){
             if (hsx[2]<=0.0) {
                 ihsx[1] = m_d->sat;
@@ -842,7 +843,9 @@ void KisVisualColorSelectorShape::setHSX(QVector<qreal> hsx, bool wrangler)
         m_d->sat = hsx[1];
         m_d->hue = hsx[0];
     } else {
-        m_d->tone = hsx[2];
+        if (m_d->channel1==2 || m_d->channel2==2){
+            m_d->tone=hsx[2];
+        }
         if (m_d->model==HSV){
             if (hsx[2]>0.0) {
                  m_d->sat = hsx[1];
@@ -927,12 +930,13 @@ QPointF KisVisualRectangleSelectorShape::convertShapeCoordinateToWidgetCoordinat
 {
     qreal x = m_barWidth/2;
     qreal y = m_barWidth/2;
+    qreal offset = 5.0;
     KisVisualColorSelectorShape::Dimensions dimension = getDimensions();
     if (dimension == KisVisualColorSelectorShape::onedimensional) {
         if ( m_type == KisVisualRectangleSelectorShape::vertical) {
-            y = coordinate.x()*height();
+            y = qMin(coordinate.x()*(height()-offset*2)+offset, (qreal)height());
         } else if (m_type == KisVisualRectangleSelectorShape::horizontal) {
-            x = coordinate.x()*width();
+            x = qMin(coordinate.x()*(width()-offset*2)+offset, (qreal)width());
         } else if (m_type == KisVisualRectangleSelectorShape::border) {
 
             QRectF innerRect(m_barWidth/2, m_barWidth/2, width()-m_barWidth, height()-m_barWidth);
@@ -1002,8 +1006,8 @@ QPointF KisVisualRectangleSelectorShape::convertShapeCoordinateToWidgetCoordinat
 
         }
     } else {
-        x = coordinate.x()*width();
-        y = coordinate.y()*height();
+        x = qMin(coordinate.x()*(height()-offset*2)+offset, (qreal)height());
+        y = qMin(coordinate.y()*(width()-offset*2)+offset, (qreal)width());
     }
     return QPointF(x,y);
 }
@@ -1013,13 +1017,14 @@ QPointF KisVisualRectangleSelectorShape::convertWidgetCoordinateToShapeCoordinat
     //default implementation:
     qreal x = 0.5;
     qreal y = 0.5;
+    qreal offset = 5.0;
     KisVisualColorSelectorShape::Dimensions dimension = getDimensions();
     if (getMaskMap().contains(coordinate)) {
         if (dimension == KisVisualColorSelectorShape::onedimensional ) {
             if (m_type == KisVisualRectangleSelectorShape::vertical) {
-                x = (qreal)coordinate.y()/(qreal)height();
+                x = qMax(((qreal)coordinate.y()-offset)/((qreal)height()-offset*2), 0.0);
             } else if (m_type == KisVisualRectangleSelectorShape::horizontal) {
-                x = (qreal)coordinate.x()/(qreal)width();
+                x = qMax(((qreal)coordinate.x()-offset)/((qreal)width()-offset*2),0.0);
             } else if (m_type == KisVisualRectangleSelectorShape::border) {
                 //border
 
@@ -1093,8 +1098,8 @@ QPointF KisVisualRectangleSelectorShape::convertWidgetCoordinateToShapeCoordinat
             }
         }
         else {
-            x = (qreal)coordinate.x()/(qreal)width();
-            y = (qreal)coordinate.y()/(qreal)height();
+            x = qMax(((qreal)coordinate.x()-offset)/((qreal)width()-offset*2), 0.0);
+            y = qMax(((qreal)coordinate.y()-offset)/((qreal)height()-offset*2), 0.0);;
         }
     }
     return QPointF(x, y);
@@ -1132,6 +1137,14 @@ void KisVisualRectangleSelectorShape::drawCursor()
         int x = ( cursorPoint.x()-(width()/2)+1 );
         int y = ( cursorPoint.y()-cursorwidth );
         rect.setCoords(x, y, x+width()-2, y+(cursorwidth*2));
+        painter.save();
+        painter.setCompositionMode(QPainter::CompositionMode_Clear);
+        QPen pen;
+        pen.setWidth(5);
+        painter.setPen(pen);
+        painter.drawLine(QLine(QPoint(0.0,0.0), QPoint(0.0,height())));
+        painter.drawLine(QLine(QPoint(width(),0.0), QPoint(width(),height())));
+        painter.restore();
     } else {
         int x = cursorPoint.x()-cursorwidth;
         int y = cursorPoint.y()-(height()/2)+1;
@@ -1165,6 +1178,14 @@ void KisVisualRectangleSelectorShape::drawCursor()
         painter.drawEllipse(mirror, cursorwidth-1, cursorwidth-1);
 
     } else {
+        painter.save();
+        painter.setCompositionMode(QPainter::CompositionMode_Clear);
+        QPen pen;
+        pen.setWidth(5);
+        painter.setPen(pen);
+        painter.drawRect(QRect(0,0,width(),height()));
+        painter.restore();
+
         painter.setPen(Qt::white);
         fill.setColor(Qt::white);
         painter.setBrush(fill);
@@ -1250,6 +1271,7 @@ QPointF KisVisualEllipticalSelectorShape::convertShapeCoordinateToWidgetCoordina
 {
     qreal x;
     qreal y;
+    qreal offset=7.0;
     qreal a = (qreal)width()*0.5;
     QPointF center(a, a);
     QLineF line(center, QPoint((m_barWidth*0.5),a));
@@ -1263,7 +1285,7 @@ QPointF KisVisualEllipticalSelectorShape::convertShapeCoordinateToWidgetCoordina
     }
     line.setAngle(angle);
     if (getDimensions()!=KisVisualColorSelectorShape::onedimensional) {
-        line.setLength(coordinate.y()*a);
+        line.setLength(coordinate.y()*a-offset);
     }
     x = qRound(line.p2().x());
     y = qRound(line.p2().y());
@@ -1275,9 +1297,10 @@ QPointF KisVisualEllipticalSelectorShape::convertWidgetCoordinateToShapeCoordina
     //default implementation:
     qreal x = 0.5;
     qreal y = 1.0;
+    qreal offset = 7.0;
     QRect total(0, 0, width(), height());
     QLineF line(total.center(), coordinate);
-    qreal a = total.width()/2;
+    qreal a = (total.width()/2)-offset;
     qreal angle;
 
     if (m_type!=KisVisualEllipticalSelectorShape::borderMirrored){
@@ -1286,7 +1309,7 @@ QPointF KisVisualEllipticalSelectorShape::convertWidgetCoordinateToShapeCoordina
         angle = angle+180.0;
         x = angle/360.0;
         if (getDimensions()==KisVisualColorSelectorShape::twodimensional) {
-            y = qBound(0.0,line.length()/a, 1.0);
+            y = qBound(0.0,(line.length())/a, 1.0);
         }
 
     } else {
@@ -1297,10 +1320,9 @@ QPointF KisVisualEllipticalSelectorShape::convertWidgetCoordinateToShapeCoordina
         }
         x = (angle/360.0)*2;
         if (getDimensions()==KisVisualColorSelectorShape::twodimensional) {
-            y = line.length()/a;
+            y = qBound(0.0,(line.length())/a, 1.0);
         }
     }
-
 
     return QPointF(x, y);
 }
@@ -1457,7 +1479,7 @@ QPointF KisVisualTriangleSelectorShape::convertWidgetCoordinateToShapeCoordinate
     qreal horizontalLineLength = ((qreal)coordinate.y())*(2./sqrt(3.))-(offset*2);
     qreal horizontalLineStart = (triWidth*0.5)-(horizontalLineLength*0.5);
 
-    qreal relativeX = qMax((qreal)coordinate.x()-offset,0.0)-horizontalLineStart;
+    qreal relativeX = qMax((qreal)coordinate.x(),0.0)-horizontalLineStart;
     x = relativeX/horizontalLineLength;
     if (coordinate.y()<offset){
         x = 0.5;

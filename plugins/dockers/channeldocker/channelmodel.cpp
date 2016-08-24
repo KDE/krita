@@ -234,7 +234,7 @@ void ChannelModel::updateThumbnails(void)
 #if QT_VERSION >= 0x050500
             m_thumbnails[i] = QImage(thumbnailSize, QImage::Format_Grayscale8);
 #else
-            m_thumbnails[i] = QImage(thumnailSize, QImage::Format_ARGB32_Premultiplied);
+            m_thumbnails[i] = QImage(thumbnailSize, QImage::Format_ARGB32_Premultiplied);
 #endif
         }
 

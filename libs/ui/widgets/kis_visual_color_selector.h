@@ -106,6 +106,7 @@ public Q_SLOTS:
     void setDisplayRenderer (const KoColorDisplayRendererInterface *displayRenderer);
 private Q_SLOTS:
     void updateFromWidgets(KoColor c);
+    void HSXwrangler();
 protected:
     void leaveEvent(QEvent *);
     void resizeEvent(QResizeEvent *);
@@ -208,10 +209,45 @@ public:
     virtual QRect getSpaceForCircle(QRect geom) = 0;
     virtual QRect getSpaceForTriangle(QRect geom) = 0;
 
+    /**
+     * @brief forceImageUpdate
+     * force the image to recache.
+     */
     void forceImageUpdate();
+
+    /**
+     * @brief setBorderWidth
+     * set the border of the single dimensional selector.
+     * @param width
+     */
     virtual void setBorderWidth(int width) = 0;
+
+    /**
+     * @brief getChannels
+     * get used channels
+     * @return
+     */
+    QVector <int> getChannels();
+
+    /**
+     * @brief setHSX
+     * This is for the cursor not to change when selecting
+     * black, white, and desaturated values. Will not change the non-native values.
+     * @param hsx the hsx value.
+     */
+    void setHSX(QVector <qreal> hsx);
+    /**
+     * @brief getHSX sets the sat and hue so they won't
+     * switch around much.
+     * @param hsx the hsx values.
+     * @return returns hsx, corrected.
+     */
+    QVector <qreal> getHSX(QVector <qreal> hsx, bool wrangler= false);
+
+
 Q_SIGNALS:
     void sigNewColor(KoColor col);
+    void sigHSXchange();
 
 public Q_SLOTS:
     /**
@@ -247,21 +283,6 @@ protected:
 private:
     struct Private;
     const QScopedPointer<Private> m_d;
-
-    /**
-     * @brief setHSX
-     * This is for the cursor not to change when selecting
-     * black, white, and desaturated values. Will not change the non-native values.
-     * @param hsx the hsx value.
-     */
-    void setHSX(QVector <qreal> hsx);
-    /**
-     * @brief getHSX sets the sat and hue so they won't
-     * switch around much.
-     * @param hsx the hsx values.
-     * @return returns hsx, corrected.
-     */
-    QVector <qreal> getHSX(QVector <qreal> hsx);
 
     /**
      * @brief convertShapeCoordinateToWidgetCoordinate

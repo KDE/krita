@@ -37,7 +37,26 @@ class KRITAUI_EXPORT KisInternalColorSelector : public QDialog
 {
     Q_OBJECT
 public:
-    KisInternalColorSelector(QWidget* parent, KoColor color, bool modal, const QString &caption, const KoColorDisplayRendererInterface *displayRenderer = KoDumbColorDisplayRenderer::instance());
+    struct Config
+    {
+        Config() :
+            modal(true),
+            visualColorSelector(true),
+            paletteBox(true),
+            screenColorPicker(true),
+            prevNextButtons(true),
+            hexInput(true),
+            useAlpha(false){}
+        bool modal;
+        bool visualColorSelector;
+        bool paletteBox;
+        bool screenColorPicker;
+        bool prevNextButtons;
+        bool hexInput;
+        bool useAlpha;
+    };
+
+    KisInternalColorSelector(QWidget* parent, KoColor color, Config config, const QString &caption, const KoColorDisplayRendererInterface *displayRenderer = KoDumbColorDisplayRenderer::instance());
     ~KisInternalColorSelector();
 
     /**
@@ -68,7 +87,7 @@ public:
      * end color to be in.
      * @param chooseAlpha - Whether or not the alpha-choosing functionality should be used.
      */
-    static KoColor getModalColorDialog(const KoColor color, bool chooseAlpha = false, QWidget* parent = Q_NULLPTR, QString caption = QString());
+    static KoColor getModalColorDialog(const KoColor color, QWidget* parent = Q_NULLPTR, QString caption = QString());
 
     /**
      * @brief getCurrentColor

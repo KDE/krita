@@ -53,11 +53,11 @@ struct KisInternalColorSelector::Private
     KisHexColorInput *hexColorInput;
 };
 
-KisInternalColorSelector::KisInternalColorSelector(QWidget *parent, KoColor color, bool modal, const QString &caption, const KoColorDisplayRendererInterface *displayRenderer)
+KisInternalColorSelector::KisInternalColorSelector(QWidget *parent, KoColor color, Config config, const QString &caption, const KoColorDisplayRendererInterface *displayRenderer)
     : QDialog(parent)
      ,m_d(new Private)
 {
-    setModal(modal);
+    setModal(config.modal);
     this->setFocusPolicy(Qt::ClickFocus);
     m_ui = new Ui_WdgDlgInternalColorSelector();
     m_ui->setupUi(this);
@@ -73,10 +73,17 @@ KisInternalColorSelector::KisInternalColorSelector(QWidget *parent, KoColor colo
 
     m_ui->visualSelector->slotSetColor(color);
     m_ui->visualSelector->setDisplayRenderer(displayRenderer);
+    if (config.visualColorSelector) {
     connect(m_ui->visualSelector, SIGNAL(sigNewColor(KoColor)), this, SLOT(slotColorUpdated(KoColor)));
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), m_ui->visualSelector, SLOT(ConfigurationChanged()));
-
-    connect(m_ui->screenColorPicker, SIGNAL(sigNewColorPicked(KoColor)),this, SLOT(slotColorUpdated(KoColor)));
+    } else {
+        m_ui->visualSelector->hide();
+    }
+    if (config.screenColorPicker) {
+        connect(m_ui->screenColorPicker, SIGNAL(sigNewColorPicked(KoColor)),this, SLOT(slotColorUpdated(KoColor)));
+    } else {
+        m_ui->screenColorPicker->hide();
+    }
     //TODO: Add disable signal as well. Might be not necessary...?
     KisConfig cfg;
     QString paletteName = cfg.readEntry("internal_selector_active_color_set", QString());
@@ -90,24 +97,35 @@ KisInternalColorSelector::KisInternalColorSelector(QWidget *parent, KoColor colo
             m_ui->paletteBox->setColorSet(savedPal);
         }
     }
+    if (config.paletteBox) {
     connect(m_ui->paletteBox, SIGNAL(colorChanged(KoColor,bool)), this, SLOT(slotColorUpdated(KoColor)));
     m_ui->paletteBox->setDisplayRenderer(displayRenderer);
+    } else {
+        m_ui->paletteBox->hide();
+    }
 
-    m_ui->currentColor->setColor(m_d->currentColor);
-    m_ui->currentColor->setDisplayRenderer(displayRenderer);
-    m_ui->currentColor->setFrameStyle(QFrame::StyledPanel);
-    m_ui->previousColor->setColor(m_d->currentColor);
-    m_ui->previousColor->setDisplayRenderer(displayRenderer);
-    m_ui->previousColor->setFrameStyle(QFrame::StyledPanel);
-    connect(this, SIGNAL(accepted()), this, SLOT(setPreviousColor()));
-    connect(m_ui->previousColor, SIGNAL(triggered(KoColorPatch*)), SLOT(slotSetColorFromPatch(KoColorPatch*)));
+    if (config.prevNextButtons) {
+        m_ui->currentColor->setColor(m_d->currentColor);
+        m_ui->currentColor->setDisplayRenderer(displayRenderer);
+        m_ui->currentColor->setFrameStyle(QFrame::StyledPanel);
+        m_ui->previousColor->setColor(m_d->currentColor);
+        m_ui->previousColor->setDisplayRenderer(displayRenderer);
+        m_ui->previousColor->setFrameStyle(QFrame::StyledPanel);
+        connect(this, SIGNAL(accepted()), this, SLOT(setPreviousColor()));
+        connect(m_ui->previousColor, SIGNAL(triggered(KoColorPatch*)), SLOT(slotSetColorFromPatch(KoColorPatch*)));
+    } else {
+        m_ui->currentColor->hide();
+        m_ui->previousColor->hide();
+    }
 
-    m_d->sRGB.fromKoColor(m_d->currentColor);
-    m_d->hexColorInput = new KisHexColorInput(this, &m_d->sRGB);
-    m_d->hexColorInput->update();
-    connect(m_d->hexColorInput, SIGNAL(updated()), SLOT(slotSetColorFromHex()));
-    m_ui->leftPane->addWidget(m_d->hexColorInput);
-    m_d->hexColorInput->setToolTip(i18n("This is a hexcode input, for webcolors. It can only get colors in the sRGB space."));
+    if (config.hexInput) {
+        m_d->sRGB.fromKoColor(m_d->currentColor);
+        m_d->hexColorInput = new KisHexColorInput(this, &m_d->sRGB);
+        m_d->hexColorInput->update();
+        connect(m_d->hexColorInput, SIGNAL(updated()), SLOT(slotSetColorFromHex()));
+        m_ui->leftPane->addWidget(m_d->hexColorInput);
+        m_d->hexColorInput->setToolTip(i18n("This is a hexcode input, for webcolors. It can only get colors in the sRGB space."));
+    }
 
     connect(this, SIGNAL(signalForegroundColorChosen(KoColor)), this, SLOT(slotLockSelector()));
     m_d->compressColorChanges = new KisSignalCompressor(100 /* ms */, KisSignalCompressor::POSTPONE, this);
@@ -168,10 +186,10 @@ void KisInternalColorSelector::setDisplayRenderer(const KoColorDisplayRendererIn
     }
 }
 
-KoColor KisInternalColorSelector::getModalColorDialog(const KoColor color, bool chooseAlpha, QWidget* parent, QString caption)
+KoColor KisInternalColorSelector::getModalColorDialog(const KoColor color, QWidget* parent, QString caption)
 {
-    KisInternalColorSelector dialog(parent, color, true, caption);
-    dialog.chooseAlpha(chooseAlpha);
+    Config config = Config();
+    KisInternalColorSelector dialog(parent, color, config, caption);
     dialog.exec();
     return dialog.getCurrentColor();
 }
@@ -251,3 +269,4 @@ void KisInternalColorSelector::slotSetColorFromHex()
 {
     slotColorUpdated(m_d->sRGB);
 }
+

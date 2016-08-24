@@ -1,5 +1,5 @@
 name: krita
-version: 3.0.1-alpha-snap11
+version: 3.0.1-beta-snap12
 summary: Krita is the digital painting studio for artists
 description: Krita is a creative application for raster images. Whether you want to create
  from scratch or work with existing images, Krita is for you. You can work with
@@ -114,7 +114,6 @@ parts:
         - liblcms2-2
         - libopencolorio1v5
         - libopenexr22
-        - libopenjpeg5
         - libpng12-0
         - libstdc++6
         - libtiff5

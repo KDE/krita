@@ -538,16 +538,16 @@ KoColor KisVisualColorSelectorShape::convertShapeCoordinateToKoColor(QPointF coo
     maxvalue.fill(1.0);
     if (m_d->displayRenderer
             && m_d->displayRenderer->getPaintingColorSpace()==m_d->cs
-            && m_d->cs->colorDepthId() == Float16BitsColorDepthID
-            && m_d->cs->colorDepthId() == Float32BitsColorDepthID
-            && m_d->cs->colorDepthId() == Float64BitsColorDepthID
+            && (m_d->cs->colorDepthId() == Float16BitsColorDepthID
+            || m_d->cs->colorDepthId() == Float32BitsColorDepthID
+            || m_d->cs->colorDepthId() == Float64BitsColorDepthID)
             && m_d->cs->colorModelId() != LABAColorModelID
             && m_d->cs->colorModelId() != CMYKAColorModelID) {
         for (int ch = 0; ch<maxvalue.size(); ch++) {
             KoChannelInfo *channel = m_d->cs->channels()[ch];
             maxvalue[ch] = m_d->displayRenderer->maxVisibleFloatValue(channel);
             channelValues[ch] = channelValues[ch]/(maxvalue[ch]);
-            channelValuesDisplay[KoChannelInfo::displayPositionToChannelIndex(ch, m_d->cs->channels())] = qBound((float)0.0,channelValues[ch], (float)1.0);
+            channelValuesDisplay[KoChannelInfo::displayPositionToChannelIndex(ch, m_d->cs->channels())] = channelValues[ch];
         }
     } else {
         for (int i =0; i<channelValues.size();i++) {
@@ -638,7 +638,7 @@ KoColor KisVisualColorSelectorShape::convertShapeCoordinateToKoColor(QPointF coo
         }
     }
     for (int i=0; i<channelValues.size();i++) {
-        channelValues[i] = qBound(0.0,channelValuesDisplay[KoChannelInfo::displayPositionToChannelIndex(i, m_d->cs->channels())]*(maxvalue[i]),1.0);
+        channelValues[i] = channelValuesDisplay[KoChannelInfo::displayPositionToChannelIndex(i, m_d->cs->channels())]*(maxvalue[i]);
     }
     c.colorSpace()->fromNormalisedChannelsValue(c.data(), channelValues);
     return c;
@@ -657,16 +657,16 @@ QPointF KisVisualColorSelectorShape::convertKoColorToShapeCoordinate(KoColor c)
     maxvalue.fill(1.0);
     if (m_d->displayRenderer
             && m_d->displayRenderer->getPaintingColorSpace()==m_d->cs
-            && m_d->cs->colorDepthId() == Float16BitsColorDepthID
-            && m_d->cs->colorDepthId() == Float32BitsColorDepthID
-            && m_d->cs->colorDepthId() == Float64BitsColorDepthID
+            && (m_d->cs->colorDepthId() == Float16BitsColorDepthID
+            || m_d->cs->colorDepthId() == Float32BitsColorDepthID
+            || m_d->cs->colorDepthId() == Float64BitsColorDepthID)
             && m_d->cs->colorModelId() != LABAColorModelID
             && m_d->cs->colorModelId() != CMYKAColorModelID) {
         for (int ch = 0; ch<maxvalue.size(); ch++) {
             KoChannelInfo *channel = m_d->cs->channels()[ch];
             maxvalue[ch] = m_d->displayRenderer->maxVisibleFloatValue(channel);
             channelValues[ch] = channelValues[ch]/(maxvalue[ch]);
-            channelValuesDisplay[KoChannelInfo::displayPositionToChannelIndex(ch, m_d->cs->channels())] = qBound((float)0.0,channelValues[ch], (float)1.0);
+            channelValuesDisplay[KoChannelInfo::displayPositionToChannelIndex(ch, m_d->cs->channels())] = channelValues[ch];
         }
     } else {
         for (int i =0; i<channelValues.size();i++) {
@@ -722,9 +722,9 @@ QPointF KisVisualColorSelectorShape::convertKoColorToShapeCoordinate(KoColor c)
             }
         }
     } else {
-        coordinates.setX(channelValuesDisplay[m_d->channel1]);
+        coordinates.setX(qBound((float)0.0, channelValuesDisplay[m_d->channel1], (float)1.0));
         if (m_d->dimension == Dimensions::twodimensional) {
-            coordinates.setY(channelValuesDisplay[m_d->channel2]);
+            coordinates.setY(qBound((float)0.0, channelValuesDisplay[m_d->channel2], (float)1.0));
         }
     }
     return coordinates;

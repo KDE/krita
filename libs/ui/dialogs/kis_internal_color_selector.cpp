@@ -36,6 +36,7 @@
 #include "kis_internal_color_selector.h"
 #include "ui_wdgdlginternalcolorselector.h"
 #include "kis_config.h"
+#include "kis_config_notifier.h"
 #include "kis_color_input.h"
 
 struct KisInternalColorSelector::Private
@@ -73,6 +74,8 @@ KisInternalColorSelector::KisInternalColorSelector(QWidget *parent, KoColor colo
     m_ui->visualSelector->slotSetColor(color);
     m_ui->visualSelector->setDisplayRenderer(displayRenderer);
     connect(m_ui->visualSelector, SIGNAL(sigNewColor(KoColor)), this, SLOT(slotColorUpdated(KoColor)));
+    connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), m_ui->visualSelector, SLOT(slotRebuildSelectors()));
+
     connect(m_ui->screenColorPicker, SIGNAL(sigNewColorPicked(KoColor)),this, SLOT(slotColorUpdated(KoColor)));
     //TODO: Add disable signal as well. Might be not necessary...?
     KisConfig cfg;
@@ -101,6 +104,7 @@ KisInternalColorSelector::KisInternalColorSelector(QWidget *parent, KoColor colo
 
     m_d->sRGB.fromKoColor(m_d->currentColor);
     m_d->hexColorInput = new KisHexColorInput(this, &m_d->sRGB);
+    m_d->hexColorInput->update();
     connect(m_d->hexColorInput, SIGNAL(updated()), SLOT(slotSetColorFromHex()));
     m_ui->leftPane->addWidget(m_d->hexColorInput);
     m_d->hexColorInput->setToolTip(i18n("This is a hexcode input, for webcolors. It can only get colors in the sRGB space."));

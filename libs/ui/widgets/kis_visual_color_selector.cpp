@@ -186,10 +186,15 @@ void KisVisualColorSelector::slotRebuildSelectors()
             channel3 = 2;
             break;
         case SV:
+        case SV2:
             modelS = KisVisualColorSelectorShape::HSV;
             channel2 = 1;
             channel3 = 2;
             break;
+        }
+        if (m_d->acs_config.mainType==Triangle) {
+            modelS = KisVisualColorSelectorShape::HSV;
+            //Triangle only really works in HSV mode.
         }
         KisVisualColorSelectorShape *bar;
         if (m_d->acs_config.subType==Ring) {

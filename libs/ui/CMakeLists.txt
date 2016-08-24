@@ -259,7 +259,7 @@ set(kritaui_LIB_SRCS
     widgets/kis_visual_color_selector.cpp
     widgets/KoDualColorButton.cpp
     widgets/kis_color_input.cpp
-
+    widgets/kis_color_button.cpp
     input/kis_input_manager.cpp
     input/kis_input_manager_p.cpp
     input/kis_extended_modifiers_mapper.cpp

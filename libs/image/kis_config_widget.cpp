@@ -24,8 +24,8 @@ KisConfigWidget::KisConfigWidget(QWidget * parent, Qt::WFlags f, int delay)
         : QWidget(parent, f)
         , m_compressor(delay, KisSignalCompressor::FIRST_ACTIVE)
 {
-    connect(&m_compressor, SIGNAL(timeout()), SLOT(slotConfigChanged()));
-    connect(this, SIGNAL(sigConfigurationItemChanged()), &m_compressor, SLOT(start()));
+    connect(this, SIGNAL(sigConfigurationItemChanged()), SLOT(slotConfigChanged()));
+    connect(&m_compressor, SIGNAL(timeout()), SIGNAL(sigConfigurationUpdated()));
 }
 
 KisConfigWidget::~KisConfigWidget()
@@ -34,7 +34,9 @@ KisConfigWidget::~KisConfigWidget()
 
 void KisConfigWidget::slotConfigChanged()
 {
-    emit sigConfigurationUpdated();
+    if (!signalsBlocked()) {
+        m_compressor.start();
+    }
 }
 
 void KisConfigWidget::setView(KisViewManager *view)
@@ -43,4 +45,3 @@ void KisConfigWidget::setView(KisViewManager *view)
         warnKrita << "KisConfigWidget::setView has got view == 0. That's a bug! Please report it!";
     }
 }
-

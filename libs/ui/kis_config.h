@@ -479,6 +479,12 @@ public:
     QString customFFMpegPath(bool defaultValue = false) const;
     void setCustomFFMpegPath(const QString &value) const;
 
+    bool showBrushHud(bool defaultValue = false) const;
+    void setShowBrushHud(bool value);
+
+    QString brushHudSetting(bool defaultValue = false) const;
+    void setBrushHudSetting(const QString &value) const;
+
     template<class T>
     void writeEntry(const QString& name, const T& value) {
         m_cfg.writeEntry(name, value);

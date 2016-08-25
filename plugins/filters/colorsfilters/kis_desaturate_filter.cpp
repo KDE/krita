@@ -54,7 +54,7 @@
 #include <kis_iterator_ng.h>
 
 KisDesaturateFilter::KisDesaturateFilter()
-        : KisColorTransformationFilter(id(), categoryAdjust(), i18n("&Desaturate"))
+   : KisColorTransformationFilter(id(), categoryAdjust(), i18n("&Desaturate..."))
 {
     setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_U));
     setSupportsPainting(true);

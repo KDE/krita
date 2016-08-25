@@ -44,6 +44,8 @@
 #include "kis_hsv_slider.h"
 #include "kis_display_color_converter.h"
 
+#include "kis_double_parse_spin_box.h"
+
 KisColorSliderInput::KisColorSliderInput(QWidget* parent, KoColor* color, const int type, KoColorDisplayRendererInterface *displayRenderer, KisCanvas2* canvas)
     : QWidget(parent),
     m_type(type),
@@ -593,7 +595,7 @@ void KisHSXColorSliderInput::update()
 
 QWidget* KisHSXColorSliderInput::createInput()
 {
-    m_NumInput = new QDoubleSpinBox(this);
+    m_NumInput = new KisDoubleParseSpinBox(this);
     m_NumInput->setMinimum(0);
     m_NumInput->setMaximum(100.0);
     m_NumInput->setKeyboardTracking(false);//this makes sure that only full values are sent after loss of focus. Much more user friendly//

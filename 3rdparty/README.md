@@ -117,7 +117,6 @@ On All operating systems:
     cmake --build . --config RelWithDebInfo --target ext_gsl
     cmake --build . --config RelWithDebInfo --target ext_vc
     cmake --build . --config RelWithDebInfo --target ext_libraw
-    cmake --build . --config RelWithDebInfo --target ext_openjpeg
 
 On Windows and OSX
 
@@ -153,7 +152,7 @@ On Windows
 
 Depending on what you want to use, run this command for MSBuild: 
 
-    cmake ..\krita -G "Visual Studio 14 Win64" -DBoost_DEBUG=OFF -DBOOST_INCLUDEDIR=c:\dev\i\include -DBOOST_DEBUG=ON -DBOOST_ROOT=c:\dev\i -DBOOST_LIBRARYDIR=c:\dev\i\lib -DCMAKE_INSTALL_PREFIX=c:\dev\i -DCMAKE_PREFIX_PATH=c:\dev\i -DCMAKE_BUILD_TYPE=RelWithDebInfo -DBUILD_TESTING=OFF -DKDE4_BUILD_TESTS=OFF -DHAVE_MEMORY_LEAK_TRACKER=OFF -DPACKAGERS_BUILD=ON -Wno-dev -DDEFINE_NO_DEPRECATED=1
+    cmake ..\krita -G "NMake Makefiles" -DBoost_DEBUG=OFF -DBOOST_INCLUDEDIR=c:\dev\i\include -DBOOST_DEBUG=ON -DBOOST_ROOT=c:\dev\i -DBOOST_LIBRARYDIR=c:\dev\i\lib -DCMAKE_INSTALL_PREFIX=c:\dev\i -DCMAKE_PREFIX_PATH=c:\dev\i -DCMAKE_BUILD_TYPE=RelWithDebInfo -DBUILD_TESTING=OFF -DKDE4_BUILD_TESTS=OFF -DHAVE_MEMORY_LEAK_TRACKER=OFF -DPACKAGERS_BUILD=ON -Wno-dev -DDEFINE_NO_DEPRECATED=1
 
 Or this to use jom (faster compiling, uses all cores, ships with QtCreator/pre-built Qt binaries):
 

@@ -19,7 +19,7 @@
 #include "KoDerivedResourceConverter.h"
 
 #include "QVariant"
-
+#include "kis_assert.h"
 
 struct KoDerivedResourceConverter::Private
 {
@@ -28,6 +28,8 @@ struct KoDerivedResourceConverter::Private
 
     int key;
     int sourceKey;
+
+    QVariant lastKnownValue;
 };
 
 
@@ -50,3 +52,42 @@ int KoDerivedResourceConverter::sourceKey() const
     return m_d->sourceKey;
 }
 
+bool KoDerivedResourceConverter::notifySourceChanged(const QVariant &sourceValue)
+{
+    const QVariant newValue = fromSource(sourceValue);
+
+    const bool valueChanged = m_d->lastKnownValue != newValue;
+    m_d->lastKnownValue = newValue;
+
+    return valueChanged;
+}
+
+QVariant KoDerivedResourceConverter::readFromSource(const QVariant &sourceValue)
+{
+    const QVariant result = fromSource(sourceValue);
+
+    KIS_SAFE_ASSERT_RECOVER_NOOP(m_d->lastKnownValue.isNull() ||
+                                 result == m_d->lastKnownValue);
+
+    m_d->lastKnownValue = result;
+
+    return m_d->lastKnownValue;
+}
+
+QVariant KoDerivedResourceConverter::writeToSource(const QVariant &value,
+                                                   const QVariant &sourceValue,
+                                                   bool *changed)
+{
+    if (changed) {
+        *changed = m_d->lastKnownValue != value;
+    }
+
+    QVariant newSourceValue = sourceValue;
+
+    if (*changed || value != fromSource(sourceValue)) {
+        m_d->lastKnownValue = value;
+        newSourceValue = toSource(value, sourceValue);
+    }
+
+    return newSourceValue;
+}

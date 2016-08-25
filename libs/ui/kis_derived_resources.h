@@ -20,7 +20,24 @@
 #define __KIS_DERIVED_RESOURCES_H
 
 #include "KoDerivedResourceConverter.h"
+#include "KoResourceUpdateMediator.h"
+#include <QScopedPointer>
 
+class KisPresetUpdateMediator : public KoResourceUpdateMediator
+{
+    Q_OBJECT
+public:
+    KisPresetUpdateMediator();
+    ~KisPresetUpdateMediator();
+    void connectResource(QVariant sourceResource);
+
+private Q_SLOTS:
+    void slotSettingsChanged();
+
+private:
+    struct Private;
+    const QScopedPointer<Private> m_d;
+};
 
 class KisCompositeOpResourceConverter : public KoDerivedResourceConverter
 {
@@ -40,10 +57,28 @@ public:
     QVariant toSource(const QVariant &value, const QVariant &sourceValue);
 };
 
-class KisOpacityResourceConverter : public KoDerivedResourceConverter
+class KisOpacityResourceConverter : public KoDerivedResourceConverter, public QObject
 {
 public:
     KisOpacityResourceConverter();
+
+    QVariant fromSource(const QVariant &value);
+    QVariant toSource(const QVariant &value, const QVariant &sourceValue);
+};
+
+class KisFlowResourceConverter : public KoDerivedResourceConverter, public QObject
+{
+public:
+    KisFlowResourceConverter();
+
+    QVariant fromSource(const QVariant &value);
+    QVariant toSource(const QVariant &value, const QVariant &sourceValue);
+};
+
+class KisSizeResourceConverter : public KoDerivedResourceConverter, public QObject
+{
+public:
+    KisSizeResourceConverter();
 
     QVariant fromSource(const QVariant &value);
     QVariant toSource(const QVariant &value, const QVariant &sourceValue);

@@ -289,7 +289,7 @@ void KisTemplateCreateDia::slotOk() {
         while (QFile(dest).exists());
     }
     bool ignore = false;
-    KisTemplate *t = new KisTemplate(d->m_name->text(), QString(), ".source/ "+ file + ext, tmpIcon, "", "", false, true);
+    KisTemplate *t = new KisTemplate(d->m_name->text(), QString(), ".source/"+ file + ext, tmpIcon, "", "", false, true);
     if (!group->add(t)) {
         KisTemplate *existingTemplate=group->find(d->m_name->text());
         if (existingTemplate && !existingTemplate->isHidden()) {

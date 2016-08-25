@@ -24,6 +24,7 @@
 #include <kis_boundary.h>
 #include "kis_brush_server.h"
 #include <QLineF>
+#include "kis_signals_blocker.h"
 
 
 KisBrushBasedPaintOpSettings::KisBrushBasedPaintOpSettings()
@@ -122,4 +123,207 @@ bool KisBrushBasedPaintOpSettings::isValid() const
 bool KisBrushBasedPaintOpSettings::isLoadable()
 {
     return (KisBrushServer::instance()->brushServer()->resources().count() > 0);
+}
+
+struct BrushReader {
+    BrushReader(const KisBrushBasedPaintOpSettings *parent)
+        : m_parent(parent)
+    {
+        if (m_parent->optionsWidget()) {
+            KisSignalsBlocker b(m_parent->optionsWidget());
+            m_parent->optionsWidget()->setConfigurationSafe(m_parent);
+        } else {
+            m_parent = 0;
+        }
+    }
+
+    KisBrushSP brush() {
+        return m_parent ? m_parent->brush() : 0;
+    }
+
+    const KisBrushBasedPaintOpSettings *m_parent;
+};
+
+struct BrushWriter {
+    BrushWriter(KisBrushBasedPaintOpSettings *parent)
+        : m_parent(parent)
+    {
+        if (!m_parent->optionsWidget()) {
+            m_parent = 0;
+        }
+    }
+
+    ~BrushWriter() {
+        if (m_parent && m_parent->optionsWidget()) {
+            m_parent->optionsWidget()->writeConfigurationSafe(m_parent);
+        }
+    }
+
+    KisBrushSP brush() {
+        return m_parent ? m_parent->brush() : 0;
+    }
+
+    KisBrushBasedPaintOpSettings *m_parent;
+};
+
+void KisBrushBasedPaintOpSettings::setAngle(qreal value)
+{
+    BrushWriter w(this);
+    if (!w.brush()) return;
+    w.brush()->setAngle(value);
+}
+
+qreal KisBrushBasedPaintOpSettings::angle() const
+{
+    BrushReader w(this);
+    if (!w.brush()) return 0.0;
+    return w.brush()->angle();
+}
+
+void KisBrushBasedPaintOpSettings::setSpacing(qreal value)
+{
+    BrushWriter w(this);
+    if (!w.brush()) return;
+    w.brush()->setSpacing(value);
+}
+
+qreal KisBrushBasedPaintOpSettings::spacing() const
+{
+    BrushReader w(this);
+    if (!w.brush()) return 0.0;
+    return w.brush()->spacing();
+}
+
+void KisBrushBasedPaintOpSettings::setAutoSpacing(bool active, qreal coeff)
+{
+    BrushWriter w(this);
+    if (!w.brush()) return;
+    w.brush()->setAutoSpacing(active, coeff);
+}
+
+
+bool KisBrushBasedPaintOpSettings::autoSpacingActive() const
+{
+    BrushReader w(this);
+    if (!w.brush()) return 0.0;
+    return w.brush()->autoSpacingActive();
+}
+
+qreal KisBrushBasedPaintOpSettings::autoSpacingCoeff() const
+{
+    BrushReader w(this);
+    if (!w.brush()) return 0.0;
+    return w.brush()->autoSpacingCoeff();
+}
+
+
+#include <brushengine/kis_slider_based_paintop_property.h>
+#include "kis_paintop_preset.h"
+#include "kis_paintop_settings_update_proxy.h"
+
+typedef KisCallbackBasedPaintopProperty<KisUniformPaintOpProperty> KisUniformPaintOpPropertyCallback;
+
+QList<KisUniformPaintOpPropertySP> KisBrushBasedPaintOpSettings::uniformProperties()
+{
+    QList<KisUniformPaintOpPropertySP> props =
+        listWeakToStrong(m_uniformProperties);
+
+    if (props.isEmpty()) {
+        {
+            KisIntSliderBasedPaintOpPropertyCallback *prop =
+                new KisIntSliderBasedPaintOpPropertyCallback(
+                    KisIntSliderBasedPaintOpPropertyCallback::Int,
+                    "angle",
+                    "Angle",
+                    this, 0);
+
+            prop->setRange(0, 360);
+
+            prop->setReadCallback(
+                [](KisUniformPaintOpProperty *prop) {
+                    KisBrushBasedPaintOpSettings *s =
+                        dynamic_cast<KisBrushBasedPaintOpSettings*>(prop->settings().data());
+
+                    const qreal angleResult = kisRadiansToDegrees(s->angle());
+                    prop->setValue(angleResult);
+                });
+            prop->setWriteCallback(
+                [](KisUniformPaintOpProperty *prop) {
+                    KisBrushBasedPaintOpSettings *s =
+                        dynamic_cast<KisBrushBasedPaintOpSettings*>(prop->settings().data());
+
+                    s->setAngle(kisDegreesToRadians(prop->value().toReal()));
+                });
+
+            QObject::connect(preset()->updateProxy(), SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
+            prop->requestReadValue();
+            props << toQShared(prop);
+        }
+        {
+            KisUniformPaintOpPropertyCallback *prop =
+                new KisUniformPaintOpPropertyCallback(
+                    KisUniformPaintOpPropertyCallback::Bool,
+                    "auto_spacing",
+                    "Auto Spacing",
+                    this, 0);
+
+            prop->setReadCallback(
+                [](KisUniformPaintOpProperty *prop) {
+                    KisBrushBasedPaintOpSettings *s =
+                        dynamic_cast<KisBrushBasedPaintOpSettings*>(prop->settings().data());
+
+                    prop->setValue(s->autoSpacingActive());
+                });
+            prop->setWriteCallback(
+                [](KisUniformPaintOpProperty *prop) {
+                    KisBrushBasedPaintOpSettings *s =
+                        dynamic_cast<KisBrushBasedPaintOpSettings*>(prop->settings().data());
+
+                    s->setAutoSpacing(prop->value().toBool(), s->autoSpacingCoeff());
+                });
+
+            QObject::connect(preset()->updateProxy(), SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
+            prop->requestReadValue();
+            props << toQShared(prop);
+        }
+
+        {
+            KisDoubleSliderBasedPaintOpPropertyCallback *prop =
+                new KisDoubleSliderBasedPaintOpPropertyCallback(
+                    KisDoubleSliderBasedPaintOpPropertyCallback::Double,
+                    "spacing",
+                    "Spacing",
+                    this, 0);
+
+            prop->setRange(0.01, 10);
+            prop->setSingleStep(0.01);
+
+            prop->setReadCallback(
+                [](KisUniformPaintOpProperty *prop) {
+                    KisBrushBasedPaintOpSettings *s =
+                        dynamic_cast<KisBrushBasedPaintOpSettings*>(prop->settings().data());
+
+                    const qreal value = s->autoSpacingActive() ?
+                        s->autoSpacingCoeff() : s->spacing();
+                    prop->setValue(value);
+                });
+            prop->setWriteCallback(
+                [](KisUniformPaintOpProperty *prop) {
+                    KisBrushBasedPaintOpSettings *s =
+                        dynamic_cast<KisBrushBasedPaintOpSettings*>(prop->settings().data());
+
+                    if (s->autoSpacingActive()) {
+                        s->setAutoSpacing(true, prop->value().toReal());
+                    } else {
+                        s->setSpacing(prop->value().toReal());
+                    }
+                });
+
+            QObject::connect(preset()->updateProxy(), SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
+            prop->requestReadValue();
+            props << toQShared(prop);
+        }
+    }
+
+    return KisPaintOpSettings::uniformProperties() + props;
 }

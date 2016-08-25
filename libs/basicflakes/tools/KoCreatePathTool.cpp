@@ -30,6 +30,7 @@
 #include "KoShapeStroke.h"
 #include "KoStrokeConfigWidget.h"
 #include "KoCanvasBase.h"
+#include "kis_int_parse_spin_box.h"
 #include <KoColor.h>
 
 #include <klocalizedstring.h>
@@ -488,7 +489,7 @@ QList<QPointer<QWidget> > KoCreatePathTool::createOptionWidgets()
     angleWidget->setObjectName("Angle Constraints");
     QGridLayout *layout = new QGridLayout(angleWidget);
     layout->addWidget(new QLabel(i18n("Angle snapping delta:"), angleWidget), 0, 0);
-    QSpinBox *angleEdit = new QSpinBox(angleWidget);
+    QSpinBox *angleEdit = new KisIntParseSpinBox(angleWidget);
     angleEdit->setValue(d->angleSnappingDelta);
     angleEdit->setRange(1, 360);
     angleEdit->setSingleStep(1);

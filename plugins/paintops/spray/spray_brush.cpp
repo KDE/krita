@@ -46,22 +46,18 @@
 #include <cmath>
 #include <ctime>
 
-#include "random_gauss.h"
-
 #include <QtGlobal>
 
 SprayBrush::SprayBrush()
 {
     m_painter = 0;
     m_transfo = 0;
-    m_rand = new RandomGauss(time(0));
 }
 
 SprayBrush::~SprayBrush()
 {
     delete m_painter;
     delete m_transfo;
-    delete m_rand;
 }
 
 void SprayBrush::setProperties(KisSprayProperties * properties,
@@ -90,12 +86,18 @@ qreal SprayBrush::rotationAngle(KisRandomSourceSP randomSource)
 
     if (m_shapeDynamicsProperties->randomRotation) {
 
+        qreal randomValue = 0.0;
+
         if (m_properties->gaussian) {
-            rotation = linearInterpolation(rotation , M_PI * 2.0 * qBound<qreal>(0.0, m_rand->nextGaussian(0.0, 0.50) , 1.0), m_shapeDynamicsProperties->randomRotationWeight);
+            randomValue = qBound<qreal>(0.0, randomSource->generateGaussian(0.0, 0.5), 1.0);
+        } else {
+            randomValue = randomSource->generateNormalized();
         }
-        else {
-            rotation = linearInterpolation(rotation, M_PI * 2.0 * randomSource->generateNormalized(), m_shapeDynamicsProperties->randomRotationWeight);
-        }
+
+        rotation =
+            linearInterpolation(rotation ,
+                                M_PI * 2.0 * randomValue,
+                                m_shapeDynamicsProperties->randomRotationWeight);
     }
 
     return rotation;
@@ -138,7 +140,7 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
     KisCrossDeviceColorPicker colorPicker(source, m_inkColor);
 
     // apply size sensor
-    m_radius = m_properties->radius * scale * additionalScale;
+    m_radius = m_properties->radius() * scale * additionalScale;
 
     // jitter movement
     if (m_properties->jitterMovement) {
@@ -182,7 +184,7 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
 
         // generate random length
         if (m_properties->gaussian) {
-            length = qBound<qreal>(0.0, m_rand->nextGaussian(0.0, 0.50) , 1.0);
+            length = randomSource->generateGaussian(0.0, 0.5);
         }
         else {
             length = randomSource->generateNormalized();

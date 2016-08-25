@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>635</width>
-    <height>982</height>
+    <height>1014</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -71,7 +71,7 @@
       </size>
      </property>
      <property name="currentIndex">
-      <number>3</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tab_typeshape">
       <attribute name="title">
@@ -108,7 +108,7 @@
               <enum>Qt::LeftToRight</enum>
              </property>
              <property name="text">
-              <string>Color Model Type: </string>
+              <string>Color &amp;Model Type: </string>
              </property>
              <property name="alignment">
               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -180,7 +180,7 @@
                  </widget>
                 </item>
                 <item row="0" column="3">
-                 <widget class="QDoubleSpinBox" name="l_lumaG">
+                 <widget class="KisDoubleParseSpinBox" name="l_lumaG">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
                     <horstretch>0</horstretch>
@@ -225,7 +225,7 @@
                  </widget>
                 </item>
                 <item row="0" column="1">
-                 <widget class="QDoubleSpinBox" name="l_lumaR">
+                 <widget class="KisDoubleParseSpinBox" name="l_lumaR">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
                     <horstretch>0</horstretch>
@@ -244,7 +244,7 @@
                  </widget>
                 </item>
                 <item row="0" column="5">
-                 <widget class="QDoubleSpinBox" name="l_lumaB">
+                 <widget class="KisDoubleParseSpinBox" name="l_lumaB">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
                     <horstretch>0</horstretch>
@@ -263,7 +263,7 @@
                  </widget>
                 </item>
                 <item row="1" column="1">
-                 <widget class="QDoubleSpinBox" name="SP_Gamma">
+                 <widget class="KisDoubleParseSpinBox" name="SP_Gamma">
                   <property name="toolTip">
                    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This sets the gamma value that the linearised HSY Luminosity is crunched with. 1 makes the selector fully linear, 2.2 is a practical default value.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                   </property>
@@ -309,7 +309,7 @@
           </size>
          </property>
          <property name="title">
-          <string>Color Selector Uses Different Color Space than Image</string>
+          <string>Color Selector Uses Different Color Space than Ima&amp;ge</string>
          </property>
          <property name="checkable">
           <bool>true</bool>
@@ -382,7 +382,7 @@
         </widget>
        </item>
        <item row="2" column="1">
-        <widget class="QSpinBox" name="popupSize">
+        <widget class="KisIntParseSpinBox" name="popupSize">
          <property name="suffix">
           <string> px</string>
          </property>
@@ -572,14 +572,14 @@
               <item>
                <widget class="QRadioButton" name="minimalShadeSelectorAsGradient">
                 <property name="text">
-                 <string>Gradient</string>
+                 <string>&amp;Gradient</string>
                 </property>
                </widget>
               </item>
               <item>
                <widget class="QRadioButton" name="minimalShadeSelectorAsColorPatches">
                 <property name="text">
-                 <string>Color Patches</string>
+                 <string>Colo&amp;r Patches</string>
                 </property>
                </widget>
               </item>
@@ -623,7 +623,7 @@
              </widget>
             </item>
             <item row="0" column="1">
-             <widget class="QSpinBox" name="minimalShadeSelectorLineCount">
+             <widget class="KisIntParseSpinBox" name="minimalShadeSelectorLineCount">
               <property name="minimum">
                <number>1</number>
               </property>
@@ -646,7 +646,7 @@
              </widget>
             </item>
             <item row="1" column="1">
-             <widget class="QSpinBox" name="minimalShadeSelectorLineHeight">
+             <widget class="KisIntParseSpinBox" name="minimalShadeSelectorLineHeight">
               <property name="suffix">
                <string> px</string>
               </property>
@@ -672,7 +672,7 @@
              </widget>
             </item>
             <item row="2" column="1">
-             <widget class="QSpinBox" name="minimalShadeSelectorPatchesPerLine"/>
+             <widget class="KisIntParseSpinBox" name="minimalShadeSelectorPatchesPerLine"/>
             </item>
            </layout>
           </item>
@@ -680,19 +680,8 @@
         </widget>
        </item>
       </layout>
-      <zorder>label_7</zorder>
-      <zorder>shadeSelectorUpdateOnRightClick</zorder>
-      <zorder>shadeSelectorUpdateOnLeftClick</zorder>
-      <zorder>shadeSelectorUpdateOnForeground</zorder>
-      <zorder>shadeSelectorUpdateOnBackground</zorder>
-      <zorder>myPaintColorModelLabel</zorder>
       <zorder>minimalShadeSelectorGroup</zorder>
-      <zorder>ACSshadeSelectorMyPaintColorModelComboBox</zorder>
-      <zorder>ACSShadeSelectorTypeComboBox</zorder>
-      <zorder>label_16</zorder>
-      <zorder>verticalSpacer_3</zorder>
       <zorder></zorder>
-      <zorder>verticalSpacer_4</zorder>
       <zorder>verticalSpacer_5</zorder>
      </widget>
      <widget class="QWidget" name="tab_ColorHistory">
@@ -718,7 +707,7 @@
           </sizepolicy>
          </property>
          <property name="title">
-          <string>Show Color History</string>
+          <string>Show Color Histor&amp;y</string>
          </property>
          <property name="checkable">
           <bool>true</bool>
@@ -743,7 +732,7 @@
                 </widget>
                </item>
                <item row="0" column="1">
-                <widget class="QSpinBox" name="lastUsedColorsWidth">
+                <widget class="KisIntParseSpinBox" name="lastUsedColorsWidth">
                  <property name="suffix">
                   <string> px</string>
                  </property>
@@ -766,7 +755,7 @@
                 </widget>
                </item>
                <item row="1" column="1">
-                <widget class="QSpinBox" name="lastUsedColorsHeight">
+                <widget class="KisIntParseSpinBox" name="lastUsedColorsHeight">
                  <property name="suffix">
                   <string> px</string>
                  </property>
@@ -786,7 +775,7 @@
                 </widget>
                </item>
                <item row="2" column="1">
-                <widget class="QSpinBox" name="lastUsedColorsPatchCount">
+                <widget class="KisIntParseSpinBox" name="lastUsedColorsPatchCount">
                  <property name="minimum">
                   <number>1</number>
                  </property>
@@ -823,7 +812,7 @@
                <item row="0" column="0">
                 <widget class="QRadioButton" name="lastUsedColorsAlignVertical">
                  <property name="text">
-                  <string>Vertical</string>
+                  <string>&amp;Vertical</string>
                  </property>
                  <property name="checked">
                   <bool>true</bool>
@@ -833,7 +822,7 @@
                <item row="0" column="1">
                 <widget class="QLabel" name="lbl_lastUsedNumCols">
                  <property name="text">
-                  <string>Columns:</string>
+                  <string>Colu&amp;mns:</string>
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -844,7 +833,7 @@
                 </widget>
                </item>
                <item row="0" column="2">
-                <widget class="QSpinBox" name="lastUsedColorsNumCols">
+                <widget class="KisIntParseSpinBox" name="lastUsedColorsNumCols">
                  <property name="minimum">
                   <number>1</number>
                  </property>
@@ -859,14 +848,14 @@
                <item row="1" column="0">
                 <widget class="QRadioButton" name="lastUsedColorsAlignHorizontal">
                  <property name="text">
-                  <string>Horizontal</string>
+                  <string>&amp;Horizontal</string>
                  </property>
                 </widget>
                </item>
                <item row="1" column="1">
                 <widget class="QLabel" name="lbl_lastUsedNumRows">
                  <property name="text">
-                  <string>Rows:</string>
+                  <string>&amp;Rows:</string>
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -877,7 +866,7 @@
                 </widget>
                </item>
                <item row="1" column="2">
-                <widget class="QSpinBox" name="lastUsedColorsNumRows">
+                <widget class="KisIntParseSpinBox" name="lastUsedColorsNumRows">
                  <property name="minimum">
                   <number>1</number>
                  </property>
@@ -933,7 +922,7 @@
           <bool>true</bool>
          </property>
          <property name="title">
-          <string>Show Colors from the image</string>
+          <string>Show Colors from the ima&amp;ge</string>
          </property>
          <property name="checkable">
           <bool>true</bool>
@@ -958,7 +947,7 @@
                 </widget>
                </item>
                <item row="0" column="1">
-                <widget class="QSpinBox" name="commonColorsWidth">
+                <widget class="KisIntParseSpinBox" name="commonColorsWidth">
                  <property name="suffix">
                   <string> px</string>
                  </property>
@@ -981,7 +970,7 @@
                 </widget>
                </item>
                <item row="1" column="1">
-                <widget class="QSpinBox" name="commonColorsHeight">
+                <widget class="KisIntParseSpinBox" name="commonColorsHeight">
                  <property name="suffix">
                   <string> px</string>
                  </property>
@@ -1001,7 +990,7 @@
                 </widget>
                </item>
                <item row="2" column="1">
-                <widget class="QSpinBox" name="commonColorsPatchCount">
+                <widget class="KisIntParseSpinBox" name="commonColorsPatchCount">
                  <property name="minimum">
                   <number>1</number>
                  </property>
@@ -1041,14 +1030,14 @@
                <item row="0" column="0">
                 <widget class="QRadioButton" name="commonColorsAlignVertical">
                  <property name="text">
-                  <string>Vertical</string>
+                  <string>&amp;Vertical</string>
                  </property>
                 </widget>
                </item>
                <item row="0" column="1">
                 <widget class="QLabel" name="lbl_commonColorsNumCols">
                  <property name="text">
-                  <string>Columns:</string>
+                  <string>Colu&amp;mns:</string>
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -1059,7 +1048,7 @@
                 </widget>
                </item>
                <item row="0" column="2">
-                <widget class="QSpinBox" name="commonColorsNumCols">
+                <widget class="KisIntParseSpinBox" name="commonColorsNumCols">
                  <property name="minimum">
                   <number>1</number>
                  </property>
@@ -1074,7 +1063,7 @@
                <item row="1" column="0">
                 <widget class="QRadioButton" name="commonColorsAlignHorizontal">
                  <property name="text">
-                  <string>Horizontal</string>
+                  <string>&amp;Horizontal</string>
                  </property>
                  <property name="checked">
                   <bool>true</bool>
@@ -1084,7 +1073,7 @@
                <item row="1" column="1">
                 <widget class="QLabel" name="lbl_commonColorsNumRows">
                  <property name="text">
-                  <string>Rows:</string>
+                  <string>&amp;Rows:</string>
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -1095,7 +1084,7 @@
                 </widget>
                </item>
                <item row="1" column="2">
-                <widget class="QSpinBox" name="commonColorsNumRows">
+                <widget class="KisIntParseSpinBox" name="commonColorsNumRows">
                  <property name="minimum">
                   <number>1</number>
                  </property>
@@ -1292,7 +1281,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QSpinBox" name="sb_lightness">
+          <widget class="KisIntParseSpinBox" name="sb_lightness">
            <property name="suffix">
             <string> steps</string>
            </property>
@@ -1319,7 +1308,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QSpinBox" name="sb_saturation">
+          <widget class="KisIntParseSpinBox" name="sb_saturation">
            <property name="suffix">
             <string> steps</string>
            </property>
@@ -1346,7 +1335,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QSpinBox" name="sb_hue">
+          <widget class="KisIntParseSpinBox" name="sb_hue">
            <property name="suffix">
             <string> steps</string>
            </property>
@@ -1369,7 +1358,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QSpinBox" name="sb_rg">
+          <widget class="KisIntParseSpinBox" name="sb_rg">
            <property name="suffix">
             <string> steps</string>
            </property>
@@ -1396,7 +1385,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QSpinBox" name="sb_by">
+          <widget class="KisIntParseSpinBox" name="sb_by">
            <property name="suffix">
             <string> steps</string>
            </property>
@@ -1439,6 +1428,16 @@
    <class>KisShadeSelectorLinesSettings</class>
    <extends>QComboBox</extends>
    <header>kis_shade_selector_lines_settings.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KisIntParseSpinBox</class>
+   <extends>QSpinBox</extends>
+   <header>kis_int_parse_spin_box.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KisDoubleParseSpinBox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header>kis_double_parse_spin_box.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

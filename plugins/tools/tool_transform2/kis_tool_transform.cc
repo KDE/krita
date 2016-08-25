@@ -99,7 +99,7 @@ KisToolTransform::KisToolTransform(KoCanvasBase * canvas)
     , m_liquifyStrategy(
         new KisLiquifyTransformStrategy(
             dynamic_cast<KisCanvas2*>(canvas)->coordinatesConverter(),
-            m_currentArgs, m_transaction))
+            m_currentArgs, m_transaction, canvas->resourceManager()))
     , m_freeStrategy(
         new KisFreeTransformStrategy(
             dynamic_cast<KisCanvas2*>(canvas)->coordinatesConverter(),

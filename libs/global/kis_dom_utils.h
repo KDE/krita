@@ -130,8 +130,8 @@ void saveValue(QDomElement *parent, const QString &tag, T value)
  *
  * \see loadValue()
  */
-template <typename T>
-void saveValue(QDomElement *parent, const QString &tag, const QVector<T> &array)
+template <template <class> class Container, typename T>
+void saveValue(QDomElement *parent, const QString &tag, const Container<T> &array)
 {
     QDomDocument doc = parent->ownerDocument();
     QDomElement e = doc.createElement(tag);
@@ -205,8 +205,8 @@ loadValue(const QDomElement &e, T *value)
  *
  * \see saveValue()
  */
-template <typename T>
-bool loadValue(const QDomElement &e, QVector<T> *array)
+template <template <class> class Container, typename T>
+bool loadValue(const QDomElement &e, Container<T> *array)
 {
     if (!Private::checkType(e, "array")) return false;
 
@@ -233,6 +233,8 @@ KRITAGLOBAL_EXPORT QDomElement findElementByAttibute(QDomNode parent,
                                                     const QString &tag,
                                                     const QString &attribute,
                                                     const QString &key);
+
+KRITAGLOBAL_EXPORT bool removeElements(QDomElement &parent, const QString &tag);
 
 }
 

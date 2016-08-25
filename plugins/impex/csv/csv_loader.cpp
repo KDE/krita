@@ -89,6 +89,8 @@ KisImageBuilder_Result CSVLoader::decode(const QString &filename)
 
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
+    idx= filename.lastIndexOf(QRegExp("[\\/]"));
+    QString base = (idx == -1) ? QString("") : filename.left(idx + 1); //include separator
     QString path = filename;
 
     if (path.right(4).toUpper() == ".CSV")
@@ -258,6 +260,13 @@ KisImageBuilder_Result CSVLoader::decode(const QString &filename)
 
                 break;
             }
+            if (field == "#Folder") {
+                //CSV 1.1 folder location
+                for (idx = 0; !(field = readLine.nextField()).isNull() && (idx < layers.size()); idx++)
+                    layers.at(idx)->path = validPath(field, base);
+
+                break;
+            }
             if ((field.size() < 2) || (field[0] != '#') || !field[1].isDigit()) break;
 
             step = 5;
@@ -375,6 +384,35 @@ QString CSVLoader::convertBlending(const QString &blending)
     return COMPOSITE_OVER;
 }
 
+QString CSVLoader::validPath(const QString &path,const QString &base)
+{
+    //replace Windows directory separators with the universal /
+
+    QString tryPath= QString(path).replace(QString("\\"), QString("/"));
+    int i = tryPath.lastIndexOf("/");
+
+    if (i == (tryPath.size() - 1))
+        tryPath= tryPath.left(i); //remove the ending separator if exists
+
+    if (QFileInfo(tryPath).isDir())
+        return tryPath.append("/");
+
+    QString scan(tryPath);
+    i = -1;
+
+    while ((i= (scan.lastIndexOf("/",i) - 1)) > 0) {
+        //avoid testing if the next level will be the default xxxx.layers folder
+
+        if ((i >= 6) && (scan.mid(i - 6, 7) == ".layers")) continue;
+
+        tryPath= QString(base).append(scan.mid(i + 2)); //base already ending with a /
+
+        if (QFileInfo(tryPath).isDir())
+            return tryPath.append("/");
+    }
+    return QString(); //NULL string
+}
+
 KisImageBuilder_Result CSVLoader::setLayer(CSVLayerRecord* layer, KisDocument *importDoc, const QString &path)
 {
     bool result = true;
@@ -407,7 +445,7 @@ KisImageBuilder_Result CSVLoader::setLayer(CSVLayerRecord* layer, KisDocument *i
 
     if (!layer->last.isEmpty()) {
         //png image
-        QString filename = path;
+        QString filename = layer->path.isNull() ? path : layer->path;
         filename.append(layer->last);
 
         result = importDoc->openUrl(QUrl::fromLocalFile(filename),

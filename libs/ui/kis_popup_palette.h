@@ -30,6 +30,9 @@ class QWidget;
 class KoColor;
 class KoTriangleColorSelector;
 class KisSignalCompressor;
+class KisBrushHud;
+class KisRoundHudButton;
+class KisCanvasResourceProvider;
 
 class KisPopupPalette : public QWidget
 {
@@ -40,7 +43,7 @@ class KisPopupPalette : public QWidget
     Q_PROPERTY(int selectedColor READ selectedColor WRITE setSelectedColor)
 
 public:
-    KisPopupPalette(KisFavoriteResourceManager*, const KoColorDisplayRendererInterface *displayRenderer = KoDumbColorDisplayRenderer::instance(), QWidget *parent = 0);
+    KisPopupPalette(KisFavoriteResourceManager*, const KoColorDisplayRendererInterface *displayRenderer, KisCanvasResourceProvider *provider, QWidget *parent = 0);
     ~KisPopupPalette();
     QSize sizeHint() const;
 
@@ -88,6 +91,7 @@ private:
     QPainterPath pathFromPresetIndex(int index);
 
     int numSlots();
+    void adjustLayout(const QPoint &p);
 private:
 
     int m_hoveredPreset;
@@ -101,6 +105,10 @@ private:
     const KoColorDisplayRendererInterface *m_displayRenderer;
 
     QScopedPointer<KisSignalCompressor> m_colorChangeCompressor;
+    KisBrushHud *m_brushHud;
+    KisRoundHudButton *m_settingsButton;
+    KisRoundHudButton *m_brushHudButton;
+    QPoint m_lastCenterPoint;
 
 Q_SIGNALS:
     void sigChangeActivePaintop(int);
@@ -123,6 +131,8 @@ private Q_SLOTS:
     void slotEnableChangeFGColor();
     void slotUpdate() { update(); }
     void slotHide() { showPopupPalette(false); }
+    void slotShowTagsPopup();
+    void showHudWidget(bool visible);
 };
 
 #endif // KIS_POPUP_PALETTE_H

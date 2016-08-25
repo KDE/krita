@@ -1,130 +1,137 @@
-<ui version="4.0" stdsetdef="1" >
-  <author></author>
-  <comment></comment>
-  <exportmacro></exportmacro>
-  <class>KisMatrixWidget</class>
-  <widget class="QWidget" name="KisMatrixWidget" >
-    <property name="geometry" >
-      <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>191</width>
-        <height>115</height>
-      </rect>
-    </property>
-    <property name="windowTitle" >
-      <string>Matrix Widget</string>
-    </property>
-    <layout class="QGridLayout" >
-      <item row="0" column="0" >
-        <widget class="QSpinBox" name="m11" >
-          <property name="minimum" >
-            <number>-99</number>
-          </property>
-        </widget>
-      </item>
-      <item row="0" column="2" >
-        <widget class="QSpinBox" name="m13" >
-          <property name="minimum" >
-            <number>-99</number>
-          </property>
-        </widget>
-      </item>
-      <item row="0" column="1" >
-        <widget class="QSpinBox" name="m12" >
-          <property name="minimum" >
-            <number>-99</number>
-          </property>
-        </widget>
-      </item>
-      <item row="1" column="2" >
-        <widget class="QSpinBox" name="m23" >
-          <property name="minimum" >
-            <number>-99</number>
-          </property>
-        </widget>
-      </item>
-      <item row="1" column="0" >
-        <widget class="QSpinBox" name="m21" >
-          <property name="minimum" >
-            <number>-99</number>
-          </property>
-        </widget>
-      </item>
-      <item row="1" column="1" >
-        <widget class="QSpinBox" name="m22" >
-          <property name="minimum" >
-            <number>-99</number>
-          </property>
-          <property name="value" >
-            <number>1</number>
-          </property>
-        </widget>
-      </item>
-      <item row="2" column="0" >
-        <widget class="QSpinBox" name="m31" >
-          <property name="minimum" >
-            <number>-99</number>
-          </property>
-        </widget>
-      </item>
-      <item row="2" column="1" >
-        <widget class="QSpinBox" name="m32" >
-          <property name="minimum" >
-            <number>-99</number>
-          </property>
-        </widget>
-      </item>
-      <item row="2" column="2" >
-        <widget class="QSpinBox" name="m33" >
-          <property name="minimum" >
-            <number>-99</number>
-          </property>
-        </widget>
-      </item>
-      <item row="3" column="1" >
-        <spacer name="spacer4" >
-          <property name="sizeHint" >
-            <size>
-              <width>20</width>
-              <height>41</height>
-            </size>
-          </property>
-          <property name="sizeType" >
-            <enum>Expanding</enum>
-          </property>
-          <property name="orientation" >
-            <enum>Qt::Vertical</enum>
-          </property>
-        </spacer>
-      </item>
-      <item row="1" column="3" >
-        <spacer name="spacer5" >
-          <property name="sizeHint" >
-            <size>
-              <width>21</width>
-              <height>20</height>
-            </size>
-          </property>
-          <property name="sizeType" >
-            <enum>Expanding</enum>
-          </property>
-          <property name="orientation" >
-            <enum>Qt::Horizontal</enum>
-          </property>
-        </spacer>
-      </item>
-    </layout>
-  </widget>
-  <tabstops>
-    <tabstop>m11</tabstop>
-    <tabstop>m12</tabstop>
-    <tabstop>m13</tabstop>
-    <tabstop>m21</tabstop>
-    <tabstop>m22</tabstop>
-    <tabstop>m23</tabstop>
-    <tabstop>m31</tabstop>
-    <tabstop>m32</tabstop>
-    <tabstop>m33</tabstop>
-  </tabstops>
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>KisMatrixWidget</class>
+ <widget class="QWidget" name="KisMatrixWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>195</width>
+    <height>117</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Matrix Widget</string>
+  </property>
+  <layout class="QGridLayout">
+   <item row="0" column="0">
+    <widget class="KisIntParseSpinBox" name="m11">
+     <property name="minimum">
+      <number>-99</number>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="2">
+    <widget class="KisIntParseSpinBox" name="m13">
+     <property name="minimum">
+      <number>-99</number>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="KisIntParseSpinBox" name="m12">
+     <property name="minimum">
+      <number>-99</number>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="2">
+    <widget class="KisIntParseSpinBox" name="m23">
+     <property name="minimum">
+      <number>-99</number>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="KisIntParseSpinBox" name="m21">
+     <property name="minimum">
+      <number>-99</number>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1">
+    <widget class="KisIntParseSpinBox" name="m22">
+     <property name="minimum">
+      <number>-99</number>
+     </property>
+     <property name="value">
+      <number>1</number>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="KisIntParseSpinBox" name="m31">
+     <property name="minimum">
+      <number>-99</number>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="1">
+    <widget class="KisIntParseSpinBox" name="m32">
+     <property name="minimum">
+      <number>-99</number>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="2">
+    <widget class="KisIntParseSpinBox" name="m33">
+     <property name="minimum">
+      <number>-99</number>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="1">
+    <spacer name="spacer4">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Expanding</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>41</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="1" column="3">
+    <spacer name="spacer5">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Expanding</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>21</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KisIntParseSpinBox</class>
+   <extends>QSpinBox</extends>
+   <header>kis_int_parse_spin_box.h</header>
+  </customwidget>
+ </customwidgets>
+ <tabstops>
+  <tabstop>m11</tabstop>
+  <tabstop>m12</tabstop>
+  <tabstop>m13</tabstop>
+  <tabstop>m21</tabstop>
+  <tabstop>m22</tabstop>
+  <tabstop>m23</tabstop>
+  <tabstop>m31</tabstop>
+  <tabstop>m32</tabstop>
+  <tabstop>m33</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
 </ui>

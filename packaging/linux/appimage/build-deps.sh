@@ -116,8 +116,6 @@ cmake3 --build . --config RelWithDebInfo --target ext_vc
 cmake3 --build . --config RelWithDebInfo --target ext_tiff
 cmake3 --build . --config RelWithDebInfo --target ext_jpeg
 cmake3 --build . --config RelWithDebInfo --target ext_libraw
-# XXX: this builds, but cmake3 never manages to find the library
-#cmake3 --build . --config RelWithDebInfo --target ext_openjpeg
 cmake3 --build . --config RelWithDebInfo --target ext_kcrash
 cmake3 --build . --config RelWithDebInfo --target ext_poppler
 cmake3 --build . --config RelWithDebInfo --target ext_gsl

@@ -313,6 +313,11 @@ void KisView::showFloatingMessageImpl(const QString &message, const QIcon& icon,
     }
 }
 
+bool KisView::canvasIsMirrored() const
+{
+   return d->canvas.xAxisMirrored() || d->canvas.yAxisMirrored();
+}
+
 void KisView::setViewManager(KisViewManager *view)
 {
     d->viewManager = view;

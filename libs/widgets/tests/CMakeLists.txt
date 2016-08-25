@@ -23,4 +23,10 @@ set(KoResourceTaggingTest_SRCS KoResourceTaggingTest.cpp )
 kde4_add_broken_unit_test(KoResourceTaggingTest TESTNAME libs-widgets-KoResourceTaggingTest  ${KoResourceTaggingTest_SRCS})
 target_link_libraries(KoResourceTaggingTest  kritawidgets Qt5::Test)
 
+########### next target ###############
+
+set(kis_parse_spin_boxes_test_SRCS kis_parse_spin_boxes_test.cpp)
+kde4_add_unit_test(KisParseSpinBoxesTest TESTNAME krita-ui-KisParseSpinBoxesTest ${kis_parse_spin_boxes_test_SRCS})
+target_link_libraries(KisParseSpinBoxesTest kritaui Qt5::Test)
+
 ########### end ###############

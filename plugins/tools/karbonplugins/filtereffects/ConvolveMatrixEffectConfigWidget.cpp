@@ -35,6 +35,9 @@
 #include <QHeaderView>
 #include <KConfigGroup>
 
+#include "kis_double_parse_spin_box.h"
+#include "kis_int_parse_spin_box.h"
+
 ConvolveMatrixEffectConfigWidget::ConvolveMatrixEffectConfigWidget(QWidget *parent)
     : KoFilterEffectConfigWidgetBase(parent)
     , m_effect(0)
@@ -48,26 +51,26 @@ ConvolveMatrixEffectConfigWidget::ConvolveMatrixEffectConfigWidget(QWidget *pare
     g->addWidget(new QLabel(i18n("Edge mode:"), this), 0, 0);
     g->addWidget(m_edgeMode, 0, 1, 1, 3);
 
-    m_orderX = new QSpinBox(this);
+    m_orderX = new KisIntParseSpinBox(this);
     m_orderX->setRange(1, 30);
-    m_orderY = new QSpinBox(this);
+    m_orderY = new KisIntParseSpinBox(this);
     m_orderY->setRange(1, 30);
     g->addWidget(new QLabel(i18n("Kernel size:"), this), 1, 0);
     g->addWidget(m_orderX, 1, 1);
     g->addWidget(new QLabel("X", this), 1, 2, Qt::AlignHCenter);
     g->addWidget(m_orderY, 1, 3);
 
-    m_targetX = new QSpinBox(this);
+    m_targetX = new KisIntParseSpinBox(this);
     m_targetX->setRange(0, 30);
-    m_targetY = new QSpinBox(this);
+    m_targetY = new KisIntParseSpinBox(this);
     m_targetY->setRange(0, 30);
     g->addWidget(new QLabel(i18n("Target point:"), this), 2, 0);
     g->addWidget(m_targetX, 2, 1);
     g->addWidget(new QLabel("X", this), 2, 2, Qt::AlignHCenter);
     g->addWidget(m_targetY, 2, 3);
 
-    m_divisor = new QDoubleSpinBox(this);
-    m_bias = new QDoubleSpinBox(this);
+    m_divisor = new KisDoubleParseSpinBox(this);
+    m_bias = new KisDoubleParseSpinBox(this);
     g->addWidget(new QLabel(i18n("Divisor:"), this), 3, 0);
     g->addWidget(m_divisor, 3, 1);
     g->addWidget(new QLabel(i18n("Bias:"), this), 3, 2);

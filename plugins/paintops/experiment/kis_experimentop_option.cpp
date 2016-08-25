@@ -77,14 +77,18 @@ KisExperimentOpOption::~KisExperimentOpOption()
 
 void KisExperimentOpOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
 {
-    setting->setProperty(EXPERIMENT_DISPLACEMENT_ENABLED, m_options->displaceCHBox->isChecked());
-    setting->setProperty(EXPERIMENT_DISPLACEMENT_VALUE, m_options->displaceStrength->value());
-    setting->setProperty(EXPERIMENT_SPEED_ENABLED, m_options->speedCHBox->isChecked());
-    setting->setProperty(EXPERIMENT_SPEED_VALUE, m_options->speed->value());
-    setting->setProperty(EXPERIMENT_SMOOTHING_ENABLED, m_options->smoothCHBox->isChecked());
-    setting->setProperty(EXPERIMENT_SMOOTHING_VALUE, m_options->smoothThreshold->value());
-    setting->setProperty(EXPERIMENT_WINDING_FILL, m_options->windingFillCHBox->isChecked());
-    setting->setProperty(EXPERIMENT_HARD_EDGE, m_options->hardEdgeCHBox->isChecked());
+    ExperimentOption op;
+
+    op.isDisplacementEnabled = m_options->displaceCHBox->isChecked();
+    op.displacement = m_options->displaceStrength->value();
+    op.isSpeedEnabled = m_options->speedCHBox->isChecked();
+    op.speed = m_options->speed->value();
+    op.isSmoothingEnabled = m_options->smoothCHBox->isChecked();
+    op.smoothing = m_options->smoothThreshold->value();
+    op.windingFill = m_options->windingFillCHBox->isChecked();
+    op.hardEdge = m_options->hardEdgeCHBox->isChecked();
+
+    op.writeOptionSetting(setting);
 }
 
 void KisExperimentOpOption::readOptionSetting(const KisPropertiesConfiguration* setting)

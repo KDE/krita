@@ -105,7 +105,7 @@ KisRecordedPaintActionEditor::~KisRecordedPaintActionEditor()
 
 void KisRecordedPaintActionEditor::configurationUpdated()
 {
-    m_configWidget->writeConfiguration(const_cast<KisPaintOpSettings*>(m_action->paintOpPreset()->settings().data()));
+    m_configWidget->writeConfigurationSafe(const_cast<KisPaintOpSettings*>(m_action->paintOpPreset()->settings().data()));
 
     m_action->setPaintColor(m_paintColorPopup->currentKoColor());
     m_action->setBackgroundColor(m_backgroundColorPopup->currentKoColor());

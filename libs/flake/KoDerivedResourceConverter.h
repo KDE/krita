@@ -49,6 +49,14 @@ public:
     int key() const;
     int sourceKey() const;
 
+    QVariant readFromSource(const QVariant &value);
+    QVariant writeToSource(const QVariant &value,
+                           const QVariant &sourceValue,
+                           bool *changed);
+
+    virtual bool notifySourceChanged(const QVariant &sourceValue);
+
+protected:
     /**
      * Converts the \p value of the source resource into the space of
      * the "derived" resource. E.g. preset -> opacity.

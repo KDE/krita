@@ -40,6 +40,7 @@ public:
 
     void clear();
     void addEvent(const KisPaintInformation &pi);
+    void addFinishingEvent(int numSamples);
     void processAllEvents();
 
 public:

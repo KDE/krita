@@ -99,8 +99,8 @@ QOpenGL2PaintEngineExPrivate::~QOpenGL2PaintEngineExPrivate()
 {
     delete shaderManager;
 
-    vertexVBO.destroy();
-    textureVBO.destroy();
+    vertexBuffer.destroy();
+    texCoordBuffer.destroy();
     vao.destroy();
 
     if (elementIndicesVBOId != 0) {
@@ -585,8 +585,8 @@ void QOpenGL2PaintEngineExPrivate::drawTexture(const QOpenGLRect& dest, const QO
     setVertexAttribArrayEnabled(QT_VERTEX_COORDS_ATTR, true);
     setVertexAttribArrayEnabled(QT_TEXTURE_COORDS_ATTR, true);
 
-    setVertexAttributePointer(QT_VERTEX_COORDS_ATTR, staticVertexCoordinateArray, 8);
-    setVertexAttributePointer(QT_TEXTURE_COORDS_ATTR, staticTextureCoordinateArray, 8);
+    uploadData(QT_VERTEX_COORDS_ATTR, staticVertexCoordinateArray, 8);
+    uploadData(QT_TEXTURE_COORDS_ATTR, staticTextureCoordinateArray, 8);
 
     funcs.glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 }
@@ -628,12 +628,12 @@ void QOpenGL2PaintEngineEx::beginNativePainting()
 
         const QSize sz = d->device->size();
 
-        // glMatrixMode(GL_PROJECTION);
-        // glLoadIdentity();
-        // glOrtho(0, sz.width(), sz.height(), 0, -999999, 999999);
-        //
-        // glMatrixMode(GL_MODELVIEW);
-        // glLoadMatrixf(&mv_matrix[0][0]);
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        glOrtho(0, sz.width(), sz.height(), 0, -999999, 999999);
+
+        glMatrixMode(GL_MODELVIEW);
+        glLoadMatrixf(&mv_matrix[0][0]);
     }
 #endif // QT_OPENGL_ES_2
 
@@ -674,7 +674,8 @@ void QOpenGL2PaintEngineExPrivate::resetGLState()
         float color[] = { 1.0f, 1.0f, 1.0f, 1.0f };
         funcs.glVertexAttrib4fv(3, color);
     }
-    vao.release();
+    if (vao.isCreated())
+        vao.release();
 }
 
 void QOpenGL2PaintEngineEx::endNativePainting()
@@ -707,16 +708,16 @@ void QOpenGL2PaintEngineExPrivate::transferMode(EngineMode newMode)
     }
 
     if (newMode == ImageDrawingMode) {
-        setVertexAttributePointer(QT_VERTEX_COORDS_ATTR, staticVertexCoordinateArray, 8);
-        setVertexAttributePointer(QT_TEXTURE_COORDS_ATTR, staticTextureCoordinateArray, 8);
+        uploadData(QT_VERTEX_COORDS_ATTR, staticVertexCoordinateArray, 8);
+        uploadData(QT_TEXTURE_COORDS_ATTR, staticTextureCoordinateArray, 8);
     }
 
     if (newMode == ImageArrayDrawingMode || newMode == ImageOpacityArrayDrawingMode) {
-        setVertexAttributePointer(QT_VERTEX_COORDS_ATTR, (GLfloat*)vertexCoordinateArray.data(), vertexCoordinateArray.vertexCount() * 2);
-        setVertexAttributePointer(QT_TEXTURE_COORDS_ATTR, (GLfloat*)textureCoordinateArray.data(), textureCoordinateArray.vertexCount() * 2);
+        uploadData(QT_VERTEX_COORDS_ATTR, (GLfloat*)vertexCoordinateArray.data(), vertexCoordinateArray.vertexCount() * 2);
+        uploadData(QT_TEXTURE_COORDS_ATTR, (GLfloat*)textureCoordinateArray.data(), textureCoordinateArray.vertexCount() * 2);
 
         if (newMode == ImageOpacityArrayDrawingMode)
-            setVertexAttributePointer(QT_OPACITY_ATTR, (GLfloat*)opacityArray.data(), opacityArray.size());
+            uploadData(QT_OPACITY_ATTR, (GLfloat*)opacityArray.data(), opacityArray.size());
     }
 
     // This needs to change when we implement high-quality anti-aliasing...
@@ -835,9 +836,10 @@ void QOpenGL2PaintEngineExPrivate::fill(const QVectorPath& path)
             prepareForDraw(currentBrush.isOpaque());
 #ifdef QT_OPENGL_CACHE_AS_VBOS
             funcs.glBindBuffer(GL_ARRAY_BUFFER, cache->vbo);
-            //setVertexAttributePointer(QT_VERTEX_COORDS_ATTR, 0);
+            uploadData(QT_VERTEX_COORD_ATTR, 0, cache->vertexCount);
+            setVertexAttributePointer(QT_VERTEX_COORDS_ATTR, 0);
 #else
-            setVertexAttributePointer(QT_VERTEX_COORDS_ATTR, cache->vertices, cache->vertexCount * 2);
+            uploadData(QT_VERTEX_COORDS_ATTR, cache->vertices, cache->vertexCount * 2);
 #endif
             funcs.glDrawArrays(cache->primitiveType, 0, cache->vertexCount);
 
@@ -931,7 +933,8 @@ void QOpenGL2PaintEngineExPrivate::fill(const QVectorPath& path)
 #ifdef QT_OPENGL_CACHE_AS_VBOS
             funcs.glBindBuffer(GL_ARRAY_BUFFER, cache->vbo);
             funcs.glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, cache->ibo);
-            //setVertexAttributePointer(QT_VERTEX_COORDS_ATTR, 0);
+            uploadData(QT_VERTEX_COORDS_ATTR, 0, cache->vertexCount);
+            setVertexAttributePointer(QT_VERTEX_COORDS_ATTR, 0);
             if (cache->indexType == QVertexIndexVector::UnsignedInt)
                 funcs.glDrawElements(cache->primitiveType, cache->indexCount, GL_UNSIGNED_INT, 0);
             else
@@ -939,7 +942,7 @@ void QOpenGL2PaintEngineExPrivate::fill(const QVectorPath& path)
             funcs.glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
             funcs.glBindBuffer(GL_ARRAY_BUFFER, 0);
 #else
-            setVertexAttributePointer(QT_VERTEX_COORDS_ATTR, cache->vertices, cache->vertexCount * 2);
+            uploadData(QT_VERTEX_COORDS_ATTR, cache->vertices, cache->vertexCount * 2);
             if (cache->indexType == QVertexIndexVector::UnsignedInt)
                 funcs.glDrawElements(cache->primitiveType, cache->indexCount, GL_UNSIGNED_INT, (qint32 *)cache->indices);
             else
@@ -968,7 +971,7 @@ void QOpenGL2PaintEngineExPrivate::fill(const QVectorPath& path)
                         vertices[i] = float(inverseScale * polys.vertices.at(i));
 
                     prepareForDraw(currentBrush.isOpaque());
-                    setVertexAttributePointer(QT_VERTEX_COORDS_ATTR, vertices.constData(), vertices.size());
+                    uploadData(QT_VERTEX_COORDS_ATTR, vertices.constData(), vertices.size());
                     if (funcs.hasOpenGLExtension(QOpenGLExtensions::ElementIndexUint))
                         funcs.glDrawElements(GL_TRIANGLES, polys.indices.size(), GL_UNSIGNED_INT, polys.indices.data());
                     else
@@ -1094,7 +1097,7 @@ void QOpenGL2PaintEngineExPrivate::fillStencilWithVertexArray(const float *data,
             funcs.glStencilFunc(GL_ALWAYS, GL_STENCIL_HIGH_BIT, 0xff);
         }
 
-        setVertexAttributePointer(QT_VERTEX_COORDS_ATTR, data, count * 2);
+        uploadData(QT_VERTEX_COORDS_ATTR, data, count * 2);
         funcs.glDrawArrays(GL_TRIANGLE_STRIP, 0, count);
 #endif
     }
@@ -1222,15 +1225,11 @@ bool QOpenGL2PaintEngineExPrivate::prepareForDraw(bool srcPixelsAreOpaque)
 }
 
 void QOpenGL2PaintEngineExPrivate::composite(const QOpenGLRect& boundingRect)
-{qDebug() << "Entering QOpenGL2PaintEngineExPrivate::composite with error: " << funcs.glGetError();
+{
     setCoords(staticVertexCoordinateArray, boundingRect);
 
-GLint vbo = 0;
-funcs.glGetIntegerv(GL_ARRAY_BUFFER_BINDING, &vbo);
-qDebug() << "BEGIN:: We are using vertex VBO: " << vbo;
-    setVertexAttributePointer(QT_VERTEX_COORDS_ATTR, staticVertexCoordinateArray, 8);
+    uploadData(QT_VERTEX_COORDS_ATTR, staticVertexCoordinateArray, 8);
     funcs.glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
-qDebug() << "Exiting QOpenGL2PaintEngineExPrivate::composite with error: " << funcs.glGetError();
 }
 
 // Draws the vertex array as a set of <vertexArrayStops.size()> triangle fans.
@@ -1238,10 +1237,10 @@ void QOpenGL2PaintEngineExPrivate::drawVertexArrays(const float *data, int *stop
                                                 GLenum primitive)
 {
     // Now setup the pointer to the vertex array:
-    setVertexAttributePointer(QT_VERTEX_COORDS_ATTR, data, stops[stopCount-1] * 2);
+    uploadData(QT_VERTEX_COORDS_ATTR, data, stops[stopCount-1] * 2);
 
     int previousStop = 0;
-    for (int i = 0; i < stopCount; ++i) {
+    for (int i=0; i<stopCount; ++i) {
         int stop = stops[i];
 
         funcs.glDrawArrays(primitive, previousStop, stop - previousStop);
@@ -1254,7 +1253,7 @@ void QOpenGL2PaintEngineExPrivate::drawVertexArrays(const float *data, int *stop
 QOpenGL2PaintEngineEx::QOpenGL2PaintEngineEx()
     : QPaintEngineEx(*(new QOpenGL2PaintEngineExPrivate(this)))
 {
-    qDebug() <<  "CREATING OUR OWN QOPENGLPAINTENGINE";
+
 }
 
 QOpenGL2PaintEngineEx::~QOpenGL2PaintEngineEx()
@@ -1264,13 +1263,12 @@ QOpenGL2PaintEngineEx::~QOpenGL2PaintEngineEx()
 void QOpenGL2PaintEngineEx::fill(const QVectorPath &path, const QBrush &brush)
 {
     Q_D(QOpenGL2PaintEngineEx);
-qDebug() << "Entering QOpenGL2PaintEngineEx::fill with error: " << d->funcs.glGetError();
+
     if (qbrush_style(brush) == Qt::NoBrush)
         return;
     ensureActive();
     d->setBrush(brush);
     d->fill(path);
-qDebug() << "Exiting QOpenGL2PaintEngineEx::fill with error: " << d->funcs.glGetError();
 }
 
 Q_GUI_EXPORT bool qt_scaleForTransform(const QTransform &transform, qreal *scale); // qtransform.cpp
@@ -1279,7 +1277,7 @@ Q_GUI_EXPORT bool qt_scaleForTransform(const QTransform &transform, qreal *scale
 void QOpenGL2PaintEngineEx::stroke(const QVectorPath &path, const QPen &pen)
 {
     Q_D(QOpenGL2PaintEngineEx);
-qDebug() << "Entering QOpenGL2PaintEngineEx::stroke with error: " << d->funcs.glGetError();
+
     const QBrush &penBrush = qpen_brush(pen);
     if (qpen_style(pen) == Qt::NoPen || qbrush_style(penBrush) == Qt::NoBrush)
         return;
@@ -1293,12 +1291,10 @@ qDebug() << "Entering QOpenGL2PaintEngineEx::stroke with error: " << d->funcs.gl
     ensureActive();
     d->setBrush(penBrush);
     d->stroke(path, pen);
-qDebug() << "Exiting QOpenGL2PaintEngineEx::stroke with error: " << d->funcs.glGetError();
 }
 
 void QOpenGL2PaintEngineExPrivate::stroke(const QVectorPath &path, const QPen &pen)
 {
-    qDebug() << "Entering QOpenGL2PaintEngineExPrivate::stroke";
     const QOpenGL2PaintEngineState *s = q->state();
     if (snapToPixelGrid) {
         snapToPixelGrid = false;
@@ -1339,7 +1335,7 @@ void QOpenGL2PaintEngineExPrivate::stroke(const QVectorPath &path, const QPen &p
     if (opaque) {
         prepareForDraw(opaque);
 
-        setVertexAttributePointer(QT_VERTEX_COORDS_ATTR, stroker.vertices(), stroker.vertexCount());
+        uploadData(QT_VERTEX_COORDS_ATTR, stroker.vertices(), stroker.vertexCount());
         funcs.glDrawArrays(GL_TRIANGLE_STRIP, 0, stroker.vertexCount() / 2);
     } else {
         qreal width = qpen_widthf(pen) / 2;
@@ -1849,8 +1845,8 @@ void QOpenGL2PaintEngineExPrivate::drawCachedGlyphs(QFontEngine::GlyphFormat gly
     }
 
     if (glyphFormat != QFontEngine::Format_ARGB || recreateVertexArrays) {
-        setVertexAttributePointer(QT_VERTEX_COORDS_ATTR, (GLfloat*)vertexCoordinates->data(), vertexCoordinates->vertexCount() * 2);
-        setVertexAttributePointer(QT_TEXTURE_COORDS_ATTR, (GLfloat*)textureCoordinates->data(), textureCoordinates->vertexCount() * 2);
+        uploadData(QT_VERTEX_COORDS_ATTR, (GLfloat*)vertexCoordinates->data(), vertexCoordinates->vertexCount() * 2);
+        uploadData(QT_TEXTURE_COORDS_ATTR, (GLfloat*)textureCoordinates->data(), textureCoordinates->vertexCount() * 2);
     }
 
     if (!snapToPixelGrid) {
@@ -2090,33 +2086,29 @@ bool QOpenGL2PaintEngineEx::begin(QPaintDevice *pdev)
     QOpenGLPaintDevicePrivate::get(d->device)->beginPaint();
 
     d->funcs.initializeOpenGLFunctions();
-//    qDebug() << "We have no vao yet, so it's: " << d->vao;
 
+    // Generate a new Vertex Array Object if we don't have one already
     if (!d->vao.isCreated()) {
-        d->vao.create();
-        qDebug() << "BEGIN:: We generate a new VAO for the engine: " << d->vao.objectId();
+        bool created = d->vao.create();
+
+        // If we managed to create it then we have a profile that supports VAOs
+        if (created) {
+            d->vao.bind();
+
+            // Generate a new Vertex Buffer Object if we don't have one already
+            if (!d->vertexBuffer.isCreated()) {
+                d->vertexBuffer.create();
+                // Set its usage to StreamDraw, we will use this buffer only a few times before refilling it
+                d->vertexBuffer.setUsagePattern(QOpenGLBuffer::StreamDraw);
+            }
+            // Generate a new Texture Buffer Object if we don't have one already
+            if (!d->texCoordBuffer.isCreated()) {
+                d->texCoordBuffer.create();
+                // Set its usage to StreamDraw, we will use this buffer only a few times before refilling it
+                d->texCoordBuffer.setUsagePattern(QOpenGLBuffer::StreamDraw);
+            }
+        }
     }
-
-    d->vao.bind();
-
-    qDebug() << "BEGIN:: We are currently using engine VAO: " << d->vao.objectId();
-
-    if (!d->vertexVBO.isCreated()) {
-        d->vertexVBO.create();
-        d->vertexVBO.setUsagePattern(QOpenGLBuffer::StreamDraw);
-        qDebug() << "BEGIN:: We generate a new vertex VBO for the engine: " << d->vertexVBO.bufferId();
-    }
-    if (!d->textureVBO.isCreated()) {
-        d->textureVBO.create();
-        d->textureVBO.setUsagePattern(QOpenGLBuffer::StreamDraw);
-        qDebug() << "BEGIN:: We generate a new texture VBO for the engine: " << d->textureVBO.bufferId();
-    }
-
-    d->vertexVBO.bind();
-    d->textureVBO.bind();
-
-    qDebug() << "BEGIN:: We are using vertex VBO: " << d->vertexVBO.bufferId();
-    qDebug() << "BEGIN:: We are using texture VBO: " << d->textureVBO.bufferId();
 
     for (int i = 0; i < QT_GL_VERTEX_ARRAY_TRACKED_COUNT; ++i)
         d->vertexAttributeArraysEnabledState[i] = false;
@@ -2198,7 +2190,10 @@ void QOpenGL2PaintEngineEx::ensureActive()
 {
     Q_D(QOpenGL2PaintEngineEx);
     QOpenGLContext *ctx = d->ctx;
-    d->vao.bind();
+
+    if (d->vao.isCreated()) {
+        d->vao.bind();
+    }
 
     if (isActive() && ctx->d_func()->active_engine != this) {
         ctx->d_func()->active_engine = this;

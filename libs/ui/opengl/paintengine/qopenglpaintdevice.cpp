@@ -115,7 +115,6 @@ QT_BEGIN_NAMESPACE
 QOpenGLPaintDevice::QOpenGLPaintDevice()
     : d_ptr(new QOpenGLPaintDevicePrivate(QSize()))
 {
-    qDebug() << "CREATING QOPENGLPAINTDEVICE";
 }
 
 /*!

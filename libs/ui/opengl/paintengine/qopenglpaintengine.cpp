@@ -616,7 +616,7 @@ void QOpenGL2PaintEngineEx::beginNativePainting()
         // be nice to people who mix OpenGL 1.x code with QPainter commands
         // by setting modelview and projection matrices to mirror the GL 1
         // paint engine
-        const QTransform& mtx = state()->matrix;
+        /*const QTransform& mtx = state()->matrix;
 
         float mv_matrix[4][4] =
             {
@@ -633,7 +633,7 @@ void QOpenGL2PaintEngineEx::beginNativePainting()
         glOrtho(0, sz.width(), sz.height(), 0, -999999, 999999);
 
         glMatrixMode(GL_MODELVIEW);
-        glLoadMatrixf(&mv_matrix[0][0]);
+        glLoadMatrixf(&mv_matrix[0][0]);*/
     }
 #endif // QT_OPENGL_ES_2
 

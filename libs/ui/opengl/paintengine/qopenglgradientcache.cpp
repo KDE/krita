@@ -108,7 +108,7 @@ GLuint QOpenGL2GradientCache::getBuffer(const QGradient &gradient, qreal opacity
 {
     quint64 hash_val = 0;
 
-    QGradientStops stops = gradient.stops();
+    const QGradientStops stops = gradient.stops();
     for (int i = 0; i < stops.size() && i <= 2; i++)
         hash_val += stops[i].second.rgba();
 
@@ -170,16 +170,12 @@ GLuint QOpenGL2GradientCache::addCacheElement(quint64 hash_val, const QGradient 
 void QOpenGL2GradientCache::generateGradientColorTable(const QGradient& gradient, QRgba64 *colorTable, int size, qreal opacity) const
 {
     int pos = 0;
-    QGradientStops s = gradient.stops();
-    QVector<QRgba64> colors(s.size());
-
-    for (int i = 0; i < s.size(); ++i)
-        colors[i] = s[i].second.rgba64();
+    const QGradientStops s = gradient.stops();
 
     bool colorInterpolation = (gradient.interpolationMode() == QGradient::ColorInterpolation);
 
     uint alpha = qRound(opacity * 256);
-    QRgba64 current_color = combineAlpha256(colors[0], alpha);
+    QRgba64 current_color = combineAlpha256(s[0].second.rgba64(), alpha);
     qreal incr = 1.0 / qreal(size);
     qreal fpos = 1.5 * incr;
     colorTable[pos++] = qPremultiply(current_color);
@@ -193,9 +189,10 @@ void QOpenGL2GradientCache::generateGradientColorTable(const QGradient& gradient
     if (colorInterpolation)
         current_color = qPremultiply(current_color);
 
-    for (int i = 0; i < s.size() - 1; ++i) {
+    const int sLast = s.size() - 1;
+    for (int i = 0; i < sLast; ++i) {
         qreal delta = 1/(s[i+1].first - s[i].first);
-        QRgba64 next_color = combineAlpha256(colors[i+1], alpha);
+        QRgba64 next_color = combineAlpha256(s[i + 1].second.rgba64(), alpha);
         if (colorInterpolation)
             next_color = qPremultiply(next_color);
 
@@ -214,7 +211,7 @@ void QOpenGL2GradientCache::generateGradientColorTable(const QGradient& gradient
 
     Q_ASSERT(s.size() > 0);
 
-    QRgba64 last_color = qPremultiply(combineAlpha256(colors[s.size() - 1], alpha));
+    QRgba64 last_color = qPremultiply(combineAlpha256(s[sLast].second.rgba64(), alpha));
     for (;pos < size; ++pos)
         colorTable[pos] = last_color;
 
@@ -225,16 +222,13 @@ void QOpenGL2GradientCache::generateGradientColorTable(const QGradient& gradient
 void QOpenGL2GradientCache::generateGradientColorTable(const QGradient& gradient, uint *colorTable, int size, qreal opacity) const
 {
     int pos = 0;
-    QGradientStops s = gradient.stops();
-    QVector<uint> colors(s.size());
-
-    for (int i = 0; i < s.size(); ++i)
-        colors[i] = s[i].second.rgba(); // Qt LIES! It returns ARGB (on little-endian AND on big-endian)
+    const QGradientStops s = gradient.stops();
 
     bool colorInterpolation = (gradient.interpolationMode() == QGradient::ColorInterpolation);
 
     uint alpha = qRound(opacity * 256);
-    uint current_color = ARGB_COMBINE_ALPHA(colors[0], alpha);
+    // Qt LIES! It returns ARGB (on little-endian AND on big-endian)
+    uint current_color = ARGB_COMBINE_ALPHA(s[0].second.rgba(), alpha);
     qreal incr = 1.0 / qreal(size);
     qreal fpos = 1.5 * incr;
     colorTable[pos++] = ARGB2RGBA(qPremultiply(current_color));
@@ -248,9 +242,10 @@ void QOpenGL2GradientCache::generateGradientColorTable(const QGradient& gradient
     if (colorInterpolation)
         current_color = qPremultiply(current_color);
 
-    for (int i = 0; i < s.size() - 1; ++i) {
+    const int sLast = s.size() - 1;
+    for (int i = 0; i < sLast; ++i) {
         qreal delta = 1/(s[i+1].first - s[i].first);
-        uint next_color = ARGB_COMBINE_ALPHA(colors[i+1], alpha);
+        uint next_color = ARGB_COMBINE_ALPHA(s[i + 1].second.rgba(), alpha);
         if (colorInterpolation)
             next_color = qPremultiply(next_color);
 
@@ -269,7 +264,7 @@ void QOpenGL2GradientCache::generateGradientColorTable(const QGradient& gradient
 
     Q_ASSERT(s.size() > 0);
 
-    uint last_color = ARGB2RGBA(qPremultiply(ARGB_COMBINE_ALPHA(colors[s.size() - 1], alpha)));
+    uint last_color = ARGB2RGBA(qPremultiply(ARGB_COMBINE_ALPHA(s[sLast].second.rgba(), alpha)));
     for (;pos < size; ++pos)
         colorTable[pos] = last_color;
 

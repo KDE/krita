@@ -341,7 +341,7 @@ bool QOpenGLTextureBlitter::create()
             if (!d->buildProgram(QOpenGLTextureBlitterPrivate::TEXTURE_EXTERNAL_OES, vertex_shader, fragment_shader_external_oes))
                 return false;
     }
-qDebug() << "Blitter vao: " << d->vao;
+
     // Create and bind the VAO, if supported.
     QOpenGLVertexArrayObject::Binder vaoBinder(d->vao.data());
 
@@ -388,7 +388,7 @@ void QOpenGLTextureBlitter::bind(GLenum target)
 
     if (d->vao->isCreated())
         d->vao->bind();
-qDebug() << "BLITTER BIND";
+
     d->currentTarget = target;
     QOpenGLTextureBlitterPrivate::Program *p = &d->programs[targetToProgramIndex(target)];
     p->glProgram->bind();

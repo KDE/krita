@@ -196,9 +196,8 @@ public:
             nativePaintingActive(false),
             inverseScale(1),
             lastTextureUnitUsed(QT_UNKNOWN_TEXTURE_UNIT),
-            vao(0),
-            vertexVBO(QOpenGLBuffer::VertexBuffer),
-            textureVBO(QOpenGLBuffer::VertexBuffer)
+            vertexBuffer(QOpenGLBuffer::VertexBuffer),
+            texCoordBuffer(QOpenGLBuffer::VertexBuffer)
     { }
 
     ~QOpenGL2PaintEngineExPrivate();
@@ -227,7 +226,7 @@ public:
     void drawCachedGlyphs(QFontEngine::GlyphFormat glyphFormat, QStaticTextItem *staticTextItem);
 
     // Calls glVertexAttributePointer if the pointer has changed
-    inline void setVertexAttributePointer(unsigned int arrayIndex, const GLfloat *data, const GLuint size);
+    inline void uploadData(unsigned int arrayIndex, const GLfloat *data, const GLuint count);
 
     // draws whatever is in the vertex array:
     void drawVertexArrays(const float *data, int *stops, int stopCount, GLenum primitive);
@@ -310,10 +309,6 @@ public:
     GLfloat staticVertexCoordinateArray[8];
     GLfloat staticTextureCoordinateArray[8];
 
-    QOpenGLVertexArrayObject vao;
-    QOpenGLBuffer vertexVBO;
-    QOpenGLBuffer textureVBO;
-
     bool snapToPixelGrid;
     bool nativePaintingActive;
     GLfloat pmvMatrix[3][3];
@@ -321,6 +316,10 @@ public:
 
     GLenum lastTextureUnitUsed;
     GLuint lastTextureUsed;
+
+    QOpenGLVertexArrayObject vao;
+    QOpenGLBuffer vertexBuffer;
+    QOpenGLBuffer texCoordBuffer;
 
     bool needsSync;
     bool multisamplingAlwaysEnabled;
@@ -334,27 +333,39 @@ public:
     const GLfloat *vertexAttribPointers[3];
 };
 
-void QOpenGL2PaintEngineExPrivate::setVertexAttributePointer(unsigned int arrayIndex, const GLfloat *data, const GLuint size)
+
+void QOpenGL2PaintEngineExPrivate::uploadData(unsigned int arrayIndex, const GLfloat *data, const GLuint count)
 {
     Q_ASSERT(arrayIndex < 3);
 
-    // if (data == vertexAttribPointers[arrayIndex]) {
-    //     return;
-    // }
+    // If a vertex array object is created we have a profile that supports them
+    // and we will upload the data via a QOpenGLBuffer. Otherwise we will use
+    // the legacy way of uploading the data via glVertexAttribPointer.
+    if (vao.isCreated()) {
+        if (arrayIndex == QT_VERTEX_COORDS_ATTR) {
+            vertexBuffer.bind();
+            vertexBuffer.allocate(data, count * sizeof(float));
+        }
+        if (arrayIndex == QT_TEXTURE_COORDS_ATTR) {
+            texCoordBuffer.bind();
+            texCoordBuffer.allocate(data, count * sizeof(float));
+        }
+        if (arrayIndex == QT_OPACITY_ATTR)
+            funcs.glVertexAttribPointer(arrayIndex, 1, GL_FLOAT, GL_FALSE, 0, 0);
+        else
+            funcs.glVertexAttribPointer(arrayIndex, 2, GL_FLOAT, GL_FALSE, 0, 0);
+    } else {
+        // If we already uploaded the data we don't have to do it again
+        if (data == vertexAttribPointers[arrayIndex])
+            return;
 
-    if (arrayIndex == QT_VERTEX_COORDS_ATTR) {
-        vertexVBO.bind();
-        vertexVBO.allocate(data, size * sizeof(float));
+        // Store the data in cache and upload it to the graphics card.
+        vertexAttribPointers[arrayIndex] = data;
+        if (arrayIndex == QT_OPACITY_ATTR)
+            funcs.glVertexAttribPointer(arrayIndex, 1, GL_FLOAT, GL_FALSE, 0, data);
+        else
+            funcs.glVertexAttribPointer(arrayIndex, 2, GL_FLOAT, GL_FALSE, 0, data);
     }
-    if (arrayIndex == QT_TEXTURE_COORDS_ATTR) {
-        textureVBO.bind();
-        textureVBO.allocate(data, size * sizeof(float));
-    }
-    vertexAttribPointers[arrayIndex] = data;
-    if (arrayIndex == QT_OPACITY_ATTR)
-        funcs.glVertexAttribPointer(arrayIndex, 1, GL_FLOAT, GL_FALSE, 0, 0);
-    else
-        funcs.glVertexAttribPointer(arrayIndex, 2, GL_FLOAT, GL_FALSE, 0, 0);
 }
 
 QT_END_NAMESPACE

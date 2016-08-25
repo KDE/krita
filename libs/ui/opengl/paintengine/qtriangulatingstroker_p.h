@@ -160,9 +160,9 @@ inline void QTriangulatingStroker::emitLineSegment(float x, float y, float vx, f
 
 void QTriangulatingStroker::lineTo(const qreal *pts)
 {
+    emitLineSegment(pts[0], pts[1], m_nvx, m_nvy);
     m_cx = pts[0];
     m_cy = pts[1];
-    emitLineSegment(m_cx, m_cy, m_nvx, m_nvy);
 }
 
 QT_END_NAMESPACE

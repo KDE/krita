@@ -545,9 +545,7 @@ class QOpenGLWidgetPaintDevice : public QOpenGLPaintDevice
 {
 public:
     QOpenGLWidgetPaintDevice(QOpenGLWidget *widget)
-        : QOpenGLPaintDevice(*new QOpenGLWidgetPaintDevicePrivate(widget)) {
-            qDebug() <<  "CREATING OUR OWN QOPENGLWIDGETPAINTDEVICE";
-        }
+        : QOpenGLPaintDevice(*new QOpenGLWidgetPaintDevicePrivate(widget)) { }
     void ensureActiveTarget() Q_DECL_OVERRIDE;
 };
 
@@ -912,8 +910,10 @@ void QOpenGLWidgetPrivate::resizeViewportFramebuffer()
     if (!initialized)
         return;
 
-    if (!fbo || q->size() * q->devicePixelRatioF() != fbo->size())
+    if (!fbo || q->size() * q->devicePixelRatioF() != fbo->size()) {
         recreateFbo();
+        q->update();
+    }
 }
 
 /*!
@@ -921,7 +921,7 @@ void QOpenGLWidgetPrivate::resizeViewportFramebuffer()
  */
 QOpenGLWidget::QOpenGLWidget(QWidget *parent, Qt::WindowFlags f)
     : QWidget(*(new QOpenGLWidgetPrivate), parent, f)
-{qDebug() <<  "CREATING OUR OWN QOPENGLWIDGET";
+{
     Q_D(QOpenGLWidget);
     if (Q_UNLIKELY(!QGuiApplicationPrivate::platformIntegration()->hasCapability(QPlatformIntegration::RasterGLSurface)))
         qWarning("QOpenGLWidget is not supported on this platform.");

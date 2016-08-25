@@ -131,58 +131,116 @@ QOpenGLEngineSharedShaders::QOpenGLEngineSharedShaders(QOpenGLContext* context)
 
         const char** code = qShaderSnippets; // shortcut
 
-        code[MainVertexShader] = qopenglslMainVertexShader;
-        code[MainWithTexCoordsVertexShader] = qopenglslMainWithTexCoordsVertexShader;
-        code[MainWithTexCoordsAndOpacityVertexShader] = qopenglslMainWithTexCoordsAndOpacityVertexShader;
+        // Check if the user has requested an OpenGL 3.2 Core Profile or higher
+        // and if so use GLSL 1.5 core shaders instead of legacy ones.
+        const QSurfaceFormat &fmt = context->format();
+        if (fmt.profile() == QSurfaceFormat::CoreProfile && fmt.version() >= qMakePair(3,2)) {
+            code[MainVertexShader] = qopenglslMainVertexShader_core;
+            code[MainWithTexCoordsVertexShader] = qopenglslMainWithTexCoordsVertexShader_core;
+            code[MainWithTexCoordsAndOpacityVertexShader] = qopenglslMainWithTexCoordsAndOpacityVertexShader_core;
 
-        code[UntransformedPositionVertexShader] = qopenglslUntransformedPositionVertexShader;
-        code[PositionOnlyVertexShader] = qopenglslPositionOnlyVertexShader;
-        code[ComplexGeometryPositionOnlyVertexShader] = qopenglslComplexGeometryPositionOnlyVertexShader;
-        code[PositionWithPatternBrushVertexShader] = qopenglslPositionWithPatternBrushVertexShader;
-        code[PositionWithLinearGradientBrushVertexShader] = qopenglslPositionWithLinearGradientBrushVertexShader;
-        code[PositionWithConicalGradientBrushVertexShader] = qopenglslPositionWithConicalGradientBrushVertexShader;
-        code[PositionWithRadialGradientBrushVertexShader] = qopenglslPositionWithRadialGradientBrushVertexShader;
-        code[PositionWithTextureBrushVertexShader] = qopenglslPositionWithTextureBrushVertexShader;
-        code[AffinePositionWithPatternBrushVertexShader] = qopenglslAffinePositionWithPatternBrushVertexShader;
-        code[AffinePositionWithLinearGradientBrushVertexShader] = qopenglslAffinePositionWithLinearGradientBrushVertexShader;
-        code[AffinePositionWithConicalGradientBrushVertexShader] = qopenglslAffinePositionWithConicalGradientBrushVertexShader;
-        code[AffinePositionWithRadialGradientBrushVertexShader] = qopenglslAffinePositionWithRadialGradientBrushVertexShader;
-        code[AffinePositionWithTextureBrushVertexShader] = qopenglslAffinePositionWithTextureBrushVertexShader;
+            code[UntransformedPositionVertexShader] = qopenglslUntransformedPositionVertexShader_core;
+            code[PositionOnlyVertexShader] = qopenglslPositionOnlyVertexShader_core;
+            code[ComplexGeometryPositionOnlyVertexShader] = qopenglslComplexGeometryPositionOnlyVertexShader_core;
+            code[PositionWithPatternBrushVertexShader] = qopenglslPositionWithPatternBrushVertexShader_core;
+            code[PositionWithLinearGradientBrushVertexShader] = qopenglslPositionWithLinearGradientBrushVertexShader_core;
+            code[PositionWithConicalGradientBrushVertexShader] = qopenglslPositionWithConicalGradientBrushVertexShader_core;
+            code[PositionWithRadialGradientBrushVertexShader] = qopenglslPositionWithRadialGradientBrushVertexShader_core;
+            code[PositionWithTextureBrushVertexShader] = qopenglslPositionWithTextureBrushVertexShader_core;
+            code[AffinePositionWithPatternBrushVertexShader] = qopenglslAffinePositionWithPatternBrushVertexShader_core;
+            code[AffinePositionWithLinearGradientBrushVertexShader] = qopenglslAffinePositionWithLinearGradientBrushVertexShader_core;
+            code[AffinePositionWithConicalGradientBrushVertexShader] = qopenglslAffinePositionWithConicalGradientBrushVertexShader_core;
+            code[AffinePositionWithRadialGradientBrushVertexShader] = qopenglslAffinePositionWithRadialGradientBrushVertexShader_core;
+            code[AffinePositionWithTextureBrushVertexShader] = qopenglslAffinePositionWithTextureBrushVertexShader_core;
 
-        code[MainFragmentShader_CMO] = qopenglslMainFragmentShader_CMO;
-        code[MainFragmentShader_CM] = qopenglslMainFragmentShader_CM;
-        code[MainFragmentShader_MO] = qopenglslMainFragmentShader_MO;
-        code[MainFragmentShader_M] = qopenglslMainFragmentShader_M;
-        code[MainFragmentShader_CO] = qopenglslMainFragmentShader_CO;
-        code[MainFragmentShader_C] = qopenglslMainFragmentShader_C;
-        code[MainFragmentShader_O] = qopenglslMainFragmentShader_O;
-        code[MainFragmentShader] = qopenglslMainFragmentShader;
-        code[MainFragmentShader_ImageArrays] = qopenglslMainFragmentShader_ImageArrays;
+            code[MainFragmentShader_CMO] = qopenglslMainFragmentShader_CMO_core;
+            code[MainFragmentShader_CM] = qopenglslMainFragmentShader_CM_core;
+            code[MainFragmentShader_MO] = qopenglslMainFragmentShader_MO_core;
+            code[MainFragmentShader_M] = qopenglslMainFragmentShader_M_core;
+            code[MainFragmentShader_CO] = qopenglslMainFragmentShader_CO_core;
+            code[MainFragmentShader_C] = qopenglslMainFragmentShader_C_core;
+            code[MainFragmentShader_O] = qopenglslMainFragmentShader_O_core;
+            code[MainFragmentShader] = qopenglslMainFragmentShader_core;
+            code[MainFragmentShader_ImageArrays] = qopenglslMainFragmentShader_ImageArrays_core;
 
-        code[ImageSrcFragmentShader] = qopenglslImageSrcFragmentShader;
-        code[ImageSrcWithPatternFragmentShader] = qopenglslImageSrcWithPatternFragmentShader;
-        code[NonPremultipliedImageSrcFragmentShader] = qopenglslNonPremultipliedImageSrcFragmentShader;
-        code[GrayscaleImageSrcFragmentShader] = qopenglslGrayscaleImageSrcFragmentShader;
-        code[AlphaImageSrcFragmentShader] = qopenglslAlphaImageSrcFragmentShader;
-        code[CustomImageSrcFragmentShader] = qopenglslCustomSrcFragmentShader; // Calls "customShader", which must be appended
-        code[SolidBrushSrcFragmentShader] = qopenglslSolidBrushSrcFragmentShader;
-        if (context->isOpenGLES())
-            code[TextureBrushSrcFragmentShader] = qopenglslTextureBrushSrcFragmentShader_ES;
-        else
-            code[TextureBrushSrcFragmentShader] = qopenglslTextureBrushSrcFragmentShader_desktop;
-        code[TextureBrushSrcWithPatternFragmentShader] = qopenglslTextureBrushSrcWithPatternFragmentShader;
-        code[PatternBrushSrcFragmentShader] = qopenglslPatternBrushSrcFragmentShader;
-        code[LinearGradientBrushSrcFragmentShader] = qopenglslLinearGradientBrushSrcFragmentShader;
-        code[RadialGradientBrushSrcFragmentShader] = qopenglslRadialGradientBrushSrcFragmentShader;
-        code[ConicalGradientBrushSrcFragmentShader] = qopenglslConicalGradientBrushSrcFragmentShader;
-        code[ShockingPinkSrcFragmentShader] = qopenglslShockingPinkSrcFragmentShader;
+            code[ImageSrcFragmentShader] = qopenglslImageSrcFragmentShader_core;
+            code[ImageSrcWithPatternFragmentShader] = qopenglslImageSrcWithPatternFragmentShader_core;
+            code[NonPremultipliedImageSrcFragmentShader] = qopenglslNonPremultipliedImageSrcFragmentShader_core;
+            code[GrayscaleImageSrcFragmentShader] = qopenglslGrayscaleImageSrcFragmentShader_core;
+            code[AlphaImageSrcFragmentShader] = qopenglslAlphaImageSrcFragmentShader_core;
+            code[CustomImageSrcFragmentShader] = qopenglslCustomSrcFragmentShader_core; // Calls "customShader", which must be appended
+            code[SolidBrushSrcFragmentShader] = qopenglslSolidBrushSrcFragmentShader_core;
 
-        code[NoMaskFragmentShader] = "";
-        code[MaskFragmentShader] = qopenglslMaskFragmentShader;
-        code[RgbMaskFragmentShaderPass1] = qopenglslRgbMaskFragmentShaderPass1;
-        code[RgbMaskFragmentShaderPass2] = qopenglslRgbMaskFragmentShaderPass2;
-        code[RgbMaskWithGammaFragmentShader] = ""; //###
+            code[TextureBrushSrcFragmentShader] = qopenglslTextureBrushSrcFragmentShader_desktop_core;
+            code[TextureBrushSrcWithPatternFragmentShader] = qopenglslTextureBrushSrcWithPatternFragmentShader_core;
+            code[PatternBrushSrcFragmentShader] = qopenglslPatternBrushSrcFragmentShader_core;
+            code[LinearGradientBrushSrcFragmentShader] = qopenglslLinearGradientBrushSrcFragmentShader_core;
+            code[RadialGradientBrushSrcFragmentShader] = qopenglslRadialGradientBrushSrcFragmentShader_core;
+            code[ConicalGradientBrushSrcFragmentShader] = qopenglslConicalGradientBrushSrcFragmentShader_core;
+            code[ShockingPinkSrcFragmentShader] = qopenglslShockingPinkSrcFragmentShader_core;
 
+            code[NoMaskFragmentShader] = "";
+            code[MaskFragmentShader] = qopenglslMaskFragmentShader_core;
+            code[RgbMaskFragmentShaderPass1] = qopenglslRgbMaskFragmentShaderPass1_core;
+            code[RgbMaskFragmentShaderPass2] = qopenglslRgbMaskFragmentShaderPass2_core;
+            code[RgbMaskWithGammaFragmentShader] = ""; //###
+        } else {
+            code[MainVertexShader] = qopenglslMainVertexShader;
+            code[MainWithTexCoordsVertexShader] = qopenglslMainWithTexCoordsVertexShader;
+            code[MainWithTexCoordsAndOpacityVertexShader] = qopenglslMainWithTexCoordsAndOpacityVertexShader;
+
+            code[UntransformedPositionVertexShader] = qopenglslUntransformedPositionVertexShader;
+            code[PositionOnlyVertexShader] = qopenglslPositionOnlyVertexShader;
+            code[ComplexGeometryPositionOnlyVertexShader] = qopenglslComplexGeometryPositionOnlyVertexShader;
+            code[PositionWithPatternBrushVertexShader] = qopenglslPositionWithPatternBrushVertexShader;
+            code[PositionWithLinearGradientBrushVertexShader] = qopenglslPositionWithLinearGradientBrushVertexShader;
+            code[PositionWithConicalGradientBrushVertexShader] = qopenglslPositionWithConicalGradientBrushVertexShader;
+            code[PositionWithRadialGradientBrushVertexShader] = qopenglslPositionWithRadialGradientBrushVertexShader;
+            code[PositionWithTextureBrushVertexShader] = qopenglslPositionWithTextureBrushVertexShader;
+            code[AffinePositionWithPatternBrushVertexShader] = qopenglslAffinePositionWithPatternBrushVertexShader;
+            code[AffinePositionWithLinearGradientBrushVertexShader] = qopenglslAffinePositionWithLinearGradientBrushVertexShader;
+            code[AffinePositionWithConicalGradientBrushVertexShader] = qopenglslAffinePositionWithConicalGradientBrushVertexShader;
+            code[AffinePositionWithRadialGradientBrushVertexShader] = qopenglslAffinePositionWithRadialGradientBrushVertexShader;
+            code[AffinePositionWithTextureBrushVertexShader] = qopenglslAffinePositionWithTextureBrushVertexShader;
+
+            code[MainFragmentShader_CMO] = qopenglslMainFragmentShader_CMO;
+            code[MainFragmentShader_CM] = qopenglslMainFragmentShader_CM;
+            code[MainFragmentShader_MO] = qopenglslMainFragmentShader_MO;
+            code[MainFragmentShader_M] = qopenglslMainFragmentShader_M;
+            code[MainFragmentShader_CO] = qopenglslMainFragmentShader_CO;
+            code[MainFragmentShader_C] = qopenglslMainFragmentShader_C;
+            code[MainFragmentShader_O] = qopenglslMainFragmentShader_O;
+            code[MainFragmentShader] = qopenglslMainFragmentShader;
+            code[MainFragmentShader_ImageArrays] = qopenglslMainFragmentShader_ImageArrays;
+
+            code[ImageSrcFragmentShader] = qopenglslImageSrcFragmentShader;
+            code[ImageSrcWithPatternFragmentShader] = qopenglslImageSrcWithPatternFragmentShader;
+            code[NonPremultipliedImageSrcFragmentShader] = qopenglslNonPremultipliedImageSrcFragmentShader;
+            code[GrayscaleImageSrcFragmentShader] = qopenglslGrayscaleImageSrcFragmentShader;
+            code[AlphaImageSrcFragmentShader] = qopenglslAlphaImageSrcFragmentShader;
+            code[CustomImageSrcFragmentShader] = qopenglslCustomSrcFragmentShader; // Calls "customShader", which must be appended
+            code[SolidBrushSrcFragmentShader] = qopenglslSolidBrushSrcFragmentShader;
+            if (context->isOpenGLES())
+                code[TextureBrushSrcFragmentShader] = qopenglslTextureBrushSrcFragmentShader_ES;
+            else
+                code[TextureBrushSrcFragmentShader] = qopenglslTextureBrushSrcFragmentShader_desktop;
+            code[TextureBrushSrcWithPatternFragmentShader] = qopenglslTextureBrushSrcWithPatternFragmentShader;
+            code[PatternBrushSrcFragmentShader] = qopenglslPatternBrushSrcFragmentShader;
+            code[LinearGradientBrushSrcFragmentShader] = qopenglslLinearGradientBrushSrcFragmentShader;
+            code[RadialGradientBrushSrcFragmentShader] = qopenglslRadialGradientBrushSrcFragmentShader;
+            code[ConicalGradientBrushSrcFragmentShader] = qopenglslConicalGradientBrushSrcFragmentShader;
+            code[ShockingPinkSrcFragmentShader] = qopenglslShockingPinkSrcFragmentShader;
+
+            code[NoMaskFragmentShader] = "";
+            code[MaskFragmentShader] = qopenglslMaskFragmentShader;
+            code[RgbMaskFragmentShaderPass1] = qopenglslRgbMaskFragmentShaderPass1;
+            code[RgbMaskFragmentShaderPass2] = qopenglslRgbMaskFragmentShaderPass2;
+            code[RgbMaskWithGammaFragmentShader] = ""; //###
+        }
+
+        // These shaders are not implemented yet and therefore are the same
+        // for all profiles. Implementations should make a version for both
+        // profiles and put the appropriate lines in the if-statement above.
         code[NoCompositionModeFragmentShader] = "";
         code[MultiplyCompositionModeFragmentShader] = ""; //###
         code[ScreenCompositionModeFragmentShader] = ""; //###
@@ -688,10 +746,10 @@ bool QOpenGLEngineShaderManager::useCorrectShaderProg()
     requiredProgram.srcPixelFragShader = QOpenGLEngineSharedShaders::InvalidSnippetName;
     bool isAffine = brushTransform.isAffine();
     if ( (srcPixelType >= Qt::Dense1Pattern) && (srcPixelType <= Qt::DiagCrossPattern) ) {
-        if (isAffine) {
-            requiredProgram.positionVertexShader = QOpenGLEngineSharedShaders::AffinePositionWithPatternBrushVertexShader; qDebug() << "using AffinePosWithPatternBrushVertShad"; }
-        else {
-            requiredProgram.positionVertexShader = QOpenGLEngineSharedShaders::PositionWithPatternBrushVertexShader; qDebug() << "usingPosWithPatternBrushVertShad"; }
+        if (isAffine)
+            requiredProgram.positionVertexShader = QOpenGLEngineSharedShaders::AffinePositionWithPatternBrushVertexShader;
+        else
+            requiredProgram.positionVertexShader = QOpenGLEngineSharedShaders::PositionWithPatternBrushVertexShader;
 
         requiredProgram.srcPixelFragShader = QOpenGLEngineSharedShaders::PatternBrushSrcFragmentShader;
     }
@@ -702,27 +760,27 @@ bool QOpenGLEngineShaderManager::useCorrectShaderProg()
             break;
         case QOpenGLEngineShaderManager::ImageSrc:
             requiredProgram.srcPixelFragShader = QOpenGLEngineSharedShaders::ImageSrcFragmentShader;
-            requiredProgram.positionVertexShader = QOpenGLEngineSharedShaders::PositionOnlyVertexShader; qDebug() << "using ImageFragShad";
+            requiredProgram.positionVertexShader = QOpenGLEngineSharedShaders::PositionOnlyVertexShader;
             texCoords = true;
             break;
         case QOpenGLEngineShaderManager::NonPremultipliedImageSrc:
             requiredProgram.srcPixelFragShader = QOpenGLEngineSharedShaders::NonPremultipliedImageSrcFragmentShader;
-            requiredProgram.positionVertexShader = QOpenGLEngineSharedShaders::PositionOnlyVertexShader; qDebug() << "using NonPremulImageFragShad";
+            requiredProgram.positionVertexShader = QOpenGLEngineSharedShaders::PositionOnlyVertexShader;
             texCoords = true;
             break;
         case QOpenGLEngineShaderManager::GrayscaleImageSrc:
             requiredProgram.srcPixelFragShader = QOpenGLEngineSharedShaders::GrayscaleImageSrcFragmentShader;
-            requiredProgram.positionVertexShader = QOpenGLEngineSharedShaders::PositionOnlyVertexShader; qDebug() << "using GrayscaleImageFragShad";
+            requiredProgram.positionVertexShader = QOpenGLEngineSharedShaders::PositionOnlyVertexShader;
             texCoords = true;
             break;
         case QOpenGLEngineShaderManager::AlphaImageSrc:
             requiredProgram.srcPixelFragShader = QOpenGLEngineSharedShaders::AlphaImageSrcFragmentShader;
-            requiredProgram.positionVertexShader = QOpenGLEngineSharedShaders::PositionOnlyVertexShader; qDebug() << "using AlphaImageFragShad";
+            requiredProgram.positionVertexShader = QOpenGLEngineSharedShaders::PositionOnlyVertexShader;
             texCoords = true;
             break;
         case QOpenGLEngineShaderManager::PatternSrc:
             requiredProgram.srcPixelFragShader = QOpenGLEngineSharedShaders::ImageSrcWithPatternFragmentShader;
-            requiredProgram.positionVertexShader = QOpenGLEngineSharedShaders::PositionOnlyVertexShader; qDebug() << "using ImageWithPatternFragShad";
+            requiredProgram.positionVertexShader = QOpenGLEngineSharedShaders::PositionOnlyVertexShader;
             texCoords = true;
             break;
         case QOpenGLEngineShaderManager::TextureSrcWithPattern:
@@ -732,7 +790,7 @@ bool QOpenGLEngineShaderManager::useCorrectShaderProg()
             break;
         case Qt::SolidPattern:
             requiredProgram.srcPixelFragShader = QOpenGLEngineSharedShaders::SolidBrushSrcFragmentShader;
-            requiredProgram.positionVertexShader = QOpenGLEngineSharedShaders::PositionOnlyVertexShader; qDebug() << "using SolidBrushFragShad";
+            requiredProgram.positionVertexShader = QOpenGLEngineSharedShaders::PositionOnlyVertexShader;
             break;
         case Qt::LinearGradientPattern:
             requiredProgram.srcPixelFragShader = QOpenGLEngineSharedShaders::LinearGradientBrushSrcFragmentShader;
@@ -862,7 +920,7 @@ bool QOpenGLEngineShaderManager::useCorrectShaderProg()
     requiredProgram.useTextureCoords = texCoords;
     requiredProgram.useOpacityAttribute = (opacityMode == AttributeOpacity);
     if (complexGeometry && srcPixelType == Qt::SolidPattern) {
-        requiredProgram.positionVertexShader = QOpenGLEngineSharedShaders::ComplexGeometryPositionOnlyVertexShader;  qDebug() << "THIS 20";
+        requiredProgram.positionVertexShader = QOpenGLEngineSharedShaders::ComplexGeometryPositionOnlyVertexShader;
         requiredProgram.usePmvMatrixAttribute = false;
     } else {
         requiredProgram.usePmvMatrixAttribute = true;
@@ -871,8 +929,6 @@ bool QOpenGLEngineShaderManager::useCorrectShaderProg()
         // non-solid brushes
         complexGeometry = false;
     }
-    qDebug() << "MAIN VERTEX SHADER: " << requiredProgram.mainVertexShader;
-    qDebug() << "MAIN FRAGMENT SHADER: " << requiredProgram.mainFragShader;
 
     // At this point, requiredProgram is fully populated so try to find the program in the cache
     currentShaderProg = sharedShaders->findProgramInCache(requiredProgram);

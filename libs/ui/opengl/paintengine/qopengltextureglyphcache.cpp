@@ -168,7 +168,7 @@ void QOpenGLTextureGlyphCache::createTextureData(int width, int height)
     }
 
     if (!m_vao.isCreated())
-        m_vao.create(); qDebug() << "Glyph VAO";
+        m_vao.create();
 }
 
 void QOpenGLTextureGlyphCache::setupVertexAttribs()
@@ -380,8 +380,8 @@ void QOpenGLTextureGlyphCache::resizeTextureData(int width, int height)
         blitProgram = m_blitProgram;
 
     } else {
-        pex->setVertexAttributePointer(QT_VERTEX_COORDS_ATTR, m_vertexCoordinateArray, 8);
-        pex->setVertexAttributePointer(QT_TEXTURE_COORDS_ATTR, m_textureCoordinateArray, 8);
+        pex->uploadData(QT_VERTEX_COORDS_ATTR, m_vertexCoordinateArray, 8);
+        pex->uploadData(QT_TEXTURE_COORDS_ATTR, m_textureCoordinateArray, 8);
 
         pex->shaderManager->useBlitProgram();
         blitProgram = pex->shaderManager->blitProgram();

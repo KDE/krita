@@ -303,10 +303,9 @@ void KisOpenGLCanvas2::paintGL()
     }
     d->glSyncObject = Sync::getSync();
 
-    qDebug() << "DRAWING DECORATIONS";
     QPainter gc(this);
-    //renderDecorations(&gc);
-    renderTests(&gc);
+    renderDecorations(&gc);
+
     gc.end();
 
     if (!OPENGL_SUCCESS) {

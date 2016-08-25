@@ -1,18 +1,34 @@
 SET(PREFIX_ext_gettext "${EXTPREFIX}" )
 if (MSVC OR MINGW)
 ExternalProject_Add(
-    ext_gettext
-    DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL http://files.kde.org/krita/build/dependencies/gettext-0.18.tar.gz
-    URL_MD5 d52a3e061032a1ed13856d42fc86f0fd
+    if(CMAKE_CL_64)
+        ext_gettext
+        DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+        URL http://files.kde.org/krita/build/dependencies/gettext0.19.8.1-iconv1.14-shared-32.zip
+        URL_MD5 f877ebff42736535415b4ddb9c631b86
+        CONFIGURE_COMMAND ""
+	BUILD_COMMAND ${CMAKE_COMMAND} -E echo deploying gettext.exe binary
+	            INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_directory <SOURCE_DIR>/bin ${PREFIX_ext_gettext}/bin
+                    COMMAND ${CMAKE_COMMAND} -E copy_directory <SOURCE_DIR>/lib ${PREFIX_ext_gettext}/lib
+                    COMMAND ${CMAKE_COMMAND} -E copy_directory <SOURCE_DIR>/include ${PREFIX_ext_gettext}/include
 
-    PATCH_COMMAND ${PATCH_COMMAND} --binary -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/gettext-0.18-20130319.diff
-    INSTALL_DIR ${PREFIX_ext_gettext}
-    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${PREFIX_ext_gettext} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE}
+        UPDATE_COMMAND ""
+        ALWAYS 0
 
-    UPDATE_COMMAND ""
-    ALWAYS 0
-    DEPENDS ext_patch ext_iconv
+    else()
+            ext_gettext
+        DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+        URL http://files.kde.org/krita/build/dependencies/gettext0.19.8.1-iconv1.14-shared-64.zip
+        URL_MD5 bced59a375aef8d325b746f0dfbe8f48
+        CONFIGURE_COMMAND ""
+	BUILD_COMMAND ${CMAKE_COMMAND} -E echo deploying gettext.exe binary
+	            INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_directory <SOURCE_DIR>/bin ${PREFIX_ext_gettext}/bin
+                    COMMAND ${CMAKE_COMMAND} -E copy_directory <SOURCE_DIR>/lib ${PREFIX_ext_gettext}/lib
+                    COMMAND ${CMAKE_COMMAND} -E copy_directory <SOURCE_DIR>/include ${PREFIX_ext_gettext}/include
+        UPDATE_COMMAND ""
+        ALWAYS 0
+
+    endif()
 )
 else (MSVC OR MINGW)
 ExternalProject_Add( ext_gettext

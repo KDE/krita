@@ -95,6 +95,15 @@ public:
     explicit KisVisualColorSelector(QWidget *parent = 0);
     ~KisVisualColorSelector();
 
+    /**
+     * @brief setConfig
+     * @param forceCircular
+     * Force circular is for space where you only have room for a circular selector.
+     * @param forceSelfUpdate
+     * force self-update is for making it update itself when using a modal dialog.
+     */
+    void setConfig(bool forceCircular, bool forceSelfUpdate);
+
 Q_SIGNALS:
     void sigNewColor(KoColor c);
 
@@ -115,7 +124,7 @@ private:
     struct Private;
     const QScopedPointer<Private> m_d;
 
-    void updateSelectorElements();
+    void updateSelectorElements(QObject *source);
     void drawGradients();
 
 };

@@ -73,9 +73,10 @@ KisInternalColorSelector::KisInternalColorSelector(QWidget *parent, KoColor colo
 
     m_ui->visualSelector->slotSetColor(color);
     m_ui->visualSelector->setDisplayRenderer(displayRenderer);
+    m_ui->visualSelector->setConfig(false, config.modal);
     if (config.visualColorSelector) {
-    connect(m_ui->visualSelector, SIGNAL(sigNewColor(KoColor)), this, SLOT(slotColorUpdated(KoColor)));
-    connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), m_ui->visualSelector, SLOT(ConfigurationChanged()));
+        connect(m_ui->visualSelector, SIGNAL(sigNewColor(KoColor)), this, SLOT(slotColorUpdated(KoColor)));
+        connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), m_ui->visualSelector, SLOT(ConfigurationChanged()));
     } else {
         m_ui->visualSelector->hide();
     }
@@ -98,8 +99,8 @@ KisInternalColorSelector::KisInternalColorSelector(QWidget *parent, KoColor colo
         }
     }
     if (config.paletteBox) {
-    connect(m_ui->paletteBox, SIGNAL(colorChanged(KoColor,bool)), this, SLOT(slotColorUpdated(KoColor)));
-    m_ui->paletteBox->setDisplayRenderer(displayRenderer);
+        connect(m_ui->paletteBox, SIGNAL(colorChanged(KoColor,bool)), this, SLOT(slotColorUpdated(KoColor)));
+        m_ui->paletteBox->setDisplayRenderer(displayRenderer);
     } else {
         m_ui->paletteBox->hide();
     }

@@ -45,6 +45,8 @@ struct KisVisualColorSelector::Private
     const KoColorSpace *currentCS;
     QList <KisVisualColorSelectorShape*> widgetlist;
     bool updateSelf = false;
+    bool updateLonesome = false; //for Modal dialogs.
+    bool circular = false;
     const KoColorDisplayRendererInterface *displayRenderer = 0;
     KisVisualColorSelector::Configuration acs_config;
     //Current coordinates.
@@ -76,7 +78,7 @@ void KisVisualColorSelector::slotSetColor(KoColor c)
             slotsetColorSpace(c.colorSpace());
         }
     }
-    updateSelectorElements();
+    updateSelectorElements(QObject::sender());
 }
 
 void KisVisualColorSelector::slotsetColorSpace(const KoColorSpace *cs)
@@ -87,6 +89,12 @@ void KisVisualColorSelector::slotsetColorSpace(const KoColorSpace *cs)
         slotRebuildSelectors();
     }
 
+}
+
+void KisVisualColorSelector::setConfig(bool forceCircular, bool forceSelfUpdate)
+{
+    m_d->updateLonesome = forceSelfUpdate;
+    m_d->circular = forceCircular;
 }
 
 void KisVisualColorSelector::ConfigurationChanged()
@@ -211,21 +219,28 @@ void KisVisualColorSelector::slotRebuildSelectors()
         }
         KisVisualColorSelectorShape *bar;
         if (m_d->acs_config.subType==Ring) {
-             bar =  new KisVisualEllipticalSelectorShape(this,
-                                                                                     KisVisualColorSelectorShape::onedimensional,
-                                                                                     modelS,
-                                                                                     m_d->currentCS, channel1, channel1,
-                                                                                     m_d->displayRenderer, borderWidth,KisVisualEllipticalSelectorShape::border);
+            bar =  new KisVisualEllipticalSelectorShape(this,
+                                                        KisVisualColorSelectorShape::onedimensional,
+                                                        modelS,
+                                                        m_d->currentCS, channel1, channel1,
+                                                        m_d->displayRenderer, borderWidth,KisVisualEllipticalSelectorShape::border);
             bar->resize(sizeValue, sizeValue);
-        } else if (m_d->acs_config.subType==Slider) {
+        } else if (m_d->acs_config.subType==Slider && m_d->circular==false) {
             bar =  new KisVisualRectangleSelectorShape(this,
-                                                                                        KisVisualRectangleSelectorShape::onedimensional,
-                                                                                        modelS,
-                                                                                        m_d->currentCS, channel1, channel2,
-                                                                                        m_d->displayRenderer, borderWidth);
+                                                       KisVisualColorSelectorShape::onedimensional,
+                                                       modelS,
+                                                       m_d->currentCS, channel1, channel1,
+                                                       m_d->displayRenderer, borderWidth);
             bar->setMaximumWidth(borderWidth);
             bar->setMinimumWidth(borderWidth);
             bar->setMinimumHeight(sizeValue);
+        } else if (m_d->acs_config.subType==Slider && m_d->circular==true) {
+            bar =  new KisVisualEllipticalSelectorShape(this,
+                                                       KisVisualColorSelectorShape::onedimensional,
+                                                       modelS,
+                                                       m_d->currentCS, channel1, channel1,
+                                                       m_d->displayRenderer, borderWidth, KisVisualEllipticalSelectorShape::borderMirrored);
+            bar->resize(sizeValue, sizeValue);
         }
 
         bar->setColor(m_d->currentcolor);
@@ -234,21 +249,21 @@ void KisVisualColorSelector::slotRebuildSelectors()
         KisVisualColorSelectorShape *block;
         if (m_d->acs_config.mainType==Triangle) {
             block =  new KisVisualTriangleSelectorShape(this, KisVisualColorSelectorShape::twodimensional,
-                                                                                        modelS,
-                                                                                        m_d->currentCS, channel2, channel3,
-                                                                                        m_d->displayRenderer);
+                                                        modelS,
+                                                        m_d->currentCS, channel2, channel3,
+                                                        m_d->displayRenderer);
             block->setGeometry(bar->getSpaceForTriangle(newrect));
         } else if (m_d->acs_config.mainType==Square) {
             block =  new KisVisualRectangleSelectorShape(this, KisVisualColorSelectorShape::twodimensional,
-                                                                                          modelS,
-                                                                                          m_d->currentCS, channel2, channel3,
-                                                                                          m_d->displayRenderer);
+                                                         modelS,
+                                                         m_d->currentCS, channel2, channel3,
+                                                         m_d->displayRenderer);
             block->setGeometry(bar->getSpaceForSquare(newrect));
-         } else {
+        } else {
             block =  new KisVisualEllipticalSelectorShape(this, KisVisualColorSelectorShape::twodimensional,
-                                                                                            modelS,
-                                                                                            m_d->currentCS, channel2, channel3,
-                                                                                            m_d->displayRenderer);
+                                                          modelS,
+                                                          m_d->currentCS, channel2, channel3,
+                                                          m_d->displayRenderer);
             block->setGeometry(bar->getSpaceForCircle(newrect));
 
         }
@@ -289,7 +304,7 @@ void KisVisualColorSelector::setDisplayRenderer (const KoColorDisplayRendererInt
     }
 }
 
-void KisVisualColorSelector::updateSelectorElements()
+void KisVisualColorSelector::updateSelectorElements(QObject *source)
 {
     //first lock all elements from sending updates, then update all elements.
     Q_FOREACH (KisVisualColorSelectorShape *shape, m_d->widgetlist) {
@@ -297,10 +312,12 @@ void KisVisualColorSelector::updateSelectorElements()
     }
 
     Q_FOREACH (KisVisualColorSelectorShape *shape, m_d->widgetlist) {
-        if (m_d->updateSelf==false) {
-            shape->setColor(m_d->currentcolor);
-        } else {
-            shape->setColorFromSibling(m_d->currentcolor);
+        if (shape!=source) {
+            if (m_d->updateSelf) {
+                shape->setColorFromSibling(m_d->currentcolor);
+            } else {
+                shape->setColor(m_d->currentcolor);
+            }
         }
     }
     Q_FOREACH (KisVisualColorSelectorShape *shape, m_d->widgetlist) {
@@ -312,8 +329,12 @@ void KisVisualColorSelector::updateSelectorElements()
 void KisVisualColorSelector::updateFromWidgets(KoColor c)
 {
     m_d->currentcolor = c;
-    Q_EMIT sigNewColor(c);
     m_d->updateSelf = true;
+    if (m_d->updateLonesome) {
+        slotSetColor(c);
+    } else {
+        Q_EMIT sigNewColor(c);
+    }
 }
 
 void KisVisualColorSelector::leaveEvent(QEvent *)
@@ -813,7 +834,13 @@ QVector <qreal> KisVisualColorSelectorShape::getHSX(QVector<qreal> hsx, bool wra
 {
     QVector <qreal> ihsx = hsx;
     if (!wrangler){
-        if (hsx[2]>m_d->tone-0.01 && hsx[2]<m_d->tone+0.01) {
+        //Ok, so this docker will not update luminosity if there's not at the least 3% more variation.
+        //This is necessary for 8bit.
+        if (m_d->cs->colorDepthId()==Integer8BitsColorDepthID){
+            if (hsx[2]>m_d->tone-0.03 && hsx[2]<m_d->tone+0.03) {
+                ihsx[2] = m_d->tone;
+            }
+        } else {
             ihsx[2] = m_d->tone;
         }
         if (m_d->model==HSV){

@@ -1,7 +1,7 @@
-#version 150
+#version 150 core
 uniform mat4 modelViewProjection;
 
-in highp vec4 a_vertexPosition;
+in vec4 a_vertexPosition;
 
 void main()
 {

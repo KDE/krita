@@ -97,6 +97,11 @@ void KisVisualColorSelector::setConfig(bool forceCircular, bool forceSelfUpdate)
     m_d->circular = forceCircular;
 }
 
+KoColor KisVisualColorSelector::getCurrentColor()
+{
+    return m_d->currentcolor;
+}
+
 void KisVisualColorSelector::ConfigurationChanged()
 {
     m_d->updateTimer =  new KisSignalCompressor(100 /* ms */, KisSignalCompressor::POSTPONE, this);
@@ -115,16 +120,24 @@ void KisVisualColorSelector::slotRebuildSelectors()
     m_d->widgetlist.clear();
     QLayout *layout = new QHBoxLayout;
     //redraw all the widgets.
+    int sizeValue = qMin(width(), height());
+    int borderWidth = qMax(sizeValue*0.1, 20.0);
+
     if (m_d->currentCS->colorChannelCount() == 1) {
-        KisVisualRectangleSelectorShape *bar =  new KisVisualRectangleSelectorShape(this, KisVisualRectangleSelectorShape::onedimensional,KisVisualColorSelectorShape::Channel, m_d->currentCS, 0, 0);
-        bar->setMaximumWidth(width()*0.1);
-        bar->setMaximumHeight(height());
+        KisVisualColorSelectorShape *bar;
+        if (m_d->circular==false) {
+            bar =  new KisVisualRectangleSelectorShape(this, KisVisualColorSelectorShape::onedimensional,KisVisualColorSelectorShape::Channel, m_d->currentCS, 0, 0,m_d->displayRenderer, borderWidth);
+            bar->setMaximumWidth(width()*0.1);
+            bar->setMaximumHeight(height());
+
+        } else {
+            bar=  new KisVisualEllipticalSelectorShape(this, KisVisualColorSelectorShape::onedimensional,KisVisualColorSelectorShape::Channel, m_d->currentCS, 0, 0,m_d->displayRenderer, borderWidth, KisVisualEllipticalSelectorShape::borderMirrored);
+            layout->setMargin(0);
+        }
         connect (bar, SIGNAL(sigNewColor(KoColor)), this, SLOT(updateFromWidgets(KoColor)));
         layout->addWidget(bar);
         m_d->widgetlist.append(bar);
     } else if (m_d->currentCS->colorChannelCount() == 3) {
-        int sizeValue = qMin(width(), height());
-        int borderWidth = qMax(sizeValue*0.1, 20.0);
         QRect newrect(0,0, this->geometry().width(), this->geometry().height());
 
 
@@ -346,14 +359,19 @@ void KisVisualColorSelector::resizeEvent(QResizeEvent *) {
     int sizeValue = qMin(width(), height());
     int borderWidth = qMax(sizeValue*0.1, 20.0);
     QRect newrect(0,0, this->geometry().width(), this->geometry().height());
+    if (!m_d->currentCS) {
+        slotsetColorSpace(m_d->currentcolor.colorSpace());
+    }
     if (m_d->currentCS->colorChannelCount()==3) {
         if (m_d->acs_config.subType==Ring) {
             m_d->widgetlist.at(0)->resize(sizeValue,sizeValue);
-        } else if (m_d->acs_config.subType==Slider) {
+        } else if (m_d->acs_config.subType==Slider && m_d->circular==false) {
             m_d->widgetlist.at(0)->setMaximumWidth(borderWidth);
             m_d->widgetlist.at(0)->setMinimumWidth(borderWidth);
             m_d->widgetlist.at(0)->setMinimumHeight(sizeValue);
             m_d->widgetlist.at(0)->setMaximumHeight(sizeValue);
+        } else if (m_d->acs_config.subType==Slider && m_d->circular==true) {
+            m_d->widgetlist.at(0)->resize(sizeValue,sizeValue);
         }
         m_d->widgetlist.at(0)->setBorderWidth(borderWidth);
 
@@ -841,7 +859,9 @@ QVector <qreal> KisVisualColorSelectorShape::getHSX(QVector<qreal> hsx, bool wra
                 ihsx[2] = m_d->tone;
             }
         } else {
-            ihsx[2] = m_d->tone;
+            if (hsx[2]>m_d->tone-0.005 && hsx[2]<m_d->tone+0.005) {
+                ihsx[2] = m_d->tone;
+            }
         }
         if (m_d->model==HSV){
             if (hsx[2]<=0.0) {
@@ -1376,6 +1396,7 @@ void KisVisualEllipticalSelectorShape::drawCursor()
     QPainter painter;
     painter.begin(&fullSelector);
     painter.setRenderHint(QPainter::Antialiasing);
+    QRect innerRect(m_barWidth, m_barWidth, width()-(m_barWidth*2), height()-(m_barWidth*2));
 
     painter.save();
     painter.setCompositionMode(QPainter::CompositionMode_Clear);
@@ -1384,7 +1405,8 @@ void KisVisualEllipticalSelectorShape::drawCursor()
     painter.setPen(pen);
     painter.drawEllipse(QRect(0,0,width(),height()));
     if (getDimensions()==KisVisualColorSelectorShape::onedimensional) {
-        painter.drawEllipse(QRect(this->geometry().top()+m_barWidth, this->geometry().left()+m_barWidth, this->geometry().width()-(m_barWidth*2), this->geometry().height()-(m_barWidth*2)));
+        painter.setBrush(Qt::SolidPattern);
+        painter.drawEllipse(innerRect);
     }
     painter.restore();
 
@@ -1392,7 +1414,6 @@ void KisVisualEllipticalSelectorShape::drawCursor()
     fill.setStyle(Qt::SolidPattern);
 
     int cursorwidth = 5;
-    QRect innerRect(m_barWidth, m_barWidth, width()-(m_barWidth*2), height()-(m_barWidth*2));
     if(m_type==KisVisualEllipticalSelectorShape::borderMirrored){
         painter.setPen(Qt::white);
         fill.setColor(Qt::white);

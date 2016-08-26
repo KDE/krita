@@ -103,6 +103,7 @@ public:
      * force self-update is for making it update itself when using a modal dialog.
      */
     void setConfig(bool forceCircular, bool forceSelfUpdate);
+    KoColor getCurrentColor();
 
 Q_SIGNALS:
     void sigNewColor(KoColor c);

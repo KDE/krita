@@ -1285,7 +1285,7 @@ QPointF KisVisualEllipticalSelectorShape::convertShapeCoordinateToWidgetCoordina
     }
     line.setAngle(angle);
     if (getDimensions()!=KisVisualColorSelectorShape::onedimensional) {
-        line.setLength(coordinate.y()*a-offset);
+        line.setLength(qMin(coordinate.y()*(a-offset), a-offset));
     }
     x = qRound(line.p2().x());
     y = qRound(line.p2().y());
@@ -1300,7 +1300,7 @@ QPointF KisVisualEllipticalSelectorShape::convertWidgetCoordinateToShapeCoordina
     qreal offset = 7.0;
     QRect total(0, 0, width(), height());
     QLineF line(total.center(), coordinate);
-    qreal a = (total.width()/2)-offset;
+    qreal a = (total.width()/2);
     qreal angle;
 
     if (m_type!=KisVisualEllipticalSelectorShape::borderMirrored){
@@ -1309,7 +1309,7 @@ QPointF KisVisualEllipticalSelectorShape::convertWidgetCoordinateToShapeCoordina
         angle = angle+180.0;
         x = angle/360.0;
         if (getDimensions()==KisVisualColorSelectorShape::twodimensional) {
-            y = qBound(0.0,(line.length())/a, 1.0);
+            y = qBound(0.0,line.length()/(a-offset), 1.0);
         }
 
     } else {
@@ -1320,7 +1320,7 @@ QPointF KisVisualEllipticalSelectorShape::convertWidgetCoordinateToShapeCoordina
         }
         x = (angle/360.0)*2;
         if (getDimensions()==KisVisualColorSelectorShape::twodimensional) {
-            y = qBound(0.0,(line.length())/a, 1.0);
+            y = qBound(0.0,(line.length()+offset)/a, 1.0);
         }
     }
 

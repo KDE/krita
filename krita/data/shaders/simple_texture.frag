@@ -4,10 +4,10 @@
  */
 uniform sampler2D texture0;
 
-in vec4 in_textureCoordinate;
+in vec4 pass_textureCoordinate;
 out vec4 fragColor;
 
 void main() {
-    fragColor = texture(texture0, in_textureCoordinate.st);
+    fragColor = texture(texture0, pass_textureCoordinate.st);
 }
 

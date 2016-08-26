@@ -7,7 +7,7 @@ uniform sampler2D texture0;
 uniform sampler3D texture1;
 #endif
 
-in vec4 v_textureCoordinate;
+in vec4 pass_textureCoordinate;
 out vec4 fragColor;
 
 const float eps = 1e-6;
@@ -87,7 +87,7 @@ void main() {
 #ifdef DIRECT_LOD_FETCH
 
         if (fixedLodLevel > eps) {
-            col = textureLod(texture0, v_textureCoordinate.st, fixedLodLevel);
+            col = textureLod(texture0, pass_textureCoordinate.st, fixedLodLevel);
         } else
 
 #endif /* DIRECT_LOD_FETCH */
@@ -95,9 +95,9 @@ void main() {
         {
 
 #ifdef HIGHQ_SCALING
-            col = filterPureLinear8(texture0, v_textureCoordinate.st);
+            col = filterPureLinear8(texture0, pass_textureCoordinate.st);
 #else /* HIGHQ_SCALING */
-            col = texture(texture0, v_textureCoordinate.st);
+            col = texture(texture0, pass_textureCoordinate.st);
 #endif /* HIGHQ_SCALING */
 
         }
@@ -109,12 +109,12 @@ void main() {
 #ifdef DIRECT_LOD_FETCH
 
         if (fixedLodLevel > eps) {
-            col = textureLod(texture0, v_textureCoordinate.st, fixedLodLevel);
+            col = textureLod(texture0, pass_textureCoordinate.st, fixedLodLevel);
         } else
 
 #endif /* DIRECT_LOD_FETCH */
         {
-            col = texture(texture0, v_textureCoordinate.st);
+            col = texture(texture0, pass_textureCoordinate.st);
         }
     }
 

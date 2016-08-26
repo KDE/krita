@@ -24,19 +24,28 @@
 #include <QVector>
 #include <QMap>
 #include <QPair>
+#include <QVariant>
 
 class KisOpcUaServer : public QThread
 {
+    Q_OBJECT
 public:
+    static KisOpcUaServer *instance();
+
     KisOpcUaServer();
 
     void run();
 
     void addObject(QObject* object);
 
-
+public Q_SLOTS:
+    bool writeVariable(const QString& id, QVariant value);
+ 
+    QVariant readVariable(const QString& id);
+    
 private:
     QVector<QObject*> m_objects;
+    QMap<QString, QPair<QObject*, int> > m_variableMap;
 };
 
 #endif // KISOPCUASERVER_H

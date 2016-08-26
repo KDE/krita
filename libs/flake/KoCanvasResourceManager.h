@@ -25,6 +25,7 @@
 
 #include "kritaflake_export.h"
 #include "KoDerivedResourceConverter.h"
+#include "KoResourceUpdateMediator.h"
 
 class KoShape;
 class KoShapeStroke;
@@ -249,6 +250,22 @@ public:
      * @see KoReosurceManager::removeDerivedResourceConverter()
      */
     void removeDerivedResourceConverter(int key);
+
+    /**
+     * @see KoReosurceManager::addResourceUpdateMediator
+     */
+    void addResourceUpdateMediator(KoResourceUpdateMediatorSP mediator);
+
+    /**
+     * @see KoReosurceManager::hasResourceUpdateMediator
+     */
+    bool hasResourceUpdateMediator(int key);
+
+    /**
+
+     * @see KoReosurceManager::removeResourceUpdateMediator
+     */
+    void removeResourceUpdateMediator(int key);
 
 Q_SIGNALS:
     /**

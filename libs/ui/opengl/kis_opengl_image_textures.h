@@ -35,6 +35,8 @@ class QOpenGLFunctions;
 typedef KisSharedPtr<KisOpenGLImageTextures> KisOpenGLImageTexturesSP;
 
 class KoColorProfile;
+class KisTextureTileUpdateInfoPoolCollection;
+typedef QSharedPointer<KisTextureTileInfoPool> KisTextureTileInfoPoolSP;
 
 /**
  * A set of OpenGL textures that contains the projection of a KisImage.
@@ -196,6 +198,8 @@ private:
 
     bool m_useOcio;
     bool m_initialized;
+
+    KisTextureTileInfoPoolSP m_infoChunksPool;
 
 private:
     typedef QMap<KisImageWSP, KisOpenGLImageTextures*> ImageTexturesMap;

@@ -31,10 +31,10 @@ RemoteControl::RemoteControl(QObject *parent, const QVariantList &)
         : KisViewPlugin(parent)
 {
     m_paintOpControl = new KisPaintopControlObject(m_view, this);
-    m_server = new KisOpcUaServer();
+    KisOpcUaServer* server = KisOpcUaServer::instance();
     
-    m_server->addObject(m_paintOpControl);
-    m_server->start();
+    server->addObject(m_paintOpControl);
+    server->start();
 }
 
 RemoteControl::~RemoteControl()

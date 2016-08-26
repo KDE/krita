@@ -21,10 +21,10 @@
 
 #include <QMetaProperty>
 #include <QDebug>
+#include <QMetaObject>
+
 
 #include "open62541.h"
-
-QMap<QString, QPair<QObject*, int> > m_variableMap;
 
 QString uaStringToQString(const UA_String& uaString)
 {
@@ -39,22 +39,14 @@ QString uaStringToQString(const UA_String& uaString)
     return result;
 }
 
-static UA_StatusCode readVariable(void *handle, const UA_NodeId nodeid, UA_Boolean sourceTimeStamp,
-                                 const UA_NumericRange *range, UA_DataValue *dataValue) {
+static UA_StatusCode readVariableCallback(void *handle, const UA_NodeId nodeid, UA_Boolean sourceTimeStamp,
+                                          const UA_NumericRange *range, UA_DataValue *dataValue) {
 
     dataValue->hasValue = true;
 
     QString id = uaStringToQString(nodeid.identifier.string);
-
-    if(!m_variableMap.contains(id)){
-        return UA_STATUSCODE_BADUNEXPECTEDERROR;
-    }
-    QPair<QObject*, int> property = m_variableMap[id];
-
-    QObject* object = property.first;
-    QMetaProperty prop = object->metaObject()->property(property.second);
-
-    QVariant value = prop.read(object);
+    
+    QVariant value = KisOpcUaServer::instance()->readVariable(id);
 
     switch (value.type()) {
         case QVariant::Int:
@@ -76,19 +68,11 @@ static UA_StatusCode readVariable(void *handle, const UA_NodeId nodeid, UA_Boole
     return UA_STATUSCODE_GOOD;
 }
 
-static UA_StatusCode writeVariable(void *handle, const UA_NodeId nodeid,
-                                   const UA_Variant *data, const UA_NumericRange *range) {
+static UA_StatusCode writeVariableCallback(void *handle, const UA_NodeId nodeid,
+                                           const UA_Variant *data, const UA_NumericRange *range) {
 
 
     QString id = uaStringToQString(nodeid.identifier.string);
-
-    if(!m_variableMap.contains(id)){
-        return UA_STATUSCODE_BADUNEXPECTEDERROR;
-    }
-    QPair<QObject*, int> property = m_variableMap[id];
-
-    QObject* object = property.first;
-    QMetaProperty prop = object->metaObject()->property(property.second);
 
     QVariant value;
     if(UA_Variant_isScalar(data) && data->data) {
@@ -104,15 +88,29 @@ static UA_StatusCode writeVariable(void *handle, const UA_NodeId nodeid,
             return UA_STATUSCODE_BADUNEXPECTEDERROR;
         }
     }
-
-    prop.write(object, value);
+    
+    bool result;
+    QMetaObject::invokeMethod(KisOpcUaServer::instance(), "writeVariable",
+                              Qt::BlockingQueuedConnection,
+                              Q_RETURN_ARG(bool, result),
+                              Q_ARG(QString, id),
+                              Q_ARG(QVariant, value));
+    if(!result)
+        return UA_STATUSCODE_BADUNEXPECTEDERROR;
 
     return UA_STATUSCODE_GOOD;
 }
 
+Q_GLOBAL_STATIC(KisOpcUaServer, s_instance)
+
 KisOpcUaServer::KisOpcUaServer()
 {
 
+}
+
+KisOpcUaServer* KisOpcUaServer::instance()
+{
+    return s_instance;
 }
 
 void KisOpcUaServer::run()
@@ -153,8 +151,8 @@ void KisOpcUaServer::run()
 
             UA_DataSource dataSource;
             dataSource.handle = 0;
-            dataSource.read = &readVariable;
-            dataSource.write = &writeVariable;
+            dataSource.read = &readVariableCallback;
+            dataSource.write = &writeVariableCallback;
 
             UA_VariableAttributes attr;
             UA_VariableAttributes_init(&attr);
@@ -178,4 +176,33 @@ void KisOpcUaServer::addObject(QObject *object)
 {
     m_objects.append(object);
 }
+
+bool KisOpcUaServer::writeVariable(const QString& id, QVariant value)
+{
+    if(!m_variableMap.contains(id)){
+        return false;
+    }
+    QPair<QObject*, int> property = m_variableMap[id];
+
+    QObject* object = property.first;
+    QMetaProperty prop = object->metaObject()->property(property.second);
+    
+    prop.write(object, value);
+    
+    return true;
+}
+
+QVariant KisOpcUaServer::readVariable(const QString& id)
+{
+    if(!m_variableMap.contains(id)){
+        return QVariant();
+    }
+    QPair<QObject*, int> property = m_variableMap[id];
+
+    QObject* object = property.first;
+    QMetaProperty prop = object->metaObject()->property(property.second);
+
+    return prop.read(object);
+}
+
 

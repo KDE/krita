@@ -11,7 +11,16 @@
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <property name="margin">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
     <number>0</number>
    </property>
    <item row="0" column="0">
@@ -24,7 +33,7 @@
      </property>
      <layout class="QGridLayout" name="gridLayout_2">
       <item row="1" column="0">
-       <widget class="QWidget" name="colorsBox">
+       <widget class="QWidget" name="colorsBox" native="true">
         <property name="minimumSize">
          <size>
           <width>20</width>
@@ -35,11 +44,20 @@
          <property name="sizeConstraint">
           <enum>QLayout::SetMinimumSize</enum>
          </property>
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
          <property name="horizontalSpacing">
           <number>6</number>
-         </property>
-         <property name="margin">
-          <number>0</number>
          </property>
         </layout>
        </widget>
@@ -71,7 +89,7 @@
        </widget>
       </item>
       <item row="3" column="1">
-       <widget class="QSpinBox" name="colorLimit">
+       <widget class="KisIntParseSpinBox" name="colorLimit">
         <property name="enabled">
          <bool>true</bool>
         </property>
@@ -87,7 +105,7 @@
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="QSpinBox" name="inbetweenSpinBox">
+       <widget class="KisIntParseSpinBox" name="inbetweenSpinBox">
         <property name="minimum">
          <number>0</number>
         </property>
@@ -107,22 +125,23 @@
        </widget>
       </item>
       <item row="1" column="0" colspan="2">
-       <widget class="QWidget" name="widget">
-        <property name="minimumSize">
-         <size>
-          <width>80</width>
-          <height>20</height>
-         </size>
+       <layout class="QGridLayout" name="layoutRowSteps">
+        <property name="sizeConstraint">
+         <enum>QLayout::SetMinimumSize</enum>
         </property>
-        <layout class="QGridLayout" name="layoutRowSteps">
-         <property name="sizeConstraint">
-          <enum>QLayout::SetMinimumSize</enum>
-         </property>
-         <property name="margin">
-          <number>0</number>
-         </property>
-        </layout>
-       </widget>
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+       </layout>
       </item>
       <item row="2" column="0">
        <widget class="QLabel" name="label_3">
@@ -285,7 +304,7 @@
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="QSpinBox" name="alphaStepsSpinBox">
+       <widget class="KisIntParseSpinBox" name="alphaStepsSpinBox">
         <property name="minimum">
          <number>0</number>
         </property>
@@ -302,6 +321,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KisIntParseSpinBox</class>
+   <extends>QSpinBox</extends>
+   <header>kis_int_parse_spin_box.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections>
   <connection>

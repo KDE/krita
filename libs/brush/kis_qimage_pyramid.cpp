@@ -123,38 +123,34 @@ inline QRect roundRect(const QRectF &rc)
     return rect.toAlignedRect();
 }
 
-QTransform baseBrushTransform(qreal scaleX, qreal scaleY,
-                              qreal rotation,
+QTransform baseBrushTransform(KisDabShape const& shape,
                               qreal subPixelX, qreal subPixelY,
                               const QRectF &baseBounds)
 {
     QTransform transform;
-    if (!qFuzzyCompare(rotation, 0)) {
-        QTransform rotationTransform;
-        rotationTransform.rotateRadians(rotation);
+    transform.scale(shape.scaleX(), shape.scaleY());
 
-        QRectF rotatedBounds = rotationTransform.mapRect(baseBounds);
-        transform = rotationTransform *
-                    QTransform::fromTranslate(-rotatedBounds.x(), -rotatedBounds.y());
+    if (!qFuzzyCompare(shape.rotation(), 0)) {
+        transform = transform * QTransform().rotateRadians(shape.rotation());
+        QRectF rotatedBounds = transform.mapRect(baseBounds);
+        transform = transform * QTransform::fromTranslate(-rotatedBounds.x(), -rotatedBounds.y());
     }
 
-    return transform *
-           QTransform::fromScale(scaleX, scaleY) *
-           QTransform::fromTranslate(subPixelX, subPixelY);
+    return transform * QTransform::fromTranslate(subPixelX, subPixelY);
 }
 
-void KisQImagePyramid::calculateParams(qreal scale, qreal rotation,
+void KisQImagePyramid::calculateParams(KisDabShape const& shape,
                                        qreal subPixelX, qreal subPixelY,
                                        const QSize &originalSize,
                                        QTransform *outputTransform, QSize *outputSize)
 {
-    calculateParams(scale, rotation,
+    calculateParams(shape,
                     subPixelX, subPixelY,
                     originalSize, 1.0, originalSize,
                     outputTransform, outputSize);
 }
 
-void KisQImagePyramid::calculateParams(qreal scale, qreal rotation,
+void KisQImagePyramid::calculateParams(KisDabShape shape,
                                        qreal subPixelX, qreal subPixelY,
                                        const QSize &originalSize,
                                        qreal baseScale, const QSize &baseSize,
@@ -164,25 +160,21 @@ void KisQImagePyramid::calculateParams(qreal scale, qreal rotation,
 
     QRectF originalBounds = QRectF(QPointF(), originalSize);
     QTransform originalTransform =
-        baseBrushTransform(scale, scale,
-                           rotation,
-                           subPixelX, subPixelY,
+        baseBrushTransform(shape, subPixelX, subPixelY,
                            originalBounds);
 
     qreal realBaseScaleX = qreal(baseSize.width()) / originalSize.width();
     qreal realBaseScaleY = qreal(baseSize.height()) / originalSize.height();
-
-    qreal scaleX = scale / realBaseScaleX;
-    qreal scaleY = scale / realBaseScaleY;
+    qreal scaleX = shape.scaleX() / realBaseScaleX;
+    qreal scaleY = shape.scaleY() / realBaseScaleY;
+    shape = KisDabShape(scaleX, scaleY/scaleX, shape.rotation());
 
     QRectF baseBounds = QRectF(QPointF(), baseSize);
 
     QTransform transform =
-        baseBrushTransform(scaleX, scaleY,
-                           rotation,
+        baseBrushTransform(shape,
                            subPixelX, subPixelY,
                            baseBounds);
-
     QRect expectedDstRect = roundRect(originalTransform.mapRect(originalBounds));
 #if 0 // Only enable when debugging; users shouldn't see this warning
     {
@@ -210,13 +202,13 @@ void KisQImagePyramid::calculateParams(qreal scale, qreal rotation,
 }
 
 QSize KisQImagePyramid::imageSize(const QSize &originalSize,
-                                  qreal scale, qreal rotation,
+                                  KisDabShape const& shape,
                                   qreal subPixelX, qreal subPixelY)
 {
     QTransform transform;
     QSize dstSize;
 
-    calculateParams(scale, rotation, subPixelX, subPixelY,
+    calculateParams(shape, subPixelX, subPixelY,
                     originalSize,
                     &transform, &dstSize);
 
@@ -224,11 +216,10 @@ QSize KisQImagePyramid::imageSize(const QSize &originalSize,
 }
 
 QSizeF KisQImagePyramid::characteristicSize(const QSize &originalSize,
-                                            qreal scale, qreal rotation)
+                                            KisDabShape const& shape)
 {
     QRectF originalRect(QPointF(), originalSize);
-    QTransform transform = baseBrushTransform(scale, scale,
-                                              rotation,
+    QTransform transform = baseBrushTransform(shape,
                                               0.0, 0.0,
                                               originalRect);
 
@@ -256,18 +247,18 @@ void KisQImagePyramid::appendPyramidLevel(const QImage &image)
     m_levels.append(PyramidLevel(tmp, levelSize));
 }
 
-QImage KisQImagePyramid::createImage(qreal scale, qreal rotation,
+QImage KisQImagePyramid::createImage(KisDabShape const& shape,
                                      qreal subPixelX, qreal subPixelY) const
 {
     qreal baseScale = -1.0;
-    int level = findNearestLevel(scale, &baseScale);
+    int level = findNearestLevel(shape.scale(), &baseScale);
 
     const QImage &srcImage = m_levels[level].image;
 
     QTransform transform;
     QSize dstSize;
 
-    calculateParams(scale, rotation, subPixelX, subPixelY,
+    calculateParams(shape, subPixelX, subPixelY,
                     m_originalSize, baseScale, m_levels[level].size,
                     &transform, &dstSize);
 

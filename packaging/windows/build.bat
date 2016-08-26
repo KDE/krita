@@ -20,7 +20,6 @@ cmake --build . --config RelWithDebInfo --target ext_tiff
 cmake --build . --config RelWithDebInfo --target ext_gsl
 cmake --build . --config RelWithDebInfo --target ext_vc
 cmake --build . --config RelWithDebInfo --target ext_libraw
-rem cmake --build . --config RelWithDebInfo --target ext_openjpeg
 rem cmake --build . --config RelWithDebInfo --target ext_freetype
 cmake --build . --config RelWithDebInfo --target ext_ocio
 cmake --build . --config RelWithDebInfo --target ext_openexr

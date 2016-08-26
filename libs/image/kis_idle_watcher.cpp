@@ -48,8 +48,8 @@ struct KisIdleWatcher::Private
 };
 
 
-KisIdleWatcher::KisIdleWatcher(int delay)
-    : m_d(new Private(delay))
+KisIdleWatcher::KisIdleWatcher(int delay, QObject *parent)
+    : QObject(parent), m_d(new Private(delay))
 {
     connect(&m_d->imageModifiedCompressor, SIGNAL(timeout()), SLOT(startIdleCheck()));
     connect(&m_d->idleCheckTimer, SIGNAL(timeout()), SLOT(slotIdleCheckTick()));

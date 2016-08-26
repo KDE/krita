@@ -46,8 +46,7 @@ private Q_SLOTS:
     void updateAction();
 
 private:
-    KisMirrorAxis* decoration();
-    
+
     QPointer<KisView> m_imageView;
     QAction *m_mirrorCanvas;
 };

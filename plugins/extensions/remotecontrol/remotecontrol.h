@@ -25,7 +25,6 @@
 #include <kis_view_plugin.h>
 
 class KisPaintopControlObject;
-class KisOpcUaServer;
 
 class RemoteControl : public KisViewPlugin
 {
@@ -36,7 +35,6 @@ public:
     
 private:
     KisPaintopControlObject* m_paintOpControl;
-    KisOpcUaServer* m_server;
     
 };
 

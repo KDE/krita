@@ -26,6 +26,9 @@
 #include "kis_cubic_curve.h"
 #include "kis_speed_smoother.h"
 
+#include <KoCanvasResourceManager.h>
+#include "kis_canvas_resource_provider.h"
+
 
 /***********************************************************************/
 /*           KisPaintingInformationBuilder                             */
@@ -36,7 +39,8 @@ const int KisPaintingInformationBuilder::LEVEL_OF_PRESSURE_RESOLUTION = 1024;
 
 
 KisPaintingInformationBuilder::KisPaintingInformationBuilder()
-    : m_speedSmoother(new KisSpeedSmoother())
+    : m_speedSmoother(new KisSpeedSmoother()),
+      m_pressureDisabled(false)
 {
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()),
             SLOT(updateSettings()));
@@ -58,8 +62,13 @@ void KisPaintingInformationBuilder::updateSettings()
 }
 
 KisPaintInformation KisPaintingInformationBuilder::startStroke(KoPointerEvent *event,
-                                                               int timeElapsed)
+                                                               int timeElapsed,
+                                                               const KoCanvasResourceManager *manager)
 {
+    if (manager) {
+        m_pressureDisabled = manager->resource(KisCanvasResourceProvider::DisablePressure).toBool();
+    }
+
     m_startPoint = event->point;
     return createPaintingInformation(event, timeElapsed);
 
@@ -103,7 +112,7 @@ KisPaintInformation KisPaintingInformationBuilder::createPaintingInformation(KoP
     qreal speed = m_speedSmoother->getNextSpeed(imageToView(imagePoint));
 
     return KisPaintInformation(imagePoint,
-                               pressureToCurve(event->pressure()),
+                               !m_pressureDisabled ? 1.0 : pressureToCurve(event->pressure()),
                                event->xTilt(), event->yTilt(),
                                event->rotation(),
                                event->tangentialPressure(),

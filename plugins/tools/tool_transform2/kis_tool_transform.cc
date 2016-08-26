@@ -99,7 +99,7 @@ KisToolTransform::KisToolTransform(KoCanvasBase * canvas)
     , m_liquifyStrategy(
         new KisLiquifyTransformStrategy(
             dynamic_cast<KisCanvas2*>(canvas)->coordinatesConverter(),
-            m_currentArgs, m_transaction))
+            m_currentArgs, m_transaction, canvas->resourceManager()))
     , m_freeStrategy(
         new KisFreeTransformStrategy(
             dynamic_cast<KisCanvas2*>(canvas)->coordinatesConverter(),
@@ -769,7 +769,7 @@ void KisToolTransform::initThumbnailImage(KisPaintDeviceSP previewDevice)
         origImg = m_selectedPortionCache->
             createThumbnail(thumbRect.width(),
                             thumbRect.height(),
-                            srcRect,
+                            srcRect, 1,
                             KoColorConversionTransformation::internalRenderingIntent(),
                             KoColorConversionTransformation::internalConversionFlags());
         thumbToImageTransform = scaleTransform.inverted();

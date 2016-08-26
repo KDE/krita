@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>644</width>
+    <width>710</width>
     <height>174</height>
    </rect>
   </property>
@@ -139,10 +139,10 @@
       </spacer>
      </item>
      <item row="1" column="2">
-      <widget class="QSpinBox" name="numNegativeColumns"/>
+      <widget class="KisIntParseSpinBox" name="numNegativeColumns"/>
      </item>
      <item row="1" column="3">
-      <widget class="QSpinBox" name="numPositiveColumns">
+      <widget class="KisIntParseSpinBox" name="numPositiveColumns">
        <property name="minimum">
         <number>1</number>
        </property>
@@ -168,7 +168,7 @@
       </spacer>
      </item>
      <item row="1" column="5">
-      <widget class="QSpinBox" name="columnXOffset">
+      <widget class="KisIntParseSpinBox" name="columnXOffset">
        <property name="suffix">
         <string>px</string>
        </property>
@@ -181,7 +181,7 @@
       </widget>
      </item>
      <item row="1" column="6">
-      <widget class="QSpinBox" name="columnYOffset">
+      <widget class="KisIntParseSpinBox" name="columnYOffset">
        <property name="suffix">
         <string>px</string>
        </property>
@@ -220,10 +220,10 @@
       </widget>
      </item>
      <item row="2" column="2">
-      <widget class="QSpinBox" name="numNegativeRows"/>
+      <widget class="KisIntParseSpinBox" name="numNegativeRows"/>
      </item>
      <item row="2" column="3">
-      <widget class="QSpinBox" name="numPositiveRows">
+      <widget class="KisIntParseSpinBox" name="numPositiveRows">
        <property name="minimum">
         <number>1</number>
        </property>
@@ -233,7 +233,7 @@
       </widget>
      </item>
      <item row="2" column="5">
-      <widget class="QSpinBox" name="rowXOffset">
+      <widget class="KisIntParseSpinBox" name="rowXOffset">
        <property name="suffix">
         <string>px</string>
        </property>
@@ -246,7 +246,7 @@
       </widget>
      </item>
      <item row="2" column="6">
-      <widget class="QSpinBox" name="rowYOffset">
+      <widget class="KisIntParseSpinBox" name="rowYOffset">
        <property name="suffix">
         <string>px</string>
        </property>
@@ -259,7 +259,7 @@
       </widget>
      </item>
      <item row="1" column="9">
-      <widget class="QDoubleSpinBox" name="columnAngle">
+      <widget class="KisDoubleParseSpinBox" name="columnAngle">
        <property name="suffix">
         <string notr="true">°</string>
        </property>
@@ -272,7 +272,7 @@
       </widget>
      </item>
      <item row="2" column="9">
-      <widget class="QDoubleSpinBox" name="rowAngle">
+      <widget class="KisDoubleParseSpinBox" name="rowAngle">
        <property name="suffix">
         <string notr="true">°</string>
        </property>
@@ -285,7 +285,7 @@
       </widget>
      </item>
      <item row="1" column="8">
-      <widget class="QDoubleSpinBox" name="columnDistance">
+      <widget class="KisDoubleParseSpinBox" name="columnDistance">
        <property name="suffix">
         <string>px</string>
        </property>
@@ -295,7 +295,7 @@
       </widget>
      </item>
      <item row="2" column="8">
-      <widget class="QDoubleSpinBox" name="rowDistance">
+      <widget class="KisDoubleParseSpinBox" name="rowDistance">
        <property name="suffix">
         <string>px</string>
        </property>
@@ -348,6 +348,18 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KisIntParseSpinBox</class>
+   <extends>QSpinBox</extends>
+   <header>kis_int_parse_spin_box.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KisDoubleParseSpinBox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header>kis_double_parse_spin_box.h</header>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>numNegativeColumns</tabstop>
   <tabstop>numNegativeRows</tabstop>

@@ -39,6 +39,8 @@ class KoUnit;
  * used unit.
  * It is adviced to use a QDoubleSpinBox in QtDesigner and then use the context-menu item: 'Promote to Custom Widget' and use the values: 'classname=KoUnitDoubleSpinBox', 'headerfile=KoUnitDoubleSpinBox.h'
  * This will generate code that uses this spinbox in the correct manner.
+ *
+ * This class need to be replaced as much as possible with \see KisDoubleParseUnitSpinBox to add math parsing ability.
  */
 class KRITAWIDGETS_EXPORT KoUnitDoubleSpinBox : public QDoubleSpinBox
 {

@@ -55,6 +55,8 @@
 #include <QPushButton>
 #include <QVBoxLayout>
 
+#include "kis_double_parse_spin_box.h"
+
 class KarbonFilterEffectsTool::Private
 {
 public:
@@ -514,25 +516,25 @@ QList<QPointer<QWidget> > KarbonFilterEffectsTool::createOptionWidgets()
     filterRegionWidget->setObjectName("EffectRegion");
     QGridLayout *filterRegionLayout = new QGridLayout(filterRegionWidget);
 
-    d->posX = new QDoubleSpinBox(filterRegionWidget);
+    d->posX = new KisDoubleParseSpinBox(filterRegionWidget);
     d->posX->setSuffix("%");
     connect(d->posX, SIGNAL(valueChanged(double)), this, SLOT(regionXChanged(double)));
     filterRegionLayout->addWidget(new QLabel(i18n("X:")), 0, 0);
     filterRegionLayout->addWidget(d->posX, 0, 1);
 
-    d->posY = new QDoubleSpinBox(filterRegionWidget);
+    d->posY = new KisDoubleParseSpinBox(filterRegionWidget);
     d->posY->setSuffix("%");
     connect(d->posY, SIGNAL(valueChanged(double)), this, SLOT(regionYChanged(double)));
     filterRegionLayout->addWidget(new QLabel(i18n("Y:")), 1, 0);
     filterRegionLayout->addWidget(d->posY, 1, 1);
 
-    d->posW = new QDoubleSpinBox(filterRegionWidget);
+    d->posW = new KisDoubleParseSpinBox(filterRegionWidget);
     d->posW->setSuffix("%");
     connect(d->posW, SIGNAL(valueChanged(double)), this, SLOT(regionWidthChanged(double)));
     filterRegionLayout->addWidget(new QLabel(i18n("W:")), 0, 2);
     filterRegionLayout->addWidget(d->posW, 0, 3);
 
-    d->posH = new QDoubleSpinBox(filterRegionWidget);
+    d->posH = new KisDoubleParseSpinBox(filterRegionWidget);
     d->posH->setSuffix("%");
     connect(d->posH, SIGNAL(valueChanged(double)), this, SLOT(regionHeightChanged(double)));
     filterRegionLayout->addWidget(new QLabel(i18n("H:")), 1, 2);

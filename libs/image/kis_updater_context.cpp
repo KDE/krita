@@ -21,18 +21,14 @@
 #include <QThread>
 #include <QThreadPool>
 
+#include "kis_safe_read_list.h"
 #include "kis_update_job_item.h"
 #include "kis_stroke_job.h"
 
 
-KisUpdaterContext::KisUpdaterContext(qint32 threadCount)
+KisUpdaterContext::KisUpdaterContext(qint32 threadCount):
+    m_jobs(threadCount > 0 ? threadCount : defaultThreadCount())
 {
-    if(threadCount <= 0) {
-        threadCount = QThread::idealThreadCount();
-        threadCount = threadCount > 0 ? threadCount : 1;
-    }
-
-    m_jobs.resize(threadCount);
     for(qint32 i = 0; i < m_jobs.size(); i++) {
         m_jobs[i] = new KisUpdateJobItem(&m_exclusiveJobLock);
         connect(m_jobs[i], SIGNAL(sigContinueUpdate(const QRect&)),
@@ -45,6 +41,10 @@ KisUpdaterContext::KisUpdaterContext(qint32 threadCount)
         connect(m_jobs[i], SIGNAL(sigJobFinished()),
                 SLOT(slotJobFinished()), Qt::DirectConnection);
     }
+
+#ifdef SANITY_CHECK_CONTEXT_LOCKING
+    m_lockedBy = (Qt::HANDLE) -1;
+#endif
 }
 
 KisUpdaterContext::~KisUpdaterContext()
@@ -54,9 +54,19 @@ KisUpdaterContext::~KisUpdaterContext()
         delete m_jobs[i];
 }
 
+qint32 KisUpdaterContext::defaultThreadCount() const
+{
+    int threadCount = QThread::idealThreadCount();
+    return threadCount > 0 ? threadCount : 1;
+}
+
 void KisUpdaterContext::getJobsSnapshot(qint32 &numMergeJobs,
                                         qint32 &numStrokeJobs)
 {
+#ifdef SANITY_CHECK_CONTEXT_LOCKING
+    KIS_ASSERT(m_lockedBy == QThread::currentThreadId());
+#endif
+
     numMergeJobs = 0;
     numStrokeJobs = 0;
 
@@ -91,6 +101,10 @@ bool KisUpdaterContext::hasSpareThread()
 
 bool KisUpdaterContext::isJobAllowed(KisBaseRectsWalkerSP walker)
 {
+#ifdef SANITY_CHECK_CONTEXT_LOCKING
+    KIS_ASSERT(m_lockedBy == QThread::currentThreadId());
+#endif
+
     int lod = this->currentLevelOfDetail();
     if (lod >= 0 && walker->levelOfDetail() != lod) return false;
 
@@ -116,9 +130,13 @@ bool KisUpdaterContext::isJobAllowed(KisBaseRectsWalkerSP walker)
  */
 void KisUpdaterContext::addMergeJob(KisBaseRectsWalkerSP walker)
 {
+#ifdef SANITY_CHECK_CONTEXT_LOCKING
+    KIS_ASSERT(m_lockedBy == QThread::currentThreadId());
+#endif
+
     m_lodCounter.addLod(walker->levelOfDetail());
     qint32 jobIndex = findSpareThread();
-    Q_ASSERT(jobIndex >= 0);
+    KIS_ASSERT(jobIndex >= 0);
 
     m_jobs[jobIndex]->setWalker(walker);
     m_threadPool.start(m_jobs[jobIndex]);
@@ -129,9 +147,13 @@ void KisUpdaterContext::addMergeJob(KisBaseRectsWalkerSP walker)
  */
 void KisTestableUpdaterContext::addMergeJob(KisBaseRectsWalkerSP walker)
 {
+#ifdef SANITY_CHECK_CONTEXT_LOCKING
+    KIS_ASSERT(m_lockedBy == QThread::currentThreadId());
+#endif
+
     m_lodCounter.addLod(walker->levelOfDetail());
     qint32 jobIndex = findSpareThread();
-    Q_ASSERT(jobIndex >= 0);
+    KIS_ASSERT(jobIndex >= 0);
 
     m_jobs[jobIndex]->setWalker(walker);
     // HINT: Not calling start() here
@@ -139,9 +161,13 @@ void KisTestableUpdaterContext::addMergeJob(KisBaseRectsWalkerSP walker)
 
 void KisUpdaterContext::addStrokeJob(KisStrokeJob *strokeJob)
 {
+#ifdef SANITY_CHECK_CONTEXT_LOCKING
+    KIS_ASSERT(m_lockedBy == QThread::currentThreadId());
+#endif
+
     m_lodCounter.addLod(strokeJob->levelOfDetail());
     qint32 jobIndex = findSpareThread();
-    Q_ASSERT(jobIndex >= 0);
+    KIS_ASSERT(jobIndex >= 0);
 
     m_jobs[jobIndex]->setStrokeJob(strokeJob);
     m_threadPool.start(m_jobs[jobIndex]);
@@ -152,9 +178,13 @@ void KisUpdaterContext::addStrokeJob(KisStrokeJob *strokeJob)
  */
 void KisTestableUpdaterContext::addStrokeJob(KisStrokeJob *strokeJob)
 {
+#ifdef SANITY_CHECK_CONTEXT_LOCKING
+    KIS_ASSERT(m_lockedBy == QThread::currentThreadId());
+#endif
+
     m_lodCounter.addLod(strokeJob->levelOfDetail());
     qint32 jobIndex = findSpareThread();
-    Q_ASSERT(jobIndex >= 0);
+    KIS_ASSERT(jobIndex >= 0);
 
     m_jobs[jobIndex]->setStrokeJob(strokeJob);
     // HINT: Not calling start() here
@@ -162,9 +192,13 @@ void KisTestableUpdaterContext::addStrokeJob(KisStrokeJob *strokeJob)
 
 void KisUpdaterContext::addSpontaneousJob(KisSpontaneousJob *spontaneousJob)
 {
+#ifdef SANITY_CHECK_CONTEXT_LOCKING
+    KIS_ASSERT(m_lockedBy == QThread::currentThreadId());
+#endif
+
     m_lodCounter.addLod(spontaneousJob->levelOfDetail());
     qint32 jobIndex = findSpareThread();
-    Q_ASSERT(jobIndex >= 0);
+    KIS_ASSERT(jobIndex >= 0);
 
     m_jobs[jobIndex]->setSpontaneousJob(spontaneousJob);
     m_threadPool.start(m_jobs[jobIndex]);
@@ -177,7 +211,7 @@ void KisTestableUpdaterContext::addSpontaneousJob(KisSpontaneousJob *spontaneous
 {
     m_lodCounter.addLod(spontaneousJob->levelOfDetail());
     qint32 jobIndex = findSpareThread();
-    Q_ASSERT(jobIndex >= 0);
+    KIS_ASSERT(jobIndex >= 0);
 
     m_jobs[jobIndex]->setSpontaneousJob(spontaneousJob);
     // HINT: Not calling start() here
@@ -185,7 +219,35 @@ void KisTestableUpdaterContext::addSpontaneousJob(KisSpontaneousJob *spontaneous
 
 void KisUpdaterContext::waitForDone()
 {
-    m_threadPool.waitForDone();
+    lock();
+
+    while(true) {
+        bool allDone = true;
+
+        QVector<KisUpdateJobItem*>::const_iterator iter;
+        FOREACH_SAFE(iter, m_jobs) {
+            if ((*iter)->isRunning()) {
+                allDone = false;
+                break;
+            }
+        }
+
+        if (!allDone) {
+#ifdef SANITY_CHECK_CONTEXT_LOCKING
+            m_lockedBy = (Qt::HANDLE) -1;
+#endif
+
+            m_waitAllCond.wait(&m_lock);
+
+#ifdef SANITY_CHECK_CONTEXT_LOCKING
+            m_lockedBy = QThread::currentThreadId();
+#endif
+        } else {
+            break;
+        }
+    }
+
+    unlock();
 }
 
 bool KisUpdaterContext::walkerIntersectsJob(KisBaseRectsWalkerSP walker,
@@ -208,6 +270,7 @@ void KisUpdaterContext::slotJobFinished()
 {
     m_lodCounter.removeLod();
 
+    m_waitAllCond.wakeOne();
     // Be careful. This slot can be called asynchronously without locks.
     emit sigSpareThreadAppeared();
 }
@@ -215,10 +278,22 @@ void KisUpdaterContext::slotJobFinished()
 void KisUpdaterContext::lock()
 {
     m_lock.lock();
+
+#ifdef SANITY_CHECK_CONTEXT_LOCKING
+    KIS_ASSERT_X(m_lockedBy == (Qt::HANDLE) -1, "KisUpdaterContext",
+               "context is already locked");
+
+    m_lockedBy = QThread::currentThreadId();
+#endif
 }
 
 void KisUpdaterContext::unlock()
 {
+#ifdef SANITY_CHECK_CONTEXT_LOCKING
+    KIS_ASSERT(m_lockedBy == QThread::currentThreadId());
+    m_lockedBy = (Qt::HANDLE) -1;
+#endif
+
     m_lock.unlock();
 }
 

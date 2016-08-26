@@ -622,8 +622,8 @@
       <icon></icon>
       <text>Reset Canvas Rotation</text>
       <whatsThis></whatsThis>
-      <toolTip>Rotate Canvas Left</toolTip>
-      <iconText>Rotate Canvas Left</iconText>
+      <toolTip>Reset Canvas Rotation</toolTip>
+      <iconText>Reset Canvas Rotation</iconText>
       <activationFlags>1</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>

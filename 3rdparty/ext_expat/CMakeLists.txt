@@ -1,6 +1,6 @@
 SET(PREFIX_ext_expat "${EXTPREFIX}" )
 
-if (MSVC)
+if (WIN32)
 ExternalProject_Add( ext_expat
 	DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
 	URL http://files.kde.org/krita/build/dependencies/expat-2.1.0.tar.gz

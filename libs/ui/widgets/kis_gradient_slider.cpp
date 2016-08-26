@@ -51,6 +51,7 @@ KisGradientSlider::KisGradientSlider(QWidget *parent)
     , m_white(255)
     , m_gamma(1.0)
     , m_gammaEnabled(false)
+    , m_whiteEnabled(true)
     , m_feedback(false)
 {
     m_grabCursor = None;
@@ -133,11 +134,13 @@ void KisGradientSlider::paintEvent(QPaintEvent *e)
         p1.drawPolygon(a, 3);
     }
 
-    a[0] = QPoint(m_whiteCursor - MARGIN, y);
-    a[1] = QPoint(m_whiteCursor - MARGIN + cursorHalfBase, wHeight - 1);
-    a[2] = QPoint(m_whiteCursor - MARGIN - cursorHalfBase, wHeight - 1);
-    p1.setBrush(Qt::white);
-    p1.drawPolygon(a, 3);
+    if (m_whiteEnabled) {
+        a[0] = QPoint(m_whiteCursor - MARGIN, y);
+        a[1] = QPoint(m_whiteCursor - MARGIN + cursorHalfBase, wHeight - 1);
+        a[2] = QPoint(m_whiteCursor - MARGIN - cursorHalfBase, wHeight - 1);
+        p1.setBrush(Qt::white);
+        p1.drawPolygon(a, 3);
+    }
 }
 
 void KisGradientSlider::resizeEvent(QResizeEvent *)
@@ -329,6 +332,13 @@ void KisGradientSlider::enableGamma(bool b)
 double KisGradientSlider::getGamma(void)
 {
     return m_gamma;
+}
+
+
+void KisGradientSlider::enableWhite(bool b)
+{
+    m_whiteEnabled = b;
+    update();
 }
 
 void KisGradientSlider::slotModifyBlack(int v)

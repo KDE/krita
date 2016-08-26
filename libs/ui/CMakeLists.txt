@@ -78,6 +78,12 @@ set(kritaui_LIB_SRCS
     flake/kis_shape_selection_canvas.cpp
     flake/kis_shape_selection_model.cpp
     flake/kis_take_all_shapes_command.cpp
+    brushhud/kis_uniform_paintop_property_widget.cpp
+    brushhud/kis_brush_hud.cpp
+    brushhud/kis_round_hud_button.cpp
+    brushhud/kis_dlg_brush_hud_config.cpp
+    brushhud/kis_brush_hud_properties_list.cpp
+    brushhud/kis_brush_hud_properties_config.cpp
     kis_aspect_ratio_locker.cpp
     kis_autogradient.cc
     kis_bookmarked_configurations_editor.cc
@@ -158,7 +164,6 @@ set(kritaui_LIB_SRCS
     opengl/kis_opengl_canvas_debugger.cpp
     opengl/kis_opengl_image_textures.cpp
     opengl/kis_texture_tile.cpp
-    opengl/kis_texture_tile_update_info.cpp
     kis_fps_decoration.cpp
     ora/kis_open_raster_stack_load_visitor.cpp
     ora/kis_open_raster_stack_save_visitor.cpp
@@ -247,6 +252,8 @@ set(kritaui_LIB_SRCS
     widgets/kis_lod_availability_widget.cpp
     widgets/kis_color_label_selector_widget.cpp
     widgets/kis_color_filter_combo.cpp
+    widgets/kis_elided_label.cpp
+
     input/kis_input_manager.cpp
     input/kis_input_manager_p.cpp
     input/kis_extended_modifiers_mapper.cpp
@@ -448,6 +455,7 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
     forms/wdgimportimagesequence.ui
     forms/KisDetailsPaneBase.ui
     forms/KisOpenPaneBase.ui
+    brushhud/kis_dlg_brush_hud_config.ui
     dialogs/kis_delayed_save_dialog.ui
     input/config/kis_input_configuration_page.ui
     input/config/kis_edit_profiles_dialog.ui
@@ -472,6 +480,7 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
 
     wdgsplash.ui
     input/wintab/kis_screen_size_choice_dialog.ui
+
 )
 
 
@@ -518,6 +527,7 @@ target_include_directories(kritaui
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/flake>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/ora>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/tool>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/utils>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/widgets>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/input/wintab>
 )

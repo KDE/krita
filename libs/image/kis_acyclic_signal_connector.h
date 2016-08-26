@@ -73,6 +73,12 @@ public:
     void connectBackwardVoid(QObject *sender, const char *signal,
                              QObject *receiver, const char *method);
 
+    void connectForwardVariant(QObject *sender, const char *signal,
+                               QObject *receiver, const char *method);
+
+    void connectBackwardVariant(QObject *sender, const char *signal,
+                                QObject *receiver, const char *method);
+
 private Q_SLOTS:
     void forwardSlotDouble(double value);
     void backwardSlotDouble(double value);
@@ -86,6 +92,9 @@ private Q_SLOTS:
     void forwardSlotVoid();
     void backwardSlotVoid();
 
+    void forwardSlotVariant(const QVariant &value);
+    void backwardSlotVariant(const QVariant &value);
+
 Q_SIGNALS:
     void forwardSignalDouble(double value);
     void backwardSignalDouble(double value);
@@ -98,6 +107,9 @@ Q_SIGNALS:
 
     void forwardSignalVoid();
     void backwardSignalVoid();
+
+    void forwardSignalVariant(const QVariant &value);
+    void backwardSignalVariant(const QVariant &value);
 
 private:
     int m_signalsBlocked;

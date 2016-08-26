@@ -29,80 +29,88 @@
 #include <KoColorConversionTransformation.h>
 #include <KoChannelInfo.h>
 #include <kis_lod_transform.h>
+#include "kis_texture_tile_info_pool.h"
 
 
 class KisTextureTileUpdateInfo;
 typedef QSharedPointer<KisTextureTileUpdateInfo> KisTextureTileUpdateInfoSP;
 typedef QVector<KisTextureTileUpdateInfoSP> KisTextureTileUpdateInfoSPList;
 
+/**
+ * A buffer object for temporary data needed during the update process.
+ *
+ * - the buffer is allocated from the common pool to avoid memory
+ *   fragmentation
+ *
+ * - the buffer's lifetime defines the lifetime of the allocated chunk
+ *   of memory, so you don't have to thing about free'ing the memory
+ */
 
-class ConversionCache {
+class DataBuffer
+{
 public:
-    class Buffer {
-    public:
-        Buffer () : m_size(0) {}
+    DataBuffer(KisTextureTileInfoPoolSP pool)
+        : m_data(0),
+          m_pixelSize(0),
+          m_pool(pool)
+    {
+    }
 
-        inline void swap(Buffer &rhs) {
-            m_data.swap(rhs.m_data);
-            qSwap(m_size, rhs.m_size);
+    DataBuffer(int pixelSize, KisTextureTileInfoPoolSP pool)
+        : m_data(0),
+          m_pixelSize(0),
+          m_pool(pool)
+    {
+        allocate(pixelSize);
+    }
+
+    ~DataBuffer() {
+        if (m_data) {
+            m_pool->free(m_data, m_pixelSize);
         }
+    }
 
-        inline quint8* data() const {
-            return m_data.data();
-        }
+    void allocate(int pixelSize) {
+        Q_ASSERT(!m_data);
 
-        inline void ensureNotSmaller(int size) {
-            if (size > m_size) {
-                try {
-                    m_data.reset(new quint8[size]);
-                    m_size = size;
-                }
-                catch (std::bad_alloc) {
-                    QMessageBox::critical(0,
-                                          i18nc("@title:window", "Fatal Error"),
-                                          i18n("Krita has run out of memory and has to close."));
-                    qFatal("KisTextureTileUpdateInfo: Could not allocate enough memory");
-                }
-            }
-        }
-
-    private:
-        QScopedArrayPointer<quint8> m_data;
-        int m_size;
-    };
-
-public:
-    inline void swap(Buffer &rhs) {
-        m_cache.localData()->swap(rhs);
+        m_pixelSize = pixelSize;
+        m_data = m_pool->malloc(m_pixelSize);
     }
 
     inline quint8* data() const {
-        return m_cache.localData()->data();
+        return m_data;
     }
 
-    inline void ensureNotSmaller(int size) {
-        if (!m_cache.hasLocalData()) {
-            m_cache.setLocalData(new Buffer());
-        }
-        m_cache.localData()->ensureNotSmaller(size);
+    void swap(DataBuffer &other) {
+        std::swap(other.m_pixelSize, m_pixelSize);
+        std::swap(other.m_data, m_data);
+    }
+
+    int size() const {
+        return m_data ? m_pool->chunkSize(m_pixelSize) : 0;
     }
 
 private:
-    QThreadStorage<Buffer*> m_cache;
+    quint8 *m_data;
+    int m_pixelSize;
+    KisTextureTileInfoPoolSP m_pool;
 };
 
 class KisTextureTileUpdateInfo
 {
 public:
-    KisTextureTileUpdateInfo()
-        : m_patchPixelsLength(0)
+    KisTextureTileUpdateInfo(KisTextureTileInfoPoolSP pool)
+        : m_patchPixels(pool),
+          m_pool(pool)
     {
     }
 
     KisTextureTileUpdateInfo(qint32 col, qint32 row,
                              const QRect &tileRect, const QRect &updateRect, const QRect &currentImageRect,
-                             int levelOfDetail)
-        : m_patchPixelsLength(0)
+                             int levelOfDetail,
+                             KisTextureTileInfoPoolSP pool)
+        : m_patchPixels(pool),
+          m_pool(pool)
     {
         m_tileCol = col;
         m_tileRow = row;
@@ -122,18 +130,12 @@ public:
     }
 
     ~KisTextureTileUpdateInfo() {
-        if (m_patchPixels.data()) {
-            m_patchPixelsCache.swap(m_patchPixels);
-        }
     }
 
     void retrieveData(KisImageWSP image, const QBitArray &channelFlags, bool onlyOneChannelSelected, int selectedChannelIndex)
     {
         m_patchColorSpace = image->projection()->colorSpace();
-
-        m_patchPixelsLength = m_patchColorSpace->pixelSize() * m_patchRect.width() * m_patchRect.height();
-        m_patchPixelsCache.ensureNotSmaller(m_patchPixelsLength);
-        m_patchPixelsCache.swap(m_patchPixels);
+        m_patchPixels.allocate(m_patchColorSpace->pixelSize());
 
         image->projection()->readBytes(m_patchPixels.data(),
                                        m_patchRect.x(), m_patchRect.y(),
@@ -142,7 +144,7 @@ public:
         // XXX: if the paint colorspace is rgb, we should do the channel swizzling in
         //      the display shader
         if (!channelFlags.isEmpty()) {
-            m_conversionCache.ensureNotSmaller(m_patchPixelsLength);
+            DataBuffer conversionCache(m_patchColorSpace->pixelSize(), m_pool);
 
             QList<KoChannelInfo*> channelInfo = m_patchColorSpace->channels();
             int channelSize = channelInfo[selectedChannelIndex]->size();
@@ -157,12 +159,12 @@ public:
                     for (uint channelIndex = 0; channelIndex < m_patchColorSpace->channelCount(); ++channelIndex) {
 
                         if (channelInfo[channelIndex]->channelType() == KoChannelInfo::COLOR) {
-                            memcpy(m_conversionCache.data() + (pixelIndex * pixelSize) + (channelIndex * channelSize),
+                            memcpy(conversionCache.data() + (pixelIndex * pixelSize) + (channelIndex * channelSize),
                                    m_patchPixels.data() + (pixelIndex * pixelSize) + selectedChannelPos,
                                    channelSize);
                         }
                         else if (channelInfo[channelIndex]->channelType() == KoChannelInfo::ALPHA) {
-                            memcpy(m_conversionCache.data() + (pixelIndex * pixelSize) + (channelIndex * channelSize),
+                            memcpy(conversionCache.data() + (pixelIndex * pixelSize) + (channelIndex * channelSize),
                                    m_patchPixels.data() + (pixelIndex * pixelSize) + (channelIndex * channelSize),
                                    channelSize);
                         }
@@ -173,19 +175,19 @@ public:
                 for (uint pixelIndex = 0; pixelIndex < numPixels; ++pixelIndex) {
                     for (uint channelIndex = 0; channelIndex < m_patchColorSpace->channelCount(); ++channelIndex) {
                         if (channelFlags.testBit(channelIndex)) {
-                            memcpy(m_conversionCache.data() + (pixelIndex * pixelSize) + (channelIndex * channelSize),
+                            memcpy(conversionCache.data() + (pixelIndex * pixelSize) + (channelIndex * channelSize),
                                    m_patchPixels.data() + (pixelIndex * pixelSize) + (channelIndex * channelSize),
                                    channelSize);
                         }
                         else {
-                            memset(m_conversionCache.data() + (pixelIndex * pixelSize) + (channelIndex * channelSize), 0, channelSize);
+                            memset(conversionCache.data() + (pixelIndex * pixelSize) + (channelIndex * channelSize), 0, channelSize);
                         }
                     }
                 }
 
             }
 
-            m_conversionCache.swap(m_patchPixels);
+            conversionCache.swap(m_patchPixels);
         }
 
     }
@@ -198,14 +200,12 @@ public:
 
         if (m_patchRect.isValid()) {
             const qint32 numPixels = m_patchRect.width() * m_patchRect.height();
-            const quint32 conversionCacheLength = numPixels * dstCS->pixelSize();
+            DataBuffer conversionCache(dstCS->pixelSize(), m_pool);
 
-            m_conversionCache.ensureNotSmaller(conversionCacheLength);
-            m_patchColorSpace->convertPixelsTo(m_patchPixels.data(), m_conversionCache.data(), dstCS, numPixels, renderingIntent, conversionFlags);
+            m_patchColorSpace->convertPixelsTo(m_patchPixels.data(), conversionCache.data(), dstCS, numPixels, renderingIntent, conversionFlags);
 
             m_patchColorSpace = dstCS;
-            m_conversionCache.swap(m_patchPixels);
-            m_patchPixelsLength = conversionCacheLength;
+            conversionCache.swap(m_patchPixels);
         }
     }
 
@@ -217,14 +217,12 @@ public:
 
         if (m_patchRect.isValid()) {
             const qint32 numPixels = m_patchRect.width() * m_patchRect.height();
-            const quint32 conversionCacheLength = numPixels * dstCS->pixelSize();
+            DataBuffer conversionCache(dstCS->pixelSize(), m_pool);
 
-            m_conversionCache.ensureNotSmaller(conversionCacheLength);
-            m_patchColorSpace->proofPixelsTo(m_patchPixels.data(), m_conversionCache.data(), numPixels, proofingTransform);
+            m_patchColorSpace->proofPixelsTo(m_patchPixels.data(), conversionCache.data(), numPixels, proofingTransform);
 
             m_patchColorSpace = dstCS;
-            m_conversionCache.swap(m_patchPixels);
-            m_patchPixelsLength = conversionCacheLength;
+            conversionCache.swap(m_patchPixels);
         }
     }
 
@@ -292,7 +290,7 @@ public:
     }
 
     inline quint32 patchPixelsLength() const {
-        return m_patchPixelsLength;
+        return m_patchPixels.size();
     }
 
     inline bool valid() const {
@@ -309,7 +307,6 @@ private:
     QRect m_tileRect;
     QRect m_patchRect;
     const KoColorSpace* m_patchColorSpace;
-    quint32 m_patchPixelsLength;
 
     QRect m_realPatchRect;
     QRect m_realPatchOffset;
@@ -319,9 +316,8 @@ private:
     QRect m_originalPatchRect;
     QRect m_originalTileRect;
 
-    ConversionCache::Buffer m_patchPixels;
-    static ConversionCache m_patchPixelsCache;
-    static ConversionCache m_conversionCache;
+    DataBuffer m_patchPixels;
+    KisTextureTileInfoPoolSP m_pool;
 };
 
 

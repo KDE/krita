@@ -63,8 +63,55 @@ public:
 
 private:
     KisDynaOpOptionsWidget * m_options;
-
-
 };
+
+struct DynaOption {
+
+    int dyna_action;
+
+    qreal dyna_width;
+    qreal dyna_mass;
+    qreal dyna_drag;
+    qreal dyna_angle;
+    qreal dyna_width_range;
+    int dyna_diameter;
+    int dyna_line_count;
+    qreal dyna_line_spacing;
+    bool dyna_enable_line;
+    bool dyna_use_two_circles;
+    bool dyna_use_fixed_angle;
+
+    void writeOptionSetting(KisPropertiesConfiguration* setting) const {
+        setting->setProperty(DYNA_WIDTH, dyna_width);
+        setting->setProperty(DYNA_MASS, dyna_mass);
+        setting->setProperty(DYNA_DRAG, dyna_drag);
+        setting->setProperty(DYNA_USE_FIXED_ANGLE, dyna_use_fixed_angle);
+        setting->setProperty(DYNA_ANGLE, dyna_angle);
+        setting->setProperty(DYNA_WIDTH_RANGE, dyna_width_range);
+        setting->setProperty(DYNA_ACTION, dyna_action);
+        setting->setProperty(DYNA_DIAMETER, dyna_diameter);
+        setting->setProperty(DYNA_ENABLE_LINE, dyna_enable_line);
+        setting->setProperty(DYNA_USE_TWO_CIRCLES, dyna_use_two_circles);
+        setting->setProperty(DYNA_LINE_COUNT, dyna_line_count);
+        setting->setProperty(DYNA_LINE_SPACING, dyna_line_spacing);
+
+    }
+
+    void readOptionSetting(const KisPropertiesConfiguration* setting) {
+        dyna_action = setting->getInt(DYNA_ACTION);
+        dyna_width = setting->getDouble(DYNA_WIDTH);
+        dyna_mass = setting->getDouble(DYNA_MASS);
+        dyna_drag = setting->getDouble(DYNA_DRAG);
+        dyna_angle = setting->getDouble(DYNA_ANGLE);
+        dyna_width_range = setting->getDouble(DYNA_WIDTH_RANGE);
+        dyna_diameter = setting->getInt(DYNA_DIAMETER);
+        dyna_line_count = setting->getInt(DYNA_LINE_COUNT);
+        dyna_line_spacing = setting->getDouble(DYNA_LINE_SPACING);
+        dyna_enable_line = setting->getBool(DYNA_ENABLE_LINE);
+        dyna_use_two_circles = setting->getBool(DYNA_USE_TWO_CIRCLES);
+        dyna_use_fixed_angle = setting->getBool(DYNA_USE_FIXED_ANGLE);
+    }
+};
+
 
 #endif

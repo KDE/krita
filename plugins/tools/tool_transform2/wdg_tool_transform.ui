@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>424</width>
-    <height>558</height>
+    <width>479</width>
+    <height>591</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -309,7 +309,7 @@
               <enum>Qt::RightToLeft</enum>
              </property>
              <property name="text">
-              <string>Filter:</string>
+              <string>&amp;Filter:</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignCenter</set>
@@ -507,7 +507,7 @@
             </layout>
            </item>
            <item row="0" column="1">
-            <widget class="KisCmbIDList" name="cmbFilter">
+            <widget class="KisCmbIDList" name="cmbFilter" native="true">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                <horstretch>0</horstretch>
@@ -523,7 +523,7 @@
            <item>
             <widget class="QRadioButton" name="freeMoveRadioButton">
              <property name="text">
-              <string>Position</string>
+              <string>Posi&amp;tion</string>
              </property>
              <property name="checked">
               <bool>true</bool>
@@ -536,7 +536,7 @@
            <item>
             <widget class="QRadioButton" name="freeRotationRadioButton">
              <property name="text">
-              <string>Rotate</string>
+              <string>&amp;Rotate</string>
              </property>
              <attribute name="buttonGroup">
               <string notr="true">freeTransformRadioGroup</string>
@@ -703,7 +703,7 @@
                <enum>Qt::LeftToRight</enum>
               </property>
               <property name="text">
-               <string>x:</string>
+               <string>&amp;x:</string>
               </property>
               <property name="buddy">
                <cstring>aXBox</cstring>
@@ -711,7 +711,7 @@
              </widget>
             </item>
             <item row="0" column="1">
-             <widget class="KisDoubleSliderSpinBox" name="aXBox">
+             <widget class="KisDoubleSliderSpinBox" name="aXBox" native="true">
               <property name="toolTip">
                <string>Rotate around X-Axis</string>
               </property>
@@ -738,7 +738,7 @@
                <enum>Qt::LeftToRight</enum>
               </property>
               <property name="text">
-               <string>y:</string>
+               <string>&amp;y:</string>
               </property>
               <property name="buddy">
                <cstring>aYBox</cstring>
@@ -746,14 +746,14 @@
              </widget>
             </item>
             <item row="2" column="1">
-             <widget class="KisDoubleSliderSpinBox" name="aYBox">
+             <widget class="KisDoubleSliderSpinBox" name="aYBox" native="true">
               <property name="toolTip">
                <string>Rotate around Y-Axis</string>
               </property>
              </widget>
             </item>
             <item row="3" column="1">
-             <widget class="KisDoubleSliderSpinBox" name="aZBox">
+             <widget class="KisDoubleSliderSpinBox" name="aZBox" native="true">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                 <horstretch>0</horstretch>
@@ -786,7 +786,7 @@
                <enum>Qt::LeftToRight</enum>
               </property>
               <property name="text">
-               <string>z:</string>
+               <string>&amp;z:</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -865,7 +865,7 @@
                  <string>Horizontal Scale</string>
                 </property>
                 <property name="text">
-                 <string>width:</string>
+                 <string>w&amp;idth:</string>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -876,7 +876,7 @@
                </widget>
               </item>
               <item row="0" column="1">
-               <widget class="QSpinBox" name="scaleXBox">
+               <widget class="KisIntParseSpinBox" name="scaleXBox">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
                   <horstretch>0</horstretch>
@@ -886,13 +886,13 @@
                 <property name="toolTip">
                  <string>Horizontal Scale</string>
                 </property>
-                <property name="suffix" stdset="0">
+                <property name="suffix">
                  <string> %</string>
                 </property>
                </widget>
               </item>
               <item row="1" column="1">
-               <widget class="QSpinBox" name="scaleYBox">
+               <widget class="KisIntParseSpinBox" name="scaleYBox">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
                   <horstretch>0</horstretch>
@@ -902,7 +902,7 @@
                 <property name="toolTip">
                  <string>Vertical Scale</string>
                 </property>
-                <property name="suffix" stdset="0">
+                <property name="suffix">
                  <string> %</string>
                 </property>
                </widget>
@@ -925,7 +925,7 @@
                  <string>Vertical Scale</string>
                 </property>
                 <property name="text">
-                 <string>height:</string>
+                 <string>&amp;height:</string>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -938,7 +938,7 @@
              </layout>
             </item>
             <item>
-             <widget class="KoAspectButton" name="aspectButton">
+             <widget class="KoAspectButton" name="aspectButton" native="true">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -1025,7 +1025,7 @@
              </widget>
             </item>
             <item row="0" column="1">
-             <widget class="QSpinBox" name="translateXBox">
+             <widget class="KisIntParseSpinBox" name="translateXBox">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -1041,7 +1041,7 @@
              </widget>
             </item>
             <item row="2" column="1">
-             <widget class="QSpinBox" name="translateYBox">
+             <widget class="KisIntParseSpinBox" name="translateYBox">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -1156,7 +1156,7 @@
              </widget>
             </item>
             <item row="1" column="1">
-             <widget class="KisDoubleSliderSpinBox" name="shearYBox">
+             <widget class="KisDoubleSliderSpinBox" name="shearYBox" native="true">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                 <horstretch>0</horstretch>
@@ -1197,7 +1197,7 @@
              </widget>
             </item>
             <item row="0" column="1">
-             <widget class="KisDoubleSliderSpinBox" name="shearXBox">
+             <widget class="KisDoubleSliderSpinBox" name="shearXBox" native="true">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                 <horstretch>0</horstretch>
@@ -1214,6 +1214,145 @@
          </layout>
         </widget>
        </item>
+       <item>
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Preferred</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item><widget class="QGroupBox" name="quickTransformGroup"> <!-- Quick transform buttons -->
+        <layout class="QHBoxLayout" name="quickTransformLayout">
+         <property name="spacing">
+          <number>6</number>
+         </property>
+         <!-- flipXButton -->
+         <item><widget class="QPushButton" name="flipXButton">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>32</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="toolTip">
+           <string>Flip selection horizontally</string>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+         </widget></item> <!-- END flipXButton -->
+         <!-- flipYButton -->
+         <item><widget class="QPushButton" name="flipYButton">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>32</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="toolTip">
+           <string>Flip selection vertically</string>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+         </widget></item> <!-- END flipYButton -->
+         <item>
+          <spacer name="horizontalFlipRotateSpacer">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Preferred</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <!-- rotateCW -->
+         <item><widget class="QPushButton" name="rotateCCWButton">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>32</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="toolTip">
+           <string>Rotate selection counter-clockwise 90 degrees</string>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+         </widget></item> <!-- END rotateCW -->
+         <!-- rotateCCW -->
+         <item><widget class="QPushButton" name="rotateCWButton">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>32</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="toolTip">
+           <string>Rotate the selection clockwise 90 degrees</string>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+         </widget></item> <!-- END rotateCCW -->
+         <item>
+          <spacer name="horizontalSpacer">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Expanding</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </widget></item> <!-- Quick transform buttons -->
        <item>
         <spacer name="verticalSpacer">
          <property name="orientation">
@@ -1250,7 +1389,7 @@
          <number>0</number>
         </property>
         <item row="1" column="1">
-         <widget class="KisDoubleSliderSpinBox" name="alphaBox">
+         <widget class="KisDoubleSliderSpinBox" name="alphaBox" native="true">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
             <horstretch>0</horstretch>
@@ -1274,7 +1413,7 @@
            </size>
           </property>
           <property name="text">
-           <string>Flexibility:</string>
+           <string>&amp;Flexibility:</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -1303,7 +1442,7 @@
            </sizepolicy>
           </property>
           <property name="text">
-           <string>Anchor Strength:</string>
+           <string>Anc&amp;hor Strength:</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -1342,7 +1481,7 @@
           <x>10</x>
           <y>30</y>
           <width>241</width>
-          <height>26</height>
+          <height>29</height>
          </rect>
         </property>
         <layout class="QHBoxLayout" name="horizontalLayout_7">
@@ -1370,7 +1509,7 @@
             </sizepolicy>
            </property>
            <property name="text">
-            <string>Subdivide</string>
+            <string>Subd&amp;ivide</string>
            </property>
            <property name="checked">
             <bool>true</bool>
@@ -1384,7 +1523,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QSpinBox" name="densityBox">
+          <widget class="KisIntParseSpinBox" name="densityBox">
            <property name="alignment">
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
            </property>
@@ -1403,8 +1542,8 @@
          <rect>
           <x>10</x>
           <y>60</y>
-          <width>241</width>
-          <height>31</height>
+          <width>290</width>
+          <height>47</height>
          </rect>
         </property>
         <layout class="QHBoxLayout" name="horizontalLayout_8">
@@ -1443,7 +1582,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QWidget" name="customWarpWidget">
+          <widget class="QWidget" name="customWarpWidget" native="true">
            <property name="enabled">
             <bool>false</bool>
            </property>
@@ -1496,7 +1635,7 @@
        <item>
         <widget class="QRadioButton" name="cageAddEditRadio">
          <property name="text">
-          <string>Add/Edit Anchor Points</string>
+          <string>Add/Ed&amp;it Anchor Points</string>
          </property>
          <property name="checked">
           <bool>true</bool>
@@ -1512,7 +1651,7 @@
           <bool>true</bool>
          </property>
          <property name="text">
-          <string>Deform Layer</string>
+          <string>De&amp;form Layer</string>
          </property>
          <attribute name="buttonGroup">
           <string notr="true">cageTransformButtonGroup</string>
@@ -1715,7 +1854,7 @@
             </widget>
            </item>
            <item row="4" column="1">
-            <widget class="KisDoubleSliderSpinBox" name="liquifySpacingSlider"/>
+            <widget class="KisDoubleSliderSpinBox" name="liquifySpacingSlider" native="true"/>
            </item>
            <item row="4" column="0">
             <widget class="QLabel" name="lblSpacing">
@@ -1756,7 +1895,7 @@
             </widget>
            </item>
            <item row="3" column="1">
-            <widget class="KisDoubleSliderSpinBox" name="liquifyFlowSlider"/>
+            <widget class="KisDoubleSliderSpinBox" name="liquifyFlowSlider" native="true"/>
            </item>
            <item row="1" column="0">
             <widget class="QLabel" name="lblSize">
@@ -1778,7 +1917,7 @@
             </widget>
            </item>
            <item row="1" column="1">
-            <widget class="KisDoubleSliderSpinBox" name="liquifySizeSlider"/>
+            <widget class="KisDoubleSliderSpinBox" name="liquifySizeSlider" native="true"/>
            </item>
            <item row="2" column="0">
             <widget class="QLabel" name="lblAmount">
@@ -1800,7 +1939,7 @@
             </widget>
            </item>
            <item row="2" column="1">
-            <widget class="KisDoubleSliderSpinBox" name="liquifyAmountSlider"/>
+            <widget class="KisDoubleSliderSpinBox" name="liquifyAmountSlider" native="true"/>
            </item>
            <item row="0" column="0">
             <widget class="QLabel" name="label_2">
@@ -2012,11 +2151,16 @@
     </layout>
    </item>
    <item>
-    <widget class="QWidget" name="SpecialSpacer"/>
+    <widget class="QWidget" name="SpecialSpacer" native="true"/>
    </item>
   </layout>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>KisCmbIDList</class>
+   <extends></extends>
+   <header>widgets/kis_cmb_idlist.h</header>
+  </customwidget>
   <customwidget>
    <class>KoAspectButton</class>
    <extends>QWidget</extends>
@@ -2024,9 +2168,9 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>KisCmbIDList</class>
-   <extends>QComboBox</extends>
-   <header>widgets/kis_cmb_idlist.h</header>
+   <class>KisIntParseSpinBox</class>
+   <extends>QSpinBox</extends>
+   <header>kis_int_parse_spin_box.h</header>
   </customwidget>
   <customwidget>
    <class>KisDoubleSliderSpinBox</class>
@@ -2038,8 +2182,8 @@
  <resources/>
  <connections/>
  <buttongroups>
+  <buttongroup name="cageTransformButtonGroup"/>
   <buttongroup name="buttonGroup"/>
   <buttongroup name="freeTransformRadioGroup"/>
-  <buttongroup name="cageTransformButtonGroup"/>
  </buttongroups>
 </ui>

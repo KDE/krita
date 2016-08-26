@@ -24,7 +24,7 @@
 #include <kpluginfactory.h>
 
 #include <brushengine/kis_paintop_registry.h>
-#include <kis_brush_based_paintop_settings.h>
+#include "kis_colorsmudgeop_settings.h"
 
 #include "kis_colorsmudgeop.h"
 #include "kis_colorsmudgeop_settings_widget.h"
@@ -38,7 +38,7 @@ K_PLUGIN_FACTORY_WITH_JSON(ColorSmudgePaintOpPluginFactory, "kritacolorsmudgepai
 ColorSmudgePaintOpPlugin::ColorSmudgePaintOpPlugin(QObject* parent, const QVariantList&):
     QObject(parent)
 {
-    KisPaintOpRegistry::instance()->add(new KisSimplePaintOpFactory<KisColorSmudgeOp, KisBrushBasedPaintOpSettings, KisColorSmudgeOpSettingsWidget>(
+    KisPaintOpRegistry::instance()->add(new KisSimplePaintOpFactory<KisColorSmudgeOp, KisColorSmudgeOpSettings, KisColorSmudgeOpSettingsWidget>(
                                             "colorsmudge", i18n("Color Smudge"), KisPaintOpFactory::categoryStable(), "krita-colorsmudge.png",
                                             QString(), QStringList(), 2)
                                        );

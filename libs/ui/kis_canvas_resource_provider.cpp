@@ -479,6 +479,26 @@ qreal KisCanvasResourceProvider::opacity() const
     return m_resourceManager->resource(Opacity).toReal();
 }
 
+void KisCanvasResourceProvider::setFlow(qreal flow)
+{
+    m_resourceManager->setResource(Flow, flow);
+}
+
+qreal KisCanvasResourceProvider::flow() const
+{
+    return m_resourceManager->resource(Flow).toReal();
+}
+
+void KisCanvasResourceProvider::setSize(qreal size)
+{
+    m_resourceManager->setResource(Size, size);
+}
+
+qreal KisCanvasResourceProvider::size() const
+{
+    return m_resourceManager->resource(Size).toReal();
+}
+
 void KisCanvasResourceProvider::setSelectionAction(int action)
 {
     m_resourceManager->setResource(SelectionAction, action);
@@ -510,6 +530,16 @@ void KisCanvasResourceProvider::setGlobalAlphaLock(bool lock)
 bool KisCanvasResourceProvider::globalAlphaLock() const
 {
     return m_resourceManager->resource(GlobalAlphaLock).toBool();
+}
+
+void KisCanvasResourceProvider::setDisablePressure(bool value)
+{
+    m_resourceManager->setResource(DisablePressure, value);
+}
+
+bool KisCanvasResourceProvider::disablePressure() const
+{
+    return m_resourceManager->resource(DisablePressure).toBool();
 }
 
 void KisCanvasResourceProvider::notifyLoadingWorkspace(KisWorkspaceResource* workspace)

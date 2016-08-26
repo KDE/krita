@@ -35,7 +35,6 @@
 #include <kis_brush.h>
 
 class KisPaintInformation;
-class RandomGauss;
 
 class SprayBrush
 {
@@ -59,7 +58,6 @@ private:
     quint32 m_particlesCount;
     quint8 m_dabPixelSize;
 
-    RandomGauss * m_rand;
     KisPainter * m_painter;
     KisPaintDeviceSP m_imageDevice;
     QImage m_brushQImage;

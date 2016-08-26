@@ -54,9 +54,7 @@ void ColorSliderDock::setCanvas(KoCanvasBase * canvas)
         m_canvas->disconnectCanvasObserver(this);
     }
     if (m_view) {
-        m_view->resourceProvider()->disconnect(m_colorSliders);
-        m_view->resourceProvider()->disconnect(this);
-        m_view->image()->disconnect(m_colorSliders);
+        m_canvasConnections.clear();
     }
 
     KisCanvas2* kisCanvas = dynamic_cast<KisCanvas2*>(canvas);
@@ -98,11 +96,11 @@ void ColorSliderDock::setCanvas(KoCanvasBase * canvas)
 
         m_colorSliders = new KisColorSliderWidget(kisCanvas->displayColorConverter()->displayRendererInterface(), this, kisCanvas, m_SlidersConfigArray);
         m_layout->addWidget(m_colorSliders);
-        connect(m_colorSliders, SIGNAL(colorChanged(const KoColor&)), view->resourceProvider(), SLOT(slotSetFGColor(const KoColor&)));
-        connect(view->resourceProvider(), SIGNAL(sigFGColorChanged(const KoColor&)), m_colorSliders, SLOT(setColor(const KoColor&)));
 
-        connect(view->resourceProvider(), SIGNAL(sigNodeChanged(const KisNodeSP)), this, SLOT(layerChanged(const KisNodeSP)));
-        connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), m_colorSliders, SLOT(slotConfigChanged()));
+        m_canvasConnections.addConnection(m_colorSliders, SIGNAL(colorChanged(const KoColor&)), view->resourceProvider(), SLOT(slotSetFGColor(const KoColor&)));
+        m_canvasConnections.addConnection(view->resourceProvider(), SIGNAL(sigFGColorChanged(const KoColor&)), m_colorSliders, SLOT(setColor(const KoColor&)));
+        m_canvasConnections.addConnection(kisCanvas->displayColorConverter(), SIGNAL(displayConfigurationChanged()), this, SLOT(udpateSliders()));
+        m_canvasConnections.addConnection(KisConfigNotifier::instance(), SIGNAL(configChanged()), m_colorSliders, SLOT(slotConfigChanged()));
 
         m_canvas = kisCanvas;
         m_view = view;
@@ -120,20 +118,12 @@ void ColorSliderDock::unsetCanvas()
     m_colorSliders = 0;
 }
 
-void ColorSliderDock::layerChanged(const KisNodeSP node)
+void ColorSliderDock::udpateSliders()
 {
-    if (!node) return;
-    if (!node->paintDevice()) return;
     if (!m_colorSliders) return;
-    //if (!m_colorSliders->customColorSpaceUsed()) {
-    //    const KoColorSpace *cs = node->paintDevice() ?
-    //        node->paintDevice()->compositionSourceColorSpace() :
-    //        node->colorSpace();
-    //
-    //    m_colorSliders->setColorSpace(cs);
-    //}
     m_colorSliders->setColor(m_view->resourceProvider()->fgColor());
 }
+
 
 #include "moc_kis_color_slider_dock.cpp"
 

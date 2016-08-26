@@ -78,7 +78,7 @@
           <item row="2" column="0">
            <widget class="QGroupBox" name="specularReflectivityGroup">
             <property name="title">
-             <string>Specular</string>
+             <string>Specula&amp;r</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -113,7 +113,7 @@
               </widget>
              </item>
              <item row="0" column="1">
-              <widget class="KisDoubleSliderSpinBox" name="specularReflectivityKisDoubleSliderSpinBox">
+              <widget class="KisDoubleSliderSpinBox" name="specularReflectivityKisDoubleSliderSpinBox" native="true">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
                  <horstretch>1</horstretch>
@@ -145,7 +145,7 @@
               </widget>
              </item>
              <item row="1" column="1">
-              <widget class="KisSliderSpinBox" name="shinynessExponentKisSliderSpinBox">
+              <widget class="KisSliderSpinBox" name="shinynessExponentKisSliderSpinBox" native="true">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                  <horstretch>1</horstretch>
@@ -191,7 +191,7 @@
              <enum>Qt::LeftToRight</enum>
             </property>
             <property name="title">
-             <string>Diffuse</string>
+             <string>Di&amp;ffuse</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -226,7 +226,7 @@
               </widget>
              </item>
              <item row="0" column="1">
-              <widget class="KisDoubleSliderSpinBox" name="diffuseReflectivityKisDoubleSliderSpinBox">
+              <widget class="KisDoubleSliderSpinBox" name="diffuseReflectivityKisDoubleSliderSpinBox" native="true">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                  <horstretch>1</horstretch>
@@ -304,7 +304,7 @@
               </widget>
              </item>
              <item row="0" column="1">
-              <widget class="KisDoubleSliderSpinBox" name="ambientReflectivityKisDoubleSliderSpinBox">
+              <widget class="KisDoubleSliderSpinBox" name="ambientReflectivityKisDoubleSliderSpinBox" native="true">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
                  <horstretch>1</horstretch>
@@ -425,7 +425,7 @@
           </sizepolicy>
          </property>
          <property name="title">
-          <string>Light Source 4</string>
+          <string>Light Source &amp;4</string>
          </property>
          <property name="flat">
           <bool>true</bool>
@@ -483,7 +483,7 @@
              </widget>
             </item>
             <item row="1" column="1">
-             <widget class="QSpinBox" name="azimuthSpinBox4">
+             <widget class="KisIntParseSpinBox" name="azimuthSpinBox4">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -527,7 +527,7 @@
              </widget>
             </item>
             <item row="2" column="1">
-             <widget class="QSpinBox" name="inclinationSpinBox4">
+             <widget class="KisIntParseSpinBox" name="inclinationSpinBox4">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -611,7 +611,7 @@
           </sizepolicy>
          </property>
          <property name="title">
-          <string>Light Source 2</string>
+          <string>Light Source &amp;2</string>
          </property>
          <property name="flat">
           <bool>true</bool>
@@ -663,7 +663,7 @@
              </widget>
             </item>
             <item row="1" column="1">
-             <widget class="QSpinBox" name="azimuthSpinBox2">
+             <widget class="KisIntParseSpinBox" name="azimuthSpinBox2">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -710,7 +710,7 @@
              </widget>
             </item>
             <item row="2" column="1">
-             <widget class="QSpinBox" name="inclinationSpinBox2">
+             <widget class="KisIntParseSpinBox" name="inclinationSpinBox2">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -797,7 +797,7 @@
           </sizepolicy>
          </property>
          <property name="title">
-          <string>Light Source 1</string>
+          <string>Light Source &amp;1</string>
          </property>
          <property name="flat">
           <bool>true</bool>
@@ -855,7 +855,7 @@
              </widget>
             </item>
             <item row="1" column="1">
-             <widget class="QSpinBox" name="azimuthSpinBox1">
+             <widget class="KisIntParseSpinBox" name="azimuthSpinBox1">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -902,7 +902,7 @@
              </widget>
             </item>
             <item row="2" column="1">
-             <widget class="QSpinBox" name="inclinationSpinBox1">
+             <widget class="KisIntParseSpinBox" name="inclinationSpinBox1">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -986,7 +986,7 @@
           </sizepolicy>
          </property>
          <property name="title">
-          <string>Light Source 3</string>
+          <string>Light Source &amp;3</string>
          </property>
          <property name="flat">
           <bool>true</bool>
@@ -1041,7 +1041,7 @@
              </widget>
             </item>
             <item row="1" column="1">
-             <widget class="QSpinBox" name="azimuthSpinBox3">
+             <widget class="KisIntParseSpinBox" name="azimuthSpinBox3">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -1085,7 +1085,7 @@
              </widget>
             </item>
             <item row="2" column="1">
-             <widget class="QSpinBox" name="inclinationSpinBox3">
+             <widget class="KisIntParseSpinBox" name="inclinationSpinBox3">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -1180,6 +1180,11 @@
   </layout>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>KisIntParseSpinBox</class>
+   <extends>QSpinBox</extends>
+   <header>kis_int_parse_spin_box.h</header>
+  </customwidget>
   <customwidget>
    <class>KColorCombo</class>
    <extends>QComboBox</extends>

@@ -251,6 +251,47 @@ List<QSharedPointer<A>> listToQShared(const List<A*> list) {
     return newList;
 }
 
+
+/**
+ * Convert a list of strong pointers into a list of weak pointers
+ */
+template <template <class> class Container, class T>
+Container<QWeakPointer<T>> listStrongToWeak(const Container<QSharedPointer<T>> &containter)
+{
+    Container<QWeakPointer<T> > result;
+    Q_FOREACH (QSharedPointer<T> v, containter) {
+        result << v;
+    }
+    return result;
+}
+
+/**
+ * Convert a list of weak pointers into a list of strong pointers
+ *
+ * WARNING: By default, uses "all or nothing" rule. If at least one of
+ *          the weak pointers is invalid, returns an *empty* list!
+ *          Even though some other pointer can still be converted
+ *          correctly.
+ */
+template <template <class> class Container, class T>
+    Container<QSharedPointer<T> > listWeakToStrong(const Container<QWeakPointer<T>> &containter,
+                                                   bool allOrNothing = true)
+{
+    Container<QSharedPointer<T> > result;
+    Q_FOREACH (QWeakPointer<T> v, containter) {
+        QSharedPointer<T> strong(v);
+        if (!strong && allOrNothing) {
+            result.clear();
+            return result;
+        }
+
+        if (strong) {
+            result << strong;
+        }
+    }
+    return result;
+}
+
 /**
  * A special wrapper object that converts Qt-style mutexes and locks
  * into an object that supports Std's (and Boost's) "Lockable"

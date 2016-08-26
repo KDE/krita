@@ -35,8 +35,7 @@ void KisPaintopControlObject::setBrushSize(double size)
         return;
     }
     
-    qreal offset = size - m_view->resourceProvider()->currentPreset()->settings()->paintOpSize().width();
-    m_view->resourceProvider()->currentPreset()->settings()->changePaintOpSize(offset, 0);
+    m_view->resourceProvider()->currentPreset()->settings()->setPaintOpSize(size);
 
 }
 
@@ -45,8 +44,8 @@ double KisPaintopControlObject::brushSize()
     if(!m_view || !m_view->resourceProvider()) {
         return 0.0;
     }
-  
-    return m_view->resourceProvider()->currentPreset()->settings()->paintOpSize().width();
+ 
+    return m_view->resourceProvider()->currentPreset()->settings()->paintOpSize();
 }
 
 double KisPaintopControlObject::flow()

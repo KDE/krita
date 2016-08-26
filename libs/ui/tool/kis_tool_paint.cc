@@ -642,7 +642,7 @@ void KisToolPaint::setOutlineEnabled(bool value)
 
 void KisToolPaint::increaseBrushSize()
 {
-    qreal paintopSize = currentPaintOpPreset()->settings()->paintOpSize().width();
+    qreal paintopSize = currentPaintOpPreset()->settings()->paintOpSize();
 
     std::vector<int>::iterator result =
         std::upper_bound(m_standardBrushSizes.begin(),
@@ -651,15 +651,13 @@ void KisToolPaint::increaseBrushSize()
 
     int newValue = result != m_standardBrushSizes.end() ? *result : m_standardBrushSizes.back();
 
-    qreal increment = newValue - paintopSize;
-
-    currentPaintOpPreset()->settings()->changePaintOpSize(increment, 0);
+    currentPaintOpPreset()->settings()->setPaintOpSize(newValue);
     requestUpdateOutline(m_outlineDocPoint, 0);
 }
 
 void KisToolPaint::decreaseBrushSize()
 {
-    qreal paintopSize = currentPaintOpPreset()->settings()->paintOpSize().width();
+    qreal paintopSize = currentPaintOpPreset()->settings()->paintOpSize();
 
     std::vector<int>::reverse_iterator result =
         std::upper_bound(m_standardBrushSizes.rbegin(),
@@ -668,9 +666,8 @@ void KisToolPaint::decreaseBrushSize()
                          std::greater<int>());
 
     int newValue = result != m_standardBrushSizes.rend() ? *result : m_standardBrushSizes.front();
-    qreal decrement = newValue - paintopSize;
 
-    currentPaintOpPreset()->settings()->changePaintOpSize(decrement, 0);
+    currentPaintOpPreset()->settings()->setPaintOpSize(newValue);
     requestUpdateOutline(m_outlineDocPoint, 0);
 }
 

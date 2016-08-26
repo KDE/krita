@@ -124,7 +124,10 @@ private:
 
     QPointF m_initialGestureDocPoint;
     QPointF m_lastDocumentPoint;
+    qreal m_lastPaintOpSize;
     QPoint m_initialGestureGlobalPoint;
+
+    bool m_paintopBasedPickingInAction;
 };
 
 

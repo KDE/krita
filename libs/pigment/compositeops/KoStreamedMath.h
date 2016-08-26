@@ -409,6 +409,8 @@ ALWAYS_INLINE void clearPixel<16>(quint8* dst)
 template<int pixelSize>
 ALWAYS_INLINE void copyPixel(const quint8 *src, quint8* dst)
 {
+    Q_UNUSED(src);
+    Q_UNUSED(dst);
     qFatal("Not implemented");
 }
 

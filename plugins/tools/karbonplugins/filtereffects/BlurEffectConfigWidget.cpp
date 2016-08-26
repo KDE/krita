@@ -27,13 +27,15 @@
 #include <QGridLayout>
 #include <QLabel>
 
+#include "kis_double_parse_spin_box.h"
+
 BlurEffectConfigWidget::BlurEffectConfigWidget(QWidget *parent)
     : KoFilterEffectConfigWidgetBase(parent), m_effect(0)
 {
     QGridLayout *g = new QGridLayout(this);
 
     g->addWidget(new QLabel(i18n("Radius"), this), 0, 0);
-    m_stdDeviation = new QDoubleSpinBox(this);
+    m_stdDeviation = new KisDoubleParseSpinBox(this);
     m_stdDeviation->setRange(0.0, 100);
     m_stdDeviation->setSingleStep(0.5);
     g->addWidget(m_stdDeviation, 0, 1);

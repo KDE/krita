@@ -29,6 +29,9 @@
 
 #include "kis_icon.h"
 #include "kis_screen_color_picker.h"
+#include "KisMainWindow.h"
+#include <kis_canvas2.h>
+#include "kis_wrapped_rect.h"
 
 struct KisScreenColorPicker::Private
 {
@@ -119,6 +122,32 @@ void KisScreenColorPicker::setCurrentColor(KoColor c)
 
 KoColor KisScreenColorPicker::grabScreenColor(const QPoint &p)
 {
+    QWidget* topLevelWidget = parentWidget();
+    while (topLevelWidget->parentWidget())
+        topLevelWidget = topLevelWidget->parentWidget();
+
+    KisMainWindow* window = dynamic_cast<KisMainWindow*>(topLevelWidget);
+    KisView* activeView = window->activeView();
+    if(activeView) {
+        QWidget* canvasWidget = activeView->canvasBase()->canvasWidget();
+        QPoint widgetPoint = canvasWidget->mapFromGlobal(p);
+
+        if(canvasWidget->rect().contains(widgetPoint))
+        {
+            QPointF imagePoint = activeView->canvasBase()->coordinatesConverter()->widgetToImage(widgetPoint);
+            KisImageWSP image = activeView->image();
+            if(image)
+            {
+                if (activeView->image()->wrapAroundModePermitted()) {
+                    imagePoint = KisWrappedRect::ptToWrappedPt(imagePoint.toPoint(), image->bounds());
+                }
+                KoColor pickedColor = KoColor();
+                image->projection()->pixel(imagePoint.x(), imagePoint.y(), &pickedColor);
+                return pickedColor;
+            }
+        }
+    }
+
     const QDesktopWidget *desktop = QApplication::desktop();
     const QPixmap pixmap = QGuiApplication::screens().at(desktop->screenNumber())->grabWindow(desktop->winId(),
                                                                                               p.x(), p.y(), 1, 1);

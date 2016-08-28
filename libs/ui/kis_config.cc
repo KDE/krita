@@ -357,6 +357,18 @@ void KisConfig::setUseEraserBrushSize(bool value)
     KisConfigNotifier::instance()->notifyConfigChanged();
 }
 
+bool KisConfig::useEraserBrushOpacity(bool defaultValue) const
+{
+   return (defaultValue ? false : m_cfg.readEntry("useEraserBrushOpacity",false));
+}
+
+void KisConfig::setUseEraserBrushOpacity(bool value)
+{
+    m_cfg.writeEntry("useEraserBrushOpacity",value);
+    KisConfigNotifier::instance()->notifyConfigChanged();
+}
+
+
 QColor KisConfig::getMDIBackgroundColor(bool defaultValue) const
 {
     QColor col(77, 77, 77);

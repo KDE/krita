@@ -451,7 +451,8 @@ void ColorSettingsTab::setDefault()
     m_page->ckbProofBlackPoint->setChecked(proofingConfig->conversionFlags.testFlag(KoColorConversionTransformation::BlackpointCompensation));
     m_page->sldAdaptationState->setValue(0);
 
-    m_page->gamutAlarm->setColor(proofingConfig->warningColor);
+    //probably this should become the screenprofile?
+    m_page->gamutAlarm->setColor(proofingConfig->warningColor.convertTo(KoColorSpaceRegistry::instance()->rgb8()));
 
     m_page->chkBlackpoint->setChecked(cfg.useBlackPointCompensation(true));
     m_page->chkAllowLCMSOptimization->setChecked(cfg.allowLCMSOptimization(true));
@@ -709,13 +710,13 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
 
     intCheckSize->setValue(cfg.checkSize());
     chkMoving->setChecked(cfg.scrollCheckers());
-    KoColor ck1;
+    KoColor ck1(KoColorSpaceRegistry::instance()->rgb8());
     ck1.fromQColor(cfg.checkersColor1());
     colorChecks1->setColor(ck1);
-    KoColor ck2;
+    KoColor ck2(KoColorSpaceRegistry::instance()->rgb8());
     ck2.fromQColor(cfg.checkersColor2());
     colorChecks2->setColor(ck2);
-    KoColor cb;
+    KoColor cb(KoColorSpaceRegistry::instance()->rgb8());
     cb.fromQColor(cfg.canvasBorderColor());
     canvasBorder->setColor(cb);
     hideScrollbars->setChecked(cfg.hideScrollbars());
@@ -750,13 +751,13 @@ void DisplaySettingsTab::setDefault()
 
     chkMoving->setChecked(cfg.scrollCheckers(true));
     intCheckSize->setValue(cfg.checkSize(true));
-    KoColor ck1;
+    KoColor ck1(KoColorSpaceRegistry::instance()->rgb8());
     ck1.fromQColor(cfg.checkersColor1(true));
     colorChecks1->setColor(ck1);
-    KoColor ck2;
+    KoColor ck2(KoColorSpaceRegistry::instance()->rgb8());
     ck2.fromQColor(cfg.checkersColor2(true));
     colorChecks2->setColor(ck2);
-    KoColor cvb;
+    KoColor cvb(KoColorSpaceRegistry::instance()->rgb8());
     cvb.fromQColor(cfg.canvasBorderColor(true));
     canvasBorder->setColor(cvb);
     hideScrollbars->setChecked(cfg.hideScrollbars(true));

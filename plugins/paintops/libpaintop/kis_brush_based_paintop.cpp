@@ -116,7 +116,7 @@ bool KisBrushBasedPaintOp::checkSizeTooSmall(qreal scale)
 KisSpacingInformation KisBrushBasedPaintOp::effectiveSpacing(qreal scale, qreal rotation) const
 {
     // we parse dab rotation separately, so don't count it
-    QSizeF metric = m_brush->characteristicSize(scale, scale, 0);
+    QSizeF metric = m_brush->characteristicSize(KisDabShape(scale, 1.0, 0));
     return effectiveSpacing(metric.width(), metric.height(), 1.0, false, rotation);
 }
 
@@ -127,7 +127,7 @@ KisSpacingInformation KisBrushBasedPaintOp::effectiveSpacing(qreal scale, qreal 
     }
 
     // we parse dab rotation separately, so don't count it
-    QSizeF metric = m_brush->characteristicSize(scale, scale, 0);
+    QSizeF metric = m_brush->characteristicSize(KisDabShape(scale, 1.0, 0));
     return effectiveSpacing(metric.width(), metric.height(), extraSpacingScale, spacingOption.isotropicSpacing(), rotation);
 }
 

@@ -29,7 +29,7 @@
    <item row="0" column="0">
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>3</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tab">
       <attribute name="title">
@@ -248,7 +248,7 @@
           </layout>
          </item>
          <item row="2" column="1">
-          <widget class="KColorButton" name="m_mdiColor">
+          <widget class="KisColorButton" name="m_mdiColor">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -704,10 +704,9 @@
    <header>kis_int_parse_spin_box.h</header>
   </customwidget>
   <customwidget>
-   <class>KColorButton</class>
+   <class>KisColorButton</class>
    <extends>QPushButton</extends>
-   <header>kcolorbutton.h</header>
-   <container>1</container>
+   <header>kis_color_button.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

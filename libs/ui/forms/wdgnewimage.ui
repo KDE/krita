@@ -507,7 +507,7 @@
         </layout>
        </item>
        <item row="2" column="2">
-        <widget class="KColorButton" name="cmbColor">
+        <widget class="KisColorButton" name="cmbColor">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -645,6 +645,22 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>KisIntParseSpinBox</class>
+   <extends>QSpinBox</extends>
+   <header>kis_int_parse_spin_box.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KisColorButton</class>
+   <extends>QPushButton</extends>
+   <header>kis_color_button.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KisDoubleSliderSpinBox</class>
+   <extends>QWidget</extends>
+   <header>kis_slider_spin_box.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
    <class>KisColorSpaceSelector</class>
    <extends>QWidget</extends>
    <header>widgets/kis_color_space_selector.h</header>
@@ -654,23 +670,6 @@
    <class>KisDoubleParseSpinBox</class>
    <extends>QDoubleSpinBox</extends>
    <header>kis_double_parse_spin_box.h</header>
-  </customwidget>
-  <customwidget>
-   <class>KColorButton</class>
-   <extends>QPushButton</extends>
-   <header>kcolorbutton.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>KisDoubleSliderSpinBox</class>
-   <extends>QWidget</extends>
-   <header>kis_slider_spin_box.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>KisIntParseSpinBox</class>
-   <extends>QSpinBox</extends>
-   <header>kis_int_parse_spin_box.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

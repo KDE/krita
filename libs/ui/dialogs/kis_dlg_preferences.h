@@ -28,6 +28,7 @@
 #include "KoColorPopupAction.h"
 
 #include "kis_global.h"
+#include "widgets/squeezedcombobox.h"
 
 #include "ui_wdggeneralsettings.h"
 #include "ui_wdgdisplaysettings.h"

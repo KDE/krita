@@ -97,6 +97,10 @@ public:
     /// @return the default file extension which should be used when saving the resource
     virtual QString defaultFileExtension() const;
 
+    /// @return true if the resource is permanent and can't be removed by the user    
+    bool permanent() const;
+    void setPermanent(bool permanent);
+
 protected:
 
     /// override generateMD5 and in your resource subclass

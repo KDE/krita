@@ -21,31 +21,33 @@
 
 #include <QRect>
 
-#include <kis_brush_based_paintop.h>
+#include <kis_paintop.h>
 #include <kis_types.h>
 #include <kis_pressure_size_option.h>
 #include <kis_pressure_spacing_option.h>
+#include "kis_roundmarker_option.h"
 
 class QPointF;
-class KisBrushBasedPaintOpSettings;
+class KisPaintOpSettings;
 class KisPainter;
 
-class KisRoundMarkerOp: public KisBrushBasedPaintOp
+class KisRoundMarkerOp: public KisPaintOp
 {
 public:
-    KisRoundMarkerOp(const KisBrushBasedPaintOpSettings* settings, KisPainter* painter, KisNodeSP node, KisImageSP image);
+    KisRoundMarkerOp(const KisPaintOpSettings* settings, KisPainter* painter, KisNodeSP node, KisImageSP image);
     virtual ~KisRoundMarkerOp();
 
     KisSpacingInformation paintAt(const KisPaintInformation& info);
 
 private:
     bool                      m_firstRun;
-    KisImageSP               m_image;
+    KisImageSP                m_image;
     KisPaintDeviceSP          m_tempDev;
     KisPressureSizeOption     m_sizeOption;
     KisPressureSpacingOption  m_spacingOption;
     QPointF                   m_lastPaintPos;
     qreal                     m_lastRadius;
+    RoundMarkerOption         m_markerOption;
 };
 
 #endif // _KIS_ROUNDMARKEROP_H_

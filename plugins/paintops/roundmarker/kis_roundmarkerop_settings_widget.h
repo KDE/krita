@@ -19,11 +19,11 @@
 #ifndef KIS_ROUNDMARKEROP_SETTINGS_WIDGET_H_
 #define KIS_ROUNDMARKEROP_SETTINGS_WIDGET_H_
 
-#include <kis_brush_based_paintop_options_widget.h>
+#include <kis_paintop_settings_widget.h>
 
 class KisSmudgeOptionWidget;
 
-class KisRoundMarkerOpSettingsWidget : public KisBrushBasedPaintopOptionWidget
+class KisRoundMarkerOpSettingsWidget : public KisPaintOpSettingsWidget
 {
     Q_OBJECT
 

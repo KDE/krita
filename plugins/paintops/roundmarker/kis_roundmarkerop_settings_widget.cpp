@@ -29,14 +29,16 @@
 #include "kis_curve_option_widget.h"
 //#include "kis_pressure_texture_strength_option.h"
 #include "kis_roundmarkerop_settings.h"
+#include "kis_roundmarker_option.h"
 
 
-KisRoundMarkerOpSettingsWidget::KisRoundMarkerOpSettingsWidget(QWidget* parent):
-    KisBrushBasedPaintopOptionWidget(parent)
+KisRoundMarkerOpSettingsWidget::KisRoundMarkerOpSettingsWidget(QWidget* parent)
+    : KisPaintOpSettingsWidget(parent)
 {
-    setObjectName("brush option widget");
-    setPrecisionEnabled(true);
+    setObjectName("roundmarker option widget");
+    //setPrecisionEnabled(true);
 
+    addPaintOpOption(new KisRoundMarkerOption(), i18n("Brush"));
     addPaintOpOption(new KisCompositeOpOption(true), i18n("Blending Mode"));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption(), i18n("0%"), i18n("100%")), i18n("Size"));
     addPaintOpOption(new KisPressureSpacingOptionWidget(), i18n("Spacing"));

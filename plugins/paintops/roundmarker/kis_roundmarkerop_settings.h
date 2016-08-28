@@ -20,16 +20,22 @@
 #define __KIS_ROUNDMARKEROP_SETTINGS_H
 
 #include <QScopedPointer>
-#include <kis_brush_based_paintop_settings.h>
+#include <kis_paintop_settings.h>
+#include <kis_outline_generation_policy.h>
 
 
-class KisRoundMarkerOpSettings : public KisBrushBasedPaintOpSettings
+class KisRoundMarkerOpSettings : public KisOutlineGenerationPolicy<KisPaintOpSettings>
 {
 public:
     KisRoundMarkerOpSettings();
     ~KisRoundMarkerOpSettings();
 
     bool paintIncremental();
+
+    qreal paintOpSize() const;
+    void setPaintOpSize(qreal value);
+
+    QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode) const;
 
 private:
     struct Private;

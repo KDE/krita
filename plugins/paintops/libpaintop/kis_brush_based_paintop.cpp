@@ -22,6 +22,7 @@
 #include <kis_pressure_spacing_option.h>
 #include "kis_painter.h"
 #include <kis_lod_transform.h>
+#include "kis_paintop_utils.h"
 
 #include <QGlobalStatic>
 
@@ -109,8 +110,7 @@ KisBrushBasedPaintOp::~KisBrushBasedPaintOp()
 bool KisBrushBasedPaintOp::checkSizeTooSmall(qreal scale)
 {
     scale *= m_brush->scale();
-
-    return (scale * m_brush->width() < 0.01 || scale * m_brush->height() < 0.01);
+    return KisPaintOpUtils::checkSizeTooSmall(scale, m_brush->width(), m_brush->height());
 }
 
 KisSpacingInformation KisBrushBasedPaintOp::effectiveSpacing(qreal scale, qreal rotation) const
@@ -131,46 +131,16 @@ KisSpacingInformation KisBrushBasedPaintOp::effectiveSpacing(qreal scale, qreal 
     return effectiveSpacing(metric.width(), metric.height(), extraSpacingScale, spacingOption.isotropicSpacing(), rotation);
 }
 
-inline qreal KisBrushBasedPaintOp::calcAutoSpacing(qreal value, qreal coeff)
-{
-    return coeff * (value < 1.0 ? value : sqrt(value));
-}
-
-QPointF KisBrushBasedPaintOp::calcAutoSpacing(const QPointF &pt, qreal coeff) const
-{
-    const qreal lodScale = KisLodTransform::lodToScale(painter()->device());
-    const qreal invLodScale = 1.0 / lodScale;
-    const QPointF lod0Point = invLodScale * pt;
-
-    return lodScale * QPointF(calcAutoSpacing(lod0Point.x(), coeff), calcAutoSpacing(lod0Point.y(), coeff));
-}
-
 KisSpacingInformation KisBrushBasedPaintOp::effectiveSpacing(qreal dabWidth, qreal dabHeight, qreal extraScale, bool isotropicSpacing, qreal rotation) const
 {
-    QPointF spacing;
-
-    if (!isotropicSpacing) {
-        if (m_brush->autoSpacingActive()) {
-            spacing = calcAutoSpacing(QPointF(dabWidth, dabHeight), m_brush->autoSpacingCoeff());
-        } else {
-            spacing = QPointF(dabWidth, dabHeight);
-            spacing *= m_brush->spacing();
-        }
-    }
-    else {
-        qreal significantDimension = qMax(dabWidth, dabHeight);
-        if (m_brush->autoSpacingActive()) {
-            significantDimension = calcAutoSpacing(significantDimension, m_brush->autoSpacingCoeff());
-        } else {
-            significantDimension *= m_brush->spacing();
-        }
-        spacing = QPointF(significantDimension, significantDimension);
-        rotation = 0.0;
-    }
-
-    spacing *= extraScale;
-
-    return KisSpacingInformation(spacing, rotation);
+    return KisPaintOpUtils::effectiveSpacing(dabWidth, dabHeight,
+                                             extraScale,
+                                             isotropicSpacing,
+                                             rotation,
+                                             m_brush->spacing(),
+                                             m_brush->autoSpacingActive(),
+                                             m_brush->autoSpacingCoeff(),
+                                             KisLodTransform::lodToScale(painter()->device()));
 }
 
 bool KisBrushBasedPaintOp::canPaint() const

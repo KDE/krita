@@ -17,6 +17,7 @@
  */
 
 #include "kis_roundmarkerop_settings.h"
+#include "kis_roundmarker_option.h"
 
 
 struct KisRoundMarkerOpSettings::Private
@@ -24,7 +25,10 @@ struct KisRoundMarkerOpSettings::Private
 };
 
 KisRoundMarkerOpSettings::KisRoundMarkerOpSettings()
-    : m_d(new Private)
+    : KisOutlineGenerationPolicy<KisPaintOpSettings>(KisCurrentOutlineFetcher::SIZE_OPTION |
+                                                     KisCurrentOutlineFetcher::ROTATION_OPTION |
+                                                     KisCurrentOutlineFetcher::MIRROR_OPTION),
+    m_d(new Private)
 {
 }
 
@@ -34,4 +38,47 @@ KisRoundMarkerOpSettings::~KisRoundMarkerOpSettings()
 
 bool KisRoundMarkerOpSettings::paintIncremental() {
     return false;
+}
+
+void KisRoundMarkerOpSettings::setPaintOpSize(qreal value)
+{
+    RoundMarkerOption op;
+    op.readOptionSetting(this);
+    op.diameter = value;
+    op.writeOptionSetting(this);
+}
+
+qreal KisRoundMarkerOpSettings::paintOpSize() const
+{
+    RoundMarkerOption op;
+    op.readOptionSetting(this);
+    return op.diameter;
+}
+
+QPainterPath KisRoundMarkerOpSettings::brushOutline(const KisPaintInformation &info, OutlineMode mode) const
+{
+    QPainterPath path;
+
+    if (mode == CursorIsOutline || mode == CursorIsCircleOutline || mode == CursorTiltOutline) {
+        qreal finalScale = 1.0;
+
+        RoundMarkerOption op;
+        op.readOptionSetting(this);
+        const qreal radius = 0.5 * op.diameter;
+
+        QPainterPath realOutline;
+        realOutline.addEllipse(QPointF(), radius, radius);
+
+        path = outlineFetcher()->fetchOutline(info, this, realOutline, finalScale);
+
+        if (mode == CursorTiltOutline) {
+            QPainterPath tiltLine = makeTiltIndicator(info,
+                realOutline.boundingRect().center(),
+                realOutline.boundingRect().width() * 0.5,
+                3.0);
+            path.addPath(outlineFetcher()->fetchOutline(info, this, tiltLine, finalScale, 0.0, true, realOutline.boundingRect().center().x(), realOutline.boundingRect().center().y()));
+        }
+    }
+
+    return path;
 }

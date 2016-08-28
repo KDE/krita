@@ -452,7 +452,9 @@ void ColorSettingsTab::setDefault()
     m_page->sldAdaptationState->setValue(0);
 
     //probably this should become the screenprofile?
-    m_page->gamutAlarm->setColor(proofingConfig->warningColor.convertTo(KoColorSpaceRegistry::instance()->rgb8()));
+    KoColor ga(KoColorSpaceRegistry::instance()->rgb8());
+    ga.fromKoColor(proofingConfig->warningColor);
+    m_page->gamutAlarm->setColor(ga);
 
     m_page->chkBlackpoint->setChecked(cfg.useBlackPointCompensation(true));
     m_page->chkAllowLCMSOptimization->setChecked(cfg.allowLCMSOptimization(true));

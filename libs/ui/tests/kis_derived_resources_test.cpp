@@ -33,15 +33,46 @@
 #include <KisView.h>
 #include <KisViewManager.h>
 #include <kis_paintop_settings.h>
-
+#include <KoResourcePaths.h>
 
 #include "testutil.h"
+
+void addResourceTypes()
+{
+    // All Krita's resource types
+    KoResourcePaths::addResourceType("kis_pics", "data", "/pics/");
+    KoResourcePaths::addResourceType("kis_images", "data", "/images/");
+    KoResourcePaths::addResourceType("icc_profiles", "data", "/profiles/");
+    KoResourcePaths::addResourceType("metadata_schema", "data", "/metadata/schemas/");
+    KoResourcePaths::addResourceType("kis_brushes", "data", "/brushes/");
+    KoResourcePaths::addResourceType("kis_taskset", "data", "/taskset/");
+    KoResourcePaths::addResourceType("kis_taskset", "data", "/taskset/");
+    KoResourcePaths::addResourceType("gmic_definitions", "data", "/gmic/");
+    KoResourcePaths::addResourceType("kis_resourcebundles", "data", "/bundles/");
+    KoResourcePaths::addResourceType("kis_defaultpresets", "data", "/defaultpresets/");
+    KoResourcePaths::addResourceType("kis_paintoppresets", "data", "/paintoppresets/");
+    KoResourcePaths::addResourceType("kis_workspaces", "data", "/workspaces/");
+    KoResourcePaths::addResourceType("psd_layer_style_collections", "data", "/asl");
+    KoResourcePaths::addResourceType("ko_patterns", "data", "/patterns/", true);
+    KoResourcePaths::addResourceType("ko_gradients", "data", "/gradients/");
+    KoResourcePaths::addResourceType("ko_gradients", "data", "/gradients/", true);
+    KoResourcePaths::addResourceType("ko_palettes", "data", "/palettes/", true);
+    KoResourcePaths::addResourceType("kis_shortcuts", "data", "/shortcuts/");
+    KoResourcePaths::addResourceType("kis_actions", "data", "/actions");
+    KoResourcePaths::addResourceType("icc_profiles", "data", "/color/icc");
+    KoResourcePaths::addResourceType("ko_effects", "data", "/effects/");
+    KoResourcePaths::addResourceType("tags", "data", "/tags/");
+
+}
 
 
 
 void KisDerivedResourcesTest::test()
 {
     KisDocument* doc = createEmptyDocument();
+
+    addResourceTypes();
+
     KisMainWindow* mainWindow = KisPart::instance()->createMainWindow();
     QPointer<KisView> view = new KisView(doc, mainWindow->resourceManager(), mainWindow->actionCollection(), mainWindow);
     KisViewManager *viewManager = new KisViewManager(mainWindow, mainWindow->actionCollection());
@@ -79,11 +110,17 @@ void KisDerivedResourcesTest::test()
     QCOMPARE(spy[2][0].toInt(), (int)KisCanvasResourceProvider::LodAvailability);
     QCOMPARE(spy[2][1].toBool(), true);
 
-    QCOMPARE(spy[3][0].toInt(), (int)KisCanvasResourceProvider::Opacity);
+    QCOMPARE(spy[3][0].toInt(), (int)KisCanvasResourceProvider::Size);
     QCOMPARE(spy[3][1].toDouble(), 1.0);
 
-    QCOMPARE(spy[4][0].toInt(), (int)KisCanvasResourceProvider::CurrentEffectiveCompositeOp);
-    QCOMPARE(spy[4][1].toString(), COMPOSITE_OVER);
+    QCOMPARE(spy[4][0].toInt(), (int)KisCanvasResourceProvider::Flow);
+    QCOMPARE(spy[4][1].toDouble(), 1.0);
+
+    QCOMPARE(spy[5][0].toInt(), (int)KisCanvasResourceProvider::Opacity);
+    QCOMPARE(spy[5][1].toDouble(), 1.0);
+
+    QCOMPARE(spy[6][0].toInt(), (int)KisCanvasResourceProvider::CurrentEffectiveCompositeOp);
+    QCOMPARE(spy[6][1].toString(), COMPOSITE_OVER);
 
     spy.clear();
 

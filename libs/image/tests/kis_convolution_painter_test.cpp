@@ -280,7 +280,7 @@ void KisConvolutionPainterTest::benchmarkConvolution()
 
     int diameter = 1;
 
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 3; i++) {
 
         KisCircleMaskGenerator* kas = new KisCircleMaskGenerator(diameter, 1.0, 5, 5, 2, false);
         KisConvolutionKernelSP kernel = KisConvolutionKernel::fromMaskGenerator(kas);

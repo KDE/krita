@@ -1,9 +1,10 @@
-#version 150
+#version 150 core
 uniform mat4 modelViewProjection;
 
-in highp vec4 a_vertexPosition;
+in vec4 in_vertexPosition;
 
 void main()
 {
-    gl_Position = modelViewProjection * a_vertexPosition;
+    gl_Position = modelViewProjection * in_vertexPosition;
 }
+

@@ -416,7 +416,10 @@ void KisOpenGLCanvas2::drawCheckers()
     textureTransform *= QTransform::fromScale(d->checkSizeScale / KisOpenGLImageTextures::BACKGROUND_TEXTURE_SIZE,
                                               d->checkSizeScale / KisOpenGLImageTextures::BACKGROUND_TEXTURE_SIZE);
 
-    d->checkerShader->bind();
+    if (!d->checkerShader->bind()) {
+        qWarning() << "Could not bind checker shader";
+        return;
+    }
 
     QMatrix4x4 projectionMatrix;
     projectionMatrix.setToIdentity();

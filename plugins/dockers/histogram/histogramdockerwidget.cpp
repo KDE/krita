@@ -23,6 +23,7 @@
 #include <algorithm>
 #include <QTime>
 #include <QPainter>
+#include <functional>
 
 #include "KoChannelInfo.h"
 #include "kis_paint_device.h"

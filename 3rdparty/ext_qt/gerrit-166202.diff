@@ -1,33 +1,7 @@
-From b483978adc373879ba97529522d740c6b7cd7919 Mon Sep 17 00:00:00 2001
-From: Julian Thijssen <Nimthora@gmail.com>
-Date: Wed, 27 Jul 2016 15:45:31 +0200
-Subject: [PATCH] Converted paintengine for OpenGL3+ core profile contexts
-
-This change allows a user to paint on a QOpenGLWidget with a QPainter,
-whenever an OpenGL3+ Core Profile format is used or enforced (such as
-on macOS).
-
-- Core Profile shaders add that use modern keywords (in, out, etc.).
-- Paint engine binds a single VAO and two VBOs.
-- Vertex and texture data is uploaded to VBO instead
-  of directly to the GPU.
-
-Fixes bug: QTBUG-33535
-
-Change-Id: I6323a7ea2aaa9e111651ebbffd3e40259c8e7a9c
----
- src/gui/opengl/qopenglengineshadermanager.cpp | 160 +++++---
- src/gui/opengl/qopenglengineshadersource_p.h  | 518 ++++++++++++++++++++++++--
- src/gui/opengl/qopenglpaintengine.cpp         |  89 +++--
- src/gui/opengl/qopenglpaintengine_p.h         |  52 ++-
- src/gui/opengl/qopengltextureglyphcache.cpp   |   4 +-
- src/gui/opengl/qtriangulatingstroker.cpp      |   2 +-
- 6 files changed, 701 insertions(+), 124 deletions(-)
-
-diff --git a/src/gui/opengl/qopenglengineshadermanager.cpp b/src/gui/opengl/qopenglengineshadermanager.cpp
+diff --git a/qtbase/src/gui/opengl/qopenglengineshadermanager.cpp b/qtbase/src/gui/opengl/qopenglengineshadermanager.cpp
 index 4e3d14b..c633236 100644
---- a/src/gui/opengl/qopenglengineshadermanager.cpp
-+++ b/src/gui/opengl/qopenglengineshadermanager.cpp
+--- a/qtbase/src/gui/opengl/qopenglengineshadermanager.cpp
++++ b/qtbase/src/gui/opengl/qopenglengineshadermanager.cpp
 @@ -131,58 +131,116 @@ QOpenGLEngineSharedShaders::QOpenGLEngineSharedShaders(QOpenGLContext* context)
  
          const char** code = qShaderSnippets; // shortcut
@@ -196,10 +170,10 @@ index 4e3d14b..c633236 100644
          code[NoCompositionModeFragmentShader] = "";
          code[MultiplyCompositionModeFragmentShader] = ""; //###
          code[ScreenCompositionModeFragmentShader] = ""; //###
-diff --git a/src/gui/opengl/qopenglengineshadersource_p.h b/src/gui/opengl/qopenglengineshadersource_p.h
+diff --git a/qtbase/src/gui/opengl/qopenglengineshadersource_p.h b/qtbase/src/gui/opengl/qopenglengineshadersource_p.h
 index 876d277..73aeb79 100644
---- a/src/gui/opengl/qopenglengineshadersource_p.h
-+++ b/src/gui/opengl/qopenglengineshadersource_p.h
+--- a/qtbase/src/gui/opengl/qopenglengineshadersource_p.h
++++ b/qtbase/src/gui/opengl/qopenglengineshadersource_p.h
 @@ -56,8 +56,6 @@
  
  QT_BEGIN_NAMESPACE
@@ -737,10 +711,10 @@ index 876d277..73aeb79 100644
  
  QT_END_NAMESPACE
  
-diff --git a/src/gui/opengl/qopenglpaintengine.cpp b/src/gui/opengl/qopenglpaintengine.cpp
+diff --git a/qtbase/src/gui/opengl/qopenglpaintengine.cpp b/qtbase/src/gui/opengl/qopenglpaintengine.cpp
 index d93871c..4cc4218 100644
---- a/src/gui/opengl/qopenglpaintengine.cpp
-+++ b/src/gui/opengl/qopenglpaintengine.cpp
+--- a/qtbase/src/gui/opengl/qopenglpaintengine.cpp
++++ b/qtbase/src/gui/opengl/qopenglpaintengine.cpp
 @@ -99,6 +99,10 @@ QOpenGL2PaintEngineExPrivate::~QOpenGL2PaintEngineExPrivate()
  {
      delete shaderManager;
@@ -970,10 +944,10 @@ index d93871c..4cc4218 100644
      if (isActive() && ctx->d_func()->active_engine != this) {
          ctx->d_func()->active_engine = this;
          d->needsSync = true;
-diff --git a/src/gui/opengl/qopenglpaintengine_p.h b/src/gui/opengl/qopenglpaintengine_p.h
+diff --git a/qtbase/src/gui/opengl/qopenglpaintengine_p.h b/qtbase/src/gui/opengl/qopenglpaintengine_p.h
 index c9f3282..fe63747 100644
---- a/src/gui/opengl/qopenglpaintengine_p.h
-+++ b/src/gui/opengl/qopenglpaintengine_p.h
+--- a/qtbase/src/gui/opengl/qopenglpaintengine_p.h
++++ b/qtbase/src/gui/opengl/qopenglpaintengine_p.h
 @@ -64,6 +64,9 @@
  
  #include <private/qopenglextensions_p.h>
@@ -1063,10 +1037,10 @@ index c9f3282..fe63747 100644
  }
  
  QT_END_NAMESPACE
-diff --git a/src/gui/opengl/qopengltextureglyphcache.cpp b/src/gui/opengl/qopengltextureglyphcache.cpp
+diff --git a/qtbase/src/gui/opengl/qopengltextureglyphcache.cpp b/qtbase/src/gui/opengl/qopengltextureglyphcache.cpp
 index 9a7b1eb..3a03989 100644
---- a/src/gui/opengl/qopengltextureglyphcache.cpp
-+++ b/src/gui/opengl/qopengltextureglyphcache.cpp
+--- a/qtbase/src/gui/opengl/qopengltextureglyphcache.cpp
++++ b/qtbase/src/gui/opengl/qopengltextureglyphcache.cpp
 @@ -380,8 +380,8 @@ void QOpenGLTextureGlyphCache::resizeTextureData(int width, int height)
          blitProgram = m_blitProgram;
  
@@ -1078,10 +1052,10 @@ index 9a7b1eb..3a03989 100644
  
          pex->shaderManager->useBlitProgram();
          blitProgram = pex->shaderManager->blitProgram();
-diff --git a/src/gui/opengl/qtriangulatingstroker.cpp b/src/gui/opengl/qtriangulatingstroker.cpp
+diff --git a/qtbase/src/gui/opengl/qtriangulatingstroker.cpp b/qtbase/src/gui/opengl/qtriangulatingstroker.cpp
 index d9a3231..a7ce6c8 100644
---- a/src/gui/opengl/qtriangulatingstroker.cpp
-+++ b/src/gui/opengl/qtriangulatingstroker.cpp
+--- a/qtbase/src/gui/opengl/qtriangulatingstroker.cpp
++++ b/qtbase/src/gui/opengl/qtriangulatingstroker.cpp
 @@ -261,7 +261,7 @@ void QTriangulatingStroker::moveTo(const qreal *pts)
      normalVector(m_cx, m_cy, x2, y2, &m_nvx, &m_nvy);
  
@@ -1091,6 +1065,3 @@ index d9a3231..a7ce6c8 100644
      // adding two identical points in both the end of previous strip
      // and beginning of next strip
      bool invisibleJump = m_vertices.size();
--- 
-2.7.4
-

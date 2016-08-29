@@ -292,20 +292,16 @@ void KisOpenGLCanvas2::paintGL()
 
     KisOpenglCanvasDebugger::instance()->nofityPaintRequested();
 
-    QPainter gc(this);
-    gc.beginNativePainting();
-
     renderCanvasGL();
 
     if (d->glSyncObject) {
         Sync::deleteSync(d->glSyncObject);
     }
     d->glSyncObject = Sync::getSync();
-    gc.endNativePainting();
 
+    QPainter gc(this);
     renderDecorations(&gc);
     gc.end();
-
 
     if (!OPENGL_SUCCESS) {
         KisConfig cfg;

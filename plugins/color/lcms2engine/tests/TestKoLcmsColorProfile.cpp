@@ -192,8 +192,8 @@ void TestKoLcmsColorProfile::testProofingConversion()
     quint16 alarm[cmsMAXCHANNELS];
     bzero(alarm,sizeof(quint16)*cmsMAXCHANNELS);
     alarm[0] = 65535;
-    alarm[1] = 65535;
-    alarm[2] = 65535;
+    alarm[1] = 0;
+    alarm[2] = 0;
     alarm[3] = 65535;
     cmsSetAlarmCodes(alarm);
 

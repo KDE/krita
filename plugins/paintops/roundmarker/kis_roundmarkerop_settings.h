@@ -37,6 +37,8 @@ public:
 
     QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode) const;
 
+    QList<KisUniformPaintOpPropertySP> uniformProperties();
+
 private:
     struct Private;
     const QScopedPointer<Private> m_d;

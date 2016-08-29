@@ -108,10 +108,8 @@ KisInternalColorSelector::KisInternalColorSelector(QWidget *parent, KoColor colo
     if (config.prevNextButtons) {
         m_ui->currentColor->setColor(m_d->currentColor);
         m_ui->currentColor->setDisplayRenderer(displayRenderer);
-        m_ui->currentColor->setFrameStyle(QFrame::StyledPanel);
         m_ui->previousColor->setColor(m_d->currentColor);
         m_ui->previousColor->setDisplayRenderer(displayRenderer);
-        m_ui->previousColor->setFrameStyle(QFrame::StyledPanel);
         connect(this, SIGNAL(accepted()), this, SLOT(setPreviousColor()));
         connect(m_ui->previousColor, SIGNAL(triggered(KoColorPatch*)), SLOT(slotSetColorFromPatch(KoColorPatch*)));
     } else {
@@ -124,7 +122,7 @@ KisInternalColorSelector::KisInternalColorSelector(QWidget *parent, KoColor colo
         m_d->hexColorInput = new KisHexColorInput(this, &m_d->sRGB);
         m_d->hexColorInput->update();
         connect(m_d->hexColorInput, SIGNAL(updated()), SLOT(slotSetColorFromHex()));
-        m_ui->leftPane->addWidget(m_d->hexColorInput);
+        m_ui->rightPane->addWidget(m_d->hexColorInput);
         m_d->hexColorInput->setToolTip(i18n("This is a hexcode input, for webcolors. It can only get colors in the sRGB space."));
     }
 
@@ -256,9 +254,9 @@ void KisInternalColorSelector::endUpdateWithNewColor()
     m_d->allowUpdates = true;
 }
 
-void KisInternalColorSelector::focusInEvent(QFocusEvent *e)
+void KisInternalColorSelector::focusInEvent(QFocusEvent *)
 {
-        setPreviousColor();
+    //setPreviousColor();
 }
 
 void KisInternalColorSelector::slotSetColorFromPatch(KoColorPatch* patch)

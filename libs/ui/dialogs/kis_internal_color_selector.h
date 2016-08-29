@@ -165,7 +165,7 @@ private:
      */
     void updateAllElements(QObject *source);
 
-    virtual void focusInEvent(QFocusEvent *e);
+    virtual void focusInEvent(QFocusEvent *);
 };
 
 #endif // KISINTERNALCOLORSELECTOR_H

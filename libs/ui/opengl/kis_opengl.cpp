@@ -148,10 +148,10 @@ void KisOpenGL::initializeContext(QOpenGLContext *ctx)
     }
 }
 
-bool KisOpenGL::supportsGLSL13()
+bool KisOpenGL::hasOpenGL3()
 {
     initialize();
-    return glMajorVersion >= 3 && supportsDeprecatedFunctions;
+    return glMajorVersion >= 3;
 }
 
 bool KisOpenGL::supportsFenceSync()

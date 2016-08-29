@@ -20,7 +20,7 @@
 #ifndef KIS_OPENGL_CANVAS_2_H
 #define KIS_OPENGL_CANVAS_2_H
 
-#include "paintengine/qopenglwidget.h"
+#include <QOpenGLWidget>
 #include <QOpenGLFunctions>
 #include <qopenglvertexarrayobject.h>
 

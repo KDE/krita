@@ -189,10 +189,11 @@ void TestKoLcmsColorProfile::testProofingConversion()
     cmsHPROFILE sRgbProfile = cmsCreate_sRGBProfile();
     cmsHPROFILE LabProfile = cmsCreateLab4Profile(NULL);
 
-    quint16 alarm[4];//cyan!
+    quint16 alarm[cmsMAXCHANNELS];
+    bzero(alarm,sizeof(quint16)*cmsMAXCHANNELS);
     alarm[0] = 65535;
-    alarm[1] = 0;
-    alarm[2] = 0;
+    alarm[1] = 65535;
+    alarm[2] = 65535;
     alarm[3] = 65535;
     cmsSetAlarmCodes(alarm);
 
@@ -208,7 +209,7 @@ void TestKoLcmsColorProfile::testProofingConversion()
     cmsDoTransform(tf, (quint8 *)&src, (quint8 *)&dst, 1);
 
     qDebug()<<dst[0]<<","<<dst[1]<<","<<dst[2]<<","<<dst[3];
-    Q_ASSERT(dst[0] != alarm[0]);
+    Q_ASSERT((dst[0] == alarm[0]) && (dst[1] == alarm[1]) && (dst[2] == alarm[2]));
 
 }
 QTEST_MAIN(TestKoLcmsColorProfile)

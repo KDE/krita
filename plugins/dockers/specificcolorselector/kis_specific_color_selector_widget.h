@@ -21,15 +21,16 @@
 #include <QWidget>
 
 #include <KoColor.h>
+#include "kis_signal_auto_connection.h"
 
 class KoColorSpace;
-class KoColorDisplayRendererInterface;
 class QVBoxLayout;
 class KisColorInput;
 class KisColorSpaceSelector;
 class QCheckBox;
 class KisSignalCompressor;
 class QSpacerItem;
+class KisDisplayColorConverter;
 
 class KisSpecificColorSelectorWidget : public QWidget
 {
@@ -39,13 +40,15 @@ public:
     ~KisSpecificColorSelectorWidget();
     bool customColorSpaceUsed();
 public Q_SLOTS:
-    void setDisplayRenderer(KoColorDisplayRendererInterface *displayRenderer);
-    void setColorSpace(const KoColorSpace*);
+    void setDisplayConverter(KisDisplayColorConverter *colorConverter);
+
+    void setColorSpace(const KoColorSpace *cs, bool force = false);
     void setColor(const KoColor&);
 private Q_SLOTS:
     void update();
     void updateTimeout();
     void setCustomColorSpace(const KoColorSpace *);
+    void rereadCurrentColorSpace(bool force = false);
 Q_SIGNALS:
     void colorChanged(const KoColor&);
     void updated();
@@ -60,8 +63,9 @@ private:
     KisColorSpaceSelector *m_colorspaceSelector;
     bool m_customColorSpaceSelected;
     QCheckBox *m_chkShowColorSpaceSelector;
-    KoColorDisplayRendererInterface *m_displayRenderer;
-    KoColorDisplayRendererInterface *m_fallbackRenderer;
+
+    KisDisplayColorConverter *m_displayConverter;
+    KisSignalAutoConnectionsStore m_converterConnection;
 };
 
 #endif

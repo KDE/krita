@@ -52,7 +52,10 @@ void KisSimpleMathParserTest::testDoubleComputation()
                       "cos(1)^3.0*2",
                       "cos(1)*2 + sin(3)/2",
                       "cos(acos(-1)+1*3^2.0)*2 + sin(3)/2",
-                      "cos(acos(-1)+1*3^2.0)^2 + sin(3)/2"};
+                      "cos(acos(-1)+1*3^2.0)^2 + sin(3)/2",
+                      "log10(100)",
+                      "exp(10)",
+                      "ln(10)"};
 
     QVector<double> expected = {1,
                              2 + 3.4,
@@ -75,7 +78,10 @@ void KisSimpleMathParserTest::testDoubleComputation()
                              qPow(qCos(1.0/180*qAcos(-1)),3.0)*2,
                              qCos(1.0/180*qAcos(-1))*2 + qSin(3.0/180*qAcos(-1))/2,
                              qCos((qAcos(-1.0)*180/qAcos(-1)+1*qPow(3,2.0))/180*qAcos(-1))*2 + qSin(3.0/180*qAcos(-1))/2,
-                             qPow(qCos((qAcos(-1.0)*180/qAcos(-1)+1*qPow(3,2.0))/180*qAcos(-1)),2) + qSin(3.0/180*qAcos(-1))/2};
+                             qPow(qCos((qAcos(-1.0)*180/qAcos(-1)+1*qPow(3,2.0))/180*qAcos(-1)),2) + qSin(3.0/180*qAcos(-1))/2,
+                             qLn(100)/qLn(10),
+                             qExp(10),
+                             qLn(10)};
 
     for (int i = 0; i < expected.size(); i++) {
 

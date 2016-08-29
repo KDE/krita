@@ -133,7 +133,7 @@ public:
     virtual quint8 intensity8(const quint8 * src) const {
         QColor c;
         const_cast<KoColorSpaceAbstract<_CSTrait> *>(this)->toQColor(src, &c);
-        return static_cast<quint8>((c.red() * 0.30 + c.green() * 0.59 + c.blue() * 0.11) + 0.5);
+        return static_cast<quint8>(c.red() * 0.30 + c.green() * 0.59 + c.blue() * 0.11);
     }
 
     virtual KoColorTransformation* createInvertTransformation() const {
@@ -150,7 +150,7 @@ public:
                                  KoColorConversionTransformation::Intent renderingIntent,
                                  KoColorConversionTransformation::ConversionFlags conversionFlags) const
     {
-        
+
         // check whether we have the same profile and color model, but only a different bit
         // depth; in that case we don't convert as such, but scale
         bool scaleOnly = false;
@@ -162,10 +162,10 @@ public:
                          dstColorSpace->colorDepthId().id() != colorDepthId().id() &&
                          dstColorSpace->profile()->name()   == profile()->name();
         }
-        
+
         if (scaleOnly && dynamic_cast<const KoColorSpaceAbstract*>(dstColorSpace)) {
             typedef typename _CSTrait::channels_type channels_type;
-            
+
             switch(dstColorSpace->channels()[0]->channelValueType())
             {
             case KoChannelInfo::UINT8:
@@ -187,19 +187,19 @@ public:
                 break;
             }
         }
-        
+
         return KoColorSpace::convertPixelsTo(src, dst, dstColorSpace, numPixels, renderingIntent, conversionFlags);
     }
-    
+
 private:
     template<int srcPixelSize, int dstChannelSize, class TSrcChannel, class TDstChannel>
     void scalePixels(const quint8* src, quint8* dst, quint32 numPixels) const {
         qint32 dstPixelSize = dstChannelSize * _CSTrait::channels_nb;
-        
+
         for(quint32 i=0; i<numPixels; ++i) {
             const TSrcChannel* srcPixel = reinterpret_cast<const TSrcChannel*>(src + i * srcPixelSize);
             TDstChannel*       dstPixel = reinterpret_cast<TDstChannel*>(dst + i * dstPixelSize);
-            
+
             for(quint32 c=0; c<_CSTrait::channels_nb; ++c)
                 dstPixel[c] = Arithmetic::scale<TDstChannel>(srcPixel[c]);
         }

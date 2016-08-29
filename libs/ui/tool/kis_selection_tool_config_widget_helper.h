@@ -42,7 +42,7 @@ public:
 
     SelectionMode selectionMode() const;
     SelectionAction selectionAction() const;
-    int action() const { return selectionAction(); };
+    int action() const { return selectionAction(); }
 
     bool processKeyPressEvent(QKeyEvent *event);
 

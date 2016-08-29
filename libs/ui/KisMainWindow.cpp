@@ -894,6 +894,13 @@ void KisMainWindow::slotSaveCompleted()
     }
 }
 
+bool KisMainWindow::hackIsSaving() const
+{
+    StdLockableWrapper<QMutex> wrapper(&d->savingEntryMutex);
+    std::unique_lock<StdLockableWrapper<QMutex>> l(wrapper, std::try_to_lock);
+    return !l.owns_lock();
+}
+
 bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent, int specialOutputFlag)
 {
     if (!document) {
@@ -1808,7 +1815,10 @@ void KisMainWindow::slotProgress(int value)
 {
     qApp->processEvents();
 
-    if (!d->progressMutex.tryLock()) return;
+    StdLockableWrapper<QMutex> wrapper(&d->progressMutex);
+    std::unique_lock<StdLockableWrapper<QMutex>> l(wrapper, std::try_to_lock);
+    if (!l.owns_lock()) return;
+
 
     dbgUI << "KisMainWindow::slotProgress" << value;
     if (value <= -1 || value >= 100) {
@@ -1823,7 +1833,6 @@ void KisMainWindow::slotProgress(int value)
             d->progressCancel = 0;
         }
         d->firstTime = true;
-        d->progressMutex.unlock();
         return;
     }
     if (d->firstTime || !d->progress) {
@@ -1866,8 +1875,6 @@ void KisMainWindow::slotProgress(int value)
         d->progress->setValue(value);
     }
     qApp->processEvents();
-
-    d->progressMutex.unlock();
 }
 
 void KisMainWindow::slotProgressCanceled()

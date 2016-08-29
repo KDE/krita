@@ -38,6 +38,7 @@ public:
     KisPaintLayer* layer;
     KisRasterKeyframeChannel *channel;
     QString     last;
+    QString     path;
     int         frame;
 };
 

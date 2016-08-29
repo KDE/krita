@@ -532,6 +532,16 @@ bool KisCanvasResourceProvider::globalAlphaLock() const
     return m_resourceManager->resource(GlobalAlphaLock).toBool();
 }
 
+void KisCanvasResourceProvider::setDisablePressure(bool value)
+{
+    m_resourceManager->setResource(DisablePressure, value);
+}
+
+bool KisCanvasResourceProvider::disablePressure() const
+{
+    return m_resourceManager->resource(DisablePressure).toBool();
+}
+
 void KisCanvasResourceProvider::notifyLoadingWorkspace(KisWorkspaceResource* workspace)
 {
     emit sigLoadingWorkspace(workspace);

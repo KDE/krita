@@ -156,7 +156,13 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     m_alphaLockButton->setDefaultAction(alphaLockAction);
 
 
+    // pen pressure
+    m_disablePressureButton = new KisHighlightedToolButton(this);
+    m_disablePressureButton->setFixedSize(iconsize, iconsize);
+    m_disablePressureButton->setCheckable(true);
 
+    m_disablePressureAction = m_viewManager->actionManager()->createAction("disable_pressure");
+    m_disablePressureButton->setDefaultAction(m_disablePressureAction);
 
     // horizontal and vertical mirror toolbar buttons
 
@@ -334,6 +340,17 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     action->setText(i18n("Brush composite"));
     action->setDefaultWidget(compositeActions);
 
+    QWidget* compositePressure = new QWidget(this);
+    QHBoxLayout* pressureLayout = new QHBoxLayout(compositePressure);
+    pressureLayout->addWidget(m_disablePressureButton);
+    pressureLayout->setSpacing(4);
+    pressureLayout->setContentsMargins(0, 0, 0, 0);
+
+    action = new QWidgetAction(this);
+    view->actionCollection()->addAction("pressure_action", action);
+    action->setText(i18n("Pressure usage (small button)"));
+    action->setDefaultWidget(compositePressure);
+
     action = new QWidgetAction(this);
     KisActionRegistry::instance()->propertizeAction("brushslider1", action);
     view->actionCollection()->addAction("brushslider1", action);
@@ -445,7 +462,9 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     connect(m_cmbCompositeOp     , SIGNAL(currentIndexChanged(int))           , SLOT(slotSetCompositeMode(int)));
     connect(m_eraseAction          , SIGNAL(toggled(bool))                    , SLOT(slotToggleEraseMode(bool)));
     connect(alphaLockAction      , SIGNAL(toggled(bool))                    , SLOT(slotToggleAlphaLockMode(bool)));
+    connect(m_disablePressureAction  , SIGNAL(toggled(bool))                    , SLOT(slotDisablePressureMode(bool)));
 
+    m_disablePressureAction->setChecked(true);
 
     connect(m_hMirrorAction        , SIGNAL(toggled(bool))                    , SLOT(slotHorizontalMirrorChanged(bool)));
     connect(m_vMirrorAction        , SIGNAL(toggled(bool))                    , SLOT(slotVerticalMirrorChanged(bool)));
@@ -554,12 +573,13 @@ void KisPaintopBox::setCurrentPaintopAndReload(const KoID& paintop, KisPaintOpPr
 
 void KisPaintopBox::setCurrentPaintop(const KoID& paintop, KisPaintOpPresetSP preset)
 {
+    m_presetConnections.clear();
+
     if (m_resourceProvider->currentPreset()) {
 
         m_resourceProvider->setPreviousPaintOpPreset(m_resourceProvider->currentPreset());
 
         if (m_optionWidget) {
-            m_optionWidget->disconnect(this);
             m_optionWidget->hide();
         }
 
@@ -589,11 +609,10 @@ void KisPaintopBox::setCurrentPaintop(const KoID& paintop, KisPaintOpPresetSP pr
 
     Q_ASSERT(m_optionWidget && m_presetSelectorPopupButton);
 
-    connect(m_optionWidget, SIGNAL(sigConfigurationUpdated()), this, SLOT(slotGuiChangedCurrentPreset()));
-    connect(&m_presetUpdateCompressor, SIGNAL(timeout()), this, SLOT(slotUpdateOptionsWidget()));
-
-    connect(m_optionWidget, SIGNAL(sigSaveLockedConfig(KisPropertiesConfiguration*)), this, SLOT(slotSaveLockedOptionToPreset(KisPropertiesConfiguration*)));
-    connect(m_optionWidget, SIGNAL(sigDropLockedConfig(KisPropertiesConfiguration*)), this, SLOT(slotDropLockedOption(KisPropertiesConfiguration*)));
+    m_presetConnections.addConnection(m_optionWidget, SIGNAL(sigConfigurationUpdated()), this, SLOT(slotGuiChangedCurrentPreset()));
+    m_presetConnections.addConnection(&m_presetUpdateCompressor, SIGNAL(timeout()), this, SLOT(slotUpdateOptionsWidget()));
+    m_presetConnections.addConnection(m_optionWidget, SIGNAL(sigSaveLockedConfig(KisPropertiesConfiguration*)), this, SLOT(slotSaveLockedOptionToPreset(KisPropertiesConfiguration*)));
+    m_presetConnections.addConnection(m_optionWidget, SIGNAL(sigDropLockedConfig(KisPropertiesConfiguration*)), this, SLOT(slotDropLockedOption(KisPropertiesConfiguration*)));
 
 
     // load the current brush engine icon for the brush editor toolbar button
@@ -608,8 +627,6 @@ void KisPaintopBox::setCurrentPaintop(const KoID& paintop, KisPaintOpPresetSP pr
         // by the new colorspace.
         dbgKrita << "current paintop " << paintop.name() << " was not set, not supported by colorspace";
     }
-
-    m_presetConnections.clear();
 
     // preset -> compressor
     m_presetConnections.addConnection(
@@ -780,6 +797,10 @@ void KisPaintopBox::slotCanvasResourceChanged(int key, const QVariant &value)
 
         if (key == KisCanvasResourceProvider::EraserMode) {
             m_eraseAction->setChecked(value.toBool());
+        }
+
+        if (key == KisCanvasResourceProvider::DisablePressure) {
+            m_disablePressureAction->setChecked(value.toBool());
         }
 
         sender()->blockSignals(false);
@@ -1076,6 +1097,17 @@ void KisPaintopBox::slotToggleAlphaLockMode(bool checked)
     m_resourceProvider->setGlobalAlphaLock(checked);
 }
 
+void KisPaintopBox::slotDisablePressureMode(bool checked)
+{
+    if (checked) {
+        m_disablePressureButton->actions()[0]->setIcon(KisIconUtils::loadIcon("transform_icons_penPressure"));
+    } else {
+        m_disablePressureButton->actions()[0]->setIcon(KisIconUtils::loadIcon("transform_icons_penPressure_locked"));
+    }
+
+    m_resourceProvider->setDisablePressure(checked);
+}
+
 void KisPaintopBox::slotReloadPreset()
 {
     KisSignalsBlocker blocker(m_optionWidget);
@@ -1168,6 +1200,12 @@ void KisPaintopBox::slotUpdateSelectionIcon()
 
     m_eraseAction->setIcon(KisIconUtils::loadIcon("draw-eraser"));
     m_reloadAction->setIcon(KisIconUtils::loadIcon("view-refresh"));
+
+    if (m_disablePressureAction->isChecked()) {
+        m_disablePressureButton->setIcon(KisIconUtils::loadIcon("transform_icons_penPressure"));
+    } else {
+        m_disablePressureButton->setIcon(KisIconUtils::loadIcon("transform_icons_penPressure_locked"));
+    }
 }
 
 void KisPaintopBox::slotLockXMirrorToggle(bool toggleLock) {

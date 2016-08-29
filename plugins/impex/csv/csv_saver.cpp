@@ -90,11 +90,20 @@ KisImageBuilder_Result CSVSaver::encode(const QString &filename)
     //DataStream instead of TextStream for correct line endings
     QDataStream stream(&f);
 
-    QString path = filename;
+    //Using the original local path
+    QString path = m_doc->localFilePath();
 
     if (path.right(4).toUpper() == ".CSV")
         path = path.left(path.size() - 4);
+    else {
+        //something is wrong: the local file name is not .csv!
+        //trying the given (probably temporary) filename as well
 
+        path= filename;
+
+        if (path.right(4).toUpper() == ".CSV")
+            path = path.left(path.size() - 4);
+    }
     path.append(".frames");
 
     //create directory

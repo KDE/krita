@@ -33,7 +33,7 @@ QString KisMimeDatabase::mimeTypeForFile(const QString &file)
     fillMimeData();
 
     QFileInfo fi(file);
-    QString suffix = fi.suffix();
+    QString suffix = fi.suffix().toLower();
     Q_FOREACH(const KisMimeDatabase::KisMimeType &mimeType, s_mimeDatabase) {
         if (mimeType.suffixes.contains("*." + suffix)) {
             debugPlugin << "mimeTypeForFile(). KisMimeDatabase returned" << mimeType.mimeType << "for" << file;
@@ -55,7 +55,7 @@ QString KisMimeDatabase::mimeTypeForSuffix(const QString &suffix)
     fillMimeData();
     QMimeDatabase db;
 
-    QString s = suffix;
+    QString s = suffix.toLower();
     if (!s.startsWith("*.")) {
         s = "*." + s;
     }

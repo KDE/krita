@@ -128,18 +128,15 @@ QTransform baseBrushTransform(KisDabShape const& shape,
                               const QRectF &baseBounds)
 {
     QTransform transform;
-    if (!qFuzzyCompare(shape.rotation(), 0)) {
-        QTransform rotationTransform;
-        rotationTransform.rotateRadians(shape.rotation());
+    transform.scale(shape.scaleX(), shape.scaleY());
 
-        QRectF rotatedBounds = rotationTransform.mapRect(baseBounds);
-        transform = rotationTransform *
-                    QTransform::fromTranslate(-rotatedBounds.x(), -rotatedBounds.y());
+    if (!qFuzzyCompare(shape.rotation(), 0)) {
+        transform = transform * QTransform().rotateRadians(shape.rotation());
+        QRectF rotatedBounds = transform.mapRect(baseBounds);
+        transform = transform * QTransform::fromTranslate(-rotatedBounds.x(), -rotatedBounds.y());
     }
 
-    return transform *
-           QTransform::fromScale(shape.scaleX(), shape.scaleY()) *
-           QTransform::fromTranslate(subPixelX, subPixelY);
+    return transform * QTransform::fromTranslate(subPixelX, subPixelY);
 }
 
 void KisQImagePyramid::calculateParams(KisDabShape const& shape,
@@ -178,7 +175,6 @@ void KisQImagePyramid::calculateParams(KisDabShape shape,
         baseBrushTransform(shape,
                            subPixelX, subPixelY,
                            baseBounds);
-
     QRect expectedDstRect = roundRect(originalTransform.mapRect(originalBounds));
 #if 0 // Only enable when debugging; users shouldn't see this warning
     {

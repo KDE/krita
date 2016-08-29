@@ -21,6 +21,7 @@
 
 #include <QDockWidget>
 #include <KoCanvasObserverBase.h>
+#include "kis_signal_auto_connection.h"
 
 #include <kis_types.h>
 
@@ -38,13 +39,14 @@ public:
     virtual void setCanvas(KoCanvasBase *canvas);
     virtual void unsetCanvas();
 public Q_SLOTS:
-    void layerChanged(const KisNodeSP);
-    
+    void udpateSliders();
+
 private:
     KisCanvas2 *m_canvas;
     KisViewManager *m_view;
     KoCanvasBase * b_canvas;
     KisColorSliderWidget* m_colorSliders;
+    KisSignalAutoConnectionsStore m_canvasConnections;
 };
 
 

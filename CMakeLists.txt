@@ -83,12 +83,12 @@ endif()
 
 # define common versions of Krita applications, used to generate kritaversion.h
 # update these version for every release:
-set(KRITA_VERSION_STRING "3.0.1 Alpha")
+set(KRITA_VERSION_STRING "3.0.1 Beta")
 set(KRITA_STABLE_VERSION_MAJOR 3) # 3 for 3.x, 4 for 4.x, etc.
 set(KRITA_STABLE_VERSION_MINOR 0) # 0 for 3.0, 1 for 3.1, etc.
-set(KRITA_VERSION_RELEASE 89)     # 89 for Alpha, increase for next test releases, set 0 for first Stable, etc.
-set(KRITA_ALPHA 1) # uncomment only for Alpha
-#set(KRITA_BETA 1) # uncomment only for Beta
+set(KRITA_VERSION_RELEASE 90)     # 89 for Alpha, increase for next test releases, set 0 for first Stable, etc.
+#set(KRITA_ALPHA 1) # uncomment only for Alpha
+set(KRITA_BETA 1) # uncomment only for Beta
 #set(KRITA_RC 1) # uncomment only for RC
 set(KRITA_YEAR 2016) # update every year
 
@@ -309,7 +309,6 @@ else()
 endif()
 
 add_definitions(
-  -DTRANSLATION_DOMAIN=\"krita\"
   -DQT_USE_QSTRINGBUILDER
   -DQT_STRICT_ITERATORS
   -DQT_NO_SIGNALS_SLOTS_KEYWORDS
@@ -318,6 +317,8 @@ add_definitions(
   -DQT_NO_URL_CAST_FROM_STRING
   -DQT_DISABLE_DEPRECATED_BEFORE=0
 )
+
+add_definitions(-DTRANSLATION_DOMAIN=\"krita\")
 
 #
 # The reason for this mode is that the Debug mode disable inlining
@@ -424,9 +425,6 @@ macro_log_feature(TIFF_FOUND "tiff" "TIFF Library and Utilities" "http://www.rem
 
 macro_optional_find_package(JPEG)
 macro_log_feature(JPEG_FOUND "jpeg" "Free library for JPEG image compression. Note: libjpeg8 is NOT supported." "http://www.libjpeg-turbo.org" FALSE "" "Required by the Krita JPEG filter")
-
-macro_optional_find_package(OpenJPEG)
-macro_log_feature(OPENJPEG_FOUND "openjpeg" "Free library for JPEG 2000 image compression" "http://www.openjpeg.org" FALSE "" "Required by the Krita JPEG 2000 filter")
 
 set(LIBRAW_MIN_VERSION  "0.16")
 macro_optional_find_package(LibRaw ${LIBRAW_MIN_VERSION})
@@ -660,6 +658,7 @@ add_subdirectory(plugins)
 
 add_subdirectory( benchmarks )
 
+
 macro_display_feature_log()
 
 calligra_product_deps_report("product_deps")
@@ -671,3 +670,5 @@ configure_file(config-ocio.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-ocio.h )
 
 check_function_exists(powf HAVE_POWF)
 configure_file(config-powf.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-powf.h)
+
+

@@ -34,6 +34,7 @@ struct Q_DECL_HIDDEN KisStrokesQueue::Private {
         : openedStrokesCounter(0),
           needsExclusiveAccess(false),
           wrapAroundModeSupported(false),
+          currentStrokeLoaded(false),
           lodNNeedsSynchronization(true),
           desiredLevelOfDetail(0),
           nextDesiredLevelOfDetail(0) {}
@@ -42,6 +43,8 @@ struct Q_DECL_HIDDEN KisStrokesQueue::Private {
     int openedStrokesCounter;
     bool needsExclusiveAccess;
     bool wrapAroundModeSupported;
+    bool currentStrokeLoaded;
+
     bool lodNNeedsSynchronization;
     int desiredLevelOfDetail;
     int nextDesiredLevelOfDetail;
@@ -510,18 +513,32 @@ bool KisStrokesQueue::checkStrokeState(bool hasStrokeJobsRunning,
      * jobs present.
      */
     if(!stroke->isInitialized() && hasJobs && hasLodCompatibility) {
+        KIS_SAFE_ASSERT_RECOVER_NOOP(!m_d->currentStrokeLoaded);
+
         m_d->needsExclusiveAccess = stroke->isExclusive();
         m_d->wrapAroundModeSupported = stroke->supportsWrapAroundMode();
+        m_d->currentStrokeLoaded = true;
 
         result = true;
     }
     else if(hasJobs && hasLodCompatibility) {
+        /**
+         * If the stroke has no initialization phase, then it can
+         * arrive here unloaded.
+         */
+        if (!m_d->currentStrokeLoaded) {
+            m_d->needsExclusiveAccess = stroke->isExclusive();
+            m_d->wrapAroundModeSupported = stroke->supportsWrapAroundMode();
+            m_d->currentStrokeLoaded = true;
+        }
+
         result = true;
     }
     else if(stroke->isEnded() && !hasJobs && !hasStrokeJobsRunning) {
         m_d->strokesQueue.dequeue(); // deleted by shared pointer
         m_d->needsExclusiveAccess = false;
         m_d->wrapAroundModeSupported = false;
+        m_d->currentStrokeLoaded = false;
 
         m_d->switchDesiredLevelOfDetail(false);
 

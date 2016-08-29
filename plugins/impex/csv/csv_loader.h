@@ -47,6 +47,7 @@ private:
     KisImageBuilder_Result setLayer(CSVLayerRecord* , KisDocument* ,const QString &);
     KisImageBuilder_Result createNewImage(int, int, float, const QString &);
     QString convertBlending(const QString &);
+    QString validPath(const QString &, const QString &);
 
 private Q_SLOTS:
     void cancel();

@@ -294,6 +294,22 @@ void KisBrushTest::testPyramidLevelRounding()
     QCOMPARE(baseLevel, 5);
 }
 
+static QSize dabTransformHelper(KisDabShape const& shape)
+{
+    QSize const testSize(150, 150);
+    qreal const subPixelX = 0.0,
+                subPixelY = 0.0;
+    return KisQImagePyramid::imageSize(testSize, shape, subPixelX, subPixelY);
+}
+
+void KisBrushTest::testPyramidDabTransform()
+{
+    QCOMPARE(dabTransformHelper(KisDabShape(1.0, 1.0, 0.0)),      QSize(150, 150));
+    QCOMPARE(dabTransformHelper(KisDabShape(1.0, 0.5, 0.0)),      QSize(150,  75));
+    QCOMPARE(dabTransformHelper(KisDabShape(1.0, 1.0, M_PI / 4)), QSize(213, 213));
+    QCOMPARE(dabTransformHelper(KisDabShape(1.0, 0.5, M_PI / 4)), QSize(160, 160));
+}
+
 // see comment in KisQImagePyramid::appendPyramidLevel
 void KisBrushTest::testQPainterTransformationBorder()
 {

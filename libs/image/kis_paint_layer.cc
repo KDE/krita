@@ -254,14 +254,16 @@ const QBitArray& KisPaintLayer::channelLockFlags() const
 
 QRect KisPaintLayer::extent() const
 {
-    QRect rect = temporaryTarget() ? temporaryTarget()->extent() : QRect();
+    KisPaintDeviceSP t = temporaryTarget();
+    QRect rect = t ? t->extent() : QRect();
     if (onionSkinEnabled()) rect |= KisOnionSkinCompositor::instance()->calculateExtent(m_d->paintDevice);
     return rect | KisLayer::extent();
 }
 
 QRect KisPaintLayer::exactBounds() const
 {
-    QRect rect = temporaryTarget() ? temporaryTarget()->exactBounds() : QRect();
+    KisPaintDeviceSP t = temporaryTarget();
+    QRect rect = t ? t->extent() : QRect();
     if (onionSkinEnabled()) rect |= KisOnionSkinCompositor::instance()->calculateExtent(m_d->paintDevice);
     return rect | KisLayer::exactBounds();
 }
@@ -276,7 +278,7 @@ void KisPaintLayer::setAlphaLocked(bool lock)
 {
     if(m_d->paintChannelFlags.isEmpty())
         m_d->paintChannelFlags = colorSpace()->channelFlags(true, true);
-    
+
     if(lock)
         m_d->paintChannelFlags &= colorSpace()->channelFlags(true, false);
     else

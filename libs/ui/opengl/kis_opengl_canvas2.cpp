@@ -805,6 +805,18 @@ QRect KisOpenGLCanvas2::updateCanvasProjection(KisUpdateInfoSP info)
     if (isOpenGLUpdateInfo) {
         d->openGLImageTextures->recalculateCache(info);
     }
+
+#ifdef Q_OS_MAC
+    /**
+     * There is a bug on OSX: if we issue frame redraw before the tiles finished
+     * uploading, the tiles will become corrupted. Depending on the GPU/driver
+     * version either the tile itself, or its mipmaps will become totally
+     * transparent.
+     */
+
+    glFinish();
+#endif
+
     return QRect(); // FIXME: Implement dirty rect for OpenGL
 }
 

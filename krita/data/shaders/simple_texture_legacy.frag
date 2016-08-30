@@ -15,7 +15,7 @@ void main() {
 
 
 #ifdef USE_OCIO
-    glFragColor = OCIODisplay(col, texture1);
+    gl_FragColor = OCIODisplay(col, texture1);
 #else /* USE_OCIO */
     gl_FragColor = col;
 #endif /* USE_OCIO */

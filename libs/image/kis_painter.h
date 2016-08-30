@@ -664,7 +664,7 @@ public:
         FillStylePattern,
         FillStyleGradient,
         FillStyleStrokes,
-        FillStyleGenerator
+        FillStyleGenerator,
     };
 
     /// Set the current style with which to fill

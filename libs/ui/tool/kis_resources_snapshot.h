@@ -86,6 +86,11 @@ public:
     qreal effectiveZoom() const;
     bool presetAllowsLod() const;
 
+    void setFGColorOverride(const KoColor &color);
+    void setBGColorOverride(const KoColor &color);
+    void setSelectionOverride(KisSelectionSP selection);
+    void setBrush(const KisPaintOpPresetSP &brush);
+
 private:
     struct Private;
     Private * const m_d;

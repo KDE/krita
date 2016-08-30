@@ -92,6 +92,7 @@ struct Q_DECL_HIDDEN KisPainter::Private {
     KisPaintOp*                 paintOp;
     KoColor                     paintColor;
     KoColor                     backgroundColor;
+    KoColor                     customColor;
     const KisFilterConfiguration* generator;
     KisPaintLayer*              sourceLayer;
     FillStyle                   fillStyle;

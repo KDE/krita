@@ -426,6 +426,18 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
+    <Action name="stroke_selection">
+      <icon></icon>
+      <text>Stroke selec&amp;tion</text>
+      <whatsThis></whatsThis>
+      <toolTip>Stroke selection</toolTip>
+      <iconText>Stroke selection</iconText>
+      <activationFlags>10000000000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
     <Action name="delete_keyframe">
       <icon></icon>
       <text>Delete keyframe</text>

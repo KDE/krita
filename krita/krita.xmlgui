@@ -52,6 +52,7 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
       <Action name="fill_selection_background_color"/>
       <Action name="fill_selection_pattern"/>
       <Action name="stroke_shapes"/>
+      <Action name="stroke_selection"/>
       <Action name="delete"/>
       <Separator/>
       <Action name="revert"/>

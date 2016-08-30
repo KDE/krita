@@ -44,11 +44,12 @@ public:
      * @see value()
      */
     virtual void changeValue( double newValue );
+
     /**
      * This spinbox shows the internal value after a conversion to the unit set here.
      */
     virtual void setUnit(const KoUnit &unit);
-    virtual void setUnit(const QString &symbol);
+    virtual void setUnit(const QString & symbol);
 
     /**
      * @brief setDimensionType set the dimension (for example length or angle) of the units the spinbox manage
@@ -103,9 +104,14 @@ private:
     class Private;
     Private * const d;
 
+    QString detectUnit();
+    QString makeTextClean(QString const& txt) const;
+
 private Q_SLOTS:
     // exists to do emits for valueChangedPt
     void privateValueChanged();
+    void detectUnitChanges();
+
 };
 
 #endif // KIS_DOUBLEPARSEUNITSPINBOX_H

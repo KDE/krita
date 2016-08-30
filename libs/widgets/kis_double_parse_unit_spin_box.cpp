@@ -19,6 +19,7 @@
 #include "kis_double_parse_unit_spin_box.h"
 #include "kis_spin_box_unit_manager.h"
 
+#include <QLineEdit>
 
 class Q_DECL_HIDDEN KisDoubleParseUnitSpinBox::Private
 {
@@ -48,6 +49,10 @@ KisDoubleParseUnitSpinBox::KisDoubleParseUnitSpinBox(QWidget *parent) :
     setAlignment( Qt::AlignRight );
 
     connect(this, SIGNAL(valueChanged( double )), SLOT(privateValueChanged()));
+    connect(lineEdit(), SIGNAL(textChanged(QString)),
+            this, SLOT(detectUnitChanges()) );
+
+
 }
 
 KisDoubleParseUnitSpinBox::~KisDoubleParseUnitSpinBox()
@@ -191,13 +196,69 @@ QValidator::State KisDoubleParseUnitSpinBox::validate(QString &input, int &pos) 
 
 QString KisDoubleParseUnitSpinBox::textFromValue( double value ) const
 {
-    return KisDoubleParseSpinBox::textFromValue(value) + " " + d->unitManager.getApparentUnitSymbol();
+    QString txt = KisDoubleParseSpinBox::textFromValue(value);
+    if (!txt.endsWith(d->unitManager.getApparentUnitSymbol())) {
+        txt += " " + d->unitManager.getApparentUnitSymbol();
+    }
+    return txt;
 }
 
 QString KisDoubleParseUnitSpinBox::veryCleanText() const
 {
-    QString expr = cleanText();
+
+    return makeTextClean(cleanText());
+
+}
+
+double KisDoubleParseUnitSpinBox::valueFromText( const QString& str ) const
+{
+
+    QString txt = makeTextClean(str);
+
+    return KisDoubleParseSpinBox::valueFromText(txt); //this function will take care of prefix (and don't mind if suffix has been removed.
+}
+
+void KisDoubleParseUnitSpinBox::privateValueChanged()
+{
+    emit valueChangedPt( value() );
+}
+
+QString KisDoubleParseUnitSpinBox::detectUnit()
+{
+    QString str = veryCleanText().trimmed(); //text with the new unit but not the old one.
+
+    QRegExp regexp ("([ ]*[a-zA-Z]+[ ]*)$"); // Letters or spaces at end
+    int res = str.indexOf( regexp );
+
+    if (res > -1) {
+        QString expr ( str.right( str.size() - res ) );
+        expr = expr.trimmed();
+        return expr;
+    }
+
+    return "";
+}
+
+void KisDoubleParseUnitSpinBox::detectUnitChanges()
+{
+    QString unitSymb = detectUnit();
+
+    if (unitSymb.isEmpty()) {
+        return;
+    }
+
+    setUnit(unitSymb);
+    setValue(valueFromText(cleanText())); //change value keep the old value, but converted to new unit... which is different from the value the user entered in the new unit. So we need to set the new value.
+}
+
+QString KisDoubleParseUnitSpinBox::makeTextClean(QString const& txt) const
+{
+    QString expr = txt;
     QString symbol = d->unitManager.getApparentUnitSymbol();
+
+    if ( expr.endsWith(suffix()) ) {
+        expr.remove(expr.size()-suffix().size(), suffix().size());
+    }
 
     expr = expr.trimmed();
 
@@ -206,15 +267,4 @@ QString KisDoubleParseUnitSpinBox::veryCleanText() const
     }
 
     return expr;
-
-}
-
-double KisDoubleParseUnitSpinBox::valueFromText( const QString& str ) const
-{
-    return KisDoubleParseSpinBox::valueFromText(veryCleanText()); //this function will take care of prefix (and don't mind if suffix has been removed.
-}
-
-void KisDoubleParseUnitSpinBox::privateValueChanged()
-{
-    emit valueChangedPt( value() );
 }

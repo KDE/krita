@@ -286,6 +286,9 @@ void KisSpinBoxUnitManager::setApparentUnitFromSymbol(QString pSymbol)
     d->conversionFactor = conversFact;
     emit conversionFactorChanged(d->conversionFactor, oldConversFact);
 
+    d->unitSymbol = newSymb;
+    emit unitChanged(newSymb);
+
 }
 
 void KisSpinBoxUnitManager::configureRelativeUnitReference(qreal value)

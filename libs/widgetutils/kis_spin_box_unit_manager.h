@@ -80,6 +80,7 @@ public:
 Q_SIGNALS:
 
     void unitDimensionChanged(int dimCode);
+    void unitChanged(QString symbol);
     void conversionFactorChanged(qreal newConversionFactor, qreal oldConversionFactor);
     void unitListChanged();
 

@@ -25,7 +25,7 @@ Note: on all operating systems the entire procedure is done in a terminal window
 3. Make sure you have a compiler:
     * Linux: gcc, minimum version 4.8
     * OSX: clang, you need to install xcode for this
-    * Windows: (http://tdm-gcc.tdragon.net/, version 5.1). MSVC cannot build G'Mic correctly.Remember to install the OpenMP plugin in tdm-gcc. Make sure mingw's bin folder is in your path.
+    * Windows: (http://tdm-gcc.tdragon.net/, version 5.1). MSVC cannot build G'Mic correctly. Remember to install the OpenMP plugin in tdm-gcc. Make sure mingw's bin folder is in your path.
 4. If you compile Qt on Windows, you will also need Python: https://www.python.org. Make sure to have python.exe in your path.
 
 == Setup your environment ==
@@ -75,7 +75,7 @@ Note: on all operating systems the entire procedure is done in a terminal window
 Note that the cmake command needs to point to your BUILDROOT like /dev/d, not c:\dev\d.
 
     set PATH=BUILDROOT\i\bin\;BUILDROOT\i\lib;%PATH%
-    cmake ..\krita\3rdparty -DEXTERNALS_DOWNLOAD_DIR=/dev/d -DINSTALL_ROOT=/dev/i  -G "MinGW Makefiless"
+    cmake ..\krita\3rdparty -DEXTERNALS_DOWNLOAD_DIR=/dev/d -DINSTALL_ROOT=/dev/i  -G "MinGW Makefiles"
 
 3. build the packages:
 

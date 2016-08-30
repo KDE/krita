@@ -17,6 +17,7 @@
  */
 
 #include "kis_double_parse_unit_spin_box.h"
+#include "kis_spin_box_unit_manager.h"
 
 
 class Q_DECL_HIDDEN KisDoubleParseUnitSpinBox::Private
@@ -26,7 +27,8 @@ public:
         : lowerInPoints(low),
         upperInPoints(up),
         stepInPoints(step),
-        unit(KoUnit(KoUnit::Point))
+        unit(KoUnit(KoUnit::Point)),
+        unitManager()
     {
     }
 
@@ -34,6 +36,8 @@ public:
     double upperInPoints; ///< highest value in points
     double stepInPoints;  ///< step in points
     KoUnit unit;
+
+    KisSpinBoxUnitManager unitManager; //manage more units than permitted by KoUnit.
 };
 
 KisDoubleParseUnitSpinBox::KisDoubleParseUnitSpinBox(QWidget *parent) :
@@ -53,61 +57,90 @@ KisDoubleParseUnitSpinBox::~KisDoubleParseUnitSpinBox()
 
 void KisDoubleParseUnitSpinBox::changeValue( double newValue )
 {
-    if (d->unit.toUserValue(newValue) == oldValue) {
+    if (d->unitManager.getApparentValue(newValue) == KisDoubleParseSpinBox::value()) {
         return;
     }
 
-    KisDoubleParseSpinBox::setValue( d->unit.toUserValue(newValue) );
+    KisDoubleParseSpinBox::setValue( d->unitManager.getApparentValue(newValue) );
 }
 
 void KisDoubleParseUnitSpinBox::setUnit( const KoUnit & unit)
 {
-    if( unit == d->unit) return;
-    double oldValue = d->unit.fromUserValue( KisDoubleParseSpinBox::value() );
+    if (d->unitManager.getUnitDimensionType() != KisSpinBoxUnitManager::LENGTH) {
+        d->unitManager.setUnitDim(KisSpinBoxUnitManager::LENGTH); //setting the unit using a KoUnit mean you want to use a length.
+    }
 
-    KisDoubleParseSpinBox::setMinimum( unit.toUserValue( d->lowerInPoints ) );
-    KisDoubleParseSpinBox::setMaximum( unit.toUserValue( d->upperInPoints ) );
+    setUnit(unit.symbol());
+    d->unit = unit;
+}
+void KisDoubleParseUnitSpinBox::setUnit(const QString &symbol)
+{
 
-    qreal step = unit.toUserValue( d->stepInPoints );
+    double oldValue = d->unitManager.getReferenceValue(KisDoubleParseSpinBox::value());
+    QString oldSymbol = d->unitManager.getApparentUnitSymbol();
 
-    if (unit.type() == KoUnit::Pixel) {
+    if (symbol == oldSymbol) {
+        return;
+    }
+
+    d->unitManager.setApparentUnitFromSymbol(symbol);
+
+    if (d->unitManager.getApparentUnitSymbol() == oldSymbol) { //the setApparentUnitFromSymbol is a bit clever, for example in regard of Casesensitivity. So better check like this.
+        return;
+    }
+
+    KisDoubleParseSpinBox::setMinimum( d->unitManager.getApparentValue( d->lowerInPoints ) );
+    KisDoubleParseSpinBox::setMaximum( d->unitManager.getApparentValue( d->upperInPoints ) );
+
+    qreal step = d->unitManager.getApparentValue( d->stepInPoints );
+
+    if (symbol == KoUnit(KoUnit::Pixel).symbol()) {
         // limit the pixel step by 1.0
         step = qMax(qreal(1.0), step);
     }
 
     KisDoubleParseSpinBox::setSingleStep( step );
-    d->unit = unit;
-    KisDoubleParseSpinBox::setValue( KoUnit::ptToUnit( oldValue, unit ) );
-    setSuffix( unit.symbol().prepend(QLatin1Char(' ')) );
+    KisDoubleParseSpinBox::setValue( d->unitManager.getApparentValue( oldValue ) );
+
+}
+
+
+void KisDoubleParseUnitSpinBox::setDimensionType(int dim)
+{
+    if (!KisSpinBoxUnitManager::isUnitId(dim)) {
+        return;
+    }
+
+    d->unitManager.setUnitDim((KisSpinBoxUnitManager::UnitDimension) dim);
 }
 
 double KisDoubleParseUnitSpinBox::value( ) const
 {
-    return d->unit.fromUserValue( KisDoubleParseSpinBox::value() );
+    return d->unitManager.getReferenceValue( KisDoubleParseSpinBox::value() );
 }
 
 void KisDoubleParseUnitSpinBox::setMinimum(double min)
 {
     d->lowerInPoints = min;
-    KisDoubleParseSpinBox::setMinimum( d->unit.toUserValue( min ) );
+    KisDoubleParseSpinBox::setMinimum( d->unitManager.getApparentValue( min ) );
 }
 
 void KisDoubleParseUnitSpinBox::setMaximum(double max)
 {
     d->upperInPoints = max;
-    KisDoubleParseSpinBox::setMaximum( d->unit.toUserValue( max ) );
+    KisDoubleParseSpinBox::setMaximum( d->unitManager.getApparentValue( max ) );
 }
 
 void KisDoubleParseUnitSpinBox::setLineStep(double step)
 {
-    d->stepInPoints = KoUnit(KoUnit::Point).toUserValue(step);
+    d->stepInPoints = d->unitManager.getReferenceValue(step);
     KisDoubleParseSpinBox::setSingleStep( step );
 }
 
 void KisDoubleParseUnitSpinBox::setLineStepPt(double step)
 {
     d->stepInPoints = step;
-    KisDoubleParseSpinBox::setSingleStep( d->unit.toUserValue( step ) );
+    KisDoubleParseSpinBox::setSingleStep( d->unitManager.getApparentValue( step ) );
 }
 
 
@@ -146,7 +179,8 @@ QValidator::State KisDoubleParseUnitSpinBox::validate(QString &input, int &pos) 
     }
 
     //check if we can parse the unit.
-    KoUnit::fromSymbol(unitName, &ok);
+    QStringList listOfSymbol = d->unitManager.getsUnitSymbolList();
+    ok = listOfSymbol.contains(unitName);
 
     if (!ok || interm) {
         return QValidator::Intermediate;
@@ -157,13 +191,27 @@ QValidator::State KisDoubleParseUnitSpinBox::validate(QString &input, int &pos) 
 
 QString KisDoubleParseUnitSpinBox::textFromValue( double value ) const
 {
-    return KisDoubleParseSpinBox::textFromValue(value);
+    return KisDoubleParseSpinBox::textFromValue(value) + " " + d->unitManager.getApparentUnitSymbol();
+}
+
+QString KisDoubleParseUnitSpinBox::veryCleanText() const
+{
+    QString expr = cleanText();
+    QString symbol = d->unitManager.getApparentUnitSymbol();
+
+    expr = expr.trimmed();
+
+    if ( expr.endsWith(symbol) ) {
+        expr.remove(expr.size()-symbol.size(), symbol.size());
+    }
+
+    return expr;
+
 }
 
 double KisDoubleParseUnitSpinBox::valueFromText( const QString& str ) const
 {
-    //KisDoubleParseSpinBox is supposed to remove the suffix and prefix by itself.
-    return KisDoubleParseSpinBox::valueFromText(str);
+    return KisDoubleParseSpinBox::valueFromText(veryCleanText()); //this function will take care of prefix (and don't mind if suffix has been removed.
 }
 
 void KisDoubleParseUnitSpinBox::privateValueChanged()

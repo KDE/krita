@@ -21,6 +21,7 @@ set(kritawidgetutils_LIB_SRCS
     KoResourcePaths.cpp
 
     kis_num_parser.cpp
+    kis_spin_box_unit_manager.cpp
 
     config/kcolorscheme.cpp
     config/kcolorschememanager.cpp
@@ -117,6 +118,7 @@ target_link_libraries(kritawidgetutils
         KF5::WidgetsAddons
         KF5::WindowSystem
         kritaplugin
+        kritaodf
         ${KRITA_WIDGET_UTILS_EXTRA_LIBS}
 )
 

@@ -48,6 +48,9 @@ public:
 
     bool isLastValid() const{ return boolLastValid; }
 
+    //! \brief this virtual function is similar to cleanText(); for KisDoubleParseSpinBox. But child class may remove additionnal artifacts.
+    virtual QString veryCleanText() const;
+
 Q_SIGNALS:
 
     //! \brief signal emmitted when the last parsed expression create an error.

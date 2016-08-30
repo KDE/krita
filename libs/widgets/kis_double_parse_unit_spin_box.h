@@ -48,6 +48,13 @@ public:
      * This spinbox shows the internal value after a conversion to the unit set here.
      */
     virtual void setUnit(const KoUnit &unit);
+    virtual void setUnit(const QString &symbol);
+
+    /**
+     * @brief setDimensionType set the dimension (for example length or angle) of the units the spinbox manage
+     * @param dim the dimension id. (if not an id in KisSpinBoxUnitManager::UnitDimension, then the function does nothing).
+     */
+    virtual void setDimensionType(int dim);
 
     /// @return the current value, converted in points
     double value( ) const;
@@ -76,6 +83,10 @@ public:
      * @return the resulting string
      */
     virtual QString textFromValue( double value ) const;
+
+    //! \brief get the text in the spinbox without prefix or suffix, and remove unit symbol if present.
+    virtual QString veryCleanText() const;
+
     /**
      * Transfrom a string into a double, while taking care of locale specific symbols.
      * @param str the string to transform into a number

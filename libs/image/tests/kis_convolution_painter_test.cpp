@@ -280,7 +280,7 @@ void KisConvolutionPainterTest::benchmarkConvolution()
 
     int diameter = 1;
 
-    for (int i = 0; i < 3; i++) {
+    for (int i = 0; i < 4; i++) {
 
         KisCircleMaskGenerator* kas = new KisCircleMaskGenerator(diameter, 1.0, 5, 5, 2, false);
         KisConvolutionKernelSP kernel = KisConvolutionKernel::fromMaskGenerator(kas);
@@ -300,7 +300,7 @@ void KisConvolutionPainterTest::benchmarkConvolution()
 
         dbgKrita << "Diameter:" << diameter << "time:" << timer.elapsed();
 
-        if(diameter < 10) {
+        if(diameter < 4) {
             diameter += 2;
         } else {
             diameter += 8;

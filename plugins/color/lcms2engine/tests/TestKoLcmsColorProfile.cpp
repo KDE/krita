@@ -189,8 +189,7 @@ void TestKoLcmsColorProfile::testProofingConversion()
     cmsHPROFILE sRgbProfile = cmsCreate_sRGBProfile();
     cmsHPROFILE LabProfile = cmsCreateLab4Profile(NULL);
 
-    quint16 alarm[cmsMAXCHANNELS];
-    bzero(alarm,sizeof(quint16)*cmsMAXCHANNELS);
+    quint16 alarm[cmsMAXCHANNELS]={0};
     alarm[0] = 65535;
     alarm[1] = 0;
     alarm[2] = 0;

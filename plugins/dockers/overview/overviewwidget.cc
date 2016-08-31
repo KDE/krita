@@ -240,7 +240,7 @@ void OverviewWidget::generateThumbnail()
 
                 if (!strokeId.isNull()) {
                     image->cancelStroke(strokeId);
-                    image->waitForDone();
+                    strokeId.clear();
                 }
 
                 OverviewThumbnailStrokeStrategy* stroke = new OverviewThumbnailStrokeStrategy(image);

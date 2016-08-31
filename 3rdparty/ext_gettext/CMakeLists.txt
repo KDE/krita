@@ -3,7 +3,7 @@ if (MSVC OR MINGW)
     if(CMAKE_CL_64)
         ExternalProject_Add( ext_gettext
             DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-            URL http://files.kde.org/krita/build/dependencies/gettext0.19.8.1-iconv1.14-shared-64.zip
+            URL http://files.kde.org/krita/build/dependencies/gettext0.19.8.1-iconv1.14-shared-32.zip
             URL_MD5 f877ebff42736535415b4ddb9c631b86
             CONFIGURE_COMMAND ""
         	BUILD_COMMAND ${CMAKE_COMMAND} -E echo deploying gettext.exe binary
@@ -17,7 +17,7 @@ if (MSVC OR MINGW)
     else()
         ExternalProject_Add( ext_gettext
             DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-            URL http://files.kde.org/krita/build/dependencies/gettext0.19.8.1-iconv1.14-shared-32.zip
+            URL http://files.kde.org/krita/build/dependencies/gettext0.19.8.1-iconv1.14-shared-64.zip
             URL_MD5 bced59a375aef8d325b746f0dfbe8f48
             CONFIGURE_COMMAND ""
     	    BUILD_COMMAND ${CMAKE_COMMAND} -E echo deploying gettext.exe binary

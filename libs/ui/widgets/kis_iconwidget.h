@@ -44,12 +44,14 @@ public:
 public Q_SLOTS:
     void slotSetItem(KoResource * resource);
     void slotAdapterResourceChanged(KoResource * resource);
+    void slotAdapterResourceRemoved(KoResource * resource);
 
 protected:
     virtual void paintEvent(QPaintEvent *);
 
 private:
     KoResource *m_resource;
+    QSharedPointer<KoAbstractResourceServerAdapter> m_adapter;
 };
 
 #endif // KIS_ICONWIDGET_H_

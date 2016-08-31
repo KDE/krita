@@ -19,7 +19,7 @@ if (MSVC)
 		ExternalProject_Add_Step(
 			ext_boost
 			post_install
-			COMMAND ${CMAKE_COMMAND} -E copy ${PREFIX_ext_boost}/lib/boost_system-vc140-mt-1_55.dll ${PREFIX_ext_boost}/bin/boost_system-vc140-mt-1_55.dll
+			COMMAND ${CMAKE_COMMAND} -E copy ${PREFIX_ext_boost}/lib/boost_system-vc140-mt-1_61.dll ${PREFIX_ext_boost}/bin/boost_system-vc140-mt-1_61.dll
 			DEPENDEES install
 		)
 		
@@ -43,7 +43,7 @@ if (MSVC)
         ExternalProject_Add_Step(
 			ext_boost
 			post_install
-			COMMAND ${CMAKE_COMMAND} -E copy ${PREFIX_ext_boost}/lib/boost_system-vc140-mt-1_55.dll ${PREFIX_ext_boost}/bin/boost_system-vc140-mt-1_55.dll
+			COMMAND ${CMAKE_COMMAND} -E copy ${PREFIX_ext_boost}/lib/boost_system-vc140-mt-1_61.dll ${PREFIX_ext_boost}/bin/boost_system-vc140-mt-1_61.dll
 			DEPENDEES install
 		)
 	endif()
@@ -67,7 +67,7 @@ elseif(MINGW)
    ExternalProject_Add_Step(
        ext_boost
        post_install
-       COMMAND ${CMAKE_COMMAND} -E copy ${PREFIX_ext_boost}/lib/libboost_system-mgw51-mt-1_55.dll ${PREFIX_ext_boost}/bin/
+       COMMAND ${CMAKE_COMMAND} -E copy ${PREFIX_ext_boost}/lib/libboost_system-mgw51-mt-1_61.dll ${PREFIX_ext_boost}/bin/
        DEPENDEES install
    )
 else()

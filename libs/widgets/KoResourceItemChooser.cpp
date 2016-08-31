@@ -378,7 +378,7 @@ void KoResourceItemChooser::updateButtonState()
 
     KoResource *resource = currentResource();
     if (resource) {
-        removeButton->setEnabled(true);
+        removeButton->setEnabled(!resource->permanent());
         return;
     }
     removeButton->setEnabled(false);

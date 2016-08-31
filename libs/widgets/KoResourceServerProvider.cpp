@@ -58,6 +58,7 @@ public:
 
         gradient->setStops(stops);
         gradient->setValid(true);
+        gradient->setPermanent(true);
         addResource(gradient, false, true);
         m_foregroundToTransparent = gradient;
 
@@ -70,6 +71,7 @@ public:
 
         gradient->setStops(stops);
         gradient->setValid(true);
+        gradient->setPermanent(true);
         addResource(gradient, false, true);
         m_foregroundToBackground = gradient;
     }

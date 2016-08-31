@@ -669,7 +669,6 @@ void PerformanceTab::selectSwapDir()
 //---------------------------------------------------------------------------------------------------
 
 #include "KoColor.h"
-#include "KoColorPopupAction.h"
 
 DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
     : WdgDisplaySettings(parent, name)

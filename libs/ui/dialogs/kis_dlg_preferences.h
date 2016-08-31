@@ -25,7 +25,6 @@
 #include <QWidget>
 
 #include <kpagedialog.h>
-#include "KoColorPopupAction.h"
 
 #include "kis_global.h"
 #include "widgets/squeezedcombobox.h"
@@ -157,7 +156,6 @@ private Q_SLOTS:
 public:
     void setDefault();
     WdgColorSettings  *m_page;
-    KoColorPopupAction *m_gamutWarning;
     QButtonGroup m_pasteBehaviourGroup;
     QList<QLabel*> m_monitorProfileLabels;
     QList<SqueezedComboBox*> m_monitorProfileWidgets;
@@ -245,7 +243,6 @@ public:
  *  Display settings tab for preferences dialog
  */
 
-class KoColorPopupAction;
 
 class DisplaySettingsTab : public WdgDisplaySettings
 {
@@ -260,7 +257,6 @@ protected Q_SLOTS:
     void slotUseOpenGLToggled(bool isChecked);
 
 public:
-    KoColorPopupAction *m_selectionOverlayColorAction;
 };
 
 //=======================

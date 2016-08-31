@@ -346,7 +346,7 @@ void KisWarpTransformWorkerTest::testNeedChangeRects()
                                   d.updater);
 
     QCOMPARE(KritaUtils::sampleRectWithPoints(d.bounds.toAlignedRect()).size(), 9);
-    QCOMPARE(worker.approxChangeRect(d.bounds.toAlignedRect()), QRect(-89,-89, 1072,1076));
+    QCOMPARE(worker.approxChangeRect(d.bounds.toAlignedRect()), QRect(-44,-44, 982,986));
 }
 
 

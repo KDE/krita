@@ -28,6 +28,7 @@ if (MSVC OR MINGW)
             ALWAYS 0
         )
     endif()
+)
 else (MSVC OR MINGW)
     ExternalProject_Add( ext_gettext
 	    DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}

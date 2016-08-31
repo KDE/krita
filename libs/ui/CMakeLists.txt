@@ -526,7 +526,7 @@ if(X11_FOUND)
     target_link_libraries(kritaui Qt5::X11Extras ${X11_LIBRARIES})
 endif()
 
-target_link_libraries(kritaui LINK_INTERFACE_LIBRARIES kritaimage kritalibbrush kritapigment KF5::Completion KF5::I18n ${GL_INTERFACE_LIBRARIES})
+target_link_libraries(kritaui LINK_INTERFACE_LIBRARIES kritaimage kritalibbrush kritapigment kritawidgets KF5::Completion KF5::I18n ${GL_INTERFACE_LIBRARIES})
 
 target_include_directories(kritaui
     PUBLIC

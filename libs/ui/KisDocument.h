@@ -231,7 +231,6 @@ public:
      * Sets the error message to be shown to the user (use i18n()!)
      * when loading or saving fails.
      * If you asked the user about something and they chose "Cancel",
-     * set the message to the magic string "USER_CANCELED", to skip the error dialog.
      */
     void setErrorMessage(const QString& errMsg);
 

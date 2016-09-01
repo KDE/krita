@@ -652,6 +652,8 @@ bool KisDocument::saveFile(KisPropertiesConfigurationSP exportConfiguration)
     // Save it to be able to restore it after a failed save
     const bool wasModified = isModified();
 
+    // Show the dialog with the options, if any
+
     // The output format is set by koMainWindow, and by openFile
     QByteArray outputMimeType = d->outputMimeType;
     if (outputMimeType.isEmpty())
@@ -766,7 +768,7 @@ bool KisDocument::saveFile(KisPropertiesConfigurationSP exportConfiguration)
 
             if (errorMessage().isEmpty()) {
                 QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Could not save\n%1", localFilePath()));
-            } else if (errorMessage() != "USER_CANCELED") {
+            } else {
                 QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Could not save %1\nReason: %2", localFilePath(), errorMessage()));
             }
 
@@ -1911,7 +1913,7 @@ void KisDocument::showLoadingErrorDialog()
     if (errorMessage().isEmpty()) {
         QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Could not open\n%1", localFilePath()));
     }
-    else if (errorMessage() != "USER_CANCELED") {
+    else {
         QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Could not open %1\nReason: %2", localFilePath(), errorMessage()));
     }
 }

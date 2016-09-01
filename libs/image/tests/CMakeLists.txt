@@ -230,11 +230,6 @@ target_link_libraries(KisConvolutionPainterTest   kritaimage Qt5::Test)
 
 ########### next target ###############
 
-set(kis_convolution_painter_test_2_SRCS kis_convolution_painter_test_2.cpp )
-kde4_add_unit_test(KisConvolutionPainterTest2 TESTNAME krita-image-KisConvolutionPainterTest2 ${kis_convolution_painter_test_2_SRCS})
-target_link_libraries(KisConvolutionPainterTest2   kritaimage Qt5::Test)
-
-########### next target ###############
 set(kis_crop_processing_visitor_test_SRCS kis_crop_processing_visitor_test.cpp )
 kde4_add_unit_test(KisCropProcessingVisitorTest TESTNAME krita-image-KisCropProcessingVisitorTest ${kis_crop_processing_visitor_test_SRCS})
 target_link_libraries(KisCropProcessingVisitorTest   kritaimage Qt5::Test)
@@ -698,4 +693,15 @@ set(kis_asl_parser_test_SRCS kis_asl_parser_test.cpp )
 kde4_add_unit_test(KisAslParserTest TESTNAME kritalibpsd-asl_parser_test ${kis_asl_parser_test_SRCS})
 target_link_libraries(KisAslParserTest kritapsd kritapigment kritawidgetutils  ${QT_QTXML_LIBRARY} Qt5::Test)
 
+########### next target ###############
 
+set(kis_convolution_painter_test_2_SRCS kis_convolution_painter_test_2.cpp )
+kde4_add_unit_test(KisConvolutionPainterTest2 TESTNAME krita-image-KisConvolutionPainterTest2 ${kis_convolution_painter_test_2_SRCS})
+target_link_libraries(KisConvolutionPainterTest2   kritaimage Qt5::Test)
+
+########### next target ###############
+set(kis_fill_painter_test_2_SRCS kis_fill_painter_test_2.cpp )
+kde4_add_unit_test(KisFillPainterTest2 TESTNAME krita-image-KisFillPainterTest2 ${kis_fill_painter_test_2_SRCS})
+target_link_libraries(KisFillPainterTest2   kritaimage Qt5::Test)
+
+########### next target ###############

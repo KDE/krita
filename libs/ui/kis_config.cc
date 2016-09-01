@@ -409,7 +409,7 @@ const KoColorProfile *KisConfig::getScreenProfile(int screen)
 
     KisConfig cfg;
     QString monitorId;
-    if (KisColorManager::instance()->devices().size() > screen && screen > 0) {
+    if (KisColorManager::instance()->devices().size() > screen) {
         monitorId = cfg.monitorForScreen(screen, KisColorManager::instance()->devices()[screen]);
     }
     //dbgKrita << "getScreenProfile(). Screen" << screen << "monitor id" << monitorId;

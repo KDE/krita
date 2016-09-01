@@ -311,7 +311,9 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
 
 // XXX: no color management integration on Windows or OSX yet
 #ifndef HAVE_X11
-    m_page->chkUseSystemMonitorProfile->setVisible(false);
+    if (KisColorManager::instance()->devices() > 0) {
+        m_page->chkUseSystemMonitorProfile->setVisible(false);
+    }
 #endif
     m_page->cmbWorkingColorSpace->setIDList(KoColorSpaceRegistry::instance()->listKeys());
     m_page->cmbWorkingColorSpace->setCurrent(cfg.workingColorSpace());

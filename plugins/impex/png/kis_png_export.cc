@@ -154,12 +154,12 @@ KisImportExportFilter::ConversionStatus KisPNGExport::convert(const QByteArray& 
 
         wdg->bnTransparencyFillColor->setEnabled(!wdg->alpha->isChecked());
 
-        //This used to be 'setEnabled(sRGB)' but firefox and ColorD are incredibly awkward about sRGB management
+        //This used to be 'cfg.getBool("saveSRGBProfile", true)' but firefox and ColorD are incredibly awkward about sRGB management
         //on Linux devices, as indicated by the same distorted colours with using the sRGB chunk, meaning it's unrelated to the profile.
         //We can somewhat assume sRGB is the default color space for the web, but it's still a darn pity we cannot rely on firefox and colord
         //to manage sRGB-marked images properly.
-        wdg->chkSRGB->setEnabled(!sRGB);
-        wdg->chkSRGB->setChecked(cfg.getBool("saveSRGBProfile", true));
+        wdg->chkSRGB->setEnabled(sRGB);
+        wdg->chkSRGB->setChecked(cfg.getBool("saveSRGBProfile", false));
 
         wdg->chkForceSRGB->setEnabled(!sRGB);
         wdg->chkForceSRGB->setChecked(cfg.getBool("forceSRGB", false));

@@ -418,23 +418,5 @@ void KisConvolutionPainterTest::testGaussianSmallFFTW()
     testGaussianSmall(true);
 }
 
-void KisConvolutionPainterTest::testGaussianDetails(bool useFftw)
-{
-    QImage referenceImage(TestUtil::fetchDataFileLazy("resolution_test.png"));
-    KisPaintDeviceSP dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
-    dev->convertFromQImage(referenceImage, 0, 0, 0);
-
-    testGaussianBase(dev, useFftw, "details");
-}
-
-void KisConvolutionPainterTest::testGaussianDetailsSpatial()
-{
-    testGaussianDetails(false);
-}
-
-void KisConvolutionPainterTest::testGaussianDetailsFFTW()
-{
-    testGaussianDetails(true);
-}
 
 QTEST_MAIN(KisConvolutionPainterTest)

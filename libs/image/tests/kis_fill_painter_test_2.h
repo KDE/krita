@@ -16,44 +16,22 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_CONVOLUTION_PAINTER_TEST_H
-#define KIS_CONVOLUTION_PAINTER_TEST_H
+#ifndef KIS_FILL_PAINTER_TEST_H
+#define KIS_FILL_PAINTER_TEST_H
 
 #include <QtTest>
-#include <kis_types.h>
 
-class QBitArray;
-
-
-class KisConvolutionPainterTest : public QObject
+class KisFillPainterTest : public QObject
 {
     Q_OBJECT
 
 private:
-    void testAsymmConvolutionImp(QBitArray channelFlags);
-    void testGaussianBase(KisPaintDeviceSP dev, bool useFftw, const QString &prefix);
-    void testGaussian(bool useFftw);
-    void testGaussianSmall(bool useFftw);
-    void testGaussianDetails(bool useFftw);
+    void benchmarkFillPainter(const QPoint &startPoint, bool useCompositioning);
 
 private Q_SLOTS:
 
-    void testIdentityConvolution();
-    void testSymmConvolution();
-
-    void testAsymmAllChannels();
-    void testAsymmSkipRed();
-    void testAsymmSkipGreen();
-    void testAsymmSkipBlue();
-    void testAsymmSkipAlpha();
-
-    void benchmarkConvolution();
-    void testGaussianSpatial();
-    void testGaussianFFTW();
-
-    void testGaussianSmallSpatial();
-    void testGaussianSmallFFTW();
-
+    void testCreation();
+    void benchmarkFillPainterOffsetCompositioning();
 };
 
 #endif

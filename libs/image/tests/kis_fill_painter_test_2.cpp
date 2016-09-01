@@ -16,7 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_fill_painter_test.h"
+#include "kis_fill_painter_test_2.h"
 
 #include "testutil.h"
 
@@ -72,77 +72,10 @@ void KisFillPainterTest::benchmarkFillPainter(const QPoint &startPoint, bool use
                                   testName));
 }
 
-void KisFillPainterTest::benchmarkFillPainter()
+
+void KisFillPainterTest::benchmarkFillPainterOffsetCompositioning()
 {
-    benchmarkFillPainter(QPoint(), false);
-}
-
-void KisFillPainterTest::benchmarkFillPainterOffset()
-{
-    benchmarkFillPainter(QPoint(5,5), false);
-}
-
-
-void KisFillPainterTest::benchmarkFillingScanlineColor()
-{
-    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
-    KisPaintDeviceSP dev = new KisPaintDevice(cs);
-
-    QImage srcImage(TestUtil::fetchDataFileLazy("heavy_labyrinth.png"));
-    QVERIFY(!srcImage.isNull());
-
-    QRect imageRect = srcImage.rect();
-
-    dev->convertFromQImage(srcImage, 0, 0, 0);
-
-
-    QBENCHMARK_ONCE {
-        KisScanlineFill gc(dev, QPoint(), imageRect);
-        gc.setThreshold(THRESHOLD);
-        gc.fillColor(KoColor(Qt::red, dev->colorSpace()));
-    }
-
-    QImage resultImage =
-        dev->convertToQImage(0,
-                             imageRect.x(), imageRect.y(),
-                             imageRect.width(), imageRect.height());
-
-    QVERIFY(TestUtil::checkQImage(resultImage,
-                                  "fill_painter",
-                                  "scanline_",
-                                  "heavy_labyrinth_top_left"));
-}
-
-void KisFillPainterTest::benchmarkFillingScanlineSelection()
-{
-    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
-    KisPaintDeviceSP dev = new KisPaintDevice(cs);
-
-    QImage srcImage(TestUtil::fetchDataFileLazy("heavy_labyrinth.png"));
-    QVERIFY(!srcImage.isNull());
-
-    QRect imageRect = srcImage.rect();
-
-    dev->convertFromQImage(srcImage, 0, 0, 0);
-
-
-    KisPixelSelectionSP pixelSelection = new KisPixelSelection();
-
-    QBENCHMARK_ONCE {
-        KisScanlineFill gc(dev, QPoint(), imageRect);
-        gc.setThreshold(THRESHOLD);
-        gc.fillSelection(pixelSelection);
-    }
-
-    QImage resultImage =
-        pixelSelection->convertToQImage(0,
-                                        imageRect.x(), imageRect.y(),
-                                        imageRect.width(), imageRect.height());
-
-    QVERIFY(TestUtil::checkQImage(resultImage,
-                                  "fill_painter",
-                                  "scanline_",
-                                  "heavy_labyrinth_top_left_selection"));
+    benchmarkFillPainter(QPoint(5,5), true);
 }
 
 

@@ -54,6 +54,8 @@ private Q_SLOTS:
     void testGaussianSmallSpatial();
     void testGaussianSmallFFTW();
 
+    void testGaussianDetailsSpatial();
+    void testGaussianDetailsFFTW();
 };
 
 #endif

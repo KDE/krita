@@ -45,7 +45,7 @@ void KisProjectionTest::testDirty()
     layer2->setDirty(gc.takeDirtyRegion());
 
     // wait a little for the projection to finish
-    QTest::qSleep(2500);
+    QTest::qSleep(250);
 
     // Check that the projection is totally redistribute
     KisSequentialConstIterator it(image->projection(), QRect(0, 0, 1000, 1000));

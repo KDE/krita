@@ -82,6 +82,10 @@ void KisFillPainterTest::benchmarkFillPainterOffset()
     benchmarkFillPainter(QPoint(5,5), false);
 }
 
+void KisFillPainterTest::benchmarkFillPainterOffsetCompositioning()
+{
+    benchmarkFillPainter(QPoint(5,5), true);
+}
 
 void KisFillPainterTest::benchmarkFillingScanlineColor()
 {

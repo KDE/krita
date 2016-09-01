@@ -33,6 +33,7 @@ private Q_SLOTS:
     void testCreation();
     void benchmarkFillPainter();
     void benchmarkFillPainterOffset();
+    void benchmarkFillPainterOffsetCompositioning();
     void benchmarkFillingScanlineColor();
     void benchmarkFillingScanlineSelection();
 };

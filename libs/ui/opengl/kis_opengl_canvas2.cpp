@@ -541,7 +541,7 @@ void KisOpenGLCanvas2::drawImage()
             glActiveTexture(GL_TEXTURE0);
             tile->bindToActiveTexture();
 
-            if (currentLodPlane) {
+            if (currentLodPlane > 0) {
                 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
             } else if (SCALE_MORE_OR_EQUAL_TO(scaleX, scaleY, 2.0)) {
                 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -551,6 +551,7 @@ void KisOpenGLCanvas2::drawImage()
 
                 switch(d->filterMode) {
                 case KisOpenGL::NearestFilterMode:
+                    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
                     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
                     break;
                 case KisOpenGL::BilinearFilterMode:

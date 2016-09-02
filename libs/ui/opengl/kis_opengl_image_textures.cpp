@@ -52,7 +52,6 @@ KisOpenGLImageTextures::KisOpenGLImageTextures()
     : m_image(0)
     , m_monitorProfile(0)
     , m_proofingConfig(0)
-    , m_proofingTransform(0)
     , m_createNewProofingTransform(true)
     , m_tilesDestinationColorSpace(0)
     , m_internalColorManagementActive(true)
@@ -79,7 +78,6 @@ KisOpenGLImageTextures::KisOpenGLImageTextures(KisImageWSP image,
     , m_monitorProfile(monitorProfile)
     , m_renderingIntent(renderingIntent)
     , m_conversionFlags(conversionFlags)
-    , m_proofingTransform(0)
     , m_createNewProofingTransform(true)
     , m_tilesDestinationColorSpace(0)
     , m_internalColorManagementActive(true)
@@ -338,13 +336,13 @@ KisOpenGLUpdateInfoSP KisOpenGLImageTextures::updateCacheImpl(const QRect& rect,
                 //create transform
                 if (m_createNewProofingTransform) {
                     const KoColorSpace *proofingSpace = KoColorSpaceRegistry::instance()->colorSpace(m_proofingConfig->proofingModel,m_proofingConfig->proofingDepth,m_proofingConfig->proofingProfile);
-                    m_proofingTransform = tileInfo->generateProofingTransform(dstCS, proofingSpace, m_renderingIntent, m_proofingConfig->intent, m_proofingConfig->conversionFlags, m_proofingConfig->warningColor, m_proofingConfig->adaptationState);
+                    m_proofingTransform.reset(tileInfo->generateProofingTransform(dstCS, proofingSpace, m_renderingIntent, m_proofingConfig->intent, m_proofingConfig->conversionFlags, m_proofingConfig->warningColor, m_proofingConfig->adaptationState));
                     m_createNewProofingTransform = false;
                 }
 
                 if (convertColorSpace) {
                     if (m_proofingConfig && m_proofingTransform && m_proofingConfig->conversionFlags.testFlag(KoColorConversionTransformation::SoftProofing)) {
-                        tileInfo->proofTo(dstCS, m_proofingConfig->conversionFlags, m_proofingTransform);
+                        tileInfo->proofTo(dstCS, m_proofingConfig->conversionFlags, m_proofingTransform.data());
                     } else {
                         tileInfo->convertTo(dstCS, m_renderingIntent, m_conversionFlags);
                     }

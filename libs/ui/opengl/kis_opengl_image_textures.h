@@ -166,7 +166,7 @@ private:
     KoColorConversionTransformation::ConversionFlags m_conversionFlags;
 
     KisProofingConfigurationSP m_proofingConfig;
-    KoColorConversionTransformation *m_proofingTransform;
+    QScopedPointer<KoColorConversionTransformation> m_proofingTransform;
     bool m_createNewProofingTransform;
 
     /**

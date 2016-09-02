@@ -568,12 +568,12 @@ public:
      * the proofingConfiguration has changed.
      * @param proofingConfig - the kis proofing config that will be used instead.
      */
-    void setProofingConfiguration(KisProofingConfiguration *proofingConfig);
+    void setProofingConfiguration(KisProofingConfigurationSP proofingConfig);
     /**
      * @brief proofingConfiguration
      * @return the proofing configuration of the image.
      */
-    KisProofingConfiguration *proofingConfiguration() const;
+    KisProofingConfigurationSP proofingConfiguration() const;
 
 public:
     bool startIsolatedMode(KisNodeSP node);

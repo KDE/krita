@@ -398,7 +398,7 @@ void KisImageConfig::setShowAdditionalOnionSkinsSettings(bool value)
     m_config.writeEntry("showAdditionalOnionSkinsSettings", value);
 }
 
-KisProofingConfiguration *KisImageConfig::defaultProofingconfiguration()
+KisProofingConfigurationSP KisImageConfig::defaultProofingconfiguration()
 {
     KisProofingConfiguration *proofingConfig= new KisProofingConfiguration();
     proofingConfig->proofingProfile = m_config.readEntry("defaultProofingProfileName", "Chemical proof");
@@ -417,7 +417,7 @@ KisProofingConfiguration *KisImageConfig::defaultProofingconfiguration()
     col.setOpacity(1.0);
     proofingConfig->warningColor = col;
     proofingConfig->adaptationState = (double)m_config.readEntry("defaultProofingAdaptationState", 1.0);
-    return proofingConfig;
+    return toQShared(proofingConfig);
 }
 
 void KisImageConfig::setDefaultProofingConfig(const KoColorSpace *proofingSpace, int proofingIntent, bool blackPointCompensation, KoColor warningColor, double adaptationState)

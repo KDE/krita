@@ -83,7 +83,7 @@ public:
     void initGL(QOpenGLFunctions *f);
 
     void setChannelFlags(const QBitArray &channelFlags);
-    void setProofingConfig(KisProofingConfiguration*);
+    void setProofingConfig(KisProofingConfigurationSP);
 
     bool internalColorManagementActive() const;
     bool setInternalColorManagementActive(bool value);
@@ -165,7 +165,7 @@ private:
     KoColorConversionTransformation::Intent m_renderingIntent;
     KoColorConversionTransformation::ConversionFlags m_conversionFlags;
 
-    KisProofingConfiguration *m_proofingConfig;
+    KisProofingConfigurationSP m_proofingConfig;
     KoColorConversionTransformation *m_proofingTransform;
     bool m_createNewProofingTransform;
 

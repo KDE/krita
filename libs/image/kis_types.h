@@ -265,6 +265,11 @@ class KisKeyframe;
 typedef QSharedPointer<KisKeyframe> KisKeyframeSP;
 typedef QWeakPointer<KisKeyframe> KisKeyframeWSP;
 
+class KisProofingConfiguration;
+typedef QSharedPointer<KisProofingConfiguration> KisProofingConfigurationSP;
+typedef QWeakPointer<KisProofingConfiguration> KisProofingConfigurationWSP;
+
+
 #include <QSharedPointer>
 #include <QWeakPointer>
 #include <kis_shared_ptr.h>

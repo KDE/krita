@@ -79,7 +79,6 @@ KisOpenGLImageTextures::KisOpenGLImageTextures(KisImageWSP image,
     , m_monitorProfile(monitorProfile)
     , m_renderingIntent(renderingIntent)
     , m_conversionFlags(conversionFlags)
-    , m_proofingConfig(0)
     , m_proofingTransform(0)
     , m_createNewProofingTransform(true)
     , m_tilesDestinationColorSpace(0)
@@ -472,7 +471,7 @@ void KisOpenGLImageTextures::setChannelFlags(const QBitArray &channelFlags)
     m_onlyOneChannelSelected = (selectedChannels == 1);
 }
 
-void KisOpenGLImageTextures::setProofingConfig(KisProofingConfiguration *proofingConfig)
+void KisOpenGLImageTextures::setProofingConfig(KisProofingConfigurationSP proofingConfig)
 {
     m_proofingConfig = proofingConfig;
     m_createNewProofingTransform = true;

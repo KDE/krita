@@ -338,7 +338,7 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
 
     KisImageConfig cfgImage;
 
-    KisProofingConfiguration *proofingConfig = cfgImage.defaultProofingconfiguration();
+    KisProofingConfigurationSP proofingConfig = cfgImage.defaultProofingconfiguration();
     m_gamutWarning = new KoColorPopupAction(this);
     m_gamutWarning->setToolTip(i18n("Set default color used for out of Gamut Warning"));
     m_gamutWarning->setCurrentColor(proofingConfig->warningColor);
@@ -443,7 +443,7 @@ void ColorSettingsTab::setDefault()
 
     KisConfig cfg;
     KisImageConfig cfgImage;
-    KisProofingConfiguration *proofingConfig =  cfgImage.defaultProofingconfiguration();
+    KisProofingConfigurationSP proofingConfig =  cfgImage.defaultProofingconfiguration();
     const KoColorSpace *proofingSpace =  KoColorSpaceRegistry::instance()->colorSpace(proofingConfig->proofingModel,proofingConfig->proofingDepth,proofingConfig->proofingProfile);
     m_page->proofingSpaceSelector->setCurrentColorSpace(proofingSpace);
     m_page->cmbProofingIntent->setCurrentIndex((int)proofingConfig->intent);

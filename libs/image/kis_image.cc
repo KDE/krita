@@ -153,7 +153,7 @@ public:
     double yres = 1.0;
 
     const KoColorSpace * colorSpace;
-    KisProofingConfiguration *proofingConfig = 0;
+    KisProofingConfigurationSP proofingConfig;
 
     KisSelectionSP deselectedGlobalSelection;
     KisGroupLayerSP rootLayer; // The layers are contained in here
@@ -1604,13 +1604,13 @@ KisImageAnimationInterface* KisImage::animationInterface() const
     return m_d->animationInterface;
 }
 
-void KisImage::setProofingConfiguration(KisProofingConfiguration *proofingConfig)
+void KisImage::setProofingConfiguration(KisProofingConfigurationSP proofingConfig)
 {
     m_d->proofingConfig = proofingConfig;
     emit sigProofingConfigChanged();
 }
 
-KisProofingConfiguration *KisImage::proofingConfiguration() const
+KisProofingConfigurationSP KisImage::proofingConfiguration() const
 {
     if (!m_d->proofingConfig) {
         KisImageConfig cfg;

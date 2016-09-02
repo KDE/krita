@@ -60,7 +60,7 @@ private:
     KisImageWSP m_image;
     KoColorPopupAction *m_defaultColorAction;
     KoColorPopupAction *m_gamutWarning;
-    KisProofingConfiguration *m_proofingConfig;
+    KisProofingConfigurationSP m_proofingConfig;
 };
 
 

@@ -268,7 +268,7 @@ KisImageWSP KisKraLoader::loadXML(const KoXmlElement& element)
             }
         }
         KisImageConfig cfgImage;
-        KisProofingConfiguration *proofingConfig = cfgImage.defaultProofingconfiguration();
+        KisProofingConfigurationSP proofingConfig = cfgImage.defaultProofingconfiguration();
         if (!(attr = element.attribute(PROOFINGPROFILENAME)).isNull()) {
             proofingConfig->proofingProfile = attr;
         }

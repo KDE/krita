@@ -474,7 +474,7 @@ bool KoGradientSegment::isValid() const
 }
 
 KoGradientSegment::RGBColorInterpolationStrategy::RGBColorInterpolationStrategy()
-        : m_colorSpace(KoColorSpaceRegistry::instance()->rgb8()), buffer(m_colorSpace), m_start(m_colorSpace), m_end(m_colorSpace)
+    : m_colorSpace(KoColorSpaceRegistry::instance()->rgb8())
 {
 }
 
@@ -488,9 +488,13 @@ KoGradientSegment::RGBColorInterpolationStrategy *KoGradientSegment::RGBColorInt
     return m_instance;
 }
 
-void KoGradientSegment::RGBColorInterpolationStrategy::colorAt(KoColor& dst, qreal t, const KoColor& start, const KoColor& end) const
+void KoGradientSegment::RGBColorInterpolationStrategy::colorAt(KoColor& dst, qreal t, const KoColor& _start, const KoColor& _end) const
 {
-    
+
+    KoColor buffer(m_colorSpace);
+    KoColor start(m_colorSpace);
+    KoColor end(m_colorSpace);
+
     KoColor startDummy, endDummy;
     //hack to get a color space with the bitdepth of the gradients(8bit), but with the colour profile of the image//
     const KoColorSpace* mixSpace = KoColorSpaceRegistry::instance()->rgb8(dst.colorSpace()->profile());
@@ -502,10 +506,10 @@ void KoGradientSegment::RGBColorInterpolationStrategy::colorAt(KoColor& dst, qre
         startDummy = start;
         endDummy = end;
     }
-    
-    m_start.fromKoColor(start);
-    m_end.fromKoColor(end);
-    
+
+    start.fromKoColor(_start);
+    end.fromKoColor(_end);
+
     const quint8 *colors[2];
     colors[0] = startDummy.data();
     colors[1] = endDummy.data();
@@ -518,7 +522,7 @@ void KoGradientSegment::RGBColorInterpolationStrategy::colorAt(KoColor& dst, qre
     if (mixSpace){
         if ( !(*buffer.colorSpace() == *mixSpace)) {
             buffer = KoColor(mixSpace);
-            }
+        }
         mixSpace->mixColorsOp()->mixColors(colors, colorWeights, 2, buffer.data());
     }
     else {
@@ -530,7 +534,7 @@ void KoGradientSegment::RGBColorInterpolationStrategy::colorAt(KoColor& dst, qre
 }
 
 KoGradientSegment::HSVCWColorInterpolationStrategy::HSVCWColorInterpolationStrategy()
-        : m_colorSpace(KoColorSpaceRegistry::instance()->rgb8())
+    : m_colorSpace(KoColorSpaceRegistry::instance()->rgb8())
 {
 }
 
@@ -575,7 +579,7 @@ void KoGradientSegment::HSVCWColorInterpolationStrategy::colorAt(KoColor& dst, q
 }
 
 KoGradientSegment::HSVCCWColorInterpolationStrategy::HSVCCWColorInterpolationStrategy() :
-        m_colorSpace(KoColorSpaceRegistry::instance()->rgb8())
+    m_colorSpace(KoColorSpaceRegistry::instance()->rgb8())
 {
 }
 
@@ -833,12 +837,12 @@ void KoSegmentGradient::splitSegment(KoGradientSegment* segment)
         KoColor midleoffsetColor(segment->endColor().colorSpace());
         segment->colorAt(midleoffsetColor, segment->middleOffset());
         KoGradientSegment* newSegment = new KoGradientSegment(
-            segment->interpolation(), segment->colorInterpolation(),
-            segment ->startOffset(),
-            (segment->middleOffset() - segment->startOffset()) / 2 + segment->startOffset(),
-            segment->middleOffset(),
-            segment->startColor(),
-            midleoffsetColor);
+                    segment->interpolation(), segment->colorInterpolation(),
+                    segment ->startOffset(),
+                    (segment->middleOffset() - segment->startOffset()) / 2 + segment->startOffset(),
+                    segment->middleOffset(),
+                    segment->startColor(),
+                    midleoffsetColor);
         m_segments.insert(it, newSegment);
         segment->setStartColor(midleoffsetColor);
         segment->setStartOffset(segment->middleOffset());
@@ -854,11 +858,11 @@ void KoSegmentGradient::duplicateSegment(KoGradientSegment* segment)
         double middlePostionPercentage = (segment->middleOffset() - segment->startOffset()) / segment->length();
         double center = segment->startOffset() + segment->length() / 2;
         KoGradientSegment* newSegment = new KoGradientSegment(
-            segment->interpolation(), segment->colorInterpolation(),
-            segment ->startOffset(),
-            segment->length() / 2 * middlePostionPercentage + segment->startOffset(),
-            center, segment->startColor(),
-            segment->endColor());
+                    segment->interpolation(), segment->colorInterpolation(),
+                    segment ->startOffset(),
+                    segment->length() / 2 * middlePostionPercentage + segment->startOffset(),
+                    center, segment->startColor(),
+                    segment->endColor());
         m_segments.insert(it, newSegment);
         segment->setStartOffset(center);
         segment->setMiddleOffset(segment->length() * middlePostionPercentage  + segment->startOffset());

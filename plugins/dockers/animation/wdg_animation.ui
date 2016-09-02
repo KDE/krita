@@ -519,6 +519,8 @@
    <class>KisToolButton</class>
    <extends>QToolButton</extends>
    <header>kis_tool_button.h</header>
+  </customwidget>
+  <customwidget>
    <class>KisDoubleParseSpinBox</class>
    <extends>QDoubleSpinBox</extends>
    <header>kis_double_parse_spin_box.h</header>

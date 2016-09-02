@@ -132,6 +132,8 @@ QGradient* KoStopGradient::toQGradient() const
 
 void KoStopGradient::colorAt(KoColor& dst, qreal t) const
 {
+    KoColor buffer;
+
     if (! m_stops.count())
         return;
     if (t <= m_stops.first().first || m_stops.count() == 1) {
@@ -162,7 +164,7 @@ void KoStopGradient::colorAt(KoColor& dst, qreal t) const
 
         const KoGradientStop& leftStop = *(stop - 1);
         const KoGradientStop& rightStop = *(stop);
-        
+
         KoColor startDummy, endDummy;
         if (mixSpace){
             startDummy = KoColor(leftStop.second, mixSpace);

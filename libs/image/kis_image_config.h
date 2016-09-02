@@ -101,6 +101,9 @@ public:
     bool showAdditionalOnionSkinsSettings(bool requestDefault = false) const;
     void setShowAdditionalOnionSkinsSettings(bool value);
 
+    int defaultFrameColorLabel() const;
+    void setDefaultFrameColorLabel(int label);
+
 private:
     Q_DISABLE_COPY(KisImageConfig)
 

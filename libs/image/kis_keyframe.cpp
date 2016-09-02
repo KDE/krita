@@ -16,6 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_image_config.h"
 #include "kis_keyframe.h"
 #include "kis_keyframe_channel.h"
 #include "kis_types.h"
@@ -48,7 +49,10 @@ struct KisKeyframe::Private
 
 KisKeyframe::KisKeyframe(KisKeyframeChannel *channel, int time)
     : m_d(new Private(channel, time))
-{}
+{
+    KisImageConfig config;
+    m_d->colorLabel = config.defaultFrameColorLabel();
+}
 
 
 KisKeyframe::~KisKeyframe()

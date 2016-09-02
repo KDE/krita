@@ -394,3 +394,13 @@ void KisImageConfig::setShowAdditionalOnionSkinsSettings(bool value)
 {
     m_config.writeEntry("showAdditionalOnionSkinsSettings", value);
 }
+
+int KisImageConfig::defaultFrameColorLabel() const
+{
+    return m_config.readEntry("defaultFrameColorLabel", 0);
+}
+
+void KisImageConfig::setDefaultFrameColorLabel(int label)
+{
+    m_config.writeEntry("defaultFrameColorLabel", label);
+}

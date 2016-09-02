@@ -38,6 +38,7 @@
 #include <QDrag>
 #include <QWidgetAction>
 #include <kis_signals_blocker.h>
+#include <kis_image_config.h>
 
 #include "kis_debug.h"
 #include "timeline_frames_item_delegate.h"
@@ -314,6 +315,9 @@ void TimelineFramesView::slotColorLabelChanged(int label)
     Q_FOREACH(QModelIndex index, selectedIndexes()) {
         m_d->model->setData(index, label, TimelineFramesModel::ColorLabel);
     }
+
+    KisImageConfig config;
+    config.setDefaultFrameColorLabel(label);
 }
 
 void TimelineFramesView::slotUpdateInfiniteFramesCount()

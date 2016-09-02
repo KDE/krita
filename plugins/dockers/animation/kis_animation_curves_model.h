@@ -88,7 +88,7 @@ protected:
     QList<KisKeyframeChannel *> channelsAt(QModelIndex index) const;
 
 private Q_SLOTS:
-    void slotKeyframeChanged(KisKeyframe *keyframe);
+    void slotKeyframeChanged(KisKeyframeSP keyframe);
 
 private:
     struct Private;

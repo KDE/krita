@@ -356,7 +356,7 @@ QList<KisKeyframeChannel *> KisAnimationCurvesModel::channelsAt(QModelIndex inde
     return list;
 }
 
-void KisAnimationCurvesModel::slotKeyframeChanged(KisKeyframe *keyframe)
+void KisAnimationCurvesModel::slotKeyframeChanged(KisKeyframeSP keyframe)
 {
     int row = m_d->rowForChannel(keyframe->channel());
     QModelIndex changedIndex = index(row, keyframe->time());

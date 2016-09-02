@@ -18,8 +18,16 @@
 
 #include "kis_keyframe.h"
 #include "kis_keyframe_channel.h"
+#include "kis_types.h"
 
 #include <QPointer>
+
+struct KisKeyframeSPStaticRegistrar {
+    KisKeyframeSPStaticRegistrar() {
+        qRegisterMetaType<KisKeyframeSP>("KisKeyframeSP");
+    }
+};
+static KisKeyframeSPStaticRegistrar __registrar;
 
 
 struct KisKeyframe::Private

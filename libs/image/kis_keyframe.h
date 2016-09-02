@@ -24,6 +24,7 @@
 #include <QScopedPointer>
 
 #include "kritaimage_export.h"
+#include "kis_types.h"
 
 class KisKeyframeChannel;
 
@@ -63,4 +64,5 @@ private:
 };
 
 Q_DECLARE_METATYPE(KisKeyframe*)
+Q_DECLARE_METATYPE(KisKeyframeSP)
 #endif

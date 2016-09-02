@@ -275,17 +275,17 @@ void KisKeyframingTest::testChannelSignals()
 {
     KisScalarKeyframeChannel *channel = new KisScalarKeyframeChannel(KoID("", ""), -17, 31, 0);
     KisKeyframeSP key;
-    KisKeyframe *resKey;
+    KisKeyframeSP resKey;
 
-    qRegisterMetaType<KisKeyframe*>("KisKeyframePtr");
-    QSignalSpy spyPreAdd(channel, SIGNAL(sigKeyframeAboutToBeAdded(KisKeyframe*)));
-    QSignalSpy spyPostAdd(channel, SIGNAL(sigKeyframeAdded(KisKeyframe*)));
+    qRegisterMetaType<KisKeyframeSP>("KisKeyframeSP");
+    QSignalSpy spyPreAdd(channel, SIGNAL(sigKeyframeAboutToBeAdded(KisKeyframeSP)));
+    QSignalSpy spyPostAdd(channel, SIGNAL(sigKeyframeAdded(KisKeyframeSP)));
 
-    QSignalSpy spyPreRemove(channel, SIGNAL(sigKeyframeAboutToBeRemoved(KisKeyframe*)));
-    QSignalSpy spyPostRemove(channel, SIGNAL(sigKeyframeRemoved(KisKeyframe*)));
+    QSignalSpy spyPreRemove(channel, SIGNAL(sigKeyframeAboutToBeRemoved(KisKeyframeSP)));
+    QSignalSpy spyPostRemove(channel, SIGNAL(sigKeyframeRemoved(KisKeyframeSP)));
 
-    QSignalSpy spyPreMove(channel, SIGNAL(sigKeyframeAboutToBeMoved(KisKeyframe*,int)));
-    QSignalSpy spyPostMove(channel, SIGNAL(sigKeyframeMoved(KisKeyframe*, int)));
+    QSignalSpy spyPreMove(channel, SIGNAL(sigKeyframeAboutToBeMoved(KisKeyframeSP,int)));
+    QSignalSpy spyPostMove(channel, SIGNAL(sigKeyframeMoved(KisKeyframeSP, int)));
 
     QVERIFY(spyPreAdd.isValid());
     QVERIFY(spyPostAdd.isValid());
@@ -304,10 +304,10 @@ void KisKeyframingTest::testChannelSignals()
     QCOMPARE(spyPreAdd.count(), 1);
     QCOMPARE(spyPostAdd.count(), 1);
 
-    resKey = spyPreAdd.at(0).at(0).value<KisKeyframe*>();
-    QVERIFY(resKey == key.data());
-    resKey = spyPostAdd.at(0).at(0).value<KisKeyframe*>();
-    QVERIFY(resKey == key.data());
+    resKey = spyPreAdd.at(0).at(0).value<KisKeyframeSP>();
+    QVERIFY(resKey == key);
+    resKey = spyPostAdd.at(0).at(0).value<KisKeyframeSP>();
+    QVERIFY(resKey == key);
 
     // Moving a keyframe
 
@@ -317,11 +317,11 @@ void KisKeyframingTest::testChannelSignals()
     QCOMPARE(spyPreMove.count(), 1);
     QCOMPARE(spyPostMove.count(), 1);
 
-    resKey = spyPreMove.at(0).at(0).value<KisKeyframe*>();
-    QVERIFY(resKey == key.data());
+    resKey = spyPreMove.at(0).at(0).value<KisKeyframeSP>();
+    QVERIFY(resKey == key);
     QCOMPARE(spyPreMove.at(0).at(1).toInt(), 15);
-    resKey = spyPostMove.at(0).at(0).value<KisKeyframe*>();
-    QVERIFY(resKey == key.data());
+    resKey = spyPostMove.at(0).at(0).value<KisKeyframeSP>();
+    QVERIFY(resKey == key);
 
     // No-op move (no signals)
 

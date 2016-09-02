@@ -112,13 +112,13 @@ public:
     int currentTime() const;
 
 Q_SIGNALS:
-    void sigKeyframeAboutToBeAdded(KisKeyframe *keyframe);
-    void sigKeyframeAdded(KisKeyframe *keyframe);
-    void sigKeyframeAboutToBeRemoved(KisKeyframe *keyframe);
-    void sigKeyframeRemoved(KisKeyframe *keyframe);
-    void sigKeyframeAboutToBeMoved(KisKeyframe *keyframe, int toTime);
-    void sigKeyframeMoved(KisKeyframe *keyframe, int fromTime);
-    void sigKeyframeChanged(KisKeyframe *keyframe);
+    void sigKeyframeAboutToBeAdded(KisKeyframeSP keyframe);
+    void sigKeyframeAdded(KisKeyframeSP keyframe);
+    void sigKeyframeAboutToBeRemoved(KisKeyframeSP keyframe);
+    void sigKeyframeRemoved(KisKeyframeSP keyframe);
+    void sigKeyframeAboutToBeMoved(KisKeyframeSP keyframe, int toTime);
+    void sigKeyframeMoved(KisKeyframeSP keyframe, int fromTime);
+    void sigKeyframeChanged(KisKeyframeSP keyframe);
 
 protected:
     typedef QMap<int, KisKeyframeSP> KeyframesMap;

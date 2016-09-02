@@ -426,7 +426,6 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
     forms/wdggeneralsettings.ui
     forms/wdgperformancesettings.ui
     forms/wdggenerators.ui
-    forms/wdgcustompalette.ui
     forms/wdgbookmarkedconfigurationseditor.ui
     forms/wdgapplyprofile.ui
     forms/wdgcustompattern.ui

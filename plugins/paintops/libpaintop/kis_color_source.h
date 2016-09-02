@@ -79,9 +79,7 @@ public:
     virtual bool isUniformColor() const;
     virtual const KoColor& uniformColor() const;
 protected:
-    KoColor* m_color;
-private:
-    mutable KoColor* m_cachedColor;
+    KoColor m_color;
 };
 
 class PAINTOP_EXPORT KisPlainColorSource : public KisUniformColorSource
@@ -91,8 +89,9 @@ public:
     virtual ~KisPlainColorSource();
     virtual void selectColor(double mix, const KisPaintInformation &pi);
 private:
-    KoColor m_backGroundColor, m_foreGroundColor;
-    KoColor* m_cachedBackGroundColor;
+    KoColor m_backGroundColor;
+    KoColor m_foreGroundColor;
+    KoColor m_cachedBackGroundColor;
 };
 
 class PAINTOP_EXPORT KisGradientColorSource : public KisUniformColorSource

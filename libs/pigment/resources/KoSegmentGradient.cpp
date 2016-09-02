@@ -500,11 +500,11 @@ void KoGradientSegment::RGBColorInterpolationStrategy::colorAt(KoColor& dst, qre
     const KoColorSpace* mixSpace = KoColorSpaceRegistry::instance()->rgb8(dst.colorSpace()->profile());
     //convert to the right colorspace for the start and end if we have our mixSpace.
     if (mixSpace){
-        startDummy = KoColor(start, mixSpace);
-        endDummy = KoColor(end, mixSpace);
+        startDummy = KoColor(_start, mixSpace);
+        endDummy = KoColor(_end, mixSpace);
     } else {
-        startDummy = start;
-        endDummy = end;
+        startDummy = _start;
+        endDummy = _end;
     }
 
     start.fromKoColor(_start);

@@ -139,24 +139,30 @@ qreal KisDynaOpOption::lineSpacing() const
 
 void KisDynaOpOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
 {
-    setting->setProperty(DYNA_WIDTH, initWidth());
-    setting->setProperty(DYNA_MASS , mass());
-    setting->setProperty(DYNA_DRAG , drag());
-    setting->setProperty(DYNA_USE_FIXED_ANGLE , useFixedAngle());
-    setting->setProperty(DYNA_ANGLE , m_options->angleSlider->value());
-    setting->setProperty(DYNA_WIDTH_RANGE , widthRange());
-    setting->setProperty(DYNA_ACTION , action());
-    setting->setProperty(DYNA_DIAMETER , m_options->diameterDSSB->value());
-    setting->setProperty(DYNA_ENABLE_LINE , enableLine());
-    setting->setProperty(DYNA_USE_TWO_CIRCLES , useTwoCircles());
-    setting->setProperty(DYNA_LINE_COUNT , lineCount());
-    setting->setProperty(DYNA_LINE_SPACING , lineSpacing());
+    DynaOption op;
 
+    op.dyna_width = initWidth();
+    op.dyna_mass  = mass();
+    op.dyna_drag  = drag();
+    op.dyna_use_fixed_angle  = useFixedAngle();
+    op.dyna_angle  = m_options->angleSlider->value();
+    op.dyna_width_range  = widthRange();
+    op.dyna_action  = action();
+    op.dyna_diameter  = m_options->diameterDSSB->value();
+    op.dyna_enable_line  = enableLine();
+    op.dyna_use_two_circles  = useTwoCircles();
+    op.dyna_line_count  = lineCount();
+    op.dyna_line_spacing  = lineSpacing();
+
+    op.writeOptionSetting(setting);
 }
 
 void KisDynaOpOption::readOptionSetting(const KisPropertiesConfiguration* setting)
 {
-    switch (setting->getInt(DYNA_ACTION)) {
+    DynaOption op;
+    op.readOptionSetting(setting);
+
+    switch (op.dyna_action) {
     case 0: m_options->circleRBox->setChecked(true); break;
     case 1: m_options->polygonRBox->setChecked(true); break;
     case 2: m_options->wireRBox->setChecked(true); break;
@@ -164,17 +170,17 @@ void KisDynaOpOption::readOptionSetting(const KisPropertiesConfiguration* settin
     default: break;
     }
 
-    m_options->initWidthSPBox->setValue(setting->getDouble(DYNA_WIDTH));
-    m_options->massSPBox->setValue(setting->getDouble(DYNA_MASS));
-    m_options->dragSPBox->setValue(setting->getDouble(DYNA_DRAG));
-    m_options->angleSlider->setValue(setting->getDouble(DYNA_ANGLE));
-    m_options->widthRangeSPBox->setValue(setting->getDouble(DYNA_WIDTH_RANGE));
-    m_options->diameterDSSB->setValue(setting->getInt(DYNA_DIAMETER));
-    m_options->lineCountSPBox->setValue(setting->getInt(DYNA_LINE_COUNT));
-    m_options->lineSpacingSPBox->setValue(setting->getDouble(DYNA_LINE_SPACING));
-    m_options->LineCBox->setChecked(setting->getBool(DYNA_ENABLE_LINE));
-    m_options->twoCBox->setChecked(setting->getBool(DYNA_USE_TWO_CIRCLES));
-    m_options->fixedAngleChBox->setChecked(setting->getBool(DYNA_USE_FIXED_ANGLE));
+    m_options->initWidthSPBox->setValue(op.dyna_width);
+    m_options->massSPBox->setValue(op.dyna_mass);
+    m_options->dragSPBox->setValue(op.dyna_drag);
+    m_options->angleSlider->setValue(op.dyna_angle);
+    m_options->widthRangeSPBox->setValue(op.dyna_width_range);
+    m_options->diameterDSSB->setValue(op.dyna_diameter);
+    m_options->lineCountSPBox->setValue(op.dyna_line_count);
+    m_options->lineSpacingSPBox->setValue(op.dyna_line_spacing);
+    m_options->LineCBox->setChecked(op.dyna_enable_line);
+    m_options->twoCBox->setChecked(op.dyna_use_two_circles);
+    m_options->fixedAngleChBox->setChecked(op.dyna_use_fixed_angle);
 }
 
 void KisDynaOpOption::lodLimitations(KisPaintopLodLimitations *l) const

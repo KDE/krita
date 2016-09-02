@@ -74,7 +74,7 @@ public:
      * @param viewConverter the viewconverter for converting between
      *                       window and document coordinates.
      */
-    KisCanvas2(KisCoordinatesConverter* coordConverter, KoCanvasResourceManager *resourceManager, KisView *view, KoShapeBasedDocumentBase* sc);
+    KisCanvas2(KisCoordinatesConverter *coordConverter, KoCanvasResourceManager *resourceManager, KisView *view, KoShapeBasedDocumentBase *sc);
 
     virtual ~KisCanvas2();
 
@@ -164,8 +164,25 @@ public: // KisCanvas2 methods
     void setDisplayFilter(KisDisplayFilter *displayFilter);
     KisDisplayFilter *displayFilter() const;
 
-    KisDisplayColorConverter* displayColorConverter() const;
+    KisDisplayColorConverter *displayColorConverter() const;
     KisExposureGammaCorrectionInterface* exposureGammaCorrectionInterface() const;
+    /**
+     * @brief setProofingOptions
+     * set the options for softproofing, without affecting the proofing options as stored inside the image.
+     */
+    void setProofingOptions(bool softProof, bool gamutCheck);
+    KisProofingConfiguration *proofingConfiguration() const;
+    /**
+     * @brief setProofingConfigUpdated This function is to set whether the proofing config is updated,
+     * this is needed for determining whether or not to generate a new proofing transform.
+     * @param updated whether it's updated. Just set it to false in normal usage.
+     */
+    void setProofingConfigUpdated(bool updated);
+    /**
+     * @brief proofingConfigUpdated ask the canvas whether or not it updated the proofing config.
+     * @return whether or not the proofing config is updated, if so, a new proofing transform needs to be made
+     * in KisOpenGL canvas.
+     */bool proofingConfigUpdated();
 
     void setCursor(const QCursor &cursor);
     KisAnimationFrameCacheSP frameCache() const;
@@ -196,6 +213,9 @@ public Q_SLOTS:
     /// Bools indicating canvasmirroring.
     bool xAxisMirrored() const;
     bool yAxisMirrored() const;
+    void slotSoftProofing(bool softProofing);
+    void slotGamutCheck(bool gamutCheck);
+    void slotChangeProofingConfig();
 
     void channelSelectionChanged();
 

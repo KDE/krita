@@ -61,7 +61,7 @@ KisSprayPaintOp::KisSprayPaintOp(const KisSprayPaintOpSettings *settings, KisPai
     m_brushOption.readOptionSetting(settings, true);
 
     m_colorProperties.fillProperties(settings);
-    m_properties.loadSettings(settings);
+    m_properties.readOptionSetting(settings);
     // first load tip properties as shape properties are dependent on diameter/scale/aspect
     m_shapeProperties.loadSettings(settings, m_properties.diameter * m_properties.scale, m_properties.diameter * m_properties.aspect * m_properties.scale);
 
@@ -113,8 +113,6 @@ KisSpacingInformation KisSprayPaintOp::paintAt(const KisPaintInformation& info)
     const qreal scale = m_sizeOption.apply(info);
     const qreal additionalScale = KisLodTransform::lodToScale(painter()->device());
 
-    setCurrentRotation(rotation);
-    setCurrentScale(scale * additionalScale);
 
     m_sprayBrush.paint(m_dab,
                        m_node->paintDevice(),

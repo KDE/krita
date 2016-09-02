@@ -124,22 +124,19 @@ KisSpacingInformation KisTangentNormalPaintOp::paintAt(const KisPaintInformation
 
     qreal scale    = m_sizeOption.apply(info);
     scale *= KisLodTransform::lodToScale(painter()->device());
-
     qreal rotation = m_rotationOption.apply(info);
-
     if (checkSizeTooSmall(scale)) return KisSpacingInformation();
+    KisDabShape shape(scale, 1.0, rotation);
 
-    setCurrentScale(scale);
-    setCurrentRotation(rotation);
 
     QPointF cursorPos =
         m_scatterOption.apply(info,
-                              brush->maskWidth(scale, rotation, 0, 0, info),
-                              brush->maskHeight(scale, rotation, 0, 0, info));
+                              brush->maskWidth(shape, 0, 0, info),
+                              brush->maskHeight(shape, 0, 0, info));
 
     m_maskDab =
         m_dabCache->fetchDab(rgbColorSpace, color, cursorPos,
-                             scale, scale, rotation,
+                             shape,
                              info, m_softnessOption.apply(info),
                              &m_dstDabRect);
 

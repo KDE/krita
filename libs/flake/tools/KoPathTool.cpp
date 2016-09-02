@@ -248,7 +248,6 @@ void KoPathTool::insertPoints()
 void KoPathTool::removePoints()
 {
     Q_D(KoToolBase);
-    // TODO finish current action or should this not possible during actions???
     if (m_pointSelection.size() > 0) {
         KUndo2Command *cmd = KoPathPointRemoveCommand::createCommand(m_pointSelection.selectedPointsData(), d->canvas->shapeController());
         PointHandle *pointHandle = dynamic_cast<PointHandle*>(m_activeHandle);
@@ -419,7 +418,7 @@ void KoPathTool::paint(QPainter &painter, const KoViewConverter &converter)
     Q_D(KoToolBase);
     painter.setRenderHint(QPainter::Antialiasing, true);
     // use different colors so that it is also visible on a background of the same color
-    painter.setBrush(Qt::white);   //TODO make configurable
+    painter.setBrush(Qt::white);
     painter.setPen(Qt::blue);
 
     Q_FOREACH (KoPathShape *shape, m_pointSelection.selectedShapes()) {
@@ -442,12 +441,12 @@ void KoPathTool::paint(QPainter &painter, const KoViewConverter &converter)
         painter.restore();
     }
 
-    painter.setBrush(Qt::green);   // TODO make color configurable
+    painter.setBrush(Qt::green);
     painter.setPen(Qt::blue);
 
     m_pointSelection.paint(painter, converter);
 
-    painter.setBrush(Qt::red);   // TODO make color configurable
+    painter.setBrush(Qt::red);
     painter.setPen(Qt::blue);
 
     if (m_activeHandle) {
@@ -770,7 +769,6 @@ void KoPathTool::mouseDoubleClickEvent(KoPointerEvent *event)
 KoPathTool::PathSegment* KoPathTool::segmentAtPoint(const QPointF &point)
 {
     Q_D(KoToolBase);
-    // TODO: use global click proximity once added to the canvas resource provider
     const int clickProximity = 5;
 
     // convert click proximity to point using the current zoom level

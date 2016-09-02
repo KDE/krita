@@ -7,7 +7,6 @@ set(kritalibpaintop_LIB_SRCS
     kis_brush_based_paintop.cpp
     kis_brush_chooser.cpp
     kis_brush_option_widget.cpp
-    kis_brush_size_option.cpp
     kis_brush_option.cpp
     kis_brush_selection_widget.cpp
     kis_color_option.cpp
@@ -16,6 +15,7 @@ set(kritalibpaintop_LIB_SRCS
     kis_color_source_option_widget.cpp
     kis_curve_option.cpp
     kis_curve_option_widget.cpp
+    kis_curve_option_uniform_property.cpp
     kis_custom_brush_widget.cpp
     kis_clipboard_brush_widget.cpp
     kis_dynamic_sensor.cc
@@ -44,6 +44,7 @@ set(kritalibpaintop_LIB_SRCS
     kis_pressure_flow_opacity_option.cpp
     kis_pressure_flow_opacity_option_widget.cpp
     kis_pressure_spacing_option_widget.cpp
+    kis_pressure_ratio_option.cpp
     kis_current_outline_fetcher.cpp
     kis_text_brush_chooser.cpp
     kis_brush_based_paintop_options_widget.cpp

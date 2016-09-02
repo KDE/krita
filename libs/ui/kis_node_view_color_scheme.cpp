@@ -166,7 +166,17 @@ QRect KisNodeViewColorScheme::relExpandButtonRect() const
 
 QColor KisNodeViewColorScheme::colorLabel(int index) const
 {
-    return m_d->colorLabels[index % m_d->colorLabels.size()];
+    /**
+     * We should ensure that the index of the overflowing range
+     * will never be zero again.
+     */
+    if (index >= m_d->colorLabels.size()) {
+        index = 1 + index % (m_d->colorLabels.size() - 1);
+    } else {
+        index = index % m_d->colorLabels.size();
+    }
+
+    return m_d->colorLabels[index];
 }
 
 QVector<QColor> KisNodeViewColorScheme::allColorLabels() const

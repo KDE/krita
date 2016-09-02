@@ -27,6 +27,7 @@
 class KoColor;
 class QWidget;
 class QDoubleSpinBox;
+class KisDoubleParseSpinBox;
 class KisHSVSlider;
 class KisDisplayColorConverter;
 
@@ -76,7 +77,7 @@ Q_SIGNALS:
     void satUpdated(int, int);
     void toneUpdated(int, int);
 private:
-    QDoubleSpinBox* m_NumInput;
+    KisDoubleParseSpinBox* m_NumInput;
     qreal m_hue;
     qreal m_sat;
     qreal m_val;

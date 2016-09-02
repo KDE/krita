@@ -55,7 +55,6 @@ struct Q_DECL_HIDDEN KisUpdateScheduler::Private {
 
     KisSimpleUpdateQueue updatesQueue;
     KisStrokesQueue strokesQueue;
-    KisUpdaterContext updaterContext;
     bool processingBlocked = false;
     qreal balancingRatio = 1.0; // updates-queue-size/strokes-queue-size
     KisProjectionUpdateListener *projectionUpdateListener;
@@ -64,6 +63,11 @@ struct Q_DECL_HIDDEN KisUpdateScheduler::Private {
     QAtomicInt updatesLockCounter;
     QReadWriteLock updatesStartLock;
     KisLazyWaitCondition updatesFinishedCondition;
+
+    // KisUpdaterContext can emit signals to KisUpdateScheduler in the dtor, so it
+    // must to be deleted before anything else.
+    // That means updaterContext must be declared last.
+    KisUpdaterContext updaterContext;
 };
 
 KisUpdateScheduler::KisUpdateScheduler(KisProjectionUpdateListener *projectionUpdateListener)
@@ -163,9 +167,11 @@ void KisUpdateScheduler::fullRefresh(KisNodeSP root, const QRect& rc, const QRec
 
     Q_ASSERT(m_d->updaterContext.isJobAllowed(walker));
     m_d->updaterContext.addMergeJob(walker);
-    m_d->updaterContext.waitForDone();
 
     m_d->updaterContext.unlock();
+
+    m_d->updaterContext.waitForDone();
+
     if(needLock) unlock(true);
 }
 
@@ -408,7 +414,9 @@ bool KisUpdateScheduler::haveUpdatesRunning()
     QWriteLocker locker(&m_d->updatesStartLock);
 
     qint32 numMergeJobs, numStrokeJobs;
+    m_d->updaterContext.lock();
     m_d->updaterContext.getJobsSnapshot(numMergeJobs, numStrokeJobs);
+    m_d->updaterContext.unlock();
 
     return numMergeJobs;
 }

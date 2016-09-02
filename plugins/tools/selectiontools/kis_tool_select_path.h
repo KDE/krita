@@ -51,23 +51,23 @@ typedef KisDelegatedTool<KisTool, __KisToolSelectPathLocalTool,
                          DeselectShapesActivationPolicy> DelegatedSelectPathTool;
 
 struct KisDelegatedSelectPathWrapper : public DelegatedSelectPathTool {
-        KisDelegatedSelectPathWrapper(KoCanvasBase *canvas,
-              const QCursor &cursor,
-              KisTool* delegateTool)
+    KisDelegatedSelectPathWrapper(KoCanvasBase *canvas,
+                                  const QCursor &cursor,
+                                  KisTool* delegateTool)
         : DelegatedSelectPathTool(canvas, cursor, (__KisToolSelectPathLocalTool*) delegateTool)
     {
     }
-          bool listeningToModifiers();
+    bool listeningToModifiers();
 
-          // If an event is explicitly forwarded only as an action (e.g. shift-click is captured by "change size")
-          // we will receive a primary action but no mousePressEvent.  Thus these events must be explicitly forwarded.
-          void beginPrimaryAction(KoPointerEvent *event);
-          void continuePrimaryAction(KoPointerEvent *event);
-          void endPrimaryAction(KoPointerEvent *event);
+    // If an event is explicitly forwarded only as an action (e.g. shift-click is captured by "change size")
+    // we will receive a primary action but no mousePressEvent.  Thus these events must be explicitly forwarded.
+    void beginPrimaryAction(KoPointerEvent *event);
+    void continuePrimaryAction(KoPointerEvent *event);
+    void endPrimaryAction(KoPointerEvent *event);
 };
 
 
-class KisToolSelectPath : public SelectionActionHandler<KisDelegatedSelectPathWrapper>
+class KisToolSelectPath : public KisToolSelectBase<KisDelegatedSelectPathWrapper>
 {
     Q_OBJECT
 public:
@@ -87,7 +87,7 @@ class KisToolSelectPathFactory : public KoToolFactoryBase
 {
 public:
     KisToolSelectPathFactory()
-            : KoToolFactoryBase("KisToolSelectPath") {
+        : KoToolFactoryBase("KisToolSelectPath") {
         setToolTip(i18n("Bezier Curve Selection Tool"));
         setToolType(TOOL_TYPE_SELECTED);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);

@@ -26,6 +26,7 @@ class KisProgressUpdateHelper {
 public:
     KisProgressUpdateHelper(KoUpdaterPtr progressUpdater, int portion, int numSteps)
         : m_progressUpdater(progressUpdater),
+          m_baseProgress(0),
           m_portion(portion),
           m_currentStep(0),
           m_numSteps(numSteps)

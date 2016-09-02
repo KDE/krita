@@ -40,7 +40,7 @@ public:
                      KisStrokesFacade *strokesFacade,
                      KisPostExecutionUndoAdapter *undoAdapter);
 
-    void start(KoPointerEvent *event);
+    void start(KoPointerEvent *event, KoCanvasResourceManager *resourceManager);
     void addPoint(KoPointerEvent *event, const QPointF &overridePos = QPointF());
     void translatePoints(const QPointF &offset);
     void end();

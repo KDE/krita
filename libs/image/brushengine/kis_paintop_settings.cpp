@@ -36,8 +36,14 @@
 #include <brushengine/kis_paint_information.h>
 #include "kis_paintop_config_widget.h"
 #include <brushengine/kis_paintop_preset.h>
+#include "kis_paintop_settings_update_proxy.h"
 #include <time.h>
 #include<kis_types.h>
+#include <kis_signals_blocker.h>
+
+#include <brushengine/kis_locked_properties_server.h>
+#include <brushengine/kis_locked_properties_proxy.h>
+
 
 struct Q_DECL_HIDDEN KisPaintOpSettings::Private {
     Private() : disableDirtyNotifications(false) {}
@@ -45,6 +51,7 @@ struct Q_DECL_HIDDEN KisPaintOpSettings::Private {
     QPointer<KisPaintOpConfigWidget> settingsWidget;
     QString modelName;
     KisPaintOpPresetWSP preset;
+    QList<KisUniformPaintOpPropertyWSP> uniformProperties;
 
 
     bool disableDirtyNotifications;
@@ -67,6 +74,14 @@ struct Q_DECL_HIDDEN KisPaintOpSettings::Private {
         bool m_oldNotificationsState;
         Q_DISABLE_COPY(DirtyNotificationsLocker)
     };
+
+    KisPaintopSettingsUpdateProxy* updateProxyNoCreate() const {
+        return preset ? preset->updateProxyNoCreate() : 0;
+    }
+
+    KisPaintopSettingsUpdateProxy* updateProxyCreate() const {
+        return preset ? preset->updateProxy() : 0;
+    }
 };
 
 
@@ -146,61 +161,100 @@ void KisPaintOpSettings::activate()
 {
 }
 
-void KisPaintOpSettings::changePaintOpSize(qreal x, qreal y)
-{
-    if (!d->settingsWidget.isNull()) {
-        d->settingsWidget.data()->changePaintOpSize(x, y);
-        d->settingsWidget.data()->writeConfiguration(this);
-    }
-}
-
-
-QSizeF KisPaintOpSettings::paintOpSize() const
-{
-    if (!d->settingsWidget.isNull()) {
-        return d->settingsWidget.data()->paintOpSize();
-    }
-    return QSizeF(1.0, 1.0);
-}
-
 void KisPaintOpSettings::setPaintOpOpacity(qreal value)
 {
-    setProperty("OpacityValue", value);
+    KisLockedPropertiesProxySP proxy(
+        KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(this));
+
+    proxy->setProperty("OpacityValue", value);
 }
 
 void KisPaintOpSettings::setPaintOpFlow(qreal value)
 {
-    setProperty("FlowValue", value);
+    KisLockedPropertiesProxySP proxy(
+        KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(this));
+
+    proxy->setProperty("FlowValue", value);
 }
 
 void KisPaintOpSettings::setPaintOpCompositeOp(const QString &value)
 {
-    setProperty("CompositeOp", value);
+    KisLockedPropertiesProxySP proxy(
+        KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(this));
+
+    proxy->setProperty("CompositeOp", value);
 }
 
 qreal KisPaintOpSettings::paintOpOpacity() const
 {
-    return getDouble("OpacityValue", 1.0);
+    KisLockedPropertiesProxySP proxy(
+        KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(this));
+
+    return proxy->getDouble("OpacityValue", 1.0);
 }
 
 qreal KisPaintOpSettings::paintOpFlow() const
 {
-    return getDouble("FlowValue", 1.0);
+    KisLockedPropertiesProxySP proxy(
+        KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(this));
+
+    return proxy->getDouble("FlowValue", 1.0);
+}
+
+void KisPaintOpSettings::setPaintOpSize(qreal value)
+{
+    /**
+     * The widget already has the wrapping for the locked setings
+     * functionality, so just request it.
+     */
+
+    if (d->settingsWidget) {
+        const qreal sizeDiff = value - paintOpSize();
+
+        {
+            KisSignalsBlocker b(d->settingsWidget);
+            d->settingsWidget.data()->setConfigurationSafe(this);
+            d->settingsWidget.data()->changePaintOpSize(sizeDiff, 0);
+        }
+        d->settingsWidget.data()->writeConfigurationSafe(this);
+    }
+}
+
+qreal KisPaintOpSettings::paintOpSize() const
+{
+    // see a comment about locked settings in setPaintOpSize()
+
+    qreal size = 1.0;
+
+    if (d->settingsWidget) {
+        size = d->settingsWidget.data()->paintOpSize().width();
+    }
+
+    return size;
 }
 
 QString KisPaintOpSettings::paintOpCompositeOp() const
 {
-    return getString("CompositeOp", COMPOSITE_OVER);
+    KisLockedPropertiesProxySP proxy(
+        KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(this));
+
+    return proxy->getString("CompositeOp", COMPOSITE_OVER);
 }
 
 void KisPaintOpSettings::setEraserMode(bool value)
 {
-    setProperty("EraserMode", value);
+    KisLockedPropertiesProxySP proxy(
+        KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(this));
+
+    proxy->setProperty("EraserMode", value);
 }
 
 bool KisPaintOpSettings::eraserMode() const
 {
-    return getBool("EraserMode", false);
+    KisLockedPropertiesProxySP proxy(
+        KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(this));
+
+    return proxy->getBool("EraserMode", false);
 }
 
 QString KisPaintOpSettings::effectivePaintOpCompositeOp() const
@@ -271,16 +325,7 @@ QPainterPath KisPaintOpSettings::brushOutline(const KisPaintInformation &info, O
         path = ellipseOutline(10, 10, 1.0, 0);
         
         if (mode == CursorTiltOutline) {
-            QPainterPath tiltLine;
-            QLineF tiltAngle(QPointF(0.0,0.0), QPointF(0.0,3.0));
-            tiltAngle.setLength(50.0 * (1 - info.tiltElevation(info, 60.0, 60.0, true)));
-            tiltAngle.setAngle((360.0 - fmod(KisPaintInformation::tiltDirection(info, true) * 360.0 + 270.0, 360.0))-2.0);
-            tiltLine.moveTo(tiltAngle.p1());
-            tiltLine.lineTo(tiltAngle.p2());
-            tiltAngle.setAngle((360.0 - fmod(KisPaintInformation::tiltDirection(info, true) * 360.0 + 270.0, 360.0))+2.0);
-            tiltLine.lineTo(tiltAngle.p2());
-            tiltLine.lineTo(tiltAngle.p1());
-            path.addPath(tiltLine);
+            path.addPath(makeTiltIndicator(info, QPointF(0.0, 0.0), 0.0, 2.0));
         }
 
         path.translate(info.pos());
@@ -289,7 +334,7 @@ QPainterPath KisPaintOpSettings::brushOutline(const KisPaintInformation &info, O
     return path;
 }
 
-QPainterPath KisPaintOpSettings::ellipseOutline(qreal width, qreal height, qreal scale, qreal rotation) const
+QPainterPath KisPaintOpSettings::ellipseOutline(qreal width, qreal height, qreal scale, qreal rotation)
 {
     QPainterPath path;
     QRectF ellipse(0, 0, width * scale, height * scale);
@@ -301,6 +346,25 @@ QPainterPath KisPaintOpSettings::ellipseOutline(qreal width, qreal height, qreal
     m.rotate(rotation);
     path = m.map(path);
     return path;
+}
+
+QPainterPath KisPaintOpSettings::makeTiltIndicator(KisPaintInformation const& info,
+    QPointF const& start, qreal maxLength, qreal angle)
+{
+    if (maxLength == 0.0) maxLength = 50.0;
+    maxLength = qMax(maxLength, 50.0);
+    qreal const length = maxLength * (1 - info.tiltElevation(info, 60.0, 60.0, true));
+    qreal const baseAngle = 360.0 - fmod(KisPaintInformation::tiltDirection(info, true) * 360.0 + 270.0, 360.0);
+
+    QLineF guideLine = QLineF::fromPolar(length, baseAngle + angle);
+    guideLine.translate(start);
+    QPainterPath ret;
+    ret.moveTo(guideLine.p1());
+    ret.lineTo(guideLine.p2());
+    guideLine.setAngle(baseAngle - angle);
+    ret.lineTo(guideLine.p2());
+    ret.lineTo(guideLine.p1());
+    return ret;
 }
 
 void KisPaintOpSettings::setCanvasRotation(qreal angle)
@@ -337,7 +401,11 @@ void KisPaintOpSettings::setProperty(const QString & name, const QVariant & valu
 
 void KisPaintOpSettings::onPropertyChanged()
 {
+    KisPaintopSettingsUpdateProxy *proxy = d->updateProxyNoCreate();
 
+    if (proxy) {
+        proxy->notifySettingsChanged();
+    }
 }
 
 bool KisPaintOpSettings::isLodUserAllowed(const KisPropertiesConfiguration *config)
@@ -348,4 +416,25 @@ bool KisPaintOpSettings::isLodUserAllowed(const KisPropertiesConfiguration *conf
 void KisPaintOpSettings::setLodUserAllowed(KisPropertiesConfiguration *config, bool value)
 {
     config->setProperty("lodUserAllowed", value);
+}
+
+#include "kis_standard_uniform_properties_factory.h"
+
+QList<KisUniformPaintOpPropertySP> KisPaintOpSettings::uniformProperties()
+{
+    QList<KisUniformPaintOpPropertySP> props =
+        listWeakToStrong(d->uniformProperties);
+
+
+    if (props.isEmpty()) {
+        using namespace KisStandardUniformPropertiesFactory;
+
+        props.append(createProperty(opacity, this, d->updateProxyCreate()));
+        props.append(createProperty(size, this, d->updateProxyCreate()));
+        props.append(createProperty(flow, this, d->updateProxyCreate()));
+
+        d->uniformProperties = listStrongToWeak(props);
+    }
+
+    return props;
 }

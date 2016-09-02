@@ -16,14 +16,23 @@
  */
 
 #include "channelmodel.h"
-
+#include <QImage>
 #include <KoColorSpace.h>
 #include <KoChannelInfo.h>
-#include <kis_layer.h>
-#include <kis_paint_layer.h>
+#include <kis_painter.h>
 
-ChannelModel::ChannelModel(QObject* parent): QAbstractTableModel(parent), m_currentLayer(0)
+#include <kis_group_layer.h>
+#include <kis_paint_device.h>
+#include <kis_iterator_ng.h>
+#include <kis_default_bounds.h>
+
+#include <kis_canvas2.h>
+
+ChannelModel::ChannelModel(QObject* parent):
+    QAbstractTableModel(parent),
+    m_canvas(nullptr), m_oversampleRatio(2), m_channelCount(0)
 {
+    setThumbnailSizeLimit(QSize(64, 64));
 }
 
 ChannelModel::~ChannelModel()
@@ -32,27 +41,36 @@ ChannelModel::~ChannelModel()
 
 QVariant ChannelModel::data(const QModelIndex& index, int role) const
 {
-    if (m_currentLayer.isValid() && index.isValid())
-    {
-        QList<KoChannelInfo*> channels = m_currentLayer->colorSpace()->channels();
-        int channelIndex = KoChannelInfo::displayPositionToChannelIndex(index.row(), channels);
+    if (m_canvas && index.isValid()) {
+        KisGroupLayerSP rootLayer = m_canvas->image()->rootLayer();
+        const KoColorSpace* cs = rootLayer->colorSpace();
+        QList<KoChannelInfo*> channels = cs->channels();
+
+        int channelIndex = index.row();
 
         switch (role) {
-        case Qt::DisplayRole:
-        {
-            return channels.at(channelIndex)->name();
-        }   
+        case Qt::DisplayRole: {
+            if (index.column() == 2) {
+                return channels.at(channelIndex)->name();
+            }
+            return QVariant();
+        }
+        case Qt::DecorationRole: {
+            if (index.column() == 1) {
+                Q_ASSERT(m_thumbnails.count() > index.row());
+                return QVariant(m_thumbnails.at(index.row()));
+            }
+            return QVariant();
+        }
         case Qt::CheckStateRole: {
             Q_ASSERT(index.row() < rowCount());
             Q_ASSERT(index.column() < columnCount());
-            
+
             if (index.column() == 0) {
-                QBitArray flags = m_currentLayer->channelFlags();
+                QBitArray flags = rootLayer->channelFlags();
                 return (flags.isEmpty() || flags.testBit(channelIndex)) ? Qt::Checked : Qt::Unchecked;
             }
-            
-            QBitArray flags = dynamic_cast<const KisPaintLayer*>(m_currentLayer.data())->channelLockFlags();
-            return (flags.isEmpty() || flags.testBit(channelIndex)) ? Qt::Unchecked : Qt::Checked;
+            return QVariant();
         }
         }
     }
@@ -61,64 +79,84 @@ QVariant ChannelModel::data(const QModelIndex& index, int role) const
 
 QVariant ChannelModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-    if(orientation == Qt::Horizontal && role == Qt::DisplayRole) {
-        if(section == 0)
-            return i18n("Enabled");
-        
-        return i18n("Locked");
-    }
-    
-    return QAbstractItemModel::headerData(section, orientation, role);
+    Q_UNUSED(section); Q_UNUSED(orientation); Q_UNUSED(role);
+    return QVariant();
 }
 
 
 int ChannelModel::rowCount(const QModelIndex& /*parent*/) const
 {
-    if (!m_currentLayer) return 0;
+    if (!m_canvas) return 0;
 
-    return m_currentLayer.isValid() ? m_currentLayer->colorSpace()->channelCount() : 0;
+    return m_channelCount;
 }
 
 int ChannelModel::columnCount(const QModelIndex& /*parent*/) const
 {
-    if (!m_currentLayer) return 0;
+    if (!m_canvas) return 0;
 
-    return dynamic_cast<const KisPaintLayer*>(m_currentLayer.data()) ? 2 : 1;
+    //columns are: checkbox, thumbnail, channel name
+    return 3;
 }
 
 
 bool ChannelModel::setData(const QModelIndex& index, const QVariant& value, int role)
 {
-    if (m_currentLayer.isValid() && index.isValid())
-    {
-        QList<KoChannelInfo*> channels = m_currentLayer->colorSpace()->channels();
-        int channelIndex = KoChannelInfo::displayPositionToChannelIndex(index.row(), channels);
-        
-        if (role == Qt::CheckStateRole) {
-            Q_ASSERT(index.row() < rowCount());
-            Q_ASSERT(index.column() < columnCount());
-            
-            if (index.column() == 0) {
-                QBitArray flags = m_currentLayer->channelFlags();
+    if (m_canvas && m_canvas->image()) {
+        KisGroupLayerSP rootLayer = m_canvas->image()->rootLayer();
+        const KoColorSpace* cs = rootLayer->colorSpace();
+        QList<KoChannelInfo*> channels = cs->channels();
+        Q_ASSERT(index.row() <= channels.count());
 
-                flags = flags.isEmpty() ? m_currentLayer->colorSpace()->channelFlags(true, true) : flags;
-                flags.setBit(channelIndex, value.toInt() == Qt::Checked);
-                m_currentLayer->setChannelFlags(flags);
-            }
-            else { //if (index.column() == 1)
-                KisPaintLayer* paintLayer = dynamic_cast<KisPaintLayer*>(m_currentLayer.data());
-                QBitArray      flags      = paintLayer->channelLockFlags();
-                flags = flags.isEmpty() ? m_currentLayer->colorSpace()->channelFlags(true, true) : flags;
-                flags.setBit(channelIndex, value.toInt() == Qt::Unchecked);
-                paintLayer->setChannelLockFlags(flags);
-            }
-            
+        int channelIndex = index.row();
+
+        if (role == Qt::CheckStateRole) {
+            QBitArray flags = rootLayer->channelFlags();
+            flags = flags.isEmpty() ? cs->channelFlags(true, true) : flags;
+            Q_ASSERT(!flags.isEmpty());
+
+            flags.setBit(channelIndex, value.toInt() == Qt::Checked);
+            rootLayer->setChannelFlags(flags);
+
             emit channelFlagsChanged();
+            emit dataChanged(this->index(0, 0), this->index(channels.count(), 0));
             return true;
         }
     }
     return false;
 }
+
+
+//User double clicked on a row (but on channel checkbox)
+//we select this channel, and deselect all other channels (except alpha, which we don't touch)
+//this makes it fast to select single color channel
+void ChannelModel::rowActivated(const QModelIndex &index)
+{
+    if (m_canvas && m_canvas->image()) {
+        KisGroupLayerWSP rootLayer = m_canvas->image()->rootLayer();
+        const KoColorSpace* cs = rootLayer->colorSpace();
+        QList<KoChannelInfo*> channels = cs->channels();
+        Q_ASSERT(index.row() <= channels.count());
+
+        int channelIndex = index.row();
+
+        QBitArray flags = rootLayer->channelFlags();
+        flags = flags.isEmpty() ? cs->channelFlags(true, true) : flags;
+        Q_ASSERT(!flags.isEmpty());
+
+        for (int i = 0; i < channels.count(); ++i) {
+            if (channels[i]->channelType() != KoChannelInfo::ALPHA) {
+                flags.setBit(i, (i == channelIndex));
+            }
+        }
+
+        rootLayer->setChannelFlags(flags);
+
+        emit channelFlagsChanged();
+        emit dataChanged(this->index(0, 0), this->index(channels.count(), 0));
+    }
+}
+
 
 Qt::ItemFlags ChannelModel::flags(const QModelIndex& /*index*/) const
 {
@@ -126,17 +164,100 @@ Qt::ItemFlags ChannelModel::flags(const QModelIndex& /*index*/) const
     return flags;
 }
 
-void ChannelModel::slotLayerActivated(KisLayerSP layer)
+void ChannelModel::unsetCanvas()
 {
-    beginResetModel();
-    m_currentLayer = layer;
-    endResetModel();
+    m_canvas = 0;
+}
+
+void ChannelModel::setThumbnailSizeLimit(QSize size)
+{
+    m_thumbnailSizeLimit = size;
+    updateData(m_canvas);
+}
+
+void ChannelModel::slotSetCanvas(KisCanvas2 *canvas)
+{
+    if (m_canvas != canvas) {
+        beginResetModel();
+        m_canvas = canvas;
+        if (m_canvas && m_canvas->image()) {
+            m_channelCount = m_canvas->image()->colorSpace()->channelCount();
+            updateThumbnails();
+        } else {
+            m_channelCount = 0;
+        }
+        endResetModel();
+    }
 }
 
 void ChannelModel::slotColorSpaceChanged(const KoColorSpace *colorSpace)
 {
     Q_UNUSED(colorSpace);
-    slotLayerActivated(m_currentLayer);
+    beginResetModel();
+    updateThumbnails();
+    endResetModel();
+}
+
+void ChannelModel::updateData(KisCanvas2 *canvas)
+{
+    beginResetModel();
+    m_canvas = canvas;
+    m_channelCount = (m_canvas) ? m_canvas->image()->colorSpace()->channelCount() : 0;
+    updateThumbnails();
+    endResetModel();
+}
+
+
+
+//Create thumbnails from full image.
+//Assumptions: thumbnail size is small compared to the original image and thumbnail quality
+//doesn't need to be high, so we use fast but not very accurate algorithm.
+void ChannelModel::updateThumbnails(void)
+{
+    if (m_canvas && m_canvas->image()) {
+        KisImageSP canvas_image = m_canvas->image();
+        const KoColorSpace* cs = canvas_image->colorSpace();
+        m_channelCount = cs->channelCount();
+
+        KisPaintDeviceSP dev = canvas_image->projection();
+
+        //make sure thumbnail maintains aspect ratio of the original image
+        QSize thumbnailSize(canvas_image->bounds().size());
+        thumbnailSize.scale(m_thumbnailSizeLimit, Qt::KeepAspectRatio);
+
+        KisPaintDeviceSP thumbnailDev = dev->createThumbnailDeviceOversampled(thumbnailSize.width(), thumbnailSize.height(),
+                                        m_oversampleRatio, canvas_image->bounds());
+
+        m_thumbnails.resize(m_channelCount);
+
+        for (quint32 i = 0; i < m_channelCount; ++i) {
+#if QT_VERSION >= 0x050500
+            m_thumbnails[i] = QImage(thumbnailSize, QImage::Format_Grayscale8);
+#else
+            m_thumbnails[i] = QImage(thumbnailSize, QImage::Format_ARGB32_Premultiplied);
+#endif
+        }
+
+        KisSequentialConstIterator it(thumbnailDev, QRect(0, 0, thumbnailSize.width(), thumbnailSize.height()));
+
+        for (int y = 0; y < thumbnailSize.height(); y++) {
+            for (int x = 0; x < thumbnailSize.width(); x++) {
+                const quint8* pixel = it.rawDataConst();
+                for (int chan = 0; chan < m_channelCount; ++chan) {
+                    QImage &img = m_thumbnails[chan];
+#if QT_VERSION >= 0x050500
+                    *(img.scanLine(y) + x) = cs->scaleToU8(pixel, chan);
+#else
+                    quint8 v = cs->scaleToU8(pixel, chan);
+                    img.setPixel(x, y, qRgb(v, v, v));
+#endif
+                }
+                it.nextPixel();
+            }
+        }
+    } else {
+        m_channelCount = 0;
+    }
 }
 
 #include "moc_channelmodel.cpp"

@@ -351,7 +351,7 @@ void KisLayerManager::convertNodeToPaintLayer(KisNodeSP source)
 
 
     KisLayer *srcLayer = dynamic_cast<KisLayer*>(source.data());
-    if (srcLayer) {
+    if (srcLayer && (srcLayer->inherits("KisGroupLayer") || srcLayer->layerStyle() || srcLayer->childCount() > 0)) {
         image->flattenLayer(srcLayer);
         return;
     }
@@ -703,8 +703,10 @@ void KisLayerManager::saveGroupLayers()
     QBoxLayout *layout = new QVBoxLayout(page);
 
     KisFileNameRequester *urlRequester = new KisFileNameRequester(page);
-    urlRequester->setMode(KoFileDialog::OpenDirectory);
-    urlRequester->setStartDir(QFileInfo(m_view->document()->url().toLocalFile()).absolutePath());
+    urlRequester->setMode(KoFileDialog::SaveFile);
+    if (m_view->document()->url().isLocalFile()) {
+        urlRequester->setStartDir(QFileInfo(m_view->document()->url().toLocalFile()).absolutePath());
+    }
     urlRequester->setMimeTypeFilters(listMimeFilter);
     urlRequester->setFileName(m_view->document()->url().toLocalFile());
     layout->addWidget(urlRequester);
@@ -718,20 +720,23 @@ void KisLayerManager::saveGroupLayers()
 
     if (!dlg.exec()) return;
 
-    // selectedUrl()( does not return the expected result. So, build up the QUrl the more complicated way
-    //return m_fileWidget->selectedUrl();
     QString path = urlRequester->fileName();
+
     if (path.isEmpty()) return;
 
     QFileInfo f(path);
+
     QString mimeType= KisMimeDatabase::mimeTypeForFile(f.fileName());
+    if (mimeType.isEmpty()) {
+        mimeType = "image/png";
+    }
     QString extension = KisMimeDatabase::suffixesForMimeType(mimeType).first();
     QString basename = f.baseName();
 
     KisImageWSP image = m_view->image();
     if (!image) return;
 
-    KisSaveGroupVisitor v(image, chkInvisible->isChecked(), chkDepth->isChecked(), QUrl(path), basename, extension, mimeType);
+    KisSaveGroupVisitor v(image, chkInvisible->isChecked(), chkDepth->isChecked(), f.absolutePath(), basename, extension, mimeType);
     image->rootLayer()->accept(v);
 
 }

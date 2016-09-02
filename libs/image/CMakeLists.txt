@@ -25,7 +25,7 @@ include_directories(SYSTEM
 )
 
 if(FFTW3_FOUND)
-  include_directories(SYSTEM ${FFTW3_INCLUDE_DIR})
+  include_directories(${FFTW3_INCLUDE_DIR})
 endif()
 
 if(HAVE_VC)
@@ -65,10 +65,14 @@ set(kritaimage_LIB_SRCS
    brushengine/kis_paintop_preset.cpp
    brushengine/kis_paintop_registry.cc
    brushengine/kis_paintop_settings.cpp
+   brushengine/kis_paintop_settings_update_proxy.cpp
    brushengine/kis_locked_properties.cc
    brushengine/kis_locked_properties_proxy.cpp
    brushengine/kis_locked_properties_server.cpp
    brushengine/kis_paintop_config_widget.cpp
+   brushengine/kis_uniform_paintop_property.cpp
+   brushengine/kis_combo_based_paintop_property.cpp
+   brushengine/kis_standard_uniform_properties_factory.cpp
    commands/kis_deselect_global_selection_command.cpp
    commands/kis_image_change_layers_command.cpp
    commands/kis_image_command.cpp
@@ -247,6 +251,7 @@ set(kritaimage_LIB_SRCS
    kis_outline_generator.cpp
    kis_layer_composition.cpp
    kis_selection_filters.cpp
+   KisProofingConfiguration.h
    metadata/kis_meta_data_entry.cc
    metadata/kis_meta_data_filter.cc
    metadata/kis_meta_data_filter_p.cc

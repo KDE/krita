@@ -30,6 +30,7 @@ KisPressureGradientOption::KisPressureGradientOption()
 
 void KisPressureGradientOption::apply(KoColor& color, const KoAbstractGradient* gradient, const KisPaintInformation& info) const
 {
-    if (isChecked() && gradient)
-        gradient->colorAt(color, computeValue(info));
+    if (isChecked() && gradient) {
+        gradient->colorAt(color, computeSizeLikeValue(info));
+    }
 }

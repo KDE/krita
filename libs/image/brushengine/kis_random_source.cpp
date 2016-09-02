@@ -20,6 +20,8 @@
 
 #include <boost/random/taus88.hpp>
 #include <boost/random/uniform_smallint.hpp>
+#include <boost/random/normal_distribution.hpp>
+
 
 struct KisRandomSource::Private
 {
@@ -92,4 +94,10 @@ qreal KisRandomSource::generateNormalized() const
     const qint64 max = m_d->uniformSource.max();
 
     return qreal(v) / max;
+}
+
+qreal KisRandomSource::generateGaussian(qreal mean, qreal sigma) const
+{
+    boost::normal_distribution<qreal> normal(mean, sigma);
+    return normal(m_d->uniformSource);
 }

@@ -2,7 +2,7 @@
 # From https://github.com/ampl/gsl. which adds CMake support to gsl
 #
 SET(EXTPREFIX_gsl "${EXTPREFIX}" )
-if (MSVC)
+if (MSVC OR MINGW)
 ExternalProject_Add(
     ext_gsl
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}

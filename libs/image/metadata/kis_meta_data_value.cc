@@ -82,7 +82,6 @@ Value::Value(const Value& v) : d(new Private)
 
 Value& Value::operator=(const Value & v)
 {
-    Q_ASSERT(d->type == Invalid || d->type == v.d->type);
     d->type = v.d->type;
     d->propertyQualifiers = v.d->propertyQualifiers;
     switch (d->type) {

@@ -51,7 +51,7 @@ DeformBrush::~DeformBrush()
 
 void DeformBrush::initDeformAction()
 {
-    DeformModes mode = DeformModes(m_properties->action - 1);
+    DeformModes mode = DeformModes(m_properties->deform_action - 1);
 
     switch (mode) {
     case GROW:
@@ -67,19 +67,19 @@ void DeformBrush::initDeformAction()
 
     case MOVE: {
         m_deformAction = new DeformMove();
-        static_cast<DeformMove*>(m_deformAction)->setFactor(m_properties->deformAmount);
+        static_cast<DeformMove*>(m_deformAction)->setFactor(m_properties->deform_amount);
         break;
     }
     case LENS_IN:
     case LENS_OUT: {
         m_deformAction = new DeformLens();
-        static_cast<DeformLens*>(m_deformAction)->setLensFactor(m_properties->deformAmount, 0.0);
+        static_cast<DeformLens*>(m_deformAction)->setLensFactor(m_properties->deform_amount, 0.0);
         static_cast<DeformLens*>(m_deformAction)->setMode(mode == LENS_OUT);
         break;
     }
     case DEFORM_COLOR: {
         m_deformAction = new DeformColor();
-        static_cast<DeformColor*>(m_deformAction)->setFactor(m_properties->deformAmount);
+        static_cast<DeformColor*>(m_deformAction)->setFactor(m_properties->deform_amount);
         break;
     }
     default: {
@@ -99,11 +99,11 @@ bool DeformBrush::setupAction(
         // grow or shrink, the sign decide
         qreal sign = (mode == GROW) ? 1.0 : -1.0;
         qreal factor;
-        if (m_properties->useCounter) {
+        if (m_properties->deform_use_counter) {
             factor = (1.0 + sign * (m_counter * m_counter / 100.0));
         }
         else {
-            factor = (1.0 + sign * (m_properties->deformAmount));
+            factor = (1.0 + sign * (m_properties->deform_amount));
         }
         dynamic_cast<DeformScale*>(m_deformAction)->setFactor(factor);
         break;
@@ -113,11 +113,11 @@ bool DeformBrush::setupAction(
         // CW or CCW, the sign decide
         qreal sign = (mode == SWIRL_CW) ? 1.0 : -1.0;
         qreal factor;
-        if (m_properties->useCounter) {
+        if (m_properties->deform_use_counter) {
             factor = m_counter * sign * degToRad;
         }
         else {
-            factor = (360 * m_properties->deformAmount * 0.5) * sign * degToRad;
+            factor = (360 * m_properties->deform_amount * 0.5) * sign * degToRad;
         }
         dynamic_cast<DeformRotation*>(m_deformAction)->setAlpha(factor);
         break;
@@ -142,7 +142,7 @@ bool DeformBrush::setupAction(
     }
     case LENS_IN:
     case LENS_OUT: {
-        static_cast<DeformLens*>(m_deformAction)->setMaxDistance(m_sizeProperties->diameter * 0.5, m_sizeProperties->diameter * 0.5);
+        static_cast<DeformLens*>(m_deformAction)->setMaxDistance(m_sizeProperties->brush_diameter * 0.5, m_sizeProperties->brush_diameter * 0.5);
         break;
     }
     case DEFORM_COLOR: {
@@ -194,7 +194,7 @@ KisFixedPaintDeviceSP DeformBrush::paintMask(KisFixedPaintDeviceSP dab,
     reverseRotationMatrix.rotateRadians(rotation);
 
     // if can't paint, stop
-    if (!setupAction(DeformModes(m_properties->action - 1),
+    if (!setupAction(DeformModes(m_properties->deform_action - 1),
                      pos, forwardRotationMatrix))
     {
         return 0;
@@ -213,8 +213,6 @@ KisFixedPaintDeviceSP DeformBrush::paintMask(KisFixedPaintDeviceSP dab,
             qreal maskX = x - centerX;
             qreal maskY = y - centerY;
             forwardRotationMatrix.map(maskX, maskY, &maskX, &maskY);
-
-            forwardRotationMatrix.map(maskX, maskY, &maskX, &maskY);
             distance = norme(maskX * majorAxis, maskY * minorAxis);
 
             if (distance > 1.0) {
@@ -228,8 +226,8 @@ KisFixedPaintDeviceSP DeformBrush::paintMask(KisFixedPaintDeviceSP dab,
                 continue;
             }
 
-            if (m_sizeProperties->density != 1.0) {
-                if (m_sizeProperties->density < drand48()) {
+            if (m_sizeProperties->brush_density != 1.0) {
+                if (m_sizeProperties->brush_density < drand48()) {
                     dabPointer += dabPixelSize;
                     *maskPointer = OPACITY_TRANSPARENT_U8;
                     maskPointer += maskPixelSize;
@@ -243,12 +241,12 @@ KisFixedPaintDeviceSP DeformBrush::paintMask(KisFixedPaintDeviceSP dab,
             maskX += pos.x();
             maskY += pos.y();
 
-            if (!m_properties->useBilinear) {
+            if (!m_properties->deform_use_bilinear) {
                 maskX = qRound(maskX);
                 maskY = qRound(maskY);
             }
 
-            if (m_properties->useOldData) {
+            if (m_properties->deform_use_old_data) {
                 colorPicker.pickOldColor(maskX, maskY, dabPointer);
             }
             else {

@@ -28,9 +28,8 @@ private Q_SLOTS:
 
     void testCreation();
     void testMaskGeneration();
-    void testSizeRotation();
+    void testDabSize();
     void testCopyMasking();
-
     void testClone();
 
 };

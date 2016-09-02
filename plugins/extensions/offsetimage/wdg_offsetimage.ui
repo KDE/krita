@@ -45,7 +45,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QSpinBox" name="offsetXspinBox">
+         <widget class="KisIntParseSpinBox" name="offsetXspinBox">
           <property name="suffix">
            <string> px</string>
           </property>
@@ -69,7 +69,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QSpinBox" name="offsetYspinBox">
+         <widget class="KisIntParseSpinBox" name="offsetYspinBox">
           <property name="suffix">
            <string> px</string>
           </property>
@@ -114,6 +114,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KisIntParseSpinBox</class>
+   <extends>QSpinBox</extends>
+   <header>kis_int_parse_spin_box.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

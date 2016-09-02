@@ -27,8 +27,6 @@ KisOffsetScaleOption::KisOffsetScaleOption()
 
 double KisOffsetScaleOption::apply(const KisPaintInformation & info, double offsetScale) const
 {
-    if (!isChecked()) {
-        return offsetScale;
-    }
-    return computeValue(info) * offsetScale;
+    if (!isChecked()) return offsetScale;
+    return computeSizeLikeValue(info) * offsetScale;
 }

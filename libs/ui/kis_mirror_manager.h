@@ -46,10 +46,11 @@ private Q_SLOTS:
     void updateAction();
 
 private:
-    KisMirrorAxis* decoration();
-    
+
     QPointer<KisView> m_imageView;
     QAction *m_mirrorCanvas;
+    KisMirrorAxis* hasDecoration();
+
 };
 
 #endif // KIS_PAINTING_ASSISTANTS_MANAGER_H

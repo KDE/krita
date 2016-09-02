@@ -137,6 +137,9 @@
 
 #include <mutex>
 
+#ifdef Q_OS_WIN
+  #include <QtPlatformHeaders/QWindowsWindowFunctions>
+#endif
 
 class ToolDockerFactory : public KoDockFactoryBase
 {
@@ -351,6 +354,7 @@ KisMainWindow::KisMainWindow()
     if (d->toolOptionsDocker) {
         dockwidgetActions[d->toolOptionsDocker->toggleViewAction()->text()] = d->toolOptionsDocker->toggleViewAction();
     }
+    connect(KoToolManager::instance(), SIGNAL(toolOptionWidgetsChanged(QList<QPointer<QWidget> >)), this, SLOT(newOptionWidgets(QList<QPointer<QWidget> >)));
 
     Q_FOREACH (QString title, dockwidgetActions.keys()) {
         d->dockWidgetMenu->addAction(dockwidgetActions[title]);
@@ -494,6 +498,11 @@ KisMainWindow::KisMainWindow()
     d->viewManager->updateGUI();
     d->viewManager->updateIcons();
 
+#ifdef Q_OS_WIN
+    auto w = qApp->activeWindow();
+    if (w) QWindowsWindowFunctions::setHasBorderInFullScreen(w->windowHandle(), true);
+#endif
+
     QTimer::singleShot(1000, this, SLOT(checkSanity()));
 
     {
@@ -504,6 +513,9 @@ KisMainWindow::KisMainWindow()
         d->tabSwitchCompressor.reset(
             new KisSignalCompressorWithParam<int>(500, callback, KisSignalCompressor::FIRST_INACTIVE));
     }
+
+
+
 }
 
 void KisMainWindow::setNoCleanup(bool noCleanup)
@@ -882,6 +894,13 @@ void KisMainWindow::slotSaveCompleted()
     }
 }
 
+bool KisMainWindow::hackIsSaving() const
+{
+    StdLockableWrapper<QMutex> wrapper(&d->savingEntryMutex);
+    std::unique_lock<StdLockableWrapper<QMutex>> l(wrapper, std::try_to_lock);
+    return !l.owns_lock();
+}
+
 bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent, int specialOutputFlag)
 {
     if (!document) {
@@ -988,7 +1007,7 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
             dialog.setDefaultDir(suggestedURL.toLocalFile(), true);
         }
         // Default to all supported file types if user is exporting, otherwise use Krita default
-        dialog.setMimeTypeFilters(mimeFilter);
+        dialog.setMimeTypeFilters(mimeFilter, QString(_native_format));
         QUrl newURL = QUrl::fromUserInput(dialog.filename());
 
         if (newURL.isLocalFile()) {
@@ -1180,6 +1199,11 @@ void KisMainWindow::closeEvent(QCloseEvent *e)
 {
     d->mdiArea->closeAllSubWindows();
 
+    QAction *action= d->viewManager->actionCollection()->action("view_show_canvas_only");
+
+    if ((action) && (action->isChecked())) {
+        action->setChecked(false);
+    }
     KConfigGroup cfg( KSharedConfig::openConfig(), "MainWindow");
     cfg.writeEntry("ko_geometry", saveGeometry().toBase64());
     cfg.writeEntry("ko_windowstate", saveState().toBase64());
@@ -1778,9 +1802,6 @@ void KisMainWindow::slotToolbarToggled(bool toggle)
 void KisMainWindow::viewFullscreen(bool fullScreen)
 {
     KisConfig cfg;
-#ifdef Q_OS_WIN
-    cfg.setFullscreenMode(false);
-#else
     cfg.setFullscreenMode(fullScreen);
 
     if (fullScreen) {
@@ -1788,14 +1809,16 @@ void KisMainWindow::viewFullscreen(bool fullScreen)
     } else {
         setWindowState(windowState() & ~Qt::WindowFullScreen);   // reset
     }
-#endif
 }
 
 void KisMainWindow::slotProgress(int value)
 {
     qApp->processEvents();
 
-    if (!d->progressMutex.tryLock()) return;
+    StdLockableWrapper<QMutex> wrapper(&d->progressMutex);
+    std::unique_lock<StdLockableWrapper<QMutex>> l(wrapper, std::try_to_lock);
+    if (!l.owns_lock()) return;
+
 
     dbgUI << "KisMainWindow::slotProgress" << value;
     if (value <= -1 || value >= 100) {
@@ -1810,7 +1833,6 @@ void KisMainWindow::slotProgress(int value)
             d->progressCancel = 0;
         }
         d->firstTime = true;
-        d->progressMutex.unlock();
         return;
     }
     if (d->firstTime || !d->progress) {
@@ -1853,8 +1875,6 @@ void KisMainWindow::slotProgress(int value)
         d->progress->setValue(value);
     }
     qApp->processEvents();
-
-    d->progressMutex.unlock();
 }
 
 void KisMainWindow::slotProgressCanceled()
@@ -2316,9 +2336,8 @@ void KisMainWindow::createActions()
     actionManager->createStandardAction(KStandardAction::Open, this, SLOT(slotFileOpen()));
     actionManager->createStandardAction(KStandardAction::Quit, this, SLOT(slotFileQuit()));
     actionManager->createStandardAction(KStandardAction::ConfigureToolbars, this, SLOT(slotConfigureToolbars()));
-#ifndef Q_OS_WIN
     actionManager->createStandardAction(KStandardAction::FullScreen, this, SLOT(viewFullscreen(bool)));
-#endif
+
     d->recentFiles = KStandardAction::openRecent(this, SLOT(slotFileOpenRecent(QUrl)), actionCollection());
     connect(d->recentFiles, SIGNAL(recentListCleared()), this, SLOT(saveRecentFiles()));
     KSharedConfigPtr configPtr =  KSharedConfig::openConfig();

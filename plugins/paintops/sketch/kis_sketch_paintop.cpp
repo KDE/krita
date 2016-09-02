@@ -110,7 +110,7 @@ void KisSketchPaintOp::updateBrushMask(const KisPaintInformation& info, qreal sc
     m_maskDab = m_dabCache->fetchDab(m_dab->colorSpace(),
                                      painter()->paintColor(),
                                      info.pos(),
-                                     scale, scale, rotation,
+                                     KisDabShape(scale, 1.0, rotation),
                                      info, 1.0,
                                      &dstRect);
 
@@ -154,8 +154,6 @@ void KisSketchPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintI
         drawConnection(prevMouse, mousePosition, currentLineWidth);
     }
 
-    setCurrentScale(scale);
-    setCurrentRotation(rotation);
 
     qreal thresholdDistance = 0.0;
 

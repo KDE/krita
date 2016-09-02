@@ -37,7 +37,8 @@ class KoParameterShape;
 
 class QAction;
 
-/// The tool for editing a KoPathShape or a KoParameterShape
+/// The tool for editing a KoPathShape or a KoParameterShape.
+/// See KoCreatePathTool for code handling the initial path creation.
 class KRITAFLAKE_EXPORT KoPathTool : public KoToolBase
 {
     Q_OBJECT

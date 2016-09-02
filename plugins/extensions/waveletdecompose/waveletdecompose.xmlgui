@@ -1,0 +1,8 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui library="kritawaveletdecompose" version="6" translationDomain="krita">
+<MenuBar>
+    <Menu name="Layer"><text>&amp;Layer</text>
+	<Action name="waveletdecompose"/>
+    </Menu>
+</MenuBar>
+</kpartgui>

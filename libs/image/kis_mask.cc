@@ -98,7 +98,9 @@ void KisMask::setImage(KisImageWSP image)
 {
     KisPaintDeviceSP parentPaintDevice = parent() ? parent()->original() : 0;
     KisDefaultBoundsBaseSP defaultBounds = new KisSelectionDefaultBounds(parentPaintDevice, image);
-    m_d->selection->setDefaultBounds(defaultBounds);
+    if (m_d->selection) {
+        m_d->selection->setDefaultBounds(defaultBounds);
+    }
 }
 
 bool KisMask::allowAsChild(KisNodeSP node) const
@@ -342,7 +344,7 @@ QImage KisMask::createThumbnail(qint32 w, qint32 h)
         selection() ? selection()->projection() : 0;
 
     return originalDevice ?
-           originalDevice->createThumbnail(w, h,
+           originalDevice->createThumbnail(w, h, 1,
                                            KoColorConversionTransformation::internalRenderingIntent(),
                                            KoColorConversionTransformation::internalConversionFlags()) : QImage();
 }

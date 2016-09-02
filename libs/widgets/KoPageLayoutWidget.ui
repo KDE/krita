@@ -11,173 +11,206 @@
    </rect>
   </property>
   <layout class="QVBoxLayout">
-   <property name="margin">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
     <number>0</number>
    </property>
    <item>
-  <layout class="QGridLayout" name="gridLayout" columnstretch="0,1,1">
-   <property name="margin">
-    <number>0</number>
-   </property>
-   <item row="0" column="0">
-    <widget class="QLabel" name="unitsLabel">
-     <property name="text">
-      <string>Unit:</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-     </property>
-     <property name="buddy">
-      <cstring>units</cstring>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="1" colspan="2">
-    <widget class="QComboBox" name="units">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Fixed" vsizetype="Fixed"/>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0">
-    <widget class="QLabel" name="stylesLabel">
-     <property name="text">
-      <string>Follow style:</string>
-     </property>
-     <property name="buddy">
-      <cstring>pageStyle</cstring>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="1" colspan="2">
-    <widget class="QComboBox" name="pageStyle"/>
-   </item>
-   <item row="2" column="0">
-    <widget class="QLabel" name="label_2">
-     <property name="text">
-      <string>Size:</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-     </property>
-     <property name="buddy">
-      <cstring>sizes</cstring>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="1" colspan="2">
-    <widget class="QComboBox" name="sizes"/>
-   </item>
-   <item row="3" column="0">
-    <widget class="QLabel" name="label_3">
-     <property name="text">
-      <string>Width:</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-     </property>
-     <property name="buddy">
-      <cstring>width</cstring>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="1" colspan="2">
-    <layout class="QHBoxLayout">
-     <property name="margin">
+    <layout class="QGridLayout" name="gridLayout" columnstretch="0,1,1">
+     <property name="leftMargin">
       <number>0</number>
      </property>
-     <item>
-      <widget class="KoUnitDoubleSpinBox" name="width"/>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
+      <number>0</number>
+     </property>
+     <item row="0" column="0">
+      <widget class="QLabel" name="unitsLabel">
+       <property name="text">
+        <string>&amp;Unit:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+       <property name="buddy">
+        <cstring>units</cstring>
+       </property>
+      </widget>
      </item>
-     <item>
-      <widget class="QLabel">
+     <item row="0" column="1" colspan="2">
+      <widget class="QComboBox" name="units">
        <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="stylesLabel">
        <property name="text">
-        <string>Height:</string>
+        <string>&amp;Follow style:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
        </property>
        <property name="buddy">
-        <cstring>height</cstring>
+        <cstring>pageStyle</cstring>
        </property>
       </widget>
      </item>
-     <item>
-      <widget class="KoUnitDoubleSpinBox" name="height"/>
+     <item row="1" column="1" colspan="2">
+      <widget class="QComboBox" name="pageStyle"/>
      </item>
-    </layout>
-   </item>
-   <item row="4" column="0">
-    <widget class="QLabel">
-     <property name="text">
-      <string>Orientation:</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="1">
-    <widget class="QRadioButton" name="portrait">
-     <property name="text">
-      <string>Portrait</string>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="2">
-    <widget class="QRadioButton" name="landscape">
-     <property name="text">
-      <string>Landscape</string>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="0">
-    <widget class="QLabel" name="facingPageLabel">
-     <property name="text">
-      <string>Facing pages:</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="1">
-    <widget class="QRadioButton" name="singleSided">
-     <property name="text">
-      <string>Single sided</string>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="2">
-    <widget class="QRadioButton" name="facingPages">
-     <property name="text">
-      <string>Facing pages</string>
-     </property>
-    </widget>
-   </item>
-   <item row="6" column="0">
-    <widget class="QLabel" name="directionLabel">
-     <property name="text">
-      <string>Text direction:</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-     </property>
-     <property name="buddy">
-      <cstring>textDirection</cstring>
-     </property>
-    </widget>
-   </item>
-   <item row="6" column="1" colspan="2">
+     <item row="2" column="0">
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>S&amp;ize:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+       <property name="buddy">
+        <cstring>sizes</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1" colspan="2">
+      <widget class="QComboBox" name="sizes"/>
+     </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="label_3">
+       <property name="text">
+        <string>Width:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+       <property name="buddy">
+        <cstring>width</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1" colspan="2">
+      <layout class="QHBoxLayout">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="KisDoubleParseUnitSpinBox" name="width"/>
+       </item>
+       <item>
+        <widget class="QLabel" name="label">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>&amp;Height:</string>
+         </property>
+         <property name="buddy">
+          <cstring>height</cstring>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="KisDoubleParseUnitSpinBox" name="height"/>
+       </item>
+      </layout>
+     </item>
+     <item row="4" column="0">
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>Orientation:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="1">
+      <widget class="QRadioButton" name="portrait">
+       <property name="text">
+        <string>Po&amp;rtrait</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="2">
+      <widget class="QRadioButton" name="landscape">
+       <property name="text">
+        <string>Landscape</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="0">
+      <widget class="QLabel" name="facingPageLabel">
+       <property name="text">
+        <string>Facing pages:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="1">
+      <widget class="QRadioButton" name="singleSided">
+       <property name="text">
+        <string>Single sided</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="2">
+      <widget class="QRadioButton" name="facingPages">
+       <property name="text">
+        <string>Facing pages</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="0">
+      <widget class="QLabel" name="directionLabel">
+       <property name="text">
+        <string>&amp;Text direction:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+       <property name="buddy">
+        <cstring>textDirection</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="1" colspan="2">
       <widget class="QComboBox" name="textDirection">
        <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed"/>
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
        </property>
        <item>
         <property name="text">
@@ -195,8 +228,8 @@
         </property>
        </item>
       </widget>
-   </item>
-   </layout>
+     </item>
+    </layout>
    </item>
    <item>
     <widget class="QGroupBox" name="margins">
@@ -205,20 +238,20 @@
      </property>
      <layout class="QFormLayout">
       <item row="0" column="0">
-       <widget class="QLabel">
+       <widget class="QLabel" name="label">
         <property name="text">
          <string>Top:</string>
-        </property>
-        <property name="buddy">
-         <cstring>topMargin</cstring>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
+        <property name="buddy">
+         <cstring>topMargin</cstring>
+        </property>
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="KoUnitDoubleSpinBox" name="topMargin">
+       <widget class="KisDoubleParseUnitSpinBox" name="topMargin">
         <property name="maximum">
          <double>999.990000000000009</double>
         </property>
@@ -227,18 +260,18 @@
       <item row="1" column="0">
        <widget class="QLabel" name="leftLabel">
         <property name="text">
-         <string>Binding edge:</string>
-        </property>
-        <property name="buddy">
-         <cstring>bindingEdgeMargin</cstring>
+         <string>&amp;Binding edge:</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
+        <property name="buddy">
+         <cstring>bindingEdgeMargin</cstring>
+        </property>
        </widget>
       </item>
       <item row="1" column="1">
-       <widget class="KoUnitDoubleSpinBox" name="bindingEdgeMargin">
+       <widget class="KisDoubleParseUnitSpinBox" name="bindingEdgeMargin">
         <property name="maximum">
          <double>999.990000000000009</double>
         </property>
@@ -247,18 +280,18 @@
       <item row="2" column="0">
        <widget class="QLabel" name="rightLabel">
         <property name="text">
-         <string>Page edge:</string>
-        </property>
-        <property name="buddy">
-         <cstring>pageEdgeMargin</cstring>
+         <string>Pa&amp;ge edge:</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
+        <property name="buddy">
+         <cstring>pageEdgeMargin</cstring>
+        </property>
        </widget>
       </item>
       <item row="2" column="1">
-       <widget class="KoUnitDoubleSpinBox" name="pageEdgeMargin">
+       <widget class="KisDoubleParseUnitSpinBox" name="pageEdgeMargin">
         <property name="maximum">
          <double>999.990000000000009</double>
         </property>
@@ -267,18 +300,18 @@
       <item row="3" column="0">
        <widget class="QLabel" name="label_12">
         <property name="text">
-         <string>Bottom:</string>
-        </property>
-        <property name="buddy">
-         <cstring>bottomMargin</cstring>
+         <string>Botto&amp;m:</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
+        <property name="buddy">
+         <cstring>bottomMargin</cstring>
+        </property>
        </widget>
       </item>
       <item row="3" column="1">
-       <widget class="KoUnitDoubleSpinBox" name="bottomMargin">
+       <widget class="KisDoubleParseUnitSpinBox" name="bottomMargin">
         <property name="maximum">
          <double>999.990000000000009</double>
         </property>
@@ -295,15 +328,21 @@
      <property name="sizeType">
       <enum>QSizePolicy::MinimumExpanding</enum>
      </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>0</width>
+       <height>0</height>
+      </size>
+     </property>
     </spacer>
    </item>
   </layout>
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KoUnitDoubleSpinBox</class>
+   <class>KisDoubleParseUnitSpinBox</class>
    <extends>QDoubleSpinBox</extends>
-   <header>KoUnitDoubleSpinBox.h</header>
+   <header>kis_double_parse_unit_spin_box.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

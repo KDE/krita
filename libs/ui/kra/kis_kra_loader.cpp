@@ -29,6 +29,7 @@
 
 #include <KoStore.h>
 #include <KoColorSpaceRegistry.h>
+#include <KoColorSpaceEngine.h>
 #include <KoColorProfile.h>
 #include <KoDocumentInfo.h>
 #include <KoFileDialog.h>
@@ -75,6 +76,9 @@
 #include "kis_time_range.h"
 #include "kis_grid_config.h"
 #include "kis_guides_config.h"
+#include "kis_image_config.h"
+#include "KisProofingConfiguration.h"
+#include "kis_node_view_color_scheme.h"
 
 /*
 
@@ -263,6 +267,24 @@ KisImageWSP KisKraLoader::loadXML(const KoXmlElement& element)
                 return KisImageWSP(0);
             }
         }
+        KisImageConfig cfgImage;
+        KisProofingConfiguration *proofingConfig = cfgImage.defaultProofingconfiguration();
+        if (!(attr = element.attribute(PROOFINGPROFILENAME)).isNull()) {
+            proofingConfig->proofingProfile = attr;
+        }
+        if (!(attr = element.attribute(PROOFINGMODEL)).isNull()) {
+            proofingConfig->proofingModel = attr;
+        }
+        if (!(attr = element.attribute(PROOFINGDEPTH)).isNull()) {
+            proofingConfig->proofingDepth = attr;
+        }
+        if (!(attr = element.attribute(PROOFINGINTENT)).isNull()) {
+            proofingConfig->intent = (KoColorConversionTransformation::Intent) KisDomUtils::toInt(attr);
+        }
+
+        if (!(attr = element.attribute(PROOFINGADAPTATIONSTATE)).isNull()) {
+            proofingConfig->adaptationState = KisDomUtils::toDouble(attr);
+        }
 
         if (m_d->document) {
             image = new KisImage(m_d->document->createUndoStore(), width, height, cs, name);
@@ -273,21 +295,31 @@ KisImageWSP KisKraLoader::loadXML(const KoXmlElement& element)
         image->setResolution(xres, yres);
         loadNodes(element, image, const_cast<KisGroupLayer*>(image->rootLayer().data()));
 
+
         KoXmlNode child;
         for (child = element.lastChild(); !child.isNull(); child = child.previousSibling()) {
             KoXmlElement e = child.toElement();
-            if(e.tagName() == "ProjectionBackgroundColor") {
-                if (e.hasAttribute("ColorData")) {
+            if(e.tagName() == CANVASPROJECTIONCOLOR) {
+                if (e.hasAttribute(COLORBYTEDATA)) {
                     QByteArray colorData = QByteArray::fromBase64(e.attribute("ColorData").toLatin1());
                     KoColor color((const quint8*)colorData.data(), image->colorSpace());
                     image->setDefaultProjectionColor(color);
                 }
             }
 
+            if(e.tagName()== PROOFINGWARNINGCOLOR) {
+                QDomDocument dom;
+                KoXml::asQDomElement(dom, e);
+                QDomElement eq = dom.firstChildElement();
+                proofingConfig->warningColor = KoColor::fromXML(eq.firstChildElement(), Integer8BitsColorDepthID.id(), QHash<QString, QString>());
+            }
+
             if (e.tagName().toLower() == "animation") {
                 loadAnimationMetadata(e, image);
             }
         }
+
+        image->setProofingConfiguration(proofingConfig);
 
         for (child = element.lastChild(); !child.isNull(); child = child.previousSibling()) {
             KoXmlElement e = child.toElement();
@@ -335,6 +367,29 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageWSP image, const QStr
             }
         }
     }
+    //load the embed proofing profile, it only needs to be loaded into Krita, not assigned.
+    location = external ? QString() : uri;
+    location += m_d->imageName + ICC_PROOFING_PATH;
+    if (store->hasFile(location)) {
+        if (store->open(location)) {
+            QByteArray proofingData;
+            proofingData.resize(store->size());
+            bool proofingProfileRes = (store->read(proofingData.data(), store->size())>-1);
+            store->close();
+            if (proofingProfileRes)
+            {
+                const KoColorProfile *proofingProfile = KoColorSpaceRegistry::instance()->createColorProfile(image->proofingConfiguration()->proofingModel, image->proofingConfiguration()->proofingDepth, proofingData);
+                if (proofingProfile->valid()){
+
+                    //if (KoColorSpaceEngineRegistry::instance()->get("icc")) {
+                    //    KoColorSpaceEngineRegistry::instance()->get("icc")->addProfile(proofingProfile->fileName());
+                    //}
+                    KoColorSpaceRegistry::instance()->addProfile(proofingProfile);
+                }
+            }
+        }
+    }
+
 
     // Load the layers data: if there is a profile associated with a layer it will be set now.
     KisKraLoadVisitor visitor(image, store, m_d->layerFilenames, m_d->keyframeFilenames, m_d->imageName, m_d->syntaxVersion);
@@ -543,7 +598,11 @@ KisNodeSP KisKraLoader::loadNode(const KoXmlElement& element, KisImageWSP image,
     const bool visible = element.attribute(VISIBLE, "1") == "0" ? false : true;
     const bool locked = element.attribute(LOCKED, "0") == "0" ? false : true;
     const bool collapsed = element.attribute(COLLAPSED, "0") == "0" ? false : true;
-    const int colorLabelIndex = element.attribute(COLOR_LABEL, "0").toInt();
+    int colorLabelIndex = element.attribute(COLOR_LABEL, "0").toInt();
+    QVector<QColor> labels = KisNodeViewColorScheme::instance()->allColorLabels();
+    if (colorLabelIndex >= labels.size()) {
+        colorLabelIndex = labels.size() - 1;
+    }
 
     // Now find out the layer type and do specific handling
     QString nodeType;

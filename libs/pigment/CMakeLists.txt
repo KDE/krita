@@ -47,6 +47,7 @@ set(kritapigment_SRCS
     KoColorConversions.cpp
     KoColorConversionSystem.cpp
     KoColorConversionTransformation.cpp
+    KoColorProofingConversionTransformation.cpp
     KoColorConversionTransformationFactory.cpp
     KoColorModelStandardIds.cpp
     KoColorProfile.cpp

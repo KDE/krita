@@ -187,8 +187,11 @@ public:
         canvasResourceManager.addDerivedResourceConverter(toQShared(new KisCompositeOpResourceConverter));
         canvasResourceManager.addDerivedResourceConverter(toQShared(new KisEffectiveCompositeOpResourceConverter));
         canvasResourceManager.addDerivedResourceConverter(toQShared(new KisOpacityResourceConverter));
+        canvasResourceManager.addDerivedResourceConverter(toQShared(new KisFlowResourceConverter));
+        canvasResourceManager.addDerivedResourceConverter(toQShared(new KisSizeResourceConverter));
         canvasResourceManager.addDerivedResourceConverter(toQShared(new KisLodAvailabilityResourceConverter));
         canvasResourceManager.addDerivedResourceConverter(toQShared(new KisEraserModeResourceConverter));
+        canvasResourceManager.addResourceUpdateMediator(toQShared(new KisPresetUpdateMediator));
     }
 
 public:
@@ -208,6 +211,8 @@ public:
     KisAction *zoomTo100pct;
     KisAction *zoomIn;
     KisAction *zoomOut;
+    KisAction *softProof;
+    KisAction *gamutCheck;
 
     KisSelectionManager selectionManager;
     KisGuidesManager guidesManager;
@@ -356,6 +361,9 @@ void KisViewManager::setCurrentView(KisView *view)
 
     }
 
+    d->softProof->setChecked(view->softProofing());
+    d->gamutCheck->setChecked(view->gamutCheck());
+
     QPointer<KisView>imageView = qobject_cast<KisView*>(view);
 
     if (imageView) {
@@ -377,13 +385,15 @@ void KisViewManager::setCurrentView(KisView *view)
         d->viewConnections.addUniqueConnection(d->levelOfDetailAction, SIGNAL(toggled(bool)), canvasController, SLOT(slotToggleLevelOfDetailMode(bool)));
         d->levelOfDetailAction->setChecked(canvasController->levelOfDetailMode());
 
-        d->viewConnections.addUniqueConnection(d->currentImageView->canvasController(), SIGNAL(toolOptionWidgetsChanged(QList<QPointer<QWidget> >)), mainWindow(), SLOT(newOptionWidgets(QList<QPointer<QWidget> >)));
         d->viewConnections.addUniqueConnection(d->currentImageView->image(), SIGNAL(sigColorSpaceChanged(const KoColorSpace*)), d->controlFrame.paintopBox(), SLOT(slotColorSpaceChanged(const KoColorSpace*)));
         d->viewConnections.addUniqueConnection(d->showRulersAction, SIGNAL(toggled(bool)), imageView->zoomManager(), SLOT(setShowRulers(bool)));
         d->viewConnections.addUniqueConnection(d->rulersTrackMouseAction, SIGNAL(toggled(bool)), imageView->zoomManager(), SLOT(setRulersTrackMouse(bool)));
         d->viewConnections.addUniqueConnection(d->zoomTo100pct, SIGNAL(triggered()), imageView->zoomManager(), SLOT(zoomTo100()));
         d->viewConnections.addUniqueConnection(d->zoomIn, SIGNAL(triggered()), imageView->zoomController()->zoomAction(), SLOT(zoomIn()));
         d->viewConnections.addUniqueConnection(d->zoomOut, SIGNAL(triggered()), imageView->zoomController()->zoomAction(), SLOT(zoomOut()));
+
+        d->viewConnections.addUniqueConnection(d->softProof, SIGNAL(toggled(bool)), view, SLOT(slotSoftProofing(bool)) );
+        d->viewConnections.addUniqueConnection(d->gamutCheck, SIGNAL(toggled(bool)), view, SLOT(slotGamutCheck(bool)) );
 
         imageView->zoomManager()->setShowRulers(d->showRulersAction->isChecked());
         imageView->zoomManager()->setRulersTrackMouse(d->rulersTrackMouseAction->isChecked());
@@ -603,6 +613,8 @@ void KisViewManager::createActions()
     d->resetCanvasRotation = actionManager()->createAction("reset_canvas_rotation");
     d->wrapAroundAction    = actionManager()->createAction("wrap_around_mode");
     d->levelOfDetailAction = actionManager()->createAction("level_of_detail_mode");
+    d->softProof           = actionManager()->createAction("softProof");
+    d->gamutCheck          = actionManager()->createAction("gamutCheck");
 
     KisAction *tAction = actionManager()->createAction("showStatusBar");
     tAction->setChecked(cfg.showStatusBar());
@@ -1041,7 +1053,7 @@ void KisViewManager::switchCanvasOnly(bool toggled)
             action->setChecked(!toggled);
         }
     }
-#ifndef Q_OS_WIN
+
     if (cfg.hideTitlebarFullscreen() && !cfg.fullscreenMode()) {
         if(toggled) {
             main->setWindowState( main->windowState() | Qt::WindowFullScreen);
@@ -1049,7 +1061,7 @@ void KisViewManager::switchCanvasOnly(bool toggled)
             main->setWindowState( main->windowState() & ~Qt::WindowFullScreen);
         }
     }
-#endif
+
     if (cfg.hideMenuFullscreen()) {
         if (!toggled) {
             if (main->menuBar()->dynamicPropertyNames().contains("wasvisible")) {

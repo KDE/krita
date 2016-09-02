@@ -23,16 +23,17 @@
 
 #include "kritaui_export.h"
 #include "kis_selection.h"
+#include "kis_canvas_resource_provider.h"
 
 class QKeyEvent;
 class KisCanvas2;
 class KisSelectionOptions;
+class KoCanvasResourceManager;
 
 
 class KRITAUI_EXPORT KisSelectionToolConfigWidgetHelper : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(int selectionAction READ action WRITE slotSetAction NOTIFY selectionActionChanged);
 public:
     KisSelectionToolConfigWidgetHelper(const QString &windowTitle);
 
@@ -41,21 +42,24 @@ public:
 
     SelectionMode selectionMode() const;
     SelectionAction selectionAction() const;
-    int action() const { return selectionAction(); };
+    int action() const { return selectionAction(); }
 
     bool processKeyPressEvent(QKeyEvent *event);
 
 Q_SIGNALS:
     void selectionActionChanged(int newAction);
+    void selectionModeChanged(int newMode);
 
 public Q_SLOTS:
-    void slotSetAction(int action);
-    void slotSetSelectionMode(int mode);
+    void slotWidgetActionChanged(int action);
+    void slotWidgetModeChanged(int mode);
+
+    void slotGlobalActionChanged(int action);
+    void slotGlobalModeChanged(int mode);
 
 private:
     KisSelectionOptions* m_optionsWidget;
-    SelectionAction m_selectionAction;
-    SelectionMode m_selectionMode;
+    KisCanvasResourceProvider *m_resourceProvider;
 
     QString m_windowTitle;
 };

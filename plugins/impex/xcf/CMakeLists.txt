@@ -5,7 +5,7 @@ set(XCFTOOLS_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/xcftools")
 include_directories( ${XCFTOOLS_SOURCE_DIR})
 
 if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
-    add_definitions(-Wno-undef -Wno-missing-format-attribute -Wno-sign-compare)
+    list(APPEND COMPILE_FLAGS -Wno-undef -Wno-missing-format-attribute -Wno-sign-compare)
 endif ()
 
 set(kritaxcfimport_SOURCES

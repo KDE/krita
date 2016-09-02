@@ -53,10 +53,10 @@ KisHairyPaintOp::KisHairyPaintOp(const KisBrushBasedPaintOpSettings *settings, K
     KisBrushSP brush = brushOption.brush();
     KisFixedPaintDeviceSP dab = cachedDab(painter->device()->compositionSourceColorSpace());
     if (brush->brushType() == IMAGE || brush->brushType() == PIPE_IMAGE) {
-        dab = brush->paintDevice(source()->colorSpace(), 1.0, 0.0, KisPaintInformation());
+        dab = brush->paintDevice(source()->colorSpace(), KisDabShape(), KisPaintInformation());
     }
     else {
-        brush->mask(dab, painter->paintColor(), 1.0, 1.0, 0.0, KisPaintInformation());
+        brush->mask(dab, painter->paintColor(), KisDabShape(), KisPaintInformation());
     }
 
     m_brush.fromDabWithDensity(dab, settings->getDouble(HAIRY_BRISTLE_DENSITY) * 0.01);
@@ -128,8 +128,6 @@ void KisHairyPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintIn
     qreal rotation = m_rotationOption.apply(pi2);
     quint8 origOpacity = m_opacityOption.apply(painter(), pi2);
 
-    setCurrentScale(scale);
-    setCurrentRotation(rotation);
 
     m_brush.paintLine(m_dab, m_dev, pi1, pi2, scale * m_properties.scaleFactor, rotation);
 

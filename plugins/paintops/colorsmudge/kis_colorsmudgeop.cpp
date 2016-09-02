@@ -101,8 +101,7 @@ void KisColorSmudgeOp::updateMask(const KisPaintInformation& info, double scale,
     m_maskDab = m_dabCache->fetchDab(cs,
                                      color,
                                      cursorPoint,
-                                     scale, scale,
-                                     rotation,
+                                     KisDabShape(scale, 1.0, rotation),
                                      info,
                                      1.0,
                                      &m_dstDabRect);
@@ -157,18 +156,15 @@ KisSpacingInformation KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
     qreal scale    = m_sizeOption.apply(info);
     scale *= KisLodTransform::lodToScale(painter()->device());
     qreal rotation = m_rotationOption.apply(info);
-
     if (checkSizeTooSmall(scale)) return KisSpacingInformation();
-
-    setCurrentScale(scale);
-    setCurrentRotation(rotation);
+    KisDabShape shape(scale, 1.0, rotation);
 
     QPointF scatteredPos =
         m_scatterOption.apply(info,
-                              brush->maskWidth(scale, rotation, 0, 0, info),
-                              brush->maskHeight(scale, rotation, 0, 0, info));
+                              brush->maskWidth(shape, 0, 0, info),
+                              brush->maskHeight(shape, 0, 0, info));
 
-    QPointF hotSpot = brush->hotSpot(scale, scale, rotation, info);
+    QPointF hotSpot = brush->hotSpot(shape, info);
 
     /**
      * Update the brush mask.

@@ -26,6 +26,7 @@
 #include <kis_pressure_opacity_option.h>
 #include <kis_pressure_flow_option.h>
 #include <kis_pressure_size_option.h>
+#include <kis_pressure_ratio_option.h>
 #include <kis_paint_action_type_option.h>
 #include <kis_pressure_rotation_option.h>
 #include <kis_pressure_mix_option.h>
@@ -56,13 +57,14 @@ KisBrushOpSettingsWidget::KisBrushOpSettingsWidget(QWidget* parent)
     addPaintOpOption(new KisFlowOpacityOptionWidget(), i18n("Opacity"));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureFlowOption(), i18n("0%"), i18n("100%")), i18n("Flow"));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption(), i18n("0%"), i18n("100%")), i18n("Size"));
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureRatioOption(), i18n("0%"), i18n("100%")), i18n("Ratio"));
     addPaintOpOption(new KisPressureSpacingOptionWidget(), i18n("Spacing"));
     addPaintOpOption(new KisPressureMirrorOptionWidget(), i18n("Mirror"));
 
 
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureSoftnessOption(), i18n("Soft"), i18n("Hard")), i18n("Softness"));
     addPaintOpOption(new KisPressureSharpnessOptionWidget(), i18n("Sharpness"));
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureRotationOption(), i18n("0°"), i18n("360°")), i18n("Rotation"));
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureRotationOption(), i18n("-180°"), i18n("180°")), i18n("Rotation"));
     addPaintOpOption(new KisPressureScatterOptionWidget(), i18n("Scatter"));
 
     // Colors options

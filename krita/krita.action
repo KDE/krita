@@ -355,12 +355,23 @@
       <isCheckable>true</isCheckable>
       <statusTip></statusTip>
     </Action>
+    <Action name="disable_pressure">
+      <icon>transform_icons_penPressure</icon>
+      <text>Use Pen Pressure</text>
+      <whatsThis></whatsThis>
+      <toolTip>Use Pen Pressure</toolTip>
+      <iconText>Use Pen Pressure</iconText>
+      <activationFlags>10000</activationFlags>
+      <shortcut></shortcut>
+      <isCheckable>true</isCheckable>
+      <statusTip></statusTip>
+    </Action>
     <Action name="hmirror_action">
       <icon>symmetry-horizontal</icon>
-      <text>Set horizontal mirror mode</text>
+      <text>Horizontal Mirror Tool</text>
       <whatsThis></whatsThis>
-      <toolTip>Set horizontal mirror mode</toolTip>
-      <iconText>Set horizontal mirror mode</iconText>
+      <toolTip>Horizontal Mirror Tool</toolTip>
+      <iconText>Horizontal Mirror Tool</iconText>
       <activationFlags>10000</activationFlags>
       <shortcut></shortcut>
       <isCheckable>true</isCheckable>
@@ -368,10 +379,10 @@
     </Action>
     <Action name="vmirror_action">
       <icon>symmetry-vertical</icon>
-      <text>Set vertical mirror mode</text>
+      <text>Vertical Mirror Tool</text>
       <whatsThis></whatsThis>
-      <toolTip>Set vertical mirror mode</toolTip>
-      <iconText>Set vertical mirror mode</iconText>
+      <toolTip>Vertical Mirror Tool</toolTip>
+      <iconText>Vertical Mirror Tool</iconText>
       <activationFlags>10000</activationFlags>
       <shortcut></shortcut>
       <isCheckable>true</isCheckable>
@@ -2612,6 +2623,18 @@
       <iconText>Split Layer</iconText>
       <activationFlags>1000</activationFlags>
       <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="waveletdecompose">
+      <icon></icon>
+      <text>Wavelet Decompose ...</text>
+      <whatsThis></whatsThis>
+      <toolTip>Wavelet Decompose</toolTip>
+      <iconText>Wavelet Decompose</iconText>
+      <activationFlags>1000</activationFlags>
+      <activationConditions>1</activationConditions>
       <shortcut></shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>

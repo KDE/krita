@@ -170,7 +170,7 @@ public:
      *
      * FIXME: this method is only used by Tables. We should refactor so
      * it is no longer necessary.
-     * 
+     *
      * NOTE: this actually is also used somehow to create the imagecollection
      *        for the picture shape?
      *
@@ -180,7 +180,6 @@ public:
      * @param manager the new manager
      */
     virtual void newDocumentResourceManager(KoDocumentResourceManager *manager) const;
-    QList<KoDocumentResourceManager *> documentResourceManagers() const;
 
     /**
      * This method should be implemented by factories to create a shape that the user

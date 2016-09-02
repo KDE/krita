@@ -44,6 +44,8 @@ public:
     KisNodeSP nodeFromIndex(const QModelIndex &index) const;
     QModelIndex indexFromNode(KisNodeSP node) const;
 
+    void unsetDummiesFacade();
+
 public Q_SLOTS:
     void setActiveNode(KisNodeSP node);
 

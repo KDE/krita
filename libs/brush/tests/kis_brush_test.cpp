@@ -56,7 +56,7 @@ void KisBrushTest::testMaskGenerationNoColor()
         QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
     }
 
-    brush->mask(fdev, 1.0, 1.0, 0.0, info);
+    brush->mask(fdev, KisDabShape(), info);
 
     result = QImage(QString(FILES_DATA_DIR) + QDir::separator() + "result_brush_2.png");
     image = fdev->convertToQImage(0);
@@ -83,7 +83,7 @@ void KisBrushTest::testMaskGenerationSingleColor()
 
     // Check creating a mask dab with a single color
     fdev = new KisFixedPaintDevice(cs);
-    brush->mask(fdev, KoColor(Qt::black, cs), 1.0, 1.0, 0.0, info);
+    brush->mask(fdev, KoColor(Qt::black, cs), KisDabShape(), info);
 
     QPoint errpoint;
     QImage result = QImage(QString(FILES_DATA_DIR) + QDir::separator() + "result_brush_3.png");
@@ -116,7 +116,7 @@ void KisBrushTest::testMaskGenerationDevColor()
     dev->fill(0, 0, 100, 100, red.data());
 
     fdev = new KisFixedPaintDevice(cs);
-    brush->mask(fdev, dev, 1.0, 1.0, 0.0, info);
+    brush->mask(fdev, dev, KisDabShape(), info);
 
     QPoint errpoint;
     QImage result = QImage(QString(FILES_DATA_DIR) + QDir::separator() + "result_brush_4.png");
@@ -144,7 +144,7 @@ void KisBrushTest::testMaskGenerationDefaultColor()
 
     // check creating a mask dab with a default color
     fdev = new KisFixedPaintDevice(cs);
-    brush->mask(fdev, 1.0, 1.0, 0.0, info);
+    brush->mask(fdev, KisDabShape(), info);
 
     QPoint errpoint;
     QImage result = QImage(QString(FILES_DATA_DIR) + QDir::separator() + "result_brush_3.png");
@@ -180,7 +180,7 @@ void KisBrushTest::testImageGeneration()
             QString("brush_%1_sc_%2_rot_%3_sub_%4")
             .arg(i).arg(scale).arg(rotation).arg(subPixelX);
 
-        dab = brush->paintDevice(cs, scale, rotation, info, subPixelX);
+        dab = brush->paintDevice(cs, KisDabShape(scale, 1.0, rotation), info, subPixelX);
 
         /**
          * Compare first 10 images. Others are tested for asserts only
@@ -217,7 +217,7 @@ void KisBrushTest::benchmarkScaling()
     KisFixedPaintDeviceSP dab;
 
     QBENCHMARK {
-        dab = brush->paintDevice(cs, qreal(qrand()) / RAND_MAX * 2.0, 0.0, info);
+        dab = brush->paintDevice(cs, KisDabShape(qreal(qrand()) / RAND_MAX * 2.0, 1.0, 0.0), info);
         //dab->convertToQImage(0).save(QString("dab_%1_new_smooth.png").arg(i++));
     }
 }
@@ -235,7 +235,7 @@ void KisBrushTest::benchmarkRotation()
     KisFixedPaintDeviceSP dab;
 
     QBENCHMARK {
-        dab = brush->paintDevice(cs, 1.0, qreal(qrand()) / RAND_MAX * 2 * M_PI, info);
+        dab = brush->paintDevice(cs, KisDabShape(1.0, 1.0, qreal(qrand()) / RAND_MAX * 2 * M_PI), info);
     }
 }
 
@@ -254,7 +254,7 @@ void KisBrushTest::benchmarkMaskScaling()
     QBENCHMARK {
         KoColor c(Qt::black, cs);
         qreal scale = qreal(qrand()) / RAND_MAX * 2.0;
-        brush->mask(dab, c, scale, scale, 0.0, info, 0.0, 0.0, 1.0);
+        brush->mask(dab, c, KisDabShape(scale, 1.0, 0.0), info, 0.0, 0.0, 1.0);
     }
 }
 
@@ -292,6 +292,22 @@ void KisBrushTest::testPyramidLevelRounding()
     baseLevel = pyramid.findNearestLevel(0.25 + 1e-7, &baseScale);
     QCOMPARE(baseScale, 0.25);
     QCOMPARE(baseLevel, 5);
+}
+
+static QSize dabTransformHelper(KisDabShape const& shape)
+{
+    QSize const testSize(150, 150);
+    qreal const subPixelX = 0.0,
+                subPixelY = 0.0;
+    return KisQImagePyramid::imageSize(testSize, shape, subPixelX, subPixelY);
+}
+
+void KisBrushTest::testPyramidDabTransform()
+{
+    QCOMPARE(dabTransformHelper(KisDabShape(1.0, 1.0, 0.0)),      QSize(150, 150));
+    QCOMPARE(dabTransformHelper(KisDabShape(1.0, 0.5, 0.0)),      QSize(150,  75));
+    QCOMPARE(dabTransformHelper(KisDabShape(1.0, 1.0, M_PI / 4)), QSize(213, 213));
+    QCOMPARE(dabTransformHelper(KisDabShape(1.0, 0.5, M_PI / 4)), QSize(160, 160));
 }
 
 // see comment in KisQImagePyramid::appendPyramidLevel

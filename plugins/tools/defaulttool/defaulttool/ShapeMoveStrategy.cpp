@@ -32,6 +32,7 @@
 #include <KoToolBase.h>
 #include <KoSelection.h>
 #include <klocalizedstring.h>
+#include <kis_global.h>
 
 ShapeMoveStrategy::ShapeMoveStrategy(KoToolBase *tool, const QPointF &clicked)
     : KoInteractionStrategy(tool)
@@ -64,13 +65,9 @@ void ShapeMoveStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModifi
     }
     QPointF diff = point - m_start;
 
-    if (modifiers & (Qt::AltModifier | Qt::ControlModifier)) {
-        // keep x or y position unchanged
-        if (qAbs(diff.x()) < qAbs(diff.y())) {
-            diff.setX(0);
-        } else {
-            diff.setY(0);
-        }
+    if (modifiers & Qt::ShiftModifier) {
+        // Limit change to one direction only
+        diff = snapToClosestAxis(diff);
     } else {
         QPointF positionToSnap = point + m_initialOffset;
         tool()->canvas()->updateCanvas(tool()->canvas()->snapGuide()->boundingRect());
@@ -88,13 +85,9 @@ void ShapeMoveStrategy::handleCustomEvent(KoPointerEvent *event)
 {
     QPointF diff = tool()->canvas()->viewConverter()->viewToDocument(event->pos());
 
-    if (event->modifiers() & (Qt::AltModifier | Qt::ControlModifier)) {
-        // keep x or y position unchanged
-        if (qAbs(diff.x()) < qAbs(diff.y())) {
-            diff.setX(0);
-        } else {
-            diff.setY(0);
-        }
+    if (event->modifiers() & Qt::ShiftModifier) {
+        // Limit change to one direction only
+        diff = snapToClosestAxis(diff);
     }
 
     m_diff += 0.1 * diff;

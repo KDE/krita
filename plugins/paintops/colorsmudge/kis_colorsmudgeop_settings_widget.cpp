@@ -38,6 +38,7 @@
 #include "kis_curve_option_widget.h"
 #include <kis_pressure_mirror_option_widget.h>
 #include "kis_pressure_texture_strength_option.h"
+#include "kis_colorsmudgeop_settings.h"
 
 
 KisColorSmudgeOpSettingsWidget::KisColorSmudgeOpSettingsWidget(QWidget* parent):
@@ -58,7 +59,7 @@ KisColorSmudgeOpSettingsWidget::KisColorSmudgeOpSettingsWidget(QWidget* parent):
     addPaintOpOption(new KisCurveOptionWidget(new KisSmudgeRadiusOption(), i18n("0.0"), i18n("1.0")), i18n("Smudge Radius"));
     addPaintOpOption(new KisCurveOptionWidget(new KisRateOption("ColorRate", KisPaintOpOption::GENERAL, false), i18n("0.0"), i18n("1.0")), i18n("Color Rate"));
 
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureRotationOption(), i18n("0°"), i18n("360°")), i18n("Rotation"));
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureRotationOption(), i18n("-180°"), i18n("180°")), i18n("Rotation"));
     addPaintOpOption(new KisPressureScatterOptionWidget(), i18n("Scatter"));
     addPaintOpOption(new KisOverlayModeOptionWidget(), i18n("Overlay Mode"));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureGradientOption(), i18n("0%"), i18n("100%")), i18n("Gradient"));
@@ -72,7 +73,7 @@ KisColorSmudgeOpSettingsWidget::~KisColorSmudgeOpSettingsWidget() { }
 
 KisPropertiesConfiguration* KisColorSmudgeOpSettingsWidget::configuration() const
 {
-    KisBrushBasedPaintOpSettings *config = new KisBrushBasedPaintOpSettings();
+    KisColorSmudgeOpSettings *config = new KisColorSmudgeOpSettings();
     config->setOptionsWidget(const_cast<KisColorSmudgeOpSettingsWidget*>(this));
     config->setProperty("paintop", "colorsmudge");
     writeConfiguration(config);

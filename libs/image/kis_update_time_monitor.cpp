@@ -224,12 +224,14 @@ void KisUpdateTimeMonitor::reportJobFinished(void *key, const QVector<QRect> &re
     QMutexLocker locker(&m_d->mutex);
 
     StrokeTicket *ticket = m_d->preliminaryTickets.take(key);
-    ticket->jobCompleted();
+    if( ticket ){
+        ticket->jobCompleted();
 
-    Q_FOREACH (const QRect &rect, rects) {
-        ticket->dirtyRegion += rect;
+        Q_FOREACH (const QRect &rect, rects) {
+            ticket->dirtyRegion += rect;
+        }
+        m_d->finishedTickets.insert(ticket);
     }
-    m_d->finishedTickets.insert(ticket);
 }
 
 void KisUpdateTimeMonitor::reportUpdateFinished(const QRect &rect)

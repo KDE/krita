@@ -81,11 +81,83 @@ public:
     void setCurve(DynamicSensorType sensorType, bool useSameCurve, const KisCubicCurve &curve);
     void setValue(qreal value);
 
+    struct ValueComponents {
+
+        ValueComponents()
+            : constant(1.0),
+              scaling(1.0),
+              additive(0.0),
+              absoluteOffset(0.0),
+              hasAbsoluteOffset(false),
+              hasScaling(false),
+              hasAdditive(false)
+        {
+        }
+
+        qreal constant;
+        qreal scaling;
+        qreal additive;
+        qreal absoluteOffset;
+        bool hasAbsoluteOffset;
+        bool hasScaling;
+        bool hasAdditive;
+        qreal minSizeLikeValue;
+        qreal maxSizeLikeValue;
+
+        qreal rotationLikeValue(qreal baseAngle) const {
+            const qreal offset =
+                hasAbsoluteOffset ? absoluteOffset : baseAngle;
+
+            const qreal realScalingPart = hasScaling ? KisDynamicSensor::scalingToAdditive(scaling) : 0.0;
+            const qreal realAdditivePart = hasAdditive ? additive : 0;
+
+            return
+                wrapInRange(
+                    2 * offset + constant * realScalingPart + realAdditivePart,
+                    -1.0, 1.0);
+        }
+
+        qreal sizeLikeValue() const {
+            const qreal offset =
+                hasAbsoluteOffset ? absoluteOffset : 1.0;
+
+            const qreal realScalingPart = hasScaling ? scaling : 1.0;
+            const qreal realAdditivePart = hasAdditive ? KisDynamicSensor::additiveToScaling(additive) : 1.0;
+
+            return qBound(minSizeLikeValue,
+                          constant * offset * realScalingPart * realAdditivePart,
+                          maxSizeLikeValue);
+        }
+
+    private:
+        static inline qreal wrapInRange(qreal x, qreal min, qreal max) {
+            const qreal range = max - min;
+
+            x -= min;
+
+            if (x < 0.0) {
+                x = range + fmod(x, range);
+            }
+
+            if (x > range) {
+                x = fmod(x, range);
+            }
+
+            return x + min;
+        }
+    };
+
     /**
      * Uses the curves set on the sensors to compute a single
      * double value that can control the parameters of a brush.
+     *
+     * This value is derives from the falues stored in
+     * ValuesComponents opject.
      */
-    double computeValue(const KisPaintInformation& info) const;
+    ValueComponents computeValueComponents(const KisPaintInformation& info) const;
+
+    qreal computeSizeLikeValue(const KisPaintInformation &info) const;
+    qreal computeRotationLikeValue(const KisPaintInformation& info, qreal baseValue) const;
 
 protected:
 

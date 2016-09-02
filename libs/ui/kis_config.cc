@@ -33,6 +33,7 @@
 
 #include <KisDocument.h>
 
+#include <KoColor.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorModelStandardIds.h>
 #include <KoColorProfile.h>
@@ -408,7 +409,7 @@ const KoColorProfile *KisConfig::getScreenProfile(int screen)
 
     KisConfig cfg;
     QString monitorId;
-    if (KisColorManager::instance()->devices().size() > screen && screen > 0) {
+    if (KisColorManager::instance()->devices().size() > screen) {
         monitorId = cfg.monitorForScreen(screen, KisColorManager::instance()->devices()[screen]);
     }
     //dbgKrita << "getScreenProfile(). Screen" << screen << "monitor id" << monitorId;
@@ -1114,11 +1115,7 @@ void KisConfig::setHideStatusbarFullscreen(const bool value) const
 
 bool KisConfig::hideTitlebarFullscreen(bool defaultValue) const
 {
-#ifdef Q_OS_WIN
-    return false;
-#else
     return (defaultValue ? true : m_cfg.readEntry("hideTitleBarFullscreen", true));
-#endif
 }
 
 void KisConfig::setHideTitlebarFullscreen(const bool value) const
@@ -1681,4 +1678,35 @@ int KisConfig::stabilizerSampleSize(bool defaultValue) const
 void KisConfig::setStabilizerSampleSize(int value)
 {
     m_cfg.writeEntry("stabilizerSampleSize", value);
+}
+
+QString KisConfig::customFFMpegPath(bool defaultValue) const
+{
+    return defaultValue ? QString() : m_cfg.readEntry("ffmpegExecutablePath", QString());
+}
+
+void KisConfig::setCustomFFMpegPath(const QString &value) const
+{
+    m_cfg.writeEntry("ffmpegExecutablePath", value);
+}
+
+bool KisConfig::showBrushHud(bool defaultValue) const
+{
+    return defaultValue ? false : m_cfg.readEntry("showBrushHud", false);
+}
+
+void KisConfig::setShowBrushHud(bool value)
+{
+    m_cfg.writeEntry("showBrushHud", value);
+}
+
+QString KisConfig::brushHudSetting(bool defaultValue) const
+{
+    QString defaultDoc = "<!DOCTYPE hud_properties>\n<hud_properties>\n <version type=\"value\" value=\"1\"/>\n <paintbrush>\n  <properties_list type=\"array\">\n   <item_0 type=\"value\" value=\"size\"/>\n   <item_1 type=\"value\" value=\"opacity\"/>\n   <item_2 type=\"value\" value=\"angle\"/>\n  </properties_list>\n </paintbrush>\n <colorsmudge>\n  <properties_list type=\"array\">\n   <item_0 type=\"value\" value=\"size\"/>\n   <item_1 type=\"value\" value=\"opacity\"/>\n   <item_2 type=\"value\" value=\"smudge_mode\"/>\n   <item_3 type=\"value\" value=\"smudge_length\"/>\n   <item_4 type=\"value\" value=\"smudge_color_rate\"/>\n  </properties_list>\n </colorsmudge>\n <sketchbrush>\n  <properties_list type=\"array\">\n   <item_0 type=\"value\" value=\"opacity\"/>\n   <item_1 type=\"value\" value=\"size\"/>\n  </properties_list>\n </sketchbrush>\n <hairybrush>\n  <properties_list type=\"array\">\n   <item_0 type=\"value\" value=\"size\"/>\n   <item_1 type=\"value\" value=\"opacity\"/>\n  </properties_list>\n </hairybrush>\n <experimentbrush>\n  <properties_list type=\"array\">\n   <item_0 type=\"value\" value=\"opacity\"/>\n   <item_1 type=\"value\" value=\"shape_windingfill\"/>\n  </properties_list>\n </experimentbrush>\n <spraybrush>\n  <properties_list type=\"array\">\n   <item_0 type=\"value\" value=\"size\"/>\n   <item_1 type=\"value\" value=\"opacity\"/>\n   <item_2 type=\"value\" value=\"spray_particlecount\"/>\n   <item_3 type=\"value\" value=\"spray_density\"/>\n  </properties_list>\n </spraybrush>\n <hatchingbrush>\n  <properties_list type=\"array\">\n   <item_0 type=\"value\" value=\"size\"/>\n   <item_1 type=\"value\" value=\"opacity\"/>\n   <item_2 type=\"value\" value=\"hatching_angle\"/>\n   <item_3 type=\"value\" value=\"hatching_thickness\"/>\n   <item_4 type=\"value\" value=\"hatching_separation\"/>\n  </properties_list>\n </hatchingbrush>\n <gridbrush>\n  <properties_list type=\"array\">\n   <item_0 type=\"value\" value=\"size\"/>\n   <item_1 type=\"value\" value=\"opacity\"/>\n   <item_2 type=\"value\" value=\"grid_divisionlevel\"/>\n  </properties_list>\n </gridbrush>\n <curvebrush>\n  <properties_list type=\"array\">\n   <item_0 type=\"value\" value=\"opacity\"/>\n   <item_1 type=\"value\" value=\"curve_historysize\"/>\n   <item_2 type=\"value\" value=\"curve_linewidth\"/>\n   <item_3 type=\"value\" value=\"curve_lineopacity\"/>\n   <item_4 type=\"value\" value=\"curve_connectionline\"/>\n  </properties_list>\n </curvebrush>\n <dynabrush>\n  <properties_list type=\"array\">\n   <item_0 type=\"value\" value=\"dyna_diameter\"/>\n   <item_1 type=\"value\" value=\"opacity\"/>\n   <item_2 type=\"value\" value=\"dyna_mass\"/>\n   <item_3 type=\"value\" value=\"dyna_drag\"/>\n  </properties_list>\n </dynabrush>\n <particlebrush>\n  <properties_list type=\"array\">\n   <item_0 type=\"value\" value=\"opacity\"/>\n   <item_1 type=\"value\" value=\"particle_particles\"/>\n   <item_2 type=\"value\" value=\"particle_opecityweight\"/>\n   <item_3 type=\"value\" value=\"particle_iterations\"/>\n  </properties_list>\n </particlebrush>\n <duplicate>\n  <properties_list type=\"array\">\n   <item_0 type=\"value\" value=\"size\"/>\n   <item_1 type=\"value\" value=\"opacity\"/>\n   <item_2 type=\"value\" value=\"clone_healing\"/>\n   <item_3 type=\"value\" value=\"clone_movesource\"/>\n  </properties_list>\n </duplicate>\n <deformbrush>\n  <properties_list type=\"array\">\n   <item_0 type=\"value\" value=\"size\"/>\n   <item_1 type=\"value\" value=\"opacity\"/>\n   <item_2 type=\"value\" value=\"deform_amount\"/>\n   <item_3 type=\"value\" value=\"deform_mode\"/>\n  </properties_list>\n </deformbrush>\n <tangentnormal>\n  <properties_list type=\"array\">\n   <item_0 type=\"value\" value=\"size\"/>\n   <item_1 type=\"value\" value=\"opacity\"/>\n  </properties_list>\n </tangentnormal>\n <filter>\n  <properties_list type=\"array\">\n   <item_0 type=\"value\" value=\"size\"/>\n   <item_1 type=\"value\" value=\"opacity\"/>\n  </properties_list>\n </filter>\n <chalkbrush>\n  <properties_list type=\"array\">\n   <item_0 type=\"value\" value=\"size\"/>\n   <item_1 type=\"value\" value=\"opacity\"/>\n  </properties_list>\n </chalkbrush>\n</hud_properties>\n";
+    return defaultValue ? defaultDoc : m_cfg.readEntry("brushHudSettings", defaultDoc);
+}
+
+void KisConfig::setBrushHudSetting(const QString &value) const
+{
+    m_cfg.writeEntry("brushHudSettings", value);
 }

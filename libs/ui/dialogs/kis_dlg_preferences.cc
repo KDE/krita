@@ -64,11 +64,14 @@
 #include "widgets/kis_cmb_idlist.h"
 #include "KoColorSpace.h"
 #include "KoColorSpaceRegistry.h"
+#include "KoColorConversionTransformation.h"
 #include "kis_cursor.h"
 #include "kis_config.h"
 #include "kis_canvas_resource_provider.h"
 #include "kis_preference_set_registry.h"
 #include "kis_color_manager.h"
+#include "KisProofingConfiguration.h"
+#include "kis_image_config.h"
 
 #include "slider_and_spin_box_sync.h"
 
@@ -304,22 +307,16 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
 
 // XXX: no color management integration on Windows or OSX yet
 #ifndef HAVE_X11
-    m_page->chkUseSystemMonitorProfile->setVisible(false);
+    if (KisColorManager::instance()->devices() > 0) {
+        m_page->chkUseSystemMonitorProfile->setVisible(false);
+    }
 #endif
     m_page->cmbWorkingColorSpace->setIDList(KoColorSpaceRegistry::instance()->listKeys());
     m_page->cmbWorkingColorSpace->setCurrent(cfg.workingColorSpace());
 
-    m_page->cmbPrintingColorSpace->setIDList(KoColorSpaceRegistry::instance()->listKeys());
-    m_page->cmbPrintingColorSpace->setCurrent(cfg.printerColorSpace());
-
     m_page->bnAddColorProfile->setIcon(KisIconUtils::loadIcon("document-open"));
     m_page->bnAddColorProfile->setToolTip( i18n("Open Color Profile") );
     connect(m_page->bnAddColorProfile, SIGNAL(clicked()), SLOT(installProfile()));
-
-    refillPrintProfiles(KoID(cfg.printerColorSpace(), ""));
-
-    //hide printing settings
-    m_page->groupBox2->hide();
 
     QGridLayout *monitorProfileGrid = new QGridLayout(m_page->monitorprofileholder);
     for(int i = 0; i < QApplication::desktop()->screenCount(); ++i) {
@@ -339,11 +336,25 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
         }
     }
 
-    if (m_page->cmbPrintProfile->contains(cfg.printerProfile()))
-        m_page->cmbPrintProfile->setCurrentIndex(m_page->cmbPrintProfile->findText(cfg.printerProfile()));
-
     m_page->chkBlackpoint->setChecked(cfg.useBlackPointCompensation());
     m_page->chkAllowLCMSOptimization->setChecked(cfg.allowLCMSOptimization());
+
+    KisImageConfig cfgImage;
+
+    KisProofingConfiguration *proofingConfig = cfgImage.defaultProofingconfiguration();
+    m_gamutWarning = new KoColorPopupAction(this);
+    m_gamutWarning->setToolTip(i18n("Set default color used for out of Gamut Warning"));
+    m_gamutWarning->setCurrentColor(proofingConfig->warningColor);
+    m_page->gamutAlarm->setDefaultAction(m_gamutWarning);
+    m_page->sldAdaptationState->setMaximum(20);
+    m_page->sldAdaptationState->setMinimum(0);
+    m_page->sldAdaptationState->setValue((int)proofingConfig->adaptationState*20);
+
+    const KoColorSpace *proofingSpace =  KoColorSpaceRegistry::instance()->colorSpace(proofingConfig->proofingModel,proofingConfig->proofingDepth,proofingConfig->proofingProfile);
+    m_page->proofingSpaceSelector->setCurrentColorSpace(proofingSpace);
+
+    m_page->cmbProofingIntent->setCurrentIndex((int)proofingConfig->intent);
+    m_page->ckbProofBlackPoint->setChecked(proofingConfig->conversionFlags.testFlag(KoColorConversionTransformation::BlackpointCompensation));
 
     m_pasteBehaviourGroup.addButton(m_page->radioPasteWeb, PASTE_ASSUME_WEB);
     m_pasteBehaviourGroup.addButton(m_page->radioPasteMonitor, PASTE_ASSUME_MONITOR);
@@ -360,8 +371,6 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
 
     toggleAllowMonitorProfileSelection(cfg.useSystemMonitorProfile());
 
-    connect(m_page->cmbPrintingColorSpace, SIGNAL(activated(const KoID &)),
-            this, SLOT(refillPrintProfiles(const KoID &)));
 }
 
 void ColorSettingsTab::installProfile()
@@ -389,17 +398,12 @@ void ColorSettingsTab::installProfile()
 
     KisConfig cfg;
     refillMonitorProfiles(KoID("RGBA", ""));
-    refillPrintProfiles(KoID(cfg.printerColorSpace(), ""));
 
     for(int i = 0; i < QApplication::desktop()->screenCount(); ++i) {
         if (m_monitorProfileWidgets[i]->contains(cfg.monitorProfile(i))) {
             m_monitorProfileWidgets[i]->setCurrent(cfg.monitorProfile(i));
         }
     }
-
-    if (m_page->cmbPrintProfile->contains(cfg.printerProfile()))
-        m_page->cmbPrintProfile->setCurrentIndex(m_page->cmbPrintProfile->findText(cfg.printerProfile()));
-
 
 }
 
@@ -438,12 +442,18 @@ void ColorSettingsTab::setDefault()
 {
     m_page->cmbWorkingColorSpace->setCurrent("RGBA");
 
-    m_page->cmbPrintingColorSpace->setCurrent("CMYK");
-    refillPrintProfiles(KoID("CMYK", ""));
-
     refillMonitorProfiles(KoID("RGBA", ""));
 
     KisConfig cfg;
+    KisImageConfig cfgImage;
+    KisProofingConfiguration *proofingConfig =  cfgImage.defaultProofingconfiguration();
+    const KoColorSpace *proofingSpace =  KoColorSpaceRegistry::instance()->colorSpace(proofingConfig->proofingModel,proofingConfig->proofingDepth,proofingConfig->proofingProfile);
+    m_page->proofingSpaceSelector->setCurrentColorSpace(proofingSpace);
+    m_page->cmbProofingIntent->setCurrentIndex((int)proofingConfig->intent);
+    m_page->ckbProofBlackPoint->setChecked(proofingConfig->conversionFlags.testFlag(KoColorConversionTransformation::BlackpointCompensation));
+    m_page->sldAdaptationState->setValue(0);
+
+    m_gamutWarning->setCurrentColor(proofingConfig->warningColor);
 
     m_page->chkBlackpoint->setChecked(cfg.useBlackPointCompensation(true));
     m_page->chkAllowLCMSOptimization->setChecked(cfg.allowLCMSOptimization(true));
@@ -485,24 +495,6 @@ void ColorSettingsTab::refillMonitorProfiles(const KoID & s)
     }
 }
 
-void ColorSettingsTab::refillPrintProfiles(const KoID & s)
-{
-    const KoColorSpaceFactory * csf = KoColorSpaceRegistry::instance()->colorSpaceFactory(s.id());
-
-    m_page->cmbPrintProfile->clear();
-
-    if (!csf)
-        return;
-
-    QList<const KoColorProfile *> profileList = KoColorSpaceRegistry::instance()->profilesFor(csf);
-
-    Q_FOREACH (const KoColorProfile *profile, profileList) {
-        if (profile->isSuitableForPrinting())
-            m_page->cmbPrintProfile->addSqueezedItem(profile->name());
-    }
-
-    m_page->cmbPrintProfile->setCurrent(csf->defaultProfile());
-}
 
 //---------------------------------------------------------------------------------------------------
 
@@ -532,7 +524,6 @@ TabletSettingsTab::TabletSettingsTab(QWidget* parent, const char* name): QWidget
 
 
 //---------------------------------------------------------------------------------------------------
-#include "kis_image_config.h"
 #include "kis_acyclic_signal_connector.h"
 
 int getTotalRAM() {
@@ -580,7 +571,7 @@ PerformanceTab::PerformanceTab(QWidget *parent, const char *name)
     SliderAndSpinBoxSync *sync2 =
         new SliderAndSpinBoxSync(sliderPoolLimit,
                                  intPoolLimit,
-                                 std::bind(&QSpinBox::value,
+                                 std::bind(&KisIntParseSpinBox::value,
                                              intMemoryLimit));
 
 
@@ -714,7 +705,6 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
     c.fromQColor(cfg.selectionOverlayMaskColor());
     m_selectionOverlayColorAction = new KoColorPopupAction(this);
     m_selectionOverlayColorAction->setCurrentColor(c);
-    m_selectionOverlayColorAction->setIcon(KisIconUtils::loadIcon("format-stroke-color"));
     m_selectionOverlayColorAction->setToolTip(i18n("Change the background color of the image"));
     btnSelectionOverlayColor->setDefaultAction(m_selectionOverlayColorAction);
 
@@ -782,9 +772,6 @@ FullscreenSettingsTab::FullscreenSettingsTab(QWidget* parent) : WdgFullscreenSet
     chkMenu->setChecked(cfg.hideMenuFullscreen());
     chkScrollbars->setChecked(cfg.hideScrollbarsFullscreen());
     chkStatusbar->setChecked(cfg.hideStatusbarFullscreen());
-#ifdef Q_OS_WINDOWS
-    chkTitlebar->setVisible(false);
-#endif
     chkTitlebar->setChecked(cfg.hideTitlebarFullscreen());
     chkToolbar->setChecked(cfg.hideToolbarFullscreen());
 
@@ -1004,9 +991,9 @@ bool KisDlgPreferences::editPreferences()
             }
         }
         cfg.setWorkingColorSpace(dialog->m_colorSettings->m_page->cmbWorkingColorSpace->currentItem().id());
-        cfg.setPrinterColorSpace(dialog->m_colorSettings->m_page->cmbPrintingColorSpace->currentItem().id());
-        cfg.setPrinterProfile(dialog->m_colorSettings->m_page->cmbPrintProfile->itemHighlighted());
 
+        KisImageConfig cfgImage;
+        cfgImage.setDefaultProofingConfig(dialog->m_colorSettings->m_page->proofingSpaceSelector->currentColorSpace(), dialog->m_colorSettings->m_page->cmbProofingIntent->currentIndex(), dialog->m_colorSettings->m_page->ckbProofBlackPoint->isChecked(), dialog->m_colorSettings->m_gamutWarning->currentKoColor(), (double)dialog->m_colorSettings->m_page->sldAdaptationState->value()/20);
         cfg.setUseBlackPointCompensation(dialog->m_colorSettings->m_page->chkBlackpoint->isChecked());
         cfg.setAllowLCMSOptimization(dialog->m_colorSettings->m_page->chkAllowLCMSOptimization->isChecked());
         cfg.setPasteBehaviour(dialog->m_colorSettings->m_pasteBehaviourGroup.checkedId());

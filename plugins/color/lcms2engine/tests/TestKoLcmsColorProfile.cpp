@@ -170,4 +170,45 @@ void TestKoLcmsColorProfile::testConversion()
 
 }
 
+void TestKoLcmsColorProfile::testProofingConversion()
+{
+    const KoColorSpace *sRgb = KoColorSpaceRegistry::instance()->rgb16("sRGB built-in");
+    Q_ASSERT(sRgb);
+    const KoColorSpace *lab = KoColorSpaceRegistry::instance()->lab16();//there's only one lab profile, replace with it's name.
+    Q_ASSERT(lab);
+
+    quint16 src[4];//the following ought to give us a purple only possible in lab. I can't seem to proof this away, somehow...
+    src[0] = 32896;
+    src[1] = 65535;
+    src[2] = 0;
+    src[3] = 65535;
+
+    quint16 dst[4];
+    memset(&dst, 0, 8);
+
+    cmsHPROFILE sRgbProfile = cmsCreate_sRGBProfile();
+    cmsHPROFILE LabProfile = cmsCreateLab4Profile(NULL);
+
+    quint16 alarm[cmsMAXCHANNELS]={0};
+    alarm[0] = 65535;
+    alarm[1] = 0;
+    alarm[2] = 0;
+    alarm[3] = 65535;
+    cmsSetAlarmCodes(alarm);
+
+    cmsHTRANSFORM tf = cmsCreateProofingTransform(LabProfile,
+                                          TYPE_Lab_16,
+                                          LabProfile,
+                                          TYPE_Lab_16,
+                                          sRgbProfile,
+                                          INTENT_ABSOLUTE_COLORIMETRIC,
+                                          INTENT_ABSOLUTE_COLORIMETRIC,
+                                          cmsFLAGS_SOFTPROOFING|cmsFLAGS_GAMUTCHECK);
+
+    cmsDoTransform(tf, (quint8 *)&src, (quint8 *)&dst, 1);
+
+    qDebug()<<dst[0]<<","<<dst[1]<<","<<dst[2]<<","<<dst[3];
+    Q_ASSERT((dst[0] == alarm[0]) && (dst[1] == alarm[1]) && (dst[2] == alarm[2]));
+
+}
 QTEST_MAIN(TestKoLcmsColorProfile)

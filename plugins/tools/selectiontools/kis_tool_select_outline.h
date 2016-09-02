@@ -31,13 +31,9 @@
 
 class QPainterPath;
 
-class KisToolSelectOutline : public KisToolSelectBase
+class KisToolSelectOutline : public KisToolSelect
 {
-
-
     Q_OBJECT
-    Q_PROPERTY(int selectionAction READ selectionAction WRITE setSelectionAction NOTIFY selectionActionChanged)
-    Q_SIGNALS: void selectionActionChanged();
 
 public:
     KisToolSelectOutline(KoCanvasBase *canvas);
@@ -50,7 +46,7 @@ public:
 
 public Q_SLOTS:
     virtual void deactivate();
-    void setSelectionAction(int newSelectionAction);
+    void setSelectionAction(int);
 
 protected:
     using KisToolSelectBase::m_widgetHelper;
@@ -67,7 +63,8 @@ class KisToolSelectOutlineFactory : public KoToolFactoryBase
 {
 public:
     KisToolSelectOutlineFactory()
-            : KoToolFactoryBase("KisToolSelectOutline") {
+        : KoToolFactoryBase("KisToolSelectOutline")
+    {
         setToolTip(i18n("Outline Selection Tool"));
         setToolType(TOOL_TYPE_SELECTED);
         setIconName(koIconNameCStr("tool_outline_selection"));

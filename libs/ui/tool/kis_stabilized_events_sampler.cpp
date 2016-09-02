@@ -27,12 +27,13 @@
 
 struct KisStabilizedEventsSampler::Private
 {
-    Private(int _sampleTime) : sampleTime(_sampleTime) {}
+    Private(int _sampleTime) : sampleTime(_sampleTime), elapsedTimeOverride(0) {}
 
     std::function<void(const KisPaintInformation &)> paintLine;
     QElapsedTimer lastPaintTime;
     QList<KisPaintInformation> realEvents;
     int sampleTime;
+    int elapsedTimeOverride;
 
     KisPaintInformation lastPaintInformation;
 };
@@ -70,6 +71,14 @@ void KisStabilizedEventsSampler::addEvent(const KisPaintInformation &pi)
     m_d->realEvents.append(pi);
 }
 
+void KisStabilizedEventsSampler::addFinishingEvent(int numSamples)
+{
+    clear();
+
+    m_d->elapsedTimeOverride = numSamples;
+    m_d->realEvents.append(m_d->lastPaintInformation);
+}
+
 void KisStabilizedEventsSampler::processAllEvents()
 {
     const int elapsed = m_d->lastPaintTime.restart();
@@ -93,8 +102,10 @@ const KisPaintInformation& KisStabilizedEventsSampler::iterator::dereference() c
 std::pair<KisStabilizedEventsSampler::iterator, KisStabilizedEventsSampler::iterator>
 KisStabilizedEventsSampler::range() const
 {
-    const int elapsed = m_d->lastPaintTime.restart() / m_d->sampleTime;
+    const int elapsed = (m_d->lastPaintTime.restart() + m_d->elapsedTimeOverride) / m_d->sampleTime;
     const qreal alpha = qreal(m_d->realEvents.size()) / elapsed;
+
+    m_d->elapsedTimeOverride = 0;
 
     return std::make_pair(iterator(this, 0, alpha),
                           iterator(this, elapsed, alpha));

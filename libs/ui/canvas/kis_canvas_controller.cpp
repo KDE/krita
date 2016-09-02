@@ -178,10 +178,6 @@ void KisCanvasController::Private::showMirrorStateOnCanvas()
 
 void KisCanvasController::mirrorCanvas(bool enable)
 {
-    KisCanvasDecorationSP decorator = dynamic_cast<KisCanvas2*>(this->canvas())->decoration("mirror_axis");
-    KIS_ASSERT_RECOVER_RETURN(decorator);
-    decorator->setVisible(enable);
-
     QPoint newOffset = m_d->coordinatesConverter->mirror(m_d->coordinatesConverter->widgetCenterPoint(), enable, false);
     m_d->updateDocumentSizeAfterTransform();
     setScrollBarValue(newOffset);
@@ -192,8 +188,6 @@ void KisCanvasController::mirrorCanvas(bool enable)
 void KisCanvasController::Private::showRotationValueOnCanvas()
 {
     qreal rotationAngle = coordinatesConverter->rotationAngle();
-
-
     view->viewManager()->
         showFloatingMessage(
             i18nc("floating message about rotation", "Rotation: %1° ",
@@ -276,7 +270,7 @@ void KisCanvasController::slotToggleLevelOfDetailMode(bool value)
             QString filteringMode =
                 kritaCanvas->openGLFilterMode() == KisOpenGL::BilinearFilterMode ?
                 i18n("Bilinear") : i18n("Nearest Neighbour");
-            reason = i18n("Instant Preview is supported\n in Trilinear of High Quality filtering modes.\nCurrent mode is %1", filteringMode);
+            reason = i18n("Instant Preview is supported\n in Trilinear or High Quality filtering modes.\nCurrent mode is %1", filteringMode);
         }
 
         m_d->view->viewManager()->showFloatingMessage(

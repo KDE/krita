@@ -165,7 +165,10 @@ void KisSafeDocumentLoader::delayedLoadStart()
         // Restart the attempt
         m_d->fileChangedSignalCompressor.start();
     } else {
-        emit loadingFinished(m_d->doc->image());
+        KisPaintDeviceSP paintDevice = new KisPaintDevice(m_d->doc->image()->colorSpace());
+        KisPaintDeviceSP projection = m_d->doc->image()->projection();
+        paintDevice->makeCloneFrom(projection, projection->extent());
+        emit loadingFinished(paintDevice, m_d->doc->image()->xRes(), m_d->doc->image()->yRes());
     }
 
     m_d->doc.reset();

@@ -25,43 +25,68 @@
 #include <FlakeDebug.h>
 
 #include "KoShape.h"
+#include "kis_assert.h"
+#include "kis_debug.h"
+
+void KoResourceManager::slotResourceInternalsChanged(int key)
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_resources.contains(key));
+    notifyDerivedResourcesChanged(key, m_resources[key]);
+}
 
 void KoResourceManager::setResource(int key, const QVariant &value)
 {
-    QVariant realValue = value;
-    int realKey = key;
-    QVariant currentValue = m_resources.value(key, QVariant());
-
     KoDerivedResourceConverterSP converter =
         m_derivedResources.value(key, KoDerivedResourceConverterSP());
 
     if (converter) {
-        realKey = converter->sourceKey();
-        currentValue = m_resources.value(realKey, QVariant());
-        realValue = converter->toSource(value, currentValue);
-    }
+        const int sourceKey = converter->sourceKey();
+        const QVariant oldSourceValue = m_resources.value(sourceKey, QVariant());
 
-    if (m_resources.contains(realKey)) {
-        if (!converter && currentValue == realValue)
-            return;
-        m_resources[realKey] = realValue;
+        bool valueChanged = false;
+        const QVariant newSourceValue = converter->writeToSource(value, oldSourceValue, &valueChanged);
+
+        if (valueChanged) {
+            notifyResourceChanged(key, value);
+        }
+
+        if (oldSourceValue != newSourceValue) {
+            m_resources[sourceKey] = newSourceValue;
+            notifyResourceChanged(sourceKey, newSourceValue);
+        }
+
     } else {
-        m_resources.insert(realKey, realValue);
-    }
+        const QVariant oldValue = m_resources.value(key, QVariant());
+        m_resources[key] = value;
 
-    notifyResourceChanged(key, value);
+        if (m_updateMediators.contains(key)) {
+            m_updateMediators[key]->connectResource(value);
+        }
+
+        if (oldValue != value) {
+            notifyResourceChanged(key, value);
+        }
+    }
 }
 
 void KoResourceManager::notifyResourceChanged(int key, const QVariant &value)
 {
     emit resourceChanged(key, value);
+    notifyDerivedResourcesChanged(key, value);
+}
 
+void KoResourceManager::notifyDerivedResourcesChanged(int key, const QVariant &value)
+{
     QMultiHash<int, KoDerivedResourceConverterSP>::const_iterator it = m_derivedFromSource.constFind(key);
     QMultiHash<int, KoDerivedResourceConverterSP>::const_iterator end = m_derivedFromSource.constEnd();
 
     while (it != end && it.key() == key) {
         KoDerivedResourceConverterSP converter = it.value();
-        notifyResourceChanged(converter->key(), converter->fromSource(value));
+
+        if (converter->notifySourceChanged(value)) {
+            notifyResourceChanged(converter->key(), converter->readFromSource(value));
+        }
+
         it++;
     }
 }
@@ -74,7 +99,7 @@ QVariant KoResourceManager::resource(int key) const
     const int realKey = converter ? converter->sourceKey() : key;
     QVariant value = m_resources.value(realKey, QVariant());
 
-    return converter ? converter->fromSource(value) : value;
+    return converter ? converter->readFromSource(value) : value;
 }
 
 void KoResourceManager::setResource(int key, const KoColor &color)
@@ -175,7 +200,7 @@ void KoResourceManager::clearResource(int key)
 
 void KoResourceManager::addDerivedResourceConverter(KoDerivedResourceConverterSP converter)
 {
-    Q_ASSERT(!m_derivedResources.contains(converter->key()));
+    KIS_SAFE_ASSERT_RECOVER_NOOP(!m_derivedResources.contains(converter->key()));
 
     m_derivedResources.insert(converter->key(), converter);
     m_derivedFromSource.insertMulti(converter->sourceKey(), converter);
@@ -193,4 +218,22 @@ void KoResourceManager::removeDerivedResourceConverter(int key)
     KoDerivedResourceConverterSP converter = m_derivedResources.value(key);
     m_derivedResources.remove(key);
     m_derivedFromSource.remove(converter->sourceKey(), converter);
+}
+
+void KoResourceManager::addResourceUpdateMediator(KoResourceUpdateMediatorSP mediator)
+{
+    KIS_SAFE_ASSERT_RECOVER_NOOP(!m_updateMediators.contains(mediator->key()));
+    m_updateMediators.insert(mediator->key(), mediator);
+    connect(mediator.data(), SIGNAL(sigResourceChanged(int)), SLOT(slotResourceInternalsChanged(int)));
+}
+
+bool KoResourceManager::hasResourceUpdateMediator(int key)
+{
+    return m_updateMediators.contains(key);
+}
+
+void KoResourceManager::removeResourceUpdateMediator(int key)
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_updateMediators.contains(key));
+    m_updateMediators.remove(key);
 }

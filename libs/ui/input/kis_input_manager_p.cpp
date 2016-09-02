@@ -80,6 +80,7 @@ bool KisInputManager::Private::EventEater::eventFilter(QObject* target, QEvent* 
         }
     };
 
+    Qt::MouseEventSource source = static_cast<QMouseEvent*>(event)->source();
     if (peckish && event->type() == QEvent::MouseButtonPress
         // Drop one mouse press following tabletPress or touchBegin
         && (static_cast<QMouseEvent*>(event)->button() == Qt::LeftButton)) {
@@ -87,7 +88,13 @@ bool KisInputManager::Private::EventEater::eventFilter(QObject* target, QEvent* 
         debugEvent();
         return true;
     } else if (isMouseEventType(event->type()) &&
-               (hungry || (eatSyntheticEvents && static_cast<QMouseEvent*>(event)->source() != 0))) {
+               (hungry
+            // On Mac, we need mouse events when the tablet is in proximity, but not pressed down
+            // since tablet move events are not generated until after tablet press.
+            #ifndef Q_OS_MAC
+                || (eatSyntheticEvents && source != 0)
+            #endif
+                )) {
         // Drop mouse events if enabled or event was synthetic & synthetic events are disabled
         debugEvent();
         return true;
@@ -312,11 +319,21 @@ bool KisInputManager::Private::ProximityNotifier::eventFilter(QObject* object, Q
         // d->eventEater.eatOneMousePress();
 
         // Qt sends fake mouse events instead of hover events, so not very useful.
+        // Don't block mouse events on tablet since tablet move events are not generated until
+        // after tablet press.
+#ifndef Q_OS_MAC
         d->blockMouseEvents();
+#else
+        // Notify input manager that tablet proximity is entered for Genius tablets.
+        d->setTabletActive(true);
+#endif
         break;
     case QEvent::TabletLeaveProximity:
         d->debugEvent<QEvent, false>(event);
         d->allowMouseEvents();
+#ifdef Q_OS_MAC
+        d->setTabletActive(false);
+#endif
         break;
     default:
         break;
@@ -495,6 +512,15 @@ void KisInputManager::Private::allowMouseEvents()
 void KisInputManager::Private::eatOneMousePress()
 {
     eventEater.eatOneMousePress();
+}
+
+void KisInputManager::Private::setTabletActive(bool value) {
+    tabletActive = value;
+}
+
+void KisInputManager::Private::resetCompressor() {
+    compressedMoveEvent.reset();
+    moveEventCompressor.stop();
 }
 
 bool KisInputManager::Private::handleCompressedTabletEvent(QEvent *event)

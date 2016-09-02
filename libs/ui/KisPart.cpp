@@ -269,6 +269,16 @@ void KisPart::removeView(KisView *view)
 {
     if (!view) return;
 
+    /**
+     * HACK ALERT: we check here explicitly if the document (or main
+     *             window), is saving the stuff. If we close the
+     *             document *before* the saving is completed, a crash
+     *             will happen.
+     */
+    if (view->mainWindow()->hackIsSaving()) {
+        return;
+    }
+
     emit sigViewRemoved(view);
 
     QPointer<KisDocument> doc = view->document();

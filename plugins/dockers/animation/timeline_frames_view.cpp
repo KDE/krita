@@ -36,6 +36,8 @@
 #include <QScrollBar>
 #include <QIcon>
 #include <QDrag>
+#include <QWidgetAction>
+#include <kis_signals_blocker.h>
 
 #include "kis_debug.h"
 #include "timeline_frames_item_delegate.h"
@@ -49,6 +51,7 @@
 #include "kis_action.h"
 #include "kis_signal_compressor.h"
 #include "kis_time_range.h"
+#include "kis_color_label_selector_widget.h"
 
 typedef QPair<QRect, QModelIndex> QItemViewPaintPair;
 typedef QList<QItemViewPaintPair> QItemViewPaintPairs;
@@ -79,6 +82,12 @@ struct TimelineFramesView::Private
 
     QToolButton *addLayersButton;
     KisAction *showHideLayerAction;
+
+    KisColorLabelSelectorWidget *colorSelector;
+    QWidgetAction *colorSelectorAction;
+    KisColorLabelSelectorWidget *multiframeColorSelector;
+    QWidgetAction *multiframeColorSelectorAction;
+
     QMenu *layerEditingMenu;
     QMenu *existingLayersMenu;
 
@@ -170,11 +179,23 @@ TimelineFramesView::TimelineFramesView(QWidget *parent)
     m_d->frameCreationMenu->addAction(KisAnimationUtils::addFrameActionName, this, SLOT(slotNewFrame()));
     m_d->frameCreationMenu->addAction(KisAnimationUtils::duplicateFrameActionName, this, SLOT(slotCopyFrame()));
 
+    m_d->colorSelector = new KisColorLabelSelectorWidget(this);
+    m_d->colorSelectorAction = new QWidgetAction(this);
+    m_d->colorSelectorAction->setDefaultWidget(m_d->colorSelector);
+    connect(m_d->colorSelector, &KisColorLabelSelectorWidget::currentIndexChanged, this, &TimelineFramesView::slotColorLabelChanged);
+
     m_d->frameEditingMenu = new QMenu(this);
     m_d->frameEditingMenu->addAction(KisAnimationUtils::removeFrameActionName, this, SLOT(slotRemoveFrame()));
+    m_d->frameEditingMenu->addAction(m_d->colorSelectorAction);
+
+    m_d->multiframeColorSelector = new KisColorLabelSelectorWidget(this);
+    m_d->multiframeColorSelectorAction = new QWidgetAction(this);
+    m_d->multiframeColorSelectorAction->setDefaultWidget(m_d->multiframeColorSelector);
+    connect(m_d->multiframeColorSelector, &KisColorLabelSelectorWidget::currentIndexChanged, this, &TimelineFramesView::slotColorLabelChanged);
 
     m_d->multipleFrameEditingMenu = new QMenu(this);
     m_d->multipleFrameEditingMenu->addAction(KisAnimationUtils::removeFramesActionName, this, SLOT(slotRemoveFrame()));
+    m_d->multipleFrameEditingMenu->addAction(m_d->multiframeColorSelectorAction);
 
     m_d->zoomDragButton = new KisZoomButton(this);
     m_d->zoomDragButton->setAutoRaise(true);
@@ -285,6 +306,13 @@ void TimelineFramesView::slotZoomButtonChanged(qreal zoomLevel)
         horizontalScrollBar()->setValue(w * m_d->zoomStillPointIndex - m_d->zoomStillPointOriginalOffset);
 
         viewport()->update();
+    }
+}
+
+void TimelineFramesView::slotColorLabelChanged(int label)
+{
+    Q_FOREACH(QModelIndex index, selectedIndexes()) {
+        m_d->model->setData(index, label, TimelineFramesModel::ColorLabel);
     }
 }
 
@@ -669,11 +697,42 @@ void TimelineFramesView::mousePressEvent(QMouseEvent *event)
 
             if (model()->data(index, TimelineFramesModel::FrameExistsRole).toBool() ||
                 model()->data(index, TimelineFramesModel::SpecialKeyframeExists).toBool()) {
+
+                {
+                KisSignalsBlocker b(m_d->colorSelector);
+                QVariant colorLabel = index.data(TimelineFramesModel::ColorLabel);
+                int labelIndex = colorLabel.isValid() ? colorLabel.toInt() : 0;
+                m_d->colorSelector->setCurrentIndex(labelIndex);
+                }
+
                 m_d->frameEditingMenu->exec(event->globalPos());
             } else {
                 m_d->frameCreationMenu->exec(event->globalPos());
             }
         } else if (numSelectedItems > 1) {
+            int labelIndex = 0;
+            bool haveFrames = false;
+            Q_FOREACH(QModelIndex index, selectedIndexes()) {
+                haveFrames |= index.data(TimelineFramesModel::FrameExistsRole).toBool();
+                QVariant colorLabel = index.data(TimelineFramesModel::ColorLabel);
+                if (colorLabel.isValid()) {
+                    if (labelIndex == 0) {
+                        labelIndex = colorLabel.toInt();
+                    } else {
+                        labelIndex = 0;
+                        break;
+                    }
+                }
+            }
+
+            if (!haveFrames) {
+                m_d->multiframeColorSelectorAction->setVisible(false);
+            } else {
+                KisSignalsBlocker b(m_d->multiframeColorSelector);
+                m_d->multiframeColorSelector->setCurrentIndex(labelIndex);
+                m_d->multiframeColorSelectorAction->setVisible(true);
+            }
+
             m_d->multipleFrameEditingMenu->exec(event->globalPos());
         }
 

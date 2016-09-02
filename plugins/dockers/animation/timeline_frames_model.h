@@ -74,7 +74,8 @@ public:
         ActiveLayerRole = KisTimeBasedItemModel::UserRole,
         TimelinePropertiesRole,
         OtherLayersRole,
-        LayerUsedInTimelineRole
+        LayerUsedInTimelineRole,
+        ColorLabel
     };
 
     // metatype is added by the original implementation

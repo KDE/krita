@@ -56,6 +56,9 @@ public:
     QPointF leftTangent() const;
     QPointF rightTangent() const;
 
+    int colorLabel() const;
+    void setColorLabel(int label);
+
     KisKeyframeChannel *channel() const;
 
 private:

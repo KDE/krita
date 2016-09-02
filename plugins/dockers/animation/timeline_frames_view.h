@@ -69,6 +69,8 @@ private Q_SLOTS:
     void slotZoomButtonPressed(qreal staticPoint);
     void slotZoomButtonChanged(qreal value);
 
+    void slotColorLabelChanged(int);
+
 private:
     void setFramesPerSecond(int fps);
 

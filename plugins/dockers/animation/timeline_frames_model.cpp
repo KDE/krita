@@ -108,6 +108,32 @@ struct TimelineFramesModel::Private
         return false;
     }
 
+    int frameColorLabel(int row, int column) {
+        KisNodeDummy *dummy = converter->dummyFromRow(row);
+        if (!dummy) return -1;
+
+        KisKeyframeChannel *primaryChannel = dummy->node()->getKeyframeChannel(KisKeyframeChannel::Content.id());
+        if (!primaryChannel) return -1;
+
+        KisKeyframeSP frame = primaryChannel->keyframeAt(column);
+        if (!frame) return -1;
+
+        return frame->colorLabel();
+    }
+
+    void setFrameColorLabel(int row, int column, int color) {
+        KisNodeDummy *dummy = converter->dummyFromRow(row);
+        if (!dummy) return;
+
+        KisKeyframeChannel *primaryChannel = dummy->node()->getKeyframeChannel(KisKeyframeChannel::Content.id());
+        if (!primaryChannel) return;
+
+        KisKeyframeSP frame = primaryChannel->keyframeAt(column);
+        if (!frame) return;
+
+        frame->setColorLabel(color);
+    }
+
     QVariant layerProperties(int row) const {
         KisNodeDummy *dummy = converter->dummyFromRow(row);
         if (!dummy) return QVariant();
@@ -286,6 +312,10 @@ QVariant TimelineFramesModel::data(const QModelIndex &index, int role) const
     case SpecialKeyframeExists: {
         return m_d->specialKeyframeExists(index.row(), index.column());
     }
+    case ColorLabel: {
+        int label = m_d->frameColorLabel(index.row(), index.column());
+        return label > 0 ? label : QVariant();
+    }
     case Qt::DisplayRole: {
         return QVariant();
     }
@@ -322,6 +352,10 @@ bool TimelineFramesModel::setData(const QModelIndex &index, const QVariant &valu
         }
         break;
     }
+    case ColorLabel: {
+        m_d->setFrameColorLabel(index.row(), index.column(), value.toInt());
+    }
+        break;
     }
 
     return ModelWithExternalNotifications::setData(index, value, role);

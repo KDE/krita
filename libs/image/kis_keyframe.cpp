@@ -39,6 +39,7 @@ struct KisKeyframe::Private
     InterpolationTangentsMode tangentsMode;
     QPointF leftTangent;
     QPointF rightTangent;
+    int colorLabel{0};
 
     Private(KisKeyframeChannel *channel, int time)
         : channel(channel), time(time), interpolationMode(Constant)
@@ -97,6 +98,16 @@ QPointF KisKeyframe::leftTangent() const
 QPointF KisKeyframe::rightTangent() const
 {
     return m_d->rightTangent;
+}
+
+int KisKeyframe::colorLabel() const
+{
+    return m_d->colorLabel;
+}
+
+void KisKeyframe::setColorLabel(int label)
+{
+    m_d->colorLabel = label;
 }
 
 KisKeyframeChannel *KisKeyframe::channel() const

@@ -25,10 +25,13 @@
 #include "timeline_frames_model.h"
 #include "timeline_color_scheme.h"
 
+#include "kis_node_view_color_scheme.h"
 
 TimelineFramesItemDelegate::TimelineFramesItemDelegate(QObject *parent)
     : QItemDelegate(parent)
 {
+    KisNodeViewColorScheme scm;
+    labelColors = scm.allColorLabels();
 }
 
 TimelineFramesItemDelegate::~TimelineFramesItemDelegate()
@@ -100,13 +103,15 @@ void TimelineFramesItemDelegate::paintSpecialKeyframeIndicator(QPainter *painter
     painter->setPen(oldPen);
 }
 
-void TimelineFramesItemDelegate::drawBackground(QPainter *painter, const QModelIndex &index, const QRect &rc)
+void TimelineFramesItemDelegate::drawBackground(QPainter *painter, const QModelIndex &index, const QRect &rc) const
 {
     bool active = index.data(TimelineFramesModel::ActiveLayerRole).toBool();
     bool present = index.data(TimelineFramesModel::FrameExistsRole).toBool();
     bool editable = index.data(TimelineFramesModel::FrameEditableRole).toBool();
+    QVariant colorLabel = index.data(TimelineFramesModel::ColorLabel);
 
-    QColor color = TimelineColorScheme::instance()->frameColor(present, active);
+    QColor color = colorLabel.isValid() ? labelColors.at(colorLabel.toInt()) :
+            TimelineColorScheme::instance()->frameColor(present, active);
 
     if (!editable && color.alpha() > 0) {
         const int l = color.lightness();

@@ -25,6 +25,9 @@
 
 const QStringList KisSpinBoxUnitManager::referenceUnitSymbols = {"pt", "°", "frame"};
 
+const QStringList KisSpinBoxUnitManager::documentRelativeLengthUnitSymbols = {"px", "vw", "vh"}; //px are relative to the resolution, vw and vh to the width and height.
+const QStringList KisSpinBoxUnitManager::documentRelativeTimeUnitSymbols = {"s", "%"}; //secondes are relative to the framerate, % to the sequence length.
+
 class Q_DECL_HIDDEN KisSpinBoxUnitManager::Private
 {
 public:
@@ -34,10 +37,13 @@ public:
         dim(pDim),
         unitSymbol(pUnitSymbol),
         conversionFactor(pConv),
+        conversionFactorIsFixed(true),
+        conversionConstant(0),
+        conversionConstantIsFixed(true),
         constrains(0),
         unitListCached(false),
         hasHundredPercent(false),
-        hasWidthAndHeight(false)
+        canAccessDocument(false)
     {
 
     }
@@ -45,7 +51,10 @@ public:
     KisSpinBoxUnitManager::UnitDimension dim;
 
     QString unitSymbol;
-    double conversionFactor;
+    mutable double conversionFactor;
+    bool conversionFactorIsFixed; //tell if it's possible to trust the conversion factor stored or if it's needed to recompute it.
+    mutable double conversionConstant;
+    bool conversionConstantIsFixed; //tell if it's possible to trust the conversion constant stored or if it's needed to recompute it.
 
     KisSpinBoxUnitManager::Constrains constrains;
 
@@ -55,11 +64,11 @@ public:
     mutable QStringList unitListWithName;
     mutable bool unitListWithNameCached;
 
+    //it's possible to store a reference for the % unit, for lenght.
     bool hasHundredPercent;
     qreal hundredPercent;
-    bool hasWidthAndHeight;
-    qreal width;
-    qreal height;
+
+    bool canAccessDocument;
 };
 
 KisSpinBoxUnitManager::KisSpinBoxUnitManager(QObject *parent) : QObject(parent)
@@ -111,12 +120,27 @@ QStringList KisSpinBoxUnitManager::getsUnitSymbolList(bool withName) const{
     case LENGTH:
 
         for (int i = 0; i < KoUnit::TypeCount; i++) {
+
+            if (KoUnit::Type(i) == KoUnit::Pixel) {
+                continue; //skip pixel, which is a document relative unit, in the base classe.
+            }
+
             if (withName) {
                 list << KoUnit::unitDescription(KoUnit::Type(i));
             } else {
                 list << KoUnit(KoUnit::Type(i)).symbol();
             }
         }
+
+        if (d->canAccessDocument) {
+            // ad document relative units
+            if (withName) {
+                list << KoUnit::unitDescription(KoUnit::Pixel) << i18n("view width (vw)") << i18n("view height (vh)");
+            } else {
+                list << documentRelativeLengthUnitSymbols;
+            }
+        }
+
         break;
 
     case ANGLE:
@@ -135,6 +159,15 @@ QStringList KisSpinBoxUnitManager::getsUnitSymbolList(bool withName) const{
         } else {
             list << "f";
         }
+
+        if (d->canAccessDocument) {
+            if (withName) {
+                list << i18n("seconds (s)") << i18n("percent of animation (%)");
+            } else {
+                list << documentRelativeTimeUnitSymbols;
+            }
+        }
+
         break;
 
     }
@@ -151,10 +184,22 @@ QStringList KisSpinBoxUnitManager::getsUnitSymbolList(bool withName) const{
 
 }
 
+qreal KisSpinBoxUnitManager::getConversionConstant(UnitDimension dim, QString symbol) const
+{
+    return 0; // all units managed here are transform via a linear function, so this wll alway be 0 in this class.
+}
+
 qreal KisSpinBoxUnitManager::getReferenceValue(double apparentValue) const
 {
+    if (!d->conversionFactorIsFixed) {
+        recomputeConversionFactor();
+    }
 
-    qreal v = apparentValue/d->conversionFactor;
+    if(!d->conversionConstantIsFixed) {
+        recomputeConvesrionConstant();
+    }
+
+    qreal v = (apparentValue - d->conversionConstant)/d->conversionFactor;
 
     if (d->constrains &= REFISINT) {
        v = qFloor(v);
@@ -166,8 +211,15 @@ qreal KisSpinBoxUnitManager::getReferenceValue(double apparentValue) const
 
 qreal KisSpinBoxUnitManager::getApparentValue(double refValue) const
 {
+    if (!d->conversionFactorIsFixed) {
+        recomputeConversionFactor();
+    }
 
-    qreal v = refValue*d->conversionFactor;
+    if(!d->conversionConstantIsFixed) {
+        recomputeConvesrionConstant();
+    }
+
+    qreal v = refValue*d->conversionFactor + d->conversionConstant;
 
     if (d->constrains &= VALISINT) {
         v = qFloor(v);
@@ -185,6 +237,10 @@ qreal KisSpinBoxUnitManager::getConversionFactor(UnitDimension dim, QString symb
 
     case LENGTH:
         do {
+            if (symbol == "px") {
+                break;
+            }
+
             bool ok;
             KoUnit unit = KoUnit::fromSymbol(symbol, &ok);
             if (! ok) {
@@ -280,6 +336,48 @@ void KisSpinBoxUnitManager::setApparentUnitFromSymbol(QString pSymbol)
         return; //abort if it was impossible to locate the correct symbol.
     }
 
+    if (d->canAccessDocument) {
+        //manage document relative units.
+
+        QStringList speUnits;
+
+        switch (d->dim) {
+
+        case LENGTH:
+            speUnits = documentRelativeLengthUnitSymbols;
+            goto default_identifier_conv_fact;
+
+        case TIME:
+            speUnits = documentRelativeTimeUnitSymbols;
+            goto default_identifier_conv_fact;
+
+        default_identifier_conv_fact:
+        default:
+
+            if (speUnits.isEmpty()) {
+                d->conversionFactorIsFixed = true;
+                break;
+            }
+
+            if (speUnits.contains(newSymb)) {
+                d->conversionFactorIsFixed = false;
+                break;
+            }
+
+            d->conversionFactorIsFixed = true;
+            break;
+        }
+
+        if (d->dim == TIME) {
+            if (newSymb == "%") {
+                d->conversionConstantIsFixed = false;
+            }
+        } else {
+            d->conversionConstantIsFixed = true;
+        }
+
+    }
+
     qreal conversFact = getConversionFactor(d->dim, newSymb);
     qreal oldConversFact = d->conversionFactor;
 
@@ -291,36 +389,33 @@ void KisSpinBoxUnitManager::setApparentUnitFromSymbol(QString pSymbol)
 
 }
 
-void KisSpinBoxUnitManager::configureRelativeUnitReference(qreal value)
+void KisSpinBoxUnitManager::recomputeConversionFactor() const
 {
-    if (d->hasHundredPercent && d->hundredPercent == value) {
+    if (d->conversionFactorIsFixed) {
         return;
     }
 
-    if (!d->hasHundredPercent) { //in case we add relative units we need to clear cache for unitlists.
-        d->unitListCached = false;
-        d->unitListWithNameCached = false;
-        emit unitListChanged();
-    }
+    qreal oldConversionFactor = d->conversionFactor;
 
-    d->hundredPercent = value;
-    d->hasHundredPercent = true;
+    d->conversionFactor = getConversionFactor(d->dim, d->unitSymbol);
+
+    if (oldConversionFactor != d->conversionFactor) {
+        emit conversionFactorChanged(d->conversionFactor, oldConversionFactor);
+    }
 }
 
-void KisSpinBoxUnitManager::configureRelativeUnitWidthAndHeight(qreal width, qreal height)
+void KisSpinBoxUnitManager::recomputeConvesrionConstant() const
 {
-    if (d->hasWidthAndHeight && d->width == width && d->height == height) {
+    if (d->conversionConstantIsFixed) {
         return;
     }
 
-    if (!d->hasWidthAndHeight) { //in case we add relative units we need to clear cache for unitlists.
-        d->unitListCached = false;
-        d->unitListWithNameCached = false;
-        emit unitListChanged();
-    }
+    qreal oldConversionConstant = d->conversionConstant;
 
-    d->width = width;
-    d->height = height;
-    d->hasWidthAndHeight = true;
+    d->conversionConstant = getConversionConstant(d->dim, d->unitSymbol);
+}
 
+void KisSpinBoxUnitManager::grantDocumentRelativeUnits()
+{
+    d->canAccessDocument = true;
 }

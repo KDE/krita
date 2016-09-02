@@ -24,6 +24,8 @@
 #include "kis_double_parse_spin_box.h"
 #include "kritawidgets_export.h"
 
+class KisSpinBoxUnitManager;
+
 /*!
  * \brief The KisDoubleParseUnitSpinBox class is an evolution of the \see KoUnitDoubleSpinBox, but inherit from \see KisDoubleParseSpinBox to be able to parse math expressions.
  *
@@ -37,6 +39,8 @@ class KRITAWIDGETS_EXPORT  KisDoubleParseUnitSpinBox : public KisDoubleParseSpin
 public:
     KisDoubleParseUnitSpinBox(QWidget* parent = 0);
     ~KisDoubleParseUnitSpinBox();
+
+    void setUnitManager(KisSpinBoxUnitManager* unitManager);
 
     /**
      * Set the new value in points which will then be converted to the current unit for display
@@ -111,6 +115,7 @@ private Q_SLOTS:
     // exists to do emits for valueChangedPt
     void privateValueChanged();
     void detectUnitChanges();
+    void disconnectExternalUnitManager();
 
 };
 

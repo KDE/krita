@@ -33,13 +33,12 @@ public:
 
 private:
     void updateMask(bool isHidden);
-    void modifyAnimatedMask();
-    template<class T> T *getChannel(KoID id);
 
 private:
     KisTransformMaskSP m_mask;
     KisTransformMaskParamsInterfaceSP m_params;
     KisTransformMaskParamsInterfaceSP m_oldParams;
+    bool m_wasHidden;
 };
 
 #endif

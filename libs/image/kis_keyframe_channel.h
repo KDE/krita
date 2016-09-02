@@ -45,6 +45,13 @@ public:
     static const KoID TransformPositionX;
     static const KoID TransformPositionY;
 
+    static const KoID TransformScaleX;
+    static const KoID TransformScaleY;
+    static const KoID TransformShearX;
+    static const KoID TransformShearY;
+    static const KoID TransformRotationX;
+    static const KoID TransformRotationY;
+    static const KoID TransformRotationZ;
 public:
     KisKeyframeChannel(const KoID& id, KisDefaultBoundsBaseSP defaultBounds);
     KisKeyframeChannel(const KisKeyframeChannel &rhs, KisNodeWSP newParentNode);

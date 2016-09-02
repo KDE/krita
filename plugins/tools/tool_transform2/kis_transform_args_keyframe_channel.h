@@ -32,7 +32,7 @@ public:
         AddKeyframeCommand(KisTransformArgsKeyframeChannel *channel, int time, const ToolTransformArgs &args, KUndo2Command *parentCommand);
     };
 
-    KisTransformArgsKeyframeChannel(const KoID &id, KisDefaultBoundsBaseSP defaultBounds);
+    KisTransformArgsKeyframeChannel(const KoID &id, KisDefaultBoundsBaseSP defaultBounds, const ToolTransformArgs &initialValue);
 
     ToolTransformArgs &transformArgs(KisKeyframeSP keyframe) const;
     bool hasScalarValue() const;

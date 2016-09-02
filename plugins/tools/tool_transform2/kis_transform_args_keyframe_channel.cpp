@@ -37,9 +37,12 @@ KisTransformArgsKeyframeChannel::AddKeyframeCommand::AddKeyframeCommand(KisTrans
 {
 }
 
-KisTransformArgsKeyframeChannel::KisTransformArgsKeyframeChannel(const KoID &id, KisDefaultBoundsBaseSP defaultBounds)
+KisTransformArgsKeyframeChannel::KisTransformArgsKeyframeChannel(const KoID &id, KisDefaultBoundsBaseSP defaultBounds, const ToolTransformArgs &initialValue)
     : KisKeyframeChannel(id, defaultBounds)
 {
+    KisKeyframeSP keyframe = addKeyframe(0);
+    KisTransformArgsKeyframe *argsKeyframe = dynamic_cast<KisTransformArgsKeyframe*>(keyframe.data());
+    argsKeyframe->args = initialValue;
 }
 
 ToolTransformArgs &KisTransformArgsKeyframeChannel::transformArgs(KisKeyframeSP keyframe) const

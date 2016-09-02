@@ -38,6 +38,7 @@
 #include "kis_busy_progress_indicator.h"
 #include "kis_perspectivetransform_worker.h"
 #include "kis_transform_mask_params_interface.h"
+#include "kis_transform_mask_params_factory_registry.h"
 #include "kis_recalculate_transform_mask_job.h"
 #include "kis_signal_compressor.h"
 #include "kis_algebra_2d.h"
@@ -427,13 +428,25 @@ KisKeyframeChannel *KisTransformMask::requestKeyframeChannel(const QString &id)
 {
     if (id == KisKeyframeChannel::TransformArguments.id() ||
         id == KisKeyframeChannel::TransformPositionX.id() ||
-        id == KisKeyframeChannel::TransformPositionY.id()) {
-        KisTransformMaskParamsInterfaceSP animatedParams = m_d->params->enableAnimation();
-        if (animatedParams) {
-            m_d->params = animatedParams;
+        id == KisKeyframeChannel::TransformPositionY.id() ||
+        id == KisKeyframeChannel::TransformScaleX.id() ||
+        id == KisKeyframeChannel::TransformScaleY.id() ||
+        id == KisKeyframeChannel::TransformShearX.id() ||
+        id == KisKeyframeChannel::TransformShearY.id() ||
+        id == KisKeyframeChannel::TransformRotationX.id() ||
+        id == KisKeyframeChannel::TransformRotationY.id() ||
+        id == KisKeyframeChannel::TransformRotationZ.id()) {
+
+        KisAnimatedTransformParamsInterface *animatedParams = dynamic_cast<KisAnimatedTransformParamsInterface*>(m_d->params.data());
+
+        if (!animatedParams) {
+            auto converted = KisTransformMaskParamsFactoryRegistry::instance()->animateParams(m_d->params);
+            if (converted.isNull()) return KisEffectMask::requestKeyframeChannel(id);
+            m_d->params = converted;
+            animatedParams = dynamic_cast<KisAnimatedTransformParamsInterface*>(converted.data());
         }
 
-        KisKeyframeChannel *channel = m_d->params->getKeyframeChannel(id, parent()->original()->defaultBounds());
+        KisKeyframeChannel *channel = animatedParams->getKeyframeChannel(id, parent()->original()->defaultBounds());
         if (channel) return channel;
     }
 

@@ -29,8 +29,15 @@
 const KoID KisKeyframeChannel::Content = KoID("content", ki18n("Content"));
 const KoID KisKeyframeChannel::Opacity = KoID("opacity", ki18n("Opacity"));
 const KoID KisKeyframeChannel::TransformArguments = KoID("transform_arguments", ki18n("Transform"));
-const KoID KisKeyframeChannel::TransformPositionX = KoID("transform_pos_x", ki18n("X position"));
-const KoID KisKeyframeChannel::TransformPositionY = KoID("transform_pos_y", ki18n("Y position"));
+const KoID KisKeyframeChannel::TransformPositionX = KoID("transform_pos_x", ki18n("Position (X)"));
+const KoID KisKeyframeChannel::TransformPositionY = KoID("transform_pos_y", ki18n("Position (Y)"));
+const KoID KisKeyframeChannel::TransformScaleX = KoID("transform_scale_x", ki18n("Scale (X)"));
+const KoID KisKeyframeChannel::TransformScaleY = KoID("transform_scale_y", ki18n("Scale (Y)"));
+const KoID KisKeyframeChannel::TransformShearX = KoID("transform_shear_x", ki18n("Shear (X)"));
+const KoID KisKeyframeChannel::TransformShearY = KoID("transform_shear_y", ki18n("Shear (Y)"));
+const KoID KisKeyframeChannel::TransformRotationX = KoID("transform_rotation_x", ki18n("Rotation (X)"));
+const KoID KisKeyframeChannel::TransformRotationY = KoID("transform_rotation_y", ki18n("Rotation (Y)"));
+const KoID KisKeyframeChannel::TransformRotationZ = KoID("transform_rotation_z", ki18n("Rotation (Z)"));
 
 struct KisKeyframeChannel::Private
 {

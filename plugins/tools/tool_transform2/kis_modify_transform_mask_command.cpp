@@ -30,10 +30,12 @@ KisModifyTransformMaskCommand::KisModifyTransformMaskCommand(KisTransformMaskSP 
   m_params(params),
   m_oldParams(m_mask->transformParams())
 {
+    m_wasHidden = m_oldParams->isHidden();
 
     auto *animatedParameters = dynamic_cast<KisAnimatedTransformMaskParameters*>(m_oldParams.data());
     if (animatedParameters) {
-        modifyAnimatedMask();
+        int time = m_mask->parent()->original()->defaultBounds()->currentTime();
+        KisAnimatedTransformMaskParameters::addKeyframes(m_mask, time, params, this);
     }
 }
 
@@ -58,7 +60,7 @@ void KisModifyTransformMaskCommand::undo() {
     auto *animatedParameters = dynamic_cast<KisAnimatedTransformMaskParameters*>(m_oldParams.data());
 
     if (animatedParameters) {
-        animatedParameters->setHidden(false);
+        animatedParameters->setHidden(m_wasHidden);
         KUndo2Command::undo();
     }
 
@@ -91,30 +93,4 @@ void KisModifyTransformMaskCommand::updateMask(bool isHidden) {
 
         m_mask->setDirty(updateRect);
     }
-}
-
-void KisModifyTransformMaskCommand::modifyAnimatedMask()
-{
-    auto *newParameters = dynamic_cast<KisTransformMaskAdapter*>(m_params.data());
-
-    if (!newParameters) return;
-
-    ToolTransformArgs args = newParameters->transformArgs();
-
-    KisKeyframeChannel *argsChannel = m_mask->getKeyframeChannel(KisKeyframeChannel::TransformArguments.id(), true);
-    KisTransformArgsKeyframeChannel *rawArgsChannel = dynamic_cast<KisTransformArgsKeyframeChannel*>(argsChannel);
-    int time = m_mask->parent()->original()->defaultBounds()->currentTime();
-
-    new KisTransformArgsKeyframeChannel::AddKeyframeCommand(rawArgsChannel, time, args, this);
-
-    KisScalarKeyframeChannel *xChannel = getChannel<KisScalarKeyframeChannel>(KisKeyframeChannel::TransformPositionX);
-    new KisScalarKeyframeChannel::AddKeyframeCommand(xChannel, time, args.transformedCenter().x(), this);
-
-    KisScalarKeyframeChannel *yChannel = getChannel<KisScalarKeyframeChannel>(KisKeyframeChannel::TransformPositionY);
-    new KisScalarKeyframeChannel::AddKeyframeCommand(yChannel, time, args.transformedCenter().y(), this);
-}
-
-template<class T> T *KisModifyTransformMaskCommand::getChannel(KoID id)
-{
-    return dynamic_cast<T*>(m_mask->getKeyframeChannel(id.id(), true));
 }

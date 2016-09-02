@@ -49,12 +49,17 @@ public:
     virtual QRect nonAffineChangeRect(const QRect &rc) = 0;
     virtual QRect nonAffineNeedRect(const QRect &rc, const QRect &srcBounds) = 0;
 
-    virtual KisKeyframeChannel *getKeyframeChannel(const QString &id, KisDefaultBoundsBaseSP defaultBounds) = 0;
-    virtual KisTransformMaskParamsInterfaceSP enableAnimation() = 0;
     virtual void clearChangedFlag() = 0;
     virtual bool hasChanged() const = 0;
 };
 
+class KRITAIMAGE_EXPORT KisAnimatedTransformParamsInterface
+{
+public:
+    virtual ~KisAnimatedTransformParamsInterface();
+
+    virtual KisKeyframeChannel *getKeyframeChannel(const QString &id, KisDefaultBoundsBaseSP defaultBounds) = 0;
+};
 
 class QDomElement;
 
@@ -85,8 +90,8 @@ public:
     QRect nonAffineChangeRect(const QRect &rc);
     QRect nonAffineNeedRect(const QRect &rc, const QRect &srcBounds);
 
+    bool isAnimated() const;
     KisKeyframeChannel *getKeyframeChannel(const QString &id, KisDefaultBoundsBaseSP defaultBounds);
-    KisTransformMaskParamsInterfaceSP enableAnimation();
     void clearChangedFlag();
     bool hasChanged() const;
 

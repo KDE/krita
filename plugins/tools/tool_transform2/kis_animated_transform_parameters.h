@@ -25,7 +25,7 @@
 
 class KisKeyframeChannel;
 
-class KRITATOOLTRANSFORM_EXPORT KisAnimatedTransformMaskParameters : public KisTransformMaskAdapter
+class KRITATOOLTRANSFORM_EXPORT KisAnimatedTransformMaskParameters : public KisTransformMaskAdapter, public KisAnimatedTransformParamsInterface
 {
 public:
     KisAnimatedTransformMaskParameters();
@@ -37,17 +37,20 @@ public:
     QString id() const;
     void toXML(QDomElement *e) const;
     static KisTransformMaskParamsInterfaceSP fromXML(const QDomElement &e);
+    static KisTransformMaskParamsInterfaceSP animate(KisTransformMaskParamsInterfaceSP params);
 
     void translate(const QPointF &offset);
 
     KisKeyframeChannel *getKeyframeChannel(const QString &id, KisDefaultBoundsBaseSP defaultBounds);
-    KisTransformMaskParamsInterfaceSP enableAnimation();
 
     bool isHidden() const;
     void setHidden(bool hidden);
 
     void clearChangedFlag();
     bool hasChanged() const;
+    bool isAnimated() const;
+
+    static void addKeyframes(KisTransformMaskSP mask, int time, KisTransformMaskParamsInterfaceSP params, KUndo2Command *parentCommand);
 
     
 private:

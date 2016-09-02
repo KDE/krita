@@ -107,14 +107,14 @@ QRect KisTransformMaskAdapter::nonAffineNeedRect(const QRect &rc, const QRect &s
     return KisTransformUtils::needRect(transformArgs(), rc, srcBounds);
 }
 
-KisKeyframeChannel *KisTransformMaskAdapter::getKeyframeChannel(const QString&, KisDefaultBoundsBaseSP)
+bool KisTransformMaskAdapter::isAnimated() const
 {
-    return 0;
+    return false;
 }
 
-KisTransformMaskParamsInterfaceSP KisTransformMaskAdapter::enableAnimation()
+KisKeyframeChannel *KisTransformMaskAdapter::getKeyframeChannel(const QString &id, KisDefaultBoundsBaseSP defaultBounds)
 {
-    return toQShared(new KisAnimatedTransformMaskParameters(this));
+    return 0;
 }
 
 void KisTransformMaskAdapter::clearChangedFlag()

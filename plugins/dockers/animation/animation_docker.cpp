@@ -24,6 +24,7 @@
 #include "kis_image.h"
 #include <QMenu>
 #include <kis_icon.h>
+#include <kis_transform_mask.h>
 #include "KisViewManager.h"
 #include "kis_action_manager.h"
 #include "kis_image_animation_interface.h"
@@ -38,6 +39,7 @@
 #include "kis_config.h"
 #include "kis_signals_blocker.h"
 #include "kis_node_manager.h"
+#include "kis_transform_mask_params_factory_registry.h"
 
 
 #include "ui_wdg_animation.h"
@@ -288,7 +290,18 @@ void AnimationDocker::slotDeleteOpacityKeyframe()
 
 void AnimationDocker::slotAddTransformKeyframe()
 {
-    addKeyframe(KisKeyframeChannel::TransformArguments.id(), false);
+    if (!m_canvas) return;
+
+    KisTransformMask *mask = dynamic_cast<KisTransformMask*>(m_canvas->viewManager()->activeNode().data());
+    if (!mask) return;
+
+    const int time = m_canvas->image()->animationInterface()->currentTime();
+
+    KUndo2Command *command = new KUndo2Command(kundo2_i18n("Add transform keyframe"));
+    KisTransformMaskParamsFactoryRegistry::instance()->autoAddKeyframe(mask, time, KisTransformMaskParamsInterfaceSP(), command);
+
+    command->redo();
+    m_canvas->currentImage()->postExecutionUndoAdapter()->addCommand(toQShared(command));
 }
 
 void AnimationDocker::slotDeleteTransformKeyframe()

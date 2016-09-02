@@ -28,10 +28,12 @@
 /**
  * @brief The KisSpinBoxUnitManager class is an abstract interface for the unitspinboxes classes to manage different type of units.
  *
- * The class make a difference between unit dimension (distance, angle, time), unit reference mode (absolute or relative).
- * If one want to use relative units a reference must be configured using the proper function.
+ * The class make a difference between unit dimension (distance, angle, time).
  *
- * The class allow to converte values between reference unit and apparent unit, but also to get other information like possible unit symbols.
+ * The class allow to converte values between reference unit and apparent unit, but also to get other information like possible units symbols.
+ *
+ * This class don't allow to use relative units (units which conversion factor is dependant of the context), even if it's private data are prepared to manage it.
+ * The reason for this is that from the library of this class it's very hard to acess easily the informations needed. So all will be managed by subclasses in other libs.
  *
  */
 class KRITAWIDGETUTILS_EXPORT KisSpinBoxUnitManager : public QObject
@@ -70,18 +72,21 @@ public:
     //! \brief get the position of the apparent unit in the list of units. It is usefull if we want to build a model for combo-box based unit management.
     int getApparentUnitId() const;
 
-    QStringList getsUnitSymbolList(bool withName = false) const;
+    virtual QStringList getsUnitSymbolList(bool withName = false) const;
 
     qreal getReferenceValue(double apparentValue) const;
     qreal getApparentValue(double refValue) const;
 
-    qreal getConversionFactor(UnitDimension dim, QString symbol) const;
+    //! \brief gets the conversion factor of a managed unit, or -1 in case of error. This method is the one that need to be overridden to extend the ability of the KisSpinBoxUnitManager.
+    virtual qreal getConversionFactor(UnitDimension dim, QString symbol) const;
+    //! \brief some units conversions are done via an affine transform, not just a linear transform. This function gives the constant of this affine transform (usually 0).
+    virtual qreal getConversionConstant(UnitDimension dim, QString symbol) const;
 
 Q_SIGNALS:
 
     void unitDimensionChanged(int dimCode);
     void unitChanged(QString symbol);
-    void conversionFactorChanged(qreal newConversionFactor, qreal oldConversionFactor);
+    void conversionFactorChanged(qreal newConversionFactor, qreal oldConversionFactor) const;
     void unitListChanged();
 
 public Q_SLOTS:
@@ -89,14 +94,20 @@ public Q_SLOTS:
     void setUnitDim(UnitDimension dim);
     void setApparentUnitFromSymbol(QString pSymbol);
 
-    //! \brief configure the reference length (100%) in reference unit. This activate relative units.
-    void configureRelativeUnitReference(qreal value);
-    void configureRelativeUnitWidthAndHeight(qreal width, qreal height);
-
 protected:
 
     class Private;
     Private * d;
+
+    //unit's that may be used only if acess to the document informations exists.
+    static const QStringList documentRelativeLengthUnitSymbols;
+    static const QStringList documentRelativeTimeUnitSymbols;
+
+    void recomputeConversionFactor() const;
+    void recomputeConvesrionConstant() const;
+
+    //! \brief calling this method give acess to document relative units. Only subclasses that manage thoses units should call it.
+    void grantDocumentRelativeUnits();
 
 };
 

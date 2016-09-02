@@ -26,6 +26,7 @@
 
 class KoUnit;
 class KoCanvasBase;
+class KisSpinBoxUnitManager;
 
 /// A widget for configuring the shadow of a shape
 class KRITAWIDGETS_EXPORT KoShadowConfigWidget : public QWidget
@@ -60,6 +61,8 @@ public:
     bool shadowVisible() const;
 
 public Q_SLOTS:
+
+    void setUnitManager(KisSpinBoxUnitManager* managerBlur, KisSpinBoxUnitManager* managerOffset);
     void setUnit( const KoUnit &unit );
     void setCanvas(KoCanvasBase *canvas);
 

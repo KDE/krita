@@ -55,6 +55,8 @@
 #include <KoShadowConfigWidget.h>
 #include "kis_action_registry.h"
 
+#include "kis_document_aware_spin_box_unit_manager.h"
+
 #include <KoIcon.h>
 
 #include <QAction>
@@ -1035,6 +1037,9 @@ QList<QPointer<QWidget> > DefaultTool::createOptionWidgets()
     widgets.append(fillWidget);
 
     KoShadowConfigWidget *shadowWidget = new KoShadowConfigWidget(0);
+    KisDocumentAwareSpinBoxUnitManager* managerBlur = new KisDocumentAwareSpinBoxUnitManager(shadowWidget); //let the shadow widget be aware of document relative units.
+    KisDocumentAwareSpinBoxUnitManager* managerOffset = new KisDocumentAwareSpinBoxUnitManager(shadowWidget); //let the shadow widget be aware of document relative units.
+    shadowWidget->setUnitManager(managerBlur, managerOffset);
     shadowWidget->setWindowTitle(i18n("Shadow"));
     shadowWidget->setCanvas(canvas());
     widgets.append(shadowWidget);

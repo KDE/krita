@@ -32,6 +32,7 @@
 #include "KisMainWindow.h"
 #include <kis_canvas2.h>
 #include "kis_wrapped_rect.h"
+#include "KisPart.h"
 
 struct KisScreenColorPicker::Private
 {
@@ -122,23 +123,17 @@ void KisScreenColorPicker::setCurrentColor(KoColor c)
 
 KoColor KisScreenColorPicker::grabScreenColor(const QPoint &p)
 {
-    QWidget* topLevelWidget = parentWidget();
-    while (topLevelWidget->parentWidget())
-        topLevelWidget = topLevelWidget->parentWidget();
-
-    KisMainWindow* window = dynamic_cast<KisMainWindow*>(topLevelWidget);
-    KisView* activeView = window->activeView();
-    if(activeView) {
-        QWidget* canvasWidget = activeView->canvasBase()->canvasWidget();
+    // First check whether we're clicking on a Krita window for some real color picking
+    Q_FOREACH(KisView *view, KisPart::instance()->views()) {
+        QWidget *canvasWidget = view->canvasBase()->canvasWidget();
         QPoint widgetPoint = canvasWidget->mapFromGlobal(p);
 
-        if(canvasWidget->rect().contains(widgetPoint))
-        {
-            QPointF imagePoint = activeView->canvasBase()->coordinatesConverter()->widgetToImage(widgetPoint);
-            KisImageWSP image = activeView->image();
-            if(image)
-            {
-                if (activeView->image()->wrapAroundModePermitted()) {
+        if (canvasWidget->rect().contains(widgetPoint)) {
+            QPointF imagePoint = view->canvasBase()->coordinatesConverter()->widgetToImage(widgetPoint);
+            KisImageWSP image = view->image();
+
+            if (image) {
+                if (image->wrapAroundModePermitted()) {
                     imagePoint = KisWrappedRect::ptToWrappedPt(imagePoint.toPoint(), image->bounds());
                 }
                 KoColor pickedColor = KoColor();
@@ -148,6 +143,7 @@ KoColor KisScreenColorPicker::grabScreenColor(const QPoint &p)
         }
     }
 
+    // And otherwise, we'll check the desktop
     const QDesktopWidget *desktop = QApplication::desktop();
     const QPixmap pixmap = QGuiApplication::screens().at(desktop->screenNumber())->grabWindow(desktop->winId(),
                                                                                               p.x(), p.y(), 1, 1);

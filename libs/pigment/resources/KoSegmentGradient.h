@@ -111,9 +111,6 @@ protected:
 
         static RGBColorInterpolationStrategy *m_instance;
         const KoColorSpace * const m_colorSpace;
-        mutable KoColor buffer;
-        mutable KoColor m_start;
-        mutable KoColor m_end;
     };
 
     class HSVCWColorInterpolationStrategy : public ColorInterpolationStrategy

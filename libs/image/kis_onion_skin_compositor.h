@@ -38,6 +38,8 @@ public:
 
     int configSeqNo() const;
 
+    void setColorLabelFilter(QList<int> colors);
+
 public Q_SLOTS:
     void configChanged();
 

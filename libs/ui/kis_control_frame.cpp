@@ -63,6 +63,7 @@
 #include "kis_favorite_resource_manager.h"
 #include "kis_display_color_converter.h"
 #include <kis_canvas2.h>
+#include <kis_image.h>
 
 
 KisControlFrame::KisControlFrame(KisViewManager *view, QWidget *parent, const char* name)
@@ -140,6 +141,8 @@ void KisControlFrame::slotUpdateDisplayRenderer()
     if (m_viewManager->canvasBase()){
         m_dual->setDisplayRenderer(m_viewManager->canvasBase()->displayColorConverter()->displayRendererInterface());
         m_dual->setColorSpace(m_viewManager->canvasBase()->image()->colorSpace());
+        m_viewManager->canvasBase()->image()->disconnect(m_dual);
+        connect(m_viewManager->canvasBase()->image(), SIGNAL(sigColorSpaceChanged(const KoColorSpace*)), m_dual, SLOT(setColorSpace(const KoColorSpace*)), Qt::UniqueConnection);
     } else if (m_viewManager->viewCount()==0) {
         m_dual->setDisplayRenderer();
     }

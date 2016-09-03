@@ -525,7 +525,9 @@ void KisVisualColorSelectorShape::forceImageUpdate()
 
 QColor KisVisualColorSelectorShape::getColorFromConverter(KoColor c){
     QColor col;
-    if (m_d->displayRenderer && m_d->displayRenderer->getPaintingColorSpace()==m_d->cs) {
+    KoColor color = c;
+    if (m_d->displayRenderer) {
+        color.convertTo(m_d->displayRenderer->getPaintingColorSpace());
         col = m_d->displayRenderer->toQColor(c);
     } else {
         col = c.toQColor();
@@ -576,7 +578,6 @@ KoColor KisVisualColorSelectorShape::convertShapeCoordinateToKoColor(QPointF coo
     QVector <qreal> maxvalue(c.colorSpace()->channelCount());
     maxvalue.fill(1.0);
     if (m_d->displayRenderer
-            && m_d->displayRenderer->getPaintingColorSpace()==m_d->cs
             && (m_d->cs->colorDepthId() == Float16BitsColorDepthID
             || m_d->cs->colorDepthId() == Float32BitsColorDepthID
             || m_d->cs->colorDepthId() == Float64BitsColorDepthID)
@@ -695,7 +696,6 @@ QPointF KisVisualColorSelectorShape::convertKoColorToShapeCoordinate(KoColor c)
     QVector <qreal> maxvalue(c.colorSpace()->channelCount());
     maxvalue.fill(1.0);
     if (m_d->displayRenderer
-            && m_d->displayRenderer->getPaintingColorSpace()==m_d->cs
             && (m_d->cs->colorDepthId() == Float16BitsColorDepthID
             || m_d->cs->colorDepthId() == Float32BitsColorDepthID
             || m_d->cs->colorDepthId() == Float64BitsColorDepthID)

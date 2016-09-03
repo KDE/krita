@@ -157,10 +157,9 @@ void KisScreenColorPicker::updateColorLabelText(const QPoint &globalPos)
 {
     KoColor col = grabScreenColor(globalPos);
     QString colname = KoColor::toQString(col);
-    m_d->lblScreenColorInfo->setText(tr("Cursor at %1 , %2, color: %3 \nPress ESC to cancel")
-                                     .arg(globalPos.x())
-                                     .arg(globalPos.y())
-                                     .arg(colname));
+    QString location = QString::number(globalPos.x())+QString(", ")+QString::number(globalPos.y());
+    m_d->lblScreenColorInfo->setWordWrap(true);
+    m_d->lblScreenColorInfo->setText(location+QString(": ")+colname);
 }
 
 bool KisScreenColorPicker::handleColorPickingMouseMove(QMouseEvent *e)

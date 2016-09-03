@@ -18,6 +18,8 @@
 
 #include "kis_animation_curves_value_ruler.h"
 
+#include <math.h>
+
 #include <QPaintEvent>
 #include <QPainter>
 #include <QApplication>

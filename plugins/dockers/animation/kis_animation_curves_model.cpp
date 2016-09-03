@@ -185,6 +185,7 @@ QVariant KisAnimationCurvesModel::data(const QModelIndex &index, int role) const
 
 bool KisAnimationCurvesModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
+    if (!index.isValid()) return false;
     KisScalarKeyframeChannel *channel = m_d->getCurveAt(index)->channel();
     KUndo2Command *command = m_d->undoCommand;
 

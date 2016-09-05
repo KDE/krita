@@ -24,8 +24,7 @@
 KisPaintOpConfigWidget::KisPaintOpConfigWidget(QWidget * parent, Qt::WFlags f)
     : KisConfigWidget(parent, f, 10),
       m_userAllowedLod(true),
-      m_isInsideUpdateCall(0),
-      m_lastConfigurationSeqNo(-1)
+      m_isInsideUpdateCall(0)
 {
 }
 
@@ -43,10 +42,6 @@ void KisPaintOpConfigWidget::writeConfigurationSafe(KisPropertiesConfiguration *
 
 void KisPaintOpConfigWidget::setConfigurationSafe(const KisPropertiesConfiguration *config)
 {
-    // we use config sequence number to avoid too many updates of the GUI
-    const bool configChanged = m_lastConfigurationSeqNo == config->sequenceNumber();
-    if (!configChanged) return;
-
     if (m_isInsideUpdateCall) return;
 
     m_isInsideUpdateCall++;

@@ -37,7 +37,6 @@
 struct Q_DECL_HIDDEN KisPropertiesConfiguration::Private {
     QMap<QString, QVariant> properties;
     QStringList notSavedProperties;
-    int sequenceNumber = 0;
 };
 
 KisPropertiesConfiguration::KisPropertiesConfiguration() : d(new Private)
@@ -157,8 +156,6 @@ void KisPropertiesConfiguration::setProperty(const QString & name, const QVarian
     } else {
         d->properties[name] = value;
     }
-
-    onPropertyChanged();
 }
 
 bool KisPropertiesConfiguration::getProperty(const QString & name, QVariant & value) const
@@ -287,19 +284,6 @@ QMap<QString, QVariant> KisPropertiesConfiguration::getProperties() const
 void KisPropertiesConfiguration::removeProperty(const QString & name)
 {
     d->properties.remove(name);
-}
-
-int KisPropertiesConfiguration::sequenceNumber() const
-{
-    int salt = reinterpret_cast<ptrdiff_t>(this);
-    salt <<= 16;
-
-    return d->sequenceNumber + salt;
-}
-
-void KisPropertiesConfiguration::onPropertyChanged()
-{
-    d->sequenceNumber++;
 }
 
 // --- factory ---

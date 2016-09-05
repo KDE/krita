@@ -279,6 +279,7 @@ KisKeyframeSP KisKeyframeChannel::currentlyActiveKeyframe() const
 
 KisKeyframeSP KisKeyframeChannel::firstKeyframe() const
 {
+    if (m_d->keys.isEmpty()) return KisKeyframeSP();
     return m_d->keys.first();
 }
 

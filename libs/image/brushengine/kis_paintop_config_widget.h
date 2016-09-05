@@ -97,6 +97,7 @@ protected:
     bool m_userAllowedLod;
 
     mutable int m_isInsideUpdateCall;
+    int m_lastConfigurationSeqNo;
 };
 
 #endif

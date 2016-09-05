@@ -395,12 +395,13 @@ void KisPaintOpSettings::setProperty(const QString & name, const QVariant & valu
     }
 
     KisPropertiesConfiguration::setProperty(name, value);
-    onPropertyChanged();
 }
 
 
 void KisPaintOpSettings::onPropertyChanged()
 {
+    KisPropertiesConfiguration::onPropertyChanged();
+
     KisPaintopSettingsUpdateProxy *proxy = d->updateProxyNoCreate();
 
     if (proxy) {

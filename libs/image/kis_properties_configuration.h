@@ -132,6 +132,19 @@ public:
 
     void removeProperty(const QString & name);
 
+    /**
+     * \return an integer hash that changes every time the properties are modified.
+     *         The sequence numbers of two distinct properties configurations are
+     *         always different.
+     */
+    int sequenceNumber() const;
+
+protected:
+    /**
+     * The callback is called every time when a property changes
+     */
+    virtual void onPropertyChanged();
+
 public:
 
     void dump() const;

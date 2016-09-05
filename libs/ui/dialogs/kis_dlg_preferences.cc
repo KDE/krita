@@ -305,10 +305,9 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
     m_page->chkUseSystemMonitorProfile->setChecked(cfg.useSystemMonitorProfile());
     connect(m_page->chkUseSystemMonitorProfile, SIGNAL(toggled(bool)), this, SLOT(toggleAllowMonitorProfileSelection(bool)));
 
-// XXX: no color management integration on Windows or OSX yet
-#ifndef HAVE_X11
-    m_page->chkUseSystemMonitorProfile->setVisible(false);
-#endif
+    if (KisColorManager::instance()->devices().size() > 0) {
+        m_page->chkUseSystemMonitorProfile->setVisible(false);
+    }
     m_page->cmbWorkingColorSpace->setIDList(KoColorSpaceRegistry::instance()->listKeys());
     m_page->cmbWorkingColorSpace->setCurrent(cfg.workingColorSpace());
 

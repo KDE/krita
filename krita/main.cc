@@ -128,7 +128,7 @@ extern "C" int main(int argc, char **argv)
     if (!language.isEmpty()) {
         KLocalizedString::setLanguages(language.split(":"));
         // And override Qt's locale, too
-        qputenv("LANG", language.toLatin1());
+        qputenv("LANG", language.split(":").first().toUtf8());
         QLocale locale(language.split(":").first());
         QLocale::setDefault(locale);
         qDebug() << "Qt ui languages" << locale.uiLanguages();

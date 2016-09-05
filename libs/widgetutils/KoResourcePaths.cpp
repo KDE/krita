@@ -334,38 +334,31 @@ QStringList KoResourcePaths::findDirsInternal(const QString &type, const QString
     debugWidgetUtils << type << relDir << aliases << d->mapTypeToQStandardPaths(type);
 
     QStringList dirs;
-
-    {
-        QStringList standardDirs =
+    QStringList standardDirs =
             QStandardPaths::locateAll(d->mapTypeToQStandardPaths(type), relDir, QStandardPaths::LocateDirectory);
-        appendResources(&dirs, standardDirs, true);
-    }
+    appendResources(&dirs, standardDirs, true);
 
     Q_FOREACH (const QString &alias, aliases) {
         QStringList aliasDirs =
             QStandardPaths::locateAll(d->mapTypeToQStandardPaths(type), alias + '/' + relDir, QStandardPaths::LocateDirectory);
         appendResources(&dirs, aliasDirs, true);
-    }
 
 #ifdef Q_OS_MAC
-    {
         debugWidgetUtils << "MAC:" << getApplicationRoot();
         QStringList bundlePaths;
-        bundlePaths << getApplicationRoot() + "/share/krita/" + relDir;
-        bundlePaths << getApplicationRoot() + "/../share/krita/" + relDir;
+        bundlePaths << getApplicationRoot() + "/share/krita/" + alias + relDir;
+        bundlePaths << getApplicationRoot() + "/../share/krita/" + alias + relDir;
         debugWidgetUtils << "bundlePaths" << bundlePaths;
         appendResources(&dirs, bundlePaths, true);
         Q_ASSERT(!dirs.isEmpty());
-    }
 #endif
 
-    if (dirs.isEmpty()) {
         QStringList fallbackPaths;
-        fallbackPaths << getApplicationRoot() + "/share/" + relDir;
-        fallbackPaths << getApplicationRoot() + "/share/krita/" + relDir;
+        fallbackPaths << getApplicationRoot() + "/share/" + alias + relDir;
+        fallbackPaths << getApplicationRoot() + "/share/krita/" + alias + relDir;
         appendResources(&dirs, fallbackPaths, true);
-    }
 
+    }
     debugWidgetUtils << "findDirs: type" << type << "relDir" << relDir<< "resource" << dirs;
     return dirs;
 }
@@ -445,14 +438,12 @@ QStringList KoResourcePaths::findAllResourcesInternal(const QString &type,
 
     debugWidgetUtils << "\tresources also from aliases:" << resources.size();
 
-    if (resources.isEmpty()) {
-        QFileInfo fi(filter);
+    QFileInfo fi(filter);
 
-        QStringList prefixResources;
-        prefixResources << filesInDir(getInstallationPrefix() + "share/" + fi.path(), fi.fileName(), false);
-        prefixResources << filesInDir(getInstallationPrefix() + "share/krita/" + fi.path(), fi.fileName(), false);
-        appendResources(&resources, prefixResources, true);
-    }
+    QStringList prefixResources;
+    prefixResources << filesInDir(getInstallationPrefix() + "share/" + fi.path(), fi.fileName(), false);
+    prefixResources << filesInDir(getInstallationPrefix() + "share/krita/" + fi.path(), fi.fileName(), false);
+    appendResources(&resources, prefixResources, true);
 
     debugWidgetUtils << "\tresources from installation:" << resources.size();
     debugWidgetUtils << "=====================================================";

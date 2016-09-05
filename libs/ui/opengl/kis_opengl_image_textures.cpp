@@ -614,7 +614,7 @@ void KisOpenGLImageTextures::updateTextureFormat()
                                        "OpenColorIO will now be deactivated."));
         }
 
-        warnUI << "WARNING: Internal color management was forcely enabled";
+        warnUI << "WARNING: Internal color management was forcibly enabled";
         warnUI << "Color Management Mode: " << cm;
         warnUI << ppVar(m_image->colorSpace());
         warnUI << ppVar(destinationColorModelId);

@@ -140,8 +140,8 @@ ExternalProject_Add(
 ExternalProject_Add(
     ext_ki18n
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL http://download.kde.org/stable/frameworks/5.24/ki18n-5.24.0.zip
-    URL_MD5 5724e8af1c1edc9ad24a17a0d94d80c8
+        URL http://download.kde.org/stable/frameworks/5.17/ki18n-5.17.0.zip
+    URL_MD5 7d60380d09f98defbf878ea9daba0fbb
     INSTALL_DIR ${EXTPREFIX_frameworks}
     PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/ki18n.diff
           COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/ki18n-appdatalocation.diff

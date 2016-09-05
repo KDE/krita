@@ -282,8 +282,8 @@ void DlgAnimationRenderer::selectRenderType()
     if (filter) {
         m_encoderConfigWidget = filter->createConfigurationWidget(0, KisDocument::nativeFormatMimeType(), mimetype.toLatin1());
         if (m_encoderConfigWidget) {
-            m_encoderConfigWidget->setConfiguration(filter->lastSavedConfiguration());
-            KoDialog dlg;
+            m_encoderConfigWidget->setConfiguration(filter->lastSavedConfiguration("", mimetype.toLatin1()));
+            KoDialog dlg(this);
             dlg.setMainWidget(m_encoderConfigWidget);
             dlg.setButtons(KoDialog::Ok | KoDialog::Cancel);
             if (!dlg.exec()) {
@@ -325,8 +325,8 @@ void DlgAnimationRenderer::sequenceMimeTypeSelected()
     if (filter) {
         m_frameExportConfigWidget = filter->createConfigurationWidget(0, KisDocument::nativeFormatMimeType(), mimetype.toLatin1());
         if (m_frameExportConfigWidget) {
-            m_frameExportConfigWidget->setConfiguration(filter->lastSavedConfiguration());
-            KoDialog dlg;
+            m_frameExportConfigWidget->setConfiguration(filter->lastSavedConfiguration("", mimetype.toLatin1()));
+            KoDialog dlg(this);
             dlg.setMainWidget(m_frameExportConfigWidget);
             dlg.setButtons(KoDialog::Ok | KoDialog::Cancel);
             if (!dlg.exec()) {

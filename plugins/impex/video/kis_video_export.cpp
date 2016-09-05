@@ -27,6 +27,7 @@
 #include <QFileInfo>
 #include <QApplication>
 
+#include <kis_debug.h>
 #include <KisImportExportManager.h>
 #include <KisFilterChain.h>
 #include <KoColorSpaceConstants.h>
@@ -37,11 +38,13 @@
 #include <kis_group_layer.h>
 #include <kis_paint_layer.h>
 #include <kis_paint_device.h>
+#include <kis_config.h>
+#include <kis_cursor_override_hijacker.h>
 
 #include "video_saver.h"
 #include "video_export_options_dialog.h"
 
-#include "kis_cursor_override_hijacker.h"
+
 
 
 K_PLUGIN_FACTORY_WITH_JSON(KisVideoExportFactory, "krita_video_export.json", registerPlugin<KisVideoExport>();)
@@ -79,10 +82,7 @@ KisImportExportFilter::ConversionStatus KisVideoExport::convert(const QByteArray
             QMessageBox::critical(KisPart::instance()->currentMainwindow(),
                                   i18n("Video Export Error"),
                                   warningMessage);
-        } else {
-            qWarning() << "WARNING:" << warningMessage;
         }
-
         return KisImportExportFilter::UsageError;
     }
 
@@ -104,6 +104,7 @@ KisImportExportFilter::ConversionStatus KisVideoExport::convert(const QByteArray
 KisPropertiesConfigurationSP KisVideoExport::defaultConfiguration(const QByteArray &from, const QByteArray &to) const
 {
     Q_UNUSED(from);
+    Q_ASSERT(!to.isEmpty());
 
     KisPropertiesConfigurationSP cfg(new KisPropertiesConfiguration());
 
@@ -120,7 +121,16 @@ KisPropertiesConfigurationSP KisVideoExport::defaultConfiguration(const QByteArr
     else if (to == "video/x-matroska" || to == "video/mp4") {
         cfg->setProperty("CodecIndex", VideoExportOptionsDialog::CODEC_H264);
     }
+    cfg->setProperty("mimetype", to);
 
+    return cfg;
+}
+
+KisPropertiesConfigurationSP KisVideoExport::lastSavedConfiguration(const QByteArray &from, const QByteArray &to) const
+{
+    KisPropertiesConfigurationSP cfg = defaultConfiguration(from, to);
+    QString filterConfig = KisConfig().exportConfiguration("FFMPEG_CONFIG");
+    cfg->fromXML(filterConfig, false);
     return cfg;
 }
 

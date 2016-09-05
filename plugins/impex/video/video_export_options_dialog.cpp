@@ -200,10 +200,11 @@ void VideoExportOptionsDialog::setConfiguration(const KisPropertiesConfiguration
     ui->intBitrate->setValue(m_d->defaultBitrate);
     m_d->defaultCustomLine = cfg->getString("CustomLineValue", "");
     ui->txtCustomLine->setText(m_d->defaultCustomLine);
+
     if (cfg->hasProperty("CodecIndex")) {
         setCodec((VideoExportOptionsDialog::CodecIndex)cfg->getInt("CodecIndex"));
     }
-    else {
+    if (cfg->getString("mimetype") == "video/ogg") {
         ui->cmbCodec->setEnabled(false);
     }
 }

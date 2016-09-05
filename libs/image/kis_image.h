@@ -480,17 +480,17 @@ public:
     /**
      * Returns the layer compositions for the image
      */
-    QList<KisLayerComposition*> compositions();
+    QList<KisLayerCompositionSP> compositions();
 
     /**
      * Adds a new layer composition, will be saved with the image
      */
-    void addComposition(KisLayerComposition* composition);
+    void addComposition(KisLayerCompositionSP composition);
 
     /**
      * Remove the layer compostion
      */
-    void removeComposition(KisLayerComposition* composition);
+    void removeComposition(KisLayerCompositionSP composition);
 
     /**
      * Permit or deny the wrap-around mode for all the paint devices

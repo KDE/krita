@@ -318,7 +318,7 @@ void KisKraSaver::saveCompositions(QDomDocument& doc, QDomElement& element, KisI
 {
     if (!image->compositions().isEmpty()) {
         QDomElement e = doc.createElement("compositions");
-        Q_FOREACH (KisLayerComposition* composition, image->compositions()) {
+        Q_FOREACH (KisLayerCompositionSP composition, image->compositions()) {
             composition->save(doc, e);
         }
         element.appendChild(e);

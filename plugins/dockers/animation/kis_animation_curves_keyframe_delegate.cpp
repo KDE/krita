@@ -69,14 +69,18 @@ void KisAnimationCurvesKeyframeDelegate::paint(QPainter *painter, const QStyleOp
     painter->drawEllipse(center, NODE_RENDER_RADIUS, NODE_RENDER_RADIUS);
 
     if (selected) {
-        QPointF leftTangent = leftHandle(index, active);
-        QPointF rightTangent = rightHandle(index, active);
-
         painter->setPen(QPen(color, 1));
         painter->setBrush(bgColor);
 
-        paintHandle(painter, center, leftTangent);
-        paintHandle(painter, center, rightTangent);
+        if (hasHandle(index, 0)) {
+            QPointF leftTangent = leftHandle(index, active);
+            paintHandle(painter, center, leftTangent);
+        }
+
+        if (hasHandle(index, 1)) {
+            QPointF rightTangent = rightHandle(index, active);
+            paintHandle(painter, center, rightTangent);
+        }
     }
 }
 
@@ -97,6 +101,24 @@ QPointF KisAnimationCurvesKeyframeDelegate::nodeCenter(const QModelIndex index, 
     QPointF center = QPointF(x, y);
     if (selected) center += m_d->selectionOffset;
     return center;
+}
+
+bool KisAnimationCurvesKeyframeDelegate::hasHandle(const QModelIndex index, int handle) const
+{
+    QModelIndex interpolatedIndex;
+
+    if (handle == 0) {
+        // Left handle: use previous keyframe's interpolation mode
+
+        QVariant previous = index.data(KisAnimationCurvesModel::PreviousKeyframeTime);
+        if (!previous.isValid()) return false;
+
+        interpolatedIndex = index.model()->index(index.row(), previous.toInt());
+    } else {
+        interpolatedIndex = index;
+    }
+
+    return (interpolatedIndex.data(KisAnimationCurvesModel::InterpolationModeRole).toInt() == KisKeyframe::Bezier);
 }
 
 QPointF KisAnimationCurvesKeyframeDelegate::leftHandle(const QModelIndex index, bool active) const
@@ -121,6 +143,10 @@ QPointF KisAnimationCurvesKeyframeDelegate::handlePosition(const QModelIndex ind
     if (active && !m_d->handleAdjustment.isNull()) {
         if (handle == m_d->adjustedHandle) {
             handlePos += m_d->handleAdjustment;
+            if ((handle == 0 && handlePos.x() > 0) ||
+                (handle == 1 && handlePos.x() < 0)) {
+                handlePos.setX(0);
+            }
         } else if (index.data(KisAnimationCurvesModel::TangentsModeRole).toInt() == KisKeyframe::Smooth) {
             qreal length = QVector2D(handlePos).length();
             QVector2D opposite(handlePosition(index, active, 1-handle));

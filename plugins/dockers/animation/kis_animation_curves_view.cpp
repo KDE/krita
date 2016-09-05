@@ -410,15 +410,18 @@ void KisAnimationCurvesView::mousePressEvent(QMouseEvent *e)
 
         Q_FOREACH(QModelIndex index, selectedIndexes()) {
             QPointF center = m_d->itemDelegate->nodeCenter(index, false);
+            bool hasLeftHandle = m_d->itemDelegate->hasHandle(index, 0);
+            bool hasRightHandle = m_d->itemDelegate->hasHandle(index, 1);
+
             QPointF leftHandle = center + m_d->itemDelegate->leftHandle(index, false);
             QPointF rightHandle = center + m_d->itemDelegate->rightHandle(index, false);
 
-            if ((e->localPos() - leftHandle).manhattanLength() < 8) {
+            if (hasLeftHandle && (e->localPos() - leftHandle).manhattanLength() < 8) {
                 m_d->isAdjustingHandle = true;
                 m_d->adjustedHandle = 0;
                 setCurrentIndex(index);
                 return;
-            } else if ((e->localPos() - rightHandle).manhattanLength() < 8) {
+            } else if (hasRightHandle && (e->localPos() - rightHandle).manhattanLength() < 8) {
                 m_d->isAdjustingHandle = true;
                 m_d->adjustedHandle = 1;
                 setCurrentIndex(index);

@@ -1303,4 +1303,32 @@ void KisLazyBrushTest::testSplitIntoConnectedComponents()
     QCOMPARE(points[1], QPoint(30,10));
 }
 
+void KisLazyBrushTest::testEstimateTransparentPixels()
+{
+    KisPaintDeviceSP dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
+
+    const QRect totalRect(0,0,50,100);
+
+    qreal value = 0.0;
+
+    value = KritaUtils::estimatePortionOfTransparentPixels(dev, totalRect, 0.1);
+    QCOMPARE(value, 1.0);
+
+    dev->fill(QRect(0,0,25,50), KoColor(Qt::red, dev->colorSpace()));
+    value = KritaUtils::estimatePortionOfTransparentPixels(dev, totalRect, 0.1);
+    QVERIFY(qAbs(value - 0.75) < 0.05);
+
+    dev->fill(QRect(25,0,25,50), KoColor(Qt::green, dev->colorSpace()));
+    value = KritaUtils::estimatePortionOfTransparentPixels(dev, totalRect, 0.1);
+    QVERIFY(qAbs(value - 0.5) < 0.05);
+
+    dev->fill(QRect(25,50,25,50), KoColor(Qt::blue, dev->colorSpace()));
+    value = KritaUtils::estimatePortionOfTransparentPixels(dev, totalRect, 0.1);
+    QVERIFY(qAbs(value - 0.25) < 0.05);
+
+    dev->fill(QRect(0,50,25,50), KoColor(Qt::blue, dev->colorSpace()));
+    value = KritaUtils::estimatePortionOfTransparentPixels(dev, totalRect, 0.1);
+    QCOMPARE(value, 0.0);
+}
+
 QTEST_MAIN(KisLazyBrushTest)

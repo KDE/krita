@@ -231,8 +231,9 @@ void KisMaskManager::createFilterMask(KisNodeSP activeNode, KisPaintDeviceSP cop
 
 void KisMaskManager::createColorizeMask(KisNodeSP activeNode)
 {
-    KisMaskSP mask = new KisColorizeMask();
+    KisColorizeMaskSP mask = new KisColorizeMask();
     createMaskCommon(mask, activeNode, 0, kundo2_i18n("Add Colorize Mask"), "KisColorizeMask", i18n("Colorize Mask"), true, false);
+    mask->initializeCompositeOp();
 }
 
 void KisMaskManager::createTransformMask(KisNodeSP activeNode)

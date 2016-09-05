@@ -33,6 +33,7 @@ public:
     KisColorizeJob(KisPaintDeviceSP src,
                    KisPaintDeviceSP dst,
                    KisPaintDeviceSP filteredSource,
+                   bool filteredSourceValid,
                    const QRect &boundingRect);
     ~KisColorizeJob();
 

@@ -65,6 +65,8 @@
 #include "kis_perspective_math.h"
 #include "tiles3/kis_random_accessor.h"
 #include <kis_distance_information.h>
+#include <KoColorSpaceMaths.h>
+
 
 // Maximum distance from a Bezier control point to the line through the start
 // and end points for the curve to be considered flat.
@@ -270,14 +272,17 @@ KisPaintDeviceSP KisPainter::convertToAlphaAsAlpha(KisPaintDeviceSP src)
     const QRect processRect = src->extent();
     KisPaintDeviceSP dst = new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8());
 
-    KisSequentialIterator srcIt(src, processRect);
+    KisSequentialConstIterator srcIt(src, processRect);
     KisSequentialIterator dstIt(dst, processRect);
 
     do {
-        quint8 *srcPtr = srcIt.rawData();
+        const quint8 *srcPtr = srcIt.rawDataConst();
         quint8 *alpha8Ptr = dstIt.rawData();
 
-        *alpha8Ptr = srcCS->opacityU8(srcPtr);
+        const quint8 white = srcCS->intensity8(srcPtr);
+        const quint8 alpha = srcCS->opacityU8(srcPtr);
+
+        *alpha8Ptr = KoColorSpaceMaths<quint8>::multiply(alpha, KoColorSpaceMathsTraits<quint8>::unitValue - white);
     } while (srcIt.nextPixel() && dstIt.nextPixel());
 
     return dst;
@@ -289,11 +294,11 @@ KisPaintDeviceSP KisPainter::convertToAlphaAsGray(KisPaintDeviceSP src)
     const QRect processRect = src->extent();
     KisPaintDeviceSP dst = new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8());
 
-    KisSequentialIterator srcIt(src, processRect);
+    KisSequentialConstIterator srcIt(src, processRect);
     KisSequentialIterator dstIt(dst, processRect);
 
     do {
-        quint8 *srcPtr = srcIt.rawData();
+        const quint8 *srcPtr = srcIt.rawDataConst();
         quint8 *alpha8Ptr = dstIt.rawData();
 
         *alpha8Ptr = srcCS->intensity8(srcPtr);

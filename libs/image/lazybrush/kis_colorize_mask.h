@@ -43,6 +43,8 @@ public:
 
     KisColorizeMask(const KisColorizeMask& rhs);
 
+    void initializeCompositeOp();
+
     KisPaintDeviceSP paintDevice() const;
 
     KisNodeSP clone() const {

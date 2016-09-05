@@ -33,6 +33,7 @@ struct KisColorizeJob::Private
     KisPaintDeviceSP src;
     KisPaintDeviceSP dst;
     KisPaintDeviceSP filteredSource;
+    bool filteredSourceValid;
     QRect boundingRect;
 
     QVector<KeyStroke> keyStrokes;
@@ -41,6 +42,7 @@ struct KisColorizeJob::Private
 KisColorizeJob::KisColorizeJob(KisPaintDeviceSP src,
                                KisPaintDeviceSP dst,
                                KisPaintDeviceSP filteredSource,
+                               bool filteredSourceValid,
                                const QRect &boundingRect)
     : m_d(new Private)
 {
@@ -48,6 +50,7 @@ KisColorizeJob::KisColorizeJob(KisPaintDeviceSP src,
     m_d->dst = dst;
     m_d->filteredSource = filteredSource;
     m_d->boundingRect = boundingRect;
+    m_d->filteredSourceValid = filteredSourceValid;
 }
 
 KisColorizeJob::~KisColorizeJob()
@@ -64,31 +67,27 @@ void KisColorizeJob::addKeyStroke(KisPaintDeviceSP dev, const KoColor &color)
 
 void KisColorizeJob::run()
 {
-    const QRect &rect = m_d->boundingRect;
+    if (!m_d->filteredSourceValid) {
+        KisPaintDeviceSP filteredMainDev = KisPainter::convertToAlphaAsAlpha(m_d->src);
 
-    // for b/w + noalpha layer
-    //KisPaintDeviceSP filteredMainDev = KisPainter::convertToAlphaAsGray(m_d->src);
+        // optional filtering
+        // KisGaussianKernel::applyLoG(filteredMainDev,
+        //                             m_d->boundingRect,
+        //                             1.0,
+        //                             QBitArray(), 0);
 
-    // for alpha-based layers
-    KisPaintDeviceSP filteredMainDev = KisPainter::convertToAlphaAsAlpha(m_d->src);
+        normalizeAndInvertAlpha8Device(filteredMainDev, m_d->boundingRect);
 
-    // optional filtering
-    // KisGaussianKernel::applyLoG(filteredMainDev,
-    //                             m_d->boundingRect,
-    //                             1.0,
-    //                             QBitArray(), 0);
+        m_d->filteredSource->makeCloneFrom(filteredMainDev, m_d->boundingRect);
+    }
 
-    normalizeAndInvertAlpha8Device(filteredMainDev, m_d->boundingRect);
-
-    KisMultiwayCut cut(filteredMainDev, m_d->dst, m_d->boundingRect);
+    KisMultiwayCut cut(m_d->filteredSource, m_d->dst, m_d->boundingRect);
 
     Q_FOREACH (const KeyStroke &stroke, m_d->keyStrokes) {
         cut.addKeyStroke(new KisPaintDevice(*stroke.dev), stroke.color);
     }
 
     cut.run();
-
-    m_d->filteredSource->makeCloneFrom(filteredMainDev, m_d->boundingRect);
 
     emit sigFinished();
 }

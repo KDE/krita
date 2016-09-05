@@ -402,16 +402,14 @@ void KisLayerBox::updateUI()
             slotFillCompositeOps(m_image->colorSpace());
         }
 
-        if (activeNode->inherits("KisMask")) {
-            m_wdgLayerBox->cmbComposite->setEnabled(false);
-            m_wdgLayerBox->doubleOpacity->setEnabled(false);
-        } else if (activeNode->inherits("KisLayer")) {
+        if (activeNode->inherits("KisColorizeMask") ||
+            activeNode->inherits("KisLayer")) {
+
             m_wdgLayerBox->doubleOpacity->setEnabled(true);
 
-            KisLayerSP l = qobject_cast<KisLayer*>(activeNode.data());
-            slotSetOpacity(l->opacity() * 100.0 / 255);
+            slotSetOpacity(activeNode->opacity() * 100.0 / 255);
 
-            const KoCompositeOp* compositeOp = l->compositeOp();
+            const KoCompositeOp* compositeOp = activeNode->compositeOp();
             if (compositeOp) {
                 slotSetCompositeOp(compositeOp);
             } else {
@@ -422,6 +420,9 @@ void KisLayerBox::updateUI()
             bool compositeSelectionActive = !(group && group->passThroughMode());
 
             m_wdgLayerBox->cmbComposite->setEnabled(compositeSelectionActive);
+        } else if (activeNode->inherits("KisMask")) {
+            m_wdgLayerBox->cmbComposite->setEnabled(false);
+            m_wdgLayerBox->doubleOpacity->setEnabled(false);
         }
     }
 }

@@ -1025,6 +1025,11 @@ void KisPaintDevice::requestTimeSwitch(int time)
     }
 }
 
+int KisPaintDevice::sequenceNumber() const
+{
+    return m_d->cache()->sequenceNumber();
+}
+
 void KisPaintDevice::setParentNode(KisNodeWSP parent)
 {
     m_d->parent = parent;

@@ -43,6 +43,7 @@
 #include "kis_post_execution_undo_adapter.h"
 #include "kis_command_utils.h"
 #include "kis_processing_applicator.h"
+#include "krita_utils.h"
 
 
 using namespace KisLazyFillTools;
@@ -51,7 +52,10 @@ struct KisColorizeMask::Private
 {
     Private()
         : needAddCurrentKeyStroke(false),
-          showKeyStrokes(true), showColoring(true), needsUpdate(true),
+          showKeyStrokes(true),
+          showColoring(true),
+          needsUpdate(true),
+          originalSequenceNumber(-1),
           updateCompressor(1000, KisSignalCompressor::POSTPONE)
     {
     }
@@ -62,6 +66,7 @@ struct KisColorizeMask::Private
           showColoring(rhs.showColoring),
           cachedSelection(),
           needsUpdate(false),
+          originalSequenceNumber(-1),
           updateCompressor(1000, KisSignalCompressor::POSTPONE)
     {
     }
@@ -82,6 +87,7 @@ struct KisColorizeMask::Private
     KisCachedSelection cachedConversionSelection;
 
     bool needsUpdate;
+    int originalSequenceNumber;
 
     KisSignalCompressor updateCompressor;
 };
@@ -114,6 +120,23 @@ KisColorizeMask::KisColorizeMask(const KisColorizeMask& rhs)
     m_d->updateCompressor.moveToThread(qApp->thread());
 }
 
+void KisColorizeMask::initializeCompositeOp()
+{
+    KisLayerSP parentLayer = dynamic_cast<KisLayer*>(parent().data());
+    if (!parentLayer || !parentLayer->original()) return;
+
+    KisImageSP image = parentLayer->image();
+    if (!image) return;
+
+    const qreal samplePortion = 0.1;
+    const qreal alphaPortion =
+        KritaUtils::estimatePortionOfTransparentPixels(parentLayer->original(),
+                                                       image->bounds(),
+                                                       samplePortion);
+
+    setCompositeOpId(alphaPortion > 0.3 ? COMPOSITE_BEHIND : COMPOSITE_MULT);
+}
+
 bool KisColorizeMask::needsUpdate() const
 {
     return m_d->needsUpdate;
@@ -136,13 +159,16 @@ void KisColorizeMask::slotUpdateRegenerateFilling()
     KisPaintDeviceSP src = parent()->original();
     KIS_ASSERT_RECOVER_RETURN(src);
 
+    bool filteredSourceValid = m_d->originalSequenceNumber == src->sequenceNumber();
+    m_d->originalSequenceNumber = src->sequenceNumber();
+
     if (!m_d->coloringProjection) {
         m_d->coloringProjection = new KisPaintDevice(src->colorSpace());
         m_d->filteredSource = new KisPaintDevice(src->colorSpace());
+        filteredSourceValid = false;
     } else {
-        // TODO: sync colorspaces
+        // TODO: sync colorspaces, including filtered source
         m_d->coloringProjection->clear();
-        m_d->filteredSource->clear();
     }
 
     KisLayerSP parentLayer = dynamic_cast<KisLayer*>(parent().data());
@@ -150,7 +176,11 @@ void KisColorizeMask::slotUpdateRegenerateFilling()
 
     KisImageSP image = parentLayer->image();
     if (image) {
-        KisColorizeJob *job = new KisColorizeJob(src, m_d->coloringProjection, m_d->filteredSource, image->bounds());
+        KisColorizeJob *job = new KisColorizeJob(src,
+                                                 m_d->coloringProjection,
+                                                 m_d->filteredSource,
+                                                 filteredSourceValid,
+                                                 image->bounds());
         Q_FOREACH (const KeyStroke &stroke, m_d->keyStrokes) {
             const KoColor color =
                 !stroke.isTransparent ?
@@ -238,13 +268,6 @@ QRect KisColorizeMask::decorateRect(KisPaintDeviceSP &src,
     {
         KisPainter gc(dst);
 
-        if (m_d->showKeyStrokes) {
-            gc.setOpacity(128);
-        }
-        if (m_d->showColoring && m_d->coloringProjection) {
-            gc.bitBlt(rect.topLeft(), m_d->coloringProjection, rect);
-        }
-
         if (m_d->showKeyStrokes &&
             m_d->filteredSource &&
             !m_d->filteredSource->extent().isEmpty()) {
@@ -255,6 +278,12 @@ QRect KisColorizeMask::decorateRect(KisPaintDeviceSP &src,
         } else {
             gc.setOpacity(255);
             gc.bitBlt(rect.topLeft(), src, rect);
+        }
+
+        if (m_d->showColoring && m_d->coloringProjection) {
+            gc.setOpacity(opacity());
+            gc.setCompositeOp(compositeOpId());
+            gc.bitBlt(rect.topLeft(), m_d->coloringProjection, rect);
         }
     }
 

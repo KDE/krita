@@ -749,6 +749,13 @@ public:
      */
     void requestTimeSwitch(int time);
 
+    /**
+     * \return a sequence number corresponding to the current paint
+     *         device state. Every time the paint device is changed,
+     *         the sequence number is increased
+     */
+    int sequenceNumber() const;
+
 public:
 
     KisHLineIteratorSP createHLineIteratorNG(qint32 x, qint32 y, qint32 w);

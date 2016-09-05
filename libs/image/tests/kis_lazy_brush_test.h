@@ -36,6 +36,8 @@ private Q_SLOTS:
     void testLoG();
 
     void testSplitIntoConnectedComponents();
+
+    void testEstimateTransparentPixels();
 };
 
 #endif /* __KIS_LAZY_BRUSH_TEST_H */

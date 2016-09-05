@@ -43,6 +43,7 @@
 #include <kis_config.h>
 #include <kis_file_name_requester.h>
 #include <KisDocument.h>
+#include <KoDialog.h>
 
 DlgAnimationRenderer::DlgAnimationRenderer(KisDocument *doc, QWidget *parent)
     : KoDialog(parent)
@@ -68,9 +69,6 @@ DlgAnimationRenderer::DlgAnimationRenderer(KisDocument *doc, QWidget *parent)
     m_page->intEnd->setMinimum(doc->image()->animationInterface()->fullClipRange().start());
     m_page->intEnd->setMaximum(doc->image()->animationInterface()->fullClipRange().end());
     m_page->intEnd->setValue(doc->image()->animationInterface()->playbackRange().end());
-
-    m_sequenceConfigLayout = new QHBoxLayout(m_page->grpExportOptions);
-    m_encoderConfigLayout = new QHBoxLayout(m_page->grpRenderOptions);
 
     QStringList mimes = KisImportExportManager::mimeFilter(KisImportExportManager::Export);
     mimes.sort();
@@ -128,11 +126,10 @@ DlgAnimationRenderer::DlgAnimationRenderer(KisDocument *doc, QWidget *parent)
     m_page->videoFilename->setStartDir(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation));
 
     qDeleteAll(list);
-    connect(m_page->cmbRenderType, SIGNAL(activated(int)), this, SLOT(selectRenderType(int)));
 
     connect(m_page->grpRender, SIGNAL(toggled(bool)), this, SLOT(toggleSequenceType(bool)));
-    connect(m_page->cmbMimetype, SIGNAL(activated(int)), this, SLOT(sequenceMimeTypeSelected(int)));
-    sequenceMimeTypeSelected(m_page->cmbMimetype->currentIndex());
+    connect(m_page->bnExportOptions, SIGNAL(clicked()), this, SLOT(sequenceMimeTypeSelected()));
+    connect(m_page->bnRenderOptions, SIGNAL(clicked()), this, SLOT(selectRenderType()));
 
     QString ffmpeg = cfg.customFFMpegPath();
     m_page->ffmpegLocation->setFileName(ffmpeg);
@@ -142,7 +139,8 @@ DlgAnimationRenderer::DlgAnimationRenderer(KisDocument *doc, QWidget *parent)
     m_page->grpRender->setChecked(cfg.readEntry<bool>("AnimationRenderer/render_animation", false));
     m_page->chkDeleteSequence->setChecked(cfg.readEntry<bool>("AnimationRenderer/delete_sequence", false));
     m_page->cmbRenderType->setCurrentIndex(cfg.readEntry<int>("AnimationRenderer/render_type", 0));
-    selectRenderType(m_page->cmbRenderType->currentIndex());
+
+
 }
 
 DlgAnimationRenderer::~DlgAnimationRenderer()
@@ -190,7 +188,6 @@ void DlgAnimationRenderer::setSequenceConfiguration(KisPropertiesConfigurationSP
     for (int i = 0; i < m_page->cmbMimetype->count(); ++i) {
         if (m_page->cmbMimetype->itemData(i).toString() == mimetype) {
             m_page->cmbMimetype->setCurrentIndex(i);
-            sequenceMimeTypeSelected(i);
             break;
         }
     }
@@ -262,12 +259,11 @@ QSharedPointer<KisImportExportFilter> DlgAnimationRenderer::encoderFilter() cons
     return QSharedPointer<KisImportExportFilter>(0);
 }
 
-void DlgAnimationRenderer::selectRenderType(int index)
+void DlgAnimationRenderer::selectRenderType()
 {
+    int index = m_page->cmbRenderType->currentIndex();
+
     if (m_encoderConfigWidget) {
-        m_encoderConfigLayout->removeWidget(m_encoderConfigWidget);
-        m_encoderConfigWidget->hide();
-        m_encoderConfigWidget->setParent(0);
         m_encoderConfigWidget->deleteLater();
         m_encoderConfigWidget = 0;
     }
@@ -284,22 +280,29 @@ void DlgAnimationRenderer::selectRenderType(int index)
     m_page->videoFilename->setFileName(m_defaultFileName + "." + KisMimeDatabase::suffixesForMimeType(mimetype).first());
 
     if (filter) {
-        m_encoderConfigWidget = filter->createConfigurationWidget(m_page->grpExportOptions, KisDocument::nativeFormatMimeType(), mimetype.toLatin1());
+        m_encoderConfigWidget = filter->createConfigurationWidget(0, KisDocument::nativeFormatMimeType(), mimetype.toLatin1());
         if (m_encoderConfigWidget) {
-            m_encoderConfigLayout->addWidget(m_encoderConfigWidget);
             m_encoderConfigWidget->setConfiguration(filter->lastSavedConfiguration());
-            m_encoderConfigWidget->show();
-            resize(sizeHint());
+            KoDialog dlg;
+            dlg.setMainWidget(m_encoderConfigWidget);
+            dlg.setButtons(KoDialog::Ok | KoDialog::Cancel);
+            if (!dlg.exec()) {
+                m_encoderConfigWidget->setConfiguration(filter->lastSavedConfiguration());
+            }
+            dlg.setMainWidget(0);
+            m_encoderConfigWidget->hide();
+            m_encoderConfigWidget->setParent(0);
         }
-        else {
-            m_encoderConfigWidget = 0;
-        }
+    }
+    else {
+        m_encoderConfigWidget = 0;
     }
 }
 
 void DlgAnimationRenderer::toggleSequenceType(bool toggle)
 {
     m_page->cmbMimetype->setEnabled(!toggle);
+    m_page->bnExportOptions->setEnabled(!toggle);
     for (int i = 0; i < m_page->cmbMimetype->count(); ++i) {
         if (m_page->cmbMimetype->itemData(i).toString() == "image/png") {
             m_page->cmbMimetype->setCurrentIndex(i);
@@ -308,27 +311,30 @@ void DlgAnimationRenderer::toggleSequenceType(bool toggle)
     }
 }
 
-void DlgAnimationRenderer::sequenceMimeTypeSelected(int index)
+void DlgAnimationRenderer::sequenceMimeTypeSelected()
 {
+    int index = m_page->cmbMimetype->currentIndex();
+
     if (m_frameExportConfigWidget) {
-        m_sequenceConfigLayout->removeWidget(m_frameExportConfigWidget);
-        m_frameExportConfigWidget->hide();
-        m_frameExportConfigWidget->setParent(0);
         m_frameExportConfigWidget->deleteLater();
         m_frameExportConfigWidget = 0;
     }
+
     QString mimetype = m_page->cmbMimetype->itemData(index).toString();
     KisImportExportFilter *filter = KisImportExportManager::filterForMimeType(mimetype, KisImportExportManager::Export);
     if (filter) {
-        m_frameExportConfigWidget = filter->createConfigurationWidget(m_page->grpExportOptions, KisDocument::nativeFormatMimeType(), mimetype.toLatin1());
+        m_frameExportConfigWidget = filter->createConfigurationWidget(0, KisDocument::nativeFormatMimeType(), mimetype.toLatin1());
         if (m_frameExportConfigWidget) {
-            m_sequenceConfigLayout->addWidget(m_frameExportConfigWidget);
             m_frameExportConfigWidget->setConfiguration(filter->lastSavedConfiguration());
-            m_frameExportConfigWidget->show();
-            resize(sizeHint());
-        }
-        else {
-            m_frameExportConfigWidget = 0;
+            KoDialog dlg;
+            dlg.setMainWidget(m_frameExportConfigWidget);
+            dlg.setButtons(KoDialog::Ok | KoDialog::Cancel);
+            if (!dlg.exec()) {
+                m_frameExportConfigWidget->setConfiguration(filter->lastSavedConfiguration());
+            }
+            m_frameExportConfigWidget->hide();
+            m_frameExportConfigWidget->setParent(0);
+            dlg.setMainWidget(0);
         }
         delete filter;
     }

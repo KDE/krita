@@ -162,7 +162,8 @@ class Q_DECL_HIDDEN KoStrokeConfigWidget::Private
 public:
     Private()
         : canvas(0),
-        active(true)
+        active(true),
+        letUnitBeSet(true)
     {
     }
 
@@ -180,6 +181,7 @@ public:
     KoCanvasBase *canvas;
 
     bool active;
+    bool letUnitBeSet;
 };
 
 KoStrokeConfigWidget::KoStrokeConfigWidget(QWidget * parent)
@@ -377,6 +379,10 @@ void KoStrokeConfigWidget::updateControls(KoShapeStrokeModel *stroke, KoMarker *
 
 void KoStrokeConfigWidget::setUnit(const KoUnit &unit)
 {
+    if (!d->letUnitBeSet) {
+        return; //the unit management is completly transferd to the unitManagers.
+    }
+
     blockChildSignals(true);
 
     KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
@@ -421,6 +427,19 @@ void KoStrokeConfigWidget::blockChildSignals(bool block)
 void KoStrokeConfigWidget::setActive(bool active)
 {
     d->active = active;
+}
+
+void KoStrokeConfigWidget::setUnitManagers(KisSpinBoxUnitManager* managerLineWidth,
+                                          KisSpinBoxUnitManager *managerMitterLimit)
+{
+    blockChildSignals(true);
+
+    d->letUnitBeSet = false;
+
+    d->lineWidth->setUnitManager(managerLineWidth);
+    d->capNJoinMenu->miterLimit->setUnitManager(managerMitterLimit);
+
+    blockChildSignals(false);
 }
 
 //------------------------

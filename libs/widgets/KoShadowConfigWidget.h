@@ -62,7 +62,7 @@ public:
 
 public Q_SLOTS:
 
-    void setUnitManager(KisSpinBoxUnitManager* managerBlur, KisSpinBoxUnitManager* managerOffset);
+    void setUnitManagers(KisSpinBoxUnitManager* managerBlur, KisSpinBoxUnitManager* managerOffset);
     void setUnit( const KoUnit &unit );
     void setCanvas(KoCanvasBase *canvas);
 

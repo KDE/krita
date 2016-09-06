@@ -1026,7 +1026,11 @@ QList<QPointer<QWidget> > DefaultTool::createOptionWidgets()
     DefaultToolWidget *defaultTool = new DefaultToolWidget(this);
     defaultTool->setWindowTitle(i18n("Geometry"));
     widgets.append(defaultTool);
+
     KoStrokeConfigWidget *strokeWidget = new KoStrokeConfigWidget(0);
+    KisDocumentAwareSpinBoxUnitManager* managerLineWidth = new KisDocumentAwareSpinBoxUnitManager(strokeWidget);
+    KisDocumentAwareSpinBoxUnitManager* managerMitterLimit = new KisDocumentAwareSpinBoxUnitManager(strokeWidget);
+    strokeWidget->setUnitManagers(managerLineWidth, managerMitterLimit);
     strokeWidget->setWindowTitle(i18n("Line"));
     strokeWidget->setCanvas(canvas());
     widgets.append(strokeWidget);
@@ -1039,7 +1043,7 @@ QList<QPointer<QWidget> > DefaultTool::createOptionWidgets()
     KoShadowConfigWidget *shadowWidget = new KoShadowConfigWidget(0);
     KisDocumentAwareSpinBoxUnitManager* managerBlur = new KisDocumentAwareSpinBoxUnitManager(shadowWidget); //let the shadow widget be aware of document relative units.
     KisDocumentAwareSpinBoxUnitManager* managerOffset = new KisDocumentAwareSpinBoxUnitManager(shadowWidget); //let the shadow widget be aware of document relative units.
-    shadowWidget->setUnitManager(managerBlur, managerOffset);
+    shadowWidget->setUnitManagers(managerBlur, managerOffset);
     shadowWidget->setWindowTitle(i18n("Shadow"));
     shadowWidget->setCanvas(canvas());
     widgets.append(shadowWidget);

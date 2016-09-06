@@ -213,7 +213,7 @@ void KoShadowConfigWidget::setCanvas(KoCanvasBase *canvas)
              this, SLOT( resourceChanged( int, const QVariant& ) ) );
 }
 
-void KoShadowConfigWidget::setUnitManager(KisSpinBoxUnitManager* managerBlur, KisSpinBoxUnitManager *managerOffset)
+void KoShadowConfigWidget::setUnitManagers(KisSpinBoxUnitManager* managerBlur, KisSpinBoxUnitManager *managerOffset)
 {
     d->widget.shadowOffset->blockSignals(true);
     d->widget.shadowBlur->blockSignals(true);

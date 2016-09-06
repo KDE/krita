@@ -99,8 +99,11 @@ public:
 
     bool wrapAroundMode{false};
 
+    // Stores a quad for drawing the canvas
     QOpenGLVertexArrayObject quadVAO;
     QOpenGLBuffer quadBuffers[2];
+
+    // Stores data for drawing tool outlines
     QOpenGLVertexArrayObject outlineVAO;
     QOpenGLBuffer lineBuffer;
 
@@ -244,31 +247,40 @@ void KisOpenGLCanvas2::initializeGL()
     initializeCheckerShader();
     initializeDisplayShader();
 
-    d->quadVAO.create();
-    d->quadVAO.bind();
-    glEnableVertexAttribArray(PROGRAM_VERTEX_ATTRIBUTE);
-    glEnableVertexAttribArray(PROGRAM_TEXCOORD_ATTRIBUTE);
+    // If we support OpenGL 3.2, then prepare out VAOs and VBOs for drawing
+    if (KisOpenGL::hasOpenGL3()) {
+        d->quadVAO.create();
+        d->quadVAO.bind();
 
-    d->quadBuffers[0].create();
-    d->quadBuffers[0].setUsagePattern(QOpenGLBuffer::StaticDraw);
-    d->quadBuffers[0].bind();
-    d->quadBuffers[0].allocate(d->vertices, 6 * 3 * sizeof(float));
-    glVertexAttribPointer(PROGRAM_VERTEX_ATTRIBUTE, 3, GL_FLOAT, GL_FALSE, 0, 0);
+        glEnableVertexAttribArray(PROGRAM_VERTEX_ATTRIBUTE);
+        glEnableVertexAttribArray(PROGRAM_TEXCOORD_ATTRIBUTE);
 
-    d->quadBuffers[1].create();
-    d->quadBuffers[1].setUsagePattern(QOpenGLBuffer::StaticDraw);
-    d->quadBuffers[1].bind();
-    d->quadBuffers[1].allocate(d->texCoords, 6 * 2 * sizeof(float));
-    glVertexAttribPointer(PROGRAM_TEXCOORD_ATTRIBUTE, 2, GL_FLOAT, GL_FALSE, 0, 0);
+        // Create the vertex buffer object, it has 6 vertices with 3 components
+        d->quadBuffers[0].create();
+        d->quadBuffers[0].setUsagePattern(QOpenGLBuffer::StaticDraw);
+        d->quadBuffers[0].bind();
+        d->quadBuffers[0].allocate(d->vertices, 6 * 3 * sizeof(float));
+        glVertexAttribPointer(PROGRAM_VERTEX_ATTRIBUTE, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
-    d->outlineVAO.create();
-    d->outlineVAO.bind();
-    glEnableVertexAttribArray(PROGRAM_VERTEX_ATTRIBUTE);
+        // Create the texture buffer object, it has 6 texture coordinates with 2 components
+        d->quadBuffers[1].create();
+        d->quadBuffers[1].setUsagePattern(QOpenGLBuffer::StaticDraw);
+        d->quadBuffers[1].bind();
+        d->quadBuffers[1].allocate(d->texCoords, 6 * 2 * sizeof(float));
+        glVertexAttribPointer(PROGRAM_TEXCOORD_ATTRIBUTE, 2, GL_FLOAT, GL_FALSE, 0, 0);
 
-    d->lineBuffer.create();
-    d->lineBuffer.setUsagePattern(QOpenGLBuffer::StreamDraw);
-    d->lineBuffer.bind();
-    glVertexAttribPointer(PROGRAM_VERTEX_ATTRIBUTE, 3, GL_FLOAT, GL_FALSE, 0, 0);
+        // Create the outline buffer, this buffer will store the outlines of
+        // tools and will frequently change data
+        d->outlineVAO.create();
+        d->outlineVAO.bind();
+
+        glEnableVertexAttribArray(PROGRAM_VERTEX_ATTRIBUTE);
+
+        d->lineBuffer.create();
+        d->lineBuffer.setUsagePattern(QOpenGLBuffer::StreamDraw);
+        d->lineBuffer.bind();
+        glVertexAttribPointer(PROGRAM_VERTEX_ATTRIBUTE, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    }
 
     ptr_glLogicOp = (kis_glLogicOp)(context()->getProcAddress("glLogicOp"));
 
@@ -358,8 +370,10 @@ void KisOpenGLCanvas2::paintToolOutline(const QPainterPath &path)
     }
 
     // Paint the tool outline
-    d->outlineVAO.bind();
-    d->lineBuffer.bind();
+    if (KisOpenGL::hasOpenGL3()) {
+        d->outlineVAO.bind();
+        d->lineBuffer.bind();
+    }
 
     // Convert every disjointed subpath to a polygon and draw that polygon
     QList<QPolygonF> subPathPolygons = path.toSubpathPolygons();
@@ -373,13 +387,21 @@ void KisOpenGLCanvas2::paintToolOutline(const QPainterPath &path)
             vertices[j].setX(p.x());
             vertices[j].setY(p.y());
         }
-        d->lineBuffer.allocate(vertices.constData(), 3 * vertices.size() * sizeof(float));
+        if (KisOpenGL::hasOpenGL3()) {
+            d->lineBuffer.allocate(vertices.constData(), 3 * vertices.size() * sizeof(float));
+        }
+        else {
+            cursorShader->enableAttributeArray(PROGRAM_VERTEX_ATTRIBUTE);
+            cursorShader->setAttributeArray(PROGRAM_VERTEX_ATTRIBUTE, vertices.constData());
+        }
 
         glDrawArrays(GL_LINE_STRIP, 0, vertices.size());
     }
 
-    d->lineBuffer.release();
-    d->outlineVAO.release();
+    if (KisOpenGL::hasOpenGL3()) {
+        d->lineBuffer.release();
+        d->outlineVAO.release();
+    }
 
     glDisable(GL_COLOR_LOGIC_OP);
 
@@ -435,14 +457,25 @@ void KisOpenGLCanvas2::drawCheckers()
     d->checkerShader->setUniformValue(d->checkerUniformLocationTextureMatrix, textureMatrix);
 
     //Setup the geometry for rendering
-    rectToVertices(d->vertices, modelRect);
+    if (KisOpenGL::hasOpenGL3()) {
+        rectToVertices(d->vertices, modelRect);
 
-    d->quadBuffers[0].bind();
-    d->quadBuffers[0].write(0, d->vertices, 3 * 6 * sizeof(float));
+        d->quadBuffers[0].bind();
+        d->quadBuffers[0].write(0, d->vertices, 3 * 6 * sizeof(float));
 
-    rectToTexCoords(d->texCoords, textureRect);
-    d->quadBuffers[1].bind();
-    d->quadBuffers[1].write(0, d->texCoords, 2 * 6 * sizeof(float));
+        rectToTexCoords(d->texCoords, textureRect);
+        d->quadBuffers[1].bind();
+        d->quadBuffers[1].write(0, d->texCoords, 2 * 6 * sizeof(float));
+    }
+    else {
+        rectToVertices(d->vertices, modelRect);
+        d->checkerShader->enableAttributeArray(PROGRAM_VERTEX_ATTRIBUTE);
+        d->checkerShader->setAttributeArray(PROGRAM_VERTEX_ATTRIBUTE, d->vertices);
+
+        rectToTexCoords(d->texCoords, textureRect);
+        d->checkerShader->enableAttributeArray(PROGRAM_TEXCOORD_ATTRIBUTE);
+        d->checkerShader->setAttributeArray(PROGRAM_TEXCOORD_ATTRIBUTE, d->texCoords);
+    }
 
     // render checkers
     glActiveTexture(GL_TEXTURE0);
@@ -550,14 +583,25 @@ void KisOpenGLCanvas2::drawImage()
             QRectF modelRect(tile->tileRectInImagePixels().translated(tileWrappingTranslation.x(), tileWrappingTranslation.y()));
 
             //Setup the geometry for rendering
-            rectToVertices(d->vertices, modelRect);
+            if (KisOpenGL::hasOpenGL3()) {
+                rectToVertices(d->vertices, modelRect);
 
-            d->quadBuffers[0].bind();
-            d->quadBuffers[0].write(0, d->vertices, 3 * 6 * sizeof(float));
+                d->quadBuffers[0].bind();
+                d->quadBuffers[0].write(0, d->vertices, 3 * 6 * sizeof(float));
 
-            rectToTexCoords(d->texCoords, textureRect);
-            d->quadBuffers[1].bind();
-            d->quadBuffers[1].write(0, d->texCoords, 2 * 6 * sizeof(float));
+                rectToTexCoords(d->texCoords, textureRect);
+                d->quadBuffers[1].bind();
+                d->quadBuffers[1].write(0, d->texCoords, 2 * 6 * sizeof(float));
+            }
+            else {
+                rectToVertices(d->vertices, modelRect);
+                d->displayShader->enableAttributeArray(PROGRAM_VERTEX_ATTRIBUTE);
+                d->displayShader->setAttributeArray(PROGRAM_VERTEX_ATTRIBUTE, d->vertices);
+
+                rectToTexCoords(d->texCoords, textureRect);
+                d->displayShader->enableAttributeArray(PROGRAM_TEXCOORD_ATTRIBUTE);
+                d->displayShader->setAttributeArray(PROGRAM_TEXCOORD_ATTRIBUTE, d->texCoords);
+            }
 
             if (d->displayFilter) {
                 glActiveTexture(GL_TEXTURE0 + 1);
@@ -790,10 +834,14 @@ void KisOpenGLCanvas2::renderCanvasGL()
         d->displayFilter->updateShader();
     }
 
-    d->quadVAO.bind();
+    if (KisOpenGL::hasOpenGL3()) {
+        d->quadVAO.bind();
+    }
     drawCheckers();
     drawImage();
-    d->quadVAO.release();
+    if (KisOpenGL::hasOpenGL3()) {
+        d->quadVAO.release();
+    }
 }
 
 void KisOpenGLCanvas2::renderDecorations(QPainter *painter)

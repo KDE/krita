@@ -714,7 +714,7 @@ void KisOpenGLCanvas2::initializeCheckerShader()
 
 }
 
-QByteArray KisOpenGLCanvas2::buildFragmentShader()
+QByteArray KisOpenGLCanvas2::buildDisplayShader()
 {
     QByteArray shaderText;
 
@@ -758,7 +758,7 @@ void KisOpenGLCanvas2::initializeDisplayShader()
     delete d->displayShader;
     d->displayShader = new QOpenGLShaderProgram();
 
-    bool result = d->displayShader->addShaderFromSourceCode(QOpenGLShader::Fragment, buildFragmentShader());
+    bool result = d->displayShader->addShaderFromSourceCode(QOpenGLShader::Fragment, buildDisplayShader());
     reportShaderLinkFailedAndExit(result, "Display fragment shader", d->displayShader->log());
 
     if (KisOpenGL::hasOpenGL3()) {

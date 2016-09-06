@@ -101,7 +101,7 @@ private:
     QOpenGLShaderProgram *getCursorShader();
     void drawImage();
     void drawCheckers();
-    QByteArray buildFragmentShader();
+    QByteArray buildDisplayShader();
 
 private:
 

@@ -1,4 +1,5 @@
-#version 130
+#version 150 core
+
 /*
  * shader for handling scaling
  */

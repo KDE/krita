@@ -151,7 +151,7 @@ void KisOpenGL::initializeContext(QOpenGLContext *ctx)
 bool KisOpenGL::hasOpenGL3()
 {
     initialize();
-    return glMajorVersion >= 3;
+    return glMajorVersion >= 3 && glMinorVersion >= 2;
 }
 
 bool KisOpenGL::supportsFenceSync()

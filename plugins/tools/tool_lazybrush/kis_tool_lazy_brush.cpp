@@ -32,13 +32,22 @@
 #include "kis_config.h"
 #include "kundo2magicstring.h"
 
+#include "KoProperties.h"
+#include "kis_node_manager.h"
+
 #include "kis_tool_lazy_brush_options_widget.h"
+
+struct KisToolLazyBrush::Private
+{
+    bool activateMaskMode = false;
+};
 
 
 KisToolLazyBrush::KisToolLazyBrush(KoCanvasBase * canvas)
     : KisToolFreehand(canvas,
                       KisCursor::load("tool_freehand_cursor.png", 5, 5),
-                      kundo2_i18n("Colorize Mask Key Stroke"))
+                      kundo2_i18n("Colorize Mask Key Stroke")),
+      m_d(new Private)
 {
     setObjectName("tool_lazybrush");
 }
@@ -60,6 +69,78 @@ void KisToolLazyBrush::deactivate()
 void KisToolLazyBrush::resetCursorStyle()
 {
     KisToolFreehand::resetCursorStyle();
+}
+
+bool KisToolLazyBrush::colorizeMaskActive() const
+{
+    KisNodeSP node = currentNode();
+    return node && node->inherits("KisColorizeMask");
+}
+
+bool KisToolLazyBrush::canCreateColorizeMask() const
+{
+    KisNodeSP node = currentNode();
+    return node && node->inherits("KisLayer");
+}
+
+void KisToolLazyBrush::activatePrimaryAction()
+{
+    KisToolFreehand::activatePrimaryAction();
+
+    if (!colorizeMaskActive() && canCreateColorizeMask()) {
+        useCursor(KisCursor::handCursor());
+        m_d->activateMaskMode = true;
+        setOutlineEnabled(false);
+    }
+}
+
+void KisToolLazyBrush::deactivatePrimaryAction()
+{
+    if (m_d->activateMaskMode) {
+        m_d->activateMaskMode = false;
+        setOutlineEnabled(true);
+        resetCursorStyle();
+    }
+
+    KisToolFreehand::deactivatePrimaryAction();
+}
+
+void KisToolLazyBrush::beginPrimaryAction(KoPointerEvent *event)
+{
+    if (m_d->activateMaskMode) {
+        KisNodeSP node = currentNode();
+        if (!node) return;
+
+        KoProperties properties;
+        properties.setProperty("visible", true);
+        properties.setProperty("locked", false);
+
+        QList<KisNodeSP> masks = node->childNodes(QStringList("KisColorizeMask"), properties);
+
+        if (!masks.isEmpty()) {
+            KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
+            KisViewManager* viewManager = kiscanvas->viewManager();
+            viewManager->nodeManager()->slotNonUiActivatedNode(masks.first());
+        } else {
+            KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
+            KisViewManager* viewManager = kiscanvas->viewManager();
+            viewManager->nodeManager()->createNode("KisColorizeMask");
+        }
+    } else {
+        KisToolFreehand::beginPrimaryAction(event);
+    }
+}
+
+void KisToolLazyBrush::continuePrimaryAction(KoPointerEvent *event)
+{
+    if (m_d->activateMaskMode) return;
+    KisToolFreehand::continuePrimaryAction(event);
+}
+
+void KisToolLazyBrush::endPrimaryAction(KoPointerEvent *event)
+{
+    if (m_d->activateMaskMode) return;
+    KisToolFreehand::endPrimaryAction(event);
 }
 
 QWidget * KisToolLazyBrush::createOptionWidget()

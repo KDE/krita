@@ -406,7 +406,7 @@ KisPaintOpPresetSP KisTool::currentPaintOpPreset()
     return canvas()->resourceManager()->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
 }
 
-KisNodeSP KisTool::currentNode()
+KisNodeSP KisTool::currentNode() const
 {
     KisNodeSP node = canvas()->resourceManager()->resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeWSP>();
     return node;

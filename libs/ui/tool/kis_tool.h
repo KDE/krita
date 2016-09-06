@@ -287,7 +287,7 @@ protected:
     KisImageWSP currentImage();
     KoPattern* currentPattern();
     KoAbstractGradient *currentGradient();
-    KisNodeSP currentNode();
+    KisNodeSP currentNode() const;
     KisNodeList selectedNodes() const;
     KoColor currentFgColor();
     KoColor currentBgColor();

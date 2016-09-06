@@ -151,6 +151,7 @@ void KisToolLazyBrushOptionsWidget::slotCurrentFgColorChanged(const KoColor &col
     m_d->ui->btnTransparent->setEnabled(selectedIndex >= 0);
 
     if (selectedIndex < 0) {
+        KisSignalsBlocker b(m_d->ui->btnTransparent);
         m_d->ui->btnTransparent->setChecked(false);
     }
 

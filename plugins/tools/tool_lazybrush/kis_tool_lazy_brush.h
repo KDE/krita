@@ -19,6 +19,7 @@
 #ifndef KIS_TOOL_LAZY_BRUSH_H_
 #define KIS_TOOL_LAZY_BRUSH_H_
 
+#include <QScopedPointer>
 #include "kis_tool_freehand.h"
 
 #include "KoToolFactoryBase.h"
@@ -43,6 +44,13 @@ public:
 
     QWidget * createOptionWidget();
 
+    void activatePrimaryAction();
+    void deactivatePrimaryAction();
+
+    void beginPrimaryAction(KoPointerEvent *event);
+    void continuePrimaryAction(KoPointerEvent *event);
+    void endPrimaryAction(KoPointerEvent *event);
+
 protected Q_SLOTS:
     void resetCursorStyle();
 
@@ -53,6 +61,12 @@ public Q_SLOTS:
 Q_SIGNALS:
 
 private:
+    bool colorizeMaskActive() const;
+    bool canCreateColorizeMask() const;
+
+private:
+    struct Private;
+    const QScopedPointer<Private> m_d;
 };
 
 

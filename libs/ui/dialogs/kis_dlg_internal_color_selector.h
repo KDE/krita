@@ -33,7 +33,7 @@
  *
  * A non-modal color selector dialog that is not a plugin and can thus be used for filters.
  */
-class KRITAUI_EXPORT KisInternalColorSelector : public QDialog
+class KRITAUI_EXPORT KisDlgInternalColorSelector : public QDialog
 {
     Q_OBJECT
 public:
@@ -56,8 +56,8 @@ public:
         bool useAlpha;
     };
 
-    KisInternalColorSelector(QWidget* parent, KoColor color, Config config, const QString &caption, const KoColorDisplayRendererInterface *displayRenderer = KoDumbColorDisplayRenderer::instance());
-    ~KisInternalColorSelector();
+    KisDlgInternalColorSelector(QWidget* parent, KoColor color, Config config, const QString &caption, const KoColorDisplayRendererInterface *displayRenderer = KoDumbColorDisplayRenderer::instance());
+    ~KisDlgInternalColorSelector();
 
     /**
      * @brief slotColorSpaceChanged

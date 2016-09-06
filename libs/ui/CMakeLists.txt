@@ -66,7 +66,7 @@ set(kritaui_LIB_SRCS
     dialogs/kis_dlg_png_import.cpp
     dialogs/kis_dlg_import_image_sequence.cpp
     dialogs/kis_delayed_save_dialog.cpp
-    dialogs/kis_internal_color_selector.cpp
+    dialogs/kis_dlg_internal_color_selector.cpp
     flake/kis_node_dummies_graph.cpp
     flake/kis_dummies_facade_base.cpp
     flake/kis_dummies_facade.cpp

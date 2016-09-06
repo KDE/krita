@@ -81,7 +81,7 @@ class Q_DECL_HIDDEN KoDualColorButton::Private
     bool dragFlag, miniCtlFlag;
     KoColor foregroundColor;
     KoColor backgroundColor;
-    KisInternalColorSelector *colorSelectorDialog;
+    KisDlgInternalColorSelector *colorSelectorDialog;
     QPoint dragPosition;
     Selection tmpSelection;
     bool popDialog;
@@ -97,9 +97,9 @@ void KoDualColorButton::Private::init(KoDualColorButton *q)
 
     q->setAcceptDrops( true );
     QString caption = i18n("Select a color");
-    KisInternalColorSelector::Config config = KisInternalColorSelector::Config();
+    KisDlgInternalColorSelector::Config config = KisDlgInternalColorSelector::Config();
     config.modal = false;
-    colorSelectorDialog = new KisInternalColorSelector(q, foregroundColor, config, caption, displayRenderer);
+    colorSelectorDialog = new KisDlgInternalColorSelector(q, foregroundColor, config, caption, displayRenderer);
     connect(colorSelectorDialog, SIGNAL(signalForegroundColorChosen(KoColor)), q, SLOT(slotSetForeGroundColorFromDialog(KoColor)));
     connect(q, SIGNAL(foregroundColorChanged(KoColor)), colorSelectorDialog, SLOT(slotColorUpdated(KoColor)));
 }
@@ -352,7 +352,7 @@ void KoDualColorButton::mouseReleaseEvent( QMouseEvent *event )
         if(d->tmpSelection == Background ) {
             if( d->popDialog) {
                 KoColor c = d->backgroundColor;
-                c = KisInternalColorSelector::getModalColorDialog(c, this);
+                c = KisDlgInternalColorSelector::getModalColorDialog(c, this);
                 d->backgroundColor = c;
                 emit backgroundColorChanged(d->backgroundColor);
                 /*QColor c = d->displayRenderer->toQColor(d->backgroundColor);

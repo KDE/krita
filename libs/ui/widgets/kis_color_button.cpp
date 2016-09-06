@@ -51,7 +51,7 @@ public:
     KoColor col;
     QPoint mPos;
 
-    QPointer<KisInternalColorSelector> dialogPtr;
+    QPointer<KisDlgInternalColorSelector> dialogPtr;
 
     void initStyleOption(QStyleOptionButton *opt) const;
 };
@@ -306,7 +306,7 @@ void KisColorButton::mouseMoveEvent(QMouseEvent *e)
 
 void KisColorButton::KisColorButtonPrivate::_k_chooseColor()
 {
-    KisInternalColorSelector *dialog = dialogPtr.data();
+    KisDlgInternalColorSelector *dialog = dialogPtr.data();
     if (dialog) {
         dialog->show();
         dialog->raise();
@@ -314,12 +314,12 @@ void KisColorButton::KisColorButtonPrivate::_k_chooseColor()
         return;
     }
 
-    KisInternalColorSelector::Config cfg;
+    KisDlgInternalColorSelector::Config cfg;
 
-    dialog = new KisInternalColorSelector(q,
+    dialog = new KisDlgInternalColorSelector(q,
                                           q->color(),
                                           cfg,
-                                          "Blabla");
+                                          i18n("Choose a color"));
     //dialog->setOption(QColorDialog::ShowAlphaChannel, m_alphaChannel);
     dialog->setAttribute(Qt::WA_DeleteOnClose);
     connect(dialog, SIGNAL(accepted()), q, SLOT(_k_colorChosen()));
@@ -329,7 +329,7 @@ void KisColorButton::KisColorButtonPrivate::_k_chooseColor()
 
 void KisColorButton::KisColorButtonPrivate::_k_colorChosen()
 {
-    KisInternalColorSelector *dialog = dialogPtr.data();
+    KisDlgInternalColorSelector *dialog = dialogPtr.data();
     if (!dialog) {
         return;
     }

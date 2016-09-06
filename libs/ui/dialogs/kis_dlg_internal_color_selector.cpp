@@ -39,7 +39,7 @@
 #include "kis_config_notifier.h"
 #include "kis_color_input.h"
 
-struct KisInternalColorSelector::Private
+struct KisDlgInternalColorSelector::Private
 {
     bool allowUpdates = true;
     KoColor currentColor;
@@ -53,7 +53,7 @@ struct KisInternalColorSelector::Private
     KisHexColorInput *hexColorInput;
 };
 
-KisInternalColorSelector::KisInternalColorSelector(QWidget *parent, KoColor color, Config config, const QString &caption, const KoColorDisplayRendererInterface *displayRenderer)
+KisDlgInternalColorSelector::KisDlgInternalColorSelector(QWidget *parent, KoColor color, Config config, const QString &caption, const KoColorDisplayRendererInterface *displayRenderer)
     : QDialog(parent)
      ,m_d(new Private)
 {
@@ -134,13 +134,13 @@ KisInternalColorSelector::KisInternalColorSelector(QWidget *parent, KoColor colo
     connect(m_ui->buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 }
 
-KisInternalColorSelector::~KisInternalColorSelector()
+KisDlgInternalColorSelector::~KisDlgInternalColorSelector()
 {
     delete m_ui;
     //TODO: Does the scoped pointer also need to be deleted???
 }
 
-void KisInternalColorSelector::slotColorUpdated(KoColor newColor)
+void KisDlgInternalColorSelector::slotColorUpdated(KoColor newColor)
 {
     //if the update did not come from this selector...
     if (m_d->allowUpdates || QObject::sender() == this->parent()) {
@@ -154,7 +154,7 @@ void KisInternalColorSelector::slotColorUpdated(KoColor newColor)
     }
 }
 
-void KisInternalColorSelector::colorSpaceChanged(const KoColorSpace *cs)
+void KisDlgInternalColorSelector::colorSpaceChanged(const KoColorSpace *cs)
 {
     if (cs == m_d->currentColorSpace) {
         return;
@@ -166,13 +166,13 @@ void KisInternalColorSelector::colorSpaceChanged(const KoColorSpace *cs)
 
 }
 
-void KisInternalColorSelector::lockUsedColorSpace(const KoColorSpace *cs)
+void KisDlgInternalColorSelector::lockUsedColorSpace(const KoColorSpace *cs)
 {
     colorSpaceChanged(cs);
     m_d->lockUsedCS = true;
 }
 
-void KisInternalColorSelector::setDisplayRenderer(const KoColorDisplayRendererInterface *displayRenderer)
+void KisDlgInternalColorSelector::setDisplayRenderer(const KoColorDisplayRendererInterface *displayRenderer)
 {
     if (displayRenderer) {
         m_d->displayRenderer = displayRenderer;
@@ -185,36 +185,36 @@ void KisInternalColorSelector::setDisplayRenderer(const KoColorDisplayRendererIn
     }
 }
 
-KoColor KisInternalColorSelector::getModalColorDialog(const KoColor color, QWidget* parent, QString caption)
+KoColor KisDlgInternalColorSelector::getModalColorDialog(const KoColor color, QWidget* parent, QString caption)
 {
     Config config = Config();
-    KisInternalColorSelector dialog(parent, color, config, caption);
+    KisDlgInternalColorSelector dialog(parent, color, config, caption);
     dialog.exec();
     return dialog.getCurrentColor();
 }
 
-KoColor KisInternalColorSelector::getCurrentColor()
+KoColor KisDlgInternalColorSelector::getCurrentColor()
 {
     return m_d->currentColor;
 }
 
-void KisInternalColorSelector::chooseAlpha(bool chooseAlpha)
+void KisDlgInternalColorSelector::chooseAlpha(bool chooseAlpha)
 {
     m_d->chooseAlpha = chooseAlpha;
 }
 
-void KisInternalColorSelector::slotConfigurationChanged()
+void KisDlgInternalColorSelector::slotConfigurationChanged()
 {
     //m_d->canvas->displayColorConverter()->
     //slotColorSpaceChanged(m_d->canvas->image()->colorSpace());
 }
 
-void KisInternalColorSelector::slotLockSelector()
+void KisDlgInternalColorSelector::slotLockSelector()
 {
     m_d->allowUpdates = false;
 }
 
-void KisInternalColorSelector::setPreviousColor()
+void KisDlgInternalColorSelector::setPreviousColor()
 {
     m_d->previousColor = m_d->currentColor;
     KisConfig cfg;
@@ -223,7 +223,7 @@ void KisInternalColorSelector::setPreviousColor()
     }
 }
 
-void KisInternalColorSelector::updateAllElements(QObject *source)
+void KisDlgInternalColorSelector::updateAllElements(QObject *source)
 {
     //update everything!!!
     if (source != m_ui->spinboxselector) {
@@ -249,22 +249,22 @@ void KisInternalColorSelector::updateAllElements(QObject *source)
 }
 
 
-void KisInternalColorSelector::endUpdateWithNewColor()
+void KisDlgInternalColorSelector::endUpdateWithNewColor()
 {
     m_d->allowUpdates = true;
 }
 
-void KisInternalColorSelector::focusInEvent(QFocusEvent *)
+void KisDlgInternalColorSelector::focusInEvent(QFocusEvent *)
 {
     //setPreviousColor();
 }
 
-void KisInternalColorSelector::slotSetColorFromPatch(KoColorPatch* patch)
+void KisDlgInternalColorSelector::slotSetColorFromPatch(KoColorPatch* patch)
 {
     slotColorUpdated(patch->color());
 }
 
-void KisInternalColorSelector::slotSetColorFromHex()
+void KisDlgInternalColorSelector::slotSetColorFromHex()
 {
     slotColorUpdated(m_d->sRGB);
 }

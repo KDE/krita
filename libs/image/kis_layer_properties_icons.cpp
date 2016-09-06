@@ -110,17 +110,20 @@ KisBaseNode::Property KisLayerPropertiesIcons::getProperty(const KoID &id, bool 
 void KisLayerPropertiesIcons::setNodeProperty(KisNodeSP node, const KoID &id, const QVariant &value, KisImageSP image)
 {
     KisBaseNode::PropertyList props = node->sectionModelProperties();
+    setNodeProperty(&props, id, value);
+    KisNodePropertyListCommand::setNodePropertiesNoUndo(node, image, props);
+}
 
-    KisBaseNode::PropertyList::iterator it = props.begin();
-    KisBaseNode::PropertyList::iterator end = props.end();
+void KisLayerPropertiesIcons::setNodeProperty(KisBaseNode::PropertyList *props, const KoID &id, const QVariant &value)
+{
+    KisBaseNode::PropertyList::iterator it = props->begin();
+    KisBaseNode::PropertyList::iterator end = props->end();
     for (; it != end; ++it) {
         if (it->id == id.id()) {
             it->state = value;
             break;
         }
     }
-
-    KisNodePropertyListCommand::setNodePropertiesNoUndo(node, image, props);
 }
 
 QVariant KisLayerPropertiesIcons::nodeProperty(KisNodeSP node, const KoID &id, const QVariant &defaultValue)

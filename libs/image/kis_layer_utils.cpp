@@ -45,6 +45,9 @@
 #include "kis_command_utils.h"
 #include "kis_processing_applicator.h"
 #include "commands_new/kis_change_projection_color_command.h"
+#include "kis_layer_properties_icons.h"
+#include "lazybrush/kis_colorize_mask.h"
+#include "commands/kis_node_property_list_command.h"
 
 
 namespace KisLayerUtils {
@@ -138,6 +141,31 @@ namespace KisLayerUtils {
 
         void redo() {
             fetchSelectionMasks(m_info->allSrcNodes(), m_info->selectionMasks);
+        }
+
+    private:
+        MergeDownInfoBaseSP m_info;
+    };
+
+    struct DisableColorizeKeyStrokes : public KisCommandUtils::AggregateCommand {
+        DisableColorizeKeyStrokes(MergeDownInfoBaseSP info) : m_info(info) {}
+
+        void populateChildCommands() {
+            Q_FOREACH (KisNodeSP node, m_info->allSrcNodes()) {
+                recursiveApplyNodes(node,
+                                    [this] (KisNodeSP node) {
+                                        if (dynamic_cast<KisColorizeMask*>(node.data()) &&
+                                            KisLayerPropertiesIcons::nodeProperty(node, KisLayerPropertiesIcons::colorizeEditKeyStrokes, true).toBool()) {
+
+                                            KisBaseNode::PropertyList props = node->sectionModelProperties();
+                                            KisLayerPropertiesIcons::setNodeProperty(&props,
+                                                                                     KisLayerPropertiesIcons::colorizeEditKeyStrokes,
+                                                                                     false);
+
+                                            addCommand(new KisNodePropertyListCommand(node, props));
+                                        }
+                                    });
+            }
         }
 
     private:
@@ -675,6 +703,11 @@ namespace KisLayerUtils {
         if (layer->visible() && prevLayer->visible()) {
             MergeDownInfoSP info(new MergeDownInfo(image, prevLayer, layer));
 
+            // disable key strokes on all colorize masks and wait until
+            // update is finished with a barrier
+            applicator.applyCommand(new DisableColorizeKeyStrokes(info));
+            applicator.applyCommand(new KUndo2Command(), KisStrokeJobData::BARRIER);
+
             applicator.applyCommand(new KeepMergedNodesSelected(info, false));
             applicator.applyCommand(new FillSelectionMasks(info));
             applicator.applyCommand(new CreateMergedLayer(info), KisStrokeJobData::BARRIER);
@@ -958,6 +991,11 @@ namespace KisLayerUtils {
 
         if (mergedNodes.size() > 1 || invisibleNodes.isEmpty()) {
             MergeMultipleInfoSP info(new MergeMultipleInfo(image, mergedNodes));
+
+            // disable key strokes on all colorize masks and wait until
+            // update is finished with a barrier
+            applicator.applyCommand(new DisableColorizeKeyStrokes(info));
+            applicator.applyCommand(new KUndo2Command(), KisStrokeJobData::BARRIER);
 
             applicator.applyCommand(new KeepMergedNodesSelected(info, putAfter, false));
             applicator.applyCommand(new FillSelectionMasks(info));

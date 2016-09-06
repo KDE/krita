@@ -55,6 +55,8 @@ public:
      */
     static void setNodeProperty(KisNodeSP node, const KoID &id, const QVariant &value, KisImageSP image);
 
+    static void setNodeProperty(KisBaseNode::PropertyList *props, const KoID &id, const QVariant &value);
+
     /**
      * Gets the specified property of the node
      */

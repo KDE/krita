@@ -45,6 +45,8 @@
 #include <QList>
 #include <QTransform>
 
+#include "kis_document_aware_spin_box_unit_manager.h"
+
 DefaultToolWidget::DefaultToolWidget(KoInteractionTool *tool, QWidget *parent)
     : QWidget(parent)
     , m_tool(tool)
@@ -57,6 +59,11 @@ DefaultToolWidget::DefaultToolWidget(KoInteractionTool *tool, QWidget *parent)
     aspectButton->setKeepAspectRatio(false);
     updatePosition();
     updateSize();
+
+    KisDocumentAwareSpinBoxUnitManager::setDocumentAwarnessToExistingUnitSpinBox(positionXSpinBox);
+    KisDocumentAwareSpinBoxUnitManager::setDocumentAwarnessToExistingUnitSpinBox(positionYSpinBox);
+    KisDocumentAwareSpinBoxUnitManager::setDocumentAwarnessToExistingUnitSpinBox(widthSpinBox);
+    KisDocumentAwareSpinBoxUnitManager::setDocumentAwarnessToExistingUnitSpinBox(heightSpinBox);
 
     connect(positionSelector, SIGNAL(positionSelected(KoFlake::Position)),
             this, SLOT(positionSelected(KoFlake::Position)));

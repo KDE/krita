@@ -16,6 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#version 120
+
 uniform sampler1D gradientColors;
 
 uniform vec2 gradientVectorStart;
@@ -24,10 +26,9 @@ uniform vec2 normalisedGradientVector;
 void main(void)
 {
     vec2 v = gl_TexCoord[0].st - gradientVectorStart;
-    
+
     /* Project the vector onto the normalised gradient vector. */
     float t = dot(v, normalisedGradientVector);
-    
+
     gl_FragColor = texture1D(gradientColors, t);
 }
-

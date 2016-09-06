@@ -16,6 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#version 120
+
 uniform sampler1D gradientColors;
 
 uniform vec2 gradientVectorStart;
@@ -26,4 +28,3 @@ void main(void)
 
     gl_FragColor = texture1D(gradientColors, t);
 }
-

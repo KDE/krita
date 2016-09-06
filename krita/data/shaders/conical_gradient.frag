@@ -16,6 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#version 120
+
 uniform sampler1D gradientColors;
 
 uniform vec2 gradientVectorStart;
@@ -26,7 +28,7 @@ const float PI = 3.1415926535;
 void main(void)
 {
     vec2 p = gl_TexCoord[0].st - gradientVectorStart;
-    
+
     float angle = atan(p.y, p.x) + PI;
     angle -= gradientVectorAngle;
 
@@ -38,4 +40,3 @@ void main(void)
 
     gl_FragColor = texture1D(gradientColors, t);
 }
-

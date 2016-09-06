@@ -1,6 +1,9 @@
 /*
  * shader for handling scaling
  */
+
+#version 120
+
 uniform sampler2D texture0;
 
 varying mediump vec4 v_textureCoordinate;

@@ -1,8 +1,9 @@
-#version 150 core
-
 /*
  * shader for handling scaling
  */
+
+#version 150 core
+
 uniform sampler2D texture0;
 
 in vec4 v_textureCoordinate;

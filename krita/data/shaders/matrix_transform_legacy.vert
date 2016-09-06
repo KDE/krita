@@ -1,6 +1,8 @@
 /*
  * Vertex shader for handling scaling
  */
+#version 120
+
 uniform mat4 modelViewProjection;
 uniform mat4 textureMatrix;
 

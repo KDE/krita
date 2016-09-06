@@ -37,13 +37,13 @@ public:
     virtual int columnCount(const QModelIndex& parent = QModelIndex()) const;
     virtual Qt::ItemFlags flags(const QModelIndex& index) const;
 
-    KisLayerComposition* compositionFromIndex(const QModelIndex& index);
-    void setCompositions(QList<KisLayerComposition*> compositions);
+    KisLayerCompositionSP compositionFromIndex(const QModelIndex& index);
+    void setCompositions(QList<KisLayerCompositionSP> compositions);
     
 // public Q_SLOTS:
 //     void clear();
 private:
-    QList<KisLayerComposition*> m_compositions;
+    QList<KisLayerCompositionSP> m_compositions;
 };
 
 #endif // TASKSETMODEL_H

@@ -342,7 +342,7 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
 
     KisImageConfig cfgImage;
 
-    KisProofingConfiguration *proofingConfig = cfgImage.defaultProofingconfiguration();
+    KisProofingConfigurationSP proofingConfig = cfgImage.defaultProofingconfiguration();
     m_page->sldAdaptationState->setMaximum(20);
     m_page->sldAdaptationState->setMinimum(0);
     m_page->sldAdaptationState->setValue((int)proofingConfig->adaptationState*20);
@@ -443,7 +443,7 @@ void ColorSettingsTab::setDefault()
 
     KisConfig cfg;
     KisImageConfig cfgImage;
-    KisProofingConfiguration *proofingConfig =  cfgImage.defaultProofingconfiguration();
+    KisProofingConfigurationSP proofingConfig =  cfgImage.defaultProofingconfiguration();
     const KoColorSpace *proofingSpace =  KoColorSpaceRegistry::instance()->colorSpace(proofingConfig->proofingModel,proofingConfig->proofingDepth,proofingConfig->proofingProfile);
     m_page->proofingSpaceSelector->setCurrentColorSpace(proofingSpace);
     m_page->cmbProofingIntent->setCurrentIndex((int)proofingConfig->intent);

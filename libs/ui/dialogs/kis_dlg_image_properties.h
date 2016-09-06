@@ -56,7 +56,7 @@ private:
 
     WdgImageProperties * m_page;
     KisImageWSP m_image;
-    KisProofingConfiguration *m_proofingConfig;
+    KisProofingConfigurationSP m_proofingConfig;
 };
 
 

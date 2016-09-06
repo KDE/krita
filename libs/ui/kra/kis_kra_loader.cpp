@@ -268,7 +268,7 @@ KisImageWSP KisKraLoader::loadXML(const KoXmlElement& element)
             }
         }
         KisImageConfig cfgImage;
-        KisProofingConfiguration *proofingConfig = cfgImage.defaultProofingconfiguration();
+        KisProofingConfigurationSP proofingConfig = cfgImage.defaultProofingconfiguration();
         if (!(attr = element.attribute(PROOFINGPROFILENAME)).isNull()) {
             proofingConfig->proofingProfile = attr;
         }
@@ -1083,7 +1083,7 @@ void KisKraLoader::loadCompositions(const KoXmlElement& elem, KisImageWSP image)
         QString name = e.attribute("name");
         bool exportEnabled = e.attribute("exportEnabled", "1") == "0" ? false : true;
 
-        KisLayerComposition* composition = new KisLayerComposition(image, name);
+        KisLayerCompositionSP composition(new KisLayerComposition(image, name));
         composition->setExportEnabled(exportEnabled);
 
         KoXmlNode value;

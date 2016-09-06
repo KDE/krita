@@ -258,14 +258,14 @@
            <property name="text">
             <string/>
            </property>
-           <property name="color" stdset="0">
+           <property name="color">
             <color>
              <red>0</red>
              <green>0</green>
              <blue>0</blue>
             </color>
            </property>
-           <property name="defaultColor" stdset="0">
+           <property name="defaultColor">
             <color>
              <red>0</red>
              <green>0</green>
@@ -707,6 +707,11 @@
    <class>KisColorButton</class>
    <extends>QPushButton</extends>
    <header>kis_color_button.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KisIntParseSpinBox</class>
+   <extends>QSpinBox</extends>
+   <header>kis_int_parse_spin_box.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

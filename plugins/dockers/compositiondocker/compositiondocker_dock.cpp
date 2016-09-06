@@ -117,12 +117,12 @@ void CompositionDockerDock::unsetCanvas()
 {
     setEnabled(false);
     m_canvas = 0;
-    m_model->setCompositions(QList<KisLayerComposition*>());
+    m_model->setCompositions(QList<KisLayerCompositionSP>());
 }
 
 void CompositionDockerDock::activated(const QModelIndex& index)
 {
-    KisLayerComposition* composition = m_model->compositionFromIndex(index);
+    KisLayerCompositionSP composition = m_model->compositionFromIndex(index);
     composition->apply();
 }
 
@@ -130,7 +130,7 @@ void CompositionDockerDock::deleteClicked()
 {
     QModelIndex index = compositionView->currentIndex();
     if (m_canvas && m_canvas->viewManager() && m_canvas->viewManager()->image() && index.isValid()) {
-        KisLayerComposition* composition = m_model->compositionFromIndex(index);
+        KisLayerCompositionSP composition = m_model->compositionFromIndex(index);
         m_canvas->viewManager()->image()->removeComposition(composition);
         updateModel();
     }
@@ -149,7 +149,7 @@ void CompositionDockerDock::saveClicked()
         do {
             name = QString("%1").arg(i, 3, 10, QChar('0'));
             found = false;
-            Q_FOREACH (KisLayerComposition* composition, m_canvas->viewManager()->image()->compositions()) {
+            Q_FOREACH (KisLayerCompositionSP composition, m_canvas->viewManager()->image()->compositions()) {
                 if (composition->name() == name) {
                     found = true;
                     break;
@@ -158,7 +158,7 @@ void CompositionDockerDock::saveClicked()
             i++;
         } while(found && i < 1000);
     }
-    KisLayerComposition* composition = new KisLayerComposition(image, name);
+    KisLayerCompositionSP composition(new KisLayerComposition(image, name));
     composition->store();
     image->addComposition(composition);
     saveNameEdit->clear();
@@ -198,7 +198,7 @@ void CompositionDockerDock::exportClicked()
             path += info.baseName() + '_';
         }
 
-        Q_FOREACH (KisLayerComposition* composition, m_canvas->viewManager()->image()->compositions()) {
+        Q_FOREACH (KisLayerCompositionSP composition, m_canvas->viewManager()->image()->compositions()) {
             if (!composition->isExportEnabled()) {
                 continue;
             }
@@ -272,7 +272,7 @@ void CompositionDockerDock::updateComposition()
 {
     QModelIndex index = compositionView->currentIndex();
     if (m_canvas && m_canvas->viewManager() && m_canvas->viewManager()->image() && index.isValid()) {
-        KisLayerComposition* composition = m_model->compositionFromIndex(index);
+        KisLayerCompositionSP composition = m_model->compositionFromIndex(index);
         composition->store();
         m_canvas->image()->setModified();
     }
@@ -283,7 +283,7 @@ void CompositionDockerDock::renameComposition()
     dbgKrita << "rename";
     QModelIndex index = compositionView->currentIndex();
     if (m_canvas && m_canvas->viewManager() && m_canvas->viewManager()->image() && index.isValid()) {
-        KisLayerComposition* composition = m_model->compositionFromIndex(index);
+        KisLayerCompositionSP composition = m_model->compositionFromIndex(index);
         bool ok;
         QString name = QInputDialog::getText(this, i18n("Rename Composition"),
                                              i18n("New Name:"), QLineEdit::Normal,

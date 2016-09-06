@@ -23,7 +23,7 @@
 
 #include <KoStore.h>
 #include <KoStoreDevice.h>
-
+#include <KoColorSpaceRegistry.h>
 #include <KisDocument.h>
 #include <kis_group_layer.h>
 #include <kis_image.h>

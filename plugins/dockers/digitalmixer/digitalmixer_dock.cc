@@ -30,6 +30,8 @@
 #include <KoCanvasResourceManager.h>
 #include <KoCanvasBase.h>
 
+#include <kis_color_button.h>
+
 class DigitalMixerPatch : public KoColorPatch {
     public:
         DigitalMixerPatch(QWidget* parent) : KoColorPatch(parent) {}
@@ -43,7 +45,13 @@ DigitalMixerDock::DigitalMixerDock( )
     : QDockWidget(i18n("Digital Colors Mixer")), m_canvas(0)
     , m_tellCanvas(true)
 {
-    QColor initColors[6] = { Qt::black, Qt::white, Qt::red, Qt::green, Qt::blue, Qt::yellow };
+    const KoColorSpace *sRGB = KoColorSpaceRegistry::instance()->rgb8();
+    KoColor initColors[6] = { KoColor(Qt::black, sRGB),
+                              KoColor(Qt::white, sRGB),
+                              KoColor(Qt::red, sRGB),
+                              KoColor(Qt::green, sRGB),
+                              KoColor(Qt::blue, sRGB),
+                              KoColor(Qt::yellow, sRGB) };
 
     QWidget* widget = new QWidget(this);
     QGridLayout* layout = new QGridLayout( widget );
@@ -75,16 +83,14 @@ DigitalMixerDock::DigitalMixerDock( )
         mixer.targetSlider->setFixedWidth(22);
         mixer.targetSlider->setMinimumHeight(66);
         layout->addWidget(mixer.targetSlider, 1, i + 1);
-        QToolButton* colorSelector = new QToolButton( this );
-        mixer.actionColor = new KoColorPopupAction(this);
-        mixer.actionColor->setCurrentColor(initColors[i]);
-        colorSelector->setDefaultAction(mixer.actionColor);
-        colorSelector->setFixedSize(colorSelector->sizeHint());
-        layout->addWidget(colorSelector, 2, i + 1);
+        mixer.actionColor = new KisColorButton( this );
+        mixer.actionColor->setColor(initColors[i]);
+        mixer.actionColor->setFixedWidth(22);
+        layout->addWidget(mixer.actionColor, 2, i + 1);
 
         m_mixers.push_back(mixer);
 
-        connect(mixer.actionColor, SIGNAL(colorChanged(KoColor)), signalMapperSelectColor, SLOT(map()));
+        connect(mixer.actionColor, SIGNAL(changed(KoColor)), signalMapperSelectColor, SLOT(map()));
         signalMapperSelectColor->setMapping(mixer.actionColor, i);
 
         connect(mixer.targetSlider, SIGNAL(valueChanged(int)), signalMapperColorSlider, SLOT(map()));
@@ -120,7 +126,7 @@ void DigitalMixerDock::setCanvas(KoCanvasBase * canvas)
 
 void DigitalMixerDock::popupColorChanged(int i)
 {
-    KoColor color = m_mixers[i].actionColor->currentKoColor();
+    KoColor color = m_mixers[i].actionColor->color();
     color.convertTo(m_currentColor.colorSpace());
     m_mixers[i].targetSlider->setColors( color, m_currentColor);
     colorSliderChanged(i);

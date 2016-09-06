@@ -141,6 +141,10 @@ struct KisDisplayColorConverter::Private
             return maxValue;
         }
 
+        virtual const KoColorSpace* getPaintingColorSpace() const {
+            return m_parent->paintingColorSpace();
+        }
+
     private:
         KisDisplayColorConverter *m_parent;
         QPointer<KoCanvasResourceManager> m_resourceManager;

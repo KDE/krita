@@ -66,6 +66,7 @@ set(kritaui_LIB_SRCS
     dialogs/kis_dlg_png_import.cpp
     dialogs/kis_dlg_import_image_sequence.cpp
     dialogs/kis_delayed_save_dialog.cpp
+    dialogs/kis_dlg_internal_color_selector.cpp
     flake/kis_node_dummies_graph.cpp
     flake/kis_dummies_facade_base.cpp
     flake/kis_dummies_facade.cpp
@@ -253,7 +254,12 @@ set(kritaui_LIB_SRCS
     widgets/kis_color_label_selector_widget.cpp
     widgets/kis_color_filter_combo.cpp
     widgets/kis_elided_label.cpp
-
+    widgets/kis_spinbox_color_selector.cpp
+    widgets/kis_screen_color_picker.cpp
+    widgets/kis_visual_color_selector.cpp
+    widgets/KoDualColorButton.cpp
+    widgets/kis_color_input.cpp
+    widgets/kis_color_button.cpp
     input/kis_input_manager.cpp
     input/kis_input_manager_p.cpp
     input/kis_extended_modifiers_mapper.cpp
@@ -455,6 +461,7 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
     forms/KisDetailsPaneBase.ui
     forms/KisOpenPaneBase.ui
     brushhud/kis_dlg_brush_hud_config.ui
+    forms/wdgdlginternalcolorselector.ui
     dialogs/kis_delayed_save_dialog.ui
     input/config/kis_input_configuration_page.ui
     input/config/kis_edit_profiles_dialog.ui

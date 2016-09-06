@@ -46,6 +46,7 @@ public:
     void initializeCompositeOp();
 
     KisPaintDeviceSP paintDevice() const;
+    KisPaintDeviceSP coloringProjection() const;
 
     KisNodeSP clone() const {
         return KisNodeSP(new KisColorizeMask(*this));

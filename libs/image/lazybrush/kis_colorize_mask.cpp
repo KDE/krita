@@ -242,6 +242,11 @@ KisPaintDeviceSP KisColorizeMask::paintDevice() const
     return m_d->showKeyStrokes ? m_d->fakePaintDevice : 0;
 }
 
+KisPaintDeviceSP KisColorizeMask::coloringProjection() const
+{
+    return m_d->coloringProjection;
+}
+
 QIcon KisColorizeMask::icon() const
 {
     return KisIconUtils::loadIcon("filterMask");

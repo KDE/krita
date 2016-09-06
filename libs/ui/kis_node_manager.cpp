@@ -216,15 +216,18 @@ void KisNodeManager::setView(QPointer<KisView>imageView)
                 &m_d->nodeCreationSignalMapper, SLOT(map()));           \
     }
 
-#define CONVERT_NODE_ACTION(id, layerType)                              \
+#define CONVERT_NODE_ACTION_2(id, layerType, exclude)                   \
     {                                                                   \
         action = actionManager->createAction(id);                       \
-        action->setExcludedNodeTypes(QStringList(layerType));           \
+        action->setExcludedNodeTypes(QStringList(exclude));             \
         actionManager->addAction(id, action);                           \
         m_d->nodeConversionSignalMapper.setMapping(action, layerType);  \
         connect(action, SIGNAL(triggered()),                            \
                 &m_d->nodeConversionSignalMapper, SLOT(map()));         \
     }
+
+#define CONVERT_NODE_ACTION(id, layerType)              \
+    CONVERT_NODE_ACTION_2(id, layerType, layerType)
 
 void KisNodeManager::setup(KActionCollection * actionCollection, KisActionManager* actionManager)
 {
@@ -311,11 +314,11 @@ void KisNodeManager::setup(KActionCollection * actionCollection, KisActionManage
 
     CONVERT_NODE_ACTION("convert_to_paint_layer", "KisPaintLayer");
 
-    CONVERT_NODE_ACTION("convert_to_selection_mask", "KisSelectionMask");
+    CONVERT_NODE_ACTION_2("convert_to_selection_mask", "KisSelectionMask", QStringList() << "KisSelectionMask" << "KisColorizeMask");
 
-    CONVERT_NODE_ACTION("convert_to_filter_mask", "KisFilterMask");
+    CONVERT_NODE_ACTION_2("convert_to_filter_mask", "KisFilterMask", QStringList() << "KisFilterMask" << "KisColorizeMask");
 
-    CONVERT_NODE_ACTION("convert_to_transparency_mask", "KisTransparencyMask");
+    CONVERT_NODE_ACTION_2("convert_to_transparency_mask", "KisTransparencyMask", QStringList() << "KisTransparencyMask" << "KisColorizeMask");
 
     CONVERT_NODE_ACTION("convert_to_animated", "animated");
 

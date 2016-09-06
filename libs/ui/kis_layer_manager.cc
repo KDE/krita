@@ -103,6 +103,7 @@
 #include "kis_post_execution_undo_adapter.h"
 #include "kis_selection_mask.h"
 #include "kis_layer_utils.h"
+#include "lazybrush/kis_colorize_mask.h"
 
 #include "KisSaveGroupVisitor.h"
 
@@ -360,6 +361,17 @@ void KisLayerManager::convertNodeToPaintLayer(KisNodeSP source)
     KisPaintDeviceSP srcDevice =
         source->paintDevice() ? source->projection() : source->original();
 
+    bool putBehind = false;
+    QString newCompositeOp = source->compositeOpId();
+    KisColorizeMask *colorizeMask = dynamic_cast<KisColorizeMask*>(source.data());
+    if (colorizeMask) {
+        srcDevice = colorizeMask->coloringProjection();
+        putBehind = colorizeMask->compositeOpId() == COMPOSITE_BEHIND;
+        if (putBehind) {
+            newCompositeOp = COMPOSITE_OVER;
+        }
+    }
+
     if (!srcDevice) return;
 
     KisPaintDeviceSP clone;
@@ -380,7 +392,7 @@ void KisLayerManager::convertNodeToPaintLayer(KisNodeSP source)
                                          source->name(),
                                          source->opacity(),
                                          clone);
-    layer->setCompositeOpId(source->compositeOpId());
+    layer->setCompositeOpId(newCompositeOp);
 
     KisNodeSP parent = source->parent();
     KisNodeSP above = source;
@@ -388,6 +400,10 @@ void KisLayerManager::convertNodeToPaintLayer(KisNodeSP source)
     while (parent && !parent->allowAsChild(layer)) {
         above = above->parent();
         parent = above ? above->parent() : 0;
+    }
+
+    if (putBehind && above == source->parent()) {
+        above = above->prevSibling();
     }
 
     m_commandsAdapter->beginMacro(kundo2_i18n("Convert to a Paint Layer"));

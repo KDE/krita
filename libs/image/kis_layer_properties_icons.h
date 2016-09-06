@@ -41,7 +41,7 @@ public:
     static const KoID selectionActive;
     static const KoID colorLabelIndex;
     static const KoID colorizeNeedsUpdate;
-    static const KoID colorizeShowKeyStrokes;
+    static const KoID colorizeEditKeyStrokes;
     static const KoID colorizeShowColoring;
 
     static KisLayerPropertiesIcons* instance();

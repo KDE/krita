@@ -208,7 +208,7 @@ KisBaseNode::PropertyList KisColorizeMask::sectionModelProperties() const
 {
     KisBaseNode::PropertyList l = KisMask::sectionModelProperties();
     l << KisLayerPropertiesIcons::getProperty(KisLayerPropertiesIcons::colorizeNeedsUpdate, needsUpdate());
-    l << KisLayerPropertiesIcons::getProperty(KisLayerPropertiesIcons::colorizeShowKeyStrokes, showKeyStrokes());
+    l << KisLayerPropertiesIcons::getProperty(KisLayerPropertiesIcons::colorizeEditKeyStrokes, showKeyStrokes());
     l << KisLayerPropertiesIcons::getProperty(KisLayerPropertiesIcons::colorizeShowColoring, showColoring());
 
     return l;
@@ -224,7 +224,7 @@ void KisColorizeMask::setSectionModelProperties(const KisBaseNode::PropertyList 
                 setNeedsUpdate(property.state.toBool());
             }
         }
-        if (property.id == KisLayerPropertiesIcons::colorizeShowKeyStrokes.id()) {
+        if (property.id == KisLayerPropertiesIcons::colorizeEditKeyStrokes.id()) {
             if (m_d->showKeyStrokes != property.state.toBool()) {
                 setShowKeyStrokes(property.state.toBool());
             }

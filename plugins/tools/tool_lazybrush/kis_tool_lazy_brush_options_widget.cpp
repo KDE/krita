@@ -198,7 +198,7 @@ void KisToolLazyBrushOptionsWidget::slotUpdateNodeProperties()
     m_d->ui->btnUpdate->setEnabled(m_d->activeMask && !m_d->ui->chkAutoUpdates->isChecked());
     m_d->ui->btnUpdate->setChecked(value);
 
-    value = m_d->activeMask && KisLayerPropertiesIcons::nodeProperty(m_d->activeMask, KisLayerPropertiesIcons::colorizeShowKeyStrokes, true).toBool();
+    value = m_d->activeMask && KisLayerPropertiesIcons::nodeProperty(m_d->activeMask, KisLayerPropertiesIcons::colorizeEditKeyStrokes, true).toBool();
     m_d->ui->chkShowKeyStrokes->setEnabled(m_d->activeMask);
     m_d->ui->chkShowKeyStrokes->setChecked(value);
 
@@ -279,7 +279,7 @@ void KisToolLazyBrushOptionsWidget::slotSetAutoUpdates(bool value)
 void KisToolLazyBrushOptionsWidget::slotSetShowKeyStrokes(bool value)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->activeMask);
-    KisLayerPropertiesIcons::setNodeProperty(m_d->activeMask, KisLayerPropertiesIcons::colorizeShowKeyStrokes, value, m_d->provider->currentImage());
+    KisLayerPropertiesIcons::setNodeProperty(m_d->activeMask, KisLayerPropertiesIcons::colorizeEditKeyStrokes, value, m_d->provider->currentImage());
 }
 
 void KisToolLazyBrushOptionsWidget::slotSetShowOutput(bool value)

@@ -50,7 +50,7 @@
    <item>
     <widget class="QCheckBox" name="chkShowKeyStrokes">
      <property name="text">
-      <string>Show key strokes</string>
+      <string>Edit key strokes</string>
      </property>
     </widget>
    </item>

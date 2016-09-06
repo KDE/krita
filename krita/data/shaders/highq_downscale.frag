@@ -97,7 +97,7 @@ void main() {
 #ifdef HIGHQ_SCALING
             col = filterPureLinear8(texture0, v_textureCoordinate.st);
 #else /* HIGHQ_SCALING */
-            col = texture2D(texture0, v_textureCoordinate.st);
+            col = texture(texture0, v_textureCoordinate.st);
 #endif /* HIGHQ_SCALING */
 
         }
@@ -114,7 +114,7 @@ void main() {
 
 #endif /* DIRECT_LOD_FETCH */
         {
-            col = texture2D(texture0, v_textureCoordinate.st);
+            col = texture(texture0, v_textureCoordinate.st);
         }
     }
 

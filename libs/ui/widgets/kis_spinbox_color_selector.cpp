@@ -158,7 +158,7 @@ void KisSpinboxColorSelector::createColorFromSpinboxValues()
     channelValues.fill(1.0);
     QList<KoChannelInfo *> channels = KoChannelInfo::displayOrderSorted(m_d->cs->channels());
 
-    for (int i=0; i<abs(m_d->cs->colorChannelCount()); i++) {
+    for (int i=0; i<qAbs(m_d->cs->colorChannelCount()); i++) {
         int channelposition = KoChannelInfo::displayPositionToChannelIndex(i, m_d->cs->channels());
 
         if (channels.at(i)->channelValueType()==KoChannelInfo::UINT8 && m_d->spinBoxList.at(i)){
@@ -212,7 +212,7 @@ void KisSpinboxColorSelector::updateSpinboxesWithNewValues()
         m_d->doubleSpinBoxList.at(i)->blockSignals(true);
     }
 
-    for (i=0; i<abs(m_d->cs->colorChannelCount()); i++) {
+    for (i=0; i<qAbs(m_d->cs->colorChannelCount()); i++) {
         int channelposition = KoChannelInfo::displayPositionToChannelIndex(i, m_d->cs->channels());
         if (channels.at(i)->channelValueType() == KoChannelInfo::UINT8 && m_d->spinBoxList.at(i)) {
             int value = KoColorSpaceMaths<float, quint8>::scaleToA(channelValues[channelposition]);

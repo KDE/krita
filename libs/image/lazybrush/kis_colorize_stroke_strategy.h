@@ -16,32 +16,33 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KIS_COLORIZE_JOB_H
-#define __KIS_COLORIZE_JOB_H
+#ifndef __KIS_COLORIZE_STROKE_STRATEGY_H
+#define __KIS_COLORIZE_STROKE_STRATEGY_H
 
 #include <QScopedPointer>
 #include <QObject>
 
-#include "kis_spontaneous_job.h"
-#include "kis_multiway_cut.h"
+#include "kis_types.h"
+#include <kis_simple_stroke_strategy.h>
+
+class KoColor;
 
 
-class KisColorizeJob : public QObject, public KisSpontaneousJob
+class KisColorizeStrokeStrategy : public QObject, public KisSimpleStrokeStrategy
 {
     Q_OBJECT
+
 public:
-    KisColorizeJob(KisPaintDeviceSP src,
-                   KisPaintDeviceSP dst,
-                   KisPaintDeviceSP filteredSource,
-                   bool filteredSourceValid,
-                   const QRect &boundingRect);
-    ~KisColorizeJob();
+    KisColorizeStrokeStrategy(KisPaintDeviceSP src,
+                              KisPaintDeviceSP dst,
+                              KisPaintDeviceSP filteredSource,
+                              bool filteredSourceValid,
+                              const QRect &boundingRect);
+    ~KisColorizeStrokeStrategy();
 
     void addKeyStroke(KisPaintDeviceSP dev, const KoColor &color);
 
-    void run();
-    bool overrides(const KisSpontaneousJob *otherJob);
-    int levelOfDetail() const;
+    void initStrokeCallback();
 
 Q_SIGNALS:
     void sigFinished();
@@ -51,4 +52,4 @@ private:
     const QScopedPointer<Private> m_d;
 };
 
-#endif /* __KIS_COLORIZE_JOB_H */
+#endif /* __KIS_COLORIZE_STROKE_STRATEGY_H */

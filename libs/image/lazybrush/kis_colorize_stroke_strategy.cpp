@@ -16,11 +16,11 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_colorize_job.h"
+#include "kis_colorize_stroke_strategy.h"
 
 #include <QBitArray>
 
-
+#include "kis_multiway_cut.h"
 #include "kis_paint_device.h"
 #include "kis_lazy_fill_tools.h"
 #include "kis_gaussian_kernel.h"
@@ -28,22 +28,23 @@
 
 using namespace KisLazyFillTools;
 
-struct KisColorizeJob::Private
+struct KisColorizeStrokeStrategy::Private
 {
     KisPaintDeviceSP src;
     KisPaintDeviceSP dst;
     KisPaintDeviceSP filteredSource;
+    KisPaintDeviceSP internalFilteredSource;
     bool filteredSourceValid;
     QRect boundingRect;
 
     QVector<KeyStroke> keyStrokes;
 };
 
-KisColorizeJob::KisColorizeJob(KisPaintDeviceSP src,
-                               KisPaintDeviceSP dst,
-                               KisPaintDeviceSP filteredSource,
-                               bool filteredSourceValid,
-                               const QRect &boundingRect)
+KisColorizeStrokeStrategy::KisColorizeStrokeStrategy(KisPaintDeviceSP src,
+                                                     KisPaintDeviceSP dst,
+                                                     KisPaintDeviceSP filteredSource,
+                                                     bool filteredSourceValid,
+                                                     const QRect &boundingRect)
     : m_d(new Private)
 {
     m_d->src = src;
@@ -51,13 +52,15 @@ KisColorizeJob::KisColorizeJob(KisPaintDeviceSP src,
     m_d->filteredSource = filteredSource;
     m_d->boundingRect = boundingRect;
     m_d->filteredSourceValid = filteredSourceValid;
+
+    enableJob(JOB_INIT, true, KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);
 }
 
-KisColorizeJob::~KisColorizeJob()
+KisColorizeStrokeStrategy::~KisColorizeStrokeStrategy()
 {
 }
 
-void KisColorizeJob::addKeyStroke(KisPaintDeviceSP dev, const KoColor &color)
+void KisColorizeStrokeStrategy::addKeyStroke(KisPaintDeviceSP dev, const KoColor &color)
 {
     KoColor convertedColor(color);
     convertedColor.convertTo(m_d->dst->colorSpace());
@@ -65,7 +68,7 @@ void KisColorizeJob::addKeyStroke(KisPaintDeviceSP dev, const KoColor &color)
     m_d->keyStrokes << KeyStroke(dev, convertedColor);
 }
 
-void KisColorizeJob::run()
+void KisColorizeStrokeStrategy::initStrokeCallback()
 {
     if (!m_d->filteredSourceValid) {
         KisPaintDeviceSP filteredMainDev = KisPainter::convertToAlphaAsAlpha(m_d->src);
@@ -90,18 +93,4 @@ void KisColorizeJob::run()
     cut.run();
 
     emit sigFinished();
-}
-
-bool KisColorizeJob::overrides(const KisSpontaneousJob *_otherJob)
-{
-    const KisColorizeJob *otherJob =
-        dynamic_cast<const KisColorizeJob*>(_otherJob);
-
-    return otherJob->m_d->src == m_d->src &&
-        otherJob->m_d->dst == m_d->dst;
-}
-
-int KisColorizeJob::levelOfDetail() const
-{
-    return 0;
 }

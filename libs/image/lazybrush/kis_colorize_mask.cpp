@@ -35,7 +35,7 @@
 #include "kis_layer_properties_icons.h"
 #include "kis_signal_compressor.h"
 
-#include "kis_colorize_job.h"
+#include "kis_colorize_stroke_strategy.h"
 #include "kis_multiway_cut.h"
 #include "kis_image.h"
 #include "kis_layer.h"
@@ -176,22 +176,25 @@ void KisColorizeMask::slotUpdateRegenerateFilling()
 
     KisImageSP image = parentLayer->image();
     if (image) {
-        KisColorizeJob *job = new KisColorizeJob(src,
-                                                 m_d->coloringProjection,
-                                                 m_d->filteredSource,
-                                                 filteredSourceValid,
-                                                 image->bounds());
+        KisColorizeStrokeStrategy *strategy =
+            new KisColorizeStrokeStrategy(src,
+                                          m_d->coloringProjection,
+                                          m_d->filteredSource,
+                                          filteredSourceValid,
+                                          image->bounds());
+
         Q_FOREACH (const KeyStroke &stroke, m_d->keyStrokes) {
             const KoColor color =
                 !stroke.isTransparent ?
                 stroke.color :
                 KoColor(Qt::transparent, stroke.color.colorSpace());
 
-            job->addKeyStroke(stroke.dev, color);
+            strategy->addKeyStroke(stroke.dev, color);
         }
 
-        connect(job, SIGNAL(sigFinished()), SLOT(slotRegenerationFinished()));
-        image->addSpontaneousJob(job);
+        connect(strategy, SIGNAL(sigFinished()), SLOT(slotRegenerationFinished()));
+        KisStrokeId id = image->startStroke(strategy);
+        image->endStroke(id);
     }
 }
 

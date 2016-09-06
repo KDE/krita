@@ -33,7 +33,7 @@
 
 #include "kis_spinbox_color_selector.h"
 
-#include "kis_internal_color_selector.h"
+#include "kis_dlg_internal_color_selector.h"
 #include "ui_wdgdlginternalcolorselector.h"
 #include "kis_config.h"
 #include "kis_config_notifier.h"

@@ -25,7 +25,7 @@
 #include "dcolorreset.xpm"
 
 #include <QColorDialog>
-#include "dialogs/kis_internal_color_selector.h"
+#include "dialogs/kis_dlg_internal_color_selector.h"
 
 #include <QBrush>
 #include <QDrag>

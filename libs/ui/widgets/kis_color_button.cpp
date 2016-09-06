@@ -33,7 +33,7 @@
 #include <QStyleOptionButton>
 
 #include <KoColor.h>
-#include <dialogs/kis_internal_color_selector.h>
+#include <dialogs/kis_dlg_internal_color_selector.h>
 
 class KisColorButton::KisColorButtonPrivate
 {

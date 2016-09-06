@@ -29,7 +29,7 @@
    <item row="0" column="0">
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>3</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tab">
       <attribute name="title">
@@ -258,14 +258,14 @@
            <property name="text">
             <string/>
            </property>
-           <property name="color" stdset="0">
+           <property name="color">
             <color>
              <red>0</red>
              <green>0</green>
              <blue>0</blue>
             </color>
            </property>
-           <property name="defaultColor" stdset="0">
+           <property name="defaultColor">
             <color>
              <red>0</red>
              <green>0</green>
@@ -699,15 +699,15 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KisIntParseSpinBox</class>
-   <extends>QSpinBox</extends>
-   <header>kis_int_parse_spin_box.h</header>
-  </customwidget>
-  <customwidget>
    <class>KColorButton</class>
    <extends>QPushButton</extends>
    <header>kcolorbutton.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KisIntParseSpinBox</class>
+   <extends>QSpinBox</extends>
+   <header>kis_int_parse_spin_box.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

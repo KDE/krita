@@ -789,12 +789,14 @@ QVector<qreal> KisVisualColorSelectorShape::convertvectorfloatToqreal(QVector <f
 
 void KisVisualColorSelectorShape::mousePressEvent(QMouseEvent *e)
 {
-    m_d->mousePressActive = true;
-    QPointF coordinates = convertWidgetCoordinateToShapeCoordinate(e->pos());
-    KoColor col = convertShapeCoordinateToKoColor(coordinates, true);
-    setColor(col);
-    Q_EMIT sigNewColor(col);
-    m_d->updateTimer->start();
+    if (e->button()==Qt::LeftButton) {
+        m_d->mousePressActive = true;
+        QPointF coordinates = convertWidgetCoordinateToShapeCoordinate(e->pos());
+        KoColor col = convertShapeCoordinateToKoColor(coordinates, true);
+        setColor(col);
+        Q_EMIT sigNewColor(col);
+        m_d->updateTimer->start();
+    }
 }
 
 void KisVisualColorSelectorShape::mouseMoveEvent(QMouseEvent *e)

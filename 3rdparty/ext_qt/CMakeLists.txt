@@ -33,7 +33,7 @@ else()
         URL_MD5 8fdec6d657bc370bd3183d8fe8e9c47a
         PATCH_COMMAND  ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/macdeploy-qt.diff
         INSTALL_DIR ${EXTPREFIX_qt}
-        CONFIGURE_COMMAND <SOURCE_DIR>/configure -confirm-license  -opensource -nomake examples -no-openssl -no-compile-examples -qt-freetype -qt-harfbuzz -opengl desktop -qt-zlib -qt-pcre -qt-libpng -qt-libjpeg -skip qt3d -skip qtactiveqt -skip qtcanvas3d -skip qtconnectivity -skip qtenginio -skip qtgraphicaleffects -skip qtlocation -skip qtmultimedia -skip qtwayland -skip qtwebchannel -skip qtwebengine -skip qtwebsockets -skip qtwebview -skip qtxmlpatterns -prefix ${EXTPREFIX_qt} 
+        CONFIGURE_COMMAND <SOURCE_DIR>/configure -confirm-license  -opensource -nomake examples -no-openssl -no-compile-examples -qt-freetype -qt-harfbuzz -opengl desktop -qt-zlib -qt-pcre -qt-libpng -qt-libjpeg -skip qt3d -skip qtactiveqt -skip qtcanvas3d -skip qtconnectivity -skip qtenginio -skip qtgraphicaleffects -skip qtlocation -skip qtmultimedia -skip qtwayland -skip qtwebchannel -skip qtwebengine -skip qtwebsockets -skip qtwebview -skip qtxmlpatterns -skip qtcharts -prefix ${EXTPREFIX_qt} 
         BUILD_COMMAND make
         INSTALL_COMMAND make install
         UPDATE_COMMAND ""

@@ -26,6 +26,7 @@ class KisColorizeMaskTest : public QObject
     Q_OBJECT
 private Q_SLOTS:
     void test();
+    void testCrop();
 };
 
 #endif /* __KIS_COLORIZE_MASK_TEST_H */

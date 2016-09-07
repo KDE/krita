@@ -784,6 +784,7 @@ QVector<KisPaintDeviceSP> KisColorizeMask::allPaintDevices() const
     }
 
     devices << m_d->coloringProjection;
+    devices << m_d->fakePaintDevice;
 
     return devices;
 }
@@ -862,7 +863,6 @@ void KisColorizeMask::setY(qint32 y)
 void KisColorizeMask::moveAllInternalDevices(const QPoint &diff)
 {
     QVector<KisPaintDeviceSP> devices = allPaintDevices();
-    devices << m_d->fakePaintDevice;
 
     Q_FOREACH (KisPaintDeviceSP dev, devices) {
         QPoint offset(dev->x(), dev->y());

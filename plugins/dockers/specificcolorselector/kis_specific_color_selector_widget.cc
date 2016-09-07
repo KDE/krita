@@ -31,12 +31,12 @@
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 
-#include "kis_color_input.h"
+#include <kis_color_input.h>
 #include <KoColorProfile.h>
-#include "kis_debug.h"
-#include "kis_color_space_selector.h"
-#include "kis_signal_compressor.h"
-#include "kis_display_color_converter.h"
+#include <kis_debug.h>
+#include <kis_color_space_selector.h>
+#include <kis_signal_compressor.h>
+#include <kis_display_color_converter.h>
 
 
 KisSpecificColorSelectorWidget::KisSpecificColorSelectorWidget(QWidget* parent)

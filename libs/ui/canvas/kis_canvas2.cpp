@@ -113,7 +113,7 @@ public:
     QRect savedUpdateRect;
 
     QBitArray channelFlags;
-    KisProofingConfiguration *proofingConfig = 0;
+    KisProofingConfigurationSP proofingConfig;
     bool softProofing = false;
     bool gamutCheck = false;
     bool proofingConfigUpdated = false;
@@ -605,7 +605,7 @@ bool KisCanvas2::proofingConfigUpdated()
     return m_d->proofingConfigUpdated;
 }
 
-KisProofingConfiguration *KisCanvas2::proofingConfiguration() const
+KisProofingConfigurationSP KisCanvas2::proofingConfiguration() const
 {
     if (!m_d->proofingConfig) {
         m_d->proofingConfig = this->image()->proofingConfiguration();

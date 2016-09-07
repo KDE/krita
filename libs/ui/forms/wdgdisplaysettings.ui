@@ -116,10 +116,10 @@
        </widget>
       </item>
       <item row="0" column="4">
-       <widget class="KColorButton" name="colorChecks1"/>
+       <widget class="KisColorButton" name="colorChecks1"/>
       </item>
       <item row="0" column="5">
-       <widget class="KColorButton" name="colorChecks2"/>
+       <widget class="KisColorButton" name="colorChecks2"/>
       </item>
       <item row="0" column="6">
        <spacer name="horizontalSpacer">
@@ -276,7 +276,7 @@
        </widget>
       </item>
       <item row="1" column="1">
-       <widget class="KColorButton" name="canvasBorder"/>
+       <widget class="KisColorButton" name="canvasBorder"/>
       </item>
       <item row="1" column="2">
        <spacer name="horizontalSpacer_4">
@@ -318,24 +318,21 @@
        </widget>
       </item>
       <item>
-       <widget class="QToolButton" name="btnSelectionOverlayColor">
+       <widget class="KisColorButton" name="btnSelectionOverlayColor">
         <property name="text">
-         <string>...</string>
+         <string/>
         </property>
        </widget>
       </item>
       <item>
-       <spacer name="horizontalSpacer_3">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
+       <widget class="KisDoubleSliderSpinBox" name="sldSelectionOverlayOpacity" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
         </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>358</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
+       </widget>
       </item>
      </layout>
     </widget>
@@ -349,9 +346,14 @@
    <header>kis_int_parse_spin_box.h</header>
   </customwidget>
   <customwidget>
-   <class>KColorButton</class>
+   <class>KisColorButton</class>
    <extends>QPushButton</extends>
-   <header>kcolorbutton.h</header>
+   <header>kis_color_button.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KisDoubleSliderSpinBox</class>
+   <extends>QWidget</extends>
+   <header>kis_slider_spin_box.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

@@ -37,6 +37,17 @@ KisComboBasedPaintOpProperty::KisComboBasedPaintOpProperty(const QString &id,
 {
 }
 
+KisComboBasedPaintOpProperty::KisComboBasedPaintOpProperty(Type type,
+                                                           const QString &id,
+                                                           const QString &name,
+                                                           KisPaintOpSettingsSP settings,
+                                                           QObject *parent)
+    : KisUniformPaintOpProperty(Combo, id, name, settings, parent),
+      m_d(new Private)
+{
+    KIS_ASSERT_RECOVER_RETURN(type == Combo);
+}
+
 KisComboBasedPaintOpProperty::~KisComboBasedPaintOpProperty()
 {
 }
@@ -61,4 +72,4 @@ void KisComboBasedPaintOpProperty::setIcons(const QList<QIcon> &list)
     m_d->icons = list;
 }
 
-
+template class KisCallbackBasedPaintopProperty<KisComboBasedPaintOpProperty>;

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>449</width>
-    <height>271</height>
+    <height>273</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -77,12 +77,26 @@
       </widget>
      </item>
      <item row="6" column="1">
-      <widget class="KisSliderSpinBox" name="intFuzziness"/>
+      <widget class="KisSliderSpinBox" name="intFuzziness" native="true"/>
      </item>
      <item row="5" column="0">
       <widget class="QCheckBox" name="chkDisregardOpacity">
        <property name="text">
         <string>Disregard opacity</string>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="0" colspan="2">
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>Palette to use for naming the layers:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="8" column="0" colspan="2">
+      <widget class="KisPopupButton" name="paletteChooser">
+       <property name="text">
+        <string>Choose Palette</string>
        </property>
       </widget>
      </item>
@@ -123,6 +137,11 @@
   </layout>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>KisPopupButton</class>
+   <extends>QPushButton</extends>
+   <header>kis_popup_button.h</header>
+  </customwidget>
   <customwidget>
    <class>KisSliderSpinBox</class>
    <extends>QWidget</extends>

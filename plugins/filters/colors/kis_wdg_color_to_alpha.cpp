@@ -33,6 +33,7 @@
 #include <kis_selection.h>
 #include <kis_paint_device.h>
 #include <kis_processing_information.h>
+#include <KoColorSpaceRegistry.h>
 
 #include "ui_wdgcolortoalphabase.h"
 
@@ -48,11 +49,12 @@ KisWdgColorToAlpha::KisWdgColorToAlpha(QWidget * parent)
 
     m_widget->intThreshold->setRange(1, 255, 0);
 
-    connect(m_widget->colorSelector, SIGNAL(colorChanged(const QColor&)), SLOT(slotColorSelectorChanged(const QColor&)));
+    connect(m_widget->colorSelector, SIGNAL(sigNewColor(KoColor)), SLOT(slotColorSelectorChanged(const KoColor&)));
     connect(m_widget->intThreshold, SIGNAL(valueChanged(qreal)), SIGNAL(sigConfigurationItemChanged()));
-    connect(m_widget->btnCustomColor, SIGNAL(changed(const QColor&)), SLOT(slotCustomColorSelected(const QColor&)));
+    connect(m_widget->btnCustomColor, SIGNAL(changed(const KoColor)), SLOT(slotCustomColorSelected(const KoColor&)));
 
-    m_widget->btnCustomColor->setColor(Qt::white);
+    KoColor c(Qt::white, KoColorSpaceRegistry::instance()->rgb8());
+    m_widget->btnCustomColor->setColor(c);
 }
 
 KisWdgColorToAlpha::~KisWdgColorToAlpha()
@@ -67,17 +69,17 @@ void KisWdgColorToAlpha::setView(KisViewManager *view)
 
 void KisWdgColorToAlpha::slotFgColorChanged(const KoColor &color)
 {
-    m_widget->btnCustomColor->setColor(color.toQColor());
+    m_widget->btnCustomColor->setColor(color);
 }
 
-void KisWdgColorToAlpha::slotColorSelectorChanged(const QColor &color)
+void KisWdgColorToAlpha::slotColorSelectorChanged(const KoColor &color)
 {
     m_widget->btnCustomColor->setColor(color);
 }
 
-void KisWdgColorToAlpha::slotCustomColorSelected(const QColor &color)
+void KisWdgColorToAlpha::slotCustomColorSelected(const KoColor &color)
 {
-    m_widget->colorSelector->setQColor(color);
+    m_widget->colorSelector->slotSetColor(color);
     emit sigConfigurationItemChanged();
 }
 
@@ -85,7 +87,13 @@ void KisWdgColorToAlpha::setConfiguration(const KisPropertiesConfiguration* conf
 {
     QVariant value;
     if (config->getProperty("targetcolor", value)) {
-        m_widget->colorSelector->setQColor(value.value<QColor>());
+        KoColor c;
+        if (value.value<QColor>().isValid()) {
+            c.fromQColor(value.value<QColor>());
+        } else {
+            c = value.value<KoColor>();
+        }
+        m_widget->colorSelector->slotSetColor(c);
     }
     if (config->getProperty("threshold", value)) {
         m_widget->intThreshold->setValue(value.toInt());
@@ -95,7 +103,7 @@ void KisWdgColorToAlpha::setConfiguration(const KisPropertiesConfiguration* conf
 KisPropertiesConfiguration* KisWdgColorToAlpha::configuration() const
 {
     KisFilterConfiguration* config = new KisFilterConfiguration("colortoalpha", 1);
-    config->setProperty("targetcolor", widget()->colorSelector->color());
+    config->setProperty("targetcolor", widget()->colorSelector->getCurrentColor().toQColor());
     config->setProperty("threshold", widget()->intThreshold->value());
     return config;
 }

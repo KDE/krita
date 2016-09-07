@@ -80,6 +80,12 @@ public:
      */
     virtual qreal maxVisibleFloatValue(const KoChannelInfo *chaninfo) const = 0;
 
+    /**
+     * @brief getColorSpace
+     * @return the painting color space, this is useful for determining the transform.
+     */
+    virtual const KoColorSpace* getPaintingColorSpace() const = 0;
+
 Q_SIGNALS:
     void displayConfigurationChanged();
 
@@ -102,6 +108,8 @@ public:
 
     virtual qreal minVisibleFloatValue(const KoChannelInfo *chaninfo) const;
     virtual qreal maxVisibleFloatValue(const KoChannelInfo *chaninfo) const;
+
+    virtual const KoColorSpace* getPaintingColorSpace() const;
 
     static KoColorDisplayRendererInterface* instance();
 };

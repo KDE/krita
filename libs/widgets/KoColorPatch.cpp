@@ -22,6 +22,9 @@
 
 KoColorPatch::KoColorPatch( QWidget *parent ) : QFrame( parent )
 {
+    m_displayRenderer = KoDumbColorDisplayRenderer::instance();
+    connect(m_displayRenderer, SIGNAL(displayConfigurationChanged()),
+            SLOT(update()), Qt::UniqueConnection);
     setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 }
 
@@ -40,6 +43,32 @@ void KoColorPatch::setColor(const KoColor& c)
 
     update();
 }
+void KoColorPatch::setDisplayRenderer(const KoColorDisplayRendererInterface *displayRenderer)
+{
+    if (displayRenderer) {
+        if (m_displayRenderer) {
+            m_displayRenderer->disconnect(this);
+        }
+        m_displayRenderer = displayRenderer;
+    } else {
+        m_displayRenderer = KoDumbColorDisplayRenderer::instance();
+    }
+    connect(m_displayRenderer, SIGNAL(displayConfigurationChanged()),
+            SLOT(update()), Qt::UniqueConnection);
+
+}
+
+QColor KoColorPatch::getColorFromDisplayRenderer(KoColor c)
+{
+    QColor col;
+    if (m_displayRenderer) {
+        c.convertTo(m_displayRenderer->getPaintingColorSpace());
+        col = m_displayRenderer->toQColor(c);
+    } else {
+        col = c.toQColor();
+    }
+    return col;
+}
 
 KoColor KoColorPatch::color() const
 {
@@ -55,9 +84,7 @@ void KoColorPatch::mousePressEvent (QMouseEvent *e )
 
 void KoColorPatch::paintEvent(QPaintEvent *pe)
 {
-    QColor qc;
-    m_color.toQColor(&qc);
-
+    QColor qc = getColorFromDisplayRenderer(m_color);
     QFrame::paintEvent(pe);
     QPainter painter( this );
     painter.setPen(qc);

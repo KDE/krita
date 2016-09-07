@@ -23,6 +23,7 @@
 
 #include <KoColor.h>
 #include "kritawidgets_export.h"
+#include <KoColorDisplayRendererInterface.h>
 
 /**
  *  The small widget showing the selected color
@@ -39,6 +40,20 @@ public:
      * @param c the new color
      */
     void setColor( const KoColor &c );
+
+    /**
+     * @brief setDisplayRenderer
+     * Set the display renderer of this object.
+     * @param displayRenderer
+     */
+    void setDisplayRenderer(const KoColorDisplayRendererInterface *displayRenderer);
+
+    /**
+     * @brief getColorFromDisplayRenderer
+     * Get QColor from the display renderers
+     * @param c
+     */
+    QColor getColorFromDisplayRenderer(KoColor c);
 
     /**
      * @return current color shown by this patch
@@ -60,6 +75,7 @@ Q_SIGNALS:
 
 private:
   KoColor m_color;
+  const KoColorDisplayRendererInterface *m_displayRenderer;
 };
 
 #endif

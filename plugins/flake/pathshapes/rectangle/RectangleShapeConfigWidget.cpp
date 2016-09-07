@@ -21,9 +21,14 @@
 #include "RectangleShape.h"
 #include "RectangleShapeConfigCommand.h"
 
+#include "kis_document_aware_spin_box_unit_manager.h"
+
 RectangleShapeConfigWidget::RectangleShapeConfigWidget()
 {
     widget.setupUi(this);
+
+    KisDocumentAwareSpinBoxUnitManager::setDocumentAwarnessToExistingUnitSpinBox(widget.cornerRadiusX);
+    KisDocumentAwareSpinBoxUnitManager::setDocumentAwarnessToExistingUnitSpinBox(widget.cornerRadiusY);
 
     connect(widget.cornerRadiusX, SIGNAL(editingFinished()), this, SIGNAL(propertyChanged()));
     connect(widget.cornerRadiusY, SIGNAL(editingFinished()), this, SIGNAL(propertyChanged()));

@@ -21,9 +21,14 @@
 #include "StarShape.h"
 #include "StarShapeConfigCommand.h"
 
+#include "kis_document_aware_spin_box_unit_manager.h"
+
 StarShapeConfigWidget::StarShapeConfigWidget()
 {
     widget.setupUi(this);
+
+    KisDocumentAwareSpinBoxUnitManager::setDocumentAwarnessToExistingUnitSpinBox(widget.innerRadius);
+    KisDocumentAwareSpinBoxUnitManager::setDocumentAwarnessToExistingUnitSpinBox(widget.outerRadius);
 
     connect(widget.corners, SIGNAL(valueChanged(int)), this, SIGNAL(propertyChanged()));
     connect(widget.innerRadius, SIGNAL(editingFinished()), this, SIGNAL(propertyChanged()));

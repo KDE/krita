@@ -55,8 +55,6 @@ void KisOpenGL::initialize()
 {
     if (initialized) return;
 
-    setDefaultFormat();
-
     // we need a QSurface active to get our GL functions from the context
     QWindow  surface;
     surface.setSurfaceType( QSurface::OpenGLSurface );
@@ -180,10 +178,7 @@ void KisOpenGL::setDefaultFormat()
     format.setDepthBufferSize(24);
     format.setStencilBufferSize(8);
     format.setSwapBehavior(QSurfaceFormat::DoubleBuffer);
-    KisConfig cfg;
-    if (cfg.disableVSync()) {
-        format.setSwapInterval(0); // Disable vertical refresh syncing
-    }
+    format.setSwapInterval(0); // Disable vertical refresh syncing
     QSurfaceFormat::setDefaultFormat(format);
 }
 

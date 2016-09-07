@@ -71,9 +71,10 @@ public:
      */
     static bool needsPixmapCacheWorkaround();
 
+    static void setDefaultFormat();
+
 private:
 
-    static void setDefaultFormat();
 
     KisOpenGL();
 

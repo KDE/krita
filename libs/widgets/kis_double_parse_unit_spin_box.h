@@ -99,6 +99,8 @@ public:
      */
     virtual double valueFromText( const QString& str ) const;
 
+    void setUnitChangeFromOutsideBehavior(bool toggle); //if set to false, setting the unit using KoUnit won't have any effect.
+
 Q_SIGNALS:
     /// emitted like valueChanged in the parent, but this one emits the point value
     void valueChangedPt( qreal );

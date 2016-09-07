@@ -1030,6 +1030,8 @@ QList<QPointer<QWidget> > DefaultTool::createOptionWidgets()
     KoStrokeConfigWidget *strokeWidget = new KoStrokeConfigWidget(0);
     KisDocumentAwareSpinBoxUnitManager* managerLineWidth = new KisDocumentAwareSpinBoxUnitManager(strokeWidget);
     KisDocumentAwareSpinBoxUnitManager* managerMitterLimit = new KisDocumentAwareSpinBoxUnitManager(strokeWidget);
+    managerLineWidth->setApparentUnitFromSymbol("px");
+    managerMitterLimit->setApparentUnitFromSymbol("px"); //set unit to px by default
     strokeWidget->setUnitManagers(managerLineWidth, managerMitterLimit);
     strokeWidget->setWindowTitle(i18n("Line"));
     strokeWidget->setCanvas(canvas());

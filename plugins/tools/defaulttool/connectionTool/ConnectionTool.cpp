@@ -52,6 +52,8 @@
 #include <KoPathConnectionPointStrategy.h>
 #include <KoStrokeConfigWidget.h>
 
+#include "kis_document_aware_spin_box_unit_manager.h"
+
 #include <KoIcon.h>
 #include "kis_action_registry.h"
 
@@ -834,6 +836,11 @@ QList<QPointer<QWidget> > ConnectionTool::createOptionWidgets()
         }
     }
     KoStrokeConfigWidget *strokeWidget = new KoStrokeConfigWidget(0);
+    KisDocumentAwareSpinBoxUnitManager* managerLineWidth = new KisDocumentAwareSpinBoxUnitManager(strokeWidget);
+    KisDocumentAwareSpinBoxUnitManager* managerMitterLimit = new KisDocumentAwareSpinBoxUnitManager(strokeWidget);
+    managerLineWidth->setApparentUnitFromSymbol("px");
+    managerMitterLimit->setApparentUnitFromSymbol("px");
+    strokeWidget->setUnitManagers(managerLineWidth, managerMitterLimit);
     strokeWidget->setWindowTitle(i18n("Line"));
     strokeWidget->setCanvas(canvas());
     list.append(strokeWidget);

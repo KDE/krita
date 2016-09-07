@@ -143,8 +143,8 @@ CapNJoinMenu::CapNJoinMenu(QWidget *parent)
     miterLimit = new KisDoubleParseUnitSpinBox(this);
     miterLimit->setMinMaxStep(0.0, 1000.0, 0.5);
     miterLimit->setDecimals(2);
-    miterLimit->setUnit(KoUnit(KoUnit::Point));
     miterLimit->setToolTip(i18n("Miter limit"));
+    miterLimit->setUnitChangeFromOutsideBehavior(false);
     mainLayout->addWidget(miterLimit, 4, 0, 1, 3);
 
     mainLayout->setSizeConstraint(QLayout::SetMinAndMaxSize);
@@ -226,7 +226,7 @@ KoStrokeConfigWidget::KoStrokeConfigWidget(QWidget * parent)
     d->lineWidth = new KisDoubleParseUnitSpinBox(this);
     d->lineWidth->setMinMaxStep(0.0, 1000.0, 0.5);
     d->lineWidth->setDecimals(2);
-    d->lineWidth->setUnit(KoUnit(KoUnit::Point));
+    d->lineWidth->setUnitChangeFromOutsideBehavior(false);
     d->lineWidth->setToolTip(i18n("Set line width of actual selection"));
     secondLineLayout->addWidget(d->lineWidth);
 

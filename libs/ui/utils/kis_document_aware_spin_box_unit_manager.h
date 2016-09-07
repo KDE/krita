@@ -37,7 +37,7 @@ public:
     }; //in case the image has not the same x and y resolution, indicate on which direction get the resolution.
 
     //! \brief configure a KisDocumentAwareSpinBoxUnitManager for the given spinbox (make the manager a child of the spinbox and attach it to the spinbox).
-    static void setDocumentAwarnessToExistingUnitSpinBox(KisDoubleParseUnitSpinBox* spinBox);
+    static void setDocumentAwarnessToExistingUnitSpinBox(KisDoubleParseUnitSpinBox* spinBox, bool setUnitFromOutsideToggle = false);
 
     //! \brief create a unitSpinBox that is already document aware.
     static KisDoubleParseUnitSpinBox* createUnitSpinBoxWithDocumentAwarness(QWidget* parent = 0);

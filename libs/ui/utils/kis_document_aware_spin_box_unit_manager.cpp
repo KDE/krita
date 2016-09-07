@@ -28,10 +28,11 @@
 #include "kis_time_range.h"
 
 
-void KisDocumentAwareSpinBoxUnitManager::setDocumentAwarnessToExistingUnitSpinBox(KisDoubleParseUnitSpinBox* spinBox)
+void KisDocumentAwareSpinBoxUnitManager::setDocumentAwarnessToExistingUnitSpinBox(KisDoubleParseUnitSpinBox* spinBox, bool setUnitFromOutsideToggle)
 {
     KisDocumentAwareSpinBoxUnitManager* manager = new KisDocumentAwareSpinBoxUnitManager(spinBox);
     spinBox->setUnitManager(manager);
+    spinBox->setUnitChangeFromOutsideBehavior(setUnitFromOutsideToggle);
 }
 
 KisDoubleParseUnitSpinBox* KisDocumentAwareSpinBoxUnitManager::createUnitSpinBoxWithDocumentAwarness(QWidget* parent)
@@ -112,7 +113,6 @@ qreal KisDocumentAwareSpinBoxUnitManager::getConversionFactor(UnitDimension dim,
 
     case TIME:
         {
-            KisImage* img = KisPart::instance()->currentMainwindow()->activeView()->document()->image().data();
             if (symbol == "s") {
                 qreal fps = img->animationInterface()->framerate();
 

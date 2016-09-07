@@ -31,7 +31,9 @@ public:
         unit(KoUnit(KoUnit::Point)),
         unitManager(new KisSpinBoxUnitManager()),
         defaultUnitManager(unitManager),
-        isDeleting(false)
+        isDeleting(false),
+        unitHasBeenChangedFromOutSideOnce(false),
+        letUnitBeChangedFromOutsideMoreThanOnce(true)
     {
     }
 
@@ -44,6 +46,10 @@ public:
     KisSpinBoxUnitManager* defaultUnitManager; //the default unit manager is the one the spinbox rely on and go back to if a connected unit manager is destroyed before the spinbox.
 
     bool isDeleting;
+
+    bool unitHasBeenChangedFromOutSideOnce; //in some part of the code the unit is reset. We want to prevent this overriding the unit defined by the user. We use this switch to do so.
+    bool letUnitBeChangedFromOutsideMoreThanOnce;
+
 };
 
 KisDoubleParseUnitSpinBox::KisDoubleParseUnitSpinBox(QWidget *parent) :
@@ -125,6 +131,10 @@ void KisDoubleParseUnitSpinBox::changeValue( double newValue )
 
 void KisDoubleParseUnitSpinBox::setUnit( const KoUnit & unit)
 {
+    if (d->unitHasBeenChangedFromOutSideOnce && !d->letUnitBeChangedFromOutsideMoreThanOnce) {
+        return;
+    }
+
     if (d->unitManager->getUnitDimensionType() != KisSpinBoxUnitManager::LENGTH) {
         d->unitManager->setUnitDim(KisSpinBoxUnitManager::LENGTH); //setting the unit using a KoUnit mean you want to use a length.
     }
@@ -160,6 +170,8 @@ void KisDoubleParseUnitSpinBox::setUnit(const QString &symbol)
 
     KisDoubleParseSpinBox::setSingleStep( step );
     KisDoubleParseSpinBox::setValue( d->unitManager->getApparentValue( oldValue ) );
+
+    d->unitHasBeenChangedFromOutSideOnce = true;
 
 }
 
@@ -270,6 +282,10 @@ double KisDoubleParseUnitSpinBox::valueFromText( const QString& str ) const
     QString txt = makeTextClean(str);
 
     return KisDoubleParseSpinBox::valueFromText(txt); //this function will take care of prefix (and don't mind if suffix has been removed.
+}
+
+void KisDoubleParseUnitSpinBox::setUnitChangeFromOutsideBehavior(bool toggle) {
+    d->letUnitBeChangedFromOutsideMoreThanOnce = toggle;
 }
 
 void KisDoubleParseUnitSpinBox::privateValueChanged()

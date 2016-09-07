@@ -123,12 +123,11 @@ const KoCompositeOp * KisMask::compositeOp() const
      * Please think it over...
      */
 
-    KisNodeSP parentNode = parent();
-    if (!parentNode) return 0;
+    const KoColorSpace *colorSpace = this->colorSpace();
+    if (!colorSpace) return 0;
 
-    if (!parentNode->colorSpace()) return 0;
-    const KoCompositeOp* op = parentNode->colorSpace()->compositeOp(compositeOpId());
-    return op ? op : parentNode->colorSpace()->compositeOp(COMPOSITE_OVER);
+    const KoCompositeOp* op = colorSpace->compositeOp(compositeOpId());
+    return op ? op : colorSpace->compositeOp(COMPOSITE_OVER);
 }
 
 void KisMask::initSelection(KisSelectionSP copyFrom, KisLayerSP parentLayer)

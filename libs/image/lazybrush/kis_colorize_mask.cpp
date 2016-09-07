@@ -44,6 +44,7 @@
 #include "kis_command_utils.h"
 #include "kis_processing_applicator.h"
 #include "krita_utils.h"
+#include "kis_command_utils.h"
 
 
 using namespace KisLazyFillTools;
@@ -90,13 +91,16 @@ struct KisColorizeMask::Private
     int originalSequenceNumber;
 
     KisSignalCompressor updateCompressor;
+    QPoint offset;
 };
 
 KisColorizeMask::KisColorizeMask()
     : m_d(new Private)
 {
-    // TODO: correct initialization of the layer's color space
-    m_d->fakePaintDevice = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
+    const KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->rgb8();
+    m_d->fakePaintDevice = new KisPaintDevice(colorSpace);
+    m_d->filteredSource = new KisPaintDevice(colorSpace);
+    m_d->coloringProjection = new KisPaintDevice(colorSpace);
 
     connect(&m_d->updateCompressor,
             SIGNAL(timeout()),
@@ -137,6 +141,81 @@ void KisColorizeMask::initializeCompositeOp()
     setCompositeOpId(alphaPortion > 0.3 ? COMPOSITE_BEHIND : COMPOSITE_MULT);
 }
 
+const KoColorSpace* KisColorizeMask::colorSpace() const
+{
+    return m_d->fakePaintDevice->colorSpace();
+}
+
+struct SetKeyStrokesColorSpaceCommand : public KUndo2Command {
+    SetKeyStrokesColorSpaceCommand(const KoColorSpace *dstCS,
+                                   KoColorConversionTransformation::Intent renderingIntent,
+                                   KoColorConversionTransformation::ConversionFlags conversionFlags,
+                                   QList<KeyStroke> *list,
+                                   KisColorizeMaskSP node)
+        : m_dstCS(dstCS),
+          m_renderingIntent(renderingIntent),
+          m_conversionFlags(conversionFlags),
+          m_list(list),
+          m_node(node) {}
+
+    void undo() {
+        KIS_ASSERT_RECOVER_RETURN(m_list->size() == m_oldColors.size());
+
+        for (int i = 0; i < m_list->size(); i++) {
+            (*m_list)[i].color = m_oldColors[i];
+        }
+    }
+
+    void redo() {
+        if (m_oldColors.isEmpty()) {
+            Q_FOREACH(const KeyStroke &stroke, *m_list) {
+                m_oldColors << stroke.color;
+                m_newColors << stroke.color;
+                m_newColors.last().convertTo(m_dstCS, m_renderingIntent, m_conversionFlags);
+            }
+        }
+
+        KIS_ASSERT_RECOVER_RETURN(m_list->size() == m_newColors.size());
+
+        for (int i = 0; i < m_list->size(); i++) {
+            (*m_list)[i].color = m_newColors[i];
+        }
+    }
+
+private:
+    QVector<KoColor> m_oldColors;
+    QVector<KoColor> m_newColors;
+
+    const KoColorSpace *m_dstCS;
+    KoColorConversionTransformation::Intent m_renderingIntent;
+    KoColorConversionTransformation::ConversionFlags m_conversionFlags;
+    QList<KeyStroke> *m_list;
+    KisColorizeMaskSP m_node;
+};
+
+
+KUndo2Command* KisColorizeMask::setColorSpace(const KoColorSpace * dstColorSpace,
+                                              KoColorConversionTransformation::Intent renderingIntent,
+                                              KoColorConversionTransformation::ConversionFlags conversionFlags)
+{
+    using namespace KisCommandUtils;
+
+    CompositeCommand *composite = new CompositeCommand();
+
+    composite->addCommand(m_d->fakePaintDevice->convertTo(dstColorSpace, renderingIntent, conversionFlags));
+    composite->addCommand(m_d->coloringProjection->convertTo(dstColorSpace, renderingIntent, conversionFlags));
+
+    KUndo2Command *strokesConversionCommand =
+        new SetKeyStrokesColorSpaceCommand(
+            dstColorSpace, renderingIntent, conversionFlags,
+            &m_d->keyStrokes, this);
+    strokesConversionCommand->redo();
+
+    composite->addCommand(new SkipFirstRedoWrapper(strokesConversionCommand));
+
+    return composite;
+}
+
 bool KisColorizeMask::needsUpdate() const
 {
     return m_d->needsUpdate;
@@ -161,15 +240,7 @@ void KisColorizeMask::slotUpdateRegenerateFilling()
 
     bool filteredSourceValid = m_d->originalSequenceNumber == src->sequenceNumber();
     m_d->originalSequenceNumber = src->sequenceNumber();
-
-    if (!m_d->coloringProjection) {
-        m_d->coloringProjection = new KisPaintDevice(src->colorSpace());
-        m_d->filteredSource = new KisPaintDevice(src->colorSpace());
-        filteredSourceValid = false;
-    } else {
-        // TODO: sync colorspaces, including filtered source
-        m_d->coloringProjection->clear();
-    }
+    m_d->coloringProjection->clear();
 
     KisLayerSP parentLayer = dynamic_cast<KisLayer*>(parent().data());
     if (!parentLayer) return;
@@ -416,8 +487,11 @@ void KisColorizeMask::setImage(KisImageWSP image)
     }
 }
 
-void KisColorizeMask::setCurrentColor(const KoColor &color)
+void KisColorizeMask::setCurrentColor(const KoColor &_color)
 {
+    KoColor color = _color;
+    color.convertTo(colorSpace());
+
     lockTemporaryTargetForWrite();
 
     setNeedsUpdate(true);
@@ -444,7 +518,6 @@ void KisColorizeMask::setCurrentColor(const KoColor &color)
     m_d->currentColor = color;
     m_d->currentKeyStrokeDevice = activeDevice;
     m_d->needAddCurrentKeyStroke = newKeyStroke;
-    m_d->fakePaintDevice->convertTo(colorSpace());
 
     unlockTemporaryTarget();
 }
@@ -659,6 +732,7 @@ void KisColorizeMask::setKeyStrokesColors(KeyStrokeColors colors)
 
     for (int i = 0; i < newList.size(); i++) {
         newList[i].color = colors.colors[i];
+        newList[i].color.convertTo(colorSpace());
         newList[i].isTransparent = colors.transparentIndex == i;
     }
 
@@ -673,8 +747,11 @@ void KisColorizeMask::setKeyStrokesColors(KeyStrokeColors colors)
     applicator.end();
 }
 
-void KisColorizeMask::removeKeyStroke(const KoColor &color)
+void KisColorizeMask::removeKeyStroke(const KoColor &_color)
 {
+    KoColor color = _color;
+    color.convertTo(colorSpace());
+
     QList<KeyStroke>::iterator it =
         std::find_if(m_d->keyStrokes.begin(),
                      m_d->keyStrokes.end(),
@@ -695,4 +772,100 @@ void KisColorizeMask::removeKeyStroke(const KoColor &color)
             false, index, *it, &m_d->keyStrokes, this));
 
     applicator.end();
+}
+
+
+QVector<KisPaintDeviceSP> KisColorizeMask::allPaintDevices() const
+{
+    QVector<KisPaintDeviceSP> devices;
+
+    Q_FOREACH (const KeyStroke &stroke, m_d->keyStrokes) {
+        devices << stroke.dev;
+    }
+
+    devices << m_d->coloringProjection;
+
+    return devices;
+}
+
+void KisColorizeMask::resetCache()
+{
+    m_d->filteredSource->clear();
+    m_d->originalSequenceNumber = -1;
+
+    rerenderFakePaintDevice();
+}
+
+
+void KisColorizeMask::rerenderFakePaintDevice()
+{
+    m_d->fakePaintDevice->clear();
+    KisFillPainter gc(m_d->fakePaintDevice);
+
+    KisSelectionSP selection = m_d->cachedSelection.getSelection();
+
+    Q_FOREACH (const KeyStroke &stroke, m_d->keyStrokes) {
+        const QRect rect = stroke.dev->extent();
+
+        selection->pixelSelection()->makeCloneFromRough(stroke.dev, rect);
+        gc.setSelection(selection);
+        gc.fillSelection(rect, stroke.color);
+    }
+
+    m_d->cachedSelection.putSelection(selection);
+}
+
+void KisColorizeMask::testingAddKeyStroke(KisPaintDeviceSP dev, const KoColor &color, bool isTransparent)
+{
+    m_d->keyStrokes << KeyStroke(dev, color, isTransparent);
+}
+
+void KisColorizeMask::testingRegenerateMask()
+{
+    slotUpdateRegenerateFilling();
+}
+
+KisPaintDeviceSP KisColorizeMask::testingFilteredSource() const
+{
+    return m_d->filteredSource;
+}
+
+QList<KeyStroke> KisColorizeMask::testingKeyStrokes() const
+{
+    return m_d->keyStrokes;
+}
+
+qint32 KisColorizeMask::x() const
+{
+    return m_d->offset.x();
+}
+
+qint32 KisColorizeMask::y() const
+{
+    return m_d->offset.y();
+}
+
+void KisColorizeMask::setX(qint32 x)
+{
+    const QPoint oldOffset = m_d->offset;
+    m_d->offset.rx() = x;
+    moveAllInternalDevices(m_d->offset - oldOffset);
+}
+
+void KisColorizeMask::setY(qint32 y)
+{
+    const QPoint oldOffset = m_d->offset;
+    m_d->offset.ry() = y;
+    moveAllInternalDevices(m_d->offset - oldOffset);
+}
+
+void KisColorizeMask::moveAllInternalDevices(const QPoint &diff)
+{
+    QVector<KisPaintDeviceSP> devices = allPaintDevices();
+    devices << m_d->fakePaintDevice;
+
+    Q_FOREACH (KisPaintDeviceSP dev, devices) {
+        QPoint offset(dev->x(), dev->y());
+        dev->move(offset + diff);
+    }
 }

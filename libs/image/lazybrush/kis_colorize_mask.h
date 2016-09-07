@@ -26,6 +26,12 @@
 #include "kritaimage_export.h"
 
 class KoColor;
+class KUndo2Command;
+
+namespace KisLazyFillTools
+{
+    struct KeyStroke;
+}
 
 
 class KRITAIMAGE_EXPORT KisColorizeMask : public KisEffectMask
@@ -44,6 +50,10 @@ public:
     KisColorizeMask(const KisColorizeMask& rhs);
 
     void initializeCompositeOp();
+    const KoColorSpace* colorSpace() const;
+    KUndo2Command* setColorSpace(const KoColorSpace * dstColorSpace,
+                                 KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::internalRenderingIntent(),
+                                 KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::internalConversionFlags());
 
     KisPaintDeviceSP paintDevice() const;
     KisPaintDeviceSP coloringProjection() const;
@@ -78,6 +88,19 @@ public:
 
     void removeKeyStroke(const KoColor &color);
 
+    QVector<KisPaintDeviceSP> allPaintDevices() const;
+    void resetCache();
+
+    void testingAddKeyStroke(KisPaintDeviceSP dev, const KoColor &color, bool isTransparent = false);
+    void testingRegenerateMask();
+    KisPaintDeviceSP testingFilteredSource() const;
+    QList<KisLazyFillTools::KeyStroke> testingKeyStrokes() const;
+
+    qint32 x() const;
+    qint32 y() const;
+    void setX(qint32 x);
+    void setY(qint32 y);
+
 private Q_SLOTS:
     void slotUpdateRegenerateFilling();
     void slotRegenerationFinished();
@@ -97,8 +120,11 @@ private:
     bool showKeyStrokes() const;
     void setShowKeyStrokes(bool value);
 
+
 private:
+    void rerenderFakePaintDevice();
     KisImageSP fetchImage() const;
+    void moveAllInternalDevices(const QPoint &diff);
 
 private:
     struct Private;

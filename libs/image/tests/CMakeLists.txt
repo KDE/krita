@@ -693,3 +693,9 @@ target_link_libraries(KisAslParserTest kritapsd kritapigment kritawidgetutils  $
 set(kis_lazy_brush_test_SRCS kis_lazy_brush_test.cpp )
 kde4_add_unit_test(KisLazyBrushTest TESTNAME kritaimage-lazy_brush_test ${kis_lazy_brush_test_SRCS})
 target_link_libraries(KisLazyBrushTest kritaimage ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
+set(kis_colorize_mask_test_SRCS kis_colorize_mask_test.cpp )
+kde4_add_unit_test(KisColorizeMaskTest TESTNAME kritaimage-colorize_mask_test ${kis_colorize_mask_test_SRCS})
+target_link_libraries(KisColorizeMaskTest kritaimage ${QT_QTTEST_LIBRARY})

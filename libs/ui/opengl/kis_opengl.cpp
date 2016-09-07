@@ -55,6 +55,8 @@ void KisOpenGL::initialize()
 {
     if (initialized) return;
 
+    setDefaultFormat();
+
     // we need a QSurface active to get our GL functions from the context
     QWindow  surface;
     surface.setSurfaceType( QSurface::OpenGLSurface );
@@ -78,6 +80,10 @@ void KisOpenGL::initialize()
     glMajorVersion = context.format().majorVersion();
     glMinorVersion = context.format().minorVersion();
     supportsDeprecatedFunctions = (context.format().options() & QSurfaceFormat::DeprecatedFunctions);
+
+    qDebug() << "     Version:" << glMajorVersion << "." << glMinorVersion;
+    qDebug() << "     Supports deprecated functions" << supportsDeprecatedFunctions;
+
 
     initialized = true;
 }
@@ -149,7 +155,13 @@ void KisOpenGL::initializeContext(QOpenGLContext *ctx)
 bool KisOpenGL::hasOpenGL3()
 {
     initialize();
-    return glMajorVersion >= 3 && glMinorVersion >= 2;
+    if (glMajorVersion == 3) {
+        return glMinorVersion >= 2;
+    }
+    if (glMajorVersion > 3) {
+        return true;
+    }
+    return false;
 }
 
 bool KisOpenGL::supportsFenceSync()

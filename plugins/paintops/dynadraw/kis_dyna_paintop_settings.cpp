@@ -74,9 +74,6 @@ int KisDynaPaintOpSettings::rate() const
 #include "kis_standard_uniform_properties_factory.h"
 
 
-typedef KisCallbackBasedPaintopProperty<KisComboBasedPaintOpProperty> KisComboBasedPaintOpPropertyCallback;
-
-
 QList<KisUniformPaintOpPropertySP> KisDynaPaintOpSettings::uniformProperties()
 {
     QList<KisUniformPaintOpPropertySP> props =

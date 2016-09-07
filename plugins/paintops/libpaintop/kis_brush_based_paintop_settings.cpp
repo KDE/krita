@@ -228,8 +228,6 @@ qreal KisBrushBasedPaintOpSettings::paintOpSize() const
 #include "kis_paintop_preset.h"
 #include "kis_paintop_settings_update_proxy.h"
 
-typedef KisCallbackBasedPaintopProperty<KisUniformPaintOpProperty> KisUniformPaintOpPropertyCallback;
-
 QList<KisUniformPaintOpPropertySP> KisBrushBasedPaintOpSettings::uniformProperties()
 {
     QList<KisUniformPaintOpPropertySP> props =

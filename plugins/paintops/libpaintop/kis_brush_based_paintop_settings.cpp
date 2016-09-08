@@ -77,6 +77,7 @@ QPainterPath KisBrushBasedPaintOpSettings::brushOutlineImpl(const KisPaintInform
 
     if (forceOutline || mode == CursorIsOutline || mode == CursorIsCircleOutline || mode == CursorTiltOutline) {
         KisBrushSP brush = this->brush();
+        if (!brush) return path;
         qreal finalScale = brush->scale() * additionalScale;
 
         QPainterPath realOutline = brush->outline();

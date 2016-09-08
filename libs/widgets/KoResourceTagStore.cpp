@@ -174,7 +174,7 @@ QStringList KoResourceTagStore::searchTag(const QString& query) const
 
 void KoResourceTagStore::loadTags()
 {
-    QStringList tagFiles = KoResourcePaths::findDirs("tags", "");
+    QStringList tagFiles = KoResourcePaths::findDirs("tags");
 
     //qDebug() << "Going to load tags" << tagFiles;
 

@@ -198,30 +198,17 @@ loadValue(const QDomElement &e, T *value)
 }
 
 /**
- * Load an array from an XML element, which is a child of \p parent
- * and has a tag \p tag.
- *
- * \return true if the object is successfully loaded and is unique
- *
- * \see saveValue()
+ * A special adapter method that makes vector- and tag-based methods
+ * work with environment parameter uniformly.
  */
-template <typename T>
-bool loadValue(const QDomElement &e, QVector<T> *array)
-{
-    if (!Private::checkType(e, "array")) return false;
-
-    QDomElement child = e.firstChildElement();
-    while (!child.isNull()) {
-        T value;
-        if (!loadValue(child, &value)) return false;
-        *array << value;
-        child = child.nextSiblingElement();
-    }
-    return true;
+template <typename T, typename E>
+    typename std::enable_if<std::is_empty<E>::value, bool>::type
+loadValue(const QDomElement &parent, T *value, const E &env) {
+    return KisDomUtils::loadValue(parent, value);
 }
 
-template <typename T, typename E>
-    bool loadValue(const QDomElement &e, QVector<T> *array, const E &env)
+template <typename T, typename E = std::tuple<>>
+    bool loadValue(const QDomElement &e, QVector<T> *array, const E &env = E())
 {
     if (!Private::checkType(e, "array")) return false;
 
@@ -235,17 +222,8 @@ template <typename T, typename E>
     return true;
 }
 
-template <typename T>
-bool loadValue(const QDomElement &parent, const QString &tag, T *value)
-{
-    QDomElement e;
-    if (!findOnlyElement(parent, tag, &e)) return false;
-
-    return loadValue(e, value);
-}
-
-template <typename T, typename E>
-    bool loadValue(const QDomElement &parent, const QString &tag, T *value, const E &env)
+template <typename T, typename E = std::tuple<>>
+    bool loadValue(const QDomElement &parent, const QString &tag, T *value, const E &env = E())
 {
     QDomElement e;
     if (!findOnlyElement(parent, tag, &e)) return false;

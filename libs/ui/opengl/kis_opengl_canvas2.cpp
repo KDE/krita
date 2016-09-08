@@ -22,6 +22,7 @@
 #include "opengl/kis_opengl_canvas2.h"
 #include "opengl/kis_opengl_canvas2_p.h"
 
+#include "opengl/kis_opengl_shader_loader.h"
 #include "opengl/kis_opengl_canvas_debugger.h"
 #include "canvas/kis_canvas2.h"
 #include "canvas/kis_coordinates_converter.h"
@@ -73,23 +74,13 @@ public:
 
     KisOpenGLImageTexturesSP openGLImageTextures;
 
-    QOpenGLShaderProgram *displayShader{0};
-    int displayUniformLocationModelViewProjection;
-    int displayUniformLocationTextureMatrix;
-    int displayUniformLocationViewPortScale;
-    int displayUniformLocationTexelSize;
-    int displayUniformLocationTexture0;
-    int displayUniformLocationTexture1;
-    int displayUniformLocationFixedLodLevel;
+    KisOpenGLShaderLoader shaderLoader;
+    KisShaderProgram *displayShader{0};
+    KisShaderProgram *checkerShader{0};
+    KisShaderProgram *cursorShader{0};
 
-    QOpenGLShaderProgram *checkerShader{0};
     GLfloat checkSizeScale;
     bool scrollCheckers;
-    int checkerUniformLocationModelViewProjection;
-    int checkerUniformLocationTextureMatrix;
-
-    QOpenGLShaderProgram *cursorShader{0};
-    int cursorShaderModelViewProjectionUniform;
 
     KisDisplayFilter* displayFilter;
     KisOpenGL::FilterMode filterMode;
@@ -194,10 +185,12 @@ void KisOpenGLCanvas2::setDisplayFilterImpl(KisDisplayFilter* displayFilter, boo
     bool needsFullRefresh = d->openGLImageTextures->setInternalColorManagementActive(needsInternalColorManagement);
 
     d->displayFilter = displayFilter;
+
     if (d->canvasInitialized) {
         d->canvasInitialized = false;
-        initializeDisplayShader();
-        initializeCheckerShader();
+        delete d->displayShader;
+        bool useHiQualityFiltering = d->filterMode == KisOpenGL::HighQualityFiltering;
+        d->displayShader = d->shaderLoader.loadDisplayShader(d->displayFilter, useHiQualityFiltering);
         d->canvasInitialized = true;
     }
 
@@ -244,10 +237,10 @@ void KisOpenGLCanvas2::initializeGL()
     d->openGLImageTextures->setProofingConfig(canvas()->proofingConfiguration());
     d->openGLImageTextures->initGL(context()->functions());
     d->openGLImageTextures->generateCheckerTexture(createCheckersImage(cfg.checkSize()));
-    initializeCheckerShader();
-    initializeDisplayShader();
 
-    // If we support OpenGL 3.2, then prepare out VAOs and VBOs for drawing
+    initializeShaders();
+
+    // If we support OpenGL 3.2, then prepare our VAOs and VBOs for drawing
     if (KisOpenGL::hasOpenGL3()) {
         d->quadVAO.create();
         d->quadVAO.bind();
@@ -289,6 +282,20 @@ void KisOpenGLCanvas2::initializeGL()
     d->canvasInitialized = true;
 }
 
+void KisOpenGLCanvas2::initializeShaders()
+{
+    bool useHiQualityFiltering = d->filterMode == KisOpenGL::HighQualityFiltering;
+
+    if (!d->canvasInitialized) {
+        delete d->displayShader;
+        delete d->checkerShader;
+        delete d->cursorShader;
+        d->displayShader = d->shaderLoader.loadDisplayShader(d->displayFilter, useHiQualityFiltering);
+        d->checkerShader = d->shaderLoader.loadCheckerShader();
+        d->cursorShader = d->shaderLoader.loadCursorShader();
+    }
+}
+
 void KisOpenGLCanvas2::resizeGL(int width, int height)
 {
     coordinatesConverter()->setCanvasWidgetSize(QSize(width, height));
@@ -322,28 +329,9 @@ void KisOpenGLCanvas2::paintGL()
     }
 }
 
-QOpenGLShaderProgram *KisOpenGLCanvas2::getCursorShader()
-{
-    if (d->cursorShader == 0) {
-        d->cursorShader = new QOpenGLShaderProgram();
-        d->cursorShader->addShaderFromSourceFile(QOpenGLShader::Vertex, ":/cursor.vert");
-        d->cursorShader->addShaderFromSourceFile(QOpenGLShader::Fragment, ":/cursor.frag");
-        d->cursorShader->bindAttributeLocation("a_vertexPosition", PROGRAM_VERTEX_ATTRIBUTE);
-        if (! d->cursorShader->link()) {
-            dbgUI << "OpenGL error" << glGetError();
-            qFatal("Failed linking cursor shader");
-        }
-        Q_ASSERT(d->cursorShader->isLinked());
-        d->cursorShaderModelViewProjectionUniform = d->cursorShader->uniformLocation("modelViewProjection");
-    }
-
-    return d->cursorShader;
-}
-
 void KisOpenGLCanvas2::paintToolOutline(const QPainterPath &path)
 {
-    QOpenGLShaderProgram *cursorShader = getCursorShader();
-    cursorShader->bind();
+    d->cursorShader->bind();
 
     // setup the mvp transformation
     KisCoordinatesConverter *converter = coordinatesConverter();
@@ -356,7 +344,7 @@ void KisOpenGLCanvas2::paintToolOutline(const QPainterPath &path)
     QMatrix4x4 modelMatrix(converter->flakeToWidgetTransform());
     modelMatrix.optimize();
     modelMatrix = projectionMatrix * modelMatrix;
-    cursorShader->setUniformValue(d->cursorShaderModelViewProjectionUniform, modelMatrix);
+    d->cursorShader->setUniformValue(d->cursorShader->location("modelViewProjection"), modelMatrix);
 
     glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
 
@@ -391,8 +379,8 @@ void KisOpenGLCanvas2::paintToolOutline(const QPainterPath &path)
             d->lineBuffer.allocate(vertices.constData(), 3 * vertices.size() * sizeof(float));
         }
         else {
-            cursorShader->enableAttributeArray(PROGRAM_VERTEX_ATTRIBUTE);
-            cursorShader->setAttributeArray(PROGRAM_VERTEX_ATTRIBUTE, vertices.constData());
+            d->cursorShader->enableAttributeArray(PROGRAM_VERTEX_ATTRIBUTE);
+            d->cursorShader->setAttributeArray(PROGRAM_VERTEX_ATTRIBUTE, vertices.constData());
         }
 
         glDrawArrays(GL_LINE_STRIP, 0, vertices.size());
@@ -405,7 +393,7 @@ void KisOpenGLCanvas2::paintToolOutline(const QPainterPath &path)
 
     glDisable(GL_COLOR_LOGIC_OP);
 
-    cursorShader->release();
+    d->cursorShader->release();
 }
 
 bool KisOpenGLCanvas2::isBusy() const
@@ -451,10 +439,10 @@ void KisOpenGLCanvas2::drawCheckers()
     QMatrix4x4 modelMatrix(modelTransform);
     modelMatrix.optimize();
     modelMatrix = projectionMatrix * modelMatrix;
-    d->checkerShader->setUniformValue(d->checkerUniformLocationModelViewProjection, modelMatrix);
+    d->checkerShader->setUniformValue(d->checkerShader->location("modelViewProjection"), modelMatrix);
 
     QMatrix4x4 textureMatrix(textureTransform);
-    d->checkerShader->setUniformValue(d->checkerUniformLocationTextureMatrix, textureMatrix);
+    d->checkerShader->setUniformValue(d->checkerShader->location("textureMatrix"), textureMatrix);
 
     //Setup the geometry for rendering
     if (KisOpenGL::hasOpenGL3()) {
@@ -509,19 +497,19 @@ void KisOpenGLCanvas2::drawImage()
     QMatrix4x4 modelMatrix(coordinatesConverter()->imageToWidgetTransform());
     modelMatrix.optimize();
     modelMatrix = projectionMatrix * modelMatrix;
-    d->displayShader->setUniformValue(d->displayUniformLocationModelViewProjection, modelMatrix);
+    d->displayShader->setUniformValue(d->displayShader->location("modelViewProjection"), modelMatrix);
 
     QMatrix4x4 textureMatrix;
     textureMatrix.setToIdentity();
-    d->displayShader->setUniformValue(d->displayUniformLocationTextureMatrix, textureMatrix);
+    d->displayShader->setUniformValue(d->displayShader->location("textureMatrix"), textureMatrix);
 
     QRectF widgetRect(0,0, width(), height());
     QRectF widgetRectInImagePixels = converter->documentToImage(converter->widgetToDocument(widgetRect));
 
     qreal scaleX, scaleY;
     converter->imageScale(&scaleX, &scaleY);
-    d->displayShader->setUniformValue(d->displayUniformLocationViewPortScale, (GLfloat) scaleX);
-    d->displayShader->setUniformValue(d->displayUniformLocationTexelSize, (GLfloat) d->openGLImageTextures->texelSize());
+    d->displayShader->setUniformValue(d->displayShader->location("viewportScale"), (GLfloat) scaleX);
+    d->displayShader->setUniformValue(d->displayShader->location("texelSize"), (GLfloat) d->openGLImageTextures->texelSize());
 
     QRect ir = d->openGLImageTextures->storedImageBounds();
     QRect wr = widgetRectInImagePixels.toAlignedRect();
@@ -606,12 +594,12 @@ void KisOpenGLCanvas2::drawImage()
             if (d->displayFilter) {
                 glActiveTexture(GL_TEXTURE0 + 1);
                 glBindTexture(GL_TEXTURE_3D, d->displayFilter->lutTexture());
-                d->displayShader->setUniformValue(d->displayUniformLocationTexture1, 1);
+                d->displayShader->setUniformValue(d->displayShader->location("texture1"), 1);
             }
 
             int currentLodPlane = tile->currentLodPlane();
-            if (d->displayUniformLocationFixedLodLevel >= 0) {
-                d->displayShader->setUniformValue(d->displayUniformLocationFixedLodLevel,
+            if (d->displayShader->location("fixedLodLevel") >= 0) {
+                d->displayShader->setUniformValue(d->displayShader->location("fixedLodLevel"),
                                                   (GLfloat) currentLodPlane);
             }
 
@@ -654,150 +642,6 @@ void KisOpenGLCanvas2::drawImage()
     glBindTexture(GL_TEXTURE_2D, 0);
     d->displayShader->release();
     glBindBuffer(GL_ARRAY_BUFFER, 0);
-}
-
-void KisOpenGLCanvas2::reportShaderLinkFailedAndExit(bool result, const QString &context, const QString &log)
-{
-    KisConfig cfg;
-
-    if (cfg.useVerboseOpenGLDebugOutput()) {
-        dbgUI << "GL-log:" << context << log;
-    }
-
-    if (result) return;
-
-    QMessageBox::critical(this, i18nc("@title:window", "Krita"),
-                          QString(i18n("Krita could not initialize the OpenGL canvas:\n\n%1\n\n%2\n\n Krita will disable OpenGL and close now.")).arg(context).arg(log),
-                          QMessageBox::Close);
-
-    cfg.setUseOpenGL(false);
-    cfg.setCanvasState("OPENGL_FAILED");
-}
-
-void KisOpenGLCanvas2::initializeCheckerShader()
-{
-    if (d->canvasInitialized) return;
-
-    delete d->checkerShader;
-    d->checkerShader = new QOpenGLShaderProgram();
-    QString vertexShaderName;
-    QString fragmentShaderName;
-
-    bool result;
-
-    if (KisOpenGL::hasOpenGL3()) {
-        vertexShaderName = ":/matrix_transform.vert";
-        fragmentShaderName = ":/simple_texture.frag";
-    }
-    else {
-        vertexShaderName = ":/matrix_transform_legacy.vert";
-        fragmentShaderName = ":/simple_texture_legacy.frag";
-    }
-
-    result = d->checkerShader->addShaderFromSourceFile(QOpenGLShader::Vertex, vertexShaderName);
-    reportShaderLinkFailedAndExit(result, "Checker vertex shader", d->checkerShader->log());
-
-    result = d->checkerShader->addShaderFromSourceFile(QOpenGLShader::Fragment, fragmentShaderName);
-    reportShaderLinkFailedAndExit(result, "Checker fragment shader", d->checkerShader->log());
-
-
-    d->checkerShader->bindAttributeLocation("a_vertexPosition", PROGRAM_VERTEX_ATTRIBUTE);
-    d->checkerShader->bindAttributeLocation("a_textureCoordinate", PROGRAM_TEXCOORD_ATTRIBUTE);
-
-    result = d->checkerShader->link();
-    reportShaderLinkFailedAndExit(result, "Checker shader (link)", d->checkerShader->log());
-
-    Q_ASSERT(d->checkerShader->isLinked());
-
-    d->checkerUniformLocationModelViewProjection = d->checkerShader->uniformLocation("modelViewProjection");
-    d->checkerUniformLocationTextureMatrix = d->checkerShader->uniformLocation("textureMatrix");
-
-}
-
-QByteArray KisOpenGLCanvas2::buildDisplayShader()
-{
-    QByteArray shaderText;
-
-    bool haveDisplayFilter = d->displayFilter && !d->displayFilter->program().isEmpty();
-    bool useHiQualityFiltering = d->filterMode == KisOpenGL::HighQualityFiltering;
-
-    QString filename;
-
-    if (KisOpenGL::hasOpenGL3()) {
-        filename = "highq_downscale.frag";
-        shaderText.append("#version 150 core\n");
-    } else {
-        filename = "simple_texture_legacy.frag";
-    }
-
-    if (haveDisplayFilter) {
-        shaderText.append("#define USE_OCIO\n");
-        shaderText.append(d->displayFilter->program().toLatin1());
-    }
-
-    if (KisOpenGL::hasOpenGL3() && useHiQualityFiltering) {
-        shaderText.append("#define HIGHQ_SCALING\n");
-    }
-    if (KisOpenGL::hasOpenGL3()) {
-        shaderText.append("#define DIRECT_LOD_FETCH\n");
-    }
-
-    {
-        QFile prefaceFile(":/" + filename);
-        prefaceFile.open(QIODevice::ReadOnly);
-        shaderText.append(prefaceFile.readAll());
-    }
-
-    return shaderText;
-}
-
-void KisOpenGLCanvas2::initializeDisplayShader()
-{
-    if (d->canvasInitialized) return;
-
-    delete d->displayShader;
-    d->displayShader = new QOpenGLShaderProgram();
-
-    bool result = d->displayShader->addShaderFromSourceCode(QOpenGLShader::Fragment, buildDisplayShader());
-    reportShaderLinkFailedAndExit(result, "Display fragment shader", d->displayShader->log());
-
-    if (KisOpenGL::hasOpenGL3()) {
-        result = d->displayShader->addShaderFromSourceFile(QOpenGLShader::Vertex, ":/matrix_transform.vert");
-    }
-    else {
-        result = d->displayShader->addShaderFromSourceFile(QOpenGLShader::Vertex, ":/matrix_transform_legacy.vert");
-    }
-
-    reportShaderLinkFailedAndExit(result, "Display vertex shader", d->displayShader->log());
-
-    d->displayShader->bindAttributeLocation("a_vertexPosition", PROGRAM_VERTEX_ATTRIBUTE);
-    d->displayShader->bindAttributeLocation("a_textureCoordinate", PROGRAM_TEXCOORD_ATTRIBUTE);
-
-    result = d->displayShader->link();
-    reportShaderLinkFailedAndExit(result, "Display shader (link)", d->displayShader->log());
-
-    Q_ASSERT(d->displayShader->isLinked());
-
-    d->displayUniformLocationModelViewProjection = d->displayShader->uniformLocation("modelViewProjection");
-    d->displayUniformLocationTextureMatrix = d->displayShader->uniformLocation("textureMatrix");
-    d->displayUniformLocationTexture0 = d->displayShader->uniformLocation("texture0");
-
-    // ocio
-    d->displayUniformLocationTexture1 = d->displayShader->uniformLocation("texture1");
-
-    // highq || lod
-    d->displayUniformLocationViewPortScale = d->displayShader->uniformLocation("viewportScale");
-
-    // highq
-    d->displayUniformLocationTexelSize = d->displayShader->uniformLocation("texelSize");
-
-    // TODO: The trilinear filtering mode is having issues when that is set in the application. It sometimes causes Krita to crash
-    // I cannot tell where that is at in here... Scott P (11/8/2015)
-
-    // lod
-    d->displayUniformLocationFixedLodLevel =
-            KisOpenGL::hasOpenGL3() ?
-                d->displayShader->uniformLocation("fixedLodLevel") : -1;
 }
 
 void KisOpenGLCanvas2::slotConfigChanged()

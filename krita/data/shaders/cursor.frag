@@ -1,5 +1,3 @@
-#version 150 core
-
 out vec4 fragColor;
 
 void main(void)

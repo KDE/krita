@@ -30,9 +30,6 @@
 #include <QDesktopServices>
 #include <QMessageBox>
 #include <QWindow>
-#include <QOpenGLFunctions_3_2_Core>
-#include <QOpenGLFunctions_3_2_Compatibility>
-#include <QOpenGLFunctions_2_1>
 
 #include <klocalizedstring.h>
 
@@ -83,7 +80,6 @@ void KisOpenGL::initialize()
 
     qDebug() << "     Version:" << glMajorVersion << "." << glMinorVersion;
     qDebug() << "     Supports deprecated functions" << supportsDeprecatedFunctions;
-
 
     initialized = true;
 }
@@ -155,13 +151,7 @@ void KisOpenGL::initializeContext(QOpenGLContext *ctx)
 bool KisOpenGL::hasOpenGL3()
 {
     initialize();
-    if (glMajorVersion == 3) {
-        return glMinorVersion >= 2;
-    }
-    if (glMajorVersion > 3) {
-        return true;
-    }
-    return false;
+    return (glMajorVersion * 100 + glMinorVersion) >= 302;
 }
 
 bool KisOpenGL::supportsFenceSync()

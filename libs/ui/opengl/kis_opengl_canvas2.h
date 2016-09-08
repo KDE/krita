@@ -63,8 +63,7 @@ public: // QOpenGLWidget
     virtual void inputMethodEvent(QInputMethodEvent *event);
 
 public:
-    void initializeCheckerShader();
-    void initializeDisplayShader();
+    void initializeShaders();
     void renderCanvasGL();
     void renderDecorations(QPainter *painter);
     void paintToolOutline(const QPainterPath &path);
@@ -101,7 +100,6 @@ private:
     QOpenGLShaderProgram *getCursorShader();
     void drawImage();
     void drawCheckers();
-    QByteArray buildDisplayShader();
 
 private:
 

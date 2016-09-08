@@ -128,7 +128,7 @@ extern "C" int main(int argc, char **argv)
     if (!language.isEmpty()) {
         KLocalizedString::setLanguages(language.split(":"));
         // And override Qt's locale, too
-        qputenv("LANG", language.toLatin1());
+        qputenv("LANG", language.split(":").first().toUtf8());
         QLocale locale(language.split(":").first());
         QLocale::setDefault(locale);
         qDebug() << "Qt ui languages" << locale.uiLanguages();
@@ -144,11 +144,12 @@ extern "C" int main(int argc, char **argv)
 
 #ifdef Q_OS_WIN
     QDir appdir(KoResourcePaths::getApplicationRoot());
+    QString path = qgetenv("PATH");
     qputenv("PATH", QFile::encodeName(appdir.absolutePath() + "/bin" + ";"
                                       + appdir.absolutePath() + "/lib" + ";"
-                                      + appdir.absolutePath() + "/lib/kde4" + ";"
                                       + appdir.absolutePath() + "/Frameworks" + ";"
-                                      + appdir.absolutePath()));
+                                      + appdir.absolutePath() + ";"
+                                      + path));
 
     qDebug() << "PATH" << qgetenv("PATH");
 #endif

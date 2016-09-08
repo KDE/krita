@@ -22,6 +22,8 @@
 #define KIS_WDG_COLOR_H
 
 #include <kis_config_widget.h>
+#include <KoColorSpace.h>
+#include <KoColorSpaceRegistry.h>
 
 class Ui_WdgColorOptions;
 
@@ -29,7 +31,7 @@ class KisWdgColor : public KisConfigWidget
 {
     Q_OBJECT
 public:
-    KisWdgColor(QWidget* parent = 0);
+    KisWdgColor(QWidget* parent = 0, const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8());
     ~KisWdgColor();
 public:
     inline const Ui_WdgColorOptions* widget() const {
@@ -39,6 +41,7 @@ public:
     virtual KisPropertiesConfiguration* configuration() const;
 private:
     Ui_WdgColorOptions* m_widget;
+    const KoColorSpace *m_cs;
 };
 
 #endif

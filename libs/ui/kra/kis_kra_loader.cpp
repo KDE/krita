@@ -80,6 +80,7 @@
 #include "kis_image_config.h"
 #include "KisProofingConfiguration.h"
 #include "kis_layer_properties_icons.h"
+#include "kis_node_view_color_scheme.h"
 
 /*
 
@@ -269,7 +270,7 @@ KisImageSP KisKraLoader::loadXML(const KoXmlElement& element)
             }
         }
         KisImageConfig cfgImage;
-        KisProofingConfiguration *proofingConfig = cfgImage.defaultProofingconfiguration();
+        KisProofingConfigurationSP proofingConfig = cfgImage.defaultProofingconfiguration();
         if (!(attr = element.attribute(PROOFINGPROFILENAME)).isNull()) {
             proofingConfig->proofingProfile = attr;
         }
@@ -654,7 +655,11 @@ KisNodeSP KisKraLoader::loadNode(const KoXmlElement& element, KisImageSP image, 
     const bool visible = element.attribute(VISIBLE, "1") == "0" ? false : true;
     const bool locked = element.attribute(LOCKED, "0") == "0" ? false : true;
     const bool collapsed = element.attribute(COLLAPSED, "0") == "0" ? false : true;
-    const int colorLabelIndex = element.attribute(COLOR_LABEL, "0").toInt();
+    int colorLabelIndex = element.attribute(COLOR_LABEL, "0").toInt();
+    QVector<QColor> labels = KisNodeViewColorScheme::instance()->allColorLabels();
+    if (colorLabelIndex >= labels.size()) {
+        colorLabelIndex = labels.size() - 1;
+    }
 
     // Now find out the layer type and do specific handling
     QString nodeType;
@@ -1098,7 +1103,7 @@ void KisKraLoader::loadCompositions(const KoXmlElement& elem, KisImageSP image)
         QString name = e.attribute("name");
         bool exportEnabled = e.attribute("exportEnabled", "1") == "0" ? false : true;
 
-        KisLayerComposition* composition = new KisLayerComposition(image, name);
+        KisLayerCompositionSP composition(new KisLayerComposition(image, name));
         composition->setExportEnabled(exportEnabled);
 
         KoXmlNode value;

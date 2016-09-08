@@ -33,6 +33,8 @@
 #include <brushengine/kis_paint_information.h>
 #include "kis_paint_device.h"
 #include "kis_image.h"
+#include "kis_paintop_settings_update_proxy.h"
+#include <brushengine/kis_paintop_config_widget.h>
 
 #include <KoStore.h>
 
@@ -45,7 +47,7 @@ struct Q_DECL_HIDDEN KisPaintOpPreset::Private {
 
     KisPaintOpSettingsSP settings;
     bool dirtyPreset;
-
+    QScopedPointer<KisPaintopSettingsUpdateProxy> updateProxy;
 };
 
 
@@ -89,6 +91,10 @@ KisPaintOpPresetSP KisPaintOpPreset::clone() const
 void KisPaintOpPreset::setPresetDirty(bool value)
 {
     m_d->dirtyPreset = value;
+
+    if (m_d->updateProxy && m_d->dirtyPreset != value) {
+        m_d->updateProxy->notifySettingsChanged();
+    }
 }
 bool KisPaintOpPreset::isPresetDirty() const
 {
@@ -107,6 +113,17 @@ KoID KisPaintOpPreset::paintOp() const
     return KoID(m_d->settings->getString("paintop"), name());
 }
 
+void KisPaintOpPreset::setOptionsWidget(KisPaintOpConfigWidget* widget)
+{
+    if (m_d->settings) {
+        m_d->settings->setOptionsWidget(widget);
+
+        if (widget) {
+            widget->setConfigurationSafe(m_d->settings);
+        }
+    }
+}
+
 void KisPaintOpPreset::setSettings(KisPaintOpSettingsSP settings)
 {
     Q_ASSERT(settings);
@@ -114,7 +131,11 @@ void KisPaintOpPreset::setSettings(KisPaintOpSettingsSP settings)
 
     DirtyStateSaver dirtyStateSaver(this);
 
+    KisPaintOpConfigWidget *oldOptionsWidget = 0;
+
     if (m_d->settings) {
+        oldOptionsWidget = m_d->settings->optionsWidget();
+        m_d->settings->setOptionsWidget(0);
         m_d->settings->setPreset(0);
         m_d->settings = 0;
     }
@@ -122,9 +143,19 @@ void KisPaintOpPreset::setSettings(KisPaintOpSettingsSP settings)
     if (settings) {
         m_d->settings = settings->clone();
         m_d->settings->setPreset(KisPaintOpPresetWSP(this));
+
+        if (oldOptionsWidget) {
+            m_d->settings->setOptionsWidget(oldOptionsWidget);
+            oldOptionsWidget->setConfigurationSafe(m_d->settings);
+        }
     }
 
     setValid(m_d->settings);
+
+    if (m_d->updateProxy) {
+        m_d->updateProxy->notifyUniformPropertiesChanged();
+        m_d->updateProxy->notifySettingsChanged();
+    }
 }
 
 KisPaintOpSettingsSP KisPaintOpPreset::settings() const
@@ -343,3 +374,20 @@ bool KisPaintOpPreset::saveToDevice(QIODevice *dev) const
 
 }
 
+KisPaintopSettingsUpdateProxy* KisPaintOpPreset::updateProxy() const
+{
+    if (!m_d->updateProxy) {
+        m_d->updateProxy.reset(new KisPaintopSettingsUpdateProxy());
+    }
+    return m_d->updateProxy.data();
+}
+
+KisPaintopSettingsUpdateProxy* KisPaintOpPreset::updateProxyNoCreate() const
+{
+    return m_d->updateProxy.data();
+}
+
+QList<KisUniformPaintOpPropertySP> KisPaintOpPreset::uniformProperties()
+{
+    return m_d->settings->uniformProperties();
+}

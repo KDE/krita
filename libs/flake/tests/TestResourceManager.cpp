@@ -26,6 +26,8 @@
 #include <QSignalSpy>
 #include <QTest>
 
+#include "kis_debug.h"
+
 void TestResourceManager::koShapeResource()
 {
     KoPathShape * shape = new KoPathShape();
@@ -118,27 +120,270 @@ void TestResourceManager::testDerivedChanged()
 
     m.setResource(derivedKey, 16);
 
-    QCOMPARE(spy.count(), 1);
+    QCOMPARE(spy.count(), 3);
     QList<QVariant> args;
 
     args = spy[0];
     QCOMPARE(args[0].toInt(), derivedKey);
     QCOMPARE(args[1].toInt(), 16);
 
-    m.setResource(key2, 7);
-    QCOMPARE(spy.count(), 4);
-
     args = spy[1];
     QCOMPARE(args[0].toInt(), key2);
-    QCOMPARE(args[1].toInt(), 7);
+    QCOMPARE(args[1].toInt(), 6);
 
     args = spy[2];
     QCOMPARE(args[0].toInt(), otherDerivedKey);
+    QCOMPARE(args[1].toInt(), 16);
+
+    spy.clear();
+
+    m.setResource(key2, 7);
+    QCOMPARE(spy.count(), 3);
+
+    args = spy[0];
+    QCOMPARE(args[0].toInt(), key2);
+    QCOMPARE(args[1].toInt(), 7);
+
+    args = spy[1];
+    QCOMPARE(args[0].toInt(), otherDerivedKey);
     QCOMPARE(args[1].toInt(), 17);
 
-    args = spy[3];
+    args = spy[2];
     QCOMPARE(args[0].toInt(), derivedKey);
     QCOMPARE(args[1].toInt(), 17);
 }
+
+struct ComplexResource {
+    QHash<int, QVariant> m_resources;
+};
+
+typedef QSharedPointer<ComplexResource> ComplexResourceSP;
+Q_DECLARE_METATYPE(ComplexResourceSP);
+
+struct ComplexConverter : public KoDerivedResourceConverter
+{
+    ComplexConverter(int key, int sourceKey) : KoDerivedResourceConverter(key, sourceKey) {}
+
+    QVariant fromSource(const QVariant &value) {
+        KIS_ASSERT(value.canConvert<ComplexResourceSP>());
+        ComplexResourceSP res = value.value<ComplexResourceSP>();
+
+        return res->m_resources[key()];
+    }
+
+    QVariant toSource(const QVariant &value, const QVariant &sourceValue) {
+        KIS_ASSERT(sourceValue.canConvert<ComplexResourceSP>());
+        ComplexResourceSP res = sourceValue.value<ComplexResourceSP>();
+
+        res->m_resources[key()] = value;
+        return QVariant::fromValue(res);
+    }
+};
+
+struct ComplexMediator : public KoResourceUpdateMediator
+{
+    ComplexMediator(int key) : KoResourceUpdateMediator(key) {}
+
+    void connectResource(QVariant sourceResource) {
+        m_res = sourceResource;
+    }
+
+    void forceNotify() {
+        emit sigResourceChanged(key());
+    }
+
+    QVariant m_res;
+};
+typedef QSharedPointer<ComplexMediator> ComplexMediatorSP;
+
+void TestResourceManager::testComplexResource()
+{
+    const int key = 2;
+    const int complex1 = 3;
+    const int complex2 = 4;
+
+    KoCanvasResourceManager m(0);
+    m.addDerivedResourceConverter(toQShared(new ComplexConverter(complex1, key)));
+    m.addDerivedResourceConverter(toQShared(new ComplexConverter(complex2, key)));
+
+    ComplexMediatorSP mediator(new ComplexMediator(key));
+    m.addResourceUpdateMediator(mediator);
+
+    QSignalSpy spy(&m, SIGNAL(canvasResourceChanged(int, const QVariant &)));
+
+    ComplexResourceSP r1(new ComplexResource());
+    r1->m_resources[complex1] = 10;
+    r1->m_resources[complex2] = 20;
+
+    ComplexResourceSP r2(new ComplexResource());
+    r2->m_resources[complex1] = 15;
+    r2->m_resources[complex2] = 25;
+
+
+    // ####################################################
+    // Initial assignment
+    // ####################################################
+    m.setResource(key, QVariant::fromValue(r1));
+
+    QCOMPARE(mediator->m_res.value<ComplexResourceSP>(), r1);
+    QCOMPARE(m.resource(key).value<ComplexResourceSP>(), r1);
+    QCOMPARE(m.resource(complex1).toInt(), 10);
+    QCOMPARE(m.resource(complex2).toInt(), 20);
+
+    QCOMPARE(spy[0][0].toInt(), key);
+    QCOMPARE(spy[0][1].value<ComplexResourceSP>(), r1);
+    QCOMPARE(spy[1][0].toInt(), complex2);
+    QCOMPARE(spy[1][1].toInt(), 20);
+    QCOMPARE(spy[2][0].toInt(), complex1);
+    QCOMPARE(spy[2][1].toInt(), 10);
+    spy.clear();
+
+    // ####################################################
+    // Change the whole resource
+    // ####################################################
+    m.setResource(key, QVariant::fromValue(r2));
+
+    QCOMPARE(mediator->m_res.value<ComplexResourceSP>(), r2);
+    QCOMPARE(m.resource(key).value<ComplexResourceSP>(), r2);
+    QCOMPARE(m.resource(complex1).toInt(), 15);
+    QCOMPARE(m.resource(complex2).toInt(), 25);
+
+    QCOMPARE(spy[0][0].toInt(), key);
+    QCOMPARE(spy[0][1].value<ComplexResourceSP>(), r2);
+    QCOMPARE(spy[1][0].toInt(), complex2);
+    QCOMPARE(spy[1][1].toInt(), 25);
+    QCOMPARE(spy[2][0].toInt(), complex1);
+    QCOMPARE(spy[2][1].toInt(), 15);
+    spy.clear();
+
+    // ####################################################
+    // Change a derived resource
+    // ####################################################
+    m.setResource(complex1, 16);
+
+    QCOMPARE(mediator->m_res.value<ComplexResourceSP>(), r2);
+    QCOMPARE(m.resource(key).value<ComplexResourceSP>(), r2);
+    QCOMPARE(m.resource(complex1).toInt(), 16);
+    QCOMPARE(m.resource(complex2).toInt(), 25);
+
+    QCOMPARE(spy[0][0].toInt(), complex1);
+    QCOMPARE(spy[0][1].toInt(), 16);
+    spy.clear();
+
+    // ####################################################
+    // Change another derived resource
+    // ####################################################
+    m.setResource(complex2, 26);
+
+    QCOMPARE(mediator->m_res.value<ComplexResourceSP>(), r2);
+    QCOMPARE(m.resource(key).value<ComplexResourceSP>(), r2);
+    QCOMPARE(m.resource(complex1).toInt(), 16);
+    QCOMPARE(m.resource(complex2).toInt(), 26);
+
+    QCOMPARE(spy[0][0].toInt(), complex2);
+    QCOMPARE(spy[0][1].toInt(), 26);
+    spy.clear();
+
+    // ####################################################
+    // Switch back the whole source resource
+    // ####################################################
+    m.setResource(key, QVariant::fromValue(r1));
+
+    QCOMPARE(mediator->m_res.value<ComplexResourceSP>(), r1);
+    QCOMPARE(m.resource(key).value<ComplexResourceSP>(), r1);
+    QCOMPARE(m.resource(complex1).toInt(), 10);
+    QCOMPARE(m.resource(complex2).toInt(), 20);
+
+    QCOMPARE(spy[0][0].toInt(), key);
+    QCOMPARE(spy[0][1].value<ComplexResourceSP>(), r1);
+    QCOMPARE(spy[1][0].toInt(), complex2);
+    QCOMPARE(spy[1][1].toInt(), 20);
+    QCOMPARE(spy[2][0].toInt(), complex1);
+    QCOMPARE(spy[2][1].toInt(), 10);
+    spy.clear();
+
+    // ####################################################
+    // The value keep unchanged case!
+    // ####################################################
+    m.setResource(complex1, 10);
+
+    QCOMPARE(mediator->m_res.value<ComplexResourceSP>(), r1);
+    QCOMPARE(m.resource(key).value<ComplexResourceSP>(), r1);
+    QCOMPARE(m.resource(complex1).toInt(), 10);
+    QCOMPARE(m.resource(complex2).toInt(), 20);
+
+    QCOMPARE(spy.size(), 0);
+    spy.clear();
+
+    // ####################################################
+    // While switching a complex resource one derived value
+    // is kept unchanged
+    // ####################################################
+    r2->m_resources[complex1] = 10;
+    m.setResource(key, QVariant::fromValue(r2));
+
+    QCOMPARE(mediator->m_res.value<ComplexResourceSP>(), r2);
+    QCOMPARE(m.resource(key).value<ComplexResourceSP>(), r2);
+    QCOMPARE(m.resource(complex1).toInt(), 10);
+    QCOMPARE(m.resource(complex2).toInt(), 26);
+
+    QCOMPARE(spy[0][0].toInt(), key);
+    QCOMPARE(spy[0][1].value<ComplexResourceSP>(), r2);
+    QCOMPARE(spy[1][0].toInt(), complex2);
+    QCOMPARE(spy[1][1].toInt(), 26);
+    spy.clear();
+
+    // ####################################################
+    // No devived values are changed!
+    // ####################################################
+    *r1 = *r2;
+    m.setResource(key, QVariant::fromValue(r1));
+
+    QCOMPARE(mediator->m_res.value<ComplexResourceSP>(), r1);
+    QCOMPARE(m.resource(key).value<ComplexResourceSP>(), r1);
+    QCOMPARE(m.resource(complex1).toInt(), 10);
+    QCOMPARE(m.resource(complex2).toInt(), 26);
+
+    QCOMPARE(spy[0][0].toInt(), key);
+    QCOMPARE(spy[0][1].value<ComplexResourceSP>(), r1);
+    spy.clear();
+
+    // ####################################################
+    // Try to set the same pointer. No signals emitted!
+    // ####################################################
+    m.setResource(key, QVariant::fromValue(r1));
+
+    QCOMPARE(mediator->m_res.value<ComplexResourceSP>(), r1);
+    QCOMPARE(m.resource(key).value<ComplexResourceSP>(), r1);
+    QCOMPARE(m.resource(complex1).toInt(), 10);
+    QCOMPARE(m.resource(complex2).toInt(), 26);
+
+    QCOMPARE(spy.size(), 0);
+    spy.clear();
+
+
+    // ####################################################
+    // Internals 'officially' changed, but the values not
+    // ####################################################
+    mediator->forceNotify();
+
+    QCOMPARE(spy.size(), 0);
+    spy.clear();
+
+    // ####################################################
+    // We changed the values, but didn't notify anyone :)
+    // ####################################################
+    r1->m_resources[complex1] = 11;
+    r1->m_resources[complex2] = 21;
+
+    mediator->forceNotify();
+
+    QCOMPARE(spy[0][0].toInt(), complex2);
+    QCOMPARE(spy[0][1].toInt(), 21);
+    QCOMPARE(spy[1][0].toInt(), complex1);
+    QCOMPARE(spy[1][1].toInt(), 11);
+    spy.clear();
+}
+
 
 QTEST_MAIN(TestResourceManager)

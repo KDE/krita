@@ -73,7 +73,7 @@ public:
     QScopedPointer<QEvent> compressedMoveEvent;
     bool testingAcceptCompressedTabletEvents = false;
     bool testingCompressBrushEvents = false;
-
+    bool tabletActive = false; // Indicates whether or not tablet is in proximity
 
     typedef QPair<int, QPointer<QObject> > PriorityPair;
     typedef QList<PriorityPair> PriorityList;
@@ -84,6 +84,8 @@ public:
     void allowMouseEvents();
     void eatOneMousePress();
     void maskSyntheticEvents(bool value);
+    void setTabletActive(bool value);
+    void resetCompressor();
 
     template <class Event, bool useBlocking>
     void debugEvent(QEvent *event)

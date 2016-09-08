@@ -33,19 +33,16 @@
 KisMirrorManager::KisMirrorManager(KisViewManager* view) : QObject(view)
     , m_imageView(0)
 {
-
 }
 
 KisMirrorManager::~KisMirrorManager()
 {
-
 }
 
 void KisMirrorManager::setup(KActionCollection * collection)
 {
     m_mirrorCanvas = new KToggleAction(i18n("Mirror View"), this);
     m_mirrorCanvas->setChecked(false);
-    //m_mirrorCanvas->setShortcut(QKeySequence(Qt::Key_M));
 
     collection->addAction("mirror_canvas", m_mirrorCanvas);
     collection->setDefaultShortcut(m_mirrorCanvas, QKeySequence(Qt::Key_M));
@@ -59,31 +56,32 @@ void KisMirrorManager::setView(QPointer<KisView> imageView)
         m_mirrorCanvas->disconnect();
     }
     m_imageView = imageView;
-    if (m_imageView && !decoration()) {
-
-        m_imageView->canvasBase()->addDecoration(new KisMirrorAxis(m_imageView->viewManager()->resourceProvider(), m_imageView));
-    }
-    if (m_imageView && decoration()) {
+    if (m_imageView)  {
         connect(m_mirrorCanvas, SIGNAL(toggled(bool)), dynamic_cast<KisCanvasController*>(m_imageView->canvasController()), SLOT(mirrorCanvas(bool)));
+
+        if (!hasDecoration()) {
+            m_imageView->canvasBase()->addDecoration(new KisMirrorAxis(m_imageView->viewManager()->resourceProvider(), m_imageView));
+        }
     }
     updateAction();
 }
 
 void KisMirrorManager::updateAction()
 {
-    if (decoration()) {
-        m_mirrorCanvas->setChecked(decoration()->visible());
+    if (m_imageView) {
         m_mirrorCanvas->setEnabled(true);
-    } else {
+        m_mirrorCanvas->setChecked(m_imageView->canvasIsMirrored());
+    }
+    else {
         m_mirrorCanvas->setEnabled(false);
+        m_mirrorCanvas->setChecked(false);
     }
 }
 
-KisMirrorAxis* KisMirrorManager::decoration()
-{
-    if (m_imageView && m_imageView->canvasBase()) {
+KisMirrorAxis* KisMirrorManager::hasDecoration() {
+
+    if (m_imageView && m_imageView->canvasBase() && m_imageView->canvasBase()->decoration("mirror_axis")) {
         return dynamic_cast<KisMirrorAxis*>(m_imageView->canvasBase()->decoration("mirror_axis").data());
     }
     return 0;
 }
-

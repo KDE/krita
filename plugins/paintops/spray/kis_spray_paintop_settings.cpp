@@ -26,9 +26,20 @@
 #include "kis_spray_shape_option.h"
 #include <kis_airbrush_option.h>
 
+struct KisSprayPaintOpSettings::Private
+{
+    QList<KisUniformPaintOpPropertyWSP> uniformProperties;
+};
+
+
 KisSprayPaintOpSettings::KisSprayPaintOpSettings()
     : KisOutlineGenerationPolicy<KisPaintOpSettings>(KisCurrentOutlineFetcher::SIZE_OPTION |
-            KisCurrentOutlineFetcher::ROTATION_OPTION)
+                                                     KisCurrentOutlineFetcher::ROTATION_OPTION),
+    m_d(new Private)
+{
+}
+
+KisSprayPaintOpSettings::~KisSprayPaintOpSettings()
 {
 }
 
@@ -64,4 +75,137 @@ QPainterPath KisSprayPaintOpSettings::brushOutline(const KisPaintInformation &in
         }
     }
     return path;
+}
+
+#include <brushengine/kis_slider_based_paintop_property.h>
+#include "kis_paintop_preset.h"
+#include "kis_paintop_settings_update_proxy.h"
+#include "kis_sprayop_option.h"
+#include "kis_standard_uniform_properties_factory.h"
+
+
+QList<KisUniformPaintOpPropertySP> KisSprayPaintOpSettings::uniformProperties()
+{
+    QList<KisUniformPaintOpPropertySP> props =
+        listWeakToStrong(m_d->uniformProperties);
+
+    if (props.isEmpty()) {
+        {
+            KisDoubleSliderBasedPaintOpPropertyCallback *prop =
+                new KisDoubleSliderBasedPaintOpPropertyCallback(
+                    KisDoubleSliderBasedPaintOpPropertyCallback::Double,
+                    "spacing",
+                    i18n("Spacing"),
+                    this, 0);
+
+            prop->setRange(0.01, 10);
+            prop->setSingleStep(0.01);
+
+            prop->setReadCallback(
+                [](KisUniformPaintOpProperty *prop) {
+                    KisSprayProperties option;
+                    option.readOptionSetting(prop->settings().data());
+
+                    prop->setValue(option.spacing);
+                });
+            prop->setWriteCallback(
+                [](KisUniformPaintOpProperty *prop) {
+                    KisSprayProperties option;
+                    option.readOptionSetting(prop->settings().data());
+                    option.spacing = prop->value().toReal();
+                    option.writeOptionSetting(prop->settings().data());
+                });
+
+            QObject::connect(preset()->updateProxy(), SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
+            prop->requestReadValue();
+            props << toQShared(prop);
+        }
+        {
+            KisIntSliderBasedPaintOpPropertyCallback *prop =
+                new KisIntSliderBasedPaintOpPropertyCallback(
+                    KisIntSliderBasedPaintOpPropertyCallback::Int,
+                    "spray_particlecount",
+                    i18n("Particle Count"),
+                    this, 0);
+
+            prop->setRange(0, 1000);
+            prop->setExponentRatio(3);
+
+            prop->setReadCallback(
+                [](KisUniformPaintOpProperty *prop) {
+                    KisSprayProperties option;
+                    option.readOptionSetting(prop->settings().data());
+
+                    prop->setValue(int(option.particleCount));
+                });
+            prop->setWriteCallback(
+                [](KisUniformPaintOpProperty *prop) {
+                    KisSprayProperties option;
+                    option.readOptionSetting(prop->settings().data());
+                    option.particleCount = prop->value().toInt();
+                    option.writeOptionSetting(prop->settings().data());
+                });
+            prop->setIsVisibleCallback(
+                [](const KisUniformPaintOpProperty *prop) {
+                    KisSprayProperties option;
+                    option.readOptionSetting(prop->settings().data());
+                    return !option.useDensity;
+                });
+
+            QObject::connect(preset()->updateProxy(), SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
+            prop->requestReadValue();
+            props << toQShared(prop);
+        }
+        {
+            KisDoubleSliderBasedPaintOpPropertyCallback *prop =
+                new KisDoubleSliderBasedPaintOpPropertyCallback(
+                    KisDoubleSliderBasedPaintOpPropertyCallback::Double,
+                    "spray_density",
+                    i18n("Density"),
+                    this, 0);
+
+            prop->setRange(0.1, 100);
+            prop->setSingleStep(0.01);
+            prop->setDecimals(2);
+            prop->setExponentRatio(3);
+            prop->setSuffix(i18n("%"));
+
+            prop->setReadCallback(
+                [](KisUniformPaintOpProperty *prop) {
+                    KisSprayProperties option;
+                    option.readOptionSetting(prop->settings().data());
+                    prop->setValue(option.coverage);
+                });
+            prop->setWriteCallback(
+                [](KisUniformPaintOpProperty *prop) {
+                    KisSprayProperties option;
+                    option.readOptionSetting(prop->settings().data());
+                    option.coverage = prop->value().toReal();
+                    option.writeOptionSetting(prop->settings().data());
+                });
+            prop->setIsVisibleCallback(
+                [](const KisUniformPaintOpProperty *prop) {
+                    KisSprayProperties option;
+                    option.readOptionSetting(prop->settings().data());
+                    return option.useDensity;
+                });
+
+            QObject::connect(preset()->updateProxy(), SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
+            prop->requestReadValue();
+            props << toQShared(prop);
+        }
+    }
+    {
+        using namespace KisStandardUniformPropertiesFactory;
+
+        Q_FOREACH (KisUniformPaintOpPropertySP prop, KisPaintOpSettings::uniformProperties()) {
+            if (prop->id() == opacity.id() ||
+                prop->id() == size.id()) {
+
+                props.prepend(prop);
+            }
+        }
+    }
+
+    return props;
 }

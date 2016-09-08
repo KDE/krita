@@ -19,6 +19,8 @@
 
 #include "kis_shade_selector_line_editor.h"
 
+#include "kis_double_parse_spin_box.h"
+
 KisShadeSelectorLineEditor::KisShadeSelectorLineEditor(QWidget* parent)
     : KisShadeSelectorLineBase(parent)
 {
@@ -28,22 +30,22 @@ KisShadeSelectorLineEditor::KisShadeSelectorLineEditor(QWidget* parent)
     layout->addLayout(lineOne);
     lineOne->addWidget(new QLabel(i18n("Delta: ")));
 
-    m_hueDelta = new QDoubleSpinBox();
+    m_hueDelta = new KisDoubleParseSpinBox();
     lineOne->addWidget(m_hueDelta);
-    m_saturationDelta = new QDoubleSpinBox();
+    m_saturationDelta = new KisDoubleParseSpinBox();
     lineOne->addWidget(m_saturationDelta);
-    m_valueDelta = new QDoubleSpinBox();
+    m_valueDelta = new KisDoubleParseSpinBox();
     lineOne->addWidget(m_valueDelta);
 
     QHBoxLayout* lineTwo = new QHBoxLayout();
     layout->addLayout(lineTwo);
     lineTwo->addWidget(new QLabel(i18n("Shift: ")));
 
-    m_hueShift = new QDoubleSpinBox();
+    m_hueShift = new KisDoubleParseSpinBox();
     lineTwo->addWidget(m_hueShift);
-    m_saturationShift = new QDoubleSpinBox();
+    m_saturationShift = new KisDoubleParseSpinBox();
     lineTwo->addWidget(m_saturationShift);
-    m_valueShift = new QDoubleSpinBox();
+    m_valueShift = new KisDoubleParseSpinBox();
     lineTwo->addWidget(m_valueShift);
 
 

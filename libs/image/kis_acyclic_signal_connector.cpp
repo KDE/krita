@@ -91,6 +91,21 @@ void KisAcyclicSignalConnector::connectBackwardVoid(QObject *sender, const char 
     connect(this, SIGNAL(backwardSignalVoid()), receiver, method);
 }
 
+void KisAcyclicSignalConnector::connectForwardVariant(QObject *sender, const char *signal,
+                                                  QObject *receiver, const char *method)
+{
+
+    connect(sender, signal, this, SLOT(forwardSlotVariant(const QVariant&)));
+    connect(this, SIGNAL(forwardSignalVariant(const QVariant&)), receiver, method);
+}
+
+void KisAcyclicSignalConnector::connectBackwardVariant(QObject *sender, const char *signal,
+                                                       QObject *receiver, const char *method)
+{
+    connect(sender, signal, this, SLOT(backwardSlotVariant(const QVariant&)));
+    connect(this, SIGNAL(backwardSignalVariant(const QVariant&)), receiver, method);
+}
+
 void KisAcyclicSignalConnector::forwardSlotDouble(double value)
 {
     if (m_signalsBlocked) return;
@@ -163,3 +178,20 @@ void KisAcyclicSignalConnector::backwardSlotVoid()
     m_signalsBlocked--;
 }
 
+void KisAcyclicSignalConnector::forwardSlotVariant(const QVariant &value)
+{
+    if (m_signalsBlocked) return;
+
+    m_signalsBlocked++;
+    emit forwardSignalVariant(value);
+    m_signalsBlocked--;
+}
+
+void KisAcyclicSignalConnector::backwardSlotVariant(const QVariant &value)
+{
+    if (m_signalsBlocked) return;
+
+    m_signalsBlocked++;
+    emit backwardSignalVariant(value);
+    m_signalsBlocked--;
+}

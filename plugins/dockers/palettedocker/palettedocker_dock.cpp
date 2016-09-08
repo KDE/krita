@@ -225,6 +225,7 @@ void PaletteDockerDock::entrySelected(QModelIndex index)
     int i = index.row()*m_model->columnCount()+index.column();
     if (i < m_currentColorSet->nColors()) {
         KoColorSetEntry entry = m_currentColorSet->getColor(i);
+        m_wdgPaletteDock->lblColorName->setText(entry.name);
         if (m_resourceProvider) {
             m_resourceProvider->setFGColor(entry.color);
         }

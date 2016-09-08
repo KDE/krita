@@ -81,12 +81,12 @@ void KisToolLineHelper::repaintLine(KoCanvasResourceManager *resourceManager,
     }
 }
 
-void KisToolLineHelper::start(KoPointerEvent *event)
+void KisToolLineHelper::start(KoPointerEvent *event, KoCanvasResourceManager *resourceManager)
 {
     if (!m_d->enabled) return;
 
     KisPaintInformation pi =
-            m_d->infoBuilder->startStroke(event, elapsedStrokeTime());
+            m_d->infoBuilder->startStroke(event, elapsedStrokeTime(), resourceManager);
 
     if (!m_d->useSensors) {
         pi = KisPaintInformation(pi.pos());

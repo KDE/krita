@@ -132,14 +132,18 @@ void MoveSelectionStrokeStrategy::cancelStrokeCallback()
     KisIndirectPaintingSupport *indirect =
         static_cast<KisIndirectPaintingSupport*>(m_paintLayer.data());
 
-    QRegion dirtyRegion = indirect->temporaryTarget()->region();
+    if (indirect) {
+        KisPaintDeviceSP t = indirect->temporaryTarget();
+        if (t) {
+            QRegion dirtyRegion = t->region();
 
-    indirect->setTemporaryTarget(0);
+            indirect->setTemporaryTarget(0);
 
-    m_selection->setVisible(true);
+            m_selection->setVisible(true);
 
-    m_paintLayer->setDirty(dirtyRegion);
-
+            m_paintLayer->setDirty(dirtyRegion);
+        }
+    }
     KisStrokeStrategyUndoCommandBased::cancelStrokeCallback();
 }
 

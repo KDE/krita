@@ -26,6 +26,8 @@
 #include <QPainter>
 #include <QRect>
 #include <QThreadPool>
+#include <QApplication>
+#include <QDesktopWidget>
 
 #include <kis_icon.h>
 #include <KoPointerEvent.h>
@@ -56,10 +58,13 @@
 #include "kis_recording_adapter.h"
 #include "strokes/freehand_stroke.h"
 
+using namespace std::placeholders; // For _1 placeholder
+
 
 KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, const KUndo2MagicString &transactionText)
     : KisToolPaint(canvas, cursor),
-      m_paintopBasedPickingInAction(false)
+      m_paintopBasedPickingInAction(false),
+      m_brushResizeCompressor(200, std::bind(&KisToolFreehand::slotDoResizeBrush, this, _1))
 {
     m_assistant = false;
     m_magnetism = 1.0;
@@ -323,6 +328,7 @@ void KisToolFreehand::beginAlternateAction(KoPointerEvent *event, AlternateActio
     m_initialGestureGlobalPoint = QCursor::pos();
 
     m_lastDocumentPoint = event->point;
+    m_lastPaintOpSize = currentPaintOpPreset()->settings()->paintOpSize();
 }
 
 void KisToolFreehand::continueAlternateAction(KoPointerEvent *event, AlternateAction action)
@@ -339,17 +345,31 @@ void KisToolFreehand::continueAlternateAction(KoPointerEvent *event, AlternateAc
 
     QPointF offset = actualWidgetPosition - lastWidgetPosition;
 
-    /**
-     * view pixels != widget pixels, but we do this anyway, we only
-     * need to scale the gesture down, not rotate or anything
-     */
-    QPointF scaledOffset = canvas()->viewConverter()->viewToDocument(offset);
+    KisCanvas2 *canvas2 = dynamic_cast<KisCanvas2 *>(canvas());
+    QRect screenRect = QApplication::desktop()->screenGeometry();
 
-    if (qRound(scaledOffset.x()) != 0) {
-        currentPaintOpPreset()->settings()->changePaintOpSize(scaledOffset.x(), scaledOffset.y());
-        requestUpdateOutline(m_initialGestureDocPoint, 0);
+    qreal scaleX = 0;
+    qreal scaleY = 0;
+    canvas2->coordinatesConverter()->imageScale(&scaleX, &scaleY);
+
+    // we have no centralized knowledge of the maximum brush size!
+    const qreal maxBrushSize = 1000.0;
+    const qreal effectiveMaxDragSize = 0.5 * screenRect.width();
+    const qreal effectiveMaxBrushSize = qMin(maxBrushSize, effectiveMaxDragSize / scaleX);
+
+    const qreal scaleCoeff = effectiveMaxBrushSize / effectiveMaxDragSize;
+    const qreal sizeDiff = scaleCoeff * offset.x() ;
+
+    if (qAbs(sizeDiff) > 0.01) {
+        //KisPaintOpSettingsSP settings = currentPaintOpPreset()->settings();
+        const qreal newSize = qBound(0.01, m_lastPaintOpSize + sizeDiff, maxBrushSize);
+
+        //settings->setPaintOpSize(newSize);
+        //requestUpdateOutline(m_initialGestureDocPoint, 0);
+        m_brushResizeCompressor.start(newSize);
 
         m_lastDocumentPoint = event->point;
+        m_lastPaintOpSize = newSize;
     }
 }
 
@@ -384,6 +404,15 @@ void KisToolFreehand::setAssistant(bool assistant)
 void KisToolFreehand::setOnlyOneAssistantSnap(bool assistant)
 {
     m_only_one_assistant = assistant;
+}
+
+void KisToolFreehand::slotDoResizeBrush(qreal newSize)
+{
+    KisPaintOpSettingsSP settings = currentPaintOpPreset()->settings();
+
+    settings->setPaintOpSize(newSize);
+    requestUpdateOutline(m_initialGestureDocPoint, 0);
+
 }
 
 QPointF KisToolFreehand::adjustPosition(const QPointF& point, const QPointF& strokeBegin)

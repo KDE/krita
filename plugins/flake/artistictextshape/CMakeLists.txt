@@ -37,6 +37,6 @@ qt5_add_resources(ArtisticTextShape_SRCS artistictextshape.qrc)
 
 add_library(krita_shape_artistictext MODULE ${ArtisticTextShape_SRCS} )
 
-target_link_libraries(krita_shape_artistictext kritaflake)
+target_link_libraries(krita_shape_artistictext kritaflake kritaui)
 
 install( TARGETS krita_shape_artistictext DESTINATION ${KRITA_PLUGIN_INSTALL_DIR} )

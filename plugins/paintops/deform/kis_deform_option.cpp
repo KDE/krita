@@ -63,14 +63,18 @@ KisDeformOption::~KisDeformOption()
     delete m_options;
 }
 
-void  KisDeformOption::readOptionSetting(const KisPropertiesConfiguration * config)
+void  KisDeformOption::readOptionSetting(const KisPropertiesConfiguration * setting)
 {
-    m_options->deformAmount->setValue(config->getDouble(DEFORM_AMOUNT));
-    m_options->interpolationChBox->setChecked(config->getBool(DEFORM_USE_BILINEAR));
-    m_options->useCounter->setChecked(config->getBool(DEFORM_USE_COUNTER));
-    m_options->useOldData->setChecked(config->getBool(DEFORM_USE_OLD_DATA));
+    DeformOption op;
+    op.readOptionSetting(setting);
 
-    int deformAction = config->getInt(DEFORM_ACTION);
+
+    m_options->deformAmount->setValue(op.deform_amount);
+    m_options->interpolationChBox->setChecked(op.deform_use_bilinear);
+    m_options->useCounter->setChecked(op.deform_use_counter);
+    m_options->useOldData->setChecked(op.deform_use_old_data);
+
+    int deformAction = op.deform_action;
     if (deformAction == 1) {
         m_options->growBtn->setChecked(true);
     }
@@ -98,13 +102,17 @@ void  KisDeformOption::readOptionSetting(const KisPropertiesConfiguration * conf
 }
 
 
-void KisDeformOption::writeOptionSetting(KisPropertiesConfiguration* config) const
+void KisDeformOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
 {
-    config->setProperty(DEFORM_AMOUNT, m_options->deformAmount->value());
-    config->setProperty(DEFORM_ACTION, deformAction());
-    config->setProperty(DEFORM_USE_BILINEAR, m_options->interpolationChBox->isChecked());
-    config->setProperty(DEFORM_USE_COUNTER, m_options->useCounter->isChecked());
-    config->setProperty(DEFORM_USE_OLD_DATA, m_options->useOldData->isChecked());
+    DeformOption op;
+
+    op.deform_amount = m_options->deformAmount->value();
+    op.deform_action = deformAction();
+    op.deform_use_bilinear = m_options->interpolationChBox->isChecked();
+    op.deform_use_counter = m_options->useCounter->isChecked();
+    op.deform_use_old_data = m_options->useOldData->isChecked();
+
+    op.writeOptionSetting(setting);
 }
 
 void KisDeformOption::lodLimitations(KisPaintopLodLimitations *l) const

@@ -66,6 +66,7 @@ set(kritaui_LIB_SRCS
     dialogs/kis_dlg_png_import.cpp
     dialogs/kis_dlg_import_image_sequence.cpp
     dialogs/kis_delayed_save_dialog.cpp
+    dialogs/kis_dlg_internal_color_selector.cpp
     flake/kis_node_dummies_graph.cpp
     flake/kis_dummies_facade_base.cpp
     flake/kis_dummies_facade.cpp
@@ -78,6 +79,12 @@ set(kritaui_LIB_SRCS
     flake/kis_shape_selection_canvas.cpp
     flake/kis_shape_selection_model.cpp
     flake/kis_take_all_shapes_command.cpp
+    brushhud/kis_uniform_paintop_property_widget.cpp
+    brushhud/kis_brush_hud.cpp
+    brushhud/kis_round_hud_button.cpp
+    brushhud/kis_dlg_brush_hud_config.cpp
+    brushhud/kis_brush_hud_properties_list.cpp
+    brushhud/kis_brush_hud_properties_config.cpp
     kis_aspect_ratio_locker.cpp
     kis_autogradient.cc
     kis_bookmarked_configurations_editor.cc
@@ -247,6 +254,13 @@ set(kritaui_LIB_SRCS
     widgets/kis_lod_availability_widget.cpp
     widgets/kis_color_label_selector_widget.cpp
     widgets/kis_color_filter_combo.cpp
+    widgets/kis_elided_label.cpp
+    widgets/kis_spinbox_color_selector.cpp
+    widgets/kis_screen_color_picker.cpp
+    widgets/kis_visual_color_selector.cpp
+    widgets/KoDualColorButton.cpp
+    widgets/kis_color_input.cpp
+    widgets/kis_color_button.cpp
     input/kis_input_manager.cpp
     input/kis_input_manager_p.cpp
     input/kis_extended_modifiers_mapper.cpp
@@ -415,7 +429,6 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
     forms/wdggeneralsettings.ui
     forms/wdgperformancesettings.ui
     forms/wdggenerators.ui
-    forms/wdgcustompalette.ui
     forms/wdgbookmarkedconfigurationseditor.ui
     forms/wdgapplyprofile.ui
     forms/wdgcustompattern.ui
@@ -450,6 +463,8 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
     forms/wdgimportimagesequence.ui
     forms/KisDetailsPaneBase.ui
     forms/KisOpenPaneBase.ui
+    brushhud/kis_dlg_brush_hud_config.ui
+    forms/wdgdlginternalcolorselector.ui
     dialogs/kis_delayed_save_dialog.ui
     input/config/kis_input_configuration_page.ui
     input/config/kis_edit_profiles_dialog.ui
@@ -474,6 +489,7 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
 
     wdgsplash.ui
     input/wintab/kis_screen_size_choice_dialog.ui
+
 )
 
 
@@ -512,7 +528,7 @@ if(X11_FOUND)
     target_link_libraries(kritaui Qt5::X11Extras ${X11_LIBRARIES})
 endif()
 
-target_link_libraries(kritaui LINK_INTERFACE_LIBRARIES kritaimage kritalibbrush kritapigment KF5::Completion KF5::I18n ${GL_INTERFACE_LIBRARIES})
+target_link_libraries(kritaui LINK_INTERFACE_LIBRARIES kritaimage kritalibbrush kritapigment kritawidgets KF5::Completion KF5::I18n ${GL_INTERFACE_LIBRARIES})
 
 target_include_directories(kritaui
     PUBLIC
@@ -520,6 +536,7 @@ target_include_directories(kritaui
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/flake>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/ora>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/tool>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/utils>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/widgets>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/input/wintab>
 )

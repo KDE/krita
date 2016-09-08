@@ -46,8 +46,16 @@ uint qHash(KisWeakSharedPtr<T> ptr) {
  * Define lots of shared pointer versions of Krita classes.
  * Shared pointer classes have the advantage of near automatic
  * memory management (but beware of circular references)
- * and the disadvantage that inheritiance relations are no longer
- * recognizable
+ * These types should never be passed by reference,
+ * because that will mess up their reference counter.
+ *
+ * An example of the naming pattern used:
+ *
+ * KisPaintDeviceSP is a KisSharedPtr of KisPaintDevice
+ * KisPaintDeviceWSP is a KisWeakSharedPtr of KisPaintDevice
+ * vKisPaintDeviceSP is a QVector of KisPaintDeviceSP
+ * vKisPaintDeviceSP_it is an iterator of vKisPaintDeviceSP
+ *
  */
 class KisImage;
 typedef KisSharedPtr<KisImage> KisImageSP;
@@ -260,6 +268,15 @@ typedef QWeakPointer<KisProjectionLeaf> KisProjectionLeafWSP;
 class KisKeyframe;
 typedef QSharedPointer<KisKeyframe> KisKeyframeSP;
 typedef QWeakPointer<KisKeyframe> KisKeyframeWSP;
+
+struct KisProofingConfiguration;
+typedef QSharedPointer<KisProofingConfiguration> KisProofingConfigurationSP;
+typedef QWeakPointer<KisProofingConfiguration> KisProofingConfigurationWSP;
+
+class KisLayerComposition;
+typedef QSharedPointer<KisLayerComposition> KisLayerCompositionSP;
+typedef QWeakPointer<KisLayerComposition> KisLayerCompositionWSP;
+
 
 #include <QSharedPointer>
 #include <QWeakPointer>

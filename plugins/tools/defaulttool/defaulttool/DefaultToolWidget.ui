@@ -6,15 +6,24 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>158</width>
-    <height>64</height>
+    <width>256</width>
+    <height>76</height>
    </rect>
   </property>
   <property name="focusPolicy">
    <enum>Qt::NoFocus</enum>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <property name="margin">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
     <number>0</number>
    </property>
    <item row="0" column="1">
@@ -31,7 +40,7 @@
     </widget>
    </item>
    <item row="0" column="2">
-    <widget class="KoUnitDoubleSpinBox" name="positionXSpinBox">
+    <widget class="KisDoubleParseUnitSpinBox" name="positionXSpinBox">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
        <horstretch>0</horstretch>
@@ -47,7 +56,7 @@
     </widget>
    </item>
    <item row="0" column="3">
-    <widget class="KoUnitDoubleSpinBox" name="widthSpinBox">
+    <widget class="KisDoubleParseUnitSpinBox" name="widthSpinBox">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
        <horstretch>0</horstretch>
@@ -63,20 +72,20 @@
     </widget>
    </item>
    <item row="0" column="4" rowspan="2">
-    <widget class="KoAspectButton" name="aspectButton">
+    <widget class="KoAspectButton" name="aspectButton" native="true">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
-     <property name="text">
+     <property name="text" stdset="0">
       <string/>
      </property>
     </widget>
    </item>
    <item row="0" column="0" rowspan="2">
-    <widget class="KoPositionSelector" name="positionSelector">
+    <widget class="KoPositionSelector" name="positionSelector" native="true">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
        <horstretch>0</horstretch>
@@ -93,7 +102,7 @@
     </widget>
    </item>
    <item row="1" column="2">
-    <widget class="KoUnitDoubleSpinBox" name="positionYSpinBox">
+    <widget class="KisDoubleParseUnitSpinBox" name="positionYSpinBox">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
        <horstretch>0</horstretch>
@@ -109,7 +118,7 @@
     </widget>
    </item>
    <item row="1" column="3">
-    <widget class="KoUnitDoubleSpinBox" name="heightSpinBox">
+    <widget class="KisDoubleParseUnitSpinBox" name="heightSpinBox">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
        <horstretch>0</horstretch>
@@ -125,7 +134,7 @@
     </widget>
    </item>
    <item row="2" column="2">
-    <widget class="QWidget" name="SpecialSpacer">
+    <widget class="QWidget" name="SpecialSpacer" native="true">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
        <horstretch>0</horstretch>
@@ -138,14 +147,15 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KoUnitDoubleSpinBox</class>
-   <extends>QDoubleSpinBox</extends>
-   <header>KoUnitDoubleSpinBox.h</header>
+   <class>KoAspectButton</class>
+   <extends>QWidget</extends>
+   <header>KoAspectButton.h</header>
+   <container>1</container>
   </customwidget>
   <customwidget>
-   <class>KoAspectButton</class>
-   <extends>QLabel</extends>
-   <header>KoAspectButton.h</header>
+   <class>KisDoubleParseUnitSpinBox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header>kis_double_parse_unit_spin_box.h</header>
   </customwidget>
   <customwidget>
    <class>KoPositionSelector</class>

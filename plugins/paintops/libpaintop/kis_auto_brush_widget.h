@@ -25,6 +25,10 @@
 #include "ui_wdgautobrush.h"
 #include <kis_auto_brush.h>
 
+class KisSignalCompressor;
+class KisAspectRatioLocker;
+
+
 class PAINTOP_EXPORT KisWdgAutobrush : public QWidget, public Ui::KisWdgAutobrush
 {
     Q_OBJECT
@@ -43,6 +47,7 @@ class PAINTOP_EXPORT KisAutoBrushWidget : public KisWdgAutobrush
 public:
 
     KisAutoBrushWidget(QWidget *parent, const char* name);
+    ~KisAutoBrushWidget();
 
     void activate();
 
@@ -56,17 +61,6 @@ public:
 private Q_SLOTS:
     void paramChanged();
     void setStackedWidget(int);
-    void spinBoxHorizontalChanged(qreal);
-    void spinBoxVerticalChanged(qreal);
-    void linkFadeToggled(bool);
-    void spinBoxRatioChanged(qreal);
-    void spinBoxRandomnessChanged(qreal);
-    void spinBoxRadiusChanged(qreal);
-    void spinBoxSpikesChanged(int);
-    void spinBoxAngleChanged(int);
-    void spinBoxDensityChanged(qreal);
-
-    void slotSpacingChanged();
 
 Q_SIGNALS:
 
@@ -79,6 +73,8 @@ private:
     QImage m_brush;
     KisBrushSP m_autoBrush;
     bool m_linkFade;
+    QScopedPointer<KisSignalCompressor> m_updateCompressor;
+    QScopedPointer<KisAspectRatioLocker> m_fadeAspectLocker;
 };
 
 

@@ -60,20 +60,27 @@ KisCurveOpOption::~KisCurveOpOption()
 
 void KisCurveOpOption::writeOptionSetting(KisPropertiesConfiguration* config) const
 {
-    config->setProperty(CURVE_PAINT_CONNECTION_LINE, m_options->connectionCHBox->isChecked());
-    config->setProperty(CURVE_SMOOTHING, m_options->smoothingCHBox->isChecked());
-    config->setProperty(CURVE_STROKE_HISTORY_SIZE, m_options->historySizeSlider->value());
-    config->setProperty(CURVE_LINE_WIDTH, m_options->lineWidthSlider->value());
-    config->setProperty(CURVE_CURVES_OPACITY, m_options->curvesOpacitySlider->value());
+    CurveOption op;
+
+    op.curve_paint_connection_line = m_options->connectionCHBox->isChecked();
+    op.curve_smoothing = m_options->smoothingCHBox->isChecked();
+    op.curve_stroke_history_size = m_options->historySizeSlider->value();
+    op.curve_line_width = m_options->lineWidthSlider->value();
+    op.curve_curves_opacity = m_options->curvesOpacitySlider->value();
+
+    op.writeOptionSetting(config);
 }
 
 void KisCurveOpOption::readOptionSetting(const KisPropertiesConfiguration* config)
 {
-    m_options->connectionCHBox->setChecked(config->getBool(CURVE_PAINT_CONNECTION_LINE));
-    m_options->smoothingCHBox->setChecked(config->getBool(CURVE_SMOOTHING));
-    m_options->historySizeSlider->setValue(config->getInt(CURVE_STROKE_HISTORY_SIZE));
-    m_options->lineWidthSlider->setValue(config->getInt(CURVE_LINE_WIDTH));
-    m_options->curvesOpacitySlider->setValue(config->getDouble(CURVE_CURVES_OPACITY));
+    CurveOption op;
+    op.readOptionSetting(config);
+
+    m_options->connectionCHBox->setChecked(op.curve_paint_connection_line);
+    m_options->smoothingCHBox->setChecked(op.curve_smoothing);
+    m_options->historySizeSlider->setValue(op.curve_stroke_history_size);
+    m_options->lineWidthSlider->setValue(op.curve_line_width);
+    m_options->curvesOpacitySlider->setValue(op.curve_curves_opacity);
 }
 
 

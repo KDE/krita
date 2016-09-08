@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>354</width>
-    <height>471</height>
+    <width>399</width>
+    <height>541</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -26,7 +26,7 @@
          <item row="0" column="0">
           <widget class="QLabel" name="label">
            <property name="text">
-            <string>&amp;Style:</string>
+            <string>St&amp;yle:</string>
            </property>
            <property name="buddy">
             <cstring>cmbStyle</cstring>
@@ -114,7 +114,7 @@
           </widget>
          </item>
          <item row="2" column="1">
-          <widget class="KisSliderSpinBox" name="intDepth">
+          <widget class="KisSliderSpinBox" name="intDepth" native="true">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
              <horstretch>0</horstretch>
@@ -161,7 +161,7 @@
           </widget>
          </item>
          <item row="4" column="1">
-          <widget class="KisSliderSpinBox" name="intSize">
+          <widget class="KisSliderSpinBox" name="intSize" native="true">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
              <horstretch>0</horstretch>
@@ -173,7 +173,7 @@
          <item row="5" column="0">
           <widget class="QLabel" name="label_6">
            <property name="text">
-            <string>Sof&amp;ten:</string>
+            <string>So&amp;ften:</string>
            </property>
            <property name="buddy">
             <cstring>intSoften</cstring>
@@ -181,7 +181,7 @@
           </widget>
          </item>
          <item row="5" column="1">
-          <widget class="KisSliderSpinBox" name="intSoften">
+          <widget class="KisSliderSpinBox" name="intSoften" native="true">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
              <horstretch>0</horstretch>
@@ -228,7 +228,7 @@
             </widget>
            </item>
            <item row="0" column="2">
-            <widget class="QSpinBox" name="intAngle">
+            <widget class="KisIntParseSpinBox" name="intAngle">
              <property name="minimum">
               <number>-179</number>
              </property>
@@ -260,7 +260,7 @@
           </layout>
          </item>
          <item row="1" column="2">
-          <widget class="QSpinBox" name="intAltitude">
+          <widget class="KisIntParseSpinBox" name="intAltitude">
            <property name="minimum">
             <number>-179</number>
            </property>
@@ -272,7 +272,7 @@
          <item row="2" column="1">
           <widget class="QLabel" name="label_9">
            <property name="text">
-            <string>Gloss Contour:</string>
+            <string>&amp;Gloss Contour:</string>
            </property>
            <property name="buddy">
             <cstring>cmbContour</cstring>
@@ -313,7 +313,7 @@
             </widget>
            </item>
            <item>
-            <widget class="KColorButton" name="bnHighlightColor">
+            <widget class="KisColorButton" name="bnHighlightColor">
              <property name="text">
               <string>...</string>
              </property>
@@ -335,7 +335,7 @@
           </widget>
          </item>
          <item row="4" column="2">
-          <widget class="KisSliderSpinBox" name="intOpacity">
+          <widget class="KisSliderSpinBox" name="intOpacity" native="true">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
              <horstretch>0</horstretch>
@@ -366,7 +366,7 @@
             </widget>
            </item>
            <item>
-            <widget class="KColorButton" name="bnShadowColor">
+            <widget class="KisColorButton" name="bnShadowColor">
              <property name="text">
               <string>...</string>
              </property>
@@ -388,7 +388,7 @@
           </widget>
          </item>
          <item row="6" column="2">
-          <widget class="KisSliderSpinBox" name="intOpacity2">
+          <widget class="KisSliderSpinBox" name="intOpacity2" native="true">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
              <horstretch>0</horstretch>
@@ -455,21 +455,25 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KColorButton</class>
+   <class>KisColorButton</class>
    <extends>QPushButton</extends>
-   <header>kcolorbutton.h</header>
-   <container>1</container>
+   <header>kis_color_button.h</header>
   </customwidget>
   <customwidget>
-   <class>KisCompositeOpComboBox</class>
-   <extends>QComboBox</extends>
-   <header location="global">kis_cmb_composite.h</header>
+   <class>KisIntParseSpinBox</class>
+   <extends>QSpinBox</extends>
+   <header>kis_int_parse_spin_box.h</header>
   </customwidget>
   <customwidget>
    <class>KisSliderSpinBox</class>
    <extends>QWidget</extends>
    <header location="global">kis_slider_spin_box.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KisCompositeOpComboBox</class>
+   <extends>QComboBox</extends>
+   <header location="global">kis_cmb_composite.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

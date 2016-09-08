@@ -26,6 +26,8 @@
 #include <brushengine/kis_paintop_preset.h>
 #include "kis_resource_server_provider.h"
 #include <KoTriangleColorSelector.h>
+#include <kis_visual_color_selector.h>
+#include <kis_config_notifier.h>
 #include "KoColorSpaceRegistry.h"
 #include <kis_types.h>
 #include <QtGui>
@@ -37,12 +39,20 @@
 #include <math.h>
 #include "kis_signal_compressor.h"
 #include <QApplication>
+#include "brushhud/kis_brush_hud.h"
+#include "brushhud/kis_round_hud_button.h"
 
 
 #define colorInnerRadius 72.0
 #define colorOuterRadius 92.0
 #define maxbrushRadius 42.0
 #define widgetSize (colorOuterRadius*2+maxbrushRadius*4)
+#define widgetMargin 20.0
+#define hudMargin 30.0
+
+#define _USE_MATH_DEFINES 1
+#include <cmath>
+
 
 class PopupColorTriangle : public KoTriangleColorSelector
 {
@@ -87,31 +97,37 @@ private:
     bool m_dragging;
 };
 
-KisPopupPalette::KisPopupPalette(KisFavoriteResourceManager* manager, const KoColorDisplayRendererInterface *displayRenderer, QWidget *parent)
+KisPopupPalette::KisPopupPalette(KisFavoriteResourceManager* manager, const KoColorDisplayRendererInterface *displayRenderer, KisCanvasResourceProvider *provider, QWidget *parent)
     : QWidget(parent, Qt::FramelessWindowHint)
     , m_resourceManager(manager)
     , m_triangleColorSelector(0)
     , m_timer(0)
     , m_displayRenderer(displayRenderer)
     , m_colorChangeCompressor(new KisSignalCompressor(50, KisSignalCompressor::POSTPONE))
+    , m_brushHud(0)
 {
 
     const int borderWidth = 3;
-    m_triangleColorSelector  = new PopupColorTriangle(displayRenderer, this);
+    //m_triangleColorSelector  = new PopupColorTriangle(displayRenderer, this);
+    m_triangleColorSelector = new KisVisualColorSelector(this);
+    m_triangleColorSelector->setDisplayRenderer(displayRenderer);
+    m_triangleColorSelector->setConfig(true,false);
     m_triangleColorSelector->move(widgetSize/2-colorInnerRadius+borderWidth, widgetSize/2-colorInnerRadius+borderWidth);
     m_triangleColorSelector->resize(colorInnerRadius*2-borderWidth*2, colorInnerRadius*2-borderWidth*2);
     m_triangleColorSelector->setVisible(true);
+    m_triangleColorSelector->slotSetColor(KoColor());
 
     QRegion maskedRegion(0, 0, m_triangleColorSelector->width(), m_triangleColorSelector->height(), QRegion::Ellipse );
     m_triangleColorSelector->setMask(maskedRegion);
 
-    setAttribute(Qt::WA_ContentsPropagated, true);
     //setAttribute(Qt::WA_TranslucentBackground, true);
 
-    connect(m_triangleColorSelector, SIGNAL(realColorChanged(KoColor)),
+    connect(m_triangleColorSelector, SIGNAL(sigNewColor(KoColor)),
             m_colorChangeCompressor.data(), SLOT(start()));
     connect(m_colorChangeCompressor.data(), SIGNAL(timeout()),
             SLOT(slotEmitColorChanged()));
+
+    connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), m_triangleColorSelector, SLOT(ConfigurationChanged()));
 
     connect(m_resourceManager, SIGNAL(sigChangeFGColorSelector(KoColor)),
             SLOT(slotExternalFgColorChanged(KoColor)));
@@ -143,20 +159,51 @@ KisPopupPalette::KisPopupPalette(KisFavoriteResourceManager* manager, const KoCo
     setHoveredColor(-1);
     setSelectedColor(-1);
 
+    m_brushHud = new KisBrushHud(provider, parent);
+    m_brushHud->setMaximumHeight(widgetSize);
+    m_brushHud->setVisible(false);
+
+    const int auxButtonSize = 35;
+
+    m_settingsButton = new KisRoundHudButton(this);
+    m_settingsButton->setIcon(KisIconUtils::loadIcon("configure"));
+    m_settingsButton->setGeometry(widgetSize - 2.2 * auxButtonSize, widgetSize - auxButtonSize,
+                                  auxButtonSize, auxButtonSize);
+
+    connect(m_settingsButton, SIGNAL(clicked()), SLOT(slotShowTagsPopup()));
+
+    KisConfig cfg;
+    m_brushHudButton = new KisRoundHudButton(this);
+    m_brushHudButton->setCheckable(true);
+    m_brushHudButton->setOnOffIcons(KisIconUtils::loadIcon("arrow-left"), KisIconUtils::loadIcon("arrow-right"));
+    m_brushHudButton->setGeometry(widgetSize - 1.0 * auxButtonSize, widgetSize - auxButtonSize,
+                                  auxButtonSize, auxButtonSize);
+    connect(m_brushHudButton, SIGNAL(toggled(bool)), SLOT(showHudWidget(bool)));
+    m_brushHudButton->setChecked(cfg.showBrushHud());
+
     setVisible(true);
     setVisible(false);
 }
 
 void KisPopupPalette::slotExternalFgColorChanged(const KoColor &color)
 {
-    m_triangleColorSelector->setRealColor(color);
+    //m_triangleColorSelector->setRealColor(color);
+    //hack to get around cmyk for now.
+    if (color.colorSpace()->colorChannelCount()>3) {
+        KoColor c(KoColorSpaceRegistry::instance()->rgb8());
+        c.fromKoColor(color);
+        m_triangleColorSelector->slotSetColor(c);
+    } else {
+        m_triangleColorSelector->slotSetColor(color);
+    }
+
 }
 
 void KisPopupPalette::slotEmitColorChanged()
 {
     if (isVisible()) {
         update();
-        emit sigChangefGColor(m_triangleColorSelector->realColor());
+        emit sigChangefGColor(m_triangleColorSelector->getCurrentColor());
     }
 }
 
@@ -201,28 +248,51 @@ void KisPopupPalette::slotEnableChangeFGColor()
     emit sigEnableChangeFGColor(true);
 }
 
+void KisPopupPalette::adjustLayout(const QPoint &p)
+{
+    KIS_ASSERT_RECOVER_RETURN(m_brushHud);
+
+    if (isVisible() && parentWidget())  {
+        const QRect fitRect = kisGrowRect(parentWidget()->rect(), -widgetMargin);
+
+        const QPoint paletteCenterOffset(width() / 2, height() / 2);
+        QRect paletteRect = rect();
+        paletteRect.moveTo(p - paletteCenterOffset);
+
+        if (m_brushHudButton->isChecked()) {
+            m_brushHud->updateGeometry();
+            paletteRect.adjust(0, 0, m_brushHud->width() + hudMargin, 0);
+        }
+
+        paletteRect = kisEnsureInRect(paletteRect, fitRect);
+
+        move(paletteRect.topLeft());
+        m_brushHud->move(paletteRect.topLeft() + QPoint(widgetSize + hudMargin, 0));
+        m_lastCenterPoint = p;
+    }
+}
+
+void KisPopupPalette::showHudWidget(bool visible)
+{
+    KIS_ASSERT_RECOVER_RETURN(m_brushHud);
+
+    const bool reallyVisible = visible && m_brushHudButton->isChecked();
+
+    if (reallyVisible) {
+        m_brushHud->updateProperties();
+    }
+
+    m_brushHud->setVisible(reallyVisible);
+    adjustLayout(m_lastCenterPoint);
+
+    KisConfig cfg;
+    cfg.setShowBrushHud(visible);
+}
+
 void KisPopupPalette::showPopupPalette(const QPoint &p)
 {
-    if (!isVisible() && parentWidget())  {
-        QSize parentSize(parentWidget()->size());
-        QPoint pointPalette(p.x() - width() / 2, p.y() - height() / 2);
-
-        //setting offset point in case the widget is shown outside of canvas region
-        int offsetX = 0, offsetY = 0;
-
-        if ((offsetX = pointPalette.x() + width() - parentSize.width()) > 0 || (offsetX = pointPalette.x()) < 0) {
-            pointPalette.setX(pointPalette.x() - offsetX);
-        }
-
-        if ((offsetY = pointPalette.y() + height() - parentSize.height()) > 0 || (offsetY = pointPalette.y()) < 0) {
-            pointPalette.setY(pointPalette.y() - offsetY);
-        }
-
-        move(pointPalette);
-
-    }
     showPopupPalette(!isVisible());
-
+    adjustLayout(p);
 }
 
 void KisPopupPalette::showPopupPalette(bool show)
@@ -233,6 +303,7 @@ void KisPopupPalette::showPopupPalette(bool show)
         emit sigTriggerTimer();
     }
     setVisible(show);
+    m_brushHud->setVisible(show && m_brushHudButton->isChecked());
 }
 
 //redefinition of setVariable function to change the scope to private
@@ -252,7 +323,7 @@ void KisPopupPalette::resizeEvent(QResizeEvent*)
 
 void KisPopupPalette::paintEvent(QPaintEvent* e)
 {
-    Q_UNUSED(e)
+    Q_UNUSED(e);
 
     float rotationAngle = 0.0;
 
@@ -271,7 +342,7 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
     //painting foreground color
     QPainterPath fgColor;
     fgColor.addEllipse(QPoint(-width() / 2 + 50, -height() / 2 + 32), 30, 30);
-    painter.fillPath(fgColor, m_displayRenderer->toQColor(m_triangleColorSelector->realColor()));
+    painter.fillPath(fgColor, m_displayRenderer->toQColor(m_triangleColorSelector->getCurrentColor()));
     painter.drawPath(fgColor);
 
     // create an ellipse for the background that is slightly
@@ -370,21 +441,6 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
             painter.rotate(selectedColor() * -1 * rotationAngle);
         }
     }
-
-
-    //painting configure background, then icon
-    QPainterPath configureContainer;
-    int side = qMin(width(), height());
-
-
-    configureContainer.addEllipse( side / 2 - 38 , side / 2 - 38 , 35 , 35 );
-    painter.fillPath(configureContainer,palette().brush(QPalette::Window));
-    painter.drawPath(configureContainer);
-
-
-    QPixmap settingIcon = KisIconUtils::loadIcon("configure").pixmap(QSize(22,22));
-    painter.drawPixmap(side / 2 - 40 + 9, side / 2 - 40 + 9, settingIcon);
-
 }
 
 QPainterPath KisPopupPalette::drawDonutPathFull(int x, int y, int inner_radius, int outer_radius)
@@ -453,33 +509,30 @@ void KisPopupPalette::mousePressEvent(QMouseEvent* event)
             //setSelectedBrush(pos);
             update();
         }
-
-        int side = qMin(width(), height());
-        QPainterPath settingCircle;
-        settingCircle.addEllipse(width() / 2 + side / 2 - 40, height() / 2 + side / 2 - 40, 40, 40);
-        if (settingCircle.contains(point)) {
-            KisPaintOpPresetResourceServer* rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
-            QStringList tags = rServer->tagNamesList();
-            qSort(tags);
-
-            if (!tags.isEmpty()) {
-                QMenu menu;
-                Q_FOREACH (const QString& tag, tags) {
-                    menu.addAction(tag);
-                }
-                QAction* action = menu.exec(event->globalPos());
-                if (action) {
-                    m_resourceManager->setCurrentTag(action->text());
-                }
-            } else {
-                QWhatsThis::showText(event->globalPos(),
-                                        i18n("There are no tags available to show in this popup. To add presets, you need to tag them and then select the tag here."));
-            }
-        }
     }
 }
 
+void KisPopupPalette::slotShowTagsPopup()
+{
+    KisPaintOpPresetResourceServer* rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
+    QStringList tags = rServer->tagNamesList();
+    qSort(tags);
 
+    if (!tags.isEmpty()) {
+        QMenu menu;
+        Q_FOREACH (const QString& tag, tags) {
+            menu.addAction(tag);
+        }
+
+        QAction* action = menu.exec(QCursor::pos());
+        if (action) {
+            m_resourceManager->setCurrentTag(action->text());
+        }
+    } else {
+        QWhatsThis::showText(QCursor::pos(),
+                             i18n("There are no tags available to show in this popup. To add presets, you need to tag them and then select the tag here."));
+    }
+}
 
 void KisPopupPalette::tabletEvent(QTabletEvent* /*event*/) {
 }

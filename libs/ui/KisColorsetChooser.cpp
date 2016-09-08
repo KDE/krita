@@ -42,6 +42,8 @@
 #include <QLineEdit>
 #include <kis_canvas_resource_provider.h>
 
+#include "kis_int_parse_spin_box.h"
+
 class ColorSetDelegate : public QAbstractItemDelegate
 {
 public:
@@ -88,6 +90,7 @@ KisColorsetChooser::KisColorsetChooser(QWidget* parent): QWidget(parent)
     QSharedPointer<KoAbstractResourceServerAdapter> adapter(new KoResourceServerAdapter<KoColorSet>(rserver));
     m_itemChooser = new KoResourceItemChooser(adapter, this);
     m_itemChooser->setItemDelegate(new ColorSetDelegate(this));
+    m_itemChooser->showTaggingBar(true);
     m_itemChooser->setFixedSize(250, 250);
     m_itemChooser->setRowHeight(30);
     m_itemChooser->setColumnCount(1);
@@ -101,7 +104,7 @@ KisColorsetChooser::KisColorsetChooser(QWidget* parent): QWidget(parent)
     m_nameEdit->setPlaceholderText(i18n("Insert name"));
     m_nameEdit->setClearButtonEnabled(true);
 
-    m_columnEdit = new QSpinBox(this);
+    m_columnEdit = new KisIntParseSpinBox(this);
     m_columnEdit->setRange(1, 30);
     m_columnEdit->setValue(10);
 

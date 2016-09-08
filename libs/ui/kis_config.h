@@ -436,6 +436,9 @@ public:
     bool useEraserBrushSize(bool defaultValue = false) const;
     void setUseEraserBrushSize(bool value);
 
+    bool useEraserBrushOpacity(bool defaultValue = false) const;
+    void setUseEraserBrushOpacity(bool value);
+    
     QColor getMDIBackgroundColor(bool defaultValue = false) const;
     void setMDIBackgroundColor(const QColor & v) const;
 
@@ -478,6 +481,12 @@ public:
 
     QString customFFMpegPath(bool defaultValue = false) const;
     void setCustomFFMpegPath(const QString &value) const;
+
+    bool showBrushHud(bool defaultValue = false) const;
+    void setShowBrushHud(bool value);
+
+    QString brushHudSetting(bool defaultValue = false) const;
+    void setBrushHudSetting(const QString &value) const;
 
     template<class T>
     void writeEntry(const QString& name, const T& value) {

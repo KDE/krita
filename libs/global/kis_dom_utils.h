@@ -130,8 +130,8 @@ void saveValue(QDomElement *parent, const QString &tag, T value)
  *
  * \see loadValue()
  */
-template <typename T>
-void saveValue(QDomElement *parent, const QString &tag, const QVector<T> &array)
+template <template <class> class Container, typename T>
+void saveValue(QDomElement *parent, const QString &tag, const Container<T> &array)
 {
     QDomDocument doc = parent->ownerDocument();
     QDomElement e = doc.createElement(tag);
@@ -207,8 +207,17 @@ loadValue(const QDomElement &parent, T *value, const E &env) {
     return KisDomUtils::loadValue(parent, value);
 }
 
-template <typename T, typename E = std::tuple<>>
-    bool loadValue(const QDomElement &e, QVector<T> *array, const E &env = E())
+/**
+ * Load an array from an XML element, which is a child of \p parent
+ * and has a tag \p tag.
+ *
+ * \return true if the object is successfully loaded and is unique
+ *
+ * \see saveValue()
+ */
+template <template <class> class Container, typename T, typename E = std::tuple<>>
+    bool loadValue(const QDomElement &e, Container<T> *array, const E &env = E())
+
 {
     if (!Private::checkType(e, "array")) return false;
 
@@ -237,6 +246,8 @@ KRITAGLOBAL_EXPORT QDomElement findElementByAttibute(QDomNode parent,
                                                     const QString &tag,
                                                     const QString &attribute,
                                                     const QString &key);
+
+KRITAGLOBAL_EXPORT bool removeElements(QDomElement &parent, const QString &tag);
 
 }
 

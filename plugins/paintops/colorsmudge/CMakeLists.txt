@@ -1,6 +1,7 @@
 set(kritacolorsmudgepaintop_SOURCES
     colorsmudge_paintop_plugin.cpp
     kis_colorsmudgeop.cpp
+    kis_colorsmudgeop_settings.cpp
     kis_colorsmudgeop_settings_widget.cpp
     kis_rate_option.cpp
     kis_smudge_option.cpp

@@ -88,7 +88,7 @@
               <item>
                <widget class="QLabel" name="label_2">
                 <property name="text">
-                 <string>&amp;Predefined:</string>
+                 <string>P&amp;redefined:</string>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -161,7 +161,7 @@
                  </widget>
                 </item>
                 <item row="0" column="1">
-                 <widget class="QDoubleSpinBox" name="doubleWidth">
+                 <widget class="KisDoubleParseSpinBox" name="doubleWidth">
                   <property name="decimals">
                    <number>2</number>
                   </property>
@@ -187,7 +187,7 @@
                  </widget>
                 </item>
                 <item row="2" column="1">
-                 <widget class="QDoubleSpinBox" name="doubleResolution">
+                 <widget class="KisDoubleParseSpinBox" name="doubleResolution">
                   <property name="decimals">
                    <number>0</number>
                   </property>
@@ -207,7 +207,7 @@
                  </widget>
                 </item>
                 <item row="1" column="1">
-                 <widget class="QDoubleSpinBox" name="doubleHeight">
+                 <widget class="KisDoubleParseSpinBox" name="doubleHeight">
                   <property name="minimum">
                    <double>1.000000000000000</double>
                   </property>
@@ -235,7 +235,7 @@
                 <item row="0" column="0">
                  <widget class="QLabel" name="lblWidth">
                   <property name="text">
-                   <string>&amp;Width:</string>
+                   <string>W&amp;idth:</string>
                   </property>
                   <property name="alignment">
                    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -407,7 +407,7 @@
        <item row="3" column="1">
         <widget class="QLabel" name="lblOpacity">
          <property name="text">
-          <string>Image Background &amp;Opacity:</string>
+          <string>Ima&amp;ge Background Opacity:</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -418,7 +418,7 @@
         </widget>
        </item>
        <item row="1" column="2">
-        <widget class="QSpinBox" name="intNumLayers">
+        <widget class="KisIntParseSpinBox" name="intNumLayers">
          <property name="minimumSize">
           <size>
            <width>0</width>
@@ -493,21 +493,21 @@
          <item>
           <widget class="QRadioButton" name="radioBackgroundAsLayer">
            <property name="text">
-            <string>As first layer</string>
+            <string>As fi&amp;rst layer</string>
            </property>
           </widget>
          </item>
          <item>
           <widget class="QRadioButton" name="radioBackgroundAsProjection">
            <property name="text">
-            <string>As canvas color</string>
+            <string>As ca&amp;nvas color</string>
            </property>
           </widget>
          </item>
         </layout>
        </item>
        <item row="2" column="2">
-        <widget class="KColorButton" name="cmbColor">
+        <widget class="KisColorButton" name="cmbColor">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -523,14 +523,14 @@
          <property name="toolTip">
           <string>Reset the image background color in the Image Properties dialog</string>
          </property>
-         <property name="color">
+         <property name="color" stdset="0">
           <color>
            <red>255</red>
            <green>255</green>
            <blue>255</blue>
           </color>
          </property>
-         <property name="defaultColor">
+         <property name="defaultColor" stdset="0">
           <color>
            <red>255</red>
            <green>255</green>
@@ -548,7 +548,16 @@
           <enum>QFrame::Plain</enum>
          </property>
          <layout class="QHBoxLayout" name="_2">
-          <property name="margin">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
            <number>0</number>
           </property>
           <item>
@@ -636,10 +645,14 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KColorButton</class>
+   <class>KisIntParseSpinBox</class>
+   <extends>QSpinBox</extends>
+   <header>kis_int_parse_spin_box.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KisColorButton</class>
    <extends>QPushButton</extends>
-   <header>kcolorbutton.h</header>
-   <container>1</container>
+   <header>kis_color_button.h</header>
   </customwidget>
   <customwidget>
    <class>KisDoubleSliderSpinBox</class>
@@ -652,6 +665,11 @@
    <extends>QWidget</extends>
    <header>widgets/kis_color_space_selector.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KisDoubleParseSpinBox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header>kis_double_parse_spin_box.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

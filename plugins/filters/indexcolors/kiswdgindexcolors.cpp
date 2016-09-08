@@ -26,7 +26,9 @@
 #include "palettegeneratorconfig.h"
 #include "ui_kiswdgindexcolors.h"
 
-#include <kcolorbutton.h>
+#include "kis_int_parse_spin_box.h"
+
+#include <kis_color_button.h>
 
 KisWdgIndexColors::KisWdgIndexColors(QWidget* parent, Qt::WFlags f, int delay): KisConfigWidget(parent, f, delay)
 {
@@ -70,9 +72,9 @@ void KisWdgIndexColors::setup(QStringList shadesLabels, int ramps)
     // Labels for the ramps
     /*for(int col = 0; col < collumns; ++col)
     {
-    	QLabel* l = new QLabel(rampsLabels[col], ui->colorsBox);
-    	l->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-    	ui->layoutColors->addWidget(l, 0, col+1);
+        QLabel* l = new QLabel(rampsLabels[col], ui->colorsBox);
+        l->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+        ui->layoutColors->addWidget(l, 0, col+1);
     }*/
     // Step selectors for the shade gradients
     for(int row = 0; row < (rows-1); ++row)
@@ -81,7 +83,7 @@ void KisWdgIndexColors::setup(QStringList shadesLabels, int ramps)
         QLabel* l1 = new QLabel(QString::fromUtf8("↔"));
         QLabel* l2 = new QLabel(shadesLabels[row]);
 
-        QSpinBox* s = new QSpinBox();
+        QSpinBox* s = new KisIntParseSpinBox();
         s->setMinimum(0);
         s->setMaximum(32);
         s->setValue(2);
@@ -98,7 +100,7 @@ void KisWdgIndexColors::setup(QStringList shadesLabels, int ramps)
     for(int y = 0; y < rows; ++y)
         for(int x = 0; x < collumns; ++x)
         {
-            KColorButton* b = new KColorButton;
+            KisColorButton* b = new KisColorButton;
             QCheckBox* c = new QCheckBox;
             c->setChecked(false);
             b->setEnabled(false);
@@ -107,7 +109,7 @@ void KisWdgIndexColors::setup(QStringList shadesLabels, int ramps)
 
             connect(c, SIGNAL(toggled(bool)), b, SLOT(setEnabled(bool)));
             connect(c, SIGNAL(toggled(bool)), this, SIGNAL(sigConfigurationItemChanged()));
-            connect(b, SIGNAL(changed(QColor)), this, SIGNAL(sigConfigurationItemChanged()));
+            connect(b, SIGNAL(changed(KoColor)), this, SIGNAL(sigConfigurationItemChanged()));
 
             QHBoxLayout* cell = new QHBoxLayout();
             cell->setSpacing(0);
@@ -131,7 +133,7 @@ KisPropertiesConfiguration* KisWdgIndexColors::configuration() const
     for(int y = 0; y < 4; ++y)
         for(int x = 0; x < 4; ++x)
         {
-            palCfg.colors[y][x] = m_colorSelectors[y][x].button->color();
+            palCfg.colors[y][x] = m_colorSelectors[y][x].button->color().toQColor();
             palCfg.colorsEnabled[y][x] = m_colorSelectors[y][x].button->isEnabled();
         }
 
@@ -177,7 +179,9 @@ void KisWdgIndexColors::setConfiguration(const KisPropertiesConfiguration* confi
         {
             m_colorSelectors[y][x].checkbox->setChecked(palCfg.colorsEnabled[y][x]);
             m_colorSelectors[y][x].button->setEnabled(palCfg.colorsEnabled[y][x]);
-            m_colorSelectors[y][x].button->setColor(palCfg.colors[y][x]);
+            KoColor c;
+            c.fromQColor(palCfg.colors[y][x]);
+            m_colorSelectors[y][x].button->setColor(c);
         }
 
     for(int y = 0; y < 3; ++y)

@@ -24,17 +24,22 @@
 #include "kritaui_export.h"
 
 class QSpinBox;
+class QDoubleSpinBox;
+class KisSliderSpinBox;
+class KisDoubleSliderSpinBox;
 class KoAspectButton;
 
 class KRITAUI_EXPORT KisAspectRatioLocker : public QObject
 {
     Q_OBJECT
 public:
-    KisAspectRatioLocker(QObject *parent);
+    KisAspectRatioLocker(QObject *parent = 0);
     ~KisAspectRatioLocker();
 
-    void connectSpinBoxes(QSpinBox *spinOne, QSpinBox *spinTwo, KoAspectButton *apectButton);
+    template <class SpinBoxType>
+        void connectSpinBoxes(SpinBoxType *spinOne, SpinBoxType *spinTwo, KoAspectButton *aspectButton);
 
+    void setBlockUpdateSignalOnDrag(bool block);
 
 private Q_SLOTS:
     void slotSpinOneChanged();

@@ -779,7 +779,7 @@ void KisShrinkSelectionFilter::process(KisPixelSelectionSP pixelSelection, const
     delete[] buffer;
     delete[] max;
     for (qint32 i = 0; i < m_yRadius + 1; i++)
-        delete buf[i];
+        delete[] buf[i];
     delete[] buf;
     delete[] out;
 }

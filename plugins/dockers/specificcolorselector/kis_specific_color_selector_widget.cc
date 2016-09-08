@@ -31,11 +31,12 @@
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 
-#include "kis_color_input.h"
+#include <kis_color_input.h>
 #include <KoColorProfile.h>
-#include "kis_debug.h"
-#include "kis_color_space_selector.h"
-#include "kis_signal_compressor.h"
+#include <kis_debug.h>
+#include <kis_color_space_selector.h>
+#include <kis_signal_compressor.h>
+#include <kis_display_color_converter.h>
 
 
 KisSpecificColorSelectorWidget::KisSpecificColorSelectorWidget(QWidget* parent)
@@ -44,8 +45,7 @@ KisSpecificColorSelectorWidget::KisSpecificColorSelectorWidget(QWidget* parent)
     , m_spacer(0)
     , m_updateCompressor(new KisSignalCompressor(10, KisSignalCompressor::POSTPONE, this))
     , m_customColorSpaceSelected(false)
-    , m_displayRenderer(0)
-    , m_fallbackRenderer(new KoDumbColorDisplayRenderer())
+    , m_displayConverter(0)
 {
 
     m_layout = new QVBoxLayout(this);
@@ -78,7 +78,6 @@ KisSpecificColorSelectorWidget::~KisSpecificColorSelectorWidget()
 {
     KConfigGroup cfg =  KSharedConfig::openConfig()->group("");
     cfg.writeEntry("SpecificColorSelector/ShowColorSpaceSelector", m_chkShowColorSpaceSelector->isChecked());
-    delete m_fallbackRenderer;
 }
 
 bool KisSpecificColorSelectorWidget::customColorSpaceUsed()
@@ -86,21 +85,40 @@ bool KisSpecificColorSelectorWidget::customColorSpaceUsed()
     return m_customColorSpaceSelected;
 }
 
-void KisSpecificColorSelectorWidget::setDisplayRenderer(KoColorDisplayRendererInterface *displayRenderer)
+void KisSpecificColorSelectorWidget::setDisplayConverter(KisDisplayColorConverter *displayConverter)
 {
-    m_displayRenderer = displayRenderer;
+    const bool needsForceUpdate = m_displayConverter != displayConverter;
 
-    if (m_colorSpace) {
-        setColorSpace(m_colorSpace);
+    m_displayConverter = displayConverter;
+
+    if (m_displayConverter) {
+        m_converterConnection.clear();
+        m_converterConnection.addConnection(m_displayConverter, SIGNAL(displayConfigurationChanged()), this, SLOT(rereadCurrentColorSpace()));
     }
+
+    rereadCurrentColorSpace(needsForceUpdate);
 }
 
-void KisSpecificColorSelectorWidget::setColorSpace(const KoColorSpace* cs)
+void KisSpecificColorSelectorWidget::rereadCurrentColorSpace(bool force)
+{
+    if (m_displayConverter && !m_customColorSpaceSelected) {
+        m_colorSpace = m_displayConverter->paintingColorSpace();
+    }
+
+    setColorSpace(m_colorSpace, force);
+    setColor(m_color);
+}
+
+void KisSpecificColorSelectorWidget::setColorSpace(const KoColorSpace* cs, bool force)
 {
     Q_ASSERT(cs);
     dbgPlugins << cs->id() << " " << cs->profile()->name();
 
-    if (cs == m_colorSpace) {
+    if (*m_colorSpace == *cs && !force) {
+        Q_FOREACH (KisColorInput* input, m_inputs) {
+            input->update();
+        }
+
         return;
     }
 
@@ -117,7 +135,10 @@ void KisSpecificColorSelectorWidget::setColorSpace(const KoColorSpace* cs)
 
     QList<KoChannelInfo *> channels = KoChannelInfo::displayOrderSorted(m_colorSpace->channels());
 
-    KoColorDisplayRendererInterface *displayRenderer = m_displayRenderer ? m_displayRenderer : m_fallbackRenderer;
+    KoColorDisplayRendererInterface *displayRenderer =
+        m_displayConverter ?
+        m_displayConverter->displayRendererInterface() :
+        KisDisplayColorConverter::dumbConverterInstance()->displayRendererInterface();
 
     Q_FOREACH (KoChannelInfo* channel, channels) {
         if (channel->channelType() == KoChannelInfo::COLOR) {

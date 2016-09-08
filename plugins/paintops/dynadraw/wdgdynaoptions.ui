@@ -46,9 +46,12 @@
           </widget>
          </item>
          <item row="0" column="1">
-          <widget class="QDoubleSpinBox" name="initWidthSPBox">
+          <widget class="KisDoubleParseSpinBox" name="initWidthSPBox">
            <property name="minimum">
-            <double>-99.000000000000000</double>
+            <double>0.000000000000000</double>
+           </property>
+           <property name="maximum">
+            <double>15.000000000000000</double>
            </property>
            <property name="singleStep">
             <double>0.050000000000000</double>
@@ -69,9 +72,12 @@
           </widget>
          </item>
          <item row="1" column="1">
-          <widget class="QDoubleSpinBox" name="massSPBox">
+          <widget class="KisDoubleParseSpinBox" name="massSPBox">
            <property name="minimum">
-            <double>-99.000000000000000</double>
+            <double>0.000000000000000</double>
+           </property>
+           <property name="maximum">
+            <double>15.000000000000000</double>
            </property>
            <property name="singleStep">
             <double>0.050000000000000</double>
@@ -92,9 +98,12 @@
           </widget>
          </item>
          <item row="2" column="1">
-          <widget class="QDoubleSpinBox" name="dragSPBox">
+          <widget class="KisDoubleParseSpinBox" name="dragSPBox">
            <property name="minimum">
-            <double>-99.000000000000000</double>
+            <double>0.000000000000000</double>
+           </property>
+           <property name="maximum">
+            <double>15.000000000000000</double>
            </property>
            <property name="singleStep">
             <double>0.050000000000000</double>
@@ -115,7 +124,7 @@
           </widget>
          </item>
          <item row="3" column="1">
-          <widget class="QDoubleSpinBox" name="widthRangeSPBox">
+          <widget class="KisDoubleParseSpinBox" name="widthRangeSPBox">
            <property name="minimum">
             <double>-99.000000000000000</double>
            </property>
@@ -229,7 +238,7 @@
            <item>
             <widget class="QRadioButton" name="circleRBox">
              <property name="text">
-              <string>Circle</string>
+              <string>C&amp;ircle</string>
              </property>
              <property name="checked">
               <bool>true</bool>
@@ -255,7 +264,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QDoubleSpinBox" name="lineSpacingSPBox">
+            <widget class="KisDoubleParseSpinBox" name="lineSpacingSPBox">
              <property name="toolTip">
               <string>Line spacing</string>
              </property>
@@ -265,7 +274,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QSpinBox" name="lineCountSPBox">
+            <widget class="KisIntParseSpinBox" name="lineCountSPBox">
              <property name="toolTip">
               <string>Line count</string>
              </property>
@@ -279,14 +288,14 @@
          <item>
           <widget class="QRadioButton" name="polygonRBox">
            <property name="text">
-            <string>Polygon</string>
+            <string>Poly&amp;gon</string>
            </property>
           </widget>
          </item>
          <item>
           <widget class="QRadioButton" name="wireRBox">
            <property name="text">
-            <string>Wire</string>
+            <string>Wi&amp;re</string>
            </property>
           </widget>
          </item>
@@ -327,6 +336,16 @@
    <extends>QWidget</extends>
    <header>kis_slider_spin_box.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KisIntParseSpinBox</class>
+   <extends>QSpinBox</extends>
+   <header>kis_int_parse_spin_box.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KisDoubleParseSpinBox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header>kis_double_parse_spin_box.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

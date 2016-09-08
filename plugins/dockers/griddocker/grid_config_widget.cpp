@@ -22,6 +22,7 @@
 #include "kis_guides_config.h"
 #include "kis_debug.h"
 #include "kis_aspect_ratio_locker.h"
+#include "kis_int_parse_spin_box.h"
 
 
 struct GridConfigWidget::Private

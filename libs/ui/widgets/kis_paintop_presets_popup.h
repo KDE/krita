@@ -94,6 +94,7 @@ Q_SIGNALS:
     void reloadPresetClicked();
     void dirtyPresetToggled(bool value);
     void eraserBrushSizeToggled(bool value);
+    void eraserBrushOpacityToggled(bool value);
     
     void sizeChanged();
 

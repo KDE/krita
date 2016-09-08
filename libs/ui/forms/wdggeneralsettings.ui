@@ -248,7 +248,7 @@
           </layout>
          </item>
          <item row="2" column="1">
-          <widget class="KColorButton" name="m_mdiColor">
+          <widget class="KisColorButton" name="m_mdiColor">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -257,20 +257,6 @@
            </property>
            <property name="text">
             <string/>
-           </property>
-           <property name="color" stdset="0">
-            <color>
-             <red>0</red>
-             <green>0</green>
-             <blue>0</blue>
-            </color>
-           </property>
-           <property name="defaultColor" stdset="0">
-            <color>
-             <red>0</red>
-             <green>0</green>
-             <blue>0</blue>
-            </color>
            </property>
           </widget>
          </item>
@@ -427,7 +413,7 @@
             <item>
              <widget class="QRadioButton" name="m_radioToolOptionsInToolbar">
               <property name="text">
-               <string>In Toolbar</string>
+               <string>In Tool&amp;bar</string>
               </property>
               <property name="checked">
                <bool>true</bool>
@@ -546,7 +532,7 @@
           </widget>
          </item>
          <item row="5" column="1">
-          <widget class="QSpinBox" name="m_favoritePresetsSpinBox">
+          <widget class="KisIntParseSpinBox" name="m_favoritePresetsSpinBox">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -584,7 +570,7 @@
           </widget>
          </item>
          <item row="0" column="1">
-          <widget class="QSpinBox" name="m_autosaveSpinBox">
+          <widget class="KisIntParseSpinBox" name="m_autosaveSpinBox">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -615,7 +601,7 @@
           </widget>
          </item>
          <item row="4" column="1">
-          <widget class="QSpinBox" name="m_undoStackSize">
+          <widget class="KisIntParseSpinBox" name="m_undoStackSize">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -699,10 +685,19 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KColorButton</class>
+   <class>KisIntParseSpinBox</class>
+   <extends>QSpinBox</extends>
+   <header>kis_int_parse_spin_box.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KisColorButton</class>
    <extends>QPushButton</extends>
-   <header>kcolorbutton.h</header>
-   <container>1</container>
+   <header>kis_color_button.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KisIntParseSpinBox</class>
+   <extends>QSpinBox</extends>
+   <header>kis_int_parse_spin_box.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

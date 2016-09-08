@@ -25,7 +25,10 @@
 #include "kis_types.h"
 #include "kis_shared.h"
 #include "kritaimage_export.h"
+#include <brushengine/kis_uniform_paintop_property.h>
 
+class KisPaintopSettingsUpdateProxy;
+class KisPaintOpConfigWidget;
 
 /**
  * A KisPaintOpPreset contains a particular set of settings
@@ -102,6 +105,13 @@ public:
         KisPaintOpPreset *m_preset;
         bool m_isDirty;
     };
+
+    void setOptionsWidget(KisPaintOpConfigWidget *widget);
+
+    KisPaintopSettingsUpdateProxy* updateProxy() const;
+    KisPaintopSettingsUpdateProxy* updateProxyNoCreate() const;
+
+    QList<KisUniformPaintOpPropertySP> uniformProperties();
 
 private:
 

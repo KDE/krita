@@ -31,6 +31,7 @@
 
 
 #include <KoColorPopupButton.h>
+#include <KoColorSpaceRegistry.h>
 #include <KoResourceServerProvider.h>
 
 #include "kis_config.h"
@@ -619,14 +620,14 @@ BevelAndEmboss::BevelAndEmboss(Contour *contour, Texture *texture, QWidget *pare
     connect(ui.cmbContour, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
     connect(ui.chkAntiAliased, SIGNAL(toggled(bool)), SIGNAL(configChanged()));
     connect(ui.cmbHighlightMode, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
-    connect(ui.bnHighlightColor, SIGNAL(changed(QColor)), SIGNAL(configChanged()));
+    connect(ui.bnHighlightColor, SIGNAL(changed(KoColor)), SIGNAL(configChanged()));
     connect(ui.intOpacity, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
     connect(ui.cmbShadowMode, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
-    connect(ui.bnShadowColor, SIGNAL(changed(QColor)), SIGNAL(configChanged()));
+    connect(ui.bnShadowColor, SIGNAL(changed(KoColor)), SIGNAL(configChanged()));
     connect(ui.intOpacity2, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));;
 
     // Contour
-    m_contour->ui.intRange->setRange(0, 100);
+    m_contour->ui.intRange->setRange(1, 100);
     m_contour->ui.intRange->setSuffix(i18n(" %"));
 
     connect(m_contour->ui.cmbContour, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
@@ -664,10 +665,13 @@ void BevelAndEmboss::setBevelAndEmboss(const psd_layer_effects_bevel_emboss *bev
     // ui.cmbContour;
     ui.chkAntiAliased->setChecked(bevelAndEmboss->glossAntiAliased());
     ui.cmbHighlightMode->selectCompositeOp(KoID(bevelAndEmboss->highlightBlendMode()));
-    ui.bnHighlightColor->setColor(bevelAndEmboss->highlightColor());
+    KoColor highlightshadow(KoColorSpaceRegistry::instance()->rgb8());
+    highlightshadow.fromQColor(bevelAndEmboss->highlightColor());
+    ui.bnHighlightColor->setColor(highlightshadow);
     ui.intOpacity->setValue(bevelAndEmboss->highlightOpacity());
     ui.cmbShadowMode->selectCompositeOp(KoID(bevelAndEmboss->shadowBlendMode()));
-    ui.bnShadowColor->setColor(bevelAndEmboss->shadowColor());
+    highlightshadow.fromQColor(bevelAndEmboss->shadowColor());
+    ui.bnShadowColor->setColor(highlightshadow);
     ui.intOpacity2->setValue(bevelAndEmboss->shadowOpacity());
 
     // FIXME: curve editing
@@ -696,10 +700,10 @@ void BevelAndEmboss::fetchBevelAndEmboss(psd_layer_effects_bevel_emboss *bevelAn
     bevelAndEmboss->setAltitude(ui.intAltitude->value());
     bevelAndEmboss->setGlossAntiAliased(ui.chkAntiAliased->isChecked());
     bevelAndEmboss->setHighlightBlendMode(ui.cmbHighlightMode->selectedCompositeOp().id());
-    bevelAndEmboss->setHighlightColor(ui.bnHighlightColor->color());
+    bevelAndEmboss->setHighlightColor(ui.bnHighlightColor->color().toQColor());
     bevelAndEmboss->setHighlightOpacity(ui.intOpacity->value());
     bevelAndEmboss->setShadowBlendMode(ui.cmbShadowMode->selectedCompositeOp().id());
-    bevelAndEmboss->setShadowColor(ui.bnShadowColor->color());
+    bevelAndEmboss->setShadowColor(ui.bnShadowColor->color().toQColor());
     bevelAndEmboss->setShadowOpacity(ui.intOpacity2->value());
 
     // FIXME: curve editing
@@ -792,21 +796,23 @@ ColorOverlay::ColorOverlay(QWidget *parent)
 
     connect(ui.cmbCompositeOp, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
     connect(ui.intOpacity, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
-    connect(ui.bnColor, SIGNAL(changed(QColor)), SIGNAL(configChanged()));
+    connect(ui.bnColor, SIGNAL(changed(KoColor)), SIGNAL(configChanged()));
 }
 
 void ColorOverlay::setColorOverlay(const psd_layer_effects_color_overlay *colorOverlay)
 {
     ui.cmbCompositeOp->selectCompositeOp(KoID(colorOverlay->blendMode()));
     ui.intOpacity->setValue(colorOverlay->opacity());
-    ui.bnColor->setColor(colorOverlay->color());
+    KoColor color(KoColorSpaceRegistry::instance()->rgb8());
+    color.fromQColor(colorOverlay->color());
+    ui.bnColor->setColor(color);
 }
 
 void ColorOverlay::fetchColorOverlay(psd_layer_effects_color_overlay *colorOverlay) const
 {
     colorOverlay->setBlendMode(ui.cmbCompositeOp->selectedCompositeOp().id());
     colorOverlay->setOpacity(ui.intOpacity->value());
-    colorOverlay->setColor(ui.bnColor->color());
+    colorOverlay->setColor(ui.bnColor->color().toQColor());
 }
 
 
@@ -843,7 +849,7 @@ DropShadow::DropShadow(Mode mode, QWidget *parent)
     // connect everything to configChanged() signal
     connect(ui.cmbCompositeOp, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
     connect(ui.intOpacity, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
-    connect(ui.bnColor, SIGNAL(changed(QColor)), SIGNAL(configChanged()));
+    connect(ui.bnColor, SIGNAL(changed(KoColor)), SIGNAL(configChanged()));
 
     connect(ui.dialAngle, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
     connect(ui.intAngle, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
@@ -897,7 +903,9 @@ void DropShadow::setShadow(const psd_layer_effects_shadow_common *shadow)
 {
     ui.cmbCompositeOp->selectCompositeOp(KoID(shadow->blendMode()));
     ui.intOpacity->setValue(shadow->opacity());
-    ui.bnColor->setColor(shadow->color());
+    KoColor color(KoColorSpaceRegistry::instance()->rgb8());
+    color.fromQColor(shadow->color());
+    ui.bnColor->setColor(color);
 
     ui.dialAngle->setValue(shadow->angle());
     ui.intAngle->setValue(shadow->angle());
@@ -925,7 +933,7 @@ void DropShadow::fetchShadow(psd_layer_effects_shadow_common *shadow) const
 {
     shadow->setBlendMode(ui.cmbCompositeOp->selectedCompositeOp().id());
     shadow->setOpacity(ui.intOpacity->value());
-    shadow->setColor(ui.bnColor->color());
+    shadow->setColor(ui.bnColor->color().toQColor());
 
     shadow->setAngle(ui.dialAngle->value());
     shadow->setUseGlobalLight(ui.chkUseGlobalLight->isChecked());
@@ -1092,7 +1100,7 @@ InnerGlow::InnerGlow(Mode mode, KisCanvasResourceProvider *resourceProvider, QWi
     connect(ui.intNoise, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
 
     connect(ui.radioColor, SIGNAL(toggled(bool)), SIGNAL(configChanged()));
-    connect(ui.bnColor, SIGNAL(changed(QColor)), SIGNAL(configChanged()));
+    connect(ui.bnColor, SIGNAL(changed(KoColor)), SIGNAL(configChanged()));
     connect(ui.radioGradient, SIGNAL(toggled(bool)), SIGNAL(configChanged()));
     connect(ui.cmbGradient, SIGNAL(gradientChanged(KoAbstractGradient*)), SIGNAL(configChanged()));
 
@@ -1121,7 +1129,9 @@ void InnerGlow::setConfig(const psd_layer_effects_glow_common *config)
     ui.intNoise->setValue(config->noise());
 
     ui.radioColor->setChecked(config->fillType() == psd_fill_solid_color);
-    ui.bnColor->setColor(config->color());
+    KoColor color(KoColorSpaceRegistry::instance()->rgb8());
+    color.fromQColor(config->color());
+    ui.bnColor->setColor(color);
     ui.radioGradient->setChecked(config->fillType() == psd_fill_gradient);
 
     KoAbstractGradient *gradient = fetchGradientLazy(
@@ -1164,7 +1174,7 @@ void InnerGlow::fetchConfig(psd_layer_effects_glow_common *config) const
         config->setFillType(psd_fill_gradient);
     }
 
-    config->setColor(ui.bnColor->color());
+    config->setColor(ui.bnColor->color().toQColor());
     config->setGradient(GradientPointerConverter::resourceToStyle(ui.cmbGradient->gradient()));
     config->setTechnique((psd_technique_type)ui.cmbTechnique->currentIndex());
     config->setSpread(ui.intChoke->value());
@@ -1251,7 +1261,7 @@ Satin::Satin(QWidget *parent)
     connect(ui.intAngle, SIGNAL(valueChanged(int)), SLOT(slotIntAngleChanged(int)));
 
     connect(ui.cmbCompositeOp, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
-    connect(ui.bnColor, SIGNAL(changed(QColor)), SIGNAL(configChanged()));
+    connect(ui.bnColor, SIGNAL(changed(KoColor)), SIGNAL(configChanged()));
     connect(ui.intOpacity, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
 
     connect(ui.dialAngle, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
@@ -1280,7 +1290,9 @@ void Satin::slotIntAngleChanged(int value)
 void Satin::setSatin(const psd_layer_effects_satin *satin)
 {
     ui.cmbCompositeOp->selectCompositeOp(KoID(satin->blendMode()));
-    ui.bnColor->setColor(satin->color());
+    KoColor color(KoColorSpaceRegistry::instance()->rgb8());
+    color.fromQColor(satin->color());
+    ui.bnColor->setColor(color);
     ui.intOpacity->setValue(satin->opacity());
 
     ui.dialAngle->setValue(satin->angle());
@@ -1301,7 +1313,7 @@ void Satin::fetchSatin(psd_layer_effects_satin *satin) const
 {
     satin->setBlendMode(ui.cmbCompositeOp->selectedCompositeOp().id());
     satin->setOpacity(ui.intOpacity->value());
-    satin->setColor(ui.bnColor->color());
+    satin->setColor(ui.bnColor->color().toQColor());
 
     satin->setAngle(ui.dialAngle->value());
 
@@ -1345,7 +1357,7 @@ Stroke::Stroke(KisCanvasResourceProvider *resourceProvider, QWidget *parent)
 
     connect(ui.cmbFillType, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
 
-    connect(ui.bnColor, SIGNAL(changed(QColor)), SIGNAL(configChanged()));
+    connect(ui.bnColor, SIGNAL(changed(KoColor)), SIGNAL(configChanged()));
 
     connect(ui.cmbGradient, SIGNAL(gradientChanged(KoAbstractGradient*)), SIGNAL(configChanged()));
     connect(ui.chkReverse, SIGNAL(toggled(bool)), SIGNAL(configChanged()));
@@ -1385,8 +1397,9 @@ void Stroke::setStroke(const psd_layer_effects_stroke *stroke)
     ui.intOpacity->setValue(stroke->opacity());
 
     ui.cmbFillType->setCurrentIndex((int)stroke->fillType());
-
-    ui.bnColor->setColor(stroke->color());
+    KoColor color(KoColorSpaceRegistry::instance()->rgb8());
+    color.fromQColor(stroke->color());
+    ui.bnColor->setColor(color);
 
     KoAbstractGradient *gradient =
         fetchGradientLazy(GradientPointerConverter::styleToResource(stroke->gradient()), m_resourceProvider);
@@ -1417,7 +1430,7 @@ void Stroke::fetchStroke(psd_layer_effects_stroke *stroke) const
 
     stroke->setFillType((psd_fill_type)ui.cmbFillType->currentIndex());
 
-    stroke->setColor(ui.bnColor->color());
+    stroke->setColor(ui.bnColor->color().toQColor());
 
     stroke->setGradient(GradientPointerConverter::resourceToStyle(ui.cmbGradient->gradient()));
     stroke->setReverse(ui.chkReverse->isChecked());

@@ -25,8 +25,14 @@
 #include "kis_grid_shape_option.h"
 #include <kis_color_option.h>
 
+struct KisGridPaintOpSettings::Private
+{
+    QList<KisUniformPaintOpPropertyWSP> uniformProperties;
+};
+
 KisGridPaintOpSettings::KisGridPaintOpSettings()
-    : KisOutlineGenerationPolicy<KisPaintOpSettings>(KisCurrentOutlineFetcher::NO_OPTION)
+    : KisOutlineGenerationPolicy<KisPaintOpSettings>(KisCurrentOutlineFetcher::NO_OPTION),
+    m_d(new Private)
 {
 }
 
@@ -52,4 +58,52 @@ QPainterPath KisGridPaintOpSettings::brushOutline(const KisPaintInformation &inf
         }
     }
     return path;
+}
+
+
+#include <brushengine/kis_slider_based_paintop_property.h>
+#include "kis_paintop_preset.h"
+#include "kis_paintop_settings_update_proxy.h"
+#include "kis_gridop_option.h"
+
+
+QList<KisUniformPaintOpPropertySP> KisGridPaintOpSettings::uniformProperties()
+{
+    QList<KisUniformPaintOpPropertySP> props =
+        listWeakToStrong(m_d->uniformProperties);
+
+    if (props.isEmpty()) {
+        {
+            KisIntSliderBasedPaintOpPropertyCallback *prop =
+                new KisIntSliderBasedPaintOpPropertyCallback(
+                    KisIntSliderBasedPaintOpPropertyCallback::Int,
+                    "grid_divisionlevel",
+                    i18n("Division Level"),
+                    this, 0);
+
+            prop->setRange(1, 25);
+            prop->setSingleStep(1);
+
+            prop->setReadCallback(
+                [](KisUniformPaintOpProperty *prop) {
+                    GridOption option;
+                    option.readOptionSetting(prop->settings().data());
+
+                    prop->setValue(int(option.grid_division_level));
+                });
+            prop->setWriteCallback(
+                [](KisUniformPaintOpProperty *prop) {
+                    GridOption option;
+                    option.readOptionSetting(prop->settings().data());
+                    option.grid_division_level = prop->value().toInt();
+                    option.writeOptionSetting(prop->settings().data());
+                });
+
+            QObject::connect(preset()->updateProxy(), SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
+            prop->requestReadValue();
+            props << toQShared(prop);
+        }
+    }
+
+    return KisPaintOpSettings::uniformProperties() + props;
 }

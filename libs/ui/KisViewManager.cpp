@@ -187,8 +187,11 @@ public:
         canvasResourceManager.addDerivedResourceConverter(toQShared(new KisCompositeOpResourceConverter));
         canvasResourceManager.addDerivedResourceConverter(toQShared(new KisEffectiveCompositeOpResourceConverter));
         canvasResourceManager.addDerivedResourceConverter(toQShared(new KisOpacityResourceConverter));
+        canvasResourceManager.addDerivedResourceConverter(toQShared(new KisFlowResourceConverter));
+        canvasResourceManager.addDerivedResourceConverter(toQShared(new KisSizeResourceConverter));
         canvasResourceManager.addDerivedResourceConverter(toQShared(new KisLodAvailabilityResourceConverter));
         canvasResourceManager.addDerivedResourceConverter(toQShared(new KisEraserModeResourceConverter));
+        canvasResourceManager.addResourceUpdateMediator(toQShared(new KisPresetUpdateMediator));
     }
 
 public:
@@ -437,6 +440,7 @@ void KisViewManager::setCurrentView(KisView *view)
 
     resourceProvider()->slotImageSizeChanged();
     resourceProvider()->slotOnScreenResolutionChanged();
+    Q_EMIT viewChanged();
 }
 
 

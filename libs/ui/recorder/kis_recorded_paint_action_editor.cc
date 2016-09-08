@@ -22,8 +22,6 @@
 #include <QGridLayout>
 
 #include <KoColor.h>
-#include <KoColorPopupAction.h>
-
 
 #include "recorder/kis_recorded_paint_action.h"
 #include <brushengine/kis_paintop_preset.h>
@@ -45,17 +43,13 @@ KisRecordedPaintActionEditor::KisRecordedPaintActionEditor(QWidget* parent, KisR
     m_actionEditor->setupUi(this);
 
     // Setup paint color editor
-    m_paintColorPopup = new KoColorPopupAction(this);
-    m_paintColorPopup->setCurrentColor(m_action->paintColor());
-    m_actionEditor->paintColor->setDefaultAction(m_paintColorPopup);
-    connect(m_paintColorPopup, SIGNAL(colorChanged(const KoColor &)),
+    m_actionEditor->paintColor->setColor(m_action->paintColor());
+    connect(m_actionEditor->paintColor, SIGNAL(changed(KoColor)),
             this, SLOT(configurationUpdated()));
 
     // Setup background color editor
-    m_backgroundColorPopup = new KoColorPopupAction(this);
-    m_backgroundColorPopup->setCurrentColor(m_action->backgroundColor());
-    m_actionEditor->backgroundColor->setDefaultAction(m_backgroundColorPopup);
-    connect(m_backgroundColorPopup, SIGNAL(colorChanged(const KoColor &)),
+    m_actionEditor->backgroundColor->setColor(m_action->backgroundColor());
+    connect(m_actionEditor->backgroundColor, SIGNAL(changed(KoColor)),
             this, SLOT(configurationUpdated()));
 
     // Setup opacity
@@ -105,10 +99,10 @@ KisRecordedPaintActionEditor::~KisRecordedPaintActionEditor()
 
 void KisRecordedPaintActionEditor::configurationUpdated()
 {
-    m_configWidget->writeConfiguration(const_cast<KisPaintOpSettings*>(m_action->paintOpPreset()->settings().data()));
+    m_configWidget->writeConfigurationSafe(const_cast<KisPaintOpSettings*>(m_action->paintOpPreset()->settings().data()));
 
-    m_action->setPaintColor(m_paintColorPopup->currentKoColor());
-    m_action->setBackgroundColor(m_backgroundColorPopup->currentKoColor());
+    m_action->setPaintColor(m_actionEditor->paintColor->color());
+    m_action->setBackgroundColor(m_actionEditor->backgroundColor->color());
     m_action->setOpacity(m_actionEditor->opacity->value() / qreal(100.0));
 
     emit(actionEdited());

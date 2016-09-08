@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>266</height>
+    <width>411</width>
+    <height>294</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
@@ -49,7 +49,7 @@
          <item row="1" column="0">
           <widget class="QLabel" name="label_14">
            <property name="text">
-            <string>&amp;Opacity:</string>
+            <string>Opac&amp;ity:</string>
            </property>
            <property name="buddy">
             <cstring>intOpacity</cstring>
@@ -81,7 +81,7 @@
          <item row="2" column="0">
           <widget class="QLabel" name="label_7">
            <property name="text">
-            <string>Gradient:</string>
+            <string>&amp;Gradient:</string>
            </property>
            <property name="buddy">
             <cstring>cmbGradient</cstring>
@@ -194,7 +194,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QSpinBox" name="intAngle">
+            <widget class="KisIntParseSpinBox" name="intAngle">
              <property name="minimum">
               <number>-179</number>
              </property>
@@ -260,15 +260,20 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KisCompositeOpComboBox</class>
-   <extends>QComboBox</extends>
-   <header location="global">kis_cmb_composite.h</header>
+   <class>KisIntParseSpinBox</class>
+   <extends>QSpinBox</extends>
+   <header>kis_int_parse_spin_box.h</header>
   </customwidget>
   <customwidget>
    <class>KisSliderSpinBox</class>
    <extends>QWidget</extends>
    <header location="global">kis_slider_spin_box.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KisCompositeOpComboBox</class>
+   <extends>QComboBox</extends>
+   <header location="global">kis_cmb_composite.h</header>
   </customwidget>
   <customwidget>
    <class>KisCmbGradient</class>

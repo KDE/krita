@@ -20,6 +20,8 @@ set(kritawidgetutils_LIB_SRCS
     KoFileDialog.cpp
     KoResourcePaths.cpp
 
+    kis_num_parser.cpp
+
     config/kcolorscheme.cpp
     config/kcolorschememanager.cpp
     config/khelpclient.cpp

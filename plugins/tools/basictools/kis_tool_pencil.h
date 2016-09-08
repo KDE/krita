@@ -55,6 +55,8 @@ public:
     KisToolPencil(KoCanvasBase * canvas);
     void mousePressEvent(KoPointerEvent *event);
 
+    virtual QList<QPointer<QWidget> > createOptionWidgets();
+
 protected Q_SLOTS:
     virtual void resetCursorStyle();
 

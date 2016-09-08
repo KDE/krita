@@ -31,7 +31,6 @@ set(kritawidgets_LIB_SRCS
     KoColorPopupAction.cpp
     KoColorSetWidget.cpp
     KoColorSlider.cpp
-    KoDualColorButton.cpp
     KoEditColorSetDialog.cpp
     KoTriangleColorSelector.cpp
     KoResourcePopupAction.cpp

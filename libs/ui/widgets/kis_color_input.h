@@ -29,14 +29,15 @@ class KisIntParseSpinBox;
 class KisDoubleParseSpinBox;
 class KoColorSlider;
 class QLineEdit;
-#include "KoColorDisplayRendererInterface.h"
 
+#include <KoColorDisplayRendererInterface.h>
+#include "kritaui_export.h"
 
-class KisColorInput : public QWidget
+class KRITAUI_EXPORT KisColorInput : public QWidget
 {
     Q_OBJECT
 public:
-    KisColorInput(QWidget* parent, const KoChannelInfo*, KoColor* color, KoColorDisplayRendererInterface *displayRenderer);
+    KisColorInput(QWidget* parent, const KoChannelInfo*, KoColor* color, KoColorDisplayRendererInterface *displayRenderer = KoDumbColorDisplayRenderer::instance());
 protected:
     void init();
     virtual QWidget* createInput() = 0;
@@ -49,11 +50,11 @@ protected:
     KoColorDisplayRendererInterface *m_displayRenderer;
 };
 
-class KisIntegerColorInput : public KisColorInput
+class KRITAUI_EXPORT KisIntegerColorInput : public KisColorInput
 {
     Q_OBJECT
 public:
-    KisIntegerColorInput(QWidget* parent, const KoChannelInfo*, KoColor* color, KoColorDisplayRendererInterface *displayRenderer);
+    KisIntegerColorInput(QWidget* parent, const KoChannelInfo*, KoColor* color, KoColorDisplayRendererInterface *displayRenderer = KoDumbColorDisplayRenderer::instance());
 protected:
     virtual QWidget* createInput();
 public Q_SLOTS:
@@ -64,11 +65,11 @@ private:
 };
 
 
-class KisFloatColorInput : public KisColorInput
+class KRITAUI_EXPORT KisFloatColorInput : public KisColorInput
 {
     Q_OBJECT
 public:
-    KisFloatColorInput(QWidget* parent, const KoChannelInfo*, KoColor* color, KoColorDisplayRendererInterface *displayRenderer);
+    KisFloatColorInput(QWidget* parent, const KoChannelInfo*, KoColor* color, KoColorDisplayRendererInterface *displayRenderer = KoDumbColorDisplayRenderer::instance());
 protected:
     virtual QWidget* createInput();
 public Q_SLOTS:
@@ -81,11 +82,11 @@ private:
     qreal m_maxValue;
 };
 
-class KisHexColorInput : public KisColorInput
+class KRITAUI_EXPORT KisHexColorInput : public KisColorInput
 {
     Q_OBJECT
 public:
-    KisHexColorInput(QWidget* parent, KoColor* color, KoColorDisplayRendererInterface *displayRenderer);
+    KisHexColorInput(QWidget* parent, KoColor* color, KoColorDisplayRendererInterface *displayRenderer = KoDumbColorDisplayRenderer::instance());
 protected:
     virtual QWidget* createInput();
 public Q_SLOTS:

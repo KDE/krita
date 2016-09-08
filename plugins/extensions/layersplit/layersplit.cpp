@@ -149,9 +149,13 @@ void LayerSplit::slotLayerSplit()
                 }
 
                 if (!found) {
+                    QString name = dlg.palette()->closestColorName(c);
+                    if (name.toLower() == "untitled" || name.toLower() == "none" || name.toLower() == "") {
+                        name = KoColor::toQString(c);
+                    }
                     Layer l;
                     l.color = c;
-                    l.device = new KisPaintDevice(cs, KoColor::toQString(c));
+                    l.device = new KisPaintDevice(cs, name);
                     l.accessor = l.device->createRandomAccessorNG(col, row);
                     l.accessor->moveTo(col, row);
                     memcpy(l.accessor->rawData(), acc->rawDataConst(), cs->pixelSize());

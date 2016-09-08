@@ -20,6 +20,8 @@
 #include "dlg_layersplit.h"
 
 #include <klocalizedstring.h>
+
+#include <KoResourceServerProvider.h>
 #include <kis_debug.h>
 
 #include <KisViewManager.h>
@@ -45,6 +47,11 @@ DlgLayerSplit::DlgLayerSplit()
     m_page->intFuzziness->setSingleStep(1);
 
 
+
+    m_colorSetChooser = new KisColorsetChooser();
+    m_page->paletteChooser->setPopupWidget(m_colorSetChooser);
+    connect(m_colorSetChooser, SIGNAL(paletteSelected(KoColorSet*)), this, SLOT(slotSetPalette(KoColorSet*)));
+
     KisConfig cfg;
     m_page->intFuzziness->setValue(cfg.readEntry<int>("layersplit/fuzziness", 20));
     m_page->chkCreateGroupLayer->setChecked(cfg.readEntry<bool>("layerspit/createmastergroup", true));
@@ -53,6 +60,17 @@ DlgLayerSplit::DlgLayerSplit()
     m_page->chkHideOriginal->setChecked(cfg.readEntry<bool>("layerspit/hideoriginal", false));
     m_page->chkSortLayers->setChecked(cfg.readEntry<bool>("layerspit/sortlayers", true));
     m_page->chkDisregardOpacity->setChecked(cfg.readEntry<bool>("layerspit/disregardopacity", true));
+
+    QString paletteName = cfg.readEntry<QString>("layersplit/paletteName", "Default");
+    KoResourceServer<KoColorSet> *pserver = KoResourceServerProvider::instance()->paletteServer(false);
+    KoColorSet *pal = pserver->resourceByName(paletteName);
+    if (pal) {
+        m_palette = pal;
+        m_page->paletteChooser->setText(pal->name());
+        QIcon icon(QPixmap::fromImage(pal->image()));
+        m_page->paletteChooser->setIcon(icon);
+    }
+
 
     connect(this, SIGNAL(applyClicked()), this, SLOT(applyClicked()));
 
@@ -73,6 +91,7 @@ void DlgLayerSplit::applyClicked()
     cfg.writeEntry("layerspit/hideoriginal", m_page->chkHideOriginal->isChecked());
     cfg.writeEntry("layerspit/sortlayers", m_page->chkSortLayers->isChecked());
     cfg.writeEntry("layerspit/disregardopacity", m_page->chkDisregardOpacity->isChecked());
+    cfg.writeEntry("layersplit/paletteName", m_palette->name());
 
     accept();
 }
@@ -113,5 +132,17 @@ int DlgLayerSplit::fuzziness() const
 
 }
 
+KoColorSet *DlgLayerSplit::palette() const
+{
+    return m_palette;
+}
 
-
+void DlgLayerSplit::slotSetPalette(KoColorSet *pal)
+{
+    if (pal) {
+        m_palette = pal;
+        m_page->paletteChooser->setText(pal->name());
+        QIcon icon(QPixmap::fromImage(pal->image()));
+        m_page->paletteChooser->setIcon(icon);
+    }
+}

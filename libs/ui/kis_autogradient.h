@@ -39,8 +39,8 @@ private Q_SLOTS:
     void slotChangedSegment(KoGradientSegment* segment);
     void slotChangedInterpolation(int type);
     void slotChangedColorInterpolation(int type);
-    void slotChangedLeftColor(const QColor& color);
-    void slotChangedRightColor(const QColor& color);
+    void slotChangedLeftColor(const KoColor& color);
+    void slotChangedRightColor(const KoColor& color);
     void slotChangedLeftOpacity(int value);
     void slotChangedRightOpacity(int value);
     void slotChangedName();

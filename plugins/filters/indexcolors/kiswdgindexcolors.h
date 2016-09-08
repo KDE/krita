@@ -27,7 +27,7 @@
 #include <QSpinBox>
 
 class QCheckBox;
-class KColorButton;
+class KisColorButton;
 namespace Ui
 {
 class KisWdgIndexColors;
@@ -48,7 +48,7 @@ private Q_SLOTS:
 private:
     struct ColorWidgets
     {
-        KColorButton* button;
+        KisColorButton* button;
         QCheckBox* checkbox;
     };
     QVector< QVector<ColorWidgets> > m_colorSelectors;

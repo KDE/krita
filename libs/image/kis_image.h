@@ -53,7 +53,7 @@ class KisLayerComposition;
 class KisSpontaneousJob;
 class KisImageAnimationInterface;
 class KUndo2MagicString;
-class KisProofingConfiguration;
+struct KisProofingConfiguration;
 
 namespace KisMetaData
 {
@@ -480,17 +480,17 @@ public:
     /**
      * Returns the layer compositions for the image
      */
-    QList<KisLayerComposition*> compositions();
+    QList<KisLayerCompositionSP> compositions();
 
     /**
      * Adds a new layer composition, will be saved with the image
      */
-    void addComposition(KisLayerComposition* composition);
+    void addComposition(KisLayerCompositionSP composition);
 
     /**
      * Remove the layer compostion
      */
-    void removeComposition(KisLayerComposition* composition);
+    void removeComposition(KisLayerCompositionSP composition);
 
     /**
      * Permit or deny the wrap-around mode for all the paint devices
@@ -568,12 +568,12 @@ public:
      * the proofingConfiguration has changed.
      * @param proofingConfig - the kis proofing config that will be used instead.
      */
-    void setProofingConfiguration(KisProofingConfiguration *proofingConfig);
+    void setProofingConfiguration(KisProofingConfigurationSP proofingConfig);
     /**
      * @brief proofingConfiguration
      * @return the proofing configuration of the image.
      */
-    KisProofingConfiguration *proofingConfiguration() const;
+    KisProofingConfigurationSP proofingConfiguration() const;
 
 public:
     bool startIsolatedMode(KisNodeSP node);

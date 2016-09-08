@@ -440,6 +440,7 @@ void KisViewManager::setCurrentView(KisView *view)
 
     resourceProvider()->slotImageSizeChanged();
     resourceProvider()->slotOnScreenResolutionChanged();
+    Q_EMIT viewChanged();
 }
 
 

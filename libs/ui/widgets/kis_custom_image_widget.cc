@@ -129,7 +129,9 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget* parent, qint32 defWidth, qin
 
     KisConfig cfg;
     intNumLayers->setValue(cfg.numDefaultLayers());
-    cmbColor->setColor(cfg.defaultBackgroundColor());
+    KoColor bcol(KoColorSpaceRegistry::instance()->rgb8());
+    bcol.fromQColor(cfg.defaultBackgroundColor());
+    cmbColor->setColor(bcol);
     setBackgroundOpacity(cfg.defaultBackgroundOpacity());
 
     KisConfig::BackgroundStyle bgStyle = cfg.defaultBackgroundStyle();
@@ -277,7 +279,7 @@ KisDocument* KisCustomImageWidget::createNewImage()
     width = static_cast<qint32>(0.5  + KoUnit::ptToUnit(m_width, KoUnit(KoUnit::Pixel, resolution)));
     height = static_cast<qint32>(0.5 + KoUnit::ptToUnit(m_height, KoUnit(KoUnit::Pixel, resolution)));
 
-    QColor qc = cmbColor->color();
+    QColor qc = cmbColor->color().toQColor();
     qc.setAlpha(backgroundOpacity());
     KoColor bgColor(qc, cs);
 
@@ -288,7 +290,7 @@ KisDocument* KisCustomImageWidget::createNewImage()
     KisConfig cfg;
     cfg.setNumDefaultLayers(intNumLayers->value());
     cfg.setDefaultBackgroundOpacity(backgroundOpacity());
-    cfg.setDefaultBackgroundColor(cmbColor->color());
+    cfg.setDefaultBackgroundColor(cmbColor->color().toQColor());
     cfg.setDefaultBackgroundStyle(backgroundAsLayer ? KisConfig::LAYER : KisConfig::PROJECTION);
 
     return doc;

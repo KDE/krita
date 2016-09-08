@@ -20,7 +20,8 @@
 #define DLG_LAYERSPLIT
 
 #include <KoDialog.h>
-
+#include <KoColorSet.h>
+#include <KisColorsetChooser.h>
 #include <kis_types.h>
 
 #include "wdg_layersplit.h"
@@ -46,13 +47,17 @@ public:
     bool sortLayers() const;
     bool disregardOpacity() const;
     int fuzziness() const;
+    KoColorSet* palette() const;
 
 private Q_SLOTS:
 
     void applyClicked();
+    void slotSetPalette(KoColorSet *pal);
 
 private:
     WdgLayerSplit* m_page;
+    KisColorsetChooser *m_colorSetChooser;
+    KoColorSet *m_palette;
 };
 
 #endif // DLG_LAYERSPLIT

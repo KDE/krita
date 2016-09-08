@@ -212,6 +212,11 @@ public Q_SLOTS:
 Q_SIGNALS:
 
     void floatingMessageRequested(const QString &message, const QString &iconName);
+    /**
+     * @brief viewChanged
+     * sent out when the view has changed.
+     */
+    void viewChanged();
 
 private Q_SLOTS:
 

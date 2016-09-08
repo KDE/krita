@@ -1,5 +1,5 @@
 diff --git a/qttools/src/macdeployqt/macdeployqt/main.cpp b/qttools/src/macdeployqt/macdeployqt/main.cpp
-index 2e6ad0c..a2c4865 100644
+index 2e6ad0c..8a90c1a 100644
 --- a/qttools/src/macdeployqt/macdeployqt/main.cpp
 +++ b/qttools/src/macdeployqt/macdeployqt/main.cpp
 @@ -52,6 +52,7 @@ int main(int argc, char **argv)
@@ -10,7 +10,15 @@ index 2e6ad0c..a2c4865 100644
          qDebug() << "";
          qDebug() << "macdeployqt takes an application bundle as input and makes it";
          qDebug() << "self-contained by copying in the Qt frameworks and plugins that";
-@@ -153,6 +154,14 @@ int main(int argc, char **argv)
+@@ -92,6 +93,7 @@ int main(int argc, char **argv)
+     extern QString codesignIdentiy;
+     extern bool appstoreCompliant;
+     extern bool deployFramework;
++    QStringList extraPluginDirectories;
+ 
+     for (int i = 2; i < argc; ++i) {
+         QByteArray argument = QByteArray(argv[i]);
+@@ -153,6 +155,14 @@ int main(int argc, char **argv)
              LogDebug() << "Argument found:" << argument;
              deployFramework = true;
  
@@ -25,7 +33,7 @@ index 2e6ad0c..a2c4865 100644
          } else if (argument.startsWith("-")) {
              LogError() << "Unknown argument" << argument << "\n";
              return 1;
-@@ -183,10 +192,13 @@ int main(int argc, char **argv)
+@@ -183,10 +193,13 @@ int main(int argc, char **argv)
          deploymentInfo.deployedFrameworks = deploymentInfo.deployedFrameworks.toSet().toList();
      }
  

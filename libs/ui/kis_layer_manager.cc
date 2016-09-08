@@ -364,8 +364,8 @@ void KisLayerManager::convertNodeToPaintLayer(KisNodeSP source)
 
     KisPaintDeviceSP clone;
 
-    if (!(*srcDevice->colorSpace() ==
-          *srcDevice->compositionSourceColorSpace())) {
+    if (*srcDevice->colorSpace() !=
+        *srcDevice->compositionSourceColorSpace()) {
 
         clone = new KisPaintDevice(srcDevice->compositionSourceColorSpace());
 

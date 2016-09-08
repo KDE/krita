@@ -520,7 +520,7 @@ void KoGradientSegment::RGBColorInterpolationStrategy::colorAt(KoColor& dst, qre
 
     //check if our mixspace exists, it doesn't at startup.
     if (mixSpace){
-        if ( !(*buffer.colorSpace() == *mixSpace)) {
+        if (*buffer.colorSpace() != *mixSpace) {
             buffer = KoColor(mixSpace);
         }
         mixSpace->mixColorsOp()->mixColors(colors, colorWeights, 2, buffer.data());

@@ -768,7 +768,7 @@ void KisPaintDevice::Private::uploadFrame(int dstFrameId, KisPaintDeviceSP srcDe
 void KisPaintDevice::Private::uploadFrameData(DataSP srcData, DataSP dstData)
 {
     if (srcData->colorSpace() != dstData->colorSpace() &&
-        !(*srcData->colorSpace() == *dstData->colorSpace())) {
+        *srcData->colorSpace() != *dstData->colorSpace()) {
 
         KUndo2Command tempCommand;
 

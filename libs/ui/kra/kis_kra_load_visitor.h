@@ -57,6 +57,7 @@ public:
     bool visit(KisTransformMask *mask);
     bool visit(KisTransparencyMask *mask);
     bool visit(KisSelectionMask *mask);
+    bool visit(KisColorizeMask *mask);
 
     QStringList errorMessages() const;
 

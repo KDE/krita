@@ -194,6 +194,18 @@ private:
 };
 
 
+void KisColorizeMask::setProfile(const KoColorProfile *profile)
+{
+    // WARNING: there is no undo information, used only while loading!
+
+    m_d->fakePaintDevice->setProfile(profile);
+    m_d->coloringProjection->setProfile(profile);
+
+    for (auto stroke : m_d->keyStrokes) {
+        stroke.color.setProfile(profile);
+    }
+}
+
 KUndo2Command* KisColorizeMask::setColorSpace(const KoColorSpace * dstColorSpace,
                                               KoColorConversionTransformation::Intent renderingIntent,
                                               KoColorConversionTransformation::ConversionFlags conversionFlags)
@@ -831,9 +843,14 @@ KisPaintDeviceSP KisColorizeMask::testingFilteredSource() const
     return m_d->filteredSource;
 }
 
-QList<KeyStroke> KisColorizeMask::testingKeyStrokes() const
+QList<KeyStroke> KisColorizeMask::fetchKeyStrokesDirect() const
 {
     return m_d->keyStrokes;
+}
+
+void KisColorizeMask::setKeyStrokesDirect(const QList<KisLazyFillTools::KeyStroke> &strokes)
+{
+    m_d->keyStrokes = strokes;
 }
 
 qint32 KisColorizeMask::x() const

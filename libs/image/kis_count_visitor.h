@@ -34,6 +34,7 @@
 #include "kis_transform_mask.h"
 #include "kis_transparency_mask.h"
 #include "kis_selection_mask.h"
+#include "lazybrush/kis_colorize_mask.h"
 #include "generator/kis_generator_layer.h"
 /**
  * The count visitor traverses the node stack for nodes that conform
@@ -104,6 +105,10 @@ public:
     }
 
     bool visit(KisSelectionMask* mask) {
+        return check(mask);
+    }
+
+    bool visit(KisColorizeMask* mask) {
         return check(mask);
     }
 

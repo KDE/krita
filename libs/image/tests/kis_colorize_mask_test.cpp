@@ -96,7 +96,7 @@ void KisColorizeMaskTest::test()
 
     QList<KisLazyFillTools::KeyStroke> strokes;
 
-    strokes = t.mask->testingKeyStrokes();
+    strokes = t.mask->fetchKeyStrokesDirect();
 
     // Check initial bounding rects
 
@@ -139,7 +139,7 @@ void KisColorizeMaskTest::test()
 
     KUndo2Command *cmd = t.mask->setColorSpace(newCS);
     cmd->redo();
-    strokes = t.mask->testingKeyStrokes();
+    strokes = t.mask->fetchKeyStrokesDirect();
 
     QCOMPARE(t.mask->colorSpace(), newCS);
     QCOMPARE(t.mask->paintDevice()->colorSpace(), newCS);
@@ -150,7 +150,7 @@ void KisColorizeMaskTest::test()
     QCOMPARE(strokes[2].color.colorSpace(), newCS);
 
     cmd->undo();
-    strokes = t.mask->testingKeyStrokes();
+    strokes = t.mask->fetchKeyStrokesDirect();
 
     QCOMPARE(t.mask->colorSpace(), oldCS);
     QCOMPARE(t.mask->paintDevice()->colorSpace(), oldCS);
@@ -161,7 +161,7 @@ void KisColorizeMaskTest::test()
     QCOMPARE(strokes[2].color.colorSpace(), oldCS);
 
     cmd->redo();
-    strokes = t.mask->testingKeyStrokes();
+    strokes = t.mask->fetchKeyStrokesDirect();
 
     QCOMPARE(t.mask->colorSpace(), newCS);
     QCOMPARE(t.mask->paintDevice()->colorSpace(), newCS);
@@ -178,7 +178,7 @@ void KisColorizeMaskTest::testCrop()
 {
     ColorizeMaskTester t;
     QList<KisLazyFillTools::KeyStroke> strokes;
-    strokes = t.mask->testingKeyStrokes();
+    strokes = t.mask->fetchKeyStrokesDirect();
 
     // Check initial bounding rects
 

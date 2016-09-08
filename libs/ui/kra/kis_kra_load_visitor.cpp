@@ -52,7 +52,10 @@
 #include "kis_transform_mask_params_factory_registry.h"
 #include <kis_transparency_mask.h>
 #include <kis_selection_mask.h>
+#include <lazybrush/kis_colorize_mask.h>
+#include <lazybrush/kis_lazy_fill_tools.h>
 #include "kis_shape_selection.h"
+#include "kis_colorize_dom_utils.h"
 #include "kis_dom_utils.h"
 #include "kis_raster_keyframe_channel.h"
 #include "kis_paint_device_frames_interface.h"
@@ -342,6 +345,38 @@ bool KisKraLoadVisitor::visit(KisSelectionMask *mask)
 {
     initSelectionForMask(mask);
     return loadSelection(getLocation(mask), mask->selection());
+}
+
+bool KisKraLoadVisitor::visit(KisColorizeMask *mask)
+{
+    m_store->pushDirectory();
+    QString location = getLocation(mask, DOT_COLORIZE_MASK);
+    m_store->enterDirectory(location) ;
+
+    QByteArray data;
+    if (!m_store->extractFile("content.xml", data))
+        return false;
+
+    QDomDocument doc;
+    if (!doc.setContent(data))
+        return false;
+
+    QVector<KisLazyFillTools::KeyStroke> strokes;
+    if (!KisDomUtils::loadValue(doc.documentElement(), COLORIZE_KEYSTROKES_SECTION, &strokes, mask->colorSpace()))
+        return false;
+
+    int i = 0;
+    Q_FOREACH (const KisLazyFillTools::KeyStroke &stroke, strokes) {
+        const QString fileName = QString("%1_%2").arg(COLORIZE_KEYSTROKE).arg(i++);
+        loadPaintDevice(stroke.dev, fileName);
+    }
+
+    mask->setKeyStrokesDirect(QList<KisLazyFillTools::KeyStroke>::fromVector(strokes));
+
+    loadPaintDevice(mask->coloringProjection(), COLORIZE_COLORING_DEVICE);
+
+    m_store->popDirectory();
+    return true;
 }
 
 QStringList KisKraLoadVisitor::errorMessages() const

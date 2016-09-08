@@ -46,6 +46,7 @@
 #include <kis_transform_mask_params_interface.h>
 #include <kis_transparency_mask.h>
 #include <kis_selection_mask.h>
+#include "lazybrush/kis_colorize_mask.h"
 #include <kis_selection_component.h>
 #include <kis_pixel_selection.h>
 #include <metadata/kis_meta_data_store.h>
@@ -57,6 +58,11 @@
 
 #include "kis_raster_keyframe_channel.h"
 #include "kis_paint_device_frames_interface.h"
+
+#include "lazybrush/kis_lazy_fill_tools.h"
+#include <KoStoreDevice.h>
+#include "kis_colorize_dom_utils.h"
+#include "kis_dom_utils.h"
 
 
 using namespace KRA;
@@ -247,6 +253,46 @@ bool KisKraSaveVisitor::visit(KisSelectionMask *mask)
         m_errorMessages << i18n("Failed to save the selection for local selection %1.", mask->name());
         return false;
     }
+    return true;
+}
+
+bool KisKraSaveVisitor::visit(KisColorizeMask *mask)
+{
+    m_store->pushDirectory();
+    QString location = getLocation(mask, DOT_COLORIZE_MASK);
+    bool result = m_store->enterDirectory(location);
+
+    if (!result) {
+        m_errorMessages << i18n("Failed to open %1.", location);
+        return false;
+    }
+
+    if (!m_store->open("content.xml"))
+        return false;
+
+    KoStoreDevice storeDev(m_store);
+
+    QDomDocument doc("doc");
+    QDomElement root = doc.createElement("colorize");
+    doc.appendChild(root);
+    KisDomUtils::saveValue(&root, COLORIZE_KEYSTROKES_SECTION, QVector<KisLazyFillTools::KeyStroke>::fromList(mask->fetchKeyStrokesDirect()));
+
+    QTextStream stream(&storeDev);
+    stream << doc;
+
+    if (!m_store->close())
+        return false;
+
+    int i = 0;
+    Q_FOREACH (const KisLazyFillTools::KeyStroke &stroke, mask->fetchKeyStrokesDirect()) {
+        const QString fileName = QString("%1_%2").arg(COLORIZE_KEYSTROKE).arg(i++);
+        savePaintDevice(stroke.dev, fileName);
+    }
+
+    savePaintDevice(mask->coloringProjection(), COLORIZE_COLORING_DEVICE);
+
+    m_store->popDirectory();
+
     return true;
 }
 

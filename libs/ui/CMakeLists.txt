@@ -153,6 +153,7 @@ set(kritaui_LIB_SRCS
     kra/kis_kra_save_visitor.cpp
     kra/kis_kra_saver.cpp
     kra/kis_kra_savexml_visitor.cpp
+    kra/kis_colorize_dom_utils.cpp
     opengl/kis_opengl.cpp
     opengl/kis_opengl_canvas2.cpp
     opengl/kis_opengl_canvas_debugger.cpp

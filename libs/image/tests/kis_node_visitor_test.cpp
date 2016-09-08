@@ -73,6 +73,10 @@ public:
         return true;
     }
 
+    bool visit(KisColorizeMask */*mask*/) {
+        return true;
+    }
+
 };
 
 void KisNodeVisitorTest::testCreation()

@@ -192,6 +192,9 @@ public:
     bool visit(KisSelectionMask*) {
         return true;
     }
+    bool visit(KisColorizeMask*) {
+        return true;
+    }
 
 private:
     QRect m_updateRect;

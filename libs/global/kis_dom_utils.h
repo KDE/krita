@@ -220,6 +220,21 @@ bool loadValue(const QDomElement &e, QVector<T> *array)
     return true;
 }
 
+template <typename T, typename E>
+    bool loadValue(const QDomElement &e, QVector<T> *array, const E &env)
+{
+    if (!Private::checkType(e, "array")) return false;
+
+    QDomElement child = e.firstChildElement();
+    while (!child.isNull()) {
+        T value;
+        if (!loadValue(child, &value, env)) return false;
+        *array << value;
+        child = child.nextSiblingElement();
+    }
+    return true;
+}
+
 template <typename T>
 bool loadValue(const QDomElement &parent, const QString &tag, T *value)
 {
@@ -228,6 +243,17 @@ bool loadValue(const QDomElement &parent, const QString &tag, T *value)
 
     return loadValue(e, value);
 }
+
+template <typename T, typename E>
+    bool loadValue(const QDomElement &parent, const QString &tag, T *value, const E &env)
+{
+    QDomElement e;
+    if (!findOnlyElement(parent, tag, &e)) return false;
+
+    return loadValue(e, value, env);
+}
+
+
 
 KRITAGLOBAL_EXPORT QDomElement findElementByAttibute(QDomNode parent,
                                                     const QString &tag,

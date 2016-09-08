@@ -165,6 +165,15 @@ void KoColor::convertTo(const KoColorSpace * cs)
               KoColorConversionTransformation::internalConversionFlags());
 }
 
+void KoColor::setProfile(const KoColorProfile *profile)
+{
+    const KoColorSpace *dstColorSpace =
+        KoColorSpaceRegistry::instance()->colorSpace(colorSpace()->colorModelId().id(), colorSpace()->colorDepthId().id(), profile);
+    if (!dstColorSpace) return;
+
+    d->colorSpace = KoColorSpaceRegistry::instance()->permanentColorspace(dstColorSpace);
+}
+
 void KoColor::setColor(const quint8 * data, const KoColorSpace * colorSpace)
 {
     Q_ASSERT(data);

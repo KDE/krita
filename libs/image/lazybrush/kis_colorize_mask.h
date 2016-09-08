@@ -51,6 +51,10 @@ public:
 
     void initializeCompositeOp();
     const KoColorSpace* colorSpace() const;
+
+    // assign color profile without conversion of pixel data
+    void setProfile(const KoColorProfile *profile);
+
     KUndo2Command* setColorSpace(const KoColorSpace * dstColorSpace,
                                  KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::internalRenderingIntent(),
                                  KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::internalConversionFlags());
@@ -94,7 +98,9 @@ public:
     void testingAddKeyStroke(KisPaintDeviceSP dev, const KoColor &color, bool isTransparent = false);
     void testingRegenerateMask();
     KisPaintDeviceSP testingFilteredSource() const;
-    QList<KisLazyFillTools::KeyStroke> testingKeyStrokes() const;
+
+    QList<KisLazyFillTools::KeyStroke> fetchKeyStrokesDirect() const;
+    void setKeyStrokesDirect(const QList<KisLazyFillTools::KeyStroke> &strokes);
 
     qint32 x() const;
     qint32 y() const;

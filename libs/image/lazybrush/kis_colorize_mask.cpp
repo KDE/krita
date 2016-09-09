@@ -337,7 +337,7 @@ KisPaintDeviceSP KisColorizeMask::coloringProjection() const
 
 QIcon KisColorizeMask::icon() const
 {
-    return KisIconUtils::loadIcon("filterMask");
+    return KisIconUtils::loadIcon("colorizeMask");
 }
 
 

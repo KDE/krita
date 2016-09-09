@@ -29,11 +29,11 @@ int KisWaveletKernel::kernelSizeFromRadius(qreal radius)
     return 2 * ceil(radius) + 1;
 }
 
-Matrix<qreal, Dynamic, Dynamic>
+Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic>
 KisWaveletKernel::createHorizontalMatrix(qreal radius)
 {
     int kernelSize = kernelSizeFromRadius(radius);
-    Matrix<qreal, Dynamic, Dynamic> matrix(1, kernelSize);
+    Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> matrix(1, kernelSize);
 
     /**
      * The kernel size should always be odd, then the position of the
@@ -50,15 +50,15 @@ KisWaveletKernel::createHorizontalMatrix(qreal radius)
         else
             matrix(0, x) = 0;
     }
-    
+
     return matrix;
 }
 
-Matrix<qreal, Dynamic, Dynamic>
+Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic>
 KisWaveletKernel::createVerticalMatrix(qreal radius)
 {
     int kernelSize = kernelSizeFromRadius(radius);
-    Matrix<qreal, Dynamic, Dynamic> matrix(kernelSize, 1);
+    Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> matrix(kernelSize, 1);
 
 
     /**
@@ -83,14 +83,14 @@ KisWaveletKernel::createVerticalMatrix(qreal radius)
 KisConvolutionKernelSP
 KisWaveletKernel::createHorizontalKernel(qreal radius)
 {
-    Matrix<qreal, Dynamic, Dynamic> matrix = createHorizontalMatrix(radius);
+    Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> matrix = createHorizontalMatrix(radius);
     return KisConvolutionKernel::fromMatrix(matrix, 0, matrix.sum());
 }
 
 KisConvolutionKernelSP
 KisWaveletKernel::createVerticalKernel(qreal radius)
 {
-    Matrix<qreal, Dynamic, Dynamic> matrix = createVerticalMatrix(radius);
+    Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> matrix = createVerticalMatrix(radius);
     return KisConvolutionKernel::fromMatrix(matrix, 0, matrix.sum());
 }
 

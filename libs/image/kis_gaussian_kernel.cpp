@@ -34,11 +34,11 @@ int KisGaussianKernel::kernelSizeFromRadius(qreal radius)
 }
 
 
-Matrix<qreal, Dynamic, Dynamic>
+Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic>
 KisGaussianKernel::createHorizontalMatrix(qreal radius)
 {
     int kernelSize = kernelSizeFromRadius(radius);
-    Matrix<qreal, Dynamic, Dynamic> matrix(1, kernelSize);
+    Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> matrix(1, kernelSize);
 
     const qreal sigma = sigmaFromRadius(radius);
     const qreal multiplicand = 1 / (sqrt(2 * M_PI * sigma * sigma));
@@ -59,11 +59,11 @@ KisGaussianKernel::createHorizontalMatrix(qreal radius)
     return matrix;
 }
 
-Matrix<qreal, Dynamic, Dynamic>
+Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic>
 KisGaussianKernel::createVerticalMatrix(qreal radius)
 {
     int kernelSize = kernelSizeFromRadius(radius);
-    Matrix<qreal, Dynamic, Dynamic> matrix(kernelSize, 1);
+    Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> matrix(kernelSize, 1);
 
     const qreal sigma = sigmaFromRadius(radius);
     const qreal multiplicand = 1 / (sqrt(2 * M_PI * sigma * sigma));
@@ -87,14 +87,14 @@ KisGaussianKernel::createVerticalMatrix(qreal radius)
 KisConvolutionKernelSP
 KisGaussianKernel::createHorizontalKernel(qreal radius)
 {
-    Matrix<qreal, Dynamic, Dynamic> matrix = createHorizontalMatrix(radius);
+    Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> matrix = createHorizontalMatrix(radius);
     return KisConvolutionKernel::fromMatrix(matrix, 0, matrix.sum());
 }
 
 KisConvolutionKernelSP
 KisGaussianKernel::createVerticalKernel(qreal radius)
 {
-    Matrix<qreal, Dynamic, Dynamic> matrix = createVerticalMatrix(radius);
+    Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> matrix = createVerticalMatrix(radius);
     return KisConvolutionKernel::fromMatrix(matrix, 0, matrix.sum());
 }
 

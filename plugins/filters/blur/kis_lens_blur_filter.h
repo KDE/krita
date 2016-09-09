@@ -1,4 +1,4 @@
-/* 
+/*
  * This file is part of Krita
  *
  * Copyright (c) 2010 Edward Apap <schumifer@hotmail.com>
@@ -26,8 +26,6 @@
 #include "ui_wdg_lens_blur.h"
 
 #include <Eigen/Core>
-
-using namespace Eigen;
 
 class KisLensBlurFilter : public KisFilter
 {

@@ -297,18 +297,20 @@ QModelIndex KisAnimationCurvesView::findNextKeyframeIndex(int channel, int time,
     }
 }
 
-void KisAnimationCurvesView::updateVerticalRange()
+void KisAnimationCurvesView::findExtremes(qreal *minimum, qreal *maximum)
 {
     if (!model()) return;
 
-    qreal min = 0;
-    qreal max = 0;
+    qreal min = qInf();
+    qreal max = -qInf();
 
     int rows = model()->rowCount();
     for (int row = 0; row < rows; row++) {
         QModelIndex index = model()->index(row, 0);
-        QVariant nextTime;
 
+        if (isIndexHidden(index)) continue;
+
+        QVariant nextTime;
         do {
             qreal value = index.data(KisAnimationCurvesModel::ScalarValueRole).toReal();
 
@@ -320,8 +322,19 @@ void KisAnimationCurvesView::updateVerticalRange()
         } while (nextTime.isValid());
     }
 
-    int viewMin = max * m_d->verticalHeader->scaleFactor();
-    int viewMax = min * m_d->verticalHeader->scaleFactor();
+    if (qIsFinite(min)) *minimum = min;
+    if (qIsFinite(max)) *maximum = max;
+}
+
+void KisAnimationCurvesView::updateVerticalRange()
+{
+    if (!model()) return;
+
+    qreal minimum, maximum;
+    findExtremes(&minimum, &maximum);
+
+    int viewMin = maximum * m_d->verticalHeader->scaleFactor();
+    int viewMax = minimum * m_d->verticalHeader->scaleFactor();
 
     viewMin -= VERTICAL_PADDING;
     viewMax += VERTICAL_PADDING;
@@ -693,4 +706,21 @@ void KisAnimationCurvesView::createKeyframe()
 void KisAnimationCurvesView::removeKeyframes()
 {
     m_d->model->removeFrames(selectedIndexes());
+}
+
+void KisAnimationCurvesView::zoomToFit()
+{
+    if (!model()) return;
+
+    qreal minimum, maximum;
+    findExtremes(&minimum, &maximum);
+    if (minimum == maximum) return;
+
+    qreal zoomLevel = (viewport()->height() - 2 * VERTICAL_PADDING) / (maximum - minimum);
+    qreal offset = -VERTICAL_PADDING - zoomLevel * maximum;
+
+    m_d->verticalHeader->setScale(zoomLevel);
+    m_d->verticalHeader->setOffset(offset);
+    verticalScrollBar()->setValue(offset);
+    viewport()->update();
 }

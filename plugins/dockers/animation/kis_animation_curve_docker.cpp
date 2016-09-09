@@ -94,6 +94,8 @@ KisAnimationCurveDocker::KisAnimationCurveDocker()
             curvesView, &KisAnimationCurvesView::createKeyframe);
     connect(m_d->curvesWidget.btnRemoveKeyframes, &QToolButton::clicked,
             curvesView, &KisAnimationCurvesView::removeKeyframes);
+    connect(m_d->curvesWidget.btnZoomToFit, &QToolButton::clicked,
+            curvesView, &KisAnimationCurvesView::zoomToFit);
 }
 
 KisAnimationCurveDocker::~KisAnimationCurveDocker()

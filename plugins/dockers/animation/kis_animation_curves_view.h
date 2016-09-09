@@ -63,6 +63,8 @@ public Q_SLOTS:
     void createKeyframe();
     void removeKeyframes();
 
+    void zoomToFit();
+
 protected Q_SLOTS:
     void updateGeometries();
 
@@ -86,6 +88,7 @@ private:
     void paintKeyframes(QPainter &painter, int firstFrame, int lastFrame);
     QModelIndex findNextKeyframeIndex(int channel, int time, int selectionOffset, bool backward);
 
+    void findExtremes(qreal *minimum, qreal *maximum);
     void updateVerticalRange();
 
     void startPan(QPoint mousePos);

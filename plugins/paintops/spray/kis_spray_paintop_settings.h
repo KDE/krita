@@ -21,7 +21,7 @@
 
 #include <QScopedPointer>
 
-#include <brushengine/kis_paintop_settings.h>
+#include <brushengine/kis_no_size_paintop_settings.h>
 #include <kis_types.h>
 
 #include <kis_outline_generation_policy.h>
@@ -33,6 +33,9 @@ class KisSprayPaintOpSettings : public KisOutlineGenerationPolicy<KisPaintOpSett
 public:
     KisSprayPaintOpSettings();
     ~KisSprayPaintOpSettings();
+
+    void setPaintOpSize(qreal value) Q_DECL_OVERRIDE;
+    qreal paintOpSize() const Q_DECL_OVERRIDE;
 
 
     QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode) const;

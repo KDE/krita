@@ -368,6 +368,7 @@ void KisPaintOpPresetsPopup::showEvent(QShowEvent *)
     if (m_d->detached) {
         window()->setGeometry(m_d->detachedGeometry);
     }
+    emit brushEditorShown();
 }
 
 void KisPaintOpPresetsPopup::resizeEvent(QResizeEvent* event)

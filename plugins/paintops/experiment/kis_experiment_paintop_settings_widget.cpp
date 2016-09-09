@@ -49,8 +49,4 @@ KisPropertiesConfiguration*  KisExperimentPaintOpSettingsWidget::configuration()
     writeConfiguration(config);
     return config;
 }
-void KisExperimentPaintOpSettingsWidget::changePaintOpSize(qreal /*x*/, qreal /*y*/)
-{
-    //m_experimentOption->setDiameter( m_experimentOption->startSize() + qRound(x) );
-}
 

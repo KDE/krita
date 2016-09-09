@@ -25,7 +25,7 @@
 #include <QSvgRenderer>
 
 KisSvgBrush::KisSvgBrush(const QString& filename)
-    : KisBrush(filename)
+    : KisScalingSizeBrush(filename)
 {
     setBrushType(INVALID);
     setSpacing(0.25);
@@ -34,7 +34,7 @@ KisSvgBrush::KisSvgBrush(const QString& filename)
 }
 
 KisSvgBrush::KisSvgBrush(const KisSvgBrush& rhs)
-    : KisBrush(rhs),
+    : KisScalingSizeBrush(rhs),
       m_svg(rhs.m_svg)
 {
 }

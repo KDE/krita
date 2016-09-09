@@ -93,17 +93,6 @@ void KisBrushOptionWidget::lodLimitations(KisPaintopLodLimitations *l) const
     brush->lodLimitations(l);
 }
 
-void KisBrushOptionWidget::setBrushSize(qreal dxPixels, qreal dyPixels)
-{
-    m_brushSelectionWidget->setBrushSize(dxPixels, dyPixels);
-}
-
-
-QSizeF KisBrushOptionWidget::brushSize() const
-{
-    return m_brushSelectionWidget->brushSize();
-}
-
 void KisBrushOptionWidget::brushChanged()
 {
     m_brushOption.setBrush(brush());

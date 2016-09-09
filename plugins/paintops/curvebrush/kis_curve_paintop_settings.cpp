@@ -17,6 +17,7 @@
  */
 #include <kis_curve_paintop_settings.h>
 #include <kis_paint_action_type_option.h>
+#include "kis_curve_line_option.h"
 
 struct KisCurvePaintOpSettings::Private
 {
@@ -32,6 +33,21 @@ KisCurvePaintOpSettings::~KisCurvePaintOpSettings()
 {
 }
 
+void KisCurvePaintOpSettings::setPaintOpSize(qreal value)
+{
+    CurveOption option;
+    option.readOptionSetting(this);
+    option.curve_line_width = value;
+    option.writeOptionSetting(this);
+}
+
+qreal KisCurvePaintOpSettings::paintOpSize() const
+{
+    CurveOption option;
+    option.readOptionSetting(this);
+    return option.curve_line_width;
+}
+
 bool KisCurvePaintOpSettings::paintIncremental()
 {
     return (enumPaintActionType)getInt("PaintOpAction", WASH) == BUILDUP;
@@ -41,7 +57,6 @@ bool KisCurvePaintOpSettings::paintIncremental()
 #include <brushengine/kis_slider_based_paintop_property.h>
 #include "kis_paintop_preset.h"
 #include "kis_paintop_settings_update_proxy.h"
-#include "kis_curve_line_option.h"
 #include "kis_standard_uniform_properties_factory.h"
 typedef KisCallbackBasedPaintopProperty<KisUniformPaintOpProperty> KisUniformPaintOpPropertyCallback;
 

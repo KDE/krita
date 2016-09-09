@@ -57,8 +57,6 @@ public:
 
     void setCurrentBrush(KisBrushSP brush);
 
-    void setBrushSize(qreal dxPixels, qreal dyPixels);
-    QSizeF brushSize() const;
     bool presetIsValid() {
         return m_presetIsValid;
     }

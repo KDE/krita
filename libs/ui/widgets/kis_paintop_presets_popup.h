@@ -96,6 +96,7 @@ Q_SIGNALS:
     void eraserBrushSizeToggled(bool value);
     
     void sizeChanged();
+    void brushEditorShown();
 
 private Q_SLOTS:
     void slotSwitchPresetStrip(bool visible);

@@ -99,6 +99,16 @@ KisAutoBrush::~KisAutoBrush()
 {
 }
 
+qreal KisAutoBrush::userEffectiveSize() const
+{
+    return d->shape->diameter();
+}
+
+void KisAutoBrush::setUserEffectiveSize(qreal value)
+{
+    d->shape->setDiameter(value);
+}
+
 KisAutoBrush::KisAutoBrush(const KisAutoBrush& rhs)
     : KisBrush(rhs),
       d(new Private(*rhs.d))
@@ -324,6 +334,8 @@ void KisAutoBrush::toXML(QDomDocument& doc, QDomElement& e) const
 
 QImage KisAutoBrush::createBrushPreview()
 {
+    return QImage();
+
     srand(0);
     srand48(0);
     int width = maskWidth(KisDabShape(), 0.0, 0.0, KisPaintInformation());

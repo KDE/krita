@@ -523,12 +523,12 @@ qint32 KisAbrBrushCollection::abr_brush_load(QDataStream & abr, AbrInfo *abr_hdr
 
 
 KisAbrBrushCollection::KisAbrBrushCollection(const QString& filename)
-    : KisBrush(filename)
+    : KisScalingSizeBrush(filename)
 {
 }
 
 KisAbrBrushCollection::KisAbrBrushCollection(const KisAbrBrushCollection& rhs)
-    : KisBrush(rhs)
+    : KisScalingSizeBrush(rhs)
 {
     for (auto it = rhs.m_abrBrushes.begin();
          it != rhs.m_abrBrushes.end();

@@ -431,6 +431,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     m_presetsPopup = new KisPaintOpPresetsPopup(m_resourceProvider);
     m_brushEditorPopupButton->setPopupWidget(m_presetsPopup);
     m_presetsPopup->switchDetached(false);
+    connect(m_presetsPopup, SIGNAL(brushEditorShown()), SLOT(slotUpdateOptionsWidget()));
     connect(m_viewManager->mainWindow(), SIGNAL(themeChanged()), m_presetsPopup, SLOT(updateThemedIcons()));
 
     m_presetsChooserPopup = new KisPaintOpPresetsChooserPopup();
@@ -641,8 +642,9 @@ void KisPaintopBox::slotUpdateOptionsWidget()
     KIS_SAFE_ASSERT_RECOVER_RETURN(preset);
     KIS_SAFE_ASSERT_RECOVER_RETURN(m_optionWidget);
 
-    KisSignalsBlocker b(m_optionWidget);
-    m_optionWidget->setConfigurationSafe(preset->settings().data());
+    if (m_optionWidget->isVisible()) {
+        m_optionWidget->setConfigurationSafe(preset->settings().data());
+    }
 
     m_presetsPopup->resourceSelected(preset.data());
     m_presetsPopup->updateViewSettings();

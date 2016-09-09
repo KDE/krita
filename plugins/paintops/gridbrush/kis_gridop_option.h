@@ -75,8 +75,8 @@ struct GridOption
 
 
     void readOptionSetting(const KisPropertiesConfiguration* setting) {
-        grid_width = setting->getInt(GRID_WIDTH);
-        grid_height = setting->getInt(GRID_HEIGHT);
+        grid_width = qMax(1, setting->getInt(GRID_WIDTH));
+        grid_height = qMax(1, setting->getInt(GRID_HEIGHT));
         grid_division_level = setting->getInt(GRID_DIVISION_LEVEL);
         grid_pressure_division = setting->getBool(GRID_PRESSURE_DIVISION);
         grid_scale = setting->getDouble(GRID_SCALE);
@@ -86,8 +86,8 @@ struct GridOption
     }
 
     void writeOptionSetting(KisPropertiesConfiguration* setting) const {
-        setting->setProperty(GRID_WIDTH, grid_width);
-        setting->setProperty(GRID_HEIGHT, grid_height);
+        setting->setProperty(GRID_WIDTH, qMax(1, grid_width));
+        setting->setProperty(GRID_HEIGHT, qMax(1, grid_height));
         setting->setProperty(GRID_DIVISION_LEVEL, grid_division_level);
         setting->setProperty(GRID_PRESSURE_DIVISION, grid_pressure_division);
         setting->setProperty(GRID_SCALE, grid_scale);

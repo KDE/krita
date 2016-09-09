@@ -54,18 +54,3 @@ KisPropertiesConfiguration*  KisGridPaintOpSettingsWidget::configuration() const
     writeConfiguration(config);
     return config;
 }
-void KisGridPaintOpSettingsWidget::changePaintOpSize(qreal x, qreal y)
-{
-    if (qAbs(x) > qAbs(y)) {
-        m_gridOption->setWidth(m_gridOption->gridWidth() + qRound(x));
-        m_gridOption->setHeight(m_gridOption->gridHeight() + qRound(x));
-    }
-    else {
-        //m_options->m_gridOption->setHeight( gridHeight() + qRound(y) );
-    }
-}
-
-QSizeF KisGridPaintOpSettingsWidget::paintOpSize() const
-{
-    return QSizeF(m_gridOption->gridWidth(), m_gridOption->gridHeight());
-}

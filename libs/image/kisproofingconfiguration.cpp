@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2008 Lukas Tvrdy <lukast.dev@gmail.com>
+ *  Copyright (c) 2016 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,27 +16,4 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_CHALKPAINTOP_SETTINGS_WIDGET_H_
-#define KIS_CHALKPAINTOP_SETTINGS_WIDGET_H_
 
-#include <kis_paintop_settings_widget.h>
-
-#include "ui_wdgchalkoptions.h"
-
-class KisChalkOpOption;
-
-class KisChalkPaintOpSettingsWidget : public KisPaintOpSettingsWidget
-{
-    Q_OBJECT
-
-public:
-    KisChalkPaintOpSettingsWidget(QWidget* parent = 0);
-    virtual ~KisChalkPaintOpSettingsWidget();
-
-    KisPropertiesConfiguration* configuration() const;
-
-public:
-    KisChalkOpOption* m_chalkOption;
-};
-
-#endif

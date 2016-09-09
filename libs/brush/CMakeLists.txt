@@ -9,6 +9,7 @@ set(kritalibbrush_LIB_SRCS
     kis_auto_brush.cpp
     kis_boundary.cc
     kis_brush.cpp
+    kis_scaling_size_brush.cpp
     kis_brush_registry.cpp
     kis_brush_server.cpp
     kis_gbr_brush.cpp

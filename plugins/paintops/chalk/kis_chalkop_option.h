@@ -64,6 +64,13 @@ public:
         useOpacity = settings->getBool(CHALK_USE_OPACITY);
         useSaturation = settings->getBool(CHALK_USE_SATURATION);
     }
+
+    void writeOptionSetting(KisPropertiesConfiguration* settings) {
+        settings->setProperty(CHALK_RADIUS, radius);
+        settings->setProperty(CHALK_INK_DEPLETION, inkDepletion);
+        settings->setProperty(CHALK_USE_OPACITY, useOpacity);
+        settings->setProperty(CHALK_USE_SATURATION, useSaturation);
+    }
 };
 
 #endif

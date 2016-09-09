@@ -26,8 +26,6 @@
 
 #include <Eigen/Core>
 
-using namespace Eigen;
-
 class KisGaussianBlurFilter : public KisFilter
 {
 public:

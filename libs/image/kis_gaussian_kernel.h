@@ -23,17 +23,16 @@
 #include "kis_types.h"
 
 #include <Eigen/Core>
-using namespace Eigen;
 
 class QRect;
 
 class KRITAIMAGE_EXPORT KisGaussianKernel
 {
 public:
-    static Matrix<qreal, Dynamic, Dynamic>
+    static Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic>
         createHorizontalMatrix(qreal radius);
 
-    static Matrix<qreal, Dynamic, Dynamic>
+    static Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic>
         createVerticalMatrix(qreal radius);
 
     static KisConvolutionKernelSP
@@ -51,7 +50,7 @@ public:
                               const QBitArray &channelFlags,
                               KoUpdater *updater);
 
-    static Matrix<qreal, Dynamic, Dynamic> createLoGMatrix(qreal radius);
+    static Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> createLoGMatrix(qreal radius);
 
     static void applyLoG(KisPaintDeviceSP device,
                          const QRect& rect,

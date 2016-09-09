@@ -887,7 +887,6 @@ void KisColorizeMask::moveAllInternalDevices(const QPoint &diff)
     QVector<KisPaintDeviceSP> devices = allPaintDevices();
 
     Q_FOREACH (KisPaintDeviceSP dev, devices) {
-        QPoint offset(dev->x(), dev->y());
-        dev->move(offset + diff);
+        dev->moveTo(dev->offset() + diff);
     }
 }

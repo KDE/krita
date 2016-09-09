@@ -143,7 +143,7 @@ void KisPaintDeviceTest::testGeometry()
     QCOMPARE(dev->exactBounds(), QRect(0, 0, 512, 512));
     QCOMPARE(dev->extent(), QRect(0, 0, 512, 512));
 
-    dev->move(10, 10);
+    dev->moveTo(10, 10);
 
     QCOMPARE(dev->exactBounds(), QRect(10, 10, 512, 512));
     QCOMPARE(dev->extent(), QRect(10, 10, 512, 512));
@@ -270,7 +270,7 @@ void KisPaintDeviceTest::testColorSpaceConversion()
     const KoColorSpace* dstCs = KoColorSpaceRegistry::instance()->lab16();
     KisPaintDeviceSP dev = new KisPaintDevice(srcCs);
     dev->convertFromQImage(image, 0);
-    dev->move(10, 10);   // Unalign with tile boundaries
+    dev->moveTo(10, 10);   // Unalign with tile boundaries
     KUndo2Command* cmd = dev->convertTo(dstCs);
 
     QCOMPARE(dev->exactBounds(), QRect(10, 10, image.width(), image.height()));
@@ -342,7 +342,7 @@ void KisPaintDeviceTest::testFastBitBlt()
         QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
     }
 
-    srcDev->move(10,10);
+    srcDev->moveTo(10,10);
     QVERIFY(!dstDev->fastBitBltPossible(srcDev));
 }
 
@@ -353,11 +353,11 @@ void KisPaintDeviceTest::testMakeClone()
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP srcDev = new KisPaintDevice(cs);
     srcDev->convertFromQImage(image, 0);
-    srcDev->move(10,10);
+    srcDev->moveTo(10,10);
 
     const KoColorSpace * weirdCS = KoColorSpaceRegistry::instance()->lab16();
     KisPaintDeviceSP dstDev = new KisPaintDevice(weirdCS);
-    dstDev->move(1000,1000);
+    dstDev->moveTo(1000,1000);
 
     QVERIFY(!dstDev->fastBitBltPossible(srcDev));
 
@@ -439,7 +439,7 @@ void KisPaintDeviceTest::testCaching()
     QImage thumb2 = dev->createThumbnail(50, 50);
     QRect exactBounds2 = dev->exactBounds();
 
-    dev->move(10, 10);
+    dev->moveTo(10, 10);
     QImage thumb3 = dev->createThumbnail(50, 50);
     QRect exactBounds3 = dev->exactBounds();
 
@@ -1297,7 +1297,7 @@ void KisPaintDeviceTest::testMoveWrapAround()
 
     //dev->convertToQImage(0, rc.x(), rc.y(), rc.width(), rc.height()).save("move0.png");
     QCOMPARE(dev->exactBounds(), QRect(3,3,16,16));
-    dev->move(QPoint(10,10));
+    dev->moveTo(QPoint(10,10));
     QCOMPARE(dev->exactBounds(), QRect(8,8,6,6));
     //dev->convertToQImage(0, rc.x(), rc.y(), rc.width(), rc.height()).save("move1.png");
 

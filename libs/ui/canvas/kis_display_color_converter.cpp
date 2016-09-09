@@ -476,7 +476,7 @@ KisDisplayColorConverter::Private::convertToQImageDirect(KisPaintDeviceSP device
 QImage KisDisplayColorConverter::toQImage(KisPaintDeviceSP srcDevice) const
 {
     KisPaintDeviceSP device = srcDevice;
-    if (!(*device->colorSpace() == *m_d->paintingColorSpace)) {
+    if (*device->colorSpace() != *m_d->paintingColorSpace) {
         device = new KisPaintDevice(*srcDevice);
 
         KUndo2Command *cmd = device->convertTo(m_d->paintingColorSpace);

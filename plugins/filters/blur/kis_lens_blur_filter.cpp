@@ -165,7 +165,7 @@ void KisLensBlurFilter::processImpl(KisPaintDeviceSP device,
     imagePainter.drawPolygon(transformedIris, Qt::WindingFill);
 
     // construct kernel from image
-    Matrix<qreal, Dynamic, Dynamic> irisKernel(kernelHeight, kernelWidth);
+    Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> irisKernel(kernelHeight, kernelWidth);
     for (int j = 0; j < kernelHeight; ++j) {
         for (int i = 0; i < kernelWidth; ++i) {
             irisKernel(j, i) = qRed(kernelRepresentation.pixel(i, j));

@@ -114,8 +114,8 @@ public:
     /**
      * Overridden from KisPaintDevice to handle outline cache moves
      */
-    void move(const QPoint& pt);
-    using KisPaintDevice::move;
+    void moveTo(const QPoint& pt);
+    using KisPaintDevice::moveTo;
 
     bool isEmpty() const;
     QPainterPath outlineCache() const;

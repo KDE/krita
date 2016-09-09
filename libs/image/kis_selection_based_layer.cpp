@@ -195,7 +195,7 @@ void KisSelectionBasedLayer::resetCache(const KoColorSpace *colorSpace)
         colorSpace = image()->colorSpace();
 
     if (!m_d->paintDevice ||
-            !(*m_d->paintDevice->colorSpace() == *colorSpace)) {
+            *m_d->paintDevice->colorSpace() != *colorSpace) {
 
         m_d->paintDevice = new KisPaintDevice(this, colorSpace, new KisDefaultBounds(image()));
     } else {

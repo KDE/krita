@@ -313,7 +313,7 @@ void KisPixelSelection::invert()
     m_d->invalidateThumbnailImage();
 }
 
-void KisPixelSelection::move(const QPoint &pt)
+void KisPixelSelection::moveTo(const QPoint &pt)
 {
     const int lod = defaultBounds()->currentLevelOfDetail();
     const QPoint lod0Point = !lod ? pt :
@@ -333,7 +333,7 @@ void KisPixelSelection::move(const QPoint &pt)
 
     m_d->lod0CachesOffset = lod0Point;
 
-    KisPaintDevice::move(pt);
+    KisPaintDevice::moveTo(pt);
 }
 
 bool KisPixelSelection::isTotallyUnselected(const QRect & r) const

@@ -135,7 +135,7 @@ KoColor & KoColor::operator=(const KoColor & rhs)
 
 bool KoColor::operator==(const KoColor &other) const
 {
-    if (!(*colorSpace() == *other.colorSpace()))
+    if (*colorSpace() != *other.colorSpace())
         return false;
     return memcmp(d->data, other.d->data, d->colorSpace->pixelSize()) == 0;
 }

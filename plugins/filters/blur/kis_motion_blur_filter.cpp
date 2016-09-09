@@ -119,7 +119,7 @@ void KisMotionBlurFilter::processImpl(KisPaintDeviceSP device,
                           QPointF(kernelWidth / 2 + halfWidth, kernelHeight / 2 - halfHeight));
 
     // construct kernel from image
-    Matrix<qreal, Dynamic, Dynamic> motionBlurKernel(kernelHeight, kernelWidth);
+    Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> motionBlurKernel(kernelHeight, kernelWidth);
     for (int j = 0; j < kernelHeight; ++j) {
         for (int i = 0; i < kernelWidth; ++i) {
             motionBlurKernel(j, i) = qRed(kernelRepresentation.pixel(i, j));

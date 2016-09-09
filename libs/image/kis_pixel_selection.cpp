@@ -257,7 +257,7 @@ void KisPixelSelection::intersectSelection(KisPixelSelectionSP selection)
 
 void KisPixelSelection::clear(const QRect & r)
 {
-    if (*defaultPixel() != MIN_SELECTED) {
+    if (*defaultPixel().data() != MIN_SELECTED) {
         KisFillPainter painter(KisPaintDeviceSP(this));
         const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
         painter.fillRect(r, KoColor(Qt::white, cs), MIN_SELECTED);
@@ -277,8 +277,7 @@ void KisPixelSelection::clear(const QRect & r)
 
 void KisPixelSelection::clear()
 {
-    quint8 defPixel = MIN_SELECTED;
-    setDefaultPixel(&defPixel);
+    setDefaultPixel(KoColor(Qt::transparent, colorSpace()));
     KisPaintDevice::clear();
 
     m_d->outlineCacheValid = true;
@@ -301,8 +300,8 @@ void KisPixelSelection::invert()
             *(it.rawData()) = MAX_SELECTED - *(it.rawData());
         } while (it.nextPixel());
     }
-    quint8 defPixel = MAX_SELECTED - *defaultPixel();
-    setDefaultPixel(&defPixel);
+    quint8 defPixel = MAX_SELECTED - *defaultPixel().data();
+    setDefaultPixel(KoColor(&defPixel, colorSpace()));
 
     if (m_d->outlineCacheValid) {
         QPainterPath path;
@@ -339,7 +338,7 @@ void KisPixelSelection::move(const QPoint &pt)
 
 bool KisPixelSelection::isTotallyUnselected(const QRect & r) const
 {
-    if (*defaultPixel() != MIN_SELECTED)
+    if (*defaultPixel().data() != MIN_SELECTED)
         return false;
     QRect sr = selectedExactRect();
     return ! r.intersects(sr);
@@ -365,7 +364,7 @@ QVector<QPolygon> KisPixelSelection::outline() const
      * value sane we should limit the calculated area by the bounds of
      * the image.
      */
-    if (*defaultPixel() != MIN_SELECTED) {
+    if (*defaultPixel().data() != MIN_SELECTED) {
         selectionExtent &= defaultBounds()->bounds();
     }
 
@@ -395,7 +394,7 @@ QVector<QPolygon> KisPixelSelection::outline() const
 
 bool KisPixelSelection::isEmpty() const
 {
-    return *defaultPixel() == MIN_SELECTED && selectedRect().isEmpty();
+    return *defaultPixel().data() == MIN_SELECTED && selectedRect().isEmpty();
 }
 
 QPainterPath KisPixelSelection::outlineCache() const

@@ -419,7 +419,7 @@ namespace KisLsUtils
     {
         if (config->fillType() == psd_fill_solid_color) {
             KoColor color(config->color(), fillDevice->colorSpace());
-            fillDevice->setDefaultPixel(color.data());
+            fillDevice->setDefaultPixel(color);
 
         } else if (config->fillType() == psd_fill_pattern) {
             fillPattern(fillDevice, applyRect, env,

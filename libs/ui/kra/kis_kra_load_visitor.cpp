@@ -390,7 +390,7 @@ struct SimpleDevicePolicy
         return dev->read(stream);
     }
 
-    void setDefaultPixel(KisPaintDeviceSP dev, const quint8 *defaultPixel) const {
+    void setDefaultPixel(KisPaintDeviceSP dev, const KoColor &defaultPixel) const {
         return dev->setDefaultPixel(defaultPixel);
     }
 };
@@ -404,7 +404,7 @@ struct FramedDevicePolicy
         return dev->framesInterface()->readFrame(stream, m_frameId);
     }
 
-    void setDefaultPixel(KisPaintDeviceSP dev, const quint8 *defaultPixel) const {
+    void setDefaultPixel(KisPaintDeviceSP dev, const KoColor &defaultPixel) const {
         return dev->framesInterface()->setFrameDefaultPixel(defaultPixel, m_frameId);
     }
 
@@ -459,10 +459,9 @@ bool KisKraLoadVisitor::loadPaintDeviceFrame(KisPaintDeviceSP device, const QStr
     if (m_store->open(location + ".defaultpixel")) {
         int pixelSize = device->colorSpace()->pixelSize();
         if (m_store->size() == pixelSize) {
-            quint8 *defPixel = new quint8[pixelSize];
-            m_store->read((char*)defPixel, pixelSize);
-            policy.setDefaultPixel(device, defPixel);
-            delete[] defPixel;
+            KoColor color(Qt::transparent, device->colorSpace());
+            m_store->read((char*)color.data(), pixelSize);
+            policy.setDefaultPixel(device, color);
         }
         m_store->close();
     }

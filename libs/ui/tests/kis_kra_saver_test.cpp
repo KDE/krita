@@ -257,7 +257,7 @@ void KisKraSaverTest::testRoundTripAnimation()
     image->addNode(layer1);
 
     layer1->paintDevice()->fill(QRect(100, 100, 50, 50), KoColor(Qt::black, cs));
-    layer1->paintDevice()->setDefaultPixel(KoColor(Qt::red, cs).data());
+    layer1->paintDevice()->setDefaultPixel(KoColor(Qt::red, cs));
 
     KUndo2Command parentCommand;
 
@@ -268,14 +268,14 @@ void KisKraSaverTest::testRoundTripAnimation()
     image->waitForDone();
     layer1->paintDevice()->fill(QRect(200, 50, 10, 10), KoColor(Qt::black, cs));
     layer1->paintDevice()->move(25, 15);
-    layer1->paintDevice()->setDefaultPixel(KoColor(Qt::green, cs).data());
+    layer1->paintDevice()->setDefaultPixel(KoColor(Qt::green, cs));
 
     rasterChannel->addKeyframe(20, &parentCommand);
     image->animationInterface()->switchCurrentTimeAsync(20);
     image->waitForDone();
     layer1->paintDevice()->fill(QRect(150, 200, 30, 30), KoColor(Qt::black, cs));
     layer1->paintDevice()->move(100, 50);
-    layer1->paintDevice()->setDefaultPixel(KoColor(Qt::blue, cs).data());
+    layer1->paintDevice()->setDefaultPixel(KoColor(Qt::blue, cs));
 
     QScopedPointer<KisDocument> doc(KisPart::instance()->createDocument());
     doc->setCurrentImage(image);
@@ -300,7 +300,7 @@ void KisKraSaverTest::testRoundTripAnimation()
     QCOMPARE(layer2->paintDevice()->nonDefaultPixelArea(), QRect(64, 64, 128, 128));
     QCOMPARE(layer2->paintDevice()->x(), 0);
     QCOMPARE(layer2->paintDevice()->y(), 0);
-    QVERIFY(!memcmp(layer2->paintDevice()->defaultPixel(), KoColor(Qt::red, cs).data(), cs->pixelSize()));
+    QCOMPARE(layer2->paintDevice()->defaultPixel(), KoColor(Qt::red, cs));
 
     image2->animationInterface()->switchCurrentTimeAsync(10);
     image2->waitForDone();
@@ -308,7 +308,7 @@ void KisKraSaverTest::testRoundTripAnimation()
     QCOMPARE(layer2->paintDevice()->nonDefaultPixelArea(), QRect(217, 15, 64, 64));
     QCOMPARE(layer2->paintDevice()->x(), 25);
     QCOMPARE(layer2->paintDevice()->y(), 15);
-    QVERIFY(!memcmp(layer2->paintDevice()->defaultPixel(), KoColor(Qt::green, cs).data(), cs->pixelSize()));
+    QCOMPARE(layer2->paintDevice()->defaultPixel(), KoColor(Qt::green, cs));
 
     image2->animationInterface()->switchCurrentTimeAsync(20);
     image2->waitForDone();
@@ -316,7 +316,7 @@ void KisKraSaverTest::testRoundTripAnimation()
     QCOMPARE(layer2->paintDevice()->nonDefaultPixelArea(), QRect(228, 242, 64, 64));
     QCOMPARE(layer2->paintDevice()->x(), 100);
     QCOMPARE(layer2->paintDevice()->y(), 50);
-    QVERIFY(!memcmp(layer2->paintDevice()->defaultPixel(), KoColor(Qt::blue, cs).data(), cs->pixelSize()));
+    QCOMPARE(layer2->paintDevice()->defaultPixel(), KoColor(Qt::blue, cs));
 
 }
 

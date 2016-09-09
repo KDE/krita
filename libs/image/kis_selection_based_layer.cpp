@@ -85,8 +85,7 @@ KisSelectionBasedLayer::~KisSelectionBasedLayer()
 void KisSelectionBasedLayer::initSelection()
 {
     m_d->selection = new KisSelection(new KisDefaultBounds(image()));
-    quint8 newDefaultPixel = MAX_SELECTED;
-    m_d->selection->pixelSelection()->setDefaultPixel(&newDefaultPixel);
+    m_d->selection->pixelSelection()->setDefaultPixel(KoColor(Qt::white, m_d->selection->pixelSelection()->colorSpace()));
     m_d->selection->setParentNode(this);
     m_d->selection->updateProjection();
 }

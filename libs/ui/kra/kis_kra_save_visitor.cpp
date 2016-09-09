@@ -307,7 +307,7 @@ struct SimpleDevicePolicy
         return dev->write(store);
     }
 
-    const quint8* defaultPixel(KisPaintDeviceSP dev) const {
+    KoColor defaultPixel(KisPaintDeviceSP dev) const {
         return dev->defaultPixel();
     }
 };
@@ -321,7 +321,7 @@ struct FramedDevicePolicy
         return dev->framesInterface()->writeFrame(store, m_frameId);
     }
 
-    const quint8* defaultPixel(KisPaintDeviceSP dev) const {
+    KoColor defaultPixel(KisPaintDeviceSP dev) const {
         return dev->framesInterface()->frameDefaultPixel(m_frameId);
     }
 
@@ -377,7 +377,7 @@ bool KisKraSaveVisitor::savePaintDeviceFrame(KisPaintDeviceSP device, QString lo
         m_store->close();
     }
     if (m_store->open(location + ".defaultpixel")) {
-        m_store->write((char*)policy.defaultPixel(device), device->colorSpace()->pixelSize());
+        m_store->write((char*)policy.defaultPixel(device).data(), device->colorSpace()->pixelSize());
         m_store->close();
     }
 

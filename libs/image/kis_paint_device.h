@@ -281,14 +281,14 @@ public:
      * caller still owns the pointer and needs to delete it to avoid memory leaks.
      * If frame ID is given, set default pixel for that frame. Otherwise use active frame.
      */
-    void setDefaultPixel(const quint8 *defPixel);
+    void setDefaultPixel(const KoColor &defPixel);
 
     /**
      * Get a pointer to the default pixel.
      * If the frame parameter is given, get the default pixel of
      * specified frame. Otherwise use currently active frame.
      */
-    const quint8 *defaultPixel() const;
+    KoColor defaultPixel() const;
 
     /**
      * Fill the given rectangle with the given pixel. The paint device will expand to

@@ -2319,7 +2319,7 @@ bool KisDocument::newImage(const QString& name,
         image->setDefaultProjectionColor(KoColor(cs));
 
         if (bgColor.opacityU8() == OPACITY_OPAQUE_U8) {
-            layer->paintDevice()->setDefaultPixel(bgColor.data());
+            layer->paintDevice()->setDefaultPixel(bgColor);
         } else {
             // Hack: with a semi-transparent background color, the projection isn't composited right if we just set the default pixel
             KisFillPainter painter;

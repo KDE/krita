@@ -92,7 +92,7 @@ void KisFillPainter::initFillPainter()
 void KisFillPainter::fillSelection(const QRect &rc, const KoColor &color)
 {
     KisPaintDeviceSP fillDevice = new KisPaintDevice(device()->colorSpace());
-    fillDevice->setDefaultPixel(color.data());
+    fillDevice->setDefaultPixel(color);
 
     bitBlt(rc.topLeft(), fillDevice, rc);
 }

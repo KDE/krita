@@ -27,6 +27,7 @@
 
 #include <QScopedPointer>
 
+#include <KoColor.h>
 #include <KoColorSpace.h>
 #include <KoCompositeOpRegistry.h>
 
@@ -169,9 +170,7 @@ void KisMask::Private::initSelectionImpl(KisSelectionSP copyFrom, KisLayerSP par
 
     } else {
         selection = new KisSelection(new KisSelectionDefaultBounds(parentPaintDevice, parentLayer->image()));
-
-        quint8 newDefaultPixel = MAX_SELECTED;
-        selection->pixelSelection()->setDefaultPixel(&newDefaultPixel);
+        selection->pixelSelection()->setDefaultPixel(KoColor(Qt::white, selection->pixelSelection()->colorSpace()));
 
         if (deferredSelectionOffset) {
             selection->setX(deferredSelectionOffset->x());

@@ -115,7 +115,7 @@ protected:
         initPaintDevice(m_sel1, 100);
         initPaintDevice(m_sel2, 200);
         const quint8 defPixel(quint8(750));
-        m_sel3->paintDevice()->setDefaultPixel(&defPixel);
+        m_sel3->paintDevice()->setDefaultPixel(KoColor(&defPixel, m_sel3->paintDevice()->colorSpace()));
     }
 
 protected:

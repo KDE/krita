@@ -119,7 +119,7 @@ void KisToolSelectSimilar::beginPrimaryAction(KoPointerEvent *event)
     KisPixelSelectionSP tmpSel = KisPixelSelectionSP(new KisPixelSelection());
 
     QRect rc;
-    if (dev->colorSpace()->difference(c.data(), dev->defaultPixel()) <= m_fuzziness) {
+    if (dev->colorSpace()->difference(c.data(), dev->defaultPixel().data()) <= m_fuzziness) {
         rc = image()->bounds();
     } else {
         rc = dev->exactBounds();

@@ -1,7 +1,7 @@
 set(kritahalftone_SOURCES kis_halftone_filter.cpp )
 
 ki18n_wrap_ui(kritahalftone_SOURCES
-    #wdg_halftone.ui
+    wdg_halftone_filter.ui
     )
 
 add_library(kritahalftone MODULE ${kritahalftone_SOURCES})

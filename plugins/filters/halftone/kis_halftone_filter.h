@@ -23,6 +23,13 @@
 
 #include <QObject>
 #include <filter/kis_filter.h>
+#include <kis_filter_configuration.h>
+#include <kis_config_widget.h>
+
+#include "ui_wdg_halftone_filter.h"
+
+class WdgHalftone;
+
 
 
 class KritaHalftone : public QObject
@@ -67,12 +74,25 @@ public:
                      const KisFilterConfiguration* config,
                      KoUpdater *progressUpdater) const;
 
-    virtual KisFilterConfiguration *factoryConfiguration(const KisPaintDeviceSP) const;
+    virtual KisFilterConfiguration *factoryConfiguration(const KisPaintDeviceSP dev) const;
 
-    //virtual KisConfigWidget *createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev) const;
+    virtual KisConfigWidget *createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev) const;
 
 private:
     QPolygonF m_gridPoints;
+};
+
+class KisHalftoneConfigWidget : public KisConfigWidget
+{
+    Q_OBJECT
+public:
+    KisHalftoneConfigWidget(QWidget *parent, KisPaintDeviceSP dev);
+    virtual ~KisHalftoneConfigWidget();
+
+    virtual KisPropertiesConfiguration *configuration() const;
+    void setConfiguration(const KisPropertiesConfiguration *config);
+    Ui::WdgHalftone m_page;
+
 };
 
 #endif // KISHALFTONEFILTER_H

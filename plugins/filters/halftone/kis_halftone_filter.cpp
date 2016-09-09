@@ -24,6 +24,7 @@
 #include <klocalizedstring.h>
 
 #include <KoUpdater.h>
+#include <KoCompositeOps.h>
 
 #include "kis_filter_configuration.h"
 #include <kis_filter_registry.h>
@@ -53,7 +54,7 @@ KisHalftoneFilter::KisHalftoneFilter()
     setColorSpaceIndependence(FULLY_INDEPENDENT);
 
     setSupportsPainting(false);
-    setShowConfigurationWidget(false);
+    setShowConfigurationWidget(true);
     setSupportsLevelOfDetail(false);
     setSupportsAdjustmentLayers(true);
     setSupportsThreading(false);
@@ -65,25 +66,39 @@ void KisHalftoneFilter::processImpl(KisPaintDeviceSP device,
                                     const KisFilterConfiguration *config,
                                     KoUpdater *progressUpdater) const
 {
-    qreal cellSize = config->getFloat("cellSize", 8.0);
-    qreal angle = config->getFloat("patternAngle", 30.0);
+    qreal cellSize = (qreal)config->getInt("cellSize", 8);
+    qreal angle = fmod((qreal)config->getInt("patternAngle", 45), 90.0);
+    KoColor foregroundC(Qt::black, device->colorSpace());
+    foregroundC.fromKoColor(config->getColor("foreGroundColor", KoColor(Qt::black, device->colorSpace()) ) );
+    KoColor backgroundC(Qt::white, device->colorSpace());
+    backgroundC.fromKoColor(config->getColor("backGroundColor", KoColor(Qt::white, device->colorSpace()) ) );
 
     //First calculate the full diameter, using pythagoras theorem.
     qreal diameter = qSqrt((cellSize*cellSize)*2);
 
-    //Horizontal cellspacing is the hypotenuse of the Angle and the cellSize.
-    qreal cellSpacingH = cellSize/qSin(angle);
+    qreal cellSpacingH = cellSize;
+    qreal cellSpacingV = cellSize;
+    qreal cellOffsetV = 0;
 
-    //Vertical cellspacing is the opposite of the Angle and the cellSize.
-    qreal cellSpacingV = qSin(angle)*cellSize;
-    //cellSpacingoffset is the adjectant of the angle and the vertical cellspacing.
-    qreal cellOffsetV = qTan(angle)*cellSpacingV;
+    if (angle>0.0){
+        //2/3=0.6 sin=o/h
+        //0.6*3=2 sin*h=o
+        //2/0.6=3 o/sin=h
+        qreal angleRad = qDegreesToRadians(angle);
+        //Horizontal cellspacing is the hypotenuse of the Angle and the cellSize(opposite).
+        cellSpacingH = cellSize/qSin(angleRad);
+        //Vertical cellspacing is the opposite of the Angle and the cellSize(hypotenuse).
+        cellSpacingV = cellSize*qSin(angleRad);
+        //cellSpacingoffset is the oppose of the (90-angle) and the vertical cellspacing(adjectant) toa t=o/a, t*a=o.
+        cellOffsetV = qTan(qDegreesToRadians(90-angle))*cellSpacingV;
+    }
+
     QPolygonF gridPoints;
     QRect totalRect(QPoint(0,0), applyRect.bottomRight());
     if (gridPoints.size()<1) {
         int rows = (totalRect.height()/cellSpacingV)+3;
         for (int r=0; r<rows; r++) {
-            qreal offset = fmod(((qreal)r*cellOffsetV), cellSize);
+            qreal offset = fmod(((qreal)r*cellOffsetV), cellSpacingH);
             int columns = ((totalRect.width()+offset)/cellSpacingH)+3;
             for (int c = 0; c<columns; c++) {
                 gridPoints.append(QPointF((c*cellSpacingH)+offset-cellSpacingH,
@@ -100,13 +115,13 @@ void KisHalftoneFilter::processImpl(KisPaintDeviceSP device,
     //itterator->numContiguousColumns(qCeil(cellSize));
     //itterator->numContiguousRows(qCeil(cellSize));
     KisPainter painter(device);
+    painter.setCompositeOp(device->colorSpace()->compositeOp(COMPOSITE_OVER));
     KisPaintDeviceSP dab = device->createCompositionSourceDevice();
     KisPainter dbPainter(dab);
-    KoColor white(Qt::white, device->colorSpace());
-    KoColor black(Qt::black, device->colorSpace());
-    device->fill(applyRect, white);
-    dbPainter.setPaintColor(black);
+    device->fill(applyRect, backgroundC);
+    dbPainter.setPaintColor(foregroundC);
     dbPainter.setFillStyle(KisPainter::FillStyleForegroundColor);
+    dbPainter.setCompositeOp(device->colorSpace()->compositeOp(COMPOSITE_OVER));
 
     QRect cellRect(applyRect.topLeft()-QPoint(qFloor(cellSpacingH), qFloor(qMax(cellSpacingV, diameter))), applyRect.bottomRight()+QPoint(qCeil(cellSpacingH), qCeil(qMax(cellSpacingV, diameter))));
     for (int i=0; i<gridPoints.size(); i++) {
@@ -126,7 +141,10 @@ void KisHalftoneFilter::processImpl(KisPaintDeviceSP device,
                              sPoint.y(),
                              diameter,
                              diameter);
-            dbPainter.paintEllipse(0, 0, qCeil(size), qCeil(size));
+            dbPainter.paintEllipse((samplePoint.x()-qFloor(samplePoint.x()))+qCeil(size)-size,
+                                   (samplePoint.y()-qFloor(samplePoint.y()))+qCeil(size)-size,
+                                   size,
+                                   size);
             dab->crop(qAbs(qMin(0, xdifference)),
                       qAbs(qMin(0, ydifference)),
                       diameter,
@@ -143,16 +161,80 @@ void KisHalftoneFilter::processImpl(KisPaintDeviceSP device,
     }
 }
 
-KisFilterConfiguration *KisHalftoneFilter::factoryConfiguration(const KisPaintDeviceSP) const
+KisFilterConfiguration *KisHalftoneFilter::factoryConfiguration(const KisPaintDeviceSP dev) const
 {
     KisFilterConfiguration *config = new KisFilterConfiguration("halftone", 1);
     config->setProperty("cellSize", 8.0);
     config->setProperty("patternAngle", 45.0);
+    QVariant v;
+    v.setValue(KoColor(Qt::black, dev->colorSpace()));
+    config->setProperty("foreGroundColor", v);
+    v.setValue(KoColor(Qt::white, dev->colorSpace()));
+    config->setProperty("backGroundColor", v);
+
     return config;
 }
 
-/*KisConfigWidget *KisHalftoneFilter::createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev) const
+KisConfigWidget *KisHalftoneFilter::createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev) const
 {
-}*/
+    return new KisHalftoneConfigWidget(parent, dev);
+}
+
+//----------config---------//
+KisHalftoneConfigWidget::KisHalftoneConfigWidget(QWidget *parent, KisPaintDeviceSP dev)
+{
+    Q_ASSERT(dev);
+    m_page.setupUi(this);
+
+    KoColor white(Qt::white, dev->colorSpace());
+    KoColor black(Qt::black, dev->colorSpace());
+
+    m_page.bnforeground->setColor(white);
+    m_page.bnbackground->setColor(black);
+    m_page.bnforeground->setDefaultColor(white);
+    m_page.bnbackground->setDefaultColor(black);
+
+    connect(m_page.sld_cellSize, SIGNAL(valueChanged(int)), SLOT(slotConfigChanged()));
+    connect(m_page.dial_angle, SIGNAL(valueChanged(int)), m_page.spb_angle, SLOT(setValue(int)));
+    connect(m_page.dial_angle, SIGNAL(valueChanged(int)), SLOT(slotConfigChanged()));
+    connect(m_page.spb_angle, SIGNAL(valueChanged(int)), SLOT(slotConfigChanged()));
+    connect(m_page.spb_angle, SIGNAL(valueChanged(int)), m_page.dial_angle, SLOT(setValue(int)));
+    connect(m_page.bnforeground, SIGNAL(changed(KoColor)), SLOT(slotConfigChanged()));
+    connect(m_page.bnbackground, SIGNAL(changed(KoColor)), SLOT(slotConfigChanged()));
+}
+
+KisHalftoneConfigWidget::~KisHalftoneConfigWidget()
+{
+
+}
+
+KisPropertiesConfiguration *KisHalftoneConfigWidget::configuration() const
+{
+    KisFilterConfiguration *config = new KisFilterConfiguration("halftone", 1);
+    config->setProperty("cellSize", m_page.sld_cellSize->value());
+    config->setProperty("patternAngle", m_page.spb_angle->value());
+    QVariant v;
+    v.setValue(m_page.bnforeground->color());
+    config->setProperty("foreGroundColor", v);
+    v.setValue(m_page.bnbackground->color());
+    config->setProperty("backGroundColor", v);
+
+    return config;
+}
+
+void KisHalftoneConfigWidget::setConfiguration(const KisPropertiesConfiguration * config)
+{
+    QVariant value;
+    if (config->getProperty("cellSize", value)) {
+        m_page.sld_cellSize->setValue(value.toUInt());
+    }
+    if (config->getProperty("patternAngle", value)) {
+        m_page.dial_angle->setValue(value.toUInt());
+        m_page.spb_angle->setValue(value.toUInt());
+    }
+
+    m_page.bnforeground->setColor(config->getColor("foreGroundColor",m_page.bnforeground->defaultColor()));
+    m_page.bnbackground->setColor(config->getColor("backGroundColor",m_page.bnbackground->defaultColor()));
+}
 
 #include "kis_halftone_filter.moc"

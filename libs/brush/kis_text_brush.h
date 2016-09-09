@@ -22,13 +22,13 @@
 
 #include <QFont>
 
-#include "kis_brush.h"
+#include "kis_scaling_size_brush.h"
 #include "kritabrush_export.h"
 
 class KisTextBrushesPipe;
 
 
-class BRUSH_EXPORT KisTextBrush : public KisBrush
+class BRUSH_EXPORT KisTextBrush : public KisScalingSizeBrush
 {
 
 public:

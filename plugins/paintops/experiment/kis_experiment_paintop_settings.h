@@ -19,10 +19,10 @@
 #ifndef KIS_EXPERIMENT_PAINTOP_SETTINGS_H_
 #define KIS_EXPERIMENT_PAINTOP_SETTINGS_H_
 
-#include <brushengine/kis_paintop_settings.h>
+#include <brushengine/kis_no_size_paintop_settings.h>
 #include <QScopedPointer>
 
-class KisExperimentPaintOpSettings : public KisPaintOpSettings
+class KisExperimentPaintOpSettings : public KisNoSizePaintOpSettings
 {
 public:
     KisExperimentPaintOpSettings();

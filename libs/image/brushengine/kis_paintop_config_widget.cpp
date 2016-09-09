@@ -66,15 +66,6 @@ void KisPaintOpConfigWidget::setNode(KisNodeWSP node) {
     m_node = node;
 }
 
-void KisPaintOpConfigWidget::changePaintOpSize(qreal x, qreal y) {
-    Q_UNUSED(x);
-    Q_UNUSED(y);
-}
-
-QSizeF KisPaintOpConfigWidget::paintOpSize() const {
-    return QSizeF(1.0, 1.0);
-}
-
 bool KisPaintOpConfigWidget::presetIsValid() {
     return true;
 }

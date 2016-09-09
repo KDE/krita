@@ -34,6 +34,9 @@ class KisGridPaintOpSettings : public KisOutlineGenerationPolicy<KisPaintOpSetti
 public:
     KisGridPaintOpSettings();
 
+    void setPaintOpSize(qreal value) Q_DECL_OVERRIDE;
+    qreal paintOpSize() const Q_DECL_OVERRIDE;
+
     QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode) const;
     bool paintIncremental();
 

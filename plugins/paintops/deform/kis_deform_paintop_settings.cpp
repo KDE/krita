@@ -40,6 +40,21 @@ KisDeformPaintOpSettings::~KisDeformPaintOpSettings()
 {
 }
 
+void KisDeformPaintOpSettings::setPaintOpSize(qreal value)
+{
+    BrushSizeOption option;
+    option.readOptionSetting(this);
+    option.brush_diameter = value;
+    option.writeOptionSetting(this);
+}
+
+qreal KisDeformPaintOpSettings::paintOpSize() const
+{
+    BrushSizeOption option;
+    option.readOptionSetting(this);
+    return option.brush_diameter;
+}
+
 bool KisDeformPaintOpSettings::paintIncremental()
 {
     return true;

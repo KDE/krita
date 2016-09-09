@@ -19,6 +19,7 @@
 #include "kis_dyna_paintop_settings.h"
 #include <kis_paint_action_type_option.h>
 #include <kis_airbrush_option.h>
+#include "kis_dynaop_option.h"
 
 struct KisDynaPaintOpSettings::Private
 {
@@ -32,6 +33,22 @@ KisDynaPaintOpSettings::KisDynaPaintOpSettings()
 
 KisDynaPaintOpSettings::~KisDynaPaintOpSettings()
 {
+}
+
+void KisDynaPaintOpSettings::setPaintOpSize(qreal value)
+{
+    DynaOption option;
+    option.readOptionSetting(this);
+    option.dyna_diameter = value;
+    option.writeOptionSetting(this);
+}
+
+qreal KisDynaPaintOpSettings::paintOpSize() const
+{
+    DynaOption option;
+    option.readOptionSetting(this);
+
+    return option.dyna_diameter;
 }
 
 bool KisDynaPaintOpSettings::paintIncremental()
@@ -54,7 +71,6 @@ int KisDynaPaintOpSettings::rate() const
 #include <brushengine/kis_combo_based_paintop_property.h>
 #include "kis_paintop_preset.h"
 #include "kis_paintop_settings_update_proxy.h"
-#include "kis_dynaop_option.h"
 #include "kis_standard_uniform_properties_factory.h"
 
 

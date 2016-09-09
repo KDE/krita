@@ -40,7 +40,7 @@
 #define DEFAULT_SPACING 0.25
 
 KisAbrBrush::KisAbrBrush(const QString& filename, KisAbrBrushCollection *parent)
-    : KisBrush(filename)
+    : KisScalingSizeBrush(filename)
     , m_parent(parent)
 {
     setBrushType(INVALID);
@@ -49,14 +49,14 @@ KisAbrBrush::KisAbrBrush(const QString& filename, KisAbrBrushCollection *parent)
 }
 
 KisAbrBrush::KisAbrBrush(const KisAbrBrush& rhs)
-    : KisBrush(rhs),
+    : KisScalingSizeBrush(rhs),
       m_parent(0)
 {
     // Warning! The brush became detached from the parent!
 }
 
 KisAbrBrush::KisAbrBrush(const KisAbrBrush& rhs, KisAbrBrushCollection *parent)
-    : KisBrush(rhs),
+    : KisScalingSizeBrush(rhs),
       m_parent(parent)
 {
 }

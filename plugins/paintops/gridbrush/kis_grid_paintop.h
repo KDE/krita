@@ -45,7 +45,8 @@ public:
 
     quint8 shape;
 public:
-    void fillProperties(const KisPropertiesConfiguration* setting);
+    void readOptionSetting(const KisPropertiesConfiguration* setting);
+    void writeOptionSetting(KisPropertiesConfiguration* setting);
 };
 
 class KisGridPaintOp : public KisPaintOp

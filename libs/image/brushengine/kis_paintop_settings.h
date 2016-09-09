@@ -193,12 +193,12 @@ public:
     /**
      * Set paintop size directly in the properties
      */
-    void setPaintOpSize(qreal value);
+    virtual void setPaintOpSize(qreal value) = 0;
 
     /**
      * @return size saved in the properties
      */
-    qreal paintOpSize() const;
+    virtual qreal paintOpSize() const = 0;
 
     void setEraserMode(bool value);
     bool eraserMode() const;

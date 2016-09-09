@@ -63,6 +63,8 @@ public:
     bool autoSpacingActive() const;
     qreal autoSpacingCoeff() const;
 
+    void setPaintOpSize(qreal value);
+    qreal paintOpSize() const;
 
     QList<KisUniformPaintOpPropertySP> uniformProperties();
 

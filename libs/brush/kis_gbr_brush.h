@@ -23,7 +23,7 @@
 #include <QImage>
 #include <QVector>
 
-#include "kis_brush.h"
+#include "kis_scaling_size_brush.h"
 #include <kis_types.h>
 #include <kis_shared.h>
 #include <brushengine/kis_paint_information.h>
@@ -36,7 +36,7 @@ typedef KisSharedPtr<KisQImagemask> KisQImagemaskSP;
 class QString;
 class QIODevice;
 
-class BRUSH_EXPORT KisGbrBrush : public KisBrush
+class BRUSH_EXPORT KisGbrBrush : public KisScalingSizeBrush
 {
 
 protected:

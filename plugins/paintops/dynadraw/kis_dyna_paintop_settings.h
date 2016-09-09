@@ -29,6 +29,9 @@ public:
     KisDynaPaintOpSettings();
     ~KisDynaPaintOpSettings();
 
+    void setPaintOpSize(qreal value) Q_DECL_OVERRIDE;
+    qreal paintOpSize() const Q_DECL_OVERRIDE;
+
     bool paintIncremental();
     virtual bool isAirbrushing() const;
     virtual int rate() const;

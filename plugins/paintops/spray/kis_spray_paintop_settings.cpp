@@ -43,6 +43,23 @@ KisSprayPaintOpSettings::~KisSprayPaintOpSettings()
 {
 }
 
+void KisSprayPaintOpSettings::setPaintOpSize(qreal value)
+{
+    KisSprayProperties option;
+    option.readOptionSetting(this);
+    option.diameter = value;
+    option.writeOptionSetting(this);
+}
+
+qreal KisSprayPaintOpSettings::paintOpSize() const
+{
+
+    KisSprayProperties option;
+    option.readOptionSetting(this);
+
+    return option.diameter;
+}
+
 bool KisSprayPaintOpSettings::paintIncremental()
 {
     return (enumPaintActionType)getInt("PaintOpAction", WASH) == BUILDUP;
@@ -80,7 +97,6 @@ QPainterPath KisSprayPaintOpSettings::brushOutline(const KisPaintInformation &in
 #include <brushengine/kis_slider_based_paintop_property.h>
 #include "kis_paintop_preset.h"
 #include "kis_paintop_settings_update_proxy.h"
-#include "kis_sprayop_option.h"
 #include "kis_standard_uniform_properties_factory.h"
 typedef KisCallbackBasedPaintopProperty<KisUniformPaintOpProperty> KisUniformPaintOpPropertyCallback;
 

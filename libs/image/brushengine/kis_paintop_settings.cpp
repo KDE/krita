@@ -201,38 +201,6 @@ qreal KisPaintOpSettings::paintOpFlow() const
     return proxy->getDouble("FlowValue", 1.0);
 }
 
-void KisPaintOpSettings::setPaintOpSize(qreal value)
-{
-    /**
-     * The widget already has the wrapping for the locked setings
-     * functionality, so just request it.
-     */
-
-    if (d->settingsWidget) {
-        const qreal sizeDiff = value - paintOpSize();
-
-        {
-            KisSignalsBlocker b(d->settingsWidget);
-            d->settingsWidget.data()->setConfigurationSafe(this);
-            d->settingsWidget.data()->changePaintOpSize(sizeDiff, 0);
-        }
-        d->settingsWidget.data()->writeConfigurationSafe(this);
-    }
-}
-
-qreal KisPaintOpSettings::paintOpSize() const
-{
-    // see a comment about locked settings in setPaintOpSize()
-
-    qreal size = 1.0;
-
-    if (d->settingsWidget) {
-        size = d->settingsWidget.data()->paintOpSize().width();
-    }
-
-    return size;
-}
-
 QString KisPaintOpSettings::paintOpCompositeOp() const
 {
     KisLockedPropertiesProxySP proxy(

@@ -164,7 +164,7 @@ KisTextBrush::KisTextBrush()
 }
 
 KisTextBrush::KisTextBrush(const KisTextBrush &rhs)
-    : KisBrush(rhs),
+    : KisScalingSizeBrush(rhs),
       m_brushesPipe(new KisTextBrushesPipe(*rhs.m_brushesPipe))
 {
 }

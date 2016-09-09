@@ -1,6 +1,5 @@
 /*
- *  Copyright (c) 2008 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (c) 2008,2009 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  Copyright (c) 2016 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,34 +15,21 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KIS_DEFORM_PAINTOP_SETTINGS_H_
-#define KIS_DEFORM_PAINTOP_SETTINGS_H_
 
-#include <QScopedPointer>
-#include <brushengine/kis_paintop_settings.h>
-#include <kis_types.h>
-#include <kis_outline_generation_policy.h>
+#ifndef KISNOSIZEPAINTOPSETTINGS_H
+#define KISNOSIZEPAINTOPSETTINGS_H
 
-class KisDeformPaintOpSettings : public KisOutlineGenerationPolicy<KisPaintOpSettings>
+#include "kis_paintop_settings.h"
+#include "kritaimage_export.h"
+
+
+class KRITAIMAGE_EXPORT KisNoSizePaintOpSettings : public KisPaintOpSettings
 {
-
 public:
-    KisDeformPaintOpSettings();
-    ~KisDeformPaintOpSettings();
+    KisNoSizePaintOpSettings();
 
     void setPaintOpSize(qreal value) Q_DECL_OVERRIDE;
     qreal paintOpSize() const Q_DECL_OVERRIDE;
-
-    QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode) const;
-
-    bool paintIncremental();
-    bool isAirbrushing() const;
-    int rate() const;
-
-    QList<KisUniformPaintOpPropertySP> uniformProperties();
-
-private:
-    struct Private;
-    const QScopedPointer<Private> m_d;
 };
-#endif
+
+#endif // KISNOSIZEPAINTOPSETTINGS_H

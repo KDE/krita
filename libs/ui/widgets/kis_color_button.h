@@ -39,8 +39,13 @@ class KisColorButtonPrivate;
 class KRITAUI_EXPORT KisColorButton : public QPushButton
 {
     Q_OBJECT
-    Q_PROPERTY(KoColor color READ color WRITE setColor NOTIFY changed USER true)
-    Q_PROPERTY(KoColor defaultColor READ defaultColor WRITE setDefaultColor)
+
+    /**
+     * QtCreator treats KoColor as a QColor in incorrect way, so just disable using them in QtCreator
+     * https://bugs.kde.org/show_bug.cgi?id=368483
+     */
+    Q_PROPERTY(KoColor color READ color WRITE setColor NOTIFY changed USER true DESIGNABLE false)
+    Q_PROPERTY(KoColor defaultColor READ defaultColor WRITE setDefaultColor DESIGNABLE false)
     Q_PROPERTY(bool alphaChannelEnabled READ isAlphaChannelEnabled WRITE setAlphaChannelEnabled)
 
 public:

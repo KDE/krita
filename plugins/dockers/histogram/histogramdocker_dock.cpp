@@ -93,7 +93,7 @@ void HistogramDockerDock::showEvent(QShowEvent *event)
 }
 
 
-void HistogramDockerDock::sigColorSpaceChanged(const KoColorSpace *cs)
+void HistogramDockerDock::sigColorSpaceChanged(const KoColorSpace */*cs*/)
 {
     if (isVisible()) {
         m_imageIdleWatcher->startCountdown();

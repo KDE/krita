@@ -150,7 +150,7 @@ class BatchMoveUpdateData {
 
     QMutex m_mutex;
 
-    KisNodeJugglerCompressed *m_parentJuggler;
+    QPointer<KisNodeJugglerCompressed> m_parentJuggler;
 
 public:
     BatchMoveUpdateData(KisNodeJugglerCompressed *parentJuggler)
@@ -195,7 +195,9 @@ public:
     void addInitialUpdate(MoveNodeStructSP moveStruct) {
         QMutexLocker l(&m_mutex);
         addToHashLazy(&m_movedNodesInitial, moveStruct);
-        emit m_parentJuggler->requestUpdateAsyncFromCommand();
+        if (m_parentJuggler) {
+            emit m_parentJuggler->requestUpdateAsyncFromCommand();
+        }
     }
 
     void emitFinalUpdates(bool undo) {

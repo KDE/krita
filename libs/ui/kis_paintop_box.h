@@ -161,6 +161,7 @@ private Q_SLOTS:
     void slotDropLockedOption(KisPropertiesConfigurationSP p);
     void slotDirtyPresetToggled(bool);
     void slotEraserBrushSizeToggled(bool);    
+    void slotEraserBrushOpacityToggled(bool);    
     void slotUpdateSelectionIcon();
 
     void slotLockXMirrorToggle(bool);
@@ -244,7 +245,8 @@ private:
     bool             m_blockUpdate;
     bool             m_dirtyPresetsEnabled;
     bool             m_eraserBrushSizeEnabled;
-
+    bool             m_eraserBrushOpacityEnabled;
+    
     KisSignalAutoConnectionsStore m_presetConnections;
     KisSignalCompressor m_presetUpdateCompressor;
 };

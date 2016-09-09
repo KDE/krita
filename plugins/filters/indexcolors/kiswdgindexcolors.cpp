@@ -28,7 +28,7 @@
 
 #include "kis_int_parse_spin_box.h"
 
-#include <kcolorbutton.h>
+#include <kis_color_button.h>
 
 KisWdgIndexColors::KisWdgIndexColors(QWidget* parent, Qt::WFlags f, int delay): KisConfigWidget(parent, f, delay)
 {
@@ -100,7 +100,7 @@ void KisWdgIndexColors::setup(QStringList shadesLabels, int ramps)
     for(int y = 0; y < rows; ++y)
         for(int x = 0; x < collumns; ++x)
         {
-            KColorButton* b = new KColorButton;
+            KisColorButton* b = new KisColorButton;
             QCheckBox* c = new QCheckBox;
             c->setChecked(false);
             b->setEnabled(false);
@@ -109,7 +109,7 @@ void KisWdgIndexColors::setup(QStringList shadesLabels, int ramps)
 
             connect(c, SIGNAL(toggled(bool)), b, SLOT(setEnabled(bool)));
             connect(c, SIGNAL(toggled(bool)), this, SIGNAL(sigConfigurationItemChanged()));
-            connect(b, SIGNAL(changed(QColor)), this, SIGNAL(sigConfigurationItemChanged()));
+            connect(b, SIGNAL(changed(KoColor)), this, SIGNAL(sigConfigurationItemChanged()));
 
             QHBoxLayout* cell = new QHBoxLayout();
             cell->setSpacing(0);
@@ -133,7 +133,7 @@ KisPropertiesConfigurationSP KisWdgIndexColors::configuration() const
     for(int y = 0; y < 4; ++y)
         for(int x = 0; x < 4; ++x)
         {
-            palCfg.colors[y][x] = m_colorSelectors[y][x].button->color();
+            palCfg.colors[y][x] = m_colorSelectors[y][x].button->color().toQColor();
             palCfg.colorsEnabled[y][x] = m_colorSelectors[y][x].button->isEnabled();
         }
 
@@ -179,7 +179,9 @@ void KisWdgIndexColors::setConfiguration(const KisPropertiesConfigurationSP conf
         {
             m_colorSelectors[y][x].checkbox->setChecked(palCfg.colorsEnabled[y][x]);
             m_colorSelectors[y][x].button->setEnabled(palCfg.colorsEnabled[y][x]);
-            m_colorSelectors[y][x].button->setColor(palCfg.colors[y][x]);
+            KoColor c;
+            c.fromQColor(palCfg.colors[y][x]);
+            m_colorSelectors[y][x].button->setColor(c);
         }
 
     for(int y = 0; y < 3; ++y)

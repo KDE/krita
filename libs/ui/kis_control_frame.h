@@ -37,6 +37,7 @@ class KisPaintopBox;
 class KisViewManager;
 class KisIconWidget;
 class KoPattern;
+class KoDualColorButton;
 
 /**
  *   Control Frame - status display with access to
@@ -60,6 +61,7 @@ private Q_SLOTS:
 
     void slotSetPattern(KoPattern * pattern);
     void slotSetGradient(KoAbstractGradient * gradient);
+    void slotUpdateDisplayRenderer();
 
 private:
 
@@ -84,6 +86,8 @@ private:
     KisPatternChooser *m_patternChooser;
 
     KisPaintopBox *m_paintopBox;
+
+    KoDualColorButton *m_dual;
 
 };
 

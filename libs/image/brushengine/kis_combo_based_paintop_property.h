@@ -55,4 +55,8 @@ private:
     const QScopedPointer<Private> m_d;
 };
 
+#include "kis_callback_based_paintop_property.h"
+extern template class KRITAIMAGE_EXPORT KisCallbackBasedPaintopProperty<KisComboBasedPaintOpProperty>;
+typedef KisCallbackBasedPaintopProperty<KisComboBasedPaintOpProperty> KisComboBasedPaintOpPropertyCallback;
+
 #endif /* __KIS_COMBO_BASED_PAINTOP_PROPERTY_H */

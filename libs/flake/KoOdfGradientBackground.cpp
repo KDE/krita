@@ -51,8 +51,6 @@ public:
     qreal angle;
     qreal border;
     qreal opacity;
-
-    mutable QImage buffer;
 };
 
 
@@ -126,22 +124,25 @@ void KoOdfGradientBackground::saveOdf(KoGenStyle& styleFill, KoGenStyles& mainSt
 void KoOdfGradientBackground::paint(QPainter& painter, const KoViewConverter &/*converter*/, KoShapePaintingContext &/*context*/, const QPainterPath& fillPath) const
 {
     Q_D(const KoOdfGradientBackground);
+
+    QImage buffer;
+
     QRectF targetRect = fillPath.boundingRect();
     QRectF pixels = painter.transform().mapRect(QRectF(0,0,targetRect.width(), targetRect.height()));
     QSize currentSize( qCeil(pixels.size().width()), qCeil(pixels.size().height()) );
-    if (d->buffer.isNull() || d->buffer.size() != currentSize){
-        d->buffer = QImage(currentSize, QImage::Format_ARGB32_Premultiplied);
+    if (buffer.isNull() || buffer.size() != currentSize){
+        buffer = QImage(currentSize, QImage::Format_ARGB32_Premultiplied);
         if (d->style == "square") {
-            renderSquareGradient(d->buffer);
+            renderSquareGradient(buffer);
         } else {
-            renderRectangleGradient(d->buffer);
+            renderRectangleGradient(buffer);
         }
     }
 
     painter.setClipPath(fillPath);
 
     painter.setOpacity(d->opacity);
-    painter.drawImage(targetRect, d->buffer, QRectF(QPointF(0,0), d->buffer.size()));
+    painter.drawImage(targetRect, buffer, QRectF(QPointF(0,0), buffer.size()));
 }
 
 void KoOdfGradientBackground::fillStyle(KoGenStyle& style, KoShapeSavingContext& context)

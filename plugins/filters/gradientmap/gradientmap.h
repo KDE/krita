@@ -36,6 +36,7 @@ public:
     }
 };
 
+
 class KritaGradientMapFilterConfiguration : public KisColorTransformationConfiguration
 {
 public:
@@ -59,6 +60,7 @@ public:
 
     virtual KisPropertiesConfigurationSP configuration() const;
     virtual void setConfiguration(const KisPropertiesConfigurationSP config);
+
     WdgGradientMap * m_page;
     void setView(KisViewManager *view);
     void gradientResourceChanged(KoResource *gradient);

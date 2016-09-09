@@ -207,6 +207,11 @@ public:
     qreal savedBrushSize() const;
     void setSavedBrushSize(qreal value);
 
+    qreal savedEraserOpacity() const;
+    void setSavedEraserOpacity(qreal value);
+    qreal savedBrushOpacity() const;
+    void setSavedBrushOpacity(qreal value);
+
     QString effectivePaintOpCompositeOp();
 
     void setPreset(KisPaintOpPresetWSP preset);

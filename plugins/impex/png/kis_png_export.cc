@@ -32,6 +32,7 @@
 #include <KisImportExportManager.h>
 #include <KoColorProfile.h>
 #include <KoColorModelStandardIds.h>
+#include <KoColorSpaceRegistry.h>
 
 #include <kis_properties_configuration.h>
 #include <kis_paint_device.h>
@@ -251,8 +252,11 @@ void KisWdgOptionsPNG::setConfiguration(const KisPropertiesConfigurationSP cfg)
     chkForceSRGB->setChecked(cfg->getBool("forceSRGB", false));
 
     QStringList rgb = cfg->getString("transparencyFillcolor", "0,0,0").split(',');
-    bnTransparencyFillColor->setDefaultColor(Qt::white);
-    bnTransparencyFillColor->setColor(QColor(rgb[0].toInt(), rgb[1].toInt(), rgb[2].toInt()));
+    KoColor c(KoColorSpaceRegistry::instance()->rgb8());
+    c.fromQColor(Qt::white);
+    bnTransparencyFillColor->setDefaultColor(c);
+    c.fromQColor(QColor(rgb[0].toInt(), rgb[1].toInt(), rgb[2].toInt()));
+    bnTransparencyFillColor->setColor(c);
 
 }
 
@@ -265,7 +269,7 @@ KisPropertiesConfigurationSP KisWdgOptionsPNG::configuration() const
     bool interlace = interlacing->isChecked();
     int compression = (int)compressionLevel->value();
     bool tryToSaveAsIndexed = this->tryToSaveAsIndexed->isChecked();
-    QColor c = bnTransparencyFillColor->color();
+    QColor c = bnTransparencyFillColor->color().toQColor();
     bool saveSRGB = chkSRGB->isChecked();
     bool forceSRGB = chkForceSRGB->isChecked();
 

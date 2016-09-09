@@ -35,8 +35,9 @@
 #include <KisImportExportManager.h>
 #include <KisFilterChain.h>
 #include <KoColorSpaceConstants.h>
-#include "kis_slider_spin_box.h"
+#include <KoColorSpaceRegistry.h>
 
+#include <kis_slider_spin_box.h>
 #include <KisDocument.h>
 #include <kis_image.h>
 #include <kis_group_layer.h>
@@ -225,10 +226,12 @@ void KisWdgOptionsJPEG::setConfiguration(const KisPropertiesConfigurationSP cfg)
     chkForceSRGB->setVisible(cfg->getBool("is_sRGB"));
     chkForceSRGB->setChecked(cfg->getBool("forceSRGB", false));
     chkSaveProfile->setChecked(cfg->getBool("saveProfile", true));
-
     QStringList rgb = cfg->getString("transparencyFillcolor", "255,255,255").split(',');
-    bnTransparencyFillColor->setDefaultColor(Qt::white);
-    bnTransparencyFillColor->setColor(QColor(rgb[0].toInt(), rgb[1].toInt(), rgb[2].toInt()));
+    KoColor background(KoColorSpaceRegistry::instance()->rgb8());
+    background.fromQColor(Qt::white);
+    bnTransparencyFillColor->setDefaultColor(background);
+    background.fromQColor(QColor(rgb[0].toInt(), rgb[1].toInt(), rgb[2].toInt()));
+    bnTransparencyFillColor->setColor(background);
 
     m_filterRegistryModel.setEnabledFilters(cfg->getString("filters").split(','));
 
@@ -248,7 +251,7 @@ KisPropertiesConfigurationSP KisWdgOptionsJPEG::configuration() const
     cfg->setProperty("exif", exif->isChecked());
     cfg->setProperty("iptc", iptc->isChecked());
     cfg->setProperty("xmp", xmp->isChecked());
-    QColor c = bnTransparencyFillColor->color();
+    QColor c = bnTransparencyFillColor->color().toQColor();
     cfg->setProperty("transparencyFillcolor", QString("%1,%2,%3").arg(c.red()).arg(c.green()).arg(c.blue()));
     QString enabledFilters;
     Q_FOREACH (const KisMetaData::Filter* filter, m_filterRegistryModel.enabledFilters()) {

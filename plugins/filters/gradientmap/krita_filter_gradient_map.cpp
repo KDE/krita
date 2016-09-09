@@ -18,28 +18,77 @@
  */
 
 #include "krita_filter_gradient_map.h"
-#include "KoColorSpace.h"
+#include <KoColorSpace.h>
+#include <KoColor.h>
+
+#include <kis_paint_device.h>
+#include <kis_global.h>
+#include <kis_types.h>
+
 #include "kis_config_widget.h"
-#include "filter/kis_color_transformation_filter.h"
+#include <KoResourceServerProvider.h>
+#include <KoResourceServer.h>
+#include <KoAbstractGradient.h>
+#include <KoColorSet.h>
 #include "gradientmap.h"
-#include "krita_gradient_map_color_transformation.h"
+
+#include <kis_sequential_iterator.h>
 
 
-KritaFilterGradientMap::KritaFilterGradientMap() : KisColorTransformationFilter(id(), categoryMap(), i18n("&Gradient Map"))
+KritaFilterGradientMap::KritaFilterGradientMap() : KisFilter(id(), categoryMap(), i18n("&Gradient Map"))
 {
-    setColorSpaceIndependence(TO_LAB16);
+    setColorSpaceIndependence(FULLY_INDEPENDENT);
     setShowConfigurationWidget(true);
-    // don't support anything just yet because of thread safety problems
-    setSupportsPainting(false);
-    setSupportsAdjustmentLayers(false);
-    setSupportsThreading(false);
+    setSupportsLevelOfDetail(true);
+    setSupportsPainting(true);
+    setSupportsAdjustmentLayers(true);
+    setSupportsThreading(true);
 }
 
-KoColorTransformation* KritaFilterGradientMap::createTransformation(const KoColorSpace* cs, const KisFilterConfigurationSP config) const
+void KritaFilterGradientMap::processImpl(KisPaintDeviceSP device,
+                 const QRect& applyRect,
+                 const KisFilterConfigurationSP config,
+                 KoUpdater *progressUpdater) const
 {
-    auto gradient = static_cast<const KoAbstractGradient *>(dynamic_cast<const KritaGradientMapFilterConfiguration *>(config.data())->gradient());
+    Q_ASSERT(!device.isNull());
 
-    return new KritaGradientMapColorTransformation(gradient, cs);
+    if (progressUpdater) {
+        progressUpdater->setRange(0, applyRect.height() * applyRect.width());
+    }
+
+    KoAbstractGradient *gradient = KoResourceServerProvider::instance()->gradientServer(false)->resourceByName(config->getString("gradientName"));
+
+    KoColorSet *gradientCache = new KoColorSet();
+    for (int i=0; i<256; i++) {
+        KoColor gc;
+        gradient->colorAt(gc, ((qreal)i/255.0));
+        KoColorSetEntry col;
+        col.color = gc;
+        gradientCache->add(col);
+    }
+
+    KoColor outColor(Qt::white, device->colorSpace());
+    KisSequentialIterator it(device, applyRect);
+    int p = 0;
+    quint8 grey;
+    const int pixelSize = device->colorSpace()->pixelSize();
+    do {
+        grey = device->colorSpace()->intensity8(it.oldRawData());
+        outColor = gradientCache->getColor((quint32)grey).color;
+        outColor.convertTo(device->colorSpace());
+        memcpy(it.rawData(), outColor.data(), pixelSize);
+        if (progressUpdater) progressUpdater->setValue(p++);
+
+    } while (it.nextPixel());
+
+}
+
+KisFilterConfigurationSP KritaFilterGradientMap::factoryConfiguration(const KisPaintDeviceSP) const
+{
+    KisFilterConfigurationSP config = new KisFilterConfiguration("gradientmap", 1);
+    KoAbstractGradient *gradient = KoResourceServerProvider::instance()->gradientServer(false)->resources().first();
+    config->setProperty("gradientName", gradient->name());
+    return config;
 }
 
 KisConfigWidget * KritaFilterGradientMap::createConfigurationWidget(QWidget * parent, const KisPaintDeviceSP dev) const

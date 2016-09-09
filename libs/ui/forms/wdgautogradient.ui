@@ -104,7 +104,7 @@
       </widget>
      </item>
      <item row="1" column="1">
-      <widget class="KColorButton" name="leftColorButton">
+      <widget class="KisColorButton" name="leftColorButton">
        <property name="sizePolicy">
         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
          <horstretch>0</horstretch>
@@ -185,7 +185,7 @@
       </widget>
      </item>
      <item row="2" column="1">
-      <widget class="KColorButton" name="rightColorButton">
+      <widget class="KisColorButton" name="rightColorButton">
        <property name="sizePolicy">
         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
          <horstretch>0</horstretch>
@@ -374,10 +374,9 @@
    <header>kis_int_parse_spin_box.h</header>
   </customwidget>
   <customwidget>
-   <class>KColorButton</class>
+   <class>KisColorButton</class>
    <extends>QPushButton</extends>
-   <header>kcolorbutton.h</header>
-   <container>1</container>
+   <header>kis_color_button.h</header>
   </customwidget>
   <customwidget>
    <class>KisGradientSliderWidget</class>

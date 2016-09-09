@@ -1,7 +1,5 @@
 /*
- * This file is part of Krita
- *
- * Copyright (c) 2016 Spencer Brown <sbrown655@gmail.com>
+ *  Copyright (c) 2016 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,19 +16,12 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#pragma once
+#include "kis_slider_based_paintop_property.h"
 
-#include "KoColorTransformation.h"
-#include "KoAbstractGradient.h"
+#include "kis_paintop_settings.h"
 
-class KritaGradientMapColorTransformation : public KoColorTransformation
-{
-public:
-    KritaGradientMapColorTransformation(const KoAbstractGradient * gradient, const KoColorSpace* cs);
-    virtual void transform(const quint8* src, quint8* dst, qint32 nPixels) const;
-private:
-    const KoAbstractGradient* m_gradient;
-    const KoColorSpace* m_colorSpace;
-    const size_t m_psize;
-};
+template class KisSliderBasedPaintOpProperty<int>;
+template class KisSliderBasedPaintOpProperty<qreal>;
 
+template class KisCallbackBasedPaintopProperty<KisSliderBasedPaintOpProperty<int>>;
+template class KisCallbackBasedPaintopProperty<KisSliderBasedPaintOpProperty<qreal>>;

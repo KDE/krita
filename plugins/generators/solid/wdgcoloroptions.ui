@@ -25,7 +25,7 @@
     </widget>
    </item>
    <item row="0" column="2">
-    <widget class="KColorButton" name="bnColor"/>
+    <widget class="KisColorButton" name="bnColor"/>
    </item>
    <item row="0" column="3">
     <spacer>
@@ -63,9 +63,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KColorButton</class>
+   <class>KisColorButton</class>
    <extends>QPushButton</extends>
-   <header>kcolorbutton.h</header>
+   <header>kis_color_button.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

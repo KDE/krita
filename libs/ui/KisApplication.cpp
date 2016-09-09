@@ -242,6 +242,7 @@ void addResourceTypes()
     KoResourcePaths::addResourceType("icc_profiles", "data", "/color/icc");
     KoResourcePaths::addResourceType("ko_effects", "data", "/effects/");
     KoResourcePaths::addResourceType("tags", "data", "/tags/");
+    KoResourcePaths::addResourceType("templates", "data", "/templates");
 
 //    // Extra directories to look for create resources. (Does anyone actually use that anymore?)
 //    KoResourcePaths::addResourceDir("ko_gradients", "/usr/share/create/gradients/gimp");

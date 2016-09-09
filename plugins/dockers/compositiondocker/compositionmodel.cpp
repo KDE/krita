@@ -59,7 +59,7 @@ bool CompositionModel::setData ( const QModelIndex& index, const QVariant& value
             Q_ASSERT(index.column() < columnCount());
             if (index.column() == 0) {
                 bool exportEnabled = value.toInt() == Qt::Checked;
-                KisLayerComposition* layerComposition = m_compositions.at(index.row());
+                KisLayerCompositionSP layerComposition = m_compositions.at(index.row());
                 if (layerComposition) {
                     layerComposition->setExportEnabled(exportEnabled);
                 }
@@ -93,15 +93,15 @@ Qt::ItemFlags CompositionModel::flags(const QModelIndex& /*index*/) const
     return flags;
 }
 
-KisLayerComposition* CompositionModel::compositionFromIndex(const QModelIndex& index)
+KisLayerCompositionSP CompositionModel::compositionFromIndex(const QModelIndex& index)
 {
     if(index.isValid()) {
         return m_compositions.at(index.row());
     }
-    return 0;
+    return KisLayerCompositionSP();
 }
 
-void CompositionModel::setCompositions(QList< KisLayerComposition* > compositions)
+void CompositionModel::setCompositions(QList< KisLayerCompositionSP > compositions)
 {
     m_compositions = compositions;
     reset();

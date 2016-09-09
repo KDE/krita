@@ -24,8 +24,6 @@
 #include "ui_wdgimageproperties.h"
 
 class KoColorSpace;
-class KoColorPopupAction;
-
 class WdgImageProperties : public QWidget, public Ui::WdgImageProperties
 {
     Q_OBJECT
@@ -58,9 +56,7 @@ private:
 
     WdgImageProperties * m_page;
     KisImageWSP m_image;
-    KoColorPopupAction *m_defaultColorAction;
-    KoColorPopupAction *m_gamutWarning;
-    KisProofingConfiguration *m_proofingConfig;
+    KisProofingConfigurationSP m_proofingConfig;
 };
 
 

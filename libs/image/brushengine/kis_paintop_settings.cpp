@@ -293,6 +293,27 @@ void KisPaintOpSettings::setSavedBrushSize(qreal value)
     setPropertyNotSaved("SavedBrushSize");
 }
 
+qreal KisPaintOpSettings::savedEraserOpacity() const
+{
+    return getDouble("SavedEraserOpacity", 0.0);
+}
+
+void KisPaintOpSettings::setSavedEraserOpacity(qreal value)
+{
+    setProperty("SavedEraserOpacity", value);
+    setPropertyNotSaved("SavedEraserOpacity");
+}
+
+qreal KisPaintOpSettings::savedBrushOpacity() const
+{
+    return getDouble("SavedBrushOpacity", 0.0);
+}
+
+void KisPaintOpSettings::setSavedBrushOpacity(qreal value)
+{
+    setProperty("SavedBrushOpacity", value);
+    setPropertyNotSaved("SavedBrushOpacity");
+}
 
 QString KisPaintOpSettings::modelName() const
 {

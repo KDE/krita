@@ -62,14 +62,19 @@ struct KisColorizeMask::Private
     }
 
     Private(const Private &rhs)
-        : needAddCurrentKeyStroke(rhs.needAddCurrentKeyStroke),
+        : coloringProjection(new KisPaintDevice(*rhs.coloringProjection)),
+          fakePaintDevice(new KisPaintDevice(*rhs.fakePaintDevice)),
+          needAddCurrentKeyStroke(rhs.needAddCurrentKeyStroke),
           showKeyStrokes(rhs.showKeyStrokes),
           showColoring(rhs.showColoring),
-          cachedSelection(),
           needsUpdate(false),
           originalSequenceNumber(-1),
-          updateCompressor(1000, KisSignalCompressor::POSTPONE)
+          updateCompressor(1000, KisSignalCompressor::POSTPONE),
+          offset(rhs.offset)
     {
+        Q_FOREACH (const KeyStroke &stroke, rhs.keyStrokes) {
+            keyStrokes << KeyStroke(new KisPaintDevice(*stroke.dev), stroke.color, stroke.isTransparent);
+        }
     }
 
     QList<KeyStroke> keyStrokes;

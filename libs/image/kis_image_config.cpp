@@ -223,12 +223,12 @@ QString KisImageConfig::swapDir(bool requestDefault)
 {
     QString swap = QDir::tempPath();
     return !requestDefault ?
-            m_config.readEntry("swaplocation", swap) : swap;
+            m_config.readPathEntry("swaplocation", swap) : swap;
 }
 
 void KisImageConfig::setSwapDir(const QString &swapDir)
 {
-    m_config.writeEntry("swaplocation", swapDir);
+    m_config.writePathEntry("swaplocation", swapDir);
 }
 
 int KisImageConfig::numberOfOnionSkins() const

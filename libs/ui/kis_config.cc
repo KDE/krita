@@ -27,7 +27,7 @@
 #include <QFont>
 #include <QThread>
 #include <QStringList>
-
+#include <QStandardPaths>
 
 #include <kconfig.h>
 
@@ -1721,4 +1721,20 @@ QString KisConfig::brushHudSetting(bool defaultValue) const
 void KisConfig::setBrushHudSetting(const QString &value) const
 {
     m_cfg.writeEntry("brushHudSettings", value);
+}
+
+QString KisConfig::resourceFolderLocation(bool defaultValue) const
+{
+    if (defaultValue) {
+        return "";
+    }
+    KConfigGroup cg(KSharedConfig::openConfig(), "resource_folder");
+    return cg.readPathEntry("saveLocation", "");
+}
+
+void KisConfig::setResourceFolderLocation(const QString &value) const
+{
+    KConfigGroup cg(KSharedConfig::openConfig(), "resource_folder");
+    cg.writePathEntry("saveLocation", value);
+
 }

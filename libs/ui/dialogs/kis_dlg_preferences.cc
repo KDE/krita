@@ -129,6 +129,9 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
 
     connect(m_bnFileName, SIGNAL(clicked()), SLOT(getBackgroundImage()));
     connect(clearBgImageButton, SIGNAL(clicked()), SLOT(clearBackgroundImage()));
+
+    lblResourceFolderLocation->setText(cfg.resourceFolderLocation());
+    connect(bnResourceFolderSelector, SIGNAL(clicked()), SLOT(selectResourceFolderLocation()));
 }
 
 void GeneralTab::setDefault()
@@ -157,6 +160,7 @@ void GeneralTab::setDefault()
     m_radioToolOptionsInDocker->setChecked(cfg.toolOptionsInDocker(true));
     m_chkSwitchSelectionCtrlAlt->setChecked(cfg.switchSelectionCtrlAlt(true));
     m_chkConvertOnImport->setChecked(cfg.convertToImageColorspaceOnImport(true));
+    lblResourceFolderLocation->setText(cfg.resourceFolderLocation(true));
 
 }
 
@@ -259,6 +263,14 @@ void GeneralTab::clearBackgroundImage()
 {
     // clearing the background image text will implicitly make the background color be used
     m_backgroundimage->setText("");
+}
+
+void GeneralTab::selectResourceFolderLocation()
+{
+    KisConfig cfg;
+    QString resourceFolderLocation = cfg.resourceFolderLocation();
+    resourceFolderLocation = QFileDialog::getExistingDirectory(0, i18nc("@title:window", "Select the location for your custom resources."), resourceFolderLocation);
+    lblResourceFolderLocation->setText(resourceFolderLocation);
 }
 
 ShortcutSettingsTab::ShortcutSettingsTab(QWidget *parent, const char *name)
@@ -973,6 +985,7 @@ bool KisDlgPreferences::editPreferences()
         cfg.setToolOptionsInDocker(dialog->m_general->toolOptionsInDocker());
         cfg.setSwitchSelectionCtrlAlt(dialog->m_general->switchSelectionCtrlAlt());
         cfg.setConvertToImageColorspaceOnImport(dialog->m_general->convertToImageColorspaceOnImport());
+        cfg.setResourceFolderLocation(dialog->m_general->lblResourceFolderLocation->text());
 
         KisPart *part = KisPart::instance();
         if (part) {

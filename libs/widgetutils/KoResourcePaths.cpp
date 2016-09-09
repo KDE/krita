@@ -29,6 +29,9 @@
 #include <QMutex>
 #include "kis_debug.h"
 
+#include <kconfiggroup.h>
+#include <ksharedconfig.h>
+
 #include "WidgetUtilsDebug.h"
 
 Q_GLOBAL_STATIC(KoResourcePaths, s_instance);
@@ -477,12 +480,22 @@ QStringList KoResourcePaths::resourceDirsInternal(const QString &type)
 QString KoResourcePaths::saveLocationInternal(const QString &type, const QString &suffix, bool create)
 {
     QStringList aliases = d->aliases(type);
-    QString path;
+
+    KConfigGroup cg(KSharedConfig::openConfig(), "resource_folder");
+    QString path = cg.readPathEntry("saveLocation", path);
+
     if (aliases.size() > 0) {
-        path = QStandardPaths::writableLocation(d->mapTypeToQStandardPaths(type)) + '/' + aliases.first();
+        if (path.isEmpty()) {
+            path = QStandardPaths::writableLocation(d->mapTypeToQStandardPaths(type)) + '/' + aliases.first();
+        }
+        else {
+            path += '/' + aliases.first();
+        }
     }
-    else {
+    else if (path.isEmpty()) {
+
         path = QStandardPaths::writableLocation(d->mapTypeToQStandardPaths(type));
+
         if (!path.endsWith("krita")) {
             path += "/krita";
         }

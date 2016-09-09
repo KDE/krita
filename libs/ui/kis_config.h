@@ -438,7 +438,7 @@ public:
 
     bool useEraserBrushOpacity(bool defaultValue = false) const;
     void setUseEraserBrushOpacity(bool value);
-    
+
     QColor getMDIBackgroundColor(bool defaultValue = false) const;
     void setMDIBackgroundColor(const QColor & v) const;
 
@@ -487,6 +487,9 @@ public:
 
     QString brushHudSetting(bool defaultValue = false) const;
     void setBrushHudSetting(const QString &value) const;
+
+    QString resourceFolderLocation(bool defaultValue = false) const;
+    void setResourceFolderLocation(const QString &value) const;
 
     template<class T>
     void writeEntry(const QString& name, const T& value) {

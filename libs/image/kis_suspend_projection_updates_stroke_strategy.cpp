@@ -212,7 +212,7 @@ void KisSuspendProjectionUpdatesStrokeStrategy::doStrokeCallback(KisStrokeJobDat
     }
 }
 
-QList<KisStrokeJobData*> KisSuspendProjectionUpdatesStrokeStrategy::createSuspendJobsData(KisImageWSP image)
+QList<KisStrokeJobData*> KisSuspendProjectionUpdatesStrokeStrategy::createSuspendJobsData(KisImageWSP /*h*/)
 {
     QList<KisStrokeJobData*> jobsData;
     jobsData << new Private::SuspendData();

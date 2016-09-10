@@ -80,7 +80,7 @@ void KisCsConversionTest::testColorSpaceConversion()
                 logFailure("pixelsize", srcCs, dstCs);
                 failedColorSpaces++;
             }
-            if (!(*dev->colorSpace() == *dstCs)) {
+            if (*dev->colorSpace() != *dstCs) {
                 logFailure("dest cs", srcCs, dstCs);
                 failedColorSpaces++;
             }

@@ -768,7 +768,7 @@ void KisPaintDevice::Private::uploadFrame(int dstFrameId, KisPaintDeviceSP srcDe
 void KisPaintDevice::Private::uploadFrameData(DataSP srcData, DataSP dstData)
 {
     if (srcData->colorSpace() != dstData->colorSpace() &&
-        !(*srcData->colorSpace() == *dstData->colorSpace())) {
+        *srcData->colorSpace() != *dstData->colorSpace()) {
 
         KUndo2Command tempCommand;
 
@@ -1046,25 +1046,30 @@ KisDefaultBoundsBaseSP KisPaintDevice::defaultBounds() const
     return m_d->defaultBounds;
 }
 
-void KisPaintDevice::move(const QPoint &pt)
+void KisPaintDevice::moveTo(const QPoint &pt)
 {
     m_d->currentStrategy()->move(pt);
     m_d->cache()->invalidate();
 }
 
-void KisPaintDevice::move(qint32 x, qint32 y)
+QPoint KisPaintDevice::offset() const
 {
-    move(QPoint(x, y));
+    return QPoint(x(), y());
+}
+
+void KisPaintDevice::moveTo(qint32 x, qint32 y)
+{
+    moveTo(QPoint(x, y));
 }
 
 void KisPaintDevice::setX(qint32 x)
 {
-    move(QPoint(x, m_d->y()));
+    moveTo(QPoint(x, m_d->y()));
 }
 
 void KisPaintDevice::setY(qint32 y)
 {
-    move(QPoint(m_d->x(), y));
+    moveTo(QPoint(m_d->x(), y));
 }
 
 qint32 KisPaintDevice::x() const

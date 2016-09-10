@@ -106,7 +106,7 @@ void KisPlainColorSource::selectColor(double mix, const KisPaintInformation &pi)
 {
     Q_UNUSED(pi);
 
-    if (!(m_color.colorSpace() == m_foreGroundColor.colorSpace())) {
+    if (m_color.colorSpace() != m_foreGroundColor.colorSpace()) {
         m_color = KoColor(m_foreGroundColor.colorSpace());
         m_cachedBackGroundColor = KoColor(m_foreGroundColor.colorSpace());
         m_cachedBackGroundColor.fromKoColor(m_backGroundColor);

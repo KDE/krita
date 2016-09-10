@@ -82,7 +82,6 @@ QPainterPath KisSprayPaintOpSettings::brushOutline(const KisPaintInformation &in
 #include "kis_paintop_settings_update_proxy.h"
 #include "kis_sprayop_option.h"
 #include "kis_standard_uniform_properties_factory.h"
-typedef KisCallbackBasedPaintopProperty<KisUniformPaintOpProperty> KisUniformPaintOpPropertyCallback;
 
 
 QList<KisUniformPaintOpPropertySP> KisSprayPaintOpSettings::uniformProperties()

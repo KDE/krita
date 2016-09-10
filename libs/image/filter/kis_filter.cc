@@ -115,7 +115,7 @@ void KisFilter::process(const KisPaintDeviceSP src,
 
     bool weirdDstColorSpace =
         dst->colorSpace() != dst->compositionSourceColorSpace() &&
-        !(*dst->colorSpace() == *dst->compositionSourceColorSpace());
+        *dst->colorSpace() != *dst->compositionSourceColorSpace();
 
     if(src == dst && !selection && !weirdDstColorSpace) {
         temporary = src;

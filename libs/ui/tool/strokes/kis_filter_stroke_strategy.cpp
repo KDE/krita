@@ -112,7 +112,7 @@ void KisFilterStrokeStrategy::initStrokeCallback()
 
     if (activeSelection() ||
         (dev->colorSpace() != dev->compositionSourceColorSpace() &&
-         !(dev->colorSpace() == dev->compositionSourceColorSpace()))) {
+         *dev->colorSpace() != *dev->compositionSourceColorSpace())) {
 
         m_d->filterDevice = dev->createCompositionSourceDevice(dev);
         m_d->secondaryTransaction = new KisTransaction(m_d->filterDevice);

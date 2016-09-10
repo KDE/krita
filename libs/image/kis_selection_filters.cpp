@@ -187,7 +187,7 @@ KUndo2MagicString KisDilateSelectionFilter::name()
 QRect KisDilateSelectionFilter::changeRect(const QRect& rect)
 {
     const qint32 radius = 1;
-    return rect.adjusted(-radius, -radius, radius, radius); 
+    return rect.adjusted(-radius, -radius, radius, radius);
 }
 
 void KisDilateSelectionFilter::process(KisPixelSelectionSP pixelSelection, const QRect& rect)
@@ -483,7 +483,7 @@ void KisFeatherSelectionFilter::process(KisPixelSelectionSP pixelSelection, cons
 {
     // compute horizontal kernel
     const uint kernelSize = m_radius * 2 + 1;
-    Matrix<qreal, Dynamic, Dynamic> gaussianMatrix(1, kernelSize);
+    Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> gaussianMatrix(1, kernelSize);
 
     const qreal multiplicand = 1 / (2 * M_PI * m_radius * m_radius);
     const qreal exponentMultiplicand = 1 / (2 * m_radius * m_radius);

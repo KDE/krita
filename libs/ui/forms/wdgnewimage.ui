@@ -523,20 +523,6 @@
          <property name="toolTip">
           <string>Reset the image background color in the Image Properties dialog</string>
          </property>
-         <property name="color" stdset="0">
-          <color>
-           <red>255</red>
-           <green>255</green>
-           <blue>255</blue>
-          </color>
-         </property>
-         <property name="defaultColor" stdset="0">
-          <color>
-           <red>255</red>
-           <green>255</green>
-           <blue>255</blue>
-          </color>
-         </property>
         </widget>
        </item>
        <item row="3" column="2">

@@ -58,6 +58,9 @@ public:
  * On top of that, the pattern can be rotated, the shape can be chosen, and the user will want to
  * decide whether or not to use antialiasing(as printers themselves give
  * inefficient results with anti-aliasing).
+ *
+ * As of currently, 2 and 3 can be done. 1 is not impossible to code with some creative usage of composite
+ * modes, but might be a little slow.
  */
 
 class KisHalftoneFilter : public KisFilter

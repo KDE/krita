@@ -119,9 +119,14 @@ void KisHalftoneFilter::processImpl(KisPaintDeviceSP device,
     KisPaintDeviceSP dab = device->createCompositionSourceDevice();
     KisPainter dbPainter(dab);
     device->fill(applyRect, backgroundC);
+    dbPainter.setAntiAliasPolygonFill(config->getBool("antiAliasing", true));
     dbPainter.setPaintColor(foregroundC);
     dbPainter.setFillStyle(KisPainter::FillStyleForegroundColor);
     dbPainter.setCompositeOp(device->colorSpace()->compositeOp(COMPOSITE_OVER));
+    quint8 eightbit = 255;
+    if (config->getBool("invert", false)) {
+        eightbit = 0;
+    }
 
     QRect cellRect(applyRect.topLeft()-QPoint(qFloor(cellSpacingH), qFloor(qMax(cellSpacingV, diameter))), applyRect.bottomRight()+QPoint(qCeil(cellSpacingH), qCeil(qMax(cellSpacingV, diameter))));
     for (int i=0; i<gridPoints.size(); i++) {
@@ -133,7 +138,7 @@ void KisHalftoneFilter::processImpl(KisPaintDeviceSP device,
                           qBound(applyRect.top()+1, qFloor(samplePoint.y())+qCeil(cellSize*0.5), applyRect.bottom()-1));
             itterator->moveTo(center.x(), center.y());
             quint8 intensity = device->colorSpace()->intensity8(itterator->oldRawData());
-            qreal size = diameter*((255-(intensity))/255.0);
+            qreal size = diameter*((qAbs(intensity-eightbit))/255.0);
             QPoint sPoint(qMax(qFloor(samplePoint.x()), applyRect.left()),
                           qMax(qFloor(samplePoint.y()), applyRect.top()));
             dbPainter.bitBlt(0, 0, device,
@@ -153,7 +158,6 @@ void KisHalftoneFilter::processImpl(KisPaintDeviceSP device,
             painter.bitBlt(sPoint,
                            dab,
                            dab->exactBounds());
-            //painter.paintEllipse(samplePoint.x(), samplePoint.y(), size, size);
             if (progressUpdater) {
                 progressUpdater->setValue(i);
             }
@@ -167,10 +171,16 @@ KisFilterConfiguration *KisHalftoneFilter::factoryConfiguration(const KisPaintDe
     config->setProperty("cellSize", 8.0);
     config->setProperty("patternAngle", 45.0);
     QVariant v;
-    v.setValue(KoColor(Qt::black, dev->colorSpace()));
+    KoColor black;
+    black.fromQColor(QColor(Qt::black));
+    v.setValue(black);
     config->setProperty("foreGroundColor", v);
-    v.setValue(KoColor(Qt::white, dev->colorSpace()));
+    KoColor white;
+    white.fromQColor(QColor(Qt::white));
+    v.setValue(white);
     config->setProperty("backGroundColor", v);
+    config->setProperty("antiAliasing", true);
+    config->setProperty("invert", false);
 
     return config;
 }
@@ -194,13 +204,16 @@ KisHalftoneConfigWidget::KisHalftoneConfigWidget(QWidget *parent, KisPaintDevice
     m_page.bnforeground->setDefaultColor(white);
     m_page.bnbackground->setDefaultColor(black);
 
+    m_page.sld_cellSize->setRange(3, 90);
+
     connect(m_page.sld_cellSize, SIGNAL(valueChanged(int)), SLOT(slotConfigChanged()));
     connect(m_page.dial_angle, SIGNAL(valueChanged(int)), m_page.spb_angle, SLOT(setValue(int)));
     connect(m_page.dial_angle, SIGNAL(valueChanged(int)), SLOT(slotConfigChanged()));
     connect(m_page.spb_angle, SIGNAL(valueChanged(int)), SLOT(slotConfigChanged()));
-    connect(m_page.spb_angle, SIGNAL(valueChanged(int)), m_page.dial_angle, SLOT(setValue(int)));
     connect(m_page.bnforeground, SIGNAL(changed(KoColor)), SLOT(slotConfigChanged()));
     connect(m_page.bnbackground, SIGNAL(changed(KoColor)), SLOT(slotConfigChanged()));
+    connect(m_page.ckbAntialiasing, SIGNAL(toggled(bool)), SLOT(slotConfigChanged()));
+    connect(m_page.ckbInvert, SIGNAL(toggled(bool)), SLOT(slotConfigChanged()));
 }
 
 KisHalftoneConfigWidget::~KisHalftoneConfigWidget()
@@ -218,6 +231,8 @@ KisPropertiesConfiguration *KisHalftoneConfigWidget::configuration() const
     config->setProperty("foreGroundColor", v);
     v.setValue(m_page.bnbackground->color());
     config->setProperty("backGroundColor", v);
+    config->setProperty("antiAliasing", m_page.ckbAntialiasing->isChecked());
+    config->setProperty("invert", m_page.ckbInvert->isChecked());
 
     return config;
 }
@@ -232,6 +247,13 @@ void KisHalftoneConfigWidget::setConfiguration(const KisPropertiesConfiguration 
         m_page.dial_angle->setValue(value.toUInt());
         m_page.spb_angle->setValue(value.toUInt());
     }
+    if (config->getProperty("antiAliasing", value)) {
+        m_page.ckbAntialiasing->setChecked(value.toBool());
+    }
+    if (config->getProperty("invert", value)) {
+        m_page.ckbInvert->setChecked(value.toBool());
+    }
+
 
     m_page.bnforeground->setColor(config->getColor("foreGroundColor",m_page.bnforeground->defaultColor()));
     m_page.bnbackground->setColor(config->getColor("backGroundColor",m_page.bnbackground->defaultColor()));

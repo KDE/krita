@@ -78,6 +78,9 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
           -->
           <Action name="view_zoom_in"/>
           <Action name="view_zoom_out"/>
+          <Action name="view_fit_to_page"/>
+          <Action name="view_fit_width"/>
+          <Action name="view_fit_height"/>
       </Menu>
       <!-- TODO: None of these actions are showing. There names must have been changed to something with the MDI changes?...
       <Action name="actual_pixels"/>

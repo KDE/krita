@@ -594,6 +594,34 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
+    <Action name="view_actual_size">
+        <icon></icon>
+        <text>&amp;Actual Size</text>
+        <whatsThis></whatsThis>
+        <iconText>Actual Size</iconText>
+        <isCheckable>false</isCheckable>
+    </Action>
+    <Action name="view_fit_to_page">
+        <icon></icon>
+        <text>&amp;Fit to Page</text>
+        <whatsThis></whatsThis>
+        <iconText>Fit to Page</iconText>
+        <isCheckable>false</isCheckable>
+    </Action>
+    <Action name="view_fit_to_width">
+        <icon></icon>
+        <text>Fit to Page &amp;Width</text>
+        <whatsThis></whatsThis>
+        <iconText>Fit to Page Width</iconText>
+        <isCheckable>false</isCheckable>
+    </Action>
+    <Action name="view_fit_to_height">
+        <icon></icon>
+        <text>Fit to Page &amp;Heights</text>
+        <whatsThis></whatsThis>
+        <iconText>Fit to Page Height</iconText>
+        <isCheckable>false</isCheckable>
+    </Action>
     <Action name="rotate_canvas_right">
       <icon></icon>
       <text>Rotate &amp;Canvas Right</text>

@@ -99,6 +99,18 @@ public Q_SLOTS:
     void zoomOut( );
 
   /**
+   * Change the zoom to fit the whole Page
+   * emits zoomChanged
+   */
+    void fitToPage( );
+
+  /**
+   * Change the zoom to fit the width exactly
+   * emits zoomChanged
+   */
+    void fitWidth( );
+
+  /**
    * Set the actual zoom value used in the app. This is needed when using @ref zoomIn() , @ref zoomOut() and/or when
    * plugged into the viewbar.
    */

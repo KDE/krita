@@ -261,6 +261,16 @@ void KoZoomAction::zoomIn()
     }
 }
 
+void KoZoomAction::fitToPage()
+{
+    triggered(I18N_NOOP("Fit Page"));
+}
+
+void KoZoomAction::fitWidth()
+{
+    triggered(I18N_NOOP("Fit Page Width"));
+}
+
 void KoZoomAction::zoomOut()
 {
     qreal zoom = prevZoomLevel();

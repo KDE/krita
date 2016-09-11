@@ -165,6 +165,9 @@ public:
         , zoomTo100pct(0)
         , zoomIn(0)
         , zoomOut(0)
+        , zoomFitPage(0)
+        , zoomFitWidth(0)
+        , zoomFitHeight(0)
         , selectionManager(_q)
         , statusBar(_q)
         , controlFrame(_q, _q_parent)
@@ -211,6 +214,9 @@ public:
     KisAction *zoomTo100pct;
     KisAction *zoomIn;
     KisAction *zoomOut;
+    KisAction *zoomFitPage;
+    KisAction *zoomFitWidth;
+    KisAction *zoomFitHeight;
     KisAction *softProof;
     KisAction *gamutCheck;
 
@@ -391,6 +397,10 @@ void KisViewManager::setCurrentView(KisView *view)
         d->viewConnections.addUniqueConnection(d->zoomTo100pct, SIGNAL(triggered()), imageView->zoomManager(), SLOT(zoomTo100()));
         d->viewConnections.addUniqueConnection(d->zoomIn, SIGNAL(triggered()), imageView->zoomController()->zoomAction(), SLOT(zoomIn()));
         d->viewConnections.addUniqueConnection(d->zoomOut, SIGNAL(triggered()), imageView->zoomController()->zoomAction(), SLOT(zoomOut()));
+
+        d->viewConnections.addUniqueConnection(d->zoomFitPage, SIGNAL(triggered()), imageView->zoomController()->zoomAction(), SLOT(fitToPage()));
+        d->viewConnections.addUniqueConnection(d->zoomFitWidth, SIGNAL(triggered()), imageView->zoomController()->zoomAction(), SLOT(fitWidth()));
+        //d->viewConnections.addUniqueConnection(d->zoomFitHeight, SIGNAL(triggered()), imageView->zoomController()->zoomAction(), SLOT(fitHeight()));
 
         d->viewConnections.addUniqueConnection(d->softProof, SIGNAL(toggled(bool)), view, SLOT(slotSoftProofing(bool)) );
         d->viewConnections.addUniqueConnection(d->gamutCheck, SIGNAL(toggled(bool)), view, SLOT(slotGamutCheck(bool)) );
@@ -646,6 +656,10 @@ void KisViewManager::createActions()
 
     d->zoomIn = actionManager()->createStandardAction(KStandardAction::ZoomIn, 0, "");
     d->zoomOut = actionManager()->createStandardAction(KStandardAction::ZoomOut, 0, "");
+
+    d->zoomFitPage   = actionManager()->createStandardAction(KStandardAction::FitToPage, 0, "");
+    d->zoomFitWidth  = actionManager()->createStandardAction(KStandardAction::FitToWidth, 0, "");
+    //d->zoomFitHeight = actionManager()->createStandardAction(KStandardAction::FitToHeight, 0, "");
 
     d->actionAuthor  = new KSelectAction(KisIconUtils::loadIcon("im-user"), i18n("Active Author Profile"), this);
     connect(d->actionAuthor, SIGNAL(triggered(const QString &)), this, SLOT(changeAuthorProfile(const QString &)));

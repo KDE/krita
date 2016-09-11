@@ -56,6 +56,15 @@ KisUniformPaintOpProperty::KisUniformPaintOpProperty(Type type,
 {
 }
 
+KisUniformPaintOpProperty::KisUniformPaintOpProperty(const QString &id,
+                                                     const QString &name,
+                                                     KisPaintOpSettingsSP settings,
+                                                     QObject *parent)
+    : QObject(parent),
+      m_d(new Private(Bool, id, name, settings))
+{
+}
+
 KisUniformPaintOpProperty::~KisUniformPaintOpProperty()
 {
 }
@@ -127,3 +136,4 @@ void KisUniformPaintOpProperty::writeValueImpl()
 {
 }
 
+template class KisCallbackBasedPaintopProperty<KisUniformPaintOpProperty>;

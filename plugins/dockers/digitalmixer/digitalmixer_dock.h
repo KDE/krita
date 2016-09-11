@@ -25,6 +25,7 @@
 class KoColorPopupAction;
 class KoColorSlider;
 class KoColorPatch;
+class KisColorButton;
 
 class DigitalMixerDock : public QDockWidget, public KoCanvasObserverBase {
     Q_OBJECT
@@ -48,7 +49,7 @@ private:
     struct Mixer {
       KoColorPatch* targetColor;
       KoColorSlider* targetSlider;
-      KoColorPopupAction* actionColor;
+      KisColorButton* actionColor;
     };
     QList<Mixer> m_mixers;
     bool m_tellCanvas;

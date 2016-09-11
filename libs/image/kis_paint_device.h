@@ -146,12 +146,17 @@ public:
     /**
      * Moves the device to these new coordinates (so no incremental move or so)
      */
-    void move(qint32 x, qint32 y);
+    void moveTo(qint32 x, qint32 y);
 
     /**
      * Convenience method for the above.
      */
-    virtual void move(const QPoint& pt);
+    virtual void moveTo(const QPoint& pt);
+
+    /**
+     * Return an X,Y offset of the device in a convenient form
+     */
+    QPoint offset() const;
 
     /**
      * The X offset of the paint device

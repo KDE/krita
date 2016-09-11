@@ -266,14 +266,14 @@ void KisKraSaverTest::testRoundTripAnimation()
     image->animationInterface()->switchCurrentTimeAsync(10);
     image->waitForDone();
     layer1->paintDevice()->fill(QRect(200, 50, 10, 10), KoColor(Qt::black, cs));
-    layer1->paintDevice()->move(25, 15);
+    layer1->paintDevice()->moveTo(25, 15);
     layer1->paintDevice()->setDefaultPixel(KoColor(Qt::green, cs).data());
 
     rasterChannel->addKeyframe(20, &parentCommand);
     image->animationInterface()->switchCurrentTimeAsync(20);
     image->waitForDone();
     layer1->paintDevice()->fill(QRect(150, 200, 30, 30), KoColor(Qt::black, cs));
-    layer1->paintDevice()->move(100, 50);
+    layer1->paintDevice()->moveTo(100, 50);
     layer1->paintDevice()->setDefaultPixel(KoColor(Qt::blue, cs).data());
 
     QScopedPointer<KisDocument> doc(KisPart::instance()->createDocument());

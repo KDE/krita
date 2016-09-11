@@ -90,6 +90,7 @@ KisColorsetChooser::KisColorsetChooser(QWidget* parent): QWidget(parent)
     QSharedPointer<KoAbstractResourceServerAdapter> adapter(new KoResourceServerAdapter<KoColorSet>(rserver));
     m_itemChooser = new KoResourceItemChooser(adapter, this);
     m_itemChooser->setItemDelegate(new ColorSetDelegate(this));
+    m_itemChooser->showTaggingBar(true);
     m_itemChooser->setFixedSize(250, 250);
     m_itemChooser->setRowHeight(30);
     m_itemChooser->setColumnCount(1);

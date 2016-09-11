@@ -36,8 +36,6 @@
 
 #include <Eigen/Core>
 
-using namespace Eigen;
-
 K_PLUGIN_FACTORY_WITH_JSON(KritaConvolutionFiltersFactory, "kritaconvolutionfilters.json", registerPlugin<KritaConvolutionFilters>();)
 
 KritaConvolutionFilters::KritaConvolutionFilters(QObject *parent, const QVariantList &)
@@ -68,7 +66,7 @@ KisSharpenFilter::KisSharpenFilter()
     setSupportsPainting(true);
     setShowConfigurationWidget(false);
 
-    Matrix<qreal, Dynamic, Dynamic> kernelMatrix(3, 3);
+    Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> kernelMatrix(3, 3);
     kernelMatrix <<  0, -2,   0,
                     -2,  11, -2,
                      0, -2,   0;
@@ -82,7 +80,7 @@ KisMeanRemovalFilter::KisMeanRemovalFilter()
     setSupportsPainting(false);
     setShowConfigurationWidget(false);
 
-    Matrix<qreal, Dynamic, Dynamic> kernelMatrix(3, 3);
+    Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> kernelMatrix(3, 3);
     kernelMatrix << -1, -1, -1,
                     -1,  9, -1,
                     -1, -1, -1;
@@ -96,7 +94,7 @@ KisEmbossLaplascianFilter::KisEmbossLaplascianFilter()
     setSupportsPainting(false);
     setShowConfigurationWidget(false);
 
-    Matrix<qreal, Dynamic, Dynamic> kernelMatrix(3, 3);
+    Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> kernelMatrix(3, 3);
     kernelMatrix << -1, 0, -1,
                      0, 4,  0,
                     -1, 0, -1;
@@ -111,7 +109,7 @@ KisEmbossInAllDirectionsFilter::KisEmbossInAllDirectionsFilter()
     setSupportsPainting(false);
     setShowConfigurationWidget(false);
 
-    Matrix<qreal, Dynamic, Dynamic> kernelMatrix(3, 3);
+    Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> kernelMatrix(3, 3);
     kernelMatrix << -1, -1, -1,
                     -1,  8, -1,
                     -1, -1, -1;
@@ -126,7 +124,7 @@ KisEmbossHorizontalVerticalFilter::KisEmbossHorizontalVerticalFilter()
     setSupportsPainting(false);
     setShowConfigurationWidget(false);
 
-    Matrix<qreal, Dynamic, Dynamic> kernelMatrix(3, 3);
+    Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> kernelMatrix(3, 3);
     kernelMatrix <<  0, -1,  0,
                     -1,  4, -1,
                      0, -1,  0;
@@ -141,7 +139,7 @@ KisEmbossVerticalFilter::KisEmbossVerticalFilter()
     setSupportsPainting(false);
     setShowConfigurationWidget(false);
 
-    Matrix<qreal, Dynamic, Dynamic> kernelMatrix(3, 3);
+    Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> kernelMatrix(3, 3);
     kernelMatrix << 0, -1, 0,
                     0,  2, 0,
                     0, -1, 0;
@@ -156,7 +154,7 @@ KisEmbossHorizontalFilter::KisEmbossHorizontalFilter() :
     setSupportsPainting(false);
     setShowConfigurationWidget(false);
 
-    Matrix<qreal, Dynamic, Dynamic> kernelMatrix(3, 3);
+    Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> kernelMatrix(3, 3);
     kernelMatrix <<  0, 0,  0,
                     -1, 2, -1,
                      0, 0,  0;
@@ -171,7 +169,7 @@ KisEmbossDiagonalFilter::KisEmbossDiagonalFilter()
     setSupportsPainting(false);
     setShowConfigurationWidget(false);
 
-    Matrix<qreal, Dynamic, Dynamic> kernelMatrix(3, 3);
+    Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> kernelMatrix(3, 3);
     kernelMatrix << -1, 0, -1,
                      0, 4,  0,
                     -1, 0, -1;
@@ -187,7 +185,7 @@ KisTopEdgeDetectionFilter::KisTopEdgeDetectionFilter()
     setSupportsPainting(false);
     setShowConfigurationWidget(false);
 
-    Matrix<qreal, Dynamic, Dynamic> kernelMatrix(3, 3);
+    Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> kernelMatrix(3, 3);
     kernelMatrix <<  1,  1,  1,
                      0,  0,  0,
                     -1, -1, -1;
@@ -202,7 +200,7 @@ KisRightEdgeDetectionFilter::KisRightEdgeDetectionFilter()
     setSupportsPainting(false);
     setShowConfigurationWidget(false);
 
-    Matrix<qreal, Dynamic, Dynamic> kernelMatrix(3, 3);
+    Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> kernelMatrix(3, 3);
     kernelMatrix << -1, 0, 1,
                     -1, 0, 1,
                     -1, 0, 1;
@@ -216,7 +214,7 @@ KisBottomEdgeDetectionFilter::KisBottomEdgeDetectionFilter() : KisConvolutionFil
     setSupportsPainting(false);
     setShowConfigurationWidget(false);
 
-    Matrix<qreal, Dynamic, Dynamic> kernelMatrix(3, 3);
+    Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> kernelMatrix(3, 3);
     kernelMatrix << -1, -1, -1,
                      0,  0,  0,
                      1,  1,  1;
@@ -230,7 +228,7 @@ KisLeftEdgeDetectionFilter::KisLeftEdgeDetectionFilter() : KisConvolutionFilter(
     setSupportsPainting(false);
     setShowConfigurationWidget(false);
 
-    Matrix<qreal, Dynamic, Dynamic> kernelMatrix(3, 3);
+    Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> kernelMatrix(3, 3);
     kernelMatrix << 1, 0, -1,
                     1, 0, -1,
                     1, 0, -1;

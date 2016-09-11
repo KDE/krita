@@ -78,3 +78,8 @@ qreal KoDumbColorDisplayRenderer::maxVisibleFloatValue(const KoChannelInfo *chan
     Q_ASSERT(chaninfo);
     return chaninfo->getUIMax();
 }
+
+const KoColorSpace* KoDumbColorDisplayRenderer::getPaintingColorSpace() const
+{
+    return KoColorSpaceRegistry::instance()->rgb8();
+}

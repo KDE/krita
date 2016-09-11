@@ -93,7 +93,7 @@ public:
     void setScale(qreal _scale);
     void setSpacing(double _spacing);
 
-    quint32 brushIndex(const KisPaintInformation& info) const;
+    quint32 brushIndex(const KisPaintInformation& info) const Q_DECL_OVERRIDE;
     qint32 maskWidth(KisDabShape const&, double subPixelX, double subPixelY, const KisPaintInformation& info) const Q_DECL_OVERRIDE;
     qint32 maskHeight(KisDabShape const&, double subPixelX, double subPixelY, const KisPaintInformation& info) const Q_DECL_OVERRIDE;
 

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>299</width>
+    <width>356</width>
     <height>368</height>
    </rect>
   </property>
@@ -54,7 +54,7 @@
       </layout>
      </item>
      <item>
-      <widget class="KisDoubleSliderSpinBox" name="doubleTintFactor">
+      <widget class="KisDoubleSliderSpinBox" name="doubleTintFactor" native="true">
        <property name="minimumSize">
         <size>
          <width>50</width>
@@ -66,7 +66,7 @@
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_2">
        <item>
-        <widget class="KColorButton" name="btnBackwardColor">
+        <widget class="KisColorButton" name="btnBackwardColor">
          <property name="text">
           <string/>
          </property>
@@ -100,7 +100,7 @@
         </widget>
        </item>
        <item>
-        <widget class="KColorButton" name="btnForwardColor">
+        <widget class="KisColorButton" name="btnForwardColor">
          <property name="text">
           <string/>
          </property>
@@ -111,23 +111,18 @@
     </layout>
    </item>
   </layout>
-  <zorder>lblPrevColor</zorder>
-  <zorder>btnBackwardColor</zorder>
-  <zorder>btnForwardColor</zorder>
-  <zorder>lblNextColor</zorder>
  </widget>
  <customwidgets>
-  <customwidget>
-   <class>KColorButton</class>
-   <extends>QPushButton</extends>
-   <header>kcolorbutton.h</header>
-   <container>1</container>
-  </customwidget>
   <customwidget>
    <class>KisDoubleSliderSpinBox</class>
    <extends>QWidget</extends>
    <header>kis_slider_spin_box.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KisColorButton</class>
+   <extends>QPushButton</extends>
+   <header>kis_color_button.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

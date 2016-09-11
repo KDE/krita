@@ -54,7 +54,7 @@
    <item>
     <layout class="QGridLayout" name="gridLayout">
      <item row="0" column="0">
-      <widget class="KColorButton" name="colorButton">
+      <widget class="KisColorButton" name="colorButton">
        <property name="sizePolicy">
         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
          <horstretch>0</horstretch>
@@ -92,10 +92,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KColorButton</class>
+   <class>KisColorButton</class>
    <extends>QPushButton</extends>
-   <header>kcolorbutton.h</header>
-   <container>1</container>
+   <header>kis_color_button.h</header>
   </customwidget>
   <customwidget>
    <class>KisStopGradientSliderWidget</class>

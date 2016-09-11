@@ -35,7 +35,7 @@ private:
      KoStopGradient* m_gradient;
 private Q_SLOTS:
     void stopChanged(int stop);
-    void colorChanged(const QColor& color);
+    void colorChanged(const KoColor& color);
     void opacityChanged(qreal value);
     void nameChanged();
     void reverse();

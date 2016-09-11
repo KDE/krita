@@ -45,7 +45,7 @@ KisStopGradientEditor::KisStopGradientEditor(KoStopGradient* gradient, QWidget *
     nameedit->setText(gradient->name());
     connect(nameedit, SIGNAL(editingFinished()), this, SLOT(nameChanged()));
 
-    connect(colorButton, SIGNAL(changed(const QColor&)), SLOT(colorChanged(const QColor&)));
+    connect(colorButton, SIGNAL(changed(const KoColor&)), SLOT(colorChanged(const KoColor&)));
     
     opacitySlider->setRange(0.0, 1.0, 2);
     connect(opacitySlider, SIGNAL(valueChanged(qreal)), this, SLOT(opacityChanged(qreal)));
@@ -64,16 +64,16 @@ void KisStopGradientEditor::activate()
 
 void KisStopGradientEditor::stopChanged(int stop)
 {
-    QColor color = m_gradient->stops()[stop].second.toQColor();
-    opacitySlider->setValue(color.alphaF());
-    
-    color.setAlphaF(1.0);
+    KoColor color = m_gradient->stops()[stop].second;
+    opacitySlider->setValue(color.opacityF());
+   
+    color.setOpacity(1.0);
     colorButton->setColor(color);
     
     paramChanged();
 }
 
-void KisStopGradientEditor::colorChanged(const QColor& color)
+void KisStopGradientEditor::colorChanged(const KoColor& color)
 {
     QList<KoGradientStop> stops = m_gradient->stops();
 

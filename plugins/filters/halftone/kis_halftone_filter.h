@@ -74,10 +74,10 @@ public:
 
     virtual void processImpl(KisPaintDeviceSP device,
                      const QRect& applyRect,
-                     const KisFilterConfiguration* config,
+                     const KisFilterConfigurationSP config,
                      KoUpdater *progressUpdater) const;
 
-    virtual KisFilterConfiguration *factoryConfiguration(const KisPaintDeviceSP dev) const;
+    virtual KisFilterConfigurationSP factoryConfiguration(const KisPaintDeviceSP dev) const;
 
     virtual KisConfigWidget *createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev) const;
 
@@ -92,8 +92,8 @@ public:
     KisHalftoneConfigWidget(QWidget *parent, KisPaintDeviceSP dev);
     virtual ~KisHalftoneConfigWidget();
 
-    virtual KisPropertiesConfiguration *configuration() const;
-    void setConfiguration(const KisPropertiesConfiguration *config);
+    virtual KisPropertiesConfigurationSP configuration() const;
+    void setConfiguration(const KisPropertiesConfigurationSP config);
     Ui::WdgHalftone m_page;
 
 };

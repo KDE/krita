@@ -63,7 +63,7 @@ KisHalftoneFilter::KisHalftoneFilter()
 //I am pretty terrible at trigionometry, hence all the comments.
 void KisHalftoneFilter::processImpl(KisPaintDeviceSP device,
                                     const QRect &applyRect,
-                                    const KisFilterConfiguration *config,
+                                    const KisFilterConfigurationSP config,
                                     KoUpdater *progressUpdater) const
 {
     qreal cellSize = (qreal)config->getInt("cellSize", 8);
@@ -165,9 +165,9 @@ void KisHalftoneFilter::processImpl(KisPaintDeviceSP device,
     }
 }
 
-KisFilterConfiguration *KisHalftoneFilter::factoryConfiguration(const KisPaintDeviceSP dev) const
+KisFilterConfigurationSP KisHalftoneFilter::factoryConfiguration(const KisPaintDeviceSP dev) const
 {
-    KisFilterConfiguration *config = new KisFilterConfiguration("halftone", 1);
+    KisFilterConfigurationSP config = new KisFilterConfiguration("halftone", 1);
     config->setProperty("cellSize", 8.0);
     config->setProperty("patternAngle", 45.0);
     QVariant v;
@@ -192,6 +192,7 @@ KisConfigWidget *KisHalftoneFilter::createConfigurationWidget(QWidget *parent, c
 
 //----------config---------//
 KisHalftoneConfigWidget::KisHalftoneConfigWidget(QWidget *parent, KisPaintDeviceSP dev)
+    : KisConfigWidget(parent)
 {
     Q_ASSERT(dev);
     m_page.setupUi(this);
@@ -221,7 +222,7 @@ KisHalftoneConfigWidget::~KisHalftoneConfigWidget()
 
 }
 
-KisPropertiesConfiguration *KisHalftoneConfigWidget::configuration() const
+KisPropertiesConfigurationSP KisHalftoneConfigWidget::configuration() const
 {
     KisFilterConfiguration *config = new KisFilterConfiguration("halftone", 1);
     config->setProperty("cellSize", m_page.sld_cellSize->value());
@@ -237,7 +238,7 @@ KisPropertiesConfiguration *KisHalftoneConfigWidget::configuration() const
     return config;
 }
 
-void KisHalftoneConfigWidget::setConfiguration(const KisPropertiesConfiguration * config)
+void KisHalftoneConfigWidget::setConfiguration(const KisPropertiesConfigurationSP config)
 {
     QVariant value;
     if (config->getProperty("cellSize", value)) {

@@ -478,7 +478,8 @@ void mirror_impl(KisPaintDeviceSP dev, qreal axis, bool isHorizontal)
 
     KisRandomAccessorSP leftIt = dev->createRandomAccessorNG(mirrorRect.x(), mirrorRect.y());
     KisRandomAccessorSP rightIt = dev->createRandomAccessorNG(mirrorRect.x(), mirrorRect.y());
-    const quint8 *defaultPixel = dev->defaultPixel();
+    const KoColor defaultPixelObject = dev->defaultPixel();
+    const quint8 *defaultPixel = defaultPixelObject.data();
 
     const int pixelSize = dev->pixelSize();
     QByteArray buf(pixelSize, 0);

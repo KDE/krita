@@ -61,16 +61,16 @@ KisWdgGaussianBlur::~KisWdgGaussianBlur()
     delete m_widget;
 }
 
-KisPropertiesConfiguration* KisWdgGaussianBlur::configuration() const
+KisPropertiesConfigurationSP KisWdgGaussianBlur::configuration() const
 {
-    KisFilterConfiguration* config = new KisFilterConfiguration("gaussian blur", 1);
+    KisFilterConfigurationSP config = new KisFilterConfiguration("gaussian blur", 1);
     config->setProperty("horizRadius", m_widget->horizontalRadius->value());
     config->setProperty("vertRadius", m_widget->verticalRadius->value());
     config->setProperty("lockAspect", m_widget->aspectButton->keepAspectRatio());
     return config;
 }
 
-void KisWdgGaussianBlur::setConfiguration(const KisPropertiesConfiguration* config)
+void KisWdgGaussianBlur::setConfiguration(const KisPropertiesConfigurationSP config)
 {
     QVariant value;
     if (config->getProperty("horizRadius", value)) {

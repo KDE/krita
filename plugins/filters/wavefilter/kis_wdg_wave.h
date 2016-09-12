@@ -36,8 +36,8 @@ public:
     inline const Ui_WdgWaveOptions* widget() const {
         return m_widget;
     }
-    virtual void setConfiguration(const KisPropertiesConfiguration*);
-    virtual KisPropertiesConfiguration* configuration() const;
+    virtual void setConfiguration(const KisPropertiesConfigurationSP);
+    virtual KisPropertiesConfigurationSP configuration() const;
 private:
     Ui_WdgWaveOptions* m_widget;
 };

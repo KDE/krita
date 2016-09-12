@@ -37,7 +37,7 @@ class KisDeformPaintOp : public KisPaintOp
 {
 
 public:
-    KisDeformPaintOp(const KisDeformPaintOpSettings *settings, KisPainter * painter, KisNodeSP node, KisImageSP image);
+    KisDeformPaintOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisNodeSP node, KisImageSP image);
     virtual ~KisDeformPaintOp();
 
     KisSpacingInformation paintAt(const KisPaintInformation& info);

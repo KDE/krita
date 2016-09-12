@@ -39,7 +39,7 @@
 
 #include "particle_brush.h"
 
-KisParticlePaintOp::KisParticlePaintOp(const KisParticlePaintOpSettings *settings, KisPainter * painter, KisNodeSP node, KisImageSP image)
+KisParticlePaintOp::KisParticlePaintOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisNodeSP node, KisImageSP image)
     : KisPaintOp(painter)
 {
     Q_UNUSED(image);

@@ -27,7 +27,7 @@ Boston, MA 02110-1301, USA.
 #include <KoJsonTrader.h>
 #include <kpluginfactory.h>
 #include <QFile>
-
+#include <KisFilterChain.h>
 #include <limits.h> // UINT_MAX
 
 
@@ -64,7 +64,7 @@ QList<KisFilterEntrySP> KisFilterEntry::query()
     return lst;
 }
 
-KisImportExportFilter* KisFilterEntry::createFilter(KisFilterChain* chain, QObject* parent)
+KisImportExportFilter* KisFilterEntry::createFilter(KisFilterChainSP chain)
 {
     KLibFactory *factory = qobject_cast<KLibFactory *>(m_loader->instance());
 
@@ -73,14 +73,14 @@ KisImportExportFilter* KisFilterEntry::createFilter(KisFilterChain* chain, QObje
         return 0;
     }
 
-    QObject* obj = factory->create<KisImportExportFilter>(parent);
+    QObject *obj = factory->create<KisImportExportFilter>(0);
     if (!obj || !obj->inherits("KisImportExportFilter")) {
         delete obj;
         return 0;
     }
 
     KisImportExportFilter* filter = static_cast<KisImportExportFilter*>(obj);
-    filter->m_chain = chain;
+    filter->setChain(chain);
     return filter;
 }
 

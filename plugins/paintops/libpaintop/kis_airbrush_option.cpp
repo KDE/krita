@@ -54,13 +54,13 @@ KisAirbrushOption::~KisAirbrushOption()
 {
 }
 
-void KisAirbrushOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
+void KisAirbrushOption::writeOptionSetting(KisPropertiesConfigurationSP setting) const
 {
     setting->setProperty(AIRBRUSH_ENABLED, isChecked());
     setting->setProperty(AIRBRUSH_RATE, m_optionWidget->sliderRate->value());
 }
 
-void KisAirbrushOption::readOptionSetting(const KisPropertiesConfiguration* setting)
+void KisAirbrushOption::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
     setChecked(setting->getBool(AIRBRUSH_ENABLED));
     m_optionWidget->sliderRate->setValue(setting->getInt(AIRBRUSH_RATE, 100));

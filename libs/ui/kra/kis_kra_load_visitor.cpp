@@ -52,7 +52,10 @@
 #include "kis_transform_mask_params_factory_registry.h"
 #include <kis_transparency_mask.h>
 #include <kis_selection_mask.h>
+#include <lazybrush/kis_colorize_mask.h>
+#include <lazybrush/kis_lazy_fill_tools.h>
 #include "kis_shape_selection.h"
+#include "kis_colorize_dom_utils.h"
 #include "kis_dom_utils.h"
 #include "kis_raster_keyframe_channel.h"
 #include "kis_paint_device_frames_interface.h"
@@ -344,6 +347,38 @@ bool KisKraLoadVisitor::visit(KisSelectionMask *mask)
     return loadSelection(getLocation(mask), mask->selection());
 }
 
+bool KisKraLoadVisitor::visit(KisColorizeMask *mask)
+{
+    m_store->pushDirectory();
+    QString location = getLocation(mask, DOT_COLORIZE_MASK);
+    m_store->enterDirectory(location) ;
+
+    QByteArray data;
+    if (!m_store->extractFile("content.xml", data))
+        return false;
+
+    QDomDocument doc;
+    if (!doc.setContent(data))
+        return false;
+
+    QVector<KisLazyFillTools::KeyStroke> strokes;
+    if (!KisDomUtils::loadValue(doc.documentElement(), COLORIZE_KEYSTROKES_SECTION, &strokes, mask->colorSpace()))
+        return false;
+
+    int i = 0;
+    Q_FOREACH (const KisLazyFillTools::KeyStroke &stroke, strokes) {
+        const QString fileName = QString("%1_%2").arg(COLORIZE_KEYSTROKE).arg(i++);
+        loadPaintDevice(stroke.dev, fileName);
+    }
+
+    mask->setKeyStrokesDirect(QList<KisLazyFillTools::KeyStroke>::fromVector(strokes));
+
+    loadPaintDevice(mask->coloringProjection(), COLORIZE_COLORING_DEVICE);
+
+    m_store->popDirectory();
+    return true;
+}
+
 QStringList KisKraLoadVisitor::errorMessages() const
 {
     return m_errorMessages;
@@ -355,7 +390,7 @@ struct SimpleDevicePolicy
         return dev->read(stream);
     }
 
-    void setDefaultPixel(KisPaintDeviceSP dev, const quint8 *defaultPixel) const {
+    void setDefaultPixel(KisPaintDeviceSP dev, const KoColor &defaultPixel) const {
         return dev->setDefaultPixel(defaultPixel);
     }
 };
@@ -369,7 +404,7 @@ struct FramedDevicePolicy
         return dev->framesInterface()->readFrame(stream, m_frameId);
     }
 
-    void setDefaultPixel(KisPaintDeviceSP dev, const quint8 *defaultPixel) const {
+    void setDefaultPixel(KisPaintDeviceSP dev, const KoColor &defaultPixel) const {
         return dev->framesInterface()->setFrameDefaultPixel(defaultPixel, m_frameId);
     }
 
@@ -424,10 +459,9 @@ bool KisKraLoadVisitor::loadPaintDeviceFrame(KisPaintDeviceSP device, const QStr
     if (m_store->open(location + ".defaultpixel")) {
         int pixelSize = device->colorSpace()->pixelSize();
         if (m_store->size() == pixelSize) {
-            quint8 *defPixel = new quint8[pixelSize];
-            m_store->read((char*)defPixel, pixelSize);
-            policy.setDefaultPixel(device, defPixel);
-            delete[] defPixel;
+            KoColor color(Qt::transparent, device->colorSpace());
+            m_store->read((char*)color.data(), pixelSize);
+            policy.setDefaultPixel(device, color);
         }
         m_store->close();
     }
@@ -456,7 +490,7 @@ bool KisKraLoadVisitor::loadProfile(KisPaintDeviceSP device, const QString& loca
     return false;
 }
 
-bool KisKraLoadVisitor::loadFilterConfiguration(KisFilterConfiguration* kfc, const QString& location)
+bool KisKraLoadVisitor::loadFilterConfiguration(KisFilterConfigurationSP kfc, const QString& location)
 {
     if (m_store->hasFile(location)) {
         QByteArray data;

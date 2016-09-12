@@ -27,7 +27,7 @@
     <number>0</number>
    </property>
    <item>
-    <widget class="KoTableView" name="paletteView">
+    <widget class="KisPaletteView" name="paletteView">
      <property name="minimumSize">
       <size>
        <width>0</width>
@@ -142,9 +142,9 @@
    <header>kis_popup_button.h</header>
   </customwidget>
   <customwidget>
-   <class>KoTableView</class>
+   <class>KisPaletteView</class>
    <extends>QTableView</extends>
-   <header location="global">KoTableView.h</header>
+   <header location="global">kis_palette_view.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

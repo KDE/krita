@@ -39,7 +39,6 @@ KritaFilterGradientMap::KritaFilterGradientMap() : KisFilter(id(), categoryMap()
 {
     setColorSpaceIndependence(FULLY_INDEPENDENT);
     setShowConfigurationWidget(true);
-    // don't support anything just yet because of thread safety problems
     setSupportsLevelOfDetail(true);
     setSupportsPainting(true);
     setSupportsAdjustmentLayers(true);
@@ -48,7 +47,7 @@ KritaFilterGradientMap::KritaFilterGradientMap() : KisFilter(id(), categoryMap()
 
 void KritaFilterGradientMap::processImpl(KisPaintDeviceSP device,
                  const QRect& applyRect,
-                 const KisFilterConfiguration *config,
+                 const KisFilterConfigurationSP config,
                  KoUpdater *progressUpdater) const
 {
     Q_ASSERT(!device.isNull());
@@ -84,9 +83,9 @@ void KritaFilterGradientMap::processImpl(KisPaintDeviceSP device,
 
 }
 
-KisFilterConfiguration *KritaFilterGradientMap::factoryConfiguration(const KisPaintDeviceSP) const
+KisFilterConfigurationSP KritaFilterGradientMap::factoryConfiguration(const KisPaintDeviceSP) const
 {
-    KisFilterConfiguration *config = new KisFilterConfiguration("gradientmap", 1);
+    KisFilterConfigurationSP config = new KisFilterConfiguration("gradientmap", 1);
     KoAbstractGradient *gradient = KoResourceServerProvider::instance()->gradientServer(false)->resources().first();
     config->setProperty("gradientName", gradient->name());
     return config;
@@ -94,6 +93,6 @@ KisFilterConfiguration *KritaFilterGradientMap::factoryConfiguration(const KisPa
 
 KisConfigWidget * KritaFilterGradientMap::createConfigurationWidget(QWidget * parent, const KisPaintDeviceSP dev) const
 {
-	return new KritaGradientMapConfigWidget(parent, dev);
+    return new KritaGradientMapConfigWidget(parent, dev);
 }
 

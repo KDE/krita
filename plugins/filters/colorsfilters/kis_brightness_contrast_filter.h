@@ -47,7 +47,7 @@ public:
 
 class KisBrightnessContrastFilterConfiguration : public KisColorTransformationConfiguration
 {
-    
+
 public:
     using KisFilterConfiguration::fromXML;
     using KisFilterConfiguration::toXML;
@@ -86,12 +86,12 @@ public:
 
 public:
 
-    virtual KoColorTransformation* createTransformation(const KoColorSpace* cs, const KisFilterConfiguration* config) const;
+    virtual KoColorTransformation* createTransformation(const KoColorSpace* cs, const KisFilterConfigurationSP config) const;
 
     static inline KoID id() {
         return KoID("brightnesscontrast", i18n("Brightness / Contrast"));
     }
-    virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
+    virtual KisFilterConfigurationSP factoryConfiguration(const KisPaintDeviceSP) const;
 
     virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
 };
@@ -104,8 +104,8 @@ public:
     KisBrightnessContrastConfigWidget(QWidget * parent, KisPaintDeviceSP dev, Qt::WFlags f = 0);
     virtual ~KisBrightnessContrastConfigWidget();
 
-    virtual KisBrightnessContrastFilterConfiguration * configuration() const;
-    virtual void setConfiguration(const KisPropertiesConfiguration* config);
+    virtual KisPropertiesConfigurationSP configuration() const;
+    virtual void setConfiguration(const KisPropertiesConfigurationSP config);
     WdgBrightnessContrast * m_page;
     void setView(KisViewManager *view);
 

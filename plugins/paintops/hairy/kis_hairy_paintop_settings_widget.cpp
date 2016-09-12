@@ -49,7 +49,7 @@ KisHairyPaintOpSettingsWidget::~ KisHairyPaintOpSettingsWidget()
 {
 }
 
-KisPropertiesConfiguration*  KisHairyPaintOpSettingsWidget::configuration() const
+KisPropertiesConfigurationSP  KisHairyPaintOpSettingsWidget::configuration() const
 {
     KisHairyPaintOpSettings* config = new KisHairyPaintOpSettings();
     config->setOptionsWidget(const_cast<KisHairyPaintOpSettingsWidget*>(this));

@@ -16,38 +16,21 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_video_plugin_test.h"
+#ifndef __KIS_MIN_CUT_WORKER_H
+#define __KIS_MIN_CUT_WORKER_H
+
+#include <QScopedPointer>
 
 
-#include <QTest>
-#include <QCoreApplication>
-
-#include <QTest>
-
-#include "filestest.h"
-
-#ifndef FILES_DATA_DIR
-#error "FILES_DATA_DIR not set. A directory with the data used for testing the importing of files in krita"
-#endif
-
-#include "../video_saver.h"
-
-
-void KisVideoPluginTest::testFiles()
+class KisMinCutWorker
 {
-    QString fname = QString(FILES_DATA_DIR) + QDir::separator() + "test_animation_small.kra";
+public:
+    KisMinCutWorker();
+    ~KisMinCutWorker();
 
-    KisDocument *doc = KisPart::instance()->createDocument();
-    doc->loadNativeFormat(fname);
+private:
+    struct Private;
+    const QScopedPointer<Private> m_d;
+};
 
-
-    VideoSaver saver(doc, false);
-
-    KisImageBuilder_Result result =
-        //saver.encode("testfile.gif");
-        saver.encode("testfile.ogg");
-
-    QCOMPARE(result, KisImageBuilder_RESULT_OK);
-}
-QTEST_MAIN(KisVideoPluginTest)
-
+#endif /* __KIS_MIN_CUT_WORKER_H */

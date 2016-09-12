@@ -22,6 +22,24 @@
 #include <QVariant>
 
 #include <KisImportExportFilter.h>
+#include <kis_config_widget.h>
+#include "ui_kis_wdg_options_heightmap.h"
+
+class KisWdgOptionsHeightmap : public KisConfigWidget, public Ui::WdgOptionsHeightMap
+{
+    Q_OBJECT
+
+public:
+    KisWdgOptionsHeightmap(QWidget *parent)
+        : KisConfigWidget(parent)
+    {
+        setupUi(this);
+    }
+
+    void setConfiguration(const KisPropertiesConfigurationSP  cfg);
+    KisPropertiesConfigurationSP configuration() const;
+};
+
 
 class KisHeightMapExport : public KisImportExportFilter
 {
@@ -29,8 +47,11 @@ class KisHeightMapExport : public KisImportExportFilter
 public:
     KisHeightMapExport(QObject *parent, const QVariantList &);
     virtual ~KisHeightMapExport();
+    KisPropertiesConfigurationSP defaultConfiguration(const QByteArray& from = "", const QByteArray& to = "") const;
+    KisPropertiesConfigurationSP lastSavedConfiguration(const QByteArray &from = "", const QByteArray &to = "") const;
+    KisConfigWidget *createConfigurationWidget(QWidget *parent, const QByteArray& from = "", const QByteArray& to = "") const;
 public:
-    virtual KisImportExportFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+    virtual KisImportExportFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration = 0);
 };
 
 #endif

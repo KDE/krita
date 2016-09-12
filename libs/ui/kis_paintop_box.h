@@ -70,8 +70,8 @@ class KisAction;
  * the following slots are added
  *  void slotReloadPreset();
     void slotGuiChangedCurrentPreset();
-    void slotSaveLockedOptionToPreset(KisPropertiesConfiguration* p);
-    void slotDropLockedOption(KisPropertiesConfiguration* p);
+    void slotSaveLockedOptionToPreset(KisPropertiesConfigurationSP p);
+    void slotDropLockedOption(KisPropertiesConfigurationSP p);
     void slotDirtyPresetToggled(bool);
     Everytime a value is changed in a preset, the preset is made dirty through the onChange() function.
     For Locked Settings however, a changed Locked Setting will not cause a preset to become dirty. That is
@@ -157,8 +157,8 @@ private Q_SLOTS:
 
     void slotReloadPreset();
     void slotGuiChangedCurrentPreset();
-    void slotSaveLockedOptionToPreset(KisPropertiesConfiguration* p);
-    void slotDropLockedOption(KisPropertiesConfiguration* p);
+    void slotSaveLockedOptionToPreset(KisPropertiesConfigurationSP p);
+    void slotDropLockedOption(KisPropertiesConfigurationSP p);
     void slotDirtyPresetToggled(bool);
     void slotEraserBrushSizeToggled(bool);    
     void slotEraserBrushOpacityToggled(bool);    

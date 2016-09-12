@@ -35,7 +35,7 @@ public:
     KisParticlePaintOpSettingsWidget(QWidget* parent = 0);
     virtual ~KisParticlePaintOpSettingsWidget();
 
-    KisPropertiesConfiguration* configuration() const;
+    KisPropertiesConfigurationSP configuration() const;
 
 public:
     KisPaintActionTypeOption* m_paintActionTypeOption;

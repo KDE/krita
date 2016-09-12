@@ -190,14 +190,8 @@ void KisGroupLayer::resetCache(const KoColorSpace *colorSpace)
         KisPaintDeviceSP dev = new KisPaintDevice(this, colorSpace, new KisDefaultBounds(image()));
         dev->setX(this->x());
         dev->setY(this->y());
-        quint8* defaultPixel = new quint8[colorSpace->pixelSize()];
+        dev->setDefaultPixel(m_d->paintDevice->defaultPixel());
 
-        m_d->paintDevice->colorSpace()->
-            convertPixelsTo(m_d->paintDevice->defaultPixel(), defaultPixel, colorSpace, 1,
-                            KoColorConversionTransformation::internalRenderingIntent(),
-                            KoColorConversionTransformation::internalConversionFlags());
-        dev->setDefaultPixel(defaultPixel);
-        delete[] defaultPixel;
         m_d->paintDevice = dev;
         m_d->paintDevice->setProjectionDevice(true);
     } else {
@@ -239,8 +233,7 @@ KisPaintDeviceSP KisGroupLayer::tryObligeChild() const
         !child->layerStyle()) {
 
         quint8 defaultOpacity =
-            m_d->paintDevice->colorSpace()->opacityU8(
-                m_d->paintDevice->defaultPixel());
+            m_d->paintDevice->defaultPixel().opacityU8();
 
         if(defaultOpacity == OPACITY_TRANSPARENT_U8) {
             return child->projection();
@@ -276,8 +269,7 @@ bool KisGroupLayer::projectionIsValid() const
 
 void KisGroupLayer::setDefaultProjectionColor(KoColor color)
 {
-    color.convertTo(m_d->paintDevice->colorSpace());
-    m_d->paintDevice->setDefaultPixel(color.data());
+    m_d->paintDevice->setDefaultPixel(color);
 }
 
 KoColor KisGroupLayer::defaultProjectionColor() const

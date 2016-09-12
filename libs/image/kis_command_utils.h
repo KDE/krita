@@ -65,7 +65,19 @@ namespace KisCommandUtils
     private:
         bool m_finalize;
         bool m_firstRedo;
-        KisSurrogateUndoStore m_store;
+    };
+
+    struct KRITAIMAGE_EXPORT CompositeCommand : public KUndo2Command {
+        CompositeCommand(KUndo2Command *parent = 0);
+        ~CompositeCommand();
+
+        void addCommand(KUndo2Command *cmd);
+
+        void redo();
+        void undo();
+
+    private:
+        QVector<KUndo2Command*> m_commands;
     };
 }
 

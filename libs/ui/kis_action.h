@@ -65,8 +65,9 @@ public:
         PIXEL_SELECTION_WITH_PIXELS = 0x0400, ///< ???
         PIXELS_IN_CLIPBOARD         = 0x0800, ///< Activate if the clipboard contains pixels
         SHAPES_IN_CLIPBOARD         = 0x1000, ///< Activate if the clipboard contains vector data
-        NEVER_ACTIVATE              = 0x2000, ///<
-        LAYERS_IN_CLIPBOARD         = 0x4000
+        NEVER_ACTIVATE              = 0x2000, ///< ???
+        LAYERS_IN_CLIPBOARD         = 0x4000, ///< ???
+        IMAGE_HAS_ANIMATION         = 0x8000, ///< Activate if the image has an animation
     };
     Q_DECLARE_FLAGS(ActivationFlags, ActivationFlag)
 

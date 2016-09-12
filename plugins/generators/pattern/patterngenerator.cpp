@@ -66,9 +66,9 @@ KoPatternGenerator::KoPatternGenerator() : KisGenerator(id(), KoID("basic"), i18
     setSupportsPainting(true);
 }
 
-KisFilterConfiguration* KoPatternGenerator::factoryConfiguration(const KisPaintDeviceSP) const
+KisFilterConfigurationSP KoPatternGenerator::factoryConfiguration(const KisPaintDeviceSP) const
 {
-    KisFilterConfiguration* config = new KisFilterConfiguration("pattern", 1);
+    KisFilterConfigurationSP config = new KisFilterConfiguration("pattern", 1);
 
     QVariant v;
     v.setValue(QString("Grid01.pat"));
@@ -88,7 +88,7 @@ KisConfigWidget * KoPatternGenerator::createConfigurationWidget(QWidget* parent,
 
 void KoPatternGenerator::generate(KisProcessingInformation dstInfo,
                                  const QSize& size,
-                                 const KisFilterConfiguration* config,
+                                 const KisFilterConfigurationSP config,
                                  KoUpdater* progressUpdater) const
 {
     KisPaintDeviceSP dst = dstInfo.paintDevice();

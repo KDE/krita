@@ -29,21 +29,21 @@
 K_PLUGIN_FACTORY_WITH_JSON(KritaGradientMapFactory, "kritagradientmap.json", registerPlugin<KritaGradientMap>();)
 
 KritaGradientMapConfigWidget::KritaGradientMapConfigWidget(QWidget *parent, KisPaintDeviceSP dev, Qt::WFlags f)
-	: KisConfigWidget(parent, f)
+    : KisConfigWidget(parent, f)
 {
     Q_UNUSED(dev)
-	m_page = new WdgGradientMap(this);
-	QHBoxLayout *l = new QHBoxLayout(this);
-	Q_CHECK_PTR(l);
-	l->addWidget(m_page);
-	l->setContentsMargins(0, 0, 0, 0);
+    m_page = new WdgGradientMap(this);
+    QHBoxLayout *l = new QHBoxLayout(this);
+    Q_CHECK_PTR(l);
+    l->addWidget(m_page);
+    l->setContentsMargins(0, 0, 0, 0);
 
     connect(m_page->gradientchooser, SIGNAL(resourceSelected(KoResource*)), SIGNAL(sigConfigurationItemChanged()));
 }
 
 KritaGradientMapConfigWidget::~KritaGradientMapConfigWidget()
 {
-	delete m_page;
+    delete m_page;
 }
 
 void KritaGradientMapConfigWidget::gradientResourceChanged(KoResource* gradient)
@@ -51,9 +51,9 @@ void KritaGradientMapConfigWidget::gradientResourceChanged(KoResource* gradient)
     Q_UNUSED(gradient)
 }
 
-KisFilterConfiguration* KritaGradientMapConfigWidget::configuration() const
+KisPropertiesConfigurationSP KritaGradientMapConfigWidget::configuration() const
 {
-    KisFilterConfiguration* cfg = new KisFilterConfiguration("gradientmap", 1);
+    KisFilterConfigurationSP cfg = new KisFilterConfiguration("gradientmap", 1);
     QString gradientName;
     gradientName = m_page->gradientchooser->currentResource()->name();
     cfg->setProperty("gradientName", gradientName);
@@ -63,7 +63,7 @@ KisFilterConfiguration* KritaGradientMapConfigWidget::configuration() const
 
 //-----------------------------
 
-void KritaGradientMapConfigWidget::setConfiguration(const KisPropertiesConfiguration* config)
+void KritaGradientMapConfigWidget::setConfiguration(const KisPropertiesConfigurationSP config)
 {
     m_page->gradientchooser->setCurrentResource(KoResourceServerProvider::instance()->gradientServer(false)->resourceByName(config->getString("gradientName")));
     Q_ASSERT(config);

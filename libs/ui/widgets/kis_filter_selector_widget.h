@@ -48,7 +48,7 @@ public:
     void setFilter(KisFilterSP f);
     void setView(KisViewManager *view);
     void setPaintDevice(bool showAll, KisPaintDeviceSP);
-    KisFilterConfiguration* configuration();
+    KisFilterConfigurationSP configuration();
     bool isFilterGalleryVisible() const;
     KisFilterSP currentFilter() const;
 public Q_SLOTS:

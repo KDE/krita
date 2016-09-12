@@ -56,7 +56,7 @@ KisBrushImport::~KisBrushImport()
 }
 
 
-KisImportExportFilter::ConversionStatus KisBrushImport::convert(const QByteArray& from, const QByteArray& to)
+KisImportExportFilter::ConversionStatus KisBrushImport::convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration)
 {
     if (to != "application/x-krita")
         return KisImportExportFilter::BadMimeType;

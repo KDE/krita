@@ -759,7 +759,7 @@ void KisPaintDeviceTest::testNonDefaultPixelArea()
     QVERIFY(dev->nonDefaultPixelArea().isEmpty());
 
     KoColor defPixel(Qt::red, cs);
-    dev->setDefaultPixel(defPixel.data());
+    dev->setDefaultPixel(defPixel);
 
     QCOMPARE(dev->exactBounds(), KisDefaultBounds::infiniteRect);
     QVERIFY(dev->nonDefaultPixelArea().isEmpty());
@@ -796,7 +796,7 @@ void KisPaintDeviceTest::testExactBoundsNonTransparent()
     QRect imageRect(0,0,1000,1000);
 
     KoColor defPixel(Qt::red, cs);
-    dev->setDefaultPixel(defPixel.data());
+    dev->setDefaultPixel(defPixel);
 
     QCOMPARE(dev->exactBounds(), imageRect);
     QVERIFY(dev->nonDefaultPixelArea().isEmpty());

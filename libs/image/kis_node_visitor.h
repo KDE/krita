@@ -32,6 +32,8 @@ class KisTransparencyMask;
 class KisSelectionMask;
 class KisGeneratorLayer;
 class KisTransformMask;
+class KisColorizeMask;
+
 
 class KRITAIMAGE_EXPORT KisNodeVisitor
 {
@@ -61,6 +63,8 @@ public:
     virtual bool visit(KisTransparencyMask *mask) = 0;
 
     virtual bool visit(KisSelectionMask *mask) = 0;
+
+    virtual bool visit(KisColorizeMask *mask) = 0;
 
 protected:
 

@@ -24,6 +24,7 @@ Boston, MA 02110-1301, USA.
 #include <QList>
 #include <QStringList>
 
+#include "kis_types.h"
 #include "kis_shared.h"
 #include "kis_shared_ptr.h"
 
@@ -32,8 +33,6 @@ Boston, MA 02110-1301, USA.
 class QObject;
 class QPluginLoader;
 class KisImportExportFilter;
-class KisFilterChain;
-
 
 class KisFilterEntry;
 typedef KisSharedPtr<KisFilterEntry> KisFilterEntrySP;
@@ -50,7 +49,7 @@ public:
     explicit KisFilterEntry(QPluginLoader *loader);
     ~KisFilterEntry();
 
-    KisImportExportFilter* createFilter(KisFilterChain* chain, QObject* parent = 0);
+    KisImportExportFilter *createFilter(KisFilterChainSP chain);
 
     /**
      *  The imported mimetype(s).

@@ -41,7 +41,7 @@ public:
     virtual ~KisRawImport();
 
 public:
-    virtual KisImportExportFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+    virtual KisImportExportFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration = 0);
 
 
 private Q_SLOTS:

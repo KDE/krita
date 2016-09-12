@@ -59,14 +59,14 @@ void KisPaintOpOption::emitSettingChanged()
     }
 }
 
-void KisPaintOpOption::startReadOptionSetting(const KisPropertiesConfiguration* setting)
+void KisPaintOpOption::startReadOptionSetting(const KisPropertiesConfigurationSP setting)
 {
     m_d->updatesBlocked = true;
     readOptionSetting(setting);
     m_d->updatesBlocked = false;
 }
 
-void KisPaintOpOption::startWriteOptionSetting(KisPropertiesConfiguration* setting) const
+void KisPaintOpOption::startWriteOptionSetting(KisPropertiesConfigurationSP setting) const
 {
     m_d->isWritingSettings = true;
     writeOptionSetting(setting);

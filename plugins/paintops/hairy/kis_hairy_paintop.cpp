@@ -40,7 +40,7 @@
 
 #include "kis_brush.h"
 
-KisHairyPaintOp::KisHairyPaintOp(const KisBrushBasedPaintOpSettings *settings, KisPainter * painter, KisNodeSP node, KisImageSP image)
+KisHairyPaintOp::KisHairyPaintOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisNodeSP node, KisImageSP image)
     : KisPaintOp(painter)
 {
     Q_UNUSED(image)
@@ -62,7 +62,7 @@ KisHairyPaintOp::KisHairyPaintOp(const KisBrushBasedPaintOpSettings *settings, K
     m_brush.fromDabWithDensity(dab, settings->getDouble(HAIRY_BRISTLE_DENSITY) * 0.01);
     m_brush.setInkColor(painter->paintColor());
 
-    loadSettings(settings);
+    loadSettings(static_cast<const KisBrushBasedPaintOpSettings*>(settings.data()));
     m_brush.setProperties(&m_properties);
 
     m_rotationOption.readOptionSetting(settings);
@@ -73,7 +73,7 @@ KisHairyPaintOp::KisHairyPaintOp(const KisBrushBasedPaintOpSettings *settings, K
     m_sizeOption.resetAllSensors();
 }
 
-void KisHairyPaintOp::loadSettings(const KisBrushBasedPaintOpSettings* settings)
+void KisHairyPaintOp::loadSettings(const KisBrushBasedPaintOpSettings *settings)
 {
     m_properties.inkAmount = settings->getInt(HAIRY_INK_AMOUNT);
     //TODO: wait for the transfer function with variable size

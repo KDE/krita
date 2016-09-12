@@ -2,6 +2,7 @@
 <RCC version="1.0">
     <qresource>
     <file>dark_cloneLayer.svg</file>
+    <file>dark_colorizeMask.svg</file>
     <file>dark_fileLayer.svg</file>
     <file>dark_fillLayer.svg</file>
     <file>dark_filterLayer.svg</file>
@@ -15,6 +16,7 @@
     <file>dark_transparencyMask.svg</file>
     <file>dark_vectorLayer.svg</file>
     <file>light_cloneLayer.svg</file>
+    <file>light_colorizeMask.svg</file>
     <file>light_fileLayer.svg</file>
     <file>light_fillLayer.svg</file>
     <file>light_filterLayer.svg</file>

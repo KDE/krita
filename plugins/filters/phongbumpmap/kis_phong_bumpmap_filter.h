@@ -38,15 +38,15 @@ public:
 
     void processImpl(KisPaintDeviceSP device,
                      const QRect& applyRect,
-                     const KisFilterConfiguration *config,
+                     const KisFilterConfigurationSP config,
                      KoUpdater *progressUpdater
                      ) const;
 
-    QRect neededRect(const QRect &rect, const KisFilterConfiguration *config, int lod) const;
-    QRect changedRect(const QRect &rect, const KisFilterConfiguration *config, int lod) const;
+    QRect neededRect(const QRect &rect, const KisFilterConfigurationSP config, int lod) const;
+    QRect changedRect(const QRect &rect, const KisFilterConfigurationSP config, int lod) const;
 
     virtual KisConfigWidget *createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev) const;
-    virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
+    virtual KisFilterConfigurationSP factoryConfiguration(const KisPaintDeviceSP) const;
 private:
     //bool m_usenormalmap;
 };

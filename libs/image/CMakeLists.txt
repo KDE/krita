@@ -117,6 +117,11 @@ set(kritaimage_LIB_SRCS
    generator/kis_generator_registry.cpp
    floodfill/kis_fill_interval_map.cpp
    floodfill/kis_scanline_fill.cpp
+   lazybrush/kis_min_cut_worker.cpp
+   lazybrush/kis_lazy_fill_tools.cpp
+   lazybrush/kis_multiway_cut.cpp
+   lazybrush/kis_colorize_mask.cpp
+   lazybrush/kis_colorize_stroke_strategy.cpp
    kis_adjustment_layer.cc
    kis_selection_based_layer.cpp
    kis_node_filter_interface.cpp
@@ -243,6 +248,7 @@ set(kritaimage_LIB_SRCS
    kis_undo_store.cpp
    kis_undo_stores.cpp
    kis_undo_adapter.cpp
+   kis_macro_based_undo_store.cpp
    kis_surrogate_undo_adapter.cpp
    kis_legacy_undo_adapter.cpp
    kis_post_execution_undo_adapter.cpp

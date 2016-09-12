@@ -32,7 +32,7 @@
 #include <krita_utils.h>
 
 
-KisExperimentPaintOp::KisExperimentPaintOp(const KisExperimentPaintOpSettings *settings, KisPainter * painter, KisNodeSP node, KisImageSP image)
+KisExperimentPaintOp::KisExperimentPaintOp(const KisPaintOpSettingsSP settings, KisPainter *painter, KisNodeSP node, KisImageSP image)
     : KisPaintOp(painter)
 {
     Q_UNUSED(image);

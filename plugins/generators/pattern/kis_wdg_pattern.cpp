@@ -48,7 +48,7 @@ KisWdgPattern::~KisWdgPattern()
 }
 
 
-void KisWdgPattern::setConfiguration(const KisPropertiesConfiguration* config)
+void KisWdgPattern::setConfiguration(const KisPropertiesConfigurationSP config)
 {
     KoResourceServer<KoPattern> *rserver = KoResourceServerProvider::instance()->patternServer();
     KoPattern *pattern = rserver->resourceByName(config->getString("pattern", "Grid01.pat"));
@@ -58,9 +58,9 @@ void KisWdgPattern::setConfiguration(const KisPropertiesConfiguration* config)
 
 }
 
-KisPropertiesConfiguration* KisWdgPattern::configuration() const
+KisPropertiesConfigurationSP KisWdgPattern::configuration() const
 {
-    KisFilterConfiguration* config = new KisFilterConfiguration("pattern", 1);
+    KisFilterConfigurationSP config = new KisFilterConfiguration("pattern", 1);
     QVariant v;
     v.setValue(widget()->patternChooser->currentResource()->name());
     config->setProperty("pattern", v);

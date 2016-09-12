@@ -30,7 +30,8 @@ public:
         : m_paintDevice(paintDevice),
           m_exactBoundsCache(paintDevice),
           m_nonDefaultPixelAreaCache(paintDevice),
-          m_regionCache(paintDevice)
+          m_regionCache(paintDevice),
+          m_sequenceNumber(0)
     {
     }
 
@@ -38,7 +39,8 @@ public:
         : m_paintDevice(rhs.m_paintDevice),
           m_exactBoundsCache(rhs.m_paintDevice),
           m_nonDefaultPixelAreaCache(rhs.m_paintDevice),
-          m_regionCache(rhs.m_paintDevice)
+          m_regionCache(rhs.m_paintDevice),
+          m_sequenceNumber(0)
     {
     }
 
@@ -51,6 +53,7 @@ public:
         m_exactBoundsCache.invalidate();
         m_nonDefaultPixelAreaCache.invalidate();
         m_regionCache.invalidate();
+        m_sequenceNumber++;
     }
 
     QRect exactBounds() {
@@ -100,6 +103,10 @@ public:
 
         Q_ASSERT(!thumbnail.isNull() || m_paintDevice->extent().isEmpty());
         return thumbnail;
+    }
+
+    int sequenceNumber() const {
+        return m_sequenceNumber;
     }
 
 private:
@@ -154,6 +161,7 @@ private:
 
     bool m_thumbnailsValid;
     QMap<int, QMap<int, QMap<qreal,QImage> > > m_thumbnails;
+    QAtomicInt m_sequenceNumber;
 };
 
 #endif /* __KIS_PAINT_DEVICE_CACHE_H */

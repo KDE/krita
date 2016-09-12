@@ -25,7 +25,7 @@
 
 #include "kis_properties_configuration.h"
 
-void KisBrushOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
+void KisBrushOption::writeOptionSetting(KisPropertiesConfigurationSP setting) const
 {
     if (!m_brush)
         return;
@@ -42,7 +42,7 @@ void KisBrushOption::writeOptionSetting(KisPropertiesConfiguration* setting) con
     setting->setProperty("requiredBrushFile", brushFileName);
 }
 
-QDomElement getBrushXMLElement(const KisPropertiesConfiguration* setting)
+QDomElement getBrushXMLElement(const KisPropertiesConfigurationSP setting)
 {
     QDomElement element;
 
@@ -56,7 +56,7 @@ QDomElement getBrushXMLElement(const KisPropertiesConfiguration* setting)
     return element;
 }
 
-void KisBrushOption::readOptionSetting(const KisPropertiesConfiguration* setting, bool forceCopy)
+void KisBrushOption::readOptionSetting(const KisPropertiesConfigurationSP setting, bool forceCopy)
 {
     QDomElement element = getBrushXMLElement(setting);
 
@@ -69,7 +69,7 @@ void KisBrushOption::readOptionSetting(const KisPropertiesConfiguration* setting
 
 #include "kis_text_brush_factory.h"
 
-bool KisBrushOption::isTextBrush(const KisPropertiesConfiguration* setting)
+bool KisBrushOption::isTextBrush(const KisPropertiesConfigurationSP setting)
 {
     static QString textBrushId = KisTextBrushFactory().id();
 

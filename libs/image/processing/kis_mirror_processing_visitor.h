@@ -21,6 +21,7 @@
 
 #include "kis_simple_processing_visitor.h"
 #include <QRect>
+#include "kis_types.h"
 
 
 class KRITAIMAGE_EXPORT KisMirrorProcessingVisitor : public KisSimpleProcessingVisitor
@@ -31,6 +32,11 @@ public:
 private:
     void visitNodeWithPaintDevice(KisNode *node, KisUndoAdapter *undoAdapter);
     void visitExternalLayer(KisExternalLayer *layer, KisUndoAdapter *undoAdapter);
+
+    void visitColorizeMask(KisColorizeMask *node, KisUndoAdapter *undoAdapter);
+
+private:
+    void transformPaintDevice(KisPaintDeviceSP device, KisUndoAdapter *undoAdapter);
 
     QRect m_bounds;
     Qt::Orientation m_orientation;

@@ -164,7 +164,6 @@ void KisCustomImageWidget::showEvent(QShowEvent *)
 
 KisCustomImageWidget::~KisCustomImageWidget()
 {
-    qDeleteAll(m_predefined);
     m_predefined.clear();
 }
 
@@ -319,12 +318,9 @@ void KisCustomImageWidget::clipboardDataChanged()
 {
 }
 
-
-
 void KisCustomImageWidget::fillPredefined()
 {
     cmbPredefined->clear();
-    qDeleteAll(m_predefined);
     m_predefined.clear();
 
     cmbPredefined->addItem("");
@@ -339,7 +335,7 @@ void KisCustomImageWidget::fillPredefined()
             f.open(QIODevice::ReadOnly);
             if (f.exists()) {
                 QString xml = QString::fromUtf8(f.readAll());
-                KisPropertiesConfiguration *predefined = new KisPropertiesConfiguration;
+                KisPropertiesConfigurationSP predefined = new KisPropertiesConfiguration;
                 predefined->fromXML(xml);
                 if (predefined->hasProperty("name")
                         && predefined->hasProperty("width")
@@ -363,7 +359,7 @@ void KisCustomImageWidget::predefinedClicked(int index)
 {
     if (index < 1 || index > m_predefined.size()) return;
 
-    KisPropertiesConfiguration *predefined = m_predefined[index - 1];
+    KisPropertiesConfigurationSP predefined = m_predefined[index - 1];
     txtPredefinedName->setText(predefined->getString("name"));
     doubleResolution->setValue(predefined->getDouble("resolution"));
     cmbWidthUnit->setCurrentIndex(predefined->getInt("x-unit"));
@@ -387,7 +383,7 @@ void KisCustomImageWidget::saveAsPredefined()
     QFile f(saveLocation + '/' + fileName.replace(' ', '_').replace('(', '_').replace(')', '_') + ".predefinedimage");
 
     f.open(QIODevice::WriteOnly | QIODevice::Truncate);
-    KisPropertiesConfiguration *predefined = new KisPropertiesConfiguration();
+    KisPropertiesConfigurationSP predefined = new KisPropertiesConfiguration();
     predefined->setProperty("name", txtPredefinedName->text());
     predefined->setProperty("width", doubleWidth->value());
     predefined->setProperty("height", doubleHeight->value());
@@ -403,7 +399,7 @@ void KisCustomImageWidget::saveAsPredefined()
 
     int i = 0;
     bool found = false;
-    Q_FOREACH (KisPropertiesConfiguration *pr, m_predefined) {
+    Q_FOREACH (KisPropertiesConfigurationSP pr, m_predefined) {
         if (pr->getString("name") == txtPredefinedName->text()) {
             found = true;
             break;

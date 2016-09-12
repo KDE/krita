@@ -37,8 +37,7 @@ public:
 
     KisSpacingInformation paintAt(const KisPaintInformation &pi);
 
-    static QPainterPath brushOutline(const KisLiquifyProperties &props,
-                                     const KisPaintInformation &info);
+    static QPainterPath brushOutline(const KisLiquifyProperties &props, const KisPaintInformation &info);
 
 private:
     struct Private;

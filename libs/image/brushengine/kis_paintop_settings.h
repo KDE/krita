@@ -25,7 +25,6 @@
 #include <QImage>
 #include <QScopedPointer>
 
-#include "kis_shared.h"
 #include "kis_properties_configuration.h"
 #include <brushengine/kis_paint_information.h>
 #include <brushengine/kis_uniform_paintop_property.h>
@@ -48,14 +47,14 @@ class KisPaintopSettingsUpdateProxy;
  * property of KisPaintOpPreset. Whenever the settings are changed/modified from the original -- the preset is
  * set to dirty.
  */
-class KRITAIMAGE_EXPORT KisPaintOpSettings : public KisPropertiesConfiguration, public KisShared
+class KRITAIMAGE_EXPORT KisPaintOpSettings : public KisPropertiesConfiguration
 {
 
 public:
 
     KisPaintOpSettings();
-
     virtual ~KisPaintOpSettings();
+    KisPaintOpSettings(const KisPaintOpSettings &rhs);
 
     /**
      *
@@ -142,7 +141,7 @@ public:
      * Outline mode has to be passed to the paintop which builds the outline as some paintops have to paint outline
      * always like clone paintop indicating the duplicate position
      */
-    virtual QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode) const;
+    virtual QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode);
 
     /**
     * Helpers for drawing the brush outline
@@ -178,17 +177,17 @@ public:
     /**
      * @return opacity saved in the properties
      */
-    qreal paintOpOpacity() const;
+    qreal paintOpOpacity();
 
     /**
      * @return flow saved in the properties
      */
-    qreal paintOpFlow() const;
+    qreal paintOpFlow();
 
     /**
      * @return composite mode saved in the properties
      */
-    QString paintOpCompositeOp() const;
+    QString paintOpCompositeOp();
 
     /**
      * Set paintop size directly in the properties
@@ -201,7 +200,7 @@ public:
     qreal paintOpSize() const;
 
     void setEraserMode(bool value);
-    bool eraserMode() const;
+    bool eraserMode();
 
     qreal savedEraserSize() const;
     void setSavedEraserSize(qreal value);
@@ -213,7 +212,7 @@ public:
     qreal savedBrushOpacity() const;
     void setSavedBrushOpacity(qreal value);
 
-    QString effectivePaintOpCompositeOp() const;
+    QString effectivePaintOpCompositeOp();
 
     void setPreset(KisPaintOpPresetWSP preset);
 
@@ -256,8 +255,8 @@ public:
 
     virtual QList<KisUniformPaintOpPropertySP> uniformProperties();
 
-    static bool isLodUserAllowed(const KisPropertiesConfiguration *config);
-    static void setLodUserAllowed(KisPropertiesConfiguration *config, bool value);
+    static bool isLodUserAllowed(const KisPropertiesConfigurationSP config);
+    static void setLodUserAllowed(KisPropertiesConfigurationSP config, bool value);
 
     /**
     * @return the option widget of the paintop (can be 0 is no option widgets is set)
@@ -276,5 +275,7 @@ private:
     struct Private;
     const QScopedPointer<Private> d;
 };
+
+typedef KisSharedPtr<KisPaintOpSettings> KisPaintOpSettingsSP;
 
 #endif

@@ -54,7 +54,7 @@ KisFlowOpacityOptionWidget::KisFlowOpacityOptionWidget():
     connect(m_opacitySlider, SIGNAL(valueChanged(qreal)), SLOT(slotSliderValueChanged()));
 }
 
-void KisFlowOpacityOptionWidget::readOptionSetting(const KisPropertiesConfiguration* setting)
+void KisFlowOpacityOptionWidget::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
     KisCurveOptionWidget::readOptionSetting(setting);
     KisFlowOpacityOption* option = static_cast<KisFlowOpacityOption*>(curveOption());

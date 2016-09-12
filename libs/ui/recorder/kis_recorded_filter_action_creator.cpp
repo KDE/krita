@@ -29,9 +29,10 @@
 #include <kis_filters_model.h>
 #include <recorder/kis_recorded_filter_action.h>
 #include <recorder/kis_node_query_path.h>
+#include <kis_filter_configuration.h>
 
-
-KisRecordedFilterActionCreator::KisRecordedFilterActionCreator(QWidget* parent , Qt::WindowFlags f) : KisRecordedActionCreator(parent, f)
+KisRecordedFilterActionCreator::KisRecordedFilterActionCreator(QWidget* parent , Qt::WindowFlags f)
+    : KisRecordedActionCreator(parent, f)
 {
     m_filterModel = new KisFiltersModel(true, 0);
     m_filterTree = new QTreeView(this);
@@ -56,7 +57,8 @@ KisRecordedAction* KisRecordedFilterActionCreator::createAction() const
 }
 
 
-KisRecordedFilterActionCreatorFactory::KisRecordedFilterActionCreatorFactory() : KisRecordedActionCreatorFactory("filter", i18nc("recorded filter action", "Apply Filter"))
+KisRecordedFilterActionCreatorFactory::KisRecordedFilterActionCreatorFactory()
+    : KisRecordedActionCreatorFactory("filter", i18nc("recorded filter action", "Apply Filter"))
 {
 }
 
@@ -66,10 +68,10 @@ KisRecordedFilterActionCreatorFactory::~KisRecordedFilterActionCreatorFactory()
 
 bool KisRecordedFilterActionCreatorFactory::requireCreator() const
 {
-	return true;
+    return true;
 }
 
 KisRecordedActionCreator* KisRecordedFilterActionCreatorFactory::createCreator(QWidget* parent) const
 {
-	return new KisRecordedFilterActionCreator(parent);
+    return new KisRecordedFilterActionCreator(parent);
 }

@@ -63,7 +63,7 @@ KisDeformOption::~KisDeformOption()
     delete m_options;
 }
 
-void  KisDeformOption::readOptionSetting(const KisPropertiesConfiguration * setting)
+void  KisDeformOption::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
     DeformOption op;
     op.readOptionSetting(setting);
@@ -102,7 +102,7 @@ void  KisDeformOption::readOptionSetting(const KisPropertiesConfiguration * sett
 }
 
 
-void KisDeformOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
+void KisDeformOption::writeOptionSetting(KisPropertiesConfigurationSP setting) const
 {
     DeformOption op;
 

@@ -42,7 +42,7 @@ KisChalkPaintOpSettingsWidget::~ KisChalkPaintOpSettingsWidget()
 {
 }
 
-KisPropertiesConfiguration*  KisChalkPaintOpSettingsWidget::configuration() const
+KisPropertiesConfigurationSP  KisChalkPaintOpSettingsWidget::configuration() const
 {
     KisChalkPaintOpSettings* config = new KisChalkPaintOpSettings();
     config->setOptionsWidget(const_cast<KisChalkPaintOpSettingsWidget*>(this));

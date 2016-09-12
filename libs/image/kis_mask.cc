@@ -27,6 +27,7 @@
 
 #include <QScopedPointer>
 
+#include <KoColor.h>
 #include <KoColorSpace.h>
 #include <KoCompositeOpRegistry.h>
 
@@ -123,12 +124,11 @@ const KoCompositeOp * KisMask::compositeOp() const
      * Please think it over...
      */
 
-    KisNodeSP parentNode = parent();
-    if (!parentNode) return 0;
+    const KoColorSpace *colorSpace = this->colorSpace();
+    if (!colorSpace) return 0;
 
-    if (!parentNode->colorSpace()) return 0;
-    const KoCompositeOp* op = parentNode->colorSpace()->compositeOp(compositeOpId());
-    return op ? op : parentNode->colorSpace()->compositeOp(COMPOSITE_OVER);
+    const KoCompositeOp* op = colorSpace->compositeOp(compositeOpId());
+    return op ? op : colorSpace->compositeOp(COMPOSITE_OVER);
 }
 
 void KisMask::initSelection(KisSelectionSP copyFrom, KisLayerSP parentLayer)
@@ -170,9 +170,7 @@ void KisMask::Private::initSelectionImpl(KisSelectionSP copyFrom, KisLayerSP par
 
     } else {
         selection = new KisSelection(new KisSelectionDefaultBounds(parentPaintDevice, parentLayer->image()));
-
-        quint8 newDefaultPixel = MAX_SELECTED;
-        selection->pixelSelection()->setDefaultPixel(&newDefaultPixel);
+        selection->pixelSelection()->setDefaultPixel(KoColor(Qt::white, selection->pixelSelection()->colorSpace()));
 
         if (deferredSelectionOffset) {
             selection->setX(deferredSelectionOffset->x());

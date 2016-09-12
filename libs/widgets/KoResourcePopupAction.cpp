@@ -50,6 +50,7 @@ public:
     QMenu *menu;
     KoResourceItemView *resourceList;
     QSharedPointer<KoShapeBackground> background;
+    KoImageCollection *imageCollection;
     KoCheckerBoardPainter checkerPainter;
 };
 
@@ -83,8 +84,8 @@ KoResourcePopupAction::KoResourcePopupAction(QSharedPointer<KoAbstractResourceSe
         qg->setCoordinateMode(QGradient::ObjectBoundingMode);
         d->background = QSharedPointer<KoShapeBackground>(new KoGradientBackground(qg));
     } else if (pattern) {
-        KoImageCollection *collection = new KoImageCollection();
-        d->background = QSharedPointer<KoShapeBackground>(new KoPatternBackground(collection));
+        d->imageCollection = new KoImageCollection();
+        d->background = QSharedPointer<KoShapeBackground>(new KoPatternBackground(d->imageCollection));
         static_cast<KoPatternBackground*>(d->background.data())->setPattern(pattern->pattern());
     }
 
@@ -116,7 +117,7 @@ KoResourcePopupAction::~KoResourcePopupAction()
     }
 
     delete d->menu;
-
+    delete d->imageCollection;
     delete d;
 }
 

@@ -16,4 +16,21 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "KisProofingConfiguration.h"
+
+
+KisProofingConfiguration::KisProofingConfiguration()
+    : intent(KoColorConversionTransformation::IntentAbsoluteColorimetric),
+      conversionFlags(KoColorConversionTransformation::BlackpointCompensation),
+      warningColor(KoColor()),
+      proofingProfile("Chemical proof"),
+      proofingModel("CMYKA"),
+      proofingDepth("U8"),
+      adaptationState(1.0)
+{
+}
+
+KisProofingConfiguration::~KisProofingConfiguration()
+{
+}
 

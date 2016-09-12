@@ -308,6 +308,8 @@ set(kritaimage_LIB_SRCS
    layerstyles/kis_ls_overlay_filter.cpp
    layerstyles/kis_ls_utils.cpp
    layerstyles/gimp_bump_map.cpp
+
+   KisProofingConfiguration.cpp
 )
 
 set(einspline_SRCS

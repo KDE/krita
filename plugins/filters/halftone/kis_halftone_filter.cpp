@@ -56,7 +56,7 @@ KisHalftoneFilter::KisHalftoneFilter()
     setSupportsPainting(false);
     setShowConfigurationWidget(true);
     setSupportsLevelOfDetail(false);
-    setSupportsAdjustmentLayers(true);
+    setSupportsAdjustmentLayers(false);
     setSupportsThreading(false);
 }
 

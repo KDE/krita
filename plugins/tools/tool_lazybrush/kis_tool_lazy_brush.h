@@ -80,10 +80,10 @@ public:
         setToolTip(i18n("Colorize Mask Editing Tool"));
 
         // Temporarily
-        setToolType(TOOL_TYPE_SHAPE);
-        setIconName(koIconNameCStr("krita_tool_lazy_brush_stub"));
-        setShortcut(QKeySequence(Qt::Key_Shift + Qt::Key_B));
-        setPriority(0);
+        setToolType(TOOL_TYPE_FILL);
+        setIconName(koIconNameCStr("krita_tool_lazybrush"));
+        //setShortcut(QKeySequence(Qt::Key_Shift + Qt::Key_B));
+        setPriority(15);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
     }
 

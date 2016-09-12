@@ -302,7 +302,6 @@ void DlgAnimationRenderer::selectRenderType()
 void DlgAnimationRenderer::toggleSequenceType(bool toggle)
 {
     m_page->cmbMimetype->setEnabled(!toggle);
-    m_page->bnExportOptions->setEnabled(!toggle);
     for (int i = 0; i < m_page->cmbMimetype->count(); ++i) {
         if (m_page->cmbMimetype->itemData(i).toString() == "image/png") {
             m_page->cmbMimetype->setCurrentIndex(i);

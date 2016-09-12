@@ -43,7 +43,7 @@ KisBMPExport::~KisBMPExport()
 {
 }
 
-KisImportExportFilter::ConversionStatus KisBMPExport::convert(const QByteArray& from, const QByteArray& to)
+KisImportExportFilter::ConversionStatus KisBMPExport::convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration)
 {
     dbgFile << "BMP export! From:" << from << ", To:" << to << "";
 

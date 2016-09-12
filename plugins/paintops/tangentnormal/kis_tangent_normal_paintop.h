@@ -43,7 +43,7 @@ public:
     //public functions//
 
     /* Create a Tangent Normal Brush Operator*/
-    KisTangentNormalPaintOp(const KisBrushBasedPaintOpSettings* settings, KisPainter* painter, KisNodeSP node, KisImageSP image);
+    KisTangentNormalPaintOp(const KisPaintOpSettingsSP settings, KisPainter* painter, KisNodeSP node, KisImageSP image);
     virtual ~KisTangentNormalPaintOp();
 
     /*paint the dabs*/

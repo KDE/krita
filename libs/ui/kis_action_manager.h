@@ -28,12 +28,12 @@
 
 #include "kstandardaction.h"
 #include "kis_action_registry.h"
+#include "operations/kis_operation_configuration.h"
 
 class KisViewManager;
 class KisAction;
 class KisOperationUIFactory;
 class KisOperation;
-class KisOperationConfiguration;
 
 /**
  * @brief A KisActionManager class keeps track of KisActions.
@@ -85,7 +85,7 @@ public:
     void registerOperationUIFactory(KisOperationUIFactory* factory);
     void registerOperation(KisOperation* operation);
     void runOperation(const QString &id);
-    void runOperationFromConfiguration(KisOperationConfiguration* config);
+    void runOperationFromConfiguration(KisOperationConfigurationSP config);
 
 
     /**

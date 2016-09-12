@@ -45,8 +45,8 @@ public:
      */
     KisDlgGeneratorLayer(const QString & name, KisViewManager *view, QWidget *parent);
 
-    void setConfiguration(const KisFilterConfiguration * config);
-    KisFilterConfiguration * configuration() const;
+    void setConfiguration(const KisFilterConfigurationSP  config);
+    KisFilterConfigurationSP  configuration() const;
     QString layerName() const;
 
 protected Q_SLOTS:

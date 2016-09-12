@@ -102,7 +102,7 @@ void KisDuplicateOpOption::setCloneFromProjection(bool cloneFromProjection)
     m_optionWidget->chkCloneProjection->setChecked(cloneFromProjection);
 }
 
-void KisDuplicateOpOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
+void KisDuplicateOpOption::writeOptionSetting(KisPropertiesConfigurationSP setting) const
 {
     DuplicateOption op;
 
@@ -114,7 +114,7 @@ void KisDuplicateOpOption::writeOptionSetting(KisPropertiesConfiguration* settin
     op.writeOptionSetting(setting);
 }
 
-void KisDuplicateOpOption::readOptionSetting(const KisPropertiesConfiguration* setting)
+void KisDuplicateOpOption::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
     DuplicateOption op;
     op.readOptionSetting(setting);

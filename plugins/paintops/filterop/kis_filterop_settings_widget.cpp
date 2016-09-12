@@ -60,7 +60,7 @@ KisFilterOpSettingsWidget::~KisFilterOpSettingsWidget()
 {
 }
 
-KisPropertiesConfiguration* KisFilterOpSettingsWidget::configuration() const
+KisPropertiesConfigurationSP KisFilterOpSettingsWidget::configuration() const
 {
     KisFilterOpSettings *config = new KisFilterOpSettings();
     config->setOptionsWidget(const_cast<KisFilterOpSettingsWidget*>(this));

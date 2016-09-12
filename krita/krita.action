@@ -2279,6 +2279,18 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
+    <Action name="new_from_visible">
+      <icon></icon>
+      <text>&amp;New Layer From Visible</text>
+      <whatsThis></whatsThis>
+      <toolTip>New layer from visible</toolTip>
+      <iconText>New layer from visible</iconText>
+      <activationFlags>1000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
     <Action name="duplicatelayer">
       <icon>duplicatelayer</icon>
       <text>&amp;Duplicate Layer or Mask</text>

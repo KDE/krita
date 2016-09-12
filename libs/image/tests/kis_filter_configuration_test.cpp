@@ -30,7 +30,7 @@
 
 void KisFilterConfigurationTest::testCreation()
 {
-    KisFilterConfiguration * kfc = new KisFilterConfiguration("test", 1);
+    KisFilterConfigurationSP  kfc = new KisFilterConfiguration("test", 1);
     QVERIFY2(kfc != 0,  "Could not create test filter configuration");
     QCOMPARE(kfc->version(), 1);
     QCOMPARE(kfc->name(), QString("test"));
@@ -40,7 +40,7 @@ void KisFilterConfigurationTest::testCreation()
 
 void KisFilterConfigurationTest::testRoundTrip()
 {
-    KisFilterConfiguration * kfc = new KisFilterConfiguration("test", 1);
+    KisFilterConfigurationSP  kfc = new KisFilterConfiguration("test", 1);
     QCOMPARE(kfc->version(), 1);
     QCOMPARE(kfc->name(), QString("test"));
     QString s = kfc->toXML();
@@ -53,7 +53,7 @@ void KisFilterConfigurationTest::testRoundTrip()
 
 void KisFilterConfigurationTest::testSetGetProperty()
 {
-    KisFilterConfiguration * kfc = new KisFilterConfiguration("test", 1);
+    KisFilterConfigurationSP  kfc = new KisFilterConfiguration("test", 1);
     kfc->setProperty("value1", 10);
     kfc->setProperty("value2", "foo");
     QCOMPARE(kfc->getInt("value1"), 10);

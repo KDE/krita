@@ -71,7 +71,7 @@ KisHairyBristleOption::~KisHairyBristleOption()
     delete m_options;
 }
 
-void KisHairyBristleOption::readOptionSetting(const KisPropertiesConfiguration* config)
+void KisHairyBristleOption::readOptionSetting(const KisPropertiesConfigurationSP config)
 {
     m_options->thresholdCBox->setChecked(config->getBool(HAIRY_BRISTLE_THRESHOLD));
     m_options->mousePressureCBox->setChecked(config->getBool(HAIRY_BRISTLE_USE_MOUSEPRESSURE));
@@ -85,7 +85,7 @@ void KisHairyBristleOption::readOptionSetting(const KisPropertiesConfiguration* 
 }
 
 
-void KisHairyBristleOption::writeOptionSetting(KisPropertiesConfiguration* config) const
+void KisHairyBristleOption::writeOptionSetting(KisPropertiesConfigurationSP config) const
 {
     config->setProperty(HAIRY_BRISTLE_THRESHOLD, m_options->thresholdCBox->isChecked());
     config->setProperty(HAIRY_BRISTLE_USE_MOUSEPRESSURE, m_options->mousePressureCBox->isChecked());

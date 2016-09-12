@@ -33,18 +33,18 @@ public:
 public:
     void processImpl(KisPaintDeviceSP device,
                      const QRect& rect,
-                     const KisFilterConfiguration* config,
+                     const KisFilterConfigurationSP config,
                      KoUpdater* progressUpdater
                      ) const;
     static inline KoID id() {
         return KoID("gaussian blur", i18n("Gaussian Blur"));
     }
 
-    virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
+    virtual KisFilterConfigurationSP factoryConfiguration(const KisPaintDeviceSP) const;
 public:
     KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
-    QRect neededRect(const QRect & rect, const KisFilterConfiguration* _config, int lod) const;
-    QRect changedRect(const QRect & rect, const KisFilterConfiguration* _config, int lod) const;
+    QRect neededRect(const QRect & rect, const KisFilterConfigurationSP _config, int lod) const;
+    QRect changedRect(const QRect & rect, const KisFilterConfigurationSP _config, int lod) const;
 };
 
 #endif

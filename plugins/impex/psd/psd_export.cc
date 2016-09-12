@@ -72,7 +72,7 @@ psdExport::~psdExport()
 {
 }
 
-KisImportExportFilter::ConversionStatus psdExport::convert(const QByteArray& from, const QByteArray& to)
+KisImportExportFilter::ConversionStatus psdExport::convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration)
 {
     dbgFile <<"PSD export! From:" << from <<", To:" << to <<"";
 

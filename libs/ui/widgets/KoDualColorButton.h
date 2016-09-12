@@ -21,7 +21,7 @@
 #ifndef KODUALCOLORBUTTON_H
 #define KODUALCOLORBUTTON_H
 
-#include "kritawidgets_export.h"
+#include <kritaui_export.h>
 #include <KoColorDisplayRendererInterface.h>
 #include <QWidget>
 
@@ -46,7 +46,7 @@ class KoColorSpace;
  *
  * @author Daniel M. Duley <mosfet@kde.org>
  */
-class KRITAWIDGETS_EXPORT KoDualColorButton : public QWidget
+class KRITAUI_EXPORT KoDualColorButton : public QWidget
 {
     Q_OBJECT
     Q_ENUMS( Selection )

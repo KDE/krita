@@ -208,7 +208,7 @@ void KisMaskManager::createFilterMask(KisNodeSP activeNode, KisPaintDeviceSP cop
 
     // If we are supposed to not disturb the user, don't start asking them about things.
     if(quiet) {
-        KisFilterConfiguration *filter = KisFilterRegistry::instance()->values().first()->defaultConfiguration(originalDevice);
+        KisFilterConfigurationSP filter = KisFilterRegistry::instance()->values().first()->defaultConfiguration(originalDevice);
         if (filter) {
             mask->setFilter(filter);
             mask->setName(mask->name());
@@ -217,7 +217,7 @@ void KisMaskManager::createFilterMask(KisNodeSP activeNode, KisPaintDeviceSP cop
     }
 
     if (dialog.exec() == QDialog::Accepted) {
-        KisFilterConfiguration *filter = dialog.filterConfiguration();
+        KisFilterConfigurationSP filter = dialog.filterConfiguration();
         if (filter) {
             QString name = dialog.layerName();
             mask->setFilter(filter);
@@ -262,13 +262,13 @@ void KisMaskManager::maskProperties()
 
         KisDlgAdjLayerProps dlg(layer, mask, dev, m_view, mask->filter().data(), mask->name(), i18n("Filter Mask Properties"), m_view->mainWindow(), "dlgeffectmaskprops");
 
-        KisSafeFilterConfigurationSP configBefore(mask->filter());
+        KisFilterConfigurationSP configBefore(mask->filter());
         Q_ASSERT(configBefore);
         QString xmlBefore = configBefore->toXML();
 
         if (dlg.exec() == QDialog::Accepted) {
 
-            KisSafeFilterConfigurationSP configAfter(dlg.filterConfiguration());
+            KisFilterConfigurationSP configAfter(dlg.filterConfiguration());
             Q_ASSERT(configAfter);
             QString xmlAfter = configAfter->toXML();
 
@@ -290,7 +290,7 @@ void KisMaskManager::maskProperties()
             }
         }
         else {
-            KisSafeFilterConfigurationSP configAfter(dlg.filterConfiguration());
+            KisFilterConfigurationSP configAfter(dlg.filterConfiguration());
             Q_ASSERT(configAfter);
             QString xmlAfter = configAfter->toXML();
 

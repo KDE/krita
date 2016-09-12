@@ -31,7 +31,7 @@ public:
     KisHairyPaintOpSettingsWidget(QWidget* parent = 0);
     virtual ~KisHairyPaintOpSettingsWidget();
 
-    KisPropertiesConfiguration* configuration() const;
+    KisPropertiesConfigurationSP configuration() const;
 };
 
 #endif

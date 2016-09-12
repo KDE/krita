@@ -490,7 +490,7 @@ bool KisKraLoadVisitor::loadProfile(KisPaintDeviceSP device, const QString& loca
     return false;
 }
 
-bool KisKraLoadVisitor::loadFilterConfiguration(KisFilterConfiguration* kfc, const QString& location)
+bool KisKraLoadVisitor::loadFilterConfiguration(KisFilterConfigurationSP kfc, const QString& location)
 {
     if (m_store->hasFile(location)) {
         QByteArray data;

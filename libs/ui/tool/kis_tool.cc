@@ -79,7 +79,7 @@ struct Q_DECL_HIDDEN KisTool::Private {
     KoColor currentFgColor;
     KoColor currentBgColor;
     float currentExposure{1.0};
-    KisFilterConfiguration* currentGenerator{0};
+    KisFilterConfigurationSP currentGenerator;
     QWidget* optionWidget{0};
     ToolMode m_mode{HOVER_MODE};
     bool m_isActive{false};
@@ -434,7 +434,7 @@ KisImageWSP KisTool::currentImage()
     return image();
 }
 
-KisFilterConfiguration * KisTool::currentGenerator()
+KisFilterConfigurationSP  KisTool::currentGenerator()
 {
     return d->currentGenerator;
 }

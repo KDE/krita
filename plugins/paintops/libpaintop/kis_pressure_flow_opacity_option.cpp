@@ -42,13 +42,13 @@ KisFlowOpacityOption::KisFlowOpacityOption(KisNodeSP currentNode)
         dynamic_cast<KisIndirectPaintingSupport*>(currentNode.data());
 }
 
-void KisFlowOpacityOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
+void KisFlowOpacityOption::writeOptionSetting(KisPropertiesConfigurationSP setting) const
 {
     KisCurveOption::writeOptionSetting(setting);
     setting->setProperty("FlowValue", m_flow);
 }
 
-void KisFlowOpacityOption::readOptionSetting(const KisPropertiesConfiguration* setting)
+void KisFlowOpacityOption::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
     KisCurveOption::readOptionSetting(setting);
     setFlow(setting->getDouble("FlowValue", 1.0));

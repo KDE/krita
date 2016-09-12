@@ -36,7 +36,7 @@ class KisFilterNormalize : public KisColorTransformationFilter
 public:
     KisFilterNormalize();
 public:
-    virtual KoColorTransformation* createTransformation(const KoColorSpace* cs, const KisFilterConfiguration* config) const;
+    virtual KoColorTransformation* createTransformation(const KoColorSpace* cs, const KisFilterConfigurationSP config) const;
 };
 
 class KisNormalizeTransformation : public KoColorTransformation

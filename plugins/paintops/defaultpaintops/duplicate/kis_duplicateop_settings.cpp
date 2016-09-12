@@ -132,7 +132,7 @@ KisPaintOpSettingsSP KisDuplicateOpSettings::clone() const
     return setting;
 }
 
-QPainterPath KisDuplicateOpSettings::brushOutline(const KisPaintInformation &info, OutlineMode mode) const
+QPainterPath KisDuplicateOpSettings::brushOutline(const KisPaintInformation &info, OutlineMode mode)
 {
     QPainterPath path;
 

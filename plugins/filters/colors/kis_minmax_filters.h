@@ -31,7 +31,7 @@ public:
 
     void processImpl(KisPaintDeviceSP src,
                      const QRect& size,
-                     const KisFilterConfiguration* config,
+                     const KisFilterConfigurationSP config,
                      KoUpdater* progressUpdater
                      ) const;
 
@@ -49,7 +49,7 @@ public:
 
     void processImpl(KisPaintDeviceSP device,
                      const QRect& rect,
-                     const KisFilterConfiguration* config,
+                     const KisFilterConfigurationSP config,
                      KoUpdater* progressUpdater
                      ) const;
     static inline KoID id() {

@@ -28,12 +28,13 @@
 #include <QMessageBox>
 
 #include <KoColorSpace.h>
-#include <KoColorSpaceRegistry.h>
 #include <KisFilterChain.h>
 #include <KisImportExportManager.h>
 #include <KoColorProfile.h>
 #include <KoColorModelStandardIds.h>
+#include <KoColorSpaceRegistry.h>
 
+#include <kis_properties_configuration.h>
 #include <kis_paint_device.h>
 #include <KisDocument.h>
 #include <kis_image.h>
@@ -69,10 +70,9 @@ bool hasVisibleWidgets()
     return false;
 }
 
-KisImportExportFilter::ConversionStatus KisPNGExport::convert(const QByteArray& from, const QByteArray& to)
+KisImportExportFilter::ConversionStatus KisPNGExport::convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration)
 {
     dbgFile << "Png export! From:" << from << ", To:" << to << "";
-
 
     KisDocument *input = inputDocument();
     QString filename = outputFile();
@@ -87,10 +87,6 @@ KisImportExportFilter::ConversionStatus KisPNGExport::convert(const QByteArray& 
         return KisImportExportFilter::NotImplemented;
 
 
-    KoDialog* kdb = new KoDialog(0);
-    kdb->setCaption(i18n("PNG Export Options"));
-    kdb->setModal(false);
-    kdb->setButtons(KoDialog::Ok | KoDialog::Cancel);
 
     KisImageWSP image = input->image();
 
@@ -114,6 +110,7 @@ KisImportExportFilter::ConversionStatus KisPNGExport::convert(const QByteArray& 
 
     KisPNGOptions options;
     bool isThereAlpha = false;
+    KisPropertiesConfigurationSP cfg = defaultConfiguration();
     do {
         if (cs->opacityU8(it.oldRawData()) != OPACITY_OPAQUE_U8) {
             isThereAlpha = true;
@@ -123,103 +120,48 @@ KisImportExportFilter::ConversionStatus KisPNGExport::convert(const QByteArray& 
 
     if (!qApp->applicationName().toLower().contains("test")) {
 
-        bool sRGB = (cs->profile()->name().contains(QLatin1String("srgb"), Qt::CaseInsensitive)
-                     && !cs->profile()->name().contains(QLatin1String("g10")));
+        KoDialog kdb;
+        kdb.setCaption(i18n("PNG Export Options"));
+        kdb.setButtons(KoDialog::Ok | KoDialog::Cancel);
+        KisConfigWidget *wdg = createConfigurationWidget(&kdb, from, to);
+        kdb.setMainWidget(wdg);
 
-        KisWdgOptionsPNG* wdg = new KisWdgOptionsPNG(kdb);
-
-        QString filterConfig = KisConfig().exportConfiguration("PNG");
-        KisPropertiesConfiguration cfg;
-        cfg.fromXML(filterConfig);
-
-        wdg->alpha->setChecked(cfg.getBool("alpha", isThereAlpha));
-
-        if (cs->colorModelId() == RGBAColorModelID) {
-            wdg->tryToSaveAsIndexed->setVisible(true);
-            if (wdg->alpha->isChecked()) {
-                wdg->tryToSaveAsIndexed->setChecked(false);
-            }
-            else {
-                wdg->tryToSaveAsIndexed->setChecked(cfg.getBool("indexed", false));
-            }
+        // If a configuration object was passed to the convert method, we use that, otherwise we load from the settings
+        if (configuration) {
+            cfg->fromXML(configuration->toXML());
         }
         else {
-            wdg->tryToSaveAsIndexed->setVisible(false);
+            cfg = lastSavedConfiguration(from, to);
         }
-        wdg->interlacing->setChecked(cfg.getBool("interlaced", false));
-        wdg->compressionLevel->setValue(cfg.getInt("compression", 9));
-        wdg->compressionLevel->setRange(1, 9 , 0);
 
-        wdg->alpha->setEnabled(isThereAlpha);
-        wdg->tryToSaveAsIndexed->setVisible(!isThereAlpha);
+        cfg->setProperty("ColorModelID", cs->colorModelId().id());
 
-        wdg->bnTransparencyFillColor->setEnabled(!wdg->alpha->isChecked());
+        bool sRGB = (cs->profile()->name().contains(QLatin1String("srgb"), Qt::CaseInsensitive)
+                     && !cs->profile()->name().contains(QLatin1String("g10")));
+        cfg->setProperty("sRGB", sRGB);
+        cfg->setProperty("isThereAlpha", isThereAlpha);
+        wdg->setConfiguration(cfg);
 
-        //This used to be 'cfg.getBool("saveSRGBProfile", true)' but firefox and ColorD are incredibly awkward about sRGB management
-        //on Linux devices, as indicated by the same distorted colours with using the sRGB chunk, meaning it's unrelated to the profile.
-        //We can somewhat assume sRGB is the default color space for the web, but it's still a darn pity we cannot rely on firefox and colord
-        //to manage sRGB-marked images properly.
-        wdg->chkSRGB->setEnabled(sRGB);
-        wdg->chkSRGB->setChecked(cfg.getBool("saveSRGBProfile", false));
-
-        wdg->chkForceSRGB->setEnabled(!sRGB);
-        wdg->chkForceSRGB->setChecked(cfg.getBool("forceSRGB", false));
-
-        QStringList rgb = cfg.getString("transparencyFillcolor", "0,0,0").split(',');
-        KoColor background(KoColorSpaceRegistry::instance()->rgb8());
-        background.fromQColor(Qt::white);
-        wdg->bnTransparencyFillColor->setDefaultColor(background);
-        background.fromQColor(QColor(rgb[0].toInt(), rgb[1].toInt(), rgb[2].toInt()));
-        wdg->bnTransparencyFillColor->setColor(background);
-
-        kdb->setMainWidget(wdg);
         QApplication::restoreOverrideCursor();
         if (hasVisibleWidgets()) {
             if (!getBatchMode()) {
-                if (kdb->exec() == QDialog::Rejected) {
+                if (kdb.exec() == QDialog::Rejected) {
                     return KisImportExportFilter::UserCancelled;
                 }
+                cfg = wdg->configuration();
+                KisConfig().setExportConfiguration("PNG", *cfg.data());
+
             }
         }
-
-        bool alpha = wdg->alpha->isChecked();
-        bool interlace = wdg->interlacing->isChecked();
-        int compression = (int)wdg->compressionLevel->value();
-        bool tryToSaveAsIndexed = wdg->tryToSaveAsIndexed->isChecked();
-        QColor c = wdg->bnTransparencyFillColor->color().toQColor();
-        bool saveSRGB = wdg->chkSRGB->isChecked();
-        bool forceSRGB = wdg->chkForceSRGB->isChecked();
-
-        cfg.setProperty("alpha", alpha);
-        cfg.setProperty("indexed", tryToSaveAsIndexed);
-        cfg.setProperty("compression", compression);
-        cfg.setProperty("interlaced", interlace);
-        cfg.setProperty("transparencyFillcolor", QString("%1,%2,%3").arg(c.red()).arg(c.green()).arg(c.blue()));
-        cfg.setProperty("saveSRGBProfile", saveSRGB);
-        cfg.setProperty("forceSRGB", forceSRGB);
-        KisConfig().setExportConfiguration("PNG", cfg);
-
-        options.alpha = alpha;
-        options.interlace = interlace;
-        options.compression = compression;
-        options.tryToSaveAsIndexed = tryToSaveAsIndexed;
-        options.transparencyFillColor = c;
-        options.saveSRGBProfile = saveSRGB;
-        options.forceSRGB = forceSRGB;
-
-    }
-    else {
-        options.alpha = true;
-        options.interlace = false;
-        options.compression = 9;
-        options.tryToSaveAsIndexed = false;
-        options.transparencyFillColor = QColor(0,0,0);
-        options.saveSRGBProfile = false;
-        options.forceSRGB = false;
-
     }
 
-    delete kdb;
+    options.alpha = cfg->getBool("alpha", true);
+    options.interlace = cfg->getBool("interlaced", false);
+    options.compression = cfg->getInt("compression", 0);
+    options.tryToSaveAsIndexed = cfg->getBool("indexed", false);
+    options.transparencyFillColor = cfg->getColor("transparencyFillColor").toQColor();
+    options.saveSRGBProfile = cfg->getBool("saveSRGBProfile", false);
+    options.forceSRGB = cfg->getBool("forceSRGB", true);
 
     KisPNGConverter kpc(input);
 
@@ -247,10 +189,105 @@ KisImportExportFilter::ConversionStatus KisPNGExport::convert(const QByteArray& 
     return KisImportExportFilter::InternalError;
 }
 
-#include "kis_png_export.moc"
+KisPropertiesConfigurationSP KisPNGExport::defaultConfiguration(const QByteArray &, const QByteArray &) const
+{
+    KisPropertiesConfigurationSP cfg = new KisPropertiesConfiguration();
+    cfg->setProperty("alpha", true);
+    cfg->setProperty("indexed", false);
+    cfg->setProperty("compression", 9);
+    cfg->setProperty("interlaced", false);
+    cfg->setProperty("transparencyFillcolor", QString("255,255,255"));
+    cfg->setProperty("saveSRGBProfile", false);
+    cfg->setProperty("forceSRGB", true);
 
+    return cfg;
+}
+
+KisPropertiesConfigurationSP KisPNGExport::lastSavedConfiguration(const QByteArray &from, const QByteArray &to) const
+{
+    QString filterConfig = KisConfig().exportConfiguration("PNG");
+    KisPropertiesConfigurationSP cfg = defaultConfiguration(from, to);
+    cfg->fromXML(filterConfig, false);
+    return cfg;
+}
+
+KisConfigWidget *KisPNGExport::createConfigurationWidget(QWidget *parent, const QByteArray &, const QByteArray &) const
+{
+    return new KisWdgOptionsPNG(parent);
+}
+
+void KisWdgOptionsPNG::setConfiguration(const KisPropertiesConfigurationSP cfg)
+{
+    bool isThereAlpha = cfg->getBool("isThereAlpha");
+
+    alpha->setChecked(cfg->getBool("alpha", isThereAlpha));
+
+    if (cfg->getString("ColorModelID") == RGBAColorModelID.id()) {
+        tryToSaveAsIndexed->setVisible(true);
+        if (alpha->isChecked()) {
+            tryToSaveAsIndexed->setChecked(false);
+        }
+        else {
+            tryToSaveAsIndexed->setChecked(cfg->getBool("indexed", false));
+        }
+    }
+    else {
+        tryToSaveAsIndexed->setVisible(false);
+    }
+    interlacing->setChecked(cfg->getBool("interlaced", false));
+    compressionLevel->setValue(cfg->getInt("compression", 9));
+    compressionLevel->setRange(1, 9 , 0);
+
+    alpha->setEnabled(isThereAlpha);
+    tryToSaveAsIndexed->setVisible(!isThereAlpha);
+
+    bnTransparencyFillColor->setEnabled(!alpha->isChecked());
+
+    bool sRGB = cfg->getBool("sRGB", false);
+
+    chkSRGB->setEnabled(sRGB);
+    chkSRGB->setChecked(cfg->getBool("saveSRGBProfile", true));
+
+    chkForceSRGB->setEnabled(!sRGB);
+    chkForceSRGB->setChecked(cfg->getBool("forceSRGB", false));
+
+    QStringList rgb = cfg->getString("transparencyFillcolor", "0,0,0").split(',');
+    KoColor c(KoColorSpaceRegistry::instance()->rgb8());
+    c.fromQColor(Qt::white);
+    bnTransparencyFillColor->setDefaultColor(c);
+    c.fromQColor(QColor(rgb[0].toInt(), rgb[1].toInt(), rgb[2].toInt()));
+    bnTransparencyFillColor->setColor(c);
+
+}
+
+KisPropertiesConfigurationSP KisWdgOptionsPNG::configuration() const
+{
+
+    KisPropertiesConfigurationSP cfg(new KisPropertiesConfiguration());
+
+    bool alpha = this->alpha->isChecked();
+    bool interlace = interlacing->isChecked();
+    int compression = (int)compressionLevel->value();
+    bool tryToSaveAsIndexed = this->tryToSaveAsIndexed->isChecked();
+    QColor c = bnTransparencyFillColor->color().toQColor();
+    bool saveSRGB = chkSRGB->isChecked();
+    bool forceSRGB = chkForceSRGB->isChecked();
+
+    cfg->setProperty("alpha", alpha);
+    cfg->setProperty("indexed", tryToSaveAsIndexed);
+    cfg->setProperty("compression", compression);
+    cfg->setProperty("interlaced", interlace);
+    cfg->setProperty("transparencyFillcolor", QString("%1,%2,%3").arg(c.red()).arg(c.green()).arg(c.blue()));
+    cfg->setProperty("saveSRGBProfile", saveSRGB);
+    cfg->setProperty("forceSRGB", forceSRGB);
+
+    return cfg;
+}
 
 void KisWdgOptionsPNG::on_alpha_toggled(bool checked)
 {
     bnTransparencyFillColor->setEnabled(!checked);
 }
+
+#include "kis_png_export.moc"
+

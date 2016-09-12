@@ -57,6 +57,8 @@ set(kritaui_LIB_SRCS
     dialogs/kis_dlg_filter.cpp
     dialogs/kis_dlg_generator_layer.cpp
     dialogs/kis_dlg_file_layer.cpp
+    dialogs/kis_dlg_filter.cpp
+    dialogs/kis_dlg_stroke_selection_properties.cpp
     dialogs/kis_dlg_image_properties.cc
     dialogs/kis_dlg_layer_properties.cc
     dialogs/kis_dlg_preferences.cc
@@ -461,6 +463,7 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
     forms/wdgdlgblacklistcleanup.ui
     forms/wdgrectangleconstraints.ui
     forms/wdgimportimagesequence.ui
+    forms/wdgstrokeselectionproperties.ui
     forms/KisDetailsPaneBase.ui
     forms/KisOpenPaneBase.ui
     brushhud/kis_dlg_brush_hud_config.ui

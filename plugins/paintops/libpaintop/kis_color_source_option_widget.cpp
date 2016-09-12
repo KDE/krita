@@ -70,12 +70,12 @@ KisColorSourceOptionWidget::~KisColorSourceOptionWidget()
     delete d;
 }
 
-void KisColorSourceOptionWidget::writeOptionSetting(KisPropertiesConfiguration* setting) const
+void KisColorSourceOptionWidget::writeOptionSetting(KisPropertiesConfigurationSP setting) const
 {
     d->option.writeOptionSetting(setting);
 }
 
-void KisColorSourceOptionWidget::readOptionSetting(const KisPropertiesConfiguration* setting)
+void KisColorSourceOptionWidget::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
     d->option.readOptionSetting(setting);
     QRadioButton* rb = d->id2radio.value(d->option.colorSourceTypeId());

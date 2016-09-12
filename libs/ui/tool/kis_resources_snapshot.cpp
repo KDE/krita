@@ -55,7 +55,7 @@ struct KisResourcesSnapshot::Private {
     KisPaintOpPresetSP currentPaintOpPreset;
     KisNodeSP currentNode;
     qreal currentExposure;
-    KisFilterConfiguration *currentGenerator;
+    KisFilterConfigurationSP currentGenerator;
 
     QPointF axesCenter;
     bool mirrorMaskHorizontal;
@@ -71,6 +71,7 @@ struct KisResourcesSnapshot::Private {
     bool globalAlphaLock;
     qreal effectiveZoom;
     bool presetAllowsLod;
+    KisSelectionSP selection;
 };
 
 KisResourcesSnapshot::KisResourcesSnapshot(KisImageSP image, KisNodeSP currentNode, KisPostExecutionUndoAdapter *undoAdapter, KoCanvasResourceManager *resourceManager, KisDefaultBoundsBaseSP bounds)
@@ -82,7 +83,6 @@ KisResourcesSnapshot::KisResourcesSnapshot(KisImageSP image, KisNodeSP currentNo
     }
     m_d->bounds = bounds;
     m_d->undoAdapter = undoAdapter;
-
     m_d->currentFgColor = resourceManager->resource(KoCanvasResourceManager::ForegroundColor).value<KoColor>();
     m_d->currentBgColor = resourceManager->resource(KoCanvasResourceManager::BackgroundColor).value<KoColor>();
     m_d->currentPattern = resourceManager->resource(KisCanvasResourceProvider::CurrentPattern).value<KoPattern*>();
@@ -131,6 +131,7 @@ KisResourcesSnapshot::KisResourcesSnapshot(KisImageSP image, KisNodeSP currentNo
     m_d->globalAlphaLock = resourceManager->resource(KisCanvasResourceProvider::GlobalAlphaLock).toBool();
     m_d->effectiveZoom = resourceManager->resource(KisCanvasResourceProvider::EffectiveZoom).toDouble();
     m_d->presetAllowsLod = resourceManager->resource(KisCanvasResourceProvider::PresetAllowsLod).toBool();
+    m_d->selection = m_d->image->globalSelection();
 }
 
 KisResourcesSnapshot::~KisResourcesSnapshot()
@@ -237,19 +238,24 @@ KisSelectionSP KisResourcesSnapshot::activeSelection() const
      * It is possible to have/use the snapshot without the image. Such
      * usecase is present for example in the scratchpad.
      */
-    KisSelectionSP selection = m_d->image ? m_d->image->globalSelection() : 0;
+    if (!m_d->selection) {
+
+        return 0;
+    }
+
+    m_d->selection = m_d->image ? m_d->image->globalSelection() : 0;
 
     KisLayerSP layer = dynamic_cast<KisLayer*>(m_d->currentNode.data());
     KisSelectionMaskSP mask;
     if((layer = dynamic_cast<KisLayer*>(m_d->currentNode.data()))) {
-        selection = layer->selection();
+         m_d->selection = layer->selection();
     } else if ((mask = dynamic_cast<KisSelectionMask*>(m_d->currentNode.data())) &&
-               mask->selection() == selection) {
+               mask->selection() == m_d->selection) {
 
-        selection = 0;
+         m_d->selection = 0;
     }
 
-    return selection;
+    return m_d->selection;
 }
 
 bool KisResourcesSnapshot::needsAirbrushing() const
@@ -329,4 +335,24 @@ qreal KisResourcesSnapshot::effectiveZoom() const
 bool KisResourcesSnapshot::presetAllowsLod() const
 {
     return m_d->presetAllowsLod;
+}
+
+void KisResourcesSnapshot::setFGColorOverride(const KoColor &color)
+{
+    m_d->currentFgColor = color;
+}
+
+void KisResourcesSnapshot::setBGColorOverride(const KoColor &color)
+{
+    m_d->currentBgColor = color;
+}
+
+void KisResourcesSnapshot::setSelectionOverride(KisSelectionSP m_selection)
+{
+    m_d->selection = m_selection;
+}
+
+void KisResourcesSnapshot::setBrush(const KisPaintOpPresetSP &brush)
+{
+    m_d->currentPaintOpPreset = brush;
 }

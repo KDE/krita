@@ -25,12 +25,16 @@ Boston, MA 02110-1301, USA.
 #include <QMap>
 #include <QPointer>
 #include <QString>
+#include <QSharedPointer>
+#include <kis_properties_configuration.h>
+#include <kis_types.h>
+
+class KoUpdater;
+class KisDocument;
+class KisConfigWidget;
 
 #include "kritaui_export.h"
 
-class KisFilterChain;
-class KoUpdater;
-class KisDocument;
 
 /**
  * @brief The base class for import and export filters.
@@ -58,9 +62,6 @@ class KRITAUI_EXPORT KisImportExportFilter : public QObject
 {
     Q_OBJECT
 
-    friend class KisFilterEntry;  // needed for the filter chain pointer :(
-    friend class KisFilterChain;
-
 public:
     /**
      * This enum is used to signal the return state of your filter.
@@ -68,18 +69,41 @@ public:
      * Feel free to add some more error conditions @em before the last item
      * if it's needed.
      */
-    enum ConversionStatus { OK, StupidError, UsageError, CreationError, FileNotFound,
-                            StorageCreationError, BadMimeType, BadConversionGraph,
-                            EmbeddedDocError, WrongFormat, NotImplemented,
-                            ParsingError, InternalError, UnexpectedEOF,
-                            UnexpectedOpcode, UserCancelled, OutOfMemory,
-                            PasswordProtected, InvalidFormat, FilterEntryNull,
-                            NoDocumentCreated, DownloadFailed, FilterCreationError,
+    enum ConversionStatus { OK,
+                            StupidError,
+                            UsageError,
+                            CreationError,
+                            FileNotFound,
+                            StorageCreationError,
+                            BadMimeType,
+                            BadConversionGraph,
+                            EmbeddedDocError,
+                            WrongFormat,
+                            NotImplemented,
+                            ParsingError,
+                            InternalError,
+                            UnexpectedEOF,
+                            UnexpectedOpcode,
+                            UserCancelled,
+                            OutOfMemory,
+                            PasswordProtected,
+                            InvalidFormat,
+                            FilterEntryNull,
+                            NoDocumentCreated,
+                            DownloadFailed,
+                            FilterCreationError,
                             ProgressCancelled,
                             JustInCaseSomeBrokenCompilerUsesLessThanAByte = 255
                           };
 
     virtual ~KisImportExportFilter();
+
+    /**
+     * @brief setChain set the chain information on the filter. The chain information
+     * lets the filter know what document it's working on. The filter will not delete
+     * @param chain the actual filter chain
+     */
+    void setChain(KisFilterChainSP chain);
 
     /**
      * The filter chain calls this method to perform the actual conversion.
@@ -92,7 +116,7 @@ public:
      * @return The error status, see the @ref #ConversionStatus enum.
      *         KisImportExportFilter::OK means that everything is alright.
      */
-    virtual ConversionStatus convert(const QByteArray& from, const QByteArray& to) = 0;
+    virtual ConversionStatus convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration = 0) = 0;
 
     /**
      * Set the updater to which the filter will report progress.
@@ -104,6 +128,33 @@ public:
      * Get the text version of the status value
      */
     static QString conversionStatusString(ConversionStatus status);
+
+    /**
+     * @brief defaultConfiguration defines the default settings for the given import export filter
+     * @param from The mimetype of the source file/document
+     * @param to The mimetype of the destination file/document
+     * @return a serializable KisPropertiesConfiguration object
+     */
+    virtual KisPropertiesConfigurationSP defaultConfiguration(const QByteArray& from = "", const QByteArray& to = "") const;
+
+    /**
+     * @brief lastSavedConfiguration return the last saved configuration for this filter
+     * @param from The mimetype of the source file/document
+     * @param to The mimetype of the destination file/document
+     * @return a serializable KisPropertiesConfiguration object
+     */
+    virtual KisPropertiesConfigurationSP lastSavedConfiguration(const QByteArray &from = "", const QByteArray &to = "") const;
+
+    /**
+     * @brief createConfigurationWidget creates a widget that can be used to define the settings for a given import/export filter
+     * @param parent the ownder of the widget; the caller is responsible for deleting
+     * @param from The mimetype of the source file/document
+     * @param to The mimetype of the destination file/document
+     *
+     * @return the widget
+     */
+    virtual KisConfigWidget *createConfigurationWidget(QWidget *parent, const QByteArray& from = "", const QByteArray& to = "") const;
+
 
 Q_SIGNALS:
     /**
@@ -128,14 +179,7 @@ protected:
     bool getBatchMode() const;
 
 private:
-    /**
-     * Use this pointer to access all information about input/output
-     * during the conversion. @em Don't use it in the constructor -
-     * it's invalid while constructing the object!
-     */
-    KisFilterChain *m_chain;
 
-private:
     KisImportExportFilter(const KisImportExportFilter& rhs);
     KisImportExportFilter& operator=(const KisImportExportFilter& rhs);
 

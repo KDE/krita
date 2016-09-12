@@ -21,10 +21,12 @@
 #define _KIS_COLOR_SOURCE_OPTION_H
 
 #include <kritapaintop_export.h>
+
 #include <QList>
 
+#include <kis_properties_configuration.h>
+
 class KisColorSource;
-class KisPropertiesConfiguration;
 class KoID;
 class KisPainter;
 
@@ -42,8 +44,8 @@ public:
 public:
     KisColorSourceOption();
     ~KisColorSourceOption();
-    void writeOptionSetting(KisPropertiesConfiguration* setting) const;
-    void readOptionSetting(const KisPropertiesConfiguration* setting);
+    void writeOptionSetting(KisPropertiesConfigurationSP setting) const;
+    void readOptionSetting(const KisPropertiesConfigurationSP setting);
 
     KisColorSource* createColorSource(const KisPainter* _painter) const;
     QString colorSourceTypeId() const;

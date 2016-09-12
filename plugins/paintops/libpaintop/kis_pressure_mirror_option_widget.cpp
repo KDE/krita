@@ -57,7 +57,7 @@ KisPressureMirrorOptionWidget::KisPressureMirrorOptionWidget()
     verticalMirrorChanged(m_verticalMirror->isChecked());
 }
 
-void KisPressureMirrorOptionWidget::readOptionSetting(const KisPropertiesConfiguration* setting)
+void KisPressureMirrorOptionWidget::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
     KisCurveOptionWidget::readOptionSetting(setting);
     m_verticalMirror->setChecked(static_cast<KisPressureMirrorOption*>(curveOption())->isVerticalMirrorEnabled());

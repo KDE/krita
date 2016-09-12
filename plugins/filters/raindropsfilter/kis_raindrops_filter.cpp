@@ -82,7 +82,7 @@ KisRainDropsFilter::KisRainDropsFilter()
 
 void KisRainDropsFilter::processImpl(KisPaintDeviceSP device,
                                      const QRect& applyRect,
-                                     const KisFilterConfiguration* config,
+                                     const KisFilterConfigurationSP config,
                                      KoUpdater* progressUpdater ) const
 {
     QPoint srcTopLeft = applyRect.topLeft();
@@ -389,9 +389,9 @@ KisConfigWidget * KisRainDropsFilter::createConfigurationWidget(QWidget* parent,
     return w;
 }
 
-KisFilterConfiguration* KisRainDropsFilter::factoryConfiguration(const KisPaintDeviceSP) const
+KisFilterConfigurationSP KisRainDropsFilter::factoryConfiguration(const KisPaintDeviceSP) const
 {
-    KisFilterConfiguration* config = new KisFilterConfiguration("raindrops", 2);
+    KisFilterConfigurationSP config = new KisFilterConfiguration("raindrops", 2);
     config->setProperty("dropsize", 80);
     config->setProperty("number", 80);
     config->setProperty("fishEyes", 30);

@@ -77,7 +77,7 @@ KisHairyInkOption::~KisHairyInkOption()
 }
 
 
-void KisHairyInkOption::readOptionSetting(const KisPropertiesConfiguration* settings)
+void KisHairyInkOption::readOptionSetting(const KisPropertiesConfigurationSP settings)
 {
     setChecked(settings->getBool(HAIRY_INK_DEPLETION_ENABLED));
     m_options->inkAmountSpinBox->setValue(settings->getInt(HAIRY_INK_AMOUNT));
@@ -92,7 +92,7 @@ void KisHairyInkOption::readOptionSetting(const KisPropertiesConfiguration* sett
     m_options->soakInkCBox->setChecked(settings->getBool(HAIRY_INK_SOAK));
 }
 
-void KisHairyInkOption::writeOptionSetting(KisPropertiesConfiguration* settings) const
+void KisHairyInkOption::writeOptionSetting(KisPropertiesConfigurationSP settings) const
 {
     settings->setProperty(HAIRY_INK_DEPLETION_ENABLED, isChecked());
     settings->setProperty(HAIRY_INK_AMOUNT, inkAmount());

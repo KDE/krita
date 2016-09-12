@@ -56,7 +56,7 @@ public:
 
     KisFilterMask(const KisFilterMask& rhs);
 
-    void setFilter(KisFilterConfiguration *filterConfig);
+    void setFilter(KisFilterConfigurationSP filterConfig);
 
     QRect decorateRect(KisPaintDeviceSP &src,
                        KisPaintDeviceSP &dst,

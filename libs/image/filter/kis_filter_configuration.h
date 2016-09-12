@@ -31,7 +31,7 @@
  * This macro activates debugging routines for such stuff.
  *
  * In the future, please either port the entire KisNodeFilterInterface
- * into KisSafeFilterConfigurationSP or derive filter configuration
+ * into KisFilterConfigurationSP or derive filter configuration
  * interface from QSharedData to handle these cases.
  */
 #define SANITY_CHECK_FILTER_CONFIGURATION_OWNER
@@ -134,5 +134,6 @@ private:
 };
 
 Q_DECLARE_METATYPE(KisFilterConfiguration*)
+
 
 #endif // _KIS_FILTER_CONFIGURATION_H_

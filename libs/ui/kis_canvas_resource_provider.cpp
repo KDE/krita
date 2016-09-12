@@ -133,12 +133,6 @@ KoPattern * KisCanvasResourceProvider::currentPattern() const
     }
 }
 
-KisFilterConfiguration * KisCanvasResourceProvider::currentGeneratorConfiguration() const
-{
-    return m_resourceManager->resource(CurrentGeneratorConfiguration).value<KisFilterConfiguration*>();
-}
-
-
 KoAbstractGradient* KisCanvasResourceProvider::currentGradient() const
 {
     if (m_resourceManager->hasResource(CurrentGradient)) {
@@ -206,14 +200,6 @@ void KisCanvasResourceProvider::slotPatternActivated(KoResource * res)
     v.setValue<KoPattern*>(pattern);
     m_resourceManager->setResource(CurrentPattern, v);
     emit sigPatternChanged(pattern);
-}
-
-void KisCanvasResourceProvider::slotGeneratorConfigurationActivated(KisFilterConfiguration * res)
-{
-    KisFilterConfiguration * generatorConfiguration = dynamic_cast<KisFilterConfiguration*>(res);
-    QVariant v;
-    v.setValue<KisFilterConfiguration*>(generatorConfiguration);
-    m_resourceManager->setResource(CurrentGeneratorConfiguration, v);
 }
 
 void KisCanvasResourceProvider::slotGradientActivated(KoResource *res)

@@ -46,9 +46,9 @@ private:
     bool cloneFromProjection() const;
     void setCloneFromProjection(bool cloneFromProjection);
 public:
-    void writeOptionSetting(KisPropertiesConfiguration* setting) const;
+    void writeOptionSetting(KisPropertiesConfigurationSP setting) const;
 
-    void readOptionSetting(const KisPropertiesConfiguration* setting);
+    void readOptionSetting(const KisPropertiesConfigurationSP setting);
 
     void setImage(KisImageWSP image);
 
@@ -71,7 +71,7 @@ struct DuplicateOption {
         duplicate_clone_from_projection = setting->getBool(DUPLICATE_CLONE_FROM_PROJECTION, false);
     }
 
-    void writeOptionSetting(KisPropertiesConfiguration* setting) const {
+    void writeOptionSetting(KisPropertiesConfigurationSP setting) const {
         setting->setProperty(DUPLICATE_HEALING, duplicate_healing);
         setting->setProperty(DUPLICATE_CORRECT_PERSPECTIVE, duplicate_correct_perspective);
         setting->setProperty(DUPLICATE_MOVE_SOURCE_POINT, duplicate_move_source_point);

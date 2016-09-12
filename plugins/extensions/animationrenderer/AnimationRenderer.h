@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2016 Dmitry Kazakov <dimula73@gmail.com>
+ * Copyright (c) 2016 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -13,19 +13,27 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- */
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA. */
 
-#ifndef _KIS_VIDEO_PLUGIN_TEST_H_
-#define _KIS_VIDEO_PLUGIN_TEST_H_
+#ifndef ANIMATIONRENDERERIMAGE_H
+#define ANIMATIONRENDERERIMAGE_H
 
-#include <QtTest>
+#include <QVariant>
 
-class KisVideoPluginTest : public QObject
+#include <kis_view_plugin.h>
+
+class AnimaterionRenderer : public KisViewPlugin
 {
     Q_OBJECT
+public:
+    AnimaterionRenderer(QObject *parent, const QVariantList &);
+    virtual ~AnimaterionRenderer();
+
 private Q_SLOTS:
-    void testFiles();
+
+    void slotRenderAnimation();
+    void slotRenderSequenceAgain();
+
 };
 
-#endif
+#endif // ANIMATIONRENDERERIMAGE_H

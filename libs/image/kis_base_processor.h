@@ -72,7 +72,7 @@ public:
      *
      * @return the default configuration of this widget
      */
-    KisFilterConfiguration * defaultConfiguration(const KisPaintDeviceSP) const;
+    KisFilterConfigurationSP  defaultConfiguration(const KisPaintDeviceSP) const;
 
     /**
      * @return the bookmark manager for this processor
@@ -139,8 +139,8 @@ public:
     ColorSpaceIndependence colorSpaceIndependence() const;
 
     /// @return the default configuration as defined by whoever wrote the plugin
-    virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
-    
+    virtual KisFilterConfigurationSP factoryConfiguration(const KisPaintDeviceSP) const;
+
 protected:
 
     void setSupportsPainting(bool v);

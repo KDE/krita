@@ -43,7 +43,7 @@ KisFilterPhongBumpmap::KisFilterPhongBumpmap()
 
 void KisFilterPhongBumpmap::processImpl(KisPaintDeviceSP device,
                                         const QRect& applyRect,
-                                        const KisFilterConfiguration *config,
+                                        const KisFilterConfigurationSP config,
                                         KoUpdater *progressUpdater
                                         ) const
 {
@@ -189,9 +189,9 @@ void KisFilterPhongBumpmap::processImpl(KisPaintDeviceSP device,
     if (progressUpdater) progressUpdater->setProgress(100);
 }
 
-KisFilterConfiguration *KisFilterPhongBumpmap::factoryConfiguration(const KisPaintDeviceSP) const
+KisFilterConfigurationSP KisFilterPhongBumpmap::factoryConfiguration(const KisPaintDeviceSP) const
 {
-    KisFilterConfiguration *config = new KisFilterConfiguration(id(), 2);
+    KisFilterConfigurationSP config = new KisFilterConfiguration(id(), 2);
     config->setProperty(PHONG_AMBIENT_REFLECTIVITY, 0.2);
     config->setProperty(PHONG_DIFFUSE_REFLECTIVITY, 0.5);
     config->setProperty(PHONG_SPECULAR_REFLECTIVITY, 0.3);
@@ -219,12 +219,12 @@ KisFilterConfiguration *KisFilterPhongBumpmap::factoryConfiguration(const KisPai
     return config;
 }
 
-QRect KisFilterPhongBumpmap::neededRect(const QRect &rect, const KisFilterConfiguration* /*config*/, int /*lod*/) const
+QRect KisFilterPhongBumpmap::neededRect(const QRect &rect, const KisFilterConfigurationSP /*config*/, int /*lod*/) const
 {
     return rect.adjusted(-1, -1, 1, 1);
 }
 
-QRect KisFilterPhongBumpmap::changedRect(const QRect &rect, const KisFilterConfiguration* /*config*/, int /*lod*/) const
+QRect KisFilterPhongBumpmap::changedRect(const QRect &rect, const KisFilterConfigurationSP /*config*/, int /*lod*/) const
 {
     return rect;
 }

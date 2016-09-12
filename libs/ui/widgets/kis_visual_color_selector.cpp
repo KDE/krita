@@ -42,19 +42,21 @@
 struct KisVisualColorSelector::Private
 {
     KoColor currentcolor;
-    const KoColorSpace *currentCS;
+    const KoColorSpace *currentCS {0};
     QList <KisVisualColorSelectorShape*> widgetlist;
-    bool updateSelf = false;
-    bool updateLonesome = false; //for Modal dialogs.
-    bool circular = false;
-    const KoColorDisplayRendererInterface *displayRenderer = 0;
+    bool updateSelf {false};
+    bool updateLonesome {false}; //for Modal dialogs.
+    bool circular {false};
+    const KoColorDisplayRendererInterface *displayRenderer {0};
     KisVisualColorSelector::Configuration acs_config;
     //Current coordinates.
-    KisSignalCompressor *updateTimer = 0;
+    KisSignalCompressor *updateTimer {0};
     QVector <qreal> currentCoordinates;
 };
 
-KisVisualColorSelector::KisVisualColorSelector(QWidget *parent) : QWidget(parent), m_d(new Private)
+KisVisualColorSelector::KisVisualColorSelector(QWidget *parent)
+    : QWidget(parent)
+    , m_d(new Private)
 {
     this->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
     QVBoxLayout *layout = new QVBoxLayout;
@@ -72,7 +74,7 @@ KisVisualColorSelector::~KisVisualColorSelector()
 
 void KisVisualColorSelector::slotSetColor(KoColor c)
 {
-    if (m_d->updateSelf==false) {
+    if (m_d->updateSelf == false) {
         m_d->currentcolor = c;
         if (m_d->currentCS != c.colorSpace()) {
             slotsetColorSpace(c.colorSpace());

@@ -53,7 +53,7 @@ KisPPMImport::~KisPPMImport()
 {
 }
 
-KisImportExportFilter::ConversionStatus KisPPMImport::convert(const QByteArray& from, const QByteArray& to)
+KisImportExportFilter::ConversionStatus KisPPMImport::convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration)
 {
     Q_UNUSED(from);
     dbgFile << "Importing using PPMImport!";

@@ -62,9 +62,9 @@ KisConfigWidget * KisUnsharpFilter::createConfigurationWidget(QWidget* parent, c
     return new KisWdgUnsharp(parent);
 }
 
-KisFilterConfiguration* KisUnsharpFilter::factoryConfiguration(const KisPaintDeviceSP) const
+KisFilterConfigurationSP KisUnsharpFilter::factoryConfiguration(const KisPaintDeviceSP) const
 {
-    KisFilterConfiguration* config = new KisFilterConfiguration(id().id(), 1);
+    KisFilterConfigurationSP config = new KisFilterConfiguration(id().id(), 1);
     config->setProperty("halfSize", 1);
     config->setProperty("amount", 50);
     config->setProperty("threshold", 0);
@@ -74,7 +74,7 @@ KisFilterConfiguration* KisUnsharpFilter::factoryConfiguration(const KisPaintDev
 
 void KisUnsharpFilter::processImpl(KisPaintDeviceSP device,
                                    const QRect& applyRect,
-                                   const KisFilterConfiguration* config,
+                                   const KisFilterConfigurationSP _config,
                                    KoUpdater* progressUpdater
                                    ) const
 {
@@ -91,7 +91,7 @@ void KisUnsharpFilter::processImpl(KisPaintDeviceSP device,
         filterUpdater = updater->startSubtask();
     }
 
-    if (!config) config = new KisFilterConfiguration(id().id(), 1);
+    KisFilterConfigurationSP config = _config ? _config : new KisFilterConfiguration(id().id(), 1);
 
     QVariant value;
 
@@ -208,7 +208,7 @@ void KisUnsharpFilter::processLightnessOnly(KisPaintDeviceSP device,
     }
 }
 
-QRect KisUnsharpFilter::neededRect(const QRect & rect, const KisFilterConfiguration* config, int lod) const
+QRect KisUnsharpFilter::neededRect(const QRect & rect, const KisFilterConfigurationSP config, int lod) const
 {
     KisLodTransformScalar t(lod);
 
@@ -218,7 +218,7 @@ QRect KisUnsharpFilter::neededRect(const QRect & rect, const KisFilterConfigurat
     return rect.adjusted(-halfSize * 2, -halfSize * 2, halfSize * 2, halfSize * 2);
 }
 
-QRect KisUnsharpFilter::changedRect(const QRect & rect, const KisFilterConfiguration* config, int lod) const
+QRect KisUnsharpFilter::changedRect(const QRect & rect, const KisFilterConfigurationSP config, int lod) const
 {
     KisLodTransformScalar t(lod);
 

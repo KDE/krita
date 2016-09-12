@@ -96,7 +96,7 @@ KisAutoContrast::KisAutoContrast() : KisFilter(id(), categoryAdjust(), i18n("&Au
 
 void KisAutoContrast::processImpl(KisPaintDeviceSP device,
                                   const QRect& applyRect,
-                                  const KisFilterConfiguration* config,
+                                  const KisFilterConfigurationSP config,
                                   KoUpdater* progressUpdater) const
 {
     Q_ASSERT(device != 0);

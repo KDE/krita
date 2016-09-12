@@ -37,12 +37,12 @@ KisBidirectionalMixingOptionWidget::~KisBidirectionalMixingOptionWidget()
 {
 }
 
-void KisBidirectionalMixingOptionWidget::writeOptionSetting(KisPropertiesConfiguration* setting) const
+void KisBidirectionalMixingOptionWidget::writeOptionSetting(KisPropertiesConfigurationSP setting) const
 {
     setting->setProperty(BIDIRECTIONAL_MIXING_ENABLED, isChecked());
 }
 
-void KisBidirectionalMixingOptionWidget::readOptionSetting(const KisPropertiesConfiguration* setting)
+void KisBidirectionalMixingOptionWidget::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
     setChecked(setting->getBool(BIDIRECTIONAL_MIXING_ENABLED, false));
 }

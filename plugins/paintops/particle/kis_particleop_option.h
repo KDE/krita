@@ -42,8 +42,8 @@ public:
     int iterations() const;
     QPointF scale() const;
 
-    void writeOptionSetting(KisPropertiesConfiguration* setting) const;
-    void readOptionSetting(const KisPropertiesConfiguration* setting);
+    void writeOptionSetting(KisPropertiesConfigurationSP setting) const;
+    void readOptionSetting(const KisPropertiesConfigurationSP setting);
     void lodLimitations(KisPaintopLodLimitations *l) const;
 
 private:
@@ -59,7 +59,7 @@ struct ParticleOption {
     qreal particle_scale_y;
 
 
-    void readOptionSetting(const KisPropertiesConfiguration* setting) {
+    void readOptionSetting(const KisPropertiesConfigurationSP setting) {
         particle_count = setting->getInt(PARTICLE_COUNT);
         particle_iterations = setting->getInt(PARTICLE_ITERATIONS);
         particle_gravity = setting->getDouble(PARTICLE_GRAVITY);
@@ -68,7 +68,7 @@ struct ParticleOption {
         particle_scale_y = setting->getDouble(PARTICLE_SCALE_Y);
     }
 
-    void writeOptionSetting(KisPropertiesConfiguration* setting) const {
+    void writeOptionSetting(KisPropertiesConfigurationSP setting) const {
         setting->setProperty(PARTICLE_COUNT, particle_count);
         setting->setProperty(PARTICLE_ITERATIONS, particle_iterations);
         setting->setProperty(PARTICLE_GRAVITY, particle_gravity);

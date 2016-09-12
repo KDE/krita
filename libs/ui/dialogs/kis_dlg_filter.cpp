@@ -117,7 +117,7 @@ void KisDlgFilter::setDialogTitle(KisFilterSP filter)
     setWindowTitle(filter.isNull() ? i18nc("@title:window", "Filter") : i18nc("@title:window", "Filter: %1", filter->name()));
 }
 
-void KisDlgFilter::startApplyingFilter(KisSafeFilterConfigurationSP config)
+void KisDlgFilter::startApplyingFilter(KisFilterConfigurationSP config)
 {
     if (!d->uiFilterDialog.filterSelection->configuration()) return;
 
@@ -134,7 +134,7 @@ void KisDlgFilter::updatePreview()
 
 
     if (d->uiFilterDialog.checkBoxPreview->isChecked()) {
-        KisSafeFilterConfigurationSP config(d->uiFilterDialog.filterSelection->configuration());
+        KisFilterConfigurationSP config(d->uiFilterDialog.filterSelection->configuration());
         startApplyingFilter(config);
     }
 
@@ -154,7 +154,7 @@ void KisDlgFilter::slotFilterWidgetSizeChanged()
 void KisDlgFilter::slotOnAccept()
 {
     if (!d->filterManager->isStrokeRunning()) {
-        KisSafeFilterConfigurationSP config(d->uiFilterDialog.filterSelection->configuration());
+        KisFilterConfigurationSP config(d->uiFilterDialog.filterSelection->configuration());
         startApplyingFilter(config);
     }
     d->filterManager->finish();

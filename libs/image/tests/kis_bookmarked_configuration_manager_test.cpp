@@ -40,11 +40,11 @@ class TestConfigurationFactory : public KisSerializableConfigurationFactory
 {
 public:
 
-    virtual KisSerializableConfiguration* createDefault() {
+    virtual KisSerializableConfigurationSP createDefault() {
         return &tc;
     }
 
-    virtual KisSerializableConfiguration* create(const QDomElement&) {
+    virtual KisSerializableConfigurationSP create(const QDomElement&) {
         return &tc;
     }
 private:

@@ -37,7 +37,7 @@
 
 struct Q_DECL_HIDDEN KisRecordedFilterAction::Private {
     Private()
-        : kconfig(0)
+        : filterConfiguration(0)
     {
 
     }
@@ -45,25 +45,23 @@ struct Q_DECL_HIDDEN KisRecordedFilterAction::Private {
     const KisFilter* filter;
     QRect rect;
 
-    KisFilterConfiguration* configuration() {
-        if (!kconfig) {
-            kconfig = filter->defaultConfiguration(0);
-            if (kconfig) {
-                kconfig->fromXML(configstr);
+    KisFilterConfigurationSP configuration() {
+        if (!filterConfiguration) {
+            filterConfiguration = filter->defaultConfiguration(0);
+            if (filterConfiguration) {
+                filterConfiguration->fromXML(configstr);
             }
         }
-        return kconfig;
+        return filterConfiguration;
     }
 
-    void setConfiguration(KisFilterConfiguration* conf) {
-        delete kconfig;
-        kconfig = conf;
+    void setConfiguration(KisFilterConfigurationSP conf) {
+        filterConfiguration = conf;
         configstr = conf->toXML();
     }
 
     void setConfig(const QString& cfg) {
-        delete kconfig;
-        kconfig = 0;
+        filterConfiguration = 0;
         configstr = cfg;
     }
 
@@ -73,10 +71,10 @@ struct Q_DECL_HIDDEN KisRecordedFilterAction::Private {
 
 private:
     QString configstr;
-    KisFilterConfiguration* kconfig;
+    KisFilterConfigurationSP filterConfiguration;
 };
 
-KisRecordedFilterAction::KisRecordedFilterAction(QString name, const KisNodeQueryPath& path, const KisFilter* filter, const KisFilterConfiguration* fc) : KisRecordedNodeAction("FilterAction", name, path), d(new Private)
+KisRecordedFilterAction::KisRecordedFilterAction(QString name, const KisNodeQueryPath& path, const KisFilter* filter, const KisFilterConfigurationSP fc) : KisRecordedNodeAction("FilterAction", name, path), d(new Private)
 {
     Q_ASSERT(filter);
     d->filter = filter;
@@ -96,7 +94,7 @@ KisRecordedFilterAction::~KisRecordedFilterAction()
 
 void KisRecordedFilterAction::play(KisNodeSP node, const KisPlayInfo& _info, KoUpdater* _updater) const
 {
-    KisFilterConfiguration * kfc = d->configuration();
+    KisFilterConfigurationSP  kfc = d->configuration();
     KisPaintDeviceSP dev = node->paintDevice();
     KisLayerSP layer = dynamic_cast<KisLayer*>(node.data());
     QRect r1 = dev->extent();
@@ -119,7 +117,7 @@ void KisRecordedFilterAction::toXML(QDomDocument& doc, QDomElement& elt, KisReco
     KisRecordedAction::toXML(doc, elt, context);
     elt.setAttribute("filter", d->filter->id());
     // Save configuration
-    KisFilterConfiguration * kfc = d->configuration();
+    KisFilterConfigurationSP  kfc = d->configuration();
     if (kfc) {
         QDomElement filterConfigElt = doc.createElement("Params");
         kfc->toXML(doc, filterConfigElt);
@@ -137,12 +135,12 @@ const KisFilter* KisRecordedFilterAction::filter() const
     return d->filter;
 }
 
-const KisFilterConfiguration* KisRecordedFilterAction::filterConfiguration() const
+const KisFilterConfigurationSP KisRecordedFilterAction::filterConfiguration() const
 {
     return d->configuration();
 }
 
-void KisRecordedFilterAction::setFilterConfiguration(KisFilterConfiguration* config)
+void KisRecordedFilterAction::setFilterConfiguration(KisFilterConfigurationSP config)
 {
     d->setConfiguration(config);
 }
@@ -164,13 +162,12 @@ KisRecordedAction* KisRecordedFilterActionFactory::fromXML(const QDomElement& el
     KisNodeQueryPath pathnode = KisNodeQueryPath::fromString(elt.attribute("path"));
     const KisFilterSP filter = KisFilterRegistry::instance()->get(elt.attribute("filter"));
     if (filter) {
-        KisFilterConfiguration* config = filter->defaultConfiguration(0);
+        KisFilterConfigurationSP config = filter->defaultConfiguration(0);
         QDomElement paramsElt = elt.firstChildElement("Params");
         if (config && !paramsElt.isNull()) {
             config->fromXML(paramsElt);
         }
         KisRecordedFilterAction* rfa = new KisRecordedFilterAction(name, pathnode, filter, config);
-        delete config;
         return rfa;
     } else {
         return 0;

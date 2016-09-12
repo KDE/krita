@@ -259,7 +259,7 @@ void KisLayerManager::layerProperties()
         dlg.resize(dlg.minimumSizeHint());
 
 
-        KisSafeFilterConfigurationSP configBefore(alayer->filter());
+        KisFilterConfigurationSP configBefore(alayer->filter());
         KIS_ASSERT_RECOVER_RETURN(configBefore);
         QString xmlBefore = configBefore->toXML();
 
@@ -268,7 +268,7 @@ void KisLayerManager::layerProperties()
 
             alayer->setName(dlg.layerName());
 
-            KisSafeFilterConfigurationSP configAfter(dlg.filterConfiguration());
+            KisFilterConfigurationSP configAfter(dlg.filterConfiguration());
             Q_ASSERT(configAfter);
             QString xmlAfter = configAfter->toXML();
 
@@ -287,7 +287,7 @@ void KisLayerManager::layerProperties()
             }
         }
         else {
-            KisSafeFilterConfigurationSP configAfter(dlg.filterConfiguration());
+            KisFilterConfigurationSP configAfter(dlg.filterConfiguration());
             Q_ASSERT(configAfter);
             QString xmlAfter = configAfter->toXML();
 
@@ -302,7 +302,7 @@ void KisLayerManager::layerProperties()
         KisDlgGeneratorLayer dlg(glayer->name(), m_view, m_view->mainWindow());
         dlg.setCaption(i18n("Fill Layer Properties"));
 
-        KisSafeFilterConfigurationSP configBefore(glayer->filter());
+        KisFilterConfigurationSP configBefore(glayer->filter());
         Q_ASSERT(configBefore);
         QString xmlBefore = configBefore->toXML();
 
@@ -313,7 +313,7 @@ void KisLayerManager::layerProperties()
 
             glayer->setName(dlg.layerName());
 
-            KisSafeFilterConfigurationSP configAfter(dlg.configuration());
+            KisFilterConfigurationSP configAfter(dlg.configuration());
             Q_ASSERT(configAfter);
             QString xmlAfter = configAfter->toXML();
 
@@ -536,7 +536,7 @@ void KisLayerManager::addAdjustmentLayer(KisNodeSP activeNode)
 }
 
 KisAdjustmentLayerSP KisLayerManager::addAdjustmentLayer(KisNodeSP activeNode, const QString & name,
-                                                         KisFilterConfiguration * filter, KisSelectionSP selection)
+                                                         KisFilterConfigurationSP  filter, KisSelectionSP selection)
 {
     KisImageWSP image = m_view->image();
     KisAdjustmentLayerSP layer = new KisAdjustmentLayer(image, name, filter, selection);
@@ -554,7 +554,7 @@ void KisLayerManager::addGeneratorLayer(KisNodeSP activeNode)
 
     if (dlg.exec() == QDialog::Accepted) {
         KisSelectionSP selection = m_view->selection();
-        KisFilterConfiguration * generator = dlg.configuration();
+        KisFilterConfigurationSP  generator = dlg.configuration();
         QString name = dlg.layerName();
 
         addLayerCommon(activeNode,

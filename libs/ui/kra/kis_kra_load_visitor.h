@@ -69,7 +69,7 @@ private:
     bool loadPaintDeviceFrame(KisPaintDeviceSP device, const QString &location, DevicePolicy policy);
 
     bool loadProfile(KisPaintDeviceSP device,  const QString& location);
-    bool loadFilterConfiguration(KisFilterConfiguration* kfc, const QString& location);
+    bool loadFilterConfiguration(KisFilterConfigurationSP kfc, const QString& location);
     bool loadMetaData(KisNode* node);
     void initSelectionForMask(KisMask *mask);
     bool loadSelection(const QString& location, KisSelectionSP dstSelection);

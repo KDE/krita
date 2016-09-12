@@ -48,9 +48,9 @@ KisWdgLensBlur::~KisWdgLensBlur()
     delete m_widget;
 }
 
-KisPropertiesConfiguration* KisWdgLensBlur::configuration() const
+KisPropertiesConfigurationSP KisWdgLensBlur::configuration() const
 {
-    KisFilterConfiguration* config = new KisFilterConfiguration("lens blur", 1);
+    KisFilterConfigurationSP config = new KisFilterConfiguration("lens blur", 1);
     config->setProperty("irisShape", m_widget->irisShapeCombo->currentText());
     config->setProperty("irisRadius", m_widget->irisRadiusSlider->value());
     config->setProperty("irisRotation", m_widget->irisRotationSlider->value());
@@ -62,7 +62,7 @@ KisPropertiesConfiguration* KisWdgLensBlur::configuration() const
     return config;
 }
 
-void KisWdgLensBlur::setConfiguration(const KisPropertiesConfiguration* config)
+void KisWdgLensBlur::setConfiguration(const KisPropertiesConfigurationSP config)
 {
     QVariant value;
     if (config->getProperty("irisShape", value)) {

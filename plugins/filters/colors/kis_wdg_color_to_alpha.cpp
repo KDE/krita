@@ -83,7 +83,7 @@ void KisWdgColorToAlpha::slotCustomColorSelected(const KoColor &color)
     emit sigConfigurationItemChanged();
 }
 
-void KisWdgColorToAlpha::setConfiguration(const KisPropertiesConfiguration* config)
+void KisWdgColorToAlpha::setConfiguration(const KisPropertiesConfigurationSP config)
 {
     QVariant value;
     if (config->getProperty("targetcolor", value)) {
@@ -100,9 +100,9 @@ void KisWdgColorToAlpha::setConfiguration(const KisPropertiesConfiguration* conf
     }
 }
 
-KisPropertiesConfiguration* KisWdgColorToAlpha::configuration() const
+KisPropertiesConfigurationSP KisWdgColorToAlpha::configuration() const
 {
-    KisFilterConfiguration* config = new KisFilterConfiguration("colortoalpha", 1);
+    KisFilterConfigurationSP config = new KisFilterConfiguration("colortoalpha", 1);
     config->setProperty("targetcolor", widget()->colorSelector->getCurrentColor().toQColor());
     config->setProperty("threshold", widget()->intThreshold->value());
     return config;

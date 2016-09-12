@@ -85,10 +85,10 @@ const KisFilterSP KisFilterOption::filter() const
     return m_currentFilter;
 }
 
-KisFilterConfiguration* KisFilterOption::filterConfig() const
+KisFilterConfigurationSP KisFilterOption::filterConfig() const
 {
     if (!m_currentFilterConfigWidget) return 0;
-    return static_cast<KisFilterConfiguration*>(m_currentFilterConfigWidget->configuration());
+    return static_cast<KisFilterConfiguration*>(m_currentFilterConfigWidget->configuration().data());
 }
 
 bool KisFilterOption::smudgeMode() const
@@ -106,18 +106,18 @@ void KisFilterOption::setNode(KisNodeWSP node)
         // created before any layer is selected in the view
         if (!m_currentFilterConfigWidget
                 || (m_currentFilterConfigWidget
-                    && static_cast<KisFilterConfiguration*>(m_currentFilterConfigWidget->configuration())->isCompatible(m_paintDevice)
+                    && static_cast<KisFilterConfiguration*>(m_currentFilterConfigWidget->configuration().data())->isCompatible(m_paintDevice)
                    )
            ) {
             if (m_currentFilter) {
-                KisPropertiesConfiguration* configuration = 0;
-                if (m_currentFilterConfigWidget)
+                KisPropertiesConfigurationSP configuration = 0;
+                if (m_currentFilterConfigWidget) {
                     configuration = m_currentFilterConfigWidget->configuration();
-
+                }
                 setCurrentFilter(KoID(m_currentFilter->id()));
-                if (configuration)
+                if (configuration) {
                     m_currentFilterConfigWidget->setConfiguration(configuration);
-                delete configuration;
+                }
             }
         }
     }
@@ -167,7 +167,7 @@ void KisFilterOption::updateFilterConfigWidget()
     m_layout->update();
 }
 
-void KisFilterOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
+void KisFilterOption::writeOptionSetting(KisPropertiesConfigurationSP setting) const
 {
     if (!m_currentFilter) return;
 
@@ -178,12 +178,12 @@ void KisFilterOption::writeOptionSetting(KisPropertiesConfiguration* setting) co
     }
 }
 
-void KisFilterOption::readOptionSetting(const KisPropertiesConfiguration* setting)
+void KisFilterOption::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
     KoID id(setting->getString(FILTER_ID), "");
     setCurrentFilter(id);
     m_options->checkBoxSmudgeMode->setChecked(setting->getBool(FILTER_SMUDGE_MODE));
-    KisFilterConfiguration* configuration = filterConfig();
+    KisFilterConfigurationSP configuration = filterConfig();
     if (configuration) {
         configuration->fromXML(setting->getString(FILTER_CONFIGURATION));
         m_currentFilterConfigWidget->setConfiguration(configuration);
@@ -192,7 +192,7 @@ void KisFilterOption::readOptionSetting(const KisPropertiesConfiguration* settin
 
 void KisFilterOption::lodLimitations(KisPaintopLodLimitations *l) const
 {
-    KisFilterConfiguration *config = filterConfig();
+    KisFilterConfigurationSP config = filterConfig();
 
     if (m_currentFilter && config) {
         QRect testRect(0,0,100,100);

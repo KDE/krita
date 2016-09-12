@@ -40,13 +40,13 @@ public:
 
     virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
 
-    virtual KoColorTransformation* createTransformation(const KoColorSpace* cs, const KisFilterConfiguration* config) const;
+    virtual KoColorTransformation* createTransformation(const KoColorSpace* cs, const KisFilterConfigurationSP config) const;
 
     static inline KoID id() {
         return KoID("desaturate", i18n("Desaturate"));
     }
 
-    virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
+    virtual KisFilterConfigurationSP factoryConfiguration(const KisPaintDeviceSP) const;
 
 };
 
@@ -60,8 +60,8 @@ public:
     KisDesaturateConfigWidget(QWidget * parent, Qt::WFlags f = 0);
     virtual ~KisDesaturateConfigWidget();
 
-    virtual KisPropertiesConfiguration * configuration() const;
-    virtual void setConfiguration(const KisPropertiesConfiguration* config);
+    virtual KisPropertiesConfigurationSP  configuration() const;
+    virtual void setConfiguration(const KisPropertiesConfigurationSP config);
     Ui_WdgDesaturate *m_page;
     QButtonGroup *m_group;
 };

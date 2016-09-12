@@ -27,21 +27,24 @@
 #include <QFileInfo>
 #include <QApplication>
 
+#include <kis_debug.h>
 #include <KisImportExportManager.h>
 #include <KisFilterChain.h>
 #include <KoColorSpaceConstants.h>
-
+#include <KoDialog.h>
 #include "KisPart.h"
 #include <KisDocument.h>
 #include <kis_image.h>
 #include <kis_group_layer.h>
 #include <kis_paint_layer.h>
 #include <kis_paint_device.h>
+#include <kis_config.h>
+#include <kis_cursor_override_hijacker.h>
 
 #include "video_saver.h"
 #include "video_export_options_dialog.h"
 
-#include "kis_cursor_override_hijacker.h"
+
 
 
 K_PLUGIN_FACTORY_WITH_JSON(KisVideoExportFactory, "krita_video_export.json", registerPlugin<KisVideoExport>();)
@@ -54,14 +57,14 @@ KisVideoExport::~KisVideoExport()
 {
 }
 
-KisImportExportFilter::ConversionStatus KisVideoExport::convert(const QByteArray& from, const QByteArray& to)
+KisImportExportFilter::ConversionStatus KisVideoExport::convert(const QByteArray &from, const QByteArray &to, KisPropertiesConfigurationSP configuration)
 {
     Q_UNUSED(to);
 
     if (from != "application/x-krita")
         return KisImportExportFilter::NotImplemented;
 
-    KisDocument* input = inputDocument();
+    KisDocument *input = inputDocument();
     QString filename = outputFile();
 
     if (!input)
@@ -69,67 +72,76 @@ KisImportExportFilter::ConversionStatus KisVideoExport::convert(const QByteArray
 
     if (filename.isEmpty()) return KisImportExportFilter::FileNotFound;
 
-    bool askForOptions = false;
+    VideoSaver videoSaver(input, getBatchMode());
 
-    const QFileInfo fileInfo(filename);
-    const QString suffix = fileInfo.suffix().toLower();
-
-    VideoExportOptionsDialog::CodecIndex codecIndex =
-        VideoExportOptionsDialog::CODEC_H264;
-
-    if (suffix == "mkv" || suffix == "mp4") {
-        codecIndex = VideoExportOptionsDialog::CODEC_H264;
-        askForOptions = true;
-    } else if (suffix == "ogv") {
-        codecIndex = VideoExportOptionsDialog::CODEC_THEORA;
-        askForOptions = true;
-    }
-
-    QStringList additionalOptionsList;
-
-    askForOptions &=
-        !qApp->applicationName().toLower().contains("test") &
-        !getBatchMode();
-
-    if (askForOptions) {
-        KisCursorOverrideHijacker badGuy;
-
-        VideoExportOptionsDialog dlg;
-        dlg.setCodec(codecIndex);
-
-        if (dlg.exec() == QDialog::Accepted) {
-            additionalOptionsList = dlg.customUserOptions();
-        } else {
-            return KisImportExportFilter::UserCancelled;
-        }
-    }
-
-    VideoSaver kpc(input, getBatchMode());
-
-    if (!kpc.hasFFMpeg()) {
+    if (!videoSaver.hasFFMpeg()) {
         const QString warningMessage =
-            i18n("Could not find \'ffmpeg\' binary. Saving to video formats is impossible.");
+                i18n("Couldn not find \'ffmpeg\' binary. Saving to video formats is impossible.");
 
-        if (askForOptions) {
+        if (!getBatchMode()) {
             QMessageBox::critical(KisPart::instance()->currentMainwindow(),
                                   i18n("Video Export Error"),
                                   warningMessage);
-        } else {
-            qWarning() << "WARNING:" << warningMessage;
         }
-
         return KisImportExportFilter::UsageError;
     }
 
-    KisImageBuilder_Result res = kpc.encode(filename, additionalOptionsList);
+    KisImageBuilder_Result res = videoSaver.encode(filename, configuration);
 
     if (res == KisImageBuilder_RESULT_OK) {
         return KisImportExportFilter::OK;
-    } else if (res == KisImageBuilder_RESULT_CANCEL) {
+    }
+    else if (res == KisImageBuilder_RESULT_CANCEL) {
         return KisImportExportFilter::ProgressCancelled;
+    }
+    else {
+        input->setErrorMessage(i18n("FFMpeg failed to convert the image sequence. Check the logfile in your output directory for more information."));
     }
 
     return KisImportExportFilter::InternalError;
+}
+
+KisPropertiesConfigurationSP KisVideoExport::defaultConfiguration(const QByteArray &from, const QByteArray &to) const
+{
+    Q_UNUSED(from);
+    Q_ASSERT(!to.isEmpty());
+
+    KisPropertiesConfigurationSP cfg(new KisPropertiesConfiguration());
+
+    cfg->setProperty("h264PresetIndex", 5);
+    cfg->setProperty("h264ConstantRateFactor", 23);
+    cfg->setProperty("h264ProfileIndex", 4);
+    cfg->setProperty("h264TuneIndex", 1);
+    cfg->setProperty("TheoraBitrate", 5000);
+    cfg->setProperty("CustomLineValue", "");
+
+    if (to == "video/ogg") {
+        cfg->setProperty("CodecIndex", VideoExportOptionsDialog::CODEC_THEORA);
+    }
+    else if (to == "video/x-matroska" || to == "video/mp4") {
+        cfg->setProperty("CodecIndex", VideoExportOptionsDialog::CODEC_H264);
+    }
+    cfg->setProperty("mimetype", to);
+
+    return cfg;
+}
+
+KisPropertiesConfigurationSP KisVideoExport::lastSavedConfiguration(const QByteArray &from, const QByteArray &to) const
+{
+    KisPropertiesConfigurationSP cfg = defaultConfiguration(from, to);
+    QString filterConfig = KisConfig().exportConfiguration("FFMPEG_CONFIG");
+    cfg->fromXML(filterConfig, false);
+    return cfg;
+}
+
+KisConfigWidget *KisVideoExport::createConfigurationWidget(QWidget *parent, const QByteArray &from, const QByteArray &to) const
+{
+    Q_UNUSED(from);
+    KisConfigWidget *w = 0;
+    if (to != "image/gif") {
+        w = new VideoExportOptionsDialog(parent);
+    }
+    return w;
 }
 
 #include "kis_video_export.moc"

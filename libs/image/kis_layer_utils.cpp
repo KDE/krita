@@ -1040,7 +1040,7 @@ namespace KisLayerUtils {
         KisNodeList mergedNodes;
         mergedNodes << image->root();
 
-        mergeMultipleLayersImpl(image, mergedNodes, putAfter, true, kundo2_i18n("New From Visible"), false, i18n("Visible Layer"));
+        mergeMultipleLayersImpl(image, mergedNodes, putAfter, true, kundo2_i18n("New From Visible"), false, i18nc("New layer created from all the visible layers", "Visible"));
     }
 
     struct MergeSelectionMasks : public KisCommandUtils::AggregateCommand {

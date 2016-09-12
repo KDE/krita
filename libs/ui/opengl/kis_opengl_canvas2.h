@@ -63,7 +63,6 @@ public: // QOpenGLWidget
     virtual void inputMethodEvent(QInputMethodEvent *event);
 
 public:
-    void initializeShaders();
     void renderCanvasGL();
     void renderDecorations(QPainter *painter);
     void paintToolOutline(const QPainterPath &path);
@@ -71,6 +70,7 @@ public:
     bool needsFpsDebugging() const;
 
 public: // Implement kis_abstract_canvas_widget interface
+    void initializeShaders();
     void setDisplayFilter(KisDisplayFilter* displayFilter);
     void setWrapAroundViewingMode(bool value);
     void channelSelectionChanged(const QBitArray &channelFlags);
@@ -97,7 +97,6 @@ protected: // KisCanvasWidgetBase
 
 private:
     void reportFailedShaderCompilation(const QString &context);
-    QOpenGLShaderProgram *getCursorShader();
     void drawImage();
     void drawCheckers();
 

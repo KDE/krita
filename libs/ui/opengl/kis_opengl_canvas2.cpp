@@ -269,6 +269,7 @@ void KisOpenGLCanvas2::initializeGL()
 
         glEnableVertexAttribArray(PROGRAM_VERTEX_ATTRIBUTE);
 
+        // The outline buffer has a StreamDraw usage pattern, because it changes constantly
         d->lineBuffer.create();
         d->lineBuffer.setUsagePattern(QOpenGLBuffer::StreamDraw);
         d->lineBuffer.bind();
@@ -282,6 +283,9 @@ void KisOpenGLCanvas2::initializeGL()
     d->canvasInitialized = true;
 }
 
+/**
+ * Loads all shaders and reports compilation problems
+ */
 void KisOpenGLCanvas2::initializeShaders()
 {
     bool useHiQualityFiltering = d->filterMode == KisOpenGL::HighQualityFiltering;
@@ -300,6 +304,10 @@ void KisOpenGLCanvas2::initializeShaders()
     }
 }
 
+/**
+ * Displays a message box telling the user that
+ * shader compilation failed and turns off OpenGL.
+ */
 void KisOpenGLCanvas2::reportFailedShaderCompilation(const QString &context)
 {
     KisConfig cfg;
@@ -308,7 +316,7 @@ void KisOpenGLCanvas2::reportFailedShaderCompilation(const QString &context)
         dbgUI << "GL-log:" << context << log;
     }
 
-    qDebug() << "SHADER COMPILATION FAILURE: " << context;
+    qDebug() << "Shader Compilation Failure: " << context;
     QMessageBox::critical(this, i18nc("@title:window", "Krita"),
                           QString(i18n("Krita could not initialize the OpenGL canvas:\n\n%1\n\n Krita will disable OpenGL and close now.")).arg(context),
                           QMessageBox::Close);

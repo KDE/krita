@@ -190,7 +190,11 @@ void KisOpenGLCanvas2::setDisplayFilterImpl(KisDisplayFilter* displayFilter, boo
         d->canvasInitialized = false;
         delete d->displayShader;
         bool useHiQualityFiltering = d->filterMode == KisOpenGL::HighQualityFiltering;
-        d->displayShader = d->shaderLoader.loadDisplayShader(d->displayFilter, useHiQualityFiltering);
+        try {
+            d->displayShader = d->shaderLoader.loadDisplayShader(d->displayFilter, useHiQualityFiltering);
+        } catch (const ShaderLoaderException &e) {
+            reportFailedShaderCompilation(e.what());
+        }
         d->canvasInitialized = true;
     }
 

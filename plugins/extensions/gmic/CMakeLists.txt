@@ -101,7 +101,7 @@ if(APPLE)
     add_definitions(-D_APPLE)
 endif()
 
-if (MSYS)
+if (WIN32)
     add_definitions(-Dcimg_OS=2)
     add_definitions(-Dcimg_display=2)
 endif()

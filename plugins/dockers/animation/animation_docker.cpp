@@ -626,11 +626,13 @@ void AnimationDocker::slotCurrentNodeChanged(KisNodeSP node)
             m_deleteKeyframeMenu->addAction(m_deleteOpacityKeyframeAction);
         }
 
+        /*
         if (node->inherits("KisTransformMask")) {
             isNodeAnimatable = true;
             m_newKeyframeMenu->addAction(m_addTransformKeyframeAction);
             m_deleteKeyframeMenu->addAction(m_deleteTransformKeyframeAction);
         }
+        */
     }
 
     m_animationWidget->btnAddKeyframe->setEnabled(isNodeAnimatable);

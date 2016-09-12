@@ -43,14 +43,12 @@ const KoColor& KisColorSource::uniformColor() const
 }
 
 
-KisUniformColorSource::KisUniformColorSource() : m_color(0), m_cachedColor(0)
+KisUniformColorSource::KisUniformColorSource()
 {
 }
 
 KisUniformColorSource::~KisUniformColorSource()
 {
-    delete m_color;
-    delete m_cachedColor;
 }
 
 void KisUniformColorSource::rotate(double)
@@ -64,29 +62,25 @@ void KisUniformColorSource::resize(double , double)
 void KisUniformColorSource::colorize(KisPaintDeviceSP dev, const QRect& size, const QPoint&) const
 {
     Q_UNUSED(size);
-    if (!m_cachedColor || !(*dev->colorSpace() == *m_cachedColor->colorSpace())) {
-        delete m_cachedColor;
-        m_cachedColor = new KoColor(dev->colorSpace());
-        m_cachedColor->fromKoColor(*m_color);
-    }
-
-    dev->dataManager()->setDefaultPixel(m_cachedColor->data());
+    KoColor c(dev->colorSpace());
+    c.fromKoColor(m_color);
+    dev->dataManager()->setDefaultPixel(c.data());
     dev->clear();
 }
 
 const KoColor& KisUniformColorSource::uniformColor() const
 {
-    return *m_color;
+    return m_color;
 }
 
 void KisUniformColorSource::applyColorTransformation(const KoColorTransformation* transfo)
 {
-    transfo->transform(m_color->data(), m_color->data(), 1);
+    transfo->transform(m_color.data(), m_color.data(), 1);
 }
 
 const KoColorSpace* KisUniformColorSource::colorSpace() const
 {
-    return m_color->colorSpace();
+    return m_color.colorSpace();
 }
 
 bool KisUniformColorSource::isUniformColor() const
@@ -98,36 +92,36 @@ bool KisUniformColorSource::isUniformColor() const
 //---------------- KisPlainColorSource ---------------//
 //-------------------------------------------------//
 
-KisPlainColorSource::KisPlainColorSource(const KoColor& backGroundColor, const KoColor& foreGroundColor) : m_backGroundColor(backGroundColor), m_foreGroundColor(foreGroundColor), m_cachedBackGroundColor(0)
+KisPlainColorSource::KisPlainColorSource(const KoColor& backGroundColor, const KoColor& foreGroundColor)
+    : m_backGroundColor(backGroundColor)
+    , m_foreGroundColor(foreGroundColor)
 {
 }
 
 KisPlainColorSource::~KisPlainColorSource()
 {
-    delete m_cachedBackGroundColor;
 }
 
 void KisPlainColorSource::selectColor(double mix, const KisPaintInformation &pi)
 {
     Q_UNUSED(pi);
 
-    if (!m_color || !(*m_color->colorSpace() == *m_foreGroundColor.colorSpace())) {
-        delete m_color;
-        m_color = new KoColor(m_foreGroundColor.colorSpace());
-        delete m_cachedBackGroundColor;
-        m_cachedBackGroundColor = new KoColor(m_foreGroundColor.colorSpace());
-        m_cachedBackGroundColor->fromKoColor(m_backGroundColor);
+    if (m_color.colorSpace() != m_foreGroundColor.colorSpace()) {
+        m_color = KoColor(m_foreGroundColor.colorSpace());
+        m_cachedBackGroundColor = KoColor(m_foreGroundColor.colorSpace());
+        m_cachedBackGroundColor.fromKoColor(m_backGroundColor);
     }
 
-    const quint8 * colors[2];
-    colors[0] = m_cachedBackGroundColor->data();
+    const quint8 *colors[2];
+    colors[0] = m_cachedBackGroundColor.data();
     colors[1] = m_foreGroundColor.data();
+
     // equally distribute mix factor over [0..255]
     // mix * 256 ensures that, with exception of mix==1.0, which gets special handling
     const int weight = (mix == 1.0) ? 255 : (int)(mix * 256);
     const qint16 weights[2] = { (qint16)(255 - weight), (qint16)weight };
 
-    m_color->colorSpace()->mixColorsOp()->mixColors(colors, weights, 2, m_color->data());
+    m_color.colorSpace()->mixColorsOp()->mixColors(colors, weights, 2, m_color.data());
 }
 
 //-------------------------------------------------//
@@ -137,7 +131,8 @@ void KisPlainColorSource::selectColor(double mix, const KisPaintInformation &pi)
 KisGradientColorSource::KisGradientColorSource(const KoAbstractGradient* gradient, const KoColorSpace* workingCS)
     : m_gradient(gradient)
 {
-    m_color = new KoColor(workingCS);
+    m_color = KoColor(workingCS);
+
     Q_ASSERT(gradient);
 }
 
@@ -148,7 +143,7 @@ KisGradientColorSource::~KisGradientColorSource()
 void KisGradientColorSource::selectColor(double mix, const KisPaintInformation &pi)
 {
     Q_UNUSED(pi);
-    m_gradient->colorAt(*m_color, mix);
+    m_gradient->colorAt(m_color, mix);
 }
 
 //-------------------------------------------------//
@@ -157,7 +152,6 @@ void KisGradientColorSource::selectColor(double mix, const KisPaintInformation &
 
 KisUniformRandomColorSource::KisUniformRandomColorSource()
 {
-    m_color = new KoColor();
 }
 
 KisUniformRandomColorSource::~KisUniformRandomColorSource()
@@ -170,9 +164,9 @@ void KisUniformRandomColorSource::selectColor(double mix, const KisPaintInformat
     Q_UNUSED(mix);
 
     KisRandomSourceSP source = pi.randomSource();
-    m_color->fromQColor(QColor((int)source->generate(0, 255),
-                               (int)source->generate(0, 255),
-                               (int)source->generate(0, 255)));
+    m_color.fromQColor(QColor((int)source->generate(0, 255),
+                              (int)source->generate(0, 255),
+                              (int)source->generate(0, 255)));
 }
 
 

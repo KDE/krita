@@ -382,9 +382,7 @@ void RGBToHSL(float r, float g, float b, float *h, float *s, float *l)
         *h = (r == m ? 3.0 + g2 : 5.0 - r2);
 
     *h *= 60;
-    if (*h == 360.) {
-        *h = 0;
-    }
+    *h = fmod(*h, 360.0);
 }
 
 void HSLToRGB(float h, float sl, float l, float *r, float *g, float *b)
@@ -403,6 +401,7 @@ void HSLToRGB(float h, float sl, float l, float *r, float *g, float *b)
 
         m = l + l - v;
         sv = (v - m) / v;
+        h = fmod(h, 360.0);
         h /= 60.0;
         sextant = static_cast<int>(h);
         fract = h - sextant;

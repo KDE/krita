@@ -64,7 +64,7 @@ KisPaintDeviceSP KisMultipleProjection::getProjection(const QString &id, const Q
 
     if (constIt == m_d->planes.constEnd() ||
         constIt->compositeOpId != compositeOpId ||
-        !(*constIt->device->colorSpace() == *prototype->colorSpace())) {
+        *constIt->device->colorSpace() != *prototype->colorSpace()) {
 
         readLocker.unlock();
 
@@ -79,7 +79,7 @@ KisPaintDeviceSP KisMultipleProjection::getProjection(const QString &id, const Q
                 plane.compositeOpId = compositeOpId;
                 writeIt = m_d->planes.insert(id, plane);
             } else if (writeIt->compositeOpId != compositeOpId ||
-                       !(*writeIt->device->colorSpace() == *prototype->colorSpace())) {
+                       *writeIt->device->colorSpace() != *prototype->colorSpace()) {
 
                 writeIt->device->prepareClone(prototype);
                 writeIt->compositeOpId = compositeOpId;

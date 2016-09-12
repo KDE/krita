@@ -91,8 +91,6 @@ QPainterPath KisDeformPaintOpSettings::brushOutline(const KisPaintInformation &i
 #include "kis_brush_size_option.h"
 #include "kis_deform_option.h"
 #include "kis_standard_uniform_properties_factory.h"
-typedef KisCallbackBasedPaintopProperty<KisUniformPaintOpProperty> KisUniformPaintOpPropertyCallback;
-typedef KisCallbackBasedPaintopProperty<KisComboBasedPaintOpProperty> KisComboBasedPaintOpPropertyCallback;
 
 
 QList<KisUniformPaintOpPropertySP> KisDeformPaintOpSettings::uniformProperties()

@@ -31,6 +31,7 @@
 #include <QFileInfo>
 
 #include <KoColorSpace.h>
+#include <KoColorSpaceRegistry.h>
 #include <KoColorProfile.h>
 #include <KisImportExportManager.h>
 #include <KisFilterChain.h>
@@ -120,8 +121,11 @@ KisImportExportFilter::ConversionStatus KisJPEGExport::convert(const QByteArray&
     wdgUi.chkSaveProfile->setChecked(cfg.getBool("saveProfile", true));
 
     QStringList rgb = cfg.getString("transparencyFillcolor", "255,255,255").split(',');
-    wdgUi.bnTransparencyFillColor->setDefaultColor(Qt::white);
-    wdgUi.bnTransparencyFillColor->setColor(QColor(rgb[0].toInt(), rgb[1].toInt(), rgb[2].toInt()));
+    KoColor background(KoColorSpaceRegistry::instance()->rgb8());
+    background.fromQColor(Qt::white);
+    wdgUi.bnTransparencyFillColor->setDefaultColor(background);
+    background.fromQColor(QColor(rgb[0].toInt(), rgb[1].toInt(), rgb[2].toInt()));
+    wdgUi.bnTransparencyFillColor->setColor(background);
 
     frm.setEnabledFilters(cfg.getString("filters").split(','));
 
@@ -170,7 +174,7 @@ KisImportExportFilter::ConversionStatus KisJPEGExport::convert(const QByteArray&
     options.xmp = wdgUi.xmp->isChecked();
     cfg.setProperty("xmp", options.xmp);
 
-    QColor c = wdgUi.bnTransparencyFillColor->color();
+    QColor c = wdgUi.bnTransparencyFillColor->color().toQColor();
     options.transparencyFillColor = c;
     cfg.setProperty("transparencyFillcolor", QString("%1,%2,%3").arg(c.red()).arg(c.green()).arg(c.blue()));
 

@@ -1727,8 +1727,9 @@ bool KisDocument::completeLoading(KoStore* store)
     }
 
     d->kraLoader->loadKeyframes(store, url().url(), isStoredExtern());
+    d->image->blockUpdates();
     d->kraLoader->loadBinaryData(store, d->image, url().url(), isStoredExtern());
-
+    d->image->unblockUpdates();
     bool retval = true;
     if (!d->kraLoader->errorMessages().isEmpty()) {
         setErrorMessage(d->kraLoader->errorMessages().join(".\n"));
@@ -1758,7 +1759,6 @@ bool KisDocument::completeLoading(KoStore* store)
     d->kraLoader = 0;
 
     return retval;
-
 }
 
 bool KisDocument::completeSaving(KoStore* store)

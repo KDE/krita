@@ -51,8 +51,6 @@ private:
     KisRecordedPaintAction* m_action;
     Ui_WdgPaintActionEditor* m_actionEditor;
     KisPaintOpConfigWidget* m_configWidget;
-    KoColorPopupAction* m_paintColorPopup;
-    KoColorPopupAction* m_backgroundColorPopup;
     QGridLayout* m_gridLayout;
     QList<QString> m_paintops;
     QMap<QString, KisPaintOpPresetSP> m_paintOpsToPreset;

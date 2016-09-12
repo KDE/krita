@@ -282,6 +282,9 @@ void KisNodeManager::setup(KActionCollection * actionCollection, KisActionManage
     action = actionManager->createAction("select_unlocked_layers");
     connect(action, SIGNAL(triggered()), this, SLOT(selectUnlockedNodes()));
 
+    action = actionManager->createAction("new_from_visible");
+    connect(action, SIGNAL(triggered()), this, SLOT(createFromVisible()));
+    
     NEW_LAYER_ACTION("add_new_paint_layer", "KisPaintLayer");
 
     NEW_LAYER_ACTION("add_new_group_layer", "KisGroupLayer");
@@ -494,6 +497,11 @@ void KisNodeManager::createNode(const QString & nodeType, bool quiet, KisPaintDe
         m_d->layerManager.addFileLayer(activeNode);
     }
 
+}
+
+void KisNodeManager::createFromVisible()
+{
+    KisLayerUtils::newLayerFromVisible(m_d->view->image(), m_d->view->image()->root()->lastChild());
 }
 
 KisLayerSP KisNodeManager::createPaintLayer()

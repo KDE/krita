@@ -92,6 +92,9 @@ On all operating systems:
     cmake --build . --config RelWithDebInfo --target ext_qt
     cmake --build . --config RelWithDebInfo --target ext_zlib
     cmake --build . --config RelWithDebInfo --target ext_boost
+
+	Note about boost: check if the headers are installed into i/include/boost, but not into i/include/boost-1.61/boost
+
     cmake --build . --config RelWithDebInfo --target ext_eigen3
     cmake --build . --config RelWithDebInfo --target ext_exiv2
     cmake --build . --config RelWithDebInfo --target ext_fftw3

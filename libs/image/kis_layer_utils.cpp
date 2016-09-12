@@ -252,17 +252,25 @@ namespace KisLayerUtils {
     };
 
     struct CreateMergedLayerMultiple : public KisCommandUtils::AggregateCommand {
-        CreateMergedLayerMultiple(MergeMultipleInfoSP info) : m_info(info) {}
+        CreateMergedLayerMultiple(MergeMultipleInfoSP info, const QString name = QString() ) 
+            : m_info(info),
+              m_name(name) {}
 
         void populateChildCommands() {
-            const QString mergedLayerSuffix = i18n("Merged");
-            QString mergedLayerName = m_info->mergedNodes.first()->name();
+            QString mergedLayerName;
+            
+            if (m_name.isEmpty()){
+                const QString mergedLayerSuffix = i18n("Merged");
+                mergedLayerName = m_info->mergedNodes.first()->name();
 
-            if (!mergedLayerName.endsWith(mergedLayerSuffix)) {
-                mergedLayerName = QString("%1 %2")
-                    .arg(mergedLayerName).arg(mergedLayerSuffix);
+                if (!mergedLayerName.endsWith(mergedLayerSuffix)) {
+                    mergedLayerName = QString("%1 %2")
+                        .arg(mergedLayerName).arg(mergedLayerSuffix);
+                }
+            } else {
+                mergedLayerName = m_name;
             }
-
+                
             m_info->dstNode = new KisPaintLayer(m_info->image, mergedLayerName, OPACITY_OPAQUE_U8);
 
             if (m_info->frames.size() > 0) {
@@ -300,6 +308,7 @@ namespace KisLayerUtils {
 
     private:
         MergeMultipleInfoSP m_info;
+        QString m_name;
     };
 
     struct MergeLayers : public KisCommandUtils::AggregateCommand {
@@ -479,6 +488,30 @@ namespace KisLayerUtils {
     void SimpleRemoveLayers::addCommandImpl(KUndo2Command *cmd) {
         addCommand(cmd);
     }
+
+    struct InsertNode : public KisCommandUtils::AggregateCommand {
+        InsertNode(MergeDownInfoBaseSP info, KisNodeSP putAfter)
+            : m_info(info), m_putAfter(putAfter) {}
+        
+        void populateChildCommands() {
+            addCommand(new KisImageLayerAddCommand(m_info->image,
+                                                           m_info->dstNode,
+                                                           m_putAfter->parent(),
+                                                           m_putAfter,
+                                                           true, false));
+        
+        }
+
+    private:
+        virtual void addCommandImpl(KUndo2Command *cmd) {
+            addCommand(cmd);
+        }
+
+    private:
+        MergeDownInfoBaseSP m_info;
+        KisNodeSP m_putAfter;
+    };
+
 
     struct CleanUpNodes : private RemoveNodeHelper, public KisCommandUtils::AggregateCommand {
         CleanUpNodes(MergeDownInfoBaseSP info, KisNodeSP putAfter)
@@ -922,7 +955,9 @@ namespace KisLayerUtils {
         applicator.end();
     }
 
-    void mergeMultipleLayersImpl(KisImageSP image, KisNodeList mergedNodes, KisNodeSP putAfter, bool flattenSingleLayer, const KUndo2MagicString &actionName)
+    void mergeMultipleLayersImpl(KisImageSP image, KisNodeList mergedNodes, KisNodeSP putAfter, 
+                                           bool flattenSingleLayer, const KUndo2MagicString &actionName, 
+                                           bool cleanupNodes = true, const QString layerName = QString())
     {
         filterMergableNodes(mergedNodes);
         {
@@ -961,7 +996,7 @@ namespace KisLayerUtils {
 
             applicator.applyCommand(new KeepMergedNodesSelected(info, putAfter, false));
             applicator.applyCommand(new FillSelectionMasks(info));
-            applicator.applyCommand(new CreateMergedLayerMultiple(info), KisStrokeJobData::BARRIER);
+            applicator.applyCommand(new CreateMergedLayerMultiple(info, layerName), KisStrokeJobData::BARRIER);
 
             if (info->frames.size() > 0) {
                 foreach (int frame, info->frames) {
@@ -979,9 +1014,15 @@ namespace KisLayerUtils {
             }
 
             //applicator.applyCommand(new MergeMetaData(info, strategy), KisStrokeJobData::BARRIER);
-            applicator.applyCommand(new CleanUpNodes(info, putAfter),
-                                    KisStrokeJobData::SEQUENTIAL,
-                                    KisStrokeJobData::EXCLUSIVE);
+            if (cleanupNodes){
+                applicator.applyCommand(new CleanUpNodes(info, putAfter),
+                                            KisStrokeJobData::SEQUENTIAL,
+                                        KisStrokeJobData::EXCLUSIVE);
+            } else {
+                applicator.applyCommand(new InsertNode(info, putAfter),
+                                            KisStrokeJobData::SEQUENTIAL,
+                                        KisStrokeJobData::EXCLUSIVE);
+            }
             applicator.applyCommand(new KeepMergedNodesSelected(info, putAfter, true));
         }
 
@@ -991,7 +1032,15 @@ namespace KisLayerUtils {
 
     void mergeMultipleLayers(KisImageSP image, KisNodeList mergedNodes, KisNodeSP putAfter)
     {
-        mergeMultipleLayersImpl(image, mergedNodes, putAfter, false, kundo2_i18n("Merge Selected Nodes"));
+        mergeMultipleLayersImpl(image, mergedNodes, putAfter, false, kundo2_i18n("Merge Selected Nodes"), false);
+    }
+    
+    void newLayerFromVisible(KisImageSP image, KisNodeSP putAfter)
+    {
+        KisNodeList mergedNodes;
+        mergedNodes << image->root();
+
+        mergeMultipleLayersImpl(image, mergedNodes, putAfter, true, kundo2_i18n("New From Visible"), false, i18nc("New layer created from all the visible layers", "Visible"));
     }
 
     struct MergeSelectionMasks : public KisCommandUtils::AggregateCommand {

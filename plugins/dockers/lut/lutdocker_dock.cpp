@@ -466,7 +466,10 @@ void LutDockerDock::resetOcioConfiguration()
         dbgKrita << "OpenColorIO Error:" << exception.what() << "Cannot create the LUT docker";
     }
 
-    refillControls();
+
+    if (m_ocioConfig) {
+        refillControls();
+    }
 }
 
 void LutDockerDock::refillControls()

@@ -117,7 +117,9 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     m_cmbMDIType->setCurrentIndex(cfg.readEntry<int>("mdi_viewmode", (int)QMdiArea::TabbedView));
     m_chkRubberBand->setChecked(cfg.readEntry<int>("mdi_rubberband", cfg.useOpenGL()));
     m_favoritePresetsSpinBox->setValue(cfg.favoritePresets());
-    m_mdiColor->setColor(cfg.getMDIBackgroundColor());
+    KoColor mdiColor;
+    mdiColor.fromQColor(cfg.getMDIBackgroundColor());
+    m_mdiColor->setColor(mdiColor);
     m_backgroundimage->setText(cfg.getMDIBackgroundImage());
     m_chkCanvasMessages->setChecked(cfg.showCanvasMessages());
     m_chkCompressKra->setChecked(cfg.compressKra());
@@ -146,7 +148,9 @@ void GeneralTab::setDefault()
     m_cmbMDIType->setCurrentIndex((int)QMdiArea::TabbedView);
     m_chkRubberBand->setChecked(cfg.useOpenGL(true));
     m_favoritePresetsSpinBox->setValue(cfg.favoritePresets(true));
-    m_mdiColor->setColor(cfg.getMDIBackgroundColor(true));
+    KoColor mdiColor;
+    mdiColor.fromQColor(cfg.getMDIBackgroundColor(true));
+    m_mdiColor->setColor(mdiColor);
     m_backgroundimage->setText(cfg.getMDIBackgroundImage(true));
     m_chkCanvasMessages->setChecked(cfg.showCanvasMessages(true));
     m_chkCompressKra->setChecked(cfg.compressKra(true));
@@ -305,10 +309,9 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
     m_page->chkUseSystemMonitorProfile->setChecked(cfg.useSystemMonitorProfile());
     connect(m_page->chkUseSystemMonitorProfile, SIGNAL(toggled(bool)), this, SLOT(toggleAllowMonitorProfileSelection(bool)));
 
-// XXX: no color management integration on Windows or OSX yet
-#ifndef HAVE_X11
-    m_page->chkUseSystemMonitorProfile->setVisible(false);
-#endif
+    if (KisColorManager::instance()->devices().size() > 0) {
+        m_page->chkUseSystemMonitorProfile->setVisible(false);
+    }
     m_page->cmbWorkingColorSpace->setIDList(KoColorSpaceRegistry::instance()->listKeys());
     m_page->cmbWorkingColorSpace->setCurrent(cfg.workingColorSpace());
 
@@ -339,11 +342,7 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
 
     KisImageConfig cfgImage;
 
-    KisProofingConfiguration *proofingConfig = cfgImage.defaultProofingconfiguration();
-    m_gamutWarning = new KoColorPopupAction(this);
-    m_gamutWarning->setToolTip(i18n("Set default color used for out of Gamut Warning"));
-    m_gamutWarning->setCurrentColor(proofingConfig->warningColor);
-    m_page->gamutAlarm->setDefaultAction(m_gamutWarning);
+    KisProofingConfigurationSP proofingConfig = cfgImage.defaultProofingconfiguration();
     m_page->sldAdaptationState->setMaximum(20);
     m_page->sldAdaptationState->setMinimum(0);
     m_page->sldAdaptationState->setValue((int)proofingConfig->adaptationState*20);
@@ -444,14 +443,17 @@ void ColorSettingsTab::setDefault()
 
     KisConfig cfg;
     KisImageConfig cfgImage;
-    KisProofingConfiguration *proofingConfig =  cfgImage.defaultProofingconfiguration();
+    KisProofingConfigurationSP proofingConfig =  cfgImage.defaultProofingconfiguration();
     const KoColorSpace *proofingSpace =  KoColorSpaceRegistry::instance()->colorSpace(proofingConfig->proofingModel,proofingConfig->proofingDepth,proofingConfig->proofingProfile);
     m_page->proofingSpaceSelector->setCurrentColorSpace(proofingSpace);
     m_page->cmbProofingIntent->setCurrentIndex((int)proofingConfig->intent);
     m_page->ckbProofBlackPoint->setChecked(proofingConfig->conversionFlags.testFlag(KoColorConversionTransformation::BlackpointCompensation));
     m_page->sldAdaptationState->setValue(0);
 
-    m_gamutWarning->setCurrentColor(proofingConfig->warningColor);
+    //probably this should become the screenprofile?
+    KoColor ga(KoColorSpaceRegistry::instance()->rgb8());
+    ga.fromKoColor(proofingConfig->warningColor);
+    m_page->gamutAlarm->setColor(ga);
 
     m_page->chkBlackpoint->setChecked(cfg.useBlackPointCompensation(true));
     m_page->chkAllowLCMSOptimization->setChecked(cfg.allowLCMSOptimization(true));
@@ -666,7 +668,6 @@ void PerformanceTab::selectSwapDir()
 //---------------------------------------------------------------------------------------------------
 
 #include "KoColor.h"
-#include "KoColorPopupAction.h"
 
 DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
     : WdgDisplaySettings(parent, name)
@@ -701,16 +702,23 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
 
     KoColor c;
     c.fromQColor(cfg.selectionOverlayMaskColor());
-    m_selectionOverlayColorAction = new KoColorPopupAction(this);
-    m_selectionOverlayColorAction->setCurrentColor(c);
-    m_selectionOverlayColorAction->setToolTip(i18n("Change the background color of the image"));
-    btnSelectionOverlayColor->setDefaultAction(m_selectionOverlayColorAction);
+    c.setOpacity(1.0);
+    btnSelectionOverlayColor->setColor(c);
+    sldSelectionOverlayOpacity->setRange(0.0, 1.0, 2);
+    sldSelectionOverlayOpacity->setSingleStep(0.05);
+    sldSelectionOverlayOpacity->setValue(cfg.selectionOverlayMaskColor().alphaF());
 
     intCheckSize->setValue(cfg.checkSize());
     chkMoving->setChecked(cfg.scrollCheckers());
-    colorChecks1->setColor(cfg.checkersColor1());
-    colorChecks2->setColor(cfg.checkersColor2());
-    canvasBorder->setColor(cfg.canvasBorderColor());
+    KoColor ck1(KoColorSpaceRegistry::instance()->rgb8());
+    ck1.fromQColor(cfg.checkersColor1());
+    colorChecks1->setColor(ck1);
+    KoColor ck2(KoColorSpaceRegistry::instance()->rgb8());
+    ck2.fromQColor(cfg.checkersColor2());
+    colorChecks2->setColor(ck2);
+    KoColor cb(KoColorSpaceRegistry::instance()->rgb8());
+    cb.fromQColor(cfg.canvasBorderColor());
+    canvasBorder->setColor(cb);
     hideScrollbars->setChecked(cfg.hideScrollbars());
     chkCurveAntialiasing->setChecked(cfg.antialiasCurves());
     chkSelectionOutlineAntialiasing->setChecked(cfg.antialiasSelectionOutline());
@@ -743,9 +751,15 @@ void DisplaySettingsTab::setDefault()
 
     chkMoving->setChecked(cfg.scrollCheckers(true));
     intCheckSize->setValue(cfg.checkSize(true));
-    colorChecks1->setColor(cfg.checkersColor1(true));
-    colorChecks2->setColor(cfg.checkersColor2(true));
-    canvasBorder->setColor(cfg.canvasBorderColor(true));
+    KoColor ck1(KoColorSpaceRegistry::instance()->rgb8());
+    ck1.fromQColor(cfg.checkersColor1(true));
+    colorChecks1->setColor(ck1);
+    KoColor ck2(KoColorSpaceRegistry::instance()->rgb8());
+    ck2.fromQColor(cfg.checkersColor2(true));
+    colorChecks2->setColor(ck2);
+    KoColor cvb(KoColorSpaceRegistry::instance()->rgb8());
+    cvb.fromQColor(cfg.canvasBorderColor(true));
+    canvasBorder->setColor(cvb);
     hideScrollbars->setChecked(cfg.hideScrollbars(true));
     chkCurveAntialiasing->setChecked(cfg.antialiasCurves(true));
     chkSelectionOutlineAntialiasing->setChecked(cfg.antialiasSelectionOutline(true));
@@ -794,8 +808,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
 {
     Q_UNUSED(name);
     setWindowTitle(i18n("Preferences"));
-    // QT5TODO: help button needs custom wiring up to whatever help should be shown
-    setStandardButtons(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Help | QDialogButtonBox::RestoreDefaults);
+    setStandardButtons(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::RestoreDefaults);
     button(QDialogButtonBox::Ok)->setDefault(true);
 
     setFaceType(KPageDialog::List);
@@ -951,7 +964,7 @@ bool KisDlgPreferences::editPreferences()
         cfg.setShowOutlineWhilePainting(dialog->m_general->showOutlineWhilePainting());
         cfg.setHideSplashScreen(dialog->m_general->hideSplashScreen());
         cfg.writeEntry<int>("mdi_viewmode", dialog->m_general->mdiMode());
-        cfg.setMDIBackgroundColor(dialog->m_general->m_mdiColor->color());
+        cfg.setMDIBackgroundColor(dialog->m_general->m_mdiColor->color().toQColor());
         cfg.setMDIBackgroundImage(dialog->m_general->m_backgroundimage->text());
         cfg.setAutoSaveInterval(dialog->m_general->autoSaveInterval());
         cfg.setBackupFile(dialog->m_general->m_backupFileCheckBox->isChecked());
@@ -991,7 +1004,7 @@ bool KisDlgPreferences::editPreferences()
         cfg.setWorkingColorSpace(dialog->m_colorSettings->m_page->cmbWorkingColorSpace->currentItem().id());
 
         KisImageConfig cfgImage;
-        cfgImage.setDefaultProofingConfig(dialog->m_colorSettings->m_page->proofingSpaceSelector->currentColorSpace(), dialog->m_colorSettings->m_page->cmbProofingIntent->currentIndex(), dialog->m_colorSettings->m_page->ckbProofBlackPoint->isChecked(), dialog->m_colorSettings->m_gamutWarning->currentKoColor(), (double)dialog->m_colorSettings->m_page->sldAdaptationState->value()/20);
+        cfgImage.setDefaultProofingConfig(dialog->m_colorSettings->m_page->proofingSpaceSelector->currentColorSpace(), dialog->m_colorSettings->m_page->cmbProofingIntent->currentIndex(), dialog->m_colorSettings->m_page->ckbProofBlackPoint->isChecked(), dialog->m_colorSettings->m_page->gamutAlarm->color(), (double)dialog->m_colorSettings->m_page->sldAdaptationState->value()/20);
         cfg.setUseBlackPointCompensation(dialog->m_colorSettings->m_page->chkBlackpoint->isChecked());
         cfg.setAllowLCMSOptimization(dialog->m_colorSettings->m_page->chkAllowLCMSOptimization->isChecked());
         cfg.setPasteBehaviour(dialog->m_colorSettings->m_pasteBehaviourGroup.checkedId());
@@ -1011,11 +1024,13 @@ bool KisDlgPreferences::editPreferences()
 
         cfg.setCheckSize(dialog->m_displaySettings->intCheckSize->value());
         cfg.setScrollingCheckers(dialog->m_displaySettings->chkMoving->isChecked());
-        cfg.setCheckersColor1(dialog->m_displaySettings->colorChecks1->color());
-        cfg.setCheckersColor2(dialog->m_displaySettings->colorChecks2->color());
-        cfg.setCanvasBorderColor(dialog->m_displaySettings->canvasBorder->color());
+        cfg.setCheckersColor1(dialog->m_displaySettings->colorChecks1->color().toQColor());
+        cfg.setCheckersColor2(dialog->m_displaySettings->colorChecks2->color().toQColor());
+        cfg.setCanvasBorderColor(dialog->m_displaySettings->canvasBorder->color().toQColor());
         cfg.setHideScrollbars(dialog->m_displaySettings->hideScrollbars->isChecked());
-        cfg.setSelectionOverlayMaskColor(dialog->m_displaySettings->m_selectionOverlayColorAction->currentKoColor().toQColor());
+        KoColor c = dialog->m_displaySettings->btnSelectionOverlayColor->color();
+        c.setOpacity(dialog->m_displaySettings->sldSelectionOverlayOpacity->value());
+        cfg.setSelectionOverlayMaskColor(c.toQColor());
         cfg.setAntialiasCurves(dialog->m_displaySettings->chkCurveAntialiasing->isChecked());
         cfg.setAntialiasSelectionOutline(dialog->m_displaySettings->chkSelectionOutlineAntialiasing->isChecked());
         cfg.setShowSingleChannelAsColor(dialog->m_displaySettings->chkChannelsAsColor->isChecked());

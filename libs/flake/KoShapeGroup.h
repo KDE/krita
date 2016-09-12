@@ -39,8 +39,11 @@ class KoShapeGroupPrivate;
  * actually being one.  This means that if the user clicks on one shape, all shapes
  * in the group will be selected at once, making the tools that works on
  * selections alter all of them at the same time.
+ *
  * <p>Note that while this object is also a shape, it is not actually visible and the user
  * can't interact with it.
+ *
+ * <p>WARNING: this class is NOT threadsafe, it caches the size in an unsafe way
  */
 class KRITAFLAKE_EXPORT KoShapeGroup : public KoShapeContainer
 {

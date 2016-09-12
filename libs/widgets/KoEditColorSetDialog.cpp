@@ -71,7 +71,14 @@ KoEditColorSetWidget::KoEditColorSetWidget(const QList<KoColorSet *> &palettes, 
         index = widget.selector->findText(m_activeColorSet->name());
     }
 
-    m_scrollArea->setMinimumWidth(16*(12+2));
+    int columns = 16;
+    if(m_activeColorSet) {
+        columns = m_activeColorSet->columnCount();
+        if (columns==0){
+            columns = 16;
+        }
+    }
+    m_scrollArea->setMinimumWidth(columns*(12+2));
 
     QHBoxLayout *layout = new QHBoxLayout();
     layout->setContentsMargins(0, 0, 0, 0);
@@ -121,15 +128,20 @@ void KoEditColorSetWidget::setActiveColorSet(int index)
 
     m_activeColorSet = m_colorSets.value(index);
     setEnabled(m_activeColorSet != 0);
+    int columns = 16;
     if (m_activeColorSet) {
+        columns = m_activeColorSet->columnCount();
+        if (columns==0){columns=16;}
         widget.remove->setEnabled(false);
         for (int i = 0; i < m_activeColorSet->nColors(); i++) {
             KoColorPatch *patch = new KoColorPatch(widget.patchesFrame);
             patch->setColor(m_activeColorSet->getColor(i).color);
+            patch->setToolTip(m_activeColorSet->getColor(i).name);
             connect(patch, SIGNAL(triggered(KoColorPatch *)), this, SLOT(setTextLabel(KoColorPatch *)));
-            m_gridLayout->addWidget(patch, i/16, i%16);
+            m_gridLayout->addWidget(patch, i/columns, i%columns);
         }
     }
+    m_scrollArea->setMinimumWidth(columns*(12+2));
 
     wdg->setLayout(m_gridLayout);
     m_scrollArea->setWidget(wdg);
@@ -137,7 +149,7 @@ void KoEditColorSetWidget::setActiveColorSet(int index)
 
 void KoEditColorSetWidget::setTextLabel(KoColorPatch *patch)
 {
-    widget.colorName->setText(patch->color().toQColor().name());
+    widget.colorName->setText(patch->toolTip());
     if (m_activePatch) {
         m_activePatch->setFrameShape(QFrame::NoFrame);
         m_activePatch->setFrameShadow(QFrame::Plain);
@@ -159,10 +171,11 @@ void KoEditColorSetWidget::addColor()
         newEntry.name = QInputDialog::getText(this, i18n("Add Color To Palette"), i18n("Color name:"));
         KoColorPatch *patch = new KoColorPatch(widget.patchesFrame);
         patch->setColor(newEntry.color);
+        patch->setToolTip(newEntry.name);
         connect(patch, SIGNAL(triggered(KoColorPatch *)), this, SLOT(setTextLabel(KoColorPatch *)));
         Q_ASSERT(m_gridLayout);
         Q_ASSERT(m_activeColorSet);
-        m_gridLayout->addWidget(patch, m_activeColorSet->nColors()/16, m_activeColorSet->nColors()%16);
+        m_gridLayout->addWidget(patch, m_activeColorSet->nColors()/m_activeColorSet->columnCount(), m_activeColorSet->nColors()%m_activeColorSet->columnCount());
         m_activeColorSet->add(newEntry);
     }
 }

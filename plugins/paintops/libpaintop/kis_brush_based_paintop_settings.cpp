@@ -77,6 +77,7 @@ QPainterPath KisBrushBasedPaintOpSettings::brushOutlineImpl(const KisPaintInform
 
     if (forceOutline || mode == CursorIsOutline || mode == CursorIsCircleOutline || mode == CursorTiltOutline) {
         KisBrushSP brush = this->brush();
+        if (!brush) return path;
         qreal finalScale = brush->scale() * additionalScale;
 
         QPainterPath realOutline = brush->outline();
@@ -220,8 +221,6 @@ qreal KisBrushBasedPaintOpSettings::autoSpacingCoeff() const
 #include <brushengine/kis_slider_based_paintop_property.h>
 #include "kis_paintop_preset.h"
 #include "kis_paintop_settings_update_proxy.h"
-
-typedef KisCallbackBasedPaintopProperty<KisUniformPaintOpProperty> KisUniformPaintOpPropertyCallback;
 
 QList<KisUniformPaintOpPropertySP> KisBrushBasedPaintOpSettings::uniformProperties()
 {

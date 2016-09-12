@@ -185,7 +185,7 @@ void KisGroupLayer::resetCache(const KoColorSpace *colorSpace)
         m_d->paintDevice = dev;
         m_d->paintDevice->setProjectionDevice(true);
     }
-    else if(!(*m_d->paintDevice->colorSpace() == *colorSpace)) {
+    else if(*m_d->paintDevice->colorSpace() != *colorSpace) {
 
         KisPaintDeviceSP dev = new KisPaintDevice(this, colorSpace, new KisDefaultBounds(image()));
         dev->setX(this->x());

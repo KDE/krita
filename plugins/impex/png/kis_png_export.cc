@@ -28,6 +28,7 @@
 #include <QMessageBox>
 
 #include <KoColorSpace.h>
+#include <KoColorSpaceRegistry.h>
 #include <KisFilterChain.h>
 #include <KisImportExportManager.h>
 #include <KoColorProfile.h>
@@ -154,15 +155,22 @@ KisImportExportFilter::ConversionStatus KisPNGExport::convert(const QByteArray& 
 
         wdg->bnTransparencyFillColor->setEnabled(!wdg->alpha->isChecked());
 
+        //This used to be 'cfg.getBool("saveSRGBProfile", true)' but firefox and ColorD are incredibly awkward about sRGB management
+        //on Linux devices, as indicated by the same distorted colours with using the sRGB chunk, meaning it's unrelated to the profile.
+        //We can somewhat assume sRGB is the default color space for the web, but it's still a darn pity we cannot rely on firefox and colord
+        //to manage sRGB-marked images properly.
         wdg->chkSRGB->setEnabled(sRGB);
-        wdg->chkSRGB->setChecked(cfg.getBool("saveSRGBProfile", true));
+        wdg->chkSRGB->setChecked(cfg.getBool("saveSRGBProfile", false));
 
         wdg->chkForceSRGB->setEnabled(!sRGB);
         wdg->chkForceSRGB->setChecked(cfg.getBool("forceSRGB", false));
 
         QStringList rgb = cfg.getString("transparencyFillcolor", "0,0,0").split(',');
-        wdg->bnTransparencyFillColor->setDefaultColor(Qt::white);
-        wdg->bnTransparencyFillColor->setColor(QColor(rgb[0].toInt(), rgb[1].toInt(), rgb[2].toInt()));
+        KoColor background(KoColorSpaceRegistry::instance()->rgb8());
+        background.fromQColor(Qt::white);
+        wdg->bnTransparencyFillColor->setDefaultColor(background);
+        background.fromQColor(QColor(rgb[0].toInt(), rgb[1].toInt(), rgb[2].toInt()));
+        wdg->bnTransparencyFillColor->setColor(background);
 
         kdb->setMainWidget(wdg);
         QApplication::restoreOverrideCursor();
@@ -178,7 +186,7 @@ KisImportExportFilter::ConversionStatus KisPNGExport::convert(const QByteArray& 
         bool interlace = wdg->interlacing->isChecked();
         int compression = (int)wdg->compressionLevel->value();
         bool tryToSaveAsIndexed = wdg->tryToSaveAsIndexed->isChecked();
-        QColor c = wdg->bnTransparencyFillColor->color();
+        QColor c = wdg->bnTransparencyFillColor->color().toQColor();
         bool saveSRGB = wdg->chkSRGB->isChecked();
         bool forceSRGB = wdg->chkForceSRGB->isChecked();
 

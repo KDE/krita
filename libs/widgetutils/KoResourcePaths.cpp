@@ -481,8 +481,11 @@ QString KoResourcePaths::saveLocationInternal(const QString &type, const QString
 {
     QStringList aliases = d->aliases(type);
 
+    QString path;
     KConfigGroup cg(KSharedConfig::openConfig(), "resource_folder");
-    QString path = cg.readPathEntry("saveLocation", path);
+    if (cg.isValid()) {
+        path = cg.readPathEntry("saveLocation", path);
+    }
 
     if (aliases.size() > 0) {
         if (path.isEmpty()) {

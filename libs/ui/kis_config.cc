@@ -1729,7 +1729,10 @@ QString KisConfig::resourceFolderLocation(bool defaultValue) const
         return "";
     }
     KConfigGroup cg(KSharedConfig::openConfig(), "resource_folder");
-    return cg.readPathEntry("saveLocation", "");
+    if (cg.isValid()) {
+        return cg.readPathEntry("saveLocation", "");
+    }
+    return "";
 }
 
 void KisConfig::setResourceFolderLocation(const QString &value) const

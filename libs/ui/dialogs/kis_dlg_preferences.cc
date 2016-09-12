@@ -808,8 +808,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
 {
     Q_UNUSED(name);
     setWindowTitle(i18n("Preferences"));
-    // QT5TODO: help button needs custom wiring up to whatever help should be shown
-    setStandardButtons(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Help | QDialogButtonBox::RestoreDefaults);
+    setStandardButtons(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::RestoreDefaults);
     button(QDialogButtonBox::Ok)->setDefault(true);
 
     setFaceType(KPageDialog::List);

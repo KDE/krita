@@ -278,6 +278,11 @@ void KoColorSet::removeAt(quint32 index)
     m_colors.remove(index);
 }
 
+void KoColorSet::clear()
+{
+    m_colors.clear();
+}
+
 KoColorSetEntry KoColorSet::getColor(quint32 index)
 {
     return m_colors[index];

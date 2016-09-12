@@ -100,10 +100,9 @@ KisMultiIntegerFilterWidget::KisMultiIntegerFilterWidget(const QString& filterid
 
 KisMultiIntegerFilterWidget::~KisMultiIntegerFilterWidget()
 {
-    delete m_config;
 }
 
-void KisMultiIntegerFilterWidget::setConfiguration(const KisPropertiesConfiguration* config)
+void KisMultiIntegerFilterWidget::setConfiguration(const KisPropertiesConfigurationSP config)
 {
     if (!config) return;
 
@@ -122,9 +121,9 @@ void KisMultiIntegerFilterWidget::setConfiguration(const KisPropertiesConfigurat
     }
 }
 
-KisPropertiesConfiguration* KisMultiIntegerFilterWidget::configuration() const
+KisPropertiesConfigurationSP KisMultiIntegerFilterWidget::configuration() const
 {
-    KisFilterConfiguration *config = new KisFilterConfiguration(m_filterid, 0);
+    KisFilterConfigurationSP config = new KisFilterConfiguration(m_filterid, 0);
     if (m_config) {
         config->fromXML(m_config->toXML());
     }

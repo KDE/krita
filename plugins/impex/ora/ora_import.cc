@@ -37,7 +37,7 @@ OraImport::~OraImport()
 {
 }
 
-KisImportExportFilter::ConversionStatus OraImport::convert(const QByteArray&, const QByteArray& to)
+KisImportExportFilter::ConversionStatus OraImport::convert(const QByteArray&, const QByteArray& to, KisPropertiesConfigurationSP configuration)
 {
     dbgFile << "Importing using ORAImport!";
 

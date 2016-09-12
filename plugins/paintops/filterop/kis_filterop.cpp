@@ -48,7 +48,7 @@
 #include <kis_lod_transform.h>
 
 
-KisFilterOp::KisFilterOp(const KisFilterOpSettings *settings, KisPainter *painter, KisNodeSP node, KisImageSP image)
+KisFilterOp::KisFilterOp(const KisPaintOpSettingsSP settings, KisPainter *painter, KisNodeSP node, KisImageSP image)
     : KisBrushBasedPaintOp(settings, painter)
     , m_filterConfiguration(0)
 {
@@ -63,7 +63,7 @@ KisFilterOp::KisFilterOp(const KisFilterOpSettings *settings, KisPainter *painte
     m_sizeOption.resetAllSensors();
     m_rotationOption.resetAllSensors();
     m_filter = KisFilterRegistry::instance()->get(settings->getString(FILTER_ID));
-    m_filterConfiguration = settings->filterConfig();
+    m_filterConfiguration = static_cast<const KisFilterOpSettings *>(settings.data())->filterConfig();
     m_smudgeMode = settings->getBool(FILTER_SMUDGE_MODE);
 
     m_rotationOption.applyFanCornersInfo(this);

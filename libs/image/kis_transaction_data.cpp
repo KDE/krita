@@ -128,7 +128,7 @@ void KisTransactionData::Private::moveDevice(const QPoint newOffset)
     if (transactionFrameId >= 0) {
         device->framesInterface()->setFrameOffset(transactionFrameId, newOffset);
     } else {
-        device->move(newOffset);
+        device->moveTo(newOffset);
     }
 }
 

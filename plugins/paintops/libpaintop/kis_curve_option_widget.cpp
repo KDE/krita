@@ -84,12 +84,12 @@ KisCurveOptionWidget::~KisCurveOptionWidget()
     delete m_curveOptionWidget;
 }
 
-void KisCurveOptionWidget::writeOptionSetting(KisPropertiesConfiguration* setting) const
+void KisCurveOptionWidget::writeOptionSetting(KisPropertiesConfigurationSP setting) const
 {
     m_curveOption->writeOptionSetting(setting);
 }
 
-void KisCurveOptionWidget::readOptionSetting(const KisPropertiesConfiguration* setting)
+void KisCurveOptionWidget::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
     setting->dump();
 

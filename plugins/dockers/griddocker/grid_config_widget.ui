@@ -256,20 +256,6 @@
              <property name="text">
               <string/>
              </property>
-             <property name="color" stdset="0">
-              <color>
-               <red>0</red>
-               <green>0</green>
-               <blue>0</blue>
-              </color>
-             </property>
-             <property name="defaultColor" stdset="0">
-              <color>
-               <red>0</red>
-               <green>0</green>
-               <blue>0</blue>
-              </color>
-             </property>
             </widget>
            </item>
           </layout>

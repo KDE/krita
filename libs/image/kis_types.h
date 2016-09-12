@@ -105,6 +105,10 @@ class KisTransparencyMask;
 typedef KisSharedPtr<KisTransparencyMask> KisTransparencyMaskSP;
 typedef KisWeakSharedPtr<KisTransparencyMask> KisTransparencyMaskWSP;
 
+class KisColorizeMask;
+typedef KisSharedPtr<KisColorizeMask> KisColorizeMaskSP;
+typedef KisWeakSharedPtr<KisColorizeMask> KisColorizeMaskWSP;
+
 class KisLayer;
 typedef KisSharedPtr<KisLayer> KisLayerSP;
 typedef KisWeakSharedPtr<KisLayer> KisLayerWSP;
@@ -248,7 +252,7 @@ typedef QWeakPointer<KisStroke> KisStrokeWSP;
 typedef KisStrokeWSP KisStrokeId;
 
 class KisFilterConfiguration;
-typedef QSharedPointer<KisFilterConfiguration> KisSafeFilterConfigurationSP;
+typedef KisSharedPtr<KisFilterConfiguration> KisFilterConfigurationSP;
 
 class KisProjectionUpdatesFilter;
 typedef QSharedPointer<KisProjectionUpdatesFilter> KisProjectionUpdatesFilterSP;
@@ -265,13 +269,18 @@ class KisKeyframe;
 typedef QSharedPointer<KisKeyframe> KisKeyframeSP;
 typedef QWeakPointer<KisKeyframe> KisKeyframeWSP;
 
-class KisProofingConfiguration;
+
+class KisFilterChain;
+typedef KisSharedPtr<KisFilterChain> KisFilterChainSP;
+
+struct KisProofingConfiguration;
 typedef QSharedPointer<KisProofingConfiguration> KisProofingConfigurationSP;
 typedef QWeakPointer<KisProofingConfiguration> KisProofingConfigurationWSP;
 
 class KisLayerComposition;
 typedef QSharedPointer<KisLayerComposition> KisLayerCompositionSP;
 typedef QWeakPointer<KisLayerComposition> KisLayerCompositionWSP;
+
 
 
 #include <QSharedPointer>

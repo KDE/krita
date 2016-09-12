@@ -32,14 +32,15 @@ struct KisSpinboxColorSelector::Private
     QList <KisIntParseSpinBox*> spinBoxList;
     QList <KisDoubleParseSpinBox*> doubleSpinBoxList;
     KoColor color;
-    const KoColorSpace *cs;
+    const KoColorSpace *cs {0};
     bool chooseAlpha = false;
 };
 
-KisSpinboxColorSelector::KisSpinboxColorSelector(QWidget *parent) : QWidget(parent) , m_d(new Private)
+KisSpinboxColorSelector::KisSpinboxColorSelector(QWidget *parent)
+    : QWidget(parent)
+    , m_d(new Private)
 {
     this->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
-
     KoColor color = KoColor();
     m_d->color = color;
     slotSetColorSpace(m_d->color.colorSpace());

@@ -270,7 +270,7 @@ public:
 
         qreal channelPixelValue;
         if (additionalMultiplierActive) {
-            channelPixelValue = (interimConvoResult * m_kernelFactor + m_absoluteOffset[channel]) * additionalMultiplier;
+            channelPixelValue = (interimConvoResult * m_kernelFactor) * additionalMultiplier + m_absoluteOffset[channel];
         } else {
             channelPixelValue = interimConvoResult * m_kernelFactor + m_absoluteOffset[channel];
         }
@@ -286,6 +286,11 @@ public:
     inline void convolveCache(quint8* dstPtr) {
         if (m_alphaCachePos >= 0) {
             qreal alphaValue = convolveOneChannelFromCache<false>(dstPtr, m_alphaCachePos);
+
+            // TODO: we need a special case for applying LoG filter,
+            // when the alpha i suniform and therefore should not be
+            // filtered!
+            //alphaValue = 255.0;
 
             if (alphaValue != 0.0) {
                 qreal alphaValueInv = 1.0 / alphaValue;

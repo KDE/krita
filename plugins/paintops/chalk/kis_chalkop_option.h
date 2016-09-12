@@ -40,8 +40,8 @@ public:
     bool saturation() const;
     bool opacity() const;
 
-    void writeOptionSetting(KisPropertiesConfiguration* setting) const;
-    void readOptionSetting(const KisPropertiesConfiguration* setting);
+    void writeOptionSetting(KisPropertiesConfigurationSP setting) const;
+    void readOptionSetting(const KisPropertiesConfigurationSP setting);
 
 
 private:
@@ -58,7 +58,7 @@ public:
     bool useOpacity;
     bool useSaturation;
 
-    void readOptionSetting(const KisPropertiesConfiguration* settings) {
+    void readOptionSetting(const KisPropertiesConfigurationSP settings) {
         radius = settings->getInt(CHALK_RADIUS);
         inkDepletion = settings->getBool(CHALK_INK_DEPLETION);
         useOpacity = settings->getBool(CHALK_USE_OPACITY);

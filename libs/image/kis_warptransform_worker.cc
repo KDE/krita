@@ -246,7 +246,7 @@ void KisWarpTransformWorker::run()
 
     if (m_origPoint.size() == 1) {
         QPointF translate(QPointF(m_dev->x(), m_dev->y()) + m_transfPoint[0] - m_origPoint[0]);
-        m_dev->move(translate.toPoint());
+        m_dev->moveTo(translate.toPoint());
         return;
     }
 

@@ -55,7 +55,7 @@ public:
                           KisViewManager *view,
                           QWidget *parent = 0);
     ~KisDlgAdjustmentLayer();
-    KisFilterConfiguration * filterConfiguration() const;
+    KisFilterConfigurationSP  filterConfiguration() const;
     QString layerName() const;
 
 public Q_SLOTS:
@@ -70,7 +70,7 @@ private:
     KisNodeSP m_node;
     KisNodeFilterInterface *m_nodeFilterInterface;
     Ui::WdgFilterNodeCreation wdgFilterNodeCreation;
-    KisFilterConfiguration *m_currentFilter;
+    KisFilterConfigurationSP m_currentFilter;
     bool m_customName;
     QString m_layerName;
 

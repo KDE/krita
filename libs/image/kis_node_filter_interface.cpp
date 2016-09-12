@@ -52,7 +52,7 @@
 
 #endif /* SANITY_CHECK_FILTER_CONFIGURATION_OWNER*/
 
-KisNodeFilterInterface::KisNodeFilterInterface(KisFilterConfiguration *filterConfig, bool useGeneratorRegistry)
+KisNodeFilterInterface::KisNodeFilterInterface(KisFilterConfigurationSP filterConfig, bool useGeneratorRegistry)
     : m_filter(filterConfig),
       m_useGeneratorRegistry(useGeneratorRegistry)
 {
@@ -63,9 +63,9 @@ KisNodeFilterInterface::KisNodeFilterInterface(const KisNodeFilterInterface &rhs
     : m_useGeneratorRegistry(rhs.m_useGeneratorRegistry)
 {
     if (m_useGeneratorRegistry) {
-        m_filter = KisSafeFilterConfigurationSP(KisGeneratorRegistry::instance()->cloneConfiguration(rhs.m_filter.data()));
+        m_filter = KisGeneratorRegistry::instance()->cloneConfiguration(const_cast<KisFilterConfiguration*>(rhs.m_filter.data()));
     } else {
-        m_filter = KisSafeFilterConfigurationSP(KisFilterRegistry::instance()->cloneConfiguration(rhs.m_filter.data()));
+        m_filter = KisFilterRegistry::instance()->cloneConfiguration(const_cast<KisFilterConfiguration*>(rhs.m_filter.data()));
     }
 
     SANITY_ACQUIRE_FILTER(m_filter);
@@ -76,17 +76,17 @@ KisNodeFilterInterface::~KisNodeFilterInterface()
     SANITY_RELEASE_FILTER(m_filter);
 }
 
-KisSafeFilterConfigurationSP KisNodeFilterInterface::filter() const
+KisFilterConfigurationSP KisNodeFilterInterface::filter() const
 {
     return m_filter;
 }
 
-void KisNodeFilterInterface::setFilter(KisFilterConfiguration *filterConfig)
+void KisNodeFilterInterface::setFilter(KisFilterConfigurationSP filterConfig)
 {
     SANITY_RELEASE_FILTER(m_filter);
 
     Q_ASSERT(filterConfig);
-    m_filter = KisSafeFilterConfigurationSP(filterConfig);
+    m_filter = filterConfig;
 
     SANITY_ACQUIRE_FILTER(m_filter);
 }

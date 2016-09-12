@@ -53,6 +53,9 @@ public:
     bool visit(KisSelectionMask*) {
         return true;
     }
+    bool visit(KisColorizeMask*) {
+        return true;
+    }
     bool visit(KisExternalLayer*) {
         return true;
     }

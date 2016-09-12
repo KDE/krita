@@ -66,12 +66,12 @@ KisColorSourceOption::~KisColorSourceOption()
     delete d;
 }
 
-void KisColorSourceOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
+void KisColorSourceOption::writeOptionSetting(KisPropertiesConfigurationSP setting) const
 {
     setting->setProperty("ColorSource/Type", Private::type2id.value(d->type).id());
 }
 
-void KisColorSourceOption::readOptionSetting(const KisPropertiesConfiguration* setting)
+void KisColorSourceOption::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
     QString colorSourceType = setting->getString("ColorSource/Type", "plain");
     d->type = Private::id2type.value(colorSourceType, PLAIN);

@@ -97,7 +97,7 @@ KisXCFImport::~KisXCFImport()
 {
 }
 
-KisImportExportFilter::ConversionStatus KisXCFImport::convert(const QByteArray& from, const QByteArray& to)
+KisImportExportFilter::ConversionStatus KisXCFImport::convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration)
 {
     Q_UNUSED(from);
     dbgFile << "Importing using XCFImport!";

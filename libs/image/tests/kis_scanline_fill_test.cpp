@@ -247,4 +247,52 @@ void KisScanlineFillTest::testFillBackwardCollisionSanityCheck()
 #endif /* ENABLE_FILL_SANITY_CHECKS */
 }
 
+void KisScanlineFillTest::testClearNonZeroComponent()
+{
+    const QRect rc1(10, 10, 10, 10);
+    const QRect rc2(30, 10, 10, 10);
+    const QRect boundingRect(0,0,100,100);
+
+    KisPaintDeviceSP dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
+
+    dev->fill(rc1, KoColor(Qt::red, dev->colorSpace()));
+    dev->fill(rc2, KoColor(Qt::green, dev->colorSpace()));
+
+    QCOMPARE(dev->exactBounds(), rc1 | rc2);
+
+    KisScanlineFill fill(dev, QPoint(10,10), boundingRect);
+    fill.clearNonZeroComponent();
+
+    QCOMPARE(dev->exactBounds(), rc2);
+}
+
+void KisScanlineFillTest::testExternalFill()
+{
+    const QRect rc1(10, 10, 10, 10);
+    const QRect rc2(30, 10, 10, 10);
+    const QRect boundingRect(0,0,100,100);
+
+    KisPaintDeviceSP dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
+    KisPaintDeviceSP other = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
+
+    dev->fill(rc1, KoColor(Qt::red, dev->colorSpace()));
+    dev->fill(rc2, KoColor(Qt::green, dev->colorSpace()));
+
+    QCOMPARE(dev->exactBounds(), rc1 | rc2);
+
+    KisScanlineFill fill(dev, QPoint(10,10), boundingRect);
+    fill.fillColor(KoColor(Qt::blue, dev->colorSpace()), other);
+
+    QCOMPARE(dev->exactBounds(), rc1 | rc2);
+    QCOMPARE(other->exactBounds(), rc1);
+
+    QColor c;
+
+    dev->pixel(10, 10, &c);
+    QCOMPARE(c, QColor(Qt::red));
+
+    other->pixel(10, 10, &c);
+    QCOMPARE(c, QColor(Qt::blue));
+}
+
 QTEST_MAIN(KisScanlineFillTest)

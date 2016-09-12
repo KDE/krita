@@ -16,16 +16,17 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KIS_VIDEO_PLUGIN_TEST_H_
-#define _KIS_VIDEO_PLUGIN_TEST_H_
+#ifndef __KIS_COLORIZE_MASK_TEST_H
+#define __KIS_COLORIZE_MASK_TEST_H
 
-#include <QtTest>
+#include <QtTest/QtTest>
 
-class KisVideoPluginTest : public QObject
+class KisColorizeMaskTest : public QObject
 {
     Q_OBJECT
 private Q_SLOTS:
-    void testFiles();
+    void test();
+    void testCrop();
 };
 
-#endif
+#endif /* __KIS_COLORIZE_MASK_TEST_H */

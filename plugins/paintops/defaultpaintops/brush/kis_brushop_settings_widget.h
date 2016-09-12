@@ -37,7 +37,7 @@ public:
 
     virtual ~KisBrushOpSettingsWidget();
 
-    KisPropertiesConfiguration* configuration() const;
+    KisPropertiesConfigurationSP configuration() const;
 };
 
 

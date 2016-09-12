@@ -22,13 +22,19 @@
 #include <brushengine/kis_paintop_settings.h>
 #include <kritapaintop_export.h>
 #include <kis_outline_generation_policy.h>
-#include "kis_brush.h"
+#include <kis_brush.h>
+#include <kis_shared.h>
+#include <kis_shared_ptr.h>
 
+
+class KisBrushBasedPaintOpSettings;
+typedef KisSharedPtr<KisBrushBasedPaintOpSettings> KisBrushBasedPaintOpSettingsSP;
 
 class PAINTOP_EXPORT KisBrushBasedPaintOpSettings : public KisOutlineGenerationPolicy<KisPaintOpSettings>
 {
 public:
     KisBrushBasedPaintOpSettings();
+    virtual ~KisBrushBasedPaintOpSettings() {}
 
     ///Reimplemented
     virtual bool paintIncremental();
@@ -40,7 +46,7 @@ public:
     virtual int rate() const;
 
     using KisPaintOpSettings::brushOutline;
-    virtual QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode) const;
+    virtual QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode);
 
     ///Reimplemented
     virtual bool isValid() const;
@@ -53,23 +59,28 @@ public:
     KisPaintOpSettingsSP clone() const;
 
     void setAngle(qreal value);
-    qreal angle() const;
+    qreal angle();
 
     void setSpacing(qreal spacing);
-    qreal spacing() const;
+    qreal spacing();
 
     void setAutoSpacing(bool active, qreal coeff);
 
-    bool autoSpacingActive() const;
-    qreal autoSpacingCoeff() const;
+    bool autoSpacingActive();
+    qreal autoSpacingCoeff();
 
 
     QList<KisUniformPaintOpPropertySP> uniformProperties();
 
 protected:
-    QPainterPath brushOutlineImpl(const KisPaintInformation &info, OutlineMode mode, qreal additionalScale, bool forceOutline = false) const;
+    QPainterPath brushOutlineImpl(const KisPaintInformation &info, OutlineMode mode, qreal additionalScale, bool forceOutline = false);
     KisBrushSP m_savedBrush;
     QList<KisUniformPaintOpPropertyWSP> m_uniformProperties;
+
+private:
+
+    Q_DISABLE_COPY(KisBrushBasedPaintOpSettings)
+
 };
 
 #endif // KIS_BRUSH_BASED_PAINTOP_SETTINGS_H

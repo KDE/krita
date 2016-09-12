@@ -102,9 +102,9 @@ KisFilterWave::KisFilterWave() : KisFilter(id(), categoryOther(), i18n("&Wave...
 
 }
 
-KisFilterConfiguration* KisFilterWave::factoryConfiguration(const KisPaintDeviceSP) const
+KisFilterConfigurationSP KisFilterWave::factoryConfiguration(const KisPaintDeviceSP) const
 {
-    KisFilterConfiguration* config = new KisFilterConfiguration("wave", 1);
+    KisFilterConfigurationSP config = new KisFilterConfiguration("wave", 1);
     config->setProperty("horizontalwavelength", 50);
     config->setProperty("horizontalshift", 50);
     config->setProperty("horizontalamplitude", 4);
@@ -123,7 +123,7 @@ KisConfigWidget * KisFilterWave::createConfigurationWidget(QWidget* parent, cons
 
 void KisFilterWave::processImpl(KisPaintDeviceSP device,
                                 const QRect& applyRect,
-                                const KisFilterConfiguration* config,
+                                const KisFilterConfigurationSP config,
                                 KoUpdater* progressUpdater
                                 ) const
 {
@@ -166,7 +166,7 @@ void KisFilterWave::processImpl(KisPaintDeviceSP device,
     delete verticalcurve;
 }
 
-QRect KisFilterWave::neededRect(const QRect& rect, const KisFilterConfiguration* config, int lod) const
+QRect KisFilterWave::neededRect(const QRect& rect, const KisFilterConfigurationSP config, int lod) const
 {
     Q_UNUSED(lod);
 

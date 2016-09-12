@@ -33,7 +33,7 @@ public:
     KisChalkPaintOpSettingsWidget(QWidget* parent = 0);
     virtual ~KisChalkPaintOpSettingsWidget();
 
-    KisPropertiesConfiguration* configuration() const;
+    KisPropertiesConfigurationSP configuration() const;
 
     ///Reimplemented
     void changePaintOpSize(qreal x, qreal y);

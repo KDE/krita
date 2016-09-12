@@ -121,8 +121,6 @@ public:
     KisPaintOpPresetSP previousPreset() const;
     void setPreviousPaintOpPreset(const KisPaintOpPresetSP preset);
 
-    KisFilterConfiguration* currentGeneratorConfiguration() const;
-
     void setCurrentCompositeOp(const QString& compositeOp);
     QString currentCompositeOp() const;
 
@@ -186,7 +184,6 @@ public Q_SLOTS:
     void slotPatternActivated(KoResource *pattern);
     void slotGradientActivated(KoResource *gradient);
     void slotNodeActivated(const KisNodeSP node);
-    void slotGeneratorConfigurationActivated(KisFilterConfiguration * generatorConfiguration);
     void slotPainting();
 
     /**

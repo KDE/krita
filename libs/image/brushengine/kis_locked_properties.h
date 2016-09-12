@@ -32,25 +32,21 @@ class KisLockedProperties
 {
 public:
     KisLockedProperties();
-    KisLockedProperties(KisPropertiesConfiguration *p);
+    KisLockedProperties(KisPropertiesConfigurationSP p);
     ~KisLockedProperties();
 
     /**Whenever any setting is made locked**/
-    void addToLockedProperties(KisPropertiesConfiguration *p);
+    void addToLockedProperties(KisPropertiesConfigurationSP p);
 
     /**Whenever any property is unlocked**/
-    void removeFromLockedProperties(KisPropertiesConfiguration *p);
+    void removeFromLockedProperties(KisPropertiesConfigurationSP p);
     bool hasProperty(const QString &p);
 
-
-
-
-    KisPropertiesConfiguration *lockedProperties();
-
+    KisPropertiesConfigurationSP lockedProperties();
 
 private:
-    KisPropertiesConfiguration* m_lockedProperties;
 
+    KisPropertiesConfigurationSP m_lockedProperties;
 
 };
 

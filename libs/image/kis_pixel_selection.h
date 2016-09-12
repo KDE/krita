@@ -81,6 +81,11 @@ public:
     void clear();
 
     /**
+     * Copies alpha channel form the specified \p src device
+     */
+    void copyAlphaFrom(KisPaintDeviceSP src, const QRect &processRect);
+
+    /**
      * Apply a selection to the selection using the specified selection mode
      */
     void applySelection(KisPixelSelectionSP selection, SelectionAction action);
@@ -109,8 +114,8 @@ public:
     /**
      * Overridden from KisPaintDevice to handle outline cache moves
      */
-    void move(const QPoint& pt);
-    using KisPaintDevice::move;
+    void moveTo(const QPoint& pt);
+    using KisPaintDevice::moveTo;
 
     bool isEmpty() const;
     QPainterPath outlineCache() const;

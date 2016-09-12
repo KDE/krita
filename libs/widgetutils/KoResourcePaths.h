@@ -138,7 +138,7 @@ public:
      * @return A list of matching directories, or an empty
      *         list if the resource specified is not found.
      */
-    static QStringList findDirs(const char *type, const QString &reldir);
+    static QStringList findDirs(const char *type);
 
     /**
      * Tries to find all resources with the specified type.
@@ -228,7 +228,7 @@ private:
 
     QString findResourceInternal(const QString &type, const QString &fileName);
 
-    QStringList findDirsInternal(const QString &type, const QString &relDir);
+    QStringList findDirsInternal(const QString &type);
 
     QStringList findAllResourcesInternal(const QString &type,
                                          const QString &filter = QString(),

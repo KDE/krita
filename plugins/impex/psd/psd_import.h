@@ -28,7 +28,7 @@ class psdImport : public KisImportExportFilter {
         psdImport(QObject *parent, const QVariantList &);
         virtual ~psdImport();
     public:
-        virtual KisImportExportFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+        virtual KisImportExportFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration = 0);
 };
 
 #endif

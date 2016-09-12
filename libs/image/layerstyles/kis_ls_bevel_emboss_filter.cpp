@@ -80,7 +80,7 @@ void paintBevelSelection(KisPixelSelectionSP srcSelection,
         quint8 selectedness = invert ?
             qRound(qreal(size - i - 1) / size * 255.0) :
             qRound(qreal(i + 1) / size * 255.0);
-        fillDevice->setDefaultPixel(&selectedness);
+        fillDevice->setDefaultPixel(KoColor(&selectedness, fillDevice->colorSpace()));
 
         tmpSelection->makeCloneFromRough(srcSelection, srcSelection->selectedRect());
 
@@ -421,7 +421,7 @@ void KisLsBevelEmbossFilter::applyBevelEmboss(KisPaintDeviceSP srcDevice,
         const KoColor fillColor(config->shadowColor(), dstDevice->colorSpace());
         const QRect &fillRect = d.shadowHighlightsFinalRect;
         KisPaintDeviceSP fillDevice = new KisPaintDevice(dstDevice->colorSpace());
-        fillDevice->setDefaultPixel(fillColor.data());
+        fillDevice->setDefaultPixel(fillColor);
         KisPainter gc(dstDevice);
 
         gc.setSelection(baseSelection);
@@ -444,7 +444,7 @@ void KisLsBevelEmbossFilter::applyBevelEmboss(KisPaintDeviceSP srcDevice,
         const KoColor fillColor(config->highlightColor(), dstDevice->colorSpace());
         const QRect &fillRect = d.shadowHighlightsFinalRect;
         KisPaintDeviceSP fillDevice = new KisPaintDevice(dstDevice->colorSpace());
-        fillDevice->setDefaultPixel(fillColor.data());
+        fillDevice->setDefaultPixel(fillColor);
         KisPainter gc(dstDevice);
         gc.setSelection(baseSelection);
         gc.setCompositeOp(COMPOSITE_OVER);

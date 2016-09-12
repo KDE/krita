@@ -26,14 +26,15 @@ class KisExperimentPaintOpSettings : public KisPaintOpSettings
 {
 public:
     KisExperimentPaintOpSettings();
-    ~KisExperimentPaintOpSettings();
+    virtual ~KisExperimentPaintOpSettings();
 
     bool paintIncremental();
-    QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode) const;
+    QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode);
 
     QList<KisUniformPaintOpPropertySP> uniformProperties();
 
 private:
+
     struct Private;
     const QScopedPointer<Private> m_d;
 };

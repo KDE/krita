@@ -40,7 +40,7 @@ KisGenerator::~KisGenerator()
 
 void KisGenerator::generate(KisProcessingInformation dst,
                             const QSize& size,
-                            const KisFilterConfiguration* config
+                            const KisFilterConfigurationSP config
                            ) const
 {
     generate(dst, size, config, 0);
@@ -51,7 +51,7 @@ const KoColorSpace * KisGenerator::colorSpace()
     return 0;
 }
 
-QRect KisGenerator::generatedRect(QRect _imageArea, const KisFilterConfiguration*) const
+QRect KisGenerator::generatedRect(QRect _imageArea, const KisFilterConfigurationSP) const
 {
     return _imageArea;
 }

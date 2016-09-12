@@ -94,7 +94,7 @@ KisFilter::~KisFilter()
 
 void KisFilter::process(KisPaintDeviceSP device,
                         const QRect& applyRect,
-                        const KisFilterConfiguration* config,
+                        const KisFilterConfigurationSP config,
                         KoUpdater* progressUpdater) const
 {
     process(device, device, 0, applyRect, config, progressUpdater);
@@ -104,7 +104,7 @@ void KisFilter::process(const KisPaintDeviceSP src,
                         KisPaintDeviceSP dst,
                         KisSelectionSP selection,
                         const QRect& applyRect,
-                        const KisFilterConfiguration* config,
+                        const KisFilterConfigurationSP config,
                         KoUpdater* progressUpdater ) const
 {
     if (applyRect.isEmpty()) return;
@@ -115,7 +115,7 @@ void KisFilter::process(const KisPaintDeviceSP src,
 
     bool weirdDstColorSpace =
         dst->colorSpace() != dst->compositionSourceColorSpace() &&
-        !(*dst->colorSpace() == *dst->compositionSourceColorSpace());
+        *dst->colorSpace() != *dst->compositionSourceColorSpace();
 
     if(src == dst && !selection && !weirdDstColorSpace) {
         temporary = src;
@@ -139,21 +139,21 @@ void KisFilter::process(const KisPaintDeviceSP src,
     }
 }
 
-QRect KisFilter::neededRect(const QRect & rect, const KisFilterConfiguration* c, int lod) const
+QRect KisFilter::neededRect(const QRect & rect, const KisFilterConfigurationSP c, int lod) const
 {
     Q_UNUSED(c);
     Q_UNUSED(lod);
     return rect;
 }
 
-QRect KisFilter::changedRect(const QRect & rect, const KisFilterConfiguration* c, int lod) const
+QRect KisFilter::changedRect(const QRect & rect, const KisFilterConfigurationSP c, int lod) const
 {
     Q_UNUSED(c);
     Q_UNUSED(lod);
     return rect;
 }
 
-bool KisFilter::supportsLevelOfDetail(const KisFilterConfiguration *config, int lod) const
+bool KisFilter::supportsLevelOfDetail(const KisFilterConfigurationSP config, int lod) const
 {
     Q_UNUSED(config);
     Q_UNUSED(lod);
@@ -165,7 +165,7 @@ void KisFilter::setSupportsLevelOfDetail(bool value)
     m_supportsLevelOfDetail = value;
 }
 
-bool KisFilter::needsTransparentPixels(const KisFilterConfiguration *config, const KoColorSpace *cs) const
+bool KisFilter::needsTransparentPixels(const KisFilterConfigurationSP config, const KoColorSpace *cs) const
 {
     Q_UNUSED(config);
     Q_UNUSED(cs);

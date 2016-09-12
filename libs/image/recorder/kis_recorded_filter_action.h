@@ -35,7 +35,7 @@ public:
     /**
      * @param config the filter configuration, the ownership of config remains in the caller.
      */
-    KisRecordedFilterAction(QString name, const KisNodeQueryPath& path, const KisFilter* filter, const KisFilterConfiguration* config);
+    KisRecordedFilterAction(QString name, const KisNodeQueryPath& path, const KisFilter* filter, const KisFilterConfigurationSP config);
     KisRecordedFilterAction(const KisRecordedFilterAction&);
     virtual ~KisRecordedFilterAction();
     using KisRecordedNodeAction::play;
@@ -43,11 +43,11 @@ public:
     virtual void toXML(QDomDocument& doc, QDomElement& elt, KisRecordedActionSaveContext* ) const;
     virtual KisRecordedAction* clone() const;
     const KisFilter* filter() const;
-    const KisFilterConfiguration* filterConfiguration() const;
+    const KisFilterConfigurationSP filterConfiguration() const;
     /**
      * Set the configuration, and takes the ownership of the config object.
      */
-    void setFilterConfiguration(KisFilterConfiguration* config);
+    void setFilterConfiguration(KisFilterConfigurationSP config);
 private:
     struct Private;
     Private* const d;

@@ -113,3 +113,40 @@ void KisFigurePaintingToolHelper::paintPainterPath(const QPainterPath &path)
                                          path));
 }
 
+void KisFigurePaintingToolHelper::setFGColorOverride(const KoColor &color)
+{
+    m_resources->setFGColorOverride(color);
+}
+
+void KisFigurePaintingToolHelper::setBGColorOverride(const KoColor &color)
+{
+    m_resources->setBGColorOverride(color);
+}
+
+void KisFigurePaintingToolHelper::setSelectionOverride(KisSelectionSP m_selection)
+{
+    m_resources->setSelectionOverride(m_selection);
+}
+
+void KisFigurePaintingToolHelper::setBrush(const KisPaintOpPresetSP &brush)
+{
+    m_resources->setBrush(brush);
+}
+
+void KisFigurePaintingToolHelper::paintPainterPathQPen(const QPainterPath path, const QPen &pen, const KoColor &color)
+{
+        m_strokesFacade->addJob(m_strokeId,
+        new FreehandStrokeStrategy::Data(m_resources->currentNode(),
+                                         0,
+                                         FreehandStrokeStrategy::Data::QPAINTER_PATH,
+                                         path, pen, color));
+}
+
+void KisFigurePaintingToolHelper::paintPainterPathQPenFill(const QPainterPath path, const QPen &pen, const KoColor &color)
+{
+    m_strokesFacade->addJob(m_strokeId,
+    new FreehandStrokeStrategy::Data(m_resources->currentNode(),
+                                     0,
+                                     FreehandStrokeStrategy::Data::QPAINTER_PATH_FILL,
+                                    path, pen, color));
+}

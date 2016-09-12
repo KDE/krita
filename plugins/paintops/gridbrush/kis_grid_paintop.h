@@ -45,7 +45,7 @@ public:
 
     quint8 shape;
 public:
-    void fillProperties(const KisPropertiesConfiguration* setting);
+    void fillProperties(const KisPropertiesConfigurationSP setting);
 };
 
 class KisGridPaintOp : public KisPaintOp
@@ -53,13 +53,13 @@ class KisGridPaintOp : public KisPaintOp
 
 public:
 
-    KisGridPaintOp(const KisGridPaintOpSettings *settings, KisPainter * painter, KisNodeSP node, KisImageSP image);
+    KisGridPaintOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisNodeSP node, KisImageSP image);
     ~KisGridPaintOp();
 
     KisSpacingInformation paintAt(const KisPaintInformation& info);
 
 private:
-    const KisGridPaintOpSettings* m_settings;
+    KisGridPaintOpSettingsSP m_settings;
     KisImageWSP         m_image;
     KisPaintDeviceSP    m_dab;
     KisPainter*         m_painter;

@@ -50,9 +50,9 @@ QVariant KisBookmarkedFilterConfigurationsModel::data(const QModelIndex &index, 
 
 }
 
-KisFilterConfiguration* KisBookmarkedFilterConfigurationsModel::configuration(const QModelIndex &index) const
+KisFilterConfigurationSP KisBookmarkedFilterConfigurationsModel::configuration(const QModelIndex &index) const
 {
-    KisFilterConfiguration* config = dynamic_cast<KisFilterConfiguration*>(KisBookmarkedConfigurationsModel::configuration(index));
+    KisFilterConfigurationSP config = dynamic_cast<KisFilterConfiguration*>(KisBookmarkedConfigurationsModel::configuration(index).data());
     if (config) return config;
     return d->filter->defaultConfiguration(d->thumb);
 }

@@ -42,7 +42,7 @@ KisDlgAdjLayerProps::KisDlgAdjLayerProps(KisNodeSP node,
                                          KisNodeFilterInterface* nfi,
                                          KisPaintDeviceSP paintDevice,
                                          KisViewManager *view,
-                                         KisFilterConfiguration *configuration,
+                                         KisFilterConfigurationSP configuration,
                                          const QString & layerName,
                                          const QString & caption,
                                          QWidget *parent,
@@ -115,11 +115,10 @@ void KisDlgAdjLayerProps::slotNameChanged(const QString & text)
     enableButtonOk(!text.isEmpty());
 }
 
-KisFilterConfiguration * KisDlgAdjLayerProps::filterConfiguration() const
+KisFilterConfigurationSP  KisDlgAdjLayerProps::filterConfiguration() const
 {
     if (m_currentConfigWidget) {
-        KisFilterConfiguration * config
-                = dynamic_cast<KisFilterConfiguration*>(m_currentConfigWidget->configuration());
+        KisFilterConfigurationSP config = dynamic_cast<KisFilterConfiguration*>(m_currentConfigWidget->configuration().data());
         if (config) {
             return config;
         }
@@ -135,7 +134,7 @@ QString KisDlgAdjLayerProps::layerName() const
 void KisDlgAdjLayerProps::slotConfigChanged()
 {
     enableButtonOk(true);
-    KisFilterConfiguration * config = filterConfiguration();
+    KisFilterConfigurationSP  config = filterConfiguration();
     if (config) {
         m_nodeFilterInterface->setFilter(config);
     }

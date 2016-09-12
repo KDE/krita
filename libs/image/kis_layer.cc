@@ -64,7 +64,7 @@ public:
             m_reusablePaintDevice = new KisPaintDevice(*prototype);
         }
         if(!m_projection ||
-           !(*m_projection->colorSpace() == *prototype->colorSpace())) {
+           *m_projection->colorSpace() != *prototype->colorSpace()) {
             m_projection = m_reusablePaintDevice;
             m_projection->makeCloneFromRough(prototype, prototype->extent());
             m_projection->setProjectionDevice(true);

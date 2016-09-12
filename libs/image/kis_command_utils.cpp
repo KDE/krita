@@ -96,4 +96,29 @@ namespace KisCommandUtils
 
     void FlipFlopCommand::init() {}
     void FlipFlopCommand::end() {}
+
+    CompositeCommand::CompositeCommand(KUndo2Command *parent)
+        : KUndo2Command(parent) {}
+
+    CompositeCommand::~CompositeCommand() {
+        qDeleteAll(m_commands);
+    }
+
+    void CompositeCommand::addCommand(KUndo2Command *cmd) {
+        if (cmd) {
+            m_commands << cmd;
+        }
+    }
+
+    void CompositeCommand::redo() {
+        Q_FOREACH (KUndo2Command *cmd, m_commands) {
+            cmd->redo();
+        }
+    }
+
+    void CompositeCommand::undo() {
+        Q_FOREACH (KUndo2Command *cmd, m_commands) {
+            cmd->undo();
+        }
+    }
 }

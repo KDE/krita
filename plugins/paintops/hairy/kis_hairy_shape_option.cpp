@@ -62,7 +62,7 @@ void KisHairyShapeOption::setRadius(int radius) const
 }
 
 
-void KisHairyShapeOption::readOptionSetting(const KisPropertiesConfiguration* config)
+void KisHairyShapeOption::readOptionSetting(const KisPropertiesConfigurationSP config)
 {
     m_options->radiusSpinBox->setValue(config->getInt(HAIRY_RADIUS));
     m_options->sigmaSpinBox->setValue(config->getDouble(HAIRY_SIGMA));
@@ -75,7 +75,7 @@ void KisHairyShapeOption::readOptionSetting(const KisPropertiesConfiguration* co
 }
 
 
-void KisHairyShapeOption::writeOptionSetting(KisPropertiesConfiguration* config) const
+void KisHairyShapeOption::writeOptionSetting(KisPropertiesConfigurationSP config) const
 {
     config->setProperty(HAIRY_RADIUS, radius());
     config->setProperty(HAIRY_SIGMA, m_options->sigmaSpinBox->value());

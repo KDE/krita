@@ -31,11 +31,11 @@ class KisBaseProcessorConfigurationFactory : public KisSerializableConfiguration
 public:
     KisBaseProcessorConfigurationFactory(KisBaseProcessor* _generator) : m_generator(_generator) {}
     virtual ~KisBaseProcessorConfigurationFactory() {}
-    virtual KisSerializableConfiguration* createDefault() {
+    virtual KisSerializableConfigurationSP createDefault() {
         return m_generator->factoryConfiguration(0);
     }
-    virtual KisSerializableConfiguration* create(const QDomElement& e) {
-        KisSerializableConfiguration* config = m_generator->factoryConfiguration(0);
+    virtual KisSerializableConfigurationSP create(const QDomElement& e) {
+        KisSerializableConfigurationSP config = m_generator->factoryConfiguration(0);
         config->fromXML(e);
         return config;
     }
@@ -85,14 +85,14 @@ KisBaseProcessor::~KisBaseProcessor()
     delete d;
 }
 
-KisFilterConfiguration * KisBaseProcessor::factoryConfiguration(const KisPaintDeviceSP) const
+KisFilterConfigurationSP  KisBaseProcessor::factoryConfiguration(const KisPaintDeviceSP) const
 {
     return new KisFilterConfiguration(id(), 0);
 }
 
-KisFilterConfiguration * KisBaseProcessor::defaultConfiguration(const KisPaintDeviceSP pd) const
+KisFilterConfigurationSP  KisBaseProcessor::defaultConfiguration(const KisPaintDeviceSP pd) const
 {
-    KisFilterConfiguration* fc = 0;
+    KisFilterConfigurationSP fc = 0;
 //     if (bookmarkManager()) {
 //         fc = dynamic_cast<KisFilterConfiguration*>(bookmarkManager()->defaultConfiguration());
 //     }

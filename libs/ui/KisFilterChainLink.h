@@ -34,7 +34,7 @@ class ChainLink
 {
 
 public:
-    ChainLink(KisFilterChain *chain, KisFilterEntrySP filterEntry,
+    ChainLink(KisFilterChainSP chain, KisFilterEntrySP filterEntry,
               const QByteArray& from, const QByteArray& to);
 
     ~ChainLink();
@@ -59,7 +59,7 @@ private:
     ChainLink(const ChainLink& rhs);
     ChainLink& operator=(const ChainLink& rhs);
 
-    KisFilterChain *m_chain;
+    KisFilterChainSP m_chain;
     KisFilterEntrySP m_filterEntry;
     QByteArray m_from, m_to;
 

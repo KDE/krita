@@ -37,7 +37,7 @@
 
 KisAdjustmentLayer::KisAdjustmentLayer(KisImageWSP image,
                                        const QString &name,
-                                       KisFilterConfiguration *kfc,
+                                       KisFilterConfigurationSP kfc,
                                        KisSelectionSP selection)
     : KisSelectionBasedLayer(image.data(), name, selection, kfc)
 {
@@ -60,7 +60,7 @@ KisAdjustmentLayer::~KisAdjustmentLayer()
 {
 }
 
-void KisAdjustmentLayer::setFilter(KisFilterConfiguration *filterConfig)
+void KisAdjustmentLayer::setFilter(KisFilterConfigurationSP filterConfig)
 {
     filterConfig->setChannelFlags(channelFlags());
     KisSelectionBasedLayer::setFilter(filterConfig);
@@ -68,7 +68,7 @@ void KisAdjustmentLayer::setFilter(KisFilterConfiguration *filterConfig)
 
 QRect KisAdjustmentLayer::incomingChangeRect(const QRect &rect) const
 {
-    KisSafeFilterConfigurationSP filterConfig = filter();
+    KisFilterConfigurationSP filterConfig = filter();
 
     QRect filteredRect = rect;
 
@@ -92,7 +92,7 @@ QRect KisAdjustmentLayer::needRect(const QRect& rect, PositionToFilthy pos) cons
 {
     Q_UNUSED(pos);
 
-    KisSafeFilterConfigurationSP filterConfig = filter();
+    KisFilterConfigurationSP filterConfig = filter();
     if (!filterConfig) return rect;
     KisFilterSP filter = KisFilterRegistry::instance()->value(filterConfig->name());
 
@@ -124,7 +124,7 @@ QIcon KisAdjustmentLayer::icon() const
 
 KisBaseNode::PropertyList KisAdjustmentLayer::sectionModelProperties() const
 {
-    KisSafeFilterConfigurationSP filterConfig = filter();
+    KisFilterConfigurationSP filterConfig = filter();
     KisBaseNode::PropertyList l = KisLayer::sectionModelProperties();
     if (filterConfig)
         l << KisBaseNode::Property(KoID("filter", i18nc("property of a filter layer, noun", "Filter")), KisFilterRegistry::instance()->value(filterConfig->name())->name());
@@ -134,7 +134,7 @@ KisBaseNode::PropertyList KisAdjustmentLayer::sectionModelProperties() const
 
 void KisAdjustmentLayer::setChannelFlags(const QBitArray & channelFlags)
 {
-    KisSafeFilterConfigurationSP filterConfig = filter();
+    KisFilterConfigurationSP filterConfig = filter();
 
     if (filterConfig) {
         filterConfig->setChannelFlags(channelFlags);

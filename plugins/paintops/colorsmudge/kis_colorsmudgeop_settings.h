@@ -36,4 +36,6 @@ private:
     const QScopedPointer<Private> m_d;
 };
 
+typedef KisSharedPtr<KisColorSmudgeOpSettings> KisColorSmudgeOpSettingsSP;
+
 #endif /* __KIS_COLORSMUDGEOP_SETTINGS_H */

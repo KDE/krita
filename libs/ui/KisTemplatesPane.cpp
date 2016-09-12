@@ -33,7 +33,7 @@ class KisTemplatesPanePrivate
 {
 public:
     KisTemplatesPanePrivate()
-            : m_selected(false) {
+        : m_selected(false) {
     }
 
     bool m_selected;
@@ -42,9 +42,9 @@ public:
 
 
 KisTemplatesPane::KisTemplatesPane(QWidget* parent, const QString& header,
-                                 KisTemplateGroup *group, KisTemplate* defaultTemplate)
-        : KisDetailsPane(parent,header)
-        , d(new KisTemplatesPanePrivate)
+                                   KisTemplateGroup *group, KisTemplate* defaultTemplate)
+    : KisDetailsPane(parent,header)
+    , d(new KisTemplatesPanePrivate)
 {
     setFocusProxy(m_documentList);
 

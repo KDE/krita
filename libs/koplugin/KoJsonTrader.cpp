@@ -97,7 +97,7 @@ KoJsonTrader::KoJsonTrader()
                 break;
             }
         }
-        qDebug() << "KoJsonTrader will load its plugins from" << m_pluginPath;
+        debugPlugin << "KoJsonTrader will load its plugins from" << m_pluginPath;
     }
 }
 

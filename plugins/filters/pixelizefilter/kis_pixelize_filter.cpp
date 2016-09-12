@@ -60,7 +60,7 @@ KisPixelizeFilter::KisPixelizeFilter() : KisFilter(id(), KisFilter::categoryArti
 
 void KisPixelizeFilter::processImpl(KisPaintDeviceSP device,
                                     const QRect& applyRect,
-                                    const KisFilterConfiguration* config,
+                                    const KisFilterConfigurationSP config,
                                     KoUpdater* progressUpdater
                                     ) const
 {
@@ -132,9 +132,9 @@ KisConfigWidget * KisPixelizeFilter::createConfigurationWidget(QWidget* parent, 
     return new KisMultiIntegerFilterWidget(id().id(),  parent,  id().id(),  param);
 }
 
-KisFilterConfiguration* KisPixelizeFilter::factoryConfiguration(const KisPaintDeviceSP) const
+KisFilterConfigurationSP KisPixelizeFilter::factoryConfiguration(const KisPaintDeviceSP) const
 {
-    KisFilterConfiguration* config = new KisFilterConfiguration("pixelize", 1);
+    KisFilterConfigurationSP config = new KisFilterConfiguration("pixelize", 1);
     config->setProperty("pixelWidth", 10);
     config->setProperty("pixelHeight", 10);
     return config;

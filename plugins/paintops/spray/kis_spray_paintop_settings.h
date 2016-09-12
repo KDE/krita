@@ -32,10 +32,9 @@ class KisSprayPaintOpSettings : public KisOutlineGenerationPolicy<KisPaintOpSett
 {
 public:
     KisSprayPaintOpSettings();
-    ~KisSprayPaintOpSettings();
+    virtual ~KisSprayPaintOpSettings();
 
-
-    QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode) const;
+    QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode);
 
     QString modelName() const {
         return "airbrush";
@@ -45,11 +44,18 @@ public:
     bool isAirbrushing() const;
     int rate() const;
 
+protected:
+
     QList<KisUniformPaintOpPropertySP> uniformProperties();
 
 private:
+    Q_DISABLE_COPY(KisSprayPaintOpSettings)
+
     struct Private;
     const QScopedPointer<Private> m_d;
+
 };
+
+typedef KisSharedPtr<KisSprayPaintOpSettings> KisSprayPaintOpSettingsSP;
 
 #endif

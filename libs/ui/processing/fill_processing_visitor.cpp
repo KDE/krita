@@ -22,6 +22,7 @@
 #include <kis_image.h>
 #include <kis_fill_painter.h>
 #include <kis_wrapped_rect.h>
+#include "lazybrush/kis_colorize_mask.h"
 
 
 FillProcessingVisitor::FillProcessingVisitor(const QPoint &startPoint,
@@ -59,8 +60,12 @@ void FillProcessingVisitor::visitNodeWithPaintDevice(KisNode *node, KisUndoAdapt
 {
     KisPaintDeviceSP device = node->paintDevice();
     Q_ASSERT(device);
-
     ProgressHelper helper(node);
+    fillPaintDevice(device, undoAdapter, helper);
+}
+
+void FillProcessingVisitor::fillPaintDevice(KisPaintDeviceSP device, KisUndoAdapter *undoAdapter, ProgressHelper &helper)
+{
     QRect fillRect = m_resources->image()->bounds();
 
     if (!device->defaultBounds()->wrapAroundMode() &&
@@ -132,5 +137,10 @@ void FillProcessingVisitor::visitNodeWithPaintDevice(KisNode *node, KisUndoAdapt
     }
 }
 
-
-
+void FillProcessingVisitor::visitColorizeMask(KisColorizeMask *mask, KisUndoAdapter *undoAdapter)
+{
+    // we fill only the coloring project so the user can work
+    // with the mask like with a usual paint layer
+    ProgressHelper helper(mask);
+    fillPaintDevice(mask->coloringProjection(), undoAdapter, helper);
+}

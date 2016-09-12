@@ -114,7 +114,7 @@ void HistogramDockerWidget::paintEvent(QPaintEvent *event)
         painter.setWindow(QRect(-1, 0, nBins + 1, highest));
         painter.setCompositionMode(QPainter::CompositionMode_Plus);
 
-        for (int chan = 0; chan < nChannels; chan++) {
+        for (int chan = 0; chan < (int)nChannels; chan++) {
             if (channels.at(chan)->channelType() != KoChannelInfo::ALPHA) {
                 QColor color = channels.at(chan)->color();
 

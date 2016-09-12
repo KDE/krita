@@ -68,8 +68,6 @@ private Q_SLOTS:
     void saveToWorkspace(KisWorkspaceResource* workspace);
     void loadFromWorkspace(KisWorkspaceResource* workspace);
 
-    virtual bool eventFilter(QObject*, QEvent*);
-
 private:    
     Ui_WdgPaletteDock* m_wdgPaletteDock;
     KisPaletteModel *m_model;

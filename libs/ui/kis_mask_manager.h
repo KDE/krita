@@ -87,6 +87,7 @@ private:
 
     void createSelectionMask(KisNodeSP activeNode, KisPaintDeviceSP copyFrom, bool avoidActiveNode);
     void createFilterMask(KisNodeSP activeNode, KisPaintDeviceSP copyFrom, bool quiet, bool avoidActiveNode);
+    void createColorizeMask(KisNodeSP activeNode);
     void createTransformMask(KisNodeSP activeNode);
     void createTransparencyMask(KisNodeSP activeNode, KisPaintDeviceSP copyFrom, bool avoidActiveNode);
 

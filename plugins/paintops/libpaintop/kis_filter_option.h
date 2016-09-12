@@ -57,7 +57,7 @@ public:
     /**
      * Return the currently selected filter configuration
      */
-    KisFilterConfiguration* filterConfig() const;
+    KisFilterConfigurationSP filterConfig() const;
 
     bool smudgeMode() const;
 
@@ -71,9 +71,9 @@ public:
      */
     void setImage(KisImageWSP image);
 
-    void writeOptionSetting(KisPropertiesConfiguration* setting) const;
+    void writeOptionSetting(KisPropertiesConfigurationSP setting) const;
 
-    void readOptionSetting(const KisPropertiesConfiguration* setting);
+    void readOptionSetting(const KisPropertiesConfigurationSP setting);
 
     void lodLimitations(KisPaintopLodLimitations *l) const;
 

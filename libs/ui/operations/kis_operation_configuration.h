@@ -28,9 +28,14 @@ class KRITAUI_EXPORT KisOperationConfiguration : public KisPropertiesConfigurati
 {
 public:
     KisOperationConfiguration();
+    virtual ~KisOperationConfiguration() {}
     KisOperationConfiguration(const QString &id);
 
     QString id() const;
+private:
+    Q_DISABLE_COPY(KisOperationConfiguration)
 };
+
+typedef KisSharedPtr<KisOperationConfiguration> KisOperationConfigurationSP;
 
 #endif /* __KIS_OPERATION_CONFIGURATION_H */

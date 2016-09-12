@@ -68,7 +68,7 @@ void Graph::setSourceMimeType(const QByteArray& from)
     shortestPaths();
 }
 
-KisFilterChainSP Graph::chain(const KisImportExportManager* manager, QByteArray& to) const
+KisFilterChainSP Graph::chain(const KisImportExportManager *manager, QByteArray &to) const
 {
     if (!isValid() || !manager)
         return KisFilterChainSP();
@@ -79,18 +79,18 @@ KisFilterChainSP Graph::chain(const KisImportExportManager* manager, QByteArray&
     if (!vertex || vertex->key() == UINT_MAX)
         return KisFilterChainSP();
 
-    KisFilterChainSP ret(new KisFilterChain(manager));
+    KisFilterChainSP filterChain(new KisFilterChain(manager));
 
     // Fill the filter chain with all filters on the path
     const Vertex* tmp = vertex->predecessor();
     while (tmp) {
         const Edge* const edge = tmp->findEdge(vertex);
         Q_ASSERT(edge);
-        ret->prependChainLink(edge->filterEntry(), tmp->mimeType(), vertex->mimeType());
+        filterChain->prependChainLink(edge->filterEntry(), tmp->mimeType(), vertex->mimeType());
         vertex = tmp;
         tmp = tmp->predecessor();
     }
-    return ret;
+    return filterChain;
 }
 
 void Graph::dump() const

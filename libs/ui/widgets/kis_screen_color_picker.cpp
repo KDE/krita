@@ -63,7 +63,7 @@ KisScreenColorPicker::KisScreenColorPicker(QWidget *parent) : QWidget(parent), m
     this->layout()->addWidget(m_d->lblScreenColorInfo);
     connect(m_d->screenColorPickerButton, SIGNAL(clicked()), SLOT(pickScreenColor()));
 #ifdef Q_OS_WIN32
-    m_d->updateTimer = new QTimer(q);
+    m_d->updateTimer = new QTimer(this);
     m_d->dummyTransparentWindow.resize(1, 1);
     m_d->dummyTransparentWindow.setFlags(Qt::Tool | Qt::FramelessWindowHint);
     connect(m_d->updateTimer, SIGNAL(timeout()), SLOT(updateColorPicking()));
@@ -234,7 +234,7 @@ void KisScreenColorPicker::updateColorPicking()
     if (!rect().contains(mapFromGlobal(newGlobalPos))) { // Inside the dialog mouse tracking works, handleColorPickingMouseMove will be called
         continueUpdateColorPicking(newGlobalPos);
 #ifdef Q_OS_WIN32
-        m_dummyTransparentWindow.setPosition(newGlobalPos);
+        m_d->dummyTransparentWindow.setPosition(newGlobalPos);
 #endif
     }
 #endif // ! QT_NO_CURSOR

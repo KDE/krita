@@ -290,10 +290,31 @@ void KisOpenGLCanvas2::initializeShaders()
         delete d->displayShader;
         delete d->checkerShader;
         delete d->cursorShader;
-        d->displayShader = d->shaderLoader.loadDisplayShader(d->displayFilter, useHiQualityFiltering);
-        d->checkerShader = d->shaderLoader.loadCheckerShader();
-        d->cursorShader = d->shaderLoader.loadCursorShader();
+        try {
+            d->displayShader = d->shaderLoader.loadDisplayShader(d->displayFilter, useHiQualityFiltering);
+            d->checkerShader = d->shaderLoader.loadCheckerShader();
+            d->cursorShader = d->shaderLoader.loadCursorShader();
+        } catch (const ShaderLoaderException &e) {
+            reportFailedShaderCompilation(e.what());
+        }
     }
+}
+
+void KisOpenGLCanvas2::reportFailedShaderCompilation(const QString &context)
+{
+    KisConfig cfg;
+
+    if (cfg.useVerboseOpenGLDebugOutput()) {
+        dbgUI << "GL-log:" << context << log;
+    }
+
+    qDebug() << "SHADER COMPILATION FAILURE: " << context;
+    QMessageBox::critical(this, i18nc("@title:window", "Krita"),
+                          QString(i18n("Krita could not initialize the OpenGL canvas:\n\n%1\n\n Krita will disable OpenGL and close now.")).arg(context),
+                          QMessageBox::Close);
+
+    cfg.setUseOpenGL(false);
+    cfg.setCanvasState("OPENGL_FAILED");
 }
 
 void KisOpenGLCanvas2::resizeGL(int width, int height)

@@ -1,3 +1,21 @@
+/* This file is part of the KDE project
+ * Copyright (C) Julian Thijssen <julianthijssen@gmail.com>, (C) 2016
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
 #include "kis_opengl_shader_loader.h"
 
 #include "opengl/kis_opengl.h"
@@ -33,7 +51,8 @@ KisShaderProgram *KisOpenGLShaderLoader::loadShader(QString vertPath, QString fr
     vertSource.append(vertexShaderFile.readAll());
 
     result = shader->addShaderFromSourceCode(QOpenGLShader::Vertex, vertSource);
-    reportShaderLinkFailedAndExit(result, "Adding vertex shader source", shader->log());
+    if (!result)
+        throw ShaderLoaderException(QString("Failed to add vertex shader source for file: ").append(vertPath));
 
     // Load fragment shader
     QByteArray fragSource;
@@ -45,7 +64,8 @@ KisShaderProgram *KisOpenGLShaderLoader::loadShader(QString vertPath, QString fr
     fragSource.append(fragmentShaderFile.readAll());
 
     result = shader->addShaderFromSourceCode(QOpenGLShader::Fragment, fragSource);
-    reportShaderLinkFailedAndExit(result, "Adding fragment shader source", shader->log());
+    if (!result)
+        throw ShaderLoaderException(QString("Failed to add fragment shader source for file: ").append(fragPath));
 
     // Bind uniforms
     shader->bindAttributeLocation("a_vertexPosition", PROGRAM_VERTEX_ATTRIBUTE);
@@ -53,7 +73,8 @@ KisShaderProgram *KisOpenGLShaderLoader::loadShader(QString vertPath, QString fr
 
     // Link
     result = shader->link();
-    reportShaderLinkFailedAndExit(result, "Linking shader", shader->log());
+    if (!result)
+        throw ShaderLoaderException(QString("Failed to link shader: ").append(vertPath));
 
     Q_ASSERT(shader->isLinked());
 
@@ -124,23 +145,4 @@ KisShaderProgram *KisOpenGLShaderLoader::loadCursorShader()
     KisShaderProgram *shader = loadShader(vertPath, fragPath, QByteArray(), QByteArray());
 
     return shader;
-}
-
-void KisOpenGLShaderLoader::reportShaderLinkFailedAndExit(bool result, const QString &context, const QString &log)
-{
-    KisConfig cfg;
-
-    if (cfg.useVerboseOpenGLDebugOutput()) {
-        dbgUI << "GL-log:" << context << log;
-    }
-
-    if (result) return;
-
-    qDebug() << "Shader failed to compile/link/anything: " << context;
-    //QMessageBox::critical(this, i18nc("@title:window", "Krita"),
-    //                      QString(i18n("Krita could not initialize the OpenGL canvas:\n\n%1\n\n%2\n\n Krita will disable OpenGL and close now.")).arg(context).arg(log),
-    //                      QMessageBox::Close);
-
-    cfg.setUseOpenGL(false);
-    cfg.setCanvasState("OPENGL_FAILED");
 }

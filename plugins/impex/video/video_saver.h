@@ -24,6 +24,7 @@
 
 #include "kis_types.h"
 
+#include <kis_properties_configuration.h>
 #include "KisImageBuilderResult.h"
 #include "kritavideoexport_export.h"
 
@@ -41,7 +42,7 @@ public:
     virtual ~VideoSaver();
 
     KisImageSP image();
-    KisImageBuilder_Result encode(const QString &filename, const QStringList &additionalOptionsList = QStringList());
+    KisImageBuilder_Result encode(const QString &filename, KisPropertiesConfigurationSP configuration);
 
     bool hasFFMpeg() const;
 

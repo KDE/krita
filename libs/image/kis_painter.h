@@ -31,6 +31,7 @@
 
 #include "kundo2magicstring.h"
 #include "kis_types.h"
+#include <kis_filter_configuration.h>
 #include <kritaimage_export.h>
 
 class QPen;
@@ -49,7 +50,6 @@ class KisUndoAdapter;
 class KisPostExecutionUndoAdapter;
 class KisTransaction;
 class KoPattern;
-class KisFilterConfiguration;
 class KisPaintInformation;
 class KisPaintOp;
 class KisDistanceInformation;
@@ -651,10 +651,10 @@ public:
     const KoColor &backgroundColor() const;
 
     /// Set the current generator (a generator can be used to fill an area
-    void setGenerator(const KisFilterConfiguration * generator);
+    void setGenerator(KisFilterConfigurationSP generator);
 
     /// @return the current generator configuration
-    const KisFilterConfiguration * generator() const;
+    const KisFilterConfigurationSP  generator() const;
 
     /// This enum contains the styles with which we can fill things like polygons and ellipses
     enum FillStyle {

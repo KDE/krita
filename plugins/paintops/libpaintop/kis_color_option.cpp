@@ -69,7 +69,7 @@ KisColorOption::~KisColorOption()
     // delete m_options;
 }
 
-void KisColorOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
+void KisColorOption::writeOptionSetting(KisPropertiesConfigurationSP setting) const
 {
     setting->setProperty(COLOROP_HUE, hue());
     setting->setProperty(COLOROP_SATURATION, saturation());
@@ -84,7 +84,7 @@ void KisColorOption::writeOptionSetting(KisPropertiesConfiguration* setting) con
     setting->setProperty(COLOROP_MIX_BG_COLOR, mixBgColor());
 }
 
-void KisColorOption::readOptionSetting(const KisPropertiesConfiguration* setting)
+void KisColorOption::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
     m_options->hueSlider->setValue(setting->getInt(COLOROP_HUE));
     m_options->saturationSlider->setValue(setting->getInt(COLOROP_SATURATION));
@@ -157,7 +157,7 @@ bool KisColorOption::mixBgColor() const
     return m_options->mixBgColorCHBox->isChecked();
 }
 
-void KisColorProperties::fillProperties(const KisPropertiesConfiguration* setting)
+void KisColorProperties::fillProperties(const KisPropertiesConfigurationSP setting)
 {
     hue = setting->getInt(COLOROP_HUE);
     saturation = setting->getInt(COLOROP_SATURATION);

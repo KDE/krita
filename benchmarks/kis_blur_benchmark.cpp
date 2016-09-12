@@ -66,7 +66,7 @@ void KisBlurBenchmark::cleanupTestCase()
 void KisBlurBenchmark::benchmarkFilter()
 {
     KisFilterSP filter = KisFilterRegistry::instance()->value("blur");
-    KisFilterConfiguration * kfc = filter->defaultConfiguration(m_device);
+    KisFilterConfigurationSP  kfc = filter->defaultConfiguration(m_device);
     // Get the predefined configuration from a file
     QFile file(QString(FILES_DATA_DIR) + QDir::separator() + filter->id() + ".cfg");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {

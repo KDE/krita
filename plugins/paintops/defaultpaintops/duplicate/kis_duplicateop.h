@@ -32,8 +32,10 @@
 #include <brushengine/kis_paintop_settings.h>
 #include <kis_pressure_size_option.h>
 
+#include "kis_duplicateop_settings.h"
+
 class KisPaintInformation;
-class KisDuplicateOpSettings;
+
 
 class QPointF;
 class KisPainter;
@@ -44,7 +46,7 @@ class KisDuplicateOp : public KisBrushBasedPaintOp
 
 public:
 
-    KisDuplicateOp(const KisDuplicateOpSettings *m_settings, KisPainter * painter, KisNodeSP node, KisImageSP image);
+    KisDuplicateOp(const KisPaintOpSettingsSP settings, KisPainter *painter, KisNodeSP node, KisImageSP image);
     ~KisDuplicateOp();
 
     KisSpacingInformation paintAt(const KisPaintInformation& info);
@@ -58,7 +60,7 @@ private:
     KisImageSP m_image;
     KisNodeSP m_node;
 
-    const KisDuplicateOpSettings * m_settings;
+    KisDuplicateOpSettingsSP m_settings;
     KisPaintDeviceSP m_srcdev;
     KisPaintDeviceSP m_target;
     QPointF m_duplicateStart;

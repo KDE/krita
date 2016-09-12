@@ -5,7 +5,7 @@ name="Krita"
 version="95"
 xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org/standards/kxmlgui/1.0/kxmlgui.xsd">
   <MenuBar>
-    <Menu name="file" noMerge="1">
+    <Menu name="file">
       <text>&amp;File</text>
       <Action name="file_new"/>
       <Action name="file_open"/>
@@ -17,12 +17,15 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
       <Separator/>
       <Action name="file_import_file"/>
       <Action name="file_export_file"/>
+      <Separator/>
       <Action name="file_export_pdf"/>
+      <Separator/>
       <Action name="file_import_animation"/>
-      <Action name="file_export_animation"/>
+      <Action name="render_animation"/>
       <Separator/>
       <Action name="save_incremental_version"/>
       <Action name="save_incremental_backup"/>
+      <Separator/>
       <Action name="create_template"/>
       <Action name="create_copy"/>
       <!--Separator/>

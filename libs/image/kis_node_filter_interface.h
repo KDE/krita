@@ -22,15 +22,13 @@
 #include <kritaimage_export.h>
 #include <kis_types.h>
 
-class KisFilterConfiguration;
-
 /**
  * Define an interface for nodes that are associated with a filter.
  */
 class KRITAIMAGE_EXPORT KisNodeFilterInterface
 {
 public:
-    KisNodeFilterInterface(KisFilterConfiguration *filterConfig, bool useGeneratorRegistry);
+    KisNodeFilterInterface(KisFilterConfigurationSP filterConfig, bool useGeneratorRegistry);
     KisNodeFilterInterface(const KisNodeFilterInterface &rhs);
     virtual ~KisNodeFilterInterface();
 
@@ -38,7 +36,7 @@ public:
      * @return safe shared pointer to the filter configuration
      *         associated with this node
      */
-    virtual KisSafeFilterConfigurationSP filter() const;
+    virtual KisFilterConfigurationSP filter() const;
 
     /**
      * Sets the filter configuration for this node. The filter might
@@ -48,13 +46,13 @@ public:
      * after you've set it. Don't try to access the configuration
      * after you've associated it with the node.
      */
-    virtual void setFilter(KisFilterConfiguration *filterConfig);
+    virtual void setFilter(KisFilterConfigurationSP filterConfig);
 
 // the child classes should access the filter with the filter() method
 private:
     KisNodeFilterInterface& operator=(const KisNodeFilterInterface &other);
 
-    KisSafeFilterConfigurationSP m_filter;
+    KisFilterConfigurationSP m_filter;
     bool m_useGeneratorRegistry;
 };
 

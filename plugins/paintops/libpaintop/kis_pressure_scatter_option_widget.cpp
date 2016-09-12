@@ -63,7 +63,7 @@ KisPressureScatterOptionWidget::KisPressureScatterOptionWidget()
     yAxisEnabled(m_axisY->isChecked());
 }
 
-void KisPressureScatterOptionWidget::readOptionSetting(const KisPropertiesConfiguration* setting)
+void KisPressureScatterOptionWidget::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
     KisCurveOptionWidget::readOptionSetting(setting);
     m_axisX->setChecked(static_cast<KisPressureScatterOption*>(curveOption())->isAxisXEnabled());

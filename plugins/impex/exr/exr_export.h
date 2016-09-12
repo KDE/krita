@@ -23,6 +23,24 @@
 #include <QVariant>
 
 #include <KisImportExportFilter.h>
+#include <kis_config_widget.h>
+#include "ui_exr_export_widget.h"
+
+class KisWdgOptionsExr : public KisConfigWidget, public Ui::ExrExportWidget
+{
+    Q_OBJECT
+
+public:
+    KisWdgOptionsExr(QWidget *parent)
+        : KisConfigWidget(parent)
+    {
+        setupUi(this);
+    }
+
+    void setConfiguration(const KisPropertiesConfigurationSP  cfg);
+    KisPropertiesConfigurationSP configuration() const;
+};
+
 
 class exrExport : public KisImportExportFilter
 {
@@ -30,8 +48,11 @@ class exrExport : public KisImportExportFilter
 public:
     exrExport(QObject *parent, const QVariantList &);
     virtual ~exrExport();
+    KisPropertiesConfigurationSP defaultConfiguration(const QByteArray& from = "", const QByteArray& to = "") const;
+    KisPropertiesConfigurationSP lastSavedConfiguration(const QByteArray &from = "", const QByteArray &to = "") const;
+    KisConfigWidget *createConfigurationWidget(QWidget *parent, const QByteArray& from = "", const QByteArray& to = "") const;
 public:
-    virtual KisImportExportFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+    virtual KisImportExportFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration = 0);
 };
 
 #endif

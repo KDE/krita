@@ -124,7 +124,7 @@ void KisBidirectionalMixingOption::applyFixed(KisFixedPaintDeviceSP dab, KisPain
 
 }
 
-void KisBidirectionalMixingOption::readOptionSetting(const KisPropertiesConfiguration* setting)
+void KisBidirectionalMixingOption::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
     m_mixingEnabled = setting->getBool(BIDIRECTIONAL_MIXING_ENABLED, false);
 }

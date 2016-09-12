@@ -97,7 +97,7 @@ void WdgBorderSelection::updateWidthUIValue(double value)
     }
 }
 
-void WdgBorderSelection::getConfiguration(KisOperationConfiguration* config)
+void WdgBorderSelection::getConfiguration(KisOperationConfigurationSP config)
 {
     config->setProperty("x-radius", m_width);
     config->setProperty("y-radius", m_width);

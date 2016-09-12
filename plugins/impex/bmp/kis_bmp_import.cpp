@@ -50,7 +50,7 @@ KisBMPImport::~KisBMPImport()
 {
 }
 
-KisImportExportFilter::ConversionStatus KisBMPImport::convert(const QByteArray& from, const QByteArray& to)
+KisImportExportFilter::ConversionStatus KisBMPImport::convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration)
 {
     dbgFile << "BMP import! From:" << from << ", To:" << to << 0;
 
@@ -67,7 +67,7 @@ KisImportExportFilter::ConversionStatus KisBMPImport::convert(const QByteArray& 
     doc->prepareForImport();
 
     if (!filename.isEmpty()) {
-        
+
         QFileInfo fi(filename);
         if (!fi.exists()) {
             return KisImportExportFilter::FileNotFound;

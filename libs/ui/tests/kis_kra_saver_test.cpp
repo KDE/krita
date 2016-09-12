@@ -124,7 +124,7 @@ void KisKraSaverTest::testSaveEmpty()
 #include "generator/kis_generator_registry.h"
 #include <generator/kis_generator.h>
 
-void testRoundTripFillLayerImpl(const QString &testName, KisFilterConfiguration *config)
+void testRoundTripFillLayerImpl(const QString &testName, KisFilterConfigurationSP config)
 {
     TestUtil::ExternalImageChecker chk(testName, "fill_layer");
 
@@ -164,7 +164,7 @@ void KisKraSaverTest::testRoundTripFillLayerColor()
     Q_ASSERT(generator);
 
     // warning: we pass null paint device to the default constructed value
-    KisFilterConfiguration *config = generator->factoryConfiguration(0);
+    KisFilterConfigurationSP config = generator->factoryConfiguration(0);
     Q_ASSERT(config);
 
     QVariant v;
@@ -180,7 +180,7 @@ void KisKraSaverTest::testRoundTripFillLayerPattern()
     Q_ASSERT(generator);
 
     // warning: we pass null paint device to the default constructed value
-    KisFilterConfiguration *config = generator->factoryConfiguration(0);
+    KisFilterConfigurationSP config = generator->factoryConfiguration(0);
     Q_ASSERT(config);
 
     QVariant v;

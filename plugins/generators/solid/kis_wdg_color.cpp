@@ -41,7 +41,7 @@ KisWdgColor::~KisWdgColor()
 }
 
 
-void KisWdgColor::setConfiguration(const KisPropertiesConfiguration* config)
+void KisWdgColor::setConfiguration(const KisPropertiesConfigurationSP config)
 {
     QVariant value;
     KoColor c =config->getColor("color");
@@ -49,9 +49,9 @@ void KisWdgColor::setConfiguration(const KisPropertiesConfiguration* config)
     widget()->bnColor->setColor(c);
 }
 
-KisPropertiesConfiguration* KisWdgColor::configuration() const
+KisPropertiesConfigurationSP KisWdgColor::configuration() const
 {
-    KisFilterConfiguration* config = new KisFilterConfiguration("color", 1);
+    KisFilterConfigurationSP config = new KisFilterConfiguration("color", 1);
     KoColor c;
     c.fromKoColor(this->widget()->bnColor->color());
     QVariant v;

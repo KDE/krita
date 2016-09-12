@@ -34,7 +34,7 @@ class KisExperimentPaintOp : public KisPaintOp
 
 public:
 
-    KisExperimentPaintOp(const KisExperimentPaintOpSettings *settings, KisPainter * painter, KisNodeSP node, KisImageSP image);
+    KisExperimentPaintOp(const KisPaintOpSettingsSP settings, KisPainter *painter, KisNodeSP node, KisImageSP image);
     ~KisExperimentPaintOp();
 
     void paintLine(const KisPaintInformation& pi1, const KisPaintInformation& pi2, KisDistanceInformation *currentDistance);

@@ -31,13 +31,13 @@
 #include <QFileInfo>
 
 #include <KoColorSpace.h>
-#include <KoColorSpaceRegistry.h>
 #include <KoColorProfile.h>
 #include <KisImportExportManager.h>
 #include <KisFilterChain.h>
 #include <KoColorSpaceConstants.h>
-#include "kis_slider_spin_box.h"
+#include <KoColorSpaceRegistry.h>
 
+#include <kis_slider_spin_box.h>
 #include <KisDocument.h>
 #include <kis_image.h>
 #include <kis_group_layer.h>
@@ -52,7 +52,6 @@
 #include "kis_jpeg_converter.h"
 #include <KisImportExportManager.h>
 
-#include "ui_kis_wdg_options_jpeg.h"
 
 class KisExternalLayer;
 
@@ -66,7 +65,7 @@ KisJPEGExport::~KisJPEGExport()
 {
 }
 
-KisImportExportFilter::ConversionStatus KisJPEGExport::convert(const QByteArray& from, const QByteArray& to)
+KisImportExportFilter::ConversionStatus KisJPEGExport::convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration)
 {
     dbgFile << "JPEG export! From:" << from << ", To:" << to << "";
 
@@ -80,116 +79,57 @@ KisImportExportFilter::ConversionStatus KisJPEGExport::convert(const QByteArray&
     KisImageWSP image = input->image();
     Q_CHECK_PTR(image);
 
-    KoDialog* kdb = new KoDialog(0);
-    kdb->setWindowTitle(i18n("JPEG Export Options"));
-    kdb->setButtons(KoDialog::Ok | KoDialog::Cancel);
+    KoDialog kdb;
+    kdb.setWindowTitle(i18n("JPEG Export Options"));
+    kdb.setButtons(KoDialog::Ok | KoDialog::Cancel);
+    KisConfigWidget *wdg = createConfigurationWidget(&kdb, from, to);
+    kdb.setMainWidget(wdg);
+    kdb.resize(kdb.minimumSize());
 
-    Ui::WdgOptionsJPEG wdgUi;
-    QWidget* wdg = new QWidget(kdb);
-    wdgUi.setupUi(wdg);
-    KisMetaData::FilterRegistryModel frm;
-    wdgUi.metaDataFilters->setModel(&frm);
+    // If a configuration object was passed to the convert method, we use that, otherwise we load from the settings
+    KisPropertiesConfigurationSP cfg(new KisPropertiesConfiguration());
+    if (configuration) {
+        cfg->fromXML(configuration->toXML());
+    }
+    else {
+        cfg = lastSavedConfiguration(from, to);
+    }
 
-    QString filterConfig = KisConfig().exportConfiguration("JPEG");
-    KisPropertiesConfiguration cfg;
-    cfg.fromXML(filterConfig);
-
-    wdgUi.progressive->setChecked(cfg.getBool("progressive", false));
-
-    wdgUi.qualityLevel->setValue(cfg.getInt("quality", 80));
-    wdgUi.qualityLevel->setRange(0, 100, 0);
-    wdgUi.qualityLevel->setSuffix("%");
-
-    wdgUi.optimize->setChecked(cfg.getBool("optimize", true));
-
-    wdgUi.smoothLevel->setValue(cfg.getInt("smoothing", 0));
-    wdgUi.smoothLevel->setRange(0, 100, 0);
-    wdgUi.smoothLevel->setSuffix("%");
-
-
-    wdgUi.baseLineJPEG->setChecked(cfg.getBool("baseline", true));
-    wdgUi.subsampling->setCurrentIndex(cfg.getInt("subsampling", 0));
-    wdgUi.exif->setChecked(cfg.getBool("exif", true));
-    wdgUi.iptc->setChecked(cfg.getBool("iptc", true));
-    wdgUi.xmp->setChecked(cfg.getBool("xmp", true));
-
+    // An extra option to pass to the config widget to set the state correctly, this isn't saved
     const KoColorSpace* cs = image->projection()->colorSpace();
     bool sRGB = cs->profile()->name().contains(QLatin1String("srgb"), Qt::CaseInsensitive);
-    wdgUi.chkForceSRGB->setVisible(!sRGB);
-    wdgUi.chkForceSRGB->setChecked(cfg.getBool("forceSRGB", false));
+    cfg->setProperty("is_sRGB", sRGB);
 
-    wdgUi.chkSaveProfile->setChecked(cfg.getBool("saveProfile", true));
+    wdg->setConfiguration(cfg);
 
-    QStringList rgb = cfg.getString("transparencyFillcolor", "255,255,255").split(',');
-    KoColor background(KoColorSpaceRegistry::instance()->rgb8());
-    background.fromQColor(Qt::white);
-    wdgUi.bnTransparencyFillColor->setDefaultColor(background);
-    background.fromQColor(QColor(rgb[0].toInt(), rgb[1].toInt(), rgb[2].toInt()));
-    wdgUi.bnTransparencyFillColor->setColor(background);
 
-    frm.setEnabledFilters(cfg.getString("filters").split(','));
-
-    kdb->setMainWidget(wdg);
     QApplication::restoreOverrideCursor();
 
     if (!getBatchMode()) {
-        if (kdb->exec() == QDialog::Rejected) {
-            delete kdb;
+        if (kdb.exec() == QDialog::Rejected) {
             return KisImportExportFilter::UserCancelled;
         }
+        cfg = wdg->configuration();
+        KisConfig().setExportConfiguration("JPEG", *cfg.data());
+
     }
 
     KisJPEGOptions options;
-    options.progressive = wdgUi.progressive->isChecked();
-    cfg.setProperty("progressive", options.progressive);
-
-    options.quality = (int)wdgUi.qualityLevel->value();
-    cfg.setProperty("quality", options.quality);
-
-    options.forceSRGB = wdgUi.chkForceSRGB->isChecked();
-    cfg.setProperty("forceSRGB", options.forceSRGB);
-
-    options.saveProfile = wdgUi.chkSaveProfile->isChecked();
-    cfg.setProperty("saveProfile", options.saveProfile);
-
-    // Advanced
-    options.optimize = wdgUi.optimize->isChecked();
-    cfg.setProperty("optimize", options.optimize);
-
-    options.smooth = (int)wdgUi.smoothLevel->value();
-    cfg.setProperty("smoothing", options.smooth);
-
-    options.baseLineJPEG = wdgUi.baseLineJPEG->isChecked();
-    cfg.setProperty("baseline", options.baseLineJPEG);
-
-    options.subsampling = wdgUi.subsampling->currentIndex();
-    cfg.setProperty("subsampling", options.subsampling);
-    // Jpeg
-    options.exif = wdgUi.exif->isChecked();
-    cfg.setProperty("exif", options.exif);
-
-    options.iptc = wdgUi.iptc->isChecked();
-    cfg.setProperty("iptc", options.iptc);
-
-    options.xmp = wdgUi.xmp->isChecked();
-    cfg.setProperty("xmp", options.xmp);
-
-    QColor c = wdgUi.bnTransparencyFillColor->color().toQColor();
-    options.transparencyFillColor = c;
-    cfg.setProperty("transparencyFillcolor", QString("%1,%2,%3").arg(c.red()).arg(c.green()).arg(c.blue()));
-
-    options.filters = frm.enabledFilters();
-    QString enabledFilters;
-    Q_FOREACH (const KisMetaData::Filter* filter, options.filters) {
-        enabledFilters = enabledFilters + filter->id() + ',';
-    }
-
-    cfg.setProperty("filters", enabledFilters);
-
-    KisConfig().setExportConfiguration("JPEG", cfg);
-
-    delete kdb;
-    // XXX: Add dialog about flattening layers here
+    options.progressive = cfg->getBool("progressive", false);
+    options.quality = cfg->getInt("quality", 80);
+    options.forceSRGB = cfg->getBool("forceSRGB", false);
+    options.saveProfile = cfg->getBool("saveProfile", true);
+    options.optimize = cfg->getBool("optimize", true);
+    options.smooth = cfg->getInt("smoothing", 0);
+    options.baseLineJPEG = cfg->getBool("baseline", true);
+    options.subsampling = cfg->getInt("subsampling", 0);
+    options.exif = cfg->getBool("exif", true);
+    options.iptc = cfg->getBool("iptc", true);
+    options.xmp = cfg->getBool("xmp", true);
+    options.transparencyFillColor = cfg->getColor("transparencyFillcolor").toQColor();
+    KisMetaData::FilterRegistryModel m;
+    m.setEnabledFilters(cfg->getString("filters").split(","));
+    options.filters = m.enabledFilters();
 
     QString filename = outputFile();
 
@@ -226,5 +166,99 @@ KisImportExportFilter::ConversionStatus KisJPEGExport::convert(const QByteArray&
     return KisImportExportFilter::InternalError;
 }
 
-#include <kis_jpeg_export.moc>
+KisPropertiesConfigurationSP KisJPEGExport::defaultConfiguration(const QByteArray &/*from*/, const QByteArray &/*to*/) const
+{
+    KisPropertiesConfigurationSP cfg = new KisPropertiesConfiguration();
+    cfg->setProperty("progressive", false);
+    cfg->setProperty("quality", 80);
+    cfg->setProperty("forceSRGB", false);
+    cfg->setProperty("saveProfile", true);
+    cfg->setProperty("optimize", true);
+    cfg->setProperty("smoothing", 0);
+    cfg->setProperty("baseline", true);
+    cfg->setProperty("subsampling", 0);
+    cfg->setProperty("exif", true);
+    cfg->setProperty("iptc", true);
+    cfg->setProperty("xmp", true);
+    cfg->setProperty("transparencyFillcolor", QString("255,255,255"));
+    cfg->setProperty("filters", "");
 
+    return cfg;
+}
+
+KisPropertiesConfigurationSP KisJPEGExport::lastSavedConfiguration(const QByteArray &from, const QByteArray &to) const
+{
+    KisPropertiesConfigurationSP cfg = defaultConfiguration(from, to);
+    QString filterConfig = KisConfig().exportConfiguration("JPEG");
+    cfg->fromXML(filterConfig, false);
+    return cfg;
+}
+
+KisConfigWidget *KisJPEGExport::createConfigurationWidget(QWidget *parent, const QByteArray &/*from*/, const QByteArray &/*to*/) const
+{
+    return new KisWdgOptionsJPEG(parent);
+}
+
+KisWdgOptionsJPEG::KisWdgOptionsJPEG(QWidget *parent)
+    : KisConfigWidget(parent)
+{
+    setupUi(this);
+
+    metaDataFilters->setModel(&m_filterRegistryModel);
+    qualityLevel->setRange(0, 100, 0);
+    qualityLevel->setSuffix("%");
+    smoothLevel->setRange(0, 100, 0);
+    smoothLevel->setSuffix("%");
+}
+
+
+void KisWdgOptionsJPEG::setConfiguration(const KisPropertiesConfigurationSP cfg)
+{
+    progressive->setChecked(cfg->getBool("progressive", false));
+    qualityLevel->setValue(cfg->getInt("quality", 80));
+    optimize->setChecked(cfg->getBool("optimize", true));
+    smoothLevel->setValue(cfg->getInt("smoothing", 0));
+    baseLineJPEG->setChecked(cfg->getBool("baseline", true));
+    subsampling->setCurrentIndex(cfg->getInt("subsampling", 0));
+    exif->setChecked(cfg->getBool("exif", true));
+    iptc->setChecked(cfg->getBool("iptc", true));
+    xmp->setChecked(cfg->getBool("xmp", true));
+    chkForceSRGB->setVisible(cfg->getBool("is_sRGB"));
+    chkForceSRGB->setChecked(cfg->getBool("forceSRGB", false));
+    chkSaveProfile->setChecked(cfg->getBool("saveProfile", true));
+    QStringList rgb = cfg->getString("transparencyFillcolor", "255,255,255").split(',');
+    KoColor background(KoColorSpaceRegistry::instance()->rgb8());
+    background.fromQColor(Qt::white);
+    bnTransparencyFillColor->setDefaultColor(background);
+    background.fromQColor(QColor(rgb[0].toInt(), rgb[1].toInt(), rgb[2].toInt()));
+    bnTransparencyFillColor->setColor(background);
+
+    m_filterRegistryModel.setEnabledFilters(cfg->getString("filters").split(','));
+
+}
+
+KisPropertiesConfigurationSP KisWdgOptionsJPEG::configuration() const
+{
+    KisPropertiesConfigurationSP cfg = new KisPropertiesConfiguration();
+    cfg->setProperty("progressive", progressive->isChecked());
+    cfg->setProperty("quality", (int)qualityLevel->value());
+    cfg->setProperty("forceSRGB", chkForceSRGB->isChecked());
+    cfg->setProperty("saveProfile", chkSaveProfile->isChecked());
+    cfg->setProperty("optimize", optimize->isChecked());
+    cfg->setProperty("smoothing", (int)smoothLevel->value());
+    cfg->setProperty("baseline", baseLineJPEG->isChecked());
+    cfg->setProperty("subsampling", subsampling->currentIndex());
+    cfg->setProperty("exif", exif->isChecked());
+    cfg->setProperty("iptc", iptc->isChecked());
+    cfg->setProperty("xmp", xmp->isChecked());
+    QColor c = bnTransparencyFillColor->color().toQColor();
+    cfg->setProperty("transparencyFillcolor", QString("%1,%2,%3").arg(c.red()).arg(c.green()).arg(c.blue()));
+    QString enabledFilters;
+    Q_FOREACH (const KisMetaData::Filter* filter, m_filterRegistryModel.enabledFilters()) {
+        enabledFilters = enabledFilters + filter->id() + ',';
+    }
+    cfg->setProperty("filters", enabledFilters);
+
+    return cfg;
+}
+#include <kis_jpeg_export.moc>

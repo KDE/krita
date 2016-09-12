@@ -246,8 +246,8 @@ void KisLayerTest::testMasksChangeRect()
 
     KisFilterSP filter = KisFilterRegistry::instance()->value("blur");
     Q_ASSERT(filter);
-    KisFilterConfiguration *configuration1 = filter->defaultConfiguration(0);
-    KisFilterConfiguration *configuration2 = filter->defaultConfiguration(0);
+    KisFilterConfigurationSP configuration1 = filter->defaultConfiguration(0);
+    KisFilterConfigurationSP configuration2 = filter->defaultConfiguration(0);
 
     filterMask1->setFilter(configuration1);
     filterMask2->setFilter(configuration2);

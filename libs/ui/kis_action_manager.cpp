@@ -32,7 +32,7 @@
 #include "kis_layer.h"
 #include "KisDocument.h"
 #include "kis_clipboard.h"
-
+#include <kis_image_animation_interface.h>
 
 #include "QFile"
 #include <QDomDocument>
@@ -208,6 +208,10 @@ void KisActionManager::updateGUI()
             image = d->viewManager->image();
             flags |= KisAction::ACTIVE_IMAGE;
 
+            if (image && image->animationInterface()->hasAnimation()) {
+                flags |= KisAction::IMAGE_HAS_ANIMATION;
+            }
+
             node = d->viewManager->activeNode();
             device = d->viewManager->activeDevice();
             document = d->viewManager->document();
@@ -367,7 +371,7 @@ void KisActionManager::registerOperation(KisOperation* operation)
 
 void KisActionManager::runOperation(const QString& id)
 {
-    KisOperationConfiguration* config = new KisOperationConfiguration(id);
+    KisOperationConfigurationSP config = new KisOperationConfiguration(id);
 
     KisOperationUIFactory* uiFactory = d->uiRegistry.get(id);
     if (uiFactory) {
@@ -379,7 +383,7 @@ void KisActionManager::runOperation(const QString& id)
     runOperationFromConfiguration(config);
 }
 
-void KisActionManager::runOperationFromConfiguration(KisOperationConfiguration* config)
+void KisActionManager::runOperationFromConfiguration(KisOperationConfigurationSP config)
 {
     KisOperation* operation = d->operationRegistry.get(config->id());
     Q_ASSERT(operation);
@@ -438,6 +442,10 @@ void KisActionManager::dumpActionFlags()
             if (flags & KisAction::SHAPES_IN_CLIPBOARD) {
                 out << "    Shape in clipboard\n";
             }
+            if (flags & KisAction::IMAGE_HAS_ANIMATION) {
+                out << "    Image has animation\n";
+            }
+
             out << "\n\n";
             out << "Action will only activate if the following conditions are met: \n";
             KisAction::ActivationConditions conditions = action->activationConditions();

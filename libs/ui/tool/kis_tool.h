@@ -292,7 +292,7 @@ protected:
     KoColor currentFgColor();
     KoColor currentBgColor();
     KisPaintOpPresetSP currentPaintOpPreset();
-    KisFilterConfiguration *currentGenerator();
+    KisFilterConfigurationSP currentGenerator();
 
     virtual void setupPaintAction(KisRecordedPaintAction* action);
 

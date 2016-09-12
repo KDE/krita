@@ -56,8 +56,7 @@ int KisBrushBasedPaintOpSettings::rate() const
 KisPaintOpSettingsSP KisBrushBasedPaintOpSettings::clone() const
 {
     KisPaintOpSettingsSP _settings = KisOutlineGenerationPolicy<KisPaintOpSettings>::clone();
-    KisBrushBasedPaintOpSettings *settings =
-        dynamic_cast<KisBrushBasedPaintOpSettings*>(_settings.data());
+    KisBrushBasedPaintOpSettingsSP settings = dynamic_cast<KisBrushBasedPaintOpSettings*>(_settings.data());
     settings->m_savedBrush = this->brush();
     return settings;
 }
@@ -71,7 +70,7 @@ KisBrushSP KisBrushBasedPaintOpSettings::brush() const
 QPainterPath KisBrushBasedPaintOpSettings::brushOutlineImpl(const KisPaintInformation &info,
                                                             OutlineMode mode,
                                                             qreal additionalScale,
-                                                            bool forceOutline) const
+                                                            bool forceOutline)
 {
     QPainterPath path;
 
@@ -104,7 +103,7 @@ QPainterPath KisBrushBasedPaintOpSettings::brushOutlineImpl(const KisPaintInform
     return path;
 }
 
-QPainterPath KisBrushBasedPaintOpSettings::brushOutline(const KisPaintInformation &info, OutlineMode mode) const
+QPainterPath KisBrushBasedPaintOpSettings::brushOutline(const KisPaintInformation &info, OutlineMode mode)
 {
     return brushOutlineImpl(info, mode, 1.0);
 }
@@ -127,7 +126,7 @@ bool KisBrushBasedPaintOpSettings::isLoadable()
 }
 
 struct BrushReader {
-    BrushReader(const KisBrushBasedPaintOpSettings *parent)
+    BrushReader(KisBrushBasedPaintOpSettingsSP parent)
         : m_parent(parent)
     {
         if (m_parent->optionsWidget()) {
@@ -142,11 +141,11 @@ struct BrushReader {
         return m_parent ? m_parent->brush() : 0;
     }
 
-    const KisBrushBasedPaintOpSettings *m_parent;
+    KisBrushBasedPaintOpSettingsSP m_parent;
 };
 
 struct BrushWriter {
-    BrushWriter(KisBrushBasedPaintOpSettings *parent)
+    BrushWriter(KisBrushBasedPaintOpSettingsSP parent)
         : m_parent(parent)
     {
         if (!m_parent->optionsWidget()) {
@@ -164,7 +163,7 @@ struct BrushWriter {
         return m_parent ? m_parent->brush() : 0;
     }
 
-    KisBrushBasedPaintOpSettings *m_parent;
+    KisBrushBasedPaintOpSettingsSP m_parent;
 };
 
 void KisBrushBasedPaintOpSettings::setAngle(qreal value)
@@ -174,7 +173,7 @@ void KisBrushBasedPaintOpSettings::setAngle(qreal value)
     w.brush()->setAngle(value);
 }
 
-qreal KisBrushBasedPaintOpSettings::angle() const
+qreal KisBrushBasedPaintOpSettings::angle()
 {
     BrushReader w(this);
     if (!w.brush()) return 0.0;
@@ -188,7 +187,7 @@ void KisBrushBasedPaintOpSettings::setSpacing(qreal value)
     w.brush()->setSpacing(value);
 }
 
-qreal KisBrushBasedPaintOpSettings::spacing() const
+qreal KisBrushBasedPaintOpSettings::spacing()
 {
     BrushReader w(this);
     if (!w.brush()) return 0.0;
@@ -203,14 +202,14 @@ void KisBrushBasedPaintOpSettings::setAutoSpacing(bool active, qreal coeff)
 }
 
 
-bool KisBrushBasedPaintOpSettings::autoSpacingActive() const
+bool KisBrushBasedPaintOpSettings::autoSpacingActive()
 {
     BrushReader w(this);
     if (!w.brush()) return 0.0;
     return w.brush()->autoSpacingActive();
 }
 
-qreal KisBrushBasedPaintOpSettings::autoSpacingCoeff() const
+qreal KisBrushBasedPaintOpSettings::autoSpacingCoeff()
 {
     BrushReader w(this);
     if (!w.brush()) return 0.0;

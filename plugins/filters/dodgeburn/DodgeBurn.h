@@ -34,7 +34,7 @@ public:
     KisFilterDodgeBurn(const QString& id, const QString& prefix, const QString& name );
 public:
 
-    virtual KoColorTransformation* createTransformation(const KoColorSpace* cs, const KisFilterConfiguration* config) const;
+    virtual KoColorTransformation* createTransformation(const KoColorSpace* cs, const KisFilterConfigurationSP config) const;
     KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
 private:
     QString m_prefix;
@@ -49,8 +49,8 @@ public:
     KisDodgeBurnConfigWidget(QWidget * parent, const QString& id);
     virtual ~KisDodgeBurnConfigWidget();
 
-    virtual KisPropertiesConfiguration * configuration() const;
-    virtual void setConfiguration(const KisPropertiesConfiguration* config);
+    virtual KisPropertiesConfigurationSP  configuration() const;
+    virtual void setConfiguration(const KisPropertiesConfigurationSP config);
     QString m_id;
     Ui_DodgeBurnConfigurationBaseWidget * m_page;
 };

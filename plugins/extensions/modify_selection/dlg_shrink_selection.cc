@@ -97,7 +97,7 @@ void WdgShrinkSelection::updateShrinkUIValue(double value)
     }
 }
 
-void WdgShrinkSelection::getConfiguration(KisOperationConfiguration* config)
+void WdgShrinkSelection::getConfiguration(KisOperationConfigurationSP config)
 {
     config->setProperty("x-radius", m_shrinkValue);
     config->setProperty("y-radius", m_shrinkValue);

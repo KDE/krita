@@ -40,7 +40,7 @@
 
 #include "filter.h"
 
-KisDynaPaintOp::KisDynaPaintOp(const KisDynaPaintOpSettings *settings, KisPainter * painter, KisNodeSP node, KisImageSP image)
+KisDynaPaintOp::KisDynaPaintOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisNodeSP node, KisImageSP image)
     : KisPaintOp(painter)
 {
     Q_UNUSED(node);

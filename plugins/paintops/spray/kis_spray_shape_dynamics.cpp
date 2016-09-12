@@ -85,7 +85,7 @@ KisSprayShapeDynamicsOption::~KisSprayShapeDynamicsOption()
     delete m_options;
 }
 
-void KisSprayShapeDynamicsOption::writeOptionSetting(KisPropertiesConfiguration* settings) const
+void KisSprayShapeDynamicsOption::writeOptionSetting(KisPropertiesConfigurationSP settings) const
 {
     settings->setProperty(SHAPE_DYNAMICS_VERSION, "2.3");
     settings->setProperty(SHAPE_DYNAMICS_ENABLED, isChecked());
@@ -101,7 +101,7 @@ void KisSprayShapeDynamicsOption::writeOptionSetting(KisPropertiesConfiguration*
 }
 
 
-void KisSprayShapeDynamicsOption::readOptionSetting(const KisPropertiesConfiguration* settings)
+void KisSprayShapeDynamicsOption::readOptionSetting(const KisPropertiesConfigurationSP settings)
 {
     // backward compatibility with 2.2
     if (settings->getString(SHAPE_DYNAMICS_VERSION, "2.2") == "2.2") {

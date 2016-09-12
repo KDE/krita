@@ -30,7 +30,7 @@ public:
     virtual ~KisExperimentPaintOpSettingsWidget();
     virtual void changePaintOpSize(qreal x, qreal y);
 
-    KisPropertiesConfiguration* configuration() const;
+    KisPropertiesConfigurationSP configuration() const;
 };
 
 #endif

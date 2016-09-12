@@ -49,8 +49,8 @@ public:
 
     qreal brushAspect() const;
 
-    void writeOptionSetting(KisPropertiesConfiguration* setting) const;
-    void readOptionSetting(const KisPropertiesConfiguration* setting);
+    void writeOptionSetting(KisPropertiesConfigurationSP setting) const;
+    void readOptionSetting(const KisPropertiesConfigurationSP setting);
 
 private:
     KisBrushSizeOptionsWidget * m_options;
@@ -70,7 +70,8 @@ public:
     bool brush_jitter_movement_enabled;
 
 public:
-    void readOptionSetting(const KisPropertiesConfiguration* setting) {
+
+    void readOptionSetting(const KisPropertiesConfigurationSP setting) {
         brush_diameter = setting->getDouble(BRUSH_DIAMETER);
         brush_aspect = setting->getDouble(BRUSH_ASPECT);
         brush_rotation = setting->getDouble(BRUSH_ROTATION);
@@ -81,7 +82,7 @@ public:
         brush_jitter_movement_enabled = setting->getBool(BRUSH_JITTER_MOVEMENT_ENABLED);
     }
 
-    void writeOptionSetting(KisPropertiesConfiguration* setting) const {
+    void writeOptionSetting(KisPropertiesConfigurationSP setting) const {
         setting->setProperty(BRUSH_DIAMETER, brush_diameter);
         setting->setProperty(BRUSH_ASPECT, brush_aspect);
         setting->setProperty(BRUSH_ROTATION, brush_rotation);

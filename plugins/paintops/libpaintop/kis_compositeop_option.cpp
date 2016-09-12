@@ -61,13 +61,13 @@ KisCompositeOpOption::~KisCompositeOpOption()
 {
 }
 
-void KisCompositeOpOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
+void KisCompositeOpOption::writeOptionSetting(KisPropertiesConfigurationSP setting) const
 {
     setting->setProperty("CompositeOp", m_currCompositeOpID);
     setting->setProperty("EraserMode", m_eraserMode);
 }
 
-void KisCompositeOpOption::readOptionSetting(const KisPropertiesConfiguration* setting)
+void KisCompositeOpOption::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
     QString ompositeOpID = setting->getString("CompositeOp", KoCompositeOpRegistry::instance().getDefaultCompositeOp().id());
     KoID    compositeOp = KoCompositeOpRegistry::instance().getKoID(ompositeOpID);

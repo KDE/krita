@@ -62,7 +62,7 @@ void KisFilterMaskTest::testProjectionNotSelected()
 
     KisFilterSP f = KisFilterRegistry::instance()->value("invert");
     Q_ASSERT(f);
-    KisFilterConfiguration * kfc = f->defaultConfiguration(0);
+    KisFilterConfigurationSP  kfc = f->defaultConfiguration(0);
     Q_ASSERT(kfc);
 
     KisFilterMaskSP mask = new KisFilterMask();
@@ -98,7 +98,7 @@ void KisFilterMaskTest::testProjectionSelected()
 
     KisFilterSP f = KisFilterRegistry::instance()->value("invert");
     Q_ASSERT(f);
-    KisFilterConfiguration * kfc = f->defaultConfiguration(0);
+    KisFilterConfigurationSP  kfc = f->defaultConfiguration(0);
     Q_ASSERT(kfc);
 
     KisFilterMaskSP mask = new KisFilterMask();

@@ -96,7 +96,7 @@ KisConfigWidget * KisHSVAdjustmentFilter::createConfigurationWidget(QWidget* par
     return new KisHSVConfigWidget(parent);
 }
 
-KoColorTransformation* KisHSVAdjustmentFilter::createTransformation(const KoColorSpace* cs, const KisFilterConfiguration* config) const
+KoColorTransformation* KisHSVAdjustmentFilter::createTransformation(const KoColorSpace* cs, const KisFilterConfigurationSP config) const
 {
     QHash<QString, QVariant> params;
     if (config) {
@@ -117,9 +117,9 @@ KoColorTransformation* KisHSVAdjustmentFilter::createTransformation(const KoColo
     return cs->createColorTransformation("hsv_adjustment", params);
 }
 
-KisFilterConfiguration* KisHSVAdjustmentFilter::factoryConfiguration(const KisPaintDeviceSP) const
+KisFilterConfigurationSP KisHSVAdjustmentFilter::factoryConfiguration(const KisPaintDeviceSP) const
 {
-    KisColorTransformationConfiguration* config = new KisColorTransformationConfiguration(id().id(), 1);
+    KisColorTransformationConfigurationSP config = new KisColorTransformationConfiguration(id().id(), 1);
     config->setProperty("h", 0);
     config->setProperty("s", 0);
     config->setProperty("v", 0);
@@ -157,9 +157,9 @@ KisHSVConfigWidget::~KisHSVConfigWidget()
     delete m_page;
 }
 
-KisPropertiesConfiguration * KisHSVConfigWidget::configuration() const
+KisPropertiesConfigurationSP  KisHSVConfigWidget::configuration() const
 {
-    KisColorTransformationConfiguration* c = new KisColorTransformationConfiguration(KisHSVAdjustmentFilter::id().id(), 0);
+    KisColorTransformationConfigurationSP c = new KisColorTransformationConfiguration(KisHSVAdjustmentFilter::id().id(), 0);
     c->setProperty("h", m_page->hueSlider->value());
     c->setProperty("s", m_page->saturationSlider->value());
     c->setProperty("v", m_page->valueSlider->value());
@@ -168,7 +168,7 @@ KisPropertiesConfiguration * KisHSVConfigWidget::configuration() const
     return c;
 }
 
-void KisHSVConfigWidget::setConfiguration(const KisPropertiesConfiguration * config)
+void KisHSVConfigWidget::setConfiguration(const KisPropertiesConfigurationSP  config)
 {
     m_page->cmbType->setCurrentIndex(config->getInt("type", 1));
     m_page->chkColorize->setChecked(config->getBool("colorize", false));

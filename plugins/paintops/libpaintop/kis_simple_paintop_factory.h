@@ -90,11 +90,8 @@ public:
     }
 #endif /* HAVE_THREADED_TEXT_RENDERING_WORKAROUND */
 
-    KisPaintOp * createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisNodeSP node, KisImageSP image) {
-        const OpSettings *opSettings = dynamic_cast<const OpSettings *>(settings.data());
-        Q_ASSERT(settings == 0 || opSettings != 0);
-
-        KisPaintOp * op = new Op(opSettings, painter, node, image);
+    KisPaintOp *createOp(const KisPaintOpSettingsSP settings, KisPainter *painter, KisNodeSP node, KisImageSP image) {
+        KisPaintOp * op = new Op(settings, painter, node, image);
         Q_CHECK_PTR(op);
         return op;
     }

@@ -39,13 +39,13 @@ public:
     KisFilterInvert();
 public:
 
-    virtual KoColorTransformation* createTransformation(const KoColorSpace* cs, const KisFilterConfiguration* config) const;
+    virtual KoColorTransformation* createTransformation(const KoColorSpace* cs, const KisFilterConfigurationSP config) const;
 
     static inline KoID id() {
         return KoID("invert", i18n("Invert"));
     }
 
-    bool needsTransparentPixels(const KisFilterConfiguration *config, const KoColorSpace *cs) const;
+    bool needsTransparentPixels(const KisFilterConfigurationSP config, const KoColorSpace *cs) const;
 };
 
 #endif

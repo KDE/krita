@@ -39,8 +39,8 @@ public:
     KisCurveOptionWidget(KisCurveOption* curveOption, const QString &minLabel, const QString &maxLabel, bool hideSlider = false);
     ~KisCurveOptionWidget();
 
-    virtual void writeOptionSetting(KisPropertiesConfiguration* setting) const;
-    virtual void readOptionSetting(const KisPropertiesConfiguration* setting);
+    virtual void writeOptionSetting(KisPropertiesConfigurationSP setting) const;
+    virtual void readOptionSetting(const KisPropertiesConfigurationSP setting);
     virtual void lodLimitations(KisPaintopLodLimitations *l) const;
 
     bool isCheckable() const;

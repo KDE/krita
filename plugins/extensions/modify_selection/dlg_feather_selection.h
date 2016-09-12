@@ -32,7 +32,7 @@ class WdgFeatherSelection : public KisOperationUIWidget, public Ui::WdgFeatherSe
 public:
     WdgFeatherSelection(QWidget *parent, KisViewManager *view);
 
-    virtual void getConfiguration(KisOperationConfiguration* config);
+    virtual void getConfiguration(KisOperationConfigurationSP config);
 
 private Q_SLOTS:
     void slotRadiusChanged(int radius);

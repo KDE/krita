@@ -99,7 +99,7 @@ void KisWdgGenerator::initialize(KisViewManager *view)
 
 
 
-void KisWdgGenerator::setConfiguration(const KisFilterConfiguration * config)
+void KisWdgGenerator::setConfiguration(const KisFilterConfigurationSP  config)
 {
     for (int i = 0; i < d->uiWdgGenerators.lstGenerators->count(); ++i) {
         KisGeneratorItem * item = static_cast<KisGeneratorItem*>(d->uiWdgGenerators.lstGenerators->item(i));
@@ -116,12 +116,11 @@ void KisWdgGenerator::setConfiguration(const KisFilterConfiguration * config)
     }
 }
 
-KisFilterConfiguration * KisWdgGenerator::configuration()
+KisFilterConfigurationSP KisWdgGenerator::configuration()
 {
     KisConfigWidget * wdg = dynamic_cast<KisConfigWidget*>(d->centralWidget);
     if (wdg) {
-        KisFilterConfiguration * config
-        = dynamic_cast<KisFilterConfiguration*>(wdg->configuration());
+        KisFilterConfigurationSP config = dynamic_cast<KisFilterConfiguration*>(wdg->configuration().data());
         if (config) {
             return config;
         }
@@ -133,13 +132,12 @@ KisFilterConfiguration * KisWdgGenerator::configuration()
 
 void KisWdgGenerator::slotGeneratorActivated(int row)
 {
-    KisGeneratorItem * item = dynamic_cast<KisGeneratorItem*>(d->uiWdgGenerators.lstGenerators->item(row));
+    KisGeneratorItem *item = dynamic_cast<KisGeneratorItem*>(d->uiWdgGenerators.lstGenerators->item(row));
 
     if (!item) {
-        d->centralWidget = new QLabel(i18n("No configuration options."),
-                                      d->uiWdgGenerators.centralWidgetHolder);
-    } else {
-
+        d->centralWidget = new QLabel(i18n("No configuration options."), d->uiWdgGenerators.centralWidgetHolder);
+    }
+    else {
 
         d->currentGenerator = item->generator;
 

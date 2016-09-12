@@ -40,7 +40,7 @@ exrImport::~exrImport()
 {
 }
 
-KisImportExportFilter::ConversionStatus exrImport::convert(const QByteArray&, const QByteArray& to)
+KisImportExportFilter::ConversionStatus exrImport::convert(const QByteArray&, const QByteArray& to, KisPropertiesConfigurationSP configuration)
 {
     dbgFile << "Importing using EXRImport!";
 

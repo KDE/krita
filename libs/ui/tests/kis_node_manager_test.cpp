@@ -19,7 +19,7 @@
 #include "kis_node_manager_test.h"
 
 #include <QTest>
-
+#include <kis_filter_configuration.h>
 #include "ui_manager_test.h"
 
 class NodeManagerTester : public TestUtil::UiManagerTest

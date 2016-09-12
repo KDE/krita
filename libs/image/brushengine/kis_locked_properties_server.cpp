@@ -36,11 +36,11 @@ KisLockedPropertiesServer::~KisLockedPropertiesServer()
     delete m_lockedProperties;
 }
 
-KisLockedPropertiesProxy* KisLockedPropertiesServer::createLockedPropertiesProxy(const KisPropertiesConfiguration* config)
+KisLockedPropertiesProxySP KisLockedPropertiesServer::createLockedPropertiesProxy(const KisPropertiesConfigurationSP config)
 {
-     KisLockedPropertiesProxy* m = new KisLockedPropertiesProxy(config, lockedProperties());
-    return m;
+    return new KisLockedPropertiesProxy(config, lockedProperties());
 }
+
 KisLockedPropertiesServer* KisLockedPropertiesServer::instance()
 {
     if (s_instance) {
@@ -49,18 +49,22 @@ KisLockedPropertiesServer* KisLockedPropertiesServer::instance()
 
     return NULL;
 }
+
 KisLockedProperties* KisLockedPropertiesServer::lockedProperties()
 {
     return m_lockedProperties;
 }
-void KisLockedPropertiesServer::addToLockedProperties(KisPropertiesConfiguration *p)
+
+void KisLockedPropertiesServer::addToLockedProperties(KisPropertiesConfigurationSP p)
 {
     lockedProperties()->addToLockedProperties(p);
 }
-void KisLockedPropertiesServer::removeFromLockedProperties(KisPropertiesConfiguration *p)
+
+void KisLockedPropertiesServer::removeFromLockedProperties(KisPropertiesConfigurationSP p)
 {
     lockedProperties()->removeFromLockedProperties(p);
 }
+
 void KisLockedPropertiesServer::setPropertiesFromLocked(bool value)
 {
     m_propertiesFromLocked = value;

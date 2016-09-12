@@ -32,7 +32,7 @@ public:
     KisCurvePaintOpSettingsWidget(QWidget* parent = 0);
     virtual ~KisCurvePaintOpSettingsWidget();
 
-    KisPropertiesConfiguration* configuration() const;
+    KisPropertiesConfigurationSP configuration() const;
 
 private:
     KisCurveOpOption *m_curveOption;

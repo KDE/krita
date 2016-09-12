@@ -97,7 +97,7 @@ void WdgGrowSelection::updateGrowUIValue(double value)
     }
 }
 
-void WdgGrowSelection::getConfiguration(KisOperationConfiguration* config)
+void WdgGrowSelection::getConfiguration(KisOperationConfigurationSP config)
 {
     config->setProperty("x-radius", m_growValue);
     config->setProperty("y-radius", m_growValue);

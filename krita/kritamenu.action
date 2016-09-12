@@ -122,18 +122,30 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
-    <Action name="file_export_animation">
+    <Action name="render_animation">
       <icon></icon>
-      <text>Expor&amp;t animation...</text>
+      <text>&amp;Render Animation...</text>
       <whatsThis></whatsThis>
-      <toolTip>Export animation</toolTip>
-      <iconText>Export animation</iconText>
-      <activationFlags>1</activationFlags>
+      <toolTip>Render Animation to GIF, Image Sequence or Video</toolTip>
+      <iconText>Render Animation</iconText>
+      <activationFlags>1000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
+      <Action name="render_image_sequence_again">
+      <icon></icon>
+      <text>&amp;Render Image Sequence Again</text>
+      <whatsThis></whatsThis>
+      <toolTip>Render Animation to Image Sequence Again</toolTip>
+      <iconText>Render Animation</iconText>
+      <activationFlags>1000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>    
     <Action name="save_incremental_version">
       <icon></icon>
       <text>Save Incremental &amp;Version</text>

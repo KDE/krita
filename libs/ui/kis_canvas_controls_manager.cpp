@@ -64,25 +64,25 @@ void KisCanvasControlsManager::setup(KisActionManager *actionManager)
 
     KisAction *desaturatedColor = actionManager->createAction("make_brush_color_desaturated");
     connect(desaturatedColor, SIGNAL(triggered()), SLOT(makeColorDesaturated()));
-    
+
     KisAction *hueClockwise = actionManager->createAction("shift_brush_color_clockwise");
     connect(hueClockwise, SIGNAL(triggered()), SLOT(shiftHueClockWise()));
 
     KisAction *hueCounterClockwise = actionManager->createAction("shift_brush_color_counter_clockwise");
     connect(hueCounterClockwise, SIGNAL(triggered()), SLOT(shiftHueCounterClockWise()));
-    
+
     KisAction *moreRed = actionManager->createAction("make_brush_color_redder");
     connect(moreRed, SIGNAL(triggered()), SLOT(makeColorRed()));
-    
+
     KisAction *moreGreen = actionManager->createAction("make_brush_color_greener");
     connect(moreGreen, SIGNAL(triggered()), SLOT(makeColorGreen()));
-    
+
     KisAction *moreBlue = actionManager->createAction("make_brush_color_bluer");
     connect(moreBlue, SIGNAL(triggered()), SLOT(makeColorBlue()));
 
     KisAction *moreYellow = actionManager->createAction("make_brush_color_yellower");
     connect(moreYellow, SIGNAL(triggered()), SLOT(makeColorYellow()));
- 
+
     KisAction *increaseOpacity = actionManager->createAction("increase_opacity");
     connect(increaseOpacity, SIGNAL(triggered()), SLOT(increaseOpacity()));
 
@@ -264,7 +264,7 @@ void KisCanvasControlsManager::stepAlpha(float step)
     m_view->canvasBase()->resourceManager ()->setResource(KisCanvasResourceProvider::Opacity, alpha);
 
     // FIXME: DK: should we uncomment it back?
-    //KisLockedPropertiesProxy *p = KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(m_view->resourceProvider()->currentPreset()->settings());
+    //KisLockedPropertiesProxySP p = KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(m_view->resourceProvider()->currentPreset()->settings());
     //p->setProperty("OpacityValue", alpha);
 }
 

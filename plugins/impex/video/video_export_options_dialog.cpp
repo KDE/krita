@@ -54,21 +54,6 @@ struct VideoExportOptionsDialog::Private
         tunes << KoID("ssim", i18nc("h264 tune option name, check simplescreenrecorder for standard translations", "ssim"));
         tunes << KoID("fastdecode", i18nc("h264 tune option name, check simplescreenrecorder for standard translations", "fastdecode"));
         tunes << KoID("zerolatency", i18nc("h264 tune option name, check simplescreenrecorder for standard translations", "zerolatency"));
-
-
-        KConfigGroup cfg = KSharedConfig::openConfig()->group("VideoExportPlugin");
-
-        defaultPreset = cfg.readEntry("h264PresetIndex", 5);
-        defaultConstantRateFactor = cfg.readEntry("h264ConstantRateFactor", 23);
-        defaultProfile = cfg.readEntry("h264ProfileIndex", 4);
-        defaultTune = cfg.readEntry("h264TuneIndex", 1);
-        defaultBitrate = cfg.readEntry("TheoraBitrate", 5000);
-        defaultCustomLine = cfg.readEntry("CustomLineValue", "");
-    }
-
-    void updateDefaultCustomLine() {
-        KConfigGroup cfg = KSharedConfig::openConfig()->group("VideoExportPlugin");
-        defaultCustomLine = cfg.readEntry("CustomLineValue", "");
     }
 
     QVector<KoID> presets;
@@ -83,11 +68,18 @@ struct VideoExportOptionsDialog::Private
     int defaultTune;
 
     QString defaultCustomLine;
+    QString currentCustomLine;
+
+    void updateDefaultCustomLine()
+    {
+        defaultCustomLine = currentCustomLine;
+    }
+
 };
 
 
 VideoExportOptionsDialog::VideoExportOptionsDialog(QWidget *parent) :
-    QDialog(parent),
+    KisConfigWidget(parent),
     ui(new Ui::VideoExportOptionsDialog),
     m_d(new Private)
 {
@@ -115,8 +107,7 @@ VideoExportOptionsDialog::VideoExportOptionsDialog(QWidget *parent) :
     ui->intBitrate->setValue(5000);
     ui->intBitrate->setSuffix(i18nc("kilo-bits-per-second, video bitrate suffix", "kbps"));
 
-    connect(ui->cmbCodec, SIGNAL(currentIndexChanged(int)),
-            ui->stackedWidget, SLOT(setCurrentIndex(int)));
+    connect(ui->cmbCodec, SIGNAL(currentIndexChanged(int)), ui->stackedWidget, SLOT(setCurrentIndex(int)));
 
     ui->cmbCodec->setCurrentIndex(0);
     ui->cmbCodec->setEnabled(false);
@@ -127,13 +118,9 @@ VideoExportOptionsDialog::VideoExportOptionsDialog(QWidget *parent) :
     ui->cmbTune->setVisible(false);
     ui->lblTune->setVisible(false);
 
-    setModal(true);
-    connect(this, SIGNAL(accepted()), SLOT(slotAccepted()));
-
     ui->chkCustomLine->setChecked(!m_d->defaultCustomLine.isEmpty());
     slotCustomLineToggled(!m_d->defaultCustomLine.isEmpty());
     connect(ui->chkCustomLine, SIGNAL(toggled(bool)), SLOT(slotCustomLineToggled(bool)));
-
     connect(ui->txtCustomLine, SIGNAL(editingFinished()), SLOT(slotSaveCustomLine()));
     connect(ui->btnResetCustomLine, SIGNAL(clicked()), SLOT(slotResetCustomLine()));
 }
@@ -143,16 +130,19 @@ VideoExportOptionsDialog::~VideoExportOptionsDialog()
     delete ui;
 }
 
-void VideoExportOptionsDialog::slotAccepted()
+KisPropertiesConfigurationSP VideoExportOptionsDialog::configuration() const
 {
-    KConfigGroup cfg = KSharedConfig::openConfig()->group("VideoExportPlugin");
+    KisPropertiesConfigurationSP cfg(new KisPropertiesConfiguration());
 
-    cfg.writeEntry("h264PresetIndex", ui->cmbPreset->currentIndex());
-    cfg.writeEntry("h264ConstantRateFactor", ui->intConstantRateFactor->value());
-    cfg.writeEntry("h264ProfileIndex", ui->cmbProfile->currentIndex());
-    cfg.writeEntry("h264TuneIndex", ui->cmbTune->currentIndex());
-    cfg.writeEntry("TheoraBitrate", ui->intBitrate->value());
-    slotSaveCustomLine();
+    cfg->setProperty("h264PresetIndex", ui->cmbPreset->currentIndex());
+    cfg->setProperty("h264ConstantRateFactor", ui->intConstantRateFactor->value());
+    cfg->setProperty("h264ProfileIndex", ui->cmbProfile->currentIndex());
+    cfg->setProperty("h264TuneIndex", ui->cmbTune->currentIndex());
+    cfg->setProperty("TheoraBitrate", ui->intBitrate->value());
+    cfg->setProperty("CustomLineValue", ui->txtCustomLine->text());
+    cfg->setProperty("customUserOptions", customUserOptions().join(' '));
+
+    return cfg;
 }
 
 void VideoExportOptionsDialog::slotCustomLineToggled(bool value)
@@ -173,16 +163,15 @@ void VideoExportOptionsDialog::slotCustomLineToggled(bool value)
     ui->btnResetCustomLine->setEnabled(value);
 }
 
-void VideoExportOptionsDialog::slotSaveCustomLine()
-{
-    KConfigGroup cfg = KSharedConfig::openConfig()->group("VideoExportPlugin");
-    cfg.writeEntry("CustomLineValue", ui->txtCustomLine->text());
-}
-
 void VideoExportOptionsDialog::slotResetCustomLine()
 {
     ui->txtCustomLine->setText(generateCustomLine().join(" "));
     slotSaveCustomLine();
+}
+
+void VideoExportOptionsDialog::slotSaveCustomLine()
+{
+    m_d->currentCustomLine = ui->txtCustomLine->text();
 }
 
 void VideoExportOptionsDialog::setCodec(CodecIndex index)
@@ -194,7 +183,30 @@ QStringList VideoExportOptionsDialog::customUserOptions() const
 {
     return ui->chkCustomLine->isChecked() ?
         ui->txtCustomLine->text().split(" ", QString::SkipEmptyParts) :
-        generateCustomLine();
+                generateCustomLine();
+}
+
+void VideoExportOptionsDialog::setConfiguration(const KisPropertiesConfigurationSP cfg)
+{
+    m_d->defaultPreset = cfg->getInt("h264PresetIndex", 5);
+    ui->cmbPreset->setCurrentIndex(m_d->defaultPreset);
+    m_d->defaultConstantRateFactor = cfg->getInt("h264ConstantRateFactor", 23);
+    ui->intConstantRateFactor->setValue(m_d->defaultConstantRateFactor);
+    m_d->defaultProfile = cfg->getInt("h264ProfileIndex", 4);
+    ui->cmbProfile->setCurrentIndex(m_d->defaultProfile);
+    m_d->defaultTune = cfg->getInt("h264TuneIndex", 1);
+    ui->cmbTune->setCurrentIndex(m_d->defaultTune);
+    m_d->defaultBitrate = cfg->getInt("TheoraBitrate", 5000);
+    ui->intBitrate->setValue(m_d->defaultBitrate);
+    m_d->defaultCustomLine = cfg->getString("CustomLineValue", "");
+    ui->txtCustomLine->setText(m_d->defaultCustomLine);
+
+    if (cfg->hasProperty("CodecIndex")) {
+        setCodec((VideoExportOptionsDialog::CodecIndex)cfg->getInt("CodecIndex"));
+    }
+    if (cfg->getString("mimetype") == "video/ogg") {
+        ui->cmbCodec->setEnabled(false);
+    }
 }
 
 QStringList VideoExportOptionsDialog::generateCustomLine() const
@@ -205,6 +217,7 @@ QStringList VideoExportOptionsDialog::generateCustomLine() const
         options << "-crf" << QString::number(ui->intConstantRateFactor->value());
 
         const int presetIndex = ui->cmbPreset->currentIndex();
+        //qDebug() << "presetIndex" << presetIndex << m_d->presets;
         options << "-preset" << m_d->presets[presetIndex].id();
 
         const int profileIndex = ui->cmbProfile->currentIndex();

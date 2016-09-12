@@ -29,6 +29,16 @@
 #define PROGRAM_VERTEX_ATTRIBUTE 0
 #define PROGRAM_TEXCOORD_ATTRIBUTE 1
 
+std::map<Uniform, const char *> KisShaderProgram::info = {
+   {ModelViewProjection, "modelViewProjection"},
+   {TextureMatrix, "textureMatrix"},
+   {ViewportScale, "viewportScale"},
+   {TexelSize, "texelSize"},
+   {Texture0, "texture0"},
+   {Texture1, "texture1"},
+   {FixedLodLevel, "fixedLodLevel"}
+};
+
 KisOpenGLShaderLoader::KisOpenGLShaderLoader()
 {
 

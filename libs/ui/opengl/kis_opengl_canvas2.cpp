@@ -365,7 +365,7 @@ void KisOpenGLCanvas2::paintToolOutline(const QPainterPath &path)
     QMatrix4x4 modelMatrix(converter->flakeToWidgetTransform());
     modelMatrix.optimize();
     modelMatrix = projectionMatrix * modelMatrix;
-    d->cursorShader->setUniformValue(d->cursorShader->location("modelViewProjection"), modelMatrix);
+    d->cursorShader->setUniformValue(d->cursorShader->location(Uniform::ModelViewProjection), modelMatrix);
 
     glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
 
@@ -460,10 +460,10 @@ void KisOpenGLCanvas2::drawCheckers()
     QMatrix4x4 modelMatrix(modelTransform);
     modelMatrix.optimize();
     modelMatrix = projectionMatrix * modelMatrix;
-    d->checkerShader->setUniformValue(d->checkerShader->location("modelViewProjection"), modelMatrix);
+    d->checkerShader->setUniformValue(d->checkerShader->location(Uniform::ModelViewProjection), modelMatrix);
 
     QMatrix4x4 textureMatrix(textureTransform);
-    d->checkerShader->setUniformValue(d->checkerShader->location("textureMatrix"), textureMatrix);
+    d->checkerShader->setUniformValue(d->checkerShader->location(Uniform::TextureMatrix), textureMatrix);
 
     //Setup the geometry for rendering
     if (KisOpenGL::hasOpenGL3()) {
@@ -518,19 +518,19 @@ void KisOpenGLCanvas2::drawImage()
     QMatrix4x4 modelMatrix(coordinatesConverter()->imageToWidgetTransform());
     modelMatrix.optimize();
     modelMatrix = projectionMatrix * modelMatrix;
-    d->displayShader->setUniformValue(d->displayShader->location("modelViewProjection"), modelMatrix);
+    d->displayShader->setUniformValue(d->displayShader->location(Uniform::ModelViewProjection), modelMatrix);
 
     QMatrix4x4 textureMatrix;
     textureMatrix.setToIdentity();
-    d->displayShader->setUniformValue(d->displayShader->location("textureMatrix"), textureMatrix);
+    d->displayShader->setUniformValue(d->displayShader->location(Uniform::TextureMatrix), textureMatrix);
 
     QRectF widgetRect(0,0, width(), height());
     QRectF widgetRectInImagePixels = converter->documentToImage(converter->widgetToDocument(widgetRect));
 
     qreal scaleX, scaleY;
     converter->imageScale(&scaleX, &scaleY);
-    d->displayShader->setUniformValue(d->displayShader->location("viewportScale"), (GLfloat) scaleX);
-    d->displayShader->setUniformValue(d->displayShader->location("texelSize"), (GLfloat) d->openGLImageTextures->texelSize());
+    d->displayShader->setUniformValue(d->displayShader->location(Uniform::ViewportScale), (GLfloat) scaleX);
+    d->displayShader->setUniformValue(d->displayShader->location(Uniform::TexelSize), (GLfloat) d->openGLImageTextures->texelSize());
 
     QRect ir = d->openGLImageTextures->storedImageBounds();
     QRect wr = widgetRectInImagePixels.toAlignedRect();
@@ -615,12 +615,12 @@ void KisOpenGLCanvas2::drawImage()
             if (d->displayFilter) {
                 glActiveTexture(GL_TEXTURE0 + 1);
                 glBindTexture(GL_TEXTURE_3D, d->displayFilter->lutTexture());
-                d->displayShader->setUniformValue(d->displayShader->location("texture1"), 1);
+                d->displayShader->setUniformValue(d->displayShader->location(Uniform::Texture1), 1);
             }
 
             int currentLodPlane = tile->currentLodPlane();
-            if (d->displayShader->location("fixedLodLevel") >= 0) {
-                d->displayShader->setUniformValue(d->displayShader->location("fixedLodLevel"),
+            if (d->displayShader->location(Uniform::FixedLodLevel) >= 0) {
+                d->displayShader->setUniformValue(d->displayShader->location(Uniform::FixedLodLevel),
                                                   (GLfloat) currentLodPlane);
             }
 

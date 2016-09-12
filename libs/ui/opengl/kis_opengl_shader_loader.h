@@ -26,26 +26,32 @@
 #include <string>
 #include <stdexcept>
 
+#include <map>
 
-class ShaderLoaderException : public std::runtime_error {
-public:
-    ShaderLoaderException(QString error) : std::runtime_error(error.toLatin1().data()) { }
-};
+enum Uniform { ModelViewProjection, TextureMatrix, ViewportScale,
+               TexelSize, Texture0, Texture1, FixedLodLevel };
 
 class KisShaderProgram : public QOpenGLShaderProgram {
 public:
-    int location(const char* name) {
-        std::unordered_map<std::string, int>::const_iterator it = locationMap.find(std::string(name));
+    static std::map<Uniform, const char *> info;
+
+    int location(Uniform uniform) {
+        std::map<Uniform, int>::const_iterator it = locationMap.find(uniform);
         if (it != locationMap.end()) {
             return it->second;
         } else {
-            int location = uniformLocation(name);
-            locationMap[std::string(name)] = location;
+            int location = uniformLocation(info[uniform]);
+            locationMap[uniform] = location;
             return location;
         }
     }
 private:
-    std::unordered_map<std::string, int> locationMap;
+    std::map<Uniform, int> locationMap;
+};
+
+class ShaderLoaderException : public std::runtime_error {
+public:
+    ShaderLoaderException(QString error) : std::runtime_error(error.toLatin1().data()) { }
 };
 
 class KisOpenGLShaderLoader {

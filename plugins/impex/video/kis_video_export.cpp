@@ -76,7 +76,7 @@ KisImportExportFilter::ConversionStatus KisVideoExport::convert(const QByteArray
 
     if (!videoSaver.hasFFMpeg()) {
         const QString warningMessage =
-                i18n("Couldn not find \'ffmpeg\' binary. Saving to video formats is impossible.");
+                i18n("Could not find \'ffmpeg\' binary. Saving to video formats is impossible.");
 
         if (!getBatchMode()) {
             QMessageBox::critical(KisPart::instance()->currentMainwindow(),

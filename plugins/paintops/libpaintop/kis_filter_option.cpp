@@ -53,13 +53,12 @@ KisFilterOption::KisFilterOption()
     setObjectName("KisFilterOption");
 
     m_checkable = false;
-    m_currentFilterConfigWidget = 0;
 
-    m_options = new KisFilterOptionWidget;
-    m_options->hide();
-    setConfigurationPage(m_options);
+    m_filterOptionWidget = new KisFilterOptionWidget();
+    m_filterOptionWidget->hide();
+    setConfigurationPage(m_filterOptionWidget);
 
-    m_layout = new QGridLayout(m_options->grpFilterOptions);
+    m_layout = new QGridLayout(m_filterOptionWidget->grpFilterOptions);
 
     // Check which filters support painting
     QList<QString> l = KisFilterRegistry::instance()->keys();
@@ -71,13 +70,17 @@ KisFilterOption::KisFilterOption()
             l2.push_back(KoID(*it, f->name()));
         }
     }
-    m_options->filtersList->setIDList(l2);
-    connect(m_options->filtersList, SIGNAL(activated(const KoID &)), SLOT(setCurrentFilter(const KoID &)));
+    m_filterOptionWidget->filtersList->setIDList(l2);
+    connect(m_filterOptionWidget->filtersList, SIGNAL(activated(const KoID &)), SLOT(setCurrentFilter(const KoID &)));
     if (!l2.empty()) {
         setCurrentFilter(l2.first());
     }
 
-    connect(m_options->checkBoxSmudgeMode, SIGNAL(stateChanged(int)), this, SLOT(emitSettingChanged()));
+    connect(m_filterOptionWidget->checkBoxSmudgeMode, SIGNAL(stateChanged(int)), this, SLOT(emitSettingChanged()));
+}
+
+KisFilterOption::~KisFilterOption()
+{
 }
 
 const KisFilterSP KisFilterOption::filter() const
@@ -93,7 +96,7 @@ KisFilterConfigurationSP KisFilterOption::filterConfig() const
 
 bool KisFilterOption::smudgeMode() const
 {
-    return m_options->checkBoxSmudgeMode->isChecked();
+    return m_filterOptionWidget->checkBoxSmudgeMode->isChecked();
 }
 
 void KisFilterOption::setNode(KisNodeWSP node)
@@ -137,7 +140,7 @@ void KisFilterOption::setImage(KisImageWSP image)
 void KisFilterOption::setCurrentFilter(const KoID& id)
 {
     m_currentFilter = KisFilterRegistry::instance()->get(id.id());
-    m_options->filtersList->setCurrent(id);
+    m_filterOptionWidget->filtersList->setCurrent(id);
     updateFilterConfigWidget();
     emitSettingChanged();
 }
@@ -154,12 +157,13 @@ void KisFilterOption::updateFilterConfigWidget()
     m_currentFilterConfigWidget = 0;
 
     if (m_currentFilter && m_image && m_paintDevice) {
+
         m_currentFilterConfigWidget =
-            m_currentFilter->createConfigurationWidget(m_options->grpFilterOptions,
-                    m_paintDevice);
+            m_currentFilter->createConfigurationWidget(m_filterOptionWidget->grpFilterOptions, m_paintDevice);
+
         if (m_currentFilterConfigWidget) {
             m_layout->addWidget(m_currentFilterConfigWidget);
-            m_options->grpFilterOptions->updateGeometry();
+            m_filterOptionWidget->grpFilterOptions->updateGeometry();
             m_currentFilterConfigWidget->show();
             connect(m_currentFilterConfigWidget, SIGNAL(sigConfigurationUpdated()), this, SLOT(emitSettingChanged()));
         }
@@ -181,12 +185,16 @@ void KisFilterOption::writeOptionSetting(KisPropertiesConfigurationSP setting) c
 void KisFilterOption::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
     KoID id(setting->getString(FILTER_ID), "");
-    setCurrentFilter(id);
-    m_options->checkBoxSmudgeMode->setChecked(setting->getBool(FILTER_SMUDGE_MODE));
+    if (id.id() != m_currentFilter->id()) {
+        setCurrentFilter(id);
+    }
+    m_filterOptionWidget->checkBoxSmudgeMode->setChecked(setting->getBool(FILTER_SMUDGE_MODE));
     KisFilterConfigurationSP configuration = filterConfig();
-    if (configuration) {
+    if (configuration && m_currentFilterConfigWidget) {
         configuration->fromXML(setting->getString(FILTER_CONFIGURATION));
+        m_currentFilterConfigWidget->blockSignals(true);
         m_currentFilterConfigWidget->setConfiguration(configuration);
+        m_currentFilterConfigWidget->blockSignals(false);
     }
 }
 

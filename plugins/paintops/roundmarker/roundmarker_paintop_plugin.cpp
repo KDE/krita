@@ -39,7 +39,7 @@ RoundMarkerPaintOpPlugin::RoundMarkerPaintOpPlugin(QObject* parent, const QVaria
     QObject(parent)
 {
     KisPaintOpRegistry::instance()->add(new KisSimplePaintOpFactory<KisRoundMarkerOp, KisRoundMarkerOpSettings, KisRoundMarkerOpSettingsWidget>(
-                                            "roundmarker", i18n("Quick Brush"), KisPaintOpFactory::categoryStable(), "krita-colorsmudge.png",
+                                            "roundmarker", i18n("Quick Brush"), KisPaintOpFactory::categoryStable(), "krita_roundmarkerop.svg",
                                             QString(), QStringList(), 3)
                                        );
 }

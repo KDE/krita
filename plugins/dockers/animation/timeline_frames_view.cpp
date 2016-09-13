@@ -200,7 +200,7 @@ TimelineFramesView::TimelineFramesView(QWidget *parent)
 
     m_d->zoomDragButton = new KisZoomButton(this);
     m_d->zoomDragButton->setAutoRaise(true);
-    m_d->zoomDragButton->setIcon(KisIconUtils::loadIcon("zoom-in"));
+    m_d->zoomDragButton->setIcon(KisIconUtils::loadIcon("zoom-horizontal"));
     m_d->zoomDragButton->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     m_d->zoomDragButton->setToolTip(i18nc("@info:tooltip", "Zoom Timeline. Hold down and drag left or right."));
     m_d->zoomDragButton->setPopupMode(QToolButton::InstantPopup);

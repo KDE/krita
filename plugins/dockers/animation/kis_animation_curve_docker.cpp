@@ -151,11 +151,12 @@ void KisAnimationCurveDocker::slotUpdateIcons()
     m_d->curvesWidget.btnSmooth->setIcon(KisIconUtils::loadIcon("interpolation_smooth"));
     m_d->curvesWidget.btnSharp->setIcon(KisIconUtils::loadIcon("interpolation_sharp"));
 
-    m_d->curvesWidget.btnHorizontalZoom->setIcon(KisIconUtils::loadIcon("zoom-in"));
-    m_d->curvesWidget.btnVerticalZoom->setIcon(KisIconUtils::loadIcon("zoom-in"));
+    m_d->curvesWidget.btnHorizontalZoom->setIcon(KisIconUtils::loadIcon("zoom-horizontal"));
+    m_d->curvesWidget.btnVerticalZoom->setIcon(KisIconUtils::loadIcon("zoom-vertical"));
+    m_d->curvesWidget.btnZoomToFit->setIcon(KisIconUtils::loadIcon("zoom-fit"));
 
-    m_d->curvesWidget.btnAddKeyframe->setIcon(KisIconUtils::loadIcon("addlayer"));
-    m_d->curvesWidget.btnRemoveKeyframes->setIcon(KisIconUtils::loadIcon("deletelayer"));
+    m_d->curvesWidget.btnAddKeyframe->setIcon(KisIconUtils::loadIcon("keyframe-add"));
+    m_d->curvesWidget.btnRemoveKeyframes->setIcon(KisIconUtils::loadIcon("keyframe-remove"));
 }
 
 void KisAnimationCurveDocker::slotListRowsInserted(const QModelIndex &parentIndex, int first, int last)

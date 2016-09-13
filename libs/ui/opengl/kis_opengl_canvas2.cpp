@@ -317,7 +317,7 @@ void KisOpenGLCanvas2::reportFailedShaderCompilation(const QString &context)
     KisConfig cfg;
 
     if (cfg.useVerboseOpenGLDebugOutput()) {
-        dbgUI << "GL-log:" << context << log;
+        dbgUI << "GL-log:" << context;
     }
 
     qDebug() << "Shader Compilation Failure: " << context;

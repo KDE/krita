@@ -59,7 +59,7 @@ KisShaderProgram *KisOpenGLShaderLoader::loadShader(QString vertPath, QString fr
     // Load vertex shader
     QByteArray vertSource;
 
-    vertSource.append(KisOpenGL::hasOpenGL3() ? "#version 150 core\n" : "#version 120");
+    vertSource.append(KisOpenGL::hasOpenGL3() ? "#version 150 core\n" : "#version 120\n");
     vertSource.append(vertHeader);
     QFile vertexShaderFile(":/" + vertPath);
     vertexShaderFile.open(QIODevice::ReadOnly);
@@ -72,7 +72,7 @@ KisShaderProgram *KisOpenGLShaderLoader::loadShader(QString vertPath, QString fr
     // Load fragment shader
     QByteArray fragSource;
 
-    fragSource.append(KisOpenGL::hasOpenGL3() ? "#version 150 core\n" : "#version 120");
+    fragSource.append(KisOpenGL::hasOpenGL3() ? "#version 150 core\n" : "#version 120\n");
     fragSource.append(fragHeader);
     QFile fragmentShaderFile(":/" + fragPath);
     fragmentShaderFile.open(QIODevice::ReadOnly);

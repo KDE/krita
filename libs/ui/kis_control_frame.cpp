@@ -76,7 +76,6 @@ KisControlFrame::KisControlFrame(KisViewManager *view, QWidget *parent, const ch
     , m_paintopBox(0)
 {
     setObjectName(name);
-    KisConfig cfg;
     m_font = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
 
     m_patternWidget = new KisIconWidget(parent, "patterns");
@@ -206,7 +205,11 @@ void KisControlFrame::createPatternsChooser(KisViewManager * view)
 
 void KisControlFrame::createGradientsChooser(KisViewManager * view)
 {
-    if (m_gradientChooserPopup) delete m_gradientChooserPopup;
+    if (m_gradientChooserPopup) {
+        delete m_gradientChooserPopup;
+        m_gradientChooserPopup = 0;
+    }
+
     m_gradientChooserPopup = new QWidget(m_gradientWidget);
     m_gradientChooserPopup->setObjectName("gradient_chooser_popup");
     QHBoxLayout * l2 = new QHBoxLayout(m_gradientChooserPopup);

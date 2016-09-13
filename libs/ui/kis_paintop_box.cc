@@ -1011,7 +1011,6 @@ void KisPaintopBox::sliderChanged(int n)
         propertiesProxy->setProperty("OpacityValue", opacity);
         propertiesProxy->setProperty("FlowValue", flow);
         m_optionWidget->setConfigurationSafe(m_resourceProvider->currentPreset()->settings().data());
-        delete propertiesProxy;
     } else {
         m_resourceProvider->setOpacity(opacity);
     }

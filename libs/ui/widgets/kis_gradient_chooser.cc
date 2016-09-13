@@ -51,7 +51,7 @@ KisCustomGradientDialog::KisCustomGradientDialog(KoAbstractGradient* gradient, Q
     setDefaultButton(Close);
     setObjectName(name);
     setModal(false);
-    
+
     KoStopGradient* stopGradient = dynamic_cast<KoStopGradient*>(gradient);
     if (stopGradient) {
         m_page = new KisStopGradientEditor(stopGradient, this, "autogradient", i18n("Custom Gradient"));
@@ -92,7 +92,7 @@ KisGradientChooser::KisGradientChooser(QWidget *parent, const char *name)
     connect(addGradient, SIGNAL(clicked()), this, SLOT(addStopGradient()));
     buttonLayout->addWidget(addGradient);
 
-    QMenu *menuAddGradient = new QMenu();
+    QMenu *menuAddGradient = new QMenu(addGradient);
 
     QAction* addStopGradient = new QAction(i18n("Stop gradient"), this);
     connect(addStopGradient, SIGNAL(triggered(bool)), this, SLOT(addStopGradient()));
@@ -101,10 +101,10 @@ KisGradientChooser::KisGradientChooser(QWidget *parent, const char *name)
     QAction* addSegmentedGradient = new QAction(i18n("Segmented gradient"), this);
     connect(addSegmentedGradient, SIGNAL(triggered(bool)), this, SLOT(addSegmentedGradient()));
     menuAddGradient->addAction(addSegmentedGradient);
-    
+
     addGradient->setMenu(menuAddGradient);
     addGradient->setPopupMode(QToolButton::MenuButtonPopup);
-       
+
     m_editGradient = new QPushButton(KisIconUtils::loadIcon("configure"), i18n("Edit..."));
     m_editGradient->setEnabled(false);
     connect(m_editGradient, SIGNAL(clicked()), this, SLOT(editGradient()));
@@ -172,10 +172,10 @@ void KisGradientChooser::addGradient(KoAbstractGradient* gradient)
 {
     KoResourceServer<KoAbstractGradient> * rserver = KoResourceServerProvider::instance()->gradientServer();
     QString saveLocation = rserver->saveLocation();
- 
+
     KisCustomGradientDialog dialog(gradient, this, "autogradient");
     dialog.exec();
-  
+
     gradient->setFilename(saveLocation + gradient->name() + gradient->defaultFileExtension());
     gradient->setValid(true);
     rserver->addResource(gradient);

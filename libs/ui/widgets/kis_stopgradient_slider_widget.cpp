@@ -27,9 +27,9 @@
 #define MARGIN 10
 #define HANDLE_SIZE 20
 
-KisStopGradientSliderWidget::KisStopGradientSliderWidget(QWidget *parent, const char* name, Qt::WFlags f)
+KisStopGradientSliderWidget::KisStopGradientSliderWidget(QWidget *parent, Qt::WFlags f)
     : QWidget(parent, f)
-    , m_selectedStop(0)   
+    , m_selectedStop(0)
     , m_drag(0)
 {
     setMinimumHeight(30);
@@ -64,7 +64,7 @@ void KisStopGradientSliderWidget::paintEvent(QPaintEvent* pe)
             triangle[0] = QPoint(position, height() - HANDLE_SIZE - MARGIN);
             triangle[1] = QPoint(position + (HANDLE_SIZE / 2 - 1), height() - MARGIN);
             triangle[2] = QPoint(position - (HANDLE_SIZE / 2 - 1), height() - MARGIN);
-            
+
             if(i != m_selectedStop)
                 painter.setPen(QPen(Qt::black, 2.0));
             else
@@ -97,7 +97,7 @@ void KisStopGradientSliderWidget::mousePressEvent(QMouseEvent * e)
             triangle[0] = QPoint(position, height() - HANDLE_SIZE - MARGIN);
             triangle[1] = QPoint(position + (HANDLE_SIZE / 2 - 1), height() - MARGIN);
             triangle[2] = QPoint(position - (HANDLE_SIZE / 2 - 1), height() - MARGIN);
-            
+
             if(triangle.containsPoint(e->pos(), Qt::WindingFill))
             {
                 if(e->button() == Qt::LeftButton) {
@@ -140,13 +140,13 @@ void KisStopGradientSliderWidget::mouseMoveEvent(QMouseEvent * e)
         QList<KoGradientStop> stops = m_gradient->stops();
 
         KoGradientStop dragedStop = stops[m_selectedStop];
-        
+
         t = qBound(stops[m_selectedStop-1].first, t, stops[m_selectedStop+1].first);
         dragedStop.first = t;
-        
+
         stops.removeAt(m_selectedStop);
         stops.insert(m_selectedStop, dragedStop);
-        
+
         m_gradient->setStops(stops);
     }
 
@@ -159,12 +159,12 @@ void KisStopGradientSliderWidget::insertStop(double t)
     int i = 0;
     while(stopPositions[i].first < t)
         i++;
-    
+
     KoColor color;
     m_gradient->colorAt(color, t);
     stopPositions.insert(i, KoGradientStop(t, color));
     m_gradient->setStops(stopPositions);
-    
+
     m_selectedStop = i;
     emit sigSelectedStop(m_selectedStop);
 }

@@ -121,7 +121,6 @@ KisHatchingPaintOpSettingsWidget:: KisHatchingPaintOpSettingsWidget(QWidget* par
         dbgKrita << i.key() << ":" << i.value();
     */
 
-    delete reconfigurationCourier;
 }
 
 KisHatchingPaintOpSettingsWidget::~ KisHatchingPaintOpSettingsWidget()
@@ -130,7 +129,7 @@ KisHatchingPaintOpSettingsWidget::~ KisHatchingPaintOpSettingsWidget()
 
 KisPropertiesConfigurationSP  KisHatchingPaintOpSettingsWidget::configuration() const
 {
-    KisHatchingPaintOpSettings* config = new KisHatchingPaintOpSettings();
+    KisHatchingPaintOpSettingsSP config = new KisHatchingPaintOpSettings();
     config->setOptionsWidget(const_cast<KisHatchingPaintOpSettingsWidget*>(this));
     config->setProperty("paintop", "hatchingbrush"); // XXX: make this a const id string
     writeConfiguration(config);

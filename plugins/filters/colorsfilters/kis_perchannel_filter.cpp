@@ -268,12 +268,12 @@ void KisPerChannelConfigWidget::setActiveChannel(int ch)
 KisPropertiesConfigurationSP  KisPerChannelConfigWidget::configuration() const
 {
     int numChannels = m_virtualChannels.size();
-    KisPerChannelFilterConfiguration * cfg = new KisPerChannelFilterConfiguration(numChannels);
+    KisPropertiesConfigurationSP cfg = new KisPerChannelFilterConfiguration(numChannels);
 
     KIS_ASSERT_RECOVER(m_activeVChannel < m_curves.size()) { return cfg; }
 
     m_curves[m_activeVChannel] = m_page->curveWidget->curve();
-    cfg->setCurves(m_curves);
+    static_cast<KisPerChannelFilterConfiguration*>(cfg.data())->setCurves(m_curves);
 
     return cfg;
 }

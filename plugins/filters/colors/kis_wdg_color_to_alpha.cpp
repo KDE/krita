@@ -44,7 +44,6 @@ KisWdgColorToAlpha::KisWdgColorToAlpha(QWidget * parent)
     m_widget = new Ui_WdgColorToAlphaBase();
     m_widget->setupUi(this);
 
-
     m_widget->textLabel1->hide();
 
     m_widget->intThreshold->setRange(1, 255, 0);

@@ -131,7 +131,9 @@ KisResourcesSnapshot::KisResourcesSnapshot(KisImageSP image, KisNodeSP currentNo
     m_d->globalAlphaLock = resourceManager->resource(KisCanvasResourceProvider::GlobalAlphaLock).toBool();
     m_d->effectiveZoom = resourceManager->resource(KisCanvasResourceProvider::EffectiveZoom).toDouble();
     m_d->presetAllowsLod = resourceManager->resource(KisCanvasResourceProvider::PresetAllowsLod).toBool();
-    m_d->selection = m_d->image->globalSelection();
+    if (m_d->image) {
+        m_d->selection = m_d->image->globalSelection();
+    }
 }
 
 KisResourcesSnapshot::~KisResourcesSnapshot()

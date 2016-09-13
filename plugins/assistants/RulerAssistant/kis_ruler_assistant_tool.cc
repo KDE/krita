@@ -894,10 +894,17 @@ QWidget *KisRulerAssistantTool::createOptionWidget()
         m_options.loadButton->setIcon(KisIconUtils::loadIcon("document-open"));
         m_options.saveButton->setIcon(KisIconUtils::loadIcon("document-save"));
         m_options.deleteButton->setIcon(KisIconUtils::loadIcon("edit-delete"));
+
+        QList<KoID> assistants;
         Q_FOREACH (const QString& key, KisPaintingAssistantFactoryRegistry::instance()->keys()) {
             QString name = KisPaintingAssistantFactoryRegistry::instance()->get(key)->name();
-            m_options.comboBox->addItem(name, key);
+            assistants << KoID(key, name);
         }
+        qSort(assistants.begin(), assistants.end(), KoID::compareNames);
+        Q_FOREACH(const KoID &id, assistants) {
+            m_options.comboBox->addItem(id.name(), id.id());
+        }
+
         connect(m_options.saveButton, SIGNAL(clicked()), SLOT(saveAssistants()));
         connect(m_options.loadButton, SIGNAL(clicked()), SLOT(loadAssistants()));
         connect(m_options.deleteButton, SIGNAL(clicked()), SLOT(removeAllAssistants()));

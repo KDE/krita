@@ -52,9 +52,9 @@ KisSketchPaintOpSettingsWidget::KisSketchPaintOpSettingsWidget(QWidget* parent)
     addPaintOpOption(new KisAirbrushOption(false), i18n("Airbrush"));
 
     m_paintActionType = new KisPaintActionTypeOption();
-    KisPropertiesConfiguration defaultSetting;
-    defaultSetting.setProperty("PaintOpAction", BUILDUP);
-    m_paintActionType->readOptionSetting(&defaultSetting);
+    KisPropertiesConfigurationSP defaultSetting = new KisPropertiesConfiguration();
+    defaultSetting->setProperty("PaintOpAction", BUILDUP);
+    m_paintActionType->readOptionSetting(defaultSetting);
 
     addPaintOpOption(m_paintActionType, i18n("Painting Mode"));
 
@@ -69,7 +69,6 @@ KisSketchPaintOpSettingsWidget::KisSketchPaintOpSettingsWidget(QWidget* parent)
 
     reconfigurationCourier->setProperty("brush_definition", xMLAnalyzer.toString());
     setConfiguration(reconfigurationCourier);
-    delete reconfigurationCourier;
 }
 
 KisSketchPaintOpSettingsWidget::~ KisSketchPaintOpSettingsWidget()
@@ -78,7 +77,7 @@ KisSketchPaintOpSettingsWidget::~ KisSketchPaintOpSettingsWidget()
 
 KisPropertiesConfigurationSP  KisSketchPaintOpSettingsWidget::configuration() const
 {
-    KisSketchPaintOpSettings* config = new KisSketchPaintOpSettings();
+    KisSketchPaintOpSettingsSP config = new KisSketchPaintOpSettings();
     config->setOptionsWidget(const_cast<KisSketchPaintOpSettingsWidget*>(this));
     config->setProperty("paintop", "sketchbrush"); // XXX: make this a const id string
     writeConfiguration(config);

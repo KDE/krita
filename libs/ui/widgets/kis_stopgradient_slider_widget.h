@@ -31,14 +31,14 @@ class KisStopGradientSliderWidget : public QWidget
     Q_OBJECT
 
 public:
-    KisStopGradientSliderWidget(QWidget *parent = 0, const char* name = 0, Qt::WFlags f = 0);
+    KisStopGradientSliderWidget(QWidget *parent = 0, Qt::WFlags f = 0);
 
 public:
     virtual void paintEvent(QPaintEvent *);
     void setGradientResource(KoStopGradient* gradient);
 
     int selectedStop();
-    
+
     void setSeletectStop(int selected);
 
 Q_SIGNALS:
@@ -53,7 +53,7 @@ private Q_SLOTS:
 
 private:
     void insertStop(double t);
-   
+
 private:
     KoStopGradient* m_gradient;
     int m_selectedStop;

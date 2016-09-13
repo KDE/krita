@@ -203,7 +203,7 @@ loadValue(const QDomElement &e, T *value)
  */
 template <typename T, typename E>
     typename std::enable_if<std::is_empty<E>::value, bool>::type
-loadValue(const QDomElement &parent, T *value, const E &env) {
+loadValue(const QDomElement &parent, T *value, const E &/*env*/) {
     return KisDomUtils::loadValue(parent, value);
 }
 

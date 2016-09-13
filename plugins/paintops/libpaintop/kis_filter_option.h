@@ -48,6 +48,7 @@ class PAINTOP_EXPORT KisFilterOption : public KisPaintOpOption
 public:
 
     KisFilterOption();
+    virtual ~KisFilterOption();
 
     /**
      * Return the currently selected filter
@@ -85,10 +86,10 @@ private Q_SLOTS:
 
 private:
 
-    QGridLayout* m_layout;
-    KisFilterOptionWidget* m_options;
+    QGridLayout *m_layout {0};
+    KisFilterOptionWidget *m_filterOptionWidget {0};
     KisFilterSP m_currentFilter;
-    KisConfigWidget* m_currentFilterConfigWidget;
+    KisConfigWidget *m_currentFilterConfigWidget {0};
     KisPaintDeviceSP m_paintDevice;
     KisImageSP m_image;
 };

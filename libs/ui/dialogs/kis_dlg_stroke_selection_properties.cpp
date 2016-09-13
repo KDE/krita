@@ -349,7 +349,7 @@ void WdgStrokeSelection::on_typeBox_currentIndexChanged(const QString &arg1)
       }
 }
 
-void WdgStrokeSelection::on_lineColorBox_currentIndexChanged(const QString &arg1)
+void WdgStrokeSelection::on_lineColorBox_currentIndexChanged(const QString &/*arg1*/)
 {
     emit colorSelectorChanged();
 }

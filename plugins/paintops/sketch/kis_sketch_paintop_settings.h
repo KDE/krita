@@ -41,4 +41,6 @@ public:
     int rate() const;
 };
 
+typedef KisSharedPtr<KisSketchPaintOpSettings> KisSketchPaintOpSettingsSP;
+
 #endif

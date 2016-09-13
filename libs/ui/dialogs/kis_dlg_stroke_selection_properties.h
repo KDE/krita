@@ -45,9 +45,9 @@ enum class colorFillSource {
 struct StrokeSelectionOptions {
     StrokeSelectionOptions ();
     int lineSize;
+    bool brushSelected;
     int _colorFillSource;
     int lineColorSource;
-    bool brushSelected;
     int lineDimension;
     KoColor color;
     KoColor fillColor;

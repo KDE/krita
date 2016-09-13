@@ -35,7 +35,7 @@ void inline myround(double *x)
     *x = ((*x - floor(*x)) >= 0.5) ? ceil(*x) : floor(*x);
 }
 
-HatchingBrush::HatchingBrush(const KisHatchingPaintOpSettings* settings)
+HatchingBrush::HatchingBrush(KisHatchingPaintOpSettingsSP settings)
 {
     m_settings = settings;
 
@@ -55,7 +55,6 @@ HatchingBrush::HatchingBrush(const KisHatchingPaintOpSettings* settings)
 
 HatchingBrush::~HatchingBrush()
 {
-    delete m_settings;
 }
 
 void HatchingBrush::init()

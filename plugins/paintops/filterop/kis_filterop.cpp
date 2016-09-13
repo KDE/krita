@@ -103,11 +103,10 @@ KisSpacingInformation KisFilterOp::paintAt(const KisPaintInformation& info)
     static KoColor color(Qt::black, cs);
 
     QRect dstRect;
-    KisFixedPaintDeviceSP dab =
-        m_dabCache->fetchDab(cs, color, info.pos(),
-                             shape,
-                             info, 1.0,
-                             &dstRect);
+    KisFixedPaintDeviceSP dab = m_dabCache->fetchDab(cs, color, info.pos(),
+                                                     shape,
+                                                     info, 1.0,
+                                                     &dstRect);
 
     if (dstRect.isEmpty()) return KisSpacingInformation(1.0);
 
@@ -130,13 +129,11 @@ KisSpacingInformation KisFilterOp::paintAt(const KisPaintInformation& info)
     m_filter->process(m_tmpDevice, dabRect, m_filterConfiguration, 0);
     transaction.end();
 
-
-    painter()->
-    bitBltWithFixedSelection(dstRect.x(), dstRect.y(),
-                             m_tmpDevice, dab,
-                             0, 0,
-                             dabRect.x(), dabRect.y(),
-                             dabRect.width(), dabRect.height());
+    painter()->bitBltWithFixedSelection(dstRect.x(), dstRect.y(),
+                                        m_tmpDevice, dab,
+                                        0, 0,
+                                        dabRect.x(), dabRect.y(),
+                                        dabRect.width(), dabRect.height());
 
     painter()->renderMirrorMaskSafe(dstRect, m_tmpDevice, 0, 0, dab,
                                     !m_dabCache->needSeparateOriginal());

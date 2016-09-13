@@ -153,6 +153,10 @@ public Q_SLOTS:
      */
     void copyNodesDirect(KisNodeList nodes, KisNodeSP parent, KisNodeSP aboveThis);
 
+    /**
+     * Create new layer from actually visible
+     */
+    void createFromVisible();
 
     void toggleIsolateActiveNode();
     void toggleIsolateMode(bool checked);

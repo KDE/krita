@@ -50,7 +50,7 @@ KisRoundMarkerOption::~KisRoundMarkerOption()
 {
 }
 
-void KisRoundMarkerOption::writeOptionSetting(KisPropertiesConfiguration* config) const
+void KisRoundMarkerOption::writeOptionSetting(KisPropertiesConfigurationSP config) const
 {
     RoundMarkerOption op;
 
@@ -62,10 +62,10 @@ void KisRoundMarkerOption::writeOptionSetting(KisPropertiesConfiguration* config
     op.writeOptionSetting(config);
 }
 
-void KisRoundMarkerOption::readOptionSetting(const KisPropertiesConfiguration* config)
+void KisRoundMarkerOption::readOptionSetting(KisPropertiesConfigurationSP config)
 {
     RoundMarkerOption op;
-    op.readOptionSetting(config);
+    op.readOptionSetting(*config);
 
     KisSignalsBlocker b(m_options->dblDiameter, m_options->spacingWidget);
 

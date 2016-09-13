@@ -93,7 +93,7 @@ private:
     void showEvent(QShowEvent *);
     
     KoUnit m_widthUnit, m_heightUnit;
-    QList<KisPropertiesConfiguration*> m_predefined;
+    QList<KisPropertiesConfigurationSP> m_predefined;
 
 };
 

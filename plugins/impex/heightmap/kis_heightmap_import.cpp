@@ -60,7 +60,7 @@ KisHeightMapImport::~KisHeightMapImport()
 {
 }
 
-KisImportExportFilter::ConversionStatus KisHeightMapImport::convert(const QByteArray& from, const QByteArray& to)
+KisImportExportFilter::ConversionStatus KisHeightMapImport::convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration)
 {
 
     KisDocument * doc = outputDocument();

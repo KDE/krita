@@ -41,7 +41,7 @@ QMLExport::~QMLExport()
 {
 }
 
-KisImportExportFilter::ConversionStatus QMLExport::convert(const QByteArray& from, const QByteArray& to)
+KisImportExportFilter::ConversionStatus QMLExport::convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration)
 {
     Q_UNUSED(to);
 

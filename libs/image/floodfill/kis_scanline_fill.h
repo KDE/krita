@@ -34,9 +34,34 @@ public:
     KisScanlineFill(KisPaintDeviceSP device, const QPoint &startPoint, const QRect &boundingRect);
     ~KisScanlineFill();
 
+    /**
+     * Fill the source device with \p fillColor
+     */
     void fillColor(const KoColor &fillColor);
+
+    /**
+     * Fill \p externalDevice with \p fillColor basing on the contents
+     * of the source device.
+     */
+    void fillColor(const KoColor &fillColor, KisPaintDeviceSP externalDevice);
+
+    /**
+     * Fill \p pixelSelection with the opacity of the contiguous area
+     */
     void fillSelection(KisPixelSelectionSP pixelSelection);
 
+    /**
+     * Clear the contiguous non-zero area of the device
+     *
+     * WARNING: the threshold parameter is not counted!
+     */
+    void clearNonZeroComponent();
+
+    /**
+     * Set the threshold of the filling operation
+     *
+     * Used in all functions except clearNonZeroComponent()
+     */
     void setThreshold(int threshold);
 
 private:

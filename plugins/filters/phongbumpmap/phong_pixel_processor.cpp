@@ -21,13 +21,13 @@
 #include <iostream>
 #include <KoChannelInfo.h>
 
-PhongPixelProcessor::PhongPixelProcessor(quint32 pixelArea, const KisPropertiesConfiguration* config)
+PhongPixelProcessor::PhongPixelProcessor(quint32 pixelArea, const KisPropertiesConfigurationSP config)
 {
     m_pixelArea = pixelArea;
     initialize(config);
 }
 
-void PhongPixelProcessor::initialize(const KisPropertiesConfiguration* config)
+void PhongPixelProcessor::initialize(const KisPropertiesConfigurationSP config)
 {
     // Basic, fundamental
     normal_vector = QVector3D(0, 0, 1);

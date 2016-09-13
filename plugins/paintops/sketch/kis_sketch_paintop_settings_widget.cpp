@@ -58,7 +58,7 @@ KisSketchPaintOpSettingsWidget::KisSketchPaintOpSettingsWidget(QWidget* parent)
 
     addPaintOpOption(m_paintActionType, i18n("Painting Mode"));
 
-    KisPropertiesConfiguration* reconfigurationCourier = configuration();
+    KisPropertiesConfigurationSP reconfigurationCourier = configuration();
     QDomDocument xMLAnalyzer("");
     xMLAnalyzer.setContent(reconfigurationCourier->getString("brush_definition"));
 
@@ -76,7 +76,7 @@ KisSketchPaintOpSettingsWidget::~ KisSketchPaintOpSettingsWidget()
 {
 }
 
-KisPropertiesConfiguration*  KisSketchPaintOpSettingsWidget::configuration() const
+KisPropertiesConfigurationSP  KisSketchPaintOpSettingsWidget::configuration() const
 {
     KisSketchPaintOpSettings* config = new KisSketchPaintOpSettings();
     config->setOptionsWidget(const_cast<KisSketchPaintOpSettingsWidget*>(this));

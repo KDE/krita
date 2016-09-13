@@ -78,7 +78,7 @@ bool KisBookmarkedConfigurationsModel::setData(const QModelIndex & index, const 
     if (role == Qt::EditRole && index.row() >= 2) {
         QString name = value.toString();
         int idx = index.row() - 2;
-        KisSerializableConfiguration* config = d->bookmarkManager->load(d->configsKey[idx]);
+        KisSerializableConfigurationSP config = d->bookmarkManager->load(d->configsKey[idx]);
         d->bookmarkManager->remove(d->configsKey[idx]);
         d->bookmarkManager->save(name, config);
         d->configsKey[idx] = name;
@@ -89,7 +89,7 @@ bool KisBookmarkedConfigurationsModel::setData(const QModelIndex & index, const 
     return false;
 }
 
-KisSerializableConfiguration* KisBookmarkedConfigurationsModel::configuration(const QModelIndex &index) const
+KisSerializableConfigurationSP KisBookmarkedConfigurationsModel::configuration(const QModelIndex &index) const
 {
     if (!index.isValid()) return 0;
     switch (index.row()) {
@@ -118,12 +118,12 @@ bool KisBookmarkedConfigurationsModel::isIndexDeletable(const QModelIndex &index
     return true;
 }
 
-void KisBookmarkedConfigurationsModel::newConfiguration(KLocalizedString baseName, const KisSerializableConfiguration* config)
+void KisBookmarkedConfigurationsModel::newConfiguration(KLocalizedString baseName, const KisSerializableConfigurationSP config)
 {
     saveConfiguration(d->bookmarkManager->uniqueName(baseName), config);
 }
 
-void KisBookmarkedConfigurationsModel::saveConfiguration(const QString & name, const KisSerializableConfiguration* config)
+void KisBookmarkedConfigurationsModel::saveConfiguration(const QString & name, const KisSerializableConfigurationSP config)
 {
     d->bookmarkManager->save(name, config);
     if (!d->configsKey.contains(name)) {

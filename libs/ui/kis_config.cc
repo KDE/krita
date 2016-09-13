@@ -357,6 +357,18 @@ void KisConfig::setUseEraserBrushSize(bool value)
     KisConfigNotifier::instance()->notifyConfigChanged();
 }
 
+bool KisConfig::useEraserBrushOpacity(bool defaultValue) const
+{
+   return (defaultValue ? false : m_cfg.readEntry("useEraserBrushOpacity",false));
+}
+
+void KisConfig::setUseEraserBrushOpacity(bool value)
+{
+    m_cfg.writeEntry("useEraserBrushOpacity",value);
+    KisConfigNotifier::instance()->notifyConfigChanged();
+}
+
+
 QColor KisConfig::getMDIBackgroundColor(bool defaultValue) const
 {
     QColor col(77, 77, 77);
@@ -409,7 +421,7 @@ const KoColorProfile *KisConfig::getScreenProfile(int screen)
 
     KisConfig cfg;
     QString monitorId;
-    if (KisColorManager::instance()->devices().size() > screen && screen > 0) {
+    if (KisColorManager::instance()->devices().size() > screen) {
         monitorId = cfg.monitorForScreen(screen, KisColorManager::instance()->devices()[screen]);
     }
     //dbgKrita << "getScreenProfile(). Screen" << screen << "monitor id" << monitorId;

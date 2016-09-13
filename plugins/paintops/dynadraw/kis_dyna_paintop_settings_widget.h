@@ -30,7 +30,7 @@ public:
     KisDynaPaintOpSettingsWidget(QWidget* parent = 0);
     virtual ~KisDynaPaintOpSettingsWidget();
 
-    KisPropertiesConfiguration* configuration() const;
+    KisPropertiesConfigurationSP configuration() const;
 };
 
 #endif

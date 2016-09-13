@@ -42,7 +42,7 @@
 
 
 
-KisRoundMarkerOp::KisRoundMarkerOp(const KisPaintOpSettings* settings, KisPainter* painter, KisNodeSP node, KisImageSP image)
+KisRoundMarkerOp::KisRoundMarkerOp(KisPaintOpSettingsSP settings, KisPainter* painter, KisNodeSP node, KisImageSP image)
     : KisPaintOp(painter)
     , m_firstRun(true)
     , m_image(image)
@@ -53,7 +53,7 @@ KisRoundMarkerOp::KisRoundMarkerOp(const KisPaintOpSettings* settings, KisPainte
     Q_ASSERT(settings);
     Q_ASSERT(painter);
 
-    m_markerOption.readOptionSetting(settings);
+    m_markerOption.readOptionSetting(*settings);
     m_sizeOption.readOptionSetting(settings);
     m_spacingOption.readOptionSetting(settings);
 

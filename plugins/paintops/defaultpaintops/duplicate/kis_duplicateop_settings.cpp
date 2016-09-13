@@ -132,7 +132,7 @@ KisPaintOpSettingsSP KisDuplicateOpSettings::clone() const
     return setting;
 }
 
-QPainterPath KisDuplicateOpSettings::brushOutline(const KisPaintInformation &info, OutlineMode mode) const
+QPainterPath KisDuplicateOpSettings::brushOutline(const KisPaintInformation &info, OutlineMode mode)
 {
     QPainterPath path;
 
@@ -165,12 +165,10 @@ QPainterPath KisDuplicateOpSettings::brushOutline(const KisPaintInformation &inf
 
 
 #include <brushengine/kis_uniform_paintop_property.h>
-#include <brushengine/kis_callback_based_paintop_property.h>
 #include "kis_paintop_preset.h"
 #include "kis_paintop_settings_update_proxy.h"
 #include "kis_duplicateop_option.h"
 #include "kis_standard_uniform_properties_factory.h"
-typedef KisCallbackBasedPaintopProperty<KisUniformPaintOpProperty> KisUniformPaintOpPropertyCallback;
 
 
 QList<KisUniformPaintOpPropertySP> KisDuplicateOpSettings::uniformProperties()

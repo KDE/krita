@@ -41,7 +41,7 @@ KisExperimentPaintOpSettingsWidget::~ KisExperimentPaintOpSettingsWidget()
 {
 }
 
-KisPropertiesConfiguration*  KisExperimentPaintOpSettingsWidget::configuration() const
+KisPropertiesConfigurationSP  KisExperimentPaintOpSettingsWidget::configuration() const
 {
     KisExperimentPaintOpSettings* config = new KisExperimentPaintOpSettings();
     config->setOptionsWidget(const_cast<KisExperimentPaintOpSettingsWidget*>(this));

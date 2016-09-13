@@ -72,7 +72,7 @@ public:
     const KisPaintOp* currentPaintOp() const;
     QPainterPath paintOpOutline(const QPointF &savedCursorPos,
                                 const KoPointerEvent *event,
-                                const KisPaintOpSettings *globalSettings,
+                                const KisPaintOpSettingsSP globalSettings,
                                 KisPaintOpSettings::OutlineMode mode) const;
     int canvasRotation();
     void setCanvasRotation(int rotation = 0);

@@ -23,6 +23,8 @@
 #include <QBuffer>
 #include <QDataStream>
 #include <QStringList>
+#include <KoColor.h>
+
 
 #include <kis_debug.h>
 #include <kis_node.h>
@@ -541,7 +543,7 @@ void PSDLayerRecord::write(QIODevice* io,
 
                 {
                     KIS_ASSERT_RECOVER_NOOP(m_onlyTransparencyMask->paintDevice()->pixelSize() == 1);
-                    const quint8 defaultPixel = *m_onlyTransparencyMask->paintDevice()->defaultPixel();
+                    const quint8 defaultPixel = *m_onlyTransparencyMask->paintDevice()->defaultPixel().data();
                     SAFE_WRITE_EX(io, defaultPixel);
                 }
 
@@ -711,7 +713,7 @@ bool PSDLayerRecord::readMask(QIODevice *io, KisPaintDeviceSP dev, ChannelInfo *
     // the device must be a pixel selection
     KIS_ASSERT_RECOVER(dev->pixelSize() == 1) { return false; }
 
-    dev->setDefaultPixel(&layerMask.defaultColor);
+    dev->setDefaultPixel(KoColor(&layerMask.defaultColor, dev->colorSpace()));
 
     int uncompressedLength = maskRect.width();
 

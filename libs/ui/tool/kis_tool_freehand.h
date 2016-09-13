@@ -26,6 +26,7 @@
 #include "kis_types.h"
 #include "kis_tool_paint.h"
 #include "kis_smoothing_options.h"
+#include "kis_signal_compressor_with_param.h"
 
 #include "kritaui_export.h"
 
@@ -92,6 +93,7 @@ protected Q_SLOTS:
     virtual void resetCursorStyle();
     void setAssistant(bool assistant);
     void setOnlyOneAssistantSnap(bool assistant);
+    void slotDoResizeBrush(qreal newSize);
 
 private:
     friend class KisToolFreehandPaintingInformationBuilder;
@@ -128,6 +130,7 @@ private:
     QPoint m_initialGestureGlobalPoint;
 
     bool m_paintopBasedPickingInAction;
+    KisSignalCompressorWithParam<qreal> m_brushResizeCompressor;
 };
 
 

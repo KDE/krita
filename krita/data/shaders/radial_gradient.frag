@@ -26,4 +26,3 @@ void main(void)
 
     gl_FragColor = texture1D(gradientColors, t);
 }
-

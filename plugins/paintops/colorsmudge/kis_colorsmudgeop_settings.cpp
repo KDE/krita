@@ -41,8 +41,6 @@ KisColorSmudgeOpSettings::~KisColorSmudgeOpSettings()
 #include "kis_curve_option_uniform_property.h"
 #include "kis_smudge_radius_option.h"
 
-typedef KisCallbackBasedPaintopProperty<KisComboBasedPaintOpProperty> KisComboBasedPaintOpPropertyCallback;
-
 QList<KisUniformPaintOpPropertySP> KisColorSmudgeOpSettings::uniformProperties()
 {
     QList<KisUniformPaintOpPropertySP> props =

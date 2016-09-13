@@ -43,7 +43,7 @@ bool KisExperimentPaintOpSettings::paintIncremental()
     return false;
 }
 
-QPainterPath KisExperimentPaintOpSettings::brushOutline(const KisPaintInformation &info, KisPaintOpSettings::OutlineMode mode) const
+QPainterPath KisExperimentPaintOpSettings::brushOutline(const KisPaintInformation &info, KisPaintOpSettings::OutlineMode mode)
 {
     QPainterPath path;
     if (mode == CursorIsOutline || mode == CursorIsCircleOutline || mode == CursorTiltOutline) {
@@ -69,7 +69,6 @@ QPainterPath KisExperimentPaintOpSettings::brushOutline(const KisPaintInformatio
 #include "kis_paintop_settings_update_proxy.h"
 #include "kis_experimentop_option.h"
 #include "kis_standard_uniform_properties_factory.h"
-typedef KisCallbackBasedPaintopProperty<KisUniformPaintOpProperty> KisUniformPaintOpPropertyCallback;
 
 
 QList<KisUniformPaintOpPropertySP> KisExperimentPaintOpSettings::uniformProperties()

@@ -31,7 +31,7 @@ public:
     KisRoundMarkerOpSettingsWidget(QWidget* parent = 0);
     ~KisRoundMarkerOpSettingsWidget();
 
-    KisPropertiesConfiguration* configuration() const;
+    KisPropertiesConfigurationSP configuration() const;
 
 private:
     KisSmudgeOptionWidget *m_smudgeOptionWidget;

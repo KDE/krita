@@ -34,8 +34,8 @@ public:
     inline const Ui_WdgMotionBlur* widget() const {
         return m_widget;
     }
-    virtual void setConfiguration(const KisPropertiesConfiguration*);
-    virtual KisPropertiesConfiguration* configuration() const;
+    virtual void setConfiguration(const KisPropertiesConfigurationSP);
+    virtual KisPropertiesConfigurationSP configuration() const;
 public Q_SLOTS:
     void angleSliderChanged(int);
     void angleDialChanged(int);

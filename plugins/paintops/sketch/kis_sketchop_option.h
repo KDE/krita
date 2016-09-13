@@ -42,8 +42,8 @@ public:
     void setThreshold(int radius) const;
     int threshold() const;
 
-    void writeOptionSetting(KisPropertiesConfiguration* settings) const;
-    void readOptionSetting(const KisPropertiesConfiguration* settings);
+    void writeOptionSetting(KisPropertiesConfigurationSP settings) const;
+    void readOptionSetting(const KisPropertiesConfigurationSP settings);
 
     void lodLimitations(KisPaintopLodLimitations *l) const;
 
@@ -67,7 +67,7 @@ public:
     bool distanceDensity;
     int lineWidth; // px
 
-    void readOptionSetting(const KisPropertiesConfiguration* settings) {
+    void readOptionSetting(const KisPropertiesConfigurationSP settings) {
         probability = settings->getDouble(SKETCH_PROBABILITY);
         offset = settings->getDouble(SKETCH_OFFSET) * 0.01;
         lineWidth = settings->getInt(SKETCH_LINE_WIDTH);

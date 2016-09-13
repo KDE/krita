@@ -186,6 +186,9 @@ void LutDockerDock::setCanvas(KoCanvasBase* _canvas)
 {
     if (m_canvas) {
         m_canvas->disconnect(this);
+        if (m_ownDisplayFilter) {
+            delete m_displayFilter;
+        }
         m_displayFilter = 0;
     }
 
@@ -466,7 +469,10 @@ void LutDockerDock::resetOcioConfiguration()
         dbgKrita << "OpenColorIO Error:" << exception.what() << "Cannot create the LUT docker";
     }
 
-    refillControls();
+
+    if (m_ocioConfig) {
+        refillControls();
+    }
 }
 
 void LutDockerDock::refillControls()

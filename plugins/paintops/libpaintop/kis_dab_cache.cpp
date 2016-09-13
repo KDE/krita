@@ -349,7 +349,7 @@ KisFixedPaintDeviceSP KisDabCache::fetchDabCommon(const KoColorSpace *cs,
                                    softnessFactor,
                                    mirrorProperties);
 
-    if (!m_d->dab || !(*m_d->dab->colorSpace() == *cs)) {
+    if (!m_d->dab || *m_d->dab->colorSpace() != *cs) {
         m_d->dab = new KisFixedPaintDevice(cs);
     }
     else if (cachingIsPossible) {
@@ -372,7 +372,7 @@ KisFixedPaintDeviceSP KisDabCache::fetchDabCommon(const KoColorSpace *cs,
                          softnessFactor);
     }
     else {
-        if (!m_d->colorSourceDevice || !(*cs == *m_d->colorSourceDevice->colorSpace())) {
+        if (!m_d->colorSourceDevice || *cs != *m_d->colorSourceDevice->colorSpace()) {
             m_d->colorSourceDevice = new KisPaintDevice(cs);
         }
         else {
@@ -395,7 +395,7 @@ KisFixedPaintDeviceSP KisDabCache::fetchDabCommon(const KoColorSpace *cs,
     }
 
     if (needSeparateOriginal()) {
-        if (!m_d->dabOriginal || !(*cs == *m_d->dabOriginal->colorSpace())) {
+        if (!m_d->dabOriginal || *cs != *m_d->dabOriginal->colorSpace()) {
             m_d->dabOriginal = new KisFixedPaintDevice(cs);
         }
 

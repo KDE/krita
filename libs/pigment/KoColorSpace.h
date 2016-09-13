@@ -27,6 +27,7 @@
 #include <QVector>
 #include <QList>
 
+#include <boost/operators.hpp>
 #include "KoColorSpaceConstants.h"
 #include "KoColorConversionTransformation.h"
 #include "KoColorProofingConversionTransformation.h"
@@ -84,7 +85,7 @@ class KoConvolutionOp;
  * Some subclasses implement only some parts and are named Traits
  *
  */
-class KRITAPIGMENT_EXPORT KoColorSpace
+class KRITAPIGMENT_EXPORT KoColorSpace : public boost::equality_comparable<KoColorSpace>
 {
     friend class KoColorSpaceRegistry;
     friend class KoColorSpaceFactory;

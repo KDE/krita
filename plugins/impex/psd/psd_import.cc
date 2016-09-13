@@ -37,7 +37,7 @@ psdImport::~psdImport()
 {
 }
 
-KisImportExportFilter::ConversionStatus psdImport::convert(const QByteArray&, const QByteArray& to)
+KisImportExportFilter::ConversionStatus psdImport::convert(const QByteArray&, const QByteArray& to, KisPropertiesConfigurationSP configuration)
 {
     dbgFile <<"Importing using PSDImport!";
 

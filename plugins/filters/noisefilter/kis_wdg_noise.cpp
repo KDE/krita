@@ -46,7 +46,7 @@ KisWdgNoise::~KisWdgNoise()
     delete m_widget;
 }
 
-void KisWdgNoise::setConfiguration(const KisPropertiesConfiguration* config)
+void KisWdgNoise::setConfiguration(const KisPropertiesConfigurationSP config)
 {
     QVariant value;
     if (config->getProperty("level", value)) {
@@ -57,9 +57,9 @@ void KisWdgNoise::setConfiguration(const KisPropertiesConfiguration* config)
     }
 }
 
-KisPropertiesConfiguration* KisWdgNoise::configuration() const
+KisPropertiesConfigurationSP KisWdgNoise::configuration() const
 {
-    KisFilterConfiguration* config = new KisFilterConfiguration("noise", 1);
+    KisFilterConfigurationSP config = new KisFilterConfiguration("noise", 1);
     config->setProperty("level", this->widget()->intLevel->value());
     config->setProperty("opacity", this->widget()->intOpacity->value());
     config->setProperty("seedThreshold", m_seedThreshold);

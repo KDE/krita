@@ -72,7 +72,7 @@ bool hasShapeLayerChild(KisNodeSP node)
     return false;
 }
 
-KisImportExportFilter::ConversionStatus OraExport::convert(const QByteArray& from, const QByteArray& to)
+KisImportExportFilter::ConversionStatus OraExport::convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration)
 {
     dbgFile << "ORA export! From:" << from << ", To:" << to << "";
 

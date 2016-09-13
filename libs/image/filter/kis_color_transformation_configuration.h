@@ -18,19 +18,24 @@
 #ifndef _KIS_COLOR_TRANSFORMATION_CONFIGURATION_H_
 #define _KIS_COLOR_TRANSFORMATION_CONFIGURATION_H_
 
-#include "filter/kis_filter_configuration.h"
+#include "kis_filter_configuration.h"
 #include "kritaimage_export.h"
 
 class KoColorSpace;
 class KisColorTransformationFilter;
 
+class KisColorTransformationConfiguration;
+typedef KisSharedPtr<KisColorTransformationConfiguration> KisColorTransformationConfigurationSP;
+
+
 class KRITAIMAGE_EXPORT KisColorTransformationConfiguration : public KisFilterConfiguration
 {
 public:
     KisColorTransformationConfiguration(const QString & name, qint32 version);
+    KisColorTransformationConfiguration(const KisColorTransformationConfiguration &rhs);
     virtual ~KisColorTransformationConfiguration();
 
-    KoColorTransformation *colorTransformation(const KoColorSpace *cs, const KisColorTransformationFilter * filter) const;
+    KoColorTransformation *colorTransformation(const KoColorSpace *cs, const KisColorTransformationFilter *filter) const;
 
 private:
     struct Private;

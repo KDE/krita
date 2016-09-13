@@ -57,8 +57,8 @@ public:
     int lineCount() const;
     qreal lineSpacing() const;
 
-    void writeOptionSetting(KisPropertiesConfiguration* setting) const;
-    void readOptionSetting(const KisPropertiesConfiguration* setting);
+    void writeOptionSetting(KisPropertiesConfigurationSP setting) const;
+    void readOptionSetting(const KisPropertiesConfigurationSP setting);
     void lodLimitations(KisPaintopLodLimitations *l) const;
 
 private:
@@ -81,7 +81,7 @@ struct DynaOption {
     bool dyna_use_two_circles;
     bool dyna_use_fixed_angle;
 
-    void writeOptionSetting(KisPropertiesConfiguration* setting) const {
+    void writeOptionSetting(KisPropertiesConfigurationSP setting) const {
         setting->setProperty(DYNA_WIDTH, dyna_width);
         setting->setProperty(DYNA_MASS, dyna_mass);
         setting->setProperty(DYNA_DRAG, dyna_drag);
@@ -97,7 +97,7 @@ struct DynaOption {
 
     }
 
-    void readOptionSetting(const KisPropertiesConfiguration* setting) {
+    void readOptionSetting(const KisPropertiesConfigurationSP setting) {
         dyna_action = setting->getInt(DYNA_ACTION);
         dyna_width = setting->getDouble(DYNA_WIDTH);
         dyna_mass = setting->getDouble(DYNA_MASS);

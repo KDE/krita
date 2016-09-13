@@ -66,12 +66,12 @@ enumPaintActionType KisPaintActionTypeOption::paintActionType() const
     }
 }
 
-void KisPaintActionTypeOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
+void KisPaintActionTypeOption::writeOptionSetting(KisPropertiesConfigurationSP setting) const
 {
     setting->setProperty("PaintOpAction", paintActionType());
 }
 
-void KisPaintActionTypeOption::readOptionSetting(const KisPropertiesConfiguration* setting)
+void KisPaintActionTypeOption::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
     enumPaintActionType type = (enumPaintActionType)setting->getInt("PaintOpAction", WASH);
     m_optionWidget->radioBuildup->setChecked(type == BUILDUP);

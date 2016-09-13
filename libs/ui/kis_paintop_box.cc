@@ -101,6 +101,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     , m_blockUpdate(false)
     , m_dirtyPresetsEnabled(false)
     , m_eraserBrushSizeEnabled(false)
+    , m_eraserBrushOpacityEnabled(false)
     , m_presetUpdateCompressor(200, KisSignalCompressor::FIRST_ACTIVE)
 {
     Q_ASSERT(view != 0);
@@ -110,6 +111,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     KisConfig cfg;
     m_dirtyPresetsEnabled = cfg.useDirtyPresets();
     m_eraserBrushSizeEnabled = cfg.useEraserBrushSize();
+    m_eraserBrushOpacityEnabled = cfg.useEraserBrushOpacity();
 
     KAcceleratorManager::setNoAccel(this);
 
@@ -456,6 +458,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     connect(m_presetsPopup       , SIGNAL(reloadPresetClicked())              , SLOT(slotReloadPreset()));
     connect(m_presetsPopup       , SIGNAL(dirtyPresetToggled(bool))           , SLOT(slotDirtyPresetToggled(bool)));
     connect(m_presetsPopup       , SIGNAL(eraserBrushSizeToggled(bool))       , SLOT(slotEraserBrushSizeToggled(bool)));
+    connect(m_presetsPopup       , SIGNAL(eraserBrushOpacityToggled(bool))       , SLOT(slotEraserBrushOpacityToggled(bool)));
 
     connect(m_presetsChooserPopup, SIGNAL(resourceSelected(KoResource*))      , SLOT(resourceSelected(KoResource*)));
     connect(m_resourceProvider   , SIGNAL(sigNodeChanged(const KisNodeSP))    , SLOT(slotNodeChanged(const KisNodeSP)));
@@ -611,8 +614,8 @@ void KisPaintopBox::setCurrentPaintop(const KoID& paintop, KisPaintOpPresetSP pr
 
     m_presetConnections.addConnection(m_optionWidget, SIGNAL(sigConfigurationUpdated()), this, SLOT(slotGuiChangedCurrentPreset()));
     m_presetConnections.addConnection(&m_presetUpdateCompressor, SIGNAL(timeout()), this, SLOT(slotUpdateOptionsWidget()));
-    m_presetConnections.addConnection(m_optionWidget, SIGNAL(sigSaveLockedConfig(KisPropertiesConfiguration*)), this, SLOT(slotSaveLockedOptionToPreset(KisPropertiesConfiguration*)));
-    m_presetConnections.addConnection(m_optionWidget, SIGNAL(sigDropLockedConfig(KisPropertiesConfiguration*)), this, SLOT(slotDropLockedOption(KisPropertiesConfiguration*)));
+    m_presetConnections.addConnection(m_optionWidget, SIGNAL(sigSaveLockedConfig(KisPropertiesConfigurationSP)), this, SLOT(slotSaveLockedOptionToPreset(KisPropertiesConfigurationSP)));
+    m_presetConnections.addConnection(m_optionWidget, SIGNAL(sigDropLockedConfig(KisPropertiesConfigurationSP)), this, SLOT(slotDropLockedOption(KisPropertiesConfigurationSP)));
 
 
     // load the current brush engine icon for the brush editor toolbar button
@@ -631,7 +634,7 @@ void KisPaintopBox::setCurrentPaintop(const KoID& paintop, KisPaintOpPresetSP pr
     // preset -> compressor
     m_presetConnections.addConnection(
         preset->updateProxy(), SIGNAL(sigSettingsChanged()),
-        &m_presetUpdateCompressor, SLOT(start()));
+         &m_presetUpdateCompressor, SLOT(start()));
 }
 
 void KisPaintopBox::slotUpdateOptionsWidget()
@@ -936,6 +939,28 @@ void KisPaintopBox::slotToggleEraseMode(bool checked)
         qreal newSize = checked ? settings->savedEraserSize() : settings->savedBrushSize();
         m_resourceProvider->setSize(newSize);
     }
+   if (m_eraserBrushOpacityEnabled) {
+        const qreal currentOpacity = m_resourceProvider->opacity();
+
+        KisPaintOpSettingsSP settings = m_resourceProvider->currentPreset()->settings();
+
+        // remember brush opacity. set the eraser opacity to the normal brush size if not set
+        if (checked) {
+            settings->setSavedBrushOpacity(currentOpacity);
+            if (qFuzzyIsNull(settings->savedEraserOpacity())) {
+                settings->setSavedEraserOpacity(currentOpacity);
+            }
+        } else {
+            settings->setSavedEraserOpacity(currentOpacity);
+            if (qFuzzyIsNull(settings->savedBrushOpacity())) {
+                settings->setSavedBrushOpacity(currentOpacity);
+            }
+        }
+
+        //update value in UI (this is the main place the value is 'stored' in memory)
+        qreal newOpacity = checked ? settings->savedEraserOpacity() : settings->savedBrushOpacity();
+        m_resourceProvider->setOpacity(newOpacity);
+    }
 }
 
 void KisPaintopBox::slotSetCompositeMode(int index)
@@ -982,10 +1007,10 @@ void KisPaintopBox::sliderChanged(int n)
         m_resourceProvider->setFlow(flow);
 
 
-        KisLockedPropertiesProxy *propertiesProxy = KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(m_resourceProvider->currentPreset()->settings());
+        KisLockedPropertiesProxySP propertiesProxy = KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(m_resourceProvider->currentPreset()->settings());
         propertiesProxy->setProperty("OpacityValue", opacity);
         propertiesProxy->setProperty("FlowValue", flow);
-        delete propertiesProxy;
+        m_optionWidget->setConfigurationSafe(m_resourceProvider->currentPreset()->settings().data());
     } else {
         m_resourceProvider->setOpacity(opacity);
     }
@@ -1128,7 +1153,7 @@ void KisPaintopBox::slotGuiChangedCurrentPreset() // Called only when UI is chan
     // TODO!!!!!!!!
     //m_presetsPopup->updateViewSettings();
 }
-void KisPaintopBox::slotSaveLockedOptionToPreset(KisPropertiesConfiguration* p)
+void KisPaintopBox::slotSaveLockedOptionToPreset(KisPropertiesConfigurationSP p)
 {
 
     QMapIterator<QString, QVariant> i(p->getProperties());
@@ -1144,7 +1169,7 @@ void KisPaintopBox::slotSaveLockedOptionToPreset(KisPropertiesConfiguration* p)
 
 }
 
-void KisPaintopBox::slotDropLockedOption(KisPropertiesConfiguration* p)
+void KisPaintopBox::slotDropLockedOption(KisPropertiesConfigurationSP p)
 {
     KisSignalsBlocker blocker(m_optionWidget);
     KisPaintOpPresetSP preset = m_resourceProvider->currentPreset();
@@ -1182,6 +1207,13 @@ void KisPaintopBox::slotEraserBrushSizeToggled(bool value)
     m_eraserBrushSizeEnabled = value;
     KisConfig cfg;
     cfg.setUseEraserBrushSize(m_eraserBrushSizeEnabled);
+}
+
+void KisPaintopBox::slotEraserBrushOpacityToggled(bool value)
+{
+    m_eraserBrushOpacityEnabled = value;
+    KisConfig cfg;
+    cfg.setUseEraserBrushOpacity(m_eraserBrushOpacityEnabled);
 }
 
 void KisPaintopBox::slotUpdateSelectionIcon()

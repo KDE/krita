@@ -48,8 +48,8 @@ public:
     double shearFactor() const;
     double randomFactor() const;
 
-    void writeOptionSetting(KisPropertiesConfiguration* config) const;
-    void readOptionSetting(const KisPropertiesConfiguration* config);
+    void writeOptionSetting(KisPropertiesConfigurationSP config) const;
+    void readOptionSetting(const KisPropertiesConfigurationSP config);
     void lodLimitations(KisPaintopLodLimitations *l) const;
 
 private:

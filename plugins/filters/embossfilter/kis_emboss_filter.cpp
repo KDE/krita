@@ -58,9 +58,9 @@ KisEmbossFilter::KisEmbossFilter() : KisFilter(id(), categoryEmboss(), i18n("&Em
     setSupportsAdjustmentLayers(false);
 }
 
-KisFilterConfiguration* KisEmbossFilter::factoryConfiguration(const KisPaintDeviceSP) const
+KisFilterConfigurationSP KisEmbossFilter::factoryConfiguration(const KisPaintDeviceSP) const
 {
-    KisFilterConfiguration* config = new KisFilterConfiguration(id().id(), 0);
+    KisFilterConfigurationSP config = new KisFilterConfiguration(id().id(), 0);
     config->setProperty("depth", 30);
     return config;
 }
@@ -80,7 +80,7 @@ KisFilterConfiguration* KisEmbossFilter::factoryConfiguration(const KisPaintDevi
  */
 void KisEmbossFilter::processImpl(KisPaintDeviceSP device,
                                   const QRect& applyRect,
-                                  const KisFilterConfiguration* config,
+                                  const KisFilterConfigurationSP config,
                                   KoUpdater* progressUpdater
                                   ) const
 {

@@ -21,6 +21,7 @@
 
 #include "kis_simple_processing_visitor.h"
 #include <QRect>
+#include "kis_types.h"
 
 
 class KRITAIMAGE_EXPORT  KisCropProcessingVisitor : public KisSimpleProcessingVisitor
@@ -35,10 +36,12 @@ private:
 public:
 
     void visit(KisTransformMask *mask, KisUndoAdapter *undoAdapter);
+    void visitColorizeMask(KisColorizeMask *mask, KisUndoAdapter *undoAdapter);
     using KisSimpleProcessingVisitor::visit;
 
 private:
     void moveNodeImpl(KisNode *node, KisUndoAdapter *undoAdapter);
+    void cropPaintDeviceImpl(KisPaintDeviceSP device, KisUndoAdapter *undoAdapter);
 
 private:
     QRect m_rect;

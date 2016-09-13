@@ -34,7 +34,7 @@ class KisPainter;
 class KisRoundMarkerOp: public KisPaintOp
 {
 public:
-    KisRoundMarkerOp(const KisPaintOpSettings* settings, KisPainter* painter, KisNodeSP node, KisImageSP image);
+    KisRoundMarkerOp(KisPaintOpSettingsSP settings, KisPainter* painter, KisNodeSP node, KisImageSP image);
     virtual ~KisRoundMarkerOp();
 
     KisSpacingInformation paintAt(const KisPaintInformation& info);

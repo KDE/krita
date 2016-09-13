@@ -54,8 +54,8 @@ public:
     qreal horizBorder() const;
     bool randomBorder() const;
 
-    void writeOptionSetting(KisPropertiesConfiguration* setting) const;
-    void readOptionSetting(const KisPropertiesConfiguration* setting);
+    void writeOptionSetting(KisPropertiesConfigurationSP setting) const;
+    void readOptionSetting(const KisPropertiesConfigurationSP setting);
 
 private:
     KisGridOpOptionsWidget * m_options;
@@ -74,7 +74,7 @@ struct GridOption
     bool grid_random_border;
 
 
-    void readOptionSetting(const KisPropertiesConfiguration* setting) {
+    void readOptionSetting(const KisPropertiesConfigurationSP setting) {
         grid_width = setting->getInt(GRID_WIDTH);
         grid_height = setting->getInt(GRID_HEIGHT);
         grid_division_level = setting->getInt(GRID_DIVISION_LEVEL);
@@ -85,7 +85,7 @@ struct GridOption
         grid_random_border = setting->getBool(GRID_RANDOM_BORDER);
     }
 
-    void writeOptionSetting(KisPropertiesConfiguration* setting) const {
+    void writeOptionSetting(KisPropertiesConfigurationSP setting) const {
         setting->setProperty(GRID_WIDTH, grid_width);
         setting->setProperty(GRID_HEIGHT, grid_height);
         setting->setProperty(GRID_DIVISION_LEVEL, grid_division_level);

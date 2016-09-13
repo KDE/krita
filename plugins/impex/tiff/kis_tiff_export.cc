@@ -25,6 +25,7 @@
 #include <kpluginfactory.h>
 #include <QFileInfo>
 
+#include <KoDialog.h>
 #include <KisFilterChain.h>
 #include <KoColorSpace.h>
 #include <KoChannelInfo.h>
@@ -36,7 +37,7 @@
 #include <kis_image.h>
 #include <kis_paint_layer.h>
 #include <kis_paint_device.h>
-
+#include <kis_config.h>
 
 #include "kis_tiff_converter.h"
 #include "kis_dlg_options_tiff.h"
@@ -52,7 +53,7 @@ KisTIFFExport::~KisTIFFExport()
 {
 }
 
-KisImportExportFilter::ConversionStatus KisTIFFExport::convert(const QByteArray& from, const QByteArray& to)
+KisImportExportFilter::ConversionStatus KisTIFFExport::convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration)
 {
     dbgFile << "Tiff export! From:" << from << ", To:" << to << "";
 
@@ -64,30 +65,41 @@ KisImportExportFilter::ConversionStatus KisTIFFExport::convert(const QByteArray&
         return KisImportExportFilter::NoDocumentCreated;
     }
 
-    KisDlgOptionsTIFF dlg;
+    KoDialog kdb;
+    kdb.setWindowTitle(i18n("TIFF Export Options"));
+    kdb.setButtons(KoDialog::Ok | KoDialog::Cancel);
+    KisTIFFOptionsWidget *wdg = static_cast<KisTIFFOptionsWidget*>(createConfigurationWidget(&kdb, from, to));
+    kdb.setMainWidget(wdg);
+    kdb.resize(kdb.minimumSize());
+
+    // If a configuration object was passed to the convert method, we use that, otherwise we load from the settings
+    KisPropertiesConfigurationSP cfg(new KisPropertiesConfiguration());
+    if (configuration) {
+        cfg->fromXML(configuration->toXML());
+    }
+    else {
+        cfg = lastSavedConfiguration(from, to);
+    }
+
     const KoColorSpace* cs = input->image()->colorSpace();
-    KoChannelInfo::enumChannelValueType type = cs->channels()[0]->channelValueType();
+    cfg->setProperty("type", (int)cs->channels()[0]->channelValueType());
+    cfg->setProperty("isCMYK", (cs->colorModelId() == CMYKAColorModelID));
 
-    if (type == KoChannelInfo::FLOAT16 || type == KoChannelInfo::FLOAT32) {
-        dlg.optionswdg->kComboBoxPredictor->removeItem(1);
-    } else {
-        dlg.optionswdg->kComboBoxPredictor->removeItem(2);
-    }
-
-    if (cs->colorModelId() == CMYKAColorModelID) {
-        dlg.optionswdg->alpha->setChecked(false);
-        dlg.optionswdg->alpha->setEnabled(false);
-    }
+    wdg->setConfiguration(cfg);
 
     if (!getBatchMode()) {
-        if (dlg.exec() == QDialog::Rejected) {
+        if (kdb.exec() == QDialog::Rejected) {
             return KisImportExportFilter::UserCancelled;
         }
+        cfg = wdg->configuration();
+        KisConfig().setExportConfiguration("TIFF", *cfg.data());
     }
 
-    KisTIFFOptions options = dlg.options();
+    KisTIFFOptions options = wdg->options();
 
-    if ((type == KoChannelInfo::FLOAT16 || type == KoChannelInfo::FLOAT32) && options.predictor == 2) { // FIXME THIS IS AN HACK FIX THAT IN 2.0 !! (62456a7b47636548c6507593df3e2bdf440f7544, BUG:135649)
+    if ((cs->channels()[0]->channelValueType() == KoChannelInfo::FLOAT16
+         || cs->channels()[0]->channelValueType() == KoChannelInfo::FLOAT32) && options.predictor == 2) {
+        // FIXME THIS IS AN HACK FIX THAT IN 2.0 !! (62456a7b47636548c6507593df3e2bdf440f7544, BUG:135649)
         options.predictor = 3;
     }
 
@@ -121,6 +133,35 @@ KisImportExportFilter::ConversionStatus KisTIFFExport::convert(const QByteArray&
 
     dbgFile << " Result =" << res;
     return KisImportExportFilter::InternalError;
+}
+
+KisPropertiesConfigurationSP KisTIFFExport::defaultConfiguration(const QByteArray &/*from*/, const QByteArray &/*to*/) const
+{
+    KisPropertiesConfigurationSP cfg = new KisPropertiesConfiguration();
+    cfg->setProperty("compressiontype", 0);
+    cfg->setProperty("predictor", 0);
+    cfg->setProperty("alpha", true);
+    cfg->setProperty("flatten", true);
+    cfg->setProperty("quality", 80);
+    cfg->setProperty("deflate", 6);
+    cfg->setProperty("faxmode", 0);
+    cfg->setProperty("pixarlog", 6);
+    cfg->setProperty("saveProfile", true);
+
+    return cfg;
+}
+
+KisPropertiesConfigurationSP KisTIFFExport::lastSavedConfiguration(const QByteArray &from, const QByteArray &to) const
+{
+    QString filterConfig = KisConfig().exportConfiguration("TIFF");
+    KisPropertiesConfigurationSP cfg = defaultConfiguration(from, to);
+    cfg->fromXML(filterConfig, false);
+    return cfg;
+}
+
+KisConfigWidget *KisTIFFExport::createConfigurationWidget(QWidget *parent, const QByteArray &/*from*/, const QByteArray &/*to*/) const
+{
+    return new KisTIFFOptionsWidget(parent);
 }
 
 #include <kis_tiff_export.moc>

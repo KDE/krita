@@ -57,7 +57,7 @@ QIcon KisFilterMask::icon() const
     return KisIconUtils::loadIcon("filterMask");
 }
 
-void KisFilterMask::setFilter(KisFilterConfiguration * filterConfig)
+void KisFilterMask::setFilter(KisFilterConfigurationSP  filterConfig)
 {
     if (parent() && parent()->inherits("KisLayer")) {
         filterConfig->setChannelFlags(qobject_cast<KisLayer*>(parent().data())->channelFlags());
@@ -72,7 +72,7 @@ QRect KisFilterMask::decorateRect(KisPaintDeviceSP &src,
 {
     Q_UNUSED(maskPos);
 
-    KisSafeFilterConfigurationSP filterConfig = filter();
+    KisFilterConfigurationSP filterConfig = filter();
 
     Q_ASSERT(nodeProgressProxy());
     Q_ASSERT_X(src != dst, "KisFilterMask::decorateRect",
@@ -123,7 +123,7 @@ QRect KisFilterMask::changeRect(const QRect &rect, PositionToFilthy pos) const
 
     QRect filteredRect = rect;
 
-    KisSafeFilterConfigurationSP filterConfig = filter();
+    KisFilterConfigurationSP filterConfig = filter();
     if (filterConfig) {
         KisNodeSP parent = this->parent();
         const int lod = parent && parent->projection() ?
@@ -159,7 +159,7 @@ QRect KisFilterMask::needRect(const QRect& rect, PositionToFilthy pos) const
 
     if(rect.isEmpty()) return rect;
 
-    KisSafeFilterConfigurationSP filterConfig = filter();
+    KisFilterConfigurationSP filterConfig = filter();
     if (!filterConfig) return rect;
 
     KisNodeSP parent = this->parent();

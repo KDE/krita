@@ -42,7 +42,7 @@ KisParticlePaintOpSettingsWidget::~ KisParticlePaintOpSettingsWidget()
 {
 }
 
-KisPropertiesConfiguration*  KisParticlePaintOpSettingsWidget::configuration() const
+KisPropertiesConfigurationSP  KisParticlePaintOpSettingsWidget::configuration() const
 {
     KisParticlePaintOpSettings* config = new KisParticlePaintOpSettings();
     config->setOptionsWidget(const_cast<KisParticlePaintOpSettingsWidget*>(this));

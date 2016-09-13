@@ -64,7 +64,7 @@ struct Q_DECL_HIDDEN KisRecordedPaintAction::Private {
     KisPainter::FillStyle fillStyle;
     const KoPattern* pattern;
     const KoAbstractGradient* gradient;
-    const KisFilterConfiguration* generator;
+    KisFilterConfigurationSP generator;
 };
 
 KisRecordedPaintAction::KisRecordedPaintAction(const QString & id,
@@ -85,7 +85,6 @@ KisRecordedPaintAction::KisRecordedPaintAction(const QString & id,
     d->fillStyle = KisPainter::FillStyleNone;
     d->pattern = 0;
     d->gradient = 0;
-    d->generator = 0;
 }
 
 KisRecordedPaintAction::KisRecordedPaintAction(const KisRecordedPaintAction& rhs) : KisRecordedNodeAction(rhs), d(new Private(*rhs.d))
@@ -257,7 +256,7 @@ void KisRecordedPaintAction::setGradient(const KoAbstractGradient* gradient)
   d->gradient = gradient;
 }
 
-void KisRecordedPaintAction::setGenerator(const KisFilterConfiguration * generator)
+void KisRecordedPaintAction::setGenerator(const KisFilterConfigurationSP  generator)
 {
   d->generator = generator;
 }
@@ -389,7 +388,7 @@ void KisRecordedPaintActionFactory::setupPaintAction(KisRecordedPaintAction* act
     } else if(fillAttr == "Generator")
     {
         KisGeneratorSP g = KisGeneratorRegistry::instance()->value(elt.attribute("generator"));
-        KisFilterConfiguration* config = 0;
+        KisFilterConfigurationSP config = 0;
         if (g)
         {
             config = g->defaultConfiguration(0);

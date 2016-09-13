@@ -59,7 +59,7 @@ KisMultiBoolFilterWidget::KisMultiBoolFilterWidget(const QString & filterid, QWi
 }
 
 
-void KisMultiBoolFilterWidget::setConfiguration(const KisPropertiesConfiguration * config)
+void KisMultiBoolFilterWidget::setConfiguration(const KisPropertiesConfigurationSP  config)
 {
     if (!config) return;
     for (int i = 0; i < nbValues(); ++i) {
@@ -69,9 +69,9 @@ void KisMultiBoolFilterWidget::setConfiguration(const KisPropertiesConfiguration
 }
 
 
-KisPropertiesConfiguration* KisMultiBoolFilterWidget::configuration() const
+KisPropertiesConfigurationSP KisMultiBoolFilterWidget::configuration() const
 {
-    KisFilterConfiguration* config = new KisFilterConfiguration(m_filterid, 0);
+    KisFilterConfigurationSP config = new KisFilterConfiguration(m_filterid, 0);
     for (int i = 0; i < nbValues(); ++i) {
         config->setProperty(m_boolWidgets[i]->objectName(), valueAt(i));
     }

@@ -132,6 +132,8 @@ QGradient* KoStopGradient::toQGradient() const
 
 void KoStopGradient::colorAt(KoColor& dst, qreal t) const
 {
+    KoColor buffer;
+
     if (! m_stops.count())
         return;
     if (t <= m_stops.first().first || m_stops.count() == 1) {
@@ -154,7 +156,7 @@ void KoStopGradient::colorAt(KoColor& dst, qreal t) const
                 break;
         }
 
-        //if ( !(*buffer.colorSpace() == *colorSpace())) {
+        //if ( *buffer.colorSpace() != *colorSpace()) {
         //    buffer = KoColor(colorSpace());
         //}
         //hack to get a color space with the bitdepth of the gradients(8bit), but with the colour profile of the image//
@@ -162,7 +164,7 @@ void KoStopGradient::colorAt(KoColor& dst, qreal t) const
 
         const KoGradientStop& leftStop = *(stop - 1);
         const KoGradientStop& rightStop = *(stop);
-        
+
         KoColor startDummy, endDummy;
         if (mixSpace){
             startDummy = KoColor(leftStop.second, mixSpace);
@@ -189,7 +191,7 @@ void KoStopGradient::colorAt(KoColor& dst, qreal t) const
 
         //check if our mixspace exists, it doesn't at startup.
         if (mixSpace){
-            if ( !(*buffer.colorSpace() == *mixSpace)) {
+            if (*buffer.colorSpace() != *mixSpace) {
                 buffer = KoColor(mixSpace);
             }
             mixSpace->mixColorsOp()->mixColors(colors, colorWeights, 2, buffer.data());

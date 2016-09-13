@@ -49,7 +49,7 @@ KisRoundMarkerOpSettingsWidget::KisRoundMarkerOpSettingsWidget(QWidget* parent)
 
 KisRoundMarkerOpSettingsWidget::~KisRoundMarkerOpSettingsWidget() { }
 
-KisPropertiesConfiguration* KisRoundMarkerOpSettingsWidget::configuration() const
+KisPropertiesConfigurationSP KisRoundMarkerOpSettingsWidget::configuration() const
 {
     KisRoundMarkerOpSettings *config = new KisRoundMarkerOpSettings();
     config->setOptionsWidget(const_cast<KisRoundMarkerOpSettingsWidget*>(this));

@@ -43,7 +43,7 @@ bool KisRoundMarkerOpSettings::paintIncremental() {
 void KisRoundMarkerOpSettings::setPaintOpSize(qreal value)
 {
     RoundMarkerOption op;
-    op.readOptionSetting(this);
+    op.readOptionSetting(*this);
     op.diameter = qBound(0.01, value, 1000.0);
     op.writeOptionSetting(this);
 }
@@ -51,11 +51,11 @@ void KisRoundMarkerOpSettings::setPaintOpSize(qreal value)
 qreal KisRoundMarkerOpSettings::paintOpSize() const
 {
     RoundMarkerOption op;
-    op.readOptionSetting(this);
+    op.readOptionSetting(*this);
     return op.diameter;
 }
 
-QPainterPath KisRoundMarkerOpSettings::brushOutline(const KisPaintInformation &info, OutlineMode mode) const
+QPainterPath KisRoundMarkerOpSettings::brushOutline(const KisPaintInformation &info, OutlineMode mode)
 {
     QPainterPath path;
 
@@ -63,7 +63,7 @@ QPainterPath KisRoundMarkerOpSettings::brushOutline(const KisPaintInformation &i
         qreal finalScale = 1.0;
 
         RoundMarkerOption op;
-        op.readOptionSetting(this);
+        op.readOptionSetting(*this);
         const qreal radius = 0.5 * op.diameter;
 
         QPainterPath realOutline;

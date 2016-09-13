@@ -54,7 +54,7 @@ KisHatchingPreferences::~KisHatchingPreferences()
 {
 }
 
-void KisHatchingPreferences::writeOptionSetting(KisPropertiesConfiguration* setting) const
+void KisHatchingPreferences::writeOptionSetting(KisPropertiesConfigurationSP setting) const
 {
     /*
     setting->setProperty("Hatching/bool_trigonometryalgebra", m_options->trigonometryAlgebraRadioButton->isChecked() );
@@ -66,7 +66,7 @@ void KisHatchingPreferences::writeOptionSetting(KisPropertiesConfiguration* sett
     setting->setProperty("Hatching/bool_subpixelprecision", m_options->subpixelPrecisionCheckBox->isChecked());
 }
 
-void KisHatchingPreferences::readOptionSetting(const KisPropertiesConfiguration* setting)
+void KisHatchingPreferences::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
     /*
     m_options->trigonometryAlgebraRadioButton->setChecked( setting->getBool("Hatching/bool_trigonometryalgebra") );

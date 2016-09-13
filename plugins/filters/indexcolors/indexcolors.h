@@ -44,13 +44,13 @@ class KisFilterIndexColors : public KisColorTransformationFilter
 public:
     KisFilterIndexColors();
 public:
-    virtual KoColorTransformation* createTransformation(const KoColorSpace* cs, const KisFilterConfiguration* config) const;
+    virtual KoColorTransformation* createTransformation(const KoColorSpace* cs, const KisFilterConfigurationSP config) const;
     virtual KisConfigWidget* createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
     static inline KoID id() {
         return KoID("indexcolors", i18n("Index Colors"));
     }
 protected:
-    virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
+    virtual KisFilterConfigurationSP factoryConfiguration(const KisPaintDeviceSP) const;
 };
 
 class KisIndexColorTransformation : public KoColorTransformation

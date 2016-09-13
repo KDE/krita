@@ -34,11 +34,13 @@
 Q_GLOBAL_STATIC(TextBrushInitializationWorkaround, s_instance)
 
 
-TextBrushInitializationWorkaround *TextBrushInitializationWorkaround::instance() {
+TextBrushInitializationWorkaround *TextBrushInitializationWorkaround::instance()
+{
     return s_instance;
 }
 
-void TextBrushInitializationWorkaround::preinitialize(const KisPropertiesConfiguration *settings) {
+void TextBrushInitializationWorkaround::preinitialize(KisPropertiesConfigurationSP settings)
+{
     if (KisBrushOption::isTextBrush(settings)) {
         KisBrushOption brushOption;
         brushOption.readOptionSetting(settings, true);
@@ -51,8 +53,9 @@ void TextBrushInitializationWorkaround::preinitialize(const KisPropertiesConfigu
     }
 }
 
-KisBrushSP TextBrushInitializationWorkaround::tryGetBrush(const KisPropertiesConfiguration *settings) {
-    return settings && settings == m_settings ? m_brush : 0;
+KisBrushSP TextBrushInitializationWorkaround::tryGetBrush(const KisPropertiesConfigurationSP settings)
+{
+    return (settings && settings == m_settings ? m_brush : 0);
 }
 
 TextBrushInitializationWorkaround::TextBrushInitializationWorkaround()
@@ -64,15 +67,15 @@ TextBrushInitializationWorkaround::~TextBrushInitializationWorkaround()
 
 
 
-void KisBrushBasedPaintOp::preinitializeOpStatically(const KisPaintOpSettingsSP settings)
+void KisBrushBasedPaintOp::preinitializeOpStatically(KisPaintOpSettingsSP settings)
 {
-    TextBrushInitializationWorkaround::instance()->preinitialize(settings.data());
+    TextBrushInitializationWorkaround::instance()->preinitialize(settings);
 }
 
 #endif /* HAVE_THREADED_TEXT_RENDERING_WORKAROUND */
 
 
-KisBrushBasedPaintOp::KisBrushBasedPaintOp(const KisPropertiesConfiguration* settings, KisPainter* painter)
+KisBrushBasedPaintOp::KisBrushBasedPaintOp(const KisPropertiesConfigurationSP settings, KisPainter* painter)
     : KisPaintOp(painter),
       m_textureProperties(painter->device()->defaultBounds()->currentLevelOfDetail())
 {

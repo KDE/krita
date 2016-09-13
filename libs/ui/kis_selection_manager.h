@@ -109,10 +109,13 @@ public Q_SLOTS:
 
     void slotToggleSelectionDecoration();
 
+    void slotStrokeSelection();
+
 Q_SIGNALS:
     void currentSelectionChanged();
     void signalUpdateGUI();
     void displaySelectionChanged();
+    void strokeSelected();
 
 public:
     bool havePixelsSelected();
@@ -167,6 +170,8 @@ private:
     KisAction *m_strokeShapes;
     KisAction *m_toggleDisplaySelection;
     KisAction *m_toggleSelectionOverlayMode;
+    KisAction *m_strokeSelected;
+
 
     QList<QAction*> m_pluginActions;
     QPointer<KisSelectionDecoration> m_selectionDecoration;

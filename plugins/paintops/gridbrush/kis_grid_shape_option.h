@@ -34,8 +34,8 @@ public:
     /// Ellipse, rectangle, line, pixel, anti-aliased pixel
     int shape() const;
 
-    void writeOptionSetting(KisPropertiesConfiguration* setting) const;
-    void readOptionSetting(const KisPropertiesConfiguration* setting);
+    void writeOptionSetting(KisPropertiesConfigurationSP setting) const;
+    void readOptionSetting(const KisPropertiesConfigurationSP setting);
 private:
     KisShapeOptionsWidget * m_options;
 };

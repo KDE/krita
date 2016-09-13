@@ -29,6 +29,7 @@
 
 #include <opengl/kis_opengl.h>
 #include <QOpenGLContext>
+#include <QOpenGLFunctions_3_2_Core>
 #include <QOpenGLFunctions_2_0>
 
 
@@ -267,6 +268,17 @@ void OcioDisplayFilter::updateProcessor()
 
 void OcioDisplayFilter::updateShader()
 {
+    if (KisOpenGL::hasOpenGL3()) {
+        QOpenGLFunctions_3_2_Core *f = QOpenGLContext::currentContext()->versionFunctions<QOpenGLFunctions_3_2_Core>();
+        updateShaderImpl(f);
+    } else {
+        QOpenGLFunctions_2_0 *f = QOpenGLContext::currentContext()->versionFunctions<QOpenGLFunctions_2_0>();
+        updateShaderImpl(f);
+    }
+}
+
+template <class F>
+void OcioDisplayFilter::updateShaderImpl(F *f) {
     // check whether we are allowed to use shaders -- though that should
     // work for everyone these days
     KisConfig cfg;
@@ -274,9 +286,8 @@ void OcioDisplayFilter::updateShader()
 
     if (!m_shaderDirty) return;
 
-    QOpenGLFunctions_2_0 *f = QOpenGLContext::currentContext()->versionFunctions<QOpenGLFunctions_2_0>();
     if (!f) {
-        qWarning() << "Could not create OpenGL 2.0 functions!";
+        qWarning() << "Failed to get valid OpenGL functions for OcioDisplayFilter!";
         return;
     }
 
@@ -307,7 +318,7 @@ void OcioDisplayFilter::updateShader()
     // Step 1: Create a GPU Shader Description
     OCIO::GpuShaderDesc shaderDesc;
 
-    if (KisOpenGL::supportsGLSL13()) {
+    if (KisOpenGL::hasOpenGL3()) {
         shaderDesc.setLanguage(OCIO::GPU_LANGUAGE_GLSL_1_3);
     }
     else {

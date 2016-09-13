@@ -21,9 +21,10 @@
 
 #include "kritaui_export.h"
 #include <QString>
+#include "operations/kis_operation_configuration.h"
 
 class KisViewManager;
-class KisOperationConfiguration;
+
 
 class KRITAUI_EXPORT KisOperationUIFactory
 {
@@ -45,8 +46,8 @@ public:
     * @param view the view
     * @param configuration the into which the setting will be written
     */
-    virtual bool fetchConfiguration(KisViewManager* view, KisOperationConfiguration* configuration) = 0;
-    
+    virtual bool fetchConfiguration(KisViewManager* view, KisOperationConfigurationSP configuration) = 0;
+
 private:
     class Private;
     Private* const d;

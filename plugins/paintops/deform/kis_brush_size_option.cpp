@@ -110,7 +110,7 @@ qreal KisBrushSizeOption::brushAspect() const
 }
 
 
-void KisBrushSizeOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
+void KisBrushSizeOption::writeOptionSetting(KisPropertiesConfigurationSP setting) const
 {
     BrushSizeOption op;
 
@@ -126,7 +126,7 @@ void KisBrushSizeOption::writeOptionSetting(KisPropertiesConfiguration* setting)
     op.writeOptionSetting(setting);
 }
 
-void KisBrushSizeOption::readOptionSetting(const KisPropertiesConfiguration* setting)
+void KisBrushSizeOption::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
     BrushSizeOption op;
     op.readOptionSetting(setting);

@@ -51,6 +51,12 @@ struct SliderWrapper
 
         } else if (m_slider.canConvert<KisDoubleSliderSpinBox*>()) {
             m_slider.value<KisDoubleSliderSpinBox*>()->setValue(value);
+
+        } else if (m_slider.canConvert<KisIntParseSpinBox*>()) {
+            m_slider.value<KisIntParseSpinBox*>()->setValue(qRound(value));
+
+        } else if (m_slider.canConvert<KisDoubleParseSpinBox*>()) {
+            m_slider.value<KisDoubleParseSpinBox*>()->setValue(value);
         }
     }
 
@@ -68,6 +74,12 @@ struct SliderWrapper
 
         } else if (m_slider.canConvert<KisDoubleSliderSpinBox*>()) {
             result = m_slider.value<KisDoubleSliderSpinBox*>()->value();
+
+        } else if (m_slider.canConvert<KisIntParseSpinBox*>()) {
+            result = m_slider.value<KisIntParseSpinBox*>()->value();
+
+        } else if (m_slider.canConvert<KisDoubleParseSpinBox*>()) {
+            result = m_slider.value<KisDoubleParseSpinBox*>()->value();
         }
 
         return result;
@@ -135,12 +147,12 @@ void KisAspectRatioLocker::connectSpinBoxes(SpinBoxType *spinOne, SpinBoxType *s
     slotAspectButtonChanged();
 }
 
-template void KisAspectRatioLocker::connectSpinBoxes(QSpinBox *spinOne, QSpinBox *spinTwo, KoAspectButton *aspectButton);
-template void KisAspectRatioLocker::connectSpinBoxes(QDoubleSpinBox *spinOne, QDoubleSpinBox *spinTwo, KoAspectButton *aspectButton);
-template void KisAspectRatioLocker::connectSpinBoxes(KisSliderSpinBox *spinOne, KisSliderSpinBox *spinTwo, KoAspectButton *aspectButton);
-template void KisAspectRatioLocker::connectSpinBoxes(KisDoubleSliderSpinBox *spinOne, KisDoubleSliderSpinBox *spinTwo, KoAspectButton *aspectButton);
-template void KisAspectRatioLocker::connectSpinBoxes(KisIntParseSpinBox *spinOne, KisIntParseSpinBox *spinTwo, KoAspectButton *aspectButton);
-template void KisAspectRatioLocker::connectSpinBoxes(KisDoubleParseSpinBox *spinOne, KisDoubleParseSpinBox *spinTwo, KoAspectButton *aspectButton);
+template KRITAUI_EXPORT void KisAspectRatioLocker::connectSpinBoxes(QSpinBox *spinOne, QSpinBox *spinTwo, KoAspectButton *aspectButton);
+template KRITAUI_EXPORT void KisAspectRatioLocker::connectSpinBoxes(QDoubleSpinBox *spinOne, QDoubleSpinBox *spinTwo, KoAspectButton *aspectButton);
+template KRITAUI_EXPORT void KisAspectRatioLocker::connectSpinBoxes(KisSliderSpinBox *spinOne, KisSliderSpinBox *spinTwo, KoAspectButton *aspectButton);
+template KRITAUI_EXPORT void KisAspectRatioLocker::connectSpinBoxes(KisDoubleSliderSpinBox *spinOne, KisDoubleSliderSpinBox *spinTwo, KoAspectButton *aspectButton);
+template KRITAUI_EXPORT void KisAspectRatioLocker::connectSpinBoxes(KisIntParseSpinBox *spinOne, KisIntParseSpinBox *spinTwo, KoAspectButton *aspectButton);
+template KRITAUI_EXPORT void KisAspectRatioLocker::connectSpinBoxes(KisDoubleParseSpinBox *spinOne, KisDoubleParseSpinBox *spinTwo, KoAspectButton *aspectButton);
 
 void KisAspectRatioLocker::slotSpinOneChanged()
 {

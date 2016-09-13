@@ -20,17 +20,16 @@
 #define __KIS_EMBEDDED_PATTERN_MANAGER_H
 
 #include <kritapaintop_export.h>
+#include <kis_properties_configuration.h>
 
 class KoPattern;
 class KoAbstractGradient;
-class KisPropertiesConfiguration;
-
 
 class PAINTOP_EXPORT KisEmbeddedPatternManager
 {
 public:
-    static void saveEmbeddedPattern(KisPropertiesConfiguration* setting, const KoPattern *pattern);
-    static KoPattern* loadEmbeddedPattern(const KisPropertiesConfiguration* setting);
+    static void saveEmbeddedPattern(KisPropertiesConfigurationSP setting, const KoPattern *pattern);
+    static KoPattern* loadEmbeddedPattern(const KisPropertiesConfigurationSP setting);
 
 private:
     struct Private;

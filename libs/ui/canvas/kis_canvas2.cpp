@@ -113,7 +113,7 @@ public:
     QRect savedUpdateRect;
 
     QBitArray channelFlags;
-    KisProofingConfiguration *proofingConfig = 0;
+    KisProofingConfigurationSP proofingConfig;
     bool softProofing = false;
     bool gamutCheck = false;
     bool proofingConfigUpdated = false;
@@ -605,7 +605,7 @@ bool KisCanvas2::proofingConfigUpdated()
     return m_d->proofingConfigUpdated;
 }
 
-KisProofingConfiguration *KisCanvas2::proofingConfiguration() const
+KisProofingConfigurationSP KisCanvas2::proofingConfiguration() const
 {
     if (!m_d->proofingConfig) {
         m_d->proofingConfig = this->image()->proofingConfiguration();
@@ -926,14 +926,14 @@ void KisCanvas2::bootstrapFinished()
 
 void KisCanvas2::setLodAllowedInCanvas(bool value)
 {
-    if (!KisOpenGL::supportsGLSL13()) {
+    if (!KisOpenGL::hasOpenGL3()) {
         qWarning() << "WARNING: Level of Detail functionality is available only with openGL + GLSL 1.3 support";
     }
 
     m_d->lodAllowedInCanvas =
             value &&
             m_d->currentCanvasIsOpenGL &&
-            KisOpenGL::supportsGLSL13() &&
+            KisOpenGL::hasOpenGL3() &&
             (m_d->openGLFilterMode == KisOpenGL::TrilinearFilterMode ||
              m_d->openGLFilterMode == KisOpenGL::HighQualityFiltering);
 

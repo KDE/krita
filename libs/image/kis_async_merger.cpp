@@ -93,7 +93,7 @@ public:
         //      null, we are finish here.
         if(applyRect.isNull()) return true;
 
-        KisSafeFilterConfigurationSP filterConfig = layer->filter();
+        KisFilterConfigurationSP filterConfig = layer->filter();
         if (!filterConfig) {
             /**
              * When an adjustment layer is just created, it may have no
@@ -190,6 +190,9 @@ public:
         return true;
     }
     bool visit(KisSelectionMask*) {
+        return true;
+    }
+    bool visit(KisColorizeMask*) {
         return true;
     }
 

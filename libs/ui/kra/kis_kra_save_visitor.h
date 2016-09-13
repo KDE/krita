@@ -65,6 +65,8 @@ public:
 
     bool visit(KisSelectionMask *mask);
 
+    bool visit(KisColorizeMask *mask);
+
     /// @return a list with everything that went wrong while saving
     QStringList errorMessages() const;
 

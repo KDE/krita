@@ -49,7 +49,7 @@ struct Q_DECL_HIDDEN KisGeneratorLayer::Private
 
 KisGeneratorLayer::KisGeneratorLayer(KisImageWSP image,
                                      const QString &name,
-                                     KisFilterConfiguration *kfc,
+                                     KisFilterConfigurationSP kfc,
                                      KisSelectionSP selection)
     : KisSelectionBasedLayer(image, name, selection, kfc, true),
       m_d(new Private)
@@ -69,7 +69,7 @@ KisGeneratorLayer::~KisGeneratorLayer()
 {
 }
 
-void KisGeneratorLayer::setFilter(KisFilterConfiguration *filterConfig)
+void KisGeneratorLayer::setFilter(KisFilterConfigurationSP filterConfig)
 {
     KisSelectionBasedLayer::setFilter(filterConfig);
     update();
@@ -93,7 +93,7 @@ void KisGeneratorLayer::slotDelayedStaticUpdate()
 
 void KisGeneratorLayer::update()
 {
-    KisSafeFilterConfigurationSP filterConfig = filter();
+    KisFilterConfigurationSP filterConfig = filter();
 
     if (!filterConfig) {
         warnImage << "BUG: No Filter configuration in KisGeneratorLayer";
@@ -137,7 +137,7 @@ QIcon KisGeneratorLayer::icon() const
 
 KisBaseNode::PropertyList KisGeneratorLayer::sectionModelProperties() const
 {
-    KisSafeFilterConfigurationSP filterConfig = filter();
+    KisFilterConfigurationSP filterConfig = filter();
 
     KisBaseNode::PropertyList l = KisLayer::sectionModelProperties();
     l << KisBaseNode::Property(KoID("generator", i18n("Generator")),

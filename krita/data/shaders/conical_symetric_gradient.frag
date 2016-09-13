@@ -26,7 +26,7 @@ const float PI = 3.1415926535;
 void main(void)
 {
     vec2 p = gl_TexCoord[0].st - gradientVectorStart;
-    
+
     float angle = atan(p.y, p.x) + PI;
     angle -= gradientVectorAngle;
 
@@ -45,4 +45,3 @@ void main(void)
 
     gl_FragColor = texture1D(gradientColors, t);
 }
-

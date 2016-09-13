@@ -143,7 +143,7 @@ qreal KisGridOpOption::scale() const
     return m_options->scaleDSPBox->value();
 }
 
-void KisGridOpOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
+void KisGridOpOption::writeOptionSetting(KisPropertiesConfigurationSP setting) const
 {
     GridOption op;
 
@@ -159,7 +159,7 @@ void KisGridOpOption::writeOptionSetting(KisPropertiesConfiguration* setting) co
     op.writeOptionSetting(setting);
 }
 
-void KisGridOpOption::readOptionSetting(const KisPropertiesConfiguration* setting)
+void KisGridOpOption::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
     GridOption op;
     op.readOptionSetting(setting);

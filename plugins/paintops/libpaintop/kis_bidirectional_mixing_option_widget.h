@@ -45,10 +45,10 @@ public:
     ~KisBidirectionalMixingOptionWidget();
 
     ///Reimplemented
-    void writeOptionSetting(KisPropertiesConfiguration* setting) const;
+    void writeOptionSetting(KisPropertiesConfigurationSP setting) const;
 
     ///Reimplemented
-    void readOptionSetting(const KisPropertiesConfiguration* setting);
+    void readOptionSetting(const KisPropertiesConfigurationSP setting);
 
 private:
     QLabel * m_optionWidget;

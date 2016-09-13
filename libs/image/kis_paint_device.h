@@ -146,12 +146,17 @@ public:
     /**
      * Moves the device to these new coordinates (so no incremental move or so)
      */
-    void move(qint32 x, qint32 y);
+    void moveTo(qint32 x, qint32 y);
 
     /**
      * Convenience method for the above.
      */
-    virtual void move(const QPoint& pt);
+    virtual void moveTo(const QPoint& pt);
+
+    /**
+     * Return an X,Y offset of the device in a convenient form
+     */
+    QPoint offset() const;
 
     /**
      * The X offset of the paint device
@@ -243,6 +248,12 @@ public:
     QRegion region() const;
 
     /**
+     * The slow version of region() that searches for exact bounds of
+     * each rectangle in the region
+     */
+    QRegion regionExact() const;
+
+    /**
      * Cut the paint device down to the specified rect. If the crop
      * area is bigger than the paint device, nothing will happen.
      */
@@ -275,14 +286,14 @@ public:
      * caller still owns the pointer and needs to delete it to avoid memory leaks.
      * If frame ID is given, set default pixel for that frame. Otherwise use active frame.
      */
-    void setDefaultPixel(const quint8 *defPixel);
+    void setDefaultPixel(const KoColor &defPixel);
 
     /**
      * Get a pointer to the default pixel.
      * If the frame parameter is given, get the default pixel of
      * specified frame. Otherwise use currently active frame.
      */
-    const quint8 *defaultPixel() const;
+    KoColor defaultPixel() const;
 
     /**
      * Fill the given rectangle with the given pixel. The paint device will expand to
@@ -742,6 +753,13 @@ public:
      * needed.
      */
     void requestTimeSwitch(int time);
+
+    /**
+     * \return a sequence number corresponding to the current paint
+     *         device state. Every time the paint device is changed,
+     *         the sequence number is increased
+     */
+    int sequenceNumber() const;
 
 public:
 

@@ -17,6 +17,7 @@
  */
 
 
+#include <kis_filter_configuration.h>
 #include "kis_recorded_filter_action_editor.h"
 #include <recorder/kis_recorded_filter_action.h>
 #include <filter/kis_filter.h>
@@ -63,7 +64,7 @@ KisRecordedFilterActionEditor::~KisRecordedFilterActionEditor()
 
 void KisRecordedFilterActionEditor::configurationUpdated()
 {
-    KisFilterConfiguration* config = dynamic_cast<KisFilterConfiguration*>(m_configWidget->configuration());
+    KisFilterConfigurationSP config = dynamic_cast<KisFilterConfiguration*>(m_configWidget->configuration().data());
     if (config) {
         m_action->setFilterConfiguration(config);
         emit(actionEdited());

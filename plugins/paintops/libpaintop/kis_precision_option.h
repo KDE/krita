@@ -22,7 +22,7 @@
 
 #include <QString>
 #include <kritapaintop_export.h>
-class KisPropertiesConfiguration;
+#include <kis_properties_configuration.h>
 
 const QString PRECISION_LEVEL = "KisPrecisionOption/precisionLevel";
 const QString AUTO_PRECISION_ENABLED = "KisPrecisionOption/AutoPrecisionEnabled";
@@ -33,8 +33,8 @@ const QString DELTA_VALUE = "KisPrecisionOption/DeltaValue";
 class PAINTOP_EXPORT KisPrecisionOption
 {
 public:
-    void writeOptionSetting(KisPropertiesConfiguration* settings) const;
-    void readOptionSetting(const KisPropertiesConfiguration* settings);
+    void writeOptionSetting(KisPropertiesConfigurationSP settings) const;
+    void readOptionSetting(const KisPropertiesConfigurationSP settings);
 
     int precisionLevel() const;
     void setPrecisionLevel(int precisionLevel);

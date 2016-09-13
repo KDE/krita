@@ -28,8 +28,8 @@ public:
     KisRoundMarkerOption();
     ~KisRoundMarkerOption();
 
-    void writeOptionSetting(KisPropertiesConfiguration* setting) const;
-    void readOptionSetting(const KisPropertiesConfiguration* setting);
+    void writeOptionSetting(KisPropertiesConfigurationSP setting) const;
+    void readOptionSetting(KisPropertiesConfigurationSP setting);
 
 private:
     KisRoundMarkerOptionWidget * m_options;
@@ -44,14 +44,14 @@ public:
     bool use_auto_spacing;
     qreal auto_spacing_coeff;
 
-    void readOptionSetting(const KisPropertiesConfiguration* config) {
-        diameter = config->getDouble("diameter", 30.0);
-        spacing = config->getDouble("spacing", 0.02);
-        use_auto_spacing = config->getBool("useAutoSpacing", false);
-        auto_spacing_coeff = config->getDouble("autoSpacingCoeff", 1.0);
+    void readOptionSetting(const KisPropertiesConfiguration &config) {
+        diameter = config.getDouble("diameter", 30.0);
+        spacing = config.getDouble("spacing", 0.02);
+        use_auto_spacing = config.getBool("useAutoSpacing", false);
+        auto_spacing_coeff = config.getDouble("autoSpacingCoeff", 1.0);
     }
 
-    void writeOptionSetting(KisPropertiesConfiguration* config) const {
+    void writeOptionSetting(KisPropertiesConfigurationSP config) const {
         config->setProperty("diameter", diameter);
         config->setProperty("spacing", spacing);
         config->setProperty("useAutoSpacing", use_auto_spacing);

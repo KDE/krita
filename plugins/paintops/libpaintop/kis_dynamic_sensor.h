@@ -92,7 +92,7 @@ enum DynamicSensorType {
  * double value which can be used to control the parameters of
  * a brush.
  */
-class PAINTOP_EXPORT KisDynamicSensor : public KisSerializableConfiguration, public KisShared
+class PAINTOP_EXPORT KisDynamicSensor : public KisSerializableConfiguration
 {
 
 public:

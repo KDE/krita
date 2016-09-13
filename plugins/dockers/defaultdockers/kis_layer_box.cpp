@@ -62,6 +62,8 @@
 #include <kis_node.h>
 #include <kis_base_node.h>
 #include <kis_composite_ops_model.h>
+#include <kis_keyframe_channel.h>
+#include <kis_image_animation_interface.h>
 
 #include "kis_action.h"
 #include "kis_action_manager.h"
@@ -293,6 +295,11 @@ void KisLayerBox::setCanvas(KoCanvasBase *canvas)
         m_canvas->disconnectCanvasObserver(this);
         m_nodeModel->setDummiesFacade(0, 0, 0, 0, 0);
 
+        if (m_image) {
+            KisImageAnimationInterface *animation = m_image->animationInterface();
+            animation->disconnect(this);
+        }
+
         disconnect(m_image, 0, this, 0);
         disconnect(m_nodeManager, 0, this, 0);
         disconnect(m_nodeModel, 0, m_nodeManager, 0);
@@ -335,6 +342,9 @@ void KisLayerBox::setCanvas(KoCanvasBase *canvas)
         // Connection KisLayerBox -> KisNodeManager (isolate layer)
         connect(m_nodeModel, SIGNAL(toggleIsolateActiveNode()),
                 m_nodeManager, SLOT(toggleIsolateActiveNode()));
+
+        KisImageAnimationInterface *animation = m_image->animationInterface();
+        connect(animation, &KisImageAnimationInterface::sigTimeChanged, this, &KisLayerBox::slotImageTimeChanged);
 
         expandNodesRecursively(m_image->rootLayer(), m_filteringModel, m_wdgLayerBox->listLayers);
         m_wdgLayerBox->listLayers->scrollTo(m_wdgLayerBox->listLayers->currentIndex());
@@ -384,6 +394,19 @@ void KisLayerBox::updateUI()
     if (!m_nodeManager) return;
 
     KisNodeSP activeNode = m_nodeManager->activeNode();
+
+    if (activeNode != m_activeNode) {
+        m_activeNode->disconnect(this);
+        m_activeNode = activeNode;
+
+        KisKeyframeChannel *opacityChannel = activeNode->getKeyframeChannel(KisKeyframeChannel::Opacity.id(), false);
+        if (opacityChannel) {
+            watchOpacityChannel(opacityChannel);
+        } else {
+            watchOpacityChannel(0);
+            connect(activeNode.data(), &KisNode::keyframeChannelAdded, this, &KisLayerBox::slotKeyframeChannelAdded);
+        }
+    }
 
     m_wdgLayerBox->bnRaise->setEnabled(activeNode && activeNode->isEditable(false) && (activeNode->nextSibling()
                                        || (activeNode->parent() && activeNode->parent() != m_image->root())));
@@ -626,7 +649,9 @@ void KisLayerBox::slotCompositeOpChanged(int index)
 void KisLayerBox::slotOpacityChanged()
 {
     if (!m_canvas) return;
+    m_blockOpacityUpdate = true;
     m_nodeManager->nodeOpacityChanged(m_newOpacity, true);
+    m_blockOpacityUpdate = false;
 }
 
 void KisLayerBox::slotOpacitySliderMoved(qreal opacity)
@@ -847,6 +872,46 @@ void KisLayerBox::updateAvailableLabels()
 void KisLayerBox::updateLayerFiltering()
 {
     m_filteringModel->setAcceptedLabels(m_wdgLayerBox->cmbFilter->selectedColors());
+}
+
+void KisLayerBox::slotKeyframeChannelAdded(KisKeyframeChannel *channel)
+{
+    if (channel->id() == KisKeyframeChannel::Opacity.id()) {
+        watchOpacityChannel(channel);
+    }
+}
+
+void KisLayerBox::watchOpacityChannel(KisKeyframeChannel *channel)
+{
+    if (m_opacityChannel) {
+        m_opacityChannel->disconnect(this);
+    }
+
+    m_opacityChannel = channel;
+
+    connect(m_opacityChannel, &KisKeyframeChannel::sigKeyframeAdded, this, &KisLayerBox::slotOpacityKeyframeChanged);
+    connect(m_opacityChannel, &KisKeyframeChannel::sigKeyframeRemoved, this, &KisLayerBox::slotOpacityKeyframeChanged);
+    connect(m_opacityChannel, &KisKeyframeChannel::sigKeyframeMoved, this, &KisLayerBox::slotOpacityKeyframeMoved);
+    connect(m_opacityChannel, &KisKeyframeChannel::sigKeyframeChanged, this, &KisLayerBox::slotOpacityKeyframeChanged);
+}
+
+void KisLayerBox::slotOpacityKeyframeChanged(KisKeyframeSP keyframe)
+{
+    Q_UNUSED(keyframe);
+    if (m_blockOpacityUpdate) return;
+    updateUI();
+}
+
+void KisLayerBox::slotOpacityKeyframeMoved(KisKeyframeSP keyframe, int fromTime)
+{
+    Q_UNUSED(fromTime);
+    slotOpacityKeyframeChanged(keyframe);
+}
+
+void KisLayerBox::slotImageTimeChanged(int time)
+{
+    Q_UNUSED(time);
+    updateUI();
 }
 
 #include "moc_kis_layer_box.cpp"

@@ -55,7 +55,9 @@ KisPropertiesConfigurationSP KritaGradientMapConfigWidget::configuration() const
 {
     KisFilterConfigurationSP cfg = new KisFilterConfiguration("gradientmap", 1);
     QString gradientName;
-    gradientName = m_page->gradientchooser->currentResource()->name();
+    if (m_page && m_page->gradientchooser && m_page->gradientchooser->currentResource()) {
+        gradientName = m_page->gradientchooser->currentResource()->name();
+    }
     cfg->setProperty("gradientName", gradientName);
 
     return cfg;

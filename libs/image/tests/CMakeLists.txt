@@ -200,12 +200,6 @@ target_link_libraries(KisAnnotationTest   kritaimage Qt5::Test)
 
 ########### next target ###############
 
-set(kis_bookmarked_configuration_manager_test_SRCS kis_bookmarked_configuration_manager_test.cpp )
-kde4_add_unit_test(KisBookmarkedConfigurationManagerTest TESTNAME krita-image-KisBookmarkedConfigurationManagerTest ${kis_bookmarked_configuration_manager_test_SRCS})
-target_link_libraries(KisBookmarkedConfigurationManagerTest   kritaimage Qt5::Test)
-
-########### next target ###############
-
 set(kis_change_profile_visitor_test_SRCS kis_change_profile_visitor_test.cpp )
 kde4_add_unit_test(KisChangeProfileVisitorTest TESTNAME krita-image-KisChangeProfileVisitorTest ${kis_change_profile_visitor_test_SRCS})
 target_link_libraries(KisChangeProfileVisitorTest   kritaimage Qt5::Test)

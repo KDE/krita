@@ -176,9 +176,9 @@ void KisPaintingAssistant::setOutline(bool set)
 void KisPaintingAssistant::drawPath(QPainter& painter, const QPainterPath &path, bool drawActive)
 {
     int alpha=100;
-    if (drawActive==false) {
+    if (!drawActive) {
         alpha=20;
-        }
+    }
     painter.save();
     QPen pen_a(QColor(0, 0, 0, alpha), 2);
     pen_a.setCosmetic(true);
@@ -285,7 +285,9 @@ void KisPaintingAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect,
     if (paintRect.isEmpty()) return;
 
     QPixmap cached;
-    if (!(QPixmapCache::find(d->cached, &cached) &&
+    bool found = QPixmapCache::find(d->cached, &cached);
+
+    if (!(found &&
           d->cachedTransform == transform &&
           d->cachedRect.translated(widgetBound.topLeft()).contains(paintRect))) {
         const QRect cacheRect = gc.viewport().adjusted(-100, -100, 100, 100).intersected(widgetBound);

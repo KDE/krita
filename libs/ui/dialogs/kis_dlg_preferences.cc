@@ -691,7 +691,7 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
         cmbFilterMode->setEnabled(cfg.useOpenGL());
         cmbFilterMode->setCurrentIndex(cfg.openGLFilteringMode());
         // Don't show the high quality filtering mode if it's not available
-        if (!KisOpenGL::supportsGLSL13()) {
+        if (!KisOpenGL::hasOpenGL3()) {
             cmbFilterMode->removeItem(3);
         }
     }

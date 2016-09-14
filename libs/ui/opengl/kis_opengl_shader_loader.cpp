@@ -102,7 +102,7 @@ KisShaderProgram *KisOpenGLShaderLoader::loadShader(QString vertPath, QString fr
  * Additionally, it picks the appropriate shader files depending on the availability
  * of OpenGL3.
  */
-KisShaderProgram *KisOpenGLShaderLoader::loadDisplayShader(KisDisplayFilter *displayFilter, bool useHiQualityFiltering)
+KisShaderProgram *KisOpenGLShaderLoader::loadDisplayShader(QSharedPointer<KisDisplayFilter> displayFilter, bool useHiQualityFiltering)
 {
     QByteArray fragHeader;
 

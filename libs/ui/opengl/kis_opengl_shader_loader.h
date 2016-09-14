@@ -82,7 +82,7 @@ public:
  */
 class KisOpenGLShaderLoader {
 public:
-    KisShaderProgram *loadDisplayShader(KisDisplayFilter *displayFilter, bool useHiQualityFiltering);
+    KisShaderProgram *loadDisplayShader(QSharedPointer<KisDisplayFilter> displayFilter, bool useHiQualityFiltering);
     KisShaderProgram *loadCheckerShader();
     KisShaderProgram *loadCursorShader();
 

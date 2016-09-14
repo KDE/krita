@@ -519,7 +519,7 @@ void KisCanvas2::startUpdateInPatches(const QRect &imageRect)
     }
 }
 
-void KisCanvas2::setDisplayFilter(KisDisplayFilter *displayFilter)
+void KisCanvas2::setDisplayFilter(QSharedPointer<KisDisplayFilter> displayFilter)
 {
     m_d->displayColorConverter.setDisplayFilter(displayFilter);
     KisImageWSP image = this->image();
@@ -531,7 +531,7 @@ void KisCanvas2::setDisplayFilter(KisDisplayFilter *displayFilter)
     image->unlock();
 }
 
-KisDisplayFilter *KisCanvas2::displayFilter() const
+QSharedPointer<KisDisplayFilter> KisCanvas2::displayFilter() const
 {
     return m_d->displayColorConverter.displayFilter();
 }
@@ -543,8 +543,7 @@ KisDisplayColorConverter* KisCanvas2::displayColorConverter() const
 
 KisExposureGammaCorrectionInterface* KisCanvas2::exposureGammaCorrectionInterface() const
 {
-    KisDisplayFilter *displayFilter =
-        m_d->displayColorConverter.displayFilter();
+    QSharedPointer<KisDisplayFilter> displayFilter = m_d->displayColorConverter.displayFilter();
 
     return displayFilter ?
         displayFilter->correctionInterface() :

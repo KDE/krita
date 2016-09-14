@@ -48,7 +48,7 @@ public: // KisAbstractCanvasWidget
 
 
     /// set the specified display filter on the canvas
-    virtual void setDisplayFilter(KisDisplayFilter *displayFilter);
+    virtual void setDisplayFilter(QSharedPointer<KisDisplayFilter> displayFilter) = 0;
 
     /**
      * Draw the specified decorations on the view.

@@ -71,7 +71,7 @@ public:
 
 public: // Implement kis_abstract_canvas_widget interface
     void initializeShaders();
-    void setDisplayFilter(KisDisplayFilter* displayFilter);
+    void setDisplayFilter(QSharedPointer<KisDisplayFilter> displayFilter);
     void setWrapAroundViewingMode(bool value);
     void channelSelectionChanged(const QBitArray &channelFlags);
     void setDisplayProfile(KisDisplayColorConverter *colorConverter);
@@ -85,7 +85,7 @@ public: // Implement kis_abstract_canvas_widget interface
 
     bool isBusy() const;
 
-    void setDisplayFilterImpl(KisDisplayFilter* displayFilter, bool initializing);
+    void setDisplayFilterImpl(QSharedPointer<KisDisplayFilter> displayFilter, bool initializing);
 
     KisOpenGLImageTexturesSP openGLImageTextures() const;
 

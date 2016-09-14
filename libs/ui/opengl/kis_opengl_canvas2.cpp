@@ -82,7 +82,7 @@ public:
     GLfloat checkSizeScale;
     bool scrollCheckers;
 
-    KisDisplayFilter* displayFilter;
+    QSharedPointer<KisDisplayFilter> displayFilter;
     KisOpenGL::FilterMode filterMode;
     bool proofingConfigIsUpdated=false;
 
@@ -173,11 +173,12 @@ bool KisOpenGLCanvas2::needsFpsDebugging() const
     return KisOpenglCanvasDebugger::instance()->showFpsOnCanvas();
 }
 
-void KisOpenGLCanvas2::setDisplayFilter(KisDisplayFilter* displayFilter) {
+void KisOpenGLCanvas2::setDisplayFilter(QSharedPointer<KisDisplayFilter> displayFilter)
+{
     setDisplayFilterImpl(displayFilter, false);
 }
 
-void KisOpenGLCanvas2::setDisplayFilterImpl(KisDisplayFilter* displayFilter, bool initializing)
+void KisOpenGLCanvas2::setDisplayFilterImpl(QSharedPointer<KisDisplayFilter> displayFilter, bool initializing)
 {
     bool needsInternalColorManagement =
             !displayFilter || displayFilter->useInternalColorManagement();

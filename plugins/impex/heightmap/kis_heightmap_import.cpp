@@ -160,8 +160,6 @@ KisImportExportFilter::ConversionStatus KisHeightMapImport::convert(const QByteA
     }
     KisConfig().setExportConfiguration("HeightMap", cfg);
 
-    doc->prepareForImport();
-
     QDataStream s(&f);
     s.setByteOrder(bo);
 

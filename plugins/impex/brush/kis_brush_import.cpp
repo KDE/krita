@@ -100,8 +100,6 @@ KisImportExportFilter::ConversionStatus KisBrushImport::convert(const QByteArray
             return KisImportExportFilter::NoDocumentCreated;
         }
 
-        doc->prepareForImport();
-
         const KoColorSpace *colorSpace = 0;
         if (brush->hasColor()) {
             colorSpace = KoColorSpaceRegistry::instance()->rgb8();

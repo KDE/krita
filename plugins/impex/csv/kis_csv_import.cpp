@@ -56,8 +56,6 @@ KisImportExportFilter::ConversionStatus KisCSVImport::convert(const QByteArray&,
 
     QString filename = inputFile();
 
-    doc -> prepareForImport();
-
     if (!filename.isEmpty() && QFileInfo(filename).exists()) {
 
         CSVLoader ib(doc, getBatchMode());

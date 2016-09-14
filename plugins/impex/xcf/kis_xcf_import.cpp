@@ -118,7 +118,6 @@ KisImportExportFilter::ConversionStatus KisXCFImport::convert(const QByteArray& 
 
     QFile fp(filename);
     if (fp.exists()) {
-        doc->prepareForImport();
         return loadFromDevice(&fp, doc);
     }
 

@@ -73,8 +73,6 @@ KisImportExportFilter::ConversionStatus KisODGImport::convert(const QByteArray& 
     }
 
 
-    doc -> prepareForImport();
-
     KoOdfReadStore odfStore(store);
     QString errorMessage;
 

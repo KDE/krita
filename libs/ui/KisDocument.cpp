@@ -2401,15 +2401,6 @@ KisNodeSP KisDocument::preActivatedNode() const
     return d->preActivatedNode;
 }
 
-void KisDocument::prepareForImport()
-{
-    /* TODO: remove this function? I kept it because it might be useful for
-     * other kind of preparing, but currently it was checking on d->nserver
-     * being null and then calling init() if it was, but the document is always
-     * initialized in the constructor (and init() does other things too).
-     * Moreover, nserver cannot be nulled by some external call.*/
-}
-
 void KisDocument::setFileProgressUpdater(const QString &text)
 {
     d->suppressProgress = d->importExportManager->getBatchMode();

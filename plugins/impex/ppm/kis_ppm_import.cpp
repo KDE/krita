@@ -78,7 +78,6 @@ KisImportExportFilter::ConversionStatus KisPPMImport::convert(const QByteArray& 
 
 
     QFile fp(filename);
-    doc->prepareForImport();
     return loadFromDevice(&fp, doc);
 }
 

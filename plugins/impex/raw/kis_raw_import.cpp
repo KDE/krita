@@ -82,8 +82,6 @@ KisImportExportFilter::ConversionStatus KisRawImport::convert(const QByteArray& 
         return KisImportExportFilter::NoDocumentCreated;
     }
 
-    doc -> prepareForImport();
-
     QString filename = inputFile();
 
     if (filename.isEmpty()) {

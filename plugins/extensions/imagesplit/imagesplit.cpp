@@ -65,7 +65,6 @@ void Imagesplit::saveAsImage(const QRect &imgSize, const QString &mimeType, cons
     KisImageWSP image = m_view->image();
 
     KisDocument *document = KisPart::instance()->createDocument();
-    document->prepareForImport();
 
     KisImageWSP dst = new KisImage(document->createUndoStore(), imgSize.width(), imgSize.height(), image->colorSpace(), image->objectName());
     dst->setResolution(image->xRes(), image->yRes());

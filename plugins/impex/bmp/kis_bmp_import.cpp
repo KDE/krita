@@ -64,8 +64,6 @@ KisImportExportFilter::ConversionStatus KisBMPImport::convert(const QByteArray& 
 
     QString filename = inputFile();
 
-    doc->prepareForImport();
-
     if (!filename.isEmpty()) {
 
         QFileInfo fi(filename);

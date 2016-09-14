@@ -745,12 +745,6 @@ public:
     KisImageWSP newImage(const QString& name, qint32 width, qint32 height, const KoColorSpace * colorspace);
 
     KisImageWSP image() const;
-
-    /**
-     * Makes an otherwise empty document ready for import/export
-     */
-    void prepareForImport();
-
     /**
      * Adds progressproxy for file operations
      */

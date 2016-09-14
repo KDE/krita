@@ -125,7 +125,6 @@ KisPDFImport::ConversionStatus KisPDFImport::convert(const QByteArray& , const Q
         return KisImportExportFilter::NoDocumentCreated;
     }
 
-    doc -> prepareForImport();
     // Create the krita image
     const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
     int width = wdg->intWidth->value();

@@ -24,12 +24,12 @@
 class Q_DECL_HIDDEN KisDoubleParseUnitSpinBox::Private
 {
 public:
-    Private(double low, double up, double step)
+    Private(double low, double up, double step, KisSpinBoxUnitManager* unitManager)
         : lowerInPoints(low),
         upperInPoints(up),
         stepInPoints(step),
         unit(KoUnit(KoUnit::Point)),
-        unitManager(new KisSpinBoxUnitManager()),
+        unitManager(unitManager),
         defaultUnitManager(unitManager),
         isDeleting(false),
         unitHasBeenChangedFromOutSideOnce(false),
@@ -54,7 +54,7 @@ public:
 
 KisDoubleParseUnitSpinBox::KisDoubleParseUnitSpinBox(QWidget *parent) :
     KisDoubleParseSpinBox(parent),
-    d(new Private(-9999, 9999, 1))
+    d(new Private(-9999, 9999, 1, KisSpinBoxUnitManagerFactory::buildDefaultUnitManager(this)))
 {
     setUnit( KoUnit(KoUnit::Point) );
     setAlignment( Qt::AlignRight );
@@ -62,6 +62,8 @@ KisDoubleParseUnitSpinBox::KisDoubleParseUnitSpinBox(QWidget *parent) :
     connect(this, SIGNAL(valueChanged( double )), SLOT(privateValueChanged()));
     connect(lineEdit(), SIGNAL(textChanged(QString)),
             this, SLOT(detectUnitChanges()) );
+
+
 
 
 }
@@ -317,8 +319,15 @@ void KisDoubleParseUnitSpinBox::detectUnitChanges()
         return;
     }
 
+    QString oldUnitSymb = d->unitManager->getApparentUnitSymbol();
+
     setUnit(unitSymb);
     setValue(valueFromText(cleanText())); //change value keep the old value, but converted to new unit... which is different from the value the user entered in the new unit. So we need to set the new value.
+
+    if (oldUnitSymb != d->unitManager->getApparentUnitSymbol()) {
+        // the user has changed the unit, so we block changes from outside.
+        setUnitChangeFromOutsideBehavior(false);
+    }
 }
 
 QString KisDoubleParseUnitSpinBox::makeTextClean(QString const& txt) const

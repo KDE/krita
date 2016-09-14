@@ -23,6 +23,36 @@
 
 #include <QtMath>
 
+
+KisSpinBoxUnitManagerBuilder* KisSpinBoxUnitManagerFactory::builder = nullptr;
+
+KisSpinBoxUnitManager* KisSpinBoxUnitManagerFactory::buildDefaultUnitManager(QObject* parent)
+{
+    if (builder == nullptr) {
+        return new KisSpinBoxUnitManager(parent);
+    }
+
+    return builder->buildUnitManager(parent);
+}
+
+void KisSpinBoxUnitManagerFactory::setDefaultUnitManagerBuilder(KisSpinBoxUnitManagerBuilder* pBuilder)
+{
+    if (builder != nullptr) {
+        delete builder; //The factory took over the lifecycle of the builder, so it delete it when replaced.
+    }
+
+    builder = pBuilder;
+}
+
+void KisSpinBoxUnitManagerFactory::clearUnitManagerBuilder()
+{
+    if (builder != nullptr) {
+        delete builder; //The factory took over the lifecycle of the builder, so it delete it when replaced.
+    }
+
+    builder = nullptr;
+}
+
 const QStringList KisSpinBoxUnitManager::referenceUnitSymbols = {"pt", "°", "frame"};
 
 const QStringList KisSpinBoxUnitManager::documentRelativeLengthUnitSymbols = {"px", "vw", "vh"}; //px are relative to the resolution, vw and vh to the width and height.

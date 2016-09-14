@@ -85,6 +85,8 @@
 #include <KoResourceServerProvider.h>
 #include "kis_image_barrier_locker.h"
 #include "opengl/kis_opengl.h"
+#include "kis_spin_box_unit_manager.h"
+#include "kis_document_aware_spin_box_unit_manager.h"
 
 #include <KritaVersionWrapper.h>
 namespace {
@@ -398,6 +400,11 @@ bool KisApplication::start(const KisApplicationArguments &args)
     }
 
     setSplashScreenLoadingText(""); // done loading, so clear out label
+
+    //configure the unit manager
+    KisSpinBoxUnitManagerFactory::setDefaultUnitManagerBuilder(new KisDocumentAwareSpinBoxUnitManagerBuilder());
+    connect(this, &KisApplication::aboutToQuit, &KisSpinBoxUnitManagerFactory::clearUnitManagerBuilder); //ensure the builder is destroyed when the application leave.
+    //the new syntax slot syntax allow to connect to a non q_object static method.
 
     // Get the command line arguments which we have to parse
     int argsCount = args.filenames().count();

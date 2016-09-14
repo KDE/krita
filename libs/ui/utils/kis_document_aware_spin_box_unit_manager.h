@@ -23,7 +23,10 @@
 #include "kis_double_parse_unit_spin_box.h"
 
 #include "kritaui_export.h"
-
+class KisDocumentAwareSpinBoxUnitManagerBuilder : public KisSpinBoxUnitManagerBuilder
+{
+    KisSpinBoxUnitManager* buildUnitManager(QObject* parent);
+};
 
 class KRITAUI_EXPORT KisDocumentAwareSpinBoxUnitManager : public KisSpinBoxUnitManager
 {

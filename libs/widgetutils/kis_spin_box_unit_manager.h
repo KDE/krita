@@ -24,6 +24,32 @@
 
 #include "kritawidgetutils_export.h"
 
+class KisSpinBoxUnitManager;
+class KisSpinBoxUnitManagerBuilder;
+class KisSpinBoxUnitManagerFactory;
+
+class KRITAWIDGETUTILS_EXPORT KisSpinBoxUnitManagerFactory
+{
+public:
+
+    static KisSpinBoxUnitManager* buildDefaultUnitManager(QObject* parent);
+    //! \brief set a builder the factory can use. The factory should take on the lifecycle of the builder, so to delete it call clearUnitManagerBuilder();
+    static void setDefaultUnitManagerBuilder(KisSpinBoxUnitManagerBuilder* pBuilder);
+    static void clearUnitManagerBuilder();
+
+private:
+
+    static KisSpinBoxUnitManagerBuilder* builder;
+
+};
+
+class KRITAWIDGETUTILS_EXPORT KisSpinBoxUnitManagerBuilder
+{
+
+public:
+
+    virtual KisSpinBoxUnitManager* buildUnitManager(QObject* parent) = 0; //this pure virtual function is used to build a unitmanager, it will be used by the unitManagerFactory.
+};
 
 /**
  * @brief The KisSpinBoxUnitManager class is an abstract interface for the unitspinboxes classes to manage different type of units.

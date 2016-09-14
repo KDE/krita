@@ -28,6 +28,11 @@
 #include "kis_time_range.h"
 
 
+KisSpinBoxUnitManager* KisDocumentAwareSpinBoxUnitManagerBuilder::buildUnitManager(QObject* parent)
+{
+    return new KisDocumentAwareSpinBoxUnitManager(parent);
+}
+
 void KisDocumentAwareSpinBoxUnitManager::setDocumentAwarnessToExistingUnitSpinBox(KisDoubleParseUnitSpinBox* spinBox, bool setUnitFromOutsideToggle)
 {
     KisDocumentAwareSpinBoxUnitManager* manager = new KisDocumentAwareSpinBoxUnitManager(spinBox);

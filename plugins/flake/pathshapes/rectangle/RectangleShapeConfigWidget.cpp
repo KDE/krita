@@ -27,9 +27,6 @@ RectangleShapeConfigWidget::RectangleShapeConfigWidget()
 {
     widget.setupUi(this);
 
-    KisDocumentAwareSpinBoxUnitManager::setDocumentAwarnessToExistingUnitSpinBox(widget.cornerRadiusX);
-    KisDocumentAwareSpinBoxUnitManager::setDocumentAwarnessToExistingUnitSpinBox(widget.cornerRadiusY);
-
     connect(widget.cornerRadiusX, SIGNAL(editingFinished()), this, SIGNAL(propertyChanged()));
     connect(widget.cornerRadiusY, SIGNAL(editingFinished()), this, SIGNAL(propertyChanged()));
 }

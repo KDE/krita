@@ -145,7 +145,7 @@ KisJPEGConverter::~KisJPEGConverter()
 {
 }
 
-KisImageBuilder_Result KisJPEGConverter::decode(const QString &filename)
+KisImageBuilder_Result KisJPEGConverter::decode(QIODevice *io)
 {
     struct jpeg_decompress_struct cinfo;
     struct jpeg_error_mgr jerr;
@@ -155,16 +155,8 @@ KisImageBuilder_Result KisJPEGConverter::decode(const QString &filename)
 
     try {
         jpeg_create_decompress(&cinfo);
-        // open the file
-        QFile file(filename);
-        if (!file.exists()) {
-            return (KisImageBuilder_RESULT_NOT_EXIST);
-        }
-        if (!file.open(QIODevice::ReadOnly)) {
-            return (KisImageBuilder_RESULT_BAD_FETCH);
-        }
 
-        KisJPEGSource::setSource(&cinfo, &file);
+        KisJPEGSource::setSource(&cinfo, io);
 
         jpeg_save_markers(&cinfo, JPEG_COM, 0xFFFF);
         /* Save APP0..APP15 markers */
@@ -454,9 +446,9 @@ KisImageBuilder_Result KisJPEGConverter::decode(const QString &filename)
 
 
 
-KisImageBuilder_Result KisJPEGConverter::buildImage(const QString &filename)
+KisImageBuilder_Result KisJPEGConverter::buildImage(QIODevice *io)
 {
-    return decode(filename);
+    return decode(io);
 }
 
 
@@ -466,7 +458,7 @@ KisImageSP KisJPEGConverter::image()
 }
 
 
-KisImageBuilder_Result KisJPEGConverter::buildFile(const QString &filename, KisPaintLayerSP layer, vKisAnnotationSP_it /*annotationsStart*/, vKisAnnotationSP_it /*annotationsEnd*/, KisJPEGOptions options, KisMetaData::Store* metaData)
+KisImageBuilder_Result KisJPEGConverter::buildFile(QIODevice *io, KisPaintLayerSP layer, vKisAnnotationSP_it /*annotationsStart*/, vKisAnnotationSP_it /*annotationsEnd*/, KisJPEGOptions options, KisMetaData::Store* metaData)
 {
     if (!layer)
         return KisImageBuilder_RESULT_INVALID_ARG;
@@ -500,13 +492,6 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const QString &filename, KisP
         color_type = JCS_RGB;
     }
 
-
-    // Open file for writing
-    QFile file(filename);
-    if (!file.open(QIODevice::WriteOnly)) {
-        return (KisImageBuilder_RESULT_FAILURE);
-    }
-
     uint height = image->height();
     uint width = image->width();
     // Initialize structure
@@ -516,7 +501,7 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const QString &filename, KisP
     cinfo.err = jpeg_std_error(&jerr);
     jpeg_create_compress(&cinfo);
     // Initialize output stream
-    KisJPEGDestination::setDestination(&cinfo, &file);
+    KisJPEGDestination::setDestination(&cinfo, io);
 
     cinfo.image_width = width;  // image width and height, in pixels
     cinfo.image_height = height;
@@ -738,7 +723,6 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const QString &filename, KisP
 
     // Writing is over
     jpeg_finish_compress(&cinfo);
-    file.close();
 
     delete [] row_pointer;
     // Free memory

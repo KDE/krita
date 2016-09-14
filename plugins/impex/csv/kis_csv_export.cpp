@@ -48,7 +48,7 @@ bool checkHomogenity(KisNodeSP root)
 
     while (child) {
             if (child->childCount() > 0) {
-                res= false;
+                res = false;
                 break;
             }
             child = child->nextSibling();
@@ -64,20 +64,9 @@ KisCSVExport::~KisCSVExport()
 {
 }
 
-KisImportExportFilter::ConversionStatus KisCSVExport::convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration)
+KisImportExportFilter::ConversionStatus KisCSVExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
 {
-    dbgFile << "CSV export! From:" << from << ", To:" << to << "";
-
-    if (from != "application/x-krita")
-        return KisImportExportFilter::NotImplemented;
-
-    KisDocument* input = inputDocument();
-    QString filename = outputFile();
-
-    if (!input)
-        return KisImportExportFilter::NoDocumentCreated;
-
-    if (!checkHomogenity(input->image()->rootLayer())) {
+    if (!checkHomogenity(document->image()->rootLayer())) {
         if (!getBatchMode()) {
             QMessageBox::critical(0,
                                   i18nc("@title:window", "CSV Export Error"),
@@ -87,13 +76,12 @@ KisImportExportFilter::ConversionStatus KisCSVExport::convert(const QByteArray& 
         return KisImportExportFilter::InvalidFormat;
     }
 
-    if (filename.isEmpty()) return KisImportExportFilter::FileNotFound;
 
-    CSVSaver kpc(input, getBatchMode());
+    CSVSaver kpc(document, getBatchMode());
     KisImageBuilder_Result res;
 
-    if ((res = kpc.buildAnimation(filename)) == KisImageBuilder_RESULT_OK) {
-        dbgFile <<"success !";
+    if ((res = kpc.buildAnimation(io)) == KisImageBuilder_RESULT_OK) {
+        dbgFile <<"success!";
         return KisImportExportFilter::OK;
     }
     dbgFile <<" Result =" << res;

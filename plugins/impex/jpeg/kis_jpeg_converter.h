@@ -68,15 +68,15 @@ public:
     KisJPEGConverter(KisDocument *doc, bool batchMode = false);
     virtual ~KisJPEGConverter();
 public:
-    KisImageBuilder_Result buildImage(const QString &filename);
-    KisImageBuilder_Result buildFile(const QString &filename, KisPaintLayerSP layer, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisJPEGOptions options, KisMetaData::Store* metaData);
+    KisImageBuilder_Result buildImage(QIODevice *io);
+    KisImageBuilder_Result buildFile(QIODevice *io, KisPaintLayerSP layer, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisJPEGOptions options, KisMetaData::Store* metaData);
     /** Retrieve the constructed image
     */
     KisImageSP image();
 public Q_SLOTS:
     virtual void cancel();
 private:
-    KisImageBuilder_Result decode(const QString &filename);
+    KisImageBuilder_Result decode(QIODevice *io);
 private:
     struct Private;
     QScopedPointer<Private> m_d;

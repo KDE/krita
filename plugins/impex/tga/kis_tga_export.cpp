@@ -46,30 +46,12 @@ KisTGAExport::~KisTGAExport()
 {
 }
 
-KisImportExportFilter::ConversionStatus KisTGAExport::convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration)
+KisImportExportFilter::ConversionStatus KisTGAExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration)
 {
-    dbgFile << "TGA export! From:" << from << ", To:" << to << "";
+    QRect rc = document->image()->bounds();
+    QImage image = document->image()->projection()->convertToQImage(0, 0, 0, rc.width(), rc.height(), KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
 
-    KisDocument *input = inputDocument();
-    QString filename = outputFile();
-
-    if (!input)
-        return KisImportExportFilter::NoDocumentCreated;
-
-    if (filename.isEmpty()) return KisImportExportFilter::FileNotFound;
-
-    if (from != "application/x-krita")
-        return KisImportExportFilter::NotImplemented;
-
-    // the image must be locked at the higher levels
-    KIS_SAFE_ASSERT_RECOVER_NOOP(input->image()->locked());
-
-    QRect rc = input->image()->bounds();
-    QImage image = input->image()->projection()->convertToQImage(0, 0, 0, rc.width(), rc.height(), KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
-
-    QFile f(filename);
-    f.open(QIODevice::WriteOnly);
-    QDataStream s(&f);
+    QDataStream s(io);
     s.setByteOrder(QDataStream::LittleEndian);
 
     const QImage& img = image;

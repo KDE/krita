@@ -122,14 +122,15 @@ private:
     // The parent filter manager may be 0.
 
     friend class CalligraFilter::Graph;
+    friend class KisImportExportFilter;
+    friend class KisImportExportManager;
+    friend class CalligraFilter::ChainLink;
 
     void prependChainLink(KisFilterEntrySP filterEntry, const QByteArray& from, const QByteArray& to);
 
     // These methods are friends of KisFilterManager and provide access
     // to a private part of its API. As I don't want to include
     // koFilterManager.h in this header the direction is "int" here.
-
-    friend class KisImportExportManager;
 
     QString filterManagerImportFile() const;
     QString filterManagerExportFile() const;

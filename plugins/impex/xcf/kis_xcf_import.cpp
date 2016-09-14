@@ -56,73 +56,6 @@ extern "C" {
 #define GET_ALPHA(x) (x >> ALPHA_SHIFT)
 }
 
-struct Layer {
-    KisLayerSP layer;
-    int depth;
-    KisMaskSP mask;
-};
-
-KisGroupLayerSP findGroup(const QVector<Layer> &layers, const Layer& layer, int i)
-{
-    for (; i < layers.size(); ++i) {
-        KisGroupLayerSP group = dynamic_cast<KisGroupLayer*>(const_cast<KisLayer*>(layers[i].layer.data()));
-        if (group && (layers[i].depth == layer.depth -1)) {
-            return group;
-        }
-    }
-    return 0;
-}
-
-void addLayers(const QVector<Layer> &layers, KisImageSP image, int depth)
-{
-    for(int i = 0; i < layers.size(); i++) {
-        const Layer &layer = layers[i];
-        if (layer.depth == depth) {
-            KisGroupLayerSP group = (depth == 0 ? image->rootLayer() : findGroup(layers, layer, i));
-            image->addNode(layer.layer, group);
-            if (layer.mask) {
-                image->addNode(layer.mask, layer.layer);
-            }
-        }
-    }
-}
-
-K_PLUGIN_FACTORY_WITH_JSON(XCFImportFactory, "krita_xcf_import.json", registerPlugin<KisXCFImport>();)
-
-KisXCFImport::KisXCFImport(QObject *parent, const QVariantList &) : KisImportExportFilter(parent)
-{
-}
-
-KisXCFImport::~KisXCFImport()
-{
-}
-
-KisImportExportFilter::ConversionStatus KisXCFImport::convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration)
-{
-    Q_UNUSED(from);
-    dbgFile << "Importing using XCFImport!";
-
-    if (to != "application/x-krita")
-        return KisImportExportFilter::BadMimeType;
-
-    KisDocument * doc = outputDocument();
-
-    if (!doc)
-        return KisImportExportFilter::NoDocumentCreated;
-
-    QString filename = inputFile();
-
-    if (filename.isEmpty()) {
-        return KisImportExportFilter::FileNotFound;
-    }
-
-    QFile fp(filename);
-    if (fp.exists()) {
-        return loadFromDevice(&fp, doc);
-    }
-
-    return KisImportExportFilter::CreationError;
-}
 
 QString layerModeG2K(GimpLayerModeEffects mode)
 {
@@ -182,15 +115,54 @@ QString layerModeG2K(GimpLayerModeEffects mode)
     return COMPOSITE_OVER;
 }
 
-KisImportExportFilter::ConversionStatus KisXCFImport::loadFromDevice(QIODevice* device, KisDocument* doc)
+struct Layer {
+    KisLayerSP layer;
+    int depth;
+    KisMaskSP mask;
+};
+
+KisGroupLayerSP findGroup(const QVector<Layer> &layers, const Layer& layer, int i)
+{
+    for (; i < layers.size(); ++i) {
+        KisGroupLayerSP group = dynamic_cast<KisGroupLayer*>(const_cast<KisLayer*>(layers[i].layer.data()));
+        if (group && (layers[i].depth == layer.depth -1)) {
+            return group;
+        }
+    }
+    return 0;
+}
+
+void addLayers(const QVector<Layer> &layers, KisImageSP image, int depth)
+{
+    for(int i = 0; i < layers.size(); i++) {
+        const Layer &layer = layers[i];
+        if (layer.depth == depth) {
+            KisGroupLayerSP group = (depth == 0 ? image->rootLayer() : findGroup(layers, layer, i));
+            image->addNode(layer.layer, group);
+            if (layer.mask) {
+                image->addNode(layer.mask, layer.layer);
+            }
+        }
+    }
+}
+
+K_PLUGIN_FACTORY_WITH_JSON(XCFImportFactory, "krita_xcf_import.json", registerPlugin<KisXCFImport>();)
+
+KisXCFImport::KisXCFImport(QObject *parent, const QVariantList &) : KisImportExportFilter(parent)
+{
+}
+
+KisXCFImport::~KisXCFImport()
+{
+}
+
+KisImportExportFilter::ConversionStatus KisXCFImport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
 {
     dbgFile << "Start decoding file";
-    // Read the file into memory
-    device->open(QIODevice::ReadOnly);
-    QByteArray data = device->readAll();
+    QByteArray data = io->readAll();
     xcf_file = (uint8_t*)data.data();
     xcf_length = data.size();
-    device->close();
+    io->close();
 
     // Decode the data
     getBasicXcfInfo() ;
@@ -199,7 +171,7 @@ KisImportExportFilter::ConversionStatus KisXCFImport::loadFromDevice(QIODevice* 
     dbgFile << XCF.version << "width = " << XCF.width << "height = " << XCF.height << "layers = " << XCF.numLayers;
 
     // Create the image
-    KisImageSP image = new KisImage(doc->createUndoStore(), XCF.width, XCF.height, KoColorSpaceRegistry::instance()->rgb8(), "built image");
+    KisImageSP image = new KisImage(document->createUndoStore(), XCF.width, XCF.height, KoColorSpaceRegistry::instance()->rgb8(), "built image");
 
     QVector<Layer> layers;
     uint maxDepth = 0;
@@ -335,8 +307,9 @@ KisImportExportFilter::ConversionStatus KisXCFImport::loadFromDevice(QIODevice* 
         addLayers(layers, image, i);
     }
 
-    doc->setCurrentImage(image);
+    document->setCurrentImage(image);
     return KisImportExportFilter::OK;
+
 }
 
 #include "kis_xcf_import.moc"

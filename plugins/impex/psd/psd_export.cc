@@ -72,21 +72,9 @@ psdExport::~psdExport()
 {
 }
 
-KisImportExportFilter::ConversionStatus psdExport::convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration)
+KisImportExportFilter::ConversionStatus psdExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
 {
-    dbgFile <<"PSD export! From:" << from <<", To:" << to <<"";
-
-    if (from != "application/x-krita")
-        return KisImportExportFilter::NotImplemented;
-
-    KisDocument *input = inputDocument();
-    QString filename = outputFile();
-
-    if (!input)
-        return KisImportExportFilter::NoDocumentCreated;
-
-
-    if (input->image()->width() > 30000 || input->image()->height() > 30000) {
+    if (document->image()->width() > 30000 || document->image()->height() > 30000) {
         if (!getBatchMode()) {
             QMessageBox::critical(0,
                                   i18nc("@title:window", "Photoshop Export Error"),
@@ -97,7 +85,7 @@ KisImportExportFilter::ConversionStatus psdExport::convert(const QByteArray& fro
     }
 
 
-    if (!checkHomogenity(input->image()->rootLayer(), input->image()->colorSpace())) {
+    if (!checkHomogenity(document->image()->rootLayer(), document->image()->colorSpace())) {
         if (!getBatchMode()) {
             QMessageBox::critical(0,
                                   i18nc("@title:window", "Photoshop Export Error"),
@@ -107,12 +95,10 @@ KisImportExportFilter::ConversionStatus psdExport::convert(const QByteArray& fro
         return KisImportExportFilter::InvalidFormat;
     }
 
-    if (filename.isEmpty()) return KisImportExportFilter::FileNotFound;
-
-    PSDSaver kpc(input);
+    PSDSaver psdSaver(document);
     KisImageBuilder_Result res;
 
-    if ((res = kpc.buildFile(filename)) == KisImageBuilder_RESULT_OK) {
+    if ((res = psdSaver.buildFile(io)) == KisImageBuilder_RESULT_OK) {
         dbgFile <<"success !";
         return KisImportExportFilter::OK;
     }

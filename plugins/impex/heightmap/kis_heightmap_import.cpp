@@ -60,43 +60,19 @@ KisHeightMapImport::~KisHeightMapImport()
 {
 }
 
-KisImportExportFilter::ConversionStatus KisHeightMapImport::convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration)
+KisImportExportFilter::ConversionStatus KisHeightMapImport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration)
 {
-
-    KisDocument * doc = outputDocument();
-
-    if (!doc) {
-        return KisImportExportFilter::NoDocumentCreated;
-    }
-
     KoID depthId;
-    if (from == "image/x-r8") {
+    if (mimeType() == "image/x-r8") {
         depthId = Integer8BitsColorDepthID;
     }
-    else if (from == "image/x-r16") {
+    else if (mimeType() == "image/x-r16") {
         depthId = Integer16BitsColorDepthID;
     }
     else {
-        doc->setErrorMessage(i18n("The file is not 8 or 16 bits raw"));
+        document->setErrorMessage(i18n("The file is not 8 or 16 bits raw"));
         return KisImportExportFilter::WrongFormat;
     }
-    dbgFile << "Importing using HeightMapImport!";
-
-    if (to != "application/x-krita") {
-        return KisImportExportFilter::BadMimeType;
-    }
-
-    QString filename = inputFile();
-
-    if (filename.isEmpty()) {
-        return KisImportExportFilter::FileNotFound;
-    }
-
-    QFileInfo fi(filename);
-    if (!fi.exists()) {
-        return KisImportExportFilter::FileNotFound;
-    }
-
 
     QApplication::restoreOverrideCursor();
 
@@ -115,19 +91,8 @@ KisImportExportFilter::ConversionStatus KisHeightMapImport::convert(const QByteA
     KisPropertiesConfiguration cfg;
     cfg.fromXML(filterConfig);
 
-    QFile f(filename);
-
     int w = 0;
     int h = 0;
-
-    if (!f.exists()) {
-        doc->setErrorMessage(i18n("File does not exist."));
-        return KisImportExportFilter::CreationError;
-    }
-
-    if (!f.isOpen()) {
-        f.open(QFile::ReadOnly);
-    }
 
     optionsHeightMap.intSize->setValue(0);
     int endianness = cfg.getInt("endianness", 0);
@@ -146,11 +111,10 @@ KisImportExportFilter::ConversionStatus KisHeightMapImport::convert(const QByteA
 
     w = h = optionsHeightMap.intSize->value();
 
-    if ((w * h * (from == "image/x-r16" ? 2 : 1)) != f.size()) {
-        doc->setErrorMessage(i18n("Source file is not the right size for the specified width and height."));
-        return KisImportExportFilter::WrongFormat;
-    }
-
+//    if ((w * h * (mimeType() == "image/x-r16" ? 2 : 1)) != f.size()) {
+//        document->setErrorMessage(i18n("Source file is not the right size for the specified width and height."));
+//        return KisImportExportFilter::WrongFormat;
+//    }
 
     QDataStream::ByteOrder bo = QDataStream::LittleEndian;
     cfg.setProperty("endianness", 1);
@@ -160,11 +124,11 @@ KisImportExportFilter::ConversionStatus KisHeightMapImport::convert(const QByteA
     }
     KisConfig().setExportConfiguration("HeightMap", cfg);
 
-    QDataStream s(&f);
+    QDataStream s(io);
     s.setByteOrder(bo);
 
     const KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->colorSpace(GrayAColorModelID.id(), depthId.id(), 0);
-    KisImageSP image = new KisImage(doc->createUndoStore(), w, h, colorSpace, "imported heightmap");
+    KisImageSP image = new KisImage(document->createUndoStore(), w, h, colorSpace, "imported heightmap");
     KisPaintLayerSP layer = new KisPaintLayer(image, image->nextLayerName(), 255);
 
     KisRandomAccessorSP it = layer->paintDevice()->createRandomAccessorNG(0, 0);
@@ -189,7 +153,7 @@ KisImportExportFilter::ConversionStatus KisHeightMapImport::convert(const QByteA
     }
 
     image->addNode(layer.data(), image->rootLayer().data());
-    doc->setCurrentImage(image);
+    document->setCurrentImage(image);
     return KisImportExportFilter::OK;
 }
 

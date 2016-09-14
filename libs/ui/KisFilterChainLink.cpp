@@ -24,7 +24,7 @@ Boston, MA 02110-1301, USA.
 #include "KisImportExportManager.h"
 #include "KoProgressUpdater.h"
 #include "KoUpdater.h"
-
+#include <QFile>
 namespace
 {
     KoUpdater *createUpdater(KisFilterChainSP chain)
@@ -78,7 +78,35 @@ namespace CalligraFilter {
             m_filter->setUpdater(m_updater);
         }
 
-        KisImportExportFilter::ConversionStatus status = m_filter->convert(m_from, m_to, m_chain->filterManagerExportConfiguration());
+        KisImportExportFilter::ConversionStatus status;
+
+        if (static_cast<KisImportExportManager::Direction>(m_chain->filterManagerDirection()) == KisImportExportManager::Export) {
+            m_filter->setMimeType(m_to);
+            KisDocument *doc = m_chain->inputDocument();
+            QFile fi(m_chain->outputFile());
+            if (!fi.open(QIODevice::WriteOnly)) {
+                status = KisImportExportFilter::CreationError;
+            }
+            else {
+                status = m_filter->convert(doc, &fi, m_chain->filterManagerExportConfiguration());
+                fi.close();
+            }
+
+
+        }
+        else {
+            KisDocument *doc = m_chain->outputDocument();
+            m_filter->setMimeType(m_from);
+            QFile fi(m_chain->inputFile());
+            if (!fi.exists() || !fi.open(QIODevice::ReadOnly)) {
+                status = KisImportExportFilter::FileNotFound;
+            }
+            else {
+                status = m_filter->convert(doc, &fi, m_chain->filterManagerExportConfiguration());
+                fi.close();
+            }
+        }
+
         delete m_filter;
         m_filter = 0;
         if (m_updater) {

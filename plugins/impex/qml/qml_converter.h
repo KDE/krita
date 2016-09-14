@@ -34,7 +34,7 @@ public:
     QMLConverter();
     virtual ~QMLConverter();
 public:
-    KisImageBuilder_Result buildFile(const QString &filename, KisImageWSP image);
+    KisImageBuilder_Result buildFile(const QString &filename, QIODevice *io, KisImageWSP image);
 
 private:
     void writeString(QTextStream& out, int spacing, const QString& setting, const QString& value);

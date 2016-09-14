@@ -135,25 +135,13 @@ private:
     quint8 m_current;
 };
 
-KisImportExportFilter::ConversionStatus KisPPMExport::convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration)
+KisImportExportFilter::ConversionStatus KisPPMExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration)
 {
-    dbgFile << "PPM export! From:" << from << ", To:" << to << "";
-
-    if (from != "application/x-krita")
-        return KisImportExportFilter::NotImplemented;
-
-    KisDocument *input = inputDocument();
-    QString filename = outputFile();
-
-    if (!input)
-        return KisImportExportFilter::NoDocumentCreated;
-
-    if (filename.isEmpty()) return KisImportExportFilter::FileNotFound;
 
     KoDialog kdb;
     kdb.setWindowTitle(i18n("PPM Export Options"));
     kdb.setButtons(KoDialog::Ok | KoDialog::Cancel);
-    KisConfigWidget *wdg = createConfigurationWidget(&kdb, from, to);
+    KisConfigWidget *wdg = createConfigurationWidget(&kdb, KisDocument::nativeFormatMimeType(), mimeType());
     kdb.setMainWidget(wdg);
     QApplication::restoreOverrideCursor();
 
@@ -163,7 +151,7 @@ KisImportExportFilter::ConversionStatus KisPPMExport::convert(const QByteArray& 
         cfg->fromXML(configuration->toXML());
     }
     else {
-        cfg = lastSavedConfiguration(from, to);
+        cfg = lastSavedConfiguration(KisDocument::nativeFormatMimeType(), mimeType());
     }
     wdg->setConfiguration(cfg);
 
@@ -175,15 +163,15 @@ KisImportExportFilter::ConversionStatus KisPPMExport::convert(const QByteArray& 
         KisConfig().setExportConfiguration("PPM", *cfg.data());
     }
 
-    bool rgb = (to == "image/x-portable-pixmap");
+    bool rgb = (mimeType() == "image/x-portable-pixmap");
     bool binary = (cfg->getInt("type") == 0);
 
-    bool bitmap = (to == "image/x-portable-bitmap");
+    bool bitmap = (mimeType() == "image/x-portable-bitmap");
 
-    KisImageWSP image = input->image();
+    KisImageWSP image = document->image();
     Q_CHECK_PTR(image);
     // the image must be locked at the higher levels
-    KIS_SAFE_ASSERT_RECOVER_NOOP(input->image()->locked());
+    KIS_SAFE_ASSERT_RECOVER_NOOP(document->image()->locked());
     KisPaintDeviceSP pd = new KisPaintDevice(*image->projection());
 
     // Test color space
@@ -199,38 +187,34 @@ KisImportExportFilter::ConversionStatus KisPPMExport::convert(const QByteArray& 
 
     bool is16bit = pd->colorSpace()->id() == "RGBA16" || pd->colorSpace()->id() == "GRAYAU16";
 
-    // Open the file for writing
-    QFile fp(filename);
-    fp.open(QIODevice::WriteOnly);
-
     // Write the magic
     if (rgb) {
-        if (binary) fp.write("P6");
-        else fp.write("P3");
+        if (binary) io->write("P6");
+        else io->write("P3");
     } else if (bitmap) {
-        if (binary) fp.write("P4");
-        else fp.write("P1");
+        if (binary) io->write("P4");
+        else io->write("P1");
     } else {
-        if (binary) fp.write("P5");
-        else fp.write("P2");
+        if (binary) io->write("P5");
+        else io->write("P2");
     }
-    fp.write("\n");
+    io->write("\n");
 
     // Write the header
-    fp.write(QByteArray::number(image->width()));
-    fp.write(" ");
-    fp.write(QByteArray::number(image->height()));
+    io->write(QByteArray::number(image->width()));
+    io->write(" ");
+    io->write(QByteArray::number(image->height()));
     if (!bitmap) {
-        if (is16bit) fp.write(" 65535\n");
-        else fp.write(" 255\n");
+        if (is16bit) io->write(" 65535\n");
+        else io->write(" 255\n");
     } else {
-        fp.write("\n");
+        io->write("\n");
     }
 
     // Write the data
     KisPPMFlow* flow = 0;
-    if (binary) flow = new KisPPMBinaryFlow(&fp);
-    else flow = new KisPPMAsciiFlow(&fp);
+    if (binary) flow = new KisPPMBinaryFlow(io);
+    else flow = new KisPPMAsciiFlow(io);
 
     for (int y = 0; y < image->height(); ++y) {
         KisHLineIteratorSP it = pd->createHLineIteratorNG(0, y, image->width());
@@ -277,7 +261,6 @@ KisImportExportFilter::ConversionStatus KisPPMExport::convert(const QByteArray& 
         flow->flush();
     }
     delete flow;
-    fp.close();
     return KisImportExportFilter::OK;
 }
 

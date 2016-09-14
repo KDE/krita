@@ -65,24 +65,15 @@ KisJPEGExport::~KisJPEGExport()
 {
 }
 
-KisImportExportFilter::ConversionStatus KisJPEGExport::convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration)
+KisImportExportFilter::ConversionStatus KisJPEGExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration)
 {
-    dbgFile << "JPEG export! From:" << from << ", To:" << to << "";
-
-    if (from != "application/x-krita")
-        return KisImportExportFilter::NotImplemented;
-
-    KisDocument *input = inputDocument();
-    if (!input)
-        return KisImportExportFilter::NoDocumentCreated;
-
-    KisImageWSP image = input->image();
+    KisImageWSP image = document->image();
     Q_CHECK_PTR(image);
 
     KoDialog kdb;
     kdb.setWindowTitle(i18n("JPEG Export Options"));
     kdb.setButtons(KoDialog::Ok | KoDialog::Cancel);
-    KisConfigWidget *wdg = createConfigurationWidget(&kdb, from, to);
+    KisConfigWidget *wdg = createConfigurationWidget(&kdb, KisDocument::nativeFormatMimeType(), "image/jpeg");
     kdb.setMainWidget(wdg);
     kdb.resize(kdb.minimumSize());
 
@@ -92,7 +83,7 @@ KisImportExportFilter::ConversionStatus KisJPEGExport::convert(const QByteArray&
         cfg->fromXML(configuration->toXML());
     }
     else {
-        cfg = lastSavedConfiguration(from, to);
+        cfg = lastSavedConfiguration(KisDocument::nativeFormatMimeType(), "image/jpeg");
     }
 
     // An extra option to pass to the config widget to set the state correctly, this isn't saved
@@ -131,15 +122,11 @@ KisImportExportFilter::ConversionStatus KisJPEGExport::convert(const QByteArray&
     m.setEnabledFilters(cfg->getString("filters").split(","));
     options.filters = m.enabledFilters();
 
-    QString filename = outputFile();
-
-    if (filename.isEmpty()) return KisImportExportFilter::FileNotFound;
-
     // the image must be locked at the higher levels
-    KIS_SAFE_ASSERT_RECOVER_NOOP(input->image()->locked());
+    KIS_SAFE_ASSERT_RECOVER_NOOP(document->image()->locked());
     KisPaintDeviceSP pd = new KisPaintDevice(*image->projection());
 
-    KisJPEGConverter kpc(input, getBatchMode());
+    KisJPEGConverter kpc(document, getBatchMode());
     KisPaintLayerSP l = new KisPaintLayer(image, "projection", OPACITY_OPAQUE_U8, pd);
 
     vKisAnnotationSP_it beginIt = image->beginAnnotations();
@@ -156,7 +143,7 @@ KisImportExportFilter::ConversionStatus KisJPEGExport::convert(const QByteArray&
         KisMetaData::Store* copy = new KisMetaData::Store(*eI);
         eI = copy;
     }
-    if ((res = kpc.buildFile(filename, l, beginIt, endIt, options, eI)) == KisImageBuilder_RESULT_OK) {
+    if ((res = kpc.buildFile(io, l, beginIt, endIt, options, eI)) == KisImageBuilder_RESULT_OK) {
         dbgFile << "success !";
         delete eI;
         return KisImportExportFilter::OK;

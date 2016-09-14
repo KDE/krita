@@ -72,23 +72,9 @@ bool hasShapeLayerChild(KisNodeSP node)
     return false;
 }
 
-KisImportExportFilter::ConversionStatus OraExport::convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration)
+KisImportExportFilter::ConversionStatus OraExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
 {
-    dbgFile << "ORA export! From:" << from << ", To:" << to << "";
-
-    if (from != "application/x-krita")
-        return KisImportExportFilter::NotImplemented;
-
-    KisDocument *input = inputDocument();
-    QString filename = outputFile();
-
-    if (!input) {
-        return KisImportExportFilter::NoDocumentCreated;
-    }
-
-    if (filename.isEmpty()) return KisImportExportFilter::FileNotFound;
-
-    KisImageWSP image = input->image();
+    KisImageWSP image = document->image();
     Q_CHECK_PTR(image);
 
     KisPaintDeviceSP pd = image->projection();
@@ -111,11 +97,11 @@ KisImportExportFilter::ConversionStatus OraExport::convert(const QByteArray& fro
                                  i18n("This image contains vector, clone or fill layers.\nThese layers will be saved as raster layers."));
     }
 
-    OraConverter kpc(input);
+    OraConverter oraConverter(document);
 
     KisImageBuilder_Result res;
 
-    if ((res = kpc.buildFile(filename, image, input->activeNodes())) == KisImageBuilder_RESULT_OK) {
+    if ((res = oraConverter.buildFile(io, image, document->activeNodes())) == KisImageBuilder_RESULT_OK) {
         dbgFile << "success !";
         return KisImportExportFilter::OK;
     }

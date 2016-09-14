@@ -62,38 +62,28 @@ KisBrushExport::~KisBrushExport()
 {
 }
 
-KisImportExportFilter::ConversionStatus KisBrushExport::convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration)
+KisImportExportFilter::ConversionStatus KisBrushExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
 {
-    KisDocument *input = inputDocument();
-    QString filename = outputFile();
-
-    if (!input)
-        return KisImportExportFilter::NoDocumentCreated;
-
-    if (filename.isEmpty()) return KisImportExportFilter::FileNotFound;
-
-    if (from != "application/x-krita")
-        return KisImportExportFilter::NotImplemented;
-
-    KisAnnotationSP annotation = input->image()->annotation("ImagePipe Parasite");
-    KisPipeBrushParasite parasite;
-    if (annotation) {
-        QBuffer buf(const_cast<QByteArray*>(&annotation->annotation()));
-        buf.open(QBuffer::ReadOnly);
-        //parasite.loadFromDevice(&buf);
-        buf.close();
-    }
+// XXX: Loading the parasite itself was commented out -- needs investigation
+//    KisAnnotationSP annotation = document->image()->annotation("ImagePipe Parasite");
+//    KisPipeBrushParasite parasite;
+//    if (annotation) {
+//        QBuffer buf(const_cast<QByteArray*>(&annotation->annotation()));
+//        buf.open(QBuffer::ReadOnly);
+//        parasite.loadFromDevice(&buf);
+//        buf.close();
+//    }
 
     KisBrushExportOptions exportOptions;
     exportOptions.spacing = 1.0;
-    exportOptions.name = input->image()->objectName();
+    exportOptions.name = document->image()->objectName();
     exportOptions.mask = true;
     exportOptions.selectionMode = 0;
     exportOptions.brushStyle = 0;
 
 
-    if (input->image()->dynamicPropertyNames().contains("brushspacing")) {
-        exportOptions.spacing = input->image()->property("brushspacing").toFloat();
+    if (document->image()->dynamicPropertyNames().contains("brushspacing")) {
+        exportOptions.spacing = document->image()->property("brushspacing").toFloat();
     }
     KisGbrBrush *brush = 0;
 
@@ -111,12 +101,12 @@ KisImportExportFilter::ConversionStatus KisBrushExport::convert(const QByteArray
         dlgBrushExportOptions->setMainWidget(wdg);
 
 
-        if (to == "image/x-gimp-brush") {
-            brush = new KisGbrBrush(filename);
+        if (mimeType() == "image/x-gimp-brush") {
+            brush = new KisGbrBrush(outputFile());
             wdgUi.groupBox->setVisible(false);
         }
-        else if (to == "image/x-gimp-brush-animated") {
-            brush = new KisImagePipeBrush(filename);
+        else if (mimeType() == "image/x-gimp-brush-animated") {
+            brush = new KisImagePipeBrush(outputFile());
             wdgUi.groupBox->setVisible(true);
         }
         else {
@@ -142,16 +132,16 @@ KisImportExportFilter::ConversionStatus KisBrushExport::convert(const QByteArray
     }
 
     // the image must be locked at the higher levels
-    KIS_SAFE_ASSERT_RECOVER_NOOP(input->image()->locked());
+    KIS_SAFE_ASSERT_RECOVER_NOOP(document->image()->locked());
 
-    QRect rc = input->image()->bounds();
+    QRect rc = document->image()->bounds();
 
     brush->setName(exportOptions.name);
     brush->setSpacing(exportOptions.spacing);
     brush->setUseColorAsMask(exportOptions.mask);
 
-    int w = input->image()->width();
-    int h = input->image()->height();
+    int w = document->image()->width();
+    int h = document->image()->height();
 
     KisImagePipeBrush *pipeBrush = dynamic_cast<KisImagePipeBrush*>(brush);
     if (pipeBrush) {
@@ -161,12 +151,11 @@ KisImportExportFilter::ConversionStatus KisBrushExport::convert(const QByteArray
 
         KoProperties properties;
         properties.setProperty("visible", true);
-        QList<KisNodeSP> layers = input->image()->root()->childNodes(QStringList("KisLayer"), properties);
-        KisNodeSP node;
+        QList<KisNodeSP> layers = document->image()->root()->childNodes(QStringList("KisLayer"), properties);
+
         Q_FOREACH (KisNodeSP node, layers) {
             devices[0].push_back(node->projection().data());
         }
-
 
         QVector<KisParasite::SelectionMode > modes;
         switch (exportOptions.selectionMode) {
@@ -192,17 +181,14 @@ KisImportExportFilter::ConversionStatus KisBrushExport::convert(const QByteArray
         pipeBrush->setDevices(devices, w, h);
     }
     else {
-        QImage image = input->image()->projection()->convertToQImage(0, 0, 0, rc.width(), rc.height(), KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
+        QImage image = document->image()->projection()->convertToQImage(0, 0, 0, rc.width(), rc.height(), KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
         brush->setImage(image);
     }
 
     brush->setWidth(w);
     brush->setHeight(h);
 
-    QFile f(filename);
-    f.open(QIODevice::WriteOnly);
-    brush->saveToDevice(&f);
-    f.close();
+    brush->saveToDevice(io);
 
     return KisImportExportFilter::OK;
 }

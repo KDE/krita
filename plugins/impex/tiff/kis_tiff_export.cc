@@ -53,22 +53,12 @@ KisTIFFExport::~KisTIFFExport()
 {
 }
 
-KisImportExportFilter::ConversionStatus KisTIFFExport::convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration)
+KisImportExportFilter::ConversionStatus KisTIFFExport::convert(KisDocument *document, QIODevice */*io*/,  KisPropertiesConfigurationSP configuration)
 {
-    dbgFile << "Tiff export! From:" << from << ", To:" << to << "";
-
-    if (from != "application/x-krita")
-        return KisImportExportFilter::NotImplemented;
-
-    KisDocument *input = inputDocument();
-    if (!input) {
-        return KisImportExportFilter::NoDocumentCreated;
-    }
-
     KoDialog kdb;
     kdb.setWindowTitle(i18n("TIFF Export Options"));
     kdb.setButtons(KoDialog::Ok | KoDialog::Cancel);
-    KisTIFFOptionsWidget *wdg = static_cast<KisTIFFOptionsWidget*>(createConfigurationWidget(&kdb, from, to));
+    KisTIFFOptionsWidget *wdg = static_cast<KisTIFFOptionsWidget*>(createConfigurationWidget(&kdb, KisDocument::nativeFormatMimeType(), "image/tiff"));
     kdb.setMainWidget(wdg);
     kdb.resize(kdb.minimumSize());
 
@@ -78,10 +68,10 @@ KisImportExportFilter::ConversionStatus KisTIFFExport::convert(const QByteArray&
         cfg->fromXML(configuration->toXML());
     }
     else {
-        cfg = lastSavedConfiguration(from, to);
+        cfg = lastSavedConfiguration(KisDocument::nativeFormatMimeType(), "image/tiff");
     }
 
-    const KoColorSpace* cs = input->image()->colorSpace();
+    const KoColorSpace* cs = document->image()->colorSpace();
     cfg->setProperty("type", (int)cs->channels()[0]->channelValueType());
     cfg->setProperty("isCMYK", (cs->colorModelId() == CMYKAColorModelID));
 
@@ -103,30 +93,24 @@ KisImportExportFilter::ConversionStatus KisTIFFExport::convert(const QByteArray&
         options.predictor = 3;
     }
 
-    QString filename = outputFile();
-
-    if (filename.isEmpty()) {
-        return KisImportExportFilter::FileNotFound;
-    }
-
     KisImageSP image;
 
     if (options.flatten) {
-        image = new KisImage(0, input->image()->width(), input->image()->height(), input->image()->colorSpace(), "");
-        image->setResolution(input->image()->xRes(), input->image()->yRes());
-        KisPaintDeviceSP pd = KisPaintDeviceSP(new KisPaintDevice(*input->image()->projection()));
+        image = new KisImage(0, document->image()->width(), document->image()->height(), document->image()->colorSpace(), "");
+        image->setResolution(document->image()->xRes(), document->image()->yRes());
+        KisPaintDeviceSP pd = KisPaintDeviceSP(new KisPaintDevice(*document->image()->projection()));
         KisPaintLayerSP l = KisPaintLayerSP(new KisPaintLayer(image.data(), "projection", OPACITY_OPAQUE_U8, pd));
         image->addNode(KisNodeSP(l.data()), image->rootLayer().data());
     } else {
-        image = input->image();
+        image = document->image();
     }
 
     // the image must be locked at the higher levels
-    KIS_SAFE_ASSERT_RECOVER_NOOP(input->image()->locked());
+    KIS_SAFE_ASSERT_RECOVER_NOOP(document->image()->locked());
 
-    KisTIFFConverter ktc(input);
+    KisTIFFConverter tiffConverter(document);
     KisImageBuilder_Result res;
-    if ((res = ktc.buildFile(filename, image, options)) == KisImageBuilder_RESULT_OK) {
+    if ((res = tiffConverter.buildFile(outputFile(), image, options)) == KisImageBuilder_RESULT_OK) {
         dbgFile << "success !";
         return KisImportExportFilter::OK;
     }

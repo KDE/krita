@@ -41,32 +41,13 @@ QMLExport::~QMLExport()
 {
 }
 
-KisImportExportFilter::ConversionStatus QMLExport::convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration)
+KisImportExportFilter::ConversionStatus QMLExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
 {
-    Q_UNUSED(to);
-
-    if (from != "application/x-krita")
-        return KisImportExportFilter::NotImplemented;
-
-    KisDocument *input = inputDocument();
-    QString filename = outputFile();
-
-    dbgKrita << "input " << input;
-    if (!input) {
-        return KisImportExportFilter::NoDocumentCreated;
-    }
-
-    dbgKrita << "filename " << input;
-
-    if (filename.isEmpty()) {
-        return KisImportExportFilter::FileNotFound;
-    }
-
-    KisImageWSP image = input->image();
+    KisImageWSP image = document->image();
     Q_CHECK_PTR(image);
 
     QMLConverter converter;
-    KisImageBuilder_Result result = converter.buildFile(filename, image);
+    KisImageBuilder_Result result = converter.buildFile(outputFile(), io, image);
     if (result == KisImageBuilder_RESULT_OK) {
         dbgFile << "success !";
         return KisImportExportFilter::OK;

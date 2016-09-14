@@ -43,26 +43,11 @@ KisBMPExport::~KisBMPExport()
 {
 }
 
-KisImportExportFilter::ConversionStatus KisBMPExport::convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration)
+KisImportExportFilter::ConversionStatus KisBMPExport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigurationSP /*configuration*/)
 {
-    dbgFile << "BMP export! From:" << from << ", To:" << to << "";
-
-    KisDocument *input = inputDocument();
-    QString filename = outputFile();
-
-    if (!input)
-        return KisImportExportFilter::NoDocumentCreated;
-
-    if (filename.isEmpty()) return KisImportExportFilter::FileNotFound;
-
-    if (from != "application/x-krita")
-        return KisImportExportFilter::NotImplemented;
-
-    QRect rc = input->image()->bounds();
-    // the image must be locked at the higher levels
-    KIS_SAFE_ASSERT_RECOVER_NOOP(input->image()->locked());
-    QImage image = input->image()->projection()->convertToQImage(0, 0, 0, rc.width(), rc.height(), KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
-    image.save(filename);
+    QRect rc = document->image()->bounds();
+    QImage image = document->image()->projection()->convertToQImage(0, 0, 0, rc.width(), rc.height(), KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
+    image.save(io, QFileInfo(outputFile()).suffix().toLatin1());
     return KisImportExportFilter::OK;
 }
 

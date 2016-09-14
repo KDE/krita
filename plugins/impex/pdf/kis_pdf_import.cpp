@@ -66,20 +66,9 @@ KisPDFImport::~KisPDFImport()
 {
 }
 
-KisPDFImport::ConversionStatus KisPDFImport::convert(const QByteArray& , const QByteArray&, KisPropertiesConfigurationSP configuration)
+KisPDFImport::ConversionStatus KisPDFImport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
 {
-    QString filename = inputFile();
-    dbgFile << "Importing using PDFImport!" << filename;
-
-    if (filename.isEmpty()) {
-        return KisImportExportFilter::FileNotFound;
-    }
-
-    QFileInfo fi(filename);
-    if (!fi.exists()) {
-        return KisImportExportFilter::FileNotFound;
-    }
-    Poppler::Document* pdoc = Poppler::Document::load(filename);
+    Poppler::Document* pdoc = Poppler::Document::loadFromData(io->readAll());
 
     if (!pdoc) {
         return KisPDFImport::InvalidFormat;
@@ -117,19 +106,11 @@ KisPDFImport::ConversionStatus KisPDFImport::convert(const QByteArray& , const Q
         return KisImportExportFilter::StorageCreationError; // FIXME Cancel doesn't exist :(
     }
 
-    // Init kis's doc
-    KisDocument * doc = outputDocument();
-    if (!doc) {
-        delete pdoc;
-        delete kdb;
-        return KisImportExportFilter::NoDocumentCreated;
-    }
-
     // Create the krita image
     const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
     int width = wdg->intWidth->value();
     int height = wdg->intHeight->value();
-    KisImageWSP image = new KisImage(doc->createUndoStore(), width, height, cs, "built image");
+    KisImageWSP image = new KisImage(document->createUndoStore(), width, height, cs, "built image");
     image->setResolution(wdg->intResolution->value() / 72.0, wdg->intResolution->value() / 72.0);
 
     // create a layer
@@ -152,7 +133,7 @@ KisPDFImport::ConversionStatus KisPDFImport::convert(const QByteArray& , const Q
         loadUpdater->setProgress(*it + 1);
     }
 
-    doc->setCurrentImage(image);
+    document->setCurrentImage(image);
 
     delete pdoc;
     delete kdb;

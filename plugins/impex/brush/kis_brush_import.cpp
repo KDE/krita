@@ -56,92 +56,69 @@ KisBrushImport::~KisBrushImport()
 }
 
 
-KisImportExportFilter::ConversionStatus KisBrushImport::convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration)
+KisImportExportFilter::ConversionStatus KisBrushImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigurationSP /*configuration*/)
 {
-    if (to != "application/x-krita")
+    KisBrush *brush;
+
+    if (mimeType() == "image/x-gimp-brush") {
+        brush = new KisGbrBrush(inputFile());
+    }
+    else if (mimeType() == "image/x-gimp-brush-animated") {
+        brush = new KisImagePipeBrush(inputFile());
+    }
+    else {
         return KisImportExportFilter::BadMimeType;
-
-    QString filename = inputFile();
-
-    if (!filename.isEmpty()) {
-
-        if (!QFile(filename).exists()) {
-            return KisImportExportFilter::FileNotFound;
-        }
-
-
-        KisBrush *brush;
-
-        if (from == "image/x-gimp-brush") {
-            brush = new KisGbrBrush(filename);
-        }
-        else if (from == "image/x-gimp-brush-animated") {
-            brush = new KisImagePipeBrush(filename);
-        }
-        else {
-            return KisImportExportFilter::BadMimeType;
-        }
-
-
-        if (!brush->load()) {
-            delete brush;
-            return KisImportExportFilter::InvalidFormat;
-        }
-
-        if (!brush->valid()) {
-            delete brush;
-            return KisImportExportFilter::InvalidFormat;
-        }
-
-        KisDocument * doc = outputDocument();
-
-        if (!doc) {
-            delete brush;
-            return KisImportExportFilter::NoDocumentCreated;
-        }
-
-        const KoColorSpace *colorSpace = 0;
-        if (brush->hasColor()) {
-            colorSpace = KoColorSpaceRegistry::instance()->rgb8();
-        }
-        else {
-            colorSpace = KoColorSpaceRegistry::instance()->colorSpace(GrayAColorModelID.id(), Integer8BitsColorDepthID.id(), "");
-        }
-
-        KisImageWSP image = new KisImage(doc->createUndoStore(), brush->width(), brush->height(), colorSpace, brush->name());
-        image->setProperty("brushspacing", brush->spacing());
-
-        KisImagePipeBrush *pipeBrush = dynamic_cast<KisImagePipeBrush*>(brush);
-        if (pipeBrush) {
-            QVector<KisGbrBrush*> brushes = pipeBrush->brushes();
-            for(int i = brushes.size(); i > 0; i--) {
-                KisGbrBrush *subbrush = brushes.at(i - 1);
-                const KoColorSpace *subColorSpace = 0;
-                if (brush->hasColor()) {
-                    subColorSpace = KoColorSpaceRegistry::instance()->rgb8();
-                }
-                else {
-                    subColorSpace = KoColorSpaceRegistry::instance()->colorSpace(GrayAColorModelID.id(), Integer8BitsColorDepthID.id(), "");
-                }
-                KisPaintLayerSP layer = new KisPaintLayer(image, image->nextLayerName(), 255, subColorSpace);
-                layer->paintDevice()->convertFromQImage(subbrush->brushTipImage(), 0, 0, 0);
-                image->addNode(layer, image->rootLayer());
-            }
-            KisAnnotationSP ann = new KisAnimatedBrushAnnotation(pipeBrush->parasite());
-            image->addAnnotation(ann);
-        }
-        else {
-            KisPaintLayerSP layer = new KisPaintLayer(image, image->nextLayerName(), 255, colorSpace);
-            layer->paintDevice()->convertFromQImage(brush->brushTipImage(), 0, 0, 0);
-            image->addNode(layer, image->rootLayer(), 0);
-        }
-
-        doc->setCurrentImage(image);
-        delete brush;
-        return KisImportExportFilter::OK;
     }
 
-    return KisImportExportFilter::StorageCreationError;
+    if (!brush->loadFromDevice(io)) {
+        delete brush;
+        return KisImportExportFilter::InvalidFormat;
+    }
+
+    if (!brush->valid()) {
+        delete brush;
+        return KisImportExportFilter::InvalidFormat;
+    }
+
+    const KoColorSpace *colorSpace = 0;
+    if (brush->hasColor()) {
+        colorSpace = KoColorSpaceRegistry::instance()->rgb8();
+    }
+    else {
+        colorSpace = KoColorSpaceRegistry::instance()->colorSpace(GrayAColorModelID.id(), Integer8BitsColorDepthID.id(), "");
+    }
+
+    KisImageWSP image = new KisImage(document->createUndoStore(), brush->width(), brush->height(), colorSpace, brush->name());
+    image->setProperty("brushspacing", brush->spacing());
+
+    KisImagePipeBrush *pipeBrush = dynamic_cast<KisImagePipeBrush*>(brush);
+    if (pipeBrush) {
+        QVector<KisGbrBrush*> brushes = pipeBrush->brushes();
+        for(int i = brushes.size(); i > 0; i--) {
+            KisGbrBrush *subbrush = brushes.at(i - 1);
+            const KoColorSpace *subColorSpace = 0;
+            if (brush->hasColor()) {
+                subColorSpace = KoColorSpaceRegistry::instance()->rgb8();
+            }
+            else {
+                subColorSpace = KoColorSpaceRegistry::instance()->colorSpace(GrayAColorModelID.id(), Integer8BitsColorDepthID.id(), "");
+            }
+            KisPaintLayerSP layer = new KisPaintLayer(image, image->nextLayerName(), 255, subColorSpace);
+            layer->paintDevice()->convertFromQImage(subbrush->brushTipImage(), 0, 0, 0);
+            image->addNode(layer, image->rootLayer());
+        }
+        KisAnnotationSP ann = new KisAnimatedBrushAnnotation(pipeBrush->parasite());
+        image->addAnnotation(ann);
+    }
+    else {
+        KisPaintLayerSP layer = new KisPaintLayer(image, image->nextLayerName(), 255, colorSpace);
+        layer->paintDevice()->convertFromQImage(brush->brushTipImage(), 0, 0, 0);
+        image->addNode(layer, image->rootLayer(), 0);
+    }
+
+    document->setCurrentImage(image);
+    delete brush;
+    return KisImportExportFilter::OK;
 
 }
 #include "kis_brush_import.moc"

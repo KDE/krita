@@ -22,6 +22,7 @@ Boston, MA 02110-1301, USA.
 #define KIS_IMPORT_EXPORT_FILTER_H
 
 #include <QObject>
+#include <QIODevice>
 #include <QMap>
 #include <QPointer>
 #include <QString>
@@ -98,6 +99,9 @@ public:
 
     virtual ~KisImportExportFilter();
 
+    void setMimeType(QByteArray mime);
+    QByteArray mimeType() const;
+
     /**
      * @brief setChain set the chain information on the filter. The chain information
      * lets the filter know what document it's working on. The filter will not delete
@@ -116,7 +120,7 @@ public:
      * @return The error status, see the @ref #ConversionStatus enum.
      *         KisImportExportFilter::OK means that everything is alright.
      */
-    virtual ConversionStatus convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration = 0) = 0;
+    virtual ConversionStatus convert(KisDocument *document, QIODevice *io, KisPropertiesConfigurationSP configuration = 0) = 0;
 
     /**
      * Set the updater to which the filter will report progress.

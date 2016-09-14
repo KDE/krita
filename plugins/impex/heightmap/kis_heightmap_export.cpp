@@ -75,38 +75,24 @@ KisConfigWidget *KisHeightMapExport::createConfigurationWidget(QWidget *parent, 
     return new KisWdgOptionsHeightmap(parent);
 }
 
-KisImportExportFilter::ConversionStatus KisHeightMapExport::convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration)
+KisImportExportFilter::ConversionStatus KisHeightMapExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration)
 {
-    dbgFile << "HeightMap export! From:" << from << ", To:" << to;
+    KisImageWSP image = document->image();
 
-    if (from != "application/x-krita")
-        return KisImportExportFilter::NotImplemented;
-
-    KisDocument *inputDoc = inputDocument();
-    QString filename = outputFile();
-
-    if (!inputDoc)
-        return KisImportExportFilter::NoDocumentCreated;
-
-    if (filename.isEmpty()) return KisImportExportFilter::FileNotFound;
-
-    KisImageWSP image = inputDoc->image();
-    Q_CHECK_PTR(image);
-
-    if (inputDoc->image()->width() != inputDoc->image()->height()) {
-        inputDoc->setErrorMessage(i18n("Cannot export this image to a heightmap: it is not square"));
+    if (document->image()->width() != document->image()->height()) {
+        document->setErrorMessage(i18n("Cannot export this image to a heightmap: it is not square"));
         return KisImportExportFilter::WrongFormat;
     }
 
-    if (inputDoc->image()->colorSpace()->colorModelId() != GrayAColorModelID) {
-        inputDoc->setErrorMessage(i18n("Cannot export this image to a heightmap: it is not grayscale"));
+    if (document->image()->colorSpace()->colorModelId() != GrayAColorModelID) {
+        document->setErrorMessage(i18n("Cannot export this image to a heightmap: it is not grayscale"));
         return KisImportExportFilter::WrongFormat;
     }
 
     KoDialog kdb;
     kdb.setWindowTitle(i18n("HeightMap Export Options"));
     kdb.setButtons(KoDialog::Ok | KoDialog::Cancel);
-    KisConfigWidget *wdg = createConfigurationWidget(&kdb, from, to);
+    KisConfigWidget *wdg = createConfigurationWidget(&kdb, KisDocument::nativeFormatMimeType(), mimeType());
     kdb.setMainWidget(wdg);
 
     QApplication::restoreOverrideCursor();
@@ -117,7 +103,7 @@ KisImportExportFilter::ConversionStatus KisHeightMapExport::convert(const QByteA
         cfg->fromXML(configuration->toXML());
     }
     else {
-        cfg = lastSavedConfiguration(from, to);
+        cfg = lastSavedConfiguration(KisDocument::nativeFormatMimeType(), mimeType());
     }
     cfg->setProperty("width", image->width());
     wdg->setConfiguration(cfg);
@@ -133,7 +119,7 @@ KisImportExportFilter::ConversionStatus KisHeightMapExport::convert(const QByteA
     QDataStream::ByteOrder bo = cfg->getInt("endianness", 0) ? QDataStream::BigEndian : QDataStream::LittleEndian;
 
     bool downscale = false;
-    if (to == "image/x-r8" && image->colorSpace()->colorDepthId() == Integer16BitsColorDepthID) {
+    if (mimeType() == "image/x-r8" && image->colorSpace()->colorDepthId() == Integer16BitsColorDepthID) {
 
         downscale = (QMessageBox::question(0,
                                            i18nc("@title:window", "Downscale Image"),
@@ -147,9 +133,7 @@ KisImportExportFilter::ConversionStatus KisHeightMapExport::convert(const QByteA
     KIS_SAFE_ASSERT_RECOVER_NOOP(image->locked());
     KisPaintDeviceSP pd = new KisPaintDevice(*image->projection());
 
-    QFile f(filename);
-    f.open(QIODevice::WriteOnly);
-    QDataStream s(&f);
+    QDataStream s(io);
     s.setByteOrder(bo);
 
     KisRandomConstAccessorSP it = pd->createRandomConstAccessorNG(0, 0);
@@ -165,8 +149,6 @@ KisImportExportFilter::ConversionStatus KisHeightMapExport::convert(const QByteA
             }
         }
     }
-
-    f.close();
     return KisImportExportFilter::OK;
 }
 

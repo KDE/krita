@@ -42,6 +42,7 @@ public:
      * it's invalid while constructing the object!
      */
     KisFilterChainSP chain;
+    QByteArray mime;
 
 };
 
@@ -81,6 +82,16 @@ KisImportExportFilter::~KisImportExportFilter()
     Q_ASSERT(d->updater);
     if (d->updater) d->updater->setProgress(100);
     delete d;
+}
+
+void KisImportExportFilter::setMimeType(QByteArray mime)
+{
+    d->mime = mime;
+}
+
+QByteArray KisImportExportFilter::mimeType() const
+{
+    return d->mime;
 }
 
 void KisImportExportFilter::setChain(KisFilterChainSP chain)

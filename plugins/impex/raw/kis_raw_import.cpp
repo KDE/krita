@@ -68,27 +68,8 @@ inline quint16 correctIndian(quint16 v)
 #endif
 }
 
-KisImportExportFilter::ConversionStatus KisRawImport::convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration)
+KisImportExportFilter::ConversionStatus KisRawImport::convert(KisDocument *document, QIODevice */*io*/,  KisPropertiesConfigurationSP /*configuration*/)
 {
-    dbgFile << from << " " << to << "";
-    if (/*from != "image/x-raw" || */to != "application/x-krita") { // too many from to check, and I don't think it can happen an unsupported from
-        return KisImportExportFilter::NotImplemented;
-    }
-
-    dbgFile << "Krita importing from Raw";
-
-    KisDocument * doc = outputDocument();
-    if (!doc) {
-        return KisImportExportFilter::NoDocumentCreated;
-    }
-
-    QString filename = inputFile();
-
-    if (filename.isEmpty()) {
-        return KisImportExportFilter::FileNotFound;
-    }
-
-
     // Show dialog
     m_dialog->setCursor(Qt::ArrowCursor);
     QApplication::setOverrideCursor(Qt::ArrowCursor);
@@ -117,7 +98,7 @@ KisImportExportFilter::ConversionStatus KisRawImport::convert(const QByteArray& 
 
         // Init the image
         const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb16();
-        KisImageWSP image = new KisImage(doc->createUndoStore(), width, height, cs, filename);
+        KisImageWSP image = new KisImage(document->createUndoStore(), width, height, cs, inputFile());
         if (image.isNull()) return KisImportExportFilter::CreationError;
 
         KisPaintLayerSP layer = new KisPaintLayer(image, image->nextLayerName(), quint8_MAX);
@@ -149,7 +130,7 @@ KisImportExportFilter::ConversionStatus KisRawImport::convert(const QByteArray& 
         }
 
         QApplication::restoreOverrideCursor();
-        doc->setCurrentImage(image);
+        document->setCurrentImage(image);
         return KisImportExportFilter::OK;
     }
 

@@ -40,18 +40,8 @@ exrImport::~exrImport()
 {
 }
 
-KisImportExportFilter::ConversionStatus exrImport::convert(const QByteArray&, const QByteArray& to, KisPropertiesConfigurationSP configuration)
+KisImportExportFilter::ConversionStatus exrImport::convert(KisDocument *document, QIODevice */*io*/,  KisPropertiesConfigurationSP /*configuration*/)
 {
-    dbgFile << "Importing using EXRImport!";
-
-    if (to != "application/x-krita")
-        return KisImportExportFilter::BadMimeType;
-
-    KisDocument * doc = outputDocument();
-
-    if (!doc)
-        return KisImportExportFilter::NoDocumentCreated;
-
     QString filename = inputFile();
 
     if (!filename.isEmpty()) {
@@ -60,36 +50,36 @@ KisImportExportFilter::ConversionStatus exrImport::convert(const QByteArray&, co
             return KisImportExportFilter::FileNotFound;
         }
 
-        exrConverter ib(doc, !getBatchMode());
+        exrConverter ib(document, !getBatchMode());
 
 
         switch (ib.buildImage(filename)) {
         case KisImageBuilder_RESULT_UNSUPPORTED:
         case KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE:
-            doc->setErrorMessage(i18n("Krita does support this type of EXR file."));
+            document->setErrorMessage(i18n("Krita does support this type of EXR file."));
             return KisImportExportFilter::NotImplemented;
 
         case KisImageBuilder_RESULT_INVALID_ARG:
-            doc->setErrorMessage(i18n("This is not an EXR file."));
+            document->setErrorMessage(i18n("This is not an EXR file."));
             return KisImportExportFilter::BadMimeType;
 
         case KisImageBuilder_RESULT_NO_URI:
         case KisImageBuilder_RESULT_NOT_LOCAL:
-            doc->setErrorMessage(i18n("The EXR file does not exist."));
+            document->setErrorMessage(i18n("The EXR file does not exist."));
             return KisImportExportFilter::FileNotFound;
 
         case KisImageBuilder_RESULT_BAD_FETCH:
         case KisImageBuilder_RESULT_EMPTY:
-            doc->setErrorMessage(i18n("The EXR is corrupted."));
+            document->setErrorMessage(i18n("The EXR is corrupted."));
             return KisImportExportFilter::ParsingError;
 
         case KisImageBuilder_RESULT_FAILURE:
-            doc->setErrorMessage(i18n("Krita could not create a new image."));
+            document->setErrorMessage(i18n("Krita could not create a new image."));
             return KisImportExportFilter::InternalError;
 
         case KisImageBuilder_RESULT_OK:
             Q_ASSERT(ib.image());
-            doc -> setCurrentImage(ib.image());
+            document -> setCurrentImage(ib.image());
             return KisImportExportFilter::OK;
 
         default:

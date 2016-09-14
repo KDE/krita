@@ -121,11 +121,19 @@ void AnimaterionRenderer::slotRenderAnimation()
             KisFilterChainSP chain(new KisFilterChain(doc->importExportManager()));
             chain->setOutputFile(videoConfig->getString("filename"));
             encoder->setChain(chain);
-            KisImportExportFilter::ConversionStatus res = encoder->convert(KisDocument::nativeFormatMimeType(), encoderConfig->getString("mimetype").toLatin1(), encoderConfig);
+            QFile fi(videoConfig->getString("filename"));
+            KisImportExportFilter::ConversionStatus res;
+            if (!fi.open(QIODevice::WriteOnly)) {
+                qWarning() << "Could not open" << fi.fileName() << "for writing!";
+                res = KisImportExportFilter::CreationError;
+            }
+            else {
+                 res = encoder->convert(doc, &fi, encoderConfig);
+                 fi.close();
+            }
             if (res != KisImportExportFilter::OK) {
                 QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Could not render animation:\n%1", doc->errorMessage()));
             }
-
             if (videoConfig->getBool("delete_sequence", false)) {
                 QDir d(sequenceConfig->getString("directory"));
                 QStringList sequenceFiles = d.entryList(QStringList() << sequenceConfig->getString("basename") + "*." + extension, QDir::Files);

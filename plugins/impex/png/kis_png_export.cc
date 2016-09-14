@@ -70,25 +70,9 @@ bool hasVisibleWidgets()
     return false;
 }
 
-KisImportExportFilter::ConversionStatus KisPNGExport::convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration)
+KisImportExportFilter::ConversionStatus KisPNGExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration)
 {
-    dbgFile << "Png export! From:" << from << ", To:" << to << "";
-
-    KisDocument *input = inputDocument();
-    QString filename = outputFile();
-
-    if (!input)
-        return KisImportExportFilter::NoDocumentCreated;
-
-
-    if (filename.isEmpty()) return KisImportExportFilter::FileNotFound;
-
-    if (from != "application/x-krita")
-        return KisImportExportFilter::NotImplemented;
-
-
-
-    KisImageWSP image = input->image();
+    KisImageWSP image = document->image();
 
     // the image must be locked at the higher levels
     KIS_SAFE_ASSERT_RECOVER_NOOP(image->locked());
@@ -123,7 +107,7 @@ KisImportExportFilter::ConversionStatus KisPNGExport::convert(const QByteArray& 
         KoDialog kdb;
         kdb.setCaption(i18n("PNG Export Options"));
         kdb.setButtons(KoDialog::Ok | KoDialog::Cancel);
-        KisConfigWidget *wdg = createConfigurationWidget(&kdb, from, to);
+        KisConfigWidget *wdg = createConfigurationWidget(&kdb, KisDocument::nativeFormatMimeType(), "image/png");
         kdb.setMainWidget(wdg);
 
         // If a configuration object was passed to the convert method, we use that, otherwise we load from the settings
@@ -131,7 +115,7 @@ KisImportExportFilter::ConversionStatus KisPNGExport::convert(const QByteArray& 
             cfg->fromXML(configuration->toXML());
         }
         else {
-            cfg = lastSavedConfiguration(from, to);
+            cfg = lastSavedConfiguration(KisDocument::nativeFormatMimeType(), "image/png");
         }
 
         cfg->setProperty("ColorModelID", cs->colorModelId().id());
@@ -163,8 +147,6 @@ KisImportExportFilter::ConversionStatus KisPNGExport::convert(const QByteArray& 
     options.saveSRGBProfile = cfg->getBool("saveSRGBProfile", false);
     options.forceSRGB = cfg->getBool("forceSRGB", true);
 
-    KisPNGConverter kpc(input);
-
     vKisAnnotationSP_it beginIt = image->beginAnnotations();
     vKisAnnotationSP_it endIt = image->endAnnotations();
     KisImageBuilder_Result res;
@@ -179,7 +161,8 @@ KisImportExportFilter::ConversionStatus KisPNGExport::convert(const QByteArray& 
         KisMetaData::Store* copy = new KisMetaData::Store(*eI);
         eI = copy;
     }
-    if ((res = kpc.buildFile(filename, image->bounds(), image->xRes(), image->yRes(), l->paintDevice(), beginIt, endIt, options, eI)) == KisImageBuilder_RESULT_OK) {
+    KisPNGConverter pngConverter(document);
+    if ((res = pngConverter.buildFile(io, image->bounds(), image->xRes(), image->yRes(), l->paintDevice(), beginIt, endIt, options, eI)) == KisImageBuilder_RESULT_OK) {
         dbgFile << "success !";
         delete eI;
         return KisImportExportFilter::OK;

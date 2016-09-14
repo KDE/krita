@@ -141,6 +141,7 @@ void KisTemplateTree::readGroups()
     QStringList dirs = KoResourcePaths::findDirs("templates");
 
     Q_FOREACH (const QString & dirName, dirs) {
+        if (!dirName.contains("templates")) continue; // Hack around broken KoResourcePaths
         QDir dir(dirName);
         // avoid the annoying warning
         if (!dir.exists())

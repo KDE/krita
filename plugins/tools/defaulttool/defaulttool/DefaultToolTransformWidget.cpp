@@ -52,9 +52,6 @@ DefaultToolTransformWidget::DefaultToolTransformWidget(KoInteractionTool *tool, 
 
     setUnit(m_tool->canvas()->unit());
 
-    KisDocumentAwareSpinBoxUnitManager::setDocumentAwarnessToExistingUnitSpinBox(shearXSpinBox);
-    KisDocumentAwareSpinBoxUnitManager::setDocumentAwarnessToExistingUnitSpinBox(shearYSpinBox);
-
     connect(m_tool->canvas()->resourceManager(), SIGNAL(canvasResourceChanged(int,QVariant)),
             this, SLOT(resourceChanged(int,QVariant)));
 

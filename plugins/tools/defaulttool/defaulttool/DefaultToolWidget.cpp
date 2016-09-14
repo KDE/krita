@@ -60,11 +60,6 @@ DefaultToolWidget::DefaultToolWidget(KoInteractionTool *tool, QWidget *parent)
     updatePosition();
     updateSize();
 
-    KisDocumentAwareSpinBoxUnitManager::setDocumentAwarnessToExistingUnitSpinBox(positionXSpinBox);
-    KisDocumentAwareSpinBoxUnitManager::setDocumentAwarnessToExistingUnitSpinBox(positionYSpinBox);
-    KisDocumentAwareSpinBoxUnitManager::setDocumentAwarnessToExistingUnitSpinBox(widthSpinBox);
-    KisDocumentAwareSpinBoxUnitManager::setDocumentAwarnessToExistingUnitSpinBox(heightSpinBox);
-
     connect(positionSelector, SIGNAL(positionSelected(KoFlake::Position)),
             this, SLOT(positionSelected(KoFlake::Position)));
 

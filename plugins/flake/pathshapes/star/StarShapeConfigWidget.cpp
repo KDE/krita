@@ -27,9 +27,6 @@ StarShapeConfigWidget::StarShapeConfigWidget()
 {
     widget.setupUi(this);
 
-    KisDocumentAwareSpinBoxUnitManager::setDocumentAwarnessToExistingUnitSpinBox(widget.innerRadius);
-    KisDocumentAwareSpinBoxUnitManager::setDocumentAwarnessToExistingUnitSpinBox(widget.outerRadius);
-
     connect(widget.corners, SIGNAL(valueChanged(int)), this, SIGNAL(propertyChanged()));
     connect(widget.innerRadius, SIGNAL(editingFinished()), this, SIGNAL(propertyChanged()));
     connect(widget.outerRadius, SIGNAL(editingFinished()), this, SIGNAL(propertyChanged()));

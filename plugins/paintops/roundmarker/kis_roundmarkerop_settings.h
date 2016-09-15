@@ -37,7 +37,7 @@ public:
 
     QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode) Q_DECL_OVERRIDE;
 
-    QList<KisUniformPaintOpPropertySP> uniformProperties() Q_DECL_OVERRIDE;
+    QList<KisUniformPaintOpPropertySP> uniformProperties(KisPaintOpSettingsSP settings) Q_DECL_OVERRIDE;
 
 private:
     struct Private;

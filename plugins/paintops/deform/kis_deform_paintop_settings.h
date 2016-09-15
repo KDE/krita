@@ -40,7 +40,7 @@ public:
     bool isAirbrushing() const;
     int rate() const;
 
-    QList<KisUniformPaintOpPropertySP> uniformProperties();
+    QList<KisUniformPaintOpPropertySP> uniformProperties(KisPaintOpSettingsSP settings);
 
 private:
     struct Private;

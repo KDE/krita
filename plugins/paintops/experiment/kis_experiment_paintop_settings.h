@@ -31,7 +31,7 @@ public:
     bool paintIncremental();
     QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode);
 
-    QList<KisUniformPaintOpPropertySP> uniformProperties();
+    QList<KisUniformPaintOpPropertySP> uniformProperties(KisPaintOpSettingsSP settings);
 
 private:
 

@@ -225,6 +225,10 @@ typedef KisWeakSharedPtr<KisPaintOpPreset> KisPaintOpPresetWSP;
 class KisPaintOpSettings;
 typedef KisSharedPtr<KisPaintOpSettings> KisPaintOpSettingsSP;
 
+template <typename T>
+class KisRestrictedSharedPointerWrapper;
+typedef KisRestrictedSharedPointerWrapper<KisPaintOpSettings> KisPaintOpSettingsRestrictedSP;
+
 class KisPaintOp;
 typedef KisSharedPtr<KisPaintOp> KisPaintOpSP;
 
@@ -292,6 +296,7 @@ typedef QWeakPointer<KisLayerComposition> KisLayerCompositionWSP;
 #include <QSharedPointer>
 #include <QWeakPointer>
 #include <kis_shared_ptr.h>
+#include <kis_restricted_shared_pointer_wrapper.h>
 
 #endif // KISTYPES_H_
 

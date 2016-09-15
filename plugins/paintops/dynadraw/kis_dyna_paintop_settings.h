@@ -36,7 +36,7 @@ public:
     virtual bool isAirbrushing() const;
     virtual int rate() const;
 
-    QList<KisUniformPaintOpPropertySP> uniformProperties();
+    QList<KisUniformPaintOpPropertySP> uniformProperties(KisPaintOpSettingsSP settings);
 
 private:
     struct Private;

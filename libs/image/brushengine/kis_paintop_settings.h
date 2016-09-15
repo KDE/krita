@@ -253,7 +253,7 @@ public:
      */
     void setProperty(const QString & name, const QVariant & value);
 
-    virtual QList<KisUniformPaintOpPropertySP> uniformProperties();
+    virtual QList<KisUniformPaintOpPropertySP> uniformProperties(KisPaintOpSettingsSP settings);
 
     static bool isLodUserAllowed(const KisPropertiesConfigurationSP config);
     static void setLodUserAllowed(KisPropertiesConfigurationSP config, bool value);

@@ -74,7 +74,7 @@ int KisDynaPaintOpSettings::rate() const
 #include "kis_standard_uniform_properties_factory.h"
 
 
-QList<KisUniformPaintOpPropertySP> KisDynaPaintOpSettings::uniformProperties()
+QList<KisUniformPaintOpPropertySP> KisDynaPaintOpSettings::uniformProperties(KisPaintOpSettingsSP settings)
 {
     QList<KisUniformPaintOpPropertySP> props =
         listWeakToStrong(m_d->uniformProperties);
@@ -86,7 +86,7 @@ QList<KisUniformPaintOpPropertySP> KisDynaPaintOpSettings::uniformProperties()
                     KisIntSliderBasedPaintOpPropertyCallback::Int,
                     "dyna_diameter",
                     i18n("Diameter"),
-                    this, 0);
+                    settings, 0);
 
             prop->setRange(0, 1000);
             prop->setSingleStep(1);
@@ -117,7 +117,7 @@ QList<KisUniformPaintOpPropertySP> KisDynaPaintOpSettings::uniformProperties()
                     KisIntSliderBasedPaintOpPropertyCallback::Int,
                     "dyna_angle",
                     i18n("Angle"),
-                    this, 0);
+                    settings, 0);
 
             const QString degree = QChar(Qt::Key_degree);
             prop->setRange(0, 360);
@@ -155,7 +155,7 @@ QList<KisUniformPaintOpPropertySP> KisDynaPaintOpSettings::uniformProperties()
                     KisDoubleSliderBasedPaintOpPropertyCallback::Double,
                     "dyna_mass",
                     i18n("Mass"),
-                    this, 0);
+                    settings, 0);
 
             prop->setRange(0.01, 3);
             prop->setSingleStep(0.01);
@@ -186,7 +186,7 @@ QList<KisUniformPaintOpPropertySP> KisDynaPaintOpSettings::uniformProperties()
                     KisDoubleSliderBasedPaintOpPropertyCallback::Double,
                     "dyna_drag",
                     i18n("Drag"),
-                    this, 0);
+                    settings, 0);
 
             prop->setRange(0, 0.99);
             prop->setSingleStep(0.01);
@@ -216,7 +216,7 @@ QList<KisUniformPaintOpPropertySP> KisDynaPaintOpSettings::uniformProperties()
                 new KisComboBasedPaintOpPropertyCallback(
                     "dyna_shape",
                     i18n("Shape"),
-                    this, 0);
+                    settings, 0);
 
             QList<QString> shapes;
             shapes << i18n("Circle");
@@ -250,7 +250,7 @@ QList<KisUniformPaintOpPropertySP> KisDynaPaintOpSettings::uniformProperties()
     {
         using namespace KisStandardUniformPropertiesFactory;
 
-        Q_FOREACH (KisUniformPaintOpPropertySP prop, KisPaintOpSettings::uniformProperties()) {
+        Q_FOREACH (KisUniformPaintOpPropertySP prop, KisPaintOpSettings::uniformProperties(settings)) {
             if (prop->id() == opacity.id() ||
                 prop->id() == flow.id()) {
 

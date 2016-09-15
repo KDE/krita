@@ -29,7 +29,7 @@ public:
     KisColorSmudgeOpSettings();
     ~KisColorSmudgeOpSettings();
 
-    QList<KisUniformPaintOpPropertySP> uniformProperties();
+    QList<KisUniformPaintOpPropertySP> uniformProperties(KisPaintOpSettingsSP settings);
 
 private:
     struct Private;

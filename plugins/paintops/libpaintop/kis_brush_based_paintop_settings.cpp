@@ -234,7 +234,7 @@ qreal KisBrushBasedPaintOpSettings::paintOpSize() const
 #include "kis_paintop_preset.h"
 #include "kis_paintop_settings_update_proxy.h"
 
-QList<KisUniformPaintOpPropertySP> KisBrushBasedPaintOpSettings::uniformProperties()
+QList<KisUniformPaintOpPropertySP> KisBrushBasedPaintOpSettings::uniformProperties(KisPaintOpSettingsSP settings)
 {
     QList<KisUniformPaintOpPropertySP> props =
         listWeakToStrong(m_uniformProperties);
@@ -246,7 +246,7 @@ QList<KisUniformPaintOpPropertySP> KisBrushBasedPaintOpSettings::uniformProperti
                     KisIntSliderBasedPaintOpPropertyCallback::Int,
                     "angle",
                     "Angle",
-                    this, 0);
+                    settings, 0);
 
             prop->setRange(0, 360);
 
@@ -276,7 +276,7 @@ QList<KisUniformPaintOpPropertySP> KisBrushBasedPaintOpSettings::uniformProperti
                     KisUniformPaintOpPropertyCallback::Bool,
                     "auto_spacing",
                     "Auto Spacing",
-                    this, 0);
+                    settings, 0);
 
             prop->setReadCallback(
                 [](KisUniformPaintOpProperty *prop) {
@@ -304,7 +304,7 @@ QList<KisUniformPaintOpPropertySP> KisBrushBasedPaintOpSettings::uniformProperti
                     KisDoubleSliderBasedPaintOpPropertyCallback::Double,
                     "spacing",
                     "Spacing",
-                    this, 0);
+                    settings, 0);
 
             prop->setRange(0.01, 10);
             prop->setSingleStep(0.01);
@@ -336,5 +336,5 @@ QList<KisUniformPaintOpPropertySP> KisBrushBasedPaintOpSettings::uniformProperti
         }
     }
 
-    return KisPaintOpSettings::uniformProperties() + props;
+    return KisPaintOpSettings::uniformProperties(settings) + props;
 }

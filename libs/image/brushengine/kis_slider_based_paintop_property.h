@@ -39,7 +39,7 @@ public:
     KisSliderBasedPaintOpProperty(Type type,
                                   const QString &id,
                                   const QString &name,
-                                  KisPaintOpSettingsSP settings,
+                                  KisPaintOpSettingsRestrictedSP settings,
                                   QObject *parent)
         : KisUniformPaintOpProperty(type, id, name, settings, parent),
         m_min(T(0)),
@@ -53,7 +53,7 @@ public:
 
     KisSliderBasedPaintOpProperty(const QString &id,
                                   const QString &name,
-                                  KisPaintOpSettingsSP settings,
+                                  KisPaintOpSettingsRestrictedSP settings,
                                   QObject *parent)
         : KisUniformPaintOpProperty(Int, id, name, settings, parent),
         m_min(T(0)),

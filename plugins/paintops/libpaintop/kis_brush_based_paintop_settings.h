@@ -72,7 +72,7 @@ public:
     void setPaintOpSize(qreal value);
     qreal paintOpSize() const;
 
-    QList<KisUniformPaintOpPropertySP> uniformProperties();
+    QList<KisUniformPaintOpPropertySP> uniformProperties(KisPaintOpSettingsSP settings);
 
 protected:
     QPainterPath brushOutlineImpl(const KisPaintInformation &info, OutlineMode mode, qreal additionalScale, bool forceOutline = false);

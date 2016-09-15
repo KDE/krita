@@ -97,7 +97,7 @@ QPainterPath KisGridPaintOpSettings::brushOutline(const KisPaintInformation &inf
 #include "kis_paintop_preset.h"
 #include "kis_paintop_settings_update_proxy.h"
 
-QList<KisUniformPaintOpPropertySP> KisGridPaintOpSettings::uniformProperties()
+QList<KisUniformPaintOpPropertySP> KisGridPaintOpSettings::uniformProperties(KisPaintOpSettingsSP settings)
 {
     QList<KisUniformPaintOpPropertySP> props =
         listWeakToStrong(m_d->uniformProperties);
@@ -109,7 +109,7 @@ QList<KisUniformPaintOpPropertySP> KisGridPaintOpSettings::uniformProperties()
                     KisIntSliderBasedPaintOpPropertyCallback::Int,
                     "grid_divisionlevel",
                     i18n("Division Level"),
-                    this, 0);
+                    settings, 0);
 
             prop->setRange(1, 25);
             prop->setSingleStep(1);
@@ -135,5 +135,5 @@ QList<KisUniformPaintOpPropertySP> KisGridPaintOpSettings::uniformProperties()
         }
     }
 
-    return KisPaintOpSettings::uniformProperties() + props;
+    return KisPaintOpSettings::uniformProperties(settings) + props;
 }

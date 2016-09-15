@@ -49,7 +49,7 @@ public:
 
 protected:
 
-    QList<KisUniformPaintOpPropertySP> uniformProperties();
+    QList<KisUniformPaintOpPropertySP> uniformProperties(KisPaintOpSettingsSP settings);
 
 private:
     Q_DISABLE_COPY(KisSprayPaintOpSettings)

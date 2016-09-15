@@ -43,6 +43,7 @@ QMLExport::~QMLExport()
 
 KisImportExportFilter::ConversionStatus QMLExport::convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration)
 {
+    Q_UNUSED(from);
     Q_UNUSED(to);
 
     if (from != "application/x-krita")

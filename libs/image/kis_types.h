@@ -257,6 +257,9 @@ typedef KisSharedPtr<KisFilterConfiguration> KisFilterConfigurationSP;
 class KisPropertiesConfiguration;
 typedef KisSharedPtr<KisPropertiesConfiguration> KisPropertiesConfigurationSP;
 
+class KisLockedProperties;
+typedef KisSharedPtr<KisLockedProperties> KisLockedPropertiesSP;
+
 class KisProjectionUpdatesFilter;
 typedef QSharedPointer<KisProjectionUpdatesFilter> KisProjectionUpdatesFilterSP;
 

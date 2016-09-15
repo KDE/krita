@@ -34,23 +34,22 @@
  * suffix are destroyed.
  */
 class KisLockedPropertiesServer;
-class KisLockedProperties;
 
 class KisLockedPropertiesProxy: public KisPropertiesConfiguration
 {
 public:
-    KisLockedPropertiesProxy() ;
-    KisLockedPropertiesProxy(KisLockedProperties *p);
-    KisLockedPropertiesProxy(KisPropertiesConfigurationSP , KisLockedProperties *);
+    KisLockedPropertiesProxy(KisPropertiesConfiguration *, KisLockedPropertiesSP);
+    ~KisLockedPropertiesProxy();
 
     using KisPropertiesConfiguration::getProperty;
     QVariant getProperty(const QString &name) const;
     using KisPropertiesConfiguration::setProperty;
     void setProperty(const QString & name, const QVariant & value);
+
 private:
     Q_DISABLE_COPY(KisLockedPropertiesProxy)
-    KisLockedProperties *m_lockedProperties;
-    KisPropertiesConfigurationSP m_parent;
+    mutable KisLockedPropertiesSP m_lockedProperties;
+    KisPropertiesConfiguration* m_parent;
 };
 
 typedef KisSharedPtr<KisLockedPropertiesProxy> KisLockedPropertiesProxySP;

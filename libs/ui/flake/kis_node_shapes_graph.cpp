@@ -83,7 +83,11 @@ KisNodeDummy* KisNodeShapesGraph::nodeToDummy(KisNodeSP node)
 
 KisNodeShape* KisNodeShapesGraph::nodeToShape(KisNodeSP node)
 {
-    return nodeToDummy(node)->nodeShape();
+    KisNodeDummy *dummy = nodeToDummy(node);
+    if (dummy) {
+        return dummy->nodeShape();
+    }
+    return 0;
 }
 
 bool KisNodeShapesGraph::containsNode(KisNodeSP node) const

@@ -51,7 +51,7 @@ void KisRoundHudButton::setOnOffIcons(const QIcon &on, const QIcon &off)
     m_d->offIcon = off;
 }
 
-void KisRoundHudButton::paintEvent(QPaintEvent *event)
+void KisRoundHudButton::paintEvent(QPaintEvent */*event*/)
 {
     const int borderWidth = 3;
     const QPointF center = QRectF(rect()).center();

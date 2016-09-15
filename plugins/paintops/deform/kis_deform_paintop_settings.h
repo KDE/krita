@@ -34,7 +34,7 @@ public:
     void setPaintOpSize(qreal value) Q_DECL_OVERRIDE;
     qreal paintOpSize() const Q_DECL_OVERRIDE;
 
-    QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode) const;
+    QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode) Q_DECL_OVERRIDE;
 
     bool paintIncremental();
     bool isAirbrushing() const;

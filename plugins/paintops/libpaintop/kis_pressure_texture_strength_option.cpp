@@ -31,7 +31,7 @@ double KisPressureTextureStrengthOption::apply(const KisPaintInformation & info)
     return computeSizeLikeValue(info);
 }
 
-void KisPressureTextureStrengthOption::readOptionSetting(const KisPropertiesConfiguration* setting)
+void KisPressureTextureStrengthOption::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
     KisCurveOption::readOptionSetting(setting);
 
@@ -49,7 +49,7 @@ void KisPressureTextureStrengthOption::readOptionSetting(const KisPropertiesConf
     }
 }
 
-void KisPressureTextureStrengthOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
+void KisPressureTextureStrengthOption::writeOptionSetting(KisPropertiesConfigurationSP setting) const
 {
     KisCurveOption::writeOptionSetting(setting);
 

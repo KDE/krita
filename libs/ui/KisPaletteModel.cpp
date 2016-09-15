@@ -63,11 +63,13 @@ QVariant KisPaletteModel::data(const QModelIndex& index, int role) const
         int i = index.row()*columnCount()+index.column();
         if (i < m_colorSet->nColors()) {
             switch (role) {
-                case Qt::BackgroundRole: {
-                    QColor color = m_displayRenderer->toQColor(m_colorSet->getColor(i).color);
-                    return QBrush(color);
-                }
-                break;
+            case Qt::DisplayRole: {
+                return m_colorSet->getColor(i).name;
+            }
+            case Qt::BackgroundRole: {
+                QColor color = m_displayRenderer->toQColor(m_colorSet->getColor(i).color);
+                return QBrush(color);
+            }
             }
         }
     }
@@ -81,7 +83,7 @@ int KisPaletteModel::rowCount(const QModelIndex& /*parent*/) const
     }
     if (m_colorSet->columnCount() > 0) {
         return m_colorSet->nColors()/m_colorSet->columnCount() + 1;
-    } 
+    }
     return m_colorSet->nColors()/15 + 1;
 }
 
@@ -108,10 +110,24 @@ QModelIndex KisPaletteModel::index(int row, int column, const QModelIndex& paren
     return QModelIndex();
 }
 
-
 void KisPaletteModel::setColorSet(KoColorSet* colorSet)
 {
     m_colorSet = colorSet;
     reset();
 }
 
+KoColorSet* KisPaletteModel::colorSet() const
+{
+    return m_colorSet;
+}
+
+QModelIndex KisPaletteModel::indexFromId(int i) const
+{
+    const int width = columnCount();
+    return width > 0 ? index(i / width, i & width) : QModelIndex();
+}
+
+int KisPaletteModel::idFromIndex(const QModelIndex &index) const
+{
+    return index.isValid() ? index.row() * columnCount() + index.column() : -1;
+}

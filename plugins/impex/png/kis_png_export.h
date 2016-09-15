@@ -23,15 +23,22 @@
 #include "ui_kis_wdg_options_png.h"
 
 #include <KisImportExportFilter.h>
+#include <kis_config_widget.h>
 
-class KisWdgOptionsPNG : public QWidget, public Ui::KisWdgOptionsPNG
+class KisWdgOptionsPNG : public KisConfigWidget, public Ui::KisWdgOptionsPNG
 {
     Q_OBJECT
 
 public:
-    KisWdgOptionsPNG(QWidget *parent) : QWidget(parent) {
+    KisWdgOptionsPNG(QWidget *parent)
+        : KisConfigWidget(parent)
+    {
         setupUi(this);
     }
+
+    void setConfiguration(const KisPropertiesConfigurationSP  config);
+    KisPropertiesConfigurationSP configuration() const;
+
 private Q_SLOTS:
     void on_alpha_toggled(bool checked);
 };
@@ -39,11 +46,17 @@ private Q_SLOTS:
 class KisPNGExport : public KisImportExportFilter
 {
     Q_OBJECT
+
 public:
+
     KisPNGExport(QObject *parent, const QVariantList &);
     virtual ~KisPNGExport();
 public:
-    virtual KisImportExportFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+    virtual KisImportExportFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration = 0);
+
+    KisPropertiesConfigurationSP defaultConfiguration(const QByteArray& from = "", const QByteArray& to = "") const;
+    KisPropertiesConfigurationSP lastSavedConfiguration(const QByteArray &from = "", const QByteArray &to = "") const;
+    KisConfigWidget *createConfigurationWidget(QWidget *parent, const QByteArray& from = "", const QByteArray& to = "") const;
 };
 
 #endif

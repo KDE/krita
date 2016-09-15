@@ -263,6 +263,116 @@ inline Point abs(const Point &pt) {
     return Point(qAbs(pt.x()), qAbs(pt.y()));
 }
 
+
+class RightHalfPlane {
+public:
+
+    RightHalfPlane(const QPointF &a, const QPointF &b)
+        : m_a(a), m_p(b - a), m_norm_p_inv(1.0 / norm(m_p))
+    {
+    }
+
+    RightHalfPlane(const QLineF &line)
+        : RightHalfPlane(line.p1(), line.p2())
+    {
+    }
+
+    qreal valueSq(const QPointF &pt) const {
+        const qreal val = value(pt);
+        return signZZ(val) * pow2(val);
+    }
+
+    qreal value(const QPointF &pt) const {
+        return crossProduct(m_p, pt - m_a) * m_norm_p_inv;
+    }
+
+    int pos(const QPointF &pt) const {
+        return signZZ(value(pt));
+    }
+
+    QLineF getLine() const {
+        return QLineF(m_a, m_a + m_p);
+    }
+
+private:
+    const QPointF m_a;
+    const QPointF m_p;
+    const qreal m_norm_p_inv;
+};
+
+class OuterCircle {
+public:
+
+    OuterCircle(const QPointF &c, qreal radius)
+        : m_c(c),
+          m_radius(radius),
+          m_radius_sq(pow2(radius)),
+          m_fadeCoeff(1.0 / (pow2(radius + 1.0) - m_radius_sq))
+    {
+    }
+
+    qreal valueSq(const QPointF &pt) const {
+        const qreal val = value(pt);
+
+        return signZZ(val) * pow2(val);
+    }
+
+    qreal value(const QPointF &pt) const {
+        return kisDistance(pt, m_c) - m_radius;
+    }
+
+    int pos(const QPointF &pt) const {
+        return signZZ(valueSq(pt));
+    }
+
+    qreal fadeSq(const QPointF &pt) const {
+        const qreal valSq = kisSquareDistance(pt, m_c);
+        return (valSq - m_radius_sq) * m_fadeCoeff;
+    }
+
+private:
+    const QPointF m_c;
+    const qreal m_radius;
+    const qreal m_radius_sq;
+    const qreal m_fadeCoeff;
+};
+
+
+/**
+ * Cuts off a portion of a rect \p rc defined by a half-plane \p p
+ * \return the bounding rect of the resulting polygon
+ */
+KRITAIMAGE_EXPORT
+QRectF cutOffRect(const QRectF &rc, const KisAlgebra2D::RightHalfPlane &p);
+
+
+/**
+ * Solves a quadratic equation in a form:
+ *
+ * a * x^2 + b * x + c = 0
+ *
+ * WARNING: Please note that \p a *must* be nonzero!  Otherwise the
+ * equation is not quadratic! And this function doesn't check that!
+ *
+ * \return the number of solutions. It can be 0, 1 or 2.
+ *
+ * \p x1, \p x2 --- the found solution. The variables are filled with
+ *                  data iff the corresponding solution is found. That
+ *                  is: 0 solutions --- variabled are not touched, 1
+ *                  solution --- x1 is filled with the result, 2
+ *                  solutions --- x1 and x2 are filled.
+ */
+KRITAIMAGE_EXPORT
+int quadraticEquation(qreal a, qreal b, qreal c, qreal *x1, qreal *x2);
+
+/**
+ * Finds the points of intersections between two circles
+ * \return the found circles, the result can have 0, 1 or 2 points
+ */
+KRITAIMAGE_EXPORT
+QVector<QPointF> intersectTwoCircles(const QPointF &c1, qreal r1,
+                                     const QPointF &c2, qreal r2);
+
 }
 
 

@@ -216,15 +216,18 @@ void KisNodeManager::setView(QPointer<KisView>imageView)
                 &m_d->nodeCreationSignalMapper, SLOT(map()));           \
     }
 
-#define CONVERT_NODE_ACTION(id, layerType)                              \
+#define CONVERT_NODE_ACTION_2(id, layerType, exclude)                   \
     {                                                                   \
         action = actionManager->createAction(id);                       \
-        action->setExcludedNodeTypes(QStringList(layerType));           \
+        action->setExcludedNodeTypes(QStringList(exclude));             \
         actionManager->addAction(id, action);                           \
         m_d->nodeConversionSignalMapper.setMapping(action, layerType);  \
         connect(action, SIGNAL(triggered()),                            \
                 &m_d->nodeConversionSignalMapper, SLOT(map()));         \
     }
+
+#define CONVERT_NODE_ACTION(id, layerType)              \
+    CONVERT_NODE_ACTION_2(id, layerType, layerType)
 
 void KisNodeManager::setup(KActionCollection * actionCollection, KisActionManager* actionManager)
 {
@@ -282,6 +285,9 @@ void KisNodeManager::setup(KActionCollection * actionCollection, KisActionManage
     action = actionManager->createAction("select_unlocked_layers");
     connect(action, SIGNAL(triggered()), this, SLOT(selectUnlockedNodes()));
 
+    action = actionManager->createAction("new_from_visible");
+    connect(action, SIGNAL(triggered()), this, SLOT(createFromVisible()));
+    
     NEW_LAYER_ACTION("add_new_paint_layer", "KisPaintLayer");
 
     NEW_LAYER_ACTION("add_new_group_layer", "KisGroupLayer");
@@ -300,6 +306,8 @@ void KisNodeManager::setup(KActionCollection * actionCollection, KisActionManage
 
     NEW_LAYER_ACTION("add_new_filter_mask", "KisFilterMask");
 
+    NEW_LAYER_ACTION("add_new_colorize_mask", "KisColorizeMask");
+
     NEW_LAYER_ACTION("add_new_transform_mask", "KisTransformMask");
 
     NEW_LAYER_ACTION("add_new_selection_mask", "KisSelectionMask");
@@ -309,11 +317,11 @@ void KisNodeManager::setup(KActionCollection * actionCollection, KisActionManage
 
     CONVERT_NODE_ACTION("convert_to_paint_layer", "KisPaintLayer");
 
-    CONVERT_NODE_ACTION("convert_to_selection_mask", "KisSelectionMask");
+    CONVERT_NODE_ACTION_2("convert_to_selection_mask", "KisSelectionMask", QStringList() << "KisSelectionMask" << "KisColorizeMask");
 
-    CONVERT_NODE_ACTION("convert_to_filter_mask", "KisFilterMask");
+    CONVERT_NODE_ACTION_2("convert_to_filter_mask", "KisFilterMask", QStringList() << "KisFilterMask" << "KisColorizeMask");
 
-    CONVERT_NODE_ACTION("convert_to_transparency_mask", "KisTransparencyMask");
+    CONVERT_NODE_ACTION_2("convert_to_transparency_mask", "KisTransparencyMask", QStringList() << "KisTransparencyMask" << "KisColorizeMask");
 
     CONVERT_NODE_ACTION("convert_to_animated", "animated");
 
@@ -424,8 +432,10 @@ void KisNodeManager::toggleIsolateMode(bool checked)
 
     if (checked) {
         KisNodeSP activeNode = this->activeNode();
-        // Transform masks don't have pixel data...
-        if (activeNode->inherits("KisTransformMask")) return;
+        // Transform and colorize masks don't have pixel data...
+        if (activeNode->inherits("KisTransformMask") ||
+            activeNode->inherits("KisColorizeMask")) return;
+
         KIS_ASSERT_RECOVER_RETURN(activeNode);
         if (!image->startIsolatedMode(activeNode)) {
             KisAction *action = m_d->view->actionManager()->actionByName("isolate_layer");
@@ -486,6 +496,8 @@ void KisNodeManager::createNode(const QString & nodeType, bool quiet, KisPaintDe
         m_d->maskManager.createTransparencyMask(activeNode, copyFrom, false);
     } else if (nodeType == "KisFilterMask") {
         m_d->maskManager.createFilterMask(activeNode, copyFrom, quiet, false);
+    } else if (nodeType == "KisColorizeMask") {
+        m_d->maskManager.createColorizeMask(activeNode);
     } else if (nodeType == "KisTransformMask") {
         m_d->maskManager.createTransformMask(activeNode);
     } else if (nodeType == "KisSelectionMask") {
@@ -494,6 +506,11 @@ void KisNodeManager::createNode(const QString & nodeType, bool quiet, KisPaintDe
         m_d->layerManager.addFileLayer(activeNode);
     }
 
+}
+
+void KisNodeManager::createFromVisible()
+{
+    KisLayerUtils::newLayerFromVisible(m_d->view->image(), m_d->view->image()->root()->lastChild());
 }
 
 KisLayerSP KisNodeManager::createPaintLayer()

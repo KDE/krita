@@ -85,6 +85,10 @@ bool KisSaveGroupVisitor::visit(KisSelectionMask* ) {
     return true;
 }
 
+bool KisSaveGroupVisitor::visit(KisColorizeMask* ) {
+    return true;
+}
+
 bool KisSaveGroupVisitor::visit(KisGroupLayer *layer)
 {
     if (layer == m_image->rootLayer()) {

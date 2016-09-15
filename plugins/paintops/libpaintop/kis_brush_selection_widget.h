@@ -20,8 +20,12 @@
 #define KIS_BRUSH_SELECTION_WIDGET_H
 
 #include <QWidget>
+
 #include <KoGroupButton.h>
-#include "kis_brush.h"
+
+#include <kis_properties_configuration.h>
+#include <kis_brush.h>
+
 #include "kis_precision_option.h"
 #include "ui_wdgbrushchooser.h"
 
@@ -61,8 +65,8 @@ public:
         return m_presetIsValid;
     }
 
-    void writeOptionSetting(KisPropertiesConfiguration* settings) const;
-    void readOptionSetting(const KisPropertiesConfiguration* setting);
+    void writeOptionSetting(KisPropertiesConfigurationSP settings) const;
+    void readOptionSetting(const KisPropertiesConfigurationSP setting);
 
     void setPrecisionEnabled(bool value);
     bool autoPrecisionEnabled();

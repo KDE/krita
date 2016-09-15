@@ -31,7 +31,8 @@ KisPaintOpConfigWidget::KisPaintOpConfigWidget(QWidget * parent, Qt::WFlags f)
 KisPaintOpConfigWidget::~KisPaintOpConfigWidget() {
 }
 
-void KisPaintOpConfigWidget::writeConfigurationSafe(KisPropertiesConfiguration *config) const
+
+void KisPaintOpConfigWidget::writeConfigurationSafe(KisPropertiesConfigurationSP config) const
 {
     if (m_isInsideUpdateCall) return;
 
@@ -40,7 +41,7 @@ void KisPaintOpConfigWidget::writeConfigurationSafe(KisPropertiesConfiguration *
     m_isInsideUpdateCall--;
 }
 
-void KisPaintOpConfigWidget::setConfigurationSafe(const KisPropertiesConfiguration *config)
+void KisPaintOpConfigWidget::setConfigurationSafe(const KisPropertiesConfigurationSP config)
 {
     if (m_isInsideUpdateCall) return;
 
@@ -49,11 +50,12 @@ void KisPaintOpConfigWidget::setConfigurationSafe(const KisPropertiesConfigurati
     m_isInsideUpdateCall--;
 }
 
-void KisPaintOpConfigWidget::writeConfiguration(KisPropertiesConfiguration *config) const {
+void KisPaintOpConfigWidget::writeConfiguration(KisPropertiesConfigurationSP config) const
+{
     KisPaintOpSettings::setLodUserAllowed(config, m_userAllowedLod);
 }
 
-void KisPaintOpConfigWidget::setConfiguration(const KisPropertiesConfiguration * config) {
+void KisPaintOpConfigWidget::setConfiguration(const KisPropertiesConfigurationSP  config) {
     m_userAllowedLod = KisPaintOpSettings::isLodUserAllowed(config);
     emit sigUserChangedLodAvailability(m_userAllowedLod);
 }

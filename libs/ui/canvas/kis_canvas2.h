@@ -161,8 +161,8 @@ public: // KisCanvas2 methods
     void addDecoration(KisCanvasDecorationSP deco);
     KisCanvasDecorationSP decoration(const QString& id) const;
 
-    void setDisplayFilter(KisDisplayFilter *displayFilter);
-    KisDisplayFilter *displayFilter() const;
+    void setDisplayFilter(QSharedPointer<KisDisplayFilter> displayFilter);
+    QSharedPointer<KisDisplayFilter> displayFilter() const;
 
     KisDisplayColorConverter *displayColorConverter() const;
     KisExposureGammaCorrectionInterface* exposureGammaCorrectionInterface() const;

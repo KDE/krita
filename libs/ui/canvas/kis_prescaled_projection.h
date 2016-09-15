@@ -114,7 +114,7 @@ public Q_SLOTS:
 
     void setChannelFlags(const QBitArray &channelFlags);
 
-    void setDisplayFilter(KisDisplayFilter *displayFilter);
+    void setDisplayFilter(QSharedPointer<KisDisplayFilter> displayFilter);
 
     /**
      * Called whenever the zoom level changes or another chunk of the

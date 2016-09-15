@@ -30,8 +30,8 @@ public:
     KisHatchingPreferences();
     ~KisHatchingPreferences();
 
-    void writeOptionSetting(KisPropertiesConfiguration* setting) const;
-    void readOptionSetting(const KisPropertiesConfiguration* setting);
+    void writeOptionSetting(KisPropertiesConfigurationSP setting) const;
+    void readOptionSetting(const KisPropertiesConfigurationSP setting);
 
 private:
     KisHatchingPreferencesWidget * m_options;

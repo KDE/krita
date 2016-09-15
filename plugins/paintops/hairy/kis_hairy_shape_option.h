@@ -41,8 +41,8 @@ public:
     bool isbrushDimension1D() const;
     bool useMousePressure() const;
 
-    void writeOptionSetting(KisPropertiesConfiguration* config) const;
-    void readOptionSetting(const KisPropertiesConfiguration* config);
+    void writeOptionSetting(KisPropertiesConfigurationSP config) const;
+    void readOptionSetting(const KisPropertiesConfigurationSP config);
 private:
     KisShapeOptionsWidget * m_options;
 };

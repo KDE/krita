@@ -35,19 +35,18 @@ public:
     KritaFilterGradientMap();
 public:
 
-
     static inline KoID id() {
         return KoID("gradientmap", i18n("Gradient Map"));
     }
 
     virtual void processImpl(KisPaintDeviceSP device,
                      const QRect& applyRect,
-                     const KisFilterConfiguration* config,
+                     const KisFilterConfigurationSP config,
                      KoUpdater *progressUpdater) const;
 
-    virtual KisFilterConfiguration *factoryConfiguration(const KisPaintDeviceSP) const;
+    virtual KisFilterConfigurationSP factoryConfiguration(const KisPaintDeviceSP) const;
 
-	virtual KisConfigWidget* createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
+    virtual KisConfigWidget* createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
 };
 
 #endif

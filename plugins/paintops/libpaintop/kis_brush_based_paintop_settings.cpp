@@ -91,8 +91,7 @@ int KisBrushBasedPaintOpSettings::rate() const
 KisPaintOpSettingsSP KisBrushBasedPaintOpSettings::clone() const
 {
     KisPaintOpSettingsSP _settings = KisOutlineGenerationPolicy<KisPaintOpSettings>::clone();
-    KisBrushBasedPaintOpSettings *settings =
-        dynamic_cast<KisBrushBasedPaintOpSettings*>(_settings.data());
+    KisBrushBasedPaintOpSettingsSP settings = dynamic_cast<KisBrushBasedPaintOpSettings*>(_settings.data());
     settings->m_savedBrush = this->brush();
     return settings;
 }
@@ -108,12 +107,13 @@ KisBrushSP KisBrushBasedPaintOpSettings::brush() const
 QPainterPath KisBrushBasedPaintOpSettings::brushOutlineImpl(const KisPaintInformation &info,
                                                             OutlineMode mode,
                                                             qreal additionalScale,
-                                                            bool forceOutline) const
+                                                            bool forceOutline)
 {
     QPainterPath path;
 
     if (forceOutline || mode == CursorIsOutline || mode == CursorIsCircleOutline || mode == CursorTiltOutline) {
         KisBrushSP brush = this->brush();
+        if (!brush) return path;
         qreal finalScale = brush->scale() * additionalScale;
 
         QPainterPath realOutline = brush->outline();
@@ -140,7 +140,7 @@ QPainterPath KisBrushBasedPaintOpSettings::brushOutlineImpl(const KisPaintInform
     return path;
 }
 
-QPainterPath KisBrushBasedPaintOpSettings::brushOutline(const KisPaintInformation &info, OutlineMode mode) const
+QPainterPath KisBrushBasedPaintOpSettings::brushOutline(const KisPaintInformation &info, OutlineMode mode)
 {
     return brushOutlineImpl(info, mode, 1.0);
 }
@@ -169,7 +169,7 @@ void KisBrushBasedPaintOpSettings::setAngle(qreal value)
     w.brush()->setAngle(value);
 }
 
-qreal KisBrushBasedPaintOpSettings::angle() const
+qreal KisBrushBasedPaintOpSettings::angle()
 {
     BrushReader w(this);
     if (!w.brush()) return 0.0;
@@ -183,7 +183,7 @@ void KisBrushBasedPaintOpSettings::setSpacing(qreal value)
     w.brush()->setSpacing(value);
 }
 
-qreal KisBrushBasedPaintOpSettings::spacing() const
+qreal KisBrushBasedPaintOpSettings::spacing()
 {
     BrushReader w(this);
     if (!w.brush()) return 0.0;
@@ -198,14 +198,14 @@ void KisBrushBasedPaintOpSettings::setAutoSpacing(bool active, qreal coeff)
 }
 
 
-bool KisBrushBasedPaintOpSettings::autoSpacingActive() const
+bool KisBrushBasedPaintOpSettings::autoSpacingActive()
 {
     BrushReader w(this);
     if (!w.brush()) return 0.0;
     return w.brush()->autoSpacingActive();
 }
 
-qreal KisBrushBasedPaintOpSettings::autoSpacingCoeff() const
+qreal KisBrushBasedPaintOpSettings::autoSpacingCoeff()
 {
     BrushReader w(this);
     if (!w.brush()) return 0.0;
@@ -233,8 +233,6 @@ qreal KisBrushBasedPaintOpSettings::paintOpSize() const
 #include <brushengine/kis_slider_based_paintop_property.h>
 #include "kis_paintop_preset.h"
 #include "kis_paintop_settings_update_proxy.h"
-
-typedef KisCallbackBasedPaintopProperty<KisUniformPaintOpProperty> KisUniformPaintOpPropertyCallback;
 
 QList<KisUniformPaintOpPropertySP> KisBrushBasedPaintOpSettings::uniformProperties()
 {

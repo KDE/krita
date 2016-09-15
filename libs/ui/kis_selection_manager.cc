@@ -81,12 +81,16 @@
 #include "kis_selection_filters.h"
 #include "kis_figure_painting_tool_helper.h"
 #include "KisView.h"
+#include "dialogs/kis_dlg_stroke_selection_properties.h"
 
 #include "actions/kis_selection_action_factories.h"
 #include "kis_action.h"
 #include "kis_action_manager.h"
 #include "operations/kis_operation_configuration.h"
-
+//new
+#include "kis_recorded_path_paint_action.h"
+#include "kis_node_query_path.h"
+#include "kis_tool_shape.h"
 
 KisSelectionManager::KisSelectionManager(KisViewManager * view)
         : m_view(view),
@@ -201,6 +205,9 @@ void KisSelectionManager::setup(KisActionManager* actionManager)
 
     m_toggleSelectionOverlayMode  = actionManager->createAction("toggle-selection-overlay-mode");
     connect(m_toggleSelectionOverlayMode, SIGNAL(triggered()), SLOT(slotToggleSelectionDecoration()));
+
+    m_strokeSelected = actionManager->createAction("stroke_selection");
+    connect(m_strokeSelected, SIGNAL(triggered()), SLOT(slotStrokeSelection()));
 
     QClipboard *cb = QApplication::clipboard();
     connect(cb, SIGNAL(dataChanged()), SLOT(clipboardDataChanged()));
@@ -580,4 +587,34 @@ bool KisSelectionManager::showSelectionAsMask() const
     }
     return false;
 }
+void KisSelectionManager::slotStrokeSelection()
+{
+    KisImageWSP image = m_view->image();
 
+    if (!image )     {
+
+        return;
+    }
+    KisNodeSP currentNode = m_view->resourceProvider()->resourceManager()->resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeWSP>();
+    bool isVectorLayer = false;
+    if (currentNode->inherits("KisShapeLayer")) {
+        isVectorLayer = true;
+    }
+
+    QPointer<KisDlgStrokeSelection> dlg = new KisDlgStrokeSelection(image, m_view, isVectorLayer);
+
+    if (dlg->exec() == QDialog::Accepted) {
+        StrokeSelectionOptions params = dlg->getParams();
+        if (params.brushSelected){
+            KisStrokeBrushSelectionActionFactory factory;
+            factory.run(m_view, params);
+        }
+        else {
+            KisStrokeSelectionActionFactory factory;
+            factory.run(m_view, params);
+        }
+    }
+    delete dlg;
+
+
+}

@@ -200,12 +200,6 @@ target_link_libraries(KisAnnotationTest   kritaimage Qt5::Test)
 
 ########### next target ###############
 
-set(kis_bookmarked_configuration_manager_test_SRCS kis_bookmarked_configuration_manager_test.cpp )
-kde4_add_unit_test(KisBookmarkedConfigurationManagerTest TESTNAME krita-image-KisBookmarkedConfigurationManagerTest ${kis_bookmarked_configuration_manager_test_SRCS})
-target_link_libraries(KisBookmarkedConfigurationManagerTest   kritaimage Qt5::Test)
-
-########### next target ###############
-
 set(kis_change_profile_visitor_test_SRCS kis_change_profile_visitor_test.cpp )
 kde4_add_unit_test(KisChangeProfileVisitorTest TESTNAME krita-image-KisChangeProfileVisitorTest ${kis_change_profile_visitor_test_SRCS})
 target_link_libraries(KisChangeProfileVisitorTest   kritaimage Qt5::Test)
@@ -688,3 +682,26 @@ set(kis_asl_parser_test_SRCS kis_asl_parser_test.cpp )
 kde4_add_unit_test(KisAslParserTest TESTNAME kritalibpsd-asl_parser_test ${kis_asl_parser_test_SRCS})
 target_link_libraries(KisAslParserTest kritapsd kritapigment kritawidgetutils  ${QT_QTXML_LIBRARY} Qt5::Test)
 
+########### next target ###############
+
+set(kis_algebra_2d_test_SRCS kis_algebra_2d_test.cpp )
+kde4_add_unit_test(KisAlgebra2DTest TESTNAME kritaimage-algebra_2d_test ${kis_algebra_2d_test_SRCS})
+target_link_libraries(KisAlgebra2DTest kritaimage ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
+set(kis_marker_painter_test_SRCS kis_marker_painter_test.cpp )
+kde4_add_unit_test(KisMarkerPainterTest TESTNAME kritaimage-marker_painter_test ${kis_marker_painter_test_SRCS})
+target_link_libraries(KisMarkerPainterTest kritaimage ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
+set(kis_lazy_brush_test_SRCS kis_lazy_brush_test.cpp )
+kde4_add_unit_test(KisLazyBrushTest TESTNAME kritaimage-lazy_brush_test ${kis_lazy_brush_test_SRCS})
+target_link_libraries(KisLazyBrushTest kritaimage ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
+set(kis_colorize_mask_test_SRCS kis_colorize_mask_test.cpp )
+kde4_add_unit_test(KisColorizeMaskTest TESTNAME kritaimage-colorize_mask_test ${kis_colorize_mask_test_SRCS})
+target_link_libraries(KisColorizeMaskTest kritaimage ${QT_QTTEST_LIBRARY})

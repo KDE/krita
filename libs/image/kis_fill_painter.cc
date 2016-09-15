@@ -92,7 +92,7 @@ void KisFillPainter::initFillPainter()
 void KisFillPainter::fillSelection(const QRect &rc, const KoColor &color)
 {
     KisPaintDeviceSP fillDevice = new KisPaintDevice(device()->colorSpace());
-    fillDevice->setDefaultPixel(color.data());
+    fillDevice->setDefaultPixel(color);
 
     bitBlt(rc.topLeft(), fillDevice, rc);
 }
@@ -168,7 +168,7 @@ void KisFillPainter::fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, const Ki
     addDirtyRect(QRect(x1, y1, w, h));
 }
 
-void KisFillPainter::fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, const KisFilterConfiguration* generator)
+void KisFillPainter::fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, const KisFilterConfigurationSP generator)
 {
     if (!generator) return;
     KisGeneratorSP g = KisGeneratorRegistry::instance()->value(generator->name());

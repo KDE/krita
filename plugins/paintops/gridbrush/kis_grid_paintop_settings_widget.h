@@ -33,7 +33,7 @@ public:
     KisGridPaintOpSettingsWidget(QWidget* parent = 0);
     virtual ~KisGridPaintOpSettingsWidget();
 
-    KisPropertiesConfiguration* configuration() const;
+    KisPropertiesConfigurationSP configuration() const;
 
 public:
     KisGridOpOption *m_gridOption;

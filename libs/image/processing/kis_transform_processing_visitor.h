@@ -50,6 +50,7 @@ public:
     void visit(KisTransformMask *mask, KisUndoAdapter *undoAdapter);
     void visit(KisTransparencyMask *mask, KisUndoAdapter *undoAdapter);
     void visit(KisSelectionMask *mask, KisUndoAdapter *undoAdapter);
+    void visit(KisColorizeMask *mask, KisUndoAdapter *undoAdapter);
 
 private:
     void transformClones(KisLayer *layer, KisUndoAdapter *undoAdapter);

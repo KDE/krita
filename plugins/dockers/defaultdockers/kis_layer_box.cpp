@@ -350,6 +350,7 @@ void KisLayerBox::setCanvas(KoCanvasBase *canvas)
         m_newLayerMenu->addSeparator();
         addActionToMenu(m_newLayerMenu, "add_new_transparency_mask");
         addActionToMenu(m_newLayerMenu, "add_new_filter_mask");
+        addActionToMenu(m_newLayerMenu, "add_new_colorize_mask");
         addActionToMenu(m_newLayerMenu, "add_new_transform_mask");
         addActionToMenu(m_newLayerMenu, "add_new_selection_mask");
     }
@@ -401,16 +402,14 @@ void KisLayerBox::updateUI()
             slotFillCompositeOps(m_image->colorSpace());
         }
 
-        if (activeNode->inherits("KisMask")) {
-            m_wdgLayerBox->cmbComposite->setEnabled(false);
-            m_wdgLayerBox->doubleOpacity->setEnabled(false);
-        } else if (activeNode->inherits("KisLayer")) {
+        if (activeNode->inherits("KisColorizeMask") ||
+            activeNode->inherits("KisLayer")) {
+
             m_wdgLayerBox->doubleOpacity->setEnabled(true);
 
-            KisLayerSP l = qobject_cast<KisLayer*>(activeNode.data());
-            slotSetOpacity(l->opacity() * 100.0 / 255);
+            slotSetOpacity(activeNode->opacity() * 100.0 / 255);
 
-            const KoCompositeOp* compositeOp = l->compositeOp();
+            const KoCompositeOp* compositeOp = activeNode->compositeOp();
             if (compositeOp) {
                 slotSetCompositeOp(compositeOp);
             } else {
@@ -421,6 +420,9 @@ void KisLayerBox::updateUI()
             bool compositeSelectionActive = !(group && group->passThroughMode());
 
             m_wdgLayerBox->cmbComposite->setEnabled(compositeSelectionActive);
+        } else if (activeNode->inherits("KisMask")) {
+            m_wdgLayerBox->cmbComposite->setEnabled(false);
+            m_wdgLayerBox->doubleOpacity->setEnabled(false);
         }
     }
 }
@@ -534,6 +536,7 @@ void KisLayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex 
                 QMenu *addLayerMenu = menu.addMenu(i18n("&Add"));
                 addActionToMenu(addLayerMenu, "add_new_transparency_mask");
                 addActionToMenu(addLayerMenu, "add_new_filter_mask");
+                addActionToMenu(addLayerMenu, "add_new_colorize_mask");
                 addActionToMenu(addLayerMenu, "add_new_transform_mask");
                 addActionToMenu(addLayerMenu, "add_new_selection_mask");
 
@@ -562,7 +565,6 @@ void KisLayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex 
                 menu.addAction(m_selectOpaque);
             }
         }
-
         menu.exec(pos);
     }
 }

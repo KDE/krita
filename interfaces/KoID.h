@@ -89,6 +89,13 @@ public:
     friend inline bool operator<(const KoID &, const KoID &);
     friend inline bool operator>(const KoID &, const KoID &);
 
+    static bool compareNames(const KoID &id1, const KoID &id2)
+    {
+        return id1.name() < id2.name();
+    }
+
+
+
 private:
 
     QString m_id;

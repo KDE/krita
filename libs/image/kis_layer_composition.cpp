@@ -28,6 +28,7 @@
 #include "kis_transform_mask.h"
 #include "kis_transparency_mask.h"
 #include "kis_selection_mask.h"
+#include "lazybrush/kis_colorize_mask.h"
 
 #include <QDomDocument>
 
@@ -60,6 +61,7 @@ public:
     virtual bool visit(KisTransformMask* mask) { return process(mask); }
     virtual bool visit(KisTransparencyMask* mask) { return process(mask); }
     virtual bool visit(KisSelectionMask* mask) { return process(mask); }
+    virtual bool visit(KisColorizeMask* mask) { return process(mask); }
 
     bool process(KisNode* node) {
         if(m_mode == STORE) {

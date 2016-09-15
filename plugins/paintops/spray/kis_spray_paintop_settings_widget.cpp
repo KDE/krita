@@ -57,7 +57,7 @@ KisSprayPaintOpSettingsWidget::~ KisSprayPaintOpSettingsWidget()
 {
 }
 
-KisPropertiesConfiguration*  KisSprayPaintOpSettingsWidget::configuration() const
+KisPropertiesConfigurationSP  KisSprayPaintOpSettingsWidget::configuration() const
 {
     KisSprayPaintOpSettings* config = new KisSprayPaintOpSettings();
     config->setOptionsWidget(const_cast<KisSprayPaintOpSettingsWidget*>(this));

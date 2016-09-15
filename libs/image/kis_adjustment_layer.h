@@ -61,7 +61,7 @@ public:
      * @param selection is a mask used by the adjustment layer to
      * know where to apply the filter.
      */
-    KisAdjustmentLayer(KisImageWSP image, const QString &name, KisFilterConfiguration * kfc, KisSelectionSP selection);
+    KisAdjustmentLayer(KisImageWSP image, const QString &name, KisFilterConfigurationSP  kfc, KisSelectionSP selection);
     KisAdjustmentLayer(const KisAdjustmentLayer& rhs);
     virtual ~KisAdjustmentLayer();
 
@@ -98,7 +98,7 @@ public:
     /**
      * \see KisNodeFilterInterface::setFilter()
      */
-    void setFilter(KisFilterConfiguration *filterConfig);
+    void setFilter(KisFilterConfigurationSP filterConfig);
 
     void setChannelFlags(const QBitArray & channelFlags);
 

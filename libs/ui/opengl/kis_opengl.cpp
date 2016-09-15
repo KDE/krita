@@ -30,9 +30,6 @@
 #include <QDesktopServices>
 #include <QMessageBox>
 #include <QWindow>
-#include <QOpenGLFunctions_3_2_Core>
-#include <QOpenGLFunctions_3_2_Compatibility>
-#include <QOpenGLFunctions_2_1>
 
 #include <klocalizedstring.h>
 
@@ -80,6 +77,9 @@ void KisOpenGL::initialize()
     glMajorVersion = context.format().majorVersion();
     glMinorVersion = context.format().minorVersion();
     supportsDeprecatedFunctions = (context.format().options() & QSurfaceFormat::DeprecatedFunctions);
+
+    qDebug() << "     Version:" << glMajorVersion << "." << glMinorVersion;
+    qDebug() << "     Supports deprecated functions" << supportsDeprecatedFunctions;
 
     initialized = true;
 }
@@ -148,10 +148,10 @@ void KisOpenGL::initializeContext(QOpenGLContext *ctx)
     }
 }
 
-bool KisOpenGL::supportsGLSL13()
+bool KisOpenGL::hasOpenGL3()
 {
     initialize();
-    return glMajorVersion >= 3 && supportsDeprecatedFunctions;
+    return (glMajorVersion * 100 + glMinorVersion) >= 302;
 }
 
 bool KisOpenGL::supportsFenceSync()
@@ -176,21 +176,17 @@ void KisOpenGL::setDefaultFormat()
 {
     QSurfaceFormat format;
 #ifdef Q_OS_MAC
-//    format.setProfile(QSurfaceFormat::CoreProfile);
-//    format.setOptions(QSurfaceFormat::DeprecatedFunctions);
-    format.setVersion(2, 1);
+    format.setVersion(3, 2);
+    format.setProfile(QSurfaceFormat::CoreProfile);
 #else
+    format.setVersion(3, 0);
     format.setProfile(QSurfaceFormat::CompatibilityProfile);
     format.setOptions(QSurfaceFormat::DeprecatedFunctions);
-    format.setVersion(3, 0);
 #endif
     format.setDepthBufferSize(24);
     format.setStencilBufferSize(8);
     format.setSwapBehavior(QSurfaceFormat::DoubleBuffer);
-    KisConfig cfg;
-    if (cfg.disableVSync()) {
-        format.setSwapInterval(0); // Disable vertical refresh syncing
-    }
+    format.setSwapInterval(0); // Disable vertical refresh syncing
     QSurfaceFormat::setDefaultFormat(format);
 }
 

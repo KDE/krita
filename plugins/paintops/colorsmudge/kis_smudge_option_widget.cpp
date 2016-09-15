@@ -64,7 +64,7 @@ void KisSmudgeOptionWidget::slotCurrentIndexChanged(int index)
     emitSettingChanged();
 }
 
-void KisSmudgeOptionWidget::readOptionSetting(const KisPropertiesConfiguration* setting)
+void KisSmudgeOptionWidget::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
     KisCurveOptionWidget::readOptionSetting(setting);
 

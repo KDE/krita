@@ -26,8 +26,10 @@
 #include <QPainterPath>
 #include <QPointF>
 
+#include <kis_paintop_settings.h>
+
 class KisPaintInformation;
-class KisPaintOpSettings;
+
 
 
 class PAINTOP_EXPORT KisCurrentOutlineFetcher
@@ -49,13 +51,14 @@ public:
     void setDirty();
 
     QPainterPath fetchOutline(const KisPaintInformation &info,
-                              const KisPaintOpSettings *settings,
+                              const KisPaintOpSettingsSP settings,
                               const QPainterPath &originalOutline,
                               qreal additionalScale = 1.0,
                               qreal additionalRotation = 0.0,
                               bool tilt = false, qreal tiltcenterx = 1.0, qreal tiltcentery = 1.0) const;
 
 private:
+    Q_DISABLE_COPY(KisCurrentOutlineFetcher);
     struct Private;
     const QScopedPointer<Private> d;
 };

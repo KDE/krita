@@ -224,7 +224,7 @@ void KisTangentTiltOption::apply(const KisPaintInformation& info,qreal *r,qreal 
 }
 
 /*settings*/
-void KisTangentTiltOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
+void KisTangentTiltOption::writeOptionSetting(KisPropertiesConfigurationSP setting) const
 {
     setting->setProperty(TANGENT_RED, redChannel());
     setting->setProperty(TANGENT_GREEN, greenChannel());
@@ -234,7 +234,7 @@ void KisTangentTiltOption::writeOptionSetting(KisPropertiesConfiguration* settin
     setting->setProperty(TANGENT_MIX_VAL, mixValue());
 }
 
-void KisTangentTiltOption::readOptionSetting(const KisPropertiesConfiguration* setting)
+void KisTangentTiltOption::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
     m_options->comboRed->setCurrentIndex(setting->getInt(TANGENT_RED, 0));
     m_options->comboGreen->setCurrentIndex(setting->getInt(TANGENT_GREEN, 2));

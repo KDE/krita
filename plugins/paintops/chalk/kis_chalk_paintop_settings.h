@@ -34,7 +34,7 @@ public:
     KisChalkPaintOpSettings();
     virtual ~KisChalkPaintOpSettings() {}
 
-    QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode) const;
+    QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode);
 
     void setPaintOpSize(qreal value) Q_DECL_OVERRIDE;
     qreal paintOpSize() const Q_DECL_OVERRIDE;

@@ -132,7 +132,7 @@ QRect KisTransformWorker::rotateRight90(KisPaintDeviceSP dev,
                                         int portion)
 {
     QRect r = rotateWithTf(90, dev, boundRect, progressUpdater, portion);
-    dev->move(dev->x() - 1, dev->y());
+    dev->moveTo(dev->x() - 1, dev->y());
     return QRect(- r.top() - r.height(), r.x(), r.height(), r.width());
 }
 
@@ -142,7 +142,7 @@ QRect KisTransformWorker::rotateLeft90(KisPaintDeviceSP dev,
                                        int portion)
 {
     QRect r = rotateWithTf(270, dev, boundRect, progressUpdater, portion);
-    dev->move(dev->x(), dev->y() - 1);
+    dev->moveTo(dev->x(), dev->y() - 1);
     return QRect(r.top(), - r.x() - r.width(), r.height(), r.width());
 }
 
@@ -152,7 +152,7 @@ QRect KisTransformWorker::rotate180(KisPaintDeviceSP dev,
                                     int portion)
 {
     QRect r = rotateWithTf(180, dev, boundRect, progressUpdater, portion);
-    dev->move(dev->x() - 1, dev->y() -1);
+    dev->moveTo(dev->x() - 1, dev->y() -1);
     return QRect(- r.x() - r.width(), - r.top() - r.height(), r.width(), r.height());
 }
 
@@ -279,11 +279,11 @@ bool KisTransformWorker::runPartial(const QRect &processRect)
         } else if (xShearPresent) {
             transformPass <KisHLineIteratorSP>(m_dev.data(), m_dev.data(), xscale, m_xshear, dx, m_filter, portion);
             m_boundRect.translate(0, dy);
-            m_dev->move(m_dev->x(), m_dev->y() + dy);
+            m_dev->moveTo(m_dev->x(), m_dev->y() + dy);
         } else if (yShearPresent) {
             transformPass <KisVLineIteratorSP>(m_dev.data(), m_dev.data(), yscale, m_yshear, dy, m_filter, portion);
             m_boundRect.translate(dx, 0);
-            m_dev->move(m_dev->x() + dx, m_dev->y());
+            m_dev->moveTo(m_dev->x() + dx, m_dev->y());
         }
 
         yscale = 1.;
@@ -332,7 +332,7 @@ bool KisTransformWorker::runPartial(const QRect &processRect)
 
     if (simpleTranslation) {
         m_boundRect.translate(xtranslate, ytranslate);
-        m_dev->move(m_dev->x() + xtranslate, m_dev->y() + ytranslate);
+        m_dev->moveTo(m_dev->x() + xtranslate, m_dev->y() + ytranslate);
     } else {
         QTransform SC = QTransform::fromScale(xscale, yscale);
         QTransform R; R.rotateRadians(rotation);
@@ -478,7 +478,8 @@ void mirror_impl(KisPaintDeviceSP dev, qreal axis, bool isHorizontal)
 
     KisRandomAccessorSP leftIt = dev->createRandomAccessorNG(mirrorRect.x(), mirrorRect.y());
     KisRandomAccessorSP rightIt = dev->createRandomAccessorNG(mirrorRect.x(), mirrorRect.y());
-    const quint8 *defaultPixel = dev->defaultPixel();
+    const KoColor defaultPixelObject = dev->defaultPixel();
+    const quint8 *defaultPixel = defaultPixelObject.data();
 
     const int pixelSize = dev->pixelSize();
     QByteArray buf(pixelSize, 0);

@@ -21,7 +21,6 @@
 
 #include "tiles3/kis_lockless_stack.h"
 
-
 class KisCachedPaintDevice
 {
 public:
@@ -43,6 +42,28 @@ public:
 
 private:
     KisLocklessStack<KisPaintDeviceSP> m_stack;
+};
+
+class KisCachedSelection
+{
+public:
+    KisSelectionSP getSelection() {
+        KisSelectionSP selection;
+
+        if(!m_stack.pop(selection)) {
+            selection = new KisSelection();
+        }
+
+        return selection;
+    }
+
+    void putSelection(KisSelectionSP selection) {
+        selection->clear();
+        m_stack.push(selection);
+    }
+
+private:
+    KisLocklessStack<KisSelectionSP> m_stack;
 };
 
 #endif /* __KIS_CACHED_PAINT_DEVICE_H */

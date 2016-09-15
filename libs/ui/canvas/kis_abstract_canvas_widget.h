@@ -60,7 +60,7 @@ public:
     virtual QList<KisCanvasDecorationSP> decorations() const = 0;
 
     /// set the specified display filter on the canvas
-    virtual void setDisplayFilter(KisDisplayFilter *displayFilter) = 0;
+    virtual void setDisplayFilter(QSharedPointer<KisDisplayFilter> displayFilter) = 0;
 
     virtual void setWrapAroundViewingMode(bool value) = 0;
 

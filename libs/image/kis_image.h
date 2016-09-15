@@ -53,7 +53,7 @@ class KisLayerComposition;
 class KisSpontaneousJob;
 class KisImageAnimationInterface;
 class KUndo2MagicString;
-class KisProofingConfiguration;
+struct KisProofingConfiguration;
 
 namespace KisMetaData
 {
@@ -122,12 +122,12 @@ public:
     QImage convertToQImage(const QSize& scaledImageSize, const KoColorProfile *profile);
 
     /**
-     * Calls KisUpdateScheduler::lock
+     * Calls KisUpdateScheduler::lock (XXX: APIDOX -- what does that mean?)
      */
     void lock();
 
     /**
-     * Calls KisUpdateScheduler::unlock
+     * Calls KisUpdateScheduler::unlock (XXX: APIDOX -- what does that mean?)
      */
     void unlock();
 
@@ -732,8 +732,22 @@ public Q_SLOTS:
 
     bool isIdle();
 
+    /**
+     * @brief barrierLock APIDOX
+     * @param readOnly
+     */
     void barrierLock(bool readOnly = false);
+
+    /**
+     * @brief barrierLock APIDOX
+     * @param readOnly
+     */
     bool tryBarrierLock(bool readOnly = false);
+
+    /**
+     * @brief barrierLock APIDOX
+     * @param readOnly
+     */
     void waitForDone();
 
     KisStrokeId startStroke(KisStrokeStrategy *strokeStrategy);
@@ -741,7 +755,15 @@ public Q_SLOTS:
     void endStroke(KisStrokeId id);
     bool cancelStroke(KisStrokeId id);
 
+    /**
+     * @brief blockUpdates block updating the image projection
+     */
     void blockUpdates();
+
+    /**
+     * @brief unblockUpdates unblock updating the image project. This
+     * only restarts the scheduler and does not schedule a full refresh.
+     */
     void unblockUpdates();
 
     /**

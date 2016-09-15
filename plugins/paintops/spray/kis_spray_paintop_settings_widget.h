@@ -31,7 +31,7 @@ public:
     KisSprayPaintOpSettingsWidget(QWidget* parent = 0);
     virtual ~KisSprayPaintOpSettingsWidget();
 
-    KisPropertiesConfiguration* configuration() const;
+    KisPropertiesConfigurationSP configuration() const;
 
 public:
     KisSprayOpOption* m_sprayArea;

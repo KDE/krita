@@ -20,7 +20,7 @@
 
 #include <QPainterPath>
 #include <kis_debug.h>
-
+#include "krita_utils.h"
 
 #define SANITY_CHECKS
 
@@ -209,6 +209,154 @@ bool intersectLineRect(QLineF &line, const QRect rect)
     line.setP2(pt2);
 
     return true;
+}
+
+QRectF cutOffRect(const QRectF &rc, const KisAlgebra2D::RightHalfPlane &p)
+{
+    QVector<QPointF> points;
+
+    const QLineF cutLine = p.getLine();
+
+    points << rc.topLeft();
+    points << rc.topRight();
+    points << rc.bottomRight();
+    points << rc.bottomLeft();
+
+    QPointF p1 = points[3];
+    bool p1Valid = p.pos(p1) >= 0;
+
+    QVector<QPointF> resultPoints;
+
+    for (int i = 0; i < 4; i++) {
+        const QPointF p2 = points[i];
+        const bool p2Valid = p.pos(p2) >= 0;
+
+        if (p1Valid != p2Valid) {
+            QPointF intersection;
+            cutLine.intersect(QLineF(p1, p2), &intersection);
+            resultPoints << intersection;
+        }
+
+        if (p2Valid) {
+            resultPoints << p2;
+        }
+
+        p1 = p2;
+        p1Valid = p2Valid;
+    }
+
+    return KritaUtils::approximateRectFromPoints(resultPoints);
+}
+
+int quadraticEquation(qreal a, qreal b, qreal c, qreal *x1, qreal *x2)
+{
+    int numSolutions = 0;
+
+    const qreal D = pow2(b) - 4 * a * c;
+
+    if (D < 0) {
+        return 0;
+    } else if (qFuzzyCompare(D, 0)) {
+        *x1 = -b / (2 * a);
+        numSolutions = 1;
+    } else {
+        const qreal sqrt_D = std::sqrt(D);
+
+        *x1 = (-b + sqrt_D) / (2 * a);
+        *x2 = (-b - sqrt_D) / (2 * a);
+        numSolutions = 2;
+    }
+
+    return numSolutions;
+}
+
+QVector<QPointF> intersectTwoCircles(const QPointF &center1, qreal r1,
+                                     const QPointF &center2, qreal r2)
+{
+    QVector<QPointF> points;
+
+    const QPointF diff = (center2 - center1);
+    const QPointF c1;
+    const QPointF c2 = diff;
+
+    const qreal centerDistance = norm(diff);
+
+    if (centerDistance > r1 + r2) return points;
+    if (centerDistance < qAbs(r1 - r2)) return points;
+
+    if (centerDistance < qAbs(r1 - r2) + 0.001) {
+        qDebug() << "Skipping intersection" << ppVar(center1) << ppVar(center2) << ppVar(r1) << ppVar(r2) << ppVar(centerDistance) << ppVar(qAbs(r1-r2));
+        return points;
+    }
+
+    const qreal x_kp1 = diff.x();
+    const qreal y_kp1 = diff.y();
+
+    const qreal F2 =
+        0.5 * (pow2(x_kp1) +
+               pow2(y_kp1) + pow2(r1) - pow2(r2));
+
+    if (qFuzzyCompare(diff.y(), 0)) {
+        qreal x = F2 / diff.x();
+        qreal y1, y2;
+        int result = KisAlgebra2D::quadraticEquation(
+            1, 0,
+            pow2(x) - pow2(r2),
+            &y1, &y2);
+
+        KIS_SAFE_ASSERT_RECOVER(result > 0) { return points; }
+
+        if (result == 1) {
+            points << QPointF(x, y1);
+        } else if (result == 2) {
+            KisAlgebra2D::RightHalfPlane p(c1, c2);
+
+            QPointF p1(x, y1);
+            QPointF p2(x, y2);
+
+            if (p.pos(p1) >= 0) {
+                points << p1;
+                points << p2;
+            } else {
+                points << p2;
+                points << p1;
+            }
+        }
+    } else {
+        const qreal A = diff.x() / diff.y();
+        const qreal C = F2 / diff.y();
+
+        qreal x1, x2;
+        int result = KisAlgebra2D::quadraticEquation(
+            1 + pow2(A), -2 * A * C,
+            pow2(C) - pow2(r1),
+            &x1, &x2);
+
+        KIS_SAFE_ASSERT_RECOVER(result > 0) { return points; }
+
+        if (result == 1) {
+            points << QPointF(x1, C - x1 * A);
+        } else if (result == 2) {
+            KisAlgebra2D::RightHalfPlane p(c1, c2);
+
+            QPointF p1(x1, C - x1 * A);
+            QPointF p2(x2, C - x2 * A);
+
+            if (p.pos(p1) >= 0) {
+                points << p1;
+                points << p2;
+            } else {
+                points << p2;
+                points << p1;
+            }
+        }
+    }
+
+    for (int i = 0; i < points.size(); i++) {
+        points[i] = center1 + points[i];
+    }
+
+    return points;
 }
 
 }

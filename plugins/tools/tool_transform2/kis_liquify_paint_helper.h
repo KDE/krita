@@ -43,7 +43,7 @@ public:
 
     void hoverPaint(KoPointerEvent *event);
 
-    QPainterPath brushOutline(const KisLiquifyProperties &props) const;
+    QPainterPath brushOutline(const KisLiquifyProperties &props);
 
 private:
     struct Private;

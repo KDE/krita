@@ -34,8 +34,8 @@ public:
     KisPressureTextureStrengthOption();
     double apply(const KisPaintInformation & info) const;
 
-    void readOptionSetting(const KisPropertiesConfiguration* setting);
-    void writeOptionSetting(KisPropertiesConfiguration* setting) const;
+    void readOptionSetting(const KisPropertiesConfigurationSP setting);
+    void writeOptionSetting(KisPropertiesConfigurationSP setting) const;
 };
 
 #endif /* __KIS_PRESSURE_TEXTURE_STRENGTH_OPTION_H */

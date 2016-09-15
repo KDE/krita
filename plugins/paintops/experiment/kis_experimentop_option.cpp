@@ -75,7 +75,7 @@ KisExperimentOpOption::~KisExperimentOpOption()
     delete m_options;
 }
 
-void KisExperimentOpOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
+void KisExperimentOpOption::writeOptionSetting(KisPropertiesConfigurationSP setting) const
 {
     ExperimentOption op;
 
@@ -91,7 +91,7 @@ void KisExperimentOpOption::writeOptionSetting(KisPropertiesConfiguration* setti
     op.writeOptionSetting(setting);
 }
 
-void KisExperimentOpOption::readOptionSetting(const KisPropertiesConfiguration* setting)
+void KisExperimentOpOption::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
     ExperimentOption op;
     op.readOptionSetting(setting);

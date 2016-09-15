@@ -46,7 +46,7 @@ KisGridPaintOpSettingsWidget::~ KisGridPaintOpSettingsWidget()
 {
 }
 
-KisPropertiesConfiguration*  KisGridPaintOpSettingsWidget::configuration() const
+KisPropertiesConfigurationSP  KisGridPaintOpSettingsWidget::configuration() const
 {
     KisGridPaintOpSettings* config = new KisGridPaintOpSettings();
     config->setOptionsWidget(const_cast<KisGridPaintOpSettingsWidget*>(this));

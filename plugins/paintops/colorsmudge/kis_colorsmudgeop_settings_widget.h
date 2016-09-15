@@ -31,7 +31,7 @@ public:
     KisColorSmudgeOpSettingsWidget(QWidget* parent = 0);
     ~KisColorSmudgeOpSettingsWidget();
 
-    KisPropertiesConfiguration* configuration() const;
+    KisPropertiesConfigurationSP configuration() const;
 
 protected:
     void notifyPageChanged();

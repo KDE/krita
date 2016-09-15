@@ -68,17 +68,18 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageWSP image, QWidget *parent,
 
     m_page->lblResolutionValue->setText(QLocale().toString(image->xRes()*72, 2)); // XXX: separate values for x & y?
 
-    //Set the canvas projection color:
-    m_defaultColorAction = new KoColorPopupAction(this);
-    m_defaultColorAction->setCurrentColor(m_image->defaultProjectionColor());
-    m_defaultColorAction->setToolTip(i18n("Change the background color of the image"));
-    m_page->bnBackgroundColor->setDefaultAction(m_defaultColorAction);
+    //Set the canvas projection color:    backgroundColor
+    KoColor background = m_image->defaultProjectionColor();
+    background.setOpacity(1.0);
+    m_page->bnBackgroundColor->setColor(background);
+    m_page->sldBackgroundColor->setRange(0.0,1.0,2);
+    m_page->sldBackgroundColor->setSingleStep(0.05);
+    m_page->sldBackgroundColor->setValue(m_image->defaultProjectionColor().opacityF());
 
     KisSignalCompressor *compressor = new KisSignalCompressor(500 /* ms */, KisSignalCompressor::POSTPONE, this);
-    connect(m_defaultColorAction, SIGNAL(colorChanged(const KoColor&)), compressor, SLOT(start()));
+    connect(m_page->bnBackgroundColor, SIGNAL(changed(KoColor)), compressor, SLOT(start()));
+    connect(m_page->sldBackgroundColor, SIGNAL(valueChanged(qreal)), compressor, SLOT(start()));
     connect(compressor, SIGNAL(timeout()), this, SLOT(setCurrentColor()));
-
-    connect(m_defaultColorAction, SIGNAL(colorChanged(const KoColor&)), this, SLOT(setCurrentColor()));
 
     //Set the color space
     m_page->colorSpaceSelector->setCurrentColorSpace(image->colorSpace());
@@ -91,17 +92,15 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageWSP image, QWidget *parent,
 
     m_page->ckbBlackPointComp->setChecked(m_proofingConfig->conversionFlags.testFlag(KoColorConversionTransformation::BlackpointCompensation));
 
-    m_gamutWarning = new KoColorPopupAction(this);
-    m_gamutWarning->setCurrentColor(m_proofingConfig->warningColor);
-    m_gamutWarning->setToolTip(i18n("Set color used for warning"));
-    m_page->gamutAlarm->setDefaultAction(m_gamutWarning);
+    m_page->gamutAlarm->setColor(m_proofingConfig->warningColor);
+    m_page->gamutAlarm->setToolTip(i18n("Set color used for warning"));
     m_page->sldAdaptationState->setMaximum(20);
     m_page->sldAdaptationState->setMinimum(0);
     m_page->sldAdaptationState->setValue((int)m_proofingConfig->adaptationState*20);
 
     KisSignalCompressor *softProofConfigCompressor = new KisSignalCompressor(500, KisSignalCompressor::POSTPONE,this);
 
-    connect(m_gamutWarning, SIGNAL(colorChanged(KoColor)), softProofConfigCompressor, SLOT(start()));
+    connect(m_page->gamutAlarm, SIGNAL(changed(KoColor)), softProofConfigCompressor, SLOT(start()));
     connect(m_page->proofSpaceSelector, SIGNAL(colorSpaceChanged(const KoColorSpace*)), softProofConfigCompressor, SLOT(start()));
     connect(m_page->cmbIntent, SIGNAL(currentIndexChanged(int)), softProofConfigCompressor, SLOT(start()));
     connect(m_page->ckbBlackPointComp, SIGNAL(stateChanged(int)), softProofConfigCompressor, SLOT(start()));
@@ -142,7 +141,9 @@ const KoColorSpace * KisDlgImageProperties::colorSpace()
 
 void KisDlgImageProperties::setCurrentColor()
 {
-    KisLayerUtils::changeImageDefaultProjectionColor(m_image, m_defaultColorAction->currentKoColor());
+    KoColor background = m_page->bnBackgroundColor->color();
+    background.setOpacity(m_page->sldBackgroundColor->value());
+    KisLayerUtils::changeImageDefaultProjectionColor(m_image, background);
 }
 
 void KisDlgImageProperties::setProofingConfig()
@@ -153,7 +154,7 @@ void KisDlgImageProperties::setProofingConfig()
     m_proofingConfig->proofingProfile = m_page->proofSpaceSelector->currentColorSpace()->profile()->name();
     m_proofingConfig->proofingModel = m_page->proofSpaceSelector->currentColorSpace()->colorModelId().id();
     m_proofingConfig->proofingDepth = "U8";//default to this
-    m_proofingConfig->warningColor = m_gamutWarning->currentKoColor();
+    m_proofingConfig->warningColor = m_page->gamutAlarm->color();
     m_proofingConfig->adaptationState = (double)m_page->sldAdaptationState->value()/20.0;
     qDebug()<<"set proofing config in properties: "<<m_proofingConfig->proofingProfile;
     m_image->setProofingConfiguration(m_proofingConfig);

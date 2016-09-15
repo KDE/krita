@@ -135,7 +135,7 @@ KoColor & KoColor::operator=(const KoColor & rhs)
 
 bool KoColor::operator==(const KoColor &other) const
 {
-    if (!(*colorSpace() == *other.colorSpace()))
+    if (*colorSpace() != *other.colorSpace())
         return false;
     return memcmp(d->data, other.d->data, d->colorSpace->pixelSize()) == 0;
 }
@@ -163,6 +163,15 @@ void KoColor::convertTo(const KoColorSpace * cs)
     convertTo(cs,
               KoColorConversionTransformation::internalRenderingIntent(),
               KoColorConversionTransformation::internalConversionFlags());
+}
+
+void KoColor::setProfile(const KoColorProfile *profile)
+{
+    const KoColorSpace *dstColorSpace =
+        KoColorSpaceRegistry::instance()->colorSpace(colorSpace()->colorModelId().id(), colorSpace()->colorDepthId().id(), profile);
+    if (!dstColorSpace) return;
+
+    d->colorSpace = KoColorSpaceRegistry::instance()->permanentColorspace(dstColorSpace);
 }
 
 void KoColor::setColor(const quint8 * data, const KoColorSpace * colorSpace)

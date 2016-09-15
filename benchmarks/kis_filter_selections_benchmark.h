@@ -47,7 +47,7 @@ private:
     KisSelectionSP m_selection;
     KisPaintDeviceSP m_device;
     KisFilterSP m_filter;
-    KisFilterConfiguration *m_configuration;
+    KisFilterConfigurationSP m_configuration;
 };
 
 #endif

@@ -32,7 +32,7 @@ class WdgBorderSelection : public KisOperationUIWidget, public Ui::WdgBorderSele
 public:
     WdgBorderSelection(QWidget *parent, KisViewManager* view);
 
-    virtual void getConfiguration(KisOperationConfiguration* config);
+    virtual void getConfiguration(KisOperationConfigurationSP config);
 
 private Q_SLOTS:
     void slotWidthChanged(int width);

@@ -21,6 +21,7 @@
 
 #include "processing/kis_simple_processing_visitor.h"
 #include <QRect>
+#include "kis_types.h"
 
 
 class KisOffsetProcessingVisitor : public KisSimpleProcessingVisitor
@@ -30,7 +31,10 @@ public:
 
     void visitNodeWithPaintDevice(KisNode *node, KisUndoAdapter *undoAdapter);
     void visitExternalLayer(KisExternalLayer *layer, KisUndoAdapter *undoAdapter);
+    void visitColorizeMask(KisColorizeMask *mask, KisUndoAdapter *undoAdapter);
 
+private:
+    void offsetPaintDevice(KisPaintDeviceSP device, KisUndoAdapter *undoAdapter);
 private:
     QPoint m_offset;
     QRect m_wrapRect;

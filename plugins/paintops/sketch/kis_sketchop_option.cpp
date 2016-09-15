@@ -74,7 +74,7 @@ KisSketchOpOption::~KisSketchOpOption()
     // delete m_options;
 }
 
-void KisSketchOpOption::writeOptionSetting(KisPropertiesConfiguration* settings) const
+void KisSketchOpOption::writeOptionSetting(KisPropertiesConfigurationSP settings) const
 {
     settings->setProperty(SKETCH_OFFSET, m_options->offsetSPBox->value());
     settings->setProperty(SKETCH_PROBABILITY, m_options->densitySPBox->value() * 0.01);
@@ -88,7 +88,7 @@ void KisSketchOpOption::writeOptionSetting(KisPropertiesConfiguration* settings)
     settings->setProperty(SKETCH_DISTANCE_OPACITY, m_options->distanceOpacityCHbox->isChecked());
 }
 
-void KisSketchOpOption::readOptionSetting(const KisPropertiesConfiguration* settings)
+void KisSketchOpOption::readOptionSetting(const KisPropertiesConfigurationSP settings)
 {
     m_options->offsetSPBox->setValue(settings->getDouble(SKETCH_OFFSET));
     m_options->simpleModeCHBox->setChecked(settings->getBool(SKETCH_USE_SIMPLE_MODE));

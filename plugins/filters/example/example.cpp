@@ -58,13 +58,13 @@ KisFilterInvert::KisFilterInvert() : KisColorTransformationFilter(id(), category
     setSupportsLevelOfDetail(true);
 }
 
-KoColorTransformation* KisFilterInvert::createTransformation(const KoColorSpace* cs, const KisFilterConfiguration* config) const
+KoColorTransformation* KisFilterInvert::createTransformation(const KoColorSpace* cs, const KisFilterConfigurationSP config) const
 {
     Q_UNUSED(config);
     return cs->createInvertTransformation();
 }
 
-bool KisFilterInvert::needsTransparentPixels(const KisFilterConfiguration *config, const KoColorSpace *cs) const
+bool KisFilterInvert::needsTransparentPixels(const KisFilterConfigurationSP config, const KoColorSpace *cs) const
 {
     Q_UNUSED(config);
     return cs->colorModelId() == AlphaColorModelID;

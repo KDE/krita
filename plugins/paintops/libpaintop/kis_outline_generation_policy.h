@@ -32,17 +32,26 @@ class KisOutlineGenerationPolicy : public ParentClass
 {
 public:
     KisOutlineGenerationPolicy(KisCurrentOutlineFetcher::Options options)
-        : m_outlineFetcher(options) {
+        : m_outlineFetcher(options)
+    {
     }
 
-    virtual ~KisOutlineGenerationPolicy() {
+    virtual ~KisOutlineGenerationPolicy()
+    {
     }
 
-    const KisCurrentOutlineFetcher* outlineFetcher() const {
+    KisOutlineGenerationPolicy(const KisOutlineGenerationPolicy &rhs)
+        : ParentClass(rhs)
+    {
+    }
+
+    const KisCurrentOutlineFetcher *outlineFetcher() const
+    {
         return &m_outlineFetcher;
     }
 
-    void onPropertyChanged() {
+    void onPropertyChanged()
+    {
         m_outlineFetcher.setDirty();
         ParentClass::onPropertyChanged();
     }

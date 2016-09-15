@@ -29,7 +29,7 @@ public:
     KisExperimentPaintOpSettingsWidget(QWidget* parent = 0);
     virtual ~KisExperimentPaintOpSettingsWidget();
 
-    KisPropertiesConfiguration* configuration() const;
+    KisPropertiesConfigurationSP configuration() const;
 };
 
 #endif

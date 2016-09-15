@@ -53,7 +53,7 @@ struct KisFilterStrokeStrategy::Private {
     }
 
     KisFilterSP filter;
-    KisSafeFilterConfigurationSP filterConfig;
+    KisFilterConfigurationSP filterConfig;
     KisNodeSP node;
     KisUpdatesFacade *updatesFacade;
 
@@ -68,7 +68,7 @@ struct KisFilterStrokeStrategy::Private {
 
 
 KisFilterStrokeStrategy::KisFilterStrokeStrategy(KisFilterSP filter,
-                                                 KisSafeFilterConfigurationSP filterConfig,
+                                                 KisFilterConfigurationSP filterConfig,
                                                  KisResourcesSnapshotSP resources)
     : KisPainterBasedStrokeStrategy("FILTER_STROKE",
                                     kundo2_i18n("Filter \"%1\"", filter->name()),
@@ -112,7 +112,7 @@ void KisFilterStrokeStrategy::initStrokeCallback()
 
     if (activeSelection() ||
         (dev->colorSpace() != dev->compositionSourceColorSpace() &&
-         !(dev->colorSpace() == dev->compositionSourceColorSpace()))) {
+         *dev->colorSpace() != *dev->compositionSourceColorSpace())) {
 
         m_d->filterDevice = dev->createCompositionSourceDevice(dev);
         m_d->secondaryTransaction = new KisTransaction(m_d->filterDevice);

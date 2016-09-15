@@ -30,7 +30,7 @@ public:
     KisTIFFImport(QObject *parent, const QVariantList &);
     virtual ~KisTIFFImport();
 public:
-    virtual KisImportExportFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+    virtual KisImportExportFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration = 0);
 };
 
 #endif

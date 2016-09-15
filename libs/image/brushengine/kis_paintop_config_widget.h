@@ -24,6 +24,7 @@
 #include "kis_config_widget.h"
 #include "kis_image.h"
 #include <kis_debug.h>
+#include <kis_properties_configuration.h>
 
 class KisPaintopLodLimitations;
 
@@ -38,17 +39,19 @@ public:
     KisPaintOpConfigWidget(QWidget * parent = 0, Qt::WFlags f = 0);
     virtual ~KisPaintOpConfigWidget();
 
-    void writeConfigurationSafe(KisPropertiesConfiguration *config) const;
-    void setConfigurationSafe(const KisPropertiesConfiguration *config);
+    void writeConfigurationSafe(KisPropertiesConfigurationSP config) const;
+    void setConfigurationSafe(const KisPropertiesConfigurationSP config);
 
 protected:
     /**
      * Write the settings in this widget to the given properties
      * configuration, which is cleared first.
      */
-    virtual void writeConfiguration(KisPropertiesConfiguration *config) const;
-    virtual void setConfiguration(const KisPropertiesConfiguration * config);
+    virtual void writeConfiguration(KisPropertiesConfigurationSP config) const;
+    virtual void setConfiguration(const KisPropertiesConfigurationSP  config);
+
 public:
+
 
     virtual KisPaintopLodLimitations lodLimitations() const = 0;
 

@@ -49,6 +49,12 @@ public:
     void paintRect(const QRectF &rect);
     void paintEllipse(const QRectF &rect);
     void paintPainterPath(const QPainterPath &path);
+    void setFGColorOverride(const KoColor &color);
+    void setBGColorOverride(const KoColor &color);
+    void setSelectionOverride(KisSelectionSP m_selection);
+    void setBrush(const KisPaintOpPresetSP &brush);
+    void paintPainterPathQPen(const QPainterPath, const QPen &pen, const KoColor &color);
+    void paintPainterPathQPenFill(const QPainterPath, const QPen &pen, const KoColor &color);
 
 private:
     KisStrokeId m_strokeId;

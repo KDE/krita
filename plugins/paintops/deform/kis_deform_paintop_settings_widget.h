@@ -31,7 +31,7 @@ public:
     KisDeformPaintOpSettingsWidget(QWidget* parent = 0);
     virtual ~KisDeformPaintOpSettingsWidget();
 
-    virtual KisPropertiesConfiguration* configuration() const;
+    virtual KisPropertiesConfigurationSP configuration() const Q_DECL_OVERRIDE;
 
 private:
     KisDeformOption * m_deformOption;

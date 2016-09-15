@@ -47,9 +47,9 @@ public:
 
     void initialize(KisViewManager *view);
 
-    void setConfiguration(const KisFilterConfiguration * config);
+    void setConfiguration(const KisFilterConfigurationSP  config);
 
-    KisFilterConfiguration * configuration();
+    KisFilterConfigurationSP  configuration();
 
 
 private Q_SLOTS:

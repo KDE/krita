@@ -233,12 +233,12 @@ void KisBrushSelectionWidget::precisionChanged(int value)
     emit sigPrecisionChanged();
 }
 
-void KisBrushSelectionWidget::writeOptionSetting(KisPropertiesConfiguration* settings) const
+void KisBrushSelectionWidget::writeOptionSetting(KisPropertiesConfigurationSP settings) const
 {
     m_precisionOption.writeOptionSetting(settings);
 }
 
-void KisBrushSelectionWidget::readOptionSetting(const KisPropertiesConfiguration* setting)
+void KisBrushSelectionWidget::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
     m_precisionOption.readOptionSetting(setting);
     uiWdgBrushChooser.sliderPrecision->setValue(m_precisionOption.precisionLevel());

@@ -43,7 +43,7 @@ class KisPainter;
 class KisColorSmudgeOp: public KisBrushBasedPaintOp
 {
 public:
-    KisColorSmudgeOp(const KisBrushBasedPaintOpSettings* settings, KisPainter* painter, KisNodeSP node, KisImageSP image);
+    KisColorSmudgeOp(const KisPaintOpSettingsSP settings, KisPainter* painter, KisNodeSP node, KisImageSP image);
     virtual ~KisColorSmudgeOp();
 
     KisSpacingInformation paintAt(const KisPaintInformation& info);

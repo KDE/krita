@@ -34,8 +34,8 @@ public:
     KisFlowOpacityOption(KisNodeSP currentNode);
     virtual ~KisFlowOpacityOption() { }
 
-    virtual void writeOptionSetting(KisPropertiesConfiguration* setting) const;
-    virtual void readOptionSetting(const KisPropertiesConfiguration* setting);
+    virtual void writeOptionSetting(KisPropertiesConfigurationSP setting) const;
+    virtual void readOptionSetting(const KisPropertiesConfigurationSP setting);
 
     void setFlow(qreal flow);
     void setOpacity(qreal opacity);

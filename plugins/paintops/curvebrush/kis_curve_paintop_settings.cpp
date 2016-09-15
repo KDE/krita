@@ -58,7 +58,6 @@ bool KisCurvePaintOpSettings::paintIncremental()
 #include "kis_paintop_preset.h"
 #include "kis_paintop_settings_update_proxy.h"
 #include "kis_standard_uniform_properties_factory.h"
-typedef KisCallbackBasedPaintopProperty<KisUniformPaintOpProperty> KisUniformPaintOpPropertyCallback;
 
 
 QList<KisUniformPaintOpPropertySP> KisCurvePaintOpSettings::uniformProperties()

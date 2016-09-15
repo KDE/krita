@@ -30,7 +30,7 @@ public:
     KisTangentNormalPaintOpSettingsWidget(QWidget* parent = 0);
     ~KisTangentNormalPaintOpSettingsWidget();
 
-    KisPropertiesConfiguration* configuration() const;
+    KisPropertiesConfigurationSP configuration() const;
 };
 
 

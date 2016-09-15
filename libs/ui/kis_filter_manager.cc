@@ -64,8 +64,8 @@ struct KisFilterManager::Private {
     KisActionManager *actionManager;
     KisViewManager *view;
 
-    KisSafeFilterConfigurationSP lastConfiguration;
-    KisSafeFilterConfigurationSP currentlyAppliedConfiguration;
+    KisFilterConfigurationSP lastConfiguration;
+    KisFilterConfigurationSP currentlyAppliedConfiguration;
     KisStrokeId currentStrokeId;
     QRect initialApplyRect;
 
@@ -238,12 +238,12 @@ void KisFilterManager::showFilterDialog(const QString &filterId)
         d->filterDialog->setFilter(filter);
         d->filterDialog->setVisible(true);
     } else {
-        apply(KisSafeFilterConfigurationSP(filter->defaultConfiguration(d->view->activeNode()->original())));
+        apply(KisFilterConfigurationSP(filter->defaultConfiguration(d->view->activeNode()->original())));
         finish();
     }
 }
 
-void KisFilterManager::apply(KisSafeFilterConfigurationSP filterConfig)
+void KisFilterManager::apply(KisFilterConfigurationSP filterConfig)
 {
     KisFilterSP filter = KisFilterRegistry::instance()->value(filterConfig->name());
     KisImageWSP image = d->view->image();
@@ -279,7 +279,7 @@ void KisFilterManager::apply(KisSafeFilterConfigurationSP filterConfig)
 
     d->currentStrokeId =
         image->startStroke(new KisFilterStrokeStrategy(filter,
-                                                       KisSafeFilterConfigurationSP(filterConfig),
+                                                       KisFilterConfigurationSP(filterConfig),
                                                        resources));
 
     QRect processRect = filter->changedRect(applyRect, filterConfig.data(), 0);

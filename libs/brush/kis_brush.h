@@ -120,8 +120,8 @@ public:
 
     virtual ~KisBrush();
 
-    virtual qreal userEffectiveSize() const { return 0;};
-    virtual void setUserEffectiveSize(qreal value) {};
+    virtual qreal userEffectiveSize() const = 0;
+    virtual void setUserEffectiveSize(qreal value) = 0;
 
     virtual bool load() {
         return false;

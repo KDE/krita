@@ -219,6 +219,10 @@ KisDummiesFacadeBase *KisNodeModel::dummiesFacade() const
 void KisNodeModel::connectDummy(KisNodeDummy *dummy, bool needConnect)
 {
     KisNodeSP node = dummy->node();
+    if (!node) {
+        qWarning() << "Dummy node has no node!" << dummy << dummy->node();
+        return;
+    }
     KisNodeProgressProxy *progressProxy = node->nodeProgressProxy();
     if(progressProxy) {
         if(needConnect) {

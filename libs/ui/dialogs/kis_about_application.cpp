@@ -108,10 +108,9 @@ KisAboutApplication::KisAboutApplication(QWidget *parent)
     Q_ASSERT(fileCredits.exists());
     fileCredits.open(QIODevice::ReadOnly);
 
-    Q_FOREACH (const QByteArray &credit, fileCredits.readAll().split('\n')) {
-        if (!credit.isEmpty()) {
+    Q_FOREACH (const QByteArray &credit, QString::fromUtf8(fileCredits.readAll()).split('\n', QString::SkipEmptyParts)) {
+        if (credit.contains(":")) {
             QList<QByteArray> creditSplit = credit.split(':');
-            Q_ASSERT(creditSplit.size() == 2);
             credits.append(QString::fromUtf8(creditSplit.at(0)));
             credits.append(" (<i>" + QString::fromUtf8(creditSplit.at(1)) + "</i>)");
             credits.append(", ");

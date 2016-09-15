@@ -54,7 +54,7 @@ KisSobelFilter::KisSobelFilter() : KisFilter(id(), categoryEdgeDetection(), i18n
 }
 
 
-void KisSobelFilter::prepareRow(KisPaintDeviceSP src, quint8* data, quint32 x, quint32 y, quint32 w, quint32 h) const
+void KisSobelFilter::prepareRow(KisPaintDeviceSP src, quint8* data, quint32 x, quint32 y, quint32 w) const
 {
     quint32 pixelSize = src->pixelSize();
 
@@ -99,8 +99,8 @@ void KisSobelFilter::processImpl(KisPaintDeviceSP device,
     quint8* cr = curRow + pixelSize;
     quint8* nr = nextRow + pixelSize;
 
-    prepareRow(device, pr, srcTopLeft.x(), srcTopLeft.y() - 1, width, height);
-    prepareRow(device, cr, srcTopLeft.x(), srcTopLeft.y(), width, height);
+    prepareRow(device, pr, srcTopLeft.x(), srcTopLeft.y() - 1, width);
+    prepareRow(device, cr, srcTopLeft.x(), srcTopLeft.y(), width);
 
     quint32 counter = 0;
     quint8* d;
@@ -114,7 +114,7 @@ void KisSobelFilter::processImpl(KisPaintDeviceSP device,
     for (quint32 row = 0; row < height; row++) {
 
         // prepare the next row
-        prepareRow(device, nr, srcTopLeft.x(), srcTopLeft.y() + row + 1, width, height);
+        prepareRow(device, nr, srcTopLeft.x(), srcTopLeft.y() + row + 1, width);
         d = dest;
         memset(d, width * pixelSize, 0);
 
@@ -170,6 +170,6 @@ KisConfigWidget * KisSobelFilter::createConfigurationWidget(QWidget* parent, con
     param.push_back(KisBoolWidgetParam(true, i18n("Sobel horizontally"), "doHorizontally"));
     param.push_back(KisBoolWidgetParam(true, i18n("Sobel vertically"), "doVertically"));
     param.push_back(KisBoolWidgetParam(true, i18n("Keep sign of result"), "keepSign"));
-    param.push_back(KisBoolWidgetParam(true, i18n("Make image opaque"), "makeOpaque"));
+    param.push_back(KisBoolWidgetParam(false, i18n("Make image opaque"), "makeOpaque"));
     return new KisMultiBoolFilterWidget(id().id(), parent, id().id(), param);
 }

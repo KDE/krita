@@ -43,7 +43,7 @@ void TextBrushInitializationWorkaround::preinitialize(KisPropertiesConfiguration
 {
     if (KisBrushOption::isTextBrush(settings)) {
         KisBrushOption brushOption;
-        brushOption.readOptionSetting(settings, true);
+        brushOption.readOptionSettingForceCopy(settings);
         m_brush = brushOption.brush();
         m_settings = settings;
     }
@@ -88,7 +88,7 @@ KisBrushBasedPaintOp::KisBrushBasedPaintOp(const KisPropertiesConfigurationSP se
 
     if (!m_brush) {
         KisBrushOption brushOption;
-        brushOption.readOptionSetting(settings, true);
+        brushOption.readOptionSettingForceCopy(settings);
         m_brush = brushOption.brush();
     }
 

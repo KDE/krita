@@ -56,7 +56,7 @@ private:
     KisBrushSizeOptionsWidget * m_options;
 };
 
-class BrushSizeOption
+class BrushSizeOption : public KisBaseOption
 {
 
 public:
@@ -71,7 +71,7 @@ public:
 
 public:
 
-    void readOptionSetting(const KisPropertiesConfigurationSP setting) {
+    void readOptionSettingImpl(const KisPropertiesConfiguration *setting) {
         brush_diameter = setting->getDouble(BRUSH_DIAMETER);
         brush_aspect = setting->getDouble(BRUSH_ASPECT);
         brush_rotation = setting->getDouble(BRUSH_ROTATION);
@@ -82,7 +82,7 @@ public:
         brush_jitter_movement_enabled = setting->getBool(BRUSH_JITTER_MOVEMENT_ENABLED);
     }
 
-    void writeOptionSetting(KisPropertiesConfigurationSP setting) const {
+    void writeOptionSettingImpl(KisPropertiesConfiguration *setting) const {
         setting->setProperty(BRUSH_DIAMETER, brush_diameter);
         setting->setProperty(BRUSH_ASPECT, brush_aspect);
         setting->setProperty(BRUSH_ROTATION, brush_rotation);

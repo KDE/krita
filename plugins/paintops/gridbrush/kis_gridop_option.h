@@ -62,7 +62,7 @@ private:
 
 };
 
-struct GridOption
+struct GridOption : public KisBaseOption
 {
     int grid_width;
     int grid_height;
@@ -74,7 +74,7 @@ struct GridOption
     bool grid_random_border;
 
 
-    void readOptionSetting(const KisPropertiesConfigurationSP setting) {
+    void readOptionSettingImpl(const KisPropertiesConfiguration *setting) {
         grid_width = qMax(1, setting->getInt(GRID_WIDTH));
         grid_height = qMax(1, setting->getInt(GRID_HEIGHT));
         grid_division_level = setting->getInt(GRID_DIVISION_LEVEL);
@@ -85,7 +85,7 @@ struct GridOption
         grid_random_border = setting->getBool(GRID_RANDOM_BORDER);
     }
 
-    void writeOptionSetting(KisPropertiesConfigurationSP setting) const {
+    void writeOptionSettingImpl(KisPropertiesConfiguration *setting) const {
         setting->setProperty(GRID_WIDTH, qMax(1, grid_width));
         setting->setProperty(GRID_HEIGHT, qMax(1, grid_height));
         setting->setProperty(GRID_DIVISION_LEVEL, grid_division_level);

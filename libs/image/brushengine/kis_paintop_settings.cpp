@@ -210,7 +210,7 @@ qreal KisPaintOpSettings::paintOpFlow()
     return proxy->getDouble("FlowValue", 1.0);
 }
 
-QString KisPaintOpSettings::paintOpCompositeOp() const
+QString KisPaintOpSettings::paintOpCompositeOp()
 {
     KisLockedPropertiesProxySP proxy(
         KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(this));

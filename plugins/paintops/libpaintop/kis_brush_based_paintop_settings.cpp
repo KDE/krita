@@ -31,7 +31,7 @@ struct BrushReader {
     BrushReader(const KisBrushBasedPaintOpSettings *parent)
         : m_parent(parent)
     {
-        m_option.readOptionSetting(m_parent, false);
+        m_option.readOptionSetting(m_parent);
     }
 
     KisBrushSP brush() {
@@ -46,7 +46,7 @@ struct BrushWriter {
     BrushWriter(KisBrushBasedPaintOpSettings *parent)
         : m_parent(parent)
     {
-        m_option.readOptionSetting(m_parent, false);
+        m_option.readOptionSetting(m_parent);
     }
 
     ~BrushWriter() {

@@ -254,6 +254,9 @@ typedef KisStrokeWSP KisStrokeId;
 class KisFilterConfiguration;
 typedef KisSharedPtr<KisFilterConfiguration> KisFilterConfigurationSP;
 
+class KisPropertiesConfiguration;
+typedef KisSharedPtr<KisPropertiesConfiguration> KisPropertiesConfigurationSP;
+
 class KisProjectionUpdatesFilter;
 typedef QSharedPointer<KisProjectionUpdatesFilter> KisProjectionUpdatesFilterSP;
 

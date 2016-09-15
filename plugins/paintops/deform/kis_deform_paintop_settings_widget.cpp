@@ -50,7 +50,7 @@ KisDeformPaintOpSettingsWidget::~ KisDeformPaintOpSettingsWidget()
 }
 
 
-KisPropertiesConfiguration* KisDeformPaintOpSettingsWidget::configuration() const
+KisPropertiesConfigurationSP KisDeformPaintOpSettingsWidget::configuration() const
 {
     KisDeformPaintOpSettings* config = new KisDeformPaintOpSettings();
     config->setOptionsWidget(const_cast<KisDeformPaintOpSettingsWidget*>(this));

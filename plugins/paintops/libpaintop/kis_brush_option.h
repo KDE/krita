@@ -22,18 +22,20 @@
 #define KIS_BRUSH_OPTION_H_
 
 #include <kis_brush.h>
+#include <kis_base_option.h>
 #include <kis_properties_configuration.h>
 #include <kis_threaded_text_rendering_workaround.h>
 
 
 #include <kritapaintop_export.h>
 
-class PAINTOP_EXPORT KisBrushOption
+class PAINTOP_EXPORT KisBrushOption : public KisBaseOption
 {
 public:
-    void writeOptionSetting(KisPropertiesConfigurationSP setting) const;
 
-    void readOptionSetting(const KisPropertiesConfigurationSP setting, bool forceCopy);
+    void writeOptionSettingImpl(KisPropertiesConfiguration *setting) const;
+    void readOptionSettingImpl(const KisPropertiesConfiguration *setting);
+    void readOptionSettingForceCopy(const KisPropertiesConfiguration *setting);
 
     KisBrushSP brush() const;
     void setBrush(KisBrushSP brush);
@@ -41,6 +43,9 @@ public:
 #ifdef HAVE_THREADED_TEXT_RENDERING_WORKAROUND
     static bool isTextBrush(const KisPropertiesConfigurationSP setting);
 #endif /* HAVE_THREADED_TEXT_RENDERING_WORKAROUND */
+
+private:
+    void readOptionSettingInternal(const KisPropertiesConfiguration *setting, bool forceCopy);
 
 private:
     KisBrushSP m_brush;

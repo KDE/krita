@@ -25,7 +25,7 @@
 
 #include "kis_properties_configuration.h"
 
-void KisBrushOption::writeOptionSetting(KisPropertiesConfigurationSP setting) const
+void KisBrushOption::writeOptionSettingImpl(KisPropertiesConfiguration *setting) const
 {
     if (!m_brush)
         return;
@@ -42,7 +42,7 @@ void KisBrushOption::writeOptionSetting(KisPropertiesConfigurationSP setting) co
     setting->setProperty("requiredBrushFile", brushFileName);
 }
 
-QDomElement getBrushXMLElement(const KisPropertiesConfigurationSP setting)
+QDomElement getBrushXMLElement(const KisPropertiesConfiguration *setting)
 {
     QDomElement element;
 
@@ -56,13 +56,23 @@ QDomElement getBrushXMLElement(const KisPropertiesConfigurationSP setting)
     return element;
 }
 
-void KisBrushOption::readOptionSetting(const KisPropertiesConfigurationSP setting, bool forceCopy)
+void KisBrushOption::readOptionSettingInternal(const KisPropertiesConfiguration *setting, bool forceCopy)
 {
     QDomElement element = getBrushXMLElement(setting);
 
     if (!element.isNull()) {
         m_brush = KisBrush::fromXML(element, forceCopy);
     }
+}
+
+void KisBrushOption::readOptionSettingForceCopy(const KisPropertiesConfiguration *setting)
+{
+    readOptionSettingInternal(setting, true);
+}
+
+void KisBrushOption::readOptionSettingImpl(const KisPropertiesConfiguration *setting)
+{
+    readOptionSettingInternal(setting, false);
 }
 
 #ifdef HAVE_THREADED_TEXT_RENDERING_WORKAROUND

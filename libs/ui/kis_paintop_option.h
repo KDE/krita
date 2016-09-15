@@ -24,6 +24,7 @@
 #include <kritaui_export.h>
 #include <kis_properties_configuration.h>
 #include <brushengine/kis_locked_properties_proxy.h>
+#include <kis_base_option.h>
 
 class QWidget;
 class QString;

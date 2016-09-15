@@ -59,7 +59,7 @@ KisShaderProgram *KisOpenGLShaderLoader::loadShader(QString vertPath, QString fr
     // Load vertex shader
     QByteArray vertSource;
 
-    vertSource.append(KisOpenGL::hasOpenGL3() ? "#version 150 core\n" : "#version 120\n");
+    vertSource.append(KisOpenGL::supportsLoD() ? "#version 130\n" : "#version 120\n");
     vertSource.append(vertHeader);
     QFile vertexShaderFile(":/" + vertPath);
     vertexShaderFile.open(QIODevice::ReadOnly);
@@ -72,7 +72,7 @@ KisShaderProgram *KisOpenGLShaderLoader::loadShader(QString vertPath, QString fr
     // Load fragment shader
     QByteArray fragSource;
 
-    fragSource.append(KisOpenGL::hasOpenGL3() ? "#version 150 core\n" : "#version 120\n");
+    fragSource.append(KisOpenGL::supportsLoD() ? "#version 130\n" : "#version 120\n");
     fragSource.append(fragHeader);
     QFile fragmentShaderFile(":/" + fragPath);
     fragmentShaderFile.open(QIODevice::ReadOnly);
@@ -106,7 +106,7 @@ KisShaderProgram *KisOpenGLShaderLoader::loadDisplayShader(QSharedPointer<KisDis
 {
     QByteArray fragHeader;
 
-    if (KisOpenGL::hasOpenGL3()) {
+    if (KisOpenGL::supportsLoD()) {
         fragHeader.append("#define DIRECT_LOD_FETCH\n");
         if (useHiQualityFiltering) {
             fragHeader.append("#define HIGHQ_SCALING\n");
@@ -123,7 +123,7 @@ KisShaderProgram *KisOpenGLShaderLoader::loadDisplayShader(QSharedPointer<KisDis
 
     QString vertPath, fragPath;
     // Select appropriate shader files
-    if (KisOpenGL::hasOpenGL3()) {
+    if (KisOpenGL::supportsLoD()) {
         vertPath = "matrix_transform.vert";
         fragPath = "highq_downscale.frag";
     } else {
@@ -144,7 +144,7 @@ KisShaderProgram *KisOpenGLShaderLoader::loadCheckerShader()
 {
     QString vertPath, fragPath;
     // Select appropriate shader files
-    if (KisOpenGL::hasOpenGL3()) {
+    if (KisOpenGL::supportsLoD()) {
         vertPath = "matrix_transform.vert";
         fragPath = "simple_texture.frag";
     } else {
@@ -165,7 +165,7 @@ KisShaderProgram *KisOpenGLShaderLoader::loadCursorShader()
 {
     QString vertPath, fragPath;
     // Select appropriate shader files
-    if (KisOpenGL::hasOpenGL3()) {
+    if (KisOpenGL::supportsLoD()) {
         vertPath = "cursor.vert";
         fragPath = "cursor.frag";
     } else {

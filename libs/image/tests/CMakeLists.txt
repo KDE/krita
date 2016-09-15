@@ -326,9 +326,9 @@ target_link_libraries(KisWalkersTest   kritaimage Qt5::Test)
 
 ########### next target ###############
 
-set(kis_async_merger_test_SRCS kis_async_merger_test.cpp )
-kde4_add_broken_unit_test(KisAsyncMergerTest TESTNAME krita-image-KisAsyncMergerTest ${kis_async_merger_test_SRCS})
-target_link_libraries(KisAsyncMergerTest   kritaimage Qt5::Test)
+#set(kis_async_merger_test_SRCS kis_async_merger_test.cpp )
+#kde4_add_broken_unit_test(KisAsyncMergerTest TESTNAME krita-image-KisAsyncMergerTest ${kis_async_merger_test_SRCS})
+#target_link_libraries(KisAsyncMergerTest   kritaimage Qt5::Test)
 
 ########### next target ###############
 

@@ -72,7 +72,7 @@ void KisSobelFilter::prepareRow(KisPaintDeviceSP src, quint8* data, quint32 x, q
 
 void KisSobelFilter::processImpl(KisPaintDeviceSP device,
                                  const QRect& applyRect,
-                                 const KisFilterConfiguration* configuration,
+                                 const KisFilterConfigurationSP configuration,
                                  KoUpdater* progressUpdater
                                  ) const
 {

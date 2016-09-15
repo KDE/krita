@@ -24,11 +24,10 @@ KisBaseOption::~KisBaseOption()
 }
 
 
-// see a comment in the header!
-//void KisBaseOption::readOptionSetting(KisPropertiesConfigurationSP settings)
-//{
-//    readOptionSettingImpl(settings.data());
-//}
+void KisBaseOption::readOptionSetting(KisPropertiesConfigurationSP settings)
+{
+    readOptionSettingImpl(settings.data());
+}
 
 void KisBaseOption::writeOptionSetting(KisPropertiesConfigurationSP settings) const
 {

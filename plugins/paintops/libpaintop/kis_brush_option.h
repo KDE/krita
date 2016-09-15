@@ -35,13 +35,14 @@ public:
 
     void writeOptionSettingImpl(KisPropertiesConfiguration *setting) const;
     void readOptionSettingImpl(const KisPropertiesConfiguration *setting);
+    void readOptionSettingForceCopy(KisPropertiesConfigurationSP setting);
     void readOptionSettingForceCopy(const KisPropertiesConfiguration *setting);
 
     KisBrushSP brush() const;
     void setBrush(KisBrushSP brush);
 
 #ifdef HAVE_THREADED_TEXT_RENDERING_WORKAROUND
-    static bool isTextBrush(const KisPropertiesConfigurationSP setting);
+    static bool isTextBrush(const KisPropertiesConfiguration *setting);
 #endif /* HAVE_THREADED_TEXT_RENDERING_WORKAROUND */
 
 private:

@@ -27,9 +27,6 @@
 #include <kis_shared_ptr.h>
 
 
-class KisBrushBasedPaintOpSettings;
-typedef KisSharedPtr<KisBrushBasedPaintOpSettings> KisBrushBasedPaintOpSettingsSP;
-
 class PAINTOP_EXPORT KisBrushBasedPaintOpSettings : public KisOutlineGenerationPolicy<KisPaintOpSettings>
 {
 public:
@@ -84,5 +81,8 @@ private:
     Q_DISABLE_COPY(KisBrushBasedPaintOpSettings)
 
 };
+
+class KisBrushBasedPaintOpSettings;
+typedef KisPinnedSharedPtr<KisBrushBasedPaintOpSettings> KisBrushBasedPaintOpSettingsSP;
 
 #endif // KIS_BRUSH_BASED_PAINTOP_SETTINGS_H

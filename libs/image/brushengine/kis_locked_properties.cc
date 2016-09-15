@@ -28,6 +28,11 @@ KisLockedProperties::~KisLockedProperties()
 {
 }
 
+void KisLockedProperties::addToLockedProperties(KisPropertiesConfigurationSP p)
+{
+    addToLockedProperties(p.data());
+}
+
 void KisLockedProperties::addToLockedProperties(const KisPropertiesConfiguration *p)
 {
     QMapIterator<QString, QVariant> i(p->getProperties());
@@ -35,6 +40,11 @@ void KisLockedProperties::addToLockedProperties(const KisPropertiesConfiguration
         i.next();
         m_lockedProperties->setProperty(i.key(), QVariant(i.value()));
     }
+}
+
+void KisLockedProperties::removeFromLockedProperties(KisPropertiesConfigurationSP p)
+{
+    removeFromLockedProperties(p.data());
 }
 
 void KisLockedProperties::removeFromLockedProperties(const KisPropertiesConfiguration *p)

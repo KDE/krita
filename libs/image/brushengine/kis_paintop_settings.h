@@ -276,6 +276,4 @@ private:
     const QScopedPointer<Private> d;
 };
 
-typedef KisSharedPtr<KisPaintOpSettings> KisPaintOpSettingsSP;
-
 #endif

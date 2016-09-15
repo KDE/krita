@@ -16,8 +16,11 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_RESTRICTED_SHARED_POINTER_WRAPPER
-#define KIS_RESTRICTED_SHARED_POINTER_WRAPPER
+#ifndef KIS_RESTRICTED_SHARED_PTR
+#define KIS_RESTRICTED_SHARED_PTR
+
+#include "kis_shared_ptr.h"
+#include "kis_pinned_shared_ptr.h"
 
 /**
  * A special type of KisSharedPtr that forbids creation of a shared
@@ -26,23 +29,35 @@
  * dangerous state. See KisUniformPaintOpProperty for an example.
  */
 template <typename T>
-class KisRestrictedSharedPointerWrapper : public KisSharedPtr<T>
+class KisRestrictedSharedPtr : public KisSharedPtr<T>
 {
     typedef KisSharedPtr<T> BaseClass;
 public:
-    KisRestrictedSharedPointerWrapper()
+    KisRestrictedSharedPtr()
     {
     }
 
     template <typename X>
-    inline KisRestrictedSharedPointerWrapper(const KisWeakSharedPtr<X>& other)
+    inline KisRestrictedSharedPtr(const KisWeakSharedPtr<X>& other)
         : BaseClass(other)
     {
     }
 
 
     template <typename X>
-    inline KisRestrictedSharedPointerWrapper(const KisSharedPtr<X> &other)
+    inline KisRestrictedSharedPtr(const KisSharedPtr<X> &other)
+        : BaseClass(other)
+    {
+    }
+
+    template <typename X>
+    inline KisRestrictedSharedPtr(const KisRestrictedSharedPtr<X> &other)
+        : BaseClass(other)
+    {
+    }
+
+    template <typename X>
+    inline KisRestrictedSharedPtr(const KisPinnedSharedPtr<X> &other)
         : BaseClass(other)
     {
     }
@@ -50,8 +65,8 @@ public:
 
 private:
     template <typename X>
-    KisRestrictedSharedPointerWrapper(X other);
+    KisRestrictedSharedPtr(X other);
 };
 
-#endif // KIS_RESTRICTED_SHARED_POINTER_WRAPPER
+#endif // KIS_RESTRICTED_SHARED_PTR
 

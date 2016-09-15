@@ -388,7 +388,6 @@ void KisActionManager::runOperationFromConfiguration(KisOperationConfigurationSP
     KisOperation* operation = d->operationRegistry.get(config->id());
     Q_ASSERT(operation);
     operation->runFromXML(d->viewManager, *config);
-    delete config;
 }
 
 void KisActionManager::dumpActionFlags()

@@ -222,12 +222,15 @@ class KisPaintOpPreset;
 typedef KisSharedPtr<KisPaintOpPreset> KisPaintOpPresetSP;
 typedef KisWeakSharedPtr<KisPaintOpPreset> KisPaintOpPresetWSP;
 
+template <typename T>
+class KisPinnedSharedPtr;
+
 class KisPaintOpSettings;
-typedef KisSharedPtr<KisPaintOpSettings> KisPaintOpSettingsSP;
+typedef KisPinnedSharedPtr<KisPaintOpSettings> KisPaintOpSettingsSP;
 
 template <typename T>
-class KisRestrictedSharedPointerWrapper;
-typedef KisRestrictedSharedPointerWrapper<KisPaintOpSettings> KisPaintOpSettingsRestrictedSP;
+class KisRestrictedSharedPtr;
+typedef KisRestrictedSharedPtr<KisPaintOpSettings> KisPaintOpSettingsRestrictedSP;
 
 class KisPaintOp;
 typedef KisSharedPtr<KisPaintOp> KisPaintOpSP;
@@ -256,10 +259,10 @@ typedef QWeakPointer<KisStroke> KisStrokeWSP;
 typedef KisStrokeWSP KisStrokeId;
 
 class KisFilterConfiguration;
-typedef KisSharedPtr<KisFilterConfiguration> KisFilterConfigurationSP;
+typedef KisPinnedSharedPtr<KisFilterConfiguration> KisFilterConfigurationSP;
 
 class KisPropertiesConfiguration;
-typedef KisSharedPtr<KisPropertiesConfiguration> KisPropertiesConfigurationSP;
+typedef KisPinnedSharedPtr<KisPropertiesConfiguration> KisPropertiesConfigurationSP;
 
 class KisLockedProperties;
 typedef KisSharedPtr<KisLockedProperties> KisLockedPropertiesSP;
@@ -296,7 +299,8 @@ typedef QWeakPointer<KisLayerComposition> KisLayerCompositionWSP;
 #include <QSharedPointer>
 #include <QWeakPointer>
 #include <kis_shared_ptr.h>
-#include <kis_restricted_shared_pointer_wrapper.h>
+#include <kis_restricted_shared_ptr.h>
+#include <kis_pinned_shared_ptr.h>
 
 #endif // KISTYPES_H_
 

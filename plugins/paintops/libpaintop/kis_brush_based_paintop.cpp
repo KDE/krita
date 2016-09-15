@@ -41,7 +41,7 @@ TextBrushInitializationWorkaround *TextBrushInitializationWorkaround::instance()
 
 void TextBrushInitializationWorkaround::preinitialize(KisPropertiesConfigurationSP settings)
 {
-    if (KisBrushOption::isTextBrush(settings)) {
+    if (KisBrushOption::isTextBrush(settings.data())) {
         KisBrushOption brushOption;
         brushOption.readOptionSettingForceCopy(settings);
         m_brush = brushOption.brush();

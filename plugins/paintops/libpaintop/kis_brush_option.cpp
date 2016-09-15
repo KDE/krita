@@ -65,6 +65,11 @@ void KisBrushOption::readOptionSettingInternal(const KisPropertiesConfiguration 
     }
 }
 
+void KisBrushOption::readOptionSettingForceCopy(KisPropertiesConfigurationSP setting)
+{
+    readOptionSettingInternal(setting.data(), true);
+}
+
 void KisBrushOption::readOptionSettingForceCopy(const KisPropertiesConfiguration *setting)
 {
     readOptionSettingInternal(setting, true);
@@ -79,7 +84,7 @@ void KisBrushOption::readOptionSettingImpl(const KisPropertiesConfiguration *set
 
 #include "kis_text_brush_factory.h"
 
-bool KisBrushOption::isTextBrush(const KisPropertiesConfigurationSP setting)
+bool KisBrushOption::isTextBrush(const KisPropertiesConfiguration *setting)
 {
     static QString textBrushId = KisTextBrushFactory().id();
 

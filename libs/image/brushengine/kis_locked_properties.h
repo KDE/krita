@@ -35,9 +35,11 @@ public:
     ~KisLockedProperties();
 
     /**Whenever any setting is made locked**/
+    void addToLockedProperties(KisPropertiesConfigurationSP p);
     void addToLockedProperties(const KisPropertiesConfiguration *p);
 
     /**Whenever any property is unlocked**/
+    void removeFromLockedProperties(KisPropertiesConfigurationSP p);
     void removeFromLockedProperties(const KisPropertiesConfiguration *p);
     bool hasProperty(const QString &p);
 

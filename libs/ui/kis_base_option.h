@@ -42,12 +42,7 @@ class KRITAUI_EXPORT KisBaseOption
 public:
     virtual ~KisBaseOption();
 
-    /**
-     * This method should be commented out until we port to QSharedPointer.
-     * KisSharedPtr is convertible into raw ptr, so this method is ambiguous.
-     * QScopedPointer is not convertible, so this method i snecessary for it.
-     */
-    // void readOptionSetting(KisPropertiesConfigurationSP settings);
+    void readOptionSetting(KisPropertiesConfigurationSP settings);
     void writeOptionSetting(KisPropertiesConfigurationSP setting) const;
 
     void readOptionSetting(const KisPropertiesConfiguration *settings);

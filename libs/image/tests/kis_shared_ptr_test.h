@@ -39,6 +39,7 @@ private Q_SLOTS:
     void testWeakSPAssignToWeakSP();
     void testWeakSPToWeakSPCopy();
     void testRestrictedPointer();
+    void testRestrictedPointerNoBackward();
 };
 
 #endif

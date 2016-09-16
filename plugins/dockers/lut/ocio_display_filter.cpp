@@ -268,7 +268,7 @@ void OcioDisplayFilter::updateProcessor()
 
 void OcioDisplayFilter::updateShader()
 {
-    if (KisOpenGL::hasOpenGL3()) {
+    if (KisOpenGL::supportsLoD()) {
         QOpenGLFunctions_3_2_Core *f = QOpenGLContext::currentContext()->versionFunctions<QOpenGLFunctions_3_2_Core>();
         updateShaderImpl(f);
     } else {
@@ -318,7 +318,7 @@ void OcioDisplayFilter::updateShaderImpl(F *f) {
     // Step 1: Create a GPU Shader Description
     OCIO::GpuShaderDesc shaderDesc;
 
-    if (KisOpenGL::hasOpenGL3()) {
+    if (KisOpenGL::supportsLoD()) {
         shaderDesc.setLanguage(OCIO::GPU_LANGUAGE_GLSL_1_3);
     }
     else {

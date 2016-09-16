@@ -188,9 +188,6 @@ void LutDockerDock::setCanvas(KoCanvasBase* _canvas)
     if (KisCanvas2* canvas = dynamic_cast<KisCanvas2*>(_canvas)) {
         m_canvas = canvas;
         if (m_canvas) {
-            qDebug() << "canvas" << m_canvas;
-            qDebug() << "\t" << "display filter" << m_canvas->displayFilter();
-
             if (!m_canvas->displayFilter()) {
                 m_displayFilter = QSharedPointer<KisDisplayFilter>(new OcioDisplayFilter(this));
                 m_canvas->setDisplayFilter(m_displayFilter);

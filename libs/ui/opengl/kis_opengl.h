@@ -49,6 +49,7 @@ public:
     /// Initialize shared OpenGL context
     static void initializeContext(QOpenGLContext *ctx);
 
+    static bool supportsLoD();
     static bool hasOpenGL3();
 
     /// Check for OpenGL

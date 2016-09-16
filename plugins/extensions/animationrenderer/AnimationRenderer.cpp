@@ -121,7 +121,7 @@ void AnimaterionRenderer::slotRenderAnimation()
             KisFilterChainSP chain(new KisFilterChain(doc->importExportManager()));
             chain->setOutputFile(videoConfig->getString("filename"));
             encoder->setChain(chain);
-            encoder->setMimeType(mimetype);
+            encoder->setMimeType(mimetype.toLatin1());
             QFile fi(videoConfig->getString("filename"));
             KisImportExportFilter::ConversionStatus res;
             if (!fi.open(QIODevice::WriteOnly)) {

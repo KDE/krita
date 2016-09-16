@@ -99,7 +99,7 @@ public:
 
     virtual ~KisImportExportFilter();
 
-    void setMimeType(QByteArray mime);
+    void setMimeType(const QByteArray &mime);
     QByteArray mimeType() const;
 
     /**

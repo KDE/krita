@@ -84,7 +84,7 @@ KisImportExportFilter::~KisImportExportFilter()
     delete d;
 }
 
-void KisImportExportFilter::setMimeType(QByteArray mime)
+void KisImportExportFilter::setMimeType(const QByteArray &mime)
 {
     d->mime = mime;
 }

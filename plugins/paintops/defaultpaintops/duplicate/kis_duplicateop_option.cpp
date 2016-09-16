@@ -106,10 +106,10 @@ void KisDuplicateOpOption::writeOptionSetting(KisPropertiesConfiguration* settin
 {
     DuplicateOption op;
 
-    setting->setProperty(DUPLICATE_HEALING, healing());
-    setting->setProperty(DUPLICATE_CORRECT_PERSPECTIVE, correctPerspective());
-    setting->setProperty(DUPLICATE_MOVE_SOURCE_POINT, moveSourcePoint());
-    setting->setProperty(DUPLICATE_CLONE_FROM_PROJECTION, cloneFromProjection());
+    op.duplicate_healing = healing();
+    op.duplicate_correct_perspective = correctPerspective();
+    op.duplicate_move_source_point = moveSourcePoint();
+    op.duplicate_clone_from_projection = cloneFromProjection();
 
     op.writeOptionSetting(setting);
 }

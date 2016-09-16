@@ -83,7 +83,7 @@ public:
 
     virtual ~KisMask();
 
-    void setImage(KisImageWSP image);
+    void setImage(KisImageWSP image) Q_DECL_OVERRIDE;
 
     bool allowAsChild(KisNodeSP node) const;
 

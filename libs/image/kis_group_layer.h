@@ -50,7 +50,7 @@ public:
     KisBaseNode::PropertyList sectionModelProperties() const;
     void setSectionModelProperties(const KisBaseNode::PropertyList &properties);
 
-    virtual void setImage(KisImageWSP image);
+    void setImage(KisImageWSP image) Q_DECL_OVERRIDE;
 
     virtual KisLayerSP createMergedLayerTemplate(KisLayerSP prevLayer);
     virtual void fillMergedLayerTemplate(KisLayerSP dstLayer, KisLayerSP prevLayer);

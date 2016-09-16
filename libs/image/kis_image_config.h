@@ -105,6 +105,9 @@ public:
     KisProofingConfigurationSP defaultProofingconfiguration();
     void setDefaultProofingConfig(const KoColorSpace *proofingSpace, int proofingIntent, bool blackPointCompensation, KoColor warningColor, double adaptationState);
 
+    bool useLodForColorizeMask(bool requestDefault = false) const;
+    void setUseLodForColorizeMask(bool value);
+
 
 private:
     Q_DISABLE_COPY(KisImageConfig)

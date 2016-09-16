@@ -269,7 +269,8 @@ void KisColorizeMask::slotUpdateRegenerateFilling()
                                           m_d->coloringProjection,
                                           m_d->filteredSource,
                                           filteredSourceValid,
-                                          image->bounds());
+                                          image->bounds(),
+                                          this);
 
         Q_FOREACH (const KeyStroke &stroke, m_d->keyStrokes) {
             const KoColor color =
@@ -289,7 +290,6 @@ void KisColorizeMask::slotUpdateRegenerateFilling()
 void KisColorizeMask::slotRegenerationFinished()
 {
     setNeedsUpdate(true);
-    setDirty();
 }
 
 KisBaseNode::PropertyList KisColorizeMask::sectionModelProperties() const
@@ -904,10 +904,6 @@ KisPaintDeviceList KisColorizeMask::getLodCapableDevices() const
     list << m_d->coloringProjection;
     list << m_d->fakePaintDevice;
     list << m_d->filteredSource;
-
-    Q_FOREACH (KisPaintDeviceSP dev, list) {
-        qDebug() << ppVar(dev->defaultBounds()->bounds());
-    }
 
     return list;
 }

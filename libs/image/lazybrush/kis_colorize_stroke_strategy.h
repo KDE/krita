@@ -37,12 +37,15 @@ public:
                               KisPaintDeviceSP dst,
                               KisPaintDeviceSP filteredSource,
                               bool filteredSourceValid,
-                              const QRect &boundingRect);
+                              const QRect &boundingRect, KisNodeSP dirtyNode);
+    KisColorizeStrokeStrategy(const KisColorizeStrokeStrategy &rhs, int levelOfDetail);
     ~KisColorizeStrokeStrategy();
 
     void addKeyStroke(KisPaintDeviceSP dev, const KoColor &color);
 
     void initStrokeCallback();
+
+    KisStrokeStrategy *createLodClone(int levelOfDetail);
 
 Q_SIGNALS:
     void sigFinished();

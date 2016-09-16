@@ -143,8 +143,6 @@ void OnionSkinsDocker::slotShowAdditionalSettings(bool value)
 
     ui->doubleTintFactor->setVisible(value);
 
-    ui->cmbColorLabelFilter->setVisible(value);
-
     QIcon icon = KisIconUtils::loadIcon(value ? "arrow-down" : "arrow-up");
     ui->btnShowHide->setIcon(icon);
 

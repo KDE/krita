@@ -102,7 +102,6 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     , m_dirtyPresetsEnabled(false)
     , m_eraserBrushSizeEnabled(false)
     , m_eraserBrushOpacityEnabled(false)
-    , m_presetUpdateCompressor(200, KisSignalCompressor::FIRST_ACTIVE)
 {
     Q_ASSERT(view != 0);
 
@@ -433,7 +432,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     m_presetsPopup = new KisPaintOpPresetsPopup(m_resourceProvider);
     m_brushEditorPopupButton->setPopupWidget(m_presetsPopup);
     m_presetsPopup->switchDetached(false);
-    connect(m_presetsPopup, SIGNAL(brushEditorShown()), SLOT(slotUpdateOptionsWidget()));
+    connect(m_presetsPopup, SIGNAL(brushEditorShown()), SLOT(slotUpdateOptionsWidgetPopup()));
     connect(m_viewManager->mainWindow(), SIGNAL(themeChanged()), m_presetsPopup, SLOT(updateThemedIcons()));
 
     m_presetsChooserPopup = new KisPaintOpPresetsChooserPopup();
@@ -614,7 +613,6 @@ void KisPaintopBox::setCurrentPaintop(const KoID& paintop, KisPaintOpPresetSP pr
     Q_ASSERT(m_optionWidget && m_presetSelectorPopupButton);
 
     m_presetConnections.addConnection(m_optionWidget, SIGNAL(sigConfigurationUpdated()), this, SLOT(slotGuiChangedCurrentPreset()));
-    m_presetConnections.addConnection(&m_presetUpdateCompressor, SIGNAL(timeout()), this, SLOT(slotUpdateOptionsWidget()));
     m_presetConnections.addConnection(m_optionWidget, SIGNAL(sigSaveLockedConfig(KisPropertiesConfigurationSP)), this, SLOT(slotSaveLockedOptionToPreset(KisPropertiesConfigurationSP)));
     m_presetConnections.addConnection(m_optionWidget, SIGNAL(sigDropLockedConfig(KisPropertiesConfigurationSP)), this, SLOT(slotDropLockedOption(KisPropertiesConfigurationSP)));
 
@@ -631,27 +629,18 @@ void KisPaintopBox::setCurrentPaintop(const KoID& paintop, KisPaintOpPresetSP pr
         // by the new colorspace.
         dbgKrita << "current paintop " << paintop.name() << " was not set, not supported by colorspace";
     }
-
-    // preset -> compressor
-    m_presetConnections.addConnection(
-        preset->updateProxy(), SIGNAL(sigSettingsChanged()),
-         &m_presetUpdateCompressor, SLOT(start()));
 }
 
-void KisPaintopBox::slotUpdateOptionsWidget()
+void KisPaintopBox::slotUpdateOptionsWidgetPopup()
 {
     KisPaintOpPresetSP preset = m_resourceProvider->currentPreset();
-
     KIS_SAFE_ASSERT_RECOVER_RETURN(preset);
     KIS_SAFE_ASSERT_RECOVER_RETURN(m_optionWidget);
 
-    if (m_optionWidget->isVisible()) {
-        m_optionWidget->setConfigurationSafe(preset->settings().data());
-    }
+    m_optionWidget->setConfigurationSafe(preset->settings());
 
     m_presetsPopup->resourceSelected(preset.data());
     m_presetsPopup->updateViewSettings();
-
 }
 
 KisPaintOpPresetSP KisPaintopBox::defaultPreset(const KoID& paintOp)

@@ -49,6 +49,7 @@ namespace KisAnimationUtils
                        KUndo2Command *parentCommand = 0);
     bool moveKeyframe(KisImageSP image, KisNodeSP node, const QString &channel, int srcTime, int dstTime);
 
+    bool supportsContentFrames(KisNodeSP node);
 
     extern const QString addFrameActionName;
     extern const QString duplicateFrameActionName;

@@ -154,7 +154,10 @@ struct TimelineFramesModel::Private
         KisNodeDummy *dummy = converter->dummyFromRow(row);
         if (!dummy) return false;
 
-        return KisAnimationUtils::createKeyframeLazy(image, dummy->node(), KisKeyframeChannel::Content.id(), column, copy);
+        KisNodeSP node = dummy->node();
+        if (!KisAnimationUtils::supportsContentFrames(node)) return false;
+
+        return KisAnimationUtils::createKeyframeLazy(image, node, KisKeyframeChannel::Content.id(), column, copy);
     }
 
     bool addNewLayer(int row) {

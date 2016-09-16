@@ -225,5 +225,11 @@ namespace KisAnimationUtils {
 
         return moveKeyframes(image, srcFrames, dstFrames);
     }
+
+    bool supportsContentFrames(KisNodeSP node)
+    {
+        return node->inherits("KisPaintLayer") || node->inherits("KisFilterMask") || node->inherits("KisTransparencyMask") || node->inherits("KisSelectionBasedLayer");
+    }
+
 }
 

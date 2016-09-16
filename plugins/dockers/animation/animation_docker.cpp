@@ -614,7 +614,7 @@ void AnimationDocker::slotCurrentNodeChanged(KisNodeSP node)
     m_deleteKeyframeMenu->clear();
 
     if (!node.isNull()) {
-        if (node->inherits("KisLayer") || node->inherits("KisFilterMask") || node->inherits("KisTransparencyMask") || node->inherits("KisSelectionBasedLayer")) {
+        if (KisAnimationUtils::supportsContentFrames(node)) {
             isNodeAnimatable = true;
             m_newKeyframeMenu->addAction(m_addBlankFrameAction);
             m_deleteKeyframeMenu->addAction(m_deleteKeyframeAction);

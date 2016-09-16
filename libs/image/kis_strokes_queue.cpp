@@ -513,11 +513,16 @@ bool KisStrokesQueue::checkStrokeState(bool hasStrokeJobsRunning,
      * jobs present.
      */
     if(!stroke->isInitialized() && hasJobs && hasLodCompatibility) {
-        KIS_SAFE_ASSERT_RECOVER_NOOP(!m_d->currentStrokeLoaded);
-
-        m_d->needsExclusiveAccess = stroke->isExclusive();
-        m_d->wrapAroundModeSupported = stroke->supportsWrapAroundMode();
-        m_d->currentStrokeLoaded = true;
+        /**
+         * It might happen that the stroke got initialized, but its job was not
+         * started due to some other reasons like exclusivity. Therefore the
+         * stroke might end up in loaded, but uninitialized state.
+         */
+        if (!m_d->currentStrokeLoaded) {
+            m_d->needsExclusiveAccess = stroke->isExclusive();
+            m_d->wrapAroundModeSupported = stroke->supportsWrapAroundMode();
+            m_d->currentStrokeLoaded = true;
+        }
 
         result = true;
     }

@@ -46,16 +46,16 @@ struct MyScribbleLabelMap {
     typedef const float& reference;
     typedef readable_property_map_tag category;
 
-    friend value_type get(const MyScribbleLabelMap<Graph> &map,
-                          const key_type &key) {
+    friend value_type get(const MyScribbleLabelMap<Graph> &/*map*/,
+                          const key_type &/*key*/) {
         return 0;
     }
 
-    friend QRegion region(const MyScribbleLabelMap<Graph> &map) {
+    friend QRegion region(const MyScribbleLabelMap<Graph> &/*map*/) {
         return QRegion();
     }
 
-    friend QRect boundingRect(const MyScribbleLabelMap<Graph> &map) {
+    friend QRect boundingRect(const MyScribbleLabelMap<Graph> &/*map*/) {
         return QRect(10,10,100,100);
     }
 };

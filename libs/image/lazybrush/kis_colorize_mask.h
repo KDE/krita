@@ -107,6 +107,8 @@ public:
     void setX(qint32 x);
     void setY(qint32 y);
 
+    KisPaintDeviceList getLodCapableDevices() const;
+
 private Q_SLOTS:
     void slotUpdateRegenerateFilling();
     void slotRegenerationFinished();

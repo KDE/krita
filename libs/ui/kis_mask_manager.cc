@@ -233,6 +233,7 @@ void KisMaskManager::createColorizeMask(KisNodeSP activeNode)
 {
     KisColorizeMaskSP mask = new KisColorizeMask();
     createMaskCommon(mask, activeNode, 0, kundo2_i18n("Add Colorize Mask"), "KisColorizeMask", i18n("Colorize Mask"), true, false);
+    mask->setImage(m_view->image());
     mask->initializeCompositeOp();
     mask->setColorSpace(mask->parent()->colorSpace());
 }

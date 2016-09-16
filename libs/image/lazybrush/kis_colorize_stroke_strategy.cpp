@@ -25,6 +25,7 @@
 #include "kis_lazy_fill_tools.h"
 #include "kis_gaussian_kernel.h"
 #include "kis_painter.h"
+#include "kis_default_bounds_base.h"
 
 using namespace KisLazyFillTools;
 
@@ -81,7 +82,9 @@ void KisColorizeStrokeStrategy::initStrokeCallback()
 
         normalizeAndInvertAlpha8Device(filteredMainDev, m_d->boundingRect);
 
+        KisDefaultBoundsBaseSP oldBounds = m_d->filteredSource->defaultBounds();
         m_d->filteredSource->makeCloneFrom(filteredMainDev, m_d->boundingRect);
+        m_d->filteredSource->setDefaultBounds(oldBounds);
     }
 
     KisMultiwayCut cut(m_d->filteredSource, m_d->dst, m_d->boundingRect);

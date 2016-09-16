@@ -116,7 +116,7 @@ void KisSobelFilter::processImpl(KisPaintDeviceSP device,
         // prepare the next row
         prepareRow(device, nr, srcTopLeft.x(), srcTopLeft.y() + row + 1, width);
         d = dest;
-        memset(d, width * pixelSize, 0);
+        memset(d, 0, width * pixelSize);
 
         for (quint32 col = 0; col < width * pixelSize; col++) {
             int positive = col + pixelSize;

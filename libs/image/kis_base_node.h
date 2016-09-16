@@ -470,6 +470,8 @@ public:
      */
     bool supportsLodMoves() const;
 
+    virtual void setImage(KisImageWSP image);
+
 protected:
 
     void setSupportsLodMoves(bool value);

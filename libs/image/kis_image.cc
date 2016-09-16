@@ -1109,6 +1109,7 @@ void KisImage::setRootLayer(KisGroupLayerSP rootLayer)
     m_d->rootLayer = rootLayer;
     m_d->rootLayer->disconnect();
     m_d->rootLayer->setGraphListener(this);
+    m_d->rootLayer->setImage(this);
 
     KisPaintDeviceSP newOriginal = m_d->rootLayer->original();
     newOriginal->setDefaultPixel(defaultProjectionColor);

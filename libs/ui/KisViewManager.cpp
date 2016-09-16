@@ -120,7 +120,6 @@
 #include <kis_undo_adapter.h>
 #include "KisView.h"
 #include "kis_zoom_manager.h"
-#include "kra/kis_kra_loader.h"
 #include "widgets/kis_floating_message.h"
 #include "kis_signal_auto_connection.h"
 #include "kis_icon_utils.h"

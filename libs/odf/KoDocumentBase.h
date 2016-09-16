@@ -82,19 +82,6 @@ public:
     virtual bool saveToStore(KoStore *store, const QString &path) = 0;
 
     /**
-     *  Reimplement this method to load the odf document. Take care to
-     *  make sure styles are loaded before body text is loaded by the
-     *  text shape.
-     */
-    virtual bool loadOdf(KoOdfReadStore &odfStore) = 0;
-
-    /**
-     *  Reimplement this method to save the contents of your %Calligra document,
-     *  using the ODF format.
-     */
-    virtual bool saveOdf(SavingContext &documentContext) = 0;
-
-    /**
      * Checks whether the document is currently in the process of autosaving
      */
     virtual bool isAutosaving() const = 0;
@@ -151,14 +138,6 @@ public:
     virtual void setOutputMimeType(const QByteArray & mimeType, int specialOutputFlag = 0) = 0;
 
     virtual QByteArray outputMimeType() const = 0;
-
-    /**
-     * Sets the document URL to empty URL
-     * KParts doesn't allow this, but %Calligra apps have e.g. templates
-     * After using loadNativeFormat on a template, one wants
-     * to set the url to QUrl()
-     */
-    virtual void resetURL() = 0;
 
 private:
     class Private;

@@ -25,7 +25,7 @@ QString KRA::flagsToString(const QBitArray& flags, int size, char trueToken, cha
     
     QString string(size, defaultTrue ? trueToken : falseToken);
     
-    for(int i=0; i<qMin(size, flags.count()); ++i)
+    for(int i=0; i < qMin(size, flags.count()); ++i)
         string[i] = flags[i] ? trueToken : falseToken;
     
     return string;
@@ -37,7 +37,7 @@ QBitArray KRA::stringToFlags(const QString& string, int size, char token, bool d
     
     QBitArray flags(size, defaultTrue);
     
-    for(int i=0; i<qMin(size, string.length()); ++i)
+    for(int i=0; i < qMin(size, string.length()); ++i)
         flags[i] = (string[i] == token) ? !defaultTrue : defaultTrue;
     
     return flags;

@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "kra/kis_kra_loader.h"
+#include "kis_kra_loader.h"
 
 #include <QApplication>
 #include <QStringList>

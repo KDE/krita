@@ -96,8 +96,6 @@
 #include "widgets/kis_custom_image_widget.h"
 #include "canvas/kis_canvas2.h"
 #include "flake/kis_shape_controller.h"
-#include "kra/kis_kra_loader.h"
-#include "kra/kis_kra_saver.h"
 #include "kis_statusbar.h"
 #include "widgets/kis_progress_widget.h"
 #include "kis_canvas_resource_provider.h"
@@ -266,7 +264,6 @@ public:
         nserver(0),
         macroNestDepth(0),
         imageIdleWatcher(2000 /*ms*/),
-        kraLoader(0),
         suppressProgress(false),
         fileProgressProxy(0)
     {
@@ -352,10 +349,6 @@ public:
     KoShapeController* koShapeController;
     KisIdleWatcher imageIdleWatcher;
     QScopedPointer<KisSignalAutoConnection> imageIdleConnection;
-
-
-    KisKraLoader* kraLoader;
-    KisKraSaver* kraSaver;
 
     bool suppressProgress;
     KoProgressProxy* fileProgressProxy;
@@ -524,7 +517,11 @@ KisDocument::KisDocument()
     // preload the krita resources
     KisResourceServerProvider::instance();
 
-    init();
+    d->nserver = new KisNameServer(1);
+
+    d->shapeController = new KisShapeController(this, d->nserver);
+    d->koShapeController = new KoShapeController(0, d->shapeController);
+
     undoStack()->setUndoLimit(KisConfig().undoStackLimit());
     setBackupFile(KisConfig().backupFile());
 }
@@ -578,21 +575,6 @@ KisDocument::~KisDocument()
     KIS_ASSERT_RECOVER_NOOP(!sanityCheckPointer.isValid());
 
     delete d;
-}
-
-void KisDocument::init()
-{
-    delete d->nserver;
-    d->nserver = 0;
-
-    d->nserver = new KisNameServer(1);
-    Q_CHECK_PTR(d->nserver);
-
-    d->shapeController = new KisShapeController(this, d->nserver);
-    d->koShapeController = new KoShapeController(0, d->shapeController);
-
-    d->kraSaver = 0;
-    d->kraLoader = 0;
 }
 
 bool KisDocument::reload()
@@ -1717,32 +1699,32 @@ void KisDocument::setTitleModified()
 bool KisDocument::completeLoading(KoStore* store)
 {
     if (!d->image) {
-        if (d->kraLoader->errorMessages().isEmpty()) {
-            setErrorMessage(i18n("Unknown error."));
-        }
-        else {
-            setErrorMessage(d->kraLoader->errorMessages().join(".\n"));
-        }
+//        if (d->kraLoader->errorMessages().isEmpty()) {
+//            setErrorMessage(i18n("Unknown error."));
+//        }
+//        else {
+//            setErrorMessage(d->kraLoader->errorMessages().join(".\n"));
+//        }
         return false;
     }
 
-    d->kraLoader->loadKeyframes(store, url().url(), isStoredExtern());
+//    d->kraLoader->loadKeyframes(store, url().url(), isStoredExtern());
     d->image->blockUpdates();
-    d->kraLoader->loadBinaryData(store, d->image, url().url(), isStoredExtern());
+//    d->kraLoader->loadBinaryData(store, d->image, url().url(), isStoredExtern());
     d->image->unblockUpdates();
     bool retval = true;
-    if (!d->kraLoader->errorMessages().isEmpty()) {
-        setErrorMessage(d->kraLoader->errorMessages().join(".\n"));
-        retval = false;
-    }
+//    if (!d->kraLoader->errorMessages().isEmpty()) {
+//        setErrorMessage(d->kraLoader->errorMessages().join(".\n"));
+//        retval = false;
+//    }
     if (retval) {
-        vKisNodeSP preselectedNodes = d->kraLoader->selectedNodes();
-        if (preselectedNodes.size() > 0) {
-            d->preActivatedNode = preselectedNodes.first();
-        }
+//        vKisNodeSP preselectedNodes = d->kraLoader->selectedNodes();
+//        if (preselectedNodes.size() > 0) {
+//            d->preActivatedNode = preselectedNodes.first();
+//        }
 
         // before deleting the kraloader, get the list with preloaded assistants and save it
-        d->assistants = d->kraLoader->assistants();
+//        d->assistants = d->kraLoader->assistants();
         d->shapeController->setImage(d->image);
 
         connect(d->image.data(), SIGNAL(sigImageModified()), this, SLOT(setImageModified()));
@@ -1755,24 +1737,24 @@ bool KisDocument::completeLoading(KoStore* store)
         emit sigLoadingFinished();
     }
 
-    delete d->kraLoader;
-    d->kraLoader = 0;
+//    delete d->kraLoader;
+//    d->kraLoader = 0;
 
     return retval;
 }
 
 bool KisDocument::completeSaving(KoStore* store)
 {
-    d->kraSaver->saveKeyframes(store, url().url(), isStoredExtern());
-    d->kraSaver->saveBinaryData(store, d->image, url().url(), isStoredExtern(), d->isAutosaving);
+//    d->kraSaver->saveKeyframes(store, url().url(), isStoredExtern());
+//    d->kraSaver->saveBinaryData(store, d->image, url().url(), isStoredExtern(), d->isAutosaving);
     bool retval = true;
-    if (!d->kraSaver->errorMessages().isEmpty()) {
-        setErrorMessage(d->kraSaver->errorMessages().join(".\n"));
-        retval = false;
-    }
+////    if (!d->kraSaver->errorMessages().isEmpty()) {
+////        setErrorMessage(d->kraSaver->errorMessages().join(".\n"));
+////        retval = false;
+////    }
 
-    delete d->kraSaver;
-    d->kraSaver = 0;
+//    delete d->kraSaver;
+//    d->kraSaver = 0;
 
     emit sigSavingFinished();
 
@@ -1827,33 +1809,33 @@ bool KisDocument::loadXML(const KoXmlDocument& doc, KoStore *store)
         return false;
     }
 
-    if (d->kraLoader) delete d->kraLoader;
-    d->kraLoader = new KisKraLoader(this, syntaxVersion);
+//    if (d->kraLoader) delete d->kraLoader;
+//    d->kraLoader = new KisKraLoader(this, syntaxVersion);
 
     // Legacy from the multi-image .kra file period.
-    for (node = root.firstChild(); !node.isNull(); node = node.nextSibling()) {
-        if (node.isElement()) {
-            if (node.nodeName() == "IMAGE") {
-                KoXmlElement elem = node.toElement();
-                if (!(image = d->kraLoader->loadXML(elem))) {
-                    if (d->kraLoader->errorMessages().isEmpty()) {
-                        setErrorMessage(i18n("Unknown error."));
-                    }
-                    else {
-                        setErrorMessage(d->kraLoader->errorMessages().join(".\n"));
-                    }
-                    return false;
-                }
+//    for (node = root.firstChild(); !node.isNull(); node = node.nextSibling()) {
+//        if (node.isElement()) {
+//            if (node.nodeName() == "IMAGE") {
+//                KoXmlElement elem = node.toElement();
+//                if (!(image = d->kraLoader->loadXML(elem))) {
+//                    if (d->kraLoader->errorMessages().isEmpty()) {
+//                        setErrorMessage(i18n("Unknown error."));
+//                    }
+//                    else {
+//                        setErrorMessage(d->kraLoader->errorMessages().join(".\n"));
+//                    }
+//                    return false;
+//                }
 
-            }
-            else {
-                if (d->kraLoader->errorMessages().isEmpty()) {
-                    setErrorMessage(i18n("The file does not contain an image."));
-                }
-                return false;
-            }
-        }
-    }
+//            }
+//            else {
+//                if (d->kraLoader->errorMessages().isEmpty()) {
+//                    setErrorMessage(i18n("The file does not contain an image."));
+//                }
+//                return false;
+//            }
+//        }
+//    }
 
     if (d->image) {
         // Disconnect existing sig/slot connections
@@ -1875,13 +1857,13 @@ QDomDocument KisDocument::saveXML()
     root.setAttribute("editor", "Krita");
     root.setAttribute("syntaxVersion", "2");
 
-    if (d->kraSaver) delete d->kraSaver;
-    d->kraSaver = new KisKraSaver(this);
+//    if (d->kraSaver) delete d->kraSaver;
+//    d->kraSaver = new KisKraSaver(this);
 
-    root.appendChild(d->kraSaver->saveXML(doc, d->image));
-    if (!d->kraSaver->errorMessages().isEmpty()) {
-        setErrorMessage(d->kraSaver->errorMessages().join(".\n"));
-    }
+//    root.appendChild(d->kraSaver->saveXML(doc, d->image));
+//    if (!d->kraSaver->errorMessages().isEmpty()) {
+//        setErrorMessage(d->kraSaver->errorMessages().join(".\n"));
+//    }
 
     return doc;
 }

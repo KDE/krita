@@ -26,7 +26,9 @@ class QTreeView;
 class QStyleOptionViewItem;
 class QRect;
 
-class KisNodeViewColorScheme
+#include <kritaui_export.h>
+
+class KRITAUI_EXPORT KisNodeViewColorScheme
 {
 public:
     KisNodeViewColorScheme();

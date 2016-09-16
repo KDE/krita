@@ -32,6 +32,7 @@
 
 #include <QApplication>
 #include <QMessageBox>
+#include <QDomDocument>
 
 #include <QFileInfo>
 
@@ -48,7 +49,6 @@
 #include <kis_paint_layer.h>
 #include <kis_transaction.h>
 #include "kis_iterator_ng.h"
-#include "kra/kis_kra_savexml_visitor.h"
 #include <kis_exr_layers_sorter.h>
 
 #include <metadata/kis_meta_data_entry.h>
@@ -1236,10 +1236,11 @@ QString exrConverter::Private::fetchExtraLayersInfo(QList<ExrPaintLayerSaveInfo>
 
     for (int i = 0; i < informationObjects.size(); i++) {
         ExrPaintLayerSaveInfo &info = informationObjects[i];
-        quint32 unused;
-        KisSaveXmlVisitor visitor(doc, rootElement, unused, QString(), false);
-        QDomElement el = visitor.savePaintLayerAttributes(info.layer.data(), doc);
-
+// XXX: impexrefactor
+//        quint32 unused;
+//        KisSaveXmlVisitor visitor(doc, rootElement, unused, QString(), false);
+//        QDomElement el = visitor.savePaintLayerAttributes(info.layer.data(), doc);
+        QDomElement el = doc.createElement("layer");
         // cut the ending '.'
         QString strippedName = info.name.left(info.name.size() - 1);
 

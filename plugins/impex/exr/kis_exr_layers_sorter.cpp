@@ -23,7 +23,7 @@
 
 #include "kis_image.h"
 #include "exr_extra_tags.h"
-#include "kra/kis_kra_savexml_visitor.h"
+//#include "kra/kis_kra_savexml_visitor.h"
 #include "kis_paint_layer.h"
 
 
@@ -105,9 +105,9 @@ void KisExrLayersSorter::Private::processLayers(KisNodeSP root)
 
         nodeToOrderingMap.insert(root, fetchMapValueLazy(pathToOrderingMap, path));
 
-        if (KisPaintLayer *paintLayer = dynamic_cast<KisPaintLayer*>(root.data())) {
-            KisSaveXmlVisitor::loadPaintLayerAttributes(pathToElementMap[path], paintLayer);
-        }
+//        if (KisPaintLayer *paintLayer = dynamic_cast<KisPaintLayer*>(root.data())) {
+//            KisSaveXmlVisitor::loadPaintLayerAttributes(pathToElementMap[path], paintLayer);
+//        }
     }
 
     KisNodeSP child = root->firstChild();

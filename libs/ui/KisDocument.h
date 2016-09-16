@@ -800,8 +800,6 @@ public:
 
 private:
 
-    void init();
-
     bool saveToStream(QIODevice *dev);
 
     bool loadNativeFormatFromStoreInternal(KoStore *store);

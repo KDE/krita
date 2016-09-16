@@ -44,6 +44,7 @@ public:
     KisImageWSP image();
 private:
     KisImageBuilder_Result decode(const QString &filename);
+
 public Q_SLOTS:
     virtual void cancel();
 private:

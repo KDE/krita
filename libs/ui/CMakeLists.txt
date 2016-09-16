@@ -157,13 +157,6 @@ set(kritaui_LIB_SRCS
     kisexiv2/kis_exiv2.cpp
     kisexiv2/kis_iptc_io.cpp
     kisexiv2/kis_xmp_io.cpp
-    kra/kis_kra_utils.cpp
-    kra/kis_kra_load_visitor.cpp
-    kra/kis_kra_loader.cpp
-    kra/kis_kra_save_visitor.cpp
-    kra/kis_kra_saver.cpp
-    kra/kis_kra_savexml_visitor.cpp
-    kra/kis_colorize_dom_utils.cpp
     opengl/kis_opengl.cpp
     opengl/kis_opengl_canvas2.cpp
     opengl/kis_opengl_canvas_debugger.cpp

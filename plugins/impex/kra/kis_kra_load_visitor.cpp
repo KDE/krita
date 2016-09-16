@@ -17,7 +17,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kra/kis_kra_load_visitor.h"
+#include "kis_kra_load_visitor.h"
 #include "kis_kra_tags.h"
 #include "flake/kis_shape_layer.h"
 

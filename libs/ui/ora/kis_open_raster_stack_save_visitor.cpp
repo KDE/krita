@@ -69,7 +69,9 @@ void KisOpenRasterStackSaveVisitor::saveLayerInfo(QDomElement& elt, KisLayer* la
     QString compop = layer->compositeOpId();
     if (layer->compositeOpId() == COMPOSITE_CLEAR) compop = "svg:clear";
     else if (layer->compositeOpId() == COMPOSITE_OVER) compop = "svg:src-over";
-    else if (layer->compositeOpId() == COMPOSITE_ADD) compop = "svg:add";
+    else if (layer->compositeOpId() == COMPOSITE_ERASE) compop = "svg:dst-out";
+    else if (layer->alphaChannelDisabled()) compop = "svg:dst-atop";
+    else if (layer->compositeOpId() == COMPOSITE_ADD) compop = "svg:plus";
     else if (layer->compositeOpId() == COMPOSITE_MULT) compop = "svg:multiply";
     else if (layer->compositeOpId() == COMPOSITE_SCREEN) compop = "svg:screen";
     else if (layer->compositeOpId() == COMPOSITE_OVERLAY) compop = "svg:overlay";
@@ -84,7 +86,7 @@ void KisOpenRasterStackSaveVisitor::saveLayerInfo(QDomElement& elt, KisLayer* la
     else if (layer->compositeOpId() == COMPOSITE_LUMINIZE) compop = "svg:luminosity";
     else if (layer->compositeOpId() == COMPOSITE_HUE) compop = "svg:hue";
     else if (layer->compositeOpId() == COMPOSITE_SATURATION) compop = "svg:saturation";
-    else if (layer->compositeOpId() == COMPOSITE_EXCLUSION) compop = "svg:exclusion";
+    //else if (layer->compositeOpId() == COMPOSITE_EXCLUSION) compop = "svg:exclusion";
     else compop = "krita:" + layer->compositeOpId();
     elt.setAttribute("composite-op", compop);
 }
@@ -106,7 +108,11 @@ bool KisOpenRasterStackSaveVisitor::visit(KisGroupLayer *layer)
     QDomElement elt = d->layerStack.createElement("stack");
     d->currentElement = &elt;
     saveLayerInfo(elt, layer);
-
+    QString isolate = "isolate";
+    if (layer->passThroughMode()) {
+        isolate = "auto";
+    }
+    elt.setAttribute("isolation", isolate);
     visitAll(layer);
 
     if (previousElt) {

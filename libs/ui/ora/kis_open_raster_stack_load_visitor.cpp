@@ -135,9 +135,22 @@ void KisOpenRasterStackLoadVisitor::loadLayerInfo(const QDomElement& elem, KisLa
 
     QString compop = elem.attribute("composite-op");
     if (compop.startsWith("svg:")) {
-        if (compop == "svg:clear") layer->setCompositeOpId(COMPOSITE_CLEAR);
+        //we don't have a 'composite op clear' despite the registery reserving a string for it, doesn't matter, ora doesn't use it.
+        //if (compop == "svg:clear") layer->setCompositeOpId(COMPOSITE_CLEAR);
         if (compop == "svg:src-over") layer->setCompositeOpId(COMPOSITE_OVER);
-        if (compop == "svg:add") layer->setCompositeOpId(COMPOSITE_ADD);
+        //not part of the spec.
+        //if (compop == "svg:dst-over") layer->setCompositeOpId(COMPOSITE_BEHIND);
+        //dst-in "The source that overlaps the destination, replaces the destination."
+        if (compop == "svg:dst-in") layer->setCompositeOpId(COMPOSITE_DESTINATION_IN);
+        //dst-out "dst is placed, where it falls outside of the source."
+        if (compop == "svg:dst-out") layer->setCompositeOpId(COMPOSITE_ERASE);
+        //src-atop "Destination which overlaps the source replaces the source. Source is placed elsewhere."
+        //this is basically our alpha-inherit.
+        if (compop == "svg:src-atop") layer->disableAlphaChannel(true);
+        //dst-atop
+        if (compop == "svg:dst-atop") layer->setCompositeOpId(COMPOSITE_DESTINATION_ATOP);
+        //plus is svg standard's way of saying addtion... photoshop calls this linear dodge, btw, maybe make a similar alias?
+        if (compop == "svg:plus") layer->setCompositeOpId(COMPOSITE_ADD);
         if (compop == "svg:multiply") layer->setCompositeOpId(COMPOSITE_MULT);
         if (compop == "svg:screen") layer->setCompositeOpId(COMPOSITE_SCREEN);
         if (compop == "svg:overlay") layer->setCompositeOpId(COMPOSITE_OVERLAY);
@@ -152,7 +165,8 @@ void KisOpenRasterStackLoadVisitor::loadLayerInfo(const QDomElement& elem, KisLa
         if (compop == "svg:luminosity") layer->setCompositeOpId(COMPOSITE_LUMINIZE);
         if (compop == "svg:hue") layer->setCompositeOpId(COMPOSITE_HUE);
         if (compop == "svg:saturation") layer->setCompositeOpId(COMPOSITE_SATURATION);
-        if (compop == "svg:exclusion") layer->setCompositeOpId(COMPOSITE_EXCLUSION);
+        //Exclusion isn't in the official list.
+        //if (compop == "svg:exclusion") layer->setCompositeOpId(COMPOSITE_EXCLUSION);
     }
     else if (compop.startsWith("krita:")) {
         compop = compop.remove(0, 6);
@@ -162,6 +176,7 @@ void KisOpenRasterStackLoadVisitor::loadLayerInfo(const QDomElement& elem, KisLa
         // to fix old bugs in krita's ora export
         if (compop == "color-dodge") layer->setCompositeOpId(COMPOSITE_DODGE);
         if (compop == "difference") layer->setCompositeOpId(COMPOSITE_DIFF);
+        if (compop == "svg:add") layer->setCompositeOpId(COMPOSITE_ADD);
     }
 
 }
@@ -191,6 +206,11 @@ void KisOpenRasterStackLoadVisitor::loadGroupLayer(const QDomElement& elem, KisG
                     opacity = KisDomUtils::toDouble(subelem.attribute("opacity", "1.0"));
                 }
                 KisGroupLayerSP layer = new KisGroupLayer(d->image, "", opacity * 255);
+                bool passThrough = true;
+                if (subelem.attribute("isolation")=="isolate") {
+                    passThrough = false;
+                }
+                layer->setPassThroughMode(passThrough);
                 d->image->addNode(layer.data(), gL.data(), 0);
                 loadGroupLayer(subelem, layer);
             } else if (node.nodeName() == "layer") {

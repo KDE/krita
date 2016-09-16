@@ -25,7 +25,6 @@
 
 #include "kis_node_visitor.h"
 #include "kis_layer.h"
-#include <kritaui_export.h>
 
 class KisOpenRasterSaveContext;
 
@@ -36,7 +35,7 @@ class KisGeneratorLayer;
 
 class QDomElement;
 
-class KRITAUI_EXPORT KisOpenRasterStackSaveVisitor : public KisNodeVisitor
+class KisOpenRasterStackSaveVisitor : public KisNodeVisitor
 {
 public:
     KisOpenRasterStackSaveVisitor(KisOpenRasterSaveContext*, vKisNodeSP activeNodes);

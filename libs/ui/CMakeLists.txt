@@ -171,10 +171,6 @@ set(kritaui_LIB_SRCS
     opengl/kis_texture_tile.cpp
     opengl/kis_opengl_shader_loader.cpp
     kis_fps_decoration.cpp
-    ora/kis_open_raster_stack_load_visitor.cpp
-    ora/kis_open_raster_stack_save_visitor.cpp
-    ora/ora_load_context.cc
-    ora/ora_save_context.cc
     recorder/kis_node_query_path_editor.cc
     recorder/kis_recorded_action_creator.cc
     recorder/kis_recorded_action_creator_factory.cc
@@ -542,7 +538,6 @@ target_include_directories(kritaui
     PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/canvas>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/flake>
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/ora>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/tool>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/utils>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/widgets>

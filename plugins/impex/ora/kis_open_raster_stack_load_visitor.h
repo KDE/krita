@@ -21,15 +21,12 @@
 #include "kis_global.h"
 #include "kis_types.h"
 
-#include <kritaui_export.h>
-
 class QDomElement;
-
 
 class KisUndoStore;
 class KisOpenRasterLoadContext;
 
-class KRITAUI_EXPORT KisOpenRasterStackLoadVisitor
+class KisOpenRasterStackLoadVisitor
 {
 public:
     KisOpenRasterStackLoadVisitor(KisUndoStore *undoStore, KisOpenRasterLoadContext* orlc);

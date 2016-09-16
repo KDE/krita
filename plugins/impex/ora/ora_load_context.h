@@ -19,11 +19,10 @@
 #define _ORA_LOAD_CONTEXT_H_
 
 #include <kis_open_raster_load_context.h>
-#include <kritaui_export.h>
 
 class KoStore;
 
-class KRITAUI_EXPORT OraLoadContext : public KisOpenRasterLoadContext
+class OraLoadContext : public KisOpenRasterLoadContext
 {
 public:
     OraLoadContext(KoStore* _store);

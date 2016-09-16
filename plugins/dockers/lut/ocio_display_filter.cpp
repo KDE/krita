@@ -33,8 +33,6 @@
 #include <QOpenGLFunctions_2_0>
 
 
-static const int LUT3D_EDGE_SIZE = 32;
-
 OcioDisplayFilter::OcioDisplayFilter(KisExposureGammaCorrectionInterface *interface, QObject *parent)
     : KisDisplayFilter(parent)
     , inputColorSpaceName(0)

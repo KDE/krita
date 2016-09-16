@@ -170,7 +170,7 @@ private Q_SLOTS:
     void slotHideDecorationMirrorX(bool);
     void slotHideDecorationMirrorY(bool);
 
-    void slotUpdateOptionsWidget();
+    void slotUpdateOptionsWidgetPopup();
 
 private:
     KisCanvasResourceProvider*          m_resourceProvider;
@@ -246,7 +246,6 @@ private:
     bool             m_eraserBrushSizeEnabled;
 
     KisSignalAutoConnectionsStore m_presetConnections;
-    KisSignalCompressor m_presetUpdateCompressor;
 };
 
 #endif //KIS_PAINTOP_BOX_H_

@@ -925,14 +925,14 @@ void KisCanvas2::bootstrapFinished()
 
 void KisCanvas2::setLodAllowedInCanvas(bool value)
 {
-    if (!KisOpenGL::hasOpenGL3()) {
+    if (!KisOpenGL::supportsLoD()) {
         qWarning() << "WARNING: Level of Detail functionality is available only with openGL + GLSL 1.3 support";
     }
 
     m_d->lodAllowedInCanvas =
             value &&
             m_d->currentCanvasIsOpenGL &&
-            KisOpenGL::hasOpenGL3() &&
+            KisOpenGL::supportsLoD() &&
             (m_d->openGLFilterMode == KisOpenGL::TrilinearFilterMode ||
              m_d->openGLFilterMode == KisOpenGL::HighQualityFiltering);
 

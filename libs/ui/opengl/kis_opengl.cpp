@@ -148,6 +148,14 @@ void KisOpenGL::initializeContext(QOpenGLContext *ctx)
     }
 }
 
+// XXX Temporary function to allow LoD on OpenGL3 without triggering
+// all of the other 3.2 functionality, can be removed once we move to Qt5.7
+bool KisOpenGL::supportsLoD()
+{
+    initialize();
+    return (glMajorVersion * 100 + glMinorVersion) >= 300;
+}
+
 bool KisOpenGL::hasOpenGL3()
 {
     initialize();
@@ -179,6 +187,7 @@ void KisOpenGL::setDefaultFormat()
     format.setVersion(3, 2);
     format.setProfile(QSurfaceFormat::CoreProfile);
 #else
+    // XXX This can be removed once we move to Qt5.7
     format.setVersion(3, 0);
     format.setProfile(QSurfaceFormat::CompatibilityProfile);
     format.setOptions(QSurfaceFormat::DeprecatedFunctions);

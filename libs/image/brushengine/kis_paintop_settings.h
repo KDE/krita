@@ -192,12 +192,12 @@ public:
     /**
      * Set paintop size directly in the properties
      */
-    virtual void setPaintOpSize(qreal value);
+    virtual void setPaintOpSize(qreal value) = 0;
 
     /**
      * @return size saved in the properties
      */
-    virtual qreal paintOpSize() const;
+    virtual qreal paintOpSize() const = 0;
 
     void setEraserMode(bool value);
     bool eraserMode();
@@ -253,7 +253,7 @@ public:
      */
     void setProperty(const QString & name, const QVariant & value);
 
-    virtual QList<KisUniformPaintOpPropertySP> uniformProperties();
+    virtual QList<KisUniformPaintOpPropertySP> uniformProperties(KisPaintOpSettingsSP settings);
 
     static bool isLodUserAllowed(const KisPropertiesConfigurationSP config);
     static void setLodUserAllowed(KisPropertiesConfigurationSP config, bool value);
@@ -275,7 +275,5 @@ private:
     struct Private;
     const QScopedPointer<Private> d;
 };
-
-typedef KisSharedPtr<KisPaintOpSettings> KisPaintOpSettingsSP;
 
 #endif

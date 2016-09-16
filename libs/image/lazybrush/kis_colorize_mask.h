@@ -68,7 +68,7 @@ public:
 
     QIcon icon() const;
 
-    void setImage(KisImageWSP image);
+    void setImage(KisImageWSP image) Q_DECL_OVERRIDE;
     bool accept(KisNodeVisitor &v);
     void accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter);
 
@@ -106,6 +106,8 @@ public:
     qint32 y() const;
     void setX(qint32 x);
     void setY(qint32 y);
+
+    KisPaintDeviceList getLodCapableDevices() const;
 
 private Q_SLOTS:
     void slotUpdateRegenerateFilling();

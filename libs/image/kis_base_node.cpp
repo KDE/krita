@@ -315,6 +315,11 @@ bool KisBaseNode::supportsLodMoves() const
     return m_d->supportsLodMoves;
 }
 
+void KisBaseNode::setImage(KisImageWSP image)
+{
+    Q_UNUSED(image);
+}
+
 void KisBaseNode::setSupportsLodMoves(bool value)
 {
     m_d->supportsLodMoves = value;

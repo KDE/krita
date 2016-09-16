@@ -269,7 +269,8 @@ void KisColorizeMask::slotUpdateRegenerateFilling()
                                           m_d->coloringProjection,
                                           m_d->filteredSource,
                                           filteredSourceValid,
-                                          image->bounds());
+                                          image->bounds(),
+                                          this);
 
         Q_FOREACH (const KeyStroke &stroke, m_d->keyStrokes) {
             const KoColor color =
@@ -289,7 +290,6 @@ void KisColorizeMask::slotUpdateRegenerateFilling()
 void KisColorizeMask::slotRegenerationFinished()
 {
     setNeedsUpdate(true);
-    setDirty();
 }
 
 KisBaseNode::PropertyList KisColorizeMask::sectionModelProperties() const
@@ -498,10 +498,16 @@ KisImageSP KisColorizeMask::fetchImage() const
 
 void KisColorizeMask::setImage(KisImageWSP image)
 {
+    KisDefaultBoundsSP bounds = new KisDefaultBounds(image);
+
     auto it = m_d->keyStrokes.begin();
     for(; it != m_d->keyStrokes.end(); ++it) {
-        it->dev->setDefaultBounds(new KisDefaultBounds(image));
+        it->dev->setDefaultBounds(bounds);
     }
+
+    m_d->coloringProjection->setDefaultBounds(bounds);
+    m_d->fakePaintDevice->setDefaultBounds(bounds);
+    m_d->filteredSource->setDefaultBounds(bounds);
 }
 
 void KisColorizeMask::setCurrentColor(const KoColor &_color)
@@ -856,6 +862,10 @@ QList<KeyStroke> KisColorizeMask::fetchKeyStrokesDirect() const
 void KisColorizeMask::setKeyStrokesDirect(const QList<KisLazyFillTools::KeyStroke> &strokes)
 {
     m_d->keyStrokes = strokes;
+
+    KisImageSP image = fetchImage();
+    KIS_SAFE_ASSERT_RECOVER_RETURN(image);
+    setImage(image);
 }
 
 qint32 KisColorizeMask::x() const
@@ -880,6 +890,22 @@ void KisColorizeMask::setY(qint32 y)
     const QPoint oldOffset = m_d->offset;
     m_d->offset.ry() = y;
     moveAllInternalDevices(m_d->offset - oldOffset);
+}
+
+KisPaintDeviceList KisColorizeMask::getLodCapableDevices() const
+{
+    KisPaintDeviceList list;
+
+    auto it = m_d->keyStrokes.begin();
+    for(; it != m_d->keyStrokes.end(); ++it) {
+        list << it->dev;
+    }
+
+    list << m_d->coloringProjection;
+    list << m_d->fakePaintDevice;
+    list << m_d->filteredSource;
+
+    return list;
 }
 
 void KisColorizeMask::moveAllInternalDevices(const QPoint &diff)

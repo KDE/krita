@@ -432,3 +432,14 @@ void KisImageConfig::setDefaultProofingConfig(const KoColorSpace *proofingSpace,
     m_config.writeEntry("defaultProofingGamutwarning", c);
     m_config.writeEntry("defaultProofingAdaptationState",adaptationState);
 }
+
+bool KisImageConfig::useLodForColorizeMask(bool requestDefault) const
+{
+    return !requestDefault ?
+        m_config.readEntry("useLodForColorizeMask", false) : false;
+}
+
+void KisImageConfig::setUseLodForColorizeMask(bool value)
+{
+    m_config.writeEntry("useLodForColorizeMask", value);
+}

@@ -635,6 +635,8 @@ void KisPaintDevice::Private::updateLodDataStruct(LodDataStruct *_dst, const QRe
     const int lod = lodData->levelOfDetail();
     const int srcStepSize = 1 << lod;
 
+    KIS_ASSERT_RECOVER_RETURN(lod > 0);
+
     const QRect srcRect = KisLodTransform::alignedRect(originalRect, lod);
     const QRect dstRect = KisLodTransform::scaledRect(srcRect, lod);
     if (!srcRect.isValid() || !dstRect.isValid()) return;

@@ -65,7 +65,9 @@ private:
     KisDynaOpOptionsWidget * m_options;
 };
 
-struct DynaOption {
+
+struct DynaOption : public KisBaseOption
+{
 
     int dyna_action;
 
@@ -81,7 +83,7 @@ struct DynaOption {
     bool dyna_use_two_circles;
     bool dyna_use_fixed_angle;
 
-    void writeOptionSetting(KisPropertiesConfigurationSP setting) const {
+    void writeOptionSettingImpl(KisPropertiesConfiguration *setting) const {
         setting->setProperty(DYNA_WIDTH, dyna_width);
         setting->setProperty(DYNA_MASS, dyna_mass);
         setting->setProperty(DYNA_DRAG, dyna_drag);
@@ -97,7 +99,7 @@ struct DynaOption {
 
     }
 
-    void readOptionSetting(const KisPropertiesConfigurationSP setting) {
+    void readOptionSettingImpl(const KisPropertiesConfiguration *setting) {
         dyna_action = setting->getInt(DYNA_ACTION);
         dyna_width = setting->getDouble(DYNA_WIDTH);
         dyna_mass = setting->getDouble(DYNA_MASS);

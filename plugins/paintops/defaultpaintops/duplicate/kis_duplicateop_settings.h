@@ -54,7 +54,7 @@ public:
 
     KisNodeWSP sourceNode() const;
 
-    QList<KisUniformPaintOpPropertySP> uniformProperties();
+    QList<KisUniformPaintOpPropertySP> uniformProperties(KisPaintOpSettingsSP settings);
 
 public:
 

@@ -36,6 +36,6 @@ private:
     Q_DISABLE_COPY(KisOperationConfiguration)
 };
 
-typedef KisSharedPtr<KisOperationConfiguration> KisOperationConfigurationSP;
+typedef KisPinnedSharedPtr<KisOperationConfiguration> KisOperationConfigurationSP;
 
 #endif /* __KIS_OPERATION_CONFIGURATION_H */

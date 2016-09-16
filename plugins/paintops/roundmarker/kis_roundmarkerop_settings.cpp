@@ -85,14 +85,14 @@ QPainterPath KisRoundMarkerOpSettings::brushOutline(const KisPaintInformation &i
 
 #include "kis_standard_uniform_properties_factory.h"
 
-QList<KisUniformPaintOpPropertySP> KisRoundMarkerOpSettings::uniformProperties()
+QList<KisUniformPaintOpPropertySP> KisRoundMarkerOpSettings::uniformProperties(KisPaintOpSettingsSP settings)
 {
     QList<KisUniformPaintOpPropertySP> props;
 
     {
         using namespace KisStandardUniformPropertiesFactory;
 
-        Q_FOREACH (KisUniformPaintOpPropertySP prop, KisPaintOpSettings::uniformProperties()) {
+        Q_FOREACH (KisUniformPaintOpPropertySP prop, KisPaintOpSettings::uniformProperties(settings)) {
             if (prop->id() != flow.id()) {
                 props.prepend(prop);
             }

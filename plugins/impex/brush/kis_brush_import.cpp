@@ -60,6 +60,17 @@ KisImportExportFilter::ConversionStatus KisBrushImport::convert(KisDocument *doc
 {
     KisBrush *brush;
 
+    if (to != "application/x-krita")
+        return KisImportExportFilter::BadMimeType;
+
+    QString filename = inputFile();
+
+    if (!filename.isEmpty()) {
+
+        if (!QFile(filename).exists()) {
+            return KisImportExportFilter::FileNotFound;
+        }
+
     if (mimeType() == "image/x-gimp-brush") {
         brush = new KisGbrBrush(inputFile());
     }

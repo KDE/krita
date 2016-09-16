@@ -64,6 +64,7 @@ KisBrushExport::~KisBrushExport()
 
 KisImportExportFilter::ConversionStatus KisBrushExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
 {
+
 // XXX: Loading the parasite itself was commented out -- needs investigation
 //    KisAnnotationSP annotation = document->image()->annotation("ImagePipe Parasite");
 //    KisPipeBrushParasite parasite;
@@ -73,6 +74,26 @@ KisImportExportFilter::ConversionStatus KisBrushExport::convert(KisDocument *doc
 //        parasite.loadFromDevice(&buf);
 //        buf.close();
 //    }
+
+    KisDocument *input = inputDocument();
+    QString filename = outputFile();
+
+    if (!input)
+        return KisImportExportFilter::NoDocumentCreated;
+
+    if (filename.isEmpty()) return KisImportExportFilter::FileNotFound;
+
+    if (from != "application/x-krita")
+        return KisImportExportFilter::NotImplemented;
+
+    KisAnnotationSP annotation = input->image()->annotation("ImagePipe Parasite");
+    KisPipeBrushParasite parasite;
+    if (annotation) {
+        QBuffer buf(const_cast<QByteArray*>(&annotation->annotation()));
+        buf.open(QBuffer::ReadOnly);
+        //parasite.loadFromDevice(&buf);
+        buf.close();
+    }
 
     KisBrushExportOptions exportOptions;
     exportOptions.spacing = 1.0;

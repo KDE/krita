@@ -210,38 +210,6 @@ qreal KisPaintOpSettings::paintOpFlow()
     return proxy->getDouble("FlowValue", 1.0);
 }
 
-void KisPaintOpSettings::setPaintOpSize(qreal value)
-{
-    /**
-     * The widget already has the wrapping for the locked setings
-     * functionality, so just request it.
-     */
-
-    if (d->settingsWidget) {
-        const qreal sizeDiff = value - paintOpSize();
-
-        {
-            KisSignalsBlocker b(d->settingsWidget);
-            d->settingsWidget.data()->setConfigurationSafe(this);
-            d->settingsWidget.data()->changePaintOpSize(sizeDiff, 0);
-        }
-        d->settingsWidget.data()->writeConfigurationSafe(this);
-    }
-}
-
-qreal KisPaintOpSettings::paintOpSize() const
-{
-    // see a comment about locked settings in setPaintOpSize()
-
-    qreal size = 1.0;
-
-    if (d->settingsWidget) {
-        size = d->settingsWidget.data()->paintOpSize().width();
-    }
-
-    return size;
-}
-
 QString KisPaintOpSettings::paintOpCompositeOp()
 {
     KisLockedPropertiesProxySP proxy(
@@ -450,7 +418,7 @@ void KisPaintOpSettings::setLodUserAllowed(KisPropertiesConfigurationSP config, 
 
 #include "kis_standard_uniform_properties_factory.h"
 
-QList<KisUniformPaintOpPropertySP> KisPaintOpSettings::uniformProperties()
+QList<KisUniformPaintOpPropertySP> KisPaintOpSettings::uniformProperties(KisPaintOpSettingsSP settings)
 {
     QList<KisUniformPaintOpPropertySP> props =
         listWeakToStrong(d->uniformProperties);
@@ -459,9 +427,9 @@ QList<KisUniformPaintOpPropertySP> KisPaintOpSettings::uniformProperties()
     if (props.isEmpty()) {
         using namespace KisStandardUniformPropertiesFactory;
 
-        props.append(createProperty(opacity, this, d->updateProxyCreate()));
-        props.append(createProperty(size, this, d->updateProxyCreate()));
-        props.append(createProperty(flow, this, d->updateProxyCreate()));
+        props.append(createProperty(opacity, settings, d->updateProxyCreate()));
+        props.append(createProperty(size, settings, d->updateProxyCreate()));
+        props.append(createProperty(flow, settings, d->updateProxyCreate()));
 
         d->uniformProperties = listStrongToWeak(props);
     }

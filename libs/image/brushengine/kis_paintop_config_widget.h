@@ -59,16 +59,6 @@ public:
     virtual void setNode(KisNodeWSP node);
 
     /**
-     * @see KisPaintOpSettings::changePaintOpSize(qreal x, qreal y)
-     */
-    virtual void changePaintOpSize(qreal x, qreal y);
-
-    /**
-     * @see KisPaintOpSettings::paintOpSize()
-     */
-    virtual QSizeF paintOpSize() const;
-
-    /**
      * This is true for all of the paintop widget except for the Custom brush tab in the Brush tip dialog
      */
     virtual bool presetIsValid();

@@ -27,9 +27,6 @@
 #include <kis_shared_ptr.h>
 
 
-class KisBrushBasedPaintOpSettings;
-typedef KisSharedPtr<KisBrushBasedPaintOpSettings> KisBrushBasedPaintOpSettingsSP;
-
 class PAINTOP_EXPORT KisBrushBasedPaintOpSettings : public KisOutlineGenerationPolicy<KisPaintOpSettings>
 {
 public:
@@ -69,8 +66,10 @@ public:
     bool autoSpacingActive();
     qreal autoSpacingCoeff();
 
+    void setPaintOpSize(qreal value);
+    qreal paintOpSize() const;
 
-    QList<KisUniformPaintOpPropertySP> uniformProperties();
+    QList<KisUniformPaintOpPropertySP> uniformProperties(KisPaintOpSettingsSP settings);
 
 protected:
     QPainterPath brushOutlineImpl(const KisPaintInformation &info, OutlineMode mode, qreal additionalScale, bool forceOutline = false);
@@ -82,5 +81,8 @@ private:
     Q_DISABLE_COPY(KisBrushBasedPaintOpSettings)
 
 };
+
+class KisBrushBasedPaintOpSettings;
+typedef KisPinnedSharedPtr<KisBrushBasedPaintOpSettings> KisBrushBasedPaintOpSettingsSP;
 
 #endif // KIS_BRUSH_BASED_PAINTOP_SETTINGS_H

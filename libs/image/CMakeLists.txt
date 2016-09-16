@@ -67,6 +67,7 @@ set(kritaimage_LIB_SRCS
    brushengine/kis_paintop_registry.cc
    brushengine/kis_paintop_settings.cpp
    brushengine/kis_paintop_settings_update_proxy.cpp
+   brushengine/kis_no_size_paintop_settings.cpp
    brushengine/kis_locked_properties.cc
    brushengine/kis_locked_properties_proxy.cpp
    brushengine/kis_locked_properties_server.cpp
@@ -315,6 +316,8 @@ set(kritaimage_LIB_SRCS
    layerstyles/kis_ls_overlay_filter.cpp
    layerstyles/kis_ls_utils.cpp
    layerstyles/gimp_bump_map.cpp
+
+   KisProofingConfiguration.cpp
 )
 
 set(einspline_SRCS

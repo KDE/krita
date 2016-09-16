@@ -41,11 +41,11 @@ public:
     KisUniformPaintOpProperty(Type type,
                               const QString &id,
                               const QString &name,
-                              KisPaintOpSettingsSP settings,
+                              KisPaintOpSettingsRestrictedSP settings,
                               QObject *parent);
     KisUniformPaintOpProperty(const QString &id,
                               const QString &name,
-                              KisPaintOpSettingsSP settings,
+                              KisPaintOpSettingsRestrictedSP settings,
                               QObject *parent);
     ~KisUniformPaintOpProperty();
 

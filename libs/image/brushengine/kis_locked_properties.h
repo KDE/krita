@@ -28,26 +28,26 @@
  * removeFromLockedProperties() removes a particular set of properties from the list
  * hasProperty() checks for a particular property in the list
  */
-class KisLockedProperties
+class KisLockedProperties : public KisShared
 {
 public:
     KisLockedProperties();
-    KisLockedProperties(KisPropertiesConfigurationSP p);
     ~KisLockedProperties();
 
     /**Whenever any setting is made locked**/
     void addToLockedProperties(KisPropertiesConfigurationSP p);
+    void addToLockedProperties(const KisPropertiesConfiguration *p);
 
     /**Whenever any property is unlocked**/
     void removeFromLockedProperties(KisPropertiesConfigurationSP p);
+    void removeFromLockedProperties(const KisPropertiesConfiguration *p);
     bool hasProperty(const QString &p);
 
     KisPropertiesConfigurationSP lockedProperties();
 
 private:
-
+    Q_DISABLE_COPY(KisLockedProperties);
     KisPropertiesConfigurationSP m_lockedProperties;
-
 };
 
 #endif // KISLOCKEDPROPERTIES_H

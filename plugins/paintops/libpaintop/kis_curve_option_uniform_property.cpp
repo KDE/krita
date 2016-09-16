@@ -26,7 +26,7 @@
 
 KisCurveOptionUniformProperty::KisCurveOptionUniformProperty(const QString &name,
                                                              KisCurveOption *option,
-                                                             KisPaintOpSettingsSP settings,
+                                                             KisPaintOpSettingsRestrictedSP settings,
                                                              QObject *parent)
     : KisDoubleSliderBasedPaintOpProperty(Double,
                                           name,

@@ -40,6 +40,21 @@ KisDeformPaintOpSettings::~KisDeformPaintOpSettings()
 {
 }
 
+void KisDeformPaintOpSettings::setPaintOpSize(qreal value)
+{
+    BrushSizeOption option;
+    option.readOptionSetting(this);
+    option.brush_diameter = value;
+    option.writeOptionSetting(this);
+}
+
+qreal KisDeformPaintOpSettings::paintOpSize() const
+{
+    BrushSizeOption option;
+    option.readOptionSetting(this);
+    return option.brush_diameter;
+}
+
 bool KisDeformPaintOpSettings::paintIncremental()
 {
     return true;
@@ -105,7 +120,7 @@ QPainterPath KisDeformPaintOpSettings::brushOutline(const KisPaintInformation &i
 #include "kis_standard_uniform_properties_factory.h"
 
 
-QList<KisUniformPaintOpPropertySP> KisDeformPaintOpSettings::uniformProperties()
+QList<KisUniformPaintOpPropertySP> KisDeformPaintOpSettings::uniformProperties(KisPaintOpSettingsSP settings)
 {
     QList<KisUniformPaintOpPropertySP> props =
         listWeakToStrong(m_d->uniformProperties);
@@ -117,7 +132,7 @@ QList<KisUniformPaintOpPropertySP> KisDeformPaintOpSettings::uniformProperties()
                     KisDoubleSliderBasedPaintOpPropertyCallback::Double,
                     "deform_amount",
                     i18n("Amount"),
-                    this, 0);
+                    settings, 0);
 
             prop->setRange(0.01, 1.0);
             prop->setSingleStep(0.01);
@@ -147,7 +162,7 @@ QList<KisUniformPaintOpPropertySP> KisDeformPaintOpSettings::uniformProperties()
                 new KisComboBasedPaintOpPropertyCallback(
                     "deform_mode",
                     i18n("Deform Mode"),
-                    this, 0);
+                    settings, 0);
 
             QList<QString> modes;
             modes << i18n("Grow");
@@ -187,7 +202,7 @@ QList<KisUniformPaintOpPropertySP> KisDeformPaintOpSettings::uniformProperties()
                     KisIntSliderBasedPaintOpPropertyCallback::Int,
                     "deform_angle",
                     i18n("Angle"),
-                    this, 0);
+                    settings, 0);
 
             const QString degree = QChar(Qt::Key_degree);
             prop->setRange(0, 360);
@@ -218,7 +233,7 @@ QList<KisUniformPaintOpPropertySP> KisDeformPaintOpSettings::uniformProperties()
     {
         using namespace KisStandardUniformPropertiesFactory;
 
-        Q_FOREACH (KisUniformPaintOpPropertySP prop, KisPaintOpSettings::uniformProperties()) {
+        Q_FOREACH (KisUniformPaintOpPropertySP prop, KisPaintOpSettings::uniformProperties(settings)) {
             if (prop->id() == opacity.id() ||
                 prop->id() == size.id()) {
                 props.prepend(prop);

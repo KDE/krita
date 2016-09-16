@@ -1090,6 +1090,7 @@ KisNodeSP KisKraLoader::loadColorizeMask(KisImageSP image, const KoXmlElement& e
     KisLayerPropertiesIcons::setNodeProperty(mask, KisLayerPropertiesIcons::colorizeEditKeyStrokes, editKeystrokes, image);
     KisLayerPropertiesIcons::setNodeProperty(mask, KisLayerPropertiesIcons::colorizeShowColoring, showColoring, image);
     mask->setColorSpace(colorSpace);
+    mask->setImage(image);
 
     return mask;
 }

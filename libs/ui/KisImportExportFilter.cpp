@@ -176,6 +176,8 @@ QString KisImportExportFilter::conversionStatusString(ConversionStatus status)
 
 KisPropertiesConfigurationSP KisImportExportFilter::defaultConfiguration(const QByteArray &from, const QByteArray &to) const
 {
+    Q_UNUSED(from);
+    Q_UNUSED(to);
     return 0;
 }
 
@@ -186,6 +188,8 @@ KisPropertiesConfigurationSP KisImportExportFilter::lastSavedConfiguration(const
 
 KisConfigWidget *KisImportExportFilter::createConfigurationWidget(QWidget *, const QByteArray &from, const QByteArray &to) const
 {
+    Q_UNUSED(from);
+    Q_UNUSED(to);
     return 0;
 }
 

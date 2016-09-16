@@ -43,6 +43,23 @@ KisSprayPaintOpSettings::~KisSprayPaintOpSettings()
 {
 }
 
+void KisSprayPaintOpSettings::setPaintOpSize(qreal value)
+{
+    KisSprayProperties option;
+    option.readOptionSetting(this);
+    option.diameter = value;
+    option.writeOptionSetting(this);
+}
+
+qreal KisSprayPaintOpSettings::paintOpSize() const
+{
+
+    KisSprayProperties option;
+    option.readOptionSetting(this);
+
+    return option.diameter;
+}
+
 bool KisSprayPaintOpSettings::paintIncremental()
 {
     return (enumPaintActionType)getInt("PaintOpAction", WASH) == BUILDUP;
@@ -91,11 +108,10 @@ QPainterPath KisSprayPaintOpSettings::brushOutline(const KisPaintInformation &in
 #include <brushengine/kis_slider_based_paintop_property.h>
 #include "kis_paintop_preset.h"
 #include "kis_paintop_settings_update_proxy.h"
-#include "kis_sprayop_option.h"
 #include "kis_standard_uniform_properties_factory.h"
 
 
-QList<KisUniformPaintOpPropertySP> KisSprayPaintOpSettings::uniformProperties()
+QList<KisUniformPaintOpPropertySP> KisSprayPaintOpSettings::uniformProperties(KisPaintOpSettingsSP settings)
 {
     QList<KisUniformPaintOpPropertySP> props =
         listWeakToStrong(m_d->uniformProperties);
@@ -107,7 +123,7 @@ QList<KisUniformPaintOpPropertySP> KisSprayPaintOpSettings::uniformProperties()
                     KisDoubleSliderBasedPaintOpPropertyCallback::Double,
                     "spacing",
                     i18n("Spacing"),
-                    this, 0);
+                    settings, 0);
 
             prop->setRange(0.01, 10);
             prop->setSingleStep(0.01);
@@ -137,7 +153,7 @@ QList<KisUniformPaintOpPropertySP> KisSprayPaintOpSettings::uniformProperties()
                     KisIntSliderBasedPaintOpPropertyCallback::Int,
                     "spray_particlecount",
                     i18n("Particle Count"),
-                    this, 0);
+                    settings, 0);
 
             prop->setRange(0, 1000);
             prop->setExponentRatio(3);
@@ -173,7 +189,7 @@ QList<KisUniformPaintOpPropertySP> KisSprayPaintOpSettings::uniformProperties()
                     KisDoubleSliderBasedPaintOpPropertyCallback::Double,
                     "spray_density",
                     i18n("Density"),
-                    this, 0);
+                    settings, 0);
 
             prop->setRange(0.1, 100);
             prop->setSingleStep(0.01);
@@ -209,7 +225,7 @@ QList<KisUniformPaintOpPropertySP> KisSprayPaintOpSettings::uniformProperties()
     {
         using namespace KisStandardUniformPropertiesFactory;
 
-        Q_FOREACH (KisUniformPaintOpPropertySP prop, KisPaintOpSettings::uniformProperties()) {
+        Q_FOREACH (KisUniformPaintOpPropertySP prop, KisPaintOpSettings::uniformProperties(settings)) {
             if (prop->id() == opacity.id() ||
                 prop->id() == size.id()) {
 

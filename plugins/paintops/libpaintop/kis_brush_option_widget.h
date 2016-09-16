@@ -57,9 +57,6 @@ public:
 
     void lodLimitations(KisPaintopLodLimitations *l) const;
 
-    void setBrushSize(qreal dxPixels, qreal dyPixels);
-    QSizeF brushSize() const;
-
     bool presetIsValid();
 
 private Q_SLOTS:

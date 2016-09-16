@@ -72,7 +72,7 @@ public:
     using KisPropertiesConfiguration::fromXML;
     virtual void fromXML(const QDomElement&);
 
-    QList<KisUniformPaintOpPropertySP> uniformProperties();
+    QList<KisUniformPaintOpPropertySP> uniformProperties(KisPaintOpSettingsSP settings);
 
 private:
     Q_DISABLE_COPY(KisHatchingPaintOpSettings)

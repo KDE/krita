@@ -57,3 +57,18 @@ QPainterPath KisChalkPaintOpSettings::brushOutline(const KisPaintInformation &in
     }
     return path;
 }
+
+void KisChalkPaintOpSettings::setPaintOpSize(qreal value)
+{
+    ChalkProperties properties;
+    properties.readOptionSetting(this);
+    properties.radius = qRound(0.5 * value);
+    properties.writeOptionSetting(this);
+}
+
+qreal KisChalkPaintOpSettings::paintOpSize() const
+{
+    ChalkProperties properties;
+    properties.readOptionSetting(this);
+    return properties.radius * 2;
+}

@@ -91,12 +91,10 @@ QWidget* KisDynamicSensorDrawingAngle::createConfigurationWidget(QWidget* parent
 
     connect(m_chkLockedMode, SIGNAL(stateChanged(int)), SLOT(setLockedAngleMode(int)));
     connect(m_chkLockedMode, SIGNAL(stateChanged(int)), SLOT(updateGUI()));
-    connect(m_chkLockedMode, SIGNAL(stateChanged(int)), ss, SIGNAL(parametersChanged()));
 
     m_chkFanCorners = new QCheckBox(i18n("Fan Corners"), w);
 
     connect(m_chkFanCorners, SIGNAL(stateChanged(int)), SLOT(setFanCornersEnabled(int)));
-    connect(m_chkFanCorners, SIGNAL(stateChanged(int)), ss, SIGNAL(parametersChanged()));
 
     m_chkFanCorners->setChecked(m_fanCornersEnabled);
 
@@ -106,7 +104,6 @@ QWidget* KisDynamicSensorDrawingAngle::createConfigurationWidget(QWidget* parent
     m_intFanCornersStep->setSuffix(i18n("°"));
 
     connect(m_intFanCornersStep, SIGNAL(valueChanged(int)), SLOT(setFanCornersStep(int)));
-    connect(m_intFanCornersStep, SIGNAL(valueChanged(int)), ss, SIGNAL(parametersChanged()));
 
     m_intFanCornersStep->setValue(m_fanCornersStep);
 
@@ -116,7 +113,6 @@ QWidget* KisDynamicSensorDrawingAngle::createConfigurationWidget(QWidget* parent
     angleOffset->setSuffix(i18n("°"));
 
     connect(angleOffset, SIGNAL(valueChanged(int)), SLOT(setAngleOffset(int)));
-    connect(angleOffset, SIGNAL(valueChanged(int)), ss, SIGNAL(parametersChanged()));
 
     angleOffset->setValue(m_angleOffset);
 
@@ -128,6 +124,11 @@ QWidget* KisDynamicSensorDrawingAngle::createConfigurationWidget(QWidget* parent
     l->addWidget(angleOffset);
 
     updateGUI();
+
+    connect(angleOffset, SIGNAL(valueChanged(int)), ss, SIGNAL(parametersChanged()));
+    connect(m_chkLockedMode, SIGNAL(stateChanged(int)), ss, SIGNAL(parametersChanged()));
+    connect(m_chkFanCorners, SIGNAL(stateChanged(int)), ss, SIGNAL(parametersChanged()));
+    connect(m_intFanCornersStep, SIGNAL(valueChanged(int)), ss, SIGNAL(parametersChanged()));
 
     w->setLayout(l);
     return w;

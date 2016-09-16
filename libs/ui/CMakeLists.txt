@@ -92,6 +92,7 @@ set(kritaui_LIB_SRCS
     kis_bookmarked_configurations_editor.cc
     kis_bookmarked_configurations_model.cc
     kis_bookmarked_filter_configurations_model.cc
+    kis_base_option.cpp
     kis_canvas_resource_provider.cpp
     kis_derived_resources.cpp
     kis_categories_mapper.cpp

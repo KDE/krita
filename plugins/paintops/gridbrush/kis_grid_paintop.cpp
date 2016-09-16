@@ -53,7 +53,7 @@ KisGridPaintOp::KisGridPaintOp(const KisPaintOpSettingsSP settings, KisPainter *
     , m_image(image)
     , m_node(node)
 {
-    m_properties.fillProperties(settings);
+    m_properties.readOptionSetting(settings);
     m_colorProperties.fillProperties(settings);
 
     m_xSpacing = m_properties.gridWidth * m_properties.scale;
@@ -240,7 +240,7 @@ KisSpacingInformation KisGridPaintOp::paintAt(const KisPaintInformation& info)
     return KisSpacingInformation(m_spacing * additionalScale);
 }
 
-void KisGridProperties::fillProperties(const KisPropertiesConfigurationSP setting)
+void KisGridProperties::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
     gridWidth = qMax(1, setting->getInt(GRID_WIDTH));
     gridHeight = qMax(1, setting->getInt(GRID_HEIGHT));

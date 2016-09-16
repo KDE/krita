@@ -42,6 +42,9 @@ public:
 
 public:
 
+    qreal userEffectiveSize() const;
+    void setUserEffectiveSize(qreal value);
+
     qint32 maskHeight(KisDabShape const& shape, qreal subPixelX, qreal subPixelY,
         const KisPaintInformation& info) const Q_DECL_OVERRIDE;
 

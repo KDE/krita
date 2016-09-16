@@ -30,6 +30,7 @@ class QDomDocument;
 
 #include "kis_serializable_configuration.h"
 #include "kritaimage_export.h"
+#include "kis_types.h"
 
 
 /**
@@ -147,8 +148,6 @@ private:
     struct Private;
     Private* const d;
 };
-
-typedef KisSharedPtr<KisPropertiesConfiguration> KisPropertiesConfigurationSP;
 
 class KRITAIMAGE_EXPORT KisPropertiesConfigurationFactory : public KisSerializableConfigurationFactory
 {

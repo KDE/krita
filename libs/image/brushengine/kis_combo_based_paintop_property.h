@@ -33,7 +33,7 @@ class KRITAIMAGE_EXPORT KisComboBasedPaintOpProperty : public KisUniformPaintOpP
 public:
     KisComboBasedPaintOpProperty(const QString &id,
                                  const QString &name,
-                                 KisPaintOpSettingsSP settings,
+                                 KisPaintOpSettingsRestrictedSP settings,
                                  QObject *parent);
     ~KisComboBasedPaintOpProperty();
 
@@ -41,7 +41,7 @@ public:
     KisComboBasedPaintOpProperty(Type type,
                                  const QString &id,
                                  const QString &name,
-                                 KisPaintOpSettingsSP settings,
+                                 KisPaintOpSettingsRestrictedSP settings,
                                  QObject *parent);
 
     QList<QString> items() const;

@@ -65,16 +65,3 @@ KisPropertiesConfigurationSP  KisSprayPaintOpSettingsWidget::configuration() con
     writeConfiguration(config);
     return config;
 }
-
-void KisSprayPaintOpSettingsWidget::changePaintOpSize(qreal x, qreal y)
-{
-    Q_UNUSED(y);
-    m_sprayArea->setDiameter(m_sprayArea->diameter() + qRound(x));
-}
-
-QSizeF KisSprayPaintOpSettingsWidget::paintOpSize() const
-{
-    qreal width = m_sprayArea->diameter();
-    qreal height = width * m_sprayArea->brushAspect();
-    return QSizeF(width, height);
-}

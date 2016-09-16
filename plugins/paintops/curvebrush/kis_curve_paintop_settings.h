@@ -29,9 +29,12 @@ public:
     KisCurvePaintOpSettings();
     virtual ~KisCurvePaintOpSettings();
 
+    void setPaintOpSize(qreal value) Q_DECL_OVERRIDE;
+    qreal paintOpSize() const Q_DECL_OVERRIDE;
+
     virtual bool paintIncremental();
 
-    QList<KisUniformPaintOpPropertySP> uniformProperties();
+    QList<KisUniformPaintOpPropertySP> uniformProperties(KisPaintOpSettingsSP settings);
 
 private:
     struct Private;

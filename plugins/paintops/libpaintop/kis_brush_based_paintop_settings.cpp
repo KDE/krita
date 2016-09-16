@@ -25,6 +25,41 @@
 #include "kis_brush_server.h"
 #include <QLineF>
 #include "kis_signals_blocker.h"
+#include "kis_brush_option.h"
+
+struct BrushReader {
+    BrushReader(const KisBrushBasedPaintOpSettings *parent)
+        : m_parent(parent)
+    {
+        m_option.readOptionSetting(m_parent);
+    }
+
+    KisBrushSP brush() {
+        return m_option.brush();
+    }
+
+    const KisBrushBasedPaintOpSettings *m_parent;
+    KisBrushOption m_option;
+};
+
+struct BrushWriter {
+    BrushWriter(KisBrushBasedPaintOpSettings *parent)
+        : m_parent(parent)
+    {
+        m_option.readOptionSetting(m_parent);
+    }
+
+    ~BrushWriter() {
+        m_option.writeOptionSetting(m_parent);
+    }
+
+    KisBrushSP brush() {
+        return m_option.brush();
+    }
+
+    KisBrushBasedPaintOpSettings *m_parent;
+    KisBrushOption m_option;
+};
 
 
 KisBrushBasedPaintOpSettings::KisBrushBasedPaintOpSettings()
@@ -63,8 +98,10 @@ KisPaintOpSettingsSP KisBrushBasedPaintOpSettings::clone() const
 
 KisBrushSP KisBrushBasedPaintOpSettings::brush() const
 {
-    KisBrushBasedPaintopOptionWidget *widget = dynamic_cast<KisBrushBasedPaintopOptionWidget*>(optionsWidget());
-    return widget ? widget->brush() : m_savedBrush;
+    BrushReader w(this);
+    if (!w.brush()) return 0;
+
+    return w.brush();
 }
 
 QPainterPath KisBrushBasedPaintOpSettings::brushOutlineImpl(const KisPaintInformation &info,
@@ -125,47 +162,6 @@ bool KisBrushBasedPaintOpSettings::isLoadable()
     return (KisBrushServer::instance()->brushServer()->resources().count() > 0);
 }
 
-struct BrushReader {
-    BrushReader(KisBrushBasedPaintOpSettingsSP parent)
-        : m_parent(parent)
-    {
-        if (m_parent->optionsWidget()) {
-            KisSignalsBlocker b(m_parent->optionsWidget());
-            m_parent->optionsWidget()->setConfigurationSafe(m_parent);
-        } else {
-            m_parent = 0;
-        }
-    }
-
-    KisBrushSP brush() {
-        return m_parent ? m_parent->brush() : 0;
-    }
-
-    KisBrushBasedPaintOpSettingsSP m_parent;
-};
-
-struct BrushWriter {
-    BrushWriter(KisBrushBasedPaintOpSettingsSP parent)
-        : m_parent(parent)
-    {
-        if (!m_parent->optionsWidget()) {
-            m_parent = 0;
-        }
-    }
-
-    ~BrushWriter() {
-        if (m_parent && m_parent->optionsWidget()) {
-            m_parent->optionsWidget()->writeConfigurationSafe(m_parent);
-        }
-    }
-
-    KisBrushSP brush() {
-        return m_parent ? m_parent->brush() : 0;
-    }
-
-    KisBrushBasedPaintOpSettingsSP m_parent;
-};
-
 void KisBrushBasedPaintOpSettings::setAngle(qreal value)
 {
     BrushWriter w(this);
@@ -216,12 +212,29 @@ qreal KisBrushBasedPaintOpSettings::autoSpacingCoeff()
     return w.brush()->autoSpacingCoeff();
 }
 
+void KisBrushBasedPaintOpSettings::setPaintOpSize(qreal value)
+{
+    BrushWriter w(this);
+    if (!w.brush()) return;
+
+    w.brush()->setUserEffectiveSize(value);
+}
+
+qreal KisBrushBasedPaintOpSettings::paintOpSize() const
+{
+    BrushReader w(this);
+    if (!w.brush()) return 0.0;
+
+    return w.brush()->userEffectiveSize();
+}
+
+
 
 #include <brushengine/kis_slider_based_paintop_property.h>
 #include "kis_paintop_preset.h"
 #include "kis_paintop_settings_update_proxy.h"
 
-QList<KisUniformPaintOpPropertySP> KisBrushBasedPaintOpSettings::uniformProperties()
+QList<KisUniformPaintOpPropertySP> KisBrushBasedPaintOpSettings::uniformProperties(KisPaintOpSettingsSP settings)
 {
     QList<KisUniformPaintOpPropertySP> props =
         listWeakToStrong(m_uniformProperties);
@@ -233,7 +246,7 @@ QList<KisUniformPaintOpPropertySP> KisBrushBasedPaintOpSettings::uniformProperti
                     KisIntSliderBasedPaintOpPropertyCallback::Int,
                     "angle",
                     "Angle",
-                    this, 0);
+                    settings, 0);
 
             prop->setRange(0, 360);
 
@@ -263,7 +276,7 @@ QList<KisUniformPaintOpPropertySP> KisBrushBasedPaintOpSettings::uniformProperti
                     KisUniformPaintOpPropertyCallback::Bool,
                     "auto_spacing",
                     "Auto Spacing",
-                    this, 0);
+                    settings, 0);
 
             prop->setReadCallback(
                 [](KisUniformPaintOpProperty *prop) {
@@ -291,7 +304,7 @@ QList<KisUniformPaintOpPropertySP> KisBrushBasedPaintOpSettings::uniformProperti
                     KisDoubleSliderBasedPaintOpPropertyCallback::Double,
                     "spacing",
                     "Spacing",
-                    this, 0);
+                    settings, 0);
 
             prop->setRange(0.01, 10);
             prop->setSingleStep(0.01);
@@ -323,5 +336,5 @@ QList<KisUniformPaintOpPropertySP> KisBrushBasedPaintOpSettings::uniformProperti
         }
     }
 
-    return KisPaintOpSettings::uniformProperties() + props;
+    return KisPaintOpSettings::uniformProperties(settings) + props;
 }

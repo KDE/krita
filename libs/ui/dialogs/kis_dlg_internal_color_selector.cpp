@@ -132,6 +132,8 @@ KisDlgInternalColorSelector::KisDlgInternalColorSelector(QWidget *parent, KoColo
 
     connect(m_ui->buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(m_ui->buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+
+    connect(this, SIGNAL(finished(int)), SLOT(slotFinishUp()));
 }
 
 KisDlgInternalColorSelector::~KisDlgInternalColorSelector()
@@ -189,6 +191,7 @@ KoColor KisDlgInternalColorSelector::getModalColorDialog(const KoColor color, QW
 {
     Config config = Config();
     KisDlgInternalColorSelector dialog(parent, color, config, caption);
+    dialog.setPreviousColor(color);
     dialog.exec();
     return dialog.getCurrentColor();
 }
@@ -214,13 +217,9 @@ void KisDlgInternalColorSelector::slotLockSelector()
     m_d->allowUpdates = false;
 }
 
-void KisDlgInternalColorSelector::setPreviousColor()
+void KisDlgInternalColorSelector::setPreviousColor(KoColor c)
 {
-    m_d->previousColor = m_d->currentColor;
-    KisConfig cfg;
-    if (m_ui->paletteBox->colorSet()) {
-        cfg.writeEntry("internal_selector_active_color_set", m_ui->paletteBox->colorSet()->name());
-    }
+    m_d->previousColor = c;
 }
 
 void KisDlgInternalColorSelector::updateAllElements(QObject *source)
@@ -257,6 +256,15 @@ void KisDlgInternalColorSelector::endUpdateWithNewColor()
 void KisDlgInternalColorSelector::focusInEvent(QFocusEvent *)
 {
     //setPreviousColor();
+}
+
+void KisDlgInternalColorSelector::slotFinishUp()
+{
+    setPreviousColor(m_d->currentColor);
+    KisConfig cfg;
+    if (m_ui->paletteBox->colorSet()) {
+        cfg.writeEntry("internal_selector_active_color_set", m_ui->paletteBox->colorSet()->name());
+    }
 }
 
 void KisDlgInternalColorSelector::slotSetColorFromPatch(KoColorPatch* patch)

@@ -331,15 +331,9 @@ void KoDualColorButton::mouseReleaseEvent( QMouseEvent *event )
     if ( foregroundRect.contains( event->pos() )) {
         if(d->tmpSelection == Foreground ) {
             if( d->popDialog) {
+                d->colorSelectorDialog->setPreviousColor(d->foregroundColor);
+                //this should toggle, but I don't know how to implement that...
                 d->colorSelectorDialog->show();
-
-                //QColor c = d->displayRenderer->toQColor(d->foregroundColor);
-                //c = QColorDialog::getColor(c, this) ;
-
-                //if (c.isValid()) {
-                //    d->foregroundColor = d->displayRenderer->approximateFromRenderedQColor(c);
-                //    emit foregroundColorChanged(d->foregroundColor);
-                //}
             }
             else
                 emit pleasePopDialog( d->foregroundColor);

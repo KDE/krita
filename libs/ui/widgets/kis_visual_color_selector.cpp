@@ -493,11 +493,7 @@ void KisVisualColorSelectorShape::setColorFromSibling(KoColor c)
     if (c.colorSpace() != m_d->cs) {
         c.convertTo(m_d->cs);
     }
-    quint8 difference = m_d->cs->difference(c.data(), m_d->currentColor.data());
     m_d->currentColor = c;
-    if (difference > 5) {
-        updateCursor();
-    }
     Q_EMIT sigNewColor(c);
     m_d->imagesNeedUpdate = true;
     update();
@@ -813,13 +809,15 @@ void KisVisualColorSelectorShape::mouseMoveEvent(QMouseEvent *e)
         QPointF coordinates = convertWidgetCoordinateToShapeCoordinate(e->pos());
         quint8* oldData = m_d->currentColor.data();
         KoColor col = convertShapeCoordinateToKoColor(coordinates, true);
-        if (col.colorSpace()->difference(col.data(), oldData) > (quint8)3 && col.colorSpace()->colorDepthId()==Integer8BitsColorDepthID) {
+        QRect offsetrect(this->geometry().topLeft()+QPoint(7.0,7.0), this->geometry().bottomRight()-QPoint(7.0,7.0));
+        if (offsetrect.contains(e->pos()) || (m_d->cs->difference(col.data(), oldData)>5)) {
             setColor(col);
             if (!m_d->updateTimer->isActive()) {
                 Q_EMIT sigNewColor(col);
                 m_d->updateTimer->start();
             }
         }
+
     } else {
         e->ignore();
     }

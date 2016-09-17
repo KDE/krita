@@ -347,6 +347,7 @@ void KisVisualColorSelector::updateFromWidgets(KoColor c)
     m_d->updateSelf = true;
     if (m_d->updateLonesome) {
         slotSetColor(c);
+        Q_EMIT sigNewColor(c);
     } else {
         Q_EMIT sigNewColor(c);
     }

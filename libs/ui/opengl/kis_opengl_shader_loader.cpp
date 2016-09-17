@@ -59,7 +59,12 @@ KisShaderProgram *KisOpenGLShaderLoader::loadShader(QString vertPath, QString fr
     // Load vertex shader
     QByteArray vertSource;
 
+// XXX Check can be removed and set to the MAC version after we move to Qt5.7
+#ifdef Q_OS_MAC
+    vertSource.append(KisOpenGL::hasOpenGL3() ? "#version 150 core\n" : "#version 120\n");
+#else
     vertSource.append(KisOpenGL::supportsLoD() ? "#version 130\n" : "#version 120\n");
+#endif
     vertSource.append(vertHeader);
     QFile vertexShaderFile(":/" + vertPath);
     vertexShaderFile.open(QIODevice::ReadOnly);
@@ -72,7 +77,12 @@ KisShaderProgram *KisOpenGLShaderLoader::loadShader(QString vertPath, QString fr
     // Load fragment shader
     QByteArray fragSource;
 
+// XXX Check can be removed and set to the MAC version after we move to Qt5.7
+#ifdef Q_OS_MAC
+    fragSource.append(KisOpenGL::hasOpenGL3() ? "#version 150 core\n" : "#version 120\n");
+#else
     fragSource.append(KisOpenGL::supportsLoD() ? "#version 130\n" : "#version 120\n");
+#endif
     fragSource.append(fragHeader);
     QFile fragmentShaderFile(":/" + fragPath);
     fragmentShaderFile.open(QIODevice::ReadOnly);

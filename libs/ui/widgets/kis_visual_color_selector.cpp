@@ -348,6 +348,7 @@ void KisVisualColorSelector::updateFromWidgets(KoColor c)
     if (m_d->updateLonesome) {
         slotSetColor(c);
         Q_EMIT sigNewColor(c);
+
     } else {
         Q_EMIT sigNewColor(c);
     }
@@ -492,7 +493,11 @@ void KisVisualColorSelectorShape::setColorFromSibling(KoColor c)
     if (c.colorSpace() != m_d->cs) {
         c.convertTo(m_d->cs);
     }
+    quint8 difference = m_d->cs->difference(c.data(), m_d->currentColor.data());
     m_d->currentColor = c;
+    if (difference > 5) {
+        updateCursor();
+    }
     Q_EMIT sigNewColor(c);
     m_d->imagesNeedUpdate = true;
     update();
@@ -806,11 +811,14 @@ void KisVisualColorSelectorShape::mouseMoveEvent(QMouseEvent *e)
 {
     if (m_d->mousePressActive==true && this->mask().contains(e->pos())) {
         QPointF coordinates = convertWidgetCoordinateToShapeCoordinate(e->pos());
+        quint8* oldData = m_d->currentColor.data();
         KoColor col = convertShapeCoordinateToKoColor(coordinates, true);
-        setColor(col);
-        if (!m_d->updateTimer->isActive()) {
-            Q_EMIT sigNewColor(col);
-            m_d->updateTimer->start();
+        if (col.colorSpace()->difference(col.data(), oldData) > (quint8)3 && col.colorSpace()->colorDepthId()==Integer8BitsColorDepthID) {
+            setColor(col);
+            if (!m_d->updateTimer->isActive()) {
+                Q_EMIT sigNewColor(col);
+                m_d->updateTimer->start();
+            }
         }
     } else {
         e->ignore();
@@ -1505,7 +1513,7 @@ void KisVisualTriangleSelectorShape::setTriangle()
 QPointF KisVisualTriangleSelectorShape::convertShapeCoordinateToWidgetCoordinate(QPointF coordinate)
 {
     qreal offset=7.0;//the offset is so we get a nice little border that allows selecting extreme colors better.
-    qreal y = qMin(coordinate.y()*(height()-offset*2)+offset+5.0, (qreal)height()-offset);
+    qreal y = qMin(coordinate.y()*(height()-offset*2-5.0)+offset+5.0, (qreal)height()-offset);
 
     qreal triWidth = width();
     qreal horizontalLineLength = y*(2./sqrt(3.));

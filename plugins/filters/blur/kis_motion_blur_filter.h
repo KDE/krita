@@ -1,4 +1,4 @@
-/* 
+/*
  * This file is part of Krita
  *
  * Copyright (c) 2010 Edward Apap <schumifer@hotmail.com>
@@ -27,8 +27,6 @@
 
 #include <Eigen/Core>
 
-using namespace Eigen;
-
 class KisMotionBlurFilter : public KisFilter
 {
 public:
@@ -37,18 +35,18 @@ public:
 
     void processImpl(KisPaintDeviceSP src,
                      const QRect& size,
-                     const KisFilterConfiguration* config,
+                     const KisFilterConfigurationSP config,
                      KoUpdater* progressUpdater
                      ) const;
     static inline KoID id() {
         return KoID("motion blur", i18n("Motion Blur"));
     }
 
-    virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
+    virtual KisFilterConfigurationSP factoryConfiguration(const KisPaintDeviceSP) const;
 public:
     KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
-    QRect neededRect(const QRect & rect, const KisFilterConfiguration* _config, int lod) const;
-    QRect changedRect(const QRect & rect, const KisFilterConfiguration* _config, int lod) const;
+    QRect neededRect(const QRect & rect, const KisFilterConfigurationSP _config, int lod) const;
+    QRect changedRect(const QRect & rect, const KisFilterConfigurationSP _config, int lod) const;
 };
 
 #endif

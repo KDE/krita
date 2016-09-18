@@ -78,9 +78,9 @@ KisHatchingPaintOpSettingsWidget:: KisHatchingPaintOpSettingsWidget(QWidget* par
 
     //---------START ALTERING DEFAULT VALUES-----------
 
-    //As the name implies, reconfigurationCourier is the KisPropertiesConfiguration*
+    //As the name implies, reconfigurationCourier is the KisPropertiesConfigurationSP
     //we'll use as an intermediary to edit the default settings
-    KisPropertiesConfiguration* reconfigurationCourier = configuration();
+    KisPropertiesConfigurationSP reconfigurationCourier = configuration();
 
     /*xMLAnalyzer is an empty document we'll use to analyze and edit the config string part by part
     I know the important string is "brush_definition" because I read the tree with the snippet
@@ -121,16 +121,15 @@ KisHatchingPaintOpSettingsWidget:: KisHatchingPaintOpSettingsWidget(QWidget* par
         dbgKrita << i.key() << ":" << i.value();
     */
 
-    delete reconfigurationCourier;
 }
 
 KisHatchingPaintOpSettingsWidget::~ KisHatchingPaintOpSettingsWidget()
 {
 }
 
-KisPropertiesConfiguration*  KisHatchingPaintOpSettingsWidget::configuration() const
+KisPropertiesConfigurationSP  KisHatchingPaintOpSettingsWidget::configuration() const
 {
-    KisHatchingPaintOpSettings* config = new KisHatchingPaintOpSettings();
+    KisHatchingPaintOpSettingsSP config = new KisHatchingPaintOpSettings();
     config->setOptionsWidget(const_cast<KisHatchingPaintOpSettingsWidget*>(this));
     config->setProperty("paintop", "hatchingbrush"); // XXX: make this a const id string
     writeConfiguration(config);

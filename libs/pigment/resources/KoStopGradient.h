@@ -54,7 +54,7 @@ public:
 
     /// Creates KoStopGradient from a QGradient
     static KoStopGradient * fromQGradient(QGradient * gradient);
-    
+
     /// Sets the gradient stops
     void setStops(QList<KoGradientStop> stops);
     QList<KoGradientStop> stops() const;
@@ -68,10 +68,6 @@ protected:
     QPointF m_start;
     QPointF m_stop;
     QPointF m_focalPoint;
-
-private:
-
-    mutable KoColor buffer;
 
 private:
 

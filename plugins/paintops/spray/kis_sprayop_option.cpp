@@ -94,7 +94,7 @@ KisSprayOpOption::~KisSprayOpOption()
     delete m_options;
 }
 
-void KisSprayOpOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
+void KisSprayOpOption::writeOptionSetting(KisPropertiesConfigurationSP setting) const
 {
     KisSprayProperties op;
 
@@ -113,7 +113,7 @@ void KisSprayOpOption::writeOptionSetting(KisPropertiesConfiguration* setting) c
     op.writeOptionSetting(setting);
 }
 
-void KisSprayOpOption::readOptionSetting(const KisPropertiesConfiguration* setting)
+void KisSprayOpOption::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
     KisSprayProperties op;
     op.readOptionSetting(setting);

@@ -43,8 +43,7 @@
 #include <kis_config.h>
 #include <kis_iterator_ng.h>
 #include <kis_random_accessor_ng.h>
-
-#include "ui_kis_wdg_options_heightmap.h"
+#include <kis_config_widget.h>
 
 K_PLUGIN_FACTORY_WITH_JSON(KisHeightMapExportFactory, "krita_heightmap_export.json", registerPlugin<KisHeightMapExport>();)
 
@@ -56,7 +55,27 @@ KisHeightMapExport::~KisHeightMapExport()
 {
 }
 
-KisImportExportFilter::ConversionStatus KisHeightMapExport::convert(const QByteArray& from, const QByteArray& to)
+KisPropertiesConfigurationSP KisHeightMapExport::defaultConfiguration(const QByteArray &/*from*/, const QByteArray &/*to*/) const
+{
+    KisPropertiesConfigurationSP cfg = new KisPropertiesConfiguration();
+    cfg->setProperty("endianness", 0);
+    return cfg;
+}
+
+KisPropertiesConfigurationSP KisHeightMapExport::lastSavedConfiguration(const QByteArray &from, const QByteArray &to) const
+{
+    KisPropertiesConfigurationSP cfg = defaultConfiguration(from, to);
+    QString filterConfig = KisConfig().exportConfiguration("HeightMap");
+    cfg->fromXML(filterConfig, false);
+    return cfg;
+}
+
+KisConfigWidget *KisHeightMapExport::createConfigurationWidget(QWidget *parent, const QByteArray &/*from*/, const QByteArray &/*to*/) const
+{
+    return new KisWdgOptionsHeightmap(parent);
+}
+
+KisImportExportFilter::ConversionStatus KisHeightMapExport::convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration)
 {
     dbgFile << "HeightMap export! From:" << from << ", To:" << to;
 
@@ -84,48 +103,34 @@ KisImportExportFilter::ConversionStatus KisHeightMapExport::convert(const QByteA
         return KisImportExportFilter::WrongFormat;
     }
 
-    KoDialog* kdb = new KoDialog(0);
-    kdb->setWindowTitle(i18n("HeightMap Export Options"));
-    kdb->setButtons(KoDialog::Ok | KoDialog::Cancel);
+    KoDialog kdb;
+    kdb.setWindowTitle(i18n("HeightMap Export Options"));
+    kdb.setButtons(KoDialog::Ok | KoDialog::Cancel);
+    KisConfigWidget *wdg = createConfigurationWidget(&kdb, from, to);
+    kdb.setMainWidget(wdg);
 
-    Ui::WdgOptionsHeightMap optionsHeightMap;
-
-    QWidget* wdg = new QWidget(kdb);
-    optionsHeightMap.setupUi(wdg);
-
-    kdb->setMainWidget(wdg);
     QApplication::restoreOverrideCursor();
 
-    QString filterConfig = KisConfig().exportConfiguration("HeightMap");
-    KisPropertiesConfiguration cfg;
-    cfg.fromXML(filterConfig);
-
-    optionsHeightMap.intSize->setValue(image->width());
-
-    int endianness = cfg.getInt("endianness", 0);
-    QDataStream::ByteOrder bo = QDataStream::LittleEndian;
-    optionsHeightMap.radioPC->setChecked(true);
-
-    if (endianness == 0) {
-        bo = QDataStream::BigEndian;
-        optionsHeightMap.radioMac->setChecked(true);
-    }
-
-    if (!getBatchMode()) {
-        if (kdb->exec() == QDialog::Rejected) {
-            return KisImportExportFilter::UserCancelled;
-        }
-    }
-
-    if (optionsHeightMap.radioMac->isChecked()) {
-        cfg.setProperty("endianness", 0);
-        bo = QDataStream::BigEndian;
+    // If a configuration object was passed to the convert method, we use that, otherwise we load from the settings
+    KisPropertiesConfigurationSP cfg(new KisPropertiesConfiguration());
+    if (configuration) {
+        cfg->fromXML(configuration->toXML());
     }
     else {
-        cfg.setProperty("endianness", 1);
-        bo = QDataStream::LittleEndian;
+        cfg = lastSavedConfiguration(from, to);
     }
-    KisConfig().setExportConfiguration("HeightMap", cfg);
+    cfg->setProperty("width", image->width());
+    wdg->setConfiguration(cfg);
+
+    if (!getBatchMode()) {
+        if (kdb.exec() == QDialog::Rejected) {
+            return KisImportExportFilter::UserCancelled;
+        }
+        cfg = wdg->configuration();
+        KisConfig().setExportConfiguration("HeightMap", *cfg.data());
+    }
+
+    QDataStream::ByteOrder bo = cfg->getInt("endianness", 0) ? QDataStream::BigEndian : QDataStream::LittleEndian;
 
     bool downscale = false;
     if (to == "image/x-r8" && image->colorSpace()->colorDepthId() == Integer16BitsColorDepthID) {
@@ -134,7 +139,7 @@ KisImportExportFilter::ConversionStatus KisHeightMapExport::convert(const QByteA
                                            i18nc("@title:window", "Downscale Image"),
                                            i18n("You specified the .r8 extension for a 16 bit/channel image. Do you want to save as 8 bit? Your image data will not be changed."),
                                            QMessageBox::Yes | QMessageBox::No)
-                          == QMessageBox::Yes);
+                     == QMessageBox::Yes);
     }
 
 
@@ -163,6 +168,26 @@ KisImportExportFilter::ConversionStatus KisHeightMapExport::convert(const QByteA
 
     f.close();
     return KisImportExportFilter::OK;
+}
+
+
+void KisWdgOptionsHeightmap::setConfiguration(const KisPropertiesConfigurationSP cfg)
+{
+    intSize->setValue(cfg->getInt("width"));
+    int endianness = cfg->getInt("endianness", 0);
+    radioMac->setChecked(endianness == 0);
+}
+
+KisPropertiesConfigurationSP KisWdgOptionsHeightmap::configuration() const
+{
+    KisPropertiesConfigurationSP cfg = new KisPropertiesConfiguration();
+    if (radioMac->isChecked()) {
+        cfg->setProperty("endianness", 0);
+    }
+    else {
+        cfg->setProperty("endianness", 1);
+    }
+    return cfg;
 }
 
 #include "kis_heightmap_export.moc"

@@ -1,6 +1,6 @@
 uniform mat4 modelViewProjection;
 
-attribute highp vec4 a_vertexPosition;
+in vec4 a_vertexPosition;
 
 void main()
 {

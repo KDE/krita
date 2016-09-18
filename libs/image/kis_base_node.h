@@ -494,6 +494,8 @@ public:
     bool isAnimated() const;
     virtual void enableAnimation();
 
+    virtual void setImage(KisImageWSP image);
+
 protected:
 
     void setSupportsLodMoves(bool value);

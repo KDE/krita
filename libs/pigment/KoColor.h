@@ -83,6 +83,9 @@ public:
 
     void convertTo(const KoColorSpace * cs);
 
+    /// assign new profile without converting pixel data
+    void setProfile(const KoColorProfile *profile);
+
 
     /// Replace the existing color data, and colorspace with the specified data.
     /// The data is copied.

@@ -75,7 +75,7 @@ KisFilterMax::KisFilterMax() : KisFilter(id(), categoryColors(), i18n("M&aximize
 
 void KisFilterMax::processImpl(KisPaintDeviceSP device,
                                const QRect& rect,
-                               const KisFilterConfiguration* config,
+                               const KisFilterConfigurationSP config,
                                KoUpdater* progressUpdater
                                ) const
 {
@@ -117,7 +117,7 @@ KisFilterMin::KisFilterMin() : KisFilter(id(), categoryColors(), i18n("M&inimize
 
 void KisFilterMin::processImpl(KisPaintDeviceSP device,
                                const QRect& rect,
-                               const KisFilterConfiguration* config,
+                               const KisFilterConfigurationSP config,
                                KoUpdater* progressUpdater
                                ) const
 {

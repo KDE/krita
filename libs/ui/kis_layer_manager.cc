@@ -103,6 +103,7 @@
 #include "kis_post_execution_undo_adapter.h"
 #include "kis_selection_mask.h"
 #include "kis_layer_utils.h"
+#include "lazybrush/kis_colorize_mask.h"
 
 #include "KisSaveGroupVisitor.h"
 
@@ -258,7 +259,7 @@ void KisLayerManager::layerProperties()
         dlg.resize(dlg.minimumSizeHint());
 
 
-        KisSafeFilterConfigurationSP configBefore(alayer->filter());
+        KisFilterConfigurationSP configBefore(alayer->filter());
         KIS_ASSERT_RECOVER_RETURN(configBefore);
         QString xmlBefore = configBefore->toXML();
 
@@ -267,7 +268,7 @@ void KisLayerManager::layerProperties()
 
             alayer->setName(dlg.layerName());
 
-            KisSafeFilterConfigurationSP configAfter(dlg.filterConfiguration());
+            KisFilterConfigurationSP configAfter(dlg.filterConfiguration());
             Q_ASSERT(configAfter);
             QString xmlAfter = configAfter->toXML();
 
@@ -286,7 +287,7 @@ void KisLayerManager::layerProperties()
             }
         }
         else {
-            KisSafeFilterConfigurationSP configAfter(dlg.filterConfiguration());
+            KisFilterConfigurationSP configAfter(dlg.filterConfiguration());
             Q_ASSERT(configAfter);
             QString xmlAfter = configAfter->toXML();
 
@@ -301,7 +302,7 @@ void KisLayerManager::layerProperties()
         KisDlgGeneratorLayer dlg(glayer->name(), m_view, m_view->mainWindow());
         dlg.setCaption(i18n("Fill Layer Properties"));
 
-        KisSafeFilterConfigurationSP configBefore(glayer->filter());
+        KisFilterConfigurationSP configBefore(glayer->filter());
         Q_ASSERT(configBefore);
         QString xmlBefore = configBefore->toXML();
 
@@ -312,7 +313,7 @@ void KisLayerManager::layerProperties()
 
             glayer->setName(dlg.layerName());
 
-            KisSafeFilterConfigurationSP configAfter(dlg.configuration());
+            KisFilterConfigurationSP configAfter(dlg.configuration());
             Q_ASSERT(configAfter);
             QString xmlAfter = configAfter->toXML();
 
@@ -360,12 +361,23 @@ void KisLayerManager::convertNodeToPaintLayer(KisNodeSP source)
     KisPaintDeviceSP srcDevice =
         source->paintDevice() ? source->projection() : source->original();
 
+    bool putBehind = false;
+    QString newCompositeOp = source->compositeOpId();
+    KisColorizeMask *colorizeMask = dynamic_cast<KisColorizeMask*>(source.data());
+    if (colorizeMask) {
+        srcDevice = colorizeMask->coloringProjection();
+        putBehind = colorizeMask->compositeOpId() == COMPOSITE_BEHIND;
+        if (putBehind) {
+            newCompositeOp = COMPOSITE_OVER;
+        }
+    }
+
     if (!srcDevice) return;
 
     KisPaintDeviceSP clone;
 
-    if (!(*srcDevice->colorSpace() ==
-          *srcDevice->compositionSourceColorSpace())) {
+    if (*srcDevice->colorSpace() !=
+        *srcDevice->compositionSourceColorSpace()) {
 
         clone = new KisPaintDevice(srcDevice->compositionSourceColorSpace());
 
@@ -380,7 +392,7 @@ void KisLayerManager::convertNodeToPaintLayer(KisNodeSP source)
                                          source->name(),
                                          source->opacity(),
                                          clone);
-    layer->setCompositeOpId(source->compositeOpId());
+    layer->setCompositeOpId(newCompositeOp);
 
     KisNodeSP parent = source->parent();
     KisNodeSP above = source;
@@ -388,6 +400,10 @@ void KisLayerManager::convertNodeToPaintLayer(KisNodeSP source)
     while (parent && !parent->allowAsChild(layer)) {
         above = above->parent();
         parent = above ? above->parent() : 0;
+    }
+
+    if (putBehind && above == source->parent()) {
+        above = above->prevSibling();
     }
 
     m_commandsAdapter->beginMacro(kundo2_i18n("Convert to a Paint Layer"));
@@ -520,7 +536,7 @@ void KisLayerManager::addAdjustmentLayer(KisNodeSP activeNode)
 }
 
 KisAdjustmentLayerSP KisLayerManager::addAdjustmentLayer(KisNodeSP activeNode, const QString & name,
-                                                         KisFilterConfiguration * filter, KisSelectionSP selection)
+                                                         KisFilterConfigurationSP  filter, KisSelectionSP selection)
 {
     KisImageWSP image = m_view->image();
     KisAdjustmentLayerSP layer = new KisAdjustmentLayer(image, name, filter, selection);
@@ -538,7 +554,7 @@ void KisLayerManager::addGeneratorLayer(KisNodeSP activeNode)
 
     if (dlg.exec() == QDialog::Accepted) {
         KisSelectionSP selection = m_view->selection();
-        KisFilterConfiguration * generator = dlg.configuration();
+        KisFilterConfigurationSP  generator = dlg.configuration();
         QString name = dlg.layerName();
 
         addLayerCommon(activeNode,

@@ -22,8 +22,7 @@
 #include <QtTest>
 
 #include "kis_cubic_curve.h"
-
-class KisPropertiesConfiguration;
+#include "kis_properties_configuration.h"
 
 class KisPropertiesConfigurationTest : public QObject
 {
@@ -36,8 +35,8 @@ private Q_SLOTS:
     void testDefaultValues();
     void testNotSavedValues();
 private:
-    KisPropertiesConfiguration* createConfig();
-    void testConfig(KisPropertiesConfiguration* config);
+    KisPropertiesConfigurationSP createConfig();
+    void testConfig(KisPropertiesConfigurationSP config);
 private:
     int v1;
     QString v2;

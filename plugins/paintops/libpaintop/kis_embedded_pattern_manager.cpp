@@ -28,7 +28,7 @@
 
 
 struct KisEmbeddedPatternManager::Private {
-    static KoPattern* tryLoadEmbeddedPattern(const KisPropertiesConfiguration* setting) {
+    static KoPattern* tryLoadEmbeddedPattern(const KisPropertiesConfigurationSP setting) {
         KoPattern *pattern = 0;
 
         QByteArray ba = QByteArray::fromBase64(setting->getString("Texture/Pattern/Pattern").toLatin1());
@@ -67,7 +67,7 @@ struct KisEmbeddedPatternManager::Private {
 
 };
 
-void KisEmbeddedPatternManager::saveEmbeddedPattern(KisPropertiesConfiguration* setting, const KoPattern *pattern)
+void KisEmbeddedPatternManager::saveEmbeddedPattern(KisPropertiesConfigurationSP setting, const KoPattern *pattern)
 {
     QByteArray patternMD5 = pattern->md5();
 
@@ -96,7 +96,7 @@ void KisEmbeddedPatternManager::saveEmbeddedPattern(KisPropertiesConfiguration* 
 
 }
 
-KoPattern* KisEmbeddedPatternManager::loadEmbeddedPattern(const KisPropertiesConfiguration* setting)
+KoPattern* KisEmbeddedPatternManager::loadEmbeddedPattern(const KisPropertiesConfigurationSP setting)
 {
     KoPattern *pattern = 0;
 

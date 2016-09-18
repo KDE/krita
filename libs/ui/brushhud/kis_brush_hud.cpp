@@ -149,7 +149,6 @@ void KisBrushHud::clearProperties() const
 void KisBrushHud::updateProperties()
 {
     KisPaintOpPresetSP preset = m_d->provider->currentPreset();
-    KisPaintOpSettingsSP settings = preset->settings();
 
     if (preset == m_d->currentPreset) return;
 
@@ -167,7 +166,7 @@ void KisBrushHud::updateProperties()
     QList<KisUniformPaintOpPropertySP> properties;
 
     {
-        QList<KisUniformPaintOpPropertySP> allProperties = settings->uniformProperties();
+        QList<KisUniformPaintOpPropertySP> allProperties = preset->uniformProperties();
         QList<KisUniformPaintOpPropertySP> discardedProperties;
 
         KisBrushHudPropertiesConfig cfg;

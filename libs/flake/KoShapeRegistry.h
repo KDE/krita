@@ -40,7 +40,7 @@ class KRITAFLAKE_EXPORT KoShapeRegistry : public KoGenericRegistry<KoShapeFactor
 {
 public:
     KoShapeRegistry();
-    ~KoShapeRegistry();
+    virtual ~KoShapeRegistry();
 
     /**
      * Return an instance of the KoShapeRegistry

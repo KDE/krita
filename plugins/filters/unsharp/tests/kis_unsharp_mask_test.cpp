@@ -42,7 +42,7 @@ void KisUnsharpMaskTest::testUnsharpWithTransparency()
     KisFilterSP f = KisFilterRegistry::instance()->value("unsharp");
     Q_ASSERT(f);
 
-    KisFilterConfiguration * kfc = f->defaultConfiguration(0);
+    KisFilterConfigurationSP  kfc = f->defaultConfiguration(0);
     Q_ASSERT(kfc);
 
     kfc->setProperty("halfSize", 3);

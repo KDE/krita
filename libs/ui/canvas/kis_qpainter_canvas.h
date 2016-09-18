@@ -61,7 +61,7 @@ public: // QWidget overrides
     virtual void inputMethodEvent(QInputMethodEvent *event);
 
 public: // Implement kis_abstract_canvas_widget interface
-    void setDisplayFilter(KisDisplayFilter* displayFilter);
+    void setDisplayFilter(QSharedPointer<KisDisplayFilter> displayFilter);
     void setWrapAroundViewingMode(bool value);
     void channelSelectionChanged(const QBitArray &channelFlags);
     void setDisplayProfile(KisDisplayColorConverter *colorConverter);

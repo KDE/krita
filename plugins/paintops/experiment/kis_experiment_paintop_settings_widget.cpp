@@ -41,16 +41,12 @@ KisExperimentPaintOpSettingsWidget::~ KisExperimentPaintOpSettingsWidget()
 {
 }
 
-KisPropertiesConfiguration*  KisExperimentPaintOpSettingsWidget::configuration() const
+KisPropertiesConfigurationSP  KisExperimentPaintOpSettingsWidget::configuration() const
 {
     KisExperimentPaintOpSettings* config = new KisExperimentPaintOpSettings();
     config->setOptionsWidget(const_cast<KisExperimentPaintOpSettingsWidget*>(this));
     config->setProperty("paintop", "experimentbrush"); // XXX: make this a const id string
     writeConfiguration(config);
     return config;
-}
-void KisExperimentPaintOpSettingsWidget::changePaintOpSize(qreal /*x*/, qreal /*y*/)
-{
-    //m_experimentOption->setDiameter( m_experimentOption->startSize() + qRound(x) );
 }
 

@@ -23,6 +23,7 @@
 #include "kis_adjustment_layer.h"
 #include "kis_paint_layer.h"
 #include "kis_group_layer.h"
+#include "lazybrush/kis_colorize_mask.h"
 #include "kis_external_layer_iface.h"
 #include "filter/kis_filter_configuration.h"
 #include "filter/kis_filter_registry.h"
@@ -113,26 +114,23 @@ bool KisColorSpaceConvertVisitor::convertPaintDevice(KisLayer* layer)
 
     if (layer->original()) {
         KUndo2Command* cmd = layer->original()->convertTo(m_dstColorSpace, m_renderingIntent, m_conversionFlags);
-        if (cmd)
+        if (cmd) {
             m_image->undoAdapter()->addCommand(cmd);
-        else
-            delete cmd;
+        }
     }
 
     if (layer->paintDevice()) {
         KUndo2Command* cmd = layer->paintDevice()->convertTo(m_dstColorSpace, m_renderingIntent, m_conversionFlags);
-        if (cmd)
+        if (cmd) {
             m_image->undoAdapter()->addCommand(cmd);
-        else
-            delete cmd;
+        }
     }
 
     if (layer->projection()) {
         KUndo2Command* cmd = layer->projection()->convertTo(m_dstColorSpace, m_renderingIntent, m_conversionFlags);
-        if (cmd)
+        if (cmd) {
             m_image->undoAdapter()->addCommand(cmd);
-        else
-            delete cmd;
+        }
     }
 
     KisPaintLayer *paintLayer = 0;
@@ -144,4 +142,13 @@ bool KisColorSpaceConvertVisitor::convertPaintDevice(KisLayer* layer)
 
     return true;
 
+}
+
+bool KisColorSpaceConvertVisitor::visit(KisColorizeMask *mask)
+{
+    KUndo2Command* cmd = mask->setColorSpace(m_dstColorSpace, m_renderingIntent, m_conversionFlags);
+    if (cmd) {
+        m_image->undoAdapter()->addCommand(cmd);
+    }
+    return true;
 }

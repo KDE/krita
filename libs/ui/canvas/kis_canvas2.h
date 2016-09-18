@@ -161,8 +161,8 @@ public: // KisCanvas2 methods
     void addDecoration(KisCanvasDecorationSP deco);
     KisCanvasDecorationSP decoration(const QString& id) const;
 
-    void setDisplayFilter(KisDisplayFilter *displayFilter);
-    KisDisplayFilter *displayFilter() const;
+    void setDisplayFilter(QSharedPointer<KisDisplayFilter> displayFilter);
+    QSharedPointer<KisDisplayFilter> displayFilter() const;
 
     KisDisplayColorConverter *displayColorConverter() const;
     KisExposureGammaCorrectionInterface* exposureGammaCorrectionInterface() const;
@@ -171,7 +171,7 @@ public: // KisCanvas2 methods
      * set the options for softproofing, without affecting the proofing options as stored inside the image.
      */
     void setProofingOptions(bool softProof, bool gamutCheck);
-    KisProofingConfiguration *proofingConfiguration() const;
+    KisProofingConfigurationSP proofingConfiguration() const;
     /**
      * @brief setProofingConfigUpdated This function is to set whether the proofing config is updated,
      * this is needed for determining whether or not to generate a new proofing transform.

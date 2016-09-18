@@ -22,6 +22,7 @@
 #include "opengl/kis_opengl_canvas2.h"
 #include "opengl/kis_opengl_canvas2_p.h"
 
+#include "opengl/kis_opengl_shader_loader.h"
 #include "opengl/kis_opengl_canvas_debugger.h"
 #include "canvas/kis_canvas2.h"
 #include "canvas/kis_coordinates_converter.h"
@@ -39,6 +40,8 @@
 #include <QThread>
 #include <QFile>
 #include <QOpenGLShaderProgram>
+#include <QOpenGLVertexArrayObject>
+#include <QOpenGLBuffer>
 #include <QMessageBox>
 
 #define NEAR_VAL -1000.0
@@ -69,36 +72,34 @@ public:
 
     bool canvasInitialized{false};
 
-    QVector3D vertices[6];
-    QVector2D texCoords[6];
-
     KisOpenGLImageTexturesSP openGLImageTextures;
 
-    QOpenGLShaderProgram *displayShader{0};
-    int displayUniformLocationModelViewProjection;
-    int displayUniformLocationTextureMatrix;
-    int displayUniformLocationViewPortScale;
-    int displayUniformLocationTexelSize;
-    int displayUniformLocationTexture0;
-    int displayUniformLocationTexture1;
-    int displayUniformLocationFixedLodLevel;
+    KisOpenGLShaderLoader shaderLoader;
+    KisShaderProgram *displayShader{0};
+    KisShaderProgram *checkerShader{0};
+    KisShaderProgram *cursorShader{0};
 
-    QOpenGLShaderProgram *checkerShader{0};
     GLfloat checkSizeScale;
     bool scrollCheckers;
-    int checkerUniformLocationModelViewProjection;
-    int checkerUniformLocationTextureMatrix;
 
-    QOpenGLShaderProgram *cursorShader{0};
-    int cursorShaderModelViewProjectionUniform;
-
-    KisDisplayFilter* displayFilter;
+    QSharedPointer<KisDisplayFilter> displayFilter;
     KisOpenGL::FilterMode filterMode;
     bool proofingConfigIsUpdated=false;
 
     GLsync glSyncObject{0};
 
     bool wrapAroundMode{false};
+
+    // Stores a quad for drawing the canvas
+    QOpenGLVertexArrayObject quadVAO;
+    QOpenGLBuffer quadBuffers[2];
+
+    // Stores data for drawing tool outlines
+    QOpenGLVertexArrayObject outlineVAO;
+    QOpenGLBuffer lineBuffer;
+
+    QVector3D vertices[6];
+    QVector2D texCoords[6];
 
     int xToColWithWrapCompensation(int x, const QRect &imageRect) {
         int firstImageColumn = openGLImageTextures->xToCol(imageRect.left());
@@ -133,13 +134,6 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas,
     , KisCanvasWidgetBase(canvas, coordinatesConverter)
     , d(new Private())
 {
-
-
-
-    QSurfaceFormat format;
-    format.setDepthBufferSize(24);
-    setFormat(format);
-
     KisConfig cfg;
     cfg.writeEntry("canvasState", "OPENGL_STARTED");
 
@@ -179,11 +173,12 @@ bool KisOpenGLCanvas2::needsFpsDebugging() const
     return KisOpenglCanvasDebugger::instance()->showFpsOnCanvas();
 }
 
-void KisOpenGLCanvas2::setDisplayFilter(KisDisplayFilter* displayFilter) {
+void KisOpenGLCanvas2::setDisplayFilter(QSharedPointer<KisDisplayFilter> displayFilter)
+{
     setDisplayFilterImpl(displayFilter, false);
 }
 
-void KisOpenGLCanvas2::setDisplayFilterImpl(KisDisplayFilter* displayFilter, bool initializing)
+void KisOpenGLCanvas2::setDisplayFilterImpl(QSharedPointer<KisDisplayFilter> displayFilter, bool initializing)
 {
     bool needsInternalColorManagement =
             !displayFilter || displayFilter->useInternalColorManagement();
@@ -191,10 +186,16 @@ void KisOpenGLCanvas2::setDisplayFilterImpl(KisDisplayFilter* displayFilter, boo
     bool needsFullRefresh = d->openGLImageTextures->setInternalColorManagementActive(needsInternalColorManagement);
 
     d->displayFilter = displayFilter;
+
     if (d->canvasInitialized) {
         d->canvasInitialized = false;
-        initializeDisplayShader();
-        initializeCheckerShader();
+        delete d->displayShader;
+        bool useHiQualityFiltering = d->filterMode == KisOpenGL::HighQualityFiltering;
+        try {
+            d->displayShader = d->shaderLoader.loadDisplayShader(d->displayFilter, useHiQualityFiltering);
+        } catch (const ShaderLoaderException &e) {
+            reportFailedShaderCompilation(e.what());
+        }
         d->canvasInitialized = true;
     }
 
@@ -210,141 +211,6 @@ void KisOpenGLCanvas2::setWrapAroundViewingMode(bool value)
 {
     d->wrapAroundMode = value;
     update();
-}
-
-void KisOpenGLCanvas2::initializeGL()
-{
-    KisOpenGL::initializeContext(context());
-    initializeOpenGLFunctions();
-
-    KisConfig cfg;
-    d->openGLImageTextures->setProofingConfig(canvas()->proofingConfiguration());
-    d->openGLImageTextures->initGL(context()->functions());
-    d->openGLImageTextures->generateCheckerTexture(createCheckersImage(cfg.checkSize()));
-    initializeCheckerShader();
-    initializeDisplayShader();
-
-    ptr_glLogicOp = (kis_glLogicOp)(context()->getProcAddress("glLogicOp"));
-
-    Sync::init(context());
-
-    d->canvasInitialized = true;
-}
-
-void KisOpenGLCanvas2::resizeGL(int width, int height)
-{
-    coordinatesConverter()->setCanvasWidgetSize(QSize(width, height));
-    paintGL();
-}
-
-void KisOpenGLCanvas2::paintGL()
-{
-    if (!OPENGL_SUCCESS) {
-        KisConfig cfg;
-        cfg.writeEntry("canvasState", "OPENGL_PAINT_STARTED");
-    }
-
-    KisOpenglCanvasDebugger::instance()->nofityPaintRequested();
-
-    QPainter gc(this);
-    gc.beginNativePainting();
-
-    renderCanvasGL();
-
-    if (d->glSyncObject) {
-        Sync::deleteSync(d->glSyncObject);
-    }
-    d->glSyncObject = Sync::getSync();
-    gc.endNativePainting();
-
-    renderDecorations(&gc);
-    gc.end();
-
-
-    if (!OPENGL_SUCCESS) {
-        KisConfig cfg;
-        cfg.writeEntry("canvasState", "OPENGL_SUCCESS");
-        OPENGL_SUCCESS = true;
-    }
-}
-
-QOpenGLShaderProgram *KisOpenGLCanvas2::getCursorShader()
-{
-    if (d->cursorShader == 0) {
-        d->cursorShader = new QOpenGLShaderProgram();
-        d->cursorShader->addShaderFromSourceFile(QOpenGLShader::Vertex, ":/cursor.vert");
-        d->cursorShader->addShaderFromSourceFile(QOpenGLShader::Fragment, ":/cursor.frag");
-        d->cursorShader->bindAttributeLocation("a_vertexPosition", PROGRAM_VERTEX_ATTRIBUTE);
-        if (! d->cursorShader->link()) {
-            dbgUI << "OpenGL error" << glGetError();
-            qFatal("Failed linking cursor shader");
-        }
-        Q_ASSERT(d->cursorShader->isLinked());
-        d->cursorShaderModelViewProjectionUniform = d->cursorShader->uniformLocation("modelViewProjection");
-    }
-
-    return d->cursorShader;
-}
-
-void KisOpenGLCanvas2::paintToolOutline(const QPainterPath &path)
-{
-
-    QOpenGLShaderProgram *cursorShader = getCursorShader();
-    cursorShader->bind();
-
-    // setup the mvp transformation
-    KisCoordinatesConverter *converter = coordinatesConverter();
-
-    QMatrix4x4 projectionMatrix;
-    projectionMatrix.setToIdentity();
-    projectionMatrix.ortho(0, width(), height(), 0, NEAR_VAL, FAR_VAL);
-
-    // Set view/projection matrices
-    QMatrix4x4 modelMatrix(converter->flakeToWidgetTransform());
-    modelMatrix.optimize();
-    modelMatrix = projectionMatrix * modelMatrix;
-    cursorShader->setUniformValue(d->cursorShaderModelViewProjectionUniform, modelMatrix);
-
-    glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
-
-    // XXX: glLogicOp not in ES 2.0 -- it would be better to use another method.
-    // It is defined in 3.1 core profile onward.
-    // Actually, https://www.opengl.org/sdk/docs/man/html/glLogicOp.xhtml says it's in 2.0 onwards,
-    // only not in ES, but we don't care about ES, so we could use the function directly.
-    glEnable(GL_COLOR_LOGIC_OP);
-    if (ptr_glLogicOp) {
-        ptr_glLogicOp(GL_XOR);
-    }
-
-    // setup the array of vertices
-    QVector<QVector3D> vertices;
-    QList<QPolygonF> subPathPolygons = path.toSubpathPolygons();
-    for (int i=0; i<subPathPolygons.size(); i++) {
-        const QPolygonF& polygon = subPathPolygons.at(i);
-        for (int j=0; j < polygon.count(); j++) {
-            QPointF p = polygon.at(j);
-            vertices << QVector3D(p.x(), p.y(), 0.f);
-        }
-        cursorShader->enableAttributeArray(PROGRAM_VERTEX_ATTRIBUTE);
-        cursorShader->setAttributeArray(PROGRAM_VERTEX_ATTRIBUTE, vertices.constData());
-
-        glDrawArrays(GL_LINE_STRIP, 0, vertices.size());
-
-        vertices.clear();
-    }
-
-    glDisable(GL_COLOR_LOGIC_OP);
-
-    cursorShader->release();
-
-}
-
-bool KisOpenGLCanvas2::isBusy() const
-{
-    const bool isBusyStatus = Sync::syncStatus(d->glSyncObject) == Sync::Unsignaled;
-    KisOpenglCanvasDebugger::instance()->nofitySyncStatus(isBusyStatus);
-
-    return isBusyStatus;
 }
 
 inline void rectToVertices(QVector3D* vertices, const QRectF &rc)
@@ -365,6 +231,211 @@ inline void rectToTexCoords(QVector2D* texCoords, const QRectF &rc)
     texCoords[3] = QVector2D(rc.left(), rc.top());
     texCoords[4] = QVector2D(rc.right(), rc.top());
     texCoords[5] = QVector2D(rc.right(), rc.bottom());
+}
+
+void KisOpenGLCanvas2::initializeGL()
+{
+    KisOpenGL::initializeContext(context());
+    initializeOpenGLFunctions();
+
+    KisConfig cfg;
+    d->openGLImageTextures->setProofingConfig(canvas()->proofingConfiguration());
+    d->openGLImageTextures->initGL(context()->functions());
+    d->openGLImageTextures->generateCheckerTexture(createCheckersImage(cfg.checkSize()));
+
+    initializeShaders();
+
+    // If we support OpenGL 3.2, then prepare our VAOs and VBOs for drawing
+    if (KisOpenGL::hasOpenGL3()) {
+        d->quadVAO.create();
+        d->quadVAO.bind();
+
+        glEnableVertexAttribArray(PROGRAM_VERTEX_ATTRIBUTE);
+        glEnableVertexAttribArray(PROGRAM_TEXCOORD_ATTRIBUTE);
+
+        // Create the vertex buffer object, it has 6 vertices with 3 components
+        d->quadBuffers[0].create();
+        d->quadBuffers[0].setUsagePattern(QOpenGLBuffer::StaticDraw);
+        d->quadBuffers[0].bind();
+        d->quadBuffers[0].allocate(d->vertices, 6 * 3 * sizeof(float));
+        glVertexAttribPointer(PROGRAM_VERTEX_ATTRIBUTE, 3, GL_FLOAT, GL_FALSE, 0, 0);
+
+        // Create the texture buffer object, it has 6 texture coordinates with 2 components
+        d->quadBuffers[1].create();
+        d->quadBuffers[1].setUsagePattern(QOpenGLBuffer::StaticDraw);
+        d->quadBuffers[1].bind();
+        d->quadBuffers[1].allocate(d->texCoords, 6 * 2 * sizeof(float));
+        glVertexAttribPointer(PROGRAM_TEXCOORD_ATTRIBUTE, 2, GL_FLOAT, GL_FALSE, 0, 0);
+
+        // Create the outline buffer, this buffer will store the outlines of
+        // tools and will frequently change data
+        d->outlineVAO.create();
+        d->outlineVAO.bind();
+
+        glEnableVertexAttribArray(PROGRAM_VERTEX_ATTRIBUTE);
+
+        // The outline buffer has a StreamDraw usage pattern, because it changes constantly
+        d->lineBuffer.create();
+        d->lineBuffer.setUsagePattern(QOpenGLBuffer::StreamDraw);
+        d->lineBuffer.bind();
+        glVertexAttribPointer(PROGRAM_VERTEX_ATTRIBUTE, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    }
+
+    ptr_glLogicOp = (kis_glLogicOp)(context()->getProcAddress("glLogicOp"));
+
+    Sync::init(context());
+
+    d->canvasInitialized = true;
+}
+
+/**
+ * Loads all shaders and reports compilation problems
+ */
+void KisOpenGLCanvas2::initializeShaders()
+{
+    bool useHiQualityFiltering = d->filterMode == KisOpenGL::HighQualityFiltering;
+
+    if (!d->canvasInitialized) {
+        delete d->displayShader;
+        delete d->checkerShader;
+        delete d->cursorShader;
+        try {
+            d->displayShader = d->shaderLoader.loadDisplayShader(d->displayFilter, useHiQualityFiltering);
+            d->checkerShader = d->shaderLoader.loadCheckerShader();
+            d->cursorShader = d->shaderLoader.loadCursorShader();
+        } catch (const ShaderLoaderException &e) {
+            reportFailedShaderCompilation(e.what());
+        }
+    }
+}
+
+/**
+ * Displays a message box telling the user that
+ * shader compilation failed and turns off OpenGL.
+ */
+void KisOpenGLCanvas2::reportFailedShaderCompilation(const QString &context)
+{
+    KisConfig cfg;
+
+    if (cfg.useVerboseOpenGLDebugOutput()) {
+        dbgUI << "GL-log:" << context;
+    }
+
+    qDebug() << "Shader Compilation Failure: " << context;
+    QMessageBox::critical(this, i18nc("@title:window", "Krita"),
+                          QString(i18n("Krita could not initialize the OpenGL canvas:\n\n%1\n\n Krita will disable OpenGL and close now.")).arg(context),
+                          QMessageBox::Close);
+
+    cfg.setUseOpenGL(false);
+    cfg.setCanvasState("OPENGL_FAILED");
+}
+
+void KisOpenGLCanvas2::resizeGL(int width, int height)
+{
+    coordinatesConverter()->setCanvasWidgetSize(QSize(width, height));
+    paintGL();
+}
+
+void KisOpenGLCanvas2::paintGL()
+{
+    if (!OPENGL_SUCCESS) {
+        KisConfig cfg;
+        cfg.writeEntry("canvasState", "OPENGL_PAINT_STARTED");
+    }
+
+    KisOpenglCanvasDebugger::instance()->nofityPaintRequested();
+
+    renderCanvasGL();
+
+    if (d->glSyncObject) {
+        Sync::deleteSync(d->glSyncObject);
+    }
+    d->glSyncObject = Sync::getSync();
+
+    QPainter gc(this);
+    renderDecorations(&gc);
+    gc.end();
+
+    if (!OPENGL_SUCCESS) {
+        KisConfig cfg;
+        cfg.writeEntry("canvasState", "OPENGL_SUCCESS");
+        OPENGL_SUCCESS = true;
+    }
+}
+
+void KisOpenGLCanvas2::paintToolOutline(const QPainterPath &path)
+{
+    d->cursorShader->bind();
+
+    // setup the mvp transformation
+    KisCoordinatesConverter *converter = coordinatesConverter();
+
+    QMatrix4x4 projectionMatrix;
+    projectionMatrix.setToIdentity();
+    projectionMatrix.ortho(0, width(), height(), 0, NEAR_VAL, FAR_VAL);
+
+    // Set view/projection matrices
+    QMatrix4x4 modelMatrix(converter->flakeToWidgetTransform());
+    modelMatrix.optimize();
+    modelMatrix = projectionMatrix * modelMatrix;
+    d->cursorShader->setUniformValue(d->cursorShader->location(Uniform::ModelViewProjection), modelMatrix);
+
+    glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
+
+    // XXX: glLogicOp not in ES 2.0 -- it would be better to use another method.
+    // It is defined in 3.1 core profile onward.
+    // Actually, https://www.opengl.org/sdk/docs/man/html/glLogicOp.xhtml says it's in 2.0 onwards,
+    // only not in ES, but we don't care about ES, so we could use the function directly.
+    glEnable(GL_COLOR_LOGIC_OP);
+    if (ptr_glLogicOp) {
+        ptr_glLogicOp(GL_XOR);
+    }
+
+    // Paint the tool outline
+    if (KisOpenGL::hasOpenGL3()) {
+        d->outlineVAO.bind();
+        d->lineBuffer.bind();
+    }
+
+    // Convert every disjointed subpath to a polygon and draw that polygon
+    QList<QPolygonF> subPathPolygons = path.toSubpathPolygons();
+    for (int i = 0; i < subPathPolygons.size(); i++) {
+        const QPolygonF& polygon = subPathPolygons.at(i);
+
+        QVector<QVector3D> vertices;
+        vertices.resize(polygon.count());
+        for (int j = 0; j < polygon.count(); j++) {
+            QPointF p = polygon.at(j);
+            vertices[j].setX(p.x());
+            vertices[j].setY(p.y());
+        }
+        if (KisOpenGL::hasOpenGL3()) {
+            d->lineBuffer.allocate(vertices.constData(), 3 * vertices.size() * sizeof(float));
+        }
+        else {
+            d->cursorShader->enableAttributeArray(PROGRAM_VERTEX_ATTRIBUTE);
+            d->cursorShader->setAttributeArray(PROGRAM_VERTEX_ATTRIBUTE, vertices.constData());
+        }
+
+        glDrawArrays(GL_LINE_STRIP, 0, vertices.size());
+    }
+
+    if (KisOpenGL::hasOpenGL3()) {
+        d->lineBuffer.release();
+        d->outlineVAO.release();
+    }
+
+    glDisable(GL_COLOR_LOGIC_OP);
+
+    d->cursorShader->release();
+}
+
+bool KisOpenGLCanvas2::isBusy() const
+{
+    const bool isBusyStatus = Sync::syncStatus(d->glSyncObject) == Sync::Unsignaled;
+    KisOpenglCanvasDebugger::instance()->nofitySyncStatus(isBusyStatus);
+
+    return isBusyStatus;
 }
 
 void KisOpenGLCanvas2::drawCheckers()
@@ -389,7 +460,10 @@ void KisOpenGLCanvas2::drawCheckers()
     textureTransform *= QTransform::fromScale(d->checkSizeScale / KisOpenGLImageTextures::BACKGROUND_TEXTURE_SIZE,
                                               d->checkSizeScale / KisOpenGLImageTextures::BACKGROUND_TEXTURE_SIZE);
 
-    d->checkerShader->bind();
+    if (!d->checkerShader->bind()) {
+        qWarning() << "Could not bind checker shader";
+        return;
+    }
 
     QMatrix4x4 projectionMatrix;
     projectionMatrix.setToIdentity();
@@ -399,19 +473,31 @@ void KisOpenGLCanvas2::drawCheckers()
     QMatrix4x4 modelMatrix(modelTransform);
     modelMatrix.optimize();
     modelMatrix = projectionMatrix * modelMatrix;
-    d->checkerShader->setUniformValue(d->checkerUniformLocationModelViewProjection, modelMatrix);
+    d->checkerShader->setUniformValue(d->checkerShader->location(Uniform::ModelViewProjection), modelMatrix);
 
     QMatrix4x4 textureMatrix(textureTransform);
-    d->checkerShader->setUniformValue(d->checkerUniformLocationTextureMatrix, textureMatrix);
+    d->checkerShader->setUniformValue(d->checkerShader->location(Uniform::TextureMatrix), textureMatrix);
 
     //Setup the geometry for rendering
-    rectToVertices(d->vertices, modelRect);
-    d->checkerShader->enableAttributeArray(PROGRAM_VERTEX_ATTRIBUTE);
-    d->checkerShader->setAttributeArray(PROGRAM_VERTEX_ATTRIBUTE, d->vertices);
+    if (KisOpenGL::hasOpenGL3()) {
+        rectToVertices(d->vertices, modelRect);
 
-    rectToTexCoords(d->texCoords, textureRect);
-    d->checkerShader->enableAttributeArray(PROGRAM_TEXCOORD_ATTRIBUTE);
-    d->checkerShader->setAttributeArray(PROGRAM_TEXCOORD_ATTRIBUTE, d->texCoords);
+        d->quadBuffers[0].bind();
+        d->quadBuffers[0].write(0, d->vertices, 3 * 6 * sizeof(float));
+
+        rectToTexCoords(d->texCoords, textureRect);
+        d->quadBuffers[1].bind();
+        d->quadBuffers[1].write(0, d->texCoords, 2 * 6 * sizeof(float));
+    }
+    else {
+        rectToVertices(d->vertices, modelRect);
+        d->checkerShader->enableAttributeArray(PROGRAM_VERTEX_ATTRIBUTE);
+        d->checkerShader->setAttributeArray(PROGRAM_VERTEX_ATTRIBUTE, d->vertices);
+
+        rectToTexCoords(d->texCoords, textureRect);
+        d->checkerShader->enableAttributeArray(PROGRAM_TEXCOORD_ATTRIBUTE);
+        d->checkerShader->setAttributeArray(PROGRAM_TEXCOORD_ATTRIBUTE, d->texCoords);
+    }
 
     // render checkers
     glActiveTexture(GL_TEXTURE0);
@@ -421,6 +507,7 @@ void KisOpenGLCanvas2::drawCheckers()
 
     glBindTexture(GL_TEXTURE_2D, 0);
     d->checkerShader->release();
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
 void KisOpenGLCanvas2::drawImage()
@@ -444,19 +531,19 @@ void KisOpenGLCanvas2::drawImage()
     QMatrix4x4 modelMatrix(coordinatesConverter()->imageToWidgetTransform());
     modelMatrix.optimize();
     modelMatrix = projectionMatrix * modelMatrix;
-    d->displayShader->setUniformValue(d->displayUniformLocationModelViewProjection, modelMatrix);
+    d->displayShader->setUniformValue(d->displayShader->location(Uniform::ModelViewProjection), modelMatrix);
 
     QMatrix4x4 textureMatrix;
     textureMatrix.setToIdentity();
-    d->displayShader->setUniformValue(d->displayUniformLocationTextureMatrix, textureMatrix);
+    d->displayShader->setUniformValue(d->displayShader->location(Uniform::TextureMatrix), textureMatrix);
 
     QRectF widgetRect(0,0, width(), height());
     QRectF widgetRectInImagePixels = converter->documentToImage(converter->widgetToDocument(widgetRect));
 
     qreal scaleX, scaleY;
     converter->imageScale(&scaleX, &scaleY);
-    d->displayShader->setUniformValue(d->displayUniformLocationViewPortScale, (GLfloat) scaleX);
-    d->displayShader->setUniformValue(d->displayUniformLocationTexelSize, (GLfloat) d->openGLImageTextures->texelSize());
+    d->displayShader->setUniformValue(d->displayShader->location(Uniform::ViewportScale), (GLfloat) scaleX);
+    d->displayShader->setUniformValue(d->displayShader->location(Uniform::TexelSize), (GLfloat) d->openGLImageTextures->texelSize());
 
     QRect ir = d->openGLImageTextures->storedImageBounds();
     QRect wr = widgetRectInImagePixels.toAlignedRect();
@@ -518,30 +605,42 @@ void KisOpenGLCanvas2::drawImage()
             QRectF modelRect(tile->tileRectInImagePixels().translated(tileWrappingTranslation.x(), tileWrappingTranslation.y()));
 
             //Setup the geometry for rendering
-            rectToVertices(d->vertices, modelRect);
-            d->displayShader->enableAttributeArray(PROGRAM_VERTEX_ATTRIBUTE);
-            d->displayShader->setAttributeArray(PROGRAM_VERTEX_ATTRIBUTE, d->vertices);
+            if (KisOpenGL::hasOpenGL3()) {
+                rectToVertices(d->vertices, modelRect);
 
-            rectToTexCoords(d->texCoords, textureRect);
-            d->displayShader->enableAttributeArray(PROGRAM_TEXCOORD_ATTRIBUTE);
-            d->displayShader->setAttributeArray(PROGRAM_TEXCOORD_ATTRIBUTE, d->texCoords);
+                d->quadBuffers[0].bind();
+                d->quadBuffers[0].write(0, d->vertices, 3 * 6 * sizeof(float));
+
+                rectToTexCoords(d->texCoords, textureRect);
+                d->quadBuffers[1].bind();
+                d->quadBuffers[1].write(0, d->texCoords, 2 * 6 * sizeof(float));
+            }
+            else {
+                rectToVertices(d->vertices, modelRect);
+                d->displayShader->enableAttributeArray(PROGRAM_VERTEX_ATTRIBUTE);
+                d->displayShader->setAttributeArray(PROGRAM_VERTEX_ATTRIBUTE, d->vertices);
+
+                rectToTexCoords(d->texCoords, textureRect);
+                d->displayShader->enableAttributeArray(PROGRAM_TEXCOORD_ATTRIBUTE);
+                d->displayShader->setAttributeArray(PROGRAM_TEXCOORD_ATTRIBUTE, d->texCoords);
+            }
 
             if (d->displayFilter) {
                 glActiveTexture(GL_TEXTURE0 + 1);
                 glBindTexture(GL_TEXTURE_3D, d->displayFilter->lutTexture());
-                d->displayShader->setUniformValue(d->displayUniformLocationTexture1, 1);
+                d->displayShader->setUniformValue(d->displayShader->location(Uniform::Texture1), 1);
             }
 
             int currentLodPlane = tile->currentLodPlane();
-            if (d->displayUniformLocationFixedLodLevel >= 0) {
-                d->displayShader->setUniformValue(d->displayUniformLocationFixedLodLevel,
+            if (d->displayShader->location(Uniform::FixedLodLevel) >= 0) {
+                d->displayShader->setUniformValue(d->displayShader->location(Uniform::FixedLodLevel),
                                                   (GLfloat) currentLodPlane);
             }
 
             glActiveTexture(GL_TEXTURE0);
             tile->bindToActiveTexture();
 
-            if (currentLodPlane) {
+            if (currentLodPlane > 0) {
                 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
             } else if (SCALE_MORE_OR_EQUAL_TO(scaleX, scaleY, 2.0)) {
                 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -551,6 +650,7 @@ void KisOpenGLCanvas2::drawImage()
 
                 switch(d->filterMode) {
                 case KisOpenGL::NearestFilterMode:
+                    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
                     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
                     break;
                 case KisOpenGL::BilinearFilterMode:
@@ -575,151 +675,7 @@ void KisOpenGLCanvas2::drawImage()
 
     glBindTexture(GL_TEXTURE_2D, 0);
     d->displayShader->release();
-}
-
-void KisOpenGLCanvas2::reportShaderLinkFailedAndExit(bool result, const QString &context, const QString &log)
-{
-    KisConfig cfg;
-
-    if (cfg.useVerboseOpenGLDebugOutput()) {
-        dbgUI << "GL-log:" << context << log;
-    }
-
-    if (result) return;
-
-    QMessageBox::critical(this, i18nc("@title:window", "Krita"),
-                          QString(i18n("Krita could not initialize the OpenGL canvas:\n\n%1\n\n%2\n\n Krita will disable OpenGL and close now.")).arg(context).arg(log),
-                          QMessageBox::Close);
-
-    cfg.setUseOpenGL(false);
-    cfg.setCanvasState("OPENGL_FAILED");
-}
-
-void KisOpenGLCanvas2::initializeCheckerShader()
-{
-    if (d->canvasInitialized) return;
-
-    delete d->checkerShader;
-    d->checkerShader = new QOpenGLShaderProgram();
-    QString vertexShaderName;
-    QString fragmentShaderName;
-
-    bool result;
-
-    if (KisOpenGL::supportsGLSL13()) {
-        vertexShaderName = ":/matrix_transform.vert";
-        fragmentShaderName = ":/simple_texture.frag";
-    }
-    else {
-        vertexShaderName = ":/matrix_transform_legacy.vert";
-        fragmentShaderName = ":/simple_texture_legacy.frag";
-    }
-
-    result = d->checkerShader->addShaderFromSourceFile(QOpenGLShader::Vertex, vertexShaderName);
-    reportShaderLinkFailedAndExit(result, "Checker vertex shader", d->checkerShader->log());
-
-    result = d->checkerShader->addShaderFromSourceFile(QOpenGLShader::Fragment, fragmentShaderName);
-    reportShaderLinkFailedAndExit(result, "Checker fragment shader", d->checkerShader->log());
-
-
-    d->checkerShader->bindAttributeLocation("a_vertexPosition", PROGRAM_VERTEX_ATTRIBUTE);
-    d->checkerShader->bindAttributeLocation("a_textureCoordinate", PROGRAM_TEXCOORD_ATTRIBUTE);
-
-    result = d->checkerShader->link();
-    reportShaderLinkFailedAndExit(result, "Checker shader (link)", d->checkerShader->log());
-
-    Q_ASSERT(d->checkerShader->isLinked());
-
-    d->checkerUniformLocationModelViewProjection = d->checkerShader->uniformLocation("modelViewProjection");
-    d->checkerUniformLocationTextureMatrix = d->checkerShader->uniformLocation("textureMatrix");
-
-}
-
-QByteArray KisOpenGLCanvas2::buildFragmentShader()
-{
-    QByteArray shaderText;
-
-    bool haveDisplayFilter = d->displayFilter && !d->displayFilter->program().isEmpty();
-    bool useHiQualityFiltering = d->filterMode == KisOpenGL::HighQualityFiltering;
-    bool haveGLSL13 = KisOpenGL::supportsGLSL13();
-
-    QString filename;
-
-    if (haveGLSL13) {
-        filename = "highq_downscale.frag";
-        shaderText.append("#version 130\n");
-    } else {
-        filename = "simple_texture_legacy.frag";
-    }
-
-    if (haveDisplayFilter) {
-        shaderText.append("#define USE_OCIO\n");
-        shaderText.append(d->displayFilter->program().toLatin1());
-    }
-
-    if (haveGLSL13 && useHiQualityFiltering) {
-        shaderText.append("#define HIGHQ_SCALING\n");
-    }
-    if (haveGLSL13) {
-        shaderText.append("#define DIRECT_LOD_FETCH\n");
-    }
-
-    {
-        QFile prefaceFile(":/" + filename);
-        prefaceFile.open(QIODevice::ReadOnly);
-        shaderText.append(prefaceFile.readAll());
-    }
-
-    return shaderText;
-}
-
-void KisOpenGLCanvas2::initializeDisplayShader()
-{
-    if (d->canvasInitialized) return;
-
-    delete d->displayShader;
-    d->displayShader = new QOpenGLShaderProgram();
-
-    bool result = d->displayShader->addShaderFromSourceCode(QOpenGLShader::Fragment, buildFragmentShader());
-    reportShaderLinkFailedAndExit(result, "Display fragment shader", d->displayShader->log());
-
-    if (KisOpenGL::supportsGLSL13()) {
-        result = d->displayShader->addShaderFromSourceFile(QOpenGLShader::Vertex, ":/matrix_transform.vert");
-    }
-    else {
-        result = d->displayShader->addShaderFromSourceFile(QOpenGLShader::Vertex, ":/matrix_transform_legacy.vert");
-    }
-
-    reportShaderLinkFailedAndExit(result, "Display vertex shader", d->displayShader->log());
-
-    d->displayShader->bindAttributeLocation("a_vertexPosition", PROGRAM_VERTEX_ATTRIBUTE);
-    d->displayShader->bindAttributeLocation("a_textureCoordinate", PROGRAM_TEXCOORD_ATTRIBUTE);
-
-    result = d->displayShader->link();
-    reportShaderLinkFailedAndExit(result, "Display shader (link)", d->displayShader->log());
-
-    Q_ASSERT(d->displayShader->isLinked());
-
-    d->displayUniformLocationModelViewProjection = d->displayShader->uniformLocation("modelViewProjection");
-    d->displayUniformLocationTextureMatrix = d->displayShader->uniformLocation("textureMatrix");
-    d->displayUniformLocationTexture0 = d->displayShader->uniformLocation("texture0");
-
-    // ocio
-    d->displayUniformLocationTexture1 = d->displayShader->uniformLocation("texture1");
-
-    // highq || lod
-    d->displayUniformLocationViewPortScale = d->displayShader->uniformLocation("viewportScale");
-
-    // highq
-    d->displayUniformLocationTexelSize = d->displayShader->uniformLocation("texelSize");
-
-    // TODO: The trilinear filtering mode is having issues when that is set in the application. It sometimes causes Krita to crash
-    // I cannot tell where that is at in here... Scott P (11/8/2015)
-
-    // lod
-    d->displayUniformLocationFixedLodLevel =
-            KisOpenGL::supportsGLSL13() ?
-                d->displayShader->uniformLocation("fixedLodLevel") : -1;
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
 void KisOpenGLCanvas2::slotConfigChanged()
@@ -756,8 +712,14 @@ void KisOpenGLCanvas2::renderCanvasGL()
         d->displayFilter->updateShader();
     }
 
+    if (KisOpenGL::hasOpenGL3()) {
+        d->quadVAO.bind();
+    }
     drawCheckers();
     drawImage();
+    if (KisOpenGL::hasOpenGL3()) {
+        d->quadVAO.release();
+    }
 }
 
 void KisOpenGLCanvas2::renderDecorations(QPainter *painter)

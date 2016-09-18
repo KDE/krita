@@ -38,6 +38,8 @@
 #include "kis_image_config.h"
 #include "kis_debug.h"
 #include "kis_node.h"
+#include "kis_sequential_iterator.h"
+#include "kis_random_accessor_ng.h"
 
 
 namespace KritaUtils
@@ -505,5 +507,49 @@ namespace KritaUtils
             c1.redF() * r1 + c2.redF() * r2,
             c1.greenF() * r1 + c2.greenF() * r2,
             c1.blueF() * r1 + c2.blueF() * r2);
+    }
+
+    void applyToAlpha8Device(KisPaintDeviceSP dev, const QRect &rc, std::function<void(quint8)> func) {
+        KisSequentialConstIterator dstIt(dev, rc);
+        do {
+            const quint8 *dstPtr = dstIt.rawDataConst();
+            func(*dstPtr);
+        } while (dstIt.nextPixel());
+    }
+
+    void filterAlpha8Device(KisPaintDeviceSP dev, const QRect &rc, std::function<quint8(quint8)> func) {
+        KisSequentialIterator dstIt(dev, rc);
+        do {
+            quint8 *dstPtr = dstIt.rawData();
+            *dstPtr = func(*dstPtr);
+        } while (dstIt.nextPixel());
+    }
+
+    qreal estimatePortionOfTransparentPixels(KisPaintDeviceSP dev, const QRect &rect, qreal samplePortion) {
+        const KoColorSpace *cs = dev->colorSpace();
+
+        const qreal linearPortion = std::sqrt(samplePortion);
+        const qreal ratio = qreal(rect.width()) / rect.height();
+        const int xStep = qMax(1, qRound(1.0 / linearPortion * ratio));
+        const int yStep = qMax(1, qRound(1.0 / linearPortion / ratio));
+
+        int numTransparentPixels = 0;
+        int numPixels = 0;
+
+        KisRandomConstAccessorSP it = dev->createRandomConstAccessorNG(rect.x(), rect.y());
+        for (int y = rect.y(); y <= rect.bottom(); y += yStep) {
+            for (int x = rect.x(); x <= rect.right(); x += xStep) {
+                it->moveTo(x, y);
+                const quint8 alpha = cs->opacityU8(it->rawDataConst());
+
+                if (alpha != OPACITY_OPAQUE_U8) {
+                    numTransparentPixels++;
+                }
+
+                numPixels++;
+            }
+        }
+
+        return qreal(numTransparentPixels) / numPixels;
     }
 }

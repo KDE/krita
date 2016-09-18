@@ -56,7 +56,7 @@ KisBookmarkedConfigurationManager::~KisBookmarkedConfigurationManager()
     delete d;
 }
 
-KisSerializableConfiguration* KisBookmarkedConfigurationManager::load(const QString & configname) const
+KisSerializableConfigurationSP KisBookmarkedConfigurationManager::load(const QString & configname) const
 {
     if (!exists(configname)) {
         if (configname == KisBookmarkedConfigurationManager::ConfigDefault)
@@ -69,12 +69,12 @@ KisSerializableConfiguration* KisBookmarkedConfigurationManager::load(const QStr
     QDomDocument doc;
     doc.setContent(cfg.readEntry<QString>(configname, ""));
     QDomElement e = doc.documentElement();
-    KisSerializableConfiguration* config = d->configFactory->create(e);
+    KisSerializableConfigurationSP config = d->configFactory->create(e);
     dbgImage << config << endl;
     return config;
 }
 
-void KisBookmarkedConfigurationManager::save(const QString & configname, const KisSerializableConfiguration* config)
+void KisBookmarkedConfigurationManager::save(const QString & configname, const KisSerializableConfigurationSP config)
 {
     dbgImage << "Saving configuration " << config << " to " << configname;
     if (!config) return;
@@ -103,7 +103,7 @@ QList<QString> KisBookmarkedConfigurationManager::configurations() const
     return configsKey;
 }
 
-KisSerializableConfiguration* KisBookmarkedConfigurationManager::defaultConfiguration() const
+KisSerializableConfigurationSP KisBookmarkedConfigurationManager::defaultConfiguration() const
 {
     if (exists(KisBookmarkedConfigurationManager::ConfigDefault)) {
         return load(KisBookmarkedConfigurationManager::ConfigDefault);

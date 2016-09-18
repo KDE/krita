@@ -4,6 +4,8 @@
         <file>bilinear_gradient.frag</file>
         <file>conical_gradient.frag</file>
         <file>conical_symetric_gradient.frag</file>
+        <file>cursor_legacy.frag</file>
+        <file>cursor_legacy.vert</file>
         <file>cursor.frag</file>
         <file>cursor.vert</file>
         <file>highq_downscale.frag</file>

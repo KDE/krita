@@ -315,8 +315,7 @@ void addBackgroundIfNeeded(KisNodeSP root, QList<FlattenedNode> &nodes)
                           i18nc("Automatically created layer name when saving into PSD", "Background"),
                           OPACITY_OPAQUE_U8);
 
-    projectionColor.convertTo(layer->paintDevice()->colorSpace());
-    layer->paintDevice()->setDefaultPixel(projectionColor.data());
+    layer->paintDevice()->setDefaultPixel(projectionColor);
 
     {
         FlattenedNode item;

@@ -56,6 +56,7 @@ set(kritaimage_LIB_SRCS
     tiles3/swap/kis_tile_data_swapper.cpp
    kis_distance_information.cpp
    kis_painter.cc
+   kis_marker_painter.cpp
    kis_progress_updater.cpp
    brushengine/kis_paint_information.cc
    brushengine/kis_random_source.cpp
@@ -66,12 +67,14 @@ set(kritaimage_LIB_SRCS
    brushengine/kis_paintop_registry.cc
    brushengine/kis_paintop_settings.cpp
    brushengine/kis_paintop_settings_update_proxy.cpp
+   brushengine/kis_no_size_paintop_settings.cpp
    brushengine/kis_locked_properties.cc
    brushengine/kis_locked_properties_proxy.cpp
    brushengine/kis_locked_properties_server.cpp
    brushengine/kis_paintop_config_widget.cpp
    brushengine/kis_uniform_paintop_property.cpp
    brushengine/kis_combo_based_paintop_property.cpp
+   brushengine/kis_slider_based_paintop_property.cpp
    brushengine/kis_standard_uniform_properties_factory.cpp
    commands/kis_deselect_global_selection_command.cpp
    commands/kis_image_change_layers_command.cpp
@@ -116,6 +119,11 @@ set(kritaimage_LIB_SRCS
    generator/kis_generator_registry.cpp
    floodfill/kis_fill_interval_map.cpp
    floodfill/kis_scanline_fill.cpp
+   lazybrush/kis_min_cut_worker.cpp
+   lazybrush/kis_lazy_fill_tools.cpp
+   lazybrush/kis_multiway_cut.cpp
+   lazybrush/kis_colorize_mask.cpp
+   lazybrush/kis_colorize_stroke_strategy.cpp
    kis_adjustment_layer.cc
    kis_selection_based_layer.cpp
    kis_node_filter_interface.cpp
@@ -242,6 +250,7 @@ set(kritaimage_LIB_SRCS
    kis_undo_store.cpp
    kis_undo_stores.cpp
    kis_undo_adapter.cpp
+   kis_macro_based_undo_store.cpp
    kis_surrogate_undo_adapter.cpp
    kis_legacy_undo_adapter.cpp
    kis_post_execution_undo_adapter.cpp
@@ -308,6 +317,8 @@ set(kritaimage_LIB_SRCS
    layerstyles/kis_ls_overlay_filter.cpp
    layerstyles/kis_ls_utils.cpp
    layerstyles/gimp_bump_map.cpp
+
+   KisProofingConfiguration.cpp
 )
 
 set(einspline_SRCS

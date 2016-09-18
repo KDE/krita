@@ -53,7 +53,7 @@ KisFilterIndexColors::KisFilterIndexColors() : KisColorTransformationFilter(id()
     setShowConfigurationWidget(true);
 }
 
-KoColorTransformation* KisFilterIndexColors::createTransformation(const KoColorSpace* cs, const KisFilterConfiguration* config) const
+KoColorTransformation* KisFilterIndexColors::createTransformation(const KoColorSpace* cs, const KisFilterConfigurationSP config) const
 {
     IndexColorPalette pal;
 
@@ -84,9 +84,9 @@ KisConfigWidget* KisFilterIndexColors::createConfigurationWidget(QWidget* parent
     return w;
 }
 
-KisFilterConfiguration* KisFilterIndexColors::factoryConfiguration(const KisPaintDeviceSP) const
+KisFilterConfigurationSP KisFilterIndexColors::factoryConfiguration(const KisPaintDeviceSP) const
 {
-    KisColorTransformationConfiguration* config = new KisColorTransformationConfiguration(id().id(), 0);
+    KisColorTransformationConfigurationSP config = new KisColorTransformationConfiguration(id().id(), 0);
 
     PaletteGeneratorConfig palCfg; // Default constructor is factory config
     config->setProperty("paletteGen",     palCfg.toByteArray());

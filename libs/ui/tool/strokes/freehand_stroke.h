@@ -26,6 +26,7 @@
 #include <kis_distance_information.h>
 #include <brushengine/kis_paint_information.h>
 #include "kis_lod_transform.h"
+#include "KoColor.h"
 
 
 
@@ -42,7 +43,9 @@ public:
             POLYGON,
             RECT,
             ELLIPSE,
-            PAINTER_PATH
+            PAINTER_PATH,
+            QPAINTER_PATH,
+            QPAINTER_PATH_FILL
         };
 
         Data(KisNodeSP _node, int _painterInfoId,
@@ -87,6 +90,15 @@ public:
              const QPainterPath &_path)
             : node(_node), painterInfoId(_painterInfoId),
             type(_type), path(_path)
+        {}
+
+        Data(KisNodeSP _node, int _painterInfoId,
+             DabType _type,
+             const QPainterPath &_path,
+             const QPen &_pen, const KoColor &_customColor)
+            : node(_node), painterInfoId(_painterInfoId),
+            type(_type), path(_path),
+            pen(_pen), customColor(_customColor)
         {}
 
         KisStrokeJobData* createLodClone(int levelOfDetail) {
@@ -145,6 +157,8 @@ public:
         vQPointF points;
         QRectF rect;
         QPainterPath path;
+        QPen pen;
+        KoColor customColor;
     };
 
 public:

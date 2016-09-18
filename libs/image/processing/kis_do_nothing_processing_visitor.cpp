@@ -96,3 +96,9 @@ void KisDoNothingProcessingVisitor::visit(KisSelectionMask *mask, KisUndoAdapter
     Q_UNUSED(mask);
     Q_UNUSED(undoAdapter);
 }
+
+void KisDoNothingProcessingVisitor::visit(KisColorizeMask *mask, KisUndoAdapter *undoAdapter)
+{
+    Q_UNUSED(mask);
+    Q_UNUSED(undoAdapter);
+}

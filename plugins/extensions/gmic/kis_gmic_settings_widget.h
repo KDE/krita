@@ -43,8 +43,8 @@ public:
     KisGmicSettingsWidget(Command * command = 0);
     ~KisGmicSettingsWidget();
 
-    virtual KisPropertiesConfiguration* configuration() const { return 0; }
-    virtual void setConfiguration(const KisPropertiesConfiguration* config) { Q_UNUSED(config) }
+    virtual KisPropertiesConfigurationSP configuration() const { return 0; }
+    virtual void setConfiguration(const KisPropertiesConfigurationSP config) { Q_UNUSED(config) }
 
     Command * currentCommandSettings();
 

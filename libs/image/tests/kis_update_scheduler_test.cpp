@@ -51,7 +51,7 @@ KisImageSP KisUpdateSchedulerTest::buildTestingImage()
 
     KisFilterSP filter = KisFilterRegistry::instance()->value("blur");
     Q_ASSERT(filter);
-    KisFilterConfiguration *configuration = filter->defaultConfiguration(0);
+    KisFilterConfigurationSP configuration = filter->defaultConfiguration(0);
     Q_ASSERT(configuration);
 
     KisPaintLayerSP paintLayer1 = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE_U8);
@@ -414,7 +414,6 @@ void KisUpdateSchedulerTest::testTimeMonitor()
 void KisUpdateSchedulerTest::testLodSync()
 {
     KisImageSP image = buildTestingImage();
-    QRect imageRect = image->bounds();
     KisNodeSP rootLayer = image->root();
     KisNodeSP paintLayer1 = rootLayer->firstChild();
 

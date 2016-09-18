@@ -42,8 +42,10 @@ KisHatchingPaintOpSettings::~KisHatchingPaintOpSettings()
 {
 }
 
-void KisHatchingPaintOpSettings::initializeTwin(KisHatchingPaintOpSettings* convenienttwin) const
+void KisHatchingPaintOpSettings::initializeTwin(KisPaintOpSettingsSP settings) const
 {
+    // XXX: this is a nice way to reinvent the copy constructor?
+
     /*--------DO NOT REMOVE please, use this to review the XML config tree
     QMap<QString, QVariant> rofl = QMap<QString, QVariant>(getProperties());
 
@@ -51,6 +53,8 @@ void KisHatchingPaintOpSettings::initializeTwin(KisHatchingPaintOpSettings* conv
     for (i = rofl.constBegin(); i != rofl.constEnd(); ++i)
         dbgKrita << i.key() << ":" << i.value();
     /----------DO NOT REMOVE----------------*/
+
+    KisHatchingPaintOpSettings *convenienttwin = static_cast<KisHatchingPaintOpSettings*>(settings.data());
 
     convenienttwin->enabledcurvecrosshatching = getBool("PressureCrosshatching");
     convenienttwin->enabledcurveopacity = getBool("PressureOpacity");
@@ -108,7 +112,7 @@ void KisHatchingPaintOpSettings::fromXML(const QDomElement& elt)
 #include "kis_hatching_options.h"
 
 
-QList<KisUniformPaintOpPropertySP> KisHatchingPaintOpSettings::uniformProperties()
+QList<KisUniformPaintOpPropertySP> KisHatchingPaintOpSettings::uniformProperties(KisPaintOpSettingsSP settings)
 {
     QList<KisUniformPaintOpPropertySP> props =
         listWeakToStrong(m_d->uniformProperties);
@@ -120,7 +124,7 @@ QList<KisUniformPaintOpPropertySP> KisHatchingPaintOpSettings::uniformProperties
                     KisDoubleSliderBasedPaintOpPropertyCallback::Double,
                     "hatching_angle",
                     i18n("Hatching Angle"),
-                    this, 0);
+                    settings, 0);
 
             const QString degree = QChar(Qt::Key_degree);
             prop->setRange(-90, 90);
@@ -152,7 +156,7 @@ QList<KisUniformPaintOpPropertySP> KisHatchingPaintOpSettings::uniformProperties
                     KisDoubleSliderBasedPaintOpPropertyCallback::Double,
                     "hatching_separation",
                     i18n("Separation"),
-                    this, 0);
+                    settings, 0);
 
             prop->setRange(1.0, 30);
             prop->setSingleStep(0.01);
@@ -183,7 +187,7 @@ QList<KisUniformPaintOpPropertySP> KisHatchingPaintOpSettings::uniformProperties
                     KisDoubleSliderBasedPaintOpPropertyCallback::Double,
                     "hatching_thickness",
                     i18n("Thickness"),
-                    this, 0);
+                    settings, 0);
 
             prop->setRange(1.0, 30);
             prop->setSingleStep(0.01);
@@ -210,6 +214,6 @@ QList<KisUniformPaintOpPropertySP> KisHatchingPaintOpSettings::uniformProperties
         }
     }
 
-    return KisPaintOpSettings::uniformProperties() + props;
+    return KisPaintOpSettings::uniformProperties(settings) + props;
 }
 

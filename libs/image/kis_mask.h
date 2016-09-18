@@ -64,7 +64,7 @@
    XXX: For now, all masks are 8 bit. Make the channel depth settable.
 
  */
-class KRITAIMAGE_EXPORT KisMask : public KisNode, KisIndirectPaintingSupport
+class KRITAIMAGE_EXPORT KisMask : public KisNode, public KisIndirectPaintingSupport
 {
 
     Q_OBJECT
@@ -83,7 +83,7 @@ public:
 
     virtual ~KisMask();
 
-    void setImage(KisImageWSP image);
+    void setImage(KisImageWSP image) Q_DECL_OVERRIDE;
 
     bool allowAsChild(KisNodeSP node) const;
 

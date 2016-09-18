@@ -1,4 +1,5 @@
-set(kritagradientmap_SOURCES gradientmap.cpp krita_gradient_map_color_transformation.cpp krita_filter_gradient_map.cpp)
+set(kritagradientmap_SOURCES gradientmap.cpp
+krita_filter_gradient_map.cpp)
 
 ki18n_wrap_ui(kritagradientmap_SOURCES wdg_gradientmap.ui)
 

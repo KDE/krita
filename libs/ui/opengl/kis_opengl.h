@@ -49,7 +49,8 @@ public:
     /// Initialize shared OpenGL context
     static void initializeContext(QOpenGLContext *ctx);
 
-    static bool supportsGLSL13();
+    static bool supportsLoD();
+    static bool hasOpenGL3();
 
     /// Check for OpenGL
     static bool hasOpenGL();
@@ -71,9 +72,10 @@ public:
      */
     static bool needsPixmapCacheWorkaround();
 
+    static void setDefaultFormat();
+
 private:
 
-    static void setDefaultFormat();
 
     KisOpenGL();
 

@@ -1,0 +1,10 @@
+{
+    "Id": "Halftone Filter",
+    "Type": "Service",
+    "X-KDE-Library": "kritahalftone",
+    "X-KDE-ServiceTypes": [
+        "Krita/Filter"
+    ],
+    "X-Krita-Version": "28"
+}
+

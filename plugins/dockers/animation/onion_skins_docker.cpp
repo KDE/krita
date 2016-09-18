@@ -30,6 +30,7 @@
 #include "KisViewManager.h"
 #include "kis_action_manager.h"
 #include "kis_action.h"
+#include <KoColorSpaceRegistry.h>
 
 #include "kis_equalizer_widget.h"
 
@@ -64,8 +65,8 @@ OnionSkinsDocker::OnionSkinsDocker(QWidget *parent) :
     connect(m_equalizerWidget, SIGNAL(sigConfigChanged()), &m_updatesCompressor, SLOT(start()));
     layout->addWidget(m_equalizerWidget, 1);
 
-    connect(ui->btnBackwardColor, SIGNAL(changed(QColor)), &m_updatesCompressor, SLOT(start()));
-    connect(ui->btnForwardColor, SIGNAL(changed(QColor)), &m_updatesCompressor, SLOT(start()));
+    connect(ui->btnBackwardColor, SIGNAL(changed(KoColor)), &m_updatesCompressor, SLOT(start()));
+    connect(ui->btnForwardColor, SIGNAL(changed(KoColor)), &m_updatesCompressor, SLOT(start()));
     connect(ui->doubleTintFactor, SIGNAL(valueChanged(qreal)), &m_updatesCompressor, SLOT(start()));
 
     connect(&m_updatesCompressor, SIGNAL(timeout()),
@@ -163,8 +164,8 @@ void OnionSkinsDocker::changed()
     }
 
     config.setOnionSkinTintFactor(ui->doubleTintFactor->value() * 255.0 / 100.0);
-    config.setOnionSkinTintColorBackward(ui->btnBackwardColor->color());
-    config.setOnionSkinTintColorForward(ui->btnForwardColor->color());
+    config.setOnionSkinTintColorBackward(ui->btnBackwardColor->color().toQColor());
+    config.setOnionSkinTintColorForward(ui->btnForwardColor->color().toQColor());
 
     KisOnionSkinCompositor::instance()->configChanged();
 }
@@ -179,8 +180,11 @@ void OnionSkinsDocker::loadSettings()
                         m_equalizerWidget);
 
     ui->doubleTintFactor->setValue(config.onionSkinTintFactor() * 100.0 / 255);
-    ui->btnBackwardColor->setColor(config.onionSkinTintColorBackward());
-    ui->btnForwardColor->setColor(config.onionSkinTintColorForward());
+    KoColor bcol(KoColorSpaceRegistry::instance()->rgb8());
+    bcol.fromQColor(config.onionSkinTintColorBackward());
+    ui->btnBackwardColor->setColor(bcol);
+    bcol.fromQColor(config.onionSkinTintColorForward());
+    ui->btnForwardColor->setColor(bcol);
 
     KisEqualizerWidget::EqualizerValues v;
     v.maxDistance = 10;

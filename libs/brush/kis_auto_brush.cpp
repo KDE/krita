@@ -99,6 +99,16 @@ KisAutoBrush::~KisAutoBrush()
 {
 }
 
+qreal KisAutoBrush::userEffectiveSize() const
+{
+    return d->shape->diameter();
+}
+
+void KisAutoBrush::setUserEffectiveSize(qreal value)
+{
+    d->shape->setDiameter(value);
+}
+
 KisAutoBrush::KisAutoBrush(const KisAutoBrush& rhs)
     : KisBrush(rhs),
       d(new Private(*rhs.d))

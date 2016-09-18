@@ -4,6 +4,7 @@
 #include "KoColor.h"
 #include "KoColorSpace.h"
 #include "KoColorConversionTransformation.h"
+#include "kritaimage_export.h"
 
 /**
  * @brief The KisProofingConfiguration struct
@@ -12,14 +13,10 @@
  * intet, conversionflags and warning color have default set to them. This
  * wasn't possible for profileSpace.
  */
-struct KisProofingConfiguration {
-    KisProofingConfiguration() : intent(KoColorConversionTransformation::IntentAbsoluteColorimetric),
-                                 conversionFlags(KoColorConversionTransformation::BlackpointCompensation),
-                                 warningColor(KoColor()),
-                                 proofingProfile("Chemical proof"),
-                                 proofingModel("CMYKA"),
-                                 proofingDepth("U8"),
-                                 adaptationState(1.0){}
+class KRITAIMAGE_EXPORT KisProofingConfiguration {
+public:
+    KisProofingConfiguration();
+    ~KisProofingConfiguration();
     KoColorConversionTransformation::Intent intent;
     KoColorConversionTransformation::ConversionFlags conversionFlags;
     KoColor warningColor;

@@ -60,7 +60,7 @@ public:
      */
     virtual void generate(KisProcessingInformation dst,
                           const QSize& size,
-                          const KisFilterConfiguration* config,
+                          const KisFilterConfigurationSP config,
                           KoUpdater* progressUpdater
                          ) const = 0;
 
@@ -69,7 +69,7 @@ public:
      */
     virtual void generate(KisProcessingInformation dst,
                           const QSize& size,
-                          const KisFilterConfiguration* config
+                          const KisFilterConfigurationSP config
                          ) const;
 
     /**
@@ -85,7 +85,7 @@ public:
      *         is supposed to affect all pixels, then the function should return
      *         @p _imageArea
      */
-    virtual QRect generatedRect(QRect _imageArea, const KisFilterConfiguration* = 0) const;
+    virtual QRect generatedRect(QRect _imageArea, const KisFilterConfigurationSP = 0) const;
 
 protected:
 

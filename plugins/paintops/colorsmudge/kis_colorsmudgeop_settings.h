@@ -29,11 +29,13 @@ public:
     KisColorSmudgeOpSettings();
     ~KisColorSmudgeOpSettings();
 
-    QList<KisUniformPaintOpPropertySP> uniformProperties();
+    QList<KisUniformPaintOpPropertySP> uniformProperties(KisPaintOpSettingsSP settings);
 
 private:
     struct Private;
     const QScopedPointer<Private> m_d;
 };
+
+typedef KisSharedPtr<KisColorSmudgeOpSettings> KisColorSmudgeOpSettingsSP;
 
 #endif /* __KIS_COLORSMUDGEOP_SETTINGS_H */

@@ -103,5 +103,16 @@
         <file>light_zoom-horizontal.svg</file>
         <file>light_zoom-vertical.svg</file>
 
+        <file>dark_showColoring.svg</file>
+        <file>dark_showMarks.svg</file>
+        <file>dark_showColoringOff.svg</file>
+        <file>dark_showMarksOff.svg</file>
+        <file>dark_updateColorize.svg</file>
+        <file>light_showColoring.svg</file>
+        <file>light_showMarks.svg</file>
+        <file>light_showColoringOff.svg</file>
+        <file>light_showMarksOff.svg</file>
+        <file>light_updateColorize.svg</file>
+
     </qresource>
 </RCC>

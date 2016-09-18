@@ -40,7 +40,7 @@ public:
 
     ~KisDuplicateOpSettingsWidget();
 
-    KisPropertiesConfiguration* configuration() const;
+    KisPropertiesConfigurationSP configuration() const;
     KisPaintopLodLimitations lodLimitations() const;
 
     virtual bool supportScratchBox() {

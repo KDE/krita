@@ -267,6 +267,45 @@ void KisSharedPtrTest::testWeakSPToWeakSPCopy()
     QVERIFY(!newInvalidInstanceWSP.isValid());
 }
 
+#include "kis_restricted_shared_ptr.h"
+
+void KisSharedPtrTest::testRestrictedPointer()
+{
+    QScopedPointer<TestClassWatcher> tcw(new TestClassWatcher());
+
+    TestClass * instance = new TestClass(tcw.data());
+
+    TestClassSP instanceSP(instance);
+
+    typedef KisRestrictedSharedPtr<TestClass> TestClassRestrictedSP;
+
+    TestClassRestrictedSP restricted(instanceSP);
+
+    TestClassSP instanceSP2(restricted);
+    QVERIFY(!restricted->m_tcw->deleted);
+
+    // this line should cause a build failure!
+    //TestClassRestrictedSP restricted2(instance);
+}
+
+#include "kis_pinned_shared_ptr.h"
+
+void KisSharedPtrTest::testRestrictedPointerNoBackward()
+{
+    QScopedPointer<TestClassWatcher> tcw(new TestClassWatcher());
+
+    TestClass * instance = new TestClass(tcw.data());
+    TestClassSP instanceSP(instance);
+
+    typedef KisPinnedSharedPtr<TestClass> TestClassPinnedSP;
+
+    TestClassPinnedSP pinned(instanceSP);
+
+    TestClassSP instanceSP2 = pinned;
+    // TestClass *instance2 = pinned;
+    // delete pinned;
+}
+
 
 QTEST_MAIN(KisSharedPtrTest)
 

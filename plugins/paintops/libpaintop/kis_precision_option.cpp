@@ -21,7 +21,7 @@
 
 #include "kis_properties_configuration.h"
 
-void KisPrecisionOption::writeOptionSetting(KisPropertiesConfiguration* settings) const
+void KisPrecisionOption::writeOptionSetting(KisPropertiesConfigurationSP settings) const
 {
     settings->setProperty(PRECISION_LEVEL, m_precisionLevel);
     settings->setProperty(AUTO_PRECISION_ENABLED,m_autoPrecisionEnabled);
@@ -29,7 +29,7 @@ void KisPrecisionOption::writeOptionSetting(KisPropertiesConfiguration* settings
     settings->setProperty(DELTA_VALUE,m_deltaValue);
 }
 
-void KisPrecisionOption::readOptionSetting(const KisPropertiesConfiguration* settings)
+void KisPrecisionOption::readOptionSetting(const KisPropertiesConfigurationSP settings)
 {
     m_precisionLevel = settings->getInt(PRECISION_LEVEL, 5);
     m_autoPrecisionEnabled = settings->getBool(AUTO_PRECISION_ENABLED,false);

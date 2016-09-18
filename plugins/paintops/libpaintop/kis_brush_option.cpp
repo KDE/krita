@@ -25,7 +25,7 @@
 
 #include "kis_properties_configuration.h"
 
-void KisBrushOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
+void KisBrushOption::writeOptionSettingImpl(KisPropertiesConfiguration *setting) const
 {
     if (!m_brush)
         return;
@@ -42,7 +42,7 @@ void KisBrushOption::writeOptionSetting(KisPropertiesConfiguration* setting) con
     setting->setProperty("requiredBrushFile", brushFileName);
 }
 
-QDomElement getBrushXMLElement(const KisPropertiesConfiguration* setting)
+QDomElement getBrushXMLElement(const KisPropertiesConfiguration *setting)
 {
     QDomElement element;
 
@@ -56,7 +56,7 @@ QDomElement getBrushXMLElement(const KisPropertiesConfiguration* setting)
     return element;
 }
 
-void KisBrushOption::readOptionSetting(const KisPropertiesConfiguration* setting, bool forceCopy)
+void KisBrushOption::readOptionSettingInternal(const KisPropertiesConfiguration *setting, bool forceCopy)
 {
     QDomElement element = getBrushXMLElement(setting);
 
@@ -65,11 +65,26 @@ void KisBrushOption::readOptionSetting(const KisPropertiesConfiguration* setting
     }
 }
 
+void KisBrushOption::readOptionSettingForceCopy(KisPropertiesConfigurationSP setting)
+{
+    readOptionSettingInternal(setting.data(), true);
+}
+
+void KisBrushOption::readOptionSettingForceCopy(const KisPropertiesConfiguration *setting)
+{
+    readOptionSettingInternal(setting, true);
+}
+
+void KisBrushOption::readOptionSettingImpl(const KisPropertiesConfiguration *setting)
+{
+    readOptionSettingInternal(setting, false);
+}
+
 #ifdef HAVE_THREADED_TEXT_RENDERING_WORKAROUND
 
 #include "kis_text_brush_factory.h"
 
-bool KisBrushOption::isTextBrush(const KisPropertiesConfiguration* setting)
+bool KisBrushOption::isTextBrush(const KisPropertiesConfiguration *setting)
 {
     static QString textBrushId = KisTextBrushFactory().id();
 

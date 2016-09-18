@@ -35,7 +35,7 @@ public:
     KisSketchPaintOpSettingsWidget(QWidget* parent = 0);
     virtual ~KisSketchPaintOpSettingsWidget();
 
-    KisPropertiesConfiguration* configuration() const;
+    KisPropertiesConfigurationSP configuration() const;
 
 public:
     KisSketchOpOption* m_sketchOption;

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>308</width>
+    <width>356</width>
     <height>368</height>
    </rect>
   </property>
@@ -96,7 +96,7 @@
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_2">
        <item>
-        <widget class="KColorButton" name="btnBackwardColor">
+        <widget class="KisColorButton" name="btnBackwardColor">
          <property name="text">
           <string/>
          </property>
@@ -130,7 +130,7 @@
         </widget>
        </item>
        <item>
-        <widget class="KColorButton" name="btnForwardColor">
+        <widget class="KisColorButton" name="btnForwardColor">
          <property name="text">
           <string/>
          </property>
@@ -155,10 +155,9 @@
    <header>kis_color_filter_combo.h</header>
   </customwidget>
   <customwidget>
-   <class>KColorButton</class>
+   <class>KisColorButton</class>
    <extends>QPushButton</extends>
-   <header>kcolorbutton.h</header>
-   <container>1</container>
+   <header>kis_color_button.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

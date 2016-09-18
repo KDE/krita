@@ -18,6 +18,7 @@
 
 #include "kis_gaussian_kernel.h"
 
+#include "kis_global.h"
 #include "kis_convolution_kernel.h"
 #include <kis_convolution_painter.h>
 #include <QRect>
@@ -34,11 +35,11 @@ int KisGaussianKernel::kernelSizeFromRadius(qreal radius)
 }
 
 
-Matrix<qreal, Dynamic, Dynamic>
+Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic>
 KisGaussianKernel::createHorizontalMatrix(qreal radius)
 {
     int kernelSize = kernelSizeFromRadius(radius);
-    Matrix<qreal, Dynamic, Dynamic> matrix(1, kernelSize);
+    Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> matrix(1, kernelSize);
 
     const qreal sigma = sigmaFromRadius(radius);
     const qreal multiplicand = 1 / (sqrt(2 * M_PI * sigma * sigma));
@@ -59,11 +60,11 @@ KisGaussianKernel::createHorizontalMatrix(qreal radius)
     return matrix;
 }
 
-Matrix<qreal, Dynamic, Dynamic>
+Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic>
 KisGaussianKernel::createVerticalMatrix(qreal radius)
 {
     int kernelSize = kernelSizeFromRadius(radius);
-    Matrix<qreal, Dynamic, Dynamic> matrix(kernelSize, 1);
+    Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> matrix(kernelSize, 1);
 
     const qreal sigma = sigmaFromRadius(radius);
     const qreal multiplicand = 1 / (sqrt(2 * M_PI * sigma * sigma));
@@ -87,14 +88,14 @@ KisGaussianKernel::createVerticalMatrix(qreal radius)
 KisConvolutionKernelSP
 KisGaussianKernel::createHorizontalKernel(qreal radius)
 {
-    Matrix<qreal, Dynamic, Dynamic> matrix = createHorizontalMatrix(radius);
+    Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> matrix = createHorizontalMatrix(radius);
     return KisConvolutionKernel::fromMatrix(matrix, 0, matrix.sum());
 }
 
 KisConvolutionKernelSP
 KisGaussianKernel::createVerticalKernel(qreal radius)
 {
-    Matrix<qreal, Dynamic, Dynamic> matrix = createVerticalMatrix(radius);
+    Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> matrix = createVerticalMatrix(radius);
     return KisConvolutionKernel::fromMatrix(matrix, 0, matrix.sum());
 }
 
@@ -144,4 +145,95 @@ void KisGaussianKernel::applyGaussian(KisPaintDeviceSP device,
         KisConvolutionKernelSP kernelVertical = KisGaussianKernel::createVerticalKernel(yRadius);
         painter.applyMatrix(kernelVertical, device, srcTopLeft, srcTopLeft, rect.size(), BORDER_REPEAT);
     }
+}
+
+Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic>
+KisGaussianKernel::createLoGMatrix(qreal radius)
+{
+    int kernelSize = 4 * std::ceil(radius) + 1;
+    Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> matrix(kernelSize, kernelSize);
+
+    const qreal sigma = radius/* / sqrt(2)*/;
+    const qreal multiplicand = -1 / (M_PI * pow2(pow2(sigma)));
+    const qreal exponentMultiplicand = 1 / (2 * pow2(sigma));
+
+    /**
+     * The kernel size should always be odd, then the position of the
+     * central pixel can be easily calculated
+     */
+    KIS_ASSERT_RECOVER_NOOP(kernelSize & 0x1);
+    const int center = kernelSize / 2;
+
+    for (int y = 0; y < kernelSize; y++) {
+        const qreal yDistance = center - y;
+        for (int x = 0; x < kernelSize; x++) {
+            const qreal xDistance = center - x;
+            const qreal distance = pow2(xDistance) + pow2(yDistance);
+            const qreal normalizedDistance = exponentMultiplicand * distance;
+
+            matrix(x, y) = multiplicand *
+                (1.0 - normalizedDistance) *
+                exp(-normalizedDistance);
+        }
+    }
+
+    qreal lateral = matrix.sum() - matrix(center, center);
+    matrix(center, center) = -lateral;
+
+    qreal positiveSum = 0;
+    qreal sideSum = 0;
+    qreal quarterSum = 0;
+
+    for (int y = 0; y < kernelSize; y++) {
+        for (int x = 0; x < kernelSize; x++) {
+            const qreal value = matrix(x, y);
+            if (value > 0) {
+                positiveSum += value;
+            }
+            if (x > center) {
+                sideSum += value;
+            }
+            if (x > center && y > center) {
+                quarterSum += value;
+            }
+        }
+    }
+
+
+    const qreal scale = 2.0 / positiveSum;
+    matrix *= scale;
+    positiveSum *= scale;
+    sideSum *= scale;
+    quarterSum *= scale;
+
+    //qDebug() << ppVar(positiveSum) << ppVar(sideSum) << ppVar(quarterSum);
+
+    return matrix;
+}
+
+#include "kis_transaction.h"
+
+void KisGaussianKernel::applyLoG(KisPaintDeviceSP device,
+                                 const QRect& rect,
+                                 qreal radius,
+                                 const QBitArray &channelFlags,
+                                 KoUpdater *progressUpdater)
+{
+    QPoint srcTopLeft = rect.topLeft();
+
+    KisConvolutionPainter painter(device);
+    painter.setChannelFlags(channelFlags);
+    painter.setProgress(progressUpdater);
+
+    Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> matrix = createLoGMatrix(radius);
+    qDebug() << ppVar(matrix.sum());
+    KisConvolutionKernelSP kernel =
+        KisConvolutionKernel::fromMatrix(matrix,
+                                         0,
+                                         0);
+
+    // TODO: move applying transaction to a higher level!
+    KisTransaction t(device);
+    painter.applyMatrix(kernel, device, srcTopLeft, srcTopLeft, rect.size(), BORDER_REPEAT);
+    t.end();
 }

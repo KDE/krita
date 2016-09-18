@@ -30,7 +30,7 @@ class KisSmudgeOptionWidget: public KisCurveOptionWidget
 public:
     KisSmudgeOptionWidget();
 
-    virtual void readOptionSetting(const KisPropertiesConfiguration* setting);
+    virtual void readOptionSetting(const KisPropertiesConfigurationSP setting);
 
     void updateBrushPierced(bool pierced);
 

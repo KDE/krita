@@ -2219,6 +2219,18 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
+    <Action name="add_new_colorize_mask">
+      <icon>filterMask</icon>
+      <text>&amp;Colorize Mask</text>
+      <whatsThis></whatsThis>
+      <toolTip>Colorize Mask</toolTip>
+      <iconText>Colorize Mask</iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
     <Action name="add_new_transform_mask">
       <icon>transformMask</icon>
       <text>&amp;Transform Mask...</text>
@@ -2264,6 +2276,18 @@
       <activationFlags>1000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>Insert</shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="new_from_visible">
+      <icon></icon>
+      <text>&amp;New Layer From Visible</text>
+      <whatsThis></whatsThis>
+      <toolTip>New layer from visible</toolTip>
+      <iconText>New layer from visible</iconText>
+      <activationFlags>1000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>

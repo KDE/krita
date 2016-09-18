@@ -21,7 +21,7 @@
 
 #include <QScopedPointer>
 
-#include <brushengine/kis_paintop_settings.h>
+#include <brushengine/kis_no_size_paintop_settings.h>
 #include <kis_types.h>
 
 #include <kis_outline_generation_policy.h>
@@ -32,10 +32,12 @@ class KisSprayPaintOpSettings : public KisOutlineGenerationPolicy<KisPaintOpSett
 {
 public:
     KisSprayPaintOpSettings();
-    ~KisSprayPaintOpSettings();
+    virtual ~KisSprayPaintOpSettings();
 
+    void setPaintOpSize(qreal value) Q_DECL_OVERRIDE;
+    qreal paintOpSize() const Q_DECL_OVERRIDE;
 
-    QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode) const;
+    QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode) Q_DECL_OVERRIDE;
 
     QString modelName() const {
         return "airbrush";
@@ -45,11 +47,18 @@ public:
     bool isAirbrushing() const;
     int rate() const;
 
-    QList<KisUniformPaintOpPropertySP> uniformProperties();
+protected:
+
+    QList<KisUniformPaintOpPropertySP> uniformProperties(KisPaintOpSettingsSP settings);
 
 private:
+    Q_DISABLE_COPY(KisSprayPaintOpSettings)
+
     struct Private;
     const QScopedPointer<Private> m_d;
+
 };
+
+typedef KisSharedPtr<KisSprayPaintOpSettings> KisSprayPaintOpSettingsSP;
 
 #endif

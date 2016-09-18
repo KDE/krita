@@ -84,7 +84,7 @@ struct KisGbrBrush::Private {
 #define DEFAULT_SPACING 0.25
 
 KisGbrBrush::KisGbrBrush(const QString& filename)
-    : KisBrush(filename)
+    : KisScalingSizeBrush(filename)
     , d(new Private)
 {
     d->ownData = true;
@@ -96,7 +96,7 @@ KisGbrBrush::KisGbrBrush(const QString& filename)
 KisGbrBrush::KisGbrBrush(const QString& filename,
                          const QByteArray& data,
                          qint32 & dataPos)
-    : KisBrush(filename)
+    : KisScalingSizeBrush(filename)
     , d(new Private)
 {
     d->ownData = false;
@@ -111,7 +111,7 @@ KisGbrBrush::KisGbrBrush(const QString& filename,
 }
 
 KisGbrBrush::KisGbrBrush(KisPaintDeviceSP image, int x, int y, int w, int h)
-    : KisBrush()
+    : KisScalingSizeBrush()
     , d(new Private)
 {
     d->ownData = true;
@@ -122,7 +122,7 @@ KisGbrBrush::KisGbrBrush(KisPaintDeviceSP image, int x, int y, int w, int h)
 }
 
 KisGbrBrush::KisGbrBrush(const QImage& image, const QString& name)
-    : KisBrush()
+    : KisScalingSizeBrush()
     , d(new Private)
 {
     d->ownData = false;
@@ -135,7 +135,7 @@ KisGbrBrush::KisGbrBrush(const QImage& image, const QString& name)
 }
 
 KisGbrBrush::KisGbrBrush(const KisGbrBrush& rhs)
-    : KisBrush(rhs)
+    : KisScalingSizeBrush(rhs)
     , d(new Private(*rhs.d))
 {
     setName(rhs.name());

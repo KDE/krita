@@ -47,6 +47,7 @@ public:
 protected:
     void visitNodeWithPaintDevice(KisNode *node, KisUndoAdapter *undoAdapter);
     void visitExternalLayer(KisExternalLayer *layer, KisUndoAdapter *undoAdapter);
+    void visitColorizeMask(KisColorizeMask *mask, KisUndoAdapter *undoAdapter);
 
 private:
     const KisNodeListSP m_nodes;

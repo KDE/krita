@@ -64,7 +64,7 @@ KisCSVExport::~KisCSVExport()
 {
 }
 
-KisImportExportFilter::ConversionStatus KisCSVExport::convert(const QByteArray& from, const QByteArray& to)
+KisImportExportFilter::ConversionStatus KisCSVExport::convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration)
 {
     dbgFile << "CSV export! From:" << from << ", To:" << to << "";
 

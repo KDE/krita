@@ -74,7 +74,7 @@ struct KisDisplayColorConverter::Private
     KoColorConversionTransformation::Intent renderingIntent;
     KoColorConversionTransformation::ConversionFlags conversionFlags;
 
-    KisDisplayFilter *displayFilter;
+    QSharedPointer<KisDisplayFilter> displayFilter;
     const KoColorSpace *intermediateColorSpace;
 
     KoColor intermediateFgColor;
@@ -141,6 +141,10 @@ struct KisDisplayColorConverter::Private
             return maxValue;
         }
 
+        virtual const KoColorSpace* getPaintingColorSpace() const {
+            return m_parent->paintingColorSpace();
+        }
+
     private:
         KisDisplayColorConverter *m_parent;
         QPointer<KoCanvasResourceManager> m_resourceManager;
@@ -162,14 +166,13 @@ KisDisplayColorConverter::KisDisplayColorConverter(KoCanvasResourceManager *reso
 
     m_d->setCurrentNode(0);
     setMonitorProfile(0);
-    setDisplayFilter(0);
+    setDisplayFilter(QSharedPointer<KisDisplayFilter>(0));
 }
 
 KisDisplayColorConverter::KisDisplayColorConverter()
     : m_d(new Private(this, 0))
 {
-    setDisplayFilter(0);
-    delete m_d->displayFilter;
+    setDisplayFilter(QSharedPointer<KisDisplayFilter>(0));
 
     m_d->paintingColorSpace = KoColorSpaceRegistry::instance()->rgb8();
 
@@ -292,7 +295,7 @@ void KisDisplayColorConverter::setMonitorProfile(const KoColorProfile *monitorPr
     emit displayConfigurationChanged();
 }
 
-void KisDisplayColorConverter::setDisplayFilter(KisDisplayFilter *displayFilter)
+void KisDisplayColorConverter::setDisplayFilter(QSharedPointer<KisDisplayFilter> displayFilter)
 {
     if (m_d->displayFilter && displayFilter &&
         displayFilter->lockCurrentColorVisualRepresentation()) {
@@ -352,7 +355,7 @@ KisDisplayColorConverter::conversionFlags()
     return conversionFlags;
 }
 
-KisDisplayFilter *KisDisplayColorConverter::displayFilter() const
+QSharedPointer<KisDisplayFilter> KisDisplayColorConverter::displayFilter() const
 {
     return m_d->displayFilter;
 }
@@ -472,7 +475,7 @@ KisDisplayColorConverter::Private::convertToQImageDirect(KisPaintDeviceSP device
 QImage KisDisplayColorConverter::toQImage(KisPaintDeviceSP srcDevice) const
 {
     KisPaintDeviceSP device = srcDevice;
-    if (!(*device->colorSpace() == *m_d->paintingColorSpace)) {
+    if (*device->colorSpace() != *m_d->paintingColorSpace) {
         device = new KisPaintDevice(*srcDevice);
 
         KUndo2Command *cmd = device->convertTo(m_d->paintingColorSpace);

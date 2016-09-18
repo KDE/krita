@@ -22,7 +22,7 @@
 #include <kconfiggroup.h>
 #include "kritaimage_export.h"
 #include "KisProofingConfiguration.h"
-
+#include "kis_types.h"
 
 class KRITAIMAGE_EXPORT KisImageConfig
 {
@@ -105,8 +105,12 @@ public:
     int defaultFrameColorLabel() const;
     void setDefaultFrameColorLabel(int label);
 
-    KisProofingConfiguration *defaultProofingconfiguration();
+    KisProofingConfigurationSP defaultProofingconfiguration();
     void setDefaultProofingConfig(const KoColorSpace *proofingSpace, int proofingIntent, bool blackPointCompensation, KoColor warningColor, double adaptationState);
+
+    bool useLodForColorizeMask(bool requestDefault = false) const;
+    void setUseLodForColorizeMask(bool value);
+
 
 private:
     Q_DISABLE_COPY(KisImageConfig)

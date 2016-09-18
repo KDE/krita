@@ -85,11 +85,11 @@ public:
     KisPerChannelFilter();
 public:
     virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
-    virtual KisFilterConfiguration * factoryConfiguration(const KisPaintDeviceSP) const;
+    virtual KisFilterConfigurationSP  factoryConfiguration(const KisPaintDeviceSP) const;
 
-    virtual KoColorTransformation* createTransformation(const KoColorSpace* cs, const KisFilterConfiguration* config) const;
+    virtual KoColorTransformation* createTransformation(const KoColorSpace* cs, const KisFilterConfigurationSP config) const;
 
-    virtual bool needsTransparentPixels(const KisFilterConfiguration *config, const KoColorSpace *cs) const;
+    virtual bool needsTransparentPixels(const KisFilterConfigurationSP config, const KoColorSpace *cs) const;
 
     static inline KoID id() {
         return KoID("perchannel", i18n("Color Adjustment"));
@@ -105,8 +105,8 @@ public:
     KisPerChannelConfigWidget(QWidget * parent, KisPaintDeviceSP dev, Qt::WFlags f = 0);
     virtual ~KisPerChannelConfigWidget();
 
-    virtual void setConfiguration(const KisPropertiesConfiguration* config);
-    virtual KisPropertiesConfiguration * configuration() const;
+    virtual void setConfiguration(const KisPropertiesConfigurationSP config);
+    virtual KisPropertiesConfigurationSP  configuration() const;
 
 private Q_SLOTS:
     virtual void setActiveChannel(int ch);

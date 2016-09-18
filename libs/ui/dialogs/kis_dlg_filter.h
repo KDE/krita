@@ -57,7 +57,7 @@ public Q_SLOTS:
     void adjustSize();
 
 private:
-    void startApplyingFilter(KisSafeFilterConfigurationSP config);
+    void startApplyingFilter(KisFilterConfigurationSP config);
     void setDialogTitle(KisFilterSP f);
     void updatePreview();
 

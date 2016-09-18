@@ -42,7 +42,7 @@ KisCSVImport::~KisCSVImport()
 {
 }
 
-KisImportExportFilter::ConversionStatus KisCSVImport::convert(const QByteArray&, const QByteArray& to)
+KisImportExportFilter::ConversionStatus KisCSVImport::convert(const QByteArray&, const QByteArray& to, KisPropertiesConfigurationSP configuration)
 {
     dbgFile << "Importing using CSVImport!";
 

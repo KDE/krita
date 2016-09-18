@@ -39,7 +39,7 @@ public:
     KisSliderBasedPaintOpProperty(Type type,
                                   const QString &id,
                                   const QString &name,
-                                  KisPaintOpSettingsSP settings,
+                                  KisPaintOpSettingsRestrictedSP settings,
                                   QObject *parent)
         : KisUniformPaintOpProperty(type, id, name, settings, parent),
         m_min(T(0)),
@@ -49,6 +49,21 @@ public:
         m_exponentRatio(1.0),
         m_decimals(2)
     {
+    }
+
+    KisSliderBasedPaintOpProperty(const QString &id,
+                                  const QString &name,
+                                  KisPaintOpSettingsRestrictedSP settings,
+                                  QObject *parent)
+        : KisUniformPaintOpProperty(Int, id, name, settings, parent),
+        m_min(T(0)),
+        m_max(T(100)),
+        m_singleStep(T(1)),
+        m_pageStep(T(10)),
+        m_exponentRatio(1.0),
+        m_decimals(2)
+    {
+        qFatal("Should have never been called!");
     }
 
     T min() const {
@@ -110,12 +125,19 @@ private:
     QString m_suffix;
 };
 
+#include "kis_callback_based_paintop_property.h"
+
+extern template class KRITAIMAGE_EXPORT KisSliderBasedPaintOpProperty<int>;
+extern template class KRITAIMAGE_EXPORT KisSliderBasedPaintOpProperty<qreal>;
+extern template class KRITAIMAGE_EXPORT KisCallbackBasedPaintopProperty<KisSliderBasedPaintOpProperty<int>>;
+extern template class KRITAIMAGE_EXPORT KisCallbackBasedPaintopProperty<KisSliderBasedPaintOpProperty<qreal>>;
+
 typedef KisSliderBasedPaintOpProperty<int> KisIntSliderBasedPaintOpProperty;
 typedef KisSliderBasedPaintOpProperty<qreal> KisDoubleSliderBasedPaintOpProperty;
 
-#include "kis_callback_based_paintop_property.h"
+typedef KisCallbackBasedPaintopProperty<KisSliderBasedPaintOpProperty<int>> KisIntSliderBasedPaintOpPropertyCallback;
+typedef KisCallbackBasedPaintopProperty<KisSliderBasedPaintOpProperty<qreal>> KisDoubleSliderBasedPaintOpPropertyCallback;
 
-typedef KisCallbackBasedPaintopProperty<KisIntSliderBasedPaintOpProperty> KisIntSliderBasedPaintOpPropertyCallback;
-typedef KisCallbackBasedPaintopProperty<KisDoubleSliderBasedPaintOpProperty> KisDoubleSliderBasedPaintOpPropertyCallback;
+
 
 #endif /* __KIS_SLIDER_BASED_PAINTOP_PROPERTY_H */

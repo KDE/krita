@@ -62,8 +62,10 @@ KisBrushExport::~KisBrushExport()
 {
 }
 
-KisImportExportFilter::ConversionStatus KisBrushExport::convert(const QByteArray& from, const QByteArray& to)
+KisImportExportFilter::ConversionStatus KisBrushExport::convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration)
 {
+    Q_UNUSED(configuration);
+
     KisDocument *input = inputDocument();
     QString filename = outputFile();
 

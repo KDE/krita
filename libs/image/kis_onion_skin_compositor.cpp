@@ -53,7 +53,7 @@ struct KisOnionSkinCompositor::Private
     {
         KisPaintDeviceSP tintDevice = new KisPaintDevice(colorSpace);
         KoColor color = KoColor(tintColor, colorSpace);
-        tintDevice->setDefaultPixel(color.data());
+        tintDevice->setDefaultPixel(color);
         return tintDevice;
     }
 

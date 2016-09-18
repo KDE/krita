@@ -35,6 +35,7 @@
 #include "kis_filter_mask.h"
 #include "kis_transform_mask.h"
 #include "kis_selection_mask.h"
+#include "lazybrush/kis_colorize_mask.h"
 
 #include "kis_external_layer_iface.h"
 
@@ -146,6 +147,15 @@ void KisTransformProcessingVisitor::visit(KisTransparencyMask *mask, KisUndoAdap
 void KisTransformProcessingVisitor::visit(KisSelectionMask *mask, KisUndoAdapter *undoAdapter)
 {
     transformSelection(mask->selection(), undoAdapter, ProgressHelper(mask));
+}
+
+void KisTransformProcessingVisitor::visit(KisColorizeMask *mask, KisUndoAdapter *undoAdapter)
+{
+    QVector<KisPaintDeviceSP> devices = mask->allPaintDevices();
+
+    Q_FOREACH (KisPaintDeviceSP device, devices) {
+        transformPaintDevice(device, undoAdapter, ProgressHelper(mask));
+    }
 }
 
 void KisTransformProcessingVisitor::transformClones(KisLayer *layer, KisUndoAdapter *undoAdapter)

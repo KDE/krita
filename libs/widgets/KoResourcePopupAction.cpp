@@ -45,12 +45,11 @@
 class KoResourcePopupAction::Private
 {
 public:
-    Private() : resourceList(0), background(0), checkerPainter(4)
-    {}
-    QMenu *menu;
-    KoResourceItemView *resourceList;
+    QMenu *menu {0};
+    KoResourceItemView *resourceList {0};
     QSharedPointer<KoShapeBackground> background;
-    KoCheckerBoardPainter checkerPainter;
+    KoImageCollection *imageCollection {0};
+    KoCheckerBoardPainter checkerPainter {4};
 };
 
 KoResourcePopupAction::KoResourcePopupAction(QSharedPointer<KoAbstractResourceServerAdapter>resourceAdapter, QObject *parent)
@@ -82,9 +81,10 @@ KoResourcePopupAction::KoResourcePopupAction(QSharedPointer<KoAbstractResourceSe
         QGradient *qg = gradient->toQGradient();
         qg->setCoordinateMode(QGradient::ObjectBoundingMode);
         d->background = QSharedPointer<KoShapeBackground>(new KoGradientBackground(qg));
-    } else if (pattern) {
-        KoImageCollection *collection = new KoImageCollection();
-        d->background = QSharedPointer<KoShapeBackground>(new KoPatternBackground(collection));
+    }
+    else if (pattern) {
+        d->imageCollection = new KoImageCollection();
+        d->background = QSharedPointer<KoShapeBackground>(new KoPatternBackground(d->imageCollection));
         static_cast<KoPatternBackground*>(d->background.data())->setPattern(pattern->pattern());
     }
 
@@ -116,7 +116,7 @@ KoResourcePopupAction::~KoResourcePopupAction()
     }
 
     delete d->menu;
-
+    delete d->imageCollection;
     delete d;
 }
 

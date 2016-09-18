@@ -28,6 +28,7 @@ class KisRecordedActionSaveContext;
 class KoUpdater;
 
 #include <kritaimage_export.h>
+#include <kis_filter_configuration.h>
 #include <kis_types.h>
 
 /**

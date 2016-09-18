@@ -21,7 +21,6 @@
 
 #include "kis_properties_configuration.h"
 
-
 /**
  * This class acts as a proxy for all transfers between KisLockedPropertiesServer
  * and KisPaintOpSettings while using setConfiguration and writeConfiguration
@@ -35,24 +34,25 @@
  * suffix are destroyed.
  */
 class KisLockedPropertiesServer;
-class KisLockedProperties;
 
 class KisLockedPropertiesProxy: public KisPropertiesConfiguration
 {
 public:
-    KisLockedPropertiesProxy() ;
-    KisLockedPropertiesProxy(KisLockedProperties* p);
-    KisLockedPropertiesProxy(const KisPropertiesConfiguration *, KisLockedProperties *);
+    KisLockedPropertiesProxy(KisPropertiesConfiguration *, KisLockedPropertiesSP);
+    ~KisLockedPropertiesProxy();
+
     using KisPropertiesConfiguration::getProperty;
     QVariant getProperty(const QString &name) const;
     using KisPropertiesConfiguration::setProperty;
     void setProperty(const QString & name, const QVariant & value);
+
 private:
-    KisLockedProperties *m_lockedProperties;
-    const KisPropertiesConfiguration *m_parent;
+    Q_DISABLE_COPY(KisLockedPropertiesProxy)
+    mutable KisLockedPropertiesSP m_lockedProperties;
+    KisPropertiesConfiguration* m_parent;
 };
 
-typedef QSharedPointer<KisLockedPropertiesProxy> KisLockedPropertiesProxySP;
-typedef QWeakPointer<KisLockedPropertiesProxy> KisLockedPropertiesProxyWSP;
+typedef KisPinnedSharedPtr<KisLockedPropertiesProxy> KisLockedPropertiesProxySP;
+typedef KisWeakSharedPtr<KisLockedPropertiesProxy> KisLockedPropertiesProxyWSP;
 
 #endif // KIS_LOCKED_PROPERTIES_PROXY_H

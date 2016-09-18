@@ -31,7 +31,7 @@ class PAINTOP_EXPORT KisCurveOptionUniformProperty : public KisDoubleSliderBased
 public:
     KisCurveOptionUniformProperty(const QString &name,
                                   KisCurveOption *option,
-                                  KisPaintOpSettingsSP settings,
+                                  KisPaintOpSettingsRestrictedSP settings,
                                   QObject *parent);
     ~KisCurveOptionUniformProperty();
 

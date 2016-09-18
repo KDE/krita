@@ -42,17 +42,6 @@ KisBrushSP KisBrushBasedPaintopOptionWidget::brush()
     return m_brushOption->brush();
 }
 
-void KisBrushBasedPaintopOptionWidget::changePaintOpSize(qreal x, qreal y)
-{
-    m_brushOption->setBrushSize(x, y);
-}
-
-QSizeF KisBrushBasedPaintopOptionWidget::paintOpSize() const
-{
-    return m_brushOption->brushSize();
-}
-
-
 bool KisBrushBasedPaintopOptionWidget::presetIsValid()
 {
     return m_brushOption->presetIsValid();

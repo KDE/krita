@@ -56,8 +56,8 @@ public:
     int saturation() const;
     int value() const;
 
-    void writeOptionSetting(KisPropertiesConfiguration* setting) const;
-    void readOptionSetting(const KisPropertiesConfiguration* setting);
+    void writeOptionSetting(KisPropertiesConfigurationSP setting) const;
+    void readOptionSetting(const KisPropertiesConfigurationSP setting);
 
 private Q_SLOTS:
 
@@ -85,7 +85,7 @@ public:
     int value;
 public:
     /// fill the class members with related properties
-    void fillProperties(const KisPropertiesConfiguration* setting);
+    void fillProperties(const KisPropertiesConfigurationSP setting);
 };
 
 #endif // KIS_COLOR_OPTION_H

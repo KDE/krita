@@ -67,7 +67,7 @@ void KisLevelFilterBenchmark::cleanupTestCase()
 void KisLevelFilterBenchmark::benchmarkFilter()
 {
     KisFilterSP filter = KisFilterRegistry::instance()->value("levels");
-    //KisFilterConfiguration * kfc = filter->defaultConfiguration(m_device);
+    //KisFilterConfigurationSP  kfc = filter->defaultConfiguration(m_device);
 
     KisColorTransformationConfiguration * kfc= new KisColorTransformationConfiguration("levels", 1);
 

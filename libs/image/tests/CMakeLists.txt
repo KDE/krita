@@ -613,7 +613,7 @@ target_link_libraries(KisScanlineFillTest   kritaimage Qt5::Test)
 
 set(kis_keyframing_test_SRCS kis_keyframing_test.cpp )
 kde4_add_broken_unit_test(KisKeyframingTest TESTNAME krita-image-Keyframing-Test ${kis_keyframing_test_SRCS})
-target_link_libraries(KisKeyframingTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
+target_link_libraries(KisKeyframingTest  kritaimage Qt5::Test)
 
 ########### next target ###############
 

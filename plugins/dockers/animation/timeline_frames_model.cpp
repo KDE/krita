@@ -38,8 +38,6 @@
 #include "kis_keyframe_channel.h"
 #include "kundo2command.h"
 #include "kis_post_execution_undo_adapter.h"
-#include "kis_animation_frame_cache.h"
-#include "kis_animation_player.h"
 #include <commands/kis_node_property_list_command.h>
 
 #include "kis_animation_utils.h"
@@ -52,29 +50,19 @@ struct TimelineFramesModel::Private
 {
     Private()
         : activeLayerIndex(0),
-          activeFrameIndex(0),
           dummiesFacade(0),
           needFinishInsertRows(false),
           needFinishRemoveRows(false),
-          numFramesOverride(0),
           updateTimer(200, KisSignalCompressor::FIRST_INACTIVE),
-          parentOfRemovedNode(0),
-          scrubInProgress(false),
-          scrubStartFrame(-1),
-          animationPlayer(0)
+          parentOfRemovedNode(0)
     {}
 
-    QVector<bool> cachedFrames;
-
     int activeLayerIndex;
-    int activeFrameIndex;
 
     KisDummiesFacadeBase *dummiesFacade;
     KisImageWSP image;
     bool needFinishInsertRows;
     bool needFinishRemoveRows;
-
-    int numFramesOverride;
 
     QList<KisNodeDummy*> updateQueue;
     KisSignalCompressor updateTimer;
@@ -82,16 +70,9 @@ struct TimelineFramesModel::Private
     KisNodeDummy* parentOfRemovedNode;
     QScopedPointer<TimelineNodeListKeeper> converter;
 
-    bool scrubInProgress;
-    int scrubStartFrame;
-
-    KisAnimationFrameCacheWSP framesCache;
-    QPointer<KisAnimationPlayer> animationPlayer;
-
     QScopedPointer<NodeManipulationInterface> nodeInterface;
 
     QPersistentModelIndex lastClickedIndex;
-    QScopedPointer<KisSignalCompressorWithParam<int> > scrubbingCompressor;
 
     QVariant layerName(int row) const {
         KisNodeDummy *dummy = converter->dummyFromRow(row);
@@ -109,24 +90,48 @@ struct TimelineFramesModel::Private
         KisNodeDummy *dummy = converter->dummyFromRow(row);
         if (!dummy) return false;
 
-        KisKeyframeChannel *content =
-            dummy->node()->getKeyframeChannel(KisKeyframeChannel::Content.id());
-
-        if (!content) return false;
-
-        KisKeyframeSP frame = content->keyframeAt(column);
-        return frame;
+        KisKeyframeChannel *primaryChannel = dummy->node()->getKeyframeChannel(KisKeyframeChannel::Content.id());
+        return (primaryChannel && primaryChannel->keyframeAt(column));
     }
 
-    int baseNumFrames() const {
-        KisImageAnimationInterface *i = image->animationInterface();
-        if (!i) return 1;
+    bool specialKeyframeExists(int row, int column) {
+        KisNodeDummy *dummy = converter->dummyFromRow(row);
+        if (!dummy) return false;
 
-        return i->totalLength();
+        QList<KisKeyframeChannel *> channels = dummy->node()->keyframeChannels();
+
+        Q_FOREACH(KisKeyframeChannel *channel, channels) {
+            if (channel->id() != KisKeyframeChannel::Content.id() && channel->keyframeAt(column)) {
+                return true;
+            }
+        }
+        return false;
     }
 
-    int effectiveNumFrames() const {
-        return qMax(baseNumFrames(), numFramesOverride);
+    int frameColorLabel(int row, int column) {
+        KisNodeDummy *dummy = converter->dummyFromRow(row);
+        if (!dummy) return -1;
+
+        KisKeyframeChannel *primaryChannel = dummy->node()->getKeyframeChannel(KisKeyframeChannel::Content.id());
+        if (!primaryChannel) return -1;
+
+        KisKeyframeSP frame = primaryChannel->keyframeAt(column);
+        if (!frame) return -1;
+
+        return frame->colorLabel();
+    }
+
+    void setFrameColorLabel(int row, int column, int color) {
+        KisNodeDummy *dummy = converter->dummyFromRow(row);
+        if (!dummy) return;
+
+        KisKeyframeChannel *primaryChannel = dummy->node()->getKeyframeChannel(KisKeyframeChannel::Content.id());
+        if (!primaryChannel) return;
+
+        KisKeyframeSP frame = primaryChannel->keyframeAt(column);
+        if (!frame) return;
+
+        frame->setColorLabel(color);
     }
 
     QVariant layerProperties(int row) const {
@@ -149,7 +154,10 @@ struct TimelineFramesModel::Private
         KisNodeDummy *dummy = converter->dummyFromRow(row);
         if (!dummy) return false;
 
-        return KisAnimationUtils::createKeyframeLazy(image, dummy->node(), column, copy);
+        KisNodeSP node = dummy->node();
+        if (!KisAnimationUtils::supportsContentFrames(node)) return false;
+
+        return KisAnimationUtils::createKeyframeLazy(image, node, KisKeyframeChannel::Content.id(), column, copy);
     }
 
     bool addNewLayer(int row) {
@@ -173,10 +181,6 @@ struct TimelineFramesModel::Private
 
         return true;
     }
-
-    int framesPerSecond() {
-        return image->animationInterface()->framerate();
-    }
 };
 
 TimelineFramesModel::TimelineFramesModel(QObject *parent)
@@ -184,17 +188,6 @@ TimelineFramesModel::TimelineFramesModel(QObject *parent)
       m_d(new Private)
 {
     connect(&m_d->updateTimer, SIGNAL(timeout()), SLOT(processUpdateQueue()));
-
-    {
-        KisConfig cfg;
-
-        using namespace std::placeholders;
-        std::function<void (int)> callback(
-            std::bind(&TimelineFramesModel::slotInternalScrubPreviewRequested, this, _1));
-
-        m_d->scrubbingCompressor.reset(
-            new KisSignalCompressorWithParam<int>(cfg.scribbingUpdatesDelay(), callback, KisSignalCompressor::FIRST_ACTIVE));
-    }
 }
 
 TimelineFramesModel::~TimelineFramesModel()
@@ -206,40 +199,20 @@ bool TimelineFramesModel::hasConnectionToCanvas() const
     return m_d->dummiesFacade;
 }
 
-void TimelineFramesModel::setFrameCache(KisAnimationFrameCacheSP cache)
-{
-    if (KisAnimationFrameCacheSP(m_d->framesCache) == cache) return;
-
-    if (m_d->framesCache) {
-        m_d->framesCache->disconnect(this);
-    }
-
-    m_d->framesCache = cache;
-
-    if (m_d->framesCache) {
-        connect(m_d->framesCache, SIGNAL(changed()), SLOT(slotCacheChanged()));
-    }
-}
-
-void TimelineFramesModel::setAnimationPlayer(KisAnimationPlayer *player)
-{
-    if (m_d->animationPlayer == player) return;
-
-    if (m_d->animationPlayer) {
-        m_d->animationPlayer->disconnect(this);
-    }
-
-    m_d->animationPlayer = player;
-
-    if (m_d->animationPlayer) {
-        connect(m_d->animationPlayer, SIGNAL(sigPlaybackStopped()), SLOT(slotPlaybackStopped()));
-        connect(m_d->animationPlayer, SIGNAL(sigFrameChanged()), SLOT(slotPlaybackFrameChanged()));
-    }
-}
-
 void TimelineFramesModel::setNodeManipulationInterface(NodeManipulationInterface *iface)
 {
     m_d->nodeInterface.reset(iface);
+}
+
+KisNodeSP TimelineFramesModel::nodeAt(QModelIndex index) const
+{
+    return m_d->converter->dummyFromRow(index.row())->node();
+}
+
+QList<KisKeyframeChannel *> TimelineFramesModel::channelsAt(QModelIndex index) const
+{
+    KisNodeDummy *srcDummy = m_d->converter->dummyFromRow(index.row());
+    return srcDummy->node()->keyframeChannels();
 }
 
 void TimelineFramesModel::setDummiesFacade(KisDummiesFacadeBase *dummiesFacade, KisImageSP image)
@@ -252,6 +225,8 @@ void TimelineFramesModel::setDummiesFacade(KisDummiesFacadeBase *dummiesFacade, 
     }
 
     m_d->image = image;
+    KisTimeBasedItemModel::setImage(image);
+
     m_d->dummiesFacade = dummiesFacade;
     m_d->converter.reset();
 
@@ -259,10 +234,6 @@ void TimelineFramesModel::setDummiesFacade(KisDummiesFacadeBase *dummiesFacade, 
         m_d->converter.reset(new TimelineNodeListKeeper(this, m_d->dummiesFacade));
         connect(m_d->dummiesFacade, SIGNAL(sigDummyChanged(KisNodeDummy*)),
                 SLOT(slotDummyChanged(KisNodeDummy*)));
-        connect(m_d->image->animationInterface(),
-                SIGNAL(sigFramerateChanged()), SLOT(slotFramerateChanged()));
-        connect(m_d->image->animationInterface(),
-                SIGNAL(sigTimeChanged(int)), SLOT(slotCurrentTimeChanged(int)));
         connect(m_d->image->animationInterface(),
                 SIGNAL(sigFullClipRangeChanged()), SIGNAL(sigInfiniteTimelineUpdateNeeded()));
     }
@@ -272,7 +243,6 @@ void TimelineFramesModel::setDummiesFacade(KisDummiesFacadeBase *dummiesFacade, 
     }
 
     if (m_d->dummiesFacade) {
-        slotCurrentTimeChanged(m_d->image->animationInterface()->currentUITime());
         emit sigInfiniteTimelineUpdateNeeded();
     }
 }
@@ -298,24 +268,6 @@ void TimelineFramesModel::processUpdateQueue()
     m_d->updateQueue.clear();
 }
 
-void TimelineFramesModel::slotFramerateChanged()
-{
-    emit headerDataChanged(Qt::Horizontal, 0, columnCount() - 1);
-}
-
-void TimelineFramesModel::slotCurrentTimeChanged(int time)
-{
-    if (time != m_d->activeFrameIndex) {
-
-        QModelIndex newIndex = index(m_d->activeLayerIndex, time);
-        if (newIndex.isValid()) {
-            setData(newIndex, true, ActiveFrameRole);
-        } else {
-            m_d->activeFrameIndex = time;
-        }
-    }
-}
-
 void TimelineFramesModel::slotCurrentNodeChanged(KisNodeSP node)
 {
     if (!node) {
@@ -338,33 +290,12 @@ void TimelineFramesModel::slotCurrentNodeChanged(KisNodeSP node)
     }
 }
 
-void TimelineFramesModel::slotCacheChanged()
-{
-    const int numFrames = columnCount();
-    m_d->cachedFrames.resize(numFrames);
-
-    for (int i = 0; i < numFrames; i++) {
-        m_d->cachedFrames[i] =
-            m_d->framesCache->frameStatus(i) == KisAnimationFrameCache::Cached;
-    }
-
-    emit headerDataChanged(Qt::Horizontal, 0, numFrames);
-}
-
 int TimelineFramesModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
     if(!m_d->dummiesFacade) return 0;
 
     return m_d->converter->rowCount();
-}
-
-int TimelineFramesModel::columnCount(const QModelIndex &parent) const
-{
-    Q_UNUSED(parent);
-    if(!m_d->dummiesFacade) return 0;
-
-    return m_d->effectiveNumFrames();
 }
 
 QVariant TimelineFramesModel::data(const QModelIndex &index, int role) const
@@ -375,14 +306,18 @@ QVariant TimelineFramesModel::data(const QModelIndex &index, int role) const
     case ActiveLayerRole: {
         return index.row() == m_d->activeLayerIndex;
     }
-    case ActiveFrameRole: {
-        return index.column() == m_d->activeFrameIndex;
-    }
     case FrameEditableRole: {
         return m_d->layerEditable(index.row());
     }
     case FrameExistsRole: {
         return m_d->frameExists(index.row(), index.column());
+    }
+    case SpecialKeyframeExists: {
+        return m_d->specialKeyframeExists(index.row(), index.column());
+    }
+    case ColorLabel: {
+        int label = m_d->frameColorLabel(index.row(), index.column());
+        return label > 0 ? label : QVariant();
     }
     case Qt::DisplayRole: {
         return QVariant();
@@ -392,8 +327,7 @@ QVariant TimelineFramesModel::data(const QModelIndex &index, int role) const
     }
     }
 
-
-    return QVariant();
+    return ModelWithExternalNotifications::data(index, role);
 }
 
 bool TimelineFramesModel::setData(const QModelIndex &index, const QVariant &value, int role)
@@ -421,40 +355,10 @@ bool TimelineFramesModel::setData(const QModelIndex &index, const QVariant &valu
         }
         break;
     }
-    case ActiveFrameRole: {
-        if (value.toBool() &&
-            index.column() != m_d->activeFrameIndex) {
-
-            int prevFrame = m_d->activeFrameIndex;
-            m_d->activeFrameIndex = index.column();
-
-            scrubTo(m_d->activeFrameIndex, m_d->scrubInProgress);
-
-
-            /**
-             * Optimization Hack Alert:
-             *
-             * ideally, we should emit all four signals, but... The
-             * point is this code is used in a tight loop during
-             * playback, so it should run as fast as possible. To tell
-             * the story short, commenting out these three lines makes
-             * playback run 15% faster ;)
-             */
-
-            if (m_d->scrubInProgress) {
-                //emit dataChanged(this->index(0, prevFrame), this->index(rowCount() - 1, prevFrame));
-                emit dataChanged(this->index(0, m_d->activeFrameIndex), this->index(rowCount() - 1, m_d->activeFrameIndex));
-                //emit headerDataChanged (Qt::Horizontal, prevFrame, prevFrame);
-                //emit headerDataChanged (Qt::Horizontal, m_d->activeFrameIndex, m_d->activeFrameIndex);
-            } else {
-                emit dataChanged(this->index(0, prevFrame), this->index(rowCount() - 1, prevFrame));
-                emit dataChanged(this->index(0, m_d->activeFrameIndex), this->index(rowCount() - 1, m_d->activeFrameIndex));
-                emit headerDataChanged (Qt::Horizontal, prevFrame, prevFrame);
-                emit headerDataChanged (Qt::Horizontal, m_d->activeFrameIndex, m_d->activeFrameIndex);
-            }
-        }
-        break;
+    case ColorLabel: {
+        m_d->setFrameColorLabel(index.row(), index.column(), value.toInt());
     }
+        break;
     }
 
     return ModelWithExternalNotifications::setData(index, value, role);
@@ -464,17 +368,7 @@ QVariant TimelineFramesModel::headerData(int section, Qt::Orientation orientatio
 {
     if(!m_d->dummiesFacade) return QVariant();
 
-    if (orientation == Qt::Horizontal) {
-        switch (role) {
-        case ActiveFrameRole:
-            return section == m_d->activeFrameIndex;
-        case FrameCachedRole:
-            return m_d->cachedFrames.size() > section ? m_d->cachedFrames[section] : false;
-        case TimelineFramesModel::FramesPerSecondRole:
-            return m_d->framesPerSecond();
-        }
-
-    } else {
+    if (orientation == Qt::Vertical) {
         switch (role) {
         case ActiveLayerRole:
             return section == m_d->activeLayerIndex;
@@ -530,21 +424,14 @@ QVariant TimelineFramesModel::headerData(int section, Qt::Orientation orientatio
         }
     }
 
-    return QVariant();
+    return ModelWithExternalNotifications::headerData(section, orientation, role);
 }
 
 bool TimelineFramesModel::setHeaderData(int section, Qt::Orientation orientation, const QVariant &value, int role)
 {
     if (!m_d->dummiesFacade) return false;
 
-    if (orientation == Qt::Horizontal) {
-        switch (role) {
-        case ActiveFrameRole: {
-            setData(index(0, section), value, role);
-            break;
-        }
-        }
-    } else {
+    if (orientation == Qt::Vertical) {
         switch (role) {
         case ActiveLayerRole: {
             setData(index(section, 0), value, role);
@@ -632,51 +519,6 @@ bool TimelineFramesModel::canDropFrameData(const QMimeData */*data*/, const QMod
     return true;
 }
 
-bool TimelineFramesModel::offsetFrames(QVector<QPoint> srcIndexes, const QPoint &offset, bool copyFrames)
-{
-    bool result = false;
-    if (srcIndexes.isEmpty()) return result;
-    if (offset.isNull()) return result;
-
-    KisAnimationUtils::sortPointsForSafeMove(&srcIndexes, offset);
-
-    KisAnimationUtils::FrameItemList srcFrameItems;
-    KisAnimationUtils::FrameItemList dstFrameItems;
-    QModelIndexList updateIndexes;
-
-    Q_FOREACH (const QPoint &point, srcIndexes) {
-        int srcRow = point.y();
-        int srcColumn = point.x();
-
-        int dstRow = point.y() + offset.y();
-        int dstColumn = point.x() + offset.x();
-
-        KisNodeDummy *srcDummy = m_d->converter->dummyFromRow(srcRow);
-        KisNodeDummy *dstDummy = m_d->converter->dummyFromRow(dstRow);
-        if (!srcDummy || !dstDummy) continue;
-
-        srcFrameItems << KisAnimationUtils::FrameItem(srcDummy->node(), srcColumn);
-        dstFrameItems << KisAnimationUtils::FrameItem(dstDummy->node(), dstColumn);
-
-        if (!copyFrames) {
-            updateIndexes << index(srcRow, srcColumn);
-        }
-
-        updateIndexes << index(dstRow, dstColumn);
-    }
-
-    result = KisAnimationUtils::moveKeyframes(m_d->image,
-                                              srcFrameItems,
-                                              dstFrameItems,
-                                              copyFrames);
-
-    Q_FOREACH (const QModelIndex &index, updateIndexes) {
-        emit dataChanged(index, index);
-    }
-
-    return result;
-}
-
 bool TimelineFramesModel::dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent)
 {
     Q_UNUSED(row);
@@ -696,7 +538,7 @@ bool TimelineFramesModel::dropMimeData(const QMimeData *data, Qt::DropAction act
     int size, baseRow, baseColumn;
     stream >> size >> baseRow >> baseColumn;
 
-    QVector<QPoint> srcIndexes;
+    QModelIndexList srcIndexes;
 
     for (int i = 0; i < size; i++) {
         int relRow, relColumn;
@@ -705,7 +547,7 @@ bool TimelineFramesModel::dropMimeData(const QMimeData *data, Qt::DropAction act
         int srcRow = baseRow + relRow;
         int srcColumn = baseColumn + relColumn;
 
-        srcIndexes << QPoint(srcColumn, srcRow);
+        srcIndexes << index(srcRow, srcColumn);
     }
 
     const QPoint offset(parent.column() - baseColumn, parent.row() - baseRow);
@@ -718,7 +560,7 @@ Qt::ItemFlags TimelineFramesModel::flags(const QModelIndex &index) const
     Qt::ItemFlags flags = ModelWithExternalNotifications::flags(index);
     if (!index.isValid()) return flags;
 
-    if (m_d->frameExists(index.row(), index.column())) {
+    if (m_d->frameExists(index.row(), index.column()) || m_d->specialKeyframeExists(index.row(), index.column())) {
         if (data(index, FrameEditableRole).toBool()) {
             flags |= Qt::ItemIsDragEnabled;
         }
@@ -800,118 +642,4 @@ bool TimelineFramesModel::copyFrame(const QModelIndex &dstIndex)
     }
 
     return result;
-}
-
-bool TimelineFramesModel::removeFrames(const QModelIndexList &indexes)
-{
-    KisAnimationUtils::FrameItemList frameItems;
-
-    Q_FOREACH (const QModelIndex &index, indexes) {
-        KisNodeDummy *dummy = m_d->converter->dummyFromRow(index.row());
-        if (!dummy) continue;
-
-        frameItems << KisAnimationUtils::FrameItem(dummy->node(), index.column());
-    }
-
-    if (frameItems.isEmpty()) return false;
-
-
-    KisAnimationUtils::removeKeyframes(m_d->image, frameItems);
-
-    Q_FOREACH (const QModelIndex &index, indexes) {
-        if (index.isValid()) {
-            emit dataChanged(index, index);
-        }
-    }
-
-    return true;
-}
-
-void TimelineFramesModel::setLastVisibleFrame(int time)
-{
-    if (!m_d->dummiesFacade) return;
-
-    const int growThreshold = m_d->effectiveNumFrames() - 3;
-    const int growValue = time + 8;
-
-    const int shrinkThreshold = m_d->effectiveNumFrames() - 12;
-    const int shrinkValue = qMax(m_d->baseNumFrames(), qMin(growValue, shrinkThreshold));
-    const bool canShrink = m_d->effectiveNumFrames() > m_d->baseNumFrames();
-
-    if (time >= growThreshold) {
-        beginInsertColumns(QModelIndex(), m_d->effectiveNumFrames(), growValue - 1);
-        m_d->numFramesOverride = growValue;
-        endInsertColumns();
-    } else if (time < shrinkThreshold && canShrink) {
-        beginRemoveColumns(QModelIndex(), shrinkValue, m_d->effectiveNumFrames() - 1);
-        m_d->numFramesOverride = shrinkValue;
-        endRemoveColumns();
-    }
-}
-
-void TimelineFramesModel::setScrubState(bool active)
-{
-    if (!m_d->scrubInProgress && active) {
-        m_d->scrubStartFrame = m_d->activeFrameIndex;
-        m_d->scrubInProgress = true;
-    }
-
-    if (m_d->scrubInProgress && !active) {
-
-        m_d->scrubInProgress = false;
-
-        if (m_d->scrubStartFrame >= 0 &&
-            m_d->scrubStartFrame != m_d->activeFrameIndex) {
-
-            scrubTo(m_d->activeFrameIndex, false);
-        }
-
-        m_d->scrubStartFrame = -1;
-    }
-}
-
-void TimelineFramesModel::slotInternalScrubPreviewRequested(int time)
-{
-    if (m_d->animationPlayer && !m_d->animationPlayer->isPlaying()) {
-        m_d->animationPlayer->displayFrame(time);
-    }
-}
-
-void TimelineFramesModel::scrubTo(int time, bool preview)
-{
-    if (m_d->animationPlayer && m_d->animationPlayer->isPlaying()) return;
-
-    KIS_ASSERT_RECOVER_RETURN(m_d->image);
-
-    if (preview) {
-        if (m_d->animationPlayer) {
-            m_d->scrubbingCompressor->start(time);
-        }
-    } else {
-        m_d->image->animationInterface()->requestTimeSwitchWithUndo(time);
-    }
-}
-
-void TimelineFramesModel::slotPlaybackFrameChanged()
-{
-    if (!m_d->animationPlayer->isPlaying()) return;
-    setData(index(0, m_d->animationPlayer->currentTime()), true, ActiveFrameRole);
-}
-
-void TimelineFramesModel::slotPlaybackStopped()
-{
-    setData(index(0, m_d->image->animationInterface()->currentUITime()), true, ActiveFrameRole);
-}
-
-void TimelineFramesModel::setPlaybackRange(const KisTimeRange &range)
-{
-    if (!m_d->dummiesFacade) return;
-
-    KisImageAnimationInterface *i = m_d->image->animationInterface();
-    i->setPlaybackRange(range);
-}
-
-bool TimelineFramesModel::isPlaybackActive() const
-{
-    return m_d->animationPlayer && m_d->animationPlayer->isPlaying();
 }

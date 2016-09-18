@@ -1726,7 +1726,6 @@ bool KisDocument::completeLoading(KoStore* store)
         return false;
     }
 
-    d->kraLoader->loadKeyframes(store, url().url(), isStoredExtern());
     d->image->blockUpdates();
     d->kraLoader->loadBinaryData(store, d->image, url().url(), isStoredExtern());
     d->image->unblockUpdates();

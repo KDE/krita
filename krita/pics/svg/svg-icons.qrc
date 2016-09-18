@@ -80,6 +80,29 @@
         <file>light_landscape.svg</file>
         <file>light_portrait.svg</file>
         
+        <file>dark_interpolation_constant.svg</file>
+        <file>dark_interpolation_linear.svg</file>
+        <file>dark_interpolation_bezier.svg</file>
+        <file>dark_interpolation_sharp.svg</file>
+        <file>dark_interpolation_smooth.svg</file>
+
+        <file>light_interpolation_bezier.svg</file>
+        <file>light_interpolation_constant.svg</file>
+        <file>light_interpolation_linear.svg</file>
+        <file>light_interpolation_sharp.svg</file>
+        <file>light_interpolation_smooth.svg</file>
+        
+        <file>dark_keyframe-add.svg</file>
+        <file>dark_keyframe-remove.svg</file>
+        <file>dark_zoom-fit.svg</file>
+        <file>dark_zoom-horizontal.svg</file>
+        <file>dark_zoom-vertical.svg</file>
+        <file>light_keyframe-add.svg</file>
+        <file>light_keyframe-remove.svg</file>
+        <file>light_zoom-fit.svg</file>
+        <file>light_zoom-horizontal.svg</file>
+        <file>light_zoom-vertical.svg</file>
+
         <file>dark_showColoring.svg</file>
         <file>dark_showMarks.svg</file>
         <file>dark_showColoringOff.svg</file>
@@ -89,7 +112,7 @@
         <file>light_showMarks.svg</file>
         <file>light_showColoringOff.svg</file>
         <file>light_showMarksOff.svg</file>
-        <file>light_updateColorize.svg</file>        
+        <file>light_updateColorize.svg</file>
 
     </qresource>
 </RCC>

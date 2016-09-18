@@ -8,6 +8,7 @@ set(kritatooltransform_SOURCES
     tool_transform.cc
     tool_transform_args.cc
     kis_transform_mask_adapter.cpp
+    kis_animated_transform_parameters.cpp
     tool_transform_changes_tracker.cpp
     kis_tool_transform.cc
     kis_tool_transform_config_widget.cpp
@@ -23,7 +24,9 @@ set(kritatooltransform_SOURCES
     kis_free_transform_strategy_gsl_helpers.cpp
     kis_perspective_transform_strategy.cpp
     kis_transform_utils.cpp
+    kis_modify_transform_mask_command.cpp
     strokes/transform_stroke_strategy.cpp
+    kis_transform_args_keyframe_channel.cpp
     )
 
 qt5_add_resources(kritatooltransform_SOURCES tool_transform.qrc)

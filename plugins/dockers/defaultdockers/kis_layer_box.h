@@ -55,6 +55,7 @@ class Ui_WdgLayerBox;
 class KisNodeJugglerCompressed;
 class KisColorLabelSelectorWidget;
 class QWidgetAction;
+class KisKeyframeChannel;
 
 /**
  * A widget that shows a visualization of the layer structure.
@@ -125,9 +126,16 @@ private Q_SLOTS:
     void updateAvailableLabels();
     void updateLayerFiltering();
 
+    // Opacity keyframing
+    void slotKeyframeChannelAdded(KisKeyframeChannel *channel);
+    void slotOpacityKeyframeChanged(KisKeyframeSP keyframe);
+    void slotOpacityKeyframeMoved(KisKeyframeSP keyframe, int fromTime);
+    void slotImageTimeChanged(int time);
+
 private:
     inline void connectActionToButton(KisViewManager* view, QAbstractButton *button, const QString &id);
     inline void addActionToMenu(QMenu *menu, const QString &id);
+    void watchOpacityChannel(KisKeyframeChannel *channel);
 
     KisNodeSP findNonHidableNode(KisNodeSP startNode);
 private:
@@ -150,6 +158,10 @@ private:
     KisAction* m_selectOpaque;
     KisSignalCompressor m_thumbnailCompressor;
     KisSignalCompressor m_colorLabelCompressor;
+
+    KisNodeSP m_activeNode;
+    KisKeyframeChannel* m_opacityChannel {0};
+    bool m_blockOpacityUpdate {false};
 };
 
 class KisLayerBoxFactory : public KoDockFactoryBase

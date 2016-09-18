@@ -73,6 +73,9 @@ public:
     void setX(qint32 x);
     void setY(qint32 y);
 
+protected:
+    KisKeyframeChannel *requestKeyframeChannel(const QString &id);
+
 private Q_SLOTS:
     void slotDelayedStaticUpdate();
 

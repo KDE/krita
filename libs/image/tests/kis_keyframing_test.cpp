@@ -56,7 +56,7 @@ void KisKeyframingTest::cleanupTestCase()
 
 void KisKeyframingTest::testScalarChannel()
 {
-    KisScalarKeyframeChannel *channel = new KisScalarKeyframeChannel(KoID("", ""), 0, -17, 31);
+    KisScalarKeyframeChannel *channel = new KisScalarKeyframeChannel(KoID("", ""), -17, 31, 0);
     KisKeyframeSP key;
     bool ok;
 
@@ -74,17 +74,18 @@ void KisKeyframingTest::testScalarChannel()
     key = channel->keyframeAt(42);
     QCOMPARE(channel->scalarValue(key), 7.0);
 
-    // Adding a keyframe where one exists
-
-    KisKeyframeSP key2 = channel->addKeyframe(42);
-    QVERIFY(key2 == key);
-
     // Copying a keyframe
 
-    key2 = channel->copyKeyframe(key, 13);
+    KisKeyframeSP key2 = channel->copyKeyframe(key, 13);
     QVERIFY(key2 != 0);
     QVERIFY(channel->keyframeAt(13) == key2);
     QCOMPARE(channel->scalarValue(key2), 7.0);
+
+    // Adding a keyframe where one exists
+
+    key2 = channel->addKeyframe(13);
+    QVERIFY(key2 != key);
+    QCOMPARE(channel->keyframeCount(), 2);
 
     // Moving keyframes
 
@@ -97,19 +98,20 @@ void KisKeyframingTest::testScalarChannel()
 
     // Moving a keyframe where another one exists
     ok = channel->moveKeyframe(key, 13);
-    QCOMPARE(ok, false);
-    QVERIFY(channel->keyframeAt(13) == key2);
+    QCOMPARE(ok, true);
+    QVERIFY(channel->keyframeAt(13) != key2);
 
+    // Deleting a keyframe
     channel->deleteKeyframe(key);
-
     QVERIFY(channel->keyframeAt(10) == 0);
+    QCOMPARE(channel->keyframeCount(), 0);
 
     delete channel;
 }
 
 void KisKeyframingTest::testScalarChannelUndoRedo()
 {
-    KisScalarKeyframeChannel *channel = new KisScalarKeyframeChannel(KoID("", ""), 0, -17, 31);
+    KisScalarKeyframeChannel *channel = new KisScalarKeyframeChannel(KoID("", ""), -17, 31, 0);
     KisKeyframeSP key;
 
     QCOMPARE(channel->hasScalarValue(), true);
@@ -146,6 +148,49 @@ void KisKeyframingTest::testScalarChannelUndoRedo()
     delete channel;
 }
 
+void KisKeyframingTest::testScalarInterpolation()
+{
+    KisScalarKeyframeChannel *channel = new KisScalarKeyframeChannel(KoID("", ""), 0, 30, 0);
+
+    KisKeyframeSP key1 = channel->addKeyframe(0);
+    channel->setScalarValue(key1, 15);
+
+    KisKeyframeSP key2 = channel->addKeyframe(10);
+    channel->setScalarValue(key2, 30);
+
+    // Constant
+
+    key1->setInterpolationMode(KisKeyframe::Constant);
+
+    QCOMPARE(channel->interpolatedValue(4), 15.0f);
+
+    // Bezier
+
+    key1->setInterpolationMode(KisKeyframe::Bezier);
+    key1->setInterpolationTangents(QPointF(), QPointF(1,4));
+    key2->setInterpolationTangents(QPointF(-4,2), QPointF());
+
+    QVERIFY(qAbs(channel->interpolatedValue(4) - 24.9812f) < 0.1f);
+
+    // Bezier, self-intersecting curve (auto-correct)
+
+    channel->setScalarValue(key2, 15);
+    key1->setInterpolationTangents(QPointF(), QPointF(13,10));
+    key2->setInterpolationTangents(QPointF(-13,10), QPointF());
+
+    QVERIFY(qAbs(channel->interpolatedValue(5) - 20.769f) < 0.1f);
+
+    // Bezier, result outside allowed range (clamp)
+
+    channel->setScalarValue(key2, 15);
+    key1->setInterpolationTangents(QPointF(), QPointF(0, 50));
+    key2->setInterpolationTangents(QPointF(0, 50), QPointF());
+
+    QCOMPARE(channel->interpolatedValue(5), 30.0f);
+
+    delete channel;
+}
+
 void KisKeyframingTest::testRasterChannel()
 {
     TestUtil::TestingTimedDefaultBounds *bounds = new TestUtil::TestingTimedDefaultBounds();
@@ -153,7 +198,7 @@ void KisKeyframingTest::testRasterChannel()
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
     dev->setDefaultBounds(bounds);
 
-    KisRasterKeyframeChannel * channel = dev->createKeyframeChannel(KoID(), 0);
+    KisRasterKeyframeChannel * channel = dev->createKeyframeChannel(KoID());
 
     QCOMPARE(channel->hasScalarValue(), false);
     QCOMPARE(channel->keyframeCount(), 1);
@@ -223,24 +268,24 @@ void KisKeyframingTest::testRasterChannel()
 
     // Fetching current keyframe before the first one should
     // return the first keyframe
-    QCOMPARE(channel->frameIdAt(0), (int)key_10->value());
+    QCOMPARE(channel->frameIdAt(0), channel->frameIdAt(key_10->time()));
 }
 
 void KisKeyframingTest::testChannelSignals()
 {
-    KisScalarKeyframeChannel *channel = new KisScalarKeyframeChannel(KoID("", ""), 0, -17, 31);
+    KisScalarKeyframeChannel *channel = new KisScalarKeyframeChannel(KoID("", ""), -17, 31, 0);
     KisKeyframeSP key;
-    KisKeyframe *resKey;
+    KisKeyframeSP resKey;
 
-    qRegisterMetaType<KisKeyframe*>("KisKeyframePtr");
-    QSignalSpy spyPreAdd(channel, SIGNAL(sigKeyframeAboutToBeAdded(KisKeyframe*)));
-    QSignalSpy spyPostAdd(channel, SIGNAL(sigKeyframeAdded(KisKeyframe*)));
+    qRegisterMetaType<KisKeyframeSP>("KisKeyframeSP");
+    QSignalSpy spyPreAdd(channel, SIGNAL(sigKeyframeAboutToBeAdded(KisKeyframeSP)));
+    QSignalSpy spyPostAdd(channel, SIGNAL(sigKeyframeAdded(KisKeyframeSP)));
 
-    QSignalSpy spyPreRemove(channel, SIGNAL(sigKeyframeAboutToBeRemoved(KisKeyframe*)));
-    QSignalSpy spyPostRemove(channel, SIGNAL(sigKeyframeRemoved(KisKeyframe*)));
+    QSignalSpy spyPreRemove(channel, SIGNAL(sigKeyframeAboutToBeRemoved(KisKeyframeSP)));
+    QSignalSpy spyPostRemove(channel, SIGNAL(sigKeyframeRemoved(KisKeyframeSP)));
 
-    QSignalSpy spyPreMove(channel, SIGNAL(sigKeyframeAboutToBeMoved(KisKeyframe*,int)));
-    QSignalSpy spyPostMove(channel, SIGNAL(sigKeyframeMoved(KisKeyframe*, int)));
+    QSignalSpy spyPreMove(channel, SIGNAL(sigKeyframeAboutToBeMoved(KisKeyframeSP,int)));
+    QSignalSpy spyPostMove(channel, SIGNAL(sigKeyframeMoved(KisKeyframeSP, int)));
 
     QVERIFY(spyPreAdd.isValid());
     QVERIFY(spyPostAdd.isValid());
@@ -259,10 +304,10 @@ void KisKeyframingTest::testChannelSignals()
     QCOMPARE(spyPreAdd.count(), 1);
     QCOMPARE(spyPostAdd.count(), 1);
 
-    resKey = spyPreAdd.at(0).at(0).value<KisKeyframe*>();
-    QVERIFY(resKey == key.data());
-    resKey = spyPostAdd.at(0).at(0).value<KisKeyframe*>();
-    QVERIFY(resKey == key.data());
+    resKey = spyPreAdd.at(0).at(0).value<KisKeyframeSP>();
+    QVERIFY(resKey == key);
+    resKey = spyPostAdd.at(0).at(0).value<KisKeyframeSP>();
+    QVERIFY(resKey == key);
 
     // Moving a keyframe
 
@@ -272,11 +317,11 @@ void KisKeyframingTest::testChannelSignals()
     QCOMPARE(spyPreMove.count(), 1);
     QCOMPARE(spyPostMove.count(), 1);
 
-    resKey = spyPreMove.at(0).at(0).value<KisKeyframe*>();
-    QVERIFY(resKey == key.data());
+    resKey = spyPreMove.at(0).at(0).value<KisKeyframeSP>();
+    QVERIFY(resKey == key);
     QCOMPARE(spyPreMove.at(0).at(1).toInt(), 15);
-    resKey = spyPostMove.at(0).at(0).value<KisKeyframe*>();
-    QVERIFY(resKey == key.data());
+    resKey = spyPostMove.at(0).at(0).value<KisKeyframeSP>();
+    QVERIFY(resKey == key);
 
     // No-op move (no signals)
 
@@ -303,7 +348,7 @@ void KisKeyframingTest::testRasterFrameFetching()
     KisPaintDeviceSP devTarget = new KisPaintDevice(cs);
     dev->setDefaultBounds(bounds);
 
-    KisRasterKeyframeChannel * channel = dev->createKeyframeChannel(KoID(), 0);
+    KisRasterKeyframeChannel * channel = dev->createKeyframeChannel(KoID());
 
     channel->addKeyframe(0);
     channel->addKeyframe(10);
@@ -354,7 +399,7 @@ void KisKeyframingTest::testDeleteFirstRasterChannel()
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
     dev->setDefaultBounds(bounds);
 
-    KisRasterKeyframeChannel * channel = dev->createKeyframeChannel(KoID(), 0);
+    KisRasterKeyframeChannel * channel = dev->createKeyframeChannel(KoID());
 
     QCOMPARE(channel->hasScalarValue(), false);
     QCOMPARE(channel->keyframeCount(), 1);
@@ -404,7 +449,7 @@ void KisKeyframingTest::testDeleteFirstRasterChannel()
 
 void KisKeyframingTest::testAffectedFrames()
 {
-    KisScalarKeyframeChannel *channel = new KisScalarKeyframeChannel(KoID("", ""), 0, -17, 31);
+    KisScalarKeyframeChannel *channel = new KisScalarKeyframeChannel(KoID("", ""), -17, 31, 0);
     KisTimeRange range;
 
     channel->addKeyframe(10);
@@ -426,7 +471,7 @@ void KisKeyframingTest::testAffectedFrames()
     // Before first frame
     range = channel->affectedFrames(5);
     QCOMPARE(range.start(), 0);
-    QCOMPARE(range.end(), 19);
+    QCOMPARE(range.end(), 9);
     QCOMPARE(range.isInfinite(), false);
 
     // After last frame

@@ -439,7 +439,7 @@ KisImageBuilder_Result CSVLoader::setLayer(CSVLayerRecord* layer, KisDocument *i
 
         layer->layer = paintLayer;
         layer->channel = qobject_cast<KisRasterKeyframeChannel*>
-            (paintLayer->getKeyframeChannel(KisKeyframeChannel::Content.id()));
+            (paintLayer->getKeyframeChannel(KisKeyframeChannel::Content.id(), true));
     }
 
 

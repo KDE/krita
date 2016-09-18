@@ -86,14 +86,24 @@ void KisImageSignalRouter::emitNodeChanged(KisNodeSP node)
 
 void KisImageSignalRouter::emitNodeHasBeenAdded(KisNode *parent, int index)
 {
-    m_image->invalidateAllFrames();
-    emit sigNodeAddedAsync(parent->at(index));
+    KisNodeSP newNode = parent->at(index);
+
+    if (!newNode->inherits("KisSelectionMask")) {
+        m_image->invalidateAllFrames();
+    }
+
+    emit sigNodeAddedAsync(newNode);
 }
 
 void KisImageSignalRouter::emitAboutToRemoveANode(KisNode *parent, int index)
 {
-    m_image->invalidateAllFrames();
-    emit sigRemoveNodeAsync(parent->at(index));
+    KisNodeSP removedNode = parent->at(index);
+
+    if (!removedNode->inherits("KisSelectionMask")) {
+        m_image->invalidateAllFrames();
+    }
+
+    emit sigRemoveNodeAsync(removedNode);
 }
 
 

@@ -214,6 +214,10 @@ public:
         emitResourceChanged(Policy::toResourcePointer(resource));
     }
 
+    void resourceChangedNoCacheInvalidation(PointerType resource) {
+        emitResourceChanged(Policy::toResourcePointer(resource));
+    }
+
     void syncTaggedResourceView() {
         serverResourceCacheInvalid(true);
         m_resourceFilter.rebuildCurrentTagFilenames();

@@ -166,9 +166,7 @@ void KoResourceModel::resourceAdded(KoResource *resource)
 void KoResourceModel::resourceRemoved(KoResource *resource)
 {
     Q_UNUSED(resource);
-
-    KoResource *first = !m_resourceAdapter->resources().isEmpty() ? m_resourceAdapter->resources().first() : 0;
-    doSafeLayoutReset(first);
+    doSafeLayoutReset(0);
 }
 
 void KoResourceModel::resourceChanged(KoResource* resource)

@@ -174,7 +174,7 @@ int KUndo2Command::id() const
     \sa id() KUndo2QStack::push()
 */
 
-bool KUndo2Command::mergeWith(const KUndo2Command *command)
+bool KUndo2Command::mergeWith(const QPointer<KUndo2Command> command)
 {
     Q_UNUSED(command);
     return false;
@@ -284,13 +284,6 @@ int KUndo2Command::childCount() const
     \sa childCount(), KUndo2QStack::command()
 */
 
-//const KUndo2Command *KUndo2Command::child(int index) const
-//{
-//    if (index < 0 || index >= d->child_list.count())
-//        return 0;
-//    return d->child_list.at(index);
-//}
-
 bool KUndo2Command::hasParent()
 {
     return m_hasParent;
@@ -304,9 +297,9 @@ void KUndo2Command::setTimedID(int value)
     m_timedID = value;
 }
 
-bool KUndo2Command::timedMergeWith(KUndo2Command *other)
+bool KUndo2Command::timedMergeWith(QPointer<KUndo2Command> other)
 {
-    if(other->timedId() == this->timedId() && other->timedId()!=-1 )
+    if (other && other->timedId() == this->timedId() && other->timedId()!=-1 )
         m_mergeCommandsVector.append(other);
     else
         return false;
@@ -331,14 +324,15 @@ QTime KUndo2Command::endTime()
 
 void KUndo2Command::undoMergedCommands()
 {
-
     undo();
     if (!mergeCommandsVector().isEmpty()) {
-        QVectorIterator<KUndo2Command*> it(mergeCommandsVector());
+        QVectorIterator<QPointer<KUndo2Command>> it(mergeCommandsVector());
         it.toFront();
         while (it.hasNext()) {
-            KUndo2Command* cmd = it.next();
-            cmd->undoMergedCommands();
+            QPointer<KUndo2Command> cmd = it.next();
+            if (cmd) {
+                cmd->undoMergedCommands();
+            }
         }
     }
 }
@@ -347,16 +341,16 @@ void KUndo2Command::redoMergedCommands()
 {
     if (!mergeCommandsVector().isEmpty()) {
 
-        QVectorIterator<KUndo2Command*> it(mergeCommandsVector());
+        QVectorIterator<QPointer<KUndo2Command>> it(mergeCommandsVector());
         it.toBack();
         while (it.hasPrevious()) {
-            KUndo2Command* cmd = it.previous();
+            QPointer<KUndo2Command> cmd = it.previous();
             cmd->redoMergedCommands();
         }
     }
     redo();
 }
-QVector<KUndo2Command*> KUndo2Command::mergeCommandsVector()
+QVector<QPointer<KUndo2Command> > KUndo2Command::mergeCommandsVector()
 {
     return m_mergeCommandsVector;
 }

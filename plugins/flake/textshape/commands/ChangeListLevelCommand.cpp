@@ -128,7 +128,7 @@ void ChangeListLevelCommand::undo()
     }
 }
 
-bool ChangeListLevelCommand::mergeWith(const KUndo2Command *)
+bool ChangeListLevelCommand::mergeWith(const QPointer<KUndo2Command>)
 {
     return false;
 }

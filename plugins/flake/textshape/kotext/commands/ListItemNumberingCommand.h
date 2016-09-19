@@ -50,7 +50,7 @@ public:
         return 58450688;
     }
     /// reimplemnted from KUndo2Command
-    virtual bool mergeWith(const KUndo2Command *other);
+    virtual bool mergeWith(const QPointer<KUndo2Command>other);
 
 private:
     void setNumbered(bool numbered);

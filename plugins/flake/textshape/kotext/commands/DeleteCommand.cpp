@@ -22,6 +22,8 @@
 
 #include "DeleteCommand.h"
 
+#include <QPointer>
+
 #include <klocalizedstring.h>
 
 #include <KoList.h>
@@ -38,6 +40,7 @@
 #include <KoSectionModel.h>
 #include <KoSectionEnd.h>
 #include <KoShapeController.h>
+
 
 bool DeleteCommand::SectionDeleteInfo::operator<(const DeleteCommand::SectionDeleteInfo &other) const
 {
@@ -508,7 +511,7 @@ int DeleteCommand::id() const
     return 56789;
 }
 
-bool DeleteCommand::mergeWith(const KUndo2Command *command)
+bool DeleteCommand::mergeWith(const QPointer<KUndo2Command>command)
 {
     class UndoTextCommand : public KUndo2Command
     {
@@ -543,7 +546,7 @@ bool DeleteCommand::mergeWith(const KUndo2Command *command)
     if (!checkMerge(command))
         return false;
 
-    DeleteCommand *other = const_cast<DeleteCommand *>(static_cast<const DeleteCommand *>(command));
+    DeleteCommand *other = const_cast<DeleteCommand *>(static_cast<const DeleteCommand *>(command.data()));
 
     m_invalidInlineObjects += other->m_invalidInlineObjects;
     other->m_invalidInlineObjects.clear();

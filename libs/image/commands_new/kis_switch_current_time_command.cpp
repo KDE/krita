@@ -42,10 +42,12 @@ int KisSwitchCurrentTimeCommand::id() const
     return 4 + 8 + 15 + 16 + 23 + 42;
 }
 
-bool KisSwitchCurrentTimeCommand::mergeWith(const KUndo2Command* command)
+bool KisSwitchCurrentTimeCommand::mergeWith(const QPointer<KUndo2Command> command)
 {
+    if (!command) return false;
+
     const KisSwitchCurrentTimeCommand *other =
-        dynamic_cast<const KisSwitchCurrentTimeCommand*>(command);
+        dynamic_cast<const KisSwitchCurrentTimeCommand*>(command.data());
 
     if (!other || other->id() != id()) {
         return false;

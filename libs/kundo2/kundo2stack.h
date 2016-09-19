@@ -66,16 +66,18 @@
 #include <QAction>
 #include <QTime>
 #include <QVector>
+#include <QPointer>
 
 #include "kritaundo2_export.h"
 #include "kundo2magicstring.h"
 #include "kundo2commandextradata.h"
+#include "kundo2command.h"
 
 class QAction;
 class KUndo2CommandPrivate;
 class KUndo2Group;
 class KUndo2MagickString;
-class KUndo2Command;
+
 class KActionCollection;
 
 #ifndef QT_NO_UNDOSTACK
@@ -153,8 +155,8 @@ protected:
 
 private:
     // from QUndoStackPrivate
-    QList<KUndo2Command*> m_command_list;
-    QList<KUndo2Command*> m_macro_stack;
+    QList<QPointer<KUndo2Command> > m_command_list;
+    QList<QPointer<KUndo2Command> > m_macro_stack;
     int m_index;
     int m_clean_index;
     KUndo2Group *m_group;

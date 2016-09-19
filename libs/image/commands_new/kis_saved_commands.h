@@ -19,7 +19,7 @@
 #ifndef __KIS_SAVED_COMMANDS_H
 #define __KIS_SAVED_COMMANDS_H
 
-#include <kundo2command.h>
+#include <kundo2stack.h>
 #include "kis_types.h"
 #include "kis_stroke_job_strategy.h"
 
@@ -56,10 +56,10 @@ public:
     void setTimedID(int timedID);
 
     int id() const;
-    bool mergeWith(const KUndo2Command* command);
+    bool mergeWith(const QPointer<KUndo2Command> command);
 
-    virtual bool timedMergeWith(KUndo2Command *other);
-    virtual QVector<KUndo2Command*> mergeCommandsVector();
+    virtual bool timedMergeWith(QPointer<KUndo2Command> other);
+    virtual QVector<QPointer<KUndo2Command> > mergeCommandsVector();
     virtual void setTime();
     virtual QTime time();
     virtual void setEndTime();
@@ -80,7 +80,7 @@ public:
     ~KisSavedMacroCommand();
 
     int id() const;
-    bool mergeWith(const KUndo2Command* command);
+    bool mergeWith(const QPointer<KUndo2Command> command);
 
     void setMacroId(int value);
 

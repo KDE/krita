@@ -135,10 +135,14 @@ public:
         : m_policy(source, rect),
           m_pixelSize(source.pixelSize()),
           m_rowsLeft(rect.height() - 1),
-          m_columnOffset(0)
+          m_columnOffset(0),
+          m_iteratorX(0),
+          m_iteratorY(0)
     {
         m_columnsLeft = m_numConseqPixels = m_policy.m_iter->nConseqPixels();
         m_policy.updatePointersCache();
+        m_iteratorX = m_policy.m_iter->x();
+        m_iteratorY = m_policy.m_iter->y();
     }
 
     inline int nConseqPixels() const {
@@ -174,18 +178,19 @@ public:
                 m_columnsLeft = m_numConseqPixels = m_policy.m_iter->nConseqPixels();
                 m_policy.updatePointersCache();
             }
-
+            m_iteratorX = m_policy.m_iter->x();
+            m_iteratorY = m_policy.m_iter->y();
         }
         return m_columnsLeft > 0;
     }
 
 
     ALWAYS_INLINE int x() const {
-        return m_policy.m_iter->x() + m_numConseqPixels - m_columnsLeft;
+        return m_iteratorX + m_numConseqPixels - m_columnsLeft;
     }
 
     ALWAYS_INLINE int y() const {
-        return m_policy.m_iter->y();
+        return m_iteratorY;
     }
 
     // SFINAE: This method becomes undefined for const version of the
@@ -212,6 +217,8 @@ private:
     int m_columnsLeft;
 
     int m_columnOffset;
+    int m_iteratorX;
+    int m_iteratorY;
 };
 
 typedef KisSequentialIteratorBase<ReadOnlyIteratorPolicy<> > KisSequentialConstIterator;

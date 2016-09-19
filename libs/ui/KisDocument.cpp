@@ -651,6 +651,9 @@ bool KisDocument::exportDocument(const QUrl &_url)
 
 bool KisDocument::saveFile()
 {
+    // Unset the error message
+    setErrorMessage("");
+
     // Save it to be able to restore it after a failed save
     const bool wasModified = isModified();
 

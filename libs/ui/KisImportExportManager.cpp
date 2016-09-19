@@ -255,7 +255,6 @@ QStringList KisImportExportManager::mimeFilter(Direction direction)
             qDeleteAll(list);
             m_exportMimeTypes = mimeTypes.toList();
         }
-        qDebug() << m_exportMimeTypes;
         return m_exportMimeTypes;
     }
     return QStringList();

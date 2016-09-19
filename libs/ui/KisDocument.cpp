@@ -2171,7 +2171,6 @@ bool KisDocument::saveAs(const QUrl &kurl, KisPropertiesConfigurationSP exportCo
 
 bool KisDocument::save(KisPropertiesConfigurationSP exportConfiguration)
 {
-    qDebug() << "Saving!";
     d->m_saveOk = false;
     if ( d->m_file.isEmpty() ) { // document was created empty
         d->prepareSaving();

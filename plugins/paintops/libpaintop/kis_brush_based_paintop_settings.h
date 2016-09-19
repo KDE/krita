@@ -72,8 +72,10 @@ public:
     QList<KisUniformPaintOpPropertySP> uniformProperties(KisPaintOpSettingsSP settings);
 
 protected:
+
+    void onPropertyChanged();
     QPainterPath brushOutlineImpl(const KisPaintInformation &info, OutlineMode mode, qreal additionalScale, bool forceOutline = false);
-    KisBrushSP m_savedBrush;
+    mutable KisBrushSP m_savedBrush;
     QList<KisUniformPaintOpPropertyWSP> m_uniformProperties;
 
 private:

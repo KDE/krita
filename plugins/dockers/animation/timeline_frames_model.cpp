@@ -504,7 +504,7 @@ QVariant TimelineFramesModel::headerData(int section, Qt::Orientation orientatio
             QFont baseFont;
             if (node->projectionLeaf()->isDroppedMask()) {
                 baseFont.setStrikeOut(true);
-            } else if (m_d->image->isolatedModeRoot() &&
+            } else if (m_d->image && m_d->image->isolatedModeRoot() &&
                        KisNodeModel::belongsToIsolatedGroup(m_d->image, node, m_d->dummiesFacade)) {
                 baseFont.setBold(true);
             }

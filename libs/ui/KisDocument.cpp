@@ -649,6 +649,9 @@ bool KisDocument::exportDocument(const QUrl &_url, KisPropertiesConfigurationSP 
 
 bool KisDocument::saveFile(KisPropertiesConfigurationSP exportConfiguration)
 {
+    // Unset the error message
+    setErrorMessage("");
+
     // Save it to be able to restore it after a failed save
     const bool wasModified = isModified();
 

@@ -169,6 +169,10 @@ public:
         emitRemovingResource(0);
     }
 
+    QString currentPaintOpId() const {
+        return m_paintopID;
+    }
+
 private:
     QString m_paintopID;
 };
@@ -193,6 +197,8 @@ KisPresetChooser::KisPresetChooser(QWidget *parent, const char *name)
 
     connect(m_chooser, SIGNAL(resourceSelected(KoResource*)),
             this, SIGNAL(resourceSelected(KoResource*)));
+    connect(m_chooser, SIGNAL(resourceClicked(KoResource*)),
+            this, SIGNAL(resourceClicked(KoResource*)));
 
     m_mode = THUMBNAIL;
 
@@ -251,6 +257,29 @@ void KisPresetChooser::updateViewSettings()
     }
 }
 
+void KisPresetChooser::setCurrentResource(KoResource *resource)
+{
+    /**
+     * HACK ALERT: here we use a direct call to an adapter to notify the view
+     *             that the preset might have changed its dirty state. This state
+     *             doesn't affect the filtering so the server's cache must not be
+     *             invalidated!
+     *
+     *             Ideally, we should call some method of KoResourceServer instead,
+     *             but ut seems like a bit too much effort for such a small fix.
+     */
+
+    if (resource == currentResource()) {
+        KisPresetProxyAdapter *adapter = static_cast<KisPresetProxyAdapter*>(m_adapter.data());
+        KisPaintOpPreset *preset = dynamic_cast<KisPaintOpPreset*>(resource);
+        if (preset) {
+            adapter->resourceChangedNoCacheInvalidation(preset);
+        }
+    }
+
+    m_chooser->setCurrentResource(resource);
+}
+
 KoResource* KisPresetChooser::currentResource()
 {
     return m_chooser->currentResource();
@@ -268,8 +297,12 @@ KoResourceItemChooser *KisPresetChooser::itemChooser()
 
 void KisPresetChooser::setPresetFilter(const QString& paintOpId)
 {
-    static_cast<KisPresetProxyAdapter*>(m_adapter.data())->setPresetFilter(paintOpId);
-    updateViewSettings();
+    KisPresetProxyAdapter *adapter = static_cast<KisPresetProxyAdapter*>(m_adapter.data());
+
+    if (adapter->currentPaintOpId() != paintOpId) {
+        adapter->setPresetFilter(paintOpId);
+        updateViewSettings();
+    }
 }
 
 

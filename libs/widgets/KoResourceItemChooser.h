@@ -113,12 +113,16 @@ public:
 Q_SIGNALS:
     /// Emitted when a resource was selected
     void resourceSelected(KoResource *resource);
+    /// Emitted when an *already selected* resource is clicked
+    /// again
+    void resourceClicked(KoResource *resource);
     void splitterMoved();
 public Q_SLOTS:
     void slotButtonClicked(int button);
 
 private Q_SLOTS:
     void activated(const QModelIndex &index);
+    void clicked(const QModelIndex &index);
     void contextMenuRequested(const QPoint &pos);
     void baseLengthChanged(int length);
 

@@ -390,7 +390,7 @@ void KoPathShapePrivate::paintDebug(QPainter &painter)
     KoSubpathList::const_iterator pathIt(q->m_subpaths.constBegin());
     int i = 0;
 
-    QPen pen(Qt::black);
+    QPen pen(Qt::black, 0);
     painter.save();
     painter.setPen(pen);
     for (; pathIt != q->m_subpaths.constEnd(); ++pathIt) {
@@ -400,7 +400,7 @@ void KoPathShapePrivate::paintDebug(QPainter &painter)
             KoPathPoint *point = (*it);
             QRectF r(point->point(), QSizeF(5, 5));
             r.translate(-2.5, -2.5);
-            QPen pen(Qt::black);
+            QPen pen(Qt::black, 0);
             painter.setPen(pen);
             if (point->activeControlPoint1() && point->activeControlPoint2()) {
                 QBrush b(Qt::red);

@@ -79,7 +79,7 @@ void RulerTabChooser::paintEvent(QPaintEvent *)
     QPainter painter(this);
     QPolygonF polygon;
 
-    painter.setPen(palette().color(QPalette::Text));
+    painter.setPen(QPen(palette().color(QPalette::Text), 0));
     painter.setBrush(palette().color(QPalette::Text));
     painter.setRenderHint( QPainter::Antialiasing );
 
@@ -140,7 +140,7 @@ QRectF HorizontalPaintingStrategy::drawBackground(const KoRulerPrivate *d, QPain
           d->viewConverter->documentToViewX(d->effectiveActiveRangeEnd()) + d->offset));
     activeRangeRectangle.setHeight(rectangle.height() - 2);
 
-    painter.setPen(d->ruler->palette().color(QPalette::Mid));
+    painter.setPen(QPen(d->ruler->palette().color(QPalette::Mid), 0));
 
 
     painter.fillRect(rectangle,d->ruler->palette().color(QPalette::AlternateBase)); // make background slightly different so it is easier to see
@@ -172,7 +172,7 @@ void HorizontalPaintingStrategy::drawTabs(const KoRulerPrivate *d, QPainter &pai
     QPolygonF polygon;
 
     const QColor tabColor = d->ruler->palette().color(QPalette::Text);
-    painter.setPen(tabColor);
+    painter.setPen(QPen(tabColor, 0));
     painter.setBrush(tabColor);
     painter.setRenderHint( QPainter::Antialiasing );
 
@@ -300,8 +300,8 @@ void HorizontalPaintingStrategy::drawMeasurements(const KoRulerPrivate *d, QPain
     int quarterStepCount = (start / qRound(numberStepPixel * 0.25)) + 1;
 
     int pos = 0;
-    const QPen numberPen(d->ruler->palette().color(QPalette::Text));
-    const QPen markerPen(d->ruler->palette().color(QPalette::Inactive, QPalette::Text));
+    const QPen numberPen(d->ruler->palette().color(QPalette::Text), 0);
+    const QPen markerPen(d->ruler->palette().color(QPalette::Inactive, QPalette::Text), 0);
     painter.setPen(markerPen);
 
     if(d->offset > 0)
@@ -459,7 +459,7 @@ QRectF VerticalPaintingStrategy::drawBackground(const KoRulerPrivate *d, QPainte
     activeRangeRectangle.setBottom(qMin(rectangle.bottom() - 1,
         d->viewConverter->documentToViewY(d->effectiveActiveRangeEnd()) + d->offset));
 
-    painter.setPen(d->ruler->palette().color(QPalette::Mid));
+    painter.setPen(QPen(d->ruler->palette().color(QPalette::Mid), 0));
 
     painter.fillRect(rectangle,d->ruler->palette().color(QPalette::AlternateBase));
     painter.drawRect(rectangle);
@@ -519,8 +519,8 @@ void VerticalPaintingStrategy::drawMeasurements(const KoRulerPrivate *d, QPainte
     int halfStepCount = (start / qRound(numberStepPixel * 0.5)) + 1;
     int quarterStepCount = (start / qRound(numberStepPixel * 0.25)) + 1;
 
-    const QPen numberPen(d->ruler->palette().color(QPalette::Text));
-    const QPen markerPen(d->ruler->palette().color(QPalette::Inactive, QPalette::Text));
+    const QPen numberPen(d->ruler->palette().color(QPalette::Text), 0);
+    const QPen markerPen(d->ruler->palette().color(QPalette::Inactive, QPalette::Text), 0);
     painter.setPen(markerPen);
 
     if(d->offset > 0)
@@ -616,7 +616,7 @@ void HorizontalDistancesPaintingStrategy::drawDistanceLine(const KoRulerPrivate 
 
     painter.save();
     painter.translate(d->offset, d->ruler->height() / 2);
-    painter.setPen(d->ruler->palette().color(QPalette::Text));
+    painter.setPen(QPen(d->ruler->palette().color(QPalette::Text), 0));
     painter.setBrush(d->ruler->palette().color(QPalette::Text));
 
     QLineF line(QPointF(d->viewConverter->documentToViewX(start), 0),

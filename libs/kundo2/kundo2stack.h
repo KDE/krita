@@ -67,16 +67,85 @@
 #include <QTime>
 #include <QVector>
 
+
 #include "kritaundo2_export.h"
-#include "kundo2magicstring.h"
-#include "kundo2commandextradata.h"
 
 class QAction;
 class KUndo2CommandPrivate;
 class KUndo2Group;
-class KUndo2MagickString;
-class KUndo2Command;
 class KActionCollection;
+
+#ifndef QT_NO_UNDOCOMMAND
+
+#include "kundo2magicstring.h"
+#include "kundo2commandextradata.h"
+
+
+class KRITAUNDO2_EXPORT KUndo2Command
+{
+    KUndo2CommandPrivate *d;
+    int timedID;
+
+public:
+    explicit KUndo2Command(KUndo2Command *parent = 0);
+    explicit KUndo2Command(const KUndo2MagicString &text, KUndo2Command *parent = 0);
+    virtual ~KUndo2Command();
+
+    virtual void undo();
+    virtual void redo();
+
+    QString actionText() const;
+    KUndo2MagicString text() const;
+    void setText(const KUndo2MagicString &text);
+
+    virtual int id() const;
+    virtual int timedId();
+    virtual void setTimedID(int timedID);
+    virtual bool mergeWith(const KUndo2Command *other);
+    virtual bool timedMergeWith(KUndo2Command *other);
+
+    int childCount() const;
+    const KUndo2Command *child(int index) const;
+
+    bool hasParent();
+    virtual void setTime();
+    virtual QTime time();
+    virtual void setEndTime();
+    virtual QTime endTime();
+
+    virtual QVector<KUndo2Command*> mergeCommandsVector();
+    virtual bool isMerged();
+    virtual void undoMergedCommands();
+    virtual void redoMergedCommands();
+
+    /**
+     * \return user-defined object associated with the command
+     *
+     * \see setExtraData()
+     */
+    KUndo2CommandExtraData* extraData() const;
+
+    /**
+     * The user can assign an arbitrary object associated with the
+     * command. The \p data object is owned by the command. If you assign
+     * the object twice, the first one will be destroyed.
+     */
+    void setExtraData(KUndo2CommandExtraData *data);
+
+private:
+    Q_DISABLE_COPY(KUndo2Command)
+    friend class KUndo2QStack;
+
+
+    bool m_hasParent;
+    int m_timedID;
+
+    QTime m_timeOfCreation;
+    QTime m_endOfCommand;
+    QVector<KUndo2Command*> m_mergeCommandsVector;
+};
+
+#endif // QT_NO_UNDOCOMMAND
 
 #ifndef QT_NO_UNDOSTACK
 

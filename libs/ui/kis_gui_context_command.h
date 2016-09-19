@@ -30,7 +30,7 @@ class KisGuiContextCommandDelegate;
  * note that any activity done by the containing command must *not*
  * lead to the blocking on the image, otherwise you'll get a deadlock!
  */
-class KisGuiContextCommand : public KUndo2Command
+class KisGuiContextCommand : public QObject, public KUndo2Command
 {
     Q_OBJECT
 public:

@@ -31,7 +31,7 @@ class KoCanvasBase;
 
 class QTextDocument;
 
-class ShowChangesCommand : public KoTextCommandBase
+class ShowChangesCommand : public QObject, public KoTextCommandBase
 {
     Q_OBJECT
 public:

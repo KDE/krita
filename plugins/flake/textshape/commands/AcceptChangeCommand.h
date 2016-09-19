@@ -28,7 +28,7 @@ class KoChangeTracker;
 
 class QTextDocument;
 
-class AcceptChangeCommand : public KoTextCommandBase
+class AcceptChangeCommand : public QObject, public KoTextCommandBase
 {
     Q_OBJECT
 public:

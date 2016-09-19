@@ -1,11 +1,10 @@
 set(kritaundo2_LIB_SRCS
-    kundo2stack.cpp
-    kundo2group.cpp
-    kundo2view.cpp
-    kundo2model.cpp
-    kundo2magicstring.cpp
-    kundo2commandextradata.cpp
-    kundo2command.cpp
+	kundo2stack.cpp
+	kundo2group.cpp
+	kundo2view.cpp
+	kundo2model.cpp
+	kundo2magicstring.cpp
+	kundo2commandextradata.cpp
 )
 
 add_library(kritaundo2 SHARED ${kritaundo2_LIB_SRCS})

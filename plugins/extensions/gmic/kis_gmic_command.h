@@ -34,7 +34,7 @@
 
 class QString;
 
-class KisGmicCommand : public QObject, public KUndo2Command
+class KisGmicCommand : public KUndo2Command
 {
     Q_OBJECT
 public:

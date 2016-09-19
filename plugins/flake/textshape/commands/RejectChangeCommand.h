@@ -29,7 +29,7 @@ class KoTextDocumentLayout;
 
 class QTextDocument;
 
-class RejectChangeCommand : public QObject, public KoTextCommandBase
+class RejectChangeCommand : public KoTextCommandBase
 {
     Q_OBJECT
 public:

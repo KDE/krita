@@ -19,6 +19,7 @@
 #include "kis_undo_stores.h"
 
 #include <kundo2stack.h>
+#include <kundo2command.h>
 
 
 /*****************************************************************/

@@ -19,7 +19,7 @@
  */
 
 #include "ChangeListCommand.h"
-#include <kundo2qstack.h>
+
 #include <KoTextBlockData.h>
 #include <KoTextDocument.h>
 #include <QTextCursor>
@@ -367,7 +367,7 @@ void ChangeListCommand::undo()
     }
 }
 
-bool ChangeListCommand::mergeWith(const QPointer<KUndo2Command>)
+bool ChangeListCommand::mergeWith(const KUndo2Command *)
 {
     return false;
 }

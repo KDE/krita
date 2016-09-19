@@ -420,13 +420,13 @@ void KUndo2QStack::push(KUndo2Command *cmd)
         m_index = m_command_list.size();
         if(m_lastMergedIndex<m_index){
             if (cmd->time().msecsTo(m_command_list.at(m_lastMergedIndex)->endTime()) < -m_timeT1 * 1000) { //T1 time elapsed
-                QListIterator<QPointer<KUndo2Command>> it(m_command_list);
+                QListIterator<KUndo2Command*> it(m_command_list);
                 it.toBack();
                 m_lastMergedSetCount = 1;
 
                 while (it.hasPrevious()) {
-                    QPointer<KUndo2Command> curr = it.previous();
-                    QPointer<KUndo2Command> lastCmdInCurrent = curr;
+                    KUndo2Command* curr = it.previous();
+                    KUndo2Command* lastCmdInCurrent = curr;
 
                     if (!lastcmd->mergeCommandsVector().isEmpty()) {
                         if (qAbs(lastcmd->mergeCommandsVector().last()->time().msecsTo(lastCmdInCurrent->endTime())) < int(m_timeT2 * 1000) && lastcmd != lastCmdInCurrent && lastcmd != curr) {
@@ -688,13 +688,11 @@ bool KUndo2QStack::canRedo() const
 
 QString KUndo2QStack::undoText() const
 {
-    if (!m_macro_stack.isEmpty()) {
+    if (!m_macro_stack.isEmpty())
         return QString();
-    }
+    if (m_index > 0 && m_command_list.at(m_index-1)!=0)
 
-    if (m_index > 0 && m_command_list.at(m_index-1) != 0) {
         return m_command_list.at(m_index - 1)->actionText();
-    }
     return QString();
 }
 
@@ -706,13 +704,10 @@ QString KUndo2QStack::undoText() const
 
 QString KUndo2QStack::redoText() const
 {
-    if (!m_macro_stack.isEmpty()) {
+    if (!m_macro_stack.isEmpty())
         return QString();
-    }
-
-    if (m_index < m_command_list.size()) {
+    if (m_index < m_command_list.size())
         return m_command_list.at(m_index)->actionText();
-    }
     return QString();
 }
 
@@ -808,18 +803,14 @@ void KUndo2QStack::beginMacro(const KUndo2MagicString &text)
     cmd->setText(text);
 
     if (m_macro_stack.isEmpty()) {
-        while (m_index < m_command_list.size()) {
+        while (m_index < m_command_list.size())
             delete m_command_list.takeLast();
-        }
-        if (m_clean_index > m_index) {
+        if (m_clean_index > m_index)
             m_clean_index = -1; // we've deleted the clean state
-        }
         m_command_list.append(cmd);
-    }
-    else {
+    } else {
         m_macro_stack.last()->d->child_list.append(cmd);
     }
-
     m_macro_stack.append(cmd);
 
     if (m_macro_stack.count() == 1) {

@@ -31,6 +31,7 @@
 #include <QVector>
 
 #include <kundo2command.h>
+#include <kundo2stack.h>
 #include "kritaundo2_export.h"
 
 class QAction;
@@ -63,10 +64,11 @@ public:
     virtual int id() const;
     virtual int timedId();
     virtual void setTimedID(int timedID);
-    virtual bool mergeWith(const QPointer<KUndo2Command> other);
-    virtual bool timedMergeWith(QPointer<KUndo2Command> other);
+    virtual bool mergeWith(const KUndo2Command *other);
+    virtual bool timedMergeWith(KUndo2Command *other);
 
     int childCount() const;
+    //const KUndo2Command *child(int index) const;
 
     bool hasParent();
     virtual void setTime();
@@ -74,7 +76,7 @@ public:
     virtual void setEndTime();
     virtual QTime endTime();
 
-    virtual QVector<QPointer<KUndo2Command>> mergeCommandsVector();
+    virtual QVector<KUndo2Command*> mergeCommandsVector();
     virtual bool isMerged();
     virtual void undoMergedCommands();
     virtual void redoMergedCommands();
@@ -103,7 +105,7 @@ private:
 
     QTime m_timeOfCreation;
     QTime m_endOfCommand;
-    QVector<QPointer<KUndo2Command>> m_mergeCommandsVector;
+    QVector<KUndo2Command*> m_mergeCommandsVector;
 };
 
 #endif // KUNDO2COMMANDH_H

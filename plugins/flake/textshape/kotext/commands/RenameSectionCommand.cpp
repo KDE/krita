@@ -61,14 +61,14 @@ int RenameSectionCommand::id() const
     return 34537684;
 }
 
-bool RenameSectionCommand::mergeWith(const QPointer<KUndo2Command>other)
+bool RenameSectionCommand::mergeWith(const KUndo2Command *other)
 {
     if (other->id() != id()) {
         return false;
     }
 
-    const RenameSectionCommand *command = dynamic_cast<const RenameSectionCommand *>(other.data());
-    if (command && command->m_section != m_section || m_newName != command->m_oldName) {
+    const RenameSectionCommand *command = static_cast<const RenameSectionCommand *>(other);
+    if (command->m_section != m_section || m_newName != command->m_oldName) {
         return false;
     }
     m_newName = command->m_oldName;

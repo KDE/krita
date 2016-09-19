@@ -25,7 +25,7 @@
 
 #include "KoTextDocument.h"
 
-#include <kundo2stack.h>
+#include <kundo2command.h>
 
 #include <klocalizedstring.h>
 

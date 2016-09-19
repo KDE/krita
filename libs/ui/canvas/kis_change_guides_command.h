@@ -20,7 +20,7 @@
 #define __KIS_CHANGE_GUIDES_COMMAND_H
 
 #include <QScopedPointer>
-#include <kundo2stack.h>
+#include <kundo2command.h>
 
 class KisDocument;
 class KUndo2Command;
@@ -38,7 +38,7 @@ public:
     void redo();
 
     int id() const;
-    bool mergeWith(const QPointer<KUndo2Command>command);
+    bool mergeWith(const KUndo2Command *command);
 
 private:
     struct Private;

@@ -22,7 +22,7 @@
 #include "KoTextDocument.h"
 #include "KoParagraphStyle.h"
 #include "KoCharacterStyle.h"
-#include <kundo2qstack.h>
+
 #include <QTextDocument>
 #include "TextDebug.h"
 

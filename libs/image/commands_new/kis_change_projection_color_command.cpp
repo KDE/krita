@@ -44,12 +44,10 @@ int KisChangeProjectionColorCommand::id() const
     return 142857;
 }
 
-bool KisChangeProjectionColorCommand::mergeWith(const QPointer<KUndo2Command> command)
+bool KisChangeProjectionColorCommand::mergeWith(const KUndo2Command* command)
 {
-    if (!command) return false;
-
     const KisChangeProjectionColorCommand *other =
-        dynamic_cast<const KisChangeProjectionColorCommand*>(command.data());
+        dynamic_cast<const KisChangeProjectionColorCommand*>(command);
 
     if (!other || other->id() != id()) {
         return false;

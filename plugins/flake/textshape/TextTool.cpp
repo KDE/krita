@@ -2655,7 +2655,7 @@ void TextTool::startMacro(const QString &title)
             }
             m_first = false;
         }
-        virtual bool mergeWith(const QPointer<KUndo2Command>)
+        virtual bool mergeWith(const KUndo2Command *)
         {
             return false;
         }

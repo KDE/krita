@@ -53,7 +53,7 @@ public:
     virtual void redo();
 
     virtual int id() const;
-    virtual bool mergeWith(const QPointer<KUndo2Command>command);
+    virtual bool mergeWith(const KUndo2Command *command);
 
 private:
     friend class DeleteVisitor;

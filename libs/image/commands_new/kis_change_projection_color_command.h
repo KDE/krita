@@ -24,7 +24,7 @@
 
 #include <KoColor.h>
 
-#include <kundo2stack.h>
+#include <kundo2command.h>
 
 
 class KRITAIMAGE_EXPORT KisChangeProjectionColorCommand : public KUndo2Command
@@ -37,7 +37,7 @@ public:
     void undo();
 
     int id() const;
-    bool mergeWith(const QPointer<KUndo2Command> command);
+    bool mergeWith(const KUndo2Command* command);
 
 private:
     KisImageWSP m_image;

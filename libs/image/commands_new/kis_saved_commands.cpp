@@ -89,14 +89,13 @@ int KisSavedCommand::id() const
     return m_command->id();
 }
 
-bool KisSavedCommand::mergeWith(const QPointer<KUndo2Command> command)
+bool KisSavedCommand::mergeWith(const KUndo2Command* command)
 {
-    const KisSavedCommand *other = 0;
-    if (command) {
-        other = dynamic_cast<const KisSavedCommand*>(command.data());
-        if (other) {
-            return m_command->mergeWith(other->m_command.data());
-        }
+    const KisSavedCommand *other =
+        dynamic_cast<const KisSavedCommand*>(command);
+
+    if (other) {
+        command = other->m_command.data();
     }
 
     return m_command->mergeWith(command);
@@ -116,16 +115,14 @@ void KisSavedCommand::setTimedID(int timedID)
     m_command->setTimedID(timedID);
 }
 
-bool KisSavedCommand::timedMergeWith(QPointer<KUndo2Command> other)
+bool KisSavedCommand::timedMergeWith(KUndo2Command *other)
 {
     return m_command->timedMergeWith(other);
 }
-
-QVector<QPointer<KUndo2Command>> KisSavedCommand::mergeCommandsVector()
+QVector<KUndo2Command*> KisSavedCommand::mergeCommandsVector()
 {
     return m_command->mergeCommandsVector();
 }
-
 void KisSavedCommand::setTime()
 {
     m_command->setTime();
@@ -185,12 +182,10 @@ int KisSavedMacroCommand::id() const
     return m_d->macroId;
 }
 
-bool KisSavedMacroCommand::mergeWith(const QPointer<KUndo2Command> command)
+bool KisSavedMacroCommand::mergeWith(const KUndo2Command* command)
 {
-    if (!command) return false;
-
     const KisSavedMacroCommand *other =
-        dynamic_cast<const KisSavedMacroCommand*>(command.data());
+        dynamic_cast<const KisSavedMacroCommand*>(command);
 
     if (other && other->id() != id()) return false;
 

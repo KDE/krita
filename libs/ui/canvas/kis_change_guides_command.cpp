@@ -60,17 +60,17 @@ int KisChangeGuidesCommand::id() const
     return 1863;
 }
 
-bool KisChangeGuidesCommand::mergeWith(const QPointer<KUndo2Command>command)
+bool KisChangeGuidesCommand::mergeWith(const KUndo2Command *command)
 {
-    if (!command) return false;
+    bool result = false;
 
     const KisChangeGuidesCommand *rhs =
-        dynamic_cast<const KisChangeGuidesCommand*>(command.data());
+        dynamic_cast<const KisChangeGuidesCommand*>(command);
 
     if (rhs) {
         m_d->newGuides = rhs->m_d->newGuides;
-        return true;
+        result = true;
     }
 
-    return false;
+    return result;
 }

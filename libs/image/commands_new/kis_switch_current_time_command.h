@@ -22,7 +22,7 @@
 #include "kritaimage_export.h"
 #include "kis_types.h"
 
-#include <kundo2stack.h>
+#include <kundo2command.h>
 
 
 class KRITAIMAGE_EXPORT KisSwitchCurrentTimeCommand : public KUndo2Command
@@ -35,7 +35,7 @@ public:
     void undo();
 
     int id() const;
-    bool mergeWith(const QPointer<KUndo2Command> command);
+    bool mergeWith(const KUndo2Command* command);
 
 private:
     KisImageWSP m_image;

@@ -21,7 +21,6 @@
 #define KO_TEXT_COMMAND_BASE_H
 
 #include <kundo2command.h>
-#include <kundo2qstack.h>
 
 #include "kritatext_export.h"
 

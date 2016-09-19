@@ -77,7 +77,7 @@ void ListItemNumberingCommand::undo()
     data.setCounterWidth(-1.0);
 }
 
-bool ListItemNumberingCommand::mergeWith(const QPointer<KUndo2Command>other)
+bool ListItemNumberingCommand::mergeWith(const KUndo2Command *other)
 {
     Q_UNUSED(other);
     return false;

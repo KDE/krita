@@ -117,8 +117,6 @@ void KisAnimationCurvesValueRuler::paintEvent(QPaintEvent *e)
 
     while (value < max) {
         painter.setPen(gridPen);
-        int y = mapValueToView(value);
-        painter.drawLine(24, y, 32, y);
 
         qreal nextMajor = value + majorStep;
         while (value < nextMajor) {
@@ -126,6 +124,9 @@ void KisAnimationCurvesValueRuler::paintEvent(QPaintEvent *e)
             int y = mapValueToView(value);
             painter.drawLine(30, y, 32, y);
         }
+
+        int y = mapValueToView(value);
+        painter.drawLine(24, y, 32, y);
 
         painter.setPen(labelPen);
         const QString label = QString::number(value, 'f', qMax(0,-minExp));

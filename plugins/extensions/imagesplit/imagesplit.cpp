@@ -120,10 +120,17 @@ void Imagesplit::slotImagesplit()
 
 
         if (dlgImagesplit->autoSave()) {
+            KoFileDialog dialog(m_view->mainWindow(), KoFileDialog::OpenDirectory, "OpenDocument");
+            dialog.setCaption(i18n("Save Image on Split"));
+            dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
+            QUrl directory = QUrl::fromUserInput(dialog.filename());
+
+            if (directory.isEmpty())
+                return;
             for (int i = 0, k = 1; i < (numVerticalLines + 1); i++) {
                 for (int j = 0; j < (numHorizontalLines + 1); j++, k++) {
                     QString mimeTypeSelected = listMimeFilter.at(dlgImagesplit->cmbIndex);
-                    QString homepath = QDir::homePath();
+                    QString homepath = directory.toLocalFile();
                     QString suffix = KisMimeDatabase::suffixesForMimeType(mimeTypeSelected).first();
                     qDebug() << "suffix" << suffix;
                     if (suffix.startsWith("*.")) {

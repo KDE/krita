@@ -25,7 +25,7 @@ class KRITAIMAGE_EXPORT KisRasterKeyframeChannel : public KisKeyframeChannel
     Q_OBJECT
 
 public:
-    KisRasterKeyframeChannel(const KoID& id, const KisNodeWSP node, const KisPaintDeviceWSP paintDevice);
+    KisRasterKeyframeChannel(const KoID& id, const KisPaintDeviceWSP paintDevice, KisDefaultBoundsBaseSP defaultBounds);
     KisRasterKeyframeChannel(const KisRasterKeyframeChannel &rhs, const KisNodeWSP newParentNode, const KisPaintDeviceWSP newPaintDevice);
     ~KisRasterKeyframeChannel();
 
@@ -56,11 +56,12 @@ public:
 
     QString frameFilename(int frameId) const;
 
+    /**
+     * When choosing filenames for frames, this will be appended to the node filename
+     */
+    void setFilenameSuffix(const QString suffix);
+
     bool hasScalarValue() const;
-    qreal minScalarValue() const;
-    qreal maxScalarValue() const;
-    qreal scalarValue(const KisKeyframeSP keyframe) const;
-    void setScalarValue(KisKeyframeSP keyframe, qreal value, KUndo2Command *parentCommand);
 
     QDomElement toXML(QDomDocument doc, const QString &layerFilename);
     void loadXML(const QDomElement &channelNode);
@@ -74,7 +75,6 @@ protected:
     void uploadExternalKeyframe(KisKeyframeChannel *srcChannel, int srcTime, KisKeyframeSP dstFrame);
 
     QRect affectedRect(KisKeyframeSP key);
-    void requestUpdate(const KisTimeRange &range, const QRect &rect);
 
     void saveKeyframe(KisKeyframeSP keyframe, QDomElement keyframeElement, const QString &layerFilename);
     KisKeyframeSP loadKeyframe(const QDomElement &keyframeNode);
@@ -82,6 +82,7 @@ protected:
 private:
     void setFrameFilename(int frameId, const QString &filename);
     QString chooseFrameFilename(int frameId, const QString &layerFilename);
+    int frameId(KisKeyframeSP keyframe) const;
 
     struct Private;
     QScopedPointer<Private> m_d;

@@ -43,9 +43,7 @@ typedef KisSafeReadList<KisNodeSP> KisSafeReadNodeList;
 #include "kis_abstract_projection_plane.h"
 #include "kis_projection_leaf.h"
 #include "kis_undo_adapter.h"
-
 #include "kis_keyframe_channel.h"
-#include "kis_time_range.h"
 
 /**
  *The link between KisProjection ans KisImageUpdater
@@ -94,8 +92,6 @@ public:
             : graphListener(0)
             , nodeProgressProxy(0)
             , busyProgressIndicator(0)
-            , animated(false)
-            , useInTimeline(false)
             , projectionLeaf(new KisProjectionLeaf(node))
     {
     }
@@ -106,9 +102,6 @@ public:
     KisNodeProgressProxy *nodeProgressProxy;
     KisBusyProgressIndicator *busyProgressIndicator;
     QReadWriteLock nodeSubgraphLock;
-    QMap<QString, KisKeyframeChannel*> keyframeChannels;
-    bool animated;
-    bool useInTimeline;
 
     KisProjectionLeafSP projectionLeaf;
 
@@ -258,47 +251,6 @@ KisAbstractProjectionPlaneSP KisNode::projectionPlane() const
     return plane;
 }
 
-QList<KisKeyframeChannel*> KisNode::keyframeChannels() const
-{
-    return m_d->keyframeChannels.values();
-}
-
-KisKeyframeChannel * KisNode::getKeyframeChannel(const QString &id) const
-{
-    QMap<QString, KisKeyframeChannel*>::iterator i = m_d->keyframeChannels.find(id);
-    if (i == m_d->keyframeChannels.end()) return 0;
-    return i.value();
-}
-
-bool KisNode::isAnimated() const
-{
-    return m_d->animated;
-}
-
-void KisNode::enableAnimation()
-{
-    m_d->animated = true;
-    baseNodeChangedCallback();
-}
-
-bool KisNode::useInTimeline() const
-{
-    return m_d->useInTimeline;
-}
-
-void KisNode::setUseInTimeline(bool value)
-{
-    if (value == m_d->useInTimeline) return;
-
-    m_d->useInTimeline = value;
-    baseNodeChangedCallback();
-}
-
-void KisNode::addKeyframeChannel(KisKeyframeChannel *channel)
-{
-    m_d->keyframeChannels.insert(channel->id(), channel);
-}
-
 KisProjectionLeafSP KisNode::projectionLeaf() const
 {
     return m_d->projectionLeaf;
@@ -376,6 +328,12 @@ void KisNode::baseNodeInvalidateAllFramesCallback()
     if(m_d->graphListener) {
         m_d->graphListener->invalidateAllFrames();
     }
+}
+
+void KisNode::addKeyframeChannel(KisKeyframeChannel *channel)
+{
+    channel->setNode(this);
+    KisBaseNode::addKeyframeChannel(channel);
 }
 
 KisNodeSP KisNode::firstChild() const

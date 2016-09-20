@@ -53,8 +53,6 @@ public:
 
     void loadBinaryData(KoStore* store, KisImageSP image, const QString & uri, bool external);
 
-    void loadKeyframes(KoStore *store, const QString uri, bool external);
-
     vKisNodeSP selectedNodes() const;
 
     // it's neater to follow the same design as with selectedNodes, so let's have a getter here

@@ -102,7 +102,7 @@ KisImportExportFilter::ConversionStatus KisAnimationImporter::import(QStringList
             undo->addCommand(new KisImageLayerAddCommand(m_d->image, paintLayer, m_d->image->rootLayer(), m_d->image->rootLayer()->childCount()));
 
             paintLayer->enableAnimation();
-            contentChannel = qobject_cast<KisRasterKeyframeChannel*>(paintLayer->getKeyframeChannel(KisKeyframeChannel::Content.id()));
+            contentChannel = qobject_cast<KisRasterKeyframeChannel*>(paintLayer->getKeyframeChannel(KisKeyframeChannel::Content.id(), true));
         }
 
         if (!batchMode) {

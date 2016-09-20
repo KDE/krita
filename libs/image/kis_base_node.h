@@ -34,6 +34,7 @@ class KoColorSpace;
 class KoCompositeOp;
 class KisNodeVisitor;
 class KisUndoAdapter;
+class KisKeyframeChannel;
 
 #include "kritaimage_export.h"
 
@@ -470,6 +471,29 @@ public:
      */
     bool supportsLodMoves() const;
 
+    /**
+     * Return the keyframe channels associated with this node
+     * @return list of keyframe channels
+     */
+    QList<KisKeyframeChannel *> keyframeChannels() const;
+
+    /**
+     * Get the keyframe channel with given id.
+     * If the channel does not yet exist and the node supports the requested
+     * channel, it will be created if create is true.
+     * @param id internal name for channel
+     * @param create attempt to create the channel if it does not exist yet
+     * @return keyframe channel with the id, or null if not found
+     */
+    KisKeyframeChannel *getKeyframeChannel(const QString &id, bool create);
+    KisKeyframeChannel *getKeyframeChannel(const QString &id) const;
+
+    bool useInTimeline() const;
+    void setUseInTimeline(bool value);
+
+    bool isAnimated() const;
+    virtual void enableAnimation();
+
     virtual void setImage(KisImageWSP image);
 
 protected:
@@ -504,6 +528,24 @@ protected:
     virtual void baseNodeInvalidateAllFramesCallback() {
     }
 
+    /**
+     * Add a keyframe channel for this node. The channel will be added
+     * to the common hash table which will be available to the UI.
+     *
+     * WARNING: the \p channel object *NOT* become owned by the node!
+     *          The caller must ensure manually that the lifetime of
+     *          the object coincide with the lifetime of the node.
+     */
+    virtual void addKeyframeChannel(KisKeyframeChannel* channel);
+
+    /**
+     * Attempt to create the requested channel. Used internally by getKeyframeChannel.
+     * Subclasses should implement this method to catch any new channel types they support.
+     * @param id channel to create
+     * @return newly created channel or null
+     */
+    virtual KisKeyframeChannel * requestKeyframeChannel(const QString &id);
+
 Q_SIGNALS:
 
     /**
@@ -519,6 +561,9 @@ Q_SIGNALS:
      * This signal is emitted when the node is locked or unlocked with \ref setSystemLocked.
      */
     void systemLockingChanged(bool);
+
+    void keyframeChannelAdded(KisKeyframeChannel *channel);
+
 private:
 
     struct Private;

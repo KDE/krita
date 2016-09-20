@@ -308,6 +308,7 @@ void KisColorButton::KisColorButtonPrivate::_k_chooseColor()
 {
     KisDlgInternalColorSelector *dialog = dialogPtr.data();
     if (dialog) {
+        dialog->setPreviousColor(q->color());
         dialog->show();
         dialog->raise();
         dialog->activateWindow();
@@ -324,6 +325,7 @@ void KisColorButton::KisColorButtonPrivate::_k_chooseColor()
     dialog->setAttribute(Qt::WA_DeleteOnClose);
     connect(dialog, SIGNAL(accepted()), q, SLOT(_k_colorChosen()));
     dialogPtr = dialog;
+    dialog->setPreviousColor(q->color());
     dialog->show();
 }
 

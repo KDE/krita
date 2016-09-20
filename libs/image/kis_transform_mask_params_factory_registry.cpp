@@ -21,6 +21,7 @@
 #include <QGlobalStatic>
 
 #include "kis_transform_mask_params_interface.h"
+#include "kis_transform_mask.h"
 
 Q_GLOBAL_STATIC(KisTransformMaskParamsFactoryRegistry, s_instance)
 
@@ -43,6 +44,30 @@ KisTransformMaskParamsFactoryRegistry::createParams(const QString &id, const QDo
 {
     KisTransformMaskParamsFactoryMap::iterator it = m_map.find(id);
     return it != m_map.end() ? (*it)(e) : KisTransformMaskParamsInterfaceSP(0);
+}
+
+void KisTransformMaskParamsFactoryRegistry::setAnimatedParamsFactory(const KisAnimatedTransformMaskParamsFactory &factory)
+{
+    m_animatedParamsFactory = factory;
+}
+
+KisTransformMaskParamsInterfaceSP KisTransformMaskParamsFactoryRegistry::animateParams(KisTransformMaskParamsInterfaceSP params)
+{
+    if (!m_animatedParamsFactory) return KisTransformMaskParamsInterfaceSP();
+
+    return m_animatedParamsFactory(params);
+}
+
+void KisTransformMaskParamsFactoryRegistry::setKeyframeFactory(const KisTransformMaskKeyframeFactory &factory)
+{
+    m_keyframeFactory = factory;
+}
+
+void KisTransformMaskParamsFactoryRegistry::autoAddKeyframe(KisTransformMaskSP mask, int time, KisTransformMaskParamsInterfaceSP params, KUndo2Command *parentCommand)
+{
+    if (m_keyframeFactory) {
+        m_keyframeFactory(mask, time, params, parentCommand);
+    }
 }
 
 KisTransformMaskParamsFactoryRegistry*

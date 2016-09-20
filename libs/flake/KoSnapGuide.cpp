@@ -228,12 +228,12 @@ void KoSnapGuide::paint(QPainter &painter, const KoViewConverter &converter)
 
     painter.setBrush(Qt::NoBrush);
 
-    QPen whitePen(Qt::white);
+    QPen whitePen(Qt::white, 0);
     whitePen.setStyle(Qt::SolidLine);
     painter.setPen(whitePen);
     painter.drawPath(decoration);
 
-    QPen redPen(Qt::red);
+    QPen redPen(Qt::red, 0);
     redPen.setStyle(Qt::DotLine);
     painter.setPen(redPen);
     painter.drawPath(decoration);

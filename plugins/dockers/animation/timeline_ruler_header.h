@@ -33,6 +33,7 @@ public:
     ~TimelineRulerHeader();
 
     void setFramePerSecond(int fps);
+    bool setZoom(qreal zoomLevel);
 
     void setModel(QAbstractItemModel *model);
 

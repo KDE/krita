@@ -21,11 +21,12 @@
 
 #include <QScopedPointer>
 #include "kis_transform_mask_params_interface.h"
+#include "kritatooltransform_export.h"
 
 class ToolTransformArgs;
 
 
-class KisTransformMaskAdapter : public KisTransformMaskParamsInterface
+class KRITATOOLTRANSFORM_EXPORT KisTransformMaskAdapter : public KisTransformMaskParamsInterface
 {
 public:
     KisTransformMaskAdapter(const ToolTransformArgs &args);
@@ -37,16 +38,21 @@ public:
 
     void transformDevice(KisNodeSP node, KisPaintDeviceSP src, KisPaintDeviceSP dst) const;
 
-    const ToolTransformArgs& savedArgs() const;
+    virtual const ToolTransformArgs& transformArgs() const;
 
     QString id() const;
     void toXML(QDomElement *e) const;
     static KisTransformMaskParamsInterfaceSP fromXML(const QDomElement &e);
 
-    void translate(const QPointF &offset);
+    virtual void translate(const QPointF &offset);
 
     QRect nonAffineChangeRect(const QRect &rc);
     QRect nonAffineNeedRect(const QRect &rc, const QRect &srcBounds);
+
+    bool isAnimated() const;
+    KisKeyframeChannel *getKeyframeChannel(const QString &id, KisDefaultBoundsBaseSP defaultBounds);
+    void clearChangedFlag();
+    bool hasChanged() const;
 
 private:
     struct Private;

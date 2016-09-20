@@ -30,6 +30,7 @@ private Q_SLOTS:
     void testCreation();
     void testContract();
     void testProperties();
+    void testOpacityKeyframing();
 };
 
 #endif

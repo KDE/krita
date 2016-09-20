@@ -38,10 +38,12 @@
 #include "kis_busy_progress_indicator.h"
 #include "kis_perspectivetransform_worker.h"
 #include "kis_transform_mask_params_interface.h"
+#include "kis_transform_mask_params_factory_registry.h"
 #include "kis_recalculate_transform_mask_job.h"
 #include "kis_signal_compressor.h"
 #include "kis_algebra_2d.h"
 #include "kis_safe_transform.h"
+#include "kis_keyframe_channel.h"
 
 #include "kis_image_config.h"
 
@@ -69,6 +71,18 @@ struct Q_DECL_HIDDEN KisTransformMask::Private
           recalculatingStaticImage(rhs.recalculatingStaticImage),
           updateSignalCompressor(UPDATE_DELAY, KisSignalCompressor::POSTPONE)
     {
+    }
+
+    void reloadParameters()
+    {
+        QTransform affineTransform;
+        if (params->isAffine()) {
+            affineTransform = params->finalAffineTransform();
+        }
+        worker.setForwardTransform(affineTransform);
+
+        params->clearChangedFlag();
+        staticCacheValid = false;
     }
 
     KisPerspectiveTransformWorker worker;
@@ -126,13 +140,9 @@ void KisTransformMask::setTransformParams(KisTransformMaskParamsInterfaceSP para
             new KisDumbTransformMaskParams());
     }
 
-    QTransform affineTransform;
-    if (params->isAffine()) {
-        affineTransform = params->finalAffineTransform();
-    }
-    m_d->worker.setForwardTransform(affineTransform);
-
     m_d->params = params;
+    m_d->reloadParameters();
+
     m_d->updateSignalCompressor.stop();
 }
 
@@ -228,6 +238,8 @@ QRect KisTransformMask::decorateRect(KisPaintDeviceSP &src,
                             maskPos == N_ABOVE_FILTHY ||
                             maskPos == N_BELOW_FILTHY);
 
+    if (m_d->params->hasChanged()) m_d->reloadParameters();
+
     if (!m_d->recalculatingStaticImage &&
         (maskPos == N_FILTHY || maskPos == N_ABOVE_FILTHY)) {
 
@@ -256,7 +268,7 @@ QRect KisTransformMask::decorateRect(KisPaintDeviceSP &src,
         KIS_DUMP_DEVICE_2(dst, DUMP_RECT, "partial_dst", "dd");
 #endif /* DEBUG_RENDERING */
 
-    } else if (m_d->staticCacheDevice) {
+    } else if (m_d->staticCacheDevice && m_d->staticCacheValid) {
         KisPainter::copyAreaOptimized(rc.topLeft(), m_d->staticCacheDevice, dst, rc);
 
 #ifdef DEBUG_RENDERING
@@ -313,6 +325,7 @@ QRect KisTransformMask::changeRect(const QRect &rect, PositionToFilthy pos) cons
 
         const QRect limitingRect = KisAlgebra2D::blowRect(bounds, m_d->offBoundsReadArea);
 
+        if (m_d->params->hasChanged()) m_d->reloadParameters();
         KisSafeTransform transform(m_d->worker.forwardTransform(), limitingRect, interestRect);
         changeRect = transform.mapRectForward(rect);
     } else {
@@ -356,6 +369,7 @@ QRect KisTransformMask::needRect(const QRect& rect, PositionToFilthy pos) const
     if (m_d->params->isAffine()) {
         const QRect limitingRect = KisAlgebra2D::blowRect(bounds, m_d->offBoundsReadArea);
 
+        if (m_d->params->hasChanged()) m_d->reloadParameters();
         KisSafeTransform transform(m_d->worker.forwardTransform(), limitingRect, interestRect);
         needRect = transform.mapRectBackward(rect);
 
@@ -408,5 +422,34 @@ void KisTransformMask::setY(qint32 y)
     m_d->params->translate(QPointF(0, y - this->y()));
     setTransformParams(m_d->params);
     KisEffectMask::setY(y);
+}
+
+KisKeyframeChannel *KisTransformMask::requestKeyframeChannel(const QString &id)
+{
+    if (id == KisKeyframeChannel::TransformArguments.id() ||
+        id == KisKeyframeChannel::TransformPositionX.id() ||
+        id == KisKeyframeChannel::TransformPositionY.id() ||
+        id == KisKeyframeChannel::TransformScaleX.id() ||
+        id == KisKeyframeChannel::TransformScaleY.id() ||
+        id == KisKeyframeChannel::TransformShearX.id() ||
+        id == KisKeyframeChannel::TransformShearY.id() ||
+        id == KisKeyframeChannel::TransformRotationX.id() ||
+        id == KisKeyframeChannel::TransformRotationY.id() ||
+        id == KisKeyframeChannel::TransformRotationZ.id()) {
+
+        KisAnimatedTransformParamsInterface *animatedParams = dynamic_cast<KisAnimatedTransformParamsInterface*>(m_d->params.data());
+
+        if (!animatedParams) {
+            auto converted = KisTransformMaskParamsFactoryRegistry::instance()->animateParams(m_d->params);
+            if (converted.isNull()) return KisEffectMask::requestKeyframeChannel(id);
+            m_d->params = converted;
+            animatedParams = dynamic_cast<KisAnimatedTransformParamsInterface*>(converted.data());
+        }
+
+        KisKeyframeChannel *channel = animatedParams->getKeyframeChannel(id, parent()->original()->defaultBounds());
+        if (channel) return channel;
+    }
+
+    return KisEffectMask::requestKeyframeChannel(id);
 }
 

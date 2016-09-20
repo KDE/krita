@@ -102,6 +102,9 @@ public:
     bool showAdditionalOnionSkinsSettings(bool requestDefault = false) const;
     void setShowAdditionalOnionSkinsSettings(bool value);
 
+    int defaultFrameColorLabel() const;
+    void setDefaultFrameColorLabel(int label);
+
     KisProofingConfigurationSP defaultProofingconfiguration();
     void setDefaultProofingConfig(const KoColorSpace *proofingSpace, int proofingIntent, bool blackPointCompensation, KoColor warningColor, double adaptationState);
 

@@ -82,7 +82,7 @@ QPixmap KoImageData::pixmap(const QSize &size)
             // and will crash. Therefore create a tmp pixmap and return it.
             d->pixmap = QPixmap(1, 1);
             QPainter p(&d->pixmap);
-            p.setPen(QPen(Qt::gray));
+            p.setPen(QPen(Qt::gray, 0));
             p.drawPoint(0, 0);
             p.end();
             break;

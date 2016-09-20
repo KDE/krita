@@ -189,6 +189,8 @@ protected:
                                const QRect & rc,
                                PositionToFilthy maskPos) const;
 
+    KisKeyframeChannel *requestKeyframeChannel(const QString &id);
+
 private:
     friend class KisMaskProjectionPlane;
 

@@ -613,7 +613,7 @@ target_link_libraries(KisScanlineFillTest   kritaimage Qt5::Test)
 
 set(kis_keyframing_test_SRCS kis_keyframing_test.cpp )
 kde4_add_broken_unit_test(KisKeyframingTest TESTNAME krita-image-Keyframing-Test ${kis_keyframing_test_SRCS})
-target_link_libraries(KisKeyframingTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
+target_link_libraries(KisKeyframingTest  kritaimage Qt5::Test)
 
 ########### next target ###############
 
@@ -623,9 +623,9 @@ target_link_libraries(KisPSDLayerStyleTest   kritaimage Qt5::Test)
 
 ########### next target ###############
 
-set(kis_dom_utils_test_SRCS kis_dom_utils_test.cpp )
-kde4_add_unit_test(KisDomUtilsTest TESTNAME krita-image-DomUtils-Test ${kis_dom_utils_test_SRCS})
-target_link_libraries(KisDomUtilsTest   kritaimage Qt5::Test)
+#set(kis_dom_utils_test_SRCS kis_dom_utils_test.cpp )
+#kde4_add_unit_test(KisDomUtilsTest TESTNAME krita-image-DomUtils-Test ${kis_dom_utils_test_SRCS})
+#target_link_libraries(KisDomUtilsTest   kritaimage Qt5::Test)
 
 ########### next target ###############
 

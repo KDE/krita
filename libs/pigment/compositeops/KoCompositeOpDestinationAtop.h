@@ -57,8 +57,7 @@ public:
                 if(channel != alpha_pos && (allChannelFlags || channelFlags.testBit(channel))) {
                     /*each color blended in proportion to their calculated opacity*/
                     channels_type srcMult= mul(src[channel], appliedAlpha);
-                    channels_type blendedValue = lerp(srcMult,dst[channel],dstAlpha);
-                    dst[channel] = KoColorSpaceMaths<channels_type>::multiply(blendedValue,newDstAlpha);
+                    dst[channel] = lerp(srcMult,dst[channel],dstAlpha);
                 }
         }
         else if (srcAlpha != zeroValue<channels_type>()) {

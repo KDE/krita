@@ -47,19 +47,22 @@ public:
                                                      const QBitArray& channelFlags                    )  {
         using namespace Arithmetic;
         Q_UNUSED(src);
+        Q_UNUSED(dst);
+        Q_UNUSED(channelFlags);
 
         channels_type appliedAlpha       = mul(maskAlpha, srcAlpha, opacity);
 
         channels_type newDstAlpha        = mul(dstAlpha, appliedAlpha);
 
+        /*
         if (newDstAlpha != zeroValue<channels_type>()) {
             // blend the color channels as if we were painting on the layer below
             for (qint8 channel = 0; channel < channels_nb; ++channel)
                 if(channel != alpha_pos && (allChannelFlags || channelFlags.testBit(channel))) {
-                    /*each color blended in proportion to their calculated opacity*/
+                    //each color blended in proportion to their calculated opacity//
                     dst[channel] = KoColorSpaceMaths<channels_type>::multiply(dst[channel],newDstAlpha);
                 }
-        }
+        }*/
 
         return newDstAlpha;
     }

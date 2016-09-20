@@ -99,10 +99,15 @@ KisPaintOpSettingsSP KisBrushBasedPaintOpSettings::clone() const
 
 KisBrushSP KisBrushBasedPaintOpSettings::brush() const
 {
-    BrushReader w(this);
-    if (!w.brush()) return 0;
+    KisBrushSP brush = m_savedBrush;
 
-    return w.brush();
+    if (!brush) {
+        BrushReader w(this);
+        brush = w.brush();
+        m_savedBrush = brush;
+    }
+
+    return brush;
 }
 
 QPainterPath KisBrushBasedPaintOpSettings::brushOutlineImpl(const KisPaintInformation &info,
@@ -171,9 +176,7 @@ void KisBrushBasedPaintOpSettings::setAngle(qreal value)
 
 qreal KisBrushBasedPaintOpSettings::angle() const
 {
-    BrushReader w(this);
-    if (!w.brush()) return 0.0;
-    return w.brush()->angle();
+    return this->brush()->angle();
 }
 
 void KisBrushBasedPaintOpSettings::setSpacing(qreal value)
@@ -185,9 +188,7 @@ void KisBrushBasedPaintOpSettings::setSpacing(qreal value)
 
 qreal KisBrushBasedPaintOpSettings::spacing() const
 {
-    BrushReader w(this);
-    if (!w.brush()) return 0.0;
-    return w.brush()->spacing();
+    return this->brush()->spacing();
 }
 
 void KisBrushBasedPaintOpSettings::setAutoSpacing(bool active, qreal coeff)
@@ -200,16 +201,12 @@ void KisBrushBasedPaintOpSettings::setAutoSpacing(bool active, qreal coeff)
 
 bool KisBrushBasedPaintOpSettings::autoSpacingActive() const
 {
-    BrushReader w(this);
-    if (!w.brush()) return 0.0;
-    return w.brush()->autoSpacingActive();
+    return this->brush()->autoSpacingActive();
 }
 
 qreal KisBrushBasedPaintOpSettings::autoSpacingCoeff() const
 {
-    BrushReader w(this);
-    if (!w.brush()) return 0.0;
-    return w.brush()->autoSpacingCoeff();
+    return this->brush()->autoSpacingCoeff();
 }
 
 void KisBrushBasedPaintOpSettings::setPaintOpSize(qreal value)
@@ -222,10 +219,7 @@ void KisBrushBasedPaintOpSettings::setPaintOpSize(qreal value)
 
 qreal KisBrushBasedPaintOpSettings::paintOpSize() const
 {
-    BrushReader w(this);
-    if (!w.brush()) return 0.0;
-
-    return w.brush()->userEffectiveSize();
+    return this->brush()->userEffectiveSize();
 }
 
 
@@ -339,4 +333,10 @@ QList<KisUniformPaintOpPropertySP> KisBrushBasedPaintOpSettings::uniformProperti
     }
 
     return KisPaintOpSettings::uniformProperties() + props;
+}
+
+void KisBrushBasedPaintOpSettings::onPropertyChanged()
+{
+    m_savedBrush.clear();
+    KisOutlineGenerationPolicy<KisPaintOpSettings>::onPropertyChanged();
 }

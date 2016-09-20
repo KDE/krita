@@ -397,7 +397,8 @@ void KisLayerBox::updateUI()
     KisNodeSP activeNode = m_nodeManager->activeNode();
 
     if (activeNode != m_activeNode) {
-        m_activeNode->disconnect(this);
+        if( !m_activeNode.isNull() )
+            m_activeNode->disconnect(this);
         m_activeNode = activeNode;
 
         KisKeyframeChannel *opacityChannel = activeNode->getKeyframeChannel(KisKeyframeChannel::Opacity.id(), false);

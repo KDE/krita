@@ -576,7 +576,7 @@ KisDocument::~KisDocument()
     d->image.clear();
 
     // check if the image has actually been deleted
-    KIS_ASSERT_RECOVER_NOOP(!sanityCheckPointer.isValid());
+    KIS_SAFE_ASSERT_RECOVER_NOOP(!sanityCheckPointer.isValid());
 
     delete d;
 }

@@ -1583,28 +1583,10 @@ bool KisDocument::loadFromStore(KoStore *_store, const QString& url)
     return result;
 }
 
-bool KisDocument::loadOdf(KoOdfReadStore & odfStore)
-{
-    Q_UNUSED(odfStore);
-    setErrorMessage(i18n("Krita does not support the OpenDocument file format."));
-    return false;
-}
-
-
-bool KisDocument::saveOdf(SavingContext &documentContext)
-{
-    Q_UNUSED(documentContext);
-    setErrorMessage(i18n("Krita does not support the OpenDocument file format."));
-    return false;
-}
-
-
-
 bool KisDocument::isStoredExtern() const
 {
     return !storeInternal() && hasExternURL();
 }
-
 
 void KisDocument::setModified()
 {

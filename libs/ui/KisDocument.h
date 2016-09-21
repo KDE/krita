@@ -287,12 +287,6 @@ public:
      *  @param url An internal url, like tar:/1/2
      */
     bool loadFromStore(KoStore *store, const QString& url);
-
-    /// Unused
-    virtual bool loadOdf(KoOdfReadStore & odfStore);
-    /// Unused
-    virtual bool saveOdf(SavingContext &documentContext);
-
     /**
      *  @brief Saves a sub-document to a store.
      *
@@ -800,7 +794,7 @@ public:
 
 private:
 
-    bool saveToStream(QIODevice *dev);
+//    bool saveToStream(QIODevice *dev);
 
     bool loadNativeFormatFromStoreInternal(KoStore *store);
 

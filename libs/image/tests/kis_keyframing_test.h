@@ -32,6 +32,7 @@ private Q_SLOTS:
 
     void testScalarChannel();
     void testScalarChannelUndoRedo();
+    void testScalarInterpolation();
 
     void testRasterChannel();
     void testChannelSignals();

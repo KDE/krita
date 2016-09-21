@@ -51,7 +51,7 @@ KisMetaDataEditor::KisMetaDataEditor(QWidget* parent, KisMetaData::Store* origin
     d->originalStore = originalStore;
     d->store = new KisMetaData::Store(*originalStore);
 
-    QStringList files = KoResourcePaths::findAllResources("data", "kritaplugins/metadataeditor/*.rc");
+    QStringList files = KoResourcePaths::findAllResources("data", "kritaplugins/metadataeditor/*.xmlgui");
 
     QMap<QString, QWidget*> widgets;
     widgets["dublincore.ui"] = new WdgDublinCore(this);

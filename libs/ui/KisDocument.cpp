@@ -631,6 +631,9 @@ bool KisDocument::exportDocument(const QUrl &_url, KisPropertiesConfigurationSP 
 
 bool KisDocument::saveFile(KisPropertiesConfigurationSP exportConfiguration)
 {
+    // Unset the error message
+    setErrorMessage("");
+
     // Save it to be able to restore it after a failed save
     const bool wasModified = isModified();
 
@@ -1707,9 +1710,8 @@ bool KisDocument::completeLoading(KoStore* store)
 //        }
         return false;
     }
-
-//    d->kraLoader->loadKeyframes(store, url().url(), isStoredExtern());
     d->image->blockUpdates();
+//    d->kraLoader->loadKeyframes(store, url().url(), isStoredExtern());
 //    d->kraLoader->loadBinaryData(store, d->image, url().url(), isStoredExtern());
     d->image->unblockUpdates();
     bool retval = true;
@@ -2154,7 +2156,6 @@ bool KisDocument::saveAs(const QUrl &kurl, KisPropertiesConfigurationSP exportCo
 
 bool KisDocument::save(KisPropertiesConfigurationSP exportConfiguration)
 {
-    qDebug() << "Saving!";
     d->m_saveOk = false;
     if ( d->m_file.isEmpty() ) { // document was created empty
         d->prepareSaving();

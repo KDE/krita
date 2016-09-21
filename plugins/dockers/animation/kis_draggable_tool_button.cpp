@@ -38,8 +38,15 @@ int KisDraggableToolButton::unitRadius()
     return 200;
 }
 
-int KisDraggableToolButton::calculateValue(const QPoint &diff)
+void KisDraggableToolButton::beginDrag(const QPoint &pos)
 {
+    m_startPoint = pos;
+}
+
+int KisDraggableToolButton::continueDrag(const QPoint &pos)
+{
+    QPoint diff = pos - m_startPoint;
+
     int value = 0;
 
     qreal tanx = diff.x() != 0 ? qAbs(qreal(diff.y()) / diff.x()) : 100.0;
@@ -69,8 +76,7 @@ void KisDraggableToolButton::mousePressEvent(QMouseEvent *e)
 
 void KisDraggableToolButton::mouseMoveEvent(QMouseEvent *e)
 {
-    QPoint diff = e->pos() - m_startPoint;
-    int value = calculateValue(diff);
+    int value = continueDrag(e->pos());
     emit valueChanged(value);
 
     QToolButton::mouseMoveEvent(e);

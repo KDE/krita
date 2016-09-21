@@ -229,7 +229,7 @@ QPointF KisBrush::hotSpot(KisDabShape const& shape, const KisPaintInformation& i
 {
     Q_UNUSED(info);
 
-    QSizeF metric = characteristicSize(shape.scaleX(), shape.scaleY(), shape.rotation());
+    QSizeF metric = characteristicSize(shape);
 
     qreal w = metric.width();
     qreal h = metric.height();
@@ -354,15 +354,14 @@ KisBrushSP KisBrush::fromXML(const QDomElement& element, bool forceCopy)
     return brush;
 }
 
-QSizeF KisBrush::characteristicSize(double scaleX, double scaleY, double rotation) const
+QSizeF KisBrush::characteristicSize(KisDabShape const& shape) const
 {
-    Q_UNUSED(scaleY);
-
-    qreal angle = normalizeAngle(rotation + d->angle);
-    qreal scale = scaleX * d->scale;
-
+    KisDabShape normalizedShape(
+         shape.scaleX() * d->scale,
+         shape.scaleY(),
+         normalizeAngle(shape.rotation() + d->angle));
     return KisQImagePyramid::characteristicSize(
-        QSize(width(), height()), KisDabShape(scale, 1.0, angle));
+        QSize(width(), height()), normalizedShape);
 }
 
 qint32 KisBrush::maskWidth(KisDabShape const& shape, qreal subPixelX, qreal subPixelY, const KisPaintInformation& info) const

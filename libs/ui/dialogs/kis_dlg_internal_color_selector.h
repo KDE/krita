@@ -117,6 +117,12 @@ public Q_SLOTS:
      * @param newColor This is the new color.
      */
     void slotColorUpdated(KoColor newColor);
+
+    /**
+     * @brief setPreviousColor
+     * set the previous color.
+     */
+    void setPreviousColor(KoColor c);
 private Q_SLOTS:
 
     /**
@@ -134,10 +140,10 @@ private Q_SLOTS:
     void endUpdateWithNewColor();
 
     /**
-     * @brief setPreviousColor
-     * triggered when the dialog is either accepted or hidden.
+     * @brief slotFinishUp
+     * This is called when the selector is closed, for saving the current palette.
      */
-    void setPreviousColor();
+    void slotFinishUp();
 
     /**
      * @brief slotSetColorFromPatch

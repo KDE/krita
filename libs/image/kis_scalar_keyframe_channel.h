@@ -19,13 +19,19 @@
 #define _KIS_SCALAR_KEYFRAME_CHANNEL_H
 
 #include "kis_keyframe_channel.h"
+#include "kis_keyframe_commands.h"
 
 class KRITAIMAGE_EXPORT KisScalarKeyframeChannel : public KisKeyframeChannel
 {
     Q_OBJECT
 
 public:
-    KisScalarKeyframeChannel(const KoID& id, KisNodeWSP node, qreal minValue, qreal maxValue);
+    struct AddKeyframeCommand : public KisReplaceKeyframeCommand
+    {
+        AddKeyframeCommand(KisScalarKeyframeChannel *channel, int time, qreal value, KUndo2Command *parentCommand);
+    };
+
+    KisScalarKeyframeChannel(const KoID& id, qreal minValue, qreal maxValue, KisDefaultBoundsBaseSP defaultBounds, KisKeyframe::InterpolationMode defaultInterpolation=KisKeyframe::Constant);
     ~KisScalarKeyframeChannel();
 
     bool hasScalarValue() const;
@@ -34,8 +40,17 @@ public:
     qreal scalarValue(const KisKeyframeSP keyframe) const;
     void setScalarValue(KisKeyframeSP keyframe, qreal value, KUndo2Command *parentCommand = 0);
 
+    void setInterpolationMode(KisKeyframeSP keyframe, KisKeyframe::InterpolationMode mode, KUndo2Command *parentCommand = 0);
+    void setInterpolationTangents(KisKeyframeSP keyframe, KisKeyframe::InterpolationTangentsMode, QPointF leftTangent, QPointF rightTangent, KUndo2Command *parentCommand);
+
+    qreal interpolatedValue(int time) const;
+    qreal currentValue() const;
+
+    static QPointF interpolate(QPointF point1, QPointF rightTangent, QPointF leftTangent, QPointF point2, qreal t);
 protected:
     KisKeyframeSP createKeyframe(int time, const KisKeyframeSP copySrc, KUndo2Command *parentCommand);
+    KisKeyframeSP createKeyframe(int time, qreal value, KUndo2Command *parentCommand);
+
     void destroyKeyframe(KisKeyframeSP key, KUndo2Command *parentCommand);
     void uploadExternalKeyframe(KisKeyframeChannel *srcChannel, int srcTime, KisKeyframeSP dstFrame);
 
@@ -45,6 +60,8 @@ protected:
     KisKeyframeSP loadKeyframe(const QDomElement &keyframeNode);
 
 private:
+    void notifyKeyframeChanged(KisKeyframeSP keyframe);
+
     struct Private;
     QScopedPointer<Private> m_d;
 };

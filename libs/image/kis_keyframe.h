@@ -24,22 +24,41 @@
 #include <QScopedPointer>
 
 #include "kritaimage_export.h"
+#include "kis_types.h"
 
 class KisKeyframeChannel;
 
 class KRITAIMAGE_EXPORT KisKeyframe
 {
 public:
-    KisKeyframe(KisKeyframeChannel *channel, int time, void *data);
-    KisKeyframe(KisKeyframeChannel *channel, int time, quint32 value);
-    ~KisKeyframe();
+    enum InterpolationMode {
+        Constant,
+        Linear,
+        Bezier
+    };
 
-    quint32 value() const;
-    void *data() const;
+    enum InterpolationTangentsMode {
+        Sharp,
+        Smooth
+    };
 
-    void setValue(quint32 value);
+    KisKeyframe(KisKeyframeChannel *channel, int time);
+    virtual ~KisKeyframe();
+
     int time() const;
     void setTime(int time);
+
+    void setInterpolationMode(InterpolationMode mode);
+    InterpolationMode interpolationMode() const;
+    void setTangentsMode(InterpolationTangentsMode mode);
+    InterpolationTangentsMode tangentsMode() const;
+    void setInterpolationTangents(QPointF leftTangent, QPointF rightTangent);
+    QPointF leftTangent() const;
+    QPointF rightTangent() const;
+
+    int colorLabel() const;
+    void setColorLabel(int label);
+
     KisKeyframeChannel *channel() const;
 
 private:
@@ -48,4 +67,5 @@ private:
 };
 
 Q_DECLARE_METATYPE(KisKeyframe*)
+Q_DECLARE_METATYPE(KisKeyframeSP)
 #endif

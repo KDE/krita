@@ -36,6 +36,7 @@
 #define TEST_HEIGHT 3000
 
 
+template <bool useXY>
 void KisIteratorBenchmark::sequentialIter(const KoColorSpace * colorSpace)
 {
 
@@ -49,11 +50,17 @@ void KisIteratorBenchmark::sequentialIter(const KoColorSpace * colorSpace)
 
     for (int i = 0; i < 3; i++) {
         KisSequentialIterator it(dev, QRect(0, 0, TEST_WIDTH, TEST_HEIGHT));
+        int sum = 0;
         do {
+            if (useXY) {
+                sum = it.x() + it.y();
+            }
+
             memcpy(it.rawData(), bytes, colorSpace->pixelSize());
         } while (it.nextPixel());
 
-        dbgKrita << "SequentialIterator run " << i  << "took" << t.elapsed();
+        dbgKrita << ppVar(useXY) << "SequentialIterator run " << i  << "took" << t.elapsed();
+        Q_UNUSED(sum);
         t.restart();
     }
 
@@ -61,11 +68,16 @@ void KisIteratorBenchmark::sequentialIter(const KoColorSpace * colorSpace)
 
     for (int i = 0; i < 3; i++) {
         KisSequentialConstIterator it(dev, QRect(0, 0, TEST_WIDTH, TEST_HEIGHT));
+        int sum = 0;
         do {
+            if (useXY) {
+                sum = it.x() + it.y();
+            }
             //memcpy(it.rawData(), bytes, colorSpace->pixelSize());
         } while (it.nextPixel());
 
-        dbgKrita << "SequentialConstIterator run " << i  << "took" << t.elapsed();
+        dbgKrita << ppVar(useXY) << "SequentialConstIterator run " << i  << "took" << t.elapsed();
+        Q_UNUSED(sum);
         t.restart();
     }
 
@@ -228,7 +240,8 @@ void KisIteratorBenchmark::runBenchmark()
 
     hLineIterNG(cs);
     vLineIterNG(cs);
-    sequentialIter(cs);
+    sequentialIter<false>(cs);
+    sequentialIter<true>(cs);
     randomAccessor(cs);
 }
 

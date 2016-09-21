@@ -272,6 +272,7 @@ namespace KisLayerUtils {
 
             if (m_info->frames.size() > 0) {
                 m_info->dstNode->enableAnimation();
+                m_info->dstNode->getKeyframeChannel(KisKeyframeChannel::Content.id(), true);
             }
         }
 
@@ -303,6 +304,7 @@ namespace KisLayerUtils {
 
             if (m_info->frames.size() > 0) {
                 m_info->dstNode->enableAnimation();
+                m_info->dstNode->getKeyframeChannel(KisKeyframeChannel::Content.id(), true);
             }
 
             QString compositeOpId;

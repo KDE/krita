@@ -253,7 +253,7 @@ void KoUnavailShape::Private::draw(QPainter &painter) const
                            picSize, picSize, questionMark);
 
         // Draw a gray rectangle around the shape.
-        painter.setPen(QPen(QColor(172, 196, 206)));
+        painter.setPen(QPen(QColor(172, 196, 206), 0));
         painter.drawRect(QRectF(QPointF(0,0), q->size()));
 
     }

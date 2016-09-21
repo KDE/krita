@@ -97,7 +97,7 @@ void KoPencilTool::paint(QPainter &painter, const KoViewConverter &converter)
         painter.setTransform(m_hoveredPoint->parent()->absoluteTransformation(&converter), true);
         KoShape::applyConversion(painter, converter);
 
-        painter.setPen(Qt::blue);      //TODO make configurable
+        painter.setPen(QPen(Qt::blue, 0));      //TODO make configurable
         painter.setBrush(Qt::white);   //TODO make configurable
         m_hoveredPoint->paint(painter, handleRadius(), KoPathPoint::Node);
 

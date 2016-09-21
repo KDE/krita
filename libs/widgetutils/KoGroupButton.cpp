@@ -120,7 +120,7 @@ void KoGroupButton::paintEvent(QPaintEvent* event)
     painter.setOpacity(0.4);
     if (d->groupPosition != GroupRight) {
         const int x = opt.rect.right();
-        painter.setPen(opt.palette.color(QPalette::Dark));
+        painter.setPen(QPen(opt.palette.color(QPalette::Dark), 0));
         painter.drawLine(x, y1, x, y2);
     }
     painter.setOpacity(1.0);

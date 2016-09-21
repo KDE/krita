@@ -31,6 +31,7 @@ private:
     void allCsApplicator(void (KisIteratorBenchmark::* funcPtr)(const KoColorSpace*cs));
 
     void vLineIterNG(const KoColorSpace * cs);
+    template <bool useXY>
     void sequentialIter(const KoColorSpace * colorSpace);
     void hLineIterNG(const KoColorSpace * cs);
     void randomAccessor(const KoColorSpace * cs);

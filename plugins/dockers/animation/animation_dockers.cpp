@@ -20,6 +20,7 @@
 #include "animation_docker.h"
 #include "timeline_docker.h"
 #include "onion_skins_docker.h"
+#include "kis_animation_curve_docker.h"
 
 #include <kpluginfactory.h>
 
@@ -123,12 +124,44 @@ public:
 private:
 };
 
+class AnimationCurvesDockerFactory : public KoDockFactoryBase {
+public:
+    AnimationCurvesDockerFactory()
+    {
+    }
+
+    virtual QString id() const
+    {
+        return QString( "AnimationCurvesDocker" );
+    }
+
+    virtual Qt::DockWidgetArea defaultDockWidgetArea() const
+    {
+        return Qt::RightDockWidgetArea;
+    }
+
+    virtual QDockWidget *createDockWidget()
+    {
+        KisAnimationCurveDocker *dockWidget = new KisAnimationCurveDocker();
+        dockWidget->setObjectName(id());
+
+        return dockWidget;
+    }
+
+    DockPosition defaultDockPosition() const
+    {
+        return DockMinimized;
+    }
+private:
+};
+
 AnimationDockersPlugin::AnimationDockersPlugin(QObject *parent, const QVariantList &)
     : QObject(parent)
 {
     KoDockRegistry::instance()->add(new AnimationDockerFactory());
     KoDockRegistry::instance()->add(new TimelineDockerFactory());
     KoDockRegistry::instance()->add(new OnionSkinsDockerFactory());
+    KoDockRegistry::instance()->add(new AnimationCurvesDockerFactory());
 }
 
 AnimationDockersPlugin::~AnimationDockersPlugin()

@@ -16,48 +16,47 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_image_config.h"
 #include "kis_keyframe.h"
 #include "kis_keyframe_channel.h"
+#include "kis_types.h"
 
 #include <QPointer>
+
+struct KisKeyframeSPStaticRegistrar {
+    KisKeyframeSPStaticRegistrar() {
+        qRegisterMetaType<KisKeyframeSP>("KisKeyframeSP");
+    }
+};
+static KisKeyframeSPStaticRegistrar __registrar;
 
 
 struct KisKeyframe::Private
 {
     QPointer<KisKeyframeChannel> channel;
     int time;
-    quintptr data;
 
-    Private(KisKeyframeChannel *channel, int time, quintptr data)
-        : channel(channel), time(time), data(data)
+    InterpolationMode interpolationMode;
+    InterpolationTangentsMode tangentsMode;
+    QPointF leftTangent;
+    QPointF rightTangent;
+    int colorLabel{0};
+
+    Private(KisKeyframeChannel *channel, int time)
+        : channel(channel), time(time), interpolationMode(Constant)
     {}
 };
 
-KisKeyframe::KisKeyframe(KisKeyframeChannel *channel, int time, void* data)
-    : m_d(new Private(channel, time, (quintptr)data))
-{}
+KisKeyframe::KisKeyframe(KisKeyframeChannel *channel, int time)
+    : m_d(new Private(channel, time))
+{
+    KisImageConfig config;
+    m_d->colorLabel = config.defaultFrameColorLabel();
+}
 
-KisKeyframe::KisKeyframe(KisKeyframeChannel *channel, int time, quint32 value)
-    : m_d(new Private(channel, time, value))
-{}
 
 KisKeyframe::~KisKeyframe()
 {}
-
-quint32 KisKeyframe::value() const
-{
-    return m_d->data;
-}
-
-void *KisKeyframe::data() const
-{
-    return (void*)m_d->data;
-}
-
-void KisKeyframe::setValue(quint32 value)
-{
-    m_d->data = value;
-}
 
 int KisKeyframe::time() const
 {
@@ -67,6 +66,52 @@ int KisKeyframe::time() const
 void KisKeyframe::setTime(int time)
 {
     m_d->time = time;
+}
+
+void KisKeyframe::setInterpolationMode(KisKeyframe::InterpolationMode mode)
+{
+    m_d->interpolationMode = mode;
+}
+
+KisKeyframe::InterpolationMode KisKeyframe::interpolationMode() const
+{
+    return m_d->interpolationMode;
+}
+
+void KisKeyframe::setTangentsMode(KisKeyframe::InterpolationTangentsMode mode)
+{
+    m_d->tangentsMode = mode;
+}
+
+KisKeyframe::InterpolationTangentsMode KisKeyframe::tangentsMode() const
+{
+    return m_d->tangentsMode;
+}
+
+void KisKeyframe::setInterpolationTangents(QPointF leftTangent, QPointF rightTangent)
+{
+    m_d->leftTangent = leftTangent;
+    m_d->rightTangent = rightTangent;
+}
+
+QPointF KisKeyframe::leftTangent() const
+{
+    return m_d->leftTangent;
+}
+
+QPointF KisKeyframe::rightTangent() const
+{
+    return m_d->rightTangent;
+}
+
+int KisKeyframe::colorLabel() const
+{
+    return m_d->colorLabel;
+}
+
+void KisKeyframe::setColorLabel(int label)
+{
+    m_d->colorLabel = label;
 }
 
 KisKeyframeChannel *KisKeyframe::channel() const

@@ -194,7 +194,7 @@ public:
      *         of this metric is calculation of brush-size derivatives like
      *         hotspots and spacing.
      */
-     QSizeF characteristicSize(double scaleX, double scaleY, double rotation) const;
+     virtual QSizeF characteristicSize(KisDabShape const&) const;
 
     /**
      * @return the angle of the mask adding the given angle

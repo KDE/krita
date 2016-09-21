@@ -40,7 +40,7 @@ yum -y install epel-release
 # we need to be up to date in order to install the xcb-keysyms dependency
 yum -y update
 # base dependencies and Qt5.
-yum -y install wget tar bzip2 git libtool which fuse fuse-devel libpng-devel automake libtool mesa-libEGL cppunit-devel cmake3 glibc-headers libstdc++-devel gcc-c++ freetype-devel fontconfig-devel libxml2-devel libstdc++-devel libXrender-devel patch xcb-util-keysyms-devel libXi-devel mesa-libGL-devel mesa-libGLU-devel libxcb libxcb-devel xcb-util xcb-util-devel
+yum -y install wget tar bzip2 git libtool which fuse fuse-devel libpng-devel automake libtool mesa-libEGL cppunit-devel cmake3 glibc-headers libstdc++-devel gcc-c++ freetype-devel fontconfig-devel libxml2-devel libstdc++-devel libXrender-devel patch xcb-util-keysyms-devel libXi-devel mesa-libGL-devel mesa-libGLU-devel libxcb libxcb-devel xcb-util xcb-util-devel glibc-devel xkeyboard-config
 
 
 # Newer compiler than what comes with CentOS 6

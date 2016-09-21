@@ -732,16 +732,28 @@ void KUndo2QStack::push(KUndo2Command *cmd)
                      && cur->id() == cmd->id()
                      && (macro || m_index != m_clean_index);
 
-    /*!
-     *Here we are going to try to merge several commands together using the QVector field in the commands using
-     *3 parameters. N : Number of commands that should remain individual at the top of the stack. T1 : Time lapsed between current command and previously merged command -- signal to
-     *merge throughout the stack. T2 : Time lapsed between two commands signalling both commands belong to the same set
-     *Whenever a KUndo2Command is initialized -- it consists of a start-time and when it is pushed --an end time.
-     *Every time a command is pushed -- it checks whether the command pushed was pushed after T1 seconds of the last merged command
-     *Then the merging begins with each group depending on the time in between each command (T2).
+    /**
+     * Here we are going to try to merge several commands together using the
+     * QVector field in the commands using 3 parameters.
      *
-     *@TODO : Currently it is not able to merge two merged commands together.
-    */
+     * N : Number of commands that should remain individual at the top of the
+     *     stack.
+     *
+     * T1 : Time lapsed between current command and previously merged command
+     *      -- signal to merge throughout the stack.
+     *
+     * T2 : Time elapsed between two commands signalling both commands belong
+     *      of the same set
+     *
+     * Whenever a KUndo2Command is initialized -- it consists of a start-time
+     * and when it is pushed -- an end time. Every time a command is pushed --
+     * it checks whether the command pushed was pushed after T1 seconds of the
+     * last merged command Then the merging begins with each group depending on
+     * the time in between each command (T2).
+     *
+     * @TODO : Currently it is not able to merge two merged commands together.
+     */
+
     if (!macro && m_command_list.size() > 1 && cmd->timedId() != -1 && m_useCumulativeUndoRedo) {
         KUndo2Command* lastcmd = m_command_list.last();
         if (qAbs(cmd->time().msecsTo(lastcmd->endTime())) < m_timeT2 * 1000) {
@@ -754,20 +766,42 @@ void KUndo2QStack::push(KUndo2Command *cmd)
             m_lastMergedSetCount = 0;
             m_lastMergedIndex = m_index;
         }
-        if (m_lastMergedSetCount > m_strokesN) { 
-            KUndo2Command* toMerge = m_command_list.at(m_lastMergedIndex);
-            if (toMerge && m_command_list.size() >= m_lastMergedIndex + 1 && m_command_list.at(m_lastMergedIndex + 1)) {
-                if(toMerge->timedMergeWith(m_command_list.at(m_lastMergedIndex + 1))){
-                    m_command_list.removeAt(m_lastMergedIndex + 1);
-                }
-                m_lastMergedSetCount--;
-                m_lastMergedIndex = m_command_list.indexOf(toMerge);       
-            }
 
+        {
+            /**
+             * Implement N rule: not more than N strokes with the same timedId
+             * should stay separate in the Undo History
+             */
+
+            const int mergeDestinationIndex = m_lastMergedIndex;
+            const int mergeSourceIndex = m_lastMergedIndex + 1;
+
+            if (m_lastMergedSetCount > m_strokesN &&
+                mergeDestinationIndex >= 0 &&
+                mergeSourceIndex < m_command_list.size()) {
+
+                KUndo2Command* mergeDestination = m_command_list.at(mergeDestinationIndex);
+                KUndo2Command* mergeSource = m_command_list.at(mergeSourceIndex);
+
+                if (mergeDestination && mergeSource) {
+
+                    if(mergeDestination->timedMergeWith(mergeSource)){
+                        m_command_list.removeAt(mergeSourceIndex);
+                    }
+
+                    m_lastMergedSetCount--;
+                    m_lastMergedIndex = m_command_list.indexOf(mergeDestination);
+                }
+
+            }
         }
+
         m_index = m_command_list.size();
-        if(m_lastMergedIndex<m_index){
-            if (cmd->time().msecsTo(m_command_list.at(m_lastMergedIndex)->endTime()) < -m_timeT1 * 1000) { //T1 time elapsed
+
+        if (m_lastMergedIndex < m_index) {
+            KUndo2Command* mergeDestination = m_command_list.at(m_lastMergedIndex);
+
+            if (qAbs(cmd->time().msecsTo(mergeDestination->endTime())) > m_timeT1 * 1000) { //T1 time elapsed
                 QListIterator<KUndo2Command*> it(m_command_list);
                 it.toBack();
                 m_lastMergedSetCount = 1;

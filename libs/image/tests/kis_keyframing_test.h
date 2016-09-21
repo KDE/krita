@@ -40,6 +40,8 @@ private Q_SLOTS:
     void testAffectedFrames();
     void cleanupTestCase();
 
+    void testMovingFrames();
+
 private:
 
     const KoColorSpace *cs;

@@ -38,7 +38,6 @@
 #include <QFileInfo>
 
 // calligra's headers
-#include <KisFilterChain.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoProgressUpdater.h>
@@ -115,7 +114,7 @@ KisPDFImport::ConversionStatus KisPDFImport::convert(KisDocument *document, QIOD
 
     // create a layer
     QList<int> pages = wdg->pages();
-    QPointer<KoUpdater> loadUpdater =  outputDocument()->progressUpdater()->startSubtask(1, "load");
+    QPointer<KoUpdater> loadUpdater =  document->progressUpdater()->startSubtask(1, "load");
     loadUpdater->setRange(0, pages.count());
     for (QList<int>::const_iterator it = pages.constBegin(); it != pages.constEnd(); ++it) {
         KisPaintLayer* layer = new KisPaintLayer(image.data(),

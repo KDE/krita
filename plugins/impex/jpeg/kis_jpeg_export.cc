@@ -33,7 +33,6 @@
 #include <KoColorSpace.h>
 #include <KoColorProfile.h>
 #include <KisImportExportManager.h>
-#include <KisFilterChain.h>
 #include <KoColorSpaceConstants.h>
 #include <KoColorSpaceRegistry.h>
 
@@ -96,7 +95,7 @@ KisImportExportFilter::ConversionStatus KisJPEGExport::convert(KisDocument *docu
 
     QApplication::restoreOverrideCursor();
 
-    if (!getBatchMode()) {
+    if (!batchMode()) {
         if (kdb.exec() == QDialog::Rejected) {
             return KisImportExportFilter::UserCancelled;
         }
@@ -126,7 +125,7 @@ KisImportExportFilter::ConversionStatus KisJPEGExport::convert(KisDocument *docu
     KIS_SAFE_ASSERT_RECOVER_NOOP(document->image()->locked());
     KisPaintDeviceSP pd = new KisPaintDevice(*image->projection());
 
-    KisJPEGConverter kpc(document, getBatchMode());
+    KisJPEGConverter kpc(document, batchMode());
     KisPaintLayerSP l = new KisPaintLayer(image, "projection", OPACITY_OPAQUE_U8, pd);
 
     vKisAnnotationSP_it beginIt = image->beginAnnotations();

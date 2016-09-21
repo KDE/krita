@@ -24,7 +24,6 @@
 #include <QDebug>
 #include <QFileInfo>
 
-#include <KisFilterChain.h>
 #include <KisImportExportManager.h>
 
 #include <KisDocument.h>
@@ -44,9 +43,9 @@ KisCSVImport::~KisCSVImport()
 
 KisImportExportFilter::ConversionStatus KisCSVImport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
 {
-    CSVLoader ib(document, getBatchMode());
+    CSVLoader ib(document, batchMode());
 
-    KisImageBuilder_Result result = ib.buildAnimation(io, inputFile());
+    KisImageBuilder_Result result = ib.buildAnimation(io, filename());
 
     switch (result) {
     case KisImageBuilder_RESULT_UNSUPPORTED:

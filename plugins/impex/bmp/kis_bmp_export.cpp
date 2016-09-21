@@ -26,8 +26,6 @@
 #include <QFileInfo>
 #include <QApplication>
 
-#include <KisFilterChain.h>
-
 #include <kis_paint_device.h>
 #include <KisDocument.h>
 #include <kis_image.h>
@@ -47,7 +45,7 @@ KisImportExportFilter::ConversionStatus KisBMPExport::convert(KisDocument *docum
 {
     QRect rc = document->image()->bounds();
     QImage image = document->image()->projection()->convertToQImage(0, 0, 0, rc.width(), rc.height(), KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
-    image.save(io, QFileInfo(outputFile()).suffix().toLatin1());
+    image.save(io, QFileInfo(filename()).suffix().toLatin1());
     return KisImportExportFilter::OK;
 }
 

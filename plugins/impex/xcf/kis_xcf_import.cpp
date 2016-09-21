@@ -32,8 +32,6 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoColorSpaceTraits.h>
 #include <KoCompositeOpRegistry.h>
-#include <KisFilterChain.h>
-
 #include <kis_debug.h>
 #include <KisDocument.h>
 #include <kis_group_layer.h>

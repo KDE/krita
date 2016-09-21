@@ -22,7 +22,6 @@
 #include <kpluginfactory.h>
 #include <QFileInfo>
 
-#include <KisFilterChain.h>
 #include <KisImportExportManager.h>
 
 #include <KisDocument.h>
@@ -44,7 +43,7 @@ KisPNGImport::~KisPNGImport()
 
 KisImportExportFilter::ConversionStatus KisPNGImport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
 {
-    KisPNGConverter ib(document, getBatchMode());
+    KisPNGConverter ib(document, batchMode());
 
     switch (ib.buildImage(io)) {
     case KisImageBuilder_RESULT_UNSUPPORTED:

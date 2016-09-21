@@ -25,7 +25,6 @@
 #include <QFileInfo>
 #include <QApplication>
 
-#include <KisFilterChain.h>
 #include <KisImportExportManager.h>
 #include <KoColorModelStandardIds.h>
 #include <KoColorSpace.h>
@@ -84,14 +83,14 @@ KisImportExportFilter::ConversionStatus OraExport::convert(KisDocument *document
     supportedColorDepthIds << Integer8BitsColorDepthID.id() << Integer16BitsColorDepthID.id();
     if (!supportedColorModelIds.contains(pd->colorSpace()->colorModelId().id()) ||
             !supportedColorDepthIds.contains(pd->colorSpace()->colorDepthId().id())) {
-        if (!getBatchMode()) {
+        if (!batchMode()) {
             QMessageBox::critical(0, i18nc("@title:window", "Krita OpenRaster Export"), i18n("Cannot export images in this colorspace or channel depth to OpenRaster"));
         }
         return KisImportExportFilter::UsageError;
     }
 
 
-    if (hasShapeLayerChild(image->root()) && !getBatchMode()) {
+    if (hasShapeLayerChild(image->root()) && !batchMode()) {
         QMessageBox::information(0,
                                  i18nc("@title:window", "Krita:Warning"),
                                  i18n("This image contains vector, clone or fill layers.\nThese layers will be saved as raster layers."));

@@ -31,7 +31,6 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoColorModelStandardIds.h>
 
-#include <KisFilterChain.h>
 #include <KisDocument.h>
 
 #include <kis_transaction.h>
@@ -61,10 +60,10 @@ KisImportExportFilter::ConversionStatus KisBrushImport::convert(KisDocument *doc
     KisBrush *brush;
 
     if (mimeType() == "image/x-gimp-brush") {
-        brush = new KisGbrBrush(inputFile());
+        brush = new KisGbrBrush(filename());
     }
     else if (mimeType() == "image/x-gimp-brush-animated") {
-        brush = new KisImagePipeBrush(inputFile());
+        brush = new KisImagePipeBrush(filename());
     }
     else {
         return KisImportExportFilter::BadMimeType;

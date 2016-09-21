@@ -32,7 +32,6 @@
 
 #include <KisImportExportManager.h>
 #include <KoColorSpaceRegistry.h>
-#include <KisFilterChain.h>
 #include <KoColorModelStandardIds.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceTraits.h>
@@ -103,7 +102,7 @@ KisImportExportFilter::ConversionStatus KisHeightMapImport::convert(KisDocument 
         optionsHeightMap.radioPC->setChecked(true);
     }
 
-    if (!getBatchMode()) {
+    if (!batchMode()) {
         if (kdb->exec() == QDialog::Rejected) {
             return KisImportExportFilter::UserCancelled;
         }

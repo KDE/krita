@@ -27,8 +27,6 @@
 #include <QFileInfo>
 #include <QApplication>
 
-#include <KisFilterChain.h>
-
 #include <kis_paint_device.h>
 #include <KisDocument.h>
 #include <kis_image.h>

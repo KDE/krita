@@ -24,8 +24,6 @@
 #include <QFileInfo>
 #include <QApplication>
 
-#include <KisFilterChain.h>
-
 #include <KisDocument.h>
 #include <kis_image.h>
 
@@ -47,7 +45,7 @@ KisImportExportFilter::ConversionStatus QMLExport::convert(KisDocument *document
     Q_CHECK_PTR(image);
 
     QMLConverter converter;
-    KisImageBuilder_Result result = converter.buildFile(outputFile(), io, image);
+    KisImageBuilder_Result result = converter.buildFile(filename(), io, image);
     if (result == KisImageBuilder_RESULT_OK) {
         dbgFile << "success !";
         return KisImportExportFilter::OK;

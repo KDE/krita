@@ -23,8 +23,6 @@
 
 #include <kpluginfactory.h>
 
-#include <KisFilterChain.h>
-
 #include <KisDocument.h>
 #include <kis_image.h>
 #include <kis_group_layer.h>
@@ -37,7 +35,7 @@
 #include <KoXmlNS.h>
 #include <KoShapeRegistry.h>
 #include <KoOdfStylesReader.h>
-
+#include <KoStore.h>
 
 #include <KoShapeBasedDocumentBase.h>
 #include <KoColorSpaceRegistry.h>

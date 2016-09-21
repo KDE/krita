@@ -36,7 +36,6 @@
 #include <KisMimeDatabase.h>
 #include <kis_time_range.h>
 #include <KisImportExportManager.h>
-#include <KisFilterChain.h>
 
 #include "DlgAnimationRenderer.h"
 
@@ -118,9 +117,6 @@ void AnimaterionRenderer::slotRenderAnimation()
             }
 
             QSharedPointer<KisImportExportFilter> encoder = dlgAnimationRenderer.encoderFilter();
-            KisFilterChainSP chain(new KisFilterChain(doc->importExportManager()));
-            chain->setOutputFile(videoConfig->getString("filename"));
-            encoder->setChain(chain);
             encoder->setMimeType(mimetype.toLatin1());
             QFile fi(videoConfig->getString("filename"));
             KisImportExportFilter::ConversionStatus res;

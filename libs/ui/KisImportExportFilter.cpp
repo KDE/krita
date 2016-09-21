@@ -31,18 +31,14 @@ class Q_DECL_HIDDEN KisImportExportFilter::Private
 {
 public:
     QPointer<KoUpdater> updater;
+    QByteArray mime;
+    QString filename;
+    bool batchmode;
 
     Private()
         : updater(0)
+        , batchmode(false)
     {}
-
-    /**
-     * Use this pointer to access all information about input/output
-     * during the conversion. @em Don't use it in the constructor -
-     * it's invalid while constructing the object!
-     */
-    KisFilterChainSP chain;
-    QByteArray mime;
 
 };
 
@@ -52,51 +48,45 @@ KisImportExportFilter::KisImportExportFilter(QObject *parent)
 {
 }
 
-KisDocument *KisImportExportFilter::inputDocument() const
-{
-    return d->chain->inputDocument();
-}
-
-KisDocument *KisImportExportFilter::outputDocument() const
-{
-    return d->chain->outputDocument();
-}
-
-QString KisImportExportFilter::inputFile() const
-{
-    return d->chain->inputFile();
-}
-
-QString KisImportExportFilter::outputFile() const
-{
-    return d->chain->outputFile();
-}
-
-bool KisImportExportFilter::getBatchMode() const
-{
-    return d->chain->manager()->getBatchMode();
-}
-
 KisImportExportFilter::~KisImportExportFilter()
 {
     Q_ASSERT(d->updater);
-    if (d->updater) d->updater->setProgress(100);
+    if (d->updater) {
+        d->updater->setProgress(100);
+    }
     delete d;
 }
 
-void KisImportExportFilter::setMimeType(const QByteArray &mime)
+
+QString KisImportExportFilter::filename() const
 {
-    d->mime = mime;
+    return d->filename;
+}
+
+bool KisImportExportFilter::batchMode() const
+{
+    return d->batchmode;
+}
+
+
+void KisImportExportFilter::setBatchMode(bool batchmode)
+{
+    d->batchmode = batchmode;
+}
+
+void KisImportExportFilter::setFilename(const QString &filename)
+{
+    d->filename = filename;
+}
+
+void KisImportExportFilter::setMimeType(const QString &mime)
+{
+    d->mime = mime.toLatin1();
 }
 
 QByteArray KisImportExportFilter::mimeType() const
 {
     return d->mime;
-}
-
-void KisImportExportFilter::setChain(KisFilterChainSP chain)
-{
-    d->chain = chain;
 }
 
 QString KisImportExportFilter::conversionStatusString(ConversionStatus status)
@@ -141,7 +131,6 @@ QString KisImportExportFilter::conversionStatusString(ConversionStatus status)
     case InternalError:
     case UnexpectedEOF:
     case UnexpectedOpcode:
-    case StupidError: // ?? what is this ??
     case UsageError:
         msg = i18n("Internal error"); break;
 
@@ -193,20 +182,13 @@ KisConfigWidget *KisImportExportFilter::createConfigurationWidget(QWidget *, con
     return 0;
 }
 
-void KisImportExportFilter::setUpdater(const QPointer<KoUpdater>& updater)
+void KisImportExportFilter::setUpdater(QPointer<KoUpdater> updater)
 {
-    Q_ASSERT(updater);
-    if (d->updater && !updater) {
-        disconnect(this, SLOT(slotProgress(int)));
-    } else if (!d->updater && updater) {
-        connect(this, SIGNAL(sigProgress(int)), SLOT(slotProgress(int)));
-    }
     d->updater = updater;
 }
 
-void KisImportExportFilter::slotProgress(int value)
+void KisImportExportFilter::setProgress(int value)
 {
-    Q_ASSERT(d->updater);
     if (d->updater) {
         d->updater->setValue(value);
     }

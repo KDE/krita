@@ -28,7 +28,6 @@
 #include <QApplication>
 
 #include <KisImportExportManager.h>
-#include <KisFilterChain.h>
 #include <KoColorSpaceConstants.h>
 
 #include <KisDocument.h>
@@ -67,7 +66,7 @@ KisCSVExport::~KisCSVExport()
 KisImportExportFilter::ConversionStatus KisCSVExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
 {
     if (!checkHomogenity(document->image()->rootLayer())) {
-        if (!getBatchMode()) {
+        if (!batchMode()) {
             QMessageBox::critical(0,
                                   i18nc("@title:window", "CSV Export Error"),
                                   i18n("Unable to save to the CSV format.\n"
@@ -77,7 +76,7 @@ KisImportExportFilter::ConversionStatus KisCSVExport::convert(KisDocument *docum
     }
 
 
-    CSVSaver kpc(document, getBatchMode());
+    CSVSaver kpc(document, batchMode());
     KisImageBuilder_Result res;
 
     if ((res = kpc.buildAnimation(io)) == KisImageBuilder_RESULT_OK) {

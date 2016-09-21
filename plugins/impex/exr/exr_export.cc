@@ -27,7 +27,6 @@
 #include <kpluginfactory.h>
 #include <QFileInfo>
 
-#include <KisFilterChain.h>
 #include <KoColorSpaceConstants.h>
 #include <KisImportExportManager.h>
 
@@ -95,7 +94,7 @@ KisImportExportFilter::ConversionStatus exrExport::convert(KisDocument *document
     }
     wdg->setConfiguration(cfg);
 
-    if (!getBatchMode() ) {
+    if (!batchMode() ) {
         QApplication::restoreOverrideCursor();
         if (kdb.exec() == QDialog::Rejected) {
             return KisImportExportFilter::UserCancelled;
@@ -104,10 +103,7 @@ KisImportExportFilter::ConversionStatus exrExport::convert(KisDocument *document
         KisConfig().setExportConfiguration("EXR", *cfg.data());
     }
 
-    QString filename = outputFile();
-    if (filename.isEmpty()) return KisImportExportFilter::FileNotFound;
-
-    exrConverter kpc(document, !getBatchMode());
+    exrConverter kpc(document, !batchMode());
 
     KisImageBuilder_Result res;
 
@@ -118,12 +114,12 @@ KisImportExportFilter::ConversionStatus exrExport::convert(KisDocument *document
         KisPaintDeviceSP pd = new KisPaintDevice(*image->projection());
         KisPaintLayerSP l = new KisPaintLayer(image, "projection", OPACITY_OPAQUE_U8, pd);
 
-        res = kpc.buildFile(outputFile(), l);
+        res = kpc.buildFile(filename(), l);
     }
     else {
         // the image must be locked at the higher levels
         KIS_SAFE_ASSERT_RECOVER_NOOP(document->image()->locked());
-        res = kpc.buildFile(filename, image->rootLayer());
+        res = kpc.buildFile(filename(), image->rootLayer());
     }
 
     dbgFile << " Result =" << res;

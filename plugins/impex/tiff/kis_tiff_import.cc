@@ -23,8 +23,6 @@
 
 #include <kpluginfactory.h>
 
-#include <KisFilterChain.h>
-
 #include <KisDocument.h>
 #include <kis_image.h>
 
@@ -46,7 +44,7 @@ KisImportExportFilter::ConversionStatus KisTIFFImport::convert(KisDocument *docu
 {
     KisTIFFConverter tiffConverter(document);
 
-    switch (tiffConverter.buildImage(inputFile())) {
+    switch (tiffConverter.buildImage(filename())) {
     case KisImageBuilder_RESULT_UNSUPPORTED:
         return KisImportExportFilter::NotImplemented;
     case KisImageBuilder_RESULT_INVALID_ARG:

@@ -22,7 +22,6 @@
 
 #include <KoColorSpace.h>
 #include <KoColorSpaceConstants.h>
-#include <KisFilterChain.h>
 #include <KisImportExportManager.h>
 
 #include <KoDialog.h>
@@ -155,7 +154,7 @@ KisImportExportFilter::ConversionStatus KisPPMExport::convert(KisDocument *docum
     }
     wdg->setConfiguration(cfg);
 
-    if (!getBatchMode()) {
+    if (!batchMode()) {
         if (kdb.exec() == QDialog::Rejected) {
             return KisImportExportFilter::UserCancelled;
         }

@@ -28,7 +28,6 @@
 #include <QFileInfo>
 
 #include <KoColorSpaceRegistry.h>
-#include <KisFilterChain.h>
 
 #include <kis_debug.h>
 #include <KisDocument.h>

@@ -29,7 +29,6 @@
 
 #include <kis_debug.h>
 #include <KisImportExportManager.h>
-#include <KisFilterChain.h>
 #include <KoColorSpaceConstants.h>
 #include <KoDialog.h>
 #include "KisPart.h"
@@ -59,14 +58,13 @@ KisVideoExport::~KisVideoExport()
 
 KisImportExportFilter::ConversionStatus KisVideoExport::convert(KisDocument *document, QIODevice */*io*/,  KisPropertiesConfigurationSP configuration)
 {
-    QString filename = outputFile();
-    VideoSaver videoSaver(document, getBatchMode());
+    VideoSaver videoSaver(document, batchMode());
 
     if (!videoSaver.hasFFMpeg()) {
         const QString warningMessage =
                 i18n("Could not find \'ffmpeg\' binary. Saving to video formats is impossible.");
 
-        if (!getBatchMode()) {
+        if (!batchMode()) {
             QMessageBox::critical(KisPart::instance()->currentMainwindow(),
                                   i18n("Video Export Error"),
                                   warningMessage);
@@ -74,7 +72,7 @@ KisImportExportFilter::ConversionStatus KisVideoExport::convert(KisDocument *doc
         return KisImportExportFilter::UsageError;
     }
 
-    KisImageBuilder_Result res = videoSaver.encode(filename, configuration);
+    KisImageBuilder_Result res = videoSaver.encode(filename(), configuration);
 
     if (res == KisImageBuilder_RESULT_OK) {
         return KisImportExportFilter::OK;

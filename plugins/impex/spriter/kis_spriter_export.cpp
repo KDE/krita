@@ -36,7 +36,6 @@
 #include <KoColorSpaceRegistry.h>
 
 #include <KisDocument.h>
-#include <KisFilterChain.h>
 #include <kis_group_layer.h>
 #include <kis_image.h>
 #include <KisImportExportManager.h>
@@ -463,8 +462,7 @@ Bone *findBoneByName(Bone *startBone, const QString &name)
 
 KisImportExportFilter::ConversionStatus KisSpriterExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
 {
-    QString filename = outputFile();
-    QFileInfo fi(filename);
+    QFileInfo fi(filename());
 
     m_image = document->image();
 

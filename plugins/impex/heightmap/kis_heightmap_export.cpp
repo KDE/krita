@@ -27,7 +27,6 @@
 
 #include <KoColorSpace.h>
 #include <KoColorSpaceConstants.h>
-#include <KisFilterChain.h>
 #include <KisImportExportManager.h>
 #include <KoColorSpaceTraits.h>
 #include <KoColorSpaceRegistry.h>
@@ -108,7 +107,7 @@ KisImportExportFilter::ConversionStatus KisHeightMapExport::convert(KisDocument 
     cfg->setProperty("width", image->width());
     wdg->setConfiguration(cfg);
 
-    if (!getBatchMode()) {
+    if (!batchMode()) {
         if (kdb.exec() == QDialog::Rejected) {
             return KisImportExportFilter::UserCancelled;
         }

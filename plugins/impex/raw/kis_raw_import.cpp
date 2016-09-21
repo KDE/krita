@@ -21,7 +21,6 @@
 #include <kpluginfactory.h>
 #include <KoDialog.h>
 
-#include <KisFilterChain.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorSpaceTraits.h>
@@ -92,13 +91,13 @@ KisImportExportFilter::ConversionStatus KisRawImport::convert(KisDocument *docum
         settings.sixteenBitsImage =  true;
         int width, height, rgbmax;
         KDcraw dcraw;
-        if (!dcraw.decodeRAWImage(inputFile(), settings, imageData, width, height, rgbmax)) return KisImportExportFilter::CreationError;
+        if (!dcraw.decodeRAWImage(filename(), settings, imageData, width, height, rgbmax)) return KisImportExportFilter::CreationError;
 
         QApplication::restoreOverrideCursor();
 
         // Init the image
         const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb16();
-        KisImageWSP image = new KisImage(document->createUndoStore(), width, height, cs, inputFile());
+        KisImageWSP image = new KisImage(document->createUndoStore(), width, height, cs, filename());
         if (image.isNull()) return KisImportExportFilter::CreationError;
 
         KisPaintLayerSP layer = new KisPaintLayer(image, image->nextLayerName(), quint8_MAX);
@@ -145,7 +144,7 @@ void KisRawImport::slotUpdatePreview()
     settings.sixteenBitsImage =  false;
     int width, height, rgbmax;
     KDcraw dcraw;
-    if (dcraw.decodeHalfRAWImage(inputFile(), settings, imageData, width, height, rgbmax)) {
+    if (dcraw.decodeHalfRAWImage(filename(), settings, imageData, width, height, rgbmax)) {
         QImage image(width, height, QImage::Format_RGB32);
         for (int y = 0; y < height; ++y) {
             QRgb *pixel= reinterpret_cast<QRgb *>(image.scanLine(y));

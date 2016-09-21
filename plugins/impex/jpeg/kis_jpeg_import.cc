@@ -23,7 +23,6 @@
 
 #include <kpluginfactory.h>
 
-#include <KisFilterChain.h>
 #include <KisDocument.h>
 #include <kis_image.h>
 #include <KisViewManager.h>
@@ -44,7 +43,7 @@ KisJPEGImport::~KisJPEGImport()
 KisImportExportFilter::ConversionStatus KisJPEGImport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
 {
 
-    KisJPEGConverter ib(document, getBatchMode());
+    KisJPEGConverter ib(document, batchMode());
 
     switch (ib.buildImage(io)) {
     case KisImageBuilder_RESULT_UNSUPPORTED:

@@ -320,7 +320,7 @@ void DlgAnimationRenderer::sequenceMimeTypeSelected()
     }
 
     QString mimetype = m_page->cmbMimetype->itemData(index).toString();
-    KisImportExportFilter *filter = KisImportExportManager::filterForMimeType(mimetype, KisImportExportManager::Export);
+    QSharedPointer<KisImportExportFilter> filter(KisImportExportManager::filterForMimeType(mimetype, KisImportExportManager::Export));
     if (filter) {
         m_frameExportConfigWidget = filter->createConfigurationWidget(0, KisDocument::nativeFormatMimeType(), mimetype.toLatin1());
         if (m_frameExportConfigWidget) {
@@ -335,7 +335,6 @@ void DlgAnimationRenderer::sequenceMimeTypeSelected()
             m_frameExportConfigWidget->setParent(0);
             dlg.setMainWidget(0);
         }
-        delete filter;
     }
 }
 

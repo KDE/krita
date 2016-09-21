@@ -26,7 +26,6 @@
 #include <QApplication>
 
 #include <KisImportExportManager.h>
-#include <KisFilterChain.h>
 #include <KoColorSpaceConstants.h>
 
 #include <KisDocument.h>
@@ -75,7 +74,7 @@ psdExport::~psdExport()
 KisImportExportFilter::ConversionStatus psdExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
 {
     if (document->image()->width() > 30000 || document->image()->height() > 30000) {
-        if (!getBatchMode()) {
+        if (!batchMode()) {
             QMessageBox::critical(0,
                                   i18nc("@title:window", "Photoshop Export Error"),
                                   i18n("Unable to save to the Photoshop format.\n"
@@ -86,7 +85,7 @@ KisImportExportFilter::ConversionStatus psdExport::convert(KisDocument *document
 
 
     if (!checkHomogenity(document->image()->rootLayer(), document->image()->colorSpace())) {
-        if (!getBatchMode()) {
+        if (!batchMode()) {
             QMessageBox::critical(0,
                                   i18nc("@title:window", "Photoshop Export Error"),
                                   i18n("Unable to save to the Photoshop format.\n"

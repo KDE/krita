@@ -45,6 +45,7 @@
 #include <KoUpdater.h>
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
+#include <KoStoreDevice.h>
 
 #include <klocalizedstring.h>
 #include <kis_debug.h>
@@ -814,7 +815,7 @@ void KisDocument::setConfirmNonNativeSave(const bool exporting, const bool on)
 
 bool KisDocument::fileBatchMode() const
 {
-    return d->importExportManager->getBatchMode();
+    return d->importExportManager->batchMode();
 }
 
 void KisDocument::setFileBatchMode(const bool batchMode)
@@ -2121,7 +2122,7 @@ KisNodeSP KisDocument::preActivatedNode() const
 
 void KisDocument::setFileProgressUpdater(const QString &text)
 {
-    d->suppressProgress = d->importExportManager->getBatchMode();
+    d->suppressProgress = d->importExportManager->batchMode();
 
     if (!d->suppressProgress) {
         d->progressUpdater = new KoProgressUpdater(d->progressProxy, KoProgressUpdater::Unthreaded);
@@ -2146,7 +2147,7 @@ void KisDocument::clearFileProgressUpdater()
 
 void KisDocument::setFileProgressProxy()
 {
-    if (!d->progressProxy && !d->importExportManager->getBatchMode()) {
+    if (!d->progressProxy && !d->importExportManager->batchMode()) {
         d->fileProgressProxy = progressProxy();
     } else {
         d->fileProgressProxy = 0;

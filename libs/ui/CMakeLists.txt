@@ -320,15 +320,9 @@ set(kritaui_LIB_SRCS
     KisNodeToolTip.cpp
     KisNodeView.cpp
     kis_node_view_color_scheme.cpp
-    KisFilterChain.cpp
-    KisFilterChainLink.cpp
-    KisFilterChainLinkList.cpp
     KisImportExportFilter.cpp
-    KisFilterEdge.cpp
     KisFilterEntry.cpp
-    KisFilterGraph.cpp
     KisImportExportManager.cpp
-    KisFilterVertex.cpp
     KisMainWindow.cpp
     KisOpenPane.cpp
     KisPart.cpp

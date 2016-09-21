@@ -26,7 +26,6 @@
 #include <QFileInfo>
 
 #include <KoDialog.h>
-#include <KisFilterChain.h>
 #include <KoColorSpace.h>
 #include <KoChannelInfo.h>
 #include <KoColorModelStandardIds.h>
@@ -77,7 +76,7 @@ KisImportExportFilter::ConversionStatus KisTIFFExport::convert(KisDocument *docu
 
     wdg->setConfiguration(cfg);
 
-    if (!getBatchMode()) {
+    if (!batchMode()) {
         if (kdb.exec() == QDialog::Rejected) {
             return KisImportExportFilter::UserCancelled;
         }
@@ -110,7 +109,7 @@ KisImportExportFilter::ConversionStatus KisTIFFExport::convert(KisDocument *docu
 
     KisTIFFConverter tiffConverter(document);
     KisImageBuilder_Result res;
-    if ((res = tiffConverter.buildFile(outputFile(), image, options)) == KisImageBuilder_RESULT_OK) {
+    if ((res = tiffConverter.buildFile(filename(), image, options)) == KisImageBuilder_RESULT_OK) {
         dbgFile << "success !";
         return KisImportExportFilter::OK;
     }

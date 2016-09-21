@@ -28,8 +28,6 @@
 #include <kpluginfactory.h>
 #include <QFileInfo>
 
-#include <KisFilterChain.h>
-
 #include <kis_paint_device.h>
 #include <KisDocument.h>
 #include <kis_image.h>
@@ -98,7 +96,7 @@ KisImportExportFilter::ConversionStatus KisBrushExport::convert(KisDocument *doc
     }
     KisGbrBrush *brush = 0;
 
-    if (!getBatchMode()) {
+    if (!batchMode()) {
 
         KoDialog* dlgBrushExportOptions = new KoDialog(0);
         dlgBrushExportOptions->setWindowTitle(i18n("Brush Tip Export Options"));
@@ -113,11 +111,11 @@ KisImportExportFilter::ConversionStatus KisBrushExport::convert(KisDocument *doc
 
 
         if (mimeType() == "image/x-gimp-brush") {
-            brush = new KisGbrBrush(outputFile());
+            brush = new KisGbrBrush(filename());
             wdgUi.groupBox->setVisible(false);
         }
         else if (mimeType() == "image/x-gimp-brush-animated") {
-            brush = new KisImagePipeBrush(outputFile());
+            brush = new KisImagePipeBrush(filename());
             wdgUi.groupBox->setVisible(true);
         }
         else {

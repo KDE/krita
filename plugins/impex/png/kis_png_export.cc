@@ -28,7 +28,6 @@
 #include <QMessageBox>
 
 #include <KoColorSpace.h>
-#include <KisFilterChain.h>
 #include <KisImportExportManager.h>
 #include <KoColorProfile.h>
 #include <KoColorModelStandardIds.h>
@@ -82,7 +81,7 @@ KisImportExportFilter::ConversionStatus KisPNGExport::convert(KisDocument *docum
 
 
     if (!KisPNGConverter::isColorSpaceSupported(pd->colorSpace())) {
-        if (!getBatchMode()) {
+        if (!batchMode()) {
             QMessageBox::critical(0, i18nc("@title:window", "Krita PNG Export"), i18n("You can only save grayscale and RGB images to PNG. Convert your image before exporting to PNG."));
         }
         return KisImportExportFilter::UsageError;
@@ -128,7 +127,7 @@ KisImportExportFilter::ConversionStatus KisPNGExport::convert(KisDocument *docum
 
         QApplication::restoreOverrideCursor();
         if (hasVisibleWidgets()) {
-            if (!getBatchMode()) {
+            if (!batchMode()) {
                 if (kdb.exec() == QDialog::Rejected) {
                     return KisImportExportFilter::UserCancelled;
                 }

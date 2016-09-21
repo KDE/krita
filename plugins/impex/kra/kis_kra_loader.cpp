@@ -35,6 +35,7 @@
 #include <KoFileDialog.h>
 #include <KisImportExportManager.h>
 #include <KoXmlReader.h>
+#include <KoStoreDevice.h>
 
 #include <filter/kis_filter.h>
 #include <filter/kis_filter_registry.h>

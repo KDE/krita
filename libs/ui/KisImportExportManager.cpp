@@ -99,7 +99,7 @@ KisImportExportManager::~KisImportExportManager()
     delete d;
 }
 
-QString KisImportExportManager::importDocument(const QString& location,
+void KisImportExportManager::importDocument(const QString& location,
                                                const QString& documentMimeType,
                                                KisImportExportFilter::ConversionStatus& status)
 {
@@ -114,7 +114,7 @@ QString KisImportExportManager::importDocument(const QString& location,
         errFile << "Couldn't create a valid graph for this source mimetype: "
                 << typeName;
         status = KisImportExportFilter::BadConversionGraph;
-        return QString();
+        return;
     }
 
     KisFilterChainSP chain(0);
@@ -141,14 +141,14 @@ QString KisImportExportManager::importDocument(const QString& location,
     else {
         errFile << "You aren't supposed to use import() from a filter!" << endl;
         status = KisImportExportFilter::UsageError;
-        return QString();
+        return;
     }
 
     if (!chain) {
         errFile << "Couldn't create a valid filter chain!" << endl;
         importErrorHelper(typeName);
         status = KisImportExportFilter::BadConversionGraph;
-        return QString();
+        return;
     }
 
     // Okay, let's invoke the filters one after the other
@@ -159,9 +159,10 @@ QString KisImportExportManager::importDocument(const QString& location,
 
     m_importFileName.clear();  // Reset the import URL
 
-    if (status == KisImportExportFilter::OK)
-        return chain->chainOutput();
-    return QString();
+    if (status == KisImportExportFilter::OK) {
+        Q_ASSERT(chain->chainOutput().isEmpty());
+    }
+
 }
 
 KisImportExportFilter::ConversionStatus KisImportExportManager::exportDocument(const QString& location, QByteArray& mimeType, KisPropertiesConfigurationSP exportConfiguration)

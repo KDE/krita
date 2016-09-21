@@ -90,9 +90,9 @@ public:
      * If the QString which is returned isEmpty() and the status is OK,
      * then we imported the file directly into the document.
      */
-    QString importDocument(const QString& location,
-                           const QString& documentMimeType,
-                           KisImportExportFilter::ConversionStatus& status);
+    void importDocument(const QString& location,
+                        const QString& documentMimeType,
+                        KisImportExportFilter::ConversionStatus& status);
 
     /**
      * @brief Exports the given file/document to the specified URL/mimetype.

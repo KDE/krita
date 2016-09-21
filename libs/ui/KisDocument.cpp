@@ -1197,14 +1197,12 @@ bool KisDocument::openFile()
     }
     dbgUI << localFilePath() << "type:" << typeName;
 
-    QString importedFile = localFilePath();
-
     setFileProgressUpdater(i18n("Opening Document"));
 
     if (!isNativeFormat(typeName.toLatin1())) {
         KisImportExportFilter::ConversionStatus status;
 
-        importedFile = d->importExportManager->importDocument(localFilePath(), typeName, status);
+        d->importExportManager->importDocument(localFilePath(), typeName, status);
         if (status != KisImportExportFilter::OK) {
             QApplication::restoreOverrideCursor();
 
@@ -1224,48 +1222,8 @@ bool KisDocument::openFile()
 
     QApplication::restoreOverrideCursor();
 
-    bool ok = true;
-
-    if (!importedFile.isEmpty()) { // Something to load (tmp or native file) ?
-        // The filter, if any, has been applied. It's all native format now.
-        if (!loadNativeFormat(importedFile)) {
-            ok = false;
-            if (d->autoErrorHandlingEnabled) {
-                showLoadingErrorDialog();
-            }
-        }
-    }
-
-    if (importedFile != localFilePath()) {
-        // We opened a temporary file (result of an import filter)
-        // Set document URL to empty - we don't want to save in /tmp !
-        // But only if in readwrite mode (no saving problem otherwise)
-        // --
-        // But this isn't true at all.  If this is the result of an
-        // import, then importedFile=temporary_file.kwd and
-        // file/m_url=foreignformat.ext so m_url is correct!
-        // So don't resetURL() or else the caption won't be set when
-        // foreign files are opened (an annoying bug).
-        // - Clarence
-        //
-#if 0
-        if (isReadWrite())
-            resetURL();
-#endif
-
-        // remove temp file - uncomment this to debug import filters
-        if (!importedFile.isEmpty()) {
-#ifndef NDEBUG
-            if (!getenv("CALLIGRA_DEBUG_FILTERS"))
-#endif
-                QFile::remove(importedFile);
-        }
-    }
-
-    if (ok) {
-        setMimeTypeAfterLoading(typeName);
-        emit sigLoadingFinished();
-    }
+    setMimeTypeAfterLoading(typeName);
+    emit sigLoadingFinished();
 
     if (!d->suppressProgress && d->progressUpdater) {
         QPointer<KoUpdater> updater = d->progressUpdater->startSubtask(1, "clear undo stack");
@@ -1279,7 +1237,7 @@ bool KisDocument::openFile()
     }
     d->isLoading = false;
 
-    return ok;
+    return true;
 }
 
 KoProgressUpdater *KisDocument::progressUpdater() const

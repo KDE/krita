@@ -279,15 +279,6 @@ public:
     void setEmpty();
 
     /**
-     *  @brief Loads a document from a store.
-     *
-     *  You should never have to reimplement.
-     *
-     *  @param store The store to load from
-     *  @param url An internal url, like tar:/1/2
-     */
-    bool loadFromStore(KoStore *store, const QString& url);
-    /**
      *  @brief Saves a sub-document to a store.
      *
      *  You should not have to reimplement this.

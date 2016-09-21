@@ -1551,38 +1551,6 @@ bool KisDocument::loadNativeFormatFromStoreInternal(KoStore *store)
     return res;
 }
 
-// For embedded documents
-bool KisDocument::loadFromStore(KoStore *_store, const QString& url)
-{
-    if (_store->open(url)) {
-        KoXmlDocument doc = KoXmlDocument(true);
-        doc.setContent(_store->device());
-        if (!loadXML(doc, _store)) {
-            _store->close();
-            return false;
-        }
-        _store->close();
-    } else {
-        dbgKrita << "couldn't open " << url;
-    }
-
-    _store->pushDirectory();
-    // Store as document URL
-    if (url.startsWith(STORE_PROTOCOL)) {
-        setUrl(QUrl::fromUserInput(url));
-    } else {
-        setUrl(QUrl(INTERNAL_PREFIX + url));
-        _store->enterDirectory(url);
-    }
-
-    bool result = completeLoading(_store);
-
-    // Restore the "old" path
-    _store->popDirectory();
-
-    return result;
-}
-
 bool KisDocument::isStoredExtern() const
 {
     return !storeInternal() && hasExternURL();

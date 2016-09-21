@@ -100,8 +100,8 @@ KisImportExportManager::~KisImportExportManager()
 }
 
 void KisImportExportManager::importDocument(const QString& location,
-                                               const QString& documentMimeType,
-                                               KisImportExportFilter::ConversionStatus& status)
+                                            const QString& documentMimeType,
+                                            KisImportExportFilter::ConversionStatus& status)
 {
     // Find the mime type for the file to be imported.
     QString  typeName = documentMimeType;
@@ -226,7 +226,7 @@ QStringList KisImportExportManager::mimeFilter(Direction direction)
 {
     // Find the right mimetype by the extension
     QSet<QString> mimeTypes;
-//    mimeTypes << KisDocument::nativeFormatMimeType() << "application/x-krita-paintoppreset" << "image/openraster";
+    //    mimeTypes << KisDocument::nativeFormatMimeType() << "application/x-krita-paintoppreset" << "image/openraster";
 
     if (direction == KisImportExportManager::Import) {
         if (m_importMimeTypes.isEmpty()) {

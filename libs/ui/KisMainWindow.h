@@ -224,16 +224,13 @@ public Q_SLOTS:
      * Saves the document, asking for a filename if necessary.
      *
      * @param saveas if set to TRUE the user is always prompted for a filename
-     *
      * @param silent if set to TRUE rootDocument()->setTitleModified will not be called.
-     *
-     * @param specialOutputFlag set to enums defined in KisDocument if save to special output format
      *
      * @return TRUE on success, false on error or cancel
      *         (don't display anything in this case, the error dialog box is also implemented here
      *         but restore the original URL in slotFileSaveAs)
      */
-    bool saveDocument(KisDocument *document, bool saveas = false, bool silent = false, int specialOutputFlag = 0);
+    bool saveDocument(KisDocument *document, bool saveas = false, bool silent = false);
 
     /**
      * Update the option widgets to the argument ones, removing the currently set widgets.

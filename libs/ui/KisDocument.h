@@ -159,21 +159,6 @@ public:
     /// be saved by KisDocument without a filter, in *addition* to the main one
     static QStringList extraNativeMimeTypes() { return QStringList() << KIS_MIME_TYPE; }
 
-
-    /// Enum values used by specialOutputFlag - note that it's a bitfield for supportedSpecialFormats
-    enum { /*SaveAsCalligra1dot1 = 1,*/ // old and removed
-        SaveAsDirectoryStore = 2,
-        SaveAsFlatXML = 4,
-        SaveEncrypted = 8
-                        // bitfield! next value is 16
-    };
-
-    /**
-     * Return the set of SupportedSpecialFormats that the application wants to
-     * offer in the "Save" file dialog.
-     */
-    virtual int supportedSpecialFormats() const;
-
     /**
      * Returns the actual mimetype of the document
      */
@@ -194,11 +179,9 @@ public:
      * have to call it.
      *
      * @param mimeType the mime type (format) to use.
-     * @param specialOutputFlag is for "save as older version" etc.
      */
-    void setOutputMimeType(const QByteArray & mimeType, int specialOutputFlag = 0);
+    void setOutputMimeType(const QByteArray & mimeType);
     QByteArray outputMimeType() const;
-    int specialOutputFlag() const;
 
     /**
      * Returns true if this document was the result of opening a foreign

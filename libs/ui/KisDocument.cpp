@@ -239,7 +239,6 @@ public:
         progressUpdater(0),
         progressProxy(0),
         importExportManager(0),
-        specialOutputFlag(0),   // default is native format
         isImporting(false),
         isExporting(false),
         password(QString()),
@@ -291,9 +290,9 @@ public:
     QByteArray mimeType; // The actual mimetype of the document
     QByteArray outputMimeType; // The mimetype to use when saving
     bool confirmNonNativeSave [2] = {true, true}; // used to pop up a dialog when saving for the
-    // first time if the file is in a foreign format
-    // (Save/Save As, Export)
-    int specialOutputFlag; // See KoFileDialog in koMainWindow.cc
+                                                  // first time if the file is in a foreign format
+                                                  // (Save/Save As, Export)
+
     bool isImporting;
     bool isExporting; // File --> Import/Export vs File --> Open/Save
     QString password; // The password used to encrypt an encrypted document
@@ -790,10 +789,9 @@ void KisDocument::setMimeType(const QByteArray & mimeType)
     d->mimeType = mimeType;
 }
 
-void KisDocument::setOutputMimeType(const QByteArray & mimeType, int specialOutputFlag)
+void KisDocument::setOutputMimeType(const QByteArray & mimeType)
 {
     d->outputMimeType = mimeType;
-    d->specialOutputFlag = specialOutputFlag;
 }
 
 QByteArray KisDocument::outputMimeType() const
@@ -801,15 +799,11 @@ QByteArray KisDocument::outputMimeType() const
     return d->outputMimeType;
 }
 
-int KisDocument::specialOutputFlag() const
-{
-    return d->specialOutputFlag;
-}
-
 bool KisDocument::confirmNonNativeSave(const bool exporting) const
 {
     // "exporting ? 1 : 0" is different from "exporting" because a bool is
     // usually implemented like an "int", not "unsigned : 1"
+    qDebug() << "confirm nonnative save" << exporting;
     return d->confirmNonNativeSave [ exporting ? 1 : 0 ];
 }
 
@@ -841,26 +835,20 @@ bool KisDocument::isExporting() const
 void KisDocument::slotAutoSave()
 {
     if (d->modified && d->modifiedAfterAutosave && !d->isLoading) {
-        // Give a warning when trying to autosave an encrypted file when no password is known (should not happen)
-        if (d->specialOutputFlag == SaveEncrypted && d->password.isNull()) {
-            // That advice should also fix this error from occurring again
-            emit statusBarMessage(i18n("The password of this encrypted document is not known. Autosave aborted! Please save your work manually."));
-        } else {
-            connect(this, SIGNAL(sigProgress(int)), KisPart::instance()->currentMainwindow(), SLOT(slotProgress(int)));
-            emit statusBarMessage(i18n("Autosaving..."));
-            d->isAutosaving = true;
-            bool ret = saveNativeFormat(autoSaveFile(localFilePath()));
-            setModified(true);
-            if (ret) {
-                d->modifiedAfterAutosave = false;
-                d->autoSaveTimer.stop(); // until the next change
-            }
-            d->isAutosaving = false;
-            emit clearStatusBarMessage();
-            disconnect(this, SIGNAL(sigProgress(int)), KisPart::instance()->currentMainwindow(), SLOT(slotProgress(int)));
-            if (!ret && !d->disregardAutosaveFailure) {
-                emit statusBarMessage(i18n("Error during autosave! Partition full?"));
-            }
+        connect(this, SIGNAL(sigProgress(int)), KisPart::instance()->currentMainwindow(), SLOT(slotProgress(int)));
+        emit statusBarMessage(i18n("Autosaving..."));
+        d->isAutosaving = true;
+        bool ret = saveNativeFormat(autoSaveFile(localFilePath()));
+        setModified(true);
+        if (ret) {
+            d->modifiedAfterAutosave = false;
+            d->autoSaveTimer.stop(); // until the next change
+        }
+        d->isAutosaving = false;
+        emit clearStatusBarMessage();
+        disconnect(this, SIGNAL(sigProgress(int)), KisPart::instance()->currentMainwindow(), SLOT(slotProgress(int)));
+        if (!ret && !d->disregardAutosaveFailure) {
+            emit statusBarMessage(i18n("Error during autosave! Partition full?"));
         }
     }
 }
@@ -904,29 +892,11 @@ bool KisDocument::saveNativeFormat(const QString & file)
     //dbgUI <<"Saving to store";
 
     KoStore::Backend backend = KoStore::Auto;
-    if (d->specialOutputFlag == SaveAsDirectoryStore) {
-        backend = KoStore::Directory;
-        dbgUI << "Saving as uncompressed XML, using directory store.";
-    }
-    else if (d->specialOutputFlag == SaveAsFlatXML) {
-        dbgUI << "Saving as a flat XML file.";
-        QFile f(file);
-        if (f.open(QIODevice::WriteOnly | QIODevice::Text)) {
-            bool success = saveToStream(&f);
-            f.close();
-            return success;
-        } else
-            return false;
-    }
-
     dbgUI << "KisDocument::saveNativeFormat nativeFormatMimeType=" << nativeFormatMimeType();
 
     // TODO: use std::auto_ptr or create store on stack [needs API fixing],
     // to remove all the 'delete store' in all the branches
     KoStore *store = KoStore::createStore(file, KoStore::Write, d->outputMimeType, backend);
-    if (d->specialOutputFlag == SaveEncrypted && !d->password.isNull()) {
-        store->setPassword(d->password);
-    }
     if (store->bad()) {
         d->lastErrorMessage = i18n("Could not create the file for saving");   // more details needed?
         delete store;
@@ -1157,8 +1127,6 @@ bool KisDocument::openFile()
 
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
-    d->specialOutputFlag = 0;
-
     QString filename = localFilePath();
     QString typeName = mimeType();
 
@@ -1297,121 +1265,33 @@ bool KisDocument::loadNativeFormat(const QString & file_)
         d->lastErrorMessage = i18n("The file %1 does not exist.", file);
         return false;
     }
-    if (!fileInfo.isFile()) {
-        file += "/content.xml";
-        QFileInfo fileInfo2(file);
-        if (!fileInfo2.exists() || !fileInfo2.isFile()) {
-            d->lastErrorMessage = i18n("%1 is not a file." , file_);
-            return false;
-        }
-    }
 
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
-    dbgUI << file;
+    KoStore *store = KoStore::createStore(file, KoStore::Read, "", KoStore::Auto);
 
-    QFile in;
-    bool isRawXML = false;
-    if (d->specialOutputFlag != SaveAsDirectoryStore) { // Don't try to open a directory ;)
-        in.setFileName(file);
-        if (!in.open(QIODevice::ReadOnly)) {
-            QApplication::restoreOverrideCursor();
-            d->lastErrorMessage = i18n("Could not open the file for reading (check read permissions).");
-            return false;
-        }
-
-        char buf[6];
-        buf[5] = 0;
-        int pos = 0;
-        do {
-            if (in.read(buf + pos , 1) < 1) {
-                QApplication::restoreOverrideCursor();
-                in.close();
-                d->lastErrorMessage = i18n("Could not read the beginning of the file.");
-                return false;
-            }
-
-            if (QChar(buf[pos]).isSpace())
-                continue;
-            pos++;
-        } while (pos < 5);
-        isRawXML = (qstrnicmp(buf, "<?xml", 5) == 0);
-        if (! isRawXML)
-            // also check for broken MathML files, which seem to be rather common
-            isRawXML = (qstrnicmp(buf, "<math", 5) == 0);   // file begins with <math ?
-        //dbgUI <<"PATTERN=" << buf;
-    }
-    // Is it plain XML?
-    if (isRawXML) {
-        in.seek(0);
-        QString errorMsg;
-        int errorLine;
-        int errorColumn;
-        KoXmlDocument doc = KoXmlDocument(true);
-        bool res;
-        if (doc.setContent(&in, &errorMsg, &errorLine, &errorColumn)) {
-            res = loadXML(doc, 0);
-            if (res)
-                res = completeLoading(0);
-        } else {
-            errUI << "Parsing Error! Aborting! (in KisDocument::loadNativeFormat (QFile))" << endl
-                  << "  Line: " << errorLine << " Column: " << errorColumn << endl
-                  << "  Message: " << errorMsg << endl;
-            d->lastErrorMessage = i18n("parsing error in the main document at line %1, column %2\nError message: %3", errorLine, errorColumn, i18n(errorMsg.toUtf8()));
-            res = false;
-        }
-
-        QApplication::restoreOverrideCursor();
-        in.close();
-        d->isEmpty = false;
-        return res;
-    }
-    else { // It's a calligra store (tar.gz, zip, directory, etc.)
-        in.close();
-
-        KoStore::Backend backend = (d->specialOutputFlag == SaveAsDirectoryStore) ? KoStore::Directory : KoStore::Auto;
-        KoStore *store = KoStore::createStore(file, KoStore::Read, "", backend);
-
-        if (store->bad()) {
-            d->lastErrorMessage = i18n("Not a valid Krita file: %1", file);
-            delete store;
-            QApplication::restoreOverrideCursor();
-            return false;
-        }
-
-        // Remember that the file was encrypted
-        if (d->specialOutputFlag == 0 && store->isEncrypted() && !d->isImporting)
-            d->specialOutputFlag = SaveEncrypted;
-
-        const bool success = loadNativeFormatFromStoreInternal(store);
-
-        // Retrieve the password after loading the file, only then is it guaranteed to exist
-        if (success && store->isEncrypted() && !d->isImporting)
-            d->password = store->password();
-
+    if (store->bad()) {
+        d->lastErrorMessage = i18n("Not a valid Krita file: %1", file);
         delete store;
-
-        return success;
-
+        QApplication::restoreOverrideCursor();
+        return false;
     }
+
+    const bool success = loadNativeFormatFromStoreInternal(store);
+    delete store;
+    return success;
 }
 
 bool KisDocument::loadNativeFormatFromByteArray(QByteArray &data)
 {
     bool succes;
-    KoStore::Backend backend = (d->specialOutputFlag == SaveAsDirectoryStore) ? KoStore::Directory : KoStore::Auto;
     QBuffer buffer(&data);
-    KoStore *store = KoStore::createStore(&buffer, KoStore::Read, "", backend);
+    KoStore *store = KoStore::createStore(&buffer, KoStore::Read, "", KoStore::Auto);
 
     if (store->bad()) {
         delete store;
         return false;
     }
-
-    // Remember that the file was encrypted
-    if (d->specialOutputFlag == 0 && store->isEncrypted() && !d->isImporting)
-        d->specialOutputFlag = SaveEncrypted;
-
     succes = loadNativeFormatFromStoreInternal(store);
 
     // Retrieve the password after loading the file, only then is it guaranteed to exist
@@ -1735,11 +1615,6 @@ bool KisDocument::isNativeFormat(const QByteArray& mimetype) const
     if (mimetype == nativeFormatMimeType())
         return true;
     return extraNativeMimeTypes().contains(mimetype);
-}
-
-int KisDocument::supportedSpecialFormats() const
-{
-    return 0; // we don't support encryption.
 }
 
 void KisDocument::setErrorMessage(const QString& errMsg)

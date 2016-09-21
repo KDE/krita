@@ -246,7 +246,6 @@ public:
     QSignalMapper *documentMapper;
 
     QByteArray lastExportedFormat;
-    int lastExportSpecialOutputFlag  {0};
     QScopedPointer<KisSignalCompressorWithParam<int> > tabSwitchCompressor;
     bool geometryInitialized  {false};
     QMutex savingEntryMutex;
@@ -865,7 +864,7 @@ bool KisMainWindow::hackIsSaving() const
     return !l.owns_lock();
 }
 
-bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent, int specialOutputFlag)
+bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent)
 {
     if (!document) {
         return true;
@@ -908,18 +907,11 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
     QByteArray _native_format = document->nativeFormatMimeType();
     QByteArray oldOutputFormat = document->outputMimeType();
 
-    int oldSpecialOutputFlag = document->specialOutputFlag();
-
     QUrl suggestedURL = document->url();
 
     QStringList mimeFilter;
 
-    if (specialOutputFlag) {
-        mimeFilter = KisMimeDatabase::suffixesForMimeType(_native_format);
-    }
-    else {
-        mimeFilter = KisImportExportManager::mimeFilter(KisImportExportManager::Export);
-    }
+    mimeFilter = KisImportExportManager::mimeFilter(KisImportExportManager::Export);
 
 
     if (!mimeFilter.contains(oldOutputFormat) && !isExporting()) {
@@ -990,32 +982,18 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
 
         QByteArray outputFormat = _native_format;
 
-        if (!specialOutputFlag) {
-            QString outputFormatString = KisMimeDatabase::mimeTypeForFile(newURL.toLocalFile());
-            outputFormat = outputFormatString.toLatin1();
-        }
+        QString outputFormatString = KisMimeDatabase::mimeTypeForFile(newURL.toLocalFile());
+        outputFormat = outputFormatString.toLatin1();
+
 
         if (!isExporting())
-            justChangingFilterOptions = (newURL == document->url()) &&
-                    (outputFormat == document->mimeType()) &&
-                    (specialOutputFlag == oldSpecialOutputFlag);
+            justChangingFilterOptions = (newURL == document->url()) && (outputFormat == document->mimeType());
         else
-            justChangingFilterOptions = (newURL == d->lastExportUrl) &&
-                    (outputFormat == d->lastExportedFormat) &&
-                    (specialOutputFlag == d->lastExportSpecialOutputFlag);
-
+            justChangingFilterOptions = (newURL == d->lastExportUrl) && (outputFormat == d->lastExportedFormat);
 
         bool bOk = true;
         if (newURL.isEmpty()) {
             bOk = false;
-        }
-
-        // adjust URL before doing checks on whether the file exists.
-        if (specialOutputFlag) {
-            QString fileName = newURL.fileName();
-            if ( specialOutputFlag== KisDocument::SaveAsDirectoryStore) {
-                //dbgKrita << "save to directory: " << newURL.url();
-            }
         }
 
         if (bOk) {
@@ -1051,7 +1029,7 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
                 //
                 // - Clarence
                 //
-                document->setOutputMimeType(outputFormat, specialOutputFlag);
+                document->setOutputMimeType(outputFormat);
                 if (!isExporting()) {  // Save As
                     ret = document->saveAs(newURL);
 
@@ -1063,7 +1041,7 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
                         dbgUI << "Failed Save As!";
                         document->setUrl(oldURL);
                         document->setLocalFilePath(oldFile);
-                        document->setOutputMimeType(oldOutputFormat, oldSpecialOutputFlag);
+                        document->setOutputMimeType(oldOutputFormat);
                     }
                 } else { // Export
                     ret = document->exportDocument(newURL);
@@ -1072,11 +1050,10 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
                         // a few file dialog convenience things
                         d->lastExportUrl = newURL;
                         d->lastExportedFormat = outputFormat;
-                        d->lastExportSpecialOutputFlag = specialOutputFlag;
                     }
 
                     // always restore output format
-                    document->setOutputMimeType(oldOutputFormat, oldSpecialOutputFlag);
+                    document->setOutputMimeType(oldOutputFormat);
                 }
 
                 if (silent) // don't let the document change the window caption

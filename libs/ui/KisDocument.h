@@ -343,18 +343,6 @@ public:
     void setAutoSave(int delay);
 
     /**
-     * Set whether the next openUrl call should show error message boxes in case
-     * of errors. This is usually the case, but e.g. not when generating thumbnail
-     * previews.
-     */
-    void setAutoErrorHandlingEnabled(bool b);
-
-    /**
-     * Checks whether error message boxes should be shown.
-     */
-    bool isAutoErrorHandlingEnabled() const;
-
-    /**
      * Retrieve the default value for autosave in seconds.
      * Called by the applications to use the correct default in their config
      */

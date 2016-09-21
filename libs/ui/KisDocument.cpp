@@ -245,7 +245,6 @@ public:
         password(QString()),
         modifiedAfterAutosave(false),
         isAutosaving(false),
-        autoErrorHandlingEnabled(true),
         backupFile(true),
         backupPath(QString()),
         doNotSaveExtDoc(false),
@@ -304,7 +303,6 @@ public:
     int autoSaveDelay; // in seconds, 0 to disable.
     bool modifiedAfterAutosave;
     bool isAutosaving;
-    bool autoErrorHandlingEnabled; // usually true
     bool backupFile;
     QString backupPath;
     bool doNotSaveExtDoc; // makes it possible to save only internally stored child documents
@@ -840,16 +838,6 @@ bool KisDocument::isExporting() const
     return d->isExporting;
 }
 
-void KisDocument::setAutoErrorHandlingEnabled(bool b)
-{
-    d->autoErrorHandlingEnabled = b;
-}
-
-bool KisDocument::isAutoErrorHandlingEnabled() const
-{
-    return d->autoErrorHandlingEnabled;
-}
-
 void KisDocument::slotAutoSave()
 {
     if (d->modified && d->modifiedAfterAutosave && !d->isLoading) {
@@ -1162,9 +1150,7 @@ bool KisDocument::openFile()
     //dbgUI <<"for" << localFilePath();
     if (!QFile::exists(localFilePath())) {
         QApplication::restoreOverrideCursor();
-        if (d->autoErrorHandlingEnabled)
-            // Maybe offer to create a new document with that name ?
-            QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("File %1 does not exist.", localFilePath()));
+        QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("File %1 does not exist.", localFilePath()));
         d->isLoading = false;
         return false;
     }
@@ -1208,7 +1194,7 @@ bool KisDocument::openFile()
 
             QString msg = KisImportExportFilter::conversionStatusString(status);
 
-            if (d->autoErrorHandlingEnabled && !msg.isEmpty()) {
+            if (!msg.isEmpty()) {
                 QString errorMsg(i18n("Could not open %2.\nReason: %1.\n%3", msg, prettyPathOrUrl(), errorMessage()));
                 QMessageBox::critical(0, i18nc("@title:window", "Krita"), errorMsg);
             }

@@ -77,11 +77,6 @@ public:
     virtual void setUrl(const QUrl &url) = 0;
 
     /**
-     *  @brief Saves a document to a store.
-     */
-    virtual bool saveToStore(KoStore *store, const QString &path) = 0;
-
-    /**
      * Checks whether the document is currently in the process of autosaving
      */
     virtual bool isAutosaving() const = 0;

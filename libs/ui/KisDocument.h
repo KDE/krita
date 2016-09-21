@@ -279,13 +279,6 @@ public:
     void setEmpty();
 
     /**
-     *  @brief Saves a sub-document to a store.
-     *
-     *  You should not have to reimplement this.
-     */
-    virtual bool saveToStore(KoStore *store, const QString& path);
-
-    /**
      *  Reimplement this method to load the contents of your Calligra document,
      *  from the XML document. This is for the pre-Oasis file format (maindoc.xml).
      */
@@ -785,7 +778,7 @@ public:
 
 private:
 
-//    bool saveToStream(QIODevice *dev);
+    bool saveToStream(QIODevice *dev);
 
     bool loadNativeFormatFromStoreInternal(KoStore *store);
 

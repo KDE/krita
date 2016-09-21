@@ -1018,40 +1018,6 @@ bool KisDocument::saveToStream(QIODevice *dev)
     return nwritten == (int)s.size();
 }
 
-// Called for embedded documents
-bool KisDocument::saveToStore(KoStore *_store, const QString & _path)
-{
-    dbgUI << "Saving document to store" << _path;
-
-    _store->pushDirectory();
-    // Use the path as the internal url
-    if (_path.startsWith(STORE_PROTOCOL))
-        setUrl(QUrl(_path));
-    else // ugly hack to pass a relative URI
-        setUrl(QUrl(INTERNAL_PREFIX +  _path));
-
-    // In the current directory we're the king :-)
-    if (_store->open("root")) {
-        KoStoreDevice dev(_store);
-        if (!saveToStream(&dev)) {
-            _store->close();
-            return false;
-        }
-        if (!_store->close())
-            return false;
-    }
-
-    if (!completeSaving(_store))
-        return false;
-
-    // Now that we're done leave the directory again
-    _store->popDirectory();
-
-    dbgUI << "Saved document to store";
-
-    return true;
-}
-
 bool KisDocument::savePreview(KoStore *store)
 {
     QPixmap pix = generatePreview(QSize(256, 256));
@@ -1554,6 +1520,7 @@ bool KisDocument::isStoredExtern() const
 {
     return !storeInternal() && hasExternURL();
 }
+
 
 void KisDocument::setModified()
 {

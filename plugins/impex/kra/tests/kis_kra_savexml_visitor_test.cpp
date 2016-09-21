@@ -48,7 +48,7 @@
 #include "kis_shape_selection.h"
 #include "util.h"
 
-#include "kra/kis_kra_savexml_visitor.h"
+#include "../kis_kra_savexml_visitor.h"
 
 #include <filter/kis_filter_registry.h>
 #include <generator/kis_generator_registry.h>

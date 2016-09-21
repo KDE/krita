@@ -1,3 +1,5 @@
+add_subdirectory(tests)
+
 set(libkritaconverter_LIB_SRCS
     kra_converter.cpp
     kis_colorize_dom_utils.cpp

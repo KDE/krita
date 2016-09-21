@@ -133,7 +133,7 @@
 
 KUndo2Command::KUndo2Command(const KUndo2MagicString &text, KUndo2Command *parent):
     m_hasParent(parent != 0),
-    m_timedID(0),
+    m_timedID(-1),
     m_endOfCommand(QTime::currentTime())
 {
     d = new KUndo2CommandPrivate;
@@ -155,7 +155,8 @@ KUndo2Command::KUndo2Command(const KUndo2MagicString &text, KUndo2Command *paren
 */
 
 KUndo2Command::KUndo2Command(KUndo2Command *parent):
-    m_hasParent(parent != 0),m_timedID(0)
+    m_hasParent(parent != 0),
+    m_timedID(-1)
 {
     d = new KUndo2CommandPrivate;
     if (parent != 0)

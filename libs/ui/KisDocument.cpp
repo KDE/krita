@@ -568,6 +568,7 @@ KisDocument::~KisDocument()
 
     // clear undo commands that can still point to the image
     d->undoStack->clear();
+    d->image->waitForDone();
 
     KisImageWSP sanityCheckPointer = d->image;
 

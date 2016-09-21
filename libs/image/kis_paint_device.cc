@@ -175,6 +175,7 @@ public:
                     m_frames.insert(it.key(), data);
                 }
             }
+            m_nextFreeFrameId = rhs->m_nextFreeFrameId;
         }
 
         if (rhs->m_lodData) {
@@ -262,6 +263,14 @@ private:
 
 public:
 
+    int getNextFrameId() {
+        int frameId = 0;
+        while (m_frames.contains(frameId = m_nextFreeFrameId++));
+        KIS_SAFE_ASSERT_RECOVER_NOOP(!m_frames.contains(frameId));
+
+        return frameId;
+    }
+
     int createFrame(bool copy, int copySrc, const QPoint &offset, KUndo2Command *parentCommand)
     {
         KIS_ASSERT_RECOVER(parentCommand) {
@@ -295,7 +304,7 @@ public:
             data->setY(offset.y());
         }
 
-        int frameId = nextFreeFrameId++;
+        int frameId = getNextFrameId();
 
         KUndo2Command *cmd =
             new FrameInsertionCommand(&m_frames,
@@ -511,7 +520,7 @@ private:
     mutable QMutex m_dataSwitchLock;
 
     FramesHash m_frames;
-    int nextFreeFrameId;
+    int m_nextFreeFrameId;
 };
 
 const KisDefaultBoundsSP KisPaintDevice::Private::transitionalDefaultBounds = new KisDefaultBounds();
@@ -523,7 +532,7 @@ KisPaintDevice::Private::Private(KisPaintDevice *paintDevice)
       basicStrategy(new KisPaintDeviceStrategy(paintDevice, this)),
       isProjectionDevice(false),
       m_data(new Data(paintDevice)),
-      nextFreeFrameId(0)
+      m_nextFreeFrameId(0)
 {
 }
 

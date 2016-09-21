@@ -50,8 +50,7 @@ void KisPSDTest::testOpening()
     KisImportExportManager manager(doc.data());
     manager.setBatchMode(true);
 
-    KisImportExportFilter::ConversionStatus status;
-    manager.importDocument(sourceFileInfo.absoluteFilePath(), QString(), status);
+    KisImportExportFilter::ConversionStatus status = manager.importDocument(sourceFileInfo.absoluteFilePath(), QString());
 
     Q_ASSERT(doc->image());
 }
@@ -63,8 +62,7 @@ QSharedPointer<KisDocument> openPsdDocument(const QFileInfo &fileInfo)
     KisImportExportManager manager(doc.data());
     manager.setBatchMode(true);
 
-    KisImportExportFilter::ConversionStatus status;
-    manager.importDocument(fileInfo.absoluteFilePath(), QString(), status);
+    KisImportExportFilter::ConversionStatus status = manager.importDocument(fileInfo.absoluteFilePath(), QString());
 
     return doc;
 }

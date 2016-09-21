@@ -86,13 +86,12 @@ public:
      * @p path can be either a URL or a filename.
      * @p documentMimeType gives importDocument a hint about what type
      * the document may be. It can be left empty.
-     * @p status signals the success/error of the conversion.
+     *
+     * @return  status signals the success/error of the conversion.
      * If the QString which is returned isEmpty() and the status is OK,
      * then we imported the file directly into the document.
      */
-    void importDocument(const QString& location,
-                        const QString& documentMimeType,
-                        KisImportExportFilter::ConversionStatus& status);
+    KisImportExportFilter::ConversionStatus importDocument(const QString& location, const QString& documentMimeType);
 
     /**
      * @brief Exports the given file/document to the specified URL/mimetype.

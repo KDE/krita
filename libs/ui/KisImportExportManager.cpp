@@ -99,9 +99,7 @@ KisImportExportManager::~KisImportExportManager()
     delete d;
 }
 
-void KisImportExportManager::importDocument(const QString& location,
-                                            const QString& documentMimeType,
-                                            KisImportExportFilter::ConversionStatus& status)
+KisImportExportFilter::ConversionStatus KisImportExportManager::importDocument(const QString& location, const QString& documentMimeType)
 {
     // Find the mime type for the file to be imported.
     QString  typeName = documentMimeType;
@@ -113,8 +111,7 @@ void KisImportExportManager::importDocument(const QString& location,
     if (!m_graph.isValid()) {
         errFile << "Couldn't create a valid graph for this source mimetype: "
                 << typeName;
-        status = KisImportExportFilter::BadConversionGraph;
-        return;
+        return KisImportExportFilter::BadConversionGraph;
     }
 
     KisFilterChainSP chain(0);
@@ -140,28 +137,27 @@ void KisImportExportManager::importDocument(const QString& location,
     }
     else {
         errFile << "You aren't supposed to use import() from a filter!" << endl;
-        status = KisImportExportFilter::UsageError;
-        return;
+        return KisImportExportFilter::UsageError;
     }
 
     if (!chain) {
         errFile << "Couldn't create a valid filter chain!" << endl;
         importErrorHelper(typeName);
-        status = KisImportExportFilter::BadConversionGraph;
-        return;
+        return KisImportExportFilter::BadConversionGraph;
     }
 
     // Okay, let's invoke the filters one after the other
     m_direction = Import; // vital information!
     m_importFileName = location;
     m_exportFileName.clear();
-    status = chain->invokeChain();
+    KisImportExportFilter::ConversionStatus status = chain->invokeChain();
 
     m_importFileName.clear();  // Reset the import URL
 
     if (status == KisImportExportFilter::OK) {
         Q_ASSERT(chain->chainOutput().isEmpty());
     }
+    return status;
 
 }
 

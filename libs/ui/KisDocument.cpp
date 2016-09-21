@@ -1156,7 +1156,7 @@ bool KisDocument::openFile()
     if (!isNativeFormat(typeName.toLatin1())) {
         KisImportExportFilter::ConversionStatus status;
 
-        d->importExportManager->importDocument(localFilePath(), typeName, status);
+        status = d->importExportManager->importDocument(localFilePath(), typeName);
         if (status != KisImportExportFilter::OK) {
             QApplication::restoreOverrideCursor();
 

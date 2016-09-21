@@ -75,18 +75,8 @@ KisImportExportFilter::ConversionStatus KisBrushExport::convert(KisDocument *doc
 //        buf.close();
 //    }
 
-    KisDocument *input = inputDocument();
-    QString filename = outputFile();
 
-    if (!input)
-        return KisImportExportFilter::NoDocumentCreated;
-
-    if (filename.isEmpty()) return KisImportExportFilter::FileNotFound;
-
-    if (from != "application/x-krita")
-        return KisImportExportFilter::NotImplemented;
-
-    KisAnnotationSP annotation = input->image()->annotation("ImagePipe Parasite");
+    KisAnnotationSP annotation = document->image()->annotation("ImagePipe Parasite");
     KisPipeBrushParasite parasite;
     if (annotation) {
         QBuffer buf(const_cast<QByteArray*>(&annotation->annotation()));

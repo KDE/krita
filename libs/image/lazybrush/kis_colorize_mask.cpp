@@ -488,6 +488,11 @@ QRect KisColorizeMask::exactBounds() const
 
 }
 
+QRect KisColorizeMask::nonDependentExtent() const
+{
+    return extent();
+}
+
 KisImageSP KisColorizeMask::fetchImage() const
 {
     KisLayerSP parentLayer = dynamic_cast<KisLayer*>(parent().data());

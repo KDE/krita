@@ -24,8 +24,6 @@
 #include <KoColorSpaceConstants.h>
 #include <KisImportExportManager.h>
 
-#include <KoDialog.h>
-
 #include <kis_debug.h>
 #include <KisDocument.h>
 #include <kis_image.h>
@@ -136,34 +134,8 @@ private:
 
 KisImportExportFilter::ConversionStatus KisPPMExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration)
 {
-
-    KoDialog kdb;
-    kdb.setWindowTitle(i18n("PPM Export Options"));
-    kdb.setButtons(KoDialog::Ok | KoDialog::Cancel);
-    KisConfigWidget *wdg = createConfigurationWidget(&kdb, KisDocument::nativeFormatMimeType(), mimeType());
-    kdb.setMainWidget(wdg);
-    QApplication::restoreOverrideCursor();
-
-    // If a configuration object was passed to the convert method, we use that, otherwise we load from the settings
-    KisPropertiesConfigurationSP cfg(new KisPropertiesConfiguration());
-    if (configuration) {
-        cfg->fromXML(configuration->toXML());
-    }
-    else {
-        cfg = lastSavedConfiguration(KisDocument::nativeFormatMimeType(), mimeType());
-    }
-    wdg->setConfiguration(cfg);
-
-    if (!batchMode()) {
-        if (kdb.exec() == QDialog::Rejected) {
-            return KisImportExportFilter::UserCancelled;
-        }
-        cfg = wdg->configuration();
-        KisConfig().setExportConfiguration("PPM", *cfg.data());
-    }
-
     bool rgb = (mimeType() == "image/x-portable-pixmap");
-    bool binary = (cfg->getInt("type") == 0);
+    bool binary = (configuration->getInt("type") == 0);
 
     bool bitmap = (mimeType() == "image/x-portable-bitmap");
 

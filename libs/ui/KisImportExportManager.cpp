@@ -34,12 +34,14 @@
 #include <ksqueezedtextlabel.h>
 #include <kpluginfactory.h>
 
-#include "KoProgressUpdater.h"
-#include "KoJsonTrader.h"
-
+#include <KoDialog.h>
+#include <KoProgressUpdater.h>
+#include <KoJsonTrader.h>
+#include <KisMimeDatabase.h>
+#include <kis_config_widget.h>
 #include <kis_debug.h>
 #include <KisMimeDatabase.h>
-
+#include "kis_config.h"
 #include "KisImportExportFilter.h"
 #include "KisDocument.h"
 
@@ -191,8 +193,39 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::convert(KisImpor
     filter->setFilename(location);
     filter->setBatchMode(batchMode());
     filter->setMimeType(typeName);
+
     if (d->progressUpdater) {
         filter->setUpdater(d->progressUpdater->startSubtask());
+    }
+
+    QByteArray from, to;
+    if (direction == Export) {
+        from = m_document->nativeFormatMimeType();
+        to = mimeType.toLatin1();
+    }
+    else {
+        from = mimeType.toLatin1();
+        to = m_document->nativeFormatMimeType();
+    }
+
+    if (!exportConfiguration) {
+        exportConfiguration = filter->lastSavedConfiguration(from, to);
+    }
+
+    if (!batchMode()) {
+        KoDialog dlg;
+        dlg.setButtons(KoDialog::Ok | KoDialog::Cancel);
+        dlg.setWindowTitle(KisMimeDatabase::descriptionForMimeType(mimeType));
+        KisConfigWidget *wdg = filter->createConfigurationWidget(&dlg, from, to);
+        if (wdg) {
+            wdg->setConfiguration(exportConfiguration);
+            dlg.setMainWidget(wdg);
+            if (!dlg.exec()) {
+                return KisImportExportFilter::UserCancelled;
+            }
+            exportConfiguration = wdg->configuration();
+        }
+        QApplication::setOverrideCursor(Qt::WaitCursor);
     }
 
     QFile io(location);
@@ -217,6 +250,12 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::convert(KisImpor
 
     KisImportExportFilter::ConversionStatus status = filter->convert(m_document, &io, exportConfiguration);
     io.close();
+
+    KisConfig().setExportConfiguration(typeName, exportConfiguration);
+
+    if (!batchMode()) {
+        QApplication::setOverrideCursor(Qt::WaitCursor);
+    }
 
     return status;
 

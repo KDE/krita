@@ -87,14 +87,14 @@ KisImportExportFilter::ConversionStatus KisHeightMapImport::convert(KisDocument 
     kdb->setMainWidget(wdg);
 
     QString filterConfig = KisConfig().exportConfiguration("HeightMap");
-    KisPropertiesConfiguration cfg;
-    cfg.fromXML(filterConfig);
+    KisPropertiesConfigurationSP cfg(new KisPropertiesConfiguration);
+    cfg->fromXML(filterConfig);
 
     int w = 0;
     int h = 0;
 
     optionsHeightMap.intSize->setValue(0);
-    int endianness = cfg.getInt("endianness", 0);
+    int endianness = cfg->getInt("endianness", 0);
     if (endianness == 0) {
         optionsHeightMap.radioMac->setChecked(true);
     }
@@ -116,12 +116,12 @@ KisImportExportFilter::ConversionStatus KisHeightMapImport::convert(KisDocument 
 //    }
 
     QDataStream::ByteOrder bo = QDataStream::LittleEndian;
-    cfg.setProperty("endianness", 1);
+    cfg->setProperty("endianness", 1);
     if (optionsHeightMap.radioMac->isChecked()) {
         bo = QDataStream::BigEndian;
-        cfg.setProperty("endianness", 0);
+        cfg->setProperty("endianness", 0);
     }
-    KisConfig().setExportConfiguration("HeightMap", cfg);
+    KisConfig().setExportConfiguration(mimeType(), cfg);
 
     QDataStream s(io);
     s.setByteOrder(bo);

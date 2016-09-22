@@ -310,7 +310,7 @@ public:
     void setFavoriteCompositeOps(const QStringList& compositeOps) const;
 
     QString exportConfiguration(const QString &filterId, bool defaultValue = false) const;
-    void setExportConfiguration(const QString &filterId, const KisPropertiesConfiguration &properties) const;
+    void setExportConfiguration(const QString &filterId, KisPropertiesConfigurationSP properties) const;
 
     bool useOcio(bool defaultValue = false) const;
     void setUseOcio(bool useOCIO) const;
@@ -438,7 +438,7 @@ public:
 
     bool useEraserBrushOpacity(bool defaultValue = false) const;
     void setUseEraserBrushOpacity(bool value);
-    
+
     QColor getMDIBackgroundColor(bool defaultValue = false) const;
     void setMDIBackgroundColor(const QColor & v) const;
 

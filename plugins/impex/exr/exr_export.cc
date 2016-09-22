@@ -23,7 +23,6 @@
 #include <QSlider>
 #include <QApplication>
 
-#include <KoDialog.h>
 #include <kpluginfactory.h>
 #include <QFileInfo>
 
@@ -77,37 +76,11 @@ KisImportExportFilter::ConversionStatus exrExport::convert(KisDocument *document
 {
     KisImageWSP image = document->image();
 
-    KoDialog kdb;
-    kdb.setWindowTitle(i18n("OpenEXR Export Options"));
-    kdb.setButtons(KoDialog::Ok | KoDialog::Cancel);
-    KisConfigWidget *wdg = createConfigurationWidget(&kdb, KisDocument::nativeFormatMimeType(), "image/x-exr");
-    kdb.setMainWidget(wdg);
-    kdb.resize(kdb.minimumSize());
-
-    // If a configuration object was passed to the convert method, we use that, otherwise we load from the settings
-    KisPropertiesConfigurationSP cfg(new KisPropertiesConfiguration());
-    if (configuration) {
-        cfg->fromXML(configuration->toXML());
-    }
-    else {
-        cfg = lastSavedConfiguration(KisDocument::nativeFormatMimeType(), "image/x-exr");
-    }
-    wdg->setConfiguration(cfg);
-
-    if (!batchMode() ) {
-        QApplication::restoreOverrideCursor();
-        if (kdb.exec() == QDialog::Rejected) {
-            return KisImportExportFilter::UserCancelled;
-        }
-        cfg = wdg->configuration();
-        KisConfig().setExportConfiguration("EXR", *cfg.data());
-    }
-
     exrConverter kpc(document, !batchMode());
 
     KisImageBuilder_Result res;
 
-    if (cfg->getBool("flatten")) {
+    if (configuration->getBool("flatten")) {
         // the image must be locked at the higher levels
         KIS_SAFE_ASSERT_RECOVER_NOOP(document->image()->locked());
 

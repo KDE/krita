@@ -94,7 +94,7 @@ void AnimaterionRenderer::slotRenderAnimation()
 
     if (dlgAnimationRenderer.exec() == QDialog::Accepted) {
         KisPropertiesConfigurationSP sequenceConfig = dlgAnimationRenderer.getSequenceConfiguration();
-        kisConfig.setExportConfiguration("IMAGESEQUENCE", *sequenceConfig.data());
+        kisConfig.setExportConfiguration("IMAGESEQUENCE", sequenceConfig);
         QString mimetype = sequenceConfig->getString("mimetype");
         QString extension = KisMimeDatabase::suffixesForMimeType(mimetype).first();
         QString baseFileName = QString("%1/%2.%3").arg(sequenceConfig->getString("directory"))
@@ -108,11 +108,11 @@ void AnimaterionRenderer::slotRenderAnimation()
 
         KisPropertiesConfigurationSP videoConfig = dlgAnimationRenderer.getVideoConfiguration();
         if (videoConfig) {
-            kisConfig.setExportConfiguration("ANIMATION_RENDERER", *videoConfig.data());
+            kisConfig.setExportConfiguration("ANIMATION_RENDERER", videoConfig);
 
             KisPropertiesConfigurationSP encoderConfig = dlgAnimationRenderer.getEncoderConfiguration();
             if (encoderConfig) {
-                kisConfig.setExportConfiguration("FFMPEG_CONFIG", *encoderConfig.data());
+                kisConfig.setExportConfiguration("FFMPEG_CONFIG", encoderConfig);
                 encoderConfig->setProperty("savedFilesMask", savedFilesMask);
             }
 

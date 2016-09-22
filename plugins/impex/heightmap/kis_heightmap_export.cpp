@@ -32,8 +32,6 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoColorModelStandardIds.h>
 
-#include <KoDialog.h>
-
 #include <kis_debug.h>
 #include <KisDocument.h>
 #include <kis_image.h>
@@ -88,34 +86,9 @@ KisImportExportFilter::ConversionStatus KisHeightMapExport::convert(KisDocument 
         return KisImportExportFilter::WrongFormat;
     }
 
-    KoDialog kdb;
-    kdb.setWindowTitle(i18n("HeightMap Export Options"));
-    kdb.setButtons(KoDialog::Ok | KoDialog::Cancel);
-    KisConfigWidget *wdg = createConfigurationWidget(&kdb, KisDocument::nativeFormatMimeType(), mimeType());
-    kdb.setMainWidget(wdg);
+    configuration->setProperty("width", image->width());
 
-    QApplication::restoreOverrideCursor();
-
-    // If a configuration object was passed to the convert method, we use that, otherwise we load from the settings
-    KisPropertiesConfigurationSP cfg(new KisPropertiesConfiguration());
-    if (configuration) {
-        cfg->fromXML(configuration->toXML());
-    }
-    else {
-        cfg = lastSavedConfiguration(KisDocument::nativeFormatMimeType(), mimeType());
-    }
-    cfg->setProperty("width", image->width());
-    wdg->setConfiguration(cfg);
-
-    if (!batchMode()) {
-        if (kdb.exec() == QDialog::Rejected) {
-            return KisImportExportFilter::UserCancelled;
-        }
-        cfg = wdg->configuration();
-        KisConfig().setExportConfiguration("HeightMap", *cfg.data());
-    }
-
-    QDataStream::ByteOrder bo = cfg->getInt("endianness", 0) ? QDataStream::BigEndian : QDataStream::LittleEndian;
+    QDataStream::ByteOrder bo = configuration->getInt("endianness", 0) ? QDataStream::BigEndian : QDataStream::LittleEndian;
 
     bool downscale = false;
     if (mimeType() == "image/x-r8" && image->colorSpace()->colorDepthId() == Integer16BitsColorDepthID) {

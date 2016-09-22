@@ -25,7 +25,6 @@
 #include <kpluginfactory.h>
 #include <QFileInfo>
 
-#include <KoDialog.h>
 #include <KoColorSpace.h>
 #include <KoChannelInfo.h>
 #include <KoColorModelStandardIds.h>
@@ -54,13 +53,6 @@ KisTIFFExport::~KisTIFFExport()
 
 KisImportExportFilter::ConversionStatus KisTIFFExport::convert(KisDocument *document, QIODevice */*io*/,  KisPropertiesConfigurationSP configuration)
 {
-    KoDialog kdb;
-    kdb.setWindowTitle(i18n("TIFF Export Options"));
-    kdb.setButtons(KoDialog::Ok | KoDialog::Cancel);
-    KisTIFFOptionsWidget *wdg = static_cast<KisTIFFOptionsWidget*>(createConfigurationWidget(&kdb, KisDocument::nativeFormatMimeType(), "image/tiff"));
-    kdb.setMainWidget(wdg);
-    kdb.resize(kdb.minimumSize());
-
     // If a configuration object was passed to the convert method, we use that, otherwise we load from the settings
     KisPropertiesConfigurationSP cfg(new KisPropertiesConfiguration());
     if (configuration) {
@@ -74,17 +66,46 @@ KisImportExportFilter::ConversionStatus KisTIFFExport::convert(KisDocument *docu
     cfg->setProperty("type", (int)cs->channels()[0]->channelValueType());
     cfg->setProperty("isCMYK", (cs->colorModelId() == CMYKAColorModelID));
 
-    wdg->setConfiguration(cfg);
-
-    if (!batchMode()) {
-        if (kdb.exec() == QDialog::Rejected) {
-            return KisImportExportFilter::UserCancelled;
-        }
-        cfg = wdg->configuration();
-        KisConfig().setExportConfiguration("TIFF", *cfg.data());
+    KisTIFFOptions options;
+    switch (configuration->getInt("compressiontype")) {
+    case 0:
+        options.compressionType = COMPRESSION_NONE;
+        break;
+    case 1:
+        options.compressionType = COMPRESSION_JPEG;
+        break;
+    case 2:
+        options.compressionType = COMPRESSION_DEFLATE;
+        break;
+    case 3:
+        options.compressionType = COMPRESSION_LZW;
+        break;
+    case 4:
+        options.compressionType = COMPRESSION_JP2000;
+        break;
+    case 5:
+        options.compressionType = COMPRESSION_CCITTRLE;
+        break;
+    case 6:
+        options.compressionType = COMPRESSION_CCITTFAX3;
+        break;
+    case 7:
+        options.compressionType = COMPRESSION_CCITTFAX4;
+        break;
+    case 8:
+        options.compressionType = COMPRESSION_PIXARLOG;
+        break;
+    default:
+        options.compressionType = COMPRESSION_NONE;
     }
-
-    KisTIFFOptions options = wdg->options();
+    options.predictor = configuration->getInt("predictor");
+    options.alpha = configuration->getBool("alpha");
+    options.flatten = configuration->getBool("flatten");
+    options.jpegQuality = configuration->getInt("quality");
+    options.deflateCompress = configuration->getInt("deflate");
+    options.faxMode = configuration->getInt("faxmode");
+    options.pixarLogCompress = configuration->getInt("pixarlog");
+    options.saveProfile = configuration->getBool("saveProfile");
 
     if ((cs->channels()[0]->channelValueType() == KoChannelInfo::FLOAT16
          || cs->channels()[0]->channelValueType() == KoChannelInfo::FLOAT32) && options.predictor == 2) {
@@ -136,7 +157,7 @@ KisPropertiesConfigurationSP KisTIFFExport::defaultConfiguration(const QByteArra
 
 KisPropertiesConfigurationSP KisTIFFExport::lastSavedConfiguration(const QByteArray &from, const QByteArray &to) const
 {
-    QString filterConfig = KisConfig().exportConfiguration("TIFF");
+    QString filterConfig = KisConfig().exportConfiguration(to);
     KisPropertiesConfigurationSP cfg = defaultConfiguration(from, to);
     cfg->fromXML(filterConfig, false);
     return cfg;

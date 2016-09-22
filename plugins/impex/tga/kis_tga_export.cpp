@@ -22,7 +22,6 @@
 #include <QCheckBox>
 #include <QSlider>
 
-#include <KoDialog.h>
 #include <kpluginfactory.h>
 #include <QFileInfo>
 #include <QApplication>

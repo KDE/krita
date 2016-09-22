@@ -251,10 +251,12 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::convert(KisImpor
     KisImportExportFilter::ConversionStatus status = filter->convert(m_document, &io, exportConfiguration);
     io.close();
 
-    KisConfig().setExportConfiguration(typeName, exportConfiguration);
+    if (exportConfiguration) {
+       KisConfig().setExportConfiguration(typeName, exportConfiguration);
+    }
 
     if (!batchMode()) {
-        QApplication::setOverrideCursor(Qt::WaitCursor);
+        QApplication::restoreOverrideCursor();
     }
 
     return status;

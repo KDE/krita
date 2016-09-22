@@ -338,7 +338,7 @@ void KisKraSaverTest::testRoundTripColorizeMask()
     KisColorizeMaskSP mask = new KisColorizeMask();
     image->addNode(mask, layer1);
     mask->initializeCompositeOp();
-    mask->setColorSpace(layer1->colorSpace());
+    delete mask->setColorSpace(layer1->colorSpace());
 
     {
         KisPaintDeviceSP key1 = new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8());

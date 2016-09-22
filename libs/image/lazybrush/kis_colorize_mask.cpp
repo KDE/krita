@@ -18,6 +18,7 @@
 
 #include "kis_colorize_mask.h"
 
+#include <mutex>
 #include <QCoreApplication>
 
 #include <KoColorSpaceRegistry.h>
@@ -520,7 +521,8 @@ void KisColorizeMask::setCurrentColor(const KoColor &_color)
     KoColor color = _color;
     color.convertTo(colorSpace());
 
-    lockTemporaryTargetForWrite();
+    WriteLockableWrapper lock(this);
+    std::lock_guard<WriteLockableWrapper> guard(lock);
 
     setNeedsUpdate(true);
 
@@ -546,8 +548,6 @@ void KisColorizeMask::setCurrentColor(const KoColor &_color)
     m_d->currentColor = color;
     m_d->currentKeyStrokeDevice = activeDevice;
     m_d->needAddCurrentKeyStroke = newKeyStroke;
-
-    unlockTemporaryTarget();
 }
 
 
@@ -579,6 +579,9 @@ private:
 void KisColorizeMask::mergeToLayer(KisNodeSP layer, KisPostExecutionUndoAdapter *undoAdapter, const KUndo2MagicString &transactionText,int timedID)
 {
     Q_UNUSED(layer);
+
+    WriteLockableWrapper lock(this);
+    std::lock_guard<WriteLockableWrapper> guard(lock);
 
     KisPaintDeviceSP temporaryTarget = this->temporaryTarget();
     const bool isTemporaryTargetErasing = temporaryCompositeOp() == COMPOSITE_ERASE;
@@ -625,8 +628,6 @@ void KisColorizeMask::mergeToLayer(KisNodeSP layer, KisPostExecutionUndoAdapter 
      * Try removing the key strokes that has been completely erased
      */
     if (isTemporaryTargetErasing) {
-        lockTemporaryTargetForWrite();
-
         for (int index = 0; index < m_d->keyStrokes.size(); /*noop*/) {
             const KeyStroke &stroke = m_d->keyStrokes[index];
 
@@ -642,8 +643,6 @@ void KisColorizeMask::mergeToLayer(KisNodeSP layer, KisPostExecutionUndoAdapter 
                 index++;
             }
         }
-
-        unlockTemporaryTarget();
     }
 
     undoAdapter->addMacro(macro);

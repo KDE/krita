@@ -641,8 +641,6 @@ bool KisDocument::saveFile(KisPropertiesConfigurationSP exportConfiguration)
     if (outputMimeType.isEmpty())
         outputMimeType = d->outputMimeType = nativeFormatMimeType();
 
-    QApplication::setOverrideCursor(Qt::WaitCursor);
-
     if (backupFile()) {
         Q_ASSERT(url().isLocalFile());
         KBackup::backupFile(url().toLocalFile(), d->backupPath);
@@ -773,8 +771,6 @@ bool KisDocument::saveFile(KisPropertiesConfigurationSP exportConfiguration)
     }
 
     clearFileProgressUpdater();
-
-    QApplication::restoreOverrideCursor();
 
     return ret;
 }
@@ -1120,13 +1116,10 @@ bool KisDocument::openFile()
 {
     //dbgUI <<"for" << localFilePath();
     if (!QFile::exists(localFilePath())) {
-        QApplication::restoreOverrideCursor();
         QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("File %1 does not exist.", localFilePath()));
         d->isLoading = false;
         return false;
     }
-
-    QApplication::setOverrideCursor(Qt::WaitCursor);
 
     QString filename = localFilePath();
     QString typeName = mimeType();
@@ -1159,7 +1152,6 @@ bool KisDocument::openFile()
 
         status = d->importExportManager->importDocument(localFilePath(), typeName);
         if (status != KisImportExportFilter::OK) {
-            QApplication::restoreOverrideCursor();
 
             QString msg = KisImportExportFilter::conversionStatusString(status);
 
@@ -1174,8 +1166,6 @@ bool KisDocument::openFile()
         d->isEmpty = false;
         //qDebug() << "importedFile" << importedFile << "status:" << static_cast<int>(status);
     }
-
-    QApplication::restoreOverrideCursor();
 
     setMimeTypeAfterLoading(typeName);
     emit sigLoadingFinished();
@@ -1267,14 +1257,11 @@ bool KisDocument::loadNativeFormat(const QString & file_)
         return false;
     }
 
-    QApplication::setOverrideCursor(Qt::WaitCursor);
-
     KoStore *store = KoStore::createStore(file, KoStore::Read, "", KoStore::Auto);
 
     if (store->bad()) {
         d->lastErrorMessage = i18n("Not a valid Krita file: %1", file);
         delete store;
-        QApplication::restoreOverrideCursor();
         return false;
     }
 
@@ -1313,14 +1300,12 @@ bool KisDocument::loadNativeFormatFromStoreInternal(KoStore *store)
         if (ok)
             ok = loadXML(doc, store);
         if (!ok) {
-            QApplication::restoreOverrideCursor();
             return false;
         }
 
     } else {
         errUI << "ERROR: No maindoc.xml" << endl;
         d->lastErrorMessage = i18n("Invalid document: no file 'maindoc.xml'.");
-        QApplication::restoreOverrideCursor();
         return false;
     }
 
@@ -1336,7 +1321,6 @@ bool KisDocument::loadNativeFormatFromStoreInternal(KoStore *store)
     }
 
     bool res = completeLoading(store);
-    QApplication::restoreOverrideCursor();
     d->isEmpty = false;
     return res;
 }

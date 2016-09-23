@@ -349,10 +349,14 @@ class bk_max_flow {
         vertex_descriptor current_node = source(e, m_g);
         while(current_node != m_source){
           edge_descriptor pred = get_edge_to_parent(current_node);
-          put(m_res_cap_map, pred, get(m_res_cap_map, pred) - bottleneck);
+          const tEdgeVal new_pred_cap = get(m_res_cap_map, pred) - bottleneck;
+          put(m_res_cap_map, pred, new_pred_cap);
           BOOST_ASSERT(get(m_res_cap_map, pred) >= 0);
-          put(m_res_cap_map, get(m_rev_edge_map, pred), get(m_res_cap_map, get(m_rev_edge_map, pred)) + bottleneck);
-          if(get(m_res_cap_map, pred) == 0){
+
+          const edge_descriptor pred_rev = get(m_rev_edge_map, pred);
+          put(m_res_cap_map, pred_rev, get(m_res_cap_map, pred_rev) + bottleneck);
+
+          if(new_pred_cap == 0){
             set_no_parent(current_node);
             m_orphans.push_front(current_node);
           }
@@ -362,10 +366,14 @@ class bk_max_flow {
         current_node = target(e, m_g);
         while(current_node != m_sink){
           edge_descriptor pred = get_edge_to_parent(current_node);
-          put(m_res_cap_map, pred, get(m_res_cap_map, pred) - bottleneck);
+          const tEdgeVal new_pred_cap = get(m_res_cap_map, pred) - bottleneck;
+          put(m_res_cap_map, pred, new_pred_cap);
           BOOST_ASSERT(get(m_res_cap_map, pred) >= 0);
-          put(m_res_cap_map, get(m_rev_edge_map, pred), get(m_res_cap_map, get(m_rev_edge_map, pred)) + bottleneck);
-          if(get(m_res_cap_map, pred) == 0){
+
+          const edge_descriptor pred_rev = get(m_rev_edge_map, pred);
+          put(m_res_cap_map, pred_rev, get(m_res_cap_map, pred_rev) + bottleneck);
+
+          if(new_pred_cap == 0){
             set_no_parent(current_node);
             m_orphans.push_front(current_node);
           }

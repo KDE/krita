@@ -27,7 +27,11 @@
 #include <boost/iterator/transform_iterator.hpp>
 
 #include <boost/graph/properties.hpp>
-#include <boost/graph/boykov_kolmogorov_max_flow.hpp>
+
+// we use a forked version of the algorithm
+//#include <boost/graph/boykov_kolmogorov_max_flow.hpp>
+#include "patched_boykov_kolmogorov_max_flow.hpp"
+
 #include <boost/graph/iteration_macros.hpp>
 
 #include "lazybrush/kis_lazy_fill_graph.h"

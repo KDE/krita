@@ -85,7 +85,7 @@ void cutOneWay(const KoColor &color,
     KisLazyFillGraph &graph = capacityMap.graph();
 
     std::vector<default_color_type> groups(num_vertices(graph));
-    std::vector<float> residual_capacity(num_edges(graph), 0);
+    std::vector<int> residual_capacity(num_edges(graph), 0);
 
     std::vector<typename graph_traits<KisLazyFillGraph>::vertices_size_type> distance_vec(num_vertices(graph), 0);
     std::vector<typename graph_traits<KisLazyFillGraph>::edge_descriptor> predecessor_vec(num_vertices(graph));

@@ -677,14 +677,12 @@ public:
     edges_size_type index_of(edge_descriptor edge) const {
         edges_size_type index = -1;
 
-        Q_FOREACH (const EdgeIndexBin &bin, m_edgeBins) {
-            index = bin.indexOf(edge);
+        auto it = m_edgeBins.constBegin();
+        for (; it != m_edgeBins.constEnd(); ++it) {
+
+            index = it->indexOf(edge);
             if (index >= 0) break;
         }
-
-
-        //ENTER_FUNCTION() << ppVar(edge) << ppVar(index);
-        //KIS_ASSERT(index >= 0);
 
         return index;
     }
@@ -714,8 +712,11 @@ private:
 
     static inline bool findInRects(const QVector<QRect> &rects, const QPoint &pt) {
         bool result = false;
-        Q_FOREACH (const QRect &rc, rects) {
-            if (rc.contains(pt)) {
+
+        auto it = rects.constBegin();
+        for (; it != rects.constEnd(); ++it) {
+
+            if (it->contains(pt)) {
                 result = true;
                 break;
             }

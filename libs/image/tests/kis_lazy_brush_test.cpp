@@ -21,6 +21,8 @@
 #include <QTest>
 #include "kis_debug.h"
 
+#include "kis_fill_painter.h"
+
 #include <QImage>
 #include <QPainter>
 
@@ -1330,5 +1332,72 @@ void KisLazyBrushTest::testEstimateTransparentPixels()
     value = KritaUtils::estimatePortionOfTransparentPixels(dev, totalRect, 0.1);
     QCOMPARE(value, 0.0);
 }
+
+void KisLazyBrushTest::multiwayCutBenchmark()
+{
+    BOOST_CONCEPT_ASSERT(( ReadablePropertyMapConcept<KisLazyFillCapacityMap, KisLazyFillGraph::edge_descriptor> ));
+
+    const KoColor fillColor(Qt::black, KoColorSpaceRegistry::instance()->rgb8());
+    KisPaintDeviceSP mainDev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
+
+    QRect mainRect(0,0,512,512);
+
+    QPainterPath path;
+    path.moveTo(100, 100);
+    path.lineTo(400, 100);
+    path.lineTo(400, 400);
+    path.lineTo(100, 400);
+    path.lineTo(100, 120);
+
+    KisFillPainter gc(mainDev);
+    gc.setPaintColor(fillColor);
+    gc.drawPainterPath(path, QPen(Qt::white, 10));
+    gc.fillRect(QRect(250, 100, 15, 120), fillColor);
+    gc.fillRect(QRect(250, 280, 15, 120), fillColor);
+    gc.fillRect(QRect(100, 250, 120, 15), fillColor);
+    gc.fillRect(QRect(280, 250, 120, 15), fillColor);
+
+    //KIS_DUMP_DEVICE_2(mainDev, mainRect, "1main", "dd");
+
+    KisPaintDeviceSP aLabelDev = new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8());
+    aLabelDev->fill(QRect(110, 110, 30,30), KoColor(Qt::black, KoColorSpaceRegistry::instance()->alpha8()));
+
+    KisPaintDeviceSP bLabelDev = new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8());
+    bLabelDev->fill(QRect(370, 110, 20,20), KoColor(Qt::black, KoColorSpaceRegistry::instance()->alpha8()));
+
+    KisPaintDeviceSP cLabelDev = new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8());
+    cLabelDev->fill(QRect(370, 370, 20,20), KoColor(Qt::black, KoColorSpaceRegistry::instance()->alpha8()));
+
+    KisPaintDeviceSP dLabelDev = new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8());
+    dLabelDev->fill(QRect(110, 370, 20,20), KoColor(Qt::black, KoColorSpaceRegistry::instance()->alpha8()));
+
+    KisPaintDeviceSP eLabelDev = new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8());
+    eLabelDev->fill(QRect(0, 0, 200,20), KoColor(Qt::black, KoColorSpaceRegistry::instance()->alpha8()));
+
+    KisPaintDeviceSP filteredMainDev = KisPainter::convertToAlphaAsAlpha(mainDev);
+    KisLazyFillTools::normalizeAndInvertAlpha8Device(filteredMainDev, mainRect);
+
+    KisPaintDeviceSP resultColoring = new KisPaintDevice(mainDev->colorSpace());
+
+    KisMultiwayCut cut(filteredMainDev, resultColoring, mainRect);
+
+    cut.addKeyStroke(aLabelDev, KoColor(Qt::red, mainDev->colorSpace()));
+    cut.addKeyStroke(bLabelDev, KoColor(Qt::green, mainDev->colorSpace()));
+    cut.addKeyStroke(cLabelDev, KoColor(Qt::blue, mainDev->colorSpace()));
+    cut.addKeyStroke(dLabelDev, KoColor(Qt::yellow, mainDev->colorSpace()));
+    cut.addKeyStroke(eLabelDev, KoColor(Qt::transparent, mainDev->colorSpace()));
+
+
+    QBENCHMARK_ONCE {
+        cut.run();
+    }
+
+
+    // KIS_DUMP_DEVICE_2(resultColoring, mainRect, "00result", "dd");
+    // KIS_DUMP_DEVICE_2(mainDev, mainRect, "1main", "dd");
+    // KIS_DUMP_DEVICE_2(filteredMainDev, mainRect, "2filtered", "dd");
+}
+
+
 
 QTEST_MAIN(KisLazyBrushTest)

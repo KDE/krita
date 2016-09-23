@@ -58,7 +58,7 @@ struct KisColorizeMask::Private
           showColoring(true),
           needsUpdate(true),
           originalSequenceNumber(-1),
-          updateCompressor(1000, KisSignalCompressor::POSTPONE)
+          updateCompressor(1, KisSignalCompressor::POSTPONE)
     {
     }
 

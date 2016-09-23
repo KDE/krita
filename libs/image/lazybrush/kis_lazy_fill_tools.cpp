@@ -16,6 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#define BOOST_DISABLE_ASSERTS 1
+
 #include "kis_lazy_fill_tools.h"
 
 #include <numeric>

@@ -521,7 +521,11 @@ public:
                 std::swap(src_vertex, dst_vertex);
             }
 
-            if (!rect.contains(QPoint(src_vertex.x, src_vertex.y))) {
+            // using direct QRect::contains makes the code 30% slower
+            const int x = src_vertex.x;
+            const int y = src_vertex.y;
+            if (x < rect.x() || x > rect.right() ||
+                y < rect.y() || y > rect.bottom()) {
                 return -1;
             }
 

@@ -504,12 +504,12 @@ public:
     /**
      * Reimplemented from QDialog.
      */
-    QSize sizeHint() const Q_DECL_OVERRIDE;
+    QSize sizeHint() const override;
 
     /**
      * Reimplemented from QDialog.
      */
-    QSize minimumSizeHint() const Q_DECL_OVERRIDE;
+    QSize minimumSizeHint() const override;
 
 public Q_SLOTS:
     /**
@@ -772,7 +772,7 @@ protected:
      * Emits the #hidden signal. You can connect to that signal to
      * detect when a dialog has been closed.
      */
-    void hideEvent(QHideEvent *) Q_DECL_OVERRIDE;
+    void hideEvent(QHideEvent *) override;
 
     /**
      * Detects when a dialog is being closed from the window manager
@@ -780,12 +780,12 @@ protected:
      * is activated. Otherwise standard QDialog behavior
      * will take place.
      */
-    void closeEvent(QCloseEvent *e) Q_DECL_OVERRIDE;
+    void closeEvent(QCloseEvent *e) override;
 
     /**
      * @internal
      */
-    void keyPressEvent(QKeyEvent *) Q_DECL_OVERRIDE;
+    void keyPressEvent(QKeyEvent *) override;
 
 protected Q_SLOTS:
     /**

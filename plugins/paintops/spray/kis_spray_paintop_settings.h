@@ -34,10 +34,10 @@ public:
     KisSprayPaintOpSettings();
     virtual ~KisSprayPaintOpSettings();
 
-    void setPaintOpSize(qreal value) Q_DECL_OVERRIDE;
-    qreal paintOpSize() const Q_DECL_OVERRIDE;
+    void setPaintOpSize(qreal value) override;
+    qreal paintOpSize() const override;
 
-    QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode) Q_DECL_OVERRIDE;
+    QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode) override;
 
     QString modelName() const {
         return "airbrush";

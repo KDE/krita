@@ -41,7 +41,7 @@
 #include <kis_node.h>
 #include <kis_group_layer.h>
 
-#include <kis_gbr_brush.h>
+#include <kis_gimp_brush.h>
 #include <kis_imagepipe_brush.h>
 #include <KisAnimatedBrushAnnotation.h>
 
@@ -75,7 +75,7 @@ KisImportExportFilter::ConversionStatus KisBrushImport::convert(const QByteArray
         KisBrush *brush;
 
         if (from == "image/x-gimp-brush") {
-            brush = new KisGbrBrush(filename);
+            brush = new KisGimpBrush(filename);
         }
         else if (from == "image/x-gimp-brush-animated") {
             brush = new KisImagePipeBrush(filename);
@@ -117,9 +117,9 @@ KisImportExportFilter::ConversionStatus KisBrushImport::convert(const QByteArray
 
         KisImagePipeBrush *pipeBrush = dynamic_cast<KisImagePipeBrush*>(brush);
         if (pipeBrush) {
-            QVector<KisGbrBrush*> brushes = pipeBrush->brushes();
+            QVector<KisGimpBrush*> brushes = pipeBrush->brushes();
             for(int i = brushes.size(); i > 0; i--) {
-                KisGbrBrush *subbrush = brushes.at(i - 1);
+                KisGimpBrush *subbrush = brushes.at(i - 1);
                 const KoColorSpace *subColorSpace = 0;
                 if (brush->hasColor()) {
                     subColorSpace = KoColorSpaceRegistry::instance()->rgb8();

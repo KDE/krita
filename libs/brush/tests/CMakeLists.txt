@@ -27,9 +27,9 @@ target_link_libraries(KisAutoBrushTest   kritaimage kritalibbrush  Qt5::Test)
 
 ########### next target ###############
 
-set(kis_gbr_brush_test_SRCS kis_gbr_brush_test.cpp )
-kde4_add_unit_test(KisGbrBrushTest TESTNAME krita-libbrush-KisGbrBrushTest ${kis_gbr_brush_test_SRCS})
-target_link_libraries(KisGbrBrushTest   kritaimage kritalibbrush  Qt5::Test)
+set(kis_gimp_brush_test_SRCS kis_gimp_brush_test.cpp )
+kde4_add_unit_test(KisGimpBrushTest TESTNAME krita-libbrush-KisGimpBrushTest ${kis_gimp_brush_test_SRCS})
+target_link_libraries(KisGimpBrushTest   kritaimage kritalibbrush  Qt5::Test)
 
 ########### next target ###############
 

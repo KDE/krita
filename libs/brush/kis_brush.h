@@ -346,8 +346,6 @@ public:
      */
     virtual void setBrushType(enumBrushType type);
 
-    friend class KisGbrBrushTest;
-
     virtual void setHasColor(bool hasColor);
 
     /**
@@ -367,7 +365,6 @@ protected:
     void predefinedBrushToXML(const QString &type, QDomElement& e) const;
 
 private:
-    friend class KisImagePipeBrushTest;
 
     // Initialize our boundary
     void generateBoundary() const;

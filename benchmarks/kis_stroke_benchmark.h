@@ -69,7 +69,7 @@ private Q_SLOTS:
 
     void init();
 
-    // Autobrush
+    // AutoBrush
     void pixelbrush300px();
     void pixelbrush300pxRL();
 

@@ -22,8 +22,8 @@ macro_add_unittest_definitions()
 ########### next target ###############
 
 set(kis_auto_brush_test_SRCS kis_auto_brush_test.cpp )
-kde4_add_unit_test(KisAutobrushTest TESTNAME krita-libbrush-KisAutobrushTest ${kis_auto_brush_test_SRCS})
-target_link_libraries(KisAutobrushTest   kritaimage kritalibbrush  Qt5::Test)
+kde4_add_unit_test(KisAutoBrushTest TESTNAME krita-libbrush-KisAutoBrushTest ${kis_auto_brush_test_SRCS})
+target_link_libraries(KisAutoBrushTest   kritaimage kritalibbrush  Qt5::Test)
 
 ########### next target ###############
 

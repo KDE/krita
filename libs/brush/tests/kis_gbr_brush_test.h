@@ -21,7 +21,7 @@
 
 #include <QtTest>
 
-class KisBrushTest : public QObject
+class KisGbrBrushTest : public QObject
 {
     Q_OBJECT
 

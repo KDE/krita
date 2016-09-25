@@ -346,7 +346,7 @@ public:
      */
     virtual void setBrushType(enumBrushType type);
 
-    friend class KisBrushTest;
+    friend class KisGbrBrushTest;
 
     virtual void setHasColor(bool hasColor);
 

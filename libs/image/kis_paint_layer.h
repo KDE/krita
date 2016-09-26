@@ -87,7 +87,7 @@ public:
     void setDirty(const QRect & rect);
 
     QIcon icon() const;
-    void setImage(KisImageWSP image) Q_DECL_OVERRIDE;
+    void setImage(KisImageWSP image) override;
 
     KisBaseNode::PropertyList sectionModelProperties() const;
     void setSectionModelProperties(const KisBaseNode::PropertyList &properties);

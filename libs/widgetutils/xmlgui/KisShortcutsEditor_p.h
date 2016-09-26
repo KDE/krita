@@ -139,8 +139,8 @@ public:
     //! Commit the changes.
     void commit();
 
-    QVariant data(int column, int role = Qt::DisplayRole) const Q_DECL_OVERRIDE;
-    bool operator<(const QTreeWidgetItem &other) const Q_DECL_OVERRIDE;
+    QVariant data(int column, int role = Qt::DisplayRole) const override;
+    bool operator<(const QTreeWidgetItem &other) const override;
 
     QKeySequence keySequence(uint column) const;
     void setKeySequence(uint column, const QKeySequence &seq);

@@ -28,8 +28,8 @@ class KRITAIMAGE_EXPORT KisNoSizePaintOpSettings : public KisPaintOpSettings
 public:
     KisNoSizePaintOpSettings();
 
-    void setPaintOpSize(qreal value) Q_DECL_OVERRIDE;
-    qreal paintOpSize() const Q_DECL_OVERRIDE;
+    void setPaintOpSize(qreal value) override;
+    qreal paintOpSize() const override;
 };
 
 #endif // KISNOSIZEPAINTOPSETTINGS_H

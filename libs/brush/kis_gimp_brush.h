@@ -36,7 +36,7 @@ typedef KisSharedPtr<KisQImagemask> KisQImagemaskSP;
 class QString;
 class QIODevice;
 
-class BRUSH_EXPORT KisGbrBrush : public KisScalingSizeBrush
+class BRUSH_EXPORT KisGimpBrush : public KisScalingSizeBrush
 {
 
 protected:
@@ -44,20 +44,20 @@ protected:
 public:
 
     /// Construct brush to load filename later as brush
-    KisGbrBrush(const QString& filename);
+    KisGimpBrush(const QString& filename);
 
     /// Load brush from the specified data, at position dataPos, and set the filename
-    KisGbrBrush(const QString& filename,
+    KisGimpBrush(const QString& filename,
                 const QByteArray & data,
                 qint32 & dataPos);
 
     /// Load brush from the specified paint device, in the specified region
-    KisGbrBrush(KisPaintDeviceSP image, int x, int y, int w, int h);
+    KisGimpBrush(KisPaintDeviceSP image, int x, int y, int w, int h);
 
     /// Load brush as a copy from the specified QImage (handy when you need to copy a brush!)
-    KisGbrBrush(const QImage& image, const QString& name = QString(""));
+    KisGimpBrush(const QImage& image, const QString& name = QString(""));
 
-    virtual ~KisGbrBrush();
+    virtual ~KisGimpBrush();
 
     virtual bool load();
     virtual bool loadFromDevice(QIODevice *dev);
@@ -102,7 +102,7 @@ protected:
     friend class KisImageBrushesPipe;
 
 
-    KisGbrBrush(const KisGbrBrush& rhs);
+    KisGimpBrush(const KisGimpBrush& rhs);
 
     void setBrushType(enumBrushType type);
     virtual void setBrushTipImage(const QImage& image);

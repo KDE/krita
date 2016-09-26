@@ -22,10 +22,14 @@
 #include "kis_int_parse_spin_box.h"
 #include "kis_signal_compressor.h"
 
-#include "KoChannelInfo.h"
-#include "KoColorSpaceTraits.h"
-#include "KoColorSpaceMaths.h"
-#include "KoColorSpaceRegistry.h"
+#include <KoConfig.h>
+#ifdef HAVE_OPENEXR
+#include <half.h>
+#endif
+#include <KoChannelInfo.h>
+#include <KoColorSpaceTraits.h>
+#include <KoColorSpaceMaths.h>
+#include <KoColorSpaceRegistry.h>
 
 struct KisSpinboxColorSelector::Private
 {
@@ -129,6 +133,7 @@ void KisSpinboxColorSelector::slotSetColorSpace(const KoColorSpace *cs)
             }
         }
             break;
+#ifdef HAVE_OPENEXR
         case KoChannelInfo::FLOAT16: {
             KisDoubleParseSpinBox *input = new KisDoubleParseSpinBox(this);
             input->setMinimum(0);
@@ -146,6 +151,7 @@ void KisSpinboxColorSelector::slotSetColorSpace(const KoColorSpace *cs)
             }
         }
             break;
+#endif
         case KoChannelInfo::FLOAT32: {
             KisDoubleParseSpinBox *input = new KisDoubleParseSpinBox(this);
             input->setMinimum(0);

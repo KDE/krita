@@ -57,6 +57,7 @@ public:
     //functions to set up selectedColor
     void setSelectedColor(int x);
     int selectedColor() const;
+    void setParent(QWidget *parent);
 
     virtual void tabletEvent(QTabletEvent * event);
 

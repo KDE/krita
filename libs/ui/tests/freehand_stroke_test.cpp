@@ -131,7 +131,7 @@ private:
     QScopedPointer<QColor> m_paintColor;
 };
 
-void FreehandStrokeTest::testAutobrushStroke()
+void FreehandStrokeTest::testAutoBrushStroke()
 {
     FreehandStrokeTester tester("autobrush_300px.kpp");
     tester.test();
@@ -169,7 +169,7 @@ void FreehandStrokeTest::testMixDullCompositioning()
     tester.test();
 }
 
-void FreehandStrokeTest::testAutobrushStrokeLod()
+void FreehandStrokeTest::testAutoBrushStrokeLod()
 {
     FreehandStrokeTester tester("Basic_tip_default.kpp", true);
     tester.testSimpleStroke();

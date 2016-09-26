@@ -36,7 +36,7 @@
 #include "kis_image.h"
 #include "kis_layer.h"
 #include "kis_paint_device.h"
-#include "kis_gbr_brush.h"
+#include "kis_gimp_brush.h"
 #include "kis_imagepipe_brush.h"
 #include <kis_fixed_paint_device.h>
 
@@ -110,7 +110,7 @@ void KisCustomBrushWidget::slotSpacingChanged()
 void KisCustomBrushWidget::slotUpdateUseColorAsMask(bool useColorAsMask)
 {
     if (m_brush) {
-        static_cast<KisGbrBrush*>(m_brush.data())->setUseColorAsMask(useColorAsMask);
+        static_cast<KisGimpBrush*>(m_brush.data())->setUseColorAsMask(useColorAsMask);
         preview->setPixmap(QPixmap::fromImage(m_brush->brushTipImage()));
     }
 }
@@ -147,7 +147,7 @@ void KisCustomBrushWidget::slotAddPredefined()
     // so to the other brush choosers can pick it up, if they want to
     if (m_rServerAdapter && m_brush) {
         qDebug() << "m_brush" << m_brush;
-        KisGbrBrush *resource = dynamic_cast<KisGbrBrush*>(m_brush->clone());
+        KisGimpBrush *resource = dynamic_cast<KisGimpBrush*>(m_brush->clone());
         resource->setFilename(tempFileName);
 
         if (nameLineEdit->text().isEmpty()) {
@@ -181,7 +181,7 @@ void KisCustomBrushWidget::createBrush()
         m_image->unlock();
 
         if (!selection) {
-            m_brush = new KisGbrBrush(dev, 0, 0, m_image->width(), m_image->height());
+            m_brush = new KisGimpBrush(dev, 0, 0, m_image->width(), m_image->height());
         }
         else {
             // apply selection mask
@@ -202,7 +202,7 @@ void KisCustomBrushWidget::createBrush()
             }
 
             QRect rc = dev->exactBounds();
-            m_brush = new KisGbrBrush(dev, rc.x(), rc.y(), rc.width(), rc.height());
+            m_brush = new KisGimpBrush(dev, rc.x(), rc.y(), rc.width(), rc.height());
         }
 
     }
@@ -240,7 +240,7 @@ void KisCustomBrushWidget::createBrush()
         m_image->unlock();
     }
 
-    static_cast<KisGbrBrush*>(m_brush.data())->setUseColorAsMask(colorAsMask->isChecked());
+    static_cast<KisGimpBrush*>(m_brush.data())->setUseColorAsMask(colorAsMask->isChecked());
     m_brush->setSpacing(spacingWidget->spacing());
     m_brush->setAutoSpacing(spacingWidget->autoSpacingActive(), spacingWidget->autoSpacingCoeff());
     m_brush->setFilename(TEMPORARY_FILENAME);

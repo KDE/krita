@@ -24,7 +24,7 @@
 #include <QString>
 
 #include <resources/KoResource.h>
-#include "kis_gimp_brush.h"
+#include "kis_gbr_brush.h"
 #include "kis_global.h"
 
 class KisPipeBrushParasite;
@@ -47,7 +47,7 @@ enum SelectionMode {
 };
 }
 
-class BRUSH_EXPORT KisImagePipeBrush : public KisGimpBrush
+class BRUSH_EXPORT KisImagePipeBrush : public KisGbrBrush
 {
 
 public:
@@ -106,7 +106,7 @@ public:
             double subPixelX = 0, double subPixelY = 0, qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR) const override;
 
 
-    QVector<KisGimpBrush*> brushes() const;
+    QVector<KisGbrBrush*> brushes() const;
 
 
     const KisPipeBrushParasite &parasite() const;
@@ -126,7 +126,7 @@ protected:
 private:
     friend class KisImagePipeBrushTest;
 
-    KisGimpBrush* testingGetCurrentBrush(const KisPaintInformation& info) const;
+    KisGbrBrush* testingGetCurrentBrush(const KisPaintInformation& info) const;
     void testingSelectNextBrush(const KisPaintInformation& info) const;
 
     bool initFromData(const QByteArray &data);

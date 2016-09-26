@@ -47,7 +47,7 @@
 #include "kis_clipboard_brush_widget.h"
 
 #include "kis_global.h"
-#include "kis_gimp_brush.h"
+#include "kis_gbr_brush.h"
 #include "kis_debug.h"
 #include "kis_image.h"
 
@@ -248,7 +248,7 @@ void KisBrushChooser::slotSpacingChanged()
 
 void KisBrushChooser::slotSetItemUseColorAsMask(bool useColorAsMask)
 {
-    KisGimpBrush *brush = dynamic_cast<KisGimpBrush *>(m_itemChooser->currentResource());
+    KisGbrBrush *brush = dynamic_cast<KisGbrBrush *>(m_itemChooser->currentResource());
     if (brush) {
         brush->setUseColorAsMask(useColorAsMask);
         slotActivatedBrush(brush);
@@ -308,7 +308,7 @@ void KisBrushChooser::update(KoResource * resource)
         m_slSize->setValue(brush->width() * brush->scale());
 
         // useColorAsMask support is only in gimp brush so far
-        KisGimpBrush *gimpBrush = dynamic_cast<KisGimpBrush*>(resource);
+        KisGbrBrush *gimpBrush = dynamic_cast<KisGbrBrush*>(resource);
         if (gimpBrush) {
             m_chkColorMask->setChecked(gimpBrush->useColorAsMask());
         }

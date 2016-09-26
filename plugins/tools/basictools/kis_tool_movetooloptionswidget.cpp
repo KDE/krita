@@ -64,6 +64,11 @@ MoveToolOptionsWidget::MoveToolOptionsWidget(QWidget *parent, int resolution, QS
     translateYBox->setSuffix(i18n(" px"));
     translateXBox->setRange(-10000, 10000);
     translateYBox->setRange(-10000, 10000);
+
+    // FIXME: disable translation spinboxes for 3.0.1.1
+    moveGroup->setVisible(false);
+    translateXBox->setVisible(false);
+    translateYBox->setVisible(false);
 }
 
 void MoveToolOptionsWidget::updateUIUnit(int newUnit)

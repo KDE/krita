@@ -435,10 +435,10 @@ QWidget* KisToolMove::createOptionWidget()
 
     m_optionsWidget->slotSetTranslate(m_startPosition);
 
-    connect(m_optionsWidget, SIGNAL(sigSetTranslateX(int)), SLOT(moveBySpinX(int)));
-    connect(m_optionsWidget, SIGNAL(sigSetTranslateY(int)), SLOT(moveBySpinY(int)));
-
-    connect(this, SIGNAL(moveInNewPosition(QPoint)), m_optionsWidget, SLOT(slotSetTranslate(QPoint)));
+    // FIXME: disable translation spinboxes for 3.0.1.1
+    //connect(m_optionsWidget, SIGNAL(sigSetTranslateX(int)), SLOT(moveBySpinX(int)));
+    //connect(m_optionsWidget, SIGNAL(sigSetTranslateY(int)), SLOT(moveBySpinY(int)));
+    //connect(this, SIGNAL(moveInNewPosition(QPoint)), m_optionsWidget, SLOT(slotSetTranslate(QPoint)));
 
     KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
 

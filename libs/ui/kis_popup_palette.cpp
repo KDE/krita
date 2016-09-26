@@ -251,21 +251,18 @@ void KisPopupPalette::slotEnableChangeFGColor()
 void KisPopupPalette::adjustLayout(const QPoint &p)
 {
     KIS_ASSERT_RECOVER_RETURN(m_brushHud);
-
     if (isVisible() && parentWidget())  {
         const QRect fitRect = kisGrowRect(parentWidget()->rect(), -widgetMargin);
 
         const QPoint paletteCenterOffset(width() / 2, height() / 2);
         QRect paletteRect = rect();
         paletteRect.moveTo(p - paletteCenterOffset);
-
         if (m_brushHudButton->isChecked()) {
             m_brushHud->updateGeometry();
             paletteRect.adjust(0, 0, m_brushHud->width() + hudMargin, 0);
         }
 
         paletteRect = kisEnsureInRect(paletteRect, fitRect);
-
         move(paletteRect.topLeft());
         m_brushHud->move(paletteRect.topLeft() + QPoint(widgetSize + hudMargin, 0));
         m_lastCenterPoint = p;
@@ -310,6 +307,11 @@ void KisPopupPalette::showPopupPalette(bool show)
 void KisPopupPalette::setVisible(bool b)
 {
     QWidget::setVisible(b);
+}
+
+void KisPopupPalette::setParent(QWidget *parent) {
+    m_brushHud->setParent(parent);
+    QWidget::setParent(parent);
 }
 
 QSize KisPopupPalette::sizeHint() const

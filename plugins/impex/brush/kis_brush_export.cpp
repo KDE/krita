@@ -33,7 +33,7 @@
 #include <kis_image.h>
 #include <kis_paint_layer.h>
 #include <kis_spacing_selection_widget.h>
-#include <kis_gbr_brush.h>
+#include <kis_gimp_brush.h>
 #include <kis_imagepipe_brush.h>
 #include <kis_pipebrush_parasite.h>
 #include <KisAnimatedBrushAnnotation.h>
@@ -94,7 +94,7 @@ KisImportExportFilter::ConversionStatus KisBrushExport::convert(KisDocument *doc
     if (document->image()->dynamicPropertyNames().contains("brushspacing")) {
         exportOptions.spacing = document->image()->property("brushspacing").toFloat();
     }
-    KisGbrBrush *brush = 0;
+    KisGimpBrush *brush = 0;
 
     if (!batchMode()) {
 
@@ -111,7 +111,7 @@ KisImportExportFilter::ConversionStatus KisBrushExport::convert(KisDocument *doc
 
 
         if (mimeType() == "image/x-gimp-brush") {
-            brush = new KisGbrBrush(filename());
+            brush = new KisGimpBrush(filename());
             wdgUi.groupBox->setVisible(false);
         }
         else if (mimeType() == "image/x-gimp-brush-animated") {

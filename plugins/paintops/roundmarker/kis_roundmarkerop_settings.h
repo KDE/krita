@@ -30,14 +30,14 @@ public:
     KisRoundMarkerOpSettings();
     ~KisRoundMarkerOpSettings();
 
-    bool paintIncremental() Q_DECL_OVERRIDE;
+    bool paintIncremental() override;
 
-    qreal paintOpSize() const Q_DECL_OVERRIDE;
-    void setPaintOpSize(qreal value) Q_DECL_OVERRIDE;
+    qreal paintOpSize() const override;
+    void setPaintOpSize(qreal value) override;
 
-    QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode) Q_DECL_OVERRIDE;
+    QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode) override;
 
-    QList<KisUniformPaintOpPropertySP> uniformProperties(KisPaintOpSettingsSP settings) Q_DECL_OVERRIDE;
+    QList<KisUniformPaintOpPropertySP> uniformProperties(KisPaintOpSettingsSP settings) override;
 
 private:
     struct Private;

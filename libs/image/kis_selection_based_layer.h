@@ -62,7 +62,7 @@ public:
      */
     bool allowAsChild(KisNodeSP node) const;
 
-    void setImage(KisImageWSP image) Q_DECL_OVERRIDE;
+    void setImage(KisImageWSP image) override;
 
     KisPaintDeviceSP original() const;
     KisPaintDeviceSP paintDevice() const;

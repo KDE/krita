@@ -27,14 +27,14 @@ class FreehandStrokeTest : public QObject
     Q_OBJECT
 
 private Q_SLOTS:
-    void testAutobrushStroke();
+    void testAutoBrushStroke();
     void testHatchingStroke();
     void testColorSmudgeStroke();
     void testAutoTextured17();
     void testAutoTextured38();
     void testMixDullCompositioning();
 
-    void testAutobrushStrokeLod();
+    void testAutoBrushStrokeLod();
     void testPredefinedBrushStrokeLod();
 };
 

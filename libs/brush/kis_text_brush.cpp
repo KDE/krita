@@ -24,7 +24,7 @@
 #include <QFontMetrics>
 #include <QPainter>
 
-#include "kis_gbr_brush.h"
+#include "kis_gimp_brush.h"
 #include "kis_brushes_pipe.h"
 #include <kis_dom_utils.h>
 #include <kis_threaded_text_rendering_workaround.h>
@@ -36,7 +36,7 @@
 #endif /* HAVE_THREADED_TEXT_RENDERING_WORKAROUND */
 
 
-class KisTextBrushesPipe : public KisBrushesPipe<KisGbrBrush>
+class KisTextBrushesPipe : public KisBrushesPipe<KisGimpBrush>
 {
 public:
     KisTextBrushesPipe() {
@@ -45,10 +45,10 @@ public:
     }
 
     KisTextBrushesPipe(const KisTextBrushesPipe &rhs)
-        : KisBrushesPipe<KisGbrBrush>(rhs) {
+        : KisBrushesPipe<KisGimpBrush>(rhs) {
         m_brushesMap.clear();
 
-        QMapIterator<QChar, KisGbrBrush*> iter(rhs.m_brushesMap);
+        QMapIterator<QChar, KisGimpBrush*> iter(rhs.m_brushesMap);
         while (iter.hasNext()) {
             iter.next();
             m_brushesMap.insert(iter.key(), iter.value());
@@ -64,12 +64,12 @@ public:
         for (int i = 0; i < m_text.length(); i++) {
             QChar letter = m_text.at(i);
             QImage image = renderChar(letter, font);
-            KisGbrBrush *brush = new KisGbrBrush(image, letter);
+            KisGimpBrush *brush = new KisGimpBrush(image, letter);
             brush->setSpacing(0.1); // support for letter spacing?
             brush->makeMaskImage();
 
             m_brushesMap.insert(letter, brush);
-            KisBrushesPipe<KisGbrBrush>::addBrush(brush);
+            KisBrushesPipe<KisGimpBrush>::addBrush(brush);
         }
     }
 
@@ -108,10 +108,10 @@ public:
 
     void clear() {
         m_brushesMap.clear();
-        KisBrushesPipe<KisGbrBrush>::clear();
+        KisBrushesPipe<KisGimpBrush>::clear();
     }
 
-    KisGbrBrush* firstBrush() const {
+    KisGimpBrush* firstBrush() const {
         Q_ASSERT(m_text.size() > 0);
         Q_ASSERT(m_brushesMap.size() > 0);
         return m_brushesMap.value(m_text.at(0));
@@ -150,7 +150,7 @@ private:
     }
 
 private:
-    QMap<QChar, KisGbrBrush*> m_brushesMap;
+    QMap<QChar, KisGimpBrush*> m_brushesMap;
     QString m_text;
     int m_charIndex;
     int m_currentBrushIndex;

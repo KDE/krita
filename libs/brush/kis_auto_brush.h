@@ -46,15 +46,15 @@ public:
     void setUserEffectiveSize(qreal value);
 
     qint32 maskWidth(KisDabShape const& shape, qreal subPixelX, qreal subPixelY,
-        const KisPaintInformation& info) const Q_DECL_OVERRIDE;
+        const KisPaintInformation& info) const override;
     qint32 maskHeight(KisDabShape const& shape, qreal subPixelX, qreal subPixelY,
-        const KisPaintInformation& info) const Q_DECL_OVERRIDE;
+        const KisPaintInformation& info) const override;
     QSizeF characteristicSize(KisDabShape const&) const override;
 
     virtual KisFixedPaintDeviceSP paintDevice(const KoColorSpace*,
             KisDabShape const&,
             const KisPaintInformation&,
-            double = 0, double = 0) const Q_DECL_OVERRIDE {
+            double = 0, double = 0) const override {
         return 0; // The autobrush does NOT support images!
     }
 
@@ -63,7 +63,7 @@ public:
             KisDabShape const&,
             const KisPaintInformation& info,
             double subPixelX = 0, double subPixelY = 0,
-            qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR) const Q_DECL_OVERRIDE;
+            qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR) const override;
 
     virtual QPainterPath outline() const;
 

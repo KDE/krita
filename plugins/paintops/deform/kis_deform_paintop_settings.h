@@ -31,10 +31,10 @@ public:
     KisDeformPaintOpSettings();
     ~KisDeformPaintOpSettings();
 
-    void setPaintOpSize(qreal value) Q_DECL_OVERRIDE;
-    qreal paintOpSize() const Q_DECL_OVERRIDE;
+    void setPaintOpSize(qreal value) override;
+    qreal paintOpSize() const override;
 
-    QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode) Q_DECL_OVERRIDE;
+    QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode) override;
 
     bool paintIncremental();
     bool isAirbrushing() const;

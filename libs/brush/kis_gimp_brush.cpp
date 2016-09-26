@@ -24,7 +24,7 @@
 #include <sys/types.h>
 #include <QtEndian>
 
-#include "kis_gbr_brush.h"
+#include "kis_gimp_brush.h"
 
 #include <QDomElement>
 #include <QFile>
@@ -67,7 +67,7 @@ struct GimpBrushHeader {
 quint32 const GimpV2BrushMagic = ('G' << 24) + ('I' << 16) + ('M' << 8) + ('P' << 0);
 
 
-struct KisGbrBrush::Private {
+struct KisGimpBrush::Private {
 
     QByteArray data;
     bool ownData;         /* seems to indicate that @ref data is owned by the brush, but in Qt4.x this is already guaranteed... so in reality it seems more to indicate whether the data is loaded from file (ownData = true) or memory (ownData = false) */
@@ -83,7 +83,7 @@ struct KisGbrBrush::Private {
 
 #define DEFAULT_SPACING 0.25
 
-KisGbrBrush::KisGbrBrush(const QString& filename)
+KisGimpBrush::KisGimpBrush(const QString& filename)
     : KisScalingSizeBrush(filename)
     , d(new Private)
 {
@@ -93,7 +93,7 @@ KisGbrBrush::KisGbrBrush(const QString& filename)
     setSpacing(DEFAULT_SPACING);
 }
 
-KisGbrBrush::KisGbrBrush(const QString& filename,
+KisGimpBrush::KisGimpBrush(const QString& filename,
                          const QByteArray& data,
                          qint32 & dataPos)
     : KisScalingSizeBrush(filename)
@@ -110,7 +110,7 @@ KisGbrBrush::KisGbrBrush(const QString& filename,
     dataPos += d->header_size + (width() * height() * d->bytes);
 }
 
-KisGbrBrush::KisGbrBrush(KisPaintDeviceSP image, int x, int y, int w, int h)
+KisGimpBrush::KisGimpBrush(KisPaintDeviceSP image, int x, int y, int w, int h)
     : KisScalingSizeBrush()
     , d(new Private)
 {
@@ -121,7 +121,7 @@ KisGbrBrush::KisGbrBrush(KisPaintDeviceSP image, int x, int y, int w, int h)
     initFromPaintDev(image, x, y, w, h);
 }
 
-KisGbrBrush::KisGbrBrush(const QImage& image, const QString& name)
+KisGimpBrush::KisGimpBrush(const QImage& image, const QString& name)
     : KisScalingSizeBrush()
     , d(new Private)
 {
@@ -134,7 +134,7 @@ KisGbrBrush::KisGbrBrush(const QImage& image, const QString& name)
     setName(name);
 }
 
-KisGbrBrush::KisGbrBrush(const KisGbrBrush& rhs)
+KisGimpBrush::KisGimpBrush(const KisGimpBrush& rhs)
     : KisScalingSizeBrush(rhs)
     , d(new Private(*rhs.d))
 {
@@ -143,12 +143,12 @@ KisGbrBrush::KisGbrBrush(const KisGbrBrush& rhs)
     setValid(rhs.valid());
 }
 
-KisGbrBrush::~KisGbrBrush()
+KisGimpBrush::~KisGimpBrush()
 {
     delete d;
 }
 
-bool KisGbrBrush::load()
+bool KisGimpBrush::load()
 {
     QFile file(filename());
     if (file.size() == 0) return false;
@@ -159,7 +159,7 @@ bool KisGbrBrush::load()
     return res;
 }
 
-bool KisGbrBrush::loadFromDevice(QIODevice *dev)
+bool KisGimpBrush::loadFromDevice(QIODevice *dev)
 {
     if (d->ownData) {
         d->data = dev->readAll();
@@ -167,7 +167,7 @@ bool KisGbrBrush::loadFromDevice(QIODevice *dev)
     return init();
 }
 
-bool KisGbrBrush::init()
+bool KisGimpBrush::init()
 {
     GimpBrushHeader bh;
 
@@ -298,7 +298,7 @@ bool KisGbrBrush::init()
     return true;
 }
 
-bool KisGbrBrush::initFromPaintDev(KisPaintDeviceSP image, int x, int y, int w, int h)
+bool KisGimpBrush::initFromPaintDev(KisPaintDeviceSP image, int x, int y, int w, int h)
 {
     // Forcefully convert to RGBA8
     // XXX profile and exposure?
@@ -310,7 +310,7 @@ bool KisGbrBrush::initFromPaintDev(KisPaintDeviceSP image, int x, int y, int w, 
     return true;
 }
 
-bool KisGbrBrush::save()
+bool KisGimpBrush::save()
 {
     QFile file(filename());
     file.open(QIODevice::WriteOnly | QIODevice::Truncate);
@@ -319,7 +319,7 @@ bool KisGbrBrush::save()
     return ok;
 }
 
-bool KisGbrBrush::saveToDevice(QIODevice* dev) const
+bool KisGimpBrush::saveToDevice(QIODevice* dev) const
 {
     GimpBrushHeader bh;
     QByteArray utf8Name = name().toUtf8(); // Names in v2 brushes are in UTF-8
@@ -392,7 +392,7 @@ bool KisGbrBrush::saveToDevice(QIODevice* dev) const
     return true;
 }
 
-QImage KisGbrBrush::brushTipImage() const
+QImage KisGimpBrush::brushTipImage() const
 {
     QImage image = KisBrush::brushTipImage();
     if (hasColor() && useColorAsMask()) {
@@ -409,38 +409,24 @@ QImage KisGbrBrush::brushTipImage() const
 }
 
 
-enumBrushType KisGbrBrush::brushType() const
+enumBrushType KisGimpBrush::brushType() const
 {
     return !hasColor() || useColorAsMask() ? MASK : IMAGE;
 }
 
-void KisGbrBrush::setBrushType(enumBrushType type)
+void KisGimpBrush::setBrushType(enumBrushType type)
 {
     Q_UNUSED(type);
-    qFatal("FATAL: protected member setBrushType has no meaning for KisGbrBrush");
+    qFatal("FATAL: protected member setBrushType has no meaning for KisGimpBrush");
 }
 
-void KisGbrBrush::setBrushTipImage(const QImage& image)
+void KisGimpBrush::setBrushTipImage(const QImage& image)
 {
     KisBrush::setBrushTipImage(image);
     setValid(true);
 }
 
-/*QImage KisGbrBrush::outline(double pressure) {
-    KisLayerSP layer = image(KoColorSpaceRegistry::instance()->colorSpace("RGBA",0),
-                             KisPaintInformation(pressure));
-    KisBoundary bounds(layer.data());
-    int w = maskWidth(pressure);
-    int h = maskHeight(pressure);
-
-    bounds.generateBoundary(w, h);
-    QPixmap pix(bounds.pixmap(w, h));
-    QImage result;
-    result = pix;
-    return result;
-}*/
-
-void KisGbrBrush::makeMaskImage()
+void KisGimpBrush::makeMaskImage()
 {
     if (!hasColor()) {
         return;
@@ -479,19 +465,19 @@ void KisGbrBrush::makeMaskImage()
     clearBrushPyramid();
 }
 
-KisBrush* KisGbrBrush::clone() const
+KisBrush* KisGimpBrush::clone() const
 {
-    return new KisGbrBrush(*this);
+    return new KisGimpBrush(*this);
 }
 
-void KisGbrBrush::toXML(QDomDocument& d, QDomElement& e) const
+void KisGimpBrush::toXML(QDomDocument& d, QDomElement& e) const
 {
     predefinedBrushToXML("gbr_brush", e);
     e.setAttribute("ColorAsMask", QString::number((int)useColorAsMask()));
     KisBrush::toXML(d, e);
 }
 
-void KisGbrBrush::setUseColorAsMask(bool useColorAsMask)
+void KisGimpBrush::setUseColorAsMask(bool useColorAsMask)
 {
     /**
      * WARNING: There is a problem in the brush server, since it
@@ -511,12 +497,12 @@ void KisGbrBrush::setUseColorAsMask(bool useColorAsMask)
         clearBrushPyramid();
     }
 }
-bool KisGbrBrush::useColorAsMask() const
+bool KisGimpBrush::useColorAsMask() const
 {
     return d->useColorAsMask;
 }
 
-QString KisGbrBrush::defaultFileExtension() const
+QString KisGimpBrush::defaultFileExtension() const
 {
     return QString(".gbr");
 }

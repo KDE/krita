@@ -33,7 +33,7 @@
 #include "kis_image.h"
 #include "kis_clipboard.h"
 #include "kis_paint_device.h"
-#include "kis_gimp_brush.h"
+#include "kis_gbr_brush.h"
 #include "kis_brush_server.h"
 
 KisClipboardBrushWidget::KisClipboardBrushWidget(QWidget *parent, const QString &caption, KisImageWSP image)
@@ -73,7 +73,7 @@ void KisClipboardBrushWidget::slotCreateBrush()
         if (pd) {
             QRect rc = pd->exactBounds();
 
-            m_brush = new KisGimpBrush(pd, rc.x(), rc.y(), rc.width(), rc.height());
+            m_brush = new KisGbrBrush(pd, rc.x(), rc.y(), rc.width(), rc.height());
 
             m_brush->setSpacing(spacingWidget->spacing());
             m_brush->setAutoSpacing(spacingWidget->autoSpacingActive(), spacingWidget->autoSpacingCoeff());
@@ -110,7 +110,7 @@ void KisClipboardBrushWidget::showEvent(QShowEvent *)
 void KisClipboardBrushWidget::slotUpdateUseColorAsMask(bool useColorAsMask)
 {
     if (m_brush) {
-        static_cast<KisGimpBrush*>(m_brush.data())->setUseColorAsMask(useColorAsMask);
+        static_cast<KisGbrBrush*>(m_brush.data())->setUseColorAsMask(useColorAsMask);
         preview->setPixmap(QPixmap::fromImage(m_brush->brushTipImage()));
     }
 }
@@ -136,7 +136,7 @@ void KisClipboardBrushWidget::slotAddPredefined()
     tempFileName = fileInfo.filePath();
 
     if (m_rServerAdapter) {
-        KisGimpBrush *resource = dynamic_cast<KisGimpBrush*>(m_brush->clone());
+        KisGbrBrush *resource = dynamic_cast<KisGbrBrush*>(m_brush->clone());
         resource->setFilename(tempFileName);
 
         if (nameEdit->text().isEmpty()) {

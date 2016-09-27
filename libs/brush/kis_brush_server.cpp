@@ -30,7 +30,7 @@
 
 #include "kis_abr_brush.h"
 #include "kis_abr_brush_collection.h"
-#include "kis_gimp_brush.h"
+#include "kis_gbr_brush.h"
 #include "kis_imagepipe_brush.h"
 #include "kis_png_brush.h"
 #include "kis_svg_brush.h"
@@ -104,7 +104,7 @@ private:
         KisBrushSP brush;
 
         if (fileExtension == "gbr") {
-            brush = new KisGimpBrush(filename);
+            brush = new KisGbrBrush(filename);
         }
         else if (fileExtension == "gih") {
             brush = new KisImagePipeBrush(filename);

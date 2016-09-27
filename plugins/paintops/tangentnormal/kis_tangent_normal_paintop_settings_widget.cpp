@@ -76,9 +76,9 @@ KisTangentNormalPaintOpSettingsWidget::~KisTangentNormalPaintOpSettingsWidget()
 {
 }
 
-KisPropertiesConfiguration* KisTangentNormalPaintOpSettingsWidget::configuration() const
+KisPropertiesConfigurationSP KisTangentNormalPaintOpSettingsWidget::configuration() const
 {
-    KisBrushBasedPaintOpSettings *config = new KisBrushBasedPaintOpSettings();
+    KisBrushBasedPaintOpSettingsSP config = new KisBrushBasedPaintOpSettings();
     config->setOptionsWidget(const_cast<KisTangentNormalPaintOpSettingsWidget*>(this));
     config->setProperty("paintop", "tangentnormal");
     writeConfiguration(config);

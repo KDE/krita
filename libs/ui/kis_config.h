@@ -436,6 +436,9 @@ public:
     bool useEraserBrushSize(bool defaultValue = false) const;
     void setUseEraserBrushSize(bool value);
 
+    bool useEraserBrushOpacity(bool defaultValue = false) const;
+    void setUseEraserBrushOpacity(bool value);
+    
     QColor getMDIBackgroundColor(bool defaultValue = false) const;
     void setMDIBackgroundColor(const QColor & v) const;
 

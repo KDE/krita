@@ -26,6 +26,7 @@
 #include <kis_simple_paintop_factory.h>
 
 #include "DualBrushPaintop.h"
+#include "DualBrushPaintopSettings.h"
 
 K_PLUGIN_FACTORY_WITH_JSON(DualBrushPaintOpPluginFactory, "kritadualbrushpaintop.json", registerPlugin<DualBrushPaintOpPlugin>();)
 

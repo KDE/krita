@@ -39,7 +39,7 @@ public:
 
     virtual ~KisFilterOpSettingsWidget();
 
-    KisPropertiesConfiguration* configuration() const;
+    KisPropertiesConfigurationSP configuration() const;
 
 public:
     KisFilterOption* m_filterOption;

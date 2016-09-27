@@ -22,6 +22,7 @@
 #include "operations/kis_operation.h"
 #include "operations/kis_operation_configuration.h"
 #include "operations/kis_filter_selection_operation.h"
+#include "dialogs/kis_dlg_stroke_selection_properties.h"
 
 class KRITAUI_EXPORT KisNoParameterActionFactory : public KisOperation
 {
@@ -116,6 +117,16 @@ struct KRITAUI_EXPORT KisShapesToVectorSelectionActionFactory : public KisNoPara
 struct KRITAUI_EXPORT KisSelectionToShapeActionFactory : public KisNoParameterActionFactory {
     KisSelectionToShapeActionFactory() : KisNoParameterActionFactory("selection-to-shape-action") {}
     void run(KisViewManager *view);
+};
+
+struct KRITAUI_EXPORT KisStrokeSelectionActionFactory : public  KisOperation  {
+    KisStrokeSelectionActionFactory()  :  KisOperation("selection-to-shape-action") {}
+    void run(KisViewManager *view, StrokeSelectionOptions params);
+};
+
+struct KRITAUI_EXPORT KisStrokeBrushSelectionActionFactory : public  KisOperation  {
+    KisStrokeBrushSelectionActionFactory()  :  KisOperation("selection-to-shape-action") {}
+    void run(KisViewManager *view, StrokeSelectionOptions params);
 };
 
 

@@ -35,15 +35,15 @@ public:
     KisCurveOpOption();
     ~KisCurveOpOption();
 
-    void writeOptionSetting(KisPropertiesConfiguration* setting) const;
-    void readOptionSetting(const KisPropertiesConfiguration* setting);
+    void writeOptionSetting(KisPropertiesConfigurationSP setting) const;
+    void readOptionSetting(const KisPropertiesConfigurationSP setting);
 
 private:
     KisCurveOpOptionsWidget * m_options;
 
 };
 
-class CurveOption
+class CurveOption : public KisBaseOption
 {
 public:
     bool curve_paint_connection_line;
@@ -52,7 +52,7 @@ public:
     int curve_line_width;
     qreal curve_curves_opacity;
 
-    void readOptionSetting(const KisPropertiesConfiguration* config) {
+    void readOptionSettingImpl(const KisPropertiesConfiguration *config) {
         curve_paint_connection_line = config->getBool(CURVE_PAINT_CONNECTION_LINE);
         curve_smoothing = config->getBool(CURVE_SMOOTHING);
         curve_stroke_history_size = config->getInt(CURVE_STROKE_HISTORY_SIZE);
@@ -60,7 +60,7 @@ public:
         curve_curves_opacity = config->getDouble(CURVE_CURVES_OPACITY);
     }
 
-    void writeOptionSetting(KisPropertiesConfiguration* config) const {
+    void writeOptionSettingImpl(KisPropertiesConfiguration *config) const {
         config->setProperty(CURVE_PAINT_CONNECTION_LINE, curve_paint_connection_line);
         config->setProperty(CURVE_SMOOTHING, curve_smoothing);
         config->setProperty(CURVE_STROKE_HISTORY_SIZE, curve_stroke_history_size);

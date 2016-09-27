@@ -48,15 +48,15 @@ KisWdgMotionBlur::~KisWdgMotionBlur()
     delete m_widget;
 }
 
-KisPropertiesConfiguration* KisWdgMotionBlur::configuration() const
+KisPropertiesConfigurationSP KisWdgMotionBlur::configuration() const
 {
-    KisFilterConfiguration* config = new KisFilterConfiguration("motion blur", 1);
+    KisFilterConfigurationSP config = new KisFilterConfiguration("motion blur", 1);
     config->setProperty("blurAngle", m_widget->blurAngleSlider->value());
     config->setProperty("blurLength", m_widget->blurLength->value());
     return config;
 }
 
-void KisWdgMotionBlur::setConfiguration(const KisPropertiesConfiguration* config)
+void KisWdgMotionBlur::setConfiguration(const KisPropertiesConfigurationSP config)
 {
     QVariant value;
     if (config->getProperty("blurAngle", value)) {

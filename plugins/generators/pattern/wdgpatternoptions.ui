@@ -52,10 +52,10 @@
       </widget>
      </item>
      <item row="1" column="1">
-      <widget class="KColorButton" name="bnColor"/>
+      <widget class="KisColorButton" name="bnColor"/>
      </item>
      <item row="0" column="1">
-      <widget class="KisPatternChooser" name="patternChooser">
+      <widget class="KisPatternChooser" name="patternChooser" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
          <horstretch>0</horstretch>
@@ -70,9 +70,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KColorButton</class>
+   <class>KisColorButton</class>
    <extends>QPushButton</extends>
-   <header>kcolorbutton.h</header>
+   <header>kis_color_button.h</header>
   </customwidget>
   <customwidget>
    <class>KisPatternChooser</class>

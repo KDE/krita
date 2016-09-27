@@ -52,7 +52,7 @@ KisODGImport::~KisODGImport()
 {
 }
 
-KisImportExportFilter::ConversionStatus KisODGImport::convert(const QByteArray& from, const QByteArray& to)
+KisImportExportFilter::ConversionStatus KisODGImport::convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration)
 {
     dbgFile << "Import odg";
 
@@ -71,7 +71,7 @@ KisImportExportFilter::ConversionStatus KisODGImport::convert(const QByteArray& 
         delete store;
         return KisImportExportFilter::BadConversionGraph;
     }
-    
+
 
     doc -> prepareForImport();
 

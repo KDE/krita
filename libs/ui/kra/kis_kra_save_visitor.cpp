@@ -46,6 +46,7 @@
 #include <kis_transform_mask_params_interface.h>
 #include <kis_transparency_mask.h>
 #include <kis_selection_mask.h>
+#include "lazybrush/kis_colorize_mask.h"
 #include <kis_selection_component.h>
 #include <kis_pixel_selection.h>
 #include <metadata/kis_meta_data_store.h>
@@ -57,6 +58,11 @@
 
 #include "kis_raster_keyframe_channel.h"
 #include "kis_paint_device_frames_interface.h"
+
+#include "lazybrush/kis_lazy_fill_tools.h"
+#include <KoStoreDevice.h>
+#include "kis_colorize_dom_utils.h"
+#include "kis_dom_utils.h"
 
 
 using namespace KRA;
@@ -250,6 +256,46 @@ bool KisKraSaveVisitor::visit(KisSelectionMask *mask)
     return true;
 }
 
+bool KisKraSaveVisitor::visit(KisColorizeMask *mask)
+{
+    m_store->pushDirectory();
+    QString location = getLocation(mask, DOT_COLORIZE_MASK);
+    bool result = m_store->enterDirectory(location);
+
+    if (!result) {
+        m_errorMessages << i18n("Failed to open %1.", location);
+        return false;
+    }
+
+    if (!m_store->open("content.xml"))
+        return false;
+
+    KoStoreDevice storeDev(m_store);
+
+    QDomDocument doc("doc");
+    QDomElement root = doc.createElement("colorize");
+    doc.appendChild(root);
+    KisDomUtils::saveValue(&root, COLORIZE_KEYSTROKES_SECTION, QVector<KisLazyFillTools::KeyStroke>::fromList(mask->fetchKeyStrokesDirect()));
+
+    QTextStream stream(&storeDev);
+    stream << doc;
+
+    if (!m_store->close())
+        return false;
+
+    int i = 0;
+    Q_FOREACH (const KisLazyFillTools::KeyStroke &stroke, mask->fetchKeyStrokesDirect()) {
+        const QString fileName = QString("%1_%2").arg(COLORIZE_KEYSTROKE).arg(i++);
+        savePaintDevice(stroke.dev, fileName);
+    }
+
+    savePaintDevice(mask->coloringProjection(), COLORIZE_COLORING_DEVICE);
+
+    m_store->popDirectory();
+
+    return true;
+}
+
 QStringList KisKraSaveVisitor::errorMessages() const
 {
     return m_errorMessages;
@@ -261,7 +307,7 @@ struct SimpleDevicePolicy
         return dev->write(store);
     }
 
-    const quint8* defaultPixel(KisPaintDeviceSP dev) const {
+    KoColor defaultPixel(KisPaintDeviceSP dev) const {
         return dev->defaultPixel();
     }
 };
@@ -275,7 +321,7 @@ struct FramedDevicePolicy
         return dev->framesInterface()->writeFrame(store, m_frameId);
     }
 
-    const quint8* defaultPixel(KisPaintDeviceSP dev) const {
+    KoColor defaultPixel(KisPaintDeviceSP dev) const {
         return dev->framesInterface()->frameDefaultPixel(m_frameId);
     }
 
@@ -331,7 +377,7 @@ bool KisKraSaveVisitor::savePaintDeviceFrame(KisPaintDeviceSP device, QString lo
         m_store->close();
     }
     if (m_store->open(location + ".defaultpixel")) {
-        m_store->write((char*)policy.defaultPixel(device), device->colorSpace()->pixelSize());
+        m_store->write((char*)policy.defaultPixel(device).data(), device->colorSpace()->pixelSize());
         m_store->close();
     }
 
@@ -417,7 +463,7 @@ bool KisKraSaveVisitor::saveFilterConfiguration(KisNode* node)
     KisNodeFilterInterface *filterInterface =
             dynamic_cast<KisNodeFilterInterface*>(node);
 
-    KisSafeFilterConfigurationSP filter;
+    KisFilterConfigurationSP filter;
 
     if (filterInterface) {
         filter = filterInterface->filter();

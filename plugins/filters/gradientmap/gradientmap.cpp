@@ -22,28 +22,28 @@
 #include <kpluginfactory.h>
 #include <filter/kis_filter_registry.h>
 #include "krita_filter_gradient_map.h"
-#include "krita_gradient_map_color_transformation.h"
+#include "KoResourceServerProvider.h"
 #include "kis_config_widget.h"
 
 
 K_PLUGIN_FACTORY_WITH_JSON(KritaGradientMapFactory, "kritagradientmap.json", registerPlugin<KritaGradientMap>();)
 
 KritaGradientMapConfigWidget::KritaGradientMapConfigWidget(QWidget *parent, KisPaintDeviceSP dev, Qt::WFlags f)
-	: KisConfigWidget(parent, f)
+    : KisConfigWidget(parent, f)
 {
     Q_UNUSED(dev)
-	m_page = new WdgGradientMap(this);
-	QHBoxLayout *l = new QHBoxLayout(this);
-	Q_CHECK_PTR(l);
-	l->addWidget(m_page);
-	l->setContentsMargins(0, 0, 0, 0);
+    m_page = new WdgGradientMap(this);
+    QHBoxLayout *l = new QHBoxLayout(this);
+    Q_CHECK_PTR(l);
+    l->addWidget(m_page);
+    l->setContentsMargins(0, 0, 0, 0);
 
     connect(m_page->gradientchooser, SIGNAL(resourceSelected(KoResource*)), SIGNAL(sigConfigurationItemChanged()));
 }
 
 KritaGradientMapConfigWidget::~KritaGradientMapConfigWidget()
 {
-	delete m_page;
+    delete m_page;
 }
 
 void KritaGradientMapConfigWidget::gradientResourceChanged(KoResource* gradient)
@@ -51,58 +51,32 @@ void KritaGradientMapConfigWidget::gradientResourceChanged(KoResource* gradient)
     Q_UNUSED(gradient)
 }
 
-KritaGradientMapFilterConfiguration* KritaGradientMapConfigWidget::configuration() const
+KisPropertiesConfigurationSP KritaGradientMapConfigWidget::configuration() const
 {
-    KritaGradientMapFilterConfiguration* cfg = new KritaGradientMapFilterConfiguration();
-	const KoResource* gradient;
-	if (!(gradient = m_page->gradientchooser->currentResource()))
-	{
-		m_page->gradientchooser->setCurrentItem(0, 0);
-		gradient = m_page->gradientchooser->currentResource();
-	}
-	cfg->setGradient(gradient);
+    KisFilterConfigurationSP cfg = new KisFilterConfiguration("gradientmap", 1);
+    QString gradientName;
+    if (m_page && m_page->gradientchooser && m_page->gradientchooser->currentResource()) {
+        gradientName = m_page->gradientchooser->currentResource()->name();
+    }
+    cfg->setProperty("gradientName", gradientName);
 
     return cfg;
 }
 
 //-----------------------------
 
-void KritaGradientMapConfigWidget::setConfiguration(const KisPropertiesConfiguration* config)
+void KritaGradientMapConfigWidget::setConfiguration(const KisPropertiesConfigurationSP config)
 {
-    const KritaGradientMapFilterConfiguration* cfg = dynamic_cast<const KritaGradientMapFilterConfiguration* > (config);
-    Q_ASSERT(cfg);
-    Q_UNUSED(cfg);
+    m_page->gradientchooser->setCurrentResource(KoResourceServerProvider::instance()->gradientServer(false)->resourceByName(config->getString("gradientName")));
+    Q_ASSERT(config);
+    Q_UNUSED(config);
 }
 
 void KritaGradientMapConfigWidget::setView(KisViewManager *view)
 {
     Q_UNUSED(view)
 }
-
-//-----------------------------
-
-KritaGradientMapFilterConfiguration::KritaGradientMapFilterConfiguration()
-    : KisColorTransformationConfiguration("gradientmap", 1)
-{
-
-}
-
-KritaGradientMapFilterConfiguration::~KritaGradientMapFilterConfiguration()
-{
-}
-
-void KritaGradientMapFilterConfiguration::setGradient(const KoResource* gradient)
-{
-    m_gradient = gradient;
-}
-
-const KoResource* KritaGradientMapFilterConfiguration::gradient() const
-{
-    return m_gradient;
-}
-
-//-----------------------------
-
+//------------------------------
 KritaGradientMap::KritaGradientMap(QObject *parent, const QVariantList &)
         : QObject(parent)
 {

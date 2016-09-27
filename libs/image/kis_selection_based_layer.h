@@ -50,7 +50,7 @@ public:
      * @param selection is a mask used by the layer to know
      * where to apply the filter/generator.
      */
-    KisSelectionBasedLayer(KisImageWSP image, const QString &name, KisSelectionSP selection, KisFilterConfiguration *filterConfig, bool useGeneratorRegistry = false);
+    KisSelectionBasedLayer(KisImageWSP image, const QString &name, KisSelectionSP selection, KisFilterConfigurationSP filterConfig, bool useGeneratorRegistry = false);
     KisSelectionBasedLayer(const KisSelectionBasedLayer& rhs);
     virtual ~KisSelectionBasedLayer();
 
@@ -62,7 +62,7 @@ public:
      */
     bool allowAsChild(KisNodeSP node) const;
 
-    void setImage(KisImageWSP image);
+    void setImage(KisImageWSP image) override;
 
     KisPaintDeviceSP original() const;
     KisPaintDeviceSP paintDevice() const;
@@ -187,6 +187,8 @@ protected:
      * Must be called only once in the child's constructor
      */
     void setUseSelectionInProjection(bool value) const;
+
+    KisKeyframeChannel *requestKeyframeChannel(const QString &id);
 
 public Q_SLOTS:
     void slotImageSizeChanged();

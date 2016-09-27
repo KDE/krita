@@ -43,8 +43,8 @@ public:
     bool useCounter() const;
     bool useOldData() const;
 
-    void writeOptionSetting(KisPropertiesConfiguration* setting) const;
-    void readOptionSetting(const KisPropertiesConfiguration* setting);
+    void writeOptionSetting(KisPropertiesConfigurationSP setting) const;
+    void readOptionSetting(const KisPropertiesConfigurationSP setting);
 
     void lodLimitations(KisPaintopLodLimitations *l) const;
 
@@ -60,7 +60,7 @@ struct DeformOption {
     bool deform_use_old_data;
     int deform_action;
 
-    void readOptionSetting(const KisPropertiesConfiguration * config) {
+    void readOptionSetting(const KisPropertiesConfigurationSP config) {
         deform_amount = config->getDouble(DEFORM_AMOUNT);
         deform_use_bilinear = config->getBool(DEFORM_USE_BILINEAR);
         deform_use_counter = config->getBool(DEFORM_USE_COUNTER);
@@ -69,7 +69,7 @@ struct DeformOption {
     }
 
 
-    void writeOptionSetting(KisPropertiesConfiguration* config) const {
+    void writeOptionSetting(KisPropertiesConfigurationSP config) const {
         config->setProperty(DEFORM_AMOUNT, deform_amount);
         config->setProperty(DEFORM_ACTION, deform_action);
         config->setProperty(DEFORM_USE_BILINEAR, deform_use_bilinear);

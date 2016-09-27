@@ -52,7 +52,10 @@
 #include "kis_transform_mask_params_factory_registry.h"
 #include <kis_transparency_mask.h>
 #include <kis_selection_mask.h>
+#include <lazybrush/kis_colorize_mask.h>
+#include <lazybrush/kis_lazy_fill_tools.h>
 #include "kis_shape_selection.h"
+#include "kis_colorize_dom_utils.h"
 #include "kis_dom_utils.h"
 #include "kis_raster_keyframe_channel.h"
 #include "kis_paint_device_frames_interface.h"
@@ -82,10 +85,12 @@ QString expandEncodedDirectory(const QString& _intern)
 KisKraLoadVisitor::KisKraLoadVisitor(KisImageWSP image,
                                      KoStore *store,
                                      QMap<KisNode *, QString> &layerFilenames,
+                                     QMap<KisNode *, QString> &keyframeFilenames,
                                      const QString & name,
                                      int syntaxVersion) :
         KisNodeVisitor(),
-        m_layerFilenames(layerFilenames)
+        m_layerFilenames(layerFilenames),
+        m_keyframeFilenames(keyframeFilenames)
 {
     m_external = false;
     m_image = image;
@@ -142,6 +147,8 @@ bool KisKraLoadVisitor::visit(KisExternalLayer * layer)
 
 bool KisKraLoadVisitor::visit(KisPaintLayer *layer)
 {
+    loadNodeKeyframes(layer);
+
     dbgFile << "Visit: " << layer->name() << " colorSpace: " << layer->colorSpace()->id();
     if (!loadPaintDevice(layer->paintDevice(), getLocation(layer))) {
         return false;
@@ -179,7 +186,7 @@ bool KisKraLoadVisitor::visit(KisPaintLayer *layer)
 
 bool KisKraLoadVisitor::visit(KisGroupLayer *layer)
 {
-    if (!(*layer->colorSpace() == *m_image->colorSpace())) {
+    if (*layer->colorSpace() != *m_image->colorSpace()) {
         layer->resetCache(m_image->colorSpace());
     }
 
@@ -193,6 +200,8 @@ bool KisKraLoadVisitor::visit(KisGroupLayer *layer)
 
 bool KisKraLoadVisitor::visit(KisAdjustmentLayer* layer)
 {
+    loadNodeKeyframes(layer);
+
     // Adjustmentlayers are tricky: there's the 1.x style and the 2.x
     // style, which has selections with selection components
     bool result = true;
@@ -224,6 +233,8 @@ bool KisKraLoadVisitor::visit(KisGeneratorLayer* layer)
         return false;
     }
     bool result = true;
+
+    loadNodeKeyframes(layer);
 
     result = loadSelection(getLocation(layer), layer->internalSelection());
 
@@ -276,6 +287,9 @@ void KisKraLoadVisitor::initSelectionForMask(KisMask *mask)
 bool KisKraLoadVisitor::visit(KisFilterMask *mask)
 {
     initSelectionForMask(mask);
+
+    loadNodeKeyframes(mask);
+
     bool result = true;
     result = loadSelection(getLocation(mask), mask->selection());
     result = loadFilterConfiguration(mask->filter().data(), getLocation(mask, DOT_FILTERCONFIG));
@@ -324,6 +338,10 @@ bool KisKraLoadVisitor::visit(KisTransformMask *mask)
             }
 
             mask->setTransformParams(params);
+
+            loadNodeKeyframes(mask);
+            params->clearChangedFlag();
+
             return true;
         }
     }
@@ -335,6 +353,8 @@ bool KisKraLoadVisitor::visit(KisTransparencyMask *mask)
 {
     initSelectionForMask(mask);
 
+    loadNodeKeyframes(mask);
+
     return loadSelection(getLocation(mask), mask->selection());
 }
 
@@ -342,6 +362,38 @@ bool KisKraLoadVisitor::visit(KisSelectionMask *mask)
 {
     initSelectionForMask(mask);
     return loadSelection(getLocation(mask), mask->selection());
+}
+
+bool KisKraLoadVisitor::visit(KisColorizeMask *mask)
+{
+    m_store->pushDirectory();
+    QString location = getLocation(mask, DOT_COLORIZE_MASK);
+    m_store->enterDirectory(location) ;
+
+    QByteArray data;
+    if (!m_store->extractFile("content.xml", data))
+        return false;
+
+    QDomDocument doc;
+    if (!doc.setContent(data))
+        return false;
+
+    QVector<KisLazyFillTools::KeyStroke> strokes;
+    if (!KisDomUtils::loadValue(doc.documentElement(), COLORIZE_KEYSTROKES_SECTION, &strokes, mask->colorSpace()))
+        return false;
+
+    int i = 0;
+    Q_FOREACH (const KisLazyFillTools::KeyStroke &stroke, strokes) {
+        const QString fileName = QString("%1_%2").arg(COLORIZE_KEYSTROKE).arg(i++);
+        loadPaintDevice(stroke.dev, fileName);
+    }
+
+    mask->setKeyStrokesDirect(QList<KisLazyFillTools::KeyStroke>::fromVector(strokes));
+
+    loadPaintDevice(mask->coloringProjection(), COLORIZE_COLORING_DEVICE);
+
+    m_store->popDirectory();
+    return true;
 }
 
 QStringList KisKraLoadVisitor::errorMessages() const
@@ -355,7 +407,7 @@ struct SimpleDevicePolicy
         return dev->read(stream);
     }
 
-    void setDefaultPixel(KisPaintDeviceSP dev, const quint8 *defaultPixel) const {
+    void setDefaultPixel(KisPaintDeviceSP dev, const KoColor &defaultPixel) const {
         return dev->setDefaultPixel(defaultPixel);
     }
 };
@@ -369,7 +421,7 @@ struct FramedDevicePolicy
         return dev->framesInterface()->readFrame(stream, m_frameId);
     }
 
-    void setDefaultPixel(KisPaintDeviceSP dev, const quint8 *defaultPixel) const {
+    void setDefaultPixel(KisPaintDeviceSP dev, const KoColor &defaultPixel) const {
         return dev->framesInterface()->setFrameDefaultPixel(defaultPixel, m_frameId);
     }
 
@@ -424,10 +476,9 @@ bool KisKraLoadVisitor::loadPaintDeviceFrame(KisPaintDeviceSP device, const QStr
     if (m_store->open(location + ".defaultpixel")) {
         int pixelSize = device->colorSpace()->pixelSize();
         if (m_store->size() == pixelSize) {
-            quint8 *defPixel = new quint8[pixelSize];
-            m_store->read((char*)defPixel, pixelSize);
-            policy.setDefaultPixel(device, defPixel);
-            delete[] defPixel;
+            KoColor color(Qt::transparent, device->colorSpace());
+            m_store->read((char*)color.data(), pixelSize);
+            policy.setDefaultPixel(device, color);
         }
         m_store->close();
     }
@@ -456,7 +507,7 @@ bool KisKraLoadVisitor::loadProfile(KisPaintDeviceSP device, const QString& loca
     return false;
 }
 
-bool KisKraLoadVisitor::loadFilterConfiguration(KisFilterConfiguration* kfc, const QString& location)
+bool KisKraLoadVisitor::loadFilterConfiguration(KisFilterConfigurationSP kfc, const QString& location)
 {
     if (m_store->hasFile(location)) {
         QByteArray data;
@@ -557,4 +608,49 @@ QString KisKraLoadVisitor::getLocation(const QString &filename, const QString& s
     QString location = m_external ? QString() : m_uri;
     location += m_name + LAYER_PATH + filename + suffix;
     return location;
+}
+
+void KisKraLoadVisitor::loadNodeKeyframes(KisNode *node)
+{
+    if (!m_keyframeFilenames.contains(node)) return;
+
+    node->enableAnimation();
+
+    const QString &location = getLocation(m_keyframeFilenames[node]);
+
+    if (!m_store->open(location)) {
+        m_errorMessages << i18n("Could not load keyframes from %1.", location);
+        return;
+    }
+
+    QString errorMsg;
+    int errorLine;
+    int errorColumn;
+    KoXmlDocument doc = KoXmlDocument(true);
+
+    bool ok = doc.setContent(m_store->device(), &errorMsg, &errorLine, &errorColumn);
+    m_store->close();
+
+    if (!ok) {
+        m_errorMessages << i18n("parsing error in the keyframe file %1 at line %2, column %3\nError message: %4", location, errorLine, errorColumn, i18n(errorMsg.toUtf8()));
+        return;
+    }
+
+    QDomDocument dom;
+    KoXml::asQDomElement(dom, doc.documentElement());
+    QDomElement root = dom.firstChildElement();
+
+    for (QDomElement child = root.firstChildElement(); !child.isNull(); child = child.nextSiblingElement()) {
+        if (child.nodeName().toUpper() == "CHANNEL") {
+            QString id = child.attribute("name");
+            KisKeyframeChannel *channel = node->getKeyframeChannel(id, true);
+
+            if (!channel) {
+                m_errorMessages << i18n("unknown keyframe channel type: %1 in %2", id, location);
+                continue;
+            }
+
+            channel->loadXML(child);
+        }
+    }
 }

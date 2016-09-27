@@ -51,13 +51,13 @@ public:
                         KisNodeFilterInterface *nfi,
                         KisPaintDeviceSP paintDevice,
                         KisViewManager *view,
-                        KisFilterConfiguration *configuration,
+                        KisFilterConfigurationSP configuration,
                         const QString & layerName,
                         const QString & caption,
                         QWidget *parent = 0,
                         const char *name = 0);
 
-    KisFilterConfiguration * filterConfiguration() const;
+    KisFilterConfigurationSP  filterConfiguration() const;
     QString layerName() const;
 
 private Q_SLOTS:
@@ -70,7 +70,7 @@ private:
     KisPaintDeviceSP m_paintDevice;
     KisConfigWidget *m_currentConfigWidget;
     KisFilter *m_currentFilter;
-    KisFilterConfiguration *m_currentConfiguration;
+    KisFilterConfigurationSP m_currentConfiguration;
     QLineEdit *m_layerName;
     KisNodeFilterInterface *m_nodeFilterInterface;
 };

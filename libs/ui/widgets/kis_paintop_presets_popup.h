@@ -94,8 +94,10 @@ Q_SIGNALS:
     void reloadPresetClicked();
     void dirtyPresetToggled(bool value);
     void eraserBrushSizeToggled(bool value);
+    void eraserBrushOpacityToggled(bool value);
     
     void sizeChanged();
+    void brushEditorShown();
 
 private Q_SLOTS:
     void slotSwitchPresetStrip(bool visible);

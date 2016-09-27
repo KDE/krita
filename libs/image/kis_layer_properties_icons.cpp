@@ -24,6 +24,9 @@
 Q_GLOBAL_STATIC(KisLayerPropertiesIcons, s_instance)
 
 #include <kis_icon_utils.h>
+#include <kis_node.h>
+#include <commands/kis_node_property_list_command.h>
+#include "kis_image.h"
 
 
 const KoID KisLayerPropertiesIcons::locked("locked", ki18n("Locked"));
@@ -35,6 +38,9 @@ const KoID KisLayerPropertiesIcons::onionSkins("onion-skins", ki18n("Onion Skins
 const KoID KisLayerPropertiesIcons::passThrough("pass-through", ki18n("Pass Through"));
 const KoID KisLayerPropertiesIcons::selectionActive("selection-active", ki18n("Active"));
 const KoID KisLayerPropertiesIcons::colorLabelIndex("color-label", ki18n("Color Label"));
+const KoID KisLayerPropertiesIcons::colorizeNeedsUpdate("colorize-needs-update", ki18n("Update Result"));
+const KoID KisLayerPropertiesIcons::colorizeEditKeyStrokes("colorize-show-key-strokes", ki18n("Edit Key Strokes"));
+const KoID KisLayerPropertiesIcons::colorizeShowColoring("colorize-show-coloring", ki18n("Show Coloring"));
 
 
 struct IconsPair {
@@ -80,6 +86,9 @@ void KisLayerPropertiesIcons::updateIcons()
     m_d->icons.insert(onionSkins.id(), IconsPair(KisIconUtils::loadIcon("onionOn"), KisIconUtils::loadIcon("onionOff")));
     m_d->icons.insert(passThrough.id(), IconsPair(KisIconUtils::loadIcon("passthrough-enabled"), KisIconUtils::loadIcon("passthrough-disabled")));
     m_d->icons.insert(selectionActive.id(), IconsPair(KisIconUtils::loadIcon("local_selection_active"), KisIconUtils::loadIcon("local_selection_inactive")));
+    m_d->icons.insert(colorizeNeedsUpdate.id(), IconsPair(KisIconUtils::loadIcon("updateColorize"), KisIconUtils::loadIcon("updateColorize")));
+    m_d->icons.insert(colorizeEditKeyStrokes.id(), IconsPair(KisIconUtils::loadIcon("showMarks"), KisIconUtils::loadIcon("showMarksOff")));
+    m_d->icons.insert(colorizeShowColoring.id(), IconsPair(KisIconUtils::loadIcon("showColoring"), KisIconUtils::loadIcon("showColoringOff")));
 }
 
 KisBaseNode::Property KisLayerPropertiesIcons::getProperty(const KoID &id, bool state)
@@ -96,4 +105,38 @@ KisBaseNode::Property KisLayerPropertiesIcons::getProperty(const KoID &id, bool 
     return KisBaseNode::Property(id,
                                  pair.on, pair.off, state,
                                  isInStasis, stateInStasis);
+}
+
+void KisLayerPropertiesIcons::setNodeProperty(KisNodeSP node, const KoID &id, const QVariant &value, KisImageSP image)
+{
+    KisBaseNode::PropertyList props = node->sectionModelProperties();
+    setNodeProperty(&props, id, value);
+    KisNodePropertyListCommand::setNodePropertiesNoUndo(node, image, props);
+}
+
+void KisLayerPropertiesIcons::setNodeProperty(KisBaseNode::PropertyList *props, const KoID &id, const QVariant &value)
+{
+    KisBaseNode::PropertyList::iterator it = props->begin();
+    KisBaseNode::PropertyList::iterator end = props->end();
+    for (; it != end; ++it) {
+        if (it->id == id.id()) {
+            it->state = value;
+            break;
+        }
+    }
+}
+
+QVariant KisLayerPropertiesIcons::nodeProperty(KisNodeSP node, const KoID &id, const QVariant &defaultValue)
+{
+    KisBaseNode::PropertyList props = node->sectionModelProperties();
+
+    KisBaseNode::PropertyList::const_iterator it = props.constBegin();
+    KisBaseNode::PropertyList::const_iterator end = props.constEnd();
+    for (; it != end; ++it) {
+        if (it->id == id.id()) {
+            return it->state;
+        }
+    }
+
+    return defaultValue;
 }

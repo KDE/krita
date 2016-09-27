@@ -36,8 +36,6 @@ public:
 
     KisBrushSP brush();
 
-    void changePaintOpSize(qreal x, qreal y);
-    virtual QSizeF paintOpSize() const;
     virtual bool presetIsValid();
 
 

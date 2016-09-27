@@ -39,10 +39,10 @@ class PhongPixelProcessor
 {
     
 public:
-    PhongPixelProcessor(quint32 pixelArea, const KisPropertiesConfiguration* config);
+    PhongPixelProcessor(quint32 pixelArea, const KisPropertiesConfigurationSP config);
     ~PhongPixelProcessor();
     
-    void initialize(const KisPropertiesConfiguration* config);
+    void initialize(const KisPropertiesConfigurationSP config);
     void normalizeHeightmap();
     
     QVector3D reflection_vector;

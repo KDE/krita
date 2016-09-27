@@ -39,7 +39,7 @@
 #include <kis_lod_transform.h>
 
 
-KisChalkPaintOp::KisChalkPaintOp(const KisChalkPaintOpSettings *settings, KisPainter * painter, KisNodeSP node, KisImageSP image)
+KisChalkPaintOp::KisChalkPaintOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisNodeSP node, KisImageSP image)
     : KisPaintOp(painter)
 {
     Q_UNUSED(image);

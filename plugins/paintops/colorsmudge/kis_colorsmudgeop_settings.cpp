@@ -41,9 +41,7 @@ KisColorSmudgeOpSettings::~KisColorSmudgeOpSettings()
 #include "kis_curve_option_uniform_property.h"
 #include "kis_smudge_radius_option.h"
 
-typedef KisCallbackBasedPaintopProperty<KisComboBasedPaintOpProperty> KisComboBasedPaintOpPropertyCallback;
-
-QList<KisUniformPaintOpPropertySP> KisColorSmudgeOpSettings::uniformProperties()
+QList<KisUniformPaintOpPropertySP> KisColorSmudgeOpSettings::uniformProperties(KisPaintOpSettingsSP settings)
 {
     QList<KisUniformPaintOpPropertySP> props =
         listWeakToStrong(m_d->uniformProperties);
@@ -54,7 +52,7 @@ QList<KisUniformPaintOpPropertySP> KisColorSmudgeOpSettings::uniformProperties()
                 new KisComboBasedPaintOpPropertyCallback(
                     "smudge_mode",
                     i18n("Smudge Mode"),
-                    this, 0);
+                    settings, 0);
 
             QList<QString> modes;
             modes << i18n("Smearing");
@@ -87,7 +85,7 @@ QList<KisUniformPaintOpPropertySP> KisColorSmudgeOpSettings::uniformProperties()
                 new KisCurveOptionUniformProperty(
                     "smudge_length",
                     new KisSmudgeOption(),
-                    this, 0);
+                    settings, 0);
 
             QObject::connect(preset()->updateProxy(), SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
             prop->requestReadValue();
@@ -98,7 +96,7 @@ QList<KisUniformPaintOpPropertySP> KisColorSmudgeOpSettings::uniformProperties()
                 new KisCurveOptionUniformProperty(
                     "smudge_radius",
                     new KisSmudgeRadiusOption(),
-                    this, 0);
+                    settings, 0);
 
             QObject::connect(preset()->updateProxy(), SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
             prop->requestReadValue();
@@ -110,7 +108,7 @@ QList<KisUniformPaintOpPropertySP> KisColorSmudgeOpSettings::uniformProperties()
                 new KisCurveOptionUniformProperty(
                     "smudge_color_rate",
                     new KisRateOption("ColorRate", KisPaintOpOption::GENERAL, false),
-                    this, 0);
+                    settings, 0);
 
             QObject::connect(preset()->updateProxy(), SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
             prop->requestReadValue();
@@ -118,6 +116,6 @@ QList<KisUniformPaintOpPropertySP> KisColorSmudgeOpSettings::uniformProperties()
         }
     }
 
-    return KisBrushBasedPaintOpSettings::uniformProperties() + props;
+    return KisBrushBasedPaintOpSettings::uniformProperties(settings) + props;
 }
 

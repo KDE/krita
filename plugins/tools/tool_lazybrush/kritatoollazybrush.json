@@ -1,0 +1,9 @@
+{
+    "Id": "Lazy Brush Tool",
+    "Type": "Service",
+    "X-KDE-Library": "kritatoollazybrush",
+    "X-KDE-ServiceTypes": [
+        "Krita/Tool"
+    ],
+    "X-Krita-Version": "28"
+}

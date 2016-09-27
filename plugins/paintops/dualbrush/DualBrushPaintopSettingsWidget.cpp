@@ -40,7 +40,7 @@ DualBrushPaintOpSettingsWidget::~ DualBrushPaintOpSettingsWidget()
 {
 }
 
-KisPropertiesConfiguration *DualBrushPaintOpSettingsWidget::configuration() const
+KisPropertiesConfigurationSP DualBrushPaintOpSettingsWidget::configuration() const
 {
     DualBrushPaintOpSettings *config = new DualBrushPaintOpSettings();
     config->setOptionsWidget(const_cast<DualBrushPaintOpSettingsWidget*>(this));

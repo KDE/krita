@@ -34,7 +34,7 @@ class KisDynaPaintOp : public KisPaintOp
 
 public:
 
-    KisDynaPaintOp(const KisDynaPaintOpSettings *settings, KisPainter * painter, KisNodeSP node, KisImageSP image);
+    KisDynaPaintOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisNodeSP node, KisImageSP image);
     ~KisDynaPaintOp();
 
     KisSpacingInformation paintAt(const KisPaintInformation& info);

@@ -41,7 +41,11 @@ public:
     KisUniformPaintOpProperty(Type type,
                               const QString &id,
                               const QString &name,
-                              KisPaintOpSettingsSP settings,
+                              KisPaintOpSettingsRestrictedSP settings,
+                              QObject *parent);
+    KisUniformPaintOpProperty(const QString &id,
+                              const QString &name,
+                              KisPaintOpSettingsRestrictedSP settings,
                               QObject *parent);
     ~KisUniformPaintOpProperty();
 
@@ -79,5 +83,9 @@ template<class T> class QList;
 
 typedef QSharedPointer<KisUniformPaintOpProperty> KisUniformPaintOpPropertySP;
 typedef QWeakPointer<KisUniformPaintOpProperty> KisUniformPaintOpPropertyWSP;
+
+#include "kis_callback_based_paintop_property.h"
+extern template class KRITAIMAGE_EXPORT KisCallbackBasedPaintopProperty<KisUniformPaintOpProperty>;
+typedef KisCallbackBasedPaintopProperty<KisUniformPaintOpProperty> KisUniformPaintOpPropertyCallback;
 
 #endif /* __KIS_UNIFORM_PAINT_OP_PROPERTY_H */

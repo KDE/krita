@@ -77,7 +77,7 @@ xcopy /Y /S /I %BUILDDIR_INSTALL%\share\kf5 %pkg_root%\share\kf5
 xcopy /Y /S /I %BUILDDIR_INSTALL%\share\krita %pkg_root%\share\krita
 xcopy /Y /S /I %BUILDDIR_INSTALL%\share\kritaplugins %pkg_root%\share\kritaplugins
 xcopy /Y /S /I %BUILDDIR_INSTALL%\share\kservices5 %pkg_root%\share\kservices5
-xcopy /Y /S /I %BUILDDIR_INSTALL%\share\locale %pkg_root%\share\locale
+xcopy /Y /S /I %BUILDDIR_INSTALL%\share\locale %pkg_root%\bin\locale
 xcopy /Y /S /I %BUILDDIR_INSTALL%\share\man %pkg_root%\share\man
 xcopy /Y /S /I %BUILDDIR_INSTALL%\share\mime %pkg_root%\share\mime
 xcopy /Y /S /I %BUILDDIR_INSTALL%\share\ocio %pkg_root%\share\ocio

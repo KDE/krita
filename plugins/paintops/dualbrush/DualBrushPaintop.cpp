@@ -41,14 +41,19 @@
 
 #include "StackedPreset.h"
 
-DualBrushPaintOp::DualBrushPaintOp(const DualBrushPaintOpSettings *settings, KisPainter *painter, KisNodeSP node, KisImageSP image)
+DualBrushPaintOp::DualBrushPaintOp(KisPaintOpSettingsSP settings, KisPainter *painter, KisNodeSP node, KisImageSP image)
     : KisPaintOp(painter)
 {
     Q_UNUSED(image);
     Q_UNUSED(node);
     m_opacityOption.readOptionSetting(settings);
     m_opacityOption.resetAllSensors();
-    m_dualBrushOption.readOptionSetting(settings);
+
+
+    DualBrushPaintOpSettings *dualSettings =
+        dynamic_cast<DualBrushPaintOpSettings*>(settings.data());
+
+    m_dualBrushOption.readOptionSetting(dualSettings);
 
     m_paintopStack.clear();
     Q_FOREACH(const StackedPreset &preset, m_dualBrushOption.presetStack()) {

@@ -398,7 +398,17 @@ void KisImageConfig::setShowAdditionalOnionSkinsSettings(bool value)
     m_config.writeEntry("showAdditionalOnionSkinsSettings", value);
 }
 
-KisProofingConfiguration *KisImageConfig::defaultProofingconfiguration()
+int KisImageConfig::defaultFrameColorLabel() const
+{
+    return m_config.readEntry("defaultFrameColorLabel", 0);
+}
+
+void KisImageConfig::setDefaultFrameColorLabel(int label)
+{
+    m_config.writeEntry("defaultFrameColorLabel", label);
+}
+
+KisProofingConfigurationSP KisImageConfig::defaultProofingconfiguration()
 {
     KisProofingConfiguration *proofingConfig= new KisProofingConfiguration();
     proofingConfig->proofingProfile = m_config.readEntry("defaultProofingProfileName", "Chemical proof");
@@ -417,7 +427,7 @@ KisProofingConfiguration *KisImageConfig::defaultProofingconfiguration()
     col.setOpacity(1.0);
     proofingConfig->warningColor = col;
     proofingConfig->adaptationState = (double)m_config.readEntry("defaultProofingAdaptationState", 1.0);
-    return proofingConfig;
+    return toQShared(proofingConfig);
 }
 
 void KisImageConfig::setDefaultProofingConfig(const KoColorSpace *proofingSpace, int proofingIntent, bool blackPointCompensation, KoColor warningColor, double adaptationState)
@@ -431,4 +441,15 @@ void KisImageConfig::setDefaultProofingConfig(const KoColorSpace *proofingSpace,
     warningColor.toQColor(&c);
     m_config.writeEntry("defaultProofingGamutwarning", c);
     m_config.writeEntry("defaultProofingAdaptationState",adaptationState);
+}
+
+bool KisImageConfig::useLodForColorizeMask(bool requestDefault) const
+{
+    return !requestDefault ?
+        m_config.readEntry("useLodForColorizeMask", false) : false;
+}
+
+void KisImageConfig::setUseLodForColorizeMask(bool value)
+{
+    m_config.writeEntry("useLodForColorizeMask", value);
 }

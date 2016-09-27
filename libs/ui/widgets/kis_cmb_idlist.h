@@ -41,6 +41,12 @@ public:
 
 
 public:
+    /**
+     * @brief setIDList clears the combobox and sorts
+     *    the given list by user-visible name and then adds
+     *    the items to the combobox
+     * @param list the (unsorted) list of KoID's
+     */
     void setIDList(const QList<KoID> & list);
     void setCurrent(const KoID id);
     void setCurrent(const QString & s);

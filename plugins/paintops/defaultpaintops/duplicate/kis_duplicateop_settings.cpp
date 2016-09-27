@@ -132,7 +132,7 @@ KisPaintOpSettingsSP KisDuplicateOpSettings::clone() const
     return setting;
 }
 
-QPainterPath KisDuplicateOpSettings::brushOutline(const KisPaintInformation &info, OutlineMode mode) const
+QPainterPath KisDuplicateOpSettings::brushOutline(const KisPaintInformation &info, OutlineMode mode)
 {
     QPainterPath path;
 
@@ -165,15 +165,13 @@ QPainterPath KisDuplicateOpSettings::brushOutline(const KisPaintInformation &inf
 
 
 #include <brushengine/kis_uniform_paintop_property.h>
-#include <brushengine/kis_callback_based_paintop_property.h>
 #include "kis_paintop_preset.h"
 #include "kis_paintop_settings_update_proxy.h"
 #include "kis_duplicateop_option.h"
 #include "kis_standard_uniform_properties_factory.h"
-typedef KisCallbackBasedPaintopProperty<KisUniformPaintOpProperty> KisUniformPaintOpPropertyCallback;
 
 
-QList<KisUniformPaintOpPropertySP> KisDuplicateOpSettings::uniformProperties()
+QList<KisUniformPaintOpPropertySP> KisDuplicateOpSettings::uniformProperties(KisPaintOpSettingsSP settings)
 {
     QList<KisUniformPaintOpPropertySP> props =
         listWeakToStrong(m_uniformProperties);
@@ -185,7 +183,7 @@ QList<KisUniformPaintOpPropertySP> KisDuplicateOpSettings::uniformProperties()
                     KisUniformPaintOpPropertyCallback::Bool,
                     "clone_healing",
                     i18n("Healing"),
-                    this, 0);
+                    settings, 0);
 
             prop->setReadCallback(
                 [](KisUniformPaintOpProperty *prop) {
@@ -212,7 +210,7 @@ QList<KisUniformPaintOpPropertySP> KisDuplicateOpSettings::uniformProperties()
                     KisUniformPaintOpPropertyCallback::Bool,
                     "clone_movesource",
                     i18n("Move Source"),
-                    this, 0);
+                    settings, 0);
 
             prop->setReadCallback(
                 [](KisUniformPaintOpProperty *prop) {
@@ -235,7 +233,7 @@ QList<KisUniformPaintOpPropertySP> KisDuplicateOpSettings::uniformProperties()
         }
     }
 
-    return KisPaintOpSettings::uniformProperties() + props;
+    return KisPaintOpSettings::uniformProperties(settings) + props;
 }
 
 

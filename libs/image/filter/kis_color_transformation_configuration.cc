@@ -32,13 +32,20 @@ struct Q_DECL_HIDDEN KisColorTransformationConfiguration::Private {
         qDeleteAll(colorTransformation);
     }
 
+    // XXX: Threadlocal storage!!!
     QMap<QThread*, KoColorTransformation*> colorTransformation;
     QMutex mutex;
 };
 
 KisColorTransformationConfiguration::KisColorTransformationConfiguration(const QString & name, qint32 version)
-: KisFilterConfiguration(name, version)
-, d(new Private())
+    : KisFilterConfiguration(name, version)
+    , d(new Private())
+{
+}
+
+KisColorTransformationConfiguration::KisColorTransformationConfiguration(const KisColorTransformationConfiguration &rhs)
+    : KisFilterConfiguration(rhs)
+    , d(new Private())
 {
 }
 
@@ -47,12 +54,13 @@ KisColorTransformationConfiguration::~KisColorTransformationConfiguration()
     delete d;
 }
 
-KoColorTransformation* KisColorTransformationConfiguration::colorTransformation(const KoColorSpace *cs, const KisColorTransformationFilter * filter) const
+KoColorTransformation* KisColorTransformationConfiguration::colorTransformation(const KoColorSpace *cs, const KisColorTransformationFilter *filter) const
 {
     QMutexLocker locker(&d->mutex);
     KoColorTransformation *transformation = d->colorTransformation.value(QThread::currentThread(), 0);
     if (!transformation) {
-        transformation = filter->createTransformation(cs, this);
+        KisFilterConfigurationSP config(const_cast<KisColorTransformationConfiguration*>(this));
+        transformation = filter->createTransformation(cs, config);
         d->colorTransformation.insert(QThread::currentThread(), transformation);
     }
     locker.unlock();

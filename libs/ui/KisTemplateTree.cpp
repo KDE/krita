@@ -59,7 +59,7 @@ void KisTemplateTree::readTemplateTree()
 
 void KisTemplateTree::writeTemplateTree()
 {
-    QString localDir = KoResourcePaths::saveLocation("data", m_templatesResourcePath);
+    QString localDir = KoResourcePaths::saveLocation("templates");
 
     Q_FOREACH (KisTemplateGroup *group, m_groups) {
         //dbgUI <<"---------------------------------";
@@ -138,9 +138,10 @@ KisTemplateGroup *KisTemplateTree::find(const QString &name) const
 
 void KisTemplateTree::readGroups()
 {
-    QStringList dirs = KoResourcePaths::findDirs("data", m_templatesResourcePath);
+    QStringList dirs = KoResourcePaths::findDirs("templates");
 
     Q_FOREACH (const QString & dirName, dirs) {
+        if (!dirName.contains("templates")) continue; // Hack around broken KoResourcePaths
         QDir dir(dirName);
         // avoid the annoying warning
         if (!dir.exists())

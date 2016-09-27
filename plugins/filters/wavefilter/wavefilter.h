@@ -45,15 +45,15 @@ public:
 
     void processImpl(KisPaintDeviceSP device,
                      const QRect& applyRect,
-                     const KisFilterConfiguration* config,
+                     const KisFilterConfigurationSP config,
                      KoUpdater* progressUpdater) const;
     static inline KoID id() {
         return KoID("wave", i18n("Wave"));
     }
 
-    virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
+    virtual KisFilterConfigurationSP factoryConfiguration(const KisPaintDeviceSP) const;
 public:
-    virtual QRect neededRect(const QRect& rect, const KisFilterConfiguration* config = 0, int lod = 0) const;
+    virtual QRect neededRect(const QRect& rect, const KisFilterConfigurationSP config = 0, int lod = 0) const;
 
     virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
 };

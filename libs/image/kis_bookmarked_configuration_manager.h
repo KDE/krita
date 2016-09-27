@@ -20,9 +20,8 @@
 #define _KIS_BOOKMARKED_CONFIGURATION_MANAGER_H_
 
 #include <QList>
+#include "kis_serializable_configuration.h"
 
-class KisSerializableConfiguration;
-class KisSerializableConfigurationFactory;
 class QString;
 class KLocalizedString;
 
@@ -43,11 +42,11 @@ public:
     /**
      * Load the configuration.
      */
-    KisSerializableConfiguration* load(const QString & configname) const;
+    KisSerializableConfigurationSP load(const QString & configname) const;
     /**
      * Save the configuration.
      */
-    void save(const QString & configname, const KisSerializableConfiguration*);
+    void save(const QString & configname, const KisSerializableConfigurationSP);
     /**
      * @return true if the configuration configname exists
      */
@@ -59,7 +58,7 @@ public:
     /**
      * @return the default configuration
      */
-    KisSerializableConfiguration* defaultConfiguration() const;
+    KisSerializableConfigurationSP defaultConfiguration() const;
     /**
      * Remove a bookmarked configuration
      */

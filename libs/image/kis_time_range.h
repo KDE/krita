@@ -43,6 +43,12 @@ public:
     {
     }
 
+    inline KisTimeRange(int start, int end, bool)
+        : m_start(start),
+          m_end(end)
+    {
+    }
+
     bool operator==(const KisTimeRange &rhs) const {
         return rhs.m_start == m_start && rhs.m_end == m_end;
     }
@@ -123,12 +129,6 @@ public:
 
     static void calculateTimeRangeRecursive(const KisNode *node, int time, KisTimeRange &range, bool exclusive);
 
-private:
-    inline KisTimeRange(int start, int end, bool)
-        : m_start(start),
-          m_end(end)
-    {
-    }
 
 private:
     int m_start;

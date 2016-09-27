@@ -175,51 +175,6 @@ void KisBrushSelectionWidget::setCurrentBrush(KisBrushSP brush)
 
 }
 
-void KisBrushSelectionWidget::setBrushSize(qreal dxPixels, qreal dyPixels)
-{
-    if (m_buttonGroup->checkedId() == AUTOBRUSH) {
-        m_autoBrushWidget->setBrushSize(dxPixels, dyPixels);
-    }
-    else if (m_buttonGroup->checkedId() == PREDEFINEDBRUSH) {
-        m_brushChooser->setBrushSize(dxPixels, dyPixels);
-    }
-    else if (m_buttonGroup->checkedId() == CUSTOMBRUSH ||
-               m_buttonGroup->checkedId() == CLIPBOARDBRUSH) {
-
-        // switch to the predefined brush and resize it
-        KisBrushSP brush = this->brush();
-        if (brush) {
-            setCurrentWidget(m_brushChooser);
-            m_brushChooser->setBrush(brush);
-            m_brushChooser->setBrushSize(dxPixels, dyPixels);
-        }
-    }
-    if(m_precisionOption.autoPrecisionEnabled())
-    {
-        m_precisionOption.setAutoPrecision(this->brushSize().width());
-        uiWdgBrushChooser.lblPrecisionValue->setText("Precision:"+QString::number(m_precisionOption.precisionLevel()));
-        emit sigPrecisionChanged();
-    }
-}
-
-
-QSizeF KisBrushSelectionWidget::brushSize() const
-{
-    if (m_buttonGroup->checkedId() == AUTOBRUSH) {
-        return m_autoBrushWidget->brushSize();
-    }
-    else if (KisBrushSP brush = this->brush()) {
-        qreal width = brush->width() * brush->scale();
-        qreal height = brush->height() * brush->scale();
-        return QSizeF(width, height);
-    }
-
-    // return neutral value
-    return QSizeF(1.0, 1.0);
-}
-
-
-
 void KisBrushSelectionWidget::buttonClicked(int id)
 {
     setCurrentWidget(m_chooserMap[id]);
@@ -278,12 +233,12 @@ void KisBrushSelectionWidget::precisionChanged(int value)
     emit sigPrecisionChanged();
 }
 
-void KisBrushSelectionWidget::writeOptionSetting(KisPropertiesConfiguration* settings) const
+void KisBrushSelectionWidget::writeOptionSetting(KisPropertiesConfigurationSP settings) const
 {
     m_precisionOption.writeOptionSetting(settings);
 }
 
-void KisBrushSelectionWidget::readOptionSetting(const KisPropertiesConfiguration* setting)
+void KisBrushSelectionWidget::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
     m_precisionOption.readOptionSetting(setting);
     uiWdgBrushChooser.sliderPrecision->setValue(m_precisionOption.precisionLevel());
@@ -336,7 +291,7 @@ void KisBrushSelectionWidget::setAutoPrecisionEnabled(int value)
     m_precisionOption.setAutoPrecisionEnabled(value);
     if(m_precisionOption.autoPrecisionEnabled())
     {
-        m_precisionOption.setAutoPrecision(this->brushSize().height());
+        m_precisionOption.setAutoPrecision(brush()->width());
         setPrecisionEnabled(false);
         precisionChanged(m_precisionOption.precisionLevel());
         uiWdgBrushChooser.label->setVisible(true);

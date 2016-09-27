@@ -47,13 +47,13 @@ public:
 
 	virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
 
-    virtual KoColorTransformation* createTransformation(const KoColorSpace* cs, const KisFilterConfiguration* config) const;
+    virtual KoColorTransformation* createTransformation(const KoColorSpace* cs, const KisFilterConfigurationSP config) const;
 
 	static inline KoID id() {
         return KoID("colorbalance", i18n("Color Balance"));
 	}
 
-    virtual KisFilterConfiguration * factoryConfiguration(const KisPaintDeviceSP) const;
+    virtual KisFilterConfigurationSP  factoryConfiguration(const KisPaintDeviceSP) const;
 
 };
 
@@ -66,8 +66,8 @@ public:
     KisColorBalanceConfigWidget(QWidget * parent);
 	virtual ~KisColorBalanceConfigWidget();
 
-	virtual KisPropertiesConfiguration * configuration() const;
-	virtual void setConfiguration(const KisPropertiesConfiguration* config);
+	virtual KisPropertiesConfigurationSP  configuration() const;
+	virtual void setConfiguration(const KisPropertiesConfigurationSP config);
     Ui_Form * m_page;
     QString m_id;
 

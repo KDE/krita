@@ -40,8 +40,22 @@ int DualBrushPaintOpSettings::rate() const
     return 100;
 }
 
-QPainterPath DualBrushPaintOpSettings::brushOutline(const KisPaintInformation &info, OutlineMode mode) const
+void DualBrushPaintOpSettings::setPaintOpSize(qreal value)
 {
+    Q_UNUSED(value);
+    // TODO: set all the child presets to new size
+}
+
+qreal DualBrushPaintOpSettings::paintOpSize() const
+{
+    // TODO: the maximum size of the presets
+    return 1.0;
+}
+
+QPainterPath DualBrushPaintOpSettings::brushOutline(const KisPaintInformation &info, OutlineMode mode)
+{
+    Q_UNUSED(info);
+
     QPainterPath path;
     if (mode == CursorIsOutline || mode == CursorIsCircleOutline || mode == CursorTiltOutline) {
 //        qreal size = getInt(DUALBRUSH_RADIUS) * 2 + 1;

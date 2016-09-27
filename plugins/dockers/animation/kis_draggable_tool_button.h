@@ -34,7 +34,8 @@ public:
 
     static int unitRadius();
 
-    int calculateValue(const QPoint &diff);
+    void beginDrag(const QPoint &pos);
+    int continueDrag(const QPoint &pos);
 
 Q_SIGNALS:
     void valueChanged(int value);

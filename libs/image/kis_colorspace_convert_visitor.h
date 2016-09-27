@@ -67,6 +67,8 @@ public:
         return true;
     }
 
+    bool visit(KisColorizeMask *mask);
+
 private:
 
     bool convertPaintDevice(KisLayer* layer);

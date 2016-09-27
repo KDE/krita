@@ -225,7 +225,7 @@ DualBrushOpOption::~DualBrushOpOption()
 {
 }
 
-void DualBrushOpOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
+void DualBrushOpOption::writeOptionSetting(KisPropertiesConfigurationSP setting) const
 {
     QVector<StackedPreset> stack = m_dualBrushOptionsWidget->presetStack();
     setting->setProperty("dualbrush/preset_count", stack.count());
@@ -239,7 +239,7 @@ void DualBrushOpOption::writeOptionSetting(KisPropertiesConfiguration* setting) 
     }
 }
 
-void DualBrushOpOption::readOptionSetting(const KisPropertiesConfiguration* setting)
+void DualBrushOpOption::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
 
     QVector<StackedPreset> stack;

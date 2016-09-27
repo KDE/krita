@@ -33,7 +33,7 @@ public:
     DualBrushPaintOpSettingsWidget(QWidget *parent = 0);
     virtual ~DualBrushPaintOpSettingsWidget();
 
-    KisPropertiesConfiguration *configuration() const;
+    KisPropertiesConfigurationSP configuration() const;
 };
 
 #endif

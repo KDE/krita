@@ -34,12 +34,17 @@ public:
     DualBrushPaintOpSettings();
     virtual ~DualBrushPaintOpSettings() {}
 
-    QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode) const;
+    QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode);
 
     bool paintIncremental();
     bool isAirbrushing() const;
     int rate() const;
 
+    virtual void setPaintOpSize(qreal value);
+    virtual qreal paintOpSize() const;
+
 };
+
+typedef KisSharedPtr<DualBrushPaintOpSettings> DualBrushPaintOpSettingsSP;
 
 #endif

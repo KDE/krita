@@ -42,7 +42,7 @@ KisTIFFImport::~KisTIFFImport()
 {
 }
 
-KisImportExportFilter::ConversionStatus KisTIFFImport::convert(const QByteArray&, const QByteArray& to)
+KisImportExportFilter::ConversionStatus KisTIFFImport::convert(const QByteArray&, const QByteArray& to, KisPropertiesConfigurationSP configuration)
 {
     dbgFile << "Importing using TIFFImport!";
 

@@ -49,9 +49,9 @@ KisConfigWidget * KisFilterColorToAlpha::createConfigurationWidget(QWidget* pare
     return new KisWdgColorToAlpha(parent);
 }
 
-KisFilterConfiguration* KisFilterColorToAlpha::factoryConfiguration(const KisPaintDeviceSP) const
+KisFilterConfigurationSP KisFilterColorToAlpha::factoryConfiguration(const KisPaintDeviceSP) const
 {
-    KisFilterConfiguration* config = new KisFilterConfiguration("colortoalpha", 1);
+    KisFilterConfigurationSP config = new KisFilterConfiguration("colortoalpha", 1);
     config->setProperty("targetcolor", QColor(255, 255, 255));
     config->setProperty("threshold", 100);
     return config;
@@ -102,13 +102,13 @@ void applyToIterator(const int numChannels, const int *channelIndex,
 
 void KisFilterColorToAlpha::processImpl(KisPaintDeviceSP device,
                                         const QRect& rect,
-                                        const KisFilterConfiguration* config,
+                                        const KisFilterConfigurationSP _config,
                                         KoUpdater* progressUpdater
                                         ) const
 {
     Q_ASSERT(device != 0);
 
-    if (config == 0) config = new KisFilterConfiguration("colortoalpha", 1);
+    KisFilterConfigurationSP config = _config ? _config : new KisFilterConfiguration("colortoalpha", 1);
 
     QVariant value;
     QColor cTA = (config->getProperty("targetcolor", value)) ? value.value<QColor>() : QColor(255, 255, 255);

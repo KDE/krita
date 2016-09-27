@@ -22,7 +22,6 @@
 #include "kis_global.h"
 #include "kis_paint_information.h"
 
-
 namespace KisPaintOpUtils {
 
 template <class PaintOp>
@@ -133,6 +132,60 @@ private:
     QPointF m_first;
     QPointF m_second;
 };
+
+bool checkSizeTooSmall(qreal scale, qreal width, qreal height)
+{
+    return scale * width < 0.01 || scale * height < 0.01;
+}
+
+inline qreal calcAutoSpacing(qreal value, qreal coeff)
+{
+    return coeff * (value < 1.0 ? value : sqrt(value));
+}
+
+QPointF calcAutoSpacing(const QPointF &pt, qreal coeff, qreal lodScale)
+{
+    const qreal invLodScale = 1.0 / lodScale;
+    const QPointF lod0Point = invLodScale * pt;
+
+    return lodScale * QPointF(calcAutoSpacing(lod0Point.x(), coeff), calcAutoSpacing(lod0Point.y(), coeff));
+}
+
+KisSpacingInformation effectiveSpacing(qreal dabWidth,
+                                       qreal dabHeight,
+                                       qreal extraScale,
+                                       bool isotropicSpacing,
+                                       qreal rotation,
+                                       qreal spacingVal,
+                                       bool autoSpacingActive,
+                                       qreal autoSpacingCoeff,
+                                       qreal lodScale)
+{
+    QPointF spacing;
+
+    if (!isotropicSpacing) {
+        if (autoSpacingActive) {
+            spacing = calcAutoSpacing(QPointF(dabWidth, dabHeight), autoSpacingCoeff, lodScale);
+        } else {
+            spacing = QPointF(dabWidth, dabHeight);
+            spacing *= spacingVal;
+        }
+    }
+    else {
+        qreal significantDimension = qMax(dabWidth, dabHeight);
+        if (autoSpacingActive) {
+            significantDimension = calcAutoSpacing(significantDimension, autoSpacingCoeff);
+        } else {
+            significantDimension *= spacingVal;
+        }
+        spacing = QPointF(significantDimension, significantDimension);
+        rotation = 0.0;
+    }
+
+    spacing *= extraScale;
+
+    return KisSpacingInformation(spacing, rotation);
+}
 
 }
 

@@ -43,10 +43,10 @@ public:
 
 public:
 
-//     virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
+//     virtual KisFilterConfigurationSP factoryConfiguration(const KisPaintDeviceSP) const;
     virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
 
-    virtual KoColorTransformation* createTransformation(const KoColorSpace* cs, const KisFilterConfiguration* config) const;
+    virtual KoColorTransformation* createTransformation(const KoColorSpace* cs, const KisFilterConfigurationSP config) const;
 
     static inline KoID id() {
         return KoID("levels", i18n("Levels"));
@@ -62,8 +62,8 @@ public:
     KisLevelConfigWidget(QWidget * parent, KisPaintDeviceSP dev);
     virtual ~KisLevelConfigWidget();
 
-    virtual KisPropertiesConfiguration* configuration() const;
-    void setConfiguration(const KisPropertiesConfiguration* config);
+    virtual KisPropertiesConfigurationSP configuration() const;
+    void setConfiguration(const KisPropertiesConfigurationSP config);
     Ui::WdgLevel m_page;
 
 protected Q_SLOTS:

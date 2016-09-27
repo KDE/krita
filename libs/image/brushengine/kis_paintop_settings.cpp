@@ -96,6 +96,15 @@ KisPaintOpSettings::~KisPaintOpSettings()
 {
 }
 
+KisPaintOpSettings::KisPaintOpSettings(const KisPaintOpSettings &rhs)
+    : KisPropertiesConfiguration(rhs)
+    , d(new Private)
+{
+    d->settingsWidget = 0;
+    d->preset = rhs.preset();
+    d->modelName = rhs.modelName();
+}
+
 void KisPaintOpSettings::setOptionsWidget(KisPaintOpConfigWidget* widget)
 {
     d->settingsWidget = widget;
@@ -189,15 +198,14 @@ void KisPaintOpSettings::setPaintOpCompositeOp(const QString &value)
     proxy->setProperty("CompositeOp", value);
 }
 
-qreal KisPaintOpSettings::paintOpOpacity() const
+qreal KisPaintOpSettings::paintOpOpacity()
 {
-    KisLockedPropertiesProxySP proxy(
-        KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(this));
+    KisLockedPropertiesProxySP proxy = KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(this);
 
     return proxy->getDouble("OpacityValue", 1.0);
 }
 
-qreal KisPaintOpSettings::paintOpFlow() const
+qreal KisPaintOpSettings::paintOpFlow()
 {
     KisLockedPropertiesProxySP proxy(
         KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(this));
@@ -205,39 +213,7 @@ qreal KisPaintOpSettings::paintOpFlow() const
     return proxy->getDouble("FlowValue", 1.0);
 }
 
-void KisPaintOpSettings::setPaintOpSize(qreal value)
-{
-    /**
-     * The widget already has the wrapping for the locked setings
-     * functionality, so just request it.
-     */
-
-    if (d->settingsWidget) {
-        const qreal sizeDiff = value - paintOpSize();
-
-        {
-            KisSignalsBlocker b(d->settingsWidget);
-            d->settingsWidget.data()->setConfigurationSafe(this);
-            d->settingsWidget.data()->changePaintOpSize(sizeDiff, 0);
-        }
-        d->settingsWidget.data()->writeConfigurationSafe(this);
-    }
-}
-
-qreal KisPaintOpSettings::paintOpSize() const
-{
-    // see a comment about locked settings in setPaintOpSize()
-
-    qreal size = 1.0;
-
-    if (d->settingsWidget) {
-        size = d->settingsWidget.data()->paintOpSize().width();
-    }
-
-    return size;
-}
-
-QString KisPaintOpSettings::paintOpCompositeOp() const
+QString KisPaintOpSettings::paintOpCompositeOp()
 {
     KisLockedPropertiesProxySP proxy(
         KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(this));
@@ -253,7 +229,7 @@ void KisPaintOpSettings::setEraserMode(bool value)
     proxy->setProperty("EraserMode", value);
 }
 
-bool KisPaintOpSettings::eraserMode() const
+bool KisPaintOpSettings::eraserMode()
 {
     KisLockedPropertiesProxySP proxy(
         KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(this));
@@ -261,7 +237,7 @@ bool KisPaintOpSettings::eraserMode() const
     return proxy->getBool("EraserMode", false);
 }
 
-QString KisPaintOpSettings::effectivePaintOpCompositeOp() const
+QString KisPaintOpSettings::effectivePaintOpCompositeOp()
 {
     return !eraserMode() ? paintOpCompositeOp() : COMPOSITE_ERASE;
 }
@@ -288,6 +264,27 @@ void KisPaintOpSettings::setSavedBrushSize(qreal value)
     setPropertyNotSaved("SavedBrushSize");
 }
 
+qreal KisPaintOpSettings::savedEraserOpacity() const
+{
+    return getDouble("SavedEraserOpacity", 0.0);
+}
+
+void KisPaintOpSettings::setSavedEraserOpacity(qreal value)
+{
+    setProperty("SavedEraserOpacity", value);
+    setPropertyNotSaved("SavedEraserOpacity");
+}
+
+qreal KisPaintOpSettings::savedBrushOpacity() const
+{
+    return getDouble("SavedBrushOpacity", 0.0);
+}
+
+void KisPaintOpSettings::setSavedBrushOpacity(qreal value)
+{
+    setProperty("SavedBrushOpacity", value);
+    setPropertyNotSaved("SavedBrushOpacity");
+}
 
 QString KisPaintOpSettings::modelName() const
 {
@@ -322,12 +319,12 @@ QString KisPaintOpSettings::indirectPaintingCompositeOp() const
     return COMPOSITE_ALPHA_DARKEN;
 }
 
-QPainterPath KisPaintOpSettings::brushOutline(const KisPaintInformation &info, OutlineMode mode) const
+QPainterPath KisPaintOpSettings::brushOutline(const KisPaintInformation &info, OutlineMode mode)
 {
     QPainterPath path;
     if (mode == CursorIsOutline || mode == CursorIsCircleOutline || mode == CursorTiltOutline) {
         path = ellipseOutline(10, 10, 1.0, 0);
-        
+
         if (mode == CursorTiltOutline) {
             path.addPath(makeTiltIndicator(info, QPointF(0.0, 0.0), 0.0, 2.0));
         }
@@ -412,19 +409,19 @@ void KisPaintOpSettings::onPropertyChanged()
     }
 }
 
-bool KisPaintOpSettings::isLodUserAllowed(const KisPropertiesConfiguration *config)
+bool KisPaintOpSettings::isLodUserAllowed(const KisPropertiesConfigurationSP config)
 {
     return config->getBool("lodUserAllowed", true);
 }
 
-void KisPaintOpSettings::setLodUserAllowed(KisPropertiesConfiguration *config, bool value)
+void KisPaintOpSettings::setLodUserAllowed(KisPropertiesConfigurationSP config, bool value)
 {
     config->setProperty("lodUserAllowed", value);
 }
 
 #include "kis_standard_uniform_properties_factory.h"
 
-QList<KisUniformPaintOpPropertySP> KisPaintOpSettings::uniformProperties()
+QList<KisUniformPaintOpPropertySP> KisPaintOpSettings::uniformProperties(KisPaintOpSettingsSP settings)
 {
     QList<KisUniformPaintOpPropertySP> props =
         listWeakToStrong(d->uniformProperties);
@@ -433,9 +430,9 @@ QList<KisUniformPaintOpPropertySP> KisPaintOpSettings::uniformProperties()
     if (props.isEmpty()) {
         using namespace KisStandardUniformPropertiesFactory;
 
-        props.append(createProperty(opacity, this, d->updateProxyCreate()));
-        props.append(createProperty(size, this, d->updateProxyCreate()));
-        props.append(createProperty(flow, this, d->updateProxyCreate()));
+        props.append(createProperty(opacity, settings, d->updateProxyCreate()));
+        props.append(createProperty(size, settings, d->updateProxyCreate()));
+        props.append(createProperty(flow, settings, d->updateProxyCreate()));
 
         d->uniformProperties = listStrongToWeak(props);
     }

@@ -14,6 +14,7 @@ add_subdirectory( shearimage )
 add_subdirectory( layergroupswitcher )
 add_subdirectory( resourcemanager )
 add_subdirectory( layersplit )
+add_subdirectory( animationrenderer )
 add_subdirectory( waveletdecompose )
 
 # Allow to skip building GMIC plugin

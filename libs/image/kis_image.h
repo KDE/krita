@@ -53,7 +53,7 @@ class KisLayerComposition;
 class KisSpontaneousJob;
 class KisImageAnimationInterface;
 class KUndo2MagicString;
-class KisProofingConfiguration;
+struct KisProofingConfiguration;
 
 namespace KisMetaData
 {
@@ -122,12 +122,12 @@ public:
     QImage convertToQImage(const QSize& scaledImageSize, const KoColorProfile *profile);
 
     /**
-     * Calls KisUpdateScheduler::lock
+     * Calls KisUpdateScheduler::lock (XXX: APIDOX -- what does that mean?)
      */
     void lock();
 
     /**
-     * Calls KisUpdateScheduler::unlock
+     * Calls KisUpdateScheduler::unlock (XXX: APIDOX -- what does that mean?)
      */
     void unlock();
 
@@ -480,17 +480,17 @@ public:
     /**
      * Returns the layer compositions for the image
      */
-    QList<KisLayerComposition*> compositions();
+    QList<KisLayerCompositionSP> compositions();
 
     /**
      * Adds a new layer composition, will be saved with the image
      */
-    void addComposition(KisLayerComposition* composition);
+    void addComposition(KisLayerCompositionSP composition);
 
     /**
      * Remove the layer compostion
      */
-    void removeComposition(KisLayerComposition* composition);
+    void removeComposition(KisLayerCompositionSP composition);
 
     /**
      * Permit or deny the wrap-around mode for all the paint devices
@@ -568,12 +568,12 @@ public:
      * the proofingConfiguration has changed.
      * @param proofingConfig - the kis proofing config that will be used instead.
      */
-    void setProofingConfiguration(KisProofingConfiguration *proofingConfig);
+    void setProofingConfiguration(KisProofingConfigurationSP proofingConfig);
     /**
      * @brief proofingConfiguration
      * @return the proofing configuration of the image.
      */
-    KisProofingConfiguration *proofingConfiguration() const;
+    KisProofingConfigurationSP proofingConfiguration() const;
 
 public:
     bool startIsolatedMode(KisNodeSP node);
@@ -732,8 +732,22 @@ public Q_SLOTS:
 
     bool isIdle();
 
+    /**
+     * @brief barrierLock APIDOX
+     * @param readOnly
+     */
     void barrierLock(bool readOnly = false);
+
+    /**
+     * @brief barrierLock APIDOX
+     * @param readOnly
+     */
     bool tryBarrierLock(bool readOnly = false);
+
+    /**
+     * @brief barrierLock APIDOX
+     * @param readOnly
+     */
     void waitForDone();
 
     KisStrokeId startStroke(KisStrokeStrategy *strokeStrategy);
@@ -741,7 +755,15 @@ public Q_SLOTS:
     void endStroke(KisStrokeId id);
     bool cancelStroke(KisStrokeId id);
 
+    /**
+     * @brief blockUpdates block updating the image projection
+     */
     void blockUpdates();
+
+    /**
+     * @brief unblockUpdates unblock updating the image project. This
+     * only restarts the scheduler and does not schedule a full refresh.
+     */
     void unblockUpdates();
 
     /**

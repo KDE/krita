@@ -122,7 +122,7 @@ KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintD
     if(keys.size() > 0) {
         KoHistogramProducerFactory *hpf;
         hpf = KoHistogramProducerFactoryRegistry::instance()->get(keys.at(0));
-	m_histogram = new KisHistogram(m_dev, m_dev->exactBounds(), hpf->generate(), LINEAR);
+    m_histogram = new KisHistogram(m_dev, m_dev->exactBounds(), hpf->generate(), LINEAR);
     }
 
     connect(m_page->curveWidget, SIGNAL(modified()), this, SIGNAL(sigConfigurationItemChanged()));
@@ -265,22 +265,22 @@ void KisPerChannelConfigWidget::setActiveChannel(int ch)
 }
 
 
-KisPropertiesConfiguration * KisPerChannelConfigWidget::configuration() const
+KisPropertiesConfigurationSP  KisPerChannelConfigWidget::configuration() const
 {
     int numChannels = m_virtualChannels.size();
-    KisPerChannelFilterConfiguration * cfg = new KisPerChannelFilterConfiguration(numChannels);
+    KisPropertiesConfigurationSP cfg = new KisPerChannelFilterConfiguration(numChannels);
 
     KIS_ASSERT_RECOVER(m_activeVChannel < m_curves.size()) { return cfg; }
 
     m_curves[m_activeVChannel] = m_page->curveWidget->curve();
-    cfg->setCurves(m_curves);
+    static_cast<KisPerChannelFilterConfiguration*>(cfg.data())->setCurves(m_curves);
 
     return cfg;
 }
 
-void KisPerChannelConfigWidget::setConfiguration(const KisPropertiesConfiguration * config)
+void KisPerChannelConfigWidget::setConfiguration(const KisPropertiesConfigurationSP  config)
 {
-    const KisPerChannelFilterConfiguration * cfg = dynamic_cast<const KisPerChannelFilterConfiguration *>(config);
+    const KisPerChannelFilterConfiguration * cfg = dynamic_cast<const KisPerChannelFilterConfiguration *>(config.data());
     if (!cfg)
         return;
 
@@ -475,15 +475,15 @@ KisConfigWidget * KisPerChannelFilter::createConfigurationWidget(QWidget *parent
     return new KisPerChannelConfigWidget(parent, dev);
 }
 
-KisFilterConfiguration * KisPerChannelFilter::factoryConfiguration(const KisPaintDeviceSP) const
+KisFilterConfigurationSP  KisPerChannelFilter::factoryConfiguration(const KisPaintDeviceSP) const
 {
     return new KisPerChannelFilterConfiguration(0);
 }
 
-KoColorTransformation* KisPerChannelFilter::createTransformation(const KoColorSpace* cs, const KisFilterConfiguration* config) const
+KoColorTransformation* KisPerChannelFilter::createTransformation(const KoColorSpace* cs, const KisFilterConfigurationSP config) const
 {
     const KisPerChannelFilterConfiguration* configBC =
-        dynamic_cast<const KisPerChannelFilterConfiguration*>(config); // Somehow, this shouldn't happen
+        dynamic_cast<const KisPerChannelFilterConfiguration*>(config.data()); // Somehow, this shouldn't happen
     Q_ASSERT(configBC);
 
     const QVector<QVector<quint16> > &originalTransfers = configBC->transfers();
@@ -591,7 +591,7 @@ KoColorTransformation* KisPerChannelFilter::createTransformation(const KoColorSp
     return KoCompositeColorTransformation::createOptimizedCompositeTransform(allTransforms);
 }
 
-bool KisPerChannelFilter::needsTransparentPixels(const KisFilterConfiguration *config, const KoColorSpace *cs) const
+bool KisPerChannelFilter::needsTransparentPixels(const KisFilterConfigurationSP config, const KoColorSpace *cs) const
 {
     Q_UNUSED(config);
     return cs->colorModelId() == AlphaColorModelID;

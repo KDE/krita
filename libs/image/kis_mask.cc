@@ -27,6 +27,7 @@
 
 #include <QScopedPointer>
 
+#include <KoColor.h>
 #include <KoColorSpace.h>
 #include <KoCompositeOpRegistry.h>
 
@@ -41,6 +42,7 @@
 #include "kis_cached_paint_device.h"
 #include "kis_mask_projection_plane.h"
 
+#include "kis_raster_keyframe_channel.h"
 
 struct Q_DECL_HIDDEN KisMask::Private {
     Private(KisMask *_q)
@@ -123,12 +125,11 @@ const KoCompositeOp * KisMask::compositeOp() const
      * Please think it over...
      */
 
-    KisNodeSP parentNode = parent();
-    if (!parentNode) return 0;
+    const KoColorSpace *colorSpace = this->colorSpace();
+    if (!colorSpace) return 0;
 
-    if (!parentNode->colorSpace()) return 0;
-    const KoCompositeOp* op = parentNode->colorSpace()->compositeOp(compositeOpId());
-    return op ? op : parentNode->colorSpace()->compositeOp(COMPOSITE_OVER);
+    const KoCompositeOp* op = colorSpace->compositeOp(compositeOpId());
+    return op ? op : colorSpace->compositeOp(COMPOSITE_OVER);
 }
 
 void KisMask::initSelection(KisSelectionSP copyFrom, KisLayerSP parentLayer)
@@ -170,9 +171,7 @@ void KisMask::Private::initSelectionImpl(KisSelectionSP copyFrom, KisLayerSP par
 
     } else {
         selection = new KisSelection(new KisSelectionDefaultBounds(parentPaintDevice, parentLayer->image()));
-
-        quint8 newDefaultPixel = MAX_SELECTED;
-        selection->pixelSelection()->setDefaultPixel(&newDefaultPixel);
+        selection->pixelSelection()->setDefaultPixel(KoColor(Qt::white, selection->pixelSelection()->colorSpace()));
 
         if (deferredSelectionOffset) {
             selection->setX(deferredSelectionOffset->x());
@@ -359,5 +358,19 @@ void KisMask::testingInitSelection(const QRect &rect, KisLayerSP parentLayer)
     m_d->selection->pixelSelection()->select(rect, OPACITY_OPAQUE_U8);
     m_d->selection->updateProjection(rect);
     m_d->selection->setParentNode(this);
+}
+
+KisKeyframeChannel *KisMask::requestKeyframeChannel(const QString &id)
+{
+    if (id == KisKeyframeChannel::Content.id()) {
+        KisPaintDeviceSP device = paintDevice();
+        if (device) {
+            KisRasterKeyframeChannel *contentChannel = device->createKeyframeChannel(KisKeyframeChannel::Content);
+            contentChannel->setFilenameSuffix(".pixelselection");
+            return contentChannel;
+       }
+    }
+
+    return KisNode::requestKeyframeChannel(id);
 }
 

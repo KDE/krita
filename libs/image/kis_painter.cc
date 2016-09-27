@@ -65,7 +65,9 @@
 #include "kis_perspective_math.h"
 #include "tiles3/kis_random_accessor.h"
 #include <kis_distance_information.h>
+#include <KoColorSpaceMaths.h>
 #include "kis_lod_transform.h"
+
 
 
 // Maximum distance from a Bezier control point to the line through the start
@@ -92,7 +94,8 @@ struct Q_DECL_HIDDEN KisPainter::Private {
     KisPaintOp*                 paintOp;
     KoColor                     paintColor;
     KoColor                     backgroundColor;
-    const KisFilterConfiguration* generator;
+    KoColor                     customColor;
+    KisFilterConfigurationSP    generator;
     KisPaintLayer*              sourceLayer;
     FillStyle                   fillStyle;
     StrokeStyle                 strokeStyle;
@@ -264,6 +267,47 @@ void KisPainter::copyAreaOptimized(const QPoint &dstPt,
             gc.bitBlt(dstRect.topLeft(), src, srcRect);
         }
     }
+}
+
+KisPaintDeviceSP KisPainter::convertToAlphaAsAlpha(KisPaintDeviceSP src)
+{
+    const KoColorSpace *srcCS = src->colorSpace();
+    const QRect processRect = src->extent();
+    KisPaintDeviceSP dst = new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8());
+
+    KisSequentialConstIterator srcIt(src, processRect);
+    KisSequentialIterator dstIt(dst, processRect);
+
+    do {
+        const quint8 *srcPtr = srcIt.rawDataConst();
+        quint8 *alpha8Ptr = dstIt.rawData();
+
+        const quint8 white = srcCS->intensity8(srcPtr);
+        const quint8 alpha = srcCS->opacityU8(srcPtr);
+
+        *alpha8Ptr = KoColorSpaceMaths<quint8>::multiply(alpha, KoColorSpaceMathsTraits<quint8>::unitValue - white);
+    } while (srcIt.nextPixel() && dstIt.nextPixel());
+
+    return dst;
+}
+
+KisPaintDeviceSP KisPainter::convertToAlphaAsGray(KisPaintDeviceSP src)
+{
+    const KoColorSpace *srcCS = src->colorSpace();
+    const QRect processRect = src->extent();
+    KisPaintDeviceSP dst = new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8());
+
+    KisSequentialConstIterator srcIt(src, processRect);
+    KisSequentialIterator dstIt(dst, processRect);
+
+    do {
+        const quint8 *srcPtr = srcIt.rawDataConst();
+        quint8 *alpha8Ptr = dstIt.rawData();
+
+        *alpha8Ptr = srcCS->intensity8(srcPtr);
+    } while (srcIt.nextPixel() && dstIt.nextPixel());
+
+    return dst;
 }
 
 void KisPainter::begin(KisPaintDeviceSP device)
@@ -2474,12 +2518,12 @@ const KoColor &KisPainter::backgroundColor() const
     return d->backgroundColor;
 }
 
-void KisPainter::setGenerator(const KisFilterConfiguration * generator)
+void KisPainter::setGenerator(KisFilterConfigurationSP  generator)
 {
     d->generator = generator;
 }
 
-const KisFilterConfiguration * KisPainter::generator() const
+const KisFilterConfigurationSP  KisPainter::generator() const
 {
     return d->generator;
 }

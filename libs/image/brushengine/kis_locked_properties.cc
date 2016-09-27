@@ -24,20 +24,16 @@ KisLockedProperties::KisLockedProperties()
     m_lockedProperties = new KisPropertiesConfiguration();
 }
 
-KisLockedProperties::KisLockedProperties(KisPropertiesConfiguration *p)
-{
-    m_lockedProperties = new KisPropertiesConfiguration();
-    QMap<QString, QVariant>::Iterator i;
-    for (i = p->getProperties().begin(); i != p->getProperties().end(); i++) {
-        m_lockedProperties->setProperty(i.key(), i.value());
-    }
-}
-
 KisLockedProperties::~KisLockedProperties()
 {
-    delete m_lockedProperties;
 }
-void KisLockedProperties::addToLockedProperties(KisPropertiesConfiguration *p)
+
+void KisLockedProperties::addToLockedProperties(KisPropertiesConfigurationSP p)
+{
+    addToLockedProperties(p.data());
+}
+
+void KisLockedProperties::addToLockedProperties(const KisPropertiesConfiguration *p)
 {
     QMapIterator<QString, QVariant> i(p->getProperties());
     while (i.hasNext()) {
@@ -45,9 +41,15 @@ void KisLockedProperties::addToLockedProperties(KisPropertiesConfiguration *p)
         m_lockedProperties->setProperty(i.key(), QVariant(i.value()));
     }
 }
-void KisLockedProperties::removeFromLockedProperties(KisPropertiesConfiguration *p)
+
+void KisLockedProperties::removeFromLockedProperties(KisPropertiesConfigurationSP p)
 {
-    KisPropertiesConfiguration *temp = new KisPropertiesConfiguration();
+    removeFromLockedProperties(p.data());
+}
+
+void KisLockedProperties::removeFromLockedProperties(const KisPropertiesConfiguration *p)
+{
+    KisPropertiesConfigurationSP temp = new KisPropertiesConfiguration();
     QMapIterator<QString, QVariant> i(m_lockedProperties->getProperties());
     while (i.hasNext()) {
         i.next();
@@ -63,12 +65,13 @@ void KisLockedProperties::removeFromLockedProperties(KisPropertiesConfiguration 
 
     }
 }
+
 bool KisLockedProperties::hasProperty(const QString &p)
 {
     return m_lockedProperties->hasProperty(p);
 }
 
-KisPropertiesConfiguration *KisLockedProperties::lockedProperties()
+KisPropertiesConfigurationSP KisLockedProperties::lockedProperties()
 {
     return m_lockedProperties;
 }

@@ -87,3 +87,9 @@ void KisImportGmicProcessingVisitor::visitExternalLayer(KisExternalLayer *layer,
     Q_UNUSED(layer);
     Q_UNUSED(undoAdapter);
 }
+
+void KisImportGmicProcessingVisitor::visitColorizeMask(KisColorizeMask *mask, KisUndoAdapter *undoAdapter)
+{
+    Q_UNUSED(mask);
+    Q_UNUSED(undoAdapter);
+}

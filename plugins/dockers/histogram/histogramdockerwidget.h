@@ -38,7 +38,7 @@ public:
     HistogramComputationThread(KisPaintDeviceSP _dev, const QRect& _bounds) : m_dev(_dev), m_bounds(_bounds)
     {}
 
-    void run() Q_DECL_OVERRIDE;
+    void run() override;
 
 Q_SIGNALS:
     void resultReady(HistVector*);

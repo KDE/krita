@@ -151,7 +151,7 @@ void KisImagePyramid::setChannelFlags(const QBitArray &channelFlags)
     m_onlyOneChannelSelected = (selectedChannels == 1);
 }
 
-void KisImagePyramid::setDisplayFilter(KisDisplayFilter* displayFilter)
+void KisImagePyramid::setDisplayFilter(QSharedPointer<KisDisplayFilter> displayFilter)
 {
     m_displayFilter = displayFilter;
 }

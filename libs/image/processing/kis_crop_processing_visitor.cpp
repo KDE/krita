@@ -29,6 +29,7 @@
 #include "kis_transaction.h"
 #include "kis_undo_adapter.h"
 #include "kis_transform_mask.h"
+#include "lazybrush/kis_colorize_mask.h"
 
 
 KisCropProcessingVisitor::KisCropProcessingVisitor(const QRect &rect, bool cropLayers, bool moveLayers)
@@ -55,7 +56,7 @@ void KisCropProcessingVisitor::moveNodeImpl(KisNode *node, KisUndoAdapter *undoA
     }
 }
 
-void KisCropProcessingVisitor::visitNodeWithPaintDevice(KisNode *node, KisUndoAdapter *undoAdapter)
+void KisCropProcessingVisitor::cropPaintDeviceImpl(KisPaintDeviceSP device, KisUndoAdapter *undoAdapter)
 {
     /**
      * TODO: implement actual robust cropping of the selections,
@@ -63,11 +64,15 @@ void KisCropProcessingVisitor::visitNodeWithPaintDevice(KisNode *node, KisUndoAd
      */
 
     if (m_cropLayers) {
-        KisTransaction transaction(kundo2_noi18n("crop"), node->paintDevice());
-        node->paintDevice()->crop(m_rect);
+        KisTransaction transaction(kundo2_noi18n("crop"), device);
+        device->crop(m_rect);
         transaction.commit(undoAdapter);
     }
+}
 
+void KisCropProcessingVisitor::visitNodeWithPaintDevice(KisNode *node, KisUndoAdapter *undoAdapter)
+{
+    cropPaintDeviceImpl(node->paintDevice(), undoAdapter);
     moveNodeImpl(node, undoAdapter);
 }
 
@@ -75,4 +80,15 @@ void KisCropProcessingVisitor::visit(KisTransformMask *node, KisUndoAdapter *und
 {
     moveNodeImpl(node, undoAdapter);
     KisSimpleProcessingVisitor::visit(node, undoAdapter);
+}
+
+void KisCropProcessingVisitor::visitColorizeMask(KisColorizeMask *node, KisUndoAdapter *undoAdapter)
+{
+    QVector<KisPaintDeviceSP> devices = node->allPaintDevices();
+
+    Q_FOREACH (KisPaintDeviceSP device, devices) {
+        cropPaintDeviceImpl(device, undoAdapter);
+    }
+
+    moveNodeImpl(node, undoAdapter);
 }

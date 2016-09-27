@@ -42,9 +42,6 @@ public:
 
     bool hasConnectionToCanvas() const;
 
-    void setFrameCache(KisAnimationFrameCacheSP cache);
-    void setAnimationPlayer(KisAnimationPlayer *player);
-
     void setDummiesFacade(KisDummiesFacadeBase *dummiesFacade, KisImageSP image);
 
     bool canDropFrameData(const QMimeData *data, const QModelIndex &index);
@@ -53,20 +50,10 @@ public:
 
     bool createFrame(const QModelIndex &dstIndex);
     bool copyFrame(const QModelIndex &dstIndex);
-    bool removeFrames(const QModelIndexList &indexes);
-    bool offsetFrames(QVector<QPoint> srcIndexes, const QPoint &offset, bool copyFrames);
 
     void setLastClickedIndex(const QModelIndex &index);
-    void setLastVisibleFrame(int time);
-
-    void setScrubState(bool active);
-    void scrubTo(int time, bool preview);
-
-    void setPlaybackRange(const KisTimeRange &range);
-    bool isPlaybackActive() const;
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
-    int columnCount(const QModelIndex &parent = QModelIndex()) const;
     QVariant data(const QModelIndex &index, int role) const;
     bool setData(const QModelIndex &index, const QVariant &value, int role);
     QVariant headerData(int section, Qt::Orientation orientation, int role) const;
@@ -84,15 +71,11 @@ public:
 
     enum ItemDataRole
     {
-        ActiveLayerRole = Qt::UserRole + 101,
-        ActiveFrameRole,
-        FrameExistsRole,
-        FrameCachedRole,
+        ActiveLayerRole = KisTimeBasedItemModel::UserRole,
         TimelinePropertiesRole,
         OtherLayersRole,
-        FrameEditableRole,
-        FramesPerSecondRole,
-        LayerUsedInTimelineRole
+        LayerUsedInTimelineRole,
+        ColorLabel
     };
 
     // metatype is added by the original implementation
@@ -115,19 +98,15 @@ public:
      */
     void setNodeManipulationInterface(NodeManipulationInterface *iface);
 
+protected:
+    KisNodeSP nodeAt(QModelIndex index) const;
+    QList<KisKeyframeChannel*> channelsAt(QModelIndex index) const;
+
 private Q_SLOTS:
     void slotDummyChanged(KisNodeDummy *dummy);
     void processUpdateQueue();
-    void slotCacheChanged();
-
-    void slotPlaybackFrameChanged();
-    void slotPlaybackStopped();
-
-    void slotInternalScrubPreviewRequested(int time);
 
 public Q_SLOTS:
-    void slotFramerateChanged();
-    void slotCurrentTimeChanged(int time);
     void slotCurrentNodeChanged(KisNodeSP node);
 
 Q_SIGNALS:

@@ -61,7 +61,7 @@ KisFilterNormalize::KisFilterNormalize()
     setShowConfigurationWidget(false);
 }
 
-KoColorTransformation* KisFilterNormalize::createTransformation(const KoColorSpace* cs, const KisFilterConfiguration* config) const
+KoColorTransformation* KisFilterNormalize::createTransformation(const KoColorSpace* cs, const KisFilterConfigurationSP config) const
 {
     Q_UNUSED(config);
     return new KisNormalizeTransformation(cs);

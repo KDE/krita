@@ -42,6 +42,7 @@ public:
     virtual QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const;
 
     void setColorSet(KoColorSet* colorSet);
+    KoColorSet* colorSet() const;
 
     /**
      * Installs a display renderer object for a palette that will
@@ -49,6 +50,9 @@ public:
      * dumb renderer.
      */
     void setDisplayRenderer(KoColorDisplayRendererInterface *displayRenderer);
+
+    QModelIndex indexFromId(int i) const;
+    int idFromIndex(const QModelIndex &index) const;
 
 private Q_SLOTS:
     void slotDisplayConfigurationChanged();

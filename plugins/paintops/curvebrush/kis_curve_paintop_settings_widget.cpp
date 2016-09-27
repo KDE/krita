@@ -44,7 +44,7 @@ KisCurvePaintOpSettingsWidget::~ KisCurvePaintOpSettingsWidget()
 }
 
 
-KisPropertiesConfiguration*  KisCurvePaintOpSettingsWidget::configuration() const
+KisPropertiesConfigurationSP  KisCurvePaintOpSettingsWidget::configuration() const
 {
     KisCurvePaintOpSettings* config = new KisCurvePaintOpSettings();
     config->setOptionsWidget(const_cast<KisCurvePaintOpSettingsWidget*>(this));

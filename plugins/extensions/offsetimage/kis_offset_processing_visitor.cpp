@@ -37,6 +37,7 @@
 #include "kis_transaction.h"
 #include "kis_undo_adapter.h"
 #include <kis_transform_worker.h>
+#include "lazybrush/kis_colorize_mask.h"
 
 
 KisOffsetProcessingVisitor::KisOffsetProcessingVisitor(const QPoint &offsetPoint, const QRect &rect)
@@ -46,16 +47,29 @@ KisOffsetProcessingVisitor::KisOffsetProcessingVisitor(const QPoint &offsetPoint
 {
 }
 
-void KisOffsetProcessingVisitor::visitNodeWithPaintDevice(KisNode *node, KisUndoAdapter *undoAdapter)
+void KisOffsetProcessingVisitor::offsetPaintDevice(KisPaintDeviceSP device, KisUndoAdapter *undoAdapter)
 {
-    KisPaintDeviceSP device = node->paintDevice();
     KisTransaction transaction(device);
     KisTransformWorker::offset(device, m_offset, m_wrapRect);
     transaction.commit(undoAdapter);
+}
+
+void KisOffsetProcessingVisitor::visitNodeWithPaintDevice(KisNode *node, KisUndoAdapter *undoAdapter)
+{
+    offsetPaintDevice(node->paintDevice(), undoAdapter);
 }
 
 void KisOffsetProcessingVisitor::visitExternalLayer(KisExternalLayer *layer, KisUndoAdapter *undoAdapter)
 {
     Q_UNUSED(layer);
     Q_UNUSED(undoAdapter);
+}
+
+void KisOffsetProcessingVisitor::visitColorizeMask(KisColorizeMask *node, KisUndoAdapter *undoAdapter)
+{
+    QVector<KisPaintDeviceSP> devices = node->allPaintDevices();
+
+    Q_FOREACH (KisPaintDeviceSP device, devices) {
+        offsetPaintDevice(device, undoAdapter);
+    }
 }

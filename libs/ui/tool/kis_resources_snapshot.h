@@ -74,6 +74,7 @@ public:
     void setOpacity(qreal opacity);
     quint8 opacity() const;
     const KoCompositeOp* compositeOp() const;
+    QString compositeOpId() const;
 
     KoPattern* currentPattern() const;
     KoColor currentFgColor() const;
@@ -85,6 +86,11 @@ public:
 
     qreal effectiveZoom() const;
     bool presetAllowsLod() const;
+
+    void setFGColorOverride(const KoColor &color);
+    void setBGColorOverride(const KoColor &color);
+    void setSelectionOverride(KisSelectionSP selection);
+    void setBrush(const KisPaintOpPresetSP &brush);
 
 private:
     struct Private;

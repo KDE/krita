@@ -71,6 +71,7 @@ public:
     void visit(KisTransformMask *mask, KisUndoAdapter*) { KIS_ASSERT_RECOVER_NOOP(!mask->selection()); }
     void visit(KisTransparencyMask *mask, KisUndoAdapter*) { mask->selection()->updateProjection(); }
     void visit(KisSelectionMask *mask, KisUndoAdapter*) { mask->selection()->updateProjection(); }
+    void visit(KisColorizeMask *, KisUndoAdapter*) {}
 };
 
 

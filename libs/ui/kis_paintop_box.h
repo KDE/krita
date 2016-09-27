@@ -70,8 +70,8 @@ class KisAction;
  * the following slots are added
  *  void slotReloadPreset();
     void slotGuiChangedCurrentPreset();
-    void slotSaveLockedOptionToPreset(KisPropertiesConfiguration* p);
-    void slotDropLockedOption(KisPropertiesConfiguration* p);
+    void slotSaveLockedOptionToPreset(KisPropertiesConfigurationSP p);
+    void slotDropLockedOption(KisPropertiesConfigurationSP p);
     void slotDirtyPresetToggled(bool);
     Everytime a value is changed in a preset, the preset is made dirty through the onChange() function.
     For Locked Settings however, a changed Locked Setting will not cause a preset to become dirty. That is
@@ -157,10 +157,11 @@ private Q_SLOTS:
 
     void slotReloadPreset();
     void slotGuiChangedCurrentPreset();
-    void slotSaveLockedOptionToPreset(KisPropertiesConfiguration* p);
-    void slotDropLockedOption(KisPropertiesConfiguration* p);
+    void slotSaveLockedOptionToPreset(KisPropertiesConfigurationSP p);
+    void slotDropLockedOption(KisPropertiesConfigurationSP p);
     void slotDirtyPresetToggled(bool);
     void slotEraserBrushSizeToggled(bool);    
+    void slotEraserBrushOpacityToggled(bool);    
     void slotUpdateSelectionIcon();
 
     void slotLockXMirrorToggle(bool);
@@ -170,7 +171,7 @@ private Q_SLOTS:
     void slotHideDecorationMirrorX(bool);
     void slotHideDecorationMirrorY(bool);
 
-    void slotUpdateOptionsWidget();
+    void slotUpdateOptionsWidgetPopup();
 
 private:
     KisCanvasResourceProvider*          m_resourceProvider;
@@ -244,9 +245,9 @@ private:
     bool             m_blockUpdate;
     bool             m_dirtyPresetsEnabled;
     bool             m_eraserBrushSizeEnabled;
-
+    bool             m_eraserBrushOpacityEnabled;
+    
     KisSignalAutoConnectionsStore m_presetConnections;
-    KisSignalCompressor m_presetUpdateCompressor;
 };
 
 #endif //KIS_PAINTOP_BOX_H_

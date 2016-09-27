@@ -1,0 +1,9 @@
+{
+    "Id": "Round Marker Brush (Quick Brush)",
+    "Type": "Service",
+    "X-KDE-Library": "kritaroundmarkerpaintop",
+    "X-KDE-ServiceTypes": [
+        "Krita/Paintop"
+    ],
+    "X-Krita-Version": "28"
+}

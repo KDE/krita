@@ -246,14 +246,14 @@ void KisFilterSelectorWidget::slotBookmarkedFilterConfigurationSelected(int inde
 {
     if (d->currentFilterConfigurationWidget) {
         QModelIndex modelIndex = d->currentBookmarkedFilterConfigurationsModel->index(index, 0);
-        KisFilterConfiguration* config  = d->currentBookmarkedFilterConfigurationsModel->configuration(modelIndex);
+        KisFilterConfigurationSP config  = d->currentBookmarkedFilterConfigurationsModel->configuration(modelIndex);
         d->currentFilterConfigurationWidget->setConfiguration(config);
     }
 }
 
 void KisFilterSelectorWidget::editConfigurations()
 {
-    KisSerializableConfiguration* config =
+    KisSerializableConfigurationSP config =
         d->currentFilterConfigurationWidget ? d->currentFilterConfigurationWidget->configuration() : 0;
     KisBookmarkedConfigurationsEditor editor(this, d->currentBookmarkedFilterConfigurationsModel, config);
     editor.exec();
@@ -280,11 +280,10 @@ void KisFilterSelectorWidget::update()
     }
 }
 
-KisFilterConfiguration* KisFilterSelectorWidget::configuration()
+KisFilterConfigurationSP KisFilterSelectorWidget::configuration()
 {
     if (d->currentFilterConfigurationWidget) {
-        KisFilterConfiguration * config
-        = dynamic_cast<KisFilterConfiguration*>(d->currentFilterConfigurationWidget->configuration());
+        KisFilterConfigurationSP config = dynamic_cast<KisFilterConfiguration*>(d->currentFilterConfigurationWidget->configuration().data());
         if (config) {
             return config;
         }

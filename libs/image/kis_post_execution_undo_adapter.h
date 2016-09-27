@@ -46,9 +46,8 @@ public:
     KisSavedMacroCommand* createMacro(const KUndo2MagicString& macroName);
     void addMacro(KisSavedMacroCommand *macro);
 
-    inline void setUndoStore(KisUndoStore *undoStore) {
-        m_undoStore = undoStore;
-    }
+    void setUndoStore(KisUndoStore *undoStore);
+    KisStrokesFacade* strokesFacade() const;
 
 private:
     KisUndoStore *m_undoStore;

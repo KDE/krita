@@ -120,7 +120,7 @@
           </widget>
          </item>
          <item row="0" column="2">
-          <widget class="KColorButton" name="bnColor"/>
+          <widget class="KisColorButton" name="bnColor"/>
          </item>
          <item row="1" column="0">
           <widget class="QLabel" name="label_14">
@@ -287,6 +287,11 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>KisColorButton</class>
+   <extends>QPushButton</extends>
+   <header>kis_color_button.h</header>
+  </customwidget>
+  <customwidget>
    <class>KisIntParseSpinBox</class>
    <extends>QSpinBox</extends>
    <header>kis_int_parse_spin_box.h</header>
@@ -295,12 +300,6 @@
    <class>KisSliderSpinBox</class>
    <extends>QWidget</extends>
    <header location="global">kis_slider_spin_box.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>KColorButton</class>
-   <extends>QPushButton</extends>
-   <header>kcolorbutton.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>

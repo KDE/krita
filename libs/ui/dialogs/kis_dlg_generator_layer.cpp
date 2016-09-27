@@ -59,12 +59,12 @@ void KisDlgGeneratorLayer::slotNameChanged(const QString & text)
     enableButtonOk(m_customName);
 }
 
-void KisDlgGeneratorLayer::setConfiguration(const KisFilterConfiguration * config)
+void KisDlgGeneratorLayer::setConfiguration(const KisFilterConfigurationSP  config)
 {
     dlgWidget.wdgGenerator->setConfiguration(config);
 }
 
-KisFilterConfiguration * KisDlgGeneratorLayer::configuration() const
+KisFilterConfigurationSP  KisDlgGeneratorLayer::configuration() const
 {
     return dlgWidget.wdgGenerator->configuration();
 }

@@ -36,12 +36,33 @@ KisGridPaintOpSettings::KisGridPaintOpSettings()
 {
 }
 
+void KisGridPaintOpSettings::setPaintOpSize(qreal value)
+{
+    GridOption option;
+    option.readOptionSetting(this);
+    option.grid_width = value;
+    option.grid_height = value;
+    option.writeOptionSetting(this);
+}
+
+qreal KisGridPaintOpSettings::paintOpSize() const
+{
+    GridOption option;
+    option.readOptionSetting(this);
+
+    return option.grid_width;
+}
+
+KisGridPaintOpSettings::~KisGridPaintOpSettings()
+{
+}
+
 bool KisGridPaintOpSettings::paintIncremental()
 {
     return (enumPaintActionType)getInt("PaintOpAction", WASH) == BUILDUP;
 }
 
-QPainterPath KisGridPaintOpSettings::brushOutline(const KisPaintInformation &info, OutlineMode mode) const
+QPainterPath KisGridPaintOpSettings::brushOutline(const KisPaintInformation &info, OutlineMode mode)
 {
     QPainterPath path;
     if (mode == CursorIsOutline || mode == CursorIsCircleOutline || mode == CursorTiltOutline) {
@@ -50,8 +71,19 @@ QPainterPath KisGridPaintOpSettings::brushOutline(const KisPaintInformation &inf
         QRectF rc(0, 0, sizex, sizey);
         rc.translate(-rc.center());
         path.addRect(rc);
+
+        QPainterPath tiltLine;
+        QLineF tiltAngle(QPointF(0.0,0.0), QPointF(0.0,sizex));
+        tiltAngle.setLength(qMax(sizex*0.5, 50.0) * (1 - info.tiltElevation(info, 60.0, 60.0, true)));
+        tiltAngle.setAngle((360.0 - fmod(KisPaintInformation::tiltDirection(info, true) * 360.0 + 270.0, 360.0))-3.0);
+        tiltLine.moveTo(tiltAngle.p1());
+        tiltLine.lineTo(tiltAngle.p2());
+        tiltAngle.setAngle((360.0 - fmod(KisPaintInformation::tiltDirection(info, true) * 360.0 + 270.0, 360.0))+3.0);
+        tiltLine.lineTo(tiltAngle.p2());
+        tiltLine.lineTo(tiltAngle.p1());
+
         path = outlineFetcher()->fetchOutline(info, this, path);
-        
+
         if (mode == CursorTiltOutline) {
             QPainterPath tiltLine = makeTiltIndicator(info, QPointF(0.0, 0.0), sizex * 0.5, 3.0);
             path.addPath(outlineFetcher()->fetchOutline(info, this, tiltLine, 1.0, 0.0, true, 0, 0));
@@ -64,11 +96,8 @@ QPainterPath KisGridPaintOpSettings::brushOutline(const KisPaintInformation &inf
 #include <brushengine/kis_slider_based_paintop_property.h>
 #include "kis_paintop_preset.h"
 #include "kis_paintop_settings_update_proxy.h"
-#include "kis_gridop_option.h"
-typedef KisCallbackBasedPaintopProperty<KisUniformPaintOpProperty> KisUniformPaintOpPropertyCallback;
 
-
-QList<KisUniformPaintOpPropertySP> KisGridPaintOpSettings::uniformProperties()
+QList<KisUniformPaintOpPropertySP> KisGridPaintOpSettings::uniformProperties(KisPaintOpSettingsSP settings)
 {
     QList<KisUniformPaintOpPropertySP> props =
         listWeakToStrong(m_d->uniformProperties);
@@ -80,7 +109,7 @@ QList<KisUniformPaintOpPropertySP> KisGridPaintOpSettings::uniformProperties()
                     KisIntSliderBasedPaintOpPropertyCallback::Int,
                     "grid_divisionlevel",
                     i18n("Division Level"),
-                    this, 0);
+                    settings, 0);
 
             prop->setRange(1, 25);
             prop->setSingleStep(1);
@@ -106,5 +135,5 @@ QList<KisUniformPaintOpPropertySP> KisGridPaintOpSettings::uniformProperties()
         }
     }
 
-    return KisPaintOpSettings::uniformProperties() + props;
+    return KisPaintOpSettings::uniformProperties(settings) + props;
 }

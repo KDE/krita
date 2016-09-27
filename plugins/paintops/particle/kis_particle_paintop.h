@@ -33,7 +33,7 @@ class KisParticlePaintOp : public KisPaintOp
 
 public:
 
-    KisParticlePaintOp(const KisParticlePaintOpSettings *settings, KisPainter * painter, KisNodeSP node, KisImageSP image);
+    KisParticlePaintOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisNodeSP node, KisImageSP image);
     ~KisParticlePaintOp();
 
     KisSpacingInformation paintAt(const KisPaintInformation& info);

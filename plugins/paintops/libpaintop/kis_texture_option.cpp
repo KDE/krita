@@ -170,7 +170,7 @@ KisTextureOption::~KisTextureOption()
     delete m_optionWidget;
 }
 
-void KisTextureOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
+void KisTextureOption::writeOptionSetting(KisPropertiesConfigurationSP setting) const
 {
     m_optionWidget->chooser->blockSignals(true); // Checking
     if (!m_optionWidget->chooser->currentResource()) return;
@@ -231,7 +231,7 @@ void KisTextureOption::writeOptionSetting(KisPropertiesConfiguration* setting) c
     KisEmbeddedPatternManager::saveEmbeddedPattern(setting, pattern);
 }
 
-void KisTextureOption::readOptionSetting(const KisPropertiesConfiguration* setting)
+void KisTextureOption::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
     setChecked(setting->getBool("Texture/Pattern/Enabled"));
     if (!isChecked()) {
@@ -343,7 +343,7 @@ void KisTextureProperties::recalculateMask()
 }
 
 
-void KisTextureProperties::fillProperties(const KisPropertiesConfiguration *setting)
+void KisTextureProperties::fillProperties(const KisPropertiesConfigurationSP setting)
 {
     if (!setting->hasProperty("Texture/Pattern/PatternMD5")) {
         m_enabled = false;

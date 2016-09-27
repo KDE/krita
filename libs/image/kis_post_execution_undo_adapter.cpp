@@ -47,3 +47,13 @@ void KisPostExecutionUndoAdapter::addMacro(KisSavedMacroCommand *macro)
 {
     m_undoStore->addCommand(macro);
 }
+
+void KisPostExecutionUndoAdapter::setUndoStore(KisUndoStore *undoStore)
+{
+    m_undoStore = undoStore;
+}
+
+KisStrokesFacade* KisPostExecutionUndoAdapter::strokesFacade() const
+{
+    return m_strokesFacade;
+}

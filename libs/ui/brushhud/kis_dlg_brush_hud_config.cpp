@@ -39,7 +39,7 @@ KisDlgConfigureBrushHud::KisDlgConfigureBrushHud(KisPaintOpPresetSP preset, QWid
     ui->setupUi(this);
 
     m_d->preset = preset;
-    m_d->properties = preset->settings()->uniformProperties();
+    m_d->properties = preset->uniformProperties();
 
     QList<KisUniformPaintOpPropertySP> available;
     QList<KisUniformPaintOpPropertySP> chosen;

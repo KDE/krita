@@ -19,6 +19,7 @@ install( FILES
     hatchingbrush.kpp
     tangentnormal.kpp
     dualbrush.kpp
+    roundmarker.kpp
     DESTINATION  ${DATA_INSTALL_DIR}/krita/defaultpresets)
 
 

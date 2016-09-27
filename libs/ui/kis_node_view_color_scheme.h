@@ -22,11 +22,13 @@
 #include <QScopedPointer>
 #include <QColor>
 
+#include "kritaui_export.h"
+
 class QTreeView;
 class QStyleOptionViewItem;
 class QRect;
 
-class KisNodeViewColorScheme
+class KRITAUI_EXPORT KisNodeViewColorScheme
 {
 public:
     KisNodeViewColorScheme();

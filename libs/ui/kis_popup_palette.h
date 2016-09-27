@@ -33,6 +33,7 @@ class KisSignalCompressor;
 class KisBrushHud;
 class KisRoundHudButton;
 class KisCanvasResourceProvider;
+class KisVisualColorSelector;
 
 class KisPopupPalette : public QWidget
 {
@@ -56,6 +57,7 @@ public:
     //functions to set up selectedColor
     void setSelectedColor(int x);
     int selectedColor() const;
+    void setParent(QWidget *parent);
 
     virtual void tabletEvent(QTabletEvent * event);
 
@@ -98,7 +100,7 @@ private:
     int m_hoveredColor;
     int m_selectedColor;
     KisFavoriteResourceManager* m_resourceManager;
-    KoTriangleColorSelector* m_triangleColorSelector;
+    KisVisualColorSelector* m_triangleColorSelector;
 
     QTimer* m_timer;
 

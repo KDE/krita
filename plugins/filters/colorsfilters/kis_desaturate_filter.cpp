@@ -71,7 +71,7 @@ KisConfigWidget *KisDesaturateFilter::createConfigurationWidget(QWidget *parent,
 }
 
 
-KoColorTransformation* KisDesaturateFilter::createTransformation(const KoColorSpace* cs, const KisFilterConfiguration* config) const
+KoColorTransformation* KisDesaturateFilter::createTransformation(const KoColorSpace* cs, const KisFilterConfigurationSP config) const
 {
     QHash<QString, QVariant> params;
     if (config) {
@@ -80,9 +80,9 @@ KoColorTransformation* KisDesaturateFilter::createTransformation(const KoColorSp
     return  cs->createColorTransformation("desaturate_adjustment", params);
 }
 
-KisFilterConfiguration *KisDesaturateFilter::factoryConfiguration(const KisPaintDeviceSP) const
+KisFilterConfigurationSP KisDesaturateFilter::factoryConfiguration(const KisPaintDeviceSP) const
 {
-    KisColorTransformationConfiguration* config = new KisColorTransformationConfiguration(id().id(), 1);
+    KisColorTransformationConfigurationSP config = new KisColorTransformationConfiguration(id().id(), 1);
     config->setProperty("type", 0);
     return config;
 }
@@ -107,14 +107,14 @@ KisDesaturateConfigWidget::~KisDesaturateConfigWidget()
     delete m_page;
 }
 
-KisPropertiesConfiguration * KisDesaturateConfigWidget::configuration() const
+KisPropertiesConfigurationSP  KisDesaturateConfigWidget::configuration() const
 {
-    KisColorTransformationConfiguration* c = new KisColorTransformationConfiguration(KisDesaturateFilter::id().id(), 0);
+    KisColorTransformationConfigurationSP c = new KisColorTransformationConfiguration(KisDesaturateFilter::id().id(), 0);
     c->setProperty("type", m_group->checkedId());
     return c;
 }
 
-void KisDesaturateConfigWidget::setConfiguration(const KisPropertiesConfiguration * config)
+void KisDesaturateConfigWidget::setConfiguration(const KisPropertiesConfigurationSP  config)
 {
     m_group->button(config->getInt("type", 0))->setChecked(true);
     emit sigConfigurationItemChanged();

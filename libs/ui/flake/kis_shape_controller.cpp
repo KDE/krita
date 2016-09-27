@@ -208,7 +208,7 @@ void KisShapeController::setInitialShapeForCanvas(KisCanvas2 *canvas)
         Q_ASSERT(canvas);
         Q_ASSERT(canvas->shapeManager());
         KoSelection *selection = canvas->shapeManager()->selection();
-        if (selection) {
+        if (selection && m_d->shapesGraph.nodeToShape(rootNode)) {
             selection->select(m_d->shapesGraph.nodeToShape(rootNode));
             KoToolManager::instance()->switchToolRequested(KoToolManager::instance()->preferredToolForSelection(selection->selectedShapes()));
         }
@@ -217,6 +217,9 @@ void KisShapeController::setInitialShapeForCanvas(KisCanvas2 *canvas)
 
 KoShapeLayer* KisShapeController::shapeForNode(KisNodeSP node) const
 {
-    return m_d->shapesGraph.nodeToShape(node);
+    if (node) {
+        return m_d->shapesGraph.nodeToShape(node);
+    }
+    return 0;
 }
 

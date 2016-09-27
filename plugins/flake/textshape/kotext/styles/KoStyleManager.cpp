@@ -187,6 +187,8 @@ KoStyleManager::KoStyleManager(QObject *parent)
 
 KoStyleManager::~KoStyleManager()
 {
+    delete d->footNotesConfiguration;
+    delete d->endNotesConfiguration;
     delete d;
 }
 

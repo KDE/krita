@@ -33,15 +33,23 @@ class KisGridPaintOpSettings : public KisOutlineGenerationPolicy<KisPaintOpSetti
 {
 public:
     KisGridPaintOpSettings();
+    ~KisGridPaintOpSettings();
 
-    QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode) const;
-    bool paintIncremental();
+    void setPaintOpSize(qreal value) override;
+    qreal paintOpSize() const override;
 
-    QList<KisUniformPaintOpPropertySP> uniformProperties();
+    QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode) override;
+    bool paintIncremental() override;
+
+    QList<KisUniformPaintOpPropertySP> uniformProperties(KisPaintOpSettingsSP settings);
 
 private:
+
     struct Private;
     const QScopedPointer<Private> m_d;
+
 };
+
+typedef KisSharedPtr<KisGridPaintOpSettings> KisGridPaintOpSettingsSP;
 
 #endif

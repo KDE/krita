@@ -22,7 +22,7 @@
 #include <kconfiggroup.h>
 #include "kritaimage_export.h"
 #include "KisProofingConfiguration.h"
-
+#include "kis_types.h"
 
 class KRITAIMAGE_EXPORT KisImageConfig
 {
@@ -102,8 +102,14 @@ public:
     bool showAdditionalOnionSkinsSettings(bool requestDefault = false) const;
     void setShowAdditionalOnionSkinsSettings(bool value);
 
-    KisProofingConfiguration *defaultProofingconfiguration();
+    int defaultFrameColorLabel() const;
+    void setDefaultFrameColorLabel(int label);
+
+    KisProofingConfigurationSP defaultProofingconfiguration();
     void setDefaultProofingConfig(const KoColorSpace *proofingSpace, int proofingIntent, bool blackPointCompensation, KoColor warningColor, double adaptationState);
+
+    bool useLodForColorizeMask(bool requestDefault = false) const;
+    void setUseLodForColorizeMask(bool value);
 
 
 private:

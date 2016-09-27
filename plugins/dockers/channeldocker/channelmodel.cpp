@@ -230,7 +230,7 @@ void ChannelModel::updateThumbnails(void)
 
         m_thumbnails.resize(m_channelCount);
 
-        for (quint32 i = 0; i < m_channelCount; ++i) {
+        for (quint32 i = 0; i < (quint32)m_channelCount; ++i) {
 #if QT_VERSION >= 0x050500
             m_thumbnails[i] = QImage(thumbnailSize, QImage::Format_Grayscale8);
 #else

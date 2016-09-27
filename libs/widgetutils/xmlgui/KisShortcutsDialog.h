@@ -134,7 +134,7 @@ public:
     QList<KActionCollection *> actionCollections() const;
 
     /** @see QWidget::sizeHint() */
-    QSize sizeHint() const Q_DECL_OVERRIDE;
+    QSize sizeHint() const override;
 
 
     /**

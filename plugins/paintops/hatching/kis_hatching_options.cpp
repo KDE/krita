@@ -83,7 +83,7 @@ KisHatchingOptions::~KisHatchingOptions()
 {
 }
 
-void KisHatchingOptions::writeOptionSetting(KisPropertiesConfiguration* setting) const
+void KisHatchingOptions::writeOptionSetting(KisPropertiesConfigurationSP setting) const
 {
     HatchingOption op;
 
@@ -104,7 +104,7 @@ void KisHatchingOptions::writeOptionSetting(KisPropertiesConfiguration* setting)
     op.writeOptionSetting(setting);
 }
 
-void KisHatchingOptions::readOptionSetting(const KisPropertiesConfiguration* setting)
+void KisHatchingOptions::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
     HatchingOption op;
     op.readOptionSetting(setting);

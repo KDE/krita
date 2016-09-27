@@ -31,7 +31,7 @@ public:
 public:
         void processImpl(KisPaintDeviceSP device,
                      const QRect& applyRect,
-                     const KisFilterConfiguration* config,
+                     const KisFilterConfigurationSP config,
                      KoUpdater* progressUpdater
                      ) const;
 
@@ -42,7 +42,7 @@ public:
 public:
     virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
 private:
-    void prepareRow(const KisPaintDeviceSP src, quint8* data, quint32 x, quint32 y, quint32 w, quint32 h) const;
+    void prepareRow(const KisPaintDeviceSP src, quint8* data, quint32 x, quint32 y, quint32 w) const;
 };
 
 #endif

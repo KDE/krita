@@ -21,11 +21,13 @@
 
 #include <QVariant>
 #include <QDomElement>
+#include <kundo2command.h>
 
 #include "kis_types.h"
 #include "KoID.h"
 #include "kritaimage_export.h"
 #include "kis_keyframe.h"
+#include "kis_default_bounds.h"
 
 class KisTimeRange;
 
@@ -38,15 +40,27 @@ public:
     // Standard Keyframe Ids
 
     static const KoID Content;
+    static const KoID Opacity;
+    static const KoID TransformArguments;
+    static const KoID TransformPositionX;
+    static const KoID TransformPositionY;
 
+    static const KoID TransformScaleX;
+    static const KoID TransformScaleY;
+    static const KoID TransformShearX;
+    static const KoID TransformShearY;
+    static const KoID TransformRotationX;
+    static const KoID TransformRotationY;
+    static const KoID TransformRotationZ;
 public:
-    KisKeyframeChannel(const KoID& id, KisNodeWSP node);
+    KisKeyframeChannel(const KoID& id, KisDefaultBoundsBaseSP defaultBounds);
     KisKeyframeChannel(const KisKeyframeChannel &rhs, KisNodeWSP newParentNode);
     ~KisKeyframeChannel();
 
     QString id() const;
     QString name() const;
 
+    void setNode(KisNodeWSP node);
     KisNodeWSP node() const;
 
     KisKeyframeSP addKeyframe(int time, KUndo2Command *parentCommand = 0);
@@ -57,6 +71,7 @@ public:
 
     KisKeyframeSP keyframeAt(int time) const;
     KisKeyframeSP activeKeyframeAt(int time) const;
+    KisKeyframeSP currentlyActiveKeyframe() const;
 
     KisKeyframeSP firstKeyframe() const;
     KisKeyframeSP nextKeyframe(KisKeyframeSP keyframe) const;
@@ -81,7 +96,7 @@ public:
      * results, compared to the given frame.
      *
      * Note: this set may be different than the set of affected frames
-     * (eg. due to interpolation, once implemented)
+     * due to interpolation.
      */
     KisTimeRange identicalFrames(int time) const;
 
@@ -93,21 +108,24 @@ public:
     int keyframeInsertionRow(int time) const;
 
     virtual bool hasScalarValue() const = 0;
-    virtual qreal minScalarValue() const = 0;
-    virtual qreal maxScalarValue() const = 0;
-    virtual qreal scalarValue(const KisKeyframeSP keyframe) const = 0;
-    virtual void setScalarValue(KisKeyframeSP keyframe, qreal value, KUndo2Command *parentCommand = 0) = 0;
+    virtual qreal minScalarValue() const;
+    virtual qreal maxScalarValue() const;
+    virtual qreal scalarValue(const KisKeyframeSP keyframe) const;
+    virtual void setScalarValue(KisKeyframeSP keyframe, qreal value, KUndo2Command *parentCommand = 0);
 
     virtual QDomElement toXML(QDomDocument doc, const QString &layerFilename);
     virtual void loadXML(const QDomElement &channelNode);
 
+    int currentTime() const;
+
 Q_SIGNALS:
-    void sigKeyframeAboutToBeAdded(KisKeyframe *keyframe);
-    void sigKeyframeAdded(KisKeyframe *keyframe);
-    void sigKeyframeAboutToBeRemoved(KisKeyframe *keyframe);
-    void sigKeyframeRemoved(KisKeyframe *keyframe);
-    void sigKeyframeAboutToBeMoved(KisKeyframe *keyframe, int toTime);
-    void sigKeyframeMoved(KisKeyframe *keyframe, int fromTime);
+    void sigKeyframeAboutToBeAdded(KisKeyframeSP keyframe);
+    void sigKeyframeAdded(KisKeyframeSP keyframe);
+    void sigKeyframeAboutToBeRemoved(KisKeyframeSP keyframe);
+    void sigKeyframeRemoved(KisKeyframeSP keyframe);
+    void sigKeyframeAboutToBeMoved(KisKeyframeSP keyframe, int toTime);
+    void sigKeyframeMoved(KisKeyframeSP keyframe, int fromTime);
+    void sigKeyframeChanged(KisKeyframeSP keyframe);
 
 protected:
     typedef QMap<int, KisKeyframeSP> KeyframesMap;
@@ -126,14 +144,16 @@ protected:
     virtual KisKeyframeSP loadKeyframe(const QDomElement &keyframeNode) = 0;
     virtual void saveKeyframe(KisKeyframeSP keyframe, QDomElement keyframeElement, const QString &layerFilename) = 0;
 
+
 private:
+    KisKeyframeSP replaceKeyframeAt(int time, KisKeyframeSP newKeyframe);
     void insertKeyframeLogical(KisKeyframeSP keyframe);
-    void deleteKeyframeLogical(KisKeyframeSP keyframe);
+    void removeKeyframeLogical(KisKeyframeSP keyframe);
     bool deleteKeyframeImpl(KisKeyframeSP keyframe, KUndo2Command *parentCommand, bool recreate);
     void moveKeyframeImpl(KisKeyframeSP keyframe, int newTime);
 
-    struct InsertFrameCommand;
-    struct MoveFrameCommand;
+    friend class KisMoveFrameCommand;
+    friend class KisReplaceKeyframeCommand;
 
 private:
     KisKeyframeSP insertKeyframe(int time, const KisKeyframeSP copySrc, KUndo2Command *parentCommand);

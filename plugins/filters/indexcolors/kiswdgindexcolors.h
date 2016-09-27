@@ -27,7 +27,7 @@
 #include <QSpinBox>
 
 class QCheckBox;
-class KColorButton;
+class KisColorButton;
 namespace Ui
 {
 class KisWdgIndexColors;
@@ -38,8 +38,8 @@ class KisWdgIndexColors : public KisConfigWidget
     Q_OBJECT
 public:
     KisWdgIndexColors(QWidget* parent = 0, Qt::WFlags f = 0, int delay = 500);
-    virtual KisPropertiesConfiguration* configuration() const;
-    virtual void setConfiguration(const KisPropertiesConfiguration* config);
+    virtual KisPropertiesConfigurationSP configuration() const;
+    virtual void setConfiguration(const KisPropertiesConfigurationSP config);
     void setup(QStringList shadesLabels, int ramps);
 
 private Q_SLOTS:
@@ -48,7 +48,7 @@ private Q_SLOTS:
 private:
     struct ColorWidgets
     {
-        KColorButton* button;
+        KisColorButton* button;
         QCheckBox* checkbox;
     };
     QVector< QVector<ColorWidgets> > m_colorSelectors;

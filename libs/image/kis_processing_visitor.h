@@ -38,6 +38,7 @@ class KisTransformMask;
 class KisTransparencyMask;
 class KisSelectionMask;
 class KisGeneratorLayer;
+class KisColorizeMask;
 
 /**
  * A visitor that processes a single layer; it does not recurse into the
@@ -59,6 +60,7 @@ public:
     virtual void visit(KisFilterMask *mask, KisUndoAdapter *undoAdapter) = 0;
     virtual void visit(KisTransformMask *mask, KisUndoAdapter *undoAdapter) = 0;
     virtual void visit(KisTransparencyMask *mask, KisUndoAdapter *undoAdapter) = 0;
+    virtual void visit(KisColorizeMask *mask, KisUndoAdapter *undoAdapter) = 0;
     virtual void visit(KisSelectionMask *mask, KisUndoAdapter *undoAdapter) = 0;
 
 public:

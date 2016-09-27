@@ -62,6 +62,8 @@
 #include <kis_node.h>
 #include <kis_base_node.h>
 #include <kis_composite_ops_model.h>
+#include <kis_keyframe_channel.h>
+#include <kis_image_animation_interface.h>
 
 #include "kis_action.h"
 #include "kis_action_manager.h"
@@ -293,6 +295,11 @@ void KisLayerBox::setCanvas(KoCanvasBase *canvas)
         m_canvas->disconnectCanvasObserver(this);
         m_nodeModel->setDummiesFacade(0, 0, 0, 0, 0);
 
+        if (m_image) {
+            KisImageAnimationInterface *animation = m_image->animationInterface();
+            animation->disconnect(this);
+        }
+
         disconnect(m_image, 0, this, 0);
         disconnect(m_nodeManager, 0, this, 0);
         disconnect(m_nodeModel, 0, m_nodeManager, 0);
@@ -336,6 +343,9 @@ void KisLayerBox::setCanvas(KoCanvasBase *canvas)
         connect(m_nodeModel, SIGNAL(toggleIsolateActiveNode()),
                 m_nodeManager, SLOT(toggleIsolateActiveNode()));
 
+        KisImageAnimationInterface *animation = m_image->animationInterface();
+        connect(animation, &KisImageAnimationInterface::sigTimeChanged, this, &KisLayerBox::slotImageTimeChanged);
+
         expandNodesRecursively(m_image->rootLayer(), m_filteringModel, m_wdgLayerBox->listLayers);
         m_wdgLayerBox->listLayers->scrollTo(m_wdgLayerBox->listLayers->currentIndex());
         updateAvailableLabels();
@@ -350,6 +360,7 @@ void KisLayerBox::setCanvas(KoCanvasBase *canvas)
         m_newLayerMenu->addSeparator();
         addActionToMenu(m_newLayerMenu, "add_new_transparency_mask");
         addActionToMenu(m_newLayerMenu, "add_new_filter_mask");
+        addActionToMenu(m_newLayerMenu, "add_new_colorize_mask");
         addActionToMenu(m_newLayerMenu, "add_new_transform_mask");
         addActionToMenu(m_newLayerMenu, "add_new_selection_mask");
     }
@@ -385,6 +396,20 @@ void KisLayerBox::updateUI()
 
     KisNodeSP activeNode = m_nodeManager->activeNode();
 
+    if (activeNode != m_activeNode) {
+        if( !m_activeNode.isNull() )
+            m_activeNode->disconnect(this);
+        m_activeNode = activeNode;
+
+        KisKeyframeChannel *opacityChannel = activeNode->getKeyframeChannel(KisKeyframeChannel::Opacity.id(), false);
+        if (opacityChannel) {
+            watchOpacityChannel(opacityChannel);
+        } else {
+            watchOpacityChannel(0);
+            connect(activeNode.data(), &KisNode::keyframeChannelAdded, this, &KisLayerBox::slotKeyframeChannelAdded);
+        }
+    }
+
     m_wdgLayerBox->bnRaise->setEnabled(activeNode && activeNode->isEditable(false) && (activeNode->nextSibling()
                                        || (activeNode->parent() && activeNode->parent() != m_image->root())));
     m_wdgLayerBox->bnLower->setEnabled(activeNode && activeNode->isEditable(false) && (activeNode->prevSibling()
@@ -401,16 +426,14 @@ void KisLayerBox::updateUI()
             slotFillCompositeOps(m_image->colorSpace());
         }
 
-        if (activeNode->inherits("KisMask")) {
-            m_wdgLayerBox->cmbComposite->setEnabled(false);
-            m_wdgLayerBox->doubleOpacity->setEnabled(false);
-        } else if (activeNode->inherits("KisLayer")) {
+        if (activeNode->inherits("KisColorizeMask") ||
+            activeNode->inherits("KisLayer")) {
+
             m_wdgLayerBox->doubleOpacity->setEnabled(true);
 
-            KisLayerSP l = qobject_cast<KisLayer*>(activeNode.data());
-            slotSetOpacity(l->opacity() * 100.0 / 255);
+            slotSetOpacity(activeNode->opacity() * 100.0 / 255);
 
-            const KoCompositeOp* compositeOp = l->compositeOp();
+            const KoCompositeOp* compositeOp = activeNode->compositeOp();
             if (compositeOp) {
                 slotSetCompositeOp(compositeOp);
             } else {
@@ -421,6 +444,9 @@ void KisLayerBox::updateUI()
             bool compositeSelectionActive = !(group && group->passThroughMode());
 
             m_wdgLayerBox->cmbComposite->setEnabled(compositeSelectionActive);
+        } else if (activeNode->inherits("KisMask")) {
+            m_wdgLayerBox->cmbComposite->setEnabled(false);
+            m_wdgLayerBox->doubleOpacity->setEnabled(false);
         }
     }
 }
@@ -534,6 +560,7 @@ void KisLayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex 
                 QMenu *addLayerMenu = menu.addMenu(i18n("&Add"));
                 addActionToMenu(addLayerMenu, "add_new_transparency_mask");
                 addActionToMenu(addLayerMenu, "add_new_filter_mask");
+                addActionToMenu(addLayerMenu, "add_new_colorize_mask");
                 addActionToMenu(addLayerMenu, "add_new_transform_mask");
                 addActionToMenu(addLayerMenu, "add_new_selection_mask");
 
@@ -562,7 +589,6 @@ void KisLayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex 
                 menu.addAction(m_selectOpaque);
             }
         }
-
         menu.exec(pos);
     }
 }
@@ -626,7 +652,9 @@ void KisLayerBox::slotCompositeOpChanged(int index)
 void KisLayerBox::slotOpacityChanged()
 {
     if (!m_canvas) return;
+    m_blockOpacityUpdate = true;
     m_nodeManager->nodeOpacityChanged(m_newOpacity, true);
+    m_blockOpacityUpdate = false;
 }
 
 void KisLayerBox::slotOpacitySliderMoved(qreal opacity)
@@ -847,6 +875,46 @@ void KisLayerBox::updateAvailableLabels()
 void KisLayerBox::updateLayerFiltering()
 {
     m_filteringModel->setAcceptedLabels(m_wdgLayerBox->cmbFilter->selectedColors());
+}
+
+void KisLayerBox::slotKeyframeChannelAdded(KisKeyframeChannel *channel)
+{
+    if (channel->id() == KisKeyframeChannel::Opacity.id()) {
+        watchOpacityChannel(channel);
+    }
+}
+
+void KisLayerBox::watchOpacityChannel(KisKeyframeChannel *channel)
+{
+    if (m_opacityChannel) {
+        m_opacityChannel->disconnect(this);
+    }
+
+    m_opacityChannel = channel;
+
+    connect(m_opacityChannel, &KisKeyframeChannel::sigKeyframeAdded, this, &KisLayerBox::slotOpacityKeyframeChanged);
+    connect(m_opacityChannel, &KisKeyframeChannel::sigKeyframeRemoved, this, &KisLayerBox::slotOpacityKeyframeChanged);
+    connect(m_opacityChannel, &KisKeyframeChannel::sigKeyframeMoved, this, &KisLayerBox::slotOpacityKeyframeMoved);
+    connect(m_opacityChannel, &KisKeyframeChannel::sigKeyframeChanged, this, &KisLayerBox::slotOpacityKeyframeChanged);
+}
+
+void KisLayerBox::slotOpacityKeyframeChanged(KisKeyframeSP keyframe)
+{
+    Q_UNUSED(keyframe);
+    if (m_blockOpacityUpdate) return;
+    updateUI();
+}
+
+void KisLayerBox::slotOpacityKeyframeMoved(KisKeyframeSP keyframe, int fromTime)
+{
+    Q_UNUSED(fromTime);
+    slotOpacityKeyframeChanged(keyframe);
+}
+
+void KisLayerBox::slotImageTimeChanged(int time)
+{
+    Q_UNUSED(time);
+    updateUI();
 }
 
 #include "moc_kis_layer_box.cpp"

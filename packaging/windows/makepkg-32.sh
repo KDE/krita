@@ -14,11 +14,8 @@ cd $BUILDROOT
 
 VER=$(grep "#define KRITA_VERSION_STRING" $BUILDROOT/build/libs/version/kritaversion.h | cut -d '"' -f 2)
 cd $BUILDROOT/krita
-BRANCH=$( git branch | cut -d ' ' -f 2)
-BRANCH="$(sed s/\ /-/g <<<$VERSION)"
-REVISION=$(git rev-parse --short HEAD)
 cd ..
-VERSION=$VER$BRANCH-$REVISION
+VERSION=$VER
 VERSION="$(sed s/\ /-/g <<<$VERSION)"
 echo $VERSION
 

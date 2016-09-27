@@ -31,7 +31,7 @@ public:
 public:
         void processImpl(KisPaintDeviceSP device,
                      const QRect& applyRect,
-                     const KisFilterConfigurationSP config,
+                     const KisFilterConfiguration *config,
                      KoUpdater* progressUpdater
                      ) const;
 

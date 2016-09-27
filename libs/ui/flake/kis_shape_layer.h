@@ -74,7 +74,7 @@ public:
     bool allowAsChild(KisNodeSP) const;
 
 
-    void setImage(KisImageWSP image) Q_DECL_OVERRIDE;
+    void setImage(KisImageWSP image) override;
 
     virtual KisLayerSP createMergedLayerTemplate(KisLayerSP prevLayer);
     virtual void fillMergedLayerTemplate(KisLayerSP dstLayer, KisLayerSP prevLayer);

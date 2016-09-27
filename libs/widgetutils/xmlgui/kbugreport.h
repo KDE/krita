@@ -60,7 +60,7 @@ public:
     /**
       * OK has been clicked
      */
-    void accept() Q_DECL_OVERRIDE;
+    void accept() override;
 
 private:
     /**

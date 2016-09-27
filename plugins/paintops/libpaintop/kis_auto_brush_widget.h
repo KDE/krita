@@ -29,18 +29,18 @@ class KisSignalCompressor;
 class KisAspectRatioLocker;
 
 
-class PAINTOP_EXPORT KisWdgAutobrush : public QWidget, public Ui::KisWdgAutobrush
+class PAINTOP_EXPORT KisWdgAutoBrush : public QWidget, public Ui::KisWdgAutoBrush
 {
     Q_OBJECT
 
 public:
-    KisWdgAutobrush(QWidget *parent, const char *name) : QWidget(parent) {
+    KisWdgAutoBrush(QWidget *parent, const char *name) : QWidget(parent) {
         setObjectName(name); setupUi(this);
     }
 
 };
 
-class PAINTOP_EXPORT KisAutoBrushWidget : public KisWdgAutobrush
+class PAINTOP_EXPORT KisAutoBrushWidget : public KisWdgAutoBrush
 {
     Q_OBJECT
 

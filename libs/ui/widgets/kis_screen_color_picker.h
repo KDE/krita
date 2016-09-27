@@ -54,7 +54,7 @@ public Q_SLOTS:
 private Q_SLOTS:
     void updateColorPicking();
 protected:
-    void changeEvent(QEvent *event) Q_DECL_OVERRIDE;
+    void changeEvent(QEvent *event) override;
 private:
     struct Private; //The private struct
     const QScopedPointer<Private> m_d; //the private pointer
@@ -70,7 +70,7 @@ class KisScreenColorPickingEventFilter : public QObject {
 public:
     explicit KisScreenColorPickingEventFilter(KisScreenColorPicker *w, QObject *parent = 0);
 
-    bool eventFilter(QObject *, QEvent *event) Q_DECL_OVERRIDE;
+    bool eventFilter(QObject *, QEvent *event) override;
 private:
     KisScreenColorPicker *m_w;
 };

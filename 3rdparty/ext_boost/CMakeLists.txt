@@ -48,6 +48,8 @@ if (MSVC)
 		)
 	endif()
 elseif(MINGW)
+   string(REGEX REPLACE "([0-9])\\.([0-9])(\\.[0-9])?" "\\1\\2"
+      KRITA_boost_COMPILER_VERSION ${CMAKE_CXX_COMPILER_VERSION})
    ExternalProject_Add(
        ext_boost
 
@@ -67,7 +69,7 @@ elseif(MINGW)
    ExternalProject_Add_Step(
        ext_boost
        post_install
-       COMMAND ${CMAKE_COMMAND} -E copy ${PREFIX_ext_boost}/lib/libboost_system-mgw51-mt-1_61.dll ${PREFIX_ext_boost}/bin/
+       COMMAND ${CMAKE_COMMAND} -E copy ${PREFIX_ext_boost}/lib/libboost_system-mgw${KRITA_boost_COMPILER_VERSION}-mt-1_61.dll ${PREFIX_ext_boost}/bin/
        DEPENDEES install
    )
 else()

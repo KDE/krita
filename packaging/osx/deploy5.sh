@@ -7,6 +7,8 @@ cp -r ~/dev/i/bin/krita.app ~/dev
 cp -r ~/dev/i/share/* ~/dev/krita.app/Contents/Resources
 cd  ~/dev/krita.app/Contents
 ln -s Resources share
+mkdir -p  ~/dev/krita.app/Contents/Library/QuickLook
+cp ~/dev/i/lib/plugins/kritaquicklook.qlgenerator ~/dev/krita.app/Contents/Library/QuickLook
 
 install_name_tool -add_rpath /Users/boud/dev/i/lib ~/dev/krita.app/Contents/MacOS/krita
 

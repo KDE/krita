@@ -357,8 +357,8 @@ KisBrushSP KisBrush::fromXML(const QDomElement& element, bool forceCopy)
 QSizeF KisBrush::characteristicSize(KisDabShape const& shape) const
 {
     KisDabShape normalizedShape(
-         shape.scaleX() * d->scale,
-         shape.scaleY(),
+         shape.scale() * d->scale,
+         shape.ratio(),
          normalizeAngle(shape.rotation() + d->angle));
     return KisQImagePyramid::characteristicSize(
         QSize(width(), height()), normalizedShape);

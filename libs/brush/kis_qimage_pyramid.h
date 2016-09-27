@@ -41,7 +41,7 @@ public:
                        qreal subPixelX, qreal subPixelY) const;
 
 private:
-    friend class KisBrushTest;
+    friend class KisGbrBrushTest;
     int findNearestLevel(qreal scale, qreal *baseScale) const;
     void appendPyramidLevel(const QImage &image);
 

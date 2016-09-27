@@ -4,6 +4,7 @@ set(kritadualbrushpaintop_SOURCES
     DualBrushPaintopPlugin.cpp
     DualBrushPaintopSettings.cpp
     DualBrushPaintopSettingsWidget.cpp
+    DualBrushProperties.cpp
     StackedPreset.cpp
 )
 

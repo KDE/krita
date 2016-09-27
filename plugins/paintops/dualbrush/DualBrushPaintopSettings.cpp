@@ -18,7 +18,9 @@
 
 #include "DualBrushPaintopSettings.h"
 #include "DualBrushOption.h"
+#include "DualBrushProperties.h"
 #include <kis_paint_action_type_option.h>
+#include "kis_paintop_preset.h"
 
 DualBrushPaintOpSettings::DualBrushPaintOpSettings()
 {
@@ -26,7 +28,8 @@ DualBrushPaintOpSettings::DualBrushPaintOpSettings()
 
 bool DualBrushPaintOpSettings::paintIncremental()
 {
-    return (enumPaintActionType)getInt("PaintOpAction", WASH) == BUILDUP;
+    //return (enumPaintActionType)getInt("PaintOpAction", WASH) == BUILDUP;
+    return false;
 }
 
 bool DualBrushPaintOpSettings::isAirbrushing() const
@@ -42,40 +45,40 @@ int DualBrushPaintOpSettings::rate() const
 
 void DualBrushPaintOpSettings::setPaintOpSize(qreal value)
 {
-    Q_UNUSED(value);
-    // TODO: set all the child presets to new size
+    DualBrushProperties prop;
+    prop.readOptionSetting(this);
+    if (prop.presetStack.isEmpty()) return;
+
+    KisPaintOpPresetSP mainPreset = prop.presetStack.first().paintopPreset;
+    const qreal oldSize = mainPreset->settings()->paintOpSize();
+    const qreal scaleFactor = value / oldSize;
+
+    auto it = prop.presetStack.begin();
+    auto end = prop.presetStack.end();
+    for (; it != end; ++it) {
+        KisPaintOpSettingsSP settings = it->paintopPreset->settings();
+        settings->setPaintOpSize(scaleFactor * settings->paintOpSize());
+    }
+
+    prop.writeOptionSetting(this);
 }
 
 qreal DualBrushPaintOpSettings::paintOpSize() const
 {
-    // TODO: the maximum size of the presets
-    return 1.0;
+    DualBrushProperties prop;
+    prop.readOptionSetting(this);
+    if (prop.presetStack.isEmpty()) return 1.0;
+
+    KisPaintOpPresetSP mainPreset = prop.presetStack.first().paintopPreset;
+    return mainPreset->settings()->paintOpSize();
 }
 
 QPainterPath DualBrushPaintOpSettings::brushOutline(const KisPaintInformation &info, OutlineMode mode)
 {
-    Q_UNUSED(info);
+    DualBrushProperties prop;
+    prop.readOptionSetting(this);
+    if (prop.presetStack.isEmpty()) return KisPaintOpSettings::brushOutline(info, mode);
 
-    QPainterPath path;
-    if (mode == CursorIsOutline || mode == CursorIsCircleOutline || mode == CursorTiltOutline) {
-//        qreal size = getInt(DUALBRUSH_RADIUS) * 2 + 1;
-//        path = ellipseOutline(size, size, 1.0, 0.0);
-
-//        QPainterPath tiltLine;
-//        QLineF tiltAngle(QPointF(0.0,0.0), QPointF(0.0,size));
-//        tiltAngle.setLength(qMax(size*qreal(0.5), qreal(50.0)) * (1 - info.tiltElevation(info, 60.0, 60.0, true)));
-//        tiltAngle.setAngle((360.0 - fmod(KisPaintInformation::tiltDirection(info, true) * 360.0 + 270.0, 360.0))-3.0);
-//        tiltLine.moveTo(tiltAngle.p1());
-//        tiltLine.lineTo(tiltAngle.p2());
-//        tiltAngle.setAngle((360.0 - fmod(KisPaintInformation::tiltDirection(info, true) * 360.0 + 270.0, 360.0))+3.0);
-//        tiltLine.lineTo(tiltAngle.p2());
-//        tiltLine.lineTo(tiltAngle.p1());
-
-//        if (mode == CursorTiltOutline) {
-//            path.addPath(tiltLine);
-//        }
-
-//        path.translate(info.pos());
-    }
-    return path;
+    KisPaintOpPresetSP mainPreset = prop.presetStack.first().paintopPreset;
+    return mainPreset->settings()->brushOutline(info, mode);
 }

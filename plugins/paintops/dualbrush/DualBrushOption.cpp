@@ -30,6 +30,7 @@
 #include <kis_paintop_presets_chooser_popup.h>
 #include <kis_resource_server_provider.h>
 #include <KoCompositeOpRegistry.h>
+#include "DualBrushProperties.h"
 
 #define ICON_SIZE 48
 
@@ -37,6 +38,17 @@ DualBrushOpOptionsWidget::DualBrushOpOptionsWidget(QWidget *parent)
     : QWidget(parent)
 {
     setupUi(this);
+
+    doubleVOffset->setVisible(false);
+    doubleHOffset->setVisible(false);
+    doubleFuzziness->setVisible(false);
+    doubleOpacity->setVisible(false);
+    lblVOffset->setVisible(false);
+    lblHOffset->setVisible(false);
+    lblFuzziness->setVisible(false);
+    lblOpacity->setVisible(false);
+
+
     doubleVOffset->setRange(-100, 100, 1);
     connect(doubleVOffset, SIGNAL(valueChanged(qreal)), SIGNAL(configurationChanged()));
 
@@ -46,16 +58,15 @@ DualBrushOpOptionsWidget::DualBrushOpOptionsWidget(QWidget *parent)
     doubleFuzziness->setRange(0, 100, 1);
     connect(doubleFuzziness, SIGNAL(valueChanged(qreal)), SIGNAL(configurationChanged()));
 
-    lblOpacity->setVisible(false);
-    doubleOpacity->setVisible(false);
-    doubleOpacity->setRange(0, 100, 0);
-    doubleOpacity->setValue(100);
-    doubleOpacity->setPrefix(QString("%1:  ").arg(i18n("Opacity")));
-    doubleOpacity->setSuffix("%");
-    connect(doubleOpacity, SIGNAL(valueChanged(qreal)), SIGNAL(configurationChanged()));
+    doubleSpacing->setRange(0.01, 10, 2);
+    doubleSpacing->setExponentRatio(2);
+    connect(doubleSpacing, SIGNAL(valueChanged(qreal)), SIGNAL(configurationChanged()));
 
-    lblCompositeOp->setVisible(false);
-    cmbComposite->setVisible(false);
+    doubleOpacity->setRange(0, 1.0, 2);
+    doubleOpacity->setValue(1.0);
+    doubleOpacity->setPrefix(QString("%1:  ").arg(i18n("Opacity")));
+    doubleOpacity->setSuffix("");
+    connect(doubleOpacity, SIGNAL(valueChanged(qreal)), SIGNAL(configurationChanged()));
 
     tableSelected->setIconSize(QSize(ICON_SIZE, ICON_SIZE));
     tableSelected->setSelectionMode(QAbstractItemView::SingleSelection);
@@ -130,9 +141,10 @@ void DualBrushOpOptionsWidget::updatePreset()
         StackedPreset preset = item->data(Qt::UserRole).value<StackedPreset>();
         preset.fuzziness = doubleFuzziness->value();
         preset.compositeOp = cmbComposite->selectedCompositeOp().id();
-        preset.opacitiy = doubleOpacity->value();
+        preset.opacity = doubleOpacity->value();
         preset.verticalOffset = doubleVOffset->value();
         preset.horizontalOffset = doubleHOffset->value();
+        preset.spacing = doubleSpacing->value();
         item->setData(Qt::UserRole, QVariant::fromValue<StackedPreset>(preset));
     }
 }
@@ -144,14 +156,16 @@ void DualBrushOpOptionsWidget::addPreset()
     doubleVOffset->setValue(0.0);
     doubleHOffset->setValue(0.0);
     cmbComposite->selectCompositeOp(KoID(COMPOSITE_OVER));
+    doubleSpacing->setValue(0.1);
 
     StackedPreset preset;
     preset.presetName = wdgPresetChooser->currentPaintOp();
     preset.fuzziness = doubleFuzziness->value();
     preset.compositeOp = cmbComposite->selectedCompositeOp().id();
-    preset.opacitiy = doubleOpacity->value();
+    preset.opacity = doubleOpacity->value();
     preset.verticalOffset = doubleVOffset->value();
     preset.horizontalOffset = doubleHOffset->value();
+    preset.spacing= doubleSpacing->value();
 
     KisPaintOpPresetResourceServer* server = KisResourceServerProvider::instance()->paintOpPresetServer();
 
@@ -195,18 +209,20 @@ void DualBrushOpOptionsWidget::itemSelected(QListWidgetItem *current, QListWidge
         StackedPreset psPrevious = previous->data(Qt::UserRole).value<StackedPreset>();
         psPrevious.fuzziness = doubleFuzziness->value();
         psPrevious.compositeOp = cmbComposite->selectedCompositeOp().id();
-        psPrevious.opacitiy = doubleOpacity->value();
+        psPrevious.opacity = doubleOpacity->value();
         psPrevious.verticalOffset = doubleVOffset->value();
         psPrevious.horizontalOffset = doubleHOffset->value();
+        psPrevious.spacing = doubleSpacing->value();
         previous->setData(Qt::UserRole, QVariant::fromValue<StackedPreset>(psPrevious));
     }
     if (current) {
         StackedPreset psCurrent = current->data(Qt::UserRole).value<StackedPreset>();
         doubleFuzziness->setValue(psCurrent.fuzziness);
-        doubleOpacity->setValue(psCurrent.opacitiy);
+        doubleOpacity->setValue(psCurrent.opacity);
         doubleVOffset->setValue(psCurrent.verticalOffset);
         doubleHOffset->setValue(psCurrent.horizontalOffset);
         cmbComposite->selectCompositeOp(KoID(psCurrent.compositeOp));
+        doubleSpacing->setValue(psCurrent.spacing);
     }
 }
 
@@ -227,36 +243,16 @@ DualBrushOpOption::~DualBrushOpOption()
 
 void DualBrushOpOption::writeOptionSetting(KisPropertiesConfigurationSP setting) const
 {
-    QVector<StackedPreset> stack = m_dualBrushOptionsWidget->presetStack();
-    setting->setProperty("dualbrush/preset_count", stack.count());
-    for(int i = 0; i < stack.count(); ++i) {
-        setting->setProperty(QString("dualbrush/preset_%1_compositeop").arg(i), stack[i].compositeOp);
-        setting->setProperty(QString("dualbrush/preset_%1_fuzziness").arg(i), stack[i].fuzziness);
-        setting->setProperty(QString("dualbrush/preset_%1_horizontal_offset").arg(i), stack[i].horizontalOffset);
-        setting->setProperty(QString("dualbrush/preset_%1_name").arg(i), stack[i].presetName);
-        setting->setProperty(QString("dualbrush/preset_%1_opacity").arg(i), stack[i].opacitiy);
-        setting->setProperty(QString("dualbrush/preset_%1_vertical_offset").arg(i), stack[i].verticalOffset);
-    }
+    DualBrushProperties prop;
+    prop.presetStack = m_dualBrushOptionsWidget->presetStack();
+    prop.writeOptionSetting(setting.data());
 }
 
 void DualBrushOpOption::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
-
-    QVector<StackedPreset> stack;
-    int count = setting->getInt("dualbrush/preset_count");
-    for (int i = 0; i < count; ++i) {
-        StackedPreset ps;
-        ps.compositeOp = setting->getString(QString("dualbrush/preset_%1_compositeop").arg(i));
-        ps.fuzziness = setting->getDouble(QString("dualbrush/preset_%1_fuzziness").arg(i));
-        ps.horizontalOffset = setting->getDouble(QString("dualbrush/preset_%1_horizontal_offset").arg(i));
-        ps.opacitiy = setting->getDouble(QString("dualbrush/preset_%1_opacity").arg(i));
-        ps.presetName = setting->getString(QString("dualbrush/preset_%1_name").arg(i));
-        KisPaintOpPresetResourceServer* server = KisResourceServerProvider::instance()->paintOpPresetServer();
-        ps.paintopPreset = server->resourceByName(ps.presetName);
-        ps.verticalOffset = setting->getDouble(QString("dualbrush/preset_%1_vertical_offset").arg(i));
-        stack << ps;
-    }
-    m_dualBrushOptionsWidget->setPresetStack(stack);
+    DualBrushProperties prop;
+    prop.readOptionSetting(setting.data());
+    m_dualBrushOptionsWidget->setPresetStack(prop.presetStack);
 }
 
 QVector<StackedPreset> DualBrushOpOption::presetStack() const

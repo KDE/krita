@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2016 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2016 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,13 +15,21 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+
+#ifndef DUALBRUSHPROPERTIES_H
+#define DUALBRUSHPROPERTIES_H
+
 #include "StackedPreset.h"
 
-StackedPreset::StackedPreset()
-    : fuzziness(0.0),
-      verticalOffset(0.0),
-      horizontalOffset(0.0),
-      opacity(1.0),
-      spacing(0.1)
+class KisPropertiesConfiguration;
+
+class DualBrushProperties
 {
-}
+public:
+    void writeOptionSetting(KisPropertiesConfiguration *setting) const;
+    void readOptionSetting(const KisPropertiesConfiguration *setting);
+
+    QVector<StackedPreset> presetStack;
+};
+
+#endif // DUALBRUSHPROPERTIES_H

@@ -31,8 +31,9 @@ struct StackedPreset
     double fuzziness;
     double verticalOffset;
     double horizontalOffset;
-    double opacitiy;
+    double opacity;
     QString compositeOp;
+    qreal spacing;
 };
 
 Q_DECLARE_METATYPE(StackedPreset)

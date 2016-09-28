@@ -179,7 +179,7 @@ bool KisKraSaver::saveNodeKeyframes(KoStore *store, QString location, const KisN
     return true;
 }
 
-bool KisKraSaver::saveBinaryData(KoStore* store, KisImageWSP image, const QString & uri, bool external, bool autosave)
+bool KisKraSaver::saveBinaryData(KoStore* store, KisImageWSP image, const QString &uri, bool external, bool autosave)
 {
     QString location;
 

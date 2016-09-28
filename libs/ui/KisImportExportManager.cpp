@@ -144,7 +144,7 @@ KisImportExportFilter *KisImportExportManager::filterForMimeType(const QString &
                 continue;
             }
 
-            KisImportExportFilter *f = static_cast<KisImportExportFilter*>(obj);
+            KisImportExportFilter *f = qobject_cast<KisImportExportFilter*>(obj);
             if (!f) {
                 delete obj;
                 continue;
@@ -180,6 +180,7 @@ void KisImportExportManager::setProgresUpdater(KoProgressUpdater *updater)
 
 KisImportExportFilter::ConversionStatus KisImportExportManager::convert(KisImportExportManager::Direction direction, const QString &location, const QString &mimeType, KisPropertiesConfigurationSP exportConfiguration) const
 {
+
     QString typeName = mimeType;
     if (typeName.isEmpty()) {
         typeName = KisMimeDatabase::mimeTypeForFile(location);

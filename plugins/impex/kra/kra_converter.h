@@ -23,19 +23,23 @@
 #include <stdio.h>
 
 #include <QObject>
+#include <QDomDocument>
 
-#include "kis_png_converter.h"
-#include "kis_types.h"
-
+#include <KoStore.h>
+#include <kis_png_converter.h>
+#include <kis_types.h>
+#include <kis_kra_saver.h>
 class KisDocument;
 
 class KraConverter : public QObject
 {
     Q_OBJECT
+
 public:
+
     KraConverter(KisDocument *doc);
     virtual ~KraConverter();
-public:
+
     KisImageBuilder_Result buildImage(QIODevice *io);
     KisImageBuilder_Result buildFile(QIODevice *io, KisImageWSP image, vKisNodeSP activeNodes);
     /**
@@ -43,13 +47,26 @@ public:
      */
     KisImageWSP image();
     vKisNodeSP activeNodes();
+
 public Q_SLOTS:
+
     virtual void cancel();
+
 private:
+
+    bool saveRootDocuments(KoStore *store);
+    bool saveToStream(QIODevice *dev);
+    QDomDocument createDomDocument();
+    bool savePreview(KoStore *store);
+
+    KisDocument *m_doc {0};
     KisImageWSP m_image;
-    KisDocument *m_doc;
+
     vKisNodeSP m_activeNodes;
-    bool m_stop;
+    bool m_stop {false};
+
+    KoStore *m_store {0};
+    KisKraSaver *m_kraSaver {0};
 };
 
 #endif

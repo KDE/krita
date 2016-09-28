@@ -251,12 +251,6 @@ public:
     virtual bool loadXML(const KoXmlDocument & doc, KoStore *store);
 
     /**
-     *  Reimplement this to save the contents of the %Calligra document into
-     *  a QDomDocument. The framework takes care of saving it to the store.
-     */
-    QDomDocument saveXML();
-
-    /**
      *  Return a correctly created QDomDocument for this KisDocument,
      *  including processing instruction, complete DOCTYPE tag (with systemId and publicId), and root element.
      *  @param tagName the name of the tag for the root element
@@ -296,11 +290,6 @@ public:
      *  Made public for writing templates.
      */
     bool saveNativeFormat(const QString & file);
-
-    /**
-     * Saves the document in the native format to the given store.
-     */
-    bool saveNativeFormatCalligra(KoStore *store);
 
     /**
      * Activate/deactivate/configure the autosave feature.
@@ -578,19 +567,6 @@ private:
      */
     bool completeLoading(KoStore *store);
 
-    /**
-     *  If you want to write additional files to a store,
-     *  then you must do it here.
-     *  In the implementation, you should prepend the document
-     *  url (using url().url()) before the filename, so that everything is kept relative
-     *  to this document. For instance it will produce urls such as
-     *  tar:/1/pictures/picture0.png, if the doc url is tar:/1
-     *  But do this ONLY if the document is not stored extern (see isStoredExtern() ).
-     *  If it is, then the pictures should be saved to tar:/pictures.
-     */
-    bool completeSaving(KoStore *store);
-
-
     /** @internal */
     void setModified();
 
@@ -610,10 +586,8 @@ private:
      */
     bool isExporting() const;
 
-    /**
-     * Legacy method from KoDocumentBase. Don't use it anywhere
-     * outside KisDocument!
-     */
+public:
+
     bool isAutosaving() const;
 
 public:
@@ -732,11 +706,7 @@ public:
 
 private:
 
-    bool saveToStream(QIODevice *dev);
-
     bool loadNativeFormatFromStoreInternal(KoStore *store);
-
-    bool savePreview(KoStore *store);
 
     QString prettyPathOrUrl() const;
 

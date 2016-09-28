@@ -345,15 +345,6 @@ public:
     QList<KisPaintingAssistantSP> assistants;
     KisGridConfig gridConfig;
 
-    // Set m_file correctly for m_url
-    void prepareSaving()
-    {
-        // Local file
-        if (m_url.isLocalFile()) {
-            m_file = m_url.toLocalFile();
-        }
-    }
-
     void setImageAndInitIdleWatcher(KisImageSP _image) {
         image = _image;
 
@@ -1782,19 +1773,20 @@ bool KisDocument::closeUrl(bool promptToSave)
 }
 
 
-bool KisDocument::saveAs(const QUrl &kurl, KisPropertiesConfigurationSP exportConfiguration)
+bool KisDocument::saveAs(const QUrl &url, KisPropertiesConfigurationSP exportConfiguration)
 {
-    if (!kurl.isValid())
-    {
-        errKrita << "saveAs: Malformed URL " << kurl.url() << endl;
+    if (!url.isValid() || !url.isLocalFile()) {
+        errKrita << "saveAs: Malformed URL " << url.url() << endl;
         return false;
     }
     d->m_duringSaveAs = true;
     d->m_originalURL = d->m_url;
     d->m_originalFilePath = d->m_file;
-    d->m_url = kurl; // Store where to upload in saveToURL
-    d->prepareSaving();
+    d->m_url = url; // Store where to upload in saveToURL
+    d->m_file = d->m_url.toLocalFile();
+
     bool result = save(exportConfiguration); // Save local file and upload local file
+
     if (!result) {
         d->m_url = d->m_originalURL;
         d->m_file = d->m_originalFilePath;
@@ -1809,8 +1801,8 @@ bool KisDocument::saveAs(const QUrl &kurl, KisPropertiesConfigurationSP exportCo
 bool KisDocument::save(KisPropertiesConfigurationSP exportConfiguration)
 {
     d->m_saveOk = false;
-    if ( d->m_file.isEmpty() ) { // document was created empty
-        d->prepareSaving();
+    if (d->m_file.isEmpty()) { // document was created empty
+        d->m_file = d->m_url.toLocalFile();
     }
 
     updateEditingTime(true);

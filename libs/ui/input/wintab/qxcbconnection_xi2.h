@@ -61,6 +61,7 @@
 
 #if XCB_USE_XINPUT2
 #include <X11/extensions/XI2.h>
+#include <X11/extensions/XI2proto.h>
 #ifdef XIScrollClass
 #define XCB_USE_XINPUT21    // XI 2.1 adds smooth scrolling support
 #ifdef XI_TouchBeginMask
@@ -388,6 +389,7 @@ public:
     void handleEnterEvent(const xcb_enter_notify_event_t *);
     void xi2HandleScrollEvent(void *event, ScrollingDevice &scrollingDevice);
     Qt::MouseButton xiToQtMouseButton(uint32_t b);
+    Qt::MouseButtons xiToQtMouseButtons(xXIDeviceEvent *xiDeviceEvent);
 
     bool xi2HandleTabletEvent(void *event, TabletData *tabletData, QWindow *window);
     void xi2ReportTabletEvent(TabletData &tabletData, void *event);
@@ -407,6 +409,8 @@ public:
     xcb_connection_t *xcb_connection() const { return m_connection; }
 
     void notifyEnterEvent(xcb_enter_notify_event_t *event);
+
+    void addWindowFromXi2Id(xcb_window_t id);
 
 private:
     xcb_connection_t *m_connection;

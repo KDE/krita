@@ -345,20 +345,34 @@ void QXcbConnection::notifyEnterEvent(xcb_enter_notify_event_t *event)
     while ((window = m_windowMapper.key(0,0)) != 0) {
         m_windowMapper.remove(window);
     }
-    window = event->event;
 
-    if (!m_windowMapper.contains(window)) {
-        QWidget *widget = QWidget::find(window);
+    addWindowFromXi2Id(event->event);
+}
+
+void QXcbConnection::addWindowFromXi2Id(xcb_window_t id)
+{
+    if (!m_windowMapper.contains(id)) {
+        QWidget *widget = QWidget::find(id);
         if (widget) {
             QWindow *windowHandle = widget->windowHandle();
-            m_windowMapper.insert(window, windowHandle);
+            m_windowMapper.insert(id, windowHandle);
         }
     }
 }
 
 QWindow* QXcbConnection::windowFromId(xcb_window_t id)
 {
-    return m_windowMapper.value(id, 0);
+    QWindow *window = m_windowMapper.value(id, 0);
+
+    // Try to fetch the window Id lazily. It is needed when the cursor gets under
+    // a popup window or a popup dialog, which doesn't produce any enter event on
+    // some systems
+    if (!window) {
+        addWindowFromXi2Id(id);
+        window = m_windowMapper.value(id, 0);
+    }
+
+    return window;
 }
 
 static int xi2ValuatorOffset(unsigned char *maskPtr, int maskLen, int number)
@@ -580,6 +594,12 @@ void processTabletEvent(QWindowSystemInterfacePrivate::TabletEvent *e)
         type = (e->buttons > tabletState) ? QEvent::TabletPress : QEvent::TabletRelease;
 
     bool localValid = true;
+
+    // It can happen that we got no tablet release event. Just catch it here
+    // and clean up the state.
+    if (type == QEvent::TabletMove && e->buttons == Qt::NoButton) {
+        tabletPressWidget = 0;
+    }
 
     QWidget *targetWidget = 0;
 

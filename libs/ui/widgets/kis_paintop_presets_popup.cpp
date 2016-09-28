@@ -331,6 +331,7 @@ void KisPaintOpPresetsPopup::showScratchPad()
 
 void KisPaintOpPresetsPopup::resourceSelected(KoResource* resource)
 {
+    m_d->uiWdgPaintOpPresetSettings.presetWidget->smallPresetChooser->setCurrentResource(resource);
     m_d->uiWdgPaintOpPresetSettings.txtPreset->setText(resource->name());
     slotWatchPresetNameLineEdit();
 }
@@ -403,6 +404,11 @@ void KisPaintOpPresetsPopup::slotSwitchScratchpad(bool visible)
 void KisPaintOpPresetsPopup::updateViewSettings()
 {
     m_d->uiWdgPaintOpPresetSettings.presetWidget->smallPresetChooser->updateViewSettings();
+}
+
+void KisPaintOpPresetsPopup::currentPresetChanged(KisPaintOpPresetSP preset)
+{
+     m_d->uiWdgPaintOpPresetSettings.presetWidget->smallPresetChooser->setCurrentResource(preset.data());
 }
 
 void KisPaintOpPresetsPopup::updateThemedIcons()

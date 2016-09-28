@@ -47,7 +47,7 @@ namespace KisCommandUtils
 
     private:
         bool m_firstRedo;
-        KUndo2Command *m_child;
+        QScopedPointer<KUndo2Command> m_child;
     };
 
     struct KRITAIMAGE_EXPORT FlipFlopCommand : public KUndo2Command {

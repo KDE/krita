@@ -37,8 +37,8 @@ class KisLazyFillCapacityMap
 
 public:
     typedef EdgeDescriptor key_type;
-    typedef float value_type;
-    typedef const float& reference;
+    typedef int value_type;
+    typedef const int& reference;
     typedef boost::readable_property_map_tag category;
 
     KisLazyFillCapacityMap(KisPaintDeviceSP mainImage,
@@ -115,7 +115,9 @@ public:
             // TODO: precalculate!
             const int k  = 2 * (map.m_mainRect.width() + map.m_mainRect.height());
 
-            float value = 0.0;
+            static const int unitValue = 256;
+
+            qreal value = 0.0;
 
             if (dstLabelA) {
                 map.m_aAccessor->moveTo(src.x, src.y);
@@ -149,7 +151,7 @@ public:
                 value = 1.0 + k * (1.0 - pow2(totalPenalty));
             }
 
-            return value;
+            return value * unitValue;
         }
 
     KisLazyFillGraph& graph() {

@@ -312,11 +312,11 @@ public:
 
     QUrl m_originalURL; // for saveAs
     QString m_originalFilePath; // for saveAs
-    bool m_saveOk : 1;
-    bool m_waitForSave : 1;
-    bool m_duringSaveAs : 1;
-    bool m_bAutoDetectedMime : 1; // whether the mimetype in the arguments was detected by the part itself
-    QUrl m_url; // Remote (or local) url - the one displayed to the user.
+    bool m_saveOk;
+    bool m_waitForSave;
+    bool m_duringSaveAs;
+    bool m_bAutoDetectedMime; // whether the mimetype in the arguments was detected by the part itself
+    QUrl m_url; // local url - the one displayed to the user.
     QString m_file; // Local file - the only one the part implementation should deal with.
     QEventLoop m_eventLoop;
     QMutex savingMutex;

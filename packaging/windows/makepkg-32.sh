@@ -12,7 +12,7 @@ APP=krita
 
 cd $BUILDROOT
 
-VER=$(grep "#define KRITA_VERSION_STRING" $BUILDROOT/build/libs/version/kritaversion.h | cut -d '"' -f 2)
+VER=$(grep "#define KRITA_VERSION_STRING" $BUILDROOT/32/build/libs/version/kritaversion.h | cut -d '"' -f 2)
 cd $BUILDROOT/krita
 cd ..
 VERSION=$VER
@@ -66,15 +66,6 @@ cp -r $MXEROOT/share/kf5 $BUILDROOT/out/$PACKAGENAME/share
 cp -r $MXEROOT/share/krita $BUILDROOT/out/$PACKAGENAME/share
 cp -r $MXEROOT/share/locale $BUILDROOT/out/$PACKAGENAME/bin/data
 cp -r $MXEROOT/share/ocio $BUILDROOT/out/$PACKAGENAME/share
-
-
-cd $BUILDROOT
-rm krita-3.0-l10n-win-current.tar.gz || true
-rm -rf locale
-
-wget http://files.kde.org/krita/build/krita-3.0-l10n-win-current.tar.gz
-tar -xf krita-3.0-l10n-win-current.tar.gz
-cp -r $BUILDROOT/locale $BUILDROOT/out/$PACKAGENAME/bin/data
 
 cd $BUILDROOT/out/
 

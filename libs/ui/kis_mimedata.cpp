@@ -33,6 +33,7 @@
 #include "kis_node_insertion_adapter.h"
 #include "kis_dummies_facade_base.h"
 #include "kis_node_dummies_graph.h"
+#include "KisImportExportManager.h"
 
 #include <KoProperties.h>
 #include <KoStore.h>
@@ -110,13 +111,14 @@ QByteArray serializeToByteArray(QList<KisNodeSP> nodes)
     QByteArray byteArray;
     QBuffer buffer(&byteArray);
 
-    KoStore *store = KoStore::createStore(&buffer, KoStore::Write);
-    Q_ASSERT(!store->bad());
-    
     KisDocument *doc = createDocument(nodes);
-    doc->saveNativeFormatCalligra(store);
+    KisImportExportFilter *filter = KisImportExportManager::filterForMimeType(doc->nativeFormatMimeType(), KisImportExportManager::Export);
+    filter->setBatchMode(true);
+    filter->setMimeType(doc->nativeFormatMimeType());
+    if (filter->convert(doc, &buffer) != KisImportExportFilter::OK) {
+        qWarning() << "serializeToByteArray():: Could not export to our native format";
+    }
     delete doc;
-
     return byteArray;
 }
 

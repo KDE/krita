@@ -773,7 +773,7 @@ bool KisMainWindow::openDocumentInternal(const QUrl &url, KisDocument *newdoc)
     connect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
     connect(newdoc, SIGNAL(completed()), this, SLOT(slotLoadCompleted()));
     connect(newdoc, SIGNAL(canceled(const QString &)), this, SLOT(slotLoadCanceled(const QString &)));
-    bool openRet = (!isImporting()) ? newdoc->openUrl(url) : newdoc->importDocument(url);
+    bool openRet = (!d->isImporting) ? newdoc->openUrl(url) : newdoc->importDocument(url);
     if (!openRet) {
         delete newdoc;
         return false;
@@ -801,7 +801,7 @@ QStringList KisMainWindow::showOpenFileDialog()
     KoFileDialog dialog(this, KoFileDialog::ImportFiles, "OpenDocument");
     dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
     dialog.setMimeTypeFilters(KisImportExportManager::mimeFilter(KisImportExportManager::Import));
-    dialog.setCaption(isImporting() ? i18n("Import Images") : i18n("Open Images"));
+    dialog.setCaption(d->isImporting ? i18n("Import Images") : i18n("Open Images"));
 
     return dialog.filenames();
 }
@@ -912,8 +912,7 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas)
 
     mimeFilter = KisImportExportManager::mimeFilter(KisImportExportManager::Export);
 
-
-    if (!mimeFilter.contains(oldOutputFormat) && !isExporting()) {
+    if (!mimeFilter.contains(oldOutputFormat) && !d->isExporting) {
         dbgUI << "KisMainWindow::saveDocument no export filter for" << oldOutputFormat;
 
         // --- don't setOutputMimeType in case the user cancels the Save As
@@ -955,7 +954,7 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas)
 
         KoFileDialog dialog(this, KoFileDialog::SaveFile, "SaveDocument");
         dialog.setCaption(i18n("untitled"));
-        if (isExporting() && !d->lastExportUrl.isEmpty()) {
+        if (d->isExporting && !d->lastExportUrl.isEmpty()) {
             dialog.setDefaultDir(d->lastExportUrl.toLocalFile(), true);
         }
         else {
@@ -985,7 +984,7 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas)
         outputFormat = outputFormatString.toLatin1();
 
 
-        if (!isExporting()) {
+        if (!d->isExporting) {
             justChangingFilterOptions = (newURL == document->url()) && (outputFormat == document->mimeType());
         }
         else {
@@ -1013,7 +1012,7 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas)
                 // we do _not_ change this operation into a Save As.  Reasons
                 // follow:
                 //
-                // 1. A check like "isExporting() && oldURL == newURL"
+                // 1. A check like "d->isExporting && oldURL == newURL"
                 //    doesn't _always_ work on case-insensitive filesystems
                 //    and inconsistent behaviour is bad.
                 // 2. It is probably not a good idea to change document->mimeType
@@ -1031,7 +1030,7 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas)
                 // - Clarence
                 //
                 document->setOutputMimeType(outputFormat);
-                if (!isExporting()) {  // Save As
+                if (!d->isExporting) {  // Save As
                     ret = document->saveAs(newURL);
 
                     if (ret) {
@@ -1066,7 +1065,7 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas)
     } else { // saving
 
         // be sure document has the correct outputMimeType!
-        if (isExporting() || document->isModified()) {
+        if (d->isExporting || document->isModified()) {
             ret = document->save();
         }
 
@@ -1839,15 +1838,6 @@ void KisMainWindow::slotExportFile()
     d->isExporting = false;
 }
 
-bool KisMainWindow::isImporting() const
-{
-    return d->isImporting;
-}
-
-bool KisMainWindow::isExporting() const
-{
-    return d->isExporting;
-}
 
 QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
 {

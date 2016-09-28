@@ -403,26 +403,6 @@ private:
     bool openDocumentInternal(const QUrl &url, KisDocument *newdoc = 0);
 
     /**
-     * Returns whether or not the current slotFileSave[As]() or saveDocument()
-     * call is actually an export operation (like File --> Export).
-     *
-     * If this is true, you must call KisDocument::export() instead of
-     * KisDocument::save() or KisDocument::saveAs(), in any reimplementation of
-     * saveDocument().
-     */
-    bool isExporting() const;
-
-    /**
-     * Returns whether or not the current slotFileOpen() or openDocument()
-     * call is actually an import operation (like File --> Import).
-     *
-     * If this is true, you must call KisDocument::import() instead of
-     * KisDocument::openUrl(), in any reimplementation of openDocument() or
-     * openDocumentInternal().
-     */
-    bool isImporting() const;
-
-    /**
      * Reloads the recent documents list.
      */
     void reloadRecentFileList();

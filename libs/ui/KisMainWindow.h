@@ -439,8 +439,6 @@ private:
 
     void applyDefaultSettings(QPrinter &printer);
 
-    bool exportConfirmation(const QByteArray &outputFormat);
-
     void createActions();
 
     void applyToolBarLayout();

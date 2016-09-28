@@ -290,9 +290,6 @@ public:
 
     QByteArray mimeType; // The actual mimetype of the document
     QByteArray outputMimeType; // The mimetype to use when saving
-    bool confirmNonNativeSave [2] = {true, true}; // used to pop up a dialog when saving for the
-                                                  // first time if the file is in a foreign format
-                                                  // (Save/Save As, Export)
 
     bool isImporting;
     bool isExporting; // File --> Import/Export vs File --> Open/Save
@@ -738,7 +735,6 @@ bool KisDocument::saveFile(KisPropertiesConfigurationSP exportConfiguration)
         setAutoSave(d->autoSaveDelay);
 
         d->mimeType = outputMimeType;
-        setConfirmNonNativeSave(isExporting(), false);
     }
     else {
         if (!suppressErrorDialog) {
@@ -795,19 +791,6 @@ void KisDocument::setOutputMimeType(const QByteArray & mimeType)
 QByteArray KisDocument::outputMimeType() const
 {
     return d->outputMimeType;
-}
-
-bool KisDocument::confirmNonNativeSave(const bool exporting) const
-{
-    // "exporting ? 1 : 0" is different from "exporting" because a bool is
-    // usually implemented like an "int", not "unsigned : 1"
-    qDebug() << "confirm nonnative save" << exporting;
-    return d->confirmNonNativeSave [ exporting ? 1 : 0 ];
-}
-
-void KisDocument::setConfirmNonNativeSave(const bool exporting, const bool on)
-{
-    d->confirmNonNativeSave [ exporting ? 1 : 0] = on;
 }
 
 bool KisDocument::fileBatchMode() const
@@ -1212,12 +1195,7 @@ KoProgressProxy* KisDocument::progressProxy() const
 void KisDocument::setMimeTypeAfterLoading(const QString& mimeType)
 {
     d->mimeType = mimeType.toLatin1();
-
     d->outputMimeType = d->mimeType;
-
-    const bool needConfirm = !isNativeFormat(d->mimeType);
-    setConfirmNonNativeSave(false, needConfirm);
-    setConfirmNonNativeSave(true, needConfirm);
 }
 
 // The caller must call store->close() if loadAndParse returns true.

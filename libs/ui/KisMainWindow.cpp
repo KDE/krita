@@ -986,10 +986,12 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
         outputFormat = outputFormatString.toLatin1();
 
 
-        if (!isExporting())
+        if (!isExporting()) {
             justChangingFilterOptions = (newURL == document->url()) && (outputFormat == document->mimeType());
-        else
+        }
+        else {
             justChangingFilterOptions = (newURL == d->lastExportUrl) && (outputFormat == d->lastExportedFormat);
+        }
 
         bool bOk = true;
         if (newURL.isEmpty()) {
@@ -1000,7 +1002,7 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
             bool wantToSave = true;
 
             // don't change this line unless you know what you're doing :)
-            if (!justChangingFilterOptions || document->confirmNonNativeSave(isExporting())) {
+            if (!justChangingFilterOptions) {
                 if (!document->isNativeFormat(outputFormat))
                     wantToSave = true;
             }
@@ -1066,23 +1068,16 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
             ret = false;
     } else { // saving
 
-        bool needConfirm = document->confirmNonNativeSave(false) && !document->isNativeFormat(oldOutputFormat);
+        // be sure document has the correct outputMimeType!
+        if (isExporting() || document->isModified()) {
+            ret = document->save();
+        }
 
-        if (!needConfirm ||
-                (needConfirm && exportConfirmation(oldOutputFormat /* not so old :) */))
-                ) {
-            // be sure document has the correct outputMimeType!
-            if (isExporting() || document->isModified()) {
-                ret = document->save();
-            }
-
-            if (!ret) {
-                dbgUI << "Failed Save!";
-                document->setUrl(oldURL);
-                document->setLocalFilePath(oldFile);
-            }
-        } else
-            ret = false;
+        if (!ret) {
+            dbgUI << "Failed Save!";
+            document->setUrl(oldURL);
+            document->setLocalFilePath(oldFile);
+        }
     }
 
 
@@ -1093,11 +1088,6 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
     updateCaption();
 
     return ret;
-}
-
-bool KisMainWindow::exportConfirmation(const QByteArray &/*outputFormat*/)
-{
-    return true;
 }
 
 void KisMainWindow::undo()

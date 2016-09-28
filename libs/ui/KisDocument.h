@@ -184,23 +184,6 @@ public:
     QByteArray outputMimeType() const;
 
     /**
-     * Returns true if this document was the result of opening a foreign
-     * file format and if the user hasn't yet saved the document (in any
-     * format).
-     *
-     * Used by KisMainWindow to warn the user when s/he lazily presses
-     * CTRL+S to save in the same foreign format, putting all his/her
-     * formatting at risk (normally an export confirmation only comes up
-     * with Save As).
-     *
-     * @param exporting specifies whether this is the setting for a
-     * File --> Export or File --> Save/Save As operation.
-     */
-    bool confirmNonNativeSave(const bool exporting) const;
-    void setConfirmNonNativeSave(const bool exporting, const bool on);
-
-
-    /**
      * @return true if file operations should inhibit the option dialog
      */
     bool fileBatchMode() const;

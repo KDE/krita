@@ -415,10 +415,15 @@ private:
 
         if (numberOfFrames > 1) {
             int frameId = contentChannel->frameIdAt(defaultBounds->currentTime());
-            KIS_ASSERT_RECOVER(m_frames.contains(frameId)) {
-                return m_frames.begin().value();
+
+            if (frameId == -1) {
+                data = m_data;
+            } else {
+                KIS_ASSERT_RECOVER(m_frames.contains(frameId)) {
+                    return m_frames.begin().value();
+                }
+                data = m_frames[frameId];
             }
-            data = m_frames[frameId];
         } else if (numberOfFrames == 1) {
             data = m_frames.begin().value();
         } else {

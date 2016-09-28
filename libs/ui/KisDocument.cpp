@@ -233,8 +233,7 @@ private:
 class Q_DECL_HIDDEN KisDocument::Private
 {
 public:
-    Private(KisDocument *document) :
-        document(document),
+    Private() :
         // XXX: the part should _not_ be modified from the document
         docInfo(0),
         progressUpdater(0),
@@ -276,8 +275,6 @@ public:
         // Don't delete m_d->shapeController because it's in a QObject hierarchy.
         delete nserver;
     }
-
-    KisDocument *document;
 
     KoDocumentInfo *docInfo;
 
@@ -350,36 +347,6 @@ public:
     QList<KisPaintingAssistantSP> assistants;
     KisGridConfig gridConfig;
 
-    bool openFile() {
-        document->setFileProgressProxy();
-        document->setUrl(m_url);
-
-        bool ok = document->openFile();
-
-        document->clearFileProgressProxy();
-        return ok;
-    }
-
-    bool openLocalFile()
-    {
-        m_bTemp = false;
-        // set the mimetype only if it was not already set (for example, by the host application)
-        if (mimeType.isEmpty()) {
-            // get the mimetype of the file
-            // using findByUrl() to avoid another string -> url conversion
-            QString mime = KisMimeDatabase::mimeTypeForFile(m_url.toLocalFile());
-            mimeType = mime.toLocal8Bit();
-            m_bAutoDetectedMime = true;
-        }
-        const bool ret = openFile();
-        if (ret) {
-            emit document->completed();
-        } else {
-            emit document->canceled(QString());
-        }
-        return ret;
-    }
-
     // Set m_file correctly for m_url
     void prepareSaving()
     {
@@ -413,11 +380,12 @@ public:
 
 class KisDocument::Private::SafeSavingLocker {
 public:
-    SafeSavingLocker(KisDocument::Private *_d)
-        : d(_d),
-          m_locked(false),
-          m_imageLock(d->image, true),
-          m_savingLock(&d->savingMutex)
+    SafeSavingLocker(KisDocument::Private *_d, KisDocument *document)
+        : d(_d)
+        , m_locked(false)
+        , m_imageLock(d->image, true)
+        , m_savingLock(&d->savingMutex)
+        , m_document(document)
     {
         const int realAutoSaveInterval = KisConfig().autoSaveInterval();
         const int emergencyAutoSaveInterval = 10; // sec
@@ -437,7 +405,7 @@ public:
             if (d->isAutosaving) {
                 d->disregardAutosaveFailure = true;
                 if (realAutoSaveInterval) {
-                    d->document->setAutoSave(emergencyAutoSaveInterval);
+                    document->setAutoSave(emergencyAutoSaveInterval);
                 }
             } else {
                 d->image->requestStrokeEnd();
@@ -459,7 +427,7 @@ public:
              m_savingLock.unlock();
 
              const int realAutoSaveInterval = KisConfig().autoSaveInterval();
-             d->document->setAutoSave(realAutoSaveInterval);
+             m_document->setAutoSave(realAutoSaveInterval);
          }
      }
 
@@ -473,10 +441,11 @@ private:
 
     KisImageBarrierLockAdapter m_imageLock;
     StdLockableWrapper<QMutex> m_savingLock;
+    KisDocument *m_document;
 };
 
 KisDocument::KisDocument()
-    : d(new Private(this))
+    : d(new Private())
 {
     d->undoStack = new UndoStack(this);
     d->undoStack->setParent(this);
@@ -632,8 +601,6 @@ bool KisDocument::saveFile(KisPropertiesConfigurationSP exportConfiguration)
     // Save it to be able to restore it after a failed save
     const bool wasModified = isModified();
 
-    // Show the dialog with the options, if any
-
     // The output format is set by koMainWindow, and by openFile
     QByteArray outputMimeType = d->outputMimeType;
     if (outputMimeType.isEmpty())
@@ -662,7 +629,7 @@ bool KisDocument::saveFile(KisPropertiesConfigurationSP exportConfiguration)
     Q_ASSERT(!tempororaryFileName.isEmpty());
 
     if (!isNativeFormat(outputMimeType)) {
-        Private::SafeSavingLocker locker(d);
+        Private::SafeSavingLocker locker(d, this);
         if (locker.successfullyLocked()) {
             status = d->importExportManager->exportDocument(tempororaryFileName, outputMimeType, exportConfiguration);
         } else {
@@ -866,7 +833,7 @@ bool KisDocument::isModified() const
 
 bool KisDocument::saveNativeFormat(const QString & file)
 {
-    Private::SafeSavingLocker locker(d);
+    Private::SafeSavingLocker locker(d, this);
     if (!locker.successfullyLocked()) return false;
 
     d->lastErrorMessage.clear();
@@ -913,7 +880,6 @@ bool KisDocument::saveNativeFormatCalligra(KoStore *store)
     if (store->open("documentinfo.xml")) {
         QDomDocument doc = KisDocument::createDomDocument("document-info"
                                                           /*DTD name*/, "document-info" /*tag name*/, "1.1");
-
 
         doc = d->docInfo->save(doc);
         KoStoreDevice dev(store);
@@ -1804,7 +1770,7 @@ QUrl KisDocument::url() const
 bool KisDocument::closeUrl(bool promptToSave)
 {
     if (promptToSave) {
-        if ( d->document->isReadWrite() && d->document->isModified()) {
+        if ( isReadWrite() && isModified()) {
             Q_FOREACH (KisView *view, KisPart::instance()->views()) {
                 if (view && view->document() == this) {
                     if (!view->queryClose()) {
@@ -1862,12 +1828,12 @@ bool KisDocument::save(KisPropertiesConfigurationSP exportConfiguration)
 
     updateEditingTime(true);
 
-    d->document->setFileProgressProxy();
-    d->document->setUrl(url());
+    setFileProgressProxy();
+    setUrl(url());
 
-    bool ok = d->document->saveFile(exportConfiguration);
+    bool ok = saveFile(exportConfiguration);
 
-    d->document->clearFileProgressProxy();
+    clearFileProgressProxy();
 
     if (ok) {
         return saveToUrl();
@@ -1904,7 +1870,7 @@ void KisDocument::setLocalFilePath( const QString &localFilePath )
 bool KisDocument::saveToUrl()
 {
     if ( d->m_url.isLocalFile() ) {
-        d->document->setModified( false );
+        setModified( false );
         emit completed();
         // if m_url is a local file there won't be a temp file -> nothing to remove
         Q_ASSERT( !d->m_bTemp );
@@ -1940,9 +1906,28 @@ bool KisDocument::openUrlInternal(const QUrl &url)
 
     if (d->m_url.isLocalFile()) {
         d->m_file = d->m_url.toLocalFile();
-        return d->openLocalFile();
-    }
+        bool ret;
+        d->m_bTemp = false;
+        // set the mimetype only if it was not already set (for example, by the host application)
+        if (d->mimeType.isEmpty()) {
+            // get the mimetype of the file
+            // using findByUrl() to avoid another string -> url conversion
+            QString mime = KisMimeDatabase::mimeTypeForFile(d->m_url.toLocalFile());
+            d->mimeType = mime.toLocal8Bit();
+            d->m_bAutoDetectedMime = true;
+        }
+        setFileProgressProxy();
+        setUrl(d->m_url);
+        ret = openFile();
+        clearFileProgressProxy();
 
+        if (ret) {
+            emit completed();
+        } else {
+            emit canceled(QString());
+        }
+        return ret;
+    }
     return false;
 }
 

@@ -253,7 +253,6 @@ public:
         m_saveOk(false),
         m_waitForSave(false),
         m_duringSaveAs(false),
-        m_bTemp(false),
         m_bAutoDetectedMime(false),
         modified(false),
         readwrite(true),
@@ -316,7 +315,6 @@ public:
     bool m_saveOk : 1;
     bool m_waitForSave : 1;
     bool m_duringSaveAs : 1;
-    bool m_bTemp: 1;      // If @p true, @p m_file is a temporary file that needs to be deleted later.
     bool m_bAutoDetectedMime : 1; // whether the mimetype in the arguments was detected by the part itself
     QUrl m_url; // Remote (or local) url - the one displayed to the user.
     QString m_file; // Local file - the only one the part implementation should deal with.
@@ -351,13 +349,7 @@ public:
     void prepareSaving()
     {
         // Local file
-        if ( m_url.isLocalFile() )
-        {
-            if ( m_bTemp ) // get rid of a possible temp file first
-            {              // (happens if previous url was remote)
-                QFile::remove( m_file );
-                m_bTemp = false;
-            }
+        if (m_url.isLocalFile()) {
             m_file = m_url.toLocalFile();
         }
     }
@@ -1783,11 +1775,6 @@ bool KisDocument::closeUrl(bool promptToSave)
     // Not modified => ok and delete temp file.
     d->mimeType = QByteArray();
 
-    if ( d->m_bTemp )
-    {
-        QFile::remove( d->m_file );
-        d->m_bTemp = false;
-    }
     // It always succeeds for a read-only part,
     // but the return value exists for reimplementations
     // (e.g. pressing cancel for a modified read-write part)
@@ -1873,7 +1860,6 @@ bool KisDocument::saveToUrl()
         setModified( false );
         emit completed();
         // if m_url is a local file there won't be a temp file -> nothing to remove
-        Q_ASSERT( !d->m_bTemp );
         d->m_saveOk = true;
         d->m_duringSaveAs = false;
         d->m_originalURL = QUrl();
@@ -1907,7 +1893,6 @@ bool KisDocument::openUrlInternal(const QUrl &url)
     if (d->m_url.isLocalFile()) {
         d->m_file = d->m_url.toLocalFile();
         bool ret;
-        d->m_bTemp = false;
         // set the mimetype only if it was not already set (for example, by the host application)
         if (d->mimeType.isEmpty()) {
             // get the mimetype of the file

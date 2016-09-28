@@ -288,7 +288,6 @@ KisMainWindow::KisMainWindow()
 #endif
 
     connect(this, SIGNAL(restoringDone()), this, SLOT(forceDockTabFonts()));
-    connect(this, SIGNAL(documentSaved()), d->viewManager, SLOT(slotDocumentSaved()));
     connect(this, SIGNAL(themeChanged()), d->viewManager, SLOT(updateIcons()));
     connect(KisPart::instance(), SIGNAL(documentClosed(QString)), SLOT(updateWindowMenu()));
     connect(KisPart::instance(), SIGNAL(documentOpened(QString)), SLOT(updateWindowMenu()));
@@ -1383,14 +1382,16 @@ void KisMainWindow::slotFileOpenRecent(const QUrl &url)
 
 void KisMainWindow::slotFileSave()
 {
-    if (saveDocument(d->activeView->document()))
+    if (saveDocument(d->activeView->document())) {
         emit documentSaved();
+    }
 }
 
 void KisMainWindow::slotFileSaveAs()
 {
-    if (saveDocument(d->activeView->document(), true))
+    if (saveDocument(d->activeView->document(), true)) {
         emit documentSaved();
+    }
 }
 
 KoCanvasResourceManager *KisMainWindow::resourceManager() const

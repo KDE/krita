@@ -230,7 +230,7 @@ public Q_SLOTS:
      *         (don't display anything in this case, the error dialog box is also implemented here
      *         but restore the original URL in slotFileSaveAs)
      */
-    bool saveDocument(KisDocument *document, bool saveas = false, bool silent = false);
+    bool saveDocument(KisDocument *document, bool saveas = false);
 
     /**
      * Update the option widgets to the argument ones, removing the currently set widgets.

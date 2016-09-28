@@ -863,7 +863,7 @@ bool KisMainWindow::hackIsSaving() const
     return !l.owns_lock();
 }
 
-bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent)
+bool KisMainWindow::saveDocument(KisDocument *document, bool saveas)
 {
     if (!document) {
         return true;
@@ -1057,8 +1057,6 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
                     document->setOutputMimeType(oldOutputFormat);
                 }
 
-                if (silent) // don't let the document change the window caption
-                    document->setTitleModified();
             }   // if (wantToSave)  {
             else
                 ret = false;

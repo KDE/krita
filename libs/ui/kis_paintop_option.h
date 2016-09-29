@@ -24,6 +24,7 @@
 #include <kritaui_export.h>
 #include <kis_properties_configuration.h>
 #include <brushengine/kis_locked_properties_proxy.h>
+#include <kis_base_option.h>
 
 class QWidget;
 class QString;
@@ -69,8 +70,8 @@ public:
 
     virtual void setNode(KisNodeWSP node);
 
-    void startReadOptionSetting(const KisPropertiesConfiguration* setting);
-    void startWriteOptionSetting(KisPropertiesConfiguration* setting) const;
+    void startReadOptionSetting(const KisPropertiesConfigurationSP setting);
+    void startWriteOptionSetting(KisPropertiesConfigurationSP setting) const;
 
     QWidget* configurationPage() const;
 
@@ -84,14 +85,14 @@ protected:
     /**
      * Re-implement this to save the configuration to the paint configuration.
      */
-    virtual void writeOptionSetting(KisPropertiesConfiguration* setting) const {
+    virtual void writeOptionSetting(KisPropertiesConfigurationSP setting) const {
         Q_UNUSED(setting);
     }
 
     /**
      * Re-implement this to set te widgets with the values in @param setting.
      */
-    virtual void readOptionSetting(const KisPropertiesConfiguration* setting) {
+    virtual void readOptionSetting(const KisPropertiesConfigurationSP setting) {
         Q_UNUSED(setting);
     }
 

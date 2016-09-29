@@ -25,14 +25,14 @@
 namespace KisStandardUniformPropertiesFactory {
 
     KisUniformPaintOpPropertySP createProperty(const KoID &id,
-                                               KisPaintOpSettingsSP settings,
+                                               KisPaintOpSettingsRestrictedSP settings,
                                                KisPaintopSettingsUpdateProxy *updateProxy)
     {
         return createProperty(id.id(), settings, updateProxy);
     }
 
     KisUniformPaintOpPropertySP createProperty(const QString &id,
-                                               KisPaintOpSettingsSP settings,
+                                               KisPaintOpSettingsRestrictedSP settings,
                                                KisPaintopSettingsUpdateProxy *updateProxy)
     {
         KisUniformPaintOpPropertySP result;

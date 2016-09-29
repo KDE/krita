@@ -68,15 +68,20 @@ public:
     double separationsensorvalue;
     double thicknesssensorvalue;
 
-    void initializeTwin(KisHatchingPaintOpSettings* convenienttwin) const;
+    void initializeTwin(KisPaintOpSettingsSP convenienttwin) const;
     using KisPropertiesConfiguration::fromXML;
     virtual void fromXML(const QDomElement&);
 
-    QList<KisUniformPaintOpPropertySP> uniformProperties();
+    QList<KisUniformPaintOpPropertySP> uniformProperties(KisPaintOpSettingsSP settings);
 
 private:
+    Q_DISABLE_COPY(KisHatchingPaintOpSettings)
+
     struct Private;
     const QScopedPointer<Private> m_d;
+
 };
+
+typedef KisSharedPtr<KisHatchingPaintOpSettings> KisHatchingPaintOpSettingsSP;
 
 #endif

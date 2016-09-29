@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>476</width>
+    <width>546</width>
     <height>243</height>
    </rect>
   </property>
@@ -52,7 +52,7 @@
       </widget>
      </item>
      <item row="1" column="1" colspan="2">
-      <widget class="KisDoubleSliderSpinBox" name="compressionLevel">
+      <widget class="KisDoubleSliderSpinBox" name="compressionLevel" native="true">
        <property name="toolTip">
         <string>Note: the compression level does not change the quality of the result</string>
        </property>
@@ -159,7 +159,7 @@ Enabling interlacing will cause the image to be displayed by the browser even wh
       </widget>
      </item>
      <item row="8" column="1">
-      <widget class="KColorButton" name="bnTransparencyFillColor">
+      <widget class="KisColorButton" name="bnTransparencyFillColor">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -205,9 +205,9 @@ Enabling interlacing will cause the image to be displayed by the browser even wh
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>KColorButton</class>
+   <class>KisColorButton</class>
    <extends>QPushButton</extends>
-   <header>kcolorbutton.h</header>
+   <header>kis_color_button.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

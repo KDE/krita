@@ -18,24 +18,35 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#pragma once
+#ifndef KIS_GRADIENT_MAP_H
+#define KIS_GRADIENT_MAP_H
 
-#include "kis_paint_device.h"
-#include "filter/kis_filter.h"
-#include "filter/kis_color_transformation_filter.h"
+#include <kis_global.h>
+#include <kis_types.h>
+#include <kis_paint_device.h>
+#include <filter/kis_filter.h>
+#include <kis_filter_configuration.h>
+#include <kis_config_widget.h>
+#include <KoUpdater.h>
 
-class KritaFilterGradientMap : public KisColorTransformationFilter
+class KritaFilterGradientMap : public KisFilter
 {
 public:
     KritaFilterGradientMap();
 public:
 
-    virtual KoColorTransformation* createTransformation(const KoColorSpace* cs, const KisFilterConfiguration* config) const;
-
     static inline KoID id() {
         return KoID("gradientmap", i18n("Gradient Map"));
     }
 
-	virtual KisConfigWidget* createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
+    virtual void processImpl(KisPaintDeviceSP device,
+                     const QRect& applyRect,
+                     const KisFilterConfigurationSP config,
+                     KoUpdater *progressUpdater) const;
+
+    virtual KisFilterConfigurationSP factoryConfiguration(const KisPaintDeviceSP) const;
+
+    virtual KisConfigWidget* createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
 };
 
+#endif

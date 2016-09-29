@@ -224,7 +224,8 @@ public:
 
         int pixelSize = m_src->pixelSize();
         KoMixColorsOp *mixOp = m_src->colorSpace()->mixColorsOp();
-        const quint8 *defaultPixel = m_src->defaultPixel();
+        const KoColor defaultPixelObject = m_src->defaultPixel();
+        const quint8 *defaultPixel = defaultPixelObject.data();
         const quint8 *borderPixel = defaultPixel;
         quint8 *srcLineBuf = new quint8[pixelSize * (rightSrcBorder - leftSrcBorder)];
 

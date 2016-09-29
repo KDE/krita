@@ -20,6 +20,7 @@
 #include "kra/kis_kra_savexml_visitor.h"
 #include "kis_kra_tags.h"
 #include "kis_kra_utils.h"
+#include "kis_layer_properties_icons.h"
 
 #include <QTextStream>
 #include <QDir>
@@ -43,6 +44,7 @@
 #include <kis_selection_mask.h>
 #include <kis_shape_layer.h>
 #include <kis_transparency_mask.h>
+#include <lazybrush/kis_colorize_mask.h>
 #include <kis_file_layer.h>
 #include <kis_psd_layer_style.h>
 #include "kis_keyframe_channel.h"
@@ -259,6 +261,16 @@ bool KisSaveXmlVisitor::visit(KisTransparencyMask *mask)
     return true;
 }
 
+bool KisSaveXmlVisitor::visit(KisColorizeMask *mask)
+{
+    Q_ASSERT(mask);
+    QDomElement el = m_doc.createElement(MASK);
+    saveMask(el, COLORIZE_MASK, mask);
+    m_elem.appendChild(el);
+    m_count++;
+    return true;
+}
+
 bool KisSaveXmlVisitor::visit(KisSelectionMask *mask)
 {
     Q_ASSERT(mask);
@@ -331,6 +343,15 @@ void KisSaveXmlVisitor::loadLayerAttributes(const QDomElement &el, KisLayer *lay
     }
 }
 
+void KisSaveXmlVisitor::saveNodeKeyframes(const KisNode* node, QString nodeFilename, QDomElement& nodeElement)
+{
+    if (node->isAnimated()) {
+        QString keyframeFile = nodeFilename + ".keyframes.xml";
+        m_keyframeFileNames[node] = keyframeFile;
+        nodeElement.setAttribute(KEYFRAME_FILE, keyframeFile);
+    }
+}
+
 void KisSaveXmlVisitor::saveLayer(QDomElement & el, const QString & layerType, const KisLayer * layer)
 {
     QString filename = LAYER + QString::number(m_count);
@@ -360,11 +381,7 @@ void KisSaveXmlVisitor::saveLayer(QDomElement & el, const QString & layerType, c
         }
     }
 
-    if (layer->isAnimated()) {
-        QString keyframeFile = filename + ".keyframes.xml";
-        m_keyframeFileNames[layer] = keyframeFile;
-        el.setAttribute(KEYFRAME_FILE, keyframeFile);
-    }
+    saveNodeKeyframes(layer, filename, el);
 
     m_nodeFileNames[layer] = filename;
 
@@ -374,27 +391,36 @@ void KisSaveXmlVisitor::saveLayer(QDomElement & el, const QString & layerType, c
             << " with filename " << LAYER + QString::number(m_count);
 }
 
-void KisSaveXmlVisitor::saveMask(QDomElement & el, const QString & maskType, const KisMask * mask)
+void KisSaveXmlVisitor::saveMask(QDomElement & el, const QString & maskType, const KisMaskSP mask)
 {
+    QString filename = MASK + QString::number(m_count);
+
     el.setAttribute(NAME, mask->name());
     el.setAttribute(VISIBLE, mask->visible());
     el.setAttribute(LOCKED, mask->userLocked());
     el.setAttribute(NODE_TYPE, maskType);
-    el.setAttribute(FILE_NAME, MASK + QString::number(m_count));
+    el.setAttribute(FILE_NAME, filename);
     el.setAttribute(X, mask->x());
     el.setAttribute(Y, mask->y());
     el.setAttribute(UUID, mask->uuid().toString());
 
     if (maskType == SELECTION_MASK) {
         el.setAttribute(ACTIVE, mask->nodeProperties().boolProperty("active"));
+    } else if (maskType == COLORIZE_MASK) {
+        el.setAttribute(COLORSPACE_NAME, mask->colorSpace()->id());
+        el.setAttribute(COMPOSITE_OP, mask->compositeOpId());
+        el.setAttribute(COLORIZE_EDIT_KEYSTROKES, KisLayerPropertiesIcons::nodeProperty(mask, KisLayerPropertiesIcons::colorizeEditKeyStrokes, true).toBool());
+        el.setAttribute(COLORIZE_SHOW_COLORING, KisLayerPropertiesIcons::nodeProperty(mask, KisLayerPropertiesIcons::colorizeShowColoring, true).toBool());
     }
 
-    m_nodeFileNames[mask] = MASK + QString::number(m_count);
+    saveNodeKeyframes(mask, filename, el);
+
+    m_nodeFileNames[mask] = filename;
 
     dbgFile << "Saved mask "
             << mask->name()
             << " of type " << maskType
-            << " with filename " << MASK + QString::number(m_count);
+            << " with filename " << filename;
 }
 
 bool KisSaveXmlVisitor::saveMasks(KisNode * node, QDomElement & layerElement)

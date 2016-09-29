@@ -30,9 +30,11 @@
 #include "KisViewManager.h"
 #include "kis_action_manager.h"
 #include "kis_action.h"
+#include <KoColorSpaceRegistry.h>
 
 #include "kis_equalizer_widget.h"
 
+#include "kis_color_filter_combo.h"
 
 static const int MAX_SKIN_COUNT = 10;
 
@@ -63,8 +65,8 @@ OnionSkinsDocker::OnionSkinsDocker(QWidget *parent) :
     connect(m_equalizerWidget, SIGNAL(sigConfigChanged()), &m_updatesCompressor, SLOT(start()));
     layout->addWidget(m_equalizerWidget, 1);
 
-    connect(ui->btnBackwardColor, SIGNAL(changed(QColor)), &m_updatesCompressor, SLOT(start()));
-    connect(ui->btnForwardColor, SIGNAL(changed(QColor)), &m_updatesCompressor, SLOT(start()));
+    connect(ui->btnBackwardColor, SIGNAL(changed(KoColor)), &m_updatesCompressor, SLOT(start()));
+    connect(ui->btnForwardColor, SIGNAL(changed(KoColor)), &m_updatesCompressor, SLOT(start()));
     connect(ui->doubleTintFactor, SIGNAL(valueChanged(qreal)), &m_updatesCompressor, SLOT(start()));
 
     connect(&m_updatesCompressor, SIGNAL(timeout()),
@@ -77,6 +79,11 @@ OnionSkinsDocker::OnionSkinsDocker(QWidget *parent) :
         connect(ui->btnShowHide, SIGNAL(toggled(bool)), SLOT(slotShowAdditionalSettings(bool)));
         slotShowAdditionalSettings(isShown);
     }
+
+    QSet<int> colors;
+    for (int c=1; c<=8; c++) colors.insert(c);
+    ui->cmbColorLabelFilter->updateAvailableLabels(colors);
+    connect(ui->cmbColorLabelFilter, &KisColorFilterCombo::selectedColorsChanged, this, &OnionSkinsDocker::slotFilteredColorsChanged);
 
     loadSettings();
     KisOnionSkinCompositor::instance()->configChanged();
@@ -114,6 +121,12 @@ void OnionSkinsDocker::slotToggleOnionSkins()
     m_equalizerWidget->toggleMasterSwitch();
 }
 
+void OnionSkinsDocker::slotFilteredColorsChanged()
+{
+    KisOnionSkinCompositor::instance()->setColorLabelFilter(ui->cmbColorLabelFilter->selectedColors());
+    KisOnionSkinCompositor::instance()->configChanged();
+}
+
 void OnionSkinsDocker::slotUpdateIcons()
 {
     if (m_toggleOnionSkinsAction) {
@@ -130,7 +143,6 @@ void OnionSkinsDocker::slotShowAdditionalSettings(bool value)
     ui->btnForwardColor->setVisible(value);
 
     ui->doubleTintFactor->setVisible(value);
-
 
     QIcon icon = KisIconUtils::loadIcon(value ? "arrow-down" : "arrow-up");
     ui->btnShowHide->setIcon(icon);
@@ -152,8 +164,8 @@ void OnionSkinsDocker::changed()
     }
 
     config.setOnionSkinTintFactor(ui->doubleTintFactor->value() * 255.0 / 100.0);
-    config.setOnionSkinTintColorBackward(ui->btnBackwardColor->color());
-    config.setOnionSkinTintColorForward(ui->btnForwardColor->color());
+    config.setOnionSkinTintColorBackward(ui->btnBackwardColor->color().toQColor());
+    config.setOnionSkinTintColorForward(ui->btnForwardColor->color().toQColor());
 
     KisOnionSkinCompositor::instance()->configChanged();
 }
@@ -168,8 +180,11 @@ void OnionSkinsDocker::loadSettings()
                         m_equalizerWidget);
 
     ui->doubleTintFactor->setValue(config.onionSkinTintFactor() * 100.0 / 255);
-    ui->btnBackwardColor->setColor(config.onionSkinTintColorBackward());
-    ui->btnForwardColor->setColor(config.onionSkinTintColorForward());
+    KoColor bcol(KoColorSpaceRegistry::instance()->rgb8());
+    bcol.fromQColor(config.onionSkinTintColorBackward());
+    ui->btnBackwardColor->setColor(bcol);
+    bcol.fromQColor(config.onionSkinTintColorForward());
+    ui->btnForwardColor->setColor(bcol);
 
     KisEqualizerWidget::EqualizerValues v;
     v.maxDistance = 10;

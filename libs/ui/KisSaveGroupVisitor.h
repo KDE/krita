@@ -84,6 +84,8 @@ public:
 
     bool visit(KisSelectionMask* );
 
+    bool visit(KisColorizeMask* );
+
     bool visit(KisGroupLayer *layer);
 
 private:

@@ -38,6 +38,7 @@ public:
     void visit(KisTransformMask *mask, KisUndoAdapter *undoAdapter);
     void visit(KisTransparencyMask *mask, KisUndoAdapter *undoAdapter);
     void visit(KisSelectionMask *mask, KisUndoAdapter *undoAdapter);
+    void visit(KisColorizeMask *mask, KisUndoAdapter *undoAdapter);
 };
 
 #endif /* __KIS_DO_NOTHING_PROCESSING_VISITOR_H */

@@ -38,7 +38,7 @@ class KisHairyPaintOp : public KisPaintOp
 {
 
 public:
-    KisHairyPaintOp(const KisBrushBasedPaintOpSettings *settings, KisPainter * painter, KisNodeSP node, KisImageSP image);
+    KisHairyPaintOp(const KisPaintOpSettingsSP settings, KisPainter *painter, KisNodeSP node, KisImageSP image);
 
     KisSpacingInformation paintAt(const KisPaintInformation& info);
     void paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, KisDistanceInformation *currentDistance);

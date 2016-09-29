@@ -239,7 +239,7 @@ void KisSelectionManagerTest::testInvertSelection()
 {
     SelectionManagerTester t(true);
 
-    KisOperationConfiguration* config = new KisOperationConfiguration("invertselection");
+    KisOperationConfigurationSP config = new KisOperationConfiguration("invertselection");
     t.actionManager->runOperationFromConfiguration(config);
     t.image->waitForDone();
     QVERIFY(t.checkLayers("invert_selection"));
@@ -258,7 +258,7 @@ void KisSelectionManagerTest::testFeatherSelection()
 {
     SelectionManagerTester t(true);
 
-    KisOperationConfiguration* config = new KisOperationConfiguration("featherselection");
+    KisOperationConfigurationSP config = new KisOperationConfiguration("featherselection");
     config->setProperty("radius", 10);
     t.actionManager->runOperationFromConfiguration(config);
     t.image->waitForDone();
@@ -278,7 +278,7 @@ void KisSelectionManagerTest::testGrowSelectionSimplified()
 {
     SelectionManagerTester t(true);
 
-    KisOperationConfiguration* config = new KisOperationConfiguration("growselection");
+    KisOperationConfigurationSP config = new KisOperationConfiguration("growselection");
     config->setProperty("x-radius", 10);
     config->setProperty("y-radius", 5);
     t.actionManager->runOperationFromConfiguration(config);
@@ -290,7 +290,7 @@ void KisSelectionManagerTest::testShrinkSelectionUnlockedSimplified()
 {
     SelectionManagerTester t(true);
 
-    KisOperationConfiguration* config = new KisOperationConfiguration("shrinkselection");
+    KisOperationConfigurationSP config = new KisOperationConfiguration("shrinkselection");
     config->setProperty("x-radius", 10);
     config->setProperty("y-radius", 5);
     config->setProperty("edgeLock", false);
@@ -303,7 +303,7 @@ void KisSelectionManagerTest::testShrinkSelectionLockedSimplified()
 {
     SelectionManagerTester t(true);
 
-    KisOperationConfiguration* config = new KisOperationConfiguration("shrinkselection");
+    KisOperationConfigurationSP config = new KisOperationConfiguration("shrinkselection");
     config->setProperty("x-radius", 10);
     config->setProperty("y-radius", 5);
     config->setProperty("edgeLock", true);
@@ -316,7 +316,7 @@ void KisSelectionManagerTest::testSmoothSelectionSimplified()
 {
     SelectionManagerTester t(true);
 
-    KisOperationConfiguration* config = new KisOperationConfiguration("smoothselection");
+    KisOperationConfigurationSP config = new KisOperationConfiguration("smoothselection");
     t.actionManager->runOperationFromConfiguration(config);
     t.image->waitForDone();
     QVERIFY(t.checkSelectionOnly("smooth_selection"));
@@ -344,7 +344,7 @@ void KisSelectionManagerTest::testBorderSelectionSimplified()
 {
     SelectionManagerTester t(true);
 
-    KisOperationConfiguration* config = new KisOperationConfiguration("borderselection");
+    KisOperationConfigurationSP config = new KisOperationConfiguration("borderselection");
     config->setProperty("x-radius", 10);
     config->setProperty("y-radius", 5);
     t.actionManager->runOperationFromConfiguration(config);

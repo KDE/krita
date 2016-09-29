@@ -57,10 +57,10 @@ protected:
 
         KisFilterSP filter = KisFilterRegistry::instance()->value(m_filterName);
         Q_ASSERT(filter);
-        KisFilterConfiguration *filterConfig = filter->defaultConfiguration(0);
+        KisFilterConfigurationSP filterConfig = filter->defaultConfiguration(0);
         Q_ASSERT(filterConfig);
 
-        return new KisFilterStrokeStrategy(filter, KisSafeFilterConfigurationSP(filterConfig), resources);
+        return new KisFilterStrokeStrategy(filter, KisFilterConfigurationSP(filterConfig), resources);
     }
 
     void addPaintingJobs(KisImageWSP image, KisResourcesSnapshotSP resources) {

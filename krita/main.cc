@@ -42,6 +42,7 @@
 #include "kis_splash_screen.h"
 #include "KisPart.h"
 #include "KisApplicationArguments.h"
+#include <opengl/kis_opengl.h>
 
 #if defined Q_OS_WIN
 #include <windows.h>
@@ -91,6 +92,8 @@ extern "C" int main(int argc, char **argv)
     key = key.replace(":", "_").replace("\\","_");
 
     QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts, true);
+    KisOpenGL::setDefaultFormat();
+
     QCoreApplication::setAttribute(Qt::AA_DontCreateNativeWidgetSiblings, true);
     QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps, true);
 
@@ -128,7 +131,7 @@ extern "C" int main(int argc, char **argv)
     if (!language.isEmpty()) {
         KLocalizedString::setLanguages(language.split(":"));
         // And override Qt's locale, too
-        qputenv("LANG", language.toLatin1());
+        qputenv("LANG", language.split(":").first().toUtf8());
         QLocale locale(language.split(":").first());
         QLocale::setDefault(locale);
         qDebug() << "Qt ui languages" << locale.uiLanguages();

@@ -252,7 +252,7 @@ void KisFixedPaintDeviceTest::testBltPerformance()
     t.start();
 
     int x;
-    for (x = 0; x < 1000; ++x) {
+    for (x = 0; x < 100; ++x) {
         KisPainter gc(dev);
         gc.bltFixed(QPoint(0, 0), fdev, image.rect());
     }

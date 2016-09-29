@@ -61,7 +61,7 @@ KisSmallTilesFilter::KisSmallTilesFilter() : KisFilter(id(), KisFilter::category
 
 void KisSmallTilesFilter::processImpl(KisPaintDeviceSP device,
                                       const QRect& /*applyRect*/,
-                                      const KisFilterConfiguration* config,
+                                      const KisFilterConfigurationSP config,
                                       KoUpdater* progressUpdater
                                       ) const
 {
@@ -102,9 +102,9 @@ KisConfigWidget * KisSmallTilesFilter::createConfigurationWidget(QWidget* parent
 
 }
 
-KisFilterConfiguration* KisSmallTilesFilter::factoryConfiguration(const KisPaintDeviceSP) const
+KisFilterConfigurationSP KisSmallTilesFilter::factoryConfiguration(const KisPaintDeviceSP) const
 {
-    KisFilterConfiguration* config = new KisFilterConfiguration("smalltiles", 1);
+    KisFilterConfigurationSP config = new KisFilterConfiguration("smalltiles", 1);
     config->setProperty("numberOfTiles", 2);
     return config;
 }

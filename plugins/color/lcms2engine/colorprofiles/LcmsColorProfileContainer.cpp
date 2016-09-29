@@ -34,9 +34,6 @@
 class LcmsColorProfileContainer::Private
 {
 public:
-    Private()
-        : valid(false)
-        , suitableForOutput(false) { }
 
     cmsHPROFILE profile;
     cmsColorSpaceSignature colorSpaceSignature;
@@ -46,24 +43,24 @@ public:
     QString copyright;
     QString name;
     float version;
-    IccColorProfile::Data *data;
-    bool valid;
-    bool suitableForOutput;
+    IccColorProfile::Data *data {0};
+    bool valid {false};
+    bool suitableForOutput {false};
     bool hasColorants;
     bool hasTRC;
     bool adaptedFromD50;
     cmsCIEXYZ mediaWhitePoint;
     cmsCIExyY whitePoint;
     cmsCIEXYZTRIPLE colorants;
-    cmsToneCurve *redTRC;
-    cmsToneCurve *greenTRC;
-    cmsToneCurve *blueTRC;
-    cmsToneCurve *grayTRC;
-    cmsToneCurve *redTRCReverse;
-    cmsToneCurve *greenTRCReverse;
-    cmsToneCurve *blueTRCReverse;
-    cmsToneCurve *grayTRCReverse;
-    
+    cmsToneCurve *redTRC {0};
+    cmsToneCurve *greenTRC {0};
+    cmsToneCurve *blueTRC {0};
+    cmsToneCurve *grayTRC {0};
+    cmsToneCurve *redTRCReverse {0};
+    cmsToneCurve *greenTRCReverse {0};
+    cmsToneCurve *blueTRCReverse {0};
+    cmsToneCurve *grayTRCReverse {0};
+
     cmsUInt32Number defaultIntent;
     bool isPerceptualCLUT;
     bool isRelativeCLUT;
@@ -205,7 +202,7 @@ bool LcmsColorProfileContainer::init()
         }
         //retrieve TRC.
         if (cmsIsTag(d->profile, cmsSigRedTRCTag) && cmsIsTag(d->profile, cmsSigBlueTRCTag) && cmsIsTag(d->profile, cmsSigGreenTRCTag)) {
-        
+
             d->redTRC = ((cmsToneCurve *)cmsReadTag (d->profile, cmsSigRedTRCTag));
             d->greenTRC = ((cmsToneCurve *)cmsReadTag (d->profile, cmsSigGreenTRCTag));
             d->blueTRC = ((cmsToneCurve *)cmsReadTag (d->profile, cmsSigBlueTRCTag));
@@ -213,7 +210,7 @@ bool LcmsColorProfileContainer::init()
             d->greenTRCReverse = cmsReverseToneCurve(d->greenTRC);
             d->blueTRCReverse = cmsReverseToneCurve(d->blueTRC);
             d->hasTRC = true;
-        
+
         } else if (cmsIsTag(d->profile, cmsSigGrayTRCTag)) {
             d->grayTRC = ((cmsToneCurve *)cmsReadTag (d->profile, cmsSigGrayTRCTag));
             d->grayTRCReverse = cmsReverseToneCurve(d->grayTRC);

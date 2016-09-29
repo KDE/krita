@@ -36,61 +36,7 @@
 #include "kis_recalculate_transform_mask_job.h"
 
 #include "kis_projection_leaf.h"
-
-
-class ModifyTransformMaskCommand : public KUndo2Command {
-public:
-    ModifyTransformMaskCommand(KisTransformMaskSP mask, KisTransformMaskParamsInterfaceSP params)
-        : m_mask(mask),
-          m_params(params),
-          m_oldParams(m_mask->transformParams())
-        {
-        }
-
-    void redo() {
-        m_mask->setTransformParams(m_params);
-
-        updateMask(m_params->isHidden());
-    }
-
-    void undo() {
-        m_mask->setTransformParams(m_oldParams);
-
-        updateMask(m_oldParams->isHidden());
-    }
-
-private:
-    void updateMask(bool isHidden) {
-        /**
-         * Depending on whether the mask is hidden we should either
-         * update it entirely via the setDirty() call, or we can use a
-         * lightweight approach by directly regenerating the
-         * precalculated static image using
-         * KisRecalculateTransformMaskJob.
-         */
-
-        if (!isHidden) {
-            KisRecalculateTransformMaskJob updateJob(m_mask);
-            updateJob.run();
-        } else {
-            m_mask->recaclulateStaticImage();
-
-            QRect updateRect = m_mask->extent();
-
-            KisNodeSP parent = m_mask->parent();
-            if (parent && parent->original()) {
-                updateRect |= parent->original()->defaultBounds()->bounds();
-            }
-
-            m_mask->setDirty(updateRect);
-        }
-    }
-
-private:
-    KisTransformMaskSP m_mask;
-    KisTransformMaskParamsInterfaceSP m_params;
-    KisTransformMaskParamsInterfaceSP m_oldParams;
-};
+#include "kis_modify_transform_mask_command.h"
 
 
 TransformStrokeStrategy::TransformStrokeStrategy(KisNodeSP rootNode,
@@ -240,7 +186,7 @@ void TransformStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
                        dynamic_cast<KisTransformMask*>(td->node.data())) {
 
                 runAndSaveCommand(KUndo2CommandSP(
-                                      new ModifyTransformMaskCommand(transformMask,
+                                      new KisModifyTransformMaskCommand(transformMask,
                                                                      KisTransformMaskParamsInterfaceSP(
                                                                          new KisTransformMaskAdapter(td->config)))),
                                   KisStrokeJobData::CONCURRENT,
@@ -274,7 +220,7 @@ void TransformStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
                    dynamic_cast<KisTransformMask*>(csd->node.data())) {
 
             runAndSaveCommand(KUndo2CommandSP(
-                                  new ModifyTransformMaskCommand(transformMask,
+                                  new KisModifyTransformMaskCommand(transformMask,
                                                                  KisTransformMaskParamsInterfaceSP(
                                                                      new KisDumbTransformMaskParams(true)))),
                                   KisStrokeJobData::SEQUENTIAL,

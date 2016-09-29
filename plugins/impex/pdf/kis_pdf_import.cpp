@@ -57,7 +57,8 @@
 K_PLUGIN_FACTORY_WITH_JSON(PDFImportFactory, "krita_pdf_import.json",
                            registerPlugin<KisPDFImport>();)
 
-KisPDFImport::KisPDFImport(QObject *parent, const QVariantList &) : KisImportExportFilter(parent)
+KisPDFImport::KisPDFImport(QObject *parent, const QVariantList &)
+    : KisImportExportFilter(parent)
 {
 }
 
@@ -65,7 +66,7 @@ KisPDFImport::~KisPDFImport()
 {
 }
 
-KisPDFImport::ConversionStatus KisPDFImport::convert(const QByteArray& , const QByteArray&)
+KisPDFImport::ConversionStatus KisPDFImport::convert(const QByteArray& , const QByteArray&, KisPropertiesConfigurationSP configuration)
 {
     QString filename = inputFile();
     dbgFile << "Importing using PDFImport!" << filename;

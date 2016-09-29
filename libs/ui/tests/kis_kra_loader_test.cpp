@@ -149,7 +149,7 @@ void KisKraLoaderTest::testLoadAnimated()
     QCOMPARE(dev->exactBounds(), QRect(506, 378, 198, 198));
     QCOMPARE(dev->x(), -26);
     QCOMPARE(dev->y(), -128);
-    QVERIFY(!memcmp(dev->defaultPixel(), transparent.data(), cs->pixelSize()));
+    QCOMPARE(dev->defaultPixel(), transparent);
 
     image->animationInterface()->switchCurrentTimeAsync(20);
     image->waitForDone();
@@ -157,7 +157,7 @@ void KisKraLoaderTest::testLoadAnimated()
     QCOMPARE(dev->nonDefaultPixelArea(), QRect(615, 416, 129, 129));
     QCOMPARE(dev->x(), 502);
     QCOMPARE(dev->y(), 224);
-    QVERIFY(!memcmp(dev->defaultPixel(), white.data(), cs->pixelSize()));
+    QCOMPARE(dev->defaultPixel(), white);
 
     image->animationInterface()->switchCurrentTimeAsync(30);
     image->waitForDone();
@@ -165,7 +165,7 @@ void KisKraLoaderTest::testLoadAnimated()
     QCOMPARE(dev->nonDefaultPixelArea(), QRect(729, 452, 45, 44));
     QCOMPARE(dev->x(), 645);
     QCOMPARE(dev->y(), -10);
-    QVERIFY(!memcmp(dev->defaultPixel(), red.data(), cs->pixelSize()));
+    QCOMPARE(dev->defaultPixel(), red);
 }
 
 

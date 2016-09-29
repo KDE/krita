@@ -43,7 +43,7 @@
 #include <kis_cubic_curve.h>
 
 KisAutoBrushWidget::KisAutoBrushWidget(QWidget *parent, const char* name)
-    : KisWdgAutobrush(parent, name)
+    : KisWdgAutoBrush(parent, name)
     , m_autoBrush(0)
     , m_updateCompressor(new KisSignalCompressor(100, KisSignalCompressor::FIRST_ACTIVE))
     , m_fadeAspectLocker(new KisAspectRatioLocker())

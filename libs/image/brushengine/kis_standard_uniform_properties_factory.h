@@ -37,7 +37,7 @@ namespace KisStandardUniformPropertiesFactory
      * Overload of createProperty(const QString &id, ...)
      */
     KisUniformPaintOpPropertySP createProperty(const KoID &id,
-                                               KisPaintOpSettingsSP settings,
+                                               KisPaintOpSettingsRestrictedSP settings,
                                                KisPaintopSettingsUpdateProxy *updateProxy);
 
     /**
@@ -45,7 +45,7 @@ namespace KisStandardUniformPropertiesFactory
      * it supports only size, opacity and flow.
      */
     KisUniformPaintOpPropertySP createProperty(const QString &id,
-                                               KisPaintOpSettingsSP settings,
+                                               KisPaintOpSettingsRestrictedSP settings,
                                                KisPaintopSettingsUpdateProxy *updateProxy);
 }
 

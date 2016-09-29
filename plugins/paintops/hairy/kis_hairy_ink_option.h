@@ -53,8 +53,8 @@ public:
 
     int m_curveSamples;
 
-    void writeOptionSetting(KisPropertiesConfiguration* config) const;
-    void readOptionSetting(const KisPropertiesConfiguration* config);
+    void writeOptionSetting(KisPropertiesConfigurationSP config) const;
+    void readOptionSetting(const KisPropertiesConfigurationSP config);
 private:
     KisInkOptionsWidget * m_options;
 };

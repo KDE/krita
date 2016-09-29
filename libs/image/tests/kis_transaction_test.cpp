@@ -131,14 +131,14 @@ void KisTransactionTest::testDeviceMove()
     QCOMPARE(dev->y(), 0);
 
     KisTransaction t1(kundo2_noi18n("move1"), dev, 0);
-    dev->move(10,20);
+    dev->moveTo(10,20);
     t1.commit(&undoAdapter);
 
     QCOMPARE(dev->x(), 10);
     QCOMPARE(dev->y(), 20);
 
     KisTransaction t2(kundo2_noi18n("move2"), dev, 0);
-    dev->move(7,11);
+    dev->moveTo(7,11);
     t2.commit(&undoAdapter);
 
     QCOMPARE(dev->x(),  7);
@@ -185,7 +185,7 @@ void KisTransactionTest::testUndoWithUnswitchedFrames()
     TestUtil::TestingTimedDefaultBounds *bounds = new TestUtil::TestingTimedDefaultBounds();
     dev->setDefaultBounds(bounds);
 
-    KisRasterKeyframeChannel *channel = dev->createKeyframeChannel(KisKeyframeChannel::Content, 0);
+    KisRasterKeyframeChannel *channel = dev->createKeyframeChannel(KisKeyframeChannel::Content);
     QVERIFY(channel);
 
     KisPaintDeviceFramesInterface *i = dev->framesInterface();
@@ -265,7 +265,7 @@ void KisTransactionTest::testUndoWithUnswitchedFrames()
     {
         KisTransaction transaction(kundo2_noi18n("third_move"), dev, 0);
 
-        dev->move(17,17);
+        dev->moveTo(17,17);
 
         transaction.commit(&undoAdapter);
 

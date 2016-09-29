@@ -48,7 +48,7 @@
 #include <kis_lod_transform.h>
 
 
-KisFilterOp::KisFilterOp(const KisFilterOpSettings *settings, KisPainter *painter, KisNodeSP node, KisImageSP image)
+KisFilterOp::KisFilterOp(const KisPaintOpSettingsSP settings, KisPainter *painter, KisNodeSP node, KisImageSP image)
     : KisBrushBasedPaintOp(settings, painter)
     , m_filterConfiguration(0)
 {
@@ -63,7 +63,7 @@ KisFilterOp::KisFilterOp(const KisFilterOpSettings *settings, KisPainter *painte
     m_sizeOption.resetAllSensors();
     m_rotationOption.resetAllSensors();
     m_filter = KisFilterRegistry::instance()->get(settings->getString(FILTER_ID));
-    m_filterConfiguration = settings->filterConfig();
+    m_filterConfiguration = static_cast<const KisFilterOpSettings *>(settings.data())->filterConfig();
     m_smudgeMode = settings->getBool(FILTER_SMUDGE_MODE);
 
     m_rotationOption.applyFanCornersInfo(this);
@@ -103,11 +103,10 @@ KisSpacingInformation KisFilterOp::paintAt(const KisPaintInformation& info)
     static KoColor color(Qt::black, cs);
 
     QRect dstRect;
-    KisFixedPaintDeviceSP dab =
-        m_dabCache->fetchDab(cs, color, info.pos(),
-                             shape,
-                             info, 1.0,
-                             &dstRect);
+    KisFixedPaintDeviceSP dab = m_dabCache->fetchDab(cs, color, info.pos(),
+                                                     shape,
+                                                     info, 1.0,
+                                                     &dstRect);
 
     if (dstRect.isEmpty()) return KisSpacingInformation(1.0);
 
@@ -130,13 +129,11 @@ KisSpacingInformation KisFilterOp::paintAt(const KisPaintInformation& info)
     m_filter->process(m_tmpDevice, dabRect, m_filterConfiguration, 0);
     transaction.end();
 
-
-    painter()->
-    bitBltWithFixedSelection(dstRect.x(), dstRect.y(),
-                             m_tmpDevice, dab,
-                             0, 0,
-                             dabRect.x(), dabRect.y(),
-                             dabRect.width(), dabRect.height());
+    painter()->bitBltWithFixedSelection(dstRect.x(), dstRect.y(),
+                                        m_tmpDevice, dab,
+                                        0, 0,
+                                        dabRect.x(), dabRect.y(),
+                                        dabRect.width(), dabRect.height());
 
     painter()->renderMirrorMaskSafe(dstRect, m_tmpDevice, 0, 0, dab,
                                     !m_dabCache->needSeparateOriginal());

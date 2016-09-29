@@ -24,7 +24,7 @@ uniform vec2 normalisedGradientVector;
 void main(void)
 {
     vec2 p = gl_TexCoord[0].st - gradientVectorStart;
-    
+
     /* Point to line distance is:
      * distance = ((l0.y() - l1.y()) * p.x() + (l1.x() - l0.x()) * p.y() + l0.x() * l1.y() - l1.x() * l0.y())
      *
@@ -42,4 +42,3 @@ void main(void)
 
     gl_FragColor = texture1D(gradientColors, t);
 }
-

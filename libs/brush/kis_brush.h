@@ -120,6 +120,9 @@ public:
 
     virtual ~KisBrush();
 
+    virtual qreal userEffectiveSize() const = 0;
+    virtual void setUserEffectiveSize(qreal value) = 0;
+
     virtual bool load() {
         return false;
     }
@@ -191,7 +194,7 @@ public:
      *         of this metric is calculation of brush-size derivatives like
      *         hotspots and spacing.
      */
-     QSizeF characteristicSize(double scaleX, double scaleY, double rotation) const;
+     virtual QSizeF characteristicSize(KisDabShape const&) const;
 
     /**
      * @return the angle of the mask adding the given angle
@@ -343,8 +346,6 @@ public:
      */
     virtual void setBrushType(enumBrushType type);
 
-    friend class KisBrushTest;
-
     virtual void setHasColor(bool hasColor);
 
     /**
@@ -364,7 +365,6 @@ protected:
     void predefinedBrushToXML(const QString &type, QDomElement& e) const;
 
 private:
-    friend class KisImagePipeBrushTest;
 
     // Initialize our boundary
     void generateBoundary() const;

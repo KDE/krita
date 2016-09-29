@@ -158,25 +158,6 @@ public:
     virtual KisAbstractProjectionPlaneSP projectionPlane() const;
 
     /**
-     * Return the keyframe channels associated with this node
-     * @return list of keyframe channels
-     */
-    QList<KisKeyframeChannel *> keyframeChannels() const;
-
-    /**
-     * Get the keyframe channel with given id.
-     * @param id internal name for channel
-     * @return keyframe channel with the id, or null if not found
-     */
-    KisKeyframeChannel *getKeyframeChannel(const QString &id) const;
-
-    bool useInTimeline() const;
-    void setUseInTimeline(bool value);
-
-    bool isAnimated() const;
-    virtual void enableAnimation();
-
-    /**
      * Synchronizes LoD caches of the node with the current state of it.
      * The current level of detail is fetched from the image pointed by
      * default bounds object
@@ -193,18 +174,6 @@ public:
      * graph may have a different order the main one.
      */
     virtual KisProjectionLeafSP projectionLeaf() const;
-
-protected:
-
-    /**
-     * Add a keyframe channel for this node. The channel will be added
-     * to the common hash table which will be available to the UI.
-     *
-     * WARNING: the \p channel object *NOT* become owned by the node!
-     *          The caller must ensure manually that the lifetime of
-     *          the object coincide with the lifetime of the node.
-     */
-    void addKeyframeChannel(KisKeyframeChannel* channel);
 
 protected:
 
@@ -377,6 +346,9 @@ protected:
     void notifyParentVisibilityChanged(bool value);
     void baseNodeChangedCallback();
     void baseNodeInvalidateAllFramesCallback();
+
+protected:
+    virtual void addKeyframeChannel(KisKeyframeChannel* channel);
 private:
 
     friend class KisNodeFacade;

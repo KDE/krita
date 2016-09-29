@@ -85,7 +85,7 @@ void OutputPainterStrategy::paintBounds(const Header *header)
     m_painter->save();
 
     // Draw a simple cross in a rectangle to show the bounds.
-    m_painter->setPen(QPen(QColor(172, 196, 206)));
+    m_painter->setPen(QPen(QColor(172, 196, 206), 0));
     m_painter->drawRect(rect);
     m_painter->drawLine(rect.topLeft(), rect.bottomRight());
     m_painter->drawLine(rect.bottomLeft(), rect.topRight());
@@ -1016,7 +1016,7 @@ void OutputPainterStrategy::extTextOut( const QRect &bounds, const EmrTextObject
 #if DEBUG_TEXTOUT
     m_painter->save();
     m_painter->setWorldTransform(m_outputTransform);
-    m_painter->setPen(Qt::black);
+    m_painter->setPen(QPen(Qt::black, 0));
     m_painter->drawRect(bounds);
     m_painter->restore();
 #endif

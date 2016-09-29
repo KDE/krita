@@ -189,7 +189,7 @@ void KisQPainterCanvas::setDisplayProfile(KisDisplayColorConverter *colorConvert
                                                 colorConverter->conversionFlags());
 }
 
-void KisQPainterCanvas::setDisplayFilter(KisDisplayFilter* displayFilter)
+void KisQPainterCanvas::setDisplayFilter(QSharedPointer<KisDisplayFilter> displayFilter)
 {
         Q_ASSERT(m_d->prescaledProjection);
         m_d->prescaledProjection->setDisplayFilter(displayFilter);

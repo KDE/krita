@@ -19,7 +19,9 @@
 #ifndef VIDEO_EXPORT_OPTIONS_DIALOG_H
 #define VIDEO_EXPORT_OPTIONS_DIALOG_H
 
-#include <QDialog>
+#include <kis_config_widget.h>
+#include <kis_properties_configuration.h>
+
 #include "video_saver.h"
 
 #include <QScopedPointer>
@@ -28,7 +30,7 @@ namespace Ui {
 class VideoExportOptionsDialog;
 }
 
-class VideoExportOptionsDialog : public QDialog
+class VideoExportOptionsDialog : public KisConfigWidget
 {
     Q_OBJECT
 
@@ -46,8 +48,10 @@ public:
 
     QStringList customUserOptions() const;
 
+    void setConfiguration(const KisPropertiesConfigurationSP  config);
+    KisPropertiesConfigurationSP configuration() const;
+
 private Q_SLOTS:
-    void slotAccepted();
     void slotCustomLineToggled(bool value);
     void slotSaveCustomLine();
     void slotResetCustomLine();

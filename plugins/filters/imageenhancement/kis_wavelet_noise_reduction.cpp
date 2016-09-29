@@ -33,7 +33,7 @@
 #include <kis_processing_information.h>
 
 KisWaveletNoiseReduction::KisWaveletNoiseReduction()
-        : KisFilter(id(), categoryEnhance(), i18n("&Wavelet Noise Reducer..."))
+    : KisFilter(id(), categoryEnhance(), i18n("&Wavelet Noise Reducer..."))
 {
     setSupportsPainting(false);
     setSupportsThreading(false);
@@ -51,16 +51,16 @@ KisConfigWidget * KisWaveletNoiseReduction::createConfigurationWidget(QWidget* p
     return new KisMultiDoubleFilterWidget(id().id(), parent, id().id(), param);
 }
 
-KisFilterConfiguration* KisWaveletNoiseReduction::factoryConfiguration(const KisPaintDeviceSP) const
+KisFilterConfigurationSP KisWaveletNoiseReduction::factoryConfiguration(const KisPaintDeviceSP) const
 {
-    KisFilterConfiguration* config = new KisFilterConfiguration(id().id(), 0);
+    KisFilterConfigurationSP config = new KisFilterConfiguration(id().id(), 0);
     config->setProperty("threshold", BEST_WAVELET_THRESHOLD_VALUE);
     return config;
 }
 
 void KisWaveletNoiseReduction::processImpl(KisPaintDeviceSP device,
                                            const QRect& applyRect,
-                                           const KisFilterConfiguration* config,
+                                           const KisFilterConfigurationSP _config,
                                            KoUpdater* progressUpdater
                                            ) const
 {
@@ -68,9 +68,7 @@ void KisWaveletNoiseReduction::processImpl(KisPaintDeviceSP device,
     // TODO take selections into account
     float threshold;
 
-    if (!config) {
-        config = defaultConfiguration(device);
-    }
+    KisFilterConfigurationSP config = _config ? _config : defaultConfiguration(device);
 
     threshold = config->getDouble("threshold", BEST_WAVELET_THRESHOLD_VALUE);
 
@@ -87,9 +85,9 @@ void KisWaveletNoiseReduction::processImpl(KisPaintDeviceSP device,
     }
     int count = 0;
 
-//     dbgFilters << size <<"" << maxrectsize <<"" << srcTopLeft.x() <<"" << srcTopLeft.y();
+    //     dbgFilters << size <<"" << maxrectsize <<"" << srcTopLeft.x() <<"" << srcTopLeft.y();
 
-//     dbgFilters <<"Transforming...";
+    //     dbgFilters <<"Transforming...";
     KisMathToolbox::KisWavelet* buff = 0;
     KisMathToolbox::KisWavelet* wav = 0;
 
@@ -106,7 +104,7 @@ void KisWaveletNoiseReduction::processImpl(KisPaintDeviceSP device,
         return;
     }
 
-//     dbgFilters <<"Thresholding...";
+    //     dbgFilters <<"Thresholding...";
     float* fin = wav->coeffs + wav->depth * wav->size * wav->size;
 
     for (float* it = wav->coeffs + wav->depth; it < fin; it++) {
@@ -120,7 +118,7 @@ void KisWaveletNoiseReduction::processImpl(KisPaintDeviceSP device,
         if (progressUpdater) progressUpdater->setValue(++count);
     }
 
-//     dbgFilters <<"Untransforming...";
+    //     dbgFilters <<"Untransforming...";
 
     mathToolbox.fastWaveletUntransformation(device, applyRect, wav, buff);
 

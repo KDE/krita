@@ -46,7 +46,7 @@ KisWdgRandomPick::~KisWdgRandomPick()
     delete m_widget;
 }
 
-void KisWdgRandomPick::setConfiguration(const KisPropertiesConfiguration* config)
+void KisWdgRandomPick::setConfiguration(const KisPropertiesConfigurationSP config)
 {
     QVariant value;
     if (config->getProperty("level", value)) {
@@ -61,9 +61,9 @@ void KisWdgRandomPick::setConfiguration(const KisPropertiesConfiguration* config
 }
 
 
-KisPropertiesConfiguration* KisWdgRandomPick::configuration() const
+KisPropertiesConfigurationSP KisWdgRandomPick::configuration() const
 {
-    KisFilterConfiguration* config = new KisFilterConfiguration("randompick", 1);
+    KisFilterConfigurationSP config = new KisFilterConfiguration("randompick", 1);
     config->setProperty("level", this->widget()->intLevel->value());
     config->setProperty("windowsize", this->widget()->intWindowSize->value());
     config->setProperty("opacity", this->widget()->intOpacity->value());

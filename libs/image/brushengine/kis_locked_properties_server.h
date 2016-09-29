@@ -24,7 +24,6 @@
 #include "kis_properties_configuration.h"
 
 class KisLockedPropertiesProxy;
-class KisLockedProperties;
 
 /**
  * The KisLockedPropertiesServer class
@@ -39,17 +38,18 @@ public:
     ~KisLockedPropertiesServer();
     static KisLockedPropertiesServer* instance();
 
-    KisLockedProperties* lockedProperties();
-    void addToLockedProperties(KisPropertiesConfiguration *p);
-    void removeFromLockedProperties(KisPropertiesConfiguration *p);
+    KisLockedPropertiesSP lockedProperties();
+    void addToLockedProperties(KisPropertiesConfigurationSP p);
+    void removeFromLockedProperties(KisPropertiesConfigurationSP p);
     void setPropertiesFromLocked(bool value);
     bool propertiesFromLocked();
-    KisLockedPropertiesProxy* createLockedPropertiesProxy(const KisPropertiesConfiguration*);
+    KisLockedPropertiesProxySP createLockedPropertiesProxy(KisPropertiesConfiguration *settings);
+    KisLockedPropertiesProxySP createLockedPropertiesProxy(KisPropertiesConfigurationSP settings);
     bool hasProperty(const QString &p);
 
 private:
 
-    KisLockedProperties *m_lockedProperties;
+    KisLockedPropertiesSP m_lockedProperties;
     bool m_propertiesFromLocked;
 };
 

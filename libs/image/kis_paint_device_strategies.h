@@ -52,8 +52,7 @@ public:
         y += m_d->y();
         extent = QRect(x, y, w, h);
 
-        quint8 defaultOpacity =
-            m_device->colorSpace()->opacityU8(m_device->defaultPixel());
+        quint8 defaultOpacity = m_device->defaultPixel().opacityU8();
 
         if (defaultOpacity != OPACITY_TRANSPARENT_U8)
             extent |= m_d->defaultBounds->bounds();

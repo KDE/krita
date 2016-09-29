@@ -37,7 +37,7 @@ class KisSprayPaintOp : public KisPaintOp
 
 public:
 
-    KisSprayPaintOp(const KisSprayPaintOpSettings *settings, KisPainter * painter, KisNodeSP node, KisImageSP image);
+    KisSprayPaintOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisNodeSP node, KisImageSP image);
     ~KisSprayPaintOp();
 
     KisSpacingInformation paintAt(const KisPaintInformation& info);
@@ -49,7 +49,7 @@ private:
     KisColorProperties m_colorProperties;
     KisBrushOption m_brushOption;
 
-    const KisSprayPaintOpSettings *m_settings;
+    KisSprayPaintOpSettingsSP m_settings;
 
     KisPaintDeviceSP m_dab;
     SprayBrush m_sprayBrush;

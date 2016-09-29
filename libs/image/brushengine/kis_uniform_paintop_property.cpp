@@ -49,10 +49,19 @@ struct KisUniformPaintOpProperty::Private
 KisUniformPaintOpProperty::KisUniformPaintOpProperty(Type type,
                                                      const QString &id,
                                                      const QString &name,
-                                                     KisPaintOpSettingsSP settings,
+                                                     KisPaintOpSettingsRestrictedSP settings,
                                                      QObject *parent)
     : QObject(parent),
       m_d(new Private(type, id, name, settings))
+{
+}
+
+KisUniformPaintOpProperty::KisUniformPaintOpProperty(const QString &id,
+                                                     const QString &name,
+                                                     KisPaintOpSettingsRestrictedSP settings,
+                                                     QObject *parent)
+    : QObject(parent),
+      m_d(new Private(Bool, id, name, settings))
 {
 }
 
@@ -111,7 +120,7 @@ void KisUniformPaintOpProperty::requestReadValue()
 KisPaintOpSettingsSP KisUniformPaintOpProperty::settings() const
 {
     // correct conversion weak-to-strong shared pointer
-    return m_d->settings ? m_d->settings : 0;
+    return m_d->settings ? m_d->settings : KisPaintOpSettingsSP();
 }
 
 bool KisUniformPaintOpProperty::isVisible() const
@@ -127,3 +136,4 @@ void KisUniformPaintOpProperty::writeValueImpl()
 {
 }
 
+template class KisCallbackBasedPaintopProperty<KisUniformPaintOpProperty>;

@@ -23,7 +23,7 @@
 
 #include "kis_types.h"
 
-class KisFilterConfiguration;
+#include <kis_serializable_configuration.h>
 
 /**
  * Use this model to get the list of configuration for a Filter.
@@ -42,7 +42,7 @@ public:
     /**
      * @return the filter configuration
      */
-    KisFilterConfiguration* configuration(const QModelIndex &index) const;
+    KisFilterConfigurationSP configuration(const QModelIndex &index) const;
 private:
     struct Private;
     Private* const d;

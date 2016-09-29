@@ -36,6 +36,8 @@
 #include "kis_image.h"
 #include "kis_layer.h"
 #include "kis_paint_device.h"
+#include "kis_selection.h"
+#include "kis_painter.h"
 
 #include <kis_debug.h>
 #include "kis_resource_server_provider.h"
@@ -139,6 +141,7 @@ void KisCustomPattern::createPattern()
     if (!m_view) return;
 
     KisPaintDeviceSP dev;
+    KisPaintDeviceSP cache;
     QString name;
     KisImageWSP image = m_view->image();
     if (!image) return;
@@ -157,6 +160,21 @@ void KisCustomPattern::createPattern()
         name = image->objectName();
     }
     if (!dev) return;
+
+    if(m_view->selection()) {
+        KisSelectionSP selection = m_view->selection();
+        QRect selectionRect = selection->selectedExactRect();
+        cache = dev->createCompositionSourceDevice();
+        KisPainter gc(cache);
+        gc.setSelection(selection);
+        gc.bitBlt(selectionRect.topLeft(), dev, selectionRect);
+        rc = selectionRect;
+    } else {
+        cache = dev;
+    }
+    if (!cache) return;
+
+
     // warn when creating large patterns
 
     QSize size = rc.size();
@@ -167,7 +185,7 @@ void KisCustomPattern::createPattern()
     }
 
     QString dir = KoResourceServerProvider::instance()->patternServer()->saveLocation();
-    m_pattern = new KoPattern(dev->createThumbnail(size.width(), size.height(), rc, /*oversample*/ 1,
+    m_pattern = new KoPattern(cache->createThumbnail(size.width(), size.height(), rc, /*oversample*/ 1,
                                                     KoColorConversionTransformation::internalRenderingIntent(),
                                                     KoColorConversionTransformation::internalConversionFlags()), name, dir);
 }

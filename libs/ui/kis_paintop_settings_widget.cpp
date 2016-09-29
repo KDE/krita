@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) Boudewijn Rempt <boud@valdyas.org>, (C) 2008
  * Copyright (C) Silvio Heinrich <plassy@web.de>   , (C) 2011
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
@@ -106,10 +106,10 @@ void KisPaintOpSettingsWidget::addPaintOpOption(KisPaintOpOption *option, const 
 
 }
 
-void KisPaintOpSettingsWidget::setConfiguration(const KisPropertiesConfiguration * config)
+void KisPaintOpSettingsWidget::setConfiguration(const KisPropertiesConfigurationSP  config)
 {
     Q_ASSERT(!config->getString("paintop").isEmpty());
-    KisLockedPropertiesProxy* propertiesProxy = KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(config);
+    KisLockedPropertiesProxySP propertiesProxy = KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(config);
     int indexcount = 0;
     Q_FOREACH (KisPaintOpOption* option, m_d->paintOpOptions) {
         option->startReadOptionSetting(propertiesProxy);
@@ -132,18 +132,16 @@ void KisPaintOpSettingsWidget::setConfiguration(const KisPropertiesConfiguration
     }
 
     KisPaintOpConfigWidget::setConfiguration(propertiesProxy);
-    delete propertiesProxy;
 }
 
-void KisPaintOpSettingsWidget::writeConfiguration(KisPropertiesConfiguration *config) const
+void KisPaintOpSettingsWidget::writeConfiguration(KisPropertiesConfigurationSP config) const
 {
-    KisLockedPropertiesProxy* propertiesProxy = KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(config);
+    KisLockedPropertiesProxySP propertiesProxy = KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(config);
     Q_FOREACH (const KisPaintOpOption* option, m_d->paintOpOptions) {
         option->startWriteOptionSetting(propertiesProxy);
     }
 
     KisPaintOpConfigWidget::writeConfiguration(propertiesProxy);
-    delete propertiesProxy;
 }
 
 KisPaintopLodLimitations KisPaintOpSettingsWidget::lodLimitations() const
@@ -195,7 +193,7 @@ void KisPaintOpSettingsWidget::lockProperties(const QModelIndex& index)
     KisOptionInfo info;
     if (m_d->model->entryAt(info, index)) {
         m_d->optionsList->setCurrentIndex(index);
-        KisPropertiesConfiguration* p = new KisPropertiesConfiguration();
+        KisPropertiesConfigurationSP p = new KisPropertiesConfiguration();
         info.option->startWriteOptionSetting(p);
 
         if (!info.option->isLocked()){

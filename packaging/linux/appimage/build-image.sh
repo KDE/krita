@@ -251,5 +251,5 @@ chmod a+rwx /out/$APPIMAGE # So that we can edit the AppImage outside of the Doc
 cd /krita.appdir
 mv AppRun krita
 cd /
-mv krita.appdir $APP"-"$VERSION"-x86_64
-tar -czf $APP"-"$VERSION"-x86_64.tgz $APP"-"$VERSION"-x86_64
+mv krita.appdir "$APP"-"$VERSION"-x86_64
+tar -czf "$APP"-"$VERSION"-x86_64.tgz "$APP"-"$VERSION"-x86_64

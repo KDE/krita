@@ -69,6 +69,9 @@
 #include <processing/fill_processing_visitor.h>
 #include <kis_selection_tool_helper.h>
 
+#include "kis_canvas_resource_provider.h"
+#include "kis_figure_painting_tool_helper.h"
+
 namespace ActionHelper {
 
     void copyFromDevice(KisViewManager *view, KisPaintDeviceSP device, bool makeSharpClip = false)
@@ -535,4 +538,111 @@ void KisSelectionToShapeActionFactory::run(KisViewManager *view)
     shape->setStroke(border);
 
     view->document()->shapeController()->addShape(shape);
+}
+
+void KisStrokeSelectionActionFactory::run(KisViewManager *view, StrokeSelectionOptions params)
+{
+    KisImageWSP image = view->image();
+    if (!image )     {
+
+        return;
+    }
+
+    KisSelectionSP selection = view->selection();
+    if (!selection)    {
+
+        return;
+    }
+
+    int size = params.lineSize;
+
+    KisPixelSelectionSP pixelSelection = selection->projection();    if (!pixelSelection->outlineCacheValid()) {
+        pixelSelection->recalculateOutlineCache();
+    }
+
+    QPainterPath outline = pixelSelection->outlineCache();
+    QColor color = params.color.toQColor();
+
+
+    KisNodeSP currentNode = view->resourceProvider()->resourceManager()->resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeWSP>();
+    if (!currentNode->inherits("KisShapeLayer") && currentNode->childCount() == 0) {
+        KoCanvasResourceManager * rManager = view->resourceProvider()->resourceManager();
+        KisPainter::StrokeStyle strokeStyle =  KisPainter::StrokeStyleBrush;
+        KisPainter::FillStyle fillStyle =  params.fillStyle();
+
+        KisFigurePaintingToolHelper helper(kundo2_i18n("Draw Polyline"),
+                                       image,
+                                       currentNode,
+                                       rManager ,
+                                       strokeStyle,
+                                       fillStyle);
+        helper.setFGColorOverride(params.color);
+        helper.setSelectionOverride(0);
+        QPen pen(Qt::red, size);
+        pen.setJoinStyle(Qt::RoundJoin);
+
+        if (fillStyle != KisPainter::FillStyleNone) {
+            helper.paintPainterPathQPenFill(outline, pen, params.fillColor);
+        }
+        else {
+            helper.paintPainterPathQPen(outline, pen, params.fillColor);
+        }
+    }
+    else  {
+
+        QTransform transform = view->canvasBase()->coordinatesConverter()->imageToDocumentTransform();
+
+        KoShape *shape = KoPathShape::createShapeFromPainterPath(transform.map(outline));
+        shape->setShapeId(KoPathShapeId);
+
+        KoShapeStroke* border = new KoShapeStroke(size, color);
+        shape->setStroke(border);
+
+        view->document()->shapeController()->addShape(shape);
+    }
+    image->setModified();
+
+}
+
+void KisStrokeBrushSelectionActionFactory::run(KisViewManager *view, StrokeSelectionOptions params)
+{
+    KisImageWSP image = view->image();
+    if (!image )     {
+
+        return;
+    }
+
+    KisSelectionSP selection = view->selection();
+    if (!selection)    {
+
+        return;
+    }
+
+    KisPixelSelectionSP pixelSelection = selection->projection();
+    if (!pixelSelection->outlineCacheValid()) {
+        pixelSelection->recalculateOutlineCache();
+    }
+
+    KisNodeSP currentNode = view->resourceProvider()->resourceManager()->resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeWSP>();
+    if (!currentNode->inherits("KisShapeLayer") && currentNode->childCount() == 0)
+    {
+        KoCanvasResourceManager * rManager = view->resourceProvider()->resourceManager();
+        QPainterPath outline = pixelSelection->outlineCache();
+        KisPainter::StrokeStyle strokeStyle =  KisPainter::StrokeStyleBrush;
+        KisPainter::FillStyle fillStyle =  KisPainter::FillStyleNone;
+        KoColor color = params.color;
+
+        KisFigurePaintingToolHelper helper(kundo2_i18n("Draw Polyline"),
+                                       image,
+                                       currentNode,
+                                       rManager ,
+                                       strokeStyle,
+                                       fillStyle);
+        helper.setFGColorOverride(color);
+        helper.setSelectionOverride(0);
+        helper.paintPainterPath(outline);
+        image->setModified();
+    }
+
+
 }

@@ -58,10 +58,13 @@
 #include "kis_recording_adapter.h"
 #include "strokes/freehand_stroke.h"
 
+using namespace std::placeholders; // For _1 placeholder
+
 
 KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, const KUndo2MagicString &transactionText)
     : KisToolPaint(canvas, cursor),
-      m_paintopBasedPickingInAction(false)
+      m_paintopBasedPickingInAction(false),
+      m_brushResizeCompressor(200, std::bind(&KisToolFreehand::slotDoResizeBrush, this, _1))
 {
     m_assistant = false;
     m_magnetism = 1.0;
@@ -363,6 +366,7 @@ void KisToolFreehand::continueAlternateAction(KoPointerEvent *event, AlternateAc
 
         settings->setPaintOpSize(newSize);
         requestUpdateOutline(m_initialGestureDocPoint, 0);
+        //m_brushResizeCompressor.start(newSize);
 
         m_lastDocumentPoint = event->point;
         m_lastPaintOpSize = newSize;
@@ -400,6 +404,15 @@ void KisToolFreehand::setAssistant(bool assistant)
 void KisToolFreehand::setOnlyOneAssistantSnap(bool assistant)
 {
     m_only_one_assistant = assistant;
+}
+
+void KisToolFreehand::slotDoResizeBrush(qreal newSize)
+{
+    KisPaintOpSettingsSP settings = currentPaintOpPreset()->settings();
+
+    settings->setPaintOpSize(newSize);
+    requestUpdateOutline(m_initialGestureDocPoint, 0);
+
 }
 
 QPointF KisToolFreehand::adjustPosition(const QPointF& point, const QPointF& strokeBegin)

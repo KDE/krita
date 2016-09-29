@@ -51,7 +51,7 @@ KisWdgFastColorTransfer::~KisWdgFastColorTransfer()
     delete m_widget;
 }
 
-void KisWdgFastColorTransfer::setConfiguration(const KisPropertiesConfiguration* config)
+void KisWdgFastColorTransfer::setConfiguration(const KisPropertiesConfigurationSP config)
 {
     QVariant value;
     if (config->getProperty("filename", value)) {
@@ -60,9 +60,9 @@ void KisWdgFastColorTransfer::setConfiguration(const KisPropertiesConfiguration*
 
 }
 
-KisPropertiesConfiguration* KisWdgFastColorTransfer::configuration() const
+KisPropertiesConfigurationSP KisWdgFastColorTransfer::configuration() const
 {
-    KisFilterConfiguration* config = new KisFilterConfiguration("colortransfer", 1);
+    KisFilterConfigurationSP config = new KisFilterConfiguration("colortransfer", 1);
     QString fileName = this->widget()->fileNameURLRequester->fileName();
 
     if (fileName.isEmpty()) return config;

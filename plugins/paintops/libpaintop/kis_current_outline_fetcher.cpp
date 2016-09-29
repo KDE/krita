@@ -22,7 +22,8 @@
 #include "kis_pressure_rotation_option.h"
 #include "kis_pressure_mirror_option.h"
 #include <brushengine/kis_paintop_settings.h>
-
+#include <kis_properties_configuration.h>
+#include "kis_paintop_settings.h"
 #include <QElapsedTimer>
 
 #define NOISY_UPDATE_SPEED 50  // Time in ms for outline updates to noisy brushes
@@ -71,7 +72,7 @@ void KisCurrentOutlineFetcher::setDirty()
 }
 
 QPainterPath KisCurrentOutlineFetcher::fetchOutline(const KisPaintInformation &info,
-                                                    const KisPaintOpSettings *settings,
+                                                    const KisPaintOpSettingsSP settings,
                                                     const QPainterPath &originalOutline,
                                                     qreal additionalScale,
                                                     qreal additionalRotation,
@@ -149,7 +150,7 @@ QPainterPath KisCurrentOutlineFetcher::fetchOutline(const KisPaintInformation &i
     rot.rotateRadians(-rotation);
 
     QPointF hotSpot = originalOutline.boundingRect().center();
-    if (tilt==true) { 
+    if (tilt==true) {
         hotSpot.setX(tiltcenterx);hotSpot.setY(tiltcentery);
     }
     QTransform T1 = QTransform::fromTranslate(-hotSpot.x(), -hotSpot.y());

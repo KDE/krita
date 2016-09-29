@@ -269,7 +269,7 @@ void KisSelectionTest::testSelectionExactBounds()
     KisSelectionSP selection = new KisSelection(new KisSelectionDefaultBounds(device, image));
 
     quint8 defaultPixel = MAX_SELECTED;
-    selection->pixelSelection()->setDefaultPixel(&defaultPixel);
+    selection->pixelSelection()->setDefaultPixel(KoColor(&defaultPixel, selection->pixelSelection()->colorSpace()));
 
     // the selection uses device's extent only for performance reasons
     // \see bug 320213

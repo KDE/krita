@@ -37,6 +37,7 @@
 
 #include <QBrush>
 #include <QPainter>
+#include <QPointer>
 
 class KoPatternBackgroundPrivate : public KoShapeBackgroundPrivate
 {
@@ -123,7 +124,7 @@ public:
     QSizeF targetImageSizePercent;
     QPointF refPointOffsetPercent;
     QPointF tileRepeatOffsetPercent;
-    KoImageCollection * imageCollection;
+    QPointer<KoImageCollection> imageCollection;
     KoImageData * imageData;
 };
 
@@ -131,7 +132,7 @@ public:
 // ----------------------------------------------------------------
 
 
-KoPatternBackground::KoPatternBackground(KoImageCollection * imageCollection)
+KoPatternBackground::KoPatternBackground(KoImageCollection *imageCollection)
         : KoShapeBackground(*(new KoPatternBackgroundPrivate()))
 {
     Q_D(KoPatternBackground);
@@ -141,7 +142,6 @@ KoPatternBackground::KoPatternBackground(KoImageCollection * imageCollection)
 
 KoPatternBackground::~KoPatternBackground()
 {
-    Q_D(KoPatternBackground);
 }
 
 void KoPatternBackground::setTransform(const QTransform &matrix)
@@ -160,7 +160,9 @@ void KoPatternBackground::setPattern(const QImage &pattern)
 {
     Q_D(KoPatternBackground);
     delete d->imageData;
-    d->imageData = d->imageCollection->createImageData(pattern);
+    if (d->imageCollection) {
+        d->imageData = d->imageCollection->createImageData(pattern);
+    }
 }
 
 void KoPatternBackground::setPattern(KoImageData *imageData)
@@ -358,7 +360,9 @@ void KoPatternBackground::fillStyle(KoGenStyle &style, KoShapeSavingContext &con
     style.addProperty("draw:fill", "bitmap");
     style.addProperty("draw:fill-image-name", patternStyleName);
 
-    context.addDataCenter(d->imageCollection);
+    if (d->imageCollection) {
+        context.addDataCenter(d->imageCollection);
+    }
 }
 
 bool KoPatternBackground::loadStyle(KoOdfLoadingContext &context, const QSizeF &)
@@ -383,9 +387,13 @@ bool KoPatternBackground::loadStyle(KoOdfLoadingContext &context, const QSizeF &
         return false;
 
     delete d->imageData;
-    d->imageData = d->imageCollection->createImageData(href, context.store());
-    if (! d->imageData)
+    d->imageData = 0;
+    if (d->imageCollection) {
+        d->imageData = d->imageCollection->createImageData(href, context.store());
+    }
+    if (! d->imageData) {
         return false;
+    }
 
     // read the pattern repeat style
     QString style = styleStack.property(KoXmlNS::style, "repeat");

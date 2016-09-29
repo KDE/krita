@@ -137,6 +137,37 @@ qint32 KoColorSet::nColors()
     return m_colors.count();
 }
 
+qint32 KoColorSet::getIndexClosestColor(KoColor color, bool useGivenColorSpace)
+{
+    qint32 closestIndex = 0;
+    quint8 highestPercentage = 0;
+    quint8 testPercentage = 0;
+    KoColor compare = color;
+    for (qint32 i=0; i<nColors(); i++) {
+        KoColor entry = m_colors.at(i).color;
+        if (useGivenColorSpace==true && compare.colorSpace()!=entry.colorSpace()) {
+            entry.convertTo(compare.colorSpace());
+
+        } else if(compare.colorSpace()!=entry.colorSpace()) {
+            compare.convertTo(entry.colorSpace());
+        }
+        testPercentage = (255 - compare.colorSpace()->difference(compare.data(), entry.data()));
+        if (testPercentage>highestPercentage)
+        {
+            closestIndex = i;
+            highestPercentage = testPercentage;
+        }
+    }
+    return closestIndex;
+}
+
+QString KoColorSet::closestColorName(KoColor color, bool useGivenColorSpace)
+{
+    int i = getIndexClosestColor(color, useGivenColorSpace);
+    QString name = m_colors.at(i).name;
+    return name;
+}
+
 bool KoColorSet::saveToDevice(QIODevice *dev) const
 {
     QTextStream stream(dev);
@@ -245,6 +276,11 @@ void KoColorSet::remove(const KoColorSetEntry & c)
 void KoColorSet::removeAt(quint32 index)
 {
     m_colors.remove(index);
+}
+
+void KoColorSet::clear()
+{
+    m_colors.clear();
 }
 
 KoColorSetEntry KoColorSet::getColor(quint32 index)

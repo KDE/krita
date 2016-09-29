@@ -34,7 +34,7 @@ void KisRecordedFilterActionTest::testCreation()
 {
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisFilterSP f = KisFilterRegistry::instance()->value("invert");
-    KisFilterConfiguration * kfc = f->defaultConfiguration(0);
+    KisFilterConfigurationSP  kfc = f->defaultConfiguration(0);
     KisImageSP image = new KisImage(0, 10, 10, cs, "merge test");
     KisPaintLayerSP layer = new KisPaintLayer(image, "test", OPACITY_OPAQUE_U8);
 

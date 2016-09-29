@@ -135,16 +135,6 @@ uint qHash(const KoQName& qname)
     return qHash(qname.nsURI)^qHash(qname.name);
 }
 
-// this simplistic hash is rather fast-and-furious. it works because
-// likely there is very few namespaced attributes per element
-static inline uint qHash(const KoXmlStringPair &p)
-{
-    return qHash(p.second[0].unicode()) ^ 0x1477;
-
-    // in case of doubt, use this:
-    // return qHash(p.first)^qHash(p.second);
-}
-
 static inline bool operator==(const KoXmlStringPair &a, const KoXmlStringPair &b)
 {
     return a.second == b.second && a.first == b.first;

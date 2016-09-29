@@ -42,18 +42,18 @@ public:
 public:
     void processImpl(KisPaintDeviceSP device,
                      const QRect& applyRect,
-                     const KisFilterConfiguration* config,
+                     const KisFilterConfigurationSP config,
                      KoUpdater* progressUpdater
                      ) const;
     static inline KoID id() {
         return KoID("randompick", i18n("Random Pick"));
     }
 
-    virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
+    virtual KisFilterConfigurationSP factoryConfiguration(const KisPaintDeviceSP) const;
 public:
     virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
 
-    virtual QRect neededRect(const QRect& rect, const KisFilterConfiguration* config, int lod = 0) const;
+    virtual QRect neededRect(const QRect& rect, const KisFilterConfigurationSP config, int lod = 0) const;
 };
 
 #endif

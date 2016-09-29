@@ -92,7 +92,9 @@ public:
 
     qreal height() const;
 
-    qreal diameter() const;
+    qreal diameter() const;    
+    void setDiameter(qreal value);
+
     qreal ratio() const;
     qreal horizontalFade() const;
     qreal verticalFade() const;

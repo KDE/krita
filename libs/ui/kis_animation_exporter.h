@@ -28,6 +28,9 @@
 
 class KisDocument;
 
+/**
+ * @brief The KisAnimationExporterUI class
+ */
 class KRITAUI_EXPORT KisAnimationExporterUI : public QObject
 {
     Q_OBJECT
@@ -35,7 +38,7 @@ class KRITAUI_EXPORT KisAnimationExporterUI : public QObject
 public:
 
     KisAnimationExporterUI(QWidget *parent);
-    ~KisAnimationExporterUI();
+    virtual ~KisAnimationExporterUI();
     KisImportExportFilter::ConversionStatus exportSequence(KisDocument *document);
 
 private:
@@ -43,15 +46,19 @@ private:
     QScopedPointer<Private> m_d;
 };
 
+/**
+ * @brief The KisAnimationExporter class
+ */
 class KRITAUI_EXPORT KisAnimationExporter : public QObject
 {
     Q_OBJECT
 public:
-    typedef std::function<KisImportExportFilter::ConversionStatus (int , KisPaintDeviceSP)> SaveFrameCallback;
+    typedef std::function<KisImportExportFilter::ConversionStatus (int , KisPaintDeviceSP, KisPropertiesConfigurationSP)> SaveFrameCallback;
 public:
     KisAnimationExporter(KisDocument *document, int fromTime, int toTime);
     ~KisAnimationExporter();
 
+    void setExportConfiguration(KisPropertiesConfigurationSP exportConfiguration);
     KisImportExportFilter::ConversionStatus exportAnimation();
 
     void setSaveFrameCallback(SaveFrameCallback func);
@@ -71,19 +78,22 @@ private:
     QScopedPointer<Private> m_d;
 };
 
+/**
+ * @brief The KisAnimationExportSaver class
+ */
 class KRITAUI_EXPORT KisAnimationExportSaver : public QObject
 {
     Q_OBJECT
 public:
-    KisAnimationExportSaver(KisDocument *document, const QString &baseFilename, int fromTime, int toTime);
+    KisAnimationExportSaver(KisDocument *document, const QString &baseFilename, int fromTime, int toTime, int sequenceNumberingOffset = 0);
     ~KisAnimationExportSaver();
 
-    KisImportExportFilter::ConversionStatus exportAnimation();
+    KisImportExportFilter::ConversionStatus exportAnimation(KisPropertiesConfigurationSP cfg = 0);
 
     QString savedFilesMask() const;
 
 private:
-    KisImportExportFilter::ConversionStatus saveFrameCallback(int time, KisPaintDeviceSP frame);
+    KisImportExportFilter::ConversionStatus saveFrameCallback(int time, KisPaintDeviceSP frame, KisPropertiesConfigurationSP exportConfiguration = 0);
 
 private:
     struct Private;

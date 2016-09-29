@@ -29,11 +29,14 @@ public:
     KisDynaPaintOpSettings();
     ~KisDynaPaintOpSettings();
 
+    void setPaintOpSize(qreal value) override;
+    qreal paintOpSize() const override;
+
     bool paintIncremental();
     virtual bool isAirbrushing() const;
     virtual int rate() const;
 
-    QList<KisUniformPaintOpPropertySP> uniformProperties();
+    QList<KisUniformPaintOpPropertySP> uniformProperties(KisPaintOpSettingsSP settings);
 
 private:
     struct Private;

@@ -249,6 +249,13 @@ qreal KisMaskGenerator::diameter() const
     return d->diameter;
 }
 
+void KisMaskGenerator::setDiameter(qreal value)
+{
+    d->diameter = value;
+    init();
+    setScale(d->scaleX, d->scaleY);
+}
+
 qreal KisMaskGenerator::ratio() const
 {
     return d->ratio;

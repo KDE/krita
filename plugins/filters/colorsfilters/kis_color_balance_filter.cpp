@@ -36,7 +36,7 @@ KisConfigWidget * KisColorBalanceFilter::createConfigurationWidget(QWidget* pare
     return new KisColorBalanceConfigWidget(parent);
 }
 
-KoColorTransformation * KisColorBalanceFilter::createTransformation(const KoColorSpace* cs, const KisFilterConfiguration* config) const
+KoColorTransformation * KisColorBalanceFilter::createTransformation(const KoColorSpace* cs, const KisFilterConfigurationSP config) const
 {
 	QHash<QString, QVariant> params;
     if (config) {
@@ -57,9 +57,9 @@ KoColorTransformation * KisColorBalanceFilter::createTransformation(const KoColo
     return cs->createColorTransformation("ColorBalance" , params);
 }
 
-KisFilterConfiguration* KisColorBalanceFilter::factoryConfiguration(const KisPaintDeviceSP) const
+KisFilterConfigurationSP KisColorBalanceFilter::factoryConfiguration(const KisPaintDeviceSP) const
 {
-    KisColorTransformationConfiguration* config = new KisColorTransformationConfiguration(id().id(), 0);
+    KisColorTransformationConfigurationSP config = new KisColorTransformationConfiguration(id().id(), 0);
     config->setProperty("cyan_red_midtones", 0);
     config->setProperty("yellow_green_midtones", 0);
     config->setProperty("magenta_blue_midtones", 0);
@@ -147,9 +147,9 @@ KisColorBalanceConfigWidget::~KisColorBalanceConfigWidget()
     delete m_page;
 }
 
-KisPropertiesConfiguration * KisColorBalanceConfigWidget::configuration() const
+KisPropertiesConfigurationSP  KisColorBalanceConfigWidget::configuration() const
 {
-    KisColorTransformationConfiguration* c = new KisColorTransformationConfiguration(KisColorBalanceFilter::id().id(), 0);
+    KisColorTransformationConfigurationSP c = new KisColorTransformationConfiguration(KisColorBalanceFilter::id().id(), 0);
 
     c->setProperty("cyan_red_shadows", m_page->cyanRedShadowsSlider->value());
     c->setProperty("magenta_green_shadows", m_page->magentaGreenShadowsSlider->value());
@@ -167,7 +167,7 @@ KisPropertiesConfiguration * KisColorBalanceConfigWidget::configuration() const
     return c;
 }
 
-void KisColorBalanceConfigWidget::setConfiguration(const KisPropertiesConfiguration * config)
+void KisColorBalanceConfigWidget::setConfiguration(const KisPropertiesConfigurationSP  config)
 {
     m_page->cyanRedMidtonesSlider->setValue( config->getDouble("cyan_red_midtones", 0));
     m_page->magentaGreenMidtonesSlider->setValue( config->getDouble("magenta_green_midtones", 0));

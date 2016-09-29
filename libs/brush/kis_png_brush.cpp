@@ -27,7 +27,7 @@
 #include <kis_dom_utils.h>
 
 KisPngBrush::KisPngBrush(const QString& filename)
-    : KisBrush(filename)
+    : KisScalingSizeBrush(filename)
 {
     setBrushType(INVALID);
     setSpacing(0.25);

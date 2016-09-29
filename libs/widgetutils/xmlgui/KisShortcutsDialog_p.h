@@ -121,7 +121,7 @@ class KisShortcutsEditorDelegate : public KExtendableItemDelegate
 public:
     KisShortcutsEditorDelegate(QTreeWidget *parent, bool allowLetterShortcuts);
     //reimplemented to have some extra height
-    QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const Q_DECL_OVERRIDE;
+    QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const override;
 
     /**
      * Set a list of action collections to check against for conflicting
@@ -130,7 +130,7 @@ public:
      * @see KKeySequenceWidget::setCheckActionCollections
      */
     void setCheckActionCollections(const QList<KActionCollection *> checkActionCollections);
-    bool eventFilter(QObject *, QEvent *) Q_DECL_OVERRIDE;
+    bool eventFilter(QObject *, QEvent *) override;
 private:
     mutable QPersistentModelIndex m_editingIndex;
     bool m_allowLetterShortcuts;
@@ -202,7 +202,7 @@ public:
     void setComponentName(const QString componentName);
 
     void setAction(QObject *action);
-    void paintEvent(QPaintEvent *pe) Q_DECL_OVERRIDE;
+    void paintEvent(QPaintEvent *pe) override;
 
 
 Q_SIGNALS:

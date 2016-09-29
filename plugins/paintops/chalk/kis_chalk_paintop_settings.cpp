@@ -42,7 +42,7 @@ int KisChalkPaintOpSettings::rate() const
     return getInt(AIRBRUSH_RATE);
 }
 
-QPainterPath KisChalkPaintOpSettings::brushOutline(const KisPaintInformation &info, OutlineMode mode) const
+QPainterPath KisChalkPaintOpSettings::brushOutline(const KisPaintInformation &info, OutlineMode mode)
 {
     QPainterPath path;
     if (mode == CursorIsOutline || mode == CursorIsCircleOutline || mode == CursorTiltOutline) {
@@ -56,4 +56,19 @@ QPainterPath KisChalkPaintOpSettings::brushOutline(const KisPaintInformation &in
         path.translate(info.pos());
     }
     return path;
+}
+
+void KisChalkPaintOpSettings::setPaintOpSize(qreal value)
+{
+    ChalkProperties properties;
+    properties.readOptionSetting(this);
+    properties.radius = qRound(0.5 * value);
+    properties.writeOptionSetting(this);
+}
+
+qreal KisChalkPaintOpSettings::paintOpSize() const
+{
+    ChalkProperties properties;
+    properties.readOptionSetting(this);
+    return properties.radius * 2;
 }

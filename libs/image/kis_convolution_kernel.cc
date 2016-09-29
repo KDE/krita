@@ -27,7 +27,7 @@
 struct Q_DECL_HIDDEN KisConvolutionKernel::Private {
     qreal offset;
     qreal factor;
-    Matrix<qreal, Dynamic, Dynamic> data;
+    Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> data;
 };
 
 KisConvolutionKernel::KisConvolutionKernel(quint32 _width, quint32 _height, qreal _offset, qreal _factor) : d(new Private)
@@ -73,12 +73,12 @@ void KisConvolutionKernel::setFactor(qreal factor)
     d->factor = factor;
 }
 
-Matrix<qreal, Dynamic, Dynamic>& KisConvolutionKernel::data()
+Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic>& KisConvolutionKernel::data()
 {
     return d->data;
 }
 
-const Matrix<qreal, Dynamic, Dynamic>* KisConvolutionKernel::data() const
+const Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic>* KisConvolutionKernel::data() const
 {
     return &(d->data);
 }
@@ -87,7 +87,7 @@ KisConvolutionKernelSP KisConvolutionKernel::fromQImage(const QImage& image)
 {
     KisConvolutionKernelSP kernel = new KisConvolutionKernel(image.width(), image.height(), 0, 0);
 
-    Matrix<qreal, Dynamic, Dynamic>& data = kernel->data();
+    Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic>& data = kernel->data();
     const quint8* itImage = image.constBits();
     qreal factor = 0;
 
@@ -118,7 +118,7 @@ KisConvolutionKernelSP KisConvolutionKernel::fromMaskGenerator(KisMaskGenerator*
     qreal xc = 0.5 * width - 0.5;
     qreal yc = 0.5 * height - 0.5;
 
-    Matrix<qreal, Dynamic, Dynamic>& data = kernel->data();
+    Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic>& data = kernel->data();
     qreal factor = 0;
 
 //     dbgImage << ppVar(xc) << ppVar(yc);
@@ -138,9 +138,9 @@ KisConvolutionKernelSP KisConvolutionKernel::fromMaskGenerator(KisMaskGenerator*
     return kernel;
 }
 
-KisConvolutionKernelSP KisConvolutionKernel::fromMatrix(Matrix<qreal, Dynamic, Dynamic> matrix, qreal offset, qreal factor)
+KisConvolutionKernelSP KisConvolutionKernel::fromMatrix(Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> matrix, qreal offset, qreal factor)
 {
-    KisConvolutionKernelSP kernel = new KisConvolutionKernel(matrix.cols(), matrix.rows(), offset, factor);        
+    KisConvolutionKernelSP kernel = new KisConvolutionKernel(matrix.cols(), matrix.rows(), offset, factor);
     kernel->data() = matrix;
 
     return kernel;

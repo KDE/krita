@@ -71,16 +71,16 @@ public:
     /**
      * Calculate the recommended size for this hbox.
      */
-    QSize sizeHint() const Q_DECL_OVERRIDE;
+    QSize sizeHint() const override;
 
     /**
      * Calculate the recommended minimum size for this hbox.
      */
-    QSize minimumSizeHint() const Q_DECL_OVERRIDE;
+    QSize minimumSizeHint() const override;
 
 protected:
 
-    void childEvent(QChildEvent *ev) Q_DECL_OVERRIDE;
+    void childEvent(QChildEvent *ev) override;
 
 private:
     class Private;

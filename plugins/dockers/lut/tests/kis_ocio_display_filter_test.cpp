@@ -40,7 +40,7 @@ void KisOcioDisplayFilterTest::test()
     KisExposureGammaCorrectionInterface *egInterface =
         new KisDumbExposureGammaCorrectionInterface();
 
-    OcioDisplayFilter filter(egInterface);
+    QSharedPointer<OcioDisplayFilter> filter(new OcioDisplayFilter(egInterface));
 
     QString configFile = TestUtil::fetchDataFileLazy("./psyfiTestingConfig-master/config.ocio");
     dbgKrita << ppVar(configFile);
@@ -50,27 +50,27 @@ void KisOcioDisplayFilterTest::test()
     OCIO::ConstConfigRcPtr ocioConfig =
         OCIO::Config::CreateFromFile(configFile.toUtf8());
 
-    filter.config = ocioConfig;
-    filter.inputColorSpaceName = ocioConfig->getColorSpaceNameByIndex(0);
-    filter.displayDevice = ocioConfig->getDisplay(1);
-    filter.view = ocioConfig->getView(filter.displayDevice, 0);
-    filter.gamma = 1.0;
-    filter.exposure = 0.0;
-    filter.swizzle = RGBA;
+    filter->config = ocioConfig;
+    filter->inputColorSpaceName = ocioConfig->getColorSpaceNameByIndex(0);
+    filter->displayDevice = ocioConfig->getDisplay(1);
+    filter->view = ocioConfig->getView(filter->displayDevice, 0);
+    filter->gamma = 1.0;
+    filter->exposure = 0.0;
+    filter->swizzle = RGBA;
 
-    filter.blackPoint = 0.0;
-    filter.whitePoint = 1.0;
+    filter->blackPoint = 0.0;
+    filter->whitePoint = 1.0;
 
-    filter.forceInternalColorManagement = false;
-    filter.setLockCurrentColorVisualRepresentation(false);
+    filter->forceInternalColorManagement = false;
+    filter->setLockCurrentColorVisualRepresentation(false);
 
-    filter.updateProcessor();
+    filter->updateProcessor();
 
-    dbgKrita << ppVar(filter.inputColorSpaceName);
-    dbgKrita << ppVar(filter.displayDevice);
-    dbgKrita << ppVar(filter.view);
-    dbgKrita << ppVar(filter.gamma);
-    dbgKrita << ppVar(filter.exposure);
+    dbgKrita << ppVar(filter->inputColorSpaceName);
+    dbgKrita << ppVar(filter->displayDevice);
+    dbgKrita << ppVar(filter->view);
+    dbgKrita << ppVar(filter->gamma);
+    dbgKrita << ppVar(filter->exposure);
 
     const KoColorSpace *paintingCS =
                 KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), Float32BitsColorDepthID.id(), 0);
@@ -93,7 +93,7 @@ dbgKrita << ppVar(paintingCS) << ppVar(image->root()->firstChild()->colorSpace()
     v.setValue(KisNodeWSP(image->root()->firstChild()));
     resourceManager->setResource(KisCanvasResourceProvider::CurrentKritaNode, v);
 
-    converter.setDisplayFilter(&filter);
+    converter.setDisplayFilter(filter);
     dbgKrita << ppVar(converter.paintingColorSpace());
 
     {

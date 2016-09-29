@@ -41,7 +41,6 @@
 
 #include "exr_converter.h"
 
-#include "ui_exr_export_widget.h"
 
 class KisExternalLayer;
 
@@ -55,7 +54,27 @@ exrExport::~exrExport()
 {
 }
 
-KisImportExportFilter::ConversionStatus exrExport::convert(const QByteArray& from, const QByteArray& to)
+KisPropertiesConfigurationSP exrExport::defaultConfiguration(const QByteArray &/*from*/, const QByteArray &/*to*/) const
+{
+    KisPropertiesConfigurationSP cfg = new KisPropertiesConfiguration();
+    cfg->setProperty("flatten", false);
+    return cfg;
+}
+
+KisPropertiesConfigurationSP exrExport::lastSavedConfiguration(const QByteArray &from, const QByteArray &to) const
+{
+    KisPropertiesConfigurationSP cfg = defaultConfiguration(from, to);
+    QString filterConfig = KisConfig().exportConfiguration("EXR");
+    cfg->fromXML(filterConfig, false);
+    return cfg;
+}
+
+KisConfigWidget *exrExport::createConfigurationWidget(QWidget *parent, const QByteArray &/*from*/, const QByteArray &/*to*/) const
+{
+    return new KisWdgOptionsExr(parent);
+}
+
+KisImportExportFilter::ConversionStatus exrExport::convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration)
 {
     dbgFile << "EXR export! From:" << from << ", To:" << to << "";
 
@@ -68,30 +87,31 @@ KisImportExportFilter::ConversionStatus exrExport::convert(const QByteArray& fro
     KisImageWSP image = input->image();
     Q_CHECK_PTR(image);
 
-    KoDialog dialog;
-    dialog.setWindowTitle(i18n("OpenEXR Export Options"));
-    dialog.setButtons(KoDialog::Ok | KoDialog::Cancel);
-    Ui::ExrExportWidget widget;
-    QWidget *page = new QWidget(&dialog);
-    widget.setupUi(page);
-    dialog.setMainWidget(page);
-    dialog.resize(dialog.minimumSize());
+    KoDialog kdb;
+    kdb.setWindowTitle(i18n("OpenEXR Export Options"));
+    kdb.setButtons(KoDialog::Ok | KoDialog::Cancel);
+    KisConfigWidget *wdg = createConfigurationWidget(&kdb, from, to);
+    kdb.setMainWidget(wdg);
+    kdb.resize(kdb.minimumSize());
 
-    QString filterConfig = KisConfig().exportConfiguration("EXR");
-    KisPropertiesConfiguration cfg;
-    cfg.fromXML(filterConfig);
-
-    widget.flatten->setChecked(cfg.getBool("flatten", false));
+    // If a configuration object was passed to the convert method, we use that, otherwise we load from the settings
+    KisPropertiesConfigurationSP cfg(new KisPropertiesConfiguration());
+    if (configuration) {
+        cfg->fromXML(configuration->toXML());
+    }
+    else {
+        cfg = lastSavedConfiguration(from, to);
+    }
+    wdg->setConfiguration(cfg);
 
     if (!getBatchMode() ) {
         QApplication::restoreOverrideCursor();
-        if (dialog.exec() == QDialog::Rejected) {
+        if (kdb.exec() == QDialog::Rejected) {
             return KisImportExportFilter::UserCancelled;
         }
+        cfg = wdg->configuration();
+        KisConfig().setExportConfiguration("EXR", *cfg.data());
     }
-
-    cfg.setProperty("flatten", widget.flatten->isChecked());
-    KisConfig().setExportConfiguration("EXR", cfg);
 
     QString filename = outputFile();
     if (filename.isEmpty()) return KisImportExportFilter::FileNotFound;
@@ -100,7 +120,7 @@ KisImportExportFilter::ConversionStatus exrExport::convert(const QByteArray& fro
 
     KisImageBuilder_Result res;
 
-    if (widget.flatten->isChecked()) {
+    if (cfg->getBool("flatten")) {
         // the image must be locked at the higher levels
         KIS_SAFE_ASSERT_RECOVER_NOOP(input->image()->locked());
 
@@ -112,7 +132,6 @@ KisImportExportFilter::ConversionStatus exrExport::convert(const QByteArray& fro
     else {
         // the image must be locked at the higher levels
         KIS_SAFE_ASSERT_RECOVER_NOOP(input->image()->locked());
-
         res = kpc.buildFile(filename, image->rootLayer());
     }
 
@@ -148,6 +167,20 @@ KisImportExportFilter::ConversionStatus exrExport::convert(const QByteArray& fro
     return KisImportExportFilter::InternalError;
 
 }
+
+
+void KisWdgOptionsExr::setConfiguration(const KisPropertiesConfigurationSP cfg)
+{
+    chkFlatten->setChecked(cfg->getBool("flatten", false));
+}
+
+KisPropertiesConfigurationSP KisWdgOptionsExr::configuration() const
+{
+    KisPropertiesConfigurationSP cfg = new KisPropertiesConfiguration();
+    cfg->setProperty("flatten", chkFlatten->isChecked());
+    return cfg;
+}
+
 
 #include <exr_export.moc>
 

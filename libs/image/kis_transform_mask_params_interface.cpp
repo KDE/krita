@@ -25,6 +25,11 @@ KisTransformMaskParamsInterface::~KisTransformMaskParamsInterface()
 {
 }
 
+
+KisAnimatedTransformParamsInterface::~KisAnimatedTransformParamsInterface()
+{
+}
+
 ///////////////// KisDumbTransformMaskParams ////////////////////////////
 
 #include <QDomElement>
@@ -145,6 +150,24 @@ QRect KisDumbTransformMaskParams::nonAffineNeedRect(const QRect &rc, const QRect
 {
     Q_UNUSED(srcBounds);
     return rc;
+}
+
+bool KisDumbTransformMaskParams::isAnimated() const
+{
+    return false;
+}
+
+KisKeyframeChannel *KisDumbTransformMaskParams::getKeyframeChannel(const QString&, KisDefaultBoundsBaseSP)
+{
+    return 0;
+}
+
+void KisDumbTransformMaskParams::clearChangedFlag()
+{}
+
+bool KisDumbTransformMaskParams::hasChanged() const
+{
+    return false;
 }
 
 QTransform KisDumbTransformMaskParams::testingGetTransform() const

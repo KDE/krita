@@ -91,7 +91,7 @@ void KoPagePreviewWidget::paintEvent(QPaintEvent *event)
 void KoPagePreviewWidget::drawPage(QPainter &painter, qreal zoom, const QRect &dimensions, bool left)
 {
     painter.fillRect(dimensions, QBrush(palette().base()));
-    painter.setPen(QPen(palette().color(QPalette::Dark)));
+    painter.setPen(QPen(palette().color(QPalette::Dark), 0));
     painter.drawRect(dimensions);
 
     // draw text areas
@@ -121,7 +121,7 @@ void KoPagePreviewWidget::drawPage(QPainter &painter, qreal zoom, const QRect &d
         textArea.setRight(textArea.right() - qRound(zoom * rightMargin));
     }
     painter.setBrush( QBrush( palette().color(QPalette::ButtonText), Qt::HorPattern ) );
-    painter.setPen( palette().color(QPalette::Dark) );
+    painter.setPen(QPen(palette().color(QPalette::Dark), 0));
 
     // uniform columns?
     if (d->columns.columnData.isEmpty()) {

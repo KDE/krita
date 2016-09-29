@@ -53,10 +53,10 @@ public:
 
     LutDockerDock();
     ~LutDockerDock();
-QString observerName() { return "LutDockerDock"; }
+    QString observerName() { return "LutDockerDock"; }
     /// reimplemented from KoCanvasObserverBase
     virtual void setCanvas(KoCanvasBase *canvas);
-    virtual void unsetCanvas() { m_canvas = 0; setEnabled(false); m_displayFilter = 0;}
+    virtual void unsetCanvas();
 
     bool canChangeExposureAndGamma() const;
     qreal currentExposure() const;
@@ -104,7 +104,7 @@ private:
 
     KisCanvas2 *m_canvas;
     OCIO::ConstConfigRcPtr m_ocioConfig;
-    OcioDisplayFilter *m_displayFilter;
+    QSharedPointer<KisDisplayFilter> m_displayFilter;
 
     bool m_draggingSlider;
 
@@ -112,7 +112,6 @@ private:
     QScopedPointer<KisSignalCompressorWithParam<qreal> > m_gammaCompressor;
 
     BlackWhitePointChooser *m_bwPointChooser;
-    bool m_ownDisplayFilter;
 };
 
 

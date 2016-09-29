@@ -153,12 +153,12 @@ public:
     double yres = 1.0;
 
     const KoColorSpace * colorSpace;
-    KisProofingConfiguration *proofingConfig = 0;
+    KisProofingConfigurationSP proofingConfig;
 
     KisSelectionSP deselectedGlobalSelection;
     KisGroupLayerSP rootLayer; // The layers are contained in here
     QList<KisLayer*> dirtyLayers; // for thumbnails
-    QList<KisLayerComposition*> compositions;
+    QList<KisLayerCompositionSP> compositions;
     KisNodeSP isolatedRootNode;
     bool wrapAroundModePermitted = false;
 
@@ -1103,16 +1103,16 @@ void KisImage::setRootLayer(KisGroupLayerSP rootLayer)
         m_d->rootLayer->disconnect();
 
         KisPaintDeviceSP original = m_d->rootLayer->original();
-        defaultProjectionColor.setColor(original->defaultPixel(), original->colorSpace());
+        defaultProjectionColor = original->defaultPixel();
     }
 
     m_d->rootLayer = rootLayer;
     m_d->rootLayer->disconnect();
     m_d->rootLayer->setGraphListener(this);
+    m_d->rootLayer->setImage(this);
 
     KisPaintDeviceSP newOriginal = m_d->rootLayer->original();
-    defaultProjectionColor.convertTo(newOriginal->colorSpace());
-    newOriginal->setDefaultPixel(defaultProjectionColor.data());
+    newOriginal->setDefaultPixel(defaultProjectionColor);
 
     setRoot(m_d->rootLayer.data());
 }
@@ -1481,20 +1481,19 @@ void KisImage::requestTimeSwitch(int time)
     m_d->animationInterface->requestTimeSwitchNonGUI(time);
 }
 
-QList<KisLayerComposition*> KisImage::compositions()
+QList<KisLayerCompositionSP> KisImage::compositions()
 {
     return m_d->compositions;
 }
 
-void KisImage::addComposition(KisLayerComposition* composition)
+void KisImage::addComposition(KisLayerCompositionSP composition)
 {
     m_d->compositions.append(composition);
 }
 
-void KisImage::removeComposition(KisLayerComposition* composition)
+void KisImage::removeComposition(KisLayerCompositionSP composition)
 {
     m_d->compositions.removeAll(composition);
-    delete composition;
 }
 
 bool checkMasksNeedConversion(KisNodeSP root, const QRect &bounds)
@@ -1604,13 +1603,13 @@ KisImageAnimationInterface* KisImage::animationInterface() const
     return m_d->animationInterface;
 }
 
-void KisImage::setProofingConfiguration(KisProofingConfiguration *proofingConfig)
+void KisImage::setProofingConfiguration(KisProofingConfigurationSP proofingConfig)
 {
     m_d->proofingConfig = proofingConfig;
     emit sigProofingConfigChanged();
 }
 
-KisProofingConfiguration *KisImage::proofingConfiguration() const
+KisProofingConfigurationSP KisImage::proofingConfiguration() const
 {
     if (!m_d->proofingConfig) {
         KisImageConfig cfg;

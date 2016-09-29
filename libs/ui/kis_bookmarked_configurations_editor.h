@@ -22,8 +22,9 @@
 #include <QDialog>
 #include <kritaui_export.h>
 
+#include <kis_serializable_configuration.h>
+
 class KisBookmarkedConfigurationsModel;
-class KisSerializableConfiguration;
 class QItemSelection;
 
 /**
@@ -39,7 +40,7 @@ public:
      * @param currentConfig is used if the user choose to create a new configuration
      *                      entry or to replace an existing entry
      */
-    KisBookmarkedConfigurationsEditor(QWidget* parent, KisBookmarkedConfigurationsModel* manager, const KisSerializableConfiguration* currentConfig);
+    KisBookmarkedConfigurationsEditor(QWidget* parent, KisBookmarkedConfigurationsModel* manager, const KisSerializableConfigurationSP currentConfig);
     ~KisBookmarkedConfigurationsEditor();
 private Q_SLOTS:
     void currentConfigChanged(const QItemSelection& selected, const QItemSelection&);

@@ -87,7 +87,7 @@ public:
     void setDirty(const QRect & rect);
 
     QIcon icon() const;
-    void setImage(KisImageWSP image);
+    void setImage(KisImageWSP image) override;
 
     KisBaseNode::PropertyList sectionModelProperties() const;
     void setSectionModelProperties(const KisBaseNode::PropertyList &properties);
@@ -146,8 +146,6 @@ public:
      */
     void setOnionSkinEnabled(bool state);
 
-    void enableAnimation();
-
     KisPaintDeviceList getLodCapableDevices() const;
 
 public Q_SLOTS:
@@ -166,6 +164,8 @@ protected:
     void copyOriginalToProjection(const KisPaintDeviceSP original,
                                   KisPaintDeviceSP projection,
                                   const QRect& rect) const;
+
+    KisKeyframeChannel *requestKeyframeChannel(const QString &id);
 
 private:
     void init(KisPaintDeviceSP paintDevice, const QBitArray &paintChannelFlags = QBitArray());

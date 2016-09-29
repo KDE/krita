@@ -54,15 +54,15 @@ public:
     qreal horizBorder() const;
     bool randomBorder() const;
 
-    void writeOptionSetting(KisPropertiesConfiguration* setting) const;
-    void readOptionSetting(const KisPropertiesConfiguration* setting);
+    void writeOptionSetting(KisPropertiesConfigurationSP setting) const;
+    void readOptionSetting(const KisPropertiesConfigurationSP setting);
 
 private:
     KisGridOpOptionsWidget * m_options;
 
 };
 
-struct GridOption
+struct GridOption : public KisBaseOption
 {
     int grid_width;
     int grid_height;
@@ -74,9 +74,9 @@ struct GridOption
     bool grid_random_border;
 
 
-    void readOptionSetting(const KisPropertiesConfiguration* setting) {
-        grid_width = setting->getInt(GRID_WIDTH);
-        grid_height = setting->getInt(GRID_HEIGHT);
+    void readOptionSettingImpl(const KisPropertiesConfiguration *setting) {
+        grid_width = qMax(1, setting->getInt(GRID_WIDTH));
+        grid_height = qMax(1, setting->getInt(GRID_HEIGHT));
         grid_division_level = setting->getInt(GRID_DIVISION_LEVEL);
         grid_pressure_division = setting->getBool(GRID_PRESSURE_DIVISION);
         grid_scale = setting->getDouble(GRID_SCALE);
@@ -85,9 +85,9 @@ struct GridOption
         grid_random_border = setting->getBool(GRID_RANDOM_BORDER);
     }
 
-    void writeOptionSetting(KisPropertiesConfiguration* setting) const {
-        setting->setProperty(GRID_WIDTH, grid_width);
-        setting->setProperty(GRID_HEIGHT, grid_height);
+    void writeOptionSettingImpl(KisPropertiesConfiguration *setting) const {
+        setting->setProperty(GRID_WIDTH, qMax(1, grid_width));
+        setting->setProperty(GRID_HEIGHT, qMax(1, grid_height));
         setting->setProperty(GRID_DIVISION_LEVEL, grid_division_level);
         setting->setProperty(GRID_PRESSURE_DIVISION, grid_pressure_division);
         setting->setProperty(GRID_SCALE, grid_scale);

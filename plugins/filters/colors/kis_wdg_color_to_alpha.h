@@ -39,8 +39,8 @@ public:
 
     void setView(KisViewManager *view);
 
-    virtual void setConfiguration(const KisPropertiesConfiguration*);
-    virtual KisPropertiesConfiguration* configuration() const;
+    virtual void setConfiguration(const KisPropertiesConfigurationSP);
+    virtual KisPropertiesConfigurationSP configuration() const;
 
 protected:
 
@@ -49,8 +49,8 @@ protected:
 
 private Q_SLOTS:
     void slotFgColorChanged(const KoColor &color);
-    void slotColorSelectorChanged(const QColor &color);
-    void slotCustomColorSelected(const QColor &color);
+    void slotColorSelectorChanged(const KoColor &color);
+    void slotCustomColorSelected(const KoColor &color);
 
 private:
     Ui_WdgColorToAlphaBase* m_widget;

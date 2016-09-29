@@ -57,24 +57,11 @@ KisSprayPaintOpSettingsWidget::~ KisSprayPaintOpSettingsWidget()
 {
 }
 
-KisPropertiesConfiguration*  KisSprayPaintOpSettingsWidget::configuration() const
+KisPropertiesConfigurationSP  KisSprayPaintOpSettingsWidget::configuration() const
 {
     KisSprayPaintOpSettings* config = new KisSprayPaintOpSettings();
     config->setOptionsWidget(const_cast<KisSprayPaintOpSettingsWidget*>(this));
     config->setProperty("paintop", "spraybrush"); // XXX: make this a const id string
     writeConfiguration(config);
     return config;
-}
-
-void KisSprayPaintOpSettingsWidget::changePaintOpSize(qreal x, qreal y)
-{
-    Q_UNUSED(y);
-    m_sprayArea->setDiameter(m_sprayArea->diameter() + qRound(x));
-}
-
-QSizeF KisSprayPaintOpSettingsWidget::paintOpSize() const
-{
-    qreal width = m_sprayArea->diameter();
-    qreal height = width * m_sprayArea->brushAspect();
-    return QSizeF(width, height);
 }

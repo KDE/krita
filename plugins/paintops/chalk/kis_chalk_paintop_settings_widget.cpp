@@ -42,25 +42,11 @@ KisChalkPaintOpSettingsWidget::~ KisChalkPaintOpSettingsWidget()
 {
 }
 
-KisPropertiesConfiguration*  KisChalkPaintOpSettingsWidget::configuration() const
+KisPropertiesConfigurationSP  KisChalkPaintOpSettingsWidget::configuration() const
 {
     KisChalkPaintOpSettings* config = new KisChalkPaintOpSettings();
     config->setOptionsWidget(const_cast<KisChalkPaintOpSettingsWidget*>(this));
     config->setProperty("paintop", "chalkbrush"); // XXX: make this a const id string
     writeConfiguration(config);
     return config;
-}
-
-void KisChalkPaintOpSettingsWidget::changePaintOpSize(qreal x, qreal y)
-{
-    // if the movement is more left<->right then up<->down
-    if (qAbs(x) > qAbs(y)) {
-        m_chalkOption->setRadius(m_chalkOption->radius() + qRound(x));
-    }
-}
-
-QSizeF KisChalkPaintOpSettingsWidget::paintOpSize() const
-{
-    qreal width = m_chalkOption->radius() * 2.0 + 1.0;
-    return QSizeF(width, width);
 }

@@ -119,7 +119,7 @@ void KisPaintLayerTest::testKeyframing()
 
     layer->enableAnimation();
 
-    contentChannel = layer->getKeyframeChannel("content");
+    contentChannel = layer->getKeyframeChannel("content", true);
     QVERIFY(contentChannel);
     QCOMPARE(contentChannel->keyframeCount(), 1);
 

@@ -38,11 +38,11 @@ public:
         return true;
     }
 
-    virtual void writeOptionSetting(KisPropertiesConfiguration* setting) const {
+    virtual void writeOptionSetting(KisPropertiesConfigurationSP setting) const {
         setting->setProperty("MergedPaint", isChecked());
     }
 
-    virtual void readOptionSetting(const KisPropertiesConfiguration* setting) {
+    virtual void readOptionSetting(const KisPropertiesConfigurationSP setting) {
         bool enabled = setting->getBool("MergedPaint");
         setChecked(enabled);
     }

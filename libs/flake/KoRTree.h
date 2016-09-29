@@ -774,7 +774,7 @@ void KoRTree<T>::Node::paintRect(QPainter & p, int level) const
         c = levelColor[level];
     }
 
-    QPen pen(c);
+    QPen pen(c, 0);
     p.setPen(pen);
 
     QRectF bbdraw(this->m_boundingBox);

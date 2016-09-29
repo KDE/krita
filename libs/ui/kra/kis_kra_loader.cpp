@@ -50,6 +50,7 @@
 #include <kis_external_layer_iface.h>
 #include <kis_filter_mask.h>
 #include <kis_transform_mask.h>
+#include "lazybrush/kis_colorize_mask.h"
 #include <kis_group_layer.h>
 #include <kis_image.h>
 #include <kis_layer.h>
@@ -65,6 +66,7 @@
 #include <kis_psd_layer_style_resource.h>
 #include "kis_resource_server_provider.h"
 #include "kis_keyframe_channel.h"
+#include <kis_filter_configuration.h>
 
 #include "KisDocument.h"
 #include "kis_config.h"
@@ -78,6 +80,7 @@
 #include "kis_guides_config.h"
 #include "kis_image_config.h"
 #include "KisProofingConfiguration.h"
+#include "kis_layer_properties_icons.h"
 #include "kis_node_view_color_scheme.h"
 
 /*
@@ -186,10 +189,10 @@ KisKraLoader::~KisKraLoader()
 }
 
 
-KisImageWSP KisKraLoader::loadXML(const KoXmlElement& element)
+KisImageSP KisKraLoader::loadXML(const KoXmlElement& element)
 {
     QString attr;
-    KisImageWSP image = 0;
+    KisImageSP image = 0;
     QString name;
     qint32 width;
     qint32 height;
@@ -203,18 +206,18 @@ KisImageWSP KisKraLoader::loadXML(const KoXmlElement& element)
 
         if ((m_d->imageName = element.attribute(NAME)).isNull()) {
             m_d->errorMessages << i18n("Image does not have a name.");
-            return KisImageWSP(0);
+            return KisImageSP(0);
         }
 
         if ((attr = element.attribute(WIDTH)).isNull()) {
             m_d->errorMessages << i18n("Image does not specify a width.");
-            return KisImageWSP(0);
+            return KisImageSP(0);
         }
         width = KisDomUtils::toInt(attr);
 
         if ((attr = element.attribute(HEIGHT)).isNull()) {
             m_d->errorMessages << i18n("Image does not specify a height.");
-            return KisImageWSP(0);
+            return KisImageSP(0);
         }
 
         height = KisDomUtils::toInt(attr);
@@ -264,11 +267,11 @@ KisImageWSP KisKraLoader::loadXML(const KoXmlElement& element)
             cs = KoColorSpaceRegistry::instance()->colorSpace(colorspaceModel, colorspaceDepth, "");
             if (cs == 0) {
                 m_d->errorMessages << i18n("Image specifies an unsupported color model: %1.", colorspacename);
-                return KisImageWSP(0);
+                return KisImageSP(0);
             }
         }
         KisImageConfig cfgImage;
-        KisProofingConfiguration *proofingConfig = cfgImage.defaultProofingconfiguration();
+        KisProofingConfigurationSP proofingConfig = cfgImage.defaultProofingconfiguration();
         if (!(attr = element.attribute(PROOFINGPROFILENAME)).isNull()) {
             proofingConfig->proofingProfile = attr;
         }
@@ -301,7 +304,7 @@ KisImageWSP KisKraLoader::loadXML(const KoXmlElement& element)
             KoXmlElement e = child.toElement();
             if(e.tagName() == CANVASPROJECTIONCOLOR) {
                 if (e.hasAttribute(COLORBYTEDATA)) {
-                    QByteArray colorData = QByteArray::fromBase64(e.attribute("ColorData").toLatin1());
+                    QByteArray colorData = QByteArray::fromBase64(e.attribute(COLORBYTEDATA).toLatin1());
                     KoColor color((const quint8*)colorData.data(), image->colorSpace());
                     image->setDefaultProjectionColor(color);
                 }
@@ -344,7 +347,7 @@ KisImageWSP KisKraLoader::loadXML(const KoXmlElement& element)
     return image;
 }
 
-void KisKraLoader::loadBinaryData(KoStore * store, KisImageWSP image, const QString & uri, bool external)
+void KisKraLoader::loadBinaryData(KoStore * store, KisImageSP image, const QString & uri, bool external)
 {
     // icc profile: if present, this overrides the profile product name loaded in loadXML.
     QString location = external ? QString() : uri;
@@ -392,7 +395,7 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageWSP image, const QStr
 
 
     // Load the layers data: if there is a profile associated with a layer it will be set now.
-    KisKraLoadVisitor visitor(image, store, m_d->layerFilenames, m_d->imageName, m_d->syntaxVersion);
+    KisKraLoadVisitor visitor(image, store, m_d->layerFilenames, m_d->keyframeFilenames, m_d->imageName, m_d->syntaxVersion);
 
     if (external) {
         visitor.setExternalUri(uri);
@@ -462,61 +465,6 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageWSP image, const QStr
     loadAssistants(store, uri, external);
 }
 
-void KisKraLoader::loadKeyframes(KoStore *store, const QString uri, bool external)
-{
-    QMap<KisNode*, QString>::iterator it;
-
-    for (it = m_d->keyframeFilenames.begin(); it != m_d->keyframeFilenames.end(); it++) {
-        KisNodeSP node = it.key();
-        QString filename = it.value();
-
-        QString location =
-                (external ? QString() : uri)
-                + m_d->imageName + LAYER_PATH + filename;
-
-        loadNodeKeyframes(store, location, node);
-    }
-}
-
-void KisKraLoader::loadNodeKeyframes(KoStore *store, const QString &location, KisNodeSP node)
-{
-    if (!store->open(location)) {
-        m_d->errorMessages << i18n("Could not load keyframes from %1.", location);
-        return;
-    }
-
-    QString errorMsg;
-    int errorLine;
-    int errorColumn;
-    KoXmlDocument doc = KoXmlDocument(true);
-
-    bool ok = doc.setContent(store->device(), &errorMsg, &errorLine, &errorColumn);
-    store->close();
-
-    if (!ok) {
-        m_d->errorMessages << i18n("parsing error in the keyframe file %1 at line %2, column %3\nError message: %4", location, errorLine, errorColumn, i18n(errorMsg.toUtf8()));
-        return;
-    }
-
-    QDomDocument dom;
-    KoXml::asQDomElement(dom, doc.documentElement());
-    QDomElement root = dom.firstChildElement();
-
-    for (QDomElement child = root.firstChildElement(); !child.isNull(); child = child.nextSiblingElement()) {
-        if (child.nodeName().toUpper() == "CHANNEL") {
-            QString id = child.attribute("name");
-            KisKeyframeChannel *channel = node->getKeyframeChannel(id);
-
-            if (!channel) {
-                m_d->errorMessages << i18n("unknown keyframe channel type: %1 in %2", id, location);
-                continue;
-            }
-
-            channel->loadXML(child);
-        }
-    }
-}
-
 vKisNodeSP KisKraLoader::selectedNodes() const
 {
     return m_d->selectedNodes;
@@ -556,7 +504,7 @@ void KisKraLoader::loadAssistants(KoStore *store, const QString &uri, bool exter
     }
 }
 
-void KisKraLoader::loadAnimationMetadata(const KoXmlElement &element, KisImageWSP image)
+void KisKraLoader::loadAnimationMetadata(const KoXmlElement &element, KisImageSP image)
 {
     QDomDocument qDom;
     KoXml::asQDomElement(qDom, element);
@@ -581,7 +529,7 @@ void KisKraLoader::loadAnimationMetadata(const KoXmlElement &element, KisImageWS
     }
 }
 
-KisNodeSP KisKraLoader::loadNodes(const KoXmlElement& element, KisImageWSP image, KisNodeSP parent)
+KisNodeSP KisKraLoader::loadNodes(const KoXmlElement& element, KisImageSP image, KisNodeSP parent)
 {
 
     KoXmlNode node = element.firstChild();
@@ -609,7 +557,7 @@ KisNodeSP KisKraLoader::loadNodes(const KoXmlElement& element, KisImageWSP image
     return parent;
 }
 
-KisNodeSP KisKraLoader::loadNode(const KoXmlElement& element, KisImageWSP image, KisNodeSP parent)
+KisNodeSP KisKraLoader::loadNode(const KoXmlElement& element, KisImageSP image, KisNodeSP parent)
 {
     // Nota bene: If you add new properties to layers, you should
     // ALWAYS define a default value in case the property is not
@@ -700,6 +648,8 @@ KisNodeSP KisKraLoader::loadNode(const KoXmlElement& element, KisImageWSP image,
         node = loadTransparencyMask(element, parent);
     else if (nodeType == SELECTION_MASK)
         node = loadSelectionMask(image, element, parent);
+    else if (nodeType == COLORIZE_MASK)
+        node = loadColorizeMask(image, element, parent, colorSpace);
     else if (nodeType == FILE_LAYER) {
         node = loadFileLayer(element, image, name, opacity);
     }
@@ -726,13 +676,15 @@ KisNodeSP KisKraLoader::loadNode(const KoXmlElement& element, KisImageWSP image,
     if (! id.isNull())          // if no uuid in file, new one has been generated already
         node->setUuid(id);
 
+    if (node->inherits("KisLayer") || node->inherits("KisColorizeMask")) {
+        QString compositeOpName = element.attribute(COMPOSITE_OP, "normal");
+        node->setCompositeOpId(compositeOpName);
+    }
+
     if (node->inherits("KisLayer")) {
         KisLayer* layer           = qobject_cast<KisLayer*>(node.data());
         QBitArray channelFlags    = stringToFlags(element.attribute(CHANNEL_FLAGS, ""), colorSpace->channelCount());
-        QString   compositeOpName = element.attribute(COMPOSITE_OP, "normal");
-
         layer->setChannelFlags(channelFlags);
-        layer->setCompositeOpId(compositeOpName);
 
         if (element.hasAttribute(LAYER_STYLE_UUID)) {
             QString uuidString = element.attribute(LAYER_STYLE_UUID);
@@ -780,7 +732,6 @@ KisNodeSP KisKraLoader::loadNode(const KoXmlElement& element, KisImageWSP image,
     }
 
     if (element.hasAttribute(KEYFRAME_FILE)) {
-        node->enableAnimation();
         m_d->keyframeFilenames.insert(node.data(), element.attribute(KEYFRAME_FILE));
     }
 
@@ -788,7 +739,7 @@ KisNodeSP KisKraLoader::loadNode(const KoXmlElement& element, KisImageWSP image,
 }
 
 
-KisNodeSP KisKraLoader::loadPaintLayer(const KoXmlElement& element, KisImageWSP image,
+KisNodeSP KisKraLoader::loadPaintLayer(const KoXmlElement& element, KisImageSP image,
                                       const QString& name, const KoColorSpace* cs, quint32 opacity)
 {
     Q_UNUSED(element);
@@ -813,7 +764,7 @@ KisNodeSP KisKraLoader::loadPaintLayer(const KoXmlElement& element, KisImageWSP 
 
 }
 
-KisNodeSP KisKraLoader::loadFileLayer(const KoXmlElement& element, KisImageWSP image, const QString& name, quint32 opacity)
+KisNodeSP KisKraLoader::loadFileLayer(const KoXmlElement& element, KisImageSP image, const QString& name, quint32 opacity)
 {
     QString filename = element.attribute("source", QString());
     if (filename.isNull()) return 0;
@@ -874,7 +825,7 @@ KisNodeSP KisKraLoader::loadFileLayer(const KoXmlElement& element, KisImageWSP i
     return layer;
 }
 
-KisNodeSP KisKraLoader::loadGroupLayer(const KoXmlElement& element, KisImageWSP image,
+KisNodeSP KisKraLoader::loadGroupLayer(const KoXmlElement& element, KisImageSP image,
                                       const QString& name, const KoColorSpace* cs, quint32 opacity)
 {
     Q_UNUSED(element);
@@ -889,7 +840,7 @@ KisNodeSP KisKraLoader::loadGroupLayer(const KoXmlElement& element, KisImageWSP 
 
 }
 
-KisNodeSP KisKraLoader::loadAdjustmentLayer(const KoXmlElement& element, KisImageWSP image,
+KisNodeSP KisKraLoader::loadAdjustmentLayer(const KoXmlElement& element, KisImageSP image,
         const QString& name, const KoColorSpace* cs, quint32 opacity)
 {
     // XXX: do something with filterversion?
@@ -910,7 +861,7 @@ KisNodeSP KisKraLoader::loadAdjustmentLayer(const KoXmlElement& element, KisImag
         return 0; // XXX: We don't have this filter. We should warn about it!
     }
 
-    KisFilterConfiguration * kfc = f->defaultConfiguration(0);
+    KisFilterConfigurationSP  kfc = f->defaultConfiguration(0);
 
     // We'll load the configuration and the selection later.
     layer = new KisAdjustmentLayer(image, name, kfc, 0);
@@ -923,7 +874,7 @@ KisNodeSP KisKraLoader::loadAdjustmentLayer(const KoXmlElement& element, KisImag
 }
 
 
-KisNodeSP KisKraLoader::loadShapeLayer(const KoXmlElement& element, KisImageWSP image,
+KisNodeSP KisKraLoader::loadShapeLayer(const KoXmlElement& element, KisImageSP image,
                                       const QString& name, const KoColorSpace* cs, quint32 opacity)
 {
 
@@ -943,7 +894,7 @@ KisNodeSP KisKraLoader::loadShapeLayer(const KoXmlElement& element, KisImageWSP 
 }
 
 
-KisNodeSP KisKraLoader::loadGeneratorLayer(const KoXmlElement& element, KisImageWSP image,
+KisNodeSP KisKraLoader::loadGeneratorLayer(const KoXmlElement& element, KisImageSP image,
         const QString& name, const KoColorSpace* cs, quint32 opacity)
 {
     Q_UNUSED(cs);
@@ -963,7 +914,7 @@ KisNodeSP KisKraLoader::loadGeneratorLayer(const KoXmlElement& element, KisImage
         return 0; // XXX: We don't have this generator. We should warn about it!
     }
 
-    KisFilterConfiguration * kgc = generator->defaultConfiguration(0);
+    KisFilterConfigurationSP  kgc = generator->defaultConfiguration(0);
 
     // We'll load the configuration and the selection later.
     layer = new KisGeneratorLayer(image, name, kgc, 0);
@@ -975,7 +926,7 @@ KisNodeSP KisKraLoader::loadGeneratorLayer(const KoXmlElement& element, KisImage
 
 }
 
-KisNodeSP KisKraLoader::loadCloneLayer(const KoXmlElement& element, KisImageWSP image,
+KisNodeSP KisKraLoader::loadCloneLayer(const KoXmlElement& element, KisImageSP image,
                                       const QString& name, const KoColorSpace* cs, quint32 opacity)
 {
     Q_UNUSED(cs);
@@ -1025,7 +976,7 @@ KisNodeSP KisKraLoader::loadFilterMask(const KoXmlElement& element, KisNodeSP pa
         return 0; // XXX: We don't have this filter. We should warn about it!
     }
 
-    KisFilterConfiguration * kfc = f->defaultConfiguration(0);
+    KisFilterConfigurationSP  kfc = f->defaultConfiguration(0);
 
     // We'll load the configuration and the selection later.
     mask = new KisFilterMask();
@@ -1062,7 +1013,7 @@ KisNodeSP KisKraLoader::loadTransparencyMask(const KoXmlElement& element, KisNod
     return mask;
 }
 
-KisNodeSP KisKraLoader::loadSelectionMask(KisImageWSP image, const KoXmlElement& element, KisNodeSP parent)
+KisNodeSP KisKraLoader::loadSelectionMask(KisImageSP image, const KoXmlElement& element, KisNodeSP parent)
 {
     Q_UNUSED(parent);
     KisSelectionMaskSP mask = new KisSelectionMask(image);
@@ -1073,7 +1024,22 @@ KisNodeSP KisKraLoader::loadSelectionMask(KisImageWSP image, const KoXmlElement&
     return mask;
 }
 
-void KisKraLoader::loadCompositions(const KoXmlElement& elem, KisImageWSP image)
+KisNodeSP KisKraLoader::loadColorizeMask(KisImageSP image, const KoXmlElement& element, KisNodeSP parent, const KoColorSpace *colorSpace)
+{
+    Q_UNUSED(parent);
+    KisColorizeMaskSP mask = new KisColorizeMask();
+    bool editKeystrokes = element.attribute(COLORIZE_EDIT_KEYSTROKES, "1") == "0" ? false : true;
+    bool showColoring = element.attribute(COLORIZE_SHOW_COLORING, "1") == "0" ? false : true;
+
+    KisLayerPropertiesIcons::setNodeProperty(mask, KisLayerPropertiesIcons::colorizeEditKeyStrokes, editKeystrokes, image);
+    KisLayerPropertiesIcons::setNodeProperty(mask, KisLayerPropertiesIcons::colorizeShowColoring, showColoring, image);
+    mask->setColorSpace(colorSpace);
+    mask->setImage(image);
+
+    return mask;
+}
+
+void KisKraLoader::loadCompositions(const KoXmlElement& elem, KisImageSP image)
 {
     KoXmlNode child;
 
@@ -1083,7 +1049,7 @@ void KisKraLoader::loadCompositions(const KoXmlElement& elem, KisImageWSP image)
         QString name = e.attribute("name");
         bool exportEnabled = e.attribute("exportEnabled", "1") == "0" ? false : true;
 
-        KisLayerComposition* composition = new KisLayerComposition(image, name);
+        KisLayerCompositionSP composition(new KisLayerComposition(image, name));
         composition->setExportEnabled(exportEnabled);
 
         KoXmlNode value;

@@ -21,31 +21,35 @@
 
 #include "kis_types.h"
 
+#include <QModelIndexList>
 
 namespace KisAnimationUtils
 {
-    bool createKeyframeLazy(KisImageSP image, KisNodeSP node, int time, bool copy);
+    bool createKeyframeLazy(KisImageSP image, KisNodeSP node, const QString &channel, int time, bool copy);
 
     struct FrameItem {
         FrameItem() : time(-1) {}
-        FrameItem(KisNodeSP _node, int _time) : node(_node), time(_time) {}
+        FrameItem(KisNodeSP _node, const QString &_channel, int _time) : node(_node), channel(_channel), time(_time) {}
 
         KisNodeSP node;
+        QString channel;
         int time;
     };
 
     typedef QVector<FrameItem> FrameItemList;
 
     bool removeKeyframes(KisImageSP image, const FrameItemList &frames);
-    bool removeKeyframe(KisImageSP image, KisNodeSP node, int time);
+    bool removeKeyframe(KisImageSP image, KisNodeSP node, const QString &channel, int time);
 
-    void sortPointsForSafeMove(QVector<QPoint> *points, const QPoint &offset);
+    void sortPointsForSafeMove(QModelIndexList *points, const QPoint &offset);
     bool moveKeyframes(KisImageSP image,
                        const FrameItemList &srcFrames,
                        const FrameItemList &dstFrames,
-                       bool copy = false);
-    bool moveKeyframe(KisImageSP image, KisNodeSP node, int srcTime, int dstTime);
+                       bool copy = false,
+                       KUndo2Command *parentCommand = 0);
+    bool moveKeyframe(KisImageSP image, KisNodeSP node, const QString &channel, int srcTime, int dstTime);
 
+    bool supportsContentFrames(KisNodeSP node);
 
     extern const QString addFrameActionName;
     extern const QString duplicateFrameActionName;
@@ -58,6 +62,11 @@ namespace KisAnimationUtils
     extern const QString newLayerActionName;
     extern const QString addExistingLayerActionName;
     extern const QString removeLayerActionName;
+
+    extern const QString addOpacityKeyframeActionName;
+    extern const QString addTransformKeyframeActionName;
+    extern const QString removeOpacityKeyframeActionName;
+    extern const QString removeTransformKeyframeActionName;
 };
 
 #endif /* __KIS_ANIMATION_UTILS_H */

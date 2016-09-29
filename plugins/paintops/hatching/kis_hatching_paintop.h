@@ -43,7 +43,7 @@ class KisHatchingPaintOp : public KisBrushBasedPaintOp
 
 public:
 
-    KisHatchingPaintOp(const KisHatchingPaintOpSettings *settings, KisPainter * painter, KisNodeSP node, KisImageSP image);
+    KisHatchingPaintOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisNodeSP node, KisImageSP image);
     virtual ~KisHatchingPaintOp();
 
     /**
@@ -60,9 +60,9 @@ public:
     double spinAngle(double spin);
 
 private:
-    KisHatchingPaintOpSettings* m_settings;
+    KisHatchingPaintOpSettingsSP m_settings;
     KisImageWSP m_image;
-    HatchingBrush * m_hatchingBrush;
+    HatchingBrush *m_hatchingBrush;
 
     /**
      *  PaintDevice that will be filled with a single pass of

@@ -86,12 +86,12 @@ public:
     /**
      * Sets default pixel for \p frameId
      */
-    void setFrameDefaultPixel(const quint8 *defPixel, int frameId);
+    void setFrameDefaultPixel(const KoColor &defPixel, int frameId);
 
     /**
      * @return default pixel for \p frameId
      */
-    const quint8* frameDefaultPixel(int frameId) const;
+    KoColor frameDefaultPixel(int frameId) const;
 
     /**
      * Write a \p frameId onto \p store

@@ -26,6 +26,8 @@
 #include <brushengine/kis_paintop_preset.h>
 #include "kis_resource_server_provider.h"
 #include <KoTriangleColorSelector.h>
+#include <kis_visual_color_selector.h>
+#include <kis_config_notifier.h>
 #include "KoColorSpaceRegistry.h"
 #include <kis_types.h>
 #include <QtGui>
@@ -106,20 +108,26 @@ KisPopupPalette::KisPopupPalette(KisFavoriteResourceManager* manager, const KoCo
 {
 
     const int borderWidth = 3;
-    m_triangleColorSelector  = new PopupColorTriangle(displayRenderer, this);
+    //m_triangleColorSelector  = new PopupColorTriangle(displayRenderer, this);
+    m_triangleColorSelector = new KisVisualColorSelector(this);
+    m_triangleColorSelector->setDisplayRenderer(displayRenderer);
+    m_triangleColorSelector->setConfig(true,false);
     m_triangleColorSelector->move(widgetSize/2-colorInnerRadius+borderWidth, widgetSize/2-colorInnerRadius+borderWidth);
     m_triangleColorSelector->resize(colorInnerRadius*2-borderWidth*2, colorInnerRadius*2-borderWidth*2);
     m_triangleColorSelector->setVisible(true);
+    m_triangleColorSelector->slotSetColor(KoColor());
 
     QRegion maskedRegion(0, 0, m_triangleColorSelector->width(), m_triangleColorSelector->height(), QRegion::Ellipse );
     m_triangleColorSelector->setMask(maskedRegion);
 
     //setAttribute(Qt::WA_TranslucentBackground, true);
 
-    connect(m_triangleColorSelector, SIGNAL(realColorChanged(KoColor)),
+    connect(m_triangleColorSelector, SIGNAL(sigNewColor(KoColor)),
             m_colorChangeCompressor.data(), SLOT(start()));
     connect(m_colorChangeCompressor.data(), SIGNAL(timeout()),
             SLOT(slotEmitColorChanged()));
+
+    connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), m_triangleColorSelector, SLOT(ConfigurationChanged()));
 
     connect(m_resourceManager, SIGNAL(sigChangeFGColorSelector(KoColor)),
             SLOT(slotExternalFgColorChanged(KoColor)));
@@ -179,14 +187,23 @@ KisPopupPalette::KisPopupPalette(KisFavoriteResourceManager* manager, const KoCo
 
 void KisPopupPalette::slotExternalFgColorChanged(const KoColor &color)
 {
-    m_triangleColorSelector->setRealColor(color);
+    //m_triangleColorSelector->setRealColor(color);
+    //hack to get around cmyk for now.
+    if (color.colorSpace()->colorChannelCount()>3) {
+        KoColor c(KoColorSpaceRegistry::instance()->rgb8());
+        c.fromKoColor(color);
+        m_triangleColorSelector->slotSetColor(c);
+    } else {
+        m_triangleColorSelector->slotSetColor(color);
+    }
+
 }
 
 void KisPopupPalette::slotEmitColorChanged()
 {
     if (isVisible()) {
         update();
-        emit sigChangefGColor(m_triangleColorSelector->realColor());
+        emit sigChangefGColor(m_triangleColorSelector->getCurrentColor());
     }
 }
 
@@ -234,21 +251,18 @@ void KisPopupPalette::slotEnableChangeFGColor()
 void KisPopupPalette::adjustLayout(const QPoint &p)
 {
     KIS_ASSERT_RECOVER_RETURN(m_brushHud);
-
     if (isVisible() && parentWidget())  {
         const QRect fitRect = kisGrowRect(parentWidget()->rect(), -widgetMargin);
 
         const QPoint paletteCenterOffset(width() / 2, height() / 2);
         QRect paletteRect = rect();
         paletteRect.moveTo(p - paletteCenterOffset);
-
         if (m_brushHudButton->isChecked()) {
             m_brushHud->updateGeometry();
             paletteRect.adjust(0, 0, m_brushHud->width() + hudMargin, 0);
         }
 
         paletteRect = kisEnsureInRect(paletteRect, fitRect);
-
         move(paletteRect.topLeft());
         m_brushHud->move(paletteRect.topLeft() + QPoint(widgetSize + hudMargin, 0));
         m_lastCenterPoint = p;
@@ -295,6 +309,11 @@ void KisPopupPalette::setVisible(bool b)
     QWidget::setVisible(b);
 }
 
+void KisPopupPalette::setParent(QWidget *parent) {
+    m_brushHud->setParent(parent);
+    QWidget::setParent(parent);
+}
+
 QSize KisPopupPalette::sizeHint() const
 {
     return QSize(widgetSize, widgetSize);
@@ -325,7 +344,7 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
     //painting foreground color
     QPainterPath fgColor;
     fgColor.addEllipse(QPoint(-width() / 2 + 50, -height() / 2 + 32), 30, 30);
-    painter.fillPath(fgColor, m_displayRenderer->toQColor(m_triangleColorSelector->realColor()));
+    painter.fillPath(fgColor, m_displayRenderer->toQColor(m_triangleColorSelector->getCurrentColor()));
     painter.drawPath(fgColor);
 
     // create an ellipse for the background that is slightly

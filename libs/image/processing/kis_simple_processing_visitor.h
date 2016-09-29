@@ -38,10 +38,12 @@ public:
     void visit(KisTransformMask *mask, KisUndoAdapter *undoAdapter);
     void visit(KisTransparencyMask *mask, KisUndoAdapter *undoAdapter);
     void visit(KisSelectionMask *mask, KisUndoAdapter *undoAdapter);
+    void visit(KisColorizeMask *mask, KisUndoAdapter *undoAdapter);
 
 protected:
     virtual void visitNodeWithPaintDevice(KisNode *node, KisUndoAdapter *undoAdapter) = 0;
     virtual void visitExternalLayer(KisExternalLayer *layer, KisUndoAdapter *undoAdapter) = 0;
+    virtual void visitColorizeMask(KisColorizeMask *mask, KisUndoAdapter *undoAdapter) = 0;
 };
 
 #endif /* __KIS_SIMPLE_PROCESSING_VISITOR_H */

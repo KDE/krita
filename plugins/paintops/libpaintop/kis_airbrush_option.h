@@ -36,8 +36,8 @@ public:
     KisAirbrushOption(bool enabled = true);
     ~KisAirbrushOption();
 
-    void writeOptionSetting(KisPropertiesConfiguration* setting) const;
-    void readOptionSetting(const KisPropertiesConfiguration* setting);
+    void writeOptionSetting(KisPropertiesConfigurationSP setting) const;
+    void readOptionSetting(const KisPropertiesConfigurationSP setting);
 
 private:
     KisAirbrushWidget * m_optionWidget;

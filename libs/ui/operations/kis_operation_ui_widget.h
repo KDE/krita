@@ -22,8 +22,7 @@
 
 #include <QWidget>
 #include <kritaui_export.h>
-
-class KisOperationConfiguration;
+#include "operations/kis_operation_configuration.h"
 
 /**
 *  Base class for the QWidget based operation config widgets
@@ -36,7 +35,7 @@ public:
     virtual ~KisOperationUIWidget();
 
    /**
-    * Caption of the operation widget, used in dialog caption 
+    * Caption of the operation widget, used in dialog caption
     */
     QString caption() const;
 
@@ -44,7 +43,7 @@ public:
     * Fetch the setting from the config widet
     * @param config configuration to which the setting will be written
     */
-    virtual void getConfiguration(KisOperationConfiguration* config) = 0;
+    virtual void getConfiguration(KisOperationConfigurationSP config) = 0;
 
 private:
     class Private;

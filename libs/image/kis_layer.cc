@@ -53,6 +53,7 @@
 
 #include "krita_utils.h"
 #include "kis_layer_properties_icons.h"
+#include "kis_layer_utils.h"
 
 
 class KisSafeProjection {
@@ -64,7 +65,7 @@ public:
             m_reusablePaintDevice = new KisPaintDevice(*prototype);
         }
         if(!m_projection ||
-           !(*m_projection->colorSpace() == *prototype->colorSpace())) {
+           *m_projection->colorSpace() != *prototype->colorSpace()) {
             m_projection = m_reusablePaintDevice;
             m_projection->makeCloneFromRough(prototype, prototype->extent());
             m_projection->setProjectionDevice(true);
@@ -316,17 +317,15 @@ KisImageWSP KisLayer::image() const
 void KisLayer::setImage(KisImageWSP image)
 {
     m_d->image = image;
-    for (uint i = 0; i < childCount(); ++i) {
-        // Only layers know about the image
-        KisLayer *layer = dynamic_cast<KisLayer*>(at(i).data());
-        if (layer) {
-            layer->setImage(image);
-        }
-        // We lied, through the defaultBounds, masks also know about the image
-        KisMask *mask = dynamic_cast<KisMask*>(at(i).data());
-        if (mask) {
-            mask->setImage(image);
-        }
+
+    KisNodeSP node = firstChild();
+    while (node) {
+        KisLayerUtils::recursiveApplyNodes(node,
+                                           [image] (KisNodeSP node) {
+                                               node->setImage(image);
+                                           });
+
+        node = node->nextSibling();
     }
 }
 

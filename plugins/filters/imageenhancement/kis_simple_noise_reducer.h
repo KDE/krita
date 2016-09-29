@@ -33,7 +33,7 @@ public:
 
     void processImpl(KisPaintDeviceSP device,
                      const QRect& applyRect,
-                     const KisFilterConfiguration* config,
+                     const KisFilterConfigurationSP config,
                      KoUpdater* progressUpdater
                      ) const;
     virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
@@ -42,7 +42,7 @@ public:
         return KoID("gaussiannoisereducer", i18n("Gaussian Noise Reducer"));
     }
 protected:
-    virtual KisFilterConfiguration * factoryConfiguration(const KisPaintDeviceSP) const;
+    virtual KisFilterConfigurationSP  factoryConfiguration(const KisPaintDeviceSP) const;
 };
 
 #endif

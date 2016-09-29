@@ -425,7 +425,7 @@ void KisScratchPad::fillDefault()
     if(!m_paintLayer) return;
     KisPaintDeviceSP paintDevice = m_paintLayer->paintDevice();
 
-    paintDevice->setDefaultPixel(m_defaultColor.data());
+    paintDevice->setDefaultPixel(m_defaultColor);
     paintDevice->clear();
     update();
 }
@@ -459,8 +459,7 @@ void KisScratchPad::fillBackground()
     if(!m_paintLayer) return;
     KisPaintDeviceSP paintDevice = m_paintLayer->paintDevice();
 
-    KoColor c(m_resourceProvider->bgColor(), paintDevice->colorSpace());
-    paintDevice->setDefaultPixel(c.data());
+    paintDevice->setDefaultPixel(m_resourceProvider->bgColor());
     paintDevice->clear();
     update();
 }

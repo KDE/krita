@@ -23,7 +23,8 @@
 #include <QFrame>
 #include <kritaui_export.h>
 
-class KoSegmentGradient;
+class KoAbstractGradient;
+class KoStopGradient;
 class KisViewManager;
 class QLabel;
 class QPushButton;
@@ -38,11 +39,11 @@ class KisCustomGradientDialog : public KoDialog
 
 public:
 
-    KisCustomGradientDialog(KoSegmentGradient* gradient, QWidget * parent, const char *name);
+    KisCustomGradientDialog(KoAbstractGradient* gradient, QWidget * parent, const char *name);
 
 private:
 
-    KisAutogradient * m_page;
+    QWidget * m_page;
 
 };
 
@@ -68,9 +69,12 @@ Q_SIGNALS:
 
 private Q_SLOTS:
     virtual void update(KoResource * resource);
-    void addGradient();
+    void addStopGradient();
+    void addSegmentedGradient();
     void editGradient();
 
+private:
+      void addGradient(KoAbstractGradient* gradient);
 private:
     QLabel *m_lbName;
     KoResourceItemChooser * m_itemChooser;

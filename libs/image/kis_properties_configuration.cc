@@ -49,19 +49,24 @@ KisPropertiesConfiguration::~KisPropertiesConfiguration()
 }
 
 KisPropertiesConfiguration::KisPropertiesConfiguration(const KisPropertiesConfiguration& rhs)
-        : KisSerializableConfiguration(rhs)
-        , d(new Private(*rhs.d))
+    : KisSerializableConfiguration(rhs)
+    , d(new Private(*rhs.d))
 {
 }
 
-void KisPropertiesConfiguration::fromXML(const QString & s)
+bool KisPropertiesConfiguration::fromXML(const QString & xml, bool clear)
 {
-    clearProperties();
+    if (clear) {
+        clearProperties();
+    }
 
     QDomDocument doc;
-    doc.setContent(s);
-    QDomElement e = doc.documentElement();
-    fromXML(e);
+    bool retval = doc.setContent(xml);
+    if (retval) {
+        QDomElement e = doc.documentElement();
+        fromXML(e);
+    }
+    return retval;
 }
 
 void KisPropertiesConfiguration::fromXML(const QDomElement& e)
@@ -300,14 +305,14 @@ KisPropertiesConfigurationFactory::~KisPropertiesConfigurationFactory()
     delete d;
 }
 
-KisSerializableConfiguration* KisPropertiesConfigurationFactory::createDefault()
+KisSerializableConfigurationSP KisPropertiesConfigurationFactory::createDefault()
 {
     return new KisPropertiesConfiguration();
 }
 
-KisSerializableConfiguration* KisPropertiesConfigurationFactory::create(const QDomElement& e)
+KisSerializableConfigurationSP KisPropertiesConfigurationFactory::create(const QDomElement& e)
 {
-    KisPropertiesConfiguration* pc = new KisPropertiesConfiguration();
+    KisPropertiesConfigurationSP pc = new KisPropertiesConfiguration();
     pc->fromXML(e);
     return pc;
 }

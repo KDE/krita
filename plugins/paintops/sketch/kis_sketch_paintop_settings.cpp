@@ -44,7 +44,7 @@ int KisSketchPaintOpSettings::rate() const
     return getInt(AIRBRUSH_RATE);
 }
 
-QPainterPath KisSketchPaintOpSettings::brushOutline(const KisPaintInformation &info, OutlineMode mode) const
+QPainterPath KisSketchPaintOpSettings::brushOutline(const KisPaintInformation &info, OutlineMode mode)
 {
     bool isSimpleMode = getBool(SKETCH_USE_SIMPLE_MODE);
 

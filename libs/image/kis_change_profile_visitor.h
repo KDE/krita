@@ -23,6 +23,7 @@
 #include "kis_types.h"
 #include "kis_node_visitor.h"
 #include "kis_paint_layer.h"
+#include "lazybrush/kis_colorize_mask.h"
 #include "kis_adjustment_layer.h"
 #include "generator/kis_generator_layer.h"
 #include "kis_group_layer.h"
@@ -99,6 +100,13 @@ public:
         return true;
     }
     bool visit(KisSelectionMask*) {
+        return true;
+    }
+
+    bool visit(KisColorizeMask *mask) {
+        if (mask->colorSpace()->colorModelId() == m_oldColorSpace->colorModelId()) {
+            mask->setProfile(m_dstColorSpace->profile());
+        }
         return true;
     }
 

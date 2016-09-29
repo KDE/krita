@@ -30,41 +30,38 @@
 
 void KisFilterConfigurationTest::testCreation()
 {
-    KisFilterConfiguration * kfc = new KisFilterConfiguration("test", 1);
+    KisFilterConfigurationSP  kfc = new KisFilterConfiguration("test", 1);
     QVERIFY2(kfc != 0,  "Could not create test filter configuration");
     QCOMPARE(kfc->version(), 1);
     QCOMPARE(kfc->name(), QString("test"));
 
-    delete kfc;
 }
 
 void KisFilterConfigurationTest::testRoundTrip()
 {
-    KisFilterConfiguration * kfc = new KisFilterConfiguration("test", 1);
+    KisFilterConfigurationSP  kfc = new KisFilterConfiguration("test", 1);
     QCOMPARE(kfc->version(), 1);
     QCOMPARE(kfc->name(), QString("test"));
     QString s = kfc->toXML();
-    delete kfc;
+
     kfc = new KisFilterConfiguration("test2", 2);
     kfc->fromXML(s);
     QCOMPARE(kfc->version(), 1);
-    delete kfc;
 }
 
 void KisFilterConfigurationTest::testSetGetProperty()
 {
-    KisFilterConfiguration * kfc = new KisFilterConfiguration("test", 1);
+    KisFilterConfigurationSP  kfc = new KisFilterConfiguration("test", 1);
     kfc->setProperty("value1", 10);
     kfc->setProperty("value2", "foo");
     QCOMPARE(kfc->getInt("value1"), 10);
     QCOMPARE(kfc->getString("value2"), QString("foo"));
     QString s = kfc->toXML();
-    delete kfc;
+
     kfc = new KisFilterConfiguration("test2", 2);
     kfc->fromXML(s);
     QCOMPARE(kfc->getInt("value1"), 10);
     QCOMPARE(kfc->getString("value2"), QString("foo"));
-    delete kfc;
 }
 
 

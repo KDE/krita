@@ -356,3 +356,26 @@ QRect KisTransformUtils::changeRect(const ToolTransformArgs &config,
 
     return result;
 }
+
+KisTransformUtils::AnchorHolder::AnchorHolder(bool enabled, ToolTransformArgs *config)
+    : m_enabled(enabled),
+      m_config(config)
+{
+    if (!m_enabled) return;
+
+    m_staticPoint = m_config->originalCenter() + m_config->rotationCenterOffset();
+
+    const KisTransformUtils::MatricesPack m(*m_config);
+    m_oldStaticPointInView = m.finalTransform().map(m_staticPoint);
+}
+
+KisTransformUtils::AnchorHolder::~AnchorHolder() {
+    if (!m_enabled) return;
+
+    const KisTransformUtils::MatricesPack m(*m_config);
+    const QPointF newStaticPointInView = m.finalTransform().map(m_staticPoint);
+
+    const QPointF diff = m_oldStaticPointInView - newStaticPointInView;
+
+    m_config->setTransformedCenter(m_config->transformedCenter() + diff);
+}

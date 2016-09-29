@@ -810,14 +810,15 @@ QStringList KisMainWindow::showOpenFileDialog()
 void KisMainWindow::slotLoadCompleted()
 {
     KisDocument *newdoc = qobject_cast<KisDocument*>(sender());
+    if (newdoc && newdoc->image()) {
+        addViewAndNotifyLoadingCompleted(newdoc);
 
-    addViewAndNotifyLoadingCompleted(newdoc);
+        disconnect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
+        disconnect(newdoc, SIGNAL(completed()), this, SLOT(slotLoadCompleted()));
+        disconnect(newdoc, SIGNAL(canceled(const QString &)), this, SLOT(slotLoadCanceled(const QString &)));
 
-    disconnect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
-    disconnect(newdoc, SIGNAL(completed()), this, SLOT(slotLoadCompleted()));
-    disconnect(newdoc, SIGNAL(canceled(const QString &)), this, SLOT(slotLoadCanceled(const QString &)));
-
-    emit loadCompleted();
+        emit loadCompleted();
+    }
 }
 
 void KisMainWindow::slotLoadCanceled(const QString & errMsg)

@@ -20,8 +20,9 @@
 #include "KisExportCheckBase.h"
 #include "KisExportConverterBase.h"
 
-KisExportCheckBase::KisExportCheckBase(Level level, const QString &customWarning)
-    : m_level(level)
+KisExportCheckBase::KisExportCheckBase(const QString &id, Level level, const QString &customWarning)
+    : m_id(id)
+    , m_level(level)
     , m_converter(0)
 {
     if (!customWarning.isEmpty()) {
@@ -34,6 +35,11 @@ KisExportCheckBase::~KisExportCheckBase()
     delete m_converter;
 }
 
+QString KisExportCheckBase::id() const
+{
+    return m_id;
+}
+
 KisExportConverterBase *KisExportCheckBase::converter() const
 {
     return m_converter;
@@ -43,3 +49,4 @@ QString KisExportCheckBase::message() const
 {
     return m_message;
 }
+

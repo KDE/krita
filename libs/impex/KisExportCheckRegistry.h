@@ -1,4 +1,4 @@
-/* This file is part of the KDE project
+/*
  * Copyright (C) 2016 Boudewijn Rempt <boud@valdyas.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -16,31 +16,29 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef KISPREEXPORTCHECKER_H
-#define KISPREEXPORTCHECKER_H
 
-#include <kis_types.h>
-#include "kritaimpex_export.h"
+#ifndef KISEXPORTCHECKREGISTRY_H
+#define KISEXPORTCHECKREGISTRY_H
+
+#include <QString>
+
+#include <KoGenericRegistry.h>
 
 #include "KisExportCheckBase.h"
 
-class KisExportConverterBase;
+#include "kritaimpex_export.h"
 
-class KRITAIMPEX_EXPORT KisPreExportChecker
+
+class KRITAIMPEX_EXPORT KisExportCheckRegistry : public QObject, public KoGenericRegistry<KisExportCheckFactory*>
 {
 public:
-    KisPreExportChecker();
-
-    void check(KisImageSP image, QMap<QString, KisExportCheckBase *> filterChecks);
-    KisImageSP convertedImage(KisImageSP) const;
-    QStringList warnings() const;
-    bool conversionNeeded() const;
-
-    KisExportCheckBase *createCheck(const QString &id, const KisExportCheckBase::Level level, const QString &customWarning = QString());
+    KisExportCheckRegistry();
+    virtual ~KisExportCheckRegistry();
+    static KisExportCheckRegistry *instance();
 
 private:
-    QStringList m_warnings;
-    QMap<QString, KisExportConverterBase*> m_conversions;
+    Q_DISABLE_COPY(KisExportCheckRegistry)
 };
 
-#endif // KISPREEXPORTCHECKER_H
+
+#endif // KISEXPORTCHECKREGISTRY_H

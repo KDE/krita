@@ -19,9 +19,12 @@
 #ifndef KISEXPORTCHECKBASE_H
 #define KISEXPORTCHECKBASE_H
 
+#include <QString>
+
+#include "KoGenericRegistry.h"
+
 #include <kis_types.h>
 
-#include <QString>
 #include "kritaimpex_export.h"
 
 class KisExportConverterBase;
@@ -47,12 +50,12 @@ public:
      * @param level the level of support the filter has for the given feature
      * @param customWarning A custom warning to use instead of the default one
      */
-    KisExportCheckBase(Level level, const QString &customWarning = QString());
+    KisExportCheckBase(const QString &id, Level level, const QString &customWarning = QString());
 
     virtual ~KisExportCheckBase();
 
     /// @return the unique id of the check
-    virtual QString id() const = 0;
+    virtual QString id() const;
 
     /// @return whether the image uses this feature
     virtual bool checkNeeded(KisImageSP image) const = 0;
@@ -67,11 +70,20 @@ public:
 
 private:
 
+    QString m_id;
     Level m_level;
     QString m_message;
     KisExportConverterBase *m_converter;
 
-
 };
+
+class KRITAIMPEX_EXPORT KisExportCheckFactory
+{
+public:
+    virtual KisExportCheckBase *create(KisExportCheckBase::Level level, const QString &customWarning = QString()) = 0;
+    virtual ~KisExportCheckFactory() {}
+    virtual QString id() const = 0;
+};
+
 
 #endif

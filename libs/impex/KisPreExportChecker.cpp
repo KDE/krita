@@ -20,23 +20,25 @@
 #include "KisPreExportChecker.h"
 #include "KisExportCheckBase.h"
 #include "KisExportConverterBase.h"
+#include "KisExportCheckRegistry.h"
 
 #include <kis_image.h>
 
 KisPreExportChecker::KisPreExportChecker()
 {
-    initializeChecks();
+    KisExportCheckRegistry::instance();
 }
 
 void KisPreExportChecker::check(KisImageSP image, QMap<QString, KisExportCheckBase*> filterChecks)
 {
-    Q_FOREACH(const KisExportCheckBase *check, m_checks) {
+    Q_FOREACH(const QString &id, KisExportCheckRegistry::instance()->keys()) {
+        KisExportCheckBase *check = createCheck(id, KisExportCheckBase::SUPPORTED);
         if (check->checkNeeded(image)) {
-            if (!filterChecks.contains(check->id())) {
+            if (!filterChecks.contains(id)) {
                 m_warnings << check->message();
             }
-            else if (filterChecks[check->id()]->check(image) != KisExportCheckBase::SUPPORTED) {
-                m_warnings << filterChecks[check->id()]->message();
+            else if (filterChecks[id]->check(image) != KisExportCheckBase::SUPPORTED) {
+                m_warnings << filterChecks[id]->message();
             }
             else {
                 continue;
@@ -45,6 +47,7 @@ void KisPreExportChecker::check(KisImageSP image, QMap<QString, KisExportCheckBa
                 m_conversions[check->converter()->id()] = check->converter();
             }
         }
+        delete check;
     }
 }
 
@@ -73,7 +76,11 @@ bool KisPreExportChecker::conversionNeeded() const
     return !m_conversions.isEmpty();
 }
 
-void KisPreExportChecker::initializeChecks()
+KisExportCheckBase *KisPreExportChecker::createCheck(const QString &id, const KisExportCheckBase::Level level, const QString &customWarning)
 {
-    // ...
+    KisExportCheckFactory *factory = KisExportCheckRegistry::instance()->get(id);
+    if (factory) {
+        return factory->create(level, customWarning);
+    }
+    return 0;
 }

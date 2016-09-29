@@ -2,6 +2,7 @@ set(kritaimpex_LIB_SRCS
     KisExportCheckBase.cpp
     KisExportConverterBase.cpp
     KisPreExportChecker.cpp
+    KisExportCheckRegistry.cpp
 )
 
 add_library(kritaimpex SHARED ${kritaimpex_HEADERS_MOC} ${kritaimpex_LIB_SRCS} )

@@ -544,19 +544,19 @@ void KisToolTransformConfigWidget::updateConfig(const ToolTransformArgs &config)
         aXBox->setEnabled(freeTransformIsActive);
         aYBox->setEnabled(freeTransformIsActive);
         aZBox->setEnabled(freeTransformIsActive);
-        Q_FOREACH (QAbstractButton *button, m_rotationCenterButtons->buttons()) {
-            button->setEnabled(freeTransformIsActive);
-            freeRotationRadioButton->setEnabled(freeTransformIsActive);
-        }
+        freeRotationRadioButton->setEnabled(freeTransformIsActive);
 
         scaleXBox->setValue(config.scaleX() * 100.);
         scaleYBox->setValue(config.scaleY() * 100.);
         shearXBox->setValue(config.shearX());
         shearYBox->setValue(config.shearY());
 
-        translateXBox->setValue(config.transformedCenter().x());
-        translateYBox->setValue(config.transformedCenter().y());
+        const QPointF anchorPoint = config.originalCenter() + config.rotationCenterOffset();
+        const KisTransformUtils::MatricesPack m(config);
+        const QPointF anchorPointView = m.finalTransform().map(anchorPoint);
 
+        translateXBox->setValue(anchorPointView.x());
+        translateYBox->setValue(anchorPointView.y());
 
         aXBox->setValue(radianToDegree(config.aX()));
         aYBox->setValue(radianToDegree(config.aY()));
@@ -846,7 +846,10 @@ void KisToolTransformConfigWidget::slotRotationCenterChanged(int index)
                                                 j * m_transaction->originalHalfHeight()));
 
         notifyConfigChanged();
+        updateConfig(*config);
     }
+
+
 }
 
 void KisToolTransformConfigWidget::slotTransformAroundRotationCenter(bool value)
@@ -948,7 +951,14 @@ void KisToolTransformConfigWidget::slotSetTranslateX(int value)
     if (m_uiSlotsBlocked) return;
 
     ToolTransformArgs *config = m_transaction->currentConfig();
-    config->setTransformedCenter(QPointF(value, config->transformedCenter().y()));
+
+    const QPointF anchorPoint = config->originalCenter() + config->rotationCenterOffset();
+    const KisTransformUtils::MatricesPack m(*config);
+
+    const QPointF anchorPointView = m.finalTransform().map(anchorPoint);
+    const QPointF newAnchorPointView(value, anchorPointView.y());
+    config->setTransformedCenter(config->transformedCenter() + newAnchorPointView - anchorPointView);
+
     notifyConfigChanged();
 }
 
@@ -957,7 +967,14 @@ void KisToolTransformConfigWidget::slotSetTranslateY(int value)
     if (m_uiSlotsBlocked) return;
 
     ToolTransformArgs *config = m_transaction->currentConfig();
-    config->setTransformedCenter(QPointF(config->transformedCenter().x(), value));
+
+    const QPointF anchorPoint = config->originalCenter() + config->rotationCenterOffset();
+    const KisTransformUtils::MatricesPack m(*config);
+
+    const QPointF anchorPointView = m.finalTransform().map(anchorPoint);
+    const QPointF newAnchorPointView(anchorPointView.x(), value);
+    config->setTransformedCenter(config->transformedCenter() + newAnchorPointView - anchorPointView);
+
     notifyConfigChanged();
 }
 

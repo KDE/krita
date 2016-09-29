@@ -151,9 +151,7 @@ void KisToolTransform::canvasUpdateRequested()
 
 void KisToolTransform::resetCursorStyle()
 {
-    KisTool::resetCursorStyle();
-
-    overrideCursorIfNotEditable();
+    setFunctionalCursor();
 }
 
 void KisToolTransform::resetRotationCenterButtonsRequested()
@@ -338,9 +336,21 @@ void KisToolTransform::endPrimaryAction(KoPointerEvent *event)
     endActionImpl(event, true, KisTool::NONE);
 }
 
+void KisToolTransform::activatePrimaryAction()
+{
+    currentStrategy()->activatePrimaryAction();
+    setFunctionalCursor();
+}
+
+void KisToolTransform::deactivatePrimaryAction()
+{
+    currentStrategy()->deactivatePrimaryAction();
+}
+
 void KisToolTransform::activateAlternateAction(AlternateAction action)
 {
     currentStrategy()->activateAlternateAction(action);
+    setFunctionalCursor();
 }
 
 void KisToolTransform::deactivateAlternateAction(AlternateAction action)

@@ -34,6 +34,8 @@ public:
     KisSimplifiedActionPolicyStrategy(const KisCoordinatesConverter *_converter, KoSnapGuide *snapGuide = 0);
     ~KisSimplifiedActionPolicyStrategy();
 
+    void activatePrimaryAction();
+
     virtual bool beginPrimaryAction(KoPointerEvent *event);
     virtual void continuePrimaryAction(KoPointerEvent *event);
     virtual bool endPrimaryAction(KoPointerEvent *event);

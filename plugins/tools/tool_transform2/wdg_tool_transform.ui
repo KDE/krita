@@ -498,7 +498,7 @@
             </widget>
            </item>
            <item row="1" column="0">
-            <widget class="QToolButton" name="btnScaleFromPivotPoint">
+            <widget class="QToolButton" name="btnTransformAroundPivotPoint">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                <horstretch>0</horstretch>
@@ -506,7 +506,7 @@
               </sizepolicy>
              </property>
              <property name="toolTip">
-              <string>Scale around pivot point (Alt)</string>
+              <string>Transform around pivot point (Alt)</string>
              </property>
              <property name="text">
               <string/>

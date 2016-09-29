@@ -486,7 +486,7 @@ void KisFreeTransformStrategy::continuePrimaryAction(const QPointF &mousePos,
         }
 
         // override scale static point if it is locked
-        if ((m_d->currentArgs.scaleFromRotationCenter() ^ altModifierActive) &&
+        if ((m_d->currentArgs.transformAroundRotationCenter() ^ altModifierActive) &&
             !qFuzzyCompare(anchorPoint.y(), movingPoint.y())) {
 
             staticPoint = anchorPoint;
@@ -536,7 +536,7 @@ void KisFreeTransformStrategy::continuePrimaryAction(const QPointF &mousePos,
         }
 
         // override scale static point if it is locked
-        if ((m_d->currentArgs.scaleFromRotationCenter() ^ altModifierActive) &&
+        if ((m_d->currentArgs.transformAroundRotationCenter() ^ altModifierActive) &&
             !qFuzzyCompare(anchorPoint.x(), movingPoint.x())) {
 
             staticPoint = anchorPoint;
@@ -589,7 +589,7 @@ void KisFreeTransformStrategy::continuePrimaryAction(const QPointF &mousePos,
         }
 
         // override scale static point if it is locked
-        if ((m_d->currentArgs.scaleFromRotationCenter() ^ altModifierActive) &&
+        if ((m_d->currentArgs.transformAroundRotationCenter() ^ altModifierActive) &&
             !(qFuzzyCompare(anchorPoint.x(), movingPoint.x()) ||
               qFuzzyCompare(anchorPoint.y(), movingPoint.y()))) {
 

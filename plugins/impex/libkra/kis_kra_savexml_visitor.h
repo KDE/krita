@@ -25,9 +25,9 @@
 
 #include "kis_node_visitor.h"
 #include "kis_types.h"
-#include "kritaui_export.h"
+#include "kritalibkra_export.h"
 
-class KRITAUI_EXPORT KisSaveXmlVisitor : public KisNodeVisitor
+class KRITALIBKRA_EXPORT KisSaveXmlVisitor : public KisNodeVisitor
 {
 public:
     KisSaveXmlVisitor(QDomDocument doc, const QDomElement & element, quint32 &count, const QString &url, bool root);

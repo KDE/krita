@@ -26,12 +26,12 @@
 #include "kis_types.h"
 #include "kis_node_visitor.h"
 #include "kis_image.h"
-
+#include "kritalibkra_export.h"
 
 class KisPaintDeviceWriter;
 class KoStore;
 
-class KisKraSaveVisitor : public KisNodeVisitor
+class KRITALIBKRA_EXPORT KisKraSaveVisitor : public KisNodeVisitor
 {
 public:
     KisKraSaveVisitor(KoStore *store, const QString & name, QMap<const KisNode*, QString> nodeFileNames);

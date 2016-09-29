@@ -28,7 +28,9 @@ class KoStore;
 class QString;
 class QStringList;
 
-class KisKraSaver
+#include "kritalibkra_export.h"
+
+class KRITALIBKRA_EXPORT KisKraSaver
 {
 public:
 

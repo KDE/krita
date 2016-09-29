@@ -22,7 +22,6 @@
 #include <QString>
 
 
-
 /**
  * Tag definitions for our xml file format
  */

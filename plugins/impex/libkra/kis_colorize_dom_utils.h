@@ -20,15 +20,14 @@
 #define __KIS_COLORIZE_DOM_UTILS_H
 
 #include <KoColorSpaceRegistry.h>
-#include "kritaui_export.h"
-
+#include "kritalibkra_export.h"
 namespace KisLazyFillTools {
     struct KeyStroke;
 }
 
 namespace KisDomUtils {
-    void KRITAUI_EXPORT saveValue(QDomElement *parent, const QString &tag, const KisLazyFillTools::KeyStroke &stroke);
-    bool KRITAUI_EXPORT loadValue(const QDomElement &e, KisLazyFillTools::KeyStroke *stroke, const KoColorSpace *colorSpace);
+    void KRITALIBKRA_EXPORT saveValue(QDomElement *parent, const QString &tag, const KisLazyFillTools::KeyStroke &stroke);
+    bool KRITALIBKRA_EXPORT loadValue(const QDomElement &e, KisLazyFillTools::KeyStroke *stroke, const KoColorSpace *colorSpace);
 }
 
 #endif /* __KIS_COLORIZE_DOM_UTILS_H */

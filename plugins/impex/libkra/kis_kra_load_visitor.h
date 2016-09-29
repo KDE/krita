@@ -27,10 +27,12 @@
 #include "kis_types.h"
 #include "kis_node_visitor.h"
 
+#include "kritalibkra_export.h"
+
 class KisFilterConfiguration;
 class KoStore;
 
-class KisKraLoadVisitor : public KisNodeVisitor
+class KRITALIBKRA_EXPORT KisKraLoadVisitor : public KisNodeVisitor
 {
 public:
 

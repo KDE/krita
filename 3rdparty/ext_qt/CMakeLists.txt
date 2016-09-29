@@ -26,7 +26,9 @@ if (WIN32)
   )
 else(WIN32)
     if (APPLE)
-      # Qt is big - try and parallelize if possible
+
+      # Qt is big - try and parallelize if at all possible
+      message(STATUS "${EXTPREFIX_qt}:Curent make program: ${CMAKE_MAKE_PROGRAM}")
       include(ProcessorCount)
       ProcessorCount(NUM_CORES)
       if(NOT NUM_CORES EQUAL 0)
@@ -35,6 +37,7 @@ else(WIN32)
       else()
         set(PARALLEL_MAKE "make")
       endif()
+
       # XCODE_VERSION is set by CMake when using the Xcode generator, otherwise we need
       # to detect it manually here.
       if (NOT XCODE_VERSION)
@@ -55,62 +58,79 @@ else(WIN32)
           message(WARNING "${EXTPREFIX_qt}:Failed to detect the version of an installed copy of Xcode, falling back to highest supported version. Set XCODE_VERSION to override.")
         endif(version_match)
       endif(NOT XCODE_VERSION)
-      if (XCODE_VERSION VERSION_LESS 8.0.0)
-        # No extra patches necessary
-        ExternalProject_Add(ext_qt
-          DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
 
-          LOG_DOWNLOAD        ON
-          LOG_UPDATE          ON
-          LOG_CONFIGURE       ON
-          LOG_BUILD           ON
-          LOG_TEST            ON
-          LOG_INSTALL         ON
-          BUILD_IN_SOURCE 		ON
-
-          URL https://download.qt.io/official_releases/qt/5.7/5.7.0/single/qt-everywhere-opensource-src-5.7.0.tar.gz
-          URL_MD5 9a46cce61fc64c20c3ac0a0e0fa41b42
-          PATCH_COMMAND   ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/gerrit-166202.diff
-                COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/macdeploy-qt.diff
-          INSTALL_DIR ${EXTPREFIX_qt}
-          CONFIGURE_COMMAND <SOURCE_DIR>/configure -confirm-license  -opensource -nomake examples -no-openssl -no-compile-examples -qt-freetype -qt-harfbuzz -opengl desktop -qt-zlib -qt-pcre -qt-libpng -qt-libjpeg -skip qt3d -skip qtactiveqt -skip qtcanvas3d -skip qtconnectivity -skip qtgraphicaleffects -skip qtlocation -skip qtmultimedia -skip qtwayland -skip qtwebchannel -skip qtwebengine -skip qtwebsockets -skip qtwebview -skip qtxmlpatterns -prefix ${EXTPREFIX_qt}
-          BUILD_COMMAND ${PARALLEL_MAKE}
-          INSTALL_COMMAND make install
-          UPDATE_COMMAND ""
-          BUILD_IN_SOURCE 1
-          ALWAYS 0
+      # Belts and suspenders
+      # Beyond all the Xcode and Qt version checking, the proof of the pudding
+      # lies in the success/failure of this command: xcrun --find xcrun. On failure a patch is necessary
+      # otherwise we're ok.
+      # So hard check xcrun...
+      set(XCRUN_OUTPUT)
+      find_program(XCRUN_PROGRAM "xcrun")
+      if(XCRUN_PROGRAM)
+        message(STATUS "${EXTPREFIX_qt}:Found XCRUN_PROGRAM as ${XCRUN_PROGRAM}")
+        set(XCRUN_COMMAND ${XCRUN_PROGRAM}
+          "--find xcrun")
+        execute_process(
+          COMMAND ${XCRUN_COMMAND}
+          RESULT_VARIABLE XCRUN_COMMAND_RESULT
+          OUTPUT_VARIABLE XCRUN_COMMAND_OUTPUT
+          ERROR_FILE /dev/null
         )
+        if(NOT XCRUN_COMMAND_RESULT)
+          # we're actually ok.
+          string(REGEX REPLACE
+            "[ \t]*[\r\n]+[ \t]*" ";"
+            XCRUN_COMMAND_OUTPUT ${XCRUN_COMMAND_OUTPUT})
+        else()
+          string(REPLACE ";" " " XCRUN_COMMAND_STR "${XCRUN_COMMAND}")
+          # message(STATUS "${XCRUN_COMMAND_STR}")
+          message(STATUS "${EXTPREFIX_qt}:xcrun test failed with status ${XCRUN_COMMAND_RESULT}")
+        endif()
       else()
-        # Fix xcrun issue.
-        # This should be fixed by Qt 5.7.1 see here: http://code.qt.io/cgit/qt/qtbase.git/commit/?h=dev&id=77a71c32c9d19b87f79b208929e71282e8d8b5d9
-        ExternalProject_Add(ext_qt
-          DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+        message(STATUS "${EXTPREFIX_qt}:xcrun not found -- ${XCRUN_PROGRAM}")
+      endif()
 
-          LOG_DOWNLOAD        ON
-          LOG_UPDATE          ON
-          LOG_CONFIGURE       ON
-          LOG_BUILD           ON
-          LOG_TEST            ON
-          LOG_INSTALL         ON
-          BUILD_IN_SOURCE 		ON
-
-          URL https://download.qt.io/official_releases/qt/5.7/5.7.0/single/qt-everywhere-opensource-src-5.7.0.tar.gz
-          URL_MD5 9a46cce61fc64c20c3ac0a0e0fa41b42
-          PATCH_COMMAND   ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/gerrit-166202.diff
+      if ((XCRUN_COMMAND_RESULT) AND (NOT (XCODE_VERSION VERSION_LESS 8.0.0)))
+        # Fix Xcode xcrun related issue.
+        # NOTE: This should be fixed by Qt 5.7.1 see here: http://code.qt.io/cgit/qt/qtbase.git/commit/?h=dev&id=77a71c32c9d19b87f79b208929e71282e8d8b5d9
+        # NOTE: but no promises yet.
+        set(ext_qt_PATCH_COMMAND $${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/gerrit-166202.diff
                 COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/macdeploy-qt.diff
                 COMMAND ${PATCH_COMMAND} -p1 -b -d <SOURCE_DIR>/qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/qtbase-configure.patch
-                COMMAND ${PATCH_COMMAND} -p1 -b -d <SOURCE_DIR>/qtbase/mkspecs/features/mac -i ${CMAKE_CURRENT_SOURCE_DIR}/mac-default.patch
-          INSTALL_DIR ${EXTPREFIX_qt}
-          CONFIGURE_COMMAND <SOURCE_DIR>/configure -confirm-license  -opensource -nomake examples -no-openssl -no-compile-examples -qt-freetype -qt-harfbuzz -opengl desktop -qt-zlib -qt-pcre -qt-libpng -qt-libjpeg -skip qt3d -skip qtactiveqt -skip qtcanvas3d -skip qtconnectivity -skip qtgraphicaleffects -skip qtlocation -skip qtmultimedia -skip qtwayland -skip qtwebchannel -skip qtwebengine -skip qtwebsockets -skip qtwebview -skip qtxmlpatterns -prefix ${EXTPREFIX_qt}
-          BUILD_COMMAND ${PARALLEL_MAKE}
-          INSTALL_COMMAND make install
-          UPDATE_COMMAND ""
-          BUILD_IN_SOURCE 1
-          ALWAYS 0
-        )
-      endif(XCODE_VERSION VERSION_LESS 8.0.0)
+                COMMAND ${PATCH_COMMAND} -p1 -b -d <SOURCE_DIR>/qtbase/mkspecs/features/mac -i ${CMAKE_CURRENT_SOURCE_DIR}/mac-default.patch)
+        message(STATUS "${EXTPREFIX_qt}:Additional patches injected.")
+      else()
+        # No extra patches will be applied
+        # NOTE: safely defaults for some untested scenarios like xcrun fails and xcode_version < 8.
+        # NOTE: that is uncharted territory and (hopefully) a very unlikely scenario...
+        set(ext_qt_PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/gerrit-166202.diff
+                COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/macdeploy-qt.diff)
+      endif()
+      ExternalProject_Add(ext_qt
+        DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+
+        LOG_DOWNLOAD        ON
+        LOG_UPDATE          ON
+        LOG_CONFIGURE       ON
+        LOG_BUILD           ON
+        LOG_TEST            ON
+        LOG_INSTALL         ON
+        BUILD_IN_SOURCE 		ON
+
+        URL https://download.qt.io/official_releases/qt/5.7/5.7.0/single/qt-everywhere-opensource-src-5.7.0.tar.gz
+        URL_MD5 9a46cce61fc64c20c3ac0a0e0fa41b42
+
+        PATCH_COMMAND ${ext_qt_PATCH_COMMAND}
+
+        INSTALL_DIR ${EXTPREFIX_qt}
+        CONFIGURE_COMMAND <SOURCE_DIR>/configure -confirm-license  -opensource -nomake examples -no-openssl -no-compile-examples -qt-freetype -qt-harfbuzz -opengl desktop -qt-zlib -qt-pcre -qt-libpng -qt-libjpeg -skip qt3d -skip qtactiveqt -skip qtcanvas3d -skip qtconnectivity -skip qtgraphicaleffects -skip qtlocation -skip qtmultimedia -skip qtwayland -skip qtwebchannel -skip qtwebengine -skip qtwebsockets -skip qtwebview -skip qtxmlpatterns -prefix ${EXTPREFIX_qt}
+        BUILD_COMMAND ${PARALLEL_MAKE}
+        INSTALL_COMMAND make install
+        UPDATE_COMMAND ""
+        BUILD_IN_SOURCE 1
+        ALWAYS 0
+      )
     else()
-        # Other nix
         ExternalProject_Add(
             ext_qt
             DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}

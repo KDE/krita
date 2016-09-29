@@ -94,13 +94,14 @@ void KisSimplifiedActionPolicyStrategy::continuePrimaryAction(KoPointerEvent *ev
      * See bug 340496
      */
     const bool shiftIsActive = event->modifiers() & Qt::ShiftModifier;
+    const bool altIsActive = event->modifiers() & Qt::AltModifier;
 
     const QPointF pos =
         m_d->snapGuide ?
         m_d->snapGuide->snap(event->point, m_d->dragOffset, event->modifiers()) :
         event->point;
 
-    return continuePrimaryAction(m_d->converter->documentToImage(pos), shiftIsActive);
+    return continuePrimaryAction(m_d->converter->documentToImage(pos), shiftIsActive, altIsActive);
 }
 
 void KisSimplifiedActionPolicyStrategy::hoverActionCommon(KoPointerEvent *event)
@@ -150,8 +151,9 @@ void KisSimplifiedActionPolicyStrategy::continueAlternateAction(KoPointerEvent *
     Q_UNUSED(action);
 
     if (!m_d->changeSizeModifierActive && !m_d->anyPickerModifierActive) return;
+    const bool altIsActive = event->modifiers() & Qt::AltModifier;
 
-    continuePrimaryAction(m_d->converter->documentToImage(event->point), m_d->changeSizeModifierActive);
+    continuePrimaryAction(m_d->converter->documentToImage(event->point), m_d->changeSizeModifierActive, altIsActive);
 }
 
 bool KisSimplifiedActionPolicyStrategy::endAlternateAction(KoPointerEvent *event, KisTool::AlternateAction action)

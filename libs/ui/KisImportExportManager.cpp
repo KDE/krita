@@ -242,16 +242,17 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::convert(KisImpor
         if (!checker.warnings().isEmpty()) {
             QTextBrowser *browser = new QTextBrowser();
             layout->addWidget(browser);
-            QString description = KisMimeDatabase::descriptionForMimeType(typeName);
-            qDebug() << description;
+
             QString warning = "<html><body><p><b>"
-                    + i18n("You will lose information when saving this image as a %1.", description)
+                    + i18n("You will lose information when saving this image as a %1.", KisMimeDatabase::descriptionForMimeType(typeName))
                     + "</p></b><p>"
                     + i18n("Reasons:")
                     + "</p><ul>";
+
             Q_FOREACH(const QString &w, checker.warnings()) {
                 warning += "\n<li>" + w + "</li>";
             }
+
             warning += "</ul>";
             browser->setHtml(warning);
         }

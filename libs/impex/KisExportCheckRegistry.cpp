@@ -34,7 +34,7 @@ public:
         , m_colorDepthID(colorDepthId)
     {
         if (customWarning.isEmpty()) {
-            m_warning = i18nc("image conversion warning", "The color model %1 or channel depth %2 cannot be saved to this format.").arg(m_colorModelID.name()).arg(m_colorDepthID.name());
+            m_warning = i18nc("image conversion warning", "The color model %1 or channel depth %2 cannot be saved to this format. Your image will be converted.").arg(m_colorModelID.name()).arg(m_colorDepthID.name());
         }
     }
 

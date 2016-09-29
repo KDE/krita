@@ -121,7 +121,7 @@ public:
 
 private:
 
-    KisImportExportFilter::ConversionStatus convert(Direction direction, const QString &location, const QString &mimeType, KisPropertiesConfigurationSP exportConfiguration) const;
+    KisImportExportFilter::ConversionStatus convert(Direction direction, const QString &location, const QString &mimeType, KisPropertiesConfigurationSP exportConfiguration);
 
     // Private API
     KisImportExportManager(const KisImportExportManager& rhs);

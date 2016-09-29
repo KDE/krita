@@ -59,10 +59,11 @@ public:
     static qreal effectiveRotationHandleGrabRadius(const KisCoordinatesConverter *converter);
 
     static qreal scaleFromAffineMatrix(const QTransform &t);
-    static qreal scaleFromPerspectiveMatrix(const QTransform &t, const QPointF &basePt);
+    static qreal scaleFromPerspectiveMatrixX(const QTransform &t, const QPointF &basePt);
+    static qreal scaleFromPerspectiveMatrixY(const QTransform &t, const QPointF &basePt);
     static qreal effectiveSize(const QRectF &rc);
 
-    static QRectF handleRect(qreal radius, const QTransform &t, const QRectF &limitingSize, qreal *d = 0);
+    static QRectF handleRect(qreal radius, const QTransform &t, const QRectF &limitingRect, qreal *dOutX, qreal *dOutY);
     static QRectF handleRect(qreal radius, const QTransform &t, const QRectF &limitingRect, const QPointF &basePoint);
 
     static QPointF clipInRect(QPointF p, QRectF r);

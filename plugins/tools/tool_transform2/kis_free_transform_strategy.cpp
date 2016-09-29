@@ -312,19 +312,19 @@ void KisFreeTransformStrategy::paint(QPainter &gc)
 
     // Draw Handles
 
-    qreal d = 1;
     QRectF handleRect =
         KisTransformUtils::handleRect(KisTransformUtils::handleVisualRadius,
                                       m_d->handlesTransform,
-                                      m_d->transaction.originalRect(),
-                                      &d);
+                                      m_d->transaction.originalRect(), 0, 0);
 
-    qreal r = 1;
+    qreal rX = 1;
+    qreal rY = 1;
     QRectF rotationCenterRect =
         KisTransformUtils::handleRect(KisTransformUtils::rotationHandleVisualRadius,
                                       m_d->handlesTransform,
                                       m_d->transaction.originalRect(),
-                                      &r);
+                                      &rX,
+                                      &rY);
 
     QPainterPath handles;
 
@@ -344,8 +344,8 @@ void KisFreeTransformStrategy::paint(QPainter &gc)
     handles.addRect(handleRect.translated(m_d->transaction.originalMiddleBottom()));
 
     QPointF rotationCenter = m_d->currentArgs.originalCenter() + m_d->currentArgs.rotationCenterOffset();
-    QPointF dx(r + 3, 0);
-    QPointF dy(0, r + 3);
+    QPointF dx(rX + 3, 0);
+    QPointF dy(0, rY + 3);
     handles.addEllipse(rotationCenterRect.translated(rotationCenter));
     handles.moveTo(rotationCenter - dx);
     handles.lineTo(rotationCenter + dx);

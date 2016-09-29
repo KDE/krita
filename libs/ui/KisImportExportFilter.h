@@ -33,6 +33,7 @@ Boston, MA 02110-1301, USA.
 class KoUpdater;
 class KisDocument;
 class KisConfigWidget;
+class KisExportCheckBase;
 
 #include "kritaui_export.h"
 
@@ -143,6 +144,12 @@ public:
      */
     virtual KisConfigWidget *createConfigurationWidget(QWidget *parent, const QByteArray& from = "", const QByteArray& to = "") const;
 
+    /**
+     * @brief generate and return the list of capabilities of this export filter. The list
+     * @return returns the list of capabilities of this export filter
+     */
+    virtual QMap<QString, KisExportCheckBase*> exportChecks();
+
 protected:
     /**
      * This is the constructor your filter has to call, obviously.
@@ -154,7 +161,8 @@ protected:
     QByteArray mimeType() const;
 
     void setProgress(int value);
-
+    virtual void initializeCapabilities();
+    void addCapability(KisExportCheckBase *capability);
 
 private:
 

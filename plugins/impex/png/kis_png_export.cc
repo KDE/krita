@@ -32,6 +32,8 @@
 #include <KoColorModelStandardIds.h>
 #include <KoColorSpaceRegistry.h>
 
+#include <KisExportCheckRegistry.h>
+
 #include <kis_properties_configuration.h>
 #include <kis_paint_device.h>
 #include <KisDocument.h>
@@ -94,7 +96,7 @@ KisImportExportFilter::ConversionStatus KisPNGExport::convert(KisDocument *docum
             break;
         }
     } while (it.nextPixel());
-    
+
     configuration->setProperty("isThereAlpha", isThereAlpha);
     configuration->setProperty("ColorModelID", cs->colorModelId().id());
     bool sRGB = (cs->profile()->name().contains(QLatin1String("srgb"), Qt::CaseInsensitive) && !cs->profile()->name().contains(QLatin1String("g10")));
@@ -163,6 +165,17 @@ KisPropertiesConfigurationSP KisPNGExport::lastSavedConfiguration(const QByteArr
 KisConfigWidget *KisPNGExport::createConfigurationWidget(QWidget *parent, const QByteArray &, const QByteArray &) const
 {
     return new KisWdgOptionsPNG(parent);
+}
+
+void KisPNGExport::initializeCapabilities()
+{
+    qDebug() << KisExportCheckRegistry::instance()->keys();
+    qDebug() << "ColorModelCheck/" + RGBAColorModelID.id() + "/" + Integer8BitsColorDepthID.id();
+    qDebug() << KisExportCheckRegistry::instance()->keys().contains("ColorModelCheck/" + RGBAColorModelID.id() + "/" + Integer8BitsColorDepthID.id());
+    addCapability(KisExportCheckRegistry::instance()->get("ColorModelCheck/" + RGBAColorModelID.id() + "/" + Integer8BitsColorDepthID.id())->create(KisExportCheckBase::SUPPORTED));
+    addCapability(KisExportCheckRegistry::instance()->get("ColorModelCheck/" + RGBAColorModelID.id() + "/" + Integer16BitsColorDepthID.id())->create(KisExportCheckBase::SUPPORTED));
+    addCapability(KisExportCheckRegistry::instance()->get("ColorModelCheck/" + GrayAColorModelID.id() + "/" + Integer8BitsColorDepthID.id())->create(KisExportCheckBase::SUPPORTED));
+    addCapability(KisExportCheckRegistry::instance()->get("ColorModelCheck/" + GrayAColorModelID.id() + "/" + Integer16BitsColorDepthID.id())->create(KisExportCheckBase::SUPPORTED));
 }
 
 void KisWdgOptionsPNG::setConfiguration(const KisPropertiesConfigurationSP cfg)

@@ -24,6 +24,7 @@ Boston, MA 02110-1301, USA.
 #include <kis_debug.h>
 #include <QStack>
 #include "KisImportExportManager.h"
+#include <KisExportCheckBase.h>
 #include "KoUpdater.h"
 #include <klocalizedstring.h>
 
@@ -35,10 +36,17 @@ public:
     QString filename;
     bool batchmode;
 
+    QMap<QString, KisExportCheckBase*> capabilities;
+
     Private()
         : updater(0)
         , batchmode(false)
     {}
+
+    ~Private()
+    {
+        qDeleteAll(capabilities);
+    }
 
 };
 
@@ -182,6 +190,13 @@ KisConfigWidget *KisImportExportFilter::createConfigurationWidget(QWidget *, con
     return 0;
 }
 
+QMap<QString, KisExportCheckBase *> KisImportExportFilter::exportChecks()
+{
+    qDeleteAll(d->capabilities);
+    initializeCapabilities();
+    return d->capabilities;
+}
+
 void KisImportExportFilter::setUpdater(QPointer<KoUpdater> updater)
 {
     d->updater = updater;
@@ -192,4 +207,14 @@ void KisImportExportFilter::setProgress(int value)
     if (d->updater) {
         d->updater->setValue(value);
     }
+}
+
+void KisImportExportFilter::initializeCapabilities()
+{
+    // XXX: Initialize everything to fully supported?
+}
+
+void KisImportExportFilter::addCapability(KisExportCheckBase *capability)
+{
+    d->capabilities[capability->id()] = capability;
 }

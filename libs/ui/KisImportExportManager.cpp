@@ -41,12 +41,12 @@
 #include <kis_config_widget.h>
 #include <kis_debug.h>
 #include <KisMimeDatabase.h>
+#include <KisPreExportChecker.h>
+#include <KisPart.h>
 #include "kis_config.h"
 #include "KisImportExportFilter.h"
 #include "KisDocument.h"
-
-#include <queue>
-#include <unistd.h>
+#include "kis_image.h"
 
 // static cache for import and export mimetypes
 QStringList KisImportExportManager::m_importMimeTypes;
@@ -214,6 +214,25 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::convert(KisImpor
         exportConfiguration = filter->lastSavedConfiguration(from, to);
     }
 
+    KisImageSP unconvertedImage = m_document->image();
+
+    KisPreExportChecker checker;
+    if (!checker.check(m_document->image(), filter->exportChecks())) {
+        if (!batchMode()) {
+            QString warning = "<html><body><p>" + i18n("Your image cannot be fully saved as a %1").arg(KisMimeDatabase::descriptionForMimeType(typeName) + "</p><p>" + i18n("Reasons:") + "</p><ul>");
+            Q_FOREACH(const QString &w, checker.warnings()) {
+                warning += "\n<li>" + w + "</li>";
+            }
+            warning += "</ul>";
+            warning += "<p><b>" + i18n("If you do not want to lose information, also save as .kra!") + "</b></p></body></html>";
+            if (QMessageBox::warning(KisPart::instance()->currentMainwindow(), i18nc("@title:window", "Krita: Export Warning"), warning, QMessageBox::Ignore, QMessageBox::Cancel) == QMessageBox::Cancel) {
+                return KisImportExportFilter::UserCancelled;
+            }
+        }
+//        KisImageSP convertedImage = checker.convertedImage(m_document->image());
+//        m_document->setCurrentImage(convertedImage);
+    }
+
     if (!batchMode()) {
         KoDialog dlg;
         dlg.setButtons(KoDialog::Ok | KoDialog::Cancel);
@@ -260,6 +279,8 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::convert(KisImpor
     if (!batchMode()) {
         QApplication::restoreOverrideCursor();
     }
+
+//    m_document->setCurrentImage(unconvertedImage);
 
     return status;
 

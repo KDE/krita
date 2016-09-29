@@ -29,16 +29,16 @@ KisPreExportChecker::KisPreExportChecker()
     KisExportCheckRegistry::instance();
 }
 
-void KisPreExportChecker::check(KisImageSP image, QMap<QString, KisExportCheckBase*> filterChecks)
+bool KisPreExportChecker::check(KisImageSP image, QMap<QString, KisExportCheckBase*> filterChecks)
 {
     Q_FOREACH(const QString &id, KisExportCheckRegistry::instance()->keys()) {
         KisExportCheckBase *check = createCheck(id, KisExportCheckBase::SUPPORTED);
         if (check->checkNeeded(image)) {
             if (!filterChecks.contains(id)) {
-                m_warnings << check->message();
+                m_warnings << check->warning();
             }
             else if (filterChecks[id]->check(image) != KisExportCheckBase::SUPPORTED) {
-                m_warnings << filterChecks[id]->message();
+                m_warnings << filterChecks[id]->warning();
             }
             else {
                 continue;
@@ -49,6 +49,8 @@ void KisPreExportChecker::check(KisImageSP image, QMap<QString, KisExportCheckBa
         }
         delete check;
     }
+
+    return m_warnings.isEmpty();
 }
 
 KisImageSP KisPreExportChecker::convertedImage(KisImageSP originalImage) const

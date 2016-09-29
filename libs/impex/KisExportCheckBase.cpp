@@ -26,7 +26,7 @@ KisExportCheckBase::KisExportCheckBase(const QString &id, Level level, const QSt
     , m_converter(0)
 {
     if (!customWarning.isEmpty()) {
-        m_message = customWarning;
+        m_warning = customWarning;
     }
 }
 
@@ -45,8 +45,8 @@ KisExportConverterBase *KisExportCheckBase::converter() const
     return m_converter;
 }
 
-QString KisExportCheckBase::message() const
+QString KisExportCheckBase::warning() const
 {
-    return m_message;
+    return m_warning;
 }
 

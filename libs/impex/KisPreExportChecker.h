@@ -31,14 +31,23 @@ class KRITAIMPEX_EXPORT KisPreExportChecker
 public:
     KisPreExportChecker();
 
-    void check(KisImageSP image, QMap<QString, KisExportCheckBase *> filterChecks);
+    /**
+     * @brief check checks the image against the capabilities of the export filter
+     * @param image the current image
+     * @param filterChecks the list of capabilities the filter possesses
+     * @return true if no warnings and no conversions are needed
+     */
+    bool check(KisImageSP image, QMap<QString, KisExportCheckBase *> filterChecks);
     KisImageSP convertedImage(KisImageSP) const;
     QStringList warnings() const;
     bool conversionNeeded() const;
 
-    KisExportCheckBase *createCheck(const QString &id, const KisExportCheckBase::Level level, const QString &customWarning = QString());
 
 private:
+
+    KisExportCheckBase *createCheck(const QString &id, const KisExportCheckBase::Level level, const QString &customWarning = QString());
+
+
     QStringList m_warnings;
     QMap<QString, KisExportConverterBase*> m_conversions;
 };

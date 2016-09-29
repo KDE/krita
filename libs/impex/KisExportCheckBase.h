@@ -64,15 +64,15 @@ public:
     virtual Level check(KisImageSP image) const = 0;
 
     /// @return the message to show the user
-    QString message() const;
+    QString warning() const;
 
     KisExportConverterBase *converter() const;
 
-private:
+protected:
 
     QString m_id;
     Level m_level;
-    QString m_message;
+    QString m_warning;
     KisExportConverterBase *m_converter;
 
 };

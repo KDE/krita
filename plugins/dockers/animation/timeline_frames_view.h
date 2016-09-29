@@ -89,6 +89,7 @@ protected:
     void mousePressEvent(QMouseEvent *event);
     void mouseMoveEvent(QMouseEvent *e);
     void mouseReleaseEvent(QMouseEvent *e);
+    void wheelEvent(QWheelEvent *e);
     void rowsInserted(const QModelIndex& parent, int start, int end);
 
 private:

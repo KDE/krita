@@ -29,6 +29,8 @@
 #include <kis_png_converter.h>
 #include <kis_types.h>
 #include <kis_kra_saver.h>
+#include <kis_kra_loader.h>
+
 class KisDocument;
 
 class KraConverter : public QObject
@@ -41,12 +43,13 @@ public:
     virtual ~KraConverter();
 
     KisImageBuilder_Result buildImage(QIODevice *io);
-    KisImageBuilder_Result buildFile(QIODevice *io, KisImageWSP image, vKisNodeSP activeNodes);
+    KisImageBuilder_Result buildFile(QIODevice *io);
     /**
      * Retrieve the constructed image
      */
-    KisImageWSP image();
+    KisImageSP image();
     vKisNodeSP activeNodes();
+    QList<KisPaintingAssistantSP> assistants();
 
 public Q_SLOTS:
 
@@ -58,15 +61,20 @@ private:
     bool saveToStream(QIODevice *dev);
     QDomDocument createDomDocument();
     bool savePreview(KoStore *store);
+    bool oldLoadAndParse(KoStore *store, const QString &filename, KoXmlDocument &xmldoc);
+    bool loadXML(const KoXmlDocument &doc, KoStore *store);
+    bool completeLoading(KoStore *store);
 
     KisDocument *m_doc {0};
-    KisImageWSP m_image;
+    KisImageSP m_image;
 
     vKisNodeSP m_activeNodes;
+    QList<KisPaintingAssistantSP> m_assistants;
     bool m_stop {false};
 
     KoStore *m_store {0};
     KisKraSaver *m_kraSaver {0};
+    KisKraLoader *m_kraLoader {0};
 };
 
 #endif

@@ -242,13 +242,7 @@ public:
      *
      *  @see isEmpty()
      */
-    void setEmpty();
-
-    /**
-     *  Reimplement this method to load the contents of your Calligra document,
-     *  from the XML document. This is for the pre-Oasis file format (maindoc.xml).
-     */
-    virtual bool loadXML(const KoXmlDocument & doc, KoStore *store);
+    void setEmpty(bool empty = true);
 
     /**
      *  Return a correctly created QDomDocument for this KisDocument,
@@ -553,12 +547,6 @@ private:
      */
     bool saveFile(KisPropertiesConfigurationSP exportConfiguration = 0);
 
-    /**
-     *  Overload this function if you have to load additional files
-     *  from a store. This function is called after loadXML()
-     *  and after loadChildren() have been called.
-     */
-    bool completeLoading(KoStore *store);
 
     /** @internal */
     void setModified();
@@ -618,9 +606,6 @@ private Q_SLOTS:
     /// Called by the undo stack when undo or redo is called
     void slotUndoStackIndexChanged(int idx);
 
-protected:
-
-    bool oldLoadAndParse(KoStore *store, const QString& filename, KoXmlDocument& doc);
 
 public:
 
@@ -698,8 +683,6 @@ public:
     void setAssistants(const QList<KisPaintingAssistantSP> value);
 
 private:
-
-    bool loadNativeFormatFromStoreInternal(KoStore *store);
 
     QString prettyPathOrUrl() const;
 

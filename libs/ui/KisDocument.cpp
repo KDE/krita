@@ -970,31 +970,26 @@ bool KisDocument::openFile()
                 break;
             }
         }
-        //qDebug() << "chopped" << filename  << "to" << path << "Was trash, is" << typeName;
+        qDebug() << "chopped" << filename  << "to" << path << "Was trash, is" << typeName;
     }
     dbgUI << localFilePath() << "type:" << typeName;
 
     setFileProgressUpdater(i18n("Opening Document"));
 
-    if (!isNativeFormat(typeName.toLatin1())) {
-        KisImportExportFilter::ConversionStatus status;
+    KisImportExportFilter::ConversionStatus status;
 
-        status = d->importExportManager->importDocument(localFilePath(), typeName);
-        if (status != KisImportExportFilter::OK) {
-
-            QString msg = KisImportExportFilter::conversionStatusString(status);
-
-            if (!msg.isEmpty()) {
-                QString errorMsg(i18n("Could not open %2.\nReason: %1.\n%3", msg, prettyPathOrUrl(), errorMessage()));
-                QMessageBox::critical(0, i18nc("@title:window", "Krita"), errorMsg);
-            }
-            d->isLoading = false;
-            clearFileProgressUpdater();
-           return false;
+    status = d->importExportManager->importDocument(localFilePath(), typeName);
+    if (status != KisImportExportFilter::OK) {
+        QString msg = KisImportExportFilter::conversionStatusString(status);
+        if (!msg.isEmpty()) {
+            QString errorMsg(i18n("Could not open %2.\nReason: %1.\n%3", msg, prettyPathOrUrl(), errorMessage()));
+            QMessageBox::critical(0, i18nc("@title:window", "Krita"), errorMsg);
         }
-        d->isEmpty = false;
-        //qDebug() << "importedFile" << importedFile << "status:" << static_cast<int>(status);
+        d->isLoading = false;
+        clearFileProgressUpdater();
+        return false;
     }
+    d->isEmpty = false;
 
     setMimeTypeAfterLoading(typeName);
     emit sigLoadingFinished();
@@ -1043,89 +1038,10 @@ void KisDocument::setMimeTypeAfterLoading(const QString& mimeType)
     d->outputMimeType = d->mimeType;
 }
 
-// The caller must call store->close() if loadAndParse returns true.
-bool KisDocument::oldLoadAndParse(KoStore *store, const QString& filename, KoXmlDocument& doc)
-{
-    //dbgUI <<"Trying to open" << filename;
-
-    if (!store->open(filename)) {
-        warnUI << "Entry " << filename << " not found!";
-        d->lastErrorMessage = i18n("Could not find %1", filename);
-        return false;
-    }
-    // Error variables for QDomDocument::setContent
-    QString errorMsg;
-    int errorLine, errorColumn;
-    bool ok = doc.setContent(store->device(), &errorMsg, &errorLine, &errorColumn);
-    store->close();
-    if (!ok) {
-        errUI << "Parsing error in " << filename << "! Aborting!" << endl
-              << " In line: " << errorLine << ", column: " << errorColumn << endl
-              << " Error message: " << errorMsg << endl;
-        d->lastErrorMessage = i18n("Parsing error in %1 at line %2, column %3\nError message: %4"
-                                   , filename  , errorLine, errorColumn ,
-                                   QCoreApplication::translate("QXml", errorMsg.toUtf8(), 0,
-                                                               QCoreApplication::UnicodeUTF8));
-        return false;
-    }
-    dbgUI << "File" << filename << " loaded and parsed";
-    return true;
-}
 
 bool KisDocument::loadNativeFormat(const QString & file_)
 {
-    QString file = file_;
-    QFileInfo fileInfo(file);
-    if (!fileInfo.exists()) { // check duplicated from openUrl, but this is useful for templates
-        d->lastErrorMessage = i18n("The file %1 does not exist.", file);
-        return false;
-    }
-
-    KoStore *store = KoStore::createStore(file, KoStore::Read, "", KoStore::Auto);
-
-    if (store->bad()) {
-        d->lastErrorMessage = i18n("Not a valid Krita file: %1", file);
-        delete store;
-        return false;
-    }
-
-    const bool success = loadNativeFormatFromStoreInternal(store);
-    delete store;
-    return success;
-}
-
-bool KisDocument::loadNativeFormatFromStoreInternal(KoStore *store)
-{
-    if (store->hasFile("root") || store->hasFile("maindoc.xml")) {   // Fallback to "old" file format (maindoc.xml)
-        KoXmlDocument doc = KoXmlDocument(true);
-
-        bool ok = oldLoadAndParse(store, "root", doc);
-        if (ok)
-            ok = loadXML(doc, store);
-        if (!ok) {
-            return false;
-        }
-
-    } else {
-        errUI << "ERROR: No maindoc.xml" << endl;
-        d->lastErrorMessage = i18n("Invalid document: no file 'maindoc.xml'.");
-        return false;
-    }
-
-    if (store->hasFile("documentinfo.xml")) {
-        KoXmlDocument doc = KoXmlDocument(true);
-        if (oldLoadAndParse(store, "documentinfo.xml", doc)) {
-            d->docInfo->load(doc);
-        }
-    } else {
-        //dbgUI <<"cannot open document info";
-        delete d->docInfo;
-        d->docInfo = new KoDocumentInfo(this);
-    }
-
-    bool res = completeLoading(store);
-    d->isEmpty = false;
-    return res;
+    return openUrl(QUrl::fromLocalFile(file_));
 }
 
 bool KisDocument::isStoredExtern() const
@@ -1227,51 +1143,6 @@ void KisDocument::setTitleModified()
     emit titleModified(caption(), isModified());
 }
 
-bool KisDocument::completeLoading(KoStore* store)
-{
-    if (!d->image) {
-//        if (d->kraLoader->errorMessages().isEmpty()) {
-//            setErrorMessage(i18n("Unknown error."));
-//        }
-//        else {
-//            setErrorMessage(d->kraLoader->errorMessages().join(".\n"));
-//        }
-        return false;
-    }
-    d->image->blockUpdates();
-//    d->kraLoader->loadKeyframes(store, url().url(), isStoredExtern());
-//    d->kraLoader->loadBinaryData(store, d->image, url().url(), isStoredExtern());
-    d->image->unblockUpdates();
-    bool retval = true;
-//    if (!d->kraLoader->errorMessages().isEmpty()) {
-//        setErrorMessage(d->kraLoader->errorMessages().join(".\n"));
-//        retval = false;
-//    }
-    if (retval) {
-//        vKisNodeSP preselectedNodes = d->kraLoader->selectedNodes();
-//        if (preselectedNodes.size() > 0) {
-//            d->preActivatedNode = preselectedNodes.first();
-//        }
-
-        // before deleting the kraloader, get the list with preloaded assistants and save it
-//        d->assistants = d->kraLoader->assistants();
-        d->shapeController->setImage(d->image);
-
-        connect(d->image.data(), SIGNAL(sigImageModified()), this, SLOT(setImageModified()));
-
-        if (d->image) {
-            d->image->initialRefreshGraph();
-        }
-        setAutoSave(KisConfig().autoSaveInterval());
-
-        emit sigLoadingFinished();
-    }
-
-//    delete d->kraLoader;
-//    d->kraLoader = 0;
-
-    return retval;
-}
 QDomDocument KisDocument::createDomDocument(const QString& tagName, const QString& version) const
 {
     return createDomDocument("krita", tagName, version);
@@ -1290,71 +1161,6 @@ QDomDocument KisDocument::createDomDocument(const QString& appName, const QStrin
     QDomDocument doc = impl.createDocument(namespaceURN, tagName, dtype);
     doc.insertBefore(doc.createProcessingInstruction("xml", "version=\"1.0\" encoding=\"UTF-8\""), doc.documentElement());
     return doc;
-}
-
-bool KisDocument::loadXML(const KoXmlDocument& doc, KoStore *store)
-{
-    Q_UNUSED(store);
-    if (d->image) {
-        d->shapeController->setImage(0);
-        d->image = 0;
-    }
-
-    KoXmlElement root;
-    KoXmlNode node;
-    KisImageSP image;
-
-    if (doc.doctype().name() != "DOC") {
-        setErrorMessage(i18n("The format is not supported or the file is corrupted"));
-        return false;
-    }
-    root = doc.documentElement();
-    int syntaxVersion = root.attribute("syntaxVersion", "3").toInt();
-    if (syntaxVersion > 2) {
-        setErrorMessage(i18n("The file is too new for this version of Krita (%1).", syntaxVersion));
-        return false;
-    }
-
-    if (!root.hasChildNodes()) {
-        setErrorMessage(i18n("The file has no layers."));
-        return false;
-    }
-
-//    if (d->kraLoader) delete d->kraLoader;
-//    d->kraLoader = new KisKraLoader(this, syntaxVersion);
-
-    // Legacy from the multi-image .kra file period.
-//    for (node = root.firstChild(); !node.isNull(); node = node.nextSibling()) {
-//        if (node.isElement()) {
-//            if (node.nodeName() == "IMAGE") {
-//                KoXmlElement elem = node.toElement();
-//                if (!(image = d->kraLoader->loadXML(elem))) {
-//                    if (d->kraLoader->errorMessages().isEmpty()) {
-//                        setErrorMessage(i18n("Unknown error."));
-//                    }
-//                    else {
-//                        setErrorMessage(d->kraLoader->errorMessages().join(".\n"));
-//                    }
-//                    return false;
-//                }
-
-//            }
-//            else {
-//                if (d->kraLoader->errorMessages().isEmpty()) {
-//                    setErrorMessage(i18n("The file does not contain an image."));
-//                }
-//                return false;
-//            }
-//        }
-//    }
-
-    if (d->image) {
-        // Disconnect existing sig/slot connections
-        d->image->disconnect(this);
-    }
-    d->setImageAndInitIdleWatcher(image);
-
-    return true;
 }
 
 bool KisDocument::isNativeFormat(const QByteArray& mimetype) const
@@ -1548,9 +1354,9 @@ bool KisDocument::isEmpty() const
     return d->isEmpty;
 }
 
-void KisDocument::setEmpty()
+void KisDocument::setEmpty(bool empty)
 {
-    d->isEmpty = true;
+    d->isEmpty = empty;
 }
 
 
@@ -1930,13 +1736,15 @@ KisImageWSP KisDocument::image() const
 
 void KisDocument::setCurrentImage(KisImageSP image)
 {
-    if (!image) return;
-
     if (d->image) {
         // Disconnect existing sig/slot connections
         d->image->disconnect(this);
         d->shapeController->setImage(0);
+        d->image = 0;
     }
+
+    if (!image) return;
+
     d->setImageAndInitIdleWatcher(image);
     d->shapeController->setImage(image);
     setModified(false);

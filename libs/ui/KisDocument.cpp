@@ -1094,27 +1094,6 @@ bool KisDocument::loadNativeFormat(const QString & file_)
     return success;
 }
 
-bool KisDocument::loadNativeFormatFromByteArray(QByteArray &data)
-{
-    bool succes;
-    QBuffer buffer(&data);
-    KoStore *store = KoStore::createStore(&buffer, KoStore::Read, "", KoStore::Auto);
-
-    if (store->bad()) {
-        delete store;
-        return false;
-    }
-    succes = loadNativeFormatFromStoreInternal(store);
-
-    // Retrieve the password after loading the file, only then is it guaranteed to exist
-    if (succes && store->isEncrypted() && !d->isImporting)
-        d->password = store->password();
-
-    delete store;
-
-    return succes;
-}
-
 bool KisDocument::loadNativeFormatFromStoreInternal(KoStore *store)
 {
     if (store->hasFile("root") || store->hasFile("maindoc.xml")) {   // Fallback to "old" file format (maindoc.xml)

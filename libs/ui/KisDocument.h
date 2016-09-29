@@ -420,13 +420,6 @@ public:
      */
     void setUnit(const KoUnit &unit);
 
-    /**
-     * Save the unit to the settings writer
-     *
-     * @param settingsWriter
-     */
-    bool loadNativeFormatFromByteArray(QByteArray &data);
-
     KisGridConfig gridConfig() const;
     void setGridConfig(const KisGridConfig &config);
 

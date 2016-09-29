@@ -146,6 +146,7 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
 
 
     connect(m_rotationCenterButtons, SIGNAL(buttonPressed(int)), this, SLOT(slotRotationCenterChanged(int)));
+    connect(btnScaleFromPivotPoint, SIGNAL(clicked(bool)), this, SLOT(slotScaleFromRotationCenter(bool)));
 
     // Init Free Transform Values
     connect(scaleXBox, SIGNAL(valueChanged(int)), this, SLOT(slotSetScaleX(int)));
@@ -321,6 +322,9 @@ void KisToolTransformConfigWidget::slotUpdateIcons()
     bottomLeftButton->setIcon(KisIconUtils::loadIcon("arrow-downleft"));
     middleBottomButton->setIcon(KisIconUtils::loadIcon("arrow-down"));
     bottomRightButton->setIcon(KisIconUtils::loadIcon("arrow-downright"));
+
+    // TODO: change the icon!
+    btnScaleFromPivotPoint->setIcon(KisIconUtils::loadIcon("transform_icons_liquify_main"));
 
 
     // pressure icons
@@ -571,6 +575,9 @@ void KisToolTransformConfigWidget::updateConfig(const ToolTransformArgs &config)
                 break;
             }
         }
+
+        btnScaleFromPivotPoint->setChecked(config.scaleFromRotationCenter());
+
     } else if (config.mode() == ToolTransformArgs::WARP) {
 
         stackedWidget->setCurrentIndex(1);
@@ -839,6 +846,16 @@ void KisToolTransformConfigWidget::slotRotationCenterChanged(int index)
 
         notifyConfigChanged();
     }
+}
+
+void KisToolTransformConfigWidget::slotScaleFromRotationCenter(bool value)
+{
+    if (m_uiSlotsBlocked) return;
+
+    ToolTransformArgs *config = m_transaction->currentConfig();
+    config->setScaleFromRotationCenter(value);
+    notifyConfigChanged();
+    notifyEditingFinished();
 }
 
 void KisToolTransformConfigWidget::slotSetScaleX(int value)

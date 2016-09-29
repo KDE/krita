@@ -440,9 +440,10 @@ QPointF toQPointF(const QVector4D &v) {
     return v.toVector2DAffine().toPointF();
 }
 
-void KisPerspectiveTransformStrategy::continuePrimaryAction(const QPointF &mousePos, bool specialModifierActve)
+void KisPerspectiveTransformStrategy::continuePrimaryAction(const QPointF &mousePos, bool shiftModifierActve, bool altModifierActive)
 {
-    Q_UNUSED(specialModifierActve);
+    Q_UNUSED(shiftModifierActve);
+    Q_UNUSED(altModifierActive);
 
     switch (m_d->function) {
     case NONE:

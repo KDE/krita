@@ -20,11 +20,12 @@
 #include <QCheckBox>
 #include <QSlider>
 #include <QMessageBox>
-
-#include <kpluginfactory.h>
 #include <QFileInfo>
 #include <QApplication>
 
+#include <kpluginfactory.h>
+
+#include <KisExportCheckRegistry.h>
 #include <KisImportExportManager.h>
 #include <KoColorSpaceConstants.h>
 
@@ -103,6 +104,11 @@ KisImportExportFilter::ConversionStatus psdExport::convert(KisDocument *document
     }
     dbgFile <<" Result =" << res;
     return KisImportExportFilter::InternalError;
+}
+
+void psdExport::initializeCapabilities()
+{
+    addCapability(KisExportCheckRegistry::instance()->get("PSDLayerStyleCheck")->create(KisExportCheckBase::SUPPORTED));
 }
 
 #include <psd_export.moc>

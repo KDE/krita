@@ -27,12 +27,11 @@
 #include <AnimationCheck.h>
 #include <ColorModelCheck.h>
 //#include <ColorModelPerLayerCheck.h>
-//#include <ColorProofingCheck.h>
 #include <CompositionsCheck.h>
 //#include <ExifCheck.h>
 //#include <GuidesCheck.h>
 #include <MultiLayerCheck.h>
-//#include <PSDLayerStylesCheck.h>
+#include <PSDLayerStylesCheck.h>
 //#include <sRGBProfileCheck.h>
 #include <NodeTypeCheck.h>
 #include <QGlobalStatic>
@@ -53,6 +52,10 @@ KisExportCheckRegistry::KisExportCheckRegistry ()
 
     // Compositions
     chkFactory = new CompositionsCheckFactory();
+    add(chkFactory->id(), chkFactory);
+
+    // Layer styles
+    chkFactory = new PSDLayerStyleCheckFactory();
     add(chkFactory->id(), chkFactory);
 
     // Color model/channel depth checks

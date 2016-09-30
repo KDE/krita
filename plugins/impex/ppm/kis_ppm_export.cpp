@@ -273,6 +273,11 @@ KisPropertiesConfigurationSP KisWdgOptionsPPM::configuration() const
 
 void KisPPMExport::initializeCapabilities()
 {
+    addCapability(KisExportCheckRegistry::instance()->get("ColorModelCheck/" + RGBAColorModelID.id() + "/" + Integer8BitsColorDepthID.id())->create(KisExportCheckBase::SUPPORTED));
+    addCapability(KisExportCheckRegistry::instance()->get("ColorModelCheck/" + RGBAColorModelID.id() + "/" + Integer16BitsColorDepthID.id())->create(KisExportCheckBase::SUPPORTED));
+    addCapability(KisExportCheckRegistry::instance()->get("ColorModelCheck/" + GrayAColorModelID.id() + "/" + Integer8BitsColorDepthID.id())->create(KisExportCheckBase::SUPPORTED));
+    addCapability(KisExportCheckRegistry::instance()->get("ColorModelCheck/" + GrayAColorModelID.id() + "/" + Integer16BitsColorDepthID.id())->create(KisExportCheckBase::SUPPORTED));
+
 }
 
 

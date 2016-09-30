@@ -1163,7 +1163,9 @@ void exrConverter::Private::recBuildPaintLayerSaveInfo(QList<ExrPaintLayerSaveIn
                     info.channels.push_back(info.name + remap(current2original, "A"));
                 }
 
-            }            if (paintLayer->colorSpace()->colorDepthId() == Float16BitsColorDepthID) {
+            }
+
+            if (paintLayer->colorSpace()->colorDepthId() == Float16BitsColorDepthID) {
                 info.pixelType = Imf::HALF;
             }
             else if (paintLayer->colorSpace()->colorDepthId() == Float32BitsColorDepthID) {
@@ -1207,14 +1209,14 @@ void exrConverter::Private::reportLayersNotSaved(const QSet<KisNodeSP> &layersNo
     textStream.setCodec("UTF-8");
 
     Q_FOREACH (KisNodeSP node, layersNotSaved) {
-        textStream << "<item>" << i18nc("@item:unsupported-node-message", "%1 (type: \"%2\")", node->name(), node->metaObject()->className()) << "</item>";
+        textStream << "<li>" << i18nc("@item:unsupported-node-message", "%1 (type: \"%2\")", node->name(), node->metaObject()->className()) << "</li>";
     }
 
     QString msg =
             i18nc("@info",
-                  "<para>The following layers have a type that is not supported by EXR format:</para>"
-                  "<para><list>%1</list></para>"
-                  "<para><warning>these layers will NOT be saved to the final EXR file</warning></para>", layersList);
+                  "<p>The following layers have a type that is not supported by EXR format:</p>"
+                  "<r><ul>%1</ul></p>"
+                  "<p><warning>these layers have <b>not</b> been saved to the final EXR file</warning></p>", layersList);
 
     if (this->showNotifications) {
         QMessageBox::information(0, i18nc("@title:window", "Layers will be lost"), msg);

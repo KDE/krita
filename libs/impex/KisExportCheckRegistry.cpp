@@ -25,13 +25,11 @@
 #include <KoColorModelStandardIds.h>
 
 #include <AnimationCheck.h>
-//#include <AssistantsCheck.h>
 #include <ColorModelCheck.h>
 //#include <ColorModelPerLayerCheck.h>
 //#include <ColorProofingCheck.h>
-//#include <CompositionsCheck.h>
+#include <CompositionsCheck.h>
 //#include <ExifCheck.h>
-//#include <GridCheck.h>
 //#include <GuidesCheck.h>
 #include <MultiLayerCheck.h>
 //#include <PSDLayerStylesCheck.h>
@@ -51,6 +49,10 @@ KisExportCheckRegistry::KisExportCheckRegistry ()
 
     // Animation check
     chkFactory = new AnimationCheckFactory();
+    add(chkFactory->id(), chkFactory);
+
+    // Compositions
+    chkFactory = new CompositionsCheckFactory();
     add(chkFactory->id(), chkFactory);
 
     // Color model/channel depth checks

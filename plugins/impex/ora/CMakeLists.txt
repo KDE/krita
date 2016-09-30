@@ -24,7 +24,7 @@ set(kritaoraexport_SOURCES
 
 add_library(kritaoraexport MODULE ${kritaoraexport_SOURCES})
 
-target_link_libraries(kritaoraexport kritaui )
+target_link_libraries(kritaoraexport kritaui kritaimpex)
 
 install(TARGETS kritaoraexport  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 

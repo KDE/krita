@@ -20,7 +20,7 @@ ki18n_wrap_ui(kritappmexport_SOURCES kis_wdg_options_ppm.ui )
 
 add_library(kritappmexport MODULE ${kritappmexport_SOURCES})
 
-target_link_libraries(kritappmexport kritaui  )
+target_link_libraries(kritappmexport kritaui kritaimpex)
 
 install(TARGETS kritappmexport  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 

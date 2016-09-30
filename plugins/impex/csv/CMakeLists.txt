@@ -29,7 +29,7 @@ set(kritacsvexport_SOURCES
 
 add_library(kritacsvexport MODULE ${kritacsvexport_SOURCES})
 
-target_link_libraries(kritacsvexport kritaui )
+target_link_libraries(kritacsvexport kritaui kritaimpex)
 
 install(TARGETS kritacsvexport  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 

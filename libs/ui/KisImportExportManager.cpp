@@ -251,9 +251,9 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::convert(KisImpor
     if (!batchMode() && !errors.isEmpty()) {
         QString error =  "<html><body><p><b>"
                 + i18n("Error: cannot save this image as a %1.", KisMimeDatabase::descriptionForMimeType(typeName))
-                + "</b> "
+                + "</b><br/> "
                 + i18n("Reasons:</p>")
-                + "</p><ul>";
+                + "<p/><ul>";
         Q_FOREACH(const QString &w, errors) {
             error += "\n<li>" + w + "</li>";
         }
@@ -261,7 +261,7 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::convert(KisImpor
         error += "</ul>";
 
         QMessageBox::critical(KisPart::instance()->currentMainwindow(), i18nc("@title:window", "Krita: Export Error"), error);
-        return KisImportExportFilter::UsageError;
+        return KisImportExportFilter::UserCancelled;
     }
 
     if (!batchMode() && (wdg || !warnings.isEmpty())) {
@@ -284,7 +284,7 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::convert(KisImpor
 
             KisPopupButton *bn = new KisPopupButton(0);
             //bn->setIcon(KisIconUtils::loadIcon("dialog-"));
-            bn->setText(i18nc("Keep the extra space at the end of the sentencte, please", "Warning: saving as %1 will lose information from your image.    ", KisMimeDatabase::descriptionForMimeType(mimeType)));
+            bn->setText(i18nc("Keep the extra space at the end of the sentence, please", "Warning: saving as %1 will lose information from your image.    ", KisMimeDatabase::descriptionForMimeType(mimeType)));
             hLayout->addWidget(bn);
 
             layout->addLayout(hLayout);
@@ -295,9 +295,9 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::convert(KisImpor
 
             QString warning = "<html><body><p><b>"
                     + i18n("You will lose information when saving this image as a %1.", KisMimeDatabase::descriptionForMimeType(typeName))
-                    + "</b> "
+                    + "</b><br/>"
                     + i18n("Reasons:</p>")
-                    + "</p><ul>";
+                    + "<p/><ul>";
 
             Q_FOREACH(const QString &w, warnings) {
                 warning += "\n<li>" + w + "</li>";

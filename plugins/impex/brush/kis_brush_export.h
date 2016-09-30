@@ -23,6 +23,25 @@
 #include <QVariant>
 
 #include <KisImportExportFilter.h>
+#include <ui_wdg_export_gih.h>
+#include <kis_config_widget.h>
+#include <kis_properties_configuration.h>
+
+class KisWdgOptionsBrush : public KisConfigWidget, public Ui::WdgExportGih
+{
+    Q_OBJECT
+
+public:
+    KisWdgOptionsBrush(QWidget *parent)
+        : KisConfigWidget(parent)
+    {
+        setupUi(this);
+    }
+
+    void setConfiguration(const KisPropertiesConfigurationSP  cfg);
+    KisPropertiesConfigurationSP configuration() const;
+};
+
 
 class KisBrushExport : public KisImportExportFilter
 {
@@ -32,6 +51,11 @@ public:
     virtual ~KisBrushExport();
 public:
     virtual KisImportExportFilter::ConversionStatus convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration = 0);
+    KisPropertiesConfigurationSP defaultConfiguration(const QByteArray& from = "", const QByteArray& to = "") const;
+    KisPropertiesConfigurationSP lastSavedConfiguration(const QByteArray &from = "", const QByteArray &to = "") const;
+    KisConfigWidget *createConfigurationWidget(QWidget *parent, const QByteArray& from = "", const QByteArray& to = "") const;
+
+    void initializeCapabilities();
 };
 
 #endif

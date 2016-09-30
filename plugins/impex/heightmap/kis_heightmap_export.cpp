@@ -76,7 +76,12 @@ KisConfigWidget *KisHeightMapExport::createConfigurationWidget(QWidget *parent, 
 
 void KisHeightMapExport::initializeCapabilities()
 {
-
+    if (mimeType() == "image/x-r8") {
+        addCapability(KisExportCheckRegistry::instance()->get("ColorModelCheck/" + GrayAColorModelID.id() + "/" + Integer8BitsColorDepthID.id())->create(KisExportCheckBase::SUPPORTED));
+    }
+    else if (mimeType() == "image/x-r16") {
+        addCapability(KisExportCheckRegistry::instance()->get("ColorModelCheck/" + GrayAColorModelID.id() + "/" + Integer16BitsColorDepthID.id())->create(KisExportCheckBase::SUPPORTED));
+    }
 }
 
 KisImportExportFilter::ConversionStatus KisHeightMapExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration)
@@ -88,25 +93,11 @@ KisImportExportFilter::ConversionStatus KisHeightMapExport::convert(KisDocument 
         return KisImportExportFilter::WrongFormat;
     }
 
-    if (document->image()->colorSpace()->colorModelId() != GrayAColorModelID) {
-        document->setErrorMessage(i18n("Cannot export this image to a heightmap: it is not grayscale"));
-        return KisImportExportFilter::WrongFormat;
-    }
-
     configuration->setProperty("width", image->width());
 
     QDataStream::ByteOrder bo = configuration->getInt("endianness", 0) ? QDataStream::BigEndian : QDataStream::LittleEndian;
 
     bool downscale = false;
-    if (mimeType() == "image/x-r8" && image->colorSpace()->colorDepthId() == Integer16BitsColorDepthID) {
-
-        downscale = (QMessageBox::question(0,
-                                           i18nc("@title:window", "Downscale Image"),
-                                           i18n("You specified the .r8 extension for a 16 bit/channel image. Do you want to save as 8 bit? Your image data will not be changed."),
-                                           QMessageBox::Yes | QMessageBox::No)
-                     == QMessageBox::Yes);
-    }
-
 
     // the image must be locked at the higher levels
     KIS_SAFE_ASSERT_RECOVER_NOOP(image->locked());

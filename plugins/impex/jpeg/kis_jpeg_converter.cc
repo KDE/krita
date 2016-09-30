@@ -470,14 +470,7 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(QIODevice *io, KisPaintLayerS
     const KoColorSpace * cs = layer->colorSpace();
     J_COLOR_SPACE color_type = getColorTypeforColorSpace(cs);
 
-    if (!m_d->batchMode && cs->colorDepthId() != Integer8BitsColorDepthID) {
-        QMessageBox::information(0, i18nc("@title:window", "Krita"), i18n("Warning: JPEG only supports 8 bits per channel. Your image uses: %1. Krita will save your image as 8 bits per channel.", cs->name()));
-    }
-
     if (color_type == JCS_UNKNOWN) {
-        if (!m_d->batchMode) {
-            QMessageBox::information(0, i18nc("@title:window", "Krita"), i18n("Cannot export images in %1.\nWill save as RGB.", cs->name()));
-        }
         KUndo2Command *tmp = layer->paintDevice()->convertTo(KoColorSpaceRegistry::instance()->rgb8(), KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
         delete tmp;
         cs = KoColorSpaceRegistry::instance()->rgb8();

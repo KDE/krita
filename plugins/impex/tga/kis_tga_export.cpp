@@ -26,6 +26,7 @@
 #include <QFileInfo>
 #include <QApplication>
 
+#include <KisImportExportManager.h>
 #include <kis_paint_device.h>
 #include <KisDocument.h>
 #include <kis_image.h>
@@ -75,6 +76,12 @@ KisImportExportFilter::ConversionStatus KisTGAExport::convert(KisDocument *docum
 
     return KisImportExportFilter::OK;
 }
+
+void KisTGAExport::initializeCapabilities()
+{
+}
+
+
 
 #include "kis_tga_export.moc"
 

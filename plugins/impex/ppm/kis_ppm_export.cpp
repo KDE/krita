@@ -22,7 +22,9 @@
 
 #include <KoColorSpace.h>
 #include <KoColorSpaceConstants.h>
+
 #include <KisImportExportManager.h>
+#include <KisExportCheckRegistry.h>
 
 #include <kis_debug.h>
 #include <KisDocument.h>
@@ -268,5 +270,12 @@ KisPropertiesConfigurationSP KisWdgOptionsPPM::configuration() const
     return cfg;
 
 }
+
+void KisPPMExport::initializeCapabilities()
+{
+}
+
+
+
 #include "kis_ppm_export.moc"
 

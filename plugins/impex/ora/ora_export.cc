@@ -28,6 +28,7 @@
 #include <KisImportExportManager.h>
 #include <KoColorModelStandardIds.h>
 #include <KoColorSpace.h>
+#include <KisExportCheckRegistry.h>
 
 #include <KisDocument.h>
 #include <kis_image.h>
@@ -107,6 +108,12 @@ KisImportExportFilter::ConversionStatus OraExport::convert(KisDocument *document
     dbgFile << " Result =" << res;
     return KisImportExportFilter::InternalError;
 }
+
+void OraExport::initializeCapabilities()
+{
+}
+
+
 
 #include <ora_export.moc>
 

@@ -27,6 +27,7 @@
 #include <QFileInfo>
 #include <QApplication>
 
+#include <KisExportCheckRegistry.h>
 #include <KisImportExportManager.h>
 #include <KoColorSpaceConstants.h>
 
@@ -40,21 +41,6 @@
 
 K_PLUGIN_FACTORY_WITH_JSON(KisCSVExportFactory, "krita_csv_export.json", registerPlugin<KisCSVExport>();)
 
-bool checkHomogenity(KisNodeSP root)
-{
-    bool res = true;
-    KisNodeSP child = root->firstChild();
-
-    while (child) {
-            if (child->childCount() > 0) {
-                res = false;
-                break;
-            }
-            child = child->nextSibling();
-    }
-    return res;
-}
-
 KisCSVExport::KisCSVExport(QObject *parent, const QVariantList &) : KisImportExportFilter(parent)
 {
 }
@@ -65,17 +51,6 @@ KisCSVExport::~KisCSVExport()
 
 KisImportExportFilter::ConversionStatus KisCSVExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
 {
-    if (!checkHomogenity(document->image()->rootLayer())) {
-        if (!batchMode()) {
-            QMessageBox::critical(0,
-                                  i18nc("@title:window", "CSV Export Error"),
-                                  i18n("Unable to save to the CSV format.\n"
-                                       "The CSV format not supports layer groups or masked layers."));
-        }
-        return KisImportExportFilter::InvalidFormat;
-    }
-
-
     CSVSaver kpc(document, batchMode());
     KisImageBuilder_Result res;
 
@@ -89,6 +64,14 @@ KisImportExportFilter::ConversionStatus KisCSVExport::convert(KisDocument *docum
         return KisImportExportFilter::ProgressCancelled;
 
     return KisImportExportFilter::InternalError;
+}
+
+void KisCSVExport::initializeCapabilities()
+{
+    addCapability(KisExportCheckRegistry::instance()->get("MultiLayerCheck")->create(KisExportCheckBase::SUPPORTED));
+    addCapability(KisExportCheckRegistry::instance()->get("ColorModelCheck/" + RGBAColorModelID.id() + "/" + Integer8BitsColorDepthID.id())->create(KisExportCheckBase::SUPPORTED));
+    addCapability(KisExportCheckRegistry::instance()->get("ColorModelPerLayerCheck/" + RGBAColorModelID.id() + "/" + Integer8BitsColorDepthID.id())->create(KisExportCheckBase::SUPPORTED));
+    addCapability(KisExportCheckRegistry::instance()->get("sRGBProfileCheck")->create(KisExportCheckBase::SUPPORTED));
 }
 
 #include "kis_csv_export.moc"

@@ -116,8 +116,8 @@ KisImageBuilder_Result CSVSaver::encode(QIODevice *io)
     idx = 0;
 
     while (node) {
-        if (node->inherits("KisPaintLayer")) {
-            KisPaintLayer* paintLayer = dynamic_cast<KisPaintLayer*>(node.data());
+        if (node->inherits("KisLayer")) {
+            KisLayer* paintLayer = dynamic_cast<KisLayer*>(node.data());
             CSVLayerRecord* layerRecord = new CSVLayerRecord();
             layers.prepend(layerRecord); //reverse order!
 
@@ -406,7 +406,6 @@ KisImageBuilder_Result CSVSaver::getLayer(CSVLayerRecord* layer, KisDocument* ex
     filename.append(layer->last);
 
     //save to PNG
-
     KisSequentialConstIterator it(device, image->bounds());
     const KoColorSpace* cs = device->colorSpace();
 

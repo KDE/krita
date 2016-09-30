@@ -35,10 +35,12 @@
 #include <KoColorSpaceConstants.h>
 #include <KoColorSpaceRegistry.h>
 
+#include <KisExportCheckRegistry.h>
+#include <KisImportExportManager.h>
+
 #include <KisDocument.h>
 #include <kis_group_layer.h>
 #include <kis_image.h>
-#include <KisImportExportManager.h>
 #include <kis_layer.h>
 #include <kis_node.h>
 #include <kis_painter.h>
@@ -593,5 +595,11 @@ KisImportExportFilter::ConversionStatus KisSpriterExport::convert(KisDocument *d
 
     return KisImportExportFilter::OK;
 }
+
+void KisSpriterExport::initializeCapabilities()
+{
+}
+
+
 
 #include "kis_spriter_export.moc"

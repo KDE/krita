@@ -63,7 +63,7 @@ KisPropertiesConfigurationSP EXRExport::defaultConfiguration(const QByteArray &/
 KisPropertiesConfigurationSP EXRExport::lastSavedConfiguration(const QByteArray &from, const QByteArray &to) const
 {
     KisPropertiesConfigurationSP cfg = defaultConfiguration(from, to);
-    QString filterConfig = KisConfig().exportConfiguration("EXR");
+    QString filterConfig = KisConfig().exportConfiguration(mimeType());
     cfg->fromXML(filterConfig, false);
     return cfg;
 }
@@ -129,7 +129,7 @@ KisImportExportFilter::ConversionStatus EXRExport::convert(KisDocument *document
 
 }
 
-EXRExport::initializeCapabilities()
+void EXRExport::initializeCapabilities()
 {
 }
 

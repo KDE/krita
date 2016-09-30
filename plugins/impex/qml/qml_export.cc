@@ -24,6 +24,7 @@
 #include <QFileInfo>
 #include <QApplication>
 
+#include <KisExportCheckRegistry.h>
 #include <KisDocument.h>
 #include <kis_image.h>
 
@@ -53,6 +54,12 @@ KisImportExportFilter::ConversionStatus QMLExport::convert(KisDocument *document
     dbgFile << " Result =" << result;
     return KisImportExportFilter::InternalError;
 }
+
+void QMLExport::initializeCapabilities()
+{
+}
+
+
 
 #include <qml_export.moc>
 

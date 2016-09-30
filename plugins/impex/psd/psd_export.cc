@@ -27,6 +27,7 @@
 
 #include <KisExportCheckRegistry.h>
 #include <KisImportExportManager.h>
+
 #include <KoColorSpaceConstants.h>
 
 #include <KisDocument.h>

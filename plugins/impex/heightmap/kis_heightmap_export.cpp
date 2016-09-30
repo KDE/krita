@@ -27,10 +27,12 @@
 
 #include <KoColorSpace.h>
 #include <KoColorSpaceConstants.h>
-#include <KisImportExportManager.h>
 #include <KoColorSpaceTraits.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorModelStandardIds.h>
+
+#include <KisImportExportManager.h>
+#include <KisExportCheckRegistry.h>
 
 #include <kis_debug.h>
 #include <KisDocument.h>
@@ -70,6 +72,11 @@ KisPropertiesConfigurationSP KisHeightMapExport::lastSavedConfiguration(const QB
 KisConfigWidget *KisHeightMapExport::createConfigurationWidget(QWidget *parent, const QByteArray &/*from*/, const QByteArray &/*to*/) const
 {
     return new KisWdgOptionsHeightmap(parent);
+}
+
+void KisHeightMapExport::initializeCapabilities()
+{
+
 }
 
 KisImportExportFilter::ConversionStatus KisHeightMapExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration)

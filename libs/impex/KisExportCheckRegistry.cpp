@@ -33,7 +33,7 @@
 //#include <ExifCheck.h>
 //#include <GridCheck.h>
 //#include <GuidesCheck.h>
-//#include <MultiLayerCheck.h>
+#include <MultiLayerCheck.h>
 //#include <PSDLayerStylesCheck.h>
 //#include <sRGBProfileCheck.h>
 #include <NodeTypeCheck.h>
@@ -44,6 +44,8 @@ Q_GLOBAL_STATIC(KisExportCheckRegistry, s_instance)
 KisExportCheckRegistry::KisExportCheckRegistry ()
 {
     KisExportCheckFactory *chkFactory = 0;
+
+    // Color model/channel depth checks
 
     chkFactory = new ColorModelCheckFactory(AlphaColorModelID, Integer8BitsColorDepthID);
     add(chkFactory->id(), chkFactory);
@@ -133,6 +135,8 @@ KisExportCheckRegistry::KisExportCheckRegistry ()
     chkFactory = new ColorModelCheckFactory(YCbCrAColorModelID, Float64BitsColorDepthID);
     add(chkFactory->id(), chkFactory);
 
+    // Node type checks
+
     chkFactory = new NodeTypeCheckFactory("KisCloneLayer", i18n("Clone Layer"));
     add(chkFactory->id(), chkFactory);
     chkFactory = new NodeTypeCheckFactory("KisFileLayer", i18n("File Layer"));
@@ -152,6 +156,10 @@ KisExportCheckRegistry::KisExportCheckRegistry ()
     chkFactory = new NodeTypeCheckFactory("KisTransparencyMask", i18n("Transparency Mask"));
     add(chkFactory->id(), chkFactory);
     chkFactory = new NodeTypeCheckFactory("KisSelectionMask", i18n("Selection Mask"));
+    add(chkFactory->id(), chkFactory);
+
+    // Multilayer check
+    chkFactory = new MultiLayerCheckFactory();
     add(chkFactory->id(), chkFactory);
 
 }

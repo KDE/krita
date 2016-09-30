@@ -385,7 +385,7 @@ public:
 
     KoColor frameDefaultPixel(int frameId) const
     {
-        DataSP data = m_frames[frameId];  
+        DataSP data = m_frames[frameId];
         return KoColor(data->dataManager()->defaultPixel(),
                        data->colorSpace());
     }
@@ -1488,7 +1488,7 @@ QImage KisPaintDevice::convertToQImage(const KoColorProfile *dstProfile,
                            renderingIntent, conversionFlags);
 }
 
-QImage KisPaintDevice::convertToQImage(const KoColorProfile *  dstProfile, qint32 x1, qint32 y1, qint32 w, qint32 h, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags) const
+QImage KisPaintDevice::convertToQImage(const KoColorProfile *dstProfile, qint32 x1, qint32 y1, qint32 w, qint32 h, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags) const
 {
 
     if (w < 0)

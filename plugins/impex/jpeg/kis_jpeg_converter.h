@@ -69,7 +69,7 @@ public:
     virtual ~KisJPEGConverter();
 public:
     KisImageBuilder_Result buildImage(QIODevice *io);
-    KisImageBuilder_Result buildFile(QIODevice *io, KisPaintLayerSP layer, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisJPEGOptions options, KisMetaData::Store* metaData);
+    KisImageBuilder_Result buildFile(QIODevice *io, KisPaintLayerSP layer, KisJPEGOptions options, KisMetaData::Store* metaData);
     /** Retrieve the constructed image
     */
     KisImageSP image();

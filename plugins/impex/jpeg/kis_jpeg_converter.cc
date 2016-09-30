@@ -458,7 +458,7 @@ KisImageSP KisJPEGConverter::image()
 }
 
 
-KisImageBuilder_Result KisJPEGConverter::buildFile(QIODevice *io, KisPaintLayerSP layer, vKisAnnotationSP_it /*annotationsStart*/, vKisAnnotationSP_it /*annotationsEnd*/, KisJPEGOptions options, KisMetaData::Store* metaData)
+KisImageBuilder_Result KisJPEGConverter::buildFile(QIODevice *io, KisPaintLayerSP layer, KisJPEGOptions options, KisMetaData::Store* metaData)
 {
     if (!layer)
         return KisImageBuilder_RESULT_INVALID_ARG;

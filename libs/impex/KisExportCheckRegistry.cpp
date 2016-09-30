@@ -28,7 +28,7 @@
 #include <ColorModelCheck.h>
 //#include <ColorModelPerLayerCheck.h>
 #include <CompositionsCheck.h>
-//#include <ExifCheck.h>
+#include <ExifCheck.h>
 //#include <GuidesCheck.h>
 #include <MultiLayerCheck.h>
 #include <PSDLayerStylesCheck.h>
@@ -57,6 +57,13 @@ KisExportCheckRegistry::KisExportCheckRegistry ()
     // Layer styles
     chkFactory = new PSDLayerStyleCheckFactory();
     add(chkFactory->id(), chkFactory);
+
+    // Check the layers for the presense of exiv info: note this is also
+    // done for multilayer images even though jpeg, which supports exiv,
+    // only can handle one layer.
+    chkFactory = new ExifCheckFactory();
+    add(chkFactory->id(), chkFactory);
+
 
     // Color model/channel depth checks
     chkFactory = new ColorModelCheckFactory(AlphaColorModelID, Integer8BitsColorDepthID);

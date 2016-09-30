@@ -48,7 +48,7 @@
 #include <metadata/kis_exif_info_visitor.h>
 #include <generator/kis_generator_layer.h>
 #include <KisImportExportManager.h>
-
+#include <KisExportCheckRegistry.h>
 #include "kis_jpeg_converter.h"
 
 class KisExternalLayer;
@@ -97,23 +97,20 @@ KisImportExportFilter::ConversionStatus KisJPEGExport::convert(KisDocument *docu
     KisJPEGConverter kpc(document, batchMode());
     KisPaintLayerSP l = new KisPaintLayer(image, "projection", OPACITY_OPAQUE_U8, pd);
 
-    vKisAnnotationSP_it beginIt = image->beginAnnotations();
-    vKisAnnotationSP_it endIt = image->endAnnotations();
-    
-
     KisExifInfoVisitor eIV;
     eIV.visit(image->rootLayer().data());
 
     KisMetaData::Store* eI = 0;
-    if (eIV.countPaintLayer() == 1)
+    if (eIV.countPaintLayer() == 1) {
         eI = eIV.exifInfo();
+    }
     if (eI) {
         KisMetaData::Store* copy = new KisMetaData::Store(*eI);
         eI = copy;
     }
-    
-    KisImageBuilder_Result res = kpc.buildFile(io, l, beginIt, endIt, options, eI);
-    
+
+    KisImageBuilder_Result res = kpc.buildFile(io, l, options, eI);
+
     if (res == KisImageBuilder_RESULT_OK) {
         delete eI;
         return KisImportExportFilter::OK;
@@ -154,6 +151,11 @@ KisPropertiesConfigurationSP KisJPEGExport::lastSavedConfiguration(const QByteAr
 KisConfigWidget *KisJPEGExport::createConfigurationWidget(QWidget *parent, const QByteArray &/*from*/, const QByteArray &/*to*/) const
 {
     return new KisWdgOptionsJPEG(parent);
+}
+
+void KisJPEGExport::initializeCapabilities()
+{
+    addCapability(KisExportCheckRegistry::instance()->get("ExifCheck")->create(KisExportCheckBase::SUPPORTED));
 }
 
 KisWdgOptionsJPEG::KisWdgOptionsJPEG(QWidget *parent)

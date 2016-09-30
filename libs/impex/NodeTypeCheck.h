@@ -1,0 +1,84 @@
+/*
+ * Copyright (C) 2016 Boudewijn Rempt <boud@valdyas.org>
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public License
+ * along with this library; see the file COPYING.LIB.  If not, write to
+ * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301, USA.
+ */
+
+#ifndef NodeTypeCheck_H
+#define NodeTypeCheck_H
+
+#include "KisExportCheckRegistry.h"
+#include <KoID.h>
+#include <klocalizedstring.h>
+#include <kis_image.h>
+#include <kis_count_visitor.h>
+
+class NodeTypeCheck : public KisExportCheckBase
+{
+public:
+
+    NodeTypeCheck(const QString &nodeType, const QString &description, const QString &id, Level level, const QString &customWarning = QString())
+        : KisExportCheckBase(id, level, customWarning, true)
+        , m_nodeType(nodeType)
+    {
+        if (customWarning.isEmpty()) {
+            m_warning = i18nc("image conversion warning", "The image contains layers of unsupported type <b>%1</b>. Only the rendered result will be saved.", description);
+        }
+    }
+
+    bool checkNeeded(KisImageSP image) const
+    {
+        QStringList nodetypes = QStringList() << m_nodeType;
+        KoProperties props;
+        KisCountVisitor v(nodetypes, props);
+        image->rootLayer()->accept(v);
+        return (v.count() > 0);
+    }
+
+    Level check(KisImageSP /*image*/) const
+    {
+        return m_level;
+    }
+
+    QString m_nodeType;
+};
+
+class NodeTypeCheckFactory : public KisExportCheckFactory
+{
+public:
+
+    NodeTypeCheckFactory(const QString &nodeType, const QString &description)
+        : m_nodeType(nodeType)
+        , m_description(description)
+    {}
+
+    virtual ~NodeTypeCheckFactory() {}
+
+    KisExportCheckBase *create(KisExportCheckBase::Level level, const QString &customWarning)
+    {
+        return new NodeTypeCheck(m_nodeType, m_description, id(), level, customWarning);
+    }
+
+    QString id() const {
+        return "NodeTypeCheck/" + m_nodeType;
+    }
+
+    QString m_nodeType;
+    QString m_description;
+
+};
+
+#endif // NodeTypeCheck_H

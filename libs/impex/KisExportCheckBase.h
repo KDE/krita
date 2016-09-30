@@ -50,7 +50,7 @@ public:
      * @param level the level of support the filter has for the given feature
      * @param customWarning A custom warning to use instead of the default one
      */
-    KisExportCheckBase(const QString &id, Level level, const QString &customWarning = QString());
+    KisExportCheckBase(const QString &id, Level level, const QString &customWarning = QString(), bool perLayerCheck = false);
 
     virtual ~KisExportCheckBase();
 
@@ -59,6 +59,9 @@ public:
 
     /// @return whether the image uses this feature
     virtual bool checkNeeded(KisImageSP image) const = 0;
+
+    /// @returns true if this check is only relevant for file formats that can save multiple layers
+    virtual bool perLayerCheck() const;
 
     /// @return the level of support for this feature
     virtual Level check(KisImageSP image) const = 0;
@@ -71,9 +74,10 @@ public:
 protected:
 
     QString m_id;
-    Level m_level;
+    Level m_level {UNSUPPORTED};
     QString m_warning;
-    KisExportConverterBase *m_converter;
+    KisExportConverterBase *m_converter {0};
+    bool m_perLayerCheck {false};
 
 };
 

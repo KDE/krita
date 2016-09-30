@@ -20,10 +20,10 @@
 #include "KisExportCheckBase.h"
 #include "KisExportConverterBase.h"
 
-KisExportCheckBase::KisExportCheckBase(const QString &id, Level level, const QString &customWarning)
+KisExportCheckBase::KisExportCheckBase(const QString &id, Level level, const QString &customWarning, bool _perLayerCheck)
     : m_id(id)
     , m_level(level)
-    , m_converter(0)
+    , m_perLayerCheck(_perLayerCheck)
 {
     if (!customWarning.isEmpty()) {
         m_warning = customWarning;
@@ -38,6 +38,11 @@ KisExportCheckBase::~KisExportCheckBase()
 QString KisExportCheckBase::id() const
 {
     return m_id;
+}
+
+bool KisExportCheckBase::perLayerCheck() const
+{
+    return m_perLayerCheck;
 }
 
 KisExportConverterBase *KisExportCheckBase::converter() const

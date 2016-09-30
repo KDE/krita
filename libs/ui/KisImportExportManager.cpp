@@ -50,6 +50,8 @@
 #include "KisImportExportFilter.h"
 #include "KisDocument.h"
 #include "kis_image.h"
+#include "kis_guides_config.h"
+#include "kis_grid_config.h"
 
 // static cache for import and export mimetypes
 QStringList KisImportExportManager::m_importMimeTypes;
@@ -164,6 +166,7 @@ KisImportExportFilter *KisImportExportManager::filterForMimeType(const QString &
     }
     qDeleteAll(list);
     filter->setMimeType(mimetype);
+    qDebug() << "Found filter" << filter << "for" << mimetype << (direction == Import ? "import" : "export");
     return filter;
 }
 
@@ -229,7 +232,21 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::convert(KisImpor
 
     KisConfigWidget *wdg = filter->createConfigurationWidget(0, from, to);
     QCheckBox *alsoAsKra = 0;
-    if (!batchMode() && (wdg || !checker.warnings().isEmpty())) {
+
+    QStringList warnings = checker.warnings();
+
+    // Extra checks that cannot be done by the checker, because the checker only has access to the image.
+    if (!m_document->assistants().isEmpty() && typeName != m_document->nativeFormatMimeType()) {
+        warnings.append(i18nc("image conversion warning", "The image contains <b>assistants</b>. The assistants will not be saved."));
+    }
+    if (m_document->guidesConfig().hasGuides() && typeName != m_document->nativeFormatMimeType()) {
+        warnings.append(i18nc("image conversion warning", "The image contains <b>guides</b>. The guides will not be saved."));
+    }
+    if (!m_document->gridConfig().isDefault() && typeName != m_document->nativeFormatMimeType()) {
+        warnings.append(i18nc("image conversion warning", "The image contains a <b>custom grid configuration</b>. The configuration will not be saved."));
+    }
+
+    if (!batchMode() && (wdg || !warnings.isEmpty())) {
 
         KoDialog dlg;
 
@@ -245,8 +262,8 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::convert(KisImpor
 
             QString warning = "<html><body><p><b>"
                     + i18n("You will lose information when saving this image as a %1.", KisMimeDatabase::descriptionForMimeType(typeName))
-                    + "</p></b><p>"
-                    + i18n("Reasons:")
+                    + "</b> "
+                    + i18n("Reasons:</p>")
                     + "</p><ul>";
 
             Q_FOREACH(const QString &w, checker.warnings()) {
@@ -272,6 +289,7 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::convert(KisImpor
         }
 
         dlg.setMainWidget(page);
+        dlg.resize(dlg.minimumSize());
 
         if (!dlg.exec()) {
             return KisImportExportFilter::UserCancelled;
@@ -315,14 +333,23 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::convert(KisImpor
        KisConfig().setExportConfiguration(typeName, exportConfiguration);
     }
 
-    if (!batchMode()) {
-        QApplication::restoreOverrideCursor();
-    }
-
     if (alsoAsKra && alsoAsKra->isChecked()) {
         QString l = location + ".kra";
         QByteArray ba = m_document->nativeFormatMimeType();
-        exportDocument(l, ba);
+        KisImportExportFilter *filter = filterForMimeType(QString::fromLatin1(ba), Export);
+        QFile f(l);
+        f.open(QIODevice::WriteOnly);
+        if (filter) {
+            filter->setFilename(l);
+            filter->convert(m_document, &f);
+        }
+        f.close();
+        delete filter;
+
+    }
+
+    if (!batchMode()) {
+        QApplication::restoreOverrideCursor();
     }
 
 //    m_document->setCurrentImage(unconvertedImage);

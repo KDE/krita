@@ -45,8 +45,11 @@ bool KisPreExportChecker::check(KisImageSP image, QMap<QString, KisExportCheckBa
             if (!filterChecks.contains(id)) {
                 m_warnings << check->warning();
             }
-            else if (filterChecks[id]->check(image) != KisExportCheckBase::SUPPORTED) {
+            else if (filterChecks[id]->check(image) == KisExportCheckBase::PARTIALLY) {
                 m_warnings << filterChecks[id]->warning();
+            }
+            else if (filterChecks[id]->check(image) == KisExportCheckBase::UNSUPPORTED) {
+                m_errors << filterChecks[id]->warning();
             }
             else {
                 continue;
@@ -75,6 +78,13 @@ KisImageSP KisPreExportChecker::convertedImage(KisImageSP originalImage) const
     }
     return originalImage;
 }
+
+
+QStringList KisPreExportChecker::errors() const
+{
+    return m_errors;
+}
+
 
 QStringList KisPreExportChecker::warnings() const
 {

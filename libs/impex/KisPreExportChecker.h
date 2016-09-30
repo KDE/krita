@@ -40,6 +40,7 @@ public:
     bool check(KisImageSP image, QMap<QString, KisExportCheckBase *> filterChecks);
     KisImageSP convertedImage(KisImageSP) const;
     QStringList warnings() const;
+    QStringList errors() const;
     bool conversionNeeded() const;
 
 
@@ -47,7 +48,7 @@ private:
 
     KisExportCheckBase *createCheck(const QString &id, const KisExportCheckBase::Level level, const QString &customWarning = QString());
 
-
+    QStringList m_errors;
     QStringList m_warnings;
     QMap<QString, KisExportConverterBase*> m_conversions;
 };

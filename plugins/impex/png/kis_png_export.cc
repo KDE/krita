@@ -169,9 +169,6 @@ KisConfigWidget *KisPNGExport::createConfigurationWidget(QWidget *parent, const 
 
 void KisPNGExport::initializeCapabilities()
 {
-    qDebug() << KisExportCheckRegistry::instance()->keys();
-    qDebug() << "ColorModelCheck/" + RGBAColorModelID.id() + "/" + Integer8BitsColorDepthID.id();
-    qDebug() << KisExportCheckRegistry::instance()->keys().contains("ColorModelCheck/" + RGBAColorModelID.id() + "/" + Integer8BitsColorDepthID.id());
     addCapability(KisExportCheckRegistry::instance()->get("ColorModelCheck/" + RGBAColorModelID.id() + "/" + Integer8BitsColorDepthID.id())->create(KisExportCheckBase::SUPPORTED));
     addCapability(KisExportCheckRegistry::instance()->get("ColorModelCheck/" + RGBAColorModelID.id() + "/" + Integer16BitsColorDepthID.id())->create(KisExportCheckBase::SUPPORTED));
     addCapability(KisExportCheckRegistry::instance()->get("ColorModelCheck/" + GrayAColorModelID.id() + "/" + Integer8BitsColorDepthID.id())->create(KisExportCheckBase::SUPPORTED));

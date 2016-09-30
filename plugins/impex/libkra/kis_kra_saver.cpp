@@ -123,7 +123,7 @@ QDomElement KisKraSaver::saveXML(QDomDocument& doc,  KisImageWSP image)
     saveBackgroundColor(doc, imageElement, image);
     saveWarningColor(doc, imageElement, image);
     saveCompositions(doc, imageElement, image);
-    saveAssistantsList(doc,imageElement);
+    saveAssistantsList(doc, imageElement);
     saveGrid(doc,imageElement);
     saveGuides(doc,imageElement);
 

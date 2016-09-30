@@ -29,7 +29,7 @@
 #include <KoChannelInfo.h>
 #include <KoColorModelStandardIds.h>
 #include <KisImportExportManager.h>
-
+#include <KisExportCheckRegistry.h>
 #include <KisDocument.h>
 #include <kis_group_layer.h>
 #include <kis_image.h>
@@ -166,6 +166,11 @@ KisPropertiesConfigurationSP KisTIFFExport::lastSavedConfiguration(const QByteAr
 KisConfigWidget *KisTIFFExport::createConfigurationWidget(QWidget *parent, const QByteArray &/*from*/, const QByteArray &/*to*/) const
 {
     return new KisTIFFOptionsWidget(parent);
+}
+
+void KisTIFFExport::initializeCapabilities()
+{
+    addCapability(KisExportCheckRegistry::instance()->get("MultiLayerCheck")->create(KisExportCheckBase::SUPPORTED));
 }
 
 #include <kis_tiff_export.moc>

@@ -31,8 +31,16 @@ KisPreExportChecker::KisPreExportChecker()
 
 bool KisPreExportChecker::check(KisImageSP image, QMap<QString, KisExportCheckBase*> filterChecks)
 {
+    bool doPerLayerChecks = false;
+    if (filterChecks.contains("MultiLayerCheck") && filterChecks["MultiLayerCheck"]->check(image) == KisExportCheckBase::SUPPORTED) {
+        doPerLayerChecks = true;
+    }
+
     Q_FOREACH(const QString &id, KisExportCheckRegistry::instance()->keys()) {
         KisExportCheckBase *check = createCheck(id, KisExportCheckBase::SUPPORTED);
+        if (!doPerLayerChecks && check->perLayerCheck()) {
+            continue;
+        }
         if (check->checkNeeded(image)) {
             if (!filterChecks.contains(id)) {
                 m_warnings << check->warning();

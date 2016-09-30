@@ -251,8 +251,7 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::convert(KisImpor
     if (!batchMode() && !errors.isEmpty()) {
         QString error =  "<html><body><p><b>"
                 + i18n("Error: cannot save this image as a %1.", KisMimeDatabase::descriptionForMimeType(typeName))
-                + "</b><br/> "
-                + i18n("Reasons:</p>")
+                + "</b> Reasons:</p>"
                 + "<p/><ul>";
         Q_FOREACH(const QString &w, errors) {
             error += "\n<li>" + w + "</li>";
@@ -295,8 +294,7 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::convert(KisImpor
 
             QString warning = "<html><body><p><b>"
                     + i18n("You will lose information when saving this image as a %1.", KisMimeDatabase::descriptionForMimeType(typeName))
-                    + "</b><br/>"
-                    + i18n("Reasons:</p>")
+                    + "</b> Reasons:</p>"
                     + "<p/><ul>";
 
             Q_FOREACH(const QString &w, warnings) {

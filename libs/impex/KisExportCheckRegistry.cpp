@@ -34,6 +34,8 @@
 #include <PSDLayerStylesCheck.h>
 #include <sRGBProfileCheck.h>
 #include <NodeTypeCheck.h>
+#include <ImageSizeCheck.h>
+#include <ColorModelHomogenousCheck.h>
 
 #include <QGlobalStatic>
 
@@ -69,6 +71,13 @@ KisExportCheckRegistry::KisExportCheckRegistry ()
     chkFactory = new sRGBProfileCheckFactory();
     add(chkFactory->id(), chkFactory);
 
+    // Image size
+    chkFactory = new ImageSizeCheckFactory();
+    add(chkFactory->id(), chkFactory);
+
+    // Do all layer have the image colorspace
+    chkFactory = new ColorModelHomogenousCheckFactory();
+    add(chkFactory->id(), chkFactory);
 
     QList<KoID> allColorModels = KoColorSpaceRegistry::instance()->colorModelsList(KoColorSpaceRegistry::AllColorSpaces);
     Q_FOREACH(const KoID &colorModelID, allColorModels) {

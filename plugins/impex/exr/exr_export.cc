@@ -28,6 +28,7 @@
 
 #include <KoColorSpaceConstants.h>
 #include <KisImportExportManager.h>
+#include <KisExportCheckRegistry.h>
 
 #include <kis_properties_configuration.h>
 #include <kis_config.h>
@@ -42,24 +43,24 @@
 
 class KisExternalLayer;
 
-K_PLUGIN_FACTORY_WITH_JSON(ExportFactory, "krita_exr_export.json", registerPlugin<exrExport>();)
+K_PLUGIN_FACTORY_WITH_JSON(ExportFactory, "krita_exr_export.json", registerPlugin<EXRExport>();)
 
-exrExport::exrExport(QObject *parent, const QVariantList &) : KisImportExportFilter(parent)
+EXRExport::EXRExport(QObject *parent, const QVariantList &) : KisImportExportFilter(parent)
 {
 }
 
-exrExport::~exrExport()
+EXRExport::~EXRExport()
 {
 }
 
-KisPropertiesConfigurationSP exrExport::defaultConfiguration(const QByteArray &/*from*/, const QByteArray &/*to*/) const
+KisPropertiesConfigurationSP EXRExport::defaultConfiguration(const QByteArray &/*from*/, const QByteArray &/*to*/) const
 {
     KisPropertiesConfigurationSP cfg = new KisPropertiesConfiguration();
     cfg->setProperty("flatten", false);
     return cfg;
 }
 
-KisPropertiesConfigurationSP exrExport::lastSavedConfiguration(const QByteArray &from, const QByteArray &to) const
+KisPropertiesConfigurationSP EXRExport::lastSavedConfiguration(const QByteArray &from, const QByteArray &to) const
 {
     KisPropertiesConfigurationSP cfg = defaultConfiguration(from, to);
     QString filterConfig = KisConfig().exportConfiguration("EXR");
@@ -67,12 +68,12 @@ KisPropertiesConfigurationSP exrExport::lastSavedConfiguration(const QByteArray 
     return cfg;
 }
 
-KisConfigWidget *exrExport::createConfigurationWidget(QWidget *parent, const QByteArray &/*from*/, const QByteArray &/*to*/) const
+KisConfigWidget *EXRExport::createConfigurationWidget(QWidget *parent, const QByteArray &/*from*/, const QByteArray &/*to*/) const
 {
     return new KisWdgOptionsExr(parent);
 }
 
-KisImportExportFilter::ConversionStatus exrExport::convert(KisDocument *document, QIODevice */*io*/,  KisPropertiesConfigurationSP configuration)
+KisImportExportFilter::ConversionStatus EXRExport::convert(KisDocument *document, QIODevice */*io*/,  KisPropertiesConfigurationSP configuration)
 {
     KisImageWSP image = document->image();
 
@@ -128,6 +129,9 @@ KisImportExportFilter::ConversionStatus exrExport::convert(KisDocument *document
 
 }
 
+EXRExport::initializeCapabilities()
+{
+}
 
 void KisWdgOptionsExr::setConfiguration(const KisPropertiesConfigurationSP cfg)
 {
@@ -140,7 +144,6 @@ KisPropertiesConfigurationSP KisWdgOptionsExr::configuration() const
     cfg->setProperty("flatten", chkFlatten->isChecked());
     return cfg;
 }
-
 
 #include <exr_export.moc>
 

@@ -31,6 +31,7 @@
 #include <KoColorModelStandardIds.h>
 #include <KoColorSpace.h>
 
+#include <KisExportCheckRegistry.h>
 #include <KisDocument.h>
 #include <kis_image.h>
 #include <kis_node.h>
@@ -108,6 +109,16 @@ KisImportExportFilter::ConversionStatus KraExport::convert(KisDocument *document
     }
     dbgFile << " Result =" << res;
     return KisImportExportFilter::InternalError;
+}
+
+void KraExport::initializeCapabilities()
+{
+    // Kra supports everything, by definition
+    KisExportCheckFactory *factory = 0;
+    Q_FOREACH(const QString &id, KisExportCheckRegistry::instance()->keys()) {
+        factory = KisExportCheckRegistry::instance()->get(id);
+        addCapability(factory->create(KisExportCheckBase::SUPPORTED));
+    }
 }
 
 #include <kra_export.moc>

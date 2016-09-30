@@ -53,7 +53,6 @@ KisImportExportFilter::ConversionStatus KisBMPExport::convert(KisDocument *docum
 void KisBMPExport::initializeCapabilities()
 {
     addCapability(KisExportCheckRegistry::instance()->get("ColorModelCheck/" + RGBAColorModelID.id() + "/" + Integer8BitsColorDepthID.id())->create(KisExportCheckBase::SUPPORTED));
-    addCapability(KisExportCheckRegistry::instance()->get("sRGBProfileCheck")->create(KisExportCheckBase::SUPPORTED));
 }
 
 #include "kis_bmp_export.moc"

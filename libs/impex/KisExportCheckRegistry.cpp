@@ -29,10 +29,9 @@
 //#include <ColorModelPerLayerCheck.h>
 #include <CompositionsCheck.h>
 #include <ExifCheck.h>
-//#include <GuidesCheck.h>
 #include <MultiLayerCheck.h>
 #include <PSDLayerStylesCheck.h>
-//#include <sRGBProfileCheck.h>
+#include <sRGBProfileCheck.h>
 #include <NodeTypeCheck.h>
 #include <QGlobalStatic>
 
@@ -64,6 +63,9 @@ KisExportCheckRegistry::KisExportCheckRegistry ()
     chkFactory = new ExifCheckFactory();
     add(chkFactory->id(), chkFactory);
 
+    // Check whether the image is sRGB
+    chkFactory = new sRGBProfileCheckFactory();
+    add(chkFactory->id(), chkFactory);
 
     // Color model/channel depth checks
     chkFactory = new ColorModelCheckFactory(AlphaColorModelID, Integer8BitsColorDepthID);

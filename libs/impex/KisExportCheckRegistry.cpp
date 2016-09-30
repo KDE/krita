@@ -23,6 +23,7 @@
 #include <kis_image.h>
 #include <KoColorSpace.h>
 #include <KoColorModelStandardIds.h>
+#include <KoColorSpaceRegistry.h>
 
 #include <AnimationCheck.h>
 #include <ColorModelCheck.h>
@@ -33,6 +34,7 @@
 #include <PSDLayerStylesCheck.h>
 #include <sRGBProfileCheck.h>
 #include <NodeTypeCheck.h>
+
 #include <QGlobalStatic>
 
 Q_GLOBAL_STATIC(KisExportCheckRegistry, s_instance)
@@ -67,184 +69,22 @@ KisExportCheckRegistry::KisExportCheckRegistry ()
     chkFactory = new sRGBProfileCheckFactory();
     add(chkFactory->id(), chkFactory);
 
-    // Per layer color model/channel depth checks
-    chkFactory = new ColorModelPerLayerCheckFactory(AlphaColorModelID, Integer8BitsColorDepthID);
-    add(chkFactory->id(), chkFactory);
-    chkFactory = new ColorModelPerLayerCheckFactory(AlphaColorModelID, Integer16BitsColorDepthID);
-    add(chkFactory->id(), chkFactory);
-    chkFactory = new ColorModelPerLayerCheckFactory(AlphaColorModelID, Float16BitsColorDepthID);
-    add(chkFactory->id(), chkFactory);
-    chkFactory = new ColorModelPerLayerCheckFactory(AlphaColorModelID, Float32BitsColorDepthID);
-    add(chkFactory->id(), chkFactory);
-    chkFactory = new ColorModelPerLayerCheckFactory(AlphaColorModelID, Float64BitsColorDepthID);
-    add(chkFactory->id(), chkFactory);
 
-    chkFactory = new ColorModelPerLayerCheckFactory(RGBAColorModelID, Integer8BitsColorDepthID);
-    add(chkFactory->id(), chkFactory);
-    chkFactory = new ColorModelPerLayerCheckFactory(RGBAColorModelID, Integer16BitsColorDepthID);
-    add(chkFactory->id(), chkFactory);
-    chkFactory = new ColorModelPerLayerCheckFactory(RGBAColorModelID, Float16BitsColorDepthID);
-    add(chkFactory->id(), chkFactory);
-    chkFactory = new ColorModelPerLayerCheckFactory(RGBAColorModelID, Float32BitsColorDepthID);
-    add(chkFactory->id(), chkFactory);
-    chkFactory = new ColorModelPerLayerCheckFactory(RGBAColorModelID, Float64BitsColorDepthID);
-    add(chkFactory->id(), chkFactory);
+    QList<KoID> allColorModels = KoColorSpaceRegistry::instance()->colorModelsList(KoColorSpaceRegistry::AllColorSpaces);
+    Q_FOREACH(const KoID &colorModelID, allColorModels) {
+        QList<KoID> allColorDepths = KoColorSpaceRegistry::instance()->colorDepthList(colorModelID.id(), KoColorSpaceRegistry::AllColorSpaces);
+        Q_FOREACH(const KoID &colorDepthID, allColorDepths) {
 
-    chkFactory = new ColorModelPerLayerCheckFactory(XYZAColorModelID, Integer8BitsColorDepthID);
-    add(chkFactory->id(), chkFactory);
-    chkFactory = new ColorModelPerLayerCheckFactory(XYZAColorModelID, Integer16BitsColorDepthID);
-    add(chkFactory->id(), chkFactory);
-    chkFactory = new ColorModelPerLayerCheckFactory(XYZAColorModelID, Float16BitsColorDepthID);
-    add(chkFactory->id(), chkFactory);
-    chkFactory = new ColorModelPerLayerCheckFactory(XYZAColorModelID, Float32BitsColorDepthID);
-    add(chkFactory->id(), chkFactory);
-    chkFactory = new ColorModelPerLayerCheckFactory(XYZAColorModelID, Float64BitsColorDepthID);
-    add(chkFactory->id(), chkFactory);
+            // Per layer color model/channel depth checks
+            chkFactory = new ColorModelPerLayerCheckFactory(colorModelID, colorDepthID);
+            add(chkFactory->id(), chkFactory);
 
-    chkFactory = new ColorModelPerLayerCheckFactory(LABAColorModelID, Integer8BitsColorDepthID);
-    add(chkFactory->id(), chkFactory);
-    chkFactory = new ColorModelPerLayerCheckFactory(LABAColorModelID, Integer16BitsColorDepthID);
-    add(chkFactory->id(), chkFactory);
-    chkFactory = new ColorModelPerLayerCheckFactory(LABAColorModelID, Float16BitsColorDepthID);
-    add(chkFactory->id(), chkFactory);
-    chkFactory = new ColorModelPerLayerCheckFactory(LABAColorModelID, Float32BitsColorDepthID);
-    add(chkFactory->id(), chkFactory);
-    chkFactory = new ColorModelPerLayerCheckFactory(LABAColorModelID, Float64BitsColorDepthID);
-    add(chkFactory->id(), chkFactory);
+            // Image color model/channel depth checks
+            chkFactory = new ColorModelCheckFactory(colorModelID, colorDepthID);
+            add(chkFactory->id(), chkFactory);
 
-    chkFactory = new ColorModelPerLayerCheckFactory(CMYKAColorModelID, Integer8BitsColorDepthID);
-    add(chkFactory->id(), chkFactory);
-    chkFactory = new ColorModelPerLayerCheckFactory(CMYKAColorModelID, Integer16BitsColorDepthID);
-    add(chkFactory->id(), chkFactory);
-    chkFactory = new ColorModelPerLayerCheckFactory(CMYKAColorModelID, Float16BitsColorDepthID);
-    add(chkFactory->id(), chkFactory);
-    chkFactory = new ColorModelPerLayerCheckFactory(CMYKAColorModelID, Float32BitsColorDepthID);
-    add(chkFactory->id(), chkFactory);
-    chkFactory = new ColorModelPerLayerCheckFactory(CMYKAColorModelID, Float64BitsColorDepthID);
-    add(chkFactory->id(), chkFactory);
-
-    chkFactory = new ColorModelPerLayerCheckFactory(GrayAColorModelID, Integer8BitsColorDepthID);
-    add(chkFactory->id(), chkFactory);
-    chkFactory = new ColorModelPerLayerCheckFactory(GrayAColorModelID, Integer16BitsColorDepthID);
-    add(chkFactory->id(), chkFactory);
-    chkFactory = new ColorModelPerLayerCheckFactory(GrayAColorModelID, Float16BitsColorDepthID);
-    add(chkFactory->id(), chkFactory);
-    chkFactory = new ColorModelPerLayerCheckFactory(GrayAColorModelID, Float32BitsColorDepthID);
-    add(chkFactory->id(), chkFactory);
-    chkFactory = new ColorModelPerLayerCheckFactory(GrayAColorModelID, Float64BitsColorDepthID);
-    add(chkFactory->id(), chkFactory);
-
-    chkFactory = new ColorModelPerLayerCheckFactory(GrayColorModelID, Integer8BitsColorDepthID);
-    add(chkFactory->id(), chkFactory);
-    chkFactory = new ColorModelPerLayerCheckFactory(GrayColorModelID, Integer16BitsColorDepthID);
-    add(chkFactory->id(), chkFactory);
-    chkFactory = new ColorModelPerLayerCheckFactory(GrayColorModelID, Float16BitsColorDepthID);
-    add(chkFactory->id(), chkFactory);
-    chkFactory = new ColorModelPerLayerCheckFactory(GrayColorModelID, Float32BitsColorDepthID);
-    add(chkFactory->id(), chkFactory);
-    chkFactory = new ColorModelPerLayerCheckFactory(GrayColorModelID, Float64BitsColorDepthID);
-    add(chkFactory->id(), chkFactory);
-
-    chkFactory = new ColorModelPerLayerCheckFactory(YCbCrAColorModelID, Integer8BitsColorDepthID);
-    add(chkFactory->id(), chkFactory);
-    chkFactory = new ColorModelPerLayerCheckFactory(YCbCrAColorModelID, Integer16BitsColorDepthID);
-    add(chkFactory->id(), chkFactory);
-    chkFactory = new ColorModelPerLayerCheckFactory(YCbCrAColorModelID, Float16BitsColorDepthID);
-    add(chkFactory->id(), chkFactory);
-    chkFactory = new ColorModelPerLayerCheckFactory(YCbCrAColorModelID, Float32BitsColorDepthID);
-    add(chkFactory->id(), chkFactory);
-    chkFactory = new ColorModelPerLayerCheckFactory(YCbCrAColorModelID, Float64BitsColorDepthID);
-    add(chkFactory->id(), chkFactory);
-
-
-    // Image color model/channel depth checks
-    chkFactory = new ColorModelCheckFactory(AlphaColorModelID, Integer8BitsColorDepthID);
-    add(chkFactory->id(), chkFactory);
-    chkFactory = new ColorModelCheckFactory(AlphaColorModelID, Integer16BitsColorDepthID);
-    add(chkFactory->id(), chkFactory);
-    chkFactory = new ColorModelCheckFactory(AlphaColorModelID, Float16BitsColorDepthID);
-    add(chkFactory->id(), chkFactory);
-    chkFactory = new ColorModelCheckFactory(AlphaColorModelID, Float32BitsColorDepthID);
-    add(chkFactory->id(), chkFactory);
-    chkFactory = new ColorModelCheckFactory(AlphaColorModelID, Float64BitsColorDepthID);
-    add(chkFactory->id(), chkFactory);
-
-    chkFactory = new ColorModelCheckFactory(RGBAColorModelID, Integer8BitsColorDepthID);
-    add(chkFactory->id(), chkFactory);
-    chkFactory = new ColorModelCheckFactory(RGBAColorModelID, Integer16BitsColorDepthID);
-    add(chkFactory->id(), chkFactory);
-    chkFactory = new ColorModelCheckFactory(RGBAColorModelID, Float16BitsColorDepthID);
-    add(chkFactory->id(), chkFactory);
-    chkFactory = new ColorModelCheckFactory(RGBAColorModelID, Float32BitsColorDepthID);
-    add(chkFactory->id(), chkFactory);
-    chkFactory = new ColorModelCheckFactory(RGBAColorModelID, Float64BitsColorDepthID);
-    add(chkFactory->id(), chkFactory);
-
-    chkFactory = new ColorModelCheckFactory(XYZAColorModelID, Integer8BitsColorDepthID);
-    add(chkFactory->id(), chkFactory);
-    chkFactory = new ColorModelCheckFactory(XYZAColorModelID, Integer16BitsColorDepthID);
-    add(chkFactory->id(), chkFactory);
-    chkFactory = new ColorModelCheckFactory(XYZAColorModelID, Float16BitsColorDepthID);
-    add(chkFactory->id(), chkFactory);
-    chkFactory = new ColorModelCheckFactory(XYZAColorModelID, Float32BitsColorDepthID);
-    add(chkFactory->id(), chkFactory);
-    chkFactory = new ColorModelCheckFactory(XYZAColorModelID, Float64BitsColorDepthID);
-    add(chkFactory->id(), chkFactory);
-
-    chkFactory = new ColorModelCheckFactory(LABAColorModelID, Integer8BitsColorDepthID);
-    add(chkFactory->id(), chkFactory);
-    chkFactory = new ColorModelCheckFactory(LABAColorModelID, Integer16BitsColorDepthID);
-    add(chkFactory->id(), chkFactory);
-    chkFactory = new ColorModelCheckFactory(LABAColorModelID, Float16BitsColorDepthID);
-    add(chkFactory->id(), chkFactory);
-    chkFactory = new ColorModelCheckFactory(LABAColorModelID, Float32BitsColorDepthID);
-    add(chkFactory->id(), chkFactory);
-    chkFactory = new ColorModelCheckFactory(LABAColorModelID, Float64BitsColorDepthID);
-    add(chkFactory->id(), chkFactory);
-
-    chkFactory = new ColorModelCheckFactory(CMYKAColorModelID, Integer8BitsColorDepthID);
-    add(chkFactory->id(), chkFactory);
-    chkFactory = new ColorModelCheckFactory(CMYKAColorModelID, Integer16BitsColorDepthID);
-    add(chkFactory->id(), chkFactory);
-    chkFactory = new ColorModelCheckFactory(CMYKAColorModelID, Float16BitsColorDepthID);
-    add(chkFactory->id(), chkFactory);
-    chkFactory = new ColorModelCheckFactory(CMYKAColorModelID, Float32BitsColorDepthID);
-    add(chkFactory->id(), chkFactory);
-    chkFactory = new ColorModelCheckFactory(CMYKAColorModelID, Float64BitsColorDepthID);
-    add(chkFactory->id(), chkFactory);
-
-    chkFactory = new ColorModelCheckFactory(GrayAColorModelID, Integer8BitsColorDepthID);
-    add(chkFactory->id(), chkFactory);
-    chkFactory = new ColorModelCheckFactory(GrayAColorModelID, Integer16BitsColorDepthID);
-    add(chkFactory->id(), chkFactory);
-    chkFactory = new ColorModelCheckFactory(GrayAColorModelID, Float16BitsColorDepthID);
-    add(chkFactory->id(), chkFactory);
-    chkFactory = new ColorModelCheckFactory(GrayAColorModelID, Float32BitsColorDepthID);
-    add(chkFactory->id(), chkFactory);
-    chkFactory = new ColorModelCheckFactory(GrayAColorModelID, Float64BitsColorDepthID);
-    add(chkFactory->id(), chkFactory);
-
-    chkFactory = new ColorModelCheckFactory(GrayColorModelID, Integer8BitsColorDepthID);
-    add(chkFactory->id(), chkFactory);
-    chkFactory = new ColorModelCheckFactory(GrayColorModelID, Integer16BitsColorDepthID);
-    add(chkFactory->id(), chkFactory);
-    chkFactory = new ColorModelCheckFactory(GrayColorModelID, Float16BitsColorDepthID);
-    add(chkFactory->id(), chkFactory);
-    chkFactory = new ColorModelCheckFactory(GrayColorModelID, Float32BitsColorDepthID);
-    add(chkFactory->id(), chkFactory);
-    chkFactory = new ColorModelCheckFactory(GrayColorModelID, Float64BitsColorDepthID);
-    add(chkFactory->id(), chkFactory);
-
-    chkFactory = new ColorModelCheckFactory(YCbCrAColorModelID, Integer8BitsColorDepthID);
-    add(chkFactory->id(), chkFactory);
-    chkFactory = new ColorModelCheckFactory(YCbCrAColorModelID, Integer16BitsColorDepthID);
-    add(chkFactory->id(), chkFactory);
-    chkFactory = new ColorModelCheckFactory(YCbCrAColorModelID, Float16BitsColorDepthID);
-    add(chkFactory->id(), chkFactory);
-    chkFactory = new ColorModelCheckFactory(YCbCrAColorModelID, Float32BitsColorDepthID);
-    add(chkFactory->id(), chkFactory);
-    chkFactory = new ColorModelCheckFactory(YCbCrAColorModelID, Float64BitsColorDepthID);
-    add(chkFactory->id(), chkFactory);
+        }
+    }
 
     // Node type checks
     chkFactory = new NodeTypeCheckFactory("KisCloneLayer", i18n("Clone Layer"));

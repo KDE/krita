@@ -168,7 +168,6 @@ KisImportExportFilter *KisImportExportManager::filterForMimeType(const QString &
     }
     qDeleteAll(list);
     filter->setMimeType(mimetype);
-    qDebug() << "Found filter" << filter << "for" << mimetype << (direction == Import ? "import" : "export");
     return filter;
 }
 
@@ -236,6 +235,7 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::convert(KisImpor
     QCheckBox *alsoAsKra = 0;
 
     QStringList warnings = checker.warnings();
+    QStringList errors = checker.errors();
 
     // Extra checks that cannot be done by the checker, because the checker only has access to the image.
     if (!m_document->assistants().isEmpty() && typeName != m_document->nativeFormatMimeType()) {
@@ -246,6 +246,22 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::convert(KisImpor
     }
     if (!m_document->gridConfig().isDefault() && typeName != m_document->nativeFormatMimeType()) {
         warnings.append(i18nc("image conversion warning", "The image contains a <b>custom grid configuration</b>. The configuration will not be saved."));
+    }
+
+    if (!batchMode() && !errors.isEmpty()) {
+        QString error =  "<html><body><p><b>"
+                + i18n("Error: cannot save this image as a %1.", KisMimeDatabase::descriptionForMimeType(typeName))
+                + "</b> "
+                + i18n("Reasons:</p>")
+                + "</p><ul>";
+        Q_FOREACH(const QString &w, errors) {
+            error += "\n<li>" + w + "</li>";
+        }
+
+        error += "</ul>";
+
+        QMessageBox::critical(KisPart::instance()->currentMainwindow(), i18nc("@title:window", "Krita: Export Error"), error);
+        return KisImportExportFilter::UsageError;
     }
 
     if (!batchMode() && (wdg || !warnings.isEmpty())) {
@@ -283,7 +299,7 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::convert(KisImpor
                     + i18n("Reasons:</p>")
                     + "</p><ul>";
 
-            Q_FOREACH(const QString &w, checker.warnings()) {
+            Q_FOREACH(const QString &w, warnings) {
                 warning += "\n<li>" + w + "</li>";
             }
 

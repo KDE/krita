@@ -45,14 +45,20 @@ bool KisPreExportChecker::check(KisImageSP image, QMap<QString, KisExportCheckBa
             if (!filterChecks.contains(id)) {
                 m_warnings << check->warning();
             }
-            else if (filterChecks[id]->check(image) == KisExportCheckBase::PARTIALLY) {
-                m_warnings << filterChecks[id]->warning();
-            }
-            else if (filterChecks[id]->check(image) == KisExportCheckBase::UNSUPPORTED) {
-                m_errors << filterChecks[id]->warning();
-            }
             else {
-                continue;
+                KisExportCheckBase *filterCheck = filterChecks[id];
+                KisExportCheckBase::Level level = filterCheck->check(image);
+                QString warning = filterCheck->warning();
+
+                if (level == KisExportCheckBase::PARTIALLY) {
+                    m_warnings << warning;
+                }
+                else if (level == KisExportCheckBase::UNSUPPORTED) {
+                    m_errors << warning;
+                }
+                else {
+                    continue;
+                }
             }
             if (check->converter()) {
                 m_conversions[check->converter()->id()] = check->converter();
@@ -60,8 +66,7 @@ bool KisPreExportChecker::check(KisImageSP image, QMap<QString, KisExportCheckBa
         }
         delete check;
     }
-
-    return m_warnings.isEmpty();
+    return m_warnings.isEmpty() && m_errors.isEmpty();
 }
 
 KisImageSP KisPreExportChecker::convertedImage(KisImageSP originalImage) const

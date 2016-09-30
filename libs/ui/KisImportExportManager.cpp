@@ -37,6 +37,7 @@
 #include <ksqueezedtextlabel.h>
 #include <kpluginfactory.h>
 
+#include <kis_icon_utils.h>
 #include <KoDialog.h>
 #include <KoProgressUpdater.h>
 #include <KoJsonTrader.h>
@@ -52,6 +53,7 @@
 #include "kis_image.h"
 #include "kis_guides_config.h"
 #include "kis_grid_config.h"
+#include "kis_popup_button.h"
 
 // static cache for import and export mimetypes
 QStringList KisImportExportManager::m_importMimeTypes;
@@ -257,8 +259,23 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::convert(KisImpor
         QVBoxLayout *layout = new QVBoxLayout(page);
 
         if (!checker.warnings().isEmpty()) {
+
+            QHBoxLayout *hLayout = new QHBoxLayout();
+
+            QLabel *labelWarning = new QLabel();
+            labelWarning->setPixmap(KisIconUtils::loadIcon("dialog-warning").pixmap(32, 32));
+            hLayout->addWidget(labelWarning);
+
+            KisPopupButton *bn = new KisPopupButton(0);
+            //bn->setIcon(KisIconUtils::loadIcon("dialog-"));
+            bn->setText(i18nc("Keep the extra space at the end of the sentencte, please", "Warning: saving as %1 will lose information from your image.    ", KisMimeDatabase::descriptionForMimeType(mimeType)));
+            hLayout->addWidget(bn);
+
+            layout->addLayout(hLayout);
+
             QTextBrowser *browser = new QTextBrowser();
-            layout->addWidget(browser);
+            browser->setMinimumWidth(bn->width());
+            bn->setPopupWidget(browser);
 
             QString warning = "<html><body><p><b>"
                     + i18n("You will lose information when saving this image as a %1.", KisMimeDatabase::descriptionForMimeType(typeName))

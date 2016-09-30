@@ -78,25 +78,6 @@ KisImportExportFilter::ConversionStatus OraExport::convert(KisDocument *document
     Q_CHECK_PTR(image);
 
     KisPaintDeviceSP pd = image->projection();
-    QStringList supportedColorModelIds;
-    supportedColorModelIds << RGBAColorModelID.id() << GrayAColorModelID.id() << GrayColorModelID.id();
-    QStringList supportedColorDepthIds;
-    supportedColorDepthIds << Integer8BitsColorDepthID.id() << Integer16BitsColorDepthID.id();
-    if (!supportedColorModelIds.contains(pd->colorSpace()->colorModelId().id()) ||
-            !supportedColorDepthIds.contains(pd->colorSpace()->colorDepthId().id())) {
-        if (!batchMode()) {
-            QMessageBox::critical(0, i18nc("@title:window", "Krita OpenRaster Export"), i18n("Cannot export images in this colorspace or channel depth to OpenRaster"));
-        }
-        return KisImportExportFilter::UsageError;
-    }
-
-
-    if (hasShapeLayerChild(image->root()) && !batchMode()) {
-        QMessageBox::information(0,
-                                 i18nc("@title:window", "Krita:Warning"),
-                                 i18n("This image contains vector, clone or fill layers.\nThese layers will be saved as raster layers."));
-    }
-
     OraConverter oraConverter(document);
 
     KisImageBuilder_Result res;
@@ -111,6 +92,14 @@ KisImportExportFilter::ConversionStatus OraExport::convert(KisDocument *document
 
 void OraExport::initializeCapabilities()
 {
+    addCapability(KisExportCheckRegistry::instance()->get("MultiLayerCheck")->create(KisExportCheckBase::SUPPORTED));
+    addCapability(KisExportCheckRegistry::instance()->get("NodeTypeCheck/KisGroupLayer")->create(KisExportCheckBase::SUPPORTED));
+    addCapability(KisExportCheckRegistry::instance()->get("NodeTypeCheck/KisAdjustmentLayer")->create(KisExportCheckBase::SUPPORTED));
+    addCapability(KisExportCheckRegistry::instance()->get("sRGBProfileCheck")->create(KisExportCheckBase::SUPPORTED));
+    addCapability(KisExportCheckRegistry::instance()->get("ColorModelCheck/" + RGBAColorModelID.id() + "/" + Integer8BitsColorDepthID.id())->create(KisExportCheckBase::SUPPORTED));
+    addCapability(KisExportCheckRegistry::instance()->get("ColorModelCheck/" + RGBAColorModelID.id() + "/" + Integer16BitsColorDepthID.id())->create(KisExportCheckBase::SUPPORTED));
+    addCapability(KisExportCheckRegistry::instance()->get("ColorModelCheck/" + GrayAColorModelID.id() + "/" + Integer8BitsColorDepthID.id())->create(KisExportCheckBase::SUPPORTED));
+    addCapability(KisExportCheckRegistry::instance()->get("ColorModelCheck/" + GrayAColorModelID.id() + "/" + Integer16BitsColorDepthID.id())->create(KisExportCheckBase::SUPPORTED));
 }
 
 

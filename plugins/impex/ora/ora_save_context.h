@@ -27,6 +27,7 @@ class OraSaveContext : public KisOpenRasterSaveContext
 {
 public:
     OraSaveContext(KoStore* _store);
+    virtual ~OraSaveContext(){}
     virtual QString saveDeviceData(KisPaintDeviceSP dev, KisMetaData::Store *metaData, const QRect &imageRect, const qreal xRes, const qreal yRes);
     virtual void saveStack(const QDomDocument& doc);
 private:

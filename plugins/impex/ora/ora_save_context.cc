@@ -21,7 +21,8 @@
 
 #include <KoStore.h>
 #include <KoStoreDevice.h>
-
+#include <KoColorSpaceRegistry.h>
+#include <kundo2command.h>
 #include <kis_paint_layer.h>
 #include <kis_paint_device.h>
 #include <kis_image.h>
@@ -38,6 +39,13 @@ OraSaveContext::OraSaveContext(KoStore* _store) : m_id(0), m_store(_store)
 QString OraSaveContext::saveDeviceData(KisPaintDeviceSP dev, KisMetaData::Store* metaData, const QRect &imageRect, const qreal xRes, const qreal yRes)
 {
     QString filename = QString("data/layer%1.png").arg(m_id++);
+
+    if (!KisPNGConverter::isColorSpaceSupported(dev->colorSpace())) {
+        dev = new KisPaintDevice(*dev.data());
+        KUndo2Command *cmd = dev->convertTo(KoColorSpaceRegistry::instance()->rgb8());
+        delete cmd;
+    }
+
     if (KisPNGConverter::saveDeviceToStore(filename, imageRect, xRes, yRes, dev, m_store, metaData)) {
         return filename;
     }

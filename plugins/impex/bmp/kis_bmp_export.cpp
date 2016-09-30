@@ -26,6 +26,7 @@
 #include <QFileInfo>
 #include <QApplication>
 
+#include <KisExportCheckRegistry.h>
 #include <kis_paint_device.h>
 #include <KisDocument.h>
 #include <kis_image.h>
@@ -47,6 +48,12 @@ KisImportExportFilter::ConversionStatus KisBMPExport::convert(KisDocument *docum
     QImage image = document->image()->projection()->convertToQImage(0, 0, 0, rc.width(), rc.height(), KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
     image.save(io, QFileInfo(filename()).suffix().toLatin1());
     return KisImportExportFilter::OK;
+}
+
+void KisBMPExport::initializeCapabilities()
+{
+    addCapability(KisExportCheckRegistry::instance()->get("ColorModelCheck/" + RGBAColorModelID.id() + "/" + Integer8BitsColorDepthID.id())->create(KisExportCheckBase::SUPPORTED));
+    addCapability(KisExportCheckRegistry::instance()->get("sRGBProfileCheck")->create(KisExportCheckBase::SUPPORTED));
 }
 
 #include "kis_bmp_export.moc"

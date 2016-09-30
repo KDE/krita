@@ -32,6 +32,7 @@ public:
     virtual ~KisBMPExport();
 public:
     virtual KisImportExportFilter::ConversionStatus convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration = 0);
+    void initializeCapabilities();
 };
 
 #endif

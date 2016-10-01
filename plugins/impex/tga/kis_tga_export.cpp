@@ -25,7 +25,8 @@
 #include <kpluginfactory.h>
 #include <QFileInfo>
 #include <QApplication>
-
+#include <KoColorModelStandardIds.h>
+#include <KisExportCheckRegistry.h>
 #include <KisImportExportManager.h>
 #include <kis_paint_device.h>
 #include <KisDocument.h>

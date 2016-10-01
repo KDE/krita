@@ -29,6 +29,7 @@
 #include <kis_image.h>
 
 #include "qml_converter.h"
+#include <KoColorModelStandardIds.h>
 
 K_PLUGIN_FACTORY_WITH_JSON(ExportFactory, "krita_qml_export.json", registerPlugin<QMLExport>();)
 

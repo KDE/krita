@@ -18,7 +18,6 @@
  */
 
 #include "KisExportCheckBase.h"
-#include "KisExportConverterBase.h"
 
 KisExportCheckBase::KisExportCheckBase(const QString &id, Level level, const QString &customWarning, bool _perLayerCheck)
     : m_id(id)
@@ -32,7 +31,6 @@ KisExportCheckBase::KisExportCheckBase(const QString &id, Level level, const QSt
 
 KisExportCheckBase::~KisExportCheckBase()
 {
-    delete m_converter;
 }
 
 QString KisExportCheckBase::id() const
@@ -43,11 +41,6 @@ QString KisExportCheckBase::id() const
 bool KisExportCheckBase::perLayerCheck() const
 {
     return m_perLayerCheck;
-}
-
-KisExportConverterBase *KisExportCheckBase::converter() const
-{
-    return m_converter;
 }
 
 QString KisExportCheckBase::warning() const

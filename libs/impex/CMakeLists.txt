@@ -1,6 +1,5 @@
 set(kritaimpex_LIB_SRCS
     KisExportCheckBase.cpp
-    KisExportConverterBase.cpp
     KisPreExportChecker.cpp
     KisExportCheckRegistry.cpp
 )

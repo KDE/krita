@@ -221,14 +221,9 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::convert(KisImpor
         exportConfiguration = filter->lastSavedConfiguration(from, to);
     }
 
-//    KisImageSP unconvertedImage = m_document->image();
-
     KisPreExportChecker checker;
     if (direction == Export) {
-        if (!checker.check(m_document->image(), filter->exportChecks())) {
-//        KisImageSP convertedImage = checker.convertedImage(m_document->image());
-//        m_document->setCurrentImage(convertedImage);
-        }
+        checker.check(m_document->image(), filter->exportChecks());
     }
 
     KisConfigWidget *wdg = filter->createConfigurationWidget(0, from, to);
@@ -382,8 +377,6 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::convert(KisImpor
     if (!batchMode()) {
         QApplication::restoreOverrideCursor();
     }
-
-//    m_document->setCurrentImage(unconvertedImage);
 
     return status;
 

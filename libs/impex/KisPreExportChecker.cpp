@@ -19,7 +19,6 @@
 
 #include "KisPreExportChecker.h"
 #include "KisExportCheckBase.h"
-#include "KisExportConverterBase.h"
 #include "KisExportCheckRegistry.h"
 
 #include <kis_image.h>
@@ -37,10 +36,14 @@ bool KisPreExportChecker::check(KisImageSP image, QMap<QString, KisExportCheckBa
     }
 
     Q_FOREACH(const QString &id, KisExportCheckRegistry::instance()->keys()) {
-        KisExportCheckBase *check = createCheck(id, KisExportCheckBase::SUPPORTED);
+
+        KisExportCheckFactory *factory = KisExportCheckRegistry::instance()->get(id);
+        KisExportCheckBase *check = factory->create(KisExportCheckBase::SUPPORTED);
+
         if (!doPerLayerChecks && check->perLayerCheck()) {
             continue;
         }
+
         if (check->checkNeeded(image)) {
             if (!filterChecks.contains(id)) {
                 m_warnings << check->warning();
@@ -60,30 +63,11 @@ bool KisPreExportChecker::check(KisImageSP image, QMap<QString, KisExportCheckBa
                     continue;
                 }
             }
-            if (check->converter()) {
-                m_conversions[check->converter()->id()] = check->converter();
-            }
         }
         delete check;
     }
     return m_warnings.isEmpty() && m_errors.isEmpty();
 }
-
-KisImageSP KisPreExportChecker::convertedImage(KisImageSP originalImage) const
-{
-    // Sort the conversions on priority
-    // Copy the image
-    // KisImageSP copy = new KisImage(originalImage.data());
-    // Apply the conversions
-    Q_FOREACH(KisExportConverterBase *converter, m_conversions.values()) {
-        if (!converter->convert(originalImage)) {
-            qDebug() << "Failed to apply conversion" << converter->id();
-            return 0;
-        }
-    }
-    return originalImage;
-}
-
 
 QStringList KisPreExportChecker::errors() const
 {
@@ -96,16 +80,3 @@ QStringList KisPreExportChecker::warnings() const
     return m_warnings;
 }
 
-bool KisPreExportChecker::conversionNeeded() const
-{
-    return !m_conversions.isEmpty();
-}
-
-KisExportCheckBase *KisPreExportChecker::createCheck(const QString &id, const KisExportCheckBase::Level level, const QString &customWarning)
-{
-    KisExportCheckFactory *factory = KisExportCheckRegistry::instance()->get(id);
-    if (factory) {
-        return factory->create(level, customWarning);
-    }
-    return 0;
-}

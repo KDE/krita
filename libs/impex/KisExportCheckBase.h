@@ -27,8 +27,6 @@
 
 #include "kritaimpex_export.h"
 
-class KisExportConverterBase;
-
 /**
  * @brief The KisExportCheckBase class defines the interface
  * of the individual checks of an export filter's capabilities
@@ -69,14 +67,11 @@ public:
     /// @return the message to show the user
     QString warning() const;
 
-    KisExportConverterBase *converter() const;
-
 protected:
 
     QString m_id;
     Level m_level {UNSUPPORTED};
     QString m_warning;
-    KisExportConverterBase *m_converter {0};
     bool m_perLayerCheck {false};
 
 };

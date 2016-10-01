@@ -1375,7 +1375,7 @@ void KisMainWindow::slotFileOpen()
 
 void KisMainWindow::slotFileOpenRecent(const QUrl &url)
 {
-    (void) openDocument(url);
+    (void) openDocument(QUrl::fromLocalFile(url.toLocalFile()));
 }
 
 void KisMainWindow::slotFileSave()

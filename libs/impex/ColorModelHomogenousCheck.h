@@ -98,8 +98,9 @@ private:
     {
         KisLayer *layer = dynamic_cast<KisLayer*>(node);
         if (layer) {
+
             const KoColorSpace * cs = layer->colorSpace();
-            if (cs->colorModelId() != m_colorModelID && cs->colorDepthId() != m_colorDepthID) {
+            if (cs->colorModelId() != m_colorModelID || cs->colorDepthId() != m_colorDepthID) {
                 m_count++;
             }
         }

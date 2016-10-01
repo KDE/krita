@@ -995,6 +995,10 @@ namespace KisLayerUtils {
                                            bool flattenSingleLayer, const KUndo2MagicString &actionName, 
                                            bool cleanupNodes = true, const QString layerName = QString())
     {
+        if (!putAfter) {
+            putAfter = mergedNodes.first();
+        }
+
         filterMergableNodes(mergedNodes);
         {
             KisNodeList tempNodes;

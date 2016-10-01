@@ -42,7 +42,7 @@ public:
 
     bool checkNeeded(KisImageSP image) const
     {
-        return image->width() <= m_maxW && image->height() <= m_maxH;
+        return image->width() >= m_maxW && image->height() >= m_maxH;
     }
 
     Level check(KisImageSP /*image*/) const

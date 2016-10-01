@@ -45,7 +45,14 @@ public:
         KoProperties props;
         KisCountVisitor v(nodetypes, props);
         image->rootLayer()->accept(v);
-        return (v.count() > 0);
+
+        // There is always one group layer, the root layer.
+        if (m_nodeType == "KisGroupLayer") {
+            return (v.count() > 1);
+        }
+        else {
+            return (v.count() > 0);
+        }
     }
 
     Level check(KisImageSP /*image*/) const

@@ -25,6 +25,7 @@
 #include <kpluginfactory.h>
 #include <QFileInfo>
 
+#include <KoColorSpaceRegistry.h>
 #include <KoColorSpace.h>
 #include <KoChannelInfo.h>
 #include <KoColorModelStandardIds.h>
@@ -170,7 +171,56 @@ KisConfigWidget *KisTIFFExport::createConfigurationWidget(QWidget *parent, const
 
 void KisTIFFExport::initializeCapabilities()
 {
+    addCapability(KisExportCheckRegistry::instance()->get("NodeTypeCheck/KisGroupLayer")->create(KisExportCheckBase::UNSUPPORTED));
     addCapability(KisExportCheckRegistry::instance()->get("MultiLayerCheck")->create(KisExportCheckBase::SUPPORTED));
+    addCapability(KisExportCheckRegistry::instance()->get("sRGBProfileCheck")->create(KisExportCheckBase::SUPPORTED));
+
+    addCapability(KisExportCheckRegistry::instance()->get("ColorModelCheck/" + RGBAColorModelID.id() + "/" + Integer8BitsColorDepthID.id())->create(KisExportCheckBase::SUPPORTED));
+    addCapability(KisExportCheckRegistry::instance()->get("ColorModelCheck/" + RGBAColorModelID.id() + "/" + Integer16BitsColorDepthID.id())->create(KisExportCheckBase::SUPPORTED));
+    addCapability(KisExportCheckRegistry::instance()->get("ColorModelCheck/" + RGBAColorModelID.id() + "/" + Float16BitsColorDepthID.id())->create(KisExportCheckBase::SUPPORTED));
+    addCapability(KisExportCheckRegistry::instance()->get("ColorModelCheck/" + RGBAColorModelID.id() + "/" + Float32BitsColorDepthID.id())->create(KisExportCheckBase::SUPPORTED));
+    addCapability(KisExportCheckRegistry::instance()->get("ColorModelCheck/" + LABAColorModelID.id() + "/" + Integer16BitsColorDepthID.id())->create(KisExportCheckBase::SUPPORTED));
+
+    QList<KoID> supportedColorModels;
+    supportedColorModels << GrayAColorModelID << CMYKAColorModelID;
+
+    QList<KoID> supportedColorDepths;
+    supportedColorDepths << Integer8BitsColorDepthID << Integer16BitsColorDepthID;
+
+
+    QList<KoID> allColorModels = KoColorSpaceRegistry::instance()->colorModelsList(KoColorSpaceRegistry::AllColorSpaces);
+    Q_FOREACH(const KoID &colorModelID, allColorModels) {
+        QList<KoID> allColorDepths = KoColorSpaceRegistry::instance()->colorDepthList(colorModelID.id(), KoColorSpaceRegistry::AllColorSpaces);
+        Q_FOREACH(const KoID &colorDepthID, allColorDepths) {
+
+            KisExportCheckFactory *f1 = KisExportCheckRegistry::instance()->get("ColorModelCheck/" + colorModelID.id() + "/" + colorDepthID.id());
+            KisExportCheckFactory *f2 = KisExportCheckRegistry::instance()->get("ColorModelPerLayerCheck/" + colorModelID.id() + "/" + colorDepthID.id());
+
+            if(!f1 || !f2) {
+                qDebug() << "No factory for" << colorModelID << colorDepthID;
+                continue;
+            }
+
+            if (supportedColorModels.contains(colorModelID) && supportedColorDepths.contains(colorDepthID)) {
+                addCapability(f1->create(KisExportCheckBase::SUPPORTED));
+                addCapability(f2->create(KisExportCheckBase::SUPPORTED));
+            }
+            else {
+                addCapability(f1->create(KisExportCheckBase::UNSUPPORTED,
+                                         i18nc("image conversion warning",
+                                               "EXR cannot save images with color model <b>%1</b> and depth <b>%2</b>. The image will not be saved.",
+                                               colorModelID.name(),
+                                               colorDepthID.name())));
+
+                addCapability(f2->create(KisExportCheckBase::UNSUPPORTED,
+                                        i18nc("image conversion warning",
+                                              "EXR cannot save layers with color model <b>%1</b> and depth <b>%2</b>. The layers will be skipped.",
+                                              colorModelID.name(),
+                                              colorDepthID.name())));
+            }
+        }
+    }
+
 }
 
 #include <kis_tiff_export.moc>

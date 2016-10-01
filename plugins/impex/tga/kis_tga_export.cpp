@@ -79,6 +79,7 @@ KisImportExportFilter::ConversionStatus KisTGAExport::convert(KisDocument *docum
 
 void KisTGAExport::initializeCapabilities()
 {
+    addCapability(KisExportCheckRegistry::instance()->get("ColorModelCheck/" + RGBAColorModelID.id() + "/" + Integer8BitsColorDepthID.id())->create(KisExportCheckBase::SUPPORTED));
 }
 
 

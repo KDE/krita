@@ -1,0 +1,10 @@
+{
+    "Id": "Halftone Pattern Generator",
+    "Type": "Service",
+    "X-KDE-Library": "kritahalftonegenerator",
+    "X-KDE-ServiceTypes": [
+        "Krita/Generator"
+    ],
+    "X-Krita-Version": "28"
+}
+

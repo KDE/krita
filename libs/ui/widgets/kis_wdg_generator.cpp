@@ -67,7 +67,7 @@ KisWdgGenerator::KisWdgGenerator(QWidget * parent)
         : QWidget(parent)
         , d(new Private())
 {
-    KisPaintDeviceSP dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8(0));
+    d->dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
 }
 
 KisWdgGenerator::~KisWdgGenerator()
@@ -125,7 +125,7 @@ KisFilterConfigurationSP KisWdgGenerator::configuration()
             return config;
         }
     } else {
-        return d->currentGenerator->defaultConfiguration(0);
+        return d->currentGenerator->defaultConfiguration(d->dev);
     }
     return 0;
 }

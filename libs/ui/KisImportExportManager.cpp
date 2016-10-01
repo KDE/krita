@@ -288,9 +288,15 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::convert(KisImpor
             bn->setPopupWidget(browser);
 
             QString warning = "<html><body><p><b>"
-                    + i18n("You will lose information when saving this image as a %1.", KisMimeDatabase::descriptionForMimeType(typeName))
-                    + "</b> Reasons:</p>"
-                    + "<p/><ul>";
+                    + i18n("You will lose information when saving this image as a %1.", KisMimeDatabase::descriptionForMimeType(typeName));
+
+            if (warnings.size() == 1) {
+                    warning += "</b> Reason:</p>";
+            }
+            else {
+                    warning += "</b> Reasons:</p>";
+            }
+            warning += "<p/><ul>";
 
             Q_FOREACH(const QString &w, warnings) {
                 warning += "\n<li>" + w + "</li>";

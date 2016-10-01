@@ -20,6 +20,7 @@
 
 #include <algorithm>
 
+#include <QUuid>
 #include <KoColorSpaceConstants.h>
 
 #include "kis_painter.h"
@@ -1237,4 +1238,13 @@ namespace KisLayerUtils {
 
         return 0;
     }
+
+    KisNodeSP findNodeByUuid(KisNodeSP root, const QUuid &uuid)
+    {
+        return recursiveFindNode(root,
+            [uuid] (KisNodeSP node) {
+                return node->uuid() == uuid;
+            });
+    }
+
 }

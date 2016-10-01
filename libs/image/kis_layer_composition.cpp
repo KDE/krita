@@ -29,6 +29,8 @@
 #include "kis_transparency_mask.h"
 #include "kis_selection_mask.h"
 #include "lazybrush/kis_colorize_mask.h"
+#include "kis_layer_utils.h"
+#include "kis_node_query_path.h"
 
 #include <QDomDocument>
 
@@ -96,6 +98,42 @@ KisLayerComposition::KisLayerComposition(KisImageWSP image, const QString& name)
 KisLayerComposition::~KisLayerComposition()
 {
 
+}
+
+KisLayerComposition::KisLayerComposition(const KisLayerComposition &rhs, KisImageWSP otherImage)
+    : m_image(otherImage ? otherImage : rhs.m_image),
+      m_name(rhs.m_name),
+      m_exportEnabled(rhs.m_exportEnabled)
+{
+    {
+        auto it = rhs.m_visibilityMap.constBegin();
+        for (; it != rhs.m_visibilityMap.constEnd(); ++it) {
+            QUuid nodeUuid = it.key();
+            KisNodeSP node = KisLayerUtils::findNodeByUuid(rhs.m_image->root(), nodeUuid);
+            if (node) {
+                KisNodeQueryPath path = KisNodeQueryPath::absolutePath(node);
+                KisNodeSP newNode = path.queryUniqueNode(m_image);
+                KIS_ASSERT_RECOVER(newNode) { continue; }
+
+                m_visibilityMap.insert(newNode->uuid(), it.value());
+            }
+        }
+    }
+
+    {
+        auto it = rhs.m_collapsedMap.constBegin();
+        for (; it != rhs.m_collapsedMap.constEnd(); ++it) {
+            QUuid nodeUuid = it.key();
+            KisNodeSP node = KisLayerUtils::findNodeByUuid(rhs.m_image->root(), nodeUuid);
+            if (node) {
+                KisNodeQueryPath path = KisNodeQueryPath::absolutePath(node);
+                KisNodeSP newNode = path.queryUniqueNode(m_image);
+                KIS_ASSERT_RECOVER(newNode) { continue; }
+
+                m_collapsedMap.insert(newNode->uuid(), it.value());
+            }
+        }
+    }
 }
 
 void KisLayerComposition::setName(const QString& name)

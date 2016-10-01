@@ -24,7 +24,6 @@
 #include <QApplication>
 
 #include <kpluginfactory.h>
-#include <QMessageBox>
 
 #include <KoColorSpace.h>
 #include <KisImportExportManager.h>
@@ -79,13 +78,6 @@ KisImportExportFilter::ConversionStatus KisPNGExport::convert(KisDocument *docum
     KisPaintDeviceSP pd;
     pd = new KisPaintDevice(*image->projection());
     KisPaintLayerSP l = new KisPaintLayer(image, "projection", OPACITY_OPAQUE_U8, pd);
-
-    if (!KisPNGConverter::isColorSpaceSupported(pd->colorSpace())) {
-        if (!batchMode()) {
-            QMessageBox::critical(0, i18nc("@title:window", "Krita PNG Export"), i18n("You can only save grayscale and RGB images to PNG. Convert your image before exporting to PNG."));
-        }
-        return KisImportExportFilter::UsageError;
-    }
 
     bool isThereAlpha = false;
     KisSequentialConstIterator it(l->paintDevice(), image->bounds());

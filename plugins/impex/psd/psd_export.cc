@@ -19,7 +19,6 @@
 
 #include <QCheckBox>
 #include <QSlider>
-#include <QMessageBox>
 #include <QFileInfo>
 #include <QApplication>
 
@@ -76,27 +75,6 @@ psdExport::~psdExport()
 
 KisImportExportFilter::ConversionStatus psdExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
 {
-    if (document->image()->width() > 30000 || document->image()->height() > 30000) {
-        if (!batchMode()) {
-            QMessageBox::critical(0,
-                                  i18nc("@title:window", "Photoshop Export Error"),
-                                  i18n("Unable to save to the Photoshop format.\n"
-                                       "The Photoshop format only supports images that are smaller than 30000x3000 pixels."));
-        }
-        return KisImportExportFilter::InvalidFormat;
-    }
-
-
-    if (!checkHomogenity(document->image()->rootLayer(), document->image()->colorSpace())) {
-        if (!batchMode()) {
-            QMessageBox::critical(0,
-                                  i18nc("@title:window", "Photoshop Export Error"),
-                                  i18n("Unable to save to the Photoshop format.\n"
-                                       "The Photoshop format only supports images where all layers have the same colorspace as the image."));
-        }
-        return KisImportExportFilter::InvalidFormat;
-    }
-
     PSDSaver psdSaver(document);
     KisImageBuilder_Result res;
 

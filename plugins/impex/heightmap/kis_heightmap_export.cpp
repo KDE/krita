@@ -21,7 +21,6 @@
 #include <qendian.h>
 #include <QDataStream>
 #include <QApplication>
-#include <QMessageBox>
 
 #include <kpluginfactory.h>
 

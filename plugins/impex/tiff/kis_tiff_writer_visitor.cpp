@@ -19,13 +19,9 @@
 
 #include "kis_tiff_writer_visitor.h"
 
-#include <QMessageBox>
-#include <klocalizedstring.h>
-
 #include <KoColorProfile.h>
 #include <KoColorSpace.h>
 #include <KoID.h>
-
 
 #include <KoConfig.h>
 #ifdef HAVE_OPENEXR

@@ -23,7 +23,6 @@
 #include <QCheckBox>
 #include <QDomDocument>
 #include <QFileInfo>
-#include <QMessageBox>
 #include <QSlider>
 #include <QFileInfo>
 #include <QDir>

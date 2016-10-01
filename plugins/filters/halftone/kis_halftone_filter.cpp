@@ -122,10 +122,7 @@ void KisHalftoneFilter::processImpl(KisPaintDeviceSP device,
     KisPainter dbPainter(dab);
     KisSelectionSP alpha = new KisSelection();
     alpha->pixelSelection()->copyAlphaFrom(device, applyRect);
-    painter.setSelection(alpha);
-
     device->fill(applyRect, backgroundC);
-
     dbPainter.setAntiAliasPolygonFill(config->getBool("antiAliasing", true));
     dbPainter.setPaintColor(foregroundC);
     dbPainter.setFillStyle(KisPainter::FillStyleForegroundColor);

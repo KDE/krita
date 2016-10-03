@@ -38,8 +38,6 @@ extern "C" {
 #include <QBuffer>
 #include <QApplication>
 
-#include <QMessageBox>
-
 #include <klocalizedstring.h>
 #include <QFileInfo>
 

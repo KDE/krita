@@ -78,7 +78,7 @@ KisImportExportFilter::ConversionStatus EXRExport::convert(KisDocument *document
 {
     KisImageWSP image = document->image();
 
-    exrConverter kpc(document, !batchMode());
+    EXRConverter exrConverter(document, !batchMode());
 
     KisImageBuilder_Result res;
 
@@ -89,12 +89,12 @@ KisImportExportFilter::ConversionStatus EXRExport::convert(KisDocument *document
         KisPaintDeviceSP pd = new KisPaintDevice(*image->projection());
         KisPaintLayerSP l = new KisPaintLayer(image, "projection", OPACITY_OPAQUE_U8, pd);
 
-        res = kpc.buildFile(filename(), l);
+        res = exrConverter.buildFile(filename(), l);
     }
     else {
         // the image must be locked at the higher levels
         KIS_SAFE_ASSERT_RECOVER_NOOP(document->image()->locked());
-        res = kpc.buildFile(filename(), image->rootLayer());
+        res = exrConverter.buildFile(filename(), image->rootLayer());
     }
 
     dbgFile << " Result =" << res;
@@ -120,6 +120,7 @@ KisImportExportFilter::ConversionStatus EXRExport::convert(KisDocument *document
         return KisImportExportFilter::WrongFormat;
 
     case KisImageBuilder_RESULT_OK:
+        document->setErrorMessage(exrConverter.errorMessage());
         return KisImportExportFilter::OK;
     default:
         break;

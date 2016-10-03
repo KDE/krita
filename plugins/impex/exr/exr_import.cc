@@ -41,7 +41,7 @@ exrImport::~exrImport()
 
 KisImportExportFilter::ConversionStatus exrImport::convert(KisDocument *document, QIODevice */*io*/,  KisPropertiesConfigurationSP /*configuration*/)
 {
-    exrConverter ib(document, !batchMode());
+    EXRConverter ib(document, !batchMode());
 
     switch (ib.buildImage(filename())) {
     case KisImageBuilder_RESULT_UNSUPPORTED:

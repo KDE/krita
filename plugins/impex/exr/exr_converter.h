@@ -28,12 +28,12 @@
 #include <KisImageBuilderResult.h>
 class KisDocument;
 
-class exrConverter : public QObject
+class EXRConverter : public QObject
 {
     Q_OBJECT
 public:
-    exrConverter(KisDocument *doc, bool showNotifications);
-    virtual ~exrConverter();
+    EXRConverter(KisDocument *doc, bool showNotifications);
+    virtual ~EXRConverter();
 public:
     KisImageBuilder_Result buildImage(const QString &filename);
     KisImageBuilder_Result buildFile(const QString &filename, KisPaintLayerSP layer);
@@ -42,6 +42,7 @@ public:
      * Retrieve the constructed image
      */
     KisImageWSP image();
+    QString errorMessage() const;
 private:
     KisImageBuilder_Result decode(const QString &filename);
 
@@ -49,7 +50,7 @@ public Q_SLOTS:
     virtual void cancel();
 private:
     struct Private;
-    const QScopedPointer<Private> m_d;
+    const QScopedPointer<Private> d;
 };
 
 #endif

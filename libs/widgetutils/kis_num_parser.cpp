@@ -24,6 +24,7 @@
 #include <QRegExp>
 #include <QStringList>
 #include <QVariant>
+#include <QLocale>
 
 #include <iostream>
 
@@ -425,6 +426,12 @@ double treatFuncs(QString const& expr, bool & noProblem)
         return sign*val;
     } else if(numExp.exactMatch(expr.trimmed())) {
         return expr.toDouble(&noProblem);
+    }
+
+    double val = QLocale().toDouble(expr, &noProblem);
+
+    if(noProblem) {
+        return val;
     }
 
     noProblem = false;

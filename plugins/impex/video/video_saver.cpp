@@ -106,10 +106,10 @@ public:
                                      const QString &logPath,
                                      int totalFrames)
     {
-//        qDebug() << "runFFMpeg: specialArgs" << specialArgs
-//                 << "actionName" << actionName
-//                 << "logPath" << logPath
-//                 << "totalFrames" << totalFrames;
+        dbgFile << "runFFMpeg: specialArgs" << specialArgs
+                << "actionName" << actionName
+                << "logPath" << logPath
+                << "totalFrames" << totalFrames;
 
         QTemporaryFile progressFile("KritaFFmpegProgress.XXXXXX");
         progressFile.open();

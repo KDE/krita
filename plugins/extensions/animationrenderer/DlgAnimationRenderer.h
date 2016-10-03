@@ -81,6 +81,8 @@ protected Q_SLOTS:
 
 private:
 
+    static QString findFFMpeg();
+
     KisImageWSP m_image;
     WdgAnimaterionRenderer *m_page {0};
     QList<QSharedPointer<KisImportExportFilter>> m_renderFilters;

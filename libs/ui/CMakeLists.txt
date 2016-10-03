@@ -152,7 +152,6 @@ set(kritaui_LIB_SRCS
     kis_canvas_controls_manager.cpp
     kis_tooltip_manager.cpp
     kis_multinode_property.cpp
-    kis_async_action_feedback.cpp
     kis_stopgradient_editor.cpp
     kisexiv2/kis_exif_io.cpp
     kisexiv2/kis_exiv2.cpp

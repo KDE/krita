@@ -59,9 +59,36 @@
 
 #elif defined USE_BREAKPAD
     #include "kis_crash_handler.h"
+#elif defined USE_DRMINGW
+namespace
+{
+void tryInitDrMingw()
+{
+    wchar_t path[MAX_PATH];
+    QString pathStr = QCoreApplication::applicationDirPath().replace(L'/', L'\\') + QStringLiteral("\\exchndl.dll");
+    if (pathStr.size() > MAX_PATH - 1) {
+        return;
+    }
+    int pathLen = pathStr.toWCharArray(path);
+    path[pathLen] = L'\0'; // toWCharArray doesn't add NULL terminator
+    HMODULE hMod = LoadLibraryW(path);
+    if (!hMod) {
+        return;
+    }
+    // No need to call ExcHndlInit since the crash handler is installed on DllMain
+    auto myExcHndlSetLogFileNameA = reinterpret_cast<BOOL (APIENTRY *)(const char *)>(GetProcAddress(hMod, "ExcHndlSetLogFileNameA"));
+    if (!myExcHndlSetLogFileNameA) {
+        return;
+    }
+    // Set the log file path to %LocalAppData%\kritacrash.log
+    QString logFile = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation).replace(L'/', L'\\') + QStringLiteral("\\kritacrash.log");
+    myExcHndlSetLogFileNameA(logFile.toLocal8Bit());
+}
+} // namespace
 #endif
 extern "C" int main(int argc, char **argv)
 {
+
     /**
      * Add a workaround for Qt 5.6, which implemented compression of the tablet events.
      * Since Qt 5.6.1 there will be this hacky environment variable option. After that,
@@ -168,6 +195,8 @@ extern "C" int main(int argc, char **argv)
     qputenv("KDE_DEBUG", "1");
     KisCrashHandler crashHandler;
     Q_UNUSED(crashHandler);
+#elif defined USE_DRMINGW
+    tryInitDrMingw();
 #endif
 
     // If we should clear the config, it has to be done as soon as possible after

@@ -531,7 +531,9 @@ void KisToolMove::slotNodeChanged(KisNodeList nodes)
     QRect totalBounds;
 
     Q_FOREACH (KisNodeSP node, nodes) {
-        totalBounds |= node->projection()->nonDefaultPixelArea();
+        if (node && node->projection()) {
+            totalBounds |= node->projection()->nonDefaultPixelArea();
+        }
     }
 
     m_startPosition = totalBounds.topLeft();

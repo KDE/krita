@@ -74,7 +74,7 @@ KoFileDialog::DialogType KisFileNameRequester::mode() const
 }
 
 void KisFileNameRequester::setMimeTypeFilters(const QStringList &filterList,
-                            QString defaultFilter)
+                                              QString defaultFilter)
 {
     m_mime_filter_list = filterList;
     m_mime_default_filter = defaultFilter;
@@ -91,7 +91,6 @@ void KisFileNameRequester::slotSelectFile()
     {
         dialog.setCaption(i18n("Select a directory to load..."));
     }
-
     dialog.setDefaultDir(m_basePath.isEmpty() ? QDesktopServices::storageLocation(QDesktopServices::PicturesLocation) : m_basePath);
 
     Q_ASSERT(!m_mime_filter_list.isEmpty());

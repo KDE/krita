@@ -71,9 +71,9 @@ KisColorSmudgeOpSettingsWidget::KisColorSmudgeOpSettingsWidget(QWidget* parent):
 
 KisColorSmudgeOpSettingsWidget::~KisColorSmudgeOpSettingsWidget() { }
 
-KisPropertiesConfiguration* KisColorSmudgeOpSettingsWidget::configuration() const
+KisPropertiesConfigurationSP KisColorSmudgeOpSettingsWidget::configuration() const
 {
-    KisColorSmudgeOpSettings *config = new KisColorSmudgeOpSettings();
+    KisColorSmudgeOpSettingsSP config = new KisColorSmudgeOpSettings();
     config->setOptionsWidget(const_cast<KisColorSmudgeOpSettingsWidget*>(this));
     config->setProperty("paintop", "colorsmudge");
     writeConfiguration(config);
@@ -86,4 +86,3 @@ void KisColorSmudgeOpSettingsWidget::notifyPageChanged()
     bool pierced =  brush ? brush->isPiercedApprox() : false;
     m_smudgeOptionWidget->updateBrushPierced(pierced);
 }
-

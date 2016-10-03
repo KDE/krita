@@ -39,8 +39,8 @@ public:
 
     void setView(KisViewManager *view);
 
-    virtual void setConfiguration(const KisPropertiesConfiguration*);
-    virtual KisPropertiesConfiguration* configuration() const;
+    virtual void setConfiguration(const KisPropertiesConfigurationSP);
+    virtual KisPropertiesConfigurationSP configuration() const;
 
 protected:
 

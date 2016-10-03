@@ -238,11 +238,7 @@ void KisToolRectangleBase::paintRectangle(QPainter &gc, const QRectF &imageRect)
 }
 
 void KisToolRectangleBase::updateArea() {
-    QRectF bound;
-    bound.setTopLeft(m_dragStart);
-    bound.setBottomRight(m_dragEnd);
-
-    bound = bound.normalized();
+    const QRectF bound = createRect(m_dragStart, m_dragEnd);
 
     canvas()->updateCanvas(convertToPt(bound).adjusted(-100, -100, +200, +200));
 

@@ -106,7 +106,7 @@ qreal KisParticleOpOption::gravity() const
     return m_options->gravSPBox->value();
 }
 
-void KisParticleOpOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
+void KisParticleOpOption::writeOptionSetting(KisPropertiesConfigurationSP setting) const
 {
     ParticleOption op;
 
@@ -120,7 +120,7 @@ void KisParticleOpOption::writeOptionSetting(KisPropertiesConfiguration* setting
     op.writeOptionSetting(setting);
 }
 
-void KisParticleOpOption::readOptionSetting(const KisPropertiesConfiguration* setting)
+void KisParticleOpOption::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
     ParticleOption op;
     op.readOptionSetting(setting);

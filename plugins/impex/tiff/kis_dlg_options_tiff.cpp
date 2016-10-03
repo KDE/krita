@@ -28,81 +28,106 @@
 #include <kcombobox.h>
 #include <klocalizedstring.h>
 
+#include <KoColorSpace.h>
+#include <KoChannelInfo.h>
+#include <KoColorModelStandardIds.h>
+
 #include <kis_properties_configuration.h>
 #include <kis_config.h>
 
-
-#include "ui_kis_wdg_options_tiff.h"
-
-KisDlgOptionsTIFF::KisDlgOptionsTIFF(QWidget *parent)
-        : KoDialog(parent), wdg(new QWidget)
+KisTIFFOptionsWidget::KisTIFFOptionsWidget(QWidget *parent)
+    : KisConfigWidget(parent)
 {
-    setWindowTitle(i18n("TIFF Export Options"));
-    setButtons(KoDialog::Ok | KoDialog::Cancel);
-    optionswdg = new Ui_KisWdgOptionsTIFF();
-    optionswdg->setupUi(wdg);
+    setupUi(this);
     activated(0);
-    connect(optionswdg->kComboBoxCompressionType, SIGNAL(activated(int)), this, SLOT(activated(int)));
-    connect(optionswdg->flatten, SIGNAL(toggled(bool)), this, SLOT(flattenToggled(bool)));
-    setMainWidget(wdg);
+    connect(kComboBoxCompressionType, SIGNAL(activated(int)), this, SLOT(activated(int)));
+    connect(flatten, SIGNAL(toggled(bool)), this, SLOT(flattenToggled(bool)));
     QApplication::restoreOverrideCursor();
     setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
-
-    QString filterConfig = KisConfig().exportConfiguration("TIFF");
-    KisPropertiesConfiguration cfg;
-    cfg.fromXML(filterConfig);
-
-    optionswdg->kComboBoxCompressionType->setCurrentIndex(cfg.getInt("compressiontype", 0));
-    activated(optionswdg->kComboBoxCompressionType->currentIndex());
-    optionswdg->kComboBoxPredictor->setCurrentIndex(cfg.getInt("predictor", 0));
-    optionswdg->alpha->setChecked(cfg.getBool("alpha", true));
-    optionswdg->flatten->setChecked(cfg.getBool("flatten", true));
-    flattenToggled(optionswdg->flatten->isChecked());
-    optionswdg->qualityLevel->setValue(cfg.getInt("quality", 80));
-    optionswdg->compressionLevelDeflate->setValue(cfg.getInt("deflate", 6));
-    optionswdg->kComboBoxFaxMode->setCurrentIndex(cfg.getInt("faxmode", 0));
-    optionswdg->compressionLevelPixarLog->setValue(cfg.getInt("pixarlog", 6));
-    optionswdg->chkSaveProfile->setChecked(cfg.getBool("saveProfile", true));
 }
 
-KisDlgOptionsTIFF::~KisDlgOptionsTIFF()
+KisTIFFOptionsWidget::~KisTIFFOptionsWidget()
 {
     delete optionswdg;
 }
 
-void KisDlgOptionsTIFF::activated(int index)
+void KisTIFFOptionsWidget::setConfiguration(const KisPropertiesConfigurationSP cfg)
+{
+    kComboBoxCompressionType->setCurrentIndex(cfg->getInt("compressiontype", 0));
+    activated(kComboBoxCompressionType->currentIndex());
+    kComboBoxPredictor->setCurrentIndex(cfg->getInt("predictor", 0));
+    alpha->setChecked(cfg->getBool("alpha", true));
+    flatten->setChecked(cfg->getBool("flatten", true));
+    flattenToggled(flatten->isChecked());
+    qualityLevel->setValue(cfg->getInt("quality", 80));
+    compressionLevelDeflate->setValue(cfg->getInt("deflate", 6));
+    kComboBoxFaxMode->setCurrentIndex(cfg->getInt("faxmode", 0));
+    compressionLevelPixarLog->setValue(cfg->getInt("pixarlog", 6));
+    chkSaveProfile->setChecked(cfg->getBool("saveProfile", true));
+
+    if (cfg->getInt("type", -1) == KoChannelInfo::FLOAT16 || cfg->getInt("type", -1) == KoChannelInfo::FLOAT32) {
+        kComboBoxPredictor->removeItem(1);
+    } else {
+        kComboBoxPredictor->removeItem(2);
+    }
+
+    if (cfg->getBool("isCMYK")) {
+        alpha->setChecked(false);
+        alpha->setEnabled(false);
+    }
+
+
+}
+
+KisPropertiesConfigurationSP KisTIFFOptionsWidget::configuration() const
+{
+    KisTIFFOptions opts = options();
+    KisPropertiesConfigurationSP cfg(new KisPropertiesConfiguration());
+    cfg->setProperty("compressiontype", kComboBoxCompressionType->currentIndex());
+    cfg->setProperty("predictor", opts.predictor - 1);
+    cfg->setProperty("alpha", opts.alpha);
+    cfg->setProperty("flatten", opts.flatten);
+    cfg->setProperty("quality", opts.jpegQuality);
+    cfg->setProperty("deflate", opts.deflateCompress);
+    cfg->setProperty("faxmode", opts.faxMode - 1);
+    cfg->setProperty("pixarlog", opts.pixarLogCompress);
+    cfg->setProperty("saveProfile", opts.saveProfile);
+
+    return cfg;
+}
+
+void KisTIFFOptionsWidget::activated(int index)
 {
     switch (index) {
     case 1:
-        optionswdg->codecsOptionsStack->setCurrentIndex(1);
+        codecsOptionsStack->setCurrentIndex(1);
         break;
     case 2:
-        optionswdg->codecsOptionsStack->setCurrentIndex(2);
+        codecsOptionsStack->setCurrentIndex(2);
         break;
     case 6:
-        optionswdg->codecsOptionsStack->setCurrentIndex(3);
+        codecsOptionsStack->setCurrentIndex(3);
         break;
     case 8:
-        optionswdg->codecsOptionsStack->setCurrentIndex(4);
+        codecsOptionsStack->setCurrentIndex(4);
         break;
     default:
-        optionswdg->codecsOptionsStack->setCurrentIndex(0);
+        codecsOptionsStack->setCurrentIndex(0);
     }
 }
 
-void KisDlgOptionsTIFF::flattenToggled(bool t)
+void KisTIFFOptionsWidget::flattenToggled(bool t)
 {
-    optionswdg->alpha->setEnabled(t);
+    alpha->setEnabled(t);
     if (!t) {
-        optionswdg->alpha->setChecked(true);
+        alpha->setChecked(true);
     }
 }
 
-
-KisTIFFOptions KisDlgOptionsTIFF::options()
+KisTIFFOptions KisTIFFOptionsWidget::options() const
 {
     KisTIFFOptions options;
-    switch (optionswdg->kComboBoxCompressionType->currentIndex()) {
+    switch (kComboBoxCompressionType->currentIndex()) {
     case 0:
         options.compressionType = COMPRESSION_NONE;
         break;
@@ -133,27 +158,14 @@ KisTIFFOptions KisDlgOptionsTIFF::options()
     default:
         options.compressionType = COMPRESSION_NONE;
     }
-    options.predictor = optionswdg->kComboBoxPredictor->currentIndex() + 1;
-    options.alpha = optionswdg->alpha->isChecked();
-    options.flatten = optionswdg->flatten->isChecked();
-    options.jpegQuality = optionswdg->qualityLevel->value();
-    options.deflateCompress = optionswdg->compressionLevelDeflate->value();
-    options.faxMode = optionswdg->kComboBoxFaxMode->currentIndex() + 1;
-    options.pixarLogCompress = optionswdg->compressionLevelPixarLog->value();
-    options.saveProfile = optionswdg->chkSaveProfile->isChecked();
-
-    KisPropertiesConfiguration cfg;
-    cfg.setProperty("compressiontype", optionswdg->kComboBoxCompressionType->currentIndex());
-    cfg.setProperty("predictor", options.predictor - 1);
-    cfg.setProperty("alpha", options.alpha);
-    cfg.setProperty("flatten", options.flatten);
-    cfg.setProperty("quality", options.jpegQuality);
-    cfg.setProperty("deflate", options.deflateCompress);
-    cfg.setProperty("faxmode", options.faxMode - 1);
-    cfg.setProperty("pixarlog", options.pixarLogCompress);
-    cfg.setProperty("saveProfile", options.saveProfile);
-
-    KisConfig().setExportConfiguration("TIFF", cfg);
+    options.predictor = kComboBoxPredictor->currentIndex() + 1;
+    options.alpha = alpha->isChecked();
+    options.flatten = flatten->isChecked();
+    options.jpegQuality = qualityLevel->value();
+    options.deflateCompress = compressionLevelDeflate->value();
+    options.faxMode = kComboBoxFaxMode->currentIndex() + 1;
+    options.pixarLogCompress = compressionLevelPixarLog->value();
+    options.saveProfile = chkSaveProfile->isChecked();
 
     return options;
 }

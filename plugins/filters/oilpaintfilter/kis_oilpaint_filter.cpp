@@ -60,7 +60,7 @@ KisOilPaintFilter::KisOilPaintFilter() : KisFilter(id(), KisFilter::categoryArti
 
 void KisOilPaintFilter::processImpl(KisPaintDeviceSP device,
                                     const QRect& applyRect,
-                                    const KisFilterConfiguration* config,
+                                    const KisFilterConfigurationSP config,
                                     KoUpdater* progressUpdater
                                     ) const
 {
@@ -210,9 +210,9 @@ KisConfigWidget * KisOilPaintFilter::createConfigurationWidget(QWidget* parent, 
     return w;
 }
 
-KisFilterConfiguration* KisOilPaintFilter::factoryConfiguration(const KisPaintDeviceSP) const
+KisFilterConfigurationSP KisOilPaintFilter::factoryConfiguration(const KisPaintDeviceSP) const
 {
-    KisFilterConfiguration* config = new KisFilterConfiguration("oilpaint", 1);
+    KisFilterConfigurationSP config = new KisFilterConfiguration("oilpaint", 1);
     config->setProperty("brushSize", 1);
     config->setProperty("smooth", 30);
 

@@ -39,7 +39,7 @@
 #include <QScreen>
 #include <QWidget>
 #include <QLibrary>
-#include <math.h>
+#include <cmath>
 #define Q_PI M_PI
 
 #include <input/kis_extended_modifiers_mapper.h>

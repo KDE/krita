@@ -398,6 +398,16 @@ void KisImageConfig::setShowAdditionalOnionSkinsSettings(bool value)
     m_config.writeEntry("showAdditionalOnionSkinsSettings", value);
 }
 
+int KisImageConfig::defaultFrameColorLabel() const
+{
+    return m_config.readEntry("defaultFrameColorLabel", 0);
+}
+
+void KisImageConfig::setDefaultFrameColorLabel(int label)
+{
+    m_config.writeEntry("defaultFrameColorLabel", label);
+}
+
 KisProofingConfigurationSP KisImageConfig::defaultProofingconfiguration()
 {
     KisProofingConfiguration *proofingConfig= new KisProofingConfiguration();
@@ -431,4 +441,15 @@ void KisImageConfig::setDefaultProofingConfig(const KoColorSpace *proofingSpace,
     warningColor.toQColor(&c);
     m_config.writeEntry("defaultProofingGamutwarning", c);
     m_config.writeEntry("defaultProofingAdaptationState",adaptationState);
+}
+
+bool KisImageConfig::useLodForColorizeMask(bool requestDefault) const
+{
+    return !requestDefault ?
+        m_config.readEntry("useLodForColorizeMask", false) : false;
+}
+
+void KisImageConfig::setUseLodForColorizeMask(bool value)
+{
+    m_config.writeEntry("useLodForColorizeMask", value);
 }

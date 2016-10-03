@@ -33,7 +33,7 @@ KisConfigWidget * KisFilterDodgeBurn::createConfigurationWidget(QWidget* parent,
     return new KisDodgeBurnConfigWidget(parent, id());
 }
 
-KoColorTransformation* KisFilterDodgeBurn::createTransformation(const KoColorSpace* cs, const KisFilterConfiguration* config) const
+KoColorTransformation* KisFilterDodgeBurn::createTransformation(const KoColorSpace* cs, const KisFilterConfigurationSP config) const
 {
     QHash<QString, QVariant> params;
     QString suffix = "Midtones";
@@ -72,9 +72,9 @@ KisDodgeBurnConfigWidget::~KisDodgeBurnConfigWidget()
     delete m_page;
 }
 
-KisPropertiesConfiguration * KisDodgeBurnConfigWidget::configuration() const
+KisPropertiesConfigurationSP  KisDodgeBurnConfigWidget::configuration() const
 {
-    KisColorTransformationConfiguration* c = new KisColorTransformationConfiguration(m_id, 0);
+    KisColorTransformationConfigurationSP c = new KisColorTransformationConfiguration(m_id, 0);
     int type = 0;
     if(m_page->radioButtonHighlights->isChecked())
     {
@@ -90,7 +90,7 @@ KisPropertiesConfiguration * KisDodgeBurnConfigWidget::configuration() const
     return c;
 }
 
-void KisDodgeBurnConfigWidget::setConfiguration(const KisPropertiesConfiguration * config)
+void KisDodgeBurnConfigWidget::setConfiguration(const KisPropertiesConfigurationSP  config)
 {
     int type = config->getInt("type", KisFilterDodgeBurn::MIDTONES);
     switch(type)

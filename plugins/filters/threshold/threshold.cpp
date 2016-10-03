@@ -74,7 +74,7 @@ KisFilterThreshold::KisFilterThreshold()
 
 void KisFilterThreshold::processImpl(KisPaintDeviceSP device,
                  const QRect& applyRect,
-                 const KisFilterConfiguration *config,
+                 const KisFilterConfigurationSP config,
                  KoUpdater *progressUpdater) const
 {
     Q_ASSERT(!device.isNull());
@@ -106,9 +106,9 @@ void KisFilterThreshold::processImpl(KisPaintDeviceSP device,
 }
 
 
-KisFilterConfiguration *KisFilterThreshold::factoryConfiguration(const KisPaintDeviceSP) const
+KisFilterConfigurationSP KisFilterThreshold::factoryConfiguration(const KisPaintDeviceSP) const
 {
-    KisFilterConfiguration *config = new KisFilterConfiguration("threshold", 1);
+    KisFilterConfigurationSP config = new KisFilterConfiguration("threshold", 1);
     config->setProperty("threshold", 128);
     return config;
 }
@@ -200,14 +200,14 @@ void KisThresholdConfigWidget::slotSetThreshold(int limit)
     m_page.intThreshold->setMaximum(limit - 1);
 }
 
-KisPropertiesConfiguration *KisThresholdConfigWidget::configuration() const
+KisPropertiesConfigurationSP KisThresholdConfigWidget::configuration() const
 {
-    KisFilterConfiguration *config = new KisFilterConfiguration("threshold", 1);
+    KisFilterConfigurationSP config = new KisFilterConfiguration("threshold", 1);
     config->setProperty("threshold", m_page.intThreshold->value());
     return config;
 }
 
-void KisThresholdConfigWidget::setConfiguration(const KisPropertiesConfiguration * config)
+void KisThresholdConfigWidget::setConfiguration(const KisPropertiesConfigurationSP config)
 {
     QVariant value;
     if (config->getProperty("threshold", value)) {

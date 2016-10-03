@@ -21,7 +21,6 @@
 #include <QMouseEvent>
 
 #include <Eigen/Core>
-using namespace Eigen;
 #include <cmath>
 
 #include "KoColor.h"
@@ -53,10 +52,10 @@ bool KisColorSelectorRing::containsPointInComponentCoords(int x, int y) const
     int innerRadiusSquared = innerRadius();
     outerRadiusSquared*=outerRadiusSquared;
     innerRadiusSquared*=innerRadiusSquared;
-    
-    
-    Vector2i relativeVector(x-width()/2, y-height()/2);
-    
+
+
+    Eigen::Vector2i relativeVector(x-width()/2, y-height()/2);
+
     if(relativeVector.squaredNorm() < outerRadiusSquared
        && relativeVector.squaredNorm() > innerRadiusSquared) {
         return true;
@@ -72,13 +71,13 @@ void KisColorSelectorRing::paint(QPainter* painter)
         colorCache();
         paintCache();
     }
-    
+
     int size = qMin(width(), height());
     if(m_cachedSize!=size) {
         m_cachedSize=size;
         paintCache();
     }
-    
+
     painter->drawImage(width()/2-m_pixelCache.width()/2,
                 height()/2-m_pixelCache.height()/2,
                 m_pixelCache);
@@ -139,17 +138,17 @@ void KisColorSelectorRing::setColor(const KoColor &color)
 void KisColorSelectorRing::paintCache()
 {
     QImage cache(m_cachedSize, m_cachedSize, QImage::Format_ARGB32_Premultiplied);
-    
-    Vector2i center(cache.width()/2., cache.height()/2.);
-    
+
+    Eigen::Vector2i center(cache.width()/2., cache.height()/2.);
+
     for(int x=0; x<cache.width(); x++) {
         for(int y=0; y<cache.height(); y++) {
-            Vector2i currentPoint((float)x, (float)y);
-            Vector2i relativeVector = currentPoint-center;
+            Eigen::Vector2i currentPoint((float)x, (float)y);
+            Eigen::Vector2i relativeVector = currentPoint-center;
 
             qreal currentRadius = relativeVector.squaredNorm();
             currentRadius=sqrt(currentRadius);
-            
+
             if(currentRadius < outerRadius()+1
                && currentRadius > innerRadius()-1)
             {

@@ -71,6 +71,8 @@ public:
 
     void updateViewSettings();
 
+    void currentPresetChanged(KisPaintOpPresetSP  preset);
+
 protected:
     void contextMenuEvent(QContextMenuEvent *);
     void hideEvent(QHideEvent *);
@@ -97,6 +99,7 @@ Q_SIGNALS:
     void eraserBrushOpacityToggled(bool value);
     
     void sizeChanged();
+    void brushEditorShown();
 
 private Q_SLOTS:
     void slotSwitchPresetStrip(bool visible);

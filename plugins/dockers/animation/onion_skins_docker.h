@@ -60,6 +60,7 @@ private Q_SLOTS:
     void slotShowAdditionalSettings(bool value);
     void slotUpdateIcons();
     void slotToggleOnionSkins();
+    void slotFilteredColorsChanged();
 };
 
 #endif // ONION_SKINS_DOCKER_H

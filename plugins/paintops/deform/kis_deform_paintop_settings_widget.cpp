@@ -50,26 +50,7 @@ KisDeformPaintOpSettingsWidget::~ KisDeformPaintOpSettingsWidget()
 }
 
 
-void KisDeformPaintOpSettingsWidget::changePaintOpSize(qreal x, qreal y)
-{
-    // if the movement is more left<->right then up<->down
-    if (qAbs(x) > qAbs(y)) {
-        m_brushSizeOption->setDiameter(m_brushSizeOption->diameter() + qRound(x));
-    }
-    else { // vice-versa
-        // we can do something different, e.g. change deform mode or ...
-    }
-}
-
-
-QSizeF KisDeformPaintOpSettingsWidget::paintOpSize() const
-{
-    qreal height = m_brushSizeOption->diameter() * m_brushSizeOption->brushAspect();
-    return QSizeF(m_brushSizeOption->diameter(), height);
-}
-
-
-KisPropertiesConfiguration* KisDeformPaintOpSettingsWidget::configuration() const
+KisPropertiesConfigurationSP KisDeformPaintOpSettingsWidget::configuration() const
 {
     KisDeformPaintOpSettings* config = new KisDeformPaintOpSettings();
     config->setOptionsWidget(const_cast<KisDeformPaintOpSettingsWidget*>(this));

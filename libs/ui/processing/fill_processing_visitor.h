@@ -45,6 +45,9 @@ public:
 private:
     void visitNodeWithPaintDevice(KisNode *node, KisUndoAdapter *undoAdapter);
     void visitExternalLayer(KisExternalLayer *layer, KisUndoAdapter *undoAdapter);
+    void visitColorizeMask(KisColorizeMask *mask, KisUndoAdapter *undoAdapter);
+
+    void fillPaintDevice(KisPaintDeviceSP device, KisUndoAdapter *undoAdapter, ProgressHelper &helper);
 
 private:
     QPoint m_startPoint;

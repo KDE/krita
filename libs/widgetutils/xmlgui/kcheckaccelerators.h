@@ -85,7 +85,7 @@ public:
     /**
      * Re-implemented to filter the parent's events.
      */
-    bool eventFilter(QObject *, QEvent *e) Q_DECL_OVERRIDE;
+    bool eventFilter(QObject *, QEvent *e) override;
 
 private:
     void checkAccelerators(bool automatic);

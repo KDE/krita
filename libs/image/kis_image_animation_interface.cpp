@@ -227,6 +227,7 @@ void KisImageAnimationInterface::notifyNodeChanged(const KisNode *node,
                                                    bool recursive)
 {
     if (externalFrameActive() || m_d->frameInvalidationBlocked) return;
+    if (node->inherits("KisSelectionMask")) return;
 
     KisKeyframeChannel *channel =
         node->getKeyframeChannel(KisKeyframeChannel::Content.id());

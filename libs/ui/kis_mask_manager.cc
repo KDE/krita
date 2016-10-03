@@ -33,6 +33,7 @@
 #include <kis_clone_layer.h>
 #include <kis_group_layer.h>
 #include <kis_filter_mask.h>
+#include <lazybrush/kis_colorize_mask.h>
 #include <kis_transform_mask.h>
 #include <kis_transparency_mask.h>
 #include <kis_selection_mask.h>
@@ -86,14 +87,8 @@ KisMaskSP KisMaskManager::activeMask()
 
 KisPaintDeviceSP KisMaskManager::activeDevice()
 {
-    // XXX: we may also need to have a possibility of getting the vector
-    // part of selection here
-    if (m_imageView) {
-        KisSelectionSP selection;
-        KisMaskSP mask = m_imageView->currentMask();
-        return mask && (selection = mask->selection()) ? selection->pixelSelection() : 0;
-    }
-    return 0;
+    KisMaskSP mask = activeMask();
+    return mask ? mask->paintDevice() : 0;
 }
 
 void KisMaskManager::activateMask(KisMaskSP mask)
@@ -213,7 +208,7 @@ void KisMaskManager::createFilterMask(KisNodeSP activeNode, KisPaintDeviceSP cop
 
     // If we are supposed to not disturb the user, don't start asking them about things.
     if(quiet) {
-        KisFilterConfiguration *filter = KisFilterRegistry::instance()->values().first()->defaultConfiguration(originalDevice);
+        KisFilterConfigurationSP filter = KisFilterRegistry::instance()->values().first()->defaultConfiguration(originalDevice);
         if (filter) {
             mask->setFilter(filter);
             mask->setName(mask->name());
@@ -222,7 +217,7 @@ void KisMaskManager::createFilterMask(KisNodeSP activeNode, KisPaintDeviceSP cop
     }
 
     if (dialog.exec() == QDialog::Accepted) {
-        KisFilterConfiguration *filter = dialog.filterConfiguration();
+        KisFilterConfigurationSP filter = dialog.filterConfiguration();
         if (filter) {
             QString name = dialog.layerName();
             mask->setFilter(filter);
@@ -232,6 +227,15 @@ void KisMaskManager::createFilterMask(KisNodeSP activeNode, KisPaintDeviceSP cop
     } else {
         m_commandsAdapter->undoLastCommand();
     }
+}
+
+void KisMaskManager::createColorizeMask(KisNodeSP activeNode)
+{
+    KisColorizeMaskSP mask = new KisColorizeMask();
+    createMaskCommon(mask, activeNode, 0, kundo2_i18n("Add Colorize Mask"), "KisColorizeMask", i18n("Colorize Mask"), true, false);
+    mask->setImage(m_view->image());
+    mask->initializeCompositeOp();
+    delete mask->setColorSpace(mask->parent()->colorSpace());
 }
 
 void KisMaskManager::createTransformMask(KisNodeSP activeNode)
@@ -259,13 +263,13 @@ void KisMaskManager::maskProperties()
 
         KisDlgAdjLayerProps dlg(layer, mask, dev, m_view, mask->filter().data(), mask->name(), i18n("Filter Mask Properties"), m_view->mainWindow(), "dlgeffectmaskprops");
 
-        KisSafeFilterConfigurationSP configBefore(mask->filter());
+        KisFilterConfigurationSP configBefore(mask->filter());
         Q_ASSERT(configBefore);
         QString xmlBefore = configBefore->toXML();
 
         if (dlg.exec() == QDialog::Accepted) {
 
-            KisSafeFilterConfigurationSP configAfter(dlg.filterConfiguration());
+            KisFilterConfigurationSP configAfter(dlg.filterConfiguration());
             Q_ASSERT(configAfter);
             QString xmlAfter = configAfter->toXML();
 
@@ -287,7 +291,7 @@ void KisMaskManager::maskProperties()
             }
         }
         else {
-            KisSafeFilterConfigurationSP configAfter(dlg.filterConfiguration());
+            KisFilterConfigurationSP configAfter(dlg.filterConfiguration());
             Q_ASSERT(configAfter);
             QString xmlAfter = configAfter->toXML();
 

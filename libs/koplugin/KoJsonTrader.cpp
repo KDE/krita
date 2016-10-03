@@ -97,7 +97,7 @@ KoJsonTrader::KoJsonTrader()
                 break;
             }
         }
-        qDebug() << "KoJsonTrader will load its plugins from" << m_pluginPath;
+        debugPlugin << "KoJsonTrader will load its plugins from" << m_pluginPath;
     }
 }
 
@@ -114,7 +114,7 @@ QList<QPluginLoader *> KoJsonTrader::query(const QString &servicetype, const QSt
     QDirIterator dirIter(m_pluginPath, QDirIterator::Subdirectories);
     while (dirIter.hasNext()) {
         dirIter.next();
-        if (dirIter.fileInfo().isFile() && dirIter.fileName().startsWith("krita")) {
+        if (dirIter.fileInfo().isFile() && dirIter.fileName().startsWith("krita") && !dirIter.fileName().endsWith(".debug")) {
             debugPlugin << dirIter.fileName();
             QPluginLoader *loader = new QPluginLoader(dirIter.filePath());
             QJsonObject json = loader->metaData().value("MetaData").toObject();

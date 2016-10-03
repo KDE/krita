@@ -61,8 +61,6 @@ public:
 
 private Q_SLOTS:
     void slotFileChanged() {
-        //qDebug() << "=== progress changed ===";
-
         int currentFrame = -1;
         bool isEnded = false;
 
@@ -75,7 +73,6 @@ private Q_SLOTS:
             } else if (var[0] == "progress") {
                 isEnded = var[1] == "end";
             }
-            //qDebug() << var;
         }
 
         if (isEnded) {
@@ -107,7 +104,12 @@ public:
     KisImageBuilder_Result runFFMpeg(const QStringList &specialArgs,
                                      const QString &actionName,
                                      const QString &logPath,
-                                     int totalFrames) {
+                                     int totalFrames)
+    {
+        dbgFile << "runFFMpeg: specialArgs" << specialArgs
+                << "actionName" << actionName
+                << "logPath" << logPath
+                << "totalFrames" << totalFrames;
 
         QTemporaryFile progressFile("KritaFFmpegProgress.XXXXXX");
         progressFile.open();
@@ -134,7 +136,8 @@ private:
     KisImageBuilder_Result waitForFFMpegProcess(const QString &message,
                                                 QFile &progressFile,
                                                 QProcess &ffmpegProcess,
-                                                int totalFrames) {
+                                                int totalFrames)
+    {
 
         KisFFMpegProgressWatcher watcher(progressFile, totalFrames);
 
@@ -183,7 +186,6 @@ VideoSaver::VideoSaver(KisDocument *doc, bool batchMode)
     , m_ffmpegPath(findFFMpeg())
     , m_runner(new KisFFMpegRunner(m_ffmpegPath))
 {
-
 }
 
 VideoSaver::~VideoSaver()
@@ -234,50 +236,37 @@ QString VideoSaver::findFFMpeg()
     return result;
 }
 
-KisImageBuilder_Result VideoSaver::encode(const QString &filename, const QStringList &additionalOptionsList)
+KisImageBuilder_Result VideoSaver::encode(const QString &filename, KisPropertiesConfigurationSP configuration)
 {
+
+    //qDebug() << "ffmpeg" << m_ffmpegPath << "filename" << filename << "configuration" << configuration->toXML();
+
     if (m_ffmpegPath.isEmpty()) return KisImageBuilder_RESULT_FAILURE;
 
-    KisImageBuilder_Result retval= KisImageBuilder_RESULT_OK;
+    KisImageBuilder_Result result = KisImageBuilder_RESULT_OK;
 
     KisImageAnimationInterface *animation = m_image->animationInterface();
-    const KisTimeRange clipRange = animation->fullClipRange();
+    const KisTimeRange fullRange = animation->fullClipRange();
+    const KisTimeRange clipRange(configuration->getInt("firstframe", fullRange.start()), configuration->getInt("lastFrame"), fullRange.end());
     const int frameRate = animation->framerate();
 
-    const QString resultFile = filename;
-    const bool removeGeneratedFiles =
-        !qEnvironmentVariableIsSet("KRITA_KEEP_FRAMES");
+    const QDir framesDir(configuration->getString("directory"));
 
+    const QString resultFile = framesDir.absolutePath() + "/" + filename;
     const QFileInfo info(resultFile);
     const QString suffix = info.suffix().toLower();
-    const QString baseDirectory = info.absolutePath();
-    const QString frameDirectoryTemplate = baseDirectory + QDir::separator() + "frames.XXXXXX";
 
-    QTemporaryDir framesDirImpl(frameDirectoryTemplate);
-    framesDirImpl.setAutoRemove(removeGeneratedFiles);
-
-    const QDir framesDir(framesDirImpl.path());
-
-    const QString framesPath = framesDir.path();
-    const QString framesBasePath = framesDir.filePath("frame.png");
     const QString palettePath = framesDir.filePath("palette.png");
 
-    KisAnimationExportSaver saver(m_doc, framesBasePath, clipRange.start(), clipRange.end());
+    const QString savedFilesMask = configuration->getString("savedFilesMask");
 
-    KisImportExportFilter::ConversionStatus status =
-        saver.exportAnimation();
-
-    if (status == KisImportExportFilter::UserCancelled) {
-        return  KisImageBuilder_RESULT_CANCEL;
-    } else if (status != KisImportExportFilter::OK) {
-        return  KisImageBuilder_RESULT_FAILURE;
-    }
+    const QStringList additionalOptionsList = configuration->getString("customUserOptions").split(' ', QString::SkipEmptyParts);
 
     if (suffix == "gif") {
         {
             QStringList args;
             args << "-r" << QString::number(frameRate)
-                 << "-i" << saver.savedFilesMask()
+                 << "-i" << savedFilesMask
                  << "-vf" << "palettegen"
                  << "-y" << palettePath;
 
@@ -294,7 +283,7 @@ KisImageBuilder_Result VideoSaver::encode(const QString &filename, const QString
         {
             QStringList args;
             args << "-r" << QString::number(frameRate)
-                 << "-i" << saver.savedFilesMask()
+                 << "-i" << savedFilesMask
                  << "-i" << palettePath
                  << "-lavfi" << "[0:v][1:v] paletteuse"
                  << additionalOptionsList
@@ -312,21 +301,16 @@ KisImageBuilder_Result VideoSaver::encode(const QString &filename, const QString
     } else {
         QStringList args;
         args << "-r" << QString::number(frameRate)
-             << "-i" << saver.savedFilesMask()
+             << "-i" << savedFilesMask
              << additionalOptionsList
              << "-y" << resultFile;
 
-        KisImageBuilder_Result result =
-            m_runner->runFFMpeg(args, i18n("Encoding frames..."),
-                                framesDir.filePath("log_encode.log"),
-                                clipRange.duration());
-
-        if (result) {
-            return result;
-        }
+        result = m_runner->runFFMpeg(args, i18n("Encoding frames..."),
+                                     framesDir.filePath("log_encode.log"),
+                                     clipRange.duration());
     }
 
-    return retval;
+    return result;
 }
 
 void VideoSaver::cancel()

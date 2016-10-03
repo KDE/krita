@@ -24,6 +24,7 @@
 #include "kis_image.h"
 
 #include "kis_transform_worker.h"
+#include "lazybrush/kis_colorize_mask.h"
 #include "processing/kis_transform_processing_visitor.h"
 
 
@@ -32,18 +33,22 @@ KisMirrorProcessingVisitor::KisMirrorProcessingVisitor(const QRect &bounds, Qt::
 {
 }
 
-void KisMirrorProcessingVisitor::visitNodeWithPaintDevice(KisNode *node, KisUndoAdapter *undoAdapter)
+void KisMirrorProcessingVisitor::transformPaintDevice(KisPaintDeviceSP device, KisUndoAdapter *undoAdapter)
 {
-    KisPaintDeviceSP dev = node->paintDevice();
-    KisTransaction transaction(dev);
+    KisTransaction transaction(device);
 
     qreal axis = m_orientation == Qt::Horizontal ?
         m_bounds.x() + 0.5 * m_bounds.width() :
         m_bounds.y() + 0.5 * m_bounds.height();
 
-    KisTransformWorker::mirror(dev, axis, m_orientation);
-
+    KisTransformWorker::mirror(device, axis, m_orientation);
     transaction.commit(undoAdapter);
+}
+
+void KisMirrorProcessingVisitor::visitNodeWithPaintDevice(KisNode *node, KisUndoAdapter *undoAdapter)
+{
+    transformPaintDevice(node->paintDevice(), undoAdapter);
+
 }
 
 void KisMirrorProcessingVisitor::visitExternalLayer(KisExternalLayer *layer, KisUndoAdapter *undoAdapter)
@@ -62,5 +67,14 @@ void KisMirrorProcessingVisitor::visitExternalLayer(KisExternalLayer *layer, Kis
                                               0.0, m_bounds.height(),
                                               0);
         visitor.visit(layer, undoAdapter);
+    }
+}
+
+void KisMirrorProcessingVisitor::visitColorizeMask(KisColorizeMask *node, KisUndoAdapter *undoAdapter)
+{
+    QVector<KisPaintDeviceSP> devices = node->allPaintDevices();
+
+    Q_FOREACH (KisPaintDeviceSP device, devices) {
+        transformPaintDevice(device, undoAdapter);
     }
 }

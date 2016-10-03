@@ -22,73 +22,64 @@
 #include <brushengine/kis_paintop_settings.h>
 #include <brushengine/kis_paintop_preset.h>
 
-KisLockedPropertiesProxy ::KisLockedPropertiesProxy()
-    : m_lockedProperties(0)
-    , m_parent(0)
+KisLockedPropertiesProxy::KisLockedPropertiesProxy(KisPropertiesConfiguration *p, KisLockedPropertiesSP l)
 {
-}
-
-KisLockedPropertiesProxy::KisLockedPropertiesProxy(KisLockedProperties* p)
-{
-    m_lockedProperties = p;
-}
-
-KisLockedPropertiesProxy::KisLockedPropertiesProxy(const KisPropertiesConfiguration *p, KisLockedProperties *l)
-{
-    m_lockedProperties = l;
     m_parent = p;
+    m_lockedProperties = l;
+}
+
+KisLockedPropertiesProxy::~KisLockedPropertiesProxy()
+{
 }
 
 QVariant KisLockedPropertiesProxy::getProperty(const QString &name) const
 {
-    KisPropertiesConfiguration* temp = const_cast<KisPropertiesConfiguration*>(m_parent);
-    KisPaintOpSettings* t = dynamic_cast<KisPaintOpSettings*>(temp);
+    KisPaintOpSettings *t = dynamic_cast<KisPaintOpSettings*>(m_parent);
+    if (!t->preset()) return m_parent->getProperty(name);
 
-    if (t->preset()) {
-        // restores the dirty state on returns automagically
-        KisPaintOpPreset::DirtyStateSaver dirtyStateSaver(t->preset().data());
+    // restores the dirty state on returns automagically
+    KisPaintOpPreset::DirtyStateSaver dirtyStateSaver(t->preset().data());
 
-        if (m_lockedProperties->lockedProperties()) {
-            if (m_lockedProperties->lockedProperties()->hasProperty(name)) {
-                KisLockedPropertiesServer::instance()->setPropertiesFromLocked(true);
+    if (m_lockedProperties->lockedProperties()) {
+        if (m_lockedProperties->lockedProperties()->hasProperty(name)) {
+            KisLockedPropertiesServer::instance()->setPropertiesFromLocked(true);
 
-                if (!m_parent->hasProperty(name + "_previous")) {
-                    temp->setProperty(name + "_previous", m_parent->getProperty(name));
-                }
-                temp->setProperty(name, m_lockedProperties->lockedProperties()->getProperty(name));
-                return m_lockedProperties->lockedProperties()->getProperty(name);
-            } else {
-                if (m_parent->hasProperty(name + "_previous")) {
-                    KisPropertiesConfiguration* temp = const_cast<KisPropertiesConfiguration*>(m_parent);
-                    temp->setProperty(name, m_parent->getProperty(name + "_previous"));
-                    temp->removeProperty(name + "_previous");
-                }
+            if (!m_parent->hasProperty(name + "_previous")) {
+                m_parent->setProperty(name + "_previous", m_parent->getProperty(name));
+            }
+            m_parent->setProperty(name, m_lockedProperties->lockedProperties()->getProperty(name));
+            return m_lockedProperties->lockedProperties()->getProperty(name);
+        } else {
+            if (m_parent->hasProperty(name + "_previous")) {
+                m_parent->setProperty(name, m_parent->getProperty(name + "_previous"));
+                m_parent->removeProperty(name + "_previous");
             }
         }
     }
+
     return m_parent->getProperty(name);
 }
 
 void KisLockedPropertiesProxy::setProperty(const QString & name, const QVariant & value)
 {
-    KisPropertiesConfiguration* temp = const_cast<KisPropertiesConfiguration*>(m_parent);
-    KisPaintOpSettings* t = dynamic_cast<KisPaintOpSettings*>(temp);
-    if (t->preset()) {
-        // restores the dirty state on returns automagically
-        KisPaintOpPreset::DirtyStateSaver dirtyStateSaver(t->preset().data());
+    KisPaintOpSettings *t = dynamic_cast<KisPaintOpSettings*>(m_parent);
+    if (!t->preset()) return;
 
-        if (m_lockedProperties->lockedProperties()) {
-            if (m_lockedProperties->lockedProperties()->hasProperty(name)) {
-                m_lockedProperties->lockedProperties()->setProperty(name, value);
-                t->setProperty(name, value);
-                if (!m_parent->hasProperty(name + "_previous")) {
-                    t->setProperty(name + "_previous", m_parent->getProperty(name));
-                }
-                return;
+    // restores the dirty state on returns automagically
+    KisPaintOpPreset::DirtyStateSaver dirtyStateSaver(t->preset().data());
+
+    if (m_lockedProperties->lockedProperties()) {
+        if (m_lockedProperties->lockedProperties()->hasProperty(name)) {
+            m_lockedProperties->lockedProperties()->setProperty(name, value);
+            m_parent->setProperty(name, value);
+            if (!m_parent->hasProperty(name + "_previous")) {
+                m_parent->setProperty(name + "_previous", m_parent->getProperty(name));
             }
+            return;
         }
     }
-    t->setProperty(name, value);
+
+    m_parent->setProperty(name, value);
 }
 
 

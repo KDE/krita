@@ -70,7 +70,7 @@ KisFilterRandomPick::KisFilterRandomPick() : KisFilter(id(), categoryOther(), i1
 
 void KisFilterRandomPick::processImpl(KisPaintDeviceSP device,
                                       const QRect& applyRect,
-                                      const KisFilterConfiguration* config,
+                                      const KisFilterConfigurationSP config,
                                       KoUpdater* progressUpdater
                                       ) const
 {
@@ -131,9 +131,9 @@ KisConfigWidget * KisFilterRandomPick::createConfigurationWidget(QWidget* parent
     return new KisWdgRandomPick((KisFilter*)this, (QWidget*)parent);
 }
 
-KisFilterConfiguration* KisFilterRandomPick::factoryConfiguration(const KisPaintDeviceSP) const
+KisFilterConfigurationSP KisFilterRandomPick::factoryConfiguration(const KisPaintDeviceSP) const
 {
-    KisFilterConfiguration* config = new KisFilterConfiguration("randompick", 1);
+    KisFilterConfigurationSP config = new KisFilterConfiguration("randompick", 1);
     config->setProperty("level", 50);
     config->setProperty("windowsize", 2.5);
     config->setProperty("opacity", 100);
@@ -144,7 +144,7 @@ KisFilterConfiguration* KisFilterRandomPick::factoryConfiguration(const KisPaint
     return config;
 }
 
-QRect KisFilterRandomPick::neededRect(const QRect& rect, const KisFilterConfiguration* config, int lod) const
+QRect KisFilterRandomPick::neededRect(const QRect& rect, const KisFilterConfigurationSP config, int lod) const
 {
     Q_UNUSED(lod);
 

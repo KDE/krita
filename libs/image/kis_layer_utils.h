@@ -58,6 +58,8 @@ namespace KisLayerUtils
     KRITAIMAGE_EXPORT QSet<int> fetchLayerFramesRecursive(KisNodeSP rootNode);
 
     KRITAIMAGE_EXPORT void mergeMultipleLayers(KisImageSP image, KisNodeList mergedNodes, KisNodeSP putAfter);
+    KRITAIMAGE_EXPORT void newLayerFromVisible(KisImageSP image, KisNodeSP putAfter);
+    
     KRITAIMAGE_EXPORT bool tryMergeSelectionMasks(KisImageSP image, KisNodeList mergedNodes, KisNodeSP putAfter);
 
     KRITAIMAGE_EXPORT void flattenLayer(KisImageSP image, KisLayerSP layer);
@@ -166,7 +168,7 @@ namespace KisLayerUtils
     {
         bool valueDiffers = false;
         bool initialized = false;
-        T currentValue;
+        T currentValue = T();
         Q_FOREACH (KisNodeSP node, nodes) {
             if (!initialized) {
                 currentValue = checkerFunc(node);

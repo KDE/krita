@@ -31,12 +31,12 @@ public:
     KisHatchingOptions();
     ~KisHatchingOptions();
 
-    void writeOptionSetting(KisPropertiesConfiguration* setting) const;
-    void readOptionSetting(const KisPropertiesConfiguration* setting);
+    void writeOptionSetting(KisPropertiesConfigurationSP setting) const;
+    void readOptionSetting(const KisPropertiesConfigurationSP setting);
     void lodLimitations(KisPaintopLodLimitations *l) const;
 
 private:
-    KisHatchingOptionsWidget * m_options;
+    KisHatchingOptionsWidget *m_options;
 
 };
 
@@ -56,7 +56,7 @@ struct HatchingOption {
     int separationintervals;
 
 
-    void writeOptionSetting(KisPropertiesConfiguration* setting) const {
+    void writeOptionSetting(KisPropertiesConfigurationSP setting) const {
         setting->setProperty("Hatching/angle", angle);
         setting->setProperty("Hatching/separation", separation);
         setting->setProperty("Hatching/thickness", thickness);
@@ -72,7 +72,7 @@ struct HatchingOption {
         setting->setProperty("Hatching/separationintervals", separationintervals);
     }
 
-    void readOptionSetting(const KisPropertiesConfiguration* setting) {
+    void readOptionSetting(const KisPropertiesConfigurationSP setting) {
         angle = setting->getDouble("Hatching/angle");
         separation = setting->getDouble("Hatching/separation");
         thickness = setting->getDouble("Hatching/thickness");

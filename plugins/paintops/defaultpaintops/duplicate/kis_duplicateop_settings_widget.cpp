@@ -58,7 +58,7 @@ KisDuplicateOpSettingsWidget::~KisDuplicateOpSettingsWidget()
 {
 }
 
-KisPropertiesConfiguration* KisDuplicateOpSettingsWidget::configuration() const
+KisPropertiesConfigurationSP KisDuplicateOpSettingsWidget::configuration() const
 {
     KisDuplicateOpSettings *config = new KisDuplicateOpSettings();
     config->setOptionsWidget(const_cast<KisDuplicateOpSettingsWidget*>(this));

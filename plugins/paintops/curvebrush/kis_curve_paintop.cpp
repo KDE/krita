@@ -31,8 +31,9 @@
 #include <kis_lod_transform.h>
 
 
-KisCurvePaintOp::KisCurvePaintOp(const KisCurvePaintOpSettings *settings, KisPainter * painter, KisNodeSP node, KisImageSP image)
-    : KisPaintOp(painter), m_painter(0)
+KisCurvePaintOp::KisCurvePaintOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisNodeSP node, KisImageSP image)
+    : KisPaintOp(painter)
+    , m_painter(0)
 {
     Q_ASSERT(settings);
     Q_UNUSED(image);

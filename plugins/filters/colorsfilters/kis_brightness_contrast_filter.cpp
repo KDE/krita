@@ -171,15 +171,15 @@ KisConfigWidget * KisBrightnessContrastFilter::createConfigurationWidget(QWidget
     return new KisBrightnessContrastConfigWidget(parent, dev);
 }
 
-KisFilterConfiguration* KisBrightnessContrastFilter::factoryConfiguration(const KisPaintDeviceSP)
+KisFilterConfigurationSP KisBrightnessContrastFilter::factoryConfiguration(const KisPaintDeviceSP)
 const
 {
     return new KisBrightnessContrastFilterConfiguration();
 }
 
-KoColorTransformation* KisBrightnessContrastFilter::createTransformation(const KoColorSpace* cs, const KisFilterConfiguration* config) const
+KoColorTransformation* KisBrightnessContrastFilter::createTransformation(const KoColorSpace* cs, const KisFilterConfigurationSP config) const
 {
-    const KisBrightnessContrastFilterConfiguration* configBC = dynamic_cast<const KisBrightnessContrastFilterConfiguration*>(config);
+    const KisBrightnessContrastFilterConfiguration* configBC = dynamic_cast<const KisBrightnessContrastFilterConfiguration*>(config.data());
     if (!configBC) return 0;
 
     KoColorTransformation * adjustment = cs->createBrightnessContrastAdjustment(configBC->transfer().constData());
@@ -205,7 +205,7 @@ KisBrightnessContrastConfigWidget::KisBrightnessContrastConfigWidget(QWidget * p
 
     l->addWidget(m_page, 1, Qt::AlignTop);
     l->setContentsMargins(0,0,0,0);
-    
+
     height = 256;
     connect(m_page->curveWidget, SIGNAL(modified()), SIGNAL(sigConfigurationItemChanged()));
 
@@ -264,7 +264,7 @@ KisBrightnessContrastConfigWidget::~KisBrightnessContrastConfigWidget()
     delete m_page;
 }
 
-KisBrightnessContrastFilterConfiguration * KisBrightnessContrastConfigWidget::configuration() const
+KisPropertiesConfigurationSP KisBrightnessContrastConfigWidget::configuration() const
 {
     KisBrightnessContrastFilterConfiguration * cfg = new KisBrightnessContrastFilterConfiguration();
     cfg->setCurve(m_page->curveWidget->curve());
@@ -291,9 +291,9 @@ void KisBrightnessContrastConfigWidget::setView(KisViewManager *view)
     KoToolManager::instance()->switchToolTemporaryRequested("KritaSelected/KisToolColorPicker");
 }
 
-void KisBrightnessContrastConfigWidget::setConfiguration(const KisPropertiesConfiguration * config)
+void KisBrightnessContrastConfigWidget::setConfiguration(const KisPropertiesConfigurationSP  config)
 {
-    const KisBrightnessContrastFilterConfiguration * cfg = dynamic_cast<const KisBrightnessContrastFilterConfiguration *>(config);
+    const KisBrightnessContrastFilterConfiguration * cfg = dynamic_cast<const KisBrightnessContrastFilterConfiguration *>(config.data());
     Q_ASSERT(cfg);
     m_page->curveWidget->setCurve(cfg->curve());
 }

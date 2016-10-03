@@ -26,7 +26,7 @@
 #include <QString>
 #include <kis_debug.h>
 
-#include <kis_brush.h>
+#include <kis_scaling_size_brush.h>
 #include <kis_types.h>
 #include <kis_shared.h>
 #include <brushengine/kis_paint_information.h>
@@ -40,7 +40,7 @@ struct AbrInfo;
 /**
  * load a collection of brushes from an abr file
  */
-class BRUSH_EXPORT KisAbrBrushCollection : public KisBrush
+class BRUSH_EXPORT KisAbrBrushCollection : public KisScalingSizeBrush
 {
 
 protected:

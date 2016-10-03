@@ -39,7 +39,7 @@ KisDynaPaintOpSettingsWidget::~ KisDynaPaintOpSettingsWidget()
 {
 }
 
-KisPropertiesConfiguration*  KisDynaPaintOpSettingsWidget::configuration() const
+KisPropertiesConfigurationSP  KisDynaPaintOpSettingsWidget::configuration() const
 {
     KisDynaPaintOpSettings* config = new KisDynaPaintOpSettings();
     config->setOptionsWidget(const_cast<KisDynaPaintOpSettingsWidget*>(this));

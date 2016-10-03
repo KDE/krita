@@ -29,13 +29,13 @@ public:
     KisCallbackBasedPaintopProperty(typename ParentClass::Type type,
                                     const QString &id,
                                     const QString &name,
-                                    KisPaintOpSettingsSP settings,
+                                    KisPaintOpSettingsRestrictedSP settings,
                                     QObject *parent)
         : ParentClass(type, id, name, settings, parent) {}
 
     KisCallbackBasedPaintopProperty(const QString &id,
                                 const QString &name,
-                                KisPaintOpSettingsSP settings,
+                                KisPaintOpSettingsRestrictedSP settings,
                                 QObject *parent)
     : ParentClass(id, name, settings, parent) {}
 

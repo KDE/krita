@@ -39,12 +39,9 @@ public:
 
     void updateGeometries();
 
-    qreal zoom() const;
     QMap<QString, KisAction*> globalActions() const;
 
 public Q_SLOTS:
-    void setZoom(qreal zoom);
-    void setZoomDouble(double zoom);
     void slotSelectionChanged();
 
 private Q_SLOTS:
@@ -69,12 +66,13 @@ private Q_SLOTS:
 
     void slotHeaderDataChanged(Qt::Orientation orientation, int first, int last);
 
-    void slotZoomButtonPressed();
-    void slotZoomButtonChanged(int value);
+    void slotZoomButtonPressed(qreal staticPoint);
+    void slotZoomButtonChanged(qreal value);
+
+    void slotColorLabelChanged(int);
 
 private:
     void setFramesPerSecond(int fps);
-    void slotZoomButtonPressedImpl();
 
     void updateShowInTimeline();
 
@@ -91,6 +89,7 @@ protected:
     void mousePressEvent(QMouseEvent *event);
     void mouseMoveEvent(QMouseEvent *e);
     void mouseReleaseEvent(QMouseEvent *e);
+    void wheelEvent(QWheelEvent *e);
     void rowsInserted(const QModelIndex& parent, int start, int end);
 
 private:

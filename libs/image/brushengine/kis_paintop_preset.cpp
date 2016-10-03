@@ -389,5 +389,5 @@ KisPaintopSettingsUpdateProxy* KisPaintOpPreset::updateProxyNoCreate() const
 
 QList<KisUniformPaintOpPropertySP> KisPaintOpPreset::uniformProperties()
 {
-    return m_d->settings->uniformProperties();
+    return m_d->settings->uniformProperties(m_d->settings);
 }

@@ -45,15 +45,15 @@ public:
 
     qreal brushAspect() const;
 
-    void writeOptionSetting(KisPropertiesConfiguration* setting) const;
-    void readOptionSetting(const KisPropertiesConfiguration* setting);
+    void writeOptionSetting(KisPropertiesConfigurationSP setting) const;
+    void readOptionSetting(const KisPropertiesConfigurationSP setting);
 
 private:
-    KisSprayOpOptionsWidget * m_options;
+    KisSprayOpOptionsWidget *m_options;
 
 };
 
-class KisSprayProperties
+class KisSprayProperties : public KisBaseOption
 {
 public:
     quint16 diameter;
@@ -73,7 +73,8 @@ public:
     }
 
 public:
-    void readOptionSetting(const KisPropertiesConfiguration* settings) {
+
+    void readOptionSettingImpl(const KisPropertiesConfiguration *settings) {
         diameter = settings->getInt(SPRAY_DIAMETER);
         aspect = settings->getDouble(SPRAY_ASPECT);
         particleCount = settings->getDouble(SPRAY_PARTICLE_COUNT);
@@ -87,7 +88,7 @@ public:
         gaussian = settings->getBool(SPRAY_GAUSS_DISTRIBUTION);
     }
 
-    void writeOptionSetting(KisPropertiesConfiguration* setting) const {
+    void writeOptionSettingImpl(KisPropertiesConfiguration *setting) const {
         setting->setProperty(SPRAY_DIAMETER, diameter);
         setting->setProperty(SPRAY_ASPECT, aspect);
         setting->setProperty(SPRAY_COVERAGE, coverage * 100.0);

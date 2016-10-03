@@ -41,9 +41,9 @@ KisColorTransformationFilter::~KisColorTransformationFilter()
 {
 }
 
-void KisColorTransformationFilter::processImpl(KisPaintDeviceSP device, 
+void KisColorTransformationFilter::processImpl(KisPaintDeviceSP device,
                                                const QRect& applyRect,
-                                               const KisFilterConfiguration* config,
+                                               const KisFilterConfigurationSP config,
                                                KoUpdater* progressUpdater
                                                ) const
 {
@@ -55,7 +55,8 @@ void KisColorTransformationFilter::processImpl(KisPaintDeviceSP device,
 
     const KoColorSpace * cs = device->colorSpace();
     KoColorTransformation * colorTransformation = 0;
-    const KisColorTransformationConfiguration * colorTransformationConfiguration = dynamic_cast<const KisColorTransformationConfiguration*>(config);
+    // Ew, casting
+    KisColorTransformationConfigurationSP colorTransformationConfiguration(dynamic_cast<KisColorTransformationConfiguration*>(const_cast<KisFilterConfiguration*>(config.data())));
     if (colorTransformationConfiguration) {
         colorTransformation = colorTransformationConfiguration->colorTransformation(cs, this);
     }
@@ -81,7 +82,7 @@ void KisColorTransformationFilter::processImpl(KisPaintDeviceSP device,
 
 }
 
-KisFilterConfiguration * KisColorTransformationFilter::factoryConfiguration(const KisPaintDeviceSP) const
+KisFilterConfigurationSP  KisColorTransformationFilter::factoryConfiguration(const KisPaintDeviceSP) const
 {
     return new KisColorTransformationConfiguration(id(), 0);
 }

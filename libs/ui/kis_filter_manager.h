@@ -46,7 +46,7 @@ public:
     void setup(KActionCollection * ac, KisActionManager *actionManager);
     void updateGUI();
 
-    void apply(KisSafeFilterConfigurationSP filterConfig);
+    void apply(KisFilterConfigurationSP filterConfig);
     void finish();
     void cancel();
     bool isStrokeRunning() const;

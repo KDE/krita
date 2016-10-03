@@ -99,6 +99,16 @@ KisAutoBrush::~KisAutoBrush()
 {
 }
 
+qreal KisAutoBrush::userEffectiveSize() const
+{
+    return d->shape->diameter();
+}
+
+void KisAutoBrush::setUserEffectiveSize(qreal value)
+{
+    d->shape->setDiameter(value);
+}
+
 KisAutoBrush::KisAutoBrush(const KisAutoBrush& rhs)
     : KisBrush(rhs),
       d(new Private(*rhs.d))
@@ -110,15 +120,32 @@ KisBrush* KisAutoBrush::clone() const
     return new KisAutoBrush(*this);
 }
 
-qint32 KisAutoBrush::maskHeight(
-    KisDabShape const& shape, qreal subPixelX, qreal subPixelY, const KisPaintInformation& info) const
+/* It's difficult to predict the mask height when exaclty when there are
+ * more than 2 spikes, so we return an upperbound instead. */
+static KisDabShape lieAboutDabShape(KisDabShape const& shape)
 {
-    Q_UNUSED(info);
-    /* It's difficult to predict the mask height when exaclty when there are
-     * more than 2 spikes, so we return an upperbound instead. */
-    return KisBrush::maskHeight(KisDabShape(shape.scale(), 1.0, shape.rotation()),
-                                       subPixelX, subPixelY, info);
+    return KisDabShape(shape.scale(), 1.0, shape.rotation());
 }
+
+qint32 KisAutoBrush::maskHeight(KisDabShape const& shape,
+    qreal subPixelX, qreal subPixelY, const KisPaintInformation& info) const
+{
+    return KisBrush::maskHeight(
+        lieAboutDabShape(shape), subPixelX, subPixelY, info);
+}
+
+qint32 KisAutoBrush::maskWidth(KisDabShape const& shape,
+    qreal subPixelX, qreal subPixelY, const KisPaintInformation& info) const
+{
+    return KisBrush::maskWidth(
+        lieAboutDabShape(shape), subPixelX, subPixelY, info);
+}
+
+QSizeF KisAutoBrush::characteristicSize(KisDabShape const& shape) const
+{
+    return KisBrush::characteristicSize(lieAboutDabShape(shape));
+}
+
 
 inline void fillPixelOptimized_4bytes(quint8 *color, quint8 *buf, int size)
 {

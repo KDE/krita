@@ -1493,7 +1493,6 @@ void KoShape::loadStyle(const KoXmlElement &element, KoShapeLoadingContext &cont
 
 bool KoShape::loadOdfAttributes(const KoXmlElement &element, KoShapeLoadingContext &context, int attributes)
 {
-    Q_D(KoShape);
     if (attributes & OdfPosition) {
         QPointF pos(position());
         if (element.hasAttributeNS(KoXmlNS::svg, "x"))

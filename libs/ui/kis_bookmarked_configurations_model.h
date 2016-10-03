@@ -26,7 +26,7 @@
 class KLocalizedString;
 
 class KisBookmarkedConfigurationManager;
-class KisSerializableConfiguration;
+#include <kis_serializable_configuration.h>
 
 /**
  * This class provides the basic functionality for a model of a bookmark
@@ -58,7 +58,7 @@ public:
     /**
      * @return the configuration at the given index
      */
-    KisSerializableConfiguration* configuration(const QModelIndex &index) const;
+    KisSerializableConfigurationSP configuration(const QModelIndex &index) const;
     /**
      * @return the index corresponding to the @p name .
      */
@@ -74,11 +74,11 @@ public:
     /**
      * Insert a new configuration.
      */
-    virtual void newConfiguration(KLocalizedString baseName, const KisSerializableConfiguration* config);
+    virtual void newConfiguration(KLocalizedString baseName, const KisSerializableConfigurationSP config);
     /**
      * Save a configuration to the bookmark manager.
      */
-    virtual void saveConfiguration(const QString & name, const KisSerializableConfiguration* config);
+    virtual void saveConfiguration(const QString & name, const KisSerializableConfigurationSP config);
     /**
      * Delete the configuration at the given index. (if possible)
      */

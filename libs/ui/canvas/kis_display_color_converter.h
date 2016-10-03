@@ -59,7 +59,7 @@ public:
 
     const KoColorSpace* paintingColorSpace() const;
     void setMonitorProfile(const KoColorProfile *monitorProfile);
-    void setDisplayFilter(KisDisplayFilter *displayFilter);
+    void setDisplayFilter(QSharedPointer<KisDisplayFilter> displayFilter);
 
     QColor toQColor(const KoColor &c) const;
     KoColor approximateFromRenderedQColor(const QColor &c) const;
@@ -75,19 +75,19 @@ public:
     KoColor fromHsv(int h, int s, int v, int a = 255) const;
     KoColor fromHsvF(qreal h, qreal s, qreal v, qreal a = 1.0);
     KoColor fromHslF(qreal h, qreal s, qreal l, qreal a = 1.0);
-	KoColor fromHsiF(qreal h, qreal s, qreal i);
+    KoColor fromHsiF(qreal h, qreal s, qreal i);
     KoColor fromHsyF(qreal h, qreal s, qreal y, qreal R=0.2126, qreal G=0.7152, qreal B=0.0722, qreal gamma=2.2);
 
     void getHsv(const KoColor &srcColor, int *h, int *s, int *v, int *a = 0) const;
     void getHsvF(const KoColor &srcColor, qreal *h, qreal *s, qreal *v, qreal *a = 0);
     void getHslF(const KoColor &srcColor, qreal *h, qreal *s, qreal *l, qreal *a = 0);
-	void getHsiF(const KoColor &srcColor, qreal *h, qreal *s, qreal *i);
+    void getHsiF(const KoColor &srcColor, qreal *h, qreal *s, qreal *i);
     void getHsyF(const KoColor &srcColor, qreal *h, qreal *s, qreal *y, qreal R=0.2126, qreal G=0.7152, qreal B=0.0722, qreal gamma=2.2);
 
     static KoColorConversionTransformation::Intent renderingIntent();
     static KoColorConversionTransformation::ConversionFlags conversionFlags();
 
-    KisDisplayFilter* displayFilter() const;
+    QSharedPointer<KisDisplayFilter> displayFilter() const;
     const KoColorProfile* monitorProfile() const;
 
 Q_SIGNALS:

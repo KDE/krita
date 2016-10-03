@@ -26,6 +26,8 @@
 
 #include "kritaanimationdocker_export.h"
 
+#include "kis_time_based_item_model.h"
+
 class KisNodeDummy;
 class KisDummiesFacadeBase;
 
@@ -59,9 +61,9 @@ private Q_SLOTS:
     void slotUpdateDummyContent(QObject *dummy);
 
 public:
-    struct ModelWithExternalNotifications : public QAbstractTableModel {
+    struct ModelWithExternalNotifications : public KisTimeBasedItemModel {
         ModelWithExternalNotifications(QObject *parent)
-            : QAbstractTableModel(parent) {}
+            : KisTimeBasedItemModel(parent) {}
 
         void callBeginInsertRows(const QModelIndex &parent, int first, int last) {
             beginInsertRows(parent, first, last);

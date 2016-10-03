@@ -132,7 +132,7 @@ KisPaintOpSettingsSP KisDuplicateOpSettings::clone() const
     return setting;
 }
 
-QPainterPath KisDuplicateOpSettings::brushOutline(const KisPaintInformation &info, OutlineMode mode) const
+QPainterPath KisDuplicateOpSettings::brushOutline(const KisPaintInformation &info, OutlineMode mode)
 {
     QPainterPath path;
 
@@ -171,7 +171,7 @@ QPainterPath KisDuplicateOpSettings::brushOutline(const KisPaintInformation &inf
 #include "kis_standard_uniform_properties_factory.h"
 
 
-QList<KisUniformPaintOpPropertySP> KisDuplicateOpSettings::uniformProperties()
+QList<KisUniformPaintOpPropertySP> KisDuplicateOpSettings::uniformProperties(KisPaintOpSettingsSP settings)
 {
     QList<KisUniformPaintOpPropertySP> props =
         listWeakToStrong(m_uniformProperties);
@@ -183,7 +183,7 @@ QList<KisUniformPaintOpPropertySP> KisDuplicateOpSettings::uniformProperties()
                     KisUniformPaintOpPropertyCallback::Bool,
                     "clone_healing",
                     i18n("Healing"),
-                    this, 0);
+                    settings, 0);
 
             prop->setReadCallback(
                 [](KisUniformPaintOpProperty *prop) {
@@ -210,7 +210,7 @@ QList<KisUniformPaintOpPropertySP> KisDuplicateOpSettings::uniformProperties()
                     KisUniformPaintOpPropertyCallback::Bool,
                     "clone_movesource",
                     i18n("Move Source"),
-                    this, 0);
+                    settings, 0);
 
             prop->setReadCallback(
                 [](KisUniformPaintOpProperty *prop) {
@@ -233,7 +233,7 @@ QList<KisUniformPaintOpPropertySP> KisDuplicateOpSettings::uniformProperties()
         }
     }
 
-    return KisPaintOpSettings::uniformProperties() + props;
+    return KisPaintOpSettings::uniformProperties(settings) + props;
 }
 
 

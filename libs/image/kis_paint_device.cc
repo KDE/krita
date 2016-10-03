@@ -66,6 +66,7 @@
 
 #include "kis_transform_worker.h"
 #include "kis_filter_strategy.h"
+#include "krita_utils.h"
 
 
 struct KisPaintDeviceSPStaticRegistrar {
@@ -174,6 +175,7 @@ public:
                     m_frames.insert(it.key(), data);
                 }
             }
+            m_nextFreeFrameId = rhs->m_nextFreeFrameId;
         }
 
         if (rhs->m_lodData) {
@@ -261,6 +263,14 @@ private:
 
 public:
 
+    int getNextFrameId() {
+        int frameId = 0;
+        while (m_frames.contains(frameId = m_nextFreeFrameId++));
+        KIS_SAFE_ASSERT_RECOVER_NOOP(!m_frames.contains(frameId));
+
+        return frameId;
+    }
+
     int createFrame(bool copy, int copySrc, const QPoint &offset, KUndo2Command *parentCommand)
     {
         KIS_ASSERT_RECOVER(parentCommand) {
@@ -294,7 +304,7 @@ public:
             data->setY(offset.y());
         }
 
-        int frameId = nextFreeFrameId++;
+        int frameId = getNextFrameId();
 
         KUndo2Command *cmd =
             new FrameInsertionCommand(&m_frames,
@@ -365,16 +375,19 @@ public:
         return data->dataManager()->write(store);
     }
 
-    void setFrameDefaultPixel(const quint8 *defPixel, int frameId)
+    void setFrameDefaultPixel(const KoColor &defPixel, int frameId)
     {
         DataSP data = m_frames[frameId];
-        data->dataManager()->setDefaultPixel(defPixel);
+        KoColor color(defPixel);
+        color.convertTo(data->colorSpace());
+        data->dataManager()->setDefaultPixel(color.data());
     }
 
-    const quint8* frameDefaultPixel(int frameId) const
+    KoColor frameDefaultPixel(int frameId) const
     {
-        DataSP data = m_frames[frameId];
-        return data->dataManager()->defaultPixel();
+        DataSP data = m_frames[frameId];  
+        return KoColor(data->dataManager()->defaultPixel(),
+                       data->colorSpace());
     }
 
     void fetchFrame(int frameId, KisPaintDeviceSP targetDevice);
@@ -402,10 +415,15 @@ private:
 
         if (numberOfFrames > 1) {
             int frameId = contentChannel->frameIdAt(defaultBounds->currentTime());
-            KIS_ASSERT_RECOVER(m_frames.contains(frameId)) {
-                return m_frames.begin().value();
+
+            if (frameId == -1) {
+                data = m_data;
+            } else {
+                KIS_ASSERT_RECOVER(m_frames.contains(frameId)) {
+                    return m_frames.begin().value();
+                }
+                data = m_frames[frameId];
             }
-            data = m_frames[frameId];
         } else if (numberOfFrames == 1) {
             data = m_frames.begin().value();
         } else {
@@ -464,7 +482,7 @@ private:
     {
         currentData()->prepareClone(srcData);
 
-        q->setDefaultPixel(srcData->dataManager()->defaultPixel());
+        q->setDefaultPixel(KoColor(srcData->dataManager()->defaultPixel(), colorSpace()));
         q->setDefaultBounds(src->defaultBounds());
     }
 
@@ -507,7 +525,7 @@ private:
     mutable QMutex m_dataSwitchLock;
 
     FramesHash m_frames;
-    int nextFreeFrameId;
+    int m_nextFreeFrameId;
 };
 
 const KisDefaultBoundsSP KisPaintDevice::Private::transitionalDefaultBounds = new KisDefaultBounds();
@@ -519,7 +537,7 @@ KisPaintDevice::Private::Private(KisPaintDevice *paintDevice)
       basicStrategy(new KisPaintDeviceStrategy(paintDevice, this)),
       isProjectionDevice(false),
       m_data(new Data(paintDevice)),
-      nextFreeFrameId(0)
+      m_nextFreeFrameId(0)
 {
 }
 
@@ -630,6 +648,8 @@ void KisPaintDevice::Private::updateLodDataStruct(LodDataStruct *_dst, const QRe
 
     const int lod = lodData->levelOfDetail();
     const int srcStepSize = 1 << lod;
+
+    KIS_ASSERT_RECOVER_RETURN(lod > 0);
 
     const QRect srcRect = KisLodTransform::alignedRect(originalRect, lod);
     const QRect dstRect = KisLodTransform::scaledRect(srcRect, lod);
@@ -768,7 +788,7 @@ void KisPaintDevice::Private::uploadFrame(int dstFrameId, KisPaintDeviceSP srcDe
 void KisPaintDevice::Private::uploadFrameData(DataSP srcData, DataSP dstData)
 {
     if (srcData->colorSpace() != dstData->colorSpace() &&
-        !(*srcData->colorSpace() == *dstData->colorSpace())) {
+        *srcData->colorSpace() != *dstData->colorSpace()) {
 
         KUndo2Command tempCommand;
 
@@ -1024,6 +1044,11 @@ void KisPaintDevice::requestTimeSwitch(int time)
     }
 }
 
+int KisPaintDevice::sequenceNumber() const
+{
+    return m_d->cache()->sequenceNumber();
+}
+
 void KisPaintDevice::setParentNode(KisNodeWSP parent)
 {
     m_d->parent = parent;
@@ -1046,25 +1071,30 @@ KisDefaultBoundsBaseSP KisPaintDevice::defaultBounds() const
     return m_d->defaultBounds;
 }
 
-void KisPaintDevice::move(const QPoint &pt)
+void KisPaintDevice::moveTo(const QPoint &pt)
 {
     m_d->currentStrategy()->move(pt);
     m_d->cache()->invalidate();
 }
 
-void KisPaintDevice::move(qint32 x, qint32 y)
+QPoint KisPaintDevice::offset() const
 {
-    move(QPoint(x, y));
+    return QPoint(x(), y());
+}
+
+void KisPaintDevice::moveTo(qint32 x, qint32 y)
+{
+    moveTo(QPoint(x, y));
 }
 
 void KisPaintDevice::setX(qint32 x)
 {
-    move(QPoint(x, m_d->y()));
+    moveTo(QPoint(x, m_d->y()));
 }
 
 void KisPaintDevice::setY(qint32 y)
 {
-    move(QPoint(m_d->x(), y));
+    moveTo(QPoint(m_d->x(), y));
 }
 
 qint32 KisPaintDevice::x() const
@@ -1260,7 +1290,7 @@ QRect KisPaintDevice::calculateExactBounds(bool nonDefaultOnly) const
     QRect startRect = extent();
     QRect endRect;
 
-    quint8 defaultOpacity = m_d->colorSpace()->opacityU8(defaultPixel());
+    quint8 defaultOpacity = defaultPixel().opacityU8();
     if (defaultOpacity != OPACITY_TRANSPARENT_U8) {
         if (!nonDefaultOnly) {
             /**
@@ -1277,7 +1307,8 @@ QRect KisPaintDevice::calculateExactBounds(bool nonDefaultOnly) const
     }
 
     if (nonDefaultOnly) {
-        Impl::CheckNonDefault compareOp(pixelSize(), defaultPixel());
+        const KoColor defaultPixel = this->defaultPixel();
+        Impl::CheckNonDefault compareOp(pixelSize(), defaultPixel.data());
         endRect = Impl::calculateExactBoundsImpl(this, startRect, endRect, compareOp);
     } else {
         Impl::CheckFullyTransparent compareOp(m_d->colorSpace());
@@ -1287,6 +1318,29 @@ QRect KisPaintDevice::calculateExactBounds(bool nonDefaultOnly) const
     return endRect;
 }
 
+QRegion KisPaintDevice::regionExact() const
+{
+    QRegion resultRegion;
+    QVector<QRect> rects = region().rects();
+
+    const KoColor defaultPixel = this->defaultPixel();
+    Impl::CheckNonDefault compareOp(pixelSize(), defaultPixel.data());
+
+    Q_FOREACH (const QRect &rc1, rects) {
+        const int patchSize = 64;
+        QVector<QRect> smallerRects = KritaUtils::splitRectIntoPatches(rc1, QSize(patchSize, patchSize));
+        Q_FOREACH (const QRect &rc2, smallerRects) {
+
+            const QRect result =
+                Impl::calculateExactBoundsImpl(this, rc2, QRect(), compareOp);
+
+            if (!result.isEmpty()) {
+                resultRegion += result;
+            }
+        }
+    }
+    return resultRegion;
+}
 
 void KisPaintDevice::crop(qint32 x, qint32 y, qint32 w, qint32 h)
 {
@@ -1305,15 +1359,18 @@ void KisPaintDevice::purgeDefaultPixels()
     dm->purge(dm->extent());
 }
 
-void KisPaintDevice::setDefaultPixel(const quint8 *defPixel)
+void KisPaintDevice::setDefaultPixel(const KoColor &defPixel)
 {
-    m_d->dataManager()->setDefaultPixel(defPixel);
+    KoColor color(defPixel);
+    color.convertTo(colorSpace());
+
+    m_d->dataManager()->setDefaultPixel(color.data());
     m_d->cache()->invalidate();
 }
 
-const quint8 *KisPaintDevice::defaultPixel() const
+KoColor KisPaintDevice::defaultPixel() const
 {
-    return m_d->dataManager()->defaultPixel();
+    return KoColor(m_d->dataManager()->defaultPixel(), colorSpace());
 }
 
 void KisPaintDevice::clear()
@@ -1638,15 +1695,15 @@ void KisPaintDevice::clearSelection(KisSelectionSP selection)
         KisHLineIteratorSP devIt = createHLineIteratorNG(r.x(), r.y(), r.width());
         KisHLineConstIteratorSP selectionIt = selection->projection()->createHLineConstIteratorNG(r.x(), r.y(), r.width());
 
-        const quint8* defaultPixel_ = defaultPixel();
-        bool transparentDefault = (colorSpace->opacityU8(defaultPixel_) == OPACITY_TRANSPARENT_U8);
+        const KoColor defaultPixel = this->defaultPixel();
+        bool transparentDefault = (defaultPixel.opacityU8() == OPACITY_TRANSPARENT_U8);
         for (qint32 y = 0; y < r.height(); y++) {
 
             do {
                 // XXX: Optimize by using stretches
                 colorSpace->applyInverseAlphaU8Mask(devIt->rawData(), selectionIt->rawDataConst(), 1);
                 if (transparentDefault && colorSpace->opacityU8(devIt->rawData()) == OPACITY_TRANSPARENT_U8) {
-                    memcpy(devIt->rawData(), defaultPixel_, colorSpace->pixelSize());
+                    memcpy(devIt->rawData(), defaultPixel.data(), colorSpace->pixelSize());
                 }
             } while (devIt->nextPixel() && selectionIt->nextPixel());
             devIt->nextRow();
@@ -1779,13 +1836,13 @@ quint32 KisPaintDevice::channelCount() const
     return _channelCount;
 }
 
-KisRasterKeyframeChannel *KisPaintDevice::createKeyframeChannel(const KoID &id, const KisNodeWSP node)
+KisRasterKeyframeChannel *KisPaintDevice::createKeyframeChannel(const KoID &id)
 {
     Q_ASSERT(!m_d->framesInterface);
     m_d->framesInterface.reset(new KisPaintDeviceFramesInterface(this));
 
     Q_ASSERT(!m_d->contentChannel);
-    m_d->contentChannel.reset(new KisRasterKeyframeChannel(id, node, this));
+    m_d->contentChannel.reset(new KisRasterKeyframeChannel(id, this, m_d->defaultBounds));
 
     // Raster channels always have at least one frame (representing a static image)
     KUndo2Command tempParentCommand;
@@ -1945,16 +2002,16 @@ QPoint KisPaintDeviceFramesInterface::frameOffset(int frameId) const
     return q->m_d->frameOffset(frameId);
 }
 
-void KisPaintDeviceFramesInterface::setFrameDefaultPixel(const quint8 *defPixel, int frameId)
+void KisPaintDeviceFramesInterface::setFrameDefaultPixel(const KoColor &defPixel, int frameId)
 {
     KIS_ASSERT_RECOVER_RETURN(frameId >= 0);
     q->m_d->setFrameDefaultPixel(defPixel, frameId);
 }
 
-const quint8* KisPaintDeviceFramesInterface::frameDefaultPixel(int frameId) const
+KoColor KisPaintDeviceFramesInterface::frameDefaultPixel(int frameId) const
 {
     KIS_ASSERT_RECOVER(frameId >= 0) {
-        return (quint8*)"deadbeef";
+        return KoColor(Qt::red, q->m_d->colorSpace());
     }
     return q->m_d->frameDefaultPixel(frameId);
 }

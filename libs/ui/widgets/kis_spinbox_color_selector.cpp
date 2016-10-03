@@ -22,24 +22,29 @@
 #include "kis_int_parse_spin_box.h"
 #include "kis_signal_compressor.h"
 
-#include "KoChannelInfo.h"
-#include "KoColorSpaceTraits.h"
-#include "KoColorSpaceMaths.h"
-#include "KoColorSpaceRegistry.h"
+#include <KoConfig.h>
+#ifdef HAVE_OPENEXR
+#include <half.h>
+#endif
+#include <KoChannelInfo.h>
+#include <KoColorSpaceTraits.h>
+#include <KoColorSpaceMaths.h>
+#include <KoColorSpaceRegistry.h>
 
 struct KisSpinboxColorSelector::Private
 {
     QList <KisIntParseSpinBox*> spinBoxList;
     QList <KisDoubleParseSpinBox*> doubleSpinBoxList;
     KoColor color;
-    const KoColorSpace *cs;
-    bool chooseAlpha = false;
+    const KoColorSpace *cs {0};
+    bool chooseAlpha {false};
 };
 
-KisSpinboxColorSelector::KisSpinboxColorSelector(QWidget *parent) : QWidget(parent) , m_d(new Private)
+KisSpinboxColorSelector::KisSpinboxColorSelector(QWidget *parent)
+    : QWidget(parent)
+    , m_d(new Private)
 {
     this->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
-
     KoColor color = KoColor();
     m_d->color = color;
     slotSetColorSpace(m_d->color.colorSpace());
@@ -77,18 +82,21 @@ void KisSpinboxColorSelector::slotSetColorSpace(const KoColorSpace *cs)
     QList<KoChannelInfo *> channels = KoChannelInfo::displayOrderSorted(m_d->cs->channels());
     Q_FOREACH (KoChannelInfo* channel, channels) {
         QString inputLabel = channel->name();
+        QLabel *inlb = new QLabel;
+        inlb->setText(inputLabel);
         switch (channel->channelValueType()) {
         case KoChannelInfo::UINT8: {
             KisIntParseSpinBox *input = new KisIntParseSpinBox(this);
             input->setMinimum(0);
             input->setMaximum(0xFF);
             m_d->spinBoxList.append(input);
-            layout->addRow(inputLabel,input);
+            layout->addRow(inlb,input);
             if (input) {
                 connect(input, SIGNAL(valueChanged(int)), this,  SLOT(slotUpdateFromSpinBoxes()));
             }
             if (channel->channelType()==KoChannelInfo::ALPHA && m_d->chooseAlpha == false) {
-                input->setEnabled(false);
+                inlb->setVisible(false);
+                input->setVisible(false);
                 input->blockSignals(true);
             }
         }
@@ -98,12 +106,13 @@ void KisSpinboxColorSelector::slotSetColorSpace(const KoColorSpace *cs)
             input->setMinimum(0);
             input->setMaximum(0xFFFF);
             m_d->spinBoxList.append(input);
-            layout->addRow(inputLabel,input);
+            layout->addRow(inlb,input);
             if (input) {
                 connect(input, SIGNAL(valueChanged(int)), this,  SLOT(slotUpdateFromSpinBoxes()));
             }
             if (channel->channelType()==KoChannelInfo::ALPHA && m_d->chooseAlpha == false) {
-                input->setEnabled(false);
+                inlb->setVisible(false);
+                input->setVisible(false);
                 input->blockSignals(true);
             }
         }
@@ -113,30 +122,49 @@ void KisSpinboxColorSelector::slotSetColorSpace(const KoColorSpace *cs)
             input->setMinimum(0);
             input->setMaximum(0xFFFFFFFF);
             m_d->spinBoxList.append(input);
-            layout->addRow(inputLabel,input);
+            layout->addRow(inlb,input);
             if (input) {
                 connect(input, SIGNAL(valueChanged(int)), this,  SLOT(slotUpdateFromSpinBoxes()));
             }
             if (channel->channelType()==KoChannelInfo::ALPHA && m_d->chooseAlpha == false) {
-                input->setEnabled(false);
+                inlb->setVisible(false);
+                input->setVisible(false);
                 input->blockSignals(true);
             }
         }
             break;
-        case KoChannelInfo::FLOAT16:
+#ifdef HAVE_OPENEXR
+        case KoChannelInfo::FLOAT16: {
+            KisDoubleParseSpinBox *input = new KisDoubleParseSpinBox(this);
+            input->setMinimum(0);
+            input->setMaximum(KoColorSpaceMathsTraits<half>::max);
+            input->setSingleStep(0.1);
+            m_d->doubleSpinBoxList.append(input);
+            layout->addRow(inlb,input);
+            if (input) {
+                connect(input, SIGNAL(valueChanged(double)), this,  SLOT(slotUpdateFromSpinBoxes()));
+            }
+            if (channel->channelType()==KoChannelInfo::ALPHA && m_d->chooseAlpha == false) {
+                inlb->setVisible(false);
+                input->setVisible(false);
+                input->blockSignals(true);
+            }
+        }
+            break;
+#endif
         case KoChannelInfo::FLOAT32: {
             KisDoubleParseSpinBox *input = new KisDoubleParseSpinBox(this);
             input->setMinimum(0);
             input->setMaximum(KoColorSpaceMathsTraits<float>::max);
             input->setSingleStep(0.1);
             m_d->doubleSpinBoxList.append(input);
-            qDebug()<<"add "<<channel->name()<<"doubleSpinBoxList "<<m_d->doubleSpinBoxList.size();
-            layout->addRow(inputLabel,input);
+            layout->addRow(inlb,input);
             if (input) {
                 connect(input, SIGNAL(valueChanged(double)), this,  SLOT(slotUpdateFromSpinBoxes()));
             }
             if (channel->channelType()==KoChannelInfo::ALPHA && m_d->chooseAlpha == false) {
-                input->setEnabled(false);
+                inlb->setVisible(false);
+                input->setVisible(false);
                 input->blockSignals(true);
             }
         }

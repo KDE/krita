@@ -165,7 +165,7 @@ void KisImageTest::testConvertImageColorSpace()
 
     KisFilterSP filter = KisFilterRegistry::instance()->value("blur");
     Q_ASSERT(filter);
-    KisFilterConfiguration *configuration = filter->defaultConfiguration(0);
+    KisFilterConfigurationSP configuration = filter->defaultConfiguration(0);
     Q_ASSERT(configuration);
 
     KisLayerSP blur1 = new KisAdjustmentLayer(image, "blur1", configuration, 0);
@@ -651,7 +651,7 @@ void KisImageTest::testMergeDownMultipleFrames()
     {
         KisLayerSP l = p.layer5;
         l->enableAnimation();
-        KisKeyframeChannel *channel = l->getKeyframeChannel(KisKeyframeChannel::Content.id());
+        KisKeyframeChannel *channel = l->getKeyframeChannel(KisKeyframeChannel::Content.id(), true);
         channel->addKeyframe(10);
         channel->addKeyframe(20);
         channel->addKeyframe(30);

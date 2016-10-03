@@ -23,6 +23,7 @@
 
 #include "tool_transform_args.h"
 #include "kis_transform_utils.h"
+#include "kis_animated_transform_parameters.h"
 
 #include "kis_node.h"
 
@@ -45,14 +46,16 @@ KisTransformMaskAdapter::~KisTransformMaskAdapter()
 
 QTransform KisTransformMaskAdapter::finalAffineTransform() const
 {
-    KisTransformUtils::MatricesPack m(m_d->args);
+    KisTransformUtils::MatricesPack m(transformArgs());
     return m.finalTransform();
 }
 
 bool KisTransformMaskAdapter::isAffine() const
 {
-    return m_d->args.mode() == ToolTransformArgs::FREE_TRANSFORM ||
-        m_d->args.mode() == ToolTransformArgs::PERSPECTIVE_4POINT;
+    const ToolTransformArgs args = transformArgs();
+
+    return args.mode() == ToolTransformArgs::FREE_TRANSFORM ||
+        args.mode() == ToolTransformArgs::PERSPECTIVE_4POINT;
 }
 
 bool KisTransformMaskAdapter::isHidden() const
@@ -65,10 +68,10 @@ void KisTransformMaskAdapter::transformDevice(KisNodeSP node, KisPaintDeviceSP s
     dst->makeCloneFrom(src, src->extent());
 
     KisProcessingVisitor::ProgressHelper helper(node);
-    KisTransformUtils::transformDevice(m_d->args, dst, &helper);
+    KisTransformUtils::transformDevice(transformArgs(), dst, &helper);
 }
 
-const ToolTransformArgs& KisTransformMaskAdapter::savedArgs() const
+const ToolTransformArgs& KisTransformMaskAdapter::transformArgs() const
 {
     return m_d->args;
 }
@@ -96,12 +99,30 @@ void KisTransformMaskAdapter::translate(const QPointF &offset)
 
 QRect KisTransformMaskAdapter::nonAffineChangeRect(const QRect &rc)
 {
-    return KisTransformUtils::changeRect(m_d->args, rc);
+    return KisTransformUtils::changeRect(transformArgs(), rc);
 }
 
 QRect KisTransformMaskAdapter::nonAffineNeedRect(const QRect &rc, const QRect &srcBounds)
 {
-    return KisTransformUtils::needRect(m_d->args, rc, srcBounds);
+    return KisTransformUtils::needRect(transformArgs(), rc, srcBounds);
+}
+
+bool KisTransformMaskAdapter::isAnimated() const
+{
+    return false;
+}
+
+KisKeyframeChannel *KisTransformMaskAdapter::getKeyframeChannel(const QString &id, KisDefaultBoundsBaseSP defaultBounds)
+{
+    return 0;
+}
+
+void KisTransformMaskAdapter::clearChangedFlag()
+{}
+
+bool KisTransformMaskAdapter::hasChanged() const
+{
+    return false;
 }
 
 #include "kis_transform_mask_params_factory_registry.h"

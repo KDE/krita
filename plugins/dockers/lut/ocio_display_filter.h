@@ -51,6 +51,8 @@ public:
     void setLockCurrentColorVisualRepresentation(bool value);
 
     void updateShader();
+    template <class F>
+    void updateShaderImpl(F *f);
 
     KisExposureGammaCorrectionInterface *correctionInterface() const;
 

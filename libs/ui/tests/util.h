@@ -127,7 +127,7 @@ KisDocument* createCompleteDocument()
     cloneLayer1->setY(100);
 
     KisSelectionSP pixelSelection = createPixelSelection(paintLayer1->paintDevice());
-    KisFilterConfiguration* kfc = KisFilterRegistry::instance()->get("pixelize")->defaultConfiguration(group2->projection());
+    KisFilterConfigurationSP kfc = KisFilterRegistry::instance()->get("pixelize")->defaultConfiguration(group2->projection());
     Q_ASSERT(kfc);
     KisAdjustmentLayerSP adjustmentLayer1 = new KisAdjustmentLayer(image, "adjustmentLayer1", kfc, pixelSelection);
     kfc = 0; // kfc cannot be shared!

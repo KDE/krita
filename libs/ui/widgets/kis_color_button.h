@@ -39,8 +39,13 @@ class KisColorButtonPrivate;
 class KRITAUI_EXPORT KisColorButton : public QPushButton
 {
     Q_OBJECT
-    Q_PROPERTY(KoColor color READ color WRITE setColor NOTIFY changed USER true)
-    Q_PROPERTY(KoColor defaultColor READ defaultColor WRITE setDefaultColor)
+
+    /**
+     * QtCreator treats KoColor as a QColor in incorrect way, so just disable using them in QtCreator
+     * https://bugs.kde.org/show_bug.cgi?id=368483
+     */
+    Q_PROPERTY(KoColor color READ color WRITE setColor NOTIFY changed USER true DESIGNABLE false)
+    Q_PROPERTY(KoColor defaultColor READ defaultColor WRITE setDefaultColor DESIGNABLE false)
     Q_PROPERTY(bool alphaChannelEnabled READ isAlphaChannelEnabled WRITE setAlphaChannelEnabled)
 
 public:
@@ -95,8 +100,8 @@ public:
      */
     void setDefaultColor(const KoColor &c);
 
-    QSize sizeHint() const Q_DECL_OVERRIDE;
-    QSize minimumSizeHint() const Q_DECL_OVERRIDE;
+    QSize sizeHint() const override;
+    QSize minimumSizeHint() const override;
 
 Q_SIGNALS:
     /**
@@ -106,12 +111,12 @@ Q_SIGNALS:
     void changed(const KoColor &newColor);
 
 protected:
-    void paintEvent(QPaintEvent *pe) Q_DECL_OVERRIDE;
-    void dragEnterEvent(QDragEnterEvent *) Q_DECL_OVERRIDE;
-    void dropEvent(QDropEvent *) Q_DECL_OVERRIDE;
-    void mousePressEvent(QMouseEvent *e) Q_DECL_OVERRIDE;
-    void mouseMoveEvent(QMouseEvent *e) Q_DECL_OVERRIDE;
-    void keyPressEvent(QKeyEvent *e) Q_DECL_OVERRIDE;
+    void paintEvent(QPaintEvent *pe) override;
+    void dragEnterEvent(QDragEnterEvent *) override;
+    void dropEvent(QDropEvent *) override;
+    void mousePressEvent(QMouseEvent *e) override;
+    void mouseMoveEvent(QMouseEvent *e) override;
+    void keyPressEvent(QKeyEvent *e) override;
 
 private:
     class KisColorButtonPrivate;

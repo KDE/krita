@@ -33,11 +33,11 @@ class KisWdgFastColorTransfer : public KisConfigWidget
 public:
     KisWdgFastColorTransfer(QWidget * parent);
     ~KisWdgFastColorTransfer();
-    virtual void setConfiguration(const KisPropertiesConfiguration*);
+    virtual void setConfiguration(const KisPropertiesConfigurationSP);
     inline const Ui_WdgFastColorTransfer* widget() const {
         return m_widget;
     }
-    virtual KisPropertiesConfiguration* configuration() const;
+    virtual KisPropertiesConfigurationSP configuration() const;
 private:
     Ui_WdgFastColorTransfer* m_widget;
 };

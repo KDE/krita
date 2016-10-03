@@ -64,7 +64,7 @@
    XXX: For now, all masks are 8 bit. Make the channel depth settable.
 
  */
-class KRITAIMAGE_EXPORT KisMask : public KisNode, KisIndirectPaintingSupport
+class KRITAIMAGE_EXPORT KisMask : public KisNode, public KisIndirectPaintingSupport
 {
 
     Q_OBJECT
@@ -83,7 +83,7 @@ public:
 
     virtual ~KisMask();
 
-    void setImage(KisImageWSP image);
+    void setImage(KisImageWSP image) override;
 
     bool allowAsChild(KisNodeSP node) const;
 
@@ -172,6 +172,19 @@ public:
      */
     void setY(qint32 y);
 
+    /**
+     * Usually masks themselves do not have any paint device and
+     * all their final effect on the layer stack is computed using
+     * the changeRect() of the dirty rect of the parent layer. Their
+     * extent() and exectBounds() methods work the same way: by taking
+     * the extent of the parent layer and computing the rect basing
+     * on it. But some of the masks like Colorize Mask may have their
+     * own "projection", which is painted independently from the changed
+     * area of the parent layer. This additional "non-dependent" extent
+     * is added to the extent of the parent layer.
+     */
+    virtual QRect nonDependentExtent() const;
+
     QRect needRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const;
     QRect changeRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const;
     QImage createThumbnail(qint32 w, qint32 h);
@@ -188,6 +201,8 @@ protected:
                                KisPaintDeviceSP &dst,
                                const QRect & rc,
                                PositionToFilthy maskPos) const;
+
+    KisKeyframeChannel *requestKeyframeChannel(const QString &id);
 
 private:
     friend class KisMaskProjectionPlane;

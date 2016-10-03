@@ -44,7 +44,6 @@ KisWdgColorToAlpha::KisWdgColorToAlpha(QWidget * parent)
     m_widget = new Ui_WdgColorToAlphaBase();
     m_widget->setupUi(this);
 
-
     m_widget->textLabel1->hide();
 
     m_widget->intThreshold->setRange(1, 255, 0);
@@ -83,7 +82,7 @@ void KisWdgColorToAlpha::slotCustomColorSelected(const KoColor &color)
     emit sigConfigurationItemChanged();
 }
 
-void KisWdgColorToAlpha::setConfiguration(const KisPropertiesConfiguration* config)
+void KisWdgColorToAlpha::setConfiguration(const KisPropertiesConfigurationSP config)
 {
     QVariant value;
     if (config->getProperty("targetcolor", value)) {
@@ -100,9 +99,9 @@ void KisWdgColorToAlpha::setConfiguration(const KisPropertiesConfiguration* conf
     }
 }
 
-KisPropertiesConfiguration* KisWdgColorToAlpha::configuration() const
+KisPropertiesConfigurationSP KisWdgColorToAlpha::configuration() const
 {
-    KisFilterConfiguration* config = new KisFilterConfiguration("colortoalpha", 1);
+    KisFilterConfigurationSP config = new KisFilterConfiguration("colortoalpha", 1);
     config->setProperty("targetcolor", widget()->colorSelector->getCurrentColor().toQColor());
     config->setProperty("threshold", widget()->intThreshold->value());
     return config;

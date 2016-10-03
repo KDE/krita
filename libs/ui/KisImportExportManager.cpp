@@ -31,9 +31,11 @@ Boston, MA 02110-1301, USA.
 #include <QPluginLoader>
 #include <QFileInfo>
 #include <QMessageBox>
+#include <QJsonObject>
 
 #include <klocalizedstring.h>
 #include <ksqueezedtextlabel.h>
+#include <kpluginfactory.h>
 
 #include "KoProgressUpdater.h"
 #include "KoJsonTrader.h"
@@ -162,7 +164,7 @@ QString KisImportExportManager::importDocument(const QString& location,
     return QString();
 }
 
-KisImportExportFilter::ConversionStatus KisImportExportManager::exportDocument(const QString& location, QByteArray& mimeType)
+KisImportExportFilter::ConversionStatus KisImportExportManager::exportDocument(const QString& location, QByteArray& mimeType, KisPropertiesConfigurationSP exportConfiguration)
 {
     bool userCancelled = false;
 
@@ -170,6 +172,7 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::exportDocument(c
     // file manager and to the correct URL if we have an embedded manager)
     m_direction = Export; // vital information!
     m_exportFileName = location;
+    m_exportConfiguration = exportConfiguration;
 
     KisFilterChainSP chain;
 
@@ -220,7 +223,6 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::exportDocument(c
 // graph this mimetype has a connection to.
 QStringList KisImportExportManager::mimeFilter(Direction direction)
 {
-
     // Find the right mimetype by the extension
     QSet<QString> mimeTypes;
 //    mimeTypes << KisDocument::nativeFormatMimeType() << "application/x-krita-paintoppreset" << "image/openraster";
@@ -253,10 +255,51 @@ QStringList KisImportExportManager::mimeFilter(Direction direction)
             qDeleteAll(list);
             m_exportMimeTypes = mimeTypes.toList();
         }
-        qDebug() << m_exportMimeTypes;
         return m_exportMimeTypes;
     }
     return QStringList();
+}
+
+KisImportExportFilter *KisImportExportManager::filterForMimeType(const QString &mimetype, KisImportExportManager::Direction direction)
+{
+    int weight = -1;
+    KisImportExportFilter *filter = 0;
+    KoJsonTrader trader;
+    QList<QPluginLoader *>list = trader.query("Krita/FileFilter", "");
+    Q_FOREACH(QPluginLoader *loader, list) {
+        QJsonObject json = loader->metaData().value("MetaData").toObject();
+        QString directionKey = direction == Export ? "X-KDE-Export" : "X-KDE-Import";
+        if (json.value(directionKey).toString().split(",").contains(mimetype)) {
+            KLibFactory *factory = qobject_cast<KLibFactory *>(loader->instance());
+
+            if (!factory) {
+                warnUI << loader->errorString();
+                continue;
+            }
+
+            QObject* obj = factory->create<KisImportExportFilter>(0);
+            if (!obj || !obj->inherits("KisImportExportFilter")) {
+                delete obj;
+                continue;
+            }
+
+            KisImportExportFilter *f = static_cast<KisImportExportFilter*>(obj);
+            if (!f) {
+                delete obj;
+                continue;
+            }
+
+            int w = json.value("X-KDE-Weight").toInt();
+            if (w > weight) {
+                delete filter;
+                filter = f;
+                f->setObjectName(loader->fileName());
+                weight = w;
+            }
+        }
+    }
+    qDeleteAll(list);
+    return filter;
 }
 
 void KisImportExportManager::importErrorHelper(const QString& mimeType, const bool suppressDialog)

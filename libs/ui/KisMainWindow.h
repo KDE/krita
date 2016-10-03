@@ -275,7 +275,6 @@ private Q_SLOTS:
     KisPrintJob* exportToPdf(KoPageLayout pageLayout, QString pdfFileName = QString());
 
     void importAnimation();
-    void exportAnimation();
 
     /**
      * Show a dialog with author and document information.

@@ -66,9 +66,9 @@ public:
     }
 
 private:
-    KisFilterConfiguration* createConfiguration(const QString &name, const QString &data)
+    KisFilterConfigurationSP createConfiguration(const QString &name, const QString &data)
     {
-        KisFilterConfiguration *config;
+        KisFilterConfigurationSP config;
 
         if (m_useGeneratorRegistry) {
             KisGeneratorSP generator = KisGeneratorRegistry::instance()->value(name);

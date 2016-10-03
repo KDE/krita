@@ -94,7 +94,7 @@ KisPhongBumpmapConfigWidget::KisPhongBumpmapConfigWidget(const KisPaintDeviceSP 
 
 }
 
-void KisPhongBumpmapConfigWidget::setConfiguration(const KisPropertiesConfiguration *config)
+void KisPhongBumpmapConfigWidget::setConfiguration(const KisPropertiesConfigurationSP config)
 {
     if (!config) return;
     
@@ -134,9 +134,9 @@ void KisPhongBumpmapConfigWidget::setConfiguration(const KisPropertiesConfigurat
     m_page->inclinationSpinBox4->setValue( config->getDouble(PHONG_ILLUMINANT_INCLINATION[3]) );
 }
 
-KisPropertiesConfiguration *KisPhongBumpmapConfigWidget::configuration() const
+KisPropertiesConfigurationSP KisPhongBumpmapConfigWidget::configuration() const
 {
-    KisFilterConfiguration *config = new KisFilterConfiguration("phongbumpmap", 2);
+    KisFilterConfigurationSP config = new KisFilterConfiguration("phongbumpmap", 2);
     config->setProperty(PHONG_HEIGHT_CHANNEL, m_page->heightChannelComboBox->currentText());
     config->setProperty(USE_NORMALMAP_IS_ENABLED, m_page->useNormalMap->isChecked());
     

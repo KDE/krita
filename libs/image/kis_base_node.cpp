@@ -26,6 +26,7 @@
 #include "kis_paint_device.h"
 #include "kis_layer_properties_icons.h"
 
+#include "kis_scalar_keyframe_channel.h"
 
 struct Q_DECL_HIDDEN KisBaseNode::Private
 {
@@ -36,6 +37,18 @@ struct Q_DECL_HIDDEN KisBaseNode::Private
     QUuid id;
     bool collapsed;
     bool supportsLodMoves;
+
+    QMap<QString, KisKeyframeChannel*> keyframeChannels;
+    bool animated;
+    bool useInTimeline;
+
+    QScopedPointer<KisScalarKeyframeChannel> opacityChannel;
+
+    Private()
+        : animated(false)
+        , useInTimeline(false)
+    {
+    }
 };
 
 KisBaseNode::KisBaseNode()
@@ -103,11 +116,27 @@ KisPaintDeviceSP KisBaseNode::projection() const
 
 quint8 KisBaseNode::opacity() const
 {
+    if (m_d->opacityChannel) {
+        qreal value = m_d->opacityChannel->currentValue();
+
+        if (!qIsNaN(value)) {
+            return value;
+        }
+    }
+
     return nodeProperties().intProperty("opacity", OPACITY_OPAQUE_U8);
 }
 
 void KisBaseNode::setOpacity(quint8 val)
 {
+    if (m_d->opacityChannel) {
+        KisKeyframeSP activeKeyframe = m_d->opacityChannel->currentlyActiveKeyframe();
+
+        if (activeKeyframe) {
+            m_d->opacityChannel->setScalarValue(activeKeyframe, val);
+        }
+    }
+
     if (opacity() == val) return;
 
     nodeProperties().setProperty("opacity", val);
@@ -315,8 +344,96 @@ bool KisBaseNode::supportsLodMoves() const
     return m_d->supportsLodMoves;
 }
 
+void KisBaseNode::setImage(KisImageWSP image)
+{
+    Q_UNUSED(image);
+}
+
 void KisBaseNode::setSupportsLodMoves(bool value)
 {
     m_d->supportsLodMoves = value;
 }
 
+
+QList<KisKeyframeChannel*> KisBaseNode::keyframeChannels() const
+{
+    return m_d->keyframeChannels.values();
+}
+
+KisKeyframeChannel * KisBaseNode::getKeyframeChannel(const QString &id) const
+{
+    QMap<QString, KisKeyframeChannel*>::const_iterator i = m_d->keyframeChannels.constFind(id);
+    if (i == m_d->keyframeChannels.constEnd()) {
+        return 0;
+    }
+    return i.value();
+}
+
+KisKeyframeChannel * KisBaseNode::getKeyframeChannel(const QString &id, bool create)
+{
+    KisKeyframeChannel *channel = getKeyframeChannel(id);
+
+    if (!channel && create) {
+        channel = requestKeyframeChannel(id);
+
+        if (channel) {
+            addKeyframeChannel(channel);
+        }
+    }
+
+    return channel;
+}
+
+bool KisBaseNode::isAnimated() const
+{
+    return m_d->animated;
+}
+
+void KisBaseNode::enableAnimation()
+{
+    m_d->animated = true;
+    baseNodeChangedCallback();
+}
+
+bool KisBaseNode::useInTimeline() const
+{
+    return m_d->useInTimeline;
+}
+
+void KisBaseNode::setUseInTimeline(bool value)
+{
+    if (value == m_d->useInTimeline) return;
+
+    m_d->useInTimeline = value;
+    baseNodeChangedCallback();
+}
+
+void KisBaseNode::addKeyframeChannel(KisKeyframeChannel *channel)
+{
+    m_d->keyframeChannels.insert(channel->id(), channel);
+    emit keyframeChannelAdded(channel);
+}
+
+KisKeyframeChannel *KisBaseNode::requestKeyframeChannel(const QString &id)
+{
+    if (id == KisKeyframeChannel::Opacity.id()) {
+        Q_ASSERT(m_d->opacityChannel.isNull());
+
+        KisPaintDeviceSP device = original();
+
+        if (device) {
+            KisScalarKeyframeChannel * channel = new KisScalarKeyframeChannel(
+                KisKeyframeChannel::Opacity,
+                0, 255,
+                device->defaultBounds(),
+                KisKeyframe::Linear
+            );
+
+            m_d->opacityChannel.reset(channel);
+
+            return channel;
+        }
+    }
+
+    return 0;
+}

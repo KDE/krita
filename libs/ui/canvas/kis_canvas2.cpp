@@ -519,7 +519,7 @@ void KisCanvas2::startUpdateInPatches(const QRect &imageRect)
     }
 }
 
-void KisCanvas2::setDisplayFilter(KisDisplayFilter *displayFilter)
+void KisCanvas2::setDisplayFilter(QSharedPointer<KisDisplayFilter> displayFilter)
 {
     m_d->displayColorConverter.setDisplayFilter(displayFilter);
     KisImageWSP image = this->image();
@@ -531,7 +531,7 @@ void KisCanvas2::setDisplayFilter(KisDisplayFilter *displayFilter)
     image->unlock();
 }
 
-KisDisplayFilter *KisCanvas2::displayFilter() const
+QSharedPointer<KisDisplayFilter> KisCanvas2::displayFilter() const
 {
     return m_d->displayColorConverter.displayFilter();
 }
@@ -543,8 +543,7 @@ KisDisplayColorConverter* KisCanvas2::displayColorConverter() const
 
 KisExposureGammaCorrectionInterface* KisCanvas2::exposureGammaCorrectionInterface() const
 {
-    KisDisplayFilter *displayFilter =
-        m_d->displayColorConverter.displayFilter();
+    QSharedPointer<KisDisplayFilter> displayFilter = m_d->displayColorConverter.displayFilter();
 
     return displayFilter ?
         displayFilter->correctionInterface() :
@@ -926,14 +925,14 @@ void KisCanvas2::bootstrapFinished()
 
 void KisCanvas2::setLodAllowedInCanvas(bool value)
 {
-    if (!KisOpenGL::supportsGLSL13()) {
+    if (!KisOpenGL::supportsLoD()) {
         qWarning() << "WARNING: Level of Detail functionality is available only with openGL + GLSL 1.3 support";
     }
 
     m_d->lodAllowedInCanvas =
             value &&
             m_d->currentCanvasIsOpenGL &&
-            KisOpenGL::supportsGLSL13() &&
+            KisOpenGL::supportsLoD() &&
             (m_d->openGLFilterMode == KisOpenGL::TrilinearFilterMode ||
              m_d->openGLFilterMode == KisOpenGL::HighQualityFiltering);
 

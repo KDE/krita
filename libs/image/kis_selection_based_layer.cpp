@@ -35,6 +35,8 @@
 #include "filter/kis_filter_registry.h"
 #include "filter/kis_filter.h"
 
+#include "kis_raster_keyframe_channel.h"
+
 
 struct Q_DECL_HIDDEN KisSelectionBasedLayer::Private
 {
@@ -50,7 +52,7 @@ public:
 KisSelectionBasedLayer::KisSelectionBasedLayer(KisImageWSP image,
         const QString &name,
         KisSelectionSP selection,
-        KisFilterConfiguration *filterConfig,
+        KisFilterConfigurationSP filterConfig,
         bool useGeneratorRegistry)
         : KisLayer(image.data(), name, OPACITY_OPAQUE_U8),
           KisNodeFilterInterface(filterConfig, useGeneratorRegistry),
@@ -85,8 +87,7 @@ KisSelectionBasedLayer::~KisSelectionBasedLayer()
 void KisSelectionBasedLayer::initSelection()
 {
     m_d->selection = new KisSelection(new KisDefaultBounds(image()));
-    quint8 newDefaultPixel = MAX_SELECTED;
-    m_d->selection->pixelSelection()->setDefaultPixel(&newDefaultPixel);
+    m_d->selection->pixelSelection()->setDefaultPixel(KoColor(Qt::white, m_d->selection->pixelSelection()->colorSpace()));
     m_d->selection->setParentNode(this);
     m_d->selection->updateProjection();
 }
@@ -196,7 +197,7 @@ void KisSelectionBasedLayer::resetCache(const KoColorSpace *colorSpace)
         colorSpace = image()->colorSpace();
 
     if (!m_d->paintDevice ||
-            !(*m_d->paintDevice->colorSpace() == *colorSpace)) {
+            *m_d->paintDevice->colorSpace() != *colorSpace) {
 
         m_d->paintDevice = new KisPaintDevice(this, colorSpace, new KisDefaultBounds(image()));
     } else {
@@ -254,6 +255,17 @@ void KisSelectionBasedLayer::setY(qint32 y)
 void KisSelectionBasedLayer::setDirty(const QRect & rect)
 {
     KisLayer::setDirty(rect);
+}
+
+KisKeyframeChannel *KisSelectionBasedLayer::requestKeyframeChannel(const QString &id)
+{
+    if (id == KisKeyframeChannel::Content.id()) {
+        KisRasterKeyframeChannel *contentChannel = m_d->selection->pixelSelection()->createKeyframeChannel(KisKeyframeChannel::Content);
+        contentChannel->setFilenameSuffix(".pixelselection");
+        return contentChannel;
+    }
+
+    return KisLayer::requestKeyframeChannel(id);
 }
 
 void KisSelectionBasedLayer::setDirty()

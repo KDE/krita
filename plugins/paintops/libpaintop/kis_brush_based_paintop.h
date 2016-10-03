@@ -40,14 +40,14 @@ public:
     ~TextBrushInitializationWorkaround();
     static TextBrushInitializationWorkaround* instance();
 
-    void preinitialize(const KisPropertiesConfiguration *settings);
+    void preinitialize(KisPropertiesConfigurationSP settings);
 
-    KisBrushSP tryGetBrush(const KisPropertiesConfiguration *settings);
+    KisBrushSP tryGetBrush(const KisPropertiesConfigurationSP settings);
 
 
 private:
     KisBrushSP m_brush;
-    const KisPropertiesConfiguration *m_settings;
+    KisPropertiesConfigurationSP m_settings;
 };
 
 
@@ -61,7 +61,7 @@ class PAINTOP_EXPORT KisBrushBasedPaintOp : public KisPaintOp
 
 public:
 
-    KisBrushBasedPaintOp(const KisPropertiesConfiguration* settings, KisPainter* painter);
+    KisBrushBasedPaintOp(const KisPropertiesConfigurationSP settings, KisPainter* painter);
     ~KisBrushBasedPaintOp();
 
     bool checkSizeTooSmall(qreal scale);
@@ -74,13 +74,11 @@ public:
 
 #ifdef HAVE_THREADED_TEXT_RENDERING_WORKAROUND
     typedef int needs_preinitialization;
-    static void preinitializeOpStatically(const KisPaintOpSettingsSP settings);
+    static void preinitializeOpStatically(KisPaintOpSettingsSP settings);
 #endif /* HAVE_THREADED_TEXT_RENDERING_WORKAROUND */
 
 private:
     KisSpacingInformation effectiveSpacing(qreal dabWidth, qreal dabHeight, qreal extraScale, bool isotropicSpacing, qreal rotation) const;
-    QPointF calcAutoSpacing(const QPointF &pt, qreal coeff) const;
-    static inline qreal calcAutoSpacing(qreal value, qreal coeff);
 
 protected: // XXX: make private!
 

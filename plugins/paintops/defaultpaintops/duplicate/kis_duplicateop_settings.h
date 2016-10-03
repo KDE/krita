@@ -36,7 +36,6 @@ public:
     using KisPaintOpSettings::toXML;
 
     KisDuplicateOpSettings();
-
     virtual ~KisDuplicateOpSettings();
     bool paintIncremental();
     QString indirectPaintingCompositeOp() const;
@@ -50,13 +49,16 @@ public:
     void toXML(QDomDocument& doc, QDomElement& rootElt) const;
 
     KisPaintOpSettingsSP clone() const;
-    QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode) const;
+    using KisBrushBasedPaintOpSettings::brushOutline;
+    QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode);
 
     KisNodeWSP sourceNode() const;
 
-    QList<KisUniformPaintOpPropertySP> uniformProperties();
+    QList<KisUniformPaintOpPropertySP> uniformProperties(KisPaintOpSettingsSP settings);
 
 public:
+
+    Q_DISABLE_COPY(KisDuplicateOpSettings)
 
     QPointF m_offset;
     bool m_isOffsetNotUptodate;
@@ -64,6 +66,8 @@ public:
     KisNodeWSP m_sourceNode;
     QList<KisUniformPaintOpPropertyWSP> m_uniformProperties;
 };
+
+typedef KisSharedPtr<KisDuplicateOpSettings> KisDuplicateOpSettingsSP;
 
 
 #endif // KIS_DUPLICATEOP_SETTINGS_H_

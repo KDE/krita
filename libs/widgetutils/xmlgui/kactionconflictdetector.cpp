@@ -39,7 +39,7 @@ public:
     {
     }
 
-    bool eventFilter(QObject *watched, QEvent *event) Q_DECL_OVERRIDE
+    bool eventFilter(QObject *watched, QEvent *event) override
     {
         if (qobject_cast<QAction *>(watched) && (event->type() == QEvent::Shortcut)) {
             QShortcutEvent *se = static_cast<QShortcutEvent *>(event);

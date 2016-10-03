@@ -32,6 +32,7 @@ private Q_SLOTS:
 
     void testScalarChannel();
     void testScalarChannelUndoRedo();
+    void testScalarInterpolation();
 
     void testRasterChannel();
     void testChannelSignals();
@@ -39,6 +40,8 @@ private Q_SLOTS:
     void testDeleteFirstRasterChannel();
     void testAffectedFrames();
     void cleanupTestCase();
+
+    void testMovingFrames();
 
 private:
 

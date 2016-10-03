@@ -271,7 +271,7 @@ void KisPerspectiveTransformStrategy::paint(QPainter &gc)
         QRectF handleRect =
             KisTransformUtils::handleRect(KisTransformUtils::handleVisualRadius,
                                           QTransform(),
-                                          m_d->transaction.originalRect());
+                                          m_d->transaction.originalRect(), 0, 0);
 
         if (m_d->transformedHandles.xVanishingExists) {
             QRectF rc = handleRect.translated(m_d->transformedHandles.xVanishing);

@@ -100,8 +100,6 @@ public Q_SLOTS:
     void remoteArguments(QByteArray message, QObject*socket);
     void fileOpenRequested(const QString & url);
 
-    void onAutoSaveFinished(int result);
-
 private:
     /// @return the number of autosavefiles opened
     void checkAutosaveFiles();

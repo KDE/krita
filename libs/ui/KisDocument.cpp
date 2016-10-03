@@ -241,7 +241,7 @@ public:
         docInfo(0),
         progressUpdater(0),
         progressProxy(0),
-        filterManager(0),
+        importExportManager(0),
         specialOutputFlag(0),   // default is native format
         isImporting(false),
         isExporting(false),
@@ -291,7 +291,7 @@ public:
 
     KoUnit unit;
 
-    KisImportExportManager *filterManager; // The filter-manager to use when loading/saving [for the options]
+    KisImportExportManager *importExportManager; // The filter-manager to use when loading/saving [for the options]
 
     QByteArray mimeType; // The actual mimetype of the document
     QByteArray outputMimeType; // The mimetype to use when saving
@@ -495,8 +495,8 @@ KisDocument::KisDocument()
     d->undoStack->setParent(this);
 
     d->isEmpty = true;
-    d->filterManager = new KisImportExportManager(this);
-    d->filterManager->setProgresUpdater(d->progressUpdater);
+    d->importExportManager = new KisImportExportManager(this);
+    d->importExportManager->setProgresUpdater(d->progressUpdater);
 
     connect(&d->autoSaveTimer, SIGNAL(timeout()), this, SLOT(slotAutoSave()));
     setAutoSave(defaultAutoSave());
@@ -540,7 +540,7 @@ KisDocument::~KisDocument()
     d->autoSaveTimer.disconnect(this);
     d->autoSaveTimer.stop();
 
-    delete d->filterManager;
+    delete d->importExportManager;
 
     // Despite being QObject they needs to be deleted before the image
     delete d->shapeController;
@@ -568,6 +568,7 @@ KisDocument::~KisDocument()
 
     // clear undo commands that can still point to the image
     d->undoStack->clear();
+    d->image->waitForDone();
 
     KisImageWSP sanityCheckPointer = d->image;
 
@@ -575,7 +576,7 @@ KisDocument::~KisDocument()
     d->image.clear();
 
     // check if the image has actually been deleted
-    KIS_ASSERT_RECOVER_NOOP(!sanityCheckPointer.isValid());
+    KIS_SAFE_ASSERT_RECOVER_NOOP(!sanityCheckPointer.isValid());
 
     delete d;
 }
@@ -601,7 +602,7 @@ bool KisDocument::reload()
     return false;
 }
 
-bool KisDocument::exportDocument(const QUrl &_url)
+bool KisDocument::exportDocument(const QUrl &_url, KisPropertiesConfigurationSP exportConfiguration)
 {
     bool ret;
 
@@ -622,8 +623,7 @@ bool KisDocument::exportDocument(const QUrl &_url)
     QByteArray oldMimeType = mimeType();
 
     // save...
-    ret = saveAs(_url);
-
+    ret = saveAs(_url, exportConfiguration);
 
     //
     // This is sooooo hacky :(
@@ -643,16 +643,20 @@ bool KisDocument::exportDocument(const QUrl &_url)
         d->mimeType = oldMimeType;
     }
 
-
     d->isExporting = false;
 
     return ret;
 }
 
-bool KisDocument::saveFile()
+bool KisDocument::saveFile(KisPropertiesConfigurationSP exportConfiguration)
 {
+    // Unset the error message
+    setErrorMessage("");
+
     // Save it to be able to restore it after a failed save
     const bool wasModified = isModified();
+
+    // Show the dialog with the options, if any
 
     // The output format is set by koMainWindow, and by openFile
     QByteArray outputMimeType = d->outputMimeType;
@@ -686,7 +690,7 @@ bool KisDocument::saveFile()
     if (!isNativeFormat(outputMimeType)) {
         Private::SafeSavingLocker locker(d);
         if (locker.successfullyLocked()) {
-            status = d->filterManager->exportDocument(tempororaryFileName, outputMimeType);
+            status = d->importExportManager->exportDocument(tempororaryFileName, outputMimeType, exportConfiguration);
         } else {
             status = KisImportExportFilter::UsageError;
         }
@@ -768,7 +772,7 @@ bool KisDocument::saveFile()
 
             if (errorMessage().isEmpty()) {
                 QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Could not save\n%1", localFilePath()));
-            } else if (errorMessage() != "USER_CANCELED") {
+            } else {
                 QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Could not save %1\nReason: %2", localFilePath(), errorMessage()));
             }
 
@@ -838,12 +842,12 @@ void KisDocument::setConfirmNonNativeSave(const bool exporting, const bool on)
 
 bool KisDocument::fileBatchMode() const
 {
-    return d->filterManager->getBatchMode();
+    return d->importExportManager->getBatchMode();
 }
 
 void KisDocument::setFileBatchMode(const bool batchMode)
 {
-    d->filterManager->setBatchMode(batchMode);
+    d->importExportManager->setBatchMode(batchMode);
 }
 
 bool KisDocument::isImporting() const
@@ -1254,7 +1258,7 @@ bool KisDocument::openFile()
     if (!isNativeFormat(typeName.toLatin1())) {
         KisImportExportFilter::ConversionStatus status;
 
-        importedFile = d->filterManager->importDocument(localFilePath(), typeName, status);
+        importedFile = d->importExportManager->importDocument(localFilePath(), typeName, status);
         if (status != KisImportExportFilter::OK) {
             QApplication::restoreOverrideCursor();
 
@@ -1726,9 +1730,9 @@ bool KisDocument::completeLoading(KoStore* store)
         return false;
     }
 
-    d->kraLoader->loadKeyframes(store, url().url(), isStoredExtern());
+    d->image->blockUpdates();
     d->kraLoader->loadBinaryData(store, d->image, url().url(), isStoredExtern());
-
+    d->image->unblockUpdates();
     bool retval = true;
     if (!d->kraLoader->errorMessages().isEmpty()) {
         setErrorMessage(d->kraLoader->errorMessages().join(".\n"));
@@ -1758,7 +1762,6 @@ bool KisDocument::completeLoading(KoStore* store)
     d->kraLoader = 0;
 
     return retval;
-
 }
 
 bool KisDocument::completeSaving(KoStore* store)
@@ -1913,7 +1916,7 @@ void KisDocument::showLoadingErrorDialog()
     if (errorMessage().isEmpty()) {
         QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Could not open\n%1", localFilePath()));
     }
-    else if (errorMessage() != "USER_CANCELED") {
+    else {
         QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Could not open %1\nReason: %2", localFilePath(), errorMessage()));
     }
 }
@@ -2020,6 +2023,11 @@ void KisDocument::setUnit(const KoUnit &unit)
 KUndo2Stack *KisDocument::undoStack()
 {
     return d->undoStack;
+}
+
+KisImportExportManager *KisDocument::importExportManager() const
+{
+    return d->importExportManager;
 }
 
 void KisDocument::addCommand(KUndo2Command *command)
@@ -2141,7 +2149,7 @@ bool KisDocument::closeUrl(bool promptToSave)
 }
 
 
-bool KisDocument::saveAs(const QUrl &kurl)
+bool KisDocument::saveAs(const QUrl &kurl, KisPropertiesConfigurationSP exportConfiguration)
 {
     if (!kurl.isValid())
     {
@@ -2153,7 +2161,7 @@ bool KisDocument::saveAs(const QUrl &kurl)
     d->m_originalFilePath = d->m_file;
     d->m_url = kurl; // Store where to upload in saveToURL
     d->prepareSaving();
-    bool result = save(); // Save local file and upload local file
+    bool result = save(exportConfiguration); // Save local file and upload local file
     if (!result) {
         d->m_url = d->m_originalURL;
         d->m_file = d->m_originalFilePath;
@@ -2165,12 +2173,8 @@ bool KisDocument::saveAs(const QUrl &kurl)
     return result;
 }
 
-
-
-
-bool KisDocument::save()
+bool KisDocument::save(KisPropertiesConfigurationSP exportConfiguration)
 {
-    qDebug() << "Saving!";
     d->m_saveOk = false;
     if ( d->m_file.isEmpty() ) { // document was created empty
         d->prepareSaving();
@@ -2181,7 +2185,7 @@ bool KisDocument::save()
     d->document->setFileProgressProxy();
     d->document->setUrl(url());
 
-    bool ok = d->document->saveFile();
+    bool ok = d->document->saveFile(exportConfiguration);
 
     d->document->clearFileProgressProxy();
 
@@ -2319,7 +2323,7 @@ bool KisDocument::newImage(const QString& name,
         image->setDefaultProjectionColor(KoColor(cs));
 
         if (bgColor.opacityU8() == OPACITY_OPAQUE_U8) {
-            layer->paintDevice()->setDefaultPixel(bgColor.data());
+            layer->paintDevice()->setDefaultPixel(bgColor);
         } else {
             // Hack: with a semi-transparent background color, the projection isn't composited right if we just set the default pixel
             KisFillPainter painter;
@@ -2410,12 +2414,12 @@ void KisDocument::prepareForImport()
 
 void KisDocument::setFileProgressUpdater(const QString &text)
 {
-    d->suppressProgress = d->filterManager->getBatchMode();
+    d->suppressProgress = d->importExportManager->getBatchMode();
 
     if (!d->suppressProgress) {
         d->progressUpdater = new KoProgressUpdater(d->progressProxy, KoProgressUpdater::Unthreaded);
         d->progressUpdater->start(100, text);
-        d->filterManager->setProgresUpdater(d->progressUpdater);
+        d->importExportManager->setProgresUpdater(d->progressUpdater);
 
         connect(this, SIGNAL(sigProgress(int)), KisPart::instance()->currentMainwindow(), SLOT(slotProgress(int)));
         connect(KisPart::instance()->currentMainwindow(), SIGNAL(sigProgressCanceled()), this, SIGNAL(sigProgressCanceled()));
@@ -2428,14 +2432,14 @@ void KisDocument::clearFileProgressUpdater()
         disconnect(KisPart::instance()->currentMainwindow(), SIGNAL(sigProgressCanceled()), this, SIGNAL(sigProgressCanceled()));
         disconnect(this, SIGNAL(sigProgress(int)), KisPart::instance()->currentMainwindow(), SLOT(slotProgress(int)));
         delete d->progressUpdater;
-        d->filterManager->setProgresUpdater(0);
+        d->importExportManager->setProgresUpdater(0);
         d->progressUpdater = 0;
     }
 }
 
 void KisDocument::setFileProgressProxy()
 {
-    if (!d->progressProxy && !d->filterManager->getBatchMode()) {
+    if (!d->progressProxy && !d->importExportManager->getBatchMode()) {
         d->fileProgressProxy = progressProxy();
     } else {
         d->fileProgressProxy = 0;

@@ -55,10 +55,10 @@ public:
 
     virtual void processImpl(KisPaintDeviceSP device,
                      const QRect& applyRect,
-                     const KisFilterConfiguration* config,
+                     const KisFilterConfigurationSP config,
                      KoUpdater *progressUpdater) const;
 
-    virtual KisFilterConfiguration *factoryConfiguration(const KisPaintDeviceSP) const;
+    virtual KisFilterConfigurationSP factoryConfiguration(const KisPaintDeviceSP) const;
 
     virtual KisConfigWidget *createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev) const;
 
@@ -71,8 +71,8 @@ public:
     KisThresholdConfigWidget(QWidget *parent, KisPaintDeviceSP dev);
     virtual ~KisThresholdConfigWidget();
 
-    virtual KisPropertiesConfiguration *configuration() const;
-    void setConfiguration(const KisPropertiesConfiguration *config);
+    virtual KisPropertiesConfigurationSP configuration() const;
+    void setConfiguration(const KisPropertiesConfigurationSP config);
     Ui::WdgThreshold m_page;
 
 private Q_SLOTS:

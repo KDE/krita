@@ -42,19 +42,21 @@
 struct KisVisualColorSelector::Private
 {
     KoColor currentcolor;
-    const KoColorSpace *currentCS;
+    const KoColorSpace *currentCS {0};
     QList <KisVisualColorSelectorShape*> widgetlist;
-    bool updateSelf = false;
-    bool updateLonesome = false; //for Modal dialogs.
-    bool circular = false;
-    const KoColorDisplayRendererInterface *displayRenderer = 0;
+    bool updateSelf {false};
+    bool updateLonesome {false}; //for Modal dialogs.
+    bool circular {false};
+    const KoColorDisplayRendererInterface *displayRenderer {0};
     KisVisualColorSelector::Configuration acs_config;
     //Current coordinates.
-    KisSignalCompressor *updateTimer = 0;
+    KisSignalCompressor *updateTimer {0};
     QVector <qreal> currentCoordinates;
 };
 
-KisVisualColorSelector::KisVisualColorSelector(QWidget *parent) : QWidget(parent), m_d(new Private)
+KisVisualColorSelector::KisVisualColorSelector(QWidget *parent)
+    : QWidget(parent)
+    , m_d(new Private)
 {
     this->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
     QVBoxLayout *layout = new QVBoxLayout;
@@ -72,7 +74,7 @@ KisVisualColorSelector::~KisVisualColorSelector()
 
 void KisVisualColorSelector::slotSetColor(KoColor c)
 {
-    if (m_d->updateSelf==false) {
+    if (m_d->updateSelf == false) {
         m_d->currentcolor = c;
         if (m_d->currentCS != c.colorSpace()) {
             slotsetColorSpace(c.colorSpace());
@@ -345,6 +347,8 @@ void KisVisualColorSelector::updateFromWidgets(KoColor c)
     m_d->updateSelf = true;
     if (m_d->updateLonesome) {
         slotSetColor(c);
+        Q_EMIT sigNewColor(c);
+
     } else {
         Q_EMIT sigNewColor(c);
     }
@@ -803,12 +807,17 @@ void KisVisualColorSelectorShape::mouseMoveEvent(QMouseEvent *e)
 {
     if (m_d->mousePressActive==true && this->mask().contains(e->pos())) {
         QPointF coordinates = convertWidgetCoordinateToShapeCoordinate(e->pos());
+        quint8* oldData = m_d->currentColor.data();
         KoColor col = convertShapeCoordinateToKoColor(coordinates, true);
-        setColor(col);
-        if (!m_d->updateTimer->isActive()) {
-            Q_EMIT sigNewColor(col);
-            m_d->updateTimer->start();
+        QRect offsetrect(this->geometry().topLeft()+QPoint(7.0,7.0), this->geometry().bottomRight()-QPoint(7.0,7.0));
+        if (offsetrect.contains(e->pos()) || (m_d->cs->difference(col.data(), oldData)>5)) {
+            setColor(col);
+            if (!m_d->updateTimer->isActive()) {
+                Q_EMIT sigNewColor(col);
+                m_d->updateTimer->start();
+            }
         }
+
     } else {
         e->ignore();
     }
@@ -1502,7 +1511,7 @@ void KisVisualTriangleSelectorShape::setTriangle()
 QPointF KisVisualTriangleSelectorShape::convertShapeCoordinateToWidgetCoordinate(QPointF coordinate)
 {
     qreal offset=7.0;//the offset is so we get a nice little border that allows selecting extreme colors better.
-    qreal y = qMin(coordinate.y()*(height()-offset*2)+offset+5.0, (qreal)height()-offset);
+    qreal y = qMin(coordinate.y()*(height()-offset*2-5.0)+offset+5.0, (qreal)height()-offset);
 
     qreal triWidth = width();
     qreal horizontalLineLength = y*(2./sqrt(3.));

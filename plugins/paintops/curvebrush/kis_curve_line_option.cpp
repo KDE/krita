@@ -58,7 +58,7 @@ KisCurveOpOption::~KisCurveOpOption()
 {
 }
 
-void KisCurveOpOption::writeOptionSetting(KisPropertiesConfiguration* config) const
+void KisCurveOpOption::writeOptionSetting(KisPropertiesConfigurationSP config) const
 {
     CurveOption op;
 
@@ -71,7 +71,7 @@ void KisCurveOpOption::writeOptionSetting(KisPropertiesConfiguration* config) co
     op.writeOptionSetting(config);
 }
 
-void KisCurveOpOption::readOptionSetting(const KisPropertiesConfiguration* config)
+void KisCurveOpOption::readOptionSetting(const KisPropertiesConfigurationSP config)
 {
     CurveOption op;
     op.readOptionSetting(config);

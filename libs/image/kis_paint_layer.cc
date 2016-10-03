@@ -98,9 +98,9 @@ KisPaintLayer::KisPaintLayer(const KisPaintLayer& rhs)
         , KisIndirectPaintingSupport()
         , m_d(new Private)
 {
-    const bool copyAnimation = rhs.isAnimated();
+    const bool copyFrames = (rhs.m_d->contentChannel != 0);
 
-    if (!copyAnimation) {
+    if (!copyFrames) {
         init(new KisPaintDevice(*rhs.m_d->paintDevice.data()), rhs.m_d->paintChannelFlags);
     } else {
         init(new KisPaintDevice(*rhs.m_d->paintDevice.data(), true, this), rhs.m_d->paintChannelFlags);
@@ -332,14 +332,15 @@ void KisPaintLayer::slotExternalUpdateOnionSkins()
     setDirty(dirtyRect);
 }
 
-void KisPaintLayer::enableAnimation()
+KisKeyframeChannel *KisPaintLayer::requestKeyframeChannel(const QString &id)
 {
-    m_d->contentChannel = m_d->paintDevice->createKeyframeChannel(KisKeyframeChannel::Content, this);
-    addKeyframeChannel(m_d->contentChannel);
+    if (id == KisKeyframeChannel::Content.id()) {
+        m_d->contentChannel = m_d->paintDevice->createKeyframeChannel(KisKeyframeChannel::Content);
+        m_d->contentChannel->setOnionSkinsEnabled(onionSkinEnabled());
+        return m_d->contentChannel;
+    }
 
-    m_d->contentChannel->setOnionSkinsEnabled(onionSkinEnabled());
-
-    KisLayer::enableAnimation();
+    return KisLayer::requestKeyframeChannel(id);
 }
 
 KisPaintDeviceList KisPaintLayer::getLodCapableDevices() const

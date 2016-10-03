@@ -236,7 +236,7 @@ void KisQImagePyramid::appendPyramidLevel(const QImage &image)
      * it is rotated.  To workaround this bug we need to add one pixel
      * wide border to the image, so that it transforms smoothly.
      *
-     * See a unittest in: KisBrushTest::testQPainterTransformationBorder
+     * See a unittest in: KisGbrBrushTest::testQPainterTransformationBorder
      */
     QSize levelSize = image.size();
     QImage tmp = image.convertToFormat(QImage::Format_ARGB32);

@@ -71,6 +71,8 @@ KisPaintOpPresetsChooserPopup::KisPaintOpPresetsChooserPopup(QWidget * parent)
 
     connect(m_d->uiWdgPaintOpPresets.wdgPresetChooser, SIGNAL(resourceSelected(KoResource*)),
             this, SIGNAL(resourceSelected(KoResource*)));
+    connect(m_d->uiWdgPaintOpPresets.wdgPresetChooser, SIGNAL(resourceClicked(KoResource*)),
+            this, SIGNAL(resourceClicked(KoResource*)));
     
     m_d->firstShown = true;
 
@@ -108,16 +110,11 @@ void KisPaintOpPresetsChooserPopup::showButtons(bool show)
     m_d->uiWdgPaintOpPresets.wdgPresetChooser->showButtons(show);
 }
 
-void KisPaintOpPresetsChooserPopup::canvasResourceChanged(KoResource* resource , KisPaintOpPresetSP  preset2  )
+void KisPaintOpPresetsChooserPopup::canvasResourceChanged(KisPaintOpPresetSP  preset)
 {
-    Q_UNUSED(preset2);
-
-    if (resource) {
+    if (preset) {
         blockSignals(true);
-        KisPaintOpPresetResourceServer * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
-        KisPaintOpPresetSP preset = rserver->resourceByName(resource->name());
-
-        m_d->uiWdgPaintOpPresets.wdgPresetChooser->itemChooser()->setCurrentResource(preset.data());
+        m_d->uiWdgPaintOpPresets.wdgPresetChooser->setCurrentResource(preset.data());
         blockSignals(false);
     }
     m_d->uiWdgPaintOpPresets.wdgPresetChooser->updateViewSettings();

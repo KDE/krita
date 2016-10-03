@@ -57,6 +57,8 @@ set(kritaui_LIB_SRCS
     dialogs/kis_dlg_filter.cpp
     dialogs/kis_dlg_generator_layer.cpp
     dialogs/kis_dlg_file_layer.cpp
+    dialogs/kis_dlg_filter.cpp
+    dialogs/kis_dlg_stroke_selection_properties.cpp
     dialogs/kis_dlg_image_properties.cc
     dialogs/kis_dlg_layer_properties.cc
     dialogs/kis_dlg_preferences.cc
@@ -90,6 +92,7 @@ set(kritaui_LIB_SRCS
     kis_bookmarked_configurations_editor.cc
     kis_bookmarked_configurations_model.cc
     kis_bookmarked_filter_configurations_model.cc
+    kis_base_option.cpp
     kis_canvas_resource_provider.cpp
     kis_derived_resources.cpp
     kis_categories_mapper.cpp
@@ -150,6 +153,7 @@ set(kritaui_LIB_SRCS
     kis_tooltip_manager.cpp
     kis_multinode_property.cpp
     kis_async_action_feedback.cpp
+    kis_stopgradient_editor.cpp
     kisexiv2/kis_exif_io.cpp
     kisexiv2/kis_exiv2.cpp
     kisexiv2/kis_iptc_io.cpp
@@ -160,11 +164,13 @@ set(kritaui_LIB_SRCS
     kra/kis_kra_save_visitor.cpp
     kra/kis_kra_saver.cpp
     kra/kis_kra_savexml_visitor.cpp
+    kra/kis_colorize_dom_utils.cpp
     opengl/kis_opengl.cpp
     opengl/kis_opengl_canvas2.cpp
     opengl/kis_opengl_canvas_debugger.cpp
     opengl/kis_opengl_image_textures.cpp
     opengl/kis_texture_tile.cpp
+    opengl/kis_opengl_shader_loader.cpp
     kis_fps_decoration.cpp
     ora/kis_open_raster_stack_load_visitor.cpp
     ora/kis_open_raster_stack_save_visitor.cpp
@@ -205,6 +211,7 @@ set(kritaui_LIB_SRCS
     tool/strokes/kis_painter_based_stroke_strategy.cpp
     tool/strokes/kis_filter_stroke_strategy.cpp
     tool/strokes/kis_color_picker_stroke_strategy.cpp
+
     widgets/kis_cmb_composite.cc
     widgets/kis_cmb_contour.cpp
     widgets/kis_cmb_gradient.cpp
@@ -254,6 +261,7 @@ set(kritaui_LIB_SRCS
     widgets/kis_color_label_selector_widget.cpp
     widgets/kis_color_filter_combo.cpp
     widgets/kis_elided_label.cpp
+    widgets/kis_stopgradient_slider_widget.cpp
     widgets/kis_spinbox_color_selector.cpp
     widgets/kis_screen_color_picker.cpp
     widgets/kis_visual_color_selector.cpp
@@ -370,6 +378,8 @@ set(kritaui_LIB_SRCS
     KisRemoteFileFetcher.cpp
 
     KisPaletteModel.cpp
+    kis_palette_delegate.cpp
+    kis_palette_view.cpp
     KisColorsetChooser.cpp
     KisSaveGroupVisitor.cpp
 )
@@ -461,8 +471,10 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
     forms/wdgdlgblacklistcleanup.ui
     forms/wdgrectangleconstraints.ui
     forms/wdgimportimagesequence.ui
+    forms/wdgstrokeselectionproperties.ui
     forms/KisDetailsPaneBase.ui
     forms/KisOpenPaneBase.ui
+    forms/wdgstopgradienteditor.ui
     brushhud/kis_dlg_brush_hud_config.ui
     forms/wdgdlginternalcolorselector.ui
     dialogs/kis_delayed_save_dialog.ui

@@ -524,7 +524,6 @@ bool KisApplication::notify(QObject *receiver, QEvent *event)
                  event->type(), qPrintable(receiver->objectName()));
     }
     return false;
-
 }
 
 
@@ -600,48 +599,37 @@ void KisApplication::checkAutosaveFiles()
             d->splashScreen->hide();
         }
         m_autosaveDialog = new KisAutoSaveRecoveryDialog(m_autosaveFiles, activeWindow());
-        connect(m_autosaveDialog, SIGNAL(finished(int)), this, SLOT(onAutoSaveFinished(int)));
-        m_autosaveDialog->exec();
-    }
-}
+        QDialog::DialogCode result = (QDialog::DialogCode) m_autosaveDialog->exec();
 
-void KisApplication::onAutoSaveFinished(int result)
-{
-    if (m_batchRun) return;
+        if (result == QDialog::Accepted) {
+            QStringList filesToRecover = m_autosaveDialog->recoverableFiles();
+            Q_FOREACH (const QString &autosaveFile, m_autosaveFiles) {
+                if (!filesToRecover.contains(autosaveFile)) {
+                    QFile::remove(dir.absolutePath() + "/" + autosaveFile);
+                }
+            }
+            m_autosaveFiles = filesToRecover;
+        } else {
+            m_autosaveFiles.clear();
+        }
 
-#ifdef Q_OS_WIN
-    QDir dir = QDir::temp();
-#else
-    QDir dir = QDir::home();
-#endif
-
-    if (result == QDialog::Accepted) {
-        QStringList filesToRecover = m_autosaveDialog->recoverableFiles();
-        Q_FOREACH (const QString &autosaveFile, m_autosaveFiles) {
-            if (!filesToRecover.contains(autosaveFile)) {
-                QFile::remove(dir.absolutePath() + "/" + autosaveFile);
+        if (m_autosaveFiles.size() > 0) {
+            QList<QUrl> autosaveUrls;
+            Q_FOREACH (const QString &autoSaveFile, m_autosaveFiles) {
+                const QUrl url = QUrl::fromLocalFile(dir.absolutePath() + QLatin1Char('/') + autoSaveFile);
+                autosaveUrls << url;
+            }
+            if (m_mainWindow) {
+                Q_FOREACH (const QUrl &url, autosaveUrls) {
+                    KisDocument *doc = KisPart::instance()->createDocument();
+                    doc->setFileBatchMode(m_batchRun);
+                    m_mainWindow->openDocumentInternal(url, doc);
+                }
             }
         }
-        m_autosaveFiles = filesToRecover;
-    } else {
-        m_autosaveFiles.clear();
-    }
-
-    QList<QUrl> autosaveUrls;
-    if (m_autosaveFiles.size() > 0) {
-
-        Q_FOREACH (const QString &autoSaveFile, m_autosaveFiles) {
-            const QUrl url = QUrl::fromLocalFile(dir.absolutePath() + QLatin1Char('/') + autoSaveFile);
-            autosaveUrls << url;
-        }
-    }
-
-    if (m_mainWindow) {
-        Q_FOREACH (const QUrl &url, autosaveUrls) {
-            KisDocument *doc = KisPart::instance()->createDocument();
-            doc->setFileBatchMode(m_batchRun);
-            m_mainWindow->openDocumentInternal(url, doc);
-        }
+        // cleanup
+        delete m_autosaveDialog;
+        m_autosaveDialog = nullptr;
     }
 }
 

@@ -34,7 +34,7 @@ class HatchingBrush
 {
 
 public:
-    HatchingBrush(const KisHatchingPaintOpSettings *settings);
+    HatchingBrush(KisHatchingPaintOpSettingsSP settings);
     ~HatchingBrush();
     HatchingBrush(KoColor inkColor);
 
@@ -49,7 +49,7 @@ private:
     KoColor m_inkColor;
     int m_counter;
     int m_radius;
-    const KisHatchingPaintOpSettings * m_settings;
+    KisHatchingPaintOpSettingsSP m_settings;
     KisPainter m_painter;
 
     /** Thickness in pixels of each hatch line */

@@ -29,12 +29,16 @@ public:
     ~TimelineFramesItemDelegate();
 
     static void paintActiveFrameSelector(QPainter *painter, const QRect &rc, bool isCurrentFrame);
-    static void drawBackground(QPainter *painter, const QModelIndex &index, const QRect &rc);
+    static void paintSpecialKeyframeIndicator(QPainter *painter, const QModelIndex &index, const QRect &rc);
+    void drawBackground(QPainter *painter, const QModelIndex &index, const QRect &rc) const;
     void drawFocus(QPainter *painter,
                    const QStyleOptionViewItem &option,
                    const QRect &rect) const;
 
     void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+
+private:
+    QVector<QColor> labelColors;
 };
 
 #endif /* __TIMELINE_FRAMES_ITEM_DELEGATE_H */

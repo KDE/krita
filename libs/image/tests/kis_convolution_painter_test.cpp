@@ -56,9 +56,9 @@ KisPaintDeviceSP initAsymTestDevice(QRect &imageRect, int &pixelSize, QByteArray
     return dev;
 }
 
-Matrix<qreal, 3, 3> initSymmFilter(qreal &offset, qreal &factor)
+Eigen::Matrix<qreal, 3, 3> initSymmFilter(qreal &offset, qreal &factor)
 {
-    Matrix<qreal, 3, 3> filter;
+    Eigen::Matrix<qreal, 3, 3> filter;
     filter(0,0) = 1.0 / 21;
     filter(0,1) = 3.0 / 21;
     filter(0,2) = 1.0 / 21;
@@ -77,9 +77,9 @@ Matrix<qreal, 3, 3> initSymmFilter(qreal &offset, qreal &factor)
     return filter;
 }
 
-Matrix<qreal, 3, 3> initAsymmFilter(qreal &offset, qreal &factor)
+Eigen::Matrix<qreal, 3, 3> initAsymmFilter(qreal &offset, qreal &factor)
 {
-    Matrix<qreal, 3, 3> filter;
+    Eigen::Matrix<qreal, 3, 3> filter;
     filter(0,0) = 1.0;
     filter(1,0) = 2.0;
     filter(2,0) = 1.0;
@@ -144,7 +144,7 @@ void KisConvolutionPainterTest::testSymmConvolution()
 {
     qreal offset = 0.0;
     qreal factor = 1.0;
-    Matrix<qreal, 3, 3> filter = initSymmFilter(offset, factor);
+    Eigen::Matrix<qreal, 3, 3> filter = initSymmFilter(offset, factor);
 
     QRect imageRect;
     int pixelSize = 0;
@@ -172,7 +172,7 @@ void KisConvolutionPainterTest::testAsymmConvolutionImp(QBitArray channelFlags)
 {
     qreal offset = 0.0;
     qreal factor = 1.0;
-    Matrix<qreal, 3, 3> filter = initAsymmFilter(offset, factor);
+    Eigen::Matrix<qreal, 3, 3> filter = initAsymmFilter(offset, factor);
 
     QRect imageRect;
     int pixelSize = -1;
@@ -317,7 +317,7 @@ void KisConvolutionPainterTest::testGaussianBase(KisPaintDeviceSP dev, bool useF
 
 
    qreal horizontalRadius = 5, verticalRadius = 5;
-   
+
    for(int i = 0; i < 3 ; i++, horizontalRadius+=5, verticalRadius+=5)
    {
        QTime timer;

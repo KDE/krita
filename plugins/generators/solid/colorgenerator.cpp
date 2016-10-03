@@ -59,9 +59,9 @@ KisColorGenerator::KisColorGenerator() : KisGenerator(id(), KoID("basic"), i18n(
     setSupportsPainting(true);
 }
 
-KisFilterConfiguration* KisColorGenerator::factoryConfiguration(const KisPaintDeviceSP) const
+KisFilterConfigurationSP KisColorGenerator::factoryConfiguration(const KisPaintDeviceSP) const
 {
-    KisFilterConfiguration* config = new KisFilterConfiguration("color", 1);
+    KisFilterConfigurationSP config = new KisFilterConfiguration("color", 1);
 
     QVariant v;
     v.setValue(KoColor());
@@ -77,7 +77,7 @@ KisConfigWidget * KisColorGenerator::createConfigurationWidget(QWidget* parent, 
 
 void KisColorGenerator::generate(KisProcessingInformation dstInfo,
                                  const QSize& size,
-                                 const KisFilterConfiguration* config,
+                                 const KisFilterConfigurationSP config,
                                  KoUpdater* progressUpdater) const
 {
     KisPaintDeviceSP dst = dstInfo.paintDevice();

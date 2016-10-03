@@ -36,11 +36,14 @@
 #include <QScrollBar>
 #include <QIcon>
 #include <QDrag>
+#include <QWidgetAction>
+#include <kis_signals_blocker.h>
+#include <kis_image_config.h>
 
 #include "kis_debug.h"
 #include "timeline_frames_item_delegate.h"
 
-#include "kis_draggable_tool_button.h"
+#include "kis_zoom_button.h"
 
 #include "kis_icon_utils.h"
 
@@ -49,6 +52,7 @@
 #include "kis_action.h"
 #include "kis_signal_compressor.h"
 #include "kis_time_range.h"
+#include "kis_color_label_selector_widget.h"
 
 typedef QPair<QRect, QModelIndex> QItemViewPaintPair;
 typedef QList<QItemViewPaintPair> QItemViewPaintPairs;
@@ -58,8 +62,6 @@ struct TimelineFramesView::Private
     Private(TimelineFramesView *_q)
         : q(_q),
           fps(1),
-          zoom(1.0),
-          initialDragZoomValue(1.0),
           zoomStillPointIndex(-1),
           zoomStillPointOriginalOffset(0),
           dragInProgress(false),
@@ -74,15 +76,19 @@ struct TimelineFramesView::Private
     TimelineRulerHeader *horizontalRuler;
     TimelineLayersHeader *layersHeader;
     int fps;
-    qreal zoom;
-    qreal initialDragZoomValue;
     int zoomStillPointIndex;
     int zoomStillPointOriginalOffset;
     QPoint initialDragPanValue;
-    QPoint startZoomPanDragPos;
+    QPoint initialDragPanPos;
 
     QToolButton *addLayersButton;
     KisAction *showHideLayerAction;
+
+    KisColorLabelSelectorWidget *colorSelector;
+    QWidgetAction *colorSelectorAction;
+    KisColorLabelSelectorWidget *multiframeColorSelector;
+    QWidgetAction *multiframeColorSelectorAction;
+
     QMenu *layerEditingMenu;
     QMenu *existingLayersMenu;
 
@@ -92,8 +98,7 @@ struct TimelineFramesView::Private
     QMenu *multipleFrameEditingMenu;
     QMap<QString, KisAction*> globalActions;
 
-
-    KisDraggableToolButton *zoomDragButton;
+    KisZoomButton *zoomDragButton;
 
     bool dragInProgress;
     bool dragWasSuccessful;
@@ -129,10 +134,6 @@ TimelineFramesView::TimelineFramesView(QWidget *parent)
     setDefaultDropAction(Qt::MoveAction);
 
     m_d->horizontalRuler = new TimelineRulerHeader(this);
-
-    m_d->horizontalRuler->setSectionResizeMode(QHeaderView::Fixed);
-
-    m_d->horizontalRuler->setDefaultSectionSize(18);
     this->setHorizontalHeader(m_d->horizontalRuler);
 
     m_d->layersHeader = new TimelineLayersHeader(this);
@@ -179,20 +180,32 @@ TimelineFramesView::TimelineFramesView(QWidget *parent)
     m_d->frameCreationMenu->addAction(KisAnimationUtils::addFrameActionName, this, SLOT(slotNewFrame()));
     m_d->frameCreationMenu->addAction(KisAnimationUtils::duplicateFrameActionName, this, SLOT(slotCopyFrame()));
 
+    m_d->colorSelector = new KisColorLabelSelectorWidget(this);
+    m_d->colorSelectorAction = new QWidgetAction(this);
+    m_d->colorSelectorAction->setDefaultWidget(m_d->colorSelector);
+    connect(m_d->colorSelector, &KisColorLabelSelectorWidget::currentIndexChanged, this, &TimelineFramesView::slotColorLabelChanged);
+
     m_d->frameEditingMenu = new QMenu(this);
     m_d->frameEditingMenu->addAction(KisAnimationUtils::removeFrameActionName, this, SLOT(slotRemoveFrame()));
+    m_d->frameEditingMenu->addAction(m_d->colorSelectorAction);
+
+    m_d->multiframeColorSelector = new KisColorLabelSelectorWidget(this);
+    m_d->multiframeColorSelectorAction = new QWidgetAction(this);
+    m_d->multiframeColorSelectorAction->setDefaultWidget(m_d->multiframeColorSelector);
+    connect(m_d->multiframeColorSelector, &KisColorLabelSelectorWidget::currentIndexChanged, this, &TimelineFramesView::slotColorLabelChanged);
 
     m_d->multipleFrameEditingMenu = new QMenu(this);
     m_d->multipleFrameEditingMenu->addAction(KisAnimationUtils::removeFramesActionName, this, SLOT(slotRemoveFrame()));
+    m_d->multipleFrameEditingMenu->addAction(m_d->multiframeColorSelectorAction);
 
-    m_d->zoomDragButton = new KisDraggableToolButton(this);
+    m_d->zoomDragButton = new KisZoomButton(this);
     m_d->zoomDragButton->setAutoRaise(true);
-    m_d->zoomDragButton->setIcon(KisIconUtils::loadIcon("zoom-in"));
+    m_d->zoomDragButton->setIcon(KisIconUtils::loadIcon("zoom-horizontal"));
     m_d->zoomDragButton->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     m_d->zoomDragButton->setToolTip(i18nc("@info:tooltip", "Zoom Timeline. Hold down and drag left or right."));
     m_d->zoomDragButton->setPopupMode(QToolButton::InstantPopup);
-    connect(m_d->zoomDragButton, SIGNAL(valueChanged(int)), SLOT(slotZoomButtonChanged(int)));
-    connect(m_d->zoomDragButton, SIGNAL(pressed()), SLOT(slotZoomButtonPressed()));
+    connect(m_d->zoomDragButton, SIGNAL(zoomLevelChanged(qreal)), SLOT(slotZoomButtonChanged(qreal)));
+    connect(m_d->zoomDragButton, SIGNAL(zoomStarted(qreal)), SLOT(slotZoomButtonPressed(qreal)));
 
     setFramesPerSecond(12);
     setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
@@ -273,66 +286,38 @@ void TimelineFramesView::setFramesPerSecond(int fps)
     // m_d->horizontalRuler->reset();
 }
 
-qreal TimelineFramesView::zoom() const
+void TimelineFramesView::slotZoomButtonPressed(qreal staticPoint)
 {
-    return m_d->zoom;
-}
+    m_d->zoomStillPointIndex =
+        qIsNaN(staticPoint) ? currentIndex().column() : staticPoint;
 
-void TimelineFramesView::setZoom(qreal zoom)
-{
-    const int minSectionSize = 4;
-    const int unitSectionSize = 18;
-
-    int newSectionSize = zoom * unitSectionSize;
-
-    if (newSectionSize < minSectionSize) {
-        newSectionSize = minSectionSize;
-        zoom = qreal(newSectionSize) / unitSectionSize;
-    }
-
-    if (!qFuzzyCompare(m_d->zoom, zoom)) {
-        m_d->zoom = zoom;
-        m_d->horizontalRuler->setDefaultSectionSize(newSectionSize);
-
-        // For some reason simple update doesn't work here,
-        // so reset the whole header
-        QPersistentModelIndex index = currentIndex();
-        m_d->horizontalRuler->reset();
-        setCurrentIndex(index);
-
-        slotUpdateInfiniteFramesCount();
-    }
-}
-
-void TimelineFramesView::setZoomDouble(double zoom)
-{
-    setZoom(zoom);
-}
-
-void TimelineFramesView::slotZoomButtonPressed()
-{
-    m_d->zoomStillPointIndex = currentIndex().column();
-    slotZoomButtonPressedImpl();
-}
-
-void TimelineFramesView::slotZoomButtonPressedImpl()
-{
     const int w = m_d->horizontalRuler->defaultSectionSize();
 
     m_d->zoomStillPointOriginalOffset =
         w * m_d->zoomStillPointIndex -
         horizontalScrollBar()->value();
-
-    m_d->initialDragZoomValue = zoom();
 }
 
-void TimelineFramesView::slotZoomButtonChanged(int value)
+void TimelineFramesView::slotZoomButtonChanged(qreal zoomLevel)
 {
-    qreal zoomCoeff = std::pow(2.0, qreal(value) / KisDraggableToolButton::unitRadius());
-    setZoom(m_d->initialDragZoomValue * zoomCoeff);
+    if (m_d->horizontalRuler->setZoom(zoomLevel)) {
+        slotUpdateInfiniteFramesCount();
 
-    const int w = m_d->horizontalRuler->defaultSectionSize();
-    horizontalScrollBar()->setValue(w * m_d->zoomStillPointIndex - m_d->zoomStillPointOriginalOffset);
+        const int w = m_d->horizontalRuler->defaultSectionSize();
+        horizontalScrollBar()->setValue(w * m_d->zoomStillPointIndex - m_d->zoomStillPointOriginalOffset);
+
+        viewport()->update();
+    }
+}
+
+void TimelineFramesView::slotColorLabelChanged(int label)
+{
+    Q_FOREACH(QModelIndex index, selectedIndexes()) {
+        m_d->model->setData(index, label, TimelineFramesModel::ColorLabel);
+    }
+
+    KisImageConfig config;
+    config.setDefaultFrameColorLabel(label);
 }
 
 void TimelineFramesView::slotUpdateInfiniteFramesCount()
@@ -688,16 +673,14 @@ void TimelineFramesView::mousePressEvent(QMouseEvent *event)
     QPersistentModelIndex index = indexAt(event->pos());
 
     if (m_d->modifiersCatcher->modifierPressed("pan-zoom")) {
-        m_d->startZoomPanDragPos = event->pos();
 
         if (event->button() == Qt::RightButton) {
             // TODO: try calculate index under mouse cursor even when
             //       it is outside any visible row
-            m_d->zoomStillPointIndex =
-                index.isValid() ? index.column() : currentIndex().column();
-
-            slotZoomButtonPressedImpl();
+            qreal staticPoint = index.isValid() ? index.column() : currentIndex().column();
+            m_d->zoomDragButton->beginZoom(event->pos(), staticPoint);
         } else if (event->button() == Qt::LeftButton) {
+            m_d->initialDragPanPos = event->pos();
             m_d->initialDragPanValue =
                 QPoint(horizontalScrollBar()->value(),
                        verticalScrollBar()->value());
@@ -716,12 +699,44 @@ void TimelineFramesView::mousePressEvent(QMouseEvent *event)
             model()->setData(index, true, TimelineFramesModel::ActiveFrameRole);
             setCurrentIndex(index);
 
-            if (model()->data(index, TimelineFramesModel::FrameExistsRole).toBool()) {
+            if (model()->data(index, TimelineFramesModel::FrameExistsRole).toBool() ||
+                model()->data(index, TimelineFramesModel::SpecialKeyframeExists).toBool()) {
+
+                {
+                KisSignalsBlocker b(m_d->colorSelector);
+                QVariant colorLabel = index.data(TimelineFramesModel::ColorLabel);
+                int labelIndex = colorLabel.isValid() ? colorLabel.toInt() : 0;
+                m_d->colorSelector->setCurrentIndex(labelIndex);
+                }
+
                 m_d->frameEditingMenu->exec(event->globalPos());
             } else {
                 m_d->frameCreationMenu->exec(event->globalPos());
             }
         } else if (numSelectedItems > 1) {
+            int labelIndex = 0;
+            bool haveFrames = false;
+            Q_FOREACH(QModelIndex index, selectedIndexes()) {
+                haveFrames |= index.data(TimelineFramesModel::FrameExistsRole).toBool();
+                QVariant colorLabel = index.data(TimelineFramesModel::ColorLabel);
+                if (colorLabel.isValid()) {
+                    if (labelIndex == 0) {
+                        labelIndex = colorLabel.toInt();
+                    } else {
+                        labelIndex = 0;
+                        break;
+                    }
+                }
+            }
+
+            if (!haveFrames) {
+                m_d->multiframeColorSelectorAction->setVisible(false);
+            } else {
+                KisSignalsBlocker b(m_d->multiframeColorSelector);
+                m_d->multiframeColorSelector->setCurrentIndex(labelIndex);
+                m_d->multiframeColorSelectorAction->setVisible(true);
+            }
+
             m_d->multipleFrameEditingMenu->exec(event->globalPos());
         }
 
@@ -740,12 +755,11 @@ void TimelineFramesView::mousePressEvent(QMouseEvent *event)
 void TimelineFramesView::mouseMoveEvent(QMouseEvent *e)
 {
     if (m_d->modifiersCatcher->modifierPressed("pan-zoom")) {
-        QPoint diff = e->pos() - m_d->startZoomPanDragPos;
 
         if (e->buttons() & Qt::RightButton) {
-            slotZoomButtonChanged(m_d->zoomDragButton->calculateValue(diff));
+            m_d->zoomDragButton->continueZoom(e->pos());
         } else if (e->buttons() & Qt::LeftButton) {
-
+            QPoint diff = e->pos() - m_d->initialDragPanPos;
             QPoint offset = QPoint(m_d->initialDragPanValue.x() - diff.x(),
                                    m_d->initialDragPanValue.y() - diff.y());
 
@@ -771,6 +785,19 @@ void TimelineFramesView::mouseReleaseEvent(QMouseEvent *e)
     }
 }
 
+void TimelineFramesView::wheelEvent(QWheelEvent *e)
+{
+    QModelIndex index = currentIndex();
+    int column= -1;
+
+    if (index.isValid()) {
+        column= index.column() + ((e->delta() > 0) ? 1 : -1);
+    }
+
+    if (column >= 0 && !m_d->dragInProgress) {
+        setCurrentIndex(m_d->model->index(index.row(), column));
+    }
+}
 
 void TimelineFramesView::slotUpdateLayersMenu()
 {

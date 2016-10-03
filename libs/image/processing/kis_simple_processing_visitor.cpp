@@ -107,3 +107,8 @@ void KisSimpleProcessingVisitor::visit(KisSelectionMask *mask, KisUndoAdapter *u
 {
     visitNodeWithPaintDevice(mask, undoAdapter);
 }
+
+void KisSimpleProcessingVisitor::visit(KisColorizeMask *mask, KisUndoAdapter *undoAdapter)
+{
+    visitColorizeMask(mask, undoAdapter);
+}

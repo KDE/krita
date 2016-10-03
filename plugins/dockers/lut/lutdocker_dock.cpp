@@ -91,7 +91,6 @@ LutDockerDock::LutDockerDock()
     : QDockWidget(i18n("LUT Management"))
     , m_canvas(0)
     , m_draggingSlider(false)
-    , m_ownDisplayFilter(false)
 {
     using namespace std::placeholders; // For _1
     m_exposureCompressor.reset(
@@ -171,22 +170,17 @@ LutDockerDock::LutDockerDock()
 
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(resetOcioConfiguration()));
 
-    m_displayFilter = 0;
-
     resetOcioConfiguration();
 }
 
 LutDockerDock::~LutDockerDock()
 {
-    if(m_ownDisplayFilter)
-        delete m_displayFilter;
 }
 
 void LutDockerDock::setCanvas(KoCanvasBase* _canvas)
 {
     if (m_canvas) {
         m_canvas->disconnect(this);
-        m_displayFilter = 0;
     }
 
     setEnabled(_canvas != 0);
@@ -195,24 +189,25 @@ void LutDockerDock::setCanvas(KoCanvasBase* _canvas)
         m_canvas = canvas;
         if (m_canvas) {
             if (!m_canvas->displayFilter()) {
-                m_displayFilter = new OcioDisplayFilter(this);
-                m_ownDisplayFilter = true;
+                m_displayFilter = QSharedPointer<KisDisplayFilter>(new OcioDisplayFilter(this));
+                m_canvas->setDisplayFilter(m_displayFilter);
                 resetOcioConfiguration();
                 updateDisplaySettings();
             }
             else {
-                m_displayFilter = dynamic_cast<OcioDisplayFilter*>(m_canvas->displayFilter());
-                Q_ASSERT(m_displayFilter);
-                m_ocioConfig = m_displayFilter->config;
+                m_displayFilter = m_canvas->displayFilter();
+                OcioDisplayFilter *displayFilter = qobject_cast<OcioDisplayFilter*>(m_displayFilter.data());
+                Q_ASSERT(displayFilter);
+                m_ocioConfig = displayFilter->config;
                 KisSignalsBlocker exposureBlocker(m_exposureDoubleWidget);
-                m_exposureDoubleWidget->setValue(m_displayFilter->exposure);
+                m_exposureDoubleWidget->setValue(displayFilter->exposure);
                 KisSignalsBlocker gammaBlocker(m_gammaDoubleWidget);
-                m_gammaDoubleWidget->setValue(m_displayFilter->gamma);
+                m_gammaDoubleWidget->setValue(displayFilter->gamma);
                 KisSignalsBlocker componentsBlocker(m_cmbComponents);
-                m_cmbComponents->setCurrentIndex((int)m_displayFilter->swizzle);
+                m_cmbComponents->setCurrentIndex((int)displayFilter->swizzle);
                 KisSignalsBlocker bwBlocker(m_bwPointChooser);
-                m_bwPointChooser->setBlackPoint(m_displayFilter->blackPoint);
-                m_bwPointChooser->setWhitePoint(m_displayFilter->whitePoint);
+                m_bwPointChooser->setBlackPoint(displayFilter->blackPoint);
+                m_bwPointChooser->setWhitePoint(displayFilter->whitePoint);
             }
 
             connect(m_canvas->image(), SIGNAL(sigColorSpaceChanged(const KoColorSpace*)), SLOT(slotImageColorSpaceChanged()), Qt::UniqueConnection);
@@ -220,6 +215,13 @@ void LutDockerDock::setCanvas(KoCanvasBase* _canvas)
 
         }
     }
+}
+
+void LutDockerDock::unsetCanvas()
+{
+    m_canvas = 0;
+    setEnabled(false);
+    m_displayFilter = QSharedPointer<KisDisplayFilter>(0);
 }
 
 void LutDockerDock::slotUpdateIcons()
@@ -241,7 +243,8 @@ bool LutDockerDock::canChangeExposureAndGamma() const
 qreal LutDockerDock::currentExposure() const
 {
     if (!m_displayFilter) return 0.0;
-    return canChangeExposureAndGamma() ? m_displayFilter->exposure : 0.0;
+    OcioDisplayFilter *displayFilter = qobject_cast<OcioDisplayFilter*>(m_displayFilter.data());
+    return canChangeExposureAndGamma() ? displayFilter->exposure : 0.0;
 }
 
 void LutDockerDock::setCurrentExposure(qreal value)
@@ -253,7 +256,8 @@ void LutDockerDock::setCurrentExposure(qreal value)
 qreal LutDockerDock::currentGamma() const
 {
     if (!m_displayFilter) return 1.0;
-    return canChangeExposureAndGamma() ? m_displayFilter->gamma : 1.0;
+    OcioDisplayFilter *displayFilter = qobject_cast<OcioDisplayFilter*>(m_displayFilter.data());
+    return canChangeExposureAndGamma() ? displayFilter->gamma : 1.0;
 }
 
 void LutDockerDock::setCurrentGamma(qreal value)
@@ -378,28 +382,29 @@ void LutDockerDock::updateDisplaySettings()
     writeControls();
 
     if (m_chkUseOcio->isChecked() && m_ocioConfig) {
-        m_displayFilter->config = m_ocioConfig;
-        m_displayFilter->inputColorSpaceName = m_ocioConfig->getColorSpaceNameByIndex(m_cmbInputColorSpace->currentIndex());
-        m_displayFilter->displayDevice = m_ocioConfig->getDisplay(m_cmbDisplayDevice->currentIndex());
-        m_displayFilter->view = m_ocioConfig->getView(m_displayFilter->displayDevice, m_cmbView->currentIndex());
-        m_displayFilter->look = m_ocioConfig->getLookNameByIndex(m_cmbLook->currentIndex());
-        m_displayFilter->gamma = m_gammaDoubleWidget->value();
-        m_displayFilter->exposure = m_exposureDoubleWidget->value();
-        m_displayFilter->swizzle = (OCIO_CHANNEL_SWIZZLE)m_cmbComponents->currentIndex();
+        OcioDisplayFilter *displayFilter = qobject_cast<OcioDisplayFilter*>(m_displayFilter.data());
+        displayFilter->config = m_ocioConfig;
+        displayFilter->inputColorSpaceName = m_ocioConfig->getColorSpaceNameByIndex(m_cmbInputColorSpace->currentIndex());
+        displayFilter->displayDevice = m_ocioConfig->getDisplay(m_cmbDisplayDevice->currentIndex());
+        displayFilter->view = m_ocioConfig->getView(displayFilter->displayDevice, m_cmbView->currentIndex());
+        displayFilter->look = m_ocioConfig->getLookNameByIndex(m_cmbLook->currentIndex());
+        displayFilter->gamma = m_gammaDoubleWidget->value();
+        displayFilter->exposure = m_exposureDoubleWidget->value();
+        displayFilter->swizzle = (OCIO_CHANNEL_SWIZZLE)m_cmbComponents->currentIndex();
 
-        m_displayFilter->blackPoint = m_bwPointChooser->blackPoint();
-        m_displayFilter->whitePoint = m_bwPointChooser->whitePoint();
+        displayFilter->blackPoint = m_bwPointChooser->blackPoint();
+        displayFilter->whitePoint = m_bwPointChooser->whitePoint();
 
-        m_displayFilter->forceInternalColorManagement =
+        displayFilter->forceInternalColorManagement =
             m_colorManagement->currentIndex() == (int)KisConfig::INTERNAL;
 
-        m_displayFilter->setLockCurrentColorVisualRepresentation(m_btnConvertCurrentColor->isChecked());
+        displayFilter->setLockCurrentColorVisualRepresentation(m_btnConvertCurrentColor->isChecked());
 
-        m_displayFilter->updateProcessor();
+        displayFilter->updateProcessor();
         m_canvas->setDisplayFilter(m_displayFilter);
     }
     else {
-        m_canvas->setDisplayFilter(0);
+        m_canvas->setDisplayFilter(QSharedPointer<KisDisplayFilter>(0));
     }
     m_canvas->updateCanvas();
 }

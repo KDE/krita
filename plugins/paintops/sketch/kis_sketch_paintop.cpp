@@ -62,7 +62,7 @@
 
 // shaded: probabity : paint always - 0.0 density
 
-KisSketchPaintOp::KisSketchPaintOp(const KisSketchPaintOpSettings *settings, KisPainter * painter, KisNodeSP node, KisImageSP image)
+KisSketchPaintOp::KisSketchPaintOp(const KisPaintOpSettingsSP settings, KisPainter *painter, KisNodeSP node, KisImageSP image)
     : KisPaintOp(painter)
 {
     Q_UNUSED(image);
@@ -72,7 +72,7 @@ KisSketchPaintOp::KisSketchPaintOp(const KisSketchPaintOpSettings *settings, Kis
     m_sizeOption.readOptionSetting(settings);
     m_rotationOption.readOptionSetting(settings);
     m_sketchProperties.readOptionSetting(settings);
-    m_brushOption.readOptionSetting(settings, true);
+    m_brushOption.readOptionSettingForceCopy(settings);
     m_densityOption.readOptionSetting(settings);
     m_lineWidthOption.readOptionSetting(settings);
     m_offsetScaleOption.readOptionSetting(settings);

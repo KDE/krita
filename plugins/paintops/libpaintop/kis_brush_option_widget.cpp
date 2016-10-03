@@ -74,16 +74,16 @@ void KisBrushOptionWidget::setPrecisionEnabled(bool value)
     m_brushSelectionWidget->setPrecisionEnabled(value);
 }
 
-void KisBrushOptionWidget::writeOptionSetting(KisPropertiesConfiguration* settings) const
+void KisBrushOptionWidget::writeOptionSetting(KisPropertiesConfigurationSP settings) const
 {
     m_brushSelectionWidget->writeOptionSetting(settings);
     m_brushOption.writeOptionSetting(settings);
 }
 
-void KisBrushOptionWidget::readOptionSetting(const KisPropertiesConfiguration* setting)
+void KisBrushOptionWidget::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
     m_brushSelectionWidget->readOptionSetting(setting);
-    m_brushOption.readOptionSetting(setting, false);
+    m_brushOption.readOptionSetting(setting);
     m_brushSelectionWidget->setCurrentBrush(m_brushOption.brush());
 }
 
@@ -91,17 +91,6 @@ void KisBrushOptionWidget::lodLimitations(KisPaintopLodLimitations *l) const
 {
     KisBrushSP brush = this->brush();
     brush->lodLimitations(l);
-}
-
-void KisBrushOptionWidget::setBrushSize(qreal dxPixels, qreal dyPixels)
-{
-    m_brushSelectionWidget->setBrushSize(dxPixels, dyPixels);
-}
-
-
-QSizeF KisBrushOptionWidget::brushSize() const
-{
-    return m_brushSelectionWidget->brushSize();
 }
 
 void KisBrushOptionWidget::brushChanged()

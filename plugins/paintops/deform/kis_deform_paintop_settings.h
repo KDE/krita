@@ -31,13 +31,16 @@ public:
     KisDeformPaintOpSettings();
     ~KisDeformPaintOpSettings();
 
-    QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode) const;
+    void setPaintOpSize(qreal value) override;
+    qreal paintOpSize() const override;
+
+    QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode) override;
 
     bool paintIncremental();
     bool isAirbrushing() const;
     int rate() const;
 
-    QList<KisUniformPaintOpPropertySP> uniformProperties();
+    QList<KisUniformPaintOpPropertySP> uniformProperties(KisPaintOpSettingsSP settings);
 
 private:
     struct Private;

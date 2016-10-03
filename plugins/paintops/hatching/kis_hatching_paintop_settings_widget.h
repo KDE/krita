@@ -35,7 +35,7 @@ public:
     KisHatchingPaintOpSettingsWidget(QWidget* parent = 0);
     virtual ~KisHatchingPaintOpSettingsWidget();
 
-    KisPropertiesConfiguration* configuration() const;
+    KisPropertiesConfigurationSP configuration() const;
 };
 
 #endif

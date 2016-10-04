@@ -316,7 +316,6 @@ KoColor KisFavoriteResourceManager::bgColor() const
     return m_bgColor;
 }
 
-
 bool sortPresetByName(KisPaintOpPresetSP preset1, KisPaintOpPresetSP preset2)
 {
      return preset1->name() < preset2->name();

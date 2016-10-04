@@ -785,6 +785,19 @@ void TimelineFramesView::mouseReleaseEvent(QMouseEvent *e)
     }
 }
 
+void TimelineFramesView::wheelEvent(QWheelEvent *e)
+{
+    QModelIndex index = currentIndex();
+    int column= -1;
+
+    if (index.isValid()) {
+        column= index.column() + ((e->delta() > 0) ? 1 : -1);
+    }
+
+    if (column >= 0 && !m_d->dragInProgress) {
+        setCurrentIndex(m_d->model->index(index.row(), column));
+    }
+}
 
 void TimelineFramesView::slotUpdateLayersMenu()
 {

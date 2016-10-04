@@ -25,6 +25,7 @@
 #include "kis_icon_utils.h"
 #include <brushengine/kis_paintop_preset.h>
 #include "kis_resource_server_provider.h"
+#include <kis_canvas_resource_provider.h>
 #include <KoTriangleColorSelector.h>
 #include <kis_visual_color_selector.h>
 #include <kis_config_notifier.h>
@@ -115,7 +116,11 @@ KisPopupPalette::KisPopupPalette(KisFavoriteResourceManager* manager, const KoCo
     m_triangleColorSelector->move(widgetSize/2-colorInnerRadius+borderWidth, widgetSize/2-colorInnerRadius+borderWidth);
     m_triangleColorSelector->resize(colorInnerRadius*2-borderWidth*2, colorInnerRadius*2-borderWidth*2);
     m_triangleColorSelector->setVisible(true);
-    m_triangleColorSelector->slotSetColor(KoColor());
+    KoColor fgcolor(Qt::black, KoColorSpaceRegistry::instance()->rgb8());
+    if (m_resourceManager) {
+        fgcolor = provider->fgColor();
+    }
+    m_triangleColorSelector->slotSetColor(fgcolor);
 
     QRegion maskedRegion(0, 0, m_triangleColorSelector->width(), m_triangleColorSelector->height(), QRegion::Ellipse );
     m_triangleColorSelector->setMask(maskedRegion);

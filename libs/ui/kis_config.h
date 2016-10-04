@@ -139,6 +139,9 @@ public:
     bool allowLCMSOptimization(bool defaultValue = false) const;
     void setAllowLCMSOptimization(bool allowLCMSOptimization);
 
+    void writeKoColor(const QString& name, const KoColor& color) const;
+    KoColor readKoColor(const QString& name, const KoColor& color = KoColor()) const;
+
     bool showRulers(bool defaultValue = false) const;
     void setShowRulers(bool rulers) const;
 

@@ -10,7 +10,7 @@ description: Krita is a creative application for raster images. Whether you want
 apps:
   krita:
     command: qt5-launch usr/bin/krita
-    plugs: [x11, unity7, home, opengl, network, network-bind]
+    plugs: [x11, unity7, home, opengl, network, network-bind, removable-media]
 
 parts:
   qt:

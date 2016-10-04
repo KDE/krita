@@ -39,6 +39,7 @@
 #include <KoColorProfile.h>
 
 #include <kis_debug.h>
+#include <kis_types.h>
 
 #include "kis_canvas_resource_provider.h"
 #include "kis_config_notifier.h"
@@ -1721,4 +1722,34 @@ QString KisConfig::brushHudSetting(bool defaultValue) const
 void KisConfig::setBrushHudSetting(const QString &value) const
 {
     m_cfg.writeEntry("brushHudSettings", value);
+}
+
+#include <QDomDocument>
+#include <QDomElement>
+
+void KisConfig::writeKoColor(const QString& name, const KoColor& color) const
+{
+    QDomDocument doc = QDomDocument(name);
+    QDomElement el = doc.createElement(name);
+    doc.appendChild(el);
+    color.toXML(doc, el);
+    m_cfg.writeEntry(name, doc.toString());
+}
+
+//ported from kispropertiesconfig.
+KoColor KisConfig::readKoColor(const QString& name, const KoColor& color) const
+{
+    QDomDocument doc;
+    if (!m_cfg.readEntry(name).isNull()) {
+        doc.setContent(m_cfg.readEntry(name));
+        QDomElement e = doc.documentElement().firstChild().toElement();
+        return KoColor::fromXML(e, Integer16BitsColorDepthID.id(), QHash<QString, QString>());
+    } else {
+        QString blackColor = "<!DOCTYPE Color>\n<Color>\n <RGB r=\"0\" space=\"sRGB-elle-V2-srgbtrc.icc\" b=\"0\" g=\"0\"/>\n</Color>\n";
+        doc.setContent(blackColor);
+        QDomElement e = doc.documentElement().firstChild().toElement();
+        return KoColor::fromXML(e, Integer16BitsColorDepthID.id(), QHash<QString, QString>());
+    }
+    return color;
+
 }

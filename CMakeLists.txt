@@ -83,7 +83,7 @@ endif()
 
 # define common versions of Krita applications, used to generate kritaversion.h
 # update these version for every release:
-set(KRITA_VERSION_STRING "3.0.1.90")
+set(KRITA_VERSION_STRING "3.0.90")
 set(KRITA_STABLE_VERSION_MAJOR 3) # 3 for 3.x, 4 for 4.x, etc.
 set(KRITA_STABLE_VERSION_MINOR 0) # 0 for 3.0, 1 for 3.1, etc.
 set(KRITA_VERSION_RELEASE 1.89)     # 89 for Alpha, increase for next test releases, set 0 for first Stable, etc.
@@ -153,7 +153,8 @@ message(STATUS "Release build: ${RELEASE_BUILD}")
 
 option(PACKAGERS_BUILD "Build support of multiple CPU architectures in one binary. Should be used by packagers only or Krita developers. Only switch off when you're an artist optimizing a build for your very own machine." ON)
 if (WIN32)
-    option(USE_BREAKPAD "Build the crash handler for Krita (only on windows)" OFF)
+    option(USE_BREAKPAD "Build the Breakpad crash handler for Krita (only on windows)" OFF)
+    option(USE_DRMINGW "Support the Dr. Mingw crash handler (only on windows)" ON)
 endif ()
 
 option(HIDE_SAFE_ASSERTS "Don't show message box for \"safe\" asserts, just ignore them automatically and dump a message to the terminal." ON)

@@ -75,6 +75,7 @@ void KritaFilterGradientMap::processImpl(KisPaintDeviceSP device,
     do {
         grey = device->colorSpace()->intensity8(it.oldRawData());
         outColor = gradientCache->getColor((quint32)grey).color;
+        outColor.setOpacity(qMin(KoColor(it.oldRawData(), device->colorSpace()).opacityF(), outColor.opacityF()));
         outColor.convertTo(device->colorSpace());
         memcpy(it.rawData(), outColor.data(), pixelSize);
         if (progressUpdater) progressUpdater->setValue(p++);

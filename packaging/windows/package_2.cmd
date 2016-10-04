@@ -190,6 +190,8 @@ if exist filelist_bin_dll.txt (
 	)
 	endlocal
 )
+:: symsrv.yes for Dr. Mingw
+copy %BUILDDIR_INSTALL%\bin\symsrv.yes %pkg_root%\bin
 :: DLLs from lib/
 if exist filelist_lib_dll.txt (
 	for /f %%F in (filelist_lib_dll.txt) do copy %BUILDDIR_INSTALL%\lib\%%F %pkg_root%\bin

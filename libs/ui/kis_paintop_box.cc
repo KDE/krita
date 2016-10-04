@@ -937,12 +937,12 @@ void KisPaintopBox::slotToggleEraseMode(bool checked)
         qreal newSize = checked ? settings->savedEraserSize() : settings->savedBrushSize();
         m_resourceProvider->setSize(newSize);
     }
-   if (m_eraserBrushOpacityEnabled) {
+   if (oldEraserMode != checked && m_eraserBrushOpacityEnabled) {
         const qreal currentOpacity = m_resourceProvider->opacity();
 
         KisPaintOpSettingsSP settings = m_resourceProvider->currentPreset()->settings();
 
-        // remember brush opacity. set the eraser opacity to the normal brush size if not set
+        // remember brush opacity. set the eraser opacity to the normal brush opacity if not set
         if (checked) {
             settings->setSavedBrushOpacity(currentOpacity);
             if (qFuzzyIsNull(settings->savedEraserOpacity())) {

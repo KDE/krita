@@ -817,14 +817,32 @@ void KisLayer::setY(qint32 y)
 
 QRect KisLayer::extent() const
 {
+    QRect additionalMaskExtent = QRect();
+    QList<KisEffectMaskSP> effectMasks = this->effectMasks();
+
+    Q_FOREACH(KisEffectMaskSP mask, effectMasks) {
+        additionalMaskExtent |= mask->nonDependentExtent();
+    }
+
     KisPaintDeviceSP originalDevice = original();
-    return originalDevice ? originalDevice->extent() : QRect();
+    QRect layerExtent = originalDevice ? originalDevice->extent() : QRect();
+
+    return layerExtent | additionalMaskExtent;
 }
 
 QRect KisLayer::exactBounds() const
 {
+    QRect additionalMaskExtent = QRect();
+    QList<KisEffectMaskSP> effectMasks = this->effectMasks();
+
+    Q_FOREACH(KisEffectMaskSP mask, effectMasks) {
+        additionalMaskExtent |= mask->nonDependentExtent();
+    }
+
     KisPaintDeviceSP originalDevice = original();
-    return originalDevice ? originalDevice->exactBounds() : QRect();
+    QRect layerExtent = originalDevice ? originalDevice->exactBounds() : QRect();
+
+    return layerExtent | additionalMaskExtent;
 }
 
 KisLayerSP KisLayer::parentLayer() const

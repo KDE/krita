@@ -140,7 +140,7 @@ ExternalProject_Add(
 ExternalProject_Add(
     ext_ki18n
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL http://download.kde.org/stable/frameworks/5.17/ki18n-5.17.0.zip
+        URL http://download.kde.org/Attic/frameworks/5.17/ki18n-5.17.0.zip
     URL_MD5 7d60380d09f98defbf878ea9daba0fbb
     INSTALL_DIR ${EXTPREFIX_frameworks}
     PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/ki18n.diff

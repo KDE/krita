@@ -70,6 +70,7 @@
 #include <KoPluginLoader.h>
 #include <KoDocumentInfo.h>
 #include <KoGlobal.h>
+#include <KoColorSpaceRegistry.h>
 
 #include "input/kis_input_manager.h"
 #include "canvas/kis_canvas2.h"
@@ -300,7 +301,11 @@ KisViewManager::~KisViewManager()
     KisConfig cfg;
     if (resourceProvider() && resourceProvider()->currentPreset()) {
         cfg.writeEntry("LastPreset", resourceProvider()->currentPreset()->name());
+        cfg.writeKoColor("LastForeGroundColor",resourceProvider()->fgColor());
+        cfg.writeKoColor("LastBackGroundColor",resourceProvider()->bgColor());
+
     }
+
     cfg.writeEntry("baseLength", KoResourceItemChooserSync::instance()->baseLength());
 
     delete d;
@@ -345,7 +350,7 @@ void KisViewManager::setCurrentView(KisView *view)
         d->viewConnections.clear();
     }
 
-    // Restore the last used brush preset
+    // Restore the last used brush preset, color and background color.
     if (first) {
         KisConfig cfg;
         KisPaintOpPresetResourceServer * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
@@ -361,6 +366,12 @@ void KisViewManager::setCurrentView(KisView *view)
         if (preset) {
             paintOpBox()->restoreResource(preset.data());
         }
+
+        const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
+        KoColor foreground(Qt::black, cs);
+        d->canvasResourceProvider.setFGColor(cfg.readKoColor("LastForeGroundColor",foreground));
+        KoColor background(Qt::white, cs);
+        d->canvasResourceProvider.setBGColor(cfg.readKoColor("LastBackGroundColor",background));
 
     }
 

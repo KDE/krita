@@ -38,6 +38,8 @@ private Q_SLOTS:
     void testSplitIntoConnectedComponents();
 
     void testEstimateTransparentPixels();
+
+    void multiwayCutBenchmark();
 };
 
 #endif /* __KIS_LAZY_BRUSH_TEST_H */

@@ -27,6 +27,7 @@
 KoResourceItemView::KoResourceItemView(QWidget *parent)
     : KoTableView(parent)
 {
+    connect(this, SIGNAL(clicked(QModelIndex)), SLOT(slotItemClicked(QModelIndex)));
 }
 
 bool KoResourceItemView::viewportEvent(QEvent *event)
@@ -53,6 +54,21 @@ void KoResourceItemView::selectionChanged(const QItemSelection &selected, const 
     } else {
         emit currentResourceChanged(selected.indexes().first());
     }
+}
+
+void KoResourceItemView::mousePressEvent(QMouseEvent *event)
+{
+    m_beforeClickIndex = currentIndex();
+    KoTableView::mousePressEvent(event);
+}
+
+void KoResourceItemView::slotItemClicked(const QModelIndex &index)
+{
+    if (m_beforeClickIndex == index) {
+        emit currentResourceClicked(index);
+    }
+
+    m_beforeClickIndex = QModelIndex();
 }
 
 void KoResourceItemView::contextMenuEvent(QContextMenuEvent *event)

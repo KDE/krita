@@ -122,3 +122,7 @@ add_subdirectory( ext_frameworks )
 if (MSVC)
     add_subdirectory( google-breakpad )
 endif()
+
+if (MSVC OR MINGW)
+    add_subdirectory( ext_drmingw )
+endif (MSVC OR MINGW)

@@ -16,6 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#define BOOST_DISABLE_ASSERTS 1
+
 #include "kis_lazy_fill_tools.h"
 
 #include <numeric>
@@ -27,7 +29,11 @@
 #include <boost/iterator/transform_iterator.hpp>
 
 #include <boost/graph/properties.hpp>
-#include <boost/graph/boykov_kolmogorov_max_flow.hpp>
+
+// we use a forked version of the algorithm
+//#include <boost/graph/boykov_kolmogorov_max_flow.hpp>
+#include "patched_boykov_kolmogorov_max_flow.hpp"
+
 #include <boost/graph/iteration_macros.hpp>
 
 #include "lazybrush/kis_lazy_fill_graph.h"
@@ -81,7 +87,7 @@ void cutOneWay(const KoColor &color,
     KisLazyFillGraph &graph = capacityMap.graph();
 
     std::vector<default_color_type> groups(num_vertices(graph));
-    std::vector<float> residual_capacity(num_edges(graph), 0);
+    std::vector<int> residual_capacity(num_edges(graph), 0);
 
     std::vector<typename graph_traits<KisLazyFillGraph>::vertices_size_type> distance_vec(num_vertices(graph), 0);
     std::vector<typename graph_traits<KisLazyFillGraph>::edge_descriptor> predecessor_vec(num_vertices(graph));

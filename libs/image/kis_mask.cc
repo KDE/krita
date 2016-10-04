@@ -336,6 +336,11 @@ void KisMask::setY(qint32 y)
     }
 }
 
+QRect KisMask::nonDependentExtent() const
+{
+    return QRect();
+}
+
 QImage KisMask::createThumbnail(qint32 w, qint32 h)
 {
     KisPaintDeviceSP originalDevice =

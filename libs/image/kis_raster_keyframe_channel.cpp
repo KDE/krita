@@ -79,7 +79,9 @@ int KisRasterKeyframeChannel::frameId(KisKeyframeSP keyframe) const
 
 int KisRasterKeyframeChannel::frameIdAt(int time) const
 {
-    return frameId(activeKeyframeAt(time));
+    KisKeyframeSP activeKey = activeKeyframeAt(time);
+    if (activeKey.isNull()) return -1;
+    return frameId(activeKey);
 }
 
 void KisRasterKeyframeChannel::fetchFrame(KisKeyframeSP keyframe, KisPaintDeviceSP targetDevice)

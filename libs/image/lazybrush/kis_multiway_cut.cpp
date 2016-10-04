@@ -85,9 +85,38 @@ void KisMultiwayCut::Private::maskOutKeyStroke(KisPaintDeviceSP keyStrokeDevice,
     }
 }
 
+bool keyStrokesOrder(const KeyStroke &a, const KeyStroke &b)
+{
+    const bool aTransparent = a.color.opacityU8() == OPACITY_TRANSPARENT_U8;
+    const bool bTransparent = b.color.opacityU8() == OPACITY_TRANSPARENT_U8;
+
+    if (aTransparent && !bTransparent) return true;
+    if (!aTransparent && bTransparent) return false;
+
+    const QRect aRect = a.dev->extent();
+    const QRect bRect = b.dev->extent();
+
+    const int aArea = aRect.width() * aRect.height();
+    const int bArea = bRect.width() * bRect.height();
+
+    return aArea > bArea;
+}
+
 void KisMultiwayCut::run()
 {
     KisPaintDeviceSP other = new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8());
+
+    /**
+     * First sort all the key strokes in a way that all the
+     * transparent strokes go to the beginning of the list.
+     *
+     * This is juat an heuristic: the transparent stroke usually
+     * represents the background so it is the bigger one. And since
+     * our algorithm is greedy, we should cover the biggest area
+     * as fast as possible.
+     */
+
+    std::stable_sort(m_d->keyStrokes.begin(), m_d->keyStrokes.end(), keyStrokesOrder);
 
     while (m_d->keyStrokes.size() > 1) {
         KeyStroke current = m_d->keyStrokes.takeFirst();

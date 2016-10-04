@@ -107,7 +107,6 @@
 #include "KisImportExportManager.h"
 #include "KisPart.h"
 #include "KisView.h"
-#include "kis_async_action_feedback.h"
 #include "kis_grid_config.h"
 #include "kis_guides_config.h"
 #include "kis_image_barrier_lock_adapter.h"

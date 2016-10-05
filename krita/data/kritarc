@@ -169,12 +169,15 @@ ColorSpaceExtensionsPluginsDisabled=
 ColorSpacePlugins=\\0
 ColorSpacePluginsDisabled=
 DockerPlugins=\\0
-DockerPluginsDisabled=
+DockerPluginsDisabled=textdocumentinspection
 FlakePlugins=,
 ShapePlugins=,
 ToolsBlacklist=CreatePathTool,KoPencilTool,ConnectionTool,KarbonFilterEffectsTool
 ToolPlugins=,,
 ToolPluginsDisabled=
+
+[KoShapeCollection]
+QuickShapes=ArtisticText,TextShapeID,EllipseShape,RectangleShape
 
 [colorhotkeys]
 steps_blueyellow=10

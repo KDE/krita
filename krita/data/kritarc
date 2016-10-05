@@ -29,6 +29,7 @@ LineSmoothingType=1
 LineSmoothingUseDelayDistance=true
 NumberOfLayersForNewImage=2
 PaintopPopupDetached=false
+SpecificColorSelector/ShowColorSpaceSelector=false
 baseLength=50
 colorDepthDef=U8
 colorModelDef=RGBA

@@ -51,6 +51,7 @@ guidesLineStyle=0
 imageHeightDef=1200
 imageResolutionDef=300
 imageWidthDef=1600
+levelOfDetailEnabled=true
 numberOfOnionSkins=10
 oninSkinTintColorForward=0,255,0
 onionSkinOpacity_-1=173

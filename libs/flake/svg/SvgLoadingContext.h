@@ -85,6 +85,8 @@ public:
     /// Returns a style parser to parse styles
     SvgStyleParser &styleParser();
 
+    bool isRootContext() const;
+
 private:
     class Private;
     Private * const d;

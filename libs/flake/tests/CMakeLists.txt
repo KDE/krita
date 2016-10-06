@@ -1,5 +1,7 @@
 set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 
+macro_add_unittest_definitions()
+
 ########### next target ###############
 
 set(TestPosition_test_SRCS TestPosition.cpp )
@@ -149,3 +151,9 @@ target_link_libraries(TestInputDevice  kritaflake Qt5::Test)
 set(TestSnapStrategy_test_SRCS TestSnapStrategy.cpp )
 kde4_add_unit_test(TestSnapStrategy TESTNAME libs-kritaflake-TestSnapStrategy  ${TestSnapStrategy_test_SRCS})
 target_link_libraries(TestSnapStrategy  kritaflake Qt5::Test)
+
+########### end ###############
+
+set(TestSvgParser_test_SRCS TestSvgParser.cpp )
+kde4_add_unit_test(TestSvgParser TESTNAME libs-kritaflake-TestSvgParser  ${TestSvgParser_test_SRCS})
+target_link_libraries(TestSvgParser  kritaflake Qt5::Test)

@@ -54,6 +54,8 @@ public:
     /// Sets the initial xml base directory (the directory form where the file is read)
     void setXmlBaseDir(const QString &baseDir);
 
+    void setResolution(const QRectF boundsInPixels, qreal pixelsPerInch);
+
     /// Returns the list of all shapes of the svg document
     QList<KoShape*> shapes() const;
 
@@ -126,6 +128,10 @@ protected:
 
     /// Applies id to specified shape
     void applyId(const QString &id, KoShape *shape);
+
+    /// Applies viewBox transformation to the current graphical context
+    /// NOTE: after applying the function currectBoundingBox can become null!
+    void applyViewBoxTransform(const KoXmlElement &element);
 
 private:
     QSizeF m_documentSize;

@@ -59,6 +59,8 @@
 #include "SvgGradientHelper.h"
 #include "SvgClipPathHelper.h"
 
+#include "kis_debug.h"
+
 
 SvgParser::SvgParser(KoDocumentResourceManager *documentResourceManager)
     : m_context(documentResourceManager)
@@ -73,6 +75,18 @@ SvgParser::~SvgParser()
 void SvgParser::setXmlBaseDir(const QString &baseDir)
 {
     m_context.setInitialXmlBaseDir(baseDir);
+}
+
+void SvgParser::setResolution(const QRectF boundsInPixels, qreal pixelsPerInch)
+{
+    KIS_ASSERT(!m_context.currentGC());
+    m_context.pushGraphicsContext();
+    m_context.currentGC()->pixelsPerInch = pixelsPerInch;
+
+    const qreal scale = 72.0 / pixelsPerInch;
+    const QTransform t = QTransform::fromScale(scale, scale);
+    m_context.currentGC()->currentBoundingBox = boundsInPixels;
+    m_context.currentGC()->matrix = t;
 }
 
 QList<KoShape*> SvgParser::shapes() const
@@ -386,7 +400,9 @@ void SvgParser::parsePattern(SvgPatternHelper &pattern, const KoXmlElement &e)
     }
     const QString viewBox = e.attribute("viewBox");
     if (!viewBox.isEmpty()) {
-        pattern.setPatternContentViewbox(SvgUtil::parseViewBox(viewBox));
+        // TODO: implement correct parsing of vbox!
+
+        //pattern.setPatternContentViewbox(SvgUtil::parseViewBox(viewBox));
     }
     const QString transform = e.attribute("patternTransform");
     if (!transform.isEmpty()) {
@@ -564,7 +580,7 @@ void SvgParser::applyFillStyle(KoShape *shape)
             if (pattern && imageCollection) {
                 // great we have a pattern fill
                 QRectF objectBound = QRectF(QPoint(), shape->size());
-                QRectF currentBoundbox = gc->currentBoundbox;
+                QRectF currentBoundbox = gc->currentBoundingBox;
 
                 // properties from the object are not inherited
                 // so we are creating a new context without copying
@@ -575,11 +591,11 @@ void SvgParser::applyFillStyle(KoShape *shape)
                 gc->matrix = QTransform();
                 // object bounding box units are relative to the object the pattern is applied
                 if (pattern->patternContentUnits() == SvgPatternHelper::ObjectBoundingBox) {
-                    gc->currentBoundbox = objectBound;
+                    gc->currentBoundingBox = objectBound;
                     gc->forcePercentage = true;
                 } else {
                     // inherit the current bounding box
-                    gc->currentBoundbox = currentBoundbox;
+                    gc->currentBoundingBox = currentBoundbox;
                 }
 
                 applyStyle(0, pattern->content());
@@ -854,7 +870,7 @@ void SvgParser::applyClipping(KoShape *shape)
         SvgGraphicsContext *gc = m_context.currentGC();
         gc->matrix.reset();
         gc->viewboxTransform.reset();
-        gc->currentBoundbox = shape->boundingRect();
+        gc->currentBoundingBox = shape->boundingRect();
         gc->forcePercentage = true;
     }
 
@@ -964,64 +980,72 @@ void SvgParser::addToGroup(QList<KoShape*> shapes, KoShapeGroup *group)
     if (! group)
         return;
 
-    KoShapeGroupCommand cmd(group, shapes);
+    // not clipped, but inherit transform
+    KoShapeGroupCommand cmd(group, shapes, false, true);
     cmd.redo();
 }
 
 QList<KoShape*> SvgParser::parseSvg(const KoXmlElement &e, QSizeF *fragmentSize)
 {
     // check if we are the root svg element
-    const bool isRootSvg = !m_context.currentGC();
+    const bool isRootSvg = m_context.isRootContext();
 
-    SvgGraphicsContext *gc = m_context.pushGraphicsContext();
+    // parse 'transform' field if preset
+    SvgGraphicsContext *gc = m_context.pushGraphicsContext(e);
 
     applyStyle(0, e);
 
-    QRectF viewBox;
-
-    const QString viewBoxStr = e.attribute("viewBox");
-    if (!viewBoxStr.isEmpty()) {
-        viewBox = SvgUtil::parseViewBox(viewBoxStr);
-    }
-
     const QString w = e.attribute("width");
     const QString h = e.attribute("height");
-    const qreal width = w.isEmpty() ? 550.0 : parseUnit(w, true, false, viewBox);
-    const qreal height = h.isEmpty() ? 841.0 : parseUnit(h, false, true, viewBox);
+    const qreal width = w.isEmpty() ? 666.0 : parseUnitX(w);
+    const qreal height = h.isEmpty() ? 555.0 : parseUnitY(h);
 
     QSizeF svgFragmentSize(QSizeF(width, height));
 
-    if (fragmentSize)
+    if (fragmentSize) {
         *fragmentSize = svgFragmentSize;
+    }
 
-    gc->currentBoundbox = QRectF(QPointF(0, 0), svgFragmentSize);
+    gc->currentBoundingBox = QRectF(QPointF(0, 0), svgFragmentSize);
 
-    if (! isRootSvg) {
-        QTransform move;
+    if (!isRootSvg) {
         // x and y attribute has no meaning for outermost svg elements
         const qreal x = parseUnit(e.attribute("x", "0"));
         const qreal y = parseUnit(e.attribute("y", "0"));
-        move.translate(x, y);
+
+        QTransform move = QTransform::fromTranslate(x, y);
         gc->matrix = move * gc->matrix;
-        gc->viewboxTransform = move *gc->viewboxTransform;
     }
 
-    if (!viewBoxStr.isEmpty()) {
-        QTransform viewTransform;
-        viewTransform.translate(viewBox.x(), viewBox.y());
-        viewTransform.scale(width / viewBox.width() , height / viewBox.height());
-        gc->matrix = viewTransform * gc->matrix;
-        gc->viewboxTransform = viewTransform *gc->viewboxTransform;
-        gc->currentBoundbox.setWidth(gc->currentBoundbox.width() * (viewBox.width() / width));
-        gc->currentBoundbox.setHeight(gc->currentBoundbox.height() * (viewBox.height() / height));
-    }
+    applyViewBoxTransform(e);
 
-    QList<KoShape*> shapes = parseContainer(e);
+    QList<KoShape*> shapes;
+
+    // SVG 1.1: skip the rendering of the element if it has null viewBox
+    if (gc->currentBoundingBox.isValid()) {
+        shapes = parseContainer(e);
+    }
 
     m_context.popGraphicsContext();
 
     return shapes;
 }
+
+void SvgParser::applyViewBoxTransform(const KoXmlElement &element)
+{
+    SvgGraphicsContext *gc = m_context.currentGC();
+
+    QRectF viewRect = gc->currentBoundingBox;
+    QTransform viewTransform;
+
+    if (SvgUtil::parseViewBox(gc, element, gc->currentBoundingBox,
+                              &viewRect, &viewTransform)) {
+
+        gc->matrix = viewTransform * gc->matrix;
+        gc->currentBoundingBox = viewRect;
+    }
+}
+
 
 QList<KoShape*> SvgParser::parseContainer(const KoXmlElement &e)
 {
@@ -1071,14 +1095,9 @@ QList<KoShape*> SvgParser::parseContainer(const KoXmlElement &e)
 
             addToGroup(childShapes, group);
 
-            const QString viewBoxStr = b.attribute("viewBox");
-            if (!viewBoxStr.isEmpty()) {
-                QRectF viewBox = SvgUtil::parseViewBox(viewBoxStr);
-                QTransform viewTransform;
-                viewTransform.translate(viewBox.x(), viewBox.y());
-                viewTransform.scale(group->size().width() / viewBox.width() , group->size().height() / viewBox.height());
-                group->applyAbsoluteTransformation(viewTransform);
-            }
+            applyViewBoxTransform(b);
+            group->applyAbsoluteTransformation(m_context.currentGC()->matrix);
+
             applyStyle(group, styles);   // apply style to this group after size is set
 
             shapes.append(group);

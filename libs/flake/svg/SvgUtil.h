@@ -26,19 +26,17 @@
 class QString;
 class SvgGraphicsContext;
 class QTransform;
+class KoXmlElement;
 
 class KRITAFLAKE_EXPORT SvgUtil
 {
 public:
-    /**
-     * Converts given value from userspace units to points.
-     */
-    static double fromUserSpace(double value);
 
-    /**
-     * Converts given value from points to userspace units.
-     */
+    // remove later! pixels *are* user coordinates
+    static double fromUserSpace(double value);
     static double toUserSpace(double value);
+
+    static double ptToPx(SvgGraphicsContext *gc, double value);
 
     /// Converts given point from points to userspace units.
     static QPointF toUserSpace(const QPointF &point);
@@ -94,7 +92,7 @@ public:
     static QString transformToString(const QTransform &transform);
 
     /// Parses a viewbox attribute into an rectangle
-    static QRectF parseViewBox(QString viewbox);
+    static bool parseViewBox(SvgGraphicsContext *gc, const KoXmlElement &e, const QRectF &elementBounds, QRectF *_viewRect, QTransform *_viewTransform);
 
     /// Parses a length attribute
     static qreal parseUnit(SvgGraphicsContext *gc, const QString &, bool horiz = false, bool vert = false, const QRectF &bbox = QRectF());
@@ -110,6 +108,28 @@ public:
 
     /// parses the number into parameter number
     static const char * parseNumber(const char *ptr, qreal &number);
+
+    struct PreserveAspectRatioParser
+    {
+        PreserveAspectRatioParser(const QString &str);
+
+        enum Alignment {
+            Min,
+            Middle,
+            Max
+        };
+
+        bool defer = false;
+        Qt::AspectRatioMode mode = Qt::IgnoreAspectRatio;
+        Alignment xAlignment = Min;
+        Alignment yAlignment = Min;
+
+        QPointF rectAnchorPoint(const QRectF &rc) const;
+
+    private:
+        Alignment alignmentFromString(const QString &str);
+        static qreal alignedValue(qreal min, qreal max, Alignment alignment);
+    };
 };
 
 #endif // SVGUTIL_H

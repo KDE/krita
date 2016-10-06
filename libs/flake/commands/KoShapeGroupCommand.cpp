@@ -69,6 +69,18 @@ KoShapeGroupCommand::KoShapeGroupCommand(KoShapeGroup *container, const QList<Ko
     d->init(this);
 }
 
+KoShapeGroupCommand::KoShapeGroupCommand(KoShapeContainer *container, const QList<KoShape *> &shapes,
+                                         bool clipped, bool inheritTransform, KUndo2Command *parent)
+    : KUndo2Command(parent),
+      d(new KoShapeGroupCommandPrivate(container,shapes))
+{
+    for (int i = 0; i < shapes.count(); ++i) {
+        d->clipped.append(clipped);
+        d->inheritTransform.append(inheritTransform);
+    }
+    d->init(this);
+}
+
 KoShapeGroupCommand::~KoShapeGroupCommand()
 {
     delete d;

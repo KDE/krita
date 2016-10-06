@@ -31,6 +31,7 @@
 #include "SvgUtil.h"
 #include "SvgCssHelper.h"
 #include "SvgStyleParser.h"
+#include "kis_debug.h"
 
 
 class Q_DECL_HIDDEN SvgLoadingContext::Private
@@ -206,4 +207,10 @@ QStringList SvgLoadingContext::matchingStyles(const KoXmlElement &element) const
 SvgStyleParser &SvgLoadingContext::styleParser()
 {
     return *d->styleParser;
+}
+
+bool SvgLoadingContext::isRootContext() const
+{
+    KIS_ASSERT(!d->gcStack.isEmpty());
+    return d->gcStack.size() == 1;
 }

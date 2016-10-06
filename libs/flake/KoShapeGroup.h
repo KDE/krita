@@ -65,6 +65,9 @@ public:
     // reimplemented
     virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
 
+private:
+    friend class ShapeGroupContainerModel;
+
     /**
      * @brief Invalidate the size cache of the group
      *

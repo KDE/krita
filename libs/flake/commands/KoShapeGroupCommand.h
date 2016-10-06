@@ -59,6 +59,20 @@ public:
      */
     KoShapeGroupCommand(KoShapeContainer *container, const QList<KoShape *> &shapes,
             const QList<bool> &clipped, const QList<bool> &inheritTransform, KUndo2Command *parent = 0);
+
+    /**
+     * Command to group a set of shapes into a predefined container.
+     * @param container the container to group the shapes under.
+     * @param shapes a list of all the shapes that should be grouped.
+     * @param clipped shows whether the shapes should be clipped by the container
+     *      See KoShapeContainer::isClipped()
+     * @param inheritTransform shows whether the shapes should inherit the parent transformation
+     *      See KoShapeContainer::inheritsTransform()
+     * @param parent the parent command used for macro commands
+     */
+    KoShapeGroupCommand(KoShapeContainer *container, const QList<KoShape *> &shapes,
+            bool clipped, bool inheritTransform, KUndo2Command *parent = 0);
+
     /**
      * Command to group a set of shapes into a predefined container.
      * Convenience constructor since KoShapeGroup does not allow clipping.

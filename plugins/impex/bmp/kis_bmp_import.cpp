@@ -23,9 +23,9 @@
 #include <QSlider>
 #include <QApplication>
 #include <QFileInfo>
+#include <QImageReader>
 
 #include <kpluginfactory.h>
-
 
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
@@ -51,8 +51,13 @@ KisBMPImport::~KisBMPImport()
 
 KisImportExportFilter::ConversionStatus KisBMPImport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
 {
+    QFileInfo fi(filename());
+    if (!QImageReader::supportedImageFormats().contains(fi.suffix().toLatin1())) {
+        return KisImportExportFilter::InvalidFormat;
+    }
+
     QImage img;
-    if (!img.loadFromData(io->readAll())) {
+    if (!img.loadFromData(io->readAll(), fi.suffix().toLatin1())) {
         return KisImportExportFilter::InvalidFormat;
     }
 

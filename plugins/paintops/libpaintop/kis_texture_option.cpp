@@ -188,29 +188,29 @@ void KisTextureOption::writeOptionSetting(KisPropertiesConfigurationSP setting) 
     int offsetX = m_optionWidget->offsetSliderX->value();
     if (m_optionWidget ->randomOffsetX->isChecked()) {
 
-        m_optionWidget -> offsetSliderX ->setEnabled(false);
-        m_optionWidget -> offsetSliderX ->blockSignals(true);
-        m_optionWidget -> offsetSliderX ->setValue(offsetX);
-        m_optionWidget -> offsetSliderX ->blockSignals(false);
+        m_optionWidget->offsetSliderX ->setEnabled(false);
+        m_optionWidget->offsetSliderX ->blockSignals(true);
+        m_optionWidget->offsetSliderX ->setValue(offsetX);
+        m_optionWidget->offsetSliderX ->blockSignals(false);
         srand(time(0));
     }
     else {
-        m_optionWidget -> offsetSliderX ->setEnabled(true);
+        m_optionWidget->offsetSliderX ->setEnabled(true);
     }
 
     int offsetY = m_optionWidget->offsetSliderY->value();
     if (m_optionWidget ->randomOffsetY->isChecked()) {
 
-        m_optionWidget -> offsetSliderY ->setEnabled(false);
-        m_optionWidget -> offsetSliderY ->blockSignals(true);
-        m_optionWidget -> offsetSliderY ->setValue(offsetY);
-        m_optionWidget -> offsetSliderY ->blockSignals(false);
+        m_optionWidget->offsetSliderY ->setEnabled(false);
+        m_optionWidget->offsetSliderY ->blockSignals(true);
+        m_optionWidget->offsetSliderY ->setValue(offsetY);
+        m_optionWidget->offsetSliderY ->blockSignals(false);
         srand(time(0));
     }
     else {
-        m_optionWidget -> offsetSliderY ->setEnabled(true);
+        m_optionWidget->offsetSliderY ->setEnabled(true);
     }
-    
+
     int texturingMode = m_optionWidget->cmbTexturingMode->currentIndex();
     bool invert = (m_optionWidget->chkInvert->checkState() == Qt::Checked);
 
@@ -223,8 +223,8 @@ void KisTextureOption::writeOptionSetting(KisPropertiesConfigurationSP setting) 
     setting->setProperty("Texture/Pattern/CutoffPolicy", m_optionWidget->cmbCutoffPolicy->currentIndex());
     setting->setProperty("Texture/Pattern/Invert", invert);
 
-    setting->setProperty("Texture/Pattern/MaximumOffsetX",m_optionWidget -> offsetSliderX ->maximum());
-    setting->setProperty("Texture/Pattern/MaximumOffsetY",m_optionWidget -> offsetSliderY ->maximum());
+    setting->setProperty("Texture/Pattern/MaximumOffsetX",m_optionWidget->offsetSliderX ->maximum());
+    setting->setProperty("Texture/Pattern/MaximumOffsetY",m_optionWidget->offsetSliderY ->maximum());
     setting->setProperty("Texture/Pattern/isRandomOffsetX",m_optionWidget ->randomOffsetX ->isChecked());
     setting->setProperty("Texture/Pattern/isRandomOffsetY",m_optionWidget ->randomOffsetY ->isChecked());
 
@@ -259,7 +259,7 @@ void KisTextureOption::readOptionSetting(const KisPropertiesConfigurationSP sett
 
 void KisTextureOption::lodLimitations(KisPaintopLodLimitations *l) const
 {
-    l->limitations << KoID("texture-pattern", i18nc("PaintOp instant preview limitation", "Texture -> Pattern (low quality preview)"));
+    l->limitations << KoID("texture-pattern", i18nc("PaintOp instant preview limitation", "Texture->Pattern (low quality preview)"));
 }
 
 

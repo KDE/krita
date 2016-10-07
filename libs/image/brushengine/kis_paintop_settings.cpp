@@ -118,36 +118,29 @@ KisPaintOpPresetWSP KisPaintOpSettings::preset() const
     return d->preset;
 }
 
-bool KisPaintOpSettings::mousePressEvent(const KisPaintInformation &pos, Qt::KeyboardModifiers modifiers, KisNodeWSP currentNode)
+bool KisPaintOpSettings::mousePressEvent(const KisPaintInformation &paintInformation, Qt::KeyboardModifiers modifiers, KisNodeWSP currentNode)
 {
-    Q_UNUSED(pos);
     Q_UNUSED(modifiers);
     Q_UNUSED(currentNode);
-    setRandomOffset();
+    setRandomOffset(paintInformation);
     return true; // ignore the event by default
 }
-void KisPaintOpSettings::setRandomOffset()
+
+void KisPaintOpSettings::setRandomOffset(const KisPaintInformation &paintInformation)
 {
-    srand(time(0));
-    bool isRandomOffsetX = KisPropertiesConfiguration::getBool("Texture/Pattern/isRandomOffsetX");
-    bool isRandomOffsetY = KisPropertiesConfiguration::getBool("Texture/Pattern/isRandomOffsetY");
-    int offsetX = KisPropertiesConfiguration::getInt("Texture/Pattern/OffsetX");
-    int offsetY = KisPropertiesConfiguration::getInt("Texture/Pattern/OffsetY");
-    if (KisPropertiesConfiguration::getBool("Texture/Pattern/Enabled")) {
-        if (isRandomOffsetX) {
-            offsetX = rand() % KisPropertiesConfiguration::getInt("Texture/Pattern/MaximumOffsetX");
-
-            KisPropertiesConfiguration::setProperty("Texture/Pattern/OffsetX", offsetX);
-            offsetX = KisPropertiesConfiguration::getInt("Texture/Pattern/OffsetX");
-
+    if (getBool("Texture/Pattern/Enabled")) {
+        if (getBool("Texture/Pattern/isRandomOffsetX")) {
+            setProperty("Texture/Pattern/OffsetX",
+                        paintInformation.randomSource()->generate(0, KisPropertiesConfiguration::getInt("Texture/Pattern/MaximumOffsetX")));
         }
+        if (getBool("Texture/Pattern/isRandomOffsetY")) {
+            setProperty("Texture/Pattern/OffsetY",
+                        paintInformation.randomSource()->generate(0, KisPropertiesConfiguration::getInt("Texture/Pattern/MaximumOffsetY")));
 
-        if (isRandomOffsetY) {
-            offsetY = rand() % KisPropertiesConfiguration::getInt("Texture/Pattern/MaximumOffsetY");
-            KisPropertiesConfiguration::setProperty("Texture/Pattern/OffsetY", offsetY);
-            offsetY = KisPropertiesConfiguration::getInt("Texture/Pattern/OffsetY");
         }
     }
+
+    qDebug() << "X" << getString("Texture/Pattern/OffsetX") << "Y" << getString("Texture/Pattern/OffsetY");
 }
 
 
@@ -174,7 +167,7 @@ void KisPaintOpSettings::activate()
 void KisPaintOpSettings::setPaintOpOpacity(qreal value)
 {
     KisLockedPropertiesProxySP proxy(
-        KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(this));
+                KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(this));
 
     proxy->setProperty("OpacityValue", value);
 }
@@ -182,7 +175,7 @@ void KisPaintOpSettings::setPaintOpOpacity(qreal value)
 void KisPaintOpSettings::setPaintOpFlow(qreal value)
 {
     KisLockedPropertiesProxySP proxy(
-        KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(this));
+                KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(this));
 
     proxy->setProperty("FlowValue", value);
 }
@@ -190,7 +183,7 @@ void KisPaintOpSettings::setPaintOpFlow(qreal value)
 void KisPaintOpSettings::setPaintOpCompositeOp(const QString &value)
 {
     KisLockedPropertiesProxySP proxy(
-        KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(this));
+                KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(this));
 
     proxy->setProperty("CompositeOp", value);
 }
@@ -205,7 +198,7 @@ qreal KisPaintOpSettings::paintOpOpacity()
 qreal KisPaintOpSettings::paintOpFlow()
 {
     KisLockedPropertiesProxySP proxy(
-        KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(this));
+                KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(this));
 
     return proxy->getDouble("FlowValue", 1.0);
 }
@@ -213,7 +206,7 @@ qreal KisPaintOpSettings::paintOpFlow()
 QString KisPaintOpSettings::paintOpCompositeOp()
 {
     KisLockedPropertiesProxySP proxy(
-        KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(this));
+                KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(this));
 
     return proxy->getString("CompositeOp", COMPOSITE_OVER);
 }
@@ -221,7 +214,7 @@ QString KisPaintOpSettings::paintOpCompositeOp()
 void KisPaintOpSettings::setEraserMode(bool value)
 {
     KisLockedPropertiesProxySP proxy(
-        KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(this));
+                KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(this));
 
     proxy->setProperty("EraserMode", value);
 }
@@ -229,7 +222,7 @@ void KisPaintOpSettings::setEraserMode(bool value)
 bool KisPaintOpSettings::eraserMode()
 {
     KisLockedPropertiesProxySP proxy(
-        KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(this));
+                KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(this));
 
     return proxy->getBool("EraserMode", false);
 }
@@ -347,7 +340,7 @@ QPainterPath KisPaintOpSettings::ellipseOutline(qreal width, qreal height, qreal
 }
 
 QPainterPath KisPaintOpSettings::makeTiltIndicator(KisPaintInformation const& info,
-    QPointF const& start, qreal maxLength, qreal angle)
+                                                   QPointF const& start, qreal maxLength, qreal angle)
 {
     if (maxLength == 0.0) maxLength = 50.0;
     maxLength = qMax(maxLength, 50.0);
@@ -387,7 +380,7 @@ void KisPaintOpSettings::setCanvasMirroring(bool xAxisMirrored, bool yAxisMirror
 void KisPaintOpSettings::setProperty(const QString & name, const QVariant & value)
 {
     if (value != KisPropertiesConfiguration::getProperty(name) &&
-        !d->disableDirtyNotifications && this->preset()) {
+            !d->disableDirtyNotifications && this->preset()) {
 
         this->preset()->setPresetDirty(true);
     }
@@ -421,7 +414,7 @@ void KisPaintOpSettings::setLodUserAllowed(KisPropertiesConfigurationSP config, 
 QList<KisUniformPaintOpPropertySP> KisPaintOpSettings::uniformProperties(KisPaintOpSettingsSP settings)
 {
     QList<KisUniformPaintOpPropertySP> props =
-        listWeakToStrong(d->uniformProperties);
+            listWeakToStrong(d->uniformProperties);
 
 
     if (props.isEmpty()) {

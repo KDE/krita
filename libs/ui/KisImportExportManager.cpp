@@ -227,7 +227,7 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::convert(KisImpor
     }
 
     KisConfigWidget *wdg = filter->createConfigurationWidget(0, from, to);
-    QCheckBox *alsoAsKra = 0;
+    bool alsoAsKra = false;
 
     QStringList warnings = checker.warnings();
     QStringList errors = checker.errors();
@@ -314,10 +314,11 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::convert(KisImpor
             layout->addWidget(box);
         }
 
+        QCheckBox *chkAlsoAsKra = 0;
         if (!checker.warnings().isEmpty()) {
-            alsoAsKra = new QCheckBox(i18n("Also save your image as a Krita file."));
-            alsoAsKra->setChecked(KisConfig().readEntry<bool>("AlsoSaveAsKra", false));
-            layout->addWidget(alsoAsKra);
+            chkAlsoAsKra = new QCheckBox(i18n("Also save your image as a Krita file."));
+            chkAlsoAsKra->setChecked(KisConfig().readEntry<bool>("AlsoSaveAsKra", false));
+            layout->addWidget(chkAlsoAsKra);
         }
 
         dlg.setMainWidget(page);
@@ -327,8 +328,9 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::convert(KisImpor
             return KisImportExportFilter::UserCancelled;
         }
 
-        if (alsoAsKra) {
-            KisConfig().writeEntry<bool>("AlsoSaveAsKra", alsoAsKra->isChecked());
+        if (chkAlsoAsKra) {
+            KisConfig().writeEntry<bool>("AlsoSaveAsKra", chkAlsoAsKra->isChecked());
+            alsoAsKra = chkAlsoAsKra->isChecked();
         }
 
         if (wdg) {
@@ -365,7 +367,7 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::convert(KisImpor
        KisConfig().setExportConfiguration(typeName, exportConfiguration);
     }
 
-    if (alsoAsKra && alsoAsKra->isChecked()) {
+    if (alsoAsKra) {
         QString l = location + ".kra";
         QByteArray ba = m_document->nativeFormatMimeType();
         KisImportExportFilter *filter = filterForMimeType(QString::fromLatin1(ba), Export);

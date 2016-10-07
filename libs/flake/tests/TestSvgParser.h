@@ -40,6 +40,12 @@ private Q_SLOTS:
     void testScalingViewportResolution();
     void testScalingViewportPercentInternal();
     void testParsePreserveAspectRatio();
+    void testParseTransform();
+
+    void testScalingViewportTransform();
+    void testTransformNesting();
+    void testTransformRotation1();
+    void testTransformRotation2();
 
 };
 

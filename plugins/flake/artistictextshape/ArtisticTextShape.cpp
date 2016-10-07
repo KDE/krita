@@ -1219,7 +1219,7 @@ bool ArtisticTextShape::loadSvg(const KoXmlElement &textElement, SvgLoadingConte
 
                 path->setSize(newSize);
                 path->setPosition(newPosition);
-                path->applyAbsoluteTransformation(SvgUtil::parseTransform(p.attribute("transform")));
+                path->applyAbsoluteTransformation(context.currentGC()->matrix);
             }
         } else {
             path = dynamic_cast<KoPathShape *>(context.shapeById(href));

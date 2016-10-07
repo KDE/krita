@@ -482,4 +482,175 @@ void TestSvgParser::testParsePreserveAspectRatio()
     }
 }
 
+#include "parsers/SvgTransformParser.h"
+
+void TestSvgParser::testParseTransform()
+{
+    {
+        QString str("translate(-111.0, 33) translate(-111.0, 33) matrix (1 1 0 0 1, 3), translate(1)"
+                    "scale(0.5) rotate(10) rotate(10, 3 3) skewX(1) skewY(2)");
+
+        SvgTransformParser p(str);
+        QCOMPARE(p.isValid(), true);
+    }
+
+    {
+        // forget about one brace
+        QString str("translate(-111.0, 33) translate(-111.0, 33 matrix (1 1 0 0 1, 3), translate(1)"
+                    "scale(0.5) rotate(10) rotate(10, 3 3) skewX(1) skewY(2)");
+
+        SvgTransformParser p(str);
+        QCOMPARE(p.isValid(), false);
+    }
+
+    {
+        SvgTransformParser p("translate(100, 50)");
+        QCOMPARE(p.isValid(), true);
+        QCOMPARE(p.transform(), QTransform::fromTranslate(100, 50));
+    }
+
+    {
+        SvgTransformParser p("translate(100 50)");
+        QCOMPARE(p.isValid(), true);
+        QCOMPARE(p.transform(), QTransform::fromTranslate(100, 50));
+    }
+
+    {
+        SvgTransformParser p("translate(100)");
+        QCOMPARE(p.isValid(), true);
+        QCOMPARE(p.transform(), QTransform::fromTranslate(100, 0));
+    }
+
+    {
+        SvgTransformParser p("scale(100, 50)");
+        QCOMPARE(p.isValid(), true);
+        QCOMPARE(p.transform(), QTransform::fromScale(100, 50));
+    }
+
+    {
+        SvgTransformParser p("scale(100)");
+        QCOMPARE(p.isValid(), true);
+        QCOMPARE(p.transform(), QTransform::fromScale(100, 100));
+    }
+
+    {
+        SvgTransformParser p("rotate(90 70 74.0)");
+        QCOMPARE(p.isValid(), true);
+        QTransform t;
+        t.rotate(90);
+        t = QTransform::fromTranslate(-70, -74) * t * QTransform::fromTranslate(70, 74);
+        qDebug() << ppVar(p.transform());
+        QCOMPARE(p.transform(), t);
+    }
+}
+
+void TestSvgParser::testScalingViewportTransform()
+{
+    /**
+     * Note: 'transform' affects all the attributes of the *current*
+     * element, while 'vewBox' affects only the decendants!
+     */
+
+    const QString data =
+            "<svg width=\"5px\" height=\"10px\" viewBox=\"60 70 20 40\""
+            "    transform=\"scale(2)\""
+            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+
+            "<rect id=\"testRect\" x=\"64\" y=\"74\" width=\"12\" height=\"32\""
+            "    transform=\"translate(6)\""
+            "    fill=\"none\" stroke=\"none\" stroke-width=\"10\"/>"
+
+            "</svg>";
+
+    SvgTester t (data);
+    t.parser.setResolution(QRectF(0, 0, 600, 400) /* px */, 72 /* ppi */);
+    t.run();
+
+    KoShape *shape = t.findShape("testRect");
+    QVERIFY(shape);
+
+    QCOMPARE(shape->absoluteTransformation(0), QTransform::fromTranslate(10, 4) * QTransform::fromScale(0.5, 0.5));
+    QCOMPARE(shape->outlineRect(), QRectF(0,0,12,32));
+    QCOMPARE(shape->absolutePosition(KoFlake::TopLeftCorner), QPointF(5,2));
+    QCOMPARE(shape->absolutePosition(KoFlake::TopRightCorner), QPointF(11,2));
+    QCOMPARE(shape->absolutePosition(KoFlake::BottomLeftCorner), QPointF(5,18));
+    QCOMPARE(shape->absolutePosition(KoFlake::BottomRightCorner), QPointF(11,18));
+}
+
+void TestSvgParser::testTransformNesting()
+{
+    const QString data =
+            "<svg width=\"10px\" height=\"20px\" viewBox=\"0 0 10 20\""
+            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+
+            "<rect id=\"testRect\" x=\"0\" y=\"0\" width=\"10\" height=\"20\""
+            "    transform=\"translate(10,10), scale(2, 1)\""
+            "    fill=\"none\" stroke=\"none\" stroke-width=\"10\"/>"
+
+            "</svg>";
+
+    SvgTester t (data);
+    t.parser.setResolution(QRectF(0, 0, 600, 400) /* px */, 72 /* ppi */);
+    t.run();
+
+    KoShape *shape = t.findShape("testRect");
+    QVERIFY(shape);
+
+    QCOMPARE(shape->boundingRect(), QRectF(10 - 1,10 - 0.5, 20 + 2, 20 + 1));
+    QCOMPARE(shape->outlineRect(), QRectF(0,0,10,20));
+    QCOMPARE(shape->absolutePosition(KoFlake::TopLeftCorner), QPointF(10,10));
+    QCOMPARE(shape->absolutePosition(KoFlake::BottomRightCorner), QPointF(30,30));
+}
+
+void TestSvgParser::testTransformRotation1()
+{
+    const QString data =
+            "<svg width=\"10px\" height=\"20px\" viewBox=\"0 0 10 20\""
+            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+
+            "<rect id=\"testRect\" x=\"0\" y=\"0\" width=\"10\" height=\"20\""
+            "    transform=\"rotate(90)\""
+            "    fill=\"none\" stroke=\"none\" stroke-width=\"10\"/>"
+
+            "</svg>";
+
+    SvgTester t (data);
+    t.parser.setResolution(QRectF(0, 0, 600, 400) /* px */, 72 /* ppi */);
+    t.run();
+
+    KoShape *shape = t.findShape("testRect");
+    QVERIFY(shape);
+
+    QCOMPARE(shape->boundingRect(), kisGrowRect(QRectF(-20,0,20,10), 0.5));
+    QCOMPARE(shape->outlineRect(), QRectF(0,0,10,20));
+    QCOMPARE(shape->absolutePosition(KoFlake::TopLeftCorner), QPointF(0,0));
+    QCOMPARE(shape->absolutePosition(KoFlake::BottomRightCorner), QPointF(-20,10));
+}
+
+void TestSvgParser::testTransformRotation2()
+{
+    const QString data =
+            "<svg width=\"10px\" height=\"20px\" viewBox=\"0 0 10 20\""
+            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+
+            "<rect id=\"testRect\" x=\"0\" y=\"0\" width=\"10\" height=\"20\""
+            "    transform=\"rotate(-90 10 5)\""
+            "    fill=\"none\" stroke=\"none\" stroke-width=\"10\"/>"
+
+            "</svg>";
+
+    SvgTester t (data);
+    t.parser.setResolution(QRectF(0, 0, 600, 400) /* px */, 72 /* ppi */);
+    t.run();
+
+    KoShape *shape = t.findShape("testRect");
+    QVERIFY(shape);
+
+    QCOMPARE(shape->boundingRect(), kisGrowRect(QRectF(5,5,20,10), 0.5));
+    QCOMPARE(shape->outlineRect(), QRectF(0,0,10,20));
+    QCOMPARE(shape->absolutePosition(KoFlake::TopLeftCorner), QPointF(5,15));
+    QCOMPARE(shape->absolutePosition(KoFlake::BottomRightCorner), QPointF(25,5));
+}
+
+
 QTEST_GUILESS_MAIN(TestSvgParser)

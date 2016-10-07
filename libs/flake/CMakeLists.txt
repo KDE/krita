@@ -196,6 +196,7 @@ set(kritaflake_SRCS
     svg/SvgClipPathHelper.cpp
     svg/SvgLoadingContext.cpp
     svg/SvgShapeFactory.cpp
+    svg/parsers/SvgTransformParser.cpp
 
     FlakeDebug.cpp
 )

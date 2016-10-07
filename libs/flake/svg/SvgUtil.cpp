@@ -114,68 +114,6 @@ QSizeF SvgUtil::userSpaceToObject(const QSizeF &size, const QRectF &objectBound)
     return QSizeF(w, h);
 }
 
-QTransform SvgUtil::parseTransform(const QString &transform)
-{
-    QTransform result;
-
-    // Split string for handling 1 transform statement at a time
-    QStringList subtransforms = transform.split(')', QString::SkipEmptyParts);
-    QStringList::ConstIterator it = subtransforms.constBegin();
-    QStringList::ConstIterator end = subtransforms.constEnd();
-    for (; it != end; ++it) {
-        QStringList subtransform = (*it).simplified().split('(', QString::SkipEmptyParts);
-        if (subtransform.count() < 2)
-            continue;
-
-        subtransform[0] = subtransform[0].trimmed().toLower();
-        subtransform[1] = subtransform[1].simplified();
-        QRegExp reg("[,( ]");
-        QStringList params = subtransform[1].split(reg, QString::SkipEmptyParts);
-
-        if (subtransform[0].startsWith(';') || subtransform[0].startsWith(','))
-            subtransform[0] = subtransform[0].right(subtransform[0].length() - 1);
-
-        if (subtransform[0] == "rotate") {
-            if (params.count() == 3) {
-                double x = params[1].toDouble();
-                double y = params[2].toDouble();
-
-                result.translate(x, y);
-                result.rotate(params[0].toDouble());
-                result.translate(-x, -y);
-            } else {
-                result.rotate(params[0].toDouble());
-            }
-        } else if (subtransform[0] == "translate") {
-            if (params.count() == 2) {
-                result.translate(SvgUtil::fromUserSpace(params[0].toDouble()),
-                                 SvgUtil::fromUserSpace(params[1].toDouble()));
-            } else {   // Spec : if only one param given, assume 2nd param to be 0
-                result.translate(SvgUtil::fromUserSpace(params[0].toDouble()) , 0);
-            }
-        } else if (subtransform[0] == "scale") {
-            if (params.count() == 2) {
-                result.scale(params[0].toDouble(), params[1].toDouble());
-            } else {   // Spec : if only one param given, assume uniform scaling
-                result.scale(params[0].toDouble(), params[0].toDouble());
-            }
-        } else if (subtransform[0].toLower() == "skewx") {
-            result.shear(tan(DEG2RAD(params[0].toDouble())), 0.0F);
-        } else if (subtransform[0].toLower() == "skewy") {
-            result.shear(0.0F, tan(DEG2RAD(params[0].toDouble())));
-        } else if (subtransform[0] == "matrix") {
-            if (params.count() >= 6) {
-                result.setMatrix(params[0].toDouble(), params[1].toDouble(), 0,
-                                 params[2].toDouble(), params[3].toDouble(), 0,
-                                 SvgUtil::fromUserSpace(params[4].toDouble()),
-                                 SvgUtil::fromUserSpace(params[5].toDouble()), 1);
-            }
-        }
-    }
-
-    return result;
-}
-
 QString SvgUtil::transformToString(const QTransform &transform)
 {
     if (transform.isIdentity())
@@ -198,6 +136,8 @@ bool SvgUtil::parseViewBox(SvgGraphicsContext *gc, const KoXmlElement &e,
                            const QRectF &elementBounds,
                            QRectF *_viewRect, QTransform *_viewTransform)
 {
+    Q_UNUSED(gc)
+
     KIS_ASSERT(_viewRect);
     KIS_ASSERT(_viewTransform);
 

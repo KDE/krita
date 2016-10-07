@@ -81,13 +81,6 @@ public:
      */
     static QSizeF userSpaceToObject(const QSizeF &size, const QRectF &objectBound);
 
-    /**
-     * Parses transform attribute value into a matrix.
-     * @param transform the transform attribute value
-     * @return the resulting transformation matrix
-     */
-    static QTransform parseTransform(const QString &transform);
-
     /// Converts specified transformation to a string
     static QString transformToString(const QTransform &transform);
 

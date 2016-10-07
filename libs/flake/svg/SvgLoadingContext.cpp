@@ -82,6 +82,8 @@ SvgGraphicsContext *SvgLoadingContext::currentGC() const
     return d->gcStack.top();
 }
 
+#include "parsers/SvgTransformParser.h"
+
 SvgGraphicsContext *SvgLoadingContext::pushGraphicsContext(const KoXmlElement &element, bool inherit)
 {
     SvgGraphicsContext *gc = new SvgGraphicsContext;
@@ -98,8 +100,11 @@ SvgGraphicsContext *SvgLoadingContext::pushGraphicsContext(const KoXmlElement &e
 
     if (!element.isNull()) {
         if (element.hasAttribute("transform")) {
-            QTransform mat = SvgUtil::parseTransform(element.attribute("transform"));
-            gc->matrix = mat * gc->matrix;
+            SvgTransformParser p(element.attribute("transform"));
+            if (p.isValid()) {
+                QTransform mat = p.transform();
+                gc->matrix = mat * gc->matrix;
+            }
         }
         if (element.hasAttribute("xml:base"))
             gc->xmlBaseDir = element.attribute("xml:base");

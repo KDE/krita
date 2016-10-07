@@ -58,6 +58,7 @@
 #include "SvgFilterHelper.h"
 #include "SvgGradientHelper.h"
 #include "SvgClipPathHelper.h"
+#include "parsers/SvgTransformParser.h"
 
 #include "kis_debug.h"
 
@@ -384,7 +385,14 @@ bool SvgParser::parseGradient(const KoXmlElement &e, const KoXmlElement &referen
     // Parse the color stops. The referencing gradient does not have colorstops,
     // so use the stops from the gradient it references to (e in this case and not b)
     m_context.styleParser().parseColorStops(gradhelper.gradient(), e);
-    gradhelper.setTransform(SvgUtil::parseTransform(b.attribute("gradientTransform")));
+
+    if (b.hasAttribute("gradientTransform")) {
+        SvgTransformParser p(e.attribute("gradientTransform"));
+        if (p.isValid()) {
+            gradhelper.setTransform(p.transform());
+        }
+    }
+
     m_gradients.insert(gradientId, gradhelper);
 
     return true;
@@ -404,9 +412,12 @@ void SvgParser::parsePattern(SvgPatternHelper &pattern, const KoXmlElement &e)
 
         //pattern.setPatternContentViewbox(SvgUtil::parseViewBox(viewBox));
     }
-    const QString transform = e.attribute("patternTransform");
-    if (!transform.isEmpty()) {
-        pattern.setTransform(SvgUtil::parseTransform(transform));
+
+    if (e.hasAttribute("patternTransform")) {
+        SvgTransformParser p(e.attribute("patternTransform"));
+        if (p.isValid()) {
+            pattern.setTransform(p.transform());
+        }
     }
 
     const QString x = e.attribute("x");

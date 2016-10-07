@@ -83,7 +83,7 @@ public:
      * and when the method returns @p mimeType contains this mimetype.
      * Oh, well, export is a C++ keyword ;)
      */
-    KisImportExportFilter::ConversionStatus exportDocument(const QString &location, QByteArray &mimeType, KisPropertiesConfigurationSP exportConfiguration = 0);
+    KisImportExportFilter::ConversionStatus exportDocument(const QString &location, QByteArray &mimeType, bool showWarnings = true, KisPropertiesConfigurationSP exportConfiguration = 0);
 
     ///@name Static API
     //@{
@@ -125,7 +125,7 @@ private Q_SLOTS:
 
 private:
 
-    KisImportExportFilter::ConversionStatus convert(Direction direction, const QString &location, const QString &mimeType, KisPropertiesConfigurationSP exportConfiguration);
+    KisImportExportFilter::ConversionStatus convert(Direction direction, const QString &location, const QString &mimeType, bool showWarnings, KisPropertiesConfigurationSP exportConfiguration);
 
     // Private API
     KisImportExportManager(const KisImportExportManager& rhs);

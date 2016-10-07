@@ -79,12 +79,12 @@ KisImportExportManager::~KisImportExportManager()
 
 KisImportExportFilter::ConversionStatus KisImportExportManager::importDocument(const QString& location, const QString& mimeType)
 {
-    return convert(Import, location, mimeType, 0);
+    return convert(Import, location, mimeType, false, 0);
 }
 
-KisImportExportFilter::ConversionStatus KisImportExportManager::exportDocument(const QString& location, QByteArray& mimeType, KisPropertiesConfigurationSP exportConfiguration)
+KisImportExportFilter::ConversionStatus KisImportExportManager::exportDocument(const QString& location, QByteArray& mimeType, bool showWarnings, KisPropertiesConfigurationSP exportConfiguration)
 {
-    return convert(Export, location, mimeType, exportConfiguration);
+    return convert(Export, location, mimeType, showWarnings, exportConfiguration);
 }
 
 // The static method to figure out to which parts of the
@@ -186,7 +186,7 @@ void KisImportExportManager::setProgresUpdater(KoProgressUpdater *updater)
     d->progressUpdater = updater;
 }
 
-KisImportExportFilter::ConversionStatus KisImportExportManager::convert(KisImportExportManager::Direction direction, const QString &location, const QString &mimeType, KisPropertiesConfigurationSP exportConfiguration)
+KisImportExportFilter::ConversionStatus KisImportExportManager::convert(KisImportExportManager::Direction direction, const QString &location, const QString &mimeType, bool showWarnings, KisPropertiesConfigurationSP exportConfiguration)
 {
 
     QString typeName = mimeType;
@@ -270,40 +270,45 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::convert(KisImpor
 
         if (!checker.warnings().isEmpty()) {
 
-            QHBoxLayout *hLayout = new QHBoxLayout();
+            if (showWarnings) {
 
-            QLabel *labelWarning = new QLabel();
-            labelWarning->setPixmap(KisIconUtils::loadIcon("dialog-warning").pixmap(32, 32));
-            hLayout->addWidget(labelWarning);
+                QHBoxLayout *hLayout = new QHBoxLayout();
 
-            KisPopupButton *bn = new KisPopupButton(0);
-            //bn->setIcon(KisIconUtils::loadIcon("dialog-"));
-            bn->setText(i18nc("Keep the extra space at the end of the sentence, please", "Warning: saving as %1 will lose information from your image.    ", KisMimeDatabase::descriptionForMimeType(mimeType)));
-            hLayout->addWidget(bn);
+                QLabel *labelWarning = new QLabel();
+                labelWarning->setPixmap(KisIconUtils::loadIcon("dialog-warning").pixmap(32, 32));
+                hLayout->addWidget(labelWarning);
 
-            layout->addLayout(hLayout);
+                KisPopupButton *bn = new KisPopupButton(0);
 
-            QTextBrowser *browser = new QTextBrowser();
-            browser->setMinimumWidth(bn->width());
-            bn->setPopupWidget(browser);
+                bn->setText(i18nc("Keep the extra space at the end of the sentence, please", "Warning: saving as %1 will lose information from your image.    ", KisMimeDatabase::descriptionForMimeType(mimeType)));
 
-            QString warning = "<html><body><p><b>"
-                    + i18n("You will lose information when saving this image as a %1.", KisMimeDatabase::descriptionForMimeType(typeName));
 
-            if (warnings.size() == 1) {
+                hLayout->addWidget(bn);
+
+                layout->addLayout(hLayout);
+
+                QTextBrowser *browser = new QTextBrowser();
+                browser->setMinimumWidth(bn->width());
+                bn->setPopupWidget(browser);
+
+                QString warning = "<html><body><p><b>"
+                        + i18n("You will lose information when saving this image as a %1.", KisMimeDatabase::descriptionForMimeType(typeName));
+
+                if (warnings.size() == 1) {
                     warning += "</b> Reason:</p>";
-            }
-            else {
+                }
+                else {
                     warning += "</b> Reasons:</p>";
-            }
-            warning += "<p/><ul>";
+                }
+                warning += "<p/><ul>";
 
-            Q_FOREACH(const QString &w, warnings) {
-                warning += "\n<li>" + w + "</li>";
-            }
+                Q_FOREACH(const QString &w, warnings) {
+                    warning += "\n<li>" + w + "</li>";
+                }
 
-            warning += "</ul>";
-            browser->setHtml(warning);
+                warning += "</ul>";
+                browser->setHtml(warning);
+            }
         }
 
         if (wdg) {
@@ -314,18 +319,23 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::convert(KisImpor
             layout->addWidget(box);
         }
 
+
         QCheckBox *chkAlsoAsKra = 0;
-        if (!checker.warnings().isEmpty()) {
-            chkAlsoAsKra = new QCheckBox(i18n("Also save your image as a Krita file."));
-            chkAlsoAsKra->setChecked(KisConfig().readEntry<bool>("AlsoSaveAsKra", false));
-            layout->addWidget(chkAlsoAsKra);
+        if (showWarnings) {
+            if (!checker.warnings().isEmpty()) {
+                chkAlsoAsKra = new QCheckBox(i18n("Also save your image as a Krita file."));
+                chkAlsoAsKra->setChecked(KisConfig().readEntry<bool>("AlsoSaveAsKra", false));
+                layout->addWidget(chkAlsoAsKra);
+            }
         }
 
         dlg.setMainWidget(page);
         dlg.resize(dlg.minimumSize());
 
-        if (!dlg.exec()) {
-            return KisImportExportFilter::UserCancelled;
+        if (showWarnings || wdg) {
+            if (!dlg.exec()) {
+                return KisImportExportFilter::UserCancelled;
+            }
         }
 
         if (chkAlsoAsKra) {
@@ -364,7 +374,7 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::convert(KisImpor
     io.close();
 
     if (exportConfiguration) {
-       KisConfig().setExportConfiguration(typeName, exportConfiguration);
+        KisConfig().setExportConfiguration(typeName, exportConfiguration);
     }
 
     if (alsoAsKra) {

@@ -569,6 +569,64 @@ bool KisDocument::exportDocument(const QUrl &_url, KisPropertiesConfigurationSP 
     return ret;
 }
 
+bool KisDocument::saveAs(const QUrl &url, KisPropertiesConfigurationSP exportConfiguration)
+{
+    if (!url.isValid() || !url.isLocalFile()) {
+        errKrita << "saveAs: Malformed URL " << url.url() << endl;
+        return false;
+    }
+    d->m_duringSaveAs = true;
+    d->m_originalURL = d->m_url;
+    d->m_originalFilePath = d->m_file;
+    d->m_url = url; // Store where to upload in saveToURL
+    d->m_file = d->m_url.toLocalFile();
+
+    bool result = save(exportConfiguration); // Save local file and upload local file
+
+    if (!result) {
+        d->m_url = d->m_originalURL;
+        d->m_file = d->m_originalFilePath;
+        d->m_duringSaveAs = false;
+        d->m_originalURL = QUrl();
+        d->m_originalFilePath.clear();
+    }
+
+    return result;
+}
+
+bool KisDocument::save(KisPropertiesConfigurationSP exportConfiguration)
+{
+    d->m_saveOk = false;
+    if (d->m_file.isEmpty()) { // document was created empty
+        d->m_file = d->m_url.toLocalFile();
+    }
+
+    updateEditingTime(true);
+
+    setFileProgressProxy();
+    setUrl(url());
+
+    bool ok = saveFile(exportConfiguration);
+
+    clearFileProgressProxy();
+
+    if (ok) {
+        return saveToUrl();
+    }
+    else {
+        emit canceled(QString());
+    }
+    return false;
+}
+
+
+bool KisDocument::waitSaveComplete()
+{
+    return d->m_saveOk;
+}
+
+
+
 bool KisDocument::saveFile(KisPropertiesConfigurationSP exportConfiguration)
 {
     // Unset the error message
@@ -606,7 +664,7 @@ bool KisDocument::saveFile(KisPropertiesConfigurationSP exportConfiguration)
 
     Private::SafeSavingLocker locker(d, this);
     if (locker.successfullyLocked()) {
-        status = d->importExportManager->exportDocument(tempororaryFileName, outputMimeType, exportConfiguration);
+        status = d->importExportManager->exportDocument(tempororaryFileName, outputMimeType, !d->isExporting , exportConfiguration);
     } else {
         status = KisImportExportFilter::UsageError;
     }
@@ -614,7 +672,6 @@ bool KisDocument::saveFile(KisPropertiesConfigurationSP exportConfiguration)
     ret = status == KisImportExportFilter::OK;
     suppressErrorDialog = (status == KisImportExportFilter::UserCancelled || status == KisImportExportFilter::BadConversionGraph);
     dbgFile << "Export status was" << status;
-
 
     if (ret) {
         if (!d->suppressProgress) {
@@ -1407,62 +1464,6 @@ bool KisDocument::closeUrl(bool promptToSave)
     return true;
 }
 
-
-bool KisDocument::saveAs(const QUrl &url, KisPropertiesConfigurationSP exportConfiguration)
-{
-    if (!url.isValid() || !url.isLocalFile()) {
-        errKrita << "saveAs: Malformed URL " << url.url() << endl;
-        return false;
-    }
-    d->m_duringSaveAs = true;
-    d->m_originalURL = d->m_url;
-    d->m_originalFilePath = d->m_file;
-    d->m_url = url; // Store where to upload in saveToURL
-    d->m_file = d->m_url.toLocalFile();
-
-    bool result = save(exportConfiguration); // Save local file and upload local file
-
-    if (!result) {
-        d->m_url = d->m_originalURL;
-        d->m_file = d->m_originalFilePath;
-        d->m_duringSaveAs = false;
-        d->m_originalURL = QUrl();
-        d->m_originalFilePath.clear();
-    }
-
-    return result;
-}
-
-bool KisDocument::save(KisPropertiesConfigurationSP exportConfiguration)
-{
-    d->m_saveOk = false;
-    if (d->m_file.isEmpty()) { // document was created empty
-        d->m_file = d->m_url.toLocalFile();
-    }
-
-    updateEditingTime(true);
-
-    setFileProgressProxy();
-    setUrl(url());
-
-    bool ok = saveFile(exportConfiguration);
-
-    clearFileProgressProxy();
-
-    if (ok) {
-        return saveToUrl();
-    }
-    else {
-        emit canceled(QString());
-    }
-    return false;
-}
-
-
-bool KisDocument::waitSaveComplete()
-{
-    return d->m_saveOk;
-}
 
 
 void KisDocument::setUrl(const QUrl &url)

@@ -26,6 +26,7 @@
 #include <QMouseEvent>
 #include <QWheelEvent>
 #include <QTouchEvent>
+#include <cmath>
 
 class Q_DECL_HIDDEN KoPointerEvent::Private
 {
@@ -186,7 +187,7 @@ qreal KoPointerEvent::rotation() const
 qreal KoPointerEvent::tangentialPressure() const
 {
     if (d->tabletEvent)
-        return d->tabletEvent->tangentialPressure();
+        return std::fmod((d->tabletEvent->tangentialPressure() - (-1.0)) / (1.0 - (-1.0)), 2.0);
     else
         return 0.0;
 }

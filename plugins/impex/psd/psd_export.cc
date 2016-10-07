@@ -100,43 +100,19 @@ void psdExport::initializeCapabilities()
         addCapability(factory->create(30000, 30000, KisExportCheckBase::SUPPORTED));
     }
 
-    QList<KoID> supportedColorModels;
-    supportedColorModels << RGBAColorModelID << GrayAColorModelID << LABAColorModelID << CMYKAColorModelID;
-    QList<KoID> supportedColorDepths;
-    supportedColorDepths << Float32BitsColorDepthID << Float16BitsColorDepthID << Integer8BitsColorDepthID << Integer16BitsColorDepthID;
-
-    QList<KoID> allColorModels = KoColorSpaceRegistry::instance()->colorModelsList(KoColorSpaceRegistry::AllColorSpaces);
-    Q_FOREACH(const KoID &colorModelID, allColorModels) {
-        QList<KoID> allColorDepths = KoColorSpaceRegistry::instance()->colorDepthList(colorModelID.id(), KoColorSpaceRegistry::AllColorSpaces);
-        Q_FOREACH(const KoID &colorDepthID, allColorDepths) {
-
-            KisExportCheckFactory *f1 = KisExportCheckRegistry::instance()->get("ColorModelCheck/" + colorModelID.id() + "/" + colorDepthID.id());
-            KisExportCheckFactory *f2 = KisExportCheckRegistry::instance()->get("ColorModelPerLayerCheck/" + colorModelID.id() + "/" + colorDepthID.id());
-
-            if(!f1 || !f2) {
-                qDebug() << "No factory for" << colorModelID << colorDepthID;
-                continue;
-            }
-
-            if (supportedColorModels.contains(colorModelID) && supportedColorDepths.contains(colorDepthID)) {
-                addCapability(f1->create(KisExportCheckBase::SUPPORTED));
-                addCapability(f2->create(KisExportCheckBase::SUPPORTED));
-            }
-            else {
-                addCapability(f1->create(KisExportCheckBase::UNSUPPORTED,
-                                         i18nc("image conversion warning",
-                                               "EXR cannot save images with color model <b>%1</b> and depth <b>%2</b>. The image will not be saved.",
-                                               colorModelID.name(),
-                                               colorDepthID.name())));
-
-                addCapability(f2->create(KisExportCheckBase::UNSUPPORTED,
-                                        i18nc("image conversion warning",
-                                              "EXR cannot save layers with color model <b>%1</b> and depth <b>%2</b>. The layers will be skipped.",
-                                              colorModelID.name(),
-                                              colorDepthID.name())));
-            }
-        }
-    }
+    QList<QPair<KoID, KoID> > supportedColorModels;
+    supportedColorModels << QPair<KoID, KoID>()
+            << QPair<KoID, KoID>(RGBAColorModelID, Integer8BitsColorDepthID)
+            << QPair<KoID, KoID>(RGBAColorModelID, Integer16BitsColorDepthID)
+            << QPair<KoID, KoID>(RGBAColorModelID, Float16BitsColorDepthID)
+            << QPair<KoID, KoID>(RGBAColorModelID, Float32BitsColorDepthID)
+            << QPair<KoID, KoID>(GrayAColorModelID, Integer8BitsColorDepthID)
+            << QPair<KoID, KoID>(GrayAColorModelID, Integer16BitsColorDepthID)
+            << QPair<KoID, KoID>(CMYKAColorModelID, Integer8BitsColorDepthID)
+            << QPair<KoID, KoID>(CMYKAColorModelID, Integer16BitsColorDepthID)
+            << QPair<KoID, KoID>(LABAColorModelID, Integer8BitsColorDepthID)
+            << QPair<KoID, KoID>(LABAColorModelID, Integer16BitsColorDepthID);
+    addSupportedColorModels(supportedColorModels, "PSD");
 
 }
 

@@ -59,11 +59,13 @@ KisImportExportFilter::ConversionStatus QMLExport::convert(KisDocument *document
 void QMLExport::initializeCapabilities()
 {
     addCapability(KisExportCheckRegistry::instance()->get("MultiLayerCheck")->create(KisExportCheckBase::SUPPORTED));
-    addCapability(KisExportCheckRegistry::instance()->get("ColorModelCheck/" + RGBAColorModelID.id() + "/" + Integer8BitsColorDepthID.id())->create(KisExportCheckBase::SUPPORTED));
-    addCapability(KisExportCheckRegistry::instance()->get("ColorModelCheck/" + RGBAColorModelID.id() + "/" + Integer16BitsColorDepthID.id())->create(KisExportCheckBase::SUPPORTED));
-    addCapability(KisExportCheckRegistry::instance()->get("ColorModelCheck/" + GrayAColorModelID.id() + "/" + Integer8BitsColorDepthID.id())->create(KisExportCheckBase::SUPPORTED));
-    addCapability(KisExportCheckRegistry::instance()->get("ColorModelCheck/" + GrayAColorModelID.id() + "/" + Integer16BitsColorDepthID.id())->create(KisExportCheckBase::SUPPORTED));
-}
+
+    QList<QPair<KoID, KoID> > supportedColorModels;
+    supportedColorModels << QPair<KoID, KoID>()
+            << QPair<KoID, KoID>(RGBAColorModelID, Integer8BitsColorDepthID)
+            << QPair<KoID, KoID>(GrayAColorModelID, Integer8BitsColorDepthID);
+    addSupportedColorModels(supportedColorModels, "QML");
+    }
 
 
 

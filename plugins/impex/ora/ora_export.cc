@@ -96,10 +96,13 @@ void OraExport::initializeCapabilities()
     addCapability(KisExportCheckRegistry::instance()->get("NodeTypeCheck/KisAdjustmentLayer")->create(KisExportCheckBase::SUPPORTED));
     addCapability(KisExportCheckRegistry::instance()->get("sRGBProfileCheck")->create(KisExportCheckBase::SUPPORTED));
     addCapability(KisExportCheckRegistry::instance()->get("ColorModelHomogenousCheck")->create(KisExportCheckBase::SUPPORTED));
-    addCapability(KisExportCheckRegistry::instance()->get("ColorModelCheck/" + RGBAColorModelID.id() + "/" + Integer8BitsColorDepthID.id())->create(KisExportCheckBase::SUPPORTED));
-    addCapability(KisExportCheckRegistry::instance()->get("ColorModelCheck/" + RGBAColorModelID.id() + "/" + Integer16BitsColorDepthID.id())->create(KisExportCheckBase::SUPPORTED));
-    addCapability(KisExportCheckRegistry::instance()->get("ColorModelCheck/" + GrayAColorModelID.id() + "/" + Integer8BitsColorDepthID.id())->create(KisExportCheckBase::SUPPORTED));
-    addCapability(KisExportCheckRegistry::instance()->get("ColorModelCheck/" + GrayAColorModelID.id() + "/" + Integer16BitsColorDepthID.id())->create(KisExportCheckBase::SUPPORTED));
+    QList<QPair<KoID, KoID> > supportedColorModels;
+    supportedColorModels << QPair<KoID, KoID>()
+            << QPair<KoID, KoID>(RGBAColorModelID, Integer8BitsColorDepthID)
+            << QPair<KoID, KoID>(RGBAColorModelID, Integer16BitsColorDepthID)
+            << QPair<KoID, KoID>(GrayAColorModelID, Integer8BitsColorDepthID)
+            << QPair<KoID, KoID>(GrayAColorModelID, Integer16BitsColorDepthID);
+    addSupportedColorModels(supportedColorModels, "OpenRaster");
 }
 
 

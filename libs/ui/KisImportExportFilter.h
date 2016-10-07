@@ -26,14 +26,17 @@ Boston, MA 02110-1301, USA.
 #include <QMap>
 #include <QPointer>
 #include <QString>
+#include <QPair>
+#include <QList>
+#include <KoID.h>
 #include <QSharedPointer>
 #include <kis_properties_configuration.h>
 #include <kis_types.h>
+#include <KisExportCheckBase.h>
 
 class KoUpdater;
 class KisDocument;
 class KisConfigWidget;
-class KisExportCheckBase;
 
 #include "kritaui_export.h"
 
@@ -163,6 +166,7 @@ protected:
     void setProgress(int value);
     virtual void initializeCapabilities();
     void addCapability(KisExportCheckBase *capability);
+    void addSupportedColorModels(QList<QPair<KoID, KoID> > supportedColorModels, const QString &name, KisExportCheckBase::Level level = KisExportCheckBase::PARTIALLY);
 
 private:
 

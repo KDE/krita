@@ -76,10 +76,16 @@ KisConfigWidget *KisHeightMapExport::createConfigurationWidget(QWidget *parent, 
 void KisHeightMapExport::initializeCapabilities()
 {
     if (mimeType() == "image/x-r8") {
-        addCapability(KisExportCheckRegistry::instance()->get("ColorModelCheck/" + GrayAColorModelID.id() + "/" + Integer8BitsColorDepthID.id())->create(KisExportCheckBase::SUPPORTED));
+        QList<QPair<KoID, KoID> > supportedColorModels;
+        supportedColorModels << QPair<KoID, KoID>()
+                << QPair<KoID, KoID>(GrayAColorModelID, Integer8BitsColorDepthID);
+        addSupportedColorModels(supportedColorModels, "R8 Heightmap");
     }
     else if (mimeType() == "image/x-r16") {
-        addCapability(KisExportCheckRegistry::instance()->get("ColorModelCheck/" + GrayAColorModelID.id() + "/" + Integer16BitsColorDepthID.id())->create(KisExportCheckBase::SUPPORTED));
+        QList<QPair<KoID, KoID> > supportedColorModels;
+        supportedColorModels << QPair<KoID, KoID>()
+                << QPair<KoID, KoID>(GrayAColorModelID, Integer16BitsColorDepthID);
+        addSupportedColorModels(supportedColorModels, "R16 Heightmap");
     }
 }
 

@@ -80,7 +80,11 @@ KisImportExportFilter::ConversionStatus KisTGAExport::convert(KisDocument *docum
 
 void KisTGAExport::initializeCapabilities()
 {
-    addCapability(KisExportCheckRegistry::instance()->get("ColorModelCheck/" + RGBAColorModelID.id() + "/" + Integer8BitsColorDepthID.id())->create(KisExportCheckBase::SUPPORTED));
+
+    QList<QPair<KoID, KoID> > supportedColorModels;
+    supportedColorModels << QPair<KoID, KoID>()
+            << QPair<KoID, KoID>(RGBAColorModelID, Integer8BitsColorDepthID);
+    addSupportedColorModels(supportedColorModels, "TGA");
 }
 
 

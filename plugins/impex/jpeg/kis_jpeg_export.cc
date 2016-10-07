@@ -157,10 +157,13 @@ void KisJPEGExport::initializeCapabilities()
 {
     addCapability(KisExportCheckRegistry::instance()->get("sRGBProfileCheck")->create(KisExportCheckBase::SUPPORTED));
     addCapability(KisExportCheckRegistry::instance()->get("ExifCheck")->create(KisExportCheckBase::SUPPORTED));
-    addCapability(KisExportCheckRegistry::instance()->get("ColorModelCheck/" + RGBAColorModelID.id() + "/" + Integer8BitsColorDepthID.id())->create(KisExportCheckBase::SUPPORTED));
-    addCapability(KisExportCheckRegistry::instance()->get("ColorModelCheck/" + GrayAColorModelID.id() + "/" + Integer8BitsColorDepthID.id())->create(KisExportCheckBase::SUPPORTED));
-    addCapability(KisExportCheckRegistry::instance()->get("ColorModelCheck/" + CMYKAColorModelID.id() + "/" + Integer8BitsColorDepthID.id())->create(KisExportCheckBase::SUPPORTED));
 
+    QList<QPair<KoID, KoID> > supportedColorModels;
+    supportedColorModels << QPair<KoID, KoID>()
+            << QPair<KoID, KoID>(RGBAColorModelID, Integer8BitsColorDepthID)
+            << QPair<KoID, KoID>(GrayAColorModelID, Integer8BitsColorDepthID)
+            << QPair<KoID, KoID>(CMYKAColorModelID, Integer8BitsColorDepthID);
+    addSupportedColorModels(supportedColorModels, "JPEG");
 }
 
 

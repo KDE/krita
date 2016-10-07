@@ -24,7 +24,10 @@ Boston, MA 02110-1301, USA.
 #include <kis_debug.h>
 #include <QStack>
 #include "KisImportExportManager.h"
+#include <KoColorSpaceRegistry.h>
+#include <KoColorModelStandardIds.h>
 #include <KisExportCheckBase.h>
+#include <KisExportCheckRegistry.h>
 #include "KoUpdater.h"
 #include <klocalizedstring.h>
 
@@ -49,6 +52,7 @@ public:
     }
 
 };
+
 
 KisImportExportFilter::KisImportExportFilter(QObject *parent)
     : QObject(parent)
@@ -217,4 +221,56 @@ void KisImportExportFilter::initializeCapabilities()
 void KisImportExportFilter::addCapability(KisExportCheckBase *capability)
 {
     d->capabilities[capability->id()] = capability;
+}
+
+
+
+void KisImportExportFilter::addSupportedColorModels(QList<QPair<KoID, KoID> > supportedColorModels, const QString &name, KisExportCheckBase::Level level)
+{
+    Q_ASSERT(level != KisExportCheckBase::SUPPORTED);
+
+    QString layerMessage;
+    QString imageMessage;
+
+    if (level == KisExportCheckBase::PARTIALLY) {
+        imageMessage = i18nc("image conversion warning",
+                             "%1 cannot save images with color model <b>%2</b> and depth <b>%3</b>. The image will be converted.");
+
+        layerMessage =
+                i18nc("image conversion warning",
+                      "%1 cannot save layers with color model <b>%2</b> and depth <b>%3</b>. The layers will be converted or skipped.");
+    }
+    else {
+        imageMessage = i18nc("image conversion warning",
+                             "%1 cannot save images with color model <b>%2</b> and depth <b>%3</b>. The image will not be saved.");
+
+        layerMessage =
+                i18nc("image conversion warning",
+                      "%1 cannot save layers with color model <b>%2</b> and depth <b>%3</b>. The layers will be skipped.");
+    }
+
+
+    QList<KoID> allColorModels = KoColorSpaceRegistry::instance()->colorModelsList(KoColorSpaceRegistry::AllColorSpaces);
+    Q_FOREACH(const KoID &colorModelID, allColorModels) {
+        QList<KoID> allColorDepths = KoColorSpaceRegistry::instance()->colorDepthList(colorModelID.id(), KoColorSpaceRegistry::AllColorSpaces);
+        Q_FOREACH(const KoID &colorDepthID, allColorDepths) {
+
+            KisExportCheckFactory *colorModelCheckFactory = KisExportCheckRegistry::instance()->get("ColorModelCheck/" + colorModelID.id() + "/" + colorDepthID.id());
+            KisExportCheckFactory *colorModelPerLayerCheckFactory = KisExportCheckRegistry::instance()->get("ColorModelPerLayerCheck/" + colorModelID.id() + "/" + colorDepthID.id());
+
+            if(!colorModelCheckFactory || !colorModelPerLayerCheckFactory) {
+                qDebug() << "No factory for" << colorModelID << colorDepthID;
+                continue;
+            }
+
+            if (supportedColorModels.contains(QPair<KoID, KoID>(colorModelID, colorDepthID))) {
+                addCapability(colorModelCheckFactory->create(KisExportCheckBase::SUPPORTED));
+                addCapability(colorModelPerLayerCheckFactory->create(KisExportCheckBase::SUPPORTED));
+            }
+            else {
+                addCapability(colorModelCheckFactory->create(level, imageMessage.arg(name).arg(colorModelID.name()).arg(colorDepthID.name())));
+                addCapability(colorModelPerLayerCheckFactory->create(level, layerMessage.arg(name).arg(colorModelID.name()).arg(colorDepthID.name())));
+            }
+        }
+    }
 }

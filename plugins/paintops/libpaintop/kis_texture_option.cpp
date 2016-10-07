@@ -85,7 +85,6 @@ public:
         offsetSliderX->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
         offsetSliderX->setSuffix(i18n(" px"));
         randomOffsetX = new QCheckBox(i18n("Random Offset"),this);
-        randomOffsetX->hide();
         offsetLayoutX->addWidget(offsetSliderX,1,0);
         offsetLayoutX->addWidget(randomOffsetX,0,0);
         formLayout->addRow(i18n("Horizontal Offset:"), offsetLayoutX);
@@ -96,7 +95,6 @@ public:
         offsetSliderY->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
         offsetSliderY->setSuffix(i18n(" px"));
         randomOffsetY = new QCheckBox(i18n("Random Offset"),this);
-        randomOffsetY->hide();
         offsetLayoutY->addWidget(offsetSliderY,1,0);
         offsetLayoutY->addWidget(randomOffsetY,0,0);
         formLayout->addRow(i18n("Vertical Offset:"), offsetLayoutY);
@@ -212,7 +210,7 @@ void KisTextureOption::writeOptionSetting(KisPropertiesConfigurationSP setting) 
     else {
         m_optionWidget -> offsetSliderY ->setEnabled(true);
     }
-
+    
     int texturingMode = m_optionWidget->cmbTexturingMode->currentIndex();
     bool invert = (m_optionWidget->chkInvert->checkState() == Qt::Checked);
 

@@ -568,6 +568,7 @@ KisDocument::~KisDocument()
 
     // clear undo commands that can still point to the image
     d->undoStack->clear();
+    d->image->waitForDone();
 
     KisImageWSP sanityCheckPointer = d->image;
 
@@ -575,7 +576,7 @@ KisDocument::~KisDocument()
     d->image.clear();
 
     // check if the image has actually been deleted
-    KIS_ASSERT_RECOVER_NOOP(!sanityCheckPointer.isValid());
+    KIS_SAFE_ASSERT_RECOVER_NOOP(!sanityCheckPointer.isValid());
 
     delete d;
 }

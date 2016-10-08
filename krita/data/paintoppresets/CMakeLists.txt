@@ -72,6 +72,9 @@ Pencil_2B.kpp
 Pencil_HB.kpp
 Pencil_texture.kpp
 Pencil_tilt.kpp
+Quick_circle_big.kpp
+Quick_circle_huge.kpp
+Quick_circle_layout.kpp
 Rake_bristle_dry.kpp
 Rake_texture.kpp
 Screentones.kpp

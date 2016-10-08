@@ -71,6 +71,8 @@ public:
 
     void updateViewSettings();
 
+    void currentPresetChanged(KisPaintOpPresetSP  preset);
+
 protected:
     void contextMenuEvent(QContextMenuEvent *);
     void hideEvent(QHideEvent *);

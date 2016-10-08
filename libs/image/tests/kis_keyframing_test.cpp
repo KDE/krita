@@ -250,25 +250,20 @@ void KisKeyframingTest::testRasterChannel()
     QCOMPARE(channel->keyframeCount(), 3);
     QCOMPARE(dev->framesInterface()->frames().count(), 3);
 
-    channel->deleteKeyframe(key_0);
+    channel->deleteKeyframe(key_20);
     QCOMPARE(channel->keyframeCount(), 2);
     QCOMPARE(dev->framesInterface()->frames().count(), 2);
-    QVERIFY(channel->keyframeAt(0) == 0);
-
-    channel->deleteKeyframe(key_20);
-    QCOMPARE(channel->keyframeCount(), 1);
-    QCOMPARE(dev->framesInterface()->frames().count(), 1);
     QVERIFY(channel->keyframeAt(20) == 0);
 
-    // Last remaining keyframe cannot be deleted
     channel->deleteKeyframe(key_10);
     QCOMPARE(channel->keyframeCount(), 1);
     QCOMPARE(dev->framesInterface()->frames().count(), 1);
-    QVERIFY(channel->keyframeAt(10) != 0);
+    QVERIFY(channel->keyframeAt(10) == 0);
 
-    // Fetching current keyframe before the first one should
-    // return the first keyframe
-    QCOMPARE(channel->frameIdAt(0), channel->frameIdAt(key_10->time()));
+    channel->deleteKeyframe(key_0);
+    QCOMPARE(channel->keyframeCount(), 1);
+    QCOMPARE(dev->framesInterface()->frames().count(), 1);
+    QVERIFY(channel->keyframeAt(0) != 0);
 }
 
 void KisKeyframingTest::testChannelSignals()
@@ -479,6 +474,55 @@ void KisKeyframingTest::testAffectedFrames()
     QCOMPARE(range.start(), 30);
     QCOMPARE(range.isInfinite(), true);
 
+}
+
+void KisKeyframingTest::testMovingFrames()
+{
+    TestUtil::TestingTimedDefaultBounds *bounds = new TestUtil::TestingTimedDefaultBounds();
+
+    KisPaintDeviceSP dev = new KisPaintDevice(cs);
+    dev->setDefaultBounds(bounds);
+
+    KisRasterKeyframeChannel * srcChannel = dev->createKeyframeChannel(KoID());
+
+    srcChannel->addKeyframe(0);
+    srcChannel->addKeyframe(10);
+    srcChannel->addKeyframe(50);
+
+    KisPaintDeviceSP dev2 = new KisPaintDevice(*dev, true);
+    KisRasterKeyframeChannel * dstChannel = dev->keyframeChannel();
+
+
+    for (int i = 0; i < 1000; i++) {
+
+        const int srcTime = 50 + i;
+        const int dstTime = 60 + i;
+        const int src2Time = 51 + i;
+
+        {
+            KUndo2Command parentCommand;
+            KisKeyframeSP srcKeyframe = srcChannel->keyframeAt(srcTime);
+            KIS_ASSERT(srcKeyframe);
+            dstChannel->copyExternalKeyframe(srcChannel, srcTime, dstTime, &parentCommand);
+            srcChannel->deleteKeyframe(srcKeyframe, &parentCommand);
+        }
+
+        for (int j = qMax(0, i-15); j < i+5; ++j) {
+            bounds->testingSetTime(j);
+            QRect rc1 = dev->extent();
+            QRect rc2 = dev2->extent();
+            Q_UNUSED(rc1);
+            Q_UNUSED(rc2);
+        }
+
+        {
+            KUndo2Command parentCommand;
+            KisKeyframeSP dstKeyframe = dstChannel->keyframeAt(dstTime);
+            KIS_ASSERT(dstKeyframe);
+            srcChannel->copyExternalKeyframe(dstChannel, dstTime, src2Time, &parentCommand);
+            dstChannel->deleteKeyframe(dstKeyframe, &parentCommand);
+        }
+    }
 }
 
 QTEST_MAIN(KisKeyframingTest)

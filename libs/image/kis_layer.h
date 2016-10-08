@@ -175,7 +175,7 @@ public:
     /**
      * Set the image this layer belongs to.
      */
-    void setImage(KisImageWSP image) Q_DECL_OVERRIDE;
+    void setImage(KisImageWSP image) override;
 
     /**
      * Create and return a layer that is the result of merging

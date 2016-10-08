@@ -426,20 +426,6 @@ void KisGbrBrush::setBrushTipImage(const QImage& image)
     setValid(true);
 }
 
-/*QImage KisGbrBrush::outline(double pressure) {
-    KisLayerSP layer = image(KoColorSpaceRegistry::instance()->colorSpace("RGBA",0),
-                             KisPaintInformation(pressure));
-    KisBoundary bounds(layer.data());
-    int w = maskWidth(pressure);
-    int h = maskHeight(pressure);
-
-    bounds.generateBoundary(w, h);
-    QPixmap pix(bounds.pixmap(w, h));
-    QImage result;
-    result = pix;
-    return result;
-}*/
-
 void KisGbrBrush::makeMaskImage()
 {
     if (!hasColor()) {

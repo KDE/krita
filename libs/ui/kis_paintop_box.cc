@@ -461,6 +461,8 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     connect(m_presetsPopup       , SIGNAL(eraserBrushOpacityToggled(bool))       , SLOT(slotEraserBrushOpacityToggled(bool)));
 
     connect(m_presetsChooserPopup, SIGNAL(resourceSelected(KoResource*))      , SLOT(resourceSelected(KoResource*)));
+    connect(m_presetsChooserPopup, SIGNAL(resourceClicked(KoResource*))      , SLOT(resourceSelected(KoResource*)));
+
     connect(m_resourceProvider   , SIGNAL(sigNodeChanged(const KisNodeSP))    , SLOT(slotNodeChanged(const KisNodeSP)));
     connect(m_cmbCompositeOp     , SIGNAL(currentIndexChanged(int))           , SLOT(slotSetCompositeMode(int)));
     connect(m_eraseAction          , SIGNAL(toggled(bool))                    , SLOT(slotToggleEraseMode(bool)));
@@ -769,7 +771,12 @@ void KisPaintopBox::slotCanvasResourceChanged(int key, const QVariant &value)
             updateCompositeOp(compositeOp);
             resourceSelected(preset.data());
         }
-        m_presetsChooserPopup->canvasResourceChanged(preset.data(), preset);
+
+        /**
+         * Update currently selected preset in both the popup widgets
+         */
+        m_presetsChooserPopup->canvasResourceChanged(preset);
+        m_presetsPopup->currentPresetChanged(preset);
 
         if (key == KisCanvasResourceProvider::CurrentCompositeOp) {
             if (m_resourceProvider->currentCompositeOp() != m_currCompositeOpID) {
@@ -930,12 +937,12 @@ void KisPaintopBox::slotToggleEraseMode(bool checked)
         qreal newSize = checked ? settings->savedEraserSize() : settings->savedBrushSize();
         m_resourceProvider->setSize(newSize);
     }
-   if (m_eraserBrushOpacityEnabled) {
+   if (oldEraserMode != checked && m_eraserBrushOpacityEnabled) {
         const qreal currentOpacity = m_resourceProvider->opacity();
 
         KisPaintOpSettingsSP settings = m_resourceProvider->currentPreset()->settings();
 
-        // remember brush opacity. set the eraser opacity to the normal brush size if not set
+        // remember brush opacity. set the eraser opacity to the normal brush opacity if not set
         if (checked) {
             settings->setSavedBrushOpacity(currentOpacity);
             if (qFuzzyIsNull(settings->savedEraserOpacity())) {

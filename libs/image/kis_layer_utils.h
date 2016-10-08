@@ -168,7 +168,7 @@ namespace KisLayerUtils
     {
         bool valueDiffers = false;
         bool initialized = false;
-        T currentValue;
+        T currentValue = T();
         Q_FOREACH (KisNodeSP node, nodes) {
             if (!initialized) {
                 currentValue = checkerFunc(node);

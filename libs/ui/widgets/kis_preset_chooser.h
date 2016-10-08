@@ -53,16 +53,16 @@ public:
     void setViewMode(ViewMode mode);
     void showButtons(bool show);
 
+    void setCurrentResource(KoResource *resource);
     KoResource* currentResource();
     /// Sets the visibility of tagging klineEdits
     void showTaggingBar(bool show);
-
     KoResourceItemChooser *itemChooser();
-
     void setPresetFilter(const QString& paintOpId);
 
 Q_SIGNALS:
-    void resourceSelected(KoResource * resource);
+    void resourceSelected(KoResource *resource);
+    void resourceClicked(KoResource *resource);
 
 public Q_SLOTS:
     void updateViewSettings();

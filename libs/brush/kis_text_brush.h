@@ -42,10 +42,10 @@ public:
     void generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst, KisBrush::ColoringInformation* coloringInformation,
             KisDabShape const&,
             const KisPaintInformation& info,
-            double subPixelX = 0, double subPixelY = 0, qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR) const Q_DECL_OVERRIDE;
+            double subPixelX = 0, double subPixelY = 0, qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR) const override;
 
     KisFixedPaintDeviceSP paintDevice(const KoColorSpace * colorSpace,
-        KisDabShape const&, const KisPaintInformation& info, double subPixelX, double subPixelY) const Q_DECL_OVERRIDE;
+        KisDabShape const&, const KisPaintInformation& info, double subPixelX, double subPixelY) const override;
 
     bool load() {
         return false;
@@ -76,8 +76,8 @@ public:
     void toXML(QDomDocument& , QDomElement&) const;
 
     quint32 brushIndex(const KisPaintInformation& info) const;
-    qint32 maskWidth(KisDabShape const&, double subPixelX, double subPixelY, const KisPaintInformation& info) const Q_DECL_OVERRIDE;
-    qint32 maskHeight(KisDabShape const&, double subPixelX, double subPixelY, const KisPaintInformation& info) const Q_DECL_OVERRIDE;
+    qint32 maskWidth(KisDabShape const&, double subPixelX, double subPixelY, const KisPaintInformation& info) const override;
+    qint32 maskHeight(KisDabShape const&, double subPixelX, double subPixelY, const KisPaintInformation& info) const override;
     void setAngle(qreal _angle);
     void setScale(qreal _scale);
     void setSpacing(double _spacing);

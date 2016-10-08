@@ -314,7 +314,7 @@ public:
      *
      * @param config Config group to read the settings from.
      * KF5 porting note: the unused bool argument was removed, make sure to remove it from your
-     * reimplementations too! And add a Q_DECL_OVERRIDE for good measure.
+     * reimplementations too! And add a override for good measure.
      */
     virtual void applyMainWindowSettings(const KConfigGroup &config);
 
@@ -396,7 +396,7 @@ protected:
      * if needed, once all constructor code for the main window has run.
      * Also reimplemented to catch when a QDockWidget is added or removed.
      */
-    bool event(QEvent *event) Q_DECL_OVERRIDE;
+    bool event(QEvent *event) override;
 
     /**
      * Reimplemented to autosave settings and call queryClose().
@@ -405,7 +405,7 @@ protected:
      * If you do it anyway, ensure to call the base implementation to keep
      * the feature of auto-saving window settings working.
      */
-    void closeEvent(QCloseEvent *) Q_DECL_OVERRIDE;
+    void closeEvent(QCloseEvent *) override;
 
     /**
        Called before the window is closed, either by the user or indirectly by

@@ -68,7 +68,7 @@ public:
 
     QIcon icon() const;
 
-    void setImage(KisImageWSP image) Q_DECL_OVERRIDE;
+    void setImage(KisImageWSP image) override;
     bool accept(KisNodeVisitor &v);
     void accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter);
 
@@ -83,6 +83,12 @@ public:
 
     QRect exactBounds() const;
     QRect extent() const;
+
+    /**
+     * Colorize mask has its own "projection", so it should report it
+     * to the parent layer using non-dependent-extent property
+     */
+    QRect nonDependentExtent() const Q_DECL_OVERRIDE;
 
     void setSectionModelProperties(const KisBaseNode::PropertyList &properties);
     KisBaseNode::PropertyList sectionModelProperties() const;

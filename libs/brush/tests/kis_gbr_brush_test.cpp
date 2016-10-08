@@ -16,7 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_brush_test.h"
+#include "kis_gbr_brush_test.h"
 
 #include <QTest>
 #include <QString>
@@ -32,7 +32,7 @@
 #include <kis_fixed_paint_device.h>
 #include "kis_qimage_pyramid.h"
 
-void KisBrushTest::testMaskGenerationNoColor()
+void KisGbrBrushTest::testMaskGenerationNoColor()
 {
     KisGbrBrush* brush = new KisGbrBrush(QString(FILES_DATA_DIR) + QDir::separator() + "brush.gbr");
     brush->load();
@@ -52,7 +52,7 @@ void KisBrushTest::testMaskGenerationNoColor()
     QImage image = fdev->convertToQImage(0);
 
     if (!TestUtil::compareQImages(errpoint, image, result)) {
-        image.save("kis_brush_test_1.png");
+        image.save("kis_gbr_brush_test_1.png");
         QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
     }
 
@@ -61,12 +61,12 @@ void KisBrushTest::testMaskGenerationNoColor()
     result = QImage(QString(FILES_DATA_DIR) + QDir::separator() + "result_brush_2.png");
     image = fdev->convertToQImage(0);
     if (!TestUtil::compareQImages(errpoint, image, result)) {
-        image.save("kis_brush_test_2.png");
+        image.save("kis_gbr_brush_test_2.png");
         QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
     }
 }
 
-void KisBrushTest::testMaskGenerationSingleColor()
+void KisGbrBrushTest::testMaskGenerationSingleColor()
 {
     KisGbrBrush* brush = new KisGbrBrush(QString(FILES_DATA_DIR) + QDir::separator() + "brush.gbr");
     brush->load();
@@ -89,12 +89,12 @@ void KisBrushTest::testMaskGenerationSingleColor()
     QImage result = QImage(QString(FILES_DATA_DIR) + QDir::separator() + "result_brush_3.png");
     QImage image = fdev->convertToQImage(0);
     if (!TestUtil::compareQImages(errpoint, image, result)) {
-        image.save("kis_brush_test_3.png");
+        image.save("kis_gbr_brush_test_3.png");
         QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
     }
 }
 
-void KisBrushTest::testMaskGenerationDevColor()
+void KisGbrBrushTest::testMaskGenerationDevColor()
 {
     KisGbrBrush* brush = new KisGbrBrush(QString(FILES_DATA_DIR) + QDir::separator() + "brush.gbr");
     brush->load();
@@ -122,12 +122,12 @@ void KisBrushTest::testMaskGenerationDevColor()
     QImage result = QImage(QString(FILES_DATA_DIR) + QDir::separator() + "result_brush_4.png");
     QImage image = fdev->convertToQImage(0);
     if (!TestUtil::compareQImages(errpoint, image, result)) {
-        image.save("kis_brush_test_4.png");
+        image.save("kis_gbr_brush_test_4.png");
         QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
     }
 }
 
-void KisBrushTest::testMaskGenerationDefaultColor()
+void KisGbrBrushTest::testMaskGenerationDefaultColor()
 {
     KisGbrBrush* brush = new KisGbrBrush(QString(FILES_DATA_DIR) + QDir::separator() + "brush.gbr");
     brush->load();
@@ -150,7 +150,7 @@ void KisBrushTest::testMaskGenerationDefaultColor()
     QImage result = QImage(QString(FILES_DATA_DIR) + QDir::separator() + "result_brush_3.png");
     QImage image = fdev->convertToQImage(0);
     if (!TestUtil::compareQImages(errpoint, image, result)) {
-        image.save("kis_brush_test_5.png");
+        image.save("kis_gbr_brush_test_5.png");
         QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
     }
 
@@ -158,7 +158,7 @@ void KisBrushTest::testMaskGenerationDefaultColor()
 }
 
 
-void KisBrushTest::testImageGeneration()
+void KisGbrBrushTest::testImageGeneration()
 {
     KisGbrBrush* brush = new KisGbrBrush(QString(FILES_DATA_DIR) + QDir::separator() + "testing_brush_512_bars.gbr");
     bool res = brush->load();
@@ -192,7 +192,7 @@ void KisBrushTest::testImageGeneration()
     }
 }
 
-void KisBrushTest::benchmarkPyramidCreation()
+void KisGbrBrushTest::benchmarkPyramidCreation()
 {
     KisGbrBrush* brush = new KisGbrBrush(QString(FILES_DATA_DIR) + QDir::separator() + "testing_brush_512_bars.gbr");
     brush->load();
@@ -204,7 +204,7 @@ void KisBrushTest::benchmarkPyramidCreation()
     }
 }
 
-void KisBrushTest::benchmarkScaling()
+void KisGbrBrushTest::benchmarkScaling()
 {
     KisGbrBrush* brush = new KisGbrBrush(QString(FILES_DATA_DIR) + QDir::separator() + "testing_brush_512_bars.gbr");
     brush->load();
@@ -222,7 +222,7 @@ void KisBrushTest::benchmarkScaling()
     }
 }
 
-void KisBrushTest::benchmarkRotation()
+void KisGbrBrushTest::benchmarkRotation()
 {
     KisGbrBrush* brush = new KisGbrBrush(QString(FILES_DATA_DIR) + QDir::separator() + "testing_brush_512_bars.gbr");
     brush->load();
@@ -239,7 +239,7 @@ void KisBrushTest::benchmarkRotation()
     }
 }
 
-void KisBrushTest::benchmarkMaskScaling()
+void KisGbrBrushTest::benchmarkMaskScaling()
 {
     KisGbrBrush* brush = new KisGbrBrush(QString(FILES_DATA_DIR) + QDir::separator() + "testing_brush_512_bars.gbr");
     brush->load();
@@ -258,7 +258,7 @@ void KisBrushTest::benchmarkMaskScaling()
     }
 }
 
-void KisBrushTest::testPyramidLevelRounding()
+void KisGbrBrushTest::testPyramidLevelRounding()
 {
     QSize imageSize(41, 41);
     QImage image(imageSize, QImage::Format_ARGB32);
@@ -302,7 +302,7 @@ static QSize dabTransformHelper(KisDabShape const& shape)
     return KisQImagePyramid::imageSize(testSize, shape, subPixelX, subPixelY);
 }
 
-void KisBrushTest::testPyramidDabTransform()
+void KisGbrBrushTest::testPyramidDabTransform()
 {
     QCOMPARE(dabTransformHelper(KisDabShape(1.0, 1.0, 0.0)),      QSize(150, 150));
     QCOMPARE(dabTransformHelper(KisDabShape(1.0, 0.5, 0.0)),      QSize(150,  75));
@@ -311,7 +311,7 @@ void KisBrushTest::testPyramidDabTransform()
 }
 
 // see comment in KisQImagePyramid::appendPyramidLevel
-void KisBrushTest::testQPainterTransformationBorder()
+void KisGbrBrushTest::testQPainterTransformationBorder()
 {
     QImage image1(10, 10, QImage::Format_ARGB32);
     QImage image2(12, 12, QImage::Format_ARGB32);
@@ -358,4 +358,4 @@ void KisBrushTest::testQPainterTransformationBorder()
     }
 }
 
-QTEST_MAIN(KisBrushTest)
+QTEST_MAIN(KisGbrBrushTest)

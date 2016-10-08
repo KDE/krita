@@ -73,7 +73,7 @@ public:
     virtual KisFixedPaintDeviceSP paintDevice(const KoColorSpace * colorSpace,
             KisDabShape const&,
             const KisPaintInformation& info,
-            double subPixelX = 0, double subPixelY = 0) const Q_DECL_OVERRIDE;
+            double subPixelX = 0, double subPixelY = 0) const override;
 
     virtual void setUseColorAsMask(bool useColorAsMask);
     virtual bool hasColor() const;
@@ -93,9 +93,9 @@ public:
     void setScale(qreal _scale);
     void setSpacing(double _spacing);
 
-    quint32 brushIndex(const KisPaintInformation& info) const Q_DECL_OVERRIDE;
-    qint32 maskWidth(KisDabShape const&, double subPixelX, double subPixelY, const KisPaintInformation& info) const Q_DECL_OVERRIDE;
-    qint32 maskHeight(KisDabShape const&, double subPixelX, double subPixelY, const KisPaintInformation& info) const Q_DECL_OVERRIDE;
+    quint32 brushIndex(const KisPaintInformation& info) const override;
+    qint32 maskWidth(KisDabShape const&, double subPixelX, double subPixelY, const KisPaintInformation& info) const override;
+    qint32 maskHeight(KisDabShape const&, double subPixelX, double subPixelY, const KisPaintInformation& info) const override;
 
     void notifyStrokeStarted();
     void notifyCachedDabPainted(const KisPaintInformation& info);
@@ -103,7 +103,7 @@ public:
     void generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst, KisBrush::ColoringInformation* coloringInformation,
             KisDabShape const&,
             const KisPaintInformation& info,
-            double subPixelX = 0, double subPixelY = 0, qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR) const Q_DECL_OVERRIDE;
+            double subPixelX = 0, double subPixelY = 0, qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR) const override;
 
 
     QVector<KisGbrBrush*> brushes() const;

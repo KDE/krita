@@ -43,15 +43,22 @@ public:
 Q_SIGNALS:
 
     void currentResourceChanged(const QModelIndex &);
+    void currentResourceClicked(const QModelIndex &);
+
     void contextMenuRequested(const QPoint &);
 
 protected:
     virtual void contextMenuEvent(QContextMenuEvent *event);
     void selectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
 
+    void mousePressEvent(QMouseEvent *event);
+
+private Q_SLOTS:
+    void slotItemClicked(const QModelIndex &index);
+
 private:
     KoIconToolTip m_tip;
-
+    QModelIndex m_beforeClickIndex;
 };
 
 #endif // KORESOURCEITEMVIEW_H

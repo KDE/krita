@@ -1000,12 +1000,10 @@ bool KisDocument::saveNativeFormatCalligra(KoStore *store)
         (void)store->close();
     }
 
-    if (!d->isAutosaving) {
-        if (store->open("preview.png")) {
-            // ### TODO: missing error checking (The partition could be full!)
-            savePreview(store);
-            (void)store->close();
-        }
+    if (store->open("preview.png")) {
+        // ### TODO: missing error checking (The partition could be full!)
+        savePreview(store);
+        (void)store->close();
     }
 
     if (!completeSaving(store)) {

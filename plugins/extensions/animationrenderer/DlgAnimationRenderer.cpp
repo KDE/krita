@@ -23,10 +23,12 @@
 #include <QJsonObject>
 #include <QMessageBox>
 #include <QStringList>
+#include <QProcess>
 
 #include <klocalizedstring.h>
 #include <kpluginfactory.h>
 
+#include <KoResourcePaths.h>
 #include <kis_properties_configuration.h>
 #include <kis_debug.h>
 #include <KisMimeDatabase.h>
@@ -131,8 +133,7 @@ DlgAnimationRenderer::DlgAnimationRenderer(KisDocument *doc, QWidget *parent)
     connect(m_page->bnExportOptions, SIGNAL(clicked()), this, SLOT(sequenceMimeTypeSelected()));
     connect(m_page->bnRenderOptions, SIGNAL(clicked()), this, SLOT(selectRenderType()));
 
-    QString ffmpeg = cfg.customFFMpegPath();
-    m_page->ffmpegLocation->setFileName(ffmpeg);
+    m_page->ffmpegLocation->setFileName(findFFMpeg());
     m_page->ffmpegLocation->setMode(KoFileDialog::OpenFile);
     connect(m_page->ffmpegLocation, SIGNAL(fileSelected(QString)), this, SLOT(ffmpegLocationChanged(QString)));
 
@@ -366,5 +367,39 @@ void DlgAnimationRenderer::slotButtonClicked(int button)
         }
     }
     KoDialog::slotButtonClicked(button);
+}
+
+QString DlgAnimationRenderer::findFFMpeg()
+{
+    QString result;
+
+    QStringList proposedPaths;
+
+    QString customPath = KisConfig().customFFMpegPath();
+    proposedPaths << customPath;
+    proposedPaths << customPath + QDir::separator() + "ffmpeg";
+
+    proposedPaths << "ffmpeg";
+    proposedPaths << KoResourcePaths::getApplicationRoot() +
+        QDir::separator() + "bin" + QDir::separator() + "ffmpeg";
+
+    Q_FOREACH (const QString &path, proposedPaths) {
+        if (path.isEmpty()) continue;
+
+        QProcess testProcess;
+        testProcess.start(path, QStringList() << "-version");
+        testProcess.waitForFinished(1000);
+
+        const bool successfulStart =
+            testProcess.state() == QProcess::NotRunning &&
+            testProcess.error() == QProcess::UnknownError;
+
+        if (successfulStart) {
+            result = path;
+            break;
+        }
+    }
+
+    return result;
 }
 

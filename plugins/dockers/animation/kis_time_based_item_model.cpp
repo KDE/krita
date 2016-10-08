@@ -299,6 +299,10 @@ bool KisTimeBasedItemModel::offsetFrames(QModelIndexList srcIndexes, const QPoin
         KisNodeSP srcNode = nodeAt(srcIndex);
         KisNodeSP dstNode = nodeAt(dstIndex);
 
+        if (!srcNode || !dstNode) {
+            return false;
+        }
+
         QList<KisKeyframeChannel*> channels = channelsAt(srcIndex);
         Q_FOREACH(KisKeyframeChannel *channel, channels) {
             if (channel->keyframeAt(srcIndex.column())) {

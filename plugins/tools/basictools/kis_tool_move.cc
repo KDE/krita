@@ -148,7 +148,9 @@ bool KisToolMove::startStrokeImpl(MoveToolMode mode, const QPoint *pos)
             QRect totalBounds;
 
             Q_FOREACH (KisNodeSP node, m_currentlyProcessingNodes) {
-                totalBounds |= node->projection()->nonDefaultPixelArea();
+                if (node && node->projection()) {
+                    totalBounds |= node->projection()->nonDefaultPixelArea();
+                }
             }
 
             m_totalTopLeft = totalBounds.topLeft();
@@ -185,7 +187,9 @@ bool KisToolMove::startStrokeImpl(MoveToolMode mode, const QPoint *pos)
     QRect totalBounds;
 
     Q_FOREACH (KisNodeSP node, m_currentlyProcessingNodes) {
-        totalBounds |= node->projection()->nonDefaultPixelArea();
+        if (node && node->projection()) {
+            totalBounds |= node->projection()->nonDefaultPixelArea();
+        }
     }
 
     m_totalTopLeft = totalBounds.topLeft();
@@ -243,7 +247,9 @@ void KisToolMove::activate(ToolActivation toolActivation, const QSet<KoShape*> &
     QRect totalBounds;
 
     Q_FOREACH (KisNodeSP node, this->selectedNodes()) {
-        totalBounds |= node->projection()->nonDefaultPixelArea();
+        if (node && node->projection()) {
+            totalBounds |= node->projection()->nonDefaultPixelArea();
+        }
     }
 
     m_startPosition = totalBounds.topLeft();
@@ -531,7 +537,9 @@ void KisToolMove::slotNodeChanged(KisNodeList nodes)
     QRect totalBounds;
 
     Q_FOREACH (KisNodeSP node, nodes) {
-        totalBounds |= node->projection()->nonDefaultPixelArea();
+        if (node && node->projection()) {
+            totalBounds |= node->projection()->nonDefaultPixelArea();
+        }
     }
 
     m_startPosition = totalBounds.topLeft();

@@ -94,6 +94,7 @@ bool KisUniformColorSource::isUniformColor() const
 
 KisPlainColorSource::KisPlainColorSource(const KoColor& backGroundColor, const KoColor& foreGroundColor)
     : m_backGroundColor(backGroundColor)
+    , m_cachedBackGroundColor(backGroundColor)
     , m_foreGroundColor(foreGroundColor)
 {
 }

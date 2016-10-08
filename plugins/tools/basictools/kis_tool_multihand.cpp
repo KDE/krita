@@ -216,7 +216,7 @@ void KisToolMultihand::initTransformations()
                transformations << m;
                m.reset();
                angle += angleStep*2;
-	        }
+            }
         }
     }
     else /* if(m_transformationNode == TRANSLATE) */ {
@@ -224,12 +224,6 @@ void KisToolMultihand::initTransformations()
          * TODO: currently, the seed is the same for all the
          * strokes
          */
-#ifdef Q_OS_WIN
-        srand(0);
-#else
-        srand48(0);
-#endif
-
         for (int i = 0; i < m_handsCount; i++){
             qreal angle = drand48() * M_PI * 2;
             qreal length = drand48();

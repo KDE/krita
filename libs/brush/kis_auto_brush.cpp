@@ -351,8 +351,6 @@ void KisAutoBrush::toXML(QDomDocument& doc, QDomElement& e) const
 
 QImage KisAutoBrush::createBrushPreview()
 {
-    srand(0);
-    srand48(0);
     int width = maskWidth(KisDabShape(), 0.0, 0.0, KisPaintInformation());
     int height = maskHeight(KisDabShape(), 0.0, 0.0, KisPaintInformation());
 

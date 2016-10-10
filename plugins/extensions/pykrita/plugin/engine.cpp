@@ -228,7 +228,7 @@ QString PyKrita::Engine::tryInitializeGetFailureReason()
     // 0) custom plugin directories (prefer local dir over systems')
     // 1) shipped krita module's dir
     // 2) w/ site_packages/ dir of the Python
-    QStringList pluginDirectories = KoResourcePaths::findDirs("data", "pykrita/");
+    QStringList pluginDirectories = KoResourcePaths::findDirs("pythonscripts");
     pluginDirectories << KoResourcePaths::locate("appdata", "plugins/pykrita/")
                       << QLatin1String(PYKRITA_PYTHON_SITE_PACKAGES_INSTALL_DIR)
             ;

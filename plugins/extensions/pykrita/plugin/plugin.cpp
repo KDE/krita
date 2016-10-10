@@ -42,9 +42,10 @@ KritaPyQtPlugin::KritaPyQtPlugin(QObject *parent, const QVariantList &)
     PyQtPluginSettingsFactory* settingsFactory = new PyQtPluginSettingsFactory(&m_engine);
 
     QByteArray pythonPath = qgetenv("PYTHONPATH");
-    QStringList pluginDirectories = KoResourcePaths::findDirs("data", "pykrita/");
+
+    QStringList pluginDirectories = KoResourcePaths::findDirs("pythonscripts");
     Q_FOREACH(const QString pluginDir, pluginDirectories) {
-        pythonPath.prepend(pluginDir + ":");
+        pythonPath.prepend(pluginDir.toUtf8() + ":");
     }
     qputenv("PYTHONPATH", pythonPath);
 

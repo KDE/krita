@@ -674,7 +674,7 @@ bool KisDocument::saveFile(KisPropertiesConfigurationSP exportConfiguration)
     dbgFile << "Export status was" << status;
 
     if (ret) {
-        if (!d->suppressProgress) {
+        if (!d->isAutosaving && !d->suppressProgress) {
             QPointer<KoUpdater> updater = d->progressUpdater->startSubtask(1, "clear undo stack");
             updater->setProgress(0);
             d->undoStack->setClean();
@@ -698,7 +698,6 @@ bool KisDocument::saveFile(KisPropertiesConfigurationSP exportConfiguration)
          }
 
         if (tempFile.exists()) {
-
             r = tempFile.copy(localFilePath());
             if (!r) {
                 setErrorMessage(i18n("Copying the temporary file failed: %1 to %2: %3", tempFile.fileName(), dstFile.fileName(), tempFile.errorString()));
@@ -721,14 +720,18 @@ bool KisDocument::saveFile(KisPropertiesConfigurationSP exportConfiguration)
         }
 
         if (errorMessage().isEmpty()) {
-            removeAutoSaveFiles();
+            if (!isAutosaving()) {
+                removeAutoSaveFiles();
+            }
         }
         else {
             qWarning() << "Error while saving:" << errorMessage();
         }
         // Restart the autosave timer
         // (we don't want to autosave again 2 seconds after a real save)
-        setAutoSave(d->autoSaveDelay);
+        if (!isAutosaving()) {
+            setAutoSave(d->autoSaveDelay);
+        }
 
         d->mimeType = outputMimeType;
     }
@@ -816,7 +819,8 @@ void KisDocument::slotAutoSave()
         connect(this, SIGNAL(sigProgress(int)), KisPart::instance()->currentMainwindow(), SLOT(slotProgress(int)));
         emit statusBarMessage(i18n("Autosaving..."));
         d->isAutosaving = true;
-        bool ret = saveNativeFormat(autoSaveFile(localFilePath()));
+        QString autoSaveFileName = autoSaveFile(localFilePath());
+        bool ret = saveNativeFormat(autoSaveFileName);
         setModified(true);
         if (ret) {
             d->modifiedAfterAutosave = false;
@@ -930,7 +934,6 @@ bool KisDocument::importDocument(const QUrl &_url)
 bool KisDocument::openUrl(const QUrl &_url, KisDocument::OpenUrlFlags flags)
 {
     if (!_url.isLocalFile()) {
-        qDebug() << "not a local file" << _url;
         return false;
     }
     dbgUI << "url=" << _url.url();
@@ -1022,7 +1025,7 @@ bool KisDocument::openFile()
                 break;
             }
         }
-        qDebug() << "chopped" << filename  << "to" << path << "Was trash, is" << typeName;
+        //qDebug() << "chopped" << filename  << "to" << path << "Was trash, is" << typeName;
     }
     dbgUI << localFilePath() << "type:" << typeName;
 

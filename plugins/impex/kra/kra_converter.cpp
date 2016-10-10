@@ -1,4 +1,4 @@
-f/*
+/*
  * Copyright (C) 2016 Boudewijn Rempt <boud@valdyas.org>
  *
  * This library is free software; you can redistribute it and/or

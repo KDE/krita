@@ -101,7 +101,8 @@ QStringList KisImportExportManager::mimeFilter(Direction direction)
             QList<QPluginLoader *>list = trader.query("Krita/FileFilter", "");
             Q_FOREACH(QPluginLoader *loader, list) {
                 QJsonObject json = loader->metaData().value("MetaData").toObject();
-                Q_FOREACH(const QString &mimetype, json.value("X-KDE-Import").toString().split(",")) {
+                Q_FOREACH(const QString &mimetype, json.value("X-KDE-Import").toString().split(",", QString::SkipEmptyParts)) {
+                    //qDebug() << "Adding  import mimetype" << mimetype << KisMimeDatabase::descriptionForMimeType(mimetype) << "from plugin" << loader;
                     mimeTypes << mimetype;
                 }
             }
@@ -116,7 +117,8 @@ QStringList KisImportExportManager::mimeFilter(Direction direction)
             QList<QPluginLoader *>list = trader.query("Krita/FileFilter", "");
             Q_FOREACH(QPluginLoader *loader, list) {
                 QJsonObject json = loader->metaData().value("MetaData").toObject();
-                Q_FOREACH(const QString &mimetype, json.value("X-KDE-Export").toString().split(",")) {
+                Q_FOREACH(const QString &mimetype, json.value("X-KDE-Export").toString().split(",", QString::SkipEmptyParts)) {
+                    //qDebug() << "Adding  export mimetype" << mimetype << KisMimeDatabase::descriptionForMimeType(mimetype) << "from plugin" << loader;
                     mimeTypes << mimetype;
                 }
             }
@@ -137,7 +139,7 @@ KisImportExportFilter *KisImportExportManager::filterForMimeType(const QString &
     Q_FOREACH(QPluginLoader *loader, list) {
         QJsonObject json = loader->metaData().value("MetaData").toObject();
         QString directionKey = direction == Export ? "X-KDE-Export" : "X-KDE-Import";
-        if (json.value(directionKey).toString().split(",").contains(mimetype)) {
+        if (json.value(directionKey).toString().split(",", QString::SkipEmptyParts).contains(mimetype)) {
             KLibFactory *factory = qobject_cast<KLibFactory *>(loader->instance());
 
             if (!factory) {

@@ -2105,7 +2105,7 @@
       <whatsThis></whatsThis>
       <toolTip>Activate next layer</toolTip>
       <iconText>Activate next layer</iconText>
-      <activationFlags>100000</activationFlags>
+      <activationFlags>1000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>PgUp</shortcut>
       <isCheckable>false</isCheckable>
@@ -2117,7 +2117,7 @@
       <whatsThis></whatsThis>
       <toolTip>Activate previous layer</toolTip>
       <iconText>Activate previous layer</iconText>
-      <activationFlags>100000</activationFlags>
+      <activationFlags>1000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>PgDown</shortcut>
       <isCheckable>false</isCheckable>

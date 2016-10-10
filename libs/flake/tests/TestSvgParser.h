@@ -47,6 +47,30 @@ private Q_SLOTS:
     void testTransformRotation1();
     void testTransformRotation2();
 
+    void testRenderStrokeNone();
+    void testRenderStrokeColorName();
+    void testRenderStrokeColorHex3();
+    void testRenderStrokeColorHex6();
+    void testRenderStrokeColorRgbValues();
+    void testRenderStrokeColorRgbPercent();
+    void testRenderStrokeColorCurrent();
+    void testRenderStrokeColorNonexistentIri();
+
+    void testRenderStrokeWidth();
+    void testRenderStrokeZeroWidth();
+    void testRenderStrokeOpacity();
+
+    void testRenderStrokeJointRound();
+    void testRenderStrokeLinecap();
+    void testRenderStrokeMiterLimit();
+
+    void testRenderStrokeDashArrayEven();
+    void testRenderStrokeDashArrayEvenOffset();
+    void testRenderStrokeDashArrayOdd();
+    void testRenderStrokeDashArrayRelative();
+
+
+
 };
 
 #endif // TESTSVGPARSER_H

@@ -530,6 +530,34 @@ bool SvgParser::parseClipPath(const KoXmlElement &e, const KoXmlElement &referen
     return true;
 }
 
+void SvgParser::uploadStyleToContext(const KoXmlElement &e)
+{
+    SvgStyles styles = m_context.styleParser().collectStyles(e);
+    m_context.styleParser().parseFont(styles);
+    m_context.styleParser().parseStyle(styles);
+}
+
+void SvgParser::applyCurrentStyle(KoShape *shape)
+{
+    if (!shape) return;
+
+    SvgGraphicsContext *gc = m_context.currentGC();
+    KIS_ASSERT(gc);
+
+    if (!dynamic_cast<KoShapeGroup*>(shape)) {
+        applyFillStyle(shape);
+        applyStrokeStyle(shape);
+    }
+
+    applyFilter(shape);
+    applyClipping(shape);
+
+    if (!gc->display) {
+        shape->setVisible(false);
+    }
+    shape->setTransparency(1.0 - gc->opacity);
+}
+
 void SvgParser::applyStyle(KoShape *obj, const KoXmlElement &e)
 {
     applyStyle(obj, m_context.styleParser().collectStyles(e));
@@ -674,6 +702,8 @@ void SvgParser::applyStrokeStyle(KoShape *shape)
     SvgGraphicsContext *gc = m_context.currentGC();
     if (! gc)
         return;
+
+    qDebug() << ppVar(gc->strokeType);
 
     if (gc->strokeType == SvgGraphicsContext::None) {
         shape->setStroke(0);
@@ -1057,7 +1087,6 @@ void SvgParser::applyViewBoxTransform(const KoXmlElement &element)
     }
 }
 
-
 QList<KoShape*> SvgParser::parseContainer(const KoXmlElement &e)
 {
     QList<KoShape*> shapes;
@@ -1095,9 +1124,7 @@ QList<KoShape*> SvgParser::parseContainer(const KoXmlElement &e)
             KoShapeGroup *group = new KoShapeGroup();
             group->setZIndex(m_context.nextZIndex());
 
-            SvgStyles styles = m_context.styleParser().collectStyles(b);
-            m_context.styleParser().parseFont(styles);
-            applyStyle(0, styles);   // parse style for inheritance
+            uploadStyleToContext(b);
 
             QList<KoShape*> childShapes = parseContainer(b);
 
@@ -1109,7 +1136,7 @@ QList<KoShape*> SvgParser::parseContainer(const KoXmlElement &e)
             applyViewBoxTransform(b);
             group->applyAbsoluteTransformation(m_context.currentGC()->matrix);
 
-            applyStyle(group, styles);   // apply style to this group after size is set
+            applyCurrentStyle(group); // apply style to this group after size is set
 
             shapes.append(group);
 
@@ -1139,7 +1166,7 @@ QList<KoShape*> SvgParser::parseContainer(const KoXmlElement &e)
                    b.tagName() == "path" ||
                    b.tagName() == "image" ||
                    b.tagName() == "text") {
-            KoShape *shape = createObject(b);
+            KoShape *shape = createObjectDirect(b);
             if (shape)
                 shapes.append(shape);
         } else if (b.tagName() == "use") {
@@ -1250,6 +1277,27 @@ KoShape * SvgParser::createPath(const KoXmlElement &element)
             obj = path;
         }
     }
+
+    return obj;
+}
+
+KoShape * SvgParser::createObjectDirect(const KoXmlElement &b)
+{
+    m_context.pushGraphicsContext(b);
+    uploadStyleToContext(b);
+
+    KoShape *obj = createShapeFromElement(b, m_context);
+    if (obj) {
+        obj->applyAbsoluteTransformation(m_context.currentGC()->matrix);
+
+        applyCurrentStyle(obj);
+
+        // handle id
+        applyId(b.attribute("id"), obj);
+        obj->setZIndex(m_context.nextZIndex());
+    }
+
+    m_context.popGraphicsContext();
 
     return obj;
 }

@@ -161,8 +161,14 @@ void SvgStyleParser::parsePA(SvgGraphicsContext *gc, const QString &command, con
         if (params != "none") {
             QString dashString = params;
             QStringList dashes = dashString.replace(',', ' ').simplified().split(' ');
-            for (QStringList::Iterator it = dashes.begin(); it != dashes.end(); ++it)
-                array.append((*it).toFloat());
+            for (QStringList::Iterator it = dashes.begin(); it != dashes.end(); ++it) {
+                array.append(SvgUtil::parseUnitXY(gc, *it));
+            }
+
+            // if the array is odd repeat it according to the standard
+            if (array.size() & 1) {
+                array << array;
+            }
         }
         gc->stroke.setLineStyle(Qt::CustomDashLine, array);
     } else if (command == "stroke-dashoffset") {
@@ -394,6 +400,7 @@ SvgStyles SvgStyleParser::collectStyles(const KoXmlElement &e)
     SvgStyles styleMap;
 
     // collect individual presentation style attributes which have the priority 0
+    // according to SVG standard
     Q_FOREACH (const QString &command, d->styleAttributes) {
         const QString attribute = e.attribute(command);
         if (!attribute.isEmpty())
@@ -406,7 +413,7 @@ SvgStyles SvgStyleParser::collectStyles(const KoXmlElement &e)
     }
 
     // match css style rules to element
-    QStringList cssStyles = d->context.matchingStyles(e);
+    QStringList cssStyles = d->context.matchingCssStyles(e);
 
     // collect all css style attributes
     Q_FOREACH (const QString &style, cssStyles) {

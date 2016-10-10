@@ -204,7 +204,7 @@ void SvgLoadingContext::addStyleSheet(const KoXmlElement &styleSheet)
     d->cssStyles.parseStylesheet(styleSheet);
 }
 
-QStringList SvgLoadingContext::matchingStyles(const KoXmlElement &element) const
+QStringList SvgLoadingContext::matchingCssStyles(const KoXmlElement &element) const
 {
     return d->cssStyles.matchStyles(element);
 }

@@ -80,7 +80,7 @@ public:
     void addStyleSheet(const KoXmlElement &styleSheet);
 
     /// Returns list of css styles matching to the specified element
-    QStringList matchingStyles(const KoXmlElement &element) const;
+    QStringList matchingCssStyles(const KoXmlElement &element) const;
 
     /// Returns a style parser to parse styles
     SvgStyleParser &styleParser();

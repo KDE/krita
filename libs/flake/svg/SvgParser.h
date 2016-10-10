@@ -84,6 +84,8 @@ protected:
     /// parses a length attribute in xy-direction
     qreal parseUnitXY(const QString &unit);
 
+    KoShape *createObjectDirect(const KoXmlElement &b);
+
     /// Creates an object from the given xml element
     KoShape * createObject(const KoXmlElement &, const SvgStyles &style = SvgStyles());
     /// Create path object from the given xml element
@@ -107,6 +109,9 @@ protected:
 
     /// Builds the document from the given shapes list
     void buildDocument(QList<KoShape*> shapes);
+
+    void uploadStyleToContext(const KoXmlElement &e);
+    void applyCurrentStyle(KoShape *shape);
 
     /// Applies styles to the given shape
     void applyStyle(KoShape *, const KoXmlElement &);

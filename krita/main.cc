@@ -32,6 +32,8 @@
 #include <QLocale>
 #include <QSettings>
 
+#include <time.h>
+
 #include <KisApplication.h>
 #include <KoConfig.h>
 #include <KoResourcePaths.h>
@@ -88,6 +90,9 @@ void tryInitDrMingw()
 #endif
 extern "C" int main(int argc, char **argv)
 {
+
+    // The global initialization of the random generator
+    qsrand(time(0));
 
     /**
      * Add a workaround for Qt 5.6, which implemented compression of the tablet events.

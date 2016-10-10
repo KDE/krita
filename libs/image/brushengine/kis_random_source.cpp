@@ -21,14 +21,12 @@
 #include <boost/random/taus88.hpp>
 #include <boost/random/uniform_smallint.hpp>
 #include <boost/random/normal_distribution.hpp>
-#include <time.h>
-#include <ctime>
-#include <//qDebug>
+
 
 struct KisRandomSource::Private
 {
     Private()
-        {}
+        : uniformSource(qrand()) {}
 
     Private(int seed)
         : uniformSource(seed) {}
@@ -46,29 +44,22 @@ struct KisRandomSource::Private
 KisRandomSource::KisRandomSource()
     : m_d(new Private)
 {
-    int r = qrand();
-    m_d->uniformSource = boost::taus88(r);
-    //qDebug() << "new kisrandomsource()" << this << "random seed" << r; 
 }
 
 KisRandomSource::KisRandomSource(int seed)
     : m_d(new Private(seed))
 {
-    //qDebug() << "new kisrandomsource(seed)" << this << "seed" << seed;
 }
 
 KisRandomSource::KisRandomSource(const KisRandomSource &rhs)
     : KisShared(),
       m_d(new Private(*rhs.m_d))
 {
-
-    //qDebug() << "copy kisrandomsource from" << &rhs << "to" << this;
 }
 
 KisRandomSource& KisRandomSource::operator=(const KisRandomSource &rhs)
 {
     if (this != &rhs) {
-        //qDebug() << "operator= kisrandomsource from" << &rhs << "to" << this;
         *m_d = *rhs.m_d;
     }
 
@@ -81,17 +72,13 @@ KisRandomSource::~KisRandomSource()
 
 qint64 KisRandomSource::generate() const
 {
-    qint64 v = m_d->uniformSource();
-    //qDebug() << "generate" << v;
-    return v;
+    return m_d->uniformSource();
 }
 
 int KisRandomSource::generate(int min, int max) const
 {
     boost::uniform_smallint<int> smallint(min, max);
-    int i = smallint(m_d->uniformSource);
-    //qDebug() << this << "generate min" << min << "max" << max << "result" << i;
-    return i;
+    return smallint(m_d->uniformSource);
 }
 
 qreal KisRandomSource::generateNormalized() const
@@ -99,15 +86,11 @@ qreal KisRandomSource::generateNormalized() const
     const qint64 v = m_d->uniformSource();
     const qint64 max = m_d->uniformSource.max();
 
-    //qDebug() << "generateNormalized" << qreal(v) / max;
-
     return qreal(v) / max;
 }
 
 qreal KisRandomSource::generateGaussian(qreal mean, qreal sigma) const
 {
     boost::normal_distribution<qreal> normal(mean, sigma);
-    qreal v = normal(m_d->uniformSource);
-    //qDebug() << "generateGaussian mean" << mean << "sigma" << sigma << "result" << v;
-    return v;
+    return normal(m_d->uniformSource);
 }

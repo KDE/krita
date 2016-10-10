@@ -1,4 +1,4 @@
-/*
+f/*
  * Copyright (C) 2016 Boudewijn Rempt <boud@valdyas.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -171,13 +171,12 @@ bool KraConverter::saveRootDocuments(KoStore *store)
         store->close();
     }
 
-    if (!m_doc->isAutosaving()) {
-        if (store->open("preview.png")) {
-            // ### TODO: missing error checking (The partition could be full!)
-            savePreview(store);
-            (void)store->close();
-        }
+    if (store->open("preview.png")) {
+        // ### TODO: missing error checking (The partition could be full!)
+        savePreview(store);
+        (void)store->close();
     }
+
 
     dbgUI << "Saving done of url:" << m_doc->url().toLocalFile();
     // Success

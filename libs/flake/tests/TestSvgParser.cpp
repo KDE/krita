@@ -977,6 +977,196 @@ void TestSvgParser::testRenderStrokeDashArrayRelative()
     t.test_standard_30px_72ppi("stroke_blue_dasharray_relative");
 }
 
+void TestSvgParser::testRenderFillDefault()
+{
+    const QString data =
+            "<svg width=\"30px\" height=\"30px\""
+            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
 
+            "<rect id=\"testRect\" x=\"5\" y=\"5\" width=\"10\" height=\"20\"/>"
+
+            "</svg>";
+
+    SvgRenderTester t (data);
+    t.test_standard_30px_72ppi("fill_black");
+}
+
+void TestSvgParser::testRenderFillRuleNonZero()
+{
+    const QString data =
+            "<svg width=\"30px\" height=\"30px\""
+            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+
+            "<polyline id=\"testRect\" points=\"5,5 15,11 15,19 5,25 5,19 15,5 15,25 5,11 5,5\""
+            "    fill=\"black\" fill-rule=\"nonzero\"/>"
+
+            "</svg>";
+
+    SvgRenderTester t (data);
+    t.test_standard_30px_72ppi("fill_non_zero");
+}
+
+void TestSvgParser::testRenderFillRuleEvenOdd()
+{
+    const QString data =
+            "<svg width=\"30px\" height=\"30px\""
+            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+
+            "<polyline id=\"testRect\" points=\"5,5 15,11 15,19 5,25 5,19 15,5 15,25 5,11 5,5\""
+            "    fill=\"black\" fill-rule=\"evenodd\"/>"
+
+            "</svg>";
+
+    SvgRenderTester t (data);
+    t.test_standard_30px_72ppi("fill_even_odd");
+}
+
+void TestSvgParser::testRenderFillOpacity()
+{
+    const QString data =
+            "<svg width=\"30px\" height=\"30px\""
+            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+
+            "<rect id=\"testRect\" x=\"5\" y=\"5\" width=\"10\" height=\"20\""
+            "    fill=\"cyan\" fill-opacity=\"0.3\"/>"
+
+            "</svg>";
+
+    SvgRenderTester t (data);
+    t.test_standard_30px_72ppi("fill_opacity_0_3");
+}
+
+void TestSvgParser::testRenderDisplayAttribute()
+{
+    const QString data =
+            "<svg width=\"10px\" height=\"20px\" viewBox=\"0 0 10 20\""
+            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+
+            "<rect id=\"testRect\" x=\"0\" y=\"0\" width=\"10\" height=\"20\""
+            "    fill=\"black\" display=\"none\"/>"
+
+            "</svg>";
+
+    SvgTester t (data);
+    t.parser.setResolution(QRectF(0, 0, 600, 400) /* px */, 144 /* ppi */);
+    t.run();
+
+    KoShape *shape = t.findShape("testRect");
+    QVERIFY(shape);
+
+    QCOMPARE(shape->isVisible(), false);
+}
+
+void TestSvgParser::testRenderVisibilityAttribute()
+{
+    {
+        const QString data =
+                "<svg width=\"10px\" height=\"20px\" viewBox=\"0 0 10 20\""
+                "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+
+                "<rect id=\"testRect\" x=\"0\" y=\"0\" width=\"10\" height=\"20\""
+                "    fill=\"black\" visibility=\"visible\"/>"
+
+                "</svg>";
+
+        SvgTester t (data);
+        t.parser.setResolution(QRectF(0, 0, 600, 400) /* px */, 144 /* ppi */);
+        t.run();
+
+        KoShape *shape = t.findShape("testRect");
+        QVERIFY(shape);
+
+        QCOMPARE(shape->isVisible(), true);
+    }
+
+    {
+        const QString data =
+                "<svg width=\"10px\" height=\"20px\" viewBox=\"0 0 10 20\""
+                "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+
+                "<rect id=\"testRect\" x=\"0\" y=\"0\" width=\"10\" height=\"20\""
+                "    fill=\"black\" visibility=\"hidden\"/>"
+
+                "</svg>";
+
+        SvgTester t (data);
+        t.parser.setResolution(QRectF(0, 0, 600, 400) /* px */, 144 /* ppi */);
+        t.run();
+
+        KoShape *shape = t.findShape("testRect");
+        QVERIFY(shape);
+
+        QCOMPARE(shape->isVisible(), false);
+    }
+
+    {
+        const QString data =
+                "<svg width=\"10px\" height=\"20px\" viewBox=\"0 0 10 20\""
+                "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+
+                "<rect id=\"testRect\" x=\"0\" y=\"0\" width=\"10\" height=\"20\""
+                "    fill=\"black\" visibility=\"collapse\"/>"
+
+                "</svg>";
+
+        SvgTester t (data);
+        t.parser.setResolution(QRectF(0, 0, 600, 400) /* px */, 144 /* ppi */);
+        t.run();
+
+        KoShape *shape = t.findShape("testRect");
+        QVERIFY(shape);
+
+        QCOMPARE(shape->isVisible(), false);
+    }
+}
+
+void TestSvgParser::testRenderVisibilityInheritance()
+{
+    const QString data =
+            "<svg width=\"10px\" height=\"20px\" viewBox=\"0 0 10 20\""
+            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+
+            "<g visibility=\"none\">"
+            "    <rect id=\"testRect\" x=\"0\" y=\"0\" width=\"10\" height=\"20\""
+            "        fill=\"black\" visibility=\"visible\"/>"
+            "</g>"
+
+            "</svg>";
+
+    SvgTester t (data);
+    t.parser.setResolution(QRectF(0, 0, 600, 400) /* px */, 144 /* ppi */);
+    t.run();
+
+    KoShape *shape = t.findShape("testRect");
+    QVERIFY(shape);
+
+    QCOMPARE(shape->isVisible(false), true);
+    QCOMPARE(shape->isVisible(true), false);
+}
+
+void TestSvgParser::testRenderDisplayInheritance()
+{
+    const QString data =
+            "<svg width=\"10px\" height=\"20px\" viewBox=\"0 0 10 20\""
+            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+
+            "<g display=\"none\">"
+            "    <rect id=\"testRect\" x=\"0\" y=\"0\" width=\"10\" height=\"20\""
+            "        fill=\"black\" visibility=\"visible\"/>"
+            "</g>"
+
+            "</svg>";
+
+    SvgTester t (data);
+    t.parser.setResolution(QRectF(0, 0, 600, 400) /* px */, 144 /* ppi */);
+    t.run();
+
+    KoShape *shape = t.findShape("testRect");
+    QVERIFY(shape);
+
+    QCOMPARE(shape->isVisible(false), true);
+    QEXPECT_FAIL("", "TODO: Fix 'display' attribute not to be inherited in shapes heirarchy!", Continue);
+    QCOMPARE(shape->isVisible(true), true);
+}
 
 QTEST_GUILESS_MAIN(TestSvgParser)

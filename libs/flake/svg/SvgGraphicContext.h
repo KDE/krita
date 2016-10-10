@@ -67,6 +67,7 @@ public:
     QString baselineShift;  ///< basline shift mode for text elements
 
     bool display;           ///< controls display of shape
+    bool visible;           ///< controls visibility of the shape (inherited)
     qreal pixelsPerInch;    ///< controls the resolution of the image raster
 };
 

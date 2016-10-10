@@ -70,6 +70,16 @@ private Q_SLOTS:
     void testRenderStrokeDashArrayRelative();
 
 
+    void testRenderFillDefault();
+    void testRenderFillRuleNonZero();
+    void testRenderFillRuleEvenOdd();
+    void testRenderFillOpacity();
+
+    void testRenderDisplayAttribute();
+    void testRenderVisibilityAttribute();
+
+    void testRenderVisibilityInheritance();
+    void testRenderDisplayInheritance();
 
 };
 

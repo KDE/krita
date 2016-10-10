@@ -42,7 +42,7 @@ public:
         fontAttributes << "font-family" << "font-size" << "font-weight";
         fontAttributes << "text-decoration" << "letter-spacing" << "word-spacing" << "baseline-shift";
         // the order of the style attributes is important, don't change without reason !!!
-        styleAttributes << "color" << "display";
+        styleAttributes << "color" << "display" << "visibility";
         styleAttributes << "fill" << "fill-rule" << "fill-opacity";
         styleAttributes << "stroke" << "stroke-width" << "stroke-linejoin" << "stroke-linecap";
         styleAttributes << "stroke-dasharray" << "stroke-dashoffset" << "stroke-opacity" << "stroke-miterlimit";
@@ -282,6 +282,9 @@ void SvgStyleParser::parsePA(SvgGraphicsContext *gc, const QString &command, con
     } else if (command == "display") {
         if (params == "none")
             gc->display = false;
+    } else if (command == "visibility") {
+        // visible is inherited!
+        gc->visible = params == "visible";
     } else if (command == "filter") {
         if (params != "none" && params.startsWith("url(")) {
             unsigned int start = params.indexOf('#') + 1;

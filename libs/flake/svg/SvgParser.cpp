@@ -552,7 +552,12 @@ void SvgParser::applyCurrentStyle(KoShape *shape)
     applyFilter(shape);
     applyClipping(shape);
 
-    if (!gc->display) {
+    if (!gc->display || !gc->visible) {
+        /**
+         * WARNING: here is a small inconsistency with the standard:
+         *          in the standard, 'display' is not inherited, but in
+         *          flake it is!
+         */
         shape->setVisible(false);
     }
     shape->setTransparency(1.0 - gc->opacity);
@@ -581,8 +586,9 @@ void SvgParser::applyStyle(KoShape *obj, const SvgStyles &styles)
     applyFilter(obj);
     applyClipping(obj);
 
-    if (! gc->display)
+    if (!gc->display || !gc->visible) {
         obj->setVisible(false);
+    }
     obj->setTransparency(1.0 - gc->opacity);
 }
 

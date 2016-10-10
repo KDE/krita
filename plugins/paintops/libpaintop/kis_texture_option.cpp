@@ -192,7 +192,6 @@ void KisTextureOption::writeOptionSetting(KisPropertiesConfigurationSP setting) 
         m_optionWidget->offsetSliderX ->blockSignals(true);
         m_optionWidget->offsetSliderX ->setValue(offsetX);
         m_optionWidget->offsetSliderX ->blockSignals(false);
-        srand(time(0));
     }
     else {
         m_optionWidget->offsetSliderX ->setEnabled(true);
@@ -205,7 +204,6 @@ void KisTextureOption::writeOptionSetting(KisPropertiesConfigurationSP setting) 
         m_optionWidget->offsetSliderY ->blockSignals(true);
         m_optionWidget->offsetSliderY ->setValue(offsetY);
         m_optionWidget->offsetSliderY ->blockSignals(false);
-        srand(time(0));
     }
     else {
         m_optionWidget->offsetSliderY ->setEnabled(true);

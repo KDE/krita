@@ -45,3 +45,11 @@ def on_pykrita_unloading():
     qDebug('UNLOADING PYKRITA')
     return True
 
+
+
+sys._excepthook = sys.excepthook
+def exception_hook(exctype, value, traceback):
+    print("Definining exception hook")
+    sys._excepthook(exctype, value, traceback)
+    #sys.exit(1)
+sys.excepthook = exception_hook

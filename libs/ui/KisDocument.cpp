@@ -512,20 +512,16 @@ KisDocument::KisDocument()
     d->pageLayout.leftMargin = 0;
     d->pageLayout.rightMargin = 0;
 
-
-    KConfigGroup cfgGrp( KSharedConfig::openConfig(), "Undo");
-    d->undoStack->setUndoLimit(cfgGrp.readEntry("UndoLimit", 1000));
-
     d->firstMod = QDateTime::currentDateTime();
     d->lastMod = QDateTime::currentDateTime();
 
-    connect(d->undoStack, SIGNAL(indexChanged(int)), this, SLOT(slotUndoStackIndexChanged(int)));
 
     // preload the krita resources
     KisResourceServerProvider::instance();
 
     init();
     undoStack()->setUndoLimit(KisConfig().undoStackLimit());
+    connect(d->undoStack, SIGNAL(indexChanged(int)), this, SLOT(slotUndoStackIndexChanged(int)));
     setBackupFile(KisConfig().backupFile());
 }
 
@@ -1004,12 +1000,10 @@ bool KisDocument::saveNativeFormatCalligra(KoStore *store)
         (void)store->close();
     }
 
-    if (!d->isAutosaving) {
-        if (store->open("preview.png")) {
-            // ### TODO: missing error checking (The partition could be full!)
-            savePreview(store);
-            (void)store->close();
-        }
+    if (store->open("preview.png")) {
+        // ### TODO: missing error checking (The partition could be full!)
+        savePreview(store);
+        (void)store->close();
     }
 
     if (!completeSaving(store)) {

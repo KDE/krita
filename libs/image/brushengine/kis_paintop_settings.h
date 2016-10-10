@@ -67,14 +67,7 @@ public:
      * If the tool is supposed to ignore the event, the paint op should return false
      * and if the tool is supposed to use the event, return true.
      */
-    virtual bool mousePressEvent(const KisPaintInformation &pos, Qt::KeyboardModifiers modifiers, KisNodeWSP currentNode);
-
-    /**
-     * This function is called to set random offsets to the brush whenever the mouse is clicked. It is
-     * specific to when the pattern option is set.
-     *
-     */
-    virtual void setRandomOffset();
+    virtual bool mousePressEvent(const KisPaintInformation &paintInformation, Qt::KeyboardModifiers modifiers, KisNodeWSP currentNode);
 
     /**
      * Clone the current settings object. Override this if your settings instance doesn't
@@ -263,6 +256,14 @@ public:
     */
     KisPaintOpConfigWidget* optionsWidget() const;
 
+
+    /**
+     * This function is called to set random offsets to the brush whenever the mouse is clicked. It is
+     * specific to when the pattern option is set.
+     *
+     */
+    virtual void setRandomOffset(const KisPaintInformation &paintInformation);
+
 protected:
 
     /**
@@ -270,8 +271,10 @@ protected:
      */
     virtual void onPropertyChanged();
 
-
 private:
+
+
+
     struct Private;
     const QScopedPointer<Private> d;
 };

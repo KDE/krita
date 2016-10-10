@@ -1,170 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE tags>
 <tags>
- <resource identifier="Block_bristles.kpp" >
-  <tag>Block</tag>
+ <resource md5="WYb3P2m6yAPzCP6UcZ9OFg==" identifier="Eraser_hard.kpp">
+  <tag>ink</tag>
  </resource>
- <resource identifier="Block_wet_tilt.kpp" >
-  <tag>Block</tag>
-  <tag>Wet</tag>
+ <resource md5="KdtxZbwqJaYI0QvrQ/cHag==" identifier="Basic_circle.kpp">
+  <tag>paint</tag>
  </resource>
- <resource identifier="Block_mix_tilt.kpp" >
-  <tag>Block</tag>
-  <tag>Mix</tag>
+ <resource md5="h0Obq3EhJfNzl54qcp4L+A==" identifier="Pencil_2B.kpp">
+  <tag>sketch</tag>
  </resource>
- <resource identifier="FX_overlay.kpp" >
-  <tag>FX</tag>
+ <resource md5="NVbSBuXDdC3e4qIXZBa2Lw==" identifier="Pencil_HB.kpp">
+  <tag>sketch</tag>
  </resource>
- <resource identifier="Bristles_mix.kpp" >
-  <tag>Mix</tag>
+ <resource md5="RT+G7vQx4U8luUHsisZkzw==" identifier="Eraser_soft.kpp">
+  <tag>sketch</tag>
  </resource>
- <resource identifier="FX_glow_add.kpp" >
-  <tag>FX</tag>
+ <resource md5="LYHcKGV344ZuzRsD8eWttw==" identifier="Bristles_hairy.kpp">
+  <tag>demo</tag>
  </resource>
- <resource identifier="Ink_gpen_10.kpp" >
-  <tag>Ink</tag>
+ <resource md5="Xebx+7bK0mL3q9vPGjfXaA==" identifier="Ink_brush_25.kpp">
+  <tag>ink</tag>
  </resource>
- <resource identifier="Screentones_eraser.kpp" >
-  <tag>Erasers</tag>
+ <resource md5="dfYwrb91jZXJQrVUR4nUxA==" identifier="Basic_wet_soft.kpp">
+  <tag>demo</tag>
  </resource>
- <resource identifier="Eraser_soft.kpp" >
-  <tag>Erasers</tag>
+ <resource md5="NNR2MgWZNXTbDnTbX8hsRg==" identifier="Block_basic.kpp">
+  <tag>demo</tag>
  </resource>
- <resource identifier="Basic_wet.kpp" >
-  <tag>Wet</tag>
+ <resource md5="+MKlutfRsrv3Vz45EVHzug==" identifier="Basic_mix.kpp">
+  <tag>demo</tag>
  </resource>
- <resource identifier="Basic_circle.kpp" >
-  <tag>Circle</tag>
+ <resource md5="QHxqwLMo6m73dsbXha4t1Q==" identifier="Basic_tip_default.kpp">
+  <tag>demo</tag>
  </resource>
- <resource identifier="Ink_tilt_20.kpp" >
-  <tag>Ink</tag>
+ <resource md5="HUzu0bsoUnh1B3jeqZXPNQ==" identifier="Airbrush_linear.kpp">
+  <tag>paint</tag>
  </resource>
- <resource identifier="Block_fuzzy.kpp" >
-  <tag>Block</tag>
+ <resource md5="AebX4dlY1cnZw4ZrwRfuJg==" identifier="Eraser_circle.kpp">
+  <tag>demo</tag>
  </resource>
- <resource identifier="Smudge_block_tilt.kpp" >
-  <tag>Block</tag>
-  <tag>Smudge</tag>
+ <resource md5="bhiruEnfPq9QtfH70mNBFQ==" identifier="Basic_wet.kpp">
+  <tag>demo</tag>
  </resource>
- <resource identifier="Basic_mix.kpp" >
-  <tag>Mix</tag>
+ <resource md5="kraUtRXtAPFN42XT9iL1Ow==" identifier="Basic_mix_soft.kpp">
+  <tag>demo</tag>
  </resource>
- <resource identifier="Basic_tip_soft.kpp" >
-  <tag>Circle</tag>
+ <resource md5="9lf5ssxI9l19S8REaWTy/A==" identifier="Ink_circle_10.kpp">
+  <tag>ink</tag>
  </resource>
- <resource identifier="Basic_wet_soft.kpp" >
-  <tag>Wet</tag>
+ <resource md5="gBFPik0q6QPItP+LgNMJlw==" identifier="Fill_circle.kpp">
+  <tag>paint</tag>
  </resource>
- <resource identifier="FX_blur_light.kpp" >
-  <tag>FX</tag>
+ <resource md5="fEHvZO4AdFGJojO1fIIMgw==" identifier="Smudge_textured.kpp">
+  <tag>demo</tag>
+  <tag>paint</tag>
  </resource>
- <resource identifier="Basic_mix_soft.kpp" >
-  <tag>Mix</tag>
+ <resource md5="eq70dIWrKGFNRz58q4hOpw==" identifier="Ink_gpen_10.kpp">
+  <tag>demo</tag>
  </resource>
- <resource identifier="FX_splat_starfield.kpp" >
-  <tag>FX</tag>
- </resource>
- <resource identifier="Layout_circle_soft.kpp" >
-  <tag>Circle</tag>
- </resource>
- <resource identifier="Smudge_soft.kpp" >
-  <tag>Smudge</tag>
- </resource>
- <resource identifier="Layout_block.kpp" >
-  <tag>Block</tag>
- </resource>
- <resource identifier="Splat_mix_cells.kpp" >
-  <tag>Mix</tag>
- </resource>
- <resource identifier="Basic_tip_gaussian.kpp" >
-  <tag>Circle</tag>
- </resource>
- <resource identifier="Fill_block.kpp" >
-  <tag>Block</tag>
- </resource>
- <resource identifier="Block_tilt.kpp" >
-  <tag>Block</tag>
- </resource>
- <resource identifier="Ink_gpen_25.kpp" >
-  <tag>Ink</tag>
- </resource>
- <resource identifier="Splat_wet_cells.kpp" >
-  <tag>Wet</tag>
- </resource>
- <resource identifier="Ink_ballpen.kpp" >
-  <tag>Ink</tag>
- </resource>
- <resource identifier="Eraser_circle.kpp" >
-  <tag>Erasers</tag>
- </resource>
- <resource identifier="ink_precision_03.kpp" >
-  <tag>Ink</tag>
- </resource>
- <resource identifier="Smudge_rake_2.kpp" >
-  <tag>Smudge</tag>
- </resource>
- <resource identifier="Smudge_textured.kpp" >
-  <tag>Smudge</tag>
- </resource>
- <resource identifier="Block_basic.kpp" >
-  <tag>Block</tag>
- </resource>
- <resource identifier="Ink_brush_25.kpp" >
-  <tag>Ink</tag>
- </resource>
- <resource identifier="Ink_circle_10.kpp" >
-  <tag>Circle</tag>
-  <tag>Ink</tag>
- </resource>
- <resource identifier="Ink_circle_05.kpp" >
-  <tag>Circle</tag>
-  <tag>Ink</tag>
- </resource>
- <resource identifier="Bristles_wet.kpp" >
-  <tag>Wet</tag>
- </resource>
- <resource identifier="Eraser_hard.kpp" >
-  <tag>Erasers</tag>
- </resource>
- <resource identifier="Airbrush_eraser.kpp" >
-  <tag>Erasers</tag>
- </resource>
- <resource identifier="Smudge_rake.kpp" >
-  <tag>Smudge</tag>
- </resource>
- <resource identifier="Sparkle_wet_soft.kpp" >
-  <tag>Wet</tag>
- </resource>
- <resource identifier="Fill_circle.kpp" >
-  <tag>Circle</tag>
- </resource>
- <resource identifier="FX_color_HSY.kpp" >
-  <tag>FX</tag>
- </resource>
- <resource identifier="Ink_tilt_10.kpp" >
-  <tag>Ink</tag>
- </resource>
- <resource identifier="Sparkle_wet.kpp" >
-  <tag>Wet</tag>
- </resource>
- <resource identifier="Basic_tip_default.kpp" >
-  <tag>Circle</tag>
- </resource>
- <resource identifier="FX_explode.kpp" >
-  <tag>FX</tag>
- </resource>
- <resource identifier="Pixelart_dither.kpp" >
-  <tag>PixelArt</tag>
- </resource>
- <resource identifier="Pixelart_round.kpp" >
-  <tag>PixelArt</tag>
- </resource>
- <resource identifier="Pixelart_square.kpp" >
-  <tag>PixelArt</tag>
- </resource>
- <resource identifier="pixel1.kpp" >
-  <tag>PixelArt</tag>
- </resource>
- 
- 
 </tags>

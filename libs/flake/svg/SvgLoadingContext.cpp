@@ -23,6 +23,9 @@
 #include <QFileInfo>
 #include <QDir>
 
+#include <KoColorSpaceRegistry.h>
+#include <KoColorSpaceEngine.h>
+#include <KoColorProfile.h>
 #include <KoDocumentResourceManager.h>
 
 #include <FlakeDebug.h>
@@ -57,8 +60,10 @@ public:
     KoDocumentResourceManager *documentResourceManager;
     QHash<QString, KoShape*> loadedShapes;
     QHash<QString, KoXmlElement> definitions;
+    QHash<QString, const KoColorProfile*> profiles;
     SvgCssHelper cssStyles;
     SvgStyleParser *styleParser;
+    FileFetcherFunc fileFetcher;
 };
 
 SvgLoadingContext::SvgLoadingContext(KoDocumentResourceManager *documentResourceManager)
@@ -160,6 +165,22 @@ QString SvgLoadingContext::absoluteFilePath(const QString &href)
     return absFile;
 }
 
+QString SvgLoadingContext::relativeFilePath(const QString &href)
+{
+    const SvgGraphicsContext *gc = currentGC();
+    if (!gc) return href;
+
+    QString result = href;
+
+    if (!gc->xmlBaseDir.isEmpty()) {
+        result = gc->xmlBaseDir + QDir::separator() + href;
+    } else if (!d->initialXmlBaseDir.isEmpty()) {
+        result = d->initialXmlBaseDir + QDir::separator() + href;
+    }
+
+    return QDir::cleanPath(result);
+}
+
 int SvgLoadingContext::nextZIndex()
 {
     return d->zIndex++;
@@ -214,8 +235,59 @@ SvgStyleParser &SvgLoadingContext::styleParser()
     return *d->styleParser;
 }
 
+void SvgLoadingContext::parseProfile(const KoXmlElement &element)
+{
+    const QString href = element.attribute("xlink:href");
+    const QByteArray uniqueId = QByteArray::fromHex(element.attribute("local").toLatin1());
+    const QString name = element.attribute("name");
+
+    if (element.attribute("rendering-intent", "auto") != "auto") {
+        // WARNING: Krita does *not* treat rendering intents attributes of the profile!
+        qDebug() << "WARNING: we do *not* treat rendering intents attributes of the profile!";
+    }
+
+    if (d->profiles.contains(name)) {
+        qDebug() << "Profile already in the map!" << ppVar(name);
+        return;
+    }
+
+    const KoColorProfile *profile =
+            KoColorSpaceRegistry::instance()->profileByUniqueId(uniqueId);
+
+    if (!profile && d->fileFetcher) {
+        KoColorSpaceEngine *engine = KoColorSpaceEngineRegistry::instance()->get("icc");
+        KIS_ASSERT(engine);
+        if (engine) {
+            const QString fileName = relativeFilePath(href);
+            const QByteArray profileData = d->fileFetcher(fileName);
+            if (!profileData.isEmpty()) {
+                profile = engine->addProfile(profileData);
+
+                if (profile->uniqueId() != uniqueId) {
+                    qDebug() << "WARNING: ProfileID of the attached profile doesn't match the one mentioned in SVG element";
+                    qDebug() << "       " << ppVar(profile->uniqueId().toHex());
+                    qDebug() << "       " << ppVar(uniqueId.toHex());
+                }
+            } else {
+                qDebug() << "WARNING: couldn't fetch the ICCprofile file!" << fileName;
+            }
+        }
+    }
+
+    if (profile) {
+        d->profiles.insert(name, profile);
+    } else {
+        qDebug() << "WARNING: couldn't load SVG profile" << ppVar(name) << ppVar(href) << ppVar(uniqueId);
+    }
+}
+
 bool SvgLoadingContext::isRootContext() const
 {
     KIS_ASSERT(!d->gcStack.isEmpty());
     return d->gcStack.size() == 1;
+}
+
+void SvgLoadingContext::setFileFetcher(SvgLoadingContext::FileFetcherFunc func)
+{
+    d->fileFetcher = func;
 }

@@ -81,6 +81,10 @@ private Q_SLOTS:
     void testRenderVisibilityInheritance();
     void testRenderDisplayInheritance();
 
+    void testRenderStrokeWithInlineStyle();
+
+    void testIccColor();
+
 };
 
 #endif // TESTSVGPARSER_H

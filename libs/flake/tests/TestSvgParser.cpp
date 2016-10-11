@@ -1169,4 +1169,56 @@ void TestSvgParser::testRenderDisplayInheritance()
     QCOMPARE(shape->isVisible(true), true);
 }
 
+void TestSvgParser::testRenderStrokeWithInlineStyle()
+{
+    const QString data =
+            "<svg width=\"30px\" height=\"30px\""
+            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+
+            "<rect id=\"testRect\" x=\"5\" y=\"5\" width=\"10\" height=\"20\""
+            "    style = \"fill: cyan; stroke :blue; stroke-width:2;\"/>"
+
+            "</svg>";
+
+    SvgRenderTester t (data);
+    t.test_standard_30px_72ppi("stroke_blue_width_2");
+}
+
+void TestSvgParser::testIccColor()
+{
+    const QString data =
+            "<svg width=\"30px\" height=\"30px\""
+            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+
+            "<g xml:base=\"icc\">"
+            "    <color-profile xlink:href=\"sRGB-elle-V4-srgbtrc.icc\""
+            "        local=\"133a66607cffeebdd64dd433ada9bf4e\" name=\"default-profile\"/>"
+
+            "    <color-profile xlink:href=\"sRGB-elle-V4-srgbtrc.icc\""
+            "        local=\"133a66607cffeebdd64dd433ada9bf4e\" name=\"some-other-name\"/>"
+
+            "    <rect id=\"testRect\" x=\"5\" y=\"5\" width=\"10\" height=\"20\""
+            "        style = \"fill: cyan; stroke :blue; stroke-width:2;\"/>"
+            "</g>"
+
+            "</svg>";
+
+    SvgRenderTester t (data);
+
+    int numFetches = 0;
+
+    t.parser.setFileFetcher(
+        [&numFetches](const QString &name) {
+            numFetches++;
+            const QString fileName = TestUtil::fetchDataFileLazy(name);
+            QFile file(fileName);
+            KIS_ASSERT(file.exists());
+            file.open(QIODevice::ReadOnly);
+            return file.readAll();
+        });
+
+    t.test_standard_30px_72ppi("stroke_blue_width_2");
+    QCOMPARE(numFetches, 1);
+}
+
 QTEST_GUILESS_MAIN(TestSvgParser)

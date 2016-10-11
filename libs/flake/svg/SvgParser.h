@@ -59,6 +59,9 @@ public:
     /// Returns the list of all shapes of the svg document
     QList<KoShape*> shapes() const;
 
+    typedef std::function<QByteArray(const QString&)> FileFetcherFunc;
+    void setFileFetcher(FileFetcherFunc func);
+
 protected:
 
     /// Parses a container element, returning a list of child shapes

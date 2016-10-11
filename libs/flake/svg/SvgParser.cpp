@@ -1093,6 +1093,11 @@ void SvgParser::applyViewBoxTransform(const KoXmlElement &element)
     }
 }
 
+void SvgParser::setFileFetcher(SvgParser::FileFetcherFunc func)
+{
+    m_context.setFileFetcher(func);
+}
+
 QList<KoShape*> SvgParser::parseContainer(const KoXmlElement &e)
 {
     QList<KoShape*> shapes;
@@ -1177,6 +1182,8 @@ QList<KoShape*> SvgParser::parseContainer(const KoXmlElement &e)
                 shapes.append(shape);
         } else if (b.tagName() == "use") {
             shapes += parseUse(b);
+        } else if (b.tagName() == "color-profile") {
+            m_context.parseProfile(b);
         } else {
             // this is an unknown element, so try to load it anyway
             // there might be a shape that handles that element

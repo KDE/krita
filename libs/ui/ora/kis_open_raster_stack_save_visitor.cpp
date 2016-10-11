@@ -70,7 +70,9 @@ void KisOpenRasterStackSaveVisitor::saveLayerInfo(QDomElement& elt, KisLayer* la
     if (layer->compositeOpId() == COMPOSITE_CLEAR) compop = "svg:clear";
     else if (layer->compositeOpId() == COMPOSITE_OVER) compop = "svg:src-over";
     else if (layer->compositeOpId() == COMPOSITE_ERASE) compop = "svg:dst-out";
-    else if (layer->alphaChannelDisabled()) compop = "svg:dst-atop";
+    else if (layer->alphaChannelDisabled()) compop = "svg:src-atop";
+    else if (layer->compositeOpId() == COMPOSITE_DESTINATION_ATOP) compop = "svg:dst-atop";
+    else if (layer->compositeOpId() == COMPOSITE_DESTINATION_IN) compop = "svg:dst-in";
     else if (layer->compositeOpId() == COMPOSITE_ADD) compop = "svg:plus";
     else if (layer->compositeOpId() == COMPOSITE_MULT) compop = "svg:multiply";
     else if (layer->compositeOpId() == COMPOSITE_SCREEN) compop = "svg:screen";

@@ -375,6 +375,9 @@ private:
     friend class KisLayerTest;
 
 private:
+    QRect layerExtentImpl(bool exactBounds) const;
+
+private:
     struct Private;
     Private * const m_d;
 };

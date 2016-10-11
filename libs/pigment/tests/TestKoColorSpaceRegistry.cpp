@@ -23,6 +23,7 @@
 
 #include <KoColorSpaceRegistry.h>
 #include <KoColorModelStandardIds.h>
+#include <KoColorProfile.h>
 
 TestColorSpaceRegistry::TestColorSpaceRegistry()
 {
@@ -50,6 +51,18 @@ void TestColorSpaceRegistry::testRgb16()
     QCOMPARE(cs->colorModelId().id(), RGBAColorModelID.id());
     QCOMPARE(cs->colorDepthId().id(), Integer16BitsColorDepthID.id());
     QVERIFY(*cs == *KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), Integer16BitsColorDepthID.id(), 0));
+}
+
+void TestColorSpaceRegistry::testProfileByUniqueId()
+{
+    const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb16();
+    const KoColorProfile *profile = cs->profile();
+    QVERIFY(profile);
+
+    const KoColorProfile *fetchedProfile =
+        KoColorSpaceRegistry::instance()->profileByUniqueId(profile->uniqueId());
+
+    QCOMPARE(*fetchedProfile, *profile);
 }
 
 QTEST_GUILESS_MAIN(TestColorSpaceRegistry)

@@ -173,6 +173,8 @@ public:
      */
     virtual void linearizeFloatValueFast(QVector <qreal> & Value) const = 0;
     virtual void delinearizeFloatValueFast(QVector <qreal> & Value) const = 0;
+
+    virtual QByteArray uniqueId() const = 0;
     
     virtual bool operator==(const KoColorProfile&) const = 0;
 

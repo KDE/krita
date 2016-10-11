@@ -50,6 +50,7 @@ struct Q_DECL_HIDDEN KoColorSpaceRegistry::Private {
     KoGenericRegistry<KoColorSpaceFactory *> colorSpaceFactoryRegistry;
     QList<KoColorSpaceFactory *> localFactories;
     QHash<QString, KoColorProfile * > profileMap;
+    QHash<QByteArray, KoColorProfile * > profileUniqueIdMap;
     QHash<QString, QString> profileAlias;
     QHash<QString, const KoColorSpace * > csMap;
     KoColorConversionSystem *colorConversionSystem;
@@ -59,6 +60,8 @@ struct Q_DECL_HIDDEN KoColorSpaceRegistry::Private {
     const KoColorSpace *lab16sLAB;
     const KoColorSpace *alphaCs;
     QReadWriteLock registrylock;
+
+    void populateUniqueIdMap();
 };
 
 KoColorSpaceRegistry* KoColorSpaceRegistry::instance()
@@ -192,6 +195,38 @@ const KoColorProfile *  KoColorSpaceRegistry::profileByName(const QString & _nam
     return d->profileMap.value( profileAlias(_name), 0);
 }
 
+void KoColorSpaceRegistry::Private::populateUniqueIdMap()
+{
+    QWriteLocker l(&registrylock);
+    profileUniqueIdMap.clear();
+
+    for (auto it = profileMap.constBegin();
+         it != profileMap.constEnd();
+         ++it) {
+
+        KoColorProfile *profile = it.value();
+        QByteArray id = profile->uniqueId();
+
+        if (!id.isEmpty()) {
+            profileUniqueIdMap.insert(id, profile);
+        }
+    }
+}
+
+const KoColorProfile *  KoColorSpaceRegistry::profileByUniqueId(const QByteArray &id) const
+{
+    {
+        QReadLocker l(&d->registrylock);
+        if (d->profileUniqueIdMap.isEmpty()) {
+            l.unlock();
+            d->populateUniqueIdMap();
+            l.relock();
+        }
+        return d->profileUniqueIdMap.value(id, 0);
+    }
+}
+
+
 QList<const KoColorProfile *>  KoColorSpaceRegistry::profilesFor(const QString &id) const
 {
     return profilesFor(d->colorSpaceFactoryRegistry.value(id));
@@ -253,6 +288,9 @@ void KoColorSpaceRegistry::addProfileToMap(KoColorProfile *p)
     Q_ASSERT(p);
     if (p->valid()) {
         d->profileMap[p->name()] = p;
+        if (!d->profileUniqueIdMap.isEmpty()) {
+            d->profileUniqueIdMap.insert(p->uniqueId(), p);
+        }
     }
 }
 
@@ -260,7 +298,7 @@ void KoColorSpaceRegistry::addProfile(KoColorProfile *p)
 {
     Q_ASSERT(p);
     if (p->valid()) {
-        d->profileMap[p->name()] = p;
+        addProfileToMap(p);
         d->colorConversionSystem->insertColorProfile(p);
     }
 }
@@ -273,6 +311,9 @@ void KoColorSpaceRegistry::addProfile(const KoColorProfile* profile)
 void KoColorSpaceRegistry::removeProfile(KoColorProfile* profile)
 {
     d->profileMap.remove(profile->name());
+    if (!d->profileUniqueIdMap.isEmpty()) {
+        d->profileUniqueIdMap.remove(profile->uniqueId());
+    }
 }
 
 const KoColorSpace* KoColorSpaceRegistry::getCachedColorSpace(const QString & csID, const QString & profileName) const

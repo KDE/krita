@@ -49,6 +49,7 @@ public:
     virtual void linearizeFloatValueFast(QVector <double> & Value) const;
     virtual void delinearizeFloatValueFast(QVector <double> & Value) const;
     virtual bool operator==(const KoColorProfile&) const;
+    virtual QByteArray uniqueId() const;
 };
 
 #endif

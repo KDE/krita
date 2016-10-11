@@ -74,6 +74,7 @@ public:
         virtual QVector <double> getWhitePointXYZ() const = 0;
         virtual QVector <double> getWhitePointxyY() const = 0;
         virtual QVector <double> getEstimatedTRC() const = 0;
+        virtual QByteArray getProfileUniqueId() const = 0;
     };
 public:
 
@@ -111,6 +112,7 @@ public:
     virtual void delinearizeFloatValue(QVector <qreal> & Value) const;
     virtual void linearizeFloatValueFast(QVector <qreal> & Value) const;
     virtual void delinearizeFloatValueFast(QVector <qreal> & Value) const;
+    virtual QByteArray uniqueId() const;
     virtual bool operator==(const KoColorProfile &) const;
     virtual QString type() const
     {

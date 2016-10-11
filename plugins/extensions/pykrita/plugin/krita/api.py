@@ -19,7 +19,7 @@
 # the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA 02110-1301, USA.
 
-'''Provide shortcuts to access kate internals from plugins'''
+'''Provide shortcuts to access krita internals from plugins'''
 
 import contextlib
 import os

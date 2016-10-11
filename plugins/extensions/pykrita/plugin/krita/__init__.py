@@ -7,6 +7,27 @@ from .decorators import *
 from .dockwidgetfactory import *
 from PyKrita.krita import *
 
+krita_path = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, krita_path)
+print("%s added to PYTHONPATH" % krita_path, file=sys.stderr)
+
+# Look for PyQt
+try:
+    from PyQt5 import QtCore
+except ImportError:
+    print("Python cannot find the Qt5 bindings.", file=sys.stderr)
+    print("Please make sure, that the needed packages are installed.", file=sys.stderr)
+    raise
+
+# Shows nice looking error dialog if an unhandled exception occures.
+import excepthook
+excepthook.install()
+
+# Import helper modules
+from scripter_hooks import MenuHooks
+from mikro import create_pyqt_object, Error as MiKroError
+
+
 def qDebug(text):
     '''Use KDE way to show debug info
 
@@ -45,11 +66,3 @@ def on_pykrita_unloading():
     qDebug('UNLOADING PYKRITA')
     return True
 
-
-
-sys._excepthook = sys.excepthook
-def exception_hook(exctype, value, traceback):
-    print("Definining exception hook")
-    sys._excepthook(exctype, value, traceback)
-    #sys.exit(1)
-sys.excepthook = exception_hook

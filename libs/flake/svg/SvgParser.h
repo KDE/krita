@@ -71,7 +71,7 @@ protected:
     /// Parses definitions for later use
     void parseDefs(const KoXmlElement &);
     /// Parses a gradient element
-    bool parseGradient(const KoXmlElement &, const KoXmlElement &referencedBy = KoXmlElement());
+    SvgGradientHelper *parseGradient(const KoXmlElement &);
     /// Parses a pattern element
     void parsePattern(SvgPatternHelper &pattern, const KoXmlElement &);
     /// Parses a filter element
@@ -94,7 +94,7 @@ protected:
     /// Create path object from the given xml element
     KoShape * createPath(const KoXmlElement &);
     /// find gradient with given id in gradient map
-    SvgGradientHelper* findGradient(const QString &id, const QString &href = QString());
+    SvgGradientHelper* findGradient(const QString &id);
     /// find pattern with given id in pattern map
     SvgPatternHelper* findPattern(const QString &id);
     /// find filter with given id in filter map

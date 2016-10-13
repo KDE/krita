@@ -346,56 +346,93 @@ bool SvgStyleParser::parseColor(QColor &color, const QString &s)
     return true;
 }
 
-void SvgStyleParser::parseColorStops(QGradient *gradient, const KoXmlElement &e)
+void SvgStyleParser::parseColorStops(QGradient *gradient,
+                                     const KoXmlElement &e,
+                                     SvgGraphicsContext *context,
+                                     const QGradientStops &defaultStops)
 {
     QGradientStops stops;
-    QColor c;
 
-    for (KoXmlNode n = e.firstChild(); !n.isNull(); n = n.nextSibling()) {
-        KoXmlElement stop = n.toElement();
+    qreal previousOffset = 0.0;
+
+    KoXmlElement stop;
+    forEachElement(stop, e) {
         if (stop.tagName() == "stop") {
-            float offset;
-            QString temp = stop.attribute("offset");
-            if (temp.contains('%')) {
-                temp = temp.left(temp.length() - 1);
-                offset = temp.toFloat() / 100.0;
-            } else
-                offset = temp.toFloat();
+            qreal offset = 0.0;
+            QString offsetStr = stop.attribute("offset").trimmed();
+            if (offsetStr.endsWith('%')) {
+                offsetStr = offsetStr.left(offsetStr.length() - 1);
+                offset = offsetStr.toFloat() / 100.0;
+            } else {
+                offset = offsetStr.toFloat();
+            }
+
+            // according to SVG the value must be within [0; 1] interval
+            offset = qBound(0.0, offset, 1.0);
+
+            // according to SVG the stops' offset must be non-decreasing
+            offset = qMax(offset, previousOffset);
+            previousOffset = offset;
+
+            QColor color;
 
             QString stopColorStr = stop.attribute("stop-color");
-            if (!stopColorStr.isEmpty()) {
-                if (stopColorStr == "inherit") {
-                    stopColorStr = inheritedAttribute("stop-color", stop);
-                }
-                parseColor(c, stopColorStr);
-            }
-            else {
-                // try style attr
-                QString style = stop.attribute("style").simplified();
-                QStringList substyles = style.split(';', QString::SkipEmptyParts);
-                for (QStringList::Iterator it = substyles.begin(); it != substyles.end(); ++it) {
-                    QStringList substyle = it->split(':');
-                    QString command = substyle[0].trimmed();
-                    QString params  = substyle[1].trimmed();
-                    if (command == "stop-color")
-                        parseColor(c, params);
-                    if (command == "stop-opacity")
-                        c.setAlphaF(params.toDouble());
-                }
+            QString stopOpacityStr = stop.attribute("stop-opacity");
 
+            const QStringList attributes({"stop-color", "stop-opacity"});
+            SvgStyles styles = parseOneCssStyle(stop.attribute("style"), attributes);
+
+            // SVG: CSS values have precedence over presentation attributes!
+            if (styles.contains("stop-color")) {
+                stopColorStr = styles.value("stop-color");
             }
-            QString opacityStr = stop.attribute("stop-opacity");
-            if (!opacityStr.isEmpty()) {
-                if (opacityStr == "inherit") {
-                    opacityStr = inheritedAttribute("stop-opacity", stop);
-                }
-                c.setAlphaF(opacityStr.toDouble());
+
+            if (styles.contains("stop-opacity")) {
+                stopOpacityStr = styles.value("stop-opacity");
             }
-            stops.append(QPair<qreal, QColor>(offset, c));
+
+            if (stopColorStr.isEmpty() && stopColorStr == "inherit") {
+                color = context->currentColor;
+            } else {
+                parseColor(color, stopColorStr);
+            }
+
+            if (!stopOpacityStr.isEmpty() && stopOpacityStr != "inherit") {
+                color.setAlphaF(qBound(0.0, stopOpacityStr.toDouble(), 1.0));
+            }
+
+            stops.append(QPair<qreal, QColor>(offset, color));
         }
     }
-    if (stops.count())
+
+    if (!stops.isEmpty()) {
         gradient->setStops(stops);
+    } else {
+        gradient->setStops(defaultStops);
+    }
+}
+
+SvgStyles SvgStyleParser::parseOneCssStyle(const QString &style, const QStringList &interestingAttributes)
+{
+    SvgStyles parsedStyles;
+    if (style.isEmpty()) return parsedStyles;
+
+    QStringList substyles = style.simplified().split(';', QString::SkipEmptyParts);
+    if (!substyles.count()) return parsedStyles;
+
+    for (QStringList::Iterator it = substyles.begin(); it != substyles.end(); ++it) {
+        QStringList substyle = it->split(':');
+        if (substyle.count() != 2)
+            continue;
+        QString command = substyle[0].trimmed();
+        QString params  = substyle[1].trimmed();
+
+        if (interestingAttributes.isEmpty() || interestingAttributes.contains(command)) {
+            parsedStyles[command] = params;
+        }
+    }
+
+    return parsedStyles;
 }
 
 SvgStyles SvgStyleParser::collectStyles(const KoXmlElement &e)

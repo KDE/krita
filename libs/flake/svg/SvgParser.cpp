@@ -59,6 +59,7 @@
 #include "SvgGradientHelper.h"
 #include "SvgClipPathHelper.h"
 #include "parsers/SvgTransformParser.h"
+#include "kis_global.h"
 
 #include "kis_debug.h"
 
@@ -98,44 +99,24 @@ QList<KoShape*> SvgParser::shapes() const
 // Helper functions
 // ---------------------------------------------------------------------------------------
 
-SvgGradientHelper* SvgParser::findGradient(const QString &id, const QString &href)
+SvgGradientHelper* SvgParser::findGradient(const QString &id)
 {
+    SvgGradientHelper *result = 0;
+
     // check if gradient was already parsed, and return it
-    if (m_gradients.contains(id))
-        return &m_gradients[ id ];
-
-    // check if gradient was stored for later parsing
-    if (!m_context.hasDefinition(id))
-        return 0;
-
-    const KoXmlElement &e = m_context.definition(id);
-    if (!e.tagName().contains("Gradient"))
-        return 0;
-
-    if (e.childNodesCount() == 0) {
-        QString mhref = e.attribute("xlink:href").mid(1);
-
-        if (m_context.hasDefinition(mhref))
-            return findGradient(mhref, id);
-        else
-            return 0;
-    } else {
-        // ok parse gradient now
-        if (! parseGradient(m_context.definition(id), m_context.definition(href)))
-            return 0;
+    if (m_gradients.contains(id)) {
+        result = &m_gradients[ id ];
     }
 
-    // return successfully parsed gradient or 0
-    QString n;
-    if (href.isEmpty())
-        n = id;
-    else
-        n = href;
+    // check if gradient was stored for later parsing
+    if (!result && m_context.hasDefinition(id)) {
+        const KoXmlElement &e = m_context.definition(id);
+        if (e.tagName().contains("Gradient")) {
+            result = parseGradient(m_context.definition(id));
+        }
+    }
 
-    if (m_gradients.contains(n))
-        return &m_gradients[ n ];
-    else
-        return 0;
+    return result;
 }
 
 SvgPatternHelper* SvgParser::findPattern(const QString &id)
@@ -263,7 +244,7 @@ qreal SvgParser::parseUnitXY(const QString &unit)
     return SvgUtil::parseUnitXY(m_context.currentGC(), unit);
 }
 
-bool SvgParser::parseGradient(const KoXmlElement &e, const KoXmlElement &referencedBy)
+SvgGradientHelper* SvgParser::parseGradient(const KoXmlElement &e)
 {
     // IMPROVEMENTS:
     // - Store the parsed colorstops in some sort of a cache so they don't need to be parsed again.
@@ -272,130 +253,114 @@ bool SvgParser::parseGradient(const KoXmlElement &e, const KoXmlElement &referen
     // - Gradients with one color stop have a solid color.
 
     SvgGraphicsContext *gc = m_context.currentGC();
-    if (!gc)
-        return false;
+    if (!gc) return 0;
 
-    SvgGradientHelper gradhelper;
+    SvgGradientHelper gradHelper;
+
+    QString gradientId = e.attribute("id");
+    if (gradientId.isEmpty()) return 0;
+
+    // check if we have this gradient already parsed
+    // copy existing gradient if it exists
+    if (m_gradients.contains(gradientId)) {
+        return &m_gradients[gradientId];
+    }
 
     if (e.hasAttribute("xlink:href")) {
+        // strip the '#' symbol
         QString href = e.attribute("xlink:href").mid(1);
-        if (! href.isEmpty()) {
+
+        if (!href.isEmpty()) {
             // copy the referenced gradient if found
             SvgGradientHelper *pGrad = findGradient(href);
-            if (pGrad)
-                gradhelper = *pGrad;
-        } else {
-            //gc->fillType = SvgGraphicsContext::None; // <--- TODO Fill OR Stroke are none
-            return false;
+            if (pGrad) {
+                gradHelper = *pGrad;
+            }
+
+            int numLocalStops = 0;
+            KoXmlElement child;
+            forEachElement (child, e) {
+                if (child.tagName() == "stop") {
+                    numLocalStops++;
+                }
+            }
         }
     }
 
-    // Use the gradient that is referencing, or if there isn't one, the original gradient.
-    KoXmlElement b;
-    if (!referencedBy.isNull())
-        b = referencedBy;
-    else
-        b = e;
+    const QGradientStops defaultStops = gradHelper.gradient()->stops();
 
-    QString gradientId = b.attribute("id");
-
-    if (! gradientId.isEmpty()) {
-        // check if we have this gradient already parsed
-        // copy existing gradient if it exists
-        if (m_gradients.find(gradientId) != m_gradients.end())
-            gradhelper.copyGradient(m_gradients[ gradientId ].gradient());
+    if (e.attribute("gradientUnits") == "userSpaceOnUse") {
+        gradHelper.setGradientUnits(SvgGradientHelper::UserSpaceOnUse);
     }
 
-    if (b.attribute("gradientUnits") == "userSpaceOnUse")
-        gradhelper.setGradientUnits(SvgGradientHelper::UserSpaceOnUse);
+    m_context.pushGraphicsContext(e);
+    uploadStyleToContext(e);
 
-    // parse color prop
-    QColor c = gc->currentColor;
-
-    if (!b.attribute("color").isEmpty()) {
-        m_context.styleParser().parseColor(c, b.attribute("color"));
-    } else {
-        // try style attr
-        QString style = b.attribute("style").simplified();
-        QStringList substyles = style.split(';', QString::SkipEmptyParts);
-        for (QStringList::Iterator it = substyles.begin(); it != substyles.end(); ++it) {
-            QStringList substyle = it->split(':');
-            QString command = substyle[0].trimmed();
-            QString params  = substyle[1].trimmed();
-            if (command == "color")
-                m_context.styleParser().parseColor(c, params);
-        }
-    }
-    gc->currentColor = c;
-
-    if (b.tagName() == "linearGradient") {
+    if (e.tagName() == "linearGradient") {
         QLinearGradient *g = new QLinearGradient();
-        if (gradhelper.gradientUnits() == SvgGradientHelper::ObjectBoundingBox) {
+        if (gradHelper.gradientUnits() == SvgGradientHelper::ObjectBoundingBox) {
             g->setCoordinateMode(QGradient::ObjectBoundingMode);
-            g->setStart(QPointF(SvgUtil::fromPercentage(b.attribute("x1", "0%")),
-                                SvgUtil::fromPercentage(b.attribute("y1", "0%"))));
-            g->setFinalStop(QPointF(SvgUtil::fromPercentage(b.attribute("x2", "100%")),
-                                    SvgUtil::fromPercentage(b.attribute("y2", "0%"))));
+            g->setStart(QPointF(SvgUtil::fromPercentage(e.attribute("x1", "0%")),
+                                SvgUtil::fromPercentage(e.attribute("y1", "0%"))));
+            g->setFinalStop(QPointF(SvgUtil::fromPercentage(e.attribute("x2", "100%")),
+                                    SvgUtil::fromPercentage(e.attribute("y2", "0%"))));
         } else {
-            g->setStart(QPointF(SvgUtil::fromUserSpace(b.attribute("x1").toDouble()),
-                                SvgUtil::fromUserSpace(b.attribute("y1").toDouble())));
-            g->setFinalStop(QPointF(SvgUtil::fromUserSpace(b.attribute("x2").toDouble()),
-                                    SvgUtil::fromUserSpace(b.attribute("y2").toDouble())));
+            g->setStart(QPointF(parseUnitX(e.attribute("x1")),
+                                parseUnitY(e.attribute("y1"))));
+            g->setFinalStop(QPointF(parseUnitX(e.attribute("x2")),
+                                    parseUnitY(e.attribute("y2"))));
         }
-        // preserve color stops
-        if (gradhelper.gradient())
-            g->setStops(gradhelper.gradient()->stops());
-        gradhelper.setGradient(g);
-    } else if (b.tagName() == "radialGradient") {
+        gradHelper.setGradient(g);
+
+    } else if (e.tagName() == "radialGradient") {
         QRadialGradient *g = new QRadialGradient();
-        if (gradhelper.gradientUnits() == SvgGradientHelper::ObjectBoundingBox) {
+        if (gradHelper.gradientUnits() == SvgGradientHelper::ObjectBoundingBox) {
             g->setCoordinateMode(QGradient::ObjectBoundingMode);
-            g->setCenter(QPointF(SvgUtil::fromPercentage(b.attribute("cx", "50%")),
-                                 SvgUtil::fromPercentage(b.attribute("cy", "50%"))));
-            g->setRadius(SvgUtil::fromPercentage(b.attribute("r", "50%")));
-            g->setFocalPoint(QPointF(SvgUtil::fromPercentage(b.attribute("fx", "50%")),
-                                     SvgUtil::fromPercentage(b.attribute("fy", "50%"))));
+            g->setCenter(QPointF(SvgUtil::fromPercentage(e.attribute("cx", "50%")),
+                                 SvgUtil::fromPercentage(e.attribute("cy", "50%"))));
+            g->setRadius(SvgUtil::fromPercentage(e.attribute("r", "50%")));
+            g->setFocalPoint(QPointF(SvgUtil::fromPercentage(e.attribute("fx", "50%")),
+                                     SvgUtil::fromPercentage(e.attribute("fy", "50%"))));
         } else {
-            g->setCenter(QPointF(SvgUtil::fromUserSpace(b.attribute("cx").toDouble()),
-                                 SvgUtil::fromUserSpace(b.attribute("cy").toDouble())));
-            g->setFocalPoint(QPointF(SvgUtil::fromUserSpace(b.attribute("fx").toDouble()),
-                                     SvgUtil::fromUserSpace(b.attribute("fy").toDouble())));
-            g->setRadius(SvgUtil::fromUserSpace(b.attribute("r").toDouble()));
+            g->setCenter(QPointF(parseUnitX(e.attribute("cx")),
+                                 parseUnitY(e.attribute("cy"))));
+            g->setFocalPoint(QPointF(parseUnitX(e.attribute("fx")),
+                                     parseUnitY(e.attribute("fy"))));
+            g->setRadius(parseUnitXY(e.attribute("r")));
         }
-        // preserve color stops
-        if (gradhelper.gradient())
-            g->setStops(gradhelper.gradient()->stops());
-        gradhelper.setGradient(g);
+        gradHelper.setGradient(g);
     } else {
-        return false;
+        qDebug() << "WARNING: Failed to parse gradient with tag" << e.tagName();
     }
 
     // handle spread method
-    QString spreadMethod = b.attribute("spreadMethod");
-    if (!spreadMethod.isEmpty()) {
-        if (spreadMethod == "reflect")
-            gradhelper.gradient()->setSpread(QGradient::ReflectSpread);
-        else if (spreadMethod == "repeat")
-            gradhelper.gradient()->setSpread(QGradient::RepeatSpread);
-        else
-            gradhelper.gradient()->setSpread(QGradient::PadSpread);
-    } else
-        gradhelper.gradient()->setSpread(QGradient::PadSpread);
-
-    // Parse the color stops. The referencing gradient does not have colorstops,
-    // so use the stops from the gradient it references to (e in this case and not b)
-    m_context.styleParser().parseColorStops(gradhelper.gradient(), e);
-
-    if (b.hasAttribute("gradientTransform")) {
-        SvgTransformParser p(e.attribute("gradientTransform"));
-        if (p.isValid()) {
-            gradhelper.setTransform(p.transform());
+    QGradient::Spread spreadMethod = QGradient::PadSpread;
+    QString spreadMethodStr = e.attribute("spreadMethod");
+    if (!spreadMethodStr.isEmpty()) {
+        if (spreadMethodStr == "reflect") {
+            spreadMethod = QGradient::ReflectSpread;
+        } else if (spreadMethodStr == "repeat") {
+            spreadMethod = QGradient::RepeatSpread;
         }
     }
 
-    m_gradients.insert(gradientId, gradhelper);
+    gradHelper.setSpreadMode(spreadMethod);
 
-    return true;
+    // Parse the color stops.
+    m_context.styleParser().parseColorStops(gradHelper.gradient(), e, gc, defaultStops);
+
+    if (e.hasAttribute("gradientTransform")) {
+        SvgTransformParser p(e.attribute("gradientTransform"));
+        if (p.isValid()) {
+            gradHelper.setTransform(p.transform());
+        }
+    }
+
+    m_context.popGraphicsContext();
+
+    m_gradients.insert(gradientId, gradHelper);
+
+    return &m_gradients[gradientId];
 }
 
 void SvgParser::parsePattern(SvgPatternHelper &pattern, const KoXmlElement &e)
@@ -592,6 +557,55 @@ void SvgParser::applyStyle(KoShape *obj, const SvgStyles &styles)
     obj->setTransparency(1.0 - gc->opacity);
 }
 
+QGradient* prepareGradientForShape(const SvgGradientHelper *gradient,
+                                   const KoShape *shape,
+                                   const SvgGraphicsContext *gc,
+                                   QTransform *transform)
+{
+    QGradient *resultGradient = 0;
+    KIS_ASSERT(transform);
+
+    if (gradient->gradientUnits() == SvgGradientHelper::ObjectBoundingBox) {
+        resultGradient = KoFlake::cloneGradient(gradient->gradient());
+        *transform = gradient->transform();
+    } else {
+        if (gradient->gradient()->type() == QGradient::LinearGradient) {
+            /**
+             * Create a converted gradient that looks the same, but linked to the
+             * bounding rect of the shape, so it would be transformed with the shape
+             */
+
+            const QRectF boundingRect = shape->outline().boundingRect();
+            const QTransform relativeToShape(boundingRect.width(), 0, 0, boundingRect.height(),
+                                             boundingRect.x(), boundingRect.y());
+
+            const QTransform relativeToUser =
+                    relativeToShape * shape->transformation() * gc->matrix.inverted();
+
+            const QTransform userToRelative = relativeToUser.inverted();
+
+            const QLinearGradient *o = static_cast<const QLinearGradient*>(gradient->gradient());
+            QLinearGradient *g = new QLinearGradient();
+            g->setStart(userToRelative.map(o->start()));
+            g->setFinalStop(userToRelative.map(o->finalStop()));
+            g->setCoordinateMode(QGradient::ObjectBoundingMode);
+            g->setStops(o->stops());
+            g->setSpread(o->spread());
+
+            resultGradient = g;
+            *transform = relativeToUser * gradient->transform() * userToRelative;
+
+        } else if (gradient->gradient()->type() == QGradient::RadialGradient) {
+            // For radial and conical gradients such conversion is not possible
+
+            resultGradient = KoFlake::cloneGradient(gradient->gradient());
+            *transform = gradient->transform() * gc->matrix * shape->transformation().inverted();
+        }
+    }
+
+    return resultGradient;
+}
+
 void SvgParser::applyFillStyle(KoShape *shape)
 {
     SvgGraphicsContext *gc = m_context.currentGC();
@@ -606,18 +620,14 @@ void SvgParser::applyFillStyle(KoShape *shape)
         // try to find referenced gradient
         SvgGradientHelper *gradient = findGradient(gc->fillId);
         if (gradient) {
-            // great, we have a gradient fill
-            QSharedPointer<KoGradientBackground> bg;
-            if (gradient->gradientUnits() == SvgGradientHelper::ObjectBoundingBox) {
-                bg = QSharedPointer<KoGradientBackground>(new KoGradientBackground(*gradient->gradient()));
-                bg->setTransform(gradient->transform());
-            } else {
-                QGradient *convertedGradient = SvgGradientHelper::convertGradient(gradient->gradient(), shape->size());
-                bg = QSharedPointer<KoGradientBackground>(new KoGradientBackground(convertedGradient));
-                QTransform invShapematrix = shape->transformation().inverted();
-                bg->setTransform(gradient->transform() * gc->matrix * invShapematrix);
+            QTransform transform;
+            QGradient *result = prepareGradientForShape(gradient, shape, gc, &transform);
+            if (result) {
+                QSharedPointer<KoGradientBackground> bg;
+                bg = toQShared(new KoGradientBackground(result));
+                bg->setTransform(transform);
+                shape->setBackground(bg);
             }
-            shape->setBackground(bg);
         } else {
             // try to find referenced pattern
             SvgPatternHelper *pattern = findPattern(gc->fillId);
@@ -703,57 +713,59 @@ void SvgParser::applyFillStyle(KoShape *shape)
         path->setFillRule(gc->fillRule);
 }
 
+void applyDashes(const KoShapeStroke *srcStroke, KoShapeStroke *dstStroke)
+{
+    const double lineWidth = srcStroke->lineWidth();
+    QVector<qreal> dashes = srcStroke->lineDashes();
+
+    // apply line width to dashes and dash offset
+    if (dashes.count() && lineWidth > 0.0) {
+        const double dashOffset = srcStroke->dashOffset();
+        QVector<qreal> dashes = srcStroke->lineDashes();
+
+        for (int i = 0; i < dashes.count(); ++i) {
+            dashes[i] /= lineWidth;
+        }
+
+        dstStroke->setLineStyle(Qt::CustomDashLine, dashes);
+        dstStroke->setDashOffset(dashOffset / lineWidth);
+    } else {
+        dstStroke->setLineStyle(Qt::SolidLine, QVector<qreal>());
+    }
+}
+
 void SvgParser::applyStrokeStyle(KoShape *shape)
 {
     SvgGraphicsContext *gc = m_context.currentGC();
     if (! gc)
         return;
 
-    qDebug() << ppVar(gc->strokeType);
-
     if (gc->strokeType == SvgGraphicsContext::None) {
         shape->setStroke(0);
     } else if (gc->strokeType == SvgGraphicsContext::Solid) {
-        double lineWidth = gc->stroke.lineWidth();
-        QVector<qreal> dashes = gc->stroke.lineDashes();
-
         KoShapeStroke *stroke = new KoShapeStroke(gc->stroke);
-
-        // apply line width to dashes and dash offset
-        if (dashes.count() && lineWidth > 0.0) {
-            QVector<qreal> dashes = stroke->lineDashes();
-            for (int i = 0; i < dashes.count(); ++i)
-                dashes[i] /= lineWidth;
-            double dashOffset = stroke->dashOffset();
-            stroke->setLineStyle(Qt::CustomDashLine, dashes);
-            stroke->setDashOffset(dashOffset / lineWidth);
-        } else {
-            stroke->setLineStyle(Qt::SolidLine, QVector<qreal>());
-        }
+        applyDashes(&gc->stroke, stroke);
         shape->setStroke(stroke);
     } else if (gc->strokeType == SvgGraphicsContext::Complex) {
         // try to find referenced gradient
         SvgGradientHelper *gradient = findGradient(gc->strokeId);
         if (gradient) {
-            // great, we have a gradient stroke
-            QBrush brush;
-            if (gradient->gradientUnits() == SvgGradientHelper::ObjectBoundingBox) {
-                brush = *gradient->gradient();
-                brush.setTransform(gradient->transform());
-            } else {
-                QGradient *convertedGradient(SvgGradientHelper::convertGradient(gradient->gradient(), shape->size()));
-                brush = *convertedGradient;
-                delete convertedGradient;
-                brush.setTransform(gradient->transform() * gc->matrix * shape->transformation().inverted());
+            QTransform transform;
+            QGradient *result = prepareGradientForShape(gradient, shape, gc, &transform);
+            if (result) {
+                QBrush brush = *result;
+                delete result;
+                brush.setTransform(transform);
+
+                KoShapeStroke *stroke = new KoShapeStroke(gc->stroke);
+                stroke->setLineBrush(brush);
+                applyDashes(&gc->stroke, stroke);
+                shape->setStroke(stroke);
             }
-            KoShapeStroke *stroke = new KoShapeStroke(gc->stroke);
-            stroke->setLineBrush(brush);
-            stroke->setLineStyle(Qt::SolidLine, QVector<qreal>());
-            shape->setStroke(stroke);
         } else {
             // no referenced stroke found, use fallback color
             KoShapeStroke *stroke = new KoShapeStroke(gc->stroke);
-            stroke->setLineStyle(Qt::SolidLine, QVector<qreal>());
+            applyDashes(&gc->stroke, stroke);
             shape->setStroke(stroke);
         }
     }

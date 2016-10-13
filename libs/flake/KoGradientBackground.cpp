@@ -101,10 +101,39 @@ void KoGradientBackground::paint(QPainter &painter, const KoViewConverter &/*con
 {
     Q_D(const KoGradientBackground);
     if (!d->gradient) return;
-    QBrush brush(*d->gradient);
-    brush.setTransform(d->matrix);
 
-    painter.setBrush(brush);
+    if (d->gradient->coordinateMode() == QGradient::ObjectBoundingMode) {
+
+        /**
+         * NOTE: important hack!
+         *
+         * Qt has different notation of QBrush::setTransform() in comparison
+         * to what SVG defines. SVG defines gradientToUser matrix to be postmultiplied
+         * by QBrush::transform(), but Qt does exectly reverse!
+         *
+         * That most probably has beed caused by the fact that Qt uses transposed
+         * matrices and someone just mistyped the stuff long ago :(
+         *
+         * So here we basically emulate this feature by converting the gradient into
+         * QGradient::LogicalMode and doing transformations manually.
+         */
+
+        const QRectF boundingRect = fillPath.boundingRect();
+        QTransform gradientToUser(boundingRect.width(), 0, 0, boundingRect.height(),
+                                  boundingRect.x(), boundingRect.y());
+
+        QGradient g = *d->gradient;
+        g.setCoordinateMode(QGradient::LogicalMode);
+
+        QBrush b(g);
+        b.setTransform(d->matrix * gradientToUser);
+        painter.setBrush(b);
+    } else {
+        QBrush b(*d->gradient);
+        b.setTransform(d->matrix);
+        painter.setBrush(b);
+    }
+
     painter.drawPath(fillPath);
 }
 

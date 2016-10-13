@@ -84,6 +84,21 @@ private Q_SLOTS:
     void testRenderStrokeWithInlineStyle();
 
     void testIccColor();
+    void testRenderFillLinearGradientRelativePercent();
+    void testRenderFillLinearGradientRelativePortion();
+    void testRenderFillLinearGradientUserCoord();
+    void testRenderFillLinearGradientStopPortion();
+    void testRenderFillLinearGradientTransform();
+    void testRenderFillLinearGradientTransformUserCoord();
+    void testRenderFillLinearGradientRotatedShape();
+    void testRenderFillLinearGradientRotatedShapeUserCoord();
+
+    void testRenderFillRadialGradient();
+    void testRenderFillRadialGradientUserCoord();
+
+    void testRenderFillLinearGradientUserCoordPercent();
+
+    void testRenderStrokeLinearGradient();
 
 };
 

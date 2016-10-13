@@ -683,13 +683,16 @@ struct SvgRenderTester : public SvgTester
         QVERIFY(TestUtil::checkQImage(canvas, "svg_render", prefix, testName));
     }
 
-    void test_standard_30px_72ppi(const QString &testName) {
+    void test_standard_30px_72ppi(const QString &testName, bool verifyGeometry = true) {
         parser.setResolution(QRectF(0, 0, 30, 30) /* px */, 72 /* ppi */);
         run();
 
         KoShape *shape = findShape("testRect");
-        QCOMPARE(shape->absolutePosition(KoFlake::TopLeftCorner), QPointF(5,5));
-        QCOMPARE(shape->absolutePosition(KoFlake::BottomRightCorner), QPointF(15,25));
+
+        if (verifyGeometry) {
+            QCOMPARE(shape->absolutePosition(KoFlake::TopLeftCorner), QPointF(5,5));
+            QCOMPARE(shape->absolutePosition(KoFlake::BottomRightCorner), QPointF(15,25));
+        }
 
         testRender(shape, "load", testName, QSize(30,30));
     }
@@ -1220,5 +1223,270 @@ void TestSvgParser::testIccColor()
     t.test_standard_30px_72ppi("stroke_blue_width_2");
     QCOMPARE(numFetches, 1);
 }
+
+void TestSvgParser::testRenderFillLinearGradientRelativePercent()
+{
+    const QString data =
+            "<svg width=\"30px\" height=\"30px\""
+            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+
+            "<defs>"
+            "    <linearGradient id=\"testGrad\" x1=\"0%\" y1=\"50%\" x2=\"100%\" y2=\"50%\">"
+            "        <stop offset=\"20%\" stop-color=\"#F60\" />"
+            "        <stop offset=\"80%\" stop-color=\"#FF6\" />"
+            "    </linearGradient>"
+            "</defs>"
+
+            "<rect id=\"testRect\" x=\"5\" y=\"5\" width=\"10\" height=\"20\""
+            "    style = \"fill:url(#testGrad) magenta; stroke:none; stroke-width:2;\"/>"
+
+            "</svg>";
+
+    SvgRenderTester t (data);
+    t.test_standard_30px_72ppi("fill_gradient");
+}
+
+void TestSvgParser::testRenderFillLinearGradientRelativePortion()
+{
+    const QString data =
+            "<svg width=\"30px\" height=\"30px\""
+            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+
+            "<linearGradient id=\"testGrad\" x1=\"0\" y1=\"0.5\" x2=\"1.0\" y2=\"0.5\">"
+            "    <stop offset=\"20%\" stop-color=\"#F60\" />"
+            "    <stop offset=\"80%\" stop-color=\"#FF6\" />"
+            "</linearGradient>"
+
+            "<rect id=\"testRect\" x=\"5\" y=\"5\" width=\"10\" height=\"20\""
+            "    style = \"fill:url(#testGrad) magenta; stroke:none; stroke-width:2;\"/>"
+
+            "</svg>";
+
+    SvgRenderTester t (data);
+    t.test_standard_30px_72ppi("fill_gradient");
+}
+
+void TestSvgParser::testRenderFillLinearGradientUserCoord()
+{
+    const QString data =
+            "<svg width=\"30px\" height=\"30px\" viewBox=\"60 70 60 90\""
+            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+
+            "<linearGradient id=\"testGrad\" x1=\"70\" y1=\"115\" x2=\"90\" y2=\"115\""
+            "    gradientUnits=\"userSpaceOnUse\">"
+            "    <stop offset=\"20%\" stop-color=\"#F60\" />"
+            "    <stop offset=\"80%\" stop-color=\"#FF6\" />"
+            "</linearGradient>"
+
+            "<rect id=\"testRect\" x=\"70\" y=\"85\" width=\"20\" height=\"60\""
+            "    fill=\"url(#testGrad) magenta\" stroke=\"none\"/>"
+
+            "</svg>";
+
+    SvgRenderTester t (data);
+    t.test_standard_30px_72ppi("fill_gradient");
+}
+
+void TestSvgParser::testRenderFillLinearGradientStopPortion()
+{
+    const QString data =
+            "<svg width=\"30px\" height=\"30px\""
+            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+
+            "<linearGradient id=\"testGrad\" x1=\"0\" y1=\"0.5\" x2=\"1.0\" y2=\"0.5\">"
+            "    <stop offset=\"0.2\" stop-color=\"#F60\" />"
+            "    <stop offset=\"0.8\" stop-color=\"#FF6\" />"
+            "</linearGradient>"
+
+            "<rect id=\"testRect\" x=\"5\" y=\"5\" width=\"10\" height=\"20\""
+            "    style = \"fill:url(#testGrad) magenta; stroke:none; stroke-width:2;\"/>"
+
+            "</svg>";
+
+    SvgRenderTester t (data);
+    t.test_standard_30px_72ppi("fill_gradient");
+}
+
+void TestSvgParser::testRenderFillLinearGradientTransform()
+{
+    const QString data =
+            "<svg width=\"30px\" height=\"30px\""
+            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+
+            "<linearGradient id=\"testGrad\" x1=\"0\" y1=\"0.5\" x2=\"1.0\" y2=\"0.5\""
+            "    gradientTransform=\"rotate(90, 0.5, 0.5)\">"
+
+            "    <stop offset=\"0.2\" stop-color=\"#F60\" />"
+            "    <stop offset=\"0.8\" stop-color=\"#FF6\" />"
+            "</linearGradient>"
+
+            "<rect id=\"testRect\" x=\"5\" y=\"5\" width=\"10\" height=\"20\""
+            "    style = \"fill:url(#testGrad) magenta; stroke:none; stroke-width:2;\"/>"
+
+            "</svg>";
+
+    SvgRenderTester t (data);
+    t.test_standard_30px_72ppi("fill_gradient_vertical");
+}
+
+void TestSvgParser::testRenderFillLinearGradientTransformUserCoord()
+{
+    const QString data =
+            "<svg width=\"30px\" height=\"30px\" viewBox=\"60 70 60 90\""
+            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+
+            "<linearGradient id=\"testGrad\" x1=\"70\" y1=\"115\" x2=\"90\" y2=\"115\""
+            "    gradientUnits=\"userSpaceOnUse\""
+            "    gradientTransform=\"rotate(90, 80, 115)\">"
+
+            "    <stop offset=\"20%\" stop-color=\"#F60\" />"
+            "    <stop offset=\"80%\" stop-color=\"#FF6\" />"
+            "</linearGradient>"
+
+            "<rect id=\"testRect\" x=\"70\" y=\"85\" width=\"20\" height=\"60\""
+            "    fill=\"url(#testGrad) magenta\" stroke=\"none\"/>"
+
+            "</svg>";
+
+    SvgRenderTester t (data);
+    t.test_standard_30px_72ppi("fill_gradient_vertical_in_user");
+}
+
+void TestSvgParser::testRenderFillLinearGradientRotatedShape()
+{
+    // DK: I'm not sure I fully understand if it is a correct transformation,
+    //     but inkscape opens the file in the same way...
+
+    const QString data =
+            "<svg width=\"30px\" height=\"30px\""
+            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+
+            "<linearGradient id=\"testGrad\" x1=\"0\" y1=\"0.5\" x2=\"1.0\" y2=\"0.5\""
+            "    gradientTransform=\"rotate(90, 0.5, 0.5)\">"
+
+            "    <stop offset=\"0.2\" stop-color=\"#F60\" />"
+            "    <stop offset=\"0.8\" stop-color=\"#FF6\" />"
+            "</linearGradient>"
+
+            "<rect id=\"testRect\" x=\"5\" y=\"5\" width=\"10\" height=\"20\""
+            "    style = \"fill:url(#testGrad) magenta; stroke:none; stroke-width:2;\""
+            "    transform=\"rotate(90, 10, 12.5)\"/>"
+
+            "</svg>";
+
+    SvgRenderTester t (data);
+    t.test_standard_30px_72ppi("fill_gradient_shape_rotated", false);
+}
+
+void TestSvgParser::testRenderFillLinearGradientRotatedShapeUserCoord()
+{
+    // DK: I'm not sure I fully understand if it is a correct transformation,
+    //     but inkscape opens the file in the same way...
+
+    const QString data =
+            "<svg width=\"30px\" height=\"30px\" viewBox=\"60 70 60 90\""
+            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+
+            "<linearGradient id=\"testGrad\" x1=\"70\" y1=\"115\" x2=\"90\" y2=\"115\""
+            "    gradientUnits=\"userSpaceOnUse\">"
+
+            "    <stop offset=\"20%\" stop-color=\"#F60\" />"
+            "    <stop offset=\"80%\" stop-color=\"#FF6\" />"
+            "</linearGradient>"
+
+            "<rect id=\"testRect\" x=\"70\" y=\"85\" width=\"20\" height=\"60\""
+            "    fill=\"url(#testGrad) magenta\" stroke=\"none\""
+            "    transform=\"rotate(90, 80, 115)\"/>"
+
+            "</svg>";
+
+    SvgRenderTester t (data);
+    t.test_standard_30px_72ppi("fill_gradient_shape_rotated_in_user", false);
+}
+
+void TestSvgParser::testRenderFillRadialGradient()
+{
+    const QString data =
+            "<svg width=\"30px\" height=\"30px\""
+            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+
+            "<radialGradient id=\"testGrad\" cx=\"0.5\" cy=\"0.5\" fx=\"0.2\" fy=\"0.2\" r=\"0.5\">"
+            "    <stop offset=\"0.2\" stop-color=\"#F60\" />"
+            "    <stop offset=\"0.8\" stop-color=\"#FF6\" />"
+            "</radialGradient>"
+
+            "<rect id=\"testRect\" x=\"5\" y=\"5\" width=\"10\" height=\"20\""
+            "    style = \"fill:url(#testGrad) magenta; stroke:none; stroke-width:2;\"/>"
+            "</svg>";
+
+    SvgRenderTester t (data);
+    t.test_standard_30px_72ppi("fill_gradient_radial");
+}
+
+void TestSvgParser::testRenderFillRadialGradientUserCoord()
+{
+    const QString data =
+            "<svg width=\"30px\" height=\"30px\""
+            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+
+            "<radialGradient id=\"testGrad\" cx=\"10\" cy=\"12.5\" fx=\"7\" fy=\"9\" r=\"5\""
+            "    gradientUnits=\"userSpaceOnUse\">"
+
+            "    <stop offset=\"0.2\" stop-color=\"#F60\" />"
+            "    <stop offset=\"0.8\" stop-color=\"#FF6\" />"
+            "</radialGradient>"
+
+            "<rect id=\"testRect\" x=\"5\" y=\"5\" width=\"10\" height=\"20\""
+            "    style = \"fill:url(#testGrad) magenta; stroke:none; stroke-width:2;\"/>"
+            "</svg>";
+
+    SvgRenderTester t (data);
+    t.test_standard_30px_72ppi("fill_gradient_radial_in_user");
+}
+
+void TestSvgParser::testRenderFillLinearGradientUserCoordPercent()
+{
+    const QString data =
+            "<svg width=\"30px\" height=\"30px\" viewBox=\"60 70 60 90\""
+            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+
+            "<linearGradient id=\"testGrad\" x1=\"116.667%\" y1=\"127.778%\" x2=\"150%\" y2=\"127.778%\""
+            "    gradientUnits=\"userSpaceOnUse\">"
+            "    <stop offset=\"20%\" stop-color=\"#F60\" />"
+            "    <stop offset=\"80%\" stop-color=\"#FF6\" />"
+            "</linearGradient>"
+
+            "<rect id=\"testRect\" x=\"70\" y=\"85\" width=\"20\" height=\"60\""
+            "    fill=\"url(#testGrad) magenta\" stroke=\"none\"/>"
+
+            "</svg>";
+
+    SvgRenderTester t (data);
+    t.test_standard_30px_72ppi("fill_gradient");
+}
+
+void TestSvgParser::testRenderStrokeLinearGradient()
+{
+    const QString data =
+            "<svg width=\"30px\" height=\"30px\""
+            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+
+            "<defs>"
+            "    <linearGradient id=\"testGrad\" x1=\"0%\" y1=\"50%\" x2=\"100%\" y2=\"50%\">"
+            "        <stop offset=\"20%\" stop-color=\"#F60\" />"
+            "        <stop offset=\"80%\" stop-color=\"#FF6\" />"
+            "    </linearGradient>"
+            "</defs>"
+
+            "<rect id=\"testRect\" x=\"5\" y=\"5\" width=\"10\" height=\"20\""
+            "    style = \"grey; stroke:url(#testGrad); stroke-width:3; stroke-dasharray:3,1\"/>"
+
+            "</svg>";
+
+    SvgRenderTester t (data);
+    t.test_standard_30px_72ppi("stroke_gradient_dashed");
+}
+
+
 
 QTEST_GUILESS_MAIN(TestSvgParser)

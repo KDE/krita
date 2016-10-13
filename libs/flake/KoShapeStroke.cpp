@@ -225,10 +225,11 @@ void KoShapeStroke::setColor(const QColor &color)
 
 void KoShapeStroke::setLineStyle(Qt::PenStyle style, const QVector<qreal> &dashes)
 {
-    if (style < Qt::CustomDashLine)
+    if (style < Qt::CustomDashLine) {
         d->pen.setStyle(style);
-    else
+    } else {
         d->pen.setDashPattern(dashes);
+    }
 }
 
 Qt::PenStyle KoShapeStroke::lineStyle() const

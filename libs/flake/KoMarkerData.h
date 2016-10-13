@@ -104,7 +104,7 @@ public:
     void setCenter(bool center);
 
     /**
-     * Compare the marker data
+     * Assign the marker data
      */
     KoMarkerData &operator=(const KoMarkerData &other);
 

@@ -1,0 +1,232 @@
+flProperties are getters and setters: ActiveDocument becomes activeDocument() and setActiveDocument(). The Document class wraps KisDocument and KisImage in one API. The scripting API uses a generic Node class that wraps both Masks and Layers.
+
+Krita/Application : 
+    Properties:
+        Actions (QAction that can be placed in a menu or a toolbar, currently called ViewExtension)
+        ActiveDocument
+        Batchmode
+        Documents
+        Exporters
+        Filters
+        Generators
+        Importers 
+        Notifier (hooks)
+        Preferences
+        Version
+        Views
+        Windows
+        Resources (brushes, palettes, profiles, etc)
+    Slots:
+        AddDockWidgetFactory (Create a dock widget on startup)
+        CloseApplication
+        CreateDocument
+        OpenDocument
+        OpenWindow
+        
+Notifier : 
+    Properties:
+        Active
+    Signals:
+        ApplicationStarted
+        ApplicationClosed
+        ImageCreated
+        ImageLoaded
+        ImageSaved
+        ImageClosed
+        NodeCreated
+        NodeRemoved
+
+Document : 
+    Properties:
+        ActiveNode
+        ColorDepth
+        ColorManager
+        ColorModel
+        ColorProfile
+        DocumentInfo
+        FileName
+        Height
+        MetaData
+        Name
+        Resolution
+        RootNode
+        Selection
+        Width
+        PixelData
+    Slots:
+        Clone
+        Close
+        Convert
+        Crop
+        Export
+        Flatten
+        Paste
+        ResizeImage
+        Save
+        SaveAs
+        OpenView
+        CreateNode
+    Signals:
+
+Node : 
+    Properties:
+        AlphaLocked
+        BlendingMode
+        Channels
+        ChildNodes
+        ColorDepth
+        ColorLabel
+        ColorModel
+        ColorProfile
+        InheritAlpha
+        Locked
+        Name
+        Opacity
+        ParentNode
+        Type
+        Visible
+        MetaDataInfo
+        Generator
+        Filter
+        Transformation
+        Selection
+        FileName
+        PixelData
+    Slots:
+        move(x,y)
+        moveToParent
+        remove
+        duplicate
+        
+Filter : 
+    Properties:
+        Configuration
+    Slots:
+        Apply
+        
+Generator : 
+    Properties:
+        Configuration
+    Slots:
+        CreateNode
+    
+Action : (Maybe we can use QAction directly?)
+    Properties:
+        Name
+        Menu
+        Checkable
+        Checked
+        Shortcut
+        Visible
+        Enabled
+    Slots:
+        Trigger
+        Toggle
+    Signals:
+        Toggled
+        Triggered
+        
+Canvas :
+    Properties:
+        Document
+        ZoomLevel
+        Rotation
+        Mirror
+        ColorManager
+        
+ColorManager:
+    Properties:
+        Type
+        OcioSettings (xml property bag? -- Check what Nuke/Mari do)
+        
+Exporter:
+    Properties:
+        Document
+        ExportSetttings (xml property bag?)
+    Slots:
+        Export
+        
+Importer:
+    Properties:
+        Document
+        ImportSettings (xml property bag?)
+    Slots:
+        Import
+    
+Preferences:
+    Properties:
+        Preference
+        
+View:
+    Properties:
+        Window
+        Document
+        Visible
+        Canvas
+    SLots:
+        Close
+        
+Window:
+    Properties:
+        Views
+        ViewMode
+    Slots:
+        Close
+        
+DockWidgets:
+    Properties:
+        Canvas
+    Slots:
+        canvasChanged
+        
+ColorDepth:
+    Properties:
+        depth
+        
+ColorModel:
+    Properties:
+        colorModelID
+        
+ColorProfile:
+    Properties:
+        name
+        ...
+
+InfoObject:
+    (key, value map?)
+    
+Transformation:
+    ???
+    
+Selection:
+    Properties:
+        Width
+        Height
+        Type
+    SLots:
+        clear
+        contract
+        copy
+        cut
+        deselection
+        expand
+        feather
+        fill
+        grow
+        invert
+        resize
+        rotate
+        select
+        selectAll
+        similar
+        move
+        
+Resource:
+    Properties:
+        Type
+        Name
+        Filename
+        
+        
+PixelData:
+    array of bytes

@@ -45,11 +45,12 @@ public:
     QList<Image*> images();
 
     QAction *createAction(const QString &text);
-    
+
     void addViewExtension(ViewExtension* _viewExtension);
     QList<ViewExtension*> viewExtensions();
+
     void addDockWidgetFactory(DockWidgetFactoryBase* _factory );
-    
+
     static Krita* instance();
 Q_SIGNALS:
 

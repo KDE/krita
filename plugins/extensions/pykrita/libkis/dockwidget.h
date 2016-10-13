@@ -29,14 +29,19 @@ class Canvas;
 class KRITALIBKIS_EXPORT DockWidget : public QDockWidget, public KoCanvasObserverBase
 {
     Q_OBJECT
+
 public:
     DockWidget();
     virtual ~DockWidget();
-protected:
+
+protected Q_SLOTS: // Krita API
+
     virtual void setCanvas(KoCanvasBase* canvas);
     virtual void unsetCanvas();
-protected:
+
+protected Q_SLOTS: // PyKRita API
     virtual void canvasChanged(Canvas *canvas) = 0;
+
 private:
     Canvas *m_canvas;
 };

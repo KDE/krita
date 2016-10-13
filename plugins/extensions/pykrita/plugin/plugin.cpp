@@ -38,12 +38,18 @@ KritaPyQtPlugin::KritaPyQtPlugin(QObject *parent, const QVariantList &)
     , m_engineFailureReason(m_engine.tryInitializeGetFailureReason())
     , m_autoReload(false)
 {
+
+    qDebug() << "Loading Python plugin";
+
     KisPreferenceSetRegistry *preferenceSetRegistry = KisPreferenceSetRegistry::instance();
     PyQtPluginSettingsFactory* settingsFactory = new PyQtPluginSettingsFactory(&m_engine);
 
     QByteArray pythonPath = qgetenv("PYTHONPATH");
 
+    qDebug() << "\tPython path:" << pythonPath;
+
     QStringList pluginDirectories = KoResourcePaths::findDirs("pythonscripts");
+    qDebug() << "\tPython plugin directories" << pluginDirectories;
     Q_FOREACH(const QString pluginDir, pluginDirectories) {
         pythonPath.prepend(pluginDir.toUtf8() + ":");
     }

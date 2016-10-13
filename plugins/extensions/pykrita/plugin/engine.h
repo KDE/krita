@@ -188,22 +188,27 @@ inline QString Engine::PluginState::pythonModuleName() const
 {
     return m_pythonPlugin.library();
 }
+
 inline QString PyKrita::Engine::PluginState::moduleFilePathPart() const
 {
     return m_pythonPlugin.library().replace(".", "/");
 }
+
 inline const QString& Engine::PluginState::errorReason() const
 {
     return m_errorReason;
 }
+
 inline bool Engine::PluginState::isEnabled() const
 {
     return m_enabled;
 }
+
 inline bool Engine::PluginState::isBroken() const
 {
     return m_broken;
 }
+
 inline bool Engine::PluginState::isUnstable() const
 {
     return m_unstable;

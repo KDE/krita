@@ -145,16 +145,6 @@ bool KisToolMove::startStrokeImpl(MoveToolMode mode, const QPoint *pos)
      */
     if (m_strokeId) {
         if (KritaUtils::compareListsUnordered(nodes, m_currentlyProcessingNodes)) {
-            QRect totalBounds;
-
-            Q_FOREACH (KisNodeSP node, m_currentlyProcessingNodes) {
-                if (node && node->projection()) {
-                    totalBounds |= node->projection()->nonDefaultPixelArea();
-                }
-            }
-
-            m_totalTopLeft = totalBounds.topLeft();
-
             return true;
         } else {
             endStroke();
@@ -183,16 +173,6 @@ bool KisToolMove::startStrokeImpl(MoveToolMode mode, const QPoint *pos)
     m_strokeId = image->startStroke(strategy);
     m_currentlyProcessingNodes = nodes;
     m_accumulatedOffset = QPoint();
-
-    QRect totalBounds;
-
-    Q_FOREACH (KisNodeSP node, m_currentlyProcessingNodes) {
-        if (node && node->projection()) {
-            totalBounds |= node->projection()->nonDefaultPixelArea();
-        }
-    }
-
-    m_totalTopLeft = totalBounds.topLeft();
 
     return true;
 }
@@ -224,13 +204,15 @@ void KisToolMove::moveDiscrete(MoveDirection direction, bool big)
             showFloatingMessage(
                 i18nc("floating message in move tool",
                       "X: %1 px, Y: %2 px",
-                      (m_totalTopLeft + offset).x(),
-                      (m_totalTopLeft + offset).y()),
+                      (m_startPosition + offset).x(),
+                      (m_startPosition + offset).y()),
                 QIcon(), 1000, KisFloatingMessage::High);
     }
 
     KisSignalsBlocker b(m_optionsWidget);
-    emit moveInNewPosition(m_totalTopLeft + offset);
+    emit moveInNewPosition(m_startPosition + offset);
+
+    m_startPosition += offset;
 
     image()->addJob(m_strokeId, new MoveStrokeStrategy::Data(m_accumulatedOffset + offset));
     m_accumulatedOffset += offset;
@@ -361,13 +343,13 @@ void KisToolMove::continueAction(KoPointerEvent *event)
                 showFloatingMessage(
                     i18nc("floating message in move tool",
                           "X: %1 px, Y: %2 px",
-                          (m_totalTopLeft + (pos - m_dragStart)).x(),
-                          (m_totalTopLeft + (pos - m_dragStart)).y()),
+                          (m_startPosition + (pos - m_dragStart)).x(),
+                          (m_startPosition + (pos - m_dragStart)).y()),
                     QIcon(), 1000, KisFloatingMessage::High);
     }
 
     KisSignalsBlocker b(m_optionsWidget);
-    emit moveInNewPosition(m_totalTopLeft + (pos - m_dragStart));
+    emit moveInNewPosition(m_startPosition + (pos - m_dragStart));
 
     pos = applyModifiers(event->modifiers(), pos);
     drag(pos);
@@ -383,6 +365,7 @@ void KisToolMove::endAction(KoPointerEvent *event)
     pos = applyModifiers(event->modifiers(), pos);
     drag(pos);
 
+    m_startPosition += pos - m_dragStart;
     m_accumulatedOffset += pos - m_dragStart;
 }
 
@@ -493,15 +476,15 @@ void KisToolMove::moveBySpinX(int newX)
         setMode(KisTool::PAINT_MODE);
     }
 
-    int offsetX = newX - m_totalTopLeft.x();
+    int offsetX = newX - m_startPosition.x();
     QPoint offset = QPoint(offsetX, 0);
 
     KisSignalsBlocker b(m_optionsWidget);
-    emit moveInNewPosition(m_totalTopLeft + offset);
+    emit moveInNewPosition(m_startPosition + offset);
 
     image()->addJob(m_strokeId, new MoveStrokeStrategy::Data(m_accumulatedOffset + offset));
     m_accumulatedOffset += offset;
-
+    m_startPosition += offset;
 
     m_moveInProgress = false;
     emit moveInProgressChanged();
@@ -517,15 +500,15 @@ void KisToolMove::moveBySpinY(int newY)
         setMode(KisTool::PAINT_MODE);
     }
 
-    int offsetY = newY - m_totalTopLeft.y();
+    int offsetY = newY - m_startPosition.y();
     QPoint offset = QPoint(0, offsetY);
 
     KisSignalsBlocker b(m_optionsWidget);
-    emit moveInNewPosition(m_totalTopLeft + offset);
+    emit moveInNewPosition(m_startPosition + offset);
 
     image()->addJob(m_strokeId, new MoveStrokeStrategy::Data(m_accumulatedOffset + offset));
     m_accumulatedOffset += offset;
-
+    m_startPosition += offset;
 
     m_moveInProgress = false;
     emit moveInProgressChanged();

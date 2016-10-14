@@ -256,15 +256,16 @@ void KisImageAnimationInterfaceTest::testSwitchFrameWithUndo()
     p.image->waitForDone();
     QCOMPARE(i->currentTime(), 16);
 
-    p.undoStore->undo();
-    QTest::qWait(100);
-    p.image->waitForDone();
-    QCOMPARE(i->currentTime(), 15);
-
+    // the two commands have been merged!
     p.undoStore->undo();
     QTest::qWait(100);
     p.image->waitForDone();
     QCOMPARE(i->currentTime(), 0);
+
+    p.undoStore->redo();
+    QTest::qWait(100);
+    p.image->waitForDone();
+    QCOMPARE(i->currentTime(), 16);
 }
 
 QTEST_MAIN(KisImageAnimationInterfaceTest)

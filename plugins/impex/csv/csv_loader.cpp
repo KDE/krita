@@ -57,7 +57,7 @@ CSVLoader::~CSVLoader()
 {
 }
 
-KisImageBuilder_Result CSVLoader::decode(const QString &filename)
+KisImageBuilder_Result CSVLoader::decode(QIODevice *io, const QString &filename)
 {
     QString     field;
     int         idx;
@@ -79,17 +79,9 @@ KisImageBuilder_Result CSVLoader::decode(const QString &filename)
 
     QVector<CSVLayerRecord*> layers;
 
-    // open the csv file
-    QFile f(filename);
-    if (!f.exists())
-        return KisImageBuilder_RESULT_NOT_EXIST;
-
-    if (!f.open(QIODevice::ReadOnly))
-        return KisImageBuilder_RESULT_NOT_EXIST;
-
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
-    idx= filename.lastIndexOf(QRegExp("[\\/]"));
+    idx = filename.lastIndexOf(QRegExp("[\\/]"));
     QString base = (idx == -1) ? QString("") : filename.left(idx + 1); //include separator
     QString path = filename;
 
@@ -101,20 +93,20 @@ KisImageBuilder_Result CSVLoader::decode(const QString &filename)
 
     KisImageBuilder_Result retval = KisImageBuilder_RESULT_OK;
 
-    dbgFile << "pos:" << f.pos();
+    dbgFile << "pos:" << io->pos();
 
     CSVReadLine readLine;
     QScopedPointer<KisDocument> importDoc(KisPart::instance()->createDocument());
     importDoc->setAutoSave(0);
     importDoc->setFileBatchMode(true);
 
-    KisView* setView(0);
+    KisView *setView(0);
 
     if (!m_batchMode) {
         //show the statusbar message even if no view
         Q_FOREACH (KisView* view, KisPart::instance()->views()) {
             if (view && view->document() == m_doc) {
-                setView= view;
+                setView = view;
                 break;
             }
         }
@@ -140,7 +132,7 @@ KisImageBuilder_Result CSVLoader::decode(const QString &filename)
             break;
         }
 
-        if ((idx = readLine.nextLine(&f)) <= 0) {
+        if ((idx = readLine.nextLine(io)) <= 0) {
             if ((idx < 0) ||(step < 5))
                 retval = KisImageBuilder_RESULT_FAILURE;
 
@@ -333,7 +325,7 @@ KisImageBuilder_Result CSVLoader::decode(const QString &filename)
         m_image->unlock();
     }
     qDeleteAll(layers);
-    f.close();
+    io->close();
 
     if (!m_batchMode) {
         disconnect(m_doc, SIGNAL(sigProgressCanceled()), this, SLOT(cancel()));
@@ -478,9 +470,9 @@ KisImageBuilder_Result CSVLoader::createNewImage(int width, int height, float ra
     return KisImageBuilder_RESULT_OK;
 }
 
-KisImageBuilder_Result CSVLoader::buildAnimation(QString &filename)
+KisImageBuilder_Result CSVLoader::buildAnimation(QIODevice *io, const QString &filename)
 {
-    return decode(filename);
+    return decode(io, filename);
 }
 
 KisImageWSP CSVLoader::image()

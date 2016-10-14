@@ -23,8 +23,6 @@
 
 #include <kpluginfactory.h>
 
-#include <KisFilterChain.h>
-
 #include <KisDocument.h>
 #include <kis_image.h>
 #include <kis_group_layer.h>
@@ -37,7 +35,7 @@
 #include <KoXmlNS.h>
 #include <KoShapeRegistry.h>
 #include <KoOdfStylesReader.h>
-
+#include <KoStore.h>
 
 #include <KoShapeBasedDocumentBase.h>
 #include <KoColorSpaceRegistry.h>
@@ -52,28 +50,13 @@ KisODGImport::~KisODGImport()
 {
 }
 
-KisImportExportFilter::ConversionStatus KisODGImport::convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration)
+KisImportExportFilter::ConversionStatus KisODGImport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration)
 {
-    dbgFile << "Import odg";
-
-    if (to != "application/x-krita")
-        return KisImportExportFilter::BadMimeType;
-
-    KisDocument * doc = outputDocument();
-
-    if (!doc)
-        return KisImportExportFilter::NoDocumentCreated;
-
-    QString filename = inputFile();
-
-    KoStore* store = KoStore::createStore(filename, KoStore::Read, from, KoStore::Zip);
+    KoStore* store = KoStore::createStore(io, KoStore::Read, "application/vnd.oasis.opendocument.graphics", KoStore::Zip);
     if (!store || store->bad()) {
         delete store;
         return KisImportExportFilter::BadConversionGraph;
     }
-
-
-    doc -> prepareForImport();
 
     KoOdfReadStore odfStore(store);
     QString errorMessage;
@@ -130,16 +113,16 @@ KisImportExportFilter::ConversionStatus KisODGImport::convert(const QByteArray& 
 
     KoOdfLoadingContext context(odfStore.styles(), odfStore.store());
     context.setManifestFile(QString("tar:/") + odfStore.store()->currentPath() + "META-INF/manifest.xml");
-    KoShapeLoadingContext shapeContext(context, doc->shapeController()->resourceManager());
+    KoShapeLoadingContext shapeContext(context, document->shapeController()->resourceManager());
 
     const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
-    KisImageWSP image = new KisImage(doc->createUndoStore(), width, height, cs, "built image");
-    doc->setCurrentImage(image);
+    KisImageWSP image = new KisImage(document->createUndoStore(), width, height, cs, "built image");
+    document->setCurrentImage(image);
 
     KoXmlElement layerElement;
     forEachElement(layerElement, KoXml::namedItemNS(page, KoXmlNS::draw, "layer-set")) {
 
-    KisShapeLayerSP shapeLayer = new KisShapeLayer(doc->shapeController(), image,
+    KisShapeLayerSP shapeLayer = new KisShapeLayer(document->shapeController(), image,
                                         i18n("Vector Layer"),
                                         OPACITY_OPAQUE_U8);
     if (!shapeLayer->loadOdf(layerElement, shapeContext)) {

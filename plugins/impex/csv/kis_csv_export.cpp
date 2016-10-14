@@ -21,14 +21,13 @@
 
 #include <QCheckBox>
 #include <QSlider>
-#include <QMessageBox>
 
 #include <kpluginfactory.h>
 #include <QFileInfo>
 #include <QApplication>
 
+#include <KisExportCheckRegistry.h>
 #include <KisImportExportManager.h>
-#include <KisFilterChain.h>
 #include <KoColorSpaceConstants.h>
 
 #include <KisDocument.h>
@@ -41,21 +40,6 @@
 
 K_PLUGIN_FACTORY_WITH_JSON(KisCSVExportFactory, "krita_csv_export.json", registerPlugin<KisCSVExport>();)
 
-bool checkHomogenity(KisNodeSP root)
-{
-    bool res = true;
-    KisNodeSP child = root->firstChild();
-
-    while (child) {
-            if (child->childCount() > 0) {
-                res= false;
-                break;
-            }
-            child = child->nextSibling();
-    }
-    return res;
-}
-
 KisCSVExport::KisCSVExport(QObject *parent, const QVariantList &) : KisImportExportFilter(parent)
 {
 }
@@ -64,36 +48,13 @@ KisCSVExport::~KisCSVExport()
 {
 }
 
-KisImportExportFilter::ConversionStatus KisCSVExport::convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration)
+KisImportExportFilter::ConversionStatus KisCSVExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
 {
-    dbgFile << "CSV export! From:" << from << ", To:" << to << "";
-
-    if (from != "application/x-krita")
-        return KisImportExportFilter::NotImplemented;
-
-    KisDocument* input = inputDocument();
-    QString filename = outputFile();
-
-    if (!input)
-        return KisImportExportFilter::NoDocumentCreated;
-
-    if (!checkHomogenity(input->image()->rootLayer())) {
-        if (!getBatchMode()) {
-            QMessageBox::critical(0,
-                                  i18nc("@title:window", "CSV Export Error"),
-                                  i18n("Unable to save to the CSV format.\n"
-                                       "The CSV format not supports layer groups or masked layers."));
-        }
-        return KisImportExportFilter::InvalidFormat;
-    }
-
-    if (filename.isEmpty()) return KisImportExportFilter::FileNotFound;
-
-    CSVSaver kpc(input, getBatchMode());
+    CSVSaver kpc(document, batchMode());
     KisImageBuilder_Result res;
 
-    if ((res = kpc.buildAnimation(filename)) == KisImageBuilder_RESULT_OK) {
-        dbgFile <<"success !";
+    if ((res = kpc.buildAnimation(io)) == KisImageBuilder_RESULT_OK) {
+        dbgFile <<"success!";
         return KisImportExportFilter::OK;
     }
     dbgFile <<" Result =" << res;
@@ -102,6 +63,17 @@ KisImportExportFilter::ConversionStatus KisCSVExport::convert(const QByteArray& 
         return KisImportExportFilter::ProgressCancelled;
 
     return KisImportExportFilter::InternalError;
+}
+
+void KisCSVExport::initializeCapabilities()
+{
+    addCapability(KisExportCheckRegistry::instance()->get("MultiLayerCheck")->create(KisExportCheckBase::SUPPORTED));
+    addCapability(KisExportCheckRegistry::instance()->get("AnimationCheck")->create(KisExportCheckBase::SUPPORTED));
+    QList<QPair<KoID, KoID> > supportedColorModels;
+    supportedColorModels << QPair<KoID, KoID>()
+            << QPair<KoID, KoID>(RGBAColorModelID, Integer8BitsColorDepthID);
+    addSupportedColorModels(supportedColorModels, "CSV");
+    addCapability(KisExportCheckRegistry::instance()->get("ColorModelPerLayerCheck/" + RGBAColorModelID.id() + "/" + Integer8BitsColorDepthID.id())->create(KisExportCheckBase::SUPPORTED));
 }
 
 #include "kis_csv_export.moc"

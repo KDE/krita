@@ -19,6 +19,9 @@
 #define KIS_NODE_GRAPH_LISTENER_H_
 
 #include "kritaimage_export.h"
+
+#include <QScopedPointer>
+
 class KisTimeRange;
 class KisNode;
 class QRect;
@@ -114,7 +117,7 @@ public:
 
 private:
     struct Private;
-    Private * const m_d;
+    QScopedPointer<Private> m_d;
 };
 
 #endif

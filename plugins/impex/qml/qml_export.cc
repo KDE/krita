@@ -24,12 +24,12 @@
 #include <QFileInfo>
 #include <QApplication>
 
-#include <KisFilterChain.h>
-
+#include <KisExportCheckRegistry.h>
 #include <KisDocument.h>
 #include <kis_image.h>
 
 #include "qml_converter.h"
+#include <KoColorModelStandardIds.h>
 
 K_PLUGIN_FACTORY_WITH_JSON(ExportFactory, "krita_qml_export.json", registerPlugin<QMLExport>();)
 
@@ -41,33 +41,13 @@ QMLExport::~QMLExport()
 {
 }
 
-KisImportExportFilter::ConversionStatus QMLExport::convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration)
+KisImportExportFilter::ConversionStatus QMLExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
 {
-    Q_UNUSED(from);
-    Q_UNUSED(to);
-
-    if (from != "application/x-krita")
-        return KisImportExportFilter::NotImplemented;
-
-    KisDocument *input = inputDocument();
-    QString filename = outputFile();
-
-    dbgKrita << "input " << input;
-    if (!input) {
-        return KisImportExportFilter::NoDocumentCreated;
-    }
-
-    dbgKrita << "filename " << input;
-
-    if (filename.isEmpty()) {
-        return KisImportExportFilter::FileNotFound;
-    }
-
-    KisImageWSP image = input->image();
+    KisImageWSP image = document->image();
     Q_CHECK_PTR(image);
 
     QMLConverter converter;
-    KisImageBuilder_Result result = converter.buildFile(filename, image);
+    KisImageBuilder_Result result = converter.buildFile(filename(), io, image);
     if (result == KisImageBuilder_RESULT_OK) {
         dbgFile << "success !";
         return KisImportExportFilter::OK;
@@ -75,6 +55,19 @@ KisImportExportFilter::ConversionStatus QMLExport::convert(const QByteArray& fro
     dbgFile << " Result =" << result;
     return KisImportExportFilter::InternalError;
 }
+
+void QMLExport::initializeCapabilities()
+{
+    addCapability(KisExportCheckRegistry::instance()->get("MultiLayerCheck")->create(KisExportCheckBase::SUPPORTED));
+
+    QList<QPair<KoID, KoID> > supportedColorModels;
+    supportedColorModels << QPair<KoID, KoID>()
+            << QPair<KoID, KoID>(RGBAColorModelID, Integer8BitsColorDepthID)
+            << QPair<KoID, KoID>(GrayAColorModelID, Integer8BitsColorDepthID);
+    addSupportedColorModels(supportedColorModels, "QML");
+    }
+
+
 
 #include <qml_export.moc>
 

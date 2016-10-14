@@ -249,7 +249,6 @@ void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOpti
                 QRect r = l->exactBounds();
 
                 KisDocument *d = KisPart::instance()->createDocument();
-                d->prepareForImport();
 
                 KisImageWSP dst = KisImageWSP(new KisImage(d->createUndoStore(), r.width(), r.height(), (*deviceIt)->colorSpace(), l->name()));
                 d->setCurrentImage(dst);

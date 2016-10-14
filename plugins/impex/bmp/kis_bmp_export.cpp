@@ -26,8 +26,8 @@
 #include <QFileInfo>
 #include <QApplication>
 
-#include <KisFilterChain.h>
-
+#include <KisMimeDatabase.h>
+#include <KisExportCheckRegistry.h>
 #include <kis_paint_device.h>
 #include <KisDocument.h>
 #include <kis_image.h>
@@ -43,27 +43,22 @@ KisBMPExport::~KisBMPExport()
 {
 }
 
-KisImportExportFilter::ConversionStatus KisBMPExport::convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration)
+KisImportExportFilter::ConversionStatus KisBMPExport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigurationSP /*configuration*/)
 {
-    dbgFile << "BMP export! From:" << from << ", To:" << to << "";
-
-    KisDocument *input = inputDocument();
-    QString filename = outputFile();
-
-    if (!input)
-        return KisImportExportFilter::NoDocumentCreated;
-
-    if (filename.isEmpty()) return KisImportExportFilter::FileNotFound;
-
-    if (from != "application/x-krita")
-        return KisImportExportFilter::NotImplemented;
-
-    QRect rc = input->image()->bounds();
-    // the image must be locked at the higher levels
-    KIS_SAFE_ASSERT_RECOVER_NOOP(input->image()->locked());
-    QImage image = input->image()->projection()->convertToQImage(0, 0, 0, rc.width(), rc.height(), KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
-    image.save(filename);
+    QRect rc = document->image()->bounds();
+    QImage image = document->image()->projection()->convertToQImage(0, 0, 0, rc.width(), rc.height(), KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
+    image.save(io, QFileInfo(filename()).suffix().toLatin1());
     return KisImportExportFilter::OK;
+}
+
+void KisBMPExport::initializeCapabilities()
+{
+
+    QList<QPair<KoID, KoID> > supportedColorModels;
+    supportedColorModels << QPair<KoID, KoID>()
+            << QPair<KoID, KoID>(RGBAColorModelID, Integer8BitsColorDepthID);
+    addSupportedColorModels(supportedColorModels, KisMimeDatabase::descriptionForMimeType(mimeType()));
+    addCapability(KisExportCheckRegistry::instance()->get("ColorModelPerLayerCheck/" + RGBAColorModelID.id() + "/" + Integer8BitsColorDepthID.id())->create(KisExportCheckBase::SUPPORTED));
 }
 
 #include "kis_bmp_export.moc"

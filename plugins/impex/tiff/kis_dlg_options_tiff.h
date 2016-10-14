@@ -39,7 +39,7 @@ public:
     void setConfiguration(const KisPropertiesConfigurationSP  cfg);
     KisPropertiesConfigurationSP configuration() const;
 
-public Q_SLOTS:
+private Q_SLOTS:
     void activated(int index);
     void flattenToggled(bool);
     KisTIFFOptions options() const;

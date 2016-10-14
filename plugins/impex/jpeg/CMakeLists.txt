@@ -38,7 +38,7 @@ ki18n_wrap_ui(kritajpegexport_SOURCES kis_wdg_options_jpeg.ui )
 
 add_library(kritajpegexport MODULE ${kritajpegexport_SOURCES})
 
-target_link_libraries(kritajpegexport kritaui   ${JPEG_LIBRARIES} ${LCMS2_LIBRARIES} ${EXIV2_LIBRARIES} )
+target_link_libraries(kritajpegexport kritaui kritaimpex ${JPEG_LIBRARIES} ${LCMS2_LIBRARIES} ${EXIV2_LIBRARIES} )
 
 install(TARGETS kritajpegexport  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 install( PROGRAMS  krita_jpeg.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})

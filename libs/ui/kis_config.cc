@@ -1171,9 +1171,9 @@ QString KisConfig::exportConfiguration(const QString &filterId, bool defaultValu
     return (defaultValue ? QString() : m_cfg.readEntry("ExportConfiguration-" + filterId, QString()));
 }
 
-void KisConfig::setExportConfiguration(const QString &filterId, const KisPropertiesConfiguration &properties) const
+void KisConfig::setExportConfiguration(const QString &filterId, KisPropertiesConfigurationSP properties) const
 {
-    QString exportConfig = properties.toXML();
+    QString exportConfig = properties->toXML();
     m_cfg.writeEntry("ExportConfiguration-" + filterId, exportConfig);
 
 }

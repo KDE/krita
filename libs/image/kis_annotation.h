@@ -67,6 +67,10 @@ public:
 
     virtual ~KisAnnotation() {}
 
+    virtual KisAnnotation* clone() const {
+        return new KisAnnotation(*this);
+    }
+
     /**
      * gets a non-localized string identifying the type of the
      * annotation.
@@ -100,6 +104,15 @@ public:
      */
     virtual QString displayText() const {
         return QString::fromUtf8(m_annotation);
+    }
+
+protected:
+    KisAnnotation(const KisAnnotation &rhs)
+     : KisShared(),
+       m_type(rhs.m_type),
+       m_description(rhs.m_description),
+       m_annotation(rhs.m_annotation)
+    {
     }
 
 protected:

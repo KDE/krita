@@ -23,7 +23,6 @@
 #include <QCheckBox>
 #include <QDomDocument>
 #include <QFileInfo>
-#include <QMessageBox>
 #include <QSlider>
 #include <QFileInfo>
 #include <QDir>
@@ -35,11 +34,12 @@
 #include <KoColorSpaceConstants.h>
 #include <KoColorSpaceRegistry.h>
 
+#include <KisExportCheckRegistry.h>
+#include <KisImportExportManager.h>
+
 #include <KisDocument.h>
-#include <KisFilterChain.h>
 #include <kis_group_layer.h>
 #include <kis_image.h>
-#include <KisImportExportManager.h>
 #include <kis_layer.h>
 #include <kis_node.h>
 #include <kis_painter.h>
@@ -81,8 +81,6 @@ bool KisSpriterExport::savePaintDevice(KisPaintDeviceSP dev, const QString &file
         delete cmd;
     }
 
-    QFile fp(fileName);
-
     KisPNGOptions options;
     options.forceSRGB = true;
 
@@ -90,7 +88,7 @@ bool KisSpriterExport::savePaintDevice(KisPaintDeviceSP dev, const QString &file
     vKisAnnotationSP_it endIt = m_image->endAnnotations();
 
     KisPNGConverter converter(0);
-    KisImageBuilder_Result res = converter.buildFile(&fp, rc, m_image->xRes(), m_image->yRes(), dev, beginIt, endIt, options, 0);
+    KisImageBuilder_Result res = converter.buildFile(fileName, rc, m_image->xRes(), m_image->yRes(), dev, beginIt, endIt, options, 0);
 
     return (res == KisImageBuilder_RESULT_OK);
 }
@@ -463,35 +461,17 @@ Bone *findBoneByName(Bone *startBone, const QString &name)
     return 0;
 }
 
-KisImportExportFilter::ConversionStatus KisSpriterExport::convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration)
+KisImportExportFilter::ConversionStatus KisSpriterExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
 {
-    dbgFile << "Spriter export! From:" << from << ", To:" << to << "" << outputFile();
+    QFileInfo fi(filename());
 
-    if (from != "application/x-krita") {
-        return KisImportExportFilter::NotImplemented;
-    }
-
-    KisDocument *input = inputDocument();
-
-    QString filename = outputFile();
-    if (filename.isEmpty()) {
-        return KisImportExportFilter::FileNotFound;
-    }
-
-    if (!input) {
-        return KisImportExportFilter::NoDocumentCreated;
-    }
-
-    QFileInfo fi(filename);
-    //qDebug() << "filename" << filename << fi.absolutePath() << fi.baseName();
-
-    m_image = input->image();
+    m_image = document->image();
 
     if (m_image->rootLayer()->childCount() == 0) {
         return KisImportExportFilter::UsageError;
     }
 
-    KisGroupLayerSP root = input->image()->rootLayer();
+    KisGroupLayerSP root = document->image()->rootLayer();
 
     m_boneLayer = qobject_cast<KisLayer*>(root->findChildByName("bone").data());
     //qDebug() << "Found boneLayer" << m_boneLayer;
@@ -499,7 +479,7 @@ KisImportExportFilter::ConversionStatus KisSpriterExport::convert(const QByteArr
     m_rootLayer= qobject_cast<KisGroupLayer*>(root->findChildByName("root").data());
     //qDebug() << "Fond rootLayer" << m_rootLayer;
 
-    parseFolder(input->image()->rootLayer(), "", fi.absolutePath());
+    parseFolder(document->image()->rootLayer(), "", fi.absolutePath());
 
     m_rootBone = 0;
 
@@ -607,20 +587,23 @@ KisImportExportFilter::ConversionStatus KisSpriterExport::convert(const QByteArr
     QDomDocument scml;
     fillScml(scml, fi.baseName());
 
-    QFile f(filename);
-    //qDebug() << "Writing xml to" << f.fileName();
-    bool r = f.open(QFile::WriteOnly);
-    Q_ASSERT(r);
-    f.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
-    f.write(scml.toString(4).toUtf8());
-    f.flush();
-    f.close();
-
-
+    io->write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+    io->write(scml.toString(4).toUtf8());
 
     delete m_rootBone;
 
     return KisImportExportFilter::OK;
 }
+
+void KisSpriterExport::initializeCapabilities()
+{
+    addCapability(KisExportCheckRegistry::instance()->get("MultiLayerCheck")->create(KisExportCheckBase::SUPPORTED));
+    QList<QPair<KoID, KoID> > supportedColorModels;
+    supportedColorModels << QPair<KoID, KoID>()
+            << QPair<KoID, KoID>(RGBAColorModelID, Integer8BitsColorDepthID);
+    addSupportedColorModels(supportedColorModels, "Spriter");
+}
+
+
 
 #include "kis_spriter_export.moc"

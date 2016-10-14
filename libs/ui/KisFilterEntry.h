@@ -49,7 +49,7 @@ public:
     explicit KisFilterEntry(QPluginLoader *loader);
     ~KisFilterEntry();
 
-    KisImportExportFilter *createFilter(KisFilterChainSP chain);
+    KisImportExportFilter *createFilter();
 
     /**
      *  The imported mimetype(s).

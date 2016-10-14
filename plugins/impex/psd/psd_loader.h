@@ -37,7 +37,7 @@ public:
     PSDLoader(KisDocument *doc);
     virtual ~PSDLoader();
 
-    KisImageBuilder_Result buildImage(const QString &filename);
+    KisImageBuilder_Result buildImage(QIODevice *io);
 
     KisImageWSP image();
 
@@ -47,7 +47,7 @@ public Q_SLOTS:
 
 private:
 
-    KisImageBuilder_Result decode(const QString &filename);
+    KisImageBuilder_Result decode(QIODevice *io);
 
 private:
 

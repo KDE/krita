@@ -77,24 +77,6 @@ public:
     virtual void setUrl(const QUrl &url) = 0;
 
     /**
-     *  @brief Saves a document to a store.
-     */
-    virtual bool saveToStore(KoStore *store, const QString &path) = 0;
-
-    /**
-     *  Reimplement this method to load the odf document. Take care to
-     *  make sure styles are loaded before body text is loaded by the
-     *  text shape.
-     */
-    virtual bool loadOdf(KoOdfReadStore &odfStore) = 0;
-
-    /**
-     *  Reimplement this method to save the contents of your %Calligra document,
-     *  using the ODF format.
-     */
-    virtual bool saveOdf(SavingContext &documentContext) = 0;
-
-    /**
      * Checks whether the document is currently in the process of autosaving
      */
     virtual bool isAutosaving() const = 0;
@@ -123,22 +105,6 @@ public:
     virtual void setMimeType(const QByteArray & mimeType) = 0;
 
     virtual QString localFilePath() const = 0;
-
-    /**
-     * Return the set of SupportedSpecialFormats that the application wants to
-     * offer in the "Save" file dialog.
-     */
-    virtual int supportedSpecialFormats() const = 0;
-
-    /// Enum values used by specialOutputFlag - note that it's a bitfield for supportedSpecialFormats
-    enum { /*SaveAsCalligra1dot1 = 1,*/ // old and removed
-        SaveAsDirectoryStore = 2,
-        SaveAsFlatXML = 4,
-        SaveEncrypted = 8
-                        // bitfield! next value is 16
-    };
-    virtual int specialOutputFlag() const = 0;
-
     /**
      * @brief Set the format in which the document should be saved.
      *
@@ -146,19 +112,10 @@ public:
      * have to call it.
      *
      * @param mimeType the mime type (format) to use.
-     * @param specialOutputFlag is for "save as older version" etc.
      */
-    virtual void setOutputMimeType(const QByteArray & mimeType, int specialOutputFlag = 0) = 0;
+    virtual void setOutputMimeType(const QByteArray & mimeType) = 0;
 
     virtual QByteArray outputMimeType() const = 0;
-
-    /**
-     * Sets the document URL to empty URL
-     * KParts doesn't allow this, but %Calligra apps have e.g. templates
-     * After using loadNativeFormat on a template, one wants
-     * to set the url to QUrl()
-     */
-    virtual void resetURL() = 0;
 
 private:
     class Private;

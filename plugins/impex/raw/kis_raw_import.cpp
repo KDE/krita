@@ -21,7 +21,6 @@
 #include <kpluginfactory.h>
 #include <KoDialog.h>
 
-#include <KisFilterChain.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorSpaceTraits.h>
@@ -68,29 +67,8 @@ inline quint16 correctIndian(quint16 v)
 #endif
 }
 
-KisImportExportFilter::ConversionStatus KisRawImport::convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration)
+KisImportExportFilter::ConversionStatus KisRawImport::convert(KisDocument *document, QIODevice */*io*/,  KisPropertiesConfigurationSP /*configuration*/)
 {
-    dbgFile << from << " " << to << "";
-    if (/*from != "image/x-raw" || */to != "application/x-krita") { // too many from to check, and I don't think it can happen an unsupported from
-        return KisImportExportFilter::NotImplemented;
-    }
-
-    dbgFile << "Krita importing from Raw";
-
-    KisDocument * doc = outputDocument();
-    if (!doc) {
-        return KisImportExportFilter::NoDocumentCreated;
-    }
-
-    doc -> prepareForImport();
-
-    QString filename = inputFile();
-
-    if (filename.isEmpty()) {
-        return KisImportExportFilter::FileNotFound;
-    }
-
-
     // Show dialog
     m_dialog->setCursor(Qt::ArrowCursor);
     QApplication::setOverrideCursor(Qt::ArrowCursor);
@@ -113,13 +91,13 @@ KisImportExportFilter::ConversionStatus KisRawImport::convert(const QByteArray& 
         settings.sixteenBitsImage =  true;
         int width, height, rgbmax;
         KDcraw dcraw;
-        if (!dcraw.decodeRAWImage(inputFile(), settings, imageData, width, height, rgbmax)) return KisImportExportFilter::CreationError;
+        if (!dcraw.decodeRAWImage(filename(), settings, imageData, width, height, rgbmax)) return KisImportExportFilter::CreationError;
 
         QApplication::restoreOverrideCursor();
 
         // Init the image
         const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb16();
-        KisImageWSP image = new KisImage(doc->createUndoStore(), width, height, cs, filename);
+        KisImageWSP image = new KisImage(document->createUndoStore(), width, height, cs, filename());
         if (image.isNull()) return KisImportExportFilter::CreationError;
 
         KisPaintLayerSP layer = new KisPaintLayer(image, image->nextLayerName(), quint8_MAX);
@@ -151,7 +129,7 @@ KisImportExportFilter::ConversionStatus KisRawImport::convert(const QByteArray& 
         }
 
         QApplication::restoreOverrideCursor();
-        doc->setCurrentImage(image);
+        document->setCurrentImage(image);
         return KisImportExportFilter::OK;
     }
 
@@ -166,7 +144,7 @@ void KisRawImport::slotUpdatePreview()
     settings.sixteenBitsImage =  false;
     int width, height, rgbmax;
     KDcraw dcraw;
-    if (dcraw.decodeHalfRAWImage(inputFile(), settings, imageData, width, height, rgbmax)) {
+    if (dcraw.decodeHalfRAWImage(filename(), settings, imageData, width, height, rgbmax)) {
         QImage image(width, height, QImage::Format_RGB32);
         for (int y = 0; y < height; ++y) {
             QRgb *pixel= reinterpret_cast<QRgb *>(image.scanLine(y));

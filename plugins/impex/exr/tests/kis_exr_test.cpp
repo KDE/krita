@@ -47,9 +47,7 @@ void KisExrTest::testRoundTrip()
     KisImportExportManager manager(doc1);
     manager.setBatchMode(true);
 
-    KisImportExportFilter::ConversionStatus status;
-    QString s = manager.importDocument(inputFileName, QString(),
-                                       status);
+    KisImportExportFilter::ConversionStatus status = manager.importDocument(inputFileName, QString());
 
     QCOMPARE(status, KisImportExportFilter::OK);
     QVERIFY(doc1->image());
@@ -73,7 +71,7 @@ void KisExrTest::testRoundTrip()
         KisImportExportManager manager(doc2);
         manager.setBatchMode(true);
 
-        s = manager.importDocument(savedFileName, QString(), status);
+        status = manager.importDocument(savedFileName, QString());
 
         QCOMPARE(status, KisImportExportFilter::OK);
         QVERIFY(doc2->image());

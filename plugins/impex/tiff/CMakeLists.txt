@@ -26,11 +26,11 @@ set(kritatiffexport_SOURCES
     kis_dlg_options_tiff.cpp
     )
 
-ki18n_wrap_ui(kritatiffexport_SOURCES kis_wdg_options_tiff.ui )
+ki18n_wrap_ui(kritatiffexport_SOURCES kis_wdg_options_tiff.ui)
 
 add_library(kritatiffexport MODULE ${kritatiffexport_SOURCES})
 
-target_link_libraries(kritatiffexport kritaui  ${TIFF_LIBRARIES})
+target_link_libraries(kritatiffexport kritaui kritaimpex  ${TIFF_LIBRARIES})
 
 install(TARGETS kritatiffexport  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 install( PROGRAMS  krita_tiff.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})

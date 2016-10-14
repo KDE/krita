@@ -39,7 +39,7 @@ public:
 
 public:
 
-    KisImageBuilder_Result buildFile(const QString &filename);
+    KisImageBuilder_Result buildFile(QIODevice *io);
 
     KisImageWSP image();
 

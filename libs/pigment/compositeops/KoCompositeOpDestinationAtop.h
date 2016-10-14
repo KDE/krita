@@ -25,6 +25,8 @@
 
 /**
  *  Generic implementation of the Destination-atop composite op, based off the behind composite op.
+ *  This is necessary for Open Raster support.
+ *  https://www.w3.org/TR/compositing-1/
  */
 template<class CS_Traits>
 class KoCompositeOpDestinationAtop : public KoCompositeOpBase<CS_Traits, KoCompositeOpDestinationAtop<CS_Traits> >

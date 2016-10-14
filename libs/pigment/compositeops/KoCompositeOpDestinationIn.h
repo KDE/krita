@@ -25,6 +25,8 @@
 
 /**
  *  Generic implementation of the Destination-in composite op, based off the behind composite op.
+ *  This is necessary for Open Raster support.
+ *  https://www.w3.org/TR/compositing-1/
  */
 template<class CS_Traits>
 class KoCompositeOpDestinationIn : public KoCompositeOpBase<CS_Traits, KoCompositeOpDestinationIn<CS_Traits> >
@@ -53,16 +55,6 @@ public:
         channels_type appliedAlpha       = mul(maskAlpha, srcAlpha, opacity);
 
         channels_type newDstAlpha        = mul(dstAlpha, appliedAlpha);
-
-        /*
-        if (newDstAlpha != zeroValue<channels_type>()) {
-            // blend the color channels as if we were painting on the layer below
-            for (qint8 channel = 0; channel < channels_nb; ++channel)
-                if(channel != alpha_pos && (allChannelFlags || channelFlags.testBit(channel))) {
-                    //each color blended in proportion to their calculated opacity//
-                    dst[channel] = KoColorSpaceMaths<channels_type>::multiply(dst[channel],newDstAlpha);
-                }
-        }*/
 
         return newDstAlpha;
     }

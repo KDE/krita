@@ -140,7 +140,6 @@ void KisPaintOpSettings::setRandomOffset(const KisPaintInformation &paintInforma
         }
     }
 
-    qDebug() << "X" << getString("Texture/Pattern/OffsetX") << "Y" << getString("Texture/Pattern/OffsetY");
 }
 
 

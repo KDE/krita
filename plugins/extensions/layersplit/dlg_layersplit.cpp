@@ -46,8 +46,6 @@ DlgLayerSplit::DlgLayerSplit()
     m_page->intFuzziness->setRange(0, 200);
     m_page->intFuzziness->setSingleStep(1);
 
-
-
     m_colorSetChooser = new KisColorsetChooser();
     m_page->paletteChooser->setPopupWidget(m_colorSetChooser);
     connect(m_colorSetChooser, SIGNAL(paletteSelected(KoColorSet*)), this, SLOT(slotSetPalette(KoColorSet*)));
@@ -61,7 +59,7 @@ DlgLayerSplit::DlgLayerSplit()
     m_page->chkSortLayers->setChecked(cfg.readEntry<bool>("layerspit/sortlayers", true));
     m_page->chkDisregardOpacity->setChecked(cfg.readEntry<bool>("layerspit/disregardopacity", true));
 
-    QString paletteName = cfg.readEntry<QString>("layersplit/paletteName", "Default");
+    QString paletteName = cfg.readEntry<QString>("layersplit/paletteName", i18n("Default"));
     KoResourceServer<KoColorSet> *pserver = KoResourceServerProvider::instance()->paletteServer(false);
     KoColorSet *pal = pserver->resourceByName(paletteName);
     if (pal) {
@@ -91,7 +89,9 @@ void DlgLayerSplit::applyClicked()
     cfg.writeEntry("layerspit/hideoriginal", m_page->chkHideOriginal->isChecked());
     cfg.writeEntry("layerspit/sortlayers", m_page->chkSortLayers->isChecked());
     cfg.writeEntry("layerspit/disregardopacity", m_page->chkDisregardOpacity->isChecked());
-    cfg.writeEntry("layersplit/paletteName", m_palette->name());
+    if (m_palette) {
+        cfg.writeEntry("layersplit/paletteName", m_palette->name());
+    }
 
     accept();
 }

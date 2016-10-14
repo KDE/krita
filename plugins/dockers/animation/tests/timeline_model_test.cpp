@@ -192,7 +192,7 @@ void TimelineModelTest::testView()
     connect(intTime, SIGNAL(valueChanged(int)),
             SLOT(setCurrentTime(int)));
 
-    connect(m_image->animationInterface(), SIGNAL(sigTimeChanged(int)),
+    connect(m_image->animationInterface(), SIGNAL(sigUiTimeChanged(int)),
             intTime, SLOT(setValue(int)));
 
     connect(intLayer, SIGNAL(valueChanged(int)),

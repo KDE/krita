@@ -103,8 +103,8 @@ public:
     // This is the main place containing ActionInfoItems.
     QMap<QString, ActionInfoItem> actionInfoList;
     void loadActionFiles();
-    void loadActionCollections();
     void loadCustomShortcuts(QString filename = QStringLiteral("kritashortcutsrc"));
+
     ActionInfoItem &actionInfo(const QString &name) {
         if (!actionInfoList.contains(name)) {
             dbgAction << "Tried to look up info for unknown action" << name;
@@ -113,7 +113,6 @@ public:
     };
 
     KisActionRegistry *q;
-    KActionCollection * defaultActionCollection;
     QMap<QString, KActionCollection*> actionCollections;
 };
 
@@ -129,13 +128,10 @@ KisActionRegistry *KisActionRegistry::instance()
 KisActionRegistry::KisActionRegistry()
     : d(new KisActionRegistry::Private(this))
 {
-    d->loadActionFiles();
-
     KConfigGroup cg = KSharedConfig::openConfig()->group("Shortcut Schemes");
     QString schemeName = cg.readEntry("Current Scheme", "Default");
     loadShortcutScheme(schemeName);
     loadCustomShortcuts();
-
 }
 
 QList<QKeySequence> KisActionRegistry::getCustomShortcut(const QString &name)
@@ -201,7 +197,6 @@ void KisActionRegistry::loadShortcutScheme(const QString &schemeName)
     if (schemeName != QStringLiteral("Default")) {
         QString schemeFileName = KShortcutSchemesHelper::schemeFileLocations().value(schemeName);
         if (schemeFileName.isEmpty()) {
-            // qDebug() << "No configuration file found for scheme" << schemeName;
             return;
         }
         KConfig schemeConfig(schemeFileName, KConfig::SimpleConfig);
@@ -379,6 +374,7 @@ void KisActionRegistry::Private::loadActionFiles()
 {
     QStringList actionDefinitions =
         KoResourcePaths::findAllResources("kis_actions", "*.action", KoResourcePaths::Recursive);
+
 
     // Extract actions all XML .action files.
     Q_FOREACH (const QString &actionDefinition, actionDefinitions)  {

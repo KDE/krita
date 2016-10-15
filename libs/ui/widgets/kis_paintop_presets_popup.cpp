@@ -144,7 +144,7 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
     connect(m_d->uiWdgPaintOpPresetSettings.txtPreset, SIGNAL(textChanged(QString)),
             SLOT(slotWatchPresetNameLineEdit()));
 
-    connect(m_d->uiWdgPaintOpPresetSettings.paintopList, SIGNAL(activated(QString)),
+    connect(m_d->uiWdgPaintOpPresetSettings.brushEgineComboBox, SIGNAL(activated(QString)),
             this, SIGNAL(paintopActivated(QString)));
 
     connect(m_d->uiWdgPaintOpPresetSettings.presetWidget->smallPresetChooser, SIGNAL(resourceSelected(KoResource*)),

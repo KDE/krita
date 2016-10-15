@@ -106,6 +106,8 @@ private Q_SLOTS:
     void slotSwitchScratchpad(bool visible);
     void slotResourceChanged(int key, const QVariant &value);
     void slotLodAvailabilityChanged(bool value);
+    void slotPaintOpChanged(int index);
+
 
 private:
 

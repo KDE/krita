@@ -33,13 +33,19 @@ KisPresetSelectorStrip::KisPresetSelectorStrip(QWidget* parent)
 {
     setupUi(this);
     smallPresetChooser->showButtons(false);
-    smallPresetChooser->setViewMode(KisPresetChooser::STRIP);
+    smallPresetChooser->setViewMode(KisPresetChooser::DETAIL); // set to details view by default to see names
     m_resourceItemView = smallPresetChooser->itemChooser()->itemView();
     
     /* This is an heuristic to fill smallPresetChooser with only the presets
      * for the paintop that comes selected by default: Pixel Brush. */
     const QString PIXEL_BRUSH_ID = "paintbrush";
     m_currentPaintopID = PIXEL_BRUSH_ID;
+
+
+    // hide the left and right arrows that are used by the "strip" view by default
+    rightScrollBtn->hide();
+    leftScrollBtn->hide();
+
 }
 
 KisPresetSelectorStrip::~KisPresetSelectorStrip()

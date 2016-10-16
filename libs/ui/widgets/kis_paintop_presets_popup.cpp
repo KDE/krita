@@ -81,6 +81,7 @@ public:
 
 KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resourceProvider, QWidget * parent)
     : QWidget(parent)
+    , current_paintOpId("")
     , m_d(new Private())
 {
     setObjectName("KisPaintOpPresetsPopup");
@@ -128,8 +129,17 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
 
 
 
+     // filtering the presets
+    // presetFilterTextLineEdit
+    m_d->uiWdgPaintOpPresetSettings.presetFilterTextLineEdit->setClearButtonEnabled(true);
+    m_d->uiWdgPaintOpPresetSettings.presetFilterTextLineEdit->setPlaceholderText(i18n("Enter resource filters here"));
+
+
 
     // Connections
+
+    connect(m_d->uiWdgPaintOpPresetSettings.presetFilterTextLineEdit, SIGNAL(textChanged(QString)),
+            this, SLOT(slotPresetFilter_onTextChanged(QString)));
 
     connect(m_d->uiWdgPaintOpPresetSettings.eraseScratchPad, SIGNAL(clicked()),
             m_d->uiWdgPaintOpPresetSettings.scratchPad, SLOT(fillDefault()));
@@ -400,8 +410,6 @@ void KisPaintOpPresetsPopup::setPaintOpList(const QList< KisPaintOpFactory* >& l
 
    m_d->uiWdgPaintOpPresetSettings.brushEgineComboBox->setModel(brushEnginesModel);
 
-
-
 }
 
 
@@ -416,6 +424,8 @@ void KisPaintOpPresetsPopup::setCurrentPaintOp(const QString& paintOpId)
         if(brushEnginesModel->entryAt(info, brushEnginesModel->index(i, 0))) {
 
            if (info.id == paintOpId ) {
+               current_paintOpId = paintOpId;
+
                m_d->uiWdgPaintOpPresetSettings.brushEgineComboBox->setCurrentIndex(i); // found it!
            }
 
@@ -430,6 +440,10 @@ void KisPaintOpPresetsPopup::setCurrentPaintOp(const QString& paintOpId)
 QString KisPaintOpPresetsPopup::currentPaintOp()
 {
     return m_d->uiWdgPaintOpPresetSettings.brushEgineComboBox->currentText();
+}
+
+QString KisPaintOpPresetsPopup::currentPaintOpId() {
+    return current_paintOpId;
 }
 
 void KisPaintOpPresetsPopup::setPresetImage(const QImage& image)
@@ -486,18 +500,22 @@ void KisPaintOpPresetsPopup::slotPaintOpChanged(int index) {
     // find the brush engine model ID from the combo box's index
     KisSortedPaintOpListModel* brushEnginesModel = static_cast<KisSortedPaintOpListModel*>( m_d->uiWdgPaintOpPresetSettings.brushEgineComboBox->model() );
     KisPaintOpInfo info;
-    QString paintOpId = ""; // the ID is a string
 
     if(brushEnginesModel->entryAt(info, brushEnginesModel->index(index, 0)))
-        paintOpId = info.id;
-
+        current_paintOpId = info.id;
 
     // add filter for the presets in the brush editor
-    m_d->uiWdgPaintOpPresetSettings.presetWidget->setPresetFilter(paintOpId);
-    setCurrentPaintOp(paintOpId);
-
+    m_d->uiWdgPaintOpPresetSettings.presetWidget->setPresetFilter(current_paintOpId);
+    setCurrentPaintOp(current_paintOpId);
 
 }
+
+void KisPaintOpPresetsPopup::slotPresetFilter_onTextChanged(QString text) {
+
+    m_d->uiWdgPaintOpPresetSettings.presetWidget->setPresetFilterWithText( currentPaintOpId(), text);
+
+}
+
 
 void KisPaintOpPresetsPopup::updateViewSettings()
 {

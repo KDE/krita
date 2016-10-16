@@ -61,6 +61,19 @@ void KisPresetSelectorStrip::setPresetFilter(const QString& paintOpId)
     }
 }
 
+
+void KisPresetSelectorStrip::setPresetFilterWithText(const QString& paintOpId, const QString filterText)
+{
+   // do similar stuff as regular paintOp, but also take text filtering into account
+    qDebug() << paintOpId << " ID.   text with filter doing it. filterText: " << filterText;
+
+}
+
+
+
+
+
+
 void KisPresetSelectorStrip::on_leftScrollBtn_pressed()
 {
     // Deciding how far beyond the left margin (10 pixels) was an arbitrary decision

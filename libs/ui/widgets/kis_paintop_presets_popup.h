@@ -60,6 +60,9 @@ public:
 
     void setCurrentPaintOp(const QString & paintOpId);
     QString currentPaintOp();
+
+    /// returns the internal ID for the paint op (brush engine)
+    QString currentPaintOpId();
     
     ///fill the cutoutOverlay rect with the cotent of an image, used to get the image back when selecting a preset
     ///@param image image that will be used, should be image of an existing preset resource
@@ -107,12 +110,14 @@ private Q_SLOTS:
     void slotResourceChanged(int key, const QVariant &value);
     void slotLodAvailabilityChanged(bool value);
     void slotPaintOpChanged(int index);
+    void slotPresetFilter_onTextChanged(QString text);
 
 
 private:
 
     struct Private;
     Private * const m_d;
+    QString current_paintOpId;
 
 };
 

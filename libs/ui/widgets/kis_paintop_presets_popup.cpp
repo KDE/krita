@@ -102,6 +102,35 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
     m_d->uiWdgPaintOpPresetSettings.eraseScratchPad->setIcon(KisIconUtils::loadIcon("edit-delete"));
     m_d->uiWdgPaintOpPresetSettings.paintPresetIcon->setIcon(KisIconUtils::loadIcon("krita_tool_freehand"));
 
+
+
+    // DETAIL and THUMBNAIL view changer
+    QMenu* menu = new QMenu(this);
+
+    QActionGroup *actionGroup = new QActionGroup(this);
+
+    KisPresetChooser::ViewMode mode = (KisPresetChooser::ViewMode)KisConfig().presetChooserViewMode();
+
+    QAction* action = menu->addAction(KisIconUtils::loadIcon("view-preview"), i18n("Thumbnails"), m_d->uiWdgPaintOpPresetSettings.presetWidget, SLOT(slotThumbnailMode()));
+    action->setCheckable(true);
+    action->setChecked(mode == KisPresetChooser::THUMBNAIL);
+    action->setActionGroup(actionGroup);
+
+    action = menu->addAction(KisIconUtils::loadIcon("view-list-details"), i18n("Details"), m_d->uiWdgPaintOpPresetSettings.presetWidget, SLOT(slotDetailMode()));
+    action->setCheckable(true);
+    action->setChecked(mode == KisPresetChooser::DETAIL);
+    action->setActionGroup(actionGroup);
+
+    // configure the button and assign menu
+    m_d->uiWdgPaintOpPresetSettings.presetChangeViewToolButton->setMenu(menu);
+    m_d->uiWdgPaintOpPresetSettings.presetChangeViewToolButton->setIcon(KisIconUtils::loadIcon("view-choose"));
+    m_d->uiWdgPaintOpPresetSettings.presetChangeViewToolButton->setPopupMode(QToolButton::InstantPopup);
+
+
+
+
+    // Connections
+
     connect(m_d->uiWdgPaintOpPresetSettings.eraseScratchPad, SIGNAL(clicked()),
             m_d->uiWdgPaintOpPresetSettings.scratchPad, SLOT(fillDefault()));
 

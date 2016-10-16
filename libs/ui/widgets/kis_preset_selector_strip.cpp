@@ -32,7 +32,7 @@ KisPresetSelectorStrip::KisPresetSelectorStrip(QWidget* parent)
     : QWidget(parent)
 {
     setupUi(this);
-    smallPresetChooser->showButtons(false);
+    smallPresetChooser->showButtons(false); //loading and saving buttons. don't need these with the brush editor
     smallPresetChooser->setViewMode(KisPresetChooser::DETAIL); // set to details view by default to see names
     m_resourceItemView = smallPresetChooser->itemChooser()->itemView();
     
@@ -74,4 +74,18 @@ void KisPresetSelectorStrip::on_rightScrollBtn_pressed()
     QPoint beyondRightMargin(10 + m_resourceItemView->viewport()->width(), 0);
     m_resourceItemView->scrollTo(m_resourceItemView->indexAt(beyondRightMargin), QAbstractItemView::EnsureVisible);
 }
+
+
+void KisPresetSelectorStrip::slotThumbnailMode()
+{
+    smallPresetChooser->setViewMode(KisPresetChooser::THUMBNAIL); // set to details view by default to see names
+    m_resourceItemView = smallPresetChooser->itemChooser()->itemView();
+}
+
+void KisPresetSelectorStrip::slotDetailMode()
+{
+    smallPresetChooser->setViewMode(KisPresetChooser::DETAIL); // set to details view by default to see names
+    m_resourceItemView = smallPresetChooser->itemChooser()->itemView();
+}
+
 

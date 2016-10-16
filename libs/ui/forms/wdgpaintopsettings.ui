@@ -46,7 +46,7 @@
         <widget class="QLineEdit" name="presetFilterTextLineEdit"/>
        </item>
        <item>
-        <widget class="QToolButton" name="presetSelectToolButton">
+        <widget class="QToolButton" name="presetChangeViewToolButton">
          <property name="text">
           <string>View</string>
          </property>
@@ -108,9 +108,6 @@
        </property>
       </widget>
      </item>
-     
-     
-
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="0,1,1,0,0">
        <item>
@@ -192,10 +189,7 @@
        </item>
       </layout>
      </item>
-
-
-
-<item>
+     <item>
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
         <widget class="QLabel" name="label">
@@ -233,12 +227,6 @@
        </item>
       </layout>
      </item>
-
-
-
-
-
-
     </layout>
    </item>
    <item>
@@ -348,8 +336,6 @@
     </widget>
    </item>
   </layout>
-  <zorder>scratchpadControls</zorder>
-  <zorder>frame</zorder>
  </widget>
  <customwidgets>
   <customwidget>

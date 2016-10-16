@@ -54,6 +54,12 @@ private Q_SLOTS:
     /// Scrolls the strip's item view to the right
     void on_rightScrollBtn_pressed();
 
+    /// Changes the preset list view type
+    void slotThumbnailMode();
+    void slotDetailMode();
+
+
+
 private:
     /**
     * This is a workaround to access members of KisPresetChooser using the QObject tree

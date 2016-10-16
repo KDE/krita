@@ -46,6 +46,7 @@ public:
     virtual ~KisPresetSelectorStrip();
 
     void setPresetFilter(const QString& paintOpId);
+    void setPresetFilterWithText(const QString& paintOpId, const QString filterText);
 
 private Q_SLOTS:
     /// Scrolls the strip's item view to the left

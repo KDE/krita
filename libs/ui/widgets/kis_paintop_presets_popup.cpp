@@ -104,7 +104,6 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
     m_d->uiWdgPaintOpPresetSettings.paintPresetIcon->setIcon(KisIconUtils::loadIcon("krita_tool_freehand"));
 
 
-
     // DETAIL and THUMBNAIL view changer
     QMenu* menu = new QMenu(this);
 
@@ -130,7 +129,6 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
 
 
      // filtering the presets
-    // presetFilterTextLineEdit
     m_d->uiWdgPaintOpPresetSettings.presetFilterTextLineEdit->setClearButtonEnabled(true);
     m_d->uiWdgPaintOpPresetSettings.presetFilterTextLineEdit->setPlaceholderText(i18n("Enter resource filters here"));
 
@@ -156,6 +154,22 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
 
 
 
+
+    // When the brush editor is detached, there is a bug in Qt5 where you have to click the brush editor
+    // icon twice for the window to open. I don't think it is a big enough
+    // issue to completely disable the feature. Ref: https://bugs.kde.org/show_bug.cgi?id=357796
+    // with the added 'pin' functionality, I think the functionality is still very helpful
+    // always showing for now until otherwise discussed... Scott Petrovic (10/17/2016)
+    if (true) {
+        m_d->uiWdgPaintOpPresetSettings.detachWindowButton->setVisible(true);
+
+        connect(m_d->uiWdgPaintOpPresetSettings.detachWindowButton, SIGNAL(clicked(bool)),
+                this, SLOT(switchDetached(bool)));
+    }
+
+
+
+
     // Connections
     connect(m_d->uiWdgPaintOpPresetSettings.showScratchpadButton, SIGNAL(clicked(bool)),
             this, SLOT(slotSwitchScratchpad(bool)));
@@ -163,8 +177,7 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
     connect(m_d->uiWdgPaintOpPresetSettings.showEditorButton, SIGNAL(clicked(bool)),
             this, SLOT(slotSwitchShowEditor(bool)));
 
-    connect(m_d->uiWdgPaintOpPresetSettings.detachWindowButton, SIGNAL(clicked(bool)),
-            this, SLOT(switchDetached(bool)));
+
 
 
     connect (m_d->uiWdgPaintOpPresetSettings.pinWindowButton, SIGNAL(clicked(bool)),

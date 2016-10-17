@@ -110,6 +110,7 @@ private Q_SLOTS:
     void slotResourceChanged(int key, const QVariant &value);
     void slotLodAvailabilityChanged(bool value);
     void slotSwitchShowEditor(bool visible);
+    void slotPinWindow(bool enabled);
     void slotPaintOpChanged(int index);
     void slotPresetFilter_onTextChanged(QString text);
 

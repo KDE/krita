@@ -38,8 +38,7 @@ struct KisImageAnimationInterface::Private
           frameInvalidationBlocked(false),
           cachedLastFrameValue(-1),
           m_currentTime(0),
-          m_currentUITime(0),
-          m_currentTimeLod(0)
+          m_currentUITime(0)
     {
     }
 
@@ -53,14 +52,14 @@ struct KisImageAnimationInterface::Private
     int cachedLastFrameValue;
 
     inline int currentTime() const {
-        return image->currentLevelOfDetail() ? m_currentTime : m_currentTimeLod;
+        return m_currentTime;
     }
 
     inline int currentUITime() const {
         return m_currentUITime;
     }
     inline void setCurrentTime(int value) {
-        image->currentLevelOfDetail() ? m_currentTime : m_currentTimeLod = value;
+        m_currentTime = value;
     }
 
     inline void setCurrentUITime(int value) {
@@ -69,7 +68,6 @@ struct KisImageAnimationInterface::Private
 private:
     int m_currentTime;
     int m_currentUITime;
-    int m_currentTimeLod;
 };
 
 

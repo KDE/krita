@@ -71,8 +71,13 @@ KisStrokeStrategy* KisSwitchTimeStrokeStrategy::createLodClone(int levelOfDetail
 {
     Q_UNUSED(levelOfDetail);
 
-    /**
-     * We need to regenerate animation frames on LodN level as well
-     */
-    return new KisSwitchTimeStrokeStrategy(m_d->frameId, m_d->interface, 0);
+    // This stroke is explicitly made LEGACY, so that it could create a barrier for
+    // time switch. Theoretically, we can have separate time ids for Lod0 and LodN,
+    // but currently this idea doesn't wotk for some reason. The consequences of
+    // making this stroke a barrier:
+    //
+    // * LodSync stroke is started after every time switch (not slow, but still...)
+    // * The frame switches only *after* all the pending strokes are finished
+
+    return 0;
 }

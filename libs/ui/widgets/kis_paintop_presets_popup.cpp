@@ -151,22 +151,7 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
 
     m_d->uiWdgPaintOpPresetSettings.pinWindowButton->setIcon(KisIconUtils::loadIcon("layer-unlocked"));
 
-
-
-
-
-    // When the brush editor is detached, there is a bug in Qt5 where you have to click the brush editor
-    // icon twice for the window to open. I don't think it is a big enough
-    // issue to completely disable the feature. Ref: https://bugs.kde.org/show_bug.cgi?id=357796
-    // with the added 'pin' functionality, I think the functionality is still very helpful
-    // always showing for now until otherwise discussed... Scott Petrovic (10/17/2016)
-    if (true) {
-        m_d->uiWdgPaintOpPresetSettings.detachWindowButton->setVisible(true);
-
-        connect(m_d->uiWdgPaintOpPresetSettings.detachWindowButton, SIGNAL(clicked(bool)),
-                this, SLOT(switchDetached(bool)));
-    }
-
+    m_d->uiWdgPaintOpPresetSettings.detachWindowButton->setVisible(true);
 
 
 
@@ -177,8 +162,8 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
     connect(m_d->uiWdgPaintOpPresetSettings.showEditorButton, SIGNAL(clicked(bool)),
             this, SLOT(slotSwitchShowEditor(bool)));
 
-
-
+    connect(m_d->uiWdgPaintOpPresetSettings.detachWindowButton, SIGNAL(clicked(bool)),
+            this, SLOT(switchDetached(bool)));
 
     connect (m_d->uiWdgPaintOpPresetSettings.pinWindowButton, SIGNAL(clicked(bool)),
              this, SLOT(slotPinWindow(bool)));
@@ -255,6 +240,29 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
 
     // brush engine is changed
    connect(m_d->uiWdgPaintOpPresetSettings.brushEgineComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(slotPaintOpChanged(int)));
+
+   connect(qApp, SIGNAL(focusChanged(QWidget*,QWidget*)), this, SLOT(slotFocusChanged(QWidget*,QWidget*)));
+
+
+}
+
+void KisPaintOpPresetsPopup::slotFocusChanged(QWidget* object1, QWidget* object2)
+{
+    // object1 = "old" focus window. object2 = "active" focus window
+
+    // don't close the editor window if we have it 'pinned'
+    if ( m_d->uiWdgPaintOpPresetSettings.pinWindowButton->isChecked() == false) {
+
+        // if the active focus window is not the brush editor, we need to hide it
+        // otherwise it will go behind the active window and require 2 clicks to bring it back
+        // once to hide it, second time to show it again at the top
+        if (object2 && object2->parentWidget() && parentWidget() ) {
+
+            if (object2->parentWidget()->objectName() != "KisPaintOpPresetsPopup") {
+                parentWidget()->hide();
+            }
+        }
+    }
 
 }
 

@@ -57,8 +57,8 @@ void KisImageAnimationInterfaceTest::testFrameRegeneration()
     KisPaintDeviceSP dev1 = p.layer->paintDevice();
     KisPaintDeviceSP dev2 = layer2->paintDevice();
 
-    dev1->createKeyframeChannel(KisKeyframeChannel::Content);
-    dev2->createKeyframeChannel(KisKeyframeChannel::Content);
+    p.layer->getKeyframeChannel(KisKeyframeChannel::Content.id(), true);
+    layer2->getKeyframeChannel(KisKeyframeChannel::Content.id(), true);
 
     // check frame 0
     {

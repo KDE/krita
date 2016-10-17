@@ -96,7 +96,7 @@ void KisBrushDelegate::paint(QPainter * painter, const QStyleOptionViewItem & op
 }
 
 
-KisBrushChooser::KisBrushChooser(QWidget *parent, const char *name)
+KisPredefinedBrushChooser::KisPredefinedBrushChooser(QWidget *parent, const char *name)
     : QWidget(parent),
       m_stampBrushWidget(0),
       m_clipboardBrushWidget(0)
@@ -196,17 +196,17 @@ KisBrushChooser::KisBrushChooser(QWidget *parent, const char *name)
     update(m_itemChooser->currentResource());
 }
 
-KisBrushChooser::~KisBrushChooser()
+KisPredefinedBrushChooser::~KisPredefinedBrushChooser()
 {
 }
 
-void KisBrushChooser::setBrush(KisBrushSP _brush)
+void KisPredefinedBrushChooser::setBrush(KisBrushSP _brush)
 {
     m_itemChooser->setCurrentResource(_brush.data());
     update(_brush.data());
 }
 
-void KisBrushChooser::slotResetBrush()
+void KisPredefinedBrushChooser::slotResetBrush()
 {
     KisBrush *brush = dynamic_cast<KisBrush *>(m_itemChooser->currentResource());
     if (brush) {
@@ -219,7 +219,7 @@ void KisBrushChooser::slotResetBrush()
     }
 }
 
-void KisBrushChooser::slotSetItemSize(qreal sizeValue)
+void KisPredefinedBrushChooser::slotSetItemSize(qreal sizeValue)
 {
     KisBrush *brush = dynamic_cast<KisBrush *>(m_itemChooser->currentResource());
 
@@ -232,7 +232,7 @@ void KisBrushChooser::slotSetItemSize(qreal sizeValue)
     }
 }
 
-void KisBrushChooser::slotSetItemRotation(qreal rotationValue)
+void KisPredefinedBrushChooser::slotSetItemRotation(qreal rotationValue)
 {
     KisBrush *brush = dynamic_cast<KisBrush *>(m_itemChooser->currentResource());
     if (brush) {
@@ -243,7 +243,7 @@ void KisBrushChooser::slotSetItemRotation(qreal rotationValue)
     }
 }
 
-void KisBrushChooser::slotSpacingChanged()
+void KisPredefinedBrushChooser::slotSpacingChanged()
 {
     KisBrush *brush = dynamic_cast<KisBrush *>(m_itemChooser->currentResource());
     if (brush) {
@@ -255,7 +255,7 @@ void KisBrushChooser::slotSpacingChanged()
     }
 }
 
-void KisBrushChooser::slotSetItemUseColorAsMask(bool useColorAsMask)
+void KisPredefinedBrushChooser::slotSetItemUseColorAsMask(bool useColorAsMask)
 {
     KisGbrBrush *brush = dynamic_cast<KisGbrBrush *>(m_itemChooser->currentResource());
     if (brush) {
@@ -266,7 +266,7 @@ void KisBrushChooser::slotSetItemUseColorAsMask(bool useColorAsMask)
     }
 }
 
-void KisBrushChooser::slotOpenStampBrush()
+void KisPredefinedBrushChooser::slotOpenStampBrush()
 {
     if(!m_stampBrushWidget) {
         m_stampBrushWidget = new KisCustomBrushWidget(this, i18n("Stamp"), m_image);
@@ -281,7 +281,7 @@ void KisBrushChooser::slotOpenStampBrush()
         update(m_itemChooser->currentResource());
     }
 }
-void KisBrushChooser::slotOpenClipboardBrush()
+void KisPredefinedBrushChooser::slotOpenClipboardBrush()
 {
     if(!m_clipboardBrushWidget) {
         m_clipboardBrushWidget = new KisClipboardBrushWidget(this, i18n("Clipboard"), m_image);
@@ -297,7 +297,7 @@ void KisBrushChooser::slotOpenClipboardBrush()
     }
 }
 
-void KisBrushChooser::update(KoResource * resource)
+void KisPredefinedBrushChooser::update(KoResource * resource)
 {
     KisBrush* brush = dynamic_cast<KisBrush*>(resource);
 
@@ -328,7 +328,7 @@ void KisBrushChooser::update(KoResource * resource)
     }
 }
 
-void KisBrushChooser::slotActivatedBrush(KoResource * resource)
+void KisPredefinedBrushChooser::slotActivatedBrush(KoResource * resource)
 {
     KisBrush* brush = dynamic_cast<KisBrush*>(resource);
 
@@ -345,13 +345,13 @@ void KisBrushChooser::slotActivatedBrush(KoResource * resource)
     }
 }
 
-void KisBrushChooser::slotNewPredefinedBrush(KoResource *resource)
+void KisPredefinedBrushChooser::slotNewPredefinedBrush(KoResource *resource)
 {
     m_itemChooser->setCurrentResource(resource);
     update(resource);
 }
 
-void KisBrushChooser::setBrushSize(qreal xPixels, qreal yPixels)
+void KisPredefinedBrushChooser::setBrushSize(qreal xPixels, qreal yPixels)
 {
     Q_UNUSED(yPixels);
     qreal oldWidth = m_brush->width() * m_brush->scale();
@@ -362,7 +362,7 @@ void KisBrushChooser::setBrushSize(qreal xPixels, qreal yPixels)
     m_slSize->setValue(newWidth);
 }
 
-void KisBrushChooser::setImage(KisImageWSP image)
+void KisPredefinedBrushChooser::setImage(KisImageWSP image)
 {
     m_image = image;
 }

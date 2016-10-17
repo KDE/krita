@@ -81,11 +81,12 @@ public:
 
 KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resourceProvider, QWidget * parent)
     : QWidget(parent)
-    , current_paintOpId("")
     , m_d(new Private())
 {
     setObjectName("KisPaintOpPresetsPopup");
     setFont(KoDockRegistry::dockFont());
+
+    current_paintOpId = "";
 
     m_d->resourceProvider = resourceProvider;
 
@@ -127,12 +128,6 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
     m_d->uiWdgPaintOpPresetSettings.presetChangeViewToolButton->setPopupMode(QToolButton::InstantPopup);
 
 
-
-     // filtering the presets
-    m_d->uiWdgPaintOpPresetSettings.presetFilterTextLineEdit->setClearButtonEnabled(true);
-    m_d->uiWdgPaintOpPresetSettings.presetFilterTextLineEdit->setPlaceholderText(i18n("Enter resource filters here"));
-
-
     // show/hide buttons
 
     KisConfig cfg;
@@ -166,10 +161,6 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
 
     connect (m_d->uiWdgPaintOpPresetSettings.pinWindowButton, SIGNAL(clicked(bool)),
              this, SLOT(slotPinWindow(bool)));
-
-
-    connect(m_d->uiWdgPaintOpPresetSettings.presetFilterTextLineEdit, SIGNAL(textChanged(QString)),
-            this, SLOT(slotPresetFilter_onTextChanged(QString)));
 
     connect(m_d->uiWdgPaintOpPresetSettings.eraseScratchPad, SIGNAL(clicked()),
             m_d->uiWdgPaintOpPresetSettings.scratchPad, SLOT(fillDefault()));
@@ -575,12 +566,6 @@ void KisPaintOpPresetsPopup::slotPaintOpChanged(int index) {
     // add filter for the presets in the brush editor
     m_d->uiWdgPaintOpPresetSettings.presetWidget->setPresetFilter(current_paintOpId);
     setCurrentPaintOp(current_paintOpId);
-
-}
-
-void KisPaintOpPresetsPopup::slotPresetFilter_onTextChanged(QString text) {
-
-    m_d->uiWdgPaintOpPresetSettings.presetWidget->setPresetFilterWithText( currentPaintOpId(), text);
 
 }
 

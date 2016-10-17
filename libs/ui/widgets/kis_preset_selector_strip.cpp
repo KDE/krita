@@ -34,8 +34,9 @@ KisPresetSelectorStrip::KisPresetSelectorStrip(QWidget* parent)
     setupUi(this);
     smallPresetChooser->showButtons(false); //loading and saving buttons. don't need these with the brush editor
     smallPresetChooser->setViewMode(KisPresetChooser::DETAIL); // set to details view by default to see names
+    smallPresetChooser->showTaggingBar(true);
     m_resourceItemView = smallPresetChooser->itemChooser()->itemView();
-    
+
     /* This is an heuristic to fill smallPresetChooser with only the presets
      * for the paintop that comes selected by default: Pixel Brush. */
     const QString PIXEL_BRUSH_ID = "paintbrush";
@@ -60,18 +61,6 @@ void KisPresetSelectorStrip::setPresetFilter(const QString& paintOpId)
         m_currentPaintopID = paintOpId;
     }
 }
-
-
-void KisPresetSelectorStrip::setPresetFilterWithText(const QString& paintOpId, const QString filterText)
-{
-   // do similar stuff as regular paintOp, but also take text filtering into account
-    qDebug() << paintOpId << " ID.   text with filter doing it. filterText: " << filterText;
-
-}
-
-
-
-
 
 
 void KisPresetSelectorStrip::on_leftScrollBtn_pressed()

@@ -8,3 +8,9 @@ macro_add_unittest_definitions()
 set(kis_brushop_test_SRCS kis_brushop_test.cpp ../../../../../sdk/tests/stroke_testing_utils.cpp)
 kde4_add_broken_unit_test(KisBrushOpTest TESTNAME krita-plugins-KisBrushOpTest ${kis_brushop_test_SRCS})
 target_link_libraries(KisBrushOpTest   kritaimage kritaui kritalibpaintop Qt5::Test)
+
+########### next target ###############
+
+set(kis_clone_test_SRCS kis_clone_test.cpp ../../../../../sdk/tests/stroke_testing_utils.cpp)
+kde4_add_broken_unit_test(KisCloneOpTest TESTNAME krita-plugins-KisCloneOpTest ${kis_clone_test_SRCS})
+target_link_libraries(KisCloneOpTest   kritaimage kritaui kritalibpaintop Qt5::Test)

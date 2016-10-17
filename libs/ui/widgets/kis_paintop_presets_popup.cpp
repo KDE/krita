@@ -136,12 +136,24 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
 
 
     // show/hide buttons
+
+    KisConfig cfg;
+
     m_d->uiWdgPaintOpPresetSettings.showScratchpadButton->setCheckable(true);
-    m_d->uiWdgPaintOpPresetSettings.showScratchpadButton->setChecked(true);
+    m_d->uiWdgPaintOpPresetSettings.showScratchpadButton->setChecked(cfg.scratchpadVisible());
     m_d->uiWdgPaintOpPresetSettings.showEditorButton->setCheckable(true);
     m_d->uiWdgPaintOpPresetSettings.showEditorButton->setChecked(true);
     m_d->uiWdgPaintOpPresetSettings.detachWindowButton->setCheckable(true);
-    m_d->uiWdgPaintOpPresetSettings.detachWindowButton->setChecked(true);
+    m_d->uiWdgPaintOpPresetSettings.detachWindowButton->setChecked(cfg.paintopPopupDetached());
+
+
+    m_d->uiWdgPaintOpPresetSettings.pinWindowButton->setCheckable(true);
+    m_d->uiWdgPaintOpPresetSettings.pinWindowButton->setChecked(false);
+    m_d->uiWdgPaintOpPresetSettings.pinWindowButton->setVisible(false);
+
+    m_d->uiWdgPaintOpPresetSettings.pinWindowButton->setIcon(KisIconUtils::loadIcon("layer-unlocked"));
+
+
 
 
     // Connections
@@ -154,6 +166,9 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
     connect(m_d->uiWdgPaintOpPresetSettings.detachWindowButton, SIGNAL(clicked(bool)),
             this, SLOT(switchDetached(bool)));
 
+
+    connect (m_d->uiWdgPaintOpPresetSettings.pinWindowButton, SIGNAL(clicked(bool)),
+             this, SLOT(slotPinWindow(bool)));
 
 
     connect(m_d->uiWdgPaintOpPresetSettings.presetFilterTextLineEdit, SIGNAL(textChanged(QString)),
@@ -213,7 +228,6 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
     connect(m_d->uiWdgPaintOpPresetSettings.reload, SIGNAL(clicked()),
             m_d->uiWdgPaintOpPresetSettings.presetWidget->smallPresetChooser, SLOT(updateViewSettings()));
 
-    KisConfig cfg;
     m_d->detached = !cfg.paintopPopupDetached();
     m_d->ignoreHideEvents = false;
     m_d->minimumSettingsWidgetSize = QSize(0, 0);
@@ -368,13 +382,18 @@ void KisPaintOpPresetsPopup::switchDetached(bool show)
             }
             m_d->ignoreHideEvents = false;
 
-
+            m_d->uiWdgPaintOpPresetSettings.pinWindowButton->setVisible(true); // allow to keep window on top
 
         }
         else {
             parentWidget()->setWindowFlags(Qt::Popup);
             KisConfig cfg;
             parentWidget()->hide();
+
+            // turn off pinning since it doesn't apply
+            m_d->uiWdgPaintOpPresetSettings.pinWindowButton->setVisible(false);
+            m_d->uiWdgPaintOpPresetSettings.pinWindowButton->setChecked(false);
+            m_d->uiWdgPaintOpPresetSettings.pinWindowButton->setIcon(KisIconUtils::loadIcon("layer-unlocked"));
         }
 
         KisConfig cfg;
@@ -498,6 +517,22 @@ void KisPaintOpPresetsPopup::slotSwitchScratchpad(bool visible)
     cfg.setScratchpadVisible(visible);
 }
 
+void KisPaintOpPresetsPopup::slotPinWindow(bool enabled)
+{
+
+    if (enabled) {
+          parentWidget()->setWindowFlags(windowFlags() | Qt::WindowStaysOnTopHint);
+            m_d->uiWdgPaintOpPresetSettings.pinWindowButton->setIcon(KisIconUtils::loadIcon("layer-locked"));
+      }
+      else {
+          parentWidget()->setWindowFlags(windowFlags() & ~Qt::WindowStaysOnTopHint);
+            m_d->uiWdgPaintOpPresetSettings.pinWindowButton->setIcon(KisIconUtils::loadIcon("layer-unlocked"));
+      }
+
+      parentWidget()->show(); // switching window state wants to hide window. keep it shown
+}
+
+
 void KisPaintOpPresetsPopup::slotSwitchShowEditor(bool visible) {
    m_d->uiWdgPaintOpPresetSettings.brushEditorSettingsControls->setVisible(visible);
 }
@@ -542,4 +577,12 @@ void KisPaintOpPresetsPopup::updateThemedIcons()
     m_d->uiWdgPaintOpPresetSettings.fillSolid->setIcon(KisIconUtils::loadIcon("krita_tool_color_fill"));
     m_d->uiWdgPaintOpPresetSettings.eraseScratchPad->setIcon(KisIconUtils::loadIcon("edit-delete"));
     m_d->uiWdgPaintOpPresetSettings.paintPresetIcon->setIcon(KisIconUtils::loadIcon("krita_tool_freehand"));
+
+    if (m_d->uiWdgPaintOpPresetSettings.pinWindowButton->isChecked()) {
+        m_d->uiWdgPaintOpPresetSettings.pinWindowButton->setIcon(KisIconUtils::loadIcon("layer-locked"));
+    } else {
+               m_d->uiWdgPaintOpPresetSettings.pinWindowButton->setIcon(KisIconUtils::loadIcon("layer-unlocked"));
+    }
+
+
 }

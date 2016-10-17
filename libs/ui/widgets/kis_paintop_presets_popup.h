@@ -108,6 +108,7 @@ private Q_SLOTS:
     void slotSwitchPresetStrip(bool visible);
     void slotSwitchScratchpad(bool visible);
     void slotSwitchShowEditor(bool visible);
+    void slotPinWindow(bool enabled);
     void slotPaintOpChanged(int index);
     void slotPresetFilter_onTextChanged(QString text);
 

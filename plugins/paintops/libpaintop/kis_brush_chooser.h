@@ -15,8 +15,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KIS_BRUSH_CHOOSER_H_
-#define KIS_BRUSH_CHOOSER_H_
+#ifndef KIS_PREDEFINED_BRUSH_CHOOSER_H_
+#define KIS_PREDEFINED_BRUSH_CHOOSER_H_
 
 #include <QLabel>
 #include "kritapaintop_export.h"
@@ -33,14 +33,14 @@ class KisClipboardBrushWidget;
 class KoResourceItemChooser;
 class KoResource;
 
-class PAINTOP_EXPORT KisBrushChooser : public QWidget
+class PAINTOP_EXPORT KisPredefinedBrushChooser : public QWidget
 {
 
     Q_OBJECT
 
 public:
-    KisBrushChooser(QWidget *parent = 0, const char *name = 0);
-    virtual ~KisBrushChooser();
+    KisPredefinedBrushChooser(QWidget *parent = 0, const char *name = 0);
+    virtual ~KisPredefinedBrushChooser();
 
     KisBrushSP brush() {
         return m_brush;
@@ -84,4 +84,4 @@ private:
 
 };
 
-#endif // KIS_BRUSH_CHOOSER_H_
+#endif // KIS_PREDEFINED_BRUSH_CHOOSER_H_

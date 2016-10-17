@@ -41,13 +41,6 @@
          </property>
         </widget>
        </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_5">
-       <item>
-        <widget class="QLineEdit" name="presetFilterTextLineEdit"/>
-       </item>
        <item>
         <widget class="QToolButton" name="presetChangeViewToolButton">
          <property name="text">

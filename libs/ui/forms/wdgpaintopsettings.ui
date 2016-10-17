@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1181</width>
+    <width>1205</width>
     <height>585</height>
    </rect>
   </property>
@@ -80,21 +80,42 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="showScratchpadButton">
-       <property name="text">
+      <widget class="KisHighlightedToolButton" name="showScratchpadButton" native="true">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>30</height>
+        </size>
+       </property>
+       <property name="text" stdset="0">
         <string>Show Scratchpad</string>
        </property>
-       <property name="checkable">
+       <property name="checkable" stdset="0">
         <bool>true</bool>
-       </property>
-       <property name="flat">
-        <bool>false</bool>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="showEditorButton">
-       <property name="text">
+      <widget class="KisHighlightedToolButton" name="showEditorButton" native="true">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>30</height>
+        </size>
+       </property>
+       <property name="text" stdset="0">
         <string>Show Editor</string>
        </property>
       </widget>
@@ -102,20 +123,26 @@
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_6">
        <item>
-        <widget class="QPushButton" name="detachWindowButton">
+        <widget class="KisHighlightedToolButton" name="detachWindowButton" native="true">
          <property name="sizePolicy">
           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
-         <property name="text">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>30</height>
+          </size>
+         </property>
+         <property name="text" stdset="0">
           <string>Detach Window</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="pinWindowButton">
+        <widget class="KisHighlightedToolButton" name="pinWindowButton" native="true">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
            <horstretch>0</horstretch>
@@ -125,10 +152,10 @@
          <property name="minimumSize">
           <size>
            <width>35</width>
-           <height>0</height>
+           <height>20</height>
           </size>
          </property>
-         <property name="text">
+         <property name="text" stdset="0">
           <string/>
          </property>
         </widget>
@@ -439,6 +466,12 @@
    <class>KisLodAvailabilityWidget</class>
    <extends>QWidget</extends>
    <header>kis_lod_availability_widget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KisHighlightedToolButton</class>
+   <extends>QWidget</extends>
+   <header>kis_highlighted_button.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

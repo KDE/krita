@@ -135,8 +135,26 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
     m_d->uiWdgPaintOpPresetSettings.presetFilterTextLineEdit->setPlaceholderText(i18n("Enter resource filters here"));
 
 
+    // show/hide buttons
+    m_d->uiWdgPaintOpPresetSettings.showScratchpadButton->setCheckable(true);
+    m_d->uiWdgPaintOpPresetSettings.showScratchpadButton->setChecked(true);
+    m_d->uiWdgPaintOpPresetSettings.showEditorButton->setCheckable(true);
+    m_d->uiWdgPaintOpPresetSettings.showEditorButton->setChecked(true);
+    m_d->uiWdgPaintOpPresetSettings.detachWindowButton->setCheckable(true);
+    m_d->uiWdgPaintOpPresetSettings.detachWindowButton->setChecked(true);
+
 
     // Connections
+    connect(m_d->uiWdgPaintOpPresetSettings.showScratchpadButton, SIGNAL(clicked(bool)),
+            this, SLOT(slotSwitchScratchpad(bool)));
+
+    connect(m_d->uiWdgPaintOpPresetSettings.showEditorButton, SIGNAL(clicked(bool)),
+            this, SLOT(slotSwitchShowEditor(bool)));
+
+    connect(m_d->uiWdgPaintOpPresetSettings.detachWindowButton, SIGNAL(clicked(bool)),
+            this, SLOT(switchDetached(bool)));
+
+
 
     connect(m_d->uiWdgPaintOpPresetSettings.presetFilterTextLineEdit, SIGNAL(textChanged(QString)),
             this, SLOT(slotPresetFilter_onTextChanged(QString)));
@@ -344,16 +362,18 @@ void KisPaintOpPresetsPopup::switchDetached(bool show)
         if (m_d->detached) {
             m_d->ignoreHideEvents = true;
             parentWidget()->setWindowFlags(Qt::Tool);
-            m_d->uiWdgPaintOpPresetSettings.scratchpadControls->setVisible(false);
+
             if (show) {
                 parentWidget()->show();
             }
             m_d->ignoreHideEvents = false;
+
+
+
         }
         else {
             parentWidget()->setWindowFlags(Qt::Popup);
             KisConfig cfg;
-            m_d->uiWdgPaintOpPresetSettings.scratchpadControls->setVisible(cfg.scratchpadVisible());
             parentWidget()->hide();
         }
 
@@ -476,6 +496,10 @@ void KisPaintOpPresetsPopup::slotSwitchScratchpad(bool visible)
     m_d->uiWdgPaintOpPresetSettings.scratchpadControls->setVisible(visible);
     KisConfig cfg;
     cfg.setScratchpadVisible(visible);
+}
+
+void KisPaintOpPresetsPopup::slotSwitchShowEditor(bool visible) {
+   m_d->uiWdgPaintOpPresetSettings.brushEditorSettingsControls->setVisible(visible);
 }
 
 void KisPaintOpPresetsPopup::slotPaintOpChanged(int index) {

@@ -30,20 +30,39 @@ class KisPostExecutionUndoAdapter;
 class KisSwitchTimeStrokeStrategy : public KisSimpleStrokeStrategy
 {
 public:
+    struct SharedToken {
+        SharedToken(int initialTime, bool needsRegeneration);
+        ~SharedToken();
+
+        bool tryResetDestinationTime(int time, bool needsRegeneration);
+        int fetchTime() const;
+
+    private:
+        struct Private;
+        QScopedPointer<Private> m_d;
+    };
+
+    typedef QSharedPointer<SharedToken> SharedTokenSP;
+    typedef QWeakPointer<SharedToken> SharedTokenWSP;
+
+public:
     /**
      * Switches current time to \p frameId
      *
-     * NOTE: in contrast to the other c-tor, refreshing current frame
-     *       *does* end all the running stroke, because it is not a
-     *       background action, but a distinct user action.
+     * NOTE: switching time *does* end all the running stroke, because it is
+     *       not a background action, but a distinct user action.
      */
     KisSwitchTimeStrokeStrategy(int frameId,
+                                bool needsRegeneration,
                                 KisImageAnimationInterface *interface,
                                 KisPostExecutionUndoAdapter *undoAdapter);
     ~KisSwitchTimeStrokeStrategy();
 
     void initStrokeCallback();
     KisStrokeStrategy* createLodClone(int levelOfDetail);
+
+    SharedTokenSP token() const;
+
 
 private:
     struct Private;

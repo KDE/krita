@@ -51,6 +51,8 @@ struct KisImageAnimationInterface::Private
     int framerate;
     int cachedLastFrameValue;
 
+    KisSwitchTimeStrokeStrategy::SharedTokenWSP switchToken;
+
     inline int currentTime() const {
         return m_currentTime;
     }
@@ -181,23 +183,37 @@ void KisImageAnimationInterface::switchCurrentTimeAsync(int frameId, bool useUnd
 {
     if (currentUITime() == frameId) return;
 
-    {
-        KisPostExecutionUndoAdapter *undoAdapter = useUndo ?
-            m_d->image->postExecutionUndoAdapter() : 0;
+    KisTimeRange range = KisTimeRange::infinite(0);
+    KisTimeRange::calculateTimeRangeRecursive(m_d->image->root(), currentUITime(), range, true);
 
-        KisStrokeStrategy *strategy =
-            new KisSwitchTimeStrokeStrategy(frameId, this, undoAdapter);
+    const bool needsRegeneration = !range.contains(frameId);
 
-        KisStrokeId stroke = m_d->image->startStroke(strategy);
-        m_d->image->endStroke(stroke);
-    }
+    KisSwitchTimeStrokeStrategy::SharedTokenSP token =
+        m_d->switchToken.toStrongRef();
 
-    {
-        KisStrokeStrategy *strategy =
-            new KisRegenerateFrameStrokeStrategy(this);
+    if (!token || !token->tryResetDestinationTime(frameId, needsRegeneration)) {
 
-        KisStrokeId stroke = m_d->image->startStroke(strategy);
-        m_d->image->endStroke(stroke);
+        {
+            KisPostExecutionUndoAdapter *undoAdapter = useUndo ?
+                m_d->image->postExecutionUndoAdapter() : 0;
+
+            KisSwitchTimeStrokeStrategy *strategy =
+                new KisSwitchTimeStrokeStrategy(frameId, needsRegeneration,
+                                                this, undoAdapter);
+
+            m_d->switchToken = strategy->token();
+
+            KisStrokeId stroke = m_d->image->startStroke(strategy);
+            m_d->image->endStroke(stroke);
+        }
+
+        if (needsRegeneration) {
+            KisStrokeStrategy *strategy =
+                new KisRegenerateFrameStrokeStrategy(this);
+
+            KisStrokeId strokeId = m_d->image->startStroke(strategy);
+            m_d->image->endStroke(strokeId);
+        }
     }
 
     m_d->setCurrentUITime(frameId);

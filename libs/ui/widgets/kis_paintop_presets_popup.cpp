@@ -150,7 +150,6 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
     m_d->uiWdgPaintOpPresetSettings.pinWindowButton->setVisible(false);
 
     m_d->uiWdgPaintOpPresetSettings.pinWindowButton->setIcon(KisIconUtils::loadIcon("layer-unlocked"));
-
     m_d->uiWdgPaintOpPresetSettings.detachWindowButton->setVisible(true);
 
 
@@ -244,22 +243,28 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
    connect(qApp, SIGNAL(focusChanged(QWidget*,QWidget*)), this, SLOT(slotFocusChanged(QWidget*,QWidget*)));
 
 
+
+
+
 }
 
 void KisPaintOpPresetsPopup::slotFocusChanged(QWidget* object1, QWidget* object2)
 {
     // object1 = "old" focus window. object2 = "active" focus window
-
-    // don't close the editor window if we have it 'pinned'
-    if ( m_d->uiWdgPaintOpPresetSettings.pinWindowButton->isChecked() == false) {
+    // only potentially hide the brush editor if it is detached and NOT pinned
+    if ( m_d->uiWdgPaintOpPresetSettings.pinWindowButton->isChecked() == false &&
+         m_d->uiWdgPaintOpPresetSettings.detachWindowButton->isChecked() == true) {
 
         // if the active focus window is not the brush editor, we need to hide it
         // otherwise it will go behind the active window and require 2 clicks to bring it back
         // once to hide it, second time to show it again at the top
-        if (object2 && object2->parentWidget() && parentWidget() ) {
+        if (object1 && object2 && object2->parentWidget() && parentWidget() ) {
 
-            if (object2->parentWidget()->objectName() != "KisPaintOpPresetsPopup") {
-                parentWidget()->hide();
+
+            // the depth of the windows will change once the main window is clicked
+            // Since it gets focus, it will be in front of the brush editor (which means greater depth)
+            if ( object2->depth() > object1->depth()) {
+                 parentWidget()->hide();
             }
         }
     }

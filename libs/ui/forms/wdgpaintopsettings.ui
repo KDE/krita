@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>Brush Editor</string>
   </property>
-  <layout class="QHBoxLayout" name="horizontalLayout_7">
+  <layout class="QHBoxLayout" name="mainLayout">
    <item>
     <layout class="QVBoxLayout" name="paintEngineOpContainer">
      <item>

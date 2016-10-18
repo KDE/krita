@@ -388,3 +388,18 @@ QList<KisUniformPaintOpPropertySP> KisPaintOpPreset::uniformProperties()
 {
     return m_d->settings->uniformProperties(m_d->settings);
 }
+
+KisPaintOpPreset::UpdatedPostponer::UpdatedPostponer(KisPaintOpPreset *preset)
+    : m_updateProxy(preset->updateProxyNoCreate())
+{
+    if (m_updateProxy) {
+        m_updateProxy->postponeSettingsChanges();
+    }
+}
+
+KisPaintOpPreset::UpdatedPostponer::~UpdatedPostponer()
+{
+    if (m_updateProxy) {
+        m_updateProxy->unpostponeSettingsChanges();
+    }
+}

@@ -74,6 +74,7 @@ ki18n_wrap_ui(kritalibpaintop_LIB_SRCS
     forms/wdgfilteroption.ui
     forms/wdgcoloroptions.ui
     forms/wdgbrushchooser.ui
+    forms/wdgpredefinedbrushchooser.ui
     forms/wdgCompositeOpOption.ui
     forms/wdgflowopacityoption.ui
     sensors/SensorDistanceConfiguration.ui

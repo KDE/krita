@@ -1151,7 +1151,8 @@ void KisPaintopBox::slotGuiChangedCurrentPreset() // Called only when UI is chan
 {
     m_optionWidget->writeConfigurationSafe(const_cast<KisPaintOpSettings*>(m_resourceProvider->currentPreset()->settings().data()));
 
-    //m_presetsPopup->resourceSelected(m_resourceProvider->currentPreset().data());
+    // we should also update the preset strip to update the status of the "dirty" mark
+    m_presetsPopup->resourceSelected(m_resourceProvider->currentPreset().data());
 
     // TODO!!!!!!!!
     //m_presetsPopup->updateViewSettings();

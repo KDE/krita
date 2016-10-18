@@ -91,11 +91,8 @@ KisPaintOpPresetSP KisPaintOpPreset::clone() const
 void KisPaintOpPreset::setPresetDirty(bool value)
 {
     m_d->dirtyPreset = value;
-
-    if (m_d->updateProxy && m_d->dirtyPreset != value) {
-        m_d->updateProxy->notifySettingsChanged();
-    }
 }
+
 bool KisPaintOpPreset::isPresetDirty() const
 {
     return m_d->dirtyPreset;

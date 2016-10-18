@@ -243,6 +243,8 @@ void KisPresetChooser::updateViewSettings()
     } else if (m_mode == DETAIL) {
         m_chooser->setSynced(false);
         m_chooser->setColumnCount(1);
+        m_chooser->setColumnWidth(m_chooser->width());
+
         KoResourceItemChooserSync* chooserSync = KoResourceItemChooserSync::instance();
         m_chooser->setRowHeight(chooserSync->baseLength());
         m_delegate->setShowText(true);

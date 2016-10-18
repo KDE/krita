@@ -91,3 +91,19 @@ void KisPresetSelectorStrip::slotDetailMode()
 }
 
 
+int KisPresetSelectorStrip::iconSize()
+{
+    return smallPresetChooser->iconSize();
+}
+
+
+void KisPresetSelectorStrip::slotSetIconSize(int size)
+{
+    smallPresetChooser->setIconSize(size);
+}
+
+void KisPresetSelectorStrip::slotSaveIconSize() {
+    smallPresetChooser->saveIconSize();
+}
+
+

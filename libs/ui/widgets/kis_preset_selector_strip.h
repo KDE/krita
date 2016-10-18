@@ -47,6 +47,19 @@ public:
 
     void setPresetFilter(const QString& paintOpId);
 
+    int iconSize();
+    void setIconSize(int size);
+
+public Q_SLOTS:
+
+    /// saving the icon base size. This affects all preset selectors
+    /// outside UI elements adjusting icon size
+    void slotSetIconSize(int size);
+
+    /// saves the icon size to the config file
+    /// when UI element is released, it is ok to save icon size to config
+    void slotSaveIconSize();
+
 private Q_SLOTS:
     /// Scrolls the strip's item view to the left
     void on_leftScrollBtn_pressed();
@@ -57,8 +70,6 @@ private Q_SLOTS:
     /// Changes the preset list view type
     void slotThumbnailMode();
     void slotDetailMode();
-
-
 
 private:
     /**

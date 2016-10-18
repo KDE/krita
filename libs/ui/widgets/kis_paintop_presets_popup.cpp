@@ -31,6 +31,7 @@
 #include <QAction>
 #include <QShowEvent>
 #include <QFontDatabase>
+#include <QWidgetAction>
 
 #include <kconfig.h>
 #include <klocalizedstring.h>
@@ -108,6 +109,9 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
     // DETAIL and THUMBNAIL view changer
     QMenu* menu = new QMenu(this);
 
+    menu->setStyleSheet("margin: 6px");
+    menu->addSection(i18n("Display"));
+
     QActionGroup *actionGroup = new QActionGroup(this);
 
     KisPresetChooser::ViewMode mode = (KisPresetChooser::ViewMode)KisConfig().presetChooserViewMode();
@@ -121,6 +125,26 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
     action->setCheckable(true);
     action->setChecked(mode == KisPresetChooser::DETAIL);
     action->setActionGroup(actionGroup);
+
+
+    // add horizontal slider for the icon size
+    QSlider* iconSizeSlider = new QSlider(this);
+    iconSizeSlider->setOrientation(Qt::Horizontal);
+    iconSizeSlider->setRange(30, 80);
+    iconSizeSlider->setValue(m_d->uiWdgPaintOpPresetSettings.presetWidget->iconSize());
+    iconSizeSlider->setMinimumHeight(20);
+    iconSizeSlider->setMinimumWidth(40);
+    iconSizeSlider->setTickInterval(10);
+
+
+    QWidgetAction *sliderAction= new QWidgetAction(this);
+    sliderAction->setDefaultWidget(iconSizeSlider);
+
+    menu->addSection(i18n("Icon Size"));
+    menu->addAction(sliderAction);
+
+
+
 
     // configure the button and assign menu
     m_d->uiWdgPaintOpPresetSettings.presetChangeViewToolButton->setMenu(menu);
@@ -150,6 +174,15 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
 
 
     // Connections
+
+
+    connect(iconSizeSlider, SIGNAL(sliderMoved(int)),
+            m_d->uiWdgPaintOpPresetSettings.presetWidget, SLOT(slotSetIconSize(int)));
+
+    connect(iconSizeSlider, SIGNAL(sliderReleased()),
+            m_d->uiWdgPaintOpPresetSettings.presetWidget, SLOT(slotSaveIconSize()));
+
+
     connect(m_d->uiWdgPaintOpPresetSettings.showScratchpadButton, SIGNAL(clicked(bool)),
             this, SLOT(slotSwitchScratchpad(bool)));
 
@@ -207,6 +240,8 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
     connect(m_d->uiWdgPaintOpPresetSettings.brushEgineComboBox, SIGNAL(activated(QString)),
             this, SIGNAL(paintopActivated(QString)));
 
+
+    // preset widget connections
     connect(m_d->uiWdgPaintOpPresetSettings.presetWidget->smallPresetChooser, SIGNAL(resourceSelected(KoResource*)),
             this, SIGNAL(signalResourceSelected(KoResource*)));
 
@@ -215,6 +250,8 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
 
     connect(m_d->uiWdgPaintOpPresetSettings.reload, SIGNAL(clicked()),
             m_d->uiWdgPaintOpPresetSettings.presetWidget->smallPresetChooser, SLOT(updateViewSettings()));
+
+
 
     m_d->detached = !cfg.paintopPopupDetached();
     m_d->ignoreHideEvents = false;

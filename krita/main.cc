@@ -93,17 +93,6 @@ extern "C" int main(int argc, char **argv)
 
     // The global initialization of the random generator
     qsrand(time(0));
-
-    /**
-     * Add a workaround for Qt 5.6, which implemented compression of the tablet events.
-     * Since Qt 5.6.1 there will be this hacky environment variable option. After that,
-     * Qt developers promised to give us better control for that. Please make sure the env
-     * variable is set *before* the construction of QApplication!
-     */
-#if defined Q_OS_LINUX && QT_VERSION >= 0x050600
-    qputenv("QT_XCB_NO_EVENT_COMPRESSION", "1");
-#endif
-
     bool runningInKDE = !qgetenv("KDE_FULL_SESSION").isEmpty();
 
     /**

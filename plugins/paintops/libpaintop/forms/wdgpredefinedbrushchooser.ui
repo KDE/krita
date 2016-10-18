@@ -11,7 +11,7 @@
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
-   <item row="0" column="0" rowspan="3">
+   <item row="0" column="0" rowspan="4">
     <layout class="QHBoxLayout" name="presetsLayout">
      <property name="leftMargin">
       <number>5</number>
@@ -27,14 +27,27 @@
      </property>
     </layout>
    </item>
-   <item row="0" column="1">
-    <widget class="QLabel" name="brushTipNameLabel">
+   <item row="5" column="0">
+    <widget class="QPushButton" name="clipboardButton">
      <property name="text">
-      <string>Current Brush Tip</string>
+      <string>Add Clipboard</string>
      </property>
     </widget>
    </item>
-   <item row="1" column="1" colspan="2">
+   <item row="3" column="2">
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="2" column="1" colspan="2">
     <layout class="QGridLayout" name="gridLayout">
      <item row="1" column="0">
       <widget class="QLabel" name="brushRotationLabel">
@@ -103,30 +116,24 @@
      </item>
     </layout>
    </item>
-   <item row="2" column="2">
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>40</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="3" column="0">
+   <item row="4" column="0">
     <widget class="QPushButton" name="stampButton">
      <property name="text">
       <string>Add Stamp</string>
      </property>
     </widget>
    </item>
-   <item row="4" column="0">
-    <widget class="QPushButton" name="clipboardButton">
+   <item row="0" column="1">
+    <widget class="QLabel" name="brushTipNameLabel">
      <property name="text">
-      <string>Add Clipboard</string>
+      <string>Current Brush Tip</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1">
+    <widget class="QLabel" name="brushDetailsLabel">
+     <property name="text">
+      <string>Brush Details</string>
      </property>
     </widget>
    </item>

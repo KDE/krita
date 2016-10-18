@@ -138,7 +138,7 @@ KisPredefinedBrushChooser::KisPredefinedBrushChooser(QWidget *parent, const char
     m_itemChooser->setCurrentItem(0, 0);
     m_itemChooser->setSynced(true);
     m_itemChooser->setMinimumWidth(100);
-    m_itemChooser->setMinimumHeight(200);
+    m_itemChooser->setMinimumHeight(100);
 
 
 
@@ -279,12 +279,35 @@ void KisPredefinedBrushChooser::update(KoResource * resource)
     KisBrush* brush = dynamic_cast<KisBrush*>(resource);
 
     if (brush) {
-        QString text = QString("%1 (%2 x %3)")
-                       .arg(i18n(brush->name().toUtf8().data()))
+
+
+        brushTipNameLabel->setText(i18n(brush->name().toUtf8().data()));
+
+        //find out if it is an animated tip...
+        qDebug() << "brush type: " << QString::number(brush->brushType()); // 3 means it has multi-tips
+
+        QString brushTypeString = "";
+
+        if (brush->brushType() == INVALID) {
+            brushTypeString = i18n("Invalid");
+        } else if (brush->brushType() == MASK) {
+            brushTypeString = i18n("Mask");
+        } else if (brush->brushType() == IMAGE) {
+            brushTypeString = i18n("GBR");
+        } else if (brush->brushType() == PIPE_MASK ) {
+            brushTypeString = i18n("Animated Mask");
+        } else if (brush->brushType() == PIPE_IMAGE ) {
+            brushTypeString = i18n("Animated Image");
+        }
+
+
+        QString brushDetailsText = QString("%1 (%2 x %3)")
+                       .arg(brushTypeString)
                        .arg(brush->width())
                        .arg(brush->height());
 
-        brushTipNameLabel->setText(text);
+        brushDetailsLabel->setText(brushDetailsText);
+
 
         brushSpacingSelectionWidget->setSpacing(brush->autoSpacingActive(),
                                 brush->autoSpacingActive() ?

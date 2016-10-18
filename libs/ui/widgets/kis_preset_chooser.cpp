@@ -295,6 +295,7 @@ KoResourceItemChooser *KisPresetChooser::itemChooser()
     return m_chooser;
 }
 
+
 void KisPresetChooser::setPresetFilter(const QString& paintOpId)
 {
     KisPresetProxyAdapter *adapter = static_cast<KisPresetProxyAdapter*>(m_adapter.data());
@@ -305,5 +306,18 @@ void KisPresetChooser::setPresetFilter(const QString& paintOpId)
     }
 }
 
+void KisPresetChooser::setIconSize(int newSize)
+{
 
+    KoResourceItemChooserSync* chooserSync = KoResourceItemChooserSync::instance();
+    chooserSync->setBaseLength(newSize);
+    updateViewSettings();
+}
+
+int KisPresetChooser::iconSize()
+{
+
+    KoResourceItemChooserSync* chooserSync = KoResourceItemChooserSync::instance();
+    return chooserSync->baseLength();
+}
 

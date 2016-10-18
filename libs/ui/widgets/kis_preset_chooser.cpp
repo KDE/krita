@@ -204,6 +204,8 @@ KisPresetChooser::KisPresetChooser(QWidget *parent, const char *name)
 
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()),
             SLOT(notifyConfigChanged()));
+
+
     notifyConfigChanged();
 }
 
@@ -232,6 +234,8 @@ void KisPresetChooser::notifyConfigChanged()
 {
     KisConfig cfg;
     m_delegate->setUseDirtyPresets(cfg.useDirtyPresets());
+    setIconSize(cfg.presetIconSize() );
+
     updateViewSettings();
 }
 
@@ -310,7 +314,6 @@ void KisPresetChooser::setPresetFilter(const QString& paintOpId)
 
 void KisPresetChooser::setIconSize(int newSize)
 {
-
     KoResourceItemChooserSync* chooserSync = KoResourceItemChooserSync::instance();
     chooserSync->setBaseLength(newSize);
     updateViewSettings();
@@ -318,8 +321,16 @@ void KisPresetChooser::setIconSize(int newSize)
 
 int KisPresetChooser::iconSize()
 {
-
     KoResourceItemChooserSync* chooserSync = KoResourceItemChooserSync::instance();
+
     return chooserSync->baseLength();
 }
 
+
+
+void KisPresetChooser::saveIconSize()
+{
+    // save icon size
+    KisConfig cfg;
+    cfg.setPresetIconSize(iconSize());
+}

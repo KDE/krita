@@ -100,7 +100,10 @@ KisPaintOpPresetsChooserPopup::KisPaintOpPresetsChooserPopup(QWidget * parent)
 
     connect (iconSizeSlider, SIGNAL(sliderMoved(int)),
              m_d->uiWdgPaintOpPresets.wdgPresetChooser, SLOT(setIconSize(int)));
-    
+    connect( iconSizeSlider, SIGNAL(sliderReleased()),
+             m_d->uiWdgPaintOpPresets.wdgPresetChooser, SLOT(saveIconSize()));
+
+
     m_d->firstShown = true;
 
 }

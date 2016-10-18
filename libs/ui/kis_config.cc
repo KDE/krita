@@ -1026,6 +1026,16 @@ void KisConfig::setPresetChooserViewMode(const int mode) const
     m_cfg.writeEntry("presetChooserViewMode", mode);
 }
 
+int KisConfig::presetIconSize(bool defaultValue) const
+{
+    return (defaultValue ? 30 : m_cfg.readEntry("presetIconSize", 30));
+}
+
+void KisConfig::setPresetIconSize(const int value) const
+{
+    m_cfg.writeEntry("presetIconSize", value);
+}
+
 bool KisConfig::firstRun(bool defaultValue) const
 {
     return (defaultValue ? true : m_cfg.readEntry("firstRun", true));

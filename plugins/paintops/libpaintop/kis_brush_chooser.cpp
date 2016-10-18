@@ -138,9 +138,17 @@ KisPredefinedBrushChooser::KisPredefinedBrushChooser(QWidget *parent, const char
     m_itemChooser->setCurrentItem(0, 0);
     m_itemChooser->setSynced(true);
     m_itemChooser->setMinimumWidth(100);
-    m_itemChooser->setMinimumHeight(100);
+    m_itemChooser->setMinimumHeight(150);
+    m_itemChooser->showButtons(false); // turn the import and delete buttons since we want control over them
 
 
+    addPresetButton->setIcon(KisIconUtils::loadIcon("list-add"));
+    deleteBrushTipButton->setIcon(KisIconUtils::loadIcon("trash-empty"));
+
+
+
+    connect(addPresetButton, SIGNAL(clicked(bool)), this, SLOT(slotImportNewBrushResource()));
+    connect(deleteBrushTipButton, SIGNAL(clicked(bool)), this, SLOT(slotDeleteBrushResource()));
 
     presetsLayout->addWidget(m_itemChooser);
 
@@ -149,13 +157,11 @@ KisPredefinedBrushChooser::KisPredefinedBrushChooser(QWidget *parent, const char
 
 
 
-    //QPushButton *stampButton = new QPushButton(KisIconUtils::loadIcon("list-add"), i18n("Stamp"), this);
-
     stampButton->setIcon(KisIconUtils::loadIcon("list-add"));
     stampButton->setToolTip(i18n("Creates a brush tip from the current image selection."
                                "\n If no selection is present the whole image will be used."));
 
-    clipboardButton->setIcon(KisIconUtils::loadIcon("edit-paste"));
+    clipboardButton->setIcon(KisIconUtils::loadIcon("list-add"));
     clipboardButton->setToolTip(i18n("Creates a brush tip from the image in the clipboard."));
 
 
@@ -283,9 +289,6 @@ void KisPredefinedBrushChooser::update(KoResource * resource)
 
         brushTipNameLabel->setText(i18n(brush->name().toUtf8().data()));
 
-        //find out if it is an animated tip...
-        qDebug() << "brush type: " << QString::number(brush->brushType()); // 3 means it has multi-tips
-
         QString brushTypeString = "";
 
         if (brush->brushType() == INVALID) {
@@ -366,6 +369,16 @@ void KisPredefinedBrushChooser::setImage(KisImageWSP image)
 {
     m_image = image;
 }
+
+void KisPredefinedBrushChooser::slotImportNewBrushResource() {
+    m_itemChooser->slotButtonClicked(KoResourceItemChooser::Button_Import);
+}
+
+void KisPredefinedBrushChooser::slotDeleteBrushResource() {
+    m_itemChooser->slotButtonClicked(KoResourceItemChooser::Button_Remove);
+}
+
+
 
 #include "moc_kis_brush_chooser.cpp"
 

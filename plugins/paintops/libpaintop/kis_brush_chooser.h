@@ -65,8 +65,12 @@ private Q_SLOTS:
     void slotActivatedBrush(KoResource *);
     void slotOpenStampBrush();
     void slotOpenClipboardBrush();
+    void slotImportNewBrushResource();
+    void slotDeleteBrushResource();
     void slotNewPredefinedBrush(KoResource *);
     void update(KoResource *);
+
+
 
 Q_SIGNALS:
 

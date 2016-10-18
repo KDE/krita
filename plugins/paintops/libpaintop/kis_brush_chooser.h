@@ -19,8 +19,13 @@
 #define KIS_PREDEFINED_BRUSH_CHOOSER_H_
 
 #include <QLabel>
-#include "kritapaintop_export.h"
 #include <kis_brush.h>
+
+#include "kritapaintop_export.h"
+#include "ui_wdgpredefinedbrushchooser.h"
+
+
+
 
 class KisDoubleSliderSpinBox;
 class QLabel;
@@ -33,7 +38,7 @@ class KisClipboardBrushWidget;
 class KoResourceItemChooser;
 class KoResource;
 
-class PAINTOP_EXPORT KisPredefinedBrushChooser : public QWidget
+class PAINTOP_EXPORT KisPredefinedBrushChooser : public QWidget, Ui::WdgPredefinedBrushChooser
 {
 
     Q_OBJECT

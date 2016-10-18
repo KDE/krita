@@ -103,6 +103,9 @@ KisPredefinedBrushChooser::KisPredefinedBrushChooser(QWidget *parent, const char
 {
     setObjectName(name);
 
+    setupUi(this);
+
+
     m_lbSize = new QLabel(i18n("Size:"), this);
     m_slSize = new KisDoubleSliderSpinBox(this);
     m_slSize->setRange(0, 1000, 2);

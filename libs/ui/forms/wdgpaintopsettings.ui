@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1205</width>
-    <height>585</height>
+    <width>1257</width>
+    <height>465</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -169,7 +169,7 @@
       <item>
        <widget class="QFrame" name="frmOptionWidgetContainer">
         <property name="sizePolicy">
-         <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
           <horstretch>0</horstretch>
           <verstretch>4</verstretch>
          </sizepolicy>

@@ -73,32 +73,32 @@ public:
     KisPaintLayer(const KisPaintLayer& rhs);
     virtual ~KisPaintLayer();
 
-    KisNodeSP clone() const {
+    KisNodeSP clone() const override {
         return KisNodeSP(new KisPaintLayer(*this));
     }
 
-    bool allowAsChild(KisNodeSP) const;
+    bool allowAsChild(KisNodeSP) const override;
 
-    const KoColorSpace * colorSpace() const;
+    const KoColorSpace * colorSpace() const override;
 
-    bool needProjection() const;
+    bool needProjection() const override;
 
     using KisLayer::setDirty;
-    void setDirty(const QRect & rect);
+    void setDirty(const QRect & rect) override;
 
-    QIcon icon() const;
+    QIcon icon() const override;
     void setImage(KisImageWSP image) override;
 
-    KisBaseNode::PropertyList sectionModelProperties() const;
-    void setSectionModelProperties(const KisBaseNode::PropertyList &properties);
+    KisBaseNode::PropertyList sectionModelProperties() const override;
+    void setSectionModelProperties(const KisBaseNode::PropertyList &properties) override;
 
 public:
 
-    QRect extent() const;
-    QRect exactBounds() const;
+    QRect extent() const override;
+    QRect exactBounds() const override;
 
-    bool accept(KisNodeVisitor &v);
-    void accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter);
+    bool accept(KisNodeVisitor &v) override;
+    void accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter) override;
 
     /**
      * set the channelflags for locking certain channels (used by painting tools)
@@ -119,12 +119,12 @@ public:
     /**
      * Returns the paintDevice that accompanies this layer
      */
-    KisPaintDeviceSP paintDevice() const;
+    KisPaintDeviceSP paintDevice() const override;
 
     /**
      * Returns the original pixels before masks have been applied.
      */
-    KisPaintDeviceSP original() const;
+    KisPaintDeviceSP original() const override;
 
     /**
      * @returns true when painting should not affect the alpha channel
@@ -146,7 +146,7 @@ public:
      */
     void setOnionSkinEnabled(bool state);
 
-    KisPaintDeviceList getLodCapableDevices() const;
+    KisPaintDeviceList getLodCapableDevices() const override;
 
 public Q_SLOTS:
     void slotExternalUpdateOnionSkins();
@@ -163,9 +163,9 @@ protected:
     // override from KisLayer
     void copyOriginalToProjection(const KisPaintDeviceSP original,
                                   KisPaintDeviceSP projection,
-                                  const QRect& rect) const;
+                                  const QRect& rect) const override;
 
-    KisKeyframeChannel *requestKeyframeChannel(const QString &id);
+    KisKeyframeChannel *requestKeyframeChannel(const QString &id) override;
 
 private:
     void init(KisPaintDeviceSP paintDevice, const QBitArray &paintChannelFlags = QBitArray());

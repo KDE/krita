@@ -355,7 +355,7 @@ public:
             m_adj_v = parameter.toDouble();
             break;
         case 3:
-            m_type = parameter.toDouble();
+            m_type = parameter.toInt();
             break;
         case 4:
             m_colorize = parameter.toBool();

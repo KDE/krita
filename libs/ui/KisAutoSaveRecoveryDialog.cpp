@@ -110,7 +110,7 @@ public:
     void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &/*index*/) const
     {
         //paint background for selected or hovered item
-        QStyleOptionViewItemV4 opt = option;
+        QStyleOptionViewItem opt = option;
         itemView()->style()->drawPrimitive(QStyle::PE_PanelItemViewItem, &opt, painter, 0);
     }
 

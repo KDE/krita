@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2007 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2016 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,34 +16,38 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_NODE_FACADE_TESTER_H
-#define KIS_NODE_FACADE_TESTER_H
-
-#include <QtTest>
+#ifndef TESTING_NODES_H
+#define TESTING_NODES_H
 
 #include "kis_node.h"
-#include <sdk/tests/testing_nodes.h>
 
-class TestNodeA : public TestUtil::DefaultNode
-{
-    Q_OBJECT
-public:
-    KisNodeSP clone() const {
-        return new TestNodeA(*this);
+namespace TestUtil {
+
+struct DefaultNode : public KisNode {
+    KisPaintDeviceSP paintDevice() const {
+        return 0;
+    }
+
+    KisPaintDeviceSP original() const {
+        return 0;
+    }
+
+    KisPaintDeviceSP projection() const {
+        return 0;
+    }
+
+    bool allowAsChild(KisNodeSP) const {
+        return true;
+    }
+    const KoColorSpace * colorSpace() const {
+        return 0;
+    }
+    virtual const KoCompositeOp * compositeOp() const {
+        return 0;
     }
 };
 
+}
 
-class KisNodeFacadeTest : public QObject
-{
-    Q_OBJECT
-
-private Q_SLOTS:
-
-    void testCreation();
-    void testOrdering();
-    void testMove();
-};
-
-#endif
+#endif // TESTING_NODES_H
 

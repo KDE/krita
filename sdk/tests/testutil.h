@@ -35,6 +35,7 @@
 #include "kis_node_graph_listener.h"
 #include "kis_iterator_ng.h"
 #include "kis_image.h"
+#include "testing_nodes.h"
 
 
 #ifndef FILES_DATA_DIR
@@ -474,14 +475,13 @@ inline bool checkAlphaDeviceFilledWithPixel(KisPaintDeviceSP dev, const QRect &r
     return true;
 }
 
-class TestNode : public KisNode
+class TestNode : public DefaultNode
 {
     Q_OBJECT
 public:
-    KisNodeSP clone() const;
-    bool allowAsChild(KisNodeSP) const;
-    const KoColorSpace * colorSpace() const;
-    const KoCompositeOp * compositeOp() const;
+    KisNodeSP clone() const {
+        return new TestNode(*this);
+    }
 };
 
 class TestGraphListener : public KisNodeGraphListener

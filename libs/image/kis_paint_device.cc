@@ -466,7 +466,7 @@ private:
 
     inline Data* currentData() const
     {
-        Data *data = m_data.data();
+        Data *data;
 
         if (defaultBounds->currentLevelOfDetail()) {
             ensureLodDataPresent();

@@ -262,6 +262,11 @@ KisPaintDeviceSP KisGroupLayer::original() const
     return realOriginal;
 }
 
+KisPaintDeviceSP KisGroupLayer::paintDevice() const
+{
+    return 0;
+}
+
 bool KisGroupLayer::projectionIsValid() const
 {
     return !tryObligeChild();

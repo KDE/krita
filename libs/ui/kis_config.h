@@ -270,6 +270,10 @@ public:
     int presetChooserViewMode(bool defaultValue = false) const;
     void setPresetChooserViewMode(const int mode) const;
 
+    int presetIconSize(bool defaultValue = false) const;
+    void setPresetIconSize(const int value) const;
+
+
     bool firstRun(bool defaultValue = false) const;
     void setFirstRun(const bool firstRun) const;
 

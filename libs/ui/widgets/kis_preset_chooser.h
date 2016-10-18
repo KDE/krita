@@ -73,6 +73,9 @@ public Q_SLOTS:
     /// sets the icon size. Used by slider in view menu
     void setIconSize(int newSize);
 
+    /// saves the icon size for the presets. called by the horizontal slider release event.
+    void saveIconSize();
+
 private Q_SLOTS:
     void notifyConfigChanged();
 

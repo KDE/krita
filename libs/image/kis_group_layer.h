@@ -76,6 +76,9 @@ public:
     void setX(qint32 x) override;
     void setY(qint32 y) override;
 
+    /// Group layers don't have a paint device, so return 0
+    KisPaintDeviceSP paintDevice() const override;
+
     /**
        Accect the specified visitor.
        @return true if the operation succeeded, false if it failed.

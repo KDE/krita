@@ -39,7 +39,7 @@ class KoRgbU8InvertColorTransformation : public KoColorTransformation
 
 public:
 
-    KoRgbU8InvertColorTransformation(const KoColorSpace *cs) : m_colorSpace(cs), m_psize(cs->pixelSize())
+    KoRgbU8InvertColorTransformation(const KoColorSpace *cs) : m_psize(cs->pixelSize())
     {
     }
 
@@ -58,8 +58,6 @@ public:
     }
 
 private:
-
-    const KoColorSpace *m_colorSpace;
     quint32 m_psize;
 };
 

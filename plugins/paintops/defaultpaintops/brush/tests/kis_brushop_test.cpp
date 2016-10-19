@@ -167,7 +167,7 @@ public:
         : TestBrushOp(presetFileName) {
     }
 
-    void doPaint(KisPainter &gc) {
+    void doPaint(KisPainter &gc) override {
 
         QVector<KisPaintInformation> vector;
 
@@ -190,7 +190,7 @@ public:
         : TestBrushOp(presetFileName, prefix) {
     }
 
-    void doPaint(KisPainter &gc) {
+    void doPaint(KisPainter &gc) override {
 
         QVector<KisPaintInformation> vector;
 

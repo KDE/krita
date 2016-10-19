@@ -58,7 +58,7 @@ class CollectionMenu : public QMenu
 {
 public:
     CollectionMenu(QWidget *parent = 0);
-    virtual QSize sizeHint() const;
+    QSize sizeHint() const override;
 };
 
 CollectionMenu::CollectionMenu(QWidget *parent)

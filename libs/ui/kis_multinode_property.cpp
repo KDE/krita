@@ -77,7 +77,7 @@ public:
         watched->installEventFilter(this);
     }
 
-    bool eventFilter(QObject *watched, QEvent * event) {
+    bool eventFilter(QObject *watched, QEvent * event) override {
         if (watched != m_watched) return false;
         if (!m_property->isIgnored()) return false;
 

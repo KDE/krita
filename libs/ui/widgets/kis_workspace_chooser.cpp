@@ -45,11 +45,11 @@ class KisWorkspaceDelegate : public QAbstractItemDelegate
 {
 public:
     KisWorkspaceDelegate(QObject * parent = 0) : QAbstractItemDelegate(parent) {}
-    virtual ~KisWorkspaceDelegate() {}
+    ~KisWorkspaceDelegate() override {}
     /// reimplemented
-    virtual void paint(QPainter *, const QStyleOptionViewItem &, const QModelIndex &) const;
+    void paint(QPainter *, const QStyleOptionViewItem &, const QModelIndex &) const override;
     /// reimplemented
-    QSize sizeHint(const QStyleOptionViewItem & option, const QModelIndex &) const {
+    QSize sizeHint(const QStyleOptionViewItem & option, const QModelIndex &) const override {
         return option.decorationSize;
     }
 };

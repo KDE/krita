@@ -99,21 +99,6 @@ KisBaseNode::~KisBaseNode()
     delete m_d;
 }
 
-KisPaintDeviceSP KisBaseNode::paintDevice() const
-{
-    return 0;
-}
-
-KisPaintDeviceSP KisBaseNode::original() const
-{
-    return 0;
-}
-
-KisPaintDeviceSP KisBaseNode::projection() const
-{
-    return 0;
-}
-
 quint8 KisBaseNode::opacity() const
 {
     if (m_d->opacityChannel) {

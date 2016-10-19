@@ -107,7 +107,7 @@ struct TimelineFramesView::Private
     QPoint lastPressedPosition;
     KisSignalCompressor selectionChangedCompressor;
 
-    QStyleOptionViewItemV4 viewOptionsV4() const;
+    QStyleOptionViewItem viewOptionsV4() const;
     QItemViewPaintPairs draggablePaintPairs(const QModelIndexList &indexes, QRect *r) const;
     QPixmap renderToPixmap(const QModelIndexList &indexes, QRect *r) const;
 
@@ -476,9 +476,9 @@ inline bool isIndexDragEnabled(QAbstractItemModel *model, const QModelIndex &ind
     return (model->flags(index) & Qt::ItemIsDragEnabled);
 }
 
-QStyleOptionViewItemV4 TimelineFramesView::Private::viewOptionsV4() const
+QStyleOptionViewItem TimelineFramesView::Private::viewOptionsV4() const
 {
-    QStyleOptionViewItemV4 option = q->viewOptions();
+    QStyleOptionViewItem option = q->viewOptions();
     option.locale = q->locale();
     option.locale.setNumberOptions(QLocale::OmitGroupSeparator);
     option.widget = q;
@@ -512,7 +512,7 @@ QPixmap TimelineFramesView::Private::renderToPixmap(const QModelIndexList &index
     QPixmap pixmap(r->size());
     pixmap.fill(Qt::transparent);
     QPainter painter(&pixmap);
-    QStyleOptionViewItemV4 option = viewOptionsV4();
+    QStyleOptionViewItem option = viewOptionsV4();
     option.state |= QStyle::State_Selected;
     for (int j = 0; j < paintPairs.count(); ++j) {
         option.rect = paintPairs.at(j).first.translated(-r->topLeft());

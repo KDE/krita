@@ -59,9 +59,9 @@ public:
         }
     }
 
-    virtual ~CachedGradient() {}
+    ~CachedGradient() override {}
 
-    KoAbstractGradient* clone() const {
+    KoAbstractGradient* clone() const override {
         return new CachedGradient(m_subject, m_max + 1, m_colorSpace);
     }
 
@@ -69,7 +69,7 @@ public:
     * Creates a QGradient from the gradient.
     * The resulting QGradient might differ from original gradient
     */
-    virtual QGradient* toQGradient() const
+    QGradient* toQGradient() const override
     {
         return m_subject->toQGradient();
     }
@@ -90,7 +90,7 @@ public:
     void setColorSpace(KoColorSpace* colorSpace) { m_colorSpace = colorSpace; }
     const KoColorSpace * colorSpace() const { return m_colorSpace; }
 
-    virtual QByteArray generateMD5() const { return QByteArray(); }
+    QByteArray generateMD5() const override { return QByteArray(); }
 
 private:
     const KoAbstractGradient *m_subject;
@@ -109,7 +109,7 @@ class LinearGradientStrategy : public KisGradientShapeStrategy
 public:
     LinearGradientStrategy(const QPointF& gradientVectorStart, const QPointF& gradientVectorEnd);
 
-    virtual double valueAt(double x, double y) const;
+    double valueAt(double x, double y) const override;
 
 protected:
     double m_normalisedVectorX;
@@ -159,7 +159,7 @@ class BiLinearGradientStrategy : public LinearGradientStrategy
 public:
     BiLinearGradientStrategy(const QPointF& gradientVectorStart, const QPointF& gradientVectorEnd);
 
-    virtual double valueAt(double x, double y) const;
+    double valueAt(double x, double y) const override;
 };
 
 BiLinearGradientStrategy::BiLinearGradientStrategy(const QPointF& gradientVectorStart, const QPointF& gradientVectorEnd)
@@ -186,7 +186,7 @@ class RadialGradientStrategy : public KisGradientShapeStrategy
 public:
     RadialGradientStrategy(const QPointF& gradientVectorStart, const QPointF& gradientVectorEnd);
 
-    virtual double valueAt(double x, double y) const;
+    double valueAt(double x, double y) const override;
 
 protected:
     double m_radius;
@@ -226,7 +226,7 @@ class SquareGradientStrategy : public KisGradientShapeStrategy
 public:
     SquareGradientStrategy(const QPointF& gradientVectorStart, const QPointF& gradientVectorEnd);
 
-    virtual double valueAt(double x, double y) const;
+    double valueAt(double x, double y) const override;
 
 protected:
     double m_normalisedVectorX;
@@ -286,7 +286,7 @@ class ConicalGradientStrategy : public KisGradientShapeStrategy
 public:
     ConicalGradientStrategy(const QPointF& gradientVectorStart, const QPointF& gradientVectorEnd);
 
-    virtual double valueAt(double x, double y) const;
+    double valueAt(double x, double y) const override;
 
 protected:
     double m_vectorAngle;
@@ -326,7 +326,7 @@ class ConicalSymetricGradientStrategy : public KisGradientShapeStrategy
 public:
     ConicalSymetricGradientStrategy(const QPointF& gradientVectorStart, const QPointF& gradientVectorEnd);
 
-    virtual double valueAt(double x, double y) const;
+    double valueAt(double x, double y) const override;
 
 protected:
     double m_vectorAngle;
@@ -382,7 +382,7 @@ class GradientRepeatNoneStrategy : public GradientRepeatStrategy
 public:
     static GradientRepeatNoneStrategy *instance();
 
-    virtual double valueAt(double t) const;
+    double valueAt(double t) const override;
 
 private:
     GradientRepeatNoneStrategy() {}
@@ -422,7 +422,7 @@ class GradientRepeatForwardsStrategy : public GradientRepeatStrategy
 public:
     static GradientRepeatForwardsStrategy *instance();
 
-    virtual double valueAt(double t) const;
+    double valueAt(double t) const override;
 
 private:
     GradientRepeatForwardsStrategy() {}
@@ -462,7 +462,7 @@ class GradientRepeatAlternateStrategy : public GradientRepeatStrategy
 public:
     static GradientRepeatAlternateStrategy *instance();
 
-    virtual double valueAt(double t) const;
+    double valueAt(double t) const override;
 
 private:
     GradientRepeatAlternateStrategy() {}

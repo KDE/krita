@@ -52,7 +52,7 @@ void parseElement(const QDomElement &el,
 class CurveObjectCatcher : public KisAslObjectCatcher
 {
 public:
-    void addText(const QString &path, const QString &value) {
+    void addText(const QString &path, const QString &value) override {
         if (path == "/Nm  ") {
             m_name = value;
         } else {
@@ -60,7 +60,7 @@ public:
         }
     }
 
-    void addPoint(const QString &path, const QPointF &value) {
+    void addPoint(const QString &path, const QPointF &value) override {
         if (!m_arrayMode) {
             warnKrita << "XML (ASL): failed to parse curve object (array fault)" << path << value << ppVar(m_arrayMode);
         }

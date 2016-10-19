@@ -90,8 +90,8 @@ public:
     virtual void selectColor(double mix, const KisPaintInformation &pi);
 private:
     KoColor m_backGroundColor;
-    KoColor m_foreGroundColor;
     KoColor m_cachedBackGroundColor;
+    KoColor m_foreGroundColor;
 };
 
 class PAINTOP_EXPORT KisGradientColorSource : public KisUniformColorSource

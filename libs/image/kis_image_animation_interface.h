@@ -74,14 +74,14 @@ public:
 
     void requestTimeSwitchWithUndo(int time);
 
-    void requestTimeSwitchNonGUI(int time);
+    void requestTimeSwitchNonGUI(int time, bool useUndo = false);
 
 public Q_SLOTS:
     /**
      * Switches current frame (synchronously) and starts an
      * asynchronous regeneration of the entire image.
      */
-    void switchCurrentTimeAsync(int frameId);
+    void switchCurrentTimeAsync(int frameId, bool useUndo = false);
 public:
 
     /**
@@ -142,13 +142,16 @@ private:
 
     void blockFrameInvalidation(bool value);
 
+    friend class KisSwitchTimeStrokeStrategy;
+    void explicitlySetCurrentTime(int frameId);
+
 Q_SIGNALS:
     void sigFrameReady(int time);
     void sigFrameCancelled();
-    void sigTimeChanged(int newTime);
+    void sigUiTimeChanged(int newTime);
     void sigFramesChanged(const KisTimeRange &range, const QRect &rect);
 
-    void sigInternalRequestTimeSwitch(int frameId);
+    void sigInternalRequestTimeSwitch(int frameId, bool useUndo);
 
     void sigFramerateChanged();
     void sigFullClipRangeChanged();

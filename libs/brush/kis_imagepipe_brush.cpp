@@ -102,7 +102,7 @@ protected:
         return index;
     }
 
-    int chooseNextBrush(const KisPaintInformation& info) {
+    int chooseNextBrush(const KisPaintInformation& info) override {
         quint32 brushIndex = 0;
 
         if (!m_isInitialized) {
@@ -128,7 +128,7 @@ protected:
         return brushIndex;
     }
 
-    void updateBrushIndexes(const KisPaintInformation& info) {
+    void updateBrushIndexes(const KisPaintInformation& info) override {
         for (int i = 0; i < m_parasite.dim; i++) {
             m_parasite.index[i] = selectPost(m_parasite.selection[i],
                                              m_parasite.index[i],
@@ -169,7 +169,7 @@ public:
         return true;
     }
 
-    void notifyStrokeStarted() {
+    void notifyStrokeStarted() override {
         m_isInitialized = false;
     }
 

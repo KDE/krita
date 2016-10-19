@@ -35,9 +35,9 @@ target_link_libraries(TestKoLcmsColorProfile kritawidgets kritapigment KF5::I18n
 
 set(TestKoColorSpaceRegistry_test_SRCS TestKoColorSpaceRegistry.cpp )
 
-kde4_add_broken_unit_test(TestKoColorSpaceRegistry TESTNAME libs-pigment-TestKoColorSpaceRegistry  ${TestKoColorSpaceRegistry_test_SRCS})
+kde4_add_broken_unit_test(TestKoColorSpaceRegistryLcms TESTNAME libs-pigment-TestKoColorSpaceRegistry  ${TestKoColorSpaceRegistry_test_SRCS})
 
-target_link_libraries(TestKoColorSpaceRegistry kritawidgets kritapigment ${LCMS2_LIBRARIES} KF5::I18n  Qt5::Test)
+target_link_libraries(TestKoColorSpaceRegistryLcms kritawidgets kritapigment ${LCMS2_LIBRARIES} KF5::I18n  Qt5::Test)
 
 
 

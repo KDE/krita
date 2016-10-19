@@ -148,6 +148,14 @@ Linux, fontconfig is needed for poppler. Poppler is needed for PDF import.
 
 Note 2: libcurl still isn't available.
 
+Note 3: if you want to build a release, you need to get the binary gettext
+archives from files.kde.org/krita/build/dependencies:
+
+  http://files.kde.org/krita/build/dependencies/gettext0.19.8.1-iconv1.14-shared-32.zip
+  http://files.kde.org/krita/build/dependencies/gettext0.19.8.1-iconv1.14-shared-64.zip
+
+Take care, these zips contain a libstdc++-6.dll that you don't want in your path when building.
+
 == Build Krita ==
  
 1. Make a krita build directory: 

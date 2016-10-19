@@ -129,10 +129,6 @@ On All operating systems:
     cmake --build . --config RelWithDebInfo --target ext_vc
     cmake --build . --config RelWithDebInfo --target ext_libraw
 
-On Windows and OSX
-
-    cmake --build . --config RelWithDebInfo --target ext_kcrash
-
 On Windows
 
     cmake --build . --config RelWithDebInfo --target ext_freetype
@@ -142,6 +138,9 @@ On Linux
 
     cmake --build . --config RelWithDebInfo --target ext_kcrash
 
+Everywhere else:
+
+    cmake --build . --config RelWithDebInfo --target ext_kwindowsystem
 
 Note: poppler should be buildable on Linux as well with a home-built freetype
 and fontconfig, but I don't know how to make fontconfig find freetype, and on

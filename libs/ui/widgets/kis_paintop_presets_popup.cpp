@@ -625,6 +625,7 @@ void KisPaintOpPresetsPopup::updateThemedIcons()
     m_d->uiWdgPaintOpPresetSettings.fillSolid->setIcon(KisIconUtils::loadIcon("krita_tool_color_fill"));
     m_d->uiWdgPaintOpPresetSettings.eraseScratchPad->setIcon(KisIconUtils::loadIcon("edit-delete"));
     m_d->uiWdgPaintOpPresetSettings.paintPresetIcon->setIcon(KisIconUtils::loadIcon("krita_tool_freehand"));
+    m_d->uiWdgPaintOpPresetSettings.presetChangeViewToolButton->setIcon(KisIconUtils::loadIcon("view-choose"));
 
     if (m_d->uiWdgPaintOpPresetSettings.pinWindowButton->isChecked()) {
         m_d->uiWdgPaintOpPresetSettings.pinWindowButton->setIcon(KisIconUtils::loadIcon("layer-locked"));

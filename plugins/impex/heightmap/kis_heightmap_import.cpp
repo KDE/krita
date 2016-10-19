@@ -61,6 +61,7 @@ KisHeightMapImport::~KisHeightMapImport()
 
 KisImportExportFilter::ConversionStatus KisHeightMapImport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration)
 {
+    Q_UNUSED(configuration);
     KoID depthId;
     if (mimeType() == "image/x-r8") {
         depthId = Integer8BitsColorDepthID;

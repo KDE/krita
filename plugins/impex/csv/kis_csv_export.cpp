@@ -51,6 +51,7 @@ KisCSVExport::~KisCSVExport()
 KisImportExportFilter::ConversionStatus KisCSVExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
 {
     CSVSaver kpc(document, batchMode());
+
     KisImageBuilder_Result res;
 
     if ((res = kpc.buildAnimation(io)) == KisImageBuilder_RESULT_OK) {

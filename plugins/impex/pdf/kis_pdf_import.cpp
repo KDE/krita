@@ -69,6 +69,7 @@ KisPDFImport::ConversionStatus KisPDFImport::convert(KisDocument *document, QIOD
 {
     Poppler::Document* pdoc = Poppler::Document::loadFromData(io->readAll());
 
+
     if (!pdoc) {
         return KisPDFImport::InvalidFormat;
     }

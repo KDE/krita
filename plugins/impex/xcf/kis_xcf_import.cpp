@@ -54,6 +54,7 @@ extern "C" {
 #define GET_ALPHA(x) (x >> ALPHA_SHIFT)
 }
 
+    Q_UNUSED(configuration);
 
 QString layerModeG2K(GimpLayerModeEffects mode)
 {

@@ -239,6 +239,7 @@ static bool loadTGA(QDataStream & s, const TgaHeader & tga, QImage &img)
 
 KisImportExportFilter::ConversionStatus KisTGAImport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration)
 {
+    Q_UNUSED(configuration);
     QDataStream s(io);
     s.setByteOrder(QDataStream::LittleEndian);
 

@@ -151,7 +151,7 @@ void KisPaintLayer::copyOriginalToProjection(const KisPaintDeviceSP original,
         KisPaintDeviceSP projection,
         const QRect& rect) const
 {
-    lockTemporaryTarget();
+    KisIndirectPaintingSupport::ReadLocker l(this);
 
     KisPainter::copyAreaOptimized(rect.topLeft(), original, projection, rect);
 
@@ -180,7 +180,6 @@ void KisPaintLayer::copyOriginalToProjection(const KisPaintDeviceSP original,
 
         m_d->onionSkinCache.reset();
     }
-    unlockTemporaryTarget();
 }
 
 void KisPaintLayer::setDirty(const QRect & rect)

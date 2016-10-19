@@ -18,7 +18,6 @@
 
 #include "kis_colorize_mask.h"
 
-#include <mutex>
 #include <QCoreApplication>
 
 #include <KoColorSpaceRegistry.h>
@@ -386,7 +385,7 @@ QRect KisColorizeMask::decorateRect(KisPaintDeviceSP &src,
 
     // Draw the key strokes
     if (m_d->showKeyStrokes) {
-        lockTemporaryTarget();
+        KisIndirectPaintingSupport::ReadLocker locker(this);
 
         KisSelectionSP selection = m_d->cachedSelection.getSelection();
         KisSelectionSP conversionSelection = m_d->cachedConversionSelection.getSelection();
@@ -430,8 +429,6 @@ QRect KisColorizeMask::decorateRect(KisPaintDeviceSP &src,
 
         m_d->cachedSelection.putSelection(selection);
         m_d->cachedSelection.putSelection(conversionSelection);
-
-        unlockTemporaryTarget();
     }
 
     return rect;
@@ -453,12 +450,12 @@ QRect KisColorizeMask::extent() const
             rc |= stroke.dev->extent();
         }
 
-        lockTemporaryTarget();
+        KisIndirectPaintingSupport::ReadLocker locker(this);
+
         KisPaintDeviceSP temporaryTarget = this->temporaryTarget();
         if (temporaryTarget) {
             rc |= temporaryTarget->extent();
         }
-        unlockTemporaryTarget();
     }
 
     return rc;
@@ -477,12 +474,11 @@ QRect KisColorizeMask::exactBounds() const
             rc |= stroke.dev->exactBounds();
         }
 
-        lockTemporaryTarget();
+        KisIndirectPaintingSupport::ReadLocker locker(this);
         KisPaintDeviceSP temporaryTarget = this->temporaryTarget();
         if (temporaryTarget) {
             rc |= temporaryTarget->exactBounds();
         }
-        unlockTemporaryTarget();
     }
 
     return rc;
@@ -521,8 +517,7 @@ void KisColorizeMask::setCurrentColor(const KoColor &_color)
     KoColor color = _color;
     color.convertTo(colorSpace());
 
-    WriteLockableWrapper lock(this);
-    std::lock_guard<WriteLockableWrapper> guard(lock);
+    WriteLocker locker(this);
 
     setNeedsUpdate(true);
 
@@ -580,8 +575,7 @@ void KisColorizeMask::mergeToLayer(KisNodeSP layer, KisPostExecutionUndoAdapter 
 {
     Q_UNUSED(layer);
 
-    WriteLockableWrapper lock(this);
-    std::lock_guard<WriteLockableWrapper> guard(lock);
+    WriteLocker locker(this);
 
     KisPaintDeviceSP temporaryTarget = this->temporaryTarget();
     const bool isTemporaryTargetErasing = temporaryCompositeOp() == COMPOSITE_ERASE;

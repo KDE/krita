@@ -104,6 +104,8 @@ Q_SIGNALS:
 private Q_SLOTS:
     void slotSwitchPresetStrip(bool visible);
     void slotSwitchScratchpad(bool visible);
+    void slotResourceChanged(int key, const QVariant &value);
+    void slotLodAvailabilityChanged(bool value);
 
 private:
 

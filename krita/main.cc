@@ -94,7 +94,7 @@ extern "C" int main(int argc, char **argv)
     // The global initialization of the random generator
     qsrand(time(0));
     bool runningInKDE = !qgetenv("KDE_FULL_SESSION").isEmpty();
-
+    
     /**
      * Disable debug output by default. (krita.input enables tablet debugging.)
      * Debug logs can be controlled by an environment variable QT_LOGGING_RULES.
@@ -247,6 +247,10 @@ extern "C" int main(int argc, char **argv)
         return 1;
     }
 
+#if QT_VERSION >= 0x050700
+    app.setAttribute(Qt::AA_CompressHighFrequencyEvents, false);
+#endif
+    
     // Set up remote arguments.
     QObject::connect(&app, SIGNAL(messageReceived(QByteArray,QObject*)),
                      &app, SLOT(remoteArguments(QByteArray,QObject*)));
@@ -255,7 +259,7 @@ extern "C" int main(int argc, char **argv)
                      &app, SLOT(fileOpenRequested(QString)));
 
     int state = app.exec();
-
+    
     return state;
 }
 

@@ -162,8 +162,31 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
     m_d->uiWdgPaintOpPresetSettings.eraserBrushOpacityCheckBox->setChecked(cfg.useEraserBrushOpacity());
 
     m_d->uiWdgPaintOpPresetSettings.wdgLodAvailability->setCanvasResourceManager(resourceProvider->resourceManager());
+
+    connect(resourceProvider->resourceManager(),
+            SIGNAL(canvasResourceChanged(int,QVariant)),
+            SLOT(slotResourceChanged(int, QVariant)));
+
+    connect(m_d->uiWdgPaintOpPresetSettings.wdgLodAvailability,
+            SIGNAL(sigUserChangedLodAvailability(bool)),
+            SLOT(slotLodAvailabilityChanged(bool)));
+
+    slotResourceChanged(KisCanvasResourceProvider::LodAvailability,
+                        resourceProvider->resourceManager()->
+                            resource(KisCanvasResourceProvider::LodAvailability));
 }
 
+void KisPaintOpPresetsPopup::slotResourceChanged(int key, const QVariant &value)
+{
+    if (key == KisCanvasResourceProvider::LodAvailability) {
+        m_d->uiWdgPaintOpPresetSettings.wdgLodAvailability->slotUserChangedLodAvailability(value.toBool());
+    }
+}
+
+void KisPaintOpPresetsPopup::slotLodAvailabilityChanged(bool value)
+{
+    m_d->resourceProvider->resourceManager()->setResource(KisCanvasResourceProvider::LodAvailability, QVariant(value));
+}
 
 KisPaintOpPresetsPopup::~KisPaintOpPresetsPopup()
 {
@@ -199,15 +222,8 @@ void KisPaintOpPresetsPopup::setPaintOpSettingsWidget(QWidget * widget)
             hideScratchPad();
         }
 
-        m_d->widgetConnections.addConnection(m_d->uiWdgPaintOpPresetSettings.wdgLodAvailability, SIGNAL(sigUserChangedLodAvailability(bool)),
-                                             m_d->settingsWidget, SLOT(slotUserChangedLodAvailability(bool)));
-        m_d->widgetConnections.addConnection(m_d->settingsWidget, SIGNAL(sigUserChangedLodAvailability(bool)),
-                                             m_d->uiWdgPaintOpPresetSettings.wdgLodAvailability, SLOT(slotUserChangedLodAvailability(bool)));
         m_d->widgetConnections.addConnection(m_d->settingsWidget, SIGNAL(sigConfigurationItemChanged()),
                                              this, SLOT(slotUpdateLodAvailability()));
-
-        m_d->settingsWidget->coldInitExternalLodAvailabilityWidget();
-
 
         widget->setFont(m_d->smallFont);
 

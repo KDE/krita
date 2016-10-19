@@ -196,7 +196,15 @@ public:
     void notifySetIndexChangedOneCommand() {
         KisImageWSP image = this->image();
         image->unlock();
-        image->barrierLock();
+
+        /**
+         * Some very weird commands may emit blocking signals to
+         * the GUI (e.g. KisGuiContextCommand). Here is the best thing
+         * we can do to avoid the deadlock
+         */
+        while(!image->tryBarrierLock()) {
+            QApplication::processEvents();
+        }
     }
 
     void undo() {

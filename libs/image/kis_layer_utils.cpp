@@ -1077,7 +1077,7 @@ namespace KisLayerUtils {
 
     void mergeMultipleLayers(KisImageSP image, KisNodeList mergedNodes, KisNodeSP putAfter)
     {
-        mergeMultipleLayersImpl(image, mergedNodes, putAfter, false, kundo2_i18n("Merge Selected Nodes"), false);
+        mergeMultipleLayersImpl(image, mergedNodes, putAfter, false, kundo2_i18n("Merge Selected Nodes"));
     }
     
     void newLayerFromVisible(KisImageSP image, KisNodeSP putAfter)

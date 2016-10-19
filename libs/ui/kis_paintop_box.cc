@@ -1149,9 +1149,21 @@ void KisPaintopBox::slotReloadPreset()
 }
 void KisPaintopBox::slotGuiChangedCurrentPreset() // Called only when UI is changed and not when preset is changed
 {
-    m_optionWidget->writeConfigurationSafe(const_cast<KisPaintOpSettings*>(m_resourceProvider->currentPreset()->settings().data()));
+    KisPaintOpPresetSP preset = m_resourceProvider->currentPreset();
 
-    //m_presetsPopup->resourceSelected(m_resourceProvider->currentPreset().data());
+    {
+        /**
+         * Here we postpone all the settings updates events until thye entire writing
+         * operation will be finished. As soon as it is finished, the updates will be
+         * emitted happily (if there were any).
+         */
+
+        KisPaintOpPreset::UpdatedPostponer postponer(preset.data());
+        m_optionWidget->writeConfigurationSafe(const_cast<KisPaintOpSettings*>(preset->settings().data()));
+    }
+
+    // we should also update the preset strip to update the status of the "dirty" mark
+    m_presetsPopup->resourceSelected(m_resourceProvider->currentPreset().data());
 
     // TODO!!!!!!!!
     //m_presetsPopup->updateViewSettings();

@@ -130,8 +130,6 @@ void KisPaintOpSettingsWidget::setConfiguration(const KisPropertiesConfiguration
         m_d->model->signalDataChanged(m_d->model->indexOf(info));
         indexcount++;
     }
-
-    KisPaintOpConfigWidget::setConfiguration(propertiesProxy);
 }
 
 void KisPaintOpSettingsWidget::writeConfiguration(KisPropertiesConfigurationSP config) const
@@ -140,8 +138,6 @@ void KisPaintOpSettingsWidget::writeConfiguration(KisPropertiesConfigurationSP c
     Q_FOREACH (const KisPaintOpOption* option, m_d->paintOpOptions) {
         option->startWriteOptionSetting(propertiesProxy);
     }
-
-    KisPaintOpConfigWidget::writeConfiguration(propertiesProxy);
 }
 
 KisPaintopLodLimitations KisPaintOpSettingsWidget::lodLimitations() const

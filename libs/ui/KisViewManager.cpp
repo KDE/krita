@@ -130,7 +130,7 @@
 
 class BlockingUserInputEventFilter : public QObject
 {
-    bool eventFilter(QObject *watched, QEvent *event)
+    bool eventFilter(QObject *watched, QEvent *event) override
     {
         Q_UNUSED(watched);
         if(dynamic_cast<QWheelEvent*>(event)

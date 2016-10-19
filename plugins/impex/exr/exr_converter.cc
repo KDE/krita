@@ -906,9 +906,9 @@ class EncoderImpl : public Encoder
 {
 public:
     EncoderImpl(Imf::OutputFile* _file, const ExrPaintLayerSaveInfo* _info, int width) : file(_file), info(_info), pixels(width), m_width(width) {}
-    virtual ~EncoderImpl() {}
-    virtual void prepareFrameBuffer(Imf::FrameBuffer*, int line);
-    virtual void encodeData(int line);
+    ~EncoderImpl() override {}
+    void prepareFrameBuffer(Imf::FrameBuffer*, int line) override;
+    void encodeData(int line) override;
 private:
     typedef ExrPixel_<_T_, size> ExrPixel;
     Imf::OutputFile* file;

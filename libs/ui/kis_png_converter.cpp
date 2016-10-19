@@ -338,10 +338,10 @@ public:
         png_uint_32 rowbytes = png_get_rowbytes(png_ptr, info_ptr);
         row_pointer = new png_byte[rowbytes];
     }
-    virtual ~KisPNGReaderLineByLine() {
+    ~KisPNGReaderLineByLine() override {
         delete[] row_pointer;
     }
-    virtual png_bytep readLine() {
+    png_bytep readLine() override {
         png_read_row(png_ptr, row_pointer, 0);
         return row_pointer;
     }
@@ -360,13 +360,13 @@ public:
         }
         png_read_image(png_ptr, row_pointers);
     }
-    virtual ~KisPNGReaderFullImage() {
+    ~KisPNGReaderFullImage() override {
         for (int i = 0; i < height; i++) {
             delete[] row_pointers[i];
         }
         delete[] row_pointers;
     }
-    virtual png_bytep readLine() {
+    png_bytep readLine() override {
         return row_pointers[y++];
     }
 private:

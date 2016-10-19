@@ -42,7 +42,7 @@ class KisBurnMidtonesAdjustment : public KoColorTransformation
 public:
     KisBurnMidtonesAdjustment(){}
 
- 	void transform(const quint8 *srcU8, quint8 *dstU8, qint32 nPixels) const
+ 	void transform(const quint8 *srcU8, quint8 *dstU8, qint32 nPixels) const override
  	{
  		const RGBPixel* src = reinterpret_cast<const RGBPixel*>(srcU8);
         RGBPixel* dst = reinterpret_cast<RGBPixel*>(dstU8);
@@ -65,21 +65,21 @@ public:
         }
     }
 
-	virtual QList<QString> parameters() const
+	QList<QString> parameters() const override
 	{
         QList<QString> list;
         list << "exposure";
         return list;
 	}
 
-	virtual int parameterId(const QString& name) const
+	int parameterId(const QString& name) const override
 	{
         if (name == "exposure")
         return 0;
         return -1;
 	}
 
-    virtual void setParameter(int id, const QVariant& parameter)
+    void setParameter(int id, const QVariant& parameter) override
     {
         switch(id)
         {

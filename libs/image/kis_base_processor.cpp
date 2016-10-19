@@ -30,11 +30,11 @@ class KisBaseProcessorConfigurationFactory : public KisSerializableConfiguration
 {
 public:
     KisBaseProcessorConfigurationFactory(KisBaseProcessor* _generator) : m_generator(_generator) {}
-    virtual ~KisBaseProcessorConfigurationFactory() {}
-    virtual KisSerializableConfigurationSP createDefault() {
+    ~KisBaseProcessorConfigurationFactory() override {}
+    KisSerializableConfigurationSP createDefault() override {
         return m_generator->factoryConfiguration(0);
     }
-    virtual KisSerializableConfigurationSP create(const QDomElement& e) {
+    KisSerializableConfigurationSP create(const QDomElement& e) override {
         KisSerializableConfigurationSP config = m_generator->factoryConfiguration(0);
         config->fromXML(e);
         return config;

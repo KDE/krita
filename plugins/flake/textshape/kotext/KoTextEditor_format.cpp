@@ -48,7 +48,7 @@ void KoTextEditor::Private::clearCharFormatProperty(int property)
     {
     public:
         PropertyWiper(int propertyId) : propertyId(propertyId) {}
-        void visit(QTextCharFormat &format) const {
+        void visit(QTextCharFormat &format) const override {
             format.clearProperty(propertyId);
         }
 
@@ -132,7 +132,7 @@ void KoTextEditor::setHorizontalTextAlignment(Qt::Alignment align)
     {
     public:
         Aligner(Qt::Alignment align) : alignment(align) {}
-        void visit(QTextBlock &block) const {
+        void visit(QTextBlock &block) const override {
             QTextBlockFormat format = block.blockFormat();
             format.setAlignment(alignment);
             QTextCursor cursor(block);
@@ -176,7 +176,7 @@ void KoTextEditor::decreaseIndent()
     class Indenter : public BlockFormatVisitor
     {
     public:
-        void visit(QTextBlock &block) const {
+        void visit(QTextBlock &block) const override {
             QTextBlockFormat format = block.blockFormat();
             // TODO make the 10 configurable.
             format.setLeftMargin(qMax(qreal(0.0), format.leftMargin() - 10));
@@ -209,7 +209,7 @@ void KoTextEditor::increaseIndent()
     class Indenter : public BlockFormatVisitor
     {
     public:
-        void visit(QTextBlock &block) const {
+        void visit(QTextBlock &block) const override {
             QTextBlockFormat format = block.blockFormat();
             // TODO make the 10 configurable.
 
@@ -244,7 +244,7 @@ public:
         QFontDatabase fontDB;
         defaultSizes = fontDB.standardSizes();
     }
-    void visit(QTextCharFormat &format) const {
+    void visit(QTextCharFormat &format) const override {
         const qreal current = format.fontPointSize();
         int prev = 1;
         Q_FOREACH (int pt, defaultSizes) {
@@ -347,7 +347,7 @@ public:
     {
     }
 
-    virtual void visitBlock(QTextBlock &block, const QTextCursor &caret)
+    void visitBlock(QTextBlock &block, const QTextCursor &caret) override
     {
         m_newFormat = block.charFormat();
         m_style->applyStyle(m_newFormat);
@@ -364,7 +364,7 @@ public:
         }
     }
 
-    virtual void visitFragmentSelection(QTextCursor &fragmentSelection)
+    void visitFragmentSelection(QTextCursor &fragmentSelection) override
     {
         QTextCharFormat format = m_newFormat;
 
@@ -439,7 +439,7 @@ public:
     {
     }
 
-    virtual void visitBlock(QTextBlock &block, const QTextCursor &)
+    void visitBlock(QTextBlock &block, const QTextCursor &) override
     {
         if (m_styleManager) {
             QTextBlockFormat bf = block.blockFormat();
@@ -499,7 +499,7 @@ public:
     {
     }
 
-    virtual void visitBlock(QTextBlock &block, const QTextCursor &caret)
+    void visitBlock(QTextBlock &block, const QTextCursor &caret) override
     {
         KoTextVisitor::visitBlock(block, caret);
 
@@ -512,7 +512,7 @@ public:
         }
     }
 
-    virtual void visitFragmentSelection(QTextCursor &fragmentSelection)
+    void visitFragmentSelection(QTextCursor &fragmentSelection) override
     {
         QTextCharFormat format = fragmentSelection.charFormat();
         format.merge(m_deltaCharFormat);

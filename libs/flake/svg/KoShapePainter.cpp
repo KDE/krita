@@ -43,63 +43,63 @@ public:
     {
     }
 
-    ~SimpleCanvas()
+    ~SimpleCanvas() override
     {
         delete m_shapeManager;
     }
 
-    virtual void gridSize(QPointF *offset, QSizeF *spacing) const
+    void gridSize(QPointF *offset, QSizeF *spacing) const override
     {
         *offset = QPointF();
         *spacing = QSizeF();
     };
 
-    virtual bool snapToGrid() const
+    bool snapToGrid() const override
     {
         return false;
     }
 
-    virtual void addCommand(KUndo2Command *)
+    void addCommand(KUndo2Command *) override
     {
     }
 
-    virtual KoShapeManager *shapeManager() const
+    KoShapeManager *shapeManager() const override
     {
         return m_shapeManager;
     }
 
-    virtual void updateCanvas(const QRectF&)
+    void updateCanvas(const QRectF&) override
     {
     }
 
-    virtual KoToolProxy *toolProxy() const
-    {
-        return 0;
-    }
-
-    virtual KoViewConverter *viewConverter() const
+    KoToolProxy *toolProxy() const override
     {
         return 0;
     }
 
-    virtual QWidget *canvasWidget()
+    KoViewConverter *viewConverter() const override
     {
         return 0;
     }
 
-    virtual const QWidget *canvasWidget() const
+    QWidget *canvasWidget() override
     {
         return 0;
     }
 
-    virtual KoUnit unit() const
+    const QWidget *canvasWidget() const override
+    {
+        return 0;
+    }
+
+    KoUnit unit() const override
     {
         return KoUnit(KoUnit::Point);
     }
 
-    virtual void updateInputMethodInfo() {}
+    void updateInputMethodInfo() override {}
 
-    void setCursor(const QCursor &) {}
+    void setCursor(const QCursor &) override {}
 
 private:
     KoShapeManager *m_shapeManager;

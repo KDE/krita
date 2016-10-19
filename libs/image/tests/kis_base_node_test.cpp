@@ -35,7 +35,7 @@ class TestNode : public TestUtil::DefaultNode
 {
     using KisBaseNode::accept;
 
-    KisNodeSP clone() const {
+    KisNodeSP clone() const override {
         return new TestNode(*this);
     }
 };

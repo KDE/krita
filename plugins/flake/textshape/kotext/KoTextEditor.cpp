@@ -902,11 +902,11 @@ public:
     }
 
     // override super's implementation to not waste cpu cycles
-    virtual void visitBlock(QTextBlock&, const QTextCursor &)
+    void visitBlock(QTextBlock&, const QTextCursor &) override
     {
     }
 
-    virtual void nonVisit()
+    void nonVisit() override
     {
         setAbortVisiting(true);
     }
@@ -1586,7 +1586,7 @@ public:
     {
     }
 
-    virtual void visitBlock(QTextBlock &block, const QTextCursor &caret)
+    void visitBlock(QTextBlock &block, const QTextCursor &caret) override
     {
         if (m_position >= qMax(block.position(), caret.selectionStart())
                     && m_position <= qMin(block.position() + block.length(), caret.selectionEnd())) {

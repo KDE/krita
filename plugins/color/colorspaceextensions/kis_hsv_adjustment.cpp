@@ -97,7 +97,7 @@ public:
 
 public:
 
-    void transform(const quint8 *srcU8, quint8 *dstU8, qint32 nPixels) const
+    void transform(const quint8 *srcU8, quint8 *dstU8, qint32 nPixels) const override
     {
 
         //if (m_model="RGBA" || m_colorize) {
@@ -303,14 +303,14 @@ public:
         }*/
     }
 
-    virtual QList<QString> parameters() const
+    QList<QString> parameters() const override
     {
       QList<QString> list;
       list << "h" << "s" << "v" << "type" << "colorize" << "lumaRed" << "lumaGreen"<< "lumaBlue";
       return list;
     }
 
-    virtual int parameterId(const QString& name) const
+    int parameterId(const QString& name) const override
     {
         if (name == "h") {
             return 0;
@@ -341,7 +341,7 @@ public:
     * m_colorize: Use colorize formula instead
     * luma Red/Green/Blue: Used for luma calculations.
     */
-    virtual void setParameter(int id, const QVariant& parameter)
+    void setParameter(int id, const QVariant& parameter) override
     {
         switch(id)
         {

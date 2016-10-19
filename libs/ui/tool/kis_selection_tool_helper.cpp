@@ -57,7 +57,7 @@ struct LazyInitGlobalSelection : public KisTransactionBasedCommand {
     LazyInitGlobalSelection(KisViewManager *view) : m_view(view) {}
     KisViewManager *m_view;
 
-    KUndo2Command* paint() {
+    KUndo2Command* paint() override {
         return !m_view->selection() ?
             new KisSetEmptyGlobalSelectionCommand(m_view->image()) : 0;
     }
@@ -90,7 +90,7 @@ void KisSelectionToolHelper::selectPixelSelection(KisPixelSelectionSP selection,
         KisPixelSelectionSP m_selection;
         SelectionAction m_action;
 
-        KUndo2Command* paint() {
+        KUndo2Command* paint() override {
 
             KisPixelSelectionSP pixelSelection = m_view->selection()->pixelSelection();
             KIS_ASSERT_RECOVER(pixelSelection) { return 0; }
@@ -175,7 +175,7 @@ void KisSelectionToolHelper::addSelectionShapes(QList< KoShape* > shapes)
         ClearPixelSelection(KisViewManager *view) : m_view(view) {}
         KisViewManager *m_view;
 
-        KUndo2Command* paint() {
+        KUndo2Command* paint() override {
 
             KisPixelSelectionSP pixelSelection = m_view->selection()->pixelSelection();
             KIS_ASSERT_RECOVER(pixelSelection) { return 0; }
@@ -194,7 +194,7 @@ void KisSelectionToolHelper::addSelectionShapes(QList< KoShape* > shapes)
         KisViewManager *m_view;
         KoShape* m_shape;
 
-        KUndo2Command* paint() {
+        KUndo2Command* paint() override {
             /**
              * Mark a shape that it belongs to a shape selection
              */

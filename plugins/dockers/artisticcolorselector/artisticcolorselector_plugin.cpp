@@ -28,7 +28,7 @@ K_PLUGIN_FACTORY_WITH_JSON(PaletteDockPluginFactory, "krita_artisticcolorselecto
 class ArtisticColorSelectorDockFactory: public KoDockFactoryBase
 {
 public:
-    virtual QString id() const {
+    QString id() const override {
         return QString("ArtisticColorSelector");
     }
 
@@ -36,13 +36,13 @@ public:
         return Qt::RightDockWidgetArea;
     }
 
-    virtual QDockWidget* createDockWidget() {
+    QDockWidget* createDockWidget() override {
         ArtisticColorSelectorDock* dockWidget = new ArtisticColorSelectorDock();
         dockWidget->setObjectName(id());
         return dockWidget;
     }
 
-    DockPosition defaultDockPosition() const {
+    DockPosition defaultDockPosition() const override {
         return DockMinimized;
     }
 };

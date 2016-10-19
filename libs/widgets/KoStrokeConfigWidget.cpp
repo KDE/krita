@@ -73,7 +73,7 @@ class CapNJoinMenu : public QMenu
 {
 public:
     CapNJoinMenu(QWidget *parent = 0);
-    virtual QSize sizeHint() const;
+    QSize sizeHint() const override;
 
     KisDoubleParseUnitSpinBox *miterLimit;
     QButtonGroup        *capGroup;

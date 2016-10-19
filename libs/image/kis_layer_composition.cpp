@@ -45,8 +45,8 @@ public:
     {        
     }
 
-    virtual bool visit(KisNode* node) { return process(node); }
-    virtual bool visit(KisGroupLayer* layer)
+    bool visit(KisNode* node) override { return process(node); }
+    bool visit(KisGroupLayer* layer) override
     { 
         bool result = visitAll(layer);
         if(layer == layer->image()->rootLayer()) {
@@ -54,16 +54,16 @@ public:
         }        
         return result && process(layer);
     }
-    virtual bool visit(KisAdjustmentLayer* layer) { return process(layer); }
-    virtual bool visit(KisPaintLayer* layer) { return process(layer); }
-    virtual bool visit(KisExternalLayer* layer) { return process(layer); }
-    virtual bool visit(KisGeneratorLayer* layer) { return process(layer); }
-    virtual bool visit(KisCloneLayer* layer) { return process(layer); }
-    virtual bool visit(KisFilterMask* mask) { return process(mask); }
-    virtual bool visit(KisTransformMask* mask) { return process(mask); }
-    virtual bool visit(KisTransparencyMask* mask) { return process(mask); }
-    virtual bool visit(KisSelectionMask* mask) { return process(mask); }
-    virtual bool visit(KisColorizeMask* mask) { return process(mask); }
+    bool visit(KisAdjustmentLayer* layer) override { return process(layer); }
+    bool visit(KisPaintLayer* layer) override { return process(layer); }
+    bool visit(KisExternalLayer* layer) override { return process(layer); }
+    bool visit(KisGeneratorLayer* layer) override { return process(layer); }
+    bool visit(KisCloneLayer* layer) override { return process(layer); }
+    bool visit(KisFilterMask* mask) override { return process(mask); }
+    bool visit(KisTransformMask* mask) override { return process(mask); }
+    bool visit(KisTransparencyMask* mask) override { return process(mask); }
+    bool visit(KisSelectionMask* mask) override { return process(mask); }
+    bool visit(KisColorizeMask* mask) override { return process(mask); }
 
     bool process(KisNode* node) {
         if(m_mode == STORE) {

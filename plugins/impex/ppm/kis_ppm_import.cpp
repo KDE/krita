@@ -52,7 +52,6 @@ KisPPMImport::~KisPPMImport()
 {
 }
 
-    Q_UNUSED(configuration);
 int readNumber(QIODevice* device)
 {
     char c;

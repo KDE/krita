@@ -106,7 +106,19 @@ void KisSelectionToolHelper::selectPixelSelection(KisPixelSelectionSP selection,
             pixelSelection->applySelection(m_selection, m_action);
 
             const QRect imageBounds = m_view->image()->bounds();
-            pixelSelection->crop(imageBounds);
+            QRect selectionExactRect = m_view->selection()->selectedExactRect();
+
+            if (!imageBounds.contains(selectionExactRect)) {
+                pixelSelection->crop(imageBounds);
+                if (pixelSelection->outlineCacheValid()) {
+                    QPainterPath cache = pixelSelection->outlineCache();
+                    QPainterPath imagePath;
+                    imagePath.addRect(imageBounds);
+                    cache &= imagePath;
+                    pixelSelection->setOutlineCache(cache);
+                }
+                selectionExactRect &= imageBounds;
+            }
 
             QRect dirtyRect = imageBounds;
             if (hasSelection && m_action != SELECTION_REPLACE && m_action != SELECTION_INTERSECT) {
@@ -117,7 +129,7 @@ void KisSelectionToolHelper::selectPixelSelection(KisPixelSelectionSP selection,
             KUndo2Command *savedCommand = transaction.endAndTake();
             pixelSelection->setDirty(dirtyRect);
 
-            if (m_view->selection()->selectedExactRect().isEmpty()) {
+            if (selectionExactRect.isEmpty()) {
                 KisCommandUtils::CompositeCommand *cmd = new KisCommandUtils::CompositeCommand();
                 cmd->addCommand(savedCommand);
                 cmd->addCommand(new KisDeselectGlobalSelectionCommand(m_view->image()));

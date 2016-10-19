@@ -100,6 +100,7 @@ KisXCFImport::~KisXCFImport()
 KisImportExportFilter::ConversionStatus KisXCFImport::convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration)
 {
     Q_UNUSED(from);
+    Q_UNUSED(configuration);
     dbgFile << "Importing using XCFImport!";
 
     if (to != "application/x-krita")

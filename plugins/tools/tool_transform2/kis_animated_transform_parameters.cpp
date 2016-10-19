@@ -135,10 +135,12 @@ QString KisAnimatedTransformMaskParameters::id() const
 
 void KisAnimatedTransformMaskParameters::toXML(QDomElement *e) const
 {
+    Q_UNUSED(e);
 }
 
 KisTransformMaskParamsInterfaceSP KisAnimatedTransformMaskParameters::fromXML(const QDomElement &e)
 {
+    Q_UNUSED(e);
     return toQShared(new KisAnimatedTransformMaskParameters());
 }
 

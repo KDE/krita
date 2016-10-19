@@ -138,7 +138,6 @@ KisDlgInternalColorSelector::KisDlgInternalColorSelector(QWidget *parent, KoColo
 KisDlgInternalColorSelector::~KisDlgInternalColorSelector()
 {
     delete m_ui;
-    //TODO: Does the scoped pointer also need to be deleted???
 }
 
 void KisDlgInternalColorSelector::slotColorUpdated(KoColor newColor)

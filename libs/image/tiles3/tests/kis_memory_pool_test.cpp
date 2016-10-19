@@ -46,7 +46,7 @@ public:
     {
     }
 
-    void run() {
+    void run() override {
         qsrand(QTime::currentTime().msec());
         for(qint32 i = 0; i < NUM_CYCLES; i++) {
             qint32 type = i % 2;
@@ -101,7 +101,7 @@ public:
     {
     }
 
-    void run() {
+    void run() override {
         qsrand(QTime::currentTime().msec());
         for(qint32 i = 0; i < NUM_CYCLES; i++) {
             qint32 type = i % 2;

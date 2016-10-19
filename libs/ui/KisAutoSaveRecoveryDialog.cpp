@@ -61,7 +61,7 @@ public:
     {
     }
 
-    QList<QWidget*> createItemWidgets(const QModelIndex& index) const
+    QList<QWidget*> createItemWidgets(const QModelIndex& index) const override
     {
         // a lump of coal and a piece of elastic will get you through the world
         QWidget *page = new QWidget;
@@ -87,7 +87,7 @@ public:
 
     void updateItemWidgets(const QList<QWidget*> widgets,
                            const QStyleOptionViewItem &option,
-                           const QPersistentModelIndex &index) const
+                           const QPersistentModelIndex &index) const override
     {
         FileItem *fileItem = (FileItem*)index.data().value<void*>();
 
@@ -107,14 +107,14 @@ public:
         page->setGeometry(option.rect.translated(0, -option.rect.y()));
     }
 
-    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &/*index*/) const
+    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &/*index*/) const override
     {
         //paint background for selected or hovered item
         QStyleOptionViewItem opt = option;
         itemView()->style()->drawPrimitive(QStyle::PE_PanelItemViewItem, &opt, painter, 0);
     }
 
-    QSize sizeHint(const QStyleOptionViewItem&, const QModelIndex&) const
+    QSize sizeHint(const QStyleOptionViewItem&, const QModelIndex&) const override
     {
         return QSize(600, 200);
     }
@@ -130,21 +130,21 @@ public:
         : QAbstractListModel(parent)
         , m_fileItems(fileItems){}
 
-    virtual ~FileItemModel()
+    ~FileItemModel() override
     {
         qDeleteAll(m_fileItems);
         m_fileItems.clear();
     }
 
-    int rowCount(const QModelIndex &/*parent*/) const { return m_fileItems.size(); }
+    int rowCount(const QModelIndex &/*parent*/) const override { return m_fileItems.size(); }
 
-    Qt::ItemFlags flags(const QModelIndex& /*index*/) const
+    Qt::ItemFlags flags(const QModelIndex& /*index*/) const override
     {
         Qt::ItemFlags flags = Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsUserCheckable;
         return flags;
     }
 
-    QVariant data(const QModelIndex& index, int role) const
+    QVariant data(const QModelIndex& index, int role) const override
     {
         if (index.isValid() && index.row() < m_fileItems.size()) {
 
@@ -162,7 +162,7 @@ public:
         return QVariant();
     }
 
-    bool setData(const QModelIndex& index, const QVariant& /*value*/, int role)
+    bool setData(const QModelIndex& index, const QVariant& /*value*/, int role) override
     {
         if (index.isValid() && index.row() < m_fileItems.size()) {
             if (role == Qt::CheckStateRole) {

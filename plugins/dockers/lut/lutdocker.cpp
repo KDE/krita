@@ -48,7 +48,7 @@ public:
     {
     }
 
-    virtual QString id() const
+    QString id() const override
     {
         return QString( "LutDocker" );
     }
@@ -58,7 +58,7 @@ public:
         return Qt::RightDockWidgetArea;
     }
 
-    virtual QDockWidget* createDockWidget()
+    QDockWidget* createDockWidget() override
     {
         LutDockerDock * dockWidget = new LutDockerDock();
         dockWidget->setObjectName(id());
@@ -66,7 +66,7 @@ public:
         return dockWidget;
     }
 
-    DockPosition defaultDockPosition() const
+    DockPosition defaultDockPosition() const override
     {
         return DockMinimized;
     }

@@ -49,7 +49,7 @@ public:
     }
 
     ///Reimplemented
-    virtual bool importResourceFile(const QString& filename, bool fileCreation = true) {
+    bool importResourceFile(const QString& filename, bool fileCreation = true) override {
         QFileInfo fi(filename);
         if (fi.exists() == false)
             return false;
@@ -77,7 +77,7 @@ public:
 private:
 
     ///Reimplemented
-    virtual QList<KisBrushSP> createResources(const QString & filename) {
+    QList<KisBrushSP> createResources(const QString & filename) override {
         QList<KisBrushSP> brushes;
 
         QString fileExtension = QFileInfo(filename).suffix().toLower();
@@ -97,7 +97,7 @@ private:
     }
 
     ///Reimplemented
-    virtual KisBrushSP createResource(const QString & filename) {
+    KisBrushSP createResource(const QString & filename) override {
 
         QString fileExtension = QFileInfo(filename).suffix().toLower();
 

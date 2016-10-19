@@ -31,7 +31,7 @@ public:
        collator(collator)
     {}
 
-    bool operator <(const QListWidgetItem &other) const
+    bool operator <(const QListWidgetItem &other) const override
     {
         int cmp = collator->compare(this->text(), other.text());
         return cmp < 0;

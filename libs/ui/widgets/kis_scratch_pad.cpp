@@ -59,7 +59,7 @@ public:
     {
     }
 
-    void requestProjectionUpdate(KisNode *node, const QRect& rect) {
+    void requestProjectionUpdate(KisNode *node, const QRect& rect) override {
         KisNodeGraphListener::requestProjectionUpdate(node, rect);
 
         QMutexLocker locker(&m_lock);
@@ -81,9 +81,9 @@ public:
     {
     }
 
-    virtual ~KisScratchPadDefaultBounds() {}
+    ~KisScratchPadDefaultBounds() override {}
 
-    virtual QRect bounds() const {
+    QRect bounds() const override {
         return m_scratchPad->imageBounds();
     }
 

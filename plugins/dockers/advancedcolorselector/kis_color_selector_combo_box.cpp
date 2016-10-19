@@ -124,14 +124,14 @@ public:
         } 
     }
 protected:
-    void paintEvent(QPaintEvent *)
+    void paintEvent(QPaintEvent *) override
     {
         QPainter painter(this);
         painter.fillRect(0,0,width(), height(), QColor(128,128,128));
         painter.fillRect(highlightArea, palette().highlight());
     }
 
-    void mouseMoveEvent(QMouseEvent * e)
+    void mouseMoveEvent(QMouseEvent * e) override
     {
         if(rect().contains(e->pos())) {
             for(int i=0; i<layout()->count(); i++) {
@@ -154,7 +154,7 @@ protected:
         }
     }
 
-    void mousePressEvent(QMouseEvent* e)
+    void mousePressEvent(QMouseEvent* e) override
     {
         if(rect().contains(e->pos())) {
             KisColorSelectorComboBox* parent = dynamic_cast<KisColorSelectorComboBox*>(this->parent());

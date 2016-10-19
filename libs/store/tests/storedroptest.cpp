@@ -38,7 +38,7 @@ protected:
     virtual void contentsDragEnterEvent(QDragEnterEvent * e);
     virtual void contentsDragMoveEvent(QDragMoveEvent * e);
     virtual void contentsDropEvent(QDropEvent * e);
-    virtual void keyPressEvent(QKeyEvent * e);
+    void keyPressEvent(QKeyEvent * e) override;
     virtual void paste();
 private:
     bool processMimeData(const QMimeData* mimeData);

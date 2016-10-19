@@ -51,7 +51,7 @@ struct KisSuspendProjectionUpdatesStrokeStrategy::Private
         {
         }
 
-        bool filter(KisImage *image, KisNode *node, const QRect &rect) {
+        bool filter(KisImage *image, KisNode *node, const QRect &rect) override {
             if (image->currentLevelOfDetail() > 0) return false;
 
             QMutexLocker l(&m_mutex);

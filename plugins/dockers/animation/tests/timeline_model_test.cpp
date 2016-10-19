@@ -120,7 +120,7 @@ struct TestingInterface : TimelineFramesModel::NodeManipulationInterface
 {
     TestingInterface(KisImageSP image) : m_image(image) {}
 
-    KisLayerSP addPaintLayer() const {
+    KisLayerSP addPaintLayer() const override {
         KisNodeSP parent = m_image->root();
         KisNodeSP after = parent->lastChild();
 
@@ -140,7 +140,7 @@ struct TestingInterface : TimelineFramesModel::NodeManipulationInterface
         return layer;
     }
 
-    void removeNode(KisNodeSP node) const {
+    void removeNode(KisNodeSP node) const override {
         m_image->undoAdapter()->addCommand(
             new KisImageLayerRemoveCommand(m_image, node));
     }

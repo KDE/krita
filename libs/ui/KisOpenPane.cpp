@@ -69,7 +69,7 @@ public:
         setFlags(newFlags);
     }
 
-    virtual bool operator<(const QTreeWidgetItem & other) const {
+    bool operator<(const QTreeWidgetItem & other) const override {
         const KoSectionListItem* item = dynamic_cast<const KoSectionListItem*>(&other);
 
         if (!item)
@@ -97,7 +97,7 @@ class KoSectionListDelegate : public QStyledItemDelegate
 public:
     KoSectionListDelegate(QObject* parent = 0) : QStyledItemDelegate(parent) { }
 
-    virtual void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const
+    void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const override
     {
         QStyledItemDelegate::paint(painter, option, index);
 

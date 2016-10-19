@@ -43,7 +43,7 @@ public:
     {
     }
 
-    virtual void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const
+    void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const override
     {
         while (nPixels--) {
             dst[0] = KoColorSpaceMathsTraits<quint8>::max - src[0];

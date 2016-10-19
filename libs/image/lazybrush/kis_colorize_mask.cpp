@@ -163,7 +163,7 @@ struct SetKeyStrokesColorSpaceCommand : public KUndo2Command {
           m_list(list),
           m_node(node) {}
 
-    void undo() {
+    void undo() override {
         KIS_ASSERT_RECOVER_RETURN(m_list->size() == m_oldColors.size());
 
         for (int i = 0; i < m_list->size(); i++) {
@@ -171,7 +171,7 @@ struct SetKeyStrokesColorSpaceCommand : public KUndo2Command {
         }
     }
 
-    void redo() {
+    void redo() override {
         if (m_oldColors.isEmpty()) {
             Q_FOREACH(const KeyStroke &stroke, *m_list) {
                 m_oldColors << stroke.color;
@@ -553,12 +553,12 @@ struct KeyStrokeAddRemoveCommand : public KisCommandUtils::FlipFlopCommand {
           m_index(index), m_stroke(stroke),
           m_list(list), m_node(node) {}
 
-    void init() {
+    void init() override {
         m_list->insert(m_index, m_stroke);
         emit m_node->sigKeyStrokesListChanged();
     }
 
-    void end() {
+    void end() override {
         KIS_ASSERT_RECOVER_RETURN((*m_list)[m_index] == m_stroke);
         m_list->removeAt(m_index);
         emit m_node->sigKeyStrokesListChanged();
@@ -724,14 +724,14 @@ struct SetKeyStrokeColorsCommand : public KUndo2Command {
           m_list(list),
           m_node(node) {}
 
-    void redo() {
+    void redo() override {
         *m_list = m_newList;
 
         emit m_node->sigKeyStrokesListChanged();
         m_node->setDirty();
     }
 
-    void undo() {
+    void undo() override {
         *m_list = m_oldList;
 
         emit m_node->sigKeyStrokesListChanged();

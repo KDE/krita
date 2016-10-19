@@ -37,12 +37,12 @@ void KisFilterSelectionOperation::runFilter(KisSelectionFilter* filter, KisViewM
     struct FilterSelection : public KisTransactionBasedCommand {
         FilterSelection(KisImageSP image, KisSelectionSP sel, KisSelectionFilter *filter)
             : m_image(image), m_sel(sel), m_filter(filter) {}
-        ~FilterSelection() { delete m_filter;}
+        ~FilterSelection() override { delete m_filter;}
         KisImageSP m_image;
         KisSelectionSP m_sel;
         KisSelectionFilter *m_filter;
 
-        KUndo2Command* paint() {
+        KUndo2Command* paint() override {
             KisPixelSelectionSP mergedSelection = m_sel->pixelSelection();
             KisTransaction transaction(mergedSelection);
             QRect processingRect = m_filter->changeRect(mergedSelection->selectedExactRect());

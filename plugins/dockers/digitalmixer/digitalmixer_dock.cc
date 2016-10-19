@@ -35,7 +35,7 @@
 class DigitalMixerPatch : public KoColorPatch {
     public:
         DigitalMixerPatch(QWidget* parent) : KoColorPatch(parent) {}
-        QSize sizeHint() const
+        QSize sizeHint() const override
         {
             return QSize(24,24);
         }

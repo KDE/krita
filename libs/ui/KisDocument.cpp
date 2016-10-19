@@ -147,26 +147,26 @@ public:
     {
     }
 
-    ~DocumentProgressProxy() {
+    ~DocumentProgressProxy() override {
         // signal that the job is done
         setValue(-1);
     }
 
-    int maximum() const {
+    int maximum() const override {
         return 100;
     }
 
-    void setValue(int value) {
+    void setValue(int value) override {
         if (m_mainWindow) {
             m_mainWindow->slotProgress(value);
         }
     }
 
-    void setRange(int /*minimum*/, int /*maximum*/) {
+    void setRange(int /*minimum*/, int /*maximum*/) override {
 
     }
 
-    void setFormat(const QString &/*format*/) {
+    void setFormat(const QString &/*format*/) override {
 
     }
 };
@@ -189,7 +189,7 @@ public:
     {
     }
 
-    void setIndex(int idx) {
+    void setIndex(int idx) override {
         KisImageWSP image = this->image();
         image->requestStrokeCancellation();
         if(image->tryBarrierLock()) {
@@ -198,7 +198,7 @@ public:
         }
     }
 
-    void notifySetIndexChangedOneCommand() {
+    void notifySetIndexChangedOneCommand() override {
         KisImageWSP image = this->image();
         image->unlock();
 
@@ -212,7 +212,7 @@ public:
         }
     }
 
-    void undo() {
+    void undo() override {
         KisImageWSP image = this->image();
         image->requestUndoDuringStroke();
         if(image->tryBarrierLock()) {
@@ -221,7 +221,7 @@ public:
         }
     }
 
-    void redo() {
+    void redo() override {
         KisImageWSP image = this->image();
         if(image->tryBarrierLock()) {
             KUndo2Stack::redo();

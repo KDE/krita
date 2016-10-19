@@ -38,6 +38,8 @@
 #include "kis_processing_applicator.h"
 #include "kis_transaction_based_command.h"
 #include "kis_gui_context_command.h"
+#include "kis_command_utils.h"
+#include "commands/kis_deselect_global_selection_command.h"
 
 
 KisSelectionToolHelper::KisSelectionToolHelper(KisCanvas2* canvas, const KUndo2MagicString& name)
@@ -103,7 +105,10 @@ void KisSelectionToolHelper::selectPixelSelection(KisPixelSelectionSP selection,
 
             pixelSelection->applySelection(m_selection, m_action);
 
-            QRect dirtyRect = m_view->image()->bounds();
+            const QRect imageBounds = m_view->image()->bounds();
+            pixelSelection->crop(imageBounds);
+
+            QRect dirtyRect = imageBounds;
             if (hasSelection && m_action != SELECTION_REPLACE && m_action != SELECTION_INTERSECT) {
                 dirtyRect = m_selection->selectedRect();
             }
@@ -111,6 +116,13 @@ void KisSelectionToolHelper::selectPixelSelection(KisPixelSelectionSP selection,
 
             KUndo2Command *savedCommand = transaction.endAndTake();
             pixelSelection->setDirty(dirtyRect);
+
+            if (m_view->selection()->selectedExactRect().isEmpty()) {
+                KisCommandUtils::CompositeCommand *cmd = new KisCommandUtils::CompositeCommand();
+                cmd->addCommand(savedCommand);
+                cmd->addCommand(new KisDeselectGlobalSelectionCommand(m_view->image()));
+                savedCommand = cmd;
+            }
 
             return savedCommand;
         }
@@ -190,13 +202,23 @@ void KisSelectionToolHelper::addSelectionShapes(QList< KoShape* > shapes)
 }
 
 
-void KisSelectionToolHelper::cropRectIfNeeded(QRect *rect)
+void KisSelectionToolHelper::cropRectIfNeeded(QRect *rect, SelectionAction action)
 {
     KisImageWSP image = m_canvas->viewManager()->image();
 
-    if (!image->wrapAroundModePermitted()) {
+    if (!image->wrapAroundModePermitted() && action != SELECTION_SUBTRACT) {
         *rect &= image->bounds();
     }
+}
+
+bool KisSelectionToolHelper::canShortcutToDeselect(const QRect &rect, SelectionAction action)
+{
+    return rect.isEmpty() && (action == SELECTION_INTERSECT || action == SELECTION_REPLACE);
+}
+
+bool KisSelectionToolHelper::canShortcutToNoop(const QRect &rect, SelectionAction action)
+{
+    return rect.isEmpty() && action == SELECTION_ADD;
 }
 
 void KisSelectionToolHelper::cropPathIfNeeded(QPainterPath *path)
@@ -209,4 +231,3 @@ void KisSelectionToolHelper::cropPathIfNeeded(QPainterPath *path)
         *path &= cropPath;
     }
 }
-

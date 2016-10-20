@@ -61,7 +61,6 @@ private:
     void setGuidesConfigImpl(const KisGuidesConfig &value);
 
 
-
 private:
     Ui::GridConfigWidget *ui;
 

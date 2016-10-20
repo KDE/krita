@@ -53,16 +53,19 @@ GridConfigWidget::GridConfigWidget(QWidget *parent) :
 
     ui->gridTypeCombobox->addItem(i18n("Rectangle"));
     ui->gridTypeCombobox->addItem(i18n("Isometric"));
-    ui->isometricOptionsContainer->setVisible(false);
-    ui->rectangleOptionsContainer->setVisible(true);
+    ui->gridTypeCombobox->setCurrentIndex(0); // set to rectangle by default
+    slotGridTypeChanged(); // update the UI to hide any elements we don't need
 
 
     connect(ui->gridTypeCombobox, SIGNAL(currentIndexChanged(int)), SLOT(slotGridTypeChanged()));
 
 
+
+
     setGridConfig(m_d->gridConfig);
     setGuidesConfig(m_d->guidesConfig);
 
+    // hide offset UI elements if offset is disabled
     connect(ui->chkOffset, SIGNAL(toggled(bool)), ui->lblXOffset, SLOT(setVisible(bool)));
     connect(ui->chkOffset, SIGNAL(toggled(bool)), ui->lblYOffset, SLOT(setVisible(bool)));
     connect(ui->chkOffset, SIGNAL(toggled(bool)), ui->intXOffset, SLOT(setVisible(bool)));
@@ -269,13 +272,40 @@ void GridConfigWidget::slotGuidesGuiChanged()
 
 void GridConfigWidget::slotGridTypeChanged() {
 
-    if (ui->gridTypeCombobox->currentIndex() == 0) { // rectangle
-        ui->isometricOptionsContainer->setVisible(false);
-        ui->rectangleOptionsContainer->setVisible(true);
-    } else { // isometric
-       ui->isometricOptionsContainer->setVisible(true);
-        ui->rectangleOptionsContainer->setVisible(false);
-    }
 
-     slotGridGuiChanged();
+    bool showRectangleControls = ui->gridTypeCombobox->currentIndex() == 0;
+
+
+    // specific rectangle UI controls
+    ui->lblXSpacing->setVisible(showRectangleControls);
+    ui->lblYSpacing->setVisible(showRectangleControls);
+    ui->intHSpacing->setVisible(showRectangleControls);
+    ui->intVSpacing->setVisible(showRectangleControls);
+    ui->spacingAspectButton->setVisible(showRectangleControls);
+
+    ui->lblSubdivision->setVisible(showRectangleControls);
+    ui->intSubdivision->setVisible(showRectangleControls);
+    ui->lblSubdivisionStyle->setVisible(showRectangleControls);
+    ui->selectSubdivisionStyle->setVisible(showRectangleControls);
+    ui->colorSubdivision->setVisible(showRectangleControls);
+
+
+    // specific isometric UI controls
+    ui->leftAngleLabel->setVisible(!showRectangleControls);
+    ui->rightAngleLabel->setVisible(!showRectangleControls);
+    ui->angleLeftSpinbox->setVisible(!showRectangleControls);
+    ui->angleRightSpinbox->setVisible(!showRectangleControls);
+    ui->cellSpacingLabel->setVisible(!showRectangleControls);
+    ui->cellSpacingSpinbox->setVisible(!showRectangleControls);
+
+
+
+
+
+    slotGridGuiChanged();
 }
+
+
+
+
+

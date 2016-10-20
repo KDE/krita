@@ -136,7 +136,8 @@ void KisGridDecoration::drawDecoration(QPainter& gc, const QRectF& updateArea, c
 
     if (gridType== 1)  { // isometric
 
-        const int offset = m_d->config.offset().y();
+        const int offset = m_d->config.offset().x();
+        const int offsetY = m_d->config.offset().y();
         const int step = scaleCoeff * m_d->config.spacing().y();
         const int lineIndexFirst = qCeil((y1 - offset) / step);
         const int cellSpacing = m_d->config.cellSpacing();
@@ -154,7 +155,7 @@ void KisGridDecoration::drawDecoration(QPainter& gc, const QRectF& updateArea, c
 
             while (finalY < bottomRightOfImageY) {
 
-                int w = counter * cellSpacing;
+                int w = (counter * cellSpacing) - offsetY;
                 gc.setPen(mainPen);
 
                 // calculate where the ending point will be based off the angle
@@ -180,7 +181,7 @@ void KisGridDecoration::drawDecoration(QPainter& gc, const QRectF& updateArea, c
 
             while (finalY < bottomLeftOfImageY) {
 
-                int w = counter * cellSpacing;
+                int w = (counter * cellSpacing) - offsetY - offset;
                 gc.setPen(mainPen);
 
                 // calculate where the ending point will be based off the angle

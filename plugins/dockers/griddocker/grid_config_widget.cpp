@@ -69,6 +69,7 @@ GridConfigWidget::GridConfigWidget(QWidget *parent) :
     connect(ui->chkLockGuides, SIGNAL(stateChanged(int)), SLOT(slotGuidesGuiChanged()));
 
     connect(ui->intSubdivision, SIGNAL(valueChanged(int)), SLOT(slotGridGuiChanged()));
+    connect(ui->angleSpinbox, SIGNAL(valueChanged(int)), SLOT(slotGridGuiChanged()));
 
     connect(ui->selectMainStyle, SIGNAL(currentIndexChanged(int)), SLOT(slotGridGuiChanged()));
     connect(ui->colorMain, SIGNAL(changed(const QColor&)), SLOT(slotGridGuiChanged()));
@@ -127,6 +128,8 @@ void GridConfigWidget::setGridConfigImpl(const KisGridConfig &value)
     ui->intXOffset->setValue(m_d->gridConfig.offset().x());
     ui->intYOffset->setValue(m_d->gridConfig.offset().y());
     ui->intSubdivision->setValue(m_d->gridConfig.subdivision());
+
+     ui->angleSpinbox->setValue(m_d->gridConfig.angle());
 
     ui->selectMainStyle->setCurrentIndex(int(m_d->gridConfig.lineTypeMain()));
     ui->selectSubdivisionStyle->setCurrentIndex(int(m_d->gridConfig.lineTypeSubdivision()));
@@ -190,6 +193,7 @@ KisGridConfig GridConfigWidget::fetchGuiGridConfig() const
     config.setOffset(pt);
 
     config.setSubdivision(ui->intSubdivision->value());
+    config.setAngle(ui->angleSpinbox->value());
 
     config.setOffsetAspectLocked(ui->offsetAspectButton->keepAspectRatio());
     config.setSpacingAspectLocked(ui->spacingAspectButton->keepAspectRatio());

@@ -46,6 +46,7 @@ public:
           m_offsetAspectLocked(true),
           m_spacingAspectLocked(true),
           m_subdivision(2),
+          m_angle(-50),
           m_lineTypeMain(LINE_SOLID),
           m_lineTypeSubdivision(LINE_DOTTED),
           m_colorMain(200, 200, 200, 200),
@@ -63,6 +64,7 @@ public:
             m_offsetAspectLocked == rhs.m_offsetAspectLocked &&
             m_spacingAspectLocked == rhs.m_spacingAspectLocked &&
             m_subdivision == rhs.m_subdivision &&
+            m_angle == rhs.m_angle &&
             m_lineTypeMain == rhs.m_lineTypeMain &&
             m_lineTypeSubdivision == rhs.m_lineTypeSubdivision &&
             m_colorMain == rhs.m_colorMain &&
@@ -103,6 +105,15 @@ public:
     void setSubdivision(int value) {
         m_subdivision = value;
     }
+
+    int angle() const {
+        return m_angle;
+    }
+    void setAngle(int angle) {
+        m_angle = angle;
+    }
+
+
 
     bool offsetAspectLocked() const {
         return m_offsetAspectLocked;
@@ -179,6 +190,8 @@ private:
 
     bool m_showGrid;
     bool m_snapToGrid;
+
+    int m_angle;
 
     QPoint m_offset;
     QPoint m_spacing;

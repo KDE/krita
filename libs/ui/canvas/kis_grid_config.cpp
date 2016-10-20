@@ -69,6 +69,9 @@ QDomElement KisGridConfig::saveDynamicDataToXml(QDomDocument& doc, const QString
     KisDomUtils::saveValue(&gridElement, "offsetAspectLocked", m_offsetAspectLocked);
     KisDomUtils::saveValue(&gridElement, "spacingAspectLocked", m_spacingAspectLocked);
     KisDomUtils::saveValue(&gridElement, "subdivision", m_subdivision);
+        KisDomUtils::saveValue(&gridElement, "angle", m_angle);
+
+
     return gridElement;
 }
 
@@ -83,6 +86,7 @@ bool KisGridConfig::loadDynamicDataFromXml(const QDomElement &gridElement)
     result &= KisDomUtils::loadValue(gridElement, "offsetAspectLocked", &m_offsetAspectLocked);
     result &= KisDomUtils::loadValue(gridElement, "spacingAspectLocked", &m_spacingAspectLocked);
     result &= KisDomUtils::loadValue(gridElement, "subdivision", &m_subdivision);
+    result &= KisDomUtils::loadValue(gridElement, "angle", &m_angle);
 
     return result;
 }

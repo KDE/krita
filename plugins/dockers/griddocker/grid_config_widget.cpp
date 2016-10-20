@@ -45,6 +45,11 @@ GridConfigWidget::GridConfigWidget(QWidget *parent) :
     ui->colorSubdivision->setAlphaChannelEnabled(true);
     ui->colorGuides->setAlphaChannelEnabled(true);
 
+
+    ui->angleLeftSpinbox->setSuffix(QChar(Qt::Key_degree));
+    ui->angleRightSpinbox->setSuffix(QChar(Qt::Key_degree));
+    ui->cellSpacingSpinbox->setSuffix(i18n(" px"));
+
     setGridConfig(m_d->gridConfig);
     setGuidesConfig(m_d->guidesConfig);
 
@@ -69,7 +74,11 @@ GridConfigWidget::GridConfigWidget(QWidget *parent) :
     connect(ui->chkLockGuides, SIGNAL(stateChanged(int)), SLOT(slotGuidesGuiChanged()));
 
     connect(ui->intSubdivision, SIGNAL(valueChanged(int)), SLOT(slotGridGuiChanged()));
-    connect(ui->angleSpinbox, SIGNAL(valueChanged(int)), SLOT(slotGridGuiChanged()));
+    connect(ui->angleLeftSpinbox, SIGNAL(valueChanged(int)), SLOT(slotGridGuiChanged()));
+    connect(ui->angleRightSpinbox, SIGNAL(valueChanged(int)), SLOT(slotGridGuiChanged()));
+    connect(ui->cellSpacingSpinbox, SIGNAL(valueChanged(int)), SLOT(slotGridGuiChanged()));
+
+
 
     connect(ui->selectMainStyle, SIGNAL(currentIndexChanged(int)), SLOT(slotGridGuiChanged()));
     connect(ui->colorMain, SIGNAL(changed(const QColor&)), SLOT(slotGridGuiChanged()));
@@ -129,7 +138,9 @@ void GridConfigWidget::setGridConfigImpl(const KisGridConfig &value)
     ui->intYOffset->setValue(m_d->gridConfig.offset().y());
     ui->intSubdivision->setValue(m_d->gridConfig.subdivision());
 
-     ui->angleSpinbox->setValue(m_d->gridConfig.angle());
+    ui->angleLeftSpinbox->setValue(m_d->gridConfig.angleLeft());
+    ui->angleRightSpinbox->setValue(m_d->gridConfig.angleRight());
+    ui->cellSpacingSpinbox->setValue(m_d->gridConfig.cellSpacing());
 
     ui->selectMainStyle->setCurrentIndex(int(m_d->gridConfig.lineTypeMain()));
     ui->selectSubdivisionStyle->setCurrentIndex(int(m_d->gridConfig.lineTypeSubdivision()));
@@ -193,7 +204,9 @@ KisGridConfig GridConfigWidget::fetchGuiGridConfig() const
     config.setOffset(pt);
 
     config.setSubdivision(ui->intSubdivision->value());
-    config.setAngle(ui->angleSpinbox->value());
+    config.setAngleLeft(ui->angleLeftSpinbox->value());
+    config.setAngleRight(ui->angleRightSpinbox->value());
+    config.setCellSpacing(ui->cellSpacingSpinbox->value());
 
     config.setOffsetAspectLocked(ui->offsetAspectButton->keepAspectRatio());
     config.setSpacingAspectLocked(ui->spacingAspectButton->keepAspectRatio());

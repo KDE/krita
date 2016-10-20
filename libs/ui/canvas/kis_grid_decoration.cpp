@@ -139,22 +139,22 @@ void KisGridDecoration::drawDecoration(QPainter& gc, const QRectF& updateArea, c
         const int offset = m_d->config.offset().y();
         const int step = scaleCoeff * m_d->config.spacing().y();
         const int lineIndexFirst = qCeil((y1 - offset) / step);
-
-
-        int bottomRightOfImageY = y2;
+        const int cellSpacing = m_d->config.cellSpacing();
 
         gc.setClipping(true);
         gc.setClipRect(imageRect, Qt::IntersectClip);
 
+
         // left angle
         {
-            int gridXAngle = m_d->config.angle();
+            int gridXAngle = m_d->config.angleLeft();
             int counter = lineIndexFirst;
+            int bottomRightOfImageY = y2; // this should be the height of the image
             int finalY = 0;
 
             while (finalY < bottomRightOfImageY) {
 
-                int w = offset + counter * step;
+                int w = counter * cellSpacing;
                 gc.setPen(mainPen);
 
                 // calculate where the ending point will be based off the angle
@@ -170,8 +170,31 @@ void KisGridDecoration::drawDecoration(QPainter& gc, const QRectF& updateArea, c
             }
         }
 
-        // right angle
-        // TODO: something similar but in the other direction
+
+        // right angle (almost the same thing, except starting the lines on the right side)
+        {
+            int gridXAngle = m_d->config.angleRight(); // TODO: add another angle property
+            int counter = lineIndexFirst;
+            int bottomLeftOfImageY = y2;
+            int finalY = 0;
+
+            while (finalY < bottomLeftOfImageY) {
+
+                int w = counter * cellSpacing;
+                gc.setPen(mainPen);
+
+                // calculate where the ending point will be based off the angle
+                int startingY = w;
+                int horizontalDistance = x2; // distance is the same (width of the image)
+
+                int length2 = qTan( qDegreesToRadians((float)gridXAngle)) * horizontalDistance; // qTan takes radians, so convert first before sending it
+
+                finalY = startingY - length2;
+                gc.drawLine(QPointF(x2, w),QPointF(0, finalY));
+
+                counter = counter +1;
+            }
+        }
 
 
     }

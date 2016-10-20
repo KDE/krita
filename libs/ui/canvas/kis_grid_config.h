@@ -45,8 +45,10 @@ public:
           m_spacing(20,20),
           m_offsetAspectLocked(true),
           m_spacingAspectLocked(true),
+          m_angleLeft(45),
+          m_angleRight(45),
+          m_cellSpacing(30),
           m_subdivision(2),
-          m_angle(-50),
           m_lineTypeMain(LINE_SOLID),
           m_lineTypeSubdivision(LINE_DOTTED),
           m_colorMain(200, 200, 200, 200),
@@ -63,8 +65,10 @@ public:
             m_offset == rhs.m_offset &&
             m_offsetAspectLocked == rhs.m_offsetAspectLocked &&
             m_spacingAspectLocked == rhs.m_spacingAspectLocked &&
+            m_angleRight == rhs.m_angleRight &&
+            m_angleLeft == rhs.m_angleLeft &&
+            m_cellSpacing == rhs.m_cellSpacing &&
             m_subdivision == rhs.m_subdivision &&
-            m_angle == rhs.m_angle &&
             m_lineTypeMain == rhs.m_lineTypeMain &&
             m_lineTypeSubdivision == rhs.m_lineTypeSubdivision &&
             m_colorMain == rhs.m_colorMain &&
@@ -106,12 +110,29 @@ public:
         m_subdivision = value;
     }
 
-    int angle() const {
-        return m_angle;
+    int angleLeft() const {
+        return m_angleLeft;
     }
-    void setAngle(int angle) {
-        m_angle = angle;
+    void setAngleLeft(int angle) {
+        m_angleLeft = angle;
     }
+
+    int angleRight() const {
+        return m_angleRight;
+    }
+
+    void setAngleRight(int angle) {
+        m_angleRight = angle;
+    }
+
+
+    int cellSpacing() const {
+        return m_cellSpacing;
+    }
+    void setCellSpacing(int spacing) {
+        m_cellSpacing = spacing;
+    }
+
 
 
 
@@ -191,7 +212,9 @@ private:
     bool m_showGrid;
     bool m_snapToGrid;
 
-    int m_angle;
+    int m_angleLeft;
+    int m_angleRight;
+    int m_cellSpacing;
 
     QPoint m_offset;
     QPoint m_spacing;

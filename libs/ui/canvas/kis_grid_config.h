@@ -48,6 +48,7 @@ public:
           m_angleLeft(45),
           m_angleRight(45),
           m_cellSpacing(30),
+          m_gridType(0),
           m_subdivision(2),
           m_lineTypeMain(LINE_SOLID),
           m_lineTypeSubdivision(LINE_DOTTED),
@@ -67,6 +68,7 @@ public:
             m_spacingAspectLocked == rhs.m_spacingAspectLocked &&
             m_angleRight == rhs.m_angleRight &&
             m_angleLeft == rhs.m_angleLeft &&
+            m_gridType == rhs.m_gridType &&
             m_cellSpacing == rhs.m_cellSpacing &&
             m_subdivision == rhs.m_subdivision &&
             m_lineTypeMain == rhs.m_lineTypeMain &&
@@ -133,7 +135,12 @@ public:
         m_cellSpacing = spacing;
     }
 
-
+    int gridType() const {
+        return m_gridType;
+    }
+    void setGridType(int type) {
+        m_gridType = type;
+    }
 
 
     bool offsetAspectLocked() const {
@@ -212,6 +219,7 @@ private:
     bool m_showGrid;
     bool m_snapToGrid;
 
+    int m_gridType; // 0 is rectangle, 1 is isometric
     int m_angleLeft;
     int m_angleRight;
     int m_cellSpacing;

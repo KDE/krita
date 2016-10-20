@@ -50,6 +50,16 @@ GridConfigWidget::GridConfigWidget(QWidget *parent) :
     ui->angleRightSpinbox->setSuffix(QChar(Qt::Key_degree));
     ui->cellSpacingSpinbox->setSuffix(i18n(" px"));
 
+
+    ui->gridTypeCombobox->addItem(i18n("Rectangle"));
+    ui->gridTypeCombobox->addItem(i18n("Isometric"));
+    ui->isometricOptionsContainer->setVisible(false);
+    ui->rectangleOptionsContainer->setVisible(true);
+
+
+    connect(ui->gridTypeCombobox, SIGNAL(currentIndexChanged(int)), SLOT(slotGridTypeChanged()));
+
+
     setGridConfig(m_d->gridConfig);
     setGuidesConfig(m_d->guidesConfig);
 
@@ -142,8 +152,10 @@ void GridConfigWidget::setGridConfigImpl(const KisGridConfig &value)
     ui->angleRightSpinbox->setValue(m_d->gridConfig.angleRight());
     ui->cellSpacingSpinbox->setValue(m_d->gridConfig.cellSpacing());
 
+
     ui->selectMainStyle->setCurrentIndex(int(m_d->gridConfig.lineTypeMain()));
     ui->selectSubdivisionStyle->setCurrentIndex(int(m_d->gridConfig.lineTypeSubdivision()));
+    ui->gridTypeCombobox->setCurrentIndex(m_d->gridConfig.gridType());
 
     ui->colorMain->setColor(m_d->gridConfig.colorMain());
     ui->colorSubdivision->setColor(m_d->gridConfig.colorSubdivision());
@@ -207,6 +219,7 @@ KisGridConfig GridConfigWidget::fetchGuiGridConfig() const
     config.setAngleLeft(ui->angleLeftSpinbox->value());
     config.setAngleRight(ui->angleRightSpinbox->value());
     config.setCellSpacing(ui->cellSpacingSpinbox->value());
+    config.setGridType(ui->gridTypeCombobox->currentIndex());
 
     config.setOffsetAspectLocked(ui->offsetAspectButton->keepAspectRatio());
     config.setSpacingAspectLocked(ui->spacingAspectButton->keepAspectRatio());
@@ -252,4 +265,17 @@ void GridConfigWidget::slotGuidesGuiChanged()
     if (currentConfig == m_d->guidesConfig) return;
 
     setGuidesConfigImpl(currentConfig);
+}
+
+void GridConfigWidget::slotGridTypeChanged() {
+
+    if (ui->gridTypeCombobox->currentIndex() == 0) { // rectangle
+        ui->isometricOptionsContainer->setVisible(false);
+        ui->rectangleOptionsContainer->setVisible(true);
+    } else { // isometric
+       ui->isometricOptionsContainer->setVisible(true);
+        ui->rectangleOptionsContainer->setVisible(false);
+    }
+
+     slotGridGuiChanged();
 }

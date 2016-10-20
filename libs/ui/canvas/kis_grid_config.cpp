@@ -72,8 +72,7 @@ QDomElement KisGridConfig::saveDynamicDataToXml(QDomDocument& doc, const QString
     KisDomUtils::saveValue(&gridElement, "angleLeft", m_angleLeft);
     KisDomUtils::saveValue(&gridElement, "angleRight", m_angleRight);
     KisDomUtils::saveValue(&gridElement, "cellSpacing", m_cellSpacing);
-
-
+    KisDomUtils::saveValue(&gridElement, "gridType", m_gridType);
 
 
     return gridElement;
@@ -92,7 +91,7 @@ bool KisGridConfig::loadDynamicDataFromXml(const QDomElement &gridElement)
     result &= KisDomUtils::loadValue(gridElement, "subdivision", &m_subdivision);
     result &= KisDomUtils::loadValue(gridElement, "angleLeft", &m_angleLeft);
     result &= KisDomUtils::loadValue(gridElement, "angleRight", &m_angleRight);
-    result &= KisDomUtils::loadValue(gridElement, "cellSpacing", &m_cellSpacing);
+    result &= KisDomUtils::loadValue(gridElement, "gridType", &m_gridType);
 
     return result;
 }

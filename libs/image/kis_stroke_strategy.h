@@ -81,6 +81,8 @@ public:
      */
     bool canForgetAboutMe() const;
 
+    bool needsExplicitCancel() const;
+
     QString id() const;
     KUndo2MagicString name() const;
 
@@ -110,6 +112,7 @@ protected:
     void setClearsRedoOnStart(bool value);
     void setRequestsOtherStrokesToEnd(bool value);
     void setCanForgetAboutMe(bool value);
+    void setNeedsExplicitCancel(bool value);
 
 protected:
     /**
@@ -125,6 +128,7 @@ private:
     bool m_clearsRedoOnStart;
     bool m_requestsOtherStrokesToEnd;
     bool m_canForgetAboutMe;
+    bool m_needsExplicitCancel;
 
     QString m_id;
     KUndo2MagicString m_name;

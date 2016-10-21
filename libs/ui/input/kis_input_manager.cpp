@@ -559,9 +559,9 @@ QTouchEvent *KisInputManager::lastTouchEvent() const
 
 void KisInputManager::slotToolChanged()
 {
-    auto toolManager = KoToolManager::instance();
-    auto tool = toolManager->toolById(canvas(), toolManager->activeToolId());
-    if (tool->isInTextMode()) {
+    KoToolManager *toolManager = KoToolManager::instance();
+    KoToolBase *tool = toolManager->toolById(canvas(), toolManager->activeToolId());
+    if (tool && tool->isInTextMode()) {
         d->forwardAllEventsToTool = true;
         d->matcher.suppressAllActions(true);
     } else {

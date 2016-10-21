@@ -13,7 +13,7 @@ endif()
 set(MIN_FRAMEWORKS_VERSION 5.7.0)
 
 if (POLICY CMP0002)
-    cmake_policy(SET CMP0002 NEW)
+    cmake_policy(SET CMP0002 OLD)
 endif()
 
 if (POLICY CMP0017)

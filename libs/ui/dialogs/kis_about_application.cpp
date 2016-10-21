@@ -158,9 +158,11 @@ KisAboutApplication::KisAboutApplication(QWidget *parent)
     connect(bnClose, SIGNAL(clicked()), SLOT(close()));
 
     QHBoxLayout *hlayout = new QHBoxLayout;
-    hlayout->setMargin(0);
+    hlayout->setMargin(10);
     hlayout->addStretch(10);
     hlayout->addWidget(bnClose);
+
+
 
     vlayout->addLayout(hlayout);
 }

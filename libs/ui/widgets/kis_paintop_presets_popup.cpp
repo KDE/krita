@@ -270,11 +270,24 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
 
    connect(qApp, SIGNAL(focusChanged(QWidget*,QWidget*)), this, SLOT(slotFocusChanged(QWidget*,QWidget*)));
 
+   connect(qApp, SIGNAL(applicationStateChanged(Qt::ApplicationState)), this, SLOT(slotApplicationStateChanged(Qt::ApplicationState)));
 
 
 
 
 }
+
+
+void KisPaintOpPresetsPopup::slotApplicationStateChanged(Qt::ApplicationState state)
+{
+    // if the entire application loses focus, let's always hide the brush editor so it doesn't become a pest
+    // this situation get annoying especially if someone minimizes the application
+    // and the brush editor is still showing and won't disappear when clicking around the desktop
+    if (state == Qt::ApplicationInactive && parentWidget()) {
+        parentWidget()->hide();
+    }
+}
+
 
 void KisPaintOpPresetsPopup::slotFocusChanged(QWidget* object1, QWidget* object2)
 {

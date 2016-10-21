@@ -172,6 +172,12 @@ void KisStroke::cancelStroke()
     m_strokeEnded = true;
 }
 
+bool KisStroke::canCancel() const
+{
+    return m_isCancelled || !m_strokeInitialized ||
+        !m_jobsQueue.isEmpty() || !m_strokeEnded;
+}
+
 bool KisStroke::sanityCheckAllJobsAreCancellable() const
 {
     Q_FOREACH (KisStrokeJob *item, m_jobsQueue) {

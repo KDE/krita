@@ -63,7 +63,6 @@ public:
                    KisImageWSP image,
                    KisNodeSP currentNode,
                    KisStrokesFacade *strokesFacade,
-                   KisPostExecutionUndoAdapter *undoAdapter,
                    KisNodeSP overrideNode = 0,
                    KisDefaultBoundsBaseSP bounds = 0);
     void paint(KoPointerEvent *event);
@@ -96,7 +95,6 @@ protected:
                        KisImageWSP image,
                        KisNodeSP node,
                        KisStrokesFacade *strokesFacade,
-                       KisPostExecutionUndoAdapter *undoAdapter,
                        KisNodeSP overrideNode = 0,
                        KisDefaultBoundsBaseSP bounds = 0);
 

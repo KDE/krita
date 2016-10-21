@@ -47,7 +47,6 @@ struct KisResourcesSnapshot::Private {
 
     KisImageSP image;
     KisDefaultBoundsBaseSP bounds;
-    KisPostExecutionUndoAdapter *undoAdapter;
     KoColor currentFgColor;
     KoColor currentBgColor;
     KoPattern *currentPattern;
@@ -74,7 +73,7 @@ struct KisResourcesSnapshot::Private {
     KisSelectionSP selectionOverride;
 };
 
-KisResourcesSnapshot::KisResourcesSnapshot(KisImageSP image, KisNodeSP currentNode, KisPostExecutionUndoAdapter *undoAdapter, KoCanvasResourceManager *resourceManager, KisDefaultBoundsBaseSP bounds)
+KisResourcesSnapshot::KisResourcesSnapshot(KisImageSP image, KisNodeSP currentNode, KoCanvasResourceManager *resourceManager, KisDefaultBoundsBaseSP bounds)
     : m_d(new Private())
 {
     m_d->image = image;
@@ -82,7 +81,6 @@ KisResourcesSnapshot::KisResourcesSnapshot(KisImageSP image, KisNodeSP currentNo
         bounds = new KisDefaultBounds(m_d->image);
     }
     m_d->bounds = bounds;
-    m_d->undoAdapter = undoAdapter;
     m_d->currentFgColor = resourceManager->resource(KoCanvasResourceManager::ForegroundColor).value<KoColor>();
     m_d->currentBgColor = resourceManager->resource(KoCanvasResourceManager::BackgroundColor).value<KoColor>();
     m_d->currentPattern = resourceManager->resource(KisCanvasResourceProvider::CurrentPattern).value<KoPattern*>();
@@ -185,7 +183,7 @@ void KisResourcesSnapshot::setupPaintAction(KisRecordedPaintAction *action)
 
 KisPostExecutionUndoAdapter* KisResourcesSnapshot::postExecutionUndoAdapter() const
 {
-    return m_d->undoAdapter;
+    return m_d->image ? m_d->image->postExecutionUndoAdapter() : 0;
 }
 
 void KisResourcesSnapshot::setCurrentNode(KisNodeSP node)

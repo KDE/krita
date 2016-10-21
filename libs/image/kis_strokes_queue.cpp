@@ -25,20 +25,65 @@
 #include "kis_updater_context.h"
 #include "kis_stroke_job_strategy.h"
 #include "kis_stroke_strategy.h"
+#include "kis_undo_stores.h"
+#include "kis_post_execution_undo_adapter.h"
 
 typedef QQueue<KisStrokeSP> StrokesQueue;
 typedef QQueue<KisStrokeSP>::iterator StrokesQueueIterator;
 
+#include "kis_image_interfaces.h"
+class KisStrokesQueue::LodNUndoStrokesFacade : public KisStrokesFacade
+{
+public:
+    LodNUndoStrokesFacade(KisStrokesQueue *_q) : q(_q) {}
+
+    KisStrokeId startStroke(KisStrokeStrategy *strokeStrategy) override {
+        return q->startLodNUndoStroke(strokeStrategy);
+    }
+
+    void addJob(KisStrokeId id, KisStrokeJobData *data) override {
+        KisStrokeSP stroke = id.toStrongRef();
+        KIS_SAFE_ASSERT_RECOVER_NOOP(stroke);
+        KIS_SAFE_ASSERT_RECOVER_NOOP(!stroke->lodBuddy());
+        KIS_SAFE_ASSERT_RECOVER_NOOP(stroke->type() == KisStroke::LODN);
+
+        q->addJob(id, data);
+    }
+
+    void endStroke(KisStrokeId id) override {
+        KisStrokeSP stroke = id.toStrongRef();
+        KIS_SAFE_ASSERT_RECOVER_NOOP(stroke);
+        KIS_SAFE_ASSERT_RECOVER_NOOP(!stroke->lodBuddy());
+        KIS_SAFE_ASSERT_RECOVER_NOOP(stroke->type() == KisStroke::LODN);
+
+        q->endStroke(id);
+    }
+
+    bool cancelStroke(KisStrokeId id) override {
+        Q_UNUSED(id);
+        qFatal("Not implemented");
+        return false;
+    }
+
+private:
+    KisStrokesQueue *q;
+};
+
+
 struct Q_DECL_HIDDEN KisStrokesQueue::Private {
-    Private()
-        : openedStrokesCounter(0),
+    Private(KisStrokesQueue *_q)
+        : q(_q),
+          openedStrokesCounter(0),
           needsExclusiveAccess(false),
           wrapAroundModeSupported(false),
           currentStrokeLoaded(false),
           lodNNeedsSynchronization(true),
           desiredLevelOfDetail(0),
-          nextDesiredLevelOfDetail(0) {}
+          nextDesiredLevelOfDetail(0),
+          lodNStrokesFacade(_q),
+          lodNPostExecutionUndoAdapter(&lodNUndoStore, &lodNStrokesFacade) {}
 
+    KisStrokesQueue *q;
     StrokesQueue strokesQueue;
     int openedStrokesCounter;
     bool needsExclusiveAccess;
@@ -52,6 +97,9 @@ struct Q_DECL_HIDDEN KisStrokesQueue::Private {
     KisLodSyncStrokeStrategyFactory lod0ToNStrokeStrategyFactory;
     KisSuspendResumeStrategyFactory suspendUpdatesStrokeStrategyFactory;
     KisSuspendResumeStrategyFactory resumeUpdatesStrokeStrategyFactory;
+    KisSurrogateUndoStore lodNUndoStore;
+    LodNUndoStrokesFacade lodNStrokesFacade;
+    KisPostExecutionUndoAdapter lodNPostExecutionUndoAdapter;
 
     void cancelForgettableStrokes();
     void startLod0ToNStroke(int levelOfDetail, bool forgettable);
@@ -63,11 +111,12 @@ struct Q_DECL_HIDDEN KisStrokesQueue::Private {
 
     void switchDesiredLevelOfDetail(bool forced);
     bool hasUnfinishedStrokes() const;
+    void tryClearUndoOnStrokeCompletion(KisStrokeSP finishingStroke);
 };
 
 
 KisStrokesQueue::KisStrokesQueue()
-  : m_d(new Private)
+  : m_d(new Private(this))
 {
 }
 
@@ -209,6 +258,23 @@ StrokesQueueIterator KisStrokesQueue::Private::findNewLodNPos(KisStrokeSP lodN)
     }
 
     return it;
+}
+
+KisStrokeId KisStrokesQueue::startLodNUndoStroke(KisStrokeStrategy *strokeStrategy)
+{
+    QMutexLocker locker(&m_d->mutex);
+
+    KIS_SAFE_ASSERT_RECOVER_NOOP(!m_d->lodNNeedsSynchronization);
+    KIS_SAFE_ASSERT_RECOVER_NOOP(m_d->desiredLevelOfDetail > 0);
+
+    KisStrokeSP buddy(new KisStroke(strokeStrategy, KisStroke::LODN, m_d->desiredLevelOfDetail));
+    strokeStrategy->setCancelStrokeId(buddy);
+    m_d->strokesQueue.insert(m_d->findNewLodNPos(buddy), buddy);
+
+    KisStrokeId id(buddy);
+    m_d->openedStrokesCounter++;
+
+    return id;
 }
 
 KisStrokeId KisStrokesQueue::startStroke(KisStrokeStrategy *strokeStrategy)
@@ -372,6 +438,101 @@ bool KisStrokesQueue::tryCancelCurrentStrokeAsync()
     return anythingCanceled;
 }
 
+UndoResult KisStrokesQueue::tryUndoLastStrokeAsync()
+{
+    UndoResult result = UNDO_FAIL;
+
+    QMutexLocker locker(&m_d->mutex);
+
+    std::reverse_iterator<StrokesQueue::ConstIterator> it(m_d->strokesQueue.constEnd());
+    std::reverse_iterator<StrokesQueue::ConstIterator> end(m_d->strokesQueue.constBegin());
+
+    KisStrokeSP lastStroke;
+    KisStrokeSP lastBuddy;
+    bool buddyFound = false;
+
+    for (; it != end; ++it) {
+        if ((*it)->type() == KisStroke::LEGACY) {
+            break;
+        }
+
+        if (!lastStroke && (*it)->type() == KisStroke::LOD0 && !(*it)->isCancelled()) {
+            lastStroke = *it;
+            lastBuddy = lastStroke->lodBuddy();
+
+            KIS_SAFE_ASSERT_RECOVER(lastBuddy) {
+                lastStroke.clear();
+                lastBuddy.clear();
+                break;
+            }
+        }
+
+        KIS_SAFE_ASSERT_RECOVER(!lastStroke || *it == lastBuddy || (*it)->type() != KisStroke::LODN) {
+            lastStroke.clear();
+            lastBuddy.clear();
+            break;
+        }
+
+        if (lastStroke && *it == lastBuddy) {
+            KIS_SAFE_ASSERT_RECOVER(lastBuddy->type() == KisStroke::LODN) {
+                lastStroke.clear();
+                lastBuddy.clear();
+                break;
+            }
+            buddyFound = true;
+            break;
+        }
+    }
+
+    if (!lastStroke) return UNDO_FAIL;
+    if (!lastStroke->isEnded()) return UNDO_FAIL;
+    if (lastStroke->isCancelled()) return UNDO_FAIL;
+
+    KIS_SAFE_ASSERT_RECOVER_NOOP(!buddyFound ||
+                                 lastStroke->isCancelled() == lastBuddy->isCancelled());
+    KIS_SAFE_ASSERT_RECOVER_NOOP(lastBuddy->isEnded());
+
+    if (!lastStroke->canCancel()) {
+        return UNDO_WAIT;
+    }
+    lastStroke->cancelStroke();
+
+    if (buddyFound && lastBuddy->canCancel()) {
+        lastBuddy->cancelStroke();
+    } else {
+        // TODO: assert that checks that there is no other lodn strokes
+        locker.unlock();
+        m_d->lodNUndoStore.undo();
+        m_d->lodNUndoStore.purgeRedoState();
+        locker.relock();
+    }
+
+    result = UNDO_OK;
+
+    return result;
+}
+
+void KisStrokesQueue::Private::tryClearUndoOnStrokeCompletion(KisStrokeSP finishingStroke)
+{
+    if (finishingStroke->type() != KisStroke::RESUME) return;
+
+    bool hasResumeStrokes = false;
+    bool hasLod0Strokes = false;
+
+    Q_FOREACH (KisStrokeSP stroke, strokesQueue) {
+        if (stroke == finishingStroke) continue;
+
+        hasLod0Strokes |= stroke->type() == KisStroke::LOD0;
+        hasResumeStrokes |= stroke->type() == KisStroke::RESUME;
+    }
+
+    KIS_SAFE_ASSERT_RECOVER_NOOP(!hasLod0Strokes || hasResumeStrokes);
+
+    if (!hasResumeStrokes && !hasLod0Strokes) {
+        lodNUndoStore.clear();
+    }
+}
+
 void KisStrokesQueue::processQueue(KisUpdaterContext &updaterContext,
                                    bool externalJobsPending)
 {
@@ -455,6 +616,17 @@ void KisStrokesQueue::notifyUFOChangedImage()
     m_d->lodNNeedsSynchronization = true;
 }
 
+void KisStrokesQueue::debugDumpAllStrokes()
+{
+    QMutexLocker locker(&m_d->mutex);
+
+    qDebug() <<"===";
+    Q_FOREACH (KisStrokeSP stroke, m_d->strokesQueue) {
+        qDebug() << ppVar(stroke->name()) << ppVar(stroke->type()) << ppVar(stroke->numJobs()) << ppVar(stroke->isInitialized()) << ppVar(stroke->isCancelled());
+    }
+    qDebug() <<"===";
+}
+
 void KisStrokesQueue::setLod0ToNStrokeStrategyFactory(const KisLodSyncStrokeStrategyFactory &factory)
 {
     m_d->lod0ToNStrokeStrategyFactory = factory;
@@ -468,6 +640,11 @@ void KisStrokesQueue::setSuspendUpdatesStrokeStrategyFactory(const KisSuspendRes
 void KisStrokesQueue::setResumeUpdatesStrokeStrategyFactory(const KisSuspendResumeStrategyFactory &factory)
 {
     m_d->resumeUpdatesStrokeStrategyFactory = factory;
+}
+
+KisPostExecutionUndoAdapter *KisStrokesQueue::lodNPostExecutionUndoAdapter() const
+{
+    return &m_d->lodNPostExecutionUndoAdapter;
 }
 
 KUndo2MagicString KisStrokesQueue::currentStrokeName() const
@@ -560,6 +737,8 @@ bool KisStrokesQueue::checkStrokeState(bool hasStrokeJobsRunning,
         result = true;
     }
     else if(stroke->isEnded() && !hasJobs && !hasStrokeJobsRunning) {
+        m_d->tryClearUndoOnStrokeCompletion(stroke);
+
         m_d->strokesQueue.dequeue(); // deleted by shared pointer
         m_d->needsExclusiveAccess = false;
         m_d->wrapAroundModeSupported = false;

@@ -1050,7 +1050,10 @@ QRect KisImage::effectiveLodBounds() const
 
 KisPostExecutionUndoAdapter* KisImage::postExecutionUndoAdapter() const
 {
-    return &m_d->postExecutionUndoAdapter;
+    const int lod = currentLevelOfDetail();
+    return lod > 0 ?
+        m_d->scheduler.lodNPostExecutionUndoAdapter() :
+        &m_d->postExecutionUndoAdapter;
 }
 
 void KisImage::setUndoStore(KisUndoStore *undoStore)
@@ -1297,6 +1300,11 @@ void KisImage::requestStrokeCancellation()
     if (!m_d->tryCancelCurrentStrokeAsync()) {
         emit sigStrokeCancellationRequested();
     }
+}
+
+UndoResult KisImage::tryUndoUnfinishedLod0Stroke()
+{
+    return m_d->scheduler.tryUndoLastStrokeAsync();
 }
 
 void KisImage::requestStrokeEnd()

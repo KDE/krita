@@ -266,15 +266,12 @@ void KisFilterManager::apply(KisFilterConfigurationSP filterConfig)
         applyRect |= image->bounds();
     }
 
-    KisPostExecutionUndoAdapter *undoAdapter =
-        image->postExecutionUndoAdapter();
     KoCanvasResourceManager *resourceManager =
         d->view->resourceProvider()->resourceManager();
 
     KisResourcesSnapshotSP resources =
         new KisResourcesSnapshot(image,
                                  d->view->activeNode(),
-                                 undoAdapter,
                                  resourceManager);
 
     d->currentStrokeId =

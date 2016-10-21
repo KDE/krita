@@ -145,6 +145,5 @@ KisStrokeStrategy* FreehandStrokeStrategy::createLodClone(int levelOfDetail)
     if (!m_d->resources->presetAllowsLod()) return 0;
 
     FreehandStrokeStrategy *clone = new FreehandStrokeStrategy(*this, levelOfDetail);
-    clone->setUndoEnabled(false);
     return clone;
 }

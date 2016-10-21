@@ -215,6 +215,11 @@ public:
     void undo() override {
         KisImageWSP image = this->image();
         image->requestUndoDuringStroke();
+
+        if (image->tryUndoUnfinishedLod0Stroke() == UNDO_OK) {
+            return;
+        }
+
         if(image->tryBarrierLock()) {
             KUndo2Stack::undo();
             image->unlock();

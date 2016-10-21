@@ -38,7 +38,6 @@ KisFigurePaintingToolHelper::KisFigurePaintingToolHelper(const KUndo2MagicString
     m_resources =
         new KisResourcesSnapshot(image,
                                  currentNode,
-                                 image->postExecutionUndoAdapter(),
                                  resourceManager);
 
     m_resources->setStrokeStyle(strokeStyle);

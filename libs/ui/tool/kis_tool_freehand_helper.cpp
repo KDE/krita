@@ -189,7 +189,6 @@ void KisToolFreehandHelper::initPaint(KoPointerEvent *event,
                                       KoCanvasResourceManager *resourceManager,
                                       KisImageWSP image, KisNodeSP currentNode,
                                       KisStrokesFacade *strokesFacade,
-                                      KisPostExecutionUndoAdapter *undoAdapter,
                                       KisNodeSP overrideNode,
                                       KisDefaultBoundsBaseSP bounds)
 {
@@ -201,7 +200,6 @@ void KisToolFreehandHelper::initPaint(KoPointerEvent *event,
                   image,
                   currentNode,
                   strokesFacade,
-                  undoAdapter,
                   overrideNode,
                   bounds);
 }
@@ -216,7 +214,6 @@ void KisToolFreehandHelper::initPaintImpl(const KisPaintInformation &previousPai
                                           KisImageWSP image,
                                           KisNodeSP currentNode,
                                           KisStrokesFacade *strokesFacade,
-                                          KisPostExecutionUndoAdapter *undoAdapter,
                                           KisNodeSP overrideNode,
                                           KisDefaultBoundsBaseSP bounds)
 {
@@ -239,7 +236,6 @@ void KisToolFreehandHelper::initPaintImpl(const KisPaintInformation &previousPai
 
     m_d->resources = new KisResourcesSnapshot(image,
                                               currentNode,
-                                              undoAdapter,
                                               resourceManager,
                                               bounds);
 

@@ -113,6 +113,7 @@ private Q_SLOTS:
     void slotPinWindow(bool enabled);
     void slotPaintOpChanged(int index);
     void slotFocusChanged(QWidget* object1, QWidget* object2);
+    void slotApplicationStateChanged(Qt::ApplicationState);
 
 
 private:

@@ -98,7 +98,7 @@ void LabeledWidget::enterEvent(QEvent *event)
 
 void LabeledWidget::setWarningText(int pos, const QString &warning)
 {
-    if ((m_warningLabel[pos] == 0)) {
+    if (m_warningLabel[pos] == 0) {
         return;
     }
     m_warningLabel[pos]->setText(warning);

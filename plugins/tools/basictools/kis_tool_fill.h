@@ -98,7 +98,8 @@ public:
     KisToolFillFactory()
             : KoToolFactoryBase("KritaFill/KisToolFill") {
         setToolTip(i18n("Fill Tool"));
-        setToolType(TOOL_TYPE_FILL);
+        setSection(TOOL_TYPE_FILL);
+        setPriority(0);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
         setIconName(koIconNameCStr("krita_tool_color_fill"));
         //setShortcut( QKeySequence( Qt::Key_F ) );

@@ -47,6 +47,10 @@ public:
     void addButton(QAbstractButton *button, int priority)
     {
         addChildWidget(button);
+        if (m_priorities.values().contains(priority)) {
+            qWarning() << "Button" << button << "has a conflicting priority";
+        }
+
         m_priorities.insert(button, priority);
         int index = 1;
         Q_FOREACH (QWidgetItem *item, m_items) {
@@ -79,8 +83,7 @@ public:
     void setGeometry (const QRect &rect)
     {
         int x = 0;
-        int y = 0;
-        const QSize &size = buttonSize();
+        int y = 0; const QSize &size = buttonSize();
         if (m_orientation == Qt::Vertical) {
             foreach (QWidgetItem* w, m_items) {
                 if (w->isEmpty())

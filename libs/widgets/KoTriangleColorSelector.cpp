@@ -269,12 +269,6 @@ QColor KoTriangleColorSelector::color() const
     return realColor().toQColor();
 }
 
-void KoTriangleColorSelector::setQColor(const QColor& c)
-{
-    KoColor color(c, KoColorSpaceRegistry::instance()->rgb8());
-    setRealColor(color);
-}
-
 void KoTriangleColorSelector::resizeEvent( QResizeEvent * event )
 {
     QWidget::resizeEvent( event );

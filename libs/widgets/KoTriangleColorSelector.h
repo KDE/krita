@@ -53,10 +53,6 @@ class KRITAWIDGETS_EXPORT KoTriangleColorSelector : public QWidget {
         void setValue(int v);
         void setSaturation(int s);
         void setHSV(int h, int s, int v);
-
-        // please use setRealColor() instead!
-        Q_DECL_DEPRECATED void setQColor(const QColor& );
-
         void setRealColor(const KoColor& );
     Q_SIGNALS:
         void colorChanged(const QColor& );

@@ -93,9 +93,12 @@ KisDlgInternalColorSelector::KisDlgInternalColorSelector(QWidget *parent, KoColo
     if (savedPal) {
         m_ui->paletteBox->setColorSet(savedPal);
     } else {
-        savedPal = rServer->resources().first();
-        if (savedPal) {
-            m_ui->paletteBox->setColorSet(savedPal);
+        Q_ASSERT(rServer->resources().count());
+        if (rServer->resources().count()) {
+            savedPal = rServer->resources().first();
+            if (savedPal) {
+                m_ui->paletteBox->setColorSet(savedPal);
+            }
         }
     }
     if (config.paletteBox) {

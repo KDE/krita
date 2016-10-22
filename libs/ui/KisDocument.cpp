@@ -298,7 +298,7 @@ public:
 
     QTimer autoSaveTimer;
     QString lastErrorMessage; // see openFile()
-    int autoSaveDelay; // in seconds, 0 to disable.
+    int autoSaveDelay {300}; // in seconds, 0 to disable.
     bool modifiedAfterAutosave;
     bool isAutosaving;
     bool backupFile;
@@ -393,7 +393,7 @@ public:
             if (d->isAutosaving) {
                 d->disregardAutosaveFailure = true;
                 if (realAutoSaveInterval) {
-                    document->setAutoSave(emergencyAutoSaveInterval);
+                    document->setAutoSaveDelay(emergencyAutoSaveInterval);
                 }
             } else {
                 d->image->requestStrokeEnd();
@@ -415,7 +415,7 @@ public:
              m_savingLock.unlock();
 
              const int realAutoSaveInterval = KisConfig().autoSaveInterval();
-             m_document->setAutoSave(realAutoSaveInterval);
+             m_document->setAutoSaveDelay(realAutoSaveInterval);
          }
      }
 
@@ -443,7 +443,8 @@ KisDocument::KisDocument()
     d->importExportManager->setProgresUpdater(d->progressUpdater);
 
     connect(&d->autoSaveTimer, SIGNAL(timeout()), this, SLOT(slotAutoSave()));
-    setAutoSave(defaultAutoSave());
+    KisConfig cfg;
+    setAutoSaveDelay(cfg.autoSaveInterval());
 
     setObjectName(newObjectName());
 
@@ -534,6 +535,7 @@ bool KisDocument::reload()
 
 bool KisDocument::exportDocument(const QUrl &_url, KisPropertiesConfigurationSP exportConfiguration)
 {
+    qDebug() << "exportDocument" << _url.toDisplayString();
     bool ret;
 
     d->isExporting = true;
@@ -580,6 +582,7 @@ bool KisDocument::exportDocument(const QUrl &_url, KisPropertiesConfigurationSP 
 
 bool KisDocument::saveAs(const QUrl &url, KisPropertiesConfigurationSP exportConfiguration)
 {
+    qDebug() << "saveAs" << url;
     if (!url.isValid() || !url.isLocalFile()) {
         errKrita << "saveAs: Malformed URL " << url.url() << endl;
         return false;
@@ -605,6 +608,8 @@ bool KisDocument::saveAs(const QUrl &url, KisPropertiesConfigurationSP exportCon
 
 bool KisDocument::save(KisPropertiesConfigurationSP exportConfiguration)
 {
+    qDebug() << "save";
+
     d->m_saveOk = false;
     if (d->m_file.isEmpty()) { // document was created empty
         d->m_file = d->m_url.toLocalFile();
@@ -620,7 +625,13 @@ bool KisDocument::save(KisPropertiesConfigurationSP exportConfiguration)
     clearFileProgressProxy();
 
     if (ok) {
-        return saveToUrl();
+        setModified( false );
+        emit completed();
+        d->m_saveOk = true;
+        d->m_duringSaveAs = false;
+        d->m_originalURL = QUrl();
+        d->m_originalFilePath.clear();
+        return true; // Nothing to do
     }
     else {
         emit canceled(QString());
@@ -638,6 +649,8 @@ bool KisDocument::waitSaveComplete()
 
 bool KisDocument::saveFile(KisPropertiesConfigurationSP exportConfiguration)
 {
+    qDebug() << "saveFile. Is Autosaving?" << isAutosaving();
+
     // Unset the error message
     setErrorMessage("");
 
@@ -649,7 +662,7 @@ bool KisDocument::saveFile(KisPropertiesConfigurationSP exportConfiguration)
     if (outputMimeType.isEmpty())
         outputMimeType = d->outputMimeType = nativeFormatMimeType();
 
-    if (backupFile()) {
+    if (d->backupFile) {
         Q_ASSERT(url().isLocalFile());
         KBackup::backupFile(url().toLocalFile(), d->backupPath);
     }
@@ -671,6 +684,8 @@ bool KisDocument::saveFile(KisPropertiesConfigurationSP exportConfiguration)
     }
     Q_ASSERT(!tempororaryFileName.isEmpty());
 
+    qDebug() << "saving to tempory file" << tempororaryFileName;
+
     Private::SafeSavingLocker locker(d, this);
     if (locker.successfullyLocked()) {
         status = d->importExportManager->exportDocument(tempororaryFileName, outputMimeType, !d->isExporting , exportConfiguration);
@@ -683,6 +698,9 @@ bool KisDocument::saveFile(KisPropertiesConfigurationSP exportConfiguration)
     dbgFile << "Export status was" << status;
 
     if (ret) {
+
+        qDebug() << "copying temporary file" << tempororaryFileName << "to" << localFilePath();
+
         if (!d->isAutosaving && !d->suppressProgress) {
             QPointer<KoUpdater> updater = d->progressUpdater->startSubtask(1, "clear undo stack");
             updater->setProgress(0);
@@ -739,7 +757,7 @@ bool KisDocument::saveFile(KisPropertiesConfigurationSP exportConfiguration)
         // Restart the autosave timer
         // (we don't want to autosave again 2 seconds after a real save)
         if (!isAutosaving()) {
-            setAutoSave(d->autoSaveDelay);
+            setAutoSaveDelay(d->autoSaveDelay);
         }
 
         d->mimeType = outputMimeType;
@@ -824,11 +842,13 @@ bool KisDocument::isExporting() const
 
 void KisDocument::slotAutoSave()
 {
+    qDebug() << "slotAutoSave. Modified:"  << d->modified << "modifiedAfterAutosave" << d->modified << "isLoading" << d->isLoading;
+
     if (d->modified && d->modifiedAfterAutosave && !d->isLoading) {
         connect(this, SIGNAL(sigProgress(int)), KisPart::instance()->currentMainwindow(), SLOT(slotProgress(int)));
         emit statusBarMessage(i18n("Autosaving..."));
         d->isAutosaving = true;
-        QString autoSaveFileName = autoSaveFile(localFilePath());
+        QString autoSaveFileName = generateAutoSaveFileName(localFilePath());
         bool ret = saveNativeFormat(autoSaveFileName);
         setModified(true);
         if (ret) {
@@ -847,7 +867,7 @@ void KisDocument::slotAutoSave()
 void KisDocument::setReadWrite(bool readwrite)
 {
     d->readwrite = readwrite;
-    setAutoSave(d->autoSaveDelay);
+    setAutoSaveDelay(d->autoSaveDelay);
 
     Q_FOREACH (KisMainWindow *mainWindow, KisPart::instance()->mainWindows()) {
         mainWindow->setReadWrite(readwrite);
@@ -855,13 +875,16 @@ void KisDocument::setReadWrite(bool readwrite)
 
 }
 
-void KisDocument::setAutoSave(int delay)
+void KisDocument::setAutoSaveDelay(int delay)
 {
+    qDebug() << "setting autosave delay from" << d->autoSaveDelay << "to" << delay;
     d->autoSaveDelay = delay;
-    if (isReadWrite() && d->autoSaveDelay > 0)
+    if (isReadWrite() && d->autoSaveDelay > 0) {
         d->autoSaveTimer.start(d->autoSaveDelay * 1000);
-    else
+    }
+    else {
         d->autoSaveTimer.stop();
+    }
 }
 
 KoDocumentInfo *KisDocument::documentInfo() const
@@ -876,6 +899,7 @@ bool KisDocument::isModified() const
 
 bool KisDocument::saveNativeFormat(const QString & file)
 {
+    qDebug() << "saveNatifeFormat" << file;
     Q_ASSERT(file.endsWith(".kra") || file.endsWith(".kra~"));
     return exportDocument(QUrl::fromLocalFile(file));
 }
@@ -891,7 +915,7 @@ QPixmap KisDocument::generatePreview(const QSize& size)
     return QPixmap(size);
 }
 
-QString KisDocument::autoSaveFile(const QString & path) const
+QString KisDocument::generateAutoSaveFileName(const QString & path) const
 {
     QString retval;
 
@@ -913,6 +937,8 @@ QString KisDocument::autoSaveFile(const QString & path) const
         QString filename = fi.fileName();
         retval = QString("%1%2.%3-autosave%4").arg(dir).arg(QDir::separator()).arg(filename).arg(extension);
     }
+
+    qDebug() << "generateAutoSaveFileName() for path" << path << ":" << retval;
     return retval;
 }
 
@@ -959,7 +985,7 @@ bool KisDocument::openUrl(const QUrl &_url, KisDocument::OpenUrlFlags flags)
     d->isLoading = true;
     if (url.isLocalFile() && !fileBatchMode()) {
         QString file = url.toLocalFile();
-        QString asf = autoSaveFile(file);
+        QString asf = generateAutoSaveFileName(file);
         if (QFile::exists(asf)) {
             KisApplication *kisApp = static_cast<KisApplication*>(qApp);
             kisApp->hideSplashScreen();
@@ -1138,7 +1164,7 @@ void KisDocument::setModified(bool mod)
 
     if (mod && !d->modifiedAfterAutosave) {
         // First change since last autosave -> start the autosave timer
-        setAutoSave(d->autoSaveDelay);
+        setAutoSaveDelay(d->autoSaveDelay);
     }
     d->modifiedAfterAutosave = mod;
 
@@ -1261,25 +1287,26 @@ bool KisDocument::isLoading() const
 
 void KisDocument::removeAutoSaveFiles()
 {
+    qDebug() << "removeAutoSaveFiles";
     // Eliminate any auto-save file
-    QString asf = autoSaveFile(localFilePath());   // the one in the current dir
-    if (QFile::exists(asf))
+    QString asf = generateAutoSaveFileName(localFilePath());   // the one in the current dir
+    qDebug() << "\tfilename:" << asf << "exists:" << QFile::exists(asf);
+    if (QFile::exists(asf)) {
+        qDebug() << "\tremoving autosavefile" << asf;
         QFile::remove(asf);
-    asf = autoSaveFile(QString());   // and the one in $HOME
-    if (QFile::exists(asf))
+    }
+    asf = generateAutoSaveFileName(QString());   // and the one in $HOME
+    qDebug() << "Autsavefile in $home" << asf;
+    if (QFile::exists(asf)) {
+        qDebug() << "\tremoving autsavefile 2" << asf;
         QFile::remove(asf);
+    }
 }
 
 void KisDocument::setBackupFile(bool _b)
 {
     d->backupFile = _b;
 }
-
-bool KisDocument::backupFile()const
-{
-    return d->backupFile;
-}
-
 
 void KisDocument::setBackupPath(const QString & _path)
 {
@@ -1308,26 +1335,6 @@ bool KisDocument::hasExternURL() const
     return    !url().scheme().isEmpty()
             && url().scheme() != STORE_PROTOCOL
             && url().scheme() != INTERNAL_PROTOCOL;
-}
-
-static const struct {
-    const char *localName;
-    const char *documentType;
-} TN2DTArray[] = {
-{ "text", I18N_NOOP("a word processing") },
-{ "spreadsheet", I18N_NOOP("a spreadsheet") },
-{ "presentation", I18N_NOOP("a presentation") },
-{ "chart", I18N_NOOP("a chart") },
-{ "drawing", I18N_NOOP("a drawing") }
-};
-static const unsigned int numTN2DT = sizeof(TN2DTArray) / sizeof(*TN2DTArray);
-
-QString KisDocument::tagNameToDocumentType(const QString& localName)
-{
-    for (unsigned int i = 0 ; i < numTN2DT ; ++i)
-        if (localName == TN2DTArray[i].localName)
-            return i18n(TN2DTArray[i].documentType);
-    return localName;
 }
 
 KoPageLayout KisDocument::pageLayout(int /*pageNumber*/) const
@@ -1424,12 +1431,6 @@ void KisDocument::setEmpty(bool empty)
 }
 
 
-// static
-int KisDocument::defaultAutoSave()
-{
-    return 300;
-}
-
 void KisDocument::resetURL() {
     setUrl(QUrl());
     setLocalFilePath(QString());
@@ -1493,22 +1494,6 @@ void KisDocument::setLocalFilePath( const QString &localFilePath )
 {
     d->m_file = localFilePath;
 }
-
-bool KisDocument::saveToUrl()
-{
-    if ( d->m_url.isLocalFile() ) {
-        setModified( false );
-        emit completed();
-        // if m_url is a local file there won't be a temp file -> nothing to remove
-        d->m_saveOk = true;
-        d->m_duringSaveAs = false;
-        d->m_originalURL = QUrl();
-        d->m_originalFilePath.clear();
-        return true; // Nothing to do
-    }
-    return false;
-}
-
 
 bool KisDocument::openUrlInternal(const QUrl &url)
 {
@@ -1758,7 +1743,7 @@ void KisDocument::setCurrentImage(KisImageSP image)
     setModified(false);
     connect(d->image, SIGNAL(sigImageModified()), this, SLOT(setImageModified()));
     d->image->initialRefreshGraph();
-    setAutoSave(KisConfig().autoSaveInterval());
+    setAutoSaveDelay(KisConfig().autoSaveInterval());
 }
 
 void KisDocument::initEmpty()

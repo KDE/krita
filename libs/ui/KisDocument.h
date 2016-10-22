@@ -75,7 +75,6 @@ class KisPart;
 class KRITAUI_EXPORT KisDocument : public QObject, public KoDocumentBase
 {
     Q_OBJECT
-    Q_PROPERTY(bool backupFile READ backupFile WRITE setBackupFile)
     Q_PROPERTY(int pageCount READ pageCount)
 
 protected:
@@ -262,15 +261,7 @@ public:
      */
     static QDomDocument createDomDocument(const QString& appName, const QString& tagName, const QString& version);
 
-    /**
-     *  The first thing to do in loadOasis is get hold of the office:body tag, then its child.
-     *  If the child isn't the expected one, the error message can indicate what it is instead.
-     *  This method returns a translated name for the type of document,
-     *  e.g. i18n("Word Processing") for office:text.
-     */
-    static QString tagNameToDocumentType(const QString& localName);
-
-    /**
+   /**
      *  Loads a document in the native format from a given URL.
      *  Reimplement if your native format isn't XML.
      *
@@ -289,13 +280,7 @@ public:
      * Activate/deactivate/configure the autosave feature.
      * @param delay in seconds, 0 to disable
      */
-    void setAutoSave(int delay);
-
-    /**
-     * Retrieve the default value for autosave in seconds.
-     * Called by the applications to use the correct default in their config
-     */
-    static int defaultAutoSave();
+    void setAutoSaveDelay(int delay);
 
     /**
      * @return the information concerning this document.
@@ -341,8 +326,6 @@ public:
     void removeAutoSaveFiles();
 
     void setBackupFile(bool _b);
-
-    bool backupFile()const;
 
     /**
      * Returns true if this document or any of its internal child documents are modified.
@@ -525,7 +508,7 @@ private:
      */
     QString newObjectName();
 
-    QString autoSaveFile(const QString & path) const;
+    QString generateAutoSaveFileName(const QString & path) const;
 
     /**
      *  Loads a document
@@ -686,7 +669,6 @@ private:
 
     QString prettyPathOrUrl() const;
 
-    bool saveToUrl();
     bool openUrlInternal(const QUrl &url);
 
     class Private;

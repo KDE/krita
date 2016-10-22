@@ -920,7 +920,7 @@ void KisConfig::setOutlineSizeMinimum(qreal outlineSizeMinimum) const
 
 int KisConfig::autoSaveInterval(bool defaultValue)  const
 {
-    return (defaultValue ? KisDocument::defaultAutoSave() : m_cfg.readEntry("AutoSaveInterval", KisDocument::defaultAutoSave()));
+    return (defaultValue ? 300 : m_cfg.readEntry("AutoSaveInterval", 300));
 }
 
 void KisConfig::setAutoSaveInterval(int seconds)  const

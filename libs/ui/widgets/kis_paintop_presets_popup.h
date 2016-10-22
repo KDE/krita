@@ -105,7 +105,6 @@ Q_SIGNALS:
     void brushEditorShown();
 
 private Q_SLOTS:
-    void slotSwitchPresetStrip(bool visible);
     void slotSwitchScratchpad(bool visible);
     void slotSwitchShowEditor(bool visible);
     void slotPinWindow(bool enabled);

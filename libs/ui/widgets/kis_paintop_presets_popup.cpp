@@ -417,21 +417,6 @@ QImage KisPaintOpPresetsPopup::cutOutOverlay()
 void KisPaintOpPresetsPopup::contextMenuEvent(QContextMenuEvent *e)
 {
     Q_UNUSED(e);
-
-#if 0
-    QMenu menu(this);
-    QAction* action = menu.addAction(m_d->detached ? i18n("Attach to Toolbar") : i18n("Detach from Toolbar"));
-    connect(action, SIGNAL(triggered()), this, SLOT(switchDetached()));
-    QAction* showPresetStrip = menu.addAction(i18n("Show Preset Strip"));
-    showPresetStrip->setCheckable(true);
-    showPresetStrip->setChecked(m_d->uiWdgPaintOpPresetSettings.presetWidget->isVisible());
-    connect(showPresetStrip, SIGNAL(triggered(bool)), this, SLOT(slotSwitchPresetStrip(bool)));
-    QAction* showScratchPad = menu.addAction(i18n("Show Scratchpad"));
-    showScratchPad->setCheckable(true);
-    showScratchPad->setChecked(m_d->uiWdgPaintOpPresetSettings.scratchPad->isVisible());
-    connect(showScratchPad, SIGNAL(triggered(bool)), this, SLOT(slotSwitchScratchpad(bool)));
-    menu.exec(e->globalPos());
-#endif
 }
 
 void KisPaintOpPresetsPopup::switchDetached(bool show)
@@ -568,13 +553,6 @@ void KisPaintOpPresetsPopup::resizeEvent(QResizeEvent* event)
 bool KisPaintOpPresetsPopup::detached() const
 {
     return m_d->detached;
-}
-
-void KisPaintOpPresetsPopup::slotSwitchPresetStrip(bool visible)
-{
-    m_d->uiWdgPaintOpPresetSettings.presetWidget->setVisible(visible);
-    KisConfig cfg;
-    cfg.setPresetStripVisible(visible);
 }
 
 void KisPaintOpPresetsPopup::slotSwitchScratchpad(bool visible)

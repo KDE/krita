@@ -73,7 +73,7 @@ KoColorSet::KoColorSet(const QString& filename)
 }
 
 KoColorSet::KoColorSet()
-    : KoResource("")
+    : KoResource(QString())
 {
     m_columns = 0; // Set the default value that the GIMP uses...
 }
@@ -81,7 +81,7 @@ KoColorSet::KoColorSet()
 /// Create an copied palette
 KoColorSet::KoColorSet(const KoColorSet& rhs)
     : QObject(0)
-    , KoResource("")
+    , KoResource(QString())
 {
     setFilename(rhs.filename());
     m_ownData = false;

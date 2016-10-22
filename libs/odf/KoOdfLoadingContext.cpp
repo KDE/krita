@@ -338,7 +338,7 @@ bool KoOdfLoadingContext::parseManifest(const KoXmlDocument &manifestDocument)
             continue;
 
         QString fullPath  = el.attributeNS(KoXmlNS::manifest, "full-path", QString());
-        QString mediaType = el.attributeNS(KoXmlNS::manifest, "media-type", QString(""));
+        QString mediaType = el.attributeNS(KoXmlNS::manifest, "media-type", QString());
         QString version   = el.attributeNS(KoXmlNS::manifest, "version", QString());
 
         // Only if fullPath is valid, should we store this entry.

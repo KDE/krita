@@ -51,7 +51,7 @@ public:
         const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
         QList<KoGradientStop> stops;
 
-        KoStopGradient* gradient = new KoStopGradient("");
+        KoStopGradient* gradient = new KoStopGradient();
         gradient->setType(QGradient::LinearGradient);
         gradient->setName("Foreground to Transparent");
         stops << KoGradientStop(0.0, KoColor(Qt::black, cs)) << KoGradientStop(1.0, KoColor(QColor(0, 0, 0, 0), cs));
@@ -62,7 +62,7 @@ public:
         addResource(gradient, false, true);
         m_foregroundToTransparent = gradient;
 
-        gradient = new KoStopGradient("");
+        gradient = new KoStopGradient();
         gradient->setType(QGradient::LinearGradient);
         gradient->setName("Foreground to Background");
 

@@ -353,16 +353,18 @@ void EXRConverter::Private::unmultiplyAlpha(typename WrapperType::pixel_type *pi
 template <typename T, typename Pixel, int size, int alphaPos>
 void multiplyAlpha(Pixel *pixel)
 {
-    T alpha = pixel->data[alphaPos];
+    if (alphaPos >= 0) {
+        T alpha = pixel->data[alphaPos];
 
-    if (alpha > 0.0) {
-        for (int i = 0; i < size; ++i) {
-            if (i != alphaPos) {
-                pixel->data[i] *= alpha;
+        if (alpha > 0.0) {
+            for (int i = 0; i < size; ++i) {
+                if (i != alphaPos) {
+                    pixel->data[i] *= alpha;
+                }
             }
-        }
 
-        pixel->data[alphaPos] = alpha;
+            pixel->data[alphaPos] = alpha;
+        }
     }
 }
 
@@ -1285,7 +1287,7 @@ KisImageBuilder_Result EXRConverter::buildFile(const QString &filename, KisGroup
     if (!extraLayersInfo.isNull()) {
         header.insert(EXR_KRITA_LAYERS, Imf::StringAttribute(extraLayersInfo.constData()));
     }
-     dbgFile << informationObjects.size() << " layers to save";
+    dbgFile << informationObjects.size() << " layers to save";
 
     Q_FOREACH (const ExrPaintLayerSaveInfo& info, informationObjects) {
         if (info.pixelType < Imf::NUM_PIXELTYPES) {

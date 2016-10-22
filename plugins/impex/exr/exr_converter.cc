@@ -546,7 +546,6 @@ bool exrConverter::Private::checkExtraLayersInfoConsistent(const QDomDocument &d
         std::set<std::string>::const_iterator it2 = exrLayerNames.begin();
 
         std::set<std::string>::const_iterator end1 = extraInfoLayers.end();
-        std::set<std::string>::const_iterator end2 = exrLayerNames.end();
 
         for (; it1 != end1; ++it1, ++it2) {
             dbgKrita << it1->c_str() << it2->c_str();

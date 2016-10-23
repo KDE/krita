@@ -84,6 +84,9 @@ KisExportCheckRegistry::KisExportCheckRegistry ()
         QList<KoID> allColorDepths = KoColorSpaceRegistry::instance()->colorDepthList(colorModelID.id(), KoColorSpaceRegistry::AllColorSpaces);
         Q_FOREACH(const KoID &colorDepthID, allColorDepths) {
 
+            Q_ASSERT(!colorModelID.name().isEmpty());
+            Q_ASSERT(!colorDepthID.name().isEmpty());
+
             // Per layer color model/channel depth checks
             chkFactory = new ColorModelPerLayerCheckFactory(colorModelID, colorDepthID);
             add(chkFactory->id(), chkFactory);
@@ -91,7 +94,6 @@ KisExportCheckRegistry::KisExportCheckRegistry ()
             // Image color model/channel depth checks
             chkFactory = new ColorModelCheckFactory(colorModelID, colorDepthID);
             add(chkFactory->id(), chkFactory);
-
         }
     }
 

@@ -31,11 +31,14 @@ class ColorModelCheck : public KisExportCheckBase
 {
 public:
 
-    ColorModelCheck(const KoID &colorModelID, const KoID &colorDepthId, const QString &id, Level level, const QString &customWarning = QString())
+    ColorModelCheck(const KoID &colorModelID, const KoID &colorDepthID, const QString &id, Level level, const QString &customWarning = QString())
         : KisExportCheckBase(id, level, customWarning)
-        ,  m_colorModelID(colorModelID)
-        , m_colorDepthID(colorDepthId)
+        , m_colorModelID(colorModelID)
+        , m_colorDepthID(colorDepthID)
     {
+        Q_ASSERT(!colorModelID.name().isEmpty());
+        Q_ASSERT(!colorDepthID.name().isEmpty());
+
         if (customWarning.isEmpty()) {
             m_warning = i18nc("image conversion warning", "The color model <b>%1</b> or channel depth <b>%2</b> cannot be saved to this format. Your image will be converted.").arg(m_colorModelID.name()).arg(m_colorDepthID.name());
         }

@@ -117,11 +117,14 @@ class ColorModelPerLayerCheck : public KisExportCheckBase
 {
 public:
 
-    ColorModelPerLayerCheck(const KoID &ColorModelID, const KoID &colorDepthId, const QString &id, Level level, const QString &customWarning = QString())
+    ColorModelPerLayerCheck(const KoID &colorModelID, const KoID &colorDepthID, const QString &id, Level level, const QString &customWarning = QString())
         : KisExportCheckBase(id, level, customWarning, true)
-        , m_ColorModelID(ColorModelID)
-        , m_colorDepthID(colorDepthId)
+        , m_ColorModelID(colorModelID)
+        , m_colorDepthID(colorDepthID)
     {
+        Q_ASSERT(!colorModelID.name().isEmpty());
+        Q_ASSERT(!colorDepthID.name().isEmpty());
+
         if (customWarning.isEmpty()) {
             m_warning = i18nc("image conversion warning", "Your image contains layers with the color model <b>%1</b> and channel depth <b>%2</b> which cannot be saved to this format. The layers will be converted.").arg(m_ColorModelID.name()).arg(m_colorDepthID.name());
         }

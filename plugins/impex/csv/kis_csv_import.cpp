@@ -44,6 +44,7 @@ KisCSVImport::~KisCSVImport()
 
 KisImportExportFilter::ConversionStatus KisCSVImport::convert(const QByteArray&, const QByteArray& to, KisPropertiesConfigurationSP configuration)
 {
+    Q_UNUSED(configuration);
     dbgFile << "Importing using CSVImport!";
 
     if (to != "application/x-krita")

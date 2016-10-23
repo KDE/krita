@@ -240,6 +240,7 @@ find_package(KF5 ${MIN_FRAMEWORKS_VERSION} REQUIRED COMPONENTS
         Archive
         Config
         WidgetsAddons
+        Auth
         Completion
         CoreAddons
         GuiAddons
@@ -248,6 +249,15 @@ find_package(KF5 ${MIN_FRAMEWORKS_VERSION} REQUIRED COMPONENTS
         ItemViews
         WindowSystem
 )
+
+# KAuth deprecated authorizeKAction. In order to be warning free,
+# compile with the updated function when the dependency is new enough.
+# Remove this (and the uses of the define) when the minimum KF5
+# version is >= 5.24.0.
+if (${KF5Auth_VERSION} VERSION_LESS "5.24.0" )
+    message("Old KAuth (< 5.24.0) found.")
+    add_definitions(-DKAUTH_BEFORE_5_24)
+endif()
 
 find_package(Qt5 ${MIN_QT_VERSION}
         REQUIRED COMPONENTS

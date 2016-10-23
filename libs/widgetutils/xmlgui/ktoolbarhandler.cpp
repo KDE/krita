@@ -32,6 +32,10 @@
 #include "kxmlguifactory.h"
 #include "kactioncollection.h"
 
+#if defined(KAUTH_BEFORE_5_24)
+# define authorizeAction authorizeKAction
+#endif
+
 namespace
 {
 const char actionListName[] = "show_menu_and_toolbar_actionlist";
@@ -260,7 +264,7 @@ void ToolBarHandler::setupActions()
     // We have no XML file associated with our action collection, so load settings from KConfig
     actionCollection()->readSettings(); // #233712
 
-    if (KAuthorized::authorizeKAction(QStringLiteral("options_show_toolbar"))) {
+    if (KAuthorized::authorizeAction(QStringLiteral("options_show_toolbar"))) {
         plugActionList(QLatin1String(actionListName), d->actions);
     }
 

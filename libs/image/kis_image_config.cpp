@@ -40,7 +40,7 @@
 #endif
 
 KisImageConfig::KisImageConfig(bool readOnly)
-    : m_config( KSharedConfig::openConfig()->group("")),
+    : m_config( KSharedConfig::openConfig()->group(QString())),
       m_readOnly(readOnly)
 {
 }

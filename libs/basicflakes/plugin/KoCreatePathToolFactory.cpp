@@ -28,8 +28,8 @@ KoCreatePathToolFactory::KoCreatePathToolFactory()
     : KoToolFactoryBase(KoCreatePathTool_ID)
 {
     setToolTip(i18n("Draw path"));
-    setToolType(mainToolType());
-    setPriority(2);
+    setSection(mainToolType());
+    setPriority(4);
     setIconName(koIconNameCStr("createpath"));
     setActivationShapeId("flake/edit");
 }

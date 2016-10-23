@@ -23,10 +23,10 @@
 #include "kritaflake_export.h"
 
 class QRectF;
-class QString;
 class QPointF;
 
 #include <QtGlobal>
+#include <QtCore/QString>
 
 /// This class provides a loading context for filter effects
 class KRITAFLAKE_EXPORT KoFilterEffectLoadingContext
@@ -36,7 +36,7 @@ public:
     * Constructs a new filter effect loading context
     * @param basePath the xml document base path
     */
-    explicit KoFilterEffectLoadingContext(const QString &basePath);
+    explicit KoFilterEffectLoadingContext(const QString &basePath = QString());
 
     /// Destructor
     virtual ~KoFilterEffectLoadingContext();

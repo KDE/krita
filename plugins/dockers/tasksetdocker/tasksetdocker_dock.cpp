@@ -194,7 +194,7 @@ void TasksetDockerDock::saveClicked()
 
     m_taskThread->barrier();
 
-    TasksetResource* taskset = new TasksetResource("");
+    TasksetResource* taskset = new TasksetResource(QString());
 
     QStringList actionNames;
     Q_FOREACH (QAction* action, m_model->actions()) {

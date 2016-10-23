@@ -36,7 +36,7 @@ class KRITAPIGMENT_EXPORT KoStopGradient : public KoAbstractGradient
 {
 
 public:
-    explicit KoStopGradient(const QString &filename);
+    explicit KoStopGradient(const QString &filename = QString());
     virtual ~KoStopGradient();
 
     KoAbstractGradient* clone() const;

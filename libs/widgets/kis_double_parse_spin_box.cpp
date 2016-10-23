@@ -227,7 +227,7 @@ void KisDoubleParseSpinBox::clearErrorStyle()
     if (boolLastValid) {
         warningIcon->setVisible(false);
 
-        //setStyleSheet("");
+        //setStyleSheet(QString());
 
         setPalette(oldPalette);
         isOldPaletteSaved = false;

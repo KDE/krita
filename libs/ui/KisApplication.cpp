@@ -397,7 +397,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
         checkAutosaveFiles();
     }
 
-    setSplashScreenLoadingText(""); // done loading, so clear out label
+    setSplashScreenLoadingText(QString()); // done loading, so clear out label
 
     // Get the command line arguments which we have to parse
     int argsCount = args.filenames().count();

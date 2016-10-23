@@ -1329,11 +1329,9 @@ void KisMainWindow::switchTab(int index)
 
 void KisMainWindow::slotFileNew()
 {
-    KisOpenPane *startupWidget = 0;
-
     const QStringList mimeFilter = KisImportExportManager::mimeFilter(KisImportExportManager::Import);
 
-    startupWidget = new KisOpenPane(this, mimeFilter, QStringLiteral("templates/"));
+    KisOpenPane *startupWidget = new KisOpenPane(this, mimeFilter, QStringLiteral("templates/"));
     startupWidget->setWindowModality(Qt::WindowModal);
 
     KisConfig cfg;

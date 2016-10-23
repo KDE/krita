@@ -142,6 +142,7 @@ public:
                 break;
             case Data::PAINTER_PATH:
                 path = t.map(rhs.path);
+                break;
             };
         }
     public:

@@ -201,8 +201,11 @@ if exist filelist_lib_dll.txt (
 )
 :: Boost, there might be more than one leftover but we can't really do much
 copy %BUILDDIR_INSTALL%\bin\libboost_system-*.dll %pkg_root%\bin
+:: KF5 plugins may be placed at different locations depending on how Qt is built
 xcopy /S /Y /I %BUILDDIR_INSTALL%\lib\plugins\imageformats %pkg_root%\bin\imageformats
+xcopy /S /Y /I %BUILDDIR_INSTALL%\plugins\imageformats %pkg_root%\bin\imageformats
 xcopy /S /Y /I %BUILDDIR_INSTALL%\lib\plugins\kf5 %pkg_root%\bin\kf5
+xcopy /S /Y /I %BUILDDIR_INSTALL%\plugins\kf5 %pkg_root%\bin\kf5
 :: Qt Translations
 :: it seems that windeployqt does these, but only *some* of these???
 mkdir %pkg_root%\bin\translations

@@ -73,27 +73,6 @@ KisImportExportFilter::ConversionStatus KisPNGExport::convert(KisDocument *docum
 {
     KisImageWSP image = document->image();
 
-    // the image must be locked at the higher levels
-    KIS_SAFE_ASSERT_RECOVER_NOOP(image->locked());
-    KisPaintDeviceSP pd;
-    pd = new KisPaintDevice(*image->projection());
-    KisPaintLayerSP l = new KisPaintLayer(image, "projection", OPACITY_OPAQUE_U8, pd);
-
-    bool isThereAlpha = false;
-    KisSequentialConstIterator it(l->paintDevice(), image->bounds());
-    const KoColorSpace* cs = l->paintDevice()->colorSpace();
-    do {
-        if (cs->opacityU8(it.oldRawData()) != OPACITY_OPAQUE_U8) {
-            isThereAlpha = true;
-            break;
-        }
-    } while (it.nextPixel());
-
-    configuration->setProperty("isThereAlpha", isThereAlpha);
-    configuration->setProperty("ColorModelID", cs->colorModelId().id());
-    bool sRGB = (cs->profile()->name().contains(QLatin1String("srgb"), Qt::CaseInsensitive) && !cs->profile()->name().contains(QLatin1String("g10")));
-    configuration->setProperty("sRGB", sRGB);
-
     KisPNGOptions options;
 
     options.alpha = configuration->getBool("alpha", true);
@@ -120,7 +99,7 @@ KisImportExportFilter::ConversionStatus KisPNGExport::convert(KisDocument *docum
 
     KisPNGConverter pngConverter(document);
 
-    KisImageBuilder_Result res = pngConverter.buildFile(io, image->bounds(), image->xRes(), image->yRes(), l->paintDevice(), beginIt, endIt, options, eI);
+    KisImageBuilder_Result res = pngConverter.buildFile(io, image->bounds(), image->xRes(), image->yRes(), image->projection(), beginIt, endIt, options, eI);
 
     if (res == KisImageBuilder_RESULT_OK) {
         delete eI;

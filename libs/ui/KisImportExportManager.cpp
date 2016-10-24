@@ -50,10 +50,12 @@
 #include "kis_config.h"
 #include "KisImportExportFilter.h"
 #include "KisDocument.h"
-#include "kis_image.h"
+#include <kis_image.h>
+#include <kis_paint_layer.h>
 #include "kis_guides_config.h"
 #include "kis_grid_config.h"
 #include "kis_popup_button.h"
+#include <kis_iterator_ng.h>
 
 // static cache for import and export mimetypes
 QStringList KisImportExportManager::m_importMimeTypes;
@@ -221,6 +223,30 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::convert(KisImpor
 
     if (!exportConfiguration) {
         exportConfiguration = filter->lastSavedConfiguration(from, to);
+
+        // Fill with some meta information about the image
+        KisImageWSP image = m_document->image();
+
+        // the image must be locked at the higher levels
+        KIS_SAFE_ASSERT_RECOVER_NOOP(image->locked());
+        KisPaintDeviceSP pd = image->projection();
+
+        bool isThereAlpha = false;
+        KisSequentialConstIterator it(pd, image->bounds());
+        const KoColorSpace* cs = pd->colorSpace();
+        do {
+            if (cs->opacityU8(it.oldRawData()) != OPACITY_OPAQUE_U8) {
+                isThereAlpha = true;
+                break;
+            }
+        } while (it.nextPixel());
+
+        exportConfiguration->setProperty("ImageContainsTransparency", isThereAlpha);
+        exportConfiguration->setProperty("ColorModelID", cs->colorModelId().id());
+        exportConfiguration->setProperty("ColorDepthID", cs->colorDepthId().id());
+        bool sRGB = (cs->profile()->name().contains(QLatin1String("srgb"), Qt::CaseInsensitive) && !cs->profile()->name().contains(QLatin1String("g10")));
+        exportConfiguration->setProperty("sRGB", sRGB);
+
     }
 
     KisPreExportChecker checker;

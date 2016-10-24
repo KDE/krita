@@ -31,6 +31,7 @@
 #include <KoShapePaintingContext.h>
 #include <QPainter>
 #include <KoShapeStrokeModel.h>
+#include <KoShapePainter.h>
 
 struct SvgTester
 {
@@ -667,18 +668,12 @@ struct SvgRenderTester : public SvgTester
         QImage canvas(canvasSize, QImage::Format_ARGB32);
         canvas.fill(0);
         KoViewConverter converter;
-        KoShapePaintingContext context;
         QPainter painter(&canvas);
 
-        painter.setPen(Qt::NoPen);
-        painter.setBrush(Qt::NoBrush);
-        painter.save();
-        painter.setTransform(shape->absoluteTransformation(&converter) * painter.transform());
-        shape->paint(painter, converter, context);
-        if (shape->stroke()) {
-            shape->stroke()->paint(shape, painter, converter);
-        }
-        painter.restore();
+        KoShapePainter p;
+        p.setShapes({shape});
+        painter.setClipRect(canvas.rect());
+        p.paint(painter, converter);
 
         QVERIFY(TestUtil::checkQImage(canvas, "svg_render", prefix, testName));
     }
@@ -1486,7 +1481,5 @@ void TestSvgParser::testRenderStrokeLinearGradient()
     SvgRenderTester t (data);
     t.test_standard_30px_72ppi("stroke_gradient_dashed");
 }
-
-
 
 QTEST_GUILESS_MAIN(TestSvgParser)

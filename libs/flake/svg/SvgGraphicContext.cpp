@@ -38,6 +38,7 @@ SvgGraphicsContext::SvgGraphicsContext()
     forcePercentage = false;
 
     display = true;
+    visible = true;
 
     clipRule = Qt::WindingFill;
     preserveWhitespace = false;

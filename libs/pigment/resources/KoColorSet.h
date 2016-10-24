@@ -53,7 +53,8 @@ public:
         RIFF_PAL,           // RIFF
         ACT,                // Photoshop binary
         PSP_PAL,            // PaintShop Pro
-        ACO                 // Photoshop Swatches
+        ACO,                // Photoshop Swatches
+        XML                 // XML palette (Scribus)
     };
 
 
@@ -120,6 +121,7 @@ private:
     bool loadRiff();
     bool loadPsp();
     bool loadAco();
+    bool loadXml();
 
     QByteArray m_data;
     bool m_ownData;

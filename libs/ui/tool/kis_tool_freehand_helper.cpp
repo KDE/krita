@@ -93,13 +93,15 @@ struct KisToolFreehandHelper::Private
 
 KisToolFreehandHelper::KisToolFreehandHelper(KisPaintingInformationBuilder *infoBuilder,
                                              const KUndo2MagicString &transactionText,
-                                             KisRecordingAdapter *recordingAdapter)
+                                             KisRecordingAdapter *recordingAdapter,
+                                             KisSmoothingOptions *smoothingOptions)
     : m_d(new Private())
 {
     m_d->infoBuilder = infoBuilder;
     m_d->recordingAdapter = recordingAdapter;
     m_d->transactionText = transactionText;
-    m_d->smoothingOptions = KisSmoothingOptionsSP(new KisSmoothingOptions());
+    m_d->smoothingOptions = KisSmoothingOptionsSP(
+                smoothingOptions ? smoothingOptions : new KisSmoothingOptions());
     m_d->canvasRotation = 0;
 
     m_d->strokeTimeoutTimer.setSingleShot(true);

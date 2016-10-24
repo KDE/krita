@@ -39,7 +39,10 @@ struct KisToolLineHelper::Private
 KisToolLineHelper::KisToolLineHelper(KisPaintingInformationBuilder *infoBuilder,
                                      const KUndo2MagicString &transactionText,
                                      KisRecordingAdapter *recordingAdapter)
-    : KisToolFreehandHelper(infoBuilder, transactionText, recordingAdapter),
+    : KisToolFreehandHelper(infoBuilder,
+                            transactionText,
+                            recordingAdapter,
+                            new KisSmoothingOptions(false)),
       m_d(new Private(infoBuilder))
 {
 }

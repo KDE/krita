@@ -50,7 +50,8 @@ public:
 
     KisToolFreehandHelper(KisPaintingInformationBuilder *infoBuilder,
                           const KUndo2MagicString &transactionText = KUndo2MagicString(),
-                          KisRecordingAdapter *recordingAdapter = 0);
+                          KisRecordingAdapter *recordingAdapter = 0,
+                          KisSmoothingOptions *smoothingOptions = 0);
     ~KisToolFreehandHelper();
 
     void setSmoothness(KisSmoothingOptionsSP smoothingOptions);

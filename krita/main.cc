@@ -95,6 +95,10 @@ extern "C" int main(int argc, char **argv)
     qsrand(time(0));
     bool runningInKDE = !qgetenv("KDE_FULL_SESSION").isEmpty();
     
+#if HAVE_X11 
+    qputenv("QT_QPA_PLATFORM", "xcb"); 
+#endif
+
     /**
      * Disable debug output by default. (krita.input enables tablet debugging.)
      * Debug logs can be controlled by an environment variable QT_LOGGING_RULES.

@@ -60,7 +60,7 @@ GridConfigWidget::GridConfigWidget(QWidget *parent) :
     connect(ui->gridTypeCombobox, SIGNAL(currentIndexChanged(int)), SLOT(slotGridTypeChanged()));
 
 
-
+    m_isGridEnabled = false;
 
     setGridConfig(m_d->gridConfig);
     setGuidesConfig(m_d->guidesConfig);
@@ -144,13 +144,12 @@ void GridConfigWidget::setGridConfigImpl(const KisGridConfig &value)
     ui->offsetAspectButton->setKeepAspectRatio(m_d->gridConfig.offsetAspectLocked());
     ui->spacingAspectButton->setKeepAspectRatio(m_d->gridConfig.spacingAspectLocked());
     ui->chkShowGrid->setChecked(m_d->gridConfig.showGrid());
-    ui->chkSnapToGrid->setChecked(m_d->gridConfig.snapToGrid());
     ui->intHSpacing->setValue(m_d->gridConfig.spacing().x());
     ui->intVSpacing->setValue(m_d->gridConfig.spacing().y());
     ui->intXOffset->setValue(m_d->gridConfig.offset().x());
     ui->intYOffset->setValue(m_d->gridConfig.offset().y());
     ui->intSubdivision->setValue(m_d->gridConfig.subdivision());
-
+    ui->chkSnapToGrid->setChecked(m_d->gridConfig.snapToGrid());
     ui->angleLeftSpinbox->setValue(m_d->gridConfig.angleLeft());
     ui->angleRightSpinbox->setValue(m_d->gridConfig.angleRight());
     ui->cellSpacingSpinbox->setValue(m_d->gridConfig.cellSpacing());
@@ -164,6 +163,10 @@ void GridConfigWidget::setGridConfigImpl(const KisGridConfig &value)
     ui->colorSubdivision->setColor(m_d->gridConfig.colorSubdivision());
 
     m_d->guiSignalsBlocked = false;
+
+
+
+
 
     emit gridValueChanged();
 }
@@ -297,6 +300,24 @@ void GridConfigWidget::slotGridTypeChanged() {
     ui->angleRightSpinbox->setVisible(!showRectangleControls);
     ui->cellSpacingLabel->setVisible(!showRectangleControls);
     ui->cellSpacingSpinbox->setVisible(!showRectangleControls);
+
+
+
+    // disable snapping for isometric grid type for now
+    // remember if we had snapping enabled if it was on the rectangule mode
+    if (!showRectangleControls) {
+        m_isGridEnabled = ui->chkSnapToGrid->isChecked();
+        ui->chkSnapToGrid->setEnabled(false);
+        ui->chkSnapToGrid->setChecked(false);
+    } else {
+        ui->chkSnapToGrid->setEnabled(true);
+        ui->chkSnapToGrid->setChecked(m_isGridEnabled);
+    }
+
+
+
+
+
 
 
 

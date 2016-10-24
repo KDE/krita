@@ -66,6 +66,7 @@ private:
 
     struct Private;
     const QScopedPointer<Private> m_d;
+    bool m_isGridEnabled;
 };
 
 #endif // GRID_CONFIG_WIDGET_H

@@ -46,3 +46,8 @@ bool KisBrushBasedPaintopOptionWidget::presetIsValid()
 {
     return m_brushOption->presetIsValid();
 }
+
+KisBrushOptionWidget *KisBrushBasedPaintopOptionWidget::brushOptionWidget() const
+{
+    return m_brushOption;
+}

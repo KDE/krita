@@ -354,15 +354,16 @@ KisKeyframeSP KisScalarKeyframeChannel::createKeyframe(int time, const KisKeyfra
 
 KisKeyframeSP KisScalarKeyframeChannel::createKeyframe(int time, qreal value, KUndo2Command *parentCommand)
 {
+    Q_UNUSED(parentCommand);
     KisScalarKeyframe *keyframe = new KisScalarKeyframe(this, time, value);
-
     keyframe->setInterpolationMode(m_d->defaultInterpolation);
-
     return toQShared(keyframe);
 }
 
 void KisScalarKeyframeChannel::destroyKeyframe(KisKeyframeSP key, KUndo2Command *parentCommand)
 {
+    Q_UNUSED(parentCommand);
+    Q_UNUSED(key);
 }
 
 void KisScalarKeyframeChannel::uploadExternalKeyframe(KisKeyframeChannel *srcChannel, int srcTime, KisKeyframeSP dstFrame)

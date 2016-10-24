@@ -56,6 +56,7 @@ KisPPMImport::~KisPPMImport()
 KisImportExportFilter::ConversionStatus KisPPMImport::convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration)
 {
     Q_UNUSED(from);
+    Q_UNUSED(configuration);
     dbgFile << "Importing using PPMImport!";
 
     if (to != "application/x-krita")

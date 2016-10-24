@@ -210,7 +210,7 @@ KoStopGradient * KoStopGradient::fromQGradient(QGradient * gradient)
     if (! gradient)
         return 0;
 
-    KoStopGradient * newGradient = new KoStopGradient("");
+    KoStopGradient * newGradient = new KoStopGradient(QString());
     newGradient->setType(gradient->type());
     newGradient->setSpread(gradient->spread());
 

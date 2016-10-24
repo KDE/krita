@@ -465,6 +465,7 @@ Bone *findBoneByName(Bone *startBone, const QString &name)
 
 KisImportExportFilter::ConversionStatus KisSpriterExport::convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration)
 {
+    Q_UNUSED(configuration);
     dbgFile << "Spriter export! From:" << from << ", To:" << to << "" << outputFile();
 
     if (from != "application/x-krita") {

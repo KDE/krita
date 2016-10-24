@@ -107,10 +107,10 @@ public:
 
     KisToolMeasureFactory()
             : KoToolFactoryBase("KritaShape/KisToolMeasure") {
-        setToolType(TOOL_TYPE_TRANSFORM);
+        setSection(TOOL_TYPE_VIEW);
         setToolTip(i18n("Measure Tool"));
         setIconName(koIconNameCStr("krita_tool_measure"));
-        setPriority(16);
+        setPriority(1);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
     }
 

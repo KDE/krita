@@ -155,7 +155,7 @@ QSet<QString> KoFilterEffectStack::requiredStandarsInputs() const
     if (isEmpty())
         return requiredInputs;
 
-    if (d->filterEffects.first()->inputs().contains(""))
+    if (d->filterEffects.first()->inputs().contains(QString()))
         requiredInputs.insert("SourceGraphic");
 
     Q_FOREACH (KoFilterEffect *effect, d->filterEffects) {

@@ -111,7 +111,7 @@ public:
      * Return the layer data before the effect masks have had their go
      * at it.
      */
-    virtual KisPaintDeviceSP original() const = 0;
+    virtual KisPaintDeviceSP original() const override = 0;
 
     /**
      * @return the selection associated with this layer, if there is

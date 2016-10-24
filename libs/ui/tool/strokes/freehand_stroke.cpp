@@ -132,7 +132,7 @@ void FreehandStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
         info->painter->setBackgroundColor(d->customColor);
         info->painter->fillPainterPath(d->path);}
         info->painter->drawPainterPath(d->path, d->pen);    
-
+        break;
     };
 
     QVector<QRect> dirtyRects = info->painter->takeDirtyRegion();

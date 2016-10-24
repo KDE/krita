@@ -113,7 +113,7 @@ FilterEffectResource *FilterEffectResource::fromFilterEffectStack(KoFilterEffect
 
     buffer.close();
 
-    FilterEffectResource *resource = new FilterEffectResource("");
+    FilterEffectResource *resource = new FilterEffectResource(QString());
     if (!resource->m_data.setContent(ba)) {
         delete resource;
         return 0;
@@ -151,7 +151,7 @@ KoFilterEffectStack *FilterEffectResource::toFilterStack() const
     filterRegion.setHeight(fromPercentage(e.attribute("height", "1.2")));
     filterStack->setClipRect(filterRegion);
 
-    KoFilterEffectLoadingContext context(QString(""));
+    KoFilterEffectLoadingContext context;
 
     KoFilterEffectRegistry *registry = KoFilterEffectRegistry::instance();
 

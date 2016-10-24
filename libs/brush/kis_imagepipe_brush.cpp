@@ -193,7 +193,7 @@ KisImagePipeBrush::KisImagePipeBrush(const QString& filename)
 KisImagePipeBrush::KisImagePipeBrush(const QString& name, int w, int h,
                                      QVector< QVector<KisPaintDevice*> > devices,
                                      QVector<KisParasite::SelectionMode > modes)
-    : KisGbrBrush("")
+    : KisGbrBrush(QString())
     , m_d(new Private())
 {
     Q_ASSERT(devices.count() == modes.count());

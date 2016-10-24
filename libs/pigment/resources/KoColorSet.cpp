@@ -30,6 +30,7 @@
 #include <QBuffer>
 #include <QByteArray>
 #include <QPainter>
+#include <QXmlStreamReader>
 
 #include <DebugPigment.h>
 #include <klocalizedstring.h>
@@ -61,6 +62,9 @@ KoColorSet::PaletteType detectFormat(const QString &fileName, const QByteArray &
     else if (fi.suffix().toLower() == "act") {
         return KoColorSet::ACT;
     }
+    else if (fi.suffix().toLower() == "xml") {
+        return KoColorSet::XML;
+    }
 
     return KoColorSet::UNKNOWN;
 }
@@ -73,7 +77,7 @@ KoColorSet::KoColorSet(const QString& filename)
 }
 
 KoColorSet::KoColorSet()
-    : KoResource("")
+    : KoResource(QString())
 {
     m_columns = 0; // Set the default value that the GIMP uses...
 }
@@ -81,7 +85,7 @@ KoColorSet::KoColorSet()
 /// Create an copied palette
 KoColorSet::KoColorSet(const KoColorSet& rhs)
     : QObject(0)
-    , KoResource("")
+    , KoResource(QString())
 {
     setFilename(rhs.filename());
     m_ownData = false;
@@ -224,6 +228,9 @@ bool KoColorSet::init()
         break;
     case ACO:
         res = loadAco();
+        break;
+    case XML:
+        res = loadXml();
         break;
     default:
         res = false;
@@ -469,6 +476,159 @@ bool KoColorSet::loadPsp()
         add(e);
     }
     return true;
+}
+
+void scribusParseColor(KoColorSet *set, QXmlStreamReader *xml) {
+    KoColorSetEntry currentColor;
+    //It's a color, retrieve it
+    QXmlStreamAttributes colorProperties = xml->attributes();
+    QStringRef colorValue;
+
+    // RGB or CMYK?
+    if (colorProperties.hasAttribute("RGB")) {
+        dbgPigment << "Color " << colorProperties.value("NAME") << ", RGB " << colorProperties.value("RGB");
+
+        QStringRef colorName = colorProperties.value("NAME");
+        currentColor.name = colorName.isEmpty() || colorName.isNull() ? i18n("Untitled") : colorName.toString();
+
+        currentColor.color = KoColor(KoColorSpaceRegistry::instance()->rgb8());
+
+        colorValue = colorProperties.value("RGB");
+        if (colorValue.length() != 7 && colorValue.at(0) != '#') { // Color is a hexadecimal number
+            xml->raiseError("Invalid rgb8 color (malformed): " + colorValue);
+            return;
+        }
+        else {
+            bool rgbOk;
+            quint32 rgb = colorValue.mid(1).toUInt(&rgbOk, 16);
+            if  (!rgbOk) {
+                xml->raiseError("Invalid rgb8 color (unable to convert): " + colorValue);
+                return;
+            }
+
+            quint8 r = rgb >> 16 & 0xff;
+            quint8 g = rgb >> 8 & 0xff;
+            quint8 b = rgb & 0xff;
+
+            dbgPigment << "Color parsed: "<< r << g << b;
+
+            currentColor.color.data()[0] = r;
+            currentColor.color.data()[1] = g;
+            currentColor.color.data()[2] = b;
+            currentColor.color.setOpacity(OPACITY_OPAQUE_U8);
+
+            set->add(currentColor);
+
+            while(xml->readNextStartElement()) {
+                //ignore - these are all unknown or the /> element tag
+                xml->skipCurrentElement();
+            }
+            return;
+        }
+    }
+    else if (colorProperties.hasAttribute("CMYK")) {
+        dbgPigment << "Color " << colorProperties.value("NAME") << ", CMYK " << colorProperties.value("CMYK");
+
+        QStringRef colorName = colorProperties.value("NAME");
+        currentColor.name = colorName.isEmpty() || colorName.isNull() ? i18n("Untitled") : colorName.toString();
+
+        currentColor.color = KoColor(KoColorSpaceRegistry::instance()->colorSpace(CMYKAColorModelID.id(), Integer8BitsColorDepthID.id(), ""));
+
+        colorValue = colorProperties.value("CMYK");
+        if (colorValue.length() != 9 && colorValue.at(0) != '#') { // Color is a hexadecimal number
+            xml->raiseError("Invalid cmyk color (malformed): " + colorValue);
+            return;
+        }
+        else {
+            bool cmykOk;
+            quint32 cmyk = colorValue.mid(1).toUInt(&cmykOk, 16); // cmyk uses the full 32 bits
+            if  (!cmykOk) {
+                xml->raiseError("Invalid cmyk color (unable to convert): " + colorValue);
+                return;
+            }
+
+            quint8 c = cmyk >> 24 & 0xff;
+            quint8 m = cmyk >> 16 & 0xff;
+            quint8 y = cmyk >> 8 & 0xff;
+            quint8 k = cmyk & 0xff;
+
+            dbgPigment << "Color parsed: "<< c << m << y << k;
+
+            currentColor.color.data()[0] = c;
+            currentColor.color.data()[1] = m;
+            currentColor.color.data()[2] = y;
+            currentColor.color.data()[3] = k;
+            currentColor.color.setOpacity(OPACITY_OPAQUE_U8);
+
+            set->add(currentColor);
+
+            while(xml->readNextStartElement()) {
+                //ignore - these are all unknown or the /> element tag
+                xml->skipCurrentElement();
+            }
+            return;
+        }
+    }
+    else {
+        xml->raiseError("Unknown color space for color " + currentColor.name);
+    }
+}
+
+bool loadScribusXmlPalette(KoColorSet *set, QXmlStreamReader *xml) {
+
+    //1. Get name
+    QXmlStreamAttributes paletteProperties = xml->attributes();
+    QStringRef paletteName = paletteProperties.value("Name");
+    dbgPigment << "Processed name of palette:" << paletteName;
+    set->setName(paletteName.toString());
+
+    //2. Inside the SCRIBUSCOLORS, there are lots of colors. Retrieve them
+
+    while(xml->readNextStartElement()) {
+        QStringRef currentElement = xml->name();
+        if(QStringRef::compare(currentElement, "COLOR", Qt::CaseInsensitive) == 0) {
+            scribusParseColor(set, xml);
+        }
+        else {
+            xml->skipCurrentElement();
+        }
+    }
+
+    if(xml->hasError()) {
+        return false;
+    }
+
+    return true;
+}
+
+bool KoColorSet::loadXml() {
+    bool res = false;
+
+    QXmlStreamReader *xml = new QXmlStreamReader(m_data);
+
+    if (xml->readNextStartElement()) {
+        QStringRef paletteId = xml->name();
+        if (QStringRef::compare(paletteId, "SCRIBUSCOLORS", Qt::CaseInsensitive) == 0) { // Scribus
+            dbgPigment << "XML palette: " << filename() << ", Scribus format";
+            res = loadScribusXmlPalette(this, xml);
+        }
+        else {
+            // Unknown XML format
+            xml->raiseError("Unknown XML palette format. Expected SCRIBUSCOLORS, found " + paletteId);
+        }
+    }
+
+    // If there is any error (it should be returned through the stream)
+    if (xml->hasError() || !res) {
+        QString err = xml->errorString();
+        warnPigment << "Illegal XML palette:" << filename();
+        warnPigment << "Error (line"<< xml->lineNumber() << ", column" << xml->columnNumber() << "):" << xml->errorString();
+        return false;
+    }
+    else {
+        dbgPigment << "XML palette parsed successfully:" << filename();
+        return true;
+    }
 }
 
 quint16 readShort(QIODevice *io) {

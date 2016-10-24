@@ -40,12 +40,13 @@ KisSplashScreen::KisSplashScreen(const QString &version, const QPixmap &pixmap, 
       m_themed(themed)
 {
 
-    m_version = version;
     setupUi(this);
     setWindowIcon(KisIconUtils::loadIcon("calligrakrita"));
 
     // Maintain the aspect ratio on high DPI screens when scaling
     lblSplash->setPixmap(pixmap);
+
+    lblVersion->setText(i18n("Version: %1", version));
 
     bnClose->hide();
     connect(bnClose, SIGNAL(clicked()), this, SLOT(close()));
@@ -145,7 +146,6 @@ void KisSplashScreen::displayRecentFilesAndLinks() {
                            "</body>"
                            "</html>", color));
 
-    lblVersion->setText(i18n("Version: %1", m_version));
     lblVersion->setStyleSheet("color:" + color);
 
     updateText();

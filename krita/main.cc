@@ -95,7 +95,7 @@ extern "C" int main(int argc, char **argv)
     qsrand(time(0));
     bool runningInKDE = !qgetenv("KDE_FULL_SESSION").isEmpty();
     
-#if HAVE_X11 
+#if defined HAVE_X11 
     qputenv("QT_QPA_PLATFORM", "xcb"); 
 #endif
 

@@ -192,10 +192,8 @@ struct KisAnimationCachePopulator::Private
                     }
                 }
 
-                if (!skipRange.isInfinite()) {
-                    bool requested = tryRequestGeneration(activeDocumentCache, skipRange);
-                    if (requested) return true;
-                }
+                bool requested = tryRequestGeneration(activeDocumentCache, skipRange);
+                if (requested) return true;
             }
         }
 

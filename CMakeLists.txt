@@ -83,7 +83,7 @@ endif()
 
 # define common versions of Krita applications, used to generate kritaversion.h
 # update these version for every release:
-set(KRITA_VERSION_STRING "3.0.91")
+set(KRITA_VERSION_STRING "3.0.92")
 set(KRITA_STABLE_VERSION_MAJOR 3) # 3 for 3.x, 4 for 4.x, etc.
 set(KRITA_STABLE_VERSION_MINOR 0) # 0 for 3.0, 1 for 3.1, etc.
 set(KRITA_VERSION_RELEASE 91)     # 89 for Alpha, increase for next test releases, set 0 for first Stable, etc.

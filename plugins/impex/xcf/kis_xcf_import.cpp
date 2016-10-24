@@ -165,7 +165,7 @@ KisImportExportFilter::ConversionStatus KisXCFImport::convert(KisDocument *docum
     getBasicXcfInfo() ;
 
     if (XCF.version < 0 || XCF.version > 3) {
-        doc->setErrorMessage(i18n("This XCF file is too new; Krita cannot support XCF files written by GIMP 2.9 or newer."));
+        document->setErrorMessage(i18n("This XCF file is too new; Krita cannot support XCF files written by GIMP 2.9 or newer."));
         return KisImportExportFilter::UnsupportedVersion;
     }
 

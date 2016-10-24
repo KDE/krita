@@ -218,19 +218,17 @@ private:
 
     bool m_showGrid;
     bool m_snapToGrid;
-
-    int m_gridType; // 0 is rectangle, 1 is isometric
+    QPoint m_spacing;
+    bool m_offsetAspectLocked;
+    bool m_spacingAspectLocked;
     int m_angleLeft;
     int m_angleRight;
     int m_cellSpacing;
+    int m_gridType; // 0 is rectangle, 1 is isometric
+    int m_subdivision;
 
     QPoint m_offset;
-    QPoint m_spacing;
 
-    bool m_offsetAspectLocked;
-    bool m_spacingAspectLocked;
-
-    int m_subdivision;
 
     // Static data. Stored in the Krita config.
 

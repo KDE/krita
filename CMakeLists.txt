@@ -160,6 +160,8 @@ endif ()
 option(HIDE_SAFE_ASSERTS "Don't show message box for \"safe\" asserts, just ignore them automatically and dump a message to the terminal." ON)
 configure_file(config-hide-safe-asserts.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-hide-safe-asserts.h)
 
+option(FOUNDATION_BUILD "A Foundation build is a binary release build that can package some extra things like color themes. Linux distribution that build and install Krita into a default system location should not define this option to true." OFF)
+
  #######################
 ########################
 ## Productset setting ##

@@ -146,6 +146,9 @@ void KisGridDecoration::drawDecoration(QPainter& gc, const QRectF& updateArea, c
         gc.setClipRect(imageRect, Qt::IntersectClip);
 
 
+
+
+
         // left angle
         {
             int gridXAngle = m_d->config.angleLeft();
@@ -153,9 +156,19 @@ void KisGridDecoration::drawDecoration(QPainter& gc, const QRectF& updateArea, c
             int bottomRightOfImageY = y2; // this should be the height of the image
             int finalY = 0;
 
+
+            // figure out the spacing based off the angle. The spacing needs to be perpendicular to the angle,
+            // so we need to do a bit of trig to get the correct spacing.
+            float correctedAngleSpacing = cellSpacing;
+            if (gridXAngle > 0) {
+                correctedAngleSpacing = cellSpacing / qCos( qDegreesToRadians((float)gridXAngle));
+
+            }
+
+
             while (finalY < bottomRightOfImageY) {
 
-                int w = (counter * cellSpacing) - offsetY;
+                int w = (counter * correctedAngleSpacing) - offsetY;
                 gc.setPen(mainPen);
 
                 // calculate where the ending point will be based off the angle
@@ -179,9 +192,17 @@ void KisGridDecoration::drawDecoration(QPainter& gc, const QRectF& updateArea, c
             int bottomLeftOfImageY = y2;
             int finalY = 0;
 
+
+            // figure out the spacing based off the angle
+            float correctedAngleSpacing = cellSpacing;
+            if (gridXAngle > 0) {
+                correctedAngleSpacing = cellSpacing / qCos( qDegreesToRadians((float)gridXAngle));
+            }
+
+
             while (finalY < bottomLeftOfImageY) {
 
-                int w = (counter * cellSpacing) - offsetY - offset;
+                int w = (counter * correctedAngleSpacing) - offsetY - offset;
                 gc.setPen(mainPen);
 
                 // calculate where the ending point will be based off the angle

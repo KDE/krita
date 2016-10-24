@@ -135,10 +135,10 @@
             </sizepolicy>
            </property>
            <property name="minimum">
-            <number>20</number>
+            <number>0</number>
            </property>
            <property name="maximum">
-            <number>69</number>
+            <number>89</number>
            </property>
           </widget>
          </item>
@@ -164,10 +164,10 @@
             </sizepolicy>
            </property>
            <property name="minimum">
-            <number>20</number>
+            <number>0</number>
            </property>
            <property name="maximum">
-            <number>70</number>
+            <number>89</number>
            </property>
            <property name="singleStep">
             <number>1</number>

@@ -87,6 +87,7 @@ public:
                             InvalidFormat,
                             FilterCreationError,
                             ProgressCancelled,
+                            UnsupportedVersion,
                             JustInCaseSomeBrokenCompilerUsesLessThanAByte = 255
                           };
 

@@ -560,6 +560,7 @@ class bk_max_flow {
        * being no more active)
        */
       inline void remove_active_node(vertex_descriptor v){
+        (void)v; // disable unused parameter warning
         BOOST_ASSERT(!has_parent(v));
       }
 

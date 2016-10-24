@@ -190,7 +190,7 @@ KoResourceServerProvider::KoResourceServerProvider() : d(new Private)
 //        d->gradientThread->barrier();
 //    }
 
-    d->paletteServer = new KoResourceServerSimpleConstruction<KoColorSet>("ko_palettes", "*.gpl:*.pal:*.act:*.aco:*.css:*.colors");
+    d->paletteServer = new KoResourceServerSimpleConstruction<KoColorSet>("ko_palettes", "*.gpl:*.pal:*.act:*.aco:*.css:*.colors;*.xml");
     if (!QFileInfo(d->paletteServer->saveLocation()).exists()) {
         QDir().mkpath(d->paletteServer->saveLocation());
     }

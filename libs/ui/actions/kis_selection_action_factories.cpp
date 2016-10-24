@@ -521,9 +521,7 @@ void KisShapesToVectorSelectionActionFactory::run(KisViewManager* view)
 void KisSelectionToShapeActionFactory::run(KisViewManager *view)
 {
     KisSelectionSP selection = view->selection();
-
     if (!selection->outlineCacheValid()) {
-
         return;
     }
 
@@ -543,26 +541,24 @@ void KisSelectionToShapeActionFactory::run(KisViewManager *view)
 void KisStrokeSelectionActionFactory::run(KisViewManager *view, StrokeSelectionOptions params)
 {
     KisImageWSP image = view->image();
-    if (!image )     {
-
+    if (!image) {
         return;
     }
 
     KisSelectionSP selection = view->selection();
-    if (!selection)    {
-
+    if (!selection) {
         return;
     }
 
     int size = params.lineSize;
 
-    KisPixelSelectionSP pixelSelection = selection->projection();    if (!pixelSelection->outlineCacheValid()) {
+    KisPixelSelectionSP pixelSelection = selection->projection();
+    if (!pixelSelection->outlineCacheValid()) {
         pixelSelection->recalculateOutlineCache();
     }
 
     QPainterPath outline = pixelSelection->outlineCache();
     QColor color = params.color.toQColor();
-
 
     KisNodeSP currentNode = view->resourceProvider()->resourceManager()->resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeWSP>();
     if (!currentNode->inherits("KisShapeLayer") && currentNode->childCount() == 0) {
@@ -607,14 +603,12 @@ void KisStrokeSelectionActionFactory::run(KisViewManager *view, StrokeSelectionO
 void KisStrokeBrushSelectionActionFactory::run(KisViewManager *view, StrokeSelectionOptions params)
 {
     KisImageWSP image = view->image();
-    if (!image )     {
-
+    if (!image) {
         return;
     }
 
     KisSelectionSP selection = view->selection();
-    if (!selection)    {
-
+    if (!selection) {
         return;
     }
 
@@ -643,6 +637,4 @@ void KisStrokeBrushSelectionActionFactory::run(KisViewManager *view, StrokeSelec
         helper.paintPainterPath(outline);
         image->setModified();
     }
-
-
 }

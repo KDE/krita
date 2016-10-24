@@ -22,8 +22,11 @@
 #include <kis_types.h>
 #include <QWidget>
 #include <QQueue>
+#include <QPushButton>
 #include <KoColorDisplayRendererInterface.h>
-
+#include "kis_action_manager.h"
+#include "KisViewManager.h"
+#include "kactioncollection.h"
 
 class KisFavoriteResourceManager;
 class QWidget;
@@ -44,7 +47,8 @@ class KisPopupPalette : public QWidget
     Q_PROPERTY(int selectedColor READ selectedColor WRITE setSelectedColor)
 
 public:
-    KisPopupPalette(KisFavoriteResourceManager*, const KoColorDisplayRendererInterface *displayRenderer, KisCanvasResourceProvider *provider, QWidget *parent = 0);
+    KisPopupPalette(KisViewManager*, KisFavoriteResourceManager*, const KoColorDisplayRendererInterface *displayRenderer,
+                    KisCanvasResourceProvider *provider, QWidget *parent = 0);
     ~KisPopupPalette();
     QSize sizeHint() const;
 
@@ -99,6 +103,9 @@ private:
     int m_hoveredPreset;
     int m_hoveredColor;
     int m_selectedColor;
+    KisActionManager* m_actionManager;
+    KActionCollection* m_actionCollection;
+
     KisFavoriteResourceManager* m_resourceManager;
     KisVisualColorSelector* m_triangleColorSelector;
 
@@ -111,6 +118,8 @@ private:
     KisRoundHudButton *m_settingsButton;
     KisRoundHudButton *m_brushHudButton;
     QPoint m_lastCenterPoint;
+
+    QPushButton* mirrorMode;
 
 Q_SIGNALS:
     void sigChangeActivePaintop(int);
@@ -135,6 +144,7 @@ private Q_SLOTS:
     void slotHide() { showPopupPalette(false); }
     void slotShowTagsPopup();
     void showHudWidget(bool visible);
+    void slotmirroModeClicked();
 };
 
 #endif // KIS_POPUP_PALETTE_H

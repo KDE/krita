@@ -42,6 +42,7 @@
 #include <QApplication>
 #include "brushhud/kis_brush_hud.h"
 #include "brushhud/kis_round_hud_button.h"
+#include <kis_action.h>
 
 
 #define colorInnerRadius 72.0
@@ -98,15 +99,20 @@ private:
     bool m_dragging;
 };
 
-KisPopupPalette::KisPopupPalette(KisFavoriteResourceManager* manager, const KoColorDisplayRendererInterface *displayRenderer, KisCanvasResourceProvider *provider, QWidget *parent)
+KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisFavoriteResourceManager* manager, const KoColorDisplayRendererInterface *displayRenderer, KisCanvasResourceProvider *provider, QWidget *parent)
     : QWidget(parent, Qt::FramelessWindowHint)
     , m_resourceManager(manager)
     , m_triangleColorSelector(0)
     , m_timer(0)
     , m_displayRenderer(displayRenderer)
     , m_colorChangeCompressor(new KisSignalCompressor(50, KisSignalCompressor::POSTPONE))
+    , m_actionManager(0)
+    , m_actionCollection(0)
     , m_brushHud(0)
 {
+
+    m_actionManager = viewManager->actionManager();
+    m_actionCollection = viewManager->actionCollection();
 
     const int borderWidth = 3;
     //m_triangleColorSelector  = new PopupColorTriangle(displayRenderer, this);
@@ -186,6 +192,18 @@ KisPopupPalette::KisPopupPalette(KisFavoriteResourceManager* manager, const KoCo
     connect(m_brushHudButton, SIGNAL(toggled(bool)), SLOT(showHudWidget(bool)));
     m_brushHudButton->setChecked(cfg.showBrushHud());
 
+
+    // add some stufff below the pop-up palette that will make it easier to use for tablet people
+    mirrorMode = new QPushButton(this);
+    mirrorMode->setText(i18n("Mirror Canvas"));
+
+    const int mirrorButtonSize = 40;
+    mirrorMode->setGeometry(widgetSize - 5.0 * mirrorButtonSize, widgetSize - mirrorButtonSize + 20,
+                           mirrorButtonSize + 60, mirrorButtonSize);
+    connect(mirrorMode, SIGNAL(clicked(bool)), this, SLOT(slotmirroModeClicked()));
+
+
+
     setVisible(true);
     setVisible(false);
 }
@@ -257,8 +275,8 @@ void KisPopupPalette::adjustLayout(const QPoint &p)
 {
     KIS_ASSERT_RECOVER_RETURN(m_brushHud);
     if (isVisible() && parentWidget())  {
-        const QRect fitRect = kisGrowRect(parentWidget()->rect(), -widgetMargin);
 
+        const QRect fitRect = kisGrowRect(parentWidget()->rect(), -widgetMargin);
         const QPoint paletteCenterOffset(width() / 2, height() / 2);
         QRect paletteRect = rect();
         paletteRect.moveTo(p - paletteCenterOffset);
@@ -538,6 +556,14 @@ void KisPopupPalette::slotShowTagsPopup()
     } else {
         QWhatsThis::showText(QCursor::pos(),
                              i18n("There are no tags available to show in this popup. To add presets, you need to tag them and then select the tag here."));
+    }
+}
+
+void KisPopupPalette::slotmirroModeClicked() {
+    QAction* action = m_actionCollection->action("mirror_canvas");
+
+    if (action) {
+          action->trigger();
     }
 }
 

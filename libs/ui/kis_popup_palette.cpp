@@ -222,13 +222,9 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisFavoriteResourc
     zoomToOneHundredPercentButton->setText(i18n("100% Zoom"));
     connect(zoomToOneHundredPercentButton, SIGNAL(clicked(bool)), this, SLOT(slotZoomToOneHundredPercentClicked()));
 
-
     hLayout->addWidget(mirrorMode);
     hLayout->addWidget(canvasOnlyButton);
     hLayout->addWidget(zoomToOneHundredPercentButton);
-
-
-
 
     setVisible(true);
     setVisible(false);
@@ -376,92 +372,93 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
 {
     Q_UNUSED(e);
 
-    float rotationAngle = 0.0;
-
     QPainter painter(this);
+
     painter.setRenderHint(QPainter::Antialiasing);
     painter.setRenderHint(QPainter::SmoothPixmapTransform);
 
-    painter.translate(widgetSize / 2, widgetSize / 2);
-
-    //painting background color
+    //painting background color indicator
     QPainterPath bgColor;
-    bgColor.addEllipse(QPoint(-widgetSize / 2 + 24, -widgetSize / 2 + 60), 20, 20);
+    bgColor.addEllipse(QPoint( 24, 60), 20, 20);
     painter.fillPath(bgColor, m_displayRenderer->toQColor(m_resourceManager->bgColor()));
     painter.drawPath(bgColor);
 
-    //painting foreground color
+    //painting foreground color indicator
     QPainterPath fgColor;
-    fgColor.addEllipse(QPoint(-widgetSize / 2 + 50, -widgetSize / 2 + 32), 30, 30);
+    fgColor.addEllipse(QPoint( 50, 32), 30, 30);
     painter.fillPath(fgColor, m_displayRenderer->toQColor(m_triangleColorSelector->getCurrentColor()));
     painter.drawPath(fgColor);
 
-    // create an ellipse for the background that is slightly
-    // smaller than the clipping mask. This will prevent aliasing
+
+    // create a circle background that everything else will go into
     QPainterPath backgroundContainer;
-    backgroundContainer.addEllipse( -colorOuterRadius, -colorOuterRadius,
-                                    colorOuterRadius*2, colorOuterRadius*2 );
-    painter.fillPath(backgroundContainer,palette().brush(QPalette::Window));
+    backgroundContainer.addEllipse( 0, 0, widgetSize, widgetSize );
+    painter.fillPath(backgroundContainer,palette().brush(QPalette::Background));
     painter.drawPath(backgroundContainer);
+
+
+    // the following things needs to be based off the center, so let's translate the painter
+    painter.translate(widgetSize / 2, widgetSize / 2);
+
 
     //painting favorite brushes
     QList<QImage> images(m_resourceManager->favoritePresetImages());
 
     //painting favorite brushes pixmap/icon
-    QPainterPath path;
+    QPainterPath presetPath;
     for (int pos = 0; pos < numSlots(); pos++) {
         painter.save();
 
-        path = pathFromPresetIndex(pos);
+        presetPath = createPathFromPresetIndex(pos);
 
         if (pos < images.size()) {
-            painter.setClipPath(path);
+            painter.setClipPath(presetPath);
 
-            QRect bounds = path.boundingRect().toAlignedRect();
+            QRect bounds = presetPath.boundingRect().toAlignedRect();
             painter.drawImage(bounds.topLeft() , images.at(pos).scaled(bounds.size() , Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation));
         }
         else {
-            painter.fillPath(path, palette().brush(QPalette::Window));
+            painter.fillPath(presetPath, palette().brush(QPalette::Window));
         }
         QPen pen = painter.pen();
         pen.setWidth(3);
         painter.setPen(pen);
-        painter.drawPath(path);
+        painter.drawPath(presetPath);
 
         painter.restore();
     }
     if (hoveredPreset() > -1) {
-        path = pathFromPresetIndex(hoveredPreset());
+        presetPath = createPathFromPresetIndex(hoveredPreset());
         QPen pen(palette().color(QPalette::Highlight));
         pen.setWidth(3);
         painter.setPen(pen);
-        painter.drawPath(path);
+        painter.drawPath(presetPath);
     }
 
-    //painting recent colors
+    // paint recent colors area.
+
     painter.setPen(Qt::NoPen);
-    rotationAngle = -360.0 / m_resourceManager->recentColorsTotal();
+    float rotationAngle = -360.0 / m_resourceManager->recentColorsTotal();
 
-    KoColor kocolor;
+   // there might be no recent colors at the start, so paint a placeholder
+   if (m_resourceManager->recentColorsTotal() == 0) {
+        painter.setBrush(Qt::transparent);
 
-    for (int pos = 0; pos < m_resourceManager->recentColorsTotal(); pos++) {
-        QPainterPath path(drawDonutPathAngle(colorInnerRadius, colorOuterRadius, m_resourceManager->recentColorsTotal()));
+        QPainterPath emptyRecentColorsPath(drawDonutPathFull(0, 0, colorInnerRadius, colorOuterRadius));
+        painter.setPen(QPen(palette().color(QPalette::Background).lighter(150), 2, Qt::SolidLine, Qt::FlatCap, Qt::MiterJoin));
+        painter.drawPath(emptyRecentColorsPath);
+    } else {
 
-        //accessing recent color of index pos
-        kocolor = m_resourceManager->recentColorAt(pos);
-        painter.fillPath(path, m_displayRenderer->toQColor(kocolor));
+       for (int pos = 0; pos < m_resourceManager->recentColorsTotal(); pos++) {
+           QPainterPath recentColorsPath(drawDonutPathAngle(colorInnerRadius, colorOuterRadius, m_resourceManager->recentColorsTotal()));
 
-        painter.drawPath(path);
-        painter.rotate(rotationAngle);
-    }
+           //accessing recent color of index pos
+           painter.fillPath(recentColorsPath, m_displayRenderer->toQColor( m_resourceManager->recentColorAt(pos) ));
+           painter.drawPath(recentColorsPath);
+           painter.rotate(rotationAngle);
+       }
 
-    painter.setBrush(Qt::transparent);
-
-    if (m_resourceManager->recentColorsTotal() == 0) {
-        QPainterPath path_ColorDonut(drawDonutPathFull(0, 0, colorInnerRadius, colorOuterRadius));
-        painter.setPen(QPen(palette().color(QPalette::Window).darker(130), 1, Qt::SolidLine, Qt::FlatCap, Qt::MiterJoin));
-        painter.drawPath(path_ColorDonut);
-    }
+   }
 
     //painting hovered color
     if (hoveredColor() > -1) {
@@ -662,7 +659,7 @@ int KisPopupPalette::calculateIndex(QPointF point, int n)
 
 bool KisPopupPalette::isPointInPixmap(QPointF& point, int pos)
 {
-    if (pathFromPresetIndex(pos).contains(point + QPointF(-widgetSize / 2, -widgetSize / 2))) {
+    if (createPathFromPresetIndex(pos).contains(point + QPointF(-widgetSize / 2, -widgetSize / 2))) {
         return true;
     }
     return false;
@@ -672,16 +669,21 @@ KisPopupPalette::~KisPopupPalette()
 {
 }
 
-QPainterPath KisPopupPalette::pathFromPresetIndex(int index)
+QPainterPath KisPopupPalette::createPathFromPresetIndex(int index)
 {
-    qreal angleLength = 360.0 / numSlots() / 180 * M_PI;
-    qreal angle = index * angleLength;
+    qreal angleSlice = 360.0 / numSlots() / 180 * M_PI; // 10 slots = 0.6283 (in radians)
+    qreal startingAngle = index * angleSlice;  // the starting angle of the slice we need to draw (in radians)
 
-    qreal r = colorOuterRadius * sin(angleLength/2) / ( 1 - sin(angleLength/2));
+    // the distance will get smaller as the amount of presets shown increases. 10 slots == 41
+    qreal angleDistance = colorOuterRadius * sin(angleSlice/2) / (1-sin(angleSlice/2));
+
 
     QPainterPath path;
-    path.addEllipse((colorOuterRadius+r) * cos(angle)-r, -(colorOuterRadius+r) * sin(angle)-r, 2*r, 2*r);
-    path.closeSubpath();
+    float pathX = (colorOuterRadius + angleDistance) * cos(startingAngle) - angleDistance;
+    float pathY = -(colorOuterRadius + angleDistance) * sin(startingAngle) - angleDistance;
+    float pathDiameter = 2 * angleDistance; // distance is used to calculate the X/Y in addition to the preset circle size
+    path.addEllipse(pathX, pathY, pathDiameter, pathDiameter);
+
     return path;
 }
 
@@ -690,7 +692,7 @@ int KisPopupPalette::calculatePresetIndex(QPointF point, int /*n*/)
     for(int i = 0; i < numSlots(); i++)
     {
         QPointF adujustedPoint = point - QPointF(widgetSize/2, widgetSize/2);
-        if(pathFromPresetIndex(i).contains(adujustedPoint))
+        if(createPathFromPresetIndex(i).contains(adujustedPoint))
         {
             return i;
         }

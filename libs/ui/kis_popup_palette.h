@@ -94,7 +94,7 @@ private:
     QPainterPath drawDonutPathAngle(int, int, int);
     bool isPointInPixmap(QPointF&, int pos);
 
-    QPainterPath pathFromPresetIndex(int index);
+    QPainterPath createPathFromPresetIndex(int index);
 
     int numSlots();
     void adjustLayout(const QPoint &p);

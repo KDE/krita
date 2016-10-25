@@ -1,6 +1,7 @@
 * Action: a QAction that can trigger something, be embedded in the menu or a toolbar
 * Application: the central application object, the root of the whole tree
 * Canvas: displays a given image at a certain zoom level, rotation and mirroring
+* Channel: 
 * ColorDepth
 * ColorManager: icc or ocio
 * ColorModel

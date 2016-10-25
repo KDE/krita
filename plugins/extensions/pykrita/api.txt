@@ -9,7 +9,7 @@ class Krita :
         Generators : QList<Generator*>
         Importers  : QList<Importer*>
         Notifier : Notifier
-        Preferences : QMap<QString, QVariant>
+        Preferences : InfoObject
         Version : QString
         Views : QList<View*>
         Windows : QList<Window*> 
@@ -39,191 +39,196 @@ $$$$$ END $$$$$
         
 class Document : 
     Properties:
-        ActiveNode : Node
-        ColorDepth : QString
-        ColorManager : ColorManager
-        ColorModel : QString
-        ColorProfile : ColorProfile
-        DocumentInfo : InfoObject
+        ActiveNode : Node*
+        ColorDepth : ColorDepth
+        ColorManager : ColorManager*
+        ColorModel : ColorModel
+        ColorProfile : ColorProfile*
+        DocumentInfo : InfoObject*
         FileName : QString
         Height : int
-        MetaData : InfoObject
+        MetaData : InfoObject*
         Name : QString
         Resolution : int
-        RootNode : Node
-        Selection : Selection
+        RootNode : Node*
+        Selection : Selection*
         Width : int
         PixelData : QByteArray
     Slots:
-        Document *clone()
-        bool close()
-        void convert(const QString &colorModel, const ColorProfile &profile) : bool
-        void crop(int x, int y, int w, int h) : void
-        Export(const QMap<QString, QVariant> exportConfiguration) : bool
+        clone() : Document *
+        close() : bool
+        convert(const QString &colorModel, const ColorProfile &profile) : bool
+        crop(int x, int y, int w, int h) : void
+        Export(const InfoObject &exportConfiguration) : bool
         Flatten() : void
         ResizeImage(int w, int h) : void
-        Save(const QString
-        SaveAs
-        OpenView
-        CreateNode
-    Signals:
-
+        Save(const QString &url) : bool
+        SaveAs(const QString &url) : bool
+        OpenView() : void
+        CreateNode(const QString &name, const QString &nodeType) : Node*
 class Node : 
     Properties:
-        AlphaLocked
-        BlendingMode
-        Channels
-        ChildNodes
-        ColorDepth
-        ColorLabel
-        ColorModel
-        ColorProfile
-        InheritAlpha
-        Locked
-        Name
-        Opacity
-        ParentNode
-        Type
-        Visible
-        MetaDataInfo
-        Generator
-        Filter
-        Transformation
-        Selection
-        FileName
-        PixelData
+        AlphaLocked : bool
+        BlendingMode : QString
+        Channels : QList<Channel*>
+        ChildNodes : QList<Node*>
+        ColorDepth : ColorDepth
+        ColorLabel : QString
+        ColorModel : ColorModel
+        ColorProfile : ColorProfile
+        InheritAlpha : bool
+        Locked : bool
+        Name : QString
+        Opacity : int
+        ParentNode : Node*
+        Type : QString
+        Visible : bool
+        MetaDataInfo : InfoObject
+        Generator : Generator*
+        Filter : Filter*
+        Transformation : Transformation*
+        Selection : Selection*
+        FileName : QString
+        PixelData : QByteArray
     Slots:
-        move(x,y)
-        moveToParent
-        remove
-        duplicate
+        move(x,y) : void
+        moveToParent(Node *parent) : void
+        remove : void
+        duplicate : Node*
+        
+class Channel :
+    Properties:
+        visible : bool
         
 class Filter : 
     Properties:
-        Configuration
+        Configuration : InfoObject
     Slots:
-        Apply
+        Apply(int x, int y, int w, int h) void
         
 class Generator : 
     Properties:
-        Configuration
+        Configuration : InfoObject
     Slots:
-        CreateNode
+        CreateNode() : Node*
     
 class Action : 
     Properties:
-        Name
-        Menu
-        Checkable
-        Checked
-        Shortcut
-        Visible
-        Enabled
+        Name : QString
+        Menu : QString
+        Checkable : bool
+        Checked : bool
+        Shortcut : QString
+        Visible : bool
+        Enabled : bool
     Slots:
-        Trigger
-        Toggle
+        Trigger() : void
+        Toggle(bool toggle) : void
     Signals:
-        Toggled
-        Triggered
+        Toggled(bool toggle)
+        Triggered()
         
 class Canvas :
     Properties:
-        Document
-        ZoomLevel
-        Rotation
-        Mirror
-        ColorManager
+        Document : Document*
+        ZoomLevel : int
+        Rotation : int
+        Mirror : bool
+        ColorManager : ColorManager*
         
 class ColorManager:
     Properties:
         Type
-        OcioSettings (xml property bag? -- Check what Nuke/Mari do)
+        OcioSettings : InfoObject
         
 class Exporter:
     Properties:
-        Document
-        ExportSetttings (xml property bag?)
+        Document : Document*
+        ExportSetttings : InfoObject
     Slots:
-        Export
+        Export(const QString &filename) : bool
         
 class Importer:
     Properties:
-        Document
-        ImportSettings (xml property bag?)
+        Document : Document*
+        ImportSettings : InfoObject
     Slots:
-        Import
-    
-class Preferences:
-    Properties:
-        Preference
+        Import(const QString &filename) : bool
         
 class View:
     Properties:
-        Window
-        Document
-        Visible
-        Canvas
+        Window : Window*
+        Document : Document*
+        Visible : bool
+        Canvas : Canvas*
     SLots:
-        Close
+        Close(bool confirm) : void
         
 class Window:
     Properties:
-        Views
-        ViewMode
+        Views : QList<View*>
+        ViewMode : QString
     Slots:
-        Close
+        Close(bool confirm) : void
         
 class DockWidget:
     Properties:
-        Canvas
+        Canvas : Canvas*
     Slots:
-        canvasChanged
+        canvasChanged(Canvas *canvas) : void
         
 class ColorDepth:
     Properties:
-        depth
+        depth : int
         
 class ColorModel:
     Properties:
-        colorModelID
+        colorModelID : QString
         
 class ColorProfile:
     Properties:
-        name
+        name : QString
 
 class InfoObject:
-    (key, value map?)
-    
-#Transformation:
-#    ???
+    Properties:
+        properties QMap<QString, QVariant>
+    Slots:
+        setProperty(const QString &key, QVariant value> : void
+        property(const QString &key) : QVariant
+        
     
 class Selection:
     Properties:
-        Width
-        Height
-        Type
+        Width : int
+        Height : int
+        X : int
+        Y : int
+        Type : QString
     SLots:
-        clear
-        contract
-        copy
-        cut
-        deselection
-        expand
-        feather
-        fill
-        grow
-        invert
-        resize
-        rotate
-        select
-        selectAll
-        similar
-        move
+        clear() : void
+        contract(int value) : void
+        copy(int x, int y, int w, int h) : Selection*
+        cut(Node* node) : void
+        deselect() : void
+        expand(int value) : void
+        feather(int value) : void
+        fill(Node* node) : void
+        grow(int value) : void
+        invert() : void
+        resize(int w, int h) : void
+        rotate(int degrees) : void
+        select(int x, int y, int w, int h, int value) : void
+        selectAll(Node *node)
         
 class Resource:
     Properties:
-        Type
-        Name
-        Filename
+        Type : QString
+        Name : QString
+        Filename : QString
+        
+class Transformation:
+    Properties:
+        Definition : QString
+        
 
           

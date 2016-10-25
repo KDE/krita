@@ -240,7 +240,6 @@ find_package(KF5 ${MIN_FRAMEWORKS_VERSION} REQUIRED COMPONENTS
         Archive
         Config
         WidgetsAddons
-        Auth
         Completion
         CoreAddons
         GuiAddons
@@ -250,14 +249,6 @@ find_package(KF5 ${MIN_FRAMEWORKS_VERSION} REQUIRED COMPONENTS
         WindowSystem
 )
 
-# KAuth deprecated authorizeKAction. In order to be warning free,
-# compile with the updated function when the dependency is new enough.
-# Remove this (and the uses of the define) when the minimum KF5
-# version is >= 5.24.0.
-if (${KF5Auth_VERSION} VERSION_LESS "5.24.0" )
-    message("Old KAuth (< 5.24.0) found.")
-    add_definitions(-DKAUTH_BEFORE_5_24)
-endif()
 
 find_package(Qt5 ${MIN_QT_VERSION}
         REQUIRED COMPONENTS
@@ -299,6 +290,22 @@ if (NOT WIN32 AND NOT APPLE)
     find_package(KF5Crash ${MIN_FRAMEWORKS_VERSION} QUIET) 
     macro_bool_to_01(KF5Crash_FOUND HAVE_KCRASH)
     macro_log_feature(${KF5Crash_FOUND} "kcrash" "KDE's Crash Handler" "http://api.kde.org/frameworks-api/frameworks5-apidocs/kcrash/html/index.html" FALSE "" "Optionally used to provide crash reporting on Linux")
+
+    # KAuth deprecated authorizeKAction. In order to be warning free,
+    find_package(KF5Auth ${MIN_FRAMEWORKS_VERSION} QUIET) 
+    macro_bool_to_01(KF5Crash_FOUND HAVE_KAUTH)
+    macro_log_feature(${KF5Auth_FOUND} "kauth" "Execute actions as privileged user" "http://api.kde.org/frameworks-api/frameworks5-apidocs/kauth/html/index.html" FALSE "" "Optional")
+
+    # compile with the updated function when the dependency is new enough.
+    # Remove this (and the uses of the define) when the minimum KF5
+    # version is >= 5.24.0.
+    if (KF5Auth_FOUND)
+        if (${KF5Auth_VERSION} VERSION_LESS "5.24.0" )
+            message("Old KAuth (< 5.24.0) found.")
+            add_definitions(-DKAUTH_BEFORE_5_24)
+        endif()
+    endif()
+
 
     find_package(X11)
     if(X11_FOUND)

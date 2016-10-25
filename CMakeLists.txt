@@ -249,7 +249,7 @@ find_package(KF5 ${MIN_FRAMEWORKS_VERSION} REQUIRED COMPONENTS
         WindowSystem
 )
 
-# KAuth deprecated authorizeKAction. In order to be warning free,
+# KConfig deprecated authorizeKAction. In order to be warning free,
 # compile with the updated function when the dependency is new enough.
 # Remove this (and the uses of the define) when the minimum KF5
 # version is >= 5.24.0.

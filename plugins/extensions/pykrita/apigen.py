@@ -24,6 +24,7 @@ signal_declaration = Template("""    void ${SIGNAL};
 
 getter = Template("""${TYPE} ${CLASSNAME}::${GETTER}() const
 {
+    return ${RETURN_VALUE};
 }
 
 """)
@@ -34,11 +35,19 @@ setter = Template("""void ${CLASSNAME}::${SETTER}(${TYPE} value)
 
 """)
 
-slot = Template("""${TYPE} ${CLASSNAME}::${SLOT}
+slot_return = Template("""${TYPE} ${CLASSNAME}::${SLOT}
+{
+    return ${RETURN_VALUE};
+}
+
+""")
+
+slot_no_return = Template("""${TYPE} ${CLASSNAME}::${SLOT}
 {
 }
 
 """)
+
 
 header = Template("""/*
  *  Copyright (c) 2016 Boudewijn Rempt <boud@valdyas.org>
@@ -61,13 +70,13 @@ header = Template("""/*
 #define LIBKIS_${HEADER_GUARD}_H
 
 #include <QObject>
-#include "kritalibkis_export.h"
-#include "kritalibkis.h"
+#include "kritalibscripting_export.h"
+#include "kritalibscripting.h"
 
 /**
  * ${CLASSNAME}
  */
-class KRITALIBKIS_EXPORT ${CLASSNAME} : public QObject
+class KRITALIBSCRIPTING_EXPORT ${CLASSNAME} : public QObject
 {
     Q_OBJECT
     
@@ -81,7 +90,7 @@ public Q_SLOTS:
     
 ${SLOT_DECLARATIONS}
     
-public Q_SIGNALS:
+Q_SIGNALS:
 
 ${SIGNAL_DECLARATIONS}
 
@@ -115,9 +124,10 @@ ${CLASSNAME}::${CLASSNAME}(QObject *parent)
 {
 }
 
+${GETTER_SETTERS}
+
 ${SLOTS}
 
-${GETTER_SETTERS}
 """)
 
 
@@ -213,23 +223,56 @@ def main(args):
                 property_name = property_definition[0].lstrip().rstrip()
                 property_type =  property_definition[1].lstrip().rstrip()
                 
-                class_definition["PROPERTIES"].append({"TYPE" : property_type ,
-                                                 "PROPERTY" : property_name,
-                                                 "GETTER" : property_name[0].lower() + property_name[1:],
-                                                 "SETTER" : "set" + property_name,
-                                                 "CLASSNAME" : class_name
-                                                 })
+                d = {"TYPE" : property_type ,
+                     "PROPERTY" : property_name,
+                     "GETTER" : property_name[0].lower() + property_name[1:],
+                     "SETTER" : "set" + property_name,
+                     "CLASSNAME" : class_name
+                    }
+                if property_type != "void":
+                    if property_type == "QString":
+                        d["RETURN_VALUE"] = "QString()"
+                    if property_type == "QByteArray":
+                        d["RETURN_VALUE"] = "QByteArray()"
+                    elif property_type == "int" or property_type.endswith("*"):
+                        d["RETURN_VALUE"] = "0"
+                    elif property_type.startswith("QList") or property_type.startswith("QMap"):
+                        d["RETURN_VALUE"] = property_type + "()"
+                    elif property_type == "bool":
+                        d["RETURN_VALUE"] = "false"
+                    elif property_type == "QVariant":
+                        d["RETURN_VALUE"] = "QVariant()"
+                        
+                class_definition["PROPERTIES"].append(d)
             elif inSlots:
+                
                 slot_definition = line.split(" : ")
                 if len(slot_definition) != 2:
                     print("Could not parse slot:" + line + "," + str(line_number))
                     continue
                 slot_name = slot_definition[0].lstrip().rstrip()
                 slot_type =  slot_definition[1].lstrip().rstrip()
-                class_definition["SLOTS"].append({"TYPE" : slot_type ,
-                                       "SLOT" : slot_name,
-                                        "CLASSNAME" : class_name
-                                      })
+                d = {"TYPE" : slot_type ,
+                     "SLOT" : slot_name,
+                     "CLASSNAME" : class_name
+                     }
+                
+                if slot_type != "void":
+                    if slot_type == "QString":
+                        d["RETURN_VALUE"] = "QString()"
+                    if slot_type == "QByteArray":
+                        d["RETURN_VALUE"] = "QByteArray()"
+                    elif slot_type == "int" or slot_type.endswith("*"):
+                        d["RETURN_VALUE"] = "0"
+                    elif slot_type.startswith("QList") or slot_type.startswith("QMap"):
+                        d["RETURN_VALUE"] = slot_type + "()"
+                    elif slot_type == "bool":
+                        d["RETURN_VALUE"] = "false"
+                    elif slot_type == "QVariant":
+                        d["RETURN_VALUE"] = "QVariant()"
+                class_definition["SLOTS"].append(d)
+                
+                        
             elif inSignals:
                 class_definition["SIGNALS"].append({"SIGNAL": line.lstrip().rstrip(),
                                                     "CLASSNAME" : class_name})
@@ -255,9 +298,14 @@ def main(args):
             unpacked_definition["GETTER_SETTERS"] += "\n"
             
         for s in classes[class_name]["SLOTS"]:
-            unpacked_definition["SLOT_DECLARATIONS"] += slot_declaration.safe_substitute(s)
-            unpacked_definition["SLOT_DECLARATIONS"] += "\n"
-            unpacked_definition["SLOTS"] += slot.safe_substitute(s)
+            if "RETURN_VALUE" in s:
+                unpacked_definition["SLOT_DECLARATIONS"] += slot_declaration.safe_substitute(s)
+                unpacked_definition["SLOT_DECLARATIONS"] += "\n"
+                unpacked_definition["SLOTS"] += slot_return.safe_substitute(s)
+            else:
+                unpacked_definition["SLOT_DECLARATIONS"] += slot_declaration.safe_substitute(s)
+                unpacked_definition["SLOT_DECLARATIONS"] += "\n"
+                unpacked_definition["SLOTS"] += slot_no_return.safe_substitute(s)
     
         for s in classes[class_name]["SIGNALS"]:
             unpacked_definition["SIGNAL_DECLARATIONS"] += signal_declaration.safe_substitute(s)

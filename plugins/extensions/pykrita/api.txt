@@ -8,14 +8,14 @@ class Krita :
         Filters : QList<Filter*>
         Generators : QList<Generator*>
         Importers  : QList<Importer*>
-        Notifier : Notifier
-        Preferences : InfoObject
+        Notifier : Notifier*
+        Preferences : InfoObject*
         Version : QString
         Views : QList<View*>
         Windows : QList<Window*> 
         Resources : QList<Resource*>
     Slots:
-        addDockWidgetFactory(DockWidgetFactory *dockWidgetFactory) : void
+        addDockWidget(DockWidget *dockWidget) : void
         addAction(Action *action) : void 
         closeApplication() : bool
         createDocument() : Document*
@@ -28,19 +28,19 @@ class Notifier :
     Signals:
         applicationStarted()
         applicationClosed()
-        imageCreated(Image *image)
-        imageLoaded(Image *image)
-        imageSaved(Image *image)
-        imageClosed(Image *image)
-        nodeCreated(Node *node)
+        imageCreated(Document *image)
+        imageLoaded(Document *image)
+        imageSaved(Document *image)
+        imageClosed(Document *image)
+        nodeCreated(Document *node)
 
         
 class Document : 
     Properties:
         ActiveNode : Node*
-        ColorDepth : ColorDepth
+        ColorDepth : ColorDepth*
         ColorManager : ColorManager*
-        ColorModel : ColorModel
+        ColorModel : ColorModel*
         ColorProfile : ColorProfile*
         DocumentInfo : InfoObject*
         FileName : QString
@@ -55,7 +55,7 @@ class Document :
     Slots:
         clone() : Document *
         close() : bool
-        convert(const QString &colorModel, const ColorProfile &profile) : bool
+        convert(const QString &colorModel, const ColorProfile *profile) : bool
         crop(int x, int y, int w, int h) : void
         Export(const InfoObject &exportConfiguration) : bool
         Flatten() : void
@@ -70,10 +70,10 @@ class Node :
         BlendingMode : QString
         Channels : QList<Channel*>
         ChildNodes : QList<Node*>
-        ColorDepth : ColorDepth
+        ColorDepth : ColorDepth*
         ColorLabel : QString
-        ColorModel : ColorModel
-        ColorProfile : ColorProfile
+        ColorModel : ColorModel*
+        ColorProfile : ColorProfile*
         InheritAlpha : bool
         Locked : bool
         Name : QString
@@ -81,7 +81,7 @@ class Node :
         ParentNode : Node*
         Type : QString
         Visible : bool
-        MetaDataInfo : InfoObject
+        MetaDataInfo : InfoObject*
         Generator : Generator*
         Filter : Filter*
         Transformation : Transformation*
@@ -89,10 +89,10 @@ class Node :
         FileName : QString
         PixelData : QByteArray
     Slots:
-        move(x,y) : void
+        move(int x, int y) : void
         moveToParent(Node *parent) : void
-        remove : void
-        duplicate : Node*
+        remove() : void
+        duplicate() : Node*
         
 class Channel :
     Properties:
@@ -100,13 +100,13 @@ class Channel :
         
 class Filter : 
     Properties:
-        Configuration : InfoObject
+        Configuration : InfoObject*
     Slots:
         Apply(int x, int y, int w, int h) : void
         
 class Generator : 
     Properties:
-        Configuration : InfoObject
+        Configuration : InfoObject*
     Slots:
         CreateNode() : Node*
     
@@ -137,19 +137,19 @@ class Canvas :
 class ColorManager :
     Properties:
         Type : QString
-        OcioSettings : InfoObject
+        OcioSettings : InfoObject*
         
 class Exporter :
     Properties:
         Document : Document*
-        ExportSetttings : InfoObject
+        ExportSetttings : InfoObject*
     Slots:
         Export(const QString &filename) : bool
         
 class Importer :
     Properties:
         Document : Document*
-        ImportSettings : InfoObject
+        ImportSettings : InfoObject*
     Slots:
         Import(const QString &filename) : bool
         
@@ -191,7 +191,7 @@ class InfoObject :
     Properties:
         properties : QMap<QString, QVariant>
     Slots:
-        setProperty(const QString &key, QVariant value> : void
+        setProperty(const QString &key, QVariant value) : void
         property(const QString &key) : QVariant
         
     

@@ -160,14 +160,14 @@ class View :
         Visible : bool
         Canvas : Canvas*
     Slots:
-        Close(bool confirm) : void
+        close(bool confirm) : void
         
-class Window :
-    Properties:
-        Views : QList<View*>
-        ViewMode : QString
-    Slots:
-        Close(bool confirm) : void
+#class Window :
+#    Properties:
+#        Views : QList<View*>
+#        ViewMode : QString
+#    Slots:
+#        close(bool confirm) : void
         
 class DockWidget :
     Properties:

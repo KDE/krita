@@ -70,19 +70,22 @@ header = Template("""/*
 #define LIBKIS_${HEADER_GUARD}_H
 
 #include <QObject>
-#include "kritalibscripting_export.h"
-#include "kritalibscripting.h"
+
+#include "kritalibkis_export.h"
+#include "libkis.h"
 
 /**
  * ${CLASSNAME}
  */
-class KRITALIBSCRIPTING_EXPORT ${CLASSNAME} : public QObject
+class KRITALIBKIS_EXPORT ${CLASSNAME} : public QObject
 {
     Q_OBJECT
+    Q_DISABLE_COPY(${CLASSNAME})
     
 ${PROPERTIES}
 public:
     explicit ${CLASSNAME}(QObject *parent = 0);
+    virtual ~${CLASSNAME}();
 
 ${GETTER_SETTER_DECLARATIONS}
 
@@ -94,8 +97,13 @@ Q_SIGNALS:
 
 ${SIGNAL_DECLARATIONS}
 
+private:
+    struct Private;
+    const Private *const d;
 
 };
+
+Q_DECLARE_METATYPE(${CLASSNAME}*)
 
 #endif // LIBKIS_${HEADER_GUARD}_H
 """)
@@ -119,9 +127,19 @@ source = Template("""/*
  */
 #include "${CLASSNAME}.h"
 
+struct ${CLASSNAME}::Private {
+    Private() {}
+};
+
 ${CLASSNAME}::${CLASSNAME}(QObject *parent) 
     : QObject(parent)
+    , d(new Private)
 {
+}
+
+${CLASSNAME}::~${CLASSNAME}() 
+{
+    delete d;
 }
 
 ${GETTER_SETTERS}
@@ -174,7 +192,7 @@ def main(args):
     for line in api:
         line_number += 1
         
-        if line.isspace():
+        if line.isspace() or line.startswith("#"):
             continue
         
         elif line.startswith("class"):

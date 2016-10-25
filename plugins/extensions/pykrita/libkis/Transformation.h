@@ -1,0 +1,59 @@
+/*
+ *  Copyright (c) 2016 Boudewijn Rempt <boud@valdyas.org>
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+#ifndef LIBKIS_TRANSFORMATION_H
+#define LIBKIS_TRANSFORMATION_H
+
+#include <QObject>
+
+#include "kritalibkis_export.h"
+#include "libkis.h"
+
+/**
+ * Transformation
+ */
+class KRITALIBKIS_EXPORT Transformation : public QObject
+{
+    Q_OBJECT
+    Q_DISABLE_COPY(Transformation)
+    
+    Q_PROPERTY(QString Definition READ definition WRITE setDefinition)
+
+public:
+    explicit Transformation(QObject *parent = 0);
+    virtual ~Transformation();
+
+    QString definition() const;
+    void setDefinition(QString value);
+
+
+
+public Q_SLOTS:
+    
+
+    
+Q_SIGNALS:
+
+
+
+private:
+    struct Private;
+    const Private *const d;
+
+};
+
+#endif // LIBKIS_TRANSFORMATION_H

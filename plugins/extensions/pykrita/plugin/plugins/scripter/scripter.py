@@ -20,10 +20,9 @@ class ScripterViewExtension(ViewExtension):
     def __init__(self, parent):
         super().__init__(parent)
 
-    def setup(self, viewManager):
-        action = viewManager.createAction("Scripter")
+    def setup(self):
+        action = Krita.instance().createAction("Scripter")
         action.triggered.connect(self.showScripter)
-        self.currentWindow = viewManager.mainWindow()
 
     def execute(self):
         stdout = sys.stdout
@@ -48,7 +47,7 @@ class ScripterViewExtension(ViewExtension):
         sys.stderr = stderr
 
     def showScripter(self):
-        dialog = QDialog(self.currentWindow)
+        dialog = QDialog()
         dialog.setWindowModality(Qt.NonModal)
 
         self.editor = QPlainTextEdit()

@@ -10,8 +10,8 @@ class HelloViewExtension(ViewExtension):
   def __init__(self, parent):
       super().__init__(parent)
 
-  def setup(self, viewManager):
-      action = viewManager.createAction("Hello")
+  def setup(self):
+      action = Krita.createAction("Hello")
       action.triggered.connect(hello)
 
 Krita.instance().addViewExtension(HelloViewExtension(Krita.instance()))

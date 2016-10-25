@@ -5,7 +5,7 @@ import sys
 from .api import *
 from .decorators import *
 from .dockwidgetfactory import *
-from PyKrita.krita import *
+from PyKrita import krita
 
 krita_path = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, krita_path)
@@ -27,6 +27,8 @@ excepthook.install()
 from scripter_hooks import MenuHooks
 from mikro import create_pyqt_object, Error as MiKroError
 
+import builtins
+builtins.Krita = krita.Krita.instance()
 
 def qDebug(text):
     '''Use KDE way to show debug info

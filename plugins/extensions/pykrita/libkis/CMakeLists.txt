@@ -1,16 +1,28 @@
 set(kritalibkis_LIB_SRCS
-    application.cpp
-    canvas.cpp
-    document.cpp
-    dockwidget.cpp
-    dockwidgetfactorybase.cpp
-    image.cpp
-    mainwindow.cpp
-    krita.cpp
-    node.cpp
-    view.cpp
-    viewextension.cpp
-    viewmanager.cpp
+    Action.cpp
+    Canvas.cpp
+    Channel.cpp
+    ColorDepth.cpp
+    ColorManager.cpp
+    ColorModel.cpp
+    ColorProfile.cpp
+    DockWidget.cpp
+    DockWidgetFactoryBase.cpp
+    Document.cpp
+    Exporter.cpp
+    Filter.cpp
+    Generator.cpp
+    Importer.cpp
+    InfoObject.cpp
+    Krita.cpp
+    Node.cpp
+    Notifier.cpp
+    Resource.cpp
+    Selection.cpp
+    Transformation.cpp
+    View.cpp
+    ViewExtension.cpp
+    Window.cpp
 )
 
 add_library(kritalibkis SHARED ${kritalibkis_LIB_SRCS} )

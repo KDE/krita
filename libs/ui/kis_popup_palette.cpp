@@ -36,6 +36,9 @@
 #include <QQueue>
 #include <QMenu>
 #include <QWhatsThis>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
+#include <QSpacerItem>
 #include <QDebug>
 #include <math.h>
 #include "kis_signal_compressor.h"
@@ -193,14 +196,37 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisFavoriteResourc
     m_brushHudButton->setChecked(cfg.showBrushHud());
 
 
-    // add some stufff below the pop-up palette that will make it easier to use for tablet people
-    mirrorMode = new QPushButton(this);
-    mirrorMode->setText(i18n("Mirror Canvas"));
+    // add some stuff below the pop-up palette that will make it easier to use for tablet people
+    QVBoxLayout* vLayout = new QVBoxLayout(this); // main layout
 
-    const int mirrorButtonSize = 40;
-    mirrorMode->setGeometry(widgetSize - 5.0 * mirrorButtonSize, widgetSize - mirrorButtonSize + 20,
-                           mirrorButtonSize + 60, mirrorButtonSize);
+    QSpacerItem* verticalSpacer = new QSpacerItem(0, 0, QSizePolicy::Fixed, QSizePolicy::Expanding);
+    vLayout->addSpacerItem(verticalSpacer); // this should push the box to the bottom
+
+
+    QHBoxLayout* hLayout = new QHBoxLayout();
+
+    vLayout->addLayout(hLayout);
+
+
+
+    mirrorMode = new QPushButton();
+    mirrorMode->setText(i18n("Mirror Canvas"));
     connect(mirrorMode, SIGNAL(clicked(bool)), this, SLOT(slotmirroModeClicked()));
+
+
+    canvasOnlyButton = new QPushButton();
+    canvasOnlyButton->setText(i18n("Canvas Only"));
+    connect(canvasOnlyButton, SIGNAL(clicked(bool)), this, SLOT(slotCanvasonlyModeClicked()));
+
+    zoomToOneHundredPercentButton = new QPushButton();
+    zoomToOneHundredPercentButton->setText(i18n("100% Zoom"));
+    connect(zoomToOneHundredPercentButton, SIGNAL(clicked(bool)), this, SLOT(slotZoomToOneHundredPercentClicked()));
+
+
+    hLayout->addWidget(mirrorMode);
+    hLayout->addWidget(canvasOnlyButton);
+    hLayout->addWidget(zoomToOneHundredPercentButton);
+
 
 
 
@@ -277,7 +303,7 @@ void KisPopupPalette::adjustLayout(const QPoint &p)
     if (isVisible() && parentWidget())  {
 
         const QRect fitRect = kisGrowRect(parentWidget()->rect(), -widgetMargin);
-        const QPoint paletteCenterOffset(width() / 2, height() / 2);
+        const QPoint paletteCenterOffset(widgetSize / 2, widgetSize / 2);
         QRect paletteRect = rect();
         paletteRect.moveTo(p - paletteCenterOffset);
         if (m_brushHudButton->isChecked()) {
@@ -339,7 +365,7 @@ void KisPopupPalette::setParent(QWidget *parent) {
 
 QSize KisPopupPalette::sizeHint() const
 {
-    return QSize(widgetSize, widgetSize);
+    return QSize(widgetSize, widgetSize + 50); // last number is the space for the toolbar below
 }
 
 void KisPopupPalette::resizeEvent(QResizeEvent*)
@@ -356,17 +382,17 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
     painter.setRenderHint(QPainter::Antialiasing);
     painter.setRenderHint(QPainter::SmoothPixmapTransform);
 
-    painter.translate(width() / 2, height() / 2);
+    painter.translate(widgetSize / 2, widgetSize / 2);
 
     //painting background color
     QPainterPath bgColor;
-    bgColor.addEllipse(QPoint(-width() / 2 + 24, -height() / 2 + 60), 20, 20);
+    bgColor.addEllipse(QPoint(-widgetSize / 2 + 24, -widgetSize / 2 + 60), 20, 20);
     painter.fillPath(bgColor, m_displayRenderer->toQColor(m_resourceManager->bgColor()));
     painter.drawPath(bgColor);
 
     //painting foreground color
     QPainterPath fgColor;
-    fgColor.addEllipse(QPoint(-width() / 2 + 50, -height() / 2 + 32), 30, 30);
+    fgColor.addEllipse(QPoint(-widgetSize / 2 + 50, -widgetSize / 2 + 32), 30, 30);
     painter.fillPath(fgColor, m_displayRenderer->toQColor(m_triangleColorSelector->getCurrentColor()));
     painter.drawPath(fgColor);
 
@@ -496,7 +522,7 @@ void KisPopupPalette::mouseMoveEvent(QMouseEvent* event)
     QPointF point = event->posF();
     event->accept();
 
-    QPainterPath pathColor(drawDonutPathFull(width() / 2, height() / 2, colorInnerRadius, colorOuterRadius));
+    QPainterPath pathColor(drawDonutPathFull(widgetSize / 2, widgetSize / 2, colorInnerRadius, colorOuterRadius));
 
     setToolTip("");
     setHoveredPreset(-1);
@@ -567,6 +593,26 @@ void KisPopupPalette::slotmirroModeClicked() {
     }
 }
 
+void KisPopupPalette::slotCanvasonlyModeClicked() {
+    QAction* action = m_actionCollection->action("view_show_canvas_only");
+
+    if (action) {
+          action->trigger();
+    }
+}
+
+
+void KisPopupPalette::slotZoomToOneHundredPercentClicked() {
+    QAction* action = m_actionCollection->action("zoom_to_100pct");
+
+    if (action) {
+          action->trigger();
+    }
+}
+
+
+
+
 void KisPopupPalette::tabletEvent(QTabletEvent* /*event*/) {
 }
 
@@ -577,7 +623,7 @@ void KisPopupPalette::mouseReleaseEvent(QMouseEvent * event)
     event->accept();
 
     if (event->button() == Qt::LeftButton || event->button() == Qt::RightButton) {
-        QPainterPath pathColor(drawDonutPathFull(width() / 2, height() / 2, colorInnerRadius, colorOuterRadius));
+        QPainterPath pathColor(drawDonutPathFull(widgetSize / 2, widgetSize / 2, colorInnerRadius, colorOuterRadius));
 
         //in favorite brushes area
         if (hoveredPreset() > -1) {
@@ -598,8 +644,8 @@ int KisPopupPalette::calculateIndex(QPointF point, int n)
 {
     calculatePresetIndex(point, n);
     //translate to (0,0)
-    point.setX(point.x() - width() / 2);
-    point.setY(point.y() - height() / 2);
+    point.setX(point.x() - widgetSize / 2);
+    point.setY(point.y() - widgetSize / 2);
 
     //rotate
     float smallerAngle = M_PI / 2 + M_PI / n - atan2(point.y(), point.x());
@@ -616,7 +662,7 @@ int KisPopupPalette::calculateIndex(QPointF point, int n)
 
 bool KisPopupPalette::isPointInPixmap(QPointF& point, int pos)
 {
-    if (pathFromPresetIndex(pos).contains(point + QPointF(-width() / 2, -height() / 2))) {
+    if (pathFromPresetIndex(pos).contains(point + QPointF(-widgetSize / 2, -widgetSize / 2))) {
         return true;
     }
     return false;
@@ -643,7 +689,7 @@ int KisPopupPalette::calculatePresetIndex(QPointF point, int /*n*/)
 {
     for(int i = 0; i < numSlots(); i++)
     {
-        QPointF adujustedPoint = point - QPointF(width()/2, height()/2);
+        QPointF adujustedPoint = point - QPointF(widgetSize/2, widgetSize/2);
         if(pathFromPresetIndex(i).contains(adujustedPoint))
         {
             return i;

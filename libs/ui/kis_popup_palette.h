@@ -120,6 +120,8 @@ private:
     QPoint m_lastCenterPoint;
 
     QPushButton* mirrorMode;
+    QPushButton* canvasOnlyButton;
+    QPushButton* zoomToOneHundredPercentButton;
 
 Q_SIGNALS:
     void sigChangeActivePaintop(int);
@@ -145,6 +147,8 @@ private Q_SLOTS:
     void slotShowTagsPopup();
     void showHudWidget(bool visible);
     void slotmirroModeClicked();
+    void slotCanvasonlyModeClicked();
+    void slotZoomToOneHundredPercentClicked();
 };
 
 #endif // KIS_POPUP_PALETTE_H

@@ -100,6 +100,8 @@ private:
     void adjustLayout(const QPoint &p);
 private:
 
+
+
     int m_hoveredPreset;
     int m_hoveredColor;
     int m_selectedColor;
@@ -115,6 +117,8 @@ private:
 
     QScopedPointer<KisSignalCompressor> m_colorChangeCompressor;
     KisBrushHud *m_brushHud;
+    int m_popupPaletteSize;
+
     KisRoundHudButton *m_settingsButton;
     KisRoundHudButton *m_brushHudButton;
     QPoint m_lastCenterPoint;

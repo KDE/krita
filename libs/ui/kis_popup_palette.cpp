@@ -50,10 +50,6 @@
 
 #define colorInnerRadius 72.0
 #define colorOuterRadius 92.0
-#define maxbrushRadius 42.0
-#define widgetSize (colorOuterRadius*2+maxbrushRadius*4)
-#define widgetMargin 20.0
-#define hudMargin 30.0
 
 #define _USE_MATH_DEFINES 1
 #include <cmath>
@@ -112,7 +108,10 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisFavoriteResourc
     , m_actionManager(0)
     , m_actionCollection(0)
     , m_brushHud(0)
+    , m_popupPaletteSize(352)
 {
+
+    m_popupPaletteSize = 352;
 
     m_actionManager = viewManager->actionManager();
     m_actionCollection = viewManager->actionCollection();
@@ -122,7 +121,7 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisFavoriteResourc
     m_triangleColorSelector = new KisVisualColorSelector(this);
     m_triangleColorSelector->setDisplayRenderer(displayRenderer);
     m_triangleColorSelector->setConfig(true,false);
-    m_triangleColorSelector->move(widgetSize/2-colorInnerRadius+borderWidth, widgetSize/2-colorInnerRadius+borderWidth);
+    m_triangleColorSelector->move(m_popupPaletteSize/2-colorInnerRadius+borderWidth, m_popupPaletteSize/2-colorInnerRadius+borderWidth);
     m_triangleColorSelector->resize(colorInnerRadius*2-borderWidth*2, colorInnerRadius*2-borderWidth*2);
     m_triangleColorSelector->setVisible(true);
     KoColor fgcolor(Qt::black, KoColorSpaceRegistry::instance()->rgb8());
@@ -174,14 +173,14 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisFavoriteResourc
     setSelectedColor(-1);
 
     m_brushHud = new KisBrushHud(provider, parent);
-    m_brushHud->setMaximumHeight(widgetSize);
+    m_brushHud->setMaximumHeight(m_popupPaletteSize);
     m_brushHud->setVisible(false);
 
     const int auxButtonSize = 35;
 
     m_settingsButton = new KisRoundHudButton(this);
     m_settingsButton->setIcon(KisIconUtils::loadIcon("configure"));
-    m_settingsButton->setGeometry(widgetSize - 2.2 * auxButtonSize, widgetSize - auxButtonSize,
+    m_settingsButton->setGeometry(m_popupPaletteSize - 2.2 * auxButtonSize, m_popupPaletteSize - auxButtonSize,
                                   auxButtonSize, auxButtonSize);
 
     connect(m_settingsButton, SIGNAL(clicked()), SLOT(slotShowTagsPopup()));
@@ -190,7 +189,7 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisFavoriteResourc
     m_brushHudButton = new KisRoundHudButton(this);
     m_brushHudButton->setCheckable(true);
     m_brushHudButton->setOnOffIcons(KisIconUtils::loadIcon("arrow-left"), KisIconUtils::loadIcon("arrow-right"));
-    m_brushHudButton->setGeometry(widgetSize - 1.0 * auxButtonSize, widgetSize - auxButtonSize,
+    m_brushHudButton->setGeometry(m_popupPaletteSize - 1.0 * auxButtonSize, m_popupPaletteSize - auxButtonSize,
                                   auxButtonSize, auxButtonSize);
     connect(m_brushHudButton, SIGNAL(toggled(bool)), SLOT(showHudWidget(bool)));
     m_brushHudButton->setChecked(cfg.showBrushHud());
@@ -298,8 +297,10 @@ void KisPopupPalette::adjustLayout(const QPoint &p)
     KIS_ASSERT_RECOVER_RETURN(m_brushHud);
     if (isVisible() && parentWidget())  {
 
-        const QRect fitRect = kisGrowRect(parentWidget()->rect(), -widgetMargin);
-        const QPoint paletteCenterOffset(widgetSize / 2, widgetSize / 2);
+
+        float hudMargin = 30.0;
+        const QRect fitRect = kisGrowRect(parentWidget()->rect(), -20.0); // -20 is widget margin
+        const QPoint paletteCenterOffset(m_popupPaletteSize / 2, m_popupPaletteSize / 2);
         QRect paletteRect = rect();
         paletteRect.moveTo(p - paletteCenterOffset);
         if (m_brushHudButton->isChecked()) {
@@ -309,7 +310,7 @@ void KisPopupPalette::adjustLayout(const QPoint &p)
 
         paletteRect = kisEnsureInRect(paletteRect, fitRect);
         move(paletteRect.topLeft());
-        m_brushHud->move(paletteRect.topLeft() + QPoint(widgetSize + hudMargin, 0));
+        m_brushHud->move(paletteRect.topLeft() + QPoint(m_popupPaletteSize + hudMargin, 0));
         m_lastCenterPoint = p;
     }
 }
@@ -361,7 +362,7 @@ void KisPopupPalette::setParent(QWidget *parent) {
 
 QSize KisPopupPalette::sizeHint() const
 {
-    return QSize(widgetSize, widgetSize + 50); // last number is the space for the toolbar below
+    return QSize(m_popupPaletteSize, m_popupPaletteSize + 50); // last number is the space for the toolbar below
 }
 
 void KisPopupPalette::resizeEvent(QResizeEvent*)
@@ -392,13 +393,13 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
 
     // create a circle background that everything else will go into
     QPainterPath backgroundContainer;
-    backgroundContainer.addEllipse( 0, 0, widgetSize, widgetSize );
+    backgroundContainer.addEllipse( 0, 0, m_popupPaletteSize, m_popupPaletteSize );
     painter.fillPath(backgroundContainer,palette().brush(QPalette::Background));
     painter.drawPath(backgroundContainer);
 
 
     // the following things needs to be based off the center, so let's translate the painter
-    painter.translate(widgetSize / 2, widgetSize / 2);
+    painter.translate(m_popupPaletteSize / 2, m_popupPaletteSize / 2);
 
 
     //painting favorite brushes
@@ -519,7 +520,7 @@ void KisPopupPalette::mouseMoveEvent(QMouseEvent* event)
     QPointF point = event->posF();
     event->accept();
 
-    QPainterPath pathColor(drawDonutPathFull(widgetSize / 2, widgetSize / 2, colorInnerRadius, colorOuterRadius));
+    QPainterPath pathColor(drawDonutPathFull(m_popupPaletteSize / 2, m_popupPaletteSize / 2, colorInnerRadius, colorOuterRadius));
 
     setToolTip("");
     setHoveredPreset(-1);
@@ -620,7 +621,7 @@ void KisPopupPalette::mouseReleaseEvent(QMouseEvent * event)
     event->accept();
 
     if (event->button() == Qt::LeftButton || event->button() == Qt::RightButton) {
-        QPainterPath pathColor(drawDonutPathFull(widgetSize / 2, widgetSize / 2, colorInnerRadius, colorOuterRadius));
+        QPainterPath pathColor(drawDonutPathFull(m_popupPaletteSize / 2, m_popupPaletteSize / 2, colorInnerRadius, colorOuterRadius));
 
         //in favorite brushes area
         if (hoveredPreset() > -1) {
@@ -641,8 +642,8 @@ int KisPopupPalette::calculateIndex(QPointF point, int n)
 {
     calculatePresetIndex(point, n);
     //translate to (0,0)
-    point.setX(point.x() - widgetSize / 2);
-    point.setY(point.y() - widgetSize / 2);
+    point.setX(point.x() - m_popupPaletteSize / 2);
+    point.setY(point.y() - m_popupPaletteSize / 2);
 
     //rotate
     float smallerAngle = M_PI / 2 + M_PI / n - atan2(point.y(), point.x());
@@ -659,7 +660,7 @@ int KisPopupPalette::calculateIndex(QPointF point, int n)
 
 bool KisPopupPalette::isPointInPixmap(QPointF& point, int pos)
 {
-    if (createPathFromPresetIndex(pos).contains(point + QPointF(-widgetSize / 2, -widgetSize / 2))) {
+    if (createPathFromPresetIndex(pos).contains(point + QPointF(-m_popupPaletteSize / 2, -m_popupPaletteSize / 2))) {
         return true;
     }
     return false;
@@ -691,7 +692,7 @@ int KisPopupPalette::calculatePresetIndex(QPointF point, int /*n*/)
 {
     for(int i = 0; i < numSlots(); i++)
     {
-        QPointF adujustedPoint = point - QPointF(widgetSize/2, widgetSize/2);
+        QPointF adujustedPoint = point - QPointF(m_popupPaletteSize/2, m_popupPaletteSize/2);
         if(createPathFromPresetIndex(i).contains(adujustedPoint))
         {
             return i;

@@ -1,74 +1,74 @@
-flProperties are getters and setters: ActiveDocument becomes activeDocument() and setActiveDocument(). The Document class wraps KisDocument and KisImage in one API. The scripting API uses a generic Node class that wraps both Masks and Layers.
-
-Krita/Application : 
+class Krita : 
     Properties:
-        Actions (QAction that can be placed in a menu or a toolbar, currently called ViewExtension)
-        ActiveDocument
-        Batchmode
-        Documents
-        Exporters
-        Filters
-        Generators
-        Importers 
-        Notifier (hooks)
-        Preferences
-        Version
-        Views
-        Windows
-        Resources (brushes, palettes, profiles, etc)
+        Actions : QList<Action*>
+        ActiveDocument : Document*
+        Batchmode : bool 
+        Documents : QList<Document*>
+        Exporters : QList<Exporter*>
+        Filters : QList<Filter*>
+        Generators : QList<Generator*>
+        Importers  : QList<Importer*>
+        Notifier : Notifier
+        Preferences : QMap<QString, QVariant>
+        Version : QString
+        Views : QList<View*>
+        Windows : QList<Window*> 
+        Resources : QList<Resource*>
     Slots:
-        AddDockWidgetFactory (Create a dock widget on startup)
-        CloseApplication
-        CreateDocument
-        OpenDocument
-        OpenWindow
+        addDockWidgetFactory(DockWidgetFactory *dockWidgetFactory) : void
+        addAction(Action *action) : void 
+        closeApplication() : bool
+        createDocument() : Document*
+        openDocument() : Document*
+        openWindow() : Window*
         
-Notifier : 
+class Notifier : 
     Properties:
-        Active
+        Active : bool
     Signals:
-        ApplicationStarted
-        ApplicationClosed
-        ImageCreated
-        ImageLoaded
-        ImageSaved
-        ImageClosed
-        NodeCreated
-        NodeRemoved
+        applicationStarted()
+        applicationClosed()
+        imageCreated(Image *image)
+        imageLoaded(Image *image)
+        imageSaved(Image *image)
+        imageClosed(Image *image)
+        nodeCreated(Node *node)
 
-Document : 
+class Dummy :     
+$$$$$ END $$$$$        
+        
+class Document : 
     Properties:
-        ActiveNode
-        ColorDepth
-        ColorManager
-        ColorModel
-        ColorProfile
-        DocumentInfo
-        FileName
-        Height
-        MetaData
-        Name
-        Resolution
-        RootNode
-        Selection
-        Width
-        PixelData
+        ActiveNode : Node
+        ColorDepth : QString
+        ColorManager : ColorManager
+        ColorModel : QString
+        ColorProfile : ColorProfile
+        DocumentInfo : InfoObject
+        FileName : QString
+        Height : int
+        MetaData : InfoObject
+        Name : QString
+        Resolution : int
+        RootNode : Node
+        Selection : Selection
+        Width : int
+        PixelData : QByteArray
     Slots:
-        Clone
-        Close
-        Convert
-        Crop
-        Export
-        Flatten
-        Paste
-        ResizeImage
-        Save
+        Document *clone()
+        bool close()
+        void convert(const QString &colorModel, const ColorProfile &profile) : bool
+        void crop(int x, int y, int w, int h) : void
+        Export(const QMap<QString, QVariant> exportConfiguration) : bool
+        Flatten() : void
+        ResizeImage(int w, int h) : void
+        Save(const QString
         SaveAs
         OpenView
         CreateNode
     Signals:
 
-Node : 
+class Node : 
     Properties:
         AlphaLocked
         BlendingMode
@@ -98,19 +98,19 @@ Node :
         remove
         duplicate
         
-Filter : 
+class Filter : 
     Properties:
         Configuration
     Slots:
         Apply
         
-Generator : 
+class Generator : 
     Properties:
         Configuration
     Slots:
         CreateNode
     
-Action : (Maybe we can use QAction directly?)
+class Action : 
     Properties:
         Name
         Menu
@@ -126,7 +126,7 @@ Action : (Maybe we can use QAction directly?)
         Toggled
         Triggered
         
-Canvas :
+class Canvas :
     Properties:
         Document
         ZoomLevel
@@ -134,30 +134,30 @@ Canvas :
         Mirror
         ColorManager
         
-ColorManager:
+class ColorManager:
     Properties:
         Type
         OcioSettings (xml property bag? -- Check what Nuke/Mari do)
         
-Exporter:
+class Exporter:
     Properties:
         Document
         ExportSetttings (xml property bag?)
     Slots:
         Export
         
-Importer:
+class Importer:
     Properties:
         Document
         ImportSettings (xml property bag?)
     Slots:
         Import
     
-Preferences:
+class Preferences:
     Properties:
         Preference
         
-View:
+class View:
     Properties:
         Window
         Document
@@ -166,39 +166,38 @@ View:
     SLots:
         Close
         
-Window:
+class Window:
     Properties:
         Views
         ViewMode
     Slots:
         Close
         
-DockWidgets:
+class DockWidget:
     Properties:
         Canvas
     Slots:
         canvasChanged
         
-ColorDepth:
+class ColorDepth:
     Properties:
         depth
         
-ColorModel:
+class ColorModel:
     Properties:
         colorModelID
         
-ColorProfile:
+class ColorProfile:
     Properties:
         name
-        ...
 
-InfoObject:
+class InfoObject:
     (key, value map?)
     
-Transformation:
-    ???
+#Transformation:
+#    ???
     
-Selection:
+class Selection:
     Properties:
         Width
         Height
@@ -221,12 +220,10 @@ Selection:
         similar
         move
         
-Resource:
+class Resource:
     Properties:
         Type
         Name
         Filename
-        
-        
-PixelData:
-    array of bytes
+
+          

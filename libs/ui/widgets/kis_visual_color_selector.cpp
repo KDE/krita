@@ -162,6 +162,8 @@ void KisVisualColorSelector::slotRebuildSelectors()
         case Y:
             channel1 = 2;
             break;
+        default:
+            Q_ASSERT_X(false, "", "Invalid acs_config.subTypeParameter");
         }
 
         switch(m_d->acs_config.mainTypeParameter)
@@ -227,6 +229,8 @@ void KisVisualColorSelector::slotRebuildSelectors()
             channel2 = 1;
             channel3 = 2;
             break;
+        default:
+            Q_ASSERT_X(false, "", "Invalid acs_config.mainTypeParameter");
         }
         if (m_d->acs_config.mainType==Triangle) {
             modelS = KisVisualColorSelectorShape::HSV;

@@ -153,7 +153,6 @@ message(STATUS "Release build: ${RELEASE_BUILD}")
 
 option(PACKAGERS_BUILD "Build support of multiple CPU architectures in one binary. Should be used by packagers only or Krita developers. Only switch off when you're an artist optimizing a build for your very own machine." ON)
 if (WIN32)
-    option(USE_BREAKPAD "Build the Breakpad crash handler for Krita (only on windows)" OFF)
     option(USE_DRMINGW "Support the Dr. Mingw crash handler (only on windows)" ON)
 endif ()
 

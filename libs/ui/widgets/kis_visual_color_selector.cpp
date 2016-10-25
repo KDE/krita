@@ -38,6 +38,7 @@
 #include <KoColorModelStandardIds.h>
 #include <QPointer>
 #include "kis_signal_compressor.h"
+#include "kis_debug.h"
 
 struct KisVisualColorSelector::Private
 {
@@ -255,6 +256,12 @@ void KisVisualColorSelector::slotRebuildSelectors()
                                                        m_d->currentCS, channel1, channel1,
                                                        m_d->displayRenderer, borderWidth, KisVisualEllipticalSelectorShape::borderMirrored);
             bar->resize(sizeValue, sizeValue);
+        } else {
+            // Accessing bar below would crash since it's not initialized.
+            // Hopefully this can never happen.
+            warnUI << "Invalid subType, cannot initialize KisVisualColorSelectorShape";
+            Q_ASSERT_X(false, "", "Invalid subType, cannot initialize KisVisualColorSelectorShape");
+            return;
         }
 
         bar->setColor(m_d->currentcolor);

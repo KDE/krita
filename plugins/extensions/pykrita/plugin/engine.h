@@ -80,7 +80,7 @@ class Python;                                               // fwd decl
  * it into memory within Krita, and then with finding and
  * loading all of the PyKrita plugins.
  *
- * \attention Qt/KDE do not use exceptions (unfortunately),
+ * \attention Qt/KDE does not use exceptions (unfortunately),
  * so this class must be initialized in two steps:
  * - create an instance (via constructor)
  * - try to initialize the rest (via \c Engine::tryInitializeGetFailureReason())

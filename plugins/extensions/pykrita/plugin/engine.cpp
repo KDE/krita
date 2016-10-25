@@ -193,10 +193,12 @@ PyKrita::Engine::~Engine()
 
     // Clean internal configuration dicts
     // NOTE Do not need to save anything! It's already done!
-    if (m_configuration)
+    if (m_configuration) {
         Py_DECREF(m_configuration);
-    if (m_sessionConfiguration)
+    }
+    if (m_sessionConfiguration) {
         Py_DECREF(m_sessionConfiguration);
+    }
 
     Python::libraryUnload();
     s_engine_instance = 0;
@@ -205,9 +207,11 @@ PyKrita::Engine::~Engine()
 void PyKrita::Engine::unloadAllModules()
 {
     // Unload all modules
-    for (int i = 0; i < m_plugins.size(); ++i)
-        if (m_plugins[i].isEnabled() && !m_plugins[i].isBroken())
+    for (int i = 0; i < m_plugins.size(); ++i) {
+        if (m_plugins[i].isEnabled() && !m_plugins[i].isBroken()) {
             unloadModule(i);
+        }
+    }
 }
 
 /**

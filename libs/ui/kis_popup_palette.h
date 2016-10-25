@@ -117,7 +117,9 @@ private:
 
     QScopedPointer<KisSignalCompressor> m_colorChangeCompressor;
     KisBrushHud *m_brushHud;
-    int m_popupPaletteSize;
+    float m_popupPaletteSize;
+    float m_colorHistoryInnerRadius;
+    float m_colorHistoryOuterRadius;
 
     KisRoundHudButton *m_settingsButton;
     KisRoundHudButton *m_brushHudButton;

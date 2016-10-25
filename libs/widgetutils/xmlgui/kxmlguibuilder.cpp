@@ -40,7 +40,7 @@
 
 #include <kis_icon_utils.h>
 
-#if defined(KAUTH_BEFORE_5_24)
+#if defined(KCONFIG_BEFORE_5_24)
 # define authorizeAction authorizeKAction
 #endif
 

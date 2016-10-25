@@ -83,14 +83,14 @@ Function naming
 
 Variable/Parameter names
 
-	Variable/parameter names start with an undercast letter. A name composed of different
+	Variable/parameter names start with a lower case letter. A name composed of different
 	words is done in camelBackedStyle.
 
 Designer
 
 	Krita has started to use designer. All dialogs and all widgets that have a layout
-	manager must be done in designer. We don't add code nor add signal/slot connections
-	in designer
+	manager must be done in designer. Do not add code or signal/slot connections
+	in designer.
 
 Enums
 

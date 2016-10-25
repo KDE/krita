@@ -48,49 +48,6 @@
 #include <kis_action.h>
 
 
-class PopupColorTriangle : public KoTriangleColorSelector
-{
-public:
-    PopupColorTriangle(const KoColorDisplayRendererInterface *displayRenderer, QWidget* parent)
-        : KoTriangleColorSelector(displayRenderer, parent)
-        , m_dragging(false) {
-    }
-
-    ~PopupColorTriangle() override {}
-
-    void tabletEvent(QTabletEvent* event) override {
-        event->accept();
-        QMouseEvent* mouseEvent = 0;
-        switch (event->type()) {
-        case QEvent::TabletPress:
-            mouseEvent = new QMouseEvent(QEvent::MouseButtonPress, event->pos(),
-                                         Qt::LeftButton, Qt::LeftButton, event->modifiers());
-            m_dragging = true;
-            mousePressEvent(mouseEvent);
-            break;
-        case QEvent::TabletMove:
-            mouseEvent = new QMouseEvent(QEvent::MouseMove, event->pos(),
-                                         (m_dragging) ? Qt::LeftButton : Qt::NoButton,
-                                         (m_dragging) ? Qt::LeftButton : Qt::NoButton, event->modifiers());
-            mouseMoveEvent(mouseEvent);
-            break;
-        case QEvent::TabletRelease:
-            mouseEvent = new QMouseEvent(QEvent::MouseButtonRelease, event->pos(),
-                                         Qt::LeftButton,
-                                         Qt::LeftButton,
-                                         event->modifiers());
-            m_dragging = false;
-            mouseReleaseEvent(mouseEvent);
-            break;
-        default: break;
-        }
-        delete mouseEvent;
-    }
-
-private:
-    bool m_dragging;
-};
-
 KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisFavoriteResourceManager* manager, const KoColorDisplayRendererInterface *displayRenderer, KisCanvasResourceProvider *provider, QWidget *parent)
     : QWidget(parent, Qt::FramelessWindowHint)
     , m_resourceManager(manager)
@@ -116,7 +73,7 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisFavoriteResourc
     m_actionCollection = viewManager->actionCollection();
 
     const int borderWidth = 3;
-    //m_triangleColorSelector  = new PopupColorTriangle(displayRenderer, this);
+
     m_triangleColorSelector = new KisVisualColorSelector(this);
     m_triangleColorSelector->setDisplayRenderer(displayRenderer);
     m_triangleColorSelector->setConfig(true,false);

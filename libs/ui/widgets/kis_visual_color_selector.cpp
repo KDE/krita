@@ -116,9 +116,7 @@ void KisVisualColorSelector::slotRebuildSelectors()
     KConfigGroup cfg =  KSharedConfig::openConfig()->group("advancedColorSelector");
     m_d->acs_config = Configuration::fromString(cfg.readEntry("colorSelectorConfiguration", KisVisualColorSelector::Configuration().toString()));
 
-    if (this->children().at(0)) {
-        qDeleteAll(this->children());
-    }
+    qDeleteAll(children());
     m_d->widgetlist.clear();
     QLayout *layout = new QHBoxLayout;
     //redraw all the widgets.

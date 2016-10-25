@@ -551,7 +551,7 @@ void TestSvgParser::testScalingViewportTransform()
 {
     /**
      * Note: 'transform' affects all the attributes of the *current*
-     * element, while 'vewBox' affects only the decendants!
+     * element, while 'viewBox' affects only the decendants!
      */
 
     const QString data =
@@ -589,6 +589,33 @@ void TestSvgParser::testTransformNesting()
             "<rect id=\"testRect\" x=\"0\" y=\"0\" width=\"10\" height=\"20\""
             "    transform=\"translate(10,10), scale(2, 1)\""
             "    fill=\"none\" stroke=\"none\" stroke-width=\"10\"/>"
+
+            "</svg>";
+
+    SvgTester t (data);
+    t.parser.setResolution(QRectF(0, 0, 600, 400) /* px */, 72 /* ppi */);
+    t.run();
+
+    KoShape *shape = t.findShape("testRect");
+    QVERIFY(shape);
+
+    QCOMPARE(shape->boundingRect(), QRectF(10 - 1,10 - 0.5, 20 + 2, 20 + 1));
+    QCOMPARE(shape->outlineRect(), QRectF(0,0,10,20));
+    QCOMPARE(shape->absolutePosition(KoFlake::TopLeftCorner), QPointF(10,10));
+    QCOMPARE(shape->absolutePosition(KoFlake::BottomRightCorner), QPointF(30,30));
+}
+
+void TestSvgParser::testTransformNestingGroups()
+{
+    const QString data =
+            "<svg width=\"10px\" height=\"20px\" viewBox=\"0 0 10 20\""
+            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+
+            "<g transform=\"translate(10,10)\">"
+            "    <rect id=\"testRect\" x=\"0\" y=\"0\" width=\"10\" height=\"20\""
+            "        transform=\"scale(2, 1)\""
+            "        fill=\"none\" stroke=\"none\" stroke-width=\"10\"/>"
+            "</g>"
 
             "</svg>";
 

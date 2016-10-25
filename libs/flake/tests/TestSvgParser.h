@@ -44,6 +44,7 @@ private Q_SLOTS:
 
     void testScalingViewportTransform();
     void testTransformNesting();
+    void testTransformNestingGroups();
     void testTransformRotation1();
     void testTransformRotation2();
 

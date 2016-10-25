@@ -1110,6 +1110,33 @@ void SvgParser::setFileFetcher(SvgParser::FileFetcherFunc func)
     m_context.setFileFetcher(func);
 }
 
+QList<KoShape*> SvgParser::parseGroup(const KoXmlElement &b)
+{
+    QList<KoShape*> shapes;
+
+    m_context.pushGraphicsContext(b);
+
+    KoShapeGroup *group = new KoShapeGroup();
+    group->setZIndex(m_context.nextZIndex());
+
+    uploadStyleToContext(b);
+
+    QList<KoShape*> childShapes = parseContainer(b);
+
+    // handle id
+    applyId(b.attribute("id"), group);
+
+    addToGroup(childShapes, group);
+
+    applyCurrentStyle(group); // apply style to this group after size is set
+
+    shapes.append(group);
+
+    m_context.popGraphicsContext();
+
+    return shapes;
+}
+
 QList<KoShape*> SvgParser::parseContainer(const KoXmlElement &e)
 {
     QList<KoShape*> shapes;
@@ -1142,28 +1169,7 @@ QList<KoShape*> SvgParser::parseContainer(const KoXmlElement &e)
             shapes += parseSvg(b);
         } else if (b.tagName() == "g" || b.tagName() == "a" || b.tagName() == "symbol") {
             // treat svg link <a> as group so we don't miss its child elements
-            m_context.pushGraphicsContext(b);
-
-            KoShapeGroup *group = new KoShapeGroup();
-            group->setZIndex(m_context.nextZIndex());
-
-            uploadStyleToContext(b);
-
-            QList<KoShape*> childShapes = parseContainer(b);
-
-            // handle id
-            applyId(b.attribute("id"), group);
-
-            addToGroup(childShapes, group);
-
-            applyViewBoxTransform(b);
-            group->applyAbsoluteTransformation(m_context.currentGC()->matrix);
-
-            applyCurrentStyle(group); // apply style to this group after size is set
-
-            shapes.append(group);
-
-            m_context.popGraphicsContext();
+            shapes += parseGroup(b);
         } else if (b.tagName() == "switch") {
             m_context.pushGraphicsContext(b);
             shapes += parseContainer(b);

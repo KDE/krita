@@ -34,8 +34,6 @@ class Notifier :
         imageClosed(Image *image)
         nodeCreated(Node *node)
 
-class Dummy :     
-$$$$$ END $$$$$        
         
 class Document : 
     Properties:
@@ -104,7 +102,7 @@ class Filter :
     Properties:
         Configuration : InfoObject
     Slots:
-        Apply(int x, int y, int w, int h) void
+        Apply(int x, int y, int w, int h) : void
         
 class Generator : 
     Properties:
@@ -136,75 +134,75 @@ class Canvas :
         Mirror : bool
         ColorManager : ColorManager*
         
-class ColorManager:
+class ColorManager :
     Properties:
-        Type
+        Type : QString
         OcioSettings : InfoObject
         
-class Exporter:
+class Exporter :
     Properties:
         Document : Document*
         ExportSetttings : InfoObject
     Slots:
         Export(const QString &filename) : bool
         
-class Importer:
+class Importer :
     Properties:
         Document : Document*
         ImportSettings : InfoObject
     Slots:
         Import(const QString &filename) : bool
         
-class View:
+class View :
     Properties:
         Window : Window*
         Document : Document*
         Visible : bool
         Canvas : Canvas*
-    SLots:
+    Slots:
         Close(bool confirm) : void
         
-class Window:
+class Window :
     Properties:
         Views : QList<View*>
         ViewMode : QString
     Slots:
         Close(bool confirm) : void
         
-class DockWidget:
+class DockWidget :
     Properties:
         Canvas : Canvas*
     Slots:
         canvasChanged(Canvas *canvas) : void
         
-class ColorDepth:
+class ColorDepth :
     Properties:
         depth : int
         
-class ColorModel:
+class ColorModel :
     Properties:
         colorModelID : QString
         
-class ColorProfile:
+class ColorProfile :
     Properties:
         name : QString
 
-class InfoObject:
+class InfoObject :
     Properties:
-        properties QMap<QString, QVariant>
+        properties : QMap<QString, QVariant>
     Slots:
         setProperty(const QString &key, QVariant value> : void
         property(const QString &key) : QVariant
         
     
-class Selection:
+class Selection :
     Properties:
         Width : int
         Height : int
         X : int
         Y : int
         Type : QString
-    SLots:
+    Slots:
         clear() : void
         contract(int value) : void
         copy(int x, int y, int w, int h) : Selection*
@@ -218,17 +216,19 @@ class Selection:
         resize(int w, int h) : void
         rotate(int degrees) : void
         select(int x, int y, int w, int h, int value) : void
-        selectAll(Node *node)
+        selectAll(Node *node) : void
         
-class Resource:
+class Resource :
     Properties:
         Type : QString
         Name : QString
         Filename : QString
         
-class Transformation:
+class Transformation :
     Properties:
         Definition : QString
         
 
+class Dummy :     
+$$$$$ END $$$$$        
           

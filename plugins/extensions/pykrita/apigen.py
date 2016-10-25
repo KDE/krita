@@ -208,7 +208,7 @@ def main(args):
             if inProperties:
                 property_definition = line.split(" : ")
                 if len(property_definition) != 2:
-                    print("Could not parse property", + line + "," + str(line_number))
+                    print("Could not parse property" + line + "," + str(line_number))
                     continue
                 property_name = property_definition[0].lstrip().rstrip()
                 property_type =  property_definition[1].lstrip().rstrip()

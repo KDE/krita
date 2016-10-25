@@ -352,7 +352,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
     // TODO: fix print & exportAsPdf to work without mainwindow shown
     const bool showmainWindow = !exportAs; // would be !batchRun;
 
-    const bool showSplashScreen = !m_batchRun && qgetenv("NOSPLASH").isEmpty() &&  qgetenv("XDG_CURRENT_DESKTOP") != "GNOME";
+    const bool showSplashScreen = !m_batchRun && qEnvironmentVariableIsEmpty("NOSPLASH") &&  qgetenv("XDG_CURRENT_DESKTOP") != "GNOME";
     if (showSplashScreen) {
         d->splashScreen->show();
         d->splashScreen->repaint();

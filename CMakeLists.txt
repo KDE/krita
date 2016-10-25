@@ -4,9 +4,9 @@ message(STATUS "Using CMake version: ${CMAKE_VERSION}")
 
 cmake_minimum_required(VERSION 2.8.12 FATAL_ERROR)
 
-if (WIN32)
-    set(MIN_QT_VERSION 5.6.0)
-else()
+set(MIN_QT_VERSION 5.6.0)
+option(OVERRIDE_QT_VERSION "Use this to make it possible to build with Qt < 5.6.0. There will be bugs." OFF)
+if (OVERRIDE_QT_VERSION)
     set(MIN_QT_VERSION 5.4.0)
 endif()
 

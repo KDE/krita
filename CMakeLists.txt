@@ -61,20 +61,6 @@ if (APPLE)
     add_definitions(-mmacosx-version-min=10.9 -Wno-deprecated-register)
 endif()
 
-# QT5TODO: remove KDE4_BUILD_TESTS once all kde4_add_unit_test have been converted
-# transitional forward compatibility:
-# BUILD_TESTING is cmake standard, KDE4_BUILD_TESTS not used by ECM/KF5, but only
-# macros in cmake/transitional. Just, Macros from cmake/transitional,
-# incl. kde4_add_unit_test, are only picked up if no macros from kdelibs4 are installed,
-# because that transitional path is appended. Prepending instead might possibly unwantedly
-# mask ECM/KF5 macros. Not tested.
-# So have BUILD_TESTING define KDE4_BUILD_TESTS.
-if (BUILD_TESTING)
-    set(KDE4_BUILD_TESTS TRUE)
-else()
-    set(KDE4_BUILD_TESTS FALSE)
-endif()
-
  ######################
 #######################
 ## Constants defines ##
@@ -228,7 +214,6 @@ include(KDEInstallDirs)
 include(KDECMakeSettings)
 include(KDECompilerSettings)
 include(FeatureSummary)
-include(KDE4Macros)
 
 # do not reorder to be alphabetical: this is the order in which the frameworks
 # depend on each other.
@@ -605,7 +590,7 @@ else()
   set(REQUIRED_Xinput_FOUND TRUE)
 endif()
 
-add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS} ${QT_QTDBUS_DEFINITIONS})
+add_definitions(${QT_DEFINITIONS} ${QT_QTDBUS_DEFINITIONS})
 
 if(WIN32)
     set(LIB_INSTALL_DIR ${LIB_INSTALL_DIR}

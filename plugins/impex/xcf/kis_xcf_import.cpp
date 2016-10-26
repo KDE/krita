@@ -339,7 +339,7 @@ KisImportExportFilter::ConversionStatus KisXCFImport::loadFromDevice(QIODevice* 
         layers.append(layer);
     }
 
-    for (int i = 0; i <= maxDepth; ++i) {
+    for (uint i = 0; i <= maxDepth; ++i) {
         addLayers(layers, image, i);
     }
 

@@ -2,6 +2,10 @@
 # CMake for gmic
 ##
 
+if (CMAKE_COMPILER_IS_GNUCXX)
+    add_compile_options("-Wno-misleading-indentation")
+endif()
+
 set(GMIC_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/gmic")
 
 include_directories( ${GMIC_SOURCE_DIR})

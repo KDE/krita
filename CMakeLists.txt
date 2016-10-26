@@ -4,9 +4,9 @@ message(STATUS "Using CMake version: ${CMAKE_VERSION}")
 
 cmake_minimum_required(VERSION 2.8.12 FATAL_ERROR)
 
-if (WIN32)
-    set(MIN_QT_VERSION 5.6.0)
-else()
+set(MIN_QT_VERSION 5.6.0)
+option(OVERRIDE_QT_VERSION "Use this to make it possible to build with Qt < 5.6.0. There will be bugs." OFF)
+if (OVERRIDE_QT_VERSION)
     set(MIN_QT_VERSION 5.4.0)
 endif()
 
@@ -83,7 +83,7 @@ endif()
 
 # define common versions of Krita applications, used to generate kritaversion.h
 # update these version for every release:
-set(KRITA_VERSION_STRING "3.0.91")
+set(KRITA_VERSION_STRING "3.0.92")
 set(KRITA_STABLE_VERSION_MAJOR 3) # 3 for 3.x, 4 for 4.x, etc.
 set(KRITA_STABLE_VERSION_MINOR 0) # 0 for 3.0, 1 for 3.1, etc.
 set(KRITA_VERSION_RELEASE 91)     # 89 for Alpha, increase for next test releases, set 0 for first Stable, etc.
@@ -153,12 +153,13 @@ message(STATUS "Release build: ${RELEASE_BUILD}")
 
 option(PACKAGERS_BUILD "Build support of multiple CPU architectures in one binary. Should be used by packagers only or Krita developers. Only switch off when you're an artist optimizing a build for your very own machine." ON)
 if (WIN32)
-    option(USE_BREAKPAD "Build the Breakpad crash handler for Krita (only on windows)" OFF)
     option(USE_DRMINGW "Support the Dr. Mingw crash handler (only on windows)" ON)
 endif ()
 
 option(HIDE_SAFE_ASSERTS "Don't show message box for \"safe\" asserts, just ignore them automatically and dump a message to the terminal." ON)
 configure_file(config-hide-safe-asserts.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-hide-safe-asserts.h)
+
+option(FOUNDATION_BUILD "A Foundation build is a binary release build that can package some extra things like color themes. Linux distributions that build and install Krita into a default system location should not define this option to true." OFF)
 
  #######################
 ########################
@@ -246,6 +247,15 @@ find_package(KF5 ${MIN_FRAMEWORKS_VERSION} REQUIRED COMPONENTS
         ItemViews
         WindowSystem
 )
+
+# KConfig deprecated authorizeKAction. In order to be warning free,
+# compile with the updated function when the dependency is new enough.
+# Remove this (and the uses of the define) when the minimum KF5
+# version is >= 5.24.0.
+if (${KF5Config_VERSION} VERSION_LESS "5.24.0" )
+    message("Old KConfig (< 5.24.0) found.")
+    add_definitions(-DKCONFIG_BEFORE_5_24)
+endif()
 
 find_package(Qt5 ${MIN_QT_VERSION}
         REQUIRED COMPONENTS

@@ -28,15 +28,16 @@ endif()
 ecm_add_app_icon(krita_SRCS ICONS ${ICON_SRCS})
 
 ecm_install_icons(ICONS
-    "${CMAKE_CURRENT_SOURCE_DIR}/pics/mimetypes/16-application-x-krita.png"
-    "${CMAKE_CURRENT_SOURCE_DIR}/pics/mimetypes/32-application-x-krita.png"
-    "${CMAKE_CURRENT_SOURCE_DIR}/pics/mimetypes/48-application-x-krita.png"
-    "${CMAKE_CURRENT_SOURCE_DIR}/pics/mimetypes/128-application-x-krita.png"
-    "${CMAKE_CURRENT_SOURCE_DIR}/pics/mimetypes/256-application-x-krita.png"
-    "${CMAKE_CURRENT_SOURCE_DIR}/pics/mimetypes/512-application-x-krita.png"
-    "${CMAKE_CURRENT_SOURCE_DIR}/pics/mimetypes/1024-application-x-krita.png"
-    DESTINATION ${ICON_INSTALL_DIR}
-)
+    "${CMAKE_CURRENT_SOURCE_DIR}/pics/mimetypes/16-mimetypes-application-x-krita.png"
+    "${CMAKE_CURRENT_SOURCE_DIR}/pics/mimetypes/22-mimetypes-application-x-krita.png"
+    "${CMAKE_CURRENT_SOURCE_DIR}/pics/mimetypes/32-mimetypes-application-x-krita.png"
+    "${CMAKE_CURRENT_SOURCE_DIR}/pics/mimetypes/48-mimetypes-application-x-krita.png"
+    "${CMAKE_CURRENT_SOURCE_DIR}/pics/mimetypes/64-mimetypes-application-x-krita.png"
+    "${CMAKE_CURRENT_SOURCE_DIR}/pics/mimetypes/128-mimetypes-application-x-krita.png"
+    "${CMAKE_CURRENT_SOURCE_DIR}/pics/mimetypes/256-mimetypes-application-x-krita.png"
+    "${CMAKE_CURRENT_SOURCE_DIR}/pics/mimetypes/512-mimetypes-application-x-krita.png"
+    "${CMAKE_CURRENT_SOURCE_DIR}/pics/mimetypes/1024-mimetypes-application-x-krita.png"
+    DESTINATION ${KDE_INSTALL_ICONDIR} THEME hicolor)
 
 # separate listing, both used by Krita and KritaSketch
 set(krita_QRCS
@@ -75,10 +76,7 @@ target_link_libraries(krita
                       Qt5::Svg
                       Qt5::Concurrent)
 if(HAVE_KCRASH)
-    target_link_libraries(krita
-        PRIVATE
-                          KF5::Crash
-    )
+    target_link_libraries(krita PRIVATE KF5::Crash)
 endif()
 
 if (APPLE)

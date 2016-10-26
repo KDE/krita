@@ -1,0 +1,134 @@
+/*
+ *  Copyright (C) 2016 Boudewijn Rempt <boud@valdyas.org>
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
+/**
+  \mainpage Krita Scripting and Plugin Wrapper Library: libkis
+
+  Libkis is a QObject-based wrapper around Krita's internal libraries.
+  The wrapper can be used from C++ plugins that do not need the
+  advanced and volatile internal libraries of Krita, or can be bound
+  to scripting languages like Python or Javascript.
+
+  All classes are based on QObject, so QMetaObject introspection can
+  be used to discover properties, slots and signals and automatically
+  expose all functionality to the client.
+
+  Note that all objects that are created are wrapper objects that are
+  owned by the scripting environement or the plugin.
+
+
+  Using the functionality in this library, either through a scripting
+  environment like Python or Javascript, or directly from C++, you can,
+  among other things achieve the following functionality:
+
+  <ul>
+     <li>Open, save, export, rename files.
+     <li>Access the layers and masks in a file
+     <li>Read and write pixel data
+     <li>Add menu items, toolbar items and docker palettes
+  </ul>
+
+  The reference implementation of scripting in Krita is implemented
+  in Python 3. All examples in the documentation for scripting will be
+  provided using Python, although the api documentation is generated
+  from C++ header files and shows c++ syntax for arguments.
+
+  Autostarting Scripts
+  ====================
+
+  Autostarting scripts or script-based plugins are scripts that Krita
+  loads on startup. You can add autostarting scripts to Krita by placing
+  them in the pykrita folder in the resources folder: go to settings/
+  manage resources and press the Open Resources Folder to open your
+  local resources folder.
+
+  Scripts are identified by a file that ends in a `.desktop` extension
+  that contain information about the script itself. For example:
+
+@code
+    [Desktop Entry]
+    Type=Service
+    ServiceTypes=Krita/PythonPlugin
+    X-KDE-Library=hello
+    X-Python-2-Compatible=false
+    Name=Hello World
+    Comment=Basic plugin to test PyKrita
+@endcode
+
+  The Python code itself should be placed in the pykrita/hello folder.
+  Your Python plugin needs to be a module, so needs to have a `__init__.py`
+  file:
+
+@code
+    # let's make a module
+    from .hello import *
+@endcode
+
+Krita is a Qt-based application. In principle, you can use any Python
+binding to Qt as long as it's using exactly the same version of Qt
+that Krita uses. In our examples we will be using [PyQt](https://www.riverbankcomputing.com/software/pyqt/intro).
+
+@code
+from PyQt5.QtGui import *
+from PyQt5.QtWidgets import *
+from krita import *
+
+def hello():
+    QMessageBox.information(QWidget(), "Test", "Hello World")
+
+class HelloViewExtension(ViewExtension):
+
+  def __init__(self, parent):
+      super().__init__(parent)
+
+  def setup(self, viewManager):
+      action = viewManager.createAction("Hello")
+      action.triggered.connect(hello)
+
+Krita.instance().addViewExtension(HelloViewExtension(Krita.instance()))
+@endcode
+
+
+The Krita Object Model
+======================
+
+The starting point is the @see Krita class, which provides a singleton
+object for easy reference. From the Krita class, a hierarchy is provided
+where you can access windows, views, documents, nodes and channels.
+
+The Document class is provided to allow access to the images Krita has
+loaded. *Note*: internally, Krita distinguishes between images and documents.
+
+A document contains an image and knows the filename of the image, the image
+itself only knows about the layers and masks it contains. The generic
+name for layers and masks is *node*.
+
+A Node can be a group layer, a file layer, a vector layer, a filter layer,
+a generator layer, a clone layer, a paint layer or a transform mask, a selection
+mask, a transparency mask or a colorize mask. You can change some properties
+of Nodes, but not all of them.
+
+The Window class is provided to allow access to the windows and views Krita
+has open. A given Document can be shown in more than one View, and in more than
+one Window. You can open and close windows and views.
+
+
+ */
+
+// DOXYGEN_SET_PROJECT_NAME = Krita
+// DOXYGEN_SET_IGNORE_PREFIX = Kis Ko K

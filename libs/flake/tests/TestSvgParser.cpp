@@ -1509,4 +1509,323 @@ void TestSvgParser::testRenderStrokeLinearGradient()
     t.test_standard_30px_72ppi("stroke_gradient_dashed");
 }
 
-QTEST_GUILESS_MAIN(TestSvgParser)
+void TestSvgParser::testRenderPattern()
+{
+    const QString data =
+            "<svg width=\"30px\" height=\"30px\""
+            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+
+            "<defs>"
+            "    <pattern id=\"TestPattern\" patternUnits=\"userSpaceOnUse\""
+            "        patternContentUnits=\"userSpaceOnUse\""
+            "        x=\"1\" y=\"1\" width=\"5\" height=\"5\">"
+            "        <rect id=\"patternRect\" x=\"4\" y=\"3\" width=\"5\" height=\"5\""
+            "            fill=\"red\" stroke=\"none\" />"
+            "    </pattern>"
+            "</defs>"
+
+            "<g>"
+            "    <rect id=\"testRect\" x=\"5\" y=\"5\" width=\"10\" height=\"20\""
+            "        transform=\"translate(7, 0) scale(2)\""
+            "        fill=\"url(#TestPattern)blue\" stroke=\"none\"/>"
+            "</g>"
+
+            "</svg>";
+
+    SvgRenderTester t (data);
+
+    t.test_standard_30px_72ppi("fill_pattern", false);
+}
+
+QPainterPath bakeShape(const QPainterPath &path,
+                       const QTransform &bakeTransform,
+                       bool contentIsObb = false, const QRectF &shapeBoundingRect = QRect())
+{
+    const QTransform relativeToShape(shapeBoundingRect.width(), 0, 0, shapeBoundingRect.height(),
+                                     shapeBoundingRect.x(), shapeBoundingRect.y());
+
+    QTransform newTransform = bakeTransform;
+
+    if (contentIsObb) {
+        newTransform = relativeToShape * newTransform;
+    }
+
+    return newTransform.map(path);
+}
+
+
+void renderBakedPath(QPainter &painter,
+                     const QPainterPath &bakedFillPath, const QTransform &bakedTransform,
+                     const QRect &shapeOutline, const QTransform &shapeTransform,
+                     const QRectF &referenceRect,
+                     QImage *stampResult,
+                     bool contentIsObb, const QRectF &bakedShapeBoundingRect,
+                     bool referenceIsObb,
+                     const QTransform &patternTransform)
+{
+    const QRectF &shapeBoundingRect = shapeOutline;
+
+    QTransform relativeToShape;
+    QTransform relativeToBakedShape;
+
+    if (referenceIsObb || contentIsObb) {
+        relativeToShape =
+            QTransform(shapeBoundingRect.width(), 0, 0, shapeBoundingRect.height(),
+                       shapeBoundingRect.x(), shapeBoundingRect.y());
+        relativeToBakedShape =
+            QTransform(bakedShapeBoundingRect.width(), 0, 0, bakedShapeBoundingRect.height(),
+                       bakedShapeBoundingRect.x(), bakedShapeBoundingRect.y());
+    }
+
+
+    QRect referenceRectUser =
+        referenceIsObb ?
+        relativeToShape.mapRect(referenceRect).toAlignedRect() :
+        referenceRect.toAlignedRect();
+
+
+    QImage patch(referenceRectUser.size(), QImage::Format_ARGB32);
+    patch.fill(0);
+    QPainter patchPainter(&patch);
+
+    patchPainter.translate(-referenceRectUser.topLeft());
+    patchPainter.setClipRect(referenceRectUser);
+
+    if (contentIsObb) {
+        patchPainter.setTransform(relativeToShape, true);
+        patchPainter.setTransform(relativeToBakedShape.inverted(), true);
+    }
+
+    patchPainter.setTransform(bakedTransform.inverted(), true);
+    patchPainter.fillPath(bakedFillPath, Qt::blue);
+
+    *stampResult = patch;
+
+    painter.save();
+
+    painter.setTransform(QTransform());
+    painter.setTransform(shapeTransform, true);
+    painter.setClipRect(shapeOutline);
+
+    QTransform brushTransform;
+
+    QPoint patternOffset = referenceRectUser.topLeft();
+
+    brushTransform = brushTransform * QTransform::fromTranslate(patternOffset.x(), patternOffset.y());
+
+    if (contentIsObb) {
+        brushTransform = brushTransform * relativeToShape.inverted();
+    }
+
+    brushTransform = brushTransform * patternTransform;
+
+    if (contentIsObb) {
+        brushTransform = brushTransform * relativeToShape;
+    }
+
+    QBrush brush(patch);
+    brush.setTransform(brushTransform);
+
+    painter.setPen(Qt::NoPen);
+    painter.setBrush(brush);
+    painter.drawRect(shapeOutline);
+
+    painter.restore();
+}
+
+void TestSvgParser::testManualRenderPattern_ContentUser_RefObb()
+{
+    const QRectF referenceRect(0, 0, 1.0, 0.5);
+
+    QPainterPath fillPath;
+    fillPath.addRect(QRect(2, 2, 6, 6));
+    fillPath.addRect(QRect(8, 4, 3, 2));
+
+    QTransform bakedTransform = QTransform::fromTranslate(10, 10) * QTransform::fromScale(2, 2);
+    QPainterPath bakedFillPath = bakeShape(fillPath, bakedTransform);
+
+    QRect shape1OutlineRect(0,0,10,20);
+
+    QImage stampResult;
+    QImage fillResult(QSize(60,60), QImage::Format_ARGB32);
+    QPainter gc(&fillResult);
+
+    fillResult.fill(0);
+    renderBakedPath(gc,
+                    bakedFillPath, bakedTransform,
+                    shape1OutlineRect, bakedTransform,
+                    referenceRect, &stampResult,
+                    false, QRectF(),
+                    true,
+                    QTransform());
+
+    QVERIFY(TestUtil::checkQImage(stampResult, "svg_render", "render", "pattern_c_user_r_obb_patch1"));
+    QVERIFY(TestUtil::checkQImage(fillResult, "svg_render", "render", "pattern_c_user_r_obb_fill1"));
+
+
+    QRect shape2OutlineRect(5,5,20,10);
+    QTransform shape2Transform = QTransform::fromScale(2, 2) * QTransform::fromTranslate(5, 5);
+
+    fillResult.fill(0);
+    renderBakedPath(gc,
+                    bakedFillPath, bakedTransform,
+                    shape2OutlineRect, shape2Transform,
+                    referenceRect, &stampResult,
+                    false, QRectF(),
+                    true,
+                    QTransform());
+
+    QVERIFY(TestUtil::checkQImage(stampResult, "svg_render", "render", "pattern_c_user_r_obb_patch2"));
+    QVERIFY(TestUtil::checkQImage(fillResult, "svg_render", "render", "pattern_c_user_r_obb_fill2"));
+}
+
+void TestSvgParser::testManualRenderPattern_ContentObb_RefObb()
+{
+    const QRectF referenceRect(0.3, 0.3, 0.4, 0.4);
+
+    QPainterPath fillPath;
+    fillPath.addRect(QRectF(0.4, 0.4, 0.2, 0.2));
+    fillPath.addRect(QRectF(0.6, 0.5, 0.1, 0.1));
+    fillPath.addRect(QRectF(0.3, 0.4, 0.1, 0.1));
+
+
+    const QRect bakedShapeRect(2,2,10,10);
+    QTransform bakedTransform = QTransform::fromTranslate(10, 10) * QTransform::fromScale(2, 2);
+
+    QPainterPath bakedFillPath = bakeShape(fillPath, bakedTransform, true, bakedShapeRect);
+
+    QImage stampResult;
+    QImage fillResult(QSize(60,60), QImage::Format_ARGB32);
+    QPainter gc(&fillResult);
+
+    // Round trip to the same shape
+
+    fillResult.fill(0);
+    renderBakedPath(gc,
+                    bakedFillPath, bakedTransform,
+                    bakedShapeRect, bakedTransform,
+                    referenceRect, &stampResult,
+                    true, bakedShapeRect,
+                    true,
+                    QTransform());
+
+    QVERIFY(TestUtil::checkQImage(stampResult, "svg_render", "render", "pattern_c_obb_r_obb_patch1"));
+    QVERIFY(TestUtil::checkQImage(fillResult, "svg_render", "render", "pattern_c_obb_r_obb_fill1"));
+
+    // Move to a different shape
+
+    QRect shape2OutlineRect(5,5,20,10);
+    QTransform shape2Transform = QTransform::fromScale(2, 2) * QTransform::fromTranslate(5, 5);
+
+    fillResult.fill(0);
+    renderBakedPath(gc,
+                    bakedFillPath, bakedTransform,
+                    shape2OutlineRect, shape2Transform,
+                    referenceRect, &stampResult,
+                    true, bakedShapeRect,
+                    true,
+                    QTransform());
+
+    QVERIFY(TestUtil::checkQImage(stampResult, "svg_render", "render", "pattern_c_obb_r_obb_patch2"));
+    QVERIFY(TestUtil::checkQImage(fillResult, "svg_render", "render", "pattern_c_obb_r_obb_fill2"));
+}
+
+void TestSvgParser::testManualRenderPattern_ContentUser_RefUser()
+{
+    const QRectF referenceRect(5, 2, 8, 8);
+
+    QPainterPath fillPath;
+    fillPath.addRect(QRect(2, 2, 6, 6));
+    fillPath.addRect(QRect(8, 4, 3, 2));
+
+
+    QTransform bakedTransform = QTransform::fromTranslate(10, 10) * QTransform::fromScale(2, 2);
+    QPainterPath bakedFillPath = bakeShape(fillPath, bakedTransform);
+
+    QRect shape1OutlineRect(0,0,10,20);
+
+    QImage stampResult;
+    QImage fillResult(QSize(60,60), QImage::Format_ARGB32);
+    QPainter gc(&fillResult);
+
+    fillResult.fill(0);
+    renderBakedPath(gc,
+                    bakedFillPath, bakedTransform,
+                    shape1OutlineRect, bakedTransform,
+                    referenceRect, &stampResult,
+                    false, QRectF(),
+                    false,
+                    QTransform());
+
+    QVERIFY(TestUtil::checkQImage(stampResult, "svg_render", "render", "pattern_c_user_r_user_patch1"));
+    QVERIFY(TestUtil::checkQImage(fillResult, "svg_render", "render", "pattern_c_user_r_user_fill1"));
+
+    QRect shape2OutlineRect(5,5,20,10);
+    QTransform shape2Transform = QTransform::fromScale(2, 2) * QTransform::fromTranslate(5, 5);
+
+    fillResult.fill(0);
+    renderBakedPath(gc,
+                    bakedFillPath, bakedTransform,
+                    shape2OutlineRect, shape2Transform,
+                    referenceRect, &stampResult,
+                    false, QRectF(),
+                    false,
+                    QTransform());
+
+    QVERIFY(TestUtil::checkQImage(stampResult, "svg_render", "render", "pattern_c_user_r_user_patch2"));
+    QVERIFY(TestUtil::checkQImage(fillResult, "svg_render", "render", "pattern_c_user_r_user_fill2"));
+}
+
+void TestSvgParser::testManualRenderPattern_ContentObb_RefObb_Transform_Rotate()
+{
+    const QRectF referenceRect(0.0, 0.0, 0.4, 0.2);
+
+    QPainterPath fillPath;
+    fillPath.addRect(QRectF(0.0, 0.0, 0.4, 0.1));
+    fillPath.addRect(QRectF(0.0, 0.1, 0.1, 0.1));
+
+    const QRect bakedShapeRect(2,1,10,10);
+    QTransform bakedTransform = QTransform::fromScale(2, 2) * QTransform::fromTranslate(10,10);
+
+    QPainterPath bakedFillPath = bakeShape(fillPath, bakedTransform, true, bakedShapeRect);
+
+    QImage stampResult;
+    QImage fillResult(QSize(60,60), QImage::Format_ARGB32);
+    QPainter gc(&fillResult);
+
+    QTransform patternTransform;
+    patternTransform.rotate(90);
+    patternTransform = patternTransform * QTransform::fromTranslate(0.5, 0.0);
+
+    // Round trip to the same shape
+
+    fillResult.fill(0);
+    renderBakedPath(gc,
+                    bakedFillPath, bakedTransform,
+                    bakedShapeRect, bakedTransform,
+                    referenceRect, &stampResult,
+                    true, bakedShapeRect,
+                    true,
+                    patternTransform);
+
+    QVERIFY(TestUtil::checkQImage(stampResult, "svg_render", "render", "pattern_c_obb_r_obb_rotate_patch1"));
+    QVERIFY(TestUtil::checkQImage(fillResult, "svg_render", "render", "pattern_c_obb_r_obb_rotate_fill1"));
+
+    QRect shape2OutlineRect(5,5,20,10);
+    QTransform shape2Transform = QTransform::fromScale(2, 2) * QTransform::fromTranslate(5, 5);
+
+    fillResult.fill(0);
+    renderBakedPath(gc,
+                    bakedFillPath, bakedTransform,
+                    shape2OutlineRect, shape2Transform,
+                    referenceRect, &stampResult,
+                    true, bakedShapeRect,
+                    true,
+                    patternTransform);
+
+    QVERIFY(TestUtil::checkQImage(stampResult, "svg_render", "render", "pattern_c_obb_r_obb_rotate_patch2"));
+    QVERIFY(TestUtil::checkQImage(fillResult, "svg_render", "render", "pattern_c_obb_r_obb_rotate_fill2"));
+}
+
+//QTEST_GUILESS_MAIN(TestSvgParser)
+QTEST_MAIN(TestSvgParser)

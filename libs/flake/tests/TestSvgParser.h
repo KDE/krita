@@ -101,6 +101,13 @@ private Q_SLOTS:
 
     void testRenderStrokeLinearGradient();
 
+    void testRenderPattern();
+    void testManualRenderPattern_ContentUser_RefObb();
+    void testManualRenderPattern_ContentObb_RefObb();
+    void testManualRenderPattern_ContentUser_RefUser();
+
+    void testManualRenderPattern_ContentObb_RefObb_Transform_Rotate();
+
 };
 
 #endif // TESTSVGPARSER_H

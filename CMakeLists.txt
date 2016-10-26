@@ -287,15 +287,27 @@ if (NOT WIN32 AND NOT APPLE)
 
     find_package(Qt5DBus ${MIN_QT_VERSION} QUIET)
     set(HAVE_DBUS ${Qt5DBus_FOUND})
-    macro_log_feature(${Qt5DBus_FOUND} "dbus" "Qt DBUS integration" "http://www.qt.io/" FALSE "" "Optionally used to provide a dbus api on Linux")
+    set_package_properties(Qt5DBus PROPERTIES
+        DESCRIPTION "Qt DBUS integration"
+        URL "http://www.qt.io/"
+        TYPE OPTIONAL
+        PURPOSE "Optionally used to provide a dbus api on Linux")
 
     find_package(KF5KIO ${MIN_FRAMEWORKS_VERSION} QUIET)
     macro_bool_to_01(KF5KIO_FOUND HAVE_KIO)
-    macro_log_feature(${KF5KIO_FOUND} "KIO" "KDE's KIO Framework" "http://api.kde.org/frameworks-api/frameworks5-apidocs/kio/html/index.html" FALSE "" "Optionally used for recent document handling")
+    set_package_properties(KF5KIO PROPERTIES
+        DESCRIPTION "KDE's KIO Framework"
+        URL "http://api.kde.org/frameworks-api/frameworks5-apidocs/kio/html/index.html"
+        TYPE OPTIONAL
+        PURPOSE "Optionally used for recent document handling")
 
     find_package(KF5Crash ${MIN_FRAMEWORKS_VERSION} QUIET) 
     macro_bool_to_01(KF5Crash_FOUND HAVE_KCRASH)
-    macro_log_feature(${KF5Crash_FOUND} "kcrash" "KDE's Crash Handler" "http://api.kde.org/frameworks-api/frameworks5-apidocs/kcrash/html/index.html" FALSE "" "Optionally used to provide crash reporting on Linux")
+    set_package_properties(KF5Crash PROPERTIES
+        DESCRIPTION "KDE's Crash Handler"
+        URL "http://api.kde.org/frameworks-api/frameworks5-apidocs/kcrash/html/index.html"
+        TYPE OPTIONAL
+        PURPOSE "Optionally used to provide crash reporting on Linux")
 
     find_package(X11)
     if(X11_FOUND)
@@ -401,8 +413,11 @@ include_directories(${Boost_INCLUDE_DIRS})
 ##
 ## Test for GNU Scientific Library
 ##
-macro_optional_find_package(GSL)
-macro_log_feature(GSL_FOUND "GSL" "GNU Scientific Library" "http://www.gnu.org/software/gsl" FALSE "1.7" "Required by Krita's Transform tool.")
+find_package(GSL)
+set_package_properties(GSL PROPERTIES
+    URL "http://www.gnu.org/software/gsl"
+    TYPE RECOMMENDED
+    PURPOSE "Required by Krita's Transform tool.")
 macro_bool_to_01(GSL_FOUND HAVE_GSL)
 configure_file(config-gsl.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-gsl.h )
 
@@ -415,13 +430,20 @@ configure_file(config-gsl.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-gsl.h )
 ##
 ## Check for OpenEXR
 ##
-macro_optional_find_package(ZLIB)
-macro_log_feature(ZLIB_FOUND "zlib" "Compression library" "http://www.zlib.net/" FALSE "" "Optionally used by the G'Mic and the PSD plugins")
+find_package(ZLIB)
+set_package_properties(ZLIB PROPERTIES
+    DESCRIPTION "Compression library"
+    URL "http://www.zlib.net/"
+    TYPE OPTIONAL
+    PURPOSE "Optionally used by the G'Mic and the PSD plugins")
 macro_bool_to_01(ZLIB_FOUND HAVE_ZLIB)
 
-
-macro_optional_find_package(OpenEXR)
-macro_log_feature(OPENEXR_FOUND "OpenEXR" "High dynamic-range (HDR) image file format" "http://www.openexr.com" FALSE "" "Required by the Krita OpenEXR filter")
+find_package(OpenEXR)
+set_package_properties(OpenEXR PROPERTIES
+    DESCRIPTION "High dynamic-range (HDR) image file format"
+    URL "http://www.openexr.com"
+    TYPE OPTIONAL
+    PURPOSE "Required by the Krita OpenEXR filter")
 macro_bool_to_01(OPENEXR_FOUND HAVE_OPENEXR)
 set(LINK_OPENEXR_LIB)
 if(OPENEXR_FOUND)
@@ -430,22 +452,42 @@ if(OPENEXR_FOUND)
     add_definitions(${OPENEXR_DEFINITIONS})
 endif()
 
-macro_optional_find_package(TIFF)
-macro_log_feature(TIFF_FOUND "tiff" "TIFF Library and Utilities" "http://www.remotesensing.org/libtiff" FALSE "" "Required by the Krita TIFF filter")
+find_package(TIFF)
+set_package_properties(TIFF PROPERTIES
+    DESCRIPTION "TIFF Library and Utilities"
+    URL "http://www.remotesensing.org/libtiff"
+    TYPE OPTIONAL
+    PURPOSE "Required by the Krita TIFF filter")
 
-macro_optional_find_package(JPEG)
-macro_log_feature(JPEG_FOUND "jpeg" "Free library for JPEG image compression. Note: libjpeg8 is NOT supported." "http://www.libjpeg-turbo.org" FALSE "" "Required by the Krita JPEG filter")
+find_package(JPEG)
+set_package_properties(JPEG PROPERTIES
+    DESCRIPTION "Free library for JPEG image compression. Note: libjpeg8 is NOT supported."
+    URL "http://www.libjpeg-turbo.org"
+    TYPE OPTIONAL
+    PURPOSE "Required by the Krita JPEG filter")
 
 set(LIBRAW_MIN_VERSION  "0.16")
-macro_optional_find_package(LibRaw ${LIBRAW_MIN_VERSION})
-macro_log_feature(LIBRAW_FOUND "LibRaw" "Library to decode RAW images" "http://www.libraw.org" FALSE "" "Required to build the raw import plugin")
+find_package(LibRaw ${LIBRAW_MIN_VERSION})
+set_package_properties(LibRaw PROPERTIES
+    DESCRIPTION "Library to decode RAW images"
+    URL "http://www.libraw.org"
+    TYPE OPTIONAL
+    PURPOSE "Required to build the raw import plugin")
 
-macro_optional_find_package(FFTW3)
-macro_log_feature(FFTW3_FOUND "FFTW3" "A fast, free C FFT library" "http://www.fftw.org/" FALSE "" "Required by the Krita for fast convolution operators and some G'Mic features")
+find_package(FFTW3)
+set_package_properties(FFTW3 PROPERTIES
+    DESCRIPTION "A fast, free C FFT library"
+    URL "http://www.fftw.org/"
+    TYPE OPTIONAL
+    PURPOSE "Required by the Krita for fast convolution operators and some G'Mic features")
 macro_bool_to_01(FFTW3_FOUND HAVE_FFTW3)
 
-macro_optional_find_package(OCIO)
-macro_log_feature(OCIO_FOUND "OCIO" "The OpenColorIO Library" "http://www.opencolorio.org" FALSE "" "Required by the Krita LUT docker")
+find_package(OCIO)
+set_package_properties(OCIO PROPERTIES
+    DESCRIPTION "The OpenColorIO Library"
+    URL "http://www.opencolorio.org"
+    TYPE OPTIONAL
+    PURPOSE "Required by the Krita LUT docker")
 macro_bool_to_01(OCIO_FOUND HAVE_OCIO)
 
 ##
@@ -461,21 +503,31 @@ endif()
 ##
 ## Test for eigen3
 ##
-find_package(Eigen3 REQUIRED)
-macro_log_feature(EIGEN3_FOUND "Eigen" "C++ template library for linear algebra" "http://eigen.tuxfamily.org" FALSE "3.0" "Required by Krita")
+find_package(Eigen3 REQUIRED "3.0")
+set_package_properties(Eigen3 PROPERTIES
+    DESCRIPTION "C++ template library for linear algebra"
+    URL "http://eigen.tuxfamily.org"
+    TYPE REQUIRED)
 
 ##
 ## Test for exiv2
 ##
 set(EXIV2_MIN_VERSION "0.16")
 find_package(Exiv2 REQUIRED)
-macro_log_feature(EXIV2_FOUND "Exiv2" "Image metadata library and tools" "http://www.exiv2.org" FALSE "0.16" "Required by Krita")
+set_package_properties(Exiv2 PROPERTIES
+    DESCRIPTION "Image metadata library and tools"
+    URL "http://www.exiv2.org"
+    PURPOSE "Required by Krita")
 
 ##
 ## Test for lcms
 ##
-find_package(LCMS2 REQUIRED)
-macro_log_feature(LCMS2_FOUND "LittleCMS" "Color management engine" "http://www.littlecms.com" FALSE "2.4" "Will be used for color management and is necessary for Krita")
+find_package(LCMS2 REQUIRED "2.4")
+set_package_properties(LCMS2 PROPERTIES
+    DESCRIPTION "LittleCMS Color management engine"
+    URL "http://www.littlecms.com"
+    TYPE REQUIRED
+    PURPOSE "Will be used for color management and is necessary for Krita")
 if(LCMS2_FOUND)
     if(NOT ${LCMS2_VERSION} VERSION_LESS 2040 )
         set(HAVE_LCMS24 TRUE)
@@ -491,8 +543,12 @@ set(OLD_CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} )
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
 set(HAVE_VC FALSE)
 if( NOT MSVC)
-    macro_optional_find_package(Vc 1.1.0)
-    macro_log_feature(Vc_FOUND "Vc" "Portable, zero-overhead SIMD library for C++" "https://github.com/VcDevel/Vc" FALSE "" "Required by the Krita for vectorization")
+    find_package(Vc 1.1.0)
+    set_package_properties(Vc PROPERTIES
+        DESCRIPTION "Portable, zero-overhead SIMD library for C++"
+        URL "https://github.com/VcDevel/Vc"
+        TYPE OPTIONAL
+        PURPOSE "Required by the Krita for vectorization")
     macro_bool_to_01(Vc_FOUND HAVE_VC)
     macro_bool_to_01(PACKAGERS_BUILD DO_PACKAGERS_BUILD)
 endif()
@@ -569,26 +625,41 @@ test_big_endian(CMAKE_WORDS_BIGENDIAN)
 ##
 ## Test for qt-poppler
 ##
-macro_optional_find_package(Poppler)
-macro_log_feature( POPPLER_FOUND "Poppler-Qt5" "A PDF rendering library" "http://poppler.freedesktop.org" FALSE "" "Required by the Krita PDF filter.")
+find_package(Poppler)
+set_package_properties(Poppler PROPERTIES
+    DESCRIPTION "A PDF rendering library"
+    URL "http://poppler.freedesktop.org"
+    TYPE OPTIONAL
+    PURPOSE "Required by the Krita PDF filter.")
 
 ##
 ## Test for pthreads (for G'Mic)
 ##
-macro_optional_find_package(Threads)
-macro_log_feature(Threads_FOUND "PThreads" "A low-level threading library" "" FALSE "" "Optionally used by the G'Mic plugin")
+find_package(Threads)
+set_package_properties(Threads PROPERTIES
+    DESCRIPTION "PThreads - A low-level threading library"
+    TYPE OPTIONAL
+    PURPOSE "Optionally used by the G'Mic plugin")
 
 ##
 ## Test for OpenMP (for G'Mic)
 ##
-macro_optional_find_package(OpenMP)
-macro_log_feature(OPENMP_FOUND "OpenMP" "A low-level parallel execution library" "http://openmp.org/wp/" FALSE "" "Optionally used by the G'Mic plugin")
+find_package(OpenMP)
+set_package_properties(OpenMP PROPERTIES
+    DESCRIPTION "A low-level parallel execution library"
+    URL "http://openmp.org/wp/"
+    TYPE OPTIONAL
+    PURPOSE "Optionally used by the G'Mic plugin")
 
 ##
 ## Test for Curl (for G'Mic)
 ##
-macro_optional_find_package(CURL)
-macro_log_feature(CURL_FOUND "CURL" "A tool to fetch remote data" "http://curl.haxx.se/" FALSE "" "Optionally used by the G'Mic plugin")
+find_package(CURL)
+set_package_properties(CURL PROPERTIES
+    DESCRIPTION "A tool to fetch remote data"
+    URL "http://curl.haxx.se/"
+    TYPE OPTIONAL
+    PURPOSE "Optionally used by the G'Mic plugin")
 
  ############################
 #############################
@@ -668,8 +739,7 @@ add_subdirectory(plugins)
 
 add_subdirectory( benchmarks )
 
-
-macro_display_feature_log()
+feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
 
 calligra_product_deps_report("product_deps")
 calligra_log_should_build()

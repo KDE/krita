@@ -11,8 +11,27 @@ class HelloViewExtension(ViewExtension):
       super().__init__(parent)
 
   def setup(self):
-      action = Krita.createAction("Hello")
+      print("Hello Setup")
+      action = Krita.instance().createAction("Hello")
       action.triggered.connect(hello)
+
+      from mikro import create_pyqt_object, Error as MiKroError
+      app = create_pyqt_object(Krita.instance())
+
+      print("Notifier:", app.Notifier.Active)
+      app.Notifier.Active = True
+      print("Notifier:", app.Notifier.Active)
+
+      print(app.Notifier)
+      print("Batchmmode", app.Batchmode)
+      app.Batchmode = True
+      print("Batchmmode", app.Batchmode)
+
+      print(dir(app))
+      print(type(app.closeApplication()))
+      print(app.closeApplication())
+
+
 
 Krita.instance().addViewExtension(HelloViewExtension(Krita.instance()))
 

@@ -29,18 +29,18 @@
 class KRITALIBKIS_EXPORT Action : public QObject
 {
     Q_OBJECT
-    Q_DISABLE_COPY(Action)
 
     Q_PROPERTY(QString Name READ name WRITE setName)
     Q_PROPERTY(QString Menu READ menu WRITE setMenu)
-    Q_PROPERTY(bool Checkable READ checkable WRITE setCheckable)
-    Q_PROPERTY(bool Checked READ checked WRITE setChecked)
+    Q_PROPERTY(bool Checkable READ isCheckable WRITE setCheckable)
+    Q_PROPERTY(bool Checked READ isChecked WRITE setChecked)
     Q_PROPERTY(QString Shortcut READ shortcut WRITE setShortcut)
-    Q_PROPERTY(bool Visible READ visible WRITE setVisible)
-    Q_PROPERTY(bool Enabled READ enabled WRITE setEnabled)
+    Q_PROPERTY(bool Visible READ isVisible WRITE setVisible)
+    Q_PROPERTY(bool Enabled READ isEnabled WRITE setEnabled)
 
 public:
     explicit Action(QObject *parent = 0);
+    Action(const QString &name, QAction *action, QObject *parent = 0);
     virtual ~Action();
 
     QString name() const;
@@ -49,41 +49,36 @@ public:
     QString menu() const;
     void setMenu(QString value);
 
-    bool checkable() const;
+    bool isCheckable() const;
     void setCheckable(bool value);
 
-    bool checked() const;
+    bool isChecked() const;
     void setChecked(bool value);
 
     QString shortcut() const;
     void setShortcut(QString value);
 
-    bool visible() const;
+    bool isVisible() const;
     void setVisible(bool value);
 
-    bool enabled() const;
+    bool isEnabled() const;
     void setEnabled(bool value);
 
 
 
 public Q_SLOTS:
 
-    void Trigger();
-
-    void Toggle(bool toggle);
-
-
+    void trigger();
 
 Q_SIGNALS:
 
-    void Toggled(bool toggle);
-    void Triggered();
-
+    void triggered();
 
 private:
     struct Private;
-    const Private *const d;
+    Private *const d;
 
 };
+
 
 #endif // LIBKIS_ACTION_H

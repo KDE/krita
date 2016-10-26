@@ -19,26 +19,28 @@
 
 struct Notifier::Private {
     Private() {}
+    bool active {false};
 };
 
-Notifier::Notifier(QObject *parent) 
+Notifier::Notifier(QObject *parent)
     : QObject(parent)
     , d(new Private)
 {
 }
 
-Notifier::~Notifier() 
+Notifier::~Notifier()
 {
     delete d;
 }
 
 bool Notifier::active() const
 {
-    return false;
+    return d->active;
 }
 
 void Notifier::setActive(bool value)
 {
+    d->active = value;
 }
 
 

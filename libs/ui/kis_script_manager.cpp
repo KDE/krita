@@ -70,6 +70,7 @@ void KisScriptManager::updateGUI()
 
 void KisScriptManager::addAction(QAction *action)
 {
+    qDebug() << "Adding action" << action;
     Q_ASSERT(d->actionCollection);
     d->scriptMenu->addAction(action);
 }

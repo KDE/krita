@@ -28,7 +28,8 @@ from scripter_hooks import MenuHooks
 from mikro import create_pyqt_object, Error as MiKroError
 
 import builtins
-builtins.Krita = krita.Krita.instance()
+builtins.Scripter = create_pyqt_object(krita.Krita.instance())
+builtins.i18n = lambda s: unicode(QCoreApplication.translate("PyKrita", s))
 
 def qDebug(text):
     '''Use KDE way to show debug info

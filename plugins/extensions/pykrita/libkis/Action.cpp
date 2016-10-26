@@ -17,99 +17,112 @@
  */
 #include "Action.h"
 
+#include <QAction>
+
 struct Action::Private {
     Private() {}
+    QAction *action {0};
+    QString name;
+    QString menu;
 };
 
-Action::Action(QObject *parent) 
+Action::Action(QObject *parent)
     : QObject(parent)
     , d(new Private)
 {
+    d->action = new QAction(this);
 }
 
-Action::~Action() 
+Action::Action(const QString &name, QAction *action, QObject *parent)
+    : QObject(parent)
+    , d(new Private)
+{
+    d->name = name;
+    d->action = action;
+}
+
+Action::~Action()
 {
     delete d;
 }
 
 QString Action::name() const
 {
-    return QString();
+    return d->name;
 }
 
 void Action::setName(QString value)
 {
+    d->name = value;
 }
 
 
 QString Action::menu() const
 {
-    return QString();
+    return d->menu;
 }
 
 void Action::setMenu(QString value)
 {
+    d->menu = value;
 }
 
-
-bool Action::checkable() const
+bool Action::isCheckable() const
 {
-    return false;
+    return d->action->isCheckable();
 }
 
 void Action::setCheckable(bool value)
 {
+    d->action->setCheckable(value);
 }
 
-
-bool Action::checked() const
+bool Action::isChecked() const
 {
-    return false;
+    return d->action->isChecked();
 }
 
 void Action::setChecked(bool value)
 {
+    d->action->setChecked(value);
 }
 
 
 QString Action::shortcut() const
 {
-    return QString();
+    return d->action->shortcut().toString();
 }
 
 void Action::setShortcut(QString value)
 {
+    d->action->setShortcut(QKeySequence::fromString(value));
 }
 
 
-bool Action::visible() const
+bool Action::isVisible() const
 {
-    return false;
+    return d->action->isVisible();
 }
 
 void Action::setVisible(bool value)
 {
+    d->action->setVisible(value);
 }
 
 
-bool Action::enabled() const
+bool Action::isEnabled() const
 {
-    return false;
+    return d->action->isEnabled();
 }
 
 void Action::setEnabled(bool value)
 {
+    d->action->setEnabled(value);
 }
 
-
-
-
-void Action::Trigger()
+void Action::trigger()
 {
-}
-
-void Action::Toggle(bool toggle)
-{
+    d->action->trigger();
 }
 
 

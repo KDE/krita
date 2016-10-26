@@ -27,18 +27,36 @@
 #include "Document.h"
 #include "Window.h"
 #include "View.h"
+#include "Action.h"
+#include "Notifier.h"
 
 class QAction;
 
+
+
 /**
- * Krita is a singleton class that offers the root access to
+ * Krita is a singleton class that offers the root access to the Krita object hierarchy.
  */
 class KRITALIBKIS_EXPORT Krita : public QObject
 {
     Q_OBJECT
-    Q_DISABLE_COPY(Krita)
 
-    Q_PROPERTY(QList<Action*> Actions READ actions)
+    /**
+     * The actions list returns a map of Action objects that belong to the currently
+     * active Window. You can retrieve a certain action by name from the map.
+     *
+     * This code will retrieve all actions, and first use the Select All action to
+     * select everything, and the Deselect action to deselect everything *in the
+     * current window, the current view, the current image, on the current layer*.
+     *
+     * @code
+     * actions = Krita.instance().actions()
+     * print(actions.keys())
+     * actions["select_all"].trigger()
+     * actions["deselect"].trigger()
+     * @endcode
+     */
+    //Q_PROPERTY(QMap<QString, Action*> Actions READ actions)
     Q_PROPERTY(Document* ActiveDocument READ activeDocument WRITE setActiveDocument)
     Q_PROPERTY(bool Batchmode READ batchmode WRITE setBatchmode)
     Q_PROPERTY(QList<Document*> Documents READ documents)
@@ -57,7 +75,6 @@ public:
     explicit Krita(QObject *parent = 0);
     virtual ~Krita();
 
-    QList<Action*> actions() const;
 
     Document* activeDocument() const;
     void setActiveDocument(Document* value);
@@ -92,6 +109,8 @@ public:
 
 public Q_SLOTS:
 
+    QMap<QString, Action*> actions() const;
+
     void addDockWidget(DockWidget *dockWidget);
 
     void addAction(Action *action);
@@ -113,6 +132,7 @@ public Q_SLOTS:
 
     static Krita* instance();
 
+    static QObject *fromVariant(const QVariant& v);
 
 private:
     struct Private;
@@ -120,5 +140,7 @@ private:
     static Krita* s_instance;
 
 };
+
+Q_DECLARE_METATYPE(Notifier*);
 
 #endif // LIBKIS_KRITA_H

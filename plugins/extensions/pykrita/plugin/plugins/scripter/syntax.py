@@ -23,9 +23,9 @@ def format(color, style=''):
 
 # Syntax styles that can be shared by all languages
 STYLES = {
-    'keyword': format('blue'),
-    'operator': format('red'),
-    'brace': format('darkGray'),
+    'keyword': format('cyan'),
+    'operator': format('orange'),
+    'brace': format('gray'),
     'defclass': format('black', 'bold'),
     'string': format('magenta'),
     'string2': format('darkMagenta'),

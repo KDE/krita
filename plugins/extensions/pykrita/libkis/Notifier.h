@@ -30,7 +30,7 @@ class KRITALIBKIS_EXPORT Notifier : public QObject
 {
     Q_OBJECT
     Q_DISABLE_COPY(Notifier)
-    
+
     Q_PROPERTY(bool Active READ active WRITE setActive)
 
 public:
@@ -40,12 +40,6 @@ public:
     bool active() const;
     void setActive(bool value);
 
-
-
-public Q_SLOTS:
-    
-
-    
 Q_SIGNALS:
 
     void applicationStarted();
@@ -59,7 +53,7 @@ Q_SIGNALS:
 
 private:
     struct Private;
-    const Private *const d;
+    Private *const d;
 
 };
 

@@ -20,8 +20,9 @@
 #include <QPointer>
 
 #include <KoDockRegistry.h>
-
+#include <kactioncollection.h>
 #include <KisPart.h>
+#include <KisMainWindow.h>
 #include <KisDocument.h>
 #include <kis_image.h>
 #include <kis_action.h>
@@ -39,23 +40,34 @@ Krita* Krita::s_instance = 0;
 struct Krita::Private {
     Private() {}
     QList<ViewExtension*> viewExtensions;
+    bool batchMode {false};
+    Notifier *notifier{new Notifier()};
 };
 
 Krita::Krita(QObject *parent)
     : QObject(parent)
     , d(new Private)
 {
+    qRegisterMetaType<Notifier*>();
 }
 
 Krita::~Krita()
 {
     qDeleteAll(d->viewExtensions);
+    delete d->notifier;
     delete d;
 }
 
-QList<Action*> Krita::actions() const
+QMap<QString, Action*> Krita::actions() const
 {
-    return QList<Action*>();
+    QMap<QString, Action*> actionList;
+    KisMainWindow *mainWindow = KisPart::instance()->currentMainwindow();
+    KActionCollection *actionCollection = mainWindow->actionCollection();
+    qDebug() << "There are" << actionCollection->count() << "actions for window" << mainWindow;
+    Q_FOREACH(QAction *action, actionCollection->actions()) {
+        actionList.insert(action->objectName(), new Action(action->objectName(), action));
+    }
+    return actionList;
 }
 
 Document* Krita::activeDocument() const
@@ -70,11 +82,13 @@ void Krita::setActiveDocument(Document* value)
 
 bool Krita::batchmode() const
 {
-    return false;
+    return d->batchMode;
 }
 
 void Krita::setBatchmode(bool value)
 {
+    d->batchMode = value;
+    qDebug() << "setting batch mode to" << value;
 }
 
 
@@ -109,7 +123,7 @@ QList<Importer*> Krita::importers() const
 
 Notifier* Krita::notifier() const
 {
-    return 0;
+    return d->notifier;
 }
 
 
@@ -184,9 +198,7 @@ Window* Krita::openWindow()
 QAction *Krita::createAction(const QString &text)
 {
     KisAction *action = new KisAction(text, this);
-    foreach(KisMainWindow *mainWin, KisPart::instance()->mainWindows()) {
-        mainWin->viewManager()->scriptManager()->addAction(action);
-    }
+    KisPart::instance()->addScriptAction(action);
     return action;
 }
 
@@ -212,5 +224,31 @@ Krita* Krita::instance()
         s_instance = new Krita;
     }
     return s_instance;
+}
+
+/**
+ * Scripter.fromVariant(variant)
+ * variant is a QVariant
+ * returns instance of QObject-subclass
+ *
+ * This is a helper method for PyQt
+ * Because PyQt cannot cast a variant to a QObject or QWidget
+ * I hope that will change some time.
+ */
+QObject *Krita::fromVariant(const QVariant& v)
+{
+
+    if (v.canConvert< QWidget* >())
+    {
+        QObject* obj = qvariant_cast< QWidget* >(v);
+        return obj;
+    }
+    else if (v.canConvert< QObject* >())
+    {
+        QObject* obj = qvariant_cast< QObject* >(v);
+        return obj;
+    }
+    else
+        return 0;
 }
 

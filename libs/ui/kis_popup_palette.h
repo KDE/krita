@@ -27,6 +27,7 @@
 #include "kis_action_manager.h"
 #include "KisViewManager.h"
 #include "kactioncollection.h"
+#include "kis_coordinates_converter.h"
 
 class KisFavoriteResourceManager;
 class QWidget;
@@ -47,7 +48,7 @@ class KisPopupPalette : public QWidget
     Q_PROPERTY(int selectedColor READ selectedColor WRITE setSelectedColor)
 
 public:
-    KisPopupPalette(KisViewManager*, KisFavoriteResourceManager*, const KoColorDisplayRendererInterface *displayRenderer,
+    KisPopupPalette(KisViewManager*, KisCoordinatesConverter* ,KisFavoriteResourceManager*, const KoColorDisplayRendererInterface *displayRenderer,
                     KisCanvasResourceProvider *provider, QWidget *parent = 0);
     ~KisPopupPalette();
     QSize sizeHint() const;
@@ -105,6 +106,10 @@ private:
     int m_hoveredPreset;
     int m_hoveredColor;
     int m_selectedColor;
+
+
+    KisCoordinatesConverter* m_coordinatesConverter;
+
     KisActionManager* m_actionManager;
     KActionCollection* m_actionCollection;
 
@@ -124,6 +129,9 @@ private:
     KisRoundHudButton *m_settingsButton;
     KisRoundHudButton *m_brushHudButton;
     QPoint m_lastCenterPoint;
+    QRect* m_canvasRotationIndicatorRect;
+    bool m_isOverCanvasRotationIndicator;
+    bool m_isRotatingCanvasIndicator;
 
     QPushButton* mirrorMode;
     QPushButton* canvasOnlyButton;

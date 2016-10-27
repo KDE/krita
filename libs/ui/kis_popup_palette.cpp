@@ -48,6 +48,7 @@
 #include <kis_action.h>
 
 
+
 KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConverter* coordinatesConverter ,KisFavoriteResourceManager* manager,
                                  const KoColorDisplayRendererInterface *displayRenderer, KisCanvasResourceProvider *provider, QWidget *parent)
     : QWidget(parent, Qt::FramelessWindowHint)
@@ -170,22 +171,39 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
 
 
 
-    mirrorMode = new QPushButton();
-    mirrorMode->setText(i18n("Mirror Canvas"));
+    mirrorMode = new KisHighlightedToolButton(this);
+    mirrorMode->setCheckable(true);
+    mirrorMode->setFixedSize(35, 35);
+    mirrorMode->setIcon(KisIconUtils::loadIcon("symmetry-horizontal"));
+    mirrorMode->setToolTip(i18n("Mirror Canvas"));
     connect(mirrorMode, SIGNAL(clicked(bool)), this, SLOT(slotmirroModeClicked()));
 
 
-    canvasOnlyButton = new QPushButton();
-    canvasOnlyButton->setText(i18n("Canvas Only"));
+    canvasOnlyButton = new KisHighlightedToolButton(this);
+    canvasOnlyButton->setCheckable(true);
+    canvasOnlyButton->setFixedSize(35, 35);
+    canvasOnlyButton->setIcon(KisIconUtils::loadIcon("document-new"));
+    canvasOnlyButton->setToolTip(i18n("Canvas Only"));
     connect(canvasOnlyButton, SIGNAL(clicked(bool)), this, SLOT(slotCanvasonlyModeClicked()));
 
     zoomToOneHundredPercentButton = new QPushButton();
-    zoomToOneHundredPercentButton->setText(i18n("100% Zoom"));
+    zoomToOneHundredPercentButton->setText(i18n("100%"));
+    zoomToOneHundredPercentButton->setFixedHeight(35);
+    zoomToOneHundredPercentButton->setIcon(KisIconUtils::loadIcon("zoom-original"));
+    zoomToOneHundredPercentButton->setToolTip(i18n("Zoom to 100%"));
     connect(zoomToOneHundredPercentButton, SIGNAL(clicked(bool)), this, SLOT(slotZoomToOneHundredPercentClicked()));
+
+
+    zoomCanvasSlider = new QSlider(Qt::Horizontal, this);
+    zoomCanvasSlider->setRange(10, 200); // 10% to 200 %
+    zoomCanvasSlider->setFixedHeight(35);
+
+
 
     hLayout->addWidget(mirrorMode);
     hLayout->addWidget(canvasOnlyButton);
     hLayout->addWidget(zoomToOneHundredPercentButton);
+    hLayout->addWidget(zoomCanvasSlider);
 
     setVisible(true);
     setVisible(false);

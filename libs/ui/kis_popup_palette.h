@@ -23,11 +23,15 @@
 #include <QWidget>
 #include <QQueue>
 #include <QPushButton>
+#include <QSlider>
 #include <KoColorDisplayRendererInterface.h>
 #include "kis_action_manager.h"
 #include "KisViewManager.h"
 #include "kactioncollection.h"
 #include "kis_coordinates_converter.h"
+#include "kis_tool_button.h"
+#include "kis_highlighted_button.h"
+
 
 class KisFavoriteResourceManager;
 class QWidget;
@@ -133,9 +137,10 @@ private:
     bool m_isOverCanvasRotationIndicator;
     bool m_isRotatingCanvasIndicator;
 
-    QPushButton* mirrorMode;
-    QPushButton* canvasOnlyButton;
+    KisHighlightedToolButton* mirrorMode;
+    KisHighlightedToolButton* canvasOnlyButton;
     QPushButton* zoomToOneHundredPercentButton;
+    QSlider* zoomCanvasSlider;
 
 Q_SIGNALS:
     void sigChangeActivePaintop(int);

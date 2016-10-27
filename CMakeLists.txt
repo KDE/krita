@@ -168,33 +168,8 @@ add_feature_info("Foundation Build" FOUNDATION_BUILD "A Foundation build is a bi
 # 5. estimate which of the products/features can be build by internal deps
 
 # get the special macros
-include(CalligraProductSetMacros)
 include(MacroJPEG)
 include(GenerateTestExportHeader)
-
-
-# get the definitions of products, features and product sets
-include(KritaProducts.cmake)
-
-set(PRODUCTSET_DEFAULT "ALL")
-# temporary migration support
-if (CREATIVEONLY)
-    set(WARN_ABOUT_CREATIVEONLY TRUE)
-    set(PRODUCTSET_DEFAULT "CREATIVE")
-endif ()
-
-if(NOT PRODUCTSET)
-    set(PRODUCTSET ${PRODUCTSET_DEFAULT} CACHE STRING "Set of products/features to build" FORCE)
-endif()
-
-if (RELEASE_BUILD)
-    set(CALLIGRA_SHOULD_BUILD_STAGING FALSE)
-else ()
-    set(CALLIGRA_SHOULD_BUILD_STAGING TRUE)
-endif ()
-
-# finally choose products/features to build
-calligra_set_productset(${PRODUCTSET})
 
  ########################
 #########################
@@ -574,15 +549,6 @@ if(HAVE_VC)
 endif()
 set(CMAKE_MODULE_PATH ${OLD_CMAKE_MODULE_PATH} )
 
-##
-## Test for Xinput
-##
-if(NOT WIN32 AND NOT APPLE)
-  set(REQUIRED_Xinput_FOUND ${X11_Xinput_FOUND})
-else()
-  set(REQUIRED_Xinput_FOUND TRUE)
-endif()
-
 add_definitions(${QT_DEFINITIONS} ${QT_QTDBUS_DEFINITIONS})
 
 if(WIN32)
@@ -662,63 +628,12 @@ include_directories(
    ${CMAKE_BINARY_DIR}/libs/version
 )
 
- ###################################################
-####################################################
-## Detect which products/features can be compiled ##
-####################################################
-###################################################
-
-calligra_drop_product_on_bad_condition( APP_KRITA
-    EIGEN3_FOUND "Eigen devel not found"
-    EXIV2_FOUND "libexiv2 devel not found"
-    HAVE_REQUIRED_LCMS_VERSION "lcms devel not found"
-    Boost_SYSTEM_FOUND "boost-system devel not found"
-    REQUIRED_Xinput_FOUND "Xinput devel not found "
-)
-
-#############################################
-####  Backward compatibility BUILD_x=off ####
-#############################################
-
-# workaround: disable directly all products which might be activated by internal
-# dependencies, but belong to scope of old flag
-calligra_drop_products_on_old_flag(krita APP_KRITA)
-
-#############################################
-####      Temporarily broken products    ####
-#############################################
-
-# If a product does not build due to some temporary brokeness disable it here,
-# by calling calligra_disable_product with the product id and the reason,
-# e.g.:
-# calligra_disable_product(APP_KEXI "isn't buildable at the moment")
-
-#############################################
-####     Calculate buildable products    ####
-#############################################
-
-calligra_drop_unbuildable_products()
-
- ###################
-####################
-## Subdirectories ##
-####################
-###################
-
-if(SHOULD_BUILD_APP_KRITA)
-  add_subdirectory(krita)
-endif()
-
-# non-app directories are moved here because they can depend on SHOULD_BUILD_{appname} variables set above
-add_subdirectory(libs)
-add_subdirectory(plugins)
-
-add_subdirectory( benchmarks )
-
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
 
-calligra_product_deps_report("product_deps")
-calligra_log_should_build()
+add_subdirectory(libs)
+add_subdirectory(plugins)
+add_subdirectory(benchmarks)
+add_subdirectory(krita)
 
 configure_file(KoConfig.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/KoConfig.h )
 configure_file(config_convolution.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config_convolution.h)

@@ -11,7 +11,6 @@ add_subdirectory( integration )
 add_subdirectory( pics/app )
 
 set(krita_SRCS main.cc)
-set(kra_SRCS main.cc)
 
 if (NOT APPLE)
     file(GLOB ICON_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/*-apps-calligrakrita.png")
@@ -27,6 +26,17 @@ else()
     )
 endif() 
 ecm_add_app_icon(krita_SRCS ICONS ${ICON_SRCS})
+
+ecm_install_icons(ICONS
+    "${CMAKE_CURRENT_SOURCE_DIR}/pics/mimetypes/16-application-x-krita.png"
+    "${CMAKE_CURRENT_SOURCE_DIR}/pics/mimetypes/32-application-x-krita.png"
+    "${CMAKE_CURRENT_SOURCE_DIR}/pics/mimetypes/48-application-x-krita.png"
+    "${CMAKE_CURRENT_SOURCE_DIR}/pics/mimetypes/128-application-x-krita.png"
+    "${CMAKE_CURRENT_SOURCE_DIR}/pics/mimetypes/256-application-x-krita.png"
+    "${CMAKE_CURRENT_SOURCE_DIR}/pics/mimetypes/512-application-x-krita.png"
+    "${CMAKE_CURRENT_SOURCE_DIR}/pics/mimetypes/1024-application-x-krita.png"
+    DESTINATION ${ICON_INSTALL_DIR}
+)
 
 # separate listing, both used by Krita and KritaSketch
 set(krita_QRCS
@@ -69,16 +79,6 @@ if(HAVE_KCRASH)
         PRIVATE
                           KF5::Crash
     )
-    set(KRA_SRCS
-        "${CMAKE_CURRENT_SOURCE_DIR}/pics/mimetypes/16-application-x-krita.png"
-        "${CMAKE_CURRENT_SOURCE_DIR}/pics/mimetypes/32-application-x-krita.png"
-        "${CMAKE_CURRENT_SOURCE_DIR}/pics/mimetypes/48-application-x-krita.png"
-        "${CMAKE_CURRENT_SOURCE_DIR}/pics/mimetypes/128-application-x-krita.png"
-        "${CMAKE_CURRENT_SOURCE_DIR}/pics/mimetypes/256-application-x-krita.png"
-        "${CMAKE_CURRENT_SOURCE_DIR}/pics/mimetypes/512-application-x-krita.png"
-        "${CMAKE_CURRENT_SOURCE_DIR}/pics/mimetypes/1024-application-x-krita.png"
-    )
-    ecm_add_app_icon(kra_SRCS ICONS ${KRA_SRCS})
 endif()
 
 if (APPLE)

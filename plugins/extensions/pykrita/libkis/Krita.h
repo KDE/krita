@@ -56,7 +56,7 @@ class KRITALIBKIS_EXPORT Krita : public QObject
      * actions["deselect"].trigger()
      * @endcode
      */
-    //Q_PROPERTY(QMap<QString, Action*> Actions READ actions)
+    Q_PROPERTY(QVariantMap Actions READ actions)
     Q_PROPERTY(Document* ActiveDocument READ activeDocument WRITE setActiveDocument)
     Q_PROPERTY(bool Batchmode READ batchmode WRITE setBatchmode)
     Q_PROPERTY(QList<Document*> Documents READ documents)
@@ -75,12 +75,13 @@ public:
     explicit Krita(QObject *parent = 0);
     virtual ~Krita();
 
-
     Document* activeDocument() const;
     void setActiveDocument(Document* value);
 
     bool batchmode() const;
     void setBatchmode(bool value);
+
+    QVariantMap actions() const;
 
     QList<Document*> documents() const;
 
@@ -108,8 +109,6 @@ public:
 
 
 public Q_SLOTS:
-
-    QMap<QString, Action*> actions() const;
 
     void addDockWidget(DockWidget *dockWidget);
 

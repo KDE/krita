@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 """
 Mini Kross - a scripting solution inspired by Kross (http://kross.dipe.org/)
+
 Technically this is one of the most important modules in Scripter.
 Via the Qt meta object system it provides access to unwrapped objects.
 This code uses a lot of metaprogramming magic. To fully understand it,
 you have to know about metaclasses in Python
 """
-from __future__ import (print_function, with_statement)
 
 import sip
 from PyQt5.QtCore import (
@@ -14,12 +14,13 @@ from PyQt5.QtCore import (
     QObject, Qt, QMetaMethod, pyqtSignal)
 from PyQt5.QtGui import QBrush, QFont, QImage, QPalette, QPixmap
 from PyQt5.QtWidgets import qApp
+from PyQt5.QtCore import QVariant
 
 import sys # TODO: remove this: only for outputting debug
 
 variant_converter = {
-  "QVariantList": lambda v: from_variantlist(v),
-  "QList<QVariant>": lambda v: v.toList(),
+  "QVariantList": lambda v: v.toList(v),
+  "QVariantMap": lambda v: toPyObject(v),
   "QPoint": lambda v: v.toPoint(),
   "str": lambda v: v.toString(),
   "int": lambda v: v.toInt()[0],
@@ -43,27 +44,61 @@ variant_converter = {
   "QPixmap": lambda v: QPixmap(v),
   "QImage": lambda v: QImage(v),
   "bool": lambda v: v.toBool(),
-  "QObject*": lambda v: Krita.fromVariant(v),
-  "QWidget*": lambda v: Krita.fromVariant(v),
+  "QObject*": lambda v: wrap_variant_object(v),
+  "QWidget*": lambda v: wrap_variant_object(v),
   "ActionMap": lambda v: int(v.count())
 }
+
+def wrap_variant_object(variant):
+    """
+    convert a QObject or a QWidget to its wrapped superclass
+    """
+    o = Krita.fromVariant(variant)
+    return wrap(o, True)
 
 def from_variant(variant):
     """
     convert a QVariant to a Python value
     """
-    typeName = variant.typeName()
-    convert = variant_converter.get(typeName)
-    if not convert:
-        raise ValueError("Could not convert value to %s" % typeName)
-    else:
-        return convert(variant)
+    # Check whether it's really a QVariant
+    if hasattr(variant, '__type__') and not (variant is None or variant.type() is None):
+        typeName = variant.typeName()
+        convert = variant_converter.get(typeName)
+        if not convert:
+            raise ValueError("Could not convert value to %s" % typeName)
+        else:
+            v = convert(variant)
+            return v
 
-def from_variantlist(variantlist):
-    """
-    convert QList<QVariant> to a normal Python list
-    """
-    return [from_variant(variant) for variant in variantlist.toList()]
+    # Give up and return
+    return variant
+
+def convert_value(value):
+
+    # Check whether it's a dict: if so, convert the keys/values
+    if hasattr(value, '__class__') and issubclass(value.__class__, dict) and len(value) > 0:
+        return {convert_value(k): convert_value(v) for k, v in value.items()}
+
+    # Check whether it's a list: if so, convert the values
+    if hasattr(value, '__class__') and issubclass(value.__class__, list) and len(value) > 0:
+        return [convert_value(v) for v in value]
+
+    if isinstance(value, str):
+        # prefer Python strings
+        return str(value)
+
+    elif isinstance(value, PyQtClass):
+        # already wrapped
+        return value
+
+    # Check whether it's a QObject
+    if hasattr(value, '__class__') and issubclass(value.__class__, QObject):
+        return wrap(value, True)
+
+    if hasattr(value, '__type__') and not (value is None or value.type() is None) :
+        return from_variant(value);
+
+    return value
 
 def classname(obj):
     """
@@ -114,17 +149,13 @@ def wrap(obj, force=False):
     which queries the metaObject and provides access to
     all slots and all properties.
     """
-    #print("wrap", obj, force)
     if isinstance(obj, str):
-        #print("String")
         # prefer Python strings
         return str(obj)
     elif isinstance(obj, PyQtClass):
-        #print("AlreadyWrapped")
         # already wrapped
         return obj
     elif obj and isinstance(obj, QObject):
-        #print("Is QObject", obj.__class__.__name__, obj.metaObject().className())
         if force or obj.__class__.__name__ != obj.metaObject().className():
             # Ah this is an unwrapped class
             obj = create_pyqt_object(obj)
@@ -137,7 +168,6 @@ def is_wrapped(obj):
     """
     # XXX: Any better/faster check?
     return hasattr(obj, "qt")
-
 
 
 def unwrap(obj):
@@ -267,12 +297,9 @@ class PyQtClass(object):
 
     def __getattr__(self, name):
         # Make named child objects available as attributes like QtQml
-        print("__getattr__", name)
-
         # Check whether the object is in the QObject hierarchy
         for child in self._instance.children():
             if str(child.objectName()) == name:
-                print(name, "is a child:", child)
                 obj = wrap(child)
                 # save found object for faster lookup
                 setattr(self, name, obj)
@@ -280,24 +307,7 @@ class PyQtClass(object):
 
         # Check whether it's a property
         v = self._instance.property(name)
-
-        if (v is None):
-            v = self._instance.property("b'" + name)
-
-        print(v, dir(v))
-
-
-        # Check whether the property
-        if hasattr(v, '__class__') and issubclass(v.__class__, QObject):
-            return wrap(v, True)
-
-        if hasattr(v, '__type__') and not (v is None or v.type() is None) :
-            return from_variant(v)
-
-        return v
-
-
-
+        return convert_value(v)
 
     @property
     def __members__(self):
@@ -344,7 +354,7 @@ class PyQtProperty(object):
 
 
     def get(self, obj):
-        return from_variant(self.meta_property.read(obj._instance))
+        return convert_value(self.meta_property.read(obj._instance))
 
 
     def set(self, obj, value):
@@ -360,12 +370,12 @@ class PyQtMethod(object):
 
     def __init__(self, meta_method):
         self.meta_method = meta_method
-        self.name, args = str(meta_method.methodSignature()).split("(", 1)
+        self.name, args = str(meta_method.methodSignature(), encoding="utf-8").split("(", 1)
         self.args = args[:-1].split(",")
         self.returnType = str(meta_method.typeName())
 
-        types = [str(t) for t in meta_method.parameterTypes()]
-        names = [str(n) or "arg%i" % (i+1) \
+        types = [str(t, encoding="utf-8") for t in meta_method.parameterTypes()]
+        names = [str(n, encoding="utf-8") or "arg%i" % (i+1) \
                   for i, n in enumerate(meta_method.parameterNames())]
         params = ", ".join("%s %s" % (t, n) for n, t in zip(types, names))
 
@@ -373,7 +383,6 @@ class PyQtMethod(object):
            self.name, params,
            self.returnType and (" -> %s" % self.returnType) or ""
         )
-
 
     def instancemethod(self):
         def wrapper(obj, *args):
@@ -387,11 +396,6 @@ class PyQtMethod(object):
             invoke_args.extend(qargs)
             try:
                 result = QMetaObject.invokeMethod(*invoke_args)
-                error_msg = str(qApp.property("MIKRO_EXCEPTION").toString())
-                if error_msg:
-                    # clear message
-                    qApp.setProperty("MIKRO_EXCEPTION", "") # TODO: "" was QVariant(): check that it's correct (ale/20141002)
-                    raise Exception(error_msg)
             except RuntimeError as e:
                 raise TypeError(
                     "%s.%s(%r) call failed: %s" % (obj, self.name, args, e))

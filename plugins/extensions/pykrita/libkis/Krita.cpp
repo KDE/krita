@@ -35,6 +35,9 @@
 #include "ViewExtension.h"
 #include "DockWidgetFactoryBase.h"
 
+#include <QVariantMap>
+#include <QVariant>
+
 Krita* Krita::s_instance = 0;
 
 struct Krita::Private {
@@ -58,14 +61,13 @@ Krita::~Krita()
     delete d;
 }
 
-QMap<QString, Action*> Krita::actions() const
+QVariantMap Krita::actions() const
 {
-    QMap<QString, Action*> actionList;
+    QVariantMap actionList;
     KisMainWindow *mainWindow = KisPart::instance()->currentMainwindow();
     KActionCollection *actionCollection = mainWindow->actionCollection();
-    qDebug() << "There are" << actionCollection->count() << "actions for window" << mainWindow;
     Q_FOREACH(QAction *action, actionCollection->actions()) {
-        actionList.insert(action->objectName(), new Action(action->objectName(), action));
+        actionList.insert(action->objectName(), QVariant::fromValue<QObject*>(new Action(action->objectName(), action)));
     }
     return actionList;
 }
@@ -88,7 +90,6 @@ bool Krita::batchmode() const
 void Krita::setBatchmode(bool value)
 {
     d->batchMode = value;
-    qDebug() << "setting batch mode to" << value;
 }
 
 
@@ -176,6 +177,7 @@ void Krita::addAction(Action *action)
 
 bool Krita::closeApplication()
 {
+    qDebug() << "closeApplication called";
     return false;
 }
 

@@ -114,8 +114,6 @@ set(GENERIC_KRITA_LIB_SOVERSION "${GENERIC_KRITA_LIB_VERSION_MAJOR}")
 LIST (APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules")
 LIST (APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/kde_macro")
 
-message("Module path:" ${CMAKE_MODULE_PATH})
-
 # fetch git revision for the current build
 
 set(KRITA_GIT_SHA1_STRING "")

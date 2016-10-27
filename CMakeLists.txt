@@ -288,14 +288,9 @@ if (NOT WIN32 AND NOT APPLE)
         TYPE OPTIONAL
         PURPOSE "Optionally used to provide crash reporting on Linux")
 
-    find_package(X11)
-    if(X11_FOUND)
-        find_package(Qt5 ${MIN_QT_VERSION} REQUIRED NO_MODULE COMPONENTS X11Extras)
-        set(HAVE_X11 TRUE)
-        add_definitions(-DHAVE_X11)
-    else()
-        set(HAVE_X11 FALSE)
-    endif()
+    find_package(X11 REQUIRED COMPONENTS Xinput)
+    set(HAVE_X11 TRUE)
+    add_definitions(-DHAVE_X11)
 
     find_package(XCB COMPONENTS XCB ATOM)
     set(HAVE_XCB ${XCB_FOUND})

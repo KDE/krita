@@ -255,10 +255,9 @@ find_package(Qt5 ${MIN_QT_VERSION}
 
 set(QT_QTTEST_LIBRARY Qt5::Test)
 
-
-include (MacroLibrary)
 include (MacroAddFileDependencies)
-
+include (MacroBoolTo01)
+include (MacroEnsureOutOfSourceBuild)
 macro_ensure_out_of_source_build("Compiling Krita inside the source directory is not possible. Please refer to the build instruction https://community.kde.org/Krita#Build_Instructions")
 
 # Note: OPTIONAL_COMPONENTS does not seem to be reliable

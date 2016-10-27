@@ -134,15 +134,22 @@ message(STATUS "Release build: ${RELEASE_BUILD}")
 #############
 ############
 
+include(FeatureSummary)
+
 option(PACKAGERS_BUILD "Build support of multiple CPU architectures in one binary. Should be used by packagers only or Krita developers. Only switch off when you're an artist optimizing a build for your very own machine." ON)
+add_feature_info("Packagers' Build" PACKAGERS_BUILD "Support several CPU arch in one binary. Recommended for packages. Switch this off to make a build for only your machine.")
+
 if (WIN32)
     option(USE_DRMINGW "Support the Dr. Mingw crash handler (only on windows)" ON)
+    add_feature_info("Dr. Mingw" USE_DRMINGW "Enable the Dr. Mingw crash handler")
 endif ()
 
 option(HIDE_SAFE_ASSERTS "Don't show message box for \"safe\" asserts, just ignore them automatically and dump a message to the terminal." ON)
 configure_file(config-hide-safe-asserts.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-hide-safe-asserts.h)
+add_feature_info("Safe Asserts" HIDE_SAFE_ASSERTS "Don't show message box for \"safe\" asserts, just ignore them automatically and dump a message to the terminal.")
 
 option(FOUNDATION_BUILD "A Foundation build is a binary release build that can package some extra things like color themes. Linux distributions that build and install Krita into a default system location should not define this option to true." OFF)
+add_feature_info("Foundation Build" FOUNDATION_BUILD "A Foundation build is a binary release build that can package some extra things like color themes. Linux distributions that build and install Krita into a default system location should not define this option to true.")
 
  #######################
 ########################
@@ -213,7 +220,6 @@ include(CheckFunctionExists)
 include(KDEInstallDirs)
 include(KDECMakeSettings)
 include(KDECompilerSettings)
-include(FeatureSummary)
 
 # do not reorder to be alphabetical: this is the order in which the frameworks
 # depend on each other.

@@ -253,8 +253,6 @@ find_package(Qt5 ${MIN_QT_VERSION}
 )
 
 
-set(QT_QTTEST_LIBRARY Qt5::Test)
-
 include (MacroAddFileDependencies)
 include (MacroBoolTo01)
 include (MacroEnsureOutOfSourceBuild)

@@ -257,7 +257,6 @@ set(QT_QTTEST_LIBRARY Qt5::Test)
 
 
 include (MacroLibrary)
-include (MacroAdditionalCleanFiles)
 include (MacroAddFileDependencies)
 
 macro_ensure_out_of_source_build("Compiling Krita inside the source directory is not possible. Please refer to the build instruction https://community.kde.org/Krita#Build_Instructions")

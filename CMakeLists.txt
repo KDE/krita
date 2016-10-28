@@ -169,7 +169,6 @@ add_feature_info("Foundation Build" FOUNDATION_BUILD "A Foundation build is a bi
 
 # get the special macros
 include(MacroJPEG)
-include(GenerateTestExportHeader)
 
  ########################
 #########################

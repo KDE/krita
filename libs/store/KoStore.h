@@ -225,27 +225,6 @@ public:
     bool hasFile(const QString &fileName) const;
 
     /**
-     * Imports a local file into a store
-     * @param fileName file on hard disk
-     * @param destName file in the store
-     */
-    bool addLocalFile(const QString &fileName, const QString &destName);
-
-    /**
-     * Imports data into a store
-     * @param buffer data
-     * @param destName file in the store
-     */
-    bool addDataToFile(QByteArray &buffer, const QString &destName);
-
-    /**
-     * Extracts a file out of the store
-     * @param sourceName file in the store
-     * @param fileName file on a disk
-     */
-    bool extractFile(const QString &sourceName, const QString &fileName);
-
-    /**
      * Extracts a file out of the store to a buffer
      * @param sourceName file in the store
      * @param data memory buffer

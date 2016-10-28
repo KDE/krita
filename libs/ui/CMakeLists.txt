@@ -384,7 +384,7 @@ if(WIN32)
         input/wintab/kis_screen_size_choice_dialog.cpp
         qtlockedfile/qtlockedfile_win.cpp
         )
-      include_directories(${Qt5Gui_PRIVATE_INCLUDE_DIRS})
+    include_directories(${Qt5Gui_PRIVATE_INCLUDE_DIRS})
 endif()
     set(kritaui_LIB_SRCS
         ${kritaui_LIB_SRCS}
@@ -412,13 +412,6 @@ if(UNIX)
             )
     endif()
 endif()
-
-if(WIN32)
-    #ki18n_wrap_ui(
-    #    input/wintab/kis_screen_size_choice_dialog.ui
-    #)
-endif()
-
 
 
 ki18n_wrap_ui(kritaui_LIB_SRCS

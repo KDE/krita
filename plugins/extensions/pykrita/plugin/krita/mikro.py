@@ -1,5 +1,23 @@
 # -*- coding: utf-8 -*-
 """
+Copyright (c) 2016 Boudewijn Rempt <boud@valdyas.org>
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+"""
+
+"""
 Mini Kross - a scripting solution inspired by Kross (http://kross.dipe.org/)
 
 Technically this is one of the most important modules in Scripter.
@@ -8,15 +26,12 @@ This code uses a lot of metaprogramming magic. To fully understand it,
 you have to know about metaclasses in Python
 """
 
+import sys
 import sip
-from PyQt5.QtCore import (
-    QMetaObject, Q_RETURN_ARG, Q_ARG,
-    QObject, Qt, QMetaMethod, pyqtSignal)
+from PyQt5.QtCore import QVariant, QMetaObject, Q_RETURN_ARG, Q_ARG, QObject, Qt, QMetaMethod, pyqtSignal
 from PyQt5.QtGui import QBrush, QFont, QImage, QPalette, QPixmap
 from PyQt5.QtWidgets import qApp
-from PyQt5.QtCore import QVariant
 
-import sys # TODO: remove this: only for outputting debug
 
 variant_converter = {
   "QVariantList": lambda v: v.toList(v),
@@ -74,6 +89,10 @@ def from_variant(variant):
     return variant
 
 def convert_value(value):
+    """
+    Convert a given value, upcasting to the highest QObject-based class if possible,
+    unpacking lists and dicts.
+    """
 
     # Check whether it's a dict: if so, convert the keys/values
     if hasattr(value, '__class__') and issubclass(value.__class__, dict) and len(value) > 0:
@@ -100,50 +119,13 @@ def convert_value(value):
 
     return value
 
-def classname(obj):
-    """
-    return real class name
-    Unwrapped classes will be represended in PyQt by a known base class.
-    So obj.__class__.__name__ will not return the desired class name
-    """
-    return obj.metaObject().className()
-
 qtclasses = {}
-
-def supercast(obj):
-    """
-    cast a QObject subclass to the best known wrapped super class
-    """
-    if not qtclasses:
-        # To get really all Qt classes I would have to
-        # import QtNetwork, QtSvg and QtQml, too.
-        import PyQt5
-        qtclasses.update(
-            dict([(key, value) \
-                for key, value in list(PyQt5.QtCore.__dict__.items()) + list(PyQt5.QtGui.__dict__.items()) \
-                if hasattr(value, "__subclasses__") and issubclass(value, QObject)])
-        )
-    try:
-        if not issubclass(value, QObject):
-            return obj
-    except TypeError:
-        # no class - no cast...
-        return obj
-    mo = obj.metaObject()
-    while mo:
-        cls = qtclasses.get(str(mo.className()))
-        if cls:
-            return sip.cast(obj, cls)
-        mo = mo.superClass()
-    # This should never be reached
-    return obj
-
-
 
 def wrap(obj, force=False):
     """
     If a class is not known by PyQt it will be automatically
     casted to a known wrapped super class.
+
     But that limits access to methods and propperties of this super class.
     So instead this functions returns a wrapper class (PyQtClass)
     which queries the metaObject and provides access to
@@ -161,20 +143,11 @@ def wrap(obj, force=False):
             obj = create_pyqt_object(obj)
     return obj
 
-
-def is_wrapped(obj):
-    """
-    checks if a object is wrapped by PyQtClass
-    """
-    # XXX: Any better/faster check?
-    return hasattr(obj, "qt")
-
-
 def unwrap(obj):
     """
     if wrapped returns the wrapped object
     """
-    if is_wrapped(obj):
+    if hasattr(obj, "qt"):
         obj = obj.qt
     return obj
 
@@ -231,13 +204,7 @@ class PyQtClass(object):
         if is_scripter_child(qobj):
             if len(qobj.children()):
                 print("Cannot delete", qobj, "because it has child objects")
-            #else:
-            #    print("* deleting", qobj)
-            # XXX: or better setdeleted ?
             sip.delete(qobj)
-        #else:
-        #    print("* NOT deleting", qobj)
-
 
     def setProperty(self, name, value):
         self._instance.setProperty(name, value)
@@ -301,7 +268,7 @@ class PyQtClass(object):
         for child in self._instance.children():
             if str(child.objectName()) == name:
                 obj = wrap(child)
-                # save found object for faster lookup
+                # Save found object for faster lookup
                 setattr(self, name, obj)
                 return obj
 
@@ -321,7 +288,6 @@ class PyQtClass(object):
             child_name = str(c.objectName())
             if child_name:
                 names.append(child_name)
-            # XXX: add unnamed childs?
         for pn in self._instance.dynamicPropertyNames():
             names.append(str(pn))
         return names
@@ -386,7 +352,6 @@ class PyQtMethod(object):
 
     def instancemethod(self):
         def wrapper(obj, *args):
-            # XXX: support kwargs?
             qargs = [Q_ARG(t, v) for t, v in zip(self.args, args)]
             invoke_args = [obj._instance, self.name]
             invoke_args.append(Qt.DirectConnection)
@@ -407,7 +372,6 @@ class PyQtMethod(object):
 
 
 # Cache on-the-fly-created classes for better speed
-# XXX Should I use weak references?
 pyqt_classes = {}
 
 def create_pyqt_class(metaobject):
@@ -420,11 +384,8 @@ def create_pyqt_class(metaobject):
     properties = attrs["__properties__"] = {}
     for i in range(metaobject.propertyCount()):
         prop = PyQtProperty(metaobject.property(i))
-        #import pdb; pdb.set_trace()
         prop_name = str(prop.name)
-        #prop_name = prop_name[0].upper() + prop_name[1:]
         if prop.read_only:
-            # XXX: write set-method which raises an error
             properties[prop_name] = attrs[prop_name] = property(prop.get, doc=prop.__doc__)
         else:
             properties[prop_name] = attrs[prop_name] = property(
@@ -447,18 +408,9 @@ def create_pyqt_class(metaobject):
         else :
             method_name = meta_method.name()
             signal_attrs = []
-            #for i in range(meta_method.parameterCount()):
-            #    typ = meta_method.parameterType(i)
-            #    signal_attrs.append(typ)
-            #import pdb; pdb.set_trace()
-            # TODO: bind the signal (which is now unbound) to the c++ signal (we can bind them signal to signal, if signal to slot does not work)
-            # TODO: make sure that the signal shows up as attribute in the created class
             properties[bytes(method_name).decode('ascii')] = pyqtSignal(meta_method.parameterTypes())
 
-    # import pdb; pdb.set_trace()
-
-    # Python is great :)
-    # It can dynamically create a class with a base class and a dictionary
+    # Dynamically create a class with a base class and a dictionary
     cls = type(class_name, (PyQtClass,), attrs)
     pyqt_classes[class_name] = cls
     return cls

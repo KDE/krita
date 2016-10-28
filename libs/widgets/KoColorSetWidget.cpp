@@ -106,7 +106,7 @@ void KoColorSetWidget::KoColorSetWidgetPrivate::addRemoveColors()
             QString savePath = srv->saveLocation();
 
             do {
-                fileInfo.setFile( savePath + QString("%1.gpl").arg( i++, 4, 10, QChar('0') ) );
+                fileInfo.setFile(savePath + QString("%1.%2").arg(i++, 4, 10, QChar('0')).arg(colorSet->defaultFileExtension()));
             }
             while (fileInfo.exists());
 

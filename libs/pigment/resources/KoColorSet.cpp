@@ -30,17 +30,22 @@
 #include <QBuffer>
 #include <QByteArray>
 #include <QPainter>
+#include <QDomDocument>
+#include <QDomElement>
 #include <QXmlStreamReader>
 
 #include <DebugPigment.h>
 #include <klocalizedstring.h>
 
+#include <KoStore.h>
 #include "KoColor.h"
+#include "KoColorProfile.h"
 #include "KoColorSpaceRegistry.h"
 #include "KoColorModelStandardIds.h"
 
 
 struct KoColorSet::Private {
+    KoColorSet::PaletteType paletteType;
     QByteArray data;
     QString name;
     QString comment;
@@ -73,7 +78,9 @@ KoColorSet::PaletteType detectFormat(const QString &fileName, const QByteArray &
     else if (fi.suffix().toLower() == "xml") {
         return KoColorSet::XML;
     }
-
+    else if (fi.suffix().toLower() == "kpl") {
+        return KoColorSet::KPL;
+    }
     return KoColorSet::UNKNOWN;
 }
 
@@ -184,22 +191,18 @@ QString KoColorSet::closestColorName(KoColor color, bool useGivenColorSpace)
 
 bool KoColorSet::saveToDevice(QIODevice *dev) const
 {
-    QTextStream stream(dev);
-    stream << "GIMP Palette\nName: " << name() << "\nColumns: " << d->columns << "\n#\n";
-
-    for (int i = 0; i < d->colors.size(); i++) {
-        const KoColorSetEntry& entry = d->colors.at(i);
-        QColor c = entry.color.toQColor();
-        stream << c.red() << " " << c.green() << " " << c.blue() << "\t";
-        if (entry.name.isEmpty())
-            stream << "Untitled\n";
-        else
-            stream << entry.name << "\n";
+    bool res;
+    switch(d->paletteType) {
+    case GPL:
+        res = saveGpl(dev);
+        break;
+    default:
+        res = saveKpl(dev);
     }
-
-    KoResource::saveToDevice(dev);
-
-    return true;
+    if (res) {
+        KoResource::saveToDevice(dev);
+    }
+    return res;
 }
 
 bool KoColorSet::init()
@@ -222,8 +225,8 @@ bool KoColorSet::init()
     }
 
     bool res = false;
-    PaletteType paletteType = detectFormat(filename(), d->data);
-    switch(paletteType) {
+    d->paletteType = detectFormat(filename(), d->data);
+    switch(d->paletteType) {
     case GPL:
         res = loadGpl();
         break;
@@ -241,6 +244,9 @@ bool KoColorSet::init()
         break;
     case XML:
         res = loadXml();
+        break;
+    case KPL:
+        res = loadKpl();
         break;
     default:
         res = false;
@@ -272,6 +278,24 @@ bool KoColorSet::init()
     // save some memory
     d->data.clear();
     return res;
+}
+
+bool KoColorSet::saveGpl(QIODevice *dev) const
+{
+    QTextStream stream(dev);
+    stream << "GIMP Palette\nName: " << name() << "\nColumns: " << d->columns << "\n#\n";
+
+    for (int i = 0; i < d->colors.size(); i++) {
+        const KoColorSetEntry& entry = d->colors.at(i);
+        QColor c = entry.color.toQColor();
+        stream << c.red() << " " << c.green() << " " << c.blue() << "\t";
+        if (entry.name.isEmpty())
+            stream << "Untitled\n";
+        else
+            stream << entry.name << "\n";
+    }
+
+    return true;
 }
 
 void KoColorSet::add(const KoColorSetEntry & c)
@@ -317,7 +341,7 @@ int KoColorSet::columnCount()
 
 QString KoColorSet::defaultFileExtension() const
 {
-    return QString(".gpl");
+    return QString(".kpl");
 }
 
 
@@ -640,6 +664,150 @@ bool KoColorSet::loadXml() {
         dbgPigment << "XML palette parsed successfully:" << filename();
         return true;
     }
+}
+
+bool KoColorSet::saveKpl(QIODevice *dev) const
+{
+    QScopedPointer<KoStore> store(KoStore::createStore(dev, KoStore::Write, "application/x-krita-palette", KoStore::Zip));
+    if (!store || store->bad()) return false;
+
+    QSet<const KoColorProfile *> profiles;
+    QMap<const KoColorProfile*, const KoColorSpace*> profileMap;
+
+    {
+        QDomDocument doc;
+        QDomElement root = doc.createElement("Colorset");
+        root.setAttribute("version", "1.0");
+        root.setAttribute("name", d->name);
+        root.setAttribute("comment", d->comment);
+        root.setAttribute("columns", d->columns);
+        Q_FOREACH(const KoColorSetEntry &entry, d->colors) {
+
+            // Only save non-builtin profiles.=
+            const KoColorProfile *profile = entry.color.colorSpace()->profile();
+            if (!profile->fileName().isEmpty()) {
+                profiles << profile;
+                profileMap[profile] = entry.color.colorSpace();
+            }
+            QDomElement el = doc.createElement("ColorSetEntry");
+            el.setAttribute("name", entry.name);
+            el.setAttribute("id", entry.id);
+            el.setAttribute("spot", entry.spotColor ? "true" : "false");
+            el.setAttribute("bitdepth", entry.color.colorSpace()->colorDepthId().id());
+            entry.color.toXML(doc, el);
+            root.appendChild(el);
+        }
+        doc.appendChild(root);
+        if (!store->open("colorset.xml")) { return false; }
+        QByteArray ba = doc.toByteArray();
+        if (!store->write(ba) == ba.size()) { return false; }
+        if (!store->close()) { return false; }
+    }
+
+    QDomDocument doc;
+    QDomElement profileElement = doc.createElement("Profiles");
+
+    Q_FOREACH(const KoColorProfile *profile, profiles) {
+        QString fn = QFileInfo(profile->fileName()).fileName();
+        if (!store->open(fn)) { return false; }
+        QByteArray profileRawData = profile->rawData();
+        if (!store->write(profileRawData)) { return false; }
+        if (!store->close()) { return false; }
+        QDomElement el = doc.createElement("Profile");
+        el.setAttribute("filename", fn);
+        el.setAttribute("name", profile->name());
+        el.setAttribute("colorModelId", profileMap[profile]->colorModelId().id());
+        el.setAttribute("colorDepthId", profileMap[profile]->colorDepthId().id());
+        profileElement.appendChild(el);
+
+    }
+    doc.appendChild(profileElement);
+    if (!store->open("profiles.xml")) { return false; }
+    QByteArray ba = doc.toByteArray();
+    if (!store->write(ba) == ba.size()) { return false; }
+    if (!store->close()) { return false; }
+
+    return store->finalize();
+}
+
+bool KoColorSet::loadKpl()
+{
+    QBuffer buf(&d->data);
+    buf.open(QBuffer::ReadOnly);
+
+    QScopedPointer<KoStore> store(KoStore::createStore(&buf, KoStore::Read, "application/x-krita-palette", KoStore::Zip));
+    if (!store || store->bad()) return false;
+
+    if (store->hasFile("profiles.xml")) {
+
+        if (!store->open("profiles.xml")) { return false; }
+        QByteArray data;
+        data.resize(store->size());
+        QByteArray ba = store->read(store->size());
+        store->close();
+
+        QDomDocument doc;
+        doc.setContent(ba);
+        QDomElement e = doc.documentElement();
+        QDomElement c = e.firstChildElement("Profiles");
+        while (!c.isNull()) {
+
+            QString name = c.attribute("name");
+            QString filename = c.attribute("filename");
+            QString colorModelId = c.attribute("colorModelId");
+            QString colorDepthId = c.attribute("colorDepthId");
+            if (!KoColorSpaceRegistry::instance()->profileByName(name)) {
+                store->open(filename);
+                QByteArray data;
+                data.resize(store->size());
+                data = store->read(store->size());
+                store->close();
+
+                const KoColorProfile *profile = KoColorSpaceRegistry::instance()->createColorProfile(colorModelId, colorDepthId, data);
+                if (profile && profile->valid()) {
+                    KoColorSpaceRegistry::instance()->addProfile(profile);
+                }
+            }
+
+            c = c.nextSiblingElement();
+
+        }
+    }
+
+    {
+        if (!store->open("colorset.xml")) { return false; }
+        QByteArray data;
+        data.resize(store->size());
+        QByteArray ba = store->read(store->size());
+        store->close();
+
+        QDomDocument doc;
+        doc.setContent(ba);
+        QDomElement e = doc.documentElement();
+        d->name = e.attribute("name");
+        d->comment = e.attribute("comment");
+        d->columns = e.attribute("columns").toInt();
+
+        QDomElement c = e.firstChildElement("ColorSetEntry");
+        while (!c.isNull()) {
+            QString colorDepthId = e.attribute("bitdepth", Integer8BitsColorDepthID.id());
+            KoColorSetEntry entry;
+
+
+            entry.color = KoColor::fromXML(c.firstChildElement(), colorDepthId);
+            entry.name = c.attribute("name");
+            entry.id = c.attribute("id");
+            entry.spotColor = c.attribute("spot", "false") == "true" ? true : false;
+            d->colors << entry;
+
+            c = c.nextSiblingElement();
+
+        }
+    }
+
+
+    buf.close();
+    return true;
 }
 
 quint16 readShort(QIODevice *io) {

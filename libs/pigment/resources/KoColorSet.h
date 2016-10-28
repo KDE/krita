@@ -58,7 +58,8 @@ public:
         ACT,                // Photoshop binary
         PSP_PAL,            // PaintShop Pro
         ACO,                // Photoshop Swatches
-        XML                 // XML palette (Scribus)
+        XML,                // XML palette (Scribus)
+        KPL                 // KoColor-based XML palette
     };
 
 
@@ -120,12 +121,19 @@ private:
 
     bool init();
 
+    bool saveGpl(QIODevice *dev) const;
     bool loadGpl();
+
     bool loadAct();
     bool loadRiff();
     bool loadPsp();
     bool loadAco();
     bool loadXml();
+
+    bool saveKpl(QIODevice *dev) const;
+    bool loadKpl();
+
+
 
     struct Private;
     const QScopedPointer<Private> d;

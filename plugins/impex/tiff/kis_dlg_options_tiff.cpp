@@ -48,7 +48,6 @@ KisTIFFOptionsWidget::KisTIFFOptionsWidget(QWidget *parent)
 
 KisTIFFOptionsWidget::~KisTIFFOptionsWidget()
 {
-    delete optionswdg;
 }
 
 void KisTIFFOptionsWidget::setConfiguration(const KisPropertiesConfigurationSP cfg)

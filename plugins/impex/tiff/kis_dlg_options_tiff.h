@@ -43,9 +43,6 @@ public Q_SLOTS:
     void activated(int index);
     void flattenToggled(bool);
     KisTIFFOptions options() const;
-public:
-    QWidget* wdg;
-    Ui_KisWdgOptionsTIFF* optionswdg;
 };
 
 #endif

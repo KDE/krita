@@ -1,11 +1,3 @@
-# Disable -Wswitch because of the extra definitions we here:
-# kis_input_manager.cpp: In member function ‘virtual bool KisInputManager::eventFilter(QObject*, QEvent*)’:
-# warning: case value ‘1001’ not in enumerated type ‘QEvent::Type’ [-Wswitch]
-# warning: case value ‘1002’ not in enumerated type ‘QEvent::Type’ [-Wswitch]
-if (CMAKE_COMPILER_IS_GNUCXX)
-    add_definitions(${KDE4_ENABLE_EXCEPTIONS} -Wno-switch)
-endif ()
-
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/qtlockedfile
     ${EXIV2_INCLUDE_DIR}

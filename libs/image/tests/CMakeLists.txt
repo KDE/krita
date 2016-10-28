@@ -39,7 +39,7 @@ set(KisRandomGeneratorDemoSources kis_random_generator_demo.cpp kimageframe.cpp)
 ki18n_wrap_ui(KisRandomGeneratorDemoSources kis_random_generator_demo.ui)
 add_executable(KisRandomGeneratorDemo ${KisRandomGeneratorDemoSources})
 target_link_libraries(KisRandomGeneratorDemo kritaimage)
-ecm_mark_as_test(${KisRandomGeneratorDemoSources})
+ecm_mark_as_test(KisRandomGeneratorDemo)
 
 ecm_add_tests(
     kis_base_node_test.cpp

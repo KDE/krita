@@ -623,11 +623,6 @@ include_directories(BEFORE ${CMAKE_CURRENT_SOURCE_DIR}
                            ${CMAKE_SOURCE_DIR}/interfaces 
 )
 
-include_directories(
-   ${CMAKE_SOURCE_DIR}/libs/version
-   ${CMAKE_BINARY_DIR}/libs/version
-)
-
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
 
 add_subdirectory(libs)

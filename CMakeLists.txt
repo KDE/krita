@@ -151,23 +151,6 @@ add_feature_info("Safe Asserts" HIDE_SAFE_ASSERTS "Don't show message box for \"
 option(FOUNDATION_BUILD "A Foundation build is a binary release build that can package some extra things like color themes. Linux distributions that build and install Krita into a default system location should not define this option to true." OFF)
 add_feature_info("Foundation Build" FOUNDATION_BUILD "A Foundation build is a binary release build that can package some extra things like color themes. Linux distributions that build and install Krita into a default system location should not define this option to true.")
 
- #######################
-########################
-## Productset setting ##
-########################
-#######################
-
-# For predefined productsets see the definitions in KritaProducts.cmake and
-# in the files in the folder cmake/productsets.
-
-# Finding out the products & features to build is done in 5 steps:
-# 1. have the user define the products/features wanted, by giving a productset
-# 2. estimate all additional required products/features
-# 3. estimate which of the products/features can be build by external deps
-# 4. find which products/features have been temporarily disabled due to problems
-# 5. estimate which of the products/features can be build by internal deps
-
-# get the special macros
 include(MacroJPEG)
 
  ########################

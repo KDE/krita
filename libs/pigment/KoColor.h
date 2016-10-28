@@ -111,7 +111,6 @@ public:
     quint8 opacityU8() const;
     qreal opacityF() const;
 
-// what about making the next two methods static factory methods?
     /// Convenient function for converting from a QColor
     void fromQColor(const QColor& c) const;
 

@@ -437,7 +437,7 @@ KoColor KisRecordedPaintActionFactory::colorFromXML(const QDomElement& elt, cons
     KoColor bC;
 
     if (!colorElt.isNull()) {
-        bC = KoColor::fromXML(colorElt.firstChildElement(), Integer8BitsColorDepthID.id(), QHash<QString, QString>());
+        bC = KoColor::fromXML(colorElt.firstChildElement(), Integer8BitsColorDepthID.id());
         bC.setOpacity(quint8(255));
         dbgImage << elementName << " color : " << bC.toQColor();
     } else {

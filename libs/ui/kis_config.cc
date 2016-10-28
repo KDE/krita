@@ -1743,12 +1743,12 @@ KoColor KisConfig::readKoColor(const QString& name, const KoColor& color) const
     if (!m_cfg.readEntry(name).isNull()) {
         doc.setContent(m_cfg.readEntry(name));
         QDomElement e = doc.documentElement().firstChild().toElement();
-        return KoColor::fromXML(e, Integer16BitsColorDepthID.id(), QHash<QString, QString>());
+        return KoColor::fromXML(e, Integer16BitsColorDepthID.id());
     } else {
         QString blackColor = "<!DOCTYPE Color>\n<Color>\n <RGB r=\"0\" space=\"sRGB-elle-V2-srgbtrc.icc\" b=\"0\" g=\"0\"/>\n</Color>\n";
         doc.setContent(blackColor);
         QDomElement e = doc.documentElement().firstChild().toElement();
-        return KoColor::fromXML(e, Integer16BitsColorDepthID.id(), QHash<QString, QString>());
+        return KoColor::fromXML(e, Integer16BitsColorDepthID.id());
     }
     return color;
 

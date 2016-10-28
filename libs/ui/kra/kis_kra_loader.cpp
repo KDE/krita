@@ -314,7 +314,7 @@ KisImageSP KisKraLoader::loadXML(const KoXmlElement& element)
                 QDomDocument dom;
                 KoXml::asQDomElement(dom, e);
                 QDomElement eq = dom.firstChildElement();
-                proofingConfig->warningColor = KoColor::fromXML(eq.firstChildElement(), Integer8BitsColorDepthID.id(), QHash<QString, QString>());
+                proofingConfig->warningColor = KoColor::fromXML(eq.firstChildElement(), Integer8BitsColorDepthID.id());
             }
 
             if (e.tagName().toLower() == "animation") {

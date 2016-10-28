@@ -283,7 +283,7 @@ qreal KoColor::opacityF() const
     return d->colorSpace->opacityF(d->data);
 }
 
-KoColor KoColor::fromXML(const QDomElement& elt, const QString & bitDepthId, const QHash<QString, QString> & aliases)
+KoColor KoColor::fromXML(const QDomElement& elt, const QString & bitDepthId)
 {
     QString modelId;
     if (elt.tagName() == "CMYK") {
@@ -304,10 +304,6 @@ KoColor KoColor::fromXML(const QDomElement& elt, const QString & bitDepthId, con
     QString profileName;
     if (elt.tagName() != "sRGB") {
         profileName = elt.attribute("space", "");
-        const QHash<QString, QString>::ConstIterator it = aliases.find(profileName);
-        if (it != aliases.end()) {
-            profileName = it.value();
-        }
         if (!KoColorSpaceRegistry::instance()->profileByName(profileName)) {
             profileName.clear();
         }

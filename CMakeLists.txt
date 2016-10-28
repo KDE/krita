@@ -128,6 +128,9 @@ if(NOT DEFINED RELEASE_BUILD)
 endif()
 message(STATUS "Release build: ${RELEASE_BUILD}")
 
+# create test make targets
+enable_testing()
+
  ############
 #############
 ## Options ##

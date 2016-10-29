@@ -58,9 +58,6 @@
 
 #if defined HAVE_KCRASH
 #include <kcrash.h>
-
-#elif defined USE_BREAKPAD
-    #include "kis_crash_handler.h"
 #elif defined USE_DRMINGW
 namespace
 {
@@ -95,6 +92,10 @@ extern "C" int main(int argc, char **argv)
     qsrand(time(0));
     bool runningInKDE = !qgetenv("KDE_FULL_SESSION").isEmpty();
     
+#if defined HAVE_X11 
+    qputenv("QT_QPA_PLATFORM", "xcb"); 
+#endif
+
     /**
      * Disable debug output by default. (krita.input enables tablet debugging.)
      * Debug logs can be controlled by an environment variable QT_LOGGING_RULES.
@@ -185,10 +186,6 @@ extern "C" int main(int argc, char **argv)
 
 #if defined HAVE_KCRASH
     KCrash::initialize();
-#elif defined USE_BREAKPAD
-    qputenv("KDE_DEBUG", "1");
-    KisCrashHandler crashHandler;
-    Q_UNUSED(crashHandler);
 #elif defined USE_DRMINGW
     tryInitDrMingw();
 #endif

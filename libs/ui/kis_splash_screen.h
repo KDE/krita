@@ -36,7 +36,8 @@ public:
     void repaint();
 
     void show();
-    void displayRecentFilesAndLinks();
+    void displayLinks();
+    void displayRecentFiles();
 
 private Q_SLOTS:
 
@@ -54,7 +55,6 @@ private:
 
     QTimer m_timer;
     bool m_themed;
-    QString m_version;
 
 };
 

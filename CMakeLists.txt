@@ -4,9 +4,9 @@ message(STATUS "Using CMake version: ${CMAKE_VERSION}")
 
 cmake_minimum_required(VERSION 2.8.12 FATAL_ERROR)
 
-if (WIN32)
-    set(MIN_QT_VERSION 5.6.0)
-else()
+set(MIN_QT_VERSION 5.6.0)
+option(OVERRIDE_QT_VERSION "Use this to make it possible to build with Qt < 5.6.0. There will be bugs." OFF)
+if (OVERRIDE_QT_VERSION)
     set(MIN_QT_VERSION 5.4.0)
 endif()
 
@@ -61,20 +61,6 @@ if (APPLE)
     add_definitions(-mmacosx-version-min=10.9 -Wno-macro-redefined -Wno-deprecated-register)
 endif()
 
-# QT5TODO: remove KDE4_BUILD_TESTS once all kde4_add_unit_test have been converted
-# transitional forward compatibility:
-# BUILD_TESTING is cmake standard, KDE4_BUILD_TESTS not used by ECM/KF5, but only
-# macros in cmake/transitional. Just, Macros from cmake/transitional,
-# incl. kde4_add_unit_test, are only picked up if no macros from kdelibs4 are installed,
-# because that transitional path is appended. Prepending instead might possibly unwantedly
-# mask ECM/KF5 macros. Not tested.
-# So have BUILD_TESTING define KDE4_BUILD_TESTS.
-if (BUILD_TESTING)
-    set(KDE4_BUILD_TESTS TRUE)
-else()
-    set(KDE4_BUILD_TESTS FALSE)
-endif()
-
  ######################
 #######################
 ## Constants defines ##
@@ -83,7 +69,7 @@ endif()
 
 # define common versions of Krita applications, used to generate kritaversion.h
 # update these version for every release:
-set(KRITA_VERSION_STRING "3.0.91")
+set(KRITA_VERSION_STRING "3.0.92")
 set(KRITA_STABLE_VERSION_MAJOR 3) # 3 for 3.x, 4 for 4.x, etc.
 set(KRITA_STABLE_VERSION_MINOR 0) # 0 for 3.0, 1 for 3.1, etc.
 set(KRITA_VERSION_RELEASE 91)     # 89 for Alpha, increase for next test releases, set 0 for first Stable, etc.
@@ -111,11 +97,8 @@ endif()
 set(GENERIC_KRITA_LIB_VERSION "${GENERIC_KRITA_LIB_VERSION_MAJOR}.0.0")
 set(GENERIC_KRITA_LIB_SOVERSION "${GENERIC_KRITA_LIB_VERSION_MAJOR}")
 
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH}
-                      "${CMAKE_SOURCE_DIR}/cmake/modules")
+LIST (APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules")
 LIST (APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/kde_macro")
-
-message("Module path:" ${CMAKE_MODULE_PATH})
 
 # fetch git revision for the current build
 
@@ -145,65 +128,39 @@ if(NOT DEFINED RELEASE_BUILD)
 endif()
 message(STATUS "Release build: ${RELEASE_BUILD}")
 
+# create test make targets
+enable_testing()
+# collect list of broken tests, empty here to start fresh with each cmake run
+set(KRITA_BROKEN_TESTS "" CACHE INTERNAL "KRITA_BROKEN_TESTS")
+
  ############
 #############
 ## Options ##
 #############
 ############
 
+include(FeatureSummary)
+
 option(PACKAGERS_BUILD "Build support of multiple CPU architectures in one binary. Should be used by packagers only or Krita developers. Only switch off when you're an artist optimizing a build for your very own machine." ON)
+add_feature_info("Packagers' Build" PACKAGERS_BUILD "Support several CPU arch in one binary. Recommended for packages. Switch this off to make a build for only your machine.")
+
 if (WIN32)
-    option(USE_BREAKPAD "Build the Breakpad crash handler for Krita (only on windows)" OFF)
     option(USE_DRMINGW "Support the Dr. Mingw crash handler (only on windows)" ON)
+    add_feature_info("Dr. Mingw" USE_DRMINGW "Enable the Dr. Mingw crash handler")
 endif ()
 
 option(HIDE_SAFE_ASSERTS "Don't show message box for \"safe\" asserts, just ignore them automatically and dump a message to the terminal." ON)
 configure_file(config-hide-safe-asserts.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-hide-safe-asserts.h)
+add_feature_info("Safe Asserts" HIDE_SAFE_ASSERTS "Don't show message box for \"safe\" asserts, just ignore them automatically and dump a message to the terminal.")
 
- #######################
-########################
-## Productset setting ##
-########################
-#######################
+option(FOUNDATION_BUILD "A Foundation build is a binary release build that can package some extra things like color themes. Linux distributions that build and install Krita into a default system location should not define this option to true." OFF)
+add_feature_info("Foundation Build" FOUNDATION_BUILD "A Foundation build is a binary release build that can package some extra things like color themes. Linux distributions that build and install Krita into a default system location should not define this option to true.")
 
-# For predefined productsets see the definitions in KritaProducts.cmake and
-# in the files in the folder cmake/productsets.
+option(KRITA_ENABLE_BROKEN_TESTS "Enable tests that are marked as broken" OFF)
+add_feature_info("Enable Broken Tests" KRITA_ENABLE_BROKEN_TESTS "Runs broken test when \"make test\" is invoked (use -DKRITA_ENABLE_BROKEN_TESTS=ON to enable).")
 
-# Finding out the products & features to build is done in 5 steps:
-# 1. have the user define the products/features wanted, by giving a productset
-# 2. estimate all additional required products/features
-# 3. estimate which of the products/features can be build by external deps
-# 4. find which products/features have been temporarily disabled due to problems
-# 5. estimate which of the products/features can be build by internal deps
 
-# get the special macros
-include(CalligraProductSetMacros)
 include(MacroJPEG)
-include(GenerateTestExportHeader)
-
-
-# get the definitions of products, features and product sets
-include(KritaProducts.cmake)
-
-set(PRODUCTSET_DEFAULT "ALL")
-# temporary migration support
-if (CREATIVEONLY)
-    set(WARN_ABOUT_CREATIVEONLY TRUE)
-    set(PRODUCTSET_DEFAULT "CREATIVE")
-endif ()
-
-if(NOT PRODUCTSET)
-    set(PRODUCTSET ${PRODUCTSET_DEFAULT} CACHE STRING "Set of products/features to build" FORCE)
-endif()
-
-if (RELEASE_BUILD)
-    set(CALLIGRA_SHOULD_BUILD_STAGING FALSE)
-else ()
-    set(CALLIGRA_SHOULD_BUILD_STAGING TRUE)
-endif ()
-
-# finally choose products/features to build
-calligra_set_productset(${PRODUCTSET})
 
  ########################
 #########################
@@ -229,8 +186,6 @@ include(CheckFunctionExists)
 include(KDEInstallDirs)
 include(KDECMakeSettings)
 include(KDECompilerSettings)
-include(FeatureSummary)
-include(KDE4Macros)
 
 # do not reorder to be alphabetical: this is the order in which the frameworks
 # depend on each other.
@@ -247,6 +202,15 @@ find_package(KF5 ${MIN_FRAMEWORKS_VERSION} REQUIRED COMPONENTS
         WindowSystem
 )
 
+# KConfig deprecated authorizeKAction. In order to be warning free,
+# compile with the updated function when the dependency is new enough.
+# Remove this (and the uses of the define) when the minimum KF5
+# version is >= 5.24.0.
+if (${KF5Config_VERSION} VERSION_LESS "5.24.0" )
+    message("Old KConfig (< 5.24.0) found.")
+    add_definitions(-DKCONFIG_BEFORE_5_24)
+endif()
+
 find_package(Qt5 ${MIN_QT_VERSION}
         REQUIRED COMPONENTS
         Core
@@ -261,13 +225,9 @@ find_package(Qt5 ${MIN_QT_VERSION}
 )
 
 
-set(QT_QTTEST_LIBRARY Qt5::Test)
-
-
-include (MacroLibrary)
-include (MacroAdditionalCleanFiles)
 include (MacroAddFileDependencies)
-
+include (MacroBoolTo01)
+include (MacroEnsureOutOfSourceBuild)
 macro_ensure_out_of_source_build("Compiling Krita inside the source directory is not possible. Please refer to the build instruction https://community.kde.org/Krita#Build_Instructions")
 
 # Note: OPTIONAL_COMPONENTS does not seem to be reliable
@@ -278,31 +238,34 @@ if (NOT WIN32 AND NOT APPLE)
 
     find_package(Qt5DBus ${MIN_QT_VERSION} QUIET)
     set(HAVE_DBUS ${Qt5DBus_FOUND})
-    macro_log_feature(${Qt5DBus_FOUND} "dbus" "Qt DBUS integration" "http://www.qt.io/" FALSE "" "Optionally used to provide a dbus api on Linux")
+    set_package_properties(Qt5DBus PROPERTIES
+        DESCRIPTION "Qt DBUS integration"
+        URL "http://www.qt.io/"
+        TYPE OPTIONAL
+        PURPOSE "Optionally used to provide a dbus api on Linux")
 
     find_package(KF5KIO ${MIN_FRAMEWORKS_VERSION} QUIET)
     macro_bool_to_01(KF5KIO_FOUND HAVE_KIO)
-    macro_log_feature(${KF5KIO_FOUND} "KIO" "KDE's KIO Framework" "http://api.kde.org/frameworks-api/frameworks5-apidocs/kio/html/index.html" FALSE "" "Optionally used for recent document handling")
+    set_package_properties(KF5KIO PROPERTIES
+        DESCRIPTION "KDE's KIO Framework"
+        URL "http://api.kde.org/frameworks-api/frameworks5-apidocs/kio/html/index.html"
+        TYPE OPTIONAL
+        PURPOSE "Optionally used for recent document handling")
 
     find_package(KF5Crash ${MIN_FRAMEWORKS_VERSION} QUIET) 
     macro_bool_to_01(KF5Crash_FOUND HAVE_KCRASH)
-    macro_log_feature(${KF5Crash_FOUND} "kcrash" "KDE's Crash Handler" "http://api.kde.org/frameworks-api/frameworks5-apidocs/kcrash/html/index.html" FALSE "" "Optionally used to provide crash reporting on Linux")
+    set_package_properties(KF5Crash PROPERTIES
+        DESCRIPTION "KDE's Crash Handler"
+        URL "http://api.kde.org/frameworks-api/frameworks5-apidocs/kcrash/html/index.html"
+        TYPE OPTIONAL
+        PURPOSE "Optionally used to provide crash reporting on Linux")
 
-    find_package(X11)
-    if(X11_FOUND)
-        find_package(Qt5 ${MIN_QT_VERSION} REQUIRED NO_MODULE COMPONENTS X11Extras)
-        set(HAVE_X11 TRUE)
-        add_definitions(-DHAVE_X11)
-    else()
-        set(HAVE_X11 FALSE)
-    endif()
+    find_package(X11 REQUIRED COMPONENTS Xinput)
+    set(HAVE_X11 TRUE)
+    add_definitions(-DHAVE_X11)
 
     find_package(XCB COMPONENTS XCB ATOM)
-    if(XCB_FOUND)
-        set(HAVE_XCB TRUE)
-    else()
-        set(HAVE_XCB FALSE)
-    endif()
+    set(HAVE_XCB ${XCB_FOUND})
 else()
     set(HAVE_DBUS FALSE)
     set(HAVE_X11 FALSE)
@@ -392,8 +355,11 @@ include_directories(${Boost_INCLUDE_DIRS})
 ##
 ## Test for GNU Scientific Library
 ##
-macro_optional_find_package(GSL)
-macro_log_feature(GSL_FOUND "GSL" "GNU Scientific Library" "http://www.gnu.org/software/gsl" FALSE "1.7" "Required by Krita's Transform tool.")
+find_package(GSL)
+set_package_properties(GSL PROPERTIES
+    URL "http://www.gnu.org/software/gsl"
+    TYPE RECOMMENDED
+    PURPOSE "Required by Krita's Transform tool.")
 macro_bool_to_01(GSL_FOUND HAVE_GSL)
 configure_file(config-gsl.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-gsl.h )
 
@@ -406,13 +372,20 @@ configure_file(config-gsl.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-gsl.h )
 ##
 ## Check for OpenEXR
 ##
-macro_optional_find_package(ZLIB)
-macro_log_feature(ZLIB_FOUND "zlib" "Compression library" "http://www.zlib.net/" FALSE "" "Optionally used by the G'Mic and the PSD plugins")
+find_package(ZLIB)
+set_package_properties(ZLIB PROPERTIES
+    DESCRIPTION "Compression library"
+    URL "http://www.zlib.net/"
+    TYPE OPTIONAL
+    PURPOSE "Optionally used by the G'Mic and the PSD plugins")
 macro_bool_to_01(ZLIB_FOUND HAVE_ZLIB)
 
-
-macro_optional_find_package(OpenEXR)
-macro_log_feature(OPENEXR_FOUND "OpenEXR" "High dynamic-range (HDR) image file format" "http://www.openexr.com" FALSE "" "Required by the Krita OpenEXR filter")
+find_package(OpenEXR)
+set_package_properties(OpenEXR PROPERTIES
+    DESCRIPTION "High dynamic-range (HDR) image file format"
+    URL "http://www.openexr.com"
+    TYPE OPTIONAL
+    PURPOSE "Required by the Krita OpenEXR filter")
 macro_bool_to_01(OPENEXR_FOUND HAVE_OPENEXR)
 set(LINK_OPENEXR_LIB)
 if(OPENEXR_FOUND)
@@ -421,22 +394,42 @@ if(OPENEXR_FOUND)
     add_definitions(${OPENEXR_DEFINITIONS})
 endif()
 
-macro_optional_find_package(TIFF)
-macro_log_feature(TIFF_FOUND "tiff" "TIFF Library and Utilities" "http://www.remotesensing.org/libtiff" FALSE "" "Required by the Krita TIFF filter")
+find_package(TIFF)
+set_package_properties(TIFF PROPERTIES
+    DESCRIPTION "TIFF Library and Utilities"
+    URL "http://www.remotesensing.org/libtiff"
+    TYPE OPTIONAL
+    PURPOSE "Required by the Krita TIFF filter")
 
-macro_optional_find_package(JPEG)
-macro_log_feature(JPEG_FOUND "jpeg" "Free library for JPEG image compression. Note: libjpeg8 is NOT supported." "http://www.libjpeg-turbo.org" FALSE "" "Required by the Krita JPEG filter")
+find_package(JPEG)
+set_package_properties(JPEG PROPERTIES
+    DESCRIPTION "Free library for JPEG image compression. Note: libjpeg8 is NOT supported."
+    URL "http://www.libjpeg-turbo.org"
+    TYPE OPTIONAL
+    PURPOSE "Required by the Krita JPEG filter")
 
 set(LIBRAW_MIN_VERSION  "0.16")
-macro_optional_find_package(LibRaw ${LIBRAW_MIN_VERSION})
-macro_log_feature(LIBRAW_FOUND "LibRaw" "Library to decode RAW images" "http://www.libraw.org" FALSE "" "Required to build the raw import plugin")
+find_package(LibRaw ${LIBRAW_MIN_VERSION})
+set_package_properties(LibRaw PROPERTIES
+    DESCRIPTION "Library to decode RAW images"
+    URL "http://www.libraw.org"
+    TYPE OPTIONAL
+    PURPOSE "Required to build the raw import plugin")
 
-macro_optional_find_package(FFTW3)
-macro_log_feature(FFTW3_FOUND "FFTW3" "A fast, free C FFT library" "http://www.fftw.org/" FALSE "" "Required by the Krita for fast convolution operators and some G'Mic features")
+find_package(FFTW3)
+set_package_properties(FFTW3 PROPERTIES
+    DESCRIPTION "A fast, free C FFT library"
+    URL "http://www.fftw.org/"
+    TYPE OPTIONAL
+    PURPOSE "Required by the Krita for fast convolution operators and some G'Mic features")
 macro_bool_to_01(FFTW3_FOUND HAVE_FFTW3)
 
-macro_optional_find_package(OCIO)
-macro_log_feature(OCIO_FOUND "OCIO" "The OpenColorIO Library" "http://www.opencolorio.org" FALSE "" "Required by the Krita LUT docker")
+find_package(OCIO)
+set_package_properties(OCIO PROPERTIES
+    DESCRIPTION "The OpenColorIO Library"
+    URL "http://www.opencolorio.org"
+    TYPE OPTIONAL
+    PURPOSE "Required by the Krita LUT docker")
 macro_bool_to_01(OCIO_FOUND HAVE_OCIO)
 
 ##
@@ -452,21 +445,31 @@ endif()
 ##
 ## Test for eigen3
 ##
-find_package(Eigen3 REQUIRED)
-macro_log_feature(EIGEN3_FOUND "Eigen" "C++ template library for linear algebra" "http://eigen.tuxfamily.org" FALSE "3.0" "Required by Krita")
+find_package(Eigen3 REQUIRED "3.0")
+set_package_properties(Eigen3 PROPERTIES
+    DESCRIPTION "C++ template library for linear algebra"
+    URL "http://eigen.tuxfamily.org"
+    TYPE REQUIRED)
 
 ##
 ## Test for exiv2
 ##
 set(EXIV2_MIN_VERSION "0.16")
 find_package(Exiv2 REQUIRED)
-macro_log_feature(EXIV2_FOUND "Exiv2" "Image metadata library and tools" "http://www.exiv2.org" FALSE "0.16" "Required by Krita")
+set_package_properties(Exiv2 PROPERTIES
+    DESCRIPTION "Image metadata library and tools"
+    URL "http://www.exiv2.org"
+    PURPOSE "Required by Krita")
 
 ##
 ## Test for lcms
 ##
-find_package(LCMS2 REQUIRED)
-macro_log_feature(LCMS2_FOUND "LittleCMS" "Color management engine" "http://www.littlecms.com" FALSE "2.4" "Will be used for color management and is necessary for Krita")
+find_package(LCMS2 REQUIRED "2.4")
+set_package_properties(LCMS2 PROPERTIES
+    DESCRIPTION "LittleCMS Color management engine"
+    URL "http://www.littlecms.com"
+    TYPE REQUIRED
+    PURPOSE "Will be used for color management and is necessary for Krita")
 if(LCMS2_FOUND)
     if(NOT ${LCMS2_VERSION} VERSION_LESS 2040 )
         set(HAVE_LCMS24 TRUE)
@@ -482,8 +485,12 @@ set(OLD_CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} )
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
 set(HAVE_VC FALSE)
 if( NOT MSVC)
-    macro_optional_find_package(Vc 1.1.0)
-    macro_log_feature(Vc_FOUND "Vc" "Portable, zero-overhead SIMD library for C++" "https://github.com/VcDevel/Vc" FALSE "" "Required by the Krita for vectorization")
+    find_package(Vc 1.1.0)
+    set_package_properties(Vc PROPERTIES
+        DESCRIPTION "Portable, zero-overhead SIMD library for C++"
+        URL "https://github.com/VcDevel/Vc"
+        TYPE OPTIONAL
+        PURPOSE "Required by the Krita for vectorization")
     macro_bool_to_01(Vc_FOUND HAVE_VC)
     macro_bool_to_01(PACKAGERS_BUILD DO_PACKAGERS_BUILD)
 endif()
@@ -533,16 +540,7 @@ if(HAVE_VC)
 endif()
 set(CMAKE_MODULE_PATH ${OLD_CMAKE_MODULE_PATH} )
 
-##
-## Test for Xinput
-##
-if(NOT WIN32 AND NOT APPLE)
-  set(REQUIRED_Xinput_FOUND ${X11_Xinput_FOUND})
-else()
-  set(REQUIRED_Xinput_FOUND TRUE)
-endif()
-
-add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS} ${QT_QTDBUS_DEFINITIONS})
+add_definitions(${QT_DEFINITIONS} ${QT_QTDBUS_DEFINITIONS})
 
 if(WIN32)
     set(LIB_INSTALL_DIR ${LIB_INSTALL_DIR}
@@ -560,26 +558,41 @@ test_big_endian(CMAKE_WORDS_BIGENDIAN)
 ##
 ## Test for qt-poppler
 ##
-macro_optional_find_package(Poppler)
-macro_log_feature( POPPLER_FOUND "Poppler-Qt5" "A PDF rendering library" "http://poppler.freedesktop.org" FALSE "" "Required by the Krita PDF filter.")
+find_package(Poppler)
+set_package_properties(Poppler PROPERTIES
+    DESCRIPTION "A PDF rendering library"
+    URL "http://poppler.freedesktop.org"
+    TYPE OPTIONAL
+    PURPOSE "Required by the Krita PDF filter.")
 
 ##
 ## Test for pthreads (for G'Mic)
 ##
-macro_optional_find_package(Threads)
-macro_log_feature(Threads_FOUND "PThreads" "A low-level threading library" "" FALSE "" "Optionally used by the G'Mic plugin")
+find_package(Threads)
+set_package_properties(Threads PROPERTIES
+    DESCRIPTION "PThreads - A low-level threading library"
+    TYPE OPTIONAL
+    PURPOSE "Optionally used by the G'Mic plugin")
 
 ##
 ## Test for OpenMP (for G'Mic)
 ##
-macro_optional_find_package(OpenMP)
-macro_log_feature(OPENMP_FOUND "OpenMP" "A low-level parallel execution library" "http://openmp.org/wp/" FALSE "" "Optionally used by the G'Mic plugin")
+find_package(OpenMP)
+set_package_properties(OpenMP PROPERTIES
+    DESCRIPTION "A low-level parallel execution library"
+    URL "http://openmp.org/wp/"
+    TYPE OPTIONAL
+    PURPOSE "Optionally used by the G'Mic plugin")
 
 ##
 ## Test for Curl (for G'Mic)
 ##
-macro_optional_find_package(CURL)
-macro_log_feature(CURL_FOUND "CURL" "A tool to fetch remote data" "http://curl.haxx.se/" FALSE "" "Optionally used by the G'Mic plugin")
+find_package(CURL)
+set_package_properties(CURL PROPERTIES
+    DESCRIPTION "A tool to fetch remote data"
+    URL "http://curl.haxx.se/"
+    TYPE OPTIONAL
+    PURPOSE "Optionally used by the G'Mic plugin")
 
  ############################
 #############################
@@ -601,69 +614,10 @@ include_directories(BEFORE ${CMAKE_CURRENT_SOURCE_DIR}
                            ${CMAKE_SOURCE_DIR}/interfaces 
 )
 
-include_directories(
-   ${CMAKE_SOURCE_DIR}/libs/version
-   ${CMAKE_BINARY_DIR}/libs/version
-)
-
- ###################################################
-####################################################
-## Detect which products/features can be compiled ##
-####################################################
-###################################################
-
-calligra_drop_product_on_bad_condition( APP_KRITA
-    EIGEN3_FOUND "Eigen devel not found"
-    EXIV2_FOUND "libexiv2 devel not found"
-    HAVE_REQUIRED_LCMS_VERSION "lcms devel not found"
-    Boost_SYSTEM_FOUND "boost-system devel not found"
-    REQUIRED_Xinput_FOUND "Xinput devel not found "
-)
-
-#############################################
-####  Backward compatibility BUILD_x=off ####
-#############################################
-
-# workaround: disable directly all products which might be activated by internal
-# dependencies, but belong to scope of old flag
-calligra_drop_products_on_old_flag(krita APP_KRITA)
-
-#############################################
-####      Temporarily broken products    ####
-#############################################
-
-# If a product does not build due to some temporary brokeness disable it here,
-# by calling calligra_disable_product with the product id and the reason,
-# e.g.:
-# calligra_disable_product(APP_KEXI "isn't buildable at the moment")
-
-#############################################
-####     Calculate buildable products    ####
-#############################################
-
-calligra_drop_unbuildable_products()
-
- ###################
-####################
-## Subdirectories ##
-####################
-###################
-
-if(SHOULD_BUILD_APP_KRITA)
-  add_subdirectory(krita)
-endif()
-
-# non-app directories are moved here because they can depend on SHOULD_BUILD_{appname} variables set above
 add_subdirectory(libs)
 add_subdirectory(plugins)
-
-add_subdirectory( benchmarks )
-
-
-macro_display_feature_log()
-
-calligra_product_deps_report("product_deps")
-calligra_log_should_build()
+add_subdirectory(benchmarks)
+add_subdirectory(krita)
 
 configure_file(KoConfig.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/KoConfig.h )
 configure_file(config_convolution.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config_convolution.h)
@@ -672,4 +626,9 @@ configure_file(config-ocio.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-ocio.h )
 check_function_exists(powf HAVE_POWF)
 configure_file(config-powf.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-powf.h)
 
+message("\nBroken tests:")
+foreach(tst ${KRITA_BROKEN_TESTS})
+    message("    * ${tst}")
+endforeach()
 
+feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)

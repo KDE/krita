@@ -1,11 +1,3 @@
-# Disable -Wswitch because of the extra definitions we here:
-# kis_input_manager.cpp: In member function ‘virtual bool KisInputManager::eventFilter(QObject*, QEvent*)’:
-# warning: case value ‘1001’ not in enumerated type ‘QEvent::Type’ [-Wswitch]
-# warning: case value ‘1002’ not in enumerated type ‘QEvent::Type’ [-Wswitch]
-if (CMAKE_COMPILER_IS_GNUCXX)
-    add_definitions(${KDE4_ENABLE_EXCEPTIONS} -Wno-switch)
-endif ()
-
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/qtlockedfile
     ${EXIV2_INCLUDE_DIR}
@@ -374,7 +366,7 @@ if(WIN32)
         input/wintab/kis_screen_size_choice_dialog.cpp
         qtlockedfile/qtlockedfile_win.cpp
         )
-      include_directories(${Qt5Gui_PRIVATE_INCLUDE_DIRS})
+    include_directories(${Qt5Gui_PRIVATE_INCLUDE_DIRS})
 endif()
     set(kritaui_LIB_SRCS
         ${kritaui_LIB_SRCS}
@@ -402,13 +394,6 @@ if(UNIX)
             )
     endif()
 endif()
-
-if(WIN32)
-    #ki18n_wrap_ui(
-    #    input/wintab/kis_screen_size_choice_dialog.ui
-    #)
-endif()
-
 
 
 ki18n_wrap_ui(kritaui_LIB_SRCS
@@ -490,7 +475,7 @@ add_library(kritaui SHARED ${kritaui_HEADERS_MOC} ${kritaui_LIB_SRCS} )
 generate_export_header(kritaui BASE_NAME kritaui)
 
 target_link_libraries(kritaui KF5::CoreAddons KF5::Completion KF5::I18n KF5::ItemViews Qt5::Network
-                      kritacolor kritaimage kritalibbrush kritawidgets kritawidgetutils kritaimpex ${PNG_LIBRARIES} ${EXIV2_LIBRARIES}
+                      kritacolor kritaimage kritalibbrush kritawidgets kritawidgetutils ${PNG_LIBRARIES} ${EXIV2_LIBRARIES}
 )
 
 if (HAVE_KIO)
@@ -519,12 +504,11 @@ if(X11_FOUND)
     target_link_libraries(kritaui Qt5::X11Extras ${X11_LIBRARIES})
 endif()
 
-target_link_libraries(kritaui LINK_INTERFACE_LIBRARIES kritaimage kritaimpex kritalibbrush kritapigment kritawidgets KF5::Completion KF5::I18n ${GL_INTERFACE_LIBRARIES})
-
 target_include_directories(kritaui
     PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/canvas>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/flake>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/ora>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/tool>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/utils>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/widgets>

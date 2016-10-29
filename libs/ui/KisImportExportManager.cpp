@@ -223,29 +223,30 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::convert(KisImpor
 
     if (!exportConfiguration) {
         exportConfiguration = filter->lastSavedConfiguration(from, to);
+        if (exportConfiguration) {
+            // Fill with some meta information about the image
+            KisImageWSP image = m_document->image();
 
-        // Fill with some meta information about the image
-        KisImageWSP image = m_document->image();
+            // the image must be locked at the higher levels
+            KIS_SAFE_ASSERT_RECOVER_NOOP(image->locked());
+            KisPaintDeviceSP pd = image->projection();
 
-        // the image must be locked at the higher levels
-        KIS_SAFE_ASSERT_RECOVER_NOOP(image->locked());
-        KisPaintDeviceSP pd = image->projection();
+            bool isThereAlpha = false;
+            KisSequentialConstIterator it(pd, image->bounds());
+            const KoColorSpace* cs = pd->colorSpace();
+            do {
+                if (cs->opacityU8(it.oldRawData()) != OPACITY_OPAQUE_U8) {
+                    isThereAlpha = true;
+                    break;
+                }
+            } while (it.nextPixel());
 
-        bool isThereAlpha = false;
-        KisSequentialConstIterator it(pd, image->bounds());
-        const KoColorSpace* cs = pd->colorSpace();
-        do {
-            if (cs->opacityU8(it.oldRawData()) != OPACITY_OPAQUE_U8) {
-                isThereAlpha = true;
-                break;
-            }
-        } while (it.nextPixel());
-
-        exportConfiguration->setProperty("ImageContainsTransparency", isThereAlpha);
-        exportConfiguration->setProperty("ColorModelID", cs->colorModelId().id());
-        exportConfiguration->setProperty("ColorDepthID", cs->colorDepthId().id());
-        bool sRGB = (cs->profile()->name().contains(QLatin1String("srgb"), Qt::CaseInsensitive) && !cs->profile()->name().contains(QLatin1String("g10")));
-        exportConfiguration->setProperty("sRGB", sRGB);
+            exportConfiguration->setProperty("ImageContainsTransparency", isThereAlpha);
+            exportConfiguration->setProperty("ColorModelID", cs->colorModelId().id());
+            exportConfiguration->setProperty("ColorDepthID", cs->colorDepthId().id());
+            bool sRGB = (cs->profile()->name().contains(QLatin1String("srgb"), Qt::CaseInsensitive) && !cs->profile()->name().contains(QLatin1String("g10")));
+            exportConfiguration->setProperty("sRGB", sRGB);
+        }
 
     }
 

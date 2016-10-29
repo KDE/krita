@@ -36,7 +36,7 @@ public:
     ColorSelectorNgDockFactory() {
     }
 
-    QString id() const override {
+    virtual QString id() const {
         return QString("ColorSelectorNg");
     }
 
@@ -44,14 +44,14 @@ public:
         return Qt::RightDockWidgetArea;
     }
 
-    QDockWidget* createDockWidget() override {
+    virtual QDockWidget* createDockWidget() {
         KisColorSelectorNgDock * dockWidget = new KisColorSelectorNgDock();
         dockWidget->setObjectName(id());
 
         return dockWidget;
     }
 
-    DockPosition defaultDockPosition() const override {
+    DockPosition defaultDockPosition() const {
         return DockRight;
     }
 };

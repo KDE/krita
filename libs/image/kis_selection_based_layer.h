@@ -60,14 +60,14 @@ public:
      * @param node to be connected node
      * @return tells if to be connected is a child of KisMask
      */
-    bool allowAsChild(KisNodeSP node) const override;
+    bool allowAsChild(KisNodeSP node) const;
 
     void setImage(KisImageWSP image) override;
 
-    KisPaintDeviceSP original() const override;
-    KisPaintDeviceSP paintDevice() const override;
+    KisPaintDeviceSP original() const;
+    KisPaintDeviceSP paintDevice() const;
 
-    bool needProjection() const override;
+    bool needProjection() const;
 
     /**
      * resets cached projection of lower layer to a new device
@@ -84,8 +84,8 @@ public:
      * Mark a layer as dirty. We can't use KisLayer's one
      * as our extent() function doesn't fit for this
      */
-    void setDirty() override;
-    void setDirty(const QRect & rect) override;
+    void setDirty();
+    void setDirty(const QRect & rect);
 
 public:
 
@@ -120,25 +120,25 @@ public:
      * gets this layer's x coordinate, taking selection into account
      * @return x-coordinate value
      */
-    qint32 x() const override;
+    qint32 x() const;
 
     /**
      * gets this layer's y coordinate, taking selection into account
      * @return y-coordinate value
      */
-    qint32 y() const override;
+    qint32 y() const;
 
     /**
      * sets this layer's y coordinate, taking selection into account
      * @param x x coordinate
      */
-    void setX(qint32 x) override;
+    void setX(qint32 x);
 
     /**
      * sets this layer's y coordinate, taking selection into account
      * @param y y coordinate
      */
-    void setY(qint32 y) override;
+    void setY(qint32 y);
 
 public:
 
@@ -146,13 +146,13 @@ public:
      * gets an approximation of where the bounds on actual data
      * are in this layer, taking selection into account
      */
-    QRect extent() const override;
+    QRect extent() const;
 
     /**
      * returns the exact bounds of where the actual data resides
      * in this layer, taking selection into account
      */
-    QRect exactBounds() const override;
+    QRect exactBounds() const;
 
     /**
      * copies the image and reformats it to thumbnail size
@@ -161,16 +161,16 @@ public:
      * @param h height of the thumbnail to create
      * @return the thumbnail image created.
      */
-    QImage createThumbnail(qint32 w, qint32 h) override;
+    QImage createThumbnail(qint32 w, qint32 h);
 
 
 protected:
     // override from KisLayer
     void copyOriginalToProjection(const KisPaintDeviceSP original,
                                   KisPaintDeviceSP projection,
-                                  const QRect& rect) const override;
+                                  const QRect& rect) const;
     // override from KisNode
-    QRect needRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const override;
+    QRect needRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const;
 
 protected:
     void initSelection();
@@ -188,7 +188,7 @@ protected:
      */
     void setUseSelectionInProjection(bool value) const;
 
-    KisKeyframeChannel *requestKeyframeChannel(const QString &id) override;
+    KisKeyframeChannel *requestKeyframeChannel(const QString &id);
 
 public Q_SLOTS:
     void slotImageSizeChanged();

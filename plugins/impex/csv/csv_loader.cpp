@@ -90,7 +90,7 @@ KisImageBuilder_Result CSVLoader::decode(const QString &filename)
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
     idx= filename.lastIndexOf(QRegExp("[\\/]"));
-    QString base = (idx == -1) ? QString() : filename.left(idx + 1); //include separator
+    QString base = (idx == -1) ? QString("") : filename.left(idx + 1); //include separator
     QString path = filename;
 
     if (path.right(4).toUpper() == ".CSV")

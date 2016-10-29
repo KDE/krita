@@ -76,10 +76,10 @@ public:
     virtual ~KisLayer();
 
     /// returns the image's colorSpace or null, if there is no image
-    virtual const KoColorSpace * colorSpace() const override;
+    virtual const KoColorSpace * colorSpace() const;
 
     /// returns the layer's composite op for the colorspace of the layer's parent.
-    const KoCompositeOp * compositeOp() const override;
+    const KoCompositeOp * compositeOp() const;
 
     KisPSDLayerStyleSP layerStyle() const;
     void setLayerStyle(KisPSDLayerStyleSP layerStyle);
@@ -87,7 +87,7 @@ public:
     /**
      * \see a comment in KisNode::projectionPlane()
      */
-    virtual KisAbstractProjectionPlaneSP projectionPlane() const override;
+    virtual KisAbstractProjectionPlaneSP projectionPlane() const;
 
     /**
      * The projection plane representing the layer itself without any
@@ -105,13 +105,13 @@ public:
      * Return the fully rendered representation of this layer: its
      * data and its effect masks
      */
-    KisPaintDeviceSP projection() const override;
+    KisPaintDeviceSP projection() const;
 
     /**
      * Return the layer data before the effect masks have had their go
      * at it.
      */
-    virtual KisPaintDeviceSP original() const override = 0;
+    virtual KisPaintDeviceSP original() const = 0;
 
     /**
      * @return the selection associated with this layer, if there is
@@ -125,8 +125,8 @@ public:
      */
     virtual KisSelectionSP selection() const;
 
-    virtual KisBaseNode::PropertyList sectionModelProperties() const override;
-    virtual void setSectionModelProperties(const KisBaseNode::PropertyList &properties) override;
+    virtual KisBaseNode::PropertyList sectionModelProperties() const;
+    virtual void setSectionModelProperties(const KisBaseNode::PropertyList &properties);
 
     /**
      * set/unset the channel flag for the alpha channel of this layer
@@ -225,25 +225,25 @@ public:
     void updateClones(const QRect &rect);
 
 public:
-    qint32 x() const override;
-    qint32 y() const override;
+    qint32 x() const;
+    qint32 y() const;
 
-    void setX(qint32 x) override;
-    void setY(qint32 y) override;
+    void setX(qint32 x);
+    void setY(qint32 y);
 
     /**
      * Returns an approximation of where the bounds
      * of actual data of this layer are
      */
-    QRect extent() const override;
+    QRect extent() const;
 
     /**
      * Returns the exact bounds of where the actual data
      * of this layer resides
      */
-    QRect exactBounds() const override;
+    QRect exactBounds() const;
 
-    QImage createThumbnail(qint32 w, qint32 h) override;
+    QImage createThumbnail(qint32 w, qint32 h);
 
 public:
     /**
@@ -268,7 +268,7 @@ public:
 
 protected:
     // override from KisNode
-    QRect changeRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const override;
+    QRect changeRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const;
 
 protected:
 

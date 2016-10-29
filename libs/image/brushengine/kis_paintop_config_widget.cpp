@@ -23,6 +23,7 @@
 
 KisPaintOpConfigWidget::KisPaintOpConfigWidget(QWidget * parent, Qt::WFlags f)
     : KisConfigWidget(parent, f, 10),
+      m_userAllowedLod(true),
       m_isInsideUpdateCall(0)
 {
 }
@@ -49,6 +50,16 @@ void KisPaintOpConfigWidget::setConfigurationSafe(const KisPropertiesConfigurati
     m_isInsideUpdateCall--;
 }
 
+void KisPaintOpConfigWidget::writeConfiguration(KisPropertiesConfigurationSP config) const
+{
+    KisPaintOpSettings::setLodUserAllowed(config, m_userAllowedLod);
+}
+
+void KisPaintOpConfigWidget::setConfiguration(const KisPropertiesConfigurationSP  config) {
+    m_userAllowedLod = KisPaintOpSettings::isLodUserAllowed(config);
+    emit sigUserChangedLodAvailability(m_userAllowedLod);
+}
+
 void KisPaintOpConfigWidget::setImage(KisImageWSP image) {
     m_image = image;
 }
@@ -63,4 +74,15 @@ bool KisPaintOpConfigWidget::presetIsValid() {
 
 bool KisPaintOpConfigWidget::supportScratchBox() {
     return true;
+}
+
+void KisPaintOpConfigWidget::slotUserChangedLodAvailability(bool value) {
+    m_userAllowedLod = value;
+    emit sigConfigurationItemChanged();
+}
+
+void KisPaintOpConfigWidget::coldInitExternalLodAvailabilityWidget()
+{
+    emit sigUserChangedLodAvailability(m_userAllowedLod);
+    emit sigConfigurationItemChanged();
 }

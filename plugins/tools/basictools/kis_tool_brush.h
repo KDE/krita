@@ -146,7 +146,7 @@ public:
         setToolTip(i18n("Freehand Brush Tool"));
 
         // Temporarily
-        setSection(TOOL_TYPE_SHAPE);
+        setToolType(TOOL_TYPE_SHAPE);
         setIconName(koIconNameCStr("krita_tool_freehand"));
         setShortcut(QKeySequence(Qt::Key_B));
         setPriority(0);

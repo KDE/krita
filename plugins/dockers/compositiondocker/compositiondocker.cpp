@@ -44,7 +44,7 @@ public:
     {
     }
 
-    QString id() const override
+    virtual QString id() const
     {
         return QString( "CompositionDocker" );
     }
@@ -54,7 +54,7 @@ public:
         return Qt::RightDockWidgetArea;
     }
 
-    QDockWidget* createDockWidget() override
+    virtual QDockWidget* createDockWidget()
     {
         CompositionDockerDock * dockWidget = new CompositionDockerDock();
         
@@ -63,7 +63,7 @@ public:
         return dockWidget;
     }
 
-    DockPosition defaultDockPosition() const override
+    DockPosition defaultDockPosition() const
     {
         return DockMinimized;
     }

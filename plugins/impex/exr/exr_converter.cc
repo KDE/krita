@@ -347,18 +347,16 @@ void exrConverter::Private::unmultiplyAlpha(typename WrapperType::pixel_type *pi
 template <typename T, typename Pixel, int size, int alphaPos>
 void multiplyAlpha(Pixel *pixel)
 {
-    if (alphaPos >= 0) {
-        T alpha = pixel->data[alphaPos];
+    T alpha = pixel->data[alphaPos];
 
-        if (alpha > 0.0) {
-            for (int i = 0; i < size; ++i) {
-                if (i != alphaPos) {
-                    pixel->data[i] *= alpha;
-                }
+    if (alpha > 0.0) {
+        for (int i = 0; i < size; ++i) {
+            if (i != alphaPos) {
+                pixel->data[i] *= alpha;
             }
-
-            pixel->data[alphaPos] = alpha;
         }
+
+        pixel->data[alphaPos] = alpha;
     }
 }
 
@@ -548,6 +546,7 @@ bool exrConverter::Private::checkExtraLayersInfoConsistent(const QDomDocument &d
         std::set<std::string>::const_iterator it2 = exrLayerNames.begin();
 
         std::set<std::string>::const_iterator end1 = extraInfoLayers.end();
+        std::set<std::string>::const_iterator end2 = exrLayerNames.end();
 
         for (; it1 != end1; ++it1, ++it2) {
             dbgKrita << it1->c_str() << it2->c_str();
@@ -896,9 +895,9 @@ class EncoderImpl : public Encoder
 {
 public:
     EncoderImpl(Imf::OutputFile* _file, const ExrPaintLayerSaveInfo* _info, int width) : file(_file), info(_info), pixels(width), m_width(width) {}
-    ~EncoderImpl() override {}
-    void prepareFrameBuffer(Imf::FrameBuffer*, int line) override;
-    void encodeData(int line) override;
+    virtual ~EncoderImpl() {}
+    virtual void prepareFrameBuffer(Imf::FrameBuffer*, int line);
+    virtual void encodeData(int line);
 private:
     typedef ExrPixel_<_T_, size> ExrPixel;
     Imf::OutputFile* file;
@@ -1279,7 +1278,7 @@ KisImageBuilder_Result exrConverter::buildFile(const QString &filename, KisGroup
     if (!extraLayersInfo.isNull()) {
         header.insert(EXR_KRITA_LAYERS, Imf::StringAttribute(extraLayersInfo.constData()));
     }
-    dbgFile << informationObjects.size() << " layers to save";
+     dbgFile << informationObjects.size() << " layers to save";
 
     Q_FOREACH (const ExrPaintLayerSaveInfo& info, informationObjects) {
         if (info.pixelType < Imf::NUM_PIXELTYPES) {

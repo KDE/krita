@@ -120,7 +120,7 @@ struct TestingInterface : TimelineFramesModel::NodeManipulationInterface
 {
     TestingInterface(KisImageSP image) : m_image(image) {}
 
-    KisLayerSP addPaintLayer() const override {
+    KisLayerSP addPaintLayer() const {
         KisNodeSP parent = m_image->root();
         KisNodeSP after = parent->lastChild();
 
@@ -140,7 +140,7 @@ struct TestingInterface : TimelineFramesModel::NodeManipulationInterface
         return layer;
     }
 
-    void removeNode(KisNodeSP node) const override {
+    void removeNode(KisNodeSP node) const {
         m_image->undoAdapter()->addCommand(
             new KisImageLayerRemoveCommand(m_image, node));
     }
@@ -192,7 +192,7 @@ void TimelineModelTest::testView()
     connect(intTime, SIGNAL(valueChanged(int)),
             SLOT(setCurrentTime(int)));
 
-    connect(m_image->animationInterface(), SIGNAL(sigUiTimeChanged(int)),
+    connect(m_image->animationInterface(), SIGNAL(sigTimeChanged(int)),
             intTime, SLOT(setValue(int)));
 
     connect(intLayer, SIGNAL(valueChanged(int)),

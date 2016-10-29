@@ -386,6 +386,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     action = new QWidgetAction(this);
     KisActionRegistry::instance()->propertizeAction("previous_preset", action);
     view->actionCollection()->addAction("previous_preset", action);
+
     connect(action, SIGNAL(triggered()), this, SLOT(slotSwitchToPreviousPreset()));
 
     if (!cfg.toolOptionsInDocker()) {
@@ -474,6 +475,10 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
 
     connect(m_hMirrorAction        , SIGNAL(toggled(bool))                    , SLOT(slotHorizontalMirrorChanged(bool)));
     connect(m_vMirrorAction        , SIGNAL(toggled(bool))                    , SLOT(slotVerticalMirrorChanged(bool)));
+
+
+
+
     connect(m_reloadAction         , SIGNAL(triggered())                        , SLOT(slotReloadPreset()));
 
     connect(m_sliderChooser[0]->getWidget<KisDoubleSliderSpinBox>("opacity"), SIGNAL(valueChanged(qreal)), SLOT(slotSlider1Changed()));
@@ -534,7 +539,7 @@ void KisPaintopBox::restoreResource(KoResource* resource)
 {
     KisPaintOpPreset* preset = dynamic_cast<KisPaintOpPreset*>(resource);
     if (preset) {
-        setCurrentPaintop(preset);
+        setCurrentPaintop(preset->paintOp(), preset);
 
         m_presetsPopup->setPresetImage(preset->image());
         m_presetsPopup->resourceSelected(resource);
@@ -551,38 +556,30 @@ void KisPaintopBox::newOptionWidgets(const QList<QPointer<QWidget> > &optionWidg
 void KisPaintopBox::resourceSelected(KoResource* resource)
 {
     KisPaintOpPreset* preset = dynamic_cast<KisPaintOpPreset*>(resource);
-    if (preset && preset != m_resourceProvider->currentPreset()) {
+    if (preset) {
         if (!preset->settings()->isLoadable())
             return;
 
-        if (!m_dirtyPresetsEnabled) {
-            KisSignalsBlocker blocker(m_optionWidget);
-            if (!preset->load()) {
-                warnKrita << "failed to load the preset.";
-            }
-        }
-
-        setCurrentPaintop(preset);
-
+        setCurrentPaintopAndReload(preset->paintOp(), preset);
         m_presetsPopup->setPresetImage(preset->image());
         m_presetsPopup->resourceSelected(resource);
     }
 }
 
-void KisPaintopBox::setCurrentPaintop(const KoID& paintop)
+void KisPaintopBox::setCurrentPaintopAndReload(const KoID& paintop, KisPaintOpPresetSP preset)
 {
-    KisPaintOpPresetSP preset = activePreset(paintop);
-    Q_ASSERT(preset && preset->settings());
-    setCurrentPaintop(preset);
+    if (!m_dirtyPresetsEnabled) {
+        KisSignalsBlocker blocker(m_optionWidget);
+        if (!preset->load()) {
+            warnKrita << "failed to load the preset.";
+        }
+    }
+
+    setCurrentPaintop(paintop, preset);
 }
 
-void KisPaintopBox::setCurrentPaintop(KisPaintOpPresetSP preset)
+void KisPaintopBox::setCurrentPaintop(const KoID& paintop, KisPaintOpPresetSP preset)
 {
-    if (preset == m_resourceProvider->currentPreset()) {
-        return;
-    }
-    Q_ASSERT(preset);
-    const KoID& paintop = preset->paintOp();
     m_presetConnections.clear();
 
     if (m_resourceProvider->currentPreset()) {
@@ -597,6 +594,9 @@ void KisPaintopBox::setCurrentPaintop(KisPaintOpPresetSP preset)
         m_tabletToolMap[m_currTabletToolID].preset = m_resourceProvider->currentPreset();
         m_tabletToolMap[m_currTabletToolID].paintOpID = m_resourceProvider->currentPreset()->paintOp();
     }
+
+    preset = (!preset) ? activePreset(paintop) : preset;
+    Q_ASSERT(preset && preset->settings());
 
     if (!m_paintopOptionWidgets.contains(paintop))
         m_paintopOptionWidgets[paintop] = KisPaintOpRegistry::instance()->get(paintop.id())->createConfigWidget(this);
@@ -753,16 +753,11 @@ void KisPaintopBox::slotInputDeviceChanged(const KoInputDevice& inputDevice)
             preset = rserver->resourceByName("Basic_tip_default");
         }
         if (preset) {
-            setCurrentPaintop(preset);
+            setCurrentPaintop(preset->paintOp(), preset);
         }
     }
     else {
-        if (toolData->preset) {
-            setCurrentPaintop(toolData->preset);
-        }
-        else {
-            setCurrentPaintop(toolData->paintOpID);
-        }
+        setCurrentPaintop(toolData->paintOpID, toolData->preset);
     }
 
     m_currTabletToolID = TabletToolID(inputDevice);
@@ -1108,7 +1103,7 @@ void KisPaintopBox::slotNextFavoritePreset()
 void KisPaintopBox::slotSwitchToPreviousPreset()
 {
     if (m_resourceProvider->previousPreset()) {
-        setCurrentPaintop(m_resourceProvider->previousPreset());
+        setCurrentPaintop(m_resourceProvider->previousPreset()->paintOp(), m_resourceProvider->previousPreset());
     }
 }
 
@@ -1151,21 +1146,9 @@ void KisPaintopBox::slotReloadPreset()
 }
 void KisPaintopBox::slotGuiChangedCurrentPreset() // Called only when UI is changed and not when preset is changed
 {
-    KisPaintOpPresetSP preset = m_resourceProvider->currentPreset();
+    m_optionWidget->writeConfigurationSafe(const_cast<KisPaintOpSettings*>(m_resourceProvider->currentPreset()->settings().data()));
 
-    {
-        /**
-         * Here we postpone all the settings updates events until thye entire writing
-         * operation will be finished. As soon as it is finished, the updates will be
-         * emitted happily (if there were any).
-         */
-
-        KisPaintOpPreset::UpdatedPostponer postponer(preset.data());
-        m_optionWidget->writeConfigurationSafe(const_cast<KisPaintOpSettings*>(preset->settings().data()));
-    }
-
-    // we should also update the preset strip to update the status of the "dirty" mark
-    m_presetsPopup->resourceSelected(m_resourceProvider->currentPreset().data());
+    //m_presetsPopup->resourceSelected(m_resourceProvider->currentPreset().data());
 
     // TODO!!!!!!!!
     //m_presetsPopup->updateViewSettings();

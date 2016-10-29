@@ -43,8 +43,12 @@ public:
     void setConfigurationSafe(const KisPropertiesConfigurationSP config);
 
 protected:
-    virtual void setConfiguration(const KisPropertiesConfigurationSP  config) = 0;
-    virtual void writeConfiguration(KisPropertiesConfigurationSP config) const = 0;
+    /**
+     * Write the settings in this widget to the given properties
+     * configuration, which is cleared first.
+     */
+    virtual void writeConfiguration(KisPropertiesConfigurationSP config) const;
+    virtual void setConfiguration(const KisPropertiesConfigurationSP  config);
 
 public:
 
@@ -66,9 +70,24 @@ public:
      */
     virtual bool supportScratchBox();
 
+
+    /**
+     * This call makes KisPaintOpConfigWidget emit
+     * sigUserChangedLodAvailability() signal with the current
+     * availability value
+     */
+    void coldInitExternalLodAvailabilityWidget();
+
+public Q_SLOTS:
+    void slotUserChangedLodAvailability(bool value);
+
+Q_SIGNALS:
+    void sigUserChangedLodAvailability(bool value);
+
 protected:
     KisImageWSP m_image;
     KisNodeWSP m_node;
+    bool m_userAllowedLod;
 
     mutable int m_isInsideUpdateCall;
 };

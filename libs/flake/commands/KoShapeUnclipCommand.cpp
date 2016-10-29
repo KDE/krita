@@ -41,7 +41,7 @@ public:
             : controller(c), executed(false) {
     }
 
-    ~Private() override {
+    ~Private() {
         if (executed) {
             qDeleteAll(oldClipPaths);
         } else {
@@ -82,7 +82,7 @@ public:
     }
 
     /// reimplemented from KoOdfPaste
-    bool process(const KoXmlElement &body, KoOdfReadStore &odfStore) override {
+    virtual bool process(const KoXmlElement &body, KoOdfReadStore &odfStore) {
         KoOdfLoadingContext loadingContext(odfStore.styles(), odfStore.store());
         KoShapeLoadingContext context(loadingContext, controller->resourceManager());
 

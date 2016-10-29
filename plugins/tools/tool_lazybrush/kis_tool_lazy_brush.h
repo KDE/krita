@@ -80,10 +80,10 @@ public:
         setToolTip(i18n("Colorize Mask Editing Tool"));
 
         // Temporarily
-        setSection(TOOL_TYPE_FILL);
+        setToolType(TOOL_TYPE_FILL);
         setIconName(koIconNameCStr("krita_tool_lazybrush"));
         //setShortcut(QKeySequence(Qt::Key_Shift + Qt::Key_B));
-        setPriority(3);
+        setPriority(15);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
     }
 

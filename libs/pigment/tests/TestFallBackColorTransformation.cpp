@@ -13,16 +13,16 @@ struct KoDummyColorTransformation : public KoColorTransformation
       m_parameters << 1 << 2;
     }
     QList<QVariant> m_parameters;
-    void transform(const quint8 */*src*/, quint8 */*dst*/, qint32 /*nPixels*/) const override
+    virtual void transform(const quint8 */*src*/, quint8 */*dst*/, qint32 /*nPixels*/) const
     {
     }
-    QList<QString> parameters() const override
+    virtual QList<QString> parameters() const
     {
       QList<QString> s;
       s << "test";
       return s;
     }
-    int parameterId(const QString& name) const override
+    virtual int parameterId(const QString& name) const
     {
       if(name == "test")
       {
@@ -31,7 +31,7 @@ struct KoDummyColorTransformation : public KoColorTransformation
         return 0;
       }
     }
-    void setParameter(int id, const QVariant& parameter) override
+    virtual void setParameter(int id, const QVariant& parameter)
     {
       m_parameters[id] = parameter;          
     }

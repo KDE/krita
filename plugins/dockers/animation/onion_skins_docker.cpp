@@ -36,6 +36,8 @@
 
 #include "kis_color_filter_combo.h"
 
+static const int MAX_SKIN_COUNT = 10;
+
 OnionSkinsDocker::OnionSkinsDocker(QWidget *parent) :
     QDockWidget(i18n("Onion Skins"), parent),
     ui(new Ui::OnionSkinsDocker),

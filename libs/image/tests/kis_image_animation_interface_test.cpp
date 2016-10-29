@@ -57,9 +57,6 @@ void KisImageAnimationInterfaceTest::testFrameRegeneration()
     KisPaintDeviceSP dev1 = p.layer->paintDevice();
     KisPaintDeviceSP dev2 = layer2->paintDevice();
 
-    p.layer->getKeyframeChannel(KisKeyframeChannel::Content.id(), true);
-    layer2->getKeyframeChannel(KisKeyframeChannel::Content.id(), true);
-
     // check frame 0
     {
         dev1->fill(rc1, KoColor(Qt::red, dev1->colorSpace()));
@@ -143,9 +140,6 @@ void KisImageAnimationInterfaceTest::testFramesChangedSignal()
     KisPaintLayerSP layer2 = new KisPaintLayer(p.image, "paint2", OPACITY_OPAQUE_U8);
     p.image->addNode(layer2);
 
-    layer1->getKeyframeChannel(KisKeyframeChannel::Content.id(), true);
-    layer2->getKeyframeChannel(KisKeyframeChannel::Content.id(), true);
-
     KisImageAnimationInterface *i = p.image->animationInterface();
     KisPaintDeviceSP dev1 = p.layer->paintDevice();
     KisPaintDeviceSP dev2 = layer2->paintDevice();
@@ -199,9 +193,6 @@ void KisImageAnimationInterfaceTest::testAnimationCompositionBug()
     KisPaintLayerSP layer2 = new KisPaintLayer(p.image, "paint2", OPACITY_OPAQUE_U8);
     p.image->addNode(layer2);
 
-    layer1->getKeyframeChannel(KisKeyframeChannel::Content.id(), true);
-    layer2->getKeyframeChannel(KisKeyframeChannel::Content.id(), true);
-
     layer1->paintDevice()->fill(rect, KoColor(Qt::red, layer1->paintDevice()->colorSpace()));
     layer2->paintDevice()->fill(QRect(128,128,128,128), KoColor(Qt::black, layer2->paintDevice()->colorSpace()));
 
@@ -234,8 +225,6 @@ void KisImageAnimationInterfaceTest::testSwitchFrameWithUndo()
 
     KisPaintLayerSP layer1 = p.layer;
 
-    layer1->getKeyframeChannel(KisKeyframeChannel::Content.id(), true);
-
     KisImageAnimationInterface *i = p.image->animationInterface();
     KisPaintDeviceSP dev1 = p.layer->paintDevice();
 
@@ -256,53 +245,15 @@ void KisImageAnimationInterfaceTest::testSwitchFrameWithUndo()
     p.image->waitForDone();
     QCOMPARE(i->currentTime(), 16);
 
-    // the two commands have been merged!
+    p.undoStore->undo();
+    QTest::qWait(100);
+    p.image->waitForDone();
+    QCOMPARE(i->currentTime(), 15);
+
     p.undoStore->undo();
     QTest::qWait(100);
     p.image->waitForDone();
     QCOMPARE(i->currentTime(), 0);
-
-    p.undoStore->redo();
-    QTest::qWait(100);
-    p.image->waitForDone();
-    QCOMPARE(i->currentTime(), 16);
-}
-#include "kis_processing_applicator.h"
-void KisImageAnimationInterfaceTest::testSwitchFrameHangup()
-{
-    QRect refRect(QRect(0,0,512,512));
-    TestUtil::MaskParent p(refRect);
-
-    KisPaintLayerSP layer1 = p.layer;
-
-    layer1->getKeyframeChannel(KisKeyframeChannel::Content.id(), true);
-
-    KisImageAnimationInterface *i = p.image->animationInterface();
-    KisPaintDeviceSP dev1 = p.layer->paintDevice();
-
-    KisKeyframeChannel *channel = dev1->keyframeChannel();
-    channel->addKeyframe(10);
-    channel->addKeyframe(20);
-
-
-    QCOMPARE(i->currentTime(), 0);
-
-    i->requestTimeSwitchWithUndo(15);
-    QTest::qWait(100);
-    p.image->waitForDone();
-    QCOMPARE(i->currentTime(), 15);
-
-    KisProcessingApplicator applicator(p.image, 0);
-
-    i->requestTimeSwitchWithUndo(16);
-
-    applicator.end();
-
-    QTest::qWait(100);
-    p.image->waitForDone();
-    QCOMPARE(i->currentTime(), 16);
-
-
 }
 
 QTEST_MAIN(KisImageAnimationInterfaceTest)

@@ -212,7 +212,7 @@ void AnimationDocker::setCanvas(KoCanvasBase * canvas)
             m_animationWidget->intFramerate->setValue(animation->framerate());
         }
 
-        connect(animation, SIGNAL(sigUiTimeChanged(int)), this, SLOT(slotGlobalTimeChanged()));
+        connect(animation, SIGNAL(sigTimeChanged(int)), this, SLOT(slotGlobalTimeChanged()));
         connect(m_canvas->animationPlayer(), SIGNAL(sigFrameChanged()), this, SLOT(slotGlobalTimeChanged()));
         connect(m_canvas->animationPlayer(), SIGNAL(sigPlaybackStopped()), this, SLOT(slotGlobalTimeChanged()));
         connect(m_canvas->animationPlayer(), SIGNAL(sigPlaybackStopped()), this, SLOT(updatePlayPauseIcon()));

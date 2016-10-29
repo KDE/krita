@@ -50,7 +50,7 @@ public:
 
 protected:
     using utils::StrokeTester::initImage;
-    void initImage(KisImageWSP image, KisNodeSP activeNode) override {
+    void initImage(KisImageWSP image, KisNodeSP activeNode) {
         Q_UNUSED(activeNode);
 
         if (m_useLod) {
@@ -58,7 +58,7 @@ protected:
         }
     }
 
-    void beforeCheckingResult(KisImageWSP image, KisNodeSP activeNode) override {
+    void beforeCheckingResult(KisImageWSP image, KisNodeSP activeNode) {
         Q_UNUSED(image)
         Q_UNUSED(activeNode);
 
@@ -68,7 +68,7 @@ protected:
     }
 
     void modifyResourceManager(KoCanvasResourceManager *manager,
-                               KisImageWSP image) override
+                               KisImageWSP image)
     {
         modifyResourceManager(manager, image, 0);
     }
@@ -76,7 +76,7 @@ protected:
 
     void modifyResourceManager(KoCanvasResourceManager *manager,
                                KisImageWSP image,
-                               int iteration) override {
+                               int iteration) {
 
         if (m_paintColor && iteration > 0) {
             QVariant i;
@@ -87,7 +87,7 @@ protected:
 
     KisStrokeStrategy* createStroke(bool indirectPainting,
                                     KisResourcesSnapshotSP resources,
-                                    KisImageWSP image) override {
+                                    KisImageWSP image) {
         Q_UNUSED(image);
 
         FreehandStrokeStrategy::PainterInfo *painterInfo =
@@ -99,13 +99,13 @@ protected:
         return stroke.take();
     }
 
-    void addPaintingJobs(KisImageWSP image,
-                                 KisResourcesSnapshotSP resources) override
+    virtual void addPaintingJobs(KisImageWSP image,
+                                 KisResourcesSnapshotSP resources)
     {
         addPaintingJobs(image, resources, 0);
     }
 
-    void addPaintingJobs(KisImageWSP image, KisResourcesSnapshotSP resources, int iteration) override {
+    void addPaintingJobs(KisImageWSP image, KisResourcesSnapshotSP resources, int iteration) {
         KisPaintInformation pi1;
         KisPaintInformation pi2;
 

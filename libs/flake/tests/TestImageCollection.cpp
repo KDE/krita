@@ -34,7 +34,7 @@
 void TestImageCollection::testGetImageImage()
 {
     KoImageCollection collection;
-    QImage image(FILES_DATA_DIR "logo-calligra.png");
+    QImage image(KDESRCDIR "/logo-calligra.png");
 
     KoImageData *id1 = collection.createImageData(image);
     QCOMPARE(id1->hasCachedImage(), true);
@@ -46,7 +46,7 @@ void TestImageCollection::testGetImageImage()
     QCOMPARE(id3->hasCachedImage(), true);
     QCOMPARE(id1->key(), id3->key());
     QCOMPARE(id1->priv(), id3->priv());
-    QImage image2(FILES_DATA_DIR "logo-kpresenter.png");
+    QImage image2(KDESRCDIR "/logo-kpresenter.png");
     KoImageData *id4 = collection.createImageData(image2);
     QCOMPARE(id4->hasCachedImage(), true);
     QVERIFY(id1->key() != id4->key());
@@ -75,7 +75,7 @@ void TestImageCollection::testGetImageImage()
 void TestImageCollection::testGetImageStore()
 {
     KoImageCollection collection;
-    KoStore *store = KoStore::createStore(FILES_DATA_DIR "store.zip", KoStore::Read);
+    KoStore *store = KoStore::createStore(KDESRCDIR "/store.zip", KoStore::Read);
     QString image("logo-calligra.jpg");
     KoImageData *id1 = collection.createImageData(image, store);
     QCOMPARE(id1->suffix(), QString("jpg"));
@@ -162,7 +162,7 @@ void TestImageCollection::testPreload1()
 void TestImageCollection::testPreload3()
 {
     KoImageData data;
-    KoStore *store = KoStore::createStore(FILES_DATA_DIR "store.zip", KoStore::Read);
+    KoStore *store = KoStore::createStore(KDESRCDIR "/store.zip", KoStore::Read);
     QString image("logo-calligra.png");
     data.setImage(image, store);
 
@@ -193,7 +193,7 @@ void TestImageCollection::testPreload3()
 
 void TestImageCollection::testSameKey()
 {
-    KoStore *store = KoStore::createStore(FILES_DATA_DIR "store.zip", KoStore::Read);
+    KoStore *store = KoStore::createStore(KDESRCDIR "/store.zip", KoStore::Read);
     QString image("logo-calligra.png");
     KoImageData data;
     data.setImage(image, store);
@@ -203,7 +203,7 @@ void TestImageCollection::testSameKey()
 
     QCOMPARE(data.key(), data2.key());
 
-    QFile file(FILES_DATA_DIR "logo-calligra.png");
+    QFile file(KDESRCDIR "/logo-calligra.png");
     file.open(QIODevice::ReadOnly);
     QByteArray imageData = file.readAll();
     KoImageData data3;
@@ -211,16 +211,16 @@ void TestImageCollection::testSameKey()
     QCOMPARE(data.key(), data3.key());
     QCOMPARE(data2.key(), data3.key());
 
-    QImage qImage1(FILES_DATA_DIR "logo-calligra.png");
-    QImage qImage2(FILES_DATA_DIR "logo-calligra.png");
+    QImage qImage1(KDESRCDIR "/logo-calligra.png");
+    QImage qImage2(KDESRCDIR "/logo-calligra.png");
     KoImageData data4;
     data4.setImage(qImage1);
     KoImageData data5;
     data5.setImage(qImage2);
     QCOMPARE(data4.key(), data5.key());
 
-    QImage qImage3(FILES_DATA_DIR "/logo-calligra-big.png");
-    QImage qImage4(FILES_DATA_DIR "/logo-calligra-big.png");
+    QImage qImage3(KDESRCDIR "/logo-calligra-big.png");
+    QImage qImage4(KDESRCDIR "/logo-calligra-big.png");
     KoImageData data6;
     data6.setImage(qImage3);
     KoImageData data7;

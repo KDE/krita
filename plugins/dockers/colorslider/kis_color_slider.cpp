@@ -45,7 +45,7 @@ public:
     ColorSliderDockFactory() {
     }
 
-    QString id() const override {
+    virtual QString id() const {
         return QString("ColorSlider");
     }
 
@@ -53,7 +53,7 @@ public:
         return Qt::RightDockWidgetArea;
     }
 
-    QDockWidget* createDockWidget() override {
+    virtual QDockWidget* createDockWidget() {
         ColorSliderDock * dockWidget = new ColorSliderDock();
 
         dockWidget->setObjectName(id());
@@ -61,7 +61,7 @@ public:
         return dockWidget;
     }
 
-    KoDockFactoryBase::DockPosition defaultDockPosition() const override {
+    KoDockFactoryBase::DockPosition defaultDockPosition() const {
         return DockMinimized;
     }
 };

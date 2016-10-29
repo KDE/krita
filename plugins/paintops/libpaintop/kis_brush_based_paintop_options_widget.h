@@ -38,11 +38,9 @@ public:
 
     virtual bool presetIsValid();
 
-protected:
-    KisBrushOptionWidget *brushOptionWidget() const;
 
 private:
-    KisBrushOptionWidget *m_brushOption;
+    KisBrushOptionWidget * m_brushOption;
 };
 
 #endif // KIS_BRUSH_BASED_PAINTOP_OPTIONS_WIDGET_H

@@ -48,11 +48,11 @@ class ColorSetDelegate : public QAbstractItemDelegate
 {
 public:
     ColorSetDelegate(QObject * parent = 0) : QAbstractItemDelegate(parent) {}
-    ~ColorSetDelegate() override {}
+    virtual ~ColorSetDelegate() {}
     /// reimplemented
-    void paint(QPainter *, const QStyleOptionViewItem &, const QModelIndex &) const override;
+    virtual void paint(QPainter *, const QStyleOptionViewItem &, const QModelIndex &) const;
     /// reimplemented
-    QSize sizeHint(const QStyleOptionViewItem & option, const QModelIndex &) const override {
+    QSize sizeHint(const QStyleOptionViewItem & option, const QModelIndex &) const {
         return option.decorationSize;
     }
 };

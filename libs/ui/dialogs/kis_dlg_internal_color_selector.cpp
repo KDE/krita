@@ -93,12 +93,9 @@ KisDlgInternalColorSelector::KisDlgInternalColorSelector(QWidget *parent, KoColo
     if (savedPal) {
         m_ui->paletteBox->setColorSet(savedPal);
     } else {
-        Q_ASSERT(rServer->resources().count());
-        if (rServer->resources().count()) {
-            savedPal = rServer->resources().first();
-            if (savedPal) {
-                m_ui->paletteBox->setColorSet(savedPal);
-            }
+        savedPal = rServer->resources().first();
+        if (savedPal) {
+            m_ui->paletteBox->setColorSet(savedPal);
         }
     }
     if (config.paletteBox) {
@@ -141,6 +138,7 @@ KisDlgInternalColorSelector::KisDlgInternalColorSelector(QWidget *parent, KoColo
 KisDlgInternalColorSelector::~KisDlgInternalColorSelector()
 {
     delete m_ui;
+    //TODO: Does the scoped pointer also need to be deleted???
 }
 
 void KisDlgInternalColorSelector::slotColorUpdated(KoColor newColor)

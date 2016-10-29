@@ -33,7 +33,7 @@ public:
     }
     KisImageWSP m_image;
 protected:
-    void showEvent(QShowEvent* event) override {
+    void showEvent(QShowEvent* event) {
         QWidget::showEvent(event);
         //cbPerspective->setEnabled(m_image && m_image->perspectiveGrid() && m_image->perspectiveGrid()->countSubGrids() == 1);
         cbPerspective->setVisible(false); // XXX: Until perspective cloning works again!

@@ -39,11 +39,11 @@ public:
     {
     }
 
-    void undo() override {
+    void undo() {
         m_result += QString(" ") + text().toString() + undoString(true);
     }
 
-    void redo() override {
+    void redo() {
         m_result += QString(" ") + text().toString() + undoString(false);
     }
 
@@ -113,8 +113,8 @@ public:
           m_exclusive(exclusive)
     {
     }
-    void redo() override { checkState(); }
-    void undo() override { checkState(); }
+    void redo() { checkState(); }
+    void undo() { checkState(); }
 
 private:
     void checkState() {

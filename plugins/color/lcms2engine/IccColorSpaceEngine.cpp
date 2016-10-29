@@ -64,14 +64,14 @@ public:
         Q_ASSERT(m_transform);
     }
 
-    ~KoLcmsColorConversionTransformation() override
+    ~KoLcmsColorConversionTransformation()
     {
         cmsDeleteTransform(m_transform);
     }
 
 public:
 
-    void transform(const quint8 *src, quint8 *dst, qint32 numPixels) const override
+    virtual void transform(const quint8 *src, quint8 *dst, qint32 numPixels) const
     {
         Q_ASSERT(m_transform);
 
@@ -143,14 +143,14 @@ public:
         Q_ASSERT(m_transform);
     }
 
-    ~KoLcmsColorProofingConversionTransformation() override
+    ~KoLcmsColorProofingConversionTransformation()
     {
         cmsDeleteTransform(m_transform);
     }
 
 public:
 
-    void transform(const quint8 *src, quint8 *dst, qint32 numPixels) const override
+    virtual void transform(const quint8 *src, quint8 *dst, qint32 numPixels) const
     {
         Q_ASSERT(m_transform);
 

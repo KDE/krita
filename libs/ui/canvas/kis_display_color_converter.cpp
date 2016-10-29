@@ -109,27 +109,27 @@ struct KisDisplayColorConverter::Private
                             this, SIGNAL(displayConfigurationChanged()));
         }
 
-        QColor toQColor(const KoColor &c) const override {
+        QColor toQColor(const KoColor &c) const {
             return m_parent->toQColor(c);
         }
 
-        KoColor approximateFromRenderedQColor(const QColor &c) const override {
+        KoColor approximateFromRenderedQColor(const QColor &c) const {
             return m_parent->approximateFromRenderedQColor(c);
         }
 
-        KoColor fromHsv(int h, int s, int v, int a) const override {
+        KoColor fromHsv(int h, int s, int v, int a) const {
             return m_parent->fromHsv(h, s, v, a);
         }
 
-        void getHsv(const KoColor &srcColor, int *h, int *s, int *v, int *a) const override {
+        void getHsv(const KoColor &srcColor, int *h, int *s, int *v, int *a) const {
             m_parent->getHsv(srcColor, h, s, v, a);
         }
 
-        qreal minVisibleFloatValue(const KoChannelInfo *chaninfo) const override {
+        virtual qreal minVisibleFloatValue(const KoChannelInfo *chaninfo) const {
             return chaninfo->getUIMin();
         }
 
-        qreal maxVisibleFloatValue(const KoChannelInfo *chaninfo) const override {
+        virtual qreal maxVisibleFloatValue(const KoChannelInfo *chaninfo) const {
             qreal maxValue = chaninfo->getUIMax();
 
             if (m_resourceManager) {
@@ -141,7 +141,7 @@ struct KisDisplayColorConverter::Private
             return maxValue;
         }
 
-        const KoColorSpace* getPaintingColorSpace() const override {
+        virtual const KoColorSpace* getPaintingColorSpace() const {
             return m_parent->paintingColorSpace();
         }
 

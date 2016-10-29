@@ -28,6 +28,9 @@
 #cmakedefine WORDS_BIGENDIAN ${CMAKE_WORDS_BIGENDIAN}
 #endif
 
+/* Defines if the Breakpad krita crash handler is built */
+#cmakedefine USE_BREAKPAD 1
+
 /* Defines if the Dr. Mingw crash handler should be used */
 #cmakedefine USE_DRMINGW 1
 

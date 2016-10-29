@@ -31,10 +31,10 @@ public:
             : KisConfigWidget(0) {
     }
 
-    void setConfiguration(const KisPropertiesConfigurationSP ) override {
+    void setConfiguration(const KisPropertiesConfigurationSP ) {
     }
 
-    KisPropertiesConfigurationSP  configuration() const override {
+    KisPropertiesConfigurationSP  configuration() const {
         return 0;
     }
 };

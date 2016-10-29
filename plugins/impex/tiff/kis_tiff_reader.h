@@ -186,6 +186,7 @@ private:
     quint8* m_poses;
     KoColorTransformation* m_transformProfile;
     KisTIFFPostProcessor* m_postprocess;
+    quint32 m_tiffDataWidth;
 };
 
 class KisTIFFReaderTarget8bit : public KisTIFFReaderBase

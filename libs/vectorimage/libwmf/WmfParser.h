@@ -137,6 +137,7 @@ private:
 
     WmfLayout   mLayout;
     QColor      mTextColor;
+    bool        mWinding;
     quint16     mMapMode;
 
     // Memory allocation for WMF file

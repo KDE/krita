@@ -40,15 +40,12 @@ KisSplashScreen::KisSplashScreen(const QString &version, const QPixmap &pixmap, 
       m_themed(themed)
 {
 
+    m_version = version;
     setupUi(this);
     setWindowIcon(KisIconUtils::loadIcon("calligrakrita"));
 
     // Maintain the aspect ratio on high DPI screens when scaling
     lblSplash->setPixmap(pixmap);
-
-    QString color = colorString();
-    lblVersion->setText(i18n("Version: %1", version));
-    lblVersion->setStyleSheet("color:" + color);
 
     bnClose->hide();
     connect(bnClose, SIGNAL(clicked()), this, SLOT(close()));
@@ -66,6 +63,8 @@ KisSplashScreen::KisSplashScreen(const QString &version, const QPixmap &pixmap, 
     lblLinks->setVisible(false);
     lblRecent->setVisible(false);
     line->setVisible(false);
+
+
 
     m_timer.setSingleShot(true);
     m_timer.start(10);
@@ -119,9 +118,14 @@ void KisSplashScreen::updateText()
     lblRecent->setText(recent);
 }
 
-void KisSplashScreen::displayLinks() {
+void KisSplashScreen::displayRecentFilesAndLinks() {
 
     QString color = colorString();
+
+    lblLinks->setVisible(true);
+    lblRecent->setVisible(true);
+    line->setVisible(true);
+
     lblLinks->setTextFormat(Qt::RichText);
     lblLinks->setText(i18n("<html>"
                            "<head/>"
@@ -141,15 +145,12 @@ void KisSplashScreen::displayLinks() {
                            "</body>"
                            "</html>", color));
 
-    lblLinks->setVisible(true);
+    lblVersion->setText(i18n("Version: %1", m_version));
+    lblVersion->setStyleSheet("color:" + color);
 
     updateText();
 }
 
-void KisSplashScreen::displayRecentFiles() {
-    lblRecent->setVisible(true);
-    line->setVisible(true);
-}
 
 QString KisSplashScreen::colorString() const
 {

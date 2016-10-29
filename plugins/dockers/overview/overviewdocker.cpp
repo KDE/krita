@@ -45,7 +45,7 @@ public:
     {
     }
 
-    QString id() const override
+    virtual QString id() const
     {
         return QString( "OverviewDocker" );
     }
@@ -55,7 +55,7 @@ public:
         return Qt::RightDockWidgetArea;
     }
 
-    QDockWidget* createDockWidget() override
+    virtual QDockWidget* createDockWidget()
     {
         OverviewDockerDock * dockWidget = new OverviewDockerDock();
         dockWidget->setObjectName(id());
@@ -63,7 +63,7 @@ public:
         return dockWidget;
     }
 
-    DockPosition defaultDockPosition() const override
+    DockPosition defaultDockPosition() const
     {
         return DockMinimized;
     }

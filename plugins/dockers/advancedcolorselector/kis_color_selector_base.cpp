@@ -101,7 +101,7 @@ public:
     }
 
 protected:
-    void paintEvent(QPaintEvent *e) override {
+    void paintEvent(QPaintEvent *e) {
         Q_UNUSED(e);
         QPainter p(this);
         p.fillRect(0, 0, width(), width(), m_color);

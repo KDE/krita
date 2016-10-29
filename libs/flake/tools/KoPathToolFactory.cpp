@@ -28,7 +28,7 @@ KoPathToolFactory::KoPathToolFactory()
         : KoToolFactoryBase("PathTool")
 {
     setToolTip(i18n("Path editing"));
-    setSection(mainToolType());
+    setToolType(dynamicToolType());
     setIconName(koIconNameCStr("shape_handling"));
     setPriority(2);
     setActivationShapeId(KoPathShapeId);

@@ -31,10 +31,10 @@ public:
             : KisRecordedAction(id, name) {
     }
 
-    void play(const KisPlayInfo&, KoUpdater*) const override {
+    void play(const KisPlayInfo&, KoUpdater*) const {
     }
 
-    KisRecordedAction* clone() const override {
+    KisRecordedAction* clone() const {
         return new TestAction(id(), name());
     }
 

@@ -43,22 +43,22 @@ struct KisFiltersModel::Private {
     };
     struct Filter : public Node {
 
-        ~Filter() override {}
+        virtual ~Filter() {}
 
         QString id;
         QPixmap icon;
         KisFilterSP filter;
-        int childrenCount() override {
+        virtual int childrenCount() {
             return 0;
         }
     };
     struct Category : public Node {
 
-        ~Category() override {}
+        virtual ~Category() {}
 
         QString id;
         QList<Filter> filters;
-        int childrenCount() override {
+        virtual int childrenCount() {
             return filters.count();
         }
     };

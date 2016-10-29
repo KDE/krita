@@ -33,7 +33,7 @@ public:
     SmallColorSelectorDockFactory() {
     }
 
-    QString id() const override {
+    virtual QString id() const {
         return QString("SmallColorSelector");
     }
 
@@ -41,14 +41,14 @@ public:
         return Qt::RightDockWidgetArea;
     }
 
-    QDockWidget* createDockWidget() override {
+    virtual QDockWidget* createDockWidget() {
         SmallColorSelectorDock * dockWidget = new SmallColorSelectorDock();
         dockWidget->setObjectName(id());
 
         return dockWidget;
     }
 
-    DockPosition defaultDockPosition() const override {
+    DockPosition defaultDockPosition() const {
         return DockRight;
     }
 };

@@ -208,6 +208,7 @@ KoPointerEvent KisToolDyna::filterEvent(KoPointerEvent* event)
     nowl.ry() *= m_surfaceHeight;
     nowr.ry() *= m_surfaceHeight;
 
+    qreal m_pressure;
 #if 0
 
     qreal xTilt, yTilt;
@@ -229,6 +230,9 @@ KoPointerEvent KisToolDyna::filterEvent(KoPointerEvent* event)
     dbgPlugins << "yAngle: " << m_yangle;
 
 #endif
+
+    m_pressure =  m_mouse.vel * 100;
+    m_pressure = qBound<qreal>(0.0,m_pressure, 1.0);
 
     m_odelx = delx;
     m_odely = dely;

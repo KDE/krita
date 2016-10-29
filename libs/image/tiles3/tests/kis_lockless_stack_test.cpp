@@ -77,11 +77,11 @@ public:
 class KisTestingLocklessStack : public KisAbstractIntStack
 {
 public:
-    void push(int value) override {
+    void push(int value) {
         m_stack.push(value);
     }
 
-    int pop() override {
+    int pop() {
         int value  = 0;
 
         bool result = m_stack.pop(value);
@@ -91,11 +91,11 @@ public:
         return value;
     }
 
-    bool isEmpty() override {
+    bool isEmpty() {
         return m_stack.isEmpty();
     }
 
-    void clear() override {
+    void clear() {
         m_stack.clear();
     }
 
@@ -106,13 +106,13 @@ private:
 class KisTestingLegacyStack : public KisAbstractIntStack
 {
 public:
-    void push(int value) override {
+    void push(int value) {
         m_mutex.lock();
         m_stack.push(value);
         m_mutex.unlock();
     }
 
-    int pop() override {
+    int pop() {
         m_mutex.lock();
         int result = m_stack.pop();
         m_mutex.unlock();
@@ -120,7 +120,7 @@ public:
         return result;
     }
 
-    bool isEmpty() override {
+    bool isEmpty() {
         m_mutex.lock();
         bool result = m_stack.isEmpty();
         m_mutex.unlock();
@@ -128,7 +128,7 @@ public:
         return result;
     }
 
-    void clear() override {
+    void clear() {
         m_mutex.lock();
         m_stack.clear();
         m_mutex.unlock();
@@ -150,7 +150,7 @@ public:
         m_popSum = 0;
     }
 
-    void run() override {
+    void run() {
         for(qint32 i = 0; i < NUM_CYCLES; i++) {
             qint32 type = i % NUM_TYPES;
             int newValue;
@@ -244,7 +244,7 @@ public:
     {
     }
 
-    void run() override {
+    void run() {
         for(qint32 i = 0; i < NUM_CYCLES; i++) {
             qint32 type = i % 4;
             int newValue;

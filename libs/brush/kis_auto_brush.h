@@ -36,14 +36,14 @@ public:
 
     KisAutoBrush(KisMaskGenerator* as, qreal angle, qreal randomness, qreal density = 1.0);
     KisAutoBrush(const KisAutoBrush& rhs);
-    KisBrush* clone() const override;
+    KisBrush* clone() const;
 
     virtual ~KisAutoBrush();
 
 public:
 
-    qreal userEffectiveSize() const override;
-    void setUserEffectiveSize(qreal value) override;
+    qreal userEffectiveSize() const;
+    void setUserEffectiveSize(qreal value);
 
     qint32 maskWidth(KisDabShape const& shape, qreal subPixelX, qreal subPixelY,
         const KisPaintInformation& info) const override;
@@ -65,32 +65,32 @@ public:
             double subPixelX = 0, double subPixelY = 0,
             qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR) const override;
 
-    virtual QPainterPath outline() const override;
+    virtual QPainterPath outline() const;
 
 public:
 
-    bool load() override {
+    bool load() {
         return false;
     }
 
-    virtual bool loadFromDevice(QIODevice *) override {
+    virtual bool loadFromDevice(QIODevice *) {
         return false;
     }
 
-    bool save() override {
+    bool save()  {
         return false;
     }
 
-    bool saveToDevice(QIODevice*) const override {
+    bool saveToDevice(QIODevice*) const {
         return false;
     }
 
-    void toXML(QDomDocument& , QDomElement&) const override;
+    void toXML(QDomDocument& , QDomElement&) const;
     const KisMaskGenerator* maskGenerator() const;
     qreal randomness() const;
     qreal density() const;
 
-    void lodLimitations(KisPaintopLodLimitations *l) const override;
+    void lodLimitations(KisPaintopLodLimitations *l) const;
 
 private:
 

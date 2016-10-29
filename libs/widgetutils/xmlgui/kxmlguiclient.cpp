@@ -40,10 +40,6 @@
 
 #include <assert.h>
 
-#if defined(KCONFIG_BEFORE_5_24)
-# define authorizeAction authorizeKAction
-#endif
-
 class KXMLGUIClientPrivate
 {
 public:
@@ -433,7 +429,7 @@ bool KXMLGUIClientPrivate::mergeXML(QDomElement &base, QDomElement &additive, KA
             if (equalstr(tag, tagAction)) {
                 const QString name =  e.attribute(attrName);
                 if (!actionCollection->action(name) ||
-                        !KAuthorized::authorizeAction(name)) {
+                        !KAuthorized::authorizeKAction(name)) {
                     // remove this child as we aren't using it
                     base.removeChild(e);
                     continue;

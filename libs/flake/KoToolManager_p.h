@@ -124,7 +124,7 @@ public:
     /// tooltip of the tool, e.g. for tooltip of a button;
     QString toolTip() const;
     /// wrapper around KoToolFactoryBase::toolType();
-    QString section() const;
+    QString toolType() const;
     /// wrapper around KoToolFactoryBase::activationShapeId();
     QString activationShapeId() const;
     /// wrapper around KoToolFactoryBase::priority();

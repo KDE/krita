@@ -123,8 +123,8 @@ public Q_SLOTS:
 
 private:
 
-    void setCurrentPaintop(const KoID& paintop);
-    void setCurrentPaintop(KisPaintOpPresetSP preset);
+    void setCurrentPaintop(const KoID& paintop, KisPaintOpPresetSP preset = 0);
+    void setCurrentPaintopAndReload(const KoID& paintop, KisPaintOpPresetSP preset);
 
     KisPaintOpPresetSP defaultPreset(const KoID& paintOp);
     KisPaintOpPresetSP activePreset(const KoID& paintOp);
@@ -160,8 +160,8 @@ private Q_SLOTS:
     void slotSaveLockedOptionToPreset(KisPropertiesConfigurationSP p);
     void slotDropLockedOption(KisPropertiesConfigurationSP p);
     void slotDirtyPresetToggled(bool);
-    void slotEraserBrushSizeToggled(bool);
-    void slotEraserBrushOpacityToggled(bool);
+    void slotEraserBrushSizeToggled(bool);    
+    void slotEraserBrushOpacityToggled(bool);    
     void slotUpdateSelectionIcon();
 
     void slotLockXMirrorToggle(bool);
@@ -246,7 +246,7 @@ private:
     bool             m_dirtyPresetsEnabled;
     bool             m_eraserBrushSizeEnabled;
     bool             m_eraserBrushOpacityEnabled;
-
+    
     KisSignalAutoConnectionsStore m_presetConnections;
 };
 

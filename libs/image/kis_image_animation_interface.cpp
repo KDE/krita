@@ -21,7 +21,6 @@
 #include "kis_global.h"
 #include "kis_image.h"
 #include "kis_regenerate_frame_stroke_strategy.h"
-#include "kis_switch_time_stroke_strategy.h"
 #include "kis_keyframe_channel.h"
 #include "kis_time_range.h"
 
@@ -34,15 +33,17 @@ struct KisImageAnimationInterface::Private
 {
     Private()
         : image(0),
+          currentTime(0),
+          currentUITime(0),
           externalFrameActive(false),
           frameInvalidationBlocked(false),
-          cachedLastFrameValue(-1),
-          m_currentTime(0),
-          m_currentUITime(0)
+          cachedLastFrameValue(-1)
     {
     }
 
     KisImage *image;
+    int currentTime;
+    int currentUITime;
     bool externalFrameActive;
     bool frameInvalidationBlocked;
 
@@ -50,26 +51,6 @@ struct KisImageAnimationInterface::Private
     KisTimeRange playbackRange;
     int framerate;
     int cachedLastFrameValue;
-
-    KisSwitchTimeStrokeStrategy::SharedTokenWSP switchToken;
-
-    inline int currentTime() const {
-        return m_currentTime;
-    }
-
-    inline int currentUITime() const {
-        return m_currentUITime;
-    }
-    inline void setCurrentTime(int value) {
-        m_currentTime = value;
-    }
-
-    inline void setCurrentUITime(int value) {
-        m_currentUITime = value;
-    }
-private:
-    int m_currentTime;
-    int m_currentUITime;
 };
 
 
@@ -81,7 +62,7 @@ KisImageAnimationInterface::KisImageAnimationInterface(KisImage *image)
     m_d->framerate = 24;
     m_d->fullClipRange = KisTimeRange::fromTime(0, 100);
 
-    connect(this, SIGNAL(sigInternalRequestTimeSwitch(int, bool)), SLOT(switchCurrentTimeAsync(int, bool)));
+    connect(this, SIGNAL(sigInternalRequestTimeSwitch(int)), SLOT(switchCurrentTimeAsync(int)));
 }
 
 KisImageAnimationInterface::~KisImageAnimationInterface()
@@ -103,12 +84,12 @@ bool KisImageAnimationInterface::hasAnimation() const
 
 int KisImageAnimationInterface::currentTime() const
 {
-    return m_d->currentTime();
+    return m_d->currentTime;
 }
 
 int KisImageAnimationInterface::currentUITime() const
 {
-    return m_d->currentUITime();
+    return m_d->currentUITime;
 }
 
 const KisTimeRange& KisImageAnimationInterface::fullClipRange() const
@@ -155,8 +136,13 @@ bool KisImageAnimationInterface::externalFrameActive() const
 
 void KisImageAnimationInterface::requestTimeSwitchWithUndo(int time)
 {
-    if (currentUITime() == time) return;
-    requestTimeSwitchNonGUI(time, true);
+    if (m_d->currentUITime == time) return;
+
+    KisSwitchCurrentTimeCommand *cmd =
+        new KisSwitchCurrentTimeCommand(m_d->image, time);
+
+    cmd->redo();
+    m_d->image->postExecutionUndoAdapter()->addCommand(toQShared(cmd));
 }
 
 void KisImageAnimationInterface::setDefaultProjectionColor(const KoColor &color)
@@ -169,55 +155,27 @@ void KisImageAnimationInterface::setDefaultProjectionColor(const KoColor &color)
     restoreCurrentTime(&savedTime);
 }
 
-void KisImageAnimationInterface::requestTimeSwitchNonGUI(int time, bool useUndo)
+void KisImageAnimationInterface::requestTimeSwitchNonGUI(int time)
 {
-    emit sigInternalRequestTimeSwitch(time, useUndo);
+    emit sigInternalRequestTimeSwitch(time);
 }
 
-void KisImageAnimationInterface::explicitlySetCurrentTime(int frameId)
+void KisImageAnimationInterface::switchCurrentTimeAsync(int frameId)
 {
-    m_d->setCurrentTime(frameId);
-}
+    if (m_d->currentUITime == frameId) return;
 
-void KisImageAnimationInterface::switchCurrentTimeAsync(int frameId, bool useUndo)
-{
-    if (currentUITime() == frameId) return;
+    m_d->image->barrierLock();
+    m_d->currentTime = frameId;
+    m_d->currentUITime = frameId;
+    m_d->image->unlock();
 
-    KisTimeRange range = KisTimeRange::infinite(0);
-    KisTimeRange::calculateTimeRangeRecursive(m_d->image->root(), currentUITime(), range, true);
+    KisStrokeStrategy *strategy =
+        new KisRegenerateFrameStrokeStrategy(this);
 
-    const bool needsRegeneration = !range.contains(frameId);
+    KisStrokeId stroke = m_d->image->startStroke(strategy);
+    m_d->image->endStroke(stroke);
 
-    KisSwitchTimeStrokeStrategy::SharedTokenSP token =
-        m_d->switchToken.toStrongRef();
-
-    if (!token || !token->tryResetDestinationTime(frameId, needsRegeneration)) {
-
-        {
-            KisPostExecutionUndoAdapter *undoAdapter = useUndo ?
-                m_d->image->postExecutionUndoAdapter() : 0;
-
-            KisSwitchTimeStrokeStrategy *strategy =
-                new KisSwitchTimeStrokeStrategy(frameId, needsRegeneration,
-                                                this, undoAdapter);
-
-            m_d->switchToken = strategy->token();
-
-            KisStrokeId stroke = m_d->image->startStroke(strategy);
-            m_d->image->endStroke(stroke);
-        }
-
-        if (needsRegeneration) {
-            KisStrokeStrategy *strategy =
-                new KisRegenerateFrameStrokeStrategy(this);
-
-            KisStrokeId strokeId = m_d->image->startStroke(strategy);
-            m_d->image->endStroke(strokeId);
-        }
-    }
-
-    m_d->setCurrentUITime(frameId);
-    emit sigUiTimeChanged(frameId);
+    emit sigTimeChanged(frameId);
 }
 
 void KisImageAnimationInterface::requestFrameRegeneration(int frameId, const QRegion &dirtyRegion)
@@ -239,19 +197,19 @@ void KisImageAnimationInterface::requestFrameRegeneration(int frameId, const QRe
 void KisImageAnimationInterface::saveAndResetCurrentTime(int frameId, int *savedValue)
 {
     m_d->externalFrameActive = true;
-    *savedValue = m_d->currentTime();
-    m_d->setCurrentTime(frameId);
+    *savedValue = m_d->currentTime;
+    m_d->currentTime = frameId;
 }
 
 void KisImageAnimationInterface::restoreCurrentTime(int *savedValue)
 {
-    m_d->setCurrentTime(*savedValue);
+    m_d->currentTime = *savedValue;
     m_d->externalFrameActive = false;
 }
 
 void KisImageAnimationInterface::notifyFrameReady()
 {
-    emit sigFrameReady(m_d->currentTime());
+    emit sigFrameReady(m_d->currentTime);
 }
 
 void KisImageAnimationInterface::notifyFrameCancelled()
@@ -280,7 +238,7 @@ void KisImageAnimationInterface::notifyNodeChanged(const KisNode *node,
 
         invalidateFrames(affectedRange, rect);
     } else if (channel) {
-        const int currentTime = m_d->currentTime();
+        const int currentTime = m_d->currentTime;
 
         invalidateFrames(channel->affectedFrames(currentTime), rect);
     } else {
@@ -329,7 +287,7 @@ int KisImageAnimationInterface::totalLength()
     int lastKey = m_d->cachedLastFrameValue;
 
     lastKey  = std::max(lastKey, m_d->fullClipRange.end());
-    lastKey  = std::max(lastKey, m_d->currentUITime());
+    lastKey  = std::max(lastKey, m_d->currentUITime);
 
     return lastKey + 1;
 }

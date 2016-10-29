@@ -3,7 +3,7 @@
  *
  *  Copyright (c) 2000 John Califf <jcaliff@compuzone.net>
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
- *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org> *
+ *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org> * 
  *  Copyright (c) 2015 Michael Abrahams <miabraha@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -67,11 +67,11 @@ public:
         : KoToolFactoryBase("KisToolSelectElliptical")
     {
         setToolTip(i18n("Elliptical Selection Tool"));
-        setSection(TOOL_TYPE_SELECTION);
+        setToolType(TOOL_TYPE_SELECTED);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
         setIconName(koIconNameCStr("tool_elliptical_selection"));
         setShortcut(QKeySequence(Qt::Key_J));
-        setPriority(1);
+        setPriority(53);
     }
 
     virtual ~KisToolSelectEllipticalFactory() {}

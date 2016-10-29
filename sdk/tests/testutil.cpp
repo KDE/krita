@@ -21,6 +21,22 @@
 
 namespace TestUtil
 {
+    KisNodeSP TestNode::clone() const {
+        return new TestNode(*this);
+    }
+
+    bool TestNode::allowAsChild(KisNodeSP) const {
+        return true;
+    }
+
+    const KoColorSpace * TestNode::colorSpace() const {
+        return 0;
+    }
+
+    const KoCompositeOp * TestNode::compositeOp() const {
+        return 0;
+    }
+
     QStringList getHierarchy(KisNodeSP root, const QString &prefix) {
         QStringList list;
 

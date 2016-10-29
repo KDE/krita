@@ -327,7 +327,7 @@ void ConnectionTool::mousePressEvent(KoPointerEvent *event)
         }
         //add connector label
         connectionShape->createTextShape(canvas()->shapeController()->resourceManager());
-        connectionShape->setPlainText(QString());
+        connectionShape->setPlainText("");
         // create the connection edit strategy from the path tool
         m_currentStrategy = new KoPathConnectionPointStrategy(this, connectionShape, 1);
         if (!m_currentStrategy) {
@@ -781,7 +781,7 @@ void ConnectionTool::updateStatusText()
                 emit statusTextChanged(i18n("Click to edit connection points."));
             }
         } else {
-            emit statusTextChanged(QString());
+            emit statusTextChanged("");
         }
         break;
     case EditConnection:
@@ -804,7 +804,7 @@ void ConnectionTool::updateStatusText()
         emit statusTextChanged(i18n("Drag to create new connection."));
         break;
     default:
-        emit statusTextChanged(QString());
+        emit statusTextChanged("");
     }
 }
 

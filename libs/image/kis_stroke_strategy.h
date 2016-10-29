@@ -74,7 +74,7 @@ public:
 
     /**
      * Returns true if the update scheduler can cancel this stroke
-     * when some other stroke is going to be started. This makes the
+     * when some other stroke is going to be started. This make the
      * "forgettable" stroke very low priority.
      *
      * Default is 'false'.

@@ -234,12 +234,12 @@ private:
         {
         }
 
-        void redo() override
+        void redo()
         {
             doSwap(m_insert);
         }
 
-        void undo() override
+        void undo()
         {
             doSwap(!m_insert);
         }
@@ -466,7 +466,7 @@ private:
 
     inline Data* currentData() const
     {
-        Data *data;
+        Data *data = m_data.data();
 
         if (defaultBounds->currentLevelOfDetail()) {
             ensureLodDataPresent();
@@ -832,7 +832,7 @@ KUndo2Command* KisPaintDevice::Private::convertColorSpace(const KoColorSpace * d
             m_device->setDirty();
         }
 
-        void redo() override
+        void redo()
         {
             KUndo2Command::redo();
 
@@ -844,7 +844,7 @@ KUndo2Command* KisPaintDevice::Private::convertColorSpace(const KoColorSpace * d
             emitNotifications();
         }
 
-        void undo() override
+        void undo()
         {
             KUndo2Command::undo();
             emitNotifications();

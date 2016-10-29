@@ -142,16 +142,6 @@ public:
                 break;
             case Data::PAINTER_PATH:
                 path = t.map(rhs.path);
-                break;
-            case Data::QPAINTER_PATH:
-                path = t.map(rhs.path);
-                pen = rhs.pen;
-                break;
-            case Data::QPAINTER_PATH_FILL:
-                path = t.map(rhs.path);
-                pen = rhs.pen;
-                customColor = rhs.customColor;
-                break;
             };
         }
     public:

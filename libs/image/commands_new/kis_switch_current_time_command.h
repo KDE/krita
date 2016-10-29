@@ -24,13 +24,11 @@
 
 #include <kundo2command.h>
 
-class KisImageAnimationInterface;
-
 
 class KRITAIMAGE_EXPORT KisSwitchCurrentTimeCommand : public KUndo2Command
 {
 public:
-    KisSwitchCurrentTimeCommand(KisImageAnimationInterface *animation, int oldTime, int newTime, KUndo2Command *parent = 0);
+    KisSwitchCurrentTimeCommand(KisImageSP image, int newTime, KUndo2Command *parent = 0);
     ~KisSwitchCurrentTimeCommand();
 
     void redo();
@@ -40,7 +38,7 @@ public:
     bool mergeWith(const KUndo2Command* command);
 
 private:
-    KisImageAnimationInterface *m_animation;
+    KisImageWSP m_image;
     int m_oldTime;
     int m_newTime;
 };

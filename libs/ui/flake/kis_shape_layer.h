@@ -68,16 +68,16 @@ public:
 private:
     void initShapeLayer(KoShapeBasedDocumentBase* controller);
 public:
-    KisNodeSP clone() const override {
+    KisNodeSP clone() const {
         return new KisShapeLayer(*this);
     }
-    bool allowAsChild(KisNodeSP) const override;
+    bool allowAsChild(KisNodeSP) const;
 
 
     void setImage(KisImageWSP image) override;
 
-    virtual KisLayerSP createMergedLayerTemplate(KisLayerSP prevLayer) override;
-    virtual void fillMergedLayerTemplate(KisLayerSP dstLayer, KisLayerSP prevLayer) override;
+    virtual KisLayerSP createMergedLayerTemplate(KisLayerSP prevLayer);
+    virtual void fillMergedLayerTemplate(KisLayerSP dstLayer, KisLayerSP prevLayer);
 public:
 
     // KoShape overrides
@@ -88,30 +88,30 @@ public:
     void setParent(KoShapeContainer *parent);
 
     // KisExternalLayer implementation
-    QIcon icon() const override;
-    void resetCache() override;
+    QIcon icon() const;
+    void resetCache();
 
-    KisPaintDeviceSP original() const override;
-    KisPaintDeviceSP paintDevice() const override;
+    KisPaintDeviceSP original() const;
+    KisPaintDeviceSP paintDevice() const;
 
-    qint32 x() const override;
-    qint32 y() const override;
-    void setX(qint32) override;
-    void setY(qint32) override;
+    qint32 x() const;
+    qint32 y() const;
+    void setX(qint32);
+    void setY(qint32);
 
-    bool accept(KisNodeVisitor&) override;
-    void accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter) override;
+    bool accept(KisNodeVisitor&);
+    void accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter);
 
     KoShapeManager *shapeManager() const;
 
     bool saveLayer(KoStore * store) const;
     bool loadLayer(KoStore* store);
 
-    KUndo2Command* crop(const QRect & rect) override;
-    KUndo2Command* transform(const QTransform &transform) override;
+    KUndo2Command* crop(const QRect & rect);
+    KUndo2Command* transform(const QTransform &transform);
 
-    bool visible(bool recursive = false) const override;
-    void setVisible(bool visible, bool isLoading = false) override;
+    bool visible(bool recursive = false) const;
+    void setVisible(bool visible, bool isLoading = false);
 
 protected:
     using KoShape::isVisible;

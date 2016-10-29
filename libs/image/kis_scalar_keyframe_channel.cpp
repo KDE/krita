@@ -99,11 +99,11 @@ struct KisScalarKeyframeChannel::Private::SetValueCommand : public KUndo2Command
     {
     }
 
-    void redo() override {
+    void redo() {
         setValue(m_newValue);
     }
 
-    void undo() override {
+    void undo() {
         setValue(m_oldValue);
     }
 
@@ -139,13 +139,13 @@ struct KisScalarKeyframeChannel::Private::SetTangentsCommand : public KUndo2Comm
     {
     }
 
-    void redo() override {
+    void redo() {
         m_keyframe->setTangentsMode(m_newMode);
         m_keyframe->setInterpolationTangents(m_newLeftTangent, m_newRightTangent);
         m_channel->notifyKeyframeChanged(m_keyframe);
     }
 
-    void undo() override {
+    void undo() {
         m_keyframe->setTangentsMode(m_oldMode);
         m_keyframe->setInterpolationTangents(m_oldLeftTangent, m_oldRightTangent);
         m_channel->notifyKeyframeChanged(m_keyframe);
@@ -173,12 +173,12 @@ struct KisScalarKeyframeChannel::Private::SetInterpolationModeCommand : public K
     {
     }
 
-    void redo() override {
+    void redo() {
         m_keyframe->setInterpolationMode(m_newMode);
         m_channel->notifyKeyframeChanged(m_keyframe);
     }
 
-    void undo() override {
+    void undo() {
         m_keyframe->setInterpolationMode(m_oldMode);
         m_channel->notifyKeyframeChanged(m_keyframe);
     }
@@ -354,16 +354,15 @@ KisKeyframeSP KisScalarKeyframeChannel::createKeyframe(int time, const KisKeyfra
 
 KisKeyframeSP KisScalarKeyframeChannel::createKeyframe(int time, qreal value, KUndo2Command *parentCommand)
 {
-    Q_UNUSED(parentCommand);
     KisScalarKeyframe *keyframe = new KisScalarKeyframe(this, time, value);
+
     keyframe->setInterpolationMode(m_d->defaultInterpolation);
+
     return toQShared(keyframe);
 }
 
 void KisScalarKeyframeChannel::destroyKeyframe(KisKeyframeSP key, KUndo2Command *parentCommand)
 {
-    Q_UNUSED(parentCommand);
-    Q_UNUSED(key);
 }
 
 void KisScalarKeyframeChannel::uploadExternalKeyframe(KisKeyframeChannel *srcChannel, int srcTime, KisKeyframeSP dstFrame)

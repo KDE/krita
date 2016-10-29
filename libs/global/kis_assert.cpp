@@ -120,7 +120,9 @@ void kis_assert_x_exception(const char *assertion,
 {
     QString res =
         QString("ASSERT failure in %1: \"%2\" (%3)")
-        .arg(where, what, assertion);
+        .arg(where)
+        .arg(what)
+        .arg(assertion);
 
     kis_assert_common(res.toLatin1().data(), file, line, true, false);
 }

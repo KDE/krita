@@ -370,7 +370,7 @@ public:
           m_rect(rect)
     {}
 
-    void run() override {
+    void run() {
         for(int i = 0; i < NUM_CYCLES; i++) {
             KisRandomAccessorSP iter =
                 m_device->createRandomAccessorNG(m_rect.x(), m_rect.y());
@@ -442,7 +442,7 @@ public:
         : m_device(device)
     {}
 
-    void run() override {
+    void run() {
         for(int i = 0; i < NUM_CYCLES; i++) {
             m_device->setX(-0x400 + (qrand() & 0x7FF));
             m_device->setY(-0x400 + (qrand() & 0x7FF));

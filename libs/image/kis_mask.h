@@ -85,7 +85,7 @@ public:
 
     void setImage(KisImageWSP image) override;
 
-    bool allowAsChild(KisNodeSP node) const override;
+    bool allowAsChild(KisNodeSP node) const;
 
     /**
      * @brief initSelection initializes the selection for the mask from
@@ -109,8 +109,8 @@ public:
      */
     void initSelection(KisLayerSP parentLayer);
 
-    const KoColorSpace * colorSpace() const override;
-    const KoCompositeOp * compositeOp() const override;
+    const KoColorSpace * colorSpace() const;
+    const KoCompositeOp * compositeOp() const;
 
     /**
      * Return the selection associated with this mask. A selection can
@@ -121,19 +121,19 @@ public:
     /**
      * @return the selection: if you paint on mask, you paint on the selections
      */
-    KisPaintDeviceSP paintDevice() const override;
+    KisPaintDeviceSP paintDevice() const;
 
     /**
      * @return the same as paintDevice()
      */
-    KisPaintDeviceSP original() const override;
+    KisPaintDeviceSP original() const;
 
     /**
      * @return the same as paintDevice()
      */
-    KisPaintDeviceSP projection() const override;
+    KisPaintDeviceSP projection() const;
 
-    KisAbstractProjectionPlaneSP projectionPlane() const override;
+    KisAbstractProjectionPlaneSP projectionPlane() const;
 
     /**
      * Change the selection to the specified selection object. The
@@ -149,28 +149,28 @@ public:
     /**
      * The extent and bounds of the mask are those of the selection inside
      */
-    QRect extent() const override;
-    QRect exactBounds() const override;
+    QRect extent() const;
+    QRect exactBounds() const;
 
     /**
      * overridden from KisBaseNode
      */
-    qint32 x() const override;
+    qint32 x() const;
 
     /**
      * overridden from KisBaseNode
      */
-    void setX(qint32 x) override;
+    void setX(qint32 x);
 
     /**
      * overridden from KisBaseNode
      */
-    qint32 y() const override;
+    qint32 y() const;
 
     /**
      * overridden from KisBaseNode
      */
-    void setY(qint32 y) override;
+    void setY(qint32 y);
 
     /**
      * Usually masks themselves do not have any paint device and
@@ -185,9 +185,9 @@ public:
      */
     virtual QRect nonDependentExtent() const;
 
-    QRect needRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const override;
-    QRect changeRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const override;
-    QImage createThumbnail(qint32 w, qint32 h) override;
+    QRect needRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const;
+    QRect changeRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const;
+    QImage createThumbnail(qint32 w, qint32 h);
 
     void testingInitSelection(const QRect &rect, KisLayerSP parentLayer);
 
@@ -202,7 +202,7 @@ protected:
                                const QRect & rc,
                                PositionToFilthy maskPos) const;
 
-    KisKeyframeChannel *requestKeyframeChannel(const QString &id) override;
+    KisKeyframeChannel *requestKeyframeChannel(const QString &id);
 
 private:
     friend class KisMaskProjectionPlane;

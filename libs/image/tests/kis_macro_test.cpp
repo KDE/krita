@@ -35,10 +35,10 @@ public:
             : KisRecordedAction(id, name) {
     }
 
-    void play(const KisPlayInfo&, KoUpdater*) const override {
+    void play(const KisPlayInfo&, KoUpdater*) const {
     }
 
-    KisRecordedAction* clone() const override {
+    KisRecordedAction* clone() const {
         return new TestAction(id(), name());
     }
 
@@ -54,7 +54,7 @@ void KisMacroTest::testCreation()
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisImageSP image = new KisImage(0, 512, 512, cs, "test");
 
-    KisMacro a;
+    KisMacro a();
     KisMacro b(actions);
 }
 

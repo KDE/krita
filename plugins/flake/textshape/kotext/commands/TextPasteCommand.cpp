@@ -98,7 +98,7 @@ void TextPasteCommand::redo()
             }
 
             if (editor->blockFormat().hasProperty(KoParagraphStyle::HiddenByTable)) {
-                editor->insertText(QString());
+                editor->insertText("");
             }
 
             if (m_pasteAsText) {

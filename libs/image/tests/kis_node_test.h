@@ -22,15 +22,23 @@
 #include <QtTest>
 
 #include "kis_node.h"
-#include <sdk/tests/testing_nodes.h>
 
-class TestNode : public TestUtil::DefaultNode
+class TestNode : public KisNode
 {
     Q_OBJECT
 
 public:
     KisNodeSP clone() {
         return new TestNode(*this);
+    }
+    bool allowAsChild(KisNodeSP) const {
+        return true;
+    }
+    const KoColorSpace * colorSpace() const {
+        return 0;
+    }
+    virtual const KoCompositeOp * compositeOp() const {
+        return 0;
     }
 
     using KisNode::setDirty;
@@ -44,30 +52,57 @@ public:
 };
 
 
-class TestNodeA : public TestUtil::DefaultNode
+class TestNodeA : public KisNode
 {
     Q_OBJECT
 public:
     KisNodeSP clone() const {
         return new TestNodeA(*this);
     }
+    bool allowAsChild(KisNodeSP) const {
+        return true;
+    }
+    const KoColorSpace * colorSpace() const {
+        return 0;
+    }
+    virtual const KoCompositeOp * compositeOp() const {
+        return 0;
+    }
 };
 
-class TestNodeB : public TestUtil::DefaultNode
+class TestNodeB : public KisNode
 {
     Q_OBJECT
 public:
     KisNodeSP clone() const {
         return new TestNodeB(*this);
     }
+    bool allowAsChild(KisNodeSP) const {
+        return true;
+    }
+    const KoColorSpace * colorSpace() const {
+        return 0;
+    }
+    virtual const KoCompositeOp * compositeOp() const {
+        return 0;
+    }
 };
 
-class TestNodeC : public TestUtil::DefaultNode
+class TestNodeC : public KisNode
 {
     Q_OBJECT
 public:
     KisNodeSP clone() const {
         return new TestNodeC(*this);
+    }
+    bool allowAsChild(KisNodeSP) const {
+        return true;
+    }
+    const KoColorSpace * colorSpace() const {
+        return 0;
+    }
+    virtual const KoCompositeOp * compositeOp() const {
+        return 0;
     }
 };
 

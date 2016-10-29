@@ -104,7 +104,7 @@ void KisTimeBasedItemModel::setImage(KisImageWSP image)
         slotCurrentTimeChanged(ai->currentUITime());
 
         connect(ai, SIGNAL(sigFramerateChanged()), SLOT(slotFramerateChanged()));
-        connect(ai, SIGNAL(sigUiTimeChanged(int)), SLOT(slotCurrentTimeChanged(int)));
+        connect(ai, SIGNAL(sigTimeChanged(int)), SLOT(slotCurrentTimeChanged(int)));
     }
 
     if (image != oldImage) {

@@ -56,7 +56,7 @@ public:
     KisToolEllipseFactory()
             : KoToolFactoryBase("KritaShape/KisToolEllipse") {
         setToolTip(i18n("Ellipse Tool"));
-        setSection(TOOL_TYPE_SHAPE);
+        setToolType(TOOL_TYPE_SHAPE);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
         setIconName(koIconNameCStr("krita_tool_ellipse"));
         setPriority(3);

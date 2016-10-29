@@ -34,7 +34,6 @@ class KisDlgImportImageSequence : public KoDialog
 public:
     KisDlgImportImageSequence(KisMainWindow *mainWindow, KisDocument *document);
 
-    QStringList showOpenFileDialog();
     QStringList files();
     int firstFrame();
     int step();

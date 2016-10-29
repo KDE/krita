@@ -48,7 +48,7 @@
 
 class ImageFilter: public QSortFilterProxyModel
 {
-    bool filterAcceptsRow(int source_row, const QModelIndex& source_parent) const override {
+    virtual bool filterAcceptsRow(int source_row, const QModelIndex& source_parent) const {
         QFileSystemModel* model = static_cast<QFileSystemModel*>(sourceModel());
         QModelIndex       index = sourceModel()->index(source_row, 0, source_parent);
 
@@ -72,7 +72,7 @@ class ImageFilter: public QSortFilterProxyModel
         return false;
     }
 
-    bool filterAcceptsColumn(int source_column, const QModelIndex& source_parent) const override {
+    virtual bool filterAcceptsColumn(int source_column, const QModelIndex& source_parent) const {
         Q_UNUSED(source_parent);
         return source_column == 0;
     }
@@ -128,12 +128,12 @@ public:
         return -1;
     }
 
-    int rowCount(const QModelIndex& parent=QModelIndex()) const override {
+    virtual int rowCount(const QModelIndex& parent=QModelIndex()) const {
         Q_UNUSED(parent);
         return m_data.size();
     }
 
-    QVariant data(const QModelIndex& index, int role=Qt::DisplayRole) const override {
+    virtual QVariant data(const QModelIndex& index, int role=Qt::DisplayRole) const {
         if(index.isValid() && index.row() < m_data.size()) {
             switch(role)
             {

@@ -71,7 +71,7 @@ private:
  */
 class ShaderLoaderException : public std::runtime_error {
 public:
-    ShaderLoaderException(QString error) : std::runtime_error(error.toStdString()) { }
+    ShaderLoaderException(QString error) : std::runtime_error(error.toLatin1().data()) { }
 };
 
 /**

@@ -138,7 +138,7 @@ void TestShapePainting::testPaintOrder()
     class OrderedMockShape : public MockShape {
     public:
         OrderedMockShape(QList<MockShape*> &list) : order(list) {}
-        void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext) override {
+        void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext) {
             order.append(this);
             MockShape::paint(painter, converter, paintcontext);
         }

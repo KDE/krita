@@ -112,7 +112,7 @@ public:
     bool loadFromXml(const QDomElement &parent);
 
 private:
-    class Private;
+    struct Private;
     const QScopedPointer<Private> d;
 };
 

@@ -71,6 +71,7 @@ TextShape::TextShape(KoInlineTextObjectManager *inlineTextObjectManager, KoTextR
     , KoFrameShape(KoXmlNS::draw, "text-box")
     , m_pageProvider(0)
     , m_imageCollection(0)
+    , m_paragraphStyle(0)
     , m_clip(true)
 {
     setShapeId(TextShape_SHAPEID);

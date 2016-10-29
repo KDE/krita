@@ -41,7 +41,7 @@ class KisColorToFloatConvertor : public KoColorTransformation
 public:
     KisColorToFloatConvertor(){}
 
-    void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const override
+    virtual void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const
     {
         const RGBPixel* srcPixel = reinterpret_cast<const RGBPixel*>(src);
         KoRgbF32Traits::Pixel* dstPixel = reinterpret_cast<KoRgbF32Traits::Pixel*>(dst);
@@ -70,7 +70,7 @@ class KisColorFromFloat : public KoColorTransformation
 public:
     KisColorFromFloat(float gmicUnitValue = 255.0f):m_gmicUnitValue(gmicUnitValue){}
 
-    void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const override
+    virtual void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const
     {
         const KoRgbF32Traits::Pixel* srcPixel = reinterpret_cast<const KoRgbF32Traits::Pixel*>(src);
         RGBPixel* dstPixel = reinterpret_cast<RGBPixel*>(dst);
@@ -104,7 +104,7 @@ class KisColorFromGrayScaleFloat : public KoColorTransformation
 public:
     KisColorFromGrayScaleFloat(float gmicUnitValue = 255.0f):m_gmicUnitValue(gmicUnitValue){}
 
-    void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const override
+    virtual void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const
     {
         const KoRgbF32Traits::Pixel* srcPixel = reinterpret_cast<const KoRgbF32Traits::Pixel*>(src);
         RGBPixel* dstPixel = reinterpret_cast<RGBPixel*>(dst);
@@ -137,7 +137,7 @@ class KisColorFromGrayScaleAlphaFloat : public KoColorTransformation
 public:
     KisColorFromGrayScaleAlphaFloat(float gmicUnitValue = 255.0f):m_gmicUnitValue(gmicUnitValue){}
 
-    void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const override
+    virtual void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const
     {
         const KoRgbF32Traits::Pixel* srcPixel = reinterpret_cast<const KoRgbF32Traits::Pixel*>(src);
         RGBPixel* dstPixel = reinterpret_cast<RGBPixel*>(dst);

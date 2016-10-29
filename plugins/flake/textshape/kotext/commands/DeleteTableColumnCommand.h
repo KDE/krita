@@ -43,6 +43,7 @@ private:
     QTextTable *m_table;
     int m_selectionColumn;
     int m_selectionColumnSpan;
+    int m_changeId;
     QList<KoTableColumnStyle> m_deletedStyles;
 };
 

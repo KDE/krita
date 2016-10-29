@@ -79,7 +79,7 @@ int degrayPixel(rgba); /* returns -1 for non-gray pixels */
 #define TILEYn(dim,ty) \
     ((ty)==(dim).tilesy ? (dim).c.b : (dim).c.t + ((ty)*TILE_HEIGHT))
 
-#if defined(__i386__)
+#if __i386__
 /* This is probably the only common architecture where small constants
  * are more efficient for byte operations.
  */

@@ -39,21 +39,21 @@ public:
     KisGroupLayer(const KisGroupLayer& rhs);
     virtual ~KisGroupLayer();
 
-    KisNodeSP clone() const override {
+    KisNodeSP clone() const {
         return KisNodeSP(new KisGroupLayer(*this));
     }
 
-    bool allowAsChild(KisNodeSP) const override;
+    bool allowAsChild(KisNodeSP) const;
 
-    QIcon icon() const override;
+    QIcon icon() const;
 
-    KisBaseNode::PropertyList sectionModelProperties() const override;
-    void setSectionModelProperties(const KisBaseNode::PropertyList &properties) override;
+    KisBaseNode::PropertyList sectionModelProperties() const;
+    void setSectionModelProperties(const KisBaseNode::PropertyList &properties);
 
     void setImage(KisImageWSP image) override;
 
-    virtual KisLayerSP createMergedLayerTemplate(KisLayerSP prevLayer) override;
-    virtual void fillMergedLayerTemplate(KisLayerSP dstLayer, KisLayerSP prevLayer) override;
+    virtual KisLayerSP createMergedLayerTemplate(KisLayerSP prevLayer);
+    virtual void fillMergedLayerTemplate(KisLayerSP dstLayer, KisLayerSP prevLayer);
 
     /**
      * Clear the projection
@@ -66,25 +66,22 @@ public:
      * resulting in a grayscale projection that is then merged with an
      * rgb image stack.
      */
-    const KoColorSpace * colorSpace() const override;
+    const KoColorSpace * colorSpace() const;
 
     /// @return the projection of the layers in the group before the masks are applied.
-    KisPaintDeviceSP original() const override;
+    KisPaintDeviceSP original() const;
 
-    qint32 x() const override;
-    qint32 y() const override;
-    void setX(qint32 x) override;
-    void setY(qint32 y) override;
-
-    /// Group layers don't have a paint device, so return 0
-    KisPaintDeviceSP paintDevice() const override;
+    qint32 x() const;
+    qint32 y() const;
+    void setX(qint32 x);
+    void setY(qint32 y);
 
     /**
        Accect the specified visitor.
        @return true if the operation succeeded, false if it failed.
     */
-    bool accept(KisNodeVisitor &v) override;
-    void accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter) override;
+    bool accept(KisNodeVisitor &v);
+    void accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter);
 
     /**
      * A special method that changes the default color of the
@@ -102,8 +99,8 @@ public:
     bool passThroughMode() const;
     void setPassThroughMode(bool value);
 
-    QRect extent() const override;
-    QRect exactBounds() const override;
+    QRect extent() const;
+    QRect exactBounds() const;
 
     bool projectionIsValid() const;
 

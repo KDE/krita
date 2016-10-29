@@ -29,7 +29,7 @@ class ImageDockerDockFactory: public KoDockFactoryBase {
 public:
     ImageDockerDockFactory() { }
 
-    QString id() const override
+    virtual QString id() const
     {
         return QString("ImageDocker");
     }
@@ -39,14 +39,14 @@ public:
         return Qt::RightDockWidgetArea;
     }
 
-    QDockWidget* createDockWidget() override
+    virtual QDockWidget* createDockWidget()
     {
         ImageDockerDock* dockWidget = new ImageDockerDock();
         dockWidget->setObjectName(id());
         return dockWidget;
     }
 
-    DockPosition defaultDockPosition() const override
+    DockPosition defaultDockPosition() const
     {
         return DockMinimized;
     }

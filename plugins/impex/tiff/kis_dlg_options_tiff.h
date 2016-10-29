@@ -34,14 +34,18 @@ class KisTIFFOptionsWidget : public KisConfigWidget, public Ui::KisWdgOptionsTIF
     Q_OBJECT
 public:
     KisTIFFOptionsWidget(QWidget *parent = 0);
+    ~KisTIFFOptionsWidget();
 
-    void setConfiguration(const KisPropertiesConfigurationSP  cfg) override;
-    KisPropertiesConfigurationSP configuration() const override;
+    void setConfiguration(const KisPropertiesConfigurationSP  cfg);
+    KisPropertiesConfigurationSP configuration() const;
 
 public Q_SLOTS:
     void activated(int index);
     void flattenToggled(bool);
     KisTIFFOptions options() const;
+public:
+    QWidget* wdg;
+    Ui_KisWdgOptionsTIFF* optionswdg;
 };
 
 #endif

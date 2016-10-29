@@ -28,8 +28,8 @@ KoPanToolFactory::KoPanToolFactory()
         : KoToolFactoryBase(KoPanTool_ID)
 {
     setToolTip(i18n("Pan"));
-    setSection(navigationToolType());
-    setPriority(1);
+    setToolType(navigationToolType());
+    setPriority(5);
     setIconName(koIconNameCStr("tool_pan"));
     setActivationShapeId("flake/always");
 }

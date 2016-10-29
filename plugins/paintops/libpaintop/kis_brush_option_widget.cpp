@@ -104,9 +104,4 @@ bool KisBrushOptionWidget::presetIsValid()
     return m_brushSelectionWidget->presetIsValid();
 }
 
-void KisBrushOptionWidget::hideOptions(const QStringList &options)
-{
-    m_brushSelectionWidget->hideOptions(options);
-}
-
 #include "moc_kis_brush_option_widget.cpp"

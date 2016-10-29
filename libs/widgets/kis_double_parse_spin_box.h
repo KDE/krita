@@ -66,9 +66,9 @@ public Q_SLOTS:
 
 protected:
 
+    mutable QString* lastExprParsed;
     mutable bool boolLastValid;
     mutable double oldValue;
-    mutable QString lastExprParsed;
 
     QLabel* warningIcon;
 

@@ -161,7 +161,7 @@ void LinkInsertionDialog::insertHyperlink(QString &linkURLString, const QString 
 {
     QString linkhtml;
     QUrl linkURL  = QUrl(linkURLString);
-    dlg.weblinkStatusLabel->setText(QString());
+    dlg.weblinkStatusLabel->setText("");
     if (!linkURL.isValid()) {
         displayInlineWarning(i18n("The URL is invalid"), dlg.weblinkStatusLabel);
     } else {
@@ -175,7 +175,7 @@ void LinkInsertionDialog::insertHyperlink(QString &linkURLString, const QString 
 
 void LinkInsertionDialog::insertBookmarkLink(const QString &linkURL, const QString &linkText)
 {
-    dlg.bookmarkLinkStatusLabel->setText(QString());
+    dlg.bookmarkLinkStatusLabel->setText("");
     m_editor->insertText(linkText, linkURL);
     this->close();
 }
@@ -272,7 +272,7 @@ void LinkInsertionDialog::replyFinished()
         }
     }
     dlg.hyperlinkText->setText(QStringRef(&res, start, end - start).toString());
-    dlg.weblinkStatusLabel->setText(QString());
+    dlg.weblinkStatusLabel->setText("");
 }
 
 void LinkInsertionDialog::updateTitleDownloadProgress(qint64 received, qint64 total)

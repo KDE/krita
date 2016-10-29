@@ -62,43 +62,43 @@ public:
 
     virtual ~KisImagePipeBrush();
 
-    bool load() override;
-    bool loadFromDevice(QIODevice *dev) override;
-    bool save() override;
-    bool saveToDevice(QIODevice* dev) const override;
+    virtual bool load();
+    virtual bool loadFromDevice(QIODevice *dev);
+    virtual bool save();
+    virtual bool saveToDevice(QIODevice* dev) const;
 
     /**
      * @return the next image in the pipe.
     */
-    KisFixedPaintDeviceSP paintDevice(const KoColorSpace * colorSpace,
+    virtual KisFixedPaintDeviceSP paintDevice(const KoColorSpace * colorSpace,
             KisDabShape const&,
             const KisPaintInformation& info,
             double subPixelX = 0, double subPixelY = 0) const override;
 
-    void setUseColorAsMask(bool useColorAsMask) override;
-    bool hasColor() const override;
+    virtual void setUseColorAsMask(bool useColorAsMask);
+    virtual bool hasColor() const;
 
-    enumBrushType brushType() const override;
+    virtual enumBrushType brushType() const;
 
-    const KisBoundary* boundary() const override;
+    virtual const KisBoundary* boundary() const;
 
-    bool canPaintFor(const KisPaintInformation& info) override;
+    virtual bool canPaintFor(const KisPaintInformation& info);
 
-    void makeMaskImage() override;
+    virtual void makeMaskImage();
 
-    KisBrush* clone() const override;
+    virtual KisBrush* clone() const;
 
-    QString defaultFileExtension() const override;
-    void setAngle(qreal _angle) override;
-    void setScale(qreal _scale) override;
-    void setSpacing(double _spacing) override;
+    virtual QString defaultFileExtension() const;
+    void setAngle(qreal _angle);
+    void setScale(qreal _scale);
+    void setSpacing(double _spacing);
 
     quint32 brushIndex(const KisPaintInformation& info) const override;
     qint32 maskWidth(KisDabShape const&, double subPixelX, double subPixelY, const KisPaintInformation& info) const override;
     qint32 maskHeight(KisDabShape const&, double subPixelX, double subPixelY, const KisPaintInformation& info) const override;
 
-    void notifyStrokeStarted() override;
-    void notifyCachedDabPainted(const KisPaintInformation& info) override;
+    void notifyStrokeStarted();
+    void notifyCachedDabPainted(const KisPaintInformation& info);
 
     void generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst, KisBrush::ColoringInformation* coloringInformation,
             KisDabShape const&,
@@ -115,8 +115,8 @@ public:
     void setDevices(QVector< QVector<KisPaintDevice*> > devices, int w, int h);
 
 protected:
-    void setBrushType(enumBrushType type) override;
-    void setHasColor(bool hasColor) override;
+    void setBrushType(enumBrushType type);
+    void setHasColor(bool hasColor);
     /// Will call KisBrush's saveToDevice as well
 
 

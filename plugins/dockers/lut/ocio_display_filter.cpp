@@ -30,9 +30,10 @@
 #include <opengl/kis_opengl.h>
 #include <QOpenGLContext>
 #include <QOpenGLFunctions_3_2_Core>
-#include <QOpenGLFunctions_3_0>
 #include <QOpenGLFunctions_2_0>
 
+
+static const int LUT3D_EDGE_SIZE = 32;
 
 OcioDisplayFilter::OcioDisplayFilter(KisExposureGammaCorrectionInterface *interface, QObject *parent)
     : KisDisplayFilter(parent)
@@ -267,13 +268,8 @@ void OcioDisplayFilter::updateProcessor()
 
 void OcioDisplayFilter::updateShader()
 {
-    if (KisOpenGL::hasOpenGL3()) {
+    if (KisOpenGL::supportsLoD()) {
         QOpenGLFunctions_3_2_Core *f = QOpenGLContext::currentContext()->versionFunctions<QOpenGLFunctions_3_2_Core>();
-        updateShaderImpl(f);
-    }
-    // XXX This option can be removed once we move to Qt 5.7+
-    else if (KisOpenGL::supportsLoD()) {
-        QOpenGLFunctions_3_0 *f = QOpenGLContext::currentContext()->versionFunctions<QOpenGLFunctions_3_0>();
         updateShaderImpl(f);
     } else {
         QOpenGLFunctions_2_0 *f = QOpenGLContext::currentContext()->versionFunctions<QOpenGLFunctions_2_0>();

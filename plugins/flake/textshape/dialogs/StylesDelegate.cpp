@@ -35,7 +35,7 @@
 #include <QScrollBar>
 #include <QStyle>
 #include <QStyleOptionButton>
-#include <QStyleOptionViewItem>
+#include <QStyleOptionViewItemV4>
 
 #include <QDebug>
 
@@ -52,7 +52,7 @@ StylesDelegate::StylesDelegate()
 void StylesDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optionV1,
                            const QModelIndex &index) const
 {
-    QStyleOptionViewItem option = optionV1;
+    QStyleOptionViewItemV4 option = optionV1;
     initStyleOption(&option, index);
     if (!index.data(AbstractStylesModel::isTitleRole).toBool()) {
         QStyledItemDelegate::paint(painter, option, index);
@@ -195,7 +195,7 @@ QSize StylesDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelI
 bool StylesDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const QStyleOptionViewItem &optionV1, const QModelIndex &index)
 {
     Q_UNUSED(model);
-    QStyleOptionViewItem option = optionV1;
+    QStyleOptionViewItemV4 option = optionV1;
     initStyleOption(&option, index);
 
     //the following is needed to find out if the view has vertical scrollbars. If not just paint and do not attempt to draw the control buttons.

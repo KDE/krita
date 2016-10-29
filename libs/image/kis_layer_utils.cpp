@@ -102,14 +102,14 @@ namespace KisLayerUtils {
         KisLayerSP prevLayer;
         KisLayerSP currLayer;
 
-        KisNodeList allSrcNodes() override {
+        KisNodeList allSrcNodes() {
             KisNodeList mergedNodes;
             mergedNodes << currLayer;
             mergedNodes << prevLayer;
             return mergedNodes;
         }
 
-        KisLayerSP dstLayer() override {
+        KisLayerSP dstLayer() {
             return dynamic_cast<KisLayer*>(dstNode.data());
         }
     };
@@ -127,7 +127,7 @@ namespace KisLayerUtils {
 
         KisNodeList mergedNodes;
 
-        KisNodeList allSrcNodes() override {
+        KisNodeList allSrcNodes() {
             return mergedNodes;
         }
     };
@@ -139,7 +139,7 @@ namespace KisLayerUtils {
     struct FillSelectionMasks : public KUndo2Command {
         FillSelectionMasks(MergeDownInfoBaseSP info) : m_info(info) {}
 
-        void redo() override {
+        void redo() {
             fetchSelectionMasks(m_info->allSrcNodes(), m_info->selectionMasks);
         }
 
@@ -150,7 +150,7 @@ namespace KisLayerUtils {
     struct DisableColorizeKeyStrokes : public KisCommandUtils::AggregateCommand {
         DisableColorizeKeyStrokes(MergeDownInfoBaseSP info) : m_info(info) {}
 
-        void populateChildCommands() override {
+        void populateChildCommands() {
             Q_FOREACH (KisNodeSP node, m_info->allSrcNodes()) {
                 recursiveApplyNodes(node,
                                     [this] (KisNodeSP node) {
@@ -175,7 +175,7 @@ namespace KisLayerUtils {
     struct RefreshHiddenAreas : public KUndo2Command {
         RefreshHiddenAreas(MergeDownInfoBaseSP info) : m_info(info) {}
 
-        void redo() override {
+        void redo() {
             KisImageAnimationInterface *interface = m_info->image->animationInterface();
             const QRect preparedRect = !interface->externalFrameActive() ?
                 m_info->image->bounds() : QRect();
@@ -227,7 +227,7 @@ namespace KisLayerUtils {
               m_finalizing(finalizing),
               m_putAfter(putAfter) {}
 
-        void populateChildCommands() override {
+        void populateChildCommands() {
             KisNodeSP prevNode;
             KisNodeSP nextNode;
             KisNodeList prevSelection;
@@ -266,7 +266,7 @@ namespace KisLayerUtils {
     struct CreateMergedLayer : public KisCommandUtils::AggregateCommand {
         CreateMergedLayer(MergeDownInfoSP info) : m_info(info) {}
 
-        void populateChildCommands() override {
+        void populateChildCommands() {
             // actual merging done by KisLayer::createMergedLayer (or specialized decendant)
             m_info->dstNode = m_info->currLayer->createMergedLayerTemplate(m_info->prevLayer);
 
@@ -285,7 +285,7 @@ namespace KisLayerUtils {
             : m_info(info),
               m_name(name) {}
 
-        void populateChildCommands() override {
+        void populateChildCommands() {
             QString mergedLayerName;
             
             if (m_name.isEmpty()){
@@ -344,7 +344,7 @@ namespace KisLayerUtils {
     struct MergeLayers : public KisCommandUtils::AggregateCommand {
         MergeLayers(MergeDownInfoSP info) : m_info(info) {}
 
-        void populateChildCommands() override {
+        void populateChildCommands() {
             // actual merging done by KisLayer::createMergedLayer (or specialized decendant)
             m_info->currLayer->fillMergedLayerTemplate(m_info->dstLayer(), m_info->prevLayer);
         }
@@ -356,7 +356,7 @@ namespace KisLayerUtils {
     struct MergeLayersMultiple : public KisCommandUtils::AggregateCommand {
         MergeLayersMultiple(MergeMultipleInfoSP info) : m_info(info) {}
 
-        void populateChildCommands() override {
+        void populateChildCommands() {
             KisPainter gc(m_info->dstNode->paintDevice());
 
             foreach (KisNodeSP node, m_info->allSrcNodes()) {
@@ -374,7 +374,7 @@ namespace KisLayerUtils {
             : m_info(info),
               m_strategy(strategy) {}
 
-        void redo() override {
+        void redo() {
             QRect layerProjectionExtent = m_info->currLayer->projection()->extent();
             QRect prevLayerProjectionExtent = m_info->prevLayer->projection()->extent();
             int prevLayerArea = prevLayerProjectionExtent.width() * prevLayerProjectionExtent.height();
@@ -523,7 +523,7 @@ namespace KisLayerUtils {
         InsertNode(MergeDownInfoBaseSP info, KisNodeSP putAfter)
             : m_info(info), m_putAfter(putAfter) {}
         
-        void populateChildCommands() override {
+        void populateChildCommands() {
             addCommand(new KisImageLayerAddCommand(m_info->image,
                                                            m_info->dstNode,
                                                            m_putAfter->parent(),
@@ -560,7 +560,7 @@ namespace KisLayerUtils {
             }
         }
 
-        void populateChildCommands() override {
+        void populateChildCommands() {
             KisNodeList nodesToDelete = m_info->allSrcNodes();
 
             KisNodeSP parent;
@@ -606,7 +606,7 @@ namespace KisLayerUtils {
         }
 
     private:
-        void addCommandImpl(KUndo2Command *cmd) override {
+        virtual void addCommandImpl(KUndo2Command *cmd) {
             addCommand(cmd);
         }
 
@@ -661,7 +661,7 @@ namespace KisLayerUtils {
     struct AddNewFrame : public KisCommandUtils::AggregateCommand {
         AddNewFrame(MergeDownInfoBaseSP info, int frame) : m_info(info), m_frame(frame) {}
 
-        void populateChildCommands() override {
+        void populateChildCommands() {
             KUndo2Command *cmd = new KisCommandUtils::SkipFirstRedoWrapper();
             KisKeyframeChannel *channel = m_info->dstNode->getKeyframeChannel(KisKeyframeChannel::Content.id());
             channel->addKeyframe(m_frame, cmd);
@@ -1072,7 +1072,7 @@ namespace KisLayerUtils {
 
     void mergeMultipleLayers(KisImageSP image, KisNodeList mergedNodes, KisNodeSP putAfter)
     {
-        mergeMultipleLayersImpl(image, mergedNodes, putAfter, false, kundo2_i18n("Merge Selected Nodes"));
+        mergeMultipleLayersImpl(image, mergedNodes, putAfter, false, kundo2_i18n("Merge Selected Nodes"), false);
     }
     
     void newLayerFromVisible(KisImageSP image, KisNodeSP putAfter)
@@ -1088,7 +1088,7 @@ namespace KisLayerUtils {
             : m_info(info),
               m_putAfter(putAfter){}
 
-        void populateChildCommands() override {
+        void populateChildCommands() {
             KisNodeSP parent;
             CleanUpNodes::findPerfectParent(m_info->allSrcNodes(), m_putAfter, parent);
 
@@ -1125,7 +1125,7 @@ namespace KisLayerUtils {
         ActivateSelectionMask(MergeDownInfoBaseSP info)
             : m_info(info) {}
 
-        void populateChildCommands() override {
+        void populateChildCommands() {
             KisSelectionMaskSP mergedMask = dynamic_cast<KisSelectionMask*>(m_info->dstNode.data());
             addCommand(new KisActivateSelectionMaskCommand(mergedMask, true));
         }

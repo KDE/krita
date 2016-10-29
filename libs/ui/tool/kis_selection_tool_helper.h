@@ -41,9 +41,7 @@ public:
     void addSelectionShape(KoShape* shape);
     void addSelectionShapes(QList<KoShape*> shapes);
 
-    void cropRectIfNeeded(QRect *rect, SelectionAction action);
-    bool canShortcutToDeselect(const QRect &rect, SelectionAction action);
-    bool canShortcutToNoop(const QRect &rect, SelectionAction action);
+    void cropRectIfNeeded(QRect *rect);
     void cropPathIfNeeded(QPainterPath *path);
 
 private:

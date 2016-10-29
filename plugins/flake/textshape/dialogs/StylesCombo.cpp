@@ -25,7 +25,7 @@
 
 #include <QListView>
 #include <QMouseEvent>
-#include <QStyleOptionViewItem>
+#include <QStyleOptionViewItemV4>
 
 #include <QDebug>
 
@@ -177,7 +177,7 @@ bool StylesCombo::eventFilter(QObject *object, QEvent *event)
         //manually though.
         QModelIndex index = view()->indexAt(mouseEvent->pos());
         QModelIndex buddy = m_stylesModel->buddy(index);
-        QStyleOptionViewItem options;
+        QStyleOptionViewItemV4 options;
         options.rect = view()->visualRect(buddy);
         options.widget = m_view;
         options.state |= (buddy == view()->currentIndex() ? QStyle::State_HasFocus : QStyle::State_None);

@@ -37,11 +37,11 @@ public:
     {
     }
 
-    void init() override {
+    void init() {
         m_image->disableUIUpdates();
     }
 
-    void end() override {
+    void end() {
         m_image->enableUIUpdates();
     }
 
@@ -64,7 +64,7 @@ public:
     }
 
 private:
-    void init() override {
+    void init() {
         /**
          * We disable all non-centralized updates here. Everything
          * should be done by this command's explicit updates.
@@ -76,7 +76,7 @@ private:
         m_image->disableDirtyRequests();
     }
 
-    void end() override {
+    void end() {
         m_image->enableDirtyRequests();
 
         if(m_flags.testFlag(KisProcessingApplicator::RECURSIVE)) {
@@ -129,7 +129,7 @@ public:
     {
     }
 
-    void end() override {
+    void end() {
         if (isFinalizing()) {
             doUpdate(m_emitSignals);
         } else {

@@ -71,8 +71,6 @@ public:
     void setPrecisionEnabled(bool value);
     bool autoPrecisionEnabled();
 
-    void hideOptions(const QStringList &options);
-
 Q_SIGNALS:
 
     void sigBrushChanged();

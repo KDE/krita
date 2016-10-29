@@ -350,7 +350,7 @@ void KisLayerBox::setCanvas(KoCanvasBase *canvas)
                 m_nodeManager, SLOT(toggleIsolateActiveNode()));
 
         KisImageAnimationInterface *animation = m_image->animationInterface();
-        connect(animation, &KisImageAnimationInterface::sigUiTimeChanged, this, &KisLayerBox::slotImageTimeChanged);
+        connect(animation, &KisImageAnimationInterface::sigTimeChanged, this, &KisLayerBox::slotImageTimeChanged);
 
         expandNodesRecursively(m_image->rootLayer(), m_filteringModel, m_wdgLayerBox->listLayers);
         m_wdgLayerBox->listLayers->scrollTo(m_wdgLayerBox->listLayers->currentIndex());

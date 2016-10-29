@@ -60,7 +60,7 @@ public:
     {
     }
 
-    void run() override {
+    void run() {
         switch(m_type) {
         case PRODUCER:
             for (int j = 0; j < m_numCycles; j++) {

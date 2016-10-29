@@ -150,7 +150,7 @@ public:
     void reset();
 
 private:
-    class Private;
+    struct Private;
     const QScopedPointer<Private> d;
 };
 

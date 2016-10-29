@@ -197,7 +197,7 @@ void KoEditColorSetWidget::open()
     Q_ASSERT(m_activeColorSet);
     KoFileDialog dialog(this, KoFileDialog::OpenFile, "OpenColorSet");
     dialog.setDefaultDir(m_activeColorSet->filename());
-    dialog.setMimeTypeFilters(QStringList() << "application/x-gimp-color-palette");
+    dialog.setMimeTypeFilters(QStringList() << "application/x-gimp-color-palette", "application/x-gimp-color-palette");
     QString fileName = dialog.filename();
     KoColorSet *colorSet = new KoColorSet(fileName);
     colorSet->load();

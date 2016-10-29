@@ -45,11 +45,11 @@ class KisWorkspaceDelegate : public QAbstractItemDelegate
 {
 public:
     KisWorkspaceDelegate(QObject * parent = 0) : QAbstractItemDelegate(parent) {}
-    ~KisWorkspaceDelegate() override {}
+    virtual ~KisWorkspaceDelegate() {}
     /// reimplemented
-    void paint(QPainter *, const QStyleOptionViewItem &, const QModelIndex &) const override;
+    virtual void paint(QPainter *, const QStyleOptionViewItem &, const QModelIndex &) const;
     /// reimplemented
-    QSize sizeHint(const QStyleOptionViewItem & option, const QModelIndex &) const override {
+    QSize sizeHint(const QStyleOptionViewItem & option, const QModelIndex &) const {
         return option.decorationSize;
     }
 };
@@ -115,7 +115,7 @@ void KisWorkspaceChooser::slotSave()
     }
     KoResourceServer<KisWorkspaceResource> * rserver = KisResourceServerProvider::instance()->workspaceServer();
 
-    KisWorkspaceResource* workspace = new KisWorkspaceResource(QString());
+    KisWorkspaceResource* workspace = new KisWorkspaceResource("");
     workspace->setDockerState(m_view->qtMainWindow()->saveState());
     m_view->resourceProvider()->notifySavingWorkspace(workspace);
     workspace->setValid(true);

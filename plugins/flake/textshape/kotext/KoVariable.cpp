@@ -38,7 +38,7 @@ public:
     {
     }
 
-    QDebug printDebug(QDebug dbg) const override
+    QDebug printDebug(QDebug dbg) const
     {
         dbg.nospace() << "KoVariable value=" << value;
         return dbg.space();

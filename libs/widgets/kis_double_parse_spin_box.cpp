@@ -29,9 +29,11 @@
 
 KisDoubleParseSpinBox::KisDoubleParseSpinBox(QWidget *parent) :
     QDoubleSpinBox(parent),
-    boolLastValid(true),
-    lastExprParsed(QStringLiteral("0.0"))
+    boolLastValid(true)
 {
+
+    lastExprParsed = new QString("0.0");
+
     connect(this, SIGNAL(noMoreParsingError()),
                     this, SLOT(clearErrorStyle()));
 
@@ -63,11 +65,16 @@ KisDoubleParseSpinBox::KisDoubleParseSpinBox(QWidget *parent) :
 
 KisDoubleParseSpinBox::~KisDoubleParseSpinBox()
 {
+
+    //needed to avoid a segfault during destruction.
+    delete lastExprParsed;
+
 }
 
 double KisDoubleParseSpinBox::valueFromText(const QString & text) const
 {
-    lastExprParsed = text;
+
+    *lastExprParsed = text;
 
     bool ok;
 
@@ -90,8 +97,10 @@ double KisDoubleParseSpinBox::valueFromText(const QString & text) const
             expr.remove(0, prefix().size());
         }
 
-        lastExprParsed = expr;
+        *lastExprParsed = expr;
+
         ret = KisNumericParser::parseSimpleMathExpr(expr, &ok);
+
     }
 
     if(qIsNaN(ret) || qIsInf(ret)){
@@ -121,9 +130,10 @@ QString KisDoubleParseSpinBox::textFromValue(double val) const
 {
 
     if (!boolLastValid) {
-        emit errorWhileParsing(lastExprParsed);
-        return lastExprParsed;
+            emit errorWhileParsing(*lastExprParsed);
+            return *lastExprParsed;
     }
+
     emit noMoreParsingError();
 
     double v = KisNumericParser::parseSimpleMathExpr(cleanText());
@@ -217,7 +227,7 @@ void KisDoubleParseSpinBox::clearErrorStyle()
     if (boolLastValid) {
         warningIcon->setVisible(false);
 
-        //setStyleSheet(QString());
+        //setStyleSheet("");
 
         setPalette(oldPalette);
         isOldPaletteSaved = false;

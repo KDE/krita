@@ -147,7 +147,7 @@ public:
     {
     }
 
-    void visitBlock(QTextBlock &block, const QTextCursor &caret) override
+    virtual void visitBlock(QTextBlock &block, const QTextCursor &caret)
     {
         for (QTextBlock::iterator it = block.begin(); it != block.end(); ++it) {
             QTextCursor fragmentSelection(caret);
@@ -206,7 +206,7 @@ public:
         }
     }
 
-    void visitFragmentSelection(QTextCursor &fragmentSelection) override
+    virtual void visitFragmentSelection(QTextCursor &fragmentSelection)
     {
         if (m_first) {
             m_firstFormat = fragmentSelection.charFormat();
@@ -518,13 +518,13 @@ bool DeleteCommand::mergeWith(const KUndo2Command *command)
         m_document(document)
         {}
 
-        void undo() override {
+        void undo() {
             QTextDocument *doc = m_document.data();
             if (doc)
                 doc->undo(KoTextDocument(doc).textEditor()->cursor());
         }
 
-        void redo() override {
+        void redo() {
             QTextDocument *doc = m_document.data();
             if (doc)
                 doc->redo(KoTextDocument(doc).textEditor()->cursor());

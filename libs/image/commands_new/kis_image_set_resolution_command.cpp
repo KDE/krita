@@ -59,19 +59,19 @@ void KisImageSetResolutionCommand::redo()
 class ResetShapesProcessingVisitor : public KisProcessingVisitor
 {
 public:
-    void visit(KisNode*, KisUndoAdapter*) override {}
-    void visit(KisPaintLayer*, KisUndoAdapter*) override {}
-    void visit(KisGroupLayer*, KisUndoAdapter*) override {}
-    void visit(KisCloneLayer*, KisUndoAdapter*) override {}
+    void visit(KisNode*, KisUndoAdapter*) {}
+    void visit(KisPaintLayer*, KisUndoAdapter*) {}
+    void visit(KisGroupLayer*, KisUndoAdapter*) {}
+    void visit(KisCloneLayer*, KisUndoAdapter*) {}
 
-    void visit(KisAdjustmentLayer *layer, KisUndoAdapter*) override { layer->internalSelection()->updateProjection(); }
-    void visit(KisGeneratorLayer *layer, KisUndoAdapter*) override { layer->internalSelection()->updateProjection(); }
-    void visit(KisExternalLayer *layer, KisUndoAdapter*) override { layer->resetCache(); }
-    void visit(KisFilterMask *mask, KisUndoAdapter*) override { mask->selection()->updateProjection(); }
-    void visit(KisTransformMask *mask, KisUndoAdapter*) override { KIS_ASSERT_RECOVER_NOOP(!mask->selection()); }
-    void visit(KisTransparencyMask *mask, KisUndoAdapter*) override { mask->selection()->updateProjection(); }
-    void visit(KisSelectionMask *mask, KisUndoAdapter*) override { mask->selection()->updateProjection(); }
-    void visit(KisColorizeMask *, KisUndoAdapter*) override {}
+    void visit(KisAdjustmentLayer *layer, KisUndoAdapter*) { layer->internalSelection()->updateProjection(); }
+    void visit(KisGeneratorLayer *layer, KisUndoAdapter*) { layer->internalSelection()->updateProjection(); }
+    void visit(KisExternalLayer *layer, KisUndoAdapter*) { layer->resetCache(); }
+    void visit(KisFilterMask *mask, KisUndoAdapter*) { mask->selection()->updateProjection(); }
+    void visit(KisTransformMask *mask, KisUndoAdapter*) { KIS_ASSERT_RECOVER_NOOP(!mask->selection()); }
+    void visit(KisTransparencyMask *mask, KisUndoAdapter*) { mask->selection()->updateProjection(); }
+    void visit(KisSelectionMask *mask, KisUndoAdapter*) { mask->selection()->updateProjection(); }
+    void visit(KisColorizeMask *, KisUndoAdapter*) {}
 };
 
 

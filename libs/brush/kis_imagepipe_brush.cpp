@@ -102,7 +102,7 @@ protected:
         return index;
     }
 
-    int chooseNextBrush(const KisPaintInformation& info) override {
+    int chooseNextBrush(const KisPaintInformation& info) {
         quint32 brushIndex = 0;
 
         if (!m_isInitialized) {
@@ -128,7 +128,7 @@ protected:
         return brushIndex;
     }
 
-    void updateBrushIndexes(const KisPaintInformation& info) override {
+    void updateBrushIndexes(const KisPaintInformation& info) {
         for (int i = 0; i < m_parasite.dim; i++) {
             m_parasite.index[i] = selectPost(m_parasite.selection[i],
                                              m_parasite.index[i],
@@ -169,7 +169,7 @@ public:
         return true;
     }
 
-    void notifyStrokeStarted() override {
+    void notifyStrokeStarted() {
         m_isInitialized = false;
     }
 
@@ -193,7 +193,7 @@ KisImagePipeBrush::KisImagePipeBrush(const QString& filename)
 KisImagePipeBrush::KisImagePipeBrush(const QString& name, int w, int h,
                                      QVector< QVector<KisPaintDevice*> > devices,
                                      QVector<KisParasite::SelectionMode > modes)
-    : KisGbrBrush(QString())
+    : KisGbrBrush("")
     , m_d(new Private())
 {
     Q_ASSERT(devices.count() == modes.count());

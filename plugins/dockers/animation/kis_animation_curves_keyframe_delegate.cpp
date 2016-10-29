@@ -86,8 +86,6 @@ void KisAnimationCurvesKeyframeDelegate::paint(QPainter *painter, const QStyleOp
 
 QSize KisAnimationCurvesKeyframeDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-    Q_UNUSED(option);
-    Q_UNUSED(index);
     return QSize(2*NODE_UI_RADIUS, 2*NODE_UI_RADIUS);
 }
 

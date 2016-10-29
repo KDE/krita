@@ -78,14 +78,16 @@ QVariant KoDerivedResourceConverter::writeToSource(const QVariant &value,
                                                    const QVariant &sourceValue,
                                                    bool *changed)
 {
+    if (changed) {
+        *changed = m_d->lastKnownValue != value;
+    }
+
     QVariant newSourceValue = sourceValue;
-    bool hasChanged = m_d->lastKnownValue != value;
-    if (hasChanged || value != fromSource(sourceValue)) {
+
+    if (*changed || value != fromSource(sourceValue)) {
         m_d->lastKnownValue = value;
         newSourceValue = toSource(value, sourceValue);
     }
-    if (changed) {
-        *changed = hasChanged;
-    }
+
     return newSourceValue;
 }

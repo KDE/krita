@@ -115,8 +115,8 @@ bool KisResourceBundleManifest::load(QIODevice *device)
             continue;
 
         QString fullPath  = el.attributeNS(KoXmlNS::manifest, "full-path", QString());
-        QString mediaType = el.attributeNS(KoXmlNS::manifest, "media-type", QString());
-        QString md5sum = el.attributeNS(KoXmlNS::manifest, "md5sum", QString());
+        QString mediaType = el.attributeNS(KoXmlNS::manifest, "media-type", QString(""));
+        QString md5sum = el.attributeNS(KoXmlNS::manifest, "md5sum", QString(""));
         QString version   = el.attributeNS(KoXmlNS::manifest, "version", QString());
 
         QStringList tagList;

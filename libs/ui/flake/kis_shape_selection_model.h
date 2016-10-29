@@ -69,7 +69,6 @@ private:
     KisSignalCompressor *m_updateSignalCompressor;
     QRect m_updateRect;
     bool m_updatesEnabled;
-    bool m_fullUpdateRequested;
 };
 
 #endif

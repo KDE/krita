@@ -49,7 +49,7 @@ void KisWdgUnsharp::setConfiguration(const KisPropertiesConfigurationSP config)
     QVariant value;
     widget()->doubleHalfSize->setValue((config->getProperty("halfSize", value)) ? value.toDouble() : 1.0);
     widget()->doubleAmount->setValue((config->getProperty("amount", value)) ? value.toDouble() : 0.0);
-    widget()->intThreshold->setValue((config->getProperty("threshold", value)) ? value.toUInt() : 2);
+    widget()->intThreshold->setValue((config->getProperty("threshold", value)) ? value.toUInt() : 25);
     widget()->chkLightnessOnly->setChecked((config->getProperty("lightnessOnly", value)) ? value.toBool() : true);
 }
 

@@ -131,7 +131,7 @@ KRITAGLOBAL_EXPORT void kis_safe_assert_recoverable(const char *assertion, const
  *    and restarting Krita!
  *
  * 3) If you think that Krita should be better restarted after this
- *    bug, please use a usual KIS_ASSERT_RECOVER.
+ *    bug, please use a usual KIS_ASSRT_RECOVER.
  */
 
 #define KIS_SAFE_ASSERT_RECOVER(cond) if (!(cond) && (kis_safe_assert_recoverable(#cond,__FILE__,__LINE__), true))

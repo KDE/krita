@@ -190,7 +190,7 @@ void KoToolBox::setButtonsVisible(const QList<QString> &codes)
 
         if (code.endsWith( QLatin1String( "/always"))) {
             button->setVisible(true);
-            button->setEnabled(true);
+            button->setEnabled( true );
         }
         else if (code.isEmpty()) {
             button->setVisible(true);

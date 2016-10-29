@@ -76,13 +76,13 @@ public:
     {
     }
 
-    KUndo2Command *createCommand() override
+    virtual KUndo2Command *createCommand()
     {
         return 0;
     }
 
-    void handleMouseMove(const QPointF & /*mouseLocation*/, Qt::KeyboardModifiers /*modifiers*/) override {}
-    void finishInteraction(Qt::KeyboardModifiers /*modifiers*/) override {}
+    virtual void handleMouseMove(const QPointF & /*mouseLocation*/, Qt::KeyboardModifiers /*modifiers*/) {}
+    virtual void finishInteraction(Qt::KeyboardModifiers /*modifiers*/) {}
 };
 
 class SelectionHandler : public KoToolSelection
@@ -95,7 +95,7 @@ public:
         Q_ASSERT(m_selection);
     }
 
-    bool hasSelection() override
+    bool hasSelection()
     {
         return m_selection->count();
     }

@@ -61,7 +61,7 @@ public:
 
 protected:
 
-    void registerChangeRect(KisProjectionLeafSP node, NodePosition position) override {
+    void registerChangeRect(KisProjectionLeafSP node, NodePosition position) {
         QString postfix;
 
         if(!node->isLayer()) {
@@ -77,7 +77,7 @@ protected:
         }
     }
 
-    void registerNeedRect(KisProjectionLeafSP node, NodePosition position) override {
+    void registerNeedRect(KisProjectionLeafSP node, NodePosition position) {
         QString postfix;
 
         if(!node->isLayer()) {
@@ -632,7 +632,7 @@ class TestingRefreshSubtreeWalker : public KisRefreshSubtreeWalker
 {
 public:
     TestingRefreshSubtreeWalker(QRect cropRect) : KisRefreshSubtreeWalker(cropRect) {}
-    UpdateType type() const override { return FULL_REFRESH; }
+    UpdateType type() const { return FULL_REFRESH; }
 };
 
 

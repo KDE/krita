@@ -726,7 +726,7 @@ FileParameter::FileParameter(const QString& name, bool updatePreview): Parameter
 void FileParameter::parseValues(const QString& typeDefinition)
 {
     QStringList values = getValues(typeDefinition);
-    // some definitions are like _file=QString()
+    // some definitions are like _file=("")
     QString filePath = stripQuotes(values.at(0));
     if (!filePath.isEmpty())
     {

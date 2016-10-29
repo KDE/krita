@@ -46,9 +46,9 @@
 class ThumbnailBounds : public KisDefaultBounds {
 public:
     ThumbnailBounds() : KisDefaultBounds() {}
-    ~ThumbnailBounds() override {}
+    virtual ~ThumbnailBounds() {}
 
-    QRect bounds() const override
+    QRect bounds() const
     {
         return QRect(0, 0, 100, 100);
     }

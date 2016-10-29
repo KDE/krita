@@ -35,7 +35,7 @@ public:
     {
     }
 
-    void visitBlock(QTextBlock &block, const QTextCursor &caret) override
+    virtual void visitBlock(QTextBlock &block, const QTextCursor &caret)
     {
         for (QTextBlock::iterator it = block.begin(); it != block.end(); ++it) {
             QTextCursor fragmentSelection(caret);
@@ -61,7 +61,7 @@ public:
         cursor.mergeBlockCharFormat(m_deltaCharFormat);
     }
 
-    void visitFragmentSelection(QTextCursor &fragmentSelection) override
+    virtual void visitFragmentSelection(QTextCursor &fragmentSelection)
     {
         QTextCharFormat format = fragmentSelection.charFormat();
         format.merge(m_deltaCharFormat);

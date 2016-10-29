@@ -44,7 +44,6 @@ KisTIFFImport::~KisTIFFImport()
 
 KisImportExportFilter::ConversionStatus KisTIFFImport::convert(const QByteArray&, const QByteArray& to, KisPropertiesConfigurationSP configuration)
 {
-    Q_UNUSED(configuration);
     dbgFile << "Importing using TIFFImport!";
 
     if (to != "application/x-krita")

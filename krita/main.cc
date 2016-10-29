@@ -58,6 +58,9 @@
 
 #if defined HAVE_KCRASH
 #include <kcrash.h>
+
+#elif defined USE_BREAKPAD
+    #include "kis_crash_handler.h"
 #elif defined USE_DRMINGW
 namespace
 {
@@ -90,11 +93,18 @@ extern "C" int main(int argc, char **argv)
 
     // The global initialization of the random generator
     qsrand(time(0));
-    bool runningInKDE = !qgetenv("KDE_FULL_SESSION").isEmpty();
-    
-#if defined HAVE_X11 
-    qputenv("QT_QPA_PLATFORM", "xcb"); 
+
+    /**
+     * Add a workaround for Qt 5.6, which implemented compression of the tablet events.
+     * Since Qt 5.6.1 there will be this hacky environment variable option. After that,
+     * Qt developers promised to give us better control for that. Please make sure the env
+     * variable is set *before* the construction of QApplication!
+     */
+#if defined Q_OS_LINUX && QT_VERSION >= 0x050600
+    qputenv("QT_XCB_NO_EVENT_COMPRESSION", "1");
 #endif
+
+    bool runningInKDE = !qgetenv("KDE_FULL_SESSION").isEmpty();
 
     /**
      * Disable debug output by default. (krita.input enables tablet debugging.)
@@ -186,6 +196,10 @@ extern "C" int main(int argc, char **argv)
 
 #if defined HAVE_KCRASH
     KCrash::initialize();
+#elif defined USE_BREAKPAD
+    qputenv("KDE_DEBUG", "1");
+    KisCrashHandler crashHandler;
+    Q_UNUSED(crashHandler);
 #elif defined USE_DRMINGW
     tryInitDrMingw();
 #endif
@@ -244,10 +258,6 @@ extern "C" int main(int argc, char **argv)
         return 1;
     }
 
-#if QT_VERSION >= 0x050700
-    app.setAttribute(Qt::AA_CompressHighFrequencyEvents, false);
-#endif
-    
     // Set up remote arguments.
     QObject::connect(&app, SIGNAL(messageReceived(QByteArray,QObject*)),
                      &app, SLOT(remoteArguments(QByteArray,QObject*)));
@@ -256,7 +266,7 @@ extern "C" int main(int argc, char **argv)
                      &app, SLOT(fileOpenRequested(QString)));
 
     int state = app.exec();
-    
+
     return state;
 }
 

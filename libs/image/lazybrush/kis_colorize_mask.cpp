@@ -18,6 +18,7 @@
 
 #include "kis_colorize_mask.h"
 
+#include <mutex>
 #include <QCoreApplication>
 
 #include <KoColorSpaceRegistry.h>
@@ -163,7 +164,7 @@ struct SetKeyStrokesColorSpaceCommand : public KUndo2Command {
           m_list(list),
           m_node(node) {}
 
-    void undo() override {
+    void undo() {
         KIS_ASSERT_RECOVER_RETURN(m_list->size() == m_oldColors.size());
 
         for (int i = 0; i < m_list->size(); i++) {
@@ -171,7 +172,7 @@ struct SetKeyStrokesColorSpaceCommand : public KUndo2Command {
         }
     }
 
-    void redo() override {
+    void redo() {
         if (m_oldColors.isEmpty()) {
             Q_FOREACH(const KeyStroke &stroke, *m_list) {
                 m_oldColors << stroke.color;
@@ -385,7 +386,7 @@ QRect KisColorizeMask::decorateRect(KisPaintDeviceSP &src,
 
     // Draw the key strokes
     if (m_d->showKeyStrokes) {
-        KisIndirectPaintingSupport::ReadLocker locker(this);
+        lockTemporaryTarget();
 
         KisSelectionSP selection = m_d->cachedSelection.getSelection();
         KisSelectionSP conversionSelection = m_d->cachedConversionSelection.getSelection();
@@ -429,6 +430,8 @@ QRect KisColorizeMask::decorateRect(KisPaintDeviceSP &src,
 
         m_d->cachedSelection.putSelection(selection);
         m_d->cachedSelection.putSelection(conversionSelection);
+
+        unlockTemporaryTarget();
     }
 
     return rect;
@@ -450,12 +453,12 @@ QRect KisColorizeMask::extent() const
             rc |= stroke.dev->extent();
         }
 
-        KisIndirectPaintingSupport::ReadLocker locker(this);
-
+        lockTemporaryTarget();
         KisPaintDeviceSP temporaryTarget = this->temporaryTarget();
         if (temporaryTarget) {
             rc |= temporaryTarget->extent();
         }
+        unlockTemporaryTarget();
     }
 
     return rc;
@@ -474,11 +477,12 @@ QRect KisColorizeMask::exactBounds() const
             rc |= stroke.dev->exactBounds();
         }
 
-        KisIndirectPaintingSupport::ReadLocker locker(this);
+        lockTemporaryTarget();
         KisPaintDeviceSP temporaryTarget = this->temporaryTarget();
         if (temporaryTarget) {
             rc |= temporaryTarget->exactBounds();
         }
+        unlockTemporaryTarget();
     }
 
     return rc;
@@ -517,7 +521,8 @@ void KisColorizeMask::setCurrentColor(const KoColor &_color)
     KoColor color = _color;
     color.convertTo(colorSpace());
 
-    WriteLocker locker(this);
+    WriteLockableWrapper lock(this);
+    std::lock_guard<WriteLockableWrapper> guard(lock);
 
     setNeedsUpdate(true);
 
@@ -553,12 +558,12 @@ struct KeyStrokeAddRemoveCommand : public KisCommandUtils::FlipFlopCommand {
           m_index(index), m_stroke(stroke),
           m_list(list), m_node(node) {}
 
-    void init() override {
+    void init() {
         m_list->insert(m_index, m_stroke);
         emit m_node->sigKeyStrokesListChanged();
     }
 
-    void end() override {
+    void end() {
         KIS_ASSERT_RECOVER_RETURN((*m_list)[m_index] == m_stroke);
         m_list->removeAt(m_index);
         emit m_node->sigKeyStrokesListChanged();
@@ -575,7 +580,8 @@ void KisColorizeMask::mergeToLayer(KisNodeSP layer, KisPostExecutionUndoAdapter 
 {
     Q_UNUSED(layer);
 
-    WriteLocker locker(this);
+    WriteLockableWrapper lock(this);
+    std::lock_guard<WriteLockableWrapper> guard(lock);
 
     KisPaintDeviceSP temporaryTarget = this->temporaryTarget();
     const bool isTemporaryTargetErasing = temporaryCompositeOp() == COMPOSITE_ERASE;
@@ -724,14 +730,14 @@ struct SetKeyStrokeColorsCommand : public KUndo2Command {
           m_list(list),
           m_node(node) {}
 
-    void redo() override {
+    void redo() {
         *m_list = m_newList;
 
         emit m_node->sigKeyStrokesListChanged();
         m_node->setDirty();
     }
 
-    void undo() override {
+    void undo() {
         *m_list = m_oldList;
 
         emit m_node->sigKeyStrokesListChanged();

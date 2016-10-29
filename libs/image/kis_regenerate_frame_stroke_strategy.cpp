@@ -46,7 +46,7 @@ struct KisRegenerateFrameStrokeStrategy::Private
               root(_root), rect(_rect), cropRect(_cropRect)
             {}
 
-        KisStrokeJobData* createLodClone(int levelOfDetail) override {
+        KisStrokeJobData* createLodClone(int levelOfDetail) {
             Q_UNUSED(levelOfDetail);
             return new KisStrokeJobData(CONCURRENT);
         }

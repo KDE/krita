@@ -740,7 +740,7 @@ bool PSDLayerRecord::readMask(QIODevice *io, KisPaintDeviceSP dev, ChannelInfo *
             channelBytes = Compression::uncompress(uncompressedLength, compressedBytes, channelInfo->compressionType);
             channelInfo->channelOffset += rleLength;
         } else {
-            error = "Unsupported Compression mode: " + QString::number(channelInfo->compressionType);
+            error = "Unsupported Compression mode: " + channelInfo->compressionType;
             return false;
         }
 

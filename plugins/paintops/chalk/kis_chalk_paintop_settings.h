@@ -34,14 +34,14 @@ public:
     KisChalkPaintOpSettings();
     virtual ~KisChalkPaintOpSettings() {}
 
-    QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode) override;
+    QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode);
 
     void setPaintOpSize(qreal value) override;
     qreal paintOpSize() const override;
 
-    bool paintIncremental() override;
-    bool isAirbrushing() const override;
-    int rate() const override;
+    bool paintIncremental();
+    bool isAirbrushing() const;
+    int rate() const;
 
 };
 

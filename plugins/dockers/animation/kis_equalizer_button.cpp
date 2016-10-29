@@ -87,7 +87,7 @@ void KisEqualizerButton::paintEvent(QPaintEvent *event)
 
     { // draw border
 
-        QStyleOptionViewItem option; // empty!
+        QStyleOptionViewItemV4 option; // empty!
         const int gridHint = style()->styleHint(QStyle::SH_Table_GridLineColor, &option, this);
         const QColor gridColor = static_cast<QRgb>(gridHint);
         const QPen gridPen(gridColor);

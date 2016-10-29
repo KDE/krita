@@ -24,7 +24,7 @@
 #include <QPainter>
 #include <QStyle>
 #include <QStyleOptionMenuItem>
-#include <QStyleOptionViewItem>
+#include <QStyleOptionViewItemV4>
 #include <QApplication>
 #include <QTransform>
 

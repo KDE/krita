@@ -147,26 +147,26 @@ public:
     {
     }
 
-    ~DocumentProgressProxy() override {
+    ~DocumentProgressProxy() {
         // signal that the job is done
         setValue(-1);
     }
 
-    int maximum() const override {
+    int maximum() const {
         return 100;
     }
 
-    void setValue(int value) override {
+    void setValue(int value) {
         if (m_mainWindow) {
             m_mainWindow->slotProgress(value);
         }
     }
 
-    void setRange(int /*minimum*/, int /*maximum*/) override {
+    void setRange(int /*minimum*/, int /*maximum*/) {
 
     }
 
-    void setFormat(const QString &/*format*/) override {
+    void setFormat(const QString &/*format*/) {
 
     }
 };
@@ -189,7 +189,7 @@ public:
     {
     }
 
-    void setIndex(int idx) override {
+    void setIndex(int idx) {
         KisImageWSP image = this->image();
         image->requestStrokeCancellation();
         if(image->tryBarrierLock()) {
@@ -198,21 +198,13 @@ public:
         }
     }
 
-    void notifySetIndexChangedOneCommand() override {
+    void notifySetIndexChangedOneCommand() {
         KisImageWSP image = this->image();
         image->unlock();
-
-        /**
-         * Some very weird commands may emit blocking signals to
-         * the GUI (e.g. KisGuiContextCommand). Here is the best thing
-         * we can do to avoid the deadlock
-         */
-        while(!image->tryBarrierLock()) {
-            QApplication::processEvents();
-        }
+        image->barrierLock();
     }
 
-    void undo() override {
+    void undo() {
         KisImageWSP image = this->image();
         image->requestUndoDuringStroke();
         if(image->tryBarrierLock()) {
@@ -221,7 +213,7 @@ public:
         }
     }
 
-    void redo() override {
+    void redo() {
         KisImageWSP image = this->image();
         if(image->tryBarrierLock()) {
             KUndo2Stack::redo();
@@ -568,20 +560,19 @@ KisDocument::~KisDocument()
 
         d->image->requestStrokeCancellation();
         d->image->waitForDone();
-
-        // clear undo commands that can still point to the image
-        d->undoStack->clear();
-        d->image->waitForDone();
-
-        KisImageWSP sanityCheckPointer = d->image;
-        Q_UNUSED(sanityCheckPointer);
-        // The following line trigger the deletion of the image
-        d->image.clear();
-
-        // check if the image has actually been deleted
-        KIS_SAFE_ASSERT_RECOVER_NOOP(!sanityCheckPointer.isValid());
     }
 
+    // clear undo commands that can still point to the image
+    d->undoStack->clear();
+    d->image->waitForDone();
+
+    KisImageWSP sanityCheckPointer = d->image;
+
+    // The following line trigger the deletion of the image
+    d->image.clear();
+
+    // check if the image has actually been deleted
+    KIS_SAFE_ASSERT_RECOVER_NOOP(!sanityCheckPointer.isValid());
 
     delete d;
 }

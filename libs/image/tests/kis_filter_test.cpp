@@ -41,7 +41,7 @@ public:
     void processImpl(KisPaintDeviceSP src,
                      const QRect& size,
                      const KisFilterConfigurationSP config,
-                     KoUpdater* progressUpdater) const override {
+                     KoUpdater* progressUpdater) const {
         Q_UNUSED(src);
         Q_UNUSED(size);
         Q_UNUSED(config);

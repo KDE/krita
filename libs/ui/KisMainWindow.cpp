@@ -146,17 +146,17 @@ class ToolDockerFactory : public KoDockFactoryBase
 public:
     ToolDockerFactory() : KoDockFactoryBase() { }
 
-    QString id() const override {
+    QString id() const {
         return "sharedtooldocker";
     }
 
-    QDockWidget* createDockWidget() override {
+    QDockWidget* createDockWidget() {
         KoToolDocker* dockWidget = new KoToolDocker();
         dockWidget->setTabEnabled(false);
         return dockWidget;
     }
 
-    DockPosition defaultDockPosition() const override {
+    DockPosition defaultDockPosition() const {
         return DockRight;
     }
 };
@@ -172,7 +172,6 @@ public:
         , mdiArea(new QMdiArea(parent))
         , windowMapper(new QSignalMapper(parent))
         , documentMapper(new QSignalMapper(parent))
-        , lastExportSpecialOutputFlag(0)
     {
     }
 
@@ -249,6 +248,7 @@ public:
     QByteArray lastExportedFormat;
     int lastExportSpecialOutputFlag  {0};
     QScopedPointer<KisSignalCompressorWithParam<int> > tabSwitchCompressor;
+    bool geometryInitialized  {false};
     QMutex savingEntryMutex;
 
     KisActionManager * actionManager() {
@@ -1139,6 +1139,26 @@ void KisMainWindow::redo()
     }
 }
 
+void KisMainWindow::showEvent(QShowEvent *e)
+{
+    KXmlGuiWindow::showEvent(e);
+
+    if (!d->geometryInitialized) {
+        /**
+         * We should move the window only *after* it has been shown on
+         * screen, otherwise it will become owned by a wrong screen, which
+         * will make positioning of all the child widgets wrong.
+         * (see bug https://bugs.kde.org/show_bug.cgi?id=362025)
+         *
+         * This is actually a bug/feature of Qt 5.5.x and it has been
+         * fixed in Qt 5.6.0. So we can avoid this delay on newer versions
+         * of Qt.
+         */
+        QTimer::singleShot(1, this, SLOT(initializeGeometry()));
+        d->geometryInitialized = true;
+    }
+}
+
 void KisMainWindow::closeEvent(QCloseEvent *e)
 {
     d->mdiArea->closeAllSubWindows();
@@ -1309,9 +1329,11 @@ void KisMainWindow::switchTab(int index)
 
 void KisMainWindow::slotFileNew()
 {
+    KisOpenPane *startupWidget = 0;
+
     const QStringList mimeFilter = KisImportExportManager::mimeFilter(KisImportExportManager::Import);
 
-    KisOpenPane *startupWidget = new KisOpenPane(this, mimeFilter, QStringLiteral("templates/"));
+    startupWidget = new KisOpenPane(this, mimeFilter, QStringLiteral("templates/"));
     startupWidget->setWindowModality(Qt::WindowModal);
 
     KisConfig cfg;

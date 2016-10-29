@@ -35,7 +35,6 @@ KisShapeSelectionModel::KisShapeSelectionModel(KisImageWSP image, KisSelectionWS
     , m_shapeSelection(shapeSelection)
     , m_updateSignalCompressor(new KisSignalCompressor(300, KisSignalCompressor::POSTPONE, this))
     , m_updatesEnabled(true)
-    , m_fullUpdateRequested(false)
 {
     connect(m_updateSignalCompressor, SIGNAL(timeout()), SLOT(startUpdateJob()));
 }
@@ -51,8 +50,7 @@ void KisShapeSelectionModel::requestUpdate(const QRect &updateRect)
     m_shapeSelection->recalculateOutlineCache();
 
     if (m_updatesEnabled) {
-        m_fullUpdateRequested |= updateRect.isEmpty();
-        m_updateRect = !m_fullUpdateRequested ? m_updateRect | updateRect : QRect();
+        m_updateRect = !updateRect.isEmpty() ? m_updateRect | updateRect : QRect();
         m_updateSignalCompressor->start();
     }
 }
@@ -63,7 +61,6 @@ void KisShapeSelectionModel::startUpdateJob()
         m_image->addSpontaneousJob(new KisUpdateSelectionJob(m_parentSelection, m_updateRect));
     }
     m_updateRect = QRect();
-    m_fullUpdateRequested = false;
 }
 
 void KisShapeSelectionModel::add(KoShape *child)

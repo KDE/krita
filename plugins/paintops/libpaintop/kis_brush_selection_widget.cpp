@@ -50,6 +50,7 @@ KisBrushSelectionWidget::KisBrushSelectionWidget(QWidget * parent)
     m_buttonGroup->setExclusive(true);
 
     m_layout = new QGridLayout(uiWdgBrushChooser.settingsFrame);
+
     m_autoBrushWidget = new KisAutoBrushWidget(this, "autobrush");
     connect(m_autoBrushWidget, SIGNAL(sigBrushChanged()), SIGNAL(sigBrushChanged()));
     addChooser(i18n("Auto"), m_autoBrushWidget, AUTOBRUSH, KoGroupButton::GroupLeft);
@@ -250,37 +251,6 @@ void KisBrushSelectionWidget::setPrecisionEnabled(bool value)
 {
     uiWdgBrushChooser.sliderPrecision->setVisible(value);
     uiWdgBrushChooser.lblPrecision->setVisible(value);
-}
-
-void KisBrushSelectionWidget::hideOptions(const QStringList &options)
-{
-    Q_FOREACH(const QString &option, options) {
-        QStringList l = option.split("/");
-        if (l.count() != 2) {
-            continue;
-        }
-        QObject *o = 0;
-        if (l[0] == "KisAutoBrushWidget") {
-            o = m_autoBrushWidget->findChild<QObject*>(l[1]);
-        }
-        else if (l[0] == "KisBrushChooser") {
-            o = m_brushChooser->findChild<QObject*>(l[1]);
-        }
-        else if (l[0] == "KisTextBrushChooser") {
-            o = m_textBrushWidget->findChild<QObject*>(l[1]);
-        }
-        else {
-            qWarning() << "KisBrushSelectionWidget: Invalid option given to disable:" << option;
-        }
-
-        if (o) {
-            QWidget *w = qobject_cast<QWidget*>(o);
-            if (w) {
-                w->setVisible(false);
-            }
-            o = 0;
-        }
-    }
 }
 
 void KisBrushSelectionWidget::setCurrentWidget(QWidget* widget)

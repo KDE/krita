@@ -59,7 +59,7 @@ private:
     class Private;
     Private* const d;
 
-    static QStyleOptionViewItem getOptions(const QStyleOptionViewItem &option, const QModelIndex &index);
+    static QStyleOptionViewItemV4 getOptions(const QStyleOptionViewItem &option, const QModelIndex &index);
     QRect progressBarRect(const QStyleOptionViewItem &option, const QModelIndex &index) const;
     void drawProgressBar(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const;
 

@@ -333,7 +333,7 @@ void ArtisticTextTool::mouseMoveEvent(KoPointerEvent *event)
         if (m_currentShape) {
             emit statusTextChanged(i18n("Press escape to finish editing."));
         } else {
-            emit statusTextChanged(QString());
+            emit statusTextChanged("");
         }
     }
 }

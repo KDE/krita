@@ -28,7 +28,7 @@ DefaultToolFactory::DefaultToolFactory()
     : KoToolFactoryBase(KoInteractionTool_ID)
 {
     setToolTip(i18n("Shape Manipulation Tool"));
-    setSection(mainToolType());
+    setToolType(mainToolType());
     setPriority(0);
     setIconName(koIconNameCStr("select"));
     setActivationShapeId("flake/always");

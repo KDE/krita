@@ -268,8 +268,9 @@ void KisWarpTransformWorkerTest::testBackwardInterpolatorRoundTrip()
     KisFourPointInterpolatorForward f(src, dst);
     KisFourPointInterpolatorBackward b(src, dst);
 
-    for (int y = 0; y <= 100; y += 1) {
-        for (int x = 0; x <= 100; x += 1) {
+    for (qreal y = 0; y <= 100; y += 1.0) {
+        for (qreal x = 0; x <= 100; x += 1.0) {
+
             QPointF pt(x, y);
 
             QPointF fwdPt = f.map(pt);

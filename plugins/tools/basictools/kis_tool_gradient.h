@@ -112,10 +112,10 @@ public:
     KisToolGradientFactory()
             : KoToolFactoryBase("KritaFill/KisToolGradient") {
         setToolTip(i18n("Gradient Tool"));
-        setSection(TOOL_TYPE_FILL);
+        setToolType(TOOL_TYPE_FILL);
         setIconName(koIconNameCStr("krita_tool_gradient"));
         setShortcut(QKeySequence(Qt::Key_G));
-        setPriority(1);
+        setPriority(15);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
     }
 

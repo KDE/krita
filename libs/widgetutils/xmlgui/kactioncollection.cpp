@@ -47,10 +47,6 @@
 
 #include <stdio.h>
 
-#if defined(KCONFIG_BEFORE_5_24)
-# define authorizeAction authorizeKAction
-#endif
-
 class KActionCollectionPrivate
 {
 public:
@@ -295,7 +291,7 @@ QAction *KActionCollection::addAction(const QString &name, QAction *action)
         return action;
     }
 
-    if (!KAuthorized::authorizeAction(indexName)) {
+    if (!KAuthorized::authorizeKAction(indexName)) {
         // Disable this action
         action->setEnabled(false);
         action->setVisible(false);

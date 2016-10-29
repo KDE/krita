@@ -44,7 +44,7 @@ public:
 
 public:
     
-    void transform(const quint8 *srcU8, quint8 *dstU8, qint32 nPixels) const override
+    void transform(const quint8 *srcU8, quint8 *dstU8, qint32 nPixels) const
     {
     	const RGBPixel* src = reinterpret_cast<const RGBPixel*>(srcU8);
         RGBPixel* dst = reinterpret_cast<RGBPixel*>(dstU8);
@@ -67,21 +67,21 @@ public:
         }
     }
 
-    QList<QString> parameters() const override
+    virtual QList<QString> parameters() const
     {
     	QList<QString> list;
     	list << "exposure";
     	return list;
     }
 
-    int parameterId(const QString& name) const override
+    virtual int parameterId(const QString& name) const
     {
         if (name == "exposure")
         return 0;
         return -1;
     }
 
-    void setParameter(int id, const QVariant& parameter) override
+    virtual void setParameter(int id, const QVariant& parameter)
     {
         switch(id)
         {

@@ -28,7 +28,6 @@
 #include <QAbstractButton>
 #include <QDesktopWidget>
 #include <QApplication>
-#include <QMouseEvent>
 
 class SectionLayout : public QLayout
 {
@@ -47,10 +46,6 @@ public:
     void addButton(QAbstractButton *button, int priority)
     {
         addChildWidget(button);
-        if (m_priorities.values().contains(priority)) {
-            qWarning() << "Button" << button << "has a conflicting priority";
-        }
-
         m_priorities.insert(button, priority);
         int index = 1;
         Q_FOREACH (QWidgetItem *item, m_items) {
@@ -83,7 +78,8 @@ public:
     void setGeometry (const QRect &rect)
     {
         int x = 0;
-        int y = 0; const QSize &size = buttonSize();
+        int y = 0;
+        const QSize &size = buttonSize();
         if (m_orientation == Qt::Vertical) {
             foreach (QWidgetItem* w, m_items) {
                 if (w->isEmpty())
@@ -143,43 +139,6 @@ public:
         m_layout(new SectionLayout(this))
     {
         setLayout(m_layout);
-// Re-enable this when we need to debug the section layout again.
-//        setAutoFillBackground(true);
-//        static int i = 0;
-//        switch(i) {
-//        case 0:
-//            setStyleSheet("background-color:red");
-//            break;
-//        case 1:
-//            setStyleSheet("background-color:blue");
-//            break;
-//        case 2:
-//            setStyleSheet("background-color:green");
-//            break;
-//        case 3:
-//            setStyleSheet("background-color:yellow");
-//            break;
-//        case 4:
-//            setStyleSheet("background-color:white");
-//            break;
-//        case 5:
-//            setStyleSheet("background-color:gray");
-//            break;
-//        case 6:
-//            setStyleSheet("background-color:lime");
-//            break;
-//        case 7:
-//            setStyleSheet("background-color:silver");
-//            break;
-//        case 8:
-//            setStyleSheet("background-color:purple");
-//            break;
-//        default:
-//            setStyleSheet("background-color:maroon");
-//            break;
-//        }
-//        i++;
-
     }
 
     void addButton(QAbstractButton *button, int priority)
@@ -189,7 +148,6 @@ public:
 
     void setName(const QString &name)
     {
-        setObjectName(name);
         m_name = name;
     }
 
@@ -233,8 +191,6 @@ public:
         m_layout->setOrientation(orientation);
     }
 
-
-protected:
 private:
     SectionLayout *m_layout;
     QString m_name;
@@ -302,9 +258,7 @@ public:
             return 0;
         return m_sections.at(i);
     }
-
     QLayoutItem* takeAt(int i) { return m_sections.takeAt(i); }
-
     int count() const { return m_sections.count(); }
 
     void setGeometry (const QRect &rect)
@@ -333,12 +287,6 @@ public:
         bool firstSection = true;
         foreach (QWidgetItem *wi, m_sections) {
             Section *section = static_cast<Section*> (wi->widget());
-            // Since sections can overlap (if a section occupies two rows, and there
-            // is space on the second row for all of the next section, the next section
-            // will be placed overlapping with the previous section), it's important that
-            // later sections will be higher in the widget z-order than previous
-            // sections, so raise it.
-            section->raise();
             const int buttonCount = section->visibleButtonCount();
             if (buttonCount == 0) {
                 // move out of view, not perfect TODO: better solution

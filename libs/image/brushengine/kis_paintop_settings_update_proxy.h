@@ -34,26 +34,9 @@ public:
     void notifySettingsChanged();
     void notifyUniformPropertiesChanged();
 
-    /**
-     * Blocks all sigSettingsChanged() signals until unpostponeSettingsChanges()
-     * is called. Used to perform "atomic" writing operations.
-     *
-     * @see unpostponeSettingsChanges()
-     */
-    void postponeSettingsChanges();
-
-    /**
-     * Unblocks sigSettingsChanged() and emits one signal if there were at least one
-     * dropped signal while the block was held.
-     */
-    void unpostponeSettingsChanges();
-
 Q_SIGNALS:
     void sigSettingsChanged();
     void sigUniformPropertiesChanged();
-
-private Q_SLOTS:
-    void slotDeliverSettingsChanged();
 
 private:
     struct Private;

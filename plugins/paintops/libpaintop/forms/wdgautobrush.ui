@@ -54,7 +54,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QLabel" name="lblMaskType">
+      <widget class="QLabel" name="label_9">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -70,7 +70,7 @@
       <widget class="QComboBox" name="comboBoxMaskType"/>
      </item>
      <item>
-      <widget class="QLabel" name="lblMaskShape">
+      <widget class="QLabel" name="label_10">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -156,7 +156,7 @@
       </widget>
      </item>
      <item row="3" column="0">
-      <widget class="QLabel" name="lblAngle">
+      <widget class="QLabel" name="label_3">
        <property name="text">
         <string>Angle:</string>
        </property>
@@ -166,7 +166,7 @@
       </widget>
      </item>
      <item row="0" column="0">
-      <widget class="QLabel" name="lblDiameter">
+      <widget class="QLabel" name="label_4">
        <property name="text">
         <string>Diameter:</string>
        </property>
@@ -176,7 +176,7 @@
       </widget>
      </item>
      <item row="1" column="0">
-      <widget class="QLabel" name="lblRatio">
+      <widget class="QLabel" name="label_5">
        <property name="text">
         <string>Ratio:</string>
        </property>
@@ -208,7 +208,7 @@
        <widget class="QWidget" name="PageFade">
         <layout class="QGridLayout" name="gridLayout_5">
          <item row="0" column="0">
-          <widget class="QGroupBox" name="grpFade">
+          <widget class="QGroupBox" name="grpFade_2">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
              <horstretch>0</horstretch>
@@ -231,7 +231,7 @@
             <item>
              <layout class="QGridLayout" name="gridLayout" columnstretch="0,1,0">
               <item row="0" column="0">
-               <widget class="QLabel" name="lblHorizontalFade">
+               <widget class="QLabel" name="label_6">
                 <property name="text">
                  <string>Horizontal:</string>
                 </property>
@@ -247,7 +247,7 @@
                <widget class="KoAspectButton" name="aspectButton" />
               </item>
               <item row="1" column="0">
-               <widget class="QLabel" name="lblVerticalFade">
+               <widget class="QLabel" name="label_7">
                 <property name="text">
                  <string>Vertical:</string>
                 </property>
@@ -330,7 +330,7 @@
       </widget>
      </item>
      <item row="5" column="0">
-      <widget class="QLabel" name="lblRandomness">
+      <widget class="QLabel" name="label_randomness">
        <property name="text">
         <string>Randomness:</string>
        </property>
@@ -340,7 +340,7 @@
       </widget>
      </item>
      <item row="4" column="0">
-      <widget class="QLabel" name="lblSpikes">
+      <widget class="QLabel" name="label">
        <property name="text">
         <string>Spikes:</string>
        </property>
@@ -369,7 +369,7 @@
       <widget class="KisDoubleSliderSpinBox" name="inputRandomness" />
      </item>
      <item row="6" column="0">
-      <widget class="QLabel" name="lblDensity">
+      <widget class="QLabel" name="label_8">
        <property name="text">
         <string>Density:</string>
        </property>
@@ -382,7 +382,7 @@
       <widget class="KisSpacingSelectionWidget" name="spacingWidget" />
      </item>
      <item row="7" column="0">
-      <widget class="QLabel" name="lblSpacing">
+      <widget class="QLabel" name="label_11">
        <property name="text">
         <string>Spacing:</string>
        </property>
@@ -397,12 +397,6 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KisSliderSpinBox</class>
-   <extends>QWidget</extends>
-   <header>kis_slider_spin_box.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>KoAspectButton</class>
    <extends>QWidget</extends>
    <header>KoAspectButton.h</header>
@@ -410,6 +404,12 @@
   </customwidget>
   <customwidget>
    <class>KisDoubleSliderSpinBox</class>
+   <extends>QWidget</extends>
+   <header>kis_slider_spin_box.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KisSliderSpinBox</class>
    <extends>QWidget</extends>
    <header>kis_slider_spin_box.h</header>
    <container>1</container>

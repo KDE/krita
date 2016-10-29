@@ -629,7 +629,7 @@ void KoPathTool::mouseMoveEvent(KoPointerEvent *event)
     } else {
         uint selectedPointCount = m_pointSelection.size();
         if (selectedPointCount == 0)
-            emit statusTextChanged(QString());
+            emit statusTextChanged("");
         else if (selectedPointCount == 1)
             emit statusTextChanged(i18n("Press B to break path at selected point."));
         else

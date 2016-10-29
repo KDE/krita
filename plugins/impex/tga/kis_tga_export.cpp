@@ -48,7 +48,6 @@ KisTGAExport::~KisTGAExport()
 
 KisImportExportFilter::ConversionStatus KisTGAExport::convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration)
 {
-    Q_UNUSED(configuration);
     dbgFile << "TGA export! From:" << from << ", To:" << to << "";
 
     KisDocument *input = inputDocument();

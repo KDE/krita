@@ -14,4 +14,7 @@ add_subdirectory( psd )
 add_subdirectory( color )
 add_subdirectory( image )
 add_subdirectory( ui )
-add_subdirectory( vectorimage )
+
+if (SHOULD_BUILD_LIB_KOVECTORIMAGE)
+    add_subdirectory( vectorimage )
+endif ()

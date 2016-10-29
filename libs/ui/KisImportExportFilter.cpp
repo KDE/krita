@@ -153,15 +153,10 @@ QString KisImportExportFilter::conversionStatusString(ConversionStatus status)
 
         msg = i18n("Unknown file type"); break;
 
-    case UnsupportedVersion:
-
-        msg = i18n("Unsupported file version"); break;
-
     case UserCancelled:
 
         // intentionally we do not prompt the error message here
         break;
-
 
     default: msg = i18n("Unknown error"); break;
     }

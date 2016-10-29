@@ -63,9 +63,9 @@ public:
         : KoToolFactoryBase("KisToolSelectPolygonal")
     {
         setToolTip(i18n("Polygonal Selection Tool"));
-        setSection(TOOL_TYPE_SELECTION);
+        setToolType(TOOL_TYPE_SELECTED);
         setIconName(koIconNameCStr("tool_polygonal_selection"));
-        setPriority(2);
+        setPriority(54);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
     }
 

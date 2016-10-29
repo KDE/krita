@@ -66,9 +66,9 @@ public:
         : KoToolFactoryBase("KisToolSelectOutline")
     {
         setToolTip(i18n("Outline Selection Tool"));
-        setSection(TOOL_TYPE_SELECTION);
+        setToolType(TOOL_TYPE_SELECTED);
         setIconName(koIconNameCStr("tool_outline_selection"));
-        setPriority(3);
+        setPriority(55);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
     }
 

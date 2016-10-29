@@ -33,7 +33,7 @@ public:
     {
     }
 
-    void run(KisStrokeJobData *data) override {
+    void run(KisStrokeJobData *data) {
         switch(m_type) {
         case KisSimpleStrokeStrategy::JOB_INIT:
             Q_UNUSED(data);

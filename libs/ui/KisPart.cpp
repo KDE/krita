@@ -446,7 +446,7 @@ void KisPart::openTemplate(const QUrl &url)
     KisOpenPane *pane = qobject_cast<KisOpenPane*>(sender());
     if (pane) {
         pane->hide();
-        pane->deleteLater();
+        delete pane;
 
     }
 
@@ -477,7 +477,7 @@ void KisPart::startCustomDocument(KisDocument* doc)
     KisOpenPane *pane = qobject_cast<KisOpenPane*>(sender());
     if (pane) {
         pane->hide();
-        pane->deleteLater();
+        delete pane;
     }
     mw->addViewAndNotifyLoadingCompleted(doc);
 

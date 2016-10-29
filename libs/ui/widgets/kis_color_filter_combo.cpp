@@ -46,7 +46,7 @@ struct LabelFilteringModel : public QSortFilterProxyModel
 {
     LabelFilteringModel(QObject *parent) : QSortFilterProxyModel(parent) {}
 
-    bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const override {
+    bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const {
         const QModelIndex index = sourceModel()->index(source_row, 0, source_parent);
         const int labelIndex = index.data(OriginalLabelIndex).toInt();
 
@@ -64,13 +64,10 @@ private:
 };
 
 
-class ComboEventFilter : public QObject
-{
-public:
+struct ComboEventFilter : public QObject {
     ComboEventFilter(KisColorFilterCombo *parent) : m_parent(parent), m_buttonPressed(false) {}
 
-protected:
-    bool eventFilter(QObject *obj, QEvent *event) override {
+    bool eventFilter(QObject *obj, QEvent *event) {
         if (event->type() == QEvent::Leave) {
             m_buttonPressed = false;
 
@@ -146,7 +143,6 @@ protected:
         return QObject::eventFilter(obj, event);
     }
 
-private:
     KisColorFilterCombo *m_parent;
     bool m_buttonPressed;
 };
@@ -154,7 +150,7 @@ private:
 class FullSizedListView : public QListView
 {
 public:
-    QSize sizeHint() const override {
+    QSize sizeHint() const {
         return contentsSize();
     }
 };

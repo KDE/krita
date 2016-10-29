@@ -39,11 +39,11 @@ class KoRgbU8InvertColorTransformation : public KoColorTransformation
 
 public:
 
-    KoRgbU8InvertColorTransformation(const KoColorSpace *cs) : m_psize(cs->pixelSize())
+    KoRgbU8InvertColorTransformation(const KoColorSpace *cs) : m_colorSpace(cs), m_psize(cs->pixelSize())
     {
     }
 
-    void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const override
+    virtual void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const
     {
         while (nPixels--) {
             dst[0] = KoColorSpaceMathsTraits<quint8>::max - src[0];
@@ -58,6 +58,8 @@ public:
     }
 
 private:
+
+    const KoColorSpace *m_colorSpace;
     quint32 m_psize;
 };
 

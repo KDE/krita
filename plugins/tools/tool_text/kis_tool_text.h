@@ -92,10 +92,10 @@ public:
             : KoToolFactoryBase("KritaShape/KisToolText") {
         setToolTip(i18n("Text Tool"));
 
-        setSection(mainToolType());
+        setToolType(mainToolType());
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
         setIconName(koIconNameCStr("draw-text"));
-        setPriority(1);
+        setPriority(2);
     }
 
     virtual ~KisToolTextFactory() {}

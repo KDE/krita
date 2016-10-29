@@ -40,10 +40,10 @@ public:
                                           KoColorConversionTransformation::internalConversionFlags()) {
     }
 
-    ~KoSimpleColorConversionTransformation() override {
+    ~KoSimpleColorConversionTransformation() {
     }
 
-    void transform(const quint8 *src, quint8 *dst, qint32 numPixels) const override {
+    virtual void transform(const quint8 *src, quint8 *dst, qint32 numPixels) const {
         const KoColorSpace* srcCs = srcColorSpace();
         const KoColorSpace* dstCs = dstColorSpace();
 

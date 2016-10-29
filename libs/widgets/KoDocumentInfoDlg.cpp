@@ -50,7 +50,7 @@ public:
         setHeader(item->name());
         setIcon(KisIconUtils::loadIcon(item->iconName()));
     }
-    ~KoPageWidgetItemAdapter() override { delete m_item; }
+    ~KoPageWidgetItemAdapter() { delete m_item; }
 
     bool shouldDialogCloseBeVetoed() { return m_item->shouldDialogCloseBeVetoed(); }
     void apply() { m_item->apply(); }

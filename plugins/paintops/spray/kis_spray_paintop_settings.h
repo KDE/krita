@@ -39,17 +39,17 @@ public:
 
     QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode) override;
 
-    QString modelName() const override {
+    QString modelName() const {
         return "airbrush";
     }
 
-    bool paintIncremental() override;
-    bool isAirbrushing() const override;
-    int rate() const override;
+    bool paintIncremental();
+    bool isAirbrushing() const;
+    int rate() const;
 
 protected:
 
-    QList<KisUniformPaintOpPropertySP> uniformProperties(KisPaintOpSettingsSP settings) override;
+    QList<KisUniformPaintOpPropertySP> uniformProperties(KisPaintOpSettingsSP settings);
 
 private:
     Q_DISABLE_COPY(KisSprayPaintOpSettings)

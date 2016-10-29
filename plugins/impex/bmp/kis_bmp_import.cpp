@@ -52,8 +52,6 @@ KisBMPImport::~KisBMPImport()
 
 KisImportExportFilter::ConversionStatus KisBMPImport::convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration)
 {
-    Q_UNUSED(configuration);
-
     dbgFile << "BMP import! From:" << from << ", To:" << to << 0;
 
     if (to != "application/x-krita")

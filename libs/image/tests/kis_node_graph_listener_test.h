@@ -22,14 +22,22 @@
 #include <QtTest>
 
 #include "kis_node.h"
-#include <sdk/tests/testing_nodes.h>
 
-class TestNode : public TestUtil::DefaultNode
+class TestNode : public KisNode
 {
     Q_OBJECT
 public:
     KisNodeSP clone() const {
         return new TestNode(*this);
+    }
+    bool allowAsChild(KisNodeSP) const {
+        return true;
+    }
+    const KoColorSpace * colorSpace() const {
+        return 0;
+    }
+    virtual const KoCompositeOp * compositeOp() const {
+        return 0;
     }
 };
 

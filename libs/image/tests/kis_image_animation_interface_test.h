@@ -35,7 +35,7 @@ private Q_SLOTS:
     void testAnimationCompositionBug();
 
     void testSwitchFrameWithUndo();
-    void testSwitchFrameHangup();
+
 
 
     void slotFrameDone();

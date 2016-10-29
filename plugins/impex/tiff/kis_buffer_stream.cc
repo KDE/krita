@@ -38,12 +38,12 @@ void KisBufferStreamContigBase::moveToLine(uint32 lineNumber)
 
 uint32 KisBufferStreamContigBelow16::nextValue()
 {
-    uint8 remain;
-    uint32 value;
+    register uint8 remain;
+    register uint32 value;
     remain = (uint8) m_depth;
     value = 0;
     while (remain > 0) {
-        uint8 toread;
+        register uint8 toread;
         toread = remain;
         if (toread > m_posinc) toread = m_posinc;
         remain -= toread;
@@ -59,12 +59,12 @@ uint32 KisBufferStreamContigBelow16::nextValue()
 
 uint32 KisBufferStreamContigBelow32::nextValue()
 {
-    uint8 remain;
-    uint32 value;
+    register uint8 remain;
+    register uint32 value;
     remain = (uint8) m_depth;
     value = 0;
     while (remain > 0) {
-        uint8 toread;
+        register uint8 toread;
         toread = remain;
         if (toread > m_posinc) toread = m_posinc;
         remain -= toread;
@@ -80,12 +80,12 @@ uint32 KisBufferStreamContigBelow32::nextValue()
 
 uint32 KisBufferStreamContigAbove32::nextValue()
 {
-    uint8 remain;
-    uint32 value;
+    register uint8 remain;
+    register uint32 value;
     remain = (uint8) m_depth;
     value = 0;
     while (remain > 0) {
-        uint8 toread;
+        register uint8 toread;
         toread = remain;
         if (toread > m_posinc) toread = m_posinc;
         remain -= toread;

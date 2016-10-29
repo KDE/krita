@@ -680,6 +680,9 @@
         </widget>
        </item>
       </layout>
+      <zorder>minimalShadeSelectorGroup</zorder>
+      <zorder></zorder>
+      <zorder>verticalSpacer_5</zorder>
      </widget>
      <widget class="QWidget" name="tab_ColorHistory">
       <property name="enabled">

@@ -62,7 +62,6 @@ KisHeightMapImport::~KisHeightMapImport()
 
 KisImportExportFilter::ConversionStatus KisHeightMapImport::convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration)
 {
-    Q_UNUSED(configuration);
 
     KisDocument * doc = outputDocument();
 

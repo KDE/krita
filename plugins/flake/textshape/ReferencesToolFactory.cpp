@@ -30,7 +30,7 @@ ReferencesToolFactory::ReferencesToolFactory()
     : KoToolFactoryBase("ReferencesTool")
 {
     setToolTip(i18n("References"));
-    setSection("calligrawords,calligraauthor");
+    setToolType("calligrawords,calligraauthor");
     setIconName(koIconNameCStr("tool_references"));
     setPriority(20);
     setActivationShapeId(TextShape_SHAPEID);

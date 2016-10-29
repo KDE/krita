@@ -143,7 +143,7 @@ KisColorSliderWidget::KisColorSliderWidget(KoColorDisplayRendererInterface *disp
 
 KisColorSliderWidget::~KisColorSliderWidget()
 {
-    //KConfigGroup cfg =  KSharedConfig::openConfig()->group(QString());
+    //KConfigGroup cfg =  KSharedConfig::openConfig()->group("");
     //cfg.writeEntry("SpecificColorSelector/ShowColorSpaceSelector", m_chkShowColorSpaceSelector->isChecked());
 
 }

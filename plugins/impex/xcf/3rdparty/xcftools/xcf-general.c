@@ -2,7 +2,7 @@
  *
  * This file was written by Henning Makholm <henning@makholm.net>
  * It is hereby in the public domain.
- *
+ * 
  * In jurisdictions that do not recognise grants of copyright to the
  * public domain: I, the author and (presumably, in those jurisdictions)
  * copyright holder, hereby permit anyone to distribute and use this code,
@@ -92,7 +92,7 @@ xcfString(uint32_t ptr,uint32_t *after)
   uint32_t length ;
   unsigned i ;
   ICONV_CONST char *utf8master ;
-
+  
   xcfCheckspace(ptr,4,"(string length)");
   length = xcfL(ptr) ;
   ptr += 4 ;
@@ -197,7 +197,7 @@ getBasicXcfInfo(void)
   uint32_t ptr, data, layerfile ;
   PropType type ;
   int i, j ;
-
+  
   xcfCheckspace(0,14+7*4,"(very short)");
   if( strcmp((char*)xcf_file,"gimp xcf file") == 0 )
     XCF.version = 0 ;
@@ -207,13 +207,15 @@ getBasicXcfInfo(void)
   else
     FatalBadXCF(_("Not an XCF file at all (magic not recognized)"));
 
-  if (XCF.version < 0 || XCF.version > 3) {
-      return;
+  if( XCF.version < 0 || XCF.version > 3 ) {
+    fprintf(stderr,
+            _("Warning: XCF version %d not supported (trying anyway...)\n"),
+            XCF.version);
   }
-
+  
   XCF.compression = COMPRESS_NONE ;
   XCF.colormapptr = 0 ;
-
+  
   ptr = 14 ;
   XCF.width    = xcfL(ptr); ptr += 4 ;
   XCF.height   = xcfL(ptr); ptr += 4 ;
@@ -281,9 +283,9 @@ getBasicXcfInfo(void)
         L->pathLength = (ptr - data - 2) / 4 ;
 
         if ( L->pathLength != 0 ) {
-
+         
           L->path = xcfmalloc( L->pathLength * sizeof(unsigned) ) ;
-
+          
           for ( j = 0; j!=L->pathLength; j++ )
             *(L->path + j) = (unsigned)xcfL(data + 4 * j);
         }

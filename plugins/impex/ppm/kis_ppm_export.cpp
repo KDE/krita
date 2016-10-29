@@ -73,27 +73,27 @@ class KisPPMAsciiFlow : public KisPPMFlow
 public:
     KisPPMAsciiFlow(QIODevice* device) : m_device(device) {
     }
-    ~KisPPMAsciiFlow() override {
+    ~KisPPMAsciiFlow() {
     }
-    void writeBool(quint8 v) override {
+    virtual void writeBool(quint8 v) {
         if (v > 127) {
             m_device->write("1 ");
         } else {
             m_device->write("0 ");
         }
     }
-    void writeBool(quint16 v) override {
+    virtual void writeBool(quint16 v) {
         writeBool(quint8(v >> 8));
     }
-    void writeNumber(quint8 v) override {
+    virtual void writeNumber(quint8 v) {
         m_device->write(QByteArray::number(v));
         m_device->write(" ");
     }
-    void writeNumber(quint16 v) override {
+    virtual void writeNumber(quint16 v) {
         m_device->write(QByteArray::number(v));
         m_device->write(" ");
     }
-    void flush() override {
+    virtual void flush() {
     }
 private:
     QIODevice* m_device;
@@ -104,9 +104,9 @@ class KisPPMBinaryFlow : public KisPPMFlow
 public:
     KisPPMBinaryFlow(QIODevice* device) : m_device(device), m_pos(0), m_current(0) {
     }
-    ~KisPPMBinaryFlow() override {
+    virtual ~KisPPMBinaryFlow() {
     }
-    void writeBool(quint8 v) override {
+    virtual void writeBool(quint8 v) {
         m_current = m_current << 1;
         m_current |= (v > 127);
         ++m_pos;
@@ -116,17 +116,17 @@ public:
             flush();
         }
     }
-    void writeBool(quint16 v) override {
+    virtual void writeBool(quint16 v) {
         writeBool(quint8(v >> 8));
     }
-    void writeNumber(quint8 v) override {
+    virtual void writeNumber(quint8 v) {
         m_device->write((char*)&v, 1);
     }
-    void writeNumber(quint16 v) override {
+    virtual void writeNumber(quint16 v) {
         quint16 vo = qToBigEndian(v);
         m_device->write((char*)&vo, 2);
     }
-    void flush() override {
+    virtual void flush() {
         m_device->write((char*)&m_current, 1);
     }
 private:

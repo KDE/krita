@@ -3,12 +3,13 @@ if(LCMS2_FOUND)
 endif()
 
 set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
-include_directories( ${CMAKE_SOURCE_DIR}/sdk/tests )
-
-include(KritaAddBrokenUnitTest)
+include_directories(     ${CMAKE_SOURCE_DIR}/sdk/tests )
 
 macro_add_unittest_definitions()
 
-krita_add_broken_unit_test(kis_tiff_test.cpp
-    TEST_NAME krita-plugin-format-tiff_test
-    LINK_LIBRARIES kritaui Qt5::Test)
+########### next target ###############
+set(kis_tiff_test_SRCS kis_tiff_test.cpp )
+
+kde4_add_broken_unit_test(kis_tiff_test TESTNAME krita-plugins-formats-tiff_test ${kis_tiff_test_SRCS})
+
+target_link_libraries(kis_tiff_test  kritaui Qt5::Test)

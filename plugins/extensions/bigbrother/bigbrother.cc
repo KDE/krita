@@ -59,17 +59,17 @@ K_PLUGIN_FACTORY_WITH_JSON(BigBrotherPluginFactory, "kritabigbrother.json", regi
 
 class RecordedActionSaveContext : public KisRecordedActionSaveContext {
     public:
-        void saveGradient(const KoAbstractGradient* ) override {}
-        void savePattern(const KoPattern* ) override {}
+        virtual void saveGradient(const KoAbstractGradient* ) {}
+        virtual void savePattern(const KoPattern* ) {}
 };
 
 class RecordedActionLoadContext : public KisRecordedActionLoadContext {
     public:
-        KoAbstractGradient* gradient(const QString& name) const override
+        virtual KoAbstractGradient* gradient(const QString& name) const
         {
             return KoResourceServerProvider::instance()->gradientServer()->resourceByName(name);
         }
-        KoPattern* pattern(const QString& name) const override
+        virtual KoPattern* pattern(const QString& name) const
         {
             return KoResourceServerProvider::instance()->patternServer()->resourceByName(name);
         }

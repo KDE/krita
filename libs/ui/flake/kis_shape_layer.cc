@@ -95,12 +95,12 @@ public:
         : q(parent)
 {}
 
-    void add(KoShape *child) override {
+    void add(KoShape *child) {
         SimpleShapeContainerModel::add(child);
         q->shapeManager()->addShape(child);
     }
 
-    void remove(KoShape *child) override {
+    void remove(KoShape *child) {
         q->shapeManager()->remove(child);
         SimpleShapeContainerModel::remove(child);
     }

@@ -51,7 +51,7 @@ struct KisSuspendProjectionUpdatesStrokeStrategy::Private
         {
         }
 
-        bool filter(KisImage *image, KisNode *node, const QRect &rect) override {
+        bool filter(KisImage *image, KisNode *node, const QRect &rect) {
             if (image->currentLevelOfDetail() > 0) return false;
 
             QMutexLocker l(&m_mutex);
@@ -145,16 +145,6 @@ KisSuspendProjectionUpdatesStrokeStrategy::KisSuspendProjectionUpdatesStrokeStra
 {
     m_d->image = image;
     m_d->suspend = suspend;
-
-
-    /**
-     * Here we add a dumb INIT job so that KisStrokesQueue would know that the
-     * stroke has already started or not. When the queue reaches the resume
-     * stroke ans starts its execution, no Lod0 can execute anymore. So all the
-     * new Lod0 strokes should go to the end of the queue and wrapped into
-     * their own Suspend/Resume pair.
-     */
-    enableJob(JOB_INIT, true);
 
     enableJob(JOB_DOSTROKE, true);
     enableJob(JOB_CANCEL, true);

@@ -31,7 +31,7 @@ public:
             : KisPaintOp(gc) {
     }
 
-    KisSpacingInformation paintAt(const KisPaintInformation&) override {
+    KisSpacingInformation paintAt(const KisPaintInformation&) {
         return KisSpacingInformation(0.0);
     }
 

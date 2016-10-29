@@ -93,7 +93,6 @@ public:
                             DownloadFailed,
                             FilterCreationError,
                             ProgressCancelled,
-                            UnsupportedVersion,
                             JustInCaseSomeBrokenCompilerUsesLessThanAByte = 255
                           };
 

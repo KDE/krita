@@ -352,7 +352,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
     // TODO: fix print & exportAsPdf to work without mainwindow shown
     const bool showmainWindow = !exportAs; // would be !batchRun;
 
-    const bool showSplashScreen = !m_batchRun && qEnvironmentVariableIsEmpty("NOSPLASH") &&  qgetenv("XDG_CURRENT_DESKTOP") != "GNOME";
+    const bool showSplashScreen = !m_batchRun && qgetenv("NOSPLASH").isEmpty() &&  qgetenv("XDG_CURRENT_DESKTOP") != "GNOME";
     if (showSplashScreen) {
         d->splashScreen->show();
         d->splashScreen->repaint();
@@ -387,8 +387,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
         m_mainWindow = KisPart::instance()->createMainWindow();
 
         if (showmainWindow) {
-            m_mainWindow->initializeGeometry();
-            m_mainWindow->show();
+            QTimer::singleShot(1, m_mainWindow, SLOT(show()));
         }
     }
     short int numberOfOpenDocuments = 0; // number of documents open
@@ -398,7 +397,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
         checkAutosaveFiles();
     }
 
-    setSplashScreenLoadingText(QString()); // done loading, so clear out label
+    setSplashScreenLoadingText(""); // done loading, so clear out label
 
     // Get the command line arguments which we have to parse
     int argsCount = args.filenames().count();

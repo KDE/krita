@@ -205,9 +205,9 @@ QHash<QTextList *, QString> KoTextWriter::Private::saveListStyles(QTextBlock blo
                 continue;
             }
             KoListStyle *listStyle = list->style();
-            if (!listStyle || listStyle->isOulineStyle())
+            if (listStyle && listStyle->isOulineStyle()) {
                 continue;
-
+            }
             bool automatic = listStyle->styleId() == 0;
             KoGenStyle style(automatic ? KoGenStyle::ListAutoStyle : KoGenStyle::ListStyle);
             if (automatic && context.isSet(KoShapeSavingContext::AutoStyleInStyleXml))

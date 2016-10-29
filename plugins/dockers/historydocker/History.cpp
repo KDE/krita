@@ -35,7 +35,7 @@ public:
     HistoryDockFactory() {
     }
 
-    QString id() const override {
+    virtual QString id() const {
         return QString("History");
     }
 
@@ -43,14 +43,14 @@ public:
         return Qt::RightDockWidgetArea;
     }
 
-    QDockWidget* createDockWidget() override {
+    virtual QDockWidget* createDockWidget() {
         HistoryDock * dockWidget = new HistoryDock();
         dockWidget->setObjectName(id());
 
         return dockWidget;
     }
 
-    DockPosition defaultDockPosition() const override {
+    DockPosition defaultDockPosition() const {
         return DockRight;
     }
 };

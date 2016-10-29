@@ -55,7 +55,7 @@ public:
         return false;
     }
     virtual QString description() {
-        return QString();
+        return QString("");
     }
 
 protected:

@@ -114,8 +114,6 @@ bool KisTransformMaskAdapter::isAnimated() const
 
 KisKeyframeChannel *KisTransformMaskAdapter::getKeyframeChannel(const QString &id, KisDefaultBoundsBaseSP defaultBounds)
 {
-    Q_UNUSED(id);
-    Q_UNUSED(defaultBounds);
     return 0;
 }
 

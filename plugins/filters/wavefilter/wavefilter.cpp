@@ -61,9 +61,9 @@ public:
     KisSinusoidalWaveCurve(int amplitude, int wavelength, int shift) : m_amplitude(amplitude), m_wavelength(wavelength), m_shift(shift) {
     }
 
-    ~KisSinusoidalWaveCurve() override {}
+    virtual ~KisSinusoidalWaveCurve() {}
 
-    double valueAt(int x, int y) override {
+    virtual double valueAt(int x, int y) {
         return y + m_amplitude * cos((double)(m_shift + x) / m_wavelength);
     }
 private:
@@ -77,9 +77,9 @@ public:
     KisTriangleWaveCurve(int amplitude, int wavelength, int shift) :  m_amplitude(amplitude), m_wavelength(wavelength), m_shift(shift) {
     }
 
-    ~KisTriangleWaveCurve() override {}
+    virtual ~KisTriangleWaveCurve() {}
 
-    double valueAt(int x, int y) override {
+    virtual double valueAt(int x, int y) {
         return y +  m_amplitude * pow(-1.0, (m_shift + x) / m_wavelength)  *(0.5 - (double)((m_shift + x) % m_wavelength) / m_wavelength);
     }
 private:

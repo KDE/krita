@@ -257,7 +257,7 @@ class KRITAPIGMENT_EXPORT KoSegmentGradient : public KoAbstractGradient
 {
 
 public:
-    explicit KoSegmentGradient(const QString &file = QString());
+    explicit KoSegmentGradient(const QString &file);
     virtual ~KoSegmentGradient();
 
     KoAbstractGradient* clone() const;

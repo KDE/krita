@@ -142,17 +142,17 @@ bool adjustIcon(QIcon *icon)
 
 void updateIconCommon(QObject *object)
 {
-    QAbstractButton* button = qobject_cast<QAbstractButton*>(object);
+    QAbstractButton* button = dynamic_cast<QAbstractButton*>(object);
     if (button) {
         updateIcon(button);
     }
 
-    QComboBox* comboBox = qobject_cast<QComboBox*>(object);
+    QComboBox* comboBox = dynamic_cast<QComboBox*>(object);
     if (comboBox) {
         updateIcon(comboBox);
     }
 
-    QAction* action = qobject_cast<QAction*>(object);
+    QAction* action = dynamic_cast<QAction*>(object);
     if (action) {
         updateIcon(action);
     }

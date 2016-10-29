@@ -201,14 +201,14 @@ void DlgBundleManager::removeSelected()
 void DlgBundleManager::itemSelected(QListWidgetItem *current, QListWidgetItem *)
 {
     if (!current) {
-        m_ui->lblName->clear();
-        m_ui->lblAuthor->clear();
-        m_ui->lblEmail->clear();
-        m_ui->lblLicense->clear();
-        m_ui->lblWebsite->clear();
-        m_ui->lblDescription->clear();
-        m_ui->lblCreated->clear();
-        m_ui->lblUpdated->clear();
+        m_ui->lblName->setText("");
+        m_ui->lblAuthor->setText("");
+        m_ui->lblEmail->setText("");
+        m_ui->lblLicense->setText("");
+        m_ui->lblWebsite->setText("");
+        m_ui->lblDescription->setPlainText("");
+        m_ui->lblCreated->setText("");
+        m_ui->lblUpdated->setText("");
         m_ui->lblPreview->setPixmap(QPixmap::fromImage(QImage()));
         m_ui->listBundleContents->clear();
         m_ui->bnEditBundle->setEnabled(false);

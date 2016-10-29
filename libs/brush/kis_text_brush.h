@@ -36,8 +36,8 @@ public:
     KisTextBrush(const KisTextBrush &rhs);
     virtual ~KisTextBrush();
 
-    void notifyStrokeStarted() override;
-    void notifyCachedDabPainted(const KisPaintInformation& info) override;
+    void notifyStrokeStarted();
+    void notifyCachedDabPainted(const KisPaintInformation& info);
 
     void generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst, KisBrush::ColoringInformation* coloringInformation,
             KisDabShape const&,
@@ -47,19 +47,19 @@ public:
     KisFixedPaintDeviceSP paintDevice(const KoColorSpace * colorSpace,
         KisDabShape const&, const KisPaintInformation& info, double subPixelX, double subPixelY) const override;
 
-    bool load() override {
+    bool load() {
         return false;
     }
 
-    virtual bool loadFromDevice(QIODevice *) override {
+    virtual bool loadFromDevice(QIODevice *) {
         return false;
     }
 
-    bool save() override {
+    bool save()  {
         return false;
     }
 
-    bool saveToDevice(QIODevice* ) const override {
+    bool saveToDevice(QIODevice* ) const {
         return false;
     }
 
@@ -73,16 +73,16 @@ public:
     bool pipeMode() const;
 
     void updateBrush();
-    void toXML(QDomDocument& , QDomElement&) const override;
+    void toXML(QDomDocument& , QDomElement&) const;
 
-    quint32 brushIndex(const KisPaintInformation& info) const override;
+    quint32 brushIndex(const KisPaintInformation& info) const;
     qint32 maskWidth(KisDabShape const&, double subPixelX, double subPixelY, const KisPaintInformation& info) const override;
     qint32 maskHeight(KisDabShape const&, double subPixelX, double subPixelY, const KisPaintInformation& info) const override;
-    void setAngle(qreal _angle) override;
-    void setScale(qreal _scale) override;
-    void setSpacing(double _spacing) override;
+    void setAngle(qreal _angle);
+    void setScale(qreal _scale);
+    void setSpacing(double _spacing);
 
-    KisBrush* clone() const override;
+    KisBrush* clone() const;
 
 private:
     QFont m_font;

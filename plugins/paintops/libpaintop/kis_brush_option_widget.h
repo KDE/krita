@@ -59,8 +59,6 @@ public:
 
     bool presetIsValid();
 
-    void hideOptions(const QStringList &options);
-
 private Q_SLOTS:
     void brushChanged();
 

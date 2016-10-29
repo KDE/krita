@@ -5,6 +5,6 @@ macro_add_unittest_definitions()
 
 ########### next target ###############
 
-krita_add_broken_unit_test(timeline_model_test.cpp
-    TEST_NAME krita-animation-TimelineModelTest
-    LINK_LIBRARIES ${KDE4_KDEUI_LIBS} kritaanimationdocker kritaui kritaimage Qt5::Test)
+set(timeline_model_test_SRCS timeline_model_test.cpp)
+kde4_add_broken_unit_test(TimelineModelTest TESTNAME krita-ui-TimelineModelTest  ${timeline_model_test_SRCS})
+target_link_libraries(TimelineModelTest ${KDE4_KDEUI_LIBS} kritaanimationdocker kritaui kritaimage ${QT_QTTEST_LIBRARY})

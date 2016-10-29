@@ -68,8 +68,6 @@ KisPDFImport::~KisPDFImport()
 
 KisPDFImport::ConversionStatus KisPDFImport::convert(const QByteArray& , const QByteArray&, KisPropertiesConfigurationSP configuration)
 {
-    Q_UNUSED(configuration);
-
     QString filename = inputFile();
     dbgFile << "Importing using PDFImport!" << filename;
 

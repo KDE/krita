@@ -312,10 +312,10 @@ public:
     KisToolTransformFactory()
             : KoToolFactoryBase("KisToolTransform") {
         setToolTip(i18n("Transform a layer or a selection"));
-        setSection(TOOL_TYPE_TRANSFORM);
+        setToolType(TOOL_TYPE_TRANSFORM);
         setIconName(koIconNameCStr("krita_tool_transform"));
         setShortcut(QKeySequence(Qt::CTRL + Qt::Key_T));
-        setPriority(2);
+        setPriority(11);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
     }
 

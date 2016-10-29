@@ -48,8 +48,6 @@ struct KisAnimationCurveChannelListModel::Private
     {}
 
     NodeListItem * itemForRow(int row) {
-        if (row < 0 || row >= items.count())
-            return nullptr;
         return items.at(row);
     }
 

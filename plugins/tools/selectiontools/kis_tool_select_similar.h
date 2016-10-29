@@ -62,10 +62,10 @@ public:
         : KoToolFactoryBase("KisToolSelectSimilar")
     {
         setToolTip(i18n("Similar Color Selection Tool"));
-        setSection(TOOL_TYPE_SELECTION);
+        setToolType(TOOL_TYPE_SELECTED);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
         setIconName(koIconNameCStr("tool_similar_selection"));
-        setPriority(5);
+        setPriority(57);
     }
     virtual ~KisToolSelectSimilarFactory() {}
     virtual KoToolBase * createTool(KoCanvasBase *canvas) {

@@ -41,7 +41,7 @@ class KoOdfGradientBackgroundPrivate : public KoShapeBackgroundPrivate
 public:
     KoOdfGradientBackgroundPrivate()
         : style(), cx(0), cy(0), startColor(), endColor(), angle(0), border(0), opacity(1.0) {};
-    ~KoOdfGradientBackgroundPrivate() override{};
+    ~KoOdfGradientBackgroundPrivate(){};
     //data
     QString style;
     int cx;

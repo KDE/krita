@@ -54,7 +54,6 @@ KisODGImport::~KisODGImport()
 
 KisImportExportFilter::ConversionStatus KisODGImport::convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration)
 {
-    Q_UNUSED(configuration);
     dbgFile << "Import odg";
 
     if (to != "application/x-krita")

@@ -89,10 +89,10 @@ public:
     KisToolSelectPathFactory()
         : KoToolFactoryBase("KisToolSelectPath") {
         setToolTip(i18n("Bezier Curve Selection Tool"));
-        setSection(TOOL_TYPE_SELECTION);
+        setToolType(TOOL_TYPE_SELECTED);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
         setIconName(koIconNameCStr("tool_path_selection"));
-        setPriority(6);
+        setPriority(58);
     }
 
     virtual ~KisToolSelectPathFactory() {}

@@ -74,7 +74,6 @@ psdExport::~psdExport()
 
 KisImportExportFilter::ConversionStatus psdExport::convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration)
 {
-    Q_UNUSED(configuration);
     dbgFile <<"PSD export! From:" << from <<", To:" << to <<"";
 
     if (from != "application/x-krita")

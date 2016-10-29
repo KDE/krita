@@ -83,7 +83,7 @@ static inline uint32_t ntohl(uint32_t a) {
                    ((uint32_t)xcf_file[(a)+2] << 16) + \
                    ((uint32_t)xcf_file[(a)+3] << 24) )
 
-#if defined(CAN_DO_UNALIGNED_WORDS)
+#if CAN_DO_UNALIGNED_WORDS
 # define xcfL(a) ntohl(*(uint32_t *)(xcf_file + (a)))
 #else
 # define xcfL(a) ((a) & 3 ? xcfBE(a) : ntohl(*(uint32_t *)(xcf_file + (a))))

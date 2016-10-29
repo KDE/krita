@@ -66,7 +66,6 @@ struct Q_DECL_HIDDEN KisMask::Private {
     QScopedPointer<QPoint> deferredSelectionOffset;
 
     KisAbstractProjectionPlaneSP projectionPlane;
-    KisCachedSelection cachedSelection;
 
     void initSelectionImpl(KisSelectionSP copyFrom, KisLayerSP parentLayer, KisPaintDeviceSP copyFromDevice);
 };
@@ -246,46 +245,16 @@ void KisMask::apply(KisPaintDeviceSP projection, const QRect &applyRect, const Q
 
         m_d->selection->updateProjection(applyRect);
 
-        KisSelectionSP effectiveSelection = m_d->selection;
-        QRect effectiveExtent = effectiveSelection->selectedRect();
-
-        {
-            // Access temporary target under the lock held
-            KisIndirectPaintingSupport::ReadLocker l(this);
-
-            if (hasTemporaryTarget()) {
-                effectiveExtent |= temporaryTarget()->extent();
-            }
-
-            if(!effectiveExtent.intersects(applyRect)) {
-                return;
-            }
-
-            if (hasTemporaryTarget()) {
-                effectiveSelection = m_d->cachedSelection.getSelection();
-                effectiveSelection->setDefaultBounds(m_d->selection->pixelSelection()->defaultBounds());
-
-                KisPainter::copyAreaOptimized(applyRect.topLeft(),
-                                              m_d->selection->pixelSelection(),
-                                              effectiveSelection->pixelSelection(), applyRect);
-
-                KisPainter gc(effectiveSelection->pixelSelection());
-                setupTemporaryPainter(&gc);
-                gc.bitBlt(applyRect.topLeft(), temporaryTarget(), applyRect);
-            }
-        }
+        if(!extent().intersects(applyRect))
+            return;
 
         KisPaintDeviceSP cacheDevice = m_d->paintDeviceCache.getDevice(projection);
 
         QRect updatedRect = decorateRect(projection, cacheDevice, applyRect, maskPos);
 
         // masks don't have any compositioning
-        KisPainter::copyAreaOptimized(updatedRect.topLeft(), cacheDevice, projection, updatedRect, effectiveSelection);
+        KisPainter::copyAreaOptimized(updatedRect.topLeft(), cacheDevice, projection, updatedRect, m_d->selection);
         m_d->paintDeviceCache.putDevice(cacheDevice);
-
-        if (effectiveSelection != m_d->selection) {
-            m_d->cachedSelection.putSelection(effectiveSelection);
-        }
 
     } else {
         KisPaintDeviceSP cacheDevice = m_d->paintDeviceCache.getDevice(projection);

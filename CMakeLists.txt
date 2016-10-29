@@ -128,6 +128,11 @@ if(NOT DEFINED RELEASE_BUILD)
 endif()
 message(STATUS "Release build: ${RELEASE_BUILD}")
 
+# create test make targets
+enable_testing()
+# collect list of broken tests, empty here to start fresh with each cmake run
+set(KRITA_BROKEN_TESTS "" CACHE INTERNAL "KRITA_BROKEN_TESTS")
+
  ############
 #############
 ## Options ##
@@ -151,50 +156,11 @@ add_feature_info("Safe Asserts" HIDE_SAFE_ASSERTS "Don't show message box for \"
 option(FOUNDATION_BUILD "A Foundation build is a binary release build that can package some extra things like color themes. Linux distributions that build and install Krita into a default system location should not define this option to true." OFF)
 add_feature_info("Foundation Build" FOUNDATION_BUILD "A Foundation build is a binary release build that can package some extra things like color themes. Linux distributions that build and install Krita into a default system location should not define this option to true.")
 
- #######################
-########################
-## Productset setting ##
-########################
-#######################
+option(KRITA_ENABLE_BROKEN_TESTS "Enable tests that are marked as broken" OFF)
+add_feature_info("Enable Broken Tests" KRITA_ENABLE_BROKEN_TESTS "Runs broken test when \"make test\" is invoked (use -DKRITA_ENABLE_BROKEN_TESTS=ON to enable).")
 
-# For predefined productsets see the definitions in KritaProducts.cmake and
-# in the files in the folder cmake/productsets.
 
-# Finding out the products & features to build is done in 5 steps:
-# 1. have the user define the products/features wanted, by giving a productset
-# 2. estimate all additional required products/features
-# 3. estimate which of the products/features can be build by external deps
-# 4. find which products/features have been temporarily disabled due to problems
-# 5. estimate which of the products/features can be build by internal deps
-
-# get the special macros
-include(CalligraProductSetMacros)
 include(MacroJPEG)
-include(GenerateTestExportHeader)
-
-
-# get the definitions of products, features and product sets
-include(KritaProducts.cmake)
-
-set(PRODUCTSET_DEFAULT "ALL")
-# temporary migration support
-if (CREATIVEONLY)
-    set(WARN_ABOUT_CREATIVEONLY TRUE)
-    set(PRODUCTSET_DEFAULT "CREATIVE")
-endif ()
-
-if(NOT PRODUCTSET)
-    set(PRODUCTSET ${PRODUCTSET_DEFAULT} CACHE STRING "Set of products/features to build" FORCE)
-endif()
-
-if (RELEASE_BUILD)
-    set(CALLIGRA_SHOULD_BUILD_STAGING FALSE)
-else ()
-    set(CALLIGRA_SHOULD_BUILD_STAGING TRUE)
-endif ()
-
-# finally choose products/features to build
-calligra_set_productset(${PRODUCTSET})
 
  ########################
 #########################
@@ -574,15 +540,6 @@ if(HAVE_VC)
 endif()
 set(CMAKE_MODULE_PATH ${OLD_CMAKE_MODULE_PATH} )
 
-##
-## Test for Xinput
-##
-if(NOT WIN32 AND NOT APPLE)
-  set(REQUIRED_Xinput_FOUND ${X11_Xinput_FOUND})
-else()
-  set(REQUIRED_Xinput_FOUND TRUE)
-endif()
-
 add_definitions(${QT_DEFINITIONS} ${QT_QTDBUS_DEFINITIONS})
 
 if(WIN32)
@@ -657,68 +614,10 @@ include_directories(BEFORE ${CMAKE_CURRENT_SOURCE_DIR}
                            ${CMAKE_SOURCE_DIR}/interfaces 
 )
 
-include_directories(
-   ${CMAKE_SOURCE_DIR}/libs/version
-   ${CMAKE_BINARY_DIR}/libs/version
-)
-
- ###################################################
-####################################################
-## Detect which products/features can be compiled ##
-####################################################
-###################################################
-
-calligra_drop_product_on_bad_condition( APP_KRITA
-    EIGEN3_FOUND "Eigen devel not found"
-    EXIV2_FOUND "libexiv2 devel not found"
-    HAVE_REQUIRED_LCMS_VERSION "lcms devel not found"
-    Boost_SYSTEM_FOUND "boost-system devel not found"
-    REQUIRED_Xinput_FOUND "Xinput devel not found "
-)
-
-#############################################
-####  Backward compatibility BUILD_x=off ####
-#############################################
-
-# workaround: disable directly all products which might be activated by internal
-# dependencies, but belong to scope of old flag
-calligra_drop_products_on_old_flag(krita APP_KRITA)
-
-#############################################
-####      Temporarily broken products    ####
-#############################################
-
-# If a product does not build due to some temporary brokeness disable it here,
-# by calling calligra_disable_product with the product id and the reason,
-# e.g.:
-# calligra_disable_product(APP_KEXI "isn't buildable at the moment")
-
-#############################################
-####     Calculate buildable products    ####
-#############################################
-
-calligra_drop_unbuildable_products()
-
- ###################
-####################
-## Subdirectories ##
-####################
-###################
-
-if(SHOULD_BUILD_APP_KRITA)
-  add_subdirectory(krita)
-endif()
-
-# non-app directories are moved here because they can depend on SHOULD_BUILD_{appname} variables set above
 add_subdirectory(libs)
 add_subdirectory(plugins)
-
-add_subdirectory( benchmarks )
-
-feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
-
-calligra_product_deps_report("product_deps")
-calligra_log_should_build()
+add_subdirectory(benchmarks)
+add_subdirectory(krita)
 
 configure_file(KoConfig.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/KoConfig.h )
 configure_file(config_convolution.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config_convolution.h)
@@ -727,4 +626,9 @@ configure_file(config-ocio.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-ocio.h )
 check_function_exists(powf HAVE_POWF)
 configure_file(config-powf.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-powf.h)
 
+message("\nBroken tests:")
+foreach(tst ${KRITA_BROKEN_TESTS})
+    message("    * ${tst}")
+endforeach()
 
+feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)

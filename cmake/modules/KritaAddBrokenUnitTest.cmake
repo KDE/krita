@@ -24,7 +24,9 @@ function(KRITA_ADD_BROKEN_UNIT_TEST)
   endif()
 
   set(_testname ${ARG_NAME_PREFIX}${_targetname})
-  MESSAGE(" * Unittest " ${_testname} " is broken!")
+
+  # add test to the global list of disabled tests
+  set(KRITA_BROKEN_TESTS ${KRITA_BROKEN_TESTS} ${_testname} CACHE INTERNAL "KRITA_BROKEN_TESTS")
 
   set(gui_args)
   if(ARG_GUI)
@@ -34,8 +36,12 @@ function(KRITA_ADD_BROKEN_UNIT_TEST)
   if(NOT ARG_GUI)
     ecm_mark_nongui_executable(${_targetname})
   endif()
-  # do not add it as test, so make test skips it!
-  #  add_test(NAME ${_testname} COMMAND ${_targetname})
+
+  # do not add it as test, so make test skips it unless asked for it
+  if(KRITA_ENABLE_BROKEN_TESTS)
+    add_test(NAME ${_testname} COMMAND ${_targetname})
+  endif()
+
   target_link_libraries(${_targetname} ${ARG_LINK_LIBRARIES})
   ecm_mark_as_test(${_targetname})
   if (ARG_TARGET_NAME_VAR)

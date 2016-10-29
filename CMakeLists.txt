@@ -156,6 +156,10 @@ add_feature_info("Safe Asserts" HIDE_SAFE_ASSERTS "Don't show message box for \"
 option(FOUNDATION_BUILD "A Foundation build is a binary release build that can package some extra things like color themes. Linux distributions that build and install Krita into a default system location should not define this option to true." OFF)
 add_feature_info("Foundation Build" FOUNDATION_BUILD "A Foundation build is a binary release build that can package some extra things like color themes. Linux distributions that build and install Krita into a default system location should not define this option to true.")
 
+option(KRITA_ENABLE_BROKEN_TESTS "Enable tests that are marked as broken" OFF)
+add_feature_info("Enable Broken Tests" KRITA_ENABLE_BROKEN_TESTS "Runs broken test when \"make test\" is invoked (use -DKRITA_ENABLE_BROKEN_TESTS=ON to enable).")
+
+
 include(MacroJPEG)
 
  ########################

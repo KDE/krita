@@ -36,8 +36,12 @@ function(KRITA_ADD_BROKEN_UNIT_TEST)
   if(NOT ARG_GUI)
     ecm_mark_nongui_executable(${_targetname})
   endif()
-  # do not add it as test, so make test skips it!
-  #  add_test(NAME ${_testname} COMMAND ${_targetname})
+
+  # do not add it as test, so make test skips it unless asked for it
+  if(KRITA_ENABLE_BROKEN_TESTS)
+    add_test(NAME ${_testname} COMMAND ${_targetname})
+  endif()
+
   target_link_libraries(${_targetname} ${ARG_LINK_LIBRARIES})
   ecm_mark_as_test(${_targetname})
   if (ARG_TARGET_NAME_VAR)

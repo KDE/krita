@@ -24,7 +24,9 @@ function(KRITA_ADD_BROKEN_UNIT_TEST)
   endif()
 
   set(_testname ${ARG_NAME_PREFIX}${_targetname})
-  MESSAGE(" * Unittest " ${_testname} " is broken!")
+
+  # add test to the global list of disabled tests
+  set(KRITA_BROKEN_TESTS ${KRITA_BROKEN_TESTS} ${_testname} CACHE INTERNAL "KRITA_BROKEN_TESTS")
 
   set(gui_args)
   if(ARG_GUI)

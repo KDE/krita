@@ -130,6 +130,8 @@ message(STATUS "Release build: ${RELEASE_BUILD}")
 
 # create test make targets
 enable_testing()
+# collect list of broken tests, empty here to start fresh with each cmake run
+set(KRITA_BROKEN_TESTS "" CACHE INTERNAL "KRITA_BROKEN_TESTS")
 
  ############
 #############
@@ -608,8 +610,6 @@ include_directories(BEFORE ${CMAKE_CURRENT_SOURCE_DIR}
                            ${CMAKE_SOURCE_DIR}/interfaces 
 )
 
-feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
-
 add_subdirectory(libs)
 add_subdirectory(plugins)
 add_subdirectory(benchmarks)
@@ -622,4 +622,9 @@ configure_file(config-ocio.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-ocio.h )
 check_function_exists(powf HAVE_POWF)
 configure_file(config-powf.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-powf.h)
 
+message("\nBroken tests:")
+foreach(tst ${KRITA_BROKEN_TESTS})
+    message("    * ${tst}")
+endforeach()
 
+feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)

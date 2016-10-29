@@ -544,6 +544,7 @@ void KisMainWindow::showView(KisView *imageView)
     if (imageView && activeView() != imageView) {
         // XXX: find a better way to initialize this!
         imageView->setViewManager(d->viewManager);
+
         imageView->canvasBase()->setFavoriteResourceManager(d->viewManager->paintOpBox()->favoriteResourcesManager());
         imageView->slotLoadingFinished();
 

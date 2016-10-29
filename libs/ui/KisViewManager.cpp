@@ -408,7 +408,7 @@ void KisViewManager::setCurrentView(KisView *view)
 
         imageView->zoomManager()->setShowRulers(d->showRulersAction->isChecked());
         imageView->zoomManager()->setRulersTrackMouse(d->rulersTrackMouseAction->isChecked());
-
+        
         showHideScrollbars();
     }
 

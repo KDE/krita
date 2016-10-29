@@ -84,6 +84,7 @@
 #include "kis_painting_assistants_decoration.h"
 
 #include "kis_canvas_updates_compressor.h"
+#include "KoZoomController.h"
 
 class Q_DECL_HIDDEN KisCanvas2::KisCanvas2Private
 {
@@ -854,9 +855,20 @@ void KisCanvas2::setFavoriteResourceManager(KisFavoriteResourceManager* favorite
 {
     m_d->popupPalette = new KisPopupPalette(viewManager(), m_d->coordinatesConverter, favoriteResourceManager, displayColorConverter()->displayRendererInterface(),
                                             m_d->view->resourceProvider(), m_d->canvasWidget->widget());
+    connect(m_d->popupPalette, SIGNAL(zoomLevelChanged(int)), this, SLOT(slotZoomChanged(int)));
 
 
     m_d->popupPalette->showPopupPalette(false);
+}
+
+void KisCanvas2::slotZoomChanged(int zoom ) {
+    QPoint canvasCenter(m_d->view->image()->width()/2,m_d->view->image()->height()/2);
+     qDebug() << "zoom change dto : " << QString::number(zoom);
+
+
+    m_d->view->viewManager()->zoomController()->setZoom(KoZoomMode::ZOOM_WIDTH, zoom);
+
+    notifyZoomChanged();
 }
 
 void KisCanvas2::setCursor(const QCursor &cursor)

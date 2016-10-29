@@ -63,6 +63,7 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
     , m_popupPaletteSize(352)
     , m_colorHistoryInnerRadius(72.0)
     , m_colorHistoryOuterRadius(92.0)
+    , m_canvasRotationIndicatorRect(0)
     , m_isOverCanvasRotationIndicator(false)
     , m_isRotatingCanvasIndicator(false)
 {
@@ -71,6 +72,9 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
     m_popupPaletteSize = 385.0;
     m_colorHistoryInnerRadius = 72.0;
     m_colorHistoryOuterRadius = 92.0;
+
+
+    m_canvasRotationIndicatorRect = new QRect();
     m_isOverCanvasRotationIndicator = false;
     m_isRotatingCanvasIndicator = false;
 
@@ -169,8 +173,6 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
 
     vLayout->addLayout(hLayout);
 
-
-
     mirrorMode = new KisHighlightedToolButton(this);
     mirrorMode->setCheckable(true);
     mirrorMode->setFixedSize(35, 35);
@@ -195,9 +197,13 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
 
 
     zoomCanvasSlider = new QSlider(Qt::Horizontal, this);
-    zoomCanvasSlider->setRange(10, 200); // 10% to 200 %
+    zoomCanvasSlider->setRange(0, 20000); // 10% to 200 %
     zoomCanvasSlider->setFixedHeight(35);
+    zoomCanvasSlider->setValue(0);
+    zoomCanvasSlider->setSingleStep(1);
+    zoomCanvasSlider->setPageStep(1);
 
+    connect(zoomCanvasSlider, SIGNAL(valueChanged(int)), this, SLOT(slotZoomSliderChanged(int)));
 
 
     hLayout->addWidget(mirrorMode);
@@ -270,6 +276,10 @@ void KisPopupPalette::slotTriggerTimer()
 void KisPopupPalette::slotEnableChangeFGColor()
 {
     emit sigEnableChangeFGColor(true);
+}
+
+void KisPopupPalette::slotZoomSliderChanged(int zoom) {
+    emit zoomLevelChanged(zoom);
 }
 
 void KisPopupPalette::adjustLayout(const QPoint &p)
@@ -553,7 +563,6 @@ void KisPopupPalette::mouseMoveEvent(QMouseEvent* event)
     // calculate if we are over the canvas rotation knob
     // before we started painting, we moved the painter to the center of the widget, so the X/Y positions are offset. we need to
     // correct them first before looking for a click event intersection
-
 
     float rotationCorrectedXPos = m_canvasRotationIndicatorRect->x() + (m_popupPaletteSize / 2);
     float rotationCorrectedYPos = m_canvasRotationIndicatorRect->y() + (m_popupPaletteSize / 2);

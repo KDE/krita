@@ -146,6 +146,7 @@ Q_SIGNALS:
     void sigChangeActivePaintop(int);
     void sigUpdateRecentColor(int);
     void sigChangefGColor(const KoColor&);
+    void zoomLevelChanged(int);
 
     // These are used to handle a bug:
     // If pop up palette is visible and a new colour is selected, the new colour
@@ -168,6 +169,9 @@ private Q_SLOTS:
     void slotmirroModeClicked();
     void slotCanvasonlyModeClicked();
     void slotZoomToOneHundredPercentClicked();
+    void slotZoomSliderChanged(int zoom);
+
+
 };
 
 #endif // KIS_POPUP_PALETTE_H

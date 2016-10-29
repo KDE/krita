@@ -64,9 +64,12 @@ private:
 };
 
 
-struct ComboEventFilter : public QObject {
+class ComboEventFilter : public QObject
+{
+public:
     ComboEventFilter(KisColorFilterCombo *parent) : m_parent(parent), m_buttonPressed(false) {}
 
+protected:
     bool eventFilter(QObject *obj, QEvent *event) override {
         if (event->type() == QEvent::Leave) {
             m_buttonPressed = false;
@@ -143,6 +146,7 @@ struct ComboEventFilter : public QObject {
         return QObject::eventFilter(obj, event);
     }
 
+private:
     KisColorFilterCombo *m_parent;
     bool m_buttonPressed;
 };

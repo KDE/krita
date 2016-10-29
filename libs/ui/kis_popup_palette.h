@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright 2009 Vera Lukman <shicmap@gmail.com>
+   Copyright 2016 Scott Petrovic <scottpetrovic@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -97,6 +98,7 @@ private:
 
     QPainterPath drawDonutPathFull(int, int, int, int);
     QPainterPath drawDonutPathAngle(int, int, int);
+    QPainterPath drawRotationIndicator(qreal rotationAngle, bool canDrag);
     bool isPointInPixmap(QPointF&, int pos);
 
     QPainterPath createPathFromPresetIndex(int index);
@@ -134,6 +136,7 @@ private:
     KisRoundHudButton *m_brushHudButton;
     QPoint m_lastCenterPoint;
     QRect* m_canvasRotationIndicatorRect;
+    QRect* m_resetCanvasRotationIndicatorRect;
     bool m_isOverCanvasRotationIndicator;
     bool m_isRotatingCanvasIndicator;
 

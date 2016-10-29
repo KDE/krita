@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright 2009 Vera Lukman <shicmap@gmail.com>
    Copyright 2011 Sven Langkamp <sven.langkamp@gmail.com>
+   Copyright 2016 Scott Petrovic <scottpetrovic@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -64,6 +65,7 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
     , m_colorHistoryInnerRadius(72.0)
     , m_colorHistoryOuterRadius(92.0)
     , m_canvasRotationIndicatorRect(0)
+    , m_resetCanvasRotationIndicatorRect(0)
     , m_isOverCanvasRotationIndicator(false)
     , m_isRotatingCanvasIndicator(false)
 {
@@ -403,37 +405,34 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
 
 
     // create the canvas rotation handle
-    painter.save();
+    QPainterPath rotationIndicator = drawRotationIndicator(m_coordinatesConverter->rotationAngle(), true);
 
-    float canvasRotationRadians = qDegreesToRadians(m_coordinatesConverter->rotationAngle() - 90);  // -90 will make 0 degrees be at the top
-    float rotationDialXPosition = qCos(canvasRotationRadians) * (m_popupPaletteSize/2 - 10); // m_popupPaletteSize/2  = radius
-    float rotationDialYPosition = qSin(canvasRotationRadians) * (m_popupPaletteSize/2 - 10);
-
-    QPainterPath canvasRotationIndicator;
-    int canvasIndicatorSize = 15;
-    float canvasIndicatorMiddle = canvasIndicatorSize/2;
-
-    m_canvasRotationIndicatorRect = new QRect( rotationDialXPosition - canvasIndicatorMiddle, rotationDialYPosition - canvasIndicatorMiddle,
-                                               canvasIndicatorSize, canvasIndicatorSize );
-
-    canvasRotationIndicator.addEllipse(m_canvasRotationIndicatorRect->x(), m_canvasRotationIndicatorRect->y(),
-                                       m_canvasRotationIndicatorRect->width(), m_canvasRotationIndicatorRect->height() );
-
-    painter.fillPath(canvasRotationIndicator,palette().brush(QPalette::Text));
-
+    painter.fillPath(rotationIndicator,palette().brush(QPalette::Text));
 
     // hover indicator for the canvas rotation
     if (m_isOverCanvasRotationIndicator == true) {
+         painter.save();
+
         QPen pen(palette().color(QPalette::Highlight));
-        pen.setWidth(3);
+        pen.setWidth(2);
         painter.setPen(pen);
-        painter.drawPath(canvasRotationIndicator);
+        painter.drawPath(rotationIndicator);
+
+        painter.restore();
     }
 
+
+
+    // create a reset canvas rotation indicator to bring the canvas back to 0 degrees
+    QPainterPath resetRotationIndicator = drawRotationIndicator(0, false);
+
+    QPen resetPen(palette().color(QPalette::Text));
+    resetPen.setWidth(1);
+    painter.save();
+    painter.setPen(resetPen);
+    painter.drawPath(resetRotationIndicator);
+
     painter.restore();
-
-
-
 
 
 
@@ -550,6 +549,35 @@ QPainterPath KisPopupPalette::drawDonutPathAngle(int inner_radius, int outer_rad
     return path;
 }
 
+QPainterPath KisPopupPalette::drawRotationIndicator(qreal rotationAngle, bool canDrag)
+{
+    // used for canvas rotation. This function gets called twice. Once by the canvas rotation indicator,
+    // and another time by the reset canvas position
+
+     float canvasRotationRadians = qDegreesToRadians(rotationAngle - 90);  // -90 will make 0 degrees be at the top
+     float rotationDialXPosition = qCos(canvasRotationRadians) * (m_popupPaletteSize/2 - 10); // m_popupPaletteSize/2  = radius
+     float rotationDialYPosition = qSin(canvasRotationRadians) * (m_popupPaletteSize/2 - 10);
+
+     QPainterPath canvasRotationIndicator;
+     int canvasIndicatorSize = 15;
+     float canvasIndicatorMiddle = canvasIndicatorSize/2;
+     QRect* indicatorRectangle = new QRect( rotationDialXPosition - canvasIndicatorMiddle, rotationDialYPosition - canvasIndicatorMiddle,
+                                            canvasIndicatorSize, canvasIndicatorSize );
+
+     if (canDrag) {
+         m_canvasRotationIndicatorRect = indicatorRectangle;
+     } else {
+         m_resetCanvasRotationIndicatorRect = indicatorRectangle;
+     }
+
+     canvasRotationIndicator.addEllipse(indicatorRectangle->x(), indicatorRectangle->y(),
+                                        indicatorRectangle->width(), indicatorRectangle->height() );
+
+     return canvasRotationIndicator;
+
+}
+
+
 void KisPopupPalette::mouseMoveEvent(QMouseEvent* event)
 {
     QPointF point = event->posF();
@@ -615,10 +643,6 @@ void KisPopupPalette::mouseMoveEvent(QMouseEvent* event)
 
 
 
-
-
-
-
     update();
 }
 
@@ -641,6 +665,21 @@ void KisPopupPalette::mousePressEvent(QMouseEvent* event)
         if (m_isOverCanvasRotationIndicator) {
             m_isRotatingCanvasIndicator = true;
         }
+
+
+      // reset the canvas if we are over the reset canvas rotation indicator
+      float rotationCorrectedXPos = m_resetCanvasRotationIndicatorRect->x() + (m_popupPaletteSize / 2);
+      float rotationCorrectedYPos = m_resetCanvasRotationIndicatorRect->y() + (m_popupPaletteSize / 2);
+      QRect* correctedResetCanvasRotationIndicator = new QRect(rotationCorrectedXPos, rotationCorrectedYPos,
+                                                 m_resetCanvasRotationIndicatorRect->width(), m_resetCanvasRotationIndicatorRect->height()   );
+
+
+      if (correctedResetCanvasRotationIndicator->contains(point.x(), point.y())) {
+        float angleDifference = -m_coordinatesConverter->rotationAngle(); // the rotation function accepts diffs, so find it ou
+        m_coordinatesConverter->rotate(m_coordinatesConverter->widgetCenterPoint(), angleDifference);
+      }
+
+
 
     }
 }

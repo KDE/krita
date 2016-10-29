@@ -197,9 +197,10 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
 
 
     zoomCanvasSlider = new QSlider(Qt::Horizontal, this);
-    zoomCanvasSlider->setRange(0, 20000); // 10% to 200 %
+    zoomCanvasSlider->setRange(10, 200); // 10% to 200 %
     zoomCanvasSlider->setFixedHeight(35);
-    zoomCanvasSlider->setValue(0);
+    zoomCanvasSlider->setValue(m_coordinatesConverter->zoomInPercent());
+
     zoomCanvasSlider->setSingleStep(1);
     zoomCanvasSlider->setPageStep(1);
 
@@ -331,6 +332,7 @@ void KisPopupPalette::showPopupPalette(const QPoint &p)
 void KisPopupPalette::showPopupPalette(bool show)
 {
     if (show) {
+        zoomCanvasSlider->setValue(m_coordinatesConverter->zoomInPercent()); // sync the zoom slider
         emit sigEnableChangeFGColor(!show);
     } else {
         emit sigTriggerTimer();
@@ -427,8 +429,6 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
         painter.setPen(pen);
         painter.drawPath(canvasRotationIndicator);
     }
-
-    qDebug() << "is over?? " << m_isOverCanvasRotationIndicator;
 
     painter.restore();
 

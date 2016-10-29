@@ -28,7 +28,6 @@ else (WIN32)
     target_link_libraries(kritapsd kritapigment kritaglobal KF5::I18n  ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY})
 endif (WIN32)
 
-target_link_libraries(kritapsd LINK_INTERFACE_LIBRARIES kritaglobal ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY})
 set_target_properties(kritapsd PROPERTIES
     VERSION ${GENERIC_KRITA_LIB_VERSION} SOVERSION ${GENERIC_KRITA_LIB_SOVERSION}
 )

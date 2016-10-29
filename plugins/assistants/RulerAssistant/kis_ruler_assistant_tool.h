@@ -106,7 +106,7 @@ public:
     KisRulerAssistantToolFactory()
             : KoToolFactoryBase("KisRulerAssistantTool") {
         setToolTip(i18n("Assistant Tool"));
-        setToolType(TOOL_TYPE_VIEW);
+        setSection(TOOL_TYPE_VIEW);
         setIconName(koIconNameCStr("krita_tool_ruler_assistant"));
         setPriority(0);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);

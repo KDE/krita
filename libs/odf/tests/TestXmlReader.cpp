@@ -924,7 +924,7 @@ void TestXmlReader::testNamespace()
     QCOMPARE(bookAuthorElement.hasAttributeNS(fnordNS, "title"), true);
 
     QCOMPARE(bookAuthorElement.attributeNS(defaultNS, "title", ""), QString("Goddess"));
-    QCOMPARE(bookAuthorElement.attributeNS(bookNS, "title", ""), QString(""));
+    QCOMPARE(bookAuthorElement.attributeNS(bookNS, "title", ""), QString());
     QCOMPARE(bookAuthorElement.attributeNS(fnordNS, "title", ""), QString("Goddess"));
 
     QCOMPARE(bookAuthorElement.hasAttributeNS(defaultNS, "fnord:title"), false);
@@ -1055,7 +1055,7 @@ void TestXmlReader::testParseQString()
     QCOMPARE(bookAuthorElement.hasAttributeNS(fnordNS, "title"), true);
 
     QCOMPARE(bookAuthorElement.attributeNS(defaultNS, "title", ""), QString("Goddess"));
-    QCOMPARE(bookAuthorElement.attributeNS(bookNS, "title", ""), QString(""));
+    QCOMPARE(bookAuthorElement.attributeNS(bookNS, "title", ""), QString());
     QCOMPARE(bookAuthorElement.attributeNS(fnordNS, "title", ""), QString("Goddess"));
 
     QCOMPARE(bookAuthorElement.hasAttributeNS(defaultNS, "fnord:title"), false);

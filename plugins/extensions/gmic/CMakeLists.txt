@@ -2,6 +2,10 @@
 # CMake for gmic
 ##
 
+if (CMAKE_COMPILER_IS_GNUCXX)
+    add_compile_options("-Wno-misleading-indentation")
+endif()
+
 set(GMIC_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/gmic")
 
 include_directories( ${GMIC_SOURCE_DIR})
@@ -87,8 +91,9 @@ endif()
 if(X11_FOUND)
     add_definitions(-Dcimg_display=1)
     add_definitions(-Dcimg_appname="gmic")
-elseif (WIN32 AND MSVC)
+elseif (WIN32)
     # CMake for MSVC automatically links and finds headers for gdi32
+    add_definitions(-Dcimg_OS=2)
     add_definitions(-Dcimg_display=2)
     add_definitions(-Dcimg_appname="gmic")
 else()
@@ -99,11 +104,6 @@ endif()
 # Extra for Krita
 if(APPLE)
     add_definitions(-D_APPLE)
-endif()
-
-if (WIN32)
-    add_definitions(-Dcimg_OS=2)
-    add_definitions(-Dcimg_display=2)
 endif()
 
 add_library(gmic STATIC ${gmic_sources_SRCS} ${gmic_headers_SRCS})

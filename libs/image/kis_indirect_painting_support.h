@@ -69,7 +69,47 @@ public:
      */
     virtual void mergeToLayer(KisNodeSP layer, KisPostExecutionUndoAdapter *undoAdapter, const KUndo2MagicString &transactionText, int timedID = -1);
 
+    KisPaintDeviceSP temporaryTarget() const;
 
+    /**
+     * A guard object to lock the temporary target for read
+     */
+    struct ReadLocker {
+        ReadLocker(const KisIndirectPaintingSupport *lock) : m_lock(lock) {
+            m_lock->lockTemporaryTarget();
+        }
+        ~ReadLocker() {
+            m_lock->unlockTemporaryTarget();
+        }
+
+    private:
+        const KisIndirectPaintingSupport *m_lock;
+    };
+
+protected:
+    void mergeToLayerImpl(KisPaintDeviceSP dst, KisPostExecutionUndoAdapter *undoAdapter, const KUndo2MagicString &transactionText, int timedID = -1, bool cleanResources = true);
+    virtual void writeMergeData(KisPainter *painter, KisPaintDeviceSP src);
+    void lockTemporaryTargetForWrite() const;
+
+    /**
+     * A guard object to lock the temporary target for write
+     */
+    struct WriteLocker {
+        WriteLocker(KisIndirectPaintingSupport *lock) : m_lock(lock) {
+            m_lock->lockTemporaryTargetForWrite();
+        }
+        ~WriteLocker() {
+            m_lock->unlockTemporaryTarget();
+        }
+
+    private:
+        KisIndirectPaintingSupport *m_lock;
+    };
+
+    QString temporaryCompositeOp() const;
+    void releaseResources();
+
+private:
     /**
      * Lock the temporary target.
      * It should be done for guarding every access to
@@ -80,30 +120,10 @@ public:
 
     /**
      * Unlock the temporary target
-     * 
+     *
      * \see lockTemporaryTarget()
      */
     void unlockTemporaryTarget() const;
-
-    KisPaintDeviceSP temporaryTarget() const;
-
-protected:
-    void mergeToLayerImpl(KisPaintDeviceSP dst, KisPostExecutionUndoAdapter *undoAdapter, const KUndo2MagicString &transactionText, int timedID = -1, bool cleanResources = true);
-    virtual void writeMergeData(KisPainter *painter, KisPaintDeviceSP src);
-    void lockTemporaryTargetForWrite() const;
-
-    struct WriteLockableWrapper {
-        WriteLockableWrapper(KisIndirectPaintingSupport *lock) : m_lock(lock) {}
-        void lock() { m_lock->lockTemporaryTargetForWrite(); }
-        void unlock() { m_lock->unlockTemporaryTarget(); }
-
-    private:
-        KisIndirectPaintingSupport *m_lock;
-    };
-
-
-    QString temporaryCompositeOp() const;
-    void releaseResources();
 
 private:
     friend class KisPainterBasedStrokeStrategy;

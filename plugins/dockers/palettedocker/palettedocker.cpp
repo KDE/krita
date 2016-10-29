@@ -42,7 +42,7 @@ public:
     {
     }
 
-    virtual QString id() const
+    QString id() const override
     {
         return QString( "PaletteDocker" );
     }
@@ -52,7 +52,7 @@ public:
         return Qt::RightDockWidgetArea;
     }
 
-    virtual QDockWidget* createDockWidget()
+    QDockWidget* createDockWidget() override
     {
         PaletteDockerDock * dockWidget = new PaletteDockerDock();
         
@@ -61,7 +61,7 @@ public:
         return dockWidget;
     }
 
-    DockPosition defaultDockPosition() const
+    DockPosition defaultDockPosition() const override
     {
         return DockMinimized;
     }

@@ -70,6 +70,7 @@ inline quint16 correctIndian(quint16 v)
 
 KisImportExportFilter::ConversionStatus KisRawImport::convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration)
 {
+    Q_UNUSED(configuration);
     dbgFile << from << " " << to << "";
     if (/*from != "image/x-raw" || */to != "application/x-krita") { // too many from to check, and I don't think it can happen an unsupported from
         return KisImportExportFilter::NotImplemented;
@@ -135,7 +136,7 @@ KisImportExportFilter::ConversionStatus KisRawImport::convert(const QByteArray& 
         for (int y = 0; y < height; ++y) {
             do {
                 KoBgrU16Traits::Pixel* pixel = reinterpret_cast<KoBgrU16Traits::Pixel*>(it->rawData());
-                quint16* ptr = ((quint16*)imageData.data()) + (y * width + it->x()) * 3;
+                quint16* ptr = ((quint16*)imageData.constData()) + (y * width + it->x()) * 3;
 #if KDCRAW_VERSION < 0x000400
                 pixel->red = correctIndian(ptr[2]);
                 pixel->green = correctIndian(ptr[1]);
@@ -171,7 +172,7 @@ void KisRawImport::slotUpdatePreview()
         for (int y = 0; y < height; ++y) {
             QRgb *pixel= reinterpret_cast<QRgb *>(image.scanLine(y));
             for (int x = 0; x < width; ++x) {
-                quint8* ptr = ((quint8*)imageData.data()) + (y * width + x) * 3;
+                quint8* ptr = ((quint8*)imageData.constData()) + (y * width + x) * 3;
                 pixel[x] = qRgb(ptr[0], ptr[1], ptr[2]);
             }
         }

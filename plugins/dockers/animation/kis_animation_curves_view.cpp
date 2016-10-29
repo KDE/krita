@@ -125,6 +125,8 @@ QRect KisAnimationCurvesView::visualRect(const QModelIndex &index) const
 void KisAnimationCurvesView::scrollTo(const QModelIndex &index, QAbstractItemView::ScrollHint hint)
 {
     // TODO
+    Q_UNUSED(index);
+    Q_UNUSED(hint);
 }
 
 QModelIndex KisAnimationCurvesView::indexAt(const QPoint &point) const
@@ -352,6 +354,8 @@ void KisAnimationCurvesView::startPan(QPoint mousePos)
 QModelIndex KisAnimationCurvesView::moveCursor(QAbstractItemView::CursorAction cursorAction, Qt::KeyboardModifiers modifiers)
 {
     // TODO
+    Q_UNUSED(cursorAction);
+    Q_UNUSED(modifiers);
     return QModelIndex();
 }
 
@@ -575,12 +579,17 @@ void KisAnimationCurvesView::slotRowsChanged(const QModelIndex &parentIndex, int
 
 void KisAnimationCurvesView::slotDataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight)
 {
+    Q_UNUSED(topLeft);
+    Q_UNUSED(bottomRight);
     updateVerticalRange();
     viewport()->update();
 }
 
 void KisAnimationCurvesView::slotHeaderDataChanged(Qt::Orientation orientation, int first, int last)
 {
+    Q_UNUSED(orientation);
+    Q_UNUSED(first);
+    Q_UNUSED(last);
     viewport()->update();
 }
 

@@ -37,7 +37,7 @@ public:
 
 protected:
     using utils::StrokeTester::initImage;
-    void initImage(KisImageWSP image, KisNodeSP activeNode) {
+    void initImage(KisImageWSP image, KisNodeSP activeNode) override {
         Q_UNUSED(image);
 
         QImage src(QString(FILES_DATA_DIR) + QDir::separator() + "carrot.png");
@@ -46,7 +46,7 @@ protected:
 
     KisStrokeStrategy* createStroke(bool indirectPainting,
                                     KisResourcesSnapshotSP resources,
-                                    KisImageWSP image) {
+                                    KisImageWSP image) override {
 
         Q_UNUSED(indirectPainting);
 
@@ -56,7 +56,7 @@ protected:
 
     using utils::StrokeTester::addPaintingJobs;
     void addPaintingJobs(KisImageWSP image,
-                         KisResourcesSnapshotSP resources) {
+                         KisResourcesSnapshotSP resources) override {
 
         Q_UNUSED(resources);
 

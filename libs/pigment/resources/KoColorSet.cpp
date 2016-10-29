@@ -30,6 +30,7 @@
 #include <QBuffer>
 #include <QByteArray>
 #include <QPainter>
+#include <QXmlStreamReader>
 
 #include <DebugPigment.h>
 #include <klocalizedstring.h>
@@ -38,6 +39,14 @@
 #include "KoColorSpaceRegistry.h"
 #include "KoColorModelStandardIds.h"
 
+
+struct KoColorSet::Private {
+    QByteArray data;
+    QString name;
+    QString comment;
+    qint32 columns;
+    QVector<KoColorSetEntry> colors;
+};
 
 KoColorSet::PaletteType detectFormat(const QString &fileName, const QByteArray &ba) {
 
@@ -61,34 +70,39 @@ KoColorSet::PaletteType detectFormat(const QString &fileName, const QByteArray &
     else if (fi.suffix().toLower() == "act") {
         return KoColorSet::ACT;
     }
+    else if (fi.suffix().toLower() == "xml") {
+        return KoColorSet::XML;
+    }
 
     return KoColorSet::UNKNOWN;
 }
 
 KoColorSet::KoColorSet(const QString& filename)
     : KoResource(filename)
+    , d(new Private())
 {
     // Implemented in KoResource class
-    m_columns = 0; // Set the default value that the GIMP uses...
+    d->columns = 0; // Set the default value that the GIMP uses...
 }
 
 KoColorSet::KoColorSet()
-    : KoResource("")
+    : KoResource(QString())
+    , d(new Private())
 {
-    m_columns = 0; // Set the default value that the GIMP uses...
+    d->columns = 0; // Set the default value that the GIMP uses...
 }
 
 /// Create an copied palette
 KoColorSet::KoColorSet(const KoColorSet& rhs)
     : QObject(0)
-    , KoResource("")
+    , KoResource(QString())
+    , d(new Private())
 {
     setFilename(rhs.filename());
-    m_ownData = false;
-    m_name = rhs.m_name;
-    m_comment = rhs.m_comment;
-    m_columns = rhs.m_columns;
-    m_colors = rhs.m_colors;
+    d->name = rhs.d->name;
+    d->comment = rhs.d->comment;
+    d->columns = rhs.d->columns;
+    d->colors = rhs.d->colors;
     setValid(true);
 }
 
@@ -113,9 +127,9 @@ bool KoColorSet::loadFromDevice(QIODevice *dev)
 {
     if (!dev->isOpen()) dev->open(QIODevice::ReadOnly);
 
-    m_data = dev->readAll();
+    d->data = dev->readAll();
 
-    Q_ASSERT(m_data.size() != 0);
+    Q_ASSERT(d->data.size() != 0);
 
     return init();
 }
@@ -134,7 +148,7 @@ bool KoColorSet::save()
 
 qint32 KoColorSet::nColors()
 {
-    return m_colors.count();
+    return d->colors.count();
 }
 
 qint32 KoColorSet::getIndexClosestColor(KoColor color, bool useGivenColorSpace)
@@ -144,7 +158,7 @@ qint32 KoColorSet::getIndexClosestColor(KoColor color, bool useGivenColorSpace)
     quint8 testPercentage = 0;
     KoColor compare = color;
     for (qint32 i=0; i<nColors(); i++) {
-        KoColor entry = m_colors.at(i).color;
+        KoColor entry = d->colors.at(i).color;
         if (useGivenColorSpace==true && compare.colorSpace()!=entry.colorSpace()) {
             entry.convertTo(compare.colorSpace());
 
@@ -164,17 +178,17 @@ qint32 KoColorSet::getIndexClosestColor(KoColor color, bool useGivenColorSpace)
 QString KoColorSet::closestColorName(KoColor color, bool useGivenColorSpace)
 {
     int i = getIndexClosestColor(color, useGivenColorSpace);
-    QString name = m_colors.at(i).name;
+    QString name = d->colors.at(i).name;
     return name;
 }
 
 bool KoColorSet::saveToDevice(QIODevice *dev) const
 {
     QTextStream stream(dev);
-    stream << "GIMP Palette\nName: " << name() << "\nColumns: " << m_columns << "\n#\n";
+    stream << "GIMP Palette\nName: " << name() << "\nColumns: " << d->columns << "\n#\n";
 
-    for (int i = 0; i < m_colors.size(); i++) {
-        const KoColorSetEntry& entry = m_colors.at(i);
+    for (int i = 0; i < d->colors.size(); i++) {
+        const KoColorSetEntry& entry = d->colors.at(i);
         QColor c = entry.color.toQColor();
         stream << c.red() << " " << c.green() << " " << c.blue() << "\t";
         if (entry.name.isEmpty())
@@ -190,25 +204,25 @@ bool KoColorSet::saveToDevice(QIODevice *dev) const
 
 bool KoColorSet::init()
 {
-    m_colors.clear(); // just in case this is a reload (eg by KoEditColorSetDialog),
+    d->colors.clear(); // just in case this is a reload (eg by KoEditColorSetDialog),
 
     if (filename().isNull()) {
         warnPigment << "Cannot load palette" << name() << "there is no filename set";
         return false;
     }
-    if (m_data.isNull()) {
+    if (d->data.isNull()) {
         QFile file(filename());
         if (file.size() == 0) {
             warnPigment << "Cannot load palette" << name() << "there is no data available";
             return false;
         }
         file.open(QIODevice::ReadOnly);
-        m_data = file.readAll();
+        d->data = file.readAll();
         file.close();
     }
 
     bool res = false;
-    PaletteType paletteType = detectFormat(filename(), m_data);
+    PaletteType paletteType = detectFormat(filename(), d->data);
     switch(paletteType) {
     case GPL:
         res = loadGpl();
@@ -225,23 +239,26 @@ bool KoColorSet::init()
     case ACO:
         res = loadAco();
         break;
+    case XML:
+        res = loadXml();
+        break;
     default:
         res = false;
     }
     setValid(res);
 
-    if (m_columns == 0) {
-        m_columns = 10;
+    if (d->columns == 0) {
+        d->columns = 10;
     }
 
-    QImage img(m_columns * 4, (m_colors.size() / m_columns) * 4, QImage::Format_ARGB32);
+    QImage img(d->columns * 4, (d->colors.size() / d->columns) * 4, QImage::Format_ARGB32);
     QPainter gc(&img);
     gc.fillRect(img.rect(), Qt::darkGray);
     int counter = 0;
-    for(int i = 0; i < m_columns; ++i) {
-        for (int j = 0; j < (m_colors.size() / m_columns); ++j) {
-            if (counter < m_colors.size()) {
-                QColor c = m_colors.at(counter).color.toQColor();
+    for(int i = 0; i < d->columns; ++i) {
+        for (int j = 0; j < (d->colors.size() / d->columns); ++j) {
+            if (counter < d->colors.size()) {
+                QColor c = d->colors.at(counter).color.toQColor();
                 gc.fillRect(i * 4, j * 4, 4, 4, c);
                 counter++;
             }
@@ -253,20 +270,20 @@ bool KoColorSet::init()
     setImage(img);
 
     // save some memory
-    m_data.clear();
+    d->data.clear();
     return res;
 }
 
 void KoColorSet::add(const KoColorSetEntry & c)
 {
-    m_colors.push_back(c);
+    d->colors.push_back(c);
 }
 
 void KoColorSet::remove(const KoColorSetEntry & c)
 {
-    for (auto it = m_colors.begin(); it != m_colors.end(); /*noop*/) {
+    for (auto it = d->colors.begin(); it != d->colors.end(); /*noop*/) {
         if ((*it) == c) {
-            it = m_colors.erase(it);
+            it = d->colors.erase(it);
             return;
         }
         ++it;
@@ -275,27 +292,27 @@ void KoColorSet::remove(const KoColorSetEntry & c)
 
 void KoColorSet::removeAt(quint32 index)
 {
-    m_colors.remove(index);
+    d->colors.remove(index);
 }
 
 void KoColorSet::clear()
 {
-    m_colors.clear();
+    d->colors.clear();
 }
 
 KoColorSetEntry KoColorSet::getColor(quint32 index)
 {
-    return m_colors[index];
+    return d->colors[index];
 }
 
 void KoColorSet::setColumnCount(int columns)
 {
-    m_columns = columns;
+    d->columns = columns;
 }
 
 int KoColorSet::columnCount()
 {
-    return m_columns;
+    return d->columns;
 }
 
 QString KoColorSet::defaultFileExtension() const
@@ -306,7 +323,7 @@ QString KoColorSet::defaultFileExtension() const
 
 bool KoColorSet::loadGpl()
 {
-    QString s = QString::fromUtf8(m_data.data(), m_data.count());
+    QString s = QString::fromUtf8(d->data.data(), d->data.count());
 
     if (s.isEmpty() || s.isNull() || s.length() < 50) {
         warnPigment << "Illegal Gimp palette file: " << filename();
@@ -338,12 +355,12 @@ bool KoColorSet::loadGpl()
     // Read columns
     if (lines[index].startsWith("Columns: ")) {
         columns = lines[index].mid(strlen("Columns: ")).trimmed();
-        m_columns = columns.toInt();
+        d->columns = columns.toInt();
         index = 3;
     }
     for (qint32 i = index; i < lines.size(); i++) {
         if (lines[i].startsWith('#')) {
-            m_comment += lines[i].mid(1).trimmed() + ' ';
+            d->comment += lines[i].mid(1).trimmed() + ' ';
         } else if (!lines[i].isEmpty()) {
             QStringList a = lines[i].replace('\t', ' ').split(' ', QString::SkipEmptyParts);
 
@@ -379,10 +396,10 @@ bool KoColorSet::loadAct()
     QFileInfo info(filename());
     setName(info.baseName());
     KoColorSetEntry e;
-    for (int i = 0; i < m_data.size(); i += 3) {
-        quint8 r = m_data[i];
-        quint8 g = m_data[i+1];
-        quint8 b = m_data[i+2];
+    for (int i = 0; i < d->data.size(); i += 3) {
+        quint8 r = d->data[i];
+        quint8 g = d->data[i+1];
+        quint8 b = d->data[i+2];
         e.color = KoColor(KoColorSpaceRegistry::instance()->rgb8());
         e.color.fromQColor(QColor(r, g, b));
         add(e);
@@ -409,15 +426,15 @@ bool KoColorSet::loadRiff()
     KoColorSetEntry e;
 
     RiffHeader header;
-    memcpy(&header, m_data.constData(), sizeof(RiffHeader));
+    memcpy(&header, d->data.constData(), sizeof(RiffHeader));
     header.colorcount = qFromBigEndian(header.colorcount);
 
     for (int i = sizeof(RiffHeader);
-         (i < (int)(sizeof(RiffHeader) + header.colorcount) && i < m_data.size());
+         (i < (int)(sizeof(RiffHeader) + header.colorcount) && i < d->data.size());
          i += 4) {
-        quint8 r = m_data[i];
-        quint8 g = m_data[i+1];
-        quint8 b = m_data[i+2];
+        quint8 r = d->data[i];
+        quint8 g = d->data[i+1];
+        quint8 b = d->data[i+2];
         e.color = KoColor(KoColorSpaceRegistry::instance()->rgb8());
         e.color.fromQColor(QColor(r, g, b));
         add(e);
@@ -433,7 +450,7 @@ bool KoColorSet::loadPsp()
     KoColorSetEntry e;
     qint32 r, g, b;
 
-    QString s = QString::fromUtf8(m_data.data(), m_data.count());
+    QString s = QString::fromUtf8(d->data.data(), d->data.count());
     QStringList l = s.split('\n', QString::SkipEmptyParts);
     if (l.size() < 4) return false;
     if (l[0] != "JASC-PAL") return false;
@@ -471,6 +488,160 @@ bool KoColorSet::loadPsp()
     return true;
 }
 
+void scribusParseColor(KoColorSet *set, QXmlStreamReader *xml)
+{
+    KoColorSetEntry currentColor;
+    //It's a color, retrieve it
+    QXmlStreamAttributes colorProperties = xml->attributes();
+    QStringRef colorValue;
+
+    // RGB or CMYK?
+    if (colorProperties.hasAttribute("RGB")) {
+        dbgPigment << "Color " << colorProperties.value("NAME") << ", RGB " << colorProperties.value("RGB");
+
+        QStringRef colorName = colorProperties.value("NAME");
+        currentColor.name = colorName.isEmpty() || colorName.isNull() ? i18n("Untitled") : colorName.toString();
+
+        currentColor.color = KoColor(KoColorSpaceRegistry::instance()->rgb8());
+
+        colorValue = colorProperties.value("RGB");
+        if (colorValue.length() != 7 && colorValue.at(0) != '#') { // Color is a hexadecimal number
+            xml->raiseError("Invalid rgb8 color (malformed): " + colorValue);
+            return;
+        }
+        else {
+            bool rgbOk;
+            quint32 rgb = colorValue.mid(1).toUInt(&rgbOk, 16);
+            if  (!rgbOk) {
+                xml->raiseError("Invalid rgb8 color (unable to convert): " + colorValue);
+                return;
+            }
+
+            quint8 r = rgb >> 16 & 0xff;
+            quint8 g = rgb >> 8 & 0xff;
+            quint8 b = rgb & 0xff;
+
+            dbgPigment << "Color parsed: "<< r << g << b;
+
+            currentColor.color.data()[0] = r;
+            currentColor.color.data()[1] = g;
+            currentColor.color.data()[2] = b;
+            currentColor.color.setOpacity(OPACITY_OPAQUE_U8);
+
+            set->add(currentColor);
+
+            while(xml->readNextStartElement()) {
+                //ignore - these are all unknown or the /> element tag
+                xml->skipCurrentElement();
+            }
+            return;
+        }
+    }
+    else if (colorProperties.hasAttribute("CMYK")) {
+        dbgPigment << "Color " << colorProperties.value("NAME") << ", CMYK " << colorProperties.value("CMYK");
+
+        QStringRef colorName = colorProperties.value("NAME");
+        currentColor.name = colorName.isEmpty() || colorName.isNull() ? i18n("Untitled") : colorName.toString();
+
+        currentColor.color = KoColor(KoColorSpaceRegistry::instance()->colorSpace(CMYKAColorModelID.id(), Integer8BitsColorDepthID.id(), ""));
+
+        colorValue = colorProperties.value("CMYK");
+        if (colorValue.length() != 9 && colorValue.at(0) != '#') { // Color is a hexadecimal number
+            xml->raiseError("Invalid cmyk color (malformed): " + colorValue);
+            return;
+        }
+        else {
+            bool cmykOk;
+            quint32 cmyk = colorValue.mid(1).toUInt(&cmykOk, 16); // cmyk uses the full 32 bits
+            if  (!cmykOk) {
+                xml->raiseError("Invalid cmyk color (unable to convert): " + colorValue);
+                return;
+            }
+
+            quint8 c = cmyk >> 24 & 0xff;
+            quint8 m = cmyk >> 16 & 0xff;
+            quint8 y = cmyk >> 8 & 0xff;
+            quint8 k = cmyk & 0xff;
+
+            dbgPigment << "Color parsed: "<< c << m << y << k;
+
+            currentColor.color.data()[0] = c;
+            currentColor.color.data()[1] = m;
+            currentColor.color.data()[2] = y;
+            currentColor.color.data()[3] = k;
+            currentColor.color.setOpacity(OPACITY_OPAQUE_U8);
+
+            set->add(currentColor);
+
+            while(xml->readNextStartElement()) {
+                //ignore - these are all unknown or the /> element tag
+                xml->skipCurrentElement();
+            }
+            return;
+        }
+    }
+    else {
+        xml->raiseError("Unknown color space for color " + currentColor.name);
+    }
+}
+
+bool loadScribusXmlPalette(KoColorSet *set, QXmlStreamReader *xml)
+{
+
+    //1. Get name
+    QXmlStreamAttributes paletteProperties = xml->attributes();
+    QStringRef paletteName = paletteProperties.value("Name");
+    dbgPigment << "Processed name of palette:" << paletteName;
+    set->setName(paletteName.toString());
+
+    //2. Inside the SCRIBUSCOLORS, there are lots of colors. Retrieve them
+
+    while(xml->readNextStartElement()) {
+        QStringRef currentElement = xml->name();
+        if(QStringRef::compare(currentElement, "COLOR", Qt::CaseInsensitive) == 0) {
+            scribusParseColor(set, xml);
+        }
+        else {
+            xml->skipCurrentElement();
+        }
+    }
+
+    if(xml->hasError()) {
+        return false;
+    }
+
+    return true;
+}
+
+bool KoColorSet::loadXml() {
+    bool res = false;
+
+    QXmlStreamReader *xml = new QXmlStreamReader(d->data);
+
+    if (xml->readNextStartElement()) {
+        QStringRef paletteId = xml->name();
+        if (QStringRef::compare(paletteId, "SCRIBUSCOLORS", Qt::CaseInsensitive) == 0) { // Scribus
+            dbgPigment << "XML palette: " << filename() << ", Scribus format";
+            res = loadScribusXmlPalette(this, xml);
+        }
+        else {
+            // Unknown XML format
+            xml->raiseError("Unknown XML palette format. Expected SCRIBUSCOLORS, found " + paletteId);
+        }
+    }
+
+    // If there is any error (it should be returned through the stream)
+    if (xml->hasError() || !res) {
+        warnPigment << "Illegal XML palette:" << filename();
+        warnPigment << "Error (line"<< xml->lineNumber() << ", column" << xml->columnNumber() << "):" << xml->errorString();
+        return false;
+    }
+    else {
+        dbgPigment << "XML palette parsed successfully:" << filename();
+        return true;
+    }
+}
+
 quint16 readShort(QIODevice *io) {
     quint16 val;
     quint64 read = io->read((char*)&val, 2);
@@ -483,7 +654,7 @@ bool KoColorSet::loadAco()
     QFileInfo info(filename());
     setName(info.baseName());
 
-    QBuffer buf(&m_data);
+    QBuffer buf(&d->data);
     buf.open(QBuffer::ReadOnly);
 
     quint16 version = readShort(&buf);

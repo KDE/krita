@@ -272,11 +272,28 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
 
    connect(qApp, SIGNAL(applicationStateChanged(Qt::ApplicationState)), this, SLOT(slotApplicationStateChanged(Qt::ApplicationState)));
 
+   connect(resourceProvider->resourceManager(),
+            SIGNAL(canvasResourceChanged(int,QVariant)),
+            SLOT(slotResourceChanged(int, QVariant)));
+
+   connect(m_d->uiWdgPaintOpPresetSettings.wdgLodAvailability,
+            SIGNAL(sigUserChangedLodAvailability(bool)),
+            SLOT(slotLodAvailabilityChanged(bool)));
+
+   slotResourceChanged(KisCanvasResourceProvider::LodAvailability,
+                        resourceProvider->resourceManager()->
+                            resource(KisCanvasResourceProvider::LodAvailability));
 
 
 
 }
 
+void KisPaintOpPresetsPopup::slotResourceChanged(int key, const QVariant &value)
+{
+    if (key == KisCanvasResourceProvider::LodAvailability) {
+        m_d->uiWdgPaintOpPresetSettings.wdgLodAvailability->slotUserChangedLodAvailability(value.toBool());
+    }
+}
 
 void KisPaintOpPresetsPopup::slotApplicationStateChanged(Qt::ApplicationState state)
 {
@@ -288,30 +305,10 @@ void KisPaintOpPresetsPopup::slotApplicationStateChanged(Qt::ApplicationState st
     }
 }
 
-
-void KisPaintOpPresetsPopup::slotFocusChanged(QWidget* object1, QWidget* object2)
+void KisPaintOpPresetsPopup::slotLodAvailabilityChanged(bool value)
 {
-    // object1 = "old" focus window. object2 = "active" focus window
-    // only potentially hide the brush editor if it is detached and NOT pinned
-    if ( m_d->uiWdgPaintOpPresetSettings.pinWindowButton->isChecked() == false &&
-         m_d->uiWdgPaintOpPresetSettings.detachWindowButton->isChecked() == true) {
-
-        // if the active focus window is not the brush editor, we need to hide it
-        // otherwise it will go behind the active window and require 2 clicks to bring it back
-        // once to hide it, second time to show it again at the top
-        if (object1 && object2 && object2->parentWidget() && parentWidget() ) {
-
-
-            // the depth of the windows will change once the main window is clicked
-            // Since it gets focus, it will be in front of the brush editor (which means greater depth)
-            if ( object2->depth() > object1->depth()) {
-                 parentWidget()->hide();
-            }
-        }
-    }
-
+    m_d->resourceProvider->resourceManager()->setResource(KisCanvasResourceProvider::LodAvailability, QVariant(value));
 }
-
 
 KisPaintOpPresetsPopup::~KisPaintOpPresetsPopup()
 {
@@ -347,15 +344,8 @@ void KisPaintOpPresetsPopup::setPaintOpSettingsWidget(QWidget * widget)
             hideScratchPad();
         }
 
-        m_d->widgetConnections.addConnection(m_d->uiWdgPaintOpPresetSettings.wdgLodAvailability, SIGNAL(sigUserChangedLodAvailability(bool)),
-                                             m_d->settingsWidget, SLOT(slotUserChangedLodAvailability(bool)));
-        m_d->widgetConnections.addConnection(m_d->settingsWidget, SIGNAL(sigUserChangedLodAvailability(bool)),
-                                             m_d->uiWdgPaintOpPresetSettings.wdgLodAvailability, SLOT(slotUserChangedLodAvailability(bool)));
         m_d->widgetConnections.addConnection(m_d->settingsWidget, SIGNAL(sigConfigurationItemChanged()),
                                              this, SLOT(slotUpdateLodAvailability()));
-
-        m_d->settingsWidget->coldInitExternalLodAvailabilityWidget();
-
 
         widget->setFont(m_d->smallFont);
 

@@ -902,11 +902,11 @@ public:
     }
 
     // override super's implementation to not waste cpu cycles
-    virtual void visitBlock(QTextBlock&, const QTextCursor &)
+    void visitBlock(QTextBlock&, const QTextCursor &) override
     {
     }
 
-    virtual void nonVisit()
+    void nonVisit() override
     {
         setAbortVisiting(true);
     }
@@ -1441,7 +1441,7 @@ void KoTextEditor::insertHtml(const QString &html)
         QTextList *currentTextList = currentBlock.textList();
         if(currentTextList && !pastedLists.contains(currentBlock.textList())) {
             KoListStyle *listStyle = KoTextDocument(d->document).styleManager()->defaultListStyle()->clone();
-            listStyle->setName("");
+            listStyle->setName(QString());
             listStyle->setStyleId(0);
             currentPastedList = new KoList(d->document, listStyle);
             QTextListFormat currentTextListFormat = currentTextList->format();
@@ -1449,8 +1449,8 @@ void KoTextEditor::insertHtml(const QString &html)
             KoListLevelProperties levelProperty = listStyle->levelProperties(currentTextListFormat.indent());
             levelProperty.setStyle(static_cast<KoListStyle::Style>(currentTextListFormat.style()));
             levelProperty.setLevel(currentTextListFormat.indent());
-            levelProperty.setListItemPrefix("");
-            levelProperty.setListItemSuffix("");
+            levelProperty.setListItemPrefix(QString());
+            levelProperty.setListItemSuffix(QString());
             levelProperty.setListId((KoListStyle::ListIdType)currentTextList);
             listStyle->setLevelProperties(levelProperty);
 
@@ -1586,7 +1586,7 @@ public:
     {
     }
 
-    virtual void visitBlock(QTextBlock &block, const QTextCursor &caret)
+    void visitBlock(QTextBlock &block, const QTextCursor &caret) override
     {
         if (m_position >= qMax(block.position(), caret.selectionStart())
                     && m_position <= qMin(block.position() + block.length(), caret.selectionEnd())) {

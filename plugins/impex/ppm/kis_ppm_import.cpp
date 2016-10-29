@@ -56,6 +56,7 @@ KisPPMImport::~KisPPMImport()
 KisImportExportFilter::ConversionStatus KisPPMImport::convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration)
 {
     Q_UNUSED(from);
+    Q_UNUSED(configuration);
     dbgFile << "Importing using PPMImport!";
 
     if (to != "application/x-krita")
@@ -120,20 +121,20 @@ class KisAsciiPpmFlow : public KisPpmFlow
 public:
     KisAsciiPpmFlow(QIODevice* device) : m_device(device) {
     }
-    virtual ~KisAsciiPpmFlow() {
+    ~KisAsciiPpmFlow() override {
     }
-    virtual void nextRow() {
+    void nextRow() override {
     }
-    virtual bool valid() {
+    bool valid() override {
         return !m_device->atEnd();
     }
-    virtual bool nextUint1() {
+    bool nextUint1() override {
         return readNumber(m_device) == 1;
     }
-    virtual quint8 nextUint8() {
+    quint8 nextUint8() override {
         return readNumber(m_device);
     }
-    virtual quint16 nextUint16() {
+    quint16 nextUint16() override {
         return readNumber(m_device);
     }
 private:
@@ -145,16 +146,16 @@ class KisBinaryPpmFlow : public KisPpmFlow
 public:
     KisBinaryPpmFlow(QIODevice* device, int lineWidth) : m_pos(0), m_device(device), m_lineWidth(lineWidth) {
     }
-    virtual ~KisBinaryPpmFlow() {
+    ~KisBinaryPpmFlow() override {
     }
-    virtual void nextRow() {
+    void nextRow() override {
         m_array = m_device->read(m_lineWidth);
         m_ptr = m_array.data();
     }
-    virtual bool valid() {
+    bool valid() override {
         return m_array.size() == m_lineWidth;
     }
-    virtual bool nextUint1() {
+    bool nextUint1() override {
         if (m_pos == 0) {
             m_current = nextUint8();
             m_pos = 8;
@@ -164,12 +165,12 @@ public:
         m_current = m_current >> 1;
         return v;
     }
-    virtual quint8 nextUint8() {
+    quint8 nextUint8() override {
         quint8 v = *reinterpret_cast<quint8*>(m_ptr);
         m_ptr += 1;
         return v;
     }
-    virtual quint16 nextUint16() {
+    quint16 nextUint16() override {
         quint16 v = *reinterpret_cast<quint16*>(m_ptr);
         m_ptr += 2;
         return qFromBigEndian(v);

@@ -44,7 +44,7 @@ public:
     SpecificColorSelectorDockFactory() {
     }
 
-    virtual QString id() const {
+    QString id() const override {
         return QString("SpecificColorSelector");
     }
 
@@ -52,7 +52,7 @@ public:
         return Qt::RightDockWidgetArea;
     }
 
-    virtual QDockWidget* createDockWidget() {
+    QDockWidget* createDockWidget() override {
         SpecificColorSelectorDock * dockWidget = new SpecificColorSelectorDock();
 
         dockWidget->setObjectName(id());
@@ -60,7 +60,7 @@ public:
         return dockWidget;
     }
 
-    KoDockFactoryBase::DockPosition defaultDockPosition() const {
+    KoDockFactoryBase::DockPosition defaultDockPosition() const override {
         return DockMinimized;
     }
 };

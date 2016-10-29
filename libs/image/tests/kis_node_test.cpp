@@ -331,7 +331,7 @@ public:
           m_nastyChild(nastyChild)
     {}
 
-    void run() {
+    void run() override {
 
         int visibility = 0;
 
@@ -409,7 +409,7 @@ public:
           m_isWriter(isWriter)
     {}
 
-    void run() {
+    void run() override {
         int numCycles = qMax(10000, NUM_CYCLES / 100);
 
         for(int i = 0; i < numCycles; i++) {

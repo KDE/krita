@@ -37,7 +37,7 @@ public:
     {
     }
 
-    virtual QString id() const
+    QString id() const override
     {
         return QString( "AnimationDocker" );
     }
@@ -47,7 +47,7 @@ public:
         return Qt::RightDockWidgetArea;
     }
 
-    virtual QDockWidget *createDockWidget()
+    QDockWidget *createDockWidget() override
     {
         AnimationDocker *dockWidget = new AnimationDocker();
         dockWidget->setObjectName(id());
@@ -55,7 +55,7 @@ public:
         return dockWidget;
     }
 
-    DockPosition defaultDockPosition() const
+    DockPosition defaultDockPosition() const override
     {
         return DockMinimized;
     }
@@ -68,7 +68,7 @@ public:
     {
     }
 
-    virtual QString id() const
+    QString id() const override
     {
         return QString( "TimelineDocker" );
     }
@@ -78,7 +78,7 @@ public:
         return Qt::RightDockWidgetArea;
     }
 
-    virtual QDockWidget *createDockWidget()
+    QDockWidget *createDockWidget() override
     {
         TimelineDocker *dockWidget = new TimelineDocker();
         dockWidget->setObjectName(id());
@@ -86,7 +86,7 @@ public:
         return dockWidget;
     }
 
-    DockPosition defaultDockPosition() const
+    DockPosition defaultDockPosition() const override
     {
         return DockMinimized;
     }
@@ -99,7 +99,7 @@ public:
     {
     }
 
-    virtual QString id() const
+    QString id() const override
     {
         return QString( "OnionSkinsDocker" );
     }
@@ -109,7 +109,7 @@ public:
         return Qt::RightDockWidgetArea;
     }
 
-    virtual QDockWidget *createDockWidget()
+    QDockWidget *createDockWidget() override
     {
         OnionSkinsDocker *dockWidget = new OnionSkinsDocker();
         dockWidget->setObjectName(id());
@@ -117,7 +117,7 @@ public:
         return dockWidget;
     }
 
-    DockPosition defaultDockPosition() const
+    DockPosition defaultDockPosition() const override
     {
         return DockMinimized;
     }
@@ -130,7 +130,7 @@ public:
     {
     }
 
-    virtual QString id() const
+    QString id() const override
     {
         return QString( "AnimationCurvesDocker" );
     }
@@ -140,7 +140,7 @@ public:
         return Qt::RightDockWidgetArea;
     }
 
-    virtual QDockWidget *createDockWidget()
+    QDockWidget *createDockWidget() override
     {
         KisAnimationCurveDocker *dockWidget = new KisAnimationCurveDocker();
         dockWidget->setObjectName(id());
@@ -148,7 +148,7 @@ public:
         return dockWidget;
     }
 
-    DockPosition defaultDockPosition() const
+    DockPosition defaultDockPosition() const override
     {
         return DockMinimized;
     }

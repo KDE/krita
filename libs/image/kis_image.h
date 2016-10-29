@@ -53,7 +53,7 @@ class KisLayerComposition;
 class KisSpontaneousJob;
 class KisImageAnimationInterface;
 class KUndo2MagicString;
-struct KisProofingConfiguration;
+class KisProofingConfiguration;
 
 namespace KisMetaData
 {

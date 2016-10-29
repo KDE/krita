@@ -23,10 +23,10 @@
 
 
 
-KisSwitchCurrentTimeCommand::KisSwitchCurrentTimeCommand(KisImageSP image, int newTime, KUndo2Command *parent)
+KisSwitchCurrentTimeCommand::KisSwitchCurrentTimeCommand(KisImageAnimationInterface *animation, int oldTime, int newTime, KUndo2Command *parent)
     : KUndo2Command(kundo2_i18n("Switch current time"), parent),
-      m_image(image),
-      m_oldTime(image->animationInterface()->currentUITime()),
+      m_animation(animation),
+      m_oldTime(oldTime),
       m_newTime(newTime)
 {
 }
@@ -57,10 +57,10 @@ bool KisSwitchCurrentTimeCommand::mergeWith(const KUndo2Command* command)
 
 void KisSwitchCurrentTimeCommand::redo()
 {
-    m_image->animationInterface()->requestTimeSwitchNonGUI(m_newTime);
+    m_animation->requestTimeSwitchNonGUI(m_newTime);
 }
 
 void KisSwitchCurrentTimeCommand::undo()
 {
-    m_image->animationInterface()->requestTimeSwitchNonGUI(m_oldTime);
+    m_animation->requestTimeSwitchNonGUI(m_oldTime);
 }

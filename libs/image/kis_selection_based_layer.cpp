@@ -145,7 +145,7 @@ KisSelectionSP KisSelectionBasedLayer::fetchComposedInternalSelection(const QRec
 
     KisSelectionSP tempSelection = m_d->selection;
 
-    lockTemporaryTarget();
+    KisIndirectPaintingSupport::ReadLocker l(this);
 
     if (hasTemporaryTarget()) {
         /**
@@ -158,8 +158,6 @@ KisSelectionSP KisSelectionBasedLayer::fetchComposedInternalSelection(const QRec
         setupTemporaryPainter(&gc2);
         gc2.bitBlt(rect.topLeft(), temporaryTarget(), rect);
     }
-
-    unlockTemporaryTarget();
 
     return tempSelection;
 }

@@ -35,26 +35,26 @@ public:
         enableJob(KisSimpleStrokeStrategy::JOB_DOSTROKE);
     }
 
-    ~TestingSimpleStrokeStrategy() {
+    ~TestingSimpleStrokeStrategy() override {
         QCOMPARE(m_stageCounter, 3);
     }
 
-    void initStrokeCallback() {
+    void initStrokeCallback() override {
         QCOMPARE(m_stageCounter, 0);
         m_stageCounter++;
     }
 
-    void finishStrokeCallback() {
+    void finishStrokeCallback() override {
         QCOMPARE(m_stageCounter, 2);
         m_stageCounter++;
     }
 
-    void cancelStrokeCallback() {
+    void cancelStrokeCallback() override {
         QCOMPARE(m_stageCounter, 2);
         m_stageCounter++;
     }
 
-    void doStrokeCallback(KisStrokeJobData *data) {
+    void doStrokeCallback(KisStrokeJobData *data) override {
         Q_UNUSED(data);
 
         QCOMPARE(m_stageCounter, 1);

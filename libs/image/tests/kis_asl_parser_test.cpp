@@ -193,7 +193,7 @@ void KisAslParserTest::testWritingGradients()
 {
     KisAslXmlWriter w1;
 
-    KoSegmentGradient segmentGradient("");
+    KoSegmentGradient segmentGradient;
     segmentGradient.createSegment(INTERP_LINEAR, COLOR_INTERP_RGB,
                                   0.0, 0.3, 0.15,
                                   Qt::black, Qt::red);
@@ -218,7 +218,7 @@ void KisAslParserTest::testWritingGradients()
     stops << KoGradientStop(0.6, KoColor(Qt::green, cs));
     stops << KoGradientStop(1.0, KoColor(Qt::white, cs));
 
-    KoStopGradient stopGradient("");
+    KoStopGradient stopGradient;
     stopGradient.setStops(stops);
 
     w2.writeStopGradient("tstG", &stopGradient);

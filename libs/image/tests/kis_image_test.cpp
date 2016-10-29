@@ -91,7 +91,7 @@ public:
     {
     }
 
-    KisStrokeStrategy* createLodClone(int levelOfDetail) {
+    KisStrokeStrategy* createLodClone(int levelOfDetail) override {
         Q_UNUSED(levelOfDetail);
         m_lodCallback();
         return 0;

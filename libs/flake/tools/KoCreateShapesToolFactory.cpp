@@ -27,8 +27,8 @@ KoCreateShapesToolFactory::KoCreateShapesToolFactory()
         : KoToolFactoryBase(KoCreateShapesTool_ID)
 {
     setToolTip(i18n("Create object"));
-    setToolType(mainToolType());
-    setPriority(1);
+    setSection(mainToolType());
+    setPriority(3);
 }
 
 KoCreateShapesToolFactory::~KoCreateShapesToolFactory()

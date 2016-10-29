@@ -100,6 +100,7 @@ KisXCFImport::~KisXCFImport()
 KisImportExportFilter::ConversionStatus KisXCFImport::convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration)
 {
     Q_UNUSED(from);
+    Q_UNUSED(configuration);
     dbgFile << "Importing using XCFImport!";
 
     if (to != "application/x-krita")
@@ -195,6 +196,12 @@ KisImportExportFilter::ConversionStatus KisXCFImport::loadFromDevice(QIODevice* 
 
     // Decode the data
     getBasicXcfInfo() ;
+
+    if (XCF.version < 0 || XCF.version > 3) {
+        doc->setErrorMessage(i18n("This XCF file is too new; Krita cannot support XCF files written by GIMP 2.9 or newer."));
+        return KisImportExportFilter::UnsupportedVersion;
+    }
+
     initColormap();
 
     dbgFile << XCF.version << "width = " << XCF.width << "height = " << XCF.height << "layers = " << XCF.numLayers;
@@ -332,7 +339,7 @@ KisImportExportFilter::ConversionStatus KisXCFImport::loadFromDevice(QIODevice* 
         layers.append(layer);
     }
 
-    for (int i = 0; i <= maxDepth; ++i) {
+    for (uint i = 0; i <= maxDepth; ++i) {
         addLayers(layers, image, i);
     }
 

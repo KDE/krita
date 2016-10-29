@@ -176,7 +176,7 @@ void KoDockWidgetTitleBar::paintEvent(QPaintEvent*)
     int fw = q->isFloating() ? q->style()->pixelMetric(QStyle::PM_DockWidgetFrameWidth, 0, q) : 0;
     int mw = q->style()->pixelMetric(QStyle::PM_DockWidgetTitleMargin, 0, q);
 
-    QStyleOptionDockWidgetV2 titleOpt;
+    QStyleOptionDockWidget titleOpt;
     titleOpt.initFrom(q);
 
     QSize collapseButtonSize(0,0);
@@ -203,7 +203,7 @@ void KoDockWidgetTitleBar::resizeEvent(QResizeEvent*)
 
     int fw = q->isFloating() ? q->style()->pixelMetric(QStyle::PM_DockWidgetFrameWidth, 0, q) : 0;
 
-    QStyleOptionDockWidgetV2 opt;
+    QStyleOptionDockWidget opt;
     opt.initFrom(q);
     opt.rect = QRect(QPoint(fw, fw), QSize(geometry().width() - (fw * 2), geometry().height() - (fw * 2)));
     opt.title = q->windowTitle();

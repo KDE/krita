@@ -85,7 +85,7 @@ KisHatchingPaintOpSettingsWidget:: KisHatchingPaintOpSettingsWidget(QWidget* par
     /*xMLAnalyzer is an empty document we'll use to analyze and edit the config string part by part
     I know the important string is "brush_definition" because I read the tree with the snippet
     in kis_hatching_paintop_settings.cpp */
-    QDomDocument xMLAnalyzer("");
+    QDomDocument xMLAnalyzer;
     xMLAnalyzer.setContent(reconfigurationCourier->getString("brush_definition"));
 
     /*More things I know by reading the XML tree. At this point you can just read it with:

@@ -56,11 +56,11 @@ class KisBrushDelegate : public QAbstractItemDelegate
 {
 public:
     KisBrushDelegate(QObject * parent = 0) : QAbstractItemDelegate(parent) {}
-    virtual ~KisBrushDelegate() {}
+    ~KisBrushDelegate() override {}
     /// reimplemented
-    virtual void paint(QPainter *, const QStyleOptionViewItem &, const QModelIndex &) const;
+    void paint(QPainter *, const QStyleOptionViewItem &, const QModelIndex &) const override;
     /// reimplemented
-    QSize sizeHint(const QStyleOptionViewItem & option, const QModelIndex &) const {
+    QSize sizeHint(const QStyleOptionViewItem & option, const QModelIndex &) const override {
         return option.decorationSize;
     }
 };
@@ -113,6 +113,12 @@ KisPredefinedBrushChooser::KisPredefinedBrushChooser(QWidget *parent, const char
 
     QObject::connect(brushSizeSpinBox, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetItemSize(qreal)));
 
+    m_lbSpacing = new QLabel(i18n("Spacing:"), this);
+    m_lbSpacing->setObjectName("lblSpacing");
+    m_slSpacing = new KisSpacingSelectionWidget(this);
+    m_slSpacing->setObjectName("Spacing");
+    m_slSpacing->setSpacing(true, 1.0);
+    connect(m_slSpacing, SIGNAL(sigSpacingChanged()), SLOT(slotSpacingChanged()));
 
     brushRotationSpinBox->setRange(0, 360, 0);
     brushRotationSpinBox->setValue(0);
@@ -172,6 +178,16 @@ KisPredefinedBrushChooser::KisPredefinedBrushChooser(QWidget *parent, const char
     spacingLayout->setObjectName("spacing grid layout");
 
 
+    spacingLayout->addWidget(m_lbSize, 1, 0);
+    spacingLayout->addWidget(m_slSize, 1, 1);
+    spacingLayout->addWidget(m_lbRotation, 2, 0);
+    spacingLayout->addWidget(m_slRotation, 2, 1);
+    spacingLayout->addWidget(m_lbSpacing, 3, 0);
+    spacingLayout->addWidget(m_slSpacing, 3, 1);
+    spacingLayout->setColumnStretch(1, 3);
+
+    QPushButton *resetBrushButton = new QPushButton(i18n("Reset Predefined Tip"), this);
+    resetBrushButton->setObjectName("ResetBrush");
     resetBrushButton->setToolTip(i18n("Reloads Spacing from file\nSets Scale to 1.0\nSets Rotation to 0.0"));
     connect(resetBrushButton, SIGNAL(clicked()), SLOT(slotResetBrush()));
 

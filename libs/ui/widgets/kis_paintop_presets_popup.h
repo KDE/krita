@@ -111,6 +111,9 @@ private Q_SLOTS:
     void slotPaintOpChanged(int index);
     void slotFocusChanged(QWidget* object1, QWidget* object2);
     void slotApplicationStateChanged(Qt::ApplicationState);
+    void slotResourceChanged(int key, const QVariant &value);
+    void slotLodAvailabilityChanged(bool value);
+
 
 private:
 

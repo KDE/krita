@@ -38,11 +38,11 @@ public:
     TestMask() : KisMask("TestMask") {
     }
 
-    KisNodeSP clone() const {
+    KisNodeSP clone() const override {
         return new TestMask(*this);
     }
 
-    bool allowAsChild(KisNodeSP) const {
+    bool allowAsChild(KisNodeSP) const override {
         return false;
     }
 

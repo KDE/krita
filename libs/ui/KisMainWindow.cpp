@@ -172,7 +172,6 @@ public:
         , mdiArea(new QMdiArea(parent))
         , windowMapper(new QSignalMapper(parent))
         , documentMapper(new QSignalMapper(parent))
-        , lastExportSpecialOutputFlag(0)
     {
     }
 

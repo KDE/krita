@@ -126,7 +126,9 @@ public:
         Q_ASSERT(!colorDepthID.name().isEmpty());
 
         if (customWarning.isEmpty()) {
-            m_warning = i18nc("image conversion warning", "Your image contains layers with the color model <b>%1</b> and channel depth <b>%2</b> which cannot be saved to this format. The layers will be converted.").arg(m_ColorModelID.name()).arg(m_colorDepthID.name());
+            m_warning = i18nc("image conversion warning", "Your image contains layers with the color model <b>%1</b> and channel depth <b>%2</b> which cannot be saved to this format. The layers will be converted."
+            , m_ColorModelID.name()
+            ,m_colorDepthID.name());
         }
     }
 

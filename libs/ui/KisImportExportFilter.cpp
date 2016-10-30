@@ -213,35 +213,17 @@ void KisImportExportFilter::addCapability(KisExportCheckBase *capability)
 void KisImportExportFilter::addSupportedColorModels(QList<QPair<KoID, KoID> > supportedColorModels, const QString &name, KisExportCheckBase::Level level)
 {
     Q_ASSERT(level != KisExportCheckBase::SUPPORTED);
-
     QString layerMessage;
     QString imageMessage;
-
-    if (level == KisExportCheckBase::PARTIALLY) {
-        imageMessage = i18nc("image conversion warning",
-                             "%1 cannot save images with color model <b>%2</b> and depth <b>%3</b>. The image will be converted.");
-
-        layerMessage =
-                i18nc("image conversion warning",
-                      "%1 cannot save layers with color model <b>%2</b> and depth <b>%3</b>. The layers will be converted or skipped.");
-    }
-    else {
-        imageMessage = i18nc("image conversion warning",
-                             "%1 cannot save images with color model <b>%2</b> and depth <b>%3</b>. The image will not be saved.");
-
-        layerMessage =
-                i18nc("image conversion warning",
-                      "%1 cannot save layers with color model <b>%2</b> and depth <b>%3</b>. The layers will be skipped.");
-    }
-
-
     QList<KoID> allColorModels = KoColorSpaceRegistry::instance()->colorModelsList(KoColorSpaceRegistry::AllColorSpaces);
     Q_FOREACH(const KoID &colorModelID, allColorModels) {
         QList<KoID> allColorDepths = KoColorSpaceRegistry::instance()->colorDepthList(colorModelID.id(), KoColorSpaceRegistry::AllColorSpaces);
         Q_FOREACH(const KoID &colorDepthID, allColorDepths) {
 
-            KisExportCheckFactory *colorModelCheckFactory = KisExportCheckRegistry::instance()->get("ColorModelCheck/" + colorModelID.id() + "/" + colorDepthID.id());
-            KisExportCheckFactory *colorModelPerLayerCheckFactory = KisExportCheckRegistry::instance()->get("ColorModelPerLayerCheck/" + colorModelID.id() + "/" + colorDepthID.id());
+            KisExportCheckFactory *colorModelCheckFactory =
+                    KisExportCheckRegistry::instance()->get("ColorModelCheck/" + colorModelID.id() + "/" + colorDepthID.id());
+            KisExportCheckFactory *colorModelPerLayerCheckFactory =
+                    KisExportCheckRegistry::instance()->get("ColorModelPerLayerCheck/" + colorModelID.id() + "/" + colorDepthID.id());
 
             if(!colorModelCheckFactory || !colorModelPerLayerCheckFactory) {
                 qDebug() << "No factory for" << colorModelID << colorDepthID;
@@ -253,8 +235,33 @@ void KisImportExportFilter::addSupportedColorModels(QList<QPair<KoID, KoID> > su
                 addCapability(colorModelPerLayerCheckFactory->create(KisExportCheckBase::SUPPORTED));
             }
             else {
-                addCapability(colorModelCheckFactory->create(level, imageMessage.arg(name).arg(colorModelID.name()).arg(colorDepthID.name())));
-                addCapability(colorModelPerLayerCheckFactory->create(level, layerMessage.arg(name).arg(colorModelID.name()).arg(colorDepthID.name())));
+
+
+                if (level == KisExportCheckBase::PARTIALLY) {
+                    imageMessage = i18nc("image conversion warning",
+                                         "%1 cannot save images with color model <b>%2</b> and depth <b>%3</b>. The image will be converted."
+                                         ,name, colorModelID.name(), colorDepthID.name());
+
+                    layerMessage =
+                            i18nc("image conversion warning",
+                                  "%1 cannot save layers with color model <b>%2</b> and depth <b>%3</b>. The layers will be converted or skipped."
+                                  ,name, colorModelID.name(), colorDepthID.name());
+                }
+                else {
+                    imageMessage = i18nc("image conversion warning",
+                                         "%1 cannot save images with color model <b>%2</b> and depth <b>%3</b>. The image will not be saved."
+                                         ,name, colorModelID.name(), colorDepthID.name());
+
+                    layerMessage =
+                            i18nc("image conversion warning",
+                                  "%1 cannot save layers with color model <b>%2</b> and depth <b>%3</b>. The layers will be skipped."
+                                  , name, colorModelID.name(), colorDepthID.name());
+                 }
+
+
+
+                addCapability(colorModelCheckFactory->create(level, imageMessage));
+                addCapability(colorModelPerLayerCheckFactory->create(level, layerMessage));
             }
         }
     }

@@ -617,6 +617,7 @@ void KisPopupPalette::mouseMoveEvent(QMouseEvent* event)
         finalAngle = finalAngle + 90; // add 90 degrees so 0 degree position points up
         float angleDifference = finalAngle - m_coordinatesConverter->rotationAngle(); // the rotation function accepts diffs, so find it out
         m_coordinatesConverter->rotate(m_coordinatesConverter->widgetCenterPoint(), angleDifference);
+        emit sigUpdateCanvas();
 
     }
 
@@ -677,6 +678,7 @@ void KisPopupPalette::mousePressEvent(QMouseEvent* event)
       if (correctedResetCanvasRotationIndicator->contains(point.x(), point.y())) {
         float angleDifference = -m_coordinatesConverter->rotationAngle(); // the rotation function accepts diffs, so find it ou
         m_coordinatesConverter->rotate(m_coordinatesConverter->widgetCenterPoint(), angleDifference);
+        emit sigUpdateCanvas();
       }
 
 

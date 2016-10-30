@@ -149,6 +149,7 @@ Q_SIGNALS:
     void sigChangeActivePaintop(int);
     void sigUpdateRecentColor(int);
     void sigChangefGColor(const KoColor&);
+    void sigUpdateCanvas();
     void zoomLevelChanged(int);
 
     // These are used to handle a bug:

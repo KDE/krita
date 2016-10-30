@@ -38,7 +38,7 @@ public:
     virtual QWidget* createConfigurationWidget(QWidget* parent, QWidget*);
 public Q_SLOTS:
     virtual void setPeriodic(bool periodic);
-    virtual void setLength(int length);
+    virtual void setLength(qreal length);
 
 
     virtual void toXML(QDomDocument&, QDomElement&) const;

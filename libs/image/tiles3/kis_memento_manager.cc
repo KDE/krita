@@ -223,7 +223,7 @@ KisTileSP KisMementoManager::getCommitedTile(qint32 col, qint32 row)
      * no named transaction is in progress.
      */
     if(!namedTransactionInProgress())
-        return 0;
+        return KisTileSP();
 
     KisMementoItemSP mi = m_headsHashTable.getReadOnlyTileLazy(col, row);
     Q_ASSERT(mi);

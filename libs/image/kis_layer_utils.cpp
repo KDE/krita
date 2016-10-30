@@ -593,8 +593,7 @@ namespace KisLayerUtils {
 
             if (!parent) {
                 KisNodeSP oldRoot = m_info->image->root();
-                KisNodeSP newRoot =
-                    new KisGroupLayer(m_info->image, "root", OPACITY_OPAQUE_U8);
+                KisNodeSP newRoot(new KisGroupLayer(m_info->image, "root", OPACITY_OPAQUE_U8));
 
                 addCommand(new KisImageLayerAddCommand(m_info->image,
                                                        m_info->dstNode,

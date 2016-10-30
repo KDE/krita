@@ -63,7 +63,7 @@ KisSelectionBasedLayer::KisSelectionBasedLayer(KisImageWSP image,
     else
         setInternalSelection(selection);
 
-    m_d->paintDevice = new KisPaintDevice(this, image->colorSpace(), new KisDefaultBounds(image));
+    m_d->paintDevice = KisPaintDeviceSP(new KisPaintDevice(this, image->colorSpace(), KisDefaultBoundsSP(new KisDefaultBounds(image))));
     connect(image.data(), SIGNAL(sigSizeChanged(QPointF,QPointF)), SLOT(slotImageSizeChanged()));
 }
 
@@ -86,7 +86,7 @@ KisSelectionBasedLayer::~KisSelectionBasedLayer()
 
 void KisSelectionBasedLayer::initSelection()
 {
-    m_d->selection = new KisSelection(new KisDefaultBounds(image()));
+    m_d->selection = KisSelectionSP(new KisSelection(KisDefaultBoundsSP(new KisDefaultBounds(image()))));
     m_d->selection->pixelSelection()->setDefaultPixel(KoColor(Qt::white, m_d->selection->pixelSelection()->colorSpace()));
     m_d->selection->setParentNode(this);
     m_d->selection->updateProjection();
@@ -106,7 +106,7 @@ void KisSelectionBasedLayer::slotImageSizeChanged()
 
 void KisSelectionBasedLayer::setImage(KisImageWSP image)
 {
-    m_d->paintDevice->setDefaultBounds(new KisDefaultBounds(image));
+    m_d->paintDevice->setDefaultBounds(KisDefaultBoundsSP(new KisDefaultBounds(image)));
     KisLayer::setImage(image);
 
     connect(image.data(), SIGNAL(sigSizeChanged(QPointF,QPointF)), SLOT(slotImageSizeChanged()));
@@ -140,7 +140,7 @@ void KisSelectionBasedLayer::setUseSelectionInProjection(bool value) const
 
 KisSelectionSP KisSelectionBasedLayer::fetchComposedInternalSelection(const QRect &rect) const
 {
-    if (!m_d->selection) return 0;
+    if (!m_d->selection) return KisSelectionSP();
     m_d->selection->updateProjection(rect);
 
     KisSelectionSP tempSelection = m_d->selection;
@@ -197,7 +197,7 @@ void KisSelectionBasedLayer::resetCache(const KoColorSpace *colorSpace)
     if (!m_d->paintDevice ||
             *m_d->paintDevice->colorSpace() != *colorSpace) {
 
-        m_d->paintDevice = new KisPaintDevice(this, colorSpace, new KisDefaultBounds(image()));
+        m_d->paintDevice = KisPaintDeviceSP(new KisPaintDevice(KisNodeWSP(this), colorSpace, new KisDefaultBounds(image())));
     } else {
         m_d->paintDevice->clear();
     }

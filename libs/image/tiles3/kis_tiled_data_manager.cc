@@ -388,7 +388,7 @@ void KisTiledDataManager::clear(QRect clearRect, const quint8 *clearPixel)
                  needsRecalculateExtent = true;
 
                  if (!pixelBytesAreDefault) {
-                     KisTileSP clearedTile = new KisTile(column, row, td, m_mementoManager);
+                     KisTileSP clearedTile = KisTileSP(new KisTile(column, row, td, m_mementoManager));
                      m_hashTable->addTile(clearedTile);
                      updateExtent(column, row);
                  }
@@ -491,7 +491,7 @@ void KisTiledDataManager::bitBltImpl(KisTiledDataManager *srcDM, const QRect &re
 
                  srcTile->lockForRead();
                  KisTileData *td = srcTile->tileData();
-                 KisTileSP clonedTile = new KisTile(column, row, td, m_mementoManager);
+                 KisTileSP clonedTile = KisTileSP(new KisTile(column, row, td, m_mementoManager));
                  srcTile->unlock();
 
                  m_hashTable->addTile(clonedTile);
@@ -552,7 +552,7 @@ void KisTiledDataManager::bitBltRoughImpl(KisTiledDataManager *srcDM, const QRec
 
             srcTile->lockForRead();
             KisTileData *td = srcTile->tileData();
-            KisTileSP clonedTile = new KisTile(column, row, td, m_mementoManager);
+            KisTileSP clonedTile = KisTileSP(new KisTile(column, row, td, m_mementoManager));
             srcTile->unlock();
 
             m_hashTable->addTile(clonedTile);

@@ -63,7 +63,7 @@ inline KisNodeSP findNode(KisNodeSP root, const QString &name) {
         child = child->nextSibling();
     }
 
-    return 0;
+    return KisNodeSP();
 }
 
 
@@ -480,7 +480,7 @@ class TestNode : public DefaultNode
     Q_OBJECT
 public:
     KisNodeSP clone() const {
-        return new TestNode(*this);
+        return KisNodeSP(new TestNode(*this));
     }
 };
 
@@ -550,8 +550,8 @@ struct MaskParent
         const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
         undoStore = new KisSurrogateUndoStore();
         image = new KisImage(undoStore, imageRect.width(), imageRect.height(), cs, "test image");
-        layer = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE_U8);
-        image->addNode(layer);
+        layer = KisPaintLayerSP(new KisPaintLayer(image, "paint1", OPACITY_OPAQUE_U8));
+        image->addNode(KisNodeSP(layer.data()));
     }
 
     KisSurrogateUndoStore *undoStore;

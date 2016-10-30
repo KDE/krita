@@ -507,7 +507,7 @@ protected:
      * the node stack
      */
     virtual KisBaseNodeSP parentCallback() const {
-        return 0;
+        return KisBaseNodeSP();
     }
 
     virtual void notifyParentVisibilityChanged(bool value) {

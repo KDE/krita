@@ -254,7 +254,7 @@ public:
     /**
      * @return the list of effect masks
      */
-    QList<KisEffectMaskSP> effectMasks(KisNodeSP lastNode = 0) const;
+    QList<KisEffectMaskSP> effectMasks(KisNodeSP lastNode = KisNodeSP()) const;
 
     /**
      * Get the group layer that contains this layer.

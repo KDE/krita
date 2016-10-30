@@ -74,7 +74,7 @@ public:
      * @param node the node to be added
      * @param parent the parent node
      */
-    bool addNode(KisNodeSP node, KisNodeSP parent = 0);
+    bool addNode(KisNodeSP node, KisNodeSP parent = KisNodeSP());
 
     /**
      * Add already existing node to the graph.

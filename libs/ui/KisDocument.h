@@ -586,10 +586,6 @@ public:
 
     bool save(KisPropertiesConfigurationSP exportConfiguration = 0);
 
-public Q_SLOTS:
-
-    bool waitSaveComplete();
-
 Q_SIGNALS:
 
     void completed();

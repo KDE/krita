@@ -620,14 +620,6 @@ bool KisDocument::save(KisPropertiesConfigurationSP exportConfiguration)
     return false;
 }
 
-
-bool KisDocument::waitSaveComplete()
-{
-    return d->m_saveOk;
-}
-
-
-
 bool KisDocument::saveFile(KisPropertiesConfigurationSP exportConfiguration)
 {
     qDebug() << "saveFile. Is Autosaving?" << isAutosaving();

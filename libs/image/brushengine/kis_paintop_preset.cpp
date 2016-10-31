@@ -124,7 +124,7 @@ void KisPaintOpPreset::setOptionsWidget(KisPaintOpConfigWidget* widget)
 void KisPaintOpPreset::setSettings(KisPaintOpSettingsSP settings)
 {
     Q_ASSERT(settings);
-    Q_ASSERT(!settings->getString("paintop", "").isEmpty());
+    Q_ASSERT(!settings->getString("paintop", QString()).isEmpty());
 
     DirtyStateSaver dirtyStateSaver(this);
 
@@ -158,7 +158,7 @@ void KisPaintOpPreset::setSettings(KisPaintOpSettingsSP settings)
 KisPaintOpSettingsSP KisPaintOpPreset::settings() const
 {
     Q_ASSERT(m_d->settings);
-    Q_ASSERT(!m_d->settings->getString("paintop", "").isEmpty());
+    Q_ASSERT(!m_d->settings->getString("paintop", QString()).isEmpty());
 
     return m_d->settings;
 }
@@ -272,7 +272,7 @@ bool KisPaintOpPreset::save()
     if (filename().isEmpty())
         return false;
 
-    QString paintopid = m_d->settings->getString("paintop", "");
+    QString paintopid = m_d->settings->getString("paintop", QString());
 
     if (paintopid.isEmpty())
         return false;
@@ -285,7 +285,7 @@ bool KisPaintOpPreset::save()
 
 void KisPaintOpPreset::toXML(QDomDocument& doc, QDomElement& elt) const
 {
-    QString paintopid = m_d->settings->getString("paintop", "");
+    QString paintopid = m_d->settings->getString("paintop", QString());
 
     elt.setAttribute("paintopid", paintopid);
     elt.setAttribute("name", name());
@@ -320,7 +320,7 @@ void KisPaintOpPreset::fromXML(const QDomElement& presetElt)
         return;
     }
 
-    KoID id(paintopid, "");
+    KoID id(paintopid, QString());
 
     KisPaintOpSettingsSP settings = KisPaintOpRegistry::instance()->settings(id);
     if (!settings) {

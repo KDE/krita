@@ -153,7 +153,7 @@ void VideoExportOptionsDialog::slotCustomLineToggled(bool value)
     if (customLine.isEmpty() && value) {
         customLine = generateCustomLine().join(" ");
     } else if (!value) {
-        customLine = "";
+        customLine = QString();
     }
 
     ui->txtCustomLine->setText(customLine);
@@ -198,7 +198,7 @@ void VideoExportOptionsDialog::setConfiguration(const KisPropertiesConfiguration
     ui->cmbTune->setCurrentIndex(m_d->defaultTune);
     m_d->defaultBitrate = cfg->getInt("TheoraBitrate", 5000);
     ui->intBitrate->setValue(m_d->defaultBitrate);
-    m_d->defaultCustomLine = cfg->getString("CustomLineValue", "");
+    m_d->defaultCustomLine = cfg->getString("CustomLineValue", QString());
     ui->txtCustomLine->setText(m_d->defaultCustomLine);
 
     if (cfg->hasProperty("CodecIndex")) {

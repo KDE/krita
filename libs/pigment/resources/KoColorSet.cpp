@@ -543,7 +543,7 @@ void scribusParseColor(KoColorSet *set, QXmlStreamReader *xml)
         QStringRef colorName = colorProperties.value("NAME");
         currentColor.name = colorName.isEmpty() || colorName.isNull() ? i18n("Untitled") : colorName.toString();
 
-        currentColor.color = KoColor(KoColorSpaceRegistry::instance()->colorSpace(CMYKAColorModelID.id(), Integer8BitsColorDepthID.id(), ""));
+        currentColor.color = KoColor(KoColorSpaceRegistry::instance()->colorSpace(CMYKAColorModelID.id(), Integer8BitsColorDepthID.id(), QString()));
 
         colorValue = colorProperties.value("CMYK");
         if (colorValue.length() != 9 && colorValue.at(0) != '#') { // Color is a hexadecimal number
@@ -687,7 +687,7 @@ bool KoColorSet::loadAco()
             e.color.setOpacity(OPACITY_OPAQUE_U8);
         }
         else if (colorSpace == 2) { // CMYK
-            e.color = KoColor(KoColorSpaceRegistry::instance()->colorSpace(CMYKAColorModelID.id(), Integer16BitsColorDepthID.id(), ""));
+            e.color = KoColor(KoColorSpaceRegistry::instance()->colorSpace(CMYKAColorModelID.id(), Integer16BitsColorDepthID.id(), QString()));
             reinterpret_cast<quint16*>(e.color.data())[0] = quint16_MAX - ch1;
             reinterpret_cast<quint16*>(e.color.data())[1] = quint16_MAX - ch2;
             reinterpret_cast<quint16*>(e.color.data())[2] = quint16_MAX - ch3;
@@ -702,7 +702,7 @@ bool KoColorSet::loadAco()
             e.color.setOpacity(OPACITY_OPAQUE_U8);
         }
         else if (colorSpace == 8) { // GRAY
-            e.color = KoColor(KoColorSpaceRegistry::instance()->colorSpace(GrayAColorModelID.id(), Integer16BitsColorDepthID.id(), ""));
+            e.color = KoColor(KoColorSpaceRegistry::instance()->colorSpace(GrayAColorModelID.id(), Integer16BitsColorDepthID.id(), QString()));
             reinterpret_cast<quint16*>(e.color.data())[0] = ch1 * (quint16_MAX / 10000);
             e.color.setOpacity(OPACITY_OPAQUE_U8);
         }

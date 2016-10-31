@@ -291,15 +291,6 @@ public:
     KoProgressProxy* progressProxy() const;
 
     /**
-     * @return the page layout associated with this document (margins, pageSize, etc).
-     * Override this if you want to provide different sized pages.
-     *
-     * @see KoPageLayout
-     */
-    KoPageLayout pageLayout(int pageNumber = 0) const;
-    void setPageLayout(const KoPageLayout &pageLayout);
-
-    /**
      * Performs a cleanup of unneeded backup files
      */
     void removeAutoSaveFiles();

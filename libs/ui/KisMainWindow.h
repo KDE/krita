@@ -216,7 +216,7 @@ public Q_SLOTS:
      */
     void slotFileSave();
 
-    KisPrintJob* exportToPdf(const QString &pdfFileName = QString());
+    KisPrintJob* exportToPdf(QString pdfFileName = QString());
 
     void slotProgress(int value);
 
@@ -268,8 +268,6 @@ private Q_SLOTS:
     void slotFileSaveAs();
 
     void slotFilePrintPreview();
-
-    KisPrintJob* exportToPdf(KoPageLayout pageLayout, QString pdfFileName = QString());
 
     void importAnimation();
 

@@ -613,11 +613,6 @@ void KisView::setDocumentDeleted()
     d->documentDeleted = true;
 }
 
-KoPageLayout KisView::pageLayout() const
-{
-    return document()->pageLayout();
-}
-
 QPrintDialog *KisView::createPrintDialog(KisPrintJob *printJob, QWidget *parent)
 {
     Q_UNUSED(parent);

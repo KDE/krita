@@ -1509,21 +1509,21 @@ void KisMainWindow::slotFilePrintPreview()
     delete preview;
 }
 
-KisPrintJob* KisMainWindow::exportToPdf(const QString &pdfFileName)
+KisPrintJob* KisMainWindow::exportToPdf(QString pdfFileName)
 {
     if (!activeView())
         return 0;
-    KoPageLayout pageLayout;
-    pageLayout = activeView()->pageLayout();
-    return exportToPdf(pageLayout, pdfFileName);
-}
 
-KisPrintJob* KisMainWindow::exportToPdf(KoPageLayout pageLayout, QString pdfFileName)
-{
-    if (!activeView())
-        return 0;
     if (!activeView()->document())
         return 0;
+
+    KoPageLayout pageLayout;
+    pageLayout.width = 0;
+    pageLayout.height = 0;
+    pageLayout.topMargin = 0;
+    pageLayout.bottomMargin = 0;
+    pageLayout.leftMargin = 0;
+    pageLayout.rightMargin = 0;
 
     if (pdfFileName.isEmpty()) {
         KConfigGroup group =  KSharedConfig::openConfig()->group("File Dialogs");
@@ -1535,7 +1535,7 @@ KisPrintJob* KisMainWindow::exportToPdf(KoPageLayout pageLayout, QString pdfFile
         /** if document has a file name, take file name and replace extension with .pdf */
         if (pDoc && pDoc->url().isValid()) {
             startUrl = pDoc->url();
-            QString fileName = startUrl.fileName();
+            QString fileName = startUrl.toLocalFile();
             fileName = fileName.replace( QRegExp( "\\.\\w{2,5}$", Qt::CaseInsensitive ), ".pdf" );
             startUrl = startUrl.adjusted(QUrl::RemoveFilename);
             startUrl.setPath(startUrl.path() +  fileName );

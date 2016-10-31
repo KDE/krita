@@ -304,8 +304,6 @@ public:
 
     KisGuidesConfig guidesConfig;
 
-    KoPageLayout pageLayout;
-
     QUrl m_originalURL; // for saveAs
     QString m_originalFilePath; // for saveAs
     bool m_saveOk;
@@ -439,13 +437,6 @@ KisDocument::KisDocument()
     setObjectName(newObjectName());
 
     d->docInfo = new KoDocumentInfo(this);
-
-    d->pageLayout.width = 0;
-    d->pageLayout.height = 0;
-    d->pageLayout.topMargin = 0;
-    d->pageLayout.bottomMargin = 0;
-    d->pageLayout.leftMargin = 0;
-    d->pageLayout.rightMargin = 0;
 
     d->firstMod = QDateTime::currentDateTime();
     d->lastMod = QDateTime::currentDateTime();
@@ -1268,16 +1259,6 @@ void KisDocument::removeAutoSaveFiles()
 void KisDocument::setBackupFile(bool saveBackup)
 {
     d->backupFile = saveBackup;
-}
-
-KoPageLayout KisDocument::pageLayout(int /*pageNumber*/) const
-{
-    return d->pageLayout;
-}
-
-void KisDocument::setPageLayout(const KoPageLayout &pageLayout)
-{
-    d->pageLayout = pageLayout;
 }
 
 KoUnit KisDocument::unit() const

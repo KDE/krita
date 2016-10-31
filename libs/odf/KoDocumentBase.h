@@ -87,11 +87,6 @@ public:
     virtual bool isModified() const = 0;
 
     /**
-     *  @return true if the document is empty.
-     */
-    virtual bool isEmpty() const = 0;
-
-    /**
      * Returns the actual mimetype of the document
      */
     virtual QByteArray mimeType() const = 0;

@@ -205,16 +205,6 @@ public:
      */
     QString errorMessage() const;
 
-
-    /**
-     * Show the last error message in a message box.
-     * The dialog box will mention a loading problem.
-     * openUrl/openFile takes care of doing it, but not loadNativeFormat itself,
-     * so this is often called after loadNativeFormat returned false.
-     */
-    void showLoadingErrorDialog();
-
-
     /**
      * @brief Generates a preview picture of the document
      * @note The preview is used in the File Dialog and also to create the Thumbnail
@@ -227,11 +217,6 @@ public:
      *  because the URL or the document-info's title changed.
      */
     void setTitleModified();
-
-    /**
-     *  @return true if the document is empty.
-     */
-    virtual bool isEmpty() const;
 
     /**
      *  @brief Sets the document to empty.

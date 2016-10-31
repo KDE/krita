@@ -306,8 +306,6 @@ public:
 
     KisGuidesConfig guidesConfig;
 
-    bool isEmpty;
-
     KoPageLayout pageLayout;
 
     QUrl m_originalURL; // for saveAs
@@ -433,7 +431,6 @@ KisDocument::KisDocument()
     d->undoStack = new UndoStack(this);
     d->undoStack->setParent(this);
 
-    d->isEmpty = true;
     d->importExportManager = new KisImportExportManager(this);
     d->importExportManager->setProgresUpdater(d->progressUpdater);
 
@@ -1070,7 +1067,6 @@ bool KisDocument::openFile()
         clearFileProgressUpdater();
         return false;
     }
-    d->isEmpty = false;
 
     setMimeTypeAfterLoading(typeName);
     emit sigLoadingFinished();
@@ -1164,7 +1160,6 @@ void KisDocument::setModified(bool mod)
     d->modified = mod;
 
     if (mod) {
-        d->isEmpty = false;
         documentInfo()->updateParameters();
     }
 
@@ -1258,16 +1253,6 @@ void KisDocument::setErrorMessage(const QString& errMsg)
 QString KisDocument::errorMessage() const
 {
     return d->lastErrorMessage;
-}
-
-void KisDocument::showLoadingErrorDialog()
-{
-    if (errorMessage().isEmpty()) {
-        QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Could not open\n%1", localFilePath()));
-    }
-    else {
-        QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Could not open %1\nReason: %2", localFilePath(), errorMessage()));
-    }
 }
 
 void KisDocument::removeAutoSaveFiles()
@@ -1393,17 +1378,6 @@ void KisDocument::setGuidesConfig(const KisGuidesConfig &data)
     d->guidesConfig = data;
     emit sigGuidesConfigChanged(d->guidesConfig);
 }
-
-bool KisDocument::isEmpty() const
-{
-    return d->isEmpty;
-}
-
-void KisDocument::setEmpty(bool empty)
-{
-    d->isEmpty = empty;
-}
-
 
 void KisDocument::resetURL() {
     setUrl(QUrl());

@@ -87,7 +87,6 @@ KisImageBuilder_Result KraConverter::buildImage(QIODevice *io)
             }
         }
         success = completeLoading(m_store);
-        m_doc->setEmpty(false);
     }
 
     return success ? KisImageBuilder_RESULT_OK : KisImageBuilder_RESULT_FAILURE;

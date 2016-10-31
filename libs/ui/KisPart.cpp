@@ -432,10 +432,14 @@ void KisPart::openTemplate(const QUrl &url)
         mimeType.remove( QRegExp( "-template$" ) );
         document->setMimeTypeAfterLoading(mimeType);
         document->resetURL();
-        document->setEmpty();
     }
     else {
-        document->showLoadingErrorDialog();
+        if (document->errorMessage().isEmpty()) {
+            QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Could not open\n%1", document->localFilePath()));
+        }
+        else {
+            QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Could not open %1\nReason: %2", document->localFilePath(), document->errorMessage()));
+        }
         document->initEmpty();
     }
     addDocument(document);

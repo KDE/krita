@@ -64,12 +64,6 @@ public:
     virtual ~KoDocumentBase();
 
     /**
-     * Return true if url() is a real filename, false if url() is
-     * an internal url in the store, like "tar:/..."
-     */
-    virtual bool isStoredExtern() const = 0;
-
-    /**
      * @return the current URL
      */
     virtual QUrl url() const = 0;

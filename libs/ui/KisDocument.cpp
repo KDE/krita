@@ -250,7 +250,6 @@ public:
         isAutosaving(false),
         backupFile(true),
         doNotSaveExtDoc(false),
-        storeInternal(false),
         undoStack(0),
         m_saveOk(false),
         m_waitForSave(false),
@@ -300,7 +299,6 @@ public:
     bool isAutosaving;
     bool backupFile;
     bool doNotSaveExtDoc; // makes it possible to save only internally stored child documents
-    bool storeInternal; // Store this doc internally even if url is external
 
     KUndo2Stack *undoStack;
 
@@ -1120,12 +1118,6 @@ bool KisDocument::loadNativeFormat(const QString & file_)
     return openUrl(QUrl::fromLocalFile(file_));
 }
 
-bool KisDocument::isStoredExtern() const
-{
-    return !storeInternal() && hasExternURL();
-}
-
-
 void KisDocument::setModified()
 {
     d->modified = true;
@@ -1276,24 +1268,6 @@ void KisDocument::removeAutoSaveFiles()
 void KisDocument::setBackupFile(bool saveBackup)
 {
     d->backupFile = saveBackup;
-}
-
-bool KisDocument::storeInternal() const
-{
-    return d->storeInternal;
-}
-
-void KisDocument::setStoreInternal(bool i)
-{
-    d->storeInternal = i;
-    //dbgUI<<"="<<d->storeInternal<<" doc:"<<url().url();
-}
-
-bool KisDocument::hasExternURL() const
-{
-    return    !url().scheme().isEmpty()
-            && url().scheme() != STORE_PROTOCOL
-            && url().scheme() != INTERNAL_PROTOCOL;
 }
 
 KoPageLayout KisDocument::pageLayout(int /*pageNumber*/) const

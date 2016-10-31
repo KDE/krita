@@ -291,12 +291,6 @@ public:
     KoProgressProxy* progressProxy() const;
 
     /**
-     * Return true if url() is a real filename, false if url() is
-     * an internal url in the store, like "tar:/..."
-     */
-    virtual bool isStoredExtern() const;
-
-    /**
      * @return the page layout associated with this document (margins, pageSize, etc).
      * Override this if you want to provide different sized pages.
      *
@@ -338,18 +332,6 @@ public:
      * to set the url to QUrl()
      */
     void resetURL();
-
-    /**
-     * Set when you want an external embedded document to be stored internally
-     */
-    void setStoreInternal(bool i);
-
-    /**
-     * @return true when external embedded documents are stored internally
-     */
-    bool storeInternal() const;
-
-    bool hasExternURL() const;
 
     /**
      * @internal (public for KisMainWindow)

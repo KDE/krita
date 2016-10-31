@@ -126,11 +126,11 @@ KisImageBuilder_Result KraConverter::buildFile(QIODevice *io)
         return KisImageBuilder_RESULT_FAILURE;
     }
 
-    result = m_kraSaver->saveKeyframes(m_store, m_doc->url().toLocalFile(), m_doc->isStoredExtern());
+    result = m_kraSaver->saveKeyframes(m_store, m_doc->url().toLocalFile(), true);
     if (!result) {
         qWarning() << "saving key frames failed";
     }
-    result = m_kraSaver->saveBinaryData(m_store, m_image, m_doc->url().toLocalFile(), m_doc->isStoredExtern(), m_doc->isAutosaving());
+    result = m_kraSaver->saveBinaryData(m_store, m_image, m_doc->url().toLocalFile(), true, m_doc->isAutosaving());
     if (!result) {
         qWarning() << "saving binary data failed";
     }
@@ -320,7 +320,7 @@ bool KraConverter::completeLoading(KoStore* store)
 
     m_image->blockUpdates();
 
-    m_kraLoader->loadBinaryData(store, m_image, m_doc->localFilePath(), m_doc->isStoredExtern());
+    m_kraLoader->loadBinaryData(store, m_image, m_doc->localFilePath(), true);
 
     m_image->unblockUpdates();
 

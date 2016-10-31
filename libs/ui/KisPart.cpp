@@ -435,12 +435,13 @@ void KisPart::openTemplate(const QUrl &url)
     }
     else {
         if (document->errorMessage().isEmpty()) {
-            QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Could not open\n%1", document->localFilePath()));
+            QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Could not create document from template\n%1", document->localFilePath()));
         }
         else {
-            QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Could not open %1\nReason: %2", document->localFilePath(), document->errorMessage()));
+            QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Could not create document from template\n%1\nReason: %2", document->localFilePath(), document->errorMessage()));
         }
-        document->initEmpty();
+        delete document;
+        return;
     }
     addDocument(document);
 

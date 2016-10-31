@@ -1432,21 +1432,8 @@ bool KisDocument::openUrlInternal(const QUrl &url)
     return false;
 }
 
-KisImageWSP KisDocument::newImage(const QString& name, qint32 width, qint32 height, const KoColorSpace* colorspace)
+bool KisDocument::newImage(const QString& name, qint32 width, qint32 height, const KoColorSpace * cs, const KoColor &bgColor, const QString &imageDescription, const double imageResolution)
 {
-    KoColor backgroundColor(Qt::white, colorspace);
-
-    /**
-     * FIXME: check whether this is a good value
-     */
-    double defaultResolution=1.;
-
-    newImage(name, width, height, colorspace, backgroundColor, "",
-             defaultResolution);
-    return image();
-}
-
-bool KisDocument::newImage(const QString& name, qint32 width, qint32 height, const KoColorSpace * cs, const KoColor &bgColor, const QString &imageDescription, const double imageResolution) {
     return newImage(name, width, height, cs, bgColor, false, 1, imageDescription, imageResolution);
 }
 
@@ -1635,13 +1622,6 @@ void KisDocument::setCurrentImage(KisImageSP image)
     connect(d->image, SIGNAL(sigImageModified()), this, SLOT(setImageModified()));
     d->image->initialRefreshGraph();
     setAutoSaveDelay(KisConfig().autoSaveInterval());
-}
-
-void KisDocument::initEmpty()
-{
-    KisConfig cfg;
-    const KoColorSpace * rgb = KoColorSpaceRegistry::instance()->rgb8();
-    newImage("", cfg.defImageWidth(), cfg.defImageHeight(), rgb);
 }
 
 void KisDocument::setImageModified()

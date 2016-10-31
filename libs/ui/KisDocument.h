@@ -357,11 +357,6 @@ public:
     void updateEditingTime(bool forceStoreElapsed);
 
     /**
-     * Initialize an empty document using default values
-     */
-    void initEmpty();
-
-    /**
      * Returns the global undo stack
      */
     KUndo2Stack *undoStack();
@@ -524,11 +519,6 @@ public:
     bool newImage(const QString& name, qint32 width, qint32 height, const KoColorSpace * cs, const KoColor &bgColor, bool backgroundAsLayer,
                   int numberOfLayers, const QString &imageDescription, const double imageResolution);
 
-    /**
-     * Create a new image that has this document as a parent and
-     * replace the current image with this image.
-     */
-    KisImageWSP newImage(const QString& name, qint32 width, qint32 height, const KoColorSpace * colorspace);
 
     KisImageWSP image() const;
     /**

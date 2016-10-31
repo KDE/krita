@@ -325,17 +325,16 @@ public:
      */
     void removeAutoSaveFiles();
 
-    void setBackupFile(bool _b);
+    /**
+     * @brief setBackupFile enable/disable saving a backup of the file on saving
+     * @param saveBackup if true, Krita will save a backup of the file
+     */
+    void setBackupFile(bool saveBackup);
 
     /**
      * Returns true if this document or any of its internal child documents are modified.
      */
     bool isModified() const;
-
-    /**
-     * Returns true during loading (openUrl can be asynchronous)
-     */
-    bool isLoading() const;
 
     /**
      * @return caption of the document

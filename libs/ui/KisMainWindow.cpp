@@ -1120,12 +1120,6 @@ void KisMainWindow::closeEvent(QCloseEvent *e)
         group.writeEntry("Theme", d->themeManager->currentThemeName());
     }
 
-
-    if(d->activeView && d->activeView->document() && d->activeView->document()->isLoading()) {
-        e->setAccepted(false);
-        return;
-    }
-
     QList<QMdiSubWindow*> childrenList = d->mdiArea->subWindowList();
 
     if (childrenList.isEmpty()) {

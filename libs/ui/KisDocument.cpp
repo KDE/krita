@@ -251,7 +251,6 @@ public:
         backupFile(true),
         doNotSaveExtDoc(false),
         storeInternal(false),
-        isLoading(false),
         undoStack(0),
         m_saveOk(false),
         m_waitForSave(false),
@@ -302,7 +301,6 @@ public:
     bool backupFile;
     bool doNotSaveExtDoc; // makes it possible to save only internally stored child documents
     bool storeInternal; // Store this doc internally even if url is external
-    bool isLoading; // True while loading (openUrl is async)
 
     KUndo2Stack *undoStack;
 
@@ -839,9 +837,9 @@ bool KisDocument::isExporting() const
 
 void KisDocument::slotAutoSave()
 {
-    qDebug() << "slotAutoSave. Modified:"  << d->modified << "modifiedAfterAutosave" << d->modified << "isLoading" << d->isLoading;
+    qDebug() << "slotAutoSave. Modified:"  << d->modified << "modifiedAfterAutosave" << d->modified;
 
-    if (d->modified && d->modifiedAfterAutosave && !d->isLoading) {
+    if (d->modified && d->modifiedAfterAutosave) {
         connect(this, SIGNAL(sigProgress(int)), KisPart::instance()->currentMainwindow(), SLOT(slotProgress(int)));
         emit statusBarMessage(i18n("Autosaving..."));
         d->isAutosaving = true;
@@ -979,7 +977,6 @@ bool KisDocument::openUrl(const QUrl &_url, KisDocument::OpenUrlFlags flags)
 
     QUrl url(_url);
     bool autosaveOpened = false;
-    d->isLoading = true;
     if (url.isLocalFile() && !fileBatchMode()) {
         QString file = url.toLocalFile();
         QString asf = generateAutoSaveFileName(file);
@@ -1001,7 +998,6 @@ bool KisDocument::openUrl(const QUrl &_url, KisDocument::OpenUrlFlags flags)
                 QFile::remove(asf);
                 break;
             default: // Cancel
-                d->isLoading = false;
                 return false;
             }
         }
@@ -1033,7 +1029,6 @@ bool KisDocument::openFile()
     //dbgUI <<"for" << localFilePath();
     if (!QFile::exists(localFilePath())) {
         QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("File %1 does not exist.", localFilePath()));
-        d->isLoading = false;
         return false;
     }
 
@@ -1072,7 +1067,6 @@ bool KisDocument::openFile()
             QString errorMsg(i18n("Could not open %2.\nReason: %1.\n%3", msg, prettyPathOrUrl(), errorMessage()));
             QMessageBox::critical(0, i18nc("@title:window", "Krita"), errorMsg);
         }
-        d->isLoading = false;
         clearFileProgressUpdater();
         return false;
     }
@@ -1091,7 +1085,6 @@ bool KisDocument::openFile()
     } else {
         undoStack()->clear();
     }
-    d->isLoading = false;
 
     return true;
 }
@@ -1277,11 +1270,6 @@ void KisDocument::showLoadingErrorDialog()
     }
 }
 
-bool KisDocument::isLoading() const
-{
-    return d->isLoading;
-}
-
 void KisDocument::removeAutoSaveFiles()
 {
     qDebug() << "removeAutoSaveFiles";
@@ -1300,9 +1288,9 @@ void KisDocument::removeAutoSaveFiles()
     }
 }
 
-void KisDocument::setBackupFile(bool _b)
+void KisDocument::setBackupFile(bool saveBackup)
 {
-    d->backupFile = _b;
+    d->backupFile = saveBackup;
 }
 
 bool KisDocument::storeInternal() const

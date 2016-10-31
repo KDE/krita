@@ -532,6 +532,8 @@ bool KisDocument::exportDocument(const QUrl &_url, KisPropertiesConfigurationSP 
     QUrl oldURL = url();
     QString oldFile = localFilePath();
 
+    qDebug() << "\toldUrl" << oldURL << "oldFile" << oldFile << "export url" << _url;
+
     bool wasModified = isModified();
     QByteArray oldMimeType = mimeType();
 
@@ -546,8 +548,11 @@ bool KisDocument::exportDocument(const QUrl &_url, KisPropertiesConfigurationSP 
 
     // always restore url & m_file because KParts has changed them
     // (regardless of failure or success)
+    qDebug() << "\tafter saveAs: url" << url() << "local file path" << localFilePath();
     setUrl(oldURL);
     setLocalFilePath(oldFile);
+    qDebug() << "\tafter restoring: url" << url() << "local file path" << localFilePath();
+
 
     // on successful export we need to restore modified etc. too
     // on failed export, mimetype/modified hasn't changed anyway
@@ -815,7 +820,7 @@ bool KisDocument::isExporting() const
 
 void KisDocument::slotAutoSave()
 {
-    qDebug() << "slotAutoSave. Modified:"  << d->modified << "modifiedAfterAutosave" << d->modified;
+    qDebug() << "slotAutoSave. Modified:"  << d->modified << "modifiedAfterAutosave" << d->modified << "url" << url() << localFilePath();
 
     if (d->modified && d->modifiedAfterAutosave) {
         connect(this, SIGNAL(sigProgress(int)), KisPart::instance()->currentMainwindow(), SLOT(slotProgress(int)));
@@ -845,7 +850,6 @@ void KisDocument::setReadWrite(bool readwrite)
     Q_FOREACH (KisMainWindow *mainWindow, KisPart::instance()->mainWindows()) {
         mainWindow->setReadWrite(readwrite);
     }
-
 }
 
 void KisDocument::setAutoSaveDelay(int delay)

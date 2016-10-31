@@ -390,18 +390,57 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
 
     // create a circle background that everything else will go into
     QPainterPath backgroundContainer;
-
     float shrinkCircleAmount = 3;// helps the circle when the stroke is put around it
 
-    backgroundContainer.addEllipse( shrinkCircleAmount, shrinkCircleAmount,
-                                    m_popupPaletteSize - shrinkCircleAmount,m_popupPaletteSize - shrinkCircleAmount );
+    QRectF circleRect(shrinkCircleAmount, shrinkCircleAmount,
+                      m_popupPaletteSize - shrinkCircleAmount*2,m_popupPaletteSize - shrinkCircleAmount*2);
+
+
+    backgroundContainer.addEllipse( circleRect );
     painter.fillPath(backgroundContainer,palette().brush(QPalette::Background));
 
     painter.drawPath(backgroundContainer);
 
 
+    // creat a path slightly inside the container circle. this will create a 'track' to indicate that we can rotate the canvas
+    // with the indicator
+    QPainterPath rotationTrackPath;
+    shrinkCircleAmount = 18;
+    QRectF circleRect2(shrinkCircleAmount, shrinkCircleAmount,
+                      m_popupPaletteSize - shrinkCircleAmount*2,m_popupPaletteSize - shrinkCircleAmount*2);
+
+    rotationTrackPath.addEllipse( circleRect2 );
+    pen.setWidth(1);
+    painter.setPen(pen);
+    painter.drawPath(rotationTrackPath);
+
+
+
+
+    // this thing will help indicate where the starting brush preset is at.
+    // also what direction they go to give sor order to the presets populated
+
+    float arcDegrees = 30; // in degrees. this is how far we will arc from the starting point
+
+    pen.setWidth(8);
+    pen.setCapStyle(Qt::RoundCap);
+    painter.setPen(pen);
+
+    painter.drawArc(circleRect, 7, (16*arcDegrees)); // span angle (last parameter) is in 16th of degrees
+
+
+    QPainterPath brushDir;
+    brushDir.arcMoveTo(circleRect, arcDegrees);
+    brushDir.lineTo(brushDir.currentPosition().x() + 15, brushDir.currentPosition().y() + 10);
+    painter.drawPath(brushDir);
+
+    painter.drawLine(circleRect.width()*.85, circleRect.height()/2, circleRect.width(), circleRect.height()/2);
+
+
+
     // the following things needs to be based off the center, so let's translate the painter
     painter.translate(m_popupPaletteSize / 2, m_popupPaletteSize / 2);
+
 
 
     // create the canvas rotation handle
@@ -453,10 +492,10 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
             painter.drawImage(bounds.topLeft() , images.at(pos).scaled(bounds.size() , Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation));
         }
         else {
-            painter.fillPath(presetPath, palette().brush(QPalette::Window));
+            painter.fillPath(presetPath, palette().brush(QPalette::Window));  // brush slot that has no brush in it
         }
         QPen pen = painter.pen();
-        pen.setWidth(5);
+        pen.setWidth(1);
         painter.setPen(pen);
         painter.drawPath(presetPath);
 

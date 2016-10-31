@@ -31,6 +31,7 @@
 #include <QByteArray>
 #include <QPainter>
 #include <QXmlStreamReader>
+#include <QTextCodec>
 
 #include <DebugPigment.h>
 #include <klocalizedstring.h>
@@ -661,6 +662,12 @@ bool KoColorSet::loadAco()
     quint16 numColors = readShort(&buf);
     KoColorSetEntry e;
 
+    if (version == 1 && buf.size() > 4+numColors*10) {
+        buf.seek(4+numColors*10);
+        version = readShort(&buf);
+        numColors = readShort(&buf);
+    }
+
     const quint16 quint16_MAX = 65535;
 
     for (int i = 0; i < numColors && !buf.atEnd(); ++i) {
@@ -711,18 +718,18 @@ bool KoColorSet::loadAco()
             skip = true;
         }
         if (version == 2) {
-            quint16 v2 = readShort(&buf);
-            if (v2 != 2) {
-                warnPigment << "Version 2 block is not version 2" << filename() << "(" << v2 << ")";
-                return false;
+            quint16 v2 = readShort(&buf); //this isn't a version, it's a marker and needs to be skipped.
+            quint16 size = readShort(&buf) -1; //then comes the length
+            if (size>0) {
+                QByteArray ba = buf.read(size*2);
+                if (ba.size() == size*2) {
+                    QTextCodec *Utf16Codec = QTextCodec::codecForName("UTF-16BE");
+                    e.name = Utf16Codec->toUnicode(ba);
+                } else {
+                    warnPigment << "Version 2 name block is the wrong size" << filename();
+                }
             }
-            quint16 size = readShort(&buf);
-            QByteArray ba = buf.read(size);
-            if (ba.size() != size) {
-                warnPigment << "Version 2 name block is the wrong size" << filename();
-                return false;
-            }
-            e.name = QString::fromUtf8(ba.constData(), ba.size());
+            v2 = readShort(&buf); //end marker also needs to be skipped.
         }
         if (!skip) {
             add(e);

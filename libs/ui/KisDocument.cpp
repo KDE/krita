@@ -239,7 +239,6 @@ class Q_DECL_HIDDEN KisDocument::Private
 {
 public:
     Private() :
-        // XXX: the part should _not_ be modified from the document
         docInfo(0),
         progressUpdater(0),
         progressProxy(0),

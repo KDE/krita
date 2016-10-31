@@ -1454,7 +1454,7 @@ bool KisDocument::newImage(const QString& name,
 
     Q_CHECK_PTR(image);
 
-    connect(image.data(), SIGNAL(sigImageModified()), this, SLOT(setImageModified()));
+    connect(image, SIGNAL(sigImageModified()), this, SLOT(setImageModified()), Qt::UniqueConnection);
     image->setResolution(imageResolution, imageResolution);
 
     image->assignImageProfile(cs->profile());
@@ -1614,7 +1614,7 @@ void KisDocument::setCurrentImage(KisImageSP image)
     d->setImageAndInitIdleWatcher(image);
     d->shapeController->setImage(image);
     setModified(false);
-    connect(d->image, SIGNAL(sigImageModified()), this, SLOT(setImageModified()));
+    connect(d->image, SIGNAL(sigImageModified()), this, SLOT(setImageModified()), Qt::UniqueConnection);
     d->image->initialRefreshGraph();
     setAutoSaveDelay(KisConfig().autoSaveInterval());
 }

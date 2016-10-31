@@ -75,7 +75,6 @@ class KisPart;
 class KRITAUI_EXPORT KisDocument : public QObject, public KoDocumentBase
 {
     Q_OBJECT
-    Q_PROPERTY(int pageCount READ pageCount)
 
 protected:
 
@@ -328,11 +327,6 @@ public:
      * @internal (public for KisMainWindow)
      */
     void setMimeTypeAfterLoading(const QString& mimeType);
-
-    /**
-     * @return returns the number of pages in the document.
-     */
-    virtual int pageCount() const;
 
     /**
      * Returns the unit used to display all measures/distances.

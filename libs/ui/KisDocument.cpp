@@ -1339,10 +1339,6 @@ void KisDocument::resetURL() {
     setLocalFilePath(QString());
 }
 
-int KisDocument::pageCount() const {
-    return 1;
-}
-
 KoDocumentInfoDlg *KisDocument::createDocumentInfoDialog(QWidget *parent, KoDocumentInfo *docInfo) const
 {
     return new KoDocumentInfoDlg(parent, docInfo);

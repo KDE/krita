@@ -63,9 +63,9 @@ public:
         , m_dragging(false) {
     }
 
-    virtual ~PopupColorTriangle() {}
+    ~PopupColorTriangle() override {}
 
-    void tabletEvent(QTabletEvent* event) {
+    void tabletEvent(QTabletEvent* event) override {
         event->accept();
         QMouseEvent* mouseEvent = 0;
         switch (event->type()) {

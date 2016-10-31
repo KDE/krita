@@ -56,11 +56,11 @@ class KisBrushDelegate : public QAbstractItemDelegate
 {
 public:
     KisBrushDelegate(QObject * parent = 0) : QAbstractItemDelegate(parent) {}
-    virtual ~KisBrushDelegate() {}
+    ~KisBrushDelegate() override {}
     /// reimplemented
-    virtual void paint(QPainter *, const QStyleOptionViewItem &, const QModelIndex &) const;
+    void paint(QPainter *, const QStyleOptionViewItem &, const QModelIndex &) const override;
     /// reimplemented
-    QSize sizeHint(const QStyleOptionViewItem & option, const QModelIndex &) const {
+    QSize sizeHint(const QStyleOptionViewItem & option, const QModelIndex &) const override {
         return option.decorationSize;
     }
 };
@@ -104,33 +104,39 @@ KisBrushChooser::KisBrushChooser(QWidget *parent, const char *name)
     setObjectName(name);
 
     m_lbSize = new QLabel(i18n("Size:"), this);
+    m_lbSize->setObjectName("lblSize");
     m_slSize = new KisDoubleSliderSpinBox(this);
+    m_slSize->setObjectName("Size");
     m_slSize->setRange(0, 1000, 2);
     m_slSize->setValue(5);
     m_slSize->setExponentRatio(3.0);
     m_slSize->setSuffix(i18n(" px"));
-
-
     m_slSize->setExponentRatio(3.0);
     QObject::connect(m_slSize, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetItemSize(qreal)));
 
 
     m_lbRotation = new QLabel(i18n("Rotation:"), this);
+    m_lbRotation->setObjectName("lblRotation");
     m_slRotation = new KisDoubleSliderSpinBox(this);
+    m_slRotation->setObjectName("Rotation");
     m_slRotation->setRange(0, 360, 0);
     m_slRotation->setValue(0);
     m_slRotation->setSuffix(QChar(Qt::Key_degree));
     QObject::connect(m_slRotation, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetItemRotation(qreal)));
 
     m_lbSpacing = new QLabel(i18n("Spacing:"), this);
+    m_lbSpacing->setObjectName("lblSpacing");
     m_slSpacing = new KisSpacingSelectionWidget(this);
+    m_slSpacing->setObjectName("Spacing");
     m_slSpacing->setSpacing(true, 1.0);
     connect(m_slSpacing, SIGNAL(sigSpacingChanged()), SLOT(slotSpacingChanged()));
 
     m_chkColorMask = new QCheckBox(i18n("Use color as mask"), this);
+    m_chkColorMask->setObjectName("ColorAsMask");
     QObject::connect(m_chkColorMask, SIGNAL(toggled(bool)), this, SLOT(slotSetItemUseColorAsMask(bool)));
 
     m_lbName = new QLabel(this);
+    m_lbName->setObjectName("lblName");
 
     KisBrushResourceServer* rServer = KisBrushServer::instance()->brushServer();
     QSharedPointer<KisBrushResourceServerAdapter> adapter(new KisBrushResourceServerAdapter(rServer));
@@ -150,10 +156,12 @@ KisBrushChooser::KisBrushChooser(QWidget *parent, const char *name)
     mainLayout->addWidget(m_itemChooser, 10);
 
     QPushButton *stampButton = new QPushButton(KisIconUtils::loadIcon("list-add"), i18n("Stamp"), this);
-    QPushButton *clipboardButton = new QPushButton(KisIconUtils::loadIcon("edit-paste"), i18n("Clipboard"), this);
-
+    stampButton->setObjectName("AddBrush");
     stampButton->setToolTip(i18n("Creates a brush tip from the current image selection."
                                  "\n If no selection is present the whole image will be used."));
+
+    QPushButton *clipboardButton = new QPushButton(KisIconUtils::loadIcon("edit-paste"), i18n("Clipboard"), this);
+    clipboardButton->setObjectName("AddFromClipboard");
     clipboardButton->setToolTip(i18n("Creates a brush tip from the image in the clipboard."));
 
     m_itemChooser->addCustomButton(stampButton, 2);
@@ -175,6 +183,7 @@ KisBrushChooser::KisBrushChooser(QWidget *parent, const char *name)
     spacingLayout->setColumnStretch(1, 3);
 
     QPushButton *resetBrushButton = new QPushButton(i18n("Reset Predefined Tip"), this);
+    resetBrushButton->setObjectName("ResetBrush");
     resetBrushButton->setToolTip(i18n("Reloads Spacing from file\nSets Scale to 1.0\nSets Rotation to 0.0"));
     connect(resetBrushButton, SIGNAL(clicked()), SLOT(slotResetBrush()));
 

@@ -234,7 +234,9 @@ QStringList KisImportExportManager::mimeFilter(Direction direction)
             Q_FOREACH(QPluginLoader *loader, list) {
                 QJsonObject json = loader->metaData().value("MetaData").toObject();
                 Q_FOREACH(const QString &mimetype, json.value("X-KDE-Import").toString().split(",")) {
-                    mimeTypes << mimetype;
+                    if (!mimetype.isEmpty()) {
+                        mimeTypes << mimetype;
+                    }
                 }
             }
             qDeleteAll(list);
@@ -249,7 +251,9 @@ QStringList KisImportExportManager::mimeFilter(Direction direction)
             Q_FOREACH(QPluginLoader *loader, list) {
                 QJsonObject json = loader->metaData().value("MetaData").toObject();
                 Q_FOREACH(const QString &mimetype, json.value("X-KDE-Export").toString().split(",")) {
-                    mimeTypes << mimetype;
+                    if (!mimetype.isEmpty()) {
+                        mimeTypes << mimetype;
+                    }
                 }
             }
             qDeleteAll(list);

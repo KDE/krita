@@ -122,7 +122,7 @@ public:
     {
     }
 
-    bool hasSelection()
+    bool hasSelection() override
     {
         if (!m_editor.isNull()) {
             return m_editor.data()->hasSelection();
@@ -2648,14 +2648,14 @@ void TextTool::startMacro(const QString &title)
     {
     public:
         MacroCommand(const KUndo2MagicString &title) : KUndo2Command(title), m_first(true) {}
-        virtual void redo()
+        void redo() override
         {
             if (!m_first) {
                 KUndo2Command::redo();
             }
             m_first = false;
         }
-        virtual bool mergeWith(const KUndo2Command *)
+        bool mergeWith(const KUndo2Command *) override
         {
             return false;
         }

@@ -46,11 +46,11 @@ public:
     {
     }
 
-    bool write(const QByteArray &data) {
+    bool write(const QByteArray &data) override {
         return (m_store->write(data) == data.size());
     }
 
-    bool write(const char* data, qint64 length) {
+    bool write(const char* data, qint64 length) override {
         return (m_store->write(data, length) == length);
     }
 
@@ -827,19 +827,19 @@ void KisPaintDeviceTest::testExactBoundsNonTransparent()
 KisPaintDeviceSP createWrapAroundPaintDevice(const KoColorSpace *cs)
 {
     struct TestingDefaultBounds : public KisDefaultBoundsBase {
-        QRect bounds() const {
+        QRect bounds() const override {
             return QRect(0,0,20,20);
         }
-        bool wrapAroundMode() const {
+        bool wrapAroundMode() const override {
             return true;
         }
-        int currentLevelOfDetail() const {
+        int currentLevelOfDetail() const override {
             return 0;
         }
-        int currentTime() const {
+        int currentTime() const override {
             return 0;
         }
-        bool externalFrameActive() const {
+        bool externalFrameActive() const override {
             return false;
         }
     };
@@ -1313,7 +1313,7 @@ void KisPaintDeviceTest::testMoveWrapAround()
 
 
 struct TestingCache : KisLockFreeCache<int> {
-    int calculateNewValue() const {
+    int calculateNewValue() const override {
         return m_realValue;
     }
 
@@ -1329,7 +1329,7 @@ public:
     {
     }
 
-    void run() {
+    void run() override {
         for(qint32 i = 0; i < NUM_CYCLES; i++) {
             qint32 type = i % NUM_TYPES;
 
@@ -1386,21 +1386,21 @@ struct TestingLodDefaultBounds : public KisDefaultBoundsBase {
     TestingLodDefaultBounds(const QRect &bounds = QRect(0,0,100,100))
         : m_lod(0), m_bounds(bounds) {}
 
-    QRect bounds() const {
+    QRect bounds() const override {
         return m_bounds;
     }
-    bool wrapAroundMode() const {
+    bool wrapAroundMode() const override {
         return false;
     }
 
-    int currentLevelOfDetail() const {
+    int currentLevelOfDetail() const override {
         return m_lod;
     }
 
-    int currentTime() const {
+    int currentTime() const override {
         return 0;
     }
-    bool externalFrameActive() const {
+    bool externalFrameActive() const override {
         return false;
     }
 

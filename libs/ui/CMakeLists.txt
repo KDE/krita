@@ -1,11 +1,3 @@
-# Disable -Wswitch because of the extra definitions we here:
-# kis_input_manager.cpp: In member function ‘virtual bool KisInputManager::eventFilter(QObject*, QEvent*)’:
-# warning: case value ‘1001’ not in enumerated type ‘QEvent::Type’ [-Wswitch]
-# warning: case value ‘1002’ not in enumerated type ‘QEvent::Type’ [-Wswitch]
-if (CMAKE_COMPILER_IS_GNUCXX)
-    add_definitions(${KDE4_ENABLE_EXCEPTIONS} -Wno-switch)
-endif ()
-
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/qtlockedfile
     ${EXIV2_INCLUDE_DIR}
@@ -395,7 +387,7 @@ if(WIN32)
         input/wintab/kis_screen_size_choice_dialog.cpp
         qtlockedfile/qtlockedfile_win.cpp
         )
-      include_directories(${Qt5Gui_PRIVATE_INCLUDE_DIRS})
+    include_directories(${Qt5Gui_PRIVATE_INCLUDE_DIRS})
 endif()
     set(kritaui_LIB_SRCS
         ${kritaui_LIB_SRCS}
@@ -423,13 +415,6 @@ if(UNIX)
             )
     endif()
 endif()
-
-if(WIN32)
-    #ki18n_wrap_ui(
-    #    input/wintab/kis_screen_size_choice_dialog.ui
-    #)
-endif()
-
 
 
 ki18n_wrap_ui(kritaui_LIB_SRCS
@@ -539,8 +524,6 @@ endif()
 if(X11_FOUND)
     target_link_libraries(kritaui Qt5::X11Extras ${X11_LIBRARIES})
 endif()
-
-target_link_libraries(kritaui LINK_INTERFACE_LIBRARIES kritaimage kritalibbrush kritapigment kritawidgets KF5::Completion KF5::I18n ${GL_INTERFACE_LIBRARIES})
 
 target_include_directories(kritaui
     PUBLIC

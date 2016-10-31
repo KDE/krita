@@ -60,7 +60,7 @@ public:
     }
 
 protected:
-    QSize documentToViewport(const QSizeF &size) {
+    QSize documentToViewport(const QSizeF &size) override {
         QRectF docRect(QPointF(), size);
         return m_converter->documentToWidget(docRect).toRect().size();
     }

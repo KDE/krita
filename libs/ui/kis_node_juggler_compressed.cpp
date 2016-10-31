@@ -233,7 +233,7 @@ public:
     {
     }
 
-    void end() {
+    void end() override {
         if (isFinalizing() && isFirstRedo()) {
             /**
              * When doing the first redo() some of the updates might
@@ -270,7 +270,7 @@ public:
     {
     }
 
-    void end() {
+    void end() override {
         QList<KisSelectionMaskSP> *newActiveMasks;
 
         if (isFinalizing()) {
@@ -347,7 +347,7 @@ struct LowerRaiseLayer : public KisCommandUtils::AggregateCommand {
             AllMasks;
     }
 
-    void populateChildCommands() {
+    void populateChildCommands() override {
         KisNodeList sortedNodes = sortAndFilterNodes(m_nodes, m_image);
         KisNodeSP headNode = m_lower ? sortedNodes.first() : sortedNodes.last();
         const NodesType nodesType = getNodesType(sortedNodes);
@@ -472,7 +472,7 @@ struct DuplicateLayers : public KisCommandUtils::AggregateCommand {
           m_activeNode(activeNode),
           m_mode(mode) {}
 
-    void populateChildCommands() {
+    void populateChildCommands() override {
         KisNodeList filteredNodes = sortAndFilterNodes(m_nodes, m_image);
 
         if (filteredNodes.isEmpty()) return;
@@ -600,7 +600,7 @@ struct RemoveLayers : private KisLayerUtils::RemoveNodeHelper, public KisCommand
           m_nodes(nodes),
           m_activeNode(activeNode){}
 
-    void populateChildCommands() {
+    void populateChildCommands() override {
         KisNodeList filteredNodes = m_nodes;
         KisLayerUtils::filterMergableNodes(filteredNodes, true);
 
@@ -622,7 +622,7 @@ struct RemoveLayers : private KisLayerUtils::RemoveNodeHelper, public KisCommand
                                                                m_image, true));
     }
 protected:
-    virtual void addCommandImpl(KUndo2Command *cmd) {
+    void addCommandImpl(KUndo2Command *cmd) override {
         addCommand(cmd);
     }
 

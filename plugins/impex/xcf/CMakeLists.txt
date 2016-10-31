@@ -8,6 +8,11 @@ if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
     list(APPEND COMPILE_FLAGS -Wno-undef -Wno-missing-format-attribute -Wno-sign-compare)
 endif ()
 
+if (CMAKE_COMPILER_IS_GNUCC)
+    add_compile_options("-Wno-suggest-attribute=format")
+    add_compile_options("-Wno-sign-compare")
+endif()
+
 set(kritaxcfimport_SOURCES
     kis_xcf_import.cpp
     ${XCFTOOLS_SOURCE_DIR}/xcf-general.c

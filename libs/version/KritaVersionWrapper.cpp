@@ -22,15 +22,14 @@
 
 QString KritaVersionWrapper::versionString(bool checkGit)
 {
-    QString kritaVersion(KRITA_VERSION_STRING);
+    QString kritaVersion = QStringLiteral(KRITA_VERSION_STRING);
     QString version = kritaVersion;
 
     if (checkGit) {
 #ifdef KRITA_GIT_SHA1_STRING
-        QString gitVersion(KRITA_GIT_SHA1_STRING);
-        version = QString("%1 (git %2)").arg(kritaVersion).arg(gitVersion).toLatin1();
+        QString gitVersion = QStringLiteral(KRITA_GIT_SHA1_STRING);
+        version = QStringLiteral("%1 (git %2)").arg(kritaVersion, gitVersion);
 #endif
     }
     return version;
 }
-

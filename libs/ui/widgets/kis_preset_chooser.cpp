@@ -53,11 +53,11 @@ class KisPresetDelegate : public QAbstractItemDelegate
 {
 public:
     KisPresetDelegate(QObject * parent = 0) : QAbstractItemDelegate(parent), m_showText(false), m_useDirtyPresets(false) {}
-    virtual ~KisPresetDelegate() {}
+    ~KisPresetDelegate() override {}
     /// reimplemented
-    virtual void paint(QPainter *, const QStyleOptionViewItem &, const QModelIndex &) const;
+    void paint(QPainter *, const QStyleOptionViewItem &, const QModelIndex &) const override;
     /// reimplemented
-    QSize sizeHint(const QStyleOptionViewItem & option, const QModelIndex &) const {
+    QSize sizeHint(const QStyleOptionViewItem & option, const QModelIndex &) const override {
         return option.decorationSize;
     }
 
@@ -134,9 +134,9 @@ public:
     {
         setSortingEnabled(true);
     }
-    virtual ~KisPresetProxyAdapter() {}
+    ~KisPresetProxyAdapter() override {}
 
-    virtual QList< KoResource* > resources() {
+    QList< KoResource* > resources() override {
 
         QList<KoResource*> serverResources =
             KisPaintOpPresetResourceServerAdapter::resources();

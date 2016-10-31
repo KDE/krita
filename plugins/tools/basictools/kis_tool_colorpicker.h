@@ -123,8 +123,8 @@ public:
     KisToolColorPickerFactory()
             : KoToolFactoryBase("KritaSelected/KisToolColorPicker") {
         setToolTip(i18n("Color Selector Tool"));
-        setToolType(TOOL_TYPE_FILL);
-        setPriority(15);
+        setSection(TOOL_TYPE_FILL);
+        setPriority(2);
         setIconName(koIconNameCStr("krita_tool_color_picker"));
         setShortcut(QKeySequence(Qt::Key_P));
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);

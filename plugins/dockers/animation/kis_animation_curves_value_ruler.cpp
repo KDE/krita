@@ -93,7 +93,7 @@ void KisAnimationCurvesValueRuler::paintEvent(QPaintEvent *e)
     QColor textColor = qApp->palette().color(QPalette::ButtonText);
     const QPen labelPen = QPen(textColor);
 
-    QStyleOptionViewItemV4 option = viewOptions();
+    QStyleOptionViewItem option = viewOptions();
     const int gridHint = style()->styleHint(QStyle::SH_Table_GridLineColor, &option, this);
     const QColor gridColor = static_cast<QRgb>(gridHint);
     const QPen gridPen = QPen(gridColor);

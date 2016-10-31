@@ -44,7 +44,6 @@ public Q_SLOTS:
 private:
     KisCanvas2 *m_canvas;
     KisViewManager *m_view;
-    KoCanvasBase * b_canvas;
     KisColorSliderWidget* m_colorSliders;
     KisSignalAutoConnectionsStore m_canvasConnections;
 };

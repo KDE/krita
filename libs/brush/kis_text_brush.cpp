@@ -106,7 +106,7 @@ public:
         return renderedChar;
     }
 
-    void clear() {
+    void clear() override {
         m_brushesMap.clear();
         KisBrushesPipe<KisGbrBrush>::clear();
     }
@@ -117,18 +117,18 @@ public:
         return m_brushesMap.value(m_text.at(0));
     }
 
-    void notifyStrokeStarted() {
+    void notifyStrokeStarted() override {
         m_charIndex = 0;
         updateBrushIndexesImpl();
     }
 
 protected:
 
-    int chooseNextBrush(const KisPaintInformation& info) {
+    int chooseNextBrush(const KisPaintInformation& info) override {
         Q_UNUSED(info);
         return m_currentBrushIndex;
     }
-    void updateBrushIndexes(const KisPaintInformation& info) {
+    void updateBrushIndexes(const KisPaintInformation& info) override {
         Q_UNUSED(info);
 
         m_charIndex++;

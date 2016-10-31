@@ -48,7 +48,7 @@ class KisColorBalanceAdjustment : public KoColorTransformation
 public:
     KisColorBalanceAdjustment(){}
 
-void transform(const quint8 *srcU8, quint8 *dstU8, qint32 nPixels) const
+void transform(const quint8 *srcU8, quint8 *dstU8, qint32 nPixels) const override
 {
     KisColorBalanceMath bal;
     const RGBPixel* src = reinterpret_cast<const RGBPixel*>(srcU8);
@@ -85,7 +85,7 @@ void transform(const quint8 *srcU8, quint8 *dstU8, qint32 nPixels) const
 }
 
 
-virtual QList<QString> parameters() const
+QList<QString> parameters() const override
 {
     QList<QString> list;
     list << "cyan_red_midtones"   << "magenta_green_midtones"   << "yellow_blue_midtones"
@@ -94,7 +94,7 @@ virtual QList<QString> parameters() const
     return list;
 }
 
-virtual int parameterId(const QString& name) const
+int parameterId(const QString& name) const override
 {
     if (name == "cyan_red_midtones")
         return 0;
@@ -119,7 +119,7 @@ virtual int parameterId(const QString& name) const
     return -1;
 }
 
-virtual void setParameter(int id, const QVariant& parameter)
+void setParameter(int id, const QVariant& parameter) override
 {
     switch(id)
     {

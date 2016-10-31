@@ -134,7 +134,7 @@ struct KisBrush::Private {
 };
 
 KisBrush::KisBrush()
-    : KoResource("")
+    : KoResource(QString())
     , d(new Private)
 {
 }
@@ -146,7 +146,7 @@ KisBrush::KisBrush(const QString& filename)
 }
 
 KisBrush::KisBrush(const KisBrush& rhs)
-    : KoResource("")
+    : KoResource(QString())
     , KisShared()
     , d(new Private)
 {

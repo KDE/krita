@@ -286,7 +286,7 @@ typedef QWeakPointer<KisKeyframe> KisKeyframeWSP;
 class KisFilterChain;
 typedef KisSharedPtr<KisFilterChain> KisFilterChainSP;
 
-struct KisProofingConfiguration;
+class KisProofingConfiguration;
 typedef QSharedPointer<KisProofingConfiguration> KisProofingConfigurationSP;
 typedef QWeakPointer<KisProofingConfiguration> KisProofingConfigurationWSP;
 

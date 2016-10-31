@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>458</width>
-    <height>458</height>
+    <height>469</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -348,7 +348,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>versionNumber</string>
+        <string/>
        </property>
        <property name="alignment">
         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>

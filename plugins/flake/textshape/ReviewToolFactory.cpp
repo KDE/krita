@@ -35,7 +35,7 @@ ReviewToolFactory::ReviewToolFactory()
     : KoToolFactoryBase("ReviewTool")
 {
     setToolTip(i18n("Review"));
-    setToolType(dynamicToolType() + ",calligrawords,calligraauthor");
+    setSection(dynamicToolType() + ",calligrawords,calligraauthor");
     setIconName(koIconNameCStr("tool_review"));
     setPriority(30);
     setActivationShapeId(TextShape_SHAPEID "," AnnotationShape_SHAPEID);

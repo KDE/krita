@@ -39,13 +39,16 @@ KisSplashScreen::KisSplashScreen(const QString &version, const QPixmap &pixmap, 
     : QWidget(parent, Qt::SplashScreen | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint | f),
       m_themed(themed)
 {
+
     setupUi(this);
     setWindowIcon(KisIconUtils::loadIcon("calligrakrita"));
 
-    QString color = colorString();
-
     // Maintain the aspect ratio on high DPI screens when scaling
     lblSplash->setPixmap(pixmap);
+
+    QString color = colorString();
+    lblVersion->setText(i18n("Version: %1", version));
+    lblVersion->setStyleSheet("color:" + color);
 
     bnClose->hide();
     connect(bnClose, SIGNAL(clicked()), this, SLOT(close()));
@@ -56,32 +59,16 @@ KisSplashScreen::KisSplashScreen(const QString &version, const QPixmap &pixmap, 
     bool hideSplash = cfg.readEntry("HideSplashAfterStartup", false);
     chkShowAtStartup->setChecked(hideSplash);
 
-    lblLinks->setTextFormat(Qt::RichText);
-    lblLinks->setText(i18n("<html>"
-                           "<head/>"
-                           "<body>"
-                           "<p align=\"center\"><span style=\" color:%1;\"><b>Links</b></span></p>"
-
-                           "<p><a href=\"https://krita.org/support-us/\"><span style=\" text-decoration: underline; color:%1;\">Support Krita</span></a></p>"
-
-                           "<p><a href=\"https://docs.krita.org/Category:Getting_Started\"><span style=\" text-decoration: underline; color:%1;\">Getting Started</span></a></p>"
-                           "<p><a href=\"https://docs.krita.org/\"><span style=\" text-decoration: underline; color:%1;\">Manual</span></a></p>"
-                           "<p><a href=\"https://krita.org/\"><span style=\" text-decoration: underline; color:%1;\">Krita Website</span></a></p>"
-                           "<p><a href=\"https://forum.kde.org/viewforum.php?f=136\"><span style=\" text-decoration: underline; color:%1;\">User Community</span></a></p>"
-
-                           "<p><a href=\"https://quickgit.kde.org/?p=krita.git\"><span style=\" text-decoration: underline; color:%1;\">Source Code</span></a></p>"
-
-                           "<p><a href=\"https://store.steampowered.com/app/280680/\"><span style=\" text-decoration: underline; color:%1;\">Krita on Steam</span></a></p>"
-                           "</body>"
-                           "</html>", color));
-
-    lblVersion->setText(i18n("Version: %1", version));
-    lblVersion->setStyleSheet("color:" + color);
-
-    updateText();
-
     connect(lblRecent, SIGNAL(linkActivated(QString)), SLOT(linkClicked(QString)));
     connect(&m_timer, SIGNAL(timeout()), SLOT(raise()));
+
+    // hide these labels by default
+    lblLinks->setVisible(false);
+    lblRecent->setVisible(false);
+    line->setVisible(false);
+
+
+
     m_timer.setSingleShot(true);
     m_timer.start(10);
 }
@@ -133,6 +120,41 @@ void KisSplashScreen::updateText()
         "</html>";
     lblRecent->setText(recent);
 }
+
+void KisSplashScreen::displayLinks() {
+
+    QString color = colorString();
+    lblLinks->setTextFormat(Qt::RichText);
+    lblLinks->setText(i18n("<html>"
+                           "<head/>"
+                           "<body>"
+                           "<p align=\"center\"><span style=\" color:%1;\"><b>Links</b></span></p>"
+
+                           "<p><a href=\"https://krita.org/support-us/\"><span style=\" text-decoration: underline; color:%1;\">Support Krita</span></a></p>"
+
+                           "<p><a href=\"https://docs.krita.org/Category:Getting_Started\"><span style=\" text-decoration: underline; color:%1;\">Getting Started</span></a></p>"
+                           "<p><a href=\"https://docs.krita.org/\"><span style=\" text-decoration: underline; color:%1;\">Manual</span></a></p>"
+                           "<p><a href=\"https://krita.org/\"><span style=\" text-decoration: underline; color:%1;\">Krita Website</span></a></p>"
+                           "<p><a href=\"https://forum.kde.org/viewforum.php?f=136\"><span style=\" text-decoration: underline; color:%1;\">User Community</span></a></p>"
+
+                           "<p><a href=\"https://quickgit.kde.org/?p=krita.git\"><span style=\" text-decoration: underline; color:%1;\">Source Code</span></a></p>"
+
+                           "<p><a href=\"https://store.steampowered.com/app/280680/\"><span style=\" text-decoration: underline; color:%1;\">Krita on Steam</span></a></p>"
+                           "</body>"
+                           "</html>", color));
+
+    lblLinks->setVisible(true);
+
+    updateText();
+}
+
+
+void KisSplashScreen::displayRecentFiles() {
+    lblRecent->setVisible(true);
+    line->setVisible(true);
+}
+
+
 
 QString KisSplashScreen::colorString() const
 {

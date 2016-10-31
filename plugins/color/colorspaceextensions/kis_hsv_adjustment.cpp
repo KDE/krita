@@ -39,7 +39,7 @@
 template<typename _channel_type_>
 void clamp(float* r, float* g, float* b);
 
-#define FLOAT_CLAMP( v ) * v = (*v < 0.0) ? 0.0 : ( (*v>1.0) ? 1.0 : *v )
+#define FLOAT_CLAMP( v ) *v = (*v < 0.0) ? 0.0 : ( (*v>1.0) ? 1.0 : *v )
 
 template<>
 void clamp<quint8>(float* r, float* g, float* b)
@@ -97,7 +97,7 @@ public:
 
 public:
 
-    void transform(const quint8 *srcU8, quint8 *dstU8, qint32 nPixels) const
+    void transform(const quint8 *srcU8, quint8 *dstU8, qint32 nPixels) const override
     {
 
         //if (m_model="RGBA" || m_colorize) {
@@ -105,7 +105,10 @@ public:
          * */
             const RGBPixel* src = reinterpret_cast<const RGBPixel*>(srcU8);
             RGBPixel* dst = reinterpret_cast<RGBPixel*>(dstU8);
-            float h, s, v, r, g, b;
+            float h, s, v;
+            float r = 0.0;
+            float g = 0.0;
+            float b = 0.0;
             qreal lumaR, lumaG, lumaB;
             //Default to rec 709 when there's no coefficients given//
             if (m_lumaRed<=0 || m_lumaGreen<=0 || m_lumaBlue<=0) {
@@ -141,8 +144,7 @@ public:
                     v = luminance;
                     HSLToRGB(h, s, v, &r, &g, &b);
 
-                }
-                else {
+                } else {
 
                     if (m_type == 0) {
                         RGBToHSV(SCALE_TO_FLOAT(src->red), SCALE_TO_FLOAT(src->green), SCALE_TO_FLOAT(src->blue), &h, &s, &v);
@@ -171,7 +173,7 @@ public:
 
 
                         HSLToRGB(h, s, v, &r, &g, &b);
-                    } else if (m_type == 2){
+                    } else if (m_type == 2) {
 
                         qreal red = SCALE_TO_FLOAT(src->red);
                         qreal green = SCALE_TO_FLOAT(src->green);
@@ -195,7 +197,7 @@ public:
                         r = red;
                         g = green;
                         b = blue;
-                    } else if (m_type == 3){
+                    } else if (m_type == 3) {
 
                         qreal red = SCALE_TO_FLOAT(src->red);
                         qreal green = SCALE_TO_FLOAT(src->green);
@@ -220,7 +222,7 @@ public:
                         g = green;
                         b = blue;
                         
-                    } else if (m_type == 4){
+                    } else if (m_type == 4) {
 
                         qreal red = SCALE_TO_FLOAT(src->red);
                         qreal green = SCALE_TO_FLOAT(src->green);
@@ -234,8 +236,6 @@ public:
                         cr *= (m_adj_s + 1.0);
                         //cr = qBound(0.0, cr, 1.0);
 
-                        
-                        
                         y += (m_adj_v);
 
 
@@ -243,6 +243,8 @@ public:
                         r = red;
                         g = green;
                         b = blue;
+                    } else {
+                        Q_ASSERT_X(false, "", "invalid type");
                     }
                 }
 
@@ -301,14 +303,14 @@ public:
         }*/
     }
 
-    virtual QList<QString> parameters() const
+    QList<QString> parameters() const override
     {
       QList<QString> list;
       list << "h" << "s" << "v" << "type" << "colorize" << "lumaRed" << "lumaGreen"<< "lumaBlue";
       return list;
     }
 
-    virtual int parameterId(const QString& name) const
+    int parameterId(const QString& name) const override
     {
         if (name == "h") {
             return 0;
@@ -339,7 +341,7 @@ public:
     * m_colorize: Use colorize formula instead
     * luma Red/Green/Blue: Used for luma calculations.
     */
-    virtual void setParameter(int id, const QVariant& parameter)
+    void setParameter(int id, const QVariant& parameter) override
     {
         switch(id)
         {
@@ -353,7 +355,7 @@ public:
             m_adj_v = parameter.toDouble();
             break;
         case 3:
-            m_type = parameter.toDouble();
+            m_type = parameter.toInt();
             break;
         case 4:
             m_colorize = parameter.toBool();

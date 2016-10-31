@@ -70,7 +70,7 @@ public:
     {
     }
 
-    virtual ~KoTextShapeDataPrivate()
+    ~KoTextShapeDataPrivate() override
     {
         if (ownsDocument) {
             delete document;

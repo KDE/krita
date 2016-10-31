@@ -39,6 +39,7 @@ OraImport::~OraImport()
 
 KisImportExportFilter::ConversionStatus OraImport::convert(const QByteArray&, const QByteArray& to, KisPropertiesConfigurationSP configuration)
 {
+    Q_UNUSED(configuration);
     dbgFile << "Importing using ORAImport!";
 
     if (to != "application/x-krita")

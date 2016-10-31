@@ -144,9 +144,7 @@ void KisAutoContrast::processImpl(KisPaintDeviceSP device,
         for (int i = 0; i < minvalue; i++)
             transfer[i] = 0x0;
         for (int i = minvalue; i < maxvalue; i++) {
-            qint32 val = (i - minvalue) / diff;
-
-            val = int((0xFFFF * (i - minvalue)) / diff);
+            qint32 val = int((0xFFFF * (i - minvalue)) / diff);
             if (val > 0xFFFF)
                 val = 0xFFFF;
             if (val < 0)

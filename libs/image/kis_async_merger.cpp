@@ -68,13 +68,13 @@ public:
         {
         }
 
-    ~KisUpdateOriginalVisitor() {
+    ~KisUpdateOriginalVisitor() override {
     }
 
 public:
     using KisNodeVisitor::visit;
 
-    bool visit(KisAdjustmentLayer* layer) {
+    bool visit(KisAdjustmentLayer* layer) override {
         if (!layer->visible()) return true;
 
         if (!m_projection) {
@@ -132,23 +132,23 @@ public:
         return true;
     }
 
-    bool visit(KisExternalLayer*) {
+    bool visit(KisExternalLayer*) override {
         return true;
     }
 
-    bool visit(KisGeneratorLayer*) {
+    bool visit(KisGeneratorLayer*) override {
         return true;
     }
 
-    bool visit(KisPaintLayer*) {
+    bool visit(KisPaintLayer*) override {
         return true;
     }
 
-    bool visit(KisGroupLayer*) {
+    bool visit(KisGroupLayer*) override {
         return true;
     }
 
-    bool visit(KisCloneLayer *layer) {
+    bool visit(KisCloneLayer *layer) override {
         QRect emptyRect;
         KisRefreshSubtreeWalker walker(emptyRect);
         KisAsyncMerger merger;
@@ -177,22 +177,22 @@ public:
         return true;
     }
 
-    bool visit(KisNode*) {
+    bool visit(KisNode*) override {
         return true;
     }
-    bool visit(KisFilterMask*) {
+    bool visit(KisFilterMask*) override {
         return true;
     }
-    bool visit(KisTransformMask*) {
+    bool visit(KisTransformMask*) override {
         return true;
     }
-    bool visit(KisTransparencyMask*) {
+    bool visit(KisTransparencyMask*) override {
         return true;
     }
-    bool visit(KisSelectionMask*) {
+    bool visit(KisSelectionMask*) override {
         return true;
     }
-    bool visit(KisColorizeMask*) {
+    bool visit(KisColorizeMask*) override {
         return true;
     }
 

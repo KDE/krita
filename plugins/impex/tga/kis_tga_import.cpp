@@ -240,6 +240,7 @@ static bool loadTGA(QDataStream & s, const TgaHeader & tga, QImage &img)
 
 KisImportExportFilter::ConversionStatus KisTGAImport::convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration)
 {
+    Q_UNUSED(configuration);
     dbgFile << "TGA import! From:" << from << ", To:" << to << 0;
 
     if (to != "application/x-krita")

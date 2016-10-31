@@ -118,9 +118,6 @@ private Q_SLOTS:
 private:
 
     MoveToolOptionsWidget* m_optionsWidget;
-
-    QPoint m_totalTopLeft;
-
     QPoint m_dragStart; ///< Point where current cursor dragging began
     QPoint m_accumulatedOffset; ///< Total offset including multiple clicks, up/down/left/right keys, etc. added together
 
@@ -144,9 +141,9 @@ public:
     KisToolMoveFactory()
             : KoToolFactoryBase("KritaTransform/KisToolMove") {
         setToolTip(i18n("Move Tool"));
-        setToolType(TOOL_TYPE_TRANSFORM);
+        setSection(TOOL_TYPE_TRANSFORM);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
-        setPriority(11);
+        setPriority(3);
         setIconName(koIconNameCStr("krita_tool_move"));
         setShortcut(QKeySequence( Qt::Key_T));
     }

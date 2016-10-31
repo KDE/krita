@@ -33,7 +33,7 @@ public:
     KoColorConversionFromAlphaTransformation(const KoColorSpace* srcCs, const KoColorSpace* dstCs,
                                              Intent renderingIntent,
                                              KoColorConversionTransformation::ConversionFlags conversionFlags);
-    virtual void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const;
+    void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const override;
 };
 
 //------ KoColorConversionFromAlphaTransformation ------//
@@ -78,7 +78,7 @@ public:
         : KoColorConversionTransformation(srcCs, dstCs, renderingIntent, conversionFlags)
     {
     }
-    virtual void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const {
+    void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const override {
         while (nPixels > 0) {
 
             dst[0] = *src;
@@ -132,7 +132,7 @@ class KoColorConversionToAlphaTransformation : public KoColorConversionTransform
 {
 public:
     KoColorConversionToAlphaTransformation(const KoColorSpace* srcCs, const KoColorSpace* dstCs, Intent renderingIntent, ConversionFlags conversionFlags);
-    virtual void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const;
+    void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const override;
 };
 
 
@@ -175,7 +175,7 @@ public:
     {
     }
 
-    virtual void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const
+    void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const override
     {
         while (nPixels > 0) {
 

@@ -30,7 +30,6 @@
 #include <kis_vec.h>
 
 #include <kis_hairy_ink_option.h>
-#include <kis_hairy_shape_option.h>
 #include <kis_hairy_bristle_option.h>
 #include <kis_brush_option.h>
 #include <kis_brush_based_paintop_settings.h>

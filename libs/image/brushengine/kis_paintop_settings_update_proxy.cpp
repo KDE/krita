@@ -23,15 +23,23 @@
 
 struct KisPaintopSettingsUpdateProxy::Private
 {
-    Private() : updatesCompressor(100, KisSignalCompressor::FIRST_ACTIVE) {}
+    Private()
+        : updatesCompressor(100, KisSignalCompressor::FIRST_ACTIVE),
+          updatesBlocked(0),
+          numUpdatesWhileBlocked(0)
+    {
+    }
+
     KisSignalCompressor updatesCompressor;
+    int updatesBlocked;
+    int numUpdatesWhileBlocked;
 };
 
 KisPaintopSettingsUpdateProxy::KisPaintopSettingsUpdateProxy(QObject *parent)
     : QObject(parent),
       m_d(new Private)
 {
-    connect(&m_d->updatesCompressor, SIGNAL(timeout()), SIGNAL(sigSettingsChanged()));
+    connect(&m_d->updatesCompressor, SIGNAL(timeout()), SLOT(slotDeliverSettingsChanged()));
 }
 
 KisPaintopSettingsUpdateProxy::~KisPaintopSettingsUpdateProxy()
@@ -46,4 +54,28 @@ void KisPaintopSettingsUpdateProxy::notifySettingsChanged()
 void KisPaintopSettingsUpdateProxy::notifyUniformPropertiesChanged()
 {
     emit sigUniformPropertiesChanged();
+}
+
+void KisPaintopSettingsUpdateProxy::postponeSettingsChanges()
+{
+    m_d->updatesBlocked++;
+}
+
+void KisPaintopSettingsUpdateProxy::unpostponeSettingsChanges()
+{
+    m_d->updatesBlocked--;
+
+    if (!m_d->updatesBlocked && m_d->numUpdatesWhileBlocked) {
+        m_d->numUpdatesWhileBlocked = 0;
+        emit sigSettingsChanged();
+    }
+}
+
+void KisPaintopSettingsUpdateProxy::slotDeliverSettingsChanged()
+{
+    if (m_d->updatesBlocked) {
+        m_d->numUpdatesWhileBlocked++;
+    } else {
+        emit sigSettingsChanged();
+    }
 }

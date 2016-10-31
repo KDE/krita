@@ -72,8 +72,8 @@ LabeledWidget::LabeledWidget(QAction *action, const QString &label, LabelPositio
     layout->addWidget(l);
     layout->addWidget(m_lineEdit);
     if (warningLabelRequired) {
-        m_warningLabel[0] = new QLabel("");
-        m_warningLabel[1] = new QLabel("");
+        m_warningLabel[0] = new QLabel();
+        m_warningLabel[1] = new QLabel();
         m_warningLabel[0]->setWordWrap(true);
         m_warningLabel[1]->setWordWrap(true);
         layout->addWidget(m_warningLabel[0]);
@@ -98,7 +98,7 @@ void LabeledWidget::enterEvent(QEvent *event)
 
 void LabeledWidget::setWarningText(int pos, const QString &warning)
 {
-    if ((m_warningLabel[pos] == 0)) {
+    if (m_warningLabel[pos] == 0) {
         return;
     }
     m_warningLabel[pos]->setText(warning);
@@ -106,7 +106,7 @@ void LabeledWidget::setWarningText(int pos, const QString &warning)
 
 void LabeledWidget::clearLineEdit()
 {
-    m_lineEdit->setText("");
+    m_lineEdit->setText(QString());
 }
 
 ReferencesTool::ReferencesTool(KoCanvasBase *canvas): TextTool(canvas),

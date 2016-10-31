@@ -136,7 +136,6 @@ private:
     KoPageProvider *m_pageProvider;
     KoImageCollection *m_imageCollection;
     QRegion m_paintRegion;
-    KoParagraphStyle *m_paragraphStyle;
     bool m_clip;
     KoTextDocumentLayout *m_layout;
 };

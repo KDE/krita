@@ -610,6 +610,7 @@ void KisToolFreehandHelper::stabilizerStart(KisPaintInformation firstPaintInfo)
     m_d->stabilizerPollTimer.start();
 
     m_d->stabilizedSampler.clear();
+    m_d->stabilizedSampler.addEvent(firstPaintInfo);
 }
 
 KisPaintInformation

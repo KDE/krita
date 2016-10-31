@@ -3,6 +3,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/sdk/tests )
 
 macro_add_unittest_definitions()
 
-set(kis_unsharp_mask_test_SRCS kis_unsharp_mask_test.cpp )
-kde4_add_unit_test(KisUnsharpMaskTest TESTNAME krita-ui-kis_unsharp_mask_test  ${kis_unsharp_mask_test_SRCS})
-target_link_libraries(KisUnsharpMaskTest   kritaui Qt5::Test)
+ecm_add_tests(
+    kis_unsharp_mask_test.cpp
+    NAME_PREFIX "krita-filters-unsharp-"
+    LINK_LIBRARIES kritaui Qt5::Test)

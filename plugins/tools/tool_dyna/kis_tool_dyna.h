@@ -159,7 +159,7 @@ public:
         setToolTip(i18n("Dynamic Brush Tool"));
 
         // Temporarily
-        setToolType(TOOL_TYPE_SHAPE);
+        setSection(TOOL_TYPE_SHAPE);
         setIconName(koIconNameCStr("krita_tool_dyna"));
         // TODO
         //setShortcut(QKeySequence(Qt::Key_F));

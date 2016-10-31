@@ -511,28 +511,6 @@ public:
 
     bool saveAs(const QUrl &url, KisPropertiesConfigurationSP exportConfigration = 0);
 
-public Q_SLOTS:
-
-    bool save(KisPropertiesConfigurationSP exportConfiguration = 0);
-    bool waitSaveComplete();
-
-Q_SIGNALS:
-
-    void completed();
-    void canceled(const QString &);
-
-private Q_SLOTS:
-
-    void setImageModified();
-
-    void slotAutoSave();
-
-    /// Called by the undo stack when undo or redo is called
-    void slotUndoStackIndexChanged(int idx);
-
-
-public:
-
     /**
      * Create a new image that has this document as a parent and
      * replace the current image with this image.
@@ -605,6 +583,27 @@ public:
 
     QList<KisPaintingAssistantSP> assistants() const;
     void setAssistants(const QList<KisPaintingAssistantSP> value);
+
+    bool save(KisPropertiesConfigurationSP exportConfiguration = 0);
+
+public Q_SLOTS:
+
+    bool waitSaveComplete();
+
+Q_SIGNALS:
+
+    void completed();
+    void canceled(const QString &);
+
+private Q_SLOTS:
+
+    void setImageModified();
+
+    void slotAutoSave();
+
+    /// Called by the undo stack when undo or redo is called
+    void slotUndoStackIndexChanged(int idx);
+
 
 private:
 

@@ -128,6 +128,7 @@ KisActionRegistry *KisActionRegistry::instance()
 KisActionRegistry::KisActionRegistry()
     : d(new KisActionRegistry::Private(this))
 {
+    d->loadActionFiles();
     KConfigGroup cg = KSharedConfig::openConfig()->group("Shortcut Schemes");
     QString schemeName = cg.readEntry("Current Scheme", "Default");
     loadShortcutScheme(schemeName);

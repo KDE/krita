@@ -249,7 +249,6 @@ public:
         modifiedAfterAutosave(false),
         isAutosaving(false),
         backupFile(true),
-        backupPath(QString()),
         doNotSaveExtDoc(false),
         storeInternal(false),
         isLoading(false),
@@ -301,7 +300,6 @@ public:
     bool modifiedAfterAutosave;
     bool isAutosaving;
     bool backupFile;
-    QString backupPath;
     bool doNotSaveExtDoc; // makes it possible to save only internally stored child documents
     bool storeInternal; // Store this doc internally even if url is external
     bool isLoading; // True while loading (openUrl is async)
@@ -663,7 +661,7 @@ bool KisDocument::saveFile(KisPropertiesConfigurationSP exportConfiguration)
 
     if (d->backupFile) {
         Q_ASSERT(url().isLocalFile());
-        KBackup::backupFile(url().toLocalFile(), d->backupPath);
+        KBackup::backupFile(url().toLocalFile());
     }
 
     qApp->processEvents();
@@ -1306,17 +1304,6 @@ void KisDocument::setBackupFile(bool _b)
 {
     d->backupFile = _b;
 }
-
-void KisDocument::setBackupPath(const QString & _path)
-{
-    d->backupPath = _path;
-}
-
-QString KisDocument::backupPath()const
-{
-    return d->backupPath;
-}
-
 
 bool KisDocument::storeInternal() const
 {

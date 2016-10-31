@@ -338,16 +338,6 @@ public:
     bool isLoading() const;
 
     /**
-     * Sets the backup path of the document
-     */
-    void setBackupPath(const QString & _path);
-
-    /**
-     * @return path to the backup document
-     */
-    QString backupPath()const;
-
-    /**
      * @return caption of the document
      *
      * Caption is of the form "[title] - [url]",

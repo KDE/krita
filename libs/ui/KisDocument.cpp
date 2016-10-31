@@ -1432,11 +1432,6 @@ bool KisDocument::openUrlInternal(const QUrl &url)
     return false;
 }
 
-bool KisDocument::newImage(const QString& name, qint32 width, qint32 height, const KoColorSpace * cs, const KoColor &bgColor, const QString &imageDescription, const double imageResolution)
-{
-    return newImage(name, width, height, cs, bgColor, false, 1, imageDescription, imageResolution);
-}
-
 bool KisDocument::newImage(const QString& name,
                            qint32 width, qint32 height,
                            const KoColorSpace* cs,

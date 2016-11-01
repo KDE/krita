@@ -89,7 +89,7 @@ void KisSplashScreen::updateText()
     QString recent = i18n("<html>"
                           "<head/>"
                           "<body>"
-                          "<p align=\"center\"><b><span style=\" color:%1;\">Recent Files</span></b></p>", color);
+                          "<p><b><span style=\" color:%1;\">Recent Files</span></b></p>", color);
 
     QString path;
     QStringList recentfiles;
@@ -128,7 +128,7 @@ void KisSplashScreen::displayLinks() {
     lblLinks->setText(i18n("<html>"
                            "<head/>"
                            "<body>"
-                           "<p align=\"center\"><span style=\" color:%1;\"><b>Links</b></span></p>"
+                           "<p><span style=\" color:%1;\"><b>Links</b></span></p>"
 
                            "<p><a href=\"https://krita.org/support-us/\"><span style=\" text-decoration: underline; color:%1;\">Support Krita</span></a></p>"
 

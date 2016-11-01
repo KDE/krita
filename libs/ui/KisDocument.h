@@ -254,13 +254,6 @@ public:
     bool loadNativeFormat(const QString & file);
 
     /**
-     *  Saves the document in native format, to a given file
-     *  You should never have to reimplement.
-     *  Made public for writing templates.
-     */
-    bool saveNativeFormat(const QString & file);
-
-    /**
      * Activate/deactivate/configure the autosave feature.
      * @param delay in seconds, 0 to disable
      */
@@ -461,10 +454,10 @@ private:
     /**
      *  Saves a document
      *
-     *  Applies a filter if necessary, and calls saveNativeFormat in any case
+     *  Applies a filter if necessary, and calls exportDocument in any case
      *  You should not have to reimplement, except for very special cases.
      */
-    bool saveFile(KisPropertiesConfigurationSP exportConfiguration = 0);
+    bool saveFile(const QString &filePath, KisPropertiesConfigurationSP exportConfiguration = 0);
 
 
     /** @internal */

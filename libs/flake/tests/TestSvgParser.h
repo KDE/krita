@@ -101,13 +101,22 @@ private Q_SLOTS:
 
     void testRenderStrokeLinearGradient();
 
-    void testRenderPattern();
     void testManualRenderPattern_ContentUser_RefObb();
     void testManualRenderPattern_ContentObb_RefObb();
     void testManualRenderPattern_ContentUser_RefUser();
 
     void testManualRenderPattern_ContentObb_RefObb_Transform_Rotate();
 
+    void testManualRenderPattern_ContentView_RefObb();
+
+    void testManualRenderPattern_ContentView_RefUser();
+
+    void testRenderPattern_r_User_c_User();
+    void testRenderPattern_r_User_c_View();
+    void testRenderPattern_r_User_c_Obb();
+
+    void testRenderPattern_r_User_c_View_Rotated();
+    void testRenderPattern_r_Obb_c_View_Rotated();
 };
 
 #endif // TESTSVGPARSER_H

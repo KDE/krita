@@ -79,6 +79,7 @@ set(kritaflake_SRCS
     KoOdfGradientBackground.cpp
     KoHatchBackground.cpp
     KoPatternBackground.cpp
+    KoVectorPatternBackground.cpp
     KoShapeConfigWidgetBase.cpp
     KoDrag.cpp
     KoDragOdfSaveHelper.cpp
@@ -190,7 +191,6 @@ set(kritaflake_SRCS
     svg/SvgParser.cpp
     svg/SvgStyleParser.cpp
     svg/SvgGradientHelper.cpp
-    svg/SvgPatternHelper.cpp
     svg/SvgFilterHelper.cpp
     svg/SvgCssHelper.cpp
     svg/SvgClipPathHelper.cpp

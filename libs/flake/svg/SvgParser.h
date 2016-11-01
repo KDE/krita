@@ -30,7 +30,6 @@
 
 #include "kritaflake_export.h"
 #include "SvgGradientHelper.h"
-#include "SvgPatternHelper.h"
 #include "SvgFilterHelper.h"
 #include "SvgClipPathHelper.h"
 #include "SvgLoadingContext.h"
@@ -40,6 +39,7 @@
 class KoShape;
 class KoShapeGroup;
 class KoDocumentResourceManager;
+class KoVectorPatternBackground;
 
 
 class KRITAFLAKE_EXPORT SvgParser
@@ -64,6 +64,8 @@ public:
 
 protected:
 
+    /// Parses a group-like element element, saving all its topmost properties
+    QList<KoShape *> parseGroup(const KoXmlElement &e);
     /// Parses a container element, returning a list of child shapes
     QList<KoShape*> parseContainer(const KoXmlElement &);
     /// Parses a use element, returning a list of child shapes
@@ -73,7 +75,7 @@ protected:
     /// Parses a gradient element
     SvgGradientHelper *parseGradient(const KoXmlElement &);
     /// Parses a pattern element
-    void parsePattern(SvgPatternHelper &pattern, const KoXmlElement &);
+    QSharedPointer<KoVectorPatternBackground> parsePattern(const KoXmlElement &e, const KoShape *__shape);
     /// Parses a filter element
     bool parseFilter(const KoXmlElement &, const KoXmlElement &referencedBy = KoXmlElement());
     /// Parses a clip path element
@@ -96,7 +98,7 @@ protected:
     /// find gradient with given id in gradient map
     SvgGradientHelper* findGradient(const QString &id);
     /// find pattern with given id in pattern map
-    SvgPatternHelper* findPattern(const QString &id);
+    QSharedPointer<KoVectorPatternBackground> findPattern(const QString &id, const KoShape *shape);
     /// find filter with given id in filter map
     SvgFilterHelper* findFilter(const QString &id, const QString &href = QString());
     /// find clip path with given id in clip path map
@@ -145,7 +147,6 @@ private:
     QSizeF m_documentSize;
     SvgLoadingContext m_context;
     QMap<QString, SvgGradientHelper> m_gradients;
-    QMap<QString, SvgPatternHelper> m_patterns;
     QMap<QString, SvgFilterHelper> m_filters;
     QMap<QString, SvgClipPathHelper> m_clipPaths;
     KoDocumentResourceManager *m_documentResourceManager;

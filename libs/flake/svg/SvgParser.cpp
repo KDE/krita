@@ -30,6 +30,7 @@
 #include <FlakeDebug.h>
 
 #include <QColor>
+#include <QPainter>
 
 #include <KoShape.h>
 #include <KoShapeRegistry.h>
@@ -54,12 +55,12 @@
 #include "SvgUtil.h"
 #include "SvgShape.h"
 #include "SvgGraphicContext.h"
-#include "SvgPatternHelper.h"
 #include "SvgFilterHelper.h"
 #include "SvgGradientHelper.h"
 #include "SvgClipPathHelper.h"
 #include "parsers/SvgTransformParser.h"
 #include "kis_global.h"
+#include <KoVectorPatternBackground.h>
 
 #include "kis_debug.h"
 
@@ -119,37 +120,19 @@ SvgGradientHelper* SvgParser::findGradient(const QString &id)
     return result;
 }
 
-SvgPatternHelper* SvgParser::findPattern(const QString &id)
+QSharedPointer<KoVectorPatternBackground> SvgParser::findPattern(const QString &id, const KoShape *shape)
 {
-    // check if pattern was already parsed, and return it
-    if (m_patterns.contains(id))
-        return &m_patterns[ id ];
+    QSharedPointer<KoVectorPatternBackground> result;
 
-    // check if pattern was stored for later parsing
-    if (!m_context.hasDefinition(id))
-        return 0;
-
-    SvgPatternHelper pattern;
-
-    const KoXmlElement &e = m_context.definition(id);
-    if (e.tagName() != "pattern")
-        return 0;
-
-    // are we referencing another pattern ?
-    if (e.hasAttribute("xlink:href")) {
-        QString mhref = e.attribute("xlink:href").mid(1);
-        SvgPatternHelper *refPattern = findPattern(mhref);
-        // inherit attributes of referenced pattern
-        if (refPattern)
-            pattern = *refPattern;
+    // check if gradient was stored for later parsing
+    if (m_context.hasDefinition(id)) {
+        const KoXmlElement &e = m_context.definition(id);
+        if (e.tagName() == "pattern") {
+            result = parsePattern(m_context.definition(id), shape);
+        }
     }
 
-    // ok parse pattern now
-    parsePattern(pattern, m_context.definition(id));
-    // add to parsed pattern list
-    m_patterns.insert(id, pattern);
-
-    return &m_patterns[ id ];
+    return result;
 }
 
 SvgFilterHelper* SvgParser::findFilter(const QString &id, const QString &href)
@@ -276,14 +259,6 @@ SvgGradientHelper* SvgParser::parseGradient(const KoXmlElement &e)
             if (pGrad) {
                 gradHelper = *pGrad;
             }
-
-            int numLocalStops = 0;
-            KoXmlElement child;
-            forEachElement (child, e) {
-                if (child.tagName() == "stop") {
-                    numLocalStops++;
-                }
-            }
         }
     }
 
@@ -363,54 +338,133 @@ SvgGradientHelper* SvgParser::parseGradient(const KoXmlElement &e)
     return &m_gradients[gradientId];
 }
 
-void SvgParser::parsePattern(SvgPatternHelper &pattern, const KoXmlElement &e)
+KoVectorPatternBackground::CoordinateSystem
+parseUnits(const QString &value, KoVectorPatternBackground::CoordinateSystem defaultValue)
 {
-    if (e.attribute("patternUnits") == "userSpaceOnUse") {
-        pattern.setPatternUnits(SvgPatternHelper::UserSpaceOnUse);
-    }
-    if (e.attribute("patternContentUnits") == "objectBoundingBox") {
-        pattern.setPatternContentUnits(SvgPatternHelper::ObjectBoundingBox);
-    }
-    const QString viewBox = e.attribute("viewBox");
-    if (!viewBox.isEmpty()) {
-        // TODO: implement correct parsing of vbox!
+    KoVectorPatternBackground::CoordinateSystem result = defaultValue;
 
-        //pattern.setPatternContentViewbox(SvgUtil::parseViewBox(viewBox));
+    if (value == "userSpaceOnUse") {
+        result = KoVectorPatternBackground::UserSpaceOnUse;
+    } else if (value == "objectBoundingBox") {
+        result = KoVectorPatternBackground::ObjectBoundingBox;
     }
+
+    return result;
+}
+
+QSharedPointer<KoVectorPatternBackground> SvgParser::parsePattern(const KoXmlElement &e, const KoShape *shape)
+{
+    /**
+     * Unlike the gradient parsing function, this method is called every time we
+     * *reference* the pattern, not when we define it. Therefore we can already
+     * use the coordinate system of the destination.
+     */
+
+    QSharedPointer<KoVectorPatternBackground> pattHelper;
+
+    SvgGraphicsContext *gc = m_context.currentGC();
+    if (!gc) return pattHelper;
+
+    const QString patternId = e.attribute("id");
+    if (patternId.isEmpty()) return pattHelper;
+
+    pattHelper = toQShared(new KoVectorPatternBackground);
+
+    if (e.hasAttribute("xlink:href")) {
+        // strip the '#' symbol
+        QString href = e.attribute("xlink:href").mid(1);
+
+        if (!href.isEmpty() &&href != patternId) {
+            // copy the referenced pattern if found
+            QSharedPointer<KoVectorPatternBackground> pPatt = findPattern(href, shape);
+            if (pPatt) {
+                pattHelper = pPatt;
+            }
+        }
+    }
+
+    pattHelper->setReferenceCoordinates(
+                parseUnits(e.attribute("patternUnits"),
+                           pattHelper->referenceCoordinates()));
+
+    pattHelper->setContentCoordinates(
+                parseUnits(e.attribute("patternContentUnits"),
+                           pattHelper->contentCoordinates()));
 
     if (e.hasAttribute("patternTransform")) {
         SvgTransformParser p(e.attribute("patternTransform"));
         if (p.isValid()) {
-            pattern.setTransform(p.transform());
+            pattHelper->setPatternTransform(p.transform());
         }
     }
 
-    const QString x = e.attribute("x");
-    const QString y = e.attribute("y");
-    const QString w = e.attribute("width");
-    const QString h = e.attribute("height");
-    // parse tile reference rectangle
-    if (pattern.patternUnits() == SvgPatternHelper::UserSpaceOnUse) {
-        if (!x.isEmpty() && !y.isEmpty()) {
-            pattern.setPosition(QPointF(parseUnitX(x), parseUnitY(y)));
-        }
-        if (!w.isEmpty() && !h.isEmpty()) {
-            pattern.setSize(QSizeF(parseUnitX(w), parseUnitY(h)));
-        }
+    if (pattHelper->referenceCoordinates() == KoVectorPatternBackground::ObjectBoundingBox) {
+        QRectF referenceRect(
+            SvgUtil::fromPercentage(e.attribute("x", "0%")),
+            SvgUtil::fromPercentage(e.attribute("y", "0%")),
+            SvgUtil::fromPercentage(e.attribute("width", "0%")), // 0% is according to SVG 1.1, don't ask me why!
+            SvgUtil::fromPercentage(e.attribute("height", "0%"))); // 0% is according to SVG 1.1, don't ask me why!
+
+        pattHelper->setReferenceRect(referenceRect);
     } else {
-        // x, y, width, height are in percentages of the object referencing the pattern
-        // so we just parse the percentages
-        if (!x.isEmpty() && !y.isEmpty()) {
-            pattern.setPosition(QPointF(SvgUtil::fromPercentage(x), SvgUtil::fromPercentage(y)));
-        }
-        if (!w.isEmpty() && !h.isEmpty()) {
-            pattern.setSize(QSizeF(SvgUtil::fromPercentage(w), SvgUtil::fromPercentage(h)));
-        }
+        QRectF referenceRect(
+            parseUnitX(e.attribute("x", "0")),
+            parseUnitY(e.attribute("y", "0")),
+            parseUnitX(e.attribute("width", "0")), // 0 is according to SVG 1.1, don't ask me why!
+            parseUnitY(e.attribute("height", "0"))); // 0 is according to SVG 1.1, don't ask me why!
+
+        pattHelper->setReferenceRect(referenceRect);
     }
 
-    if (e.hasChildNodes()) {
-        pattern.setContent(e);
+    m_context.pushGraphicsContext(e);
+    gc = m_context.currentGC();
+
+    /**
+     * In Krita shapes X,Y coordinates are baked into the the shape global transform, but
+     * the pattern should be painted in "user" coordinates. Therefore, we should handle
+     * this offfset separately.
+     */
+
+   const QTransform dstShapeTransform = shape->absoluteTransformation(0);
+   const QTransform shapeOffsetTransform = dstShapeTransform * gc->matrix.inverted();
+   KIS_SAFE_ASSERT_RECOVER_NOOP(shapeOffsetTransform.type() <= QTransform::TxTranslate);
+   const QPointF extraShapeOffset(shapeOffsetTransform.dx(), shapeOffsetTransform.dy());
+
+   pattHelper->setExtraShapeOffset(extraShapeOffset);
+
+   const QRectF boundingRect = shape->outline().boundingRect().translated(extraShapeOffset);
+   const QTransform relativeToShape(boundingRect.width(), 0, 0, boundingRect.height(),
+                                    boundingRect.x(), boundingRect.y());
+
+
+    if (e.hasAttribute("viewBox")) {
+        gc->currentBoundingBox =
+            pattHelper->referenceCoordinates() == KoVectorPatternBackground::ObjectBoundingBox ?
+            relativeToShape.mapRect(pattHelper->referenceRect()) :
+            pattHelper->referenceRect();
+
+        applyViewBoxTransform(e);
+        pattHelper->setContentCoordinates(pattHelper->referenceCoordinates());
+
+    } else if (pattHelper->contentCoordinates() == KoVectorPatternBackground::ObjectBoundingBox) {
+        gc->matrix = relativeToShape * gc->matrix;
     }
+
+    // We do *not* apply patternTransform here! Here we only bake the untransformed
+    // version of the shape. The transformed one will be done in the very end while rendering.
+
+    QList<KoShape*> shapes = parseGroup(e);
+
+    m_context.popGraphicsContext();
+    gc = m_context.currentGC();
+
+    KIS_SAFE_ASSERT_RECOVER_NOOP(shapes.size() <= 1);
+
+    if (!shapes.isEmpty()) {
+        pattHelper->setShape(shapes.first(), gc->matrix);
+    }
+
+    return pattHelper;
 }
 
 bool SvgParser::parseFilter(const KoXmlElement &e, const KoXmlElement &referencedBy)
@@ -629,78 +683,11 @@ void SvgParser::applyFillStyle(KoShape *shape)
                 shape->setBackground(bg);
             }
         } else {
-            // try to find referenced pattern
-            SvgPatternHelper *pattern = findPattern(gc->fillId);
-            KoImageCollection *imageCollection = m_documentResourceManager->imageCollection();
-            if (pattern && imageCollection) {
-                // great we have a pattern fill
-                QRectF objectBound = QRectF(QPoint(), shape->size());
-                QRectF currentBoundbox = gc->currentBoundingBox;
+            QSharedPointer<KoVectorPatternBackground> pattern =
+                findPattern(gc->fillId, shape);
 
-                // properties from the object are not inherited
-                // so we are creating a new context without copying
-                SvgGraphicsContext *gc = m_context.pushGraphicsContext(pattern->content(), false);
-
-                // the pattern establishes a new coordinate system with its
-                // origin at the patterns x and y attributes
-                gc->matrix = QTransform();
-                // object bounding box units are relative to the object the pattern is applied
-                if (pattern->patternContentUnits() == SvgPatternHelper::ObjectBoundingBox) {
-                    gc->currentBoundingBox = objectBound;
-                    gc->forcePercentage = true;
-                } else {
-                    // inherit the current bounding box
-                    gc->currentBoundingBox = currentBoundbox;
-                }
-
-                applyStyle(0, pattern->content());
-
-                // parse the pattern content elements
-                QList<KoShape*> patternContent = parseContainer(pattern->content());
-
-                // generate the pattern image from the shapes and the object bounding rect
-                QImage image = pattern->generateImage(objectBound, patternContent);
-
-                m_context.popGraphicsContext();
-
-                // delete the shapes created from the pattern content
-                qDeleteAll(patternContent);
-
-                if (!image.isNull()) {
-                    QSharedPointer<KoPatternBackground> bg(new KoPatternBackground(imageCollection));
-                    bg->setPattern(image);
-
-                    QPointF refPoint = shape->documentToShape(pattern->position(objectBound));
-                    QSizeF tileSize = pattern->size(objectBound);
-
-                    bg->setPatternDisplaySize(tileSize);
-                    if (pattern->patternUnits() == SvgPatternHelper::ObjectBoundingBox) {
-                        if (tileSize == objectBound.size())
-                            bg->setRepeat(KoPatternBackground::Stretched);
-                    }
-
-                    // calculate pattern reference point offset in percent of tileSize
-                    // and relative to the topleft corner of the shape
-                    qreal fx = refPoint.x() / tileSize.width();
-                    qreal fy = refPoint.y() / tileSize.height();
-                    if (fx < 0.0)
-                        fx = std::floor(fx);
-                    else if (fx > 1.0)
-                        fx = std::ceil(fx);
-                    else
-                        fx = 0.0;
-                    if (fy < 0.0)
-                        fy = std::floor(fy);
-                    else if (fx > 1.0)
-                        fy = std::ceil(fy);
-                    else
-                        fy = 0.0;
-                    qreal offsetX = 100.0 * (refPoint.x() - fx * tileSize.width()) / tileSize.width();
-                    qreal offsetY = 100.0 * (refPoint.y() - fy * tileSize.height()) / tileSize.height();
-                    bg->setReferencePointOffset(QPointF(offsetX, offsetY));
-
-                    shape->setBackground(bg);
-                }
+            if (pattern) {
+                shape->setBackground(pattern);
             } else {
                 // no referenced fill found, use fallback color
                 shape->setBackground(QSharedPointer<KoColorBackground>(new KoColorBackground(gc->fillColor)));

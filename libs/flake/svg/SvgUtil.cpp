@@ -169,7 +169,8 @@ bool SvgUtil::parseViewBox(SvgGraphicsContext *gc, const KoXmlElement &e,
     QTransform viewBoxTransform =
         QTransform::fromTranslate(-viewBoxRect.x(), -viewBoxRect.y()) *
         QTransform::fromScale(elementBounds.width() / viewBoxRect.width(),
-                                  elementBounds.height() / viewBoxRect.height());;
+                                  elementBounds.height() / viewBoxRect.height()) *
+            QTransform::fromTranslate(elementBounds.x(), elementBounds.y());
 
     const QString aspectString = e.attribute("preserveAspectRatio");
     if (!aspectString.isEmpty()) {
@@ -186,7 +187,8 @@ bool SvgUtil::parseViewBox(SvgGraphicsContext *gc, const KoXmlElement &e,
 
             viewBoxTransform =
                 QTransform::fromTranslate(-viewBoxRect.x(), -viewBoxRect.y()) *
-                QTransform::fromScale(uniformScale, uniformScale);
+                QTransform::fromScale(uniformScale, uniformScale) *
+                QTransform::fromTranslate(elementBounds.x(), elementBounds.y());
 
             const QPointF viewBoxAnchor = viewBoxTransform.map(p.rectAnchorPoint(viewBoxRect));
             const QPointF elementAnchor = p.rectAnchorPoint(elementBounds);

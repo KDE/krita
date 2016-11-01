@@ -89,7 +89,6 @@
 #include <kis_idle_watcher.h>
 #include <kis_signal_auto_connection.h>
 #include <kis_debug.h>
-#include <kis_canvas_widget_base.h>
 
 // Local
 #include "KisViewManager.h"
@@ -1079,12 +1078,22 @@ bool KisDocument::saveToStore(KoStore *_store, const QString & _path)
 bool KisDocument::savePreview(KoStore *store)
 {
     QPixmap pix = generatePreview(QSize(256, 256));
-    const QImage preview(pix.toImage().convertToFormat(QImage::Format_ARGB32, Qt::ColorOnly));
+    QImage preview(pix.toImage().convertToFormat(QImage::Format_ARGB32, Qt::ColorOnly));
+    if (preview.size() == QSize(0,0)) {
+        QSize newSize = d->image->bounds().size();
+        newSize.scale(QSize(256, 256), Qt::KeepAspectRatio);
+        preview = QImage(newSize, QImage::Format_ARGB32);
+        preview.fill(QColor(0, 0, 0, 0));
+    }
     KoStoreDevice io(store);
-    if (!io.open(QIODevice::WriteOnly))
+    if (!io.open(QIODevice::WriteOnly)) {
         return false;
-    if (! preview.save(&io, "PNG"))     // ### TODO What is -9 in quality terms?
+    }
+
+    if (!preview.save(&io, "PNG")) {     // ### TODO What is -9 in quality terms?
         return false;
+    }
+
     io.close();
     return true;
 }
@@ -1095,14 +1104,7 @@ QPixmap KisDocument::generatePreview(const QSize& size)
         QRect bounds = d->image->bounds();
         QSize newSize = bounds.size();
         newSize.scale(size, Qt::KeepAspectRatio);
-        QPixmap px = QPixmap::fromImage(d->image->convertToQImage(newSize, 0));
-        if (px.size() == QSize(0,0)) {
-            px = QPixmap(newSize);
-            QPainter gc(&px);
-            QBrush checkBrush = QBrush(KisCanvasWidgetBase::createCheckersImage(newSize.width() / 5));
-            gc.fillRect(px.rect(), checkBrush);
-            gc.end();
-        }
+        return QPixmap::fromImage(d->image->convertToQImage(newSize, 0));
     }
     return QPixmap(size);
 }

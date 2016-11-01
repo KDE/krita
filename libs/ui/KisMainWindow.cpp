@@ -246,9 +246,7 @@ public:
     QSignalMapper *documentMapper;
 
     QByteArray lastExportedFormat;
-    int lastExportSpecialOutputFlag  {0};
     QScopedPointer<KisSignalCompressorWithParam<int> > tabSwitchCompressor;
-    bool geometryInitialized  {false};
     QMutex savingEntryMutex;
 
     KisActionManager * actionManager() {
@@ -289,7 +287,6 @@ KisMainWindow::KisMainWindow()
 #endif
 
     connect(this, SIGNAL(restoringDone()), this, SLOT(forceDockTabFonts()));
-    connect(this, SIGNAL(documentSaved()), d->viewManager, SLOT(slotDocumentSaved()));
     connect(this, SIGNAL(themeChanged()), d->viewManager, SLOT(updateIcons()));
     connect(KisPart::instance(), SIGNAL(documentClosed(QString)), SLOT(updateWindowMenu()));
     connect(KisPart::instance(), SIGNAL(documentOpened(QString)), SLOT(updateWindowMenu()));
@@ -775,7 +772,7 @@ bool KisMainWindow::openDocumentInternal(const QUrl &url, KisDocument *newdoc)
     connect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
     connect(newdoc, SIGNAL(completed()), this, SLOT(slotLoadCompleted()));
     connect(newdoc, SIGNAL(canceled(const QString &)), this, SLOT(slotLoadCanceled(const QString &)));
-    bool openRet = (!isImporting()) ? newdoc->openUrl(url) : newdoc->importDocument(url);
+    bool openRet = (!d->isImporting) ? newdoc->openUrl(url) : newdoc->importDocument(url);
     if (!openRet) {
         delete newdoc;
         return false;
@@ -803,7 +800,7 @@ QStringList KisMainWindow::showOpenFileDialog()
     KoFileDialog dialog(this, KoFileDialog::ImportFiles, "OpenDocument");
     dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
     dialog.setMimeTypeFilters(KisImportExportManager::mimeFilter(KisImportExportManager::Import));
-    dialog.setCaption(isImporting() ? i18n("Import Images") : i18n("Open Images"));
+    dialog.setCaption(d->isImporting ? i18n("Import Images") : i18n("Open Images"));
 
     return dialog.filenames();
 }
@@ -812,14 +809,15 @@ QStringList KisMainWindow::showOpenFileDialog()
 void KisMainWindow::slotLoadCompleted()
 {
     KisDocument *newdoc = qobject_cast<KisDocument*>(sender());
+    if (newdoc && newdoc->image()) {
+        addViewAndNotifyLoadingCompleted(newdoc);
 
-    addViewAndNotifyLoadingCompleted(newdoc);
+        disconnect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
+        disconnect(newdoc, SIGNAL(completed()), this, SLOT(slotLoadCompleted()));
+        disconnect(newdoc, SIGNAL(canceled(const QString &)), this, SLOT(slotLoadCanceled(const QString &)));
 
-    disconnect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
-    disconnect(newdoc, SIGNAL(completed()), this, SLOT(slotLoadCompleted()));
-    disconnect(newdoc, SIGNAL(canceled(const QString &)), this, SLOT(slotLoadCanceled(const QString &)));
-
-    emit loadCompleted();
+        emit loadCompleted();
+    }
 }
 
 void KisMainWindow::slotLoadCanceled(const QString & errMsg)
@@ -865,7 +863,7 @@ bool KisMainWindow::hackIsSaving() const
     return !l.owns_lock();
 }
 
-bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent, int specialOutputFlag)
+bool KisMainWindow::saveDocument(KisDocument *document, bool saveas)
 {
     if (!document) {
         return true;
@@ -875,7 +873,7 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
      * Make sure that we cannot enter this method twice!
      *
      * The lower level functions may call processEvents() so
-     * double-entry is quite possible to achive. Here we try to lock
+     * double-entry is quite possible to achieve. Here we try to lock
      * the mutex, and if it is failed, just cancel saving.
      */
     StdLockableWrapper<QMutex> wrapper(&d->savingEntryMutex);
@@ -908,21 +906,13 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
     QByteArray _native_format = document->nativeFormatMimeType();
     QByteArray oldOutputFormat = document->outputMimeType();
 
-    int oldSpecialOutputFlag = document->specialOutputFlag();
-
     QUrl suggestedURL = document->url();
 
     QStringList mimeFilter;
 
-    if (specialOutputFlag) {
-        mimeFilter = KisMimeDatabase::suffixesForMimeType(_native_format);
-    }
-    else {
-        mimeFilter = KisImportExportManager::mimeFilter(KisImportExportManager::Export);
-    }
+    mimeFilter = KisImportExportManager::mimeFilter(KisImportExportManager::Export);
 
-
-    if (!mimeFilter.contains(oldOutputFormat) && !isExporting()) {
+    if (!mimeFilter.contains(oldOutputFormat) && !d->isExporting) {
         dbgUI << "KisMainWindow::saveDocument no export filter for" << oldOutputFormat;
 
         // --- don't setOutputMimeType in case the user cancels the Save As
@@ -964,7 +954,7 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
 
         KoFileDialog dialog(this, KoFileDialog::SaveFile, "SaveDocument");
         dialog.setCaption(i18n("untitled"));
-        if (isExporting() && !d->lastExportUrl.isEmpty()) {
+        if (d->isExporting && !d->lastExportUrl.isEmpty()) {
             dialog.setDefaultDir(d->lastExportUrl.toLocalFile(), true);
         }
         else {
@@ -990,39 +980,27 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
 
         QByteArray outputFormat = _native_format;
 
-        if (!specialOutputFlag) {
-            QString outputFormatString = KisMimeDatabase::mimeTypeForFile(newURL.toLocalFile());
-            outputFormat = outputFormatString.toLatin1();
+        QString outputFormatString = KisMimeDatabase::mimeTypeForFile(newURL.toLocalFile());
+        outputFormat = outputFormatString.toLatin1();
+
+
+        if (!d->isExporting) {
+            justChangingFilterOptions = (newURL == document->url()) && (outputFormat == document->mimeType());
         }
-
-        if (!isExporting())
-            justChangingFilterOptions = (newURL == document->url()) &&
-                    (outputFormat == document->mimeType()) &&
-                    (specialOutputFlag == oldSpecialOutputFlag);
-        else
-            justChangingFilterOptions = (newURL == d->lastExportUrl) &&
-                    (outputFormat == d->lastExportedFormat) &&
-                    (specialOutputFlag == d->lastExportSpecialOutputFlag);
-
+        else {
+            justChangingFilterOptions = (newURL == d->lastExportUrl) && (outputFormat == d->lastExportedFormat);
+        }
 
         bool bOk = true;
         if (newURL.isEmpty()) {
             bOk = false;
         }
 
-        // adjust URL before doing checks on whether the file exists.
-        if (specialOutputFlag) {
-            QString fileName = newURL.fileName();
-            if ( specialOutputFlag== KisDocument::SaveAsDirectoryStore) {
-                //dbgKrita << "save to directory: " << newURL.url();
-            }
-        }
-
         if (bOk) {
             bool wantToSave = true;
 
             // don't change this line unless you know what you're doing :)
-            if (!justChangingFilterOptions || document->confirmNonNativeSave(isExporting())) {
+            if (!justChangingFilterOptions) {
                 if (!document->isNativeFormat(outputFormat))
                     wantToSave = true;
             }
@@ -1034,7 +1012,7 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
                 // we do _not_ change this operation into a Save As.  Reasons
                 // follow:
                 //
-                // 1. A check like "isExporting() && oldURL == newURL"
+                // 1. A check like "d->isExporting && oldURL == newURL"
                 //    doesn't _always_ work on case-insensitive filesystems
                 //    and inconsistent behaviour is bad.
                 // 2. It is probably not a good idea to change document->mimeType
@@ -1051,8 +1029,8 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
                 //
                 // - Clarence
                 //
-                document->setOutputMimeType(outputFormat, specialOutputFlag);
-                if (!isExporting()) {  // Save As
+                document->setOutputMimeType(outputFormat);
+                if (!d->isExporting) {  // Save As
                     ret = document->saveAs(newURL);
 
                     if (ret) {
@@ -1063,7 +1041,7 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
                         dbgUI << "Failed Save As!";
                         document->setUrl(oldURL);
                         document->setLocalFilePath(oldFile);
-                        document->setOutputMimeType(oldOutputFormat, oldSpecialOutputFlag);
+                        document->setOutputMimeType(oldOutputFormat);
                     }
                 } else { // Export
                     ret = document->exportDocument(newURL);
@@ -1072,15 +1050,12 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
                         // a few file dialog convenience things
                         d->lastExportUrl = newURL;
                         d->lastExportedFormat = outputFormat;
-                        d->lastExportSpecialOutputFlag = specialOutputFlag;
                     }
 
                     // always restore output format
-                    document->setOutputMimeType(oldOutputFormat, oldSpecialOutputFlag);
+                    document->setOutputMimeType(oldOutputFormat);
                 }
 
-                if (silent) // don't let the document change the window caption
-                    document->setTitleModified();
             }   // if (wantToSave)  {
             else
                 ret = false;
@@ -1089,23 +1064,16 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
             ret = false;
     } else { // saving
 
-        bool needConfirm = document->confirmNonNativeSave(false) && !document->isNativeFormat(oldOutputFormat);
+        // be sure document has the correct outputMimeType!
+        if (d->isExporting || document->isModified()) {
+            ret = document->save();
+        }
 
-        if (!needConfirm ||
-                (needConfirm && exportConfirmation(oldOutputFormat /* not so old :) */))
-                ) {
-            // be sure document has the correct outputMimeType!
-            if (isExporting() || document->isModified()) {
-                ret = document->save();
-            }
-
-            if (!ret) {
-                dbgUI << "Failed Save!";
-                document->setUrl(oldURL);
-                document->setLocalFilePath(oldFile);
-            }
-        } else
-            ret = false;
+        if (!ret) {
+            dbgUI << "Failed Save!";
+            document->setUrl(oldURL);
+            document->setLocalFilePath(oldFile);
+        }
     }
 
 
@@ -1116,11 +1084,6 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
     updateCaption();
 
     return ret;
-}
-
-bool KisMainWindow::exportConfirmation(const QByteArray &/*outputFormat*/)
-{
-    return true;
 }
 
 void KisMainWindow::undo()
@@ -1136,26 +1099,6 @@ void KisMainWindow::redo()
     if (activeView()) {
         activeView()->redoAction()->trigger();
         d->redo->setText(activeView()->redoAction()->text());
-    }
-}
-
-void KisMainWindow::showEvent(QShowEvent *e)
-{
-    KXmlGuiWindow::showEvent(e);
-
-    if (!d->geometryInitialized) {
-        /**
-         * We should move the window only *after* it has been shown on
-         * screen, otherwise it will become owned by a wrong screen, which
-         * will make positioning of all the child widgets wrong.
-         * (see bug https://bugs.kde.org/show_bug.cgi?id=362025)
-         *
-         * This is actually a bug/feature of Qt 5.5.x and it has been
-         * fixed in Qt 5.6.0. So we can avoid this delay on newer versions
-         * of Qt.
-         */
-        QTimer::singleShot(1, this, SLOT(initializeGeometry()));
-        d->geometryInitialized = true;
     }
 }
 
@@ -1175,12 +1118,6 @@ void KisMainWindow::closeEvent(QCloseEvent *e)
     {
         KConfigGroup group( KSharedConfig::openConfig(), "theme");
         group.writeEntry("Theme", d->themeManager->currentThemeName());
-    }
-
-
-    if(d->activeView && d->activeView->document() && d->activeView->document()->isLoading()) {
-        e->setAccepted(false);
-        return;
     }
 
     QList<QMdiSubWindow*> childrenList = d->mdiArea->subWindowList();
@@ -1329,11 +1266,9 @@ void KisMainWindow::switchTab(int index)
 
 void KisMainWindow::slotFileNew()
 {
-    KisOpenPane *startupWidget = 0;
-
     const QStringList mimeFilter = KisImportExportManager::mimeFilter(KisImportExportManager::Import);
 
-    startupWidget = new KisOpenPane(this, mimeFilter, QStringLiteral("templates/"));
+    KisOpenPane *startupWidget = new KisOpenPane(this, mimeFilter, QStringLiteral("templates/"));
     startupWidget->setWindowModality(Qt::WindowModal);
 
     KisConfig cfg;
@@ -1411,19 +1346,21 @@ void KisMainWindow::slotFileOpen()
 
 void KisMainWindow::slotFileOpenRecent(const QUrl &url)
 {
-    (void) openDocument(QUrl(url));
+    (void) openDocument(QUrl::fromLocalFile(url.toLocalFile()));
 }
 
 void KisMainWindow::slotFileSave()
 {
-    if (saveDocument(d->activeView->document()))
+    if (saveDocument(d->activeView->document())) {
         emit documentSaved();
+    }
 }
 
 void KisMainWindow::slotFileSaveAs()
 {
-    if (saveDocument(d->activeView->document(), true))
+    if (saveDocument(d->activeView->document(), true)) {
         emit documentSaved();
+    }
 }
 
 KoCanvasResourceManager *KisMainWindow::resourceManager() const
@@ -1572,21 +1509,21 @@ void KisMainWindow::slotFilePrintPreview()
     delete preview;
 }
 
-KisPrintJob* KisMainWindow::exportToPdf(const QString &pdfFileName)
+KisPrintJob* KisMainWindow::exportToPdf(QString pdfFileName)
 {
     if (!activeView())
         return 0;
-    KoPageLayout pageLayout;
-    pageLayout = activeView()->pageLayout();
-    return exportToPdf(pageLayout, pdfFileName);
-}
 
-KisPrintJob* KisMainWindow::exportToPdf(KoPageLayout pageLayout, QString pdfFileName)
-{
-    if (!activeView())
-        return 0;
     if (!activeView()->document())
         return 0;
+
+    KoPageLayout pageLayout;
+    pageLayout.width = 0;
+    pageLayout.height = 0;
+    pageLayout.topMargin = 0;
+    pageLayout.bottomMargin = 0;
+    pageLayout.leftMargin = 0;
+    pageLayout.rightMargin = 0;
 
     if (pdfFileName.isEmpty()) {
         KConfigGroup group =  KSharedConfig::openConfig()->group("File Dialogs");
@@ -1598,7 +1535,7 @@ KisPrintJob* KisMainWindow::exportToPdf(KoPageLayout pageLayout, QString pdfFile
         /** if document has a file name, take file name and replace extension with .pdf */
         if (pDoc && pDoc->url().isValid()) {
             startUrl = pDoc->url();
-            QString fileName = startUrl.fileName();
+            QString fileName = startUrl.toLocalFile();
             fileName = fileName.replace( QRegExp( "\\.\\w{2,5}$", Qt::CaseInsensitive ), ".pdf" );
             startUrl = startUrl.adjusted(QUrl::RemoveFilename);
             startUrl.setPath(startUrl.path() +  fileName );
@@ -1873,15 +1810,6 @@ void KisMainWindow::slotExportFile()
     d->isExporting = false;
 }
 
-bool KisMainWindow::isImporting() const
-{
-    return d->isImporting;
-}
-
-bool KisMainWindow::isExporting() const
-{
-    return d->isExporting;
-}
 
 QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
 {

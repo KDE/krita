@@ -33,7 +33,6 @@ public:
 
 private Q_SLOTS:
     void setDataFromToolAction();
-
 private:
     KoToolAction *m_toolAction;
 };

@@ -1,11 +1,3 @@
-# Disable -Wswitch because of the extra definitions we here:
-# kis_input_manager.cpp: In member function ‘virtual bool KisInputManager::eventFilter(QObject*, QEvent*)’:
-# warning: case value ‘1001’ not in enumerated type ‘QEvent::Type’ [-Wswitch]
-# warning: case value ‘1002’ not in enumerated type ‘QEvent::Type’ [-Wswitch]
-if (CMAKE_COMPILER_IS_GNUCXX)
-    add_definitions(${KDE4_ENABLE_EXCEPTIONS} -Wno-switch)
-endif ()
-
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/qtlockedfile
     ${EXIV2_INCLUDE_DIR}
@@ -152,19 +144,11 @@ set(kritaui_LIB_SRCS
     kis_canvas_controls_manager.cpp
     kis_tooltip_manager.cpp
     kis_multinode_property.cpp
-    kis_async_action_feedback.cpp
     kis_stopgradient_editor.cpp
     kisexiv2/kis_exif_io.cpp
     kisexiv2/kis_exiv2.cpp
     kisexiv2/kis_iptc_io.cpp
     kisexiv2/kis_xmp_io.cpp
-    kra/kis_kra_utils.cpp
-    kra/kis_kra_load_visitor.cpp
-    kra/kis_kra_loader.cpp
-    kra/kis_kra_save_visitor.cpp
-    kra/kis_kra_saver.cpp
-    kra/kis_kra_savexml_visitor.cpp
-    kra/kis_colorize_dom_utils.cpp
     opengl/kis_opengl.cpp
     opengl/kis_opengl_canvas2.cpp
     opengl/kis_opengl_canvas_debugger.cpp
@@ -172,10 +156,6 @@ set(kritaui_LIB_SRCS
     opengl/kis_texture_tile.cpp
     opengl/kis_opengl_shader_loader.cpp
     kis_fps_decoration.cpp
-    ora/kis_open_raster_stack_load_visitor.cpp
-    ora/kis_open_raster_stack_save_visitor.cpp
-    ora/ora_load_context.cc
-    ora/ora_save_context.cc
     recorder/kis_node_query_path_editor.cc
     recorder/kis_recorded_action_creator.cc
     recorder/kis_recorded_action_creator_factory.cc
@@ -331,15 +311,9 @@ set(kritaui_LIB_SRCS
     KisNodeToolTip.cpp
     KisNodeView.cpp
     kis_node_view_color_scheme.cpp
-    KisFilterChain.cpp
-    KisFilterChainLink.cpp
-    KisFilterChainLinkList.cpp
     KisImportExportFilter.cpp
-    KisFilterEdge.cpp
     KisFilterEntry.cpp
-    KisFilterGraph.cpp
     KisImportExportManager.cpp
-    KisFilterVertex.cpp
     KisMainWindow.cpp
     KisOpenPane.cpp
     KisPart.cpp
@@ -392,7 +366,7 @@ if(WIN32)
         input/wintab/kis_screen_size_choice_dialog.cpp
         qtlockedfile/qtlockedfile_win.cpp
         )
-      include_directories(${Qt5Gui_PRIVATE_INCLUDE_DIRS})
+    include_directories(${Qt5Gui_PRIVATE_INCLUDE_DIRS})
 endif()
     set(kritaui_LIB_SRCS
         ${kritaui_LIB_SRCS}
@@ -420,13 +394,6 @@ if(UNIX)
             )
     endif()
 endif()
-
-if(WIN32)
-    #ki18n_wrap_ui(
-    #    input/wintab/kis_screen_size_choice_dialog.ui
-    #)
-endif()
-
 
 
 ki18n_wrap_ui(kritaui_LIB_SRCS
@@ -508,7 +475,7 @@ add_library(kritaui SHARED ${kritaui_HEADERS_MOC} ${kritaui_LIB_SRCS} )
 generate_export_header(kritaui BASE_NAME kritaui)
 
 target_link_libraries(kritaui KF5::CoreAddons KF5::Completion KF5::I18n KF5::ItemViews Qt5::Network
-                      kritacolor kritaimage kritalibbrush kritawidgets kritawidgetutils ${PNG_LIBRARIES} ${EXIV2_LIBRARIES}
+                      kritaimpex kritacolor kritaimage kritalibbrush kritawidgets kritawidgetutils ${PNG_LIBRARIES} ${EXIV2_LIBRARIES}
 )
 
 if (HAVE_KIO)
@@ -536,8 +503,6 @@ endif()
 if(X11_FOUND)
     target_link_libraries(kritaui Qt5::X11Extras ${X11_LIBRARIES})
 endif()
-
-target_link_libraries(kritaui LINK_INTERFACE_LIBRARIES kritaimage kritalibbrush kritapigment kritawidgets KF5::Completion KF5::I18n ${GL_INTERFACE_LIBRARIES})
 
 target_include_directories(kritaui
     PUBLIC

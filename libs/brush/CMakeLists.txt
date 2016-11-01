@@ -41,8 +41,6 @@ if(HAVE_VC)
 #  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Vc_DEFINITIONS}")
 endif()
 
-target_link_libraries(kritalibbrush LINK_INTERFACE_LIBRARIES kritaimage Qt5::Svg)
-
 set_target_properties(kritalibbrush PROPERTIES
     VERSION ${GENERIC_KRITA_LIB_VERSION} SOVERSION ${GENERIC_KRITA_LIB_SOVERSION}
 )

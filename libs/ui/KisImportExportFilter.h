@@ -22,12 +22,17 @@ Boston, MA 02110-1301, USA.
 #define KIS_IMPORT_EXPORT_FILTER_H
 
 #include <QObject>
+#include <QIODevice>
 #include <QMap>
 #include <QPointer>
 #include <QString>
+#include <QPair>
+#include <QList>
+#include <KoID.h>
 #include <QSharedPointer>
 #include <kis_properties_configuration.h>
 #include <kis_types.h>
+#include <KisExportCheckBase.h>
 
 class KoUpdater;
 class KisDocument;
@@ -43,8 +48,6 @@ class KisConfigWidget;
  * the @ref convert() method. Don't forget to specify the Q_OBJECT
  * macro in your class even if you don't use signals or slots.
  * This is needed as filters are created on the fly.
- * The m_chain member allows access to the @ref KisFilterChain
- * which invokes the filter to query for input/output.
  *
  * @note Take care: The m_chain pointer is invalid while the constructor
  * runs due to the implementation -- @em don't use it in the constructor.
@@ -70,40 +73,30 @@ public:
      * if it's needed.
      */
     enum ConversionStatus { OK,
-                            StupidError,
                             UsageError,
                             CreationError,
                             FileNotFound,
                             StorageCreationError,
                             BadMimeType,
                             BadConversionGraph,
-                            EmbeddedDocError,
                             WrongFormat,
                             NotImplemented,
                             ParsingError,
                             InternalError,
-                            UnexpectedEOF,
-                            UnexpectedOpcode,
                             UserCancelled,
-                            OutOfMemory,
-                            PasswordProtected,
                             InvalidFormat,
-                            FilterEntryNull,
-                            NoDocumentCreated,
-                            DownloadFailed,
                             FilterCreationError,
                             ProgressCancelled,
+                            UnsupportedVersion,
                             JustInCaseSomeBrokenCompilerUsesLessThanAByte = 255
                           };
 
     virtual ~KisImportExportFilter();
 
-    /**
-     * @brief setChain set the chain information on the filter. The chain information
-     * lets the filter know what document it's working on. The filter will not delete
-     * @param chain the actual filter chain
-     */
-    void setChain(KisFilterChainSP chain);
+    void setBatchMode(bool batchmode);
+    void setFilename(const QString &filename);
+    void setMimeType(const QString &mime);
+    void setUpdater(QPointer<KoUpdater> updater);
 
     /**
      * The filter chain calls this method to perform the actual conversion.
@@ -111,18 +104,10 @@ public:
      * .desktop file.
      * You @em have to implement this method to make the filter work.
      *
-     * @param from The mimetype of the source file/document
-     * @param to The mimetype of the destination file/document
      * @return The error status, see the @ref #ConversionStatus enum.
      *         KisImportExportFilter::OK means that everything is alright.
      */
-    virtual ConversionStatus convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration = 0) = 0;
-
-    /**
-     * Set the updater to which the filter will report progress.
-     * Every emit of the sigProgress signal is reported to the updater.
-     */
-    void setUpdater(const QPointer<KoUpdater>& updater);
+    virtual ConversionStatus convert(KisDocument *document, QIODevice *io, KisPropertiesConfigurationSP configuration = 0) = 0;
 
     /**
      * Get the text version of the status value
@@ -155,16 +140,11 @@ public:
      */
     virtual KisConfigWidget *createConfigurationWidget(QWidget *parent, const QByteArray& from = "", const QByteArray& to = "") const;
 
-
-Q_SIGNALS:
     /**
-     * Emit this signal with a value in the range of 1...100 to have some
-     * progress feedback for the user in the statusbar of the application.
-     *
-     * @param value The actual progress state. Should always remain in
-     * the range 1..100.
+     * @brief generate and return the list of capabilities of this export filter. The list
+     * @return returns the list of capabilities of this export filter
      */
-    void sigProgress(int value);
+    virtual QMap<QString, KisExportCheckBase*> exportChecks();
 
 protected:
     /**
@@ -172,11 +152,14 @@ protected:
      */
     KisImportExportFilter(QObject *parent = 0);
 
-    KisDocument *inputDocument() const;
-    KisDocument *outputDocument() const;
-    QString inputFile() const;
-    QString outputFile() const;
-    bool getBatchMode() const;
+    QString filename() const;
+    bool batchMode() const;
+    QByteArray mimeType() const;
+
+    void setProgress(int value);
+    virtual void initializeCapabilities();
+    void addCapability(KisExportCheckBase *capability);
+    void addSupportedColorModels(QList<QPair<KoID, KoID> > supportedColorModels, const QString &name, KisExportCheckBase::Level level = KisExportCheckBase::PARTIALLY);
 
 private:
 
@@ -186,8 +169,6 @@ private:
     class Private;
     Private *const d;
 
-private Q_SLOTS:
-    void slotProgress(int value);
 };
 
 #endif

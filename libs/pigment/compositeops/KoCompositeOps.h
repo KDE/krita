@@ -35,6 +35,8 @@
 #include "compositeops/KoCompositeOpCopy2.h"
 #include "compositeops/KoCompositeOpDissolve.h"
 #include "compositeops/KoCompositeOpBehind.h"
+#include "compositeops/KoCompositeOpDestinationIn.h"
+#include "compositeops/KoCompositeOpDestinationAtop.h"
 #include "compositeops/KoCompositeOpGreater.h"
 
 #include "KoOptimizedCompositeOpFactory.h"
@@ -109,6 +111,8 @@ struct AddGeneralOps<Traits, true>
          cs->addCompositeOp(new KoCompositeOpCopy2<Traits>(cs));
          cs->addCompositeOp(new KoCompositeOpErase<Traits>(cs));
          cs->addCompositeOp(new KoCompositeOpBehind<Traits>(cs));
+         cs->addCompositeOp(new KoCompositeOpDestinationIn<Traits>(cs));
+         cs->addCompositeOp(new KoCompositeOpDestinationAtop<Traits>(cs));
          cs->addCompositeOp(new KoCompositeOpGreater<Traits>(cs));
 
          add<&cfOverlay<Arg>       >(cs, COMPOSITE_OVERLAY       , i18n("Overlay")       , KoCompositeOp::categoryMix());

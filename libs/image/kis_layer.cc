@@ -817,7 +817,7 @@ void KisLayer::setY(qint32 y)
         originalDevice->setY(y);
 }
 
-QRect KisLayer::extent() const
+QRect KisLayer::layerExtentImpl(bool needExactBounds) const
 {
     QRect additionalMaskExtent = QRect();
     QList<KisEffectMaskSP> effectMasks = this->effectMasks();
@@ -827,24 +827,32 @@ QRect KisLayer::extent() const
     }
 
     KisPaintDeviceSP originalDevice = original();
-    QRect layerExtent = originalDevice ? originalDevice->extent() : QRect();
+    QRect layerExtent;
 
-    return layerExtent | additionalMaskExtent;
+    if (originalDevice) {
+        layerExtent = needExactBounds ?
+            originalDevice->exactBounds() :
+            originalDevice->extent();
+    }
+
+    QRect additionalCompositeOpExtent;
+    if (compositeOpId() == COMPOSITE_DESTINATION_IN ||
+        compositeOpId() == COMPOSITE_DESTINATION_ATOP) {
+
+        additionalCompositeOpExtent = originalDevice->defaultBounds()->bounds();
+    }
+
+    return layerExtent | additionalMaskExtent | additionalCompositeOpExtent;
+}
+
+QRect KisLayer::extent() const
+{
+    return layerExtentImpl(false);
 }
 
 QRect KisLayer::exactBounds() const
 {
-    QRect additionalMaskExtent = QRect();
-    QList<KisEffectMaskSP> effectMasks = this->effectMasks();
-
-    Q_FOREACH(KisEffectMaskSP mask, effectMasks) {
-        additionalMaskExtent |= mask->nonDependentExtent();
-    }
-
-    KisPaintDeviceSP originalDevice = original();
-    QRect layerExtent = originalDevice ? originalDevice->exactBounds() : QRect();
-
-    return layerExtent | additionalMaskExtent;
+    return layerExtentImpl(true);
 }
 
 KisLayerSP KisLayer::parentLayer() const

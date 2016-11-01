@@ -105,8 +105,6 @@ bool KisSaveGroupVisitor::visit(KisGroupLayer *layer)
 
         KisDocument *exportDocument = KisPart::instance()->createDocument();
 
-        exportDocument->prepareForImport();
-
         KisImageWSP dst = new KisImage(exportDocument->createUndoStore(), r.width(), r.height(), m_image->colorSpace(), layer->name());
         dst->setResolution(m_image->xRes(), m_image->yRes());
         exportDocument->setCurrentImage(dst);

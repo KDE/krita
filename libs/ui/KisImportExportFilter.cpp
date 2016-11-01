@@ -24,6 +24,10 @@ Boston, MA 02110-1301, USA.
 #include <kis_debug.h>
 #include <QStack>
 #include "KisImportExportManager.h"
+#include <KoColorSpaceRegistry.h>
+#include <KoColorModelStandardIds.h>
+#include <KisExportCheckBase.h>
+#include <KisExportCheckRegistry.h>
 #include "KoUpdater.h"
 #include <klocalizedstring.h>
 
@@ -31,19 +35,24 @@ class Q_DECL_HIDDEN KisImportExportFilter::Private
 {
 public:
     QPointer<KoUpdater> updater;
+    QByteArray mime;
+    QString filename;
+    bool batchmode;
+
+    QMap<QString, KisExportCheckBase*> capabilities;
 
     Private()
         : updater(0)
+        , batchmode(false)
     {}
 
-    /**
-     * Use this pointer to access all information about input/output
-     * during the conversion. @em Don't use it in the constructor -
-     * it's invalid while constructing the object!
-     */
-    KisFilterChainSP chain;
+    ~Private()
+    {
+        qDeleteAll(capabilities);
+    }
 
 };
+
 
 KisImportExportFilter::KisImportExportFilter(QObject *parent)
     : QObject(parent)
@@ -51,41 +60,45 @@ KisImportExportFilter::KisImportExportFilter(QObject *parent)
 {
 }
 
-KisDocument *KisImportExportFilter::inputDocument() const
-{
-    return d->chain->inputDocument();
-}
-
-KisDocument *KisImportExportFilter::outputDocument() const
-{
-    return d->chain->outputDocument();
-}
-
-QString KisImportExportFilter::inputFile() const
-{
-    return d->chain->inputFile();
-}
-
-QString KisImportExportFilter::outputFile() const
-{
-    return d->chain->outputFile();
-}
-
-bool KisImportExportFilter::getBatchMode() const
-{
-    return d->chain->manager()->getBatchMode();
-}
-
 KisImportExportFilter::~KisImportExportFilter()
 {
     Q_ASSERT(d->updater);
-    if (d->updater) d->updater->setProgress(100);
+    if (d->updater) {
+        d->updater->setProgress(100);
+    }
     delete d;
 }
 
-void KisImportExportFilter::setChain(KisFilterChainSP chain)
+
+QString KisImportExportFilter::filename() const
 {
-    d->chain = chain;
+    return d->filename;
+}
+
+bool KisImportExportFilter::batchMode() const
+{
+    return d->batchmode;
+}
+
+
+void KisImportExportFilter::setBatchMode(bool batchmode)
+{
+    d->batchmode = batchmode;
+}
+
+void KisImportExportFilter::setFilename(const QString &filename)
+{
+    d->filename = filename;
+}
+
+void KisImportExportFilter::setMimeType(const QString &mime)
+{
+    d->mime = mime.toLatin1();
+}
+
+QByteArray KisImportExportFilter::mimeType() const
+{
+    return d->mime;
 }
 
 QString KisImportExportFilter::conversionStatusString(ConversionStatus status)
@@ -109,9 +122,6 @@ QString KisImportExportFilter::conversionStatusString(ConversionStatus status)
     case BadMimeType:
         msg = i18n("Bad MIME type"); break;
 
-    case EmbeddedDocError:
-        msg = i18n("Error in embedded document"); break;
-
     case WrongFormat:
         msg = i18n("Format not recognized"); break;
 
@@ -121,30 +131,12 @@ QString KisImportExportFilter::conversionStatusString(ConversionStatus status)
     case ParsingError:
         msg = i18n("Parsing error"); break;
 
-    case PasswordProtected:
-        msg = i18n("Document is password protected"); break;
-
     case InvalidFormat:
         msg = i18n("Invalid file format"); break;
 
     case InternalError:
-    case UnexpectedEOF:
-    case UnexpectedOpcode:
-    case StupidError: // ?? what is this ??
     case UsageError:
         msg = i18n("Internal error"); break;
-
-    case OutOfMemory:
-        msg = i18n("Out of memory"); break;
-
-    case FilterEntryNull:
-        msg = i18n("Empty Filter Plugin"); break;
-
-    case NoDocumentCreated:
-        msg = i18n("Trying to load into the wrong kind of document"); break;
-
-    case DownloadFailed:
-        msg = i18n("Failed to download remote file"); break;
 
     case ProgressCancelled:
         msg = i18n("Cancelled by user"); break;
@@ -153,10 +145,15 @@ QString KisImportExportFilter::conversionStatusString(ConversionStatus status)
 
         msg = i18n("Unknown file type"); break;
 
+    case UnsupportedVersion:
+
+        msg = i18n("Unsupported file version"); break;
+
     case UserCancelled:
 
         // intentionally we do not prompt the error message here
         break;
+
 
     default: msg = i18n("Unknown error"); break;
     }
@@ -182,21 +179,90 @@ KisConfigWidget *KisImportExportFilter::createConfigurationWidget(QWidget *, con
     return 0;
 }
 
-void KisImportExportFilter::setUpdater(const QPointer<KoUpdater>& updater)
+QMap<QString, KisExportCheckBase *> KisImportExportFilter::exportChecks()
 {
-    Q_ASSERT(updater);
-    if (d->updater && !updater) {
-        disconnect(this, SLOT(slotProgress(int)));
-    } else if (!d->updater && updater) {
-        connect(this, SIGNAL(sigProgress(int)), SLOT(slotProgress(int)));
-    }
+    qDeleteAll(d->capabilities);
+    initializeCapabilities();
+    return d->capabilities;
+}
+
+void KisImportExportFilter::setUpdater(QPointer<KoUpdater> updater)
+{
     d->updater = updater;
 }
 
-void KisImportExportFilter::slotProgress(int value)
+void KisImportExportFilter::setProgress(int value)
 {
-    Q_ASSERT(d->updater);
     if (d->updater) {
         d->updater->setValue(value);
+    }
+}
+
+void KisImportExportFilter::initializeCapabilities()
+{
+    // XXX: Initialize everything to fully supported?
+}
+
+void KisImportExportFilter::addCapability(KisExportCheckBase *capability)
+{
+    d->capabilities[capability->id()] = capability;
+}
+
+
+
+void KisImportExportFilter::addSupportedColorModels(QList<QPair<KoID, KoID> > supportedColorModels, const QString &name, KisExportCheckBase::Level level)
+{
+    Q_ASSERT(level != KisExportCheckBase::SUPPORTED);
+    QString layerMessage;
+    QString imageMessage;
+    QList<KoID> allColorModels = KoColorSpaceRegistry::instance()->colorModelsList(KoColorSpaceRegistry::AllColorSpaces);
+    Q_FOREACH(const KoID &colorModelID, allColorModels) {
+        QList<KoID> allColorDepths = KoColorSpaceRegistry::instance()->colorDepthList(colorModelID.id(), KoColorSpaceRegistry::AllColorSpaces);
+        Q_FOREACH(const KoID &colorDepthID, allColorDepths) {
+
+            KisExportCheckFactory *colorModelCheckFactory =
+                    KisExportCheckRegistry::instance()->get("ColorModelCheck/" + colorModelID.id() + "/" + colorDepthID.id());
+            KisExportCheckFactory *colorModelPerLayerCheckFactory =
+                    KisExportCheckRegistry::instance()->get("ColorModelPerLayerCheck/" + colorModelID.id() + "/" + colorDepthID.id());
+
+            if(!colorModelCheckFactory || !colorModelPerLayerCheckFactory) {
+                qDebug() << "No factory for" << colorModelID << colorDepthID;
+                continue;
+            }
+
+            if (supportedColorModels.contains(QPair<KoID, KoID>(colorModelID, colorDepthID))) {
+                addCapability(colorModelCheckFactory->create(KisExportCheckBase::SUPPORTED));
+                addCapability(colorModelPerLayerCheckFactory->create(KisExportCheckBase::SUPPORTED));
+            }
+            else {
+
+
+                if (level == KisExportCheckBase::PARTIALLY) {
+                    imageMessage = i18nc("image conversion warning",
+                                         "%1 cannot save images with color model <b>%2</b> and depth <b>%3</b>. The image will be converted."
+                                         ,name, colorModelID.name(), colorDepthID.name());
+
+                    layerMessage =
+                            i18nc("image conversion warning",
+                                  "%1 cannot save layers with color model <b>%2</b> and depth <b>%3</b>. The layers will be converted or skipped."
+                                  ,name, colorModelID.name(), colorDepthID.name());
+                }
+                else {
+                    imageMessage = i18nc("image conversion warning",
+                                         "%1 cannot save images with color model <b>%2</b> and depth <b>%3</b>. The image will not be saved."
+                                         ,name, colorModelID.name(), colorDepthID.name());
+
+                    layerMessage =
+                            i18nc("image conversion warning",
+                                  "%1 cannot save layers with color model <b>%2</b> and depth <b>%3</b>. The layers will be skipped."
+                                  , name, colorModelID.name(), colorDepthID.name());
+                 }
+
+
+
+                addCapability(colorModelCheckFactory->create(level, imageMessage));
+                addCapability(colorModelPerLayerCheckFactory->create(level, layerMessage));
+            }
+        }
     }
 }

@@ -80,7 +80,7 @@ bool KisInputManager::Private::EventEater::eventFilter(QObject* target, QEvent* 
         }
     };
 
-    Qt::MouseEventSource source = static_cast<QMouseEvent*>(event)->source();
+
     if (peckish && event->type() == QEvent::MouseButtonPress
         // Drop one mouse press following tabletPress or touchBegin
         && (static_cast<QMouseEvent*>(event)->button() == Qt::LeftButton)) {
@@ -92,7 +92,7 @@ bool KisInputManager::Private::EventEater::eventFilter(QObject* target, QEvent* 
             // On Mac, we need mouse events when the tablet is in proximity, but not pressed down
             // since tablet move events are not generated until after tablet press.
             #ifndef Q_OS_MAC
-                || (eatSyntheticEvents && source != 0)
+                || (eatSyntheticEvents &&  static_cast<QMouseEvent*>(event)->source() != Qt::MouseEventNotSynthesized)
             #endif
                 )) {
         // Drop mouse events if enabled or event was synthetic & synthetic events are disabled

@@ -115,7 +115,7 @@ void KisWorkspaceChooser::slotSave()
     }
     KoResourceServer<KisWorkspaceResource> * rserver = KisResourceServerProvider::instance()->workspaceServer();
 
-    KisWorkspaceResource* workspace = new KisWorkspaceResource("");
+    KisWorkspaceResource* workspace = new KisWorkspaceResource(QString());
     workspace->setDockerState(m_view->qtMainWindow()->saveState());
     m_view->resourceProvider()->notifySavingWorkspace(workspace);
     workspace->setValid(true);

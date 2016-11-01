@@ -64,11 +64,11 @@ public:
         : KoToolFactoryBase("KisToolSelectRectangular")
     {
         setToolTip(i18n("Rectangular Selection Tool"));
-        setToolType(TOOL_TYPE_SELECTED);
+        setSection(TOOL_TYPE_SELECTION);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
         setIconName(koIconNameCStr("tool_rect_selection"));
         setShortcut(QKeySequence(Qt::CTRL + Qt::Key_R));
-        setPriority(52);
+        setPriority(0);
     }
 
     virtual ~KisToolSelectRectangularFactory() {}

@@ -562,6 +562,10 @@ void KisTiledDataManagerTest::benchmarkReadOnlyTileLazy()
 class KisSimpleClass : public KisShared
 {
     qint64 m_int;
+public:
+    KisSimpleClass() {
+        Q_UNUSED(m_int);
+    }
 };
 
 typedef KisSharedPtr<KisSimpleClass> KisSimpleClassSP;

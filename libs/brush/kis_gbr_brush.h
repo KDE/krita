@@ -55,7 +55,7 @@ public:
     KisGbrBrush(KisPaintDeviceSP image, int x, int y, int w, int h);
 
     /// Load brush as a copy from the specified QImage (handy when you need to copy a brush!)
-    KisGbrBrush(const QImage& image, const QString& name = QString(""));
+    KisGbrBrush(const QImage& image, const QString& name = QString());
 
     virtual ~KisGbrBrush();
 

@@ -97,7 +97,6 @@ private:
     QString m_baseName;
     QString m_extension;
     QString m_mimeFilter;
-    bool m_cropLayers;
 };
 
 

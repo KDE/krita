@@ -128,6 +128,7 @@ KisActionRegistry *KisActionRegistry::instance()
 KisActionRegistry::KisActionRegistry()
     : d(new KisActionRegistry::Private(this))
 {
+    d->loadActionFiles();
     KConfigGroup cg = KSharedConfig::openConfig()->group("Shortcut Schemes");
     QString schemeName = cg.readEntry("Current Scheme", "Default");
     loadShortcutScheme(schemeName);
@@ -445,22 +446,18 @@ void KisActionRegistry::Private::loadActionFiles()
                         // dbgAction << "default shortcut for" << name << " - " << info.defaultShortcut;
                         actionInfoList.insert(name,info);
                     }
-
                 }
                 actionXml = actionXml.nextSiblingElement();
             }
             actions = actions.nextSiblingElement();
         }
-
     }
-
 };
 
 void KisActionRegistry::Private::loadCustomShortcuts(QString filename)
 {
     const KConfigGroup localShortcuts(KSharedConfig::openConfig(filename),
                                       QStringLiteral("Shortcuts"));
-
 
     if (!localShortcuts.exists()) {
         return;
@@ -473,7 +470,7 @@ void KisActionRegistry::Private::loadCustomShortcuts(QString filename)
             if (entry == QStringLiteral("none")) {
                 // A shortcut list with a single entry "" means the user has disabled the shortcut.
                 // This occurs after stealing the shortcut without assigning a new one.
-                i.value().customShortcuts = QKeySequence::listFromString("");
+                i.value().customShortcuts = QList<QKeySequence>();
             } else {
                 i.value().customShortcuts = QKeySequence::listFromString(entry);
             }

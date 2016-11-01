@@ -27,13 +27,6 @@
 #include "KoDpi.h"
 #include "KoUnit.h"
 
-// Same as qfuzzycompare, but less precise because KoZoomHandler is a
-// bit messy itself.
-static inline bool fuzzyCompare(qreal p1, qreal p2)
-{
-    return qAbs(p1 - p2) < 0.0000001;
-}
-
 
 void zoomhandler_test::testConstruction()
 {

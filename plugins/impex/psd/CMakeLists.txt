@@ -56,9 +56,9 @@ set(kritapsdexport_SOURCES
 add_library(kritapsdexport MODULE ${kritapsdexport_SOURCES})
 
 if (MSVC)
-    target_link_libraries(kritapsdexport kritaui kritapsd ${WIN32_PLATFORM_NET_LIBS} ${ZLIB_LIBRARIES})
+    target_link_libraries(kritapsdexport kritaui kritapsd kritaimpex ${WIN32_PLATFORM_NET_LIBS} ${ZLIB_LIBRARIES})
 else ()	
-    target_link_libraries(kritapsdexport kritaui kritapsd ${ZLIB_LIBRARIES})
+    target_link_libraries(kritapsdexport kritaui kritapsd kritaimpex ${ZLIB_LIBRARIES})
 endif ()	
 
 install(TARGETS kritapsdexport DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})

@@ -20,6 +20,7 @@
 
 #include <algorithm>
 
+#include <QUuid>
 #include <KoColorSpaceConstants.h>
 
 #include "kis_painter.h"
@@ -994,6 +995,10 @@ namespace KisLayerUtils {
                                            bool flattenSingleLayer, const KUndo2MagicString &actionName, 
                                            bool cleanupNodes = true, const QString layerName = QString())
     {
+        if (!putAfter) {
+            putAfter = mergedNodes.first();
+        }
+
         filterMergableNodes(mergedNodes);
         {
             KisNodeList tempNodes;
@@ -1237,4 +1242,13 @@ namespace KisLayerUtils {
 
         return 0;
     }
+
+    KisNodeSP findNodeByUuid(KisNodeSP root, const QUuid &uuid)
+    {
+        return recursiveFindNode(root,
+            [uuid] (KisNodeSP node) {
+                return node->uuid() == uuid;
+            });
+    }
+
 }

@@ -1441,7 +1441,7 @@ void KoTextEditor::insertHtml(const QString &html)
         QTextList *currentTextList = currentBlock.textList();
         if(currentTextList && !pastedLists.contains(currentBlock.textList())) {
             KoListStyle *listStyle = KoTextDocument(d->document).styleManager()->defaultListStyle()->clone();
-            listStyle->setName("");
+            listStyle->setName(QString());
             listStyle->setStyleId(0);
             currentPastedList = new KoList(d->document, listStyle);
             QTextListFormat currentTextListFormat = currentTextList->format();
@@ -1449,8 +1449,8 @@ void KoTextEditor::insertHtml(const QString &html)
             KoListLevelProperties levelProperty = listStyle->levelProperties(currentTextListFormat.indent());
             levelProperty.setStyle(static_cast<KoListStyle::Style>(currentTextListFormat.style()));
             levelProperty.setLevel(currentTextListFormat.indent());
-            levelProperty.setListItemPrefix("");
-            levelProperty.setListItemSuffix("");
+            levelProperty.setListItemPrefix(QString());
+            levelProperty.setListItemSuffix(QString());
             levelProperty.setListId((KoListStyle::ListIdType)currentTextList);
             listStyle->setLevelProperties(levelProperty);
 

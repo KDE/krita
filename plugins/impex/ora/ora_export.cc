@@ -19,16 +19,15 @@
 
 #include <QCheckBox>
 #include <QSlider>
-#include <QMessageBox>
 
 #include <kpluginfactory.h>
 #include <QFileInfo>
 #include <QApplication>
 
-#include <KisFilterChain.h>
 #include <KisImportExportManager.h>
 #include <KoColorModelStandardIds.h>
 #include <KoColorSpace.h>
+#include <KisExportCheckRegistry.h>
 
 #include <KisDocument.h>
 #include <kis_image.h>
@@ -72,58 +71,42 @@ bool hasShapeLayerChild(KisNodeSP node)
     return false;
 }
 
-KisImportExportFilter::ConversionStatus OraExport::convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration)
+KisImportExportFilter::ConversionStatus OraExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
 {
-    Q_UNUSED(configuration);
+    KisImageWSP image = document->image();
 
-    dbgFile << "ORA export! From:" << from << ", To:" << to << "";
-
-    if (from != "application/x-krita")
-        return KisImportExportFilter::NotImplemented;
-
-    KisDocument *input = inputDocument();
-    QString filename = outputFile();
-
-    if (!input) {
-        return KisImportExportFilter::NoDocumentCreated;
-    }
-
-    if (filename.isEmpty()) return KisImportExportFilter::FileNotFound;
-
-    KisImageWSP image = input->image();
     Q_CHECK_PTR(image);
 
     KisPaintDeviceSP pd = image->projection();
-    QStringList supportedColorModelIds;
-    supportedColorModelIds << RGBAColorModelID.id() << GrayAColorModelID.id() << GrayColorModelID.id();
-    QStringList supportedColorDepthIds;
-    supportedColorDepthIds << Integer8BitsColorDepthID.id() << Integer16BitsColorDepthID.id();
-    if (!supportedColorModelIds.contains(pd->colorSpace()->colorModelId().id()) ||
-            !supportedColorDepthIds.contains(pd->colorSpace()->colorDepthId().id())) {
-        if (!getBatchMode()) {
-            QMessageBox::critical(0, i18nc("@title:window", "Krita OpenRaster Export"), i18n("Cannot export images in this colorspace or channel depth to OpenRaster"));
-        }
-        return KisImportExportFilter::UsageError;
-    }
-
-
-    if (hasShapeLayerChild(image->root()) && !getBatchMode()) {
-        QMessageBox::information(0,
-                                 i18nc("@title:window", "Krita:Warning"),
-                                 i18n("This image contains vector, clone or fill layers.\nThese layers will be saved as raster layers."));
-    }
-
-    OraConverter kpc(input);
+    OraConverter oraConverter(document);
 
     KisImageBuilder_Result res;
 
-    if ((res = kpc.buildFile(filename, image, input->activeNodes())) == KisImageBuilder_RESULT_OK) {
+    if ((res = oraConverter.buildFile(io, image, document->activeNodes())) == KisImageBuilder_RESULT_OK) {
         dbgFile << "success !";
         return KisImportExportFilter::OK;
     }
     dbgFile << " Result =" << res;
     return KisImportExportFilter::InternalError;
 }
+
+void OraExport::initializeCapabilities()
+{
+    addCapability(KisExportCheckRegistry::instance()->get("MultiLayerCheck")->create(KisExportCheckBase::SUPPORTED));
+    addCapability(KisExportCheckRegistry::instance()->get("NodeTypeCheck/KisGroupLayer")->create(KisExportCheckBase::SUPPORTED));
+    addCapability(KisExportCheckRegistry::instance()->get("NodeTypeCheck/KisAdjustmentLayer")->create(KisExportCheckBase::SUPPORTED));
+    addCapability(KisExportCheckRegistry::instance()->get("sRGBProfileCheck")->create(KisExportCheckBase::SUPPORTED));
+    addCapability(KisExportCheckRegistry::instance()->get("ColorModelHomogenousCheck")->create(KisExportCheckBase::SUPPORTED));
+    QList<QPair<KoID, KoID> > supportedColorModels;
+    supportedColorModels << QPair<KoID, KoID>()
+            << QPair<KoID, KoID>(RGBAColorModelID, Integer8BitsColorDepthID)
+            << QPair<KoID, KoID>(RGBAColorModelID, Integer16BitsColorDepthID)
+            << QPair<KoID, KoID>(GrayAColorModelID, Integer8BitsColorDepthID)
+            << QPair<KoID, KoID>(GrayAColorModelID, Integer16BitsColorDepthID);
+    addSupportedColorModels(supportedColorModels, "OpenRaster");
+}
+
+
 
 #include <ora_export.moc>
 

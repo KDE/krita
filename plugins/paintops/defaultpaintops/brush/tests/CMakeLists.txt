@@ -13,4 +13,4 @@ target_link_libraries(KisBrushOpTest   kritaimage kritaui kritalibpaintop Qt5::T
 
 set(kis_clone_test_SRCS kis_clone_test.cpp ../../../../../sdk/tests/stroke_testing_utils.cpp)
 kde4_add_broken_unit_test(KisCloneOpTest TESTNAME krita-plugins-KisCloneOpTest ${kis_clone_test_SRCS})
-target_link_libraries(KisCloneOpTest   kritaimage kritaui kritalibpaintop Qt5::Test)
+target_link_libraries(KisCloneOpTest   kritaimage kritaui kritalibpaintop hdf5_hl hdf5 Qt5::Test)

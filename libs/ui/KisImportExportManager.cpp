@@ -376,7 +376,6 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::convert(KisImpor
             exportConfiguration = wdg->configuration();
         }
 
-        QApplication::setOverrideCursor(Qt::WaitCursor);
     }
 
     QFile io(location);
@@ -397,6 +396,10 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::convert(KisImpor
     }
     else {
         return KisImportExportFilter::BadConversionGraph;
+    }
+
+    if (!batchMode()) {
+        QApplication::setOverrideCursor(Qt::WaitCursor);
     }
 
     KisImportExportFilter::ConversionStatus status = filter->convert(m_document, &io, exportConfiguration);

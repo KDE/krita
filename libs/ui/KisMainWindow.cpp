@@ -873,7 +873,7 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas)
      * Make sure that we cannot enter this method twice!
      *
      * The lower level functions may call processEvents() so
-     * double-entry is quite possible to achive. Here we try to lock
+     * double-entry is quite possible to achieve. Here we try to lock
      * the mutex, and if it is failed, just cancel saving.
      */
     StdLockableWrapper<QMutex> wrapper(&d->savingEntryMutex);

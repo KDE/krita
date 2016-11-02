@@ -263,7 +263,7 @@ bool KisNode::accept(KisNodeVisitor &v)
 
 void KisNode::accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter)
 {
-    return visitor.visit(this, undoAdapter);
+    visitor.visit(this, undoAdapter);
 }
 
 int KisNode::graphSequenceNumber() const

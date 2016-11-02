@@ -592,7 +592,6 @@ public:
     QVector<QRect> m_aLabelRects;
     QVector<QRect> m_bLabelRects;
 
-protected:
 public:
 
     // Returns the number of vertices in the graph

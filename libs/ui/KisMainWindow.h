@@ -40,7 +40,6 @@ struct KoPageLayout;
 class KoCanvasResourceManager;
 
 class KisDocument;
-class KisView;
 class KisPrintJob;
 class KoDockFactoryBase;
 class QDockWidget;

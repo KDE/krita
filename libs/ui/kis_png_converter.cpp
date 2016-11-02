@@ -645,7 +645,7 @@ png_get_text(png_ptr, info_ptr, &text_ptr, &num_comments);
     png_uint_32 x_resolution, y_resolution;
 
     png_get_pHYs(png_ptr, info_ptr, &x_resolution, &y_resolution, &unit_type);
-    if (unit_type == PNG_RESOLUTION_METER) {
+    if (x_resolution > 0 && y_resolution > 0 && unit_type == PNG_RESOLUTION_METER) {
         m_image->setResolution((double) POINT_TO_CM(x_resolution) / 100.0, (double) POINT_TO_CM(y_resolution) / 100.0); // It is the "invert" macro because we convert from pointer-per-inchs to points
     }
 
@@ -665,7 +665,7 @@ png_get_text(png_ptr, info_ptr, &text_ptr, &num_comments);
             } else if (key == "description") {
                 info->setAboutInfo("comment", text_ptr[i].text);
             } else if (key == "author") {
-		qDebug()<<"Author:"<<text_ptr[i].text;
+        qDebug()<<"Author:"<<text_ptr[i].text;
                 info->setAuthorInfo("creator", text_ptr[i].text);
             } else if (key.contains("Raw profile type exif")) {
                 decode_meta_data(text_ptr + i, layer->metaData(), "exif", 6);
@@ -1022,9 +1022,9 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, const QRe
      * This automatically writes the correct gamma and chroma chunks along with the sRGB chunk, but firefox's
      * color management is bugged, so once you give it any incentive to start color managing an sRGB image it
      * will turn, for example, a nice desaturated rusty red into bright poppy red. So this is disabled for now.
-     */    
+     */
     /*if (!options.saveSRGBProfile && sRGB) {
-	    png_set_sRGB_gAMA_and_cHRM(png_ptr, info_ptr, PNG_sRGB_INTENT_PERCEPTUAL);
+        png_set_sRGB_gAMA_and_cHRM(png_ptr, info_ptr, PNG_sRGB_INTENT_PERCEPTUAL);
     }*/
     // set the palette
     if (color_type == PNG_COLOR_TYPE_PALETTE) {

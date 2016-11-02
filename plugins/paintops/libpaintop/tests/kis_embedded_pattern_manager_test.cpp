@@ -69,11 +69,11 @@ void KisEmbeddedPatternManagerTest::testRoundTrip()
 {
     KoPattern *pattern = createPattern();
 
-    KisPropertiesConfiguration config;
+    KisPropertiesConfigurationSP config(new KisPropertiesConfiguration);
 
-    KisEmbeddedPatternManager::saveEmbeddedPattern(&config, pattern);
+    KisEmbeddedPatternManager::saveEmbeddedPattern(config, pattern);
 
-    KoPattern *newPattern = KisEmbeddedPatternManager::loadEmbeddedPattern(&config);
+    KoPattern *newPattern = KisEmbeddedPatternManager::loadEmbeddedPattern(config);
 
     QCOMPARE(newPattern->pattern(), pattern->pattern());
     QCOMPARE(newPattern->name(), pattern->name());
@@ -91,7 +91,7 @@ enum NameStatus {
     EMPTY
 };
 
-KisPropertiesConfiguration createXML(NameStatus nameStatus,
+KisPropertiesConfigurationSP createXML(NameStatus nameStatus,
                                      bool hasMd5)
 {
     QString fileName("./__test_pattern_path.pat");
@@ -109,26 +109,26 @@ KisPropertiesConfiguration createXML(NameStatus nameStatus,
         break;
     }
 
-    KisPropertiesConfiguration setting;
+    KisPropertiesConfigurationSP setting(new KisPropertiesConfiguration);
 
     {
         KoPattern *pattern = createPattern();
 
         if (hasMd5) {
             QByteArray patternMD5 = pattern->md5();
-            setting.setProperty("Texture/Pattern/PatternMD5", patternMD5.toBase64());
+            setting->setProperty("Texture/Pattern/PatternMD5", patternMD5.toBase64());
         }
 
         QByteArray ba;
         QBuffer buffer(&ba);
         buffer.open(QIODevice::WriteOnly);
         pattern->pattern().save(&buffer, "PNG");
-        setting.setProperty("Texture/Pattern/Pattern", ba.toBase64());
+        setting->setProperty("Texture/Pattern/Pattern", ba.toBase64());
         delete pattern;
     }
 
-    setting.setProperty("Texture/Pattern/PatternFileName", fileName);
-    setting.setProperty("Texture/Pattern/Name", name);
+    setting->setProperty("Texture/Pattern/PatternFileName", fileName);
+    setting->setProperty("Texture/Pattern/Name", name);
 
     return setting;
 }
@@ -158,8 +158,8 @@ void checkOneConfig(NameStatus nameStatus, bool hasMd5,
     KoPattern *initialPattern = findOnServer(basePattern->md5());
     QCOMPARE((bool)initialPattern, isOnServer);
 
-    KisPropertiesConfiguration setting = createXML(nameStatus, hasMd5);
-    KoPattern *pattern = KisEmbeddedPatternManager::loadEmbeddedPattern(&setting);
+    KisPropertiesConfigurationSP setting = createXML(nameStatus, hasMd5);
+    KoPattern *pattern = KisEmbeddedPatternManager::loadEmbeddedPattern(setting);
 
     QVERIFY(pattern);
     QCOMPARE(pattern->pattern(), basePattern->pattern());

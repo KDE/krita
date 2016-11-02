@@ -31,6 +31,7 @@
 #include <QByteArray>
 #include <QPainter>
 #include <QXmlStreamReader>
+#include <QTextCodec>
 
 #include <DebugPigment.h>
 #include <klocalizedstring.h>
@@ -543,7 +544,7 @@ void scribusParseColor(KoColorSet *set, QXmlStreamReader *xml)
         QStringRef colorName = colorProperties.value("NAME");
         currentColor.name = colorName.isEmpty() || colorName.isNull() ? i18n("Untitled") : colorName.toString();
 
-        currentColor.color = KoColor(KoColorSpaceRegistry::instance()->colorSpace(CMYKAColorModelID.id(), Integer8BitsColorDepthID.id(), ""));
+        currentColor.color = KoColor(KoColorSpaceRegistry::instance()->colorSpace(CMYKAColorModelID.id(), Integer8BitsColorDepthID.id(), QString()));
 
         colorValue = colorProperties.value("CMYK");
         if (colorValue.length() != 9 && colorValue.at(0) != '#') { // Color is a hexadecimal number
@@ -661,6 +662,12 @@ bool KoColorSet::loadAco()
     quint16 numColors = readShort(&buf);
     KoColorSetEntry e;
 
+    if (version == 1 && buf.size() > 4+numColors*10) {
+        buf.seek(4+numColors*10);
+        version = readShort(&buf);
+        numColors = readShort(&buf);
+    }
+
     const quint16 quint16_MAX = 65535;
 
     for (int i = 0; i < numColors && !buf.atEnd(); ++i) {
@@ -687,7 +694,7 @@ bool KoColorSet::loadAco()
             e.color.setOpacity(OPACITY_OPAQUE_U8);
         }
         else if (colorSpace == 2) { // CMYK
-            e.color = KoColor(KoColorSpaceRegistry::instance()->colorSpace(CMYKAColorModelID.id(), Integer16BitsColorDepthID.id(), ""));
+            e.color = KoColor(KoColorSpaceRegistry::instance()->colorSpace(CMYKAColorModelID.id(), Integer16BitsColorDepthID.id(), QString()));
             reinterpret_cast<quint16*>(e.color.data())[0] = quint16_MAX - ch1;
             reinterpret_cast<quint16*>(e.color.data())[1] = quint16_MAX - ch2;
             reinterpret_cast<quint16*>(e.color.data())[2] = quint16_MAX - ch3;
@@ -702,7 +709,7 @@ bool KoColorSet::loadAco()
             e.color.setOpacity(OPACITY_OPAQUE_U8);
         }
         else if (colorSpace == 8) { // GRAY
-            e.color = KoColor(KoColorSpaceRegistry::instance()->colorSpace(GrayAColorModelID.id(), Integer16BitsColorDepthID.id(), ""));
+            e.color = KoColor(KoColorSpaceRegistry::instance()->colorSpace(GrayAColorModelID.id(), Integer16BitsColorDepthID.id(), QString()));
             reinterpret_cast<quint16*>(e.color.data())[0] = ch1 * (quint16_MAX / 10000);
             e.color.setOpacity(OPACITY_OPAQUE_U8);
         }
@@ -711,18 +718,18 @@ bool KoColorSet::loadAco()
             skip = true;
         }
         if (version == 2) {
-            quint16 v2 = readShort(&buf);
-            if (v2 != 2) {
-                warnPigment << "Version 2 block is not version 2" << filename() << "(" << v2 << ")";
-                return false;
+            quint16 v2 = readShort(&buf); //this isn't a version, it's a marker and needs to be skipped.
+            quint16 size = readShort(&buf) -1; //then comes the length
+            if (size>0) {
+                QByteArray ba = buf.read(size*2);
+                if (ba.size() == size*2) {
+                    QTextCodec *Utf16Codec = QTextCodec::codecForName("UTF-16BE");
+                    e.name = Utf16Codec->toUnicode(ba);
+                } else {
+                    warnPigment << "Version 2 name block is the wrong size" << filename();
+                }
             }
-            quint16 size = readShort(&buf);
-            QByteArray ba = buf.read(size);
-            if (ba.size() != size) {
-                warnPigment << "Version 2 name block is the wrong size" << filename();
-                return false;
-            }
-            e.name = QString::fromUtf8(ba.constData(), ba.size());
+            v2 = readShort(&buf); //end marker also needs to be skipped.
         }
         if (!skip) {
             add(e);

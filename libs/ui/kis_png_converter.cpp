@@ -641,7 +641,7 @@ png_get_text(png_ptr, info_ptr, &text_ptr, &num_comments);
     png_uint_32 x_resolution, y_resolution;
 
     png_get_pHYs(png_ptr, info_ptr, &x_resolution, &y_resolution, &unit_type);
-    if (unit_type == PNG_RESOLUTION_METER) {
+    if (x_resolution > 0 && y_resolution > 0 && unit_type == PNG_RESOLUTION_METER) {
         m_image->setResolution((double) POINT_TO_CM(x_resolution) / 100.0, (double) POINT_TO_CM(y_resolution) / 100.0); // It is the "invert" macro because we convert from pointer-per-inchs to points
     }
 

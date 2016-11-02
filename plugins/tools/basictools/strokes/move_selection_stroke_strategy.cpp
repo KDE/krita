@@ -31,24 +31,22 @@
 MoveSelectionStrokeStrategy::MoveSelectionStrokeStrategy(KisPaintLayerSP paintLayer,
                                                          KisSelectionSP selection,
                                                          KisUpdatesFacade *updatesFacade,
-                                                         KisPostExecutionUndoAdapter *undoAdapter)
-    : KisStrokeStrategyUndoCommandBased(kundo2_i18n("Move Selection"), false, undoAdapter),
+                                                         KisStrokeUndoFacade *undoFacade)
+    : KisStrokeStrategyUndoCommandBased(kundo2_i18n("Move Selection"), false, undoFacade),
       m_paintLayer(paintLayer),
       m_selection(selection),
-      m_updatesFacade(updatesFacade),
-      m_undoEnabled(true)
+      m_updatesFacade(updatesFacade)
 {
     enableJob(KisSimpleStrokeStrategy::JOB_INIT);
     enableJob(KisSimpleStrokeStrategy::JOB_FINISH);
     enableJob(KisSimpleStrokeStrategy::JOB_CANCEL);
 }
 
-MoveSelectionStrokeStrategy::MoveSelectionStrokeStrategy(const MoveSelectionStrokeStrategy &rhs, bool suppressUndo)
-    : KisStrokeStrategyUndoCommandBased(rhs, suppressUndo),
+MoveSelectionStrokeStrategy::MoveSelectionStrokeStrategy(const MoveSelectionStrokeStrategy &rhs)
+    : KisStrokeStrategyUndoCommandBased(rhs),
       m_paintLayer(rhs.m_paintLayer),
       m_selection(rhs.m_selection),
-      m_updatesFacade(rhs.m_updatesFacade),
-      m_undoEnabled(rhs.m_undoEnabled)
+      m_updatesFacade(rhs.m_updatesFacade)
 {
 }
 
@@ -92,13 +90,9 @@ void MoveSelectionStrokeStrategy::finishStrokeCallback()
     KisTransaction transaction(name(), m_paintLayer->paintDevice());
     indirect->mergeToLayer(m_paintLayer, (KisPostExecutionUndoAdapter*)0, KUndo2MagicString());
 
-    if (m_undoEnabled) {
-        runAndSaveCommand(KUndo2CommandSP(transaction.endAndTake()),
-                          KisStrokeJobData::SEQUENTIAL,
-                          KisStrokeJobData::NORMAL);
-    } else {
-        transaction.end();
-    }
+    runAndSaveCommand(KUndo2CommandSP(transaction.endAndTake()),
+                      KisStrokeJobData::SEQUENTIAL,
+                      KisStrokeJobData::NORMAL);
 
     indirect->setTemporaryTarget(0);
 
@@ -106,19 +100,13 @@ void MoveSelectionStrokeStrategy::finishStrokeCallback()
 
     m_updatesFacade->blockUpdates();
 
-    if (m_undoEnabled) {
-        KUndo2CommandSP moveSelectionCommand(
-            new KisSelectionMoveCommand2(m_selection, selectionOffset, selectionOffset + m_finalOffset));
+    KUndo2CommandSP moveSelectionCommand(
+        new KisSelectionMoveCommand2(m_selection, selectionOffset, selectionOffset + m_finalOffset));
 
-        runAndSaveCommand(
-            moveSelectionCommand,
+    runAndSaveCommand(
+        moveSelectionCommand,
             KisStrokeJobData::SEQUENTIAL,
             KisStrokeJobData::EXCLUSIVE);
-    } else {
-        QPoint offset = selectionOffset + m_finalOffset;
-        m_selection->setX(offset.x());
-        m_selection->setY(offset.y());
-    }
 
     m_updatesFacade->unblockUpdates();
 
@@ -176,14 +164,10 @@ void MoveSelectionStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
     }
 }
 
-void MoveSelectionStrokeStrategy::setUndoEnabled(bool value)
-{
-    m_undoEnabled = value;
-}
-
 KisStrokeStrategy* MoveSelectionStrokeStrategy::createLodClone(int levelOfDetail)
 {
-    MoveSelectionStrokeStrategy *clone = new MoveSelectionStrokeStrategy(*this, levelOfDetail > 0);
-    clone->setUndoEnabled(false);
+    Q_UNUSED(levelOfDetail);
+
+    MoveSelectionStrokeStrategy *clone = new MoveSelectionStrokeStrategy(*this);
     return clone;
 }

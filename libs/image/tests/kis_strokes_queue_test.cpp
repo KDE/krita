@@ -384,24 +384,85 @@ void KisStrokesQueueTest::testAsyncCancelWhileOpenedStroke()
     VERIFY_EMPTY(jobs[2]);
 }
 
+struct KisStrokesQueueTest::LodStrokesQueueTester {
+
+    LodStrokesQueueTester(bool real = false)
+        : fakeContext(2),
+          realContext(2),
+          context(!real ? fakeContext : realContext)
+    {
+        queue.setSuspendUpdatesStrokeStrategyFactory(
+            []() {
+                return KisSuspendResumePair(
+                    new KisTestingStrokeStrategy("susp_u_", false, true, true),
+                    QList<KisStrokeJobData*>());
+            });
+
+        queue.setResumeUpdatesStrokeStrategyFactory(
+            []() {
+                return KisSuspendResumePair(
+                    new KisTestingStrokeStrategy("resu_u_", false, true, true),
+                    QList<KisStrokeJobData*>());
+            });
+        queue.setLod0ToNStrokeStrategyFactory(
+            [](bool forgettable) {
+                Q_UNUSED(forgettable);
+                return KisSuspendResumePair(
+                    new KisTestingStrokeStrategy("sync_u_", false, true, true),
+                    QList<KisStrokeJobData*>());
+            });
+    }
+
+    KisStrokesQueue queue;
+
+    KisTestableUpdaterContext fakeContext;
+    KisUpdaterContext realContext;
+    KisUpdaterContext &context;
+    QVector<KisUpdateJobItem*> jobs;
+
+    void processQueueNoAdd() {
+        if (&context != &fakeContext) return;
+
+        fakeContext.clear();
+
+        jobs = fakeContext.getJobs();
+        VERIFY_EMPTY(jobs[0]);
+        VERIFY_EMPTY(jobs[1]);
+    }
+
+    void processQueue() {
+        processQueueNoAdd();
+        queue.processQueue(context, false);
+
+        if (&context == &realContext) {
+            context.waitForDone();
+        }
+    }
+
+    void checkOnlyJob(const QString &name) {
+        KIS_ASSERT(&context == &fakeContext);
+
+        jobs = fakeContext.getJobs();
+        COMPARE_NAME(jobs[0], name);
+        VERIFY_EMPTY(jobs[1]);
+        QCOMPARE(queue.needsExclusiveAccess(), false);
+    }
+
+    void checkOnlyExecutedJob(const QString &name) {
+        realContext.waitForDone();
+        QVERIFY(!globalExecutedDabs.isEmpty());
+        QCOMPARE(globalExecutedDabs[0], name);
+
+        QCOMPARE(globalExecutedDabs.size(), 1);
+        globalExecutedDabs.clear();
+    }
+};
+
 
 void KisStrokesQueueTest::testStrokesLevelOfDetail()
 {
-    KisStrokesQueue queue;
-
-    queue.setSuspendUpdatesStrokeStrategyFactory(
-        []() {
-            return KisSuspendResumePair(
-                new KisTestingStrokeStrategy("susp_u_", false, true, true),
-                QList<KisStrokeJobData*>());
-        });
-
-    queue.setResumeUpdatesStrokeStrategyFactory(
-        []() {
-            return KisSuspendResumePair(
-                new KisTestingStrokeStrategy("resu_u_", false, true, true),
-                QList<KisStrokeJobData*>());
-        });
+    LodStrokesQueueTester t;
+    KisStrokesQueue &queue = t.queue;
 
     // create a stroke with LOD0 + LOD2
     queue.setDesiredLevelOfDetail(2);
@@ -468,5 +529,119 @@ void KisStrokesQueueTest::testStrokesLevelOfDetail()
 
     context.clear();
 }
+
+#include <kundo2command.h>
+#include <kis_post_execution_undo_adapter.h>
+struct TestUndoCommand : public KUndo2Command
+{
+    TestUndoCommand(const QString &text) : KUndo2Command(kundo2_noi18n(text)) {}
+
+    void undo() {
+        ENTER_FUNCTION();
+        undoCount++;
+    }
+
+    void redo() {
+        ENTER_FUNCTION();
+        redoCount++;
+    }
+
+    int undoCount = 0;
+    int redoCount = 0;
+};
+
+void KisStrokesQueueTest::testLodUndoBase()
+{
+    LodStrokesQueueTester t;
+    KisStrokesQueue &queue = t.queue;
+
+    // create a stroke with LOD0 + LOD2
+    queue.setDesiredLevelOfDetail(2);
+    KisStrokeId id1 = queue.startStroke(new KisTestingStrokeStrategy("str1_", false, true));
+    queue.addJob(id1, new KisTestingStrokeJobData(KisStrokeJobData::CONCURRENT));
+    queue.endStroke(id1);
+
+    KisStrokeId id2 = queue.startStroke(new KisTestingStrokeStrategy("str2_", false, true));
+    queue.addJob(id2, new KisTestingStrokeJobData(KisStrokeJobData::CONCURRENT));
+    queue.endStroke(id2);
+
+    t.processQueue();
+    t.checkOnlyJob("clone2_str1_dab");
+
+
+    QSharedPointer<TestUndoCommand> undoStr1(new TestUndoCommand("str1_undo"));
+    queue.lodNPostExecutionUndoAdapter()->addCommand(undoStr1);
+
+    t.processQueue();
+    t.checkOnlyJob("clone2_str2_dab");
+
+    QSharedPointer<TestUndoCommand> undoStr2(new TestUndoCommand("str2_undo"));
+    queue.lodNPostExecutionUndoAdapter()->addCommand(undoStr2);
+
+    t.processQueue();
+    t.checkOnlyJob("susp_u_init");
+
+    t.processQueue();
+    t.checkOnlyJob("str1_dab");
+
+    t.processQueue();
+    t.checkOnlyJob("str2_dab");
+
+    t.processQueue();
+    t.checkOnlyJob("resu_u_init");
+}
+
+void KisStrokesQueueTest::testLodUndoBase2()
+{
+    LodStrokesQueueTester t(true);
+    KisStrokesQueue &queue = t.queue;
+
+    // create a stroke with LOD0 + LOD2
+    queue.setDesiredLevelOfDetail(2);
+    KisStrokeId id1 = queue.startStroke(new KisTestingStrokeStrategy("str1_", false, true, false, true));
+    queue.addJob(id1, new KisTestingStrokeJobData(KisStrokeJobData::CONCURRENT));
+    queue.endStroke(id1);
+
+    KisStrokeId id2 = queue.startStroke(new KisTestingStrokeStrategy("str2_", false, true, false, true));
+    queue.addJob(id2, new KisTestingStrokeJobData(KisStrokeJobData::CONCURRENT));
+    queue.endStroke(id2);
+
+    t.processQueue();
+    t.checkOnlyExecutedJob("sync_u_init");
+
+    t.processQueue();
+    t.checkOnlyExecutedJob("clone2_str1_dab");
+
+    QSharedPointer<TestUndoCommand> undoStr1(new TestUndoCommand("str1_undo"));
+    queue.lodNPostExecutionUndoAdapter()->addCommand(undoStr1);
+
+    t.processQueue();
+    t.checkOnlyExecutedJob("clone2_str2_dab");
+
+    QSharedPointer<TestUndoCommand> undoStr2(new TestUndoCommand("str2_undo"));
+    queue.lodNPostExecutionUndoAdapter()->addCommand(undoStr2);
+
+    t.processQueue();
+    t.checkOnlyExecutedJob("susp_u_init");
+
+    queue.tryUndoLastStrokeAsync();
+    t.processQueue();
+
+    while (queue.currentStrokeName() == kundo2_noi18n("str2_undo")) {
+        //queue.debugPrintStrokes();
+        t.processQueue();
+    }
+
+    QCOMPARE(undoStr2->undoCount, 1);
+
+    t.checkOnlyExecutedJob("str1_dab");
+
+    t.processQueue();
+    t.checkOnlyExecutedJob("str2_cancel");
+
+    t.processQueue();
+    t.checkOnlyExecutedJob("resu_u_init");
+}
+
 
 QTEST_MAIN(KisStrokesQueueTest)

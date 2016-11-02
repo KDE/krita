@@ -28,8 +28,8 @@
 
 
 class KisStrokeJob;
-class KisPostExecutionUndoAdapter;
 class KisSavedMacroCommand;
+class KisStrokeUndoFacade;
 
 class KRITAIMAGE_EXPORT KisStrokeStrategyUndoCommandBased : public KisSimpleStrokeStrategy
 {
@@ -63,7 +63,7 @@ public:
 public:
     KisStrokeStrategyUndoCommandBased(const KUndo2MagicString &name,
                                       bool undo,
-                                      KisPostExecutionUndoAdapter *undoAdapter,
+                                      KisStrokeUndoFacade *undoFacade,
                                       KUndo2CommandSP initCommand = KUndo2CommandSP(0),
                                       KUndo2CommandSP finishCommand = KUndo2CommandSP(0));
 
@@ -116,8 +116,7 @@ protected:
                            KisStrokeJobData::Sequentiality sequentiality,
                            KisStrokeJobData::Exclusivity exclusivity);
 
-    KisStrokeStrategyUndoCommandBased(const KisStrokeStrategyUndoCommandBased &rhs,
-                                      bool suppressUndo);
+    KisStrokeStrategyUndoCommandBased(const KisStrokeStrategyUndoCommandBased &rhs);
 
     virtual void postProcessToplevelCommand(KUndo2Command *command);
 
@@ -128,7 +127,7 @@ private:
     bool m_undo;
     KUndo2CommandSP m_initCommand;
     KUndo2CommandSP m_finishCommand;
-    KisPostExecutionUndoAdapter *m_undoAdapter;
+    KisStrokeUndoFacade *m_undoFacade;
 
     QScopedPointer<KUndo2CommandExtraData> m_commandExtraData;
     int m_macroId;

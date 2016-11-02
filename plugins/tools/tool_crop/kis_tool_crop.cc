@@ -134,7 +134,7 @@ void KisToolCrop::activate(ToolActivation toolActivation, const QSet<KoShape*> &
     configGroup =  KSharedConfig::openConfig()->group(toolId()); // save settings to kritarc
 
     KisResourcesSnapshotSP resources =
-        new KisResourcesSnapshot(image(), currentNode(), 0, this->canvas()->resourceManager());
+        new KisResourcesSnapshot(image(), currentNode(), this->canvas()->resourceManager());
 
 
     // load settings from configuration

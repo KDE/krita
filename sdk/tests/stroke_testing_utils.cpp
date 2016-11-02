@@ -264,7 +264,6 @@ QImage utils::StrokeTester::doStroke(bool cancelled,
         KisResourcesSnapshotSP resources =
             new KisResourcesSnapshot(image,
                                      image->rootLayer()->firstChild(),
-                                     image->postExecutionUndoAdapter(),
                                      manager);
 
         if(externalLayer) {

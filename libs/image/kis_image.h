@@ -34,6 +34,7 @@
 #include "kis_node_graph_listener.h"
 #include "kis_node_facade.h"
 #include "kis_image_interfaces.h"
+#include "kis_strokes_queue_undo_result.h"
 
 #include <kritaimage_export.h>
 
@@ -67,6 +68,7 @@ class MergeStrategy;
  */
 class KRITAIMAGE_EXPORT KisImage : public QObject,
         public KisStrokesFacade,
+        public KisStrokeUndoFacade,
         public KisUpdatesFacade,
         public KisProjectionUpdateListener,
         public KisNodeFacade,
@@ -880,6 +882,15 @@ public Q_SLOTS:
      * the request and the stroke will be cancelled
      */
     void requestStrokeCancellation();
+
+    /**
+     * This method requests the last stroke executed on the image to become undone.
+     * If the stroke is not ended, or if all the Lod0 strokes are completed, the method
+     * returns UNDO_FAIL. If the last Lod0 is going to be finished soon, then UNDO_WAIT
+     * is returned and the caller should just wait for its completion and call global undo
+     * instead. UNDO_OK means one unfinished stroke has been undone.
+     */
+    UndoResult tryUndoUnfinishedLod0Stroke();
 
     /**
      * This method is called when image or some other part of Krita

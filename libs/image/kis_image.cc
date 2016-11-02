@@ -139,6 +139,7 @@ public:
         , signalRouter(_q)
         , animationInterface(0)
         , scheduler(_q)
+        , axesCenter(QPointF(0.5, 0.5))
     {}
 
     KisImage *q;
@@ -183,6 +184,8 @@ public:
     KisCompositeProgressProxy compositeProgressProxy;
 
     bool blockLevelOfDetail = false;
+
+    QPointF axesCenter;
 
     bool tryCancelCurrentStrokeAsync();
 
@@ -1624,4 +1627,14 @@ KisProofingConfigurationSP KisImage::proofingConfiguration() const
         m_d->proofingConfig = cfg.defaultProofingconfiguration();
     }
     return m_d->proofingConfig;
+}
+
+QPointF KisImage::mirrorAxesCenter() const
+{
+    return m_d->axesCenter;
+}
+
+void KisImage::setMirrorAxesCenter(const QPointF &value) const
+{
+    m_d->axesCenter = value;
 }

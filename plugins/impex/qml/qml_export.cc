@@ -43,7 +43,7 @@ QMLExport::~QMLExport()
 
 KisImportExportFilter::ConversionStatus QMLExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
 {
-    KisImageWSP image = document->image();
+    KisImageWSP image = document->saveImage();
     Q_CHECK_PTR(image);
 
     QMLConverter converter;

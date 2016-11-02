@@ -458,7 +458,15 @@ private:
      *  You should not have to reimplement, except for very special cases.
      */
     bool saveFile(const QString &filePath, KisPropertiesConfigurationSP exportConfiguration = 0);
-
+public:
+    /**
+     * @brief saveImage returns a perfect clone of this document's image. It is
+     * safe to use when saving; if the actual image is changed while saving, this still
+     * returns the original data.
+     * @return a clone of the image
+     */
+    KisImageSP saveImage() const;
+private:
 
     /** @internal */
     void setModified();

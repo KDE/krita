@@ -32,6 +32,8 @@
 #include <QTextBrowser>
 #include <QCheckBox>
 #include <QGroupBox>
+#include <QThread>
+#include <QMutex>
 
 #include <klocalizedstring.h>
 #include <ksqueezedtextlabel.h>
@@ -66,6 +68,7 @@ class Q_DECL_HIDDEN KisImportExportManager::Private
 public:
     bool batchMode {false};
     QPointer<KoProgressUpdater> progressUpdater {0};
+
 };
 
 KisImportExportManager::KisImportExportManager(KisDocument* document)
@@ -225,10 +228,7 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::convert(KisImpor
         exportConfiguration = filter->lastSavedConfiguration(from, to);
         if (exportConfiguration) {
             // Fill with some meta information about the image
-            KisImageWSP image = m_document->image();
-
-            // the image must be locked at the higher levels
-            KIS_SAFE_ASSERT_RECOVER_NOOP(image->locked());
+            KisImageWSP image = m_document->saveImage();
             KisPaintDeviceSP pd = image->projection();
 
             bool isThereAlpha = false;
@@ -252,7 +252,7 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::convert(KisImpor
 
     KisPreExportChecker checker;
     if (direction == Export) {
-        checker.check(m_document->image(), filter->exportChecks());
+        checker.check(m_document->saveImage(), filter->exportChecks());
     }
 
     KisConfigWidget *wdg = filter->createConfigurationWidget(0, from, to);

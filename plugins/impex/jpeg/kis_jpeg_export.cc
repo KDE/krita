@@ -65,7 +65,7 @@ KisJPEGExport::~KisJPEGExport()
 
 KisImportExportFilter::ConversionStatus KisJPEGExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration)
 {
-    KisImageWSP image = document->image();
+    KisImageWSP image = document->saveImage();
     Q_CHECK_PTR(image);
 
     // An extra option to pass to the config widget to set the state correctly, this isn't saved
@@ -91,7 +91,7 @@ KisImportExportFilter::ConversionStatus KisJPEGExport::convert(KisDocument *docu
     options.filters = m.enabledFilters();
 
     // the image must be locked at the higher levels
-    KIS_SAFE_ASSERT_RECOVER_NOOP(document->image()->locked());
+    KIS_SAFE_ASSERT_RECOVER_NOOP(document->saveImage()->locked());
     KisPaintDeviceSP pd = new KisPaintDevice(*image->projection());
 
     KisJPEGConverter kpc(document, batchMode());

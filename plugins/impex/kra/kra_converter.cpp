@@ -42,7 +42,7 @@ static const char CURRENT_DTD_VERSION[] = "2.0";
 
 KraConverter::KraConverter(KisDocument *doc)
     : m_doc(doc)
-    , m_image(doc->image())
+    , m_image(doc->saveImage())
 {
 }
 

@@ -119,10 +119,6 @@ public:
 
     void setProgresUpdater(KoProgressUpdater *updater);
 
-private Q_SLOTS:
-
-
-
 private:
 
     KisImportExportFilter::ConversionStatus convert(Direction direction, const QString &location, const QString &mimeType, bool showWarnings, KisPropertiesConfigurationSP exportConfiguration);

@@ -48,8 +48,8 @@ KisTGAExport::~KisTGAExport()
 KisImportExportFilter::ConversionStatus KisTGAExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration)
 {
     Q_UNUSED(configuration);
-    QRect rc = document->image()->bounds();
-    QImage image = document->image()->projection()->convertToQImage(0, 0, 0, rc.width(), rc.height(), KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
+    QRect rc = document->saveImage()->bounds();
+    QImage image = document->saveImage()->projection()->convertToQImage(0, 0, 0, rc.width(), rc.height(), KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
 
     QDataStream s(io);
     s.setByteOrder(QDataStream::LittleEndian);

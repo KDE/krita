@@ -63,7 +63,7 @@ KisImportExportFilter::ConversionStatus KisTIFFExport::convert(KisDocument *docu
         cfg = lastSavedConfiguration(KisDocument::nativeFormatMimeType(), "image/tiff");
     }
 
-    const KoColorSpace* cs = document->image()->colorSpace();
+    const KoColorSpace* cs = document->saveImage()->colorSpace();
     cfg->setProperty("type", (int)cs->channels()[0]->channelValueType());
     cfg->setProperty("isCMYK", (cs->colorModelId() == CMYKAColorModelID));
 
@@ -117,17 +117,17 @@ KisImportExportFilter::ConversionStatus KisTIFFExport::convert(KisDocument *docu
     KisImageSP image;
 
     if (options.flatten) {
-        image = new KisImage(0, document->image()->width(), document->image()->height(), document->image()->colorSpace(), "");
-        image->setResolution(document->image()->xRes(), document->image()->yRes());
-        KisPaintDeviceSP pd = KisPaintDeviceSP(new KisPaintDevice(*document->image()->projection()));
+        image = new KisImage(0, document->saveImage()->width(), document->saveImage()->height(), document->saveImage()->colorSpace(), "");
+        image->setResolution(document->saveImage()->xRes(), document->saveImage()->yRes());
+        KisPaintDeviceSP pd = KisPaintDeviceSP(new KisPaintDevice(*document->saveImage()->projection()));
         KisPaintLayerSP l = KisPaintLayerSP(new KisPaintLayer(image.data(), "projection", OPACITY_OPAQUE_U8, pd));
         image->addNode(KisNodeSP(l.data()), image->rootLayer().data());
     } else {
-        image = document->image();
+        image = document->saveImage();
     }
 
     // the image must be locked at the higher levels
-    KIS_SAFE_ASSERT_RECOVER_NOOP(document->image()->locked());
+    KIS_SAFE_ASSERT_RECOVER_NOOP(document->saveImage()->locked());
 
     KisTIFFConverter tiffConverter(document);
     KisImageBuilder_Result res;

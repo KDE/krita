@@ -76,7 +76,7 @@ KisConfigWidget *EXRExport::createConfigurationWidget(QWidget *parent, const QBy
 
 KisImportExportFilter::ConversionStatus EXRExport::convert(KisDocument *document, QIODevice */*io*/,  KisPropertiesConfigurationSP configuration)
 {
-    KisImageWSP image = document->image();
+    KisImageWSP image = document->saveImage();
 
     EXRConverter exrConverter(document, !batchMode());
 
@@ -84,7 +84,7 @@ KisImportExportFilter::ConversionStatus EXRExport::convert(KisDocument *document
 
     if (configuration->getBool("flatten")) {
         // the image must be locked at the higher levels
-        KIS_SAFE_ASSERT_RECOVER_NOOP(document->image()->locked());
+        KIS_SAFE_ASSERT_RECOVER_NOOP(document->saveImage()->locked());
 
         KisPaintDeviceSP pd = new KisPaintDevice(*image->projection());
         KisPaintLayerSP l = new KisPaintLayer(image, "projection", OPACITY_OPAQUE_U8, pd);
@@ -93,7 +93,7 @@ KisImportExportFilter::ConversionStatus EXRExport::convert(KisDocument *document
     }
     else {
         // the image must be locked at the higher levels
-        KIS_SAFE_ASSERT_RECOVER_NOOP(document->image()->locked());
+        KIS_SAFE_ASSERT_RECOVER_NOOP(document->saveImage()->locked());
         res = exrConverter.buildFile(filename(), image->rootLayer());
     }
 

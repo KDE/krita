@@ -327,6 +327,7 @@ public:
     qint32 macroNestDepth;
 
     KisImageSP image;
+    KisImageSP saveImage;
     KisNodeSP preActivatedNode;
     KisShapeController* shapeController;
     KoShapeController* koShapeController;
@@ -352,74 +353,8 @@ public:
         }
     }
 
-    class SafeSavingLocker;
 };
 
-class KisDocument::Private::SafeSavingLocker {
-public:
-    SafeSavingLocker(KisDocument::Private *_d, KisDocument *document)
-        : d(_d)
-        , m_locked(false)
-        , m_imageLock(d->image, true)
-        , m_savingLock(&d->savingMutex)
-        , m_document(document)
-    {
-        const int realAutoSaveInterval = KisConfig().autoSaveInterval();
-        const int emergencyAutoSaveInterval = 10; // sec
-
-        /**
-         * Initial try to lock both objects. Locking the image guards
-         * us from any image composition threads running in the
-         * background, while savingMutex guards us from entering the
-         * saving code twice by autosave and main threads.
-         *
-         * Since we are trying to lock multiple objects, so we should
-         * do it in a safe manner.
-         */
-        m_locked = std::try_lock(m_imageLock, m_savingLock) < 0;
-
-        if (!m_locked) {
-            if (d->isAutosaving) {
-                d->disregardAutosaveFailure = true;
-                if (realAutoSaveInterval) {
-                    document->setAutoSaveDelay(emergencyAutoSaveInterval);
-                }
-            } else {
-                d->image->requestStrokeEnd();
-                QApplication::processEvents();
-
-                // one more try...
-                m_locked = std::try_lock(m_imageLock, m_savingLock) < 0;
-            }
-        }
-
-        if (m_locked) {
-            d->disregardAutosaveFailure = false;
-        }
-    }
-
-    ~SafeSavingLocker() {
-         if (m_locked) {
-             m_imageLock.unlock();
-             m_savingLock.unlock();
-
-             const int realAutoSaveInterval = KisConfig().autoSaveInterval();
-             m_document->setAutoSaveDelay(realAutoSaveInterval);
-         }
-     }
-
-    bool successfullyLocked() const {
-        return m_locked;
-    }
-
-private:
-    KisDocument::Private *d;
-    bool m_locked;
-
-    KisImageBarrierLockAdapter m_imageLock;
-    StdLockableWrapper<QMutex> m_savingLock;
-    KisDocument *m_document;
-};
 
 KisDocument::KisDocument()
     : d(new Private())
@@ -626,12 +561,13 @@ bool KisDocument::save(KisPropertiesConfigurationSP exportConfiguration)
 
 bool KisDocument::saveFile(const QString &filePath, KisPropertiesConfigurationSP exportConfiguration)
 {
-    qDebug() << "saveFile. Is Autosaving?" << isAutosaving();
-    Private::SafeSavingLocker locker(d, this);
-    if (!locker.successfullyLocked()) {
-        qWarning() << "Could not lock image for saving, it's still busy";
+    if (!d->savingMutex.tryLock(5)) {
+        qWarning() << "We're already saving.";
         return false;
     }
+
+
+    qDebug() << "saveFile. Is Autosaving?" << isAutosaving();
 
     // Unset the error message
     setErrorMessage("");
@@ -667,7 +603,10 @@ bool KisDocument::saveFile(const QString &filePath, KisPropertiesConfigurationSP
     Q_ASSERT(!tempororaryFileName.isEmpty());
 
     qDebug() << "saving to tempory file" << tempororaryFileName;
+
+    d->saveImage = d->image->clone(true);
     status = d->importExportManager->exportDocument(tempororaryFileName, outputMimeType, !d->isExporting , exportConfiguration);
+    d->saveImage.clear();
 
     ret = (status == KisImportExportFilter::OK);
     suppressErrorDialog = (isAutosaving() || status == KisImportExportFilter::UserCancelled || status == KisImportExportFilter::BadConversionGraph);
@@ -772,7 +711,13 @@ bool KisDocument::saveFile(const QString &filePath, KisPropertiesConfigurationSP
     emit sigSavingFinished();
     clearFileProgressUpdater();
 
+    d->savingMutex.unlock();
     return ret;
+}
+
+KisImageSP KisDocument::saveImage() const
+{
+    return d->saveImage;
 }
 
 

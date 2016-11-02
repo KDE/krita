@@ -320,9 +320,9 @@ KisImage::KisImage(const KisImage& rhs, KisUndoStore *undoStore, bool exactCopy)
     }
     m_d->annotations = newAnnotations;
 
-    KIS_ASSERT_RECOVER_NOOP(!rhs.m_d->projectionUpdatesFilter);
-    KIS_ASSERT_RECOVER_NOOP(!rhs.m_d->disableUIUpdateSignals);
-    KIS_ASSERT_RECOVER_NOOP(!rhs.m_d->disableDirtyRequests);
+//    KIS_ASSERT_RECOVER_NOOP(!rhs.m_d->projectionUpdatesFilter);
+//    KIS_ASSERT_RECOVER_NOOP(!rhs.m_d->disableUIUpdateSignals);
+//    KIS_ASSERT_RECOVER_NOOP(!rhs.m_d->disableDirtyRequests);
 
     m_d->blockLevelOfDetail = rhs.m_d->blockLevelOfDetail;
 }

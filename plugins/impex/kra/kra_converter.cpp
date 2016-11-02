@@ -217,7 +217,7 @@ bool KraConverter::savePreview(KoStore *store)
     QPixmap pix = m_doc->generatePreview(QSize(256, 256));
     const QImage preview(pix.toImage().convertToFormat(QImage::Format_ARGB32, Qt::ColorOnly));
     if (preview.size() == QSize(0,0)) {
-        QSize newSize = d->image->bounds().size();
+        QSize newSize = m_doc->image()->bounds().size();
         newSize.scale(QSize(256, 256), Qt::KeepAspectRatio);
         preview = QImage(newSize, QImage::Format_ARGB32);
         preview.fill(QColor(0, 0, 0, 0));

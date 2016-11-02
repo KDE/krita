@@ -1,14 +1,27 @@
-macro_optional_find_package(PythonLibrary)
-macro_log_feature(PYTHON_LIBRARY "PythonLibrary" "Python Library" FALSE "" "Required by the Krita PyQt plugin")
+find_package(PythonLibrary)
+set_package_properties(PythonLibrary PROPERTIES
+    DESCRIPTION "Python Library"
+    URL "http://www.python.org"
+    TYPE OPTIONAL
+    PURPOSE "Required by the Krita PyQt plugin")
 macro_bool_to_01(PYTHONLIBS_FOUND HAVE_PYTHONLIBS)
+    
 
-macro_optional_find_package(SIP 4.18.0)
-macro_log_feature(SIP_FOUND "SIP" "Support for SIP Python bindings" FALSE "" "Required by the Krita PyQt plugin")
-macro_bool_to_01(SIP_FOUND HAVE_SIP)
+find_package(SIP "4.18.0")
+set_package_properties(SIP PROPERTIES
+    DESCRIPTION "Support for generating SIP Python bindings"
+    URL "https://www.riverbankcomputing.com/software/sip/download"
+    TYPE OPTIONAL
+    PURPOSE "Required by the Krita PyQt plugin")
+macro_bool_to_01(SIP_FOUND HAVE_SIP)    
 
-macro_optional_find_package(PyQt5 5.6.0)
-macro_log_feature(PYQT5_FOUND "PyQt5" "Python bindings for Qt5" FALSE "" "Required by the Krita PyQt plugin")
-macro_bool_to_01(PYQT5_FOUND HAVE_PYQT5)
+find_package(PyQt5 "5.6.0")
+set_package_properties(PyQt5 PROPERTIES
+    DESCRIPTION "Python bindings for Qt5."
+    URL "https://www.riverbankcomputing.com/software/pyqt/download5"
+    TYPE OPTIONAL
+    PURPOSE "Required by the Krita PyQt plugin")
+macro_bool_to_01(PYQT5_FOUND HAVE_PYQT5)    
 
 if (HAVE_PYQT5 AND HAVE_SIP AND HAVE_PYTHONLIBS)
 

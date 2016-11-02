@@ -29,11 +29,10 @@
 
 MoveStrokeStrategy::MoveStrokeStrategy(KisNodeList nodes,
                                        KisUpdatesFacade *updatesFacade,
-                                       KisPostExecutionUndoAdapter *undoAdapter)
-    : KisStrokeStrategyUndoCommandBased(kundo2_i18n("Move"), false, undoAdapter),
+                                       KisStrokeUndoFacade *undoFacade)
+    : KisStrokeStrategyUndoCommandBased(kundo2_i18n("Move"), false, undoFacade),
       m_nodes(),
       m_updatesFacade(updatesFacade),
-      m_undoEnabled(true),
       m_updatesEnabled(true)
 {
     m_nodes = KisLayerUtils::sortAndFilterMergableInternalNodes(nodes, true);
@@ -60,15 +59,14 @@ MoveStrokeStrategy::MoveStrokeStrategy(KisNodeList nodes,
     setSupportsWrapAroundMode(true);
 }
 
-MoveStrokeStrategy::MoveStrokeStrategy(const MoveStrokeStrategy &rhs, bool suppressUndo)
-    : KisStrokeStrategyUndoCommandBased(rhs, suppressUndo),
+MoveStrokeStrategy::MoveStrokeStrategy(const MoveStrokeStrategy &rhs)
+    : KisStrokeStrategyUndoCommandBased(rhs),
       m_nodes(rhs.m_nodes),
       m_blacklistedNodes(rhs.m_blacklistedNodes),
       m_updatesFacade(rhs.m_updatesFacade),
       m_finalOffset(rhs.m_finalOffset),
       m_dirtyRect(rhs.m_dirtyRect),
       m_dirtyRects(rhs.m_dirtyRects),
-      m_undoEnabled(rhs.m_undoEnabled),
       m_updatesEnabled(rhs.m_updatesEnabled)
 {
 }
@@ -97,17 +95,15 @@ void MoveStrokeStrategy::initStrokeCallback()
 
 void MoveStrokeStrategy::finishStrokeCallback()
 {
-    if (m_undoEnabled) {
-        Q_FOREACH (KisNodeSP node, m_nodes) {
-            KUndo2Command *updateCommand =
-                new KisUpdateCommand(node, m_dirtyRects[node], m_updatesFacade, true);
+    Q_FOREACH (KisNodeSP node, m_nodes) {
+        KUndo2Command *updateCommand =
+            new KisUpdateCommand(node, m_dirtyRects[node], m_updatesFacade, true);
 
-            addMoveCommands(node, updateCommand);
+        addMoveCommands(node, updateCommand);
 
-            notifyCommandDone(KUndo2CommandSP(updateCommand),
-                              KisStrokeJobData::SEQUENTIAL,
-                              KisStrokeJobData::EXCLUSIVE);
-        }
+        notifyCommandDone(KUndo2CommandSP(updateCommand),
+                          KisStrokeJobData::SEQUENTIAL,
+                          KisStrokeJobData::EXCLUSIVE);
     }
 
     if (!m_updatesEnabled) {
@@ -204,11 +200,6 @@ void MoveStrokeStrategy::addMoveCommands(KisNodeSP node, KUndo2Command *parent)
     }
 }
 
-void MoveStrokeStrategy::setUndoEnabled(bool value)
-{
-    m_undoEnabled = value;
-}
-
 void MoveStrokeStrategy::setUpdatesEnabled(bool value)
 {
     m_updatesEnabled = value;
@@ -231,8 +222,7 @@ KisStrokeStrategy* MoveStrokeStrategy::createLodClone(int levelOfDetail)
         if (!checkSupportsLodMoves(node)) return 0;
     }
 
-    MoveStrokeStrategy *clone = new MoveStrokeStrategy(*this, levelOfDetail > 0);
-    clone->setUndoEnabled(false);
+    MoveStrokeStrategy *clone = new MoveStrokeStrategy(*this);
     this->setUpdatesEnabled(false);
     return clone;
 }

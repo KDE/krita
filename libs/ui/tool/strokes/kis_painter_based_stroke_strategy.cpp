@@ -77,7 +77,6 @@ KisPainterBasedStrokeStrategy::KisPainterBasedStrokeStrategy(const QString &id,
       m_resources(resources),
       m_painterInfos(painterInfos),
       m_transaction(0),
-      m_undoEnabled(true),
       m_useMergeID(useMergeID)
 {
     init();
@@ -91,7 +90,6 @@ KisPainterBasedStrokeStrategy::KisPainterBasedStrokeStrategy(const QString &id,
       m_resources(resources),
       m_painterInfos(QVector<PainterInfo*>() <<  painterInfo),
       m_transaction(0),
-      m_undoEnabled(true),
       m_useMergeID(useMergeID)
 {
     init();
@@ -111,7 +109,6 @@ KisPainterBasedStrokeStrategy::KisPainterBasedStrokeStrategy(const KisPainterBas
     : KisSimpleStrokeStrategy(rhs),
       m_resources(rhs.m_resources),
       m_transaction(rhs.m_transaction),
-      m_undoEnabled(true),
       m_useMergeID(rhs.m_useMergeID)
 {
     Q_FOREACH (PainterInfo *info, rhs.m_painterInfos) {
@@ -139,11 +136,6 @@ const QVector<KisPainterBasedStrokeStrategy::PainterInfo*>
 KisPainterBasedStrokeStrategy::painterInfos() const
 {
     return m_painterInfos;
-}
-
-void KisPainterBasedStrokeStrategy::setUndoEnabled(bool value)
-{
-    m_undoEnabled = value;
 }
 
 void KisPainterBasedStrokeStrategy::initPainters(KisPaintDeviceSP targetDevice,
@@ -235,17 +227,6 @@ void KisPainterBasedStrokeStrategy::finishStrokeCallback()
 
     KisPostExecutionUndoAdapter *undoAdapter =
         m_resources->postExecutionUndoAdapter();
-
-    QScopedPointer<KisPostExecutionUndoAdapter> dumbUndoAdapter;
-    QScopedPointer<KisUndoStore> dumbUndoStore;
-
-
-    if (!m_undoEnabled) {
-        dumbUndoStore.reset(new KisDumbUndoStore());
-        dumbUndoAdapter.reset(new KisPostExecutionUndoAdapter(dumbUndoStore.data(), 0));
-
-        undoAdapter = dumbUndoAdapter.data();
-    }
 
     if (indirect && indirect->hasTemporaryTarget()) {
         KUndo2MagicString transactionText = m_transaction->text();

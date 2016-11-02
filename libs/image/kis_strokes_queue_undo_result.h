@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2011 Dmitry Kazakov <dimula73@gmail.com>
+ *  Copyright (c) 2016 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,20 +16,14 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_image_interfaces.h"
+#ifndef KIS_STROKES_QUEUE_UNDO_RESULT_H
+#define KIS_STROKES_QUEUE_UNDO_RESULT_H
 
-KisStrokesFacade::~KisStrokesFacade()
-{
-}
+enum UndoResult {
+    UNDO_FAIL,
+    UNDO_OK,
+    UNDO_WAIT
+};
 
-KisUpdatesFacade::~KisUpdatesFacade()
-{
-}
+#endif // KIS_STROKES_QUEUE_UNDO_RESULT_H
 
-KisProjectionUpdateListener::~KisProjectionUpdateListener()
-{
-}
-
-KisStrokeUndoFacade::~KisStrokeUndoFacade()
-{
-}

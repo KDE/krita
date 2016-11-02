@@ -402,7 +402,7 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
     painter.drawPath(backgroundContainer);
 
 
-    // creat a path slightly inside the container circle. this will create a 'track' to indicate that we can rotate the canvas
+    // create a path slightly inside the container circle. this will create a 'track' to indicate that we can rotate the canvas
     // with the indicator
     QPainterPath rotationTrackPath;
     shrinkCircleAmount = 18;
@@ -419,22 +419,20 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
 
     // this thing will help indicate where the starting brush preset is at.
     // also what direction they go to give sor order to the presets populated
-
-    float arcDegrees = 30; // in degrees. this is how far we will arc from the starting point
-
-    pen.setWidth(8);
+    pen.setWidth(6);
     pen.setCapStyle(Qt::RoundCap);
     painter.setPen(pen);
-
-    painter.drawArc(circleRect, 7, (16*arcDegrees)); // span angle (last parameter) is in 16th of degrees
-
+    painter.drawArc(circleRect, (16*90), (16*-30)); // span angle (last parameter) is in 16th of degrees
 
     QPainterPath brushDir;
-    brushDir.arcMoveTo(circleRect, arcDegrees);
-    brushDir.lineTo(brushDir.currentPosition().x() + 15, brushDir.currentPosition().y() + 10);
+    brushDir.arcMoveTo(circleRect, 60);
+    brushDir.lineTo(brushDir.currentPosition().x()-5, brushDir.currentPosition().y() - 14);
     painter.drawPath(brushDir);
 
-    painter.drawLine(circleRect.width()*.85, circleRect.height()/2, circleRect.width(), circleRect.height()/2);
+    brushDir.lineTo(brushDir.currentPosition().x()-2, brushDir.currentPosition().y() + 6);
+    painter.drawPath(brushDir);
+
+    //painter.drawLine(circleRect.width()*.79, circleRect.height()/2, circleRect.width(), circleRect.height()/2);
 
 
 
@@ -839,16 +837,20 @@ KisPopupPalette::~KisPopupPalette()
 
 QPainterPath KisPopupPalette::createPathFromPresetIndex(int index)
 {
-    qreal angleSlice = 360.0 / numSlots() / 180 * M_PI; // 10 slots = 0.6283 (in radians)
-    qreal startingAngle = index * angleSlice;  // the starting angle of the slice we need to draw (in radians)
+
+    qreal angleSlice = 360.0 / numSlots() ; // how many degrees each slice will get
+
+    // the starting angle of the slice we need to draw. the negative sign makes us go clockwise.
+    // adding 90 degrees makes us start at the top. otherwise we would start at the right
+    qreal startingAngle = -(index * angleSlice) + 90;
 
     // the radius will get smaller as the amount of presets shown increases. 10 slots == 41
-    qreal presetRadius = m_colorHistoryOuterRadius * sin(angleSlice/2) / (1-sin(angleSlice/2));
+    qreal presetRadius = m_colorHistoryOuterRadius * qSin(qDegreesToRadians(angleSlice/2)) / (1-qSin(qDegreesToRadians(angleSlice/2)));
 
 
     QPainterPath path;
-    float pathX = (m_colorHistoryOuterRadius + presetRadius) * cos(startingAngle) - presetRadius;
-    float pathY = -(m_colorHistoryOuterRadius + presetRadius) * sin(startingAngle) - presetRadius;
+    float pathX = (m_colorHistoryOuterRadius + presetRadius) * qCos(qDegreesToRadians(startingAngle)) - presetRadius;
+    float pathY = -(m_colorHistoryOuterRadius + presetRadius) * qSin(qDegreesToRadians(startingAngle)) - presetRadius;
     float pathDiameter = 2 * presetRadius; // distance is used to calculate the X/Y in addition to the preset circle size
     path.addEllipse(pathX, pathY, pathDiameter, pathDiameter);
 

@@ -50,7 +50,7 @@ class KRITALIBKIS_EXPORT Krita : public QObject
      * current window, the current view, the current image, on the current layer*.
      *
      * @code
-     * actions = Krita.instance().actions()
+     * actions = Krita.Actions
      * print(actions.keys())
      * actions["select_all"].trigger()
      * actions["deselect"].trigger()
@@ -59,17 +59,17 @@ class KRITALIBKIS_EXPORT Krita : public QObject
     Q_PROPERTY(QVariantMap Actions READ actions)
     Q_PROPERTY(Document* ActiveDocument READ activeDocument WRITE setActiveDocument)
     Q_PROPERTY(bool Batchmode READ batchmode WRITE setBatchmode)
-    Q_PROPERTY(QList<Document*> Documents READ documents)
-    Q_PROPERTY(QList<Exporter*> Exporters READ exporters)
-    Q_PROPERTY(QList<Filter*> Filters READ filters)
-    Q_PROPERTY(QList<Generator*> Generators READ generators)
-    Q_PROPERTY(QList<Importer*> Importers READ importers)
+    Q_PROPERTY(QVariantList Documents READ documents)
+    Q_PROPERTY(QVariantList Exporters READ exporters)
+    Q_PROPERTY(QVariantList Filters READ filters)
+    Q_PROPERTY(QVariantList Generators READ generators)
+    Q_PROPERTY(QVariantList Importers READ importers)
     Q_PROPERTY(Notifier* Notifier READ notifier)
     Q_PROPERTY(InfoObject* Preferences READ preferences WRITE setPreferences)
     Q_PROPERTY(QString Version READ version)
-    Q_PROPERTY(QList<View*> Views READ views)
-    Q_PROPERTY(QList<Window*> Windows READ windows)
-    Q_PROPERTY(QList<Resource*> Resources READ resources)
+    Q_PROPERTY(QVariantList Views READ views)
+    Q_PROPERTY(QVariantList Windows READ windows)
+    Q_PROPERTY(QVariantList Resources READ resources)
 
 public:
     explicit Krita(QObject *parent = 0);
@@ -83,15 +83,15 @@ public:
 
     QVariantMap actions() const;
 
-    QList<Document*> documents() const;
+    QVariantList documents() const;
 
-    QList<Exporter*> exporters() const;
+    QVariantList exporters() const;
 
-    QList<Filter*> filters() const;
+    QVariantList filters() const;
 
-    QList<Generator*> generators() const;
+    QVariantList generators() const;
 
-    QList<Importer*> importers() const;
+    QVariantList importers() const;
 
     Notifier* notifier() const;
 
@@ -100,11 +100,11 @@ public:
 
     QString version() const;
 
-    QList<View*> views() const;
+    QVariantList views() const;
 
-    QList<Window*> windows() const;
+    QVariantList windows() const;
 
-    QList<Resource*> resources() const;
+    QVariantList resources() const;
     void setResources(QList<Resource*> value);
 
 

@@ -93,33 +93,33 @@ void Krita::setBatchmode(bool value)
 }
 
 
-QList<Document*> Krita::documents() const
+QVariantList Krita::documents() const
 {
-    QList<Document *> ret;
+    QVariantList ret;
     foreach(QPointer<KisDocument> doc, KisPart::instance()->documents()) {
-        ret << new Document(doc);
+        ret << QVariant::fromValue<Document*>(new Document(doc));
     }
     return ret;
 }
 
-QList<Exporter*> Krita::exporters() const
+QVariantList Krita::exporters() const
 {
-    return QList<Exporter*>();
+    return QVariantList();
 }
 
-QList<Filter*> Krita::filters() const
+QVariantList Krita::filters() const
 {
-    return QList<Filter*>();
+    return QVariantList();
 }
 
-QList<Generator*> Krita::generators() const
+QVariantList Krita::generators() const
 {
-    return QList<Generator*>();
+    return QVariantList();
 }
 
-QList<Importer*> Krita::importers() const
+QVariantList Krita::importers() const
 {
-    return QList<Importer*>();
+    return QVariantList();
 }
 
 Notifier* Krita::notifier() const
@@ -143,28 +143,28 @@ QString Krita::version() const
     return QString();
 }
 
-QList<View*> Krita::views() const
+QVariantList Krita::views() const
 {
-    QList<View *> ret;
+    QVariantList ret;
     foreach(QPointer<KisView> view, KisPart::instance()->views()) {
-        ret << new View(view);
+        ret << QVariant::fromValue<View*>(new View(view));
     }
     return ret;
 }
 
-QList<Window*> Krita::windows() const
+QVariantList Krita::windows() const
 {
-    QList<Window *> ret;
+    QVariantList ret;
     foreach(QPointer<KisMainWindow> mainWin, KisPart::instance()->mainWindows()) {
-        ret << new Window(mainWin);
+        ret << QVariant::fromValue<Window*>(new Window(mainWin));
     }
     return ret;
 
 }
 
-QList<Resource*> Krita::resources() const
+QVariantList Krita::resources() const
 {
-    return QList<Resource*>();
+    return QVariantList();
 }
 
 void Krita::addDockWidget(DockWidget *dockWidget)

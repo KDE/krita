@@ -206,6 +206,7 @@ class PyQtClass(object):
                 print("Cannot delete", qobj, "because it has child objects")
             sip.delete(qobj)
 
+
     def setProperty(self, name, value):
         self._instance.setProperty(name, value)
 

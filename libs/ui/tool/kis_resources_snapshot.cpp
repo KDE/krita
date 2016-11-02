@@ -34,6 +34,7 @@
 #include "recorder/kis_recorded_paint_action.h"
 #include "kis_selection.h"
 #include "kis_selection_mask.h"
+#include "kis_algebra_2d.h"
 
 
 struct KisResourcesSnapshot::Private {
@@ -101,11 +102,12 @@ KisResourcesSnapshot::KisResourcesSnapshot(KisImageSP image, KisNodeSP currentNo
     m_d->currentExposure = resourceManager->resource(KisCanvasResourceProvider::HdrExposure).toDouble();
     m_d->currentGenerator = resourceManager->resource(KisCanvasResourceProvider::CurrentGeneratorConfiguration).value<KisFilterConfiguration*>();
 
-    m_d->axesCenter = resourceManager->resource(KisCanvasResourceProvider::MirrorAxesCenter).toPointF();
-    if (m_d->axesCenter.isNull()){
-        QRect bounds = m_d->bounds->bounds();
-        m_d->axesCenter = QPointF(0.5 * bounds.width(), 0.5 * bounds.height());
+
+    QPointF relativeAxesCenter(0.5, 0.5);
+    if (m_d->image) {
+        relativeAxesCenter = m_d->image->mirrorAxesCenter();
     }
+    m_d->axesCenter = KisAlgebra2D::relativeToAbsolute(relativeAxesCenter, m_d->bounds->bounds());
 
     m_d->mirrorMaskHorizontal = resourceManager->resource(KisCanvasResourceProvider::MirrorHorizontal).toBool();
     m_d->mirrorMaskVertical = resourceManager->resource(KisCanvasResourceProvider::MirrorVertical).toBool();

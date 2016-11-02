@@ -548,6 +548,19 @@ public:
      */
     void setDesiredLevelOfDetail(int lod);
 
+    /**
+     * Relative position of the mirror axis center
+     *     0,0 - topleft corner of the image
+     *     1,1 - bottomright corner of the image
+     */
+    QPointF mirrorAxesCenter() const;
+
+    /**
+     * Sets the relative position of the axes center
+     * \see mirrorAxesCenter() for details
+     */
+    void setMirrorAxesCenter(const QPointF &value) const;
+
 public Q_SLOTS:
 
     /**

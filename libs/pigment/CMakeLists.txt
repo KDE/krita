@@ -112,6 +112,7 @@ target_include_directories( kritapigment
 target_link_libraries( kritapigment
     PUBLIC
         kritaplugin
+        kostore
         ${EXTRA_LIBRARIES}
         KF5::I18n 
         Qt5::Core

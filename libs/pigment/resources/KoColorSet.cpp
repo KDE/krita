@@ -48,7 +48,6 @@
 struct KoColorSet::Private {
     KoColorSet::PaletteType paletteType;
     QByteArray data;
-    QString name;
     QString comment;
     qint32 columns;
     QVector<KoColorSetEntry> colors;
@@ -107,7 +106,6 @@ KoColorSet::KoColorSet(const KoColorSet& rhs)
     , d(new Private())
 {
     setFilename(rhs.filename());
-    d->name = rhs.d->name;
     d->comment = rhs.d->comment;
     d->columns = rhs.d->columns;
     d->colors = rhs.d->colors;
@@ -679,7 +677,7 @@ bool KoColorSet::saveKpl(QIODevice *dev) const
         QDomDocument doc;
         QDomElement root = doc.createElement("Colorset");
         root.setAttribute("version", "1.0");
-        root.setAttribute("name", d->name);
+        root.setAttribute("name", name());
         root.setAttribute("comment", d->comment);
         root.setAttribute("columns", d->columns);
         Q_FOREACH(const KoColorSetEntry &entry, d->colors) {
@@ -785,7 +783,7 @@ bool KoColorSet::loadKpl()
         QDomDocument doc;
         doc.setContent(ba);
         QDomElement e = doc.documentElement();
-        d->name = e.attribute("name");
+        setName(e.attribute("name"));
         d->comment = e.attribute("comment");
         d->columns = e.attribute("columns").toInt();
 

@@ -27,11 +27,11 @@
 #include <QStackedWidget>
 #include <kis_slider_spin_box.h>
 #include <QLabel>
-
 #include "kis_canvas2.h"
 #include "kis_cursor.h"
 
 #include "kis_tool_multihand_helper.h"
+#include "kis_tool_multihand_config.h"
 
 static const int MAXIMUM_BRUSHES = 50;
 
@@ -55,6 +55,8 @@ KisToolMultihand::KisToolMultihand(KoCanvasBase *canvas)
       m_translateRadius(100),
       m_setupAxesFlag(false)
 {
+
+
     m_helper =
         new KisToolMultihandHelper(paintingInformationBuilder(),
                                    kundo2_i18n("Multibrush Stroke"),
@@ -63,6 +65,7 @@ KisToolMultihand::KisToolMultihand(KoCanvasBase *canvas)
     if (image()) {
         m_axesPoint = QPointF(0.5 * image()->width(), 0.5 * image()->height());
     }
+
 }
 
 KisToolMultihand::~KisToolMultihand()
@@ -249,6 +252,17 @@ QWidget* KisToolMultihand::createOptionWidget()
 {
     QWidget *widget = KisToolBrush::createOptionWidget();
 
+    QWidget* customUI = new KisToolMultiHandConfigWidget();
+
+    // TODO: add this a bit differently to the widget later inside the config
+    customUI->layout()->addWidget(widget);
+
+
+    // TODO: add the rest of the control below to the UI widget and hook up
+
+
+
+/*
     m_axesChCkBox = new QCheckBox(i18n("Show Axes"));
 
     connect(m_axesChCkBox,SIGNAL(toggled(bool)),this, SLOT(slotSetAxesVisible(bool)));
@@ -256,7 +270,7 @@ QWidget* KisToolMultihand::createOptionWidget()
     m_axesPointBtn = new QPushButton(i18n("Axes point"), widget);
     m_axesPointBtn->setCheckable(true);
     connect(m_axesPointBtn, SIGNAL(clicked(bool)),this, SLOT(activateAxesPointModeSetup()));
-    addOptionWidgetOption(m_axesPointBtn, m_axesChCkBox);
+    addOptionWidgetOption(m_axesPointBtn, m_axesChCkBox); // this just adds it to the main layout
 
     m_axesAngleSlider = new KisDoubleSliderSpinBox(widget);
     m_axesAngleSlider->setToolTip(i18n("Set axes angle (degrees)"));
@@ -328,8 +342,9 @@ QWidget* KisToolMultihand::createOptionWidget()
     m_transformModesComboBox->setCurrentIndex(m_configGroup.readEntry("transformMode", 0));
     m_translateRadiusSlider->setValue(m_configGroup.readEntry("translateRadius", 0));
     m_handsCountSlider->setValue(m_configGroup.readEntry("handsCount", 4));
+*/
 
-    return widget;
+    return customUI;
 }
 
 void KisToolMultihand::activateAxesPointModeSetup()

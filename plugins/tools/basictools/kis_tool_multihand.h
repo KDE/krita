@@ -23,6 +23,7 @@
 #include "kis_tool_brush.h"
 #include <kis_icon.h>
 
+
 class QPushButton;
 class QCheckBox;
 class QComboBox;

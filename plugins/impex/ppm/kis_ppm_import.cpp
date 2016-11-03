@@ -28,7 +28,6 @@
 #include <QFileInfo>
 
 #include <KoColorSpaceRegistry.h>
-#include <KisFilterChain.h>
 
 #include <kis_debug.h>
 #include <KisDocument.h>
@@ -51,36 +50,6 @@ KisPPMImport::KisPPMImport(QObject *parent, const QVariantList &) : KisImportExp
 
 KisPPMImport::~KisPPMImport()
 {
-}
-
-KisImportExportFilter::ConversionStatus KisPPMImport::convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration)
-{
-    Q_UNUSED(from);
-    Q_UNUSED(configuration);
-    dbgFile << "Importing using PPMImport!";
-
-    if (to != "application/x-krita")
-        return KisImportExportFilter::BadMimeType;
-
-    KisDocument * doc = outputDocument();
-
-    if (!doc)
-        return KisImportExportFilter::NoDocumentCreated;
-
-    QString filename = inputFile();
-
-    if (filename.isEmpty()) {
-        return KisImportExportFilter::FileNotFound;
-    }
-
-    if (!QFileInfo(filename).exists()) {
-        return KisImportExportFilter::FileNotFound;
-    }
-
-
-    QFile fp(filename);
-    doc->prepareForImport();
-    return loadFromDevice(&fp, doc);
 }
 
 int readNumber(QIODevice* device)
@@ -184,15 +153,11 @@ private:
     int m_lineWidth;
 };
 
-KisImportExportFilter::ConversionStatus KisPPMImport::loadFromDevice(QIODevice* device, KisDocument* doc)
-{
-    dbgFile << "Start decoding file";
-    device->open(QIODevice::ReadOnly);
-    if (!device->isOpen()) {
-        return KisImportExportFilter::CreationError;
-    }
 
-    QByteArray array = device->read(2);
+
+KisImportExportFilter::ConversionStatus KisPPMImport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
+{
+    QByteArray array = io->read(2);
 
     if (array.size() < 2) return KisImportExportFilter::CreationError;
 
@@ -226,16 +191,16 @@ KisImportExportFilter::ConversionStatus KisPPMImport::loadFromDevice(QIODevice* 
     }
 
     Q_ASSERT(channels != -1);
-    char c; device->getChar(&c);
+    char c; io->getChar(&c);
     if (!isspace(c)) return KisImportExportFilter::CreationError; // Invalid file, it should have a separator now
 
     // Read width
-    int width = readNumber(device);
-    int height = readNumber(device);
+    int width = readNumber(io);
+    int height = readNumber(io);
     int maxval = 1;
 
     if (fileType != P1 && fileType != P4) {
-        maxval = readNumber(device);
+        maxval = readNumber(io);
     }
 
     dbgFile << "Width = " << width << " height = " << height << "maxval = " << maxval;
@@ -264,14 +229,14 @@ KisImportExportFilter::ConversionStatus KisPPMImport::loadFromDevice(QIODevice* 
         return KisImportExportFilter::CreationError;
     }
 
-    KisImageSP image = new KisImage(doc->createUndoStore(), width, height, colorSpace, "built image");
+    KisImageSP image = new KisImage(document->createUndoStore(), width, height, colorSpace, "built image");
     KisPaintLayerSP layer = new KisPaintLayer(image, image->nextLayerName(), 255);
 
     KisPpmFlow* ppmFlow = 0;
     if (isAscii) {
-        ppmFlow = new KisAsciiPpmFlow(device);
+        ppmFlow = new KisAsciiPpmFlow(io);
     } else {
-        ppmFlow = new KisBinaryPpmFlow(device, pixelsize * width);
+        ppmFlow = new KisBinaryPpmFlow(io, pixelsize * width);
     }
 
     for (int v = 0; v < height; ++v) {
@@ -320,7 +285,7 @@ KisImportExportFilter::ConversionStatus KisPPMImport::loadFromDevice(QIODevice* 
 
     image->addNode(layer.data(), image->rootLayer().data());
 
-    doc->setCurrentImage(image);
+    document->setCurrentImage(image);
     return KisImportExportFilter::OK;
 }
 

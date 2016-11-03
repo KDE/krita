@@ -676,7 +676,6 @@ bool KisApplication::createNewDocFromTemplate(const QString &fileName, KisMainWi
         doc->setFileBatchMode(m_batchRun);
         if (mainWindow->openDocumentInternal(templateURL, doc)) {
             doc->resetURL();
-            doc->setEmpty();
             doc->setTitleModified();
             dbgUI << "Template loaded...";
             return true;

@@ -432,11 +432,16 @@ void KisPart::openTemplate(const QUrl &url)
         mimeType.remove( QRegExp( "-template$" ) );
         document->setMimeTypeAfterLoading(mimeType);
         document->resetURL();
-        document->setEmpty();
     }
     else {
-        document->showLoadingErrorDialog();
-        document->initEmpty();
+        if (document->errorMessage().isEmpty()) {
+            QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Could not create document from template\n%1", document->localFilePath()));
+        }
+        else {
+            QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Could not create document from template\n%1\nReason: %2", document->localFilePath(), document->errorMessage()));
+        }
+        delete document;
+        return;
     }
     addDocument(document);
 

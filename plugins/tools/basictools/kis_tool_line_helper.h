@@ -37,8 +37,7 @@ public:
     void repaintLine(KoCanvasResourceManager *resourceManager,
                      KisImageWSP image,
                      KisNodeSP node,
-                     KisStrokesFacade *strokesFacade,
-                     KisPostExecutionUndoAdapter *undoAdapter);
+                     KisStrokesFacade *strokesFacade);
 
     void start(KoPointerEvent *event, KoCanvasResourceManager *resourceManager);
     void addPoint(KoPointerEvent *event, const QPointF &overridePos = QPointF());

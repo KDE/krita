@@ -66,7 +66,6 @@ public:
         KisResourcesSnapshotSP resources =
             new KisResourcesSnapshot(image,
                                      fillNode,
-                                     image->postExecutionUndoAdapter(),
                                      manager);
 
         KisProcessingVisitorSP visitor =

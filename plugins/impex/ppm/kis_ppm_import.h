@@ -34,9 +34,7 @@ public:
     KisPPMImport(QObject *parent, const QVariantList &);
     virtual ~KisPPMImport();
 public:
-    virtual KisImportExportFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration = 0);
-private:
-    KisImportExportFilter::ConversionStatus loadFromDevice(QIODevice* device, KisDocument* doc);
+    virtual KisImportExportFilter::ConversionStatus convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration = 0);
 };
 
 #endif

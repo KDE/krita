@@ -920,7 +920,7 @@ void KisConfig::setOutlineSizeMinimum(qreal outlineSizeMinimum) const
 
 int KisConfig::autoSaveInterval(bool defaultValue)  const
 {
-    return (defaultValue ? KisDocument::defaultAutoSave() : m_cfg.readEntry("AutoSaveInterval", KisDocument::defaultAutoSave()));
+    return (defaultValue ? 300 : m_cfg.readEntry("AutoSaveInterval", 300));
 }
 
 void KisConfig::setAutoSaveInterval(int seconds)  const
@@ -1171,9 +1171,9 @@ QString KisConfig::exportConfiguration(const QString &filterId, bool defaultValu
     return (defaultValue ? QString() : m_cfg.readEntry("ExportConfiguration-" + filterId, QString()));
 }
 
-void KisConfig::setExportConfiguration(const QString &filterId, const KisPropertiesConfiguration &properties) const
+void KisConfig::setExportConfiguration(const QString &filterId, KisPropertiesConfigurationSP properties) const
 {
-    QString exportConfig = properties.toXML();
+    QString exportConfig = properties->toXML();
     m_cfg.writeEntry("ExportConfiguration-" + filterId, exportConfig);
 
 }

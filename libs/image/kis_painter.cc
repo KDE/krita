@@ -449,6 +449,8 @@ inline bool KisPainter::Private::tryReduceSourceRect(const KisPaintDevice *srcDe
      * the image.
      */
     if (compositeOp->id() != COMPOSITE_COPY &&
+        compositeOp->id() != COMPOSITE_DESTINATION_IN  &&
+        compositeOp->id() != COMPOSITE_DESTINATION_ATOP &&
         !srcDev->defaultBounds()->wrapAroundMode()) {
 
         /**

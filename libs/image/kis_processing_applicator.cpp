@@ -172,8 +172,7 @@ KisProcessingApplicator::KisProcessingApplicator(KisImageWSP image,
       m_finalSignalsEmitted(false)
 {
     KisStrokeStrategyUndoCommandBased *strategy =
-            new KisStrokeStrategyUndoCommandBased(name, false,
-                                                  m_image->postExecutionUndoAdapter());
+            new KisStrokeStrategyUndoCommandBased(name, false, m_image.data());
 
     if (m_flags.testFlag(SUPPORTS_WRAPAROUND_MODE)) {
         strategy->setSupportsWrapAroundMode(true);

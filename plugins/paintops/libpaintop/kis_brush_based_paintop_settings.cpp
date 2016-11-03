@@ -152,7 +152,7 @@ QPainterPath KisBrushBasedPaintOpSettings::brushOutline(const KisPaintInformatio
 
 bool KisBrushBasedPaintOpSettings::isValid() const
 {
-    QString filename = getString("requiredBrushFile", "");
+    QString filename = getString("requiredBrushFile", QString());
     if (!filename.isEmpty()) {
         KisBrushSP brush = KisBrushServer::instance()->brushServer()->resourceByFilename(filename);
         if (!brush) {

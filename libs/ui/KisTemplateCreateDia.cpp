@@ -207,7 +207,7 @@ void KisTemplateCreateDia::createTemplate(const QString &templatesResourcePath,
         }
         fileName = tempFile.fileName();
     }
-    bool retval = document->saveNativeFormat(fileName);
+    bool retval = document->exportDocument(QUrl::fromLocalFile(fileName));
     if (!retval) {
         qWarning("Could not save template");
         return;

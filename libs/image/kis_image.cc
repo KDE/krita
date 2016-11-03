@@ -137,9 +137,41 @@ public:
         , postExecutionUndoAdapter(u, _q)
         , recorder(_q)
         , signalRouter(_q)
-        , animationInterface(0)
+        , animationInterface(new KisImageAnimationInterface(q))
         , scheduler(_q)
-    {}
+        , axesCenter(QPointF(0.5, 0.5))
+    {
+        {
+            KisImageConfig cfg;
+            if (cfg.enableProgressReporting()) {
+                scheduler.setProgressProxy(&compositeProgressProxy);
+            }
+
+            // Each of these lambdas defines a new factory function.
+            scheduler.setLod0ToNStrokeStrategyFactory(
+                [=](bool forgettable) {
+                    return KisLodSyncPair(
+                        new KisSyncLodCacheStrokeStrategy(KisImageWSP(q), forgettable),
+                        KisSyncLodCacheStrokeStrategy::createJobsData(KisImageWSP(q)));
+                });
+
+            scheduler.setSuspendUpdatesStrokeStrategyFactory(
+                [=]() {
+                    return KisSuspendResumePair(
+                        new KisSuspendProjectionUpdatesStrokeStrategy(KisImageWSP(q), true),
+                        KisSuspendProjectionUpdatesStrokeStrategy::createSuspendJobsData(KisImageWSP(q)));
+                });
+
+            scheduler.setResumeUpdatesStrokeStrategyFactory(
+                [=]() {
+                    return KisSuspendResumePair(
+                        new KisSuspendProjectionUpdatesStrokeStrategy(KisImageWSP(q), false),
+                        KisSuspendProjectionUpdatesStrokeStrategy::createResumeJobsData(KisImageWSP(q)));
+                });
+        }
+
+        connect(q, SIGNAL(sigImageModified()), KisMemoryStatisticsServer::instance(), SLOT(notifyImageChanged()));
+    }
 
     KisImage *q;
 
@@ -157,7 +189,6 @@ public:
 
     KisSelectionSP deselectedGlobalSelection;
     KisGroupLayerSP rootLayer; // The layers are contained in here
-    QList<KisLayer*> dirtyLayers; // for thumbnails
     QList<KisLayerCompositionSP> compositions;
     KisNodeSP isolatedRootNode;
     bool wrapAroundModePermitted = false;
@@ -184,6 +215,8 @@ public:
 
     bool blockLevelOfDetail = false;
 
+    QPointF axesCenter;
+
     bool tryCancelCurrentStrokeAsync();
 
     void notifyProjectionUpdatedInPatches(const QRect &rc);
@@ -207,41 +240,7 @@ KisImage::KisImage(KisUndoStore *undoStore, qint32 width, qint32 height, const K
     }
     m_d = new KisImagePrivate(this, width, height, c, undoStore);
 
-
-    {
-        KisImageConfig cfg;
-        if (cfg.enableProgressReporting()) {
-            m_d->scheduler.setProgressProxy(&m_d->compositeProgressProxy);
-        }
-
-        // Each of these lambdas defines a new factory function.
-        m_d->scheduler.setLod0ToNStrokeStrategyFactory(
-            [=](bool forgettable) {
-                return KisLodSyncPair(
-                    new KisSyncLodCacheStrokeStrategy(KisImageWSP(this), forgettable),
-                    KisSyncLodCacheStrokeStrategy::createJobsData(KisImageWSP(this)));
-            });
-
-        m_d->scheduler.setSuspendUpdatesStrokeStrategyFactory(
-            [=]() {
-                return KisSuspendResumePair(
-                    new KisSuspendProjectionUpdatesStrokeStrategy(KisImageWSP(this), true),
-                    KisSuspendProjectionUpdatesStrokeStrategy::createSuspendJobsData(KisImageWSP(this)));
-            });
-
-        m_d->scheduler.setResumeUpdatesStrokeStrategyFactory(
-            [=]() {
-                return KisSuspendResumePair(
-                    new KisSuspendProjectionUpdatesStrokeStrategy(KisImageWSP(this), false),
-                    KisSuspendProjectionUpdatesStrokeStrategy::createResumeJobsData(KisImageWSP(this)));
-            });
-    }
-
     setRootLayer(new KisGroupLayer(this, "root", OPACITY_OPAQUE_U8));
-
-    m_d->animationInterface = new KisImageAnimationInterface(this);
-
-    connect(this, SIGNAL(sigImageModified()), KisMemoryStatisticsServer::instance(), SLOT(notifyImageChanged()));
 }
 
 KisImage::~KisImage()
@@ -267,6 +266,68 @@ KisImage::~KisImage()
     delete m_d->undoStore;
     delete m_d;
     disconnect(); // in case Qt gets confused
+}
+
+KisImage *KisImage::clone(bool exactCopy)
+{
+    return new KisImage(*this, 0, exactCopy);
+}
+
+KisImage::KisImage(const KisImage& rhs, KisUndoStore *undoStore, bool exactCopy)
+    : KisNodeFacade(),
+      KisNodeGraphListener(),
+      KisShared(),
+      m_d(new KisImagePrivate(this,
+                              rhs.width(), rhs.height(),
+                              rhs.colorSpace(),
+                              undoStore ? undoStore : new KisDumbUndoStore()))
+{
+    setObjectName(rhs.objectName());
+
+    m_d->xres = rhs.m_d->xres;
+    m_d->yres = rhs.m_d->yres;
+
+
+    if (rhs.m_d->proofingConfig) {
+        m_d->proofingConfig = toQShared(new KisProofingConfiguration(*rhs.m_d->proofingConfig));
+    }
+
+    KisNodeSP newRoot = rhs.root()->clone();
+    newRoot->setGraphListener(this);
+    newRoot->setImage(this);
+    m_d->rootLayer = dynamic_cast<KisGroupLayer*>(newRoot.data());
+    setRoot(newRoot);
+
+    if (exactCopy) {
+        QQueue<KisNodeSP> linearizedNodes;
+        KisLayerUtils::recursiveApplyNodes(rhs.root(),
+            [&linearizedNodes](KisNodeSP node) {
+                linearizedNodes.enqueue(node);
+            });
+        KisLayerUtils::recursiveApplyNodes(newRoot,
+            [&linearizedNodes](KisNodeSP node) {
+                KisNodeSP refNode = linearizedNodes.dequeue();
+                node->setUuid(refNode->uuid());
+            });
+    }
+
+    Q_FOREACH (KisLayerCompositionSP comp, rhs.m_d->compositions) {
+        m_d->compositions << toQShared(new KisLayerComposition(*comp, this));
+    }
+
+    rhs.m_d->nserver = KisNameServer(rhs.m_d->nserver);
+
+    vKisAnnotationSP newAnnotations;
+    Q_FOREACH (KisAnnotationSP annotation, rhs.m_d->annotations) {
+        newAnnotations << annotation->clone();
+    }
+    m_d->annotations = newAnnotations;
+
+    KIS_ASSERT_RECOVER_NOOP(!rhs.m_d->projectionUpdatesFilter);
+    KIS_ASSERT_RECOVER_NOOP(!rhs.m_d->disableUIUpdateSignals);
+    KIS_ASSERT_RECOVER_NOOP(!rhs.m_d->disableDirtyRequests);
+
+    m_d->blockLevelOfDetail = rhs.m_d->blockLevelOfDetail;
 }
 
 void KisImage::aboutToAddANode(KisNode *parent, int index)
@@ -1050,7 +1111,10 @@ QRect KisImage::effectiveLodBounds() const
 
 KisPostExecutionUndoAdapter* KisImage::postExecutionUndoAdapter() const
 {
-    return &m_d->postExecutionUndoAdapter;
+    const int lod = currentLevelOfDetail();
+    return lod > 0 ?
+        m_d->scheduler.lodNPostExecutionUndoAdapter() :
+        &m_d->postExecutionUndoAdapter;
 }
 
 void KisImage::setUndoStore(KisUndoStore *undoStore)
@@ -1297,6 +1361,11 @@ void KisImage::requestStrokeCancellation()
     if (!m_d->tryCancelCurrentStrokeAsync()) {
         emit sigStrokeCancellationRequested();
     }
+}
+
+UndoResult KisImage::tryUndoUnfinishedLod0Stroke()
+{
+    return m_d->scheduler.tryUndoLastStrokeAsync();
 }
 
 void KisImage::requestStrokeEnd()
@@ -1616,4 +1685,14 @@ KisProofingConfigurationSP KisImage::proofingConfiguration() const
         m_d->proofingConfig = cfg.defaultProofingconfiguration();
     }
     return m_d->proofingConfig;
+}
+
+QPointF KisImage::mirrorAxesCenter() const
+{
+    return m_d->axesCenter;
+}
+
+void KisImage::setMirrorAxesCenter(const QPointF &value) const
+{
+    m_d->axesCenter = value;
 }

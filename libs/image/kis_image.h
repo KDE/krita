@@ -34,6 +34,7 @@
 #include "kis_node_graph_listener.h"
 #include "kis_node_facade.h"
 #include "kis_image_interfaces.h"
+#include "kis_strokes_queue_undo_result.h"
 
 #include <kritaimage_export.h>
 
@@ -67,6 +68,7 @@ class MergeStrategy;
  */
 class KRITAIMAGE_EXPORT KisImage : public QObject,
         public KisStrokesFacade,
+        public KisStrokeUndoFacade,
         public KisUpdatesFacade,
         public KisProjectionUpdateListener,
         public KisNodeFacade,
@@ -79,7 +81,7 @@ class KRITAIMAGE_EXPORT KisImage : public QObject,
 public:
 
     /// @param colorSpace can be null. in that case it will be initialised to a default color space.
-    KisImage(KisUndoStore *undoStore, qint32 width, qint32 height, const KoColorSpace * colorSpace, const QString& name);
+    KisImage(KisUndoStore *undoStore, qint32 width, qint32 height, const KoColorSpace *colorSpace, const QString& name);
     virtual ~KisImage();
 
 public: // KisNodeGraphListener implementation
@@ -98,6 +100,18 @@ public: // KisProjectionUpdateListener implementation
     void notifyProjectionUpdated(const QRect &rc);
 
 public:
+
+    /**
+     * Makes a copy of the image with all the layers. If possible, shallow
+     * copies of the layers are made.
+     *
+     * \p exactCopy shows if the copied image should look *exactly* the same as
+     * the other one (according to it's .kra xml representation). It means that
+     * the layers will have the same UUID keys and, therefore, you are not
+     * expected to use the copied image anywhere except for saving. Don't use
+     * this option if you plan to work with the copied image later.
+     */
+    KisImage* clone(bool exactCopy = false);
 
     /**
      * Render the projection onto a QImage.
@@ -534,6 +548,19 @@ public:
      */
     void setDesiredLevelOfDetail(int lod);
 
+    /**
+     * Relative position of the mirror axis center
+     *     0,0 - topleft corner of the image
+     *     1,1 - bottomright corner of the image
+     */
+    QPointF mirrorAxesCenter() const;
+
+    /**
+     * Sets the relative position of the axes center
+     * \see mirrorAxesCenter() for details
+     */
+    void setMirrorAxesCenter(const QPointF &value) const;
+
 public Q_SLOTS:
 
     /**
@@ -870,6 +897,15 @@ public Q_SLOTS:
     void requestStrokeCancellation();
 
     /**
+     * This method requests the last stroke executed on the image to become undone.
+     * If the stroke is not ended, or if all the Lod0 strokes are completed, the method
+     * returns UNDO_FAIL. If the last Lod0 is going to be finished soon, then UNDO_WAIT
+     * is returned and the caller should just wait for its completion and call global undo
+     * instead. UNDO_OK means one unfinished stroke has been undone.
+     */
+    UndoResult tryUndoUnfinishedLod0Stroke();
+
+    /**
      * This method is called when image or some other part of Krita
      * (*not* the creator of the stroke) decides that the stroke
      * should be ended. If the creator of the stroke supports it, it
@@ -888,7 +924,7 @@ public Q_SLOTS:
 
 private:
 
-    KisImage(const KisImage& rhs);
+    KisImage(const KisImage& rhs, KisUndoStore *undoStore, bool exactCopy);
     KisImage& operator=(const KisImage& rhs);
 
     void emitSizeChanged();

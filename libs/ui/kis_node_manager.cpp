@@ -287,7 +287,7 @@ void KisNodeManager::setup(KActionCollection * actionCollection, KisActionManage
 
     action = actionManager->createAction("new_from_visible");
     connect(action, SIGNAL(triggered()), this, SLOT(createFromVisible()));
-    
+
     NEW_LAYER_ACTION("add_new_paint_layer", "KisPaintLayer");
 
     NEW_LAYER_ACTION("add_new_group_layer", "KisGroupLayer");
@@ -950,7 +950,6 @@ void KisNodeManager::Private::saveDeviceAsImage(KisPaintDeviceSP device,
     QString mimefilter = KisMimeDatabase::mimeTypeForFile(filename);;
 
     QScopedPointer<KisDocument> d(KisPart::instance()->createDocument());
-    d->prepareForImport();
 
     KisImageSP dst = new KisImage(d->createUndoStore(),
                                   bounds.width(),

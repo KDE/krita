@@ -754,6 +754,7 @@ void KoColorSpace::increaseGreen(quint8 * pixel, qreal step) const{
     fromNormalisedChannelsValue(pixel, channelValuesF);
     setOpacity(pixel, 1.0, 1);
 }
+
 void KoColorSpace::increaseBlue(quint8 * pixel, qreal step) const{
     int channelnumber = channelCount();
     QVector <double> channelValues(channelnumber);
@@ -775,6 +776,7 @@ void KoColorSpace::increaseBlue(quint8 * pixel, qreal step) const{
     fromNormalisedChannelsValue(pixel, channelValuesF);
     setOpacity(pixel, 1.0, 1);
 }
+
 void KoColorSpace::increaseYellow(quint8 * pixel, qreal step) const{
     int channelnumber = channelCount();
     QVector <double> channelValues(channelnumber);
@@ -796,6 +798,7 @@ void KoColorSpace::increaseYellow(quint8 * pixel, qreal step) const{
     fromNormalisedChannelsValue(pixel, channelValuesF);
     setOpacity(pixel, 1.0, 1);
 }
+
 QImage KoColorSpace::convertToQImage(const quint8 *data, qint32 width, qint32 height,
                                      const KoColorProfile *dstProfile,
                                      KoColorConversionTransformation::Intent renderingIntent,

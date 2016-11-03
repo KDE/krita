@@ -111,7 +111,7 @@ bool KisToolMove::startStrokeImpl(MoveToolMode mode, const QPoint *pos)
     KisImageSP image = this->image();
 
     KisResourcesSnapshotSP resources =
-        new KisResourcesSnapshot(image, currentNode(), 0, this->canvas()->resourceManager());
+        new KisResourcesSnapshot(image, currentNode(), this->canvas()->resourceManager());
     KisSelectionSP selection = resources->activeSelection();
 
     if (mode != MoveSelectedLayer && pos) {
@@ -163,11 +163,10 @@ bool KisToolMove::startStrokeImpl(MoveToolMode mode, const QPoint *pos)
             new MoveSelectionStrokeStrategy(paintLayer,
                                             selection,
                                             image.data(),
-                                            image->postExecutionUndoAdapter());
+                                            image.data());
     } else {
         strategy =
-            new MoveStrokeStrategy(nodes, image.data(),
-                                   image->postExecutionUndoAdapter());
+            new MoveStrokeStrategy(nodes, image.data(), image.data());
     }
 
     m_strokeId = image->startStroke(strategy);

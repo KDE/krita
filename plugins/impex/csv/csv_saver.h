@@ -21,7 +21,7 @@
 #define CSV_SAVER_H_
 
 #include <QObject>
-
+#include <QIODevice>
 #include "kis_types.h"
 #include "kis_raster_keyframe_channel.h"
 #include "kis_png_converter.h"
@@ -39,11 +39,11 @@ public:
     CSVSaver(KisDocument* doc, bool batchMode);
     virtual ~CSVSaver();
 
-    KisImageBuilder_Result buildAnimation(const QString &filename);
+    KisImageBuilder_Result buildAnimation(QIODevice *io);
     KisImageWSP image();
 
 private:
-    KisImageBuilder_Result encode(const QString &filename);
+    KisImageBuilder_Result encode(QIODevice *io);
     KisImageBuilder_Result getLayer(CSVLayerRecord* , KisDocument* , KisKeyframeSP, const QString &, int, int);
     void createTempImage(KisDocument* );
     QString convertToBlending(const QString &);

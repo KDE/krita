@@ -213,7 +213,6 @@ void KisScratchPad::beginStroke(KoPointerEvent *event)
                         0,
                         0,
                         m_updateScheduler,
-                        m_undoAdapter,
                         m_paintLayer,
                         m_paintLayer->paintDevice()->defaultBounds());
 }

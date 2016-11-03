@@ -58,7 +58,7 @@ if (APPLE)
     set(KDE_SKIP_RPATH_SETTINGS TRUE)
     set(CMAKE_MACOSX_RPATH 1)
     set(BUILD_WITH_INSTALL_RPATH 1)
-    add_definitions(-mmacosx-version-min=10.9 -Wno-deprecated-register)
+    add_definitions(-mmacosx-version-min=10.9 -Wno-macro-redefined -Wno-deprecated-register)
 endif()
 
  ######################
@@ -147,6 +147,26 @@ add_feature_info("Packagers' Build" PACKAGERS_BUILD "Support several CPU arch in
 if (WIN32)
     option(USE_DRMINGW "Support the Dr. Mingw crash handler (only on windows)" ON)
     add_feature_info("Dr. Mingw" USE_DRMINGW "Enable the Dr. Mingw crash handler")
+
+    if (MINGW)
+        option(USE_MINGW_HARDENING_LINKER "Enable DEP (NX), ASLR and high-entropy ASLR linker flags (mingw-w64)" ON)
+        add_feature_info("Linker Security Flags" USE_MINGW_HARDENING_LINKER "Enable DEP (NX), ASLR and high-entropy ASLR linker flags")
+        if (USE_MINGW_HARDENING_LINKER)
+            set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--dynamicbase -Wl,--nxcompat -Wl,--disable-auto-image-base")
+            set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--dynamicbase -Wl,--nxcompat -Wl,--disable-auto-image-base")
+            set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -Wl,--dynamicbase -Wl,--nxcompat -Wl,--disable-auto-image-base")
+            if ("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
+                # Enable high-entropy ASLR for 64-bit
+                # The image base has to be >4GB for HEASLR to be enabled.
+                # The values used here are kind of arbitrary.
+                set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--high-entropy-va -Wl,--image-base,0x140000000")
+                set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--high-entropy-va -Wl,--image-base,0x180000000")
+                set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -Wl,--high-entropy-va -Wl,--image-base,0x180000000")
+            endif ("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
+        else (USE_MINGW_HARDENING_LINKER)
+            message(WARNING "Linker Security Flags not enabled!")
+        endif (USE_MINGW_HARDENING_LINKER)
+    endif (MINGW)
 endif ()
 
 option(HIDE_SAFE_ASSERTS "Don't show message box for \"safe\" asserts, just ignore them automatically and dump a message to the terminal." ON)

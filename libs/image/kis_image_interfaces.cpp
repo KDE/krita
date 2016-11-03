@@ -29,3 +29,7 @@ KisUpdatesFacade::~KisUpdatesFacade()
 KisProjectionUpdateListener::~KisProjectionUpdateListener()
 {
 }
+
+KisStrokeUndoFacade::~KisStrokeUndoFacade()
+{
+}

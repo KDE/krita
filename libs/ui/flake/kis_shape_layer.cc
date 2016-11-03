@@ -392,7 +392,7 @@ bool KisShapeLayer::saveLayer(KoStore * store) const
     KoOdfWriteStore odfStore(store);
     KoXmlWriter* manifestWriter = odfStore.manifestWriter("application/vnd.oasis.opendocument.graphics");
     KoEmbeddedDocumentSaver embeddedSaver;
-    KisDocument::SavingContext documentContext(odfStore, embeddedSaver);
+    KoDocumentBase::SavingContext documentContext(odfStore, embeddedSaver);
 
     if (!store->open("content.xml"))
         return false;
@@ -401,9 +401,9 @@ bool KisShapeLayer::saveLayer(KoStore * store) const
     KoXmlWriter * docWriter = KoOdfWriteStore::createOasisXmlWriter(&storeDev, "office:document-content");
 
     // for office:master-styles
-    QTemporaryFile masterStyles;
-    masterStyles.open();
-    KoXmlWriter masterStylesTmpWriter(&masterStyles, 1);
+//    QTemporaryFile masterStyles;
+//    masterStyles.open();
+//    KoXmlWriter masterStylesTmpWriter(&masterStyles, 1);
 
     KoPageLayout page;
     page.format = KoPageFormat::defaultFormat();

@@ -172,6 +172,30 @@ namespace KisLayerUtils {
         MergeDownInfoBaseSP m_info;
     };
 
+    struct DisableOnionSkins : public KisCommandUtils::AggregateCommand {
+        DisableOnionSkins(MergeDownInfoBaseSP info) : m_info(info) {}
+
+        void populateChildCommands() override {
+            Q_FOREACH (KisNodeSP node, m_info->allSrcNodes()) {
+                recursiveApplyNodes(node,
+                                    [this] (KisNodeSP node) {
+                                        if (KisLayerPropertiesIcons::nodeProperty(node, KisLayerPropertiesIcons::onionSkins, false).toBool()) {
+
+                                            KisBaseNode::PropertyList props = node->sectionModelProperties();
+                                            KisLayerPropertiesIcons::setNodeProperty(&props,
+                                                                                     KisLayerPropertiesIcons::onionSkins,
+                                                                                     false);
+
+                                            addCommand(new KisNodePropertyListCommand(node, props));
+                                        }
+                                    });
+            }
+        }
+
+    private:
+        MergeDownInfoBaseSP m_info;
+    };
+
     struct RefreshHiddenAreas : public KUndo2Command {
         RefreshHiddenAreas(MergeDownInfoBaseSP info) : m_info(info) {}
 
@@ -738,9 +762,10 @@ namespace KisLayerUtils {
         if (layer->visible() && prevLayer->visible()) {
             MergeDownInfoSP info(new MergeDownInfo(image, prevLayer, layer));
 
-            // disable key strokes on all colorize masks and wait until
-            // update is finished with a barrier
+            // disable key strokes on all colorize masks, all onion skins on
+            // paint layers and wait until update is finished with a barrier
             applicator.applyCommand(new DisableColorizeKeyStrokes(info));
+            applicator.applyCommand(new DisableOnionSkins(info));
             applicator.applyCommand(new KUndo2Command(), KisStrokeJobData::BARRIER);
 
             applicator.applyCommand(new KeepMergedNodesSelected(info, false));
@@ -1029,9 +1054,10 @@ namespace KisLayerUtils {
         if (mergedNodes.size() > 1 || invisibleNodes.isEmpty()) {
             MergeMultipleInfoSP info(new MergeMultipleInfo(image, mergedNodes));
 
-            // disable key strokes on all colorize masks and wait until
-            // update is finished with a barrier
+            // disable key strokes on all colorize masks, all onion skins on
+            // paint layers and wait until update is finished with a barrier
             applicator.applyCommand(new DisableColorizeKeyStrokes(info));
+            applicator.applyCommand(new DisableOnionSkins(info));
             applicator.applyCommand(new KUndo2Command(), KisStrokeJobData::BARRIER);
 
             applicator.applyCommand(new KeepMergedNodesSelected(info, putAfter, false));

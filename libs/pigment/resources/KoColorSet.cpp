@@ -701,7 +701,7 @@ bool KoColorSet::saveKpl(QIODevice *dev) const
         doc.appendChild(root);
         if (!store->open("colorset.xml")) { return false; }
         QByteArray ba = doc.toByteArray();
-        if (!store->write(ba) == ba.size()) { return false; }
+        if (store->write(ba) != ba.size()) { return false; }
         if (!store->close()) { return false; }
     }
 
@@ -725,7 +725,7 @@ bool KoColorSet::saveKpl(QIODevice *dev) const
     doc.appendChild(profileElement);
     if (!store->open("profiles.xml")) { return false; }
     QByteArray ba = doc.toByteArray();
-    if (!store->write(ba) == ba.size()) { return false; }
+    if (store->write(ba) != ba.size()) { return false; }
     if (!store->close()) { return false; }
 
     return store->finalize();
@@ -848,7 +848,8 @@ bool KoColorSet::loadAco()
 
         bool skip = false;
         if (colorSpace == 0) { // RGB
-            e.color = KoColor(KoColorSpaceRegistry::instance()->rgb16());
+            const KoColorProfile *srgb = KoColorSpaceRegistry::instance()->rgb8()->profile();
+            e.color = KoColor(KoColorSpaceRegistry::instance()->rgb16(srgb));
             reinterpret_cast<quint16*>(e.color.data())[0] = ch3;
             reinterpret_cast<quint16*>(e.color.data())[1] = ch2;
             reinterpret_cast<quint16*>(e.color.data())[2] = ch1;

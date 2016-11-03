@@ -196,7 +196,6 @@ void KisToolColorPicker::pickColor(const QPointF& pos)
 
         quint8* dstColor = new quint8[pixelSize];
         QVector<const quint8*> pixels;
-        QVector<qint16> weights;
 
         KisRandomConstAccessorSP accessor = dev->createRandomConstAccessorNG(0, 0);
 
@@ -216,14 +215,9 @@ void KisToolColorPicker::pickColor(const QPointF& pos)
             }
         }
 
-        weights.fill(255 / pixels.size(), pixels.size());
-        // Because the sum of the weights must be 255,
-        // we cheat a bit, and weigh the center pixel differently in order
-        // to sum to 255 in total
-        weights[(weights.size() / 2)] = 255 - (weights.size() -1) * (255 / weights.size());
 
         const quint8** cpixels = const_cast<const quint8**>(pixels.constData());
-        cs->mixColorsOp()->mixColors(cpixels, weights.constData(), pixels.size(), dstColor);
+        cs->mixColorsOp()->mixColors(cpixels, pixels.size(), dstColor);
 
         m_pickedColor = KoColor(dstColor, cs);
 

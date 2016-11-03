@@ -56,6 +56,26 @@ public:
      */
     virtual void mixColors(const quint8 * const*colors, const qint16 *weights, quint32 nColors, quint8 *dst) const = 0;
     virtual void mixColors(const quint8 *colors, const qint16 *weights, quint32 nColors, quint8 *dst) const = 0;
+
+
+    /**
+     * Mix the colors uniformly, without weightening
+     * @param colors a pointer toward the source pixels
+     * @param nColors the number of pixels in the colors array
+     * @param dst the destination pixel
+     *
+     * @code
+     * quint8* colors[nColors];
+     * colors[0] = ptrToFirstPixel;
+     * colors[1] = ptrToSecondPixel;
+     * ...
+     * colors[nColors-1] = ptrToLastPixel;
+     *
+     * mixColors(colors, nColors, ptrToDestinationPixel);
+     * @endcode
+     */
+    virtual void mixColors(const quint8 * const*colors, quint32 nColors, quint8 *dst) const = 0;
+    virtual void mixColors(const quint8 *colors, quint32 nColors, quint8 *dst) const = 0;
 };
 
 #endif

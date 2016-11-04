@@ -4,7 +4,7 @@
 
 if (CMAKE_COMPILER_IS_GNUCXX)
     add_compile_options("-Wno-misleading-indentation")
-elseif(CMAKE_COMPILER_IS_CLANG)
+elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
     add_compile_options("-Wno-cast-align")
 endif()
 

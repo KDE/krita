@@ -104,7 +104,6 @@ void KisToolProxy::forwardHoverEvent(QEvent *event)
 
 bool KisToolProxy::forwardEvent(ActionState state, KisTool::ToolAction action, QEvent *event, QEvent *originalEvent)
 {
-    qDebug() << state << action << event << originalEvent;
     bool retval = true;
 
     QTabletEvent *tabletEvent = dynamic_cast<QTabletEvent*>(event);

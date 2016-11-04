@@ -28,10 +28,26 @@
 
 namespace KisToolUtils {
 
+struct KRITAUI_EXPORT ColorPickerConfig {
+    ColorPickerConfig();
+
+    bool toForegroundColor;
+    bool updateColor;
+    bool addPalette;
+    bool normaliseValues;
+    bool sampleMerged;
+    int radius;
+
+    void save(bool defaultActivation = true) const;
+    void load(bool defaultActivation = true);
+private:
+    static const QString CONFIG_GROUP_NAME;
+};
+
 /**
  * return the color at the given position on the given paint device.
  */
-bool KRITAUI_EXPORT pick(KisPaintDeviceSP dev, const QPoint& pos, KoColor *color);
+bool KRITAUI_EXPORT pick(KisPaintDeviceSP dev, const QPoint& pos, KoColor *color, int radius = 1);
 
 /**
  * Recursively search a node with a non-transparent pixel

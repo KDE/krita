@@ -57,8 +57,8 @@ typedef KisSharedPtr<KisDataManager> KisDataManagerSP;
 
 /**
  * A paint device contains the actual pixel data and offers methods
- * to read and write pixels. A paint device has an integer x,y position
- * (i.e., are not positioned on the image with sub-pixel accuracy).
+ * to read and write pixels. A paint device has an integer x, y position
+ * (it is not positioned on the image with sub-pixel accuracy).
  * A KisPaintDevice doesn't have any fixed size, the size changes dynamically
  * when pixels are accessed by an iterator.
  */
@@ -134,7 +134,7 @@ public:
 
     /**
      * set the default bounds for the paint device when
-     * the default pixel in not completely transarent
+     * the default pixel is not completely transparent
      */
     void setDefaultBounds(KisDefaultBoundsBaseSP bounds);
 
@@ -144,7 +144,7 @@ public:
     KisDefaultBoundsBaseSP defaultBounds() const;
 
     /**
-     * Moves the device to these new coordinates (so no incremental move or so)
+     * Moves the device to these new coordinates (no incremental move)
      */
     void moveTo(qint32 x, qint32 y);
 
@@ -503,9 +503,9 @@ public:
      * case it's up to the color strategy to choose a profile (most
      * like sRGB).
      */
-    virtual QImage convertToQImage(const KoColorProfile *dstProfile, qint32 x, qint32 y, qint32 w, qint32 h,
-                                   KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::internalRenderingIntent(),
-                                   KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::internalConversionFlags()) const;
+    QImage convertToQImage(const KoColorProfile *dstProfile, qint32 x, qint32 y, qint32 w, qint32 h,
+                           KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::internalRenderingIntent(),
+                           KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::internalConversionFlags()) const;
 
     /**
      * Overridden method for convenience

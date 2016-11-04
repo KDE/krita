@@ -38,7 +38,6 @@
 #include <QFileInfo>
 
 // calligra's headers
-#include <KisFilterChain.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoProgressUpdater.h>
@@ -66,22 +65,10 @@ KisPDFImport::~KisPDFImport()
 {
 }
 
-KisPDFImport::ConversionStatus KisPDFImport::convert(const QByteArray& , const QByteArray&, KisPropertiesConfigurationSP configuration)
+KisPDFImport::ConversionStatus KisPDFImport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
 {
-    Q_UNUSED(configuration);
+    Poppler::Document* pdoc = Poppler::Document::loadFromData(io->readAll());
 
-    QString filename = inputFile();
-    dbgFile << "Importing using PDFImport!" << filename;
-
-    if (filename.isEmpty()) {
-        return KisImportExportFilter::FileNotFound;
-    }
-
-    QFileInfo fi(filename);
-    if (!fi.exists()) {
-        return KisImportExportFilter::FileNotFound;
-    }
-    Poppler::Document* pdoc = Poppler::Document::load(filename);
 
     if (!pdoc) {
         return KisPDFImport::InvalidFormat;
@@ -119,25 +106,16 @@ KisPDFImport::ConversionStatus KisPDFImport::convert(const QByteArray& , const Q
         return KisImportExportFilter::StorageCreationError; // FIXME Cancel doesn't exist :(
     }
 
-    // Init kis's doc
-    KisDocument * doc = outputDocument();
-    if (!doc) {
-        delete pdoc;
-        delete kdb;
-        return KisImportExportFilter::NoDocumentCreated;
-    }
-
-    doc -> prepareForImport();
     // Create the krita image
     const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
     int width = wdg->intWidth->value();
     int height = wdg->intHeight->value();
-    KisImageWSP image = new KisImage(doc->createUndoStore(), width, height, cs, "built image");
+    KisImageWSP image = new KisImage(document->createUndoStore(), width, height, cs, "built image");
     image->setResolution(wdg->intResolution->value() / 72.0, wdg->intResolution->value() / 72.0);
 
     // create a layer
     QList<int> pages = wdg->pages();
-    QPointer<KoUpdater> loadUpdater =  outputDocument()->progressUpdater()->startSubtask(1, "load");
+    QPointer<KoUpdater> loadUpdater =  document->progressUpdater()->startSubtask(1, "load");
     loadUpdater->setRange(0, pages.count());
     for (QList<int>::const_iterator it = pages.constBegin(); it != pages.constEnd(); ++it) {
         KisPaintLayer* layer = new KisPaintLayer(image.data(),
@@ -155,7 +133,7 @@ KisPDFImport::ConversionStatus KisPDFImport::convert(const QByteArray& , const Q
         loadUpdater->setProgress(*it + 1);
     }
 
-    doc->setCurrentImage(image);
+    document->setCurrentImage(image);
 
     delete pdoc;
     delete kdb;

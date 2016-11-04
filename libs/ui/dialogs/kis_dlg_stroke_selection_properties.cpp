@@ -67,22 +67,22 @@ KisDlgStrokeSelection::KisDlgStrokeSelection(KisImageWSP image, KisViewManager *
     resize(m_page->sizeHint());
 
     QString filterConfig = KisConfig().exportConfiguration("StrokeSelection");
-    KisPropertiesConfiguration cfg;
-    cfg.fromXML(filterConfig);
+    KisPropertiesConfigurationSP cfg(new KisPropertiesConfiguration());
+    cfg->fromXML(filterConfig);
 
     auto &m_options = m_page->m_options;
-    m_options.color = cfg.getColor("color");
-    m_options.lineColorSource = cfg.getInt("lineColorSource");
+    m_options.color = cfg->getColor("color");
+    m_options.lineColorSource = cfg->getInt("lineColorSource");
     m_page->lineColorBox->setCurrentIndex(m_options.lineColorSource);
 
     m_page->colorSelector->setColor(getSelectedColor().toQColor());
 
-    m_options.brushSelected = cfg.getBool("useBrush", 0);
+    m_options.brushSelected = cfg->getBool("useBrush", 0);
     m_page->typeBox->setCurrentIndex(m_options.brushSelected? 0 : 1);
 
-    m_options._colorFillSource = cfg.getInt("colorFillSource", 0);
+    m_options._colorFillSource = cfg->getInt("colorFillSource", 0);
     m_page->fillBox->setCurrentIndex(m_options._colorFillSource);
-    m_options.customColor = cfg.getColor("customColor");
+    m_options.customColor = cfg->getColor("customColor");
     if (m_options._colorFillSource == static_cast<int>(colorFillSource::CustomColor)) {
         m_page->colorFillSelector->setColor(m_options.customColor.toQColor());
     }
@@ -90,14 +90,14 @@ KisDlgStrokeSelection::KisDlgStrokeSelection(KisImageWSP image, KisViewManager *
         m_page->colorFillSelector->setColor(getFillSelectedColor().toQColor());
     }
 
-    m_options.fillColor = cfg.getColor("fillColor");
+    m_options.fillColor = cfg->getColor("fillColor");
     if (m_options._colorFillSource == static_cast<int>(colorFillSource::None)) {
         m_page->colorFillSelector->setDisabled(true);
     }
     else {
         m_page->colorFillSelector->setDisabled(false);    }
 
-    m_options.lineSize = cfg.getInt("lineSize", 1);
+    m_options.lineSize = cfg->getInt("lineSize", 1);
     m_page->lineSize->setValue(m_options.lineSize);
     if (m_options.brushSelected) {
         m_page->lineSize->setDisabled(true);
@@ -106,7 +106,7 @@ KisDlgStrokeSelection::KisDlgStrokeSelection(KisImageWSP image, KisViewManager *
         m_page->sizeBox->setDisabled(true);
     }
 
-    m_options.lineDimension = cfg.getInt("lineDimension", 0);
+    m_options.lineDimension = cfg->getInt("lineDimension", 0);
     m_page->sizeBox->setCurrentIndex(m_options.lineDimension);
 
     connect(m_page, SIGNAL(colorSelectorChanged()), SLOT(setColorButton()));
@@ -127,24 +127,24 @@ KisDlgStrokeSelection::~KisDlgStrokeSelection()
     m_options.lineDimension = m_page->sizeBox->currentIndex();
     m_options.lineColorSource = m_page->lineColorBox->currentIndex();
 
-    KisPropertiesConfiguration cfg;
-    cfg.setProperty("lineSize", m_options.lineSize);
-    cfg.setProperty("colorFillSource", m_options._colorFillSource);
-    cfg.setProperty("useBrush", m_options.brushSelected);
-    cfg.setProperty("lineDimension", m_options.lineDimension);
-    cfg.setProperty("lineColorSource", m_options.lineColorSource);
+    KisPropertiesConfigurationSP cfg(new KisPropertiesConfiguration());
+    cfg->setProperty("lineSize", m_options.lineSize);
+    cfg->setProperty("colorFillSource", m_options._colorFillSource);
+    cfg->setProperty("useBrush", m_options.brushSelected);
+    cfg->setProperty("lineDimension", m_options.lineDimension);
+    cfg->setProperty("lineColorSource", m_options.lineColorSource);
 
     QVariant colorVariant("KoColor");
     colorVariant.setValue(m_options.customColor);
-    cfg.setProperty("customColor", colorVariant);
+    cfg->setProperty("customColor", colorVariant);
 
     QVariant  _colorVariant("KoColor");
     _colorVariant.setValue(m_options.color);
-    cfg.setProperty("color", _colorVariant);
+    cfg->setProperty("color", _colorVariant);
 
     QVariant _cVariant("KoColor");
     _cVariant.setValue(m_options.fillColor);
-    cfg.setProperty("fillColor", _cVariant);
+    cfg->setProperty("fillColor", _cVariant);
 
     KisConfig().setExportConfiguration("StrokeSelection", cfg);
 

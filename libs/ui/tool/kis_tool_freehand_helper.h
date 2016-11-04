@@ -50,7 +50,8 @@ public:
 
     KisToolFreehandHelper(KisPaintingInformationBuilder *infoBuilder,
                           const KUndo2MagicString &transactionText = KUndo2MagicString(),
-                          KisRecordingAdapter *recordingAdapter = 0);
+                          KisRecordingAdapter *recordingAdapter = 0,
+                          KisSmoothingOptions *smoothingOptions = 0);
     ~KisToolFreehandHelper();
 
     void setSmoothness(KisSmoothingOptionsSP smoothingOptions);
@@ -63,7 +64,6 @@ public:
                    KisImageWSP image,
                    KisNodeSP currentNode,
                    KisStrokesFacade *strokesFacade,
-                   KisPostExecutionUndoAdapter *undoAdapter,
                    KisNodeSP overrideNode = 0,
                    KisDefaultBoundsBaseSP bounds = 0);
     void paint(KoPointerEvent *event);
@@ -96,7 +96,6 @@ protected:
                        KisImageWSP image,
                        KisNodeSP node,
                        KisStrokesFacade *strokesFacade,
-                       KisPostExecutionUndoAdapter *undoAdapter,
                        KisNodeSP overrideNode = 0,
                        KisDefaultBoundsBaseSP bounds = 0);
 

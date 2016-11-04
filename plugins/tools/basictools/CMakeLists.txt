@@ -21,10 +21,11 @@ set(kritadefaulttools_SOURCES
     strokes/move_stroke_strategy.cpp
     strokes/move_selection_stroke_strategy.cpp
     kis_tool_multihand.cpp
+    kis_tool_multihand_config.cpp
     kis_tool_pencil.cc
     )
 
-ki18n_wrap_ui(kritadefaulttools_SOURCES wdgcolorpicker.ui wdgmovetool.ui)
+ki18n_wrap_ui(kritadefaulttools_SOURCES wdgcolorpicker.ui wdgmovetool.ui wdgmultihandtool.ui)
 qt5_add_resources(kritadefaulttools_SOURCES defaulttools.qrc )
 
 add_library(kritadefaulttools MODULE ${kritadefaulttools_SOURCES})

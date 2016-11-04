@@ -158,6 +158,8 @@ KisSuspendProjectionUpdatesStrokeStrategy::KisSuspendProjectionUpdatesStrokeStra
 
     enableJob(JOB_DOSTROKE, true);
     enableJob(JOB_CANCEL, true);
+
+    setNeedsExplicitCancel(true);
 }
 
 KisSuspendProjectionUpdatesStrokeStrategy::~KisSuspendProjectionUpdatesStrokeStrategy()

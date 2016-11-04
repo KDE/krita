@@ -25,6 +25,21 @@
 
 #include <tiffio.h>
 
+#include <kis_annotation.h>
+#include <kis_paint_device.h>
+#include <kis_group_layer.h>
+#include <kis_generator_layer.h>
+#include <kis_clone_layer.h>
+#include <kis_external_layer_iface.h>
+#include <kis_adjustment_layer.h>
+#include <kis_image.h>
+#include <kis_paint_layer.h>
+#include <kis_types.h>
+#include <generator/kis_generator_layer.h>
+#include "kis_tiff_converter.h"
+#include <kis_iterator_ng.h>
+#include <kis_shape_layer.h>
+
 struct KisTIFFOptions;
 
 /**
@@ -41,36 +56,55 @@ public:
 
 public:
 
-    bool visit(KisPaintLayer *layer);
-    bool visit(KisGroupLayer *layer);
-    bool visit(KisGeneratorLayer*);
-
     bool visit(KisNode*) {
         return true;
     }
-    bool visit(KisCloneLayer*) {
-        return true;
+
+    bool visit(KisPaintLayer *layer) {
+        return saveLayerProjection(layer);
     }
+
+    bool visit(KisGroupLayer *layer) {
+        dbgFile << "Visiting on grouplayer" << layer->name() << "";
+        return visitAll(layer, true);
+    }
+
+    bool visit(KisGeneratorLayer *layer) {
+        return saveLayerProjection(layer);
+    }
+
+    bool visit(KisCloneLayer *layer) {
+        return saveLayerProjection(layer);
+    }
+
+    bool visit(KisExternalLayer *layer) {
+        return saveLayerProjection(layer);
+    }
+
+    bool visit(KisAdjustmentLayer *layer) {
+        return saveLayerProjection(layer);
+    }
+
     bool visit(KisFilterMask*) {
         return true;
     }
+
     bool visit(KisTransformMask*) {
         return true;
     }
+
     bool visit(KisTransparencyMask*) {
         return true;
     }
+
     bool visit(KisSelectionMask*) {
         return true;
     }
+
     bool visit(KisColorizeMask*) {
         return true;
     }
-    bool visit(KisExternalLayer*);
 
-    bool visit(KisAdjustmentLayer*) {
-        return true;
-    }
 
 private:
     inline TIFF* image() {

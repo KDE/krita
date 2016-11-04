@@ -47,6 +47,7 @@ public:
 private Q_SLOTS:
     void slotGridGuiChanged();
     void slotGuidesGuiChanged();
+    void slotGridTypeChanged();
 
 Q_SIGNALS:
     void gridValueChanged();
@@ -59,11 +60,13 @@ private:
     KisGuidesConfig fetchGuiGuidesConfig() const;
     void setGuidesConfigImpl(const KisGuidesConfig &value);
 
+
 private:
     Ui::GridConfigWidget *ui;
 
     struct Private;
     const QScopedPointer<Private> m_d;
+    bool m_isGridEnabled;
 };
 
 #endif // GRID_CONFIG_WIDGET_H

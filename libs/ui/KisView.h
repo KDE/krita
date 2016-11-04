@@ -107,13 +107,6 @@ public:
     KisPrintJob * createPrintJob();
 
     /**
-     * @return the page layout to be used for printing.
-     * Default is the documents layout.
-     * Reimplement if your application needs to use a different layout.
-     */
-    KoPageLayout pageLayout() const;
-
-    /**
      * Create a QPrintDialog based on the @p printJob
      */
     QPrintDialog *createPrintDialog(KisPrintJob *printJob, QWidget *parent);

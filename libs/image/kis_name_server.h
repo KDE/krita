@@ -33,7 +33,6 @@ public:
 
 private:
     qint32 m_generator;
-    QString m_prefix;
 };
 
 #endif // KIS_NAMESERVER_H_

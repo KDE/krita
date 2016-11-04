@@ -25,11 +25,13 @@
 
 #include "kis_image_interfaces.h"
 #include "kis_stroke_strategy_factory.h"
+#include "kis_strokes_queue_undo_result.h"
 
 class QRect;
 class KoProgressProxy;
 class KisProjectionUpdateListener;
 class KisSpontaneousJob;
+class KisPostExecutionUndoAdapter;
 
 
 class KRITAIMAGE_EXPORT KisUpdateScheduler : public QObject, public KisStrokesFacade
@@ -174,6 +176,9 @@ public:
      */
     void setResumeUpdatesStrokeStrategyFactory(const KisSuspendResumeStrategyFactory &factory);
 
+    KisPostExecutionUndoAdapter* lodNPostExecutionUndoAdapter() const;
+
+
     /**
      * tryCancelCurrentStrokeAsync() checks whether there is a
      * *running* stroke (which is being executed at this very moment)
@@ -187,6 +192,8 @@ public:
      *       more high level requestStrokeCancellation().
      */
     bool tryCancelCurrentStrokeAsync();
+
+    UndoResult tryUndoLastStrokeAsync();
 
     bool wrapAroundModeSupported() const;
     int currentLevelOfDetail() const;

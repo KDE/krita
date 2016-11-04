@@ -159,7 +159,7 @@ void KisToolGradient::endPrimaryAction(KoPointerEvent *event)
     KisImageSP image = this->image();
 
     KisResourcesSnapshotSP resources =
-        new KisResourcesSnapshot(image, currentNode(), 0,  this->canvas()->resourceManager());
+        new KisResourcesSnapshot(image, currentNode(), this->canvas()->resourceManager());
 
     if (image && (device = resources->currentNode()->paintDevice())) {
         QApplication::setOverrideCursor(Qt::BusyCursor);

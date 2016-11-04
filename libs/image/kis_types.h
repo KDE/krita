@@ -282,7 +282,6 @@ class KisKeyframe;
 typedef QSharedPointer<KisKeyframe> KisKeyframeSP;
 typedef QWeakPointer<KisKeyframe> KisKeyframeWSP;
 
-
 class KisFilterChain;
 typedef KisSharedPtr<KisFilterChain> KisFilterChainSP;
 

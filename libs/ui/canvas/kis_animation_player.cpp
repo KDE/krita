@@ -68,6 +68,7 @@ public:
 
     QTimer *timer;
 
+    int initialFrame;
     int firstFrame;
     int lastFrame;
     int fps;
@@ -178,6 +179,8 @@ void KisAnimationPlayer::slotUpdatePlaybackTimer()
     if (!range.isValid()) return;
 
     m_d->fps = animation->framerate();
+
+    m_d->initialFrame = animation->currentUITime();
     m_d->firstFrame = range.start();
     m_d->lastFrame = range.end();
     m_d->expectedFrame = qBound(m_d->firstFrame, m_d->expectedFrame, m_d->lastFrame);
@@ -214,7 +217,12 @@ void KisAnimationPlayer::Private::stopImpl(bool doUpdates)
     playing = false;
 
     if (doUpdates) {
-        canvas->refetchDataFromImage();
+        KisImageAnimationInterface *animation = canvas->image()->animationInterface();
+        if (animation->currentUITime() == initialFrame) {
+            canvas->refetchDataFromImage();
+        } else {
+            animation->switchCurrentTimeAsync(initialFrame);
+        }
     }
 
     emit q->sigPlaybackStopped();
@@ -286,6 +294,9 @@ void KisAnimationPlayer::uploadFrame(int frame)
         emit sigFrameChanged();
     } else {
         m_d->useFastFrameUpload = false;
+
+        m_d->canvas->image()->barrierLock(true);
+        m_d->canvas->image()->unlock();
 
         // no OpenGL cache or the frame just not cached yet
         m_d->canvas->image()->animationInterface()->switchCurrentTimeAsync(frame);

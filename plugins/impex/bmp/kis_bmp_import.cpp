@@ -23,12 +23,11 @@
 #include <QSlider>
 #include <QApplication>
 #include <QFileInfo>
+#include <QImageReader>
 
 #include <kpluginfactory.h>
 
-
 #include <KoColorSpace.h>
-#include <KisFilterChain.h>
 #include <KoColorSpaceRegistry.h>
 
 #include <kis_transaction.h>
@@ -50,44 +49,27 @@ KisBMPImport::~KisBMPImport()
 {
 }
 
-KisImportExportFilter::ConversionStatus KisBMPImport::convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration)
+KisImportExportFilter::ConversionStatus KisBMPImport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
 {
-    Q_UNUSED(configuration);
-
-    dbgFile << "BMP import! From:" << from << ", To:" << to << 0;
-
-    if (to != "application/x-krita")
-        return KisImportExportFilter::BadMimeType;
-
-    KisDocument * doc = outputDocument();
-
-    if (!doc)
-        return KisImportExportFilter::NoDocumentCreated;
-
-    QString filename = inputFile();
-
-    doc->prepareForImport();
-
-    if (!filename.isEmpty()) {
-
-        QFileInfo fi(filename);
-        if (!fi.exists()) {
-            return KisImportExportFilter::FileNotFound;
-        }
-
-        QImage img(filename);
-
-        const KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->rgb8();
-        KisImageSP image = new KisImage(doc->createUndoStore(), img.width(), img.height(), colorSpace, "imported from bmp");
-
-        KisPaintLayerSP layer = new KisPaintLayer(image, image->nextLayerName(), 255);
-        layer->paintDevice()->convertFromQImage(img, 0, 0, 0);
-        image->addNode(layer.data(), image->rootLayer().data());
-
-        doc->setCurrentImage(image);
-        return KisImportExportFilter::OK;
+    QFileInfo fi(filename());
+    if (!QImageReader::supportedImageFormats().contains(fi.suffix().toLatin1())) {
+        return KisImportExportFilter::InvalidFormat;
     }
-    return KisImportExportFilter::StorageCreationError;
+
+    QImage img;
+    if (!img.loadFromData(io->readAll(), fi.suffix().toLatin1())) {
+        return KisImportExportFilter::InvalidFormat;
+    }
+
+    const KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->rgb8();
+    KisImageSP image = new KisImage(document->createUndoStore(), img.width(), img.height(), colorSpace, i18n("Imported Image"));
+
+    KisPaintLayerSP layer = new KisPaintLayer(image, image->nextLayerName(), 255);
+    layer->paintDevice()->convertFromQImage(img, 0, 0, 0);
+    image->addNode(layer.data(), image->rootLayer().data());
+
+    document->setCurrentImage(image);
+    return KisImportExportFilter::OK;
 
 }
 

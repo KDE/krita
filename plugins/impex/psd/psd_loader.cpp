@@ -63,49 +63,42 @@ PSDLoader::~PSDLoader()
 {
 }
 
-KisImageBuilder_Result PSDLoader::decode(const QString &filename)
+KisImageBuilder_Result PSDLoader::decode(QIODevice *io)
 {
     // open the file
-    QFile f(filename);
-    if (!f.exists()) {
-        return KisImageBuilder_RESULT_NOT_EXIST;
-    }
-    if (!f.open(QIODevice::ReadOnly)) {
-        return KisImageBuilder_RESULT_FAILURE;
-    }
 
-    dbgFile << "pos:" << f.pos();
+    dbgFile << "pos:" << io->pos();
 
     PSDHeader header;
-    if (!header.read(&f)) {
+    if (!header.read(   io)) {
         dbgFile << "failed reading header: " << header.error;
         return KisImageBuilder_RESULT_FAILURE;
     }
 
     dbgFile << header;
-    dbgFile << "Read header. pos:" << f.pos();
+    dbgFile << "Read header. pos:" << io->pos();
 
     PSDColorModeBlock colorModeBlock(header.colormode);
-    if (!colorModeBlock.read(&f)) {
+    if (!colorModeBlock.read(io)) {
         dbgFile << "failed reading colormode block: " << colorModeBlock.error;
         return KisImageBuilder_RESULT_FAILURE;
     }
 
-    dbgFile << "Read color mode block. pos:" << f.pos();
+    dbgFile << "Read color mode block. pos:" << io->pos();
 
     PSDImageResourceSection resourceSection;
-    if (!resourceSection.read(&f)) {
+    if (!resourceSection.read(io)) {
         dbgFile << "failed image reading resource section: " << resourceSection.error;
         return KisImageBuilder_RESULT_FAILURE;
     }
-    dbgFile << "Read image resource section. pos:" << f.pos();
+    dbgFile << "Read image resource section. pos:" << io->pos();
 
     PSDLayerMaskSection layerSection(header);
-    if (!layerSection.read(&f)) {
+    if (!layerSection.read(io)) {
         dbgFile << "failed reading layer/mask section: " << layerSection.error;
         return KisImageBuilder_RESULT_FAILURE;
     }
-    dbgFile << "Read layer/mask section. " << layerSection.nLayers << "layers. pos:" << f.pos();
+    dbgFile << "Read layer/mask section. " << layerSection.nLayers << "layers. pos:" << io->pos();
 
     // Done reading, except possibly for the image data block, which is only relevant if there
     // are no layers.
@@ -138,7 +131,8 @@ KisImageBuilder_Result PSDLoader::decode(const QString &filename)
     }
 
     // Creating the KisImage
-    m_image = new KisImage(m_doc->createUndoStore(),  header.width, header.height, cs, f.fileName());
+    QString name = dynamic_cast<QFile*>(io) ? dynamic_cast<QFile*>(io)->fileName() : "Imported";
+    m_image = new KisImage(m_doc->createUndoStore(),  header.width, header.height, cs, name);
     Q_CHECK_PTR(m_image);
     m_image->lock();
 
@@ -171,12 +165,12 @@ KisImageBuilder_Result PSDLoader::decode(const QString &filename)
     // first layer to the projection if the number of layers is negative/
     // See http://www.adobe.com/devnet-apps/photoshop/fileformatashtml/#50577409_16000.
     if (layerSection.nLayers == 0) {
-        dbgFile << "Position" << f.pos() << "Going to read the projection into the first layer, which Photoshop calls 'Background'";
+        dbgFile << "Position" << io->pos() << "Going to read the projection into the first layer, which Photoshop calls 'Background'";
 
         KisPaintLayerSP layer = new KisPaintLayer(m_image, i18n("Background"), OPACITY_OPAQUE_U8);
 
         PSDImageData imageData(&header);
-        imageData.read(&f, layer->paintDevice());
+        imageData.read(io, layer->paintDevice());
 
         m_image->addNode(layer, m_image->rootLayer());
 
@@ -277,7 +271,7 @@ KisImageBuilder_Result PSDLoader::decode(const QString &filename)
                 allStylesXml << LayerStyleMapping(styleXml, layer);
             }
 
-            if (!layerRecord->readPixelData(&f, layer->paintDevice())) {
+            if (!layerRecord->readPixelData(io, layer->paintDevice())) {
                 dbgFile << "failed reading channels for layer: " << layerRecord->layerName << layerRecord->error;
                 return KisImageBuilder_RESULT_FAILURE;
             }
@@ -297,7 +291,7 @@ KisImageBuilder_Result PSDLoader::decode(const QString &filename)
                 KisTransparencyMaskSP mask = new KisTransparencyMask();
                 mask->setName(i18n("Transparency Mask"));
                 mask->initSelection(newLayer);
-                if (!layerRecord->readMask(&f, mask->paintDevice(), channelInfo)) {
+                if (!layerRecord->readMask(io, mask->paintDevice(), channelInfo)) {
                     dbgFile << "failed reading masks for layer: " << layerRecord->layerName << layerRecord->error;
                 }
                 m_image->addNode(mask, newLayer);
@@ -358,9 +352,9 @@ KisImageBuilder_Result PSDLoader::decode(const QString &filename)
     return KisImageBuilder_RESULT_OK;
 }
 
-KisImageBuilder_Result PSDLoader::buildImage(const QString &filename)
+KisImageBuilder_Result PSDLoader::buildImage(QIODevice *io)
 {
-    return decode(filename);
+    return decode(io);
 }
 
 

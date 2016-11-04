@@ -419,6 +419,7 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
 
     // this thing will help indicate where the starting brush preset is at.
     // also what direction they go to give sor order to the presets populated
+    /*
     pen.setWidth(6);
     pen.setCapStyle(Qt::RoundCap);
     painter.setPen(pen);
@@ -432,8 +433,7 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
     brushDir.lineTo(brushDir.currentPosition().x()-2, brushDir.currentPosition().y() + 6);
     painter.drawPath(brushDir);
 
-    //painter.drawLine(circleRect.width()*.79, circleRect.height()/2, circleRect.width(), circleRect.height()/2);
-
+    */
 
 
     // the following things needs to be based off the center, so let's translate the painter

@@ -184,7 +184,7 @@ void KisFilterOption::writeOptionSetting(KisPropertiesConfigurationSP setting) c
 
 void KisFilterOption::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
-    KoID id(setting->getString(FILTER_ID), "");
+    KoID id(setting->getString(FILTER_ID), QString());
     if (id.id() != m_currentFilter->id()) {
         setCurrentFilter(id);
     }

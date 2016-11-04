@@ -36,11 +36,6 @@
 #include "kis_action_registry.h"
 
 
-QString KShortcutSchemesHelper::currentShortcutSchemeName()
-{
-    return KSharedConfig::openConfig()->group("Shortcut Schemes").readEntry("Current Scheme", "Default");
-}
-
 QString KShortcutSchemesHelper::shortcutSchemeFileName(const QString &schemeName)
 {
     // Create a directory if one cannot be found.

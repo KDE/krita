@@ -22,6 +22,10 @@
 #include "KisMainWindow.h"
 #include "kis_image.h"
 #include "kis_image_animation_interface.h"
+#include "KisImportExportManager.h"
+#include "KoFileDialog.h"
+#include <QDesktopServices>
+
 
 class KisDlgImportImageSequence::ListItem : QListWidgetItem {
 
@@ -95,7 +99,7 @@ int KisDlgImportImageSequence::step()
 
 void KisDlgImportImageSequence::slotAddFiles()
 {
-    QStringList urls = mainWindow->showOpenFileDialog();
+    QStringList urls = showOpenFileDialog();
 
     if (!urls.isEmpty()) {
         Q_FOREACH(QString url, urls) {
@@ -107,6 +111,18 @@ void KisDlgImportImageSequence::slotAddFiles()
 
     enableButtonOk(ui.lstFiles->count() > 0);
 }
+
+QStringList KisDlgImportImageSequence::showOpenFileDialog()
+{
+    KoFileDialog dialog(this, KoFileDialog::ImportFiles, "OpenDocument");
+    dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
+    dialog.setMimeTypeFilters(KisImportExportManager::mimeFilter(KisImportExportManager::Import));
+    dialog.setCaption(i18n("Import Images"));
+
+    return dialog.filenames();
+}
+
+
 
 void KisDlgImportImageSequence::slotRemoveFiles()
 {

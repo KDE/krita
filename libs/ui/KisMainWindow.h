@@ -368,7 +368,6 @@ private Q_SLOTS:
 
 protected:
 
-    void showEvent(QShowEvent * e);
     void closeEvent(QCloseEvent * e);
     void resizeEvent(QResizeEvent * e);
 

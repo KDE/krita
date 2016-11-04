@@ -23,21 +23,12 @@ if(MSVC OR (WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel"))
   set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /NODEFAULTLIB:LIBC.LIB")
 endif()
 
-########### next target ###############
 
-set(TestKoLcmsColorProfile_test_SRCS TestKoLcmsColorProfile.cpp )
-
-kde4_add_unit_test(TestKoLcmsColorProfile TESTNAME libs-pigment-TestKoLcmsColorProfile  ${TestKoLcmsColorProfile_test_SRCS})
-
-target_link_libraries(TestKoLcmsColorProfile kritawidgets kritapigment KF5::I18n  Qt5::Test ${LCMS2_LIBRARIES} )
-
-########### next target ###############
-
-set(TestKoColorSpaceRegistry_test_SRCS TestKoColorSpaceRegistry.cpp )
-
-kde4_add_broken_unit_test(TestKoColorSpaceRegistryLcms TESTNAME libs-pigment-TestKoColorSpaceRegistry  ${TestKoColorSpaceRegistry_test_SRCS})
-
-target_link_libraries(TestKoColorSpaceRegistryLcms kritawidgets kritapigment ${LCMS2_LIBRARIES} KF5::I18n  Qt5::Test)
+ecm_add_tests(TestKoLcmsColorProfile.cpp
+    NAME_PREFIX "libs-pigment-"
+    LINK_LIBRARIES kritawidgets kritapigment KF5::I18n Qt5::Test ${LCMS2_LIBRARIES})
 
 
-
+krita_add_broken_unit_test(TestKoColorSpaceRegistry.cpp
+    TEST_NAME libs-pigment-TestKoColorSpaceRegistry
+    LINK_LIBRARIES kritawidgets kritapigment ${LCMS2_LIBRARIES} KF5::I18n Qt5::Test)

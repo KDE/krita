@@ -86,12 +86,8 @@ KisImportExportFilter::ConversionStatus KisPNGExport::convert(const QByteArray& 
     if (from != "application/x-krita")
         return KisImportExportFilter::NotImplemented;
 
+    KisImageWSP image = input->savingImage();
 
-
-    KisImageWSP image = input->image();
-
-    // the image must be locked at the higher levels
-    KIS_SAFE_ASSERT_RECOVER_NOOP(image->locked());
     KisPaintDeviceSP pd;
     pd = new KisPaintDevice(*image->projection());
     KisPaintLayerSP l = new KisPaintLayer(image, "projection", OPACITY_OPAQUE_U8, pd);

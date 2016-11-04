@@ -77,6 +77,7 @@ KisKraSaveVisitor::KisKraSaveVisitor(KoStore *store, const QString & name, QMap<
 {
 }
 
+
 KisKraSaveVisitor::~KisKraSaveVisitor()
 {
     delete m_writer;
@@ -406,7 +407,8 @@ bool KisKraSaveVisitor::saveAnnotations(KisLayer* layer)
 
         if (annotation) {
             // save layer profile
-            if (m_store->open(getLocation(layer, DOT_ICC))) {
+            QString location = getLocation(layer, DOT_ICC);
+            if (m_store->open(location)) {
                 m_store->write(annotation->annotation());
                 m_store->close();
             } else {

@@ -79,7 +79,7 @@ KisImportExportFilter::ConversionStatus KisCSVExport::convert(const QByteArray& 
     if (!input)
         return KisImportExportFilter::NoDocumentCreated;
 
-    if (!checkHomogenity(input->image()->rootLayer())) {
+    if (!checkHomogenity(input->savingImage()->rootLayer())) {
         if (!getBatchMode()) {
             QMessageBox::critical(0,
                                   i18nc("@title:window", "CSV Export Error"),

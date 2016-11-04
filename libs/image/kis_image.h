@@ -102,6 +102,18 @@ public: // KisProjectionUpdateListener implementation
 public:
 
     /**
+     * Makes a copy of the image with all the layers. If possible, shallow
+     * copies of the layers are made.
+     *
+     * \p exactCopy shows if the copied image should look *exactly* the same as
+     * the other one (according to it's .kra xml representation). It means that
+     * the layers will have the same UUID keys and, therefore, you are not
+     * expected to use the copied image anywhere except for saving. Don't use
+     * this option if you plan to work with the copied image later.
+     */
+    KisImage* clone(bool exactCopy = false);
+
+    /**
      * Render the projection onto a QImage.
      */
     QImage convertToQImage(qint32 x1,
@@ -912,7 +924,7 @@ public Q_SLOTS:
 
 private:
 
-    KisImage(const KisImage& rhs);
+    KisImage(const KisImage& rhs, KisUndoStore *undoStore, bool exactCopy);
     KisImage& operator=(const KisImage& rhs);
 
     void emitSizeChanged();

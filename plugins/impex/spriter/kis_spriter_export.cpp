@@ -486,13 +486,13 @@ KisImportExportFilter::ConversionStatus KisSpriterExport::convert(const QByteArr
     QFileInfo fi(filename);
     //qDebug() << "filename" << filename << fi.absolutePath() << fi.baseName();
 
-    m_image = input->image();
+    m_image = input->savingImage();
 
     if (m_image->rootLayer()->childCount() == 0) {
         return KisImportExportFilter::UsageError;
     }
 
-    KisGroupLayerSP root = input->image()->rootLayer();
+    KisGroupLayerSP root = input->savingImage()->rootLayer();
 
     m_boneLayer = qobject_cast<KisLayer*>(root->findChildByName("bone").data());
     //qDebug() << "Found boneLayer" << m_boneLayer;
@@ -500,7 +500,7 @@ KisImportExportFilter::ConversionStatus KisSpriterExport::convert(const QByteArr
     m_rootLayer= qobject_cast<KisGroupLayer*>(root->findChildByName("root").data());
     //qDebug() << "Fond rootLayer" << m_rootLayer;
 
-    parseFolder(input->image()->rootLayer(), "", fi.absolutePath());
+    parseFolder(input->savingImage()->rootLayer(), "", fi.absolutePath());
 
     m_rootBone = 0;
 

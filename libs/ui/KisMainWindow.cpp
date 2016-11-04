@@ -98,7 +98,6 @@
 #include <KisMimeDatabase.h>
 #include <brushengine/kis_paintop_settings.h>
 #include "dialogs/kis_about_application.h"
-#include "dialogs/kis_delayed_save_dialog.h"
 #include "dialogs/kis_dlg_preferences.h"
 #include "kis_action.h"
 #include "kis_action_manager.h"
@@ -882,11 +881,8 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
     std::unique_lock<StdLockableWrapper<QMutex>> l(wrapper, std::try_to_lock);
     if (!l.owns_lock()) return false;
 
-    KisDelayedSaveDialog dlg(document->image(), this);
-    dlg.blockIfImageIsBusy();
-
-    if (dlg.result() != QDialog::Accepted) {
-        return false;
+    if (!document->image()->isIdle()) {
+        QMessageBox::warning(this, i18nc("@title:window", "Krita"), i18n("Krita is still rendering the last strokes. Those strokes will not be saved."));
     }
 
     bool reset_url;

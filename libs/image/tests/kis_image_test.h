@@ -33,6 +33,7 @@ private Q_SLOTS:
     void testBlockLevelOfDetail();
     void testConvertImageColorSpace();
     void testGlobalSelection();
+    void testCloneImage();
     void testLayerComposition();
 
     void testFlattenLayer();

@@ -59,7 +59,6 @@ set(kritaui_LIB_SRCS
     dialogs/kis_dlg_layer_style.cpp
     dialogs/kis_dlg_png_import.cpp
     dialogs/kis_dlg_import_image_sequence.cpp
-    dialogs/kis_delayed_save_dialog.cpp
     dialogs/kis_dlg_internal_color_selector.cpp
     flake/kis_node_dummies_graph.cpp
     flake/kis_dummies_facade_base.cpp
@@ -459,7 +458,6 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
     forms/wdgstopgradienteditor.ui
     brushhud/kis_dlg_brush_hud_config.ui
     forms/wdgdlginternalcolorselector.ui
-    dialogs/kis_delayed_save_dialog.ui
     input/config/kis_input_configuration_page.ui
     input/config/kis_edit_profiles_dialog.ui
     input/config/kis_input_configuration_page_item.ui

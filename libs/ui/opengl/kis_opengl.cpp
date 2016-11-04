@@ -61,6 +61,8 @@ void KisOpenGL::initialize()
 
     QOpenGLContext context;
     context.create();
+    if (!context.isValid()) return;
+
     context.makeCurrent( &surface );
 
     QOpenGLFunctions  *funcs = context.functions();

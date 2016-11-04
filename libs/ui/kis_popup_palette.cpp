@@ -53,12 +53,12 @@
 KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConverter* coordinatesConverter ,KisFavoriteResourceManager* manager,
                                  const KoColorDisplayRendererInterface *displayRenderer, KisCanvasResourceProvider *provider, QWidget *parent)
     : QWidget(parent, Qt::FramelessWindowHint)
+    , m_actionManager(0)
     , m_resourceManager(manager)
     , m_triangleColorSelector(0)
     , m_timer(0)
     , m_displayRenderer(displayRenderer)
     , m_colorChangeCompressor(new KisSignalCompressor(50, KisSignalCompressor::POSTPONE))
-    , m_actionManager(0)
     , m_actionCollection(0)
     , m_brushHud(0)
     , m_popupPaletteSize(352)

@@ -65,35 +65,35 @@ ShapeResizeStrategy::ShapeResizeStrategy(KoToolBase *tool, const QPointF &clicke
         m_unwindMatrix = m_windMatrix.inverted();
         m_initialSize = shape->size();
         m_initialPosition = m_windMatrix.map(QPointF());
-    }
 
-    switch (direction) {
-    case KoFlake::TopMiddleHandle:
-        m_start = 0.5 * (shape->absolutePosition(KoFlake::TopLeftCorner) + shape->absolutePosition(KoFlake::TopRightCorner));
-        m_top = true; m_bottom = false; m_left = false; m_right = false; break;
-    case KoFlake::TopRightHandle:
-        m_start = shape->absolutePosition(KoFlake::TopRightCorner);
-        m_top = true; m_bottom = false; m_left = false; m_right = true; break;
-    case KoFlake::RightMiddleHandle:
-        m_start = 0.5 * (shape->absolutePosition(KoFlake::TopRightCorner) + shape->absolutePosition(KoFlake::BottomRightCorner));
-        m_top = false; m_bottom = false; m_left = false; m_right = true; break;
-    case KoFlake::BottomRightHandle:
-        m_start = shape->absolutePosition(KoFlake::BottomRightCorner);
-        m_top = false; m_bottom = true; m_left = false; m_right = true; break;
-    case KoFlake::BottomMiddleHandle:
-        m_start = 0.5 * (shape->absolutePosition(KoFlake::BottomRightCorner) + shape->absolutePosition(KoFlake::BottomLeftCorner));
-        m_top = false; m_bottom = true; m_left = false; m_right = false; break;
-    case KoFlake::BottomLeftHandle:
-        m_start = shape->absolutePosition(KoFlake::BottomLeftCorner);
-        m_top = false; m_bottom = true; m_left = true; m_right = false; break;
-    case KoFlake::LeftMiddleHandle:
-        m_start = 0.5 * (shape->absolutePosition(KoFlake::BottomLeftCorner) + shape->absolutePosition(KoFlake::TopLeftCorner));
-        m_top = false; m_bottom = false; m_left = true; m_right = false; break;
-    case KoFlake::TopLeftHandle:
-        m_start = shape->absolutePosition(KoFlake::TopLeftCorner);
-        m_top = true; m_bottom = false; m_left = true; m_right = false; break;
-    default:
-        Q_ASSERT(0); // illegal 'corner'
+        switch (direction) {
+        case KoFlake::TopMiddleHandle:
+            m_start = 0.5 * (shape->absolutePosition(KoFlake::TopLeftCorner) + shape->absolutePosition(KoFlake::TopRightCorner));
+            m_top = true; m_bottom = false; m_left = false; m_right = false; break;
+        case KoFlake::TopRightHandle:
+            m_start = shape->absolutePosition(KoFlake::TopRightCorner);
+            m_top = true; m_bottom = false; m_left = false; m_right = true; break;
+        case KoFlake::RightMiddleHandle:
+            m_start = 0.5 * (shape->absolutePosition(KoFlake::TopRightCorner) + shape->absolutePosition(KoFlake::BottomRightCorner));
+            m_top = false; m_bottom = false; m_left = false; m_right = true; break;
+        case KoFlake::BottomRightHandle:
+            m_start = shape->absolutePosition(KoFlake::BottomRightCorner);
+            m_top = false; m_bottom = true; m_left = false; m_right = true; break;
+        case KoFlake::BottomMiddleHandle:
+            m_start = 0.5 * (shape->absolutePosition(KoFlake::BottomRightCorner) + shape->absolutePosition(KoFlake::BottomLeftCorner));
+            m_top = false; m_bottom = true; m_left = false; m_right = false; break;
+        case KoFlake::BottomLeftHandle:
+            m_start = shape->absolutePosition(KoFlake::BottomLeftCorner);
+            m_top = false; m_bottom = true; m_left = true; m_right = false; break;
+        case KoFlake::LeftMiddleHandle:
+            m_start = 0.5 * (shape->absolutePosition(KoFlake::BottomLeftCorner) + shape->absolutePosition(KoFlake::TopLeftCorner));
+            m_top = false; m_bottom = false; m_left = true; m_right = false; break;
+        case KoFlake::TopLeftHandle:
+            m_start = shape->absolutePosition(KoFlake::TopLeftCorner);
+            m_top = true; m_bottom = false; m_left = true; m_right = false; break;
+        default:
+            Q_ASSERT(0); // illegal 'corner'
+        }
     }
 
     tool->setStatusText(i18n("Press CTRL to resize from center."));

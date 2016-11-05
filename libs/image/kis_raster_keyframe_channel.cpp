@@ -108,7 +108,7 @@ QString KisRasterKeyframeChannel::frameFilename(int frameId) const
     return m_d->frameFilenames.value(frameId, QString());
 }
 
-void KisRasterKeyframeChannel::setFilenameSuffix(const QString suffix)
+void KisRasterKeyframeChannel::setFilenameSuffix(const QString &suffix)
 {
     m_d->filenameSuffix = suffix;
 }

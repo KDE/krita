@@ -38,6 +38,10 @@ bool KisLegacyTileCompressor::writeTile(KisTileSP tile, KisPaintDeviceWriter &st
     quint8 *headerBuffer = new quint8[bufferSize];
 
     bool retval = writeHeader(tile, headerBuffer);
+    Q_ASSERT(retval);  // currently the code returns true unconditionally
+    if (!retval) {
+        return false;
+    }
 
     store.write((char *)headerBuffer, strlen((char *)headerBuffer));
 

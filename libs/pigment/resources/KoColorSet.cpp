@@ -731,6 +731,7 @@ bool KoColorSet::loadAco()
                 }
             }
             v2 = readShort(&buf); //end marker also needs to be skipped.
+            Q_UNUSED(v2);
         }
         if (!skip) {
             add(e);

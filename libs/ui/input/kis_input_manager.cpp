@@ -224,7 +224,7 @@ bool KisInputManager::compressMoveEventCommon(Event *event)
      */
     static_assert(std::is_same<Event, QMouseEvent>::value ||
                   std::is_same<Event, QTabletEvent>::value,
-                  "event should a mouse or a tablet event");
+                  "event should be a mouse or a tablet event");
 
     bool retval = false;
 

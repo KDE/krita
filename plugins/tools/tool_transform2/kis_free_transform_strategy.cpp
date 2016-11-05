@@ -73,8 +73,7 @@ struct KisFreeTransformStrategy::Private
         scaleCursors[6] = KisCursor::sizeVerCursor();
         scaleCursors[7] = KisCursor::sizeBDiagCursor();
 
-        shearCursorPixmap.load(KoResourcePaths::locate("data", "icons/cursor_shear.png"));
-
+        shearCursorPixmap.load(":/shear_cursor.png");
     }
 
     KisFreeTransformStrategy *q;

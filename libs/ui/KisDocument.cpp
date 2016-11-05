@@ -89,6 +89,7 @@
 #include <kis_idle_watcher.h>
 #include <kis_signal_auto_connection.h>
 #include <kis_debug.h>
+#include <kis_canvas_widget_base.h>
 
 // Local
 #include "KisViewManager.h"
@@ -210,6 +211,11 @@ public:
     void undo() override {
         KisImageWSP image = this->image();
         image->requestUndoDuringStroke();
+
+        if (image->tryUndoUnfinishedLod0Stroke() == UNDO_OK) {
+            return;
+        }
+
         if(image->tryBarrierLock()) {
             KUndo2Stack::undo();
             image->unlock();
@@ -828,7 +834,14 @@ QPixmap KisDocument::generatePreview(const QSize& size)
         QRect bounds = d->image->bounds();
         QSize newSize = bounds.size();
         newSize.scale(size, Qt::KeepAspectRatio);
-        return QPixmap::fromImage(d->image->convertToQImage(newSize, 0));
+        QPixmap px = QPixmap::fromImage(d->image->convertToQImage(newSize, 0));
+        if (px.size() == QSize(0,0)) {
+            px = QPixmap(newSize);
+            QPainter gc(&px);
+            QBrush checkBrush = QBrush(KisCanvasWidgetBase::createCheckersImage(newSize.width() / 5));
+            gc.fillRect(px.rect(), checkBrush);
+            gc.end();
+        }
     }
     return QPixmap(size);
 }

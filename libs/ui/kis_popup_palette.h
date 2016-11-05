@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright 2009 Vera Lukman <shicmap@gmail.com>
+   Copyright 2016 Scott Petrovic <scottpetrovic@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,7 +23,15 @@
 #include <kis_types.h>
 #include <QWidget>
 #include <QQueue>
+#include <QPushButton>
+#include <QSlider>
 #include <KoColorDisplayRendererInterface.h>
+#include "kis_action_manager.h"
+#include "KisViewManager.h"
+#include "kactioncollection.h"
+#include "kis_coordinates_converter.h"
+#include "kis_tool_button.h"
+#include "kis_highlighted_button.h"
 
 
 class KisFavoriteResourceManager;
@@ -44,7 +53,8 @@ class KisPopupPalette : public QWidget
     Q_PROPERTY(int selectedColor READ selectedColor WRITE setSelectedColor)
 
 public:
-    KisPopupPalette(KisFavoriteResourceManager*, const KoColorDisplayRendererInterface *displayRenderer, KisCanvasResourceProvider *provider, QWidget *parent = 0);
+    KisPopupPalette(KisViewManager*, KisCoordinatesConverter* ,KisFavoriteResourceManager*, const KoColorDisplayRendererInterface *displayRenderer,
+                    KisCanvasResourceProvider *provider, QWidget *parent = 0);
     ~KisPopupPalette();
     QSize sizeHint() const;
 
@@ -88,17 +98,27 @@ private:
 
     QPainterPath drawDonutPathFull(int, int, int, int);
     QPainterPath drawDonutPathAngle(int, int, int);
+    QPainterPath drawRotationIndicator(qreal rotationAngle, bool canDrag);
     bool isPointInPixmap(QPointF&, int pos);
 
-    QPainterPath pathFromPresetIndex(int index);
+    QPainterPath createPathFromPresetIndex(int index);
 
     int numSlots();
     void adjustLayout(const QPoint &p);
 private:
 
+
+
     int m_hoveredPreset;
     int m_hoveredColor;
     int m_selectedColor;
+
+
+    KisCoordinatesConverter* m_coordinatesConverter;
+
+    KisActionManager* m_actionManager;
+    KActionCollection* m_actionCollection;
+
     KisFavoriteResourceManager* m_resourceManager;
     KisVisualColorSelector* m_triangleColorSelector;
 
@@ -108,14 +128,29 @@ private:
 
     QScopedPointer<KisSignalCompressor> m_colorChangeCompressor;
     KisBrushHud *m_brushHud;
+    float m_popupPaletteSize;
+    float m_colorHistoryInnerRadius;
+    float m_colorHistoryOuterRadius;
+
     KisRoundHudButton *m_settingsButton;
     KisRoundHudButton *m_brushHudButton;
     QPoint m_lastCenterPoint;
+    QRect* m_canvasRotationIndicatorRect;
+    QRect* m_resetCanvasRotationIndicatorRect;
+    bool m_isOverCanvasRotationIndicator;
+    bool m_isRotatingCanvasIndicator;
+
+    KisHighlightedToolButton* mirrorMode;
+    KisHighlightedToolButton* canvasOnlyButton;
+    QPushButton* zoomToOneHundredPercentButton;
+    QSlider* zoomCanvasSlider;
 
 Q_SIGNALS:
     void sigChangeActivePaintop(int);
     void sigUpdateRecentColor(int);
     void sigChangefGColor(const KoColor&);
+    void sigUpdateCanvas();
+    void zoomLevelChanged(int);
 
     // These are used to handle a bug:
     // If pop up palette is visible and a new colour is selected, the new colour
@@ -135,6 +170,12 @@ private Q_SLOTS:
     void slotHide() { showPopupPalette(false); }
     void slotShowTagsPopup();
     void showHudWidget(bool visible);
+    void slotmirroModeClicked();
+    void slotCanvasonlyModeClicked();
+    void slotZoomToOneHundredPercentClicked();
+    void slotZoomSliderChanged(int zoom);
+
+
 };
 
 #endif // KIS_POPUP_PALETTE_H

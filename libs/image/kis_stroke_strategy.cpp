@@ -29,6 +29,7 @@ KisStrokeStrategy::KisStrokeStrategy(QString id, const KUndo2MagicString &name)
       m_clearsRedoOnStart(true),
       m_requestsOtherStrokesToEnd(true),
       m_canForgetAboutMe(false),
+      m_needsExplicitCancel(false),
       m_id(id),
       m_name(name)
 {
@@ -41,7 +42,8 @@ KisStrokeStrategy::KisStrokeStrategy(const KisStrokeStrategy &rhs)
       m_indirectPaintingCompositeOp(rhs.m_indirectPaintingCompositeOp),
       m_clearsRedoOnStart(rhs.m_clearsRedoOnStart),
       m_requestsOtherStrokesToEnd(rhs.m_requestsOtherStrokesToEnd),
-      m_canForgetAboutMe(false),
+      m_canForgetAboutMe(rhs.m_canForgetAboutMe),
+      m_needsExplicitCancel(rhs.m_needsExplicitCancel),
       m_id(rhs.m_id),
       m_name(rhs.m_name)
 {
@@ -193,4 +195,14 @@ bool KisStrokeStrategy::canForgetAboutMe() const
 void KisStrokeStrategy::setCanForgetAboutMe(bool value)
 {
     m_canForgetAboutMe = value;
+}
+
+bool KisStrokeStrategy::needsExplicitCancel() const
+{
+    return m_needsExplicitCancel;
+}
+
+void KisStrokeStrategy::setNeedsExplicitCancel(bool value)
+{
+    m_needsExplicitCancel = value;
 }

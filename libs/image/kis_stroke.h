@@ -55,6 +55,8 @@ public:
     void endStroke();
     void cancelStroke();
 
+    bool canCancel() const;
+
     bool supportsSuspension();
     void suspendStroke(KisStrokeSP recipient);
 

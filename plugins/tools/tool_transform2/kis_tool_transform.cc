@@ -730,7 +730,7 @@ void KisToolTransform::updateSelectionPath()
     m_selectionPath = QPainterPath();
 
     KisResourcesSnapshotSP resources =
-        new KisResourcesSnapshot(image(), currentNode(), 0, this->canvas()->resourceManager());
+        new KisResourcesSnapshot(image(), currentNode(), this->canvas()->resourceManager());
 
     QPainterPath selectionOutline;
     KisSelectionSP selection = resources->activeSelection();
@@ -832,7 +832,7 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode, bool f
     KisPaintDeviceSP dev;
 
     KisResourcesSnapshotSP resources =
-            new KisResourcesSnapshot(image(), currentNode(), 0, this->canvas()->resourceManager());
+            new KisResourcesSnapshot(image(), currentNode(), this->canvas()->resourceManager());
 
     KisNodeSP currentNode = resources->currentNode();
 
@@ -867,7 +867,7 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode, bool f
             !currentNode->paintDevice();
     }
 
-    TransformStrokeStrategy *strategy = new TransformStrokeStrategy(currentNode, resources->activeSelection(), image()->postExecutionUndoAdapter());
+    TransformStrokeStrategy *strategy = new TransformStrokeStrategy(currentNode, resources->activeSelection(), image().data());
     KisPaintDeviceSP previewDevice = strategy->previewDevice();
 
     KisSelectionSP selection = strategy->realSelection();

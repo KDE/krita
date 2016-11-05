@@ -139,6 +139,7 @@ public:
         , signalRouter(_q)
         , animationInterface(new KisImageAnimationInterface(q))
         , scheduler(_q)
+        , axesCenter(QPointF(0.5, 0.5))
     {
         {
             KisImageConfig cfg;
@@ -213,6 +214,8 @@ public:
     KisCompositeProgressProxy compositeProgressProxy;
 
     bool blockLevelOfDetail = false;
+
+    QPointF axesCenter;
 
     bool tryCancelCurrentStrokeAsync();
 
@@ -1108,7 +1111,10 @@ QRect KisImage::effectiveLodBounds() const
 
 KisPostExecutionUndoAdapter* KisImage::postExecutionUndoAdapter() const
 {
-    return &m_d->postExecutionUndoAdapter;
+    const int lod = currentLevelOfDetail();
+    return lod > 0 ?
+        m_d->scheduler.lodNPostExecutionUndoAdapter() :
+        &m_d->postExecutionUndoAdapter;
 }
 
 void KisImage::setUndoStore(KisUndoStore *undoStore)
@@ -1355,6 +1361,11 @@ void KisImage::requestStrokeCancellation()
     if (!m_d->tryCancelCurrentStrokeAsync()) {
         emit sigStrokeCancellationRequested();
     }
+}
+
+UndoResult KisImage::tryUndoUnfinishedLod0Stroke()
+{
+    return m_d->scheduler.tryUndoLastStrokeAsync();
 }
 
 void KisImage::requestStrokeEnd()
@@ -1674,4 +1685,14 @@ KisProofingConfigurationSP KisImage::proofingConfiguration() const
         m_d->proofingConfig = cfg.defaultProofingconfiguration();
     }
     return m_d->proofingConfig;
+}
+
+QPointF KisImage::mirrorAxesCenter() const
+{
+    return m_d->axesCenter;
+}
+
+void KisImage::setMirrorAxesCenter(const QPointF &value) const
+{
+    m_d->axesCenter = value;
 }

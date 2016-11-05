@@ -35,21 +35,19 @@ bool KisLegacyTileCompressor::writeTile(KisTileSP tile, KisPaintDeviceWriter &st
     const qint32 tileDataSize = TILE_DATA_SIZE(tile->pixelSize());
 
     const qint32 bufferSize = maxHeaderLength() + 1;
-    quint8 *headerBuffer = new quint8[bufferSize];
+    QScopedArrayPointer<quint8> headerBuffer(new quint8[bufferSize]);
 
-    bool retval = writeHeader(tile, headerBuffer);
+    bool retval = writeHeader(tile, headerBuffer.data());
     Q_ASSERT(retval);  // currently the code returns true unconditionally
     if (!retval) {
         return false;
     }
 
-    store.write((char *)headerBuffer, strlen((char *)headerBuffer));
+    store.write((char *)headerBuffer.data(), strlen((char *)headerBuffer.data()));
 
     tile->lockForRead();
     retval = store.write((char *)tile->data(), tileDataSize);
     tile->unlock();
-
-    delete[] headerBuffer;
 
     return retval;
 }

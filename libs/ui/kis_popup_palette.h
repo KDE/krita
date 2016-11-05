@@ -107,26 +107,21 @@ private:
     void adjustLayout(const QPoint &p);
 private:
 
-
-
     int m_hoveredPreset;
     int m_hoveredColor;
     int m_selectedColor;
 
-
     KisCoordinatesConverter* m_coordinatesConverter;
 
     KisActionManager* m_actionManager;
-    KActionCollection* m_actionCollection;
-
     KisFavoriteResourceManager* m_resourceManager;
     KisVisualColorSelector* m_triangleColorSelector;
-
-    QTimer* m_timer;
-
     const KoColorDisplayRendererInterface *m_displayRenderer;
-
     QScopedPointer<KisSignalCompressor> m_colorChangeCompressor;
+    KActionCollection* m_actionCollection;
+
+    QTimer m_timer;
+
     KisBrushHud *m_brushHud;
     float m_popupPaletteSize;
     float m_colorHistoryInnerRadius;
@@ -135,8 +130,8 @@ private:
     KisRoundHudButton *m_settingsButton;
     KisRoundHudButton *m_brushHudButton;
     QPoint m_lastCenterPoint;
-    QRect* m_canvasRotationIndicatorRect;
-    QRect* m_resetCanvasRotationIndicatorRect;
+    QRect m_canvasRotationIndicatorRect;
+    QRect m_resetCanvasRotationIndicatorRect;
     bool m_isOverCanvasRotationIndicator;
     bool m_isRotatingCanvasIndicator;
 

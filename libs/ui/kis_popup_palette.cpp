@@ -53,37 +53,24 @@
 KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConverter* coordinatesConverter ,KisFavoriteResourceManager* manager,
                                  const KoColorDisplayRendererInterface *displayRenderer, KisCanvasResourceProvider *provider, QWidget *parent)
     : QWidget(parent, Qt::FramelessWindowHint)
-    , m_actionManager(0)
+    , m_hoveredPreset(0)
+    , m_hoveredColor(0)
+    , m_selectedColor(0)
+    , m_coordinatesConverter(coordinatesConverter)
+    , m_actionManager(viewManager->actionManager())
     , m_resourceManager(manager)
     , m_triangleColorSelector(0)
-    , m_timer(0)
     , m_displayRenderer(displayRenderer)
     , m_colorChangeCompressor(new KisSignalCompressor(50, KisSignalCompressor::POSTPONE))
-    , m_actionCollection(0)
+    , m_actionCollection(viewManager->actionCollection())
     , m_brushHud(0)
-    , m_popupPaletteSize(352)
+    , m_popupPaletteSize(385.0)
     , m_colorHistoryInnerRadius(72.0)
     , m_colorHistoryOuterRadius(92.0)
-    , m_canvasRotationIndicatorRect(0)
-    , m_resetCanvasRotationIndicatorRect(0)
     , m_isOverCanvasRotationIndicator(false)
     , m_isRotatingCanvasIndicator(false)
 {
-
     // some UI controls are defined and created based off these variables
-    m_popupPaletteSize = 385.0;
-    m_colorHistoryInnerRadius = 72.0;
-    m_colorHistoryOuterRadius = 92.0;
-
-
-    m_canvasRotationIndicatorRect = new QRect();
-    m_isOverCanvasRotationIndicator = false;
-    m_isRotatingCanvasIndicator = false;
-
-    m_coordinatesConverter = coordinatesConverter;
-
-    m_actionManager = viewManager->actionManager();
-    m_actionCollection = viewManager->actionCollection();
 
     const int borderWidth = 3;
 
@@ -129,10 +116,9 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
     // will be added when the user clicks on the canvas to hide the palette
     // In general, we want to be able to store recent color if the pop up palette
     // is not visible
-    m_timer = new QTimer(this);
-    m_timer->setSingleShot(true);
+    m_timer.setSingleShot(true);
     connect(this, SIGNAL(sigTriggerTimer()), this, SLOT(slotTriggerTimer()));
-    connect(m_timer, SIGNAL(timeout()), this, SLOT(slotEnableChangeFGColor()));
+    connect(&m_timer, SIGNAL(timeout()), this, SLOT(slotEnableChangeFGColor()));
     connect(this, SIGNAL(sigEnableChangeFGColor(bool)), m_resourceManager, SIGNAL(sigEnableChangeColor(bool)));
 
     setCursor(Qt::ArrowCursor);
@@ -190,13 +176,12 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
     canvasOnlyButton->setToolTip(i18n("Canvas Only"));
     connect(canvasOnlyButton, SIGNAL(clicked(bool)), this, SLOT(slotCanvasonlyModeClicked()));
 
-    zoomToOneHundredPercentButton = new QPushButton();
+    zoomToOneHundredPercentButton = new QPushButton(this);
     zoomToOneHundredPercentButton->setText(i18n("100%"));
     zoomToOneHundredPercentButton->setFixedHeight(35);
     zoomToOneHundredPercentButton->setIcon(KisIconUtils::loadIcon("zoom-original"));
     zoomToOneHundredPercentButton->setToolTip(i18n("Zoom to 100%"));
     connect(zoomToOneHundredPercentButton, SIGNAL(clicked(bool)), this, SLOT(slotZoomToOneHundredPercentClicked()));
-
 
     zoomCanvasSlider = new QSlider(Qt::Horizontal, this);
     zoomCanvasSlider->setRange(10, 200); // 10% to 200 %
@@ -273,7 +258,7 @@ void KisPopupPalette::setSelectedColor(int x)
 
 void KisPopupPalette::slotTriggerTimer()
 {
-    m_timer->start(750);
+    m_timer.start(750);
 }
 
 void KisPopupPalette::slotEnableChangeFGColor()
@@ -598,8 +583,8 @@ QPainterPath KisPopupPalette::drawRotationIndicator(qreal rotationAngle, bool ca
      QPainterPath canvasRotationIndicator;
      int canvasIndicatorSize = 15;
      float canvasIndicatorMiddle = canvasIndicatorSize/2;
-     QRect* indicatorRectangle = new QRect( rotationDialXPosition - canvasIndicatorMiddle, rotationDialYPosition - canvasIndicatorMiddle,
-                                            canvasIndicatorSize, canvasIndicatorSize );
+     QRect indicatorRectangle = QRect( rotationDialXPosition - canvasIndicatorMiddle, rotationDialYPosition - canvasIndicatorMiddle,
+                                       canvasIndicatorSize, canvasIndicatorSize );
 
      if (canDrag) {
          m_canvasRotationIndicatorRect = indicatorRectangle;
@@ -607,8 +592,8 @@ QPainterPath KisPopupPalette::drawRotationIndicator(qreal rotationAngle, bool ca
          m_resetCanvasRotationIndicatorRect = indicatorRectangle;
      }
 
-     canvasRotationIndicator.addEllipse(indicatorRectangle->x(), indicatorRectangle->y(),
-                                        indicatorRectangle->width(), indicatorRectangle->height() );
+     canvasRotationIndicator.addEllipse(indicatorRectangle.x(), indicatorRectangle.y(),
+                                        indicatorRectangle.width(), indicatorRectangle.height() );
 
      return canvasRotationIndicator;
 
@@ -620,7 +605,7 @@ void KisPopupPalette::mouseMoveEvent(QMouseEvent* event)
     QPointF point = event->posF();
     event->accept();
 
-    setToolTip("");
+    setToolTip(QString());
     setHoveredPreset(-1);
     setHoveredColor(-1);
 
@@ -629,12 +614,12 @@ void KisPopupPalette::mouseMoveEvent(QMouseEvent* event)
     // before we started painting, we moved the painter to the center of the widget, so the X/Y positions are offset. we need to
     // correct them first before looking for a click event intersection
 
-    float rotationCorrectedXPos = m_canvasRotationIndicatorRect->x() + (m_popupPaletteSize / 2);
-    float rotationCorrectedYPos = m_canvasRotationIndicatorRect->y() + (m_popupPaletteSize / 2);
-    QRect* correctedCanvasRotationIndicator = new QRect(rotationCorrectedXPos, rotationCorrectedYPos,
-                                               m_canvasRotationIndicatorRect->width(), m_canvasRotationIndicatorRect->height()   );
+    float rotationCorrectedXPos = m_canvasRotationIndicatorRect.x() + (m_popupPaletteSize / 2);
+    float rotationCorrectedYPos = m_canvasRotationIndicatorRect.y() + (m_popupPaletteSize / 2);
+    QRect correctedCanvasRotationIndicator = QRect(rotationCorrectedXPos, rotationCorrectedYPos,
+                                               m_canvasRotationIndicatorRect.width(), m_canvasRotationIndicatorRect.height());
 
-    if (correctedCanvasRotationIndicator->contains(point.x(), point.y())) {
+    if (correctedCanvasRotationIndicator.contains(point.x(), point.y())) {
         m_isOverCanvasRotationIndicator = true;
     } else {
         m_isOverCanvasRotationIndicator = false;
@@ -644,10 +629,10 @@ void KisPopupPalette::mouseMoveEvent(QMouseEvent* event)
     if (m_isRotatingCanvasIndicator) {
         // we are rotating the canvas, so calculate the rotation angle based off the center
         // calculate the angle we are at first
-        QPoint* widgetCenterPoint = new QPoint(m_popupPaletteSize/2, m_popupPaletteSize/2) ;
+        QPoint widgetCenterPoint = QPoint(m_popupPaletteSize/2, m_popupPaletteSize/2);
 
-        float dX = point.x() - widgetCenterPoint->x();
-        float dY = point.y() - widgetCenterPoint->y();
+        float dX = point.x() - widgetCenterPoint.x();
+        float dY = point.y() - widgetCenterPoint.y();
 
 
         float finalAngle = qAtan2(dY,dX) * 180 / M_PI; // what we need if we have two points, but don't know the angle
@@ -699,27 +684,22 @@ void KisPopupPalette::mousePressEvent(QMouseEvent* event)
             update();
         }
 
-
         if (m_isOverCanvasRotationIndicator) {
             m_isRotatingCanvasIndicator = true;
         }
 
-
-      // reset the canvas if we are over the reset canvas rotation indicator
-      float rotationCorrectedXPos = m_resetCanvasRotationIndicatorRect->x() + (m_popupPaletteSize / 2);
-      float rotationCorrectedYPos = m_resetCanvasRotationIndicatorRect->y() + (m_popupPaletteSize / 2);
-      QRect* correctedResetCanvasRotationIndicator = new QRect(rotationCorrectedXPos, rotationCorrectedYPos,
-                                                 m_resetCanvasRotationIndicatorRect->width(), m_resetCanvasRotationIndicatorRect->height()   );
-
-
-      if (correctedResetCanvasRotationIndicator->contains(point.x(), point.y())) {
-        float angleDifference = -m_coordinatesConverter->rotationAngle(); // the rotation function accepts diffs, so find it ou
-        m_coordinatesConverter->rotate(m_coordinatesConverter->widgetCenterPoint(), angleDifference);
-        emit sigUpdateCanvas();
-      }
+        // reset the canvas if we are over the reset canvas rotation indicator
+        float rotationCorrectedXPos = m_resetCanvasRotationIndicatorRect.x() + (m_popupPaletteSize / 2);
+        float rotationCorrectedYPos = m_resetCanvasRotationIndicatorRect.y() + (m_popupPaletteSize / 2);
+        QRect correctedResetCanvasRotationIndicator = QRect(rotationCorrectedXPos, rotationCorrectedYPos,
+                                                            m_resetCanvasRotationIndicatorRect.width(), m_resetCanvasRotationIndicatorRect.height());
 
 
-
+        if (correctedResetCanvasRotationIndicator.contains(point.x(), point.y())) {
+            float angleDifference = -m_coordinatesConverter->rotationAngle(); // the rotation function accepts diffs, so find it ou
+            m_coordinatesConverter->rotate(m_coordinatesConverter->widgetCenterPoint(), angleDifference);
+            emit sigUpdateCanvas();
+        }
     }
 }
 

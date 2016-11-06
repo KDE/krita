@@ -80,14 +80,14 @@ static const Qt::CaseSensitivity cs = Qt::CaseInsensitive;
 static const Qt::CaseSensitivity cs = Qt::CaseSensitive;
 #endif
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_OSX
 #include <ApplicationServices/ApplicationServices.h>
 #include <CoreFoundation/CoreFoundation.h>
 #include <CoreServices/CoreServices.h>
 #endif
 
 QString getInstallationPrefix() {
-#ifdef Q_OS_MAC
+#ifdef Q_OS_OSX
      QString appPath = qApp->applicationDirPath();
 
      debugWidgetUtils << "1" << appPath;
@@ -343,7 +343,7 @@ QStringList KoResourcePaths::findDirsInternal(const QString &type)
             QStandardPaths::locateAll(d->mapTypeToQStandardPaths(type), alias + '/', QStandardPaths::LocateDirectory);
         appendResources(&dirs, aliasDirs, true);
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_OSX
         debugWidgetUtils << "MAC:" << getApplicationRoot();
         QStringList bundlePaths;
         bundlePaths << getApplicationRoot() + "/share/krita/" + alias;

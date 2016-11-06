@@ -185,7 +185,7 @@ bool KisOpenGL::needsPixmapCacheWorkaround()
 void KisOpenGL::setDefaultFormat()
 {
     QSurfaceFormat format;
-#ifdef Q_OS_MAC
+#ifdef Q_OS_OSX
     format.setVersion(3, 2);
     format.setProfile(QSurfaceFormat::CoreProfile);
 #else

@@ -35,7 +35,7 @@
 #include "kis_global.h"
 #include <cmath>
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_OSX
 #include <errno.h>
 #endif
 
@@ -318,7 +318,7 @@ void KisImageConfig::setLazyFrameCreationEnabled(bool value)
 #include <sys/sysctl.h>
 #elif defined Q_OS_WIN
 #include <windows.h>
-#elif defined Q_OS_MAC
+#elif defined Q_OS_OSX
 #include <sys/types.h>
 #include <sys/sysctl.h>
 #endif
@@ -364,7 +364,7 @@ int KisImageConfig::totalRAM()
 #   if defined ENV32BIT
     totalMemory = qMin(totalMemory, 2000);
 #   endif
-#elif defined Q_OS_MAC
+#elif defined Q_OS_OSX
     int mib[2] = { CTL_HW, HW_MEMSIZE };
     u_int namelen = sizeof(mib) / sizeof(mib[0]);
     uint64_t size;

@@ -347,7 +347,7 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
          * Ignore delta 0 events on OSX, since they are triggered by tablet
          * proximity when using Wacom devices.
          */
-#ifdef Q_OS_MAC
+#ifdef Q_OS_OSX
         if(wheelEvent->delta() == 0) {
             retval = true;
             break;
@@ -420,7 +420,7 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
         stop_ignore_cursor_events();
         break;
     case QEvent::TabletRelease: {
-#ifdef Q_OS_MAC
+#ifdef Q_OS_OSX
         stop_ignore_cursor_events();
 #endif
         // break_if_touch_blocked_press_events();
@@ -485,7 +485,7 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
         break;
     case QEvent::TouchUpdate: {
         QTouchEvent *tevent = static_cast<QTouchEvent*>(event);
-#ifdef Q_OS_MAC
+#ifdef Q_OS_OSX
         int count = 0;
         Q_FOREACH (const QTouchEvent::TouchPoint &point, tevent->touchPoints()) {
             if (point.state() != Qt::TouchPointReleased) {
@@ -504,7 +504,7 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
             touch_start_block_press_events();
             KisAbstractInputAction::setInputManager(this);
             retval = d->matcher.touchUpdateEvent(tevent);
-#ifdef Q_OS_MAC
+#ifdef Q_OS_OSX
         }
 #endif
         event->accept();

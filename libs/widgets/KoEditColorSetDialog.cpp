@@ -133,10 +133,11 @@ void KoEditColorSetWidget::setActiveColorSet(int index)
         columns = m_activeColorSet->columnCount();
         if (columns==0){columns=16;}
         widget.remove->setEnabled(false);
-        for (int i = 0; i < m_activeColorSet->nColors(); i++) {
+        for (quint32 i = 0; i < m_activeColorSet->nColors(); i++) {
             KoColorPatch *patch = new KoColorPatch(widget.patchesFrame);
-            patch->setColor(m_activeColorSet->getColor(i).color);
-            patch->setToolTip(m_activeColorSet->getColor(i).name);
+            KoColorSetEntry c = m_activeColorSet->getColorGlobal(i);
+            patch->setColor(c.color);
+            patch->setToolTip(c.name);
             connect(patch, SIGNAL(triggered(KoColorPatch *)), this, SLOT(setTextLabel(KoColorPatch *)));
             m_gridLayout->addWidget(patch, i/columns, i%columns);
         }
@@ -183,9 +184,10 @@ void KoEditColorSetWidget::addColor()
 void KoEditColorSetWidget::removeColor()
 {
     Q_ASSERT(m_activeColorSet);
-    for (int i = 0; i < m_activeColorSet->nColors(); i++) {
-        if (m_activePatch->color() == m_activeColorSet->getColor(i).color) {
-            m_activeColorSet->remove(m_activeColorSet->getColor(i));
+    for (quint32 i = 0; i < m_activeColorSet->nColors(); i++) {
+        KoColorSetEntry c = m_activeColorSet->getColorGlobal(i);
+        if (m_activePatch->color() == c.color) {
+            m_activeColorSet->remove(c);
             setActiveColorSet(widget.selector->currentIndex());
             break;
         }

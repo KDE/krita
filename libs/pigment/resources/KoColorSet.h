@@ -86,14 +86,90 @@ public:
 
     void setColumnCount(int columns);
     int columnCount();
+    /**
+     * @brief comment
+     * @return the comment.
+     */
+    QString comment();
 
 public:
 
-    void add(const KoColorSetEntry &);
-    void remove(const KoColorSetEntry &);
-    void removeAt(quint32 index);
-    KoColorSetEntry getColor(quint32 index);
-    qint32 nColors();
+    /**
+     * @brief add Add a color to the palette.
+     * @param groupName color to add the group to. If empty, it will be added to the unsorted.
+     */
+    void add(const KoColorSetEntry &, QString groupName = QString());
+
+    /**
+     * @brief insertBefore insert color before index into group.
+     * @param index
+     * @param groupName name of the group that the color goes into.
+     * @return new index of index after the prepending.
+     */
+    quint32 insertBefore(const KoColorSetEntry &, qint32 index, const QString &groupName = QString());
+
+    void remove(const KoColorSetEntry &);//unsure
+    /**
+     * @brief removeAt remove the color at this index.
+     * @param index index to remove at
+     * @param groupName group in which the color is.
+     */
+    void removeAt(quint32 index, QString groupName = QString());
+
+    /**
+     * @brief getColorGlobal
+     * A function for getting a color based on a global index. Useful for itterating through all color entries.
+     * @param globalIndex the global index over the whole palette.
+     * @return the entry.
+     */
+    KoColorSetEntry getColorGlobal(quint32 globalIndex);
+    /**
+     * @brief getColorGroup
+     * A function for getting the color from a specific group.
+     * @param groupName the name of the group, will give unosrted when not defined.
+     * @param index the index within the group.
+     * @return the entry
+     */
+    KoColorSetEntry getColorGroup(quint32 index, QString groupName = QString());
+
+    QString findGroupByGlobalIndex(quint32 globalIndex, quint32 *index);
+    QString findGroupByColorName(const QString &name, quint32 *index);
+    QString findGroupByID(const QString &id,quint32 *index);
+
+    /**
+     * @brief getGroupNames
+     * @return returns a list of group names, excluding the unsorted group.
+     */
+    QStringList getGroupNames();
+
+    /**
+     * @brief nColorsGroup
+     * @param groupName string name of the group, when not specified, returns unsorted colors.
+     * @return the amount of colors in this group.
+     */
+    quint32 nColorsGroup(QString groupName = QString());
+    /**
+     * @brief nColors
+     * @return total colors in palette.
+     */
+    quint32 nColors();
+
+    /**
+     * @brief addGroup
+     * Adds a new group.
+     * @param groupName the name of the new group. When not specified, this will fail.
+     * @return whether thegroup was made.
+     */
+    bool addGroup(const QString &groupName);
+    /**
+     * @brief removeGroup
+     * Remove a group from the KoColorSet
+     * @param groupName the name of the group you want to remove.
+     * @param keepColors Whether you wish to keep the colorsetentries. These will be added to the unsorted.
+     * @return whether it could find the group to remove.
+     */
+    bool removeGroup(const QString &groupName, bool keepColors = true);
+
     void clear();
 
     /**
@@ -105,7 +181,7 @@ public:
      * when the two colors' colorspaces don't match. Else it'll use the entry's colorspace.
      * @return returns the int of the closest match.
      */
-    qint32 getIndexClosestColor(KoColor color, bool useGivenColorSpace = true);
+    quint32 getIndexClosestColor(KoColor color, bool useGivenColorSpace = true);
 
     /**
      * @brief closestColorName

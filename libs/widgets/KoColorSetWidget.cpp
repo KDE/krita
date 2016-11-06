@@ -68,20 +68,21 @@ void KoColorSetWidget::KoColorSetWidgetPrivate::fillColors()
     colorNameCmb->clear();
 
     if (colorSet) {
-        for( int i = 0, p= 0; i < colorSet->nColors(); i++) {
+        for( quint32 i = 0, p= 0; i < colorSet->nColors(); i++) {
             KoColorPatch *patch = new KoColorPatch(colorSetContainer);
             patch->setFrameStyle(QFrame::Plain | QFrame::Box);
             patch->setLineWidth(1);
-            patch->setColor(colorSet->getColor(i).color);
-            patch->setToolTip(colorSet->getColor(i).name);
+            KoColorSetEntry c = colorSet->getColorGlobal(i);
+            patch->setColor(c.color);
+            patch->setToolTip(c.name);
             connect(patch, SIGNAL(triggered(KoColorPatch *)), thePublic, SLOT(colorTriggered(KoColorPatch *)));
             colorSetLayout->addWidget(patch, p/columns, p%columns);
             patch->setDisplayRenderer(displayRenderer);
             patchWidgetList.append(patch);
-            colornames.append(colorSet->getColor(i).name);
+            colornames.append(c.name);
             QPixmap colorsquare = QPixmap(12,12);
-            colorsquare.fill(colorSet->getColor(i).color.toQColor());
-            colorNameCmb->addItem(QIcon(colorsquare), colorSet->getColor(i).name);
+            colorsquare.fill(c.color.toQColor());
+            colorNameCmb->addItem(QIcon(colorsquare), c.name);
             ++p;
         }
     }

@@ -222,10 +222,16 @@ void PaletteDockerDock::entrySelected(QModelIndex index)
         return;
     }
 
-    int i = index.row()*m_model->columnCount()+index.column();
+    quint32 i = (quint32)(index.row()*m_model->columnCount()+index.column());
     if (i < m_currentColorSet->nColors()) {
-        KoColorSetEntry entry = m_currentColorSet->getColor(i);
-        m_wdgPaletteDock->lblColorName->setText(entry.name);
+        KoColorSetEntry entry = m_currentColorSet->getColorGlobal(i);
+        quint32 li = 0;
+        QString groupName = m_currentColorSet->findGroupByGlobalIndex(i, &li);
+        if (groupName != QString()) {
+            groupName = groupName+" - ";
+        }
+        m_wdgPaletteDock->lblColorName->setText(groupName+entry.name);
+        qDebug()<<"The index of the currently selected color within its group is: "<<li;
         if (m_resourceProvider) {
             m_resourceProvider->setFGColor(entry.color);
         }

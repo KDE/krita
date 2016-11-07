@@ -68,10 +68,8 @@ ColorSpaceConversion::~ColorSpaceConversion()
 
 void ColorSpaceConversion::slotImageColorSpaceConversion()
 {
-    KisImageWSP image = m_view->image();
-
+    KisImageSP image = m_view->image().toStrongRef();
     if (!image) return;
-
 
     DlgColorSpaceConversion * dlgColorSpaceConversion = new DlgColorSpaceConversion(m_view->mainWindow(), "ColorSpaceConversion");
     bool allowLCMSOptimization = KisConfig().allowLCMSOptimization();
@@ -98,8 +96,7 @@ void ColorSpaceConversion::slotImageColorSpaceConversion()
 
 void ColorSpaceConversion::slotLayerColorSpaceConversion()
 {
-
-    KisImageWSP image = m_view->image();
+    KisImageSP image = m_view->image().toStrongRef();
     if (!image) return;
 
     KisLayerSP layer = m_view->activeLayer();

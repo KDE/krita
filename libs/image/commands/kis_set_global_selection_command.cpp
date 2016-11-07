@@ -29,18 +29,30 @@
 KisSetGlobalSelectionCommand::KisSetGlobalSelectionCommand(KisImageWSP image, KisSelectionSP selection)
     : m_image(image)
 {
-    m_oldSelection = m_image->globalSelection();
+    KisImageSP imageSP = m_image.toStrongRef();
+    if (!image) {
+        return;
+    }
+    m_oldSelection = imageSP->globalSelection();
     m_newSelection = selection;
 }
 
 void KisSetGlobalSelectionCommand::redo()
 {
-    m_image->setGlobalSelection(m_newSelection);
+    KisImageSP image = m_image.toStrongRef();
+    if (!image) {
+        return;
+    }
+    image->setGlobalSelection(m_newSelection);
 }
 
 void KisSetGlobalSelectionCommand::undo()
 {
-    m_image->setGlobalSelection(m_oldSelection);
+    KisImageSP image = m_image.toStrongRef();
+    if (!image) {
+        return;
+    }
+    image->setGlobalSelection(m_oldSelection);
 }
 
 KisSetEmptyGlobalSelectionCommand::KisSetEmptyGlobalSelectionCommand(KisImageWSP image)

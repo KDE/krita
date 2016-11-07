@@ -211,16 +211,21 @@ void KisSuspendProjectionUpdatesStrokeStrategy::doStrokeCallback(KisStrokeJobDat
     Private::UpdatesBarrierData *barrierData = dynamic_cast<Private::UpdatesBarrierData*>(data);
     Private::IssueCanvasUpdatesData *canvasUpdates = dynamic_cast<Private::IssueCanvasUpdatesData*>(data);
 
+    KisImageSP image = m_d->image.toStrongRef();
+    if (!image) {
+        return;
+    }
+
     if (suspendData) {
-        m_d->image->setProjectionUpdatesFilter(
+        image->setProjectionUpdatesFilter(
             KisProjectionUpdatesFilterSP(new Private::SuspendLod0Updates()));
     } else if (resumeData) {
-        m_d->image->disableUIUpdates();
+        image->disableUIUpdates();
         resumeAndIssueUpdates(false);
     } else if (barrierData) {
-        m_d->image->enableUIUpdates();
+        image->enableUIUpdates();
     } else if (canvasUpdates) {
-        m_d->image->notifyProjectionUpdated(canvasUpdates->updateRect);
+        image->notifyProjectionUpdated(canvasUpdates->updateRect);
     }
 }
 

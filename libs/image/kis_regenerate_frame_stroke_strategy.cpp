@@ -57,12 +57,20 @@ struct KisRegenerateFrameStrokeStrategy::Private
     };
 
     void saveAndResetUpdatesFilter() {
-        prevUpdatesFilter = interface->image()->projectionUpdatesFilter();
-        interface->image()->setProjectionUpdatesFilter(KisProjectionUpdatesFilterSP());
+        KisImageSP image = interface->image().toStrongRef();
+        if (!image) {
+            return;
+        }
+        prevUpdatesFilter = image->projectionUpdatesFilter();
+        image->setProjectionUpdatesFilter(KisProjectionUpdatesFilterSP());
     }
 
     void restoreUpdatesFilter() {
-        interface->image()->setProjectionUpdatesFilter(prevUpdatesFilter);
+        KisImageSP image = interface->image().toStrongRef();
+        if (!image) {
+            return;
+        }
+        image->setProjectionUpdatesFilter(prevUpdatesFilter);
         prevUpdatesFilter.clear();
     }
 };

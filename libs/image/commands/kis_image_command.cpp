@@ -75,7 +75,10 @@ void KisImageCommand::UpdateTarget::update() {
     if (node) {
         node->setDirty(m_updateRect);
     } else {
-        m_image->refreshGraphAsync(m_removedNodeParent);
-        m_removedNodeParent->setDirty(m_updateRect);
+        KisImageSP image = m_image.toStrongRef();
+        if (image) {
+            image->refreshGraphAsync(m_removedNodeParent);
+            m_removedNodeParent->setDirty(m_updateRect);
+        }
     }
 }

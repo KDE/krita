@@ -87,7 +87,7 @@ KisImportExportFilter::ConversionStatus psdExport::convert(const QByteArray& fro
         return KisImportExportFilter::NoDocumentCreated;
 
 
-    if (input->image()->width() > 30000 || input->image()->height() > 30000) {
+    if (input->savingImage()->width() > 30000 || input->savingImage()->height() > 30000) {
         if (!getBatchMode()) {
             QMessageBox::critical(0,
                                   i18nc("@title:window", "Photoshop Export Error"),
@@ -98,7 +98,7 @@ KisImportExportFilter::ConversionStatus psdExport::convert(const QByteArray& fro
     }
 
 
-    if (!checkHomogenity(input->image()->rootLayer(), input->image()->colorSpace())) {
+    if (!checkHomogenity(input->savingImage()->rootLayer(), input->savingImage()->colorSpace())) {
         if (!getBatchMode()) {
             QMessageBox::critical(0,
                                   i18nc("@title:window", "Photoshop Export Error"),

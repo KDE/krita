@@ -82,24 +82,24 @@ KisImportExportFilter::ConversionStatus KisHeightMapExport::convert(const QByteA
     if (from != "application/x-krita")
         return KisImportExportFilter::NotImplemented;
 
-    KisDocument *inputDoc = inputDocument();
+    KisDocument *input = inputDocument();
     QString filename = outputFile();
 
-    if (!inputDoc)
+    if (!input)
         return KisImportExportFilter::NoDocumentCreated;
 
     if (filename.isEmpty()) return KisImportExportFilter::FileNotFound;
 
-    KisImageWSP image = inputDoc->image();
+    KisImageWSP image = input->savingImage();
     Q_CHECK_PTR(image);
 
-    if (inputDoc->image()->width() != inputDoc->image()->height()) {
-        inputDoc->setErrorMessage(i18n("Cannot export this image to a heightmap: it is not square"));
+    if (input->savingImage()->width() != input->savingImage()->height()) {
+        input->setErrorMessage(i18n("Cannot export this image to a heightmap: it is not square"));
         return KisImportExportFilter::WrongFormat;
     }
 
-    if (inputDoc->image()->colorSpace()->colorModelId() != GrayAColorModelID) {
-        inputDoc->setErrorMessage(i18n("Cannot export this image to a heightmap: it is not grayscale"));
+    if (input->savingImage()->colorSpace()->colorModelId() != GrayAColorModelID) {
+        input->setErrorMessage(i18n("Cannot export this image to a heightmap: it is not grayscale"));
         return KisImportExportFilter::WrongFormat;
     }
 
@@ -143,8 +143,6 @@ KisImportExportFilter::ConversionStatus KisHeightMapExport::convert(const QByteA
     }
 
 
-    // the image must be locked at the higher levels
-    KIS_SAFE_ASSERT_RECOVER_NOOP(image->locked());
     KisPaintDeviceSP pd = new KisPaintDevice(*image->projection());
 
     QFile f(filename);

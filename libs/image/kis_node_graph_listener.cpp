@@ -37,7 +37,6 @@ KisNodeGraphListener::KisNodeGraphListener()
 
 KisNodeGraphListener::~KisNodeGraphListener()
 {
-    delete m_d;
 }
 
 void KisNodeGraphListener::aboutToAddANode(KisNode */*parent*/, int /*index*/)

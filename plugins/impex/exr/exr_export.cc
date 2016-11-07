@@ -84,7 +84,7 @@ KisImportExportFilter::ConversionStatus exrExport::convert(const QByteArray& fro
     KisDocument *input = inputDocument();
     if (!input)
         return KisImportExportFilter::NoDocumentCreated;
-    KisImageWSP image = input->image();
+    KisImageWSP image = input->savingImage();
     Q_CHECK_PTR(image);
 
     KoDialog kdb;
@@ -121,17 +121,12 @@ KisImportExportFilter::ConversionStatus exrExport::convert(const QByteArray& fro
     KisImageBuilder_Result res;
 
     if (cfg->getBool("flatten")) {
-        // the image must be locked at the higher levels
-        KIS_SAFE_ASSERT_RECOVER_NOOP(input->image()->locked());
-
         KisPaintDeviceSP pd = new KisPaintDevice(*image->projection());
         KisPaintLayerSP l = new KisPaintLayer(image, "projection", OPACITY_OPAQUE_U8, pd);
 
         res = kpc.buildFile(filename, l);
     }
     else {
-        // the image must be locked at the higher levels
-        KIS_SAFE_ASSERT_RECOVER_NOOP(input->image()->locked());
         res = kpc.buildFile(filename, image->rootLayer());
     }
 

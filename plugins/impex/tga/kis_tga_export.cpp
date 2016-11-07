@@ -62,11 +62,8 @@ KisImportExportFilter::ConversionStatus KisTGAExport::convert(const QByteArray& 
     if (from != "application/x-krita")
         return KisImportExportFilter::NotImplemented;
 
-    // the image must be locked at the higher levels
-    KIS_SAFE_ASSERT_RECOVER_NOOP(input->image()->locked());
-
-    QRect rc = input->image()->bounds();
-    QImage image = input->image()->projection()->convertToQImage(0, 0, 0, rc.width(), rc.height(), KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
+    QRect rc = input->savingImage()->bounds();
+    QImage image = input->savingImage()->projection()->convertToQImage(0, 0, 0, rc.width(), rc.height(), KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
 
     QFile f(filename);
     f.open(QIODevice::WriteOnly);

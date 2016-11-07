@@ -76,7 +76,7 @@ KisImportExportFilter::ConversionStatus KisJPEGExport::convert(const QByteArray&
     if (!input)
         return KisImportExportFilter::NoDocumentCreated;
 
-    KisImageWSP image = input->image();
+    KisImageWSP image = input->savingImage();
     Q_CHECK_PTR(image);
 
     KoDialog kdb;
@@ -135,8 +135,6 @@ KisImportExportFilter::ConversionStatus KisJPEGExport::convert(const QByteArray&
 
     if (filename.isEmpty()) return KisImportExportFilter::FileNotFound;
 
-    // the image must be locked at the higher levels
-    KIS_SAFE_ASSERT_RECOVER_NOOP(input->image()->locked());
     KisPaintDeviceSP pd = new KisPaintDevice(*image->projection());
 
     KisJPEGConverter kpc(input, getBatchMode());

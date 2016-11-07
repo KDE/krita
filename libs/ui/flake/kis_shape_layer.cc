@@ -261,7 +261,9 @@ bool KisShapeLayer::allowAsChild(KisNodeSP node) const
 
 void KisShapeLayer::setImage(KisImageWSP _image)
 {
-    KisLayer::setImage(_image);
+    if (_image) {
+        KisLayer::setImage(_image);
+    }
     delete m_d->converter;
     m_d->converter = new KisImageViewConverter(image());
     m_d->paintDevice = new KisPaintDevice(image()->colorSpace());

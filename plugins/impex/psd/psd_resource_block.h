@@ -75,6 +75,18 @@ public:
         delete resource;
     }
 
+    KisAnnotation* clone() const Q_DECL_OVERRIDE {
+        // HACK ALERT: we are evil! use notmal copying instead!
+
+        PSDResourceBlock *copied = new PSDResourceBlock();
+
+        QBuffer buffer;
+        write(&buffer);
+        copied->read(&buffer);
+
+        return copied;
+    }
+
     QString displayText() const {
         if (resource) {
             return resource->displayText();
@@ -83,7 +95,7 @@ public:
     }
 
     bool read(QIODevice* io);
-    bool write(QIODevice* io);
+    bool write(QIODevice* io) const;
     bool valid();
 
     quint16     identifier;
@@ -93,7 +105,7 @@ public:
 
     PSDInterpretedResource *resource;
 
-    QString error;
+    mutable QString error;
 };
 
 

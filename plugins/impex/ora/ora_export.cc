@@ -90,7 +90,7 @@ KisImportExportFilter::ConversionStatus OraExport::convert(const QByteArray& fro
 
     if (filename.isEmpty()) return KisImportExportFilter::FileNotFound;
 
-    KisImageWSP image = input->image();
+    KisImageWSP image = input->savingImage();
     Q_CHECK_PTR(image);
 
     KisPaintDeviceSP pd = image->projection();

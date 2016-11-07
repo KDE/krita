@@ -281,7 +281,8 @@ public:
         imageIdleWatcher(2000 /*ms*/),
         kraLoader(0),
         suppressProgress(false),
-        fileProgressProxy(0)
+        fileProgressProxy(0),
+        savingLock(&savingMutex)
     {
         if (QLocale().measurementSystem() == QLocale::ImperialSystem) {
             unit = KoUnit::Inch;
@@ -360,6 +361,8 @@ public:
     qint32 macroNestDepth;
 
     KisImageSP image;
+    KisImageSP savingImage;
+
     KisNodeSP preActivatedNode;
     KisShapeController* shapeController;
     KoShapeController* koShapeController;
@@ -375,6 +378,8 @@ public:
 
     QList<KisPaintingAssistantSP> assistants;
     KisGridConfig gridConfig;
+
+    StdLockableWrapper<QMutex> savingLock;
 
     bool openFile() {
         document->setFileProgressProxy();
@@ -442,8 +447,7 @@ public:
     SafeSavingLocker(KisDocument::Private *_d)
         : d(_d),
           m_locked(false),
-          m_imageLock(d->image, true),
-          m_savingLock(&d->savingMutex)
+          m_imageLock(d->image, true)
     {
         const int realAutoSaveInterval = KisConfig().autoSaveInterval();
         const int emergencyAutoSaveInterval = 10; // sec
@@ -457,7 +461,7 @@ public:
          * Since we are trying to lock multiple objects, so we should
          * do it in a safe manner.
          */
-        m_locked = std::try_lock(m_imageLock, m_savingLock) < 0;
+        m_locked = std::try_lock(m_imageLock, d->savingLock) < 0;
 
         if (!m_locked) {
             if (d->isAutosaving) {
@@ -470,7 +474,7 @@ public:
                 QApplication::processEvents();
 
                 // one more try...
-                m_locked = std::try_lock(m_imageLock, m_savingLock) < 0;
+                m_locked = std::try_lock(m_imageLock, d->savingLock) < 0;
             }
         }
 
@@ -482,7 +486,7 @@ public:
     ~SafeSavingLocker() {
          if (m_locked) {
              m_imageLock.unlock();
-             m_savingLock.unlock();
+             d->savingLock.unlock();
 
              const int realAutoSaveInterval = KisConfig().autoSaveInterval();
              d->document->setAutoSave(realAutoSaveInterval);
@@ -498,8 +502,8 @@ private:
     bool m_locked;
 
     KisImageBarrierLockAdapter m_imageLock;
-    StdLockableWrapper<QMutex> m_savingLock;
 };
+
 
 KisDocument::KisDocument()
     : d(new Private(this))
@@ -527,7 +531,6 @@ KisDocument::KisDocument()
 
     d->firstMod = QDateTime::currentDateTime();
     d->lastMod = QDateTime::currentDateTime();
-
 
     // preload the krita resources
     KisResourceServerProvider::instance();
@@ -698,12 +701,12 @@ bool KisDocument::saveFile(KisPropertiesConfigurationSP exportConfiguration)
     Q_ASSERT(!tempororaryFileName.isEmpty());
 
     if (!isNativeFormat(outputMimeType)) {
-        Private::SafeSavingLocker locker(d);
-        if (locker.successfullyLocked()) {
-            status = d->importExportManager->exportDocument(tempororaryFileName, outputMimeType, exportConfiguration);
-        } else {
-            status = KisImportExportFilter::UsageError;
+
+        if (!prepareLocksForSaving()) {
+            return false;
         }
+        status = d->importExportManager->exportDocument(tempororaryFileName, outputMimeType, exportConfiguration);
+        unlockAfterSaving();
 
         ret = status == KisImportExportFilter::OK;
         suppressErrorDialog = (status == KisImportExportFilter::UserCancelled || status == KisImportExportFilter::BadConversionGraph);
@@ -882,7 +885,7 @@ bool KisDocument::isAutoErrorHandlingEnabled() const
 
 void KisDocument::slotAutoSave()
 {
-    if (d->modified && d->modifiedAfterAutosave && !d->isLoading) {
+    if (!d->isAutosaving && d->modified && d->modifiedAfterAutosave && !d->isLoading) {
         // Give a warning when trying to autosave an encrypted file when no password is known (should not happen)
         if (d->specialOutputFlag == SaveEncrypted && d->password.isNull()) {
             // That advice should also fix this error from occurring again
@@ -937,10 +940,43 @@ bool KisDocument::isModified() const
     return d->modified;
 }
 
+bool KisDocument::prepareLocksForSaving()
+{
+    {
+        Private::SafeSavingLocker locker(d);
+        if (locker.successfullyLocked()) {
+            d->savingImage = d->image->clone(true);
+        }
+        else {
+            d->lastErrorMessage = i18n("The image was still busy while saving. Your saved image might be incomplete.");
+            d->image->lock();
+            d->savingImage = d->image->clone(true);
+            d->image->unlock();
+        }
+    }
+
+    if (!d->savingMutex.tryLock()) {
+        qWarning() << "Could not lock for saving!";
+        d->lastErrorMessage = i18n("Could not lock the image for saving.");
+        d->savingImage = 0;
+        return false;
+    }
+
+    Q_ASSERT(d->savingImage);
+    return true;
+}
+
+void KisDocument::unlockAfterSaving()
+{
+    d->savingImage = 0;
+    d->savingMutex.unlock();
+}
+
 bool KisDocument::saveNativeFormat(const QString & file)
 {
-    Private::SafeSavingLocker locker(d);
-    if (!locker.successfullyLocked()) return false;
+    if (!prepareLocksForSaving()) {
+        return false;
+    }
 
     d->lastErrorMessage.clear();
     //dbgUI <<"Saving to store";
@@ -956,9 +992,12 @@ bool KisDocument::saveNativeFormat(const QString & file)
         if (f.open(QIODevice::WriteOnly | QIODevice::Text)) {
             bool success = saveToStream(&f);
             f.close();
+            unlockAfterSaving();
             return success;
-        } else
+        } else {
+            unlockAfterSaving();
             return false;
+        }
     }
 
     dbgUI << "KisDocument::saveNativeFormat nativeFormatMimeType=" << nativeFormatMimeType();
@@ -971,6 +1010,7 @@ bool KisDocument::saveNativeFormat(const QString & file)
     }
     if (store->bad()) {
         d->lastErrorMessage = i18n("Could not create the file for saving");   // more details needed?
+        unlockAfterSaving();
         delete store;
         return false;
     }
@@ -983,6 +1023,7 @@ bool KisDocument::saveNativeFormat(const QString & file)
     } else {
         result = saveNativeFormatCalligra(store);
     }
+    unlockAfterSaving();
     return result;
 }
 
@@ -1166,7 +1207,6 @@ bool KisDocument::importDocument(const QUrl &_url)
 bool KisDocument::openUrl(const QUrl &_url, KisDocument::OpenUrlFlags flags)
 {
     if (!_url.isLocalFile()) {
-        qDebug() << "not a local file" << _url;
         return false;
     }
     dbgUI << "url=" << _url.url();
@@ -1785,7 +1825,7 @@ bool KisDocument::completeLoading(KoStore* store)
 bool KisDocument::completeSaving(KoStore* store)
 {
     d->kraSaver->saveKeyframes(store, url().url(), isStoredExtern());
-    d->kraSaver->saveBinaryData(store, d->image, url().url(), isStoredExtern(), d->isAutosaving);
+    d->kraSaver->saveBinaryData(store, d->savingImage, url().url(), isStoredExtern(), d->isAutosaving);
     bool retval = true;
     if (!d->kraSaver->errorMessages().isEmpty()) {
         setErrorMessage(d->kraSaver->errorMessages().join(".\n"));
@@ -1899,7 +1939,7 @@ QDomDocument KisDocument::saveXML()
     if (d->kraSaver) delete d->kraSaver;
     d->kraSaver = new KisKraSaver(this);
 
-    root.appendChild(d->kraSaver->saveXML(doc, d->image));
+    root.appendChild(d->kraSaver->saveXML(doc, d->savingImage));
     if (!d->kraSaver->errorMessages().isEmpty()) {
         setErrorMessage(d->kraSaver->errorMessages().join(".\n"));
     }
@@ -2476,6 +2516,11 @@ void KisDocument::clearFileProgressProxy()
 KisImageWSP KisDocument::image() const
 {
     return d->image;
+}
+
+KisImageSP KisDocument::savingImage() const
+{
+    return d->savingImage;
 }
 
 

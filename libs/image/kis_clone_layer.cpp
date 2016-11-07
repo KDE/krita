@@ -201,10 +201,12 @@ qint32 KisCloneLayer::y() const
 void KisCloneLayer::setX(qint32 x)
 {
     m_d->offset.setX(x);
+    notifyNeedProjectionChanged();
 }
 void KisCloneLayer::setY(qint32 y)
 {
     m_d->offset.setY(y);
+    notifyNeedProjectionChanged();
 }
 
 QRect KisCloneLayer::extent() const

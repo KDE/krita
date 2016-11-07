@@ -272,6 +272,8 @@ protected:
 
 protected:
 
+    void notifyNeedProjectionChanged();
+
     /**
      * Ask the layer to assemble its data & apply all the effect masks
      * to it.

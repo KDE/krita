@@ -169,6 +169,6 @@ void KisIndirectPaintingSupport::writeMergeData(KisPainter *painter, KisPaintDev
 
 void KisIndirectPaintingSupport::releaseResources()
 {
-    d->temporaryTarget = 0;
+    setTemporaryTarget(0);
     d->selection = 0;
 }

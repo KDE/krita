@@ -49,7 +49,7 @@ public:
     bool hasTemporaryTarget() const;
 
     virtual void setCurrentColor(const KoColor &color);
-    void setTemporaryTarget(KisPaintDeviceSP t);
+    virtual void setTemporaryTarget(KisPaintDeviceSP t);
     void setTemporaryCompositeOp(const QString &id);
     void setTemporaryOpacity(quint8 o);
     void setTemporaryChannelFlags(const QBitArray& channelFlags);

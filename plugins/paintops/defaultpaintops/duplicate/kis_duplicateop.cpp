@@ -63,6 +63,7 @@
 #include "kis_duplicateop_settings.h"
 #include "kis_duplicateop_settings_widget.h"
 #include "kis_duplicateop_option.h"
+#include "kis_lod_transform.h"
 
 KisDuplicateOp::KisDuplicateOp(const KisPaintOpSettingsSP settings, KisPainter *painter, KisNodeSP node, KisImageSP image)
     : KisBrushBasedPaintOp(settings, painter)
@@ -123,6 +124,7 @@ KisSpacingInformation KisDuplicateOp::paintAt(const KisPaintInformation& info)
     }
 
     qreal scale = m_sizeOption.apply(info);
+    scale *= KisLodTransform::lodToScale(realSourceDevice);
     if (checkSizeTooSmall(scale)) return KisSpacingInformation();
     KisDabShape shape(scale, 1.0, 0.0);
 
@@ -143,11 +145,14 @@ KisSpacingInformation KisDuplicateOp::paintAt(const KisPaintInformation& info)
     QPoint srcPoint;
 
     if (m_moveSourcePoint) {
-        srcPoint = (dstRect.topLeft() - m_settings->offset()).toPoint();
+        KisLodTransform t(realSourceDevice);
+
+        srcPoint = (dstRect.topLeft() - t.map(m_settings->offset())).toPoint();
     }
     else {
+        KisLodTransform t(realSourceDevice);
         QPointF hotSpot = brush->hotSpot(shape, info);
-        srcPoint = (m_settings->position() - hotSpot).toPoint();
+        srcPoint = (t.map(m_settings->position()) - hotSpot).toPoint();
     }
 
     qint32 sw = dstRect.width();

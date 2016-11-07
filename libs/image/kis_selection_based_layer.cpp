@@ -90,6 +90,7 @@ void KisSelectionBasedLayer::initSelection()
     m_d->selection->pixelSelection()->setDefaultPixel(KoColor(Qt::white, m_d->selection->pixelSelection()->colorSpace()));
     m_d->selection->setParentNode(this);
     m_d->selection->updateProjection();
+    notifyNeedProjectionChanged();
 }
 
 void KisSelectionBasedLayer::slotImageSizeChanged()
@@ -224,6 +225,8 @@ void KisSelectionBasedLayer::setInternalSelection(KisSelectionSP selection)
         qWarning() << "WARNING:" << ppVar(selection->pixelSelection()->defaultBounds()->bounds());
         qWarning() << "WARNING:" << ppVar(image()->bounds());
     }
+
+    notifyNeedProjectionChanged();
 }
 
 qint32 KisSelectionBasedLayer::x() const

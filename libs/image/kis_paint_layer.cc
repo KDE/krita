@@ -142,6 +142,12 @@ KisPaintDeviceSP KisPaintLayer::paintDevice() const
     return m_d->paintDevice;
 }
 
+void KisPaintLayer::setTemporaryTarget(KisPaintDeviceSP t)
+{
+    notifyNeedProjectionChanged();
+    KisIndirectPaintingSupport::setTemporaryTarget(t);
+}
+
 bool KisPaintLayer::needProjection() const
 {
     return hasTemporaryTarget() || (isAnimated() && onionSkinEnabled());
@@ -319,6 +325,7 @@ void KisPaintLayer::setOnionSkinEnabled(bool state)
     }
 
     baseNodeChangedCallback();
+    notifyNeedProjectionChanged();
 }
 
 void KisPaintLayer::slotExternalUpdateOnionSkins()

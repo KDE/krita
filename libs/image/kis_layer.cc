@@ -655,6 +655,13 @@ QRect KisLayer::applyMasks(const KisPaintDeviceSP source,
     return changeRect;
 }
 
+void KisLayer::notifyNeedProjectionChanged()
+{
+    if (!needProjection() && !hasEffectMasks()) {
+        m_d->safeProjection.freeDevice();
+    }
+}
+
 QRect KisLayer::updateProjection(const QRect& rect, KisNodeSP filthyNode)
 {
     QRect updatedRect = rect;

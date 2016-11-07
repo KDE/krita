@@ -92,6 +92,8 @@ public:
     KisBaseNode::PropertyList sectionModelProperties() const override;
     void setSectionModelProperties(const KisBaseNode::PropertyList &properties) override;
 
+    void setTemporaryTarget(KisPaintDeviceSP t) override;
+
 public:
 
     QRect extent() const override;

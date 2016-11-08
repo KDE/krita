@@ -228,6 +228,17 @@ void KisPainterBasedStrokeStrategy::finishStrokeCallback()
     KisPostExecutionUndoAdapter *undoAdapter =
         m_resources->postExecutionUndoAdapter();
 
+    QScopedPointer<KisPostExecutionUndoAdapter> dumbUndoAdapter;
+    QScopedPointer<KisUndoStore> dumbUndoStore;
+
+    if (!undoAdapter) {
+        dumbUndoStore.reset(new KisDumbUndoStore());
+        dumbUndoAdapter.reset(new KisPostExecutionUndoAdapter(dumbUndoStore.data(), 0));
+
+        undoAdapter = dumbUndoAdapter.data();
+    }
+
+
     if (indirect && indirect->hasTemporaryTarget()) {
         KUndo2MagicString transactionText = m_transaction->text();
         m_transaction->end();

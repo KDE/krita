@@ -55,48 +55,28 @@ QRect KisDefaultBounds::bounds() const
     /**
      * By default return infinite rect to cover everything
      */
-    KisImageSP image = m_d->image.toStrongRef();
-    if (!image) {
-        return infiniteRect;
-    }
-    return image->effectiveLodBounds();
+    return m_d->image ? m_d->image->effectiveLodBounds() : infiniteRect;
 }
 
 bool KisDefaultBounds::wrapAroundMode() const
 {
-    KisImageSP image = m_d->image.toStrongRef();
-    if (!image) {
-        return false;
-    }
-    return image->wrapAroundModeActive();
+    return m_d->image ? m_d->image->wrapAroundModeActive() : false;
 }
 
 int KisDefaultBounds::currentLevelOfDetail() const
 {
-    KisImageSP image = m_d->image.toStrongRef();
-    if (!image) {
-        return 0;
-    }
-    return image->currentLevelOfDetail();
+    return m_d->image ? m_d->image->currentLevelOfDetail() : 0;
 }
 
 int KisDefaultBounds::currentTime() const
 {
-    KisImageSP image = m_d->image.toStrongRef();
-    if (!image) {
-        return 0;
-    }
-    KisImageAnimationInterface *interface = image->animationInterface();
+    KisImageAnimationInterface *interface = m_d->image ? m_d->image->animationInterface() : 0;
     return interface ? interface->currentTime() : 0;
 }
 
 bool KisDefaultBounds::externalFrameActive() const
 {
-    KisImageSP image = m_d->image.toStrongRef();
-    if (!image) {
-        return 0;
-    }
-    KisImageAnimationInterface *interface = image->animationInterface();
+    KisImageAnimationInterface *interface = m_d->image ? m_d->image->animationInterface() : 0;
     return interface ? interface->externalFrameActive() : false;
 }
 
@@ -123,8 +103,7 @@ KisSelectionDefaultBounds::~KisSelectionDefaultBounds()
 
 QRect KisSelectionDefaultBounds::bounds() const
 {
-    auto parentDevice = m_d->parentDevice.toStrongRef();
-    QRect additionalRect = parentDevice ? parentDevice->extent() : QRect();
+    QRect additionalRect = m_d->parentDevice ? m_d->parentDevice->extent() : QRect();
     return additionalRect | KisDefaultBounds::bounds();
 }
 

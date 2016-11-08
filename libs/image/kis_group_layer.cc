@@ -144,13 +144,8 @@ void KisGroupLayer::setImage(KisImageWSP image)
 
 KisLayerSP KisGroupLayer::createMergedLayerTemplate(KisLayerSP prevLayer)
 {
-    KisImageSP imageSP = image().toStrongRef();
-    if (!imageSP) {
-        warnImage << "image invalid";
-        return KisLayerSP();
-    }
-
     KisGroupLayer *prevGroup = dynamic_cast<KisGroupLayer*>(prevLayer.data());
+
     if (prevGroup && canMergeAndKeepBlendOptions(prevLayer)) {
         KisSharedPtr<KisGroupLayer> merged(new KisGroupLayer(*prevGroup));
 
@@ -158,15 +153,14 @@ KisLayerSP KisGroupLayer::createMergedLayerTemplate(KisLayerSP prevLayer)
 
         for (child = firstChild(); child; child = child->nextSibling()) {
             cloned = child->clone();
-            imageSP->addNode(cloned, merged);
+            image()->addNode(cloned, merged);
         }
 
-        imageSP->refreshGraphAsync(merged);
+        image()->refreshGraphAsync(merged);
 
         return merged;
-    } else {
+    } else
         return KisLayer::createMergedLayerTemplate(prevLayer);
-    }
 }
 
 void KisGroupLayer::fillMergedLayerTemplate(KisLayerSP dstLayer, KisLayerSP prevLayer)
@@ -178,12 +172,8 @@ void KisGroupLayer::fillMergedLayerTemplate(KisLayerSP dstLayer, KisLayerSP prev
 
 void KisGroupLayer::resetCache(const KoColorSpace *colorSpace)
 {
-    KisImageSP imageSP = image().toStrongRef();
-    if (!imageSP) {
-        return;
-    }
     if (!colorSpace)
-        colorSpace = imageSP->colorSpace();
+        colorSpace = image()->colorSpace();
 
     Q_ASSERT(colorSpace);
 

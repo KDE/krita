@@ -130,9 +130,13 @@ KisRegenerateFrameStrokeStrategy::~KisRegenerateFrameStrokeStrategy()
 
 void KisRegenerateFrameStrokeStrategy::initStrokeCallback()
 {
+    KisImageSP image = m_d->interface->image().toStrongRef();
+    if (!image) {
+        return;
+    }
     if (m_d->type == EXTERNAL_FRAME) {
         m_d->saveAndResetUpdatesFilter();
-        m_d->interface->image()->disableUIUpdates();
+        image->disableUIUpdates();
         m_d->interface->saveAndResetCurrentTime(m_d->frameId, &m_d->previousFrameId);
     } else if (m_d->type == CURRENT_FRAME) {
         m_d->interface->blockFrameInvalidation(true);
@@ -156,10 +160,14 @@ void KisRegenerateFrameStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
 
 void KisRegenerateFrameStrokeStrategy::finishStrokeCallback()
 {
+    KisImageSP image = m_d->interface->image().toStrongRef();
+    if (!image) {
+        return;
+    }
     if (m_d->type == EXTERNAL_FRAME) {
         m_d->interface->notifyFrameReady();
         m_d->interface->restoreCurrentTime(&m_d->previousFrameId);
-        m_d->interface->image()->enableUIUpdates();
+        image->enableUIUpdates();
         m_d->restoreUpdatesFilter();
     } else if (m_d->type == CURRENT_FRAME) {
         m_d->interface->blockFrameInvalidation(false);
@@ -168,10 +176,14 @@ void KisRegenerateFrameStrokeStrategy::finishStrokeCallback()
 
 void KisRegenerateFrameStrokeStrategy::cancelStrokeCallback()
 {
+    KisImageSP image = m_d->interface->image().toStrongRef();
+    if (!image) {
+        return;
+    }
     if (m_d->type == EXTERNAL_FRAME) {
         m_d->interface->notifyFrameCancelled();
         m_d->interface->restoreCurrentTime(&m_d->previousFrameId);
-        m_d->interface->image()->enableUIUpdates();
+        image->enableUIUpdates();
         m_d->restoreUpdatesFilter();
     } else if (m_d->type == CURRENT_FRAME) {
         m_d->interface->blockFrameInvalidation(false);
@@ -193,9 +205,13 @@ KisStrokeStrategy* KisRegenerateFrameStrokeStrategy::createLodClone(int levelOfD
 
 void KisRegenerateFrameStrokeStrategy::suspendStrokeCallback()
 {
+    KisImageSP image = m_d->interface->image().toStrongRef();
+    if (!image) {
+        return;
+    }
     if (m_d->type == EXTERNAL_FRAME) {
         m_d->interface->restoreCurrentTime(&m_d->previousFrameId);
-        m_d->interface->image()->enableUIUpdates();
+        image->enableUIUpdates();
         m_d->restoreUpdatesFilter();
     } else if (m_d->type == CURRENT_FRAME) {
         m_d->interface->blockFrameInvalidation(false);
@@ -204,9 +220,13 @@ void KisRegenerateFrameStrokeStrategy::suspendStrokeCallback()
 
 void KisRegenerateFrameStrokeStrategy::resumeStrokeCallback()
 {
+    KisImageSP image = m_d->interface->image().toStrongRef();
+    if (!image) {
+        return;
+    }
     if (m_d->type == EXTERNAL_FRAME) {
         m_d->saveAndResetUpdatesFilter();
-        m_d->interface->image()->disableUIUpdates();
+        image->disableUIUpdates();
         m_d->interface->saveAndResetCurrentTime(m_d->frameId, &m_d->previousFrameId);
     } else if (m_d->type == CURRENT_FRAME) {
         m_d->interface->blockFrameInvalidation(true);

@@ -257,8 +257,13 @@ QList<KisStrokeJobData*> KisSuspendProjectionUpdatesStrokeStrategy::createResume
 
 void KisSuspendProjectionUpdatesStrokeStrategy::resumeAndIssueUpdates(bool dropUpdates)
 {
+    KisImageSP image = m_d->image.toStrongRef();
+    if (!image) {
+        return;
+    }
+
     KisProjectionUpdatesFilterSP filter =
-        m_d->image->projectionUpdatesFilter();
+        image->projectionUpdatesFilter();
 
     if (!filter) return;
 
@@ -266,16 +271,21 @@ void KisSuspendProjectionUpdatesStrokeStrategy::resumeAndIssueUpdates(bool dropU
         dynamic_cast<Private::SuspendLod0Updates*>(filter.data());
 
     if (localFilter) {
-        m_d->image->setProjectionUpdatesFilter(KisProjectionUpdatesFilterSP());
+        image->setProjectionUpdatesFilter(KisProjectionUpdatesFilterSP());
 
         if (!dropUpdates) {
-            localFilter->notifyUpdates(m_d->image.data());
+            localFilter->notifyUpdates(image.data());
         }
     }
 }
 
 void KisSuspendProjectionUpdatesStrokeStrategy::cancelStrokeCallback()
 {
+    KisImageSP image = m_d->image.toStrongRef();
+    if (!image) {
+        return;
+    }
+
     /**
      * We shouldn't emit any ad-hoc updates when cancelling the
      * stroke.  It generates weird temporary holes on the canvas,
@@ -287,6 +297,6 @@ void KisSuspendProjectionUpdatesStrokeStrategy::cancelStrokeCallback()
 
     if (!m_d->suspend) {
         // FIXME: optimize
-        m_d->image->refreshGraphAsync();
+        image->refreshGraphAsync();
     }
 }

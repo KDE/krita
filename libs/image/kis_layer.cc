@@ -367,8 +367,6 @@ void KisLayer::fillMergedLayerTemplate(KisLayerSP dstLayer, KisLayerSP prevLayer
     KisPaintDeviceSP mergedDevice = dstLayer->paintDevice();
 
     if (!keepBlendingOptions) {
-
-        KisNodeSP parentNode = parent();
         KisPainter gc(mergedDevice);
 
         //Copy the pixels of previous layer with their actual alpha value

@@ -55,7 +55,7 @@ KraExport::~KraExport()
 
 KisImportExportFilter::ConversionStatus KraExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
 {
-    KisImageWSP image = document->image();
+    KisImageSP image = document->image();
     Q_CHECK_PTR(image);
 
     KisPaintDeviceSP pd = image->projection();

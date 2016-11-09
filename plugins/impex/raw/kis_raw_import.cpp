@@ -97,7 +97,7 @@ KisImportExportFilter::ConversionStatus KisRawImport::convert(KisDocument *docum
 
         // Init the image
         const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb16();
-        KisImageWSP image = new KisImage(document->createUndoStore(), width, height, cs, filename());
+        KisImageSP image = new KisImage(document->createUndoStore(), width, height, cs, filename());
         if (image.isNull()) return KisImportExportFilter::CreationError;
 
         KisPaintLayerSP layer = new KisPaintLayer(image, image->nextLayerName(), quint8_MAX);

@@ -82,7 +82,7 @@ QString expandEncodedDirectory(const QString& _intern)
 }
 
 
-KisKraLoadVisitor::KisKraLoadVisitor(KisImageWSP image,
+KisKraLoadVisitor::KisKraLoadVisitor(KisImageSP image,
                                      KoStore *store,
                                      QMap<KisNode *, QString> &layerFilenames,
                                      QMap<KisNode *, QString> &keyframeFilenames,

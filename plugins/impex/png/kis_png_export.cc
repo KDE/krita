@@ -71,7 +71,7 @@ bool hasVisibleWidgets()
 
 KisImportExportFilter::ConversionStatus KisPNGExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration)
 {
-    KisImageWSP image = document->image();
+    KisImageSP image = document->image();
 
     KisPNGOptions options;
 

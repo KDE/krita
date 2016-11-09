@@ -37,7 +37,7 @@ class KRITALIBKRA_EXPORT KisKraLoadVisitor : public KisNodeVisitor
 public:
 
 
-    KisKraLoadVisitor(KisImageWSP image,
+    KisKraLoadVisitor(KisImageSP image,
                       KoStore *store,
                       QMap<KisNode *, QString> &layerFilenames,
                       QMap<KisNode *, QString> &keyframeFilenames,
@@ -81,7 +81,7 @@ private:
     void loadNodeKeyframes(KisNode *node);
 
 private:
-    KisImageWSP m_image;
+    KisImageSP m_image;
     KoStore *m_store;
     bool m_external;
     QString m_uri;

@@ -62,7 +62,7 @@ KisImageBuilder_Result OraConverter::buildImage(QIODevice *io)
     return KisImageBuilder_RESULT_OK;
 }
 
-KisImageWSP OraConverter::image()
+KisImageSP OraConverter::image()
 {
     return m_image;
 }
@@ -72,7 +72,7 @@ vKisNodeSP OraConverter::activeNodes()
     return m_activeNodes;
 }
 
-KisImageBuilder_Result OraConverter::buildFile(QIODevice *io, KisImageWSP image, vKisNodeSP activeNodes)
+KisImageBuilder_Result OraConverter::buildFile(QIODevice *io, KisImageSP image, vKisNodeSP activeNodes)
 {
 
     // Open file for writing

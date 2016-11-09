@@ -91,7 +91,7 @@ void KisHeightMapExport::initializeCapabilities()
 
 KisImportExportFilter::ConversionStatus KisHeightMapExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration)
 {
-    KisImageWSP image = document->image();
+    KisImageSP image = document->image();
 
     if (document->image()->width() != document->image()->height()) {
         document->setErrorMessage(i18n("Cannot export this image to a heightmap: it is not square"));

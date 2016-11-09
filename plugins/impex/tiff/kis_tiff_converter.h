@@ -51,17 +51,17 @@ public:
     virtual ~KisTIFFConverter();
 public:
     KisImageBuilder_Result buildImage(const QString &filename);
-    KisImageBuilder_Result buildFile(const QString &filename, KisImageWSP layer, KisTIFFOptions);
+    KisImageBuilder_Result buildFile(const QString &filename, KisImageSP layer, KisTIFFOptions);
     /** Retrieve the constructed image
     */
-    KisImageWSP image();
+    KisImageSP image();
 public Q_SLOTS:
     virtual void cancel();
 private:
     KisImageBuilder_Result decode(const QString &filename);
     KisImageBuilder_Result readTIFFDirectory(TIFF* image);
 private:
-    KisImageWSP m_image;
+    KisImageSP m_image;
     KisDocument *m_doc;
     bool m_stop;
 };

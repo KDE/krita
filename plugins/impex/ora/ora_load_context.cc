@@ -36,7 +36,7 @@ OraLoadContext::~OraLoadContext()
 {
 }
 
-KisImageWSP OraLoadContext::loadDeviceData(const QString & filename)
+KisImageSP OraLoadContext::loadDeviceData(const QString & filename)
 {
     if (m_store->open(filename)) {
         KoStoreDevice io(m_store);

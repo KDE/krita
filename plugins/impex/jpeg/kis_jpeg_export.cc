@@ -65,7 +65,7 @@ KisJPEGExport::~KisJPEGExport()
 
 KisImportExportFilter::ConversionStatus KisJPEGExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration)
 {
-    KisImageWSP image = document->image();
+    KisImageSP image = document->image();
     Q_CHECK_PTR(image);
 
     // An extra option to pass to the config widget to set the state correctly, this isn't saved

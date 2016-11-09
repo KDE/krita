@@ -35,7 +35,7 @@ QMLConverter::~QMLConverter()
 {
 }
 
-KisImageBuilder_Result QMLConverter::buildFile(const QString &filename, QIODevice *io, KisImageWSP image)
+KisImageBuilder_Result QMLConverter::buildFile(const QString &filename, QIODevice *io, KisImageSP image)
 {
     QTextStream out(io);
     out.setCodec("UTF-8");

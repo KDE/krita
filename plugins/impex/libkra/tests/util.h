@@ -65,7 +65,7 @@ KisSelectionSP createPixelSelection(KisPaintDeviceSP paintDevice)
     return pixelSelection;
 }
 
-KisSelectionSP createVectorSelection(KisPaintDeviceSP paintDevice, KisImageWSP image)
+KisSelectionSP createVectorSelection(KisPaintDeviceSP paintDevice, KisImageSP image)
 {
     KisSelectionSP vectorSelection = new KisSelection(new KisSelectionDefaultBounds(paintDevice));
     KoPathShape* path = new KoPathShape();
@@ -89,7 +89,7 @@ QTransform createTestingTransform() {
 
 KisDocument* createCompleteDocument()
 {
-    KisImageWSP image = new KisImage(0, 1024, 1024, KoColorSpaceRegistry::instance()->rgb8(), "test for roundtrip");
+    KisImageSP image = new KisImage(0, 1024, 1024, KoColorSpaceRegistry::instance()->rgb8(), "test for roundtrip");
 
     KisDocument *doc = qobject_cast<KisDocument*>(KisPart::instance()->createDocument());
 
@@ -212,7 +212,7 @@ KisDocument* createCompleteDocument()
 
 KisDocument *createEmptyDocument()
 {
-    KisImageWSP image = new KisImage(0, 1024, 1024, KoColorSpaceRegistry::instance()->rgb8(), "test for roundtrip");
+    KisImageSP image = new KisImage(0, 1024, 1024, KoColorSpaceRegistry::instance()->rgb8(), "test for roundtrip");
 
     KisDocument *doc = qobject_cast<KisDocument*>(KisPart::instance()->createDocument());
 

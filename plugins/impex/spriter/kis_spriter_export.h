@@ -122,7 +122,7 @@ private:
     void writeBoneRef(const Bone *bone, QDomElement &mainline, QDomDocument &scml);
     void writeBone(const Bone *bone, QDomElement &timeline, QDomDocument &scml);
 
-    KisImageWSP m_image;
+    KisImageSP m_image;
     qreal m_timelineid;
     QList<Folder> m_folders;
     Bone *m_rootBone;

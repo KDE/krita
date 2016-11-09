@@ -269,6 +269,8 @@ void KisKraSaverTest::testRoundTripLayerStyles()
 
 void KisKraSaverTest::testRoundTripAnimation()
 {
+    QScopedPointer<KisDocument> doc(KisPart::instance()->createDocument());
+
     QRect imageRect(0,0,512,512);
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisImageSP image = new KisImage(new KisSurrogateUndoStore(), imageRect.width(), imageRect.height(), cs, "test image");
@@ -280,7 +282,9 @@ void KisKraSaverTest::testRoundTripAnimation()
 
     KUndo2Command parentCommand;
 
-    KisKeyframeChannel *rasterChannel = layer1->getKeyframeChannel(KisKeyframeChannel::Content.id());
+    layer1->enableAnimation();
+    KisKeyframeChannel *rasterChannel = layer1->getKeyframeChannel(KisKeyframeChannel::Content.id(), true);
+    QVERIFY(rasterChannel);
 
     rasterChannel->addKeyframe(10, &parentCommand);
     image->animationInterface()->switchCurrentTimeAsync(10);
@@ -296,7 +300,7 @@ void KisKraSaverTest::testRoundTripAnimation()
     layer1->paintDevice()->moveTo(100, 50);
     layer1->paintDevice()->setDefaultPixel(KoColor(Qt::blue, cs));
 
-    QScopedPointer<KisDocument> doc(KisPart::instance()->createDocument());
+
     doc->setCurrentImage(image);
     doc->saveNativeFormat("roundtrip_animation.kra");
 
@@ -311,6 +315,7 @@ void KisKraSaverTest::testRoundTripAnimation()
 
     QCOMPARE(image2->animationInterface()->currentTime(), 20);
     KisKeyframeChannel *channel = layer2->getKeyframeChannel(KisKeyframeChannel::Content.id());
+    QVERIFY(channel);
     QCOMPARE(channel->keyframeCount(), 3);
 
     image2->animationInterface()->switchCurrentTimeAsync(0);

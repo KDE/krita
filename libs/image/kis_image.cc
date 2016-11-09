@@ -125,7 +125,10 @@ static KisImageSPStaticRegistrar __registrar;
 class KisImage::KisImagePrivate
 {
 public:
-    KisImagePrivate(KisImage *_q, qint32 w, qint32 h, const KoColorSpace *c, KisUndoStore *u)
+    KisImagePrivate(KisImage *_q, qint32 w, qint32 h,
+                    const KoColorSpace *c,
+                    KisUndoStore *u,
+                    KisImageAnimationInterface *_animationInterface)
         : q(_q)
         , lockedForReadOnly(false)
         , width(w)
@@ -137,7 +140,7 @@ public:
         , postExecutionUndoAdapter(u, _q)
         , recorder(_q)
         , signalRouter(_q)
-        , animationInterface(new KisImageAnimationInterface(q))
+        , animationInterface(_animationInterface)
         , scheduler(_q)
         , axesCenter(QPointF(0.5, 0.5))
         {
@@ -240,7 +243,9 @@ KisImage::KisImage(KisUndoStore *undoStore, qint32 width, qint32 height, const K
     } else {
         c = KoColorSpaceRegistry::instance()->rgb8();
     }
-    m_d = new KisImagePrivate(this, width, height, c, undoStore);
+    m_d = new KisImagePrivate(this, width, height,
+                              c, undoStore,
+                              new KisImageAnimationInterface(this));
 
     setRootLayer(new KisGroupLayer(this, "root", OPACITY_OPAQUE_U8));
 }
@@ -282,7 +287,8 @@ KisImage::KisImage(const KisImage& rhs, KisUndoStore *undoStore, bool exactCopy)
       m_d(new KisImagePrivate(this,
                               rhs.width(), rhs.height(),
                               rhs.colorSpace(),
-                              undoStore ? undoStore : new KisDumbUndoStore()))
+                              undoStore ? undoStore : new KisDumbUndoStore(),
+                              new KisImageAnimationInterface(*rhs.animationInterface(), this)))
 {
     setObjectName(rhs.objectName());
 

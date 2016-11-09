@@ -39,6 +39,7 @@ class KRITAIMAGE_EXPORT KisImageAnimationInterface : public QObject
 
 public:
     KisImageAnimationInterface(KisImage *image);
+    KisImageAnimationInterface(const KisImageAnimationInterface &rhs, KisImage *newImage);
     ~KisImageAnimationInterface();
 
     /**

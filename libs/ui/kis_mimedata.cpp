@@ -114,7 +114,7 @@ QByteArray serializeToByteArray(QList<KisNodeSP> nodes)
     Q_ASSERT(!store->bad());
     
     KisDocument *doc = createDocument(nodes);
-    doc->saveNativeFormatCalligra(store);
+    doc->saveNativeFormatCalligraDirect(store);
     delete doc;
 
     return byteArray;

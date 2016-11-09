@@ -1019,15 +1019,29 @@ bool KisDocument::saveNativeFormat(const QString & file)
 
     if (!d->isAutosaving) {
         KisAsyncActionFeedback f(i18n("Saving document..."), 0);
-        result = f.runAction(std::bind(&KisDocument::saveNativeFormatCalligra, this, store));
+        result = f.runAction(std::bind(&KisDocument::saveNativeFormatCalligraImpl, this, store));
     } else {
-        result = saveNativeFormatCalligra(store);
+        result = saveNativeFormatCalligraImpl(store);
     }
     unlockAfterSaving();
     return result;
 }
 
-bool KisDocument::saveNativeFormatCalligra(KoStore *store)
+bool KisDocument::saveNativeFormatCalligraDirect(KoStore *store)
+{
+    bool result = false;
+
+    Private::SafeSavingLocker locker(d);
+    if (locker.successfullyLocked()) {
+        d->savingImage = d->image;
+        result = saveNativeFormatCalligraImpl(store);
+        d->savingImage = 0;
+    }
+
+    return result;
+}
+
+bool KisDocument::saveNativeFormatCalligraImpl(KoStore *store)
 {
     dbgUI << "Saving root";
     if (store->open("root")) {

@@ -354,9 +354,10 @@ public:
     bool saveNativeFormat(const QString & file);
 
     /**
-     * Saves the document in the native format to the given store.
+     * Saves the document in the native format to the given store. Does *no*
+     * cloning of the image
      */
-    bool saveNativeFormatCalligra(KoStore *store);
+    bool saveNativeFormatCalligraDirect(KoStore *store);
 
     /**
      * Activate/deactivate/configure the autosave feature.
@@ -820,6 +821,8 @@ private:
 
     bool prepareLocksForSaving();
     void unlockAfterSaving();
+
+    bool saveNativeFormatCalligraImpl(KoStore *store);
 
     bool saveToStream(QIODevice *dev);
 

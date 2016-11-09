@@ -483,7 +483,7 @@ KisImageBuilder_Result CSVLoader::buildAnimation(QString &filename)
     return decode(filename);
 }
 
-KisImageWSP CSVLoader::image()
+KisImageSP CSVLoader::image()
 {
     return m_image;
 }

@@ -63,7 +63,7 @@ CSVSaver::~CSVSaver()
 {
 }
 
-KisImageWSP CSVSaver::image()
+KisImageSP CSVSaver::image()
 {
     return m_image;
 }
@@ -393,7 +393,7 @@ QString CSVSaver::convertToBlending(const QString &opid)
 KisImageBuilder_Result CSVSaver::getLayer(CSVLayerRecord* layer, KisDocument* exportDoc, KisKeyframeSP keyframe, const QString &path, int frame, int idx)
 {
     //render to the temp layer
-    KisImageWSP image = exportDoc->image();
+    KisImageSP image = exportDoc->image();
     KisPaintDeviceSP device = image->rootLayer()->firstChild()->projection();
 
     if (!keyframe.isNull()) {
@@ -456,7 +456,7 @@ void CSVSaver::createTempImage(KisDocument* exportDoc)
     exportDoc->setOutputMimeType("image/png");
     exportDoc->setFileBatchMode(true);
 
-    KisImageWSP exportImage = new KisImage(exportDoc->createUndoStore(),
+    KisImageSP exportImage = new KisImage(exportDoc->createUndoStore(),
                                            m_image->width(), m_image->height(), m_image->colorSpace(),
                                            QString());
 

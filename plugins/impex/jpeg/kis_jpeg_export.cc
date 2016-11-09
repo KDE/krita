@@ -76,7 +76,7 @@ KisImportExportFilter::ConversionStatus KisJPEGExport::convert(const QByteArray&
     if (!input)
         return KisImportExportFilter::NoDocumentCreated;
 
-    KisImageWSP image = input->savingImage();
+    KisImageSP image = input->savingImage();
     Q_CHECK_PTR(image);
 
     KoDialog kdb;

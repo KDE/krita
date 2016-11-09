@@ -364,7 +364,7 @@ KisImageBuilder_Result PSDLoader::buildImage(const QString &filename)
 }
 
 
-KisImageWSP PSDLoader::image()
+KisImageSP PSDLoader::image()
 {
     return m_image;
 }

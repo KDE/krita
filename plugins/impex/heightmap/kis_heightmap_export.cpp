@@ -90,7 +90,7 @@ KisImportExportFilter::ConversionStatus KisHeightMapExport::convert(const QByteA
 
     if (filename.isEmpty()) return KisImportExportFilter::FileNotFound;
 
-    KisImageWSP image = input->savingImage();
+    KisImageSP image = input->savingImage();
     Q_CHECK_PTR(image);
 
     if (input->savingImage()->width() != input->savingImage()->height()) {

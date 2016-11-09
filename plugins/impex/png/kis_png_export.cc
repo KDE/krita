@@ -86,7 +86,7 @@ KisImportExportFilter::ConversionStatus KisPNGExport::convert(const QByteArray& 
     if (from != "application/x-krita")
         return KisImportExportFilter::NotImplemented;
 
-    KisImageWSP image = input->savingImage();
+    KisImageSP image = input->savingImage();
 
     KisPaintDeviceSP pd;
     pd = new KisPaintDevice(*image->projection());

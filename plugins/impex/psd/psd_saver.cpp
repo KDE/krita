@@ -95,7 +95,7 @@ PSDSaver::~PSDSaver()
 {
 }
 
-KisImageWSP PSDSaver::image()
+KisImageSP PSDSaver::image()
 {
     return m_image;
 }

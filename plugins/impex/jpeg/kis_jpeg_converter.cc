@@ -471,7 +471,7 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const QString &filename, KisP
     if (!layer)
         return KisImageBuilder_RESULT_INVALID_ARG;
 
-    KisImageWSP image = KisImageWSP(layer->image());
+    KisImageSP image = KisImageSP(layer->image());
     if (!image)
         return KisImageBuilder_RESULT_EMPTY;
 

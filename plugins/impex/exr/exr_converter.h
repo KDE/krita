@@ -41,7 +41,7 @@ public:
     /**
      * Retrieve the constructed image
      */
-    KisImageWSP image();
+    KisImageSP image();
 private:
     KisImageBuilder_Result decode(const QString &filename);
 public Q_SLOTS:

@@ -39,7 +39,7 @@ public:
 
     KisImageBuilder_Result buildImage(const QString &filename);
 
-    KisImageWSP image();
+    KisImageSP image();
 
 public Q_SLOTS:
 
@@ -51,7 +51,7 @@ private:
 
 private:
 
-    KisImageWSP m_image;
+    KisImageSP m_image;
     KisDocument *m_doc;
     bool m_stop;
 };

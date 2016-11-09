@@ -40,7 +40,7 @@ public:
 
     KisImageBuilder_Result buildAnimation(QString &filename);
 
-    KisImageWSP image();
+    KisImageSP image();
 
 private:
     KisImageBuilder_Result decode(const QString &);
@@ -53,7 +53,7 @@ private Q_SLOTS:
     void cancel();
 
 private:
-    KisImageWSP m_image;
+    KisImageSP m_image;
     KisDocument* m_doc;
     bool m_batchMode;
     bool m_stop;

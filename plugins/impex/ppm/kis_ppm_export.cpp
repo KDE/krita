@@ -180,7 +180,7 @@ KisImportExportFilter::ConversionStatus KisPPMExport::convert(const QByteArray& 
 
     bool bitmap = (to == "image/x-portable-bitmap");
 
-    KisImageWSP image = input->savingImage();
+    KisImageSP image = input->savingImage();
     Q_CHECK_PTR(image);
     KisPaintDeviceSP pd = new KisPaintDevice(*image->projection());
 

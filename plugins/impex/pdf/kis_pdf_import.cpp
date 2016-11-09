@@ -132,7 +132,7 @@ KisPDFImport::ConversionStatus KisPDFImport::convert(const QByteArray& , const Q
     const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
     int width = wdg->intWidth->value();
     int height = wdg->intHeight->value();
-    KisImageWSP image = new KisImage(doc->createUndoStore(), width, height, cs, "built image");
+    KisImageSP image = new KisImage(doc->createUndoStore(), width, height, cs, "built image");
     image->setResolution(wdg->intResolution->value() / 72.0, wdg->intResolution->value() / 72.0);
 
     // create a layer

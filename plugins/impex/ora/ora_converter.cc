@@ -62,7 +62,7 @@ KisImageBuilder_Result OraConverter::buildImage(const QString &filename)
     return KisImageBuilder_RESULT_OK;
 }
 
-KisImageWSP OraConverter::image()
+KisImageSP OraConverter::image()
 {
     return m_image;
 }
@@ -72,7 +72,7 @@ vKisNodeSP OraConverter::activeNodes()
     return m_activeNodes;
 }
 
-KisImageBuilder_Result OraConverter::buildFile(const QString &filename, KisImageWSP image, vKisNodeSP activeNodes)
+KisImageBuilder_Result OraConverter::buildFile(const QString &filename, KisImageSP image, vKisNodeSP activeNodes)
 {
 
     // Open file for writing

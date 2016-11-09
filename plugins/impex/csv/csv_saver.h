@@ -40,7 +40,7 @@ public:
     virtual ~CSVSaver();
 
     KisImageBuilder_Result buildAnimation(const QString &filename);
-    KisImageWSP image();
+    KisImageSP image();
 
 private:
     KisImageBuilder_Result encode(const QString &filename);
@@ -52,7 +52,7 @@ private Q_SLOTS:
     void cancel();
 
 private:
-    KisImageWSP m_image;
+    KisImageSP m_image;
     KisDocument* m_doc;
     bool m_batchMode;
     bool m_stop;

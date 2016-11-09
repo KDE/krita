@@ -84,7 +84,7 @@ KisImportExportFilter::ConversionStatus exrExport::convert(const QByteArray& fro
     KisDocument *input = inputDocument();
     if (!input)
         return KisImportExportFilter::NoDocumentCreated;
-    KisImageWSP image = input->savingImage();
+    KisImageSP image = input->savingImage();
     Q_CHECK_PTR(image);
 
     KoDialog kdb;

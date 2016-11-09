@@ -134,7 +134,7 @@ KisImportExportFilter::ConversionStatus KisODGImport::convert(const QByteArray& 
     KoShapeLoadingContext shapeContext(context, doc->shapeController()->resourceManager());
 
     const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
-    KisImageWSP image = new KisImage(doc->createUndoStore(), width, height, cs, "built image");
+    KisImageSP image = new KisImage(doc->createUndoStore(), width, height, cs, "built image");
     doc->setCurrentImage(image);
 
     KoXmlElement layerElement;

@@ -64,7 +64,7 @@ KisImportExportFilter::ConversionStatus QMLExport::convert(const QByteArray& fro
         return KisImportExportFilter::FileNotFound;
     }
 
-    KisImageWSP image = input->savingImage();
+    KisImageSP image = input->savingImage();
     Q_CHECK_PTR(image);
 
     QMLConverter converter;

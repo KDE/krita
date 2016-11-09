@@ -35,7 +35,7 @@ QMLConverter::~QMLConverter()
 {
 }
 
-KisImageBuilder_Result QMLConverter::buildFile(const QString &filename, KisImageWSP image)
+KisImageBuilder_Result QMLConverter::buildFile(const QString &filename, KisImageSP image)
 {
     QFile file(filename);
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {

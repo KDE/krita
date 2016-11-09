@@ -872,7 +872,7 @@ KisImageBuilder_Result exrConverter::buildImage(const QString &filename)
 }
 
 
-KisImageWSP exrConverter::image()
+KisImageSP exrConverter::image()
 {
     return m_d->image;
 }
@@ -1007,7 +1007,7 @@ KisImageBuilder_Result exrConverter::buildFile(const QString &filename, KisPaint
     if (!layer)
         return KisImageBuilder_RESULT_INVALID_ARG;
 
-    KisImageWSP image = layer->image();
+    KisImageSP image = layer->image();
     if (!image)
         return KisImageBuilder_RESULT_EMPTY;
 
@@ -1257,7 +1257,7 @@ KisImageBuilder_Result exrConverter::buildFile(const QString &filename, KisGroup
     if (!layer)
         return KisImageBuilder_RESULT_INVALID_ARG;
 
-    KisImageWSP image = layer->image();
+    KisImageSP image = layer->image();
     if (!image)
         return KisImageBuilder_RESULT_EMPTY;
 

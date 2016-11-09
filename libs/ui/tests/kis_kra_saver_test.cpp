@@ -95,10 +95,10 @@ void KisKraSaverTest::testRoundTrip()
     QCOMPARE(doc2->image()->defaultProjectionColor(), bgColor);
 
     // test round trip of a transform mask
-    KisNodeSP tnode =
-        TestUtil::findNode(doc2->image()->rootLayer(), "testTransformMask");
+    KisNode* tnode =
+        TestUtil::findNode(doc2->image()->rootLayer(), "testTransformMask").data();
     QVERIFY(tnode);
-    KisTransformMask *tmask = dynamic_cast<KisTransformMask*>(tnode.data());
+    KisTransformMask *tmask = dynamic_cast<KisTransformMask*>(tnode);
     QVERIFY(tmask);
     KisDumbTransformMaskParams *params = dynamic_cast<KisDumbTransformMaskParams*>(tmask->transformParams().data());
     QVERIFY(params);
@@ -140,10 +140,12 @@ void testRoundTripFillLayerImpl(const QString &testName, KisFilterConfigurationS
 {
     TestUtil::ExternalImageChecker chk(testName, "fill_layer");
 
+    QScopedPointer<KisDocument> doc(KisPart::instance()->createDocument());
+
+    // mask parent should be destructed before the document!
     QRect refRect(0,0,512,512);
     TestUtil::MaskParent p(refRect);
 
-    QScopedPointer<KisDocument> doc(KisPart::instance()->createDocument());
     doc->setCurrentImage(p.image);
     doc->documentInfo()->setAboutInfo("title", p.image->objectName());
 
@@ -157,7 +159,6 @@ void testRoundTripFillLayerImpl(const QString &testName, KisFilterConfigurationS
     chk.checkImage(p.image, "00_initial_layer_update");
 
     doc->saveNativeFormat("roundtrip_fill_layer_test.kra");
-
 
     QScopedPointer<KisDocument> doc2(KisPart::instance()->createDocument());
     doc2->loadNativeFormat("roundtrip_fill_layer_test.kra");
@@ -211,6 +212,9 @@ void KisKraSaverTest::testRoundTripLayerStyles()
 
     QRect imageRect(0,0,512,512);
 
+    // the document should be created before the image!
+    QScopedPointer<KisDocument> doc(KisPart::instance()->createDocument());
+
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisImageSP image = new KisImage(new KisSurrogateUndoStore(), imageRect.width(), imageRect.height(), cs, "test image");
     KisPaintLayerSP layer1 = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE_U8);
@@ -220,7 +224,6 @@ void KisKraSaverTest::testRoundTripLayerStyles()
     image->addNode(layer2);
     image->addNode(layer3);
 
-    QScopedPointer<KisDocument> doc(KisPart::instance()->createDocument());
     doc->setCurrentImage(image);
     doc->documentInfo()->setAboutInfo("title", image->objectName());
 

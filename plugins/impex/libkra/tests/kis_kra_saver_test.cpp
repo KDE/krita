@@ -55,8 +55,12 @@
 #include <filter/kis_filter_registry.h>
 #include <generator/kis_generator_registry.h>
 
+#include <KoResourcePaths.h>
+
 void KisKraSaverTest::initTestCase()
 {
+    KoResourcePaths::addResourceDir("ko_patterns", QString(SYSTEM_RESOURCES_DATA_DIR) + "/patterns");
+
     KisFilterRegistry::instance();
     KisGeneratorRegistry::instance();
 }
@@ -139,6 +143,7 @@ void KisKraSaverTest::testSaveEmpty()
 void testRoundTripFillLayerImpl(const QString &testName, KisFilterConfigurationSP config)
 {
     TestUtil::ExternalImageChecker chk(testName, "fill_layer");
+    chk.setFuzzy(2);
 
     QScopedPointer<KisDocument> doc(KisPart::instance()->createDocument());
 
@@ -190,11 +195,11 @@ void KisKraSaverTest::testRoundTripFillLayerColor()
 void KisKraSaverTest::testRoundTripFillLayerPattern()
 {
     KisGeneratorSP generator = KisGeneratorRegistry::instance()->get("pattern");
-    Q_ASSERT(generator);
+    QVERIFY(generator);
 
     // warning: we pass null paint device to the default constructed value
     KisFilterConfigurationSP config = generator->factoryConfiguration(0);
-    Q_ASSERT(config);
+    QVERIFY(config);
 
     QVariant v;
     v.setValue(QString("11_drawed_furry.png"));

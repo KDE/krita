@@ -1012,4 +1012,4 @@ void KisImageTest::testFlattenImage()
     }
 }
 
-QTEST_GUILESS_MAIN(KisImageTest)
+QTEST_MAIN(KisImageTest)

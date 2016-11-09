@@ -425,9 +425,14 @@ QStringList KoResourcePaths::findAllResourcesInternal(const QString &type,
         debugWidgetUtils << "\t\talias:" << alias;
         QStringList dirs;
 
-        dirs << QStandardPaths::locateAll(d->mapTypeToQStandardPaths(type), alias, QStandardPaths::LocateDirectory)
-             << getInstallationPrefix() + "share/" + alias + "/"
-             << getInstallationPrefix() + "share/krita/" + alias + "/";
+        QFileInfo dirInfo(alias);
+        if (dirInfo.exists() && dirInfo.isDir() && dirInfo.isAbsolute()) {
+            dirs << alias;
+        } else {
+            dirs << QStandardPaths::locateAll(d->mapTypeToQStandardPaths(type), alias, QStandardPaths::LocateDirectory)
+                 << getInstallationPrefix() + "share/" + alias + "/"
+                 << getInstallationPrefix() + "share/krita/" + alias + "/";
+        }
 
         Q_FOREACH (const QString &dir, dirs) {
             appendResources(&resources,

@@ -399,13 +399,18 @@ struct ExternalImageChecker
         : m_prefix(prefix),
           m_testName(testName),
           m_success(true),
-          m_maxFailingPixels(100)
+          m_maxFailingPixels(100),
+          m_fuzzy(1)
         {
         }
 
 
     void setMaxFailingPixels(int value) {
         m_maxFailingPixels = value;
+    }
+
+    void setFuzzy(int fuzzy){
+        m_fuzzy = fuzzy;
     }
 
     bool testPassed() const {
@@ -417,7 +422,7 @@ struct ExternalImageChecker
             checkQImageExternal(device->convertToQImage(0, image->bounds()),
                                 m_testName,
                                 m_prefix,
-                                caseName, 1, 1, m_maxFailingPixels);
+                                caseName, m_fuzzy, m_fuzzy, m_maxFailingPixels);
 
         m_success &= result;
         return result;
@@ -436,6 +441,7 @@ private:
 
     bool m_success;
     int m_maxFailingPixels;
+    int m_fuzzy;
 };
 
 

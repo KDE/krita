@@ -52,7 +52,10 @@ using namespace KisLazyFillTools;
 struct KisColorizeMask::Private
 {
     Private()
-        : needAddCurrentKeyStroke(false),
+        : coloringProjection(new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8())),
+          fakePaintDevice(new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8())),
+          filteredSource(new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8())),
+          needAddCurrentKeyStroke(false),
           showKeyStrokes(true),
           showColoring(true),
           needsUpdate(true),
@@ -64,6 +67,7 @@ struct KisColorizeMask::Private
     Private(const Private &rhs)
         : coloringProjection(new KisPaintDevice(*rhs.coloringProjection)),
           fakePaintDevice(new KisPaintDevice(*rhs.fakePaintDevice)),
+          filteredSource(new KisPaintDevice(*rhs.filteredSource)),
           needAddCurrentKeyStroke(rhs.needAddCurrentKeyStroke),
           showKeyStrokes(rhs.showKeyStrokes),
           showColoring(rhs.showColoring),
@@ -102,11 +106,6 @@ struct KisColorizeMask::Private
 KisColorizeMask::KisColorizeMask()
     : m_d(new Private)
 {
-    const KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->rgb8();
-    m_d->fakePaintDevice = new KisPaintDevice(colorSpace);
-    m_d->filteredSource = new KisPaintDevice(colorSpace);
-    m_d->coloringProjection = new KisPaintDevice(colorSpace);
-
     connect(&m_d->updateCompressor,
             SIGNAL(timeout()),
             SLOT(slotUpdateRegenerateFilling()));

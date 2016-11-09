@@ -61,6 +61,17 @@ void KisKraSaverTest::initTestCase()
     KisGeneratorRegistry::instance();
 }
 
+void KisKraSaverTest::testCrashyShapeLayer()
+{
+    /**
+     * KisShapeLayer used to call setImage from its destructor and
+     * therefore causing an infinite recursion (when at least one transparency
+     * mask was preset. This testcase just checks that.
+     */
+
+    QScopedPointer<KisDocument> doc(createCompleteDocument(true));
+    Q_UNUSED(doc);
+}
 
 void KisKraSaverTest::testRoundTrip()
 {

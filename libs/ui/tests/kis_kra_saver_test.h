@@ -28,6 +28,8 @@ private Q_SLOTS:
 
     void initTestCase();
 
+    void testCrashyShapeLayer();
+
     // XXX: Also test roundtripping of metadata
     void testRoundTrip();
 

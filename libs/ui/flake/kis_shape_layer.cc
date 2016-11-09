@@ -213,10 +213,9 @@ KisShapeLayer::KisShapeLayer(const KisShapeLayer& _rhs, const KisShapeLayer &_ad
 KisShapeLayer::~KisShapeLayer()
 {
     /**
-     * Small hack alert: we set the image to null to disable
-     * updates those will be emitted on shape deletion
+     * Small hack alert: we should avoid updates on shape deletion
      */
-    KisLayer::setImage(0);
+    m_d->canvas->prepareForDestroying();
 
     Q_FOREACH (KoShape *shape, shapes()) {
         shape->setParent(0);
@@ -261,9 +260,8 @@ bool KisShapeLayer::allowAsChild(KisNodeSP node) const
 
 void KisShapeLayer::setImage(KisImageWSP _image)
 {
-    if (_image) {
-        KisLayer::setImage(_image);
-    }
+    KisLayer::setImage(_image);
+
     delete m_d->converter;
     m_d->converter = new KisImageViewConverter(image());
     m_d->paintDevice = new KisPaintDevice(image()->colorSpace());

@@ -104,7 +104,7 @@ protected:
     QVariant retrieveData(const QString &mimetype, QVariant::Type preferredType) const;
 
 private:
-    static void initializeExternalNode(KisNodeSP &nodes,
+    static void initializeExternalNode(KisNodeSP *nodes,
                                        KisImageWSP image,
                                        KisShapeController *shapeController);
 

@@ -425,8 +425,7 @@ QWidget * KisToolBrush::createOptionWidget()
     m_sliderMagnetism = new KisSliderSpinBox(optionsWidget);
     m_sliderMagnetism->setToolTip(i18n("Assistant Magnetism"));
     m_sliderMagnetism->setRange(0, MAXIMUM_MAGNETISM);
-    m_sliderMagnetism->setEnabled(false);
-    connect(m_chkAssistant, SIGNAL(toggled(bool)), m_sliderMagnetism, SLOT(setEnabled(bool)));
+
     m_sliderMagnetism->setValue(m_magnetism * MAXIMUM_MAGNETISM);
     connect(m_sliderMagnetism, SIGNAL(valueChanged(int)), SLOT(slotSetMagnetism(int)));
     
@@ -435,13 +434,28 @@ QWidget * KisToolBrush::createOptionWidget()
     toggleaction->setShortcut(QKeySequence(Qt::ControlModifier + Qt::ShiftModifier + Qt::Key_L));
     connect(toggleaction, SIGNAL(triggered(bool)), m_chkAssistant, SLOT(toggle()));
 
+
     addOptionWidgetOption(m_sliderMagnetism, assistantWidget);
-    
+
+    QLabel* snapSingleLabel = new QLabel(i18n("Snap Single:"));
+
     m_chkOnlyOneAssistant = new QCheckBox(optionsWidget);
     m_chkOnlyOneAssistant->setToolTip(i18nc("@info:tooltip","Make it only snap to a single assistant, prevents snapping mess while using the infinite assistants."));
     m_chkOnlyOneAssistant->setCheckState(Qt::Checked);//turn on by default.
     connect(m_chkOnlyOneAssistant, SIGNAL(toggled(bool)), this, SLOT(setOnlyOneAssistantSnap(bool)));
-    addOptionWidgetOption(m_chkOnlyOneAssistant, new QLabel(i18n("Snap single:")));
+    addOptionWidgetOption(m_chkOnlyOneAssistant, snapSingleLabel);
+
+
+    // set the assistant snapping options to hidden by default and toggle their visibility based based off snapping checkbox
+    m_sliderMagnetism->setVisible(false);
+    m_chkOnlyOneAssistant->setVisible(false);
+    snapSingleLabel->setVisible(false);
+
+   connect(m_chkAssistant, SIGNAL(toggled(bool)), m_sliderMagnetism, SLOT(setVisible(bool)));
+   connect(m_chkAssistant, SIGNAL(toggled(bool)), m_chkOnlyOneAssistant, SLOT(setVisible(bool)));
+   connect(m_chkAssistant, SIGNAL(toggled(bool)), snapSingleLabel, SLOT(setVisible(bool)));
+
+
 
     KisConfig cfg;
     slotSetSmoothingType(cfg.lineSmoothingType());

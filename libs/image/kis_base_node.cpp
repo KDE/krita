@@ -49,6 +49,22 @@ struct Q_DECL_HIDDEN KisBaseNode::Private
         , useInTimeline(false)
     {
     }
+
+    Private(const Private &rhs)
+        : compositeOp(rhs.compositeOp),
+          systemLocked(false),
+          id(QUuid::createUuid()),
+          collapsed(rhs.collapsed),
+          supportsLodMoves(rhs.supportsLodMoves),
+          animated(rhs.animated),
+          useInTimeline(rhs.useInTimeline)
+    {
+        QMapIterator<QString, QVariant> iter = rhs.properties.propertyIterator();
+        while (iter.hasNext()) {
+            iter.next();
+            properties.setProperty(iter.key(), iter.value());
+        }
+    }
 };
 
 KisBaseNode::KisBaseNode()
@@ -78,20 +94,8 @@ KisBaseNode::KisBaseNode()
 KisBaseNode::KisBaseNode(const KisBaseNode & rhs)
     : QObject()
     , KisShared()
-    ,  m_d(new Private())
+    , m_d(new Private(*rhs.m_d))
 {
-    QMapIterator<QString, QVariant> iter = rhs.m_d->properties.propertyIterator();
-    while (iter.hasNext()) {
-        iter.next();
-        m_d->properties.setProperty(iter.key(), iter.value());
-    }
-    setCollapsed(rhs.collapsed());
-    setSupportsLodMoves(rhs.supportsLodMoves());
-
-    setSystemLocked(false);
-    m_d->compositeOp = rhs.m_d->compositeOp;
-
-    setUuid(QUuid::createUuid());
 }
 
 KisBaseNode::~KisBaseNode()

@@ -137,7 +137,6 @@ const KisTimeRange& KisImageAnimationInterface::fullClipRange() const
 
 void KisImageAnimationInterface::setFullClipRange(const KisTimeRange range) {
     m_d->fullClipRange = range;
-    m_d->image->setModified();
     emit sigFullClipRangeChanged();
 }
 
@@ -160,7 +159,6 @@ int KisImageAnimationInterface::framerate() const
 void KisImageAnimationInterface::setFramerate(int fps)
 {
     m_d->framerate = fps;
-    m_d->image->setModified();
     emit sigFramerateChanged();
 }
 

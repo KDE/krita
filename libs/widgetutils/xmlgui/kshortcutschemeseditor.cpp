@@ -83,13 +83,13 @@ KShortcutSchemesEditor::KShortcutSchemesEditor(KisShortcutsDialog *parent)
     // moreActionsMenu->addAction(i18n("Save as Scheme Defaults"),
                                // this, SLOT(saveAsDefaultsForScheme()));
 
-    moreActionsMenu->addAction(i18n("Save Custom Shortcuts"),
-                               this, SLOT(saveCustomShortcuts()));
-    moreActionsMenu->addAction(i18n("Load Custom Shortcuts"),
-                               this, SLOT(loadCustomShortcuts()));
-    moreActionsMenu->addAction(i18n("Export Scheme..."),
+    moreActionsMenu->addAction(i18n("Save New Shortcut Scheme"),
+                               this, SLOT(saveNewShortcutScheme()));
+    moreActionsMenu->addAction(i18n("Load Shortcut Scheme"),
+                               this, SLOT(loadShortcutScheme()));
+    moreActionsMenu->addAction(i18n("Export Scheme..."),   // how is ths different than saving a new one?
                                this, SLOT(exportShortcutsScheme()));
-    moreActionsMenu->addAction(i18n("Import Scheme..."),
+    moreActionsMenu->addAction(i18n("Import Scheme..."),   // how is this different than loading??
                                this, SLOT(importShortcutsScheme()));
     moreActions->setMenu(moreActionsMenu);
 
@@ -104,6 +104,8 @@ KShortcutSchemesEditor::KShortcutSchemesEditor(KisShortcutsDialog *parent)
 
 void KShortcutSchemesEditor::newScheme()
 {
+    qDebug() << "KShortcutSchemesEditor::newScheme()";
+
     bool ok;
     const QString newName = QInputDialog::getText(m_dialog, i18n("Name for New Scheme"),
                             i18n("Name for new scheme:"), QLineEdit::Normal, i18n("New Scheme"), &ok);
@@ -173,7 +175,7 @@ void KShortcutSchemesEditor::exportShortcutsScheme()
     }
 }
 
-void KShortcutSchemesEditor::saveCustomShortcuts()
+void KShortcutSchemesEditor::saveNewShortcutScheme()
 {
     //ask user about dir
     QFileDialog dlg(m_dialog,
@@ -186,18 +188,21 @@ void KShortcutSchemesEditor::saveCustomShortcuts()
         auto path = dlg.selectedFiles().first();
 
         if (!path.isEmpty()) {
-            m_dialog->saveCustomShortcuts(path);
+            m_dialog->saveShortcutScheme(path);
         }
     }
 }
 
 
-void KShortcutSchemesEditor::loadCustomShortcuts()
+void KShortcutSchemesEditor::loadShortcutScheme()
 {
+
+    qDebug() << "KShortcutSchemesEditor::loadShortcutScheme()";
+
     auto path = QFileDialog::getOpenFileName(m_dialog,
-                                             i18n("Import Shortcuts"),
-                                             QDir::currentPath(),
-                                             i18n("Shortcuts (*.shortcuts)"));
+         i18n("Import Shortcuts"),
+         QDir::currentPath(),
+         i18n("Shortcuts (*.shortcuts)"));
 
     if (path.isEmpty()) {
         return;
@@ -219,16 +224,6 @@ void KShortcutSchemesEditor::importShortcutsScheme()
 
     m_dialog->importConfiguration(path);
 }
-
-#if 0
-// XXX: Not implemented
-void KShortcutSchemesEditor::saveAsDefaultsForScheme()
-{
-    foreach (KActionCollection *collection, m_dialog->actionCollections()) {
-        KShortcutSchemesHelper::exportActionCollection(collection, currentScheme());
-    }
-}
-#endif
 
 void KShortcutSchemesEditor::updateDeleteButton()
 {

@@ -88,8 +88,8 @@ class KisShortcutsDialog::KisShortcutsDialogPrivate
 public:
     KisShortcutsDialogPrivate(KisShortcutsDialog *q);
     void changeShortcutScheme(const QString &scheme);
-    void undo();
-    void save();
+    void save(); // save our shortcuts to the kritashortcutsrc file
+    void undo(); // in the middle of editing shortcuts that we want to back out of
 
     QHash<QString, KActionCollection *> m_collections;
     KisShortcutsDialog *q;

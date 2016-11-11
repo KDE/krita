@@ -132,12 +132,6 @@ public:
 
 
     /**
-     * Write custom shortcuts to a specific file
-     */
-    void writeCustomShortcuts(KConfigBase *config) const;
-
-
-    /**
      * Call after settings are changed.
      */
     void notifySettingsUpdated();

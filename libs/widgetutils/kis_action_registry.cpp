@@ -186,7 +186,10 @@ void KisActionRegistry::notifySettingsUpdated()
 void KisActionRegistry::loadCustomShortcuts(const QString &path)
 {
     if (path.isEmpty()) {
+        // if empty, we will use the default path
+        // set in the function declaration  "kritashortcutsrc" and try again
         d->loadCustomShortcuts();
+
     } else {
         d->loadCustomShortcuts(path);
     }
@@ -346,31 +349,6 @@ QString KisActionRegistry::getActionProperty(const QString &name, const QString 
 }
 
 
-void KisActionRegistry::writeCustomShortcuts(KConfigBase *config) const
-{
-
-    KConfigGroup cg;
-    if (config == 0) {
-        cg = KConfigGroup(KSharedConfig::openConfig("kritashortcutsrc"),
-                          QStringLiteral("Shortcuts"));
-    } else {
-        cg = KConfigGroup(config, QStringLiteral("Shortcuts"));
-    }
-
-    for (auto it = d->actionInfoList.constBegin();
-         it != d->actionInfoList.constEnd(); ++it) {
-
-        QString actionName = it.key();
-        QString s = QKeySequence::listToString(it.value().customShortcuts);
-        if (s.isEmpty()) {
-            cg.deleteEntry(actionName, KConfigGroup::Persistent);
-        } else {
-            cg.writeEntry(actionName, s, KConfigGroup::Persistent);
-        }
-    }
-    cg.sync();
-}
-
 void KisActionRegistry::Private::loadActionFiles()
 {
     QStringList actionDefinitions =
@@ -463,6 +441,7 @@ void KisActionRegistry::Private::loadCustomShortcuts(QString filename)
         return;
     }
 
+
     // Distinguish between two "null" states for custom shortcuts.
     for (auto i = actionInfoList.begin(); i != actionInfoList.end(); ++i) {
         if (localShortcuts.hasKey(i.key())) {
@@ -470,13 +449,24 @@ void KisActionRegistry::Private::loadCustomShortcuts(QString filename)
             if (entry == QStringLiteral("none")) {
                 // A shortcut list with a single entry "" means the user has disabled the shortcut.
                 // This occurs after stealing the shortcut without assigning a new one.
-                i.value().customShortcuts = QList<QKeySequence>();
+
+                //i.value().customShortcuts = QList<QKeySequence>();
+                i.value().customShortcuts = QKeySequence::listFromString("");
+
+
+                qDebug() << " custom shortcut is empty:  " << QString(i.key()) << entry;
+
             } else {
                 i.value().customShortcuts = QKeySequence::listFromString(entry);
+
+
+                 qDebug() << " custom shortcut loading with key:  " << QString(i.key()) << entry;
+
             }
         } else {
             // An empty shortcut list means no custom shortcut has been set.
-            i.value().customShortcuts = QList<QKeySequence>();
+            //i.value().customShortcuts = QList<QKeySequence>();
+           //  i.value().customShortcuts = QKeySequence::listFromString("");
         }
     }
 };

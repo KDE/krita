@@ -137,7 +137,7 @@ public:
     void undo();
 
     //! Commit the changes.
-    void commit();
+    //void commit();
 
     QVariant data(int column, int role = Qt::DisplayRole) const override;
     bool operator<(const QTreeWidgetItem &other) const override;
@@ -164,11 +164,6 @@ private:
 
     //! Should the Name column be painted in bold?
     bool m_isNameBold{false};
-
-    //@{
-    //! The original shortcuts before user changes. 0 means no change.
-    QList<QKeySequence> *m_oldLocalShortcut{0};
-    //@}
 
     //! The localized action name
     QString m_actionNameInTable;

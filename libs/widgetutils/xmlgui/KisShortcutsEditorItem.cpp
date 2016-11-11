@@ -46,18 +46,10 @@ KisShortcutsEditorItem::KisShortcutsEditorItem(QTreeWidgetItem *parent, QAction 
 
     m_collator.setNumericMode(true);
     m_collator.setCaseSensitivity(Qt::CaseSensitive);
-
-    // qDebug() << "Adding new action" << m_id << "with shortcut" << keySequence(LocalPrimary).toString();
 }
 
 KisShortcutsEditorItem::~KisShortcutsEditorItem()
 {
-    delete m_oldLocalShortcut;
-}
-
-bool KisShortcutsEditorItem::isModified() const
-{
-    return m_oldLocalShortcut;
 }
 
 QVariant KisShortcutsEditorItem::data(int column, int role) const
@@ -168,9 +160,7 @@ void KisShortcutsEditorItem::setKeySequence(uint column, const QKeySequence &seq
 {
     QList<QKeySequence> ks;
     ks = m_action->shortcuts();
-    if (!m_oldLocalShortcut) {
-        m_oldLocalShortcut = new QList<QKeySequence>(ks);
-    }
+
 
     if (column == LocalAlternate) {
         if (ks.isEmpty()) {
@@ -192,56 +182,4 @@ void KisShortcutsEditorItem::setKeySequence(uint column, const QKeySequence &seq
 
     m_action->setShortcuts(ks);
 
-    updateModified();
-}
-
-//our definition of modified is "modified since the chooser was shown".
-void KisShortcutsEditorItem::updateModified()
-{
-    if (m_oldLocalShortcut && *m_oldLocalShortcut == m_action->shortcuts()) {
-        delete m_oldLocalShortcut;
-        m_oldLocalShortcut = 0;
-    }
-}
-
-bool KisShortcutsEditorItem::isModified(uint column) const
-{
-    switch (column) {
-    case Name:
-        return false;
-    case LocalPrimary:
-    case LocalAlternate:
-        if (!m_oldLocalShortcut) {
-            return false;
-        }
-        if (column == LocalPrimary) {
-            return primarySequence(*m_oldLocalShortcut) != primarySequence(m_action->shortcuts());
-        } else {
-            return alternateSequence(*m_oldLocalShortcut) != alternateSequence(m_action->shortcuts());
-        }
-    default:
-        return false;
-    }
-}
-
-void KisShortcutsEditorItem::undo()
-{
-    //dbgKrita << "Undoing changes for " << data(Name, Qt::DisplayRole).toString();
-
-    if (m_oldLocalShortcut) {
-        // We only ever reset the active Shortcut
-        m_action->setShortcuts(*m_oldLocalShortcut);
-    }
-
-    updateModified();
-}
-
-void KisShortcutsEditorItem::commit()
-{
-    if (m_oldLocalShortcut) { // || m_oldShapeGesture || m_oldRockerGesture) {
-       dbgUI << "Committing changes for " << data(Name, Qt::DisplayRole).toString();
-    }
-
-    delete m_oldLocalShortcut;
-    m_oldLocalShortcut = 0;
 }

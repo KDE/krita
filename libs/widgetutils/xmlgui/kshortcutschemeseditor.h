@@ -36,11 +36,10 @@ public:
 private Q_SLOTS:
     void newScheme();
     void deleteScheme();
-    void importShortcutsScheme();
-    void exportShortcutsScheme();
-    void loadCustomShortcuts();
-    void saveCustomShortcuts();
-    // void saveAsDefaultsForScheme();  //Not implemented
+    void importShortcutsScheme(); // clean this up since it is so close to loading
+    void exportShortcutsScheme(); // clean this up since it is so close to saving a new scheme
+    void loadShortcutScheme();
+    void saveNewShortcutScheme();
 
 Q_SIGNALS:
     void shortcutsSchemeChanged(const QString &);

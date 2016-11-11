@@ -49,16 +49,24 @@ KisShortcutsDialog::KisShortcutsDialogPrivate::KisShortcutsDialogPrivate(KisShor
 
 void KisShortcutsDialog::KisShortcutsDialogPrivate::changeShortcutScheme(const QString &schemeName)
 {
+    qDebug() << "KisShortcutDialogPrivate::changeShortcutScheme";
+
     // KTreeWidgetSearchLine is unhappy if the contents of the tree change
     m_shortcutsEditor->clearSearch();
 
     QString dialogText = i18n("The current shortcut scheme is modified. Save before switching to the new one?");
+
+    // TODO: this just needs to check if the kritashortcutssrc has anything in it.
+    // if thereare custom shortcut notify the person will lose changes if they switch now
+
+    /*
     if (m_shortcutsEditor->isModified() &&
         KMessageBox::questionYesNo( q,dialogText ) == KMessageBox::Yes) {
         m_shortcutsEditor->save();
     } else {
         m_shortcutsEditor->undo();
     }
+    */
 
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
     m_shortcutsEditor->clearCollections();
@@ -80,14 +88,16 @@ void KisShortcutsDialog::KisShortcutsDialogPrivate::changeShortcutScheme(const Q
     QApplication::restoreOverrideCursor();
 }
 
+
 void KisShortcutsDialog::KisShortcutsDialogPrivate::undo()
 {
     m_shortcutsEditor->undo();
 }
 
+
 void KisShortcutsDialog::KisShortcutsDialogPrivate::save()
 {
     m_shortcutsEditor->save();
-};
+}
 
 #include "moc_KisShortcutsDialog_p.cpp"

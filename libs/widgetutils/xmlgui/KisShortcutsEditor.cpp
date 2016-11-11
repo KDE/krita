@@ -70,19 +70,6 @@ KisShortcutsEditor::~KisShortcutsEditor()
     delete d;
 }
 
-bool KisShortcutsEditor::isModified() const
-{
-    // Iterate over all items
-    QTreeWidgetItemIterator it(d->ui.list, QTreeWidgetItemIterator::NoChildren);
-
-    for (; (*it); ++it) {
-        KisShortcutsEditorItem *item = dynamic_cast<KisShortcutsEditorItem *>(*it);
-        if (item && item->isModified()) {
-            return true;
-        }
-    }
-    return false;
-}
 
 void KisShortcutsEditor::clearCollections()
 {
@@ -231,20 +218,37 @@ void KisShortcutsEditor::exportConfiguration(KConfigBase *config) const
     KisActionRegistry::instance()->notifySettingsUpdated();
 }
 
-void KisShortcutsEditor::saveShortcuts(KConfigGroup *config) const
+
+void KisShortcutsEditor::saveCustomShortcuts() {
+    KConfigGroup cg = KConfigGroup(KSharedConfig::openConfig("kritashortcutsrc"), QStringLiteral("Shortcuts"));
+    saveShortcutScheme(&cg);
+}
+
+
+void KisShortcutsEditor::saveShortcutScheme(KConfigGroup *config) const
 {
+    qDebug() << "KisShortcutsEditor::saveShortcuts called";
     // This is a horrible mess with pointers...
     KConfigGroup cg;
     if (config == 0) {
         cg = KConfigGroup(KSharedConfig::openConfig("kritashortcutsrc"),
                           QStringLiteral("Shortcuts"));
         config = &cg;
+
+        qDebug() << "kritashortcutsrc is marked as the shortcut file";
+
     }
 
+    qDebug() << "about to delete group. it has this many things in it: " << QString::number( config->groupList().length());
+
+
+
     // Clear and reset temporary shortcuts
-    config->deleteGroup();
+    config->deleteGroup(); // when you just change custom shortcuts, this seems to have 0
     foreach (KActionCollection *collection, d->actionCollections) {
         collection->writeSettings(config, false);
+
+        qDebug() << "KisShortcutsEditor::saveShortcuts(): collection beig written to";
     }
 
     KisActionRegistry::instance()->notifySettingsUpdated();
@@ -260,7 +264,7 @@ void KisShortcutsEditor::resizeColumns()
 
 
 
-
+/*
 void KisShortcutsEditor::commit()
 {
     for (QTreeWidgetItemIterator it(d->ui.list); (*it); ++it) {
@@ -269,22 +273,26 @@ void KisShortcutsEditor::commit()
         }
     }
 }
+*/
 
 void KisShortcutsEditor::save()
 {
-    saveShortcuts();
-    commit(); // Not doing this would be bad
+
+    qDebug() << "KisShortcutsEditor::save()";
+
+    // the settings dialog will trigger this when the OK button is pressed
+    saveCustomShortcuts();
 }
+
+
 
 void KisShortcutsEditor::undo()
 {
-    // TODO: is this working?
-    for (QTreeWidgetItemIterator it(d->ui.list); (*it); ++it) {
-        if (KisShortcutsEditorItem *item = dynamic_cast<KisShortcutsEditorItem *>(*it)) {
-            item->undo();
-        }
-    }
+    // TODO: load selected shortcuts scheme and apply custom krita shortcuts file
+    // disregarding anything we might have done
 }
+
+
 
 void KisShortcutsEditor::allDefault()
 {

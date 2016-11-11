@@ -117,10 +117,6 @@ public:
     /// Destructor
     virtual ~KisShortcutsEditor();
 
-    /**
-     * @ret true if there are unsaved changes.
-     */
-    bool isModified() const;
 
     /**
      * Removes all action collections from the editor
@@ -145,10 +141,6 @@ public:
      */
     void addCollection(KActionCollection *, const QString &title = QString());
 
-    /**
-     * Undo all change made since the last commit().
-     */
-    void undo();
 
     /**
      * Save the changes.
@@ -161,11 +153,9 @@ public:
     void save();
 
     /**
-     * Update the dialog entries without saving.
-     *
-     * @since 4.2
+     * @brief disregard any shortcut changes the user might have made in the dialog
      */
-    void commit();
+    void undo();
 
     /**
      * Removes all configured shortcuts.
@@ -174,12 +164,14 @@ public:
 
     /**
      * Write the current custom shortcut settings to the \p config object.
-     *
      * @param config Config object to save to. Default is kritashortcutsrc.
-     *
      */
-    void saveShortcuts(KConfigGroup *config = 0) const;
+    void saveShortcutScheme(KConfigGroup *config) const;
 
+    /**
+     * Write the current custom shortcut settings to the \p config object.
+     */
+    void saveCustomShortcuts();
 
     /**
      * Write the current shortcuts to a new scheme to configuration file

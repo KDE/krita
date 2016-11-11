@@ -160,7 +160,7 @@ public:
     /**
      * Exports custom shortcuts to @p path
      */
-    void saveCustomShortcuts(const QString &path) const;
+    void saveShortcutScheme(const QString &path) const;
 
 public Q_SLOTS:
 

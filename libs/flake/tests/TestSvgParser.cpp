@@ -691,7 +691,7 @@ struct SvgRenderTester : public SvgTester
     {
     }
 
-    void testRender(KoShape *shape, const QString &prefix, const QString &testName, const QSize canvasSize) {
+    static void testRender(KoShape *shape, const QString &prefix, const QString &testName, const QSize canvasSize) {
         QImage canvas(canvasSize, QImage::Format_ARGB32);
         canvas.fill(0);
         KoViewConverter converter;
@@ -2073,6 +2073,57 @@ void TestSvgParser::testRenderPattern_r_Obb_c_View_Rotated()
     SvgRenderTester t (data);
 
     t.test_standard_30px_72ppi("fill_pattern_rotated_odd", false, QSize(220, 160));
+}
+
+#include <KoPathShape.h>
+#include <KoColorBackground.h>
+#include <KoClipPath.h>
+#include <commands/KoShapeGroupCommand.h>
+
+void TestSvgParser::testKoClipPathRendering()
+{
+    QPainterPath path1;
+    path1.addRect(QRect(5,5,15,15));
+
+    QPainterPath path2;
+    path2.addRect(QRect(10,10,15,15));
+
+    QPainterPath clipPath1;
+    clipPath1.addRect(QRect(10, 0, 10, 30));
+
+    QPainterPath clipPath2;
+    clipPath2.moveTo(0,7);
+    clipPath2.lineTo(30,7);
+    clipPath2.lineTo(15,30);
+    clipPath2.lineTo(0,7);
+
+    QScopedPointer<KoPathShape> shape1(KoPathShape::createShapeFromPainterPath(path1));
+    shape1->setBackground(QSharedPointer<KoColorBackground>(new KoColorBackground(Qt::blue)));
+
+    QScopedPointer<KoPathShape> shape2(KoPathShape::createShapeFromPainterPath(path2));
+    shape2->setBackground(QSharedPointer<KoColorBackground>(new KoColorBackground(Qt::red)));
+
+    QScopedPointer<KoPathShape> clipShape1(KoPathShape::createShapeFromPainterPath(clipPath1));
+    KoClipData *koClipData1 = new KoClipData(clipShape1.take());
+    KoClipPath *koClipPath1 = new KoClipPath(shape1.data(), koClipData1);
+    koClipPath1->setClipRule(Qt::WindingFill);
+    shape1->setClipPath(koClipPath1);
+
+    QScopedPointer<KoShapeGroup> group(new KoShapeGroup());
+    {
+        QList<KoShape*> shapes({shape1.take(), shape2.take()});
+
+        KoShapeGroupCommand cmd(group.data(), shapes, false, true);
+        cmd.redo();
+    }
+
+    QScopedPointer<KoPathShape> clipShape2(KoPathShape::createShapeFromPainterPath(clipPath2));
+    KoClipData *koClipData2 = new KoClipData(clipShape2.take());
+    KoClipPath *koClipPath2 = new KoClipPath(group.data(), koClipData2);
+    koClipPath2->setClipRule(Qt::WindingFill);
+    group->setClipPath(koClipPath2);
+
+    SvgRenderTester::testRender(group.take(), "load", "clip_render_test", QSize(30,30));
 }
 
 QTEST_MAIN(TestSvgParser)

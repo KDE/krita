@@ -157,7 +157,7 @@ void KoClipPath::applyClipping(KoShape *clippedShape, QPainter &painter, const K
             if (clipPath.isEmpty())
                 clipPath = m.map(shape->clipPath()->path());
             else
-                clipPath |= m.map(shape->clipPath()->path());
+                clipPath &= m.map(shape->clipPath()->path());
         }
         shape = shape->parent();
     }

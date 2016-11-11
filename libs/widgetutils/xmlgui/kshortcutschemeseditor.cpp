@@ -80,17 +80,11 @@ KShortcutSchemesEditor::KShortcutSchemesEditor(KisShortcutsDialog *parent)
     addWidget(moreActions);
 
     QMenu *moreActionsMenu = new QMenu(m_dialog);
-    // moreActionsMenu->addAction(i18n("Save as Scheme Defaults"),
-                               // this, SLOT(saveAsDefaultsForScheme()));
 
-    moreActionsMenu->addAction(i18n("Save New Shortcut Scheme"),
-                               this, SLOT(saveNewShortcutScheme()));
     moreActionsMenu->addAction(i18n("Load Shortcut Scheme"),
                                this, SLOT(loadShortcutScheme()));
-    moreActionsMenu->addAction(i18n("Export Scheme..."),   // how is ths different than saving a new one?
-                               this, SLOT(exportShortcutsScheme()));
-    moreActionsMenu->addAction(i18n("Import Scheme..."),   // how is this different than loading??
-                               this, SLOT(importShortcutsScheme()));
+    moreActionsMenu->addAction(i18n("Save New Shortcut Scheme..."),
+                               this, SLOT(saveNewShortcutsScheme()));
     moreActions->setMenu(moreActionsMenu);
 
     addStretch(1);
@@ -156,13 +150,15 @@ QString KShortcutSchemesEditor::currentScheme()
     return m_schemesList->currentText();
 }
 
-void KShortcutSchemesEditor::exportShortcutsScheme()
+void KShortcutSchemesEditor::saveNewShortcutsScheme()
 {
-    //ask user about dir
+    //ask user about directory. defaults to where the local shortcuts are savedo
     QFileDialog dlg(m_dialog,
-                    i18n("Export Shortcuts"),
+                    i18n("Save Shortcuts"),
                     KoResourcePaths::saveLocation("kis_shortcuts"),
                     i18n("Shortcuts (*.shortcuts)"));
+
+
     dlg.setDefaultSuffix(QStringLiteral(".shortcuts"));
     dlg.setAcceptMode(QFileDialog::AcceptSave);
     if (dlg.exec()) {
@@ -173,26 +169,12 @@ void KShortcutSchemesEditor::exportShortcutsScheme()
         }
 
     }
+
+    // TODO: emit a signal letting us know there is a new shortcut scheme
+    // this will be useful for the drop-down box that has the list of availabe shortcut schemes
+    // currently you have to close the preferences window and re-open it to seethe new saved scheme
+
 }
-
-void KShortcutSchemesEditor::saveNewShortcutScheme()
-{
-    //ask user about dir
-    QFileDialog dlg(m_dialog,
-                    i18n("Save Shortcuts"),
-                    QDir::currentPath(),
-                    i18n("Shortcuts (*.shortcuts)"));
-    dlg.setDefaultSuffix(QStringLiteral(".shortcuts"));
-    dlg.setAcceptMode(QFileDialog::AcceptSave);
-    if (dlg.exec()) {
-        auto path = dlg.selectedFiles().first();
-
-        if (!path.isEmpty()) {
-            m_dialog->saveShortcutScheme(path);
-        }
-    }
-}
-
 
 void KShortcutSchemesEditor::loadShortcutScheme()
 {
@@ -212,17 +194,6 @@ void KShortcutSchemesEditor::loadShortcutScheme()
     // ar->loadCustomShortcuts(path);
     m_dialog->loadCustomShortcuts(path);
 
-}
-
-void KShortcutSchemesEditor::importShortcutsScheme()
-{
-    //ask user about dir
-    QString path = QFileDialog::getOpenFileName(m_dialog, i18n("Import Shortcuts"), QDir::currentPath(), i18n("Shortcuts (*.shortcuts)"));
-    if (path.isEmpty()) {
-        return;
-    }
-
-    m_dialog->importConfiguration(path);
 }
 
 void KShortcutSchemesEditor::updateDeleteButton()

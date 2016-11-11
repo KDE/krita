@@ -34,12 +34,10 @@ public:
     QString currentScheme();
 
 private Q_SLOTS:
-    void newScheme();
+    void newScheme(); // need to think about this. It is a bit awkward if we start off with no shortcuts
     void deleteScheme();
-    void importShortcutsScheme(); // clean this up since it is so close to loading
-    void exportShortcutsScheme(); // clean this up since it is so close to saving a new scheme
+    void saveNewShortcutsScheme();
     void loadShortcutScheme();
-    void saveNewShortcutScheme();
 
 Q_SIGNALS:
     void shortcutsSchemeChanged(const QString &);

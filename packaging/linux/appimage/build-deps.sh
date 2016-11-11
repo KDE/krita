@@ -58,6 +58,7 @@ fi
 
 cd /AppImageKit/
 git_pull_rebase_helper
+git checkout stable/v1.0
 ./build.sh
 cd /
 

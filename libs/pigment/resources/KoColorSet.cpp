@@ -996,7 +996,7 @@ bool KoColorSet::loadKpl()
 
         QDomElement c = e.firstChildElement("ColorSetEntry");
         while (!c.isNull()) {
-            QString colorDepthId = e.attribute("bitdepth", Integer8BitsColorDepthID.id());
+            QString colorDepthId = c.attribute("bitdepth", Integer8BitsColorDepthID.id());
             KoColorSetEntry entry;
 
 
@@ -1015,7 +1015,7 @@ bool KoColorSet::loadKpl()
             addGroup(groupName);
             QDomElement cg = g.firstChildElement("ColorSetEntry");
             while (!cg.isNull()) {
-                QString colorDepthId = e.attribute("bitdepth", Integer8BitsColorDepthID.id());
+                QString colorDepthId = cg.attribute("bitdepth", Integer8BitsColorDepthID.id());
                 KoColorSetEntry entry;
 
 

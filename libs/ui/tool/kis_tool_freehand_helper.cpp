@@ -36,6 +36,7 @@
 
 #include "kis_update_time_monitor.h"
 #include "kis_stabilized_events_sampler.h"
+#include "KisStabilizerDelayedPaintHelper.h"
 #include "kis_config.h"
 
 
@@ -79,6 +80,7 @@ struct KisToolFreehandHelper::Private
     QQueue<KisPaintInformation> stabilizerDeque;
     QTimer stabilizerPollTimer;
     KisStabilizedEventsSampler stabilizedSampler;
+    KisStabilizerDelayedPaintHelper stabilizerDelayedPaintHelper;
 
     int canvasRotation;
     bool canvasMirroredH;
@@ -108,6 +110,15 @@ KisToolFreehandHelper::KisToolFreehandHelper(KisPaintingInformationBuilder *info
     connect(&m_d->strokeTimeoutTimer, SIGNAL(timeout()), SLOT(finishStroke()));
     connect(&m_d->airbrushingTimer, SIGNAL(timeout()), SLOT(doAirbrushing()));
     connect(&m_d->stabilizerPollTimer, SIGNAL(timeout()), SLOT(stabilizerPollAndPaint()));
+
+    m_d->stabilizerDelayedPaintHelper.setPaintLineCallback(
+                [this](const KisPaintInformation &pi1, const KisPaintInformation &pi2) {
+                    paintLine(pi1, pi2);
+                });
+    m_d->stabilizerDelayedPaintHelper.setUpdateOutlineCallback(
+                [this]() {
+                    emit requestExplicitUpdateOutline();
+                });
 }
 
 KisToolFreehandHelper::~KisToolFreehandHelper()
@@ -138,7 +149,12 @@ QPainterPath KisToolFreehandHelper::paintOpOutline(const QPointF &savedCursorPos
 
     if (!m_d->painterInfos.isEmpty()) {
         settings = m_d->resources->currentPaintOpPreset()->settings();
-        info = m_d->previousPaintInformation;
+        if (m_d->stabilizerDelayedPaintHelper.running() &&
+                m_d->stabilizerDelayedPaintHelper.hasLastPaintInformation()) {
+            info = m_d->stabilizerDelayedPaintHelper.lastPaintInformation();
+        } else {
+            info = m_d->previousPaintInformation;
+        }
 
         /**
          * When LoD mode is active it may happen that the helper has
@@ -573,6 +589,10 @@ void KisToolFreehandHelper::cancelPaint()
         m_d->stabilizerPollTimer.stop();
     }
 
+    if (m_d->stabilizerDelayedPaintHelper.running()) {
+        m_d->stabilizerDelayedPaintHelper.cancel();
+    }
+
     // see a comment in endPaint()
     m_d->painterInfos.clear();
 
@@ -604,8 +624,14 @@ void KisToolFreehandHelper::stabilizerStart(KisPaintInformation firstPaintInfo)
 
     // Poll and draw regularly
     KisConfig cfg;
-    m_d->stabilizerPollTimer.setInterval(cfg.stabilizerSampleSize());
+    int stabilizerSampleSize = cfg.stabilizerSampleSize();
+    m_d->stabilizerPollTimer.setInterval(stabilizerSampleSize);
     m_d->stabilizerPollTimer.start();
+
+    int delayedPaintInterval = cfg.stabilizerDelayedPaintInterval();
+    if (delayedPaintInterval < stabilizerSampleSize) {
+        m_d->stabilizerDelayedPaintHelper.start(delayedPaintInterval, firstPaintInfo);
+    }
 
     m_d->stabilizedSampler.clear();
     m_d->stabilizedSampler.addEvent(firstPaintInfo);
@@ -652,6 +678,7 @@ void KisToolFreehandHelper::stabilizerPollAndPaint()
     KisStabilizedEventsSampler::iterator it;
     KisStabilizedEventsSampler::iterator end;
     std::tie(it, end) = m_d->stabilizedSampler.range();
+    QVector<KisPaintInformation> delayedPaintTodoItems;
 
     for (; it != end; ++it) {
         KisPaintInformation sampledInfo = *it;
@@ -672,14 +699,16 @@ void KisToolFreehandHelper::stabilizerPollAndPaint()
             KisPaintInformation newInfo =
                     m_d->getStabilizedPaintInfo(m_d->stabilizerDeque, sampledInfo);
 
-            paintLine(m_d->previousPaintInformation, newInfo);
+            if (m_d->stabilizerDelayedPaintHelper.running()) {
+                delayedPaintTodoItems.append(newInfo);
+            } else {
+                paintLine(m_d->previousPaintInformation, newInfo);
+            }
             m_d->previousPaintInformation = newInfo;
 
             // Push the new entry through the queue
             m_d->stabilizerDeque.dequeue();
             m_d->stabilizerDeque.enqueue(sampledInfo);
-
-            emit requestExplicitUpdateOutline();
         } else if (m_d->stabilizerDeque.head().pos() != m_d->previousPaintInformation.pos()) {
 
             QQueue<KisPaintInformation>::iterator it = m_d->stabilizerDeque.begin();
@@ -693,6 +722,12 @@ void KisToolFreehandHelper::stabilizerPollAndPaint()
     }
 
     m_d->stabilizedSampler.clear();
+
+    if (m_d->stabilizerDelayedPaintHelper.running()) {
+        m_d->stabilizerDelayedPaintHelper.update(delayedPaintTodoItems);
+    } else {
+        emit requestExplicitUpdateOutline();
+    }
 }
 
 void KisToolFreehandHelper::stabilizerEnd()
@@ -708,6 +743,10 @@ void KisToolFreehandHelper::stabilizerEnd()
 
         m_d->stabilizedSampler.addFinishingEvent(m_d->stabilizerDeque.size());
         stabilizerPollAndPaint();
+    }
+
+    if (m_d->stabilizerDelayedPaintHelper.running()) {
+        m_d->stabilizerDelayedPaintHelper.end();
     }
 }
 

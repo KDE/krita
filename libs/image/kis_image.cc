@@ -198,7 +198,7 @@ public:
 
     KisNameServer nserver;
 
-    KisUndoStore *undoStore;
+    QScopedPointer<KisUndoStore> undoStore;
     KisLegacyUndoAdapter legacyUndoAdapter;
     KisPostExecutionUndoAdapter postExecutionUndoAdapter;
 
@@ -268,7 +268,6 @@ KisImage::~KisImage()
      */
     m_d->rootLayer = 0;
 
-    delete m_d->undoStore;
     delete m_d;
     disconnect(); // in case Qt gets confused
 }
@@ -1128,13 +1127,12 @@ void KisImage::setUndoStore(KisUndoStore *undoStore)
 
     m_d->legacyUndoAdapter.setUndoStore(undoStore);
     m_d->postExecutionUndoAdapter.setUndoStore(undoStore);
-    delete m_d->undoStore;
-    m_d->undoStore = undoStore;
+    m_d->undoStore.reset(undoStore);
 }
 
 KisUndoStore* KisImage::undoStore()
 {
-    return m_d->undoStore;
+    return m_d->undoStore.data();
 }
 
 KisUndoAdapter* KisImage::undoAdapter() const

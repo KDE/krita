@@ -86,7 +86,7 @@ KisKraSaver::~KisKraSaver()
     delete m_d;
 }
 
-QDomElement KisKraSaver::saveXML(QDomDocument& doc,  KisImageWSP image)
+QDomElement KisKraSaver::saveXML(QDomDocument& doc,  KisImageSP image)
 {
     QDomElement imageElement = doc.createElement("IMAGE"); // Legacy!
 
@@ -179,7 +179,7 @@ bool KisKraSaver::saveNodeKeyframes(KoStore *store, QString location, const KisN
     return true;
 }
 
-bool KisKraSaver::saveBinaryData(KoStore* store, KisImageWSP image, const QString &uri, bool external, bool autosave)
+bool KisKraSaver::saveBinaryData(KoStore* store, KisImageSP image, const QString &uri, bool external, bool autosave)
 {
     QString location;
 
@@ -293,7 +293,7 @@ QStringList KisKraSaver::errorMessages() const
     return m_d->errorMessages;
 }
 
-void KisKraSaver::saveBackgroundColor(QDomDocument& doc, QDomElement& element, KisImageWSP image)
+void KisKraSaver::saveBackgroundColor(QDomDocument& doc, QDomElement& element, KisImageSP image)
 {
     QDomElement e = doc.createElement(CANVASPROJECTIONCOLOR);
     KoColor color = image->defaultProjectionColor();
@@ -302,7 +302,7 @@ void KisKraSaver::saveBackgroundColor(QDomDocument& doc, QDomElement& element, K
     element.appendChild(e);
 }
 
-void KisKraSaver::saveWarningColor(QDomDocument& doc, QDomElement& element, KisImageWSP image)
+void KisKraSaver::saveWarningColor(QDomDocument& doc, QDomElement& element, KisImageSP image)
 {
     if (image->proofingConfiguration()) {
         QDomElement e = doc.createElement(PROOFINGWARNINGCOLOR);
@@ -314,7 +314,7 @@ void KisKraSaver::saveWarningColor(QDomDocument& doc, QDomElement& element, KisI
     }
 }
 
-void KisKraSaver::saveCompositions(QDomDocument& doc, QDomElement& element, KisImageWSP image)
+void KisKraSaver::saveCompositions(QDomDocument& doc, QDomElement& element, KisImageSP image)
 {
     if (!image->compositions().isEmpty()) {
         QDomElement e = doc.createElement("compositions");

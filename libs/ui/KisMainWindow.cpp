@@ -282,7 +282,7 @@ KisMainWindow::KisMainWindow()
 
     qApp->setStartDragDistance(25);     // 25 px is a distance that works well for Tablet and Mouse events
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_OSX
     setUnifiedTitleAndToolBarOnMac(true);
 #endif
 
@@ -541,6 +541,7 @@ void KisMainWindow::showView(KisView *imageView)
     if (imageView && activeView() != imageView) {
         // XXX: find a better way to initialize this!
         imageView->setViewManager(d->viewManager);
+
         imageView->canvasBase()->setFavoriteResourceManager(d->viewManager->paintOpBox()->favoriteResourcesManager());
         imageView->slotLoadingFinished();
 
@@ -1891,7 +1892,7 @@ QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
         dockWidget = d->dockWidgetsMap[factory->id()];
     }
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_OSX
     dockWidget->setAttribute(Qt::WA_MacSmallSize, true);
 #endif
     dockWidget->setFont(KoDockRegistry::dockFont());
@@ -2161,7 +2162,7 @@ QPointer<KisView>KisMainWindow::activeKisView()
 void KisMainWindow::newOptionWidgets(const QList<QPointer<QWidget> > &optionWidgetList)
 {
     Q_FOREACH (QWidget *w, optionWidgetList) {
-#ifdef Q_OS_MAC
+#ifdef Q_OS_OSX
         w->setAttribute(Qt::WA_MacSmallSize, true);
 #endif
         w->setFont(KoDockRegistry::dockFont());

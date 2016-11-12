@@ -321,7 +321,7 @@ void KisApplication::loadPlugins()
 
 bool KisApplication::start(const KisApplicationArguments &args)
 {
-#if defined(Q_OS_WIN)  || defined (Q_OS_MAC)
+#if defined(Q_OS_WIN)  || defined (Q_OS_OSX)
 #ifdef ENV32BIT
     KisConfig cfg;
     if (isWow64() && !cfg.readEntry("WarnedAbout32Bits", false)) {

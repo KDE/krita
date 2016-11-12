@@ -76,7 +76,7 @@ KisConfigWidget *EXRExport::createConfigurationWidget(QWidget *parent, const QBy
 
 KisImportExportFilter::ConversionStatus EXRExport::convert(KisDocument *document, QIODevice */*io*/,  KisPropertiesConfigurationSP configuration)
 {
-    KisImageWSP image = document->image();
+    KisImageSP image = document->image();
 
     EXRConverter exrConverter(document, !batchMode());
 

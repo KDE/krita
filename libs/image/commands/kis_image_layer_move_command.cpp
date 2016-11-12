@@ -61,29 +61,36 @@ KisImageLayerMoveCommand::KisImageLayerMoveCommand(KisImageWSP image, KisNodeSP 
 
 void KisImageLayerMoveCommand::redo()
 {
-
+    KisImageSP image = m_image.toStrongRef();
+    if (!image) {
+        return;
+    }
     if (m_useIndex) {
-        m_image->moveNode(m_layer, m_newParent, m_index);
+        image->moveNode(m_layer, m_newParent, m_index);
     } else {
-        m_image->moveNode(m_layer, m_newParent, m_newAbove);
+        image->moveNode(m_layer, m_newParent, m_newAbove);
     }
 
     if (m_doUpdates) {
-        m_image->refreshGraphAsync(m_prevParent);
+        image->refreshGraphAsync(m_prevParent);
         if (m_newParent != m_prevParent) {
-            m_layer->setDirty(m_image->bounds());
+            m_layer->setDirty(image->bounds());
         }
     }
 }
 
 void KisImageLayerMoveCommand::undo()
 {
-    m_image->moveNode(m_layer, m_prevParent, m_prevAbove);
+    KisImageSP image = m_image.toStrongRef();
+    if (!image) {
+        return;
+    }
+    image->moveNode(m_layer, m_prevParent, m_prevAbove);
 
     if (m_doUpdates) {
-        m_image->refreshGraphAsync(m_newParent);
+        image->refreshGraphAsync(m_newParent);
         if (m_newParent != m_prevParent) {
-            m_layer->setDirty(m_image->bounds());
+            m_layer->setDirty(image->bounds());
         }
     }
 }

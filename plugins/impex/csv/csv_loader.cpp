@@ -475,7 +475,7 @@ KisImageBuilder_Result CSVLoader::buildAnimation(QIODevice *io, const QString &f
     return decode(io, filename);
 }
 
-KisImageWSP CSVLoader::image()
+KisImageSP CSVLoader::image()
 {
     return m_image;
 }

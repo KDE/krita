@@ -97,7 +97,7 @@ void KisFilter::process(KisPaintDeviceSP device,
                         const KisFilterConfigurationSP config,
                         KoUpdater* progressUpdater) const
 {
-    process(device, device, 0, applyRect, config, progressUpdater);
+    process(device, device, KisSelectionSP(), applyRect, config, progressUpdater);
 }
 
 void KisFilter::process(const KisPaintDeviceSP src,

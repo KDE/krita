@@ -29,11 +29,11 @@
 
 struct KisExrLayersSorter::Private
 {
-    Private(const QDomDocument &_extraData, KisImageWSP _image)
+    Private(const QDomDocument &_extraData, KisImageSP _image)
         : extraData(_extraData), image(_image) {}
 
     const QDomDocument &extraData;
-    KisImageWSP image;
+    KisImageSP image;
 
     QMap<QString, QDomElement> pathToElementMap;
     QMap<QString, int> pathToOrderingMap;
@@ -161,7 +161,7 @@ void KisExrLayersSorter::Private::sortLayers(KisNodeSP root)
     }
 }
 
-KisExrLayersSorter::KisExrLayersSorter(const QDomDocument &extraData, KisImageWSP image)
+KisExrLayersSorter::KisExrLayersSorter(const QDomDocument &extraData, KisImageSP image)
     : m_d(new Private(extraData, image))
 {
     KIS_ASSERT_RECOVER_RETURN(!extraData.isNull());

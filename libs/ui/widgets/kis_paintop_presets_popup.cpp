@@ -237,6 +237,8 @@ void KisPaintOpPresetsPopup::setPaintOpSettingsWidget(QWidget * widget)
         widget->show();
 
     }
+
+    slotUpdateLodAvailability();
 }
 
 void KisPaintOpPresetsPopup::slotUpdateLodAvailability()

@@ -829,7 +829,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(const QString &filename)
 }
 
 
-KisImageWSP KisPNGConverter::image()
+KisImageSP KisPNGConverter::image()
 {
     return m_image;
 }

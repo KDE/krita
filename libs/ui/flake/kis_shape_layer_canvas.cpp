@@ -41,6 +41,7 @@
 KisShapeLayerCanvas::KisShapeLayerCanvas(KisShapeLayer *parent, KoViewConverter * viewConverter)
         : QObject()
         , KoCanvasBase(0)
+        , m_isDestroying(false)
         , m_viewConverter(viewConverter)
         , m_shapeManager(new KoShapeManager(this))
         , m_projection(0)
@@ -53,6 +54,11 @@ KisShapeLayerCanvas::KisShapeLayerCanvas(KisShapeLayer *parent, KoViewConverter 
 KisShapeLayerCanvas::~KisShapeLayerCanvas()
 {
     delete m_shapeManager;
+}
+
+void KisShapeLayerCanvas::prepareForDestroying()
+{
+    m_isDestroying = true;
 }
 
 void KisShapeLayerCanvas::gridSize(QPointF *offset, QSizeF *spacing) const
@@ -86,7 +92,7 @@ void KisShapeLayerCanvas::updateCanvas(const QRectF& rc)
 {
     dbgUI << "KisShapeLayerCanvas::updateCanvas()" << rc;
     //image is 0, if parentLayer is being deleted so don't update
-    if (!m_parentLayer->image()) {
+    if (!m_parentLayer->image() || m_isDestroying) {
         return;
     }
 

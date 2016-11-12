@@ -41,7 +41,7 @@ public:
     /**
      * Retrieve the constructed image
      */
-    KisImageWSP image();
+    KisImageSP image();
     QString errorMessage() const;
 private:
     KisImageBuilder_Result decode(const QString &filename);

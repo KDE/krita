@@ -1115,6 +1115,7 @@ bool KoColorSet::loadAco()
         }
         if (version == 2) {
             quint16 v2 = readShort(&buf); //this isn't a version, it's a marker and needs to be skipped.
+            Q_UNUSED(v2);
             quint16 size = readShort(&buf) -1; //then comes the length
             if (size>0) {
                 QByteArray ba = buf.read(size*2);
@@ -1126,6 +1127,7 @@ bool KoColorSet::loadAco()
                 }
             }
             v2 = readShort(&buf); //end marker also needs to be skipped.
+            Q_UNUSED(v2);
         }
         if (!skip) {
             add(e);

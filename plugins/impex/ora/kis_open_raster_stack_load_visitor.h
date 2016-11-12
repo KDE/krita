@@ -37,7 +37,7 @@ public:
     void loadPaintLayer(const QDomElement& elem, KisPaintLayerSP pL);
     void loadAdjustmentLayer(const QDomElement& elem, KisAdjustmentLayerSP pL);
     void loadGroupLayer(const QDomElement& elem, KisGroupLayerSP gL);
-    KisImageWSP image();
+    KisImageSP image();
     vKisNodeSP activeNodes();
 private:
     void loadLayerInfo(const QDomElement& elem, KisLayerSP layer);

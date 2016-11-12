@@ -38,19 +38,19 @@ public:
 
     ~KisKraSaver();
 
-    QDomElement saveXML(QDomDocument& doc,  KisImageWSP image);
+    QDomElement saveXML(QDomDocument& doc,  KisImageSP image);
 
     bool saveKeyframes(KoStore *store, const QString &uri, bool external);
 
-    bool saveBinaryData(KoStore* store, KisImageWSP image, const QString & uri, bool external, bool includeMerge);
+    bool saveBinaryData(KoStore* store, KisImageSP image, const QString & uri, bool external, bool includeMerge);
 
     /// @return a list with everthing that went wrong while saving
     QStringList errorMessages() const;
 
 private:
-    void saveBackgroundColor(QDomDocument& doc, QDomElement& element, KisImageWSP image);
-    void saveWarningColor(QDomDocument& doc, QDomElement& element, KisImageWSP image);
-    void saveCompositions(QDomDocument& doc, QDomElement& element, KisImageWSP image);
+    void saveBackgroundColor(QDomDocument& doc, QDomElement& element, KisImageSP image);
+    void saveWarningColor(QDomDocument& doc, QDomElement& element, KisImageSP image);
+    void saveCompositions(QDomDocument& doc, QDomElement& element, KisImageSP image);
     bool saveAssistants(KoStore *store,QString uri, bool external);
     bool saveAssistantsList(QDomDocument& doc, QDomElement& element);
     bool saveGrid(QDomDocument& doc, QDomElement& element);

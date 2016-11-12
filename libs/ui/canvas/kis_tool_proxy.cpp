@@ -116,7 +116,8 @@ bool KisToolProxy::forwardEvent(ActionState state, KisTool::ToolAction action, Q
         this->tabletEvent(tabletEvent, docPoint);
         forwardToTool(state, action, tabletEvent, docPoint);
         retval = tabletEvent->isAccepted();
-    } else if (touchEvent) {
+    }
+    else if (touchEvent) {
         if (state == END && touchEvent->type() != QEvent::TouchEnd) {
             //Fake a touch end if we are "upgrading" a single-touch gesture to a multi-touch gesture.
             QTouchEvent fakeEvent(QEvent::TouchEnd, touchEvent->device(),
@@ -126,7 +127,8 @@ bool KisToolProxy::forwardEvent(ActionState state, KisTool::ToolAction action, Q
         } else {
             this->touchEvent(touchEvent);
         }
-    } else if (mouseEvent) {
+    }
+    else if (mouseEvent) {
         QPointF docPoint = widgetToDocument(mouseEvent->posF());
         mouseEvent->accept();
         if (mouseEvent->type() == QEvent::MouseButtonPress) {
@@ -140,10 +142,12 @@ bool KisToolProxy::forwardEvent(ActionState state, KisTool::ToolAction action, Q
         }
         forwardToTool(state, action, originalEvent, docPoint);
         retval = mouseEvent->isAccepted();
-    } else if(event->type() == QEvent::KeyPress) {
+    }
+    else if (event && event->type() == QEvent::KeyPress) {
         QKeyEvent* kevent = static_cast<QKeyEvent*>(event);
         keyPressEvent(kevent);
-    } else if(event->type() == QEvent::KeyRelease) {
+    }
+    else if (event && event->type() == QEvent::KeyRelease) {
         QKeyEvent* kevent = static_cast<QKeyEvent*>(event);
         keyReleaseEvent(kevent);
     }

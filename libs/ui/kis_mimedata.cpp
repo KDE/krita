@@ -185,20 +185,20 @@ QVariant KisMimeData::retrieveData(const QString &mimetype, QVariant::Type prefe
     }
 }
 
-void KisMimeData::initializeExternalNode(KisNodeSP &node,
+void KisMimeData::initializeExternalNode(KisNodeSP *node,
                                          KisImageWSP image,
                                          KisShapeController *shapeController)
 {
     // layers store a link to the image, so update it
-    KisLayer *layer = dynamic_cast<KisLayer*>(node.data());
+    KisLayer *layer = dynamic_cast<KisLayer*>(node->data());
     if (layer) {
         layer->setImage(image);
     }
-    KisShapeLayer *shapeLayer = dynamic_cast<KisShapeLayer*>(node.data());
+    KisShapeLayer *shapeLayer = dynamic_cast<KisShapeLayer*>(node->data());
     if (shapeLayer) {
         // attach the layer to a new shape controller
         KisShapeLayer *shapeLayer2 = new KisShapeLayer(*shapeLayer, shapeController);
-        node = shapeLayer2;
+        *node = shapeLayer2;
     }
 }
 
@@ -255,7 +255,7 @@ QList<KisNodeSP> KisMimeData::tryLoadInternalNodes(const QMimeData *data,
             if ((forceCopy || copyNode) && initialListener == image.data()) {
                 KisLayerUtils::addCopyOfNameTag(node);
             }
-            initializeExternalNode(node, image, shapeController);
+            initializeExternalNode(&node, image, shapeController);
             clones << node;
         }
         nodes = clones;
@@ -285,9 +285,9 @@ QList<KisNodeSP> KisMimeData::loadNodes(const QMimeData *data,
         if (result) {
             KisImageWSP tempImage = tempDoc->image();
             Q_FOREACH (KisNodeSP node, tempImage->root()->childNodes(QStringList(), KoProperties())) {
-                nodes << node;
                 tempImage->removeNode(node);
-                initializeExternalNode(node, image, shapeController);
+                initializeExternalNode(&node, image, shapeController);
+                nodes << node;
             }
         }
         delete filter;
@@ -303,9 +303,9 @@ QList<KisNodeSP> KisMimeData::loadNodes(const QMimeData *data,
         if (result) {
             KisImageWSP tempImage = tempDoc->image();
             Q_FOREACH (KisNodeSP node, tempImage->root()->childNodes(QStringList(), KoProperties())) {
-                nodes << node;
                 tempImage->removeNode(node);
-                initializeExternalNode(node, image, shapeController);
+                initializeExternalNode(&node, image, shapeController);
+                nodes << node;
             }
         }
         delete tempDoc;

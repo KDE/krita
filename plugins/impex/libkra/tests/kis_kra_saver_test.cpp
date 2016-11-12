@@ -55,12 +55,27 @@
 #include <filter/kis_filter_registry.h>
 #include <generator/kis_generator_registry.h>
 
+#include <KoResourcePaths.h>
+
 void KisKraSaverTest::initTestCase()
 {
+    KoResourcePaths::addResourceDir("ko_patterns", QString(SYSTEM_RESOURCES_DATA_DIR) + "/patterns");
+
     KisFilterRegistry::instance();
     KisGeneratorRegistry::instance();
 }
 
+void KisKraSaverTest::testCrashyShapeLayer()
+{
+    /**
+     * KisShapeLayer used to call setImage from its destructor and
+     * therefore causing an infinite recursion (when at least one transparency
+     * mask was preset. This testcase just checks that.
+     */
+
+    QScopedPointer<KisDocument> doc(createCompleteDocument(true));
+    Q_UNUSED(doc);
+}
 
 void KisKraSaverTest::testRoundTrip()
 {
@@ -84,10 +99,10 @@ void KisKraSaverTest::testRoundTrip()
     QCOMPARE(doc2->image()->defaultProjectionColor(), bgColor);
 
     // test round trip of a transform mask
-    KisNodeSP tnode =
-        TestUtil::findNode(doc2->image()->rootLayer(), "testTransformMask");
+    KisNode* tnode =
+        TestUtil::findNode(doc2->image()->rootLayer(), "testTransformMask").data();
     QVERIFY(tnode);
-    KisTransformMask *tmask = dynamic_cast<KisTransformMask*>(tnode.data());
+    KisTransformMask *tmask = dynamic_cast<KisTransformMask*>(tnode);
     QVERIFY(tmask);
     KisDumbTransformMaskParams *params = dynamic_cast<KisDumbTransformMaskParams*>(tmask->transformParams().data());
     QVERIFY(params);
@@ -128,11 +143,14 @@ void KisKraSaverTest::testSaveEmpty()
 void testRoundTripFillLayerImpl(const QString &testName, KisFilterConfigurationSP config)
 {
     TestUtil::ExternalImageChecker chk(testName, "fill_layer");
+    chk.setFuzzy(2);
 
+    QScopedPointer<KisDocument> doc(KisPart::instance()->createDocument());
+
+    // mask parent should be destructed before the document!
     QRect refRect(0,0,512,512);
     TestUtil::MaskParent p(refRect);
 
-    QScopedPointer<KisDocument> doc(KisPart::instance()->createDocument());
     doc->setCurrentImage(p.image);
     doc->documentInfo()->setAboutInfo("title", p.image->objectName());
 
@@ -146,7 +164,6 @@ void testRoundTripFillLayerImpl(const QString &testName, KisFilterConfigurationS
     chk.checkImage(p.image, "00_initial_layer_update");
 
     doc->exportDocument(QUrl::fromLocalFile("roundtrip_fill_layer_test.kra"));
-
 
     QScopedPointer<KisDocument> doc2(KisPart::instance()->createDocument());
     doc2->loadNativeFormat("roundtrip_fill_layer_test.kra");
@@ -178,11 +195,11 @@ void KisKraSaverTest::testRoundTripFillLayerColor()
 void KisKraSaverTest::testRoundTripFillLayerPattern()
 {
     KisGeneratorSP generator = KisGeneratorRegistry::instance()->get("pattern");
-    Q_ASSERT(generator);
+    QVERIFY(generator);
 
     // warning: we pass null paint device to the default constructed value
     KisFilterConfigurationSP config = generator->factoryConfiguration(0);
-    Q_ASSERT(config);
+    QVERIFY(config);
 
     QVariant v;
     v.setValue(QString("11_drawed_furry.png"));
@@ -200,6 +217,9 @@ void KisKraSaverTest::testRoundTripLayerStyles()
 
     QRect imageRect(0,0,512,512);
 
+    // the document should be created before the image!
+    QScopedPointer<KisDocument> doc(KisPart::instance()->createDocument());
+
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisImageSP image = new KisImage(new KisSurrogateUndoStore(), imageRect.width(), imageRect.height(), cs, "test image");
     KisPaintLayerSP layer1 = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE_U8);
@@ -209,7 +229,6 @@ void KisKraSaverTest::testRoundTripLayerStyles()
     image->addNode(layer2);
     image->addNode(layer3);
 
-    QScopedPointer<KisDocument> doc(KisPart::instance()->createDocument());
     doc->setCurrentImage(image);
     doc->documentInfo()->setAboutInfo("title", image->objectName());
 
@@ -250,6 +269,8 @@ void KisKraSaverTest::testRoundTripLayerStyles()
 
 void KisKraSaverTest::testRoundTripAnimation()
 {
+    QScopedPointer<KisDocument> doc(KisPart::instance()->createDocument());
+
     QRect imageRect(0,0,512,512);
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisImageSP image = new KisImage(new KisSurrogateUndoStore(), imageRect.width(), imageRect.height(), cs, "test image");
@@ -261,7 +282,9 @@ void KisKraSaverTest::testRoundTripAnimation()
 
     KUndo2Command parentCommand;
 
-    KisKeyframeChannel *rasterChannel = layer1->getKeyframeChannel(KisKeyframeChannel::Content.id());
+    layer1->enableAnimation();
+    KisKeyframeChannel *rasterChannel = layer1->getKeyframeChannel(KisKeyframeChannel::Content.id(), true);
+    QVERIFY(rasterChannel);
 
     rasterChannel->addKeyframe(10, &parentCommand);
     image->animationInterface()->switchCurrentTimeAsync(10);
@@ -277,7 +300,9 @@ void KisKraSaverTest::testRoundTripAnimation()
     layer1->paintDevice()->moveTo(100, 50);
     layer1->paintDevice()->setDefaultPixel(KoColor(Qt::blue, cs));
 
-    QScopedPointer<KisDocument> doc(KisPart::instance()->createDocument());
+    QVERIFY(!layer1->useInTimeline());
+    layer1->setUseInTimeline(true);
+
     doc->setCurrentImage(image);
     doc->exportDocument(QUrl::fromLocalFile("roundtrip_animation.kra"));
 
@@ -292,6 +317,7 @@ void KisKraSaverTest::testRoundTripAnimation()
 
     QCOMPARE(image2->animationInterface()->currentTime(), 20);
     KisKeyframeChannel *channel = layer2->getKeyframeChannel(KisKeyframeChannel::Content.id());
+    QVERIFY(channel);
     QCOMPARE(channel->keyframeCount(), 3);
 
     image2->animationInterface()->switchCurrentTimeAsync(0);
@@ -317,6 +343,8 @@ void KisKraSaverTest::testRoundTripAnimation()
     QCOMPARE(layer2->paintDevice()->x(), 100);
     QCOMPARE(layer2->paintDevice()->y(), 50);
     QCOMPARE(layer2->paintDevice()->defaultPixel(), KoColor(Qt::blue, cs));
+
+    QVERIFY(layer2->useInTimeline());
 
 }
 

@@ -116,10 +116,8 @@ QDomElement KisSaveXmlVisitor::savePaintLayerAttributes(KisPaintLayer *layer, QD
     element.setAttribute(CHANNEL_LOCK_FLAGS, flagsToString(layer->channelLockFlags()));
     element.setAttribute(COLORSPACE_NAME, layer->paintDevice()->colorSpace()->id());
 
-    if (layer->isAnimated()) {
-        element.setAttribute(ONION_SKIN_ENABLED, layer->onionSkinEnabled());
-        element.setAttribute(VISIBLE_IN_TIMELINE, layer->useInTimeline());
-    }
+    element.setAttribute(ONION_SKIN_ENABLED, layer->onionSkinEnabled());
+    element.setAttribute(VISIBLE_IN_TIMELINE, layer->useInTimeline());
 
     return element;
 }

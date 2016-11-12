@@ -101,7 +101,6 @@ public:
             cacheThumbnail(w, h, oversample, thumbnail);
         }
 
-        Q_ASSERT(!thumbnail.isNull() || m_paintDevice->extent().isEmpty());
         return thumbnail;
     }
 

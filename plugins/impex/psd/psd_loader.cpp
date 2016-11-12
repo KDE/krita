@@ -358,7 +358,7 @@ KisImageBuilder_Result PSDLoader::buildImage(QIODevice *io)
 }
 
 
-KisImageWSP PSDLoader::image()
+KisImageSP PSDLoader::image()
 {
     return m_image;
 }

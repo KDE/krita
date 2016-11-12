@@ -87,7 +87,7 @@ KisImportExportFilter::ConversionStatus KisBrushImport::convert(KisDocument *doc
         colorSpace = KoColorSpaceRegistry::instance()->colorSpace(GrayAColorModelID.id(), Integer8BitsColorDepthID.id(), "");
     }
 
-    KisImageWSP image = new KisImage(document->createUndoStore(), brush->width(), brush->height(), colorSpace, brush->name());
+    KisImageSP image = new KisImage(document->createUndoStore(), brush->width(), brush->height(), colorSpace, brush->name());
     image->setProperty("brushspacing", brush->spacing());
 
     KisImagePipeBrush *pipeBrush = dynamic_cast<KisImagePipeBrush*>(brush);

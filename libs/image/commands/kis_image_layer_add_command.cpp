@@ -57,24 +57,32 @@ KisImageLayerAddCommand::KisImageLayerAddCommand(KisImageWSP image,
 
 void KisImageLayerAddCommand::redo()
 {
+    KisImageSP image = m_image.toStrongRef();
+    if (!image) {
+        return;
+    }
     if (m_aboveThis || m_index == quint32(-1)) {
-        m_image->addNode(m_layer, m_parent, m_aboveThis);
+        image->addNode(m_layer, m_parent, m_aboveThis);
     } else {
-        m_image->addNode(m_layer, m_parent, m_index);
+        image->addNode(m_layer, m_parent, m_index);
     }
 
     if (m_doRedoUpdates) {
-        m_layer->setDirty(m_image->bounds());
+        m_layer->setDirty(image->bounds());
     }
 }
 
 void KisImageLayerAddCommand::undo()
 {
+    KisImageSP image = m_image.toStrongRef();
+    if (!image) {
+        return;
+    }
     if (m_doUndoUpdates) {
-        UpdateTarget target(m_image, m_layer, m_image->bounds());
-        m_image->removeNode(m_layer);
+        UpdateTarget target(image, m_layer, image->bounds());
+        image->removeNode(m_layer);
         target.update();
     } else {
-        m_image->removeNode(m_layer);
+        image->removeNode(m_layer);
     }
 }

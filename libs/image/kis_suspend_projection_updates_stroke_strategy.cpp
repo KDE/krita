@@ -211,16 +211,21 @@ void KisSuspendProjectionUpdatesStrokeStrategy::doStrokeCallback(KisStrokeJobDat
     Private::UpdatesBarrierData *barrierData = dynamic_cast<Private::UpdatesBarrierData*>(data);
     Private::IssueCanvasUpdatesData *canvasUpdates = dynamic_cast<Private::IssueCanvasUpdatesData*>(data);
 
+    KisImageSP image = m_d->image.toStrongRef();
+    if (!image) {
+        return;
+    }
+
     if (suspendData) {
-        m_d->image->setProjectionUpdatesFilter(
+        image->setProjectionUpdatesFilter(
             KisProjectionUpdatesFilterSP(new Private::SuspendLod0Updates()));
     } else if (resumeData) {
-        m_d->image->disableUIUpdates();
+        image->disableUIUpdates();
         resumeAndIssueUpdates(false);
     } else if (barrierData) {
-        m_d->image->enableUIUpdates();
+        image->enableUIUpdates();
     } else if (canvasUpdates) {
-        m_d->image->notifyProjectionUpdated(canvasUpdates->updateRect);
+        image->notifyProjectionUpdated(canvasUpdates->updateRect);
     }
 }
 
@@ -252,8 +257,13 @@ QList<KisStrokeJobData*> KisSuspendProjectionUpdatesStrokeStrategy::createResume
 
 void KisSuspendProjectionUpdatesStrokeStrategy::resumeAndIssueUpdates(bool dropUpdates)
 {
+    KisImageSP image = m_d->image.toStrongRef();
+    if (!image) {
+        return;
+    }
+
     KisProjectionUpdatesFilterSP filter =
-        m_d->image->projectionUpdatesFilter();
+        image->projectionUpdatesFilter();
 
     if (!filter) return;
 
@@ -261,16 +271,21 @@ void KisSuspendProjectionUpdatesStrokeStrategy::resumeAndIssueUpdates(bool dropU
         dynamic_cast<Private::SuspendLod0Updates*>(filter.data());
 
     if (localFilter) {
-        m_d->image->setProjectionUpdatesFilter(KisProjectionUpdatesFilterSP());
+        image->setProjectionUpdatesFilter(KisProjectionUpdatesFilterSP());
 
         if (!dropUpdates) {
-            localFilter->notifyUpdates(m_d->image.data());
+            localFilter->notifyUpdates(image.data());
         }
     }
 }
 
 void KisSuspendProjectionUpdatesStrokeStrategy::cancelStrokeCallback()
 {
+    KisImageSP image = m_d->image.toStrongRef();
+    if (!image) {
+        return;
+    }
+
     /**
      * We shouldn't emit any ad-hoc updates when cancelling the
      * stroke.  It generates weird temporary holes on the canvas,
@@ -282,6 +297,6 @@ void KisSuspendProjectionUpdatesStrokeStrategy::cancelStrokeCallback()
 
     if (!m_d->suspend) {
         // FIXME: optimize
-        m_d->image->refreshGraphAsync();
+        image->refreshGraphAsync();
     }
 }

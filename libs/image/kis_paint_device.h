@@ -88,7 +88,7 @@ public:
      * @param defaultBounds boundaries of the device in case it is empty
      * @param name for debugging purposes
      */
-    KisPaintDevice(KisNodeWSP parent, const KoColorSpace * colorSpace, KisDefaultBoundsBaseSP defaultBounds = 0, const QString& name = QString());
+    KisPaintDevice(KisNodeWSP parent, const KoColorSpace * colorSpace, KisDefaultBoundsBaseSP defaultBounds = KisDefaultBoundsBaseSP(), const QString& name = QString());
 
     /**
      * Creates a copy of this device.

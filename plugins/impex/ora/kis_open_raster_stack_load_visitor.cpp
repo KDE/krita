@@ -42,7 +42,7 @@
 #include "kis_open_raster_load_context.h"
 
 struct KisOpenRasterStackLoadVisitor::Private {
-    KisImageWSP image;
+    KisImageSP image;
     vKisNodeSP activeNodes;
     KisUndoStore* undoStore;
     KisOpenRasterLoadContext* loadContext;
@@ -62,7 +62,7 @@ KisOpenRasterStackLoadVisitor::~KisOpenRasterStackLoadVisitor()
     delete d;
 }
 
-KisImageWSP KisOpenRasterStackLoadVisitor::image()
+KisImageSP KisOpenRasterStackLoadVisitor::image()
 {
     return d->image;
 }
@@ -218,7 +218,7 @@ void KisOpenRasterStackLoadVisitor::loadGroupLayer(const QDomElement& elem, KisG
                 if (!filename.isNull()) {
                     double opacity = 1.0;
                     opacity = KisDomUtils::toDouble(subelem.attribute("opacity", "1.0"));
-                    KisImageWSP pngImage = d->loadContext->loadDeviceData(filename);
+                    KisImageSP pngImage = d->loadContext->loadDeviceData(filename);
                     if (pngImage) {
                         // If ORA doesn't have resolution info, load the default value(75 ppi) else fetch from stack.xml
                         d->image->setResolution(d->xRes, d->yRes);

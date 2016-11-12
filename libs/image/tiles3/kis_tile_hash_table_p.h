@@ -52,14 +52,14 @@ KisTileHashTableTraits<T>::KisTileHashTableTraits(const KisTileHashTableTraits<T
 
 
     TileTypeSP foreignTile;
-    TileType* nativeTile;
-    TileType* nativeTileHead;
+    TileTypeSP nativeTile;
+    TileTypeSP nativeTileHead;
     for (qint32 i = 0; i < TABLE_SIZE; i++) {
         nativeTileHead = 0;
 
         foreignTile = ht.m_hashTable[i];
         while (foreignTile) {
-            nativeTile = new TileType(*foreignTile, m_mementoManager);
+            nativeTile = TileTypeSP(new TileType(*foreignTile, m_mementoManager));
             nativeTile->setNext(nativeTileHead);
             nativeTileHead = nativeTile;
 
@@ -100,7 +100,7 @@ KisTileHashTableTraits<T>::getTile(qint32 col, qint32 row)
         }
     }
 
-    return 0;
+    return TileTypeSP();
 }
 
 template<class T>
@@ -125,7 +125,7 @@ KisTileHashTableTraits<T>::unlinkTile(qint32 col, qint32 row)
 {
     qint32 idx = calculateHash(col, row);
     TileTypeSP tile = m_hashTable[idx];
-    TileTypeSP prevTile = 0;
+    TileTypeSP prevTile;
 
     for (; tile; tile = tile->next()) {
         if (tile->col() == col &&
@@ -142,9 +142,9 @@ KisTileHashTableTraits<T>::unlinkTile(qint32 col, qint32 row)
              * we need to disconnects the tile from memento manager
              * explicitly
              */
-            tile->setNext(0);
+            tile->setNext(TileTypeSP());
             tile->notifyDead();
-            tile = 0;
+            tile = TileTypeSP();
 
             m_numTiles--;
             return tile;
@@ -152,7 +152,7 @@ KisTileHashTableTraits<T>::unlinkTile(qint32 col, qint32 row)
         prevTile = tile;
     }
 
-    return 0;
+    return TileTypeSP();
 }
 
 template<class T>
@@ -255,7 +255,7 @@ template<class T>
 void KisTileHashTableTraits<T>::clear()
 {
     QWriteLocker locker(&m_lock);
-    TileTypeSP tile = 0;
+    TileTypeSP tile = TileTypeSP();
     qint32 i;
 
     for (i = 0; i < TABLE_SIZE; i++) {
@@ -269,7 +269,7 @@ void KisTileHashTableTraits<T>::clear()
              * About disconnection of tiles see a comment in unlinkTile()
              */
 
-            tmp->setNext(0);
+            tmp->setNext(TileTypeSP());
             tmp->notifyDead();
             tmp = 0;
 

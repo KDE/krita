@@ -1,5 +1,6 @@
 /*  This file is part of the KDE project
     Copyright (c) 2005 Boudewijn Rempt <boud@valdyas.org>
+    Copyright (c) 2016 L. E. Segovia <leo.segovia@siggraph.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -59,13 +60,15 @@ public:
         PSP_PAL,            // PaintShop Pro
         ACO,                // Photoshop Swatches
         XML,                // XML palette (Scribus)
-        KPL                 // KoColor-based XML palette
+        KPL,                // KoColor-based XML palette
+        SBZ                 // SwatchBooker
     };
 
 
     /**
      * Load a color set from a file. This can be a Gimp
-     * palette, a RIFF palette or a Photoshop palette.
+     * palette, a RIFF palette, a Photoshop palette,
+     * a Scribus palette or a SwatchBooker palette.
      */
     explicit KoColorSet(const QString &filename);
 
@@ -205,6 +208,7 @@ private:
     bool loadPsp();
     bool loadAco();
     bool loadXml();
+    bool loadSbz();
 
     bool saveKpl(QIODevice *dev) const;
     bool loadKpl();

@@ -1703,6 +1703,19 @@ void KisConfig::setStabilizerSampleSize(int value)
     m_cfg.writeEntry("stabilizerSampleSize", value);
 }
 
+int KisConfig::stabilizerDelayedPaintInterval(bool defaultValue) const
+{
+    const int defaultInterval = 20;
+
+    return defaultValue ?
+        defaultInterval : m_cfg.readEntry("stabilizerDelayedPaintInterval", defaultInterval);
+}
+
+void KisConfig::setStabilizerDelayedPaintInterval(int value)
+{
+    m_cfg.writeEntry("stabilizerDelayedPaintInterval", value);
+}
+
 QString KisConfig::customFFMpegPath(bool defaultValue) const
 {
     return defaultValue ? QString() : m_cfg.readEntry("ffmpegExecutablePath", QString());

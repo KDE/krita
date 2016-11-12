@@ -140,9 +140,6 @@ typedef KisWeakSharedPtr<KisSelection> KisSelectionWSP;
 class KisSelectionComponent;
 typedef KisSharedPtr<KisSelectionComponent> KisSelectionComponentSP;
 
-class KisBackground;
-typedef KisSharedPtr<KisBackground> KisBackgroundSP;
-
 class KisSelectionMask;
 typedef KisSharedPtr<KisSelectionMask> KisSelectionMaskSP;
 

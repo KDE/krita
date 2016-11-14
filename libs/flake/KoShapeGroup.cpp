@@ -91,7 +91,12 @@ public:
     {
     }
 
+    mutable QRectF savedOutlineRect;
     mutable bool sizeCached;
+
+    void tryUpdateCachedSize() const;
+
+    Q_DECLARE_PUBLIC(KoShapeGroup)
 };
 
 KoShapeGroup::KoShapeGroup()
@@ -116,24 +121,38 @@ bool KoShapeGroup::hitTest(const QPointF &position) const
     return false;
 }
 
-QSizeF KoShapeGroup::size() const
+void KoShapeGroupPrivate::tryUpdateCachedSize() const
 {
-    Q_D(const KoShapeGroup);
-    //debugFlake << "size" << d->size;
-    if (!d->sizeCached) {
+    Q_Q(const KoShapeGroup);
+
+    if (!sizeCached) {
         QRectF bound;
-        Q_FOREACH (KoShape *shape, shapes()) {
+        Q_FOREACH (KoShape *shape, q->shapes()) {
             if (bound.isEmpty())
                 bound = shape->transformation().mapRect(shape->outlineRect());
             else
                 bound |= shape->transformation().mapRect(shape->outlineRect());
         }
-        d->size = bound.size();
-        d->sizeCached = true;
-        debugFlake << "recalculated size" << d->size;
+        savedOutlineRect = bound;
+        size = bound.size();
+        sizeCached = true;
     }
+}
 
+QSizeF KoShapeGroup::size() const
+{
+    Q_D(const KoShapeGroup);
+
+    d->tryUpdateCachedSize();
     return d->size;
+}
+
+QRectF KoShapeGroup::outlineRect() const
+{
+    Q_D(const KoShapeGroup);
+
+    d->tryUpdateCachedSize();
+    return d->savedOutlineRect;
 }
 
 QRectF KoShapeGroup::boundingRect() const

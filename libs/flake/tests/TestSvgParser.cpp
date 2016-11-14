@@ -2105,7 +2105,7 @@ void TestSvgParser::testKoClipPathRendering()
 
     QScopedPointer<KoPathShape> clipShape1(KoPathShape::createShapeFromPainterPath(clipPath1));
     KoClipData *koClipData1 = new KoClipData(clipShape1.take());
-    KoClipPath *koClipPath1 = new KoClipPath(shape1.data(), koClipData1);
+    KoClipPath *koClipPath1 = new KoClipPath(koClipData1, KoClipPath::UserSpaceOnUse);
     koClipPath1->setClipRule(Qt::WindingFill);
     shape1->setClipPath(koClipPath1);
 
@@ -2113,13 +2113,13 @@ void TestSvgParser::testKoClipPathRendering()
     {
         QList<KoShape*> shapes({shape1.take(), shape2.take()});
 
-        KoShapeGroupCommand cmd(group.data(), shapes, false, true);
+        KoShapeGroupCommand cmd(group.data(), shapes, false, true, false);
         cmd.redo();
     }
 
     QScopedPointer<KoPathShape> clipShape2(KoPathShape::createShapeFromPainterPath(clipPath2));
     KoClipData *koClipData2 = new KoClipData(clipShape2.take());
-    KoClipPath *koClipPath2 = new KoClipPath(group.data(), koClipData2);
+    KoClipPath *koClipPath2 = new KoClipPath(koClipData2, KoClipPath::UserSpaceOnUse);
     koClipPath2->setClipRule(Qt::WindingFill);
     group->setClipPath(koClipPath2);
 
@@ -2159,7 +2159,7 @@ void TestSvgParser::testKoClipPathRelativeRendering()
     {
         QList<KoShape*> shapes({shape1.take(), shape2.take()});
 
-        KoShapeGroupCommand cmd(group.data(), shapes, false, true);
+        KoShapeGroupCommand cmd(group.data(), shapes, false, true, false);
         cmd.redo();
     }
 
@@ -2169,10 +2169,7 @@ void TestSvgParser::testKoClipPathRelativeRendering()
     koClipPath2->setClipRule(Qt::WindingFill);
     group->setClipPath(koClipPath2);
 
-    // LEAK!!!
-    Q_UNUSED(group.take());
-
-    //SvgRenderTester::testRender(group.take(), "load", "relative_clip_render_test", QSize(30,30));
+    SvgRenderTester::testRender(group.take(), "load", "relative_clip_render_test", QSize(30,30));
 }
 
 QTEST_MAIN(TestSvgParser)

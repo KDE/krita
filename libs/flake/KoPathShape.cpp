@@ -445,6 +445,11 @@ void KoPathShape::paintPoints(QPainter &painter, const KoViewConverter &converte
     }
 }
 
+QRectF KoPathShape::outlineRect() const
+{
+    return outline().boundingRect();
+}
+
 QPainterPath KoPathShape::outline() const
 {
     QPainterPath path;
@@ -550,7 +555,7 @@ QSizeF KoPathShape::size() const
 {
     // don't call boundingRect here as it uses absoluteTransformation
     // which itself uses size() -> leads to infinite reccursion
-    return outline().boundingRect().size();
+    return outlineRect().size();
 }
 
 void KoPathShape::setSize(const QSizeF &newSize)
@@ -1467,7 +1472,7 @@ KoPathShape * KoPathShape::createShapeFromPainterPath(const QPainterPath &path)
         }
     }
 
-    shape->normalize();
+    //shape->normalize();
     return shape;
 }
 

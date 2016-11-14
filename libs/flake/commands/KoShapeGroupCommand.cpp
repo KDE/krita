@@ -40,18 +40,20 @@ KoShapeGroupCommand * KoShapeGroupCommand::createCommand(KoShapeGroup *container
     return new KoShapeGroupCommand(container, orderedShapes, parent);
 }
 
-KoShapeGroupCommandPrivate::KoShapeGroupCommandPrivate(KoShapeContainer *c, const QList<KoShape *> &s, const QList<bool> &clip, const QList<bool> &it)
+KoShapeGroupCommandPrivate::KoShapeGroupCommandPrivate(KoShapeContainer *c, const QList<KoShape *> &s, const QList<bool> &clip, const QList<bool> &it, bool _shouldNormalize)
     : shapes(s),
     clipped(clip),
     inheritTransform(it),
+    shouldNormalize(_shouldNormalize),
     container(c)
+
 {
 }
 
 
 KoShapeGroupCommand::KoShapeGroupCommand(KoShapeContainer *container, const QList<KoShape *> &shapes, const QList<bool> &clipped, const QList<bool> &inheritTransform, KUndo2Command *parent)
     : KUndo2Command(parent),
-    d(new KoShapeGroupCommandPrivate(container,shapes, clipped, inheritTransform))
+    d(new KoShapeGroupCommandPrivate(container,shapes, clipped, inheritTransform, true))
 {
     Q_ASSERT(d->clipped.count() == d->shapes.count());
     Q_ASSERT(d->inheritTransform.count() == d->shapes.count());
@@ -60,7 +62,7 @@ KoShapeGroupCommand::KoShapeGroupCommand(KoShapeContainer *container, const QLis
 
 KoShapeGroupCommand::KoShapeGroupCommand(KoShapeGroup *container, const QList<KoShape *> &shapes, KUndo2Command *parent)
     : KUndo2Command(parent),
-    d(new KoShapeGroupCommandPrivate(container,shapes))
+    d(new KoShapeGroupCommandPrivate(container,shapes, QList<bool>(), QList<bool>(), true))
 {
     for (int i = 0; i < shapes.count(); ++i) {
         d->clipped.append(false);
@@ -70,9 +72,9 @@ KoShapeGroupCommand::KoShapeGroupCommand(KoShapeGroup *container, const QList<Ko
 }
 
 KoShapeGroupCommand::KoShapeGroupCommand(KoShapeContainer *container, const QList<KoShape *> &shapes,
-                                         bool clipped, bool inheritTransform, KUndo2Command *parent)
+                                         bool clipped, bool inheritTransform, bool shouldNormalize, KUndo2Command *parent)
     : KUndo2Command(parent),
-      d(new KoShapeGroupCommandPrivate(container,shapes))
+      d(new KoShapeGroupCommandPrivate(container,shapes, QList<bool>(), QList<bool>(), shouldNormalize))
 {
     for (int i = 0; i < shapes.count(); ++i) {
         d->clipped.append(clipped);
@@ -112,7 +114,7 @@ void KoShapeGroupCommand::redo()
 {
     KUndo2Command::redo();
 
-    if (dynamic_cast<KoShapeGroup*>(d->container)) {
+    if (d->shouldNormalize &&  dynamic_cast<KoShapeGroup*>(d->container)) {
         QRectF bound = d->containerBoundingRect();
         QPointF oldGroupPosition = d->container->absolutePosition(KoFlake::TopLeftCorner);
         d->container->setAbsolutePosition(bound.topLeft(), KoFlake::TopLeftCorner);
@@ -187,7 +189,7 @@ void KoShapeGroupCommand::undo()
         shape->setZIndex(d->oldZIndex[i]);
     }
 
-    if (dynamic_cast<KoShapeGroup*>(d->container)) {
+    if (d->shouldNormalize && dynamic_cast<KoShapeGroup*>(d->container)) {
         QPointF oldGroupPosition = d->container->absolutePosition(KoFlake::TopLeftCorner);
         if (d->container->shapeCount() > 0) {
             bool boundingRectInitialized = false;

@@ -71,7 +71,7 @@ public:
      * @param parent the parent command used for macro commands
      */
     KoShapeGroupCommand(KoShapeContainer *container, const QList<KoShape *> &shapes,
-            bool clipped, bool inheritTransform, KUndo2Command *parent = 0);
+            bool clipped, bool inheritTransform, bool shouldNormalize, KUndo2Command *parent = 0);
 
     /**
      * Command to group a set of shapes into a predefined container.

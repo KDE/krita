@@ -88,12 +88,15 @@ public:
     /// reimplemented
     virtual void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext);
     virtual void paintPoints(QPainter &painter, const KoViewConverter &converter, int handleRadius);
+
     /// reimplemented
-    virtual QPainterPath outline() const;
+    QRectF outlineRect() const override;
     /// reimplemented
-    virtual QRectF boundingRect() const;
+    QPainterPath outline() const override;
     /// reimplemented
-    virtual QSizeF size() const;
+    QRectF boundingRect() const override;
+    /// reimplemented
+    QSizeF size() const override;
 
     QPainterPath pathStroke(const QPen &pen) const;
     /**

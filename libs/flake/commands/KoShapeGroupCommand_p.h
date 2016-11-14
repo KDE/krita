@@ -31,13 +31,14 @@ class QRectF;
 class KoShapeGroupCommandPrivate
 {
 public:
-    KoShapeGroupCommandPrivate(KoShapeContainer *container, const QList<KoShape *> &shapes, const QList<bool> &clipped = QList<bool>(), const QList<bool> &inheritTransform = QList<bool>());
+    KoShapeGroupCommandPrivate(KoShapeContainer *container, const QList<KoShape *> &shapes, const QList<bool> &clipped, const QList<bool> &inheritTransform, bool _shouldNormalize);
     void init(KUndo2Command *q);
     QRectF containerBoundingRect();
 
     QList<KoShape*> shapes; ///<list of shapes to be grouped
     QList<bool> clipped; ///< list of booleans to specify the shape of the same index to be clipped
     QList<bool> inheritTransform; ///< list of booleans to specify the shape of the same index to inherit transform
+    bool shouldNormalize; ///< Adjust the coordinate system of the group to its origin into the topleft of the group
     KoShapeContainer *container; ///< the container where the grouping should be for.
     QList<KoShapeContainer*> oldParents; ///< the old parents of the shapes
     QList<bool> oldClipped; ///< if the shape was clipped in the old parent

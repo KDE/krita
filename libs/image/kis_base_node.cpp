@@ -32,28 +32,31 @@ struct Q_DECL_HIDDEN KisBaseNode::Private
 {
     QString compositeOp;
     KoProperties properties;
-    bool systemLocked;
     KisBaseNode::Property hack_visible; //HACK
     QUuid id;
+    QMap<QString, KisKeyframeChannel*> keyframeChannels;
+    QScopedPointer<KisScalarKeyframeChannel> opacityChannel;
+
+    bool systemLocked;
     bool collapsed;
     bool supportsLodMoves;
-
-    QMap<QString, KisKeyframeChannel*> keyframeChannels;
     bool animated;
     bool useInTimeline;
 
-    QScopedPointer<KisScalarKeyframeChannel> opacityChannel;
-
     Private()
-        : animated(false)
+        : id(QUuid::createUuid())
+        , systemLocked(false)
+        , collapsed(false)
+        , supportsLodMoves(false)
+        , animated(false)
         , useInTimeline(false)
     {
     }
 
     Private(const Private &rhs)
         : compositeOp(rhs.compositeOp),
-          systemLocked(false),
           id(QUuid::createUuid()),
+          systemLocked(false),
           collapsed(rhs.collapsed),
           supportsLodMoves(rhs.supportsLodMoves),
           animated(rhs.animated),
@@ -84,10 +87,7 @@ KisBaseNode::KisBaseNode()
     setCollapsed(false);
     setSupportsLodMoves(true);
 
-    setSystemLocked(false);
     m_d->compositeOp = COMPOSITE_OVER;
-
-    setUuid(QUuid::createUuid());
 }
 
 

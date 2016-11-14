@@ -58,27 +58,6 @@ class KRITAWIDGETUTILS_EXPORT KisActionRegistry : public QObject
 public:
     static KisActionRegistry *instance();
 
-
-    /**
-     * Get shortcut for an action
-     */
-    QList<QKeySequence> getPreferredShortcut(const QString &name);
-
-    /**
-     * Get shortcut for an action
-     */
-    QList<QKeySequence> getDefaultShortcut(const QString &name);
-
-    /**
-     * Get custom shortcut for an action
-     */
-    QList<QKeySequence> getCustomShortcut(const QString &name);
-
-    /**
-     * Get category name
-     */
-    QString getCategory(const QString &name);
-
     /**
      * @return value @p property for an action @p name.
      *
@@ -109,11 +88,6 @@ public:
 
 
     /**
-     * @return list of actions with data available.
-     */
-    QStringList allActions();
-
-    /**
      * Setup the shortcut configuration widget.
      */
     void setupDialog(KisShortcutsDialog *dlg);
@@ -130,36 +104,34 @@ public:
      */
     void loadCustomShortcuts(const QString &path = QString());
 
-
-    /**
-     * Write custom shortcuts to a specific file
-     */
-    void writeCustomShortcuts(KConfigBase *config) const;
-
-
     /**
      * Call after settings are changed.
      */
     void notifySettingsUpdated();
+
+    // If config == 0, reload defaults
+    void applyShortcutScheme(const KConfigBase *config = 0);
 
     /**
      * Constructor.  Please don't touch!
      */
     KisActionRegistry();
 
+
+    /**
+     * @brief loadShortcutScheme
+     * @param schemeName
+     */
+    void loadShortcutScheme(const QString &schemeName);
+
     // Undocumented
     void updateShortcut(const QString &name, QAction *ac);
-    KActionCollection * getDefaultCollection();
-
-
-    void loadShortcutScheme(const QString &schemeName);
-    // If config == 0, reload defaults
-    void applyShortcutScheme(const KConfigBase *config = 0);
 
 Q_SIGNALS:
     void shortcutsUpdated();
 
 private:
+
     class Private;
     Private * const d;
 };

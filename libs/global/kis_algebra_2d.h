@@ -29,6 +29,7 @@
 #include <functional>
 
 class QPainterPath;
+class QTransform;
 
 namespace KisAlgebra2D {
 
@@ -381,6 +382,9 @@ int quadraticEquation(qreal a, qreal b, qreal c, qreal *x1, qreal *x2);
 KRITAGLOBAL_EXPORT
 QVector<QPointF> intersectTwoCircles(const QPointF &c1, qreal r1,
                                      const QPointF &c2, qreal r2);
+
+KRITAGLOBAL_EXPORT
+QTransform mapToRect(const QRectF &rect);
 
 }
 

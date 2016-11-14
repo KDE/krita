@@ -18,6 +18,7 @@
 
 #include "kis_algebra_2d.h"
 
+#include <QTransform>
 #include <QPainterPath>
 #include <kis_debug.h>
 
@@ -453,6 +454,13 @@ QVector<QPointF> intersectTwoCircles(const QPointF &center1, qreal r1,
     }
 
     return points;
+}
+
+QTransform mapToRect(const QRectF &rect)
+{
+    return
+        QTransform(rect.width(), 0, 0, rect.height(),
+                   rect.x(), rect.y());
 }
 
 }

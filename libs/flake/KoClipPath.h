@@ -61,6 +61,21 @@ private:
 class KRITAFLAKE_EXPORT KoClipPath
 {
 public:
+    enum CoordinateSystem {
+        UserSpaceOnUse,
+        ObjectBoundingBox
+    };
+
+public:
+
+    /**
+     * Create a new shape clipping using the given clip data
+     * @param clipData shared clipping data containing the clip paths
+     * @param coordinates shows if ObjectBoundingBox or UserSpaceOnUse coordinate
+     *                    system is used.
+     */
+    KoClipPath(KoClipData *clipData, CoordinateSystem coordinates);
+
     /**
      * Create a new shape clipping using the given clip data
      * @param clippedShape the shape to clip
@@ -69,6 +84,8 @@ public:
     KoClipPath(KoShape *clippedShape, KoClipData *clipData);
 
     ~KoClipPath();
+
+    CoordinateSystem coordinates() const;
 
     /// Sets the clip rule to be used for the clip path
     void setClipRule(Qt::FillRule clipRule);

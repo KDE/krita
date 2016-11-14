@@ -25,6 +25,7 @@
 #include <QTransform>
 
 #include <kis_debug.h>
+#include <kis_algebra_2d.h>
 
 
 struct KoBakedShapeRenderer {
@@ -47,12 +48,8 @@ struct KoBakedShapeRenderer {
         QTransform relativeToBakedShape;
 
         if (referenceIsObb || contentIsObb) {
-            m_relativeToShape =
-                QTransform(dstShapeBoundingRect.width(), 0, 0, dstShapeBoundingRect.height(),
-                           dstShapeBoundingRect.x(), dstShapeBoundingRect.y());
-            relativeToBakedShape =
-                QTransform(bakedShapeBoundingRect.width(), 0, 0, bakedShapeBoundingRect.height(),
-                           bakedShapeBoundingRect.x(), bakedShapeBoundingRect.y());
+            m_relativeToShape = KisAlgebra2D::mapToRect(dstShapeBoundingRect);
+            relativeToBakedShape = KisAlgebra2D::mapToRect(bakedShapeBoundingRect);
         }
 
 

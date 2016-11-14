@@ -26,18 +26,21 @@
 #include <QPainter>
 #include <QVarLengthArray>
 
+#include <kis_algebra_2d.h>
+
+
 QTransform scaleToPercent(const QSizeF &size)
 {
     const qreal w = qMax(static_cast<qreal>(1e-5), size.width());
     const qreal h = qMax(static_cast<qreal>(1e-5), size.height());
-    return QTransform().scale(100/w, 100/h);
+    return QTransform().scale(1.0/w, 1.0/h);
 }
 
 QTransform scaleFromPercent(const QSizeF &size)
 {
     const qreal w = qMax(static_cast<qreal>(1e-5), size.width());
     const qreal h = qMax(static_cast<qreal>(1e-5), size.height());
-    return QTransform().scale(w/100, h/100);
+    return QTransform().scale(w/1.0, h/1.0);
 }
 
 class Q_DECL_HIDDEN KoClipData::Private
@@ -120,11 +123,38 @@ public:
         }
     }
 
+    void compileClipPath()
+    {
+        QList<KoPathShape*> clipShapes = clipData->clipPathShapes();
+        if (clipShapes.isEmpty())
+            return;
+
+        clipPath = QPainterPath();
+
+        Q_FOREACH (KoPathShape *path, clipShapes) {
+            if (!path) continue;
+
+            QTransform t = path->absoluteTransformation(0);
+            clipPath.addPath(t.map(path->outline()));
+        }
+
+        clipPath.setFillRule(clipRule);
+    }
+
     QExplicitlySharedDataPointer<KoClipData> clipData; ///< the clip path data
     QPainterPath clipPath; ///< the compiled clip path in shape coordinates of the clipped shape
+    Qt::FillRule clipRule = Qt::OddEvenFill;
+    CoordinateSystem coordinates = ObjectBoundingBox;
     QTransform initialTransformToShape; ///< initial transformation to shape coordinates of the clipped shape
     QSizeF initialShapeSize; ///< initial size of clipped shape
 };
+
+KoClipPath::KoClipPath(KoClipData *clipData, KoClipPath::CoordinateSystem coordinates)
+    : d( new Private(clipData) )
+{
+    d->coordinates = coordinates;
+    d->compileClipPath();
+}
 
 KoClipPath::KoClipPath(KoShape *clippedShape, KoClipData *clipData)
         : d( new Private(clipData) )
@@ -139,12 +169,18 @@ KoClipPath::~KoClipPath()
 
 void KoClipPath::setClipRule(Qt::FillRule clipRule)
 {
+    d->clipRule = clipRule;
     d->clipPath.setFillRule(clipRule);
 }
 
 Qt::FillRule KoClipPath::clipRule() const
 {
-    return d->clipPath.fillRule();
+    return d->clipRule;
+}
+
+KoClipPath::CoordinateSystem KoClipPath::coordinates() const
+{
+    return d->coordinates;
 }
 
 void KoClipPath::applyClipping(KoShape *clippedShape, QPainter &painter, const KoViewConverter &converter)
@@ -153,11 +189,25 @@ void KoClipPath::applyClipping(KoShape *clippedShape, QPainter &painter, const K
     KoShape *shape = clippedShape;
     while (shape) {
         if (shape->clipPath()) {
-            QTransform m = scaleFromPercent(shape->outline().boundingRect().size()) * shape->absoluteTransformation(0);
-            if (clipPath.isEmpty())
-                clipPath = m.map(shape->clipPath()->path());
-            else
-                clipPath &= m.map(shape->clipPath()->path());
+            QPainterPath path = shape->clipPath()->path();
+
+            QTransform t;
+
+            if (shape->clipPath()->coordinates() == ObjectBoundingBox) {
+                const QRectF shapeLocalBoundingRect = shape->outline().boundingRect();
+                t = KisAlgebra2D::mapToRect(shapeLocalBoundingRect) * shape->absoluteTransformation(0);
+
+            } else {
+                t = shape->absoluteTransformation(0);
+            }
+
+            path = t.map(path);
+
+            if (clipPath.isEmpty()) {
+                clipPath = path;
+            } else {
+                clipPath &= path;
+            }
         }
         shape = shape->parent();
     }

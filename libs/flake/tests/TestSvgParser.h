@@ -119,6 +119,7 @@ private Q_SLOTS:
     void testRenderPattern_r_Obb_c_View_Rotated();
 
     void testKoClipPathRendering();
+    void testKoClipPathRelativeRendering();
 };
 
 #endif // TESTSVGPARSER_H

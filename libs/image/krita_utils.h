@@ -41,14 +41,6 @@ namespace KritaUtils
     QVector<QRect> KRITAIMAGE_EXPORT splitRectIntoPatches(const QRect &rc, const QSize &patchSize);
     QVector<QRect> KRITAIMAGE_EXPORT splitRegionIntoPatches(const QRegion &region, const QSize &patchSize);
 
-    QVector<QPoint> KRITAIMAGE_EXPORT sampleRectWithPoints(const QRect &rect);
-    QVector<QPointF> KRITAIMAGE_EXPORT sampleRectWithPoints(const QRectF &rect);
-
-    QRect KRITAIMAGE_EXPORT approximateRectFromPoints(const QVector<QPoint> &points);
-    QRectF KRITAIMAGE_EXPORT approximateRectFromPoints(const QVector<QPointF> &points);
-
-    QRect KRITAIMAGE_EXPORT approximateRectWithPointTransform(const QRect &rect, std::function<QPointF(QPointF)> func);
-
     QRegion KRITAIMAGE_EXPORT splitTriangles(const QPointF &center,
                                              const QVector<QPointF> &points);
     QRegion KRITAIMAGE_EXPORT splitPath(const QPainterPath &path);

@@ -25,7 +25,8 @@
 #include <QPolygonF>
 #include <cmath>
 #include <kis_global.h>
-#include <kritaimage_export.h>
+#include <kritaglobal_export.h>
+#include <functional>
 
 class QPainterPath;
 
@@ -154,7 +155,7 @@ bool isInRange(T x, T a, T b) {
     return qAbs(x - a) <= length && qAbs(x - b) <= length;
 }
 
-void KRITAIMAGE_EXPORT adjustIfOnPolygonBoundary(const QPolygonF &poly, int polygonDirection, QPointF *pt);
+void KRITAGLOBAL_EXPORT adjustIfOnPolygonBoundary(const QPolygonF &poly, int polygonDirection, QPointF *pt);
 
 /**
  * Let \p pt, \p base1 are two vectors. \p base1 is uniformly scaled
@@ -162,9 +163,9 @@ void KRITAIMAGE_EXPORT adjustIfOnPolygonBoundary(const QPolygonF &poly, int poly
  * R. The function applies the same transformation to \pt and returns
  * the result.
  **/
-QPointF KRITAIMAGE_EXPORT transformAsBase(const QPointF &pt, const QPointF &base1, const QPointF &base2);
+QPointF KRITAGLOBAL_EXPORT transformAsBase(const QPointF &pt, const QPointF &base1, const QPointF &base2);
 
-qreal KRITAIMAGE_EXPORT angleBetweenVectors(const QPointF &v1, const QPointF &v2);
+qreal KRITAGLOBAL_EXPORT angleBetweenVectors(const QPointF &v1, const QPointF &v2);
 
 namespace Private {
     inline void resetEmptyRectangle(const QPoint &pt, QRect *rc) {
@@ -223,7 +224,7 @@ inline Point clampPoint(Point pt, const Rect &bounds)
     return pt;
 }
 
-QPainterPath KRITAIMAGE_EXPORT smallArrow();
+QPainterPath KRITAGLOBAL_EXPORT smallArrow();
 
 /**
  * Multiply width and height of \p rect by \p coeff keeping the
@@ -240,10 +241,10 @@ Rect blowRect(const Rect &rect, qreal coeff)
     return rect.adjusted(-w, -h, w, h);
 }
 
-QPoint KRITAIMAGE_EXPORT ensureInRect(QPoint pt, const QRect &bounds);
-QPointF KRITAIMAGE_EXPORT ensureInRect(QPointF pt, const QRectF &bounds);
+QPoint KRITAGLOBAL_EXPORT ensureInRect(QPoint pt, const QRect &bounds);
+QPointF KRITAGLOBAL_EXPORT ensureInRect(QPointF pt, const QRectF &bounds);
 
-QRect KRITAIMAGE_EXPORT ensureRectNotSmaller(QRect rc, const QSize &size);
+QRect KRITAGLOBAL_EXPORT ensureRectNotSmaller(QRect rc, const QSize &size);
 
 /**
  * Attempt to intersect a line to the area of the a rectangle.
@@ -255,7 +256,7 @@ QRect KRITAIMAGE_EXPORT ensureRectNotSmaller(QRect rc, const QSize &size);
  * @param area
  * @return true if successful
  */
-bool KRITAIMAGE_EXPORT intersectLineRect(QLineF &line, const QRect rect);
+bool KRITAGLOBAL_EXPORT intersectLineRect(QLineF &line, const QRect rect);
 
 
 template <class Point>
@@ -337,12 +338,20 @@ private:
     const qreal m_fadeCoeff;
 };
 
+QVector<QPoint> KRITAGLOBAL_EXPORT sampleRectWithPoints(const QRect &rect);
+QVector<QPointF> KRITAGLOBAL_EXPORT sampleRectWithPoints(const QRectF &rect);
+
+QRect KRITAGLOBAL_EXPORT approximateRectFromPoints(const QVector<QPoint> &points);
+QRectF KRITAGLOBAL_EXPORT approximateRectFromPoints(const QVector<QPointF> &points);
+
+QRect KRITAGLOBAL_EXPORT approximateRectWithPointTransform(const QRect &rect, std::function<QPointF(QPointF)> func);
+
 
 /**
  * Cuts off a portion of a rect \p rc defined by a half-plane \p p
  * \return the bounding rect of the resulting polygon
  */
-KRITAIMAGE_EXPORT
+KRITAGLOBAL_EXPORT
 QRectF cutOffRect(const QRectF &rc, const KisAlgebra2D::RightHalfPlane &p);
 
 
@@ -362,14 +371,14 @@ QRectF cutOffRect(const QRectF &rc, const KisAlgebra2D::RightHalfPlane &p);
  *                  solution --- x1 is filled with the result, 2
  *                  solutions --- x1 and x2 are filled.
  */
-KRITAIMAGE_EXPORT
+KRITAGLOBAL_EXPORT
 int quadraticEquation(qreal a, qreal b, qreal c, qreal *x1, qreal *x2);
 
 /**
  * Finds the points of intersections between two circles
  * \return the found circles, the result can have 0, 1 or 2 points
  */
-KRITAIMAGE_EXPORT
+KRITAGLOBAL_EXPORT
 QVector<QPointF> intersectTwoCircles(const QPointF &c1, qreal r1,
                                      const QPointF &c2, qreal r2);
 

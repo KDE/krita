@@ -472,6 +472,8 @@ SvgStyles SvgStyleParser::collectStyles(const KoXmlElement &e)
         }
     }
 
+    // FIXME: if 'inherit' we should just remove the property and use the one from the context!
+
     // replace keyword "inherit" for style values
     QMutableMapIterator<QString, QString> it(styleMap);
     while (it.hasNext()) {

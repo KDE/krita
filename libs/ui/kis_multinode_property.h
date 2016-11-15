@@ -285,7 +285,7 @@ struct ChannelFlagAdapter : public BaseAdapter {
     }
 private:
     static KisLayerSP toLayer(KisNodeSP node) {
-        return dynamic_cast<KisLayer*>(node.data());
+        return qobject_cast<KisLayer*>(node.data());
     }
 private:
     Property m_prop;

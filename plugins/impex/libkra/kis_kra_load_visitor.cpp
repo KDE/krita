@@ -258,7 +258,7 @@ bool KisKraLoadVisitor::visit(KisCloneLayer *layer)
     }
 
     KisNodeSP srcNode = layer->copyFromInfo().findNode(m_image->rootLayer());
-    KisLayerSP srcLayer = dynamic_cast<KisLayer*>(srcNode.data());
+    KisLayerSP srcLayer = qobject_cast<KisLayer*>(srcNode.data());
     Q_ASSERT(srcLayer);
 
     layer->setCopyFrom(srcLayer);
@@ -278,7 +278,7 @@ void KisKraLoadVisitor::initSelectionForMask(KisMask *mask)
         cloneLayer->accept(*this);
     }
 
-    KisLayer *parentLayer = dynamic_cast<KisLayer*>(mask->parent().data());
+    KisLayer *parentLayer = qobject_cast<KisLayer*>(mask->parent().data());
     // the KisKraLoader must have already set the parent for us
     Q_ASSERT(parentLayer);
     mask->initSelection(parentLayer);

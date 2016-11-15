@@ -529,7 +529,7 @@ KisLayerSP flattenLayerHelper(ContainerTest &p, KisLayerSP layer, bool nothingHa
     QList<QVariant> arguments = spy.takeFirst();
     KisNodeSP newNode = arguments.first().value<KisNodeSP>();
 
-    KisLayerSP newLayer = dynamic_cast<KisLayer*>(newNode.data());
+    KisLayerSP newLayer = qobject_cast<KisLayer*>(newNode.data());
     return newLayer;
 }
 
@@ -600,7 +600,7 @@ KisLayerSP mergeHelper(ContainerTest &p, KisLayerSP layer)
     //KisLayerUtils::mergeDown(p.image, layer, KisMetaData::MergeStrategyRegistry::instance()->get("Drop"));
     p.image->waitForDone();
 
-    KisLayerSP newLayer = dynamic_cast<KisLayer*>(parent->at(newIndex).data());
+    KisLayerSP newLayer = qobject_cast<KisLayer*>(parent->at(newIndex).data());
     return newLayer;
 }
 

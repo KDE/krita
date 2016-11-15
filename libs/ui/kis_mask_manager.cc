@@ -154,7 +154,7 @@ void KisMaskManager::createMaskCommon(KisMaskSP mask, KisNodeSP activeNode, KisP
     KisNodeSP above;
     adjustMaskPosition(mask, activeNode, avoidActiveNode, parent, above);
 
-    KisLayerSP parentLayer = dynamic_cast<KisLayer*>(parent.data());
+    KisLayerSP parentLayer = qobject_cast<KisLayer*>(parent.data());
     Q_ASSERT(parentLayer);
 
     if (!suppressSelection) {
@@ -251,7 +251,7 @@ void KisMaskManager::maskProperties()
     if (activeMask()->inherits("KisFilterMask")) {
         KisFilterMask *mask = static_cast<KisFilterMask*>(activeMask().data());
 
-        KisLayerSP layer = dynamic_cast<KisLayer*>(mask->parent().data());
+        KisLayerSP layer = qobject_cast<KisLayer*>(mask->parent().data());
         if (! layer)
             return;
 

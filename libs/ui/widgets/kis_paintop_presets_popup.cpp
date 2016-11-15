@@ -172,6 +172,11 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
     m_d->uiWdgPaintOpPresetSettings.detachWindowButton->setVisible(true);
 
 
+    m_d->uiWdgPaintOpPresetSettings.showPresetsButton->setText(i18n("Presets"));
+    m_d->uiWdgPaintOpPresetSettings.showPresetsButton->setCheckable(true);
+    m_d->uiWdgPaintOpPresetSettings.showPresetsButton->setChecked(false);  // use a config to load/save this state
+   slotSwitchShowPresets(false); // hide presets by default
+
 
     // Connections
 
@@ -188,6 +193,9 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
 
     connect(m_d->uiWdgPaintOpPresetSettings.showEditorButton, SIGNAL(clicked(bool)),
             this, SLOT(slotSwitchShowEditor(bool)));
+
+    connect(m_d->uiWdgPaintOpPresetSettings.showPresetsButton, SIGNAL(clicked(bool)), this, SLOT(slotSwitchShowPresets(bool)));
+
 
     connect(m_d->uiWdgPaintOpPresetSettings.detachWindowButton, SIGNAL(clicked(bool)),
             this, SLOT(switchDetached(bool)));
@@ -598,6 +606,10 @@ void KisPaintOpPresetsPopup::slotPinWindow(bool enabled)
 
 void KisPaintOpPresetsPopup::slotSwitchShowEditor(bool visible) {
    m_d->uiWdgPaintOpPresetSettings.brushEditorSettingsControls->setVisible(visible);
+}
+
+void KisPaintOpPresetsPopup::slotSwitchShowPresets(bool visible) {
+    m_d->uiWdgPaintOpPresetSettings.presetsContainer->setVisible(visible);
 }
 
 void KisPaintOpPresetsPopup::slotPaintOpChanged(int index) {

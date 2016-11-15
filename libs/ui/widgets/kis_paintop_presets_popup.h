@@ -100,7 +100,6 @@ Q_SIGNALS:
     void dirtyPresetToggled(bool value);
     void eraserBrushSizeToggled(bool value);
     void eraserBrushOpacityToggled(bool value);
-    
     void sizeChanged();
     void brushEditorShown();
 
@@ -113,6 +112,8 @@ private Q_SLOTS:
     void slotPaintOpChanged(int index);
     void slotFocusChanged(QWidget* object1, QWidget* object2);
     void slotApplicationStateChanged(Qt::ApplicationState);
+    void slotSwitchShowPresets(bool visible);
+
 
 
 private:

@@ -92,10 +92,10 @@ bool KisSaveGroupVisitor::visit(KisColorizeMask* ) {
 bool KisSaveGroupVisitor::visit(KisGroupLayer *layer)
 {
     if (layer == m_image->rootLayer()) {
-        KisLayerSP child = dynamic_cast<KisLayer*>(layer->firstChild().data());
+        KisLayerSP child = qobject_cast<KisLayer*>(layer->firstChild().data());
         while (child) {
             child->accept(*this);
-            child = dynamic_cast<KisLayer*>(child->nextSibling().data());
+            child = qobject_cast<KisLayer*>(child->nextSibling().data());
         }
 
     }

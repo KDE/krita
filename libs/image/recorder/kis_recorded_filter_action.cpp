@@ -96,7 +96,7 @@ void KisRecordedFilterAction::play(KisNodeSP node, const KisPlayInfo& _info, KoU
 {
     KisFilterConfigurationSP  kfc = d->configuration();
     KisPaintDeviceSP dev = node->paintDevice();
-    KisLayerSP layer = dynamic_cast<KisLayer*>(node.data());
+    KisLayerSP layer = qobject_cast<KisLayer*>(node.data());
     QRect r1 = dev->extent();
     KisTransaction transaction(kundo2_i18n("Filter: \"%1\"", d->filter->name()), dev);
 

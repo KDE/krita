@@ -82,7 +82,7 @@ namespace KisToolUtils {
     {
         KisNodeSP foundNode = 0;
         while (node) {
-            KisLayerSP layer = dynamic_cast<KisLayer*>(node.data());
+            KisLayerSP layer = qobject_cast<KisLayer*>(node.data());
 
             if (!layer || !layer->isEditable()) {
                 node = node->prevSibling();

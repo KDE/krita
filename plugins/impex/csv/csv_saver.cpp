@@ -117,7 +117,7 @@ KisImageBuilder_Result CSVSaver::encode(QIODevice *io)
 
     while (node) {
         if (node->inherits("KisLayer")) {
-            KisLayer* paintLayer = dynamic_cast<KisLayer*>(node.data());
+            KisLayer* paintLayer = qobject_cast<KisLayer*>(node.data());
             CSVLayerRecord* layerRecord = new CSVLayerRecord();
             layers.prepend(layerRecord); //reverse order!
 

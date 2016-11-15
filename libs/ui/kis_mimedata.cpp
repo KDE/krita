@@ -190,7 +190,7 @@ void KisMimeData::initializeExternalNode(KisNodeSP *node,
                                          KisShapeController *shapeController)
 {
     // layers store a link to the image, so update it
-    KisLayer *layer = dynamic_cast<KisLayer*>(node->data());
+    KisLayer *layer = qobject_cast<KisLayer*>(node->data());
     if (layer) {
         layer->setImage(image);
     }

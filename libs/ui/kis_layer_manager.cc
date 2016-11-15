@@ -351,7 +351,7 @@ void KisLayerManager::convertNodeToPaintLayer(KisNodeSP source)
     if (!image) return;
 
 
-    KisLayer *srcLayer = dynamic_cast<KisLayer*>(source.data());
+    KisLayer *srcLayer = qobject_cast<KisLayer*>(source.data());
     if (srcLayer && (srcLayer->inherits("KisGroupLayer") || srcLayer->layerStyle() || srcLayer->childCount() > 0)) {
         image->flattenLayer(srcLayer);
         return;
@@ -647,7 +647,7 @@ void KisLayerManager::mergeLayer()
     } else if (!tryMergeSelectionMasks(m_view->activeNode(), image)) {
 
         if (!layer->prevSibling()) return;
-        KisLayer *prevLayer = dynamic_cast<KisLayer*>(layer->prevSibling().data());
+        KisLayer *prevLayer = qobject_cast<KisLayer*>(layer->prevSibling().data());
         if (!prevLayer) return;
 
         if (layer->metaData()->isEmpty() && prevLayer->metaData()->isEmpty()) {

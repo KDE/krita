@@ -239,7 +239,7 @@ void KisActionManager::updateGUI()
         // if a node exists, we know there is an active layer as well
         flags |= KisAction::ACTIVE_NODE;
 
-        layer = dynamic_cast<KisLayer*>(node.data());
+        layer = qobject_cast<KisLayer*>(node.data());
         if (layer) {
             flags |= KisAction::ACTIVE_LAYER;
         }

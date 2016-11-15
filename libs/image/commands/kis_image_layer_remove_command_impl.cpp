@@ -97,7 +97,7 @@ void KisImageLayerRemoveCommandImpl::Private::restoreClones()
 
 void KisImageLayerRemoveCommandImpl::Private::processClones(KisNodeSP node)
 {
-    KisLayerSP layer(dynamic_cast<KisLayer*>(node.data()));
+    KisLayerSP layer(qobject_cast<KisLayer*>(node.data()));
     if(!layer || !layer->hasClones()) return;
 
     if(reincarnatedNodes.isEmpty()) {

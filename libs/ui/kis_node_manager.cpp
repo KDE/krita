@@ -158,7 +158,7 @@ bool KisNodeManager::Private::activateNodeImpl(KisNodeSP node)
         selection->setActiveLayer(shapeLayer);
 
         imageView->setCurrentNode(node);
-        if (KisLayerSP layer = dynamic_cast<KisLayer*>(node.data())) {
+        if (KisLayerSP layer = qobject_cast<KisLayer*>(node.data())) {
             maskManager.activateMask(0);
             layerManager.activateLayer(layer);
         } else if (KisMaskSP mask = dynamic_cast<KisMask*>(node.data())) {
@@ -383,7 +383,7 @@ void KisNodeManager::moveNodeAt(KisNodeSP node, KisNodeSP parent, int index)
     if (parent->allowAsChild(node)) {
         if (node->inherits("KisSelectionMask") && parent->inherits("KisLayer")) {
             KisSelectionMask *m = dynamic_cast<KisSelectionMask*>(node.data());
-            KisLayer *l = dynamic_cast<KisLayer*>(parent.data());
+            KisLayer *l = qobject_cast<KisLayer*>(parent.data());
             KisSelectionMaskSP selMask = l->selectionMask();
             if (m && m->active() && l && l->selectionMask())
                 selMask->setActive(false);

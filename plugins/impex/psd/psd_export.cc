@@ -53,7 +53,7 @@ bool checkHomogenity(KisNodeSP root, const KoColorSpace* cs)
                 break;
             }
         }
-        KisLayer *layer = dynamic_cast<KisLayer*>(child.data());
+        KisLayer *layer = qobject_cast<KisLayer*>(child.data());
         if (layer) {
             if (layer->colorSpace() != cs) {
                 res = false;

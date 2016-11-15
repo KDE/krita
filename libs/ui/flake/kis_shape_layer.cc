@@ -213,10 +213,9 @@ KisShapeLayer::KisShapeLayer(const KisShapeLayer& _rhs, const KisShapeLayer &_ad
 KisShapeLayer::~KisShapeLayer()
 {
     /**
-     * Small hack alert: we set the image to null to disable
-     * updates those will be emitted on shape deletion
+     * Small hack alert: we should avoid updates on shape deletion
      */
-    KisLayer::setImage(0);
+    m_d->canvas->prepareForDestroying();
 
     Q_FOREACH (KoShape *shape, shapes()) {
         shape->setParent(0);
@@ -392,7 +391,7 @@ bool KisShapeLayer::saveLayer(KoStore * store) const
     KoOdfWriteStore odfStore(store);
     KoXmlWriter* manifestWriter = odfStore.manifestWriter("application/vnd.oasis.opendocument.graphics");
     KoEmbeddedDocumentSaver embeddedSaver;
-    KisDocument::SavingContext documentContext(odfStore, embeddedSaver);
+    KoDocumentBase::SavingContext documentContext(odfStore, embeddedSaver);
 
     if (!store->open("content.xml"))
         return false;
@@ -401,9 +400,9 @@ bool KisShapeLayer::saveLayer(KoStore * store) const
     KoXmlWriter * docWriter = KoOdfWriteStore::createOasisXmlWriter(&storeDev, "office:document-content");
 
     // for office:master-styles
-    QTemporaryFile masterStyles;
-    masterStyles.open();
-    KoXmlWriter masterStylesTmpWriter(&masterStyles, 1);
+//    QTemporaryFile masterStyles;
+//    masterStyles.open();
+//    KoXmlWriter masterStylesTmpWriter(&masterStyles, 1);
 
     KoPageLayout page;
     page.format = KoPageFormat::defaultFormat();

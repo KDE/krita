@@ -52,7 +52,10 @@ using namespace KisLazyFillTools;
 struct KisColorizeMask::Private
 {
     Private()
-        : needAddCurrentKeyStroke(false),
+        : coloringProjection(new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8())),
+          fakePaintDevice(new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8())),
+          filteredSource(new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8())),
+          needAddCurrentKeyStroke(false),
           showKeyStrokes(true),
           showColoring(true),
           needsUpdate(true),
@@ -64,6 +67,7 @@ struct KisColorizeMask::Private
     Private(const Private &rhs)
         : coloringProjection(new KisPaintDevice(*rhs.coloringProjection)),
           fakePaintDevice(new KisPaintDevice(*rhs.fakePaintDevice)),
+          filteredSource(new KisPaintDevice(*rhs.filteredSource)),
           needAddCurrentKeyStroke(rhs.needAddCurrentKeyStroke),
           showKeyStrokes(rhs.showKeyStrokes),
           showColoring(rhs.showColoring),
@@ -73,7 +77,7 @@ struct KisColorizeMask::Private
           offset(rhs.offset)
     {
         Q_FOREACH (const KeyStroke &stroke, rhs.keyStrokes) {
-            keyStrokes << KeyStroke(new KisPaintDevice(*stroke.dev), stroke.color, stroke.isTransparent);
+            keyStrokes << KeyStroke(KisPaintDeviceSP(new KisPaintDevice(*stroke.dev)), stroke.color, stroke.isTransparent);
         }
     }
 
@@ -102,11 +106,6 @@ struct KisColorizeMask::Private
 KisColorizeMask::KisColorizeMask()
     : m_d(new Private)
 {
-    const KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->rgb8();
-    m_d->fakePaintDevice = new KisPaintDevice(colorSpace);
-    m_d->filteredSource = new KisPaintDevice(colorSpace);
-    m_d->coloringProjection = new KisPaintDevice(colorSpace);
-
     connect(&m_d->updateCompressor,
             SIGNAL(timeout()),
             SLOT(slotUpdateRegenerateFilling()));
@@ -131,7 +130,7 @@ KisColorizeMask::KisColorizeMask(const KisColorizeMask& rhs)
 
 void KisColorizeMask::initializeCompositeOp()
 {
-    KisLayerSP parentLayer = dynamic_cast<KisLayer*>(parent().data());
+    KisLayerSP parentLayer(dynamic_cast<KisLayer*>(parent().data()));
     if (!parentLayer || !parentLayer->original()) return;
 
     KisImageSP image = parentLayer->image();
@@ -225,7 +224,7 @@ KUndo2Command* KisColorizeMask::setColorSpace(const KoColorSpace * dstColorSpace
     KUndo2Command *strokesConversionCommand =
         new SetKeyStrokesColorSpaceCommand(
             dstColorSpace, renderingIntent, conversionFlags,
-            &m_d->keyStrokes, this);
+            &m_d->keyStrokes, KisColorizeMaskSP(this));
     strokesConversionCommand->redo();
 
     composite->addCommand(new SkipFirstRedoWrapper(strokesConversionCommand));
@@ -259,7 +258,7 @@ void KisColorizeMask::slotUpdateRegenerateFilling()
     m_d->originalSequenceNumber = src->sequenceNumber();
     m_d->coloringProjection->clear();
 
-    KisLayerSP parentLayer = dynamic_cast<KisLayer*>(parent().data());
+    KisLayerSP parentLayer(dynamic_cast<KisLayer*>(parent().data()));
     if (!parentLayer) return;
 
     KisImageSP image = parentLayer->image();
@@ -270,7 +269,7 @@ void KisColorizeMask::slotUpdateRegenerateFilling()
                                           m_d->filteredSource,
                                           filteredSourceValid,
                                           image->bounds(),
-                                          this);
+                                          KisColorizeMaskSP(this));
 
         Q_FOREACH (const KeyStroke &stroke, m_d->keyStrokes) {
             const KoColor color =
@@ -327,7 +326,7 @@ void KisColorizeMask::setSectionModelProperties(const KisBaseNode::PropertyList 
 
 KisPaintDeviceSP KisColorizeMask::paintDevice() const
 {
-    return m_d->showKeyStrokes ? m_d->fakePaintDevice : 0;
+    return m_d->showKeyStrokes ? m_d->fakePaintDevice : KisPaintDeviceSP();
 }
 
 KisPaintDeviceSP KisColorizeMask::coloringProjection() const
@@ -492,15 +491,15 @@ QRect KisColorizeMask::nonDependentExtent() const
 
 KisImageSP KisColorizeMask::fetchImage() const
 {
-    KisLayerSP parentLayer = dynamic_cast<KisLayer*>(parent().data());
-    if (!parentLayer) return 0;
+    KisLayerSP parentLayer(dynamic_cast<KisLayer*>(parent().data()));
+    if (!parentLayer) return KisImageSP();
 
     return parentLayer->image();
 }
 
 void KisColorizeMask::setImage(KisImageWSP image)
 {
-    KisDefaultBoundsSP bounds = new KisDefaultBounds(image);
+    KisDefaultBoundsSP bounds(new KisDefaultBounds(image));
 
     auto it = m_d->keyStrokes.begin();
     for(; it != m_d->keyStrokes.end(); ++it) {
@@ -534,7 +533,7 @@ void KisColorizeMask::setCurrentColor(const KoColor &_color)
     if (it == m_d->keyStrokes.constEnd()) {
         activeDevice = new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8());
         activeDevice->setParentNode(this);
-        activeDevice->setDefaultBounds(new KisDefaultBounds(fetchImage()));
+        activeDevice->setDefaultBounds(KisDefaultBoundsBaseSP(new KisDefaultBounds(fetchImage())));
         newKeyStroke = true;
     } else {
         activeDevice = it->dev;
@@ -593,7 +592,7 @@ void KisColorizeMask::mergeToLayer(KisNodeSP layer, KisPostExecutionUndoAdapter 
 
         KUndo2Command *cmd =
             new KeyStrokeAddRemoveCommand(
-                true, m_d->keyStrokes.size(), key, &m_d->keyStrokes, this);
+                true, m_d->keyStrokes.size(), key, &m_d->keyStrokes, KisColorizeMaskSP(this));
         cmd->redo();
         fakeUndoAdapter.addCommand(toQShared(cmd));
     }
@@ -628,7 +627,7 @@ void KisColorizeMask::mergeToLayer(KisNodeSP layer, KisPostExecutionUndoAdapter 
             if (stroke.dev->exactBounds().isEmpty()) {
                 KUndo2Command *cmd =
                     new KeyStrokeAddRemoveCommand(
-                        false, index, stroke, &m_d->keyStrokes, this);
+                        false, index, stroke, &m_d->keyStrokes, KisColorizeMaskSP(this));
 
                 cmd->redo();
                 fakeUndoAdapter.addCommand(toQShared(cmd));
@@ -757,13 +756,13 @@ void KisColorizeMask::setKeyStrokesColors(KeyStrokeColors colors)
         newList[i].isTransparent = colors.transparentIndex == i;
     }
 
-    KisProcessingApplicator applicator(fetchImage(), this,
+    KisProcessingApplicator applicator(fetchImage(), KisNodeSP(this),
                                        KisProcessingApplicator::NONE,
                                        KisImageSignalVector(),
                                        kundo2_i18n("Change Key Stroke Color"));
     applicator.applyCommand(
         new SetKeyStrokeColorsCommand(
-            newList, &m_d->keyStrokes, this));
+            newList, &m_d->keyStrokes, KisColorizeMaskSP(this)));
 
     applicator.end();
 }
@@ -784,13 +783,13 @@ void KisColorizeMask::removeKeyStroke(const KoColor &_color)
 
     const int index = it - m_d->keyStrokes.begin();
 
-    KisProcessingApplicator applicator(fetchImage(), this,
+    KisProcessingApplicator applicator(KisImageWSP(fetchImage()), KisNodeSP(this),
                                        KisProcessingApplicator::NONE,
                                        KisImageSignalVector(),
                                        kundo2_i18n("Remove Key Stroke"));
     applicator.applyCommand(
         new KeyStrokeAddRemoveCommand(
-            false, index, *it, &m_d->keyStrokes, this));
+            false, index, *it, &m_d->keyStrokes, KisColorizeMaskSP(this)));
 
     applicator.end();
 }

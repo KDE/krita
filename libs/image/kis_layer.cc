@@ -99,8 +99,10 @@ public:
     }
 
     void setDirty(const QRect &rect) {
-        Q_FOREACH (KisCloneLayerWSP clone, m_clonesList) {
-            clone->setDirtyOriginal(rect);
+        Q_FOREACH (KisCloneLayerSP clone, m_clonesList) {
+            if (clone) {
+                clone->setDirtyOriginal(rect);
+            }
         }
     }
 
@@ -168,9 +170,11 @@ KisLayer::~KisLayer()
 
 const KoColorSpace * KisLayer::colorSpace() const
 {
-    if (m_d->image)
-        return m_d->image->colorSpace();
-    return 0;
+    KisImageSP image = m_d->image.toStrongRef();
+    if (!image) {
+        return nullptr;
+    }
+    return image->colorSpace();
 }
 
 const KoCompositeOp * KisLayer::compositeOp() const
@@ -367,14 +371,17 @@ void KisLayer::fillMergedLayerTemplate(KisLayerSP dstLayer, KisLayerSP prevLayer
     KisPaintDeviceSP mergedDevice = dstLayer->paintDevice();
 
     if (!keepBlendingOptions) {
-
-        KisNodeSP parentNode = parent();
         KisPainter gc(mergedDevice);
+
+        KisImageSP imageSP = image().toStrongRef();
+        if (!imageSP) {
+            return;
+        }
 
         //Copy the pixels of previous layer with their actual alpha value
         prevLayer->disableAlphaChannel(false);
 
-        prevLayer->projectionPlane()->apply(&gc, prevLayerProjectionExtent | image()->bounds());
+        prevLayer->projectionPlane()->apply(&gc, prevLayerProjectionExtent | imageSP->bounds());
 
         //Restore the previous prevLayer disableAlpha status for correct undo/redo
         prevLayer->disableAlphaChannel(prevAlphaDisabled);
@@ -384,7 +391,7 @@ void KisLayer::fillMergedLayerTemplate(KisLayerSP dstLayer, KisLayerSP prevLayer
             this->disableAlphaChannel(false);
         }
 
-        this->projectionPlane()->apply(&gc, layerProjectionExtent | image()->bounds());
+        this->projectionPlane()->apply(&gc, layerProjectionExtent | imageSP->bounds());
 
         //Restore the layer disableAlpha status for correct undo/redo
         this->disableAlphaChannel(alphaDisabled);
@@ -437,7 +444,7 @@ KisSelectionMaskSP KisLayer::selectionMask() const
             return dynamic_cast<KisSelectionMask*>(mask.data());
         }
     }
-    return 0;
+    return KisSelectionMaskSP();
 }
 
 KisSelectionSP KisLayer::selection() const
@@ -447,12 +454,12 @@ KisSelectionSP KisLayer::selection() const
     if (mask) {
         return mask->selection();
     }
-    else if (m_d->image) {
-        return m_d->image->globalSelection();
+
+    KisImageSP image = m_d->image.toStrongRef();
+    if (image) {
+        return image->globalSelection();
     }
-    else {
-        return 0;
-    }
+    return KisSelectionSP();
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -817,7 +824,7 @@ void KisLayer::setY(qint32 y)
         originalDevice->setY(y);
 }
 
-QRect KisLayer::extent() const
+QRect KisLayer::layerExtentImpl(bool needExactBounds) const
 {
     QRect additionalMaskExtent = QRect();
     QList<KisEffectMaskSP> effectMasks = this->effectMasks();
@@ -827,24 +834,32 @@ QRect KisLayer::extent() const
     }
 
     KisPaintDeviceSP originalDevice = original();
-    QRect layerExtent = originalDevice ? originalDevice->extent() : QRect();
+    QRect layerExtent;
 
-    return layerExtent | additionalMaskExtent;
+    if (originalDevice) {
+        layerExtent = needExactBounds ?
+            originalDevice->exactBounds() :
+            originalDevice->extent();
+    }
+
+    QRect additionalCompositeOpExtent;
+    if (compositeOpId() == COMPOSITE_DESTINATION_IN ||
+        compositeOpId() == COMPOSITE_DESTINATION_ATOP) {
+
+        additionalCompositeOpExtent = originalDevice->defaultBounds()->bounds();
+    }
+
+    return layerExtent | additionalMaskExtent | additionalCompositeOpExtent;
+}
+
+QRect KisLayer::extent() const
+{
+    return layerExtentImpl(false);
 }
 
 QRect KisLayer::exactBounds() const
 {
-    QRect additionalMaskExtent = QRect();
-    QList<KisEffectMaskSP> effectMasks = this->effectMasks();
-
-    Q_FOREACH(KisEffectMaskSP mask, effectMasks) {
-        additionalMaskExtent |= mask->nonDependentExtent();
-    }
-
-    KisPaintDeviceSP originalDevice = original();
-    QRect layerExtent = originalDevice ? originalDevice->exactBounds() : QRect();
-
-    return layerExtent | additionalMaskExtent;
+    return layerExtentImpl(true);
 }
 
 KisLayerSP KisLayer::parentLayer() const

@@ -70,11 +70,17 @@ void KisNodePropertyListCommand::doUpdate(const KisBaseNode::PropertyList &oldPr
     }
 
     if (oldPassThroughValue && !newPassThroughValue) {
-        KisLayer *layer = qobject_cast<KisLayer*>(m_node.data());
-        layer->image()->refreshGraphAsync(layer);
+        KisLayerSP layer(qobject_cast<KisLayer*>(m_node.data()));
+        KisImageSP image = layer->image().toStrongRef();
+        if (image) {
+            image->refreshGraphAsync(layer);
+        }
     } else if (m_node->parent() && !oldPassThroughValue && newPassThroughValue) {
-        KisLayer *layer = qobject_cast<KisLayer*>(m_node->parent().data());
-        layer->image()->refreshGraphAsync(layer);
+        KisLayerSP layer(qobject_cast<KisLayer*>(m_node->parent().data()));
+        KisImageSP image = layer->image().toStrongRef();
+        if (image) {
+            image->refreshGraphAsync(layer);
+        }
     } else {
         m_node->setDirty(); // TODO check if visibility was changed or not
     }

@@ -35,6 +35,10 @@
 class KoResource;
 class KoColorSet;
 
+namespace KisToolUtils {
+struct ColorPickerConfig;
+}
+
 class ColorPickerOptionsWidget : public QWidget, public Ui::ColorPickerOptionsWidget
 {
     Q_OBJECT
@@ -102,7 +106,8 @@ private:
     void pickColor(const QPointF& pos);
     void updateOptionWidget();
 
-    Configuration m_config;
+    //Configuration m_config;
+    QScopedPointer<KisToolUtils::ColorPickerConfig> m_config;
     ToolActivation m_toolActivationSource;
     bool m_isActivated;
 

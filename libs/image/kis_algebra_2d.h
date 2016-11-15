@@ -373,6 +373,28 @@ KRITAIMAGE_EXPORT
 QVector<QPointF> intersectTwoCircles(const QPointF &c1, qreal r1,
                                      const QPointF &c2, qreal r2);
 
+
+/**
+ * Scale the relative point \pt into the bounds of \p rc. The point might be
+ * outside the rectangle.
+ */
+inline QPointF relativeToAbsolute(const QPointF &pt, const QRectF &rc) {
+    return rc.topLeft() + QPointF(pt.x() * rc.width(), pt.y() * rc.height());
+}
+
+/**
+ * Get the relative position of \p pt inside rectangle \p rc. The point can be
+ * outside the rectangle.
+ */
+inline QPointF absoluteToRelative(const QPointF &pt, const QRectF &rc) {
+    if (!rc.isValid()) return QPointF();
+
+    const QPointF rel = pt - rc.topLeft();
+    return QPointF(rel.x() / rc.width(), rel.y() / rc.height());
+
+}
+
+
 }
 
 

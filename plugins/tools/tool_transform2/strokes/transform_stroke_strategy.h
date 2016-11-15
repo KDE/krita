@@ -69,7 +69,7 @@ public:
 public:
     TransformStrokeStrategy(KisNodeSP rootNode,
                             KisSelectionSP selection,
-                            KisPostExecutionUndoAdapter *undoAdapter);
+                            KisStrokeUndoFacade *undoFacade);
 
     ~TransformStrokeStrategy();
 

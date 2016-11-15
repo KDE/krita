@@ -23,13 +23,13 @@
 #include <QSlider>
 #include <QApplication>
 
-#include <KoDialog.h>
 #include <kpluginfactory.h>
 #include <QFileInfo>
 
-#include <KisFilterChain.h>
+#include <KoColorSpaceRegistry.h>
 #include <KoColorSpaceConstants.h>
 #include <KisImportExportManager.h>
+#include <KisExportCheckRegistry.h>
 
 #include <kis_properties_configuration.h>
 #include <kis_config.h>
@@ -44,129 +44,113 @@
 
 class KisExternalLayer;
 
-K_PLUGIN_FACTORY_WITH_JSON(ExportFactory, "krita_exr_export.json", registerPlugin<exrExport>();)
+K_PLUGIN_FACTORY_WITH_JSON(ExportFactory, "krita_exr_export.json", registerPlugin<EXRExport>();)
 
-exrExport::exrExport(QObject *parent, const QVariantList &) : KisImportExportFilter(parent)
+EXRExport::EXRExport(QObject *parent, const QVariantList &) : KisImportExportFilter(parent)
 {
 }
 
-exrExport::~exrExport()
+EXRExport::~EXRExport()
 {
 }
 
-KisPropertiesConfigurationSP exrExport::defaultConfiguration(const QByteArray &/*from*/, const QByteArray &/*to*/) const
+KisPropertiesConfigurationSP EXRExport::defaultConfiguration(const QByteArray &/*from*/, const QByteArray &/*to*/) const
 {
     KisPropertiesConfigurationSP cfg = new KisPropertiesConfiguration();
     cfg->setProperty("flatten", false);
     return cfg;
 }
 
-KisPropertiesConfigurationSP exrExport::lastSavedConfiguration(const QByteArray &from, const QByteArray &to) const
+KisPropertiesConfigurationSP EXRExport::lastSavedConfiguration(const QByteArray &from, const QByteArray &to) const
 {
     KisPropertiesConfigurationSP cfg = defaultConfiguration(from, to);
-    QString filterConfig = KisConfig().exportConfiguration("EXR");
+    QString filterConfig = KisConfig().exportConfiguration(mimeType());
     cfg->fromXML(filterConfig, false);
     return cfg;
 }
 
-KisConfigWidget *exrExport::createConfigurationWidget(QWidget *parent, const QByteArray &/*from*/, const QByteArray &/*to*/) const
+KisConfigWidget *EXRExport::createConfigurationWidget(QWidget *parent, const QByteArray &/*from*/, const QByteArray &/*to*/) const
 {
     return new KisWdgOptionsExr(parent);
 }
 
-KisImportExportFilter::ConversionStatus exrExport::convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration)
+KisImportExportFilter::ConversionStatus EXRExport::convert(KisDocument *document, QIODevice */*io*/,  KisPropertiesConfigurationSP configuration)
 {
-    dbgFile << "EXR export! From:" << from << ", To:" << to << "";
+    KisImageSP image = document->image();
 
-    if (from != "application/x-krita")
-        return KisImportExportFilter::NotImplemented;
-
-    KisDocument *input = inputDocument();
-    if (!input)
-        return KisImportExportFilter::NoDocumentCreated;
-    KisImageWSP image = input->image();
-    Q_CHECK_PTR(image);
-
-    KoDialog kdb;
-    kdb.setWindowTitle(i18n("OpenEXR Export Options"));
-    kdb.setButtons(KoDialog::Ok | KoDialog::Cancel);
-    KisConfigWidget *wdg = createConfigurationWidget(&kdb, from, to);
-    kdb.setMainWidget(wdg);
-    kdb.resize(kdb.minimumSize());
-
-    // If a configuration object was passed to the convert method, we use that, otherwise we load from the settings
-    KisPropertiesConfigurationSP cfg(new KisPropertiesConfiguration());
-    if (configuration) {
-        cfg->fromXML(configuration->toXML());
-    }
-    else {
-        cfg = lastSavedConfiguration(from, to);
-    }
-    wdg->setConfiguration(cfg);
-
-    if (!getBatchMode() ) {
-        QApplication::restoreOverrideCursor();
-        if (kdb.exec() == QDialog::Rejected) {
-            return KisImportExportFilter::UserCancelled;
-        }
-        cfg = wdg->configuration();
-        KisConfig().setExportConfiguration("EXR", *cfg.data());
-    }
-
-    QString filename = outputFile();
-    if (filename.isEmpty()) return KisImportExportFilter::FileNotFound;
-
-    exrConverter kpc(input, !getBatchMode());
+    EXRConverter exrConverter(document, !batchMode());
 
     KisImageBuilder_Result res;
 
-    if (cfg->getBool("flatten")) {
+    if (configuration->getBool("flatten")) {
         // the image must be locked at the higher levels
-        KIS_SAFE_ASSERT_RECOVER_NOOP(input->image()->locked());
+        KIS_SAFE_ASSERT_RECOVER_NOOP(document->image()->locked());
 
         KisPaintDeviceSP pd = new KisPaintDevice(*image->projection());
         KisPaintLayerSP l = new KisPaintLayer(image, "projection", OPACITY_OPAQUE_U8, pd);
 
-        res = kpc.buildFile(filename, l);
+        res = exrConverter.buildFile(filename(), l);
     }
     else {
         // the image must be locked at the higher levels
-        KIS_SAFE_ASSERT_RECOVER_NOOP(input->image()->locked());
-        res = kpc.buildFile(filename, image->rootLayer());
+        KIS_SAFE_ASSERT_RECOVER_NOOP(document->image()->locked());
+        res = exrConverter.buildFile(filename(), image->rootLayer());
     }
 
     dbgFile << " Result =" << res;
     switch (res) {
     case KisImageBuilder_RESULT_INVALID_ARG:
-        input->setErrorMessage(i18n("This layer cannot be saved to EXR."));
+        document->setErrorMessage(i18n("This layer cannot be saved to EXR."));
         return KisImportExportFilter::WrongFormat;
 
     case KisImageBuilder_RESULT_EMPTY:
-        input->setErrorMessage(i18n("The layer does not have an image associated with it."));
+        document->setErrorMessage(i18n("The layer does not have an image associated with it."));
         return KisImportExportFilter::WrongFormat;
 
     case KisImageBuilder_RESULT_NO_URI:
-        input->setErrorMessage(i18n("The filename is empty."));
+        document->setErrorMessage(i18n("The filename is empty."));
         return KisImportExportFilter::CreationError;
 
     case KisImageBuilder_RESULT_NOT_LOCAL:
-        input->setErrorMessage(i18n("EXR images cannot be saved remotely."));
+        document->setErrorMessage(i18n("EXR images cannot be saved remotely."));
         return KisImportExportFilter::InternalError;
 
     case KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE:
-        input->setErrorMessage(i18n("Colorspace not supported: EXR images must be 16 or 32 bits floating point RGB."));
+        document->setErrorMessage(i18n("Colorspace not supported: EXR images must be 16 or 32 bits floating point RGB."));
         return KisImportExportFilter::WrongFormat;
 
     case KisImageBuilder_RESULT_OK:
+        document->setErrorMessage(exrConverter.errorMessage());
         return KisImportExportFilter::OK;
     default:
         break;
     }
 
-    input->setErrorMessage(i18n("Internal Error"));
+    document->setErrorMessage(i18n("Internal Error"));
     return KisImportExportFilter::InternalError;
 
 }
+
+void EXRExport::initializeCapabilities()
+{
+    addCapability(KisExportCheckRegistry::instance()->get("NodeTypeCheck/KisGroupLayer")->create(KisExportCheckBase::SUPPORTED));
+    addCapability(KisExportCheckRegistry::instance()->get("MultiLayerCheck")->create(KisExportCheckBase::SUPPORTED));
+    addCapability(KisExportCheckRegistry::instance()->get("sRGBProfileCheck")->create(KisExportCheckBase::SUPPORTED));
+
+    QList<QPair<KoID, KoID> > supportedColorModels;
+    supportedColorModels << QPair<KoID, KoID>()
+            << QPair<KoID, KoID>(RGBAColorModelID, Float16BitsColorDepthID)
+            << QPair<KoID, KoID>(RGBAColorModelID, Float32BitsColorDepthID)
+            << QPair<KoID, KoID>(GrayAColorModelID, Float16BitsColorDepthID)
+            << QPair<KoID, KoID>(GrayAColorModelID, Float32BitsColorDepthID)
+            << QPair<KoID, KoID>(GrayColorModelID, Float16BitsColorDepthID)
+            << QPair<KoID, KoID>(GrayColorModelID, Float32BitsColorDepthID)
+            << QPair<KoID, KoID>(XYZAColorModelID, Float16BitsColorDepthID)
+            << QPair<KoID, KoID>(XYZAColorModelID, Float32BitsColorDepthID);
+    addSupportedColorModels(supportedColorModels, "TIFF");
+}
+
+
 
 
 void KisWdgOptionsExr::setConfiguration(const KisPropertiesConfigurationSP cfg)
@@ -180,7 +164,6 @@ KisPropertiesConfigurationSP KisWdgOptionsExr::configuration() const
     cfg->setProperty("flatten", chkFlatten->isChecked());
     return cfg;
 }
-
 
 #include <exr_export.moc>
 

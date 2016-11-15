@@ -59,7 +59,7 @@ OffsetImage::~OffsetImage()
 
 void OffsetImage::slotOffsetImage()
 {
-    KisImageWSP image = m_view->image();
+    KisImageSP image = m_view->image().toStrongRef();
     if (image) {
 
         DlgOffsetImage * dlgOffsetImage = new DlgOffsetImage(m_view->mainWindow(), "OffsetImage", offsetWrapRect().size());
@@ -83,22 +83,21 @@ void OffsetImage::slotOffsetImage()
 
 void OffsetImage::slotOffsetLayer()
 {
-    KisImageWSP image = m_view->image();
+    KisImageSP image = m_view->image().toStrongRef();
     if (image) {
 
-    DlgOffsetImage * dlgOffsetImage = new DlgOffsetImage(m_view->mainWindow(), "OffsetLayer", offsetWrapRect().size());
-    Q_CHECK_PTR(dlgOffsetImage);
+        DlgOffsetImage * dlgOffsetImage = new DlgOffsetImage(m_view->mainWindow(), "OffsetLayer", offsetWrapRect().size());
+        Q_CHECK_PTR(dlgOffsetImage);
 
-    KUndo2MagicString actionName = kundo2_i18n("Offset Layer");
-    dlgOffsetImage->setCaption(i18nc("@title:window", "Offset Layer"));
+        KUndo2MagicString actionName = kundo2_i18n("Offset Layer");
+        dlgOffsetImage->setCaption(i18nc("@title:window", "Offset Layer"));
 
-    if (dlgOffsetImage->exec() == QDialog::Accepted) {
-        QPoint offsetPoint = QPoint(dlgOffsetImage->offsetX(), dlgOffsetImage->offsetY());
-        KisNodeSP activeNode = m_view->activeNode();
-        offsetImpl(actionName, activeNode, offsetPoint);
-    }
-    delete dlgOffsetImage;
-
+        if (dlgOffsetImage->exec() == QDialog::Accepted) {
+            QPoint offsetPoint = QPoint(dlgOffsetImage->offsetX(), dlgOffsetImage->offsetY());
+            KisNodeSP activeNode = m_view->activeNode();
+            offsetImpl(actionName, activeNode, offsetPoint);
+        }
+        delete dlgOffsetImage;
     }
     else
     {
@@ -131,7 +130,10 @@ QRect OffsetImage::offsetWrapRect()
     }
     else
     {
-        offsetWrapRect = m_view->image()->bounds();
+        KisImageSP image = m_view->image().toStrongRef();
+        if (image) {
+            offsetWrapRect = image->bounds();
+        }
     }
     return offsetWrapRect;
 }

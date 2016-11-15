@@ -79,6 +79,7 @@ private Q_SLOTS:
             emit sigProgressChanged(100);
             emit sigProcessingFinished();
         } else {
+
             emit sigProgressChanged(100 * currentFrame / m_totalFrames);
         }
     }
@@ -273,7 +274,7 @@ KisImageBuilder_Result VideoSaver::encode(const QString &filename, KisProperties
             KisImageBuilder_Result result =
                 m_runner->runFFMpeg(args, i18n("Fetching palette..."),
                                     framesDir.filePath("log_palettegen.log"),
-                                    clipRange.duration());
+                                    clipRange.duration() + clipRange.start());
 
             if (result) {
                 return result;
@@ -292,7 +293,7 @@ KisImageBuilder_Result VideoSaver::encode(const QString &filename, KisProperties
             KisImageBuilder_Result result =
                 m_runner->runFFMpeg(args, i18n("Encoding frames..."),
                                     framesDir.filePath("log_paletteuse.log"),
-                                    clipRange.duration());
+                                    clipRange.duration() + clipRange.start());
 
             if (result) {
                 return result;
@@ -307,7 +308,7 @@ KisImageBuilder_Result VideoSaver::encode(const QString &filename, KisProperties
 
         result = m_runner->runFFMpeg(args, i18n("Encoding frames..."),
                                      framesDir.filePath("log_encode.log"),
-                                     clipRange.duration());
+                                     clipRange.duration() + clipRange.start());
     }
 
     return result;

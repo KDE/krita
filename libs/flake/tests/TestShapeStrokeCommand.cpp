@@ -64,6 +64,9 @@ void TestShapeStrokeCommand::refCounting()
 
     delete cmd2;
     delete shape1;
+    delete whiteStroke;
+    delete blackStroke;
+    delete redStroke;
 }
 
 QTEST_MAIN(TestShapeStrokeCommand)

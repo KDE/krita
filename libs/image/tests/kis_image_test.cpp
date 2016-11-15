@@ -38,6 +38,8 @@
 #include "kis_keyframe_channel.h"
 #include "kis_selection_mask.h"
 #include "kis_layer_utils.h"
+#include "kis_annotation.h"
+#include "KisProofingConfiguration.h"
 
 #include "kis_undo_stores.h"
 
@@ -239,15 +241,84 @@ void KisImageTest::testGlobalSelection()
     QCOMPARE(image->root()->childCount(), 1U);
 }
 
+void KisImageTest::testCloneImage()
+{
+    KisImageSP image = new KisImage(0, IMAGE_WIDTH, IMAGE_WIDTH, 0, "layer tests");
+    QVERIFY(image->rootLayer() != 0);
+    QVERIFY(image->rootLayer()->firstChild() == 0);
+
+    KisAnnotationSP annotation = new KisAnnotation("mytype", "mydescription", QByteArray());
+    image->addAnnotation(annotation);
+    QVERIFY(image->annotation("mytype"));
+
+    KisProofingConfigurationSP proofing = toQShared(new KisProofingConfiguration());
+    image->setProofingConfiguration(proofing);
+    QVERIFY(image->proofingConfiguration());
+
+    const KoColor defaultColor(Qt::green, image->colorSpace());
+    image->setDefaultProjectionColor(defaultColor);
+    QCOMPARE(image->defaultProjectionColor(), defaultColor);
+
+    KisLayerSP layer = new KisPaintLayer(image, "layer1", OPACITY_OPAQUE_U8);
+    image->addNode(layer);
+    KisLayerSP layer2 = new KisPaintLayer(image, "layer2", OPACITY_OPAQUE_U8);
+    image->addNode(layer2);
+
+    QVERIFY(layer->visible());
+    QVERIFY(layer2->visible());
+
+    QVERIFY(TestUtil::findNode(image->root(), "layer1"));
+    QVERIFY(TestUtil::findNode(image->root(), "layer2"));
+
+    QUuid uuid1 = layer->uuid();
+    QUuid uuid2 = layer2->uuid();
+
+    {
+        KisImageSP newImage = image->clone();
+
+        KisNodeSP newLayer1 = TestUtil::findNode(newImage->root(), "layer1");
+        KisNodeSP newLayer2 = TestUtil::findNode(newImage->root(), "layer2");
+
+        QVERIFY(newLayer1);
+        QVERIFY(newLayer2);
+
+        QVERIFY(newLayer1->uuid() != uuid1);
+        QVERIFY(newLayer2->uuid() != uuid2);
+
+        KisAnnotationSP newAnnotation = newImage->annotation("mytype");
+        QVERIFY(newAnnotation);
+        QVERIFY(newAnnotation != annotation);
+
+        KisProofingConfigurationSP newProofing = newImage->proofingConfiguration();
+        QVERIFY(newProofing);
+        QVERIFY(newProofing != proofing);
+
+        QCOMPARE(newImage->defaultProjectionColor(), defaultColor);
+    }
+
+    {
+        KisImageSP newImage = image->clone(true);
+
+        KisNodeSP newLayer1 = TestUtil::findNode(newImage->root(), "layer1");
+        KisNodeSP newLayer2 = TestUtil::findNode(newImage->root(), "layer2");
+
+        QVERIFY(newLayer1);
+        QVERIFY(newLayer2);
+
+        QVERIFY(newLayer1->uuid() == uuid1);
+        QVERIFY(newLayer2->uuid() == uuid2);
+    }
+}
+
 void KisImageTest::testLayerComposition()
 {
     KisImageSP image = new KisImage(0, IMAGE_WIDTH, IMAGE_WIDTH, 0, "layer tests");
     QVERIFY(image->rootLayer() != 0);
     QVERIFY(image->rootLayer()->firstChild() == 0);
 
-    KisLayerSP layer = new KisPaintLayer(image, "layer 1", OPACITY_OPAQUE_U8);
+    KisLayerSP layer = new KisPaintLayer(image, "layer1", OPACITY_OPAQUE_U8);
     image->addNode(layer);
-    KisLayerSP layer2 = new KisPaintLayer(image, "layer 2", OPACITY_OPAQUE_U8);
+    KisLayerSP layer2 = new KisPaintLayer(image, "layer2", OPACITY_OPAQUE_U8);
     image->addNode(layer2);
 
     QVERIFY(layer->visible());
@@ -264,6 +335,10 @@ void KisImageTest::testLayerComposition()
     KisLayerComposition comp2(image, "comp 2");
     comp2.store();
 
+    KisLayerCompositionSP comp3 = toQShared(new KisLayerComposition(image, "comp 3"));
+    comp3->store();
+    image->addComposition(comp3);
+
     comp.apply();
 
     QVERIFY(layer->visible());
@@ -273,6 +348,42 @@ void KisImageTest::testLayerComposition()
 
     QVERIFY(layer->visible());
     QVERIFY(!layer2->visible());
+
+    comp.apply();
+
+    QVERIFY(layer->visible());
+    QVERIFY(layer2->visible());
+
+    KisImageSP newImage = image->clone();
+
+    KisNodeSP newLayer1 = TestUtil::findNode(newImage->root(), "layer1");
+    KisNodeSP newLayer2 = TestUtil::findNode(newImage->root(), "layer2");
+
+    QVERIFY(newLayer1);
+    QVERIFY(newLayer2);
+
+    QVERIFY(newLayer1->visible());
+    QVERIFY(newLayer2->visible());
+
+    KisLayerComposition newComp1(comp, newImage);
+    newComp1.apply();
+    QVERIFY(newLayer1->visible());
+    QVERIFY(newLayer2->visible());
+
+    KisLayerComposition newComp2(comp2, newImage);
+    newComp2.apply();
+    QVERIFY(newLayer1->visible());
+    QVERIFY(!newLayer2->visible());
+
+    newComp1.apply();
+    QVERIFY(newLayer1->visible());
+    QVERIFY(newLayer2->visible());
+
+    QVERIFY(!newImage->compositions().isEmpty());
+    KisLayerCompositionSP newComp3 = newImage->compositions().first();
+    newComp3->apply();
+    QVERIFY(newLayer1->visible());
+    QVERIFY(!newLayer2->visible());
 }
 
 #include "testutil.h"
@@ -901,4 +1012,4 @@ void KisImageTest::testFlattenImage()
     }
 }
 
-QTEST_GUILESS_MAIN(KisImageTest)
+QTEST_MAIN(KisImageTest)

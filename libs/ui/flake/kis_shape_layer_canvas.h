@@ -51,6 +51,7 @@ public:
         m_projection = projection;
     }
 
+    void prepareForDestroying();
     void gridSize(QPointF *offset, QSizeF *spacing) const;
     bool snapToGrid() const;
     void addCommand(KUndo2Command *command);
@@ -70,6 +71,7 @@ Q_SIGNALS:
     void forwardRepaint();
 private:
 
+    bool m_isDestroying;
     KoViewConverter * m_viewConverter;
     KoShapeManager * m_shapeManager;
     KisPaintDeviceSP m_projection;

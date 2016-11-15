@@ -59,12 +59,20 @@ bool KisChangeProjectionColorCommand::mergeWith(const KUndo2Command* command)
 
 void KisChangeProjectionColorCommand::redo()
 {
-    m_image->setDefaultProjectionColor(m_newColor);
-    m_image->animationInterface()->setDefaultProjectionColor(m_newColor);
+    KisImageSP image = m_image.toStrongRef();
+    if (!image) {
+        return;
+    }
+    image->setDefaultProjectionColor(m_newColor);
+    image->animationInterface()->setDefaultProjectionColor(m_newColor);
 }
 
 void KisChangeProjectionColorCommand::undo()
 {
-    m_image->setDefaultProjectionColor(m_oldColor);
-    m_image->animationInterface()->setDefaultProjectionColor(m_oldColor);
+    KisImageSP image = m_image.toStrongRef();
+    if (!image) {
+        return;
+    }
+    image->setDefaultProjectionColor(m_oldColor);
+    image->animationInterface()->setDefaultProjectionColor(m_oldColor);
 }

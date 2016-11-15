@@ -27,19 +27,33 @@ KisImageSetResolutionCommand::KisImageSetResolutionCommand(KisImageWSP image, qr
     , m_image(image)
     , m_newXRes(newXRes)
     , m_newYRes(newYRes)
-    , m_oldXRes(m_image->xRes())
-    , m_oldYRes(m_image->yRes())
+    , m_oldXRes(0)
+    , m_oldYRes(0)
 {
+    KisImageSP imageSP = image.toStrongRef();
+     if (!imageSP) {
+         return;
+     }
+     m_oldXRes = imageSP->xRes();
+     m_oldYRes = imageSP->yRes();
 }
 
 void KisImageSetResolutionCommand::undo()
 {
-    m_image->setResolution(m_oldXRes, m_oldYRes);
+    KisImageSP image = m_image.toStrongRef();
+    if (!image) {
+        return;
+    }
+    image->setResolution(m_oldXRes, m_oldYRes);
 }
 
 void KisImageSetResolutionCommand::redo()
 {
-    m_image->setResolution(m_newXRes, m_newYRes);
+    KisImageSP image = m_image.toStrongRef();
+    if (!image) {
+        return;
+    }
+    image->setResolution(m_newXRes, m_newYRes);
 }
 
 

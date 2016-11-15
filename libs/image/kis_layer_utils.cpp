@@ -20,6 +20,7 @@
 
 #include <algorithm>
 
+#include <QUuid>
 #include <KoColorSpaceConstants.h>
 
 #include "kis_painter.h"
@@ -160,6 +161,30 @@ namespace KisLayerUtils {
                                             KisBaseNode::PropertyList props = node->sectionModelProperties();
                                             KisLayerPropertiesIcons::setNodeProperty(&props,
                                                                                      KisLayerPropertiesIcons::colorizeEditKeyStrokes,
+                                                                                     false);
+
+                                            addCommand(new KisNodePropertyListCommand(node, props));
+                                        }
+                                    });
+            }
+        }
+
+    private:
+        MergeDownInfoBaseSP m_info;
+    };
+
+    struct DisableOnionSkins : public KisCommandUtils::AggregateCommand {
+        DisableOnionSkins(MergeDownInfoBaseSP info) : m_info(info) {}
+
+        void populateChildCommands() override {
+            Q_FOREACH (KisNodeSP node, m_info->allSrcNodes()) {
+                recursiveApplyNodes(node,
+                                    [this] (KisNodeSP node) {
+                                        if (KisLayerPropertiesIcons::nodeProperty(node, KisLayerPropertiesIcons::onionSkins, false).toBool()) {
+
+                                            KisBaseNode::PropertyList props = node->sectionModelProperties();
+                                            KisLayerPropertiesIcons::setNodeProperty(&props,
+                                                                                     KisLayerPropertiesIcons::onionSkins,
                                                                                      false);
 
                                             addCommand(new KisNodePropertyListCommand(node, props));
@@ -568,8 +593,7 @@ namespace KisLayerUtils {
 
             if (!parent) {
                 KisNodeSP oldRoot = m_info->image->root();
-                KisNodeSP newRoot =
-                    new KisGroupLayer(m_info->image, "root", OPACITY_OPAQUE_U8);
+                KisNodeSP newRoot(new KisGroupLayer(m_info->image, "root", OPACITY_OPAQUE_U8));
 
                 addCommand(new KisImageLayerAddCommand(m_info->image,
                                                        m_info->dstNode,
@@ -738,9 +762,10 @@ namespace KisLayerUtils {
         if (layer->visible() && prevLayer->visible()) {
             MergeDownInfoSP info(new MergeDownInfo(image, prevLayer, layer));
 
-            // disable key strokes on all colorize masks and wait until
-            // update is finished with a barrier
+            // disable key strokes on all colorize masks, all onion skins on
+            // paint layers and wait until update is finished with a barrier
             applicator.applyCommand(new DisableColorizeKeyStrokes(info));
+            applicator.applyCommand(new DisableOnionSkins(info));
             applicator.applyCommand(new KUndo2Command(), KisStrokeJobData::BARRIER);
 
             applicator.applyCommand(new KeepMergedNodesSelected(info, false));
@@ -994,6 +1019,10 @@ namespace KisLayerUtils {
                                            bool flattenSingleLayer, const KUndo2MagicString &actionName, 
                                            bool cleanupNodes = true, const QString layerName = QString())
     {
+        if (!putAfter) {
+            putAfter = mergedNodes.first();
+        }
+
         filterMergableNodes(mergedNodes);
         {
             KisNodeList tempNodes;
@@ -1029,9 +1058,10 @@ namespace KisLayerUtils {
         if (mergedNodes.size() > 1 || invisibleNodes.isEmpty()) {
             MergeMultipleInfoSP info(new MergeMultipleInfo(image, mergedNodes));
 
-            // disable key strokes on all colorize masks and wait until
-            // update is finished with a barrier
+            // disable key strokes on all colorize masks, all onion skins on
+            // paint layers and wait until update is finished with a barrier
             applicator.applyCommand(new DisableColorizeKeyStrokes(info));
+            applicator.applyCommand(new DisableOnionSkins(info));
             applicator.applyCommand(new KUndo2Command(), KisStrokeJobData::BARRIER);
 
             applicator.applyCommand(new KeepMergedNodesSelected(info, putAfter, false));
@@ -1237,4 +1267,13 @@ namespace KisLayerUtils {
 
         return 0;
     }
+
+    KisNodeSP findNodeByUuid(KisNodeSP root, const QUuid &uuid)
+    {
+        return recursiveFindNode(root,
+            [uuid] (KisNodeSP node) {
+                return node->uuid() == uuid;
+            });
+    }
+
 }

@@ -59,7 +59,11 @@ KisCloneLayer::KisCloneLayer(KisLayerSP from, KisImageWSP image, const QString &
         : KisLayer(image, name, opacity)
         , m_d(new Private(new KisDefaultBounds(image)))
 {
-    m_d->fallback = new KisPaintDevice(image->colorSpace());
+    KisImageSP imageSP = image.toStrongRef();
+    if (!imageSP) {
+        return;
+    }
+    m_d->fallback = new KisPaintDevice(imageSP->colorSpace());
     m_d->copyFrom = from;
     m_d->type = COPY_PROJECTION;
 
@@ -164,7 +168,11 @@ void KisCloneLayer::setDirtyOriginal(const QRect &rect)
 
 void KisCloneLayer::notifyParentVisibilityChanged(bool value)
 {
-    KisLayer::setDirty(image()->bounds());
+    KisImageSP imageSP = image().toStrongRef();
+    if (!imageSP) {
+        return;
+    }
+    KisLayer::setDirty(imageSP->bounds());
     KisLayer::notifyParentVisibilityChanged(value);
 }
 

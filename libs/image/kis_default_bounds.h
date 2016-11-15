@@ -56,7 +56,7 @@ private:
 class KRITAIMAGE_EXPORT KisSelectionDefaultBounds : public KisDefaultBounds
 {
 public:
-    KisSelectionDefaultBounds(KisPaintDeviceSP parentPaintDevice = 0, KisImageWSP image = 0);
+    KisSelectionDefaultBounds(KisPaintDeviceSP parentPaintDevice, KisImageWSP image = 0);
     ~KisSelectionDefaultBounds();
 
     QRect bounds() const;

@@ -25,13 +25,12 @@
 #include <kpluginfactory.h>
 #include <QFileInfo>
 
-#include <KoDialog.h>
-#include <KisFilterChain.h>
+#include <KoColorSpaceRegistry.h>
 #include <KoColorSpace.h>
 #include <KoChannelInfo.h>
 #include <KoColorModelStandardIds.h>
 #include <KisImportExportManager.h>
-
+#include <KisExportCheckRegistry.h>
 #include <KisDocument.h>
 #include <kis_group_layer.h>
 #include <kis_image.h>
@@ -53,49 +52,61 @@ KisTIFFExport::~KisTIFFExport()
 {
 }
 
-KisImportExportFilter::ConversionStatus KisTIFFExport::convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration)
+KisImportExportFilter::ConversionStatus KisTIFFExport::convert(KisDocument *document, QIODevice */*io*/,  KisPropertiesConfigurationSP configuration)
 {
-    dbgFile << "Tiff export! From:" << from << ", To:" << to << "";
-
-    if (from != "application/x-krita")
-        return KisImportExportFilter::NotImplemented;
-
-    KisDocument *input = inputDocument();
-    if (!input) {
-        return KisImportExportFilter::NoDocumentCreated;
-    }
-
-    KoDialog kdb;
-    kdb.setWindowTitle(i18n("TIFF Export Options"));
-    kdb.setButtons(KoDialog::Ok | KoDialog::Cancel);
-    KisTIFFOptionsWidget *wdg = static_cast<KisTIFFOptionsWidget*>(createConfigurationWidget(&kdb, from, to));
-    kdb.setMainWidget(wdg);
-    kdb.resize(kdb.minimumSize());
-
     // If a configuration object was passed to the convert method, we use that, otherwise we load from the settings
     KisPropertiesConfigurationSP cfg(new KisPropertiesConfiguration());
     if (configuration) {
         cfg->fromXML(configuration->toXML());
     }
     else {
-        cfg = lastSavedConfiguration(from, to);
+        cfg = lastSavedConfiguration(KisDocument::nativeFormatMimeType(), "image/tiff");
     }
 
-    const KoColorSpace* cs = input->image()->colorSpace();
+    const KoColorSpace* cs = document->image()->colorSpace();
     cfg->setProperty("type", (int)cs->channels()[0]->channelValueType());
     cfg->setProperty("isCMYK", (cs->colorModelId() == CMYKAColorModelID));
 
-    wdg->setConfiguration(cfg);
-
-    if (!getBatchMode()) {
-        if (kdb.exec() == QDialog::Rejected) {
-            return KisImportExportFilter::UserCancelled;
-        }
-        cfg = wdg->configuration();
-        KisConfig().setExportConfiguration("TIFF", *cfg.data());
+    KisTIFFOptions options;
+    switch (configuration->getInt("compressiontype")) {
+    case 0:
+        options.compressionType = COMPRESSION_NONE;
+        break;
+    case 1:
+        options.compressionType = COMPRESSION_JPEG;
+        break;
+    case 2:
+        options.compressionType = COMPRESSION_DEFLATE;
+        break;
+    case 3:
+        options.compressionType = COMPRESSION_LZW;
+        break;
+    case 4:
+        options.compressionType = COMPRESSION_JP2000;
+        break;
+    case 5:
+        options.compressionType = COMPRESSION_CCITTRLE;
+        break;
+    case 6:
+        options.compressionType = COMPRESSION_CCITTFAX3;
+        break;
+    case 7:
+        options.compressionType = COMPRESSION_CCITTFAX4;
+        break;
+    case 8:
+        options.compressionType = COMPRESSION_PIXARLOG;
+        break;
+    default:
+        options.compressionType = COMPRESSION_NONE;
     }
-
-    KisTIFFOptions options = wdg->options();
+    options.predictor = configuration->getInt("predictor");
+    options.alpha = configuration->getBool("alpha");
+    options.flatten = configuration->getBool("flatten");
+    options.jpegQuality = configuration->getInt("quality");
+    options.deflateCompress = configuration->getInt("deflate");
+    options.faxMode = configuration->getInt("faxmode");
+    options.pixarLogCompress = configuration->getInt("pixarlog");
+    options.saveProfile = configuration->getBool("saveProfile");
 
     if ((cs->channels()[0]->channelValueType() == KoChannelInfo::FLOAT16
          || cs->channels()[0]->channelValueType() == KoChannelInfo::FLOAT32) && options.predictor == 2) {
@@ -103,30 +114,24 @@ KisImportExportFilter::ConversionStatus KisTIFFExport::convert(const QByteArray&
         options.predictor = 3;
     }
 
-    QString filename = outputFile();
-
-    if (filename.isEmpty()) {
-        return KisImportExportFilter::FileNotFound;
-    }
-
     KisImageSP image;
 
     if (options.flatten) {
-        image = new KisImage(0, input->image()->width(), input->image()->height(), input->image()->colorSpace(), "");
-        image->setResolution(input->image()->xRes(), input->image()->yRes());
-        KisPaintDeviceSP pd = KisPaintDeviceSP(new KisPaintDevice(*input->image()->projection()));
+        image = new KisImage(0, document->image()->width(), document->image()->height(), document->image()->colorSpace(), "");
+        image->setResolution(document->image()->xRes(), document->image()->yRes());
+        KisPaintDeviceSP pd = KisPaintDeviceSP(new KisPaintDevice(*document->image()->projection()));
         KisPaintLayerSP l = KisPaintLayerSP(new KisPaintLayer(image.data(), "projection", OPACITY_OPAQUE_U8, pd));
         image->addNode(KisNodeSP(l.data()), image->rootLayer().data());
     } else {
-        image = input->image();
+        image = document->image();
     }
 
     // the image must be locked at the higher levels
-    KIS_SAFE_ASSERT_RECOVER_NOOP(input->image()->locked());
+    KIS_SAFE_ASSERT_RECOVER_NOOP(document->image()->locked());
 
-    KisTIFFConverter ktc(input);
+    KisTIFFConverter tiffConverter(document);
     KisImageBuilder_Result res;
-    if ((res = ktc.buildFile(filename, image, options)) == KisImageBuilder_RESULT_OK) {
+    if ((res = tiffConverter.buildFile(filename(), image, options)) == KisImageBuilder_RESULT_OK) {
         dbgFile << "success !";
         return KisImportExportFilter::OK;
     }
@@ -153,7 +158,7 @@ KisPropertiesConfigurationSP KisTIFFExport::defaultConfiguration(const QByteArra
 
 KisPropertiesConfigurationSP KisTIFFExport::lastSavedConfiguration(const QByteArray &from, const QByteArray &to) const
 {
-    QString filterConfig = KisConfig().exportConfiguration("TIFF");
+    QString filterConfig = KisConfig().exportConfiguration(to);
     KisPropertiesConfigurationSP cfg = defaultConfiguration(from, to);
     cfg->fromXML(filterConfig, false);
     return cfg;
@@ -162,6 +167,27 @@ KisPropertiesConfigurationSP KisTIFFExport::lastSavedConfiguration(const QByteAr
 KisConfigWidget *KisTIFFExport::createConfigurationWidget(QWidget *parent, const QByteArray &/*from*/, const QByteArray &/*to*/) const
 {
     return new KisTIFFOptionsWidget(parent);
+}
+
+void KisTIFFExport::initializeCapabilities()
+{
+    addCapability(KisExportCheckRegistry::instance()->get("NodeTypeCheck/KisGroupLayer")->create(KisExportCheckBase::UNSUPPORTED));
+    addCapability(KisExportCheckRegistry::instance()->get("MultiLayerCheck")->create(KisExportCheckBase::SUPPORTED));
+    addCapability(KisExportCheckRegistry::instance()->get("sRGBProfileCheck")->create(KisExportCheckBase::SUPPORTED));
+
+    QList<QPair<KoID, KoID> > supportedColorModels;
+    supportedColorModels << QPair<KoID, KoID>()
+            << QPair<KoID, KoID>(RGBAColorModelID, Integer8BitsColorDepthID)
+            << QPair<KoID, KoID>(RGBAColorModelID, Integer16BitsColorDepthID)
+            << QPair<KoID, KoID>(RGBAColorModelID, Float16BitsColorDepthID)
+            << QPair<KoID, KoID>(RGBAColorModelID, Float32BitsColorDepthID)
+            << QPair<KoID, KoID>(GrayAColorModelID, Integer8BitsColorDepthID)
+            << QPair<KoID, KoID>(GrayAColorModelID, Integer16BitsColorDepthID)
+            << QPair<KoID, KoID>(CMYKAColorModelID, Integer8BitsColorDepthID)
+            << QPair<KoID, KoID>(CMYKAColorModelID, Integer16BitsColorDepthID)
+            << QPair<KoID, KoID>(LABAColorModelID, Integer16BitsColorDepthID);
+    addSupportedColorModels(supportedColorModels, "TIFF");
+
 }
 
 #include <kis_tiff_export.moc>

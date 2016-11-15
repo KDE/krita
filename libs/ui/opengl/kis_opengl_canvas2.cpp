@@ -148,7 +148,7 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas,
 
     setFocusPolicy(Qt::StrongFocus);
     setAttribute(Qt::WA_NoSystemBackground, true);
-#ifdef Q_OS_MAC
+#ifdef Q_OS_OSX
     setAttribute(Qt::WA_AcceptTouchEvents, false);
 #else
     setAttribute(Qt::WA_AcceptTouchEvents, true);
@@ -768,7 +768,7 @@ QRect KisOpenGLCanvas2::updateCanvasProjection(KisUpdateInfoSP info)
         d->openGLImageTextures->recalculateCache(info);
     }
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_OSX
     /**
      * There is a bug on OSX: if we issue frame redraw before the tiles finished
      * uploading, the tiles will become corrupted. Depending on the GPU/driver

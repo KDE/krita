@@ -95,7 +95,7 @@ PSDSaver::~PSDSaver()
 {
 }
 
-KisImageWSP PSDSaver::image()
+KisImageSP PSDSaver::image()
 {
     return m_image;
 }
@@ -126,16 +126,10 @@ bool checkIfHasTransparency(KisPaintDeviceSP dev)
     return false;
 }
 
-KisImageBuilder_Result PSDSaver::buildFile(const QString &filename)
+KisImageBuilder_Result PSDSaver::buildFile(QIODevice *io)
 {
     if (!m_image)
         return KisImageBuilder_RESULT_EMPTY;
-
-    // Open file for writing
-    QFile f(filename);
-    if (!f.open(QIODevice::WriteOnly)) {
-        return KisImageBuilder_RESULT_NOT_LOCAL;
-    }
 
     const bool haveLayers = m_image->rootLayer()->childCount() > 1 ||
         checkIfHasTransparency(m_image->rootLayer()->firstChild()->projection());
@@ -160,10 +154,10 @@ KisImageBuilder_Result PSDSaver::buildFile(const QString &filename)
     header.colormode = colordef.first;
     header.channelDepth = colordef.second;
 
-    dbgFile << "header" << header << f.pos();
+    dbgFile << "header" << header << io->pos();
 
-    if (!header.write(&f)) {
-        dbgFile << "Failed to write header. Error:" << header.error << f.pos();
+    if (!header.write(io)) {
+        dbgFile << "Failed to write header. Error:" << header.error << io->pos();
         return KisImageBuilder_RESULT_FAILURE;
     }
 
@@ -176,9 +170,9 @@ KisImageBuilder_Result PSDSaver::buildFile(const QString &filename)
         colorModeBlock.duotoneSpecification = annotation->annotation();
     }
 
-    dbgFile << "colormode block" << f.pos();
-    if (!colorModeBlock.write(&f)) {
-        dbgFile << "Failed to write colormode block. Error:" << colorModeBlock.error << f.pos();
+    dbgFile << "colormode block" << io->pos();
+    if (!colorModeBlock.write(io)) {
+        dbgFile << "Failed to write colormode block. Error:" << colorModeBlock.error << io->pos();
         return KisImageBuilder_RESULT_FAILURE;
     }
 
@@ -231,41 +225,39 @@ KisImageBuilder_Result PSDSaver::buildFile(const QString &filename)
     }
 
 
-    dbgFile << "resource section" << f.pos();
-    if (!resourceSection.write(&f)) {
-        dbgFile << "Failed to write resource section. Error:" << resourceSection.error << f.pos();
+    dbgFile << "resource section" << io->pos();
+    if (!resourceSection.write(io)) {
+        dbgFile << "Failed to write resource section. Error:" << resourceSection.error << io->pos();
         return KisImageBuilder_RESULT_FAILURE;
     }
 
     // LAYER AND MASK DATA
     // Only save layers and masks if there is more than one layer
-    dbgFile << "m_image->rootLayer->childCount" << m_image->rootLayer()->childCount() << f.pos();
+    dbgFile << "m_image->rootLayer->childCount" << m_image->rootLayer()->childCount() << io->pos();
 
     if (haveLayers) {
 
         PSDLayerMaskSection layerSection(header);
         layerSection.hasTransparency = true;
 
-        if (!layerSection.write(&f, m_image->rootLayer())) {
-            dbgFile << "failed to write layer section. Error:" << layerSection.error << f.pos();
+        if (!layerSection.write(io, m_image->rootLayer())) {
+            dbgFile << "failed to write layer section. Error:" << layerSection.error << io->pos();
             return KisImageBuilder_RESULT_FAILURE;
         }
     }
     else {
         // else write a zero length block
-        dbgFile << "No layers, saving empty layers/mask block" << f.pos();
-        psdwrite(&f, (quint32)0);
+        dbgFile << "No layers, saving empty layers/mask block" << io->pos();
+        psdwrite(io, (quint32)0);
     }
 
     // IMAGE DATA
-    dbgFile << "Saving composited image" << f.pos();
+    dbgFile << "Saving composited image" << io->pos();
     PSDImageData imagedata(&header);
-    if (!imagedata.write(&f, m_image->projection(), haveLayers)) {
+    if (!imagedata.write(io, m_image->projection(), haveLayers)) {
         dbgFile << "Failed to write image data. Error:"  << imagedata.error;
         return KisImageBuilder_RESULT_FAILURE;
     }
-
-    f.close();
 
     return KisImageBuilder_RESULT_OK;
 }

@@ -322,7 +322,7 @@ void KisApplication::loadPlugins()
 
 bool KisApplication::start(const KisApplicationArguments &args)
 {
-#if defined(Q_OS_WIN)  || defined (Q_OS_MAC)
+#if defined(Q_OS_WIN)  || defined (Q_OS_OSX)
 #ifdef ENV32BIT
     KisConfig cfg;
     if (isWow64() && !cfg.readEntry("WarnedAbout32Bits", false)) {
@@ -677,7 +677,6 @@ bool KisApplication::createNewDocFromTemplate(const QString &fileName, KisMainWi
         doc->setFileBatchMode(m_batchRun);
         if (mainWindow->openDocumentInternal(templateURL, doc)) {
             doc->resetURL();
-            doc->setEmpty();
             doc->setTitleModified();
             dbgUI << "Template loaded...";
             return true;

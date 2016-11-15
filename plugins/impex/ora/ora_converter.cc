@@ -44,9 +44,9 @@ OraConverter::~OraConverter()
 {
 }
 
-KisImageBuilder_Result OraConverter::buildImage(const QString &filename)
+KisImageBuilder_Result OraConverter::buildImage(QIODevice *io)
 {
-    KoStore* store = KoStore::createStore(filename, KoStore::Read, "image/openraster", KoStore::Zip);
+    KoStore* store = KoStore::createStore(io, KoStore::Read, "image/openraster", KoStore::Zip);
     if (!store) {
         delete store;
         return KisImageBuilder_RESULT_FAILURE;
@@ -62,7 +62,7 @@ KisImageBuilder_Result OraConverter::buildImage(const QString &filename)
     return KisImageBuilder_RESULT_OK;
 }
 
-KisImageWSP OraConverter::image()
+KisImageSP OraConverter::image()
 {
     return m_image;
 }
@@ -72,11 +72,11 @@ vKisNodeSP OraConverter::activeNodes()
     return m_activeNodes;
 }
 
-KisImageBuilder_Result OraConverter::buildFile(const QString &filename, KisImageWSP image, vKisNodeSP activeNodes)
+KisImageBuilder_Result OraConverter::buildFile(QIODevice *io, KisImageSP image, vKisNodeSP activeNodes)
 {
 
     // Open file for writing
-    KoStore* store = KoStore::createStore(filename, KoStore::Write, "image/openraster", KoStore::Zip);
+    KoStore* store = KoStore::createStore(io, KoStore::Write, "image/openraster", KoStore::Zip);
     if (!store) {
         return KisImageBuilder_RESULT_FAILURE;
     }

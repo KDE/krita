@@ -42,6 +42,19 @@ struct KisImageAnimationInterface::Private
     {
     }
 
+    Private(const Private &rhs, KisImage *newImage)
+        : image(newImage),
+          externalFrameActive(false),
+          frameInvalidationBlocked(false),
+          fullClipRange(rhs.fullClipRange),
+          playbackRange(rhs.playbackRange),
+          framerate(rhs.framerate),
+          cachedLastFrameValue(-1),
+          m_currentTime(rhs.m_currentTime),
+          m_currentUITime(rhs.m_currentUITime)
+    {
+    }
+
     KisImage *image;
     bool externalFrameActive;
     bool frameInvalidationBlocked;
@@ -81,6 +94,12 @@ KisImageAnimationInterface::KisImageAnimationInterface(KisImage *image)
     m_d->framerate = 24;
     m_d->fullClipRange = KisTimeRange::fromTime(0, 100);
 
+    connect(this, SIGNAL(sigInternalRequestTimeSwitch(int, bool)), SLOT(switchCurrentTimeAsync(int, bool)));
+}
+
+KisImageAnimationInterface::KisImageAnimationInterface(const KisImageAnimationInterface &rhs, KisImage *newImage)
+    : m_d(new Private(*rhs.m_d, newImage))
+{
     connect(this, SIGNAL(sigInternalRequestTimeSwitch(int, bool)), SLOT(switchCurrentTimeAsync(int, bool)));
 }
 

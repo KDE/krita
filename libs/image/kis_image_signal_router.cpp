@@ -89,7 +89,10 @@ void KisImageSignalRouter::emitNodeHasBeenAdded(KisNode *parent, int index)
     KisNodeSP newNode = parent->at(index);
 
     if (!newNode->inherits("KisSelectionMask")) {
-        m_image->invalidateAllFrames();
+        KisImageSP image = m_image.toStrongRef();
+        if (image) {
+            image->invalidateAllFrames();
+        }
     }
 
     emit sigNodeAddedAsync(newNode);
@@ -100,7 +103,10 @@ void KisImageSignalRouter::emitAboutToRemoveANode(KisNode *parent, int index)
     KisNodeSP removedNode = parent->at(index);
 
     if (!removedNode->inherits("KisSelectionMask")) {
-        m_image->invalidateAllFrames();
+        KisImageSP image = m_image.toStrongRef();
+        if (image) {
+            image->invalidateAllFrames();
+        }
     }
 
     emit sigRemoveNodeAsync(removedNode);
@@ -109,30 +115,35 @@ void KisImageSignalRouter::emitAboutToRemoveANode(KisNode *parent, int index)
 
 void KisImageSignalRouter::slotNotification(KisImageSignalType type)
 {
+    KisImageSP image = m_image.toStrongRef();
+    if (!image) {
+        return;
+    }
+
     switch(type.id) {
     case LayersChangedSignal:
-        m_image->invalidateAllFrames();
+        image->invalidateAllFrames();
         emit sigLayersChangedAsync();
         break;
     case ModifiedSignal:
         emit sigImageModified();
         break;
     case SizeChangedSignal:
-        m_image->invalidateAllFrames();
+        image->invalidateAllFrames();
         emit sigSizeChanged(type.sizeChangedSignal.oldStillPoint,
                             type.sizeChangedSignal.newStillPoint);
         break;
     case ProfileChangedSignal:
-        m_image->invalidateAllFrames();
-        emit sigProfileChanged(m_image->profile());
+        image->invalidateAllFrames();
+        emit sigProfileChanged(image->profile());
         break;
     case ColorSpaceChangedSignal:
-        m_image->invalidateAllFrames();
-        emit sigColorSpaceChanged(m_image->colorSpace());
+        image->invalidateAllFrames();
+        emit sigColorSpaceChanged(image->colorSpace());
         break;
     case ResolutionChangedSignal:
-        m_image->invalidateAllFrames();
-        emit sigResolutionChanged(m_image->xRes(), m_image->yRes());
+        image->invalidateAllFrames();
+        emit sigResolutionChanged(image->xRes(), image->yRes());
         break;
     case NodeReselectionRequestSignal:
         if (type.nodeReselectionSignal.newActiveNode ||

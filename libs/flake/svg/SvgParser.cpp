@@ -172,36 +172,9 @@ SvgFilterHelper* SvgParser::findFilter(const QString &id, const QString &href)
         return 0;
 }
 
-SvgClipPathHelper* SvgParser::findClipPath(const QString &id, const QString &href)
+SvgClipPathHelper* SvgParser::findClipPath(const QString &id)
 {
-    // check if clip path was already parsed, and return it
-    if (m_clipPaths.contains(id))
-        return &m_clipPaths[ id ];
-
-    // check if clip path was stored for later parsing
-    if (!m_context.hasDefinition(id))
-        return 0;
-
-    const KoXmlElement &e = m_context.definition(id);
-    if (e.childNodesCount() == 0) {
-        QString mhref = e.attribute("xlink:href").mid(1);
-
-        if (m_context.hasDefinition(mhref))
-            return findClipPath(mhref, id);
-        else
-            return 0;
-    } else {
-        // ok clip path filter now
-        if (! parseClipPath(m_context.definition(id), m_context.definition(href)))
-            return 0;
-    }
-
-    // return successfully parsed clip path or 0
-    const QString n = href.isEmpty() ? id : href;
-    if (m_clipPaths.contains(n))
-        return &m_clipPaths[ n ];
-    else
-        return 0;
+    return m_clipPaths.contains(id) ? &m_clipPaths[id] : 0;
 }
 
 // Parsing functions
@@ -516,35 +489,33 @@ bool SvgParser::parseFilter(const KoXmlElement &e, const KoXmlElement &reference
     return true;
 }
 
-bool SvgParser::parseClipPath(const KoXmlElement &e, const KoXmlElement &referencedBy)
+bool SvgParser::parseClipPath(const KoXmlElement &e)
 {
     SvgClipPathHelper clipPath;
 
-    // Use the filter that is referencing, or if there isn't one, the original filter
-    KoXmlElement b;
-    if (!referencedBy.isNull())
-        b = referencedBy;
-    else
-        b = e;
+    const QString id = e.attribute("id");
+    if (id.isEmpty()) return false;
 
-    // check if we are referencing another clip path
-    if (e.hasAttribute("xlink:href")) {
-        QString href = e.attribute("xlink:href").mid(1);
-        if (! href.isEmpty()) {
-            // copy the referenced clip path if found
-            SvgClipPathHelper *refClipPath = findClipPath(href);
-            if (refClipPath)
-                clipPath = *refClipPath;
-        }
-    } else {
-        clipPath.setContent(b);
-    }
-
-    if (b.attribute("clipPathUnits") == "objectBoundingBox")
-        clipPath.setClipPathUnits(SvgClipPathHelper::ObjectBoundingBox);
+    clipPath.setClipPathUnits(
+        e.attribute("clipPathUnits") == "objectBoundingBox" ?
+            SvgClipPathHelper::ObjectBoundingBox :
+            SvgClipPathHelper::UserSpaceOnUse);
 
 
-    m_clipPaths.insert(b.attribute("id"), clipPath);
+    // ensure that the clip path is loaded in local coordinates system
+    m_context.pushGraphicsContext(e);
+    m_context.currentGC()->matrix = QTransform();
+
+    QList<KoShape*> shapes = parseGroup(e);
+    KIS_ASSERT_RECOVER_NOOP(shapes.size() <= 1);
+
+    m_context.popGraphicsContext();
+
+    if (shapes.isEmpty()) return false;
+
+    clipPath.setShapes(shapes);
+
+    m_clipPaths.insert(id, clipPath);
 
     return true;
 }
@@ -886,6 +857,8 @@ void SvgParser::applyFilter(KoShape *shape)
     }
 }
 
+
+
 void SvgParser::applyClipping(KoShape *shape)
 {
     SvgGraphicsContext *gc = m_context.currentGC();
@@ -896,73 +869,31 @@ void SvgParser::applyClipping(KoShape *shape)
         return;
 
     SvgClipPathHelper *clipPath = findClipPath(gc->clipPathId);
-    if (! clipPath)
+    if (!clipPath || clipPath->isEmpty())
         return;
 
-    debugFlake << "applying clip path" << gc->clipPathId << "clip rule" << gc->clipRule;
+    QList<KoShape*> shapes = clipPath->shapes();
 
-    const bool boundingBoxUnits = clipPath->clipPathUnits() == SvgClipPathHelper::ObjectBoundingBox;
-    debugFlake << "using" << (boundingBoxUnits ? "boundingBoxUnits" : "userSpaceOnUse");
+    QTransform extraShapeTransform;
+    KIS_ASSERT_RECOVER_NOOP(m_coordinateSystemOnLoading.contains(shape));
 
-    QTransform shapeMatrix = shape->absoluteTransformation(0);
-    // TODO:
-    // clip path element can have a clip-path property
-    // -> clip-path = intersection of children with referenced clip-path
-    // any of its children can have a clip-path property
-    // -> child element is clipped and the ORed with other children
-    m_context.pushGraphicsContext();
-
-    if (boundingBoxUnits) {
-        SvgGraphicsContext *gc = m_context.currentGC();
-        gc->matrix.reset();
-        gc->viewboxTransform.reset();
-        gc->currentBoundingBox = shape->boundingRect();
-        gc->forcePercentage = true;
+    if (m_coordinateSystemOnLoading.contains(shape)) {
+        extraShapeTransform =
+                shape->absoluteTransformation(0).inverted() *
+            m_coordinateSystemOnLoading[shape];
     }
 
-    QList<KoShape*> clipShapes = parseContainer(clipPath->content());
-    QList<KoPathShape*> pathShapes;
-    while (!clipShapes.isEmpty()) {
-        KoShape *clipShape = clipShapes.first();
-        clipShapes.removeFirst();
-        // remove clip shape from list of all parsed shapes
-        m_shapes.removeOne(clipShape);
-        // check if we have a path shape
-        KoPathShape *path = dynamic_cast<KoPathShape*>(clipShape);
-        if (!path) {
-            // if shape is a group, ungroup and add children to lits of clip shapes
-            KoShapeGroup *group = dynamic_cast<KoShapeGroup*>(clipShape);
-            if (group) {
-                QList<KoShape*> groupedShapes = group->shapes();
-                KoShapeUngroupCommand cmd(group, groupedShapes);
-                cmd.redo();
-                clipShapes.append(groupedShapes);
-            } else {
-                // shape is not a group shape, use its outline as clip path
-                QPainterPath outline = clipShape->absoluteTransformation(0).map(clipShape->outline());
-                path = KoPathShape::createShapeFromPainterPath(outline);
-            }
-            delete clipShape;
-        }
-        if (path) {
-            debugFlake << "using shape" << path->name() << "as clip path";
-            pathShapes.append(path);
-            if (boundingBoxUnits)
-                path->applyAbsoluteTransformation(shapeMatrix);
+    if (!extraShapeTransform.isIdentity()) {
+        Q_FOREACH(KoShape *s, shapes) {
+            s->applyAbsoluteTransformation(extraShapeTransform);
         }
     }
 
-    m_context.popGraphicsContext();
-
-    if (pathShapes.count()) {
-        QTransform transformToShape;
-        if (!boundingBoxUnits)
-            transformToShape = shape->absoluteTransformation(0).inverted();
-        KoClipData *clipData = new KoClipData(pathShapes);
-        KoClipPath *clipPath = new KoClipPath(shape, clipData);
-        clipPath->setClipRule(gc->clipRule);
-        shape->setClipPath(clipPath);
-    }
+    KoClipData *clipData = new KoClipData(shapes);
+    KoClipPath *clipPathObject = new KoClipPath(clipData,
+                                          clipPath->clipPathUnits() == SvgClipPathHelper::ObjectBoundingBox ?
+                                              KoClipPath::ObjectBoundingBox : KoClipPath::UserSpaceOnUse);
+    shape->setClipPath(clipPathObject);
 }
 
 QList<KoShape*> SvgParser::parseUse(const KoXmlElement &e)
@@ -987,6 +918,8 @@ QList<KoShape*> SvgParser::parseUse(const KoXmlElement &e)
 
                 KoShapeGroup *group = new KoShapeGroup();
                 group->setZIndex(m_context.nextZIndex());
+                group->applyAbsoluteTransformation(m_context.currentGC()->matrix);
+                m_coordinateSystemOnLoading[group] = m_context.currentGC()->matrix;
 
                 applyStyle(0, styles);
                 m_context.styleParser().parseFont(styles);
@@ -1105,6 +1038,10 @@ QList<KoShape*> SvgParser::parseGroup(const KoXmlElement &b)
 
     KoShapeGroup *group = new KoShapeGroup();
     group->setZIndex(m_context.nextZIndex());
+
+    // groups should also have their own coordinate system!
+    group->applyAbsoluteTransformation(m_context.currentGC()->matrix);
+    m_coordinateSystemOnLoading[group] = m_context.currentGC()->matrix;
 
     uploadStyleToContext(b);
 
@@ -1307,6 +1244,7 @@ KoShape * SvgParser::createObjectDirect(const KoXmlElement &b)
     KoShape *obj = createShapeFromElement(b, m_context);
     if (obj) {
         obj->applyAbsoluteTransformation(m_context.currentGC()->matrix);
+        m_coordinateSystemOnLoading[obj] = m_context.currentGC()->matrix;
 
         applyCurrentStyle(obj);
 
@@ -1327,6 +1265,7 @@ KoShape * SvgParser::createObject(const KoXmlElement &b, const SvgStyles &style)
     KoShape *obj = createShapeFromElement(b, m_context);
     if (obj) {
         obj->applyAbsoluteTransformation(m_context.currentGC()->matrix);
+        m_coordinateSystemOnLoading[obj] = m_context.currentGC()->matrix;
 
         SvgStyles objStyle = style.isEmpty() ? m_context.styleParser().collectStyles(b) : style;
         m_context.styleParser().parseFont(objStyle);

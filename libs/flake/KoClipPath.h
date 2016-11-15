@@ -43,11 +43,13 @@ public:
     /// Creates clip path data from multiple path shapes, takes ownership of the path shapes
     explicit KoClipData(const QList<KoPathShape*> &clipPathShapes);
 
+    explicit KoClipData(const QList<KoShape*> &clipPathShapes);
+
     /// Destroys the clip path data
     ~KoClipData();
 
     /// Returns the clip path shapes
-    QList<KoPathShape*> clipPathShapes() const;
+    QList<KoShape*> clipPathShapes() const;
 
     /// Gives up ownership of clip path shapes
     void removeClipShapesOwnership();

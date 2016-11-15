@@ -20,6 +20,7 @@
 #include "KoClipPath.h"
 #include "KoPathShape.h"
 #include "KoViewConverter.h"
+#include "KoShapeGroup.h"
 
 #include <QTransform>
 #include <QPainterPath>
@@ -56,7 +57,7 @@ public:
             qDeleteAll(clipPathShapes);
     }
 
-    QList<KoPathShape*> clipPathShapes;
+    QList<KoShape*> clipPathShapes;
     bool deleteClipShapes;
 };
 
@@ -71,6 +72,16 @@ KoClipData::KoClipData(const QList<KoPathShape*> &clipPathShapes)
         : d(new Private())
 {
     Q_ASSERT(clipPathShapes.count());
+
+    Q_FOREACH (KoPathShape *shape, clipPathShapes) {
+        d->clipPathShapes << shape;
+    }
+}
+
+KoClipData::KoClipData(const QList<KoShape*> &clipPathShapes)
+        : d(new Private())
+{
+    Q_ASSERT(clipPathShapes.count());
     d->clipPathShapes = clipPathShapes;
 }
 
@@ -79,7 +90,7 @@ KoClipData::~KoClipData()
     delete d;
 }
 
-QList<KoPathShape*> KoClipData::clipPathShapes() const
+QList<KoShape*> KoClipData::clipPathShapes() const
 {
     return d->clipPathShapes;
 }
@@ -102,7 +113,7 @@ public:
 
     void compileClipPath(KoShape *clippedShape)
     {
-        QList<KoPathShape*> clipShapes = clipData->clipPathShapes();
+        QList<KoShape*> clipShapes = clipData->clipPathShapes();
         if (!clipShapes.count())
             return;
 
@@ -111,7 +122,7 @@ public:
 
         QTransform transformToShape = initialTransformToShape * scaleToPercent(initialShapeSize);
 
-        Q_FOREACH (KoPathShape *path, clipShapes) {
+        Q_FOREACH (KoShape *path, clipShapes) {
             if (!path)
                 continue;
             // map clip path to shape coordinates of clipped shape
@@ -123,22 +134,38 @@ public:
         }
     }
 
+    void collectShapePath(QPainterPath *result, const KoShape *shape) {
+        if (const KoPathShape *pathShape = dynamic_cast<const KoPathShape*>(shape)) {
+            // different shapes add up to the final path using Windind Fill rule (acc. to SVG 1.1)
+            QTransform t = pathShape->absoluteTransformation(0);
+            result->addPath(t.map(pathShape->outline()));
+        } else if (const KoShapeGroup *groupShape = dynamic_cast<const KoShapeGroup*>(shape)) {
+            QList<KoShape*> shapes = groupShape->shapes();
+            qSort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
+
+            Q_FOREACH (const KoShape *child, shapes) {
+                collectShapePath(result, child);
+            }
+        }
+    }
+
+
     void compileClipPath()
     {
-        QList<KoPathShape*> clipShapes = clipData->clipPathShapes();
+        QList<KoShape*> clipShapes = clipData->clipPathShapes();
         if (clipShapes.isEmpty())
             return;
 
         clipPath = QPainterPath();
+        clipPath.setFillRule(Qt::WindingFill);
 
-        Q_FOREACH (KoPathShape *path, clipShapes) {
+        qSort(clipShapes.begin(), clipShapes.end(), KoShape::compareShapeZIndex);
+
+        Q_FOREACH (KoShape *path, clipShapes) {
             if (!path) continue;
 
-            QTransform t = path->absoluteTransformation(0);
-            clipPath.addPath(t.map(path->outline()));
+            collectShapePath(&clipPath, path);
         }
-
-        clipPath.setFillRule(clipRule);
     }
 
     QExplicitlySharedDataPointer<KoClipData> clipData; ///< the clip path data
@@ -170,7 +197,6 @@ KoClipPath::~KoClipPath()
 void KoClipPath::setClipRule(Qt::FillRule clipRule)
 {
     d->clipRule = clipRule;
-    d->clipPath.setFillRule(clipRule);
 }
 
 Qt::FillRule KoClipPath::clipRule() const
@@ -182,7 +208,6 @@ KoClipPath::CoordinateSystem KoClipPath::coordinates() const
 {
     return d->coordinates;
 }
-
 void KoClipPath::applyClipping(KoShape *clippedShape, QPainter &painter, const KoViewConverter &converter)
 {
     QPainterPath clipPath;
@@ -233,7 +258,18 @@ QPainterPath KoClipPath::pathForSize(const QSizeF &size) const
 
 QList<KoPathShape*> KoClipPath::clipPathShapes() const
 {
-    return d->clipData->clipPathShapes();
+    // TODO: deprecate this method!
+
+    QList<KoPathShape*> shapes;
+
+    Q_FOREACH (KoShape *shape, d->clipData->clipPathShapes()) {
+        KoPathShape *pathShape = dynamic_cast<KoPathShape*>(shape);
+        if (pathShape) {
+            shapes << pathShape;
+        }
+    }
+
+    return shapes;
 }
 
 QTransform KoClipPath::clipDataTransformation(KoShape *clippedShape) const

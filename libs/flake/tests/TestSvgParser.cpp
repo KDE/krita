@@ -2172,4 +2172,105 @@ void TestSvgParser::testKoClipPathRelativeRendering()
     SvgRenderTester::testRender(group.take(), "load", "relative_clip_render_test", QSize(30,30));
 }
 
+void TestSvgParser::testRenderClipPath_User()
+{
+    const QString data =
+            "<svg width=\"30px\" height=\"30px\""
+            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+
+            "<clipPath id=\"clip1\" clipPathUnits=\"userSpaceOnUse\">"
+            "    <rect id=\"clipRect1\" x=\"10\" y=\"0\" width=\"10\" height=\"30\""
+            "            fill=\"red\" stroke=\"none\" />"
+            "    <rect id=\"clipRect1\" x=\"10\" y=\"0\" width=\"10\" height=\"30\""
+            "            fill=\"yellow\" stroke=\"none\" />"
+            "</clipPath>"
+
+            "<clipPath id=\"clip2\" clipPathUnits=\"userSpaceOnUse\">"
+            "    <path id=\"clipRect1\" d=\"M 0 7 L 30 7 15 30 0 7 z\""
+            "            fill=\"red\" stroke=\"none\" />"
+            "</clipPath>"
+
+            "<g id=\"testRect\" clip-path=\"url(#clip2)\">"
+            "    <rect id=\"testRect1\" x=\"5\" y=\"5\" width=\"15\" height=\"15\""
+            "        fill=\"blue\" stroke=\"none\" clip-path=\"url(#clip1)\"/>"
+
+            "    <rect id=\"testRect2\" x=\"10\" y=\"10\" width=\"15\" height=\"15\""
+            "        fill=\"red\" stroke=\"none\"/>"
+            "</g>"
+
+            "</svg>";
+
+    SvgRenderTester t (data);
+
+    t.test_standard_30px_72ppi("clip_render_test", false);
+}
+
+void TestSvgParser::testRenderClipPath_Obb()
+{
+    const QString data =
+            "<svg width=\"30px\" height=\"30px\""
+            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+
+            "<clipPath id=\"clip1\" clipPathUnits=\"userSpaceOnUse\">"
+            "    <rect id=\"clipRect1\" x=\"10\" y=\"0\" width=\"10\" height=\"30\""
+            "            fill=\"red\" stroke=\"none\" />"
+            "    <rect id=\"clipRect1\" x=\"10\" y=\"0\" width=\"10\" height=\"30\""
+            "            fill=\"yellow\" stroke=\"none\" />"
+            "</clipPath>"
+
+            "<clipPath id=\"clip2\" clipPathUnits=\"objectBoundingBox\">"
+            "    <path id=\"clipRect1\" d=\"M 0 0 L 1 0 0.5 1 0 0 z\""
+            "            fill=\"red\" stroke=\"none\" />"
+            "</clipPath>"
+
+            "<g id=\"testRect\" clip-path=\"url(#clip2)\">"
+            "    <rect id=\"testRect1\" x=\"5\" y=\"5\" width=\"15\" height=\"15\""
+            "        fill=\"blue\" stroke=\"none\" clip-path=\"url(#clip1)\"/>"
+
+            "    <rect id=\"testRect2\" x=\"10\" y=\"10\" width=\"15\" height=\"15\""
+            "        fill=\"red\" stroke=\"none\"/>"
+            "</g>"
+
+            "</svg>";
+
+    SvgRenderTester t (data);
+
+    t.test_standard_30px_72ppi("relative_clip_render_test", false);
+}
+
+void TestSvgParser::testRenderClipPath_Obb_Transform()
+{
+    const QString data =
+            "<svg width=\"30px\" height=\"30px\""
+            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+
+            "<clipPath id=\"clip1\" clipPathUnits=\"userSpaceOnUse\""
+            "    transform=\"rotate(90,15,15)\">"
+            "    <rect id=\"clipRect1\" x=\"10\" y=\"0\" width=\"10\" height=\"30\""
+            "            fill=\"red\" stroke=\"none\" />"
+            "    <rect id=\"clipRect1\" x=\"10\" y=\"0\" width=\"10\" height=\"30\""
+            "            fill=\"yellow\" stroke=\"none\" />"
+            "</clipPath>"
+
+            "<clipPath id=\"clip2\" clipPathUnits=\"objectBoundingBox\""
+            "    transform=\"rotate(90 0.5 0.5)\">"
+            "    <path id=\"clipRect1\" d=\"M 0 0 L 1 0 0.5 1 0 0 z\""
+            "            fill=\"red\" stroke=\"none\" />"
+            "</clipPath>"
+
+            "<g id=\"testRect\" clip-path=\"url(#clip2)\">"
+            "    <rect id=\"testRect1\" x=\"5\" y=\"5\" width=\"15\" height=\"15\""
+            "        fill=\"blue\" stroke=\"none\" clip-path=\"url(#clip1)\"/>"
+
+            "    <rect id=\"testRect2\" x=\"10\" y=\"10\" width=\"15\" height=\"15\""
+            "        fill=\"red\" stroke=\"none\"/>"
+            "</g>"
+
+            "</svg>";
+
+    SvgRenderTester t (data);
+
+    t.test_standard_30px_72ppi("clip_render_test_rotated", false);
+}
+
 QTEST_MAIN(TestSvgParser)

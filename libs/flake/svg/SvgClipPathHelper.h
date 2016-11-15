@@ -20,7 +20,9 @@
 #ifndef SVGCLIPPATHHELPER_H
 #define SVGCLIPPATHHELPER_H
 
-#include <KoXmlReader.h>
+#include <QList>
+
+class KoShape;
 
 class SvgClipPathHelper
 {
@@ -35,14 +37,14 @@ public:
     /// Returns the clip path units type
     Units clipPathUnits() const;
 
-    /// Sets the dom element containing the clip path
-    void setContent(const KoXmlElement &content);
-    /// Return the clip path element
-    KoXmlElement content() const;
+    QList<KoShape *> shapes() const;
+    void setShapes(const QList<KoShape *> &shapes);
+
+    bool isEmpty() const;
 
 private:
     Units m_clipPathUnits;
-    KoXmlElement m_content;
+    QList<KoShape*> m_shapes;
 };
 
 #endif // SVGCLIPPATHHELPER_H

@@ -38,12 +38,17 @@ SvgClipPathHelper::Units SvgClipPathHelper::clipPathUnits() const
     return m_clipPathUnits;
 }
 
-void SvgClipPathHelper::setContent(const KoXmlElement &content)
+QList<KoShape *> SvgClipPathHelper::shapes() const
 {
-    m_content = content;
+    return m_shapes;
 }
 
-KoXmlElement SvgClipPathHelper::content() const
+void SvgClipPathHelper::setShapes(const QList<KoShape *> &shapes)
 {
-    return m_content;
+    m_shapes = shapes;
+}
+
+bool SvgClipPathHelper::isEmpty() const
+{
+    return m_shapes.isEmpty();
 }

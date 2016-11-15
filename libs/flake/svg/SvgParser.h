@@ -79,7 +79,7 @@ protected:
     /// Parses a filter element
     bool parseFilter(const KoXmlElement &, const KoXmlElement &referencedBy = KoXmlElement());
     /// Parses a clip path element
-    bool parseClipPath(const KoXmlElement &, const KoXmlElement &referencedBy = KoXmlElement());
+    bool parseClipPath(const KoXmlElement &);
     /// parses a length attribute
     qreal parseUnit(const QString &, bool horiz = false, bool vert = false, const QRectF &bbox = QRectF());
     /// parses a length attribute in x-direction
@@ -102,7 +102,7 @@ protected:
     /// find filter with given id in filter map
     SvgFilterHelper* findFilter(const QString &id, const QString &href = QString());
     /// find clip path with given id in clip path map
-    SvgClipPathHelper* findClipPath(const QString &id, const QString &href = QString());
+    SvgClipPathHelper* findClipPath(const QString &id);
 
     /// Adds list of shapes to the given group shape
     void addToGroup(QList<KoShape*> shapes, KoShapeGroup * group);
@@ -152,6 +152,7 @@ private:
     KoDocumentResourceManager *m_documentResourceManager;
     QList<KoShape*> m_shapes;
     QList<KoShape*> m_toplevelShapes;
+    QHash<KoShape*, QTransform> m_coordinateSystemOnLoading;
 };
 
 #endif

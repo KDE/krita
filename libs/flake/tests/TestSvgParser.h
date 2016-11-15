@@ -120,6 +120,10 @@ private Q_SLOTS:
 
     void testKoClipPathRendering();
     void testKoClipPathRelativeRendering();
+
+    void testRenderClipPath_User();
+    void testRenderClipPath_Obb();
+    void testRenderClipPath_Obb_Transform();
 };
 
 #endif // TESTSVGPARSER_H

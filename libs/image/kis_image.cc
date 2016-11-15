@@ -127,17 +127,17 @@ class KisImage::KisImagePrivate
 public:
     KisImagePrivate(KisImage *_q, qint32 w, qint32 h,
                     const KoColorSpace *c,
-                    KisUndoStore *u,
+                    KisUndoStore *undo,
                     KisImageAnimationInterface *_animationInterface)
         : q(_q)
         , lockedForReadOnly(false)
         , width(w)
         , height(h)
-        , colorSpace(c)
+        , colorSpace(c ? c : KoColorSpaceRegistry::instance()->rgb8())
         , nserver(1)
-        , undoStore(u)
-        , legacyUndoAdapter(u, _q)
-        , postExecutionUndoAdapter(u, _q)
+        , undoStore(undo ? undo : new KisDumbUndoStore())
+        , legacyUndoAdapter(undoStore.data(), _q)
+        , postExecutionUndoAdapter(undoStore.data(), _q)
         , recorder(_q)
         , signalRouter(_q)
         , animationInterface(_animationInterface)
@@ -176,6 +176,19 @@ public:
         connect(q, SIGNAL(sigImageModified()), KisMemoryStatisticsServer::instance(), SLOT(notifyImageChanged()));
     }
 
+    ~KisImagePrivate() {
+        /**
+         * Stop animation interface. It may use the rootLayer.
+         */
+        delete animationInterface;
+
+        /**
+         * First delete the nodes, while strokes
+         * and undo are still alive
+         */
+        rootLayer.clear();
+    }
+
     KisImage *q;
 
     quint32 lockCount = 0;
@@ -198,7 +211,7 @@ public:
 
     KisNameServer nserver;
 
-    KisUndoStore *undoStore;
+    QScopedPointer<KisUndoStore> undoStore;
     KisLegacyUndoAdapter legacyUndoAdapter;
     KisPostExecutionUndoAdapter postExecutionUndoAdapter;
 
@@ -228,23 +241,11 @@ public:
 KisImage::KisImage(KisUndoStore *undoStore, qint32 width, qint32 height, const KoColorSpace * colorSpace, const QString& name)
         : QObject(0)
         , KisShared()
+        , m_d(new KisImagePrivate(this, width, height,
+                                  colorSpace, undoStore,
+                                  new KisImageAnimationInterface(this)))
 {
     setObjectName(name);
-    // Handle undoStore == 0 and colorSpace == 0 cases
-    if (!undoStore) {
-        undoStore = new KisDumbUndoStore();
-    }
-
-    const KoColorSpace *c;
-    if (colorSpace != 0) {
-        c = colorSpace;
-    } else {
-        c = KoColorSpaceRegistry::instance()->rgb8();
-    }
-    m_d = new KisImagePrivate(this, width, height,
-                              c, undoStore,
-                              new KisImageAnimationInterface(this));
-
     setRootLayer(new KisGroupLayer(this, "root", OPACITY_OPAQUE_U8));
 }
 
@@ -257,18 +258,6 @@ KisImage::~KisImage()
      */
     waitForDone();
 
-    /**
-     * Stop animation interface. It may use the rootLayer.
-     */
-    delete m_d->animationInterface;
-
-    /**
-     * First delete the nodes, while strokes
-     * and undo are still alive
-     */
-    m_d->rootLayer = 0;
-
-    delete m_d->undoStore;
     delete m_d;
     disconnect(); // in case Qt gets confused
 }
@@ -1128,13 +1117,12 @@ void KisImage::setUndoStore(KisUndoStore *undoStore)
 
     m_d->legacyUndoAdapter.setUndoStore(undoStore);
     m_d->postExecutionUndoAdapter.setUndoStore(undoStore);
-    delete m_d->undoStore;
-    m_d->undoStore = undoStore;
+    m_d->undoStore.reset(undoStore);
 }
 
 KisUndoStore* KisImage::undoStore()
 {
-    return m_d->undoStore;
+    return m_d->undoStore.data();
 }
 
 KisUndoAdapter* KisImage::undoAdapter() const

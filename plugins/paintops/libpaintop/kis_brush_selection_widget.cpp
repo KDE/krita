@@ -264,7 +264,7 @@ void KisBrushSelectionWidget::hideOptions(const QStringList &options)
             o = m_autoBrushWidget->findChild<QObject*>(l[1]);
         }
         else if (l[0] == "KisBrushChooser") {
-            o = m_brushChooser->findChild<QObject*>(l[1]);
+            o = m_predefinedBrushWidget->findChild<QObject*>(l[1]);
         }
         else if (l[0] == "KisTextBrushChooser") {
             o = m_textBrushWidget->findChild<QObject*>(l[1]);

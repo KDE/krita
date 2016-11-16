@@ -436,7 +436,6 @@ struct KisVisualColorSelectorShape::Private
     int channel1;
     int channel2;
     KisSignalCompressor *updateTimer;
-    KisSignalCompressor *siblingTimer;
     bool mousePressActive = false;
     const KoColorDisplayRendererInterface *displayRenderer = 0;
     qreal hue = 0.0;
@@ -464,7 +463,6 @@ KisVisualColorSelectorShape::KisVisualColorSelectorShape(QWidget *parent,
     m_d->channel2 = qBound(0, channel2, maxchannel);
     this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     m_d->updateTimer = new KisSignalCompressor(100 /* ms */, KisSignalCompressor::POSTPONE, this);
-    m_d->siblingTimer = new KisSignalCompressor(30 /* ms */, KisSignalCompressor::POSTPONE, this);
     setDisplayRenderer(displayRenderer);
     show();
 

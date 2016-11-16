@@ -49,7 +49,7 @@ struct KisVisualColorSelector::Private
     bool updateLonesome {false}; //for Modal dialogs.
     bool circular {false};
     const KoColorDisplayRendererInterface *displayRenderer {0};
-    KisVisualColorSelector::Configuration acs_config;
+    KisColorSelectorConfiguration acs_config;
     //Current coordinates.
     KisSignalCompressor *updateTimer {0};
     QVector <qreal> currentCoordinates;
@@ -64,7 +64,7 @@ KisVisualColorSelector::KisVisualColorSelector(QWidget *parent)
     this->setLayout(layout);
 
     KConfigGroup cfg =  KSharedConfig::openConfig()->group("advancedColorSelector");
-    m_d->acs_config = Configuration::fromString(cfg.readEntry("colorSelectorConfiguration", KisVisualColorSelector::Configuration().toString()));
+    m_d->acs_config = KisColorSelectorConfiguration::fromString(cfg.readEntry("colorSelectorConfiguration", KisColorSelectorConfiguration().toString()));
 
 }
 
@@ -107,15 +107,13 @@ KoColor KisVisualColorSelector::getCurrentColor()
 
 void KisVisualColorSelector::ConfigurationChanged()
 {
-    m_d->updateTimer = new KisSignalCompressor(100 /* ms */, KisSignalCompressor::POSTPONE, this);
     m_d->updateTimer->start();
-    connect(m_d->updateTimer, SIGNAL(timeout()), SLOT(slotRebuildSelectors()), Qt::UniqueConnection);
 }
 
 void KisVisualColorSelector::slotRebuildSelectors()
 {
     KConfigGroup cfg =  KSharedConfig::openConfig()->group("advancedColorSelector");
-    m_d->acs_config = Configuration::fromString(cfg.readEntry("colorSelectorConfiguration", KisVisualColorSelector::Configuration().toString()));
+    m_d->acs_config = KisColorSelectorConfiguration::fromString(cfg.readEntry("colorSelectorConfiguration", KisColorSelectorConfiguration().toString()));
 
     qDeleteAll(children());
     m_d->widgetlist.clear();
@@ -147,19 +145,19 @@ void KisVisualColorSelector::slotRebuildSelectors()
 
         switch(m_d->acs_config.subTypeParameter)
         {
-        case H:
+        case KisColorSelectorConfiguration::H:
             channel1 = 0;
             break;
-        case hsyS:
-        case hsiS:
-        case hslS:
-        case hsvS:
+        case KisColorSelectorConfiguration::hsyS:
+        case KisColorSelectorConfiguration::hsiS:
+        case KisColorSelectorConfiguration::hslS:
+        case KisColorSelectorConfiguration::hsvS:
             channel1 = 1;
             break;
-        case V:
-        case L:
-        case I:
-        case Y:
+        case KisColorSelectorConfiguration::V:
+        case KisColorSelectorConfiguration::L:
+        case KisColorSelectorConfiguration::I:
+        case KisColorSelectorConfiguration::Y:
             channel1 = 2;
             break;
         default:
@@ -168,63 +166,63 @@ void KisVisualColorSelector::slotRebuildSelectors()
 
         switch(m_d->acs_config.mainTypeParameter)
         {
-        case hsySH:
+        case KisColorSelectorConfiguration::hsySH:
             modelS = KisVisualColorSelectorShape::HSY;
             channel2 = 0;
             channel3 = 1;
             break;
-        case hsiSH:
+        case KisColorSelectorConfiguration::hsiSH:
             modelS = KisVisualColorSelectorShape::HSI;
             channel2 = 0;
             channel3 = 1;
             break;
-        case hslSH:
+        case KisColorSelectorConfiguration::hslSH:
             modelS = KisVisualColorSelectorShape::HSL;
             channel2 = 0;
             channel3 = 1;
             break;
-        case hsvSH:
+        case KisColorSelectorConfiguration::hsvSH:
             modelS = KisVisualColorSelectorShape::HSV;
             channel2 = 0;
             channel3 = 1;
             break;
-        case YH:
+        case KisColorSelectorConfiguration::YH:
             modelS = KisVisualColorSelectorShape::HSY;
             channel2 = 0;
             channel3 = 2;
             break;
-        case LH:
+        case KisColorSelectorConfiguration::LH:
             modelS = KisVisualColorSelectorShape::HSL;
             channel2 = 0;
             channel3 = 2;
             break;
-        case IH:
+        case KisColorSelectorConfiguration::IH:
             modelS = KisVisualColorSelectorShape::HSL;
             channel2 = 0;
             channel3 = 2;
             break;
-        case VH:
+        case KisColorSelectorConfiguration::VH:
             modelS = KisVisualColorSelectorShape::HSV;
             channel2 = 0;
             channel3 = 2;
             break;
-        case SY:
+        case KisColorSelectorConfiguration::SY:
             modelS = KisVisualColorSelectorShape::HSY;
             channel2 = 1;
             channel3 = 2;
             break;
-        case SI:
+        case KisColorSelectorConfiguration::SI:
             modelS = KisVisualColorSelectorShape::HSI;
             channel2 = 1;
             channel3 = 2;
             break;
-        case SL:
+        case KisColorSelectorConfiguration::SL:
             modelS = KisVisualColorSelectorShape::HSL;
             channel2 = 1;
             channel3 = 2;
             break;
-        case SV:
-        case SV2:
+        case KisColorSelectorConfiguration::SV:
+        case KisColorSelectorConfiguration::SV2:
             modelS = KisVisualColorSelectorShape::HSV;
             channel2 = 1;
             channel3 = 2;
@@ -232,19 +230,20 @@ void KisVisualColorSelector::slotRebuildSelectors()
         default:
             Q_ASSERT_X(false, "", "Invalid acs_config.mainTypeParameter");
         }
-        if (m_d->acs_config.mainType==Triangle) {
+        if (m_d->acs_config.mainType == KisColorSelectorConfiguration::Triangle) {
             modelS = KisVisualColorSelectorShape::HSV;
             //Triangle only really works in HSV mode.
         }
         KisVisualColorSelectorShape *bar;
-        if (m_d->acs_config.subType==Ring) {
+        if (m_d->acs_config.subType == KisColorSelectorConfiguration::Ring) {
             bar = new KisVisualEllipticalSelectorShape(this,
                                                        KisVisualColorSelectorShape::onedimensional,
                                                        modelS,
                                                        m_d->currentCS, channel1, channel1,
                                                        m_d->displayRenderer, borderWidth,KisVisualEllipticalSelectorShape::border);
             bar->resize(sizeValue, sizeValue);
-        } else if (m_d->acs_config.subType==Slider && m_d->circular==false) {
+        }
+        else if (m_d->acs_config.subType == KisColorSelectorConfiguration::Slider && m_d->circular==false) {
             bar = new KisVisualRectangleSelectorShape(this,
                                                       KisVisualColorSelectorShape::onedimensional,
                                                       modelS,
@@ -253,7 +252,8 @@ void KisVisualColorSelector::slotRebuildSelectors()
             bar->setMaximumWidth(borderWidth);
             bar->setMinimumWidth(borderWidth);
             bar->setMinimumHeight(sizeValue);
-        } else if (m_d->acs_config.subType==Slider && m_d->circular==true) {
+        }
+        else if (m_d->acs_config.subType == KisColorSelectorConfiguration::Slider && m_d->circular==true) {
             bar = new KisVisualEllipticalSelectorShape(this,
                                                        KisVisualColorSelectorShape::onedimensional,
                                                        modelS,
@@ -272,13 +272,13 @@ void KisVisualColorSelector::slotRebuildSelectors()
         m_d->widgetlist.append(bar);
 
         KisVisualColorSelectorShape *block;
-        if (m_d->acs_config.mainType==Triangle) {
+        if (m_d->acs_config.mainType == KisColorSelectorConfiguration::Triangle) {
             block = new KisVisualTriangleSelectorShape(this, KisVisualColorSelectorShape::twodimensional,
                                                        modelS,
                                                        m_d->currentCS, channel2, channel3,
                                                        m_d->displayRenderer);
             block->setGeometry(bar->getSpaceForTriangle(newrect));
-        } else if (m_d->acs_config.mainType==Square) {
+        } else if (m_d->acs_config.mainType == KisColorSelectorConfiguration::Square) {
             block = new KisVisualRectangleSelectorShape(this, KisVisualColorSelectorShape::twodimensional,
                                                         modelS,
                                                         m_d->currentCS, channel2, channel3,
@@ -301,7 +301,8 @@ void KisVisualColorSelector::slotRebuildSelectors()
         m_d->widgetlist.append(block);
 
 
-    } else if (m_d->currentCS->colorChannelCount() == 4) {
+    }
+    else if (m_d->currentCS->colorChannelCount() == 4) {
         KisVisualRectangleSelectorShape *block =  new KisVisualRectangleSelectorShape(this, KisVisualRectangleSelectorShape::twodimensional,KisVisualColorSelectorShape::Channel, m_d->currentCS, 0, 1);
         KisVisualRectangleSelectorShape *block2 =  new KisVisualRectangleSelectorShape(this, KisVisualRectangleSelectorShape::twodimensional,KisVisualColorSelectorShape::Channel, m_d->currentCS, 2, 3);
         block->setMaximumWidth(width()*0.5);
@@ -377,23 +378,28 @@ void KisVisualColorSelector::resizeEvent(QResizeEvent *) {
         slotsetColorSpace(m_d->currentcolor.colorSpace());
     }
     if (m_d->currentCS->colorChannelCount()==3) {
-        if (m_d->acs_config.subType==Ring) {
+
+        if (m_d->acs_config.subType == KisColorSelectorConfiguration::Ring) {
             m_d->widgetlist.at(0)->resize(sizeValue,sizeValue);
-        } else if (m_d->acs_config.subType==Slider && m_d->circular==false) {
+        }
+        else if (m_d->acs_config.subType == KisColorSelectorConfiguration::Slider && m_d->circular==false) {
             m_d->widgetlist.at(0)->setMaximumWidth(borderWidth);
             m_d->widgetlist.at(0)->setMinimumWidth(borderWidth);
             m_d->widgetlist.at(0)->setMinimumHeight(sizeValue);
             m_d->widgetlist.at(0)->setMaximumHeight(sizeValue);
-        } else if (m_d->acs_config.subType==Slider && m_d->circular==true) {
+        }
+        else if (m_d->acs_config.subType == KisColorSelectorConfiguration::Slider && m_d->circular==true) {
             m_d->widgetlist.at(0)->resize(sizeValue,sizeValue);
         }
         m_d->widgetlist.at(0)->setBorderWidth(borderWidth);
 
-        if (m_d->acs_config.mainType==Triangle) {
+        if (m_d->acs_config.mainType == KisColorSelectorConfiguration::Triangle) {
             m_d->widgetlist.at(1)->setGeometry(m_d->widgetlist.at(0)->getSpaceForTriangle(newrect));
-        } else if (m_d->acs_config.mainType==Square) {
+        }
+        else if (m_d->acs_config.mainType == KisColorSelectorConfiguration::Square) {
             m_d->widgetlist.at(1)->setGeometry(m_d->widgetlist.at(0)->getSpaceForSquare(newrect));
-        } else if (m_d->acs_config.mainType==Wheel) {
+        }
+        else if (m_d->acs_config.mainType == KisColorSelectorConfiguration::Wheel) {
             m_d->widgetlist.at(1)->setGeometry(m_d->widgetlist.at(0)->getSpaceForCircle(newrect));
         }
     }
@@ -427,7 +433,7 @@ struct KisVisualColorSelectorShape::Private
 {
     QImage gradient;
     QImage fullSelector;
-    bool imagesNeedUpdate= true;
+    bool imagesNeedUpdate {true};
     QPointF currentCoordinates;
     Dimensions dimension;
     ColorModel model;
@@ -435,7 +441,7 @@ struct KisVisualColorSelectorShape::Private
     KoColor currentColor;
     int channel1;
     int channel2;
-    KisSignalCompressor *updateTimer;
+    KisSignalCompressor *updateTimer {0};
     bool mousePressActive = false;
     const KoColorDisplayRendererInterface *displayRenderer = 0;
     qreal hue = 0.0;
@@ -463,6 +469,7 @@ KisVisualColorSelectorShape::KisVisualColorSelectorShape(QWidget *parent,
     m_d->channel2 = qBound(0, channel2, maxchannel);
     this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     m_d->updateTimer = new KisSignalCompressor(100 /* ms */, KisSignalCompressor::POSTPONE, this);
+    connect(m_d->updateTimer, SIGNAL(timeout()), SLOT(slotRebuildSelectors()), Qt::UniqueConnection);
     setDisplayRenderer(displayRenderer);
     show();
 
@@ -470,7 +477,6 @@ KisVisualColorSelectorShape::KisVisualColorSelectorShape(QWidget *parent,
 
 KisVisualColorSelectorShape::~KisVisualColorSelectorShape()
 {
-
 }
 
 void KisVisualColorSelectorShape::updateCursor()
@@ -487,17 +493,20 @@ QPointF KisVisualColorSelectorShape::getCursorPosition() {
 
 void KisVisualColorSelectorShape::setColor(KoColor c)
 {
+    //qDebug()() << "KisVisualColorSelectorShape::setColor";
     if (c.colorSpace() != m_d->cs) {
         c.convertTo(m_d->cs);
     }
     m_d->currentColor = c;
     updateCursor();
+
     m_d->imagesNeedUpdate = true;
     update();
 }
 
 void KisVisualColorSelectorShape::setColorFromSibling(KoColor c)
 {
+    //qDebug()() << "setColorFromSibling";
     if (c.colorSpace() != m_d->cs) {
         c.convertTo(m_d->cs);
     }
@@ -524,6 +533,7 @@ void KisVisualColorSelectorShape::setDisplayRenderer (const KoColorDisplayRender
 
 void KisVisualColorSelectorShape::updateFromChangedDisplayRenderer()
 {
+    //qDebug()() << "updateFromChangedDisplayRenderer();";
     m_d->imagesNeedUpdate = true;
     updateCursor();
     //m_d->currentColor = convertShapeCoordinateToKoColor(getCursorPosition());
@@ -532,6 +542,7 @@ void KisVisualColorSelectorShape::updateFromChangedDisplayRenderer()
 
 void KisVisualColorSelectorShape::forceImageUpdate()
 {
+    //qDebug()() << "forceImageUpdate";
     m_d->imagesNeedUpdate = true;
 }
 
@@ -549,6 +560,7 @@ QColor KisVisualColorSelectorShape::getColorFromConverter(KoColor c){
 
 void KisVisualColorSelectorShape::slotSetActiveChannels(int channel1, int channel2)
 {
+    //qDebug()() << "slotSetActiveChannels";
     int maxchannel = m_d->cs->colorChannelCount()-1;
     m_d->channel1 = qBound(0, channel1, maxchannel);
     m_d->channel2 = qBound(0, channel2, maxchannel);
@@ -556,10 +568,15 @@ void KisVisualColorSelectorShape::slotSetActiveChannels(int channel1, int channe
     update();
 }
 
+bool KisVisualColorSelectorShape::imagesNeedUpdate() const {
+    return m_d->imagesNeedUpdate;
+}
+
 QImage KisVisualColorSelectorShape::getImageMap()
 {
+    //qDebug()() << ">>>>>>>>> getImageMap()" << m_d->imagesNeedUpdate;
+
     if (m_d->imagesNeedUpdate == true) {
-        m_d->imagesNeedUpdate = false;
         m_d->gradient = QImage(width(), height(), QImage::Format_ARGB32);
         m_d->gradient.fill(Qt::transparent);
         QImage img(width(), height(), QImage::Format_ARGB32);
@@ -574,7 +591,7 @@ QImage KisVisualColorSelectorShape::getImageMap()
                 *data = col.rgba();
             }
         }
-
+        m_d->imagesNeedUpdate = false;
         m_d->gradient = img;
     }
     return m_d->gradient;
@@ -1181,11 +1198,13 @@ QRegion KisVisualRectangleSelectorShape::getMaskMap()
 }
 void KisVisualRectangleSelectorShape::resizeEvent(QResizeEvent *)
 {
+    //qDebug()() << "KisVisualRectangleSelectorShape::resizeEvent";
     forceImageUpdate();
 }
 
 void KisVisualRectangleSelectorShape::drawCursor()
 {
+    //qDebug()() << "KisVisualRectangleSelectorShape::drawCursor: image needs update" << imagesNeedUpdate();
     QPointF cursorPoint = convertShapeCoordinateToWidgetCoordinate(getCursorPosition());
     QImage fullSelector = getImageMap();
     QColor col = getColorFromConverter(getCurrentColor());
@@ -1404,11 +1423,13 @@ QRegion KisVisualEllipticalSelectorShape::getMaskMap()
 
 void KisVisualEllipticalSelectorShape::resizeEvent(QResizeEvent *)
 {
+    //qDebug()() << "KisVisualEllipticalSelectorShape::resizeEvent";
     forceImageUpdate();
 }
 
 void KisVisualEllipticalSelectorShape::drawCursor()
 {
+    //qDebug()() << "KisVisualEllipticalSelectorShape::drawCursor: image needs update" << imagesNeedUpdate();
     QPointF cursorPoint = convertShapeCoordinateToWidgetCoordinate(getCursorPosition());
     QImage fullSelector = getImageMap();
     QColor col = getColorFromConverter(getCurrentColor());
@@ -1566,12 +1587,14 @@ QRegion KisVisualTriangleSelectorShape::getMaskMap()
 
 void KisVisualTriangleSelectorShape::resizeEvent(QResizeEvent *)
 {
+    //qDebug()() << "KisVisualTriangleSelectorShape::resizeEvent(QResizeEvent *)";
     setTriangle();
     forceImageUpdate();
 }
 
 void KisVisualTriangleSelectorShape::drawCursor()
 {
+    //qDebug()() << "KisVisualTriangleSelectorShape::drawCursor: image needs update" << imagesNeedUpdate();
     QPointF cursorPoint = convertShapeCoordinateToWidgetCoordinate(getCursorPosition());
     QImage fullSelector = getImageMap();
     QColor col = getColorFromConverter(getCurrentColor());

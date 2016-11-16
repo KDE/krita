@@ -27,7 +27,7 @@
 #include "kis_resource_server_provider.h"
 #include <kis_canvas_resource_provider.h>
 #include <KoTriangleColorSelector.h>
-#include <kis_visual_color_selector.h>
+#include <KisVisualColorSelector.h>
 #include <kis_config_notifier.h>
 #include "KoColorSpaceRegistry.h"
 #include <kis_types.h>
@@ -132,7 +132,7 @@ KisPopupPalette::KisPopupPalette(KisFavoriteResourceManager* manager, const KoCo
     connect(m_colorChangeCompressor.data(), SIGNAL(timeout()),
             SLOT(slotEmitColorChanged()));
 
-    connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), m_triangleColorSelector, SLOT(ConfigurationChanged()));
+    connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), m_triangleColorSelector, SLOT(configurationChanged()));
 
     connect(m_resourceManager, SIGNAL(sigChangeFGColorSelector(KoColor)),
             SLOT(slotExternalFgColorChanged(KoColor)));

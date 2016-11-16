@@ -1,5 +1,5 @@
 name: krita
-version: 3.0.91-snap15
+version: 3.0.93
 summary: Krita is the digital painting studio for artists
 description: Krita is a creative application for raster images. Whether you want to create
  from scratch or work with existing images, Krita is for you. You can work with
@@ -47,8 +47,8 @@ parts:
     plugin: cmake
 # Using -DKDE_NO_DEBUG_OUTPUT was causing compilation failure for some reason
 #    configflags: [-DCMAKE_INSTALL_PREFIX=/usr, -DQT_NO_DEBUG=1, -DCMAKE_CXX_FLAGS="-DKDE_NO_DEBUG_OUTPUT"]
-    configflags: [-DCMAKE_INSTALL_PREFIX=/usr, -DQT_NO_DEBUG=1]
-    source: http://download.kde.org/unstable/krita/3.0.91/krita-3.0.91.tar.gz
+    configflags: [-DCMAKE_INSTALL_PREFIX=/usr, -DQT_NO_DEBUG=1 -DOVERRIDE_QT_VERSION=TRUE]
+    source: http://download.kde.org/unstable/krita/3.0.93/krita-3.0.93.tar.gz
 # Use these instead to build from the git source
 #    source: git://anongit.kde.org/krita.git
 #    source-type: git

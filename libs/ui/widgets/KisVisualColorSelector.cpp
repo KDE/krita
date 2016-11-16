@@ -421,7 +421,7 @@ void KisVisualColorSelector::resizeEvent(QResizeEvent *) {
 
 void KisVisualColorSelector::HSXwrangler()
 {
-    qDebug() << this << "HSXWrangler";
+    //qDebug() << this << "HSXWrangler";
 
     QVector<qreal> currentCoordinates = QVector<qreal>(3);
 

@@ -245,10 +245,15 @@ set(kritaui_LIB_SRCS
     widgets/kis_stopgradient_slider_widget.cpp
     widgets/kis_spinbox_color_selector.cpp
     widgets/kis_screen_color_picker.cpp
-    widgets/kis_visual_color_selector.cpp
     widgets/KoDualColorButton.cpp
     widgets/kis_color_input.cpp
     widgets/kis_color_button.cpp
+    widgets/KisVisualColorSelector.cpp
+    widgets/KisVisualColorSelectorShape.cpp
+    widgets/KisVisualEllipticalSelectorShape.cpp
+    widgets/KisVisualRectangleSelectorShape.cpp
+    widgets/KisVisualTriangleSelectorShape.cpp
+
     input/kis_input_manager.cpp
     input/kis_input_manager_p.cpp
     input/kis_extended_modifiers_mapper.cpp

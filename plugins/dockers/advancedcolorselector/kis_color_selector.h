@@ -19,7 +19,8 @@
 #define KIS_COLOR_SELECTOR_H
 
 #include "kis_color_selector_base.h"
-#include <kis_visual_color_selector.h>
+#include <KisColorSelectorConfiguration.h>
+
 
 class KisColorSelectorRing;
 class KisColorSelectorComponent;

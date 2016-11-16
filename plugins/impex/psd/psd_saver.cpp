@@ -85,7 +85,7 @@ QPair<psd_color_mode, quint16> colormodelid_to_psd_colormode(const QString &colo
 
 
 PSDSaver::PSDSaver(KisDocument *doc)
-    : m_image(doc->image())
+    : m_image(doc->savingImage())
     , m_doc(doc)
     , m_stop(false)
 {

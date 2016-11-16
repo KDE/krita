@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>374</width>
-    <height>157</height>
+    <width>449</width>
+    <height>147</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,7 +19,7 @@
   <property name="modal">
    <bool>true</bool>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout" stretch="2,1,3,1">
+  <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QLabel" name="lblMessage">
      <property name="text">
@@ -54,11 +54,29 @@
     </spacer>
    </item>
    <item>
-    <widget class="QPushButton" name="btnCancel">
-     <property name="text">
-      <string>Cancel Operation and Save</string>
-     </property>
-    </widget>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QPushButton" name="bnDontWait">
+       <property name="text">
+        <string>Save without waiting</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="bnCancel">
+       <property name="text">
+        <string>Cancel Operation and Save</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="bnDontSave">
+       <property name="text">
+        <string>Close, do not save</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
   </layout>
  </widget>

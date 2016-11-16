@@ -188,14 +188,14 @@ public Q_SLOTS:
      * for updating from the display renderer... not sure why this one is public.
      */
     void updateFromChangedDisplayRenderer();
-    
+
 protected:
-    
+
     void mousePressEvent(QMouseEvent *e);
     void mouseMoveEvent(QMouseEvent *e);
     void mouseReleaseEvent(QMouseEvent *e);
     void paintEvent(QPaintEvent*);
-    
+
 private:
     struct Private;
     const QScopedPointer<Private> m_d;
@@ -220,7 +220,7 @@ private:
     void updateCursor();
 
     QPointF convertKoColorToShapeCoordinate(KoColor c);
-    KoColor convertShapeCoordinateToKoColor(QPointF coordinates, bool cursor=false);
+    KoColor convertShapeCoordinateToKoColor(QPointF coordinates, bool cursor = false);
 
     /**
      * @brief getPixmap

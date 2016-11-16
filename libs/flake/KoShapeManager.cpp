@@ -41,6 +41,7 @@
 #include "KoShapeBackground.h"
 #include <KoRTree.h>
 #include "KoClipPath.h"
+#include "KoClipMaskPainter.h"
 #include "KoShapePaintingContext.h"
 #include "KoViewConverter.h"
 
@@ -296,7 +297,7 @@ void KoShapeManager::paint(QPainter &painter, const KoViewConverter &converter, 
         d->selection->paint(painter, converter, paintContext);
     }
 }
-
+#include "kis_debug.h"
 void KoShapeManager::paintShape(KoShape *shape, QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext)
 {
     qreal transparency = shape->transparency(true);
@@ -310,15 +311,33 @@ void KoShapeManager::paintShape(KoShape *shape, QPainter &painter, const KoViewC
         painter.restore();
     }
     if (!shape->filterEffectStack() || shape->filterEffectStack()->isEmpty()) {
-        painter.save();
-        shape->paint(painter, converter, paintContext);
-        painter.restore();
-        if (shape->stroke()) {
-            painter.save();
-            shape->stroke()->paint(shape, painter, converter);
-            painter.restore();
+
+        QScopedPointer<KoClipMaskPainter> clipMaskPainter;
+        QPainter *shapePainter = &painter;
+
+        KoClipMask *clipMask = shape->clipMask();
+        if (clipMask) {
+            clipMaskPainter.reset(new KoClipMaskPainter(&painter, shape->boundingRect()));
+            shapePainter = clipMaskPainter->shapePainter();
         }
+
+        shapePainter->save();
+        shape->paint(*shapePainter, converter, paintContext);
+        shapePainter->restore();
+        if (shape->stroke()) {
+            shapePainter->save();
+            shape->stroke()->paint(shape, *shapePainter, converter);
+            shapePainter->restore();
+        }
+
+        if (clipMask) {
+            shape->clipMask()->drawMask(clipMaskPainter->maskPainter(), shape);
+            clipMaskPainter->renderOnGlobalPainter();
+        }
+
     } else {
+        // TODO: clipping mask is not implemented for this case!
+
         // There are filter effects, then we need to prerender the shape on an image, to filter it
         QRectF shapeBound(QPointF(), shape->size());
         // First step, compute the rectangle used for the image

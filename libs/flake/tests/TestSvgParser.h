@@ -124,6 +124,10 @@ private Q_SLOTS:
     void testRenderClipPath_User();
     void testRenderClipPath_Obb();
     void testRenderClipPath_Obb_Transform();
+
+    void testRenderClipMask_Obb();
+    void testRenderClipMask_User_Clip_Obb();
+    void testRenderClipMask_User_Clip_User();
 };
 
 #endif // TESTSVGPARSER_H

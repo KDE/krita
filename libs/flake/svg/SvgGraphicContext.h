@@ -49,6 +49,7 @@ public:
 
     QString filterId;       ///< the current filter id
     QString clipPathId;     ///< the current clip path id
+    QString clipMaskId;     ///< the current clip mask id
     Qt::FillRule clipRule;  ///< the current clip rule
     qreal opacity;          ///< the shapes opacity
 

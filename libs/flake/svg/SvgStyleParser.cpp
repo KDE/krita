@@ -46,7 +46,7 @@ public:
         styleAttributes << "fill" << "fill-rule" << "fill-opacity";
         styleAttributes << "stroke" << "stroke-width" << "stroke-linejoin" << "stroke-linecap";
         styleAttributes << "stroke-dasharray" << "stroke-dashoffset" << "stroke-opacity" << "stroke-miterlimit";
-        styleAttributes << "opacity" << "filter" << "clip-path" << "clip-rule";
+        styleAttributes << "opacity" << "filter" << "clip-path" << "clip-rule" << "mask";
     }
 
     SvgLoadingContext &context;
@@ -302,6 +302,12 @@ void SvgStyleParser::parsePA(SvgGraphicsContext *gc, const QString &command, con
             gc->clipRule = Qt::WindingFill;
         else if (params == "evenodd")
             gc->clipRule = Qt::OddEvenFill;
+    } else if (command == "mask") {
+        if (params != "none" && params.startsWith("url(")) {
+            unsigned int start = params.indexOf('#') + 1;
+            unsigned int end = params.indexOf(')', start);
+            gc->clipMaskId = params.mid(start, end - start);
+        }
     }
 
     gc->fillColor = fillcolor;

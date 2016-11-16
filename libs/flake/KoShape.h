@@ -52,6 +52,7 @@ class KoShapePrivate;
 class KoFilterEffectStack;
 class KoSnapData;
 class KoClipPath;
+class KoClipMask;
 class KoShapePaintingContext;
 class KoShapeAnchor;
 class KoBorder;
@@ -762,6 +763,12 @@ public:
 
     /// Returns the currently set clip path or 0 if there is no clip path set
     KoClipPath * clipPath() const;
+
+    /// Sets a new clip mask, removing the old one. The mask is owned by the shape.
+    void setClipMask(KoClipMask *clipMask);
+
+    /// Returns the currently set clip mask or 0 if there is no clip mask set
+    KoClipMask* clipMask() const;
 
     /**
      * Setting the shape to keep its aspect-ratio has the effect that user-scaling will

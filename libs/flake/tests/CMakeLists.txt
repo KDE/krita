@@ -157,3 +157,9 @@ target_link_libraries(TestSnapStrategy  kritaflake Qt5::Test)
 set(TestSvgParser_test_SRCS TestSvgParser.cpp )
 kde4_add_unit_test(TestSvgParser TESTNAME libs-kritaflake-TestSvgParser  ${TestSvgParser_test_SRCS})
 target_link_libraries(TestSvgParser  kritaflake Qt5::Test)
+
+########### end ###############
+
+set(TestKoClipMaskPainter_test_SRCS TestKoClipMaskPainter.cpp )
+kde4_add_unit_test(TestKoClipMaskPainter TESTNAME libs-kritaflake-TestKoClipMaskPainter  ${TestKoClipMaskPainter_test_SRCS})
+target_link_libraries(TestKoClipMaskPainter  kritaflake Qt5::Test)

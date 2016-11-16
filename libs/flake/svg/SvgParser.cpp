@@ -50,6 +50,7 @@
 #include "KoFilterEffectStack.h"
 #include "KoFilterEffectLoadingContext.h"
 #include <KoClipPath.h>
+#include <KoClipMask.h>
 #include <KoXmlNS.h>
 
 #include "SvgUtil.h"
@@ -520,6 +521,59 @@ bool SvgParser::parseClipPath(const KoXmlElement &e)
     return true;
 }
 
+bool SvgParser::parseClipMask(const KoXmlElement &e)
+{
+    QSharedPointer<KoClipMask> clipMask(new KoClipMask);
+
+    const QString id = e.attribute("id");
+    if (id.isEmpty()) return false;
+
+    clipMask->setCoordinates(
+        e.attribute("maskUnits") == "userSpaceOnUse" ?
+                    KoClipMask::UserSpaceOnUse :
+                    KoClipMask::ObjectBoundingBox);
+
+    clipMask->setContentCoordinates(
+        e.attribute("maskContentUnits") == "objectBoundingBox" ?
+                    KoClipMask::ObjectBoundingBox :
+                    KoClipMask::UserSpaceOnUse);
+
+    QRectF maskRect;
+
+    if (clipMask->coordinates() == KoClipMask::ObjectBoundingBox) {
+        maskRect.setRect(
+            SvgUtil::fromPercentage(e.attribute("x", "-10%")),
+            SvgUtil::fromPercentage(e.attribute("y", "-10%")),
+            SvgUtil::fromPercentage(e.attribute("width", "120%")),
+            SvgUtil::fromPercentage(e.attribute("height", "120%")));
+    } else {
+        maskRect.setRect(
+            parseUnitX(e.attribute("x", "-10%")), // yes, percents are insane in this case,
+            parseUnitY(e.attribute("y", "-10%")), // but this is what SVG 1.1 tells us...
+            parseUnitX(e.attribute("width", "120%")),
+            parseUnitY(e.attribute("height", "120%")));
+    }
+
+    clipMask->setMaskRect(maskRect);
+
+
+    // ensure that the clip mask is loaded in local coordinates system
+    m_context.pushGraphicsContext(e);
+    m_context.currentGC()->matrix = QTransform();
+
+    QList<KoShape*> shapes = parseGroup(e);
+    KIS_ASSERT_RECOVER_NOOP(shapes.size() <= 1);
+
+    m_context.popGraphicsContext();
+
+    if (shapes.isEmpty()) return false;
+
+    clipMask->setShapes(shapes);
+
+    m_clipMasks.insert(id, clipMask);
+    return true;
+}
+
 void SvgParser::uploadStyleToContext(const KoXmlElement &e)
 {
     SvgStyles styles = m_context.styleParser().collectStyles(e);
@@ -541,6 +595,7 @@ void SvgParser::applyCurrentStyle(KoShape *shape)
 
     applyFilter(shape);
     applyClipping(shape);
+    applyMaskClipping(shape);
 
     if (!gc->display || !gc->visible) {
         /**
@@ -575,6 +630,7 @@ void SvgParser::applyStyle(KoShape *obj, const SvgStyles &styles)
     }
     applyFilter(obj);
     applyClipping(obj);
+    applyMaskClipping(obj);
 
     if (!gc->display || !gc->visible) {
         obj->setVisible(false);
@@ -857,8 +913,6 @@ void SvgParser::applyFilter(KoShape *shape)
     }
 }
 
-
-
 void SvgParser::applyClipping(KoShape *shape)
 {
     SvgGraphicsContext *gc = m_context.currentGC();
@@ -894,6 +948,35 @@ void SvgParser::applyClipping(KoShape *shape)
                                           clipPath->clipPathUnits() == SvgClipPathHelper::ObjectBoundingBox ?
                                               KoClipPath::ObjectBoundingBox : KoClipPath::UserSpaceOnUse);
     shape->setClipPath(clipPathObject);
+}
+
+void SvgParser::applyMaskClipping(KoShape *shape)
+{
+    SvgGraphicsContext *gc = m_context.currentGC();
+    if (!gc)
+        return;
+
+    if (gc->clipMaskId.isEmpty())
+        return;
+
+
+    QSharedPointer<KoClipMask> originalClipMask = m_clipMasks.value(gc->clipMaskId);
+    if (!originalClipMask || originalClipMask->isEmpty()) return;
+
+    KoClipMask *clipMask = originalClipMask->clone();
+
+    QTransform extraShapeTransform;
+    KIS_ASSERT_RECOVER_NOOP(m_coordinateSystemOnLoading.contains(shape));
+
+    if (m_coordinateSystemOnLoading.contains(shape)) {
+        extraShapeTransform =
+                shape->absoluteTransformation(0).inverted() *
+            m_coordinateSystemOnLoading[shape];
+    }
+
+    clipMask->setExtraShapeTransform(extraShapeTransform);
+
+    shape->setClipMask(clipMask);
 }
 
 QList<KoShape*> SvgParser::parseUse(const KoXmlElement &e)
@@ -1108,6 +1191,8 @@ QList<KoShape*> SvgParser::parseContainer(const KoXmlElement &e)
             parseFilter(b);
         } else if (b.tagName() == "clipPath") {
             parseClipPath(b);
+        } else if (b.tagName() == "mask") {
+            parseClipMask(b);
         } else if (b.tagName() == "style") {
             m_context.addStyleSheet(b);
         } else if (b.tagName() == "rect" ||

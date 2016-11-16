@@ -25,6 +25,9 @@
 #include <QPoint>
 #include <QPaintDevice>
 #include <QTransform>
+#include <QScopedPointer>
+
+#include <KoClipMask.h>
 
 class KoBorder;
 class KoShapeManager;
@@ -81,6 +84,7 @@ public:
     KoShapeShadow * shadow; ///< the current shape shadow
     KoBorder *border; ///< the current shape border
     KoClipPath * clipPath; ///< the current clip path
+    QScopedPointer<KoClipMask> clipMask; ///< the current clip mask
     QMap<QString, QString> additionalAttributes;
     QMap<QByteArray, QString> additionalStyleAttributes;
     KoFilterEffectStack *filterEffectStack; ///< stack of filter effects applied to the shape

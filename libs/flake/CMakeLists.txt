@@ -116,6 +116,8 @@ set(kritaflake_SRCS
     KoTosContainer.cpp
     KoTosContainerModel.cpp
     KoClipPath.cpp
+    KoClipMask.cpp
+    KoClipMaskPainter.cpp
     KoCurveFit.cpp
     commands/KoShapeGroupCommand.cpp
     commands/KoShapeAlignCommand.cpp

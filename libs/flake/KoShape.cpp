@@ -1223,6 +1223,18 @@ KoClipPath * KoShape::clipPath() const
     return d->clipPath;
 }
 
+void KoShape::setClipMask(KoClipMask *clipMask)
+{
+    Q_D(KoShape);
+    d->clipMask.reset(clipMask);
+}
+
+KoClipMask* KoShape::clipMask() const
+{
+    Q_D(const KoShape);
+    return d->clipMask.data();
+}
+
 QTransform KoShape::transform() const
 {
     Q_D(const KoShape);

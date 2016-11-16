@@ -2273,4 +2273,130 @@ void TestSvgParser::testRenderClipPath_Obb_Transform()
     t.test_standard_30px_72ppi("clip_render_test_rotated", false);
 }
 
+void TestSvgParser::testRenderClipMask_Obb()
+{
+    const QString data =
+            "<svg width=\"30px\" height=\"30px\""
+            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+
+            //"<defs>"
+
+            "    <linearGradient id=\"Gradient\" gradientUnits=\"objectBoundingBox\""
+            "        x1=\"0\" y1=\"0\" x2=\"1\" y2=\"0\">"
+
+            "        <stop offset=\"0\" stop-color=\"white\" stop-opacity=\"0\" />"
+            "        <stop offset=\"1\" stop-color=\"white\" stop-opacity=\"1\" />"
+
+            "    </linearGradient>"
+
+            "    <mask id=\"Mask\" maskUnits=\"objectBoundingBox\""
+            "        maskContentUnits=\"objectBoundingBox\""
+            "        x=\"0.2\" y=\"0.2\" width=\"0.6\" height=\"0.6\">"
+
+            "        <rect x=\"0\" y=\"0\" width=\"1\" height=\"1\" fill=\"url(#Gradient)\" />"
+
+            "    </mask>"
+
+            //"</defs>"
+
+
+            "<g id=\"testRect\">"
+            "    <rect id=\"testRect1\" x=\"5\" y=\"5\" width=\"15\" height=\"15\""
+            "        fill=\"blue\" stroke=\"none\"/>"
+
+            "    <rect id=\"testRect2\" x=\"10\" y=\"10\" width=\"15\" height=\"15\""
+            "        fill=\"red\" stroke=\"none\" mask=\"url(#Mask)\" />"
+            "</g>"
+
+            "</svg>";
+
+    SvgRenderTester t (data);
+
+    t.test_standard_30px_72ppi("clip_mask_obb", false);
+}
+
+void TestSvgParser::testRenderClipMask_User_Clip_Obb()
+{
+    const QString data =
+            "<svg width=\"30px\" height=\"30px\""
+            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+
+            //"<defs>"
+
+            "    <linearGradient id=\"Gradient\" gradientUnits=\"objectBoundingBox\""
+            "        x1=\"0\" y1=\"0\" x2=\"1\" y2=\"0\">"
+
+            "        <stop offset=\"0\" stop-color=\"white\" stop-opacity=\"0\" />"
+            "        <stop offset=\"1\" stop-color=\"white\" stop-opacity=\"1\" />"
+
+            "    </linearGradient>"
+
+            "    <mask id=\"Mask\" maskUnits=\"objectBoundingBox\""
+            "        maskContentUnits=\"userSpaceOnUse\""
+            "        x=\"0.2\" y=\"0.2\" width=\"0.6\" height=\"0.6\">"
+
+            "        <rect x=\"10\" y=\"10\" width=\"15\" height=\"15\" fill=\"url(#Gradient)\" />"
+
+            "    </mask>"
+
+            //"</defs>"
+
+
+            "<g id=\"testRect\">"
+            "    <rect id=\"testRect1\" x=\"5\" y=\"5\" width=\"15\" height=\"15\""
+            "        fill=\"blue\" stroke=\"none\"/>"
+
+            "    <rect id=\"testRect2\" x=\"10\" y=\"10\" width=\"15\" height=\"15\""
+            "        fill=\"red\" stroke=\"none\" mask=\"url(#Mask)\" />"
+            "</g>"
+
+            "</svg>";
+
+    SvgRenderTester t (data);
+
+    t.test_standard_30px_72ppi("clip_mask_obb", false);
+}
+
+void TestSvgParser::testRenderClipMask_User_Clip_User()
+{
+    const QString data =
+            "<svg width=\"30px\" height=\"30px\""
+            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+
+            //"<defs>"
+
+            "    <linearGradient id=\"Gradient\" gradientUnits=\"objectBoundingBox\""
+            "        x1=\"0\" y1=\"0\" x2=\"1\" y2=\"0\">"
+
+            "        <stop offset=\"0\" stop-color=\"white\" stop-opacity=\"0\" />"
+            "        <stop offset=\"1\" stop-color=\"white\" stop-opacity=\"1\" />"
+
+            "    </linearGradient>"
+
+            "    <mask id=\"Mask\" maskUnits=\"userSpaceOnUse\""
+            "        maskContentUnits=\"userSpaceOnUse\""
+            "        x=\"13\" y=\"13\" width=\"9\" height=\"9\">"
+
+            "        <rect x=\"10\" y=\"10\" width=\"15\" height=\"15\" fill=\"url(#Gradient)\" />"
+
+            "    </mask>"
+
+            //"</defs>"
+
+
+            "<g id=\"testRect\">"
+            "    <rect id=\"testRect1\" x=\"5\" y=\"5\" width=\"15\" height=\"15\""
+            "        fill=\"blue\" stroke=\"none\"/>"
+
+            "    <rect id=\"testRect2\" x=\"10\" y=\"10\" width=\"15\" height=\"15\""
+            "        fill=\"red\" stroke=\"none\" mask=\"url(#Mask)\" />"
+            "</g>"
+
+            "</svg>";
+
+    SvgRenderTester t (data);
+
+    t.test_standard_30px_72ppi("clip_mask_obb", false);
+}
+
 QTEST_MAIN(TestSvgParser)

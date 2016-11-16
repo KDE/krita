@@ -47,7 +47,7 @@ parts:
     plugin: cmake
 # Using -DKDE_NO_DEBUG_OUTPUT was causing compilation failure for some reason
 #    configflags: [-DCMAKE_INSTALL_PREFIX=/usr, -DQT_NO_DEBUG=1, -DCMAKE_CXX_FLAGS="-DKDE_NO_DEBUG_OUTPUT"]
-    configflags: [-DCMAKE_INSTALL_PREFIX=/usr, -DQT_NO_DEBUG=1 -DOVERRIDE_QT_VERSION=TRUE]
+    configflags: [-DCMAKE_INSTALL_PREFIX=/usr, -DQT_NO_DEBUG=1, -DOVERRIDE_QT_VERSION=TRUE]
     source: http://download.kde.org/unstable/krita/3.0.93/krita-3.0.93.tar.gz
 # Use these instead to build from the git source
 #    source: git://anongit.kde.org/krita.git

@@ -31,66 +31,75 @@
 
 #include "kritaui_export.h"
 
+class KRITAUI_EXPORT KisColorSelectorConfiguration {
+
+public:
+
+    enum Type {Ring, Square, Wheel, Triangle, Slider};
+    enum Parameters {H, hsvS, V, hslS, L, SL, SV, SV2, hsvSH, hslSH, VH, LH, SI, SY, hsiSH, hsySH, I, Y, IH, YH, hsiS, hsyS};
+
+    Type mainType;
+    Type subType;
+    Parameters mainTypeParameter;
+    Parameters subTypeParameter;
+
+    KisColorSelectorConfiguration(Type mainT = Triangle, Type subT = Ring, Parameters mainTP = SL, Parameters subTP = H)
+        : mainType(mainT)
+        , subType(subT)
+        , mainTypeParameter(mainTP)
+        , subTypeParameter(subTP)
+    {
+    }
+
+    KisColorSelectorConfiguration(QString string)
+    {
+        readString(string);
+    }
+
+    QString toString() const
+    {
+        return QString("%1|%2|%3|%4").arg(mainType).arg(subType).arg(mainTypeParameter).arg(subTypeParameter);
+    }
+    void readString(QString string)
+    {
+        QStringList strili = string.split('|');
+        if(strili.length()!=4) return;
+
+        int imt=strili.at(0).toInt();
+        int ist=strili.at(1).toInt();
+        int imtp=strili.at(2).toInt();
+        int istp=strili.at(3).toInt();
+
+        if(imt>Slider || ist>Slider || imtp>hsyS || istp>hsyS)//this was LH before
+            return;
+
+        mainType = Type(imt);
+        subType = Type(ist);
+        mainTypeParameter = Parameters(imtp);
+        subTypeParameter = Parameters(istp);
+    }
+
+    static KisColorSelectorConfiguration fromString(QString string)
+    {
+        KisColorSelectorConfiguration ret;
+        ret.readString(string);
+        return ret;
+    }
+};
+
+
 /**
  * @brief The KisVisualColorSelector class
- * this gives a color selector box that draws gradients and everything.
- * Unlike other color selectors, this one draws the full gamut of the given colorspace.
+ *
+ * This gives a color selector box that draws gradients and everything.
+ *
+ * Unlike other color selectors, this one draws the full gamut of the given
+ * colorspace.
  */
 class KRITAUI_EXPORT KisVisualColorSelector : public QWidget
 {
     Q_OBJECT
 public:
-    //Copied directly from the advanced color selector:
-    enum Type {Ring, Square, Wheel, Triangle, Slider};
-    enum Parameters {H, hsvS, V, hslS, L, SL, SV, SV2, hsvSH, hslSH, VH, LH, SI, SY, hsiSH, hsySH, I, Y, IH, YH, hsiS, hsyS};
-    struct Configuration {
-        Type mainType;
-        Type subType;
-        Parameters mainTypeParameter;
-        Parameters subTypeParameter;
-        Configuration(Type mainT = Triangle,
-                              Type subT = Ring,
-                              Parameters mainTP = SL,
-                              Parameters subTP = H)
-                                  : mainType(mainT),
-                                  subType(subT),
-                                  mainTypeParameter(mainTP),
-                                  subTypeParameter(subTP)
-        {}
-        Configuration(QString string)
-        {
-            readString(string);
-        }
-
-        QString toString() const
-        {
-            return QString("%1|%2|%3|%4").arg(mainType).arg(subType).arg(mainTypeParameter).arg(subTypeParameter);
-        }
-        void readString(QString string)
-        {
-            QStringList strili = string.split('|');
-            if(strili.length()!=4) return;
-
-            int imt=strili.at(0).toInt();
-            int ist=strili.at(1).toInt();
-            int imtp=strili.at(2).toInt();
-            int istp=strili.at(3).toInt();
-
-            if(imt>Slider || ist>Slider || imtp>hsyS || istp>hsyS)//this was LH before
-                return;
-
-            mainType = Type(imt);
-            subType = Type(ist);
-            mainTypeParameter = Parameters(imtp);
-            subTypeParameter = Parameters(istp);
-        }
-        static Configuration fromString(QString string)
-        {
-            Configuration ret;
-            ret.readString(string);
-            return ret;
-        }
-    };
 
     explicit KisVisualColorSelector(QWidget *parent = 0);
     ~KisVisualColorSelector();
@@ -186,6 +195,7 @@ public:
      * the pixmap will not change unless 'm_d->setPixmap=true' which is toggled by
      * refresh and update functions.
      */
+    bool imagesNeedUpdate() const;
     QImage getImageMap();
     /**
      * @brief setFullImage
@@ -334,13 +344,13 @@ class KisVisualRectangleSelectorShape : public KisVisualColorSelectorShape
 public:
     enum singelDTypes{vertical, horizontal, border, borderMirrored};
     explicit KisVisualRectangleSelectorShape(QWidget *parent,
-                                         Dimensions dimension,
-                                         ColorModel model,
-                                         const KoColorSpace *cs,
-                                         int channel1, int channel2,
-                                         const KoColorDisplayRendererInterface *displayRenderer = KoDumbColorDisplayRenderer::instance(), int width=20,
-                                         KisVisualRectangleSelectorShape::singelDTypes d = KisVisualRectangleSelectorShape::vertical
-                                         );
+                                             Dimensions dimension,
+                                             ColorModel model,
+                                             const KoColorSpace *cs,
+                                             int channel1, int channel2,
+                                             const KoColorDisplayRendererInterface *displayRenderer = KoDumbColorDisplayRenderer::instance(), int width=20,
+                                             KisVisualRectangleSelectorShape::singelDTypes d = KisVisualRectangleSelectorShape::vertical
+            );
     ~KisVisualRectangleSelectorShape();
 
     void setBorderWidth(int width);
@@ -371,13 +381,13 @@ class KisVisualEllipticalSelectorShape : public KisVisualColorSelectorShape
 public:
     enum singelDTypes{border, borderMirrored};
     explicit KisVisualEllipticalSelectorShape(QWidget *parent,
-                                         Dimensions dimension,
-                                         ColorModel model,
-                                         const KoColorSpace *cs,
-                                         int channel1, int channel2,
-                                         const KoColorDisplayRendererInterface *displayRenderer = KoDumbColorDisplayRenderer::instance(), int borwidth=20,
-                                         KisVisualEllipticalSelectorShape::singelDTypes d = KisVisualEllipticalSelectorShape::border
-                                         );
+                                              Dimensions dimension,
+                                              ColorModel model,
+                                              const KoColorSpace *cs,
+                                              int channel1, int channel2,
+                                              const KoColorDisplayRendererInterface *displayRenderer = KoDumbColorDisplayRenderer::instance(), int borwidth=20,
+                                              KisVisualEllipticalSelectorShape::singelDTypes d = KisVisualEllipticalSelectorShape::border
+            );
     ~KisVisualEllipticalSelectorShape();
 
     void setBorderWidth(int width);
@@ -410,13 +420,13 @@ class KisVisualTriangleSelectorShape : public KisVisualColorSelectorShape
 public:
     enum singelDTypes{border, borderMirrored};
     explicit KisVisualTriangleSelectorShape(QWidget *parent,
-                                         Dimensions dimension,
-                                         ColorModel model,
-                                         const KoColorSpace *cs,
-                                         int channel1, int channel2,
-                                         const KoColorDisplayRendererInterface *displayRenderer = KoDumbColorDisplayRenderer::instance(),
-                                         int borwidth=20
-                                         );
+                                            Dimensions dimension,
+                                            ColorModel model,
+                                            const KoColorSpace *cs,
+                                            int channel1, int channel2,
+                                            const KoColorDisplayRendererInterface *displayRenderer = KoDumbColorDisplayRenderer::instance(),
+                                            int borwidth=20
+            );
     ~KisVisualTriangleSelectorShape();
 
     void setBorderWidth(int width);
@@ -430,9 +440,12 @@ public:
     virtual QRect getSpaceForSquare(QRect geom);
     virtual QRect getSpaceForCircle(QRect geom);
     virtual QRect getSpaceForTriangle(QRect geom);
+
 protected:
     void resizeEvent(QResizeEvent *);
+
 private:
+
     virtual QPointF convertShapeCoordinateToWidgetCoordinate(QPointF coordinate);
     virtual QPointF convertWidgetCoordinateToShapeCoordinate(QPoint coordinate);
 

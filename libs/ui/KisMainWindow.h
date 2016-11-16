@@ -324,16 +324,14 @@ private Q_SLOTS:
     /**
      * File --> Import
      *
-     * This will call slotFileOpen().  To differentiate this from an ordinary
-     * call to slotFileOpen() call @ref isImporting().
+     * This will call slotFileOpen().
      */
     void slotImportFile();
 
     /**
      * File --> Export
      *
-     * This will call slotFileSaveAs().  To differentiate this from an ordinary
-     * call to slotFileSaveAs() call @ref isExporting().
+     * This will call slotFileSaveAs().
      */
     void slotExportFile();
 

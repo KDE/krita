@@ -74,6 +74,12 @@ inline QString fetchDataFileLazy(const QString relativeFileName, bool externalTe
     return QString();
 }
 
+// quint8 arguments are automatically converted into int
+inline bool compareChannels(int ch1, int ch2, int fuzzy)
+{
+    return qAbs(ch1 - ch2) <= fuzzy;
+}
+
 inline bool compareQImages(QPoint & pt, const QImage & image1, const QImage & image2, int fuzzy = 0, int fuzzyAlpha = 0, int maxNumFailingPixels = 0)
 {
     //     QTime t;
@@ -102,10 +108,11 @@ inline bool compareQImages(QPoint & pt, const QImage & image1, const QImage & im
             for (int x = 0; x < w1; ++x) {
                 const QRgb a = firstLine[x];
                 const QRgb b = secondLine[x];
-                const bool same = qAbs(qRed(a) - qRed(b)) <= fuzzy
-                                  && qAbs(qGreen(a) - qGreen(b)) <= fuzzy
-                                  && qAbs(qBlue(a) - qBlue(b)) <= fuzzy;
-                const bool sameAlpha = qAlpha(a) - qAlpha(b) <= fuzzyAlpha;
+                const bool same =
+                        compareChannels(qRed(a), qRed(b), fuzzy) &&
+                        compareChannels(qGreen(a), qGreen(b), fuzzy) &&
+                        compareChannels(qBlue(a), qBlue(b), fuzzy);
+                const bool sameAlpha = compareChannels(qAlpha(a), qAlpha(b), fuzzyAlpha);
                 const bool bothTransparent = sameAlpha && qAlpha(a)==0;
 
                 if (!bothTransparent && (!same || !sameAlpha)) {

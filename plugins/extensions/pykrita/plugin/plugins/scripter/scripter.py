@@ -1,7 +1,7 @@
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from krita import *
-from scripter import syntax
+from scripter import syntax, pythoneditor
 import sys
 
 class docWrapper:
@@ -47,7 +47,7 @@ class ScripterViewExtension(ViewExtension):
     def showScripter(self):
         dialog = QDialog()
         dialog.setWindowModality(Qt.NonModal)
-        self.editor = QPlainTextEdit()
+        self.editor = pythoneditor.CodeEditor()
         f = QFont("monospace", 10, QFont.Normal)
         f.setFixedPitch(True)
         self.editor.document().setDefaultFont(f)
@@ -68,4 +68,3 @@ class ScripterViewExtension(ViewExtension):
 
 
 Krita.instance().addViewExtension(ScripterViewExtension(Krita.instance()))
-

@@ -37,6 +37,7 @@
 #include "KoChannelInfo.h"
 #include <KoColorModelStandardIds.h>
 #include <QPointer>
+
 #include "kis_signal_compressor.h"
 #include "kis_debug.h"
 
@@ -48,7 +49,7 @@ struct KisVisualColorSelectorShape::Private
     QPointF currentCoordinates;
     Dimensions dimension;
     ColorModel model;
-    const KoColorSpace *cs;
+    const KoColorSpace *colorSpace;
     KoColor currentColor;
     int channel1;
     int channel2;
@@ -71,11 +72,11 @@ KisVisualColorSelectorShape::KisVisualColorSelectorShape(QWidget *parent,
 {
     m_d->dimension = dimension;
     m_d->model = model;
-    m_d->cs = cs;
+    m_d->colorSpace = cs;
     m_d->currentColor = KoColor();
     m_d->currentColor.setOpacity(1.0);
     m_d->currentColor.convertTo(cs);
-    int maxchannel = m_d->cs->colorChannelCount()-1;
+    int maxchannel = m_d->colorSpace->colorChannelCount()-1;
     m_d->channel1 = qBound(0, channel1, maxchannel);
     m_d->channel2 = qBound(0, channel2, maxchannel);
     this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -106,8 +107,8 @@ QPointF KisVisualColorSelectorShape::getCursorPosition() {
 void KisVisualColorSelectorShape::setColor(KoColor c)
 {
     //qDebug() << this  << "KisVisualColorSelectorShape::setColor";
-    if (c.colorSpace() != m_d->cs) {
-        c.convertTo(m_d->cs);
+    if (c.colorSpace() != m_d->colorSpace) {
+        c.convertTo(m_d->colorSpace);
     }
     m_d->currentColor = c;
     updateCursor();
@@ -119,8 +120,8 @@ void KisVisualColorSelectorShape::setColor(KoColor c)
 void KisVisualColorSelectorShape::setColorFromSibling(KoColor c)
 {
     //qDebug() << this  << "setColorFromSibling";
-    if (c.colorSpace() != m_d->cs) {
-        c.convertTo(m_d->cs);
+    if (c.colorSpace() != m_d->colorSpace) {
+        c.convertTo(m_d->colorSpace);
     }
     m_d->currentColor = c;
     Q_EMIT sigNewColor(c);
@@ -173,7 +174,7 @@ QColor KisVisualColorSelectorShape::getColorFromConverter(KoColor c){
 void KisVisualColorSelectorShape::slotSetActiveChannels(int channel1, int channel2)
 {
     //qDebug() << this  << "slotSetActiveChannels";
-    int maxchannel = m_d->cs->colorChannelCount()-1;
+    int maxchannel = m_d->colorSpace->colorChannelCount()-1;
     m_d->channel1 = qBound(0, channel1, maxchannel);
     m_d->channel2 = qBound(0, channel2, maxchannel);
     m_d->imagesNeedUpdate = true;
@@ -191,27 +192,34 @@ QImage KisVisualColorSelectorShape::getImageMap()
     if (m_d->imagesNeedUpdate == true) {
         m_d->gradient = QImage(width(), height(), QImage::Format_ARGB32);
         m_d->gradient.fill(Qt::transparent);
-        QImage img(width(), height(), QImage::Format_ARGB32);
-        img.fill(Qt::transparent);
-        for (int y = 0; y<img.height(); y++) {
-            uint* data = reinterpret_cast<uint*>(img.scanLine(y));
-            for (int x=0; x<img.width(); x++,  ++data) {
-                QPoint widgetPoint(x,y);
-                QPointF newcoordinate = convertWidgetCoordinateToShapeCoordinate(widgetPoint);
+//        KoColor c = m_d->currentColor;
+
+        // Fill a buffer with the right kocolors
+        quint8 *data = new quint8[width() * height() * height()];
+        quint8 *dataPtr = data;
+        for (int y = 0; y < m_d->gradient.height(); y++) {
+            for (int x=0; x < m_d->gradient.width(); x++) {
+                QPointF newcoordinate = convertWidgetCoordinateToShapeCoordinate(QPoint(x, y));
                 KoColor c = convertShapeCoordinateToKoColor(newcoordinate);
-                QColor col = getColorFromConverter(c);
-                *data = col.rgba();
+                memcpy(dataPtr, c.data(), m_d->currentColor.colorSpace()->pixelSize());
+                dataPtr += m_d->currentColor.colorSpace()->pixelSize();
             }
         }
+        // Convert the buffer to a qimage
+        if (m_d->displayRenderer) {
+            m_d->gradient = m_d->displayRenderer->convertToQImage(m_d->currentColor.colorSpace(), data, width(), height());
+        }
+        else {
+            m_d->gradient = m_d->currentColor.colorSpace()->convertToQImage(data, width(), height(), 0, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
+        }
         m_d->imagesNeedUpdate = false;
-        m_d->gradient = img;
     }
     return m_d->gradient;
 }
 
 KoColor KisVisualColorSelectorShape::convertShapeCoordinateToKoColor(QPointF coordinates, bool cursor)
 {
-    ////qDebug() << this  << ">>>>>>>>> convertShapeCoordinateToKoColor()" << coordinates;
+    //qDebug() << this  << ">>>>>>>>> convertShapeCoordinateToKoColor()" << coordinates;
 
     KoColor c = m_d->currentColor;
     QVector <float> channelValues (c.colorSpace()->channelCount());
@@ -222,22 +230,22 @@ KoColor KisVisualColorSelectorShape::convertShapeCoordinateToKoColor(QPointF coo
     maxvalue.fill(1.0);
 
     if (m_d->displayRenderer
-            && (m_d->cs->colorDepthId() == Float16BitsColorDepthID
-                || m_d->cs->colorDepthId() == Float32BitsColorDepthID
-                || m_d->cs->colorDepthId() == Float64BitsColorDepthID)
-            && m_d->cs->colorModelId() != LABAColorModelID
-            && m_d->cs->colorModelId() != CMYKAColorModelID) {
+            && (m_d->colorSpace->colorDepthId() == Float16BitsColorDepthID
+                || m_d->colorSpace->colorDepthId() == Float32BitsColorDepthID
+                || m_d->colorSpace->colorDepthId() == Float64BitsColorDepthID)
+            && m_d->colorSpace->colorModelId() != LABAColorModelID
+            && m_d->colorSpace->colorModelId() != CMYKAColorModelID) {
 
         for (int ch = 0; ch < maxvalue.size(); ch++) {
-            KoChannelInfo *channel = m_d->cs->channels()[ch];
+            KoChannelInfo *channel = m_d->colorSpace->channels()[ch];
             maxvalue[ch] = m_d->displayRenderer->maxVisibleFloatValue(channel);
             channelValues[ch] = channelValues[ch]/(maxvalue[ch]);
-            channelValuesDisplay[KoChannelInfo::displayPositionToChannelIndex(ch, m_d->cs->channels())] = channelValues[ch];
+            channelValuesDisplay[KoChannelInfo::displayPositionToChannelIndex(ch, m_d->colorSpace->channels())] = channelValues[ch];
         }
     }
     else {
         for (int i =0; i < channelValues.size();i++) {
-            channelValuesDisplay[KoChannelInfo::displayPositionToChannelIndex(i, m_d->cs->channels())] = qBound((float)0.0,channelValues[i], (float)1.0);
+            channelValuesDisplay[KoChannelInfo::displayPositionToChannelIndex(i, m_d->colorSpace->channels())] = qBound((float)0.0,channelValues[i], (float)1.0);
         }
     }
 
@@ -316,7 +324,7 @@ KoColor KisVisualColorSelectorShape::convertShapeCoordinateToKoColor(QPointF coo
              * Might be worth investigating whether HCY can be used instead, but I have had
              * some weird results with that.
              */
-            QVector <qreal> luma= m_d->cs->lumaCoefficients();
+            QVector <qreal> luma= m_d->colorSpace->lumaCoefficients();
             QVector <qreal> chan2 = convertvectorfloatToqreal(channelValuesDisplay);
             QVector <qreal> inbetween(3);
             RGBToHSY(chan2[0],chan2[1], chan2[2], &inbetween[0], &inbetween[1], &inbetween[2],
@@ -344,7 +352,7 @@ KoColor KisVisualColorSelectorShape::convertShapeCoordinateToKoColor(QPointF coo
     }
 
     for (int i=0; i<channelValues.size();i++) {
-        channelValues[i] = channelValuesDisplay[KoChannelInfo::displayPositionToChannelIndex(i, m_d->cs->channels())]*(maxvalue[i]);
+        channelValues[i] = channelValuesDisplay[KoChannelInfo::displayPositionToChannelIndex(i, m_d->colorSpace->channels())]*(maxvalue[i]);
     }
 
     c.colorSpace()->fromNormalisedChannelsValue(c.data(), channelValues);
@@ -356,30 +364,30 @@ QPointF KisVisualColorSelectorShape::convertKoColorToShapeCoordinate(KoColor c)
 {
     ////qDebug() << this  << ">>>>>>>>> convertKoColorToShapeCoordinate()";
 
-    if (c.colorSpace() != m_d->cs) {
-        c.convertTo(m_d->cs);
+    if (c.colorSpace() != m_d->colorSpace) {
+        c.convertTo(m_d->colorSpace);
     }
     QVector <float> channelValues (m_d->currentColor.colorSpace()->channelCount());
     channelValues.fill(1.0);
-    m_d->cs->normalisedChannelsValue(c.data(), channelValues);
+    m_d->colorSpace->normalisedChannelsValue(c.data(), channelValues);
     QVector <float> channelValuesDisplay = channelValues;
     QVector <qreal> maxvalue(c.colorSpace()->channelCount());
     maxvalue.fill(1.0);
     if (m_d->displayRenderer
-            && (m_d->cs->colorDepthId() == Float16BitsColorDepthID
-                || m_d->cs->colorDepthId() == Float32BitsColorDepthID
-                || m_d->cs->colorDepthId() == Float64BitsColorDepthID)
-            && m_d->cs->colorModelId() != LABAColorModelID
-            && m_d->cs->colorModelId() != CMYKAColorModelID) {
+            && (m_d->colorSpace->colorDepthId() == Float16BitsColorDepthID
+                || m_d->colorSpace->colorDepthId() == Float32BitsColorDepthID
+                || m_d->colorSpace->colorDepthId() == Float64BitsColorDepthID)
+            && m_d->colorSpace->colorModelId() != LABAColorModelID
+            && m_d->colorSpace->colorModelId() != CMYKAColorModelID) {
         for (int ch = 0; ch<maxvalue.size(); ch++) {
-            KoChannelInfo *channel = m_d->cs->channels()[ch];
+            KoChannelInfo *channel = m_d->colorSpace->channels()[ch];
             maxvalue[ch] = m_d->displayRenderer->maxVisibleFloatValue(channel);
             channelValues[ch] = channelValues[ch]/(maxvalue[ch]);
-            channelValuesDisplay[KoChannelInfo::displayPositionToChannelIndex(ch, m_d->cs->channels())] = channelValues[ch];
+            channelValuesDisplay[KoChannelInfo::displayPositionToChannelIndex(ch, m_d->colorSpace->channels())] = channelValues[ch];
         }
     } else {
         for (int i =0; i<channelValues.size();i++) {
-            channelValuesDisplay[KoChannelInfo::displayPositionToChannelIndex(i, m_d->cs->channels())] = qBound((float)0.0,channelValues[i], (float)1.0);
+            channelValuesDisplay[KoChannelInfo::displayPositionToChannelIndex(i, m_d->colorSpace->channels())] = qBound((float)0.0,channelValues[i], (float)1.0);
         }
     }
     QPointF coordinates(0.0,0.0);
@@ -419,7 +427,7 @@ QPointF KisVisualColorSelectorShape::convertKoColorToShapeCoordinate(KoColor c)
                     coordinates.setY(inbetween[m_d->channel2]);
                 }
             } else if (m_d->model == ColorModel::HSY) {
-                QVector <qreal> luma = m_d->cs->lumaCoefficients();
+                QVector <qreal> luma = m_d->colorSpace->lumaCoefficients();
                 QVector <qreal> chan2 = convertvectorfloatToqreal(channelValuesDisplay);
                 QVector <qreal> inbetween(3);
                 RGBToHSY(channelValuesDisplay[0],channelValuesDisplay[1], channelValuesDisplay[2], &inbetween[0], &inbetween[1], &inbetween[2], luma[0], luma[1], luma[2]);
@@ -476,7 +484,7 @@ void KisVisualColorSelectorShape::mouseMoveEvent(QMouseEvent *e)
         quint8* oldData = m_d->currentColor.data();
         KoColor col = convertShapeCoordinateToKoColor(coordinates, true);
         QRect offsetrect(this->geometry().topLeft()+QPoint(7.0,7.0), this->geometry().bottomRight()-QPoint(7.0,7.0));
-        if (offsetrect.contains(e->pos()) || (m_d->cs->difference(col.data(), oldData)>5)) {
+        if (offsetrect.contains(e->pos()) || (m_d->colorSpace->difference(col.data(), oldData)>5)) {
             setColor(col);
             if (!m_d->updateTimer->isActive()) {
                 Q_EMIT sigNewColor(col);
@@ -531,7 +539,7 @@ QVector <qreal> KisVisualColorSelectorShape::getHSX(QVector<qreal> hsx, bool wra
     if (!wrangler){
         //Ok, so this docker will not update luminosity if there's not at the least 3% more variation.
         //This is necessary for 8bit.
-        if (m_d->cs->colorDepthId()==Integer8BitsColorDepthID){
+        if (m_d->colorSpace->colorDepthId()==Integer8BitsColorDepthID){
             if (hsx[2]>m_d->tone-0.03 && hsx[2]<m_d->tone+0.03) {
                 ihsx[2] = m_d->tone;
             }

@@ -67,7 +67,7 @@ public:
     /**
      * Converts the exactBounds() (!) of the \p srcDevice into QImage
      * properly rendered into display RGB space. Please note that the
-     * offset of the image in QImage is always zero for efficience
+     * offset of the image in QImage is always zero for efficiency
      * reasons.
      */
     QImage toQImage(KisPaintDeviceSP srcDevice) const;

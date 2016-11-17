@@ -273,7 +273,7 @@ KisImageBuilder_Result VideoSaver::encode(const QString &filename, KisProperties
 
             KisImageBuilder_Result result =
                 m_runner->runFFMpeg(args, i18n("Fetching palette..."),
-                                    framesDir.filePath("log_palettegen.log"),
+                                    framesDir.filePath("log_generate_palette_gif.log"),
                                     clipRange.duration() + clipRange.start());
 
             if (result) {
@@ -292,7 +292,7 @@ KisImageBuilder_Result VideoSaver::encode(const QString &filename, KisProperties
 
             KisImageBuilder_Result result =
                 m_runner->runFFMpeg(args, i18n("Encoding frames..."),
-                                    framesDir.filePath("log_paletteuse.log"),
+                                    framesDir.filePath("log_encode_gif.log"),
                                     clipRange.duration() + clipRange.start());
 
             if (result) {

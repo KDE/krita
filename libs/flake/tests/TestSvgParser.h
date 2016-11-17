@@ -132,6 +132,19 @@ private Q_SLOTS:
     void testRenderImage_AspectDefault();
     void testRenderImage_AspectNone();
     void testRenderImage_AspectMeet();
+
+    void testRectShapeRoundUniformX();
+    void testRectShapeRoundUniformY();
+    void testRectShapeRoundXY();
+    void testRectShapeRoundXYOverflow();
+
+    void testCircleShape();
+    void testEllipseShape();
+    void testLineShape();
+    void testPolylineShape();
+    void testPolygonShape();
+
+    void testPathShape();
 };
 
 #endif // TESTSVGPARSER_H

@@ -2505,4 +2505,172 @@ void TestSvgParser::testRenderImage_AspectMeet()
     t.test_standard_30px_72ppi("image_aspect_meet", false);
 }
 
+void TestSvgParser::testRectShapeRoundUniformX()
+{
+    const QString data =
+            "<svg width=\"30px\" height=\"30px\""
+            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+
+            "    <rect id=\"testRect\" x=\"5\" y=\"5\" width=\"20\" height=\"20\""
+            "        rx=\"5\""
+            "        fill=\"blue\" stroke=\"none\"/>"
+
+            "</svg>";
+
+    SvgRenderTester t (data);
+
+    t.test_standard_30px_72ppi("rect_5_5", false);
+}
+
+void TestSvgParser::testRectShapeRoundUniformY()
+{
+    const QString data =
+            "<svg width=\"30px\" height=\"30px\""
+            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+
+            "    <rect id=\"testRect\" x=\"5\" y=\"5\" width=\"20\" height=\"20\""
+            "        rx=\"5\""
+            "        fill=\"blue\" stroke=\"none\"/>"
+
+            "</svg>";
+
+    SvgRenderTester t (data);
+
+    t.test_standard_30px_72ppi("rect_5_5", false);
+}
+
+void TestSvgParser::testRectShapeRoundXY()
+{
+    const QString data =
+            "<svg width=\"30px\" height=\"30px\""
+            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+
+            "    <rect id=\"testRect\" x=\"5\" y=\"5\" width=\"20\" height=\"20\""
+            "        rx=\"5\" ry=\"10\""
+            "        fill=\"blue\" stroke=\"none\"/>"
+
+            "</svg>";
+
+    SvgRenderTester t (data);
+
+    t.test_standard_30px_72ppi("rect_5_10", false);
+}
+
+void TestSvgParser::testRectShapeRoundXYOverflow()
+{
+    const QString data =
+            "<svg width=\"30px\" height=\"30px\""
+            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+
+            "    <rect id=\"testRect\" x=\"5\" y=\"5\" width=\"20\" height=\"20\""
+            "        rx=\"5\" ry=\"25\""
+            "        fill=\"blue\" stroke=\"none\"/>"
+
+            "</svg>";
+
+    SvgRenderTester t (data);
+
+    t.test_standard_30px_72ppi("rect_5_10", false);
+}
+
+void TestSvgParser::testCircleShape()
+{
+    const QString data =
+            "<svg width=\"30px\" height=\"30px\""
+            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+
+            "    <circle id=\"testRect\" cx=\"15\" cy=\"15\" r=\"10\""
+            "        fill=\"blue\" stroke=\"white\"/>"
+
+            "</svg>";
+
+    SvgRenderTester t (data);
+
+    t.test_standard_30px_72ppi("circle", false);
+}
+
+void TestSvgParser::testEllipseShape()
+{
+    const QString data =
+            "<svg width=\"30px\" height=\"30px\""
+            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+
+            "    <ellipse id=\"testRect\" cx=\"15\" cy=\"15\" rx=\"10\" ry=\"5\""
+            "        fill=\"blue\" stroke=\"white\"/>"
+
+            "</svg>";
+
+    SvgRenderTester t (data);
+
+    t.test_standard_30px_72ppi("ellipse", false);
+}
+
+void TestSvgParser::testLineShape()
+{
+    const QString data =
+            "<svg width=\"30px\" height=\"30px\""
+            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+
+            "    <line id=\"testRect\" x1=\"5\" y1=\"5\" x2=\"25\" y2=\"15\""
+            "        fill=\"blue\" stroke=\"white\"/>"
+
+            "</svg>";
+
+    SvgRenderTester t (data);
+
+    t.test_standard_30px_72ppi("line", false);
+}
+
+void TestSvgParser::testPolylineShape()
+{
+    const QString data =
+            "<svg width=\"30px\" height=\"30px\""
+            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+
+            "    <polyline id=\"testRect\" points=\"5,5 10, 5 10,10 5,10 \n"
+            "        5 ,15 15 , 15 15,20 20,20 20,10 25,10 25,25 5,25\""
+            "        fill=\"red\" stroke=\"white\"/>"
+
+            "</svg>";
+
+    SvgRenderTester t (data);
+
+    t.test_standard_30px_72ppi("polyline", false);
+}
+
+void TestSvgParser::testPolygonShape()
+{
+    const QString data =
+            "<svg width=\"30px\" height=\"30px\""
+            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+
+            "    <polygon id=\"testRect\" points=\"5,5 10, 5 10,10 5,10 \n"
+            "        5 ,15 15 , 15 15,20 20,20 20,10 25,10 25,25 5,25\""
+            "        fill=\"red\" stroke=\"white\"/>"
+
+            "</svg>";
+
+    SvgRenderTester t (data);
+
+    t.test_standard_30px_72ppi("polygon", false);
+}
+
+void TestSvgParser::testPathShape()
+{
+    const QString data =
+            "<svg width=\"30px\" height=\"30px\""
+            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+
+            "    <path id=\"testRect\""
+            "        d=\"M 5,5 h 5 l 0,5 L5,10 l 0,5 l10,0 v5 l 5, 0 L20, 10 l 5,0 L 25,25 L 5,25 z\""
+            "        fill=\"red\" stroke=\"white\"/>"
+
+            "</svg>";
+
+    SvgRenderTester t (data);
+
+    t.test_standard_30px_72ppi("polygon", false);
+}
+
+
 QTEST_MAIN(TestSvgParser)

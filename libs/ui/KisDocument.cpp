@@ -706,6 +706,7 @@ bool KisDocument::saveFile(const QString &filePath, KisPropertiesConfigurationSP
             r = dstFile.rename(s);
             if (!r) {
                setErrorMessage(i18n("Could not rename original file to %1: %2", dstFile.fileName(), dstFile. errorString()));
+                ret = false;
             }
          }
 
@@ -713,22 +714,26 @@ bool KisDocument::saveFile(const QString &filePath, KisPropertiesConfigurationSP
             r = tempFile.copy(filePath);
             if (!r) {
                 setErrorMessage(i18n("Copying the temporary file failed: %1 to %2: %3", tempFile.fileName(), dstFile.fileName(), tempFile.errorString()));
+                ret = false;
             }
             else {
                 r = tempFile.remove();
                 if (!r) {
                     setErrorMessage(i18n("Could not remove temporary file %1: %2", tempFile.fileName(), tempFile.errorString()));
+                    ret = false;
                 }
                 else if (s != filePath) {
                     r = dstFile.remove();
                     if (!r) {
                         setErrorMessage(i18n("Could not remove saved original file: %1", dstFile.errorString()));
+                        ret = false;
                     }
                 }
             }
         }
         else {
             setErrorMessage(i18n("The temporary file %1 is gone before we could copy it!", tempFile.fileName()));
+            ret = false;
         }
 
         if (errorMessage().isEmpty()) {
@@ -737,6 +742,7 @@ bool KisDocument::saveFile(const QString &filePath, KisPropertiesConfigurationSP
             }
         }
         else {
+            ret = false;
             qWarning() << "Error while saving:" << errorMessage();
         }
         // Restart the autosave timer
@@ -747,7 +753,7 @@ bool KisDocument::saveFile(const QString &filePath, KisPropertiesConfigurationSP
 
         d->mimeType = outputMimeType;
     }
-    else {
+    if (!ret) {
         if (!suppressErrorDialog) {
 
             if (errorMessage().isEmpty()) {

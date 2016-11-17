@@ -379,7 +379,9 @@ QString DlgAnimationRenderer::findFFMpeg()
     proposedPaths << customPath;
     proposedPaths << customPath + QDir::separator() + "ffmpeg";
 
-    proposedPaths << "ffmpeg";
+    proposedPaths << QDir::homePath() + "/bin/ffmpeg";
+    proposedPaths << "/usr/bin/ffmpeg";
+    proposedPaths << "/usr/local/bin/ffmpeg";
     proposedPaths << KoResourcePaths::getApplicationRoot() +
         QDir::separator() + "bin" + QDir::separator() + "ffmpeg";
 

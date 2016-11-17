@@ -965,10 +965,10 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
         KoFileDialog dialog(this, KoFileDialog::SaveFile, "SaveDocument");
         dialog.setCaption(i18n("untitled"));
         if (isExporting() && !d->lastExportUrl.isEmpty()) {
-            dialog.setDefaultDir(d->lastExportUrl.toLocalFile(), true);
+            dialog.setDefaultDir(d->lastExportUrl.toLocalFile());
         }
         else {
-            dialog.setDefaultDir(suggestedURL.toLocalFile(), true);
+            dialog.setDefaultDir(suggestedURL.toLocalFile());
         }
         // Default to all supported file types if user is exporting, otherwise use Krita default
         dialog.setMimeTypeFilters(mimeFilter, QString(_native_format));

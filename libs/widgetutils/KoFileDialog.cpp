@@ -83,12 +83,10 @@ void KoFileDialog::setCaption(const QString &caption)
     d->caption = caption;
 }
 
-void KoFileDialog::setDefaultDir(const QString &defaultDir, bool override)
+void KoFileDialog::setDefaultDir(const QString &defaultDir)
 {
-    if (override || d->defaultDirectory.isEmpty() || !QFile(d->defaultDirectory).exists()) {
-        QFileInfo f(defaultDir);
-        d->defaultDirectory = f.absoluteFilePath();
-    }
+    QFileInfo f(defaultDir);
+    d->defaultDirectory = f.absoluteFilePath();
 }
 
 void KoFileDialog::setOverrideDir(const QString &overrideDir)

@@ -70,7 +70,7 @@ public:
      *
      * @param defaultDir a path to a file or directory
      */
-    void setDefaultDir(const QString &defaultDir, bool override = false);
+    void setDefaultDir(const QString &defaultDir);
 
     /**
      * @brief setOverrideDir override both the default dir and the saved dir found by dialogName

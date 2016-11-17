@@ -87,6 +87,9 @@ public:
     /// Parses a viewbox attribute into an rectangle
     static bool parseViewBox(SvgGraphicsContext *gc, const KoXmlElement &e, const QRectF &elementBounds, QRectF *_viewRect, QTransform *_viewTransform);
 
+    struct PreserveAspectRatioParser;
+    static void parseAspectRatio(const PreserveAspectRatioParser &p, const QRectF &elementBounds, const QRectF &viewRect, QTransform *_viewTransform);
+
     /// Parses a length attribute
     static qreal parseUnit(SvgGraphicsContext *gc, const QString &, bool horiz = false, bool vert = false, const QRectF &bbox = QRectF());
 

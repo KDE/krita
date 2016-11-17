@@ -27,7 +27,7 @@
 #include <KoViewConverter.h>
 #include <KoShapePainter.h>
 
-struct KoClipMask::Private {
+struct Q_DECL_HIDDEN KoClipMask::Private {
 
     CoordinateSystem coordinates = ObjectBoundingBox;
     CoordinateSystem contentCoordinates = UserSpaceOnUse;

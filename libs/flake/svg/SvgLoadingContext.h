@@ -96,6 +96,8 @@ public:
     typedef std::function<QByteArray(const QString&)> FileFetcherFunc;
     void setFileFetcher(FileFetcherFunc func);
 
+    QByteArray fetchExternalFile(const QString &url);
+
 private:
     class Private;
     Private * const d;

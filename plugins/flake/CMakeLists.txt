@@ -13,3 +13,5 @@ endif()
 if (SHOULD_BUILD_PLUGIN_VECTORSHAPE)
     add_subdirectory( vectorshape )
 endif ()
+
+add_subdirectory( imageshape )

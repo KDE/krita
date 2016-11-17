@@ -128,6 +128,10 @@ private Q_SLOTS:
     void testRenderClipMask_Obb();
     void testRenderClipMask_User_Clip_Obb();
     void testRenderClipMask_User_Clip_User();
+
+    void testRenderImage_AspectDefault();
+    void testRenderImage_AspectNone();
+    void testRenderImage_AspectMeet();
 };
 
 #endif // TESTSVGPARSER_H

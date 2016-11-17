@@ -292,3 +292,8 @@ void SvgLoadingContext::setFileFetcher(SvgLoadingContext::FileFetcherFunc func)
 {
     d->fileFetcher = func;
 }
+
+QByteArray SvgLoadingContext::fetchExternalFile(const QString &url)
+{
+    return d->fileFetcher ? d->fileFetcher(url) : QByteArray();
+}

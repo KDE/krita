@@ -43,6 +43,8 @@ struct SvgTester
 
         parser.setXmlBaseDir("./");
 
+        //printf("%s", data.toLatin1().data());
+
     }
 
     void run() {
@@ -2397,6 +2399,135 @@ void TestSvgParser::testRenderClipMask_User_Clip_User()
     SvgRenderTester t (data);
 
     t.test_standard_30px_72ppi("clip_mask_obb", false);
+}
+
+QByteArray fileFetcherFunc(const QString &name)
+{
+    const QString fileName = TestUtil::fetchDataFileLazy(name);
+    QFile file(fileName);
+    KIS_ASSERT(file.exists());
+    file.open(QIODevice::ReadOnly);
+    return file.readAll();
+}
+
+void TestSvgParser::testRenderImage_AspectDefault()
+{
+    QImage testFilledImage(15, 15, QImage::Format_ARGB32);
+    testFilledImage.fill(0);
+    QPainter p(&testFilledImage);
+    p.fillRect(QRect(0, 0, 15, 15), Qt::blue);
+    p.fillRect(QRect(3, 3, 9, 9), Qt::red);
+    testFilledImage.save("testing_ref_image.png");
+
+    const QString data =
+            "<svg width=\"30px\" height=\"30px\""
+            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+
+            "<g id=\"testRect\">"
+            "    <rect id=\"testRect1\" x=\"2\" y=\"2\" width=\"26\" height=\"26\""
+            "        fill=\"green\" stroke=\"none\"/>"
+
+            "    <rect id=\"testRect1\" x=\"5\" y=\"5\" width=\"15\" height=\"10\""
+            "        fill=\"white\" stroke=\"none\"/>"
+
+
+            "    <image x=\"5\" y=\"5\" width=\"15\" height=\"10\""
+            "        xlink:href=\"svg_render/testing_ref_image.png\">"
+
+            "        <title>My image</title>"
+
+            "    </image>"
+
+            "</g>"
+
+            "</svg>";
+
+    SvgRenderTester t (data);
+    t.parser.setFileFetcher(fileFetcherFunc);
+
+    t.test_standard_30px_72ppi("image_aspect_default", false);
+}
+
+void TestSvgParser::testRenderImage_AspectNone()
+{
+    QImage testFilledImage(15, 15, QImage::Format_ARGB32);
+    testFilledImage.fill(0);
+    QPainter p(&testFilledImage);
+    p.fillRect(QRect(0, 0, 15, 15), Qt::blue);
+    p.fillRect(QRect(3, 3, 9, 9), Qt::red);
+    testFilledImage.save("testing_ref_image.png");
+
+
+
+    const QString data =
+            "<svg width=\"30px\" height=\"30px\""
+            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+
+            "<g id=\"testRect\">"
+            "    <rect id=\"testRect1\" x=\"2\" y=\"2\" width=\"26\" height=\"26\""
+            "        fill=\"green\" stroke=\"none\"/>"
+
+            "    <rect id=\"testRect1\" x=\"5\" y=\"5\" width=\"15\" height=\"10\""
+            "        fill=\"white\" stroke=\"none\"/>"
+
+
+            "    <image x=\"5\" y=\"5\" width=\"15\" height=\"10\""
+            "        preserveAspectRatio=\"none\""
+            "        xlink:href=\"svg_render/testing_ref_image.png\">"
+
+            "        <title>My image</title>"
+
+            "    </image>"
+
+            "</g>"
+
+            "</svg>";
+
+    SvgRenderTester t (data);
+    t.parser.setFileFetcher(fileFetcherFunc);
+
+    t.test_standard_30px_72ppi("image_aspect_none", false);
+}
+
+void TestSvgParser::testRenderImage_AspectMeet()
+{
+    QImage testFilledImage(15, 15, QImage::Format_ARGB32);
+    testFilledImage.fill(0);
+    QPainter p(&testFilledImage);
+    p.fillRect(QRect(0, 0, 15, 15), Qt::blue);
+    p.fillRect(QRect(3, 3, 9, 9), Qt::red);
+    testFilledImage.save("testing_ref_image.png");
+
+
+
+    const QString data =
+            "<svg width=\"30px\" height=\"30px\""
+            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+
+            "<g id=\"testRect\">"
+            "    <rect id=\"testRect1\" x=\"2\" y=\"2\" width=\"26\" height=\"26\""
+            "        fill=\"green\" stroke=\"none\"/>"
+
+            "    <rect id=\"testRect1\" x=\"5\" y=\"5\" width=\"15\" height=\"10\""
+            "        fill=\"white\" stroke=\"none\"/>"
+
+
+            "    <image x=\"5\" y=\"5\" width=\"15\" height=\"10\""
+            "        preserveAspectRatio=\"xMinYMin meet\""
+            "        xlink:href=\"svg_render/testing_ref_image.png\">"
+
+            "        <title>My image</title>"
+
+            "    </image>"
+
+            "</g>"
+
+            "</svg>";
+
+    SvgRenderTester t (data);
+    t.parser.setFileFetcher(fileFetcherFunc);
+
+    t.test_standard_30px_72ppi("image_aspect_meet", false);
 }
 
 QTEST_MAIN(TestSvgParser)

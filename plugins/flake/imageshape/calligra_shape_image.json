@@ -1,0 +1,11 @@
+{
+    "Id": "Static Vector Shape",
+    "Type": "Service",
+    "X-Flake-MinVersion": "28",
+    "X-Flake-PluginVersion": "28",
+    "X-KDE-Library": "krita_shape_vector",
+    "X-KDE-PluginInfo-Name": "vectorshape",
+    "X-KDE-ServiceTypes": [
+        "Calligra/Flake"
+    ]
+}

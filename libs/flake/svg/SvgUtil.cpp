@@ -175,37 +175,41 @@ bool SvgUtil::parseViewBox(SvgGraphicsContext *gc, const KoXmlElement &e,
     const QString aspectString = e.attribute("preserveAspectRatio");
     if (!aspectString.isEmpty()) {
         PreserveAspectRatioParser p(aspectString);
-        if (p.mode != Qt::IgnoreAspectRatio) {
-            const qreal tan1 = viewBoxRect.height() / viewBoxRect.width();
-            const qreal tan2 = elementBounds.height() / elementBounds.width();
-
-            const qreal uniformScale =
-                (p.mode == Qt::KeepAspectRatioByExpanding) ^ (tan1 > tan2) ?
-                elementBounds.height() / viewBoxRect.height() :
-                elementBounds.width() / viewBoxRect.width();
-
-
-            viewBoxTransform =
-                QTransform::fromTranslate(-viewBoxRect.x(), -viewBoxRect.y()) *
-                QTransform::fromScale(uniformScale, uniformScale) *
-                QTransform::fromTranslate(elementBounds.x(), elementBounds.y());
-
-            const QPointF viewBoxAnchor = viewBoxTransform.map(p.rectAnchorPoint(viewBoxRect));
-            const QPointF elementAnchor = p.rectAnchorPoint(elementBounds);
-            const QPointF offset = elementAnchor - viewBoxAnchor;
-
-            viewBoxTransform = viewBoxTransform * QTransform::fromTranslate(offset.x(), offset.y());
-        }
-
-        if (p.defer && e.tagName() == "image") {
-            // TODO:
-        }
+        parseAspectRatio(p, elementBounds, viewBoxRect, &viewBoxTransform);
     }
 
     *_viewRect = viewBoxRect;
     *_viewTransform = viewBoxTransform;
 
     return result;
+}
+
+void SvgUtil::parseAspectRatio(const PreserveAspectRatioParser &p, const QRectF &elementBounds, const QRectF &viewBoxRect, QTransform *_viewTransform)
+{
+    if (p.mode != Qt::IgnoreAspectRatio) {
+        QTransform viewBoxTransform = *_viewTransform;
+
+        const qreal tan1 = viewBoxRect.height() / viewBoxRect.width();
+        const qreal tan2 = elementBounds.height() / elementBounds.width();
+
+        const qreal uniformScale =
+            (p.mode == Qt::KeepAspectRatioByExpanding) ^ (tan1 > tan2) ?
+                elementBounds.height() / viewBoxRect.height() :
+                elementBounds.width() / viewBoxRect.width();
+
+        viewBoxTransform =
+            QTransform::fromTranslate(-viewBoxRect.x(), -viewBoxRect.y()) *
+            QTransform::fromScale(uniformScale, uniformScale) *
+            QTransform::fromTranslate(elementBounds.x(), elementBounds.y());
+
+        const QPointF viewBoxAnchor = viewBoxTransform.map(p.rectAnchorPoint(viewBoxRect));
+        const QPointF elementAnchor = p.rectAnchorPoint(elementBounds);
+        const QPointF offset = elementAnchor - viewBoxAnchor;
+
+        viewBoxTransform = viewBoxTransform * QTransform::fromTranslate(offset.x(), offset.y());
+
+        *_viewTransform = viewBoxTransform;
+    }
 }
 
 qreal SvgUtil::parseUnit(SvgGraphicsContext *gc, const QString &unit, bool horiz, bool vert, const QRectF &bbox)
@@ -351,7 +355,7 @@ const char * SvgUtil::parseNumber(const char *ptr, qreal &number)
 
 SvgUtil::PreserveAspectRatioParser::PreserveAspectRatioParser(const QString &str)
 {
-    QRegExp rexp("(defer)?\\s+(none|(x(Min|Max|Mid)Y(Min|Max|Mid)))\\s+(meet|slice)?", Qt::CaseInsensitive);
+    QRegExp rexp("(defer)?\\s*(none|(x(Min|Max|Mid)Y(Min|Max|Mid)))\\s*(meet|slice)?", Qt::CaseInsensitive);
     int index = rexp.indexIn(str.toLower());
 
     if (index >= 0) {

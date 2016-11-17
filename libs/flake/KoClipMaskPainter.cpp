@@ -23,7 +23,7 @@
 
 #include "kis_global.h"
 
-struct KoClipMaskPainter::Private
+struct Q_DECL_HIDDEN KoClipMaskPainter::Private
 {
     QPainter *globalPainter;
 

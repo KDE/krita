@@ -2412,13 +2412,6 @@ QByteArray fileFetcherFunc(const QString &name)
 
 void TestSvgParser::testRenderImage_AspectDefault()
 {
-    QImage testFilledImage(15, 15, QImage::Format_ARGB32);
-    testFilledImage.fill(0);
-    QPainter p(&testFilledImage);
-    p.fillRect(QRect(0, 0, 15, 15), Qt::blue);
-    p.fillRect(QRect(3, 3, 9, 9), Qt::red);
-    testFilledImage.save("testing_ref_image.png");
-
     const QString data =
             "<svg width=\"30px\" height=\"30px\""
             "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
@@ -2450,15 +2443,6 @@ void TestSvgParser::testRenderImage_AspectDefault()
 
 void TestSvgParser::testRenderImage_AspectNone()
 {
-    QImage testFilledImage(15, 15, QImage::Format_ARGB32);
-    testFilledImage.fill(0);
-    QPainter p(&testFilledImage);
-    p.fillRect(QRect(0, 0, 15, 15), Qt::blue);
-    p.fillRect(QRect(3, 3, 9, 9), Qt::red);
-    testFilledImage.save("testing_ref_image.png");
-
-
-
     const QString data =
             "<svg width=\"30px\" height=\"30px\""
             "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
@@ -2491,15 +2475,6 @@ void TestSvgParser::testRenderImage_AspectNone()
 
 void TestSvgParser::testRenderImage_AspectMeet()
 {
-    QImage testFilledImage(15, 15, QImage::Format_ARGB32);
-    testFilledImage.fill(0);
-    QPainter p(&testFilledImage);
-    p.fillRect(QRect(0, 0, 15, 15), Qt::blue);
-    p.fillRect(QRect(3, 3, 9, 9), Qt::red);
-    testFilledImage.save("testing_ref_image.png");
-
-
-
     const QString data =
             "<svg width=\"30px\" height=\"30px\""
             "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"

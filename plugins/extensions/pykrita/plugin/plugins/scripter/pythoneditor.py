@@ -56,7 +56,7 @@ class CodeEditor(QPlainTextEdit):
     def lineNumberAreaPaintEvent(self, event):
         """This method draws the current lineNumberArea for while"""
         painter = QPainter(self.lineNumberArea)
-        painter.fillRect(event.rect(), Qt.lightGray)
+        painter.fillRect(event.rect(), QColor(Qt.lightGray).darker(300))
 
         block = self.firstVisibleBlock()
         blockNumber = block.blockNumber()
@@ -66,7 +66,7 @@ class CodeEditor(QPlainTextEdit):
         while block.isValid() and top <= event.rect().bottom():
             if block.isVisible() and bottom >= event.rect().top():
                 number = str(blockNumber + 1)
-                painter.setPen(Qt.black)
+                painter.setPen(QColor(Qt.lightGray))
                 painter.drawText(0, top, self.lineNumberArea.width(), self.fontMetrics().height(),
                                  Qt.AlignRight, number)
 
@@ -79,9 +79,22 @@ class CodeEditor(QPlainTextEdit):
         """Highlight current line under cursor"""
         currentSelection = QTextEdit.ExtraSelection()
 
-        lineColor = QColor(Qt.gray).lighter(180)
+        lineColor = QColor(Qt.gray).darker(250)
         currentSelection.format.setBackground(lineColor)
         currentSelection.format.setProperty(QTextFormat.FullWidthSelection, True)
         currentSelection.cursor = self.textCursor()
         currentSelection.cursor.clearSelection()
+
         self.setExtraSelections([currentSelection])
+
+    def wheelEvent(self, e):
+        """When the CTRL is pressed during the wheelEvent, zoomIn and zoomOut
+           slots are invoked"""
+        if e.modifiers() == Qt.ControlModifier:
+            delta = e.angleDelta().y()
+            if delta < 0:
+                self.zoomOut()
+            elif delta > 0:
+                self.zoomIn()
+        else:
+            super(CodeEditor, self).wheelEvent(e)

@@ -742,18 +742,18 @@ bool KisDocument::saveFile(KisPropertiesConfigurationSP exportConfiguration)
 
         if (tempFile.exists()) {
 
-            r = tempFile.copy(localFilePath());
-            if (!r) {
+            ret = tempFile.copy(localFilePath());
+            if (!ret) {
                 setErrorMessage(i18n("Copying the temporary file failed: %1 to %2: %3", tempFile.fileName(), dstFile.fileName(), tempFile.errorString()));
             }
             else {
                 r = tempFile.remove();
-                if (!r) {
+                if (!ret) {
                     setErrorMessage(i18n("Could not remove temporary file %1: %2", tempFile.fileName(), tempFile.errorString()));
                 }
                 else if (s != localFilePath()) {
                     r = dstFile.remove();
-                    if (!r) {
+                    if (!ret) {
                         setErrorMessage(i18n("Could not remove saved original file: %1", dstFile.errorString()));
                     }
                 }
@@ -761,6 +761,7 @@ bool KisDocument::saveFile(KisPropertiesConfigurationSP exportConfiguration)
         }
         else {
             setErrorMessage(i18n("The temporary file %1 is gone before we could copy it!", tempFile.fileName()));
+            ret = false;
         }
 
         if (errorMessage().isEmpty()) {
@@ -776,7 +777,8 @@ bool KisDocument::saveFile(KisPropertiesConfigurationSP exportConfiguration)
         d->mimeType = outputMimeType;
         setConfirmNonNativeSave(isExporting(), false);
     }
-    else {
+
+    if (!ret) {
         if (!suppressErrorDialog) {
 
             if (errorMessage().isEmpty()) {

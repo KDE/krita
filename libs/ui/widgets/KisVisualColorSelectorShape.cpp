@@ -212,6 +212,8 @@ QImage KisVisualColorSelectorShape::getImageMap()
         else {
             m_d->gradient = m_d->currentColor.colorSpace()->convertToQImage(data, width(), height(), 0, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
         }
+        delete[] data;
+
         m_d->imagesNeedUpdate = false;
     }
     return m_d->gradient;

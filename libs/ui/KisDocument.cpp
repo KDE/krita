@@ -944,28 +944,38 @@ bool KisDocument::isModified() const
 
 bool KisDocument::prepareLocksForSaving()
 {
+    KisImageSP copiedImage;
+
     {
         Private::SafeSavingLocker locker(d);
         if (locker.successfullyLocked()) {
-            d->savingImage = d->image->clone(true);
+            copiedImage = d->image->clone(true);
         }
         else {
-            d->lastErrorMessage = i18n("The image was still busy while saving. Your saved image might be incomplete.");
-            d->image->lock();
-            d->savingImage = d->image->clone(true);
-            d->image->unlock();
+            // even though it is a recovery operation, we should ensure we do not enter saving twice!
+            std::unique_lock<StdLockableWrapper<QMutex>> l(d->savingLock, std::try_to_lock);
+
+            if (l.owns_lock()) {
+                d->lastErrorMessage = i18n("The image was still busy while saving. Your saved image might be incomplete.");
+                d->image->lock();
+                copiedImage = d->image->clone(true);
+                d->image->unlock();
+            }
         }
     }
 
-    if (!d->savingMutex.tryLock()) {
-        qWarning() << "Could not lock for saving!";
+    bool result = false;
+
+    // ensure we do not enter saving twice
+    if (copiedImage && d->savingMutex.tryLock()) {
+        d->savingImage = copiedImage;
+        result = true;
+    } else {
+        qWarning() << "Could not lock the document for saving!";
         d->lastErrorMessage = i18n("Could not lock the image for saving.");
-        d->savingImage = 0;
-        return false;
     }
 
-    Q_ASSERT(d->savingImage);
-    return true;
+    return result;
 }
 
 void KisDocument::unlockAfterSaving()

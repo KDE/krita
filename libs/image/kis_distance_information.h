@@ -36,18 +36,21 @@ public:
     explicit KisSpacingInformation()
         : m_spacing(0.0, 0.0)
         , m_rotation(0.0)
+        , m_coordinateSystemFlipped(false)
     {
     }
 
     explicit KisSpacingInformation(qreal isotropicSpacing)
         : m_spacing(isotropicSpacing, isotropicSpacing)
         , m_rotation(0.0)
+        , m_coordinateSystemFlipped(false)
     {
     }
 
-    explicit KisSpacingInformation(const QPointF &anisotropicSpacing, qreal rotation)
+    explicit KisSpacingInformation(const QPointF &anisotropicSpacing, qreal rotation, bool coordinateSystemFlipped)
         : m_spacing(anisotropicSpacing)
         , m_rotation(rotation)
+        , m_coordinateSystemFlipped(coordinateSystemFlipped)
     {
     }
 
@@ -64,12 +67,13 @@ public:
     }
 
     inline qreal rotation() const {
-        return m_rotation;
+        return m_coordinateSystemFlipped ? 2 * M_PI - m_rotation : m_rotation;
     }
 
 private:
     QPointF m_spacing;
     qreal m_rotation;
+    bool m_coordinateSystemFlipped;
 };
 
 /**

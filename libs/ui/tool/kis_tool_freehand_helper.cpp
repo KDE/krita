@@ -737,10 +737,10 @@ void KisToolFreehandHelper::stabilizerEnd()
 
     // Finish the line
     if (m_d->smoothingOptions->finishStabilizedCurve()) {
-        // In each iteration we add the latest paint info and delete the oldest
-        // After `sampleSize` iterations the deque will be filled with the latest
-        // value and we will have reached the end point.
+        // Process all the existing events first
+        stabilizerPollAndPaint();
 
+        // Draw the finish line with pending events and a time override
         m_d->stabilizedSampler.addFinishingEvent(m_d->stabilizerDeque.size());
         stabilizerPollAndPaint();
     }

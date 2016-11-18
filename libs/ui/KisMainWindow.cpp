@@ -315,7 +315,7 @@ KisMainWindow::KisMainWindow()
     if (d->toolOptionsDocker) {
         dockwidgetActions[d->toolOptionsDocker->toggleViewAction()->text()] = d->toolOptionsDocker->toggleViewAction();
     }
-    connect(KoToolManager::instance(), SIGNAL(toolOptionWidgetsChanged(QList<QPointer<QWidget> >)), this, SLOT(newOptionWidgets(QList<QPointer<QWidget> >)));
+    connect(KoToolManager::instance(), SIGNAL(toolOptionWidgetsChanged(KoCanvasController*, QList<QPointer<QWidget> >)), this, SLOT(newOptionWidgets(KoCanvasController*, QList<QPointer<QWidget> >)));
 
     Q_FOREACH (QString title, dockwidgetActions.keys()) {
         d->dockWidgetMenu->addAction(dockwidgetActions[title]);
@@ -2158,9 +2158,19 @@ QPointer<KisView>KisMainWindow::activeKisView()
     return qobject_cast<KisView*>(activeSubWindow->widget());
 }
 
-
-void KisMainWindow::newOptionWidgets(const QList<QPointer<QWidget> > &optionWidgetList)
+void KisMainWindow::newOptionWidgets(KoCanvasController *controller, const QList<QPointer<QWidget> > &optionWidgetList)
 {
+    KIS_ASSERT_RECOVER_NOOP(controller == KoToolManager::instance()->activeCanvasController());
+    bool isOurOwnView = false;
+
+    Q_FOREACH (QPointer<KisView> view, KisPart::instance()->views()) {
+        if (view && view->canvasController() == controller) {
+            isOurOwnView = view->mainWindow() == this;
+        }
+    }
+
+    if (!isOurOwnView) return;
+
     Q_FOREACH (QWidget *w, optionWidgetList) {
 #ifdef Q_OS_OSX
         w->setAttribute(Qt::WA_MacSmallSize, true);

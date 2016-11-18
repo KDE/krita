@@ -45,6 +45,7 @@ class KoDockFactoryBase;
 class QDockWidget;
 class KisView;
 class KisViewManager;
+class KoCanvasController;
 
 
 /**
@@ -234,7 +235,7 @@ public Q_SLOTS:
     /**
      * Update the option widgets to the argument ones, removing the currently set widgets.
      */
-    void newOptionWidgets(const QList<QPointer<QWidget> > & optionWidgetList);
+    void newOptionWidgets(KoCanvasController *controller, const QList<QPointer<QWidget> > & optionWidgetList);
 
 
 private Q_SLOTS:

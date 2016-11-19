@@ -67,6 +67,8 @@ KisPaintOpSettingsWidget::KisPaintOpSettingsWidget(QWidget * parent)
     QSizePolicy policy =  QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
     m_d->optionsList->setSizePolicy(policy);
 
+
+
     m_d->optionsStack = new QStackedWidget(this);
     policy = QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     m_d->optionsStack->setSizePolicy(policy);

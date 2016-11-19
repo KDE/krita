@@ -109,8 +109,6 @@ private Q_SLOTS:
     void slotLodAvailabilityChanged(bool value);
     void slotSwitchShowEditor(bool visible);
     void slotPaintOpChanged(int index);
-    void slotFocusChanged(QWidget* object1, QWidget* object2);
-    void slotApplicationStateChanged(Qt::ApplicationState);
     void slotSwitchShowPresets(bool visible);
 
 

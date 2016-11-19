@@ -428,7 +428,6 @@
        <property name="checkable" stdset="0">
         <bool>true</bool>
        </property>
-       <zorder>detachWindowButton</zorder>
       </widget>
      </item>
      <item>
@@ -443,25 +442,6 @@
         </size>
        </property>
       </spacer>
-     </item>
-     <item>
-      <widget class="KisHighlightedToolButton" name="pinWindowButton" native="true">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="minimumSize">
-        <size>
-         <width>35</width>
-         <height>20</height>
-        </size>
-       </property>
-       <property name="text" stdset="0">
-        <string/>
-       </property>
-      </widget>
      </item>
      <item>
       <widget class="KisHighlightedToolButton" name="detachWindowButton" native="true">
@@ -553,13 +533,10 @@
     </widget>
    </item>
   </layout>
+  <zorder>presetsContainer</zorder>
   <zorder>brushEditorSettingsControls</zorder>
   <zorder>scratchpadControls</zorder>
   <zorder></zorder>
-  <zorder>showScratchpadButton</zorder>
-  <zorder>detachWindowButton</zorder>
-  <zorder>pinWindowButton</zorder>
-  <zorder>showEditorButton</zorder>
  </widget>
  <customwidgets>
   <customwidget>

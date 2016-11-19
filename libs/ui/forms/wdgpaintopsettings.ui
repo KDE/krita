@@ -443,25 +443,6 @@
        </property>
       </spacer>
      </item>
-     <item>
-      <widget class="KisHighlightedToolButton" name="detachWindowButton" native="true">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="minimumSize">
-        <size>
-         <width>35</width>
-         <height>30</height>
-        </size>
-       </property>
-       <property name="text" stdset="0">
-        <string>Detach</string>
-       </property>
-      </widget>
-     </item>
     </layout>
    </item>
    <item row="1" column="0">

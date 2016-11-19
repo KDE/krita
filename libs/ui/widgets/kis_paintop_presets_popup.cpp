@@ -160,12 +160,6 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
     m_d->uiWdgPaintOpPresetSettings.showScratchpadButton->setChecked(cfg.scratchpadVisible());
     m_d->uiWdgPaintOpPresetSettings.showEditorButton->setCheckable(true);
     m_d->uiWdgPaintOpPresetSettings.showEditorButton->setChecked(true);
-    m_d->uiWdgPaintOpPresetSettings.detachWindowButton->setCheckable(true);
-    m_d->uiWdgPaintOpPresetSettings.detachWindowButton->setChecked(cfg.paintopPopupDetached());
-
-
-    m_d->uiWdgPaintOpPresetSettings.detachWindowButton->setVisible(true);
-
 
     m_d->uiWdgPaintOpPresetSettings.showPresetsButton->setText(i18n("Presets"));
     m_d->uiWdgPaintOpPresetSettings.showPresetsButton->setCheckable(true);
@@ -190,10 +184,6 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
             this, SLOT(slotSwitchShowEditor(bool)));
 
     connect(m_d->uiWdgPaintOpPresetSettings.showPresetsButton, SIGNAL(clicked(bool)), this, SLOT(slotSwitchShowPresets(bool)));
-
-
-    connect(m_d->uiWdgPaintOpPresetSettings.detachWindowButton, SIGNAL(clicked(bool)),
-            this, SLOT(switchDetached(bool)));
 
     connect(m_d->uiWdgPaintOpPresetSettings.eraseScratchPad, SIGNAL(clicked()),
             m_d->uiWdgPaintOpPresetSettings.scratchPad, SLOT(fillDefault()));
@@ -253,7 +243,7 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
 
 
 
-    m_d->detached = !cfg.paintopPopupDetached();
+    m_d->detached = false;
     m_d->ignoreHideEvents = false;
     m_d->minimumSettingsWidgetSize = QSize(0, 0);
     m_d->uiWdgPaintOpPresetSettings.scratchpadControls->setVisible(cfg.scratchpadVisible());
@@ -279,48 +269,11 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
                         resourceProvider->resourceManager()->
                             resource(KisCanvasResourceProvider::LodAvailability));
 
-   connect(qApp, SIGNAL(focusChanged(QWidget*,QWidget*)), this, SLOT(slotFocusChanged(QWidget*,QWidget*)));
-
-   connect(qApp, SIGNAL(applicationStateChanged(Qt::ApplicationState)), this, SLOT(slotApplicationStateChanged(Qt::ApplicationState)));
-
 
 
 
 }
 
-
-void KisPaintOpPresetsPopup::slotApplicationStateChanged(Qt::ApplicationState state)
-{
-    // if the entire application loses focus, let's always hide the brush editor so it doesn't become a pest
-    // this situation get annoying especially if someone minimizes the application
-    // and the brush editor is still showing and won't disappear when clicking around the desktop
-    if (state == Qt::ApplicationInactive && parentWidget()) {
-        parentWidget()->hide();
-    }
-}
-
-
-void KisPaintOpPresetsPopup::slotFocusChanged(QWidget* object1, QWidget* object2)
-{
-    // object1 = "old" focus window. object2 = "active" focus window
-    // only potentially hide the brush editor if it is detached and NOT pinned
-    if (  m_d->uiWdgPaintOpPresetSettings.detachWindowButton->isChecked() == true) {
-
-        // if the active focus window is not the brush editor, we need to hide it
-        // otherwise it will go behind the active window and require 2 clicks to bring it back
-        // once to hide it, second time to show it again at the top
-        if (object1 && object2 && object2->parentWidget() && parentWidget() ) {
-
-
-            // the depth of the windows will change once the main window is clicked
-            // Since it gets focus, it will be in front of the brush editor (which means greater depth)
-            if ( object2->depth() > object1->depth()) {
-                 parentWidget()->hide();
-            }
-        }
-    }
-
-}
 
 void KisPaintOpPresetsPopup::slotResourceChanged(int key, const QVariant &value)
 {
@@ -443,7 +396,6 @@ void KisPaintOpPresetsPopup::switchDetached(bool show)
 
         if (m_d->detached) {
             m_d->ignoreHideEvents = true;
-            parentWidget()->setWindowFlags(Qt::Tool);
 
             if (show) {
                 parentWidget()->show();
@@ -452,7 +404,6 @@ void KisPaintOpPresetsPopup::switchDetached(bool show)
 
         }
         else {
-            parentWidget()->setWindowFlags(Qt::Popup);
             KisConfig cfg;
             parentWidget()->hide();
         }

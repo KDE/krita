@@ -1,7 +1,8 @@
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
+from PyQt5.QtCore import *
 from krita import *
-from scripter import syntax, pythoneditor
+from scripter import syntax, pythoneditor, settingsdialog, syntaxstyles
 import sys
 
 class docWrapper:
@@ -44,6 +45,13 @@ class ScripterViewExtension(ViewExtension):
         sys.stdout = stdout
         sys.stderr = stderr
 
+    def openSettings(self):
+        self.settingsDialog = settingsdialog.SettingsDialog(self)
+        self.settingsDialog.setWindowModality(Qt.WindowModal)
+        self.settingsDialog.setFixedSize(400, 250)
+        self.settingsDialog.show()
+        self.settingsDialog.exec()
+
     def showScripter(self):
         dialog = QDialog()
         dialog.setWindowModality(Qt.NonModal)
@@ -51,12 +59,17 @@ class ScripterViewExtension(ViewExtension):
         f = QFont("monospace", 10, QFont.Normal)
         f.setFixedPitch(True)
         self.editor.document().setDefaultFont(f)
-        highlight = syntax.PythonHighlighter(self.editor.document())
+        self.highlight = syntax.PythonHighlighter(self.editor.document(), syntaxstyles.DefaultSyntaxStyle())
         vbox = QVBoxLayout(dialog)
         vbox.addWidget(self.editor)
-        button = QPushButton("Execute")
+        buttonLayout = QHBoxLayout()
+        button = QPushButton("Run")
+        settingsButton = QPushButton("Settings")
         button.clicked.connect(self.execute)
-        vbox.addWidget(button)
+        settingsButton.clicked.connect(self.openSettings)
+        buttonLayout.addWidget(button)
+        buttonLayout.addWidget(settingsButton)
+        vbox.addLayout(buttonLayout)
         self.output = QPlainTextEdit()
         vbox.addWidget(self.output)
         dialog.resize(400, 500)

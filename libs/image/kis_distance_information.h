@@ -67,7 +67,11 @@ public:
     }
 
     inline qreal rotation() const {
-        return m_coordinateSystemFlipped ? 2 * M_PI - m_rotation : m_rotation;
+        return m_rotation;
+    }
+
+    bool coordinateSystemFlipped() const {
+        return m_coordinateSystemFlipped;
     }
 
 private:

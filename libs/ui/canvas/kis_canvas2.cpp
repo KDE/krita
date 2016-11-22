@@ -286,15 +286,15 @@ bool KisCanvas2::yAxisMirrored() const
 
 void KisCanvas2::channelSelectionChanged()
 {
-    KisImageWSP image = this->image();
+    KisImageSP image = this->image();
     m_d->channelFlags = image->rootLayer()->channelFlags();
+
+    m_d->view->viewManager()->blockUntillOperationsFinishedForced(image);
 
     image->barrierLock();
     m_d->canvasWidget->channelSelectionChanged(m_d->channelFlags);
     startUpdateInPatches(image->bounds());
-
     image->unlock();
-
 }
 
 void KisCanvas2::addCommand(KUndo2Command *command)
@@ -522,12 +522,12 @@ void KisCanvas2::startUpdateInPatches(const QRect &imageRect)
 void KisCanvas2::setDisplayFilter(QSharedPointer<KisDisplayFilter> displayFilter)
 {
     m_d->displayColorConverter.setDisplayFilter(displayFilter);
-    KisImageWSP image = this->image();
+    KisImageSP image = this->image();
+
+    m_d->view->viewManager()->blockUntillOperationsFinishedForced(image);
 
     image->barrierLock();
-
     m_d->canvasWidget->setDisplayFilter(displayFilter);
-
     image->unlock();
 }
 

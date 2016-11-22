@@ -882,7 +882,8 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
     std::unique_lock<StdLockableWrapper<QMutex>> l(wrapper, std::try_to_lock);
     if (!l.owns_lock()) return false;
 
-    KisDelayedSaveDialog dlg(document->image(), this);
+    // no busy wait for saving because it is dangerous!
+    KisDelayedSaveDialog dlg(document->image(), KisDelayedSaveDialog::SaveDialog, 0, this);
     dlg.blockIfImageIsBusy();
 
     if (dlg.result() != QDialog::Accepted) {

@@ -543,6 +543,8 @@ void KisPaintOpPresetsPopup::slotPaintOpChanged(int index) {
     m_d->uiWdgPaintOpPresetSettings.presetWidget->setPresetFilter(current_paintOpId);
     setCurrentPaintOp(current_paintOpId);
 
+    emit paintopActivated(current_paintOpId); // tell the toolbar to change the active icon
+
 }
 
 

@@ -156,6 +156,7 @@ KisSpacingInformation effectiveSpacing(qreal dabWidth,
                                        qreal extraScale,
                                        bool isotropicSpacing,
                                        qreal rotation,
+                                       bool axesFlipped,
                                        qreal spacingVal,
                                        bool autoSpacingActive,
                                        qreal autoSpacingCoeff,
@@ -180,11 +181,12 @@ KisSpacingInformation effectiveSpacing(qreal dabWidth,
         }
         spacing = QPointF(significantDimension, significantDimension);
         rotation = 0.0;
+        axesFlipped = false;
     }
 
     spacing *= extraScale;
 
-    return KisSpacingInformation(spacing, rotation);
+    return KisSpacingInformation(spacing, rotation, axesFlipped);
 }
 
 }

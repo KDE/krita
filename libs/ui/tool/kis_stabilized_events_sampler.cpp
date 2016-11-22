@@ -67,7 +67,11 @@ void KisStabilizedEventsSampler::addEvent(const KisPaintInformation &pi)
 
 void KisStabilizedEventsSampler::addFinishingEvent(int numSamples)
 {
-    clear();
+    if (m_d->realEvents.size() > 0) {
+        dbgKrita << "DEBUG: KisStabilizedEventsSampler::addFinishingEvent called "
+                    "before `realEvents` is cleared";
+        clear();
+    }
 
     m_d->elapsedTimeOverride = numSamples;
     m_d->realEvents.append(m_d->lastPaintInformation);

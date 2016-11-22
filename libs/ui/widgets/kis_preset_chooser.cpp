@@ -99,7 +99,13 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
         painter->drawImage(paintRect.x(), paintRect.y(),
                            preview.scaled(pixSize, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
-        painter->drawText(pixSize.width() + 10, option.rect.y() + option.rect.height() - 10, preset->name());
+        // Put an asterisk after the preset if it is dirty. This will help in case the pixmap icon is too small
+         QString dirtyPresetIndicator = QString("");
+        if (m_useDirtyPresets && preset->isPresetDirty()) {
+            dirtyPresetIndicator = QString("*");
+        }
+
+        painter->drawText(pixSize.width() + 10, option.rect.y() + option.rect.height() - 10, preset->name().append(dirtyPresetIndicator));
     }
     if (m_useDirtyPresets && preset->isPresetDirty()) {
         const QIcon icon = KisIconUtils::loadIcon(koIconName("dirty-preset"));

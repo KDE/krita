@@ -270,7 +270,7 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
                             resource(KisCanvasResourceProvider::LodAvailability));
 
 
-
+    connect(m_d->uiWdgPaintOpPresetSettings.brushEgineComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(slotPaintOpChanged(int)));
 
 }
 

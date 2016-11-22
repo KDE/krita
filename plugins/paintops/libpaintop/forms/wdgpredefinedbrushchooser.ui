@@ -95,12 +95,15 @@
    </item>
    <item>
     <layout class="QVBoxLayout" name="verticalLayout">
+     <property name="spacing">
+      <number>0</number>
+     </property>
      <item>
       <widget class="QLabel" name="brushTipNameLabel">
        <property name="font">
         <font>
-         <pointsize>13</pointsize>
-         <italic>true</italic>
+         <pointsize>12</pointsize>
+         <italic>false</italic>
         </font>
        </property>
        <property name="autoFillBackground">
@@ -110,7 +113,7 @@
         <string>Current Brush Tip</string>
        </property>
        <property name="margin">
-        <number>5</number>
+        <number>2</number>
        </property>
       </widget>
      </item>
@@ -120,14 +123,20 @@
         <string>Brush Details</string>
        </property>
        <property name="margin">
-        <number>5</number>
+        <number>2</number>
        </property>
       </widget>
      </item>
      <item>
       <layout class="QGridLayout" name="gridLayout">
        <property name="leftMargin">
-        <number>20</number>
+        <number>5</number>
+       </property>
+       <property name="topMargin">
+        <number>15</number>
+       </property>
+       <property name="verticalSpacing">
+        <number>10</number>
        </property>
        <item row="1" column="0">
         <widget class="QLabel" name="brushRotationLabel">

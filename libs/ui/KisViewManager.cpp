@@ -126,6 +126,7 @@
 #include "kis_icon_utils.h"
 #include "kis_guides_manager.h"
 #include "kis_derived_resources.h"
+#include "dialogs/kis_delayed_save_dialog.h"
 
 
 class BlockingUserInputEventFilter : public QObject
@@ -241,6 +242,8 @@ public:
     KSelectAction *actionAuthor; // Select action for author profile.
 
     QByteArray canvasState;
+
+    bool blockUntillOperationsFinishedImpl(KisImageSP image, bool force);
 };
 
 
@@ -741,6 +744,26 @@ int KisViewManager::viewCount() const
         return mw->viewCount();
     }
     return 0;
+}
+
+bool KisViewManager::KisViewManagerPrivate::blockUntillOperationsFinishedImpl(KisImageSP image, bool force)
+{
+    const int busyWaitDelay = 1000;
+    KisDelayedSaveDialog dialog(image, !force ? KisDelayedSaveDialog::GeneralDialog : KisDelayedSaveDialog::ForcedDialog, busyWaitDelay, mainWindow);
+    dialog.blockIfImageIsBusy();
+
+    return dialog.result() == QDialog::Accepted;
+}
+
+
+bool KisViewManager::blockUntillOperationsFinished(KisImageSP image)
+{
+    return d->blockUntillOperationsFinishedImpl(image, false);
+}
+
+void KisViewManager::blockUntillOperationsFinishedForced(KisImageSP image)
+{
+    d->blockUntillOperationsFinishedImpl(image, true);
 }
 
 void KisViewManager::slotCreateTemplate()
@@ -1260,5 +1283,3 @@ void KisViewManager::slotUpdateAuthorProfileActions()
         d->actionAuthor->setCurrentItem(0);
     }
 }
-
-

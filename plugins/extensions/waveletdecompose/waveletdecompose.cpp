@@ -82,6 +82,8 @@ void WaveletDecompose::slotWaveletDecompose()
         KisImageSP image = m_view->image();
         if (!image) return;
 
+        if (!m_view->blockUntillOperationsFinished(image)) return;
+
         image->barrierLock();
 
         KisPaintDeviceSP projection = new KisPaintDevice(*(image->projection()), false, 0);

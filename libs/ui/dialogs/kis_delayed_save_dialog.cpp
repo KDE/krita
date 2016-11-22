@@ -20,6 +20,8 @@
 #include "ui_kis_delayed_save_dialog.h"
 
 #include <QTimer>
+#include <QElapsedTimer>
+#include <QThread>
 
 #include "kis_debug.h"
 #include "kis_image.h"
@@ -28,24 +30,36 @@
 
 struct KisDelayedSaveDialog::Private
 {
-    Private(KisImageSP _image) : image(_image) {}
+    Private(KisImageSP _image, int _busyWait) : image(_image), busyWait(_busyWait) {}
 
     KisImageSP image;
     QTimer updateTimer;
+    int busyWait;
 };
 
-KisDelayedSaveDialog::KisDelayedSaveDialog(KisImageSP image, QWidget *parent)
+KisDelayedSaveDialog::KisDelayedSaveDialog(KisImageSP image, Type type, int busyWait, QWidget *parent)
     : QDialog(parent),
       ui(new Ui::KisDelayedSaveDialog),
-      m_d(new Private(image))
+      m_d(new Private(image, busyWait))
 {
     KIS_ASSERT_RECOVER_NOOP(image);
 
     ui->setupUi(this);
 
-    connect(ui->bnDontWait, SIGNAL(clicked()), SLOT(accept()));
+    if (type == SaveDialog) {
+        connect(ui->bnDontWait, SIGNAL(clicked()), SLOT(accept()));
+        connect(ui->bnCancel, SIGNAL(clicked()), SLOT(slotCancelRequested()));
+    } else {
+        ui->bnDontSave->setText(i18n("Cancel"));
+        ui->bnDontWait->setVisible(false);
+        ui->bnCancel->setVisible(false);
+
+        if (type == ForcedDialog) {
+            ui->bnDontSave->setVisible(false);
+        }
+    }
+
     connect(ui->bnDontSave, SIGNAL(clicked()), SLOT(reject()));
-    connect(ui->bnCancel, SIGNAL(clicked()), SLOT(slotCancelRequested()));
 
     connect(&m_d->updateTimer, SIGNAL(timeout()), SLOT(slotTimerTimeout()));
 
@@ -66,6 +80,20 @@ void KisDelayedSaveDialog::blockIfImageIsBusy()
     }
 
     m_d->image->requestStrokeEnd();
+
+    QElapsedTimer t;
+    t.start();
+
+    while (t.elapsed() < m_d->busyWait) {
+        QApplication::processEvents();
+
+        if (m_d->image->isIdle()) {
+            setResult(Accepted);
+            return;
+        }
+
+        QThread::yieldCurrentThread();
+    }
 
     m_d->updateTimer.start(200);
     exec();

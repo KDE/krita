@@ -30,6 +30,7 @@ class KoViewConverter;
 class KUndo2Command;
 class QWidget;
 class KoUnit;
+class KisImageViewConverter;
 
 /**
  * KisShapeLayerCanvas is a special canvas implementation that Krita
@@ -43,13 +44,15 @@ class KisShapeLayerCanvas : public QObject, public KoCanvasBase
     Q_OBJECT
 public:
 
-    KisShapeLayerCanvas(KisShapeLayer *parent, KoViewConverter * viewConverter);
+    KisShapeLayerCanvas(KisShapeLayer *parent, KisImageWSP image);
     virtual ~KisShapeLayerCanvas();
 
     /// This canvas won't render onto a widget, but a projection
     void setProjection(KisPaintDeviceSP projection) {
         m_projection = projection;
     }
+
+    void setImage(KisImageWSP image);
 
     void prepareForDestroying();
     void gridSize(QPointF *offset, QSizeF *spacing) const;
@@ -58,7 +61,7 @@ public:
     KoShapeManager *shapeManager() const;
     void updateCanvas(const QRectF& rc);
     KoToolProxy * toolProxy() const;
-    KoViewConverter *viewConverter() const;
+    KoViewConverter* viewConverter() const;
     QWidget* canvasWidget();
     const QWidget* canvasWidget() const;
     KoUnit unit() const;
@@ -72,7 +75,7 @@ Q_SIGNALS:
 private:
 
     bool m_isDestroying;
-    KoViewConverter * m_viewConverter;
+    QScopedPointer<KisImageViewConverter> m_viewConverter;
     KoShapeManager * m_shapeManager;
     KisPaintDeviceSP m_projection;
     KisShapeLayer *m_parentLayer;

@@ -47,6 +47,11 @@ struct SvgTester
 
     }
 
+    ~SvgTester ()
+    {
+        qDeleteAll(shapes);
+    }
+
     void run() {
         shapes = parser.parseSvg(root, &fragmentSize);
     }

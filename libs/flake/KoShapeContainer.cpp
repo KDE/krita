@@ -30,6 +30,7 @@
 #include <QPainterPath>
 
 #include "kis_painting_tweaks.h"
+#include "kis_assert.h"
 
 KoShapeContainerPrivate::KoShapeContainerPrivate(KoShapeContainer *q)
     : KoShapePrivate(q),
@@ -58,9 +59,14 @@ KoShapeContainer::~KoShapeContainer()
 {
     Q_D(KoShapeContainer);
     if (d->model) {
-        Q_FOREACH (KoShape *shape, d->model->shapes()) {
+        QList<KoShape*> ownedShapes = d->model->shapes();
+
+        Q_FOREACH (KoShape *shape, ownedShapes) {
+            shape->setParent(0);
             delete shape;
         }
+
+        KIS_SAFE_ASSERT_RECOVER_NOOP(!d->model->count());
     }
 }
 

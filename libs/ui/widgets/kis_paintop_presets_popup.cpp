@@ -434,6 +434,7 @@ void KisPaintOpPresetsPopup::resourceSelected(KoResource* resource)
     m_d->uiWdgPaintOpPresetSettings.presetWidget->smallPresetChooser->setCurrentResource(resource);
     m_d->uiWdgPaintOpPresetSettings.txtPreset->setText(resource->name());
     slotWatchPresetNameLineEdit();
+    m_d->uiWdgPaintOpPresetSettings.currentBrushNameLabel->setText(resource->name());
 }
 
 void KisPaintOpPresetsPopup::setPaintOpList(const QList< KisPaintOpFactory* >& list)

@@ -28,6 +28,8 @@ class KisCloneOpTest : public QObject
     Q_OBJECT
 private Q_SLOTS:
     void testClone();
+private:
+    void testProjection();
 
 };
 

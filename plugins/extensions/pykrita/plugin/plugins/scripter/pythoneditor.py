@@ -20,6 +20,7 @@ class CodeEditor(QPlainTextEdit):
 
         self.updateLineNumberAreaWidth()
         self.highlightCurrentLine()
+        self.font = "Monospace"
 
     def lineNumberAreaWidth(self):
         """The lineNumberAreaWidth is the quatity of decimal places in blockCount"""
@@ -98,3 +99,12 @@ class CodeEditor(QPlainTextEdit):
                 self.zoomIn()
         else:
             super(CodeEditor, self).wheelEvent(e)
+
+    @property
+    def font(self):
+        return self._font
+
+    @font.setter
+    def font(self, font):
+        self._font = font
+        self.setFont(QFont(font, 10))

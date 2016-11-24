@@ -2,7 +2,6 @@
 
 from PyQt5.QtWidgets import *
 from scripter import syntaxstyles
-import importlib
 
 
 class SyntaxStylesComboBox(QComboBox):

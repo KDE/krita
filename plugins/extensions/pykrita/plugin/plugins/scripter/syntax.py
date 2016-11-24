@@ -36,6 +36,7 @@ class PythonHighlighter (QSyntaxHighlighter):
     braces = [
         '\{', '\}', '\(', '\)', '\[', '\]',
     ]
+
     def __init__(self, document, syntaxStyle):
         QSyntaxHighlighter.__init__(self, document)
 
@@ -45,60 +46,59 @@ class PythonHighlighter (QSyntaxHighlighter):
         # Multi-line strings (expression, flag, style)
         # FIXME: The triple-quotes in these two lines will mess up the
         # syntax highlighting from this point onward
-        self.tri_single = (QRegExp("'''"), 1, self.syntaxStyle['string2'])
-        self.tri_double = (QRegExp('"""'), 2, self.syntaxStyle['string2'])
+        self.tri_single = (QRegExp(r"""'''(?!")"""), 1, 'string2')
+        self.tri_double = (QRegExp(r'''"""(?!')'''), 2, 'string2')
 
         rules = []
 
         # Keyword, operator, and brace rules
-        rules += [(r'\b%s\b' % w, 0, self.syntaxStyle['keyword'])
+        rules += [(r'\b%s\b' % w, 0, 'keyword')
             for w in PythonHighlighter.keywords]
-        rules += [(r'%s' % o, 0, self.syntaxStyle['operator'])
+        rules += [(r'%s' % o, 0, 'operator')
             for o in PythonHighlighter.operators]
-        rules += [(r'%s' % b, 0, self.syntaxStyle['brace'])
+        rules += [(r'%s' % b, 0, 'brace')
             for b in PythonHighlighter.braces]
 
         # All other rules
         rules += [
             # 'self'
-            (r'\bself\b', 0, self.syntaxStyle['self']),
+            (r'\bself\b', 0, 'self'),
 
             # Double-quoted string, possibly containing escape sequences
-            (r'"[^"\\]*(\\.[^"\\]*)*"', 0, self.syntaxStyle['string']),
+            (r'"[^"\\]*(\\.[^"\\]*)*"', 0, 'string'),
             # Single-quoted string, possibly containing escape sequences
-            (r"'[^'\\]*(\\.[^'\\]*)*'", 0, self.syntaxStyle['string']),
+            (r"'[^'\\]*(\\.[^'\\]*)*'", 0, 'string'),
 
             # 'def' followed by an identifier
-            (r'\bdef\b\s*(\w+)', 1, self.syntaxStyle['defclass']),
+            (r'\bdef\b\s*(\w+)', 1, 'defclass'),
             # 'class' followed by an identifier
-            (r'\bclass\b\s*(\w+)', 1, self.syntaxStyle['defclass']),
+            (r'\bclass\b\s*(\w+)', 1, 'defclass'),
 
             # From '#' until a newline
-            (r'#[^\n]*', 0, self.syntaxStyle['comment']),
+            (r'#[^\n]*', 0, 'comment'),
 
             # Numeric literals
-            (r'\b[+-]?[0-9]+[lL]?\b', 0, self.syntaxStyle['numbers']),
-            (r'\b[+-]?0[xX][0-9A-Fa-f]+[lL]?\b', 0, self.syntaxStyle['numbers']),
-            (r'\b[+-]?[0-9]+(?:\.[0-9]+)?(?:[eE][+-]?[0-9]+)?\b', 0, self.syntaxStyle['numbers']),
+            (r'\b[+-]?[0-9]+[lL]?\b', 0, 'numbers'),
+            (r'\b[+-]?0[xX][0-9A-Fa-f]+[lL]?\b', 0, 'numbers'),
+            (r'\b[+-]?[0-9]+(?:\.[0-9]+)?(?:[eE][+-]?[0-9]+)?\b', 0, 'numbers'),
         ]
 
         # Build a QRegExp for each pattern
-        self.rules = [(QRegExp(pat), index, fmt)
-            for (pat, index, fmt) in rules]
+        self.rules = [(QRegExp(pat), index, identifier)
+            for (pat, index, identifier) in rules]
 
 
     def highlightBlock(self, text):
-        """Apply syntax highlighting to the given block of text.
-        """
+        """Apply syntax highlighting to the given block of text."""
         # Do other syntax formatting
-        for expression, nth, format in self.rules:
+        for expression, nth, identifier in self.rules:
             index = expression.indexIn(text, 0)
 
             while index >= 0:
                 # We actually want the index of the nth match
                 index = expression.pos(nth)
                 length = len(expression.cap(nth))
-                self.setFormat(index, length, format)
+                self.setFormat(index, length, self.syntaxStyle[identifier])
                 index = expression.indexIn(text, index + length)
 
         self.setCurrentBlockState(0)
@@ -139,7 +139,7 @@ class PythonHighlighter (QSyntaxHighlighter):
                 self.setCurrentBlockState(in_state)
                 length = len(text) - start + add
             # Apply formatting
-            self.setFormat(start, length, style)
+            self.setFormat(start, length, self.syntaxStyle[style])
             # Look for the next match
             start = delimiter.indexIn(text, start + length)
 
@@ -154,4 +154,3 @@ class PythonHighlighter (QSyntaxHighlighter):
 
     def setSyntaxStyle(self, syntaxStyle):
         self.syntaxStyle = syntaxStyle
-        PythonHighlighter(self.document, self.syntaxStyle)

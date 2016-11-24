@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from PyQt5.QtWidgets import *
-from scripter import syntaxstylescombobox
+from scripter import syntaxstylescombobox, fontscombobox
 
 
 class SettingsDialog(QDialog):
@@ -12,5 +12,4 @@ class SettingsDialog(QDialog):
         self.scripter = scripter
         self.mainLayout = QFormLayout(self)
         self.mainLayout.addRow('Syntax Highlither', syntaxstylescombobox.SyntaxStylesComboBox(scripter.highlight))
-        self.mainLayout.addRow('Fonts', QComboBox())
-        self.mainLayout.addRow('BackGoud Color', QComboBox())
+        self.mainLayout.addRow('Fonts', fontscombobox.FontsComboBox(scripter.editor))

@@ -33,7 +33,20 @@ struct KisRasterKeyframe : public KisKeyframe
         , frameId(frameId)
     {}
 
+    KisRasterKeyframe(const KisRasterKeyframe *rhs, KisRasterKeyframeChannel *channel)
+        : KisKeyframe(rhs, channel)
+        , frameId(rhs->frameId)
+    {}
+
     int frameId;
+
+    KisKeyframeSP cloneFor(KisKeyframeChannel *channel) const
+    {
+        KisRasterKeyframeChannel *rasterChannel = dynamic_cast<KisRasterKeyframeChannel*>(channel);
+        Q_ASSERT(rasterChannel);
+        return toQShared(new KisRasterKeyframe(this, rasterChannel));
+    }
+
 };
 
 struct KisRasterKeyframeChannel::Private

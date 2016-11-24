@@ -106,7 +106,7 @@
      id="layer1"
      transform="translate(-553.72253,-583.11926)">
     <rect
-       style="opacity:1;fill:#f2f2f2;fill-opacity:1;stroke:none"
+       style="opacity:1;fill:#cacaca;fill-opacity:1;stroke:none"
        id="rect4189"
        width="0.99999732"
        height="15.000004"
@@ -119,6 +119,6 @@
        height="15.000003"
        width="1.0000042"
        id="rect4119"
-       style="opacity:1;fill:#f2f2f2;fill-opacity:1;stroke:none" />
+       style="opacity:1;fill:#cacaca;fill-opacity:1;stroke:none" />
   </g>
 </svg>

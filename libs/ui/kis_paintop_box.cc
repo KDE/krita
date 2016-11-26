@@ -43,6 +43,7 @@
 #include <kis_icon.h>
 #include <KoColorSpace.h>
 #include <KoCompositeOpRegistry.h>
+#include <KoDockRegistry.h>
 #include <KoResourceSelector.h>
 #include <KoResourceServerAdapter.h>
 #include <KoToolManager.h>
@@ -104,7 +105,6 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     , m_eraserBrushOpacityEnabled(false)
 {
     Q_ASSERT(view != 0);
-
 
     setObjectName(name);
     KisConfig cfg;
@@ -255,6 +255,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
         KisDoubleSliderSpinBox* slOpacity;
         KisDoubleSliderSpinBox* slFlow;
         KisDoubleSliderSpinBox* slSize;
+
         if (sliderLabels) {
             slOpacity = m_sliderChooser[i]->addWidget<KisDoubleSliderSpinBox>("opacity");
             slFlow    = m_sliderChooser[i]->addWidget<KisDoubleSliderSpinBox>("flow");

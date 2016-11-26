@@ -32,6 +32,7 @@
 #include <QTimer>
 #include <QtDebug>
 #include <QDoubleSpinBox>
+#include <KoDockRegistry.h>
 
 #include "KisPart.h"
 #include "input/kis_input_manager.h"
@@ -86,6 +87,8 @@ KisAbstractSliderSpinBox::KisAbstractSliderSpinBox(QWidget* parent, KisAbstractS
     d->edit->hide();
     d->edit->setContentsMargins(0,0,0,0);
     d->edit->installEventFilter(this);
+
+    setFont(KoDockRegistry::dockFont());
 
     //Make edit transparent
     d->edit->setAutoFillBackground(false);

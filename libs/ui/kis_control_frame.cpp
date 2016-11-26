@@ -46,6 +46,7 @@
 #include <KoResourceServerAdapter.h>
 #include <KoResourceServerProvider.h>
 #include <KoColorSpaceRegistry.h>
+#include <KoDockRegistry.h>
 #include <kis_image.h>
 
 #include <resources/KoPattern.h>
@@ -76,7 +77,7 @@ KisControlFrame::KisControlFrame(KisViewManager *view, QWidget *parent, const ch
     , m_paintopBox(0)
 {
     setObjectName(name);
-    m_font = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
+    m_font =  KoDockRegistry::dockFont();
 
     m_patternWidget = new KisIconWidget(parent, "patterns");
     m_patternWidget->setToolTip(i18n("Fill Patterns"));

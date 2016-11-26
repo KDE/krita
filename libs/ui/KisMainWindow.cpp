@@ -275,6 +275,9 @@ KisMainWindow::KisMainWindow()
     KConfigGroup group( KSharedConfig::openConfig(), "theme");
     d->themeManager = new Digikam::ThemeManager(group.readEntry("Theme", "Krita dark"), this);
 
+
+    setFont(KoDockRegistry::dockFont());
+
     setAcceptDrops(true);
     setStandardToolBarMenuEnabled(true);
     setTabPosition(Qt::AllDockWidgetAreas, QTabWidget::North);
@@ -1834,7 +1837,6 @@ QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
             dockWidget->setTitleBarWidget(titleBar);
             titleBar->setCollapsable(factory->isCollapsable());
         }
-        titleBar->setFont(KoDockRegistry::dockFont());
 
         dockWidget->setObjectName(factory->id());
         dockWidget->setParent(this);
@@ -1895,7 +1897,6 @@ QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
 #ifdef Q_OS_OSX
     dockWidget->setAttribute(Qt::WA_MacSmallSize, true);
 #endif
-    dockWidget->setFont(KoDockRegistry::dockFont());
 
     connect(dockWidget, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), this, SLOT(forceDockTabFonts()));
 

@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
-
 <svg
    xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
@@ -9,96 +7,55 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="22"
-   height="22"
-   id="svg4355"
+   viewBox="0 0 22 22"
+   id="svg2"
    version="1.1"
-   inkscape:version="0.48+devel r"
-   sodipodi:docname="zoom-in.svg">
-  <defs
-     id="defs4357" />
-  <sodipodi:namedview
-     id="base"
-     pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1.0"
-     inkscape:pageopacity="0.0"
-     inkscape:pageshadow="2"
-     inkscape:zoom="16.301626"
-     inkscape:cx="5.306493"
-     inkscape:cy="13.808373"
-     inkscape:document-units="px"
-     inkscape:current-layer="layer1"
-     showgrid="true"
-     width="0px"
-     height="0px"
-     fit-margin-top="0"
-     fit-margin-left="0"
-     fit-margin-right="0"
-     fit-margin-bottom="0"
-     inkscape:window-width="1366"
-     inkscape:window-height="718"
-     inkscape:window-x="-2"
-     inkscape:window-y="23"
-     inkscape:window-maximized="1"
-     inkscape:showpageshadow="false">
-    <inkscape:grid
-       type="xygrid"
-       id="grid4112" />
-    <sodipodi:guide
-       position="2.0000011,19.999996"
-       orientation="18,0"
-       id="guide4118" />
-    <sodipodi:guide
-       position="2.0000011,1.9999962"
-       orientation="0,18"
-       id="guide4120" />
-    <sodipodi:guide
-       position="20.000001,1.9999962"
-       orientation="-18,0"
-       id="guide4122" />
-    <sodipodi:guide
-       position="20.000001,19.999996"
-       orientation="0,-18"
-       id="guide4124" />
-    <sodipodi:guide
-       position="3.0000011,18.999996"
-       orientation="16,0"
-       id="guide4126" />
-    <sodipodi:guide
-       position="3.0000011,2.9999962"
-       orientation="0,16"
-       id="guide4128" />
-    <sodipodi:guide
-       position="19.000001,2.9999962"
-       orientation="-16,0"
-       id="guide4130" />
-    <sodipodi:guide
-       position="19.000001,18.999996"
-       orientation="0,-16"
-       id="guide4132" />
-  </sodipodi:namedview>
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="light_zoom-in.svg">
   <metadata
-     id="metadata4360">
+     id="metadata10">
     <rdf:RDF>
       <cc:Work
          rdf:about="">
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
-  <g
-     inkscape:label="Capa 1"
-     inkscape:groupmode="layer"
-     id="layer1"
-     transform="translate(-544.57141,-742.93359)">
-    <path
-       style="opacity:1;fill:#cacaca;fill-opacity:1;stroke:none"
-       d="M 3 3 L 3 4 L 3 11 L 4 11 L 4 4 L 9 4 L 9 3 L 4 3 L 3 3 z M 12 3 L 14 5 L 10 12 L 17 8 L 19 10 L 19 3 L 12 3 z M 3 13 L 3 19 L 9 19 L 9 13 L 3 13 z M 18 13 L 18 18 L 11 18 L 11 19 L 19 19 L 19 18 L 19 13 L 18 13 z M 4 14 L 8 14 L 8 18 L 4 18 L 4 14 z "
-       transform="translate(544.57141,742.93359)"
-       id="rect4134" />
-  </g>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1884"
+     inkscape:window-height="1051"
+     id="namedview8"
+     showgrid="false"
+     inkscape:zoom="10.727273"
+     inkscape:cx="16.439114"
+     inkscape:cy="17.152542"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg2" />
+  <defs
+     id="defs3051">
+    <style
+       type="text/css"
+       id="current-color-scheme">
+      .ColorScheme-Text {
+        color:#f2f2f2
+      }
+      </style>
+  </defs>
+  <path
+     style="fill:#cacaca;fill-opacity:1;stroke:none"
+     d="M 3 3 L 3 5 L 4 5 L 4 4 L 5 4 L 5 3 L 3 3 z M 8 3 L 8 4 L 10 4 L 10 3 L 8 3 z M 12 3 L 12 4 L 14 4 L 14 3 L 12 3 z M 17 3 L 17 4 L 18 4 L 18 5 L 19 5 L 19 3 L 17 3 z M 11 7 L 11 8 L 13.292969 8 L 10 11.292969 L 10.707031 12 L 14 8.7070312 L 14 11 L 15 11 L 15 7 L 14 7 L 11 7 z M 3 8 L 3 10 L 4 10 L 4 8 L 3 8 z M 18 8 L 18 10 L 19 10 L 19 8 L 18 8 z M 18 12 L 18 14 L 19 14 L 19 12 L 18 12 z M 3 13 L 3 19 L 9 19 L 9 13 L 3 13 z M 4 14 L 8 14 L 8 18 L 4 18 L 4 14 z M 18 17 L 18 18 L 17 18 L 17 19 L 19 19 L 19 17 L 18 17 z "
+     class="ColorScheme-Text"
+     id="path6" />
 </svg>

@@ -908,6 +908,26 @@ void KisConfig::setHideSplashScreen(bool hideSplashScreen) const
     cfg.writeEntry("HideSplashAfterStartup", hideSplashScreen);
 }
 
+bool KisConfig::useCustomFont() const {
+     KConfigGroup cfg( KSharedConfig::openConfig(), "GUI");
+     return cfg.readEntry("UseCustomFont", false);
+}
+
+void KisConfig::setUseCustomFont(bool useCustomFont) const {
+     KConfigGroup cfg( KSharedConfig::openConfig(), "GUI");
+     cfg.writeEntry("UseCustomFont", useCustomFont);
+}
+
+int KisConfig::customFontSize() const {
+     KConfigGroup cfg( KSharedConfig::openConfig(), "GUI");
+     return cfg.readEntry("palettefontsize", 10);
+}
+
+void KisConfig::setCustomFontSize(int customFontSize) const {
+     KConfigGroup cfg( KSharedConfig::openConfig(), "GUI");
+     cfg.writeEntry("palettefontsize", customFontSize);
+}
+
 qreal KisConfig::outlineSizeMinimum(bool defaultValue) const
 {
     return (defaultValue ? 1.0 : m_cfg.readEntry("OutlineSizeMinimum", 1.0));

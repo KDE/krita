@@ -67,18 +67,18 @@ QFont KoDockRegistry::dockFont()
     QFont dockWidgetFont = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
     QFont smallFont = QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont);
 
+    bool usingCustomFont = group.readEntry("UseCustomFont", false);
     int pointSize = group.readEntry("palettefontsize", dockWidgetFont.pointSize());
 
-    // Not set by the user
-    if (pointSize == dockWidgetFont.pointSize()) {
-        // and there is no setting for the smallest readable font, calculate something small
-        if (smallFont.pointSize() >= pointSize) {
-            smallFont.setPointSizeF(pointSize * 0.9);
-        }
+    if (usingCustomFont) {
+        // paletteFontSize was set
+        smallFont.setPointSize(pointSize);
     }
     else {
-        // paletteFontSize was set, use that
-        smallFont.setPointSize(pointSize);
+        // and there is no setting for the smallest readable font, calculate something small
+        if (smallFont.pointSize() >= dockWidgetFont.pointSize()) {
+            smallFont.setPointSizeF(dockWidgetFont.pointSize() * 0.9);
+        }
     }
     return smallFont;
 }

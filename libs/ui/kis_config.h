@@ -236,6 +236,12 @@ public:
     bool hideSplashScreen(bool defaultValue = false) const;
     void setHideSplashScreen(bool hideSplashScreen) const;
 
+    bool useCustomFont() const;
+    void setUseCustomFont(bool useCustomFont) const;
+
+    int customFontSize() const;
+    void setCustomFontSize(int customFontSize) const;
+
     qreal outlineSizeMinimum(bool defaultValue = false) const;
     void setOutlineSizeMinimum(qreal outlineSizeMinimum) const;
 

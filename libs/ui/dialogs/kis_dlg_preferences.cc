@@ -113,6 +113,12 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     m_undoStackSize->setValue(cfg.undoStackLimit());
     m_backupFileCheckBox->setChecked(cfg.backupFile());
     m_showOutlinePainting->setChecked(cfg.showOutlineWhilePainting());
+
+    m_useCustomFontSizeCheckbox->setChecked(cfg.useCustomFont());
+    m_customFontSizeTextBox->setValue(cfg.customFontSize());
+    m_customFontSizeTextBox->setEnabled(cfg.useCustomFont());
+
+
     m_hideSplashScreen->setChecked(cfg.hideSplashScreen());
     m_cmbMDIType->setCurrentIndex(cfg.readEntry<int>("mdi_viewmode", (int)QMdiArea::TabbedView));
     m_chkRubberBand->setChecked(cfg.readEntry<int>("mdi_rubberband", cfg.useOpenGL()));
@@ -128,7 +134,8 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     m_chkConvertOnImport->setChecked(cfg.convertToImageColorspaceOnImport());
 
     connect(m_bnFileName, SIGNAL(clicked()), SLOT(getBackgroundImage()));
-    connect(clearBgImageButton, SIGNAL(clicked()), SLOT(clearBackgroundImage()));
+    connect(clearBgImageButton, SIGNAL(clicked()), SLOT(clearBackgroundImage()));    
+    connect (m_useCustomFontSizeCheckbox, SIGNAL(clicked(bool)), m_customFontSizeTextBox, SLOT(setEnabled(bool)));
 }
 
 void GeneralTab::setDefault()
@@ -184,6 +191,14 @@ int GeneralTab::autoSaveInterval()
 int GeneralTab::undoStackSize()
 {
     return m_undoStackSize->value();
+}
+
+int GeneralTab::customFontSize() {
+    return m_customFontSizeTextBox->value();
+}
+
+bool GeneralTab::useCustomFont() {
+    return m_useCustomFontSizeCheckbox->isChecked();
 }
 
 bool GeneralTab::showOutlineWhilePainting()
@@ -986,6 +1001,8 @@ bool KisDlgPreferences::editPreferences()
         }
         cfg.setUndoStackLimit(dialog->m_general->undoStackSize());
         cfg.setFavoritePresets(dialog->m_general->favoritePresets());
+        cfg.setUseCustomFont(dialog->m_general->useCustomFont());
+        cfg.setCustomFontSize(dialog->m_general->customFontSize());
 
         // Color settings
         cfg.setUseSystemMonitorProfile(dialog->m_colorSettings->m_page->chkUseSystemMonitorProfile->isChecked());

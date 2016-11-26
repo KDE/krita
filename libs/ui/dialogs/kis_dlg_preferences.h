@@ -71,7 +71,9 @@ public:
     bool showRootLayer();
     int autoSaveInterval();
     void setDefault();
-    int undoStackSize();
+    int undoStackSize();    
+    int customFontSize();
+    bool useCustomFont();
     bool showOutlineWhilePainting();
     bool hideSplashScreen();
     int mdiMode();

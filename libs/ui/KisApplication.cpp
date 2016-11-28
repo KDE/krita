@@ -433,16 +433,11 @@ bool KisApplication::start(const KisApplicationArguments &args)
                     doc->openUrl(QUrl::fromLocalFile(fileName));
 
                     qApp->processEvents(); // For vector layers to be updated
-                    KisImageBarrierLocker locker(doc->image());
 
-                    KisImportExportFilter::ConversionStatus status = KisImportExportFilter::OK;
-                    KisImportExportManager manager(doc);
-                    manager.setBatchMode(true);
-                    QByteArray mime(outputMimetype.toLatin1());
-                    status = manager.exportDocument(exportFileName, mime);
-
-                    if (status != KisImportExportFilter::OK) {
-                        dbgKrita << "Could not export " << fileName << "to" << exportFileName << ":" << (int)status;
+                    doc->setFileBatchMode(true);
+                    doc->setOutputMimeType(outputMimetype.toLatin1());
+                    if (!doc->exportDocument(QUrl::fromLocalFile(exportFileName))) {
+                        dbgKrita << "Could not export " << fileName << "to" << exportFileName << ":" << doc->errorMessage();
                     }
                     nPrinted++;
                     QTimer::singleShot(0, this, SLOT(quit()));

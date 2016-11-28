@@ -111,8 +111,8 @@ private:
         imageCache.resize(boost::extents[imageSize.width()][imageSize.height()][nChannels]);
 
         KisSequentialConstIterator it(imageDev, imageSize);
-        for (int x = 0; x < imageSize.width(); x++) {
-            for (int y = 0; y < imageSize.height(); y++) {
+        for (int y = 0; y < imageSize.height(); y++) {
+            for (int x = 0; x < imageSize.width(); x++) {
                 const quint8* pixel = it.rawDataConst();
                 for (quint32 chan = 0; chan < nChannels; ++chan) {
                     quint8 v = cs->scaleToU8(pixel, (qint32)chan);
@@ -186,8 +186,8 @@ public:
         const KoColorSpace* cs = imageDev->colorSpace();
         Q_ASSERT(nChannels==cs->channelCount());
 
-        for (int x = 0; x < imageSize.width(); x++) {
-            for (int y = 0; y < imageSize.height(); y++) {
+        for (int y = 0; y < imageSize.height(); y++) {
+            for (int x = 0; x < imageSize.width(); x++) {
                 for(int i=0; i<nChannels; ++i){
                     channels[i]=imageCache[x][y][i];
                 }

@@ -78,7 +78,7 @@ void KisToolEllipse::finishRect(const QRectF& rect)
     } else {
         QRectF r = convertToPt(rect);
         KoShape* shape = KisShapeToolHelper::createEllipseShape(r);
-        KoShapeStroke* border = new KoShapeStroke(1.0, currentFgColor().toQColor());
+        KoShapeStrokeSP border(new KoShapeStroke(1.0, currentFgColor().toQColor()));
         shape->setStroke(border);
         addShape(shape);
     }

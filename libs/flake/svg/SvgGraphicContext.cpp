@@ -20,13 +20,18 @@
 
 #include "SvgGraphicContext.h"
 
+#include "kis_global.h"
+
+
 SvgGraphicsContext::SvgGraphicsContext()
 {
     strokeType = None;
-    stroke.setLineStyle(Qt::NoPen, QVector<qreal>());   // default is no stroke
-    stroke.setLineWidth(1.0);
-    stroke.setCapStyle(Qt::FlatCap);
-    stroke.setJoinStyle(Qt::MiterJoin);
+
+    stroke = toQShared(new KoShapeStroke());
+    stroke->setLineStyle(Qt::NoPen, QVector<qreal>());   // default is no stroke
+    stroke->setLineWidth(1.0);
+    stroke->setCapStyle(Qt::FlatCap);
+    stroke->setJoinStyle(Qt::MiterJoin);
 
     fillType = Solid;
     fillRule = Qt::WindingFill;

@@ -33,6 +33,8 @@ public:
     explicit KoShapeContainerPrivate(KoShapeContainer *q);
     virtual ~KoShapeContainerPrivate();
 
+    KoShapeContainerPrivate(const KoShapeContainerPrivate &rhs, KoShapeContainer *q);
+
     KoShapeContainerModel *model;
 };
 

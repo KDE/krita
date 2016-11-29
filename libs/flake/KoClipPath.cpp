@@ -53,12 +53,14 @@ public:
 
     ~Private()
     {
-        if (deleteClipShapes)
+        if (deleteClipShapes) {
             qDeleteAll(clipPathShapes);
+            clipPathShapes.clear();
+        }
     }
 
     QList<KoShape*> clipPathShapes;
-    bool deleteClipShapes;
+    bool deleteClipShapes; // TODO: deprecate this option!
 };
 
 KoClipData::KoClipData(KoPathShape *clipPathShape)
@@ -85,6 +87,19 @@ KoClipData::KoClipData(const QList<KoShape*> &clipPathShapes)
     d->clipPathShapes = clipPathShapes;
 }
 
+KoClipData::KoClipData(const KoClipData &rhs)
+        : d(new Private())
+{
+    Q_FOREACH (KoShape *shape, rhs.d->clipPathShapes) {
+        KoShape *clonedShape = shape->cloneShape();
+        KIS_ASSERT_RECOVER(clonedShape) { continue; }
+
+        d->clipPathShapes << clonedShape;
+    }
+
+    d->deleteClipShapes = rhs.d->deleteClipShapes;
+}
+
 KoClipData::~KoClipData()
 {
     delete d;
@@ -106,6 +121,16 @@ public:
     Private(KoClipData *data)
             : clipData(data)
     {}
+
+    Private(const Private &rhs)
+        : clipData(new KoClipData(*rhs.clipData)),
+          clipPath(rhs.clipPath),
+          clipRule(rhs.clipRule),
+          coordinates(rhs.coordinates),
+          initialTransformToShape(rhs.initialTransformToShape),
+          initialShapeSize(rhs.initialShapeSize)
+    {
+    }
 
     ~Private()
     {
@@ -189,9 +214,19 @@ KoClipPath::KoClipPath(KoShape *clippedShape, KoClipData *clipData)
     d->compileClipPath(clippedShape);
 }
 
+KoClipPath::KoClipPath(const KoClipPath &rhs)
+    : d(new Private(*rhs.d))
+{
+}
+
 KoClipPath::~KoClipPath()
 {
     delete d;
+}
+
+KoClipPath *KoClipPath::clone() const
+{
+    return new KoClipPath(*this);
 }
 
 void KoClipPath::setClipRule(Qt::FillRule clipRule)

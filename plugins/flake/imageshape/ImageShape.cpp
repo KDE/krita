@@ -16,6 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include <KoTosContainer_p.h>
+
 #include "ImageShape.h"
 #include "kis_debug.h"
 
@@ -28,6 +30,14 @@
 
 struct Q_DECL_HIDDEN ImageShape::Private
 {
+    Private() {}
+    Private(const Private &rhs)
+        : image(rhs.image),
+          ratioParser(rhs.ratioParser ? new SvgUtil::PreserveAspectRatioParser(*rhs.ratioParser) : 0),
+          viewBoxTransform(rhs.viewBoxTransform)
+    {
+    }
+
     QImage image;
     QScopedPointer<SvgUtil::PreserveAspectRatioParser> ratioParser;
     QTransform viewBoxTransform;
@@ -39,8 +49,19 @@ ImageShape::ImageShape()
 {
 }
 
+ImageShape::ImageShape(const ImageShape &rhs)
+    : KoTosContainer(new KoTosContainerPrivate(*rhs.d_func(), this)),
+      m_d(new Private(*rhs.m_d))
+{
+}
+
 ImageShape::~ImageShape()
 {
+}
+
+KoShape *ImageShape::cloneShape() const
+{
+    return new ImageShape(*this);
 }
 
 void ImageShape::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext)
@@ -124,4 +145,3 @@ bool ImageShape::loadSvg(const KoXmlElement &element, SvgLoadingContext &context
 
     return true;
 }
-

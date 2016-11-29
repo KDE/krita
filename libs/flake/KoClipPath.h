@@ -45,6 +45,8 @@ public:
 
     explicit KoClipData(const QList<KoShape*> &clipPathShapes);
 
+    explicit KoClipData(const KoClipData &rhs);
+
     /// Destroys the clip path data
     ~KoClipData();
 
@@ -87,6 +89,8 @@ public:
 
     ~KoClipPath();
 
+    KoClipPath *clone() const;
+
     CoordinateSystem coordinates() const;
 
     /// Sets the clip rule to be used for the clip path
@@ -115,6 +119,9 @@ public:
 
     /// Applies the clipping to the given painter
     static void applyClipping(KoShape *clippedShape, QPainter &painter, const KoViewConverter &converter);
+
+private:
+    KoClipPath(const KoClipPath &rhs);
 
 private:
     class Private;

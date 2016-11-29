@@ -29,6 +29,8 @@
 #include <KoIcon.h>
 #include <klocalizedstring.h>
 
+#include "kis_global.h"
+
 RectangleShapeFactory::RectangleShapeFactory()
     : KoShapeFactoryBase(RectangleShapeId, i18n("Rectangle"))
 {
@@ -47,7 +49,7 @@ KoShape *RectangleShapeFactory::createDefaultShape(KoDocumentResourceManager *) 
 {
     RectangleShape *rect = new RectangleShape();
 
-    rect->setStroke(new KoShapeStroke(1.0));
+    rect->setStroke(toQShared(new KoShapeStroke(1.0)));
     rect->setShapeId(KoPathShapeId);
 
     QLinearGradient *gradient = new QLinearGradient(QPointF(0, 0), QPointF(1, 1));

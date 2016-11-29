@@ -98,7 +98,7 @@ void SvgStyleParser::parseFont(const SvgStyles &styles)
 void SvgStyleParser::parsePA(SvgGraphicsContext *gc, const QString &command, const QString &params)
 {
     QColor fillcolor = gc->fillColor;
-    QColor strokecolor = gc->stroke.color();
+    QColor strokecolor = gc->stroke->color();
 
     if (params == "inherit")
         return;
@@ -139,23 +139,23 @@ void SvgStyleParser::parsePA(SvgGraphicsContext *gc, const QString &command, con
             parseColor(strokecolor, params);
         }
     } else if (command == "stroke-width") {
-        gc->stroke.setLineWidth(SvgUtil::parseUnitXY(gc, params));
+        gc->stroke->setLineWidth(SvgUtil::parseUnitXY(gc, params));
     } else if (command == "stroke-linejoin") {
         if (params == "miter")
-            gc->stroke.setJoinStyle(Qt::MiterJoin);
+            gc->stroke->setJoinStyle(Qt::MiterJoin);
         else if (params == "round")
-            gc->stroke.setJoinStyle(Qt::RoundJoin);
+            gc->stroke->setJoinStyle(Qt::RoundJoin);
         else if (params == "bevel")
-            gc->stroke.setJoinStyle(Qt::BevelJoin);
+            gc->stroke->setJoinStyle(Qt::BevelJoin);
     } else if (command == "stroke-linecap") {
         if (params == "butt")
-            gc->stroke.setCapStyle(Qt::FlatCap);
+            gc->stroke->setCapStyle(Qt::FlatCap);
         else if (params == "round")
-            gc->stroke.setCapStyle(Qt::RoundCap);
+            gc->stroke->setCapStyle(Qt::RoundCap);
         else if (params == "square")
-            gc->stroke.setCapStyle(Qt::SquareCap);
+            gc->stroke->setCapStyle(Qt::SquareCap);
     } else if (command == "stroke-miterlimit") {
-        gc->stroke.setMiterLimit(params.toFloat());
+        gc->stroke->setMiterLimit(params.toFloat());
     } else if (command == "stroke-dasharray") {
         QVector<qreal> array;
         if (params != "none") {
@@ -170,9 +170,9 @@ void SvgStyleParser::parsePA(SvgGraphicsContext *gc, const QString &command, con
                 array << array;
             }
         }
-        gc->stroke.setLineStyle(Qt::CustomDashLine, array);
+        gc->stroke->setLineStyle(Qt::CustomDashLine, array);
     } else if (command == "stroke-dashoffset") {
-        gc->stroke.setDashOffset(params.toFloat());
+        gc->stroke->setDashOffset(params.toFloat());
     }
     // handle opacity
     else if (command == "stroke-opacity")
@@ -311,7 +311,7 @@ void SvgStyleParser::parsePA(SvgGraphicsContext *gc, const QString &command, con
     }
 
     gc->fillColor = fillcolor;
-    gc->stroke.setColor(strokecolor);
+    gc->stroke->setColor(strokecolor);
 }
 
 bool SvgStyleParser::parseColor(QColor &color, const QString &s)

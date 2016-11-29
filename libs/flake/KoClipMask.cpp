@@ -28,6 +28,26 @@
 #include <KoShapePainter.h>
 
 struct Q_DECL_HIDDEN KoClipMask::Private {
+    Private() {}
+    Private(const Private &rhs)
+        : coordinates(rhs.coordinates),
+          contentCoordinates(rhs.contentCoordinates),
+          maskRect(rhs.maskRect),
+          extraShapeTransform(rhs.extraShapeTransform)
+    {
+        Q_FOREACH (KoShape *shape, rhs.shapes) {
+            KoShape *clonedShape = shape->cloneShape();
+            KIS_ASSERT_RECOVER(clonedShape) { continue; }
+
+            shapes << clonedShape;
+        }
+    }
+
+    ~Private() {
+        qDeleteAll(shapes);
+        shapes.clear();
+    }
+
 
     CoordinateSystem coordinates = ObjectBoundingBox;
     CoordinateSystem contentCoordinates = UserSpaceOnUse;
@@ -46,13 +66,11 @@ KoClipMask::KoClipMask()
 
 KoClipMask::~KoClipMask()
 {
-    // TODO: yes, yes, shapes are leaked!
 }
 
 KoClipMask::KoClipMask(const KoClipMask &rhs)
     : m_d(new Private(*rhs.m_d))
 {
-    // TODO: yes, we leak shapes at the moment!
 }
 
 KoClipMask *KoClipMask::clone() const
@@ -146,4 +164,3 @@ void KoClipMask::drawMask(QPainter *painter, KoShape *shape)
 
     painter->restore();
 }
-

@@ -42,6 +42,12 @@ public:
     ShapeGroupContainerModel(KoShapeGroup *group) : m_group(group) {}
     ~ShapeGroupContainerModel() {}
 
+    ShapeGroupContainerModel(const ShapeGroupContainerModel &rhs, KoShapeGroup *group)
+        : SimpleShapeContainerModel(rhs),
+          m_group(group)
+    {
+    }
+
     virtual void add(KoShape *child)
     {
         SimpleShapeContainerModel::add(child);
@@ -82,9 +88,17 @@ class KoShapeGroupPrivate : public KoShapeContainerPrivate
 {
 public:
     KoShapeGroupPrivate(KoShapeGroup *q)
-    : KoShapeContainerPrivate(q)
+        : KoShapeContainerPrivate(q)
     {
         model = new ShapeGroupContainerModel(q);
+    }
+
+    KoShapeGroupPrivate(const KoShapeGroupPrivate &rhs, KoShapeGroup *q)
+        : KoShapeContainerPrivate(rhs, q)
+    {
+        ShapeGroupContainerModel *otherModel = dynamic_cast<ShapeGroupContainerModel*>(rhs.model);
+        KIS_ASSERT_RECOVER_RETURN(otherModel);
+        model = new ShapeGroupContainerModel(*otherModel, q);
     }
 
     ~KoShapeGroupPrivate()
@@ -92,7 +106,7 @@ public:
     }
 
     mutable QRectF savedOutlineRect;
-    mutable bool sizeCached;
+    mutable bool sizeCached = false;
 
     void tryUpdateCachedSize() const;
 
@@ -100,13 +114,22 @@ public:
 };
 
 KoShapeGroup::KoShapeGroup()
-        : KoShapeContainer(*(new KoShapeGroupPrivate(this)))
+        : KoShapeContainer(new KoShapeGroupPrivate(this))
 {
-    setSize(QSizeF(0, 0));
+}
+
+KoShapeGroup::KoShapeGroup(const KoShapeGroup &rhs)
+    : KoShapeContainer(new KoShapeGroupPrivate(*rhs.d_func(), this))
+{
 }
 
 KoShapeGroup::~KoShapeGroup()
 {
+}
+
+KoShape *KoShapeGroup::cloneShape() const
+{
+    return new KoShapeGroup(*this);
 }
 
 void KoShapeGroup::paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &)
@@ -247,15 +270,7 @@ void KoShapeGroup::shapeChanged(ChangeType type, KoShape *shape)
     KoShapeContainer::shapeChanged(type, shape);
     switch (type) {
     case KoShape::StrokeChanged:
-    {
-        KoShapeStrokeModel *str = stroke();
-        if (str) {
-            if (str->deref())
-                delete str;
-            setStroke(0);
-        }
         break;
-    }
     default:
         break;
     }
@@ -266,4 +281,3 @@ void KoShapeGroup::invalidateSizeCache()
     Q_D(KoShapeGroup);
     d->sizeCached = false;
 }
-

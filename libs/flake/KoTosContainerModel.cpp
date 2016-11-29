@@ -40,6 +40,7 @@ void KoTosContainerModel::add(KoShape *shape)
     KoTextShapeDataBase *shapeData = qobject_cast<KoTextShapeDataBase*>(shape->userData());
     Q_ASSERT(shapeData != 0);
     if (shapeData) {
+        delete m_textShape;
         m_textShape = shape;
     }
 }

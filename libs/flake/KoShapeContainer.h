@@ -223,7 +223,7 @@ protected:
     virtual void shapeChanged(ChangeType type, KoShape *shape = 0);
 
     /// constructor
-    KoShapeContainer(KoShapeContainerPrivate &);
+    KoShapeContainer(KoShapeContainerPrivate *);
 
 private:
     Q_DECLARE_PRIVATE(KoShapeContainer)

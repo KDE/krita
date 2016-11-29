@@ -49,6 +49,20 @@ KoConnectionShapePrivate::KoConnectionShapePrivate(KoConnectionShape *q)
 {
 }
 
+KoConnectionShapePrivate::KoConnectionShapePrivate(const KoConnectionShapePrivate &rhs, KoConnectionShape *q)
+    : KoParameterShapePrivate(rhs, q),
+      path(rhs.path),
+      shape1(0), // FIXME: it should point to the new shapes!!!
+      shape2(0), // FIXME: it should point to the new shapes!!!
+      connectionPointId1(rhs.connectionPointId1),
+      connectionPointId2(rhs.connectionPointId2),
+      connectionType(rhs.connectionType),
+      forceUpdate(rhs.forceUpdate),
+      hasCustomPath(rhs.hasCustomPath)
+{
+
+}
+
 QPointF KoConnectionShapePrivate::escapeDirection(int handleId) const
 {
     Q_Q(const KoConnectionShape);
@@ -299,7 +313,7 @@ void KoConnectionShape::updateConnections()
 }
 
 KoConnectionShape::KoConnectionShape()
-    : KoParameterShape(*(new KoConnectionShapePrivate(this)))
+    : KoParameterShape(new KoConnectionShapePrivate(this))
 {
     Q_D(KoConnectionShape);
     d->handles.push_back(QPointF(0, 0));
@@ -313,6 +327,12 @@ KoConnectionShape::KoConnectionShape()
     clearConnectionPoints();
 }
 
+KoConnectionShape::KoConnectionShape(const KoConnectionShape &rhs)
+    : KoParameterShape(new KoConnectionShapePrivate(*rhs.d_func(), this))
+{
+}
+
+
 KoConnectionShape::~KoConnectionShape()
 {
     Q_D(KoConnectionShape);
@@ -320,6 +340,11 @@ KoConnectionShape::~KoConnectionShape()
         d->shape1->removeDependee(this);
     if (d->shape2)
         d->shape2->removeDependee(this);
+}
+
+KoShape *KoConnectionShape::cloneShape() const
+{
+    return new KoConnectionShape(*this);
 }
 
 void KoConnectionShape::saveOdf(KoShapeSavingContext & context) const
@@ -445,7 +470,7 @@ bool KoConnectionShape::loadOdf(const KoXmlElement & element, KoShapeLoadingCont
     if (d->hasCustomPath) {
         KoPathShapeLoader loader(this);
         loader.parseSvg(element.attributeNS(KoXmlNS::svg, "d"), true);
-        if (m_subpaths.size() > 0) {
+        if (d->subpaths.size() > 0) {
             QRectF viewBox = loadOdfViewbox(element);
             if (viewBox.isEmpty()) {
                 // there should be a viewBox to transform the path data
@@ -503,8 +528,8 @@ void KoConnectionShape::finishLoadingConnection()
                 p2 = d->handles[EndHandle];
             }
 
-            QPointF relativeBegin = m_subpaths.first()->first()->point();
-            QPointF relativeEnd = m_subpaths.last()->last()->point();
+            QPointF relativeBegin = d->subpaths.first()->first()->point();
+            QPointF relativeEnd = d->subpaths.last()->last()->point();
 
             QPointF diffRelative(relativeBegin - relativeEnd);
             QPointF diffAbsolute(p1 - p2);

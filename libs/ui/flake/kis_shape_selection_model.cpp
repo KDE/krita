@@ -70,7 +70,7 @@ void KisShapeSelectionModel::add(KoShape *child)
     if (m_shapeMap.contains(child))
         return;
 
-    child->setStroke(0);
+    child->setStroke(KoShapeStrokeModelSP());
     child->setBackground( QSharedPointer<KoShapeBackground>(0));
     m_shapeMap.insert(child, child->boundingRect());
     m_shapeSelection->shapeManager()->addShape(child);

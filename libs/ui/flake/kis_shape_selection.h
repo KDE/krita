@@ -42,6 +42,9 @@ class KUndo2Command;
  */
 class KisShapeSelectionMarker : public KoShapeUserData
 {
+    KoShapeUserData* clone() const override {
+        return new KisShapeSelectionMarker(*this);
+    }
 };
 
 

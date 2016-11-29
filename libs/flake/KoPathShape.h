@@ -85,6 +85,8 @@ public:
      */
     virtual ~KoPathShape();
 
+    KoShape *cloneShape() const;
+
     /// reimplemented
     virtual void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext);
     virtual void paintPoints(QPainter &painter, const KoViewConverter &converter, int handleRadius);
@@ -464,9 +466,15 @@ public:
 
     KoMarkerData markerData(KoMarkerData::MarkerPosition position) const;
 
+private:
+    /// constructor: to be used in cloneShape(), not in descendants!
+    /// \internal
+    KoPathShape(const KoPathShape &rhs);
+
 protected:
-    /// constructor \internal
-    KoPathShape(KoPathShapePrivate &);
+    /// constructor:to be used in descendant shapes
+    /// \internal
+    KoPathShape(KoPathShapePrivate *);
 
     /// reimplemented
     virtual QString saveStyle(KoGenStyle &style, KoShapeSavingContext &context) const;
@@ -496,8 +504,6 @@ protected:
      * very small size of 0.000001 pixels
      */
     QTransform resizeMatrix( const QSizeF &newSize ) const;
-
-    KoSubpathList m_subpaths;
 
 private:
     Q_DECLARE_PRIVATE(KoPathShape)

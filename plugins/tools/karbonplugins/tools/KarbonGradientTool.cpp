@@ -45,6 +45,8 @@
 
 #include <klocalizedstring.h>
 
+#include "kis_global.h"
+
 #include <QPainter>
 
 // helper function
@@ -163,9 +165,9 @@ void KarbonGradientTool::mousePressEvent(KoPointerEvent *event)
             }
         } else {
             // target is stroke so check the stroke style
-            KoShapeStroke *stroke = dynamic_cast<KoShapeStroke *>(shape->stroke());
+            KoShapeStrokeSP stroke = qSharedPointerDynamicCast<KoShapeStroke>(shape->stroke());
             if (!stroke) {
-                stroke = new KoShapeStroke(1.0);
+                stroke = toQShared(new KoShapeStroke(1.0));
                 stroke->setLineBrush(QBrush(*m_gradient));
                 m_currentCmd = new KoShapeStrokeCommand(shape, stroke);
                 shape->setStroke(stroke);
@@ -174,7 +176,7 @@ void KarbonGradientTool::mousePressEvent(KoPointerEvent *event)
             } else {
                 Qt::BrushStyle style = stroke->lineBrush().style();
                 if (style < Qt::LinearGradientPattern || style > Qt::RadialGradientPattern) {
-                    KoShapeStroke *newStroke = new KoShapeStroke(*stroke);
+                    KoShapeStrokeSP newStroke(new KoShapeStroke(*stroke));
                     newStroke->setLineBrush(QBrush(*m_gradient));
                     m_currentCmd = new KoShapeStrokeCommand(shape, newStroke);
                     stroke->setLineBrush(QBrush(*m_gradient));
@@ -383,7 +385,7 @@ void KarbonGradientTool::initialize()
         }
         // is the gradient a stroke gradient but shape has no stroke gradient anymore ?
         if (strategy->target() == GradientStrategy::Stroke) {
-            KoShapeStroke *stroke = dynamic_cast<KoShapeStroke *>(strategy->shape()->stroke());
+            KoShapeStrokeSP stroke = qSharedPointerDynamicCast<KoShapeStroke>(strategy->shape()->stroke());
             if (!stroke  || ! stroke->lineBrush().gradient() || stroke->lineBrush().gradient()->type() != strategy->type()) {
                 // delete the gradient
                 m_strategies.remove(strategy->shape(), strategy);
@@ -428,7 +430,7 @@ void KarbonGradientTool::initialize()
         }
 
         if (!strokeExists) {
-            KoShapeStroke *stroke = dynamic_cast<KoShapeStroke *>(shape->stroke());
+            KoShapeStrokeSP stroke = qSharedPointerDynamicCast<KoShapeStroke>(shape->stroke());
             if (stroke) {
                 GradientStrategy *strokeStrategy = createStrategy(shape, stroke->lineBrush().gradient(), GradientStrategy::Stroke);
                 if (strokeStrategy) {
@@ -578,14 +580,14 @@ void KarbonGradientTool::gradientChanged()
         }
         canvas()->addCommand(new KoShapeBackgroundCommand(selectedShapes, newFills));
     } else {
-        QList<KoShapeStrokeModel *> newStrokes;
+        QList<KoShapeStrokeModelSP> newStrokes;
         Q_FOREACH (KoShape *shape, selectedShapes) {
-            KoShapeStroke *stroke = dynamic_cast<KoShapeStroke *>(shape->stroke());
-            KoShapeStroke *newStroke = 0;
+            KoShapeStrokeSP stroke = qSharedPointerDynamicCast<KoShapeStroke>(shape->stroke());
+            KoShapeStrokeSP newStroke;
             if (stroke) {
-                newStroke = new KoShapeStroke(*stroke);
+                newStroke = toQShared(new KoShapeStroke(*stroke));
             } else {
-                newStroke = new KoShapeStroke(1.0);
+                newStroke = toQShared(new KoShapeStroke(1.0));
             }
             QBrush newGradient;
             if (newStroke->lineBrush().gradient()) {

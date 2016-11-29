@@ -40,6 +40,8 @@ public:
     SpiralShape();
     ~SpiralShape();
 
+    KoShape* cloneShape() const override;
+
     void setSize(const QSizeF &newSize);
     virtual QPointF normalize();
 
@@ -68,6 +70,8 @@ public:
     virtual QString pathShapeId() const;
 
 protected:
+    SpiralShape(const SpiralShape &rhs);
+
     // reimplemented
     virtual void saveOdf(KoShapeSavingContext &context) const;
     // reimplemented

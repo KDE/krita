@@ -26,6 +26,8 @@
 #include <KoIcon.h>
 #include <klocalizedstring.h>
 
+#include "kis_global.h"
+
 SpiralShapeFactory::SpiralShapeFactory()
     : KoShapeFactoryBase(SpiralShapeId, i18n("Spiral"))
 {
@@ -39,7 +41,7 @@ KoShape *SpiralShapeFactory::createDefaultShape(KoDocumentResourceManager *) con
 {
     SpiralShape *spiral = new SpiralShape();
 
-    spiral->setStroke(new KoShapeStroke(1.0));
+    spiral->setStroke(toQShared(new KoShapeStroke(1.0)));
     spiral->setShapeId(KoPathShapeId);
 
     return spiral;

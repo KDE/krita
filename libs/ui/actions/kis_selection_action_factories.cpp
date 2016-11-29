@@ -534,7 +534,7 @@ void KisSelectionToShapeActionFactory::run(KisViewManager *view)
     shape->setShapeId(KoPathShapeId);
 
     KoColor fgColor = view->canvasBase()->resourceManager()->resource(KoCanvasResourceManager::ForegroundColor).value<KoColor>();
-    KoShapeStroke* border = new KoShapeStroke(1.0, fgColor.toQColor());
+    KoShapeStrokeSP border(new KoShapeStroke(1.0, fgColor.toQColor()));
     shape->setStroke(border);
 
     view->document()->shapeController()->addShape(shape);
@@ -595,7 +595,7 @@ void KisStrokeSelectionActionFactory::run(KisViewManager *view, StrokeSelectionO
         KoShape *shape = KoPathShape::createShapeFromPainterPath(transform.map(outline));
         shape->setShapeId(KoPathShapeId);
 
-        KoShapeStroke* border = new KoShapeStroke(size, color);
+        KoShapeStrokeSP border(new KoShapeStroke(size, color));
         shape->setStroke(border);
 
         view->document()->shapeController()->addShape(shape);

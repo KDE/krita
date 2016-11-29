@@ -417,9 +417,9 @@ void KoPencilTool::setDelta(double delta)
         m_combineAngle = delta;
 }
 
-KoShapeStroke* KoPencilTool::createStroke()
+KoShapeStrokeSP KoPencilTool::createStroke()
 {
-    KoShapeStroke *stroke = 0;
+    KoShapeStrokeSP stroke;
     if (m_strokeWidget) {
         stroke = m_strokeWidget->createShapeStroke();
     }

@@ -37,6 +37,8 @@ public:
     RectangleShape();
     ~RectangleShape();
 
+    KoShape* cloneShape() const override;
+
     /// Returns the corner radius in x-direction
     qreal cornerRadiusX() const;
 
@@ -79,6 +81,7 @@ public:
     virtual bool loadSvg(const KoXmlElement &element, SvgLoadingContext &context);
 
 protected:
+    RectangleShape(const RectangleShape &rhs);
 
     void moveHandleAction(int handleId, const QPointF &point, Qt::KeyboardModifiers modifiers = Qt::NoModifier);
     void updatePath(const QSizeF &size);

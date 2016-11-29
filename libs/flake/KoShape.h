@@ -24,6 +24,7 @@
 #define KOSHAPE_H
 
 #include "KoFlake.h"
+#include "KoFlakeTypes.h"
 #include "KoConnectionPoint.h"
 
 #include <QSharedPointer>
@@ -58,6 +59,7 @@ class KoShapeAnchor;
 class KoBorder;
 struct KoInsets;
 class KoShapeBackground;
+
 
 
 /**
@@ -164,6 +166,12 @@ public:
      * @brief Destructor
      */
     virtual ~KoShape();
+
+    /**
+     * @brief creates a deep copy of thie shape or shapes subtree
+     * @return a cloned shape
+     */
+    virtual KoShape* cloneShape() const;
 
     /**
      * @brief Paint the shape
@@ -732,13 +740,13 @@ public:
      * Returns the currently set stroke, or 0 if there is no stroke.
      * @return the currently set stroke, or 0 if there is no stroke.
      */
-    KoShapeStrokeModel *stroke() const;
+    KoShapeStrokeModelSP stroke() const;
 
     /**
      * Set a new stroke, removing the old one.
      * @param stroke the new stroke, or 0 if there should be no stroke.
      */
-    void setStroke(KoShapeStrokeModel *stroke);
+    void setStroke(KoShapeStrokeModelSP stroke);
 
     /**
      * Return the insets of the stroke.
@@ -821,19 +829,6 @@ public:
      * Return the current userData.
      */
     KoShapeUserData *userData() const;
-
-    /**
-     * Set a data object on the shape to be used by an application.
-     * This is specifically useful when an application wants to have data that is per shape
-     * and should be deleted when the shape is destructed.
-     * @param applicationData the new application data, or 0 to delete the current one.
-     */
-    void setApplicationData(KoShapeApplicationData *applicationData);
-
-    /**
-     * Return the current applicationData.
-     */
-    KoShapeApplicationData *applicationData() const;
 
     /**
      * Return the Id of this shape, identifying the type of shape by the id of the factory.
@@ -1099,7 +1094,7 @@ public:
 
 protected:
     /// constructor
-    KoShape(KoShapePrivate &);
+    KoShape(KoShapePrivate *);
 
     /* ** loading saving helper methods */
     /// attributes from ODF 1.1 chapter 9.2.15 Common Drawing Shape Attributes
@@ -1162,7 +1157,7 @@ protected:
     virtual void loadStyle(const KoXmlElement &element, KoShapeLoadingContext &context);
 
     /// Loads the stroke style
-    KoShapeStrokeModel *loadOdfStroke(const KoXmlElement &element, KoShapeLoadingContext &context) const;
+    KoShapeStrokeModelSP loadOdfStroke(const KoXmlElement &element, KoShapeLoadingContext &context) const;
 
     /// Loads the fill style
     QSharedPointer<KoShapeBackground> loadOdfFill(KoShapeLoadingContext &context) const;

@@ -29,6 +29,26 @@ class SimpleShapeContainerModel: public KoShapeContainerModel
 public:
     SimpleShapeContainerModel() {}
     ~SimpleShapeContainerModel() {}
+
+    SimpleShapeContainerModel(const SimpleShapeContainerModel &rhs)
+        : KoShapeContainerModel(rhs),
+          m_inheritsTransform(rhs.m_inheritsTransform),
+          m_clipped(rhs.m_clipped)
+    {
+        Q_FOREACH (KoShape *shape, rhs.m_members) {
+            m_members << shape->cloneShape();
+        }
+
+        KIS_ASSERT_RECOVER(m_members.size() == m_inheritsTransform.size() &&
+                           m_members.size() == m_clipped.size())
+        {
+            qDeleteAll(m_members);
+            m_members.clear();
+            m_inheritsTransform.clear();
+            m_clipped.clear();
+        }
+    }
+
     void add(KoShape *child) {
         if (m_members.contains(child))
             return;
@@ -79,6 +99,20 @@ public:
         const int index = indexOf(shape);
         KIS_SAFE_ASSERT_RECOVER(index >= 0)  { return false;}
         return m_inheritsTransform[index];
+    }
+
+    void proposeMove(KoShape *shape, QPointF &move)
+    {
+        KoShapeContainer *parent = shape->parent();
+        bool allowedToMove = true;
+        while (allowedToMove && parent) {
+            allowedToMove = parent->isEditable();
+            parent = parent->parent();
+        }
+        if (! allowedToMove) {
+            move.setX(0);
+            move.setY(0);
+        }
     }
 
 private:

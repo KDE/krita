@@ -727,7 +727,7 @@ void SvgParser::applyFillStyle(KoShape *shape)
         path->setFillRule(gc->fillRule);
 }
 
-void applyDashes(const KoShapeStroke *srcStroke, KoShapeStroke *dstStroke)
+void applyDashes(const KoShapeStrokeSP srcStroke, KoShapeStrokeSP dstStroke)
 {
     const double lineWidth = srcStroke->lineWidth();
     QVector<qreal> dashes = srcStroke->lineDashes();
@@ -755,10 +755,10 @@ void SvgParser::applyStrokeStyle(KoShape *shape)
         return;
 
     if (gc->strokeType == SvgGraphicsContext::None) {
-        shape->setStroke(0);
+        shape->setStroke(KoShapeStrokeModelSP());
     } else if (gc->strokeType == SvgGraphicsContext::Solid) {
-        KoShapeStroke *stroke = new KoShapeStroke(gc->stroke);
-        applyDashes(&gc->stroke, stroke);
+        KoShapeStrokeSP stroke(new KoShapeStroke(*gc->stroke));
+        applyDashes(gc->stroke, stroke);
         shape->setStroke(stroke);
     } else if (gc->strokeType == SvgGraphicsContext::Complex) {
         // try to find referenced gradient
@@ -771,15 +771,15 @@ void SvgParser::applyStrokeStyle(KoShape *shape)
                 delete result;
                 brush.setTransform(transform);
 
-                KoShapeStroke *stroke = new KoShapeStroke(gc->stroke);
+                KoShapeStrokeSP stroke(new KoShapeStroke(*gc->stroke));
                 stroke->setLineBrush(brush);
-                applyDashes(&gc->stroke, stroke);
+                applyDashes(gc->stroke, stroke);
                 shape->setStroke(stroke);
             }
         } else {
             // no referenced stroke found, use fallback color
-            KoShapeStroke *stroke = new KoShapeStroke(gc->stroke);
-            applyDashes(&gc->stroke, stroke);
+            KoShapeStrokeSP stroke(new KoShapeStroke(*gc->stroke));
+            applyDashes(gc->stroke, stroke);
             shape->setStroke(stroke);
         }
     }
@@ -1386,9 +1386,8 @@ KoShape * SvgParser::createShapeFromElement(const KoXmlElement &element, SvgLoad
         shape->setTransformation(QTransform());
 
         // reset border
-        KoShapeStrokeModel *oldStroke = shape->stroke();
-        shape->setStroke(0);
-        delete oldStroke;
+        KoShapeStrokeModelSP oldStroke = shape->stroke();
+        shape->setStroke(KoShapeStrokeModelSP());
 
         // reset fill
         shape->setBackground(QSharedPointer<KoShapeBackground>(0));
@@ -1429,9 +1428,8 @@ KoShape * SvgParser::createShape(const QString &shapeID)
     shape->setTransformation(QTransform());
 
     // reset border
-    KoShapeStrokeModel *oldStroke = shape->stroke();
-    shape->setStroke(0);
-    delete oldStroke;
+    KoShapeStrokeModelSP oldStroke = shape->stroke();
+    shape->setStroke(KoShapeStrokeModelSP());
 
     // reset fill
     shape->setBackground(QSharedPointer<KoShapeBackground>(0));

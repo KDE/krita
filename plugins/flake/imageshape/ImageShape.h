@@ -35,6 +35,8 @@ public:
     ImageShape();
     ~ImageShape();
 
+    KoShape *cloneShape() const;
+
     void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext);
 
     void setSize(const QSizeF &size) override;
@@ -44,6 +46,9 @@ public:
 
     bool saveSvg(SvgSavingContext &context) override;
     bool loadSvg(const KoXmlElement &element, SvgLoadingContext &context) override;
+
+private:
+    ImageShape(const ImageShape &rhs);
 
 private:
     struct Private;

@@ -45,7 +45,7 @@ public:
 
     StyleType     strokeType;///< the current stroke type
     QString       strokeId;  ///< the current stroke id (used for gradient strokes)
-    KoShapeStroke stroke;    ///< the current stroke
+    KoShapeStrokeSP stroke;    ///< the current stroke
 
     QString filterId;       ///< the current filter id
     QString clipPathId;     ///< the current clip path id

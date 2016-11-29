@@ -350,6 +350,11 @@ KoImageData &KoImageData::operator=(const KoImageData &other)
     return *this;
 }
 
+KoShapeUserData *KoImageData::clone() const
+{
+    return new KoImageData(*this);
+}
+
 qint64 KoImageData::key() const
 {
     return d->key;

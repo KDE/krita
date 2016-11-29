@@ -49,6 +49,11 @@ public:
     /// Constructor
     explicit KoShapeUserData(QObject *parent = 0);
     virtual ~KoShapeUserData();
+
+    virtual KoShapeUserData* clone() const = 0;
+
+protected:
+    KoShapeUserData(const KoShapeUserData &rhs);
 };
 
 #endif

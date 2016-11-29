@@ -21,12 +21,26 @@
 
 #include "KoShapeContainer.h"
 
+#include "kis_assert.h"
+
 KoShapeContainerModel::KoShapeContainerModel()
 {
 }
 
 KoShapeContainerModel::~KoShapeContainerModel()
 {
+}
+
+void KoShapeContainerModel::deleteOwnedShapes()
+{
+    QList<KoShape*> ownedShapes = this->shapes();
+
+    Q_FOREACH (KoShape *shape, ownedShapes) {
+        shape->setParent(0);
+        delete shape;
+    }
+
+    KIS_SAFE_ASSERT_RECOVER_NOOP(!this->count());
 }
 
 void KoShapeContainerModel::proposeMove(KoShape *child, QPointF &move)
@@ -47,4 +61,9 @@ void KoShapeContainerModel::childChanged(KoShape *child, KoShape::ChangeType typ
             grandparent->model()->childChanged(parent, KoShape::ChildChanged);
         }
     }
+}
+
+KoShapeContainerModel::KoShapeContainerModel(const KoShapeContainerModel &rhs)
+{
+    Q_UNUSED(rhs);
 }

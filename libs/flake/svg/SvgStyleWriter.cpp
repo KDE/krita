@@ -100,48 +100,49 @@ void SvgStyleWriter::saveSvgFill(KoShape *shape, SvgSavingContext &context)
 
 void SvgStyleWriter::saveSvgStroke(KoShape *shape, SvgSavingContext &context)
 {
-    const KoShapeStroke * line = dynamic_cast<const KoShapeStroke*>(shape->stroke());
-    if (! line)
+    const QSharedPointer<KoShapeStroke> lineBorder = qSharedPointerDynamicCast<KoShapeStroke>(shape->stroke());
+
+    if (! lineBorder)
         return;
 
     QString strokeStr("none");
-    if (line->lineBrush().gradient()) {
-        QString gradientId = saveSvgGradient(line->lineBrush().gradient(), line->lineBrush().transform(), context);
+    if (lineBorder->lineBrush().gradient()) {
+        QString gradientId = saveSvgGradient(lineBorder->lineBrush().gradient(), lineBorder->lineBrush().transform(), context);
         strokeStr = "url(#" + gradientId + ")";
     } else {
-        strokeStr = line->color().name();
+        strokeStr = lineBorder->color().name();
     }
     if (!strokeStr.isEmpty())
         context.shapeWriter().addAttribute("stroke", strokeStr);
 
-    if (line->color().alphaF() < 1.0)
-        context.shapeWriter().addAttribute("stroke-opacity", line->color().alphaF());
-    context.shapeWriter().addAttribute("stroke-width", SvgUtil::toUserSpace(line->lineWidth()));
+    if (lineBorder->color().alphaF() < 1.0)
+        context.shapeWriter().addAttribute("stroke-opacity", lineBorder->color().alphaF());
+    context.shapeWriter().addAttribute("stroke-width", SvgUtil::toUserSpace(lineBorder->lineWidth()));
 
-    if (line->capStyle() == Qt::FlatCap)
+    if (lineBorder->capStyle() == Qt::FlatCap)
         context.shapeWriter().addAttribute("stroke-linecap", "butt");
-    else if (line->capStyle() == Qt::RoundCap)
+    else if (lineBorder->capStyle() == Qt::RoundCap)
         context.shapeWriter().addAttribute("stroke-linecap", "round");
-    else if (line->capStyle() == Qt::SquareCap)
+    else if (lineBorder->capStyle() == Qt::SquareCap)
         context.shapeWriter().addAttribute("stroke-linecap", "square");
 
-    if (line->joinStyle() == Qt::MiterJoin) {
+    if (lineBorder->joinStyle() == Qt::MiterJoin) {
         context.shapeWriter().addAttribute("stroke-linejoin", "miter");
-        context.shapeWriter().addAttribute("stroke-miterlimit", line->miterLimit());
-    } else if (line->joinStyle() == Qt::RoundJoin)
+        context.shapeWriter().addAttribute("stroke-miterlimit", lineBorder->miterLimit());
+    } else if (lineBorder->joinStyle() == Qt::RoundJoin)
         context.shapeWriter().addAttribute("stroke-linejoin", "round");
-    else if (line->joinStyle() == Qt::BevelJoin)
+    else if (lineBorder->joinStyle() == Qt::BevelJoin)
         context.shapeWriter().addAttribute("stroke-linejoin", "bevel");
 
     // dash
-    if (line->lineStyle() > Qt::SolidLine) {
-        qreal dashFactor = line->lineWidth();
+    if (lineBorder->lineStyle() > Qt::SolidLine) {
+        qreal dashFactor = lineBorder->lineWidth();
 
-        if (line->dashOffset() != 0)
-            context.shapeWriter().addAttribute("stroke-dashoffset", dashFactor * line->dashOffset());
+        if (lineBorder->dashOffset() != 0)
+            context.shapeWriter().addAttribute("stroke-dashoffset", dashFactor * lineBorder->dashOffset());
 
         QString dashStr;
-        const QVector<qreal> dashes = line->lineDashes();
+        const QVector<qreal> dashes = lineBorder->lineDashes();
         int dashCount = dashes.size();
         for (int i = 0; i < dashCount; ++i) {
             if (i > 0)

@@ -24,12 +24,24 @@
 #include <QPainter>
 #include <FlakeDebug.h>
 
-KoParameterShape::KoParameterShape()
-    : KoPathShape(*(new KoParameterShapePrivate(this)))
+KoParameterShapePrivate::KoParameterShapePrivate(KoParameterShape *shape)
+    : KoPathShapePrivate(shape),
+    parametric(true)
 {
 }
 
-KoParameterShape::KoParameterShape(KoParameterShapePrivate &dd)
+KoParameterShapePrivate::KoParameterShapePrivate(const KoParameterShapePrivate &rhs, KoParameterShape *q)
+    : KoPathShapePrivate(rhs, q),
+      handles(rhs.handles)
+{
+}
+
+KoParameterShape::KoParameterShape()
+    : KoPathShape(new KoParameterShapePrivate(this))
+{
+}
+
+KoParameterShape::KoParameterShape(KoParameterShapePrivate *dd)
     : KoPathShape(dd)
 {
 }

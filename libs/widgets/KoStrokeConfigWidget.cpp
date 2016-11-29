@@ -323,9 +323,9 @@ Qt::PenJoinStyle KoStrokeConfigWidget::joinStyle() const
     return static_cast<Qt::PenJoinStyle>(d->capNJoinMenu->joinGroup->checkedId());
 }
 
-KoShapeStroke* KoStrokeConfigWidget::createShapeStroke() const
+KoShapeStrokeSP KoStrokeConfigWidget::createShapeStroke() const
 {
-    KoShapeStroke *stroke = new KoShapeStroke();
+    KoShapeStrokeSP stroke(new KoShapeStroke());
 
     stroke->setColor(color());
     stroke->setLineWidth(lineWidth());
@@ -340,11 +340,11 @@ KoShapeStroke* KoStrokeConfigWidget::createShapeStroke() const
 // ----------------------------------------------------------------
 //                         Other public functions
 
-void KoStrokeConfigWidget::updateControls(KoShapeStrokeModel *stroke, KoMarker *startMarker, KoMarker *endMarker)
+void KoStrokeConfigWidget::updateControls(KoShapeStrokeModelSP stroke, KoMarker *startMarker, KoMarker *endMarker)
 {
     blockChildSignals(true);
 
-    const KoShapeStroke *lineStroke = dynamic_cast<const KoShapeStroke*>(stroke);
+    const KoShapeStrokeSP lineStroke = qSharedPointerDynamicCast<KoShapeStroke>(stroke);
     if (lineStroke) {
         d->lineWidth->changeValue(lineStroke->lineWidth());
         QAbstractButton *button = d->capNJoinMenu->capGroup->button(lineStroke->capStyle());
@@ -435,8 +435,9 @@ void KoStrokeConfigWidget::applyChanges()
         return;
     }
 
-    KoShapeStroke *newStroke = new KoShapeStroke();
-    KoShapeStroke *oldStroke = dynamic_cast<KoShapeStroke*>( selection->firstSelectedShape()->stroke() );
+    KoShapeStrokeSP newStroke(new KoShapeStroke());
+    KoShapeStrokeSP oldStroke = qSharedPointerDynamicCast<KoShapeStroke>( selection->firstSelectedShape()->stroke() );
+
     if (oldStroke) {
         newStroke->setLineBrush(oldStroke->lineBrush());
     }

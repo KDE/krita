@@ -30,6 +30,7 @@
 #include <KoIcon.h>
 
 #include <klocalizedstring.h>
+#include "kis_global.h"
 
 #include <QString>
 
@@ -54,7 +55,7 @@ EnhancedPathShapeFactory::EnhancedPathShapeFactory()
 KoShape *EnhancedPathShapeFactory::createDefaultShape(KoDocumentResourceManager *) const
 {
     EnhancedPathShape *shape = new EnhancedPathShape(QRect(0, 0, 100, 100));
-    shape->setStroke(new KoShapeStroke(1.0));
+    shape->setStroke(toQShared(new KoShapeStroke(1.0)));
     shape->setShapeId(KoPathShapeId);
 
     shape->addModifiers("35");
@@ -88,7 +89,7 @@ KoShape *EnhancedPathShapeFactory::createShape(const KoProperties *params, KoDoc
     EnhancedPathShape *shape = new EnhancedPathShape(viewBox);
 
     shape->setShapeId(KoPathShapeId);
-    shape->setStroke(new KoShapeStroke(1.0));
+    shape->setStroke(toQShared(new KoShapeStroke(1.0)));
     shape->addModifiers(params->stringProperty("modifiers"));
 
     ListType handles = params->property("handles").toList();

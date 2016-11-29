@@ -20,6 +20,7 @@
 #ifndef _KOPENCILTOOL_H_
 #define _KOPENCILTOOL_H_
 
+#include "KoFlakeTypes.h"
 #include "KoToolBase.h"
 
 class KoPathShape;
@@ -57,7 +58,7 @@ protected:
      */
     virtual void addPathShape(KoPathShape* path, bool closePath);
 
-    KoShapeStroke* createStroke();
+    KoShapeStrokeSP createStroke();
     void setFittingError(qreal fittingError);
     qreal getFittingError();
 

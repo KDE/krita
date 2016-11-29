@@ -27,7 +27,7 @@ class KoSelectionPrivate : public KoShapePrivate
 {
 public:
     explicit KoSelectionPrivate(KoSelection *parent)
-        : KoShapePrivate(parent), eventTriggered(false), activeLayer(0), q(parent) {}
+        : KoShapePrivate(parent), eventTriggered(false), activeLayer(0) {}
     QList<KoShape*> selectedShapes;
     bool eventTriggered;
 
@@ -41,8 +41,9 @@ public:
 
     QRectF sizeRect();
 
-    KoSelection *q;
     QRectF globalBound;
+
+    Q_DECLARE_PUBLIC(KoSelection)
 };
 
 #endif

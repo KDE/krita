@@ -65,6 +65,23 @@ KoPathShapePrivate::KoPathShapePrivate(KoPathShape *q)
 {
 }
 
+KoPathShapePrivate::KoPathShapePrivate(const KoPathShapePrivate &rhs, KoPathShape *q)
+    : KoTosContainerPrivate(rhs, q),
+      fillRule(rhs.fillRule),
+      startMarker(rhs.startMarker),
+      endMarker(rhs.endMarker)
+{
+    Q_FOREACH (KoSubpath *subPath, rhs.subpaths) {
+        KoSubpath *clonedSubPath = new KoSubpath();
+
+        Q_FOREACH (KoPathPoint *point, *subPath) {
+            *clonedSubPath << new KoPathPoint(*point);
+        }
+
+        subpaths << clonedSubPath;
+    }
+}
+
 QRectF KoPathShapePrivate::handleRect(const QPointF &p, qreal radius) const
 {
     return QRectF(p.x() - radius, p.y() - radius, 2*radius, 2*radius);
@@ -97,12 +114,17 @@ void KoPathShapePrivate::applyViewboxTransformation(const KoXmlElement &element)
 }
 
 KoPathShape::KoPathShape()
-    :KoTosContainer(*(new KoPathShapePrivate(this)))
+    :KoTosContainer(new KoPathShapePrivate(this))
 {
 }
 
-KoPathShape::KoPathShape(KoPathShapePrivate &dd)
+KoPathShape::KoPathShape(KoPathShapePrivate *dd)
     : KoTosContainer(dd)
+{
+}
+
+KoPathShape::KoPathShape(const KoPathShape &rhs)
+    : KoTosContainer(new KoPathShapePrivate(*rhs.d_func(), this))
 {
 }
 
@@ -111,15 +133,20 @@ KoPathShape::~KoPathShape()
     clear();
 }
 
+KoShape *KoPathShape::cloneShape() const
+{
+    return new KoPathShape(*this);
+}
+
 void KoPathShape::saveContourOdf(KoShapeSavingContext &context, const QSizeF &scaleFactor) const
 {
     Q_D(const KoPathShape);
 
-    if (m_subpaths.length() <= 1) {
+    if (d->subpaths.length() <= 1) {
         QTransform matrix;
         matrix.scale(scaleFactor.width(), scaleFactor.height());
         QString points;
-        KoSubpath *subPath = m_subpaths.first();
+        KoSubpath *subPath = d->subpaths.first();
         KoSubpath::const_iterator pointIt(subPath->constBegin());
 
         KoPathPoint *currPoint= 0;
@@ -303,7 +330,7 @@ QString KoPathShape::saveStyle(KoGenStyle &style, KoShapeSavingContext &context)
 
     style.addProperty("svg:fill-rule", d->fillRule == Qt::OddEvenFill ? "evenodd" : "nonzero");
 
-    KoShapeStroke *lineBorder = dynamic_cast<KoShapeStroke*>(stroke());
+    QSharedPointer<KoShapeStroke> lineBorder = qSharedPointerDynamicCast<KoShapeStroke>(stroke());
     qreal lineWidth = 0;
     if (lineBorder) {
         lineWidth = lineBorder->lineWidth();
@@ -332,7 +359,7 @@ void KoPathShape::loadStyle(const KoXmlElement & element, KoShapeLoadingContext 
 #endif
     }
 
-    KoShapeStroke *lineBorder = dynamic_cast<KoShapeStroke*>(stroke());
+    QSharedPointer<KoShapeStroke> lineBorder = qSharedPointerDynamicCast<KoShapeStroke>(stroke());
     qreal lineWidth = 0;
     if (lineBorder) {
         lineWidth = lineBorder->lineWidth();
@@ -361,12 +388,14 @@ QRect KoPathShape::loadOdfViewbox(const KoXmlElement & element)
 
 void KoPathShape::clear()
 {
-    Q_FOREACH (KoSubpath *subpath, m_subpaths) {
+    Q_D(KoPathShape);
+
+    Q_FOREACH (KoSubpath *subpath, d->subpaths) {
         Q_FOREACH (KoPathPoint *point, *subpath)
             delete point;
         delete subpath;
     }
-    m_subpaths.clear();
+    d->subpaths.clear();
 }
 
 void KoPathShape::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext)
@@ -387,13 +416,13 @@ void KoPathShape::paint(QPainter &painter, const KoViewConverter &converter, KoS
 void KoPathShapePrivate::paintDebug(QPainter &painter)
 {
     Q_Q(KoPathShape);
-    KoSubpathList::const_iterator pathIt(q->m_subpaths.constBegin());
+    KoSubpathList::const_iterator pathIt(subpaths.constBegin());
     int i = 0;
 
     QPen pen(Qt::black, 0);
     painter.save();
     painter.setPen(pen);
-    for (; pathIt != q->m_subpaths.constEnd(); ++pathIt) {
+    for (; pathIt != subpaths.constEnd(); ++pathIt) {
         KoSubpath::const_iterator it((*pathIt)->constBegin());
         for (; it != (*pathIt)->constEnd(); ++it) {
             ++i;
@@ -422,8 +451,8 @@ void KoPathShapePrivate::paintDebug(QPainter &painter)
 void KoPathShapePrivate::debugPath() const
 {
     Q_Q(const KoPathShape);
-    KoSubpathList::const_iterator pathIt(q->m_subpaths.constBegin());
-    for (; pathIt != q->m_subpaths.constEnd(); ++pathIt) {
+    KoSubpathList::const_iterator pathIt(subpaths.constBegin());
+    for (; pathIt != subpaths.constEnd(); ++pathIt) {
         KoSubpath::const_iterator it((*pathIt)->constBegin());
         for (; it != (*pathIt)->constEnd(); ++it) {
             debugFlake << "p:" << (*pathIt) << "," << *it << "," << (*it)->point() << "," << (*it)->properties();
@@ -434,11 +463,13 @@ void KoPathShapePrivate::debugPath() const
 
 void KoPathShape::paintPoints(QPainter &painter, const KoViewConverter &converter, int handleRadius)
 {
+    Q_D(KoPathShape);
+
     applyConversion(painter, converter);
 
-    KoSubpathList::const_iterator pathIt(m_subpaths.constBegin());
+    KoSubpathList::const_iterator pathIt(d->subpaths.constBegin());
 
-    for (; pathIt != m_subpaths.constEnd(); ++pathIt) {
+    for (; pathIt != d->subpaths.constEnd(); ++pathIt) {
         KoSubpath::const_iterator it((*pathIt)->constBegin());
         for (; it != (*pathIt)->constEnd(); ++it)
             (*it)->paint(painter, handleRadius, KoPathPoint::Node);
@@ -452,8 +483,10 @@ QRectF KoPathShape::outlineRect() const
 
 QPainterPath KoPathShape::outline() const
 {
+    Q_D(const KoPathShape);
+
     QPainterPath path;
-    Q_FOREACH (KoSubpath * subpath, m_subpaths) {
+    Q_FOREACH (KoSubpath * subpath, d->subpaths) {
         KoPathPoint * lastPoint = subpath->first();
         bool activeCP = false;
         Q_FOREACH (KoPathPoint * currPoint, *subpath) {
@@ -518,7 +551,7 @@ QRectF KoPathShape::boundingRect() const
     QTransform transform = absoluteTransformation(0);
     // calculate the bounding rect of the transformed outline
     QRectF bb;
-    KoShapeStroke *lineBorder = dynamic_cast<KoShapeStroke*>(stroke());
+    const QSharedPointer<KoShapeStroke> lineBorder = qSharedPointerDynamicCast<KoShapeStroke>(stroke());
     QPen pen;
     if (lineBorder) {
         pen.setWidthF(lineBorder->lineWidth());
@@ -590,65 +623,69 @@ QTransform KoPathShape::resizeMatrix(const QSizeF & newSize) const
 
 KoPathPoint * KoPathShape::moveTo(const QPointF &p)
 {
+    Q_D(KoPathShape);
+
     KoPathPoint * point = new KoPathPoint(this, p, KoPathPoint::StartSubpath | KoPathPoint::StopSubpath);
     KoSubpath * path = new KoSubpath;
     path->push_back(point);
-    m_subpaths.push_back(path);
+    d->subpaths.push_back(path);
     return point;
 }
 
 KoPathPoint * KoPathShape::lineTo(const QPointF &p)
 {
     Q_D(KoPathShape);
-    if (m_subpaths.empty()) {
+    if (d->subpaths.empty()) {
         moveTo(QPointF(0, 0));
     }
     KoPathPoint * point = new KoPathPoint(this, p, KoPathPoint::StopSubpath);
-    KoPathPoint * lastPoint = m_subpaths.last()->last();
+    KoPathPoint * lastPoint = d->subpaths.last()->last();
     d->updateLast(&lastPoint);
-    m_subpaths.last()->push_back(point);
+    d->subpaths.last()->push_back(point);
     return point;
 }
 
 KoPathPoint * KoPathShape::curveTo(const QPointF &c1, const QPointF &c2, const QPointF &p)
 {
     Q_D(KoPathShape);
-    if (m_subpaths.empty()) {
+    if (d->subpaths.empty()) {
         moveTo(QPointF(0, 0));
     }
-    KoPathPoint * lastPoint = m_subpaths.last()->last();
+    KoPathPoint * lastPoint = d->subpaths.last()->last();
     d->updateLast(&lastPoint);
     lastPoint->setControlPoint2(c1);
     KoPathPoint * point = new KoPathPoint(this, p, KoPathPoint::StopSubpath);
     point->setControlPoint1(c2);
-    m_subpaths.last()->push_back(point);
+    d->subpaths.last()->push_back(point);
     return point;
 }
 
 KoPathPoint * KoPathShape::curveTo(const QPointF &c, const QPointF &p)
 {
     Q_D(KoPathShape);
-    if (m_subpaths.empty())
+    if (d->subpaths.empty())
         moveTo(QPointF(0, 0));
 
-    KoPathPoint * lastPoint = m_subpaths.last()->last();
+    KoPathPoint * lastPoint = d->subpaths.last()->last();
     d->updateLast(&lastPoint);
     lastPoint->setControlPoint2(c);
     KoPathPoint * point = new KoPathPoint(this, p, KoPathPoint::StopSubpath);
-    m_subpaths.last()->push_back(point);
+    d->subpaths.last()->push_back(point);
 
     return point;
 }
 
 KoPathPoint * KoPathShape::arcTo(qreal rx, qreal ry, qreal startAngle, qreal sweepAngle)
 {
-    if (m_subpaths.empty()) {
+    Q_D(KoPathShape);
+
+    if (d->subpaths.empty()) {
         moveTo(QPointF(0, 0));
     }
 
-    KoPathPoint * lastPoint = m_subpaths.last()->last();
+    KoPathPoint * lastPoint = d->subpaths.last()->last();
     if (lastPoint->properties() & KoPathPoint::CloseSubpath) {
-        lastPoint = m_subpaths.last()->first();
+        lastPoint = d->subpaths.last()->first();
     }
     QPointF startpoint(lastPoint->point());
 
@@ -725,19 +762,19 @@ int KoPathShape::arcToCurve(qreal rx, qreal ry, qreal startAngle, qreal sweepAng
 void KoPathShape::close()
 {
     Q_D(KoPathShape);
-    if (m_subpaths.empty()) {
+    if (d->subpaths.empty()) {
         return;
     }
-    d->closeSubpath(m_subpaths.last());
+    d->closeSubpath(d->subpaths.last());
 }
 
 void KoPathShape::closeMerge()
 {
     Q_D(KoPathShape);
-    if (m_subpaths.empty()) {
+    if (d->subpaths.empty()) {
         return;
     }
-    d->closeMergeSubpath(m_subpaths.last());
+    d->closeMergeSubpath(d->subpaths.last());
 }
 
 QPointF KoPathShape::normalize()
@@ -757,8 +794,8 @@ QPointF KoPathShape::normalize()
 void KoPathShapePrivate::map(const QTransform &matrix)
 {
     Q_Q(KoPathShape);
-    KoSubpathList::const_iterator pathIt(q->m_subpaths.constBegin());
-    for (; pathIt != q->m_subpaths.constEnd(); ++pathIt) {
+    KoSubpathList::const_iterator pathIt(subpaths.constBegin());
+    for (; pathIt != subpaths.constEnd(); ++pathIt) {
         KoSubpath::const_iterator it((*pathIt)->constBegin());
         for (; it != (*pathIt)->constEnd(); ++it) {
             (*it)->map(matrix);
@@ -773,7 +810,7 @@ void KoPathShapePrivate::updateLast(KoPathPoint **lastPoint)
     if ((*lastPoint)->properties() & KoPathPoint::StopSubpath
             && (*lastPoint)->properties() & KoPathPoint::CloseSubpath) {
         // get the first point of the subpath
-        KoPathPoint *subpathStart = q->m_subpaths.last()->first();
+        KoPathPoint *subpathStart = subpaths.last()->first();
         // clone the first point of the subpath...
         KoPathPoint * newLastPoint = new KoPathPoint(*subpathStart);
         // ... and make it a normal point
@@ -781,7 +818,7 @@ void KoPathShapePrivate::updateLast(KoPathPoint **lastPoint)
         // now start a new subpath with the cloned start point
         KoSubpath *path = new KoSubpath;
         path->push_back(newLastPoint);
-        q->m_subpaths.push_back(path);
+        subpaths.push_back(path);
         *lastPoint = newLastPoint;
     } else {
         // the subpath was not closed so the formerly last point
@@ -793,10 +830,12 @@ void KoPathShapePrivate::updateLast(KoPathPoint **lastPoint)
 
 QList<KoPathPoint*> KoPathShape::pointsAt(const QRectF &r) const
 {
+    Q_D(const KoPathShape);
+
     QList<KoPathPoint*> result;
 
-    KoSubpathList::const_iterator pathIt(m_subpaths.constBegin());
-    for (; pathIt != m_subpaths.constEnd(); ++pathIt) {
+    KoSubpathList::const_iterator pathIt(d->subpaths.constBegin());
+    for (; pathIt != d->subpaths.constEnd(); ++pathIt) {
         KoSubpath::const_iterator it((*pathIt)->constBegin());
         for (; it != (*pathIt)->constEnd(); ++it) {
             if (r.contains((*it)->point()))
@@ -812,10 +851,12 @@ QList<KoPathPoint*> KoPathShape::pointsAt(const QRectF &r) const
 
 QList<KoPathSegment> KoPathShape::segmentsAt(const QRectF &r) const
 {
+    Q_D(const KoPathShape);
+
     QList<KoPathSegment> segments;
-    int subpathCount = m_subpaths.count();
+    int subpathCount = d->subpaths.count();
     for (int subpathIndex = 0; subpathIndex < subpathCount; ++subpathIndex) {
-        KoSubpath * subpath = m_subpaths[subpathIndex];
+        KoSubpath * subpath = d->subpaths[subpathIndex];
         int pointCount = subpath->count();
         bool subpathClosed = isClosedSubpath(subpathIndex);
         for (int pointIndex = 0; pointIndex < pointCount; ++pointIndex) {
@@ -837,8 +878,10 @@ QList<KoPathSegment> KoPathShape::segmentsAt(const QRectF &r) const
 
 KoPathPointIndex KoPathShape::pathPointIndex(const KoPathPoint *point) const
 {
-    for (int subpathIndex = 0; subpathIndex < m_subpaths.size(); ++subpathIndex) {
-        KoSubpath * subpath = m_subpaths.at(subpathIndex);
+    Q_D(const KoPathShape);
+
+    for (int subpathIndex = 0; subpathIndex < d->subpaths.size(); ++subpathIndex) {
+        KoSubpath * subpath = d->subpaths.at(subpathIndex);
         for (int pointPos = 0; pointPos < subpath->size(); ++pointPos) {
             if (subpath->at(pointPos) == point) {
                 return KoPathPointIndex(subpathIndex, pointPos);
@@ -884,9 +927,11 @@ KoPathSegment KoPathShape::segmentByIndex(const KoPathPointIndex &pointIndex) co
 
 int KoPathShape::pointCount() const
 {
+    Q_D(const KoPathShape);
+
     int i = 0;
-    KoSubpathList::const_iterator pathIt(m_subpaths.constBegin());
-    for (; pathIt != m_subpaths.constEnd(); ++pathIt) {
+    KoSubpathList::const_iterator pathIt(d->subpaths.constBegin());
+    for (; pathIt != d->subpaths.constEnd(); ++pathIt) {
         i += (*pathIt)->size();
     }
 
@@ -895,7 +940,9 @@ int KoPathShape::pointCount() const
 
 int KoPathShape::subpathCount() const
 {
-    return m_subpaths.count();
+    Q_D(const KoPathShape);
+
+    return d->subpaths.count();
 }
 
 int KoPathShape::subpathPointCount(int subpathIndex) const
@@ -1023,7 +1070,7 @@ bool KoPathShape::breakAfter(const KoPathPointIndex &pointIndex)
     subpath->last()->setProperty(KoPathPoint::StopSubpath);
 
     // insert the new subpath after the broken one
-    m_subpaths.insert(pointIndex.first + 1, newSubpath);
+    d->subpaths.insert(pointIndex.first + 1, newSubpath);
 
     return true;
 }
@@ -1048,7 +1095,7 @@ bool KoPathShape::join(int subpathIndex)
         subpath->append(p);
 
     // remove the nextSubpath from path
-    m_subpaths.removeAt(subpathIndex + 1);
+    d->subpaths.removeAt(subpathIndex + 1);
 
     // delete it as it is no longer possible to use it
     delete nextSubpath;
@@ -1061,14 +1108,14 @@ bool KoPathShape::moveSubpath(int oldSubpathIndex, int newSubpathIndex)
     Q_D(KoPathShape);
     KoSubpath *subpath = d->subPath(oldSubpathIndex);
 
-    if (subpath == 0 || newSubpathIndex >= m_subpaths.size())
+    if (subpath == 0 || newSubpathIndex >= d->subpaths.size())
         return false;
 
     if (oldSubpathIndex == newSubpathIndex)
         return true;
 
-    m_subpaths.removeAt(oldSubpathIndex);
-    m_subpaths.insert(newSubpathIndex, subpath);
+    d->subpaths.removeAt(oldSubpathIndex);
+    d->subpaths.insert(newSubpathIndex, subpath);
 
     return true;
 }
@@ -1168,30 +1215,34 @@ KoSubpath * KoPathShape::removeSubpath(int subpathIndex)
     KoSubpath *subpath = d->subPath(subpathIndex);
 
     if (subpath != 0)
-        m_subpaths.removeAt(subpathIndex);
+        d->subpaths.removeAt(subpathIndex);
 
     return subpath;
 }
 
 bool KoPathShape::addSubpath(KoSubpath * subpath, int subpathIndex)
 {
-    if (subpathIndex < 0 || subpathIndex > m_subpaths.size())
+    Q_D(KoPathShape);
+
+    if (subpathIndex < 0 || subpathIndex > d->subpaths.size())
         return false;
 
-    m_subpaths.insert(subpathIndex, subpath);
+    d->subpaths.insert(subpathIndex, subpath);
 
     return true;
 }
 
 bool KoPathShape::combine(KoPathShape *path)
 {
+    Q_D(KoPathShape);
+
     if (! path)
         return false;
 
     QTransform pathMatrix = path->absoluteTransformation(0);
     QTransform myMatrix = absoluteTransformation(0).inverted();
 
-    Q_FOREACH (KoSubpath* subpath, path->m_subpaths) {
+    Q_FOREACH (KoSubpath* subpath, path->d_func()->subpaths) {
         KoSubpath *newSubpath = new KoSubpath();
 
         Q_FOREACH (KoPathPoint* point, *subpath) {
@@ -1201,7 +1252,7 @@ bool KoPathShape::combine(KoPathShape *path)
             newPoint->setParent(this);
             newSubpath->append(newPoint);
         }
-        m_subpaths.append(newSubpath);
+        d->subpaths.append(newSubpath);
     }
     normalize();
     return true;
@@ -1209,12 +1260,14 @@ bool KoPathShape::combine(KoPathShape *path)
 
 bool KoPathShape::separate(QList<KoPathShape*> & separatedPaths)
 {
-    if (! m_subpaths.size())
+    Q_D(KoPathShape);
+
+    if (! d->subpaths.size())
         return false;
 
     QTransform myMatrix = absoluteTransformation(0);
 
-    Q_FOREACH (KoSubpath* subpath, m_subpaths) {
+    Q_FOREACH (KoSubpath* subpath, d->subpaths) {
         KoPathShape *shape = new KoPathShape();
         if (! shape) continue;
 
@@ -1228,7 +1281,7 @@ bool KoPathShape::separate(QList<KoPathShape*> & separatedPaths)
             newPoint->map(myMatrix);
             newSubpath->append(newPoint);
         }
-        shape->m_subpaths.append(newSubpath);
+        shape->d_func()->subpaths.append(newSubpath);
         shape->normalize();
         separatedPaths.append(shape);
     }
@@ -1274,10 +1327,10 @@ void KoPathShapePrivate::closeMergeSubpath(KoSubpath *subpath)
 KoSubpath *KoPathShapePrivate::subPath(int subpathIndex) const
 {
     Q_Q(const KoPathShape);
-    if (subpathIndex < 0 || subpathIndex >= q->m_subpaths.size())
+    if (subpathIndex < 0 || subpathIndex >= subpaths.size())
         return 0;
 
-    return q->m_subpaths.at(subpathIndex);
+    return subpaths.at(subpathIndex);
 }
 
 QString KoPathShape::pathShapeId() const
@@ -1287,11 +1340,13 @@ QString KoPathShape::pathShapeId() const
 
 QString KoPathShape::toString(const QTransform &matrix) const
 {
-    QString d;
+    Q_D(const KoPathShape);
+
+    QString pathString;
 
     // iterate over all subpaths
-    KoSubpathList::const_iterator pathIt(m_subpaths.constBegin());
-    for (; pathIt != m_subpaths.constEnd(); ++pathIt) {
+    KoSubpathList::const_iterator pathIt(d->subpaths.constBegin());
+    for (; pathIt != d->subpaths.constEnd(); ++pathIt) {
         KoSubpath::const_iterator pointIt((*pathIt)->constBegin());
         // keep a pointer to the first point of the subpath
         KoPathPoint *firstPoint(*pointIt);
@@ -1308,7 +1363,7 @@ QString KoPathShape::toString(const QTransform &matrix) const
                 // are we starting a subpath ?
                 if (currPoint->properties() & KoPathPoint::StartSubpath) {
                     const QPointF p = matrix.map(currPoint->point());
-                    d += QString("M%1 %2").arg(p.x()).arg(p.y());
+                    pathString += QString("M%1 %2").arg(p.x()).arg(p.y());
                 }
             }
             // end point of curve segment ?
@@ -1320,7 +1375,7 @@ QString KoPathShape::toString(const QTransform &matrix) const
                 const QPointF cp1 = matrix.map(cubicSeg.first()->controlPoint2());
                 const QPointF cp2 = matrix.map(cubicSeg.second()->controlPoint1());
                 const QPointF p = matrix.map(cubicSeg.second()->point());
-                d += QString("C%1 %2 %3 %4 %5 %6")
+                pathString += QString("C%1 %2 %3 %4 %5 %6")
                      .arg(cp1.x()).arg(cp1.y())
                      .arg(cp2.x()).arg(cp2.y())
                      .arg(p.x()).arg(p.y());
@@ -1328,7 +1383,7 @@ QString KoPathShape::toString(const QTransform &matrix) const
             // end point of line segment!
             else {
                 const QPointF p = matrix.map(currPoint->point());
-                d += QString("L%1 %2").arg(p.x()).arg(p.y());
+                pathString += QString("L%1 %2").arg(p.x()).arg(p.y());
             }
             // last point closes subpath ?
             if (currPoint->properties() & KoPathPoint::StopSubpath
@@ -1342,12 +1397,12 @@ QString KoPathShape::toString(const QTransform &matrix) const
                     const QPointF cp1 = matrix.map(cubicSeg.first()->controlPoint2());
                     const QPointF cp2 = matrix.map(cubicSeg.second()->controlPoint1());
                     const QPointF p = matrix.map(cubicSeg.second()->point());
-                    d += QString("C%1 %2 %3 %4 %5 %6")
+                    pathString += QString("C%1 %2 %3 %4 %5 %6")
                          .arg(cp1.x()).arg(cp1.y())
                          .arg(cp2.x()).arg(cp2.y())
                          .arg(p.x()).arg(p.y());
                 }
-                d += QString("Z");
+                pathString += QString("Z");
             }
 
             activeControlPoint2 = currPoint->activeControlPoint2();
@@ -1355,7 +1410,7 @@ QString KoPathShape::toString(const QTransform &matrix) const
         }
     }
 
-    return d;
+    return pathString;
 }
 
 char nodeType(const KoPathPoint * point)
@@ -1375,8 +1430,8 @@ QString KoPathShapePrivate::nodeTypes() const
 {
     Q_Q(const KoPathShape);
     QString types;
-    KoSubpathList::const_iterator pathIt(q->m_subpaths.constBegin());
-    for (; pathIt != q->m_subpaths.constEnd(); ++pathIt) {
+    KoSubpathList::const_iterator pathIt(subpaths.constBegin());
+    for (; pathIt != subpaths.constEnd(); ++pathIt) {
         KoSubpath::const_iterator it((*pathIt)->constBegin());
         for (; it != (*pathIt)->constEnd(); ++it) {
             if (it == (*pathIt)->constBegin()) {
@@ -1412,8 +1467,8 @@ void KoPathShapePrivate::loadNodeTypes(const KoXmlElement &element)
     if (element.hasAttributeNS(KoXmlNS::calligra, "nodeTypes")) {
         QString nodeTypes = element.attributeNS(KoXmlNS::calligra, "nodeTypes");
         QString::const_iterator nIt(nodeTypes.constBegin());
-        KoSubpathList::const_iterator pathIt(q->m_subpaths.constBegin());
-        for (; pathIt != q->m_subpaths.constEnd(); ++pathIt) {
+        KoSubpathList::const_iterator pathIt(subpaths.constBegin());
+        for (; pathIt != subpaths.constEnd(); ++pathIt) {
             KoSubpath::const_iterator it((*pathIt)->constBegin());
             for (; it != (*pathIt)->constEnd(); ++it, nIt++) {
                 // be sure not to crash if there are not enough nodes in nodeTypes
@@ -1562,7 +1617,9 @@ KoMarkerData KoPathShape::markerData(KoMarkerData::MarkerPosition position) cons
 
 QPainterPath KoPathShape::pathStroke(const QPen &pen) const
 {
-    if (m_subpaths.isEmpty()) {
+    Q_D(const KoPathShape);
+
+    if (d->subpaths.isEmpty()) {
         return QPainterPath();
     }
     QPainterPath pathOutline;
@@ -1579,7 +1636,7 @@ QPainterPath KoPathShape::pathStroke(const QPen &pen) const
     KoPathPoint *secondPoint = 0;
     KoPathPoint *preLastPoint = 0;
 
-    KoSubpath *firstSubpath = m_subpaths.first();
+    KoSubpath *firstSubpath = d->subpaths.first();
     bool twoPointPath = subpathPointCount(0) == 2;
     bool closedPath = isClosedSubpath(0);
 

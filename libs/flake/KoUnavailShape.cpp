@@ -44,7 +44,7 @@
 #include <KoEmbeddedDocumentSaver.h>
 #include "KoShapeLoadingContext.h"
 #include "KoShapeSavingContext.h"
-#include "KoShapeContainerDefaultModel.h"
+#include "SimpleShapeContainerModel.h"
 #include "KoShapeBackground.h"
 
 #include <FlakeDebug.h>
@@ -171,7 +171,7 @@ KoUnavailShape::Private::~Private()
 
 KoUnavailShape::KoUnavailShape()
 : KoFrameShape( "", "" )
-, KoShapeContainer(new KoShapeContainerDefaultModel())
+, KoShapeContainer(new SimpleShapeContainerModel())
 , d(new Private(this))
 {
     setShapeId(KoUnavailShape_SHAPEID);

@@ -52,6 +52,9 @@ public:
     KoShapeGroup();
     /// destructor
     virtual ~KoShapeGroup();
+
+    KoShape* cloneShape() const override;
+
     /// This implementation is empty since a group is itself not visible.
     virtual void paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
     /// always returns false since the group itself can't be selected or hit
@@ -76,6 +79,9 @@ private:
      * to be invalidated.
      */
     void invalidateSizeCache();
+
+private:
+    KoShapeGroup(const KoShapeGroup &rhs);
 
 private:
     virtual void shapeChanged(ChangeType type, KoShape *shape = 0);

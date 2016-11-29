@@ -25,6 +25,8 @@
 #include <KoShapeShadow.h>
 #include <kundo2command.h>
 
+#include "kis_global.h"
+
 #include <QTest>
 
 TestShapeGroupCommand::TestShapeGroupCommand()
@@ -79,7 +81,7 @@ void TestShapeGroupCommand::init()
     strokeShape2->setPosition( QPointF(25,25) );
 
     strokeGroup = new KoShapeGroup();
-    strokeGroup->setStroke( new KoShapeStroke( 2.0f ) );
+    strokeGroup->setStroke( toQShared(new KoShapeStroke( 2.0f )) );
     strokeGroup->setShadow( new KoShapeShadow() );
 }
 

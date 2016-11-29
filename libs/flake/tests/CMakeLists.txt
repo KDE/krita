@@ -160,6 +160,14 @@ target_link_libraries(TestSvgParser  kritaflake Qt5::Test)
 
 ########### end ###############
 
+set(TestSvgParserCloned_test_SRCS TestSvgParser.cpp )
+kde4_add_unit_test(TestSvgParserCloned TESTNAME libs-kritaflake-TestSvgParserCloned  ${TestSvgParserCloned_test_SRCS})
+set_property(TARGET TestSvgParserCloned
+             PROPERTY COMPILE_DEFINITIONS USE_CLONED_SHAPES)
+target_link_libraries(TestSvgParserCloned  kritaflake Qt5::Test)
+
+########### end ###############
+
 set(TestKoClipMaskPainter_test_SRCS TestKoClipMaskPainter.cpp )
 kde4_add_unit_test(TestKoClipMaskPainter TESTNAME libs-kritaflake-TestKoClipMaskPainter  ${TestKoClipMaskPainter_test_SRCS})
 target_link_libraries(TestKoClipMaskPainter  kritaflake Qt5::Test)

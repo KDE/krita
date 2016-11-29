@@ -38,6 +38,9 @@ class KoShapePrivate
 public:
     explicit KoShapePrivate(KoShape *shape);
     virtual ~KoShapePrivate();
+
+    explicit KoShapePrivate(const KoShapePrivate &rhs, KoShape *q);
+
     /**
      * Notify the shape that a change was done. To be used by inheriting shapes.
      * @param type the change type
@@ -61,6 +64,7 @@ public:
     /// calls update on the shape where the stroke is.
     void updateStroke();
 
+public:
     // Members
 
     KoShape *q_ptr;             // Points the shape that owns this class.
@@ -76,14 +80,13 @@ public:
     KoShapeContainer *parent;
     QSet<KoShapeManager *> shapeManagers;
     QSet<KoShape *> toolDelegates;
-    KoShapeUserData *userData;
-    KoShapeApplicationData *appData;
-    KoShapeStrokeModel *stroke; ///< points to a stroke, or 0 if there is no stroke
+    QScopedPointer<KoShapeUserData> userData;
+    QSharedPointer<KoShapeStrokeModel> stroke; ///< points to a stroke, or 0 if there is no stroke
     QSharedPointer<KoShapeBackground> fill; ///< Stands for the background color / fill etc.
     QList<KoShape*> dependees; ///< list of shape dependent on this shape
     KoShapeShadow * shadow; ///< the current shape shadow
     KoBorder *border; ///< the current shape border
-    KoClipPath * clipPath; ///< the current clip path
+    QScopedPointer<KoClipPath> clipPath; ///< the current clip path
     QScopedPointer<KoClipMask> clipMask; ///< the current clip mask
     QMap<QString, QString> additionalAttributes;
     QMap<QByteArray, QString> additionalStyleAttributes;
@@ -109,8 +112,10 @@ public:
     qreal textRunAroundDistanceBottom;
     qreal textRunAroundThreshold;
     KoShape::TextRunAroundContour textRunAroundContour;
-    KoShapeAnchor *anchor;
-    qreal minimumHeight;
+
+
+public:
+    /// Connection point converters
 
     /// Convert connection point position from shape coordinates, taking alignment into account
     void convertFromShapeCoordinates(KoConnectionPoint &point, const QSizeF &shapeSize) const;

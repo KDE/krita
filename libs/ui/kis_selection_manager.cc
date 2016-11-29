@@ -518,13 +518,13 @@ void KisSelectionManager::shapeSelectionChanged()
     KoSelection * selection = shapeManager->selection();
     QList<KoShape*> selectedShapes = selection->selectedShapes();
 
-    KoShapeStroke* border = new KoShapeStroke(0, Qt::lightGray);
+    KoShapeStrokeSP border(new KoShapeStroke(0, Qt::lightGray));
     Q_FOREACH (KoShape* shape, shapeManager->shapes()) {
         if (dynamic_cast<KisShapeSelection*>(shape->parent())) {
             if (selectedShapes.contains(shape))
                 shape->setStroke(border);
             else
-                shape->setStroke(0);
+                shape->setStroke(KoShapeStrokeSP());
         }
     }
     m_view->updateGUI();

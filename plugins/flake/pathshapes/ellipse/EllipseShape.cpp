@@ -33,6 +33,8 @@
 #include <SvgUtil.h>
 #include <SvgStyleWriter.h>
 
+#include <KoParameterShape_p.h>
+
 #include <math.h>
 
 EllipseShape::EllipseShape()
@@ -52,8 +54,24 @@ EllipseShape::EllipseShape()
     updatePath(size);
 }
 
+EllipseShape::EllipseShape(const EllipseShape &rhs)
+    : KoParameterShape(new KoParameterShapePrivate(*rhs.d_func(), this)),
+      m_startAngle(rhs.m_startAngle),
+      m_endAngle(rhs.m_endAngle),
+      m_kindAngle(rhs.m_kindAngle),
+      m_center(rhs.m_center),
+      m_radii(rhs.m_radii),
+      m_type(rhs.m_type)
+{
+}
+
 EllipseShape::~EllipseShape()
 {
+}
+
+KoShape *EllipseShape::cloneShape() const
+{
+    return new EllipseShape(*this);
 }
 
 void EllipseShape::saveOdf(KoShapeSavingContext &context) const
@@ -226,6 +244,8 @@ void EllipseShape::moveHandleAction(int handleId, const QPointF &point, Qt::Keyb
 
 void EllipseShape::updatePath(const QSizeF &size)
 {
+    Q_D(KoParameterShape);
+
     Q_UNUSED(size);
     QPointF startpoint(handles()[0]);
 
@@ -244,7 +264,7 @@ void EllipseShape::updatePath(const QSizeF &size)
 
     createPoints(requiredPointCount);
 
-    KoSubpath &points = *m_subpaths[0];
+    KoSubpath &points = *d->subpaths[0];
 
     int curveIndex = 0;
     points[0]->setPoint(startpoint);
@@ -270,13 +290,13 @@ void EllipseShape::updatePath(const QSizeF &size)
         points[i]->unsetProperty(KoPathPoint::StopSubpath);
         points[i]->unsetProperty(KoPathPoint::CloseSubpath);
     }
-    m_subpaths[0]->last()->setProperty(KoPathPoint::StopSubpath);
+    d->subpaths[0]->last()->setProperty(KoPathPoint::StopSubpath);
     if (m_type == Arc && m_startAngle != m_endAngle) {
-        m_subpaths[0]->first()->unsetProperty(KoPathPoint::CloseSubpath);
-        m_subpaths[0]->last()->unsetProperty(KoPathPoint::CloseSubpath);
+        d->subpaths[0]->first()->unsetProperty(KoPathPoint::CloseSubpath);
+        d->subpaths[0]->last()->unsetProperty(KoPathPoint::CloseSubpath);
     } else {
-        m_subpaths[0]->first()->setProperty(KoPathPoint::CloseSubpath);
-        m_subpaths[0]->last()->setProperty(KoPathPoint::CloseSubpath);
+        d->subpaths[0]->first()->setProperty(KoPathPoint::CloseSubpath);
+        d->subpaths[0]->last()->setProperty(KoPathPoint::CloseSubpath);
     }
 
     normalize();
@@ -284,19 +304,21 @@ void EllipseShape::updatePath(const QSizeF &size)
 
 void EllipseShape::createPoints(int requiredPointCount)
 {
-    if (m_subpaths.count() != 1) {
+    Q_D(KoParameterShape);
+
+    if (d->subpaths.count() != 1) {
         clear();
-        m_subpaths.append(new KoSubpath());
+        d->subpaths.append(new KoSubpath());
     }
-    int currentPointCount = m_subpaths[0]->count();
+    int currentPointCount = d->subpaths[0]->count();
     if (currentPointCount > requiredPointCount) {
         for (int i = 0; i < currentPointCount - requiredPointCount; ++i) {
-            delete m_subpaths[0]->front();
-            m_subpaths[0]->pop_front();
+            delete d->subpaths[0]->front();
+            d->subpaths[0]->pop_front();
         }
     } else if (requiredPointCount > currentPointCount) {
         for (int i = 0; i < requiredPointCount - currentPointCount; ++i) {
-            m_subpaths[0]->append(new KoPathPoint(this, QPointF()));
+            d->subpaths[0]->append(new KoPathPoint(this, QPointF()));
         }
     }
 }

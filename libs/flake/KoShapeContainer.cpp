@@ -21,7 +21,7 @@
 #include "KoShapeContainer_p.h"
 #include "KoShapeContainerModel.h"
 #include "KoShapeStrokeModel.h"
-#include "KoShapeContainerDefaultModel.h"
+#include "SimpleShapeContainerModel.h"
 #include "KoShapeSavingContext.h"
 #include "KoViewConverter.h"
 
@@ -43,30 +43,39 @@ KoShapeContainerPrivate::~KoShapeContainerPrivate()
     delete model;
 }
 
+KoShapeContainerPrivate::KoShapeContainerPrivate(const KoShapeContainerPrivate &rhs, KoShapeContainer *q)
+    : KoShapePrivate(rhs, q),
+      model(0)
+{
+}
+
 KoShapeContainer::KoShapeContainer(KoShapeContainerModel *model)
-        : KoShape(*(new KoShapeContainerPrivate(this)))
+        : KoShape(new KoShapeContainerPrivate(this))
 {
     Q_D(KoShapeContainer);
     d->model = model;
 }
 
-KoShapeContainer::KoShapeContainer(KoShapeContainerPrivate &dd)
+KoShapeContainer::KoShapeContainer(KoShapeContainerPrivate *dd)
     : KoShape(dd)
 {
+    Q_D(KoShapeContainer);
+
+    // HACK ALERT: the shapes are copied inside the model,
+    //             but we still need to connect the to the
+    //             hierarchy here!
+    if (d->model) {
+        Q_FOREACH (KoShape *shape, d->model->shapes()) {
+            shape->setParent(this);
+        }
+    }
 }
 
 KoShapeContainer::~KoShapeContainer()
 {
     Q_D(KoShapeContainer);
     if (d->model) {
-        QList<KoShape*> ownedShapes = d->model->shapes();
-
-        Q_FOREACH (KoShape *shape, ownedShapes) {
-            shape->setParent(0);
-            delete shape;
-        }
-
-        KIS_SAFE_ASSERT_RECOVER_NOOP(!d->model->count());
+        d->model->deleteOwnedShapes();
     }
 }
 
@@ -78,7 +87,7 @@ void KoShapeContainer::addShape(KoShape *shape)
         return;
     // TODO add a method to create a default model depending on the shape container
     if (d->model == 0)
-        d->model = new KoShapeContainerDefaultModel();
+        d->model = new SimpleShapeContainerModel();
     if (shape->parent() && shape->parent() != this)
         shape->parent()->removeShape(shape);
     d->model->add(shape);

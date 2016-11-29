@@ -24,6 +24,7 @@
 #ifndef KOSHAPESTROKE_H
 #define KOSHAPESTROKE_H
 
+#include "KoFlakeTypes.h"
 #include "KoShapeStrokeModel.h"
 
 #include "kritaflake_export.h"

@@ -23,6 +23,7 @@
 
 #include "kritabasicflakes_export.h"
 
+#include <KoFlakeTypes.h>
 #include <KoToolBase.h>
 
 #include <QList>
@@ -101,7 +102,7 @@ protected:
     virtual QList<QPointer<QWidget> > createOptionWidgets();
 
 private:
-    KoShapeStroke *createStroke();
+    KoShapeStrokeSP createStroke();
 
     Q_DECLARE_PRIVATE(KoCreatePathTool)
     Q_PRIVATE_SLOT(d_func(), void angleDeltaChanged(int))

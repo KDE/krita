@@ -33,6 +33,8 @@
 
 QRectF KoSelectionPrivate::sizeRect()
 {
+    Q_Q(KoSelection);
+
     bool first = true;
     QRectF bb;
 
@@ -66,6 +68,8 @@ QRectF KoSelectionPrivate::sizeRect()
 
 void KoSelectionPrivate::requestSelectionChangedEvent()
 {
+    Q_Q(KoSelection);
+
     if (eventTriggered)
         return;
     eventTriggered = true;
@@ -74,6 +78,8 @@ void KoSelectionPrivate::requestSelectionChangedEvent()
 
 void KoSelectionPrivate::selectionChangedEvent()
 {
+    Q_Q(KoSelection);
+
     eventTriggered = false;
     emit q->selectionChanged();
 }
@@ -112,7 +118,7 @@ void KoSelectionPrivate::deselectGroupChildren(KoShapeGroup *group)
 ////////////
 
 KoSelection::KoSelection()
-    : KoShape(*(new KoSelectionPrivate(this)))
+    : KoShape(new KoSelectionPrivate(this))
 {
 }
 

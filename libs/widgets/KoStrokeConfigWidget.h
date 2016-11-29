@@ -34,12 +34,15 @@
 
 #include <QWidget>
 #include <KoMarkerData.h>
+#include <KoFlakeTypes.h>
 
 class KoUnit;
 class KoShapeStrokeModel;
+class KoShapeStroke;
 class KoMarker;
 class KoCanvasBase;
 class KoShapeStroke;
+
 
 /// A widget for configuring the stroke of a shape
 class KRITAWIDGETS_EXPORT KoStrokeConfigWidget : public QWidget
@@ -65,13 +68,13 @@ public:
      * configured by the widget. The caller is in charge of
      * deletion of the returned object
      */
-    KoShapeStroke* createShapeStroke() const;
+    KoShapeStrokeSP createShapeStroke() const;
 
     void setCanvas(KoCanvasBase *canvas);
     void setActive(bool active);
 
 private Q_SLOTS:
-    void updateControls(KoShapeStrokeModel *stroke, KoMarker *startMarker, KoMarker *endMarker);
+    void updateControls(KoShapeStrokeModelSP stroke, KoMarker *startMarker, KoMarker *endMarker);
 
     void updateMarkers(const QList<KoMarker*> &markers);
 

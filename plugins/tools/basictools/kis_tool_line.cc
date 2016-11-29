@@ -291,7 +291,7 @@ void KisToolLine::endStroke()
         path->lineTo(resolutionMatrix.map(m_endPoint));
         path->normalize();
 
-        KoShapeStroke* border = new KoShapeStroke(1.0, currentFgColor().toQColor());
+        KoShapeStrokeSP border(new KoShapeStroke(1.0, currentFgColor().toQColor()));
         path->setStroke(border);
 
         KUndo2Command * cmd = canvas()->shapeController()->addShape(path);

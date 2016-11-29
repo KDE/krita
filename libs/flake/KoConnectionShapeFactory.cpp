@@ -31,6 +31,8 @@
 #include <KoShapeStroke.h>
 #include <KoShapeLoadingContext.h>
 
+#include "kis_global.h"
+
 KoConnectionShapeFactory::KoConnectionShapeFactory()
         : KoShapeFactoryBase(KOCONNECTIONSHAPEID, i18n("Tie"))
 {
@@ -44,7 +46,7 @@ KoConnectionShapeFactory::KoConnectionShapeFactory()
 KoShape* KoConnectionShapeFactory::createDefaultShape(KoDocumentResourceManager *) const
 {
     KoConnectionShape * shape = new KoConnectionShape();
-    shape->setStroke(new KoShapeStroke());
+    shape->setStroke(toQShared(new KoShapeStroke()));
     shape->setShapeId(KoPathShapeId);
     return shape;
 }

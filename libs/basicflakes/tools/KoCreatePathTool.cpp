@@ -57,7 +57,7 @@ void KoCreatePathTool::paint(QPainter &painter, const KoViewConverter &converter
 
     if (pathStarted()) {
 
-        KoShapeStroke *stroke(createStroke());
+        KoShapeStrokeSP stroke(createStroke());
 
         if (stroke) {
             d->shape->setStroke(stroke);
@@ -199,7 +199,7 @@ void KoCreatePathTool::mousePressEvent(KoPointerEvent *event)
         d->shape = pathShape;
         pathShape->setShapeId(KoPathShapeId);
 
-        KoShapeStroke *stroke = new KoShapeStroke(canvas()->resourceManager()->activeStroke());
+        KoShapeStrokeSP stroke(new KoShapeStroke(canvas()->resourceManager()->activeStroke()));
         stroke->setColor(canvas()->resourceManager()->foregroundColor().toQColor());
 
         pathShape->setStroke(stroke);
@@ -518,11 +518,11 @@ QList<QPointer<QWidget> > KoCreatePathTool::createOptionWidgets()
     return list;
 }
 
-KoShapeStroke *KoCreatePathTool::createStroke()
+KoShapeStrokeSP KoCreatePathTool::createStroke()
 {
     Q_D(KoCreatePathTool);
 
-    KoShapeStroke *stroke = 0;
+    KoShapeStrokeSP stroke;
     if (d->strokeWidget) {
         stroke = d->strokeWidget->createShapeStroke();
     }

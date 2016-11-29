@@ -35,7 +35,6 @@ set(kritaflake_SRCS
     KoShapeApplicationData.cpp
     KoShapeContainer.cpp
     KoShapeContainerModel.cpp
-    KoShapeContainerDefaultModel.cpp
     KoShapeGroup.cpp
     KoShapeManagerPaintingStrategy.cpp
     KoShapeManager.cpp

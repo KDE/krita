@@ -79,12 +79,8 @@ KoShapePrivate::KoShapePrivate(KoShape *shape)
     : q_ptr(shape),
       size(50, 50),
       parent(0),
-      userData(0),
-      appData(0),
-      stroke(0),
       shadow(0),
       border(0),
-      clipPath(0),
       filterEffectStack(0),
       transparency(0.0),
       zIndex(0),
@@ -102,15 +98,57 @@ KoShapePrivate::KoShapePrivate(KoShape *shape)
       textRunAroundDistanceRight(0.0),
       textRunAroundDistanceBottom(0.0),
       textRunAroundThreshold(0.0),
-      textRunAroundContour(KoShape::ContourFull),
-      anchor(0),
-      minimumHeight(0.0)
+      textRunAroundContour(KoShape::ContourFull)
 {
     connectors[KoConnectionPoint::TopConnectionPoint] = KoConnectionPoint::defaultConnectionPoint(KoConnectionPoint::TopConnectionPoint);
     connectors[KoConnectionPoint::RightConnectionPoint] = KoConnectionPoint::defaultConnectionPoint(KoConnectionPoint::RightConnectionPoint);
     connectors[KoConnectionPoint::BottomConnectionPoint] = KoConnectionPoint::defaultConnectionPoint(KoConnectionPoint::BottomConnectionPoint);
     connectors[KoConnectionPoint::LeftConnectionPoint] = KoConnectionPoint::defaultConnectionPoint(KoConnectionPoint::LeftConnectionPoint);
     connectors[KoConnectionPoint::FirstCustomConnectionPoint] = KoConnectionPoint(QPointF(0.5, 0.5), KoConnectionPoint::AllDirections, KoConnectionPoint::AlignCenter);
+}
+
+KoShapePrivate::KoShapePrivate(const KoShapePrivate &rhs, KoShape *q)
+    : q_ptr(q),
+      size(rhs.size),
+      shapeId(rhs.shapeId),
+      name(rhs.name),
+      localMatrix(rhs.localMatrix),
+      connectors(rhs.connectors),
+      parent(0), // to be initialized later
+      shapeManagers(), // to be initialized later
+      toolDelegates(), // FIXME: how to initialize them?
+      userData(rhs.userData ? rhs.userData->clone() : 0),
+      stroke(rhs.stroke),
+      fill(rhs.fill),
+      dependees(), // FIXME: how to initialize them?
+      shadow(0), // WARNING: not implemented in Krita
+      border(0), // WARNING: not implemented in Krita
+      clipPath(rhs.clipPath ? rhs.clipPath->clone() : 0),
+      clipMask(rhs.clipMask ? rhs.clipMask->clone() : 0),
+      additionalAttributes(rhs.additionalAttributes),
+      additionalStyleAttributes(rhs.additionalStyleAttributes),
+      filterEffectStack(0), // WARNING: not implemented in Krita
+      transparency(rhs.transparency),
+      hyperLink(rhs.hyperLink),
+
+      zIndex(rhs.zIndex),
+      runThrough(rhs.runThrough),
+      visible(rhs.visible),
+      printable(rhs.visible),
+      geometryProtected(rhs.geometryProtected),
+      keepAspect(rhs.keepAspect),
+      selectable(rhs.selectable),
+      detectCollision(rhs.detectCollision),
+      protectContent(rhs.protectContent),
+
+      textRunAroundSide(rhs.textRunAroundSide),
+      textRunAroundDistanceLeft(rhs.textRunAroundDistanceLeft),
+      textRunAroundDistanceTop(rhs.textRunAroundDistanceTop),
+      textRunAroundDistanceRight(rhs.textRunAroundDistanceRight),
+      textRunAroundDistanceBottom(rhs.textRunAroundDistanceBottom),
+      textRunAroundThreshold(rhs.textRunAroundThreshold),
+      textRunAroundContour(rhs.textRunAroundContour)
+{
 }
 
 KoShapePrivate::~KoShapePrivate()
@@ -122,15 +160,11 @@ KoShapePrivate::~KoShapePrivate()
         manager->remove(q);
         manager->removeAdditional(q);
     }
-    delete userData;
-    delete appData;
-    if (stroke && !stroke->deref())
-        delete stroke;
+
     if (shadow && !shadow->deref())
         delete shadow;
     if (filterEffectStack && !filterEffectStack->deref())
         delete filterEffectStack;
-    delete clipPath;
 }
 
 void KoShapePrivate::shapeChanged(KoShape::ChangeType type)
@@ -146,8 +180,8 @@ void KoShapePrivate::shapeChanged(KoShape::ChangeType type)
 void KoShapePrivate::updateStroke()
 {
     Q_Q(KoShape);
-    if (stroke == 0)
-        return;
+    if (!stroke) return;
+
     KoInsets insets;
     stroke->strokeInsets(q, insets);
     QSizeF inner = q->size();
@@ -271,8 +305,8 @@ KoShape::KoShape()
     notifyChanged();
 }
 
-KoShape::KoShape(KoShapePrivate &dd)
-    : d_ptr(&dd)
+KoShape::KoShape(KoShapePrivate *dd)
+    : d_ptr(dd)
 {
 }
 
@@ -281,6 +315,11 @@ KoShape::~KoShape()
     Q_D(KoShape);
     d->shapeChanged(Deleted);
     delete d_ptr;
+}
+
+KoShape *KoShape::cloneShape() const
+{
+    return 0;
 }
 
 void KoShape::scale(qreal sx, qreal sy)
@@ -687,27 +726,13 @@ void KoShape::notifyChanged()
 void KoShape::setUserData(KoShapeUserData *userData)
 {
     Q_D(KoShape);
-    delete d->userData;
-    d->userData = userData;
+    d->userData.reset(userData);
 }
 
 KoShapeUserData *KoShape::userData() const
 {
     Q_D(const KoShape);
-    return d->userData;
-}
-
-void KoShape::setApplicationData(KoShapeApplicationData *appData)
-{
-    Q_D(KoShape);
-    // appdata is deleted by the application.
-    d->appData = appData;
-}
-
-KoShapeApplicationData *KoShape::applicationData() const
-{
-    Q_D(const KoShape);
-    return d->appData;
+    return d->userData.data();
 }
 
 bool KoShape::hasTransparency() const
@@ -973,31 +998,6 @@ void KoShape::setTextRunAroundContour(KoShape::TextRunAroundContour contour)
     d->textRunAroundContour = contour;
 }
 
-void KoShape::setAnchor(KoShapeAnchor *anchor)
-{
-    Q_D(KoShape);
-    d->anchor = anchor;
-}
-
-KoShapeAnchor *KoShape::anchor() const
-{
-    Q_D(const KoShape);
-    return d->anchor;
-}
-
-void KoShape::setMinimumHeight(qreal height)
-{
-    Q_D(KoShape);
-    d->minimumHeight = height;
-}
-
-qreal KoShape::minimumHeight() const
-{
-    Q_D(const KoShape);
-    return d->minimumHeight;
-}
-
-
 void KoShape::setBackground(QSharedPointer<KoShapeBackground> fill)
 {
     Q_D(KoShape);
@@ -1151,22 +1151,22 @@ bool KoShape::collisionDetection()
     return d->detectCollision;
 }
 
-KoShapeStrokeModel *KoShape::stroke() const
+KoShapeStrokeModelSP KoShape::stroke() const
 {
     Q_D(const KoShape);
     return d->stroke;
 }
 
-void KoShape::setStroke(KoShapeStrokeModel *stroke)
+void KoShape::setStroke(KoShapeStrokeModelSP stroke)
 {
     Q_D(KoShape);
-    if (stroke)
-        stroke->ref();
+
+    // TODO: check if it really updates stuff
     d->updateStroke();
-    if (d->stroke)
-        d->stroke->deref();
+
     d->stroke = stroke;
     d->updateStroke();
+
     d->shapeChanged(StrokeChanged);
     notifyChanged();
 }
@@ -1212,7 +1212,7 @@ KoBorder *KoShape::border() const
 void KoShape::setClipPath(KoClipPath *clipPath)
 {
     Q_D(KoShape);
-    d->clipPath = clipPath;
+    d->clipPath.reset(clipPath);
     d->shapeChanged(ClipPathChanged);
     notifyChanged();
 }
@@ -1220,7 +1220,7 @@ void KoShape::setClipPath(KoClipPath *clipPath)
 KoClipPath * KoShape::clipPath() const
 {
     Q_D(const KoShape);
-    return d->clipPath;
+    return d->clipPath.data();
 }
 
 void KoShape::setClipMask(KoClipMask *clipMask)
@@ -1291,7 +1291,7 @@ QString KoShape::saveStyle(KoGenStyle &style, KoShapeSavingContext &context) con
 {
     Q_D(const KoShape);
     // and fill the style
-    KoShapeStrokeModel *sm = stroke();
+    KoShapeStrokeModelSP sm = stroke();
     if (sm) {
         sm->fillStyle(style, context);
     }
@@ -1415,10 +1415,8 @@ void KoShape::loadStyle(const KoXmlElement &element, KoShapeLoadingContext &cont
     styleStack.setTypeProperties("graphic");
 
     d->fill.clear();
-    if (d->stroke && !d->stroke->deref()) {
-        delete d->stroke;
-        d->stroke = 0;
-    }
+    d->stroke.clear();
+
     if (d->shadow && !d->shadow->deref()) {
         delete d->shadow;
         d->shadow = 0;
@@ -1635,7 +1633,7 @@ QSharedPointer<KoShapeBackground> KoShape::loadOdfFill(KoShapeLoadingContext &co
     return bg;
 }
 
-KoShapeStrokeModel *KoShape::loadOdfStroke(const KoXmlElement &element, KoShapeLoadingContext &context) const
+KoShapeStrokeModelSP KoShape::loadOdfStroke(const KoXmlElement &element, KoShapeLoadingContext &context) const
 {
     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
     KoOdfStylesReader &stylesReader = context.odfLoadingContext().stylesReader();
@@ -1644,7 +1642,7 @@ KoShapeStrokeModel *KoShape::loadOdfStroke(const KoXmlElement &element, KoShapeL
     if (stroke == "solid" || stroke == "dash") {
         QPen pen = KoOdfGraphicStyles::loadOdfStrokeStyle(styleStack, stroke, stylesReader);
 
-        KoShapeStroke *stroke = new KoShapeStroke();
+        QSharedPointer<KoShapeStroke> stroke(new KoShapeStroke());
 
         if (styleStack.hasProperty(KoXmlNS::calligra, "stroke-gradient")) {
             QString gradientName = styleStack.property(KoXmlNS::calligra, "stroke-gradient");
@@ -1667,7 +1665,7 @@ KoShapeStrokeModel *KoShape::loadOdfStroke(const KoXmlElement &element, KoShapeL
     } else if (stroke.isEmpty()) {
         QPen pen = KoOdfGraphicStyles::loadOdfStrokeStyle(styleStack, "solid", stylesReader);
         if (KoOdfWorkaround::fixMissingStroke(pen, element, context, this)) {
-            KoShapeStroke *stroke = new KoShapeStroke();
+            QSharedPointer<KoShapeStroke> stroke(new KoShapeStroke());
 
 #ifndef NWORKAROUND_ODF_BUGS
             KoOdfWorkaround::fixPenWidth(pen, context);
@@ -1683,7 +1681,7 @@ KoShapeStrokeModel *KoShape::loadOdfStroke(const KoXmlElement &element, KoShapeL
 #endif
     }
 
-    return 0;
+    return KoShapeStrokeModelSP();
 }
 
 KoShapeShadow *KoShapePrivate::loadOdfShadow(KoShapeLoadingContext &context) const
@@ -1848,7 +1846,7 @@ void KoShape::loadOdfClipContour(const KoXmlElement &element, KoShapeLoadingCont
 
         KoClipData *cd = new KoClipData(ps);
         KoClipPath *clipPath = new KoClipPath(this, cd);
-        d->clipPath = clipPath;
+        d->clipPath.reset(clipPath);
     }
 }
 

@@ -32,6 +32,8 @@
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
 
+#include "kis_global.h"
+
 KoPathShapeFactory::KoPathShapeFactory(const QStringList&)
         : KoShapeFactoryBase(KoPathShapeId, i18n("Simple path shape"))
 {
@@ -50,7 +52,7 @@ KoShape *KoPathShapeFactory::createDefaultShape(KoDocumentResourceManager *) con
     path->curveTo(QPointF(0, 120), QPointF(50, 120), QPointF(50, 50));
     path->curveTo(QPointF(50, -20), QPointF(100, -20), QPointF(100, 50));
     path->normalize();
-    path->setStroke(new KoShapeStroke(1.0));
+    path->setStroke(toQShared(new KoShapeStroke(1.0)));
     return path;
 }
 

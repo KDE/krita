@@ -61,7 +61,7 @@ GradientStrategy::GradientStrategy(KoShape *shape, const QGradient *gradient, Ta
             m_matrix = fill->transform() * m_shape->absoluteTransformation(0);
         }
     } else {
-        KoShapeStroke *stroke = dynamic_cast<KoShapeStroke *>(m_shape->stroke());
+        KoShapeStrokeSP stroke = qSharedPointerDynamicCast<KoShapeStroke>(m_shape->stroke());
         if (stroke) {
             m_matrix = stroke->lineBrush().transform() * m_shape->absoluteTransformation(0);
         }
@@ -82,7 +82,7 @@ void GradientStrategy::setEditing(bool on)
                 m_oldBrush.setTransform(fill->transform());
             }
         } else {
-            KoShapeStroke *stroke = dynamic_cast<KoShapeStroke *>(m_shape->stroke());
+            KoShapeStrokeSP stroke = qSharedPointerDynamicCast<KoShapeStroke>(m_shape->stroke());
             if (stroke) {
                 m_oldStroke = *stroke;
                 m_oldBrush = stroke->lineBrush();
@@ -330,7 +330,7 @@ void GradientStrategy::applyChanges()
             fill->setTransform(m_newBrush.transform());
         }
     } else {
-        KoShapeStroke *stroke = dynamic_cast<KoShapeStroke *>(m_shape->stroke());
+        KoShapeStrokeSP stroke = qSharedPointerDynamicCast<KoShapeStroke>(m_shape->stroke());
         if (stroke) {
             stroke->setLineBrush(m_newBrush);
         }
@@ -352,10 +352,10 @@ KUndo2Command *GradientStrategy::createCommand(KUndo2Command *parent)
             return new KoShapeBackgroundCommand(m_shape, newFill, parent);
         }
     } else {
-        KoShapeStroke *stroke = dynamic_cast<KoShapeStroke *>(m_shape->stroke());
+        KoShapeStrokeSP stroke = qSharedPointerDynamicCast<KoShapeStroke>(m_shape->stroke());
         if (stroke) {
             *stroke = m_oldStroke;
-            KoShapeStroke *newStroke = new KoShapeStroke(*stroke);
+            KoShapeStrokeSP newStroke(new KoShapeStroke(*stroke));
             newStroke->setLineBrush(m_newBrush);
             return new KoShapeStrokeCommand(m_shape, newStroke, parent);
         }
@@ -404,7 +404,7 @@ const QGradient *GradientStrategy::gradient()
         }
         return fill->gradient();
     } else {
-        KoShapeStroke *stroke = dynamic_cast<KoShapeStroke *>(m_shape->stroke());
+        KoShapeStrokeSP stroke = qSharedPointerDynamicCast<KoShapeStroke>(m_shape->stroke());
         if (!stroke) {
             return 0;
         }
@@ -454,7 +454,7 @@ void GradientStrategy::updateStops()
             m_stops = fill->gradient()->stops();
         }
     } else {
-        KoShapeStroke *stroke = dynamic_cast<KoShapeStroke *>(m_shape->stroke());
+        KoShapeStrokeSP stroke = qSharedPointerDynamicCast<KoShapeStroke>(m_shape->stroke());
         if (stroke) {
             brush = stroke->lineBrush();
             if (brush.gradient()) {

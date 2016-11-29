@@ -716,7 +716,24 @@ struct SvgRenderTester : public SvgTester
         parser.setResolution(QRectF(0, 0, 30, 30) /* px */, 72 /* ppi */);
         run();
 
+#ifdef USE_CLONED_SHAPES
+        {
+            QList<KoShape*> newShapes;
+            Q_FOREACH (KoShape *shape, shapes) {
+                KoShape *clonedShape = shape->cloneShape();
+                KIS_ASSERT(clonedShape);
+
+                newShapes << clonedShape;
+            }
+
+            qDeleteAll(shapes);
+            shapes = newShapes;
+        }
+
+#endif /* USE_CLONED_SHAPES */
+
         KoShape *shape = findShape("testRect");
+        KIS_ASSERT(shape);
 
         if (verifyGeometry) {
             QCOMPARE(shape->absolutePosition(KoFlake::TopLeftCorner), QPointF(5,5));

@@ -33,7 +33,7 @@
 
 #include <klocalizedstring.h>
 
-#include "kis_global.h"
+#include "kis_pointer_utils.h"
 
 StarShapeFactory::StarShapeFactory()
     : KoShapeFactoryBase(StarShapeId, i18n("A star shape"))

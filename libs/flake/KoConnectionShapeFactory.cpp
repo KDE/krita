@@ -31,7 +31,7 @@
 #include <KoShapeStroke.h>
 #include <KoShapeLoadingContext.h>
 
-#include "kis_global.h"
+#include "kis_pointer_utils.h"
 
 KoConnectionShapeFactory::KoConnectionShapeFactory()
         : KoShapeFactoryBase(KOCONNECTIONSHAPEID, i18n("Tie"))

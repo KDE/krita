@@ -19,6 +19,69 @@
 #ifndef KIS_POINTER_UTILS_H
 #define KIS_POINTER_UTILS_H
 
+#include <QSharedPointer>
+
+/**
+ * Convert a raw pointer into a shared pointer
+ */
+template <class T>
+inline QSharedPointer<T> toQShared(T* ptr) {
+    return QSharedPointer<T>(ptr);
+}
+
+/**
+ * Convert a list of raw pointers into a list of shared pointers
+ */
+template <class A, template <class C> class List>
+List<QSharedPointer<A>> listToQShared(const List<A*> list) {
+    List<QSharedPointer<A>> newList;
+    Q_FOREACH(A* value, list) {
+        newList.append(toQShared(value));
+    }
+    return newList;
+}
+
+
+/**
+ * Convert a list of strong pointers into a list of weak pointers
+ */
+template <template <class> class Container, class T>
+Container<QWeakPointer<T>> listStrongToWeak(const Container<QSharedPointer<T>> &containter)
+{
+    Container<QWeakPointer<T> > result;
+    Q_FOREACH (QSharedPointer<T> v, containter) {
+        result << v;
+    }
+    return result;
+}
+
+/**
+ * Convert a list of weak pointers into a list of strong pointers
+ *
+ * WARNING: By default, uses "all or nothing" rule. If at least one of
+ *          the weak pointers is invalid, returns an *empty* list!
+ *          Even though some other pointer can still be converted
+ *          correctly.
+ */
+template <template <class> class Container, class T>
+    Container<QSharedPointer<T> > listWeakToStrong(const Container<QWeakPointer<T>> &containter,
+                                                   bool allOrNothing = true)
+{
+    Container<QSharedPointer<T> > result;
+    Q_FOREACH (QWeakPointer<T> v, containter) {
+        QSharedPointer<T> strong(v);
+        if (!strong && allOrNothing) {
+            result.clear();
+            return result;
+        }
+
+        if (strong) {
+            result << strong;
+        }
+    }
+    return result;
+}
+
 /**
  * Coverts a list of objects with type T into a list of objects of type R.
  * The conversion is done implicitly, therefore the c-tor of type R should

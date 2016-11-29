@@ -21,7 +21,7 @@
 #include <QPainter>
 #include <QRectF>
 
-#include "kis_global.h"
+#include "kis_assert.h"
 
 struct Q_DECL_HIDDEN KoClipMaskPainter::Private
 {

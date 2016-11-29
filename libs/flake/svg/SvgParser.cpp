@@ -60,7 +60,7 @@
 #include "SvgGradientHelper.h"
 #include "SvgClipPathHelper.h"
 #include "parsers/SvgTransformParser.h"
-#include "kis_global.h"
+#include "kis_pointer_utils.h"
 #include <KoVectorPatternBackground.h>
 
 #include "kis_debug.h"

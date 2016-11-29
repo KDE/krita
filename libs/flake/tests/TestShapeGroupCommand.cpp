@@ -25,7 +25,7 @@
 #include <KoShapeShadow.h>
 #include <kundo2command.h>
 
-#include "kis_global.h"
+#include "kis_pointer_utils.h"
 
 #include <QTest>
 

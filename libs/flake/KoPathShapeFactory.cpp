@@ -32,7 +32,7 @@
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
 
-#include "kis_global.h"
+#include "kis_pointer_utils.h"
 
 KoPathShapeFactory::KoPathShapeFactory(const QStringList&)
         : KoShapeFactoryBase(KoPathShapeId, i18n("Simple path shape"))

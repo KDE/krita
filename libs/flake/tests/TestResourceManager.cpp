@@ -52,7 +52,7 @@ void TestResourceManager::testUnitChanged()
     QCOMPARE(spy.count(), 2);
 }
 
-#include "kis_global.h"
+#include "kis_pointer_utils.h"
 
 struct DerivedResource : public KoDerivedResourceConverter
 {

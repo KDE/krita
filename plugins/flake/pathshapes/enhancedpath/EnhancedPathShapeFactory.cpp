@@ -30,7 +30,7 @@
 #include <KoIcon.h>
 
 #include <klocalizedstring.h>
-#include "kis_global.h"
+#include "kis_pointer_utils.h"
 
 #include <QString>
 

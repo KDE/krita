@@ -145,6 +145,10 @@ private Q_SLOTS:
     void testPolygonShape();
 
     void testPathShape();
+
+    void testDefsHidden();
+    void testDefsUseInheritance();
+    void testUseWithoutDefs();
 };
 
 #endif // TESTSVGPARSER_H

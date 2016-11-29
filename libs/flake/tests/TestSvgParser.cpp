@@ -2690,5 +2690,107 @@ void TestSvgParser::testPathShape()
     t.test_standard_30px_72ppi("polygon", false);
 }
 
+void TestSvgParser::testDefsHidden()
+{
+    const QString data =
+            "<svg width=\"30px\" height=\"30px\""
+            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+
+            "<g id=\"testRect\">"
+            "    <defs>"
+            "        <rect id=\"testRect1\" x=\"5\" y=\"5\" width=\"15\" height=\"15\""
+            "            fill=\"blue\" stroke=\"none\"/>"
+            "    </defs>"
+
+            "    <rect id=\"testRect2\" x=\"10\" y=\"10\" width=\"15\" height=\"15\""
+            "        fill=\"red\" stroke=\"none\"/>"
+            "</g>"
+
+            "</svg>";
+
+    SvgRenderTester t (data);
+
+    t.test_standard_30px_72ppi("test_defs_hidden", false);
+}
+
+void TestSvgParser::testDefsUseInheritance()
+{
+    const QString data =
+            "<svg width=\"30px\" height=\"30px\""
+            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+
+
+
+            "<g id=\"unrenderedRect\" fill=\"green\" >"
+            "    <defs>"
+            "        <rect id=\"testRect1\" x=\"1\" y=\"1\" width=\"15\" height=\"15\""
+            "            stroke=\"none\"/>"
+            "    </defs>"
+            "</g>"
+
+
+            /**
+             * NOTES:
+             * 1) width/height attributes for <use> are not implemented yet
+             * 2) x and y are summed up
+             * 3) stroke="white" is overridden by the original templated object
+             * 4) fill="green" attribute from <defs> is not inherited
+             */
+
+            "<g id=\"testRect\" fill=\"blue\" >"
+            "    <use x=\"4\" y=\"4\" xlink:href=\"#testRect1\""
+            "        stroke=\"white\" stroke-width=\"1\" />"
+
+            "    <rect id=\"testRect2\" x=\"10\" y=\"10\" width=\"15\" height=\"15\""
+            "        fill=\"red\" stroke=\"none\"/>"
+            "</g>"
+
+            "</svg>";
+
+    SvgRenderTester t (data);
+
+    t.test_standard_30px_72ppi("defs_use_inheritance", false);
+}
+
+void TestSvgParser::testUseWithoutDefs()
+{
+    const QString data =
+            "<svg width=\"30px\" height=\"30px\""
+            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+
+            // technical rect for rendering
+            "<g id=\"testRect\">"
+
+            "<g id=\"renderedRect1\" fill=\"green\" >"
+            "    <rect id=\"testRect1\" x=\"1\" y=\"1\" width=\"15\" height=\"15\""
+            "        stroke=\"none\"/>"
+            "</g>"
+
+
+            /**
+             * NOTES:
+             * 1) width/height attributes for <use> are not implemented yet
+             * 2) x and y are summed up
+             * 3) stroke="white" is overridden by the original templated object
+             * 4) fill="green" attribute from <defs> is not inherited
+             */
+
+            "<g id=\"renderedRect2\" fill=\"blue\" >"
+            "    <use x=\"4\" y=\"4\" xlink:href=\"#testRect1\""
+            "        stroke=\"white\" stroke-width=\"1\" />"
+
+            "    <rect id=\"testRect2\" x=\"10\" y=\"10\" width=\"15\" height=\"15\""
+            "        fill=\"red\" stroke=\"none\"/>"
+            "</g>"
+
+            "</g>"
+
+            "</svg>";
+
+    SvgRenderTester t (data);
+
+    t.test_standard_30px_72ppi("use_without_defs", false);
+}
+
 
 QTEST_MAIN(TestSvgParser)

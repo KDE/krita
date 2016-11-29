@@ -427,15 +427,13 @@ QSharedPointer<KoVectorPatternBackground> SvgParser::parsePattern(const KoXmlEle
     // We do *not* apply patternTransform here! Here we only bake the untransformed
     // version of the shape. The transformed one will be done in the very end while rendering.
 
-    QList<KoShape*> shapes = parseGroup(e);
+    KoShape *patternShape = parseGroup(e);
 
     m_context.popGraphicsContext();
     gc = m_context.currentGC();
 
-    KIS_SAFE_ASSERT_RECOVER_NOOP(shapes.size() <= 1);
-
-    if (!shapes.isEmpty()) {
-        pattHelper->setShape(shapes.first(), gc->matrix);
+    if (patternShape) {
+        pattHelper->setShape(patternShape, gc->matrix);
     }
 
     return pattHelper;
@@ -507,15 +505,13 @@ bool SvgParser::parseClipPath(const KoXmlElement &e)
     m_context.pushGraphicsContext(e);
     m_context.currentGC()->matrix = QTransform();
 
-    QList<KoShape*> shapes = parseGroup(e);
-    KIS_ASSERT_RECOVER_NOOP(shapes.size() <= 1);
+    KoShape *clipShape = parseGroup(e);
 
     m_context.popGraphicsContext();
 
-    if (shapes.isEmpty()) return false;
+    if (!clipShape) return false;
 
-    clipPath.setShapes(shapes);
-
+    clipPath.setShapes({clipShape});
     m_clipPaths.insert(id, clipPath);
 
     return true;
@@ -561,14 +557,12 @@ bool SvgParser::parseClipMask(const KoXmlElement &e)
     m_context.pushGraphicsContext(e);
     m_context.currentGC()->matrix = QTransform();
 
-    QList<KoShape*> shapes = parseGroup(e);
-    KIS_ASSERT_RECOVER_NOOP(shapes.size() <= 1);
+    KoShape *clipShape = parseGroup(e);
 
     m_context.popGraphicsContext();
 
-    if (shapes.isEmpty()) return false;
-
-    clipMask->setShapes(shapes);
+    if (!clipShape) return false;
+    clipMask->setShapes({clipShape});
 
     m_clipMasks.insert(id, clipMask);
     return true;
@@ -602,6 +596,11 @@ void SvgParser::applyCurrentStyle(KoShape *shape, const QTransform &shapeToOrigi
          * WARNING: here is a small inconsistency with the standard:
          *          in the standard, 'display' is not inherited, but in
          *          flake it is!
+         *
+         * NOTE: though the standard says: "A value of 'display:none' indicates
+         *       that the given element and ***its children*** shall not be
+         *       rendered directly". Therefore, using setVisible(false) is fully
+         *       legitimate here (DK 29.11.16).
          */
         shape->setVisible(false);
     }
@@ -967,71 +966,36 @@ void SvgParser::applyMaskClipping(KoShape *shape, const QTransform &shapeToOrigi
     shape->setClipMask(clipMask);
 }
 
-QList<KoShape*> SvgParser::parseUse(const KoXmlElement &e)
+KoShape* SvgParser::parseUse(const KoXmlElement &e)
 {
-    QList<KoShape*> shapes;
+    KoShape *result = 0;
 
     QString id = e.attribute("xlink:href");
-    //
     if (!id.isEmpty()) {
-        SvgGraphicsContext *gc = m_context.pushGraphicsContext(e);
-
-        // TODO: use width and height attributes too
-        gc->matrix.translate(parseUnitX(e.attribute("x", "0")), parseUnitY(e.attribute("y", "0")));
 
         QString key = id.mid(1);
-
         if (m_context.hasDefinition(key)) {
-            const KoXmlElement &a = m_context.definition(key);
-            SvgStyles styles = m_context.styleParser().mergeStyles(e, a);
-            if (a.tagName() == "g" || a.tagName() == "a" || a.tagName() == "symbol") {
-                m_context.pushGraphicsContext(a);
 
-                KoShapeGroup *group = new KoShapeGroup();
-                group->setZIndex(m_context.nextZIndex());
-                group->applyAbsoluteTransformation(m_context.currentGC()->matrix);
+            SvgGraphicsContext *gc = m_context.pushGraphicsContext(e);
 
-                const QTransform coordinateSystemOnLoading = m_context.currentGC()->matrix;
-                const QTransform shapeToOriginalUserCoordinates =
-                    group->absoluteTransformation(0).inverted() *
-                    coordinateSystemOnLoading;
+            // TODO: parse 'width' and 'hight' as well
+            gc->matrix.translate(parseUnitX(e.attribute("x", "0")), parseUnitY(e.attribute("y", "0")));
 
-                applyStyle(0, styles, QTransform());
-                m_context.styleParser().parseFont(styles);
+            const KoXmlElement &referencedElement = m_context.definition(key);
+            result = parseGroup(e, referencedElement);
 
-                QList<KoShape*> childShapes = parseContainer(a);
-
-                // handle id
-                applyId(a.attribute("id"), group);
-
-                addToGroup(childShapes, group);
-                applyStyle(group, styles, shapeToOriginalUserCoordinates);   // apply style to group after size is set
-
-                shapes.append(group);
-
-                m_context.popGraphicsContext();
-            } else {
-                // Create the object with the merged styles.
-                // The object inherits all style attributes from the use tag, but keeps it's own attributes.
-                // So, not just use the style attributes of the use tag, but merge them first.
-                KoShape *shape = createObject(a, styles);
-                if (shape)
-                    shapes.append(shape);
-            }
-        } else {
-            // TODO: any named object can be referenced too
+            m_context.popGraphicsContext();
         }
-        m_context.popGraphicsContext();
     }
 
-    return shapes;
+    return result;
 }
 
 void SvgParser::addToGroup(QList<KoShape*> shapes, KoShapeGroup *group)
 {
     m_shapes += shapes;
 
-    if (! group)
+    if (!group || shapes.isEmpty())
         return;
 
     // not clipped, but inherit transform
@@ -1105,10 +1069,8 @@ void SvgParser::setFileFetcher(SvgParser::FileFetcherFunc func)
     m_context.setFileFetcher(func);
 }
 
-QList<KoShape*> SvgParser::parseGroup(const KoXmlElement &b)
+KoShape* SvgParser::parseGroup(const KoXmlElement &b, const KoXmlElement &overrideChildrenFrom)
 {
-    QList<KoShape*> shapes;
-
     m_context.pushGraphicsContext(b);
 
     KoShapeGroup *group = new KoShapeGroup();
@@ -1124,7 +1086,15 @@ QList<KoShape*> SvgParser::parseGroup(const KoXmlElement &b)
 
     uploadStyleToContext(b);
 
-    QList<KoShape*> childShapes = parseContainer(b);
+    QList<KoShape*> childShapes;
+
+    if (!overrideChildrenFrom.isNull()) {
+        // we upload styles from both: <use> and <defs>
+        uploadStyleToContext(overrideChildrenFrom);
+        childShapes = parseSingleElement(overrideChildrenFrom);
+    } else {
+        childShapes = parseContainer(b);
+    }
 
     // handle id
     applyId(b.attribute("id"), group);
@@ -1133,11 +1103,9 @@ QList<KoShape*> SvgParser::parseGroup(const KoXmlElement &b)
 
     applyCurrentStyle(group, shapeToOriginalUserCoordinates); // apply style to this group after size is set
 
-    shapes.append(group);
-
     m_context.popGraphicsContext();
 
-    return shapes;
+    return group;
 }
 
 QList<KoShape*> SvgParser::parseContainer(const KoXmlElement &e)
@@ -1168,79 +1136,79 @@ QList<KoShape*> SvgParser::parseContainer(const KoXmlElement &e)
             }
         }
 
-        if (b.tagName() == "svg") {
-            shapes += parseSvg(b);
-        } else if (b.tagName() == "g" || b.tagName() == "a" || b.tagName() == "symbol") {
-            // treat svg link <a> as group so we don't miss its child elements
-            shapes += parseGroup(b);
-        } else if (b.tagName() == "switch") {
-            m_context.pushGraphicsContext(b);
-            shapes += parseContainer(b);
-            m_context.popGraphicsContext();
-        } else if (b.tagName() == "defs") {
-            parseDefs(b);
-        } else if (b.tagName() == "linearGradient" || b.tagName() == "radialGradient") {
-            parseGradient(b);
-        } else if (b.tagName() == "pattern") {
-            m_context.addDefinition(b);
-        } else if (b.tagName() == "filter") {
-            parseFilter(b);
-        } else if (b.tagName() == "clipPath") {
-            parseClipPath(b);
-        } else if (b.tagName() == "mask") {
-            parseClipMask(b);
-        } else if (b.tagName() == "style") {
-            m_context.addStyleSheet(b);
-        } else if (b.tagName() == "rect" ||
-                   b.tagName() == "ellipse" ||
-                   b.tagName() == "circle" ||
-                   b.tagName() == "line" ||
-                   b.tagName() == "polyline" ||
-                   b.tagName() == "polygon" ||
-                   b.tagName() == "path" ||
-                   b.tagName() == "image" ||
-                   b.tagName() == "text") {
-            KoShape *shape = createObjectDirect(b);
-            if (shape)
-                shapes.append(shape);
-        } else if (b.tagName() == "use") {
-            shapes += parseUse(b);
-        } else if (b.tagName() == "color-profile") {
-            m_context.parseProfile(b);
-        } else {
-            // this is an unknown element, so try to load it anyway
-            // there might be a shape that handles that element
-            KoShape *shape = createObject(b);
-            if (shape) {
-                shapes.append(shape);
-            } else {
-                continue;
-            }
-        }
+        QList<KoShape*> currentShapes = parseSingleElement(b);
+        shapes.append(currentShapes);
 
         // if we are parsing a switch, stop after the first supported element
-        if (isSwitch)
+        if (isSwitch && !currentShapes.isEmpty())
             break;
     }
 
     return shapes;
 }
 
-void SvgParser::parseDefs(const KoXmlElement &e)
+QList<KoShape*> SvgParser::parseSingleElement(const KoXmlElement &b)
 {
-    for (KoXmlNode n = e.firstChild(); !n.isNull(); n = n.nextSibling()) {
-        KoXmlElement b = n.toElement();
-        if (b.isNull())
-            continue;
+    QList<KoShape*> shapes;
 
-        if (b.tagName() == "style") {
-            m_context.addStyleSheet(b);
-        } else if (b.tagName() == "defs") {
-            parseDefs(b);
-        } else {
-            m_context.addDefinition(b);
+    // save definition for later instantiation with 'use'
+    m_context.addDefinition(b);
+
+    if (b.tagName() == "svg") {
+        shapes += parseSvg(b);
+    } else if (b.tagName() == "g" || b.tagName() == "a" || b.tagName() == "symbol") {
+        // treat svg link <a> as group so we don't miss its child elements
+        shapes += parseGroup(b);
+    } else if (b.tagName() == "switch") {
+        m_context.pushGraphicsContext(b);
+        shapes += parseContainer(b);
+        m_context.popGraphicsContext();
+    } else if (b.tagName() == "defs") {
+        /**
+         * WARNING: 'defs' are basically 'display:none' style, therefore they should not play
+         *          any role in shapes outline calculation. But setVisible(false) shapes do!
+         *          Should be fixed in the future!
+         */
+        KoShape *defsShape = parseGroup(b);
+        defsShape->setVisible(false);
+        shapes += defsShape;
+    } else if (b.tagName() == "linearGradient" || b.tagName() == "radialGradient") {
+        parseGradient(b);
+    } else if (b.tagName() == "pattern") {
+    } else if (b.tagName() == "filter") {
+        parseFilter(b);
+    } else if (b.tagName() == "clipPath") {
+        parseClipPath(b);
+    } else if (b.tagName() == "mask") {
+        parseClipMask(b);
+    } else if (b.tagName() == "style") {
+        m_context.addStyleSheet(b);
+    } else if (b.tagName() == "rect" ||
+               b.tagName() == "ellipse" ||
+               b.tagName() == "circle" ||
+               b.tagName() == "line" ||
+               b.tagName() == "polyline" ||
+               b.tagName() == "polygon" ||
+               b.tagName() == "path" ||
+               b.tagName() == "image" ||
+               b.tagName() == "text") {
+        KoShape *shape = createObjectDirect(b);
+        if (shape)
+            shapes.append(shape);
+    } else if (b.tagName() == "use") {
+        shapes += parseUse(b);
+    } else if (b.tagName() == "color-profile") {
+        m_context.parseProfile(b);
+    } else {
+        // this is an unknown element, so try to load it anyway
+        // there might be a shape that handles that element
+        KoShape *shape = createObject(b);
+        if (shape) {
+            shapes.append(shape);
         }
     }
+
+    return shapes;
 }
 
 // Creating functions

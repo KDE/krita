@@ -67,13 +67,12 @@ public:
 protected:
 
     /// Parses a group-like element element, saving all its topmost properties
-    QList<KoShape *> parseGroup(const KoXmlElement &e);
+    KoShape* parseGroup(const KoXmlElement &e, const KoXmlElement &overrideChildrenFrom = KoXmlElement());
     /// Parses a container element, returning a list of child shapes
     QList<KoShape*> parseContainer(const KoXmlElement &);
+    QList<KoShape*> parseSingleElement(const KoXmlElement &b);
     /// Parses a use element, returning a list of child shapes
-    QList<KoShape*> parseUse(const KoXmlElement &);
-    /// Parses definitions for later use
-    void parseDefs(const KoXmlElement &);
+    KoShape* parseUse(const KoXmlElement &);
     /// Parses a gradient element
     SvgGradientHelper *parseGradient(const KoXmlElement &);
     /// Parses a pattern element

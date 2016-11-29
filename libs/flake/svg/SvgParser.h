@@ -119,13 +119,13 @@ protected:
     void buildDocument(QList<KoShape*> shapes);
 
     void uploadStyleToContext(const KoXmlElement &e);
-    void applyCurrentStyle(KoShape *shape);
+    void applyCurrentStyle(KoShape *shape, const QTransform &shapeToOriginalUserCoordinates);
 
     /// Applies styles to the given shape
-    void applyStyle(KoShape *, const KoXmlElement &);
+    void applyStyle(KoShape *, const KoXmlElement &, const QTransform &shapeToOriginalUserCoordinates);
 
     /// Applies styles to the given shape
-    void applyStyle(KoShape *, const SvgStyles &);
+    void applyStyle(KoShape *, const SvgStyles &, const QTransform &shapeToOriginalUserCoordinates);
 
     /// Applies the current fill style to the object
     void applyFillStyle(KoShape * shape);
@@ -137,8 +137,8 @@ protected:
     void applyFilter(KoShape * shape);
 
     /// Applies the current clip path to the object
-    void applyClipping(KoShape *shape);
-    void applyMaskClipping(KoShape *shape);
+    void applyClipping(KoShape *shape, const QTransform &shapeToOriginalUserCoordinates);
+    void applyMaskClipping(KoShape *shape, const QTransform &shapeToOriginalUserCoordinates);
 
     /// Applies id to specified shape
     void applyId(const QString &id, KoShape *shape);
@@ -157,7 +157,6 @@ private:
     KoDocumentResourceManager *m_documentResourceManager;
     QList<KoShape*> m_shapes;
     QList<KoShape*> m_toplevelShapes;
-    QHash<KoShape*, QTransform> m_coordinateSystemOnLoading;
 };
 
 #endif

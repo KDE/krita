@@ -58,19 +58,28 @@ KisVideoExport::~KisVideoExport()
 
 KisImportExportFilter::ConversionStatus KisVideoExport::convert(KisDocument *document, QIODevice */*io*/,  KisPropertiesConfigurationSP configuration)
 {
-    VideoSaver videoSaver(document, batchMode());
+    QString ffmpegPath = configuration->getString("ffmpeg_path");
+    if (ffmpegPath.isEmpty()) {
+        KisConfig cfg;
+        ffmpegPath = cfg.customFFMpegPath();
+        if (ffmpegPath.isEmpty()) {
+            const QString warningMessage =
+                    i18n("Could not find \'ffmpeg\' binary. Saving to video formats is impossible.");
 
-    if (!videoSaver.hasFFMpeg()) {
-        const QString warningMessage =
-                i18n("Could not find \'ffmpeg\' binary. Saving to video formats is impossible.");
-
-        if (!batchMode()) {
-            QMessageBox::critical(KisPart::instance()->currentMainwindow(),
-                                  i18n("Video Export Error"),
-                                  warningMessage);
+            if (!batchMode()) {
+                QMessageBox::critical(KisPart::instance()->currentMainwindow(),
+                                      i18n("Video Export Error"),
+                                      warningMessage);
+            }
+            else {
+                qWarning() << warningMessage;
+            }
+            return KisImportExportFilter::UsageError;
         }
-        return KisImportExportFilter::UsageError;
     }
+
+    VideoSaver videoSaver(document, ffmpegPath, batchMode());
+
 
     KisImageBuilder_Result res = videoSaver.encode(filename(), configuration);
 

@@ -38,7 +38,7 @@ class KRITAVIDEOEXPORT_EXPORT VideoSaver : public QObject {
 
     Q_OBJECT
 public:
-    VideoSaver(KisDocument* doc, bool batchMode);
+    VideoSaver(KisDocument* doc, const QString &ffmpegPath, bool batchMode);
     virtual ~VideoSaver();
 
     KisImageSP image();
@@ -48,9 +48,6 @@ public:
 
 private Q_SLOTS:
     void cancel();
-
-private:
-    static QString findFFMpeg();
 
 private:
     KisImageSP m_image;

@@ -44,119 +44,31 @@ QTransform scaleFromPercent(const QSizeF &size)
     return QTransform().scale(w/1.0, h/1.0);
 }
 
-class Q_DECL_HIDDEN KoClipData::Private
-{
-public:
-    Private() : deleteClipShapes(true)
-    {
-    }
-
-    ~Private()
-    {
-        if (deleteClipShapes) {
-            qDeleteAll(clipPathShapes);
-            clipPathShapes.clear();
-        }
-    }
-
-    QList<KoShape*> clipPathShapes;
-    bool deleteClipShapes; // TODO: deprecate this option!
-};
-
-KoClipData::KoClipData(KoPathShape *clipPathShape)
-        : d(new Private())
-{
-    Q_ASSERT(clipPathShape);
-    d->clipPathShapes.append(clipPathShape);
-}
-
-KoClipData::KoClipData(const QList<KoPathShape*> &clipPathShapes)
-        : d(new Private())
-{
-    Q_ASSERT(clipPathShapes.count());
-
-    Q_FOREACH (KoPathShape *shape, clipPathShapes) {
-        d->clipPathShapes << shape;
-    }
-}
-
-KoClipData::KoClipData(const QList<KoShape*> &clipPathShapes)
-        : d(new Private())
-{
-    Q_ASSERT(clipPathShapes.count());
-    d->clipPathShapes = clipPathShapes;
-}
-
-KoClipData::KoClipData(const KoClipData &rhs)
-        : d(new Private())
-{
-    Q_FOREACH (KoShape *shape, rhs.d->clipPathShapes) {
-        KoShape *clonedShape = shape->cloneShape();
-        KIS_ASSERT_RECOVER(clonedShape) { continue; }
-
-        d->clipPathShapes << clonedShape;
-    }
-
-    d->deleteClipShapes = rhs.d->deleteClipShapes;
-}
-
-KoClipData::~KoClipData()
-{
-    delete d;
-}
-
-QList<KoShape*> KoClipData::clipPathShapes() const
-{
-    return d->clipPathShapes;
-}
-
-void KoClipData::removeClipShapesOwnership()
-{
-    d->deleteClipShapes = false;
-}
-
 class Q_DECL_HIDDEN KoClipPath::Private
 {
 public:
-    Private(KoClipData *data)
-            : clipData(data)
+    Private()
     {}
 
     Private(const Private &rhs)
-        : clipData(new KoClipData(*rhs.clipData)),
-          clipPath(rhs.clipPath),
+        : clipPath(rhs.clipPath),
           clipRule(rhs.clipRule),
           coordinates(rhs.coordinates),
           initialTransformToShape(rhs.initialTransformToShape),
           initialShapeSize(rhs.initialShapeSize)
     {
+        Q_FOREACH (KoShape *shape, rhs.shapes) {
+            KoShape *clonedShape = shape->cloneShape();
+            KIS_ASSERT_RECOVER(clonedShape) { continue; }
+
+            shapes.append(clonedShape);
+        }
     }
 
     ~Private()
     {
-    }
-
-    void compileClipPath(KoShape *clippedShape)
-    {
-        QList<KoShape*> clipShapes = clipData->clipPathShapes();
-        if (!clipShapes.count())
-            return;
-
-        initialShapeSize = clippedShape->outline().boundingRect().size();
-        initialTransformToShape = clippedShape->absoluteTransformation(0).inverted();
-
-        QTransform transformToShape = initialTransformToShape * scaleToPercent(initialShapeSize);
-
-        Q_FOREACH (KoShape *path, clipShapes) {
-            if (!path)
-                continue;
-            // map clip path to shape coordinates of clipped shape
-            QTransform m = path->absoluteTransformation(0) * transformToShape;
-            if (clipPath.isEmpty())
-                clipPath = m.map(path->outline());
-            else
-                clipPath |= m.map(path->outline());
-        }
+        qDeleteAll(shapes);
+        shapes.clear();
     }
 
     void collectShapePath(QPainterPath *result, const KoShape *shape) {
@@ -177,7 +89,7 @@ public:
 
     void compileClipPath()
     {
-        QList<KoShape*> clipShapes = clipData->clipPathShapes();
+        QList<KoShape*> clipShapes = this->shapes;
         if (clipShapes.isEmpty())
             return;
 
@@ -193,7 +105,7 @@ public:
         }
     }
 
-    QExplicitlySharedDataPointer<KoClipData> clipData; ///< the clip path data
+    QList<KoShape*> shapes;
     QPainterPath clipPath; ///< the compiled clip path in shape coordinates of the clipped shape
     Qt::FillRule clipRule = Qt::OddEvenFill;
     CoordinateSystem coordinates = ObjectBoundingBox;
@@ -201,17 +113,12 @@ public:
     QSizeF initialShapeSize; ///< initial size of clipped shape
 };
 
-KoClipPath::KoClipPath(KoClipData *clipData, KoClipPath::CoordinateSystem coordinates)
-    : d( new Private(clipData) )
+KoClipPath::KoClipPath(QList<KoShape*> clipShapes, KoClipPath::CoordinateSystem coordinates)
+   : d(new Private())
 {
+    d->shapes = clipShapes;
     d->coordinates = coordinates;
     d->compileClipPath();
-}
-
-KoClipPath::KoClipPath(KoShape *clippedShape, KoClipData *clipData)
-        : d( new Private(clipData) )
-{
-    d->compileClipPath(clippedShape);
 }
 
 KoClipPath::KoClipPath(const KoClipPath &rhs)
@@ -221,7 +128,6 @@ KoClipPath::KoClipPath(const KoClipPath &rhs)
 
 KoClipPath::~KoClipPath()
 {
-    delete d;
 }
 
 KoClipPath *KoClipPath::clone() const
@@ -297,7 +203,7 @@ QList<KoPathShape*> KoClipPath::clipPathShapes() const
 
     QList<KoPathShape*> shapes;
 
-    Q_FOREACH (KoShape *shape, d->clipData->clipPathShapes()) {
+    Q_FOREACH (KoShape *shape, d->shapes) {
         KoPathShape *pathShape = dynamic_cast<KoPathShape*>(shape);
         if (pathShape) {
             shapes << pathShape;

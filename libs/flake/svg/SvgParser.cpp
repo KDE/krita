@@ -926,7 +926,14 @@ void SvgParser::applyClipping(KoShape *shape)
     if (!clipPath || clipPath->isEmpty())
         return;
 
-    QList<KoShape*> shapes = clipPath->shapes();
+    QList<KoShape*> shapes;
+
+    Q_FOREACH (KoShape *item, clipPath->shapes()) {
+        KoShape *clonedShape = item->cloneShape();
+        KIS_ASSERT_RECOVER(clonedShape) { continue; }
+
+        shapes.append(clonedShape);
+    }
 
     QTransform extraShapeTransform;
     KIS_ASSERT_RECOVER_NOOP(m_coordinateSystemOnLoading.contains(shape));
@@ -943,10 +950,9 @@ void SvgParser::applyClipping(KoShape *shape)
         }
     }
 
-    KoClipData *clipData = new KoClipData(shapes);
-    KoClipPath *clipPathObject = new KoClipPath(clipData,
-                                          clipPath->clipPathUnits() == SvgClipPathHelper::ObjectBoundingBox ?
-                                              KoClipPath::ObjectBoundingBox : KoClipPath::UserSpaceOnUse);
+    KoClipPath *clipPathObject = new KoClipPath(shapes,
+                                                clipPath->clipPathUnits() == SvgClipPathHelper::ObjectBoundingBox ?
+                                                KoClipPath::ObjectBoundingBox : KoClipPath::UserSpaceOnUse);
     shape->setClipPath(clipPathObject);
 }
 

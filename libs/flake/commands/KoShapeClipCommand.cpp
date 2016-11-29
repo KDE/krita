@@ -26,6 +26,8 @@
 
 #include <klocalizedstring.h>
 
+#include "kis_pointer_utils.h"
+
 class Q_DECL_HIDDEN KoShapeClipCommand::Private
 {
 public:
@@ -37,7 +39,6 @@ public:
         if (executed) {
             qDeleteAll(oldClipPaths);
         } else {
-            clipData->removeClipShapesOwnership();
             qDeleteAll(newClipPaths);
         }
     }
@@ -47,7 +48,6 @@ public:
     QList<KoPathShape*> clipPathShapes;
     QList<KoClipPath*> newClipPaths;
     QList<KoShapeContainer*> oldParents;
-    QExplicitlySharedDataPointer<KoClipData> clipData;
     KoShapeBasedDocumentBase *controller;
     bool executed;
 };
@@ -57,10 +57,10 @@ KoShapeClipCommand::KoShapeClipCommand(KoShapeBasedDocumentBase *controller, con
 {
     d->shapesToClip = shapes;
     d->clipPathShapes = clipPathShapes;
-    d->clipData = new KoClipData(clipPathShapes);
+
     Q_FOREACH (KoShape *shape, d->shapesToClip) {
         d->oldClipPaths.append(shape->clipPath());
-        d->newClipPaths.append(new KoClipPath(shape, d->clipData.data()));
+        d->newClipPaths.append(new KoClipPath(implicitCastList<KoShape*>(clipPathShapes), KoClipPath::UserSpaceOnUse));
     }
 
     Q_FOREACH (KoPathShape *path, clipPathShapes) {
@@ -75,9 +75,8 @@ KoShapeClipCommand::KoShapeClipCommand(KoShapeBasedDocumentBase *controller, KoS
 {
     d->shapesToClip.append(shape);
     d->clipPathShapes = clipPathShapes;
-    d->clipData = new KoClipData(clipPathShapes);
     d->oldClipPaths.append(shape->clipPath());
-    d->newClipPaths.append(new KoClipPath(shape, d->clipData.data()));
+    d->newClipPaths.append(new KoClipPath(implicitCastList<KoShape*>(clipPathShapes), KoClipPath::UserSpaceOnUse));
 
     Q_FOREACH (KoPathShape *path, clipPathShapes) {
         d->oldParents.append(path->parent());

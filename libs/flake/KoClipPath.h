@@ -21,8 +21,9 @@
 #define KOCLIPPATH_H
 
 #include "kritaflake_export.h"
+
+#include <QScopedPointer>
 #include <QList>
-#include <QSharedData>
 #include <qnamespace.h>
 
 class KoShape;
@@ -32,34 +33,6 @@ class QPainter;
 class QTransform;
 class QPainterPath;
 class QSizeF;
-
-/// Shared clip path data
-class KRITAFLAKE_EXPORT KoClipData : public QSharedData
-{
-public:
-    /// Creates clip path data from a single path shape, takes ownership of the path shape
-    explicit KoClipData(KoPathShape *clipPathShape);
-
-    /// Creates clip path data from multiple path shapes, takes ownership of the path shapes
-    explicit KoClipData(const QList<KoPathShape*> &clipPathShapes);
-
-    explicit KoClipData(const QList<KoShape*> &clipPathShapes);
-
-    explicit KoClipData(const KoClipData &rhs);
-
-    /// Destroys the clip path data
-    ~KoClipData();
-
-    /// Returns the clip path shapes
-    QList<KoShape*> clipPathShapes() const;
-
-    /// Gives up ownership of clip path shapes
-    void removeClipShapesOwnership();
-
-private:
-    class Private;
-    Private * const d;
-};
 
 /// Clip path used to clip shapes
 class KRITAFLAKE_EXPORT KoClipPath
@@ -74,19 +47,11 @@ public:
 
     /**
      * Create a new shape clipping using the given clip data
-     * @param clipData shared clipping data containing the clip paths
+     * @param clipShapes define the clipping shapes, owned by KoClipPath!
      * @param coordinates shows if ObjectBoundingBox or UserSpaceOnUse coordinate
      *                    system is used.
      */
-    KoClipPath(KoClipData *clipData, CoordinateSystem coordinates);
-
-    /**
-     * Create a new shape clipping using the given clip data
-     * @param clippedShape the shape to clip
-     * @param clipData shared clipping data containing the clip paths
-     */
-    KoClipPath(KoShape *clippedShape, KoClipData *clipData);
-
+    KoClipPath(QList<KoShape*> clipShapes, CoordinateSystem coordinates);
     ~KoClipPath();
 
     KoClipPath *clone() const;
@@ -125,7 +90,7 @@ private:
 
 private:
     class Private;
-    Private * const d;
+    const QScopedPointer<Private> d;
 };
 
 #endif // KOCLIPPATH_H

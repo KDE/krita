@@ -1844,8 +1844,7 @@ void KoShape::loadOdfClipContour(const KoXmlElement &element, KoShapeLoadingCont
         ps->loadContourOdf(child, context, scaleFactor);
         ps->setTransformation(transformation());
 
-        KoClipData *cd = new KoClipData(ps);
-        KoClipPath *clipPath = new KoClipPath(this, cd);
+        KoClipPath *clipPath = new KoClipPath({ps}, KoClipPath::UserSpaceOnUse);
         d->clipPath.reset(clipPath);
     }
 }

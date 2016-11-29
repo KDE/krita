@@ -2128,8 +2128,7 @@ void TestSvgParser::testKoClipPathRendering()
     shape2->setBackground(QSharedPointer<KoColorBackground>(new KoColorBackground(Qt::red)));
 
     QScopedPointer<KoPathShape> clipShape1(KoPathShape::createShapeFromPainterPath(clipPath1));
-    KoClipData *koClipData1 = new KoClipData(clipShape1.take());
-    KoClipPath *koClipPath1 = new KoClipPath(koClipData1, KoClipPath::UserSpaceOnUse);
+    KoClipPath *koClipPath1 = new KoClipPath({clipShape1.take()}, KoClipPath::UserSpaceOnUse);
     koClipPath1->setClipRule(Qt::WindingFill);
     shape1->setClipPath(koClipPath1);
 
@@ -2142,8 +2141,7 @@ void TestSvgParser::testKoClipPathRendering()
     }
 
     QScopedPointer<KoPathShape> clipShape2(KoPathShape::createShapeFromPainterPath(clipPath2));
-    KoClipData *koClipData2 = new KoClipData(clipShape2.take());
-    KoClipPath *koClipPath2 = new KoClipPath(koClipData2, KoClipPath::UserSpaceOnUse);
+    KoClipPath *koClipPath2 = new KoClipPath({clipShape2.take()}, KoClipPath::UserSpaceOnUse);
     koClipPath2->setClipRule(Qt::WindingFill);
     group->setClipPath(koClipPath2);
 
@@ -2174,8 +2172,7 @@ void TestSvgParser::testKoClipPathRelativeRendering()
     shape2->setBackground(QSharedPointer<KoColorBackground>(new KoColorBackground(Qt::red)));
 
     QScopedPointer<KoPathShape> clipShape1(KoPathShape::createShapeFromPainterPath(clipPath1));
-    KoClipData *koClipData1 = new KoClipData(clipShape1.take());
-    KoClipPath *koClipPath1 = new KoClipPath(koClipData1, KoClipPath::UserSpaceOnUse);
+    KoClipPath *koClipPath1 = new KoClipPath({clipShape1.take()}, KoClipPath::UserSpaceOnUse);
     koClipPath1->setClipRule(Qt::WindingFill);
     shape1->setClipPath(koClipPath1);
 
@@ -2188,8 +2185,7 @@ void TestSvgParser::testKoClipPathRelativeRendering()
     }
 
     QScopedPointer<KoPathShape> clipShape2(KoPathShape::createShapeFromPainterPath(clipPath2));
-    KoClipData *koClipData2 = new KoClipData(clipShape2.take());
-    KoClipPath *koClipPath2 = new KoClipPath(koClipData2, KoClipPath::ObjectBoundingBox);
+    KoClipPath *koClipPath2 = new KoClipPath({clipShape2.take()}, KoClipPath::ObjectBoundingBox);
     koClipPath2->setClipRule(Qt::WindingFill);
     group->setClipPath(koClipPath2);
 

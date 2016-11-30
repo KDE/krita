@@ -158,15 +158,18 @@ void KoXmlWriter::addCompleteElement(QIODevice* indev)
         return;
     }
 
-    static const int MAX_CHUNK_SIZE = 8 * 1024; // 8 KB
+    QString indentString;
+    indentString.fill((' '), indentLevel());
+    QByteArray indentBuf(indentString.toUtf8());
+
     QByteArray buffer;
-    buffer.resize(MAX_CHUNK_SIZE);
     while (!indev->atEnd()) {
-        qint64 len = indev->read(buffer.data(), buffer.size());
-        if (len <= 0)   // e.g. on error
-            break;
-        d->dev->write(buffer.data(), len);
+        buffer = indev->readLine();
+
+        d->dev->write(indentBuf);
+        d->dev->write(buffer);
     }
+
     if (!wasOpen) {
         // Restore initial state
         indev->close();

@@ -107,7 +107,7 @@ public:
 
     QList<KoShape*> shapes;
     QPainterPath clipPath; ///< the compiled clip path in shape coordinates of the clipped shape
-    Qt::FillRule clipRule = Qt::OddEvenFill;
+    Qt::FillRule clipRule = Qt::WindingFill;
     CoordinateSystem coordinates = ObjectBoundingBox;
     QTransform initialTransformToShape; ///< initial transformation to shape coordinates of the clipped shape
     QSizeF initialShapeSize; ///< initial size of clipped shape
@@ -211,6 +211,11 @@ QList<KoPathShape*> KoClipPath::clipPathShapes() const
     }
 
     return shapes;
+}
+
+QList<KoShape *> KoClipPath::clipShapes() const
+{
+    return d->shapes;
 }
 
 QTransform KoClipPath::clipDataTransformation(KoShape *clippedShape) const

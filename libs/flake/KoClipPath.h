@@ -73,6 +73,8 @@ public:
     /// Returns the clip path shapes
     QList<KoPathShape*> clipPathShapes() const;
 
+    QList<KoShape*> clipShapes() const;
+
     /**
      * Returns the transformation from the clip data path shapes to the
      * current document coordinates of the specified clipped shape.

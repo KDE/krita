@@ -112,26 +112,41 @@ bool SvgWriter::save(QIODevice &outputDevice)
 
     {
         SvgSavingContext savingContext(outputDevice, m_writeInlineImages);
-
-        // top level shapes
-        Q_FOREACH (KoShape *shape, m_toplevelShapes) {
-            KoShapeLayer *layer = dynamic_cast<KoShapeLayer*>(shape);
-            if(layer) {
-                saveLayer(layer, savingContext);
-            } else {
-                KoShapeGroup *group = dynamic_cast<KoShapeGroup*>(shape);
-                if (group)
-                    saveGroup(group, savingContext);
-                else
-                    saveShape(shape, savingContext);
-            }
-        }
+        saveShapes(m_toplevelShapes, savingContext);
     }
 
     // end tag:
     svgStream << endl << "</svg>" << endl;
 
     return true;
+}
+
+bool SvgWriter::saveDetached(QIODevice &outputDevice)
+{
+    if (m_toplevelShapes.isEmpty())
+        return false;
+
+    SvgSavingContext savingContext(outputDevice, m_writeInlineImages);
+    saveShapes(m_toplevelShapes, savingContext);
+
+    return true;
+}
+
+void SvgWriter::saveShapes(const QList<KoShape *> shapes, SvgSavingContext &savingContext)
+{
+    // top level shapes
+    Q_FOREACH (KoShape *shape, shapes) {
+        KoShapeLayer *layer = dynamic_cast<KoShapeLayer*>(shape);
+        if(layer) {
+            saveLayer(layer, savingContext);
+        } else {
+            KoShapeGroup *group = dynamic_cast<KoShapeGroup*>(shape);
+            if (group)
+                saveGroup(group, savingContext);
+            else
+                saveShape(shape, savingContext);
+        }
+    }
 }
 
 void SvgWriter::saveLayer(KoShapeLayer *layer, SvgSavingContext &context)

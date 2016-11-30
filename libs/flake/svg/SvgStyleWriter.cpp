@@ -54,6 +54,7 @@
 #include <QRadialGradient>
 #include <KisMimeDatabase.h>
 #include "kis_dom_utils.h"
+#include <SvgWriter.h>
 
 void SvgStyleWriter::saveSvgStyle(KoShape *shape, SvgSavingContext &context)
 {
@@ -171,6 +172,13 @@ void SvgStyleWriter::saveSvgEffects(KoShape *shape, SvgSavingContext &context)
     context.shapeWriter().addAttribute("filter", "url(#" + uid + ")");
 }
 
+inline QString convertClipPathMode(KoClipPath::CoordinateSystem mode) {
+    return
+        mode == KoClipPath::ObjectBoundingBox?
+        "objectBoundingBox" :
+        "userSpaceOnUse";
+}
+
 void SvgStyleWriter::saveSvgClipping(KoShape *shape, SvgSavingContext &context)
 {
     KoClipPath *clipPath = shape->clipPath();
@@ -188,11 +196,17 @@ void SvgStyleWriter::saveSvgClipping(KoShape *shape, SvgSavingContext &context)
 
     context.styleWriter().startElement("clipPath");
     context.styleWriter().addAttribute("id", uid);
-    context.styleWriter().addAttribute("clipPathUnits", "userSpaceOnUse");
+    context.styleWriter().addAttribute("clipPathUnits", convertClipPathMode(clipPath->coordinates()));
 
-    context.styleWriter().startElement("path");
-    context.styleWriter().addAttribute("d", path->toString(path->absoluteTransformation(0)*context.userSpaceTransform()));
-    context.styleWriter().endElement(); // path
+    QBuffer buffer;
+    buffer.open(QIODevice::WriteOnly);
+    {
+        QList<KoShape*> shapes = clipPath->clipShapes();
+        SvgWriter shapesWriter(shapes, QSizeF(666, 666));
+        shapesWriter.saveDetached(buffer);
+    }
+    buffer.close();
+    context.styleWriter().addCompleteElement(&buffer);
 
     context.styleWriter().endElement(); // clipPath
 

@@ -212,6 +212,16 @@ void SvgStyleWriter::saveSvgColorStops(const QGradientStops &colorStops, SvgSavi
     }
 }
 
+inline QString convertGradientMode(QGradient::CoordinateMode mode) {
+    KIS_ASSERT_RECOVER_NOOP(mode != QGradient::StretchToDeviceMode);
+
+    return
+        mode == QGradient::ObjectBoundingMode ?
+        "objectBoundingBox" :
+        "userSpaceOnUse";
+
+}
+
 QString SvgStyleWriter::saveSvgGradient(const QGradient *gradient, const QTransform &gradientTransform, SvgSavingContext &context)
 {
     if (! gradient)
@@ -232,7 +242,7 @@ QString SvgStyleWriter::saveSvgGradient(const QGradient *gradient, const QTransf
         context.styleWriter().startElement("linearGradient");
         context.styleWriter().addAttribute("id", uid);
         context.styleWriter().addAttribute("gradientTransform", SvgUtil::transformToString(gradientTransform));
-        context.styleWriter().addAttribute("gradientUnits", "objectBoundingBox");
+        context.styleWriter().addAttribute("gradientUnits", convertGradientMode(g->coordinateMode()));
         context.styleWriter().addAttribute("x1", g->start().x());
         context.styleWriter().addAttribute("y1", g->start().y());
         context.styleWriter().addAttribute("x2", g->finalStop().x());
@@ -246,7 +256,7 @@ QString SvgStyleWriter::saveSvgGradient(const QGradient *gradient, const QTransf
         context.styleWriter().startElement("radialGradient");
         context.styleWriter().addAttribute("id", uid);
         context.styleWriter().addAttribute("gradientTransform", SvgUtil::transformToString(gradientTransform));
-        context.styleWriter().addAttribute("gradientUnits", "objectBoundingBox");
+        context.styleWriter().addAttribute("gradientUnits", convertGradientMode(g->coordinateMode()));
         context.styleWriter().addAttribute("cx", g->center().x());
         context.styleWriter().addAttribute("cy", g->center().y());
         context.styleWriter().addAttribute("fx", g->focalPoint().x());

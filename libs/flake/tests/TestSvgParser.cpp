@@ -33,6 +33,8 @@
 #include <KoShapeStrokeModel.h>
 #include <KoShapePainter.h>
 
+#include "kis_algebra_2d.h"
+
 struct SvgTester
 {
     SvgTester (const QString &data)
@@ -771,7 +773,13 @@ struct SvgRenderTester : public SvgTester
 
         if (verifyGeometry) {
             QCOMPARE(shape->absolutePosition(KoFlake::TopLeftCorner), QPointF(5,5));
-            QCOMPARE(shape->absolutePosition(KoFlake::BottomRightCorner), QPointF(15,25));
+
+            const QPointF bottomRight= shape->absolutePosition(KoFlake::BottomRightCorner);
+            const QPointF expectedBottomRight(15,25);
+
+            if (KisAlgebra2D::norm(bottomRight - expectedBottomRight) > 0.0001 ) {
+                QCOMPARE(bottomRight, expectedBottomRight);
+            }
         }
 
         testRender(shape, "load", testName, canvasSize);

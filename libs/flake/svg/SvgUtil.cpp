@@ -32,6 +32,8 @@
 #include <math.h>
 #include "kis_debug.h"
 
+#include "kis_dom_utils.h"
+
 #define DPI 72.0
 
 #define DEG2RAD(degree) degree/180.0*M_PI
@@ -121,14 +123,16 @@ QString SvgUtil::transformToString(const QTransform &transform)
 
     if (transform.type() == QTransform::TxTranslate) {
         return QString("translate(%1, %2)")
-                     .arg(toUserSpace(transform.dx()))
-                     .arg(toUserSpace(transform.dy()));
+                     .arg(KisDomUtils::toString(toUserSpace(transform.dx())))
+                     .arg(KisDomUtils::toString(toUserSpace(transform.dy())));
     } else {
         return QString("matrix(%1 %2 %3 %4 %5 %6)")
-                     .arg(transform.m11()).arg(transform.m12())
-                     .arg(transform.m21()).arg(transform.m22())
-                     .arg(toUserSpace(transform.dx()))
-                     .arg(toUserSpace(transform.dy()));
+                     .arg(KisDomUtils::toString(transform.m11()))
+                     .arg(KisDomUtils::toString(transform.m12()))
+                     .arg(KisDomUtils::toString(transform.m21()))
+                     .arg(KisDomUtils::toString(transform.m22()))
+                     .arg(KisDomUtils::toString(toUserSpace(transform.dx())))
+                     .arg(KisDomUtils::toString(toUserSpace(transform.dy())));
     }
 }
 

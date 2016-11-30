@@ -53,6 +53,7 @@
 #include <QLinearGradient>
 #include <QRadialGradient>
 #include <KisMimeDatabase.h>
+#include "kis_dom_utils.h"
 
 void SvgStyleWriter::saveSvgStyle(KoShape *shape, SvgSavingContext &context)
 {
@@ -147,7 +148,7 @@ void SvgStyleWriter::saveSvgStroke(KoShape *shape, SvgSavingContext &context)
         for (int i = 0; i < dashCount; ++i) {
             if (i > 0)
                 dashStr += ",";
-            dashStr += QString("%1").arg(dashes[i] * dashFactor);
+            dashStr += QString("%1").arg(KisDomUtils::toString(dashes[i] * dashFactor));
         }
         context.shapeWriter().addAttribute("stroke-dasharray", dashStr);
     }
@@ -344,14 +345,14 @@ QString SvgStyleWriter::saveSvgPattern(QSharedPointer<KoPatternBackground> patte
         context.styleWriter().addAttribute("patternUnits", "userSpaceOnUse");
     }
 
-    context.styleWriter().addAttribute("viewBox", QString("0 0 %1 %2").arg(imageSize.width()).arg(imageSize.height()));
+    context.styleWriter().addAttribute("viewBox", QString("0 0 %1 %2").arg(KisDomUtils::toString(imageSize.width())).arg(KisDomUtils::toString(imageSize.height())));
     //*m_defs << " patternContentUnits=\"userSpaceOnUse\"";
 
     context.styleWriter().startElement("image");
     context.styleWriter().addAttribute("x", "0");
     context.styleWriter().addAttribute("y", "0");
-    context.styleWriter().addAttribute("width", QString("%1px").arg(imageSize.width()));
-    context.styleWriter().addAttribute("height", QString("%1px").arg(imageSize.height()));
+    context.styleWriter().addAttribute("width", QString("%1px").arg(KisDomUtils::toString(imageSize.width())));
+    context.styleWriter().addAttribute("height", QString("%1px").arg(KisDomUtils::toString(imageSize.height())));
 
     QByteArray ba;
     QBuffer buffer(&ba);

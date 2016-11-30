@@ -24,6 +24,7 @@
 #include <QByteArray>
 #include <QStack>
 #include <float.h>
+#include "../global/kis_dom_utils.h"
 
 static const int s_indentBufferLength = 100;
 static const int s_escapeBufferLen = 10000;
@@ -248,32 +249,22 @@ void KoXmlWriter::addAttribute(const char* attrName, const char* value)
 
 void KoXmlWriter::addAttribute(const char* attrName, double value)
 {
-    QByteArray str;
-    str.setNum(value, 'f', 11);
-    addAttribute(attrName, str.data());
+    addAttribute(attrName, KisDomUtils::toString(value));
 }
 
 void KoXmlWriter::addAttribute(const char* attrName, float value)
 {
-    QByteArray str;
-    str.setNum(value, 'f', FLT_DIG);
-    addAttribute(attrName, str.data());
+    addAttribute(attrName, KisDomUtils::toString(value));
 }
 
 void KoXmlWriter::addAttributePt(const char* attrName, double value)
 {
-    QByteArray str;
-    str.setNum(value, 'f', 11);
-    str += "pt";
-    addAttribute(attrName, str.data());
+    addAttribute(attrName, KisDomUtils::toString(value) + "pt");
 }
 
 void KoXmlWriter::addAttributePt(const char* attrName, float value)
 {
-    QByteArray str;
-    str.setNum(value, 'f', FLT_DIG);
-    str += "pt";
-    addAttribute(attrName, str.data());
+    addAttribute(attrName, KisDomUtils::toString(value) + "pt");
 }
 
 void KoXmlWriter::writeIndent()

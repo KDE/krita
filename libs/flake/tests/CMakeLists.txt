@@ -168,6 +168,14 @@ target_link_libraries(TestSvgParserCloned  kritaflake Qt5::Test)
 
 ########### end ###############
 
+set(TestSvgParserRoundTrip_test_SRCS TestSvgParser.cpp )
+kde4_add_unit_test(TestSvgParserRoundTrip TESTNAME libs-kritaflake-TestSvgParserRoundTrip  ${TestSvgParserRoundTrip_test_SRCS})
+set_property(TARGET TestSvgParserRoundTrip
+             PROPERTY COMPILE_DEFINITIONS USE_ROUND_TRIP)
+target_link_libraries(TestSvgParserRoundTrip  kritaflake Qt5::Test)
+
+########### end ###############
+
 set(TestKoClipMaskPainter_test_SRCS TestKoClipMaskPainter.cpp )
 kde4_add_unit_test(TestKoClipMaskPainter TESTNAME libs-kritaflake-TestKoClipMaskPainter  ${TestKoClipMaskPainter_test_SRCS})
 target_link_libraries(TestKoClipMaskPainter  kritaflake Qt5::Test)

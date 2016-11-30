@@ -43,7 +43,9 @@ struct SvgTester
 
         parser.setXmlBaseDir("./");
 
-        //printf("%s", data.toLatin1().data());
+
+        savedData = data;
+        //printf("%s", savedData.toLatin1().data());
 
     }
 
@@ -99,6 +101,7 @@ struct SvgTester
     KoXmlElement root;
     QSizeF fragmentSize;
     QList<KoShape*> shapes;
+    QString savedData;
 };
 
 void TestSvgParser::testUnitPx()
@@ -691,6 +694,12 @@ void TestSvgParser::testTransformRotation2()
 
 #include "../../sdk/tests/qimage_test_util.h"
 
+#ifdef USE_ROUND_TRIP
+#include "SvgWriter.h"
+#include <QBuffer>
+#include <QDomDocument>
+#endif
+
 struct SvgRenderTester : public SvgTester
 {
     SvgRenderTester(const QString &data)
@@ -731,6 +740,31 @@ struct SvgRenderTester : public SvgTester
         }
 
 #endif /* USE_CLONED_SHAPES */
+
+#ifdef USE_ROUND_TRIP
+
+        const QSizeF sizeInPt(30,30);
+        QBuffer writeBuf;
+        writeBuf.open(QIODevice::WriteOnly);
+
+        {
+            SvgWriter writer(shapes, sizeInPt);
+            writer.save(writeBuf);
+        }
+
+        QDomDocument prettyDoc;
+        prettyDoc.setContent(savedData);
+
+
+        qDebug();
+        printf("\n=== Original: ===\n\n%s\n", prettyDoc.toByteArray(4).data());
+        printf("\n=== Saved: ===\n\n%s\n", writeBuf.data().data());
+        qDebug();
+
+        QVERIFY(doc.setContent(writeBuf.data()));
+        root = doc.documentElement();
+        run();
+#endif /* USE_ROUND_TRIP */
 
         KoShape *shape = findShape("testRect");
         KIS_ASSERT(shape);

@@ -16,16 +16,13 @@ set_package_properties(PythonModuleGeneration PROPERTIES
 if (PythonModuleGeneration_FOUND)
     add_subdirectory(libkis)
 
-    ecm_generate_python_binding(
+    ecm_generate_python_binding (
         TARGET kritalibkis
         PYTHONNAMESPACE krita
         MODULENAME PyKrita
         RULES_FILE "${CMAKE_CURRENT_SOURCE_DIR}/libkis/rules_PyKrita.py"
         SIP_DEPENDS
             QtCore/QtCoremod.sip
-            QtOpenGL/QtOpenGLmod.sip
-            Qt/Qtmod.sip
-            QtXml/QtXmlmod.sip
             QtGui/QtGuimod.sip
             QtWidgets/QtWidgetsmod.sip
          HEADERS

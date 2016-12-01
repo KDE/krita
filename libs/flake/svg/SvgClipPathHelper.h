@@ -20,6 +20,7 @@
 #ifndef SVGCLIPPATHHELPER_H
 #define SVGCLIPPATHHELPER_H
 
+#include <KoFlakeCoordinateSystem.h>
 #include <QList>
 
 class KoShape;
@@ -27,15 +28,13 @@ class KoShape;
 class SvgClipPathHelper
 {
 public:
-    enum Units { UserSpaceOnUse, ObjectBoundingBox };
-
     SvgClipPathHelper();
     ~SvgClipPathHelper();
 
     /// Set the clip path units type
-    void setClipPathUnits(Units clipPathUnits);
+    void setClipPathUnits(KoFlake::CoordinateSystem clipPathUnits);
     /// Returns the clip path units type
-    Units clipPathUnits() const;
+    KoFlake::CoordinateSystem clipPathUnits() const;
 
     QList<KoShape *> shapes() const;
     void setShapes(const QList<KoShape *> &shapes);
@@ -43,7 +42,7 @@ public:
     bool isEmpty() const;
 
 private:
-    Units m_clipPathUnits;
+    KoFlake::CoordinateSystem m_clipPathUnits;
     QList<KoShape*> m_shapes;
 };
 

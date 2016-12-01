@@ -21,23 +21,22 @@
 #ifndef SVGGRADIENTHELPER_H
 #define SVGGRADIENTHELPER_H
 
+#include <KoFlakeCoordinateSystem.h>
 #include <QTransform>
 #include <QGradient>
 
 class SvgGradientHelper
 {
 public:
-    enum Units { UserSpaceOnUse, ObjectBoundingBox };
-
     SvgGradientHelper();
     ~SvgGradientHelper();
     /// Copy constructor
     SvgGradientHelper(const SvgGradientHelper &other);
 
     /// Sets the gradient units type
-    void setGradientUnits(Units units);
+    void setGradientUnits(KoFlake::CoordinateSystem units);
     /// Returns gradient units type
-    Units gradientUnits() const;
+    KoFlake::CoordinateSystem gradientUnits() const;
 
     /// Sets the gradient
     void setGradient(QGradient * g);
@@ -63,7 +62,7 @@ public:
 private:
 
     QGradient * m_gradient;
-    Units m_gradientUnits;
+    KoFlake::CoordinateSystem m_gradientUnits;
     QTransform m_gradientTransform;
     QGradient::Spread m_spreadMode;
 };

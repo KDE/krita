@@ -28,7 +28,7 @@
 #include <KoFlake.h>
 
 SvgGradientHelper::SvgGradientHelper()
-        : m_gradient(new QGradient()), m_gradientUnits(ObjectBoundingBox)
+        : m_gradient(new QGradient()), m_gradientUnits(KoFlake::ObjectBoundingBox)
 {
 }
 
@@ -38,7 +38,7 @@ SvgGradientHelper::~SvgGradientHelper()
 }
 
 SvgGradientHelper::SvgGradientHelper(const SvgGradientHelper &other)
-        : m_gradient(0), m_gradientUnits(ObjectBoundingBox)
+        : m_gradient(0), m_gradientUnits(KoFlake::ObjectBoundingBox)
 {
     m_gradientUnits = other.m_gradientUnits;
     m_gradientTransform = other.m_gradientTransform;
@@ -57,12 +57,12 @@ SvgGradientHelper & SvgGradientHelper::operator = (const SvgGradientHelper & rhs
     return *this;
 }
 
-void SvgGradientHelper::setGradientUnits(Units units)
+void SvgGradientHelper::setGradientUnits(KoFlake::CoordinateSystem units)
 {
     m_gradientUnits = units;
 }
 
-SvgGradientHelper::Units SvgGradientHelper::gradientUnits() const
+KoFlake::CoordinateSystem SvgGradientHelper::gradientUnits() const
 {
     return m_gradientUnits;
 }

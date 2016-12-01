@@ -20,7 +20,7 @@
 #include "SvgClipPathHelper.h"
 
 SvgClipPathHelper::SvgClipPathHelper()
-    : m_clipPathUnits(UserSpaceOnUse) // default as per svg spec
+    : m_clipPathUnits(KoFlake::UserSpaceOnUse) // default as per svg spec
 {
 }
 
@@ -28,12 +28,12 @@ SvgClipPathHelper::~SvgClipPathHelper()
 {
 }
 
-void SvgClipPathHelper::setClipPathUnits(Units clipPathUnits)
+void SvgClipPathHelper::setClipPathUnits(KoFlake::CoordinateSystem clipPathUnits)
 {
     m_clipPathUnits = clipPathUnits;
 }
 
-SvgClipPathHelper::Units SvgClipPathHelper::clipPathUnits() const
+KoFlake::CoordinateSystem SvgClipPathHelper::clipPathUnits() const
 {
     return m_clipPathUnits;
 }

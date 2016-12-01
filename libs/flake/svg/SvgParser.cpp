@@ -239,7 +239,7 @@ SvgGradientHelper* SvgParser::parseGradient(const KoXmlElement &e)
     const QGradientStops defaultStops = gradHelper.gradient()->stops();
 
     if (e.attribute("gradientUnits") == "userSpaceOnUse") {
-        gradHelper.setGradientUnits(SvgGradientHelper::UserSpaceOnUse);
+        gradHelper.setGradientUnits(KoFlake::UserSpaceOnUse);
     }
 
     m_context.pushGraphicsContext(e);
@@ -247,7 +247,7 @@ SvgGradientHelper* SvgParser::parseGradient(const KoXmlElement &e)
 
     if (e.tagName() == "linearGradient") {
         QLinearGradient *g = new QLinearGradient();
-        if (gradHelper.gradientUnits() == SvgGradientHelper::ObjectBoundingBox) {
+        if (gradHelper.gradientUnits() == KoFlake::ObjectBoundingBox) {
             g->setCoordinateMode(QGradient::ObjectBoundingMode);
             g->setStart(QPointF(SvgUtil::fromPercentage(e.attribute("x1", "0%")),
                                 SvgUtil::fromPercentage(e.attribute("y1", "0%"))));
@@ -263,7 +263,7 @@ SvgGradientHelper* SvgParser::parseGradient(const KoXmlElement &e)
 
     } else if (e.tagName() == "radialGradient") {
         QRadialGradient *g = new QRadialGradient();
-        if (gradHelper.gradientUnits() == SvgGradientHelper::ObjectBoundingBox) {
+        if (gradHelper.gradientUnits() == KoFlake::ObjectBoundingBox) {
             g->setCoordinateMode(QGradient::ObjectBoundingMode);
             g->setCenter(QPointF(SvgUtil::fromPercentage(e.attribute("cx", "50%")),
                                  SvgUtil::fromPercentage(e.attribute("cy", "50%"))));
@@ -312,20 +312,6 @@ SvgGradientHelper* SvgParser::parseGradient(const KoXmlElement &e)
     return &m_gradients[gradientId];
 }
 
-KoVectorPatternBackground::CoordinateSystem
-parseUnits(const QString &value, KoVectorPatternBackground::CoordinateSystem defaultValue)
-{
-    KoVectorPatternBackground::CoordinateSystem result = defaultValue;
-
-    if (value == "userSpaceOnUse") {
-        result = KoVectorPatternBackground::UserSpaceOnUse;
-    } else if (value == "objectBoundingBox") {
-        result = KoVectorPatternBackground::ObjectBoundingBox;
-    }
-
-    return result;
-}
-
 inline QPointF bakeShapeOffset(const QTransform &patternTransform, const QPointF &shapeOffset)
 {
     QTransform result =
@@ -369,12 +355,12 @@ QSharedPointer<KoVectorPatternBackground> SvgParser::parsePattern(const KoXmlEle
     }
 
     pattHelper->setReferenceCoordinates(
-                parseUnits(e.attribute("patternUnits"),
-                           pattHelper->referenceCoordinates()));
+                KoFlake::coordinatesFromString(e.attribute("patternUnits"),
+                                               pattHelper->referenceCoordinates()));
 
     pattHelper->setContentCoordinates(
-                parseUnits(e.attribute("patternContentUnits"),
-                           pattHelper->contentCoordinates()));
+                KoFlake::coordinatesFromString(e.attribute("patternContentUnits"),
+                                               pattHelper->contentCoordinates()));
 
     if (e.hasAttribute("patternTransform")) {
         SvgTransformParser p(e.attribute("patternTransform"));
@@ -383,7 +369,7 @@ QSharedPointer<KoVectorPatternBackground> SvgParser::parsePattern(const KoXmlEle
         }
     }
 
-    if (pattHelper->referenceCoordinates() == KoVectorPatternBackground::ObjectBoundingBox) {
+    if (pattHelper->referenceCoordinates() == KoFlake::ObjectBoundingBox) {
         QRectF referenceRect(
             SvgUtil::fromPercentage(e.attribute("x", "0%")),
             SvgUtil::fromPercentage(e.attribute("y", "0%")),
@@ -436,14 +422,14 @@ QSharedPointer<KoVectorPatternBackground> SvgParser::parsePattern(const KoXmlEle
    //           into SVG
    if (e.hasAttribute("viewBox")) {
         gc->currentBoundingBox =
-            pattHelper->referenceCoordinates() == KoVectorPatternBackground::ObjectBoundingBox ?
+            pattHelper->referenceCoordinates() == KoFlake::ObjectBoundingBox ?
             relativeToShape.mapRect(pattHelper->referenceRect()) :
             pattHelper->referenceRect();
 
         applyViewBoxTransform(e);
         pattHelper->setContentCoordinates(pattHelper->referenceCoordinates());
 
-    } else if (pattHelper->contentCoordinates() == KoVectorPatternBackground::ObjectBoundingBox) {
+    } else if (pattHelper->contentCoordinates() == KoFlake::ObjectBoundingBox) {
         gc->matrix = relativeToShape * gc->matrix;
     }
 
@@ -452,7 +438,7 @@ QSharedPointer<KoVectorPatternBackground> SvgParser::parsePattern(const KoXmlEle
 
     QList<KoShape*> patternShapes = parseContainer(e);
 
-    if (pattHelper->contentCoordinates() == KoVectorPatternBackground::UserSpaceOnUse) {
+    if (pattHelper->contentCoordinates() == KoFlake::UserSpaceOnUse) {
         // In Krita we normalize the shapes, bake this transform into the pattern shapes
 
         const QPointF offset = bakeShapeOffset(pattHelper->patternTransform(), extraShapeOffset);
@@ -462,7 +448,7 @@ QSharedPointer<KoVectorPatternBackground> SvgParser::parsePattern(const KoXmlEle
         }
     }
 
-    if (pattHelper->referenceCoordinates() == KoVectorPatternBackground::UserSpaceOnUse) {
+    if (pattHelper->referenceCoordinates() == KoFlake::UserSpaceOnUse) {
         // In Krita we normalize the shapes, bake this transform into reference rect
         // NOTE: this is possible *only* when pattern transform is not perspective
         //       (which is always true for SVG)
@@ -509,12 +495,12 @@ bool SvgParser::parseFilter(const KoXmlElement &e, const KoXmlElement &reference
     }
 
     if (b.attribute("filterUnits") == "userSpaceOnUse")
-        filter.setFilterUnits(SvgFilterHelper::UserSpaceOnUse);
+        filter.setFilterUnits(KoFlake::UserSpaceOnUse);
     if (b.attribute("primitiveUnits") == "objectBoundingBox")
-        filter.setPrimitiveUnits(SvgFilterHelper::ObjectBoundingBox);
+        filter.setPrimitiveUnits(KoFlake::ObjectBoundingBox);
 
     // parse filter region rectangle
-    if (filter.filterUnits() == SvgFilterHelper::UserSpaceOnUse) {
+    if (filter.filterUnits() == KoFlake::UserSpaceOnUse) {
         filter.setPosition(QPointF(parseUnitX(b.attribute("x")),
                                    parseUnitY(b.attribute("y"))));
         filter.setSize(QSizeF(parseUnitX(b.attribute("width")),
@@ -541,10 +527,7 @@ bool SvgParser::parseClipPath(const KoXmlElement &e)
     if (id.isEmpty()) return false;
 
     clipPath.setClipPathUnits(
-        e.attribute("clipPathUnits") == "objectBoundingBox" ?
-            SvgClipPathHelper::ObjectBoundingBox :
-            SvgClipPathHelper::UserSpaceOnUse);
-
+                KoFlake::coordinatesFromString(e.attribute("clipPathUnits"), KoFlake::UserSpaceOnUse));
 
     // ensure that the clip path is loaded in local coordinates system
     m_context.pushGraphicsContext(e);
@@ -569,19 +552,12 @@ bool SvgParser::parseClipMask(const KoXmlElement &e)
     const QString id = e.attribute("id");
     if (id.isEmpty()) return false;
 
-    clipMask->setCoordinates(
-        e.attribute("maskUnits") == "userSpaceOnUse" ?
-                    KoClipMask::UserSpaceOnUse :
-                    KoClipMask::ObjectBoundingBox);
-
-    clipMask->setContentCoordinates(
-        e.attribute("maskContentUnits") == "objectBoundingBox" ?
-                    KoClipMask::ObjectBoundingBox :
-                    KoClipMask::UserSpaceOnUse);
+    clipMask->setCoordinates(KoFlake::coordinatesFromString(e.attribute("maskUnits"), KoFlake::ObjectBoundingBox));
+    clipMask->setContentCoordinates(KoFlake::coordinatesFromString(e.attribute("maskContentUnits"), KoFlake::UserSpaceOnUse));
 
     QRectF maskRect;
 
-    if (clipMask->coordinates() == KoClipMask::ObjectBoundingBox) {
+    if (clipMask->coordinates() == KoFlake::ObjectBoundingBox) {
         maskRect.setRect(
             SvgUtil::fromPercentage(e.attribute("x", "-10%")),
             SvgUtil::fromPercentage(e.attribute("y", "-10%")),
@@ -690,7 +666,7 @@ QGradient* prepareGradientForShape(const SvgGradientHelper *gradient,
     QGradient *resultGradient = 0;
     KIS_ASSERT(transform);
 
-    if (gradient->gradientUnits() == SvgGradientHelper::ObjectBoundingBox) {
+    if (gradient->gradientUnits() == KoFlake::ObjectBoundingBox) {
         resultGradient = KoFlake::cloneGradient(gradient->gradient());
         *transform = gradient->transform();
     } else {
@@ -860,8 +836,8 @@ void SvgParser::applyFilter(KoShape *shape)
     KoFilterEffectLoadingContext context(m_context.xmlBaseDir());
     context.setShapeBoundingBox(bound);
     // enable units conversion
-    context.enableFilterUnitsConversion(filter->filterUnits() == SvgFilterHelper::UserSpaceOnUse);
-    context.enableFilterPrimitiveUnitsConversion(filter->primitiveUnits() == SvgFilterHelper::UserSpaceOnUse);
+    context.enableFilterUnitsConversion(filter->filterUnits() == KoFlake::UserSpaceOnUse);
+    context.enableFilterPrimitiveUnitsConversion(filter->primitiveUnits() == KoFlake::UserSpaceOnUse);
 
     KoFilterEffectRegistry *registry = KoFilterEffectRegistry::instance();
 
@@ -894,7 +870,7 @@ void SvgParser::applyFilter(KoShape *shape)
 
         QRectF subRegion;
         // parse subregion
-        if (filter->primitiveUnits() == SvgFilterHelper::UserSpaceOnUse) {
+        if (filter->primitiveUnits() == KoFlake::UserSpaceOnUse) {
             const QString xa = primitive.attribute("x");
             const QString ya = primitive.attribute("y");
             const QString wa = primitive.attribute("width");
@@ -990,8 +966,8 @@ void SvgParser::applyClipping(KoShape *shape, const QPointF &shapeToOriginalUser
     }
 
     KoClipPath *clipPathObject = new KoClipPath(shapes,
-                                                clipPath->clipPathUnits() == SvgClipPathHelper::ObjectBoundingBox ?
-                                                KoClipPath::ObjectBoundingBox : KoClipPath::UserSpaceOnUse);
+                                                clipPath->clipPathUnits() == KoFlake::ObjectBoundingBox ?
+                                                KoFlake::ObjectBoundingBox : KoFlake::UserSpaceOnUse);
     shape->setClipPath(clipPathObject);
 }
 

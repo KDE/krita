@@ -20,6 +20,7 @@
 #define KOVECTORPATTERNBACKGROUND_H
 
 #include <KoShapeBackground.h>
+#include <KoFlakeCoordinateSystem.h>
 
 class KoShape;
 class QPointF;
@@ -31,23 +32,17 @@ class KoVectorPatternBackgroundPrivate;
 class KoVectorPatternBackground : public KoShapeBackground
 {
 public:
-    enum CoordinateSystem {
-        UserSpaceOnUse,
-        ObjectBoundingBox
-    };
-
-public:
     KoVectorPatternBackground();
     ~KoVectorPatternBackground();
 
-    void setReferenceCoordinates(CoordinateSystem value);
-    CoordinateSystem referenceCoordinates() const;
+    void setReferenceCoordinates(KoFlake::CoordinateSystem value);
+    KoFlake::CoordinateSystem referenceCoordinates() const;
 
     /**
      * In ViewBox just use the same mode as for referenceCoordinates
      */
-    void setContentCoordinates(CoordinateSystem value);
-    CoordinateSystem contentCoordinates() const;
+    void setContentCoordinates(KoFlake::CoordinateSystem value);
+    KoFlake::CoordinateSystem contentCoordinates() const;
 
     void setReferenceRect(const QRectF &value);
     QRectF referenceRect() const;

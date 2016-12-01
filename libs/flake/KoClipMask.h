@@ -21,6 +21,7 @@
 
 #include "kritaflake_export.h"
 
+#include <KoFlakeCoordinateSystem.h>
 #include <QScopedPointer>
 #include <QList>
 
@@ -34,22 +35,16 @@ class QPainter;
 class KRITAFLAKE_EXPORT KoClipMask
 {
 public:
-    enum CoordinateSystem {
-        UserSpaceOnUse,
-        ObjectBoundingBox
-    };
-
-public:
     KoClipMask();
     ~KoClipMask();
 
     KoClipMask *clone() const;
 
-    CoordinateSystem coordinates() const;
-    void setCoordinates(CoordinateSystem value);
+    KoFlake::CoordinateSystem coordinates() const;
+    void setCoordinates(KoFlake::CoordinateSystem value);
 
-    CoordinateSystem contentCoordinates() const;
-    void setContentCoordinates(CoordinateSystem value);
+    KoFlake::CoordinateSystem contentCoordinates() const;
+    void setContentCoordinates(KoFlake::CoordinateSystem value);
 
     QRectF maskRect() const;
     void setMaskRect(const QRectF &value);

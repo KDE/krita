@@ -108,12 +108,12 @@ public:
     QList<KoShape*> shapes;
     QPainterPath clipPath; ///< the compiled clip path in shape coordinates of the clipped shape
     Qt::FillRule clipRule = Qt::WindingFill;
-    CoordinateSystem coordinates = ObjectBoundingBox;
+    KoFlake::CoordinateSystem coordinates = KoFlake::ObjectBoundingBox;
     QTransform initialTransformToShape; ///< initial transformation to shape coordinates of the clipped shape
     QSizeF initialShapeSize; ///< initial size of clipped shape
 };
 
-KoClipPath::KoClipPath(QList<KoShape*> clipShapes, KoClipPath::CoordinateSystem coordinates)
+KoClipPath::KoClipPath(QList<KoShape*> clipShapes, KoFlake::CoordinateSystem coordinates)
    : d(new Private())
 {
     d->shapes = clipShapes;
@@ -145,10 +145,11 @@ Qt::FillRule KoClipPath::clipRule() const
     return d->clipRule;
 }
 
-KoClipPath::CoordinateSystem KoClipPath::coordinates() const
+KoFlake::CoordinateSystem KoClipPath::coordinates() const
 {
     return d->coordinates;
 }
+
 void KoClipPath::applyClipping(KoShape *clippedShape, QPainter &painter, const KoViewConverter &converter)
 {
     QPainterPath clipPath;
@@ -159,7 +160,7 @@ void KoClipPath::applyClipping(KoShape *clippedShape, QPainter &painter, const K
 
             QTransform t;
 
-            if (shape->clipPath()->coordinates() == ObjectBoundingBox) {
+            if (shape->clipPath()->coordinates() == KoFlake::ObjectBoundingBox) {
                 const QRectF shapeLocalBoundingRect = shape->outline().boundingRect();
                 t = KisAlgebra2D::mapToRect(shapeLocalBoundingRect) * shape->absoluteTransformation(0);
 

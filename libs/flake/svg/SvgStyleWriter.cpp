@@ -58,6 +58,8 @@
 #include "kis_dom_utils.h"
 #include "kis_algebra_2d.h"
 #include <SvgWriter.h>
+#include <KoFlakeCoordinateSystem.h>
+
 
 void SvgStyleWriter::saveSvgStyle(KoShape *shape, SvgSavingContext &context)
 {
@@ -181,13 +183,6 @@ void SvgStyleWriter::saveSvgEffects(KoShape *shape, SvgSavingContext &context)
     context.shapeWriter().addAttribute("filter", "url(#" + uid + ")");
 }
 
-inline QString convertClipPathMode(KoClipPath::CoordinateSystem mode) {
-    return
-        mode == KoClipPath::ObjectBoundingBox?
-        "objectBoundingBox" :
-        "userSpaceOnUse";
-}
-
 void embedShapes(const QList<KoShape*> &shapes, KoXmlWriter &outWriter)
 {
     QBuffer buffer;
@@ -211,7 +206,7 @@ void SvgStyleWriter::saveSvgClipping(KoShape *shape, SvgSavingContext &context)
 
     context.styleWriter().startElement("clipPath");
     context.styleWriter().addAttribute("id", uid);
-    context.styleWriter().addAttribute("clipPathUnits", convertClipPathMode(clipPath->coordinates()));
+    context.styleWriter().addAttribute("clipPathUnits", KoFlake::coordinateToString(clipPath->coordinates()));
 
     embedShapes(clipPath->clipShapes(), context.styleWriter());
 
@@ -220,13 +215,6 @@ void SvgStyleWriter::saveSvgClipping(KoShape *shape, SvgSavingContext &context)
     context.shapeWriter().addAttribute("clip-path", "url(#" + uid + ")");
     if (clipPath->clipRule() != Qt::WindingFill)
         context.shapeWriter().addAttribute("clip-rule", "evenodd");
-}
-
-inline QString convertClipMaskMode(KoClipMask::CoordinateSystem mode) {
-    return
-        mode == KoClipMask::ObjectBoundingBox?
-        "objectBoundingBox" :
-        "userSpaceOnUse";
 }
 
 void SvgStyleWriter::saveSvgMasking(KoShape *shape, SvgSavingContext &context)
@@ -239,12 +227,12 @@ void SvgStyleWriter::saveSvgMasking(KoShape *shape, SvgSavingContext &context)
 
     context.styleWriter().startElement("mask");
     context.styleWriter().addAttribute("id", uid);
-    context.styleWriter().addAttribute("maskUnits", convertClipMaskMode(clipMask->coordinates()));
-    context.styleWriter().addAttribute("maskContentUnits", convertClipMaskMode(clipMask->contentCoordinates()));
+    context.styleWriter().addAttribute("maskUnits", KoFlake::coordinateToString(clipMask->coordinates()));
+    context.styleWriter().addAttribute("maskContentUnits", KoFlake::coordinateToString(clipMask->contentCoordinates()));
 
     const QRectF rect = clipMask->maskRect();
 
-    if (clipMask->coordinates() == KoClipMask::ObjectBoundingBox) {
+    if (clipMask->coordinates() == KoFlake::ObjectBoundingBox) {
         context.styleWriter().addAttribute("x", rect.x());
         context.styleWriter().addAttribute("y", rect.y());
         context.styleWriter().addAttribute("width", rect.width());
@@ -440,14 +428,6 @@ QString SvgStyleWriter::saveSvgPattern(QSharedPointer<KoPatternBackground> patte
     return uid;
 }
 
-inline QString convertVectorPatternMode(KoVectorPatternBackground::CoordinateSystem mode) {
-    return
-        mode == KoVectorPatternBackground::ObjectBoundingBox?
-        "objectBoundingBox" :
-        "userSpaceOnUse";
-}
-
-
 QString SvgStyleWriter::saveSvgVectorPattern(QSharedPointer<KoVectorPatternBackground> pattern, KoShape *parentShape, SvgSavingContext &context)
 {
     const QString uid = context.createUID("pattern");
@@ -455,12 +435,12 @@ QString SvgStyleWriter::saveSvgVectorPattern(QSharedPointer<KoVectorPatternBackg
     context.styleWriter().startElement("pattern");
     context.styleWriter().addAttribute("id", uid);
 
-    context.styleWriter().addAttribute("patternUnits", convertVectorPatternMode(pattern->referenceCoordinates()));
-    context.styleWriter().addAttribute("patternContentUnits", convertVectorPatternMode(pattern->contentCoordinates()));
+    context.styleWriter().addAttribute("patternUnits", KoFlake::coordinateToString(pattern->referenceCoordinates()));
+    context.styleWriter().addAttribute("patternContentUnits", KoFlake::coordinateToString(pattern->contentCoordinates()));
 
     const QRectF rect = pattern->referenceRect();
 
-    if (pattern->referenceCoordinates() == KoVectorPatternBackground::ObjectBoundingBox) {
+    if (pattern->referenceCoordinates() == KoFlake::ObjectBoundingBox) {
         context.styleWriter().addAttribute("x", rect.x());
         context.styleWriter().addAttribute("y", rect.y());
         context.styleWriter().addAttribute("width", rect.width());
@@ -474,7 +454,7 @@ QString SvgStyleWriter::saveSvgVectorPattern(QSharedPointer<KoVectorPatternBackg
 
     context.styleWriter().addAttribute("patternTransform", SvgUtil::transformToString(pattern->patternTransform()));
 
-    if (pattern->contentCoordinates() == KoVectorPatternBackground::ObjectBoundingBox) {
+    if (pattern->contentCoordinates() == KoFlake::ObjectBoundingBox) {
         // TODO: move this normalization into the KoVectorPatternBackground itself
 
         QList<KoShape*> shapes = pattern->shapes();

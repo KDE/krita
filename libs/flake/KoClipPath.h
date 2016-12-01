@@ -25,6 +25,7 @@
 #include <QScopedPointer>
 #include <QList>
 #include <qnamespace.h>
+#include <KoFlakeCoordinateSystem.h>
 
 class KoShape;
 class KoPathShape;
@@ -38,12 +39,6 @@ class QSizeF;
 class KRITAFLAKE_EXPORT KoClipPath
 {
 public:
-    enum CoordinateSystem {
-        UserSpaceOnUse,
-        ObjectBoundingBox
-    };
-
-public:
 
     /**
      * Create a new shape clipping using the given clip data
@@ -51,12 +46,12 @@ public:
      * @param coordinates shows if ObjectBoundingBox or UserSpaceOnUse coordinate
      *                    system is used.
      */
-    KoClipPath(QList<KoShape*> clipShapes, CoordinateSystem coordinates);
+    KoClipPath(QList<KoShape*> clipShapes, KoFlake::CoordinateSystem coordinates);
     ~KoClipPath();
 
     KoClipPath *clone() const;
 
-    CoordinateSystem coordinates() const;
+    KoFlake::CoordinateSystem coordinates() const;
 
     /// Sets the clip rule to be used for the clip path
     void setClipRule(Qt::FillRule clipRule);

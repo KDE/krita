@@ -39,10 +39,10 @@ public:
     }
 
     QList<KoShape*> shapes;
-    KoVectorPatternBackground::CoordinateSystem referenceCoordinates =
-            KoVectorPatternBackground::ObjectBoundingBox;
-    KoVectorPatternBackground::CoordinateSystem contentCoordinates =
-            KoVectorPatternBackground::UserSpaceOnUse;
+    KoFlake::CoordinateSystem referenceCoordinates =
+            KoFlake::ObjectBoundingBox;
+    KoFlake::CoordinateSystem contentCoordinates =
+            KoFlake::UserSpaceOnUse;
     QRectF referenceRect;
     QTransform patternTransform;
 };
@@ -57,25 +57,25 @@ KoVectorPatternBackground::~KoVectorPatternBackground()
 
 }
 
-void KoVectorPatternBackground::setReferenceCoordinates(CoordinateSystem value)
+void KoVectorPatternBackground::setReferenceCoordinates(KoFlake::CoordinateSystem value)
 {
     Q_D(KoVectorPatternBackground);
     d->referenceCoordinates = value;
 }
 
-KoVectorPatternBackground::CoordinateSystem KoVectorPatternBackground::referenceCoordinates() const
+KoFlake::CoordinateSystem KoVectorPatternBackground::referenceCoordinates() const
 {
     Q_D(const KoVectorPatternBackground);
     return d->referenceCoordinates;
 }
 
-void KoVectorPatternBackground::setContentCoordinates(CoordinateSystem value)
+void KoVectorPatternBackground::setContentCoordinates(KoFlake::CoordinateSystem value)
 {
     Q_D(KoVectorPatternBackground);
     d->contentCoordinates = value;
 }
 
-KoVectorPatternBackground::CoordinateSystem KoVectorPatternBackground::contentCoordinates() const
+KoFlake::CoordinateSystem KoVectorPatternBackground::contentCoordinates() const
 {
     Q_D(const KoVectorPatternBackground);
     return d->contentCoordinates;
@@ -133,9 +133,9 @@ void KoVectorPatternBackground::paint(QPainter &painter, const KoViewConverter &
     KoBakedShapeRenderer renderer(dstShapeOutline, QTransform(),
                                   QTransform(),
                                   d->referenceRect,
-                                  d->contentCoordinates != UserSpaceOnUse,
+                                  d->contentCoordinates != KoFlake::UserSpaceOnUse,
                                   dstShapeBoundingBox,
-                                  d->referenceCoordinates != UserSpaceOnUse,
+                                  d->referenceCoordinates != KoFlake::UserSpaceOnUse,
                                   d->patternTransform);
 
     QPainter *patchPainter = renderer.bakeShapePainter();

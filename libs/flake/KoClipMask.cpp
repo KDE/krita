@@ -49,8 +49,8 @@ struct Q_DECL_HIDDEN KoClipMask::Private {
     }
 
 
-    CoordinateSystem coordinates = ObjectBoundingBox;
-    CoordinateSystem contentCoordinates = UserSpaceOnUse;
+    KoFlake::CoordinateSystem coordinates = KoFlake::ObjectBoundingBox;
+    KoFlake::CoordinateSystem contentCoordinates = KoFlake::UserSpaceOnUse;
 
     QRectF maskRect = QRectF(-0.1, -0.1, 1.2, 1.2);
 
@@ -78,22 +78,22 @@ KoClipMask *KoClipMask::clone() const
     return new KoClipMask(*this);
 }
 
-KoClipMask::CoordinateSystem KoClipMask::coordinates() const
+KoFlake::CoordinateSystem KoClipMask::coordinates() const
 {
     return m_d->coordinates;
 }
 
-void KoClipMask::setCoordinates(KoClipMask::CoordinateSystem value)
+void KoClipMask::setCoordinates(KoFlake::CoordinateSystem value)
 {
     m_d->coordinates = value;
 }
 
-KoClipMask::CoordinateSystem KoClipMask::contentCoordinates() const
+KoFlake::CoordinateSystem KoClipMask::contentCoordinates() const
 {
     return m_d->contentCoordinates;
 }
 
-void KoClipMask::setContentCoordinates(KoClipMask::CoordinateSystem value)
+void KoClipMask::setContentCoordinates(KoFlake::CoordinateSystem value)
 {
     m_d->contentCoordinates = value;
 }
@@ -130,7 +130,7 @@ void KoClipMask::setExtraShapeOffset(const QPointF &value)
      *       into a group and apply this transform to the group instead
      */
 
-    if (m_d->contentCoordinates == UserSpaceOnUse) {
+    if (m_d->contentCoordinates == KoFlake::UserSpaceOnUse) {
         const QTransform t = QTransform::fromTranslate(value.x(), value.y());
 
         Q_FOREACH (KoShape *shape, m_d->shapes) {
@@ -138,7 +138,7 @@ void KoClipMask::setExtraShapeOffset(const QPointF &value)
         }
     }
 
-    if (m_d->coordinates == UserSpaceOnUse) {
+    if (m_d->coordinates == KoFlake::UserSpaceOnUse) {
         m_d->maskRect.translate(value);
     }
 }
@@ -149,7 +149,7 @@ void KoClipMask::drawMask(QPainter *painter, KoShape *shape)
 
     QPainterPath clipPathInShapeSpace;
 
-    if (m_d->coordinates == ObjectBoundingBox) {
+    if (m_d->coordinates == KoFlake::ObjectBoundingBox) {
         QTransform relativeToShape = KisAlgebra2D::mapToRect(shape->outlineRect());
         clipPathInShapeSpace.addPolygon(relativeToShape.map(m_d->maskRect));
     } else {
@@ -159,7 +159,7 @@ void KoClipMask::drawMask(QPainter *painter, KoShape *shape)
 
     painter->setClipPath(clipPathInShapeSpace, Qt::IntersectClip);
 
-    if (m_d->contentCoordinates == ObjectBoundingBox) {
+    if (m_d->contentCoordinates == KoFlake::ObjectBoundingBox) {
         QTransform relativeToShape = KisAlgebra2D::mapToRect(shape->outlineRect());
 
         painter->setTransform(relativeToShape, true);

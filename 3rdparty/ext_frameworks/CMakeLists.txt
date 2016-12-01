@@ -18,9 +18,10 @@ SET(EXTPREFIX_frameworks "${EXTPREFIX}" )
 ExternalProject_Add(
     ext_extra_cmake_modules
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL http://download.kde.org/stable/frameworks/5.24/extra-cmake-modules-5.24.0.zip
-    URL_MD5 e0c19ba97ebd964f9bdc9110c64ce96a
+    URL http://download.kde.org/stable/frameworks/5.28/extra-cmake-modules-5.28.0.zip
+    URL_MD5 8e8e20e1fea1f86dc3ff843bd1f2f8f1
     PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/ecm_install_to_share.diff
+          COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}ecm_python3.diff
     INSTALL_DIR ${EXTPREFIX_frameworks}
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_frameworks}
                -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} 

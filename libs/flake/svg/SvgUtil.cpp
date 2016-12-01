@@ -382,10 +382,50 @@ QPointF SvgUtil::PreserveAspectRatioParser::rectAnchorPoint(const QRectF &rc) co
                    alignedValue(rc.y(), rc.y() + rc.height(), yAlignment));
 }
 
-SvgUtil::PreserveAspectRatioParser::Alignment SvgUtil::PreserveAspectRatioParser::alignmentFromString(const QString &str) {
+QString SvgUtil::PreserveAspectRatioParser::toString() const
+{
+    QString result;
+
+    if (!defer &&
+        xAlignment == Middle &&
+        yAlignment == Middle &&
+        mode == Qt::KeepAspectRatio) {
+
+        return result;
+    }
+
+    if (defer) {
+        result += "defer ";
+    }
+
+    if (mode == Qt::IgnoreAspectRatio) {
+        result += "none";
+    } else {
+        result += QString("x%1Y%2")
+            .arg(alignmentToString(xAlignment))
+            .arg(alignmentToString(yAlignment));
+
+        if (mode == Qt::KeepAspectRatioByExpanding) {
+            result += " slice";
+        }
+    }
+
+    return result;
+}
+
+SvgUtil::PreserveAspectRatioParser::Alignment SvgUtil::PreserveAspectRatioParser::alignmentFromString(const QString &str) const {
     return
         str == "max" ? Max :
         str == "mid" ? Middle : Min;
+}
+
+QString SvgUtil::PreserveAspectRatioParser::alignmentToString(SvgUtil::PreserveAspectRatioParser::Alignment alignment) const
+{
+    return
+        alignment == Max ? "Max" :
+        alignment == Min ? "Min" :
+        "Mid";
+
 }
 
 qreal SvgUtil::PreserveAspectRatioParser::alignedValue(qreal min, qreal max, SvgUtil::PreserveAspectRatioParser::Alignment alignment)

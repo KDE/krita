@@ -24,9 +24,14 @@
 #include <QPainter>
 #include <KoViewConverter.h>
 #include <SvgLoadingContext.h>
+#include <SvgSavingContext.h>
 #include <SvgUtil.h>
 #include <QFileInfo>
 #include <QBuffer>
+#include <KisMimeDatabase.h>
+#include <KoXmlWriter.h>
+#include "kis_dom_utils.h"
+#include <QRegularExpression>
 
 struct Q_DECL_HIDDEN ImageShape::Private
 {
@@ -99,8 +104,30 @@ bool ImageShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &con
 
 bool ImageShape::saveSvg(SvgSavingContext &context)
 {
-    Q_UNUSED(context);
-    return false;
+    const QString uid = context.createUID("image");
+
+    context.shapeWriter().startElement("image");
+    context.shapeWriter().addAttribute("id", uid);
+    context.shapeWriter().addAttribute("transform", SvgUtil::transformToString(transformation()));
+    context.shapeWriter().addAttribute("width", QString("%1px").arg(KisDomUtils::toString(size().width())));
+    context.shapeWriter().addAttribute("height", QString("%1px").arg(KisDomUtils::toString(size().height())));
+
+    QString aspectString = m_d->ratioParser->toString();
+    if (!aspectString.isEmpty()) {
+        context.shapeWriter().addAttribute("preserveAspectRatio", aspectString);
+    }
+
+    QByteArray ba;
+    QBuffer buffer(&ba);
+    buffer.open(QIODevice::WriteOnly);
+    if (m_d->image.save(&buffer, "PNG")) {
+        const QString mimeType = KisMimeDatabase::mimeTypeForSuffix("*.png");
+        context.shapeWriter().addAttribute("xlink:href", "data:"+ mimeType + ";base64," + ba.toBase64());
+    }
+
+    context.shapeWriter().endElement(); // image
+
+    return true;
 }
 
 bool ImageShape::loadSvg(const KoXmlElement &element, SvgLoadingContext &context)
@@ -118,7 +145,19 @@ bool ImageShape::loadSvg(const KoXmlElement &element, SvgLoadingContext &context
     }
 
     QString fileName = element.attribute("xlink:href");
-    QByteArray data = context.fetchExternalFile(fileName);
+
+    QByteArray data;
+
+    if (fileName.startsWith("data:")) {
+
+        QRegularExpression re("data:(.+?);base64,(.+)");
+        QRegularExpressionMatch match = re.match(fileName);
+
+        data = match.captured(2).toLatin1();
+        data = QByteArray::fromBase64(data);
+    } else {
+        data = context.fetchExternalFile(fileName);
+    }
 
     if (!data.isEmpty()) {
         QBuffer buffer(&data);
@@ -137,7 +176,7 @@ bool ImageShape::loadSvg(const KoXmlElement &element, SvgLoadingContext &context
                                   QRectF(QPointF(), size()),
                                   QRect(QPoint(), m_d->image.size()),
                                   &m_d->viewBoxTransform);
-        }
+    }
 
     if (m_d->ratioParser->defer) {
         // TODO:

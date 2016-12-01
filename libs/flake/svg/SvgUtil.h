@@ -122,8 +122,11 @@ public:
 
         QPointF rectAnchorPoint(const QRectF &rc) const;
 
+        QString toString() const;
+
     private:
-        Alignment alignmentFromString(const QString &str);
+        Alignment alignmentFromString(const QString &str) const;
+        QString alignmentToString(Alignment alignment) const;
         static qreal alignedValue(qreal min, qreal max, Alignment alignment);
     };
 };

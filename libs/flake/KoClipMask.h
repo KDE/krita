@@ -27,6 +27,7 @@
 class KoShape;
 class QRectF;
 class QTransform;
+class QPointF;
 class QPainter;
 
 
@@ -58,8 +59,7 @@ public:
 
     bool isEmpty() const;
 
-    QTransform extraShapeTransform() const;
-    void setExtraShapeTransform(const QTransform &value);
+    void setExtraShapeOffset(const QPointF &value);
 
     void drawMask(QPainter *painter, KoShape *shape);
 

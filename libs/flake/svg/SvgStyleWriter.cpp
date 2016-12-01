@@ -46,6 +46,7 @@
 #include <KoPatternBackground.h>
 #include <KoShapeStroke.h>
 #include <KoClipPath.h>
+#include <KoClipMask.h>
 #include <KoXmlWriter.h>
 
 #include <QBuffer>
@@ -62,6 +63,7 @@ void SvgStyleWriter::saveSvgStyle(KoShape *shape, SvgSavingContext &context)
     saveSvgStroke(shape, context);
     saveSvgEffects(shape, context);
     saveSvgClipping(shape, context);
+    saveSvgMasking(shape, context);
     if (! shape->isVisible())
         context.shapeWriter().addAttribute("display", "none");
     if (shape->transparency() > 0.0)
@@ -185,13 +187,6 @@ void SvgStyleWriter::saveSvgClipping(KoShape *shape, SvgSavingContext &context)
     if (!clipPath)
         return;
 
-    const QSizeF shapeSize = shape->outlineRect().size();
-    KoPathShape *path = KoPathShape::createShapeFromPainterPath(clipPath->pathForSize(shapeSize));
-    if (!path)
-        return;
-
-    path->close();
-
     const QString uid = context.createUID("clippath");
 
     context.styleWriter().startElement("clipPath");
@@ -213,6 +208,55 @@ void SvgStyleWriter::saveSvgClipping(KoShape *shape, SvgSavingContext &context)
     context.shapeWriter().addAttribute("clip-path", "url(#" + uid + ")");
     if (clipPath->clipRule() != Qt::WindingFill)
         context.shapeWriter().addAttribute("clip-rule", "evenodd");
+}
+
+inline QString convertClipMaskMode(KoClipMask::CoordinateSystem mode) {
+    return
+        mode == KoClipMask::ObjectBoundingBox?
+        "objectBoundingBox" :
+        "userSpaceOnUse";
+}
+
+void SvgStyleWriter::saveSvgMasking(KoShape *shape, SvgSavingContext &context)
+{
+    KoClipMask*clipMask = shape->clipMask();
+    if (!clipMask)
+        return;
+
+    const QString uid = context.createUID("clipmask");
+
+    context.styleWriter().startElement("mask");
+    context.styleWriter().addAttribute("id", uid);
+    context.styleWriter().addAttribute("maskUnits", convertClipMaskMode(clipMask->coordinates()));
+    context.styleWriter().addAttribute("maskContentUnits", convertClipMaskMode(clipMask->contentCoordinates()));
+
+    const QRectF rect = clipMask->maskRect();
+
+    if (clipMask->coordinates() == KoClipMask::ObjectBoundingBox) {
+        context.styleWriter().addAttribute("x", rect.x());
+        context.styleWriter().addAttribute("y", rect.y());
+        context.styleWriter().addAttribute("width", rect.width());
+        context.styleWriter().addAttribute("height", rect.height());
+    } else {
+        context.styleWriter().addAttributePt("x", rect.x());
+        context.styleWriter().addAttributePt("y", rect.y());
+        context.styleWriter().addAttributePt("width", rect.width());
+        context.styleWriter().addAttributePt("height", rect.height());
+    }
+
+    QBuffer buffer;
+    buffer.open(QIODevice::WriteOnly);
+    {
+        QList<KoShape*> shapes = clipMask->shapes();
+        SvgWriter shapesWriter(shapes, QSizeF(666, 666));
+        shapesWriter.saveDetached(buffer);
+    }
+    buffer.close();
+    context.styleWriter().addCompleteElement(&buffer);
+
+    context.styleWriter().endElement(); // clipMask
+
+    context.shapeWriter().addAttribute("mask", "url(#" + uid + ")");
 }
 
 void SvgStyleWriter::saveSvgColorStops(const QGradientStops &colorStops, SvgSavingContext &context)

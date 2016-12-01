@@ -55,7 +55,7 @@ struct Q_DECL_HIDDEN KoClipMask::Private {
     QRectF maskRect = QRectF(-0.1, -0.1, 1.2, 1.2);
 
     QList<KoShape*> shapes;
-    QTransform extraShapeTransform;
+    QTransform extraShapeTransform; // TODO: not used anymore, use direct shape transform instead
 
 };
 
@@ -123,14 +123,24 @@ bool KoClipMask::isEmpty() const
     return m_d->shapes.isEmpty();
 }
 
-QTransform KoClipMask::extraShapeTransform() const
+void KoClipMask::setExtraShapeOffset(const QPointF &value)
 {
-    return m_d->extraShapeTransform;
-}
+    /**
+     * TODO: when we implement source shapes sharing, please wrap the shapes
+     *       into a group and apply this transform to the group instead
+     */
 
-void KoClipMask::setExtraShapeTransform(const QTransform &value)
-{
-    m_d->extraShapeTransform = value;
+    if (m_d->contentCoordinates == UserSpaceOnUse) {
+        const QTransform t = QTransform::fromTranslate(value.x(), value.y());
+
+        Q_FOREACH (KoShape *shape, m_d->shapes) {
+            shape->applyAbsoluteTransformation(t);
+        }
+    }
+
+    if (m_d->coordinates == UserSpaceOnUse) {
+        m_d->maskRect.translate(value);
+    }
 }
 
 void KoClipMask::drawMask(QPainter *painter, KoShape *shape)

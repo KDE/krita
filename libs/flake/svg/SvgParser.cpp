@@ -326,7 +326,7 @@ parseUnits(const QString &value, KoVectorPatternBackground::CoordinateSystem def
     return result;
 }
 
-QSharedPointer<KoVectorPatternBackground> SvgParser::parsePattern(const KoXmlElement &e, const KoShape *shape)
+ QSharedPointer<KoVectorPatternBackground> SvgParser::parsePattern(const KoXmlElement &e, const KoShape *shape)
 {
     /**
      * Unlike the gradient parsing function, this method is called every time we
@@ -575,7 +575,7 @@ void SvgParser::uploadStyleToContext(const KoXmlElement &e)
     m_context.styleParser().parseStyle(styles);
 }
 
-void SvgParser::applyCurrentStyle(KoShape *shape, const QTransform &shapeToOriginalUserCoordinates)
+void SvgParser::applyCurrentStyle(KoShape *shape, const QPointF &shapeToOriginalUserCoordinates)
 {
     if (!shape) return;
 
@@ -607,12 +607,12 @@ void SvgParser::applyCurrentStyle(KoShape *shape, const QTransform &shapeToOrigi
     shape->setTransparency(1.0 - gc->opacity);
 }
 
-void SvgParser::applyStyle(KoShape *obj, const KoXmlElement &e, const QTransform &shapeToOriginalUserCoordinates)
+void SvgParser::applyStyle(KoShape *obj, const KoXmlElement &e, const QPointF &shapeToOriginalUserCoordinates)
 {
     applyStyle(obj, m_context.styleParser().collectStyles(e), shapeToOriginalUserCoordinates);
 }
 
-void SvgParser::applyStyle(KoShape *obj, const SvgStyles &styles, const QTransform &shapeToOriginalUserCoordinates)
+void SvgParser::applyStyle(KoShape *obj, const SvgStyles &styles, const QPointF &shapeToOriginalUserCoordinates)
 {
     SvgGraphicsContext *gc = m_context.currentGC();
     if (!gc)
@@ -912,7 +912,7 @@ void SvgParser::applyFilter(KoShape *shape)
     }
 }
 
-void SvgParser::applyClipping(KoShape *shape, const QTransform &shapeToOriginalUserCoordinates)
+void SvgParser::applyClipping(KoShape *shape, const QPointF &shapeToOriginalUserCoordinates)
 {
     SvgGraphicsContext *gc = m_context.currentGC();
     if (! gc)
@@ -934,9 +934,13 @@ void SvgParser::applyClipping(KoShape *shape, const QTransform &shapeToOriginalU
         shapes.append(clonedShape);
     }
 
-    if (!shapeToOriginalUserCoordinates.isIdentity()) {
+    if (!shapeToOriginalUserCoordinates.isNull()) {
+        const QTransform t =
+            QTransform::fromTranslate(shapeToOriginalUserCoordinates.x(),
+                                      shapeToOriginalUserCoordinates.y());
+
         Q_FOREACH(KoShape *s, shapes) {
-            s->applyAbsoluteTransformation(shapeToOriginalUserCoordinates);
+            s->applyAbsoluteTransformation(t);
         }
     }
 
@@ -946,7 +950,7 @@ void SvgParser::applyClipping(KoShape *shape, const QTransform &shapeToOriginalU
     shape->setClipPath(clipPathObject);
 }
 
-void SvgParser::applyMaskClipping(KoShape *shape, const QTransform &shapeToOriginalUserCoordinates)
+void SvgParser::applyMaskClipping(KoShape *shape, const QPointF &shapeToOriginalUserCoordinates)
 {
     SvgGraphicsContext *gc = m_context.currentGC();
     if (!gc)
@@ -961,7 +965,7 @@ void SvgParser::applyMaskClipping(KoShape *shape, const QTransform &shapeToOrigi
 
     KoClipMask *clipMask = originalClipMask->clone();
 
-    clipMask->setExtraShapeTransform(shapeToOriginalUserCoordinates);
+    clipMask->setExtraShapeOffset(shapeToOriginalUserCoordinates);
 
     shape->setClipMask(clipMask);
 }
@@ -1011,7 +1015,7 @@ QList<KoShape*> SvgParser::parseSvg(const KoXmlElement &e, QSizeF *fragmentSize)
     // parse 'transform' field if preset
     SvgGraphicsContext *gc = m_context.pushGraphicsContext(e);
 
-    applyStyle(0, e, QTransform());
+    applyStyle(0, e, QPointF());
 
     const QString w = e.attribute("width");
     const QString h = e.attribute("height");
@@ -1069,6 +1073,16 @@ void SvgParser::setFileFetcher(SvgParser::FileFetcherFunc func)
     m_context.setFileFetcher(func);
 }
 
+inline QPointF extraShapeOffset(const KoShape *shape, const QTransform coordinateSystemOnLoading)
+{
+    const QTransform shapeToOriginalUserCoordinates =
+        shape->absoluteTransformation(0).inverted() *
+        coordinateSystemOnLoading;
+
+    KIS_SAFE_ASSERT_RECOVER_NOOP(shapeToOriginalUserCoordinates.type() <= QTransform::TxTranslate);
+    return QPointF(shapeToOriginalUserCoordinates.dx(), shapeToOriginalUserCoordinates.dy());
+}
+
 KoShape* SvgParser::parseGroup(const KoXmlElement &b, const KoXmlElement &overrideChildrenFrom)
 {
     m_context.pushGraphicsContext(b);
@@ -1078,11 +1092,7 @@ KoShape* SvgParser::parseGroup(const KoXmlElement &b, const KoXmlElement &overri
 
     // groups should also have their own coordinate system!
     group->applyAbsoluteTransformation(m_context.currentGC()->matrix);
-
-    const QTransform coordinateSystemOnLoading = m_context.currentGC()->matrix;
-    const QTransform shapeToOriginalUserCoordinates =
-        group->absoluteTransformation(0).inverted() *
-        coordinateSystemOnLoading;
+    const QPointF extraOffset = extraShapeOffset(group, m_context.currentGC()->matrix);
 
     uploadStyleToContext(b);
 
@@ -1101,7 +1111,7 @@ KoShape* SvgParser::parseGroup(const KoXmlElement &b, const KoXmlElement &overri
 
     addToGroup(childShapes, group);
 
-    applyCurrentStyle(group, shapeToOriginalUserCoordinates); // apply style to this group after size is set
+    applyCurrentStyle(group, extraOffset); // apply style to this group after size is set
 
     m_context.popGraphicsContext();
 
@@ -1293,12 +1303,9 @@ KoShape * SvgParser::createObjectDirect(const KoXmlElement &b)
     KoShape *obj = createShapeFromElement(b, m_context);
     if (obj) {
         obj->applyAbsoluteTransformation(m_context.currentGC()->matrix);
-        const QTransform coordinateSystemOnLoading = m_context.currentGC()->matrix;
-        const QTransform shapeToOriginalUserCoordinates =
-            obj->absoluteTransformation(0).inverted() *
-            coordinateSystemOnLoading;
+        const QPointF extraOffset = extraShapeOffset(obj, m_context.currentGC()->matrix);
 
-        applyCurrentStyle(obj, shapeToOriginalUserCoordinates);
+        applyCurrentStyle(obj, extraOffset);
 
         // handle id
         applyId(b.attribute("id"), obj);
@@ -1317,15 +1324,11 @@ KoShape * SvgParser::createObject(const KoXmlElement &b, const SvgStyles &style)
     KoShape *obj = createShapeFromElement(b, m_context);
     if (obj) {
         obj->applyAbsoluteTransformation(m_context.currentGC()->matrix);
-
-        const QTransform coordinateSystemOnLoading = m_context.currentGC()->matrix;
-        const QTransform shapeToOriginalUserCoordinates =
-            obj->absoluteTransformation(0).inverted() *
-            coordinateSystemOnLoading;
+        const QPointF extraOffset = extraShapeOffset(obj, m_context.currentGC()->matrix);
 
         SvgStyles objStyle = style.isEmpty() ? m_context.styleParser().collectStyles(b) : style;
         m_context.styleParser().parseFont(objStyle);
-        applyStyle(obj, objStyle, shapeToOriginalUserCoordinates);
+        applyStyle(obj, objStyle, extraOffset);
 
         // handle id
         applyId(b.attribute("id"), obj);

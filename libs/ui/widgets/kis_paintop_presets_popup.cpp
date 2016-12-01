@@ -469,7 +469,10 @@ void KisPaintOpPresetsPopup::setPaintOpList(const QList< KisPaintOpFactory* >& l
 
         qStableSort(sortedList.begin(), sortedList.end(), variantLessThan );
 
-        // TODO: Add an "All" option that shows all brush presets.
+        // add an "All" option at the front to show all presets
+        QPixmap emptyPixmap = QPixmap(22,22);
+        emptyPixmap.fill(palette().color(QPalette::Background));
+        sortedList.push_front(KisPaintOpInfo(QString("all_options"), i18n("All"), QString(""), emptyPixmap, 0 ));
 
         // fill the list into the brush combo box
         for (int m = 0; m < sortedList.length(); m++) {
@@ -493,7 +496,14 @@ void KisPaintOpPresetsPopup::setCurrentPaintOp(const QString& paintOpId)
         }
     }
 
-    m_d->uiWdgPaintOpPresetSettings.presetWidget->setPresetFilter(paintOpId);
+    // if the "all" option is set, set the filter to "", that way it clears the filter and shows everything
+    QString paintOpFilter = paintOpId;
+    if (paintOpFilter == "all_options") {
+        paintOpFilter = "";
+    }
+
+    m_d->uiWdgPaintOpPresetSettings.presetWidget->setPresetFilter(paintOpFilter);
+
 }
 
 QString KisPaintOpPresetsPopup::currentPaintOp()
@@ -564,7 +574,6 @@ void KisPaintOpPresetsPopup::slotPaintOpChanged(int index) {
     QVariant userData = m_d->uiWdgPaintOpPresetSettings.brushEgineComboBox->currentData(); // grab paintOpID from data
     QString currentPaintOpId = userData.toString();
 
-    m_d->uiWdgPaintOpPresetSettings.presetWidget->setPresetFilter(currentPaintOpId);
     setCurrentPaintOp(currentPaintOpId);
     emit paintopActivated(currentPaintOpId); // tell the toolbar to change the active icon
 }

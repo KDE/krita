@@ -45,6 +45,8 @@ public:
      */
     KisImageViewConverter(const KisImageWSP image);
 
+    void setImage(KisImageWSP image);
+
     QTransform documentToView() const;
     QTransform viewToDocument() const;
 
@@ -63,7 +65,7 @@ public:
     qreal zoom() const;
 
 private:
-    const KisImageWSP m_image;
+    KisImageWSP m_image;
 };
 
 #endif

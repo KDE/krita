@@ -1,5 +1,5 @@
 diff --git a/find-modules/FindPythonModuleGeneration.cmake b/find-modules/FindPythonModuleGeneration.cmake
-index 0a857a2..de53e0d 100644
+index 0a857a2..aa93e45 100644
 --- a/find-modules/FindPythonModuleGeneration.cmake
 +++ b/find-modules/FindPythonModuleGeneration.cmake
 @@ -161,8 +161,8 @@ if (NOT GPB_PYTHON3_LIBRARY)
@@ -41,6 +41,19 @@ index 0a857a2..de53e0d 100644
 +  COMMAND ${GPB_PYTHON3_COMMAND} ${CMAKE_CURRENT_LIST_DIR}/sip_generator.py --self-check ${libclang_LIBRARY}
    RESULT_VARIABLE selfCheckErrors
  )
+ 
+@@ -230,9 +230,9 @@ set(GPB_Qt5_Tag Qt_5_${Qt5Core_VERSION_MINOR}_${Qt5Core_VERSION_PATCH})
+ 
+ list(FIND _SIP_Qt5_VERSIONS ${GPB_Qt5_Tag} _SIP_Qt5_Version_Index)
+ 
+-if(_SIP_Qt5_Version_Index EQUAL -1)
+-  _report_NOT_FOUND("PyQt module \"${SIP_Qt5Core_Mod_FILE}\" does not support Qt version 5.${Qt5Core_VERSION_MINOR}.${Qt5Core_VERSION_PATCH} for the ${CMAKE_FIND_PACKAGE_NAME} Module. Found available Qt5 tags: \"${_SIP_Qt5_VERSIONS}\".")
+-endif()
++#if(_SIP_Qt5_Version_Index EQUAL -1)
++#  _report_NOT_FOUND("PyQt module \"${SIP_Qt5Core_Mod_FILE}\" does not support Qt version 5.${Qt5Core_VERSION_MINOR}.${Qt5Core_VERSION_PATCH} for the ${CMAKE_FIND_PACKAGE_NAME} Module. Found available Qt5 tags: \"${_SIP_Qt5_VERSIONS}\".")
++#endif()
+ 
+ set(PythonModuleGeneration_FOUND TRUE)
  
 @@ -337,7 +337,7 @@ function(ecm_generate_python_binding
          set(comp_flags "$<JOIN:$<TARGET_PROPERTY:${target_value},INTERFACE_COMPILE_OPTIONS>;${stdFlag},;>")

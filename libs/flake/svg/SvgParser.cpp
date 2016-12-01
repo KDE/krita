@@ -326,7 +326,18 @@ parseUnits(const QString &value, KoVectorPatternBackground::CoordinateSystem def
     return result;
 }
 
- QSharedPointer<KoVectorPatternBackground> SvgParser::parsePattern(const KoXmlElement &e, const KoShape *shape)
+inline QPointF bakeShapeOffset(const QTransform &patternTransform, const QPointF &shapeOffset)
+{
+    QTransform result =
+            patternTransform *
+            QTransform::fromTranslate(-shapeOffset.x(), -shapeOffset.y()) *
+            patternTransform.inverted();
+    KIS_ASSERT_RECOVER_NOOP(result.type() <= QTransform::TxTranslate);
+
+    return QPointF(result.dx(), result.dy());
+}
+
+QSharedPointer<KoVectorPatternBackground> SvgParser::parsePattern(const KoXmlElement &e, const KoShape *shape)
 {
     /**
      * Unlike the gradient parsing function, this method is called every time we
@@ -404,14 +415,22 @@ parseUnits(const QString &value, KoVectorPatternBackground::CoordinateSystem def
    KIS_SAFE_ASSERT_RECOVER_NOOP(shapeOffsetTransform.type() <= QTransform::TxTranslate);
    const QPointF extraShapeOffset(shapeOffsetTransform.dx(), shapeOffsetTransform.dy());
 
-   pattHelper->setExtraShapeOffset(extraShapeOffset);
+   // start building shape tree from scratch
+   gc->matrix = QTransform();
 
-   const QRectF boundingRect = shape->outline().boundingRect().translated(extraShapeOffset);
+   const QRectF boundingRect = shape->outline().boundingRect()/*.translated(extraShapeOffset)*/;
    const QTransform relativeToShape(boundingRect.width(), 0, 0, boundingRect.height(),
                                     boundingRect.x(), boundingRect.y());
 
 
-    if (e.hasAttribute("viewBox")) {
+
+   // WARNING1: OBB and ViewBox transformations are *baked* into the pattern shapes!
+   //          although we expect the pattern be reusable, but it is not so!
+   // WARNING2: the pattern shapes are stored in *User* coordinate system, although
+   //           the "official" content system might be either OBB or User. It means that
+   //           this baked transform should be stripped before writing the shapes back
+   //           into SVG
+   if (e.hasAttribute("viewBox")) {
         gc->currentBoundingBox =
             pattHelper->referenceCoordinates() == KoVectorPatternBackground::ObjectBoundingBox ?
             relativeToShape.mapRect(pattHelper->referenceRect()) :
@@ -427,13 +446,35 @@ parseUnits(const QString &value, KoVectorPatternBackground::CoordinateSystem def
     // We do *not* apply patternTransform here! Here we only bake the untransformed
     // version of the shape. The transformed one will be done in the very end while rendering.
 
-    KoShape *patternShape = parseGroup(e);
+    QList<KoShape*> patternShapes = parseContainer(e);
+
+    if (pattHelper->contentCoordinates() == KoVectorPatternBackground::UserSpaceOnUse) {
+        // In Krita we normalize the shapes, bake this transform into the pattern shapes
+
+        const QPointF offset = bakeShapeOffset(pattHelper->patternTransform(), extraShapeOffset);
+
+        Q_FOREACH (KoShape *shape, patternShapes) {
+            shape->applyAbsoluteTransformation(QTransform::fromTranslate(offset.x(), offset.y()));
+        }
+    }
+
+    if (pattHelper->referenceCoordinates() == KoVectorPatternBackground::UserSpaceOnUse) {
+        // In Krita we normalize the shapes, bake this transform into reference rect
+        // NOTE: this is possible *only* when pattern transform is not perspective
+        //       (which is always true for SVG)
+
+        const QPointF offset = bakeShapeOffset(pattHelper->patternTransform(), extraShapeOffset);
+
+        QRectF ref = pattHelper->referenceRect();
+        ref.translate(offset);
+        pattHelper->setReferenceRect(ref);
+    }
 
     m_context.popGraphicsContext();
     gc = m_context.currentGC();
 
-    if (patternShape) {
-        pattHelper->setShape(patternShape, gc->matrix);
+    if (!patternShapes.isEmpty()) {
+        pattHelper->setShapes(patternShapes);
     }
 
     return pattHelper;

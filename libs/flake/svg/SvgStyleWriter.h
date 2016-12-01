@@ -36,6 +36,7 @@
 class SvgSavingContext;
 class KoShape;
 class KoPatternBackground;
+class KoVectorPatternBackground;
 class QTransform;
 class QGradient;
 
@@ -63,6 +64,7 @@ protected:
     static QString saveSvgGradient(const QGradient *gradient, const QTransform &gradientTransform, SvgSavingContext &context);
     /// Saves pattern
     static QString saveSvgPattern(QSharedPointer<KoPatternBackground> pattern, KoShape *shape, SvgSavingContext &context);
+    static QString saveSvgVectorPattern(QSharedPointer<KoVectorPatternBackground> pattern, KoShape *shape, SvgSavingContext &context);
 };
 
 #endif // SVGSTYLEWRITER_H

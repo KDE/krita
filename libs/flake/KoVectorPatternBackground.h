@@ -55,11 +55,8 @@ public:
     void setPatternTransform(const QTransform &value);
     QTransform patternTransform() const;
 
-    void setExtraShapeOffset(const QPointF &value);
-    QPointF extraShapeOffset() const;
-
-    void setShape(KoShape *shape, const QTransform &bakedTransform);
-
+    void setShapes(const QList<KoShape*> value);
+    QList<KoShape*> shapes() const;
 
     void paint(QPainter &painter, const KoViewConverter &converter_Unused, KoShapePaintingContext &context_Unused, const QPainterPath &fillPath) const override;
     bool hasTransparency() const override;

@@ -34,18 +34,17 @@ public:
 
     ~KoVectorPatternBackgroundPrivate()
     {
+        qDeleteAll(shapes);
+        shapes.clear();
     }
 
-    QScopedPointer<KoShape> shape;
-    QTransform bakedTransform;
-
+    QList<KoShape*> shapes;
     KoVectorPatternBackground::CoordinateSystem referenceCoordinates =
             KoVectorPatternBackground::ObjectBoundingBox;
     KoVectorPatternBackground::CoordinateSystem contentCoordinates =
             KoVectorPatternBackground::UserSpaceOnUse;
     QRectF referenceRect;
     QTransform patternTransform;
-    QPointF extraShapeOffset;
 };
 
 KoVectorPatternBackground::KoVectorPatternBackground()
@@ -106,24 +105,19 @@ QTransform KoVectorPatternBackground::patternTransform() const
     return d->patternTransform;
 }
 
-void KoVectorPatternBackground::setExtraShapeOffset(const QPointF &value)
+void KoVectorPatternBackground::setShapes(const QList<KoShape*> value)
 {
     Q_D(KoVectorPatternBackground);
-    d->extraShapeOffset = value;
+    qDeleteAll(d->shapes);
+    d->shapes.clear();
+
+    d->shapes = value;
 }
 
-QPointF KoVectorPatternBackground::extraShapeOffset() const
+QList<KoShape *> KoVectorPatternBackground::shapes() const
 {
     Q_D(const KoVectorPatternBackground);
-    return d->extraShapeOffset;
-}
-
-void KoVectorPatternBackground::setShape(KoShape *shape, const QTransform &bakedTransform)
-{
-    Q_D(KoVectorPatternBackground);
-
-    d->shape.reset(shape);
-    d->bakedTransform = bakedTransform;
+    return d->shapes;
 }
 
 void KoVectorPatternBackground::paint(QPainter &painter, const KoViewConverter &converter_Unused, KoShapePaintingContext &context_Unused, const QPainterPath &fillPath) const
@@ -133,11 +127,11 @@ void KoVectorPatternBackground::paint(QPainter &painter, const KoViewConverter &
 
     Q_D(const KoVectorPatternBackground);
 
-    const QPainterPath dstShapeOutline = fillPath.translated(d->extraShapeOffset);
+    const QPainterPath dstShapeOutline = fillPath;
     const QRectF dstShapeBoundingBox = dstShapeOutline.boundingRect();
 
     KoBakedShapeRenderer renderer(dstShapeOutline, QTransform(),
-                                  d->bakedTransform,
+                                  QTransform(),
                                   d->referenceRect,
                                   d->contentCoordinates != UserSpaceOnUse,
                                   dstShapeBoundingBox,
@@ -148,13 +142,12 @@ void KoVectorPatternBackground::paint(QPainter &painter, const KoViewConverter &
 
     KoViewConverter converter;
     KoShapePainter p;
-    p.setShapes({d->shape.data()});
+    p.setShapes(d->shapes);
     p.paint(*patchPainter, converter);
 
     // uncomment for debug
     // renderer.patchImage().save("dd_patch_image.png");
 
-    painter.setTransform(QTransform::fromTranslate(-d->extraShapeOffset.x(), -d->extraShapeOffset.y()), true);
     painter.setPen(Qt::NoPen);
     renderer.renderShape(painter);
 }

@@ -44,6 +44,7 @@
 #include <KoColorBackground.h>
 #include <KoGradientBackground.h>
 #include <KoPatternBackground.h>
+#include <KoVectorPatternBackground.h>
 #include <KoShapeStroke.h>
 #include <KoClipPath.h>
 #include <KoClipMask.h>
@@ -55,6 +56,7 @@
 #include <QRadialGradient>
 #include <KisMimeDatabase.h>
 #include "kis_dom_utils.h"
+#include "kis_algebra_2d.h"
 #include <SvgWriter.h>
 
 void SvgStyleWriter::saveSvgStyle(KoShape *shape, SvgSavingContext &context)
@@ -91,6 +93,11 @@ void SvgStyleWriter::saveSvgFill(KoShape *shape, SvgSavingContext &context)
     QSharedPointer<KoPatternBackground>  pbg = qSharedPointerDynamicCast<KoPatternBackground>(shape->background());
     if (pbg) {
         const QString patternId = saveSvgPattern(pbg, shape, context);
+        context.shapeWriter().addAttribute("fill", "url(#" + patternId + ")");
+    }
+    QSharedPointer<KoVectorPatternBackground>  vpbg = qSharedPointerDynamicCast<KoVectorPatternBackground>(shape->background());
+    if (vpbg) {
+        const QString patternId = saveSvgVectorPattern(vpbg, shape, context);
         context.shapeWriter().addAttribute("fill", "url(#" + patternId + ")");
     }
 
@@ -181,6 +188,19 @@ inline QString convertClipPathMode(KoClipPath::CoordinateSystem mode) {
         "userSpaceOnUse";
 }
 
+void embedShapes(const QList<KoShape*> &shapes, KoXmlWriter &outWriter)
+{
+    QBuffer buffer;
+    buffer.open(QIODevice::WriteOnly);
+    {
+        SvgWriter shapesWriter(shapes, QSizeF(666, 666));
+        shapesWriter.saveDetached(buffer);
+    }
+    buffer.close();
+    outWriter.addCompleteElement(&buffer);
+}
+
+
 void SvgStyleWriter::saveSvgClipping(KoShape *shape, SvgSavingContext &context)
 {
     KoClipPath *clipPath = shape->clipPath();
@@ -193,15 +213,7 @@ void SvgStyleWriter::saveSvgClipping(KoShape *shape, SvgSavingContext &context)
     context.styleWriter().addAttribute("id", uid);
     context.styleWriter().addAttribute("clipPathUnits", convertClipPathMode(clipPath->coordinates()));
 
-    QBuffer buffer;
-    buffer.open(QIODevice::WriteOnly);
-    {
-        QList<KoShape*> shapes = clipPath->clipShapes();
-        SvgWriter shapesWriter(shapes, QSizeF(666, 666));
-        shapesWriter.saveDetached(buffer);
-    }
-    buffer.close();
-    context.styleWriter().addCompleteElement(&buffer);
+    embedShapes(clipPath->clipShapes(), context.styleWriter());
 
     context.styleWriter().endElement(); // clipPath
 
@@ -244,15 +256,7 @@ void SvgStyleWriter::saveSvgMasking(KoShape *shape, SvgSavingContext &context)
         context.styleWriter().addAttributePt("height", rect.height());
     }
 
-    QBuffer buffer;
-    buffer.open(QIODevice::WriteOnly);
-    {
-        QList<KoShape*> shapes = clipMask->shapes();
-        SvgWriter shapesWriter(shapes, QSizeF(666, 666));
-        shapesWriter.saveDetached(buffer);
-    }
-    buffer.close();
-    context.styleWriter().addCompleteElement(&buffer);
+    embedShapes(clipMask->shapes(), context.styleWriter());
 
     context.styleWriter().endElement(); // clipMask
 
@@ -431,6 +435,69 @@ QString SvgStyleWriter::saveSvgPattern(QSharedPointer<KoPatternBackground> patte
     }
 
     context.styleWriter().endElement(); // image
+    context.styleWriter().endElement(); // pattern
+
+    return uid;
+}
+
+inline QString convertVectorPatternMode(KoVectorPatternBackground::CoordinateSystem mode) {
+    return
+        mode == KoVectorPatternBackground::ObjectBoundingBox?
+        "objectBoundingBox" :
+        "userSpaceOnUse";
+}
+
+
+QString SvgStyleWriter::saveSvgVectorPattern(QSharedPointer<KoVectorPatternBackground> pattern, KoShape *parentShape, SvgSavingContext &context)
+{
+    const QString uid = context.createUID("pattern");
+
+    context.styleWriter().startElement("pattern");
+    context.styleWriter().addAttribute("id", uid);
+
+    context.styleWriter().addAttribute("patternUnits", convertVectorPatternMode(pattern->referenceCoordinates()));
+    context.styleWriter().addAttribute("patternContentUnits", convertVectorPatternMode(pattern->contentCoordinates()));
+
+    const QRectF rect = pattern->referenceRect();
+
+    if (pattern->referenceCoordinates() == KoVectorPatternBackground::ObjectBoundingBox) {
+        context.styleWriter().addAttribute("x", rect.x());
+        context.styleWriter().addAttribute("y", rect.y());
+        context.styleWriter().addAttribute("width", rect.width());
+        context.styleWriter().addAttribute("height", rect.height());
+    } else {
+        context.styleWriter().addAttributePt("x", rect.x());
+        context.styleWriter().addAttributePt("y", rect.y());
+        context.styleWriter().addAttributePt("width", rect.width());
+        context.styleWriter().addAttributePt("height", rect.height());
+    }
+
+    context.styleWriter().addAttribute("patternTransform", SvgUtil::transformToString(pattern->patternTransform()));
+
+    if (pattern->contentCoordinates() == KoVectorPatternBackground::ObjectBoundingBox) {
+        // TODO: move this normalization into the KoVectorPatternBackground itself
+
+        QList<KoShape*> shapes = pattern->shapes();
+        QList<KoShape*> clonedShapes;
+
+        const QRectF dstShapeBoundingRect = parentShape->outlineRect();
+        const QTransform relativeToShape = KisAlgebra2D::mapToRect(dstShapeBoundingRect);
+        const QTransform shapeToRelative = relativeToShape.inverted();
+
+        Q_FOREACH (KoShape *shape, shapes) {
+            KoShape *clone = shape->cloneShape();
+            clone->applyAbsoluteTransformation(shapeToRelative);
+            clonedShapes.append(clone);
+        }
+
+        embedShapes(clonedShapes, context.styleWriter());
+        qDeleteAll(clonedShapes);
+
+    } else {
+        QList<KoShape*> shapes = pattern->shapes();
+        embedShapes(shapes, context.styleWriter());
+    }
+
     context.styleWriter().endElement(); // pattern
 
     return uid;

@@ -1,13 +1,15 @@
-%Import QtCore/QtCoremod.sip
-%Import QtGui/QtGuimod.sip
-%Import QtWidgets/QtWidgetsmod.sip
-
-class Generator : public QObject
+class Generator : QObject
 {
 %TypeHeaderCode
 #include "Generator.h"
 %End
-
+    Generator(const Generator & __0);
 public:
-    explicit Generator(QObject *parent  /TransferThis/ = 0);
+    Generator(QObject*  parent /TransferThis/ = 0);
+    virtual ~Generator();
+    InfoObject * configuration() const;
+    void setConfiguration(InfoObject*  value);
+public Q_SLOTS:
+    Node * CreateNode();
+private:
 };

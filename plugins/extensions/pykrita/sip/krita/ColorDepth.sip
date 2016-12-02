@@ -1,13 +1,15 @@
-%Import QtCore/QtCoremod.sip
-%Import QtGui/QtGuimod.sip
-%Import QtWidgets/QtWidgetsmod.sip
-
-class ColorDepth : public QObject
+class ColorDepth : QObject
 {
 %TypeHeaderCode
 #include "ColorDepth.h"
 %End
-
+    ColorDepth(const ColorDepth & __0);
 public:
-    explicit ColorDepth(QObject *parent  /TransferThis/ = 0);
+    ColorDepth(QObject*  parent /TransferThis/ = 0);
+    virtual ~ColorDepth();
+    int depth() const;
+    void setdepth(int value);
+public Q_SLOTS:
+Q_SIGNALS:
+private:
 };

@@ -1,13 +1,16 @@
-%Import QtCore/QtCoremod.sip
-%Import QtGui/QtGuimod.sip
-%Import QtWidgets/QtWidgetsmod.sip
-
-class Channel : public QObject
+class Channel : QObject
 {
 %TypeHeaderCode
 #include "Channel.h"
 %End
-
+    Channel(const Channel & __0);
 public:
-    explicit Channel(QObject *parent  /TransferThis/ = 0);
+    Channel(QObject*  parent /TransferThis/ = 0);
+    virtual ~Channel();
+    bool visible() const;
+    void setvisible(bool value);
+public Q_SLOTS:
+Q_SIGNALS:
+private:
+
 };

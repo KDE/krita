@@ -1,8 +1,4 @@
-%Import QtCore/QtCoremod.sip
-%Import QtGui/QtGuimod.sip
-%Import QtWidgets/QtWidgetsmod.sip
-
-class ViewExtension : public QObject
+class ViewExtension : QObject
 {
 
 %TypeHeaderCode

@@ -1,9 +1,5 @@
 %Module PyKrita.krita
 
-%Import QtCore/QtCoremod.sip
-%Import QtGui/QtGuimod.sip
-%Import QtWidgets/QtWidgetsmod.sip
-
 %ModuleHeaderCode
 #pragma GCC visibility push(default)
 %End
@@ -11,6 +7,7 @@
 %Import QtCore/QtCoremod.sip
 %Import QtGui/QtGuimod.sip
 %Import QtXml/QtXmlmod.sip
+%Import QtWidgets/QtWidgetsmod.sip
 
 %Include Action.sip
 %Include Canvas.sip

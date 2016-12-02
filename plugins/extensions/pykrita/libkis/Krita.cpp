@@ -167,6 +167,11 @@ QVariantList Krita::resources() const
     return QVariantList();
 }
 
+void Krita::setResources(QList<Resource *> value)
+{
+
+}
+
 void Krita::addDockWidget(DockWidget *dockWidget)
 {
 }

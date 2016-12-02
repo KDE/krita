@@ -1,13 +1,15 @@
-%Import QtCore/QtCoremod.sip
-%Import QtGui/QtGuimod.sip
-%Import QtWidgets/QtWidgetsmod.sip
-
-class Transformation : public QObject
+class Transformation : QObject
 {
 %TypeHeaderCode
 #include "Transformation.h"
 %End
-
+    Transformation(const Transformation & __0);
 public:
-    explicit Transformation(QObject *parent  /TransferThis/ = 0);
+    Transformation(QObject*  parent /TransferThis/ = 0);
+    virtual ~Transformation();
+    QString definition() const;
+    void setDefinition(QString value);
+public Q_SLOTS:
+Q_SIGNALS:
+private:
 };

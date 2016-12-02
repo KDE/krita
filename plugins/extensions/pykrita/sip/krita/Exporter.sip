@@ -1,13 +1,18 @@
-%Import QtCore/QtCoremod.sip
-%Import QtGui/QtGuimod.sip
-%Import QtWidgets/QtWidgetsmod.sip
-
-class Exporter : public QObject
+class Exporter : QObject
 {
 %TypeHeaderCode
 #include "Exporter.h"
 %End
-
+    Exporter(const Exporter & __0);
 public:
-    explicit Exporter(QObject *parent  /TransferThis/ = 0);
+    Exporter(QObject*  parent /TransferThis/ = 0);
+    virtual ~Exporter();
+    Document * document() const;
+    void setDocument(Document*  value);
+    InfoObject * exportSetttings() const;
+    void setExportSetttings(InfoObject*  value);
+public Q_SLOTS:
+    bool Export(const QString & filename);
+Q_SIGNALS:
+private:
 };

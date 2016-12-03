@@ -114,14 +114,12 @@ struct KisShapeLayer::Private
 {
 public:
     Private()
-        : converter(0)
-        , canvas(0)
+        : canvas(0)
         , controller(0)
         , x(0)
         , y(0)
          {}
 
-    KoViewConverter * converter;
     KisPaintDeviceSP paintDevice;
     KisShapeLayerCanvas * canvas;
     KoShapeBasedDocumentBase* controller;
@@ -222,7 +220,6 @@ KisShapeLayer::~KisShapeLayer()
         delete shape;
     }
 
-    delete m_d->converter;
     delete m_d->canvas;
     delete m_d;
 }
@@ -232,14 +229,12 @@ void KisShapeLayer::initShapeLayer(KoShapeBasedDocumentBase* controller)
     setSupportsLodMoves(false);
     setShapeId(KIS_SHAPE_LAYER_ID);
 
-    m_d->converter = new KisImageViewConverter(image());
-
     KIS_ASSERT_RECOVER_NOOP(this->image());
     m_d->paintDevice = new KisPaintDevice(image()->colorSpace());
     m_d->paintDevice->setDefaultBounds(new KisDefaultBounds(this->image()));
     m_d->paintDevice->setParentNode(this);
 
-    m_d->canvas = new KisShapeLayerCanvas(this, m_d->converter);
+    m_d->canvas = new KisShapeLayerCanvas(this, image());
     m_d->canvas->setProjection(m_d->paintDevice);
     m_d->canvas->moveToThread(this->thread());
     m_d->controller = controller;
@@ -261,9 +256,9 @@ bool KisShapeLayer::allowAsChild(KisNodeSP node) const
 void KisShapeLayer::setImage(KisImageWSP _image)
 {
     KisLayer::setImage(_image);
-    delete m_d->converter;
-    m_d->converter = new KisImageViewConverter(image());
-    m_d->paintDevice = new KisPaintDevice(image()->colorSpace());
+    m_d->canvas->setImage(_image);
+    m_d->paintDevice->convertTo(_image->colorSpace());
+    m_d->paintDevice->setDefaultBounds(new KisDefaultBounds(_image));
 }
 
 KisLayerSP KisShapeLayer::createMergedLayerTemplate(KisLayerSP prevLayer)
@@ -317,7 +312,7 @@ qint32 KisShapeLayer::y() const
 void KisShapeLayer::setX(qint32 x)
 {
     qint32 delta = x - this->x();
-    QPointF diff = QPointF(m_d->converter->viewToDocumentX(delta), 0);
+    QPointF diff = QPointF(m_d->canvas->viewConverter()->viewToDocumentX(delta), 0);
     emit sigMoveShapes(diff);
 
     // Save new value to satisfy LSP
@@ -327,7 +322,7 @@ void KisShapeLayer::setX(qint32 x)
 void KisShapeLayer::setY(qint32 y)
 {
     qint32 delta = y - this->y();
-    QPointF diff = QPointF(0, m_d->converter->viewToDocumentY(delta));
+    QPointF diff = QPointF(0, m_d->canvas->viewConverter()->viewToDocumentY(delta));
     emit sigMoveShapes(diff);
 
     // Save new value to satisfy LSP
@@ -372,7 +367,7 @@ KoShapeManager* KisShapeLayer::shapeManager() const
 
 KoViewConverter* KisShapeLayer::converter() const
 {
-    return m_d->converter;
+    return m_d->canvas->viewConverter();
 }
 
 bool KisShapeLayer::visible(bool recursive) const
@@ -585,7 +580,7 @@ KUndo2Command* KisShapeLayer::transform(const QTransform &transform) {
     QList<KoShape*> shapes = m_d->canvas->shapeManager()->shapes();
     if(shapes.isEmpty()) return 0;
 
-    KisImageViewConverter *converter = dynamic_cast<KisImageViewConverter*>(m_d->converter);
+    KisImageViewConverter *converter = dynamic_cast<KisImageViewConverter*>(this->converter());
     QTransform realTransform = converter->documentToView() *
         transform * converter->viewToDocument();
 

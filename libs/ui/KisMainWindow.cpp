@@ -317,7 +317,7 @@ KisMainWindow::KisMainWindow()
     if (d->toolOptionsDocker) {
         dockwidgetActions[d->toolOptionsDocker->toggleViewAction()->text()] = d->toolOptionsDocker->toggleViewAction();
     }
-    connect(KoToolManager::instance(), SIGNAL(toolOptionWidgetsChanged(QList<QPointer<QWidget> >)), this, SLOT(newOptionWidgets(QList<QPointer<QWidget> >)));
+    connect(KoToolManager::instance(), SIGNAL(toolOptionWidgetsChanged(KoCanvasController*, QList<QPointer<QWidget> >)), this, SLOT(newOptionWidgets(KoCanvasController*, QList<QPointer<QWidget> >)));
 
     Q_FOREACH (QString title, dockwidgetActions.keys()) {
         d->dockWidgetMenu->addAction(dockwidgetActions[title]);
@@ -953,10 +953,10 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas)
         KoFileDialog dialog(this, KoFileDialog::SaveFile, "SaveDocument");
         dialog.setCaption(i18n("untitled"));
         if (d->isExporting && !d->lastExportUrl.isEmpty()) {
-            dialog.setDefaultDir(d->lastExportUrl.toLocalFile(), true);
+            dialog.setDefaultDir(d->lastExportUrl.toLocalFile());
         }
         else {
-            dialog.setDefaultDir(suggestedURL.toLocalFile(), true);
+            dialog.setDefaultDir(suggestedURL.toLocalFile());
         }
         // Default to all supported file types if user is exporting, otherwise use Krita default
         dialog.setMimeTypeFilters(mimeFilter, QString(_native_format));
@@ -2155,9 +2155,19 @@ QPointer<KisView>KisMainWindow::activeKisView()
     return qobject_cast<KisView*>(activeSubWindow->widget());
 }
 
-
-void KisMainWindow::newOptionWidgets(const QList<QPointer<QWidget> > &optionWidgetList)
+void KisMainWindow::newOptionWidgets(KoCanvasController *controller, const QList<QPointer<QWidget> > &optionWidgetList)
 {
+    KIS_ASSERT_RECOVER_NOOP(controller == KoToolManager::instance()->activeCanvasController());
+    bool isOurOwnView = false;
+
+    Q_FOREACH (QPointer<KisView> view, KisPart::instance()->views()) {
+        if (view && view->canvasController() == controller) {
+            isOurOwnView = view->mainWindow() == this;
+        }
+    }
+
+    if (!isOurOwnView) return;
+
     Q_FOREACH (QWidget *w, optionWidgetList) {
 #ifdef Q_OS_OSX
         w->setAttribute(Qt::WA_MacSmallSize, true);

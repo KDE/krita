@@ -160,7 +160,7 @@ KisApplication::KisApplication(const QString &key, int &argc, char **argv)
     setWindowIcon(KisIconUtils::loadIcon("calligrakrita"));
 
     if (qgetenv("KRITA_NO_STYLE_OVERRIDE").isEmpty()) {
-        QStringList styles = QStringList() << "fusion" << "plastique";
+        QStringList styles = QStringList() << "breeze" << "fusion" << "plastique";
         if (!styles.contains(style()->objectName().toLower())) {
             Q_FOREACH (const QString & style, styles) {
                 if (!setStyle(style)) {
@@ -434,16 +434,11 @@ bool KisApplication::start(const KisApplicationArguments &args)
                     doc->openUrl(QUrl::fromLocalFile(fileName));
 
                     qApp->processEvents(); // For vector layers to be updated
-                    KisImageBarrierLocker locker(doc->image());
 
-                    KisImportExportFilter::ConversionStatus status = KisImportExportFilter::OK;
-                    KisImportExportManager manager(doc);
-                    manager.setBatchMode(true);
-                    QByteArray mime(outputMimetype.toLatin1());
-                    status = manager.exportDocument(exportFileName, mime);
-
-                    if (status != KisImportExportFilter::OK) {
-                        dbgKrita << "Could not export " << fileName << "to" << exportFileName << ":" << (int)status;
+                    doc->setFileBatchMode(true);
+                    doc->setOutputMimeType(outputMimetype.toLatin1());
+                    if (!doc->exportDocument(QUrl::fromLocalFile(exportFileName))) {
+                        dbgKrita << "Could not export " << fileName << "to" << exportFileName << ":" << doc->errorMessage();
                     }
                     nPrinted++;
                     QTimer::singleShot(0, this, SLOT(quit()));

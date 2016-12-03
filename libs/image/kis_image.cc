@@ -579,7 +579,7 @@ void KisImage::cropImage(const QRect& newRect)
 
 void KisImage::cropNode(KisNodeSP node, const QRect& newRect)
 {
-    bool isLayer = dynamic_cast<KisLayer*>(node.data());
+    bool isLayer = qobject_cast<KisLayer*>(node.data());
     KUndo2MagicString actionName = isLayer ?
         kundo2_i18n("Crop Layer") :
         kundo2_i18n("Crop Mask");

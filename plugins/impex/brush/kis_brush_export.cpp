@@ -64,7 +64,7 @@ KisImportExportFilter::ConversionStatus KisBrushExport::convert(KisDocument *doc
 {
 
 // XXX: Loading the parasite itself was commented out -- needs investigation
-//    KisAnnotationSP annotation = document->image()->annotation("ImagePipe Parasite");
+//    KisAnnotationSP annotation = document->savingImage()->annotation("ImagePipe Parasite");
 //    KisPipeBrushParasite parasite;
 //    if (annotation) {
 //        QBuffer buf(const_cast<QByteArray*>(&annotation->annotation()));
@@ -74,8 +74,8 @@ KisImportExportFilter::ConversionStatus KisBrushExport::convert(KisDocument *doc
 //    }
 
     KisBrushExportOptions exportOptions;
-    if (document->image()->dynamicPropertyNames().contains("brushspacing")) {
-        exportOptions.spacing = document->image()->property("brushspacing").toFloat();
+    if (document->savingImage()->dynamicPropertyNames().contains("brushspacing")) {
+        exportOptions.spacing = document->savingImage()->property("brushspacing").toFloat();
     }
     else {
         exportOptions.spacing = configuration->getInt("spacing");
@@ -84,7 +84,7 @@ KisImportExportFilter::ConversionStatus KisBrushExport::convert(KisDocument *doc
         exportOptions.name = configuration->getString("name");
     }
     else {
-        exportOptions.name = document->image()->objectName();
+        exportOptions.name = document->savingImage()->objectName();
     }
     exportOptions.mask = configuration->getBool("mask");
     exportOptions.selectionMode = configuration->getInt("selectionMode");
@@ -103,17 +103,14 @@ KisImportExportFilter::ConversionStatus KisBrushExport::convert(KisDocument *doc
 
     qApp->processEvents(); // For vector layers to be updated
 
-    // the image must be locked at the higher levels
-    KIS_SAFE_ASSERT_RECOVER_NOOP(document->image()->locked());
-
-    QRect rc = document->image()->bounds();
+    QRect rc = document->savingImage()->bounds();
 
     brush->setName(exportOptions.name);
     brush->setSpacing(exportOptions.spacing);
     brush->setUseColorAsMask(exportOptions.mask);
 
-    int w = document->image()->width();
-    int h = document->image()->height();
+    int w = document->savingImage()->width();
+    int h = document->savingImage()->height();
 
     KisImagePipeBrush *pipeBrush = dynamic_cast<KisImagePipeBrush*>(brush);
     if (pipeBrush) {
@@ -123,7 +120,7 @@ KisImportExportFilter::ConversionStatus KisBrushExport::convert(KisDocument *doc
 
         KoProperties properties;
         properties.setProperty("visible", true);
-        QList<KisNodeSP> layers = document->image()->root()->childNodes(QStringList("KisLayer"), properties);
+        QList<KisNodeSP> layers = document->savingImage()->root()->childNodes(QStringList("KisLayer"), properties);
 
         Q_FOREACH (KisNodeSP node, layers) {
             devices[0].push_back(node->projection().data());
@@ -153,7 +150,7 @@ KisImportExportFilter::ConversionStatus KisBrushExport::convert(KisDocument *doc
         pipeBrush->setDevices(devices, w, h);
     }
     else {
-        QImage image = document->image()->projection()->convertToQImage(0, 0, 0, rc.width(), rc.height(), KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
+        QImage image = document->savingImage()->projection()->convertToQImage(0, 0, 0, rc.width(), rc.height(), KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
         brush->setImage(image);
     }
 

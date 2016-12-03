@@ -97,7 +97,7 @@ private:
             prevNode = prevNode->prevSibling();
         }
 
-        KisLayer *layer = dynamic_cast<KisLayer*>(m_node.data());
+        KisLayer *layer = qobject_cast<KisLayer*>(m_node.data());
         if(layer && layer->hasClones()) {
             Q_FOREACH (KisCloneLayerSP clone, layer->registeredClones()) {
                 if(!clone) continue;

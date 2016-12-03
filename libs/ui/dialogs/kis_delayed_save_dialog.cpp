@@ -43,7 +43,10 @@ KisDelayedSaveDialog::KisDelayedSaveDialog(KisImageSP image, QWidget *parent)
 
     ui->setupUi(this);
 
-    connect(ui->btnCancel, SIGNAL(clicked()), SLOT(slotCancelRequested()));
+    connect(ui->bnDontWait, SIGNAL(clicked()), SLOT(accept()));
+    connect(ui->bnDontSave, SIGNAL(clicked()), SLOT(reject()));
+    connect(ui->bnCancel, SIGNAL(clicked()), SLOT(slotCancelRequested()));
+
     connect(&m_d->updateTimer, SIGNAL(timeout()), SLOT(slotTimerTimeout()));
 
     m_d->image->compositeProgressProxy()->addProxy(ui->progressBar);

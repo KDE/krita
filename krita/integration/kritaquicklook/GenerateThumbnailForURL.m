@@ -73,7 +73,9 @@ OSStatus GenerateThumbnailForURL(void *thisInterface, QLThumbnailRequestRef thum
     
         appIcon = [[NSImage alloc] initWithData:appPlist];
         
-        NSRect renderRect = NSMakeRect(0.0, 0.0, appIcon.size.width, appIcon.size.height);
+        NSImageRep *rep = [[appIcon representations] objectAtIndex:0];
+        
+        NSRect renderRect = NSMakeRect(0.0, 0.0, rep.pixelsWide, rep.pixelsHigh);
         
         CGImageRef cgImage = [appIcon CGImageForProposedRect:&renderRect context:NULL hints:nil];
         

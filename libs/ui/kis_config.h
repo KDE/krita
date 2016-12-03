@@ -482,6 +482,9 @@ public:
     int stabilizerSampleSize(bool defaultValue = false) const;
     void setStabilizerSampleSize(int value);
 
+    int stabilizerDelayedPaintInterval(bool defaultValue = false) const;
+    void setStabilizerDelayedPaintInterval(int value);
+
     QString customFFMpegPath(bool defaultValue = false) const;
     void setCustomFFMpegPath(const QString &value) const;
 

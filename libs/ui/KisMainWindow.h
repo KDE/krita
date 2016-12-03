@@ -45,6 +45,7 @@ class KoDockFactoryBase;
 class QDockWidget;
 class KisView;
 class KisViewManager;
+class KoCanvasController;
 
 
 /**
@@ -234,7 +235,7 @@ public Q_SLOTS:
     /**
      * Update the option widgets to the argument ones, removing the currently set widgets.
      */
-    void newOptionWidgets(const QList<QPointer<QWidget> > & optionWidgetList);
+    void newOptionWidgets(KoCanvasController *controller, const QList<QPointer<QWidget> > & optionWidgetList);
 
 
 private Q_SLOTS:
@@ -324,16 +325,14 @@ private Q_SLOTS:
     /**
      * File --> Import
      *
-     * This will call slotFileOpen().  To differentiate this from an ordinary
-     * call to slotFileOpen() call @ref isImporting().
+     * This will call slotFileOpen().
      */
     void slotImportFile();
 
     /**
      * File --> Export
      *
-     * This will call slotFileSaveAs().  To differentiate this from an ordinary
-     * call to slotFileSaveAs() call @ref isExporting().
+     * This will call slotFileSaveAs().
      */
     void slotExportFile();
 

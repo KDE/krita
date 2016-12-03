@@ -82,7 +82,7 @@ void KisGeneratorLayer::slotDelayedStaticUpdate()
      * meanwhile. Just ignore the updates in the case.
      */
 
-    KisLayerSP parentLayer(dynamic_cast<KisLayer*>(parent().data()));
+    KisLayerSP parentLayer(qobject_cast<KisLayer*>(parent().data()));
     if (!parentLayer) return;
 
     KisImageSP image = parentLayer->image();

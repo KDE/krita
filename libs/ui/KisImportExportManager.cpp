@@ -226,9 +226,6 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::convert(KisImpor
         if (exportConfiguration) {
             // Fill with some meta information about the image
             KisImageWSP image = m_document->image();
-
-            // the image must be locked at the higher levels
-            KIS_SAFE_ASSERT_RECOVER_NOOP(image->locked());
             KisPaintDeviceSP pd = image->projection();
 
             bool isThereAlpha = false;

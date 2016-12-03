@@ -52,28 +52,28 @@ KoColor KisColorSelectorWheel::selectColor(int x, int y)
     angle/=2*M_PI;
 
     switch (m_parameter) {
-    case KisColorSelector::hsvSH:
+    case KisColorSelectorConfiguration::hsvSH:
         emit paramChanged(angle, radius, -1, -1, -1, -1, -1, -1, -1);
         break;
-    case KisColorSelector::hslSH:
+    case KisColorSelectorConfiguration::hslSH:
         emit paramChanged(angle, -1, -1, radius, -1, -1, -1, -1, -1);
         break;
-	case KisColorSelector::hsiSH:
+    case KisColorSelectorConfiguration::hsiSH:
         emit paramChanged(angle, -1, -1, -1, -1, radius, -1, -1, -1);
         break;
-    case KisColorSelector::hsySH:
+    case KisColorSelectorConfiguration::hsySH:
         emit paramChanged(angle, -1, -1, -1, -1, -1, -1, radius, -1);
         break;
-    case KisColorSelector::VH:
+    case KisColorSelectorConfiguration::VH:
         emit paramChanged(angle, -1, radius, -1, -1, -1, -1, -1, -1);
         break;
-    case KisColorSelector::LH:
+    case KisColorSelectorConfiguration::LH:
         emit paramChanged(angle, -1, -1, -1, radius, -1, -1, -1, -1);
         break;
-	case KisColorSelector::IH:
+    case KisColorSelectorConfiguration::IH:
         emit paramChanged(angle, -1, -1, -1, -1, -1, radius, -1, -1);
         break;
-    case KisColorSelector::YH:
+    case KisColorSelectorConfiguration::YH:
         emit paramChanged(angle, -1, -1, -1, -1, -1, -1, -1, radius);
         break;
     default:
@@ -96,10 +96,10 @@ void KisColorSelectorWheel::setColor(const KoColor &color)
 {
     qreal hsvH, hsvS, hsvV;
     qreal hslH, hslS, hslL;
-	qreal hsiH, hsiS, hsiI;
-	qreal hsyH, hsyS, hsyY;
-	KConfigGroup cfg =  KSharedConfig::openConfig()->group("advancedColorSelector");
-	R = cfg.readEntry("lumaR", 0.2126);
+    qreal hsiH, hsiS, hsiI;
+    qreal hsyH, hsyS, hsyY;
+    KConfigGroup cfg =  KSharedConfig::openConfig()->group("advancedColorSelector");
+    R = cfg.readEntry("lumaR", 0.2126);
     G = cfg.readEntry("lumaG", 0.7152);
     B = cfg.readEntry("lumaB", 0.0722);
     Gamma = cfg.readEntry("gamma", 2.2);
@@ -108,44 +108,44 @@ void KisColorSelectorWheel::setColor(const KoColor &color)
     m_parent->converter()->getHsiF(color, &hsiH, &hsiS, &hsiI);
     m_parent->converter()->getHsyF(color, &hsyH, &hsyS, &hsyY, R, G, B, Gamma);
 
-	//workaround, for some reason the HSI and HSY algorithms are fine, but they don't seem to update the selectors properly.
-	hsiH=hslH;
-	hsyH=hslH;
+    //workaround, for some reason the HSI and HSY algorithms are fine, but they don't seem to update the selectors properly.
+    hsiH=hslH;
+    hsyH=hslH;
 
     qreal angle = 0.0, radius = 0.0;
     angle = hsvH;
     angle *= 2. * M_PI;
     angle -= M_PI;
     switch (m_parameter) {
-    case KisColorSelector::LH:
+    case KisColorSelectorConfiguration::LH:
         emit paramChanged(hslH, -1, -1, -1, hslL, -1, -1, -1, -1);
         radius = hslL;
         break;
-    case KisColorSelector::VH:
+    case KisColorSelectorConfiguration::VH:
         emit paramChanged(hsvH, -1, hsvV, -1, -1, -1, -1, -1, -1);
         radius = hsvV;
         break;
-	case KisColorSelector::IH:
+    case KisColorSelectorConfiguration::IH:
         emit paramChanged(hslH, -1, -1, -1, -1, -1, hsiI, -1, -1);
         radius = hsiI;
         break;
-    case KisColorSelector::YH:
+    case KisColorSelectorConfiguration::YH:
         emit paramChanged(hsvH, -1, -1, -1, -1, -1, -1, -1, hsyY);
         radius = hsyY;
         break;
-    case KisColorSelector::hsvSH:
+    case KisColorSelectorConfiguration::hsvSH:
         emit paramChanged(hsvH, hsvS, -1, -1, -1, -1, -1, -1, -1);
         radius = hsvS;
         break;
-    case KisColorSelector::hslSH:
+    case KisColorSelectorConfiguration::hslSH:
         emit paramChanged(hslH, -1, -1, hslS, -1, -1, -1, -1, -1);
         radius = hslS;
         break;
-	case KisColorSelector::hsiSH:
+    case KisColorSelectorConfiguration::hsiSH:
         emit paramChanged(hsiH, -1, -1, -1, -1, hsiS, -1, -1, -1);
         radius = hsiS;
         break;
-    case KisColorSelector::hsySH:
+    case KisColorSelectorConfiguration::hsySH:
         emit paramChanged(hsyH, -1, -1, -1, -1, -1, -1, hsyS, -1);
         radius = hsyS;
         break;
@@ -195,7 +195,7 @@ void KisColorSelectorWheel::paint(QPainter* painter)
     painter->drawImage(m_pixelCacheOffset.x(),m_pixelCacheOffset.y(), m_pixelCache);
 
     // draw blips
-   
+
     if(m_lastClickPos!=QPoint(-1,-1) && m_parent->displayBlip()) {
         QPoint pos = (m_lastClickPos*qMin(width(), height())).toPoint();
         if(width()<height())
@@ -235,28 +235,28 @@ KoColor KisColorSelectorWheel::colorAt(int x, int y, bool forceValid)
     angle /= 2 * M_PI;
 
     switch(m_parameter) {
-    case KisColorSelector::hsvSH:
+    case KisColorSelectorConfiguration::hsvSH:
         color = m_parent->converter()->fromHsvF(angle, radius, m_value);
         break;
-    case KisColorSelector::hslSH:
+    case KisColorSelectorConfiguration::hslSH:
         color = m_parent->converter()->fromHslF(angle, radius, m_lightness);
         break;
-    case KisColorSelector::hsiSH:
+    case KisColorSelectorConfiguration::hsiSH:
         color = m_parent->converter()->fromHsiF(angle, radius, m_intensity);
         break;
-    case KisColorSelector::hsySH:
+    case KisColorSelectorConfiguration::hsySH:
         color = m_parent->converter()->fromHsyF(angle, radius, m_luma, R, G, B, Gamma);
         break;
-    case KisColorSelector::VH:
+    case KisColorSelectorConfiguration::VH:
         color = m_parent->converter()->fromHsvF(angle, m_hsvSaturation, radius);
         break;
-    case KisColorSelector::LH:
+    case KisColorSelectorConfiguration::LH:
         color = m_parent->converter()->fromHslF(angle, m_hslSaturation, radius);
         break;
-	case KisColorSelector::IH:
+    case KisColorSelectorConfiguration::IH:
         color = m_parent->converter()->fromHsiF(angle, m_hsiSaturation, radius);
         break;
-	case KisColorSelector::YH:
+    case KisColorSelectorConfiguration::YH:
         color = m_parent->converter()->fromHsyF(angle, m_hsySaturation, radius, R, G, B, Gamma);
         break;
     default:

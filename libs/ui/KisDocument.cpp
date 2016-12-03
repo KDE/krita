@@ -268,7 +268,8 @@ public:
         macroNestDepth(0),
         imageIdleWatcher(2000 /*ms*/),
         suppressProgress(false),
-        fileProgressProxy(0)
+        fileProgressProxy(0),
+        savingLock(&savingMutex)
     {
         if (QLocale().measurementSystem() == QLocale::ImperialSystem) {
             unit = KoUnit::Inch;
@@ -333,6 +334,8 @@ public:
     qint32 macroNestDepth;
 
     KisImageSP image;
+    KisImageSP savingImage;
+
     KisNodeSP preActivatedNode;
     KisShapeController* shapeController;
     KoShapeController* koShapeController;
@@ -344,6 +347,8 @@ public:
 
     QList<KisPaintingAssistantSP> assistants;
     KisGridConfig gridConfig;
+
+    StdLockableWrapper<QMutex> savingLock;
 
     void setImageAndInitIdleWatcher(KisImageSP _image) {
         image = _image;
@@ -365,10 +370,9 @@ class KisDocument::Private::SafeSavingLocker {
 public:
     SafeSavingLocker(KisDocument::Private *_d, KisDocument *document)
         : d(_d)
+        , m_document(document)
         , m_locked(false)
         , m_imageLock(d->image, true)
-        , m_savingLock(&d->savingMutex)
-        , m_document(document)
     {
         const int realAutoSaveInterval = KisConfig().autoSaveInterval();
         const int emergencyAutoSaveInterval = 10; // sec
@@ -382,20 +386,20 @@ public:
          * Since we are trying to lock multiple objects, so we should
          * do it in a safe manner.
          */
-        m_locked = std::try_lock(m_imageLock, m_savingLock) < 0;
+        m_locked = std::try_lock(m_imageLock, d->savingLock) < 0;
 
         if (!m_locked) {
             if (d->isAutosaving) {
                 d->disregardAutosaveFailure = true;
                 if (realAutoSaveInterval) {
-                    document->setAutoSaveDelay(emergencyAutoSaveInterval);
+                    m_document->setAutoSaveDelay(emergencyAutoSaveInterval);
                 }
             } else {
                 d->image->requestStrokeEnd();
                 QApplication::processEvents();
 
                 // one more try...
-                m_locked = std::try_lock(m_imageLock, m_savingLock) < 0;
+                m_locked = std::try_lock(m_imageLock, d->savingLock) < 0;
             }
         }
 
@@ -407,7 +411,7 @@ public:
     ~SafeSavingLocker() {
          if (m_locked) {
              m_imageLock.unlock();
-             m_savingLock.unlock();
+             d->savingLock.unlock();
 
              const int realAutoSaveInterval = KisConfig().autoSaveInterval();
              m_document->setAutoSaveDelay(realAutoSaveInterval);
@@ -420,11 +424,10 @@ public:
 
 private:
     KisDocument::Private *d;
+    KisDocument *m_document;
     bool m_locked;
 
     KisImageBarrierLockAdapter m_imageLock;
-    StdLockableWrapper<QMutex> m_savingLock;
-    KisDocument *m_document;
 };
 
 KisDocument::KisDocument()
@@ -630,9 +633,7 @@ bool KisDocument::save(KisPropertiesConfigurationSP exportConfiguration)
 
 bool KisDocument::saveFile(const QString &filePath, KisPropertiesConfigurationSP exportConfiguration)
 {
-    Private::SafeSavingLocker locker(d, this);
-    if (!locker.successfullyLocked()) {
-        qWarning() << "Could not lock image for saving, it's still busy";
+    if (!prepareLocksForSaving()) {
         return false;
     }
 
@@ -705,6 +706,7 @@ bool KisDocument::saveFile(const QString &filePath, KisPropertiesConfigurationSP
             r = dstFile.rename(s);
             if (!r) {
                setErrorMessage(i18n("Could not rename original file to %1: %2", dstFile.fileName(), dstFile. errorString()));
+                ret = false;
             }
          }
 
@@ -712,22 +714,26 @@ bool KisDocument::saveFile(const QString &filePath, KisPropertiesConfigurationSP
             r = tempFile.copy(filePath);
             if (!r) {
                 setErrorMessage(i18n("Copying the temporary file failed: %1 to %2: %3", tempFile.fileName(), dstFile.fileName(), tempFile.errorString()));
+                ret = false;
             }
             else {
                 r = tempFile.remove();
                 if (!r) {
                     setErrorMessage(i18n("Could not remove temporary file %1: %2", tempFile.fileName(), tempFile.errorString()));
+                    ret = false;
                 }
                 else if (s != filePath) {
                     r = dstFile.remove();
                     if (!r) {
                         setErrorMessage(i18n("Could not remove saved original file: %1", dstFile.errorString()));
+                        ret = false;
                     }
                 }
             }
         }
         else {
             setErrorMessage(i18n("The temporary file %1 is gone before we could copy it!", tempFile.fileName()));
+            ret = false;
         }
 
         if (errorMessage().isEmpty()) {
@@ -736,6 +742,7 @@ bool KisDocument::saveFile(const QString &filePath, KisPropertiesConfigurationSP
             }
         }
         else {
+            ret = false;
             qWarning() << "Error while saving:" << errorMessage();
         }
         // Restart the autosave timer
@@ -746,7 +753,7 @@ bool KisDocument::saveFile(const QString &filePath, KisPropertiesConfigurationSP
 
         d->mimeType = outputMimeType;
     }
-    else {
+    if (!ret) {
         if (!suppressErrorDialog) {
 
             if (errorMessage().isEmpty()) {
@@ -780,6 +787,7 @@ bool KisDocument::saveFile(const QString &filePath, KisPropertiesConfigurationSP
     emit sigSavingFinished();
     clearFileProgressUpdater();
 
+    unlockAfterSaving();
     return ret;
 }
 
@@ -1616,6 +1624,11 @@ KisImageWSP KisDocument::image() const
     return d->image;
 }
 
+KisImageSP KisDocument::savingImage() const
+{
+    return d->savingImage;
+}
+
 
 void KisDocument::setCurrentImage(KisImageSP image)
 {
@@ -1651,3 +1664,46 @@ bool KisDocument::isAutosaving() const
 {
     return d->isAutosaving;
 }
+
+bool KisDocument::prepareLocksForSaving()
+{
+    KisImageSP copiedImage;
+
+    {
+        Private::SafeSavingLocker locker(d, this);
+        if (locker.successfullyLocked()) {
+            copiedImage = d->image->clone(true);
+        }
+        else {
+            // even though it is a recovery operation, we should ensure we do not enter saving twice!
+            std::unique_lock<StdLockableWrapper<QMutex>> l(d->savingLock, std::try_to_lock);
+
+            if (l.owns_lock()) {
+                d->lastErrorMessage = i18n("The image was still busy while saving. Your saved image might be incomplete.");
+                d->image->lock();
+                copiedImage = d->image->clone(true);
+                d->image->unlock();
+            }
+        }
+    }
+
+    bool result = false;
+
+    // ensure we do not enter saving twice
+    if (copiedImage && d->savingMutex.tryLock()) {
+        d->savingImage = copiedImage;
+        result = true;
+    } else {
+        qWarning() << "Could not lock the document for saving!";
+        d->lastErrorMessage = i18n("Could not lock the image for saving.");
+    }
+
+    return result;
+}
+
+void KisDocument::unlockAfterSaving()
+{
+    d->savingImage = 0;
+    d->savingMutex.unlock();
+}
+

@@ -788,7 +788,7 @@ KisLayerSP KisView::currentLayer() const
     else {
         node = d->currentNode;
     }
-    return dynamic_cast<KisLayer*>(node.data());
+    return qobject_cast<KisLayer*>(node.data());
 }
 
 KisMaskSP KisView::currentMask() const

@@ -66,7 +66,8 @@ public:
 
     bool checkSizeTooSmall(qreal scale);
 
-    KisSpacingInformation effectiveSpacing(qreal scale, qreal rotation) const;
+    KisSpacingInformation effectiveSpacing(qreal scale) const;
+    KisSpacingInformation effectiveSpacing(qreal scale, qreal rotation, const KisPaintInformation &pi) const;
     KisSpacingInformation effectiveSpacing(qreal scale, qreal rotation, const KisPressureSpacingOption &spacingOption, const KisPaintInformation &pi) const;
 
     ///Reimplemented, false if brush is 0
@@ -78,7 +79,7 @@ public:
 #endif /* HAVE_THREADED_TEXT_RENDERING_WORKAROUND */
 
 private:
-    KisSpacingInformation effectiveSpacing(qreal dabWidth, qreal dabHeight, qreal extraScale, bool isotropicSpacing, qreal rotation) const;
+    KisSpacingInformation effectiveSpacing(qreal dabWidth, qreal dabHeight, qreal extraScale, bool isotropicSpacing, qreal rotation, bool axesFlipped) const;
 
 protected: // XXX: make private!
 

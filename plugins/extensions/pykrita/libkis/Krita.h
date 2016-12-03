@@ -32,44 +32,12 @@
 
 class QAction;
 
-
-
 /**
  * Krita is a singleton class that offers the root access to the Krita object hierarchy.
  */
 class KRITALIBKIS_EXPORT Krita : public QObject
 {
     Q_OBJECT
-
-    /**
-     * The actions list returns a map of Action objects that belong to the currently
-     * active Window. You can retrieve a certain action by name from the map.
-     *
-     * This code will retrieve all actions, and first use the Select All action to
-     * select everything, and the Deselect action to deselect everything *in the
-     * current window, the current view, the current image, on the current layer*.
-     *
-     * @code
-     * actions = Krita.Actions
-     * print(actions.keys())
-     * actions["select_all"].trigger()
-     * actions["deselect"].trigger()
-     * @endcode
-     */
-    Q_PROPERTY(QVariantMap Actions READ actions)
-    Q_PROPERTY(Document* ActiveDocument READ activeDocument WRITE setActiveDocument)
-    Q_PROPERTY(bool Batchmode READ batchmode WRITE setBatchmode)
-    Q_PROPERTY(QVariantList Documents READ documents)
-    Q_PROPERTY(QVariantList Exporters READ exporters)
-    Q_PROPERTY(QVariantList Filters READ filters)
-    Q_PROPERTY(QVariantList Generators READ generators)
-    Q_PROPERTY(QVariantList Importers READ importers)
-    Q_PROPERTY(Notifier* Notifier READ notifier)
-    Q_PROPERTY(InfoObject* Preferences READ preferences WRITE setPreferences)
-    Q_PROPERTY(QString Version READ version)
-    Q_PROPERTY(QVariantList Views READ views)
-    Q_PROPERTY(QVariantList Windows READ windows)
-    Q_PROPERTY(QVariantList Resources READ resources)
 
 public:
     explicit Krita(QObject *parent = 0);
@@ -81,17 +49,18 @@ public:
     bool batchmode() const;
     void setBatchmode(bool value);
 
-    QVariantMap actions() const;
+    QList<Action*> actions() const;
+    Action *action(const QString &name) const;
 
-    QVariantList documents() const;
+    QList<Document*> documents() const;
 
-    QVariantList exporters() const;
+    QList<Exporter*> exporters() const;
 
-    QVariantList filters() const;
+    QList<Filter*> filters() const;
 
-    QVariantList generators() const;
+    QList<Generator *> generators() const;
 
-    QVariantList importers() const;
+    QList<Importer *> importers() const;
 
     Notifier* notifier() const;
 
@@ -100,11 +69,11 @@ public:
 
     QString version() const;
 
-    QVariantList views() const;
+    QList<View*> views() const;
 
-    QVariantList windows() const;
+    QList<Window *> windows() const;
 
-    QVariantList resources() const;
+    QList<Resource*> resources() const;
     void setResources(QList<Resource*> value);
 
 

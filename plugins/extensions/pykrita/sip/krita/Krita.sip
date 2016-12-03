@@ -4,25 +4,27 @@ class Krita : QObject
 #include "Krita.h"
 %End
 public:
+public:
     Krita(QObject*  parent /TransferThis/ = 0);
     virtual ~Krita();
     Document * activeDocument() const;
     void setActiveDocument(Document*  value);
     bool batchmode() const;
     void setBatchmode(bool value);
-    QVariantMap actions() const;
-    QVariantList documents() const;
-    QVariantList exporters() const;
-    QVariantList filters() const;
-    QVariantList generators() const;
-    QVariantList importers() const;
+    QList<Action *> actions() const;
+    Action * action(const QString & name) const;
+    QList<Document *> documents() const;
+    QList<Exporter *> exporters() const;
+    QList<Filter *> filters() const;
+    QList<Generator *> generators() const;
+    QList<Importer *> importers() const;
     Notifier * notifier() const;
     InfoObject * preferences() const;
     void setPreferences(InfoObject*  value);
     QString version() const;
-    QVariantList views() const;
-    QVariantList windows() const;
-    QVariantList resources() const;
+    QList<View *> views() const;
+    QList<Window *> windows() const;
+    QList<Resource *> resources() const;
     void setResources(QList<Resource *> value);
 public Q_SLOTS:
     void addDockWidget(DockWidget*  dockWidget);
@@ -32,7 +34,8 @@ public Q_SLOTS:
     Document * openDocument();
     Window * openWindow();
     QAction * createAction(const QString & text);
-    void addViewExtension(ViewExtension*  viewExtension /GetWrapper/);
+    
+    void addViewExtension(ViewExtension* _viewExtension /GetWrapper/);
 %MethodCode
         Py_BEGIN_ALLOW_THREADS
         sipCpp->addViewExtension(a0);
@@ -40,10 +43,7 @@ public Q_SLOTS:
 
         sipTransferTo(a0Wrapper, Py_None);
 %End
-    
-    QList<ViewExtension *> viewExtensions();
-
-    void addDockWidgetFactory(DockWidgetFactoryBase*  factory /GetWrapper/);
+    void addDockWidgetFactory(DockWidgetFactoryBase* _factory /GetWrapper/);
 %MethodCode
         Py_BEGIN_ALLOW_THREADS
         sipCpp->addDockWidgetFactory(a0);
@@ -55,6 +55,5 @@ public Q_SLOTS:
     static Krita * instance();
     static QObject * fromVariant(const QVariant & v);
 private:
-    private:
-        Krita(const Krita &); // Generated
+    Krita(const Krita &); // Generated
 };

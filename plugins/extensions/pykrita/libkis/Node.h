@@ -20,6 +20,8 @@
 
 #include <QObject>
 
+#include <kis_types.h>
+
 #include "kritalibkis_export.h"
 #include "libkis.h"
 
@@ -30,7 +32,7 @@ class KRITALIBKIS_EXPORT Node : public QObject
 {
     Q_OBJECT
     Q_DISABLE_COPY(Node)
-    
+
     Q_PROPERTY(bool AlphaLocked READ alphaLocked WRITE setAlphaLocked)
     Q_PROPERTY(QString BlendingMode READ blendingMode WRITE setBlendingMode)
     Q_PROPERTY(QList<Channel*> Channels READ channels WRITE setChannels)
@@ -55,7 +57,7 @@ class KRITALIBKIS_EXPORT Node : public QObject
     Q_PROPERTY(QByteArray PixelData READ pixelData WRITE setPixelData)
 
 public:
-    explicit Node(QObject *parent = 0);
+    explicit Node(KisNodeSP node, QObject *parent = 0);
     virtual ~Node();
 
     bool alphaLocked() const;
@@ -127,7 +129,7 @@ public:
 
 
 public Q_SLOTS:
-    
+
     void move(int x, int y);
 
     void moveToParent(Node *parent);
@@ -137,14 +139,14 @@ public Q_SLOTS:
     Node* duplicate();
 
 
-    
+
 Q_SIGNALS:
 
 
 
 private:
     struct Private;
-    const Private *const d;
+    Private *d;
 
 };
 

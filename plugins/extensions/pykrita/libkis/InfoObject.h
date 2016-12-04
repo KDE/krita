@@ -19,6 +19,7 @@
 #define LIBKIS_INFOOBJECT_H
 
 #include <QObject>
+#include <kis_properties_configuration.h>
 
 #include "kritalibkis_export.h"
 #include "libkis.h"
@@ -30,7 +31,7 @@ class KRITALIBKIS_EXPORT InfoObject : public QObject
 {
     Q_OBJECT
     Q_DISABLE_COPY(InfoObject)
-    
+
     Q_PROPERTY(QMap<QString, QVariant> properties READ properties WRITE setproperties)
 
 public:
@@ -38,25 +39,17 @@ public:
     virtual ~InfoObject();
 
     QMap<QString, QVariant> properties() const;
-    void setproperties(QMap<QString, QVariant> value);
-
-
+    void setproperties(QMap<QString, QVariant> proprertyMap);
 
 public Q_SLOTS:
-    
+
     void setProperty(const QString &key, QVariant value);
-
     QVariant property(const QString &key);
-
-
-    
-Q_SIGNALS:
-
 
 
 private:
     struct Private;
-    const Private *const d;
+    Private *d;
 
 };
 

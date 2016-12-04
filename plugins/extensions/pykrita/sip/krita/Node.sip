@@ -5,7 +5,6 @@ class Node : QObject
 %End
     Node(const Node & __0);
 public:
-    Node(QObject*  parent /TransferThis/ = 0);
     virtual ~Node();
     bool alphaLocked() const;
     void setAlphaLocked(bool value);

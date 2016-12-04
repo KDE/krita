@@ -64,6 +64,9 @@ QList<Action *> Krita::actions() const
 {
     QList<Action*> actionList;
     KisMainWindow *mainWindow = KisPart::instance()->currentMainwindow();
+    if (!mainWindow) {
+        return actionList;
+    }
     KActionCollection *actionCollection = mainWindow->actionCollection();
     Q_FOREACH(QAction *action, actionCollection->actions()) {
         actionList << new Action(action->objectName(), action);
@@ -74,6 +77,9 @@ QList<Action *> Krita::actions() const
 Action *Krita::action(const QString &name) const
 {
     KisMainWindow *mainWindow = KisPart::instance()->currentMainwindow();
+    if (!mainWindow) {
+        return 0;
+    }
     KActionCollection *actionCollection = mainWindow->actionCollection();
     QAction *action = actionCollection->action(name);
     if (action) {
@@ -84,7 +90,16 @@ Action *Krita::action(const QString &name) const
 
 Document* Krita::activeDocument() const
 {
-    return 0;
+    KisMainWindow *mainWindow = KisPart::instance()->currentMainwindow();
+    if (!mainWindow) {
+        return 0;
+    }
+    KisView *view = mainWindow->activeView();
+    if (!view) {
+        return 0;
+    }
+    KisDocument *document = view->document();
+    return new Document(document);
 }
 
 void Krita::setActiveDocument(Document* value)
@@ -201,9 +216,12 @@ Document* Krita::createDocument()
     return 0;
 }
 
-Document* Krita::openDocument()
+Document* Krita::openDocument(const QString &filename)
 {
-    return 0;
+    KisDocument *document = KisPart::instance()->createDocument();
+    KisPart::instance()->addDocument(document);
+    document->openUrl(QUrl::fromLocalFile(filename), KisDocument::OPEN_URL_FLAG_DO_NOT_ADD_TO_RECENT_FILES);
+    return new Document(document);
 }
 
 Window* Krita::openWindow()

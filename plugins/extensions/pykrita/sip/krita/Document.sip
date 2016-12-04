@@ -28,25 +28,22 @@ public:
     int resolution() const;
     void setResolution(int value);
     Node * rootNode() const;
-    void setRootNode(Node*  value);
     Selection * selection() const;
     void setSelection(Selection*  value);
     int width() const;
     void setWidth(int value);
     QByteArray pixelData() const;
-    void setPixelData(QByteArray value);
 public Q_SLOTS:
-    Document * clone();
     bool close();
     bool convert(const QString & colorModel, const ColorProfile*  profile);
     void crop(int x, int y, int w, int h);
-    bool Export(const InfoObject & exportConfiguration);
-    void Flatten();
-    void ResizeImage(int w, int h);
-    bool Save(const QString & url);
-    bool SaveAs(const QString & url);
-    void OpenView();
-    Node * CreateNode(const QString & name, const QString & nodeType);
+    bool exportImage(const QString &filename, const InfoObject & exportConfiguration);
+    void flatten();
+    void resizeImage(int w, int h);
+    bool save();
+    bool saveAs(const QString & filename);
+    void openView();
+    Node * createNode(const QString & name, const QString & nodeType);
 private:
 
 };

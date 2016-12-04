@@ -17,19 +17,27 @@
  */
 #include "Document.h"
 #include <QPointer>
-
+#include <QUrl>
 #include <KisDocument.h>
+#include <kis_image.h>
+#include <KisPart.h>
+#include <kis_paint_device.h>
+
+#include <InfoObject.h>
+#include <Node.h>
 
 struct Document::Private {
     Private() {}
     QPointer<KisDocument> document;
+    bool ownsDocument {false};
 };
 
-Document::Document(KisDocument *document, QObject *parent)
+Document::Document(KisDocument *document, bool ownsDocument, QObject *parent)
     : QObject(parent)
     , d(new Private)
 {
     d->document = document;
+    d->ownsDocument = ownsDocument;
 }
 
 Document::~Document()
@@ -37,9 +45,18 @@ Document::~Document()
     delete d;
 }
 
-Node* Document::activeNode() const
+Node *Document::activeNode() const
 {
-    return 0;
+    QList<KisNodeSP> activeNodes;
+    Q_FOREACH(QPointer<KisView> view, KisPart::instance()->views()) {
+        if (view && view->document() == d->document) {
+            activeNodes << view->currentNode();
+        }
+    }
+    if (activeNodes.size() > 0) {
+        return new Node(activeNodes.first());
+    }
+    return new Node(d->document->image()->root()->firstChild());
 }
 
 void Document::setActiveNode(Node* value)
@@ -99,7 +116,8 @@ void Document::setDocumentInfo(InfoObject* value)
 
 QString Document::fileName() const
 {
-    return QString();
+    if (!d->document) return QString::null;
+    return d->document->url().toLocalFile();
 }
 
 void Document::setFileName(QString value)
@@ -109,11 +127,20 @@ void Document::setFileName(QString value)
 
 int Document::height() const
 {
-    return 0;
+    if (!d->document) return 0;
+    KisImageSP image = d->document->image();
+    if (!image) return 0;
+    return image->height();
 }
 
 void Document::setHeight(int value)
 {
+    if (!d->document) return;
+    KisImageSP image = d->document->image();
+    if (!image) return;
+    QRect rc = image->bounds();
+    rc.setHeight(value);
+    image->resizeImage(rc);
 }
 
 
@@ -147,17 +174,16 @@ void Document::setResolution(int value)
 }
 
 
-Node* Document::rootNode() const
+Node *Document::rootNode() const
 {
-    return 0;
+    if (!d->document) return 0;
+    KisImageSP image = d->document->image();
+    if (!image) return 0;
+
+    return new Node(image->root());
 }
 
-void Document::setRootNode(Node* value)
-{
-}
-
-
-Selection* Document::selection() const
+Selection *Document::selection() const
 {
     return 0;
 }
@@ -169,34 +195,45 @@ void Document::setSelection(Selection* value)
 
 int Document::width() const
 {
-    return 0;
+    if (!d->document) return 0;
+    KisImageSP image = d->document->image();
+    if (!image) return 0;
+    return image->width();
 }
 
 void Document::setWidth(int value)
 {
+    if (!d->document) return;
+    KisImageSP image = d->document->image();
+    if (!image) return;
+    QRect rc = image->bounds();
+    rc.setWidth(value);
+    image->resizeImage(rc);
 }
 
 
 QByteArray Document::pixelData() const
 {
-    return QByteArray();
-}
+    QByteArray ba;
 
-void Document::setPixelData(QByteArray value)
-{
-}
+    if (!d->document) return ba;
+    KisImageSP image = d->document->image();
+    if (!image) return ba;
 
-
-
-
-Document * Document::clone()
-{
-    return 0;
+    KisPaintDeviceSP dev = image->projection();
+    quint8 *data = new quint8[image->width() * image->height() * dev->pixelSize()];
+    dev->readBytes(data, 0, 0, image->width(), image->height());
+    ba = QByteArray((const char*)data, (int)(image->width() * image->height() * dev->pixelSize()));
+    delete[] data;
+    return ba;
 }
 
 bool Document::close()
 {
-    return false;
+    if (d->ownsDocument) {
+        KisPart::instance()->removeDocument(d->document);
+    }
+    return d->document->closeUrl(false);
 }
 
 bool Document::convert(const QString &colorModel, const ColorProfile *profile)
@@ -206,36 +243,51 @@ bool Document::convert(const QString &colorModel, const ColorProfile *profile)
 
 void Document::crop(int x, int y, int w, int h)
 {
+    if (!d->document) return;
+    KisImageSP image = d->document->image();
+    if (!image) return;
+    QRect rc(x, y, w, h);
+    image->cropImage(rc);
 }
 
-bool Document::Export(const InfoObject &exportConfiguration)
+bool Document::exportImage(const QString &filename, const InfoObject &exportConfiguration)
 {
-    return false;
+    if (!d->document) return false;
+    return d->document->exportDocument(QUrl::fromLocalFile(filename));
 }
 
-void Document::Flatten()
-{
-}
-
-void Document::ResizeImage(int w, int h)
-{
-}
-
-bool Document::Save(const QString &url)
-{
-    return false;
-}
-
-bool Document::SaveAs(const QString &url)
-{
-    return false;
-}
-
-void Document::OpenView()
+void Document::flatten()
 {
 }
 
-Node* Document::CreateNode(const QString &name, const QString &nodeType)
+void Document::resizeImage(int w, int h)
+{
+    if (!d->document) return;
+    KisImageSP image = d->document->image();
+    if (!image) return;
+    QRect rc = image->bounds();
+    rc.setWidth(w);
+    rc.setHeight(h);
+    image->resizeImage(rc);
+}
+
+bool Document::save()
+{
+    if (!d->document) return false;
+    return d->document->save();
+}
+
+bool Document::saveAs(const QString &filename)
+{
+    if (!d->document) return false;
+    return d->document->saveAs(QUrl::fromLocalFile(filename));
+}
+
+void Document::openView()
+{
+}
+
+Node* Document::createNode(const QString &name, const QString &nodeType)
 {
     return 0;
 }

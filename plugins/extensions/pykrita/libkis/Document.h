@@ -33,24 +33,8 @@ class KRITALIBKIS_EXPORT Document : public QObject
     Q_OBJECT
     Q_DISABLE_COPY(Document)
 
-    Q_PROPERTY(Node* ActiveNode READ activeNode WRITE setActiveNode)
-    Q_PROPERTY(ColorDepth* ColorDepth READ colorDepth WRITE setColorDepth)
-    Q_PROPERTY(ColorManager* ColorManager READ colorManager WRITE setColorManager)
-    Q_PROPERTY(ColorModel* ColorModel READ colorModel WRITE setColorModel)
-    Q_PROPERTY(ColorProfile* ColorProfile READ colorProfile WRITE setColorProfile)
-    Q_PROPERTY(InfoObject* DocumentInfo READ documentInfo WRITE setDocumentInfo)
-    Q_PROPERTY(QString FileName READ fileName WRITE setFileName)
-    Q_PROPERTY(int Height READ height WRITE setHeight)
-    Q_PROPERTY(InfoObject* MetaData READ metaData WRITE setMetaData)
-    Q_PROPERTY(QString Name READ name WRITE setName)
-    Q_PROPERTY(int Resolution READ resolution WRITE setResolution)
-    Q_PROPERTY(Node* RootNode READ rootNode WRITE setRootNode)
-    Q_PROPERTY(Selection* Selection READ selection WRITE setSelection)
-    Q_PROPERTY(int Width READ width WRITE setWidth)
-    Q_PROPERTY(QByteArray PixelData READ pixelData WRITE setPixelData)
-
 public:
-    explicit Document(KisDocument *document, QObject *parent = 0);
+    explicit Document(KisDocument *document, bool ownsDocument = false, QObject *parent = 0);
     virtual ~Document();
 
     Node* activeNode() const;
@@ -87,7 +71,6 @@ public:
     void setResolution(int value);
 
     Node* rootNode() const;
-    void setRootNode(Node* value);
 
     Selection* selection() const;
     void setSelection(Selection* value);
@@ -96,11 +79,8 @@ public:
     void setWidth(int value);
 
     QByteArray pixelData() const;
-    void setPixelData(QByteArray value);
 
 public Q_SLOTS:
-
-    Document * clone();
 
     bool close();
 
@@ -108,19 +88,19 @@ public Q_SLOTS:
 
     void crop(int x, int y, int w, int h);
 
-    bool Export(const InfoObject &exportConfiguration);
+    bool exportImage(const QString &filename, const InfoObject &exportConfiguration);
 
-    void Flatten();
+    void flatten();
 
-    void ResizeImage(int w, int h);
+    void resizeImage(int w, int h);
 
-    bool Save(const QString &url);
+    bool save();
 
-    bool SaveAs(const QString &url);
+    bool saveAs(const QString &filename);
 
-    void OpenView();
+    void openView();
 
-    Node* CreateNode(const QString &name, const QString &nodeType);
+    Node* createNode(const QString &name, const QString &nodeType);
 
 private:
     struct Private;

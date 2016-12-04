@@ -87,7 +87,7 @@ public Q_SLOTS:
 
     Document* createDocument();
 
-    Document* openDocument();
+    Document* openDocument(const QString &filename);
 
     Window* openWindow();
 

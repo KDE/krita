@@ -31,7 +31,7 @@ public Q_SLOTS:
     void addAction(Action*  action);
     bool closeApplication();
     Document * createDocument();
-    Document * openDocument();
+    Document * openDocument(const QString &filename);
     Window * openWindow();
     QAction * createAction(const QString & text);
     

@@ -25,17 +25,22 @@
 #include "Transformation.h"
 #include "Selection.h"
 
+#include <kis_types.h>
+#include <kis_node.h>
+
 struct Node::Private {
     Private() {}
+    KisNodeSP node;
 };
 
-Node::Node(QObject *parent) 
+Node::Node(KisNodeSP node, QObject *parent)
     : QObject(parent)
     , d(new Private)
 {
+    d->node = node;
 }
 
-Node::~Node() 
+Node::~Node()
 {
     delete d;
 }

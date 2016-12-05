@@ -2,6 +2,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 
+
 class FontsComboBox(QComboBox):
 
     def __init__(self, editor, parent=None):
@@ -18,7 +19,7 @@ class FontsComboBox(QComboBox):
         com.setCaseSensitivity(Qt.CaseInsensitive)
         com.setCompletionMode(QCompleter.PopupCompletion)
 
-        # Style sheet to set false on combobox-popup 
+        # Style sheet to set false on combobox-popup
         self.setStyleSheet("QComboBox { combobox-popup: 0; }")
         self.setMaxVisibleItems(10)
         self.setCompleter(com)

@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
+
 from PyQt5.QtWidgets import *
-from scripter import syntaxstyles
+from scripter.ui_scripter.syntax import syntaxstyles
 
 
 class SyntaxStylesComboBox(QComboBox):

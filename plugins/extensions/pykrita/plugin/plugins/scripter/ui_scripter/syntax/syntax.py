@@ -1,7 +1,7 @@
 # syntax.py: taken from https://wiki.python.org/moin/PyQt/Python%20syntax%20highlighting
 
-import sys
 
+import sys
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 

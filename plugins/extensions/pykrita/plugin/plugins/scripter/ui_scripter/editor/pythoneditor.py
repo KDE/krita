@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 
+
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
-from scripter import linenumberarea
+from scripter.ui_scripter.widgets import linenumberarea
 from PyQt5.QtGui import *
+
 
 class CodeEditor(QPlainTextEdit):
 

@@ -165,6 +165,8 @@ KisShapeLayer::KisShapeLayer(const KisShapeLayer& _rhs, KoShapeBasedDocumentBase
     bool success = paste.paste(KoOdf::Text, mimeData);
     Q_ASSERT(success);
     Q_UNUSED(success); // for release build
+
+    setVisible(_rhs.visible());
 }
 
 KisShapeLayer::KisShapeLayer(const KisShapeLayer& _rhs, const KisShapeLayer &_addShapes)

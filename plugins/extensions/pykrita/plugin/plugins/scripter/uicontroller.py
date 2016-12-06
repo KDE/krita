@@ -2,14 +2,13 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from scripter.ui_scripter.syntax import syntax, syntaxstyles
-from scripter.ui_scripter import actions
 from scripter.ui_scripter.editor import pythoneditor
-from scripter.loaders import actionloader, menuloader, widgetloader
 import os
 import importlib
-import inspect
+
 
 class UIController(object):
+
     def __init__(self, mainWidget):
         self.mainWidget = mainWidget
         self.actionToolbar = QToolBar('toolBar', self.mainWidget)
@@ -18,7 +17,7 @@ class UIController(object):
         self.actionToolbar.setObjectName('toolBar')
         self.menu_bar.setObjectName('menuBar')
 
-        self.components = []
+        self.actions = []
 
         self.mainWidget.setWindowModality(Qt.NonModal)
         self.editor = pythoneditor.CodeEditor()
@@ -29,7 +28,7 @@ class UIController(object):
         self.scripter = scripter
 
         self.loadMenus()
-        self.loadComponents(actionloader.ActionLoader())
+        self.loadActions()
 
         vbox = QVBoxLayout(self.mainWidget)
         vbox.addWidget(self.menu_bar)
@@ -61,21 +60,24 @@ class UIController(object):
         return self.newMenu
 
 
-    def loadComponents(self, loader):
-        component_module = importlib.import_module(loader.importPath)
+    def loadActions(self):
+        module_path = 'scripter.ui_scripter.actions'
+        actions_module = importlib.import_module(module_path)
+        print(actions_module)
+        modules = []
 
-        modules = [loader.importPath + '.' + str(module).split('.')[0]
-                    for module in os.listdir(component_module.__path__[0])
-                    if module.endswith('.py') and (not '__init__' in module)]
+        for class_path in actions_module.action_classes:
+            _module, _klass =  class_path.rsplit('.', maxsplit=1)
+            print(_module, _klass)
+            modules.append(dict(module='{0}.{1}'.format(module_path, _module),
+                                klass=_klass))
 
         for module in modules:
-            m = importlib.import_module(module)
-            clsmembers = [klass for klass in inspect.getmembers(m, inspect.isclass) if klass[1].__module__ == module]
-            print(self.mainWidget.children())
-            for klass in clsmembers:
-                obj = klass[1](self.scripter)
-                parent = self.mainWidget.findChild(QObject, obj.parent)
-                print('parent:', parent)
-                self.components.append(dict(component=obj, parent=parent))
+            m = importlib.import_module(module['module'])
+            action_class = getattr(m, module['klass'])
+            obj = action_class(self.scripter)
+            parent = self.mainWidget.findChild(QObject, obj.parent)
+            self.actions.append(dict(action=obj, parent=parent))
 
-        loader.addComponents(self.components)
+        for action in self.actions:
+            action['parent'].addAction(action['action'])

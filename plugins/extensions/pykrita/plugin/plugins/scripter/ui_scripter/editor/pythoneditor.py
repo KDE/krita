@@ -3,7 +3,7 @@
 
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
-from scripter.ui_scripter.widgets import linenumberarea
+from scripter.ui_scripter.editor import linenumberarea
 from PyQt5.QtGui import *
 
 

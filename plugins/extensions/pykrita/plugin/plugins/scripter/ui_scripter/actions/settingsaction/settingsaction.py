@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import QAction
 from PyQt5.QtCore import Qt
-from ..widgets import settingsdialog
+from . import settingsdialog
 
 
 class SettingsAction(QAction):

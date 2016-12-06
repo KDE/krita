@@ -9,7 +9,6 @@ class ScripterViewExtension(ViewExtension):
 
     def __init__(self, parent):
         super().__init__(parent)
-        self.uicontroller = uicontroller.UIController(QDialog())
 
     def setup(self):
         print("Scripter setup")
@@ -17,6 +16,7 @@ class ScripterViewExtension(ViewExtension):
         action.triggered.connect(self.initialize)
 
     def initialize(self):
+        self.uicontroller = uicontroller.UIController(QDialog())
         self.uicontroller.initialize(self)
 
 Krita.instance().addViewExtension(ScripterViewExtension(Krita.instance()))

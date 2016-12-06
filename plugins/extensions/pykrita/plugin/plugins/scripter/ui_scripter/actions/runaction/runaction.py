@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import QAction, QMessageBox
 from PyQt5.QtGui import QIcon
 import sys
-from ..editor import docwrapper
+from . import docwrapper
 
 class RunAction(QAction):
 
@@ -15,7 +15,8 @@ class RunAction(QAction):
         self.triggered.connect(self.run)
 
         self.setText('Run')
-        self.setIcon(QIcon('/home/eliakincosta/Pictures/play.svg'))
+        # path to the icon
+        #self.setIcon(QIcon('/home/eliakincosta/Pictures/play.svg'))
 
     @property
     def parent(self):

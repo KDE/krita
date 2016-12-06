@@ -2,7 +2,7 @@
 
 
 from PyQt5.QtWidgets import *
-from ..widgets import syntaxstylescombobox, fontscombobox
+from . import syntaxstylescombobox, fontscombobox
 
 
 class SettingsDialog(QDialog):

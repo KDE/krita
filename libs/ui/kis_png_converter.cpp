@@ -835,6 +835,8 @@ KisImageWSP KisPNGConverter::image()
 
 bool KisPNGConverter::saveDeviceToStore(const QString &filename, const QRect &imageRect, const qreal xRes, const qreal yRes, KisPaintDeviceSP dev, KoStore *store, KisMetaData::Store* metaData)
 {
+
+
     if (store->open(filename)) {
         KoStoreDevice io(store);
         if (!io.open(QIODevice::WriteOnly)) {
@@ -852,6 +854,15 @@ bool KisPNGConverter::saveDeviceToStore(const QString &filename, const QRect &im
         options.interlace = false;
         options.tryToSaveAsIndexed = false;
         options.alpha = true;
+        options.saveSRGBProfile = false;
+
+        if (dev->colorSpace()->id() != "RGBA") {
+            dev = new KisPaintDevice(*dev.data());
+            KUndo2Command *cmd = dev->convertTo(KoColorSpaceRegistry::instance()->rgb8());
+            delete cmd;
+        }
+
+
         bool success = pngconv.buildFile(&io, imageRect, xRes, yRes, dev, annotIt, annotIt, options, metaDataStore);
         if (success != KisImageBuilder_RESULT_OK) {
             dbgFile << "Saving PNG failed:" << filename;

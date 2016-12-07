@@ -250,7 +250,7 @@
       <enum>QFrame::Raised</enum>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>3</number>
      </property>
      <widget class="QWidget" name="freeTransformWidget">
       <layout class="QVBoxLayout" name="verticalLayout">
@@ -612,7 +612,7 @@
           </layout>
          </item>
          <item>
-          <spacer name="horizontalSpacer">
+          <spacer name="horizontalSpacer0">
            <property name="orientation">
             <enum>Qt::Horizontal</enum>
            </property>
@@ -1215,7 +1215,7 @@
         </widget>
        </item>
        <item>
-        <spacer name="verticalSpacer">
+        <spacer name="verticalSpacer0">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
@@ -1225,7 +1225,7 @@
          <property name="sizeHint" stdset="0">
           <size>
            <width>20</width>
-           <height>20</height>
+           <height>10</height>
           </size>
          </property>
         </spacer>
@@ -1341,7 +1341,7 @@
            </widget>
           </item>
           <item>
-           <spacer name="horizontalSpacer">
+           <spacer name="horizontalSpacer1">
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
             </property>
@@ -1360,7 +1360,7 @@
         </widget>
        </item>
        <item>
-        <spacer name="verticalSpacer">
+        <spacer name="verticalSpacer00">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
@@ -1370,7 +1370,7 @@
          <property name="sizeHint" stdset="0">
           <size>
            <width>20</width>
-           <height>20</height>
+           <height>10</height>
           </size>
          </property>
         </spacer>
@@ -1609,16 +1609,12 @@
          <property name="sizeHint" stdset="0">
           <size>
            <width>20</width>
-           <height>417</height>
+           <height>10</height>
           </size>
          </property>
         </spacer>
        </item>
       </layout>
-      <zorder>gridLayoutWidget</zorder>
-      <zorder>groupBox</zorder>
-      <zorder>verticalSpacer_2</zorder>
-      <zorder>customWarpWidget</zorder>
      </widget>
      <widget class="QWidget" name="cageTransformPage">
       <layout class="QVBoxLayout" name="verticalLayout_6">
@@ -2043,7 +2039,7 @@
          <property name="sizeHint" stdset="0">
           <size>
            <width>20</width>
-           <height>40</height>
+           <height>0</height>
           </size>
          </property>
         </spacer>
@@ -2179,8 +2175,8 @@
  <resources/>
  <connections/>
  <buttongroups>
+  <buttongroup name="freeTransformRadioGroup"/>
   <buttongroup name="cageTransformButtonGroup"/>
   <buttongroup name="buttonGroup"/>
-  <buttongroup name="freeTransformRadioGroup"/>
  </buttongroups>
 </ui>

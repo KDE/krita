@@ -73,12 +73,6 @@ public:
     void setDefaultDir(const QString &defaultDir);
 
     /**
-     * @brief setOverrideDir override both the default dir and the saved dir found by dialogName
-     * @param overrideDir a path to a file or directory
-     */
-    void setOverrideDir(const QString &overrideDir);
-
-    /**
      * @brief setImageFilters sets the name filters for the file dialog to all
      * image formats Qt's QImageReader supports.
      */

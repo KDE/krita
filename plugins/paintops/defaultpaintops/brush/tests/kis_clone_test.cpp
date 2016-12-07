@@ -76,8 +76,7 @@ inline void alignRectBy2(qint32 &x, qint32 &y, qint32 &w, qint32 &h)
 class MaskedImage : public KisShared
 {
 private:
-    //KisPaintDeviceSP imageDev;
-    //KisPaintDeviceSP maskDev;
+
     QRect imageSize;
     int nChannels;
 
@@ -87,17 +86,6 @@ private:
     typedef boost::multi_array<float, 3> Image_type;
     Image_type imageCache;
 
-    MaskedImage(const MaskedImage& other){
-        imageSize = other.imageSize;
-        nChannels = other.nChannels;
-
-        //this ugly code is required due to poor multi_array class design
-        maskCache.resize(boost::extents[other.maskCache.shape()[0]][other.maskCache.shape()[1]]);
-        maskCache = other.maskCache;
-
-        imageCache.resize(boost::extents[other.imageCache.shape()[0]][other.imageCache.shape()[1]][other.imageCache.shape()[2]]);
-        imageCache = other.imageCache;
-    }
 
     void cacheImageSize(KisPaintDeviceSP imageDev)
     {
@@ -107,6 +95,8 @@ private:
     void cacheImage(KisPaintDeviceSP imageDev)
     {
         nChannels = imageDev->channelCount();
+        QVector<float> channels(nChannels);
+
         const KoColorSpace* cs = imageDev->colorSpace();
         imageCache.resize(boost::extents[imageSize.width()][imageSize.height()][nChannels]);
 
@@ -114,9 +104,9 @@ private:
         for (int y = 0; y < imageSize.height(); y++) {
             for (int x = 0; x < imageSize.width(); x++) {
                 const quint8* pixel = it.rawDataConst();
+                cs->normalisedChannelsValue(pixel,channels);
                 for (quint32 chan = 0; chan < nChannels; ++chan) {
-                    quint8 v = cs->scaleToU8(pixel, (qint32)chan);
-                    imageCache[x][y][chan] = v;
+                    imageCache[x][y][chan] = channels[chan];
                 }
                 it.nextPixel();
             }
@@ -147,38 +137,10 @@ private:
         }
     }
 
-    void debugDump(QString dirName, QString dset)
-    {
-        static int index = 0;
-        hid_t       file_id;
-
-        QString fname = dirName + QString("debug.h5"); //suffix+QString::number(index);
-        file_id = H5Fopen(fname.toStdString().c_str(), H5F_ACC_RDWR, H5P_DEFAULT);
-        if (file_id == -1)
-            file_id = H5Fcreate(fname.toStdString().c_str(), H5F_ACC_DEBUG, H5P_DEFAULT, H5P_DEFAULT);
-
-        QString dset_name = QString("/") + dset + QString("_mask_") + QString::number(index);
-        hsize_t dims[] = {maskCache.shape()[0], maskCache.shape()[1]};
-        H5LTmake_dataset(file_id, dset_name.toStdString().c_str(), 2, dims, H5T_NATIVE_INT8, (void*)maskCache.data());
-
-        dset_name = QString("/") + dset + QString("_image_") + QString::number(index);
-        H5LTmake_dataset(file_id, dset_name.toStdString().c_str(), imageCache.num_dimensions(), (const hsize_t*)imageCache.shape(), H5T_NATIVE_UINT8, (void*)imageCache.data());
-
-        H5Fclose(file_id);
-
-        index++;
-    }
-
+    MaskedImage() {}
 
 public:
-//    KisPaintDeviceSP getImageDev(void) const
-//    {
-//        return imageDev;
-//    }
-//    KisPaintDeviceSP getMaskDev(void) const
-//    {
-//        return maskDev;
-//    }
+
     void toPaintDevice( KisPaintDeviceSP imageDev )
     {
         KisSequentialIterator it(imageDev, imageSize);
@@ -224,15 +186,14 @@ public:
     {
         int kernel[6] = {1,5,10,10,5,1};
 
-
-        int ksum=0;
-        int m=0;
         int H=imageSize.height();
         int W=imageSize.width();
-
         int newW=W/2, newH=H/2;
 
         Image_type newImage(boost::extents[newW][newH][nChannels]);
+
+        std::fill(newImage.origin(), newImage.origin()+newImage.num_elements(), 0);
+
         Mask_type newMask(boost::extents[newW][newH]);
 
         std::vector<float> colors(nChannels);
@@ -240,6 +201,9 @@ public:
 
         for (int x=0;x<W-1;x+=2) {
             for (int y=0;y<H-1;y+=2) {
+                int ksum=0;
+                int m=0;
+
                 for (int dy=-2;dy<=3;++dy) {
                     int yk=y+dy;
                     if (yk<0 || yk>=H)
@@ -285,6 +249,8 @@ public:
         maskCache.resize(boost::extents[newMask.shape()[0]][newMask.shape()[1]]);
         maskCache = newMask;
         imageSize = QRect(0, 0, newW, newH);
+        int nmasked = countMasked();
+        printf("Masked: %d size: %dx%d\n", nmasked, newW, newH);
     }
 
     //TODO replace this with reference code if not working
@@ -334,11 +300,20 @@ public:
         return imageSize;
     }
 
-
-
     KisSharedPtr<MaskedImage> copy( void )
     {
-        return KisSharedPtr<MaskedImage>(new MaskedImage(*this));
+        KisSharedPtr<MaskedImage> clone = new MaskedImage();
+        clone->imageSize = this->imageSize;
+        clone->nChannels = this->nChannels;
+
+        //this ugly code is required due to poor multi_array class design
+        clone->maskCache.resize(boost::extents[this->maskCache.shape()[0]][this->maskCache.shape()[1]]);
+        clone->maskCache = this->maskCache;
+        //this ugly code is required due to poor multi_array class design
+        clone->imageCache.resize(boost::extents[this->imageCache.shape()[0]][this->imageCache.shape()[1]][this->imageCache.shape()[2]]);
+        clone->imageCache = this->imageCache;
+
+        return clone;
     }
 
     int countMasked(void)
@@ -390,21 +365,16 @@ public:
         imageCache[x][y][channel] = value;
     }
 
-    //        KisRandomAccessorSP it = imageDev->createRandomAccessorNG(x, y);
-    //        quint8* value = it->rawData();
-    //        const KoColorSpace* cs = imageDev->colorSpace();
-    //        Q_ASSERT(channels.size() == cs->channelCount());
-    //        cs->fromNormalisedChannelsValue(value, channels);
     inline void setMask(int x, int y, bool v)
     {
         maskCache[x][y] = v;
     }
 
-    long distance(int x, int y, const MaskedImage& other, int xo, int yo)
+    float distance(int x, int y, const MaskedImage& other, int xo, int yo)
     {
-        int dsq = 0;
+        float dsq = 0;
         for (quint32 chan = 0; chan < nChannels; chan++) {
-            int v = imageCache[x][y][chan] - other.imageCache[xo][yo][chan];
+            float v = imageCache[x][y][chan] - other.imageCache[xo][yo][chan];
             dsq += v * v;
         }
         return dsq;
@@ -413,6 +383,28 @@ public:
     inline int channelCount(void) const{
         return nChannels;
     }
+
+
+    void debugDump(QString dirName, QString dset)
+    {
+        static int index = 0;
+        hid_t       file_id;
+
+        QString fname = dirName + QString("debug.h5"); //suffix+QString::number(index);
+        file_id = H5Fopen(fname.toStdString().c_str(), H5F_ACC_RDWR, H5P_DEFAULT);
+        if (file_id == -1)
+            file_id = H5Fcreate(fname.toStdString().c_str(), H5F_ACC_DEBUG, H5P_DEFAULT, H5P_DEFAULT);
+
+        QString dset_name = QString("/") + dset + QString("_mask_") + QString::number(index);
+        H5LTmake_dataset(file_id, dset_name.toStdString().c_str(), maskCache.num_dimensions(), (const hsize_t*)maskCache.shape(), H5T_NATIVE_B8, (void*)maskCache.data());
+
+        dset_name = QString("/") + dset + QString("_image_") + QString::number(index);
+        H5LTmake_dataset(file_id, dset_name.toStdString().c_str(), imageCache.num_dimensions(), (const hsize_t*)imageCache.shape(), H5T_NATIVE_FLOAT, (void*)imageCache.data());
+
+        H5Fclose(file_id);
+        index++;
+    }
+
 };
 
 typedef KisSharedPtr<MaskedImage> MaskedImageSP;
@@ -438,11 +430,12 @@ class NearestNeighborField : public KisShared
 private:
     template< typename T> T random_int(T range)
     {
-        static std::random_device rd;
-        static std::mt19937 gen(rd());
+//        static std::random_device rd;
+//        static std::mt19937 gen(rd());
 
-        std::uniform_int_distribution<T> dis(0, range - 1);
-        return dis(gen);
+//        std::uniform_int_distribution<T> dis(0, range - 1);
+//        return dis(gen);
+        return rand() % range;
     }
 
     //compute intial value of the distance term
@@ -454,10 +447,10 @@ private:
 
                 //if the distance is "infinity", try to find a better link
                 int iter = 0;
-                int maxretry = 20;
+                const int maxretry = 20;
                 while (field[x][y].distance == MAX_DIST && iter < maxretry) {
-                    field[x][y].x = random_int(imSize.width());
-                    field[x][y].y = random_int(imSize.height());
+                    field[x][y].x = random_int(imSize.width()+1);
+                    field[x][y].y = random_int(imSize.height()+1);
                     field[x][y].distance = distance(x, y, field[x][y].x, field[x][y].y);
                     iter++;
                 }
@@ -524,8 +517,8 @@ public:
     {
         for (int y = 0; y < imSize.height(); y++) {
             for (int x = 0; x < imSize.width(); x++) {
-                field[x][y].x = random_int(imSize.width());
-                field[x][y].y = random_int(imSize.height());
+                field[x][y].x = random_int(imSize.width()+1);
+                field[x][y].y = random_int(imSize.height()+1);
                 field[x][y].distance = MAX_DIST;
             }
         }
@@ -535,8 +528,8 @@ public:
     //initialize field from an existing (possibly smaller) nearest neighbor field
     void initialize(const NearestNeighborField& nnf)
     {
-        float xscale = (float)imSize.width() / nnf.imSize.width();
-        float yscale = (float)imSize.height() / nnf.imSize.height();
+        float xscale = imSize.width() / nnf.imSize.width();
+        float yscale = imSize.height() / nnf.imSize.height();
 
         for (int y = 0; y < imSize.height(); y++) {
             for (int x = 0; x < imSize.width(); x++) {
@@ -571,8 +564,6 @@ public:
                 for (int x = max_x; x >= min_x; x--)
                     if (field[x][y].distance > 0)
                         minimizeLink(x, y, -1);
-
-            //debugDumpField("/home/eugening/Projects/","NNF_Iter");
         }
     }
 
@@ -605,7 +596,7 @@ public:
         }
 
         //Random search
-        int wi = output->size().width();
+        int wi = std::max(output->size().width(),output->size().height());
         int xpi = field[x][y].x;
         int ypi = field[x][y].y;
         while (wi > 0) {
@@ -627,54 +618,55 @@ public:
     //compute distance between two patches
     int distance(int x, int y, int xp, int yp)
     {
-        long distance = 0;
-        long wsum = 0;
-        long ssdmax = 10 * 255 * 255;
+        float distance = 0;
+        float wsum = 0;
+        float ssdmax = 9; // * 255 * 255;
 
         //for each pixel in the source patch
         for (int dy = -patchSize; dy <= patchSize; dy++) {
             for (int dx = -patchSize; dx <= patchSize; dx++) {
-                wsum += ssdmax;
+                wsum++;
                 int xks = x + dx;
                 int yks = y + dy;
 
-                if (xks < 0 || xks >= input->size().width()) {
-                    distance += ssdmax;
+                if (xks < 1 || xks >= input->size().width()-1) {
+                    distance++;
                     continue;
                 }
 
-                if (yks < 0 || yks >= input->size().height()) {
-                    distance += ssdmax;
+                if (yks < 1 || yks >= input->size().height()-1) {
+                    distance++;
                     continue;
                 }
 
                 //cannot use masked pixels as a valid source of information
                 if (input->isMasked(xks, yks)) {
-                    distance += ssdmax;
+                    distance++;
                     continue;
                 }
 
                 //corresponding pixel in target patch
                 int xkt = xp + dx;
                 int ykt = yp + dy;
-                if (xkt < 0 || xkt >= output->size().width()) {
-                    distance += ssdmax;
+                if (xkt < 1 || xkt >= output->size().width()-1) {
+                    distance++;
                     continue;
                 }
-                if (ykt < 0 || ykt >= output->size().height()) {
-                    distance += ssdmax;
+                if (ykt < 1 || ykt >= output->size().height()-1) {
+                    distance++;
                     continue;
                 }
 
                 //cannot use masked pixels as a valid source of information
                 if (output->isMasked(xkt, ykt)) {
-                    distance += ssdmax;
+                    distance++;
                     continue;
                 }
 
                 //SSD distance between pixels
-                long ssd = input->distance(xks, yks, *output, xkt, ykt);
-                distance += ssd;
+                float ssd = input->distance(xks, yks, *output, xkt, ykt);
+                //long ssd = input->distance(xks, yks, *input, xkt, ykt);
+                distance += ssd/ssdmax;
 
             }
         }
@@ -715,9 +707,11 @@ public:
         if (file_id == -1)
             file_id = H5Fcreate(fname.toStdString().c_str(), H5F_ACC_DEBUG, H5P_DEFAULT, H5P_DEFAULT);
 
-        QString dset_name = QString("/") + dset + QString("_field_x_") + QString::number(index);
+        char dsetName[1024];
+        snprintf(dsetName, 1023, "/field_%s_%d", dset.toStdString().c_str(), index);
+
         hsize_t dims[] = {field.shape()[0], field.shape()[1], 3}; //x,y,distance
-        H5LTmake_dataset(file_id, dset_name.toStdString().c_str(), 3, dims, H5T_NATIVE_INT, (void*)field.data());
+        H5LTmake_dataset(file_id, dsetName, 3, dims, H5T_NATIVE_INT, (void*)field.data());
 
         H5Fclose(file_id);
 
@@ -731,6 +725,7 @@ typedef KisSharedPtr<NearestNeighborField> NearestNeighborFieldSP;
 class Inpaint
 {
 private:
+    KisPaintDeviceSP devCache;
     MaskedImageSP initial;
     NearestNeighborFieldSP nnf_TargetToSource;
     NearestNeighborFieldSP nnf_SourceToTarget;
@@ -743,6 +738,7 @@ public:
     {
         initial = new MaskedImage(dev, devMask);
         radius = _radius;
+        devCache = dev;
     }
     MaskedImageSP patch(void);
     MaskedImageSP patch_simple(void);
@@ -822,27 +818,26 @@ MaskedImageSP Inpaint::patch()
 
     QRect size = source->size();
 
-    while ((size.width() > radius) && (size.height() > radius) ) {
-//        if (source->countMasked() == 0)
-//            break;
+    while ((size.width() > radius) && (size.height() > radius) && source->countMasked() > 0 ) {
+
         source->downsample2x();
         pyramid.append(source->copy());
-//        KIS_DUMP_DEVICE_2(pyramid.last()->getImageDev(), pyramid.last()->getImageDev()->exactBounds(), "image", "/home/eugening/Projects/Pyramid");
-//        KIS_DUMP_DEVICE_2(pyramid.last()->getMaskDev(), pyramid.last()->getMaskDev()->exactBounds(), "mask", "/home/eugening/Projects/Pyramid");
-
         size = source->size();
     }
     int maxlevel = pyramid.size();
 
     // The initial target is the same as the smallest source.
     // We consider that this target contains no masked pixels
-    MaskedImageSP target = pyramid.last();
-    target->clearMask();
+    MaskedImageSP target = nullptr;
+//    target->clearMask();
 
     //recursively building nearest neighbor field
-    for (int level = maxlevel - 1; level >= 1; level--) {
+    for (int level = maxlevel - 1; level > 0; level--) {
         source = pyramid.at(level);
         if (level == maxlevel - 1) {
+            target = source->copy();
+            target->clearMask();
+
             nnf_SourceToTarget = new NearestNeighborField(source, target, radius);
             nnf_SourceToTarget->randomize();
 
@@ -863,7 +858,10 @@ MaskedImageSP Inpaint::patch()
 
         //Build an upscaled target by EM-like algorithm (see "PatchMatch" - page 6)
         target = NearestNeighborField::ExpectationMaximization(nnf_SourceToTarget, nnf_TargetToSource, level, radius, pyramid);
-//        KIS_DUMP_DEVICE_2(target->getImageDev(), target->size(), "target", "/home/eugening/Projects/Tgt");
+
+        //devCache->clear();
+        target->toPaintDevice(devCache);
+        KIS_DUMP_DEVICE_2(devCache, target->size(), "target", "/home/eugening/Projects/Tgt");
     }
     return target;
 }
@@ -884,7 +882,7 @@ void MaximizationStep(MaskedImageSP target, const Vote_type& vote)
                 for(int i=0; i<pixel.size(); ++i){
                     target->setImagePixels(x,y,i,pixel[i]/w);
                 }
-                target->setMask(x, y, 0);
+                target->setMask(x, y, false);
             }
         }
     }
@@ -936,7 +934,8 @@ MaskedImageSP NearestNeighborField::ExpectationMaximization(NearestNeighborField
         nnf_SourceToTarget->minimize(iterNNF);
         nnf_TargetToSource->minimize(iterNNF);
 
-        //debugDumpField("/home/eugening/Projects/","NNF");
+        nnf_SourceToTarget->debugDumpField("/home/eugening/Projects/","S2T");
+        nnf_TargetToSource->debugDumpField("/home/eugening/Projects/","T2S");
 
         //Now we rebuild the target using best patches from source
         MaskedImageSP newsource = nullptr;
@@ -947,7 +946,7 @@ MaskedImageSP NearestNeighborField::ExpectationMaximization(NearestNeighborField
         if (level >= 1 && (emloop == iterEM)) {
             newsource = pyramid.at(level - 1);
             QRect sz = newsource->size();
-            newtarget = target;
+            newtarget = target->copy();
             newtarget->upscale(sz.width(), sz.height());
             upscaled = true;
         } else {
@@ -967,7 +966,7 @@ MaskedImageSP NearestNeighborField::ExpectationMaximization(NearestNeighborField
         }
 
         ExpectationStep(nnf_SourceToTarget, true, vote, newsource, upscaled);
-        //ei ExpectationStep(nnf_TargetToSource, false, vote, newsource, upscaled);
+        ExpectationStep(nnf_TargetToSource, false, vote, newsource, upscaled);
 
         // --- MAXIMIZATION STEP ---
 
@@ -975,7 +974,9 @@ MaskedImageSP NearestNeighborField::ExpectationMaximization(NearestNeighborField
         MaximizationStep(newtarget, vote);
 
     }
-    //debugDumpField("/home/eugening/Projects/", "NNF_Final");
+    newtarget->debugDump("/home/eugening/Projects/","newtarget");
+    nnf_SourceToTarget->debugDumpField("/home/eugening/Projects/","S2T_Final");
+    nnf_TargetToSource->debugDumpField("/home/eugening/Projects/","T2S_Final");
     return newtarget;
 }
 

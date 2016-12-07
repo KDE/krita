@@ -382,13 +382,11 @@ void ColorSettingsTab::installProfile()
     QString saveLocation = KoResourcePaths::saveLocation("icc_profiles");
 
     Q_FOREACH (const QString &profileName, profileNames) {
-        QUrl file(profileName);
-        if (!QFile::copy(profileName, saveLocation + file.fileName())) {
-            dbgKrita << "Could not install profile!";
-            return;
+        if (!QFile::copy(profileName, saveLocation + QFileInfo(profileName).fileName())) {
+            qWarning() << "Could not install profile!" << saveLocation + QFileInfo(profileName).fileName();
+            continue;
         }
-        iccEngine->addProfile(saveLocation + file.fileName());
-
+        iccEngine->addProfile(saveLocation + QFileInfo(profileName).fileName());
     }
 
     KisConfig cfg;

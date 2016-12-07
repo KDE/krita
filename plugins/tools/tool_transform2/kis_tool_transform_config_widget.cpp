@@ -59,12 +59,12 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
     cmbFilter->setIDList(KisFilterStrategyRegistry::instance()->listKeys());
     cmbFilter->setCurrent("Bicubic");
     cmbFilter->setToolTip(i18nc("@info:tooltip",
-                                "<para>Select filtering mode:\n"
-                                "<list>"
-                                "<item><interface>Bilinear</interface> for areas with uniform color to avoid artifacts</item>"
-                                "<item><interface>Bicubic</interface> for smoother results</item>"
-                                "<item><interface>Lanczos3</interface> for sharp results. May produce aerials.</item>"
-                                "</list></para>"));
+                                "<p>Select filtering mode:\n"
+                                "<ul>"
+                                "<li><interface>Bilinear</interface> for areas with uniform color to avoid artifacts</li>"
+                                "<li><interface>Bicubic</interface> for smoother results</li>"
+                                "<li><interface>Lanczos3</interface> for sharp results. May produce aerials.</il>"
+                                "</ul></p>"));
     connect(cmbFilter, SIGNAL(activated(const KoID &)),
             this, SLOT(slotFilterChanged(const KoID &)));
 
@@ -179,7 +179,7 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
 
 
 
-    // Init Warp Transform Values  
+    // Init Warp Transform Values
     alphaBox->setSingleStep(0.1);
     alphaBox->setRange(0, 10, 1);
 
@@ -531,7 +531,7 @@ void KisToolTransformConfigWidget::updateConfig(const ToolTransformArgs &config)
 
         if (freeTransformIsActive)
         {
-            freeTransformButton->setChecked(true);           
+            freeTransformButton->setChecked(true);
         }
         else
         {

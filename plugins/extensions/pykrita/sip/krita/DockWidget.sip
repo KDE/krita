@@ -1,7 +1,3 @@
-%Import QtCore/QtCoremod.sip
-%Import QtGui/QtGuimod.sip
-%Import QtWidgets/QtWidgetsmod.sip
-
 class DockWidget : public QDockWidget /NoDefaultCtors/
 {
 %TypeHeaderCode
@@ -10,7 +6,7 @@ class DockWidget : public QDockWidget /NoDefaultCtors/
 
 public:
     explicit DockWidget();
-protected:
+protected Q_SLOTS:
     virtual void canvasChanged(Canvas *canvas) = 0;
     
 };

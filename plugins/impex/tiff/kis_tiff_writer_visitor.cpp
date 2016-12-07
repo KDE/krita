@@ -19,23 +19,9 @@
 
 #include "kis_tiff_writer_visitor.h"
 
-#include <QMessageBox>
-#include <klocalizedstring.h>
-
 #include <KoColorProfile.h>
 #include <KoColorSpace.h>
 #include <KoID.h>
-
-#include <kis_annotation.h>
-#include <kis_paint_device.h>
-#include <kis_group_layer.h>
-#include <kis_image.h>
-#include <kis_paint_layer.h>
-#include <kis_types.h>
-#include <generator/kis_generator_layer.h>
-#include "kis_tiff_converter.h"
-#include <kis_iterator_ng.h>
-#include <kis_shape_layer.h>
 
 #include <KoConfig.h>
 #ifdef HAVE_OPENEXR
@@ -69,8 +55,6 @@ namespace
             color_type = PHOTOMETRIC_ICCLAB;
             return true;
         }
-
-        QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Cannot export images in %1.\n", cs->name())) ;
         return false;
 
     }
@@ -140,41 +124,14 @@ bool KisTIFFWriterVisitor::copyDataToStrips(KisHLineConstIteratorSP it, tdata_t 
                 *(dst++) = d[poses[i]];
             }
             if (m_options->alpha) *(dst++) = d[poses[i]];
-            
+
         } while (it->nextPixel());
         return true;
     }
     return false;
 }
 
-
-bool KisTIFFWriterVisitor::visit(KisPaintLayer *layer)
-{
-    return saveLayerProjection(layer);
-}
-
-bool KisTIFFWriterVisitor::visit(KisGroupLayer *layer)
-{
-    dbgFile << "Visiting on grouplayer" << layer->name() << "";
-    return visitAll(layer, true);
-}
-
-bool KisTIFFWriterVisitor::visit(KisGeneratorLayer* layer)
-{
-    // a generator layer has a nice paint device we can save.
-    return saveLayerProjection(layer);
-}
-
-bool KisTIFFWriterVisitor::visit(KisExternalLayer* layer)
-{
-    // a shape layer has a nice paint device we can save.
-    if (qobject_cast<KisShapeLayer*>(layer)) {
-        return saveLayerProjection(layer);
-    }
-    return true;
-}
-
-bool KisTIFFWriterVisitor::saveLayerProjection(KisLayer * layer)
+bool KisTIFFWriterVisitor::saveLayerProjection(KisLayer *layer)
 {
     dbgFile << "visiting on layer" << layer->name() << "";
     KisPaintDeviceSP pd = layer->projection();

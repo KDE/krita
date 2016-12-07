@@ -33,16 +33,20 @@ KisImageChangeLayersCommand::KisImageChangeLayersCommand(KisImageWSP image, KisN
 
 void KisImageChangeLayersCommand::redo()
 {
-    m_image->setRootLayer(static_cast<KisGroupLayer*>(m_newRootLayer.data()));
-
-    m_image->refreshGraphAsync();
-    m_image->notifyLayersChanged();
+    KisImageSP image = m_image.toStrongRef();
+    if (image) {
+        image->setRootLayer(static_cast<KisGroupLayer*>(m_newRootLayer.data()));
+        image->refreshGraphAsync();
+        image->notifyLayersChanged();
+    }
 }
 
 void KisImageChangeLayersCommand::undo()
 {
-    m_image->setRootLayer(static_cast<KisGroupLayer*>(m_oldRootLayer.data()));
-
-    m_image->refreshGraphAsync();
-    m_image->notifyLayersChanged();
+    KisImageSP image = m_image.toStrongRef();
+    if (image) {
+        image->setRootLayer(static_cast<KisGroupLayer*>(m_oldRootLayer.data()));
+        image->refreshGraphAsync();
+        image->notifyLayersChanged();
+    }
 }

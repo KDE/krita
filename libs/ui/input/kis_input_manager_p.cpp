@@ -91,7 +91,7 @@ bool KisInputManager::Private::EventEater::eventFilter(QObject* target, QEvent* 
                (hungry
             // On Mac, we need mouse events when the tablet is in proximity, but not pressed down
             // since tablet move events are not generated until after tablet press.
-            #ifndef Q_OS_MAC
+            #ifndef Q_OS_OSX
                 || (eatSyntheticEvents &&  static_cast<QMouseEvent*>(event)->source() != Qt::MouseEventNotSynthesized)
             #endif
                 )) {
@@ -321,7 +321,7 @@ bool KisInputManager::Private::ProximityNotifier::eventFilter(QObject* object, Q
         // Qt sends fake mouse events instead of hover events, so not very useful.
         // Don't block mouse events on tablet since tablet move events are not generated until
         // after tablet press.
-#ifndef Q_OS_MAC
+#ifndef Q_OS_OSX
         d->blockMouseEvents();
 #else
         // Notify input manager that tablet proximity is entered for Genius tablets.
@@ -331,7 +331,7 @@ bool KisInputManager::Private::ProximityNotifier::eventFilter(QObject* object, Q
     case QEvent::TabletLeaveProximity:
         d->debugEvent<QEvent, false>(event);
         d->allowMouseEvents();
-#ifdef Q_OS_MAC
+#ifdef Q_OS_OSX
         d->setTabletActive(false);
 #endif
         break;

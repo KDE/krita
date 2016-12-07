@@ -6,7 +6,7 @@ ki18n_wrap_ui(kritabmpexport_SOURCES )
 
 add_library(kritabmpexport MODULE ${kritabmpexport_SOURCES})
 
-target_link_libraries(kritabmpexport kritaui)
+target_link_libraries(kritabmpexport kritaui kritaimpex)
 
 install(TARGETS kritabmpexport  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 

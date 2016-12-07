@@ -25,15 +25,15 @@ namespace TestUtil {
 
 struct DefaultNode : public KisNode {
     KisPaintDeviceSP paintDevice() const {
-        return 0;
+        return KisPaintDeviceSP();
     }
 
     KisPaintDeviceSP original() const {
-        return 0;
+        return KisPaintDeviceSP();
     }
 
     KisPaintDeviceSP projection() const {
-        return 0;
+        return KisPaintDeviceSP();
     }
 
     bool allowAsChild(KisNodeSP) const {

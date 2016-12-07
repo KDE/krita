@@ -613,11 +613,6 @@ void KisView::setDocumentDeleted()
     d->documentDeleted = true;
 }
 
-KoPageLayout KisView::pageLayout() const
-{
-    return document()->pageLayout();
-}
-
 QPrintDialog *KisView::createPrintDialog(KisPrintJob *printJob, QWidget *parent)
 {
     Q_UNUSED(parent);
@@ -793,7 +788,7 @@ KisLayerSP KisView::currentLayer() const
     else {
         node = d->currentNode;
     }
-    return dynamic_cast<KisLayer*>(node.data());
+    return qobject_cast<KisLayer*>(node.data());
 }
 
 KisMaskSP KisView::currentMask() const

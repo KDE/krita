@@ -125,7 +125,7 @@ QByteArray KisPSDLayerStyleCollectionResource::generateMD5() const
 
 void KisPSDLayerStyleCollectionResource::collectAllLayerStyles(KisNodeSP root)
 {
-    KisLayer* layer = dynamic_cast<KisLayer*>(root.data());
+    KisLayer* layer = qobject_cast<KisLayer*>(root.data());
 
     if (layer && layer->layerStyle()) {
         KisPSDLayerStyleSP clone = layer->layerStyle()->clone();
@@ -143,7 +143,7 @@ void KisPSDLayerStyleCollectionResource::collectAllLayerStyles(KisNodeSP root)
 
 void KisPSDLayerStyleCollectionResource::assignAllLayerStyles(KisNodeSP root)
 {
-    KisLayer* layer = dynamic_cast<KisLayer*>(root.data());
+    KisLayer* layer = qobject_cast<KisLayer*>(root.data());
 
     if (layer && layer->layerStyle()) {
         QUuid uuid = layer->layerStyle()->uuid();

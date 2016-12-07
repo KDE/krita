@@ -2,7 +2,6 @@
     "Id": "Krita RAW Import Filter",
     "NoDisplay": "true",
     "Type": "Service",
-    "X-KDE-Export": "application/x-krita",
     "X-KDE-Import": "image/x-krita-raw",
     "X-KDE-Library": "krita_raw_import",
     "X-KDE-ServiceTypes": [

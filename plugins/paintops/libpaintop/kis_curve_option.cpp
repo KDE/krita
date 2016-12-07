@@ -364,10 +364,10 @@ qreal KisCurveOption::computeSizeLikeValue(const KisPaintInformation& info) cons
     return components.sizeLikeValue();
 }
 
-qreal KisCurveOption::computeRotationLikeValue(const KisPaintInformation& info, qreal baseValue) const
+qreal KisCurveOption::computeRotationLikeValue(const KisPaintInformation& info, qreal baseValue, bool absoluteAxesFlipped) const
 {
     const ValueComponents components = computeValueComponents(info);
-    return components.rotationLikeValue(baseValue);
+    return components.rotationLikeValue(baseValue, absoluteAxesFlipped);
 }
 
 QList<KisDynamicSensorSP> KisCurveOption::sensors()

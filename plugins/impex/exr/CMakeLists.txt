@@ -17,7 +17,7 @@ set(kritaexrimport_SOURCES
 
 add_library(kritaexrimport MODULE ${kritaexrimport_SOURCES})
 
-target_link_libraries(kritaexrimport kritaui  ${OPENEXR_LIBRARIES} )
+target_link_libraries(kritaexrimport kritaui kritalibkra ${OPENEXR_LIBRARIES} )
 
 install(TARGETS kritaexrimport  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 
@@ -30,7 +30,7 @@ ki18n_wrap_ui(kritaexrexport_SOURCES exr_export_widget.ui )
 
 add_library(kritaexrexport MODULE ${kritaexrexport_SOURCES})
 
-target_link_libraries(kritaexrexport kritaui  ${OPENEXR_LIBRARIES} )
+target_link_libraries(kritaexrexport kritaui kritalibkra kritaimpex ${OPENEXR_LIBRARIES} )
 
 install(TARGETS kritaexrexport  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 

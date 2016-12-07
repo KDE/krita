@@ -28,7 +28,6 @@
 #include <QFileInfo>
 
 #include <KoColorSpace.h>
-#include <KisFilterChain.h>
 #include <KoColorSpaceRegistry.h>
 
 #include <kis_transaction.h>
@@ -238,67 +237,43 @@ static bool loadTGA(QDataStream & s, const TgaHeader & tga, QImage &img)
 
 
 
-KisImportExportFilter::ConversionStatus KisTGAImport::convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration)
+KisImportExportFilter::ConversionStatus KisTGAImport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration)
 {
     Q_UNUSED(configuration);
-    dbgFile << "TGA import! From:" << from << ", To:" << to << 0;
+    QDataStream s(io);
+    s.setByteOrder(QDataStream::LittleEndian);
 
-    if (to != "application/x-krita")
-        return KisImportExportFilter::BadMimeType;
-
-    KisDocument * doc = outputDocument();
-
-    if (!doc)
-        return KisImportExportFilter::NoDocumentCreated;
-
-    QString filename = inputFile();
-
-    doc->prepareForImport();
-
-    if (!filename.isEmpty()) {
-
-        if (!QFileInfo(filename).exists()) {
-            return KisImportExportFilter::FileNotFound;
-        }
-
-        QFile f(filename);
-        f.open(QIODevice::ReadOnly);
-        QDataStream s(&f);
-        s.setByteOrder(QDataStream::LittleEndian);
-
-        TgaHeader tga;
-        s >> tga;
-        s.device()->seek(TgaHeader::SIZE + tga.id_length);
+    TgaHeader tga;
+    s >> tga;
+    s.device()->seek(TgaHeader::SIZE + tga.id_length);
 
 
-        // Check image file format.
-        if (s.atEnd()) {
-            return KisImportExportFilter::InvalidFormat;
-        }
-
-        // Check supported file types.
-        if (!isSupported(tga)) {
-            return KisImportExportFilter::InvalidFormat;
-        }
-
-        QImage img;
-        bool result = loadTGA(s, tga, img);
-
-        if (result == false) {
-            return KisImportExportFilter::CreationError;
-        }
-
-        const KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->rgb8();
-        KisImageSP image = new KisImage(doc->createUndoStore(), img.width(), img.height(), colorSpace, "imported from tga");
-
-        KisPaintLayerSP layer = new KisPaintLayer(image, image->nextLayerName(), 255);
-        layer->paintDevice()->convertFromQImage(img, 0, 0, 0);
-        image->addNode(layer.data(), image->rootLayer().data());
-
-        doc->setCurrentImage(image);
-        return KisImportExportFilter::OK;
+    // Check image file format.
+    if (s.atEnd()) {
+        return KisImportExportFilter::InvalidFormat;
     }
-    return KisImportExportFilter::StorageCreationError;
+
+    // Check supported file types.
+    if (!isSupported(tga)) {
+        return KisImportExportFilter::InvalidFormat;
+    }
+
+    QImage img;
+    bool result = loadTGA(s, tga, img);
+
+    if (result == false) {
+        return KisImportExportFilter::CreationError;
+    }
+
+    const KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->rgb8();
+    KisImageSP image = new KisImage(document->createUndoStore(), img.width(), img.height(), colorSpace, "imported from tga");
+
+    KisPaintLayerSP layer = new KisPaintLayer(image, image->nextLayerName(), 255);
+    layer->paintDevice()->convertFromQImage(img, 0, 0, 0);
+    image->addNode(layer.data(), image->rootLayer().data());
+
+    document->setCurrentImage(image);
+    return KisImportExportFilter::OK;
 
 }
 

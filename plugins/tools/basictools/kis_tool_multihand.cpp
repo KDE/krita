@@ -27,11 +27,11 @@
 #include <QStackedWidget>
 #include <kis_slider_spin_box.h>
 #include <QLabel>
-
 #include "kis_canvas2.h"
 #include "kis_cursor.h"
 
 #include "kis_tool_multihand_helper.h"
+
 
 static const int MAXIMUM_BRUSHES = 50;
 
@@ -54,7 +54,10 @@ KisToolMultihand::KisToolMultihand(KoCanvasBase *canvas)
       m_showAxes(false),
       m_translateRadius(100),
       m_setupAxesFlag(false)
+    , customUI(0)
 {
+
+
     m_helper =
         new KisToolMultihandHelper(paintingInformationBuilder(),
                                    kundo2_i18n("Multibrush Stroke"),
@@ -63,6 +66,7 @@ KisToolMultihand::KisToolMultihand(KoCanvasBase *canvas)
     if (image()) {
         m_axesPoint = QPointF(0.5 * image()->width(), 0.5 * image()->height());
     }
+
 }
 
 KisToolMultihand::~KisToolMultihand()
@@ -249,92 +253,67 @@ QWidget* KisToolMultihand::createOptionWidget()
 {
     QWidget *widget = KisToolBrush::createOptionWidget();
 
-    m_axesChCkBox = new QCheckBox(i18n("Show Axes"));
+    customUI = new KisToolMultiHandConfigWidget();
 
-    connect(m_axesChCkBox,SIGNAL(toggled(bool)),this, SLOT(slotSetAxesVisible(bool)));
-
-    m_axesPointBtn = new QPushButton(i18n("Axes point"), widget);
-    m_axesPointBtn->setCheckable(true);
-    connect(m_axesPointBtn, SIGNAL(clicked(bool)),this, SLOT(activateAxesPointModeSetup()));
-    addOptionWidgetOption(m_axesPointBtn, m_axesChCkBox);
-
-    m_axesAngleSlider = new KisDoubleSliderSpinBox(widget);
-    m_axesAngleSlider->setToolTip(i18n("Set axes angle (degrees)"));
-    m_axesAngleSlider->setSuffix(QChar(Qt::Key_degree));
-    m_axesAngleSlider->setRange(0.0, 90.0,1);
-
-    m_axesAngleSlider->setEnabled(true);
-    connect(m_axesAngleSlider, SIGNAL(valueChanged(qreal)),this, SLOT(slotSetAxesAngle(qreal)));
-    addOptionWidgetOption(m_axesAngleSlider, new QLabel(i18n("Axes Angle:")));
-
-    m_transformModesComboBox = new QComboBox(widget);
-    m_transformModesComboBox->addItem(i18n("Symmetry"),int(SYMMETRY));
-    m_transformModesComboBox->addItem(i18n("Mirror"),int(MIRROR));
-    m_transformModesComboBox->addItem(i18n("Translate"),int(TRANSLATE));
-    m_transformModesComboBox->addItem(i18n("Snowflake"),int(SNOWFLAKE));
-
-    connect(m_transformModesComboBox,SIGNAL(currentIndexChanged(int)),SLOT(slotSetTransformMode(int)));
-    addOptionWidgetOption(m_transformModesComboBox);
-
-    m_handsCountSlider = new KisSliderSpinBox(widget);
-    m_handsCountSlider->setToolTip(i18n("Brush count"));
-    m_handsCountSlider->setRange(1, MAXIMUM_BRUSHES);
-    m_handsCountSlider->setEnabled(true);
-    connect(m_handsCountSlider, SIGNAL(valueChanged(int)),this, SLOT(slotSetHandsCount(int)));
-    addOptionWidgetOption(m_handsCountSlider);
-
-    m_modeCustomOption = new QStackedWidget(widget);
-
-    QWidget * symmetryWidget = new QWidget(m_modeCustomOption);
-    m_modeCustomOption->addWidget(symmetryWidget);
-
-    QWidget * mirrorWidget = new QWidget(m_modeCustomOption);
-    m_mirrorHorizontallyChCkBox = new QCheckBox(i18n("Horizontally"));
-
-    m_mirrorVerticallyChCkBox = new QCheckBox(i18n("Vertically"));
-
-    connect(m_mirrorHorizontallyChCkBox,SIGNAL(toggled(bool)),this, SLOT(slotSetMirrorHorizontally(bool)));
-    connect(m_mirrorVerticallyChCkBox,SIGNAL(toggled(bool)),this, SLOT(slotSetMirrorVertically(bool)));
-
-    QGridLayout * mirrorLayout = new QGridLayout(mirrorWidget);
-    mirrorLayout->addWidget(m_mirrorHorizontallyChCkBox,0,0);
-    mirrorLayout->addWidget(m_mirrorVerticallyChCkBox,0,1);
-    mirrorWidget->setLayout(mirrorLayout);
-    m_modeCustomOption->addWidget(mirrorWidget);
-
-    QWidget * translateWidget = new QWidget(m_modeCustomOption);
-    m_translateRadiusSlider = new KisSliderSpinBox(translateWidget);
-    m_translateRadiusSlider->setRange(0, 200);
-
-    m_translateRadiusSlider->setSuffix(i18n(" px"));
-    connect(m_translateRadiusSlider,SIGNAL(valueChanged(int)),this,SLOT(slotSetTranslateRadius(int)));
-
-    QFormLayout *radiusLayout = new QFormLayout(translateWidget);
-    radiusLayout->setFieldGrowthPolicy(QFormLayout::AllNonFixedFieldsGrow);
-    radiusLayout->addRow(i18n("Radius"), m_translateRadiusSlider);
-    translateWidget->setLayout(radiusLayout);
-
-    m_modeCustomOption->addWidget(translateWidget);
-    m_modeCustomOption->setCurrentIndex(m_transformModesComboBox->currentIndex());
-
-    addOptionWidgetOption(m_modeCustomOption);
+    // brush smoothing option.
+    customUI->layout()->addWidget(widget);
+    customUI->smoothingOptionsLayout->addWidget(widget);
 
 
-    // read values from configuration file
-    m_axesChCkBox->setChecked((bool)m_configGroup.readEntry("showAxes", false));
-    m_mirrorHorizontallyChCkBox->setChecked((bool)m_configGroup.readEntry("mirrorHorizontally", false));
-    m_mirrorVerticallyChCkBox->setChecked((bool)m_configGroup.readEntry("mirrorVertically", false));
-    m_axesAngleSlider->setValue(m_configGroup.readEntry("axesAngle", 0.0));
-    m_transformModesComboBox->setCurrentIndex(m_configGroup.readEntry("transformMode", 0));
-    m_translateRadiusSlider->setValue(m_configGroup.readEntry("translateRadius", 0));
-    m_handsCountSlider->setValue(m_configGroup.readEntry("handsCount", 4));
+    // setup common parameters that all of the modes will see
+    connect(customUI->showAxesCheckbox, SIGNAL(toggled(bool)), this, SLOT(slotSetAxesVisible(bool)));
+    customUI->showAxesCheckbox->setChecked((bool)m_configGroup.readEntry("showAxes", false));
 
-    return widget;
+
+    customUI->moveOriginButton->setCheckable(true);
+    connect(customUI->moveOriginButton, SIGNAL(clicked(bool)),this, SLOT(activateAxesPointModeSetup()));
+
+    customUI->multihandTypeCombobox->addItem(i18n("Symmetry"),int(SYMMETRY));  // axis mode
+    customUI->multihandTypeCombobox->addItem(i18n("Mirror"),int(MIRROR));
+    customUI->multihandTypeCombobox->addItem(i18n("Translate"),int(TRANSLATE));
+    customUI->multihandTypeCombobox->addItem(i18n("Snowflake"),int(SNOWFLAKE));
+    connect(customUI->multihandTypeCombobox,SIGNAL(currentIndexChanged(int)),this, SLOT(slotSetTransformMode(int)));
+    customUI->multihandTypeCombobox->setCurrentIndex(m_configGroup.readEntry("transformMode", 0));
+    slotSetTransformMode(customUI->multihandTypeCombobox->currentIndex());
+
+
+    customUI->axisRotationSpinbox->setSuffix(QChar(Qt::Key_degree));   // origin rotation
+    customUI->axisRotationSpinbox->setRange(0.0, 90.0);
+    customUI->axisRotationSpinbox->setValue(m_configGroup.readEntry("axesAngle", 0.0));
+    connect( customUI->axisRotationSpinbox, SIGNAL(valueChanged(int)),this, SLOT(slotSetAxesAngle(int)));
+
+
+
+
+    // symmetry mode options
+    customUI->brushCountSpinBox->setRange(1, MAXIMUM_BRUSHES);
+    connect(customUI->brushCountSpinBox, SIGNAL(valueChanged(int)),this, SLOT(slotSetHandsCount(int)));
+    customUI->brushCountSpinBox->setValue(m_configGroup.readEntry("handsCount", 4));
+
+    // mirror mode specific options
+    connect(customUI->horizontalCheckbox, SIGNAL(toggled(bool)), this, SLOT(slotSetMirrorHorizontally(bool)));
+    customUI->horizontalCheckbox->setChecked((bool)m_configGroup.readEntry("mirrorHorizontally", false));
+
+    connect(customUI->verticalCheckbox, SIGNAL(toggled(bool)), this, SLOT(slotSetMirrorVertically(bool)));
+    customUI->verticalCheckbox->setChecked((bool)m_configGroup.readEntry("mirrorVertically", false));
+
+    // translate mode options
+    customUI->translationRadiusSpinbox->setRange(0, 200);
+    customUI->translationRadiusSpinbox->setSuffix(i18n(" px"));
+    customUI->translationRadiusSpinbox->setValue(m_configGroup.readEntry("translateRadius", 0));
+
+    connect(customUI->translationRadiusSpinbox,SIGNAL(valueChanged(int)),this,SLOT(slotSetTranslateRadius(int)));
+
+
+    // snowflake re-uses the existing options, so there is no special parameters for that...
+
+
+    return static_cast<QWidget*>(customUI); // keeping it in the native class until the end allows us to access the UI components
 }
 
 void KisToolMultihand::activateAxesPointModeSetup()
 {
-    if (m_axesPointBtn->isChecked()){
+    if (customUI->moveOriginButton->isChecked()){
         m_setupAxesFlag = true;
         useCursor(KisCursor::crossCursor());
         updateCanvas();
@@ -346,7 +325,7 @@ void KisToolMultihand::activateAxesPointModeSetup()
 void KisToolMultihand::finishAxesSetup()
 {
     m_setupAxesFlag = false;
-    m_axesPointBtn->setChecked(false);
+    customUI->moveOriginButton->setChecked(false);
     resetCursorStyle();
     updateCanvas();
 }
@@ -364,7 +343,7 @@ void KisToolMultihand::slotSetHandsCount(int count)
     m_configGroup.writeEntry("handsCount", count);
 }
 
-void KisToolMultihand::slotSetAxesAngle(qreal angle)
+void KisToolMultihand::slotSetAxesAngle(int angle)
 {
     //negative so axes rotates counter clockwise
     m_angle = -angle*M_PI/180;
@@ -374,10 +353,34 @@ void KisToolMultihand::slotSetAxesAngle(qreal angle)
 
 void KisToolMultihand::slotSetTransformMode(int index)
 {
-    m_transformMode = enumTransforModes(m_transformModesComboBox->itemData(index).toInt());
-    m_modeCustomOption->setCurrentIndex(index);
-    m_handsCountSlider->setVisible(m_transformMode != MIRROR);
+    m_transformMode = enumTransforModes(customUI->multihandTypeCombobox->itemData(index).toInt());
     m_configGroup.writeEntry("transformMode", index);
+
+
+    // hide all of the UI elements by default
+    customUI->horizontalCheckbox->setVisible(false);
+    customUI->verticalCheckbox->setVisible(false);
+    customUI->translationRadiusSpinbox->setVisible(false);
+    customUI->radiusLabel->setVisible(false);
+    customUI->brushCountSpinBox->setVisible(false);
+    customUI->brushesLabel->setVisible(false);
+
+    // turn on what we need
+    if (index == int(MIRROR)) {
+         customUI->horizontalCheckbox->setVisible(true);
+         customUI->verticalCheckbox->setVisible(true);
+    }
+
+     if (index == int(TRANSLATE)) {
+         customUI->translationRadiusSpinbox->setVisible(true);
+         customUI->radiusLabel->setVisible(true);
+     }
+
+     if (index == int(SYMMETRY) || index == int(SNOWFLAKE) || index == int(TRANSLATE) ) {
+        customUI->brushCountSpinBox->setVisible(true);
+        customUI->brushesLabel->setVisible(true);
+     }
+
 }
 
 void KisToolMultihand::slotSetAxesVisible(bool vis)

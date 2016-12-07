@@ -1,18 +1,40 @@
-%Import QtCore/QtCoremod.sip
-%Import QtGui/QtGuimod.sip
-%Import QtWidgets/QtWidgetsmod.sip
-
-class Krita : public QObject
+class Krita : QObject
 {
 %TypeHeaderCode
 #include "Krita.h"
 %End
-
 public:
-    explicit Krita(QObject *parent  /TransferThis/ = 0);
-    public:
-    static Krita* instance();
-
+public:
+    Krita(QObject*  parent /TransferThis/ = 0);
+    virtual ~Krita();
+    Document * activeDocument() const;
+    void setActiveDocument(Document*  value);
+    bool batchmode() const;
+    void setBatchmode(bool value);
+    QList<Action *> actions() const;
+    Action * action(const QString & name) const;
+    QList<Document *> documents() const;
+    QList<Exporter *> exporters() const;
+    QList<Filter *> filters() const;
+    QList<Generator *> generators() const;
+    QList<Importer *> importers() const;
+    Notifier * notifier() const;
+    InfoObject * preferences() const;
+    void setPreferences(InfoObject*  value);
+    QString version() const;
+    QList<View *> views() const;
+    QList<Window *> windows() const;
+    QList<Resource *> resources() const;
+    void setResources(QList<Resource *> value);
+public Q_SLOTS:
+    void addDockWidget(DockWidget*  dockWidget);
+    void addAction(Action*  action);
+    bool closeApplication();
+    Document * createDocument();
+    Document * openDocument(const QString &filename);
+    Window * openWindow();
+    QAction * createAction(const QString & text);
+    
     void addViewExtension(ViewExtension* _viewExtension /GetWrapper/);
 %MethodCode
         Py_BEGIN_ALLOW_THREADS
@@ -30,4 +52,8 @@ public:
         sipTransferTo(a0Wrapper, Py_None);
 %End
 
+    static Krita * instance();
+    static QObject * fromVariant(const QVariant & v);
+private:
+    Krita(const Krita &); // Generated
 };

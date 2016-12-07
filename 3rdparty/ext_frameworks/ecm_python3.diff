@@ -1,0 +1,189 @@
+diff --git a/find-modules/FindPythonModuleGeneration.cmake b/find-modules/FindPythonModuleGeneration.cmake
+index 0a857a2..aa93e45 100644
+--- a/find-modules/FindPythonModuleGeneration.cmake
++++ b/find-modules/FindPythonModuleGeneration.cmake
+@@ -161,8 +161,8 @@ if (NOT GPB_PYTHON3_LIBRARY)
+ endif()
+ _create_imported_python_target(3)
+ 
+-_find_python(2 7)
+-_create_imported_python_target(2)
++#_find_python(2 7)
++#_create_imported_python_target(2)
+ 
+ if (NOT _pyversions)
+   _report_NOT_FOUND("At least one python version must be available to use ${CMAKE_FIND_PACKAGE_NAME}.")
+@@ -174,8 +174,8 @@ if (NOT GBP_SIP_COMMAND)
+   _report_NOT_FOUND("The sip executable must be available to use ${CMAKE_FIND_PACKAGE_NAME}.")
+ endif()
+ 
+-if (NOT GPB_PYTHON2_COMMAND)
+-  _report_NOT_FOUND("The python2 executable is required by clang-python for the ${CMAKE_FIND_PACKAGE_NAME} Module.")
++if (NOT GPB_PYTHON3_COMMAND)
++  _report_NOT_FOUND("The python3 executable is required by clang-python for the ${CMAKE_FIND_PACKAGE_NAME} Module.")
+ endif()
+ 
+ if (NOT libclang_LIBRARY)
+@@ -185,7 +185,7 @@ if (NOT libclang_LIBRARY)
+   find_library(libclang_LIBRARY clang-3.${_LIBCLANG3_MAX_VERSION})
+ 
+   if (libclang_LIBRARY)
+-    message(FATAL_ERROR "The max python version in ${CMAKE_FIND_PACKAGE_NAME} must be updated.")
++   # message(FATAL_ERROR "The max python version in ${CMAKE_FIND_PACKAGE_NAME} must be updated.")
+   endif()
+ 
+   set(_LIBCLANG3_FIND_VERSION ${_LIBCLANG3_MAX_VERSION})
+@@ -201,7 +201,7 @@ if (NOT libclang_LIBRARY)
+ endif()
+ 
+ execute_process(
+-  COMMAND ${GPB_PYTHON2_COMMAND} ${CMAKE_CURRENT_LIST_DIR}/sip_generator.py --self-check ${libclang_LIBRARY}
++  COMMAND ${GPB_PYTHON3_COMMAND} ${CMAKE_CURRENT_LIST_DIR}/sip_generator.py --self-check ${libclang_LIBRARY}
+   RESULT_VARIABLE selfCheckErrors
+ )
+ 
+@@ -230,9 +230,9 @@ set(GPB_Qt5_Tag Qt_5_${Qt5Core_VERSION_MINOR}_${Qt5Core_VERSION_PATCH})
+ 
+ list(FIND _SIP_Qt5_VERSIONS ${GPB_Qt5_Tag} _SIP_Qt5_Version_Index)
+ 
+-if(_SIP_Qt5_Version_Index EQUAL -1)
+-  _report_NOT_FOUND("PyQt module \"${SIP_Qt5Core_Mod_FILE}\" does not support Qt version 5.${Qt5Core_VERSION_MINOR}.${Qt5Core_VERSION_PATCH} for the ${CMAKE_FIND_PACKAGE_NAME} Module. Found available Qt5 tags: \"${_SIP_Qt5_VERSIONS}\".")
+-endif()
++#if(_SIP_Qt5_Version_Index EQUAL -1)
++#  _report_NOT_FOUND("PyQt module \"${SIP_Qt5Core_Mod_FILE}\" does not support Qt version 5.${Qt5Core_VERSION_MINOR}.${Qt5Core_VERSION_PATCH} for the ${CMAKE_FIND_PACKAGE_NAME} Module. Found available Qt5 tags: \"${_SIP_Qt5_VERSIONS}\".")
++#endif()
+ 
+ set(PythonModuleGeneration_FOUND TRUE)
+ 
+@@ -337,7 +337,7 @@ function(ecm_generate_python_binding
+         set(comp_flags "$<JOIN:$<TARGET_PROPERTY:${target_value},INTERFACE_COMPILE_OPTIONS>;${stdFlag},;>")
+ 
+         add_custom_command(OUTPUT ${sip_file}
+-            COMMAND ${GPB_PYTHON2_COMMAND} ${GPB_MODULE_DIR}/sip_generator.py
++            COMMAND ${GPB_PYTHON3_COMMAND} ${GPB_MODULE_DIR}/sip_generator.py
+               --flags " ${inc_dirs};${sys_inc_dirs};${comp_defs};${comp_flags}"
+               --include_filename "${hdr_filename}"
+               ${libclang_LIBRARY}
+@@ -385,7 +385,7 @@ headers = sipAPI${modulename_value}
+ 
+     add_custom_command(OUTPUT
+       "${CMAKE_CURRENT_BINARY_DIR}/pybuild/${pythonnamespace_value}/${modulename_value}/unified${modulename_value}.cpp"
+-      COMMAND ${GPB_PYTHON2_COMMAND} "${GPB_MODULE_DIR}/run-sip.py" --sip ${GBP_SIP_COMMAND}
++      COMMAND ${GPB_PYTHON3_COMMAND} "${GPB_MODULE_DIR}/run-sip.py" --sip ${GBP_SIP_COMMAND}
+        --unify "${CMAKE_CURRENT_BINARY_DIR}/pybuild/${pythonnamespace_value}/${modulename_value}/unified${modulename_value}.cpp"
+        --module-name "${modulename_value}"
+        -c "${CMAKE_CURRENT_BINARY_DIR}/pybuild/${pythonnamespace_value}/${modulename_value}"
+diff --git a/find-modules/Qt5Ruleset.py b/find-modules/Qt5Ruleset.py
+index 6ace296..7730ecc 100644
+--- a/find-modules/Qt5Ruleset.py
++++ b/find-modules/Qt5Ruleset.py
+@@ -27,7 +27,7 @@
+ # THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ #=============================================================================
+ 
+-from __future__ import print_function
++
+ 
+ import rules_engine
+ 
+diff --git a/find-modules/rules_engine.py b/find-modules/rules_engine.py
+index 53c8141..1f84749 100755
+--- a/find-modules/rules_engine.py
++++ b/find-modules/rules_engine.py
+@@ -29,7 +29,7 @@
+ 
+ """SIP file generation rules engine."""
+ 
+-from __future__ import print_function
++
+ 
+ from abc import *
+ import argparse
+@@ -94,7 +94,7 @@ class Rule(object):
+             logger.debug(_("Rule {} suppressed {}, {}").format(self, fqn, original))
+         else:
+             delta = False
+-            for k, v in original.iteritems():
++            for k, v in original.items():
+                 if v != modified[k]:
+                     delta = True
+                     break
+@@ -107,16 +107,14 @@ class Rule(object):
+         return "[{},{}]".format(self.rule_number, self.fn.__name__)
+ 
+ 
+-class AbstractCompiledRuleDb(object):
+-    __metaclass__ = ABCMeta
+-
++class AbstractCompiledRuleDb(object, metaclass=ABCMeta):
+     def __init__(self, db, parameter_names):
+         self.db = db
+         self.compiled_rules = []
+         for i, raw_rule in enumerate(db()):
+             if len(raw_rule) != len(parameter_names) + 1:
+                 raise RuntimeError(_("Bad raw rule {}: {}: {}").format(db.__name__, raw_rule, parameter_names))
+-            z = zip(raw_rule[:-1], parameter_names)
++            z = list(zip(raw_rule[:-1], parameter_names))
+             self.compiled_rules.append(Rule(db, i, raw_rule[-1], z))
+         self.candidate_formatter = _SEPARATOR.join(["{}"] * len(parameter_names))
+ 
+@@ -425,7 +423,7 @@ class VariableRuleDb(AbstractCompiledRuleDb):
+             rule.trace_result(parents, variable, before, sip)
+ 
+ 
+-class RuleSet(object):
++class RuleSet(object, metaclass=ABCMeta):
+     """
+     To implement your own binding, create a subclass of RuleSet, also called
+     RuleSet in your own Python module. Your subclass will expose the raw rules
+@@ -434,7 +432,6 @@ class RuleSet(object):
+     You then simply run the SIP generation and SIP compilation programs passing
+     in the name of your rules file
+     """
+-    __metaclass__ = ABCMeta
+ 
+     @abstractmethod
+     def container_rules(self):
+diff --git a/find-modules/run-sip.py b/find-modules/run-sip.py
+index 74c8486..1ae93ea 100755
+--- a/find-modules/run-sip.py
++++ b/find-modules/run-sip.py
+@@ -36,7 +36,7 @@ del sipArgs[idx]
+ del sipArgs[idx]
+ 
+ try:
+-    print(subprocess.check_output([exe] + sipArgs))
++    print((subprocess.check_output([exe] + sipArgs)))
+ except subprocess.CalledProcessError:
+     sys.exit(1)
+ 
+diff --git a/find-modules/sip_generator.py b/find-modules/sip_generator.py
+index 10be147..4e41219 100644
+--- a/find-modules/sip_generator.py
++++ b/find-modules/sip_generator.py
+@@ -29,7 +29,7 @@
+ 
+ """SIP file generator for PyQt."""
+ 
+-from __future__ import print_function
++
+ import argparse
+ import gettext
+ import inspect
+@@ -359,6 +359,7 @@ class SipGenerator(object):
+         :param level:               Recursion level controls indentation.
+         :return:                    A string.
+         """
++        print("_fn_get", function.spelling)
+ 
+         def skippable_attribute(member, text):
+             """
+@@ -494,6 +495,8 @@ class SipGenerator(object):
+             return result
+ 
+         def _get_param_value(text, parameterType):
++            if not parameterType.spelling:
++                return text
+             if text == "0":
+                 return text
+             if not "::" in parameterType.spelling:

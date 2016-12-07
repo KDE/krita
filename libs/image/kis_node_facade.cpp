@@ -39,7 +39,6 @@ KisNodeFacade::KisNodeFacade(KisNodeSP root)
 
 KisNodeFacade::~KisNodeFacade()
 {
-    delete m_d;
 }
 
 void KisNodeFacade::setRoot(KisNodeSP root)

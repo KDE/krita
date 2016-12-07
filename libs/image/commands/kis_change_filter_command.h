@@ -72,10 +72,10 @@ private:
 
         if (m_useGeneratorRegistry) {
             KisGeneratorSP generator = KisGeneratorRegistry::instance()->value(name);
-            config = generator->defaultConfiguration(0);
+            config = generator->defaultConfiguration(KisPaintDeviceSP());
         } else {
             KisFilterSP filter = KisFilterRegistry::instance()->value(name);
-            config = filter->defaultConfiguration(0);
+            config = filter->defaultConfiguration(KisPaintDeviceSP());
         }
 
         config->fromXML(data);

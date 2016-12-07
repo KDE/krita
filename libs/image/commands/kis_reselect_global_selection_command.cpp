@@ -38,17 +38,25 @@ KisReselectGlobalSelectionCommand::~KisReselectGlobalSelectionCommand()
 
 void KisReselectGlobalSelectionCommand::redo()
 {
-    m_canReselect = m_image->canReselectGlobalSelection();
+    KisImageSP image = m_image.toStrongRef();
+    if (!image) {
+        return;
+    }
+    m_canReselect = image->canReselectGlobalSelection();
 
     if (m_canReselect) {
-        m_image->reselectGlobalSelection();
+        image->reselectGlobalSelection();
     }
 }
 
 void KisReselectGlobalSelectionCommand::undo()
 {
+    KisImageSP image = m_image.toStrongRef();
+    if (!image) {
+        return;
+    }
     if (m_canReselect) {
-        m_image->deselectGlobalSelection();
+        image->deselectGlobalSelection();
     }
 }
 

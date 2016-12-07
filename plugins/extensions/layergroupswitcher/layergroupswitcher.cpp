@@ -47,7 +47,6 @@ LayerGroupSwitcher::LayerGroupSwitcher(QObject *parent, const QVariantList &)
     action = new KisAction(i18n("Move into next group"), this);
     addAction("LayerGroupSwitcher/next", action);
     connect(action, SIGNAL(triggered()), this, SLOT(moveIntoNextGroup()));
-
 }
 
 LayerGroupSwitcher::~LayerGroupSwitcher()
@@ -56,7 +55,10 @@ LayerGroupSwitcher::~LayerGroupSwitcher()
 
 void LayerGroupSwitcher::moveIntoNextGroup()
 {
-    KisImageWSP image = m_view->image();
+    KisImageSP image = m_view->image().toStrongRef();
+    if (!image) {
+        return;
+    }
     KisNodeManager *nodeManager = m_view->nodeManager();
     KisLayerSP active = nodeManager->activeLayer();
     if (!active) {
@@ -94,7 +96,10 @@ void LayerGroupSwitcher::moveIntoNextGroup()
 
 void LayerGroupSwitcher::moveIntoPreviousGroup()
 {
-    KisImageWSP image = m_view->image();
+    KisImageSP image = m_view->image().toStrongRef();
+    if (!image) {
+        return;
+    }
     KisNodeManager *nodeManager = m_view->nodeManager();
     KisLayerSP active = nodeManager->activeLayer();
     if (!active) {

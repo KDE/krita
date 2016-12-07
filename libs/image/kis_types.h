@@ -140,9 +140,6 @@ typedef KisWeakSharedPtr<KisSelection> KisSelectionWSP;
 class KisSelectionComponent;
 typedef KisSharedPtr<KisSelectionComponent> KisSelectionComponentSP;
 
-class KisBackground;
-typedef KisSharedPtr<KisBackground> KisBackgroundSP;
-
 class KisSelectionMask;
 typedef KisSharedPtr<KisSelectionMask> KisSelectionMaskSP;
 
@@ -281,7 +278,6 @@ typedef QWeakPointer<KisProjectionLeaf> KisProjectionLeafWSP;
 class KisKeyframe;
 typedef QSharedPointer<KisKeyframe> KisKeyframeSP;
 typedef QWeakPointer<KisKeyframe> KisKeyframeWSP;
-
 
 class KisFilterChain;
 typedef KisSharedPtr<KisFilterChain> KisFilterChainSP;

@@ -978,7 +978,7 @@ bool KisDlgPreferences::editPreferences()
         if (part) {
             Q_FOREACH (QPointer<KisDocument> doc, part->documents()) {
                 if (doc) {
-                    doc->setAutoSave(dialog->m_general->autoSaveInterval());
+                    doc->setAutoSaveDelay(dialog->m_general->autoSaveInterval());
                     doc->setBackupFile(dialog->m_general->m_backupFileCheckBox->isChecked());
                     doc->undoStack()->setUndoLimit(dialog->m_general->undoStackSize());
                 }

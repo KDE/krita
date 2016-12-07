@@ -1,13 +1,15 @@
-%Import QtCore/QtCoremod.sip
-%Import QtGui/QtGuimod.sip
-%Import QtWidgets/QtWidgetsmod.sip
-
-class ColorProfile : public QObject
+class ColorProfile : QObject
 {
 %TypeHeaderCode
 #include "ColorProfile.h"
 %End
-
+    ColorProfile(const ColorProfile & __0);
 public:
-    explicit ColorProfile(QObject *parent  /TransferThis/ = 0);
+    ColorProfile(QObject*  parent /TransferThis/ = 0);
+    virtual ~ColorProfile();
+    QString name() const;
+    void setname(QString value);
+public Q_SLOTS:
+Q_SIGNALS:
+private:
 };

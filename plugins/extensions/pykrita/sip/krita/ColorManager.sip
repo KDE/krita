@@ -1,13 +1,17 @@
-%Import QtCore/QtCoremod.sip
-%Import QtGui/QtGuimod.sip
-%Import QtWidgets/QtWidgetsmod.sip
-
-class ColorManager : public QObject
+class ColorManager : QObject
 {
 %TypeHeaderCode
 #include "ColorManager.h"
 %End
-
+    ColorManager(const ColorManager & __0);
 public:
-    explicit ColorManager(QObject *parent  /TransferThis/ = 0);
+    ColorManager(QObject*  parent /TransferThis/ = 0);
+    virtual ~ColorManager();
+    QString type() const;
+    void setType(QString value);
+    InfoObject * ocioSettings() const;
+    void setOcioSettings(InfoObject*  value);
+public Q_SLOTS:
+Q_SIGNALS:
+private:
 };

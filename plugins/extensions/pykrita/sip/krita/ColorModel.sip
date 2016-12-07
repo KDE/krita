@@ -1,13 +1,15 @@
-%Import QtCore/QtCoremod.sip
-%Import QtGui/QtGuimod.sip
-%Import QtWidgets/QtWidgetsmod.sip
-
-class ColorModel : public QObject
+class ColorModel : QObject
 {
 %TypeHeaderCode
 #include "ColorModel.h"
 %End
-
+    ColorModel(const ColorModel & __0);
 public:
-    explicit ColorModel(QObject *parent  /TransferThis/ = 0);
+    ColorModel(QObject*  parent /TransferThis/ = 0);
+    virtual ~ColorModel();
+    QString colorModelID() const;
+    void setcolorModelID(QString value);
+public Q_SLOTS:
+Q_SIGNALS:
+private:
 };

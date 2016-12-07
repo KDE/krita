@@ -97,7 +97,7 @@ private:
             prevNode = prevNode->prevSibling();
         }
 
-        KisLayer *layer = dynamic_cast<KisLayer*>(m_node.data());
+        KisLayer *layer = qobject_cast<KisLayer*>(m_node.data());
         if(layer && layer->hasClones()) {
             Q_FOREACH (KisCloneLayerSP clone, layer->registeredClones()) {
                 if(!clone) continue;
@@ -172,8 +172,7 @@ KisProcessingApplicator::KisProcessingApplicator(KisImageWSP image,
       m_finalSignalsEmitted(false)
 {
     KisStrokeStrategyUndoCommandBased *strategy =
-            new KisStrokeStrategyUndoCommandBased(name, false,
-                                                  m_image->postExecutionUndoAdapter());
+            new KisStrokeStrategyUndoCommandBased(name, false, m_image.data());
 
     if (m_flags.testFlag(SUPPORTS_WRAPAROUND_MODE)) {
         strategy->setSupportsWrapAroundMode(true);

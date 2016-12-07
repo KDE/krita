@@ -58,7 +58,7 @@ public:
 
 public:
     MoveStrokeStrategy(KisNodeList nodes, KisUpdatesFacade *updatesFacade,
-                       KisPostExecutionUndoAdapter *undoAdapter);
+                       KisStrokeUndoFacade *undoFacade);
 
     void initStrokeCallback();
     void finishStrokeCallback();
@@ -68,7 +68,7 @@ public:
     KisStrokeStrategy* createLodClone(int levelOfDetail);
 
 private:
-    MoveStrokeStrategy(const MoveStrokeStrategy &rhs, bool suppressUndo);
+    MoveStrokeStrategy(const MoveStrokeStrategy &rhs);
     void setUndoEnabled(bool value);
     void setUpdatesEnabled(bool value);
 private:
@@ -84,7 +84,6 @@ private:
     QPoint m_finalOffset;
     QRect m_dirtyRect;
     QHash<KisNodeSP, QRect> m_dirtyRects;
-    bool m_undoEnabled;
     bool m_updatesEnabled;
     QHash<KisNodeSP, QPoint> m_initialNodeOffsets;
 };

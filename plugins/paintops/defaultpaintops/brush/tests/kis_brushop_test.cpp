@@ -139,7 +139,6 @@ public:
         KisResourcesSnapshotSP resources =
             new KisResourcesSnapshot(image,
                                      paint1,
-                                     image->postExecutionUndoAdapter(),
                                      manager.data());
 
         resources->setupPainter(&gc);
@@ -208,6 +207,11 @@ public:
     }
 };
 
+#include <KoResourcePaths.h>
+void KisBrushOpTest::initTestCase()
+{
+    KoResourcePaths::addResourceDir("kis_brushes", QString(SYSTEM_RESOURCES_DATA_DIR) + "/brushes");
+}
 
 void KisBrushOpTest::testRotationMirroring()
 {

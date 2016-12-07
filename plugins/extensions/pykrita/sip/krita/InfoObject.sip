@@ -1,13 +1,17 @@
-%Import QtCore/QtCoremod.sip
-%Import QtGui/QtGuimod.sip
-%Import QtWidgets/QtWidgetsmod.sip
-
-class InfoObject : public QObject
+class InfoObject : QObject
 {
 %TypeHeaderCode
 #include "InfoObject.h"
 %End
-
+    InfoObject(const InfoObject & __0);
 public:
-    explicit InfoObject(QObject *parent  /TransferThis/ = 0);
+    InfoObject(QObject*  parent /TransferThis/ = 0);
+    virtual ~InfoObject();
+    QMap<QString, QVariant> properties() const;
+    void setproperties(QMap<QString, QVariant> value);
+public Q_SLOTS:
+    void setProperty(const QString & key, QVariant value);
+    QVariant property(const QString & key);
+Q_SIGNALS:
+private:
 };

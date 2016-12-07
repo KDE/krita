@@ -7,7 +7,7 @@ ki18n_wrap_ui(kritabrushexport_PART_SRCS  wdg_export_gih.ui)
 
 add_library(kritabrushexport MODULE ${kritabrushexport_PART_SRCS})
 
-target_link_libraries(kritabrushexport kritalibbrush kritalibpaintop kritaui)
+target_link_libraries(kritabrushexport kritalibbrush kritalibpaintop kritaui kritaimpex)
 
 install(TARGETS kritabrushexport  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 

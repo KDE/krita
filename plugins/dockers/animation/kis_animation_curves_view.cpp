@@ -332,7 +332,8 @@ void KisAnimationCurvesView::updateVerticalRange()
 {
     if (!model()) return;
 
-    qreal minimum, maximum;
+    qreal minimum = 0;
+    qreal maximum = 0;
     findExtremes(&minimum, &maximum);
 
     int viewMin = maximum * m_d->verticalHeader->scaleFactor();

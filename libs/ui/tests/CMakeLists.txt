@@ -11,7 +11,6 @@ macro_add_unittest_definitions()
 ecm_add_tests(
     kis_image_view_converter_test.cpp
     squeezedcombobox_test.cpp
-    kis_kra_savexml_visitor_test.cpp
     kis_shape_selection_test.cpp
     kis_recorded_action_editor_test.cpp
     kis_doc2_test.cpp
@@ -86,16 +85,6 @@ krita_add_broken_unit_test(
     kis_prescaled_projection_test.cpp
     TEST_NAME krita-ui-kis_prescaled_projection_test
     LINK_LIBRARIES kritaui Qt5::Test)
-
-krita_add_broken_unit_test(
-    kis_kra_loader_test.cpp
-    TEST_NAME krita-ui-KisKraLoaderTest
-    LINK_LIBRARIES kritaimage kritaui Qt5::Test)
-
-krita_add_broken_unit_test(
-    kis_kra_saver_test.cpp
-    TEST_NAME krita-ui-KisKraSaverTest
-    LINK_LIBRARIES kritaimage kritaui Qt5::Test)
 
 krita_add_broken_unit_test(
     kis_exiv2_test.cpp

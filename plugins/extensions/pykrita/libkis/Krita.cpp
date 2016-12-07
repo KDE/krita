@@ -35,7 +35,6 @@
 #include "ViewExtension.h"
 #include "DockWidgetFactoryBase.h"
 
-#include <QVariantMap>
 #include <QVariant>
 
 Krita* Krita::s_instance = 0;
@@ -61,20 +60,46 @@ Krita::~Krita()
     delete d;
 }
 
-QVariantMap Krita::actions() const
+QList<Action *> Krita::actions() const
 {
-    QVariantMap actionList;
+    QList<Action*> actionList;
     KisMainWindow *mainWindow = KisPart::instance()->currentMainwindow();
+    if (!mainWindow) {
+        return actionList;
+    }
     KActionCollection *actionCollection = mainWindow->actionCollection();
     Q_FOREACH(QAction *action, actionCollection->actions()) {
-        actionList.insert(action->objectName(), QVariant::fromValue<QObject*>(new Action(action->objectName(), action)));
+        actionList << new Action(action->objectName(), action);
     }
     return actionList;
 }
 
+Action *Krita::action(const QString &name) const
+{
+    KisMainWindow *mainWindow = KisPart::instance()->currentMainwindow();
+    if (!mainWindow) {
+        return 0;
+    }
+    KActionCollection *actionCollection = mainWindow->actionCollection();
+    QAction *action = actionCollection->action(name);
+    if (action) {
+        return new Action(name, action);
+    }
+    return 0;
+}
+
 Document* Krita::activeDocument() const
 {
-    return 0;
+    KisMainWindow *mainWindow = KisPart::instance()->currentMainwindow();
+    if (!mainWindow) {
+        return 0;
+    }
+    KisView *view = mainWindow->activeView();
+    if (!view) {
+        return 0;
+    }
+    KisDocument *document = view->document();
+    return new Document(document);
 }
 
 void Krita::setActiveDocument(Document* value)
@@ -93,33 +118,33 @@ void Krita::setBatchmode(bool value)
 }
 
 
-QVariantList Krita::documents() const
+QList<Document *> Krita::documents() const
 {
-    QVariantList ret;
+    QList<Document *> ret;
     foreach(QPointer<KisDocument> doc, KisPart::instance()->documents()) {
-        ret << QVariant::fromValue<Document*>(new Document(doc));
+        ret << new Document(doc);
     }
     return ret;
 }
 
-QVariantList Krita::exporters() const
+QList<Exporter *> Krita::exporters() const
 {
-    return QVariantList();
+    return QList<Exporter*>();
 }
 
-QVariantList Krita::filters() const
+QList<Filter*> Krita::filters() const
 {
-    return QVariantList();
+    return QList<Filter*>();
 }
 
-QVariantList Krita::generators() const
+QList<Generator*> Krita::generators() const
 {
-    return QVariantList();
+    return QList<Generator*> ();
 }
 
-QVariantList Krita::importers() const
+QList<Importer*>  Krita::importers() const
 {
-    return QVariantList();
+    return QList<Importer*>();
 }
 
 Notifier* Krita::notifier() const
@@ -143,28 +168,33 @@ QString Krita::version() const
     return QString();
 }
 
-QVariantList Krita::views() const
+QList<View *> Krita::views() const
 {
-    QVariantList ret;
+    QList<View *> ret;
     foreach(QPointer<KisView> view, KisPart::instance()->views()) {
-        ret << QVariant::fromValue<View*>(new View(view));
+        ret << new View(view);
     }
     return ret;
 }
 
-QVariantList Krita::windows() const
+QList<Window*>  Krita::windows() const
 {
-    QVariantList ret;
+    QList<Window*> ret;
     foreach(QPointer<KisMainWindow> mainWin, KisPart::instance()->mainWindows()) {
-        ret << QVariant::fromValue<Window*>(new Window(mainWin));
+        ret << new Window(mainWin);
     }
     return ret;
 
 }
 
-QVariantList Krita::resources() const
+QList<Resource *> Krita::resources() const
 {
-    return QVariantList();
+    return QList<Resource *> ();
+}
+
+void Krita::setResources(QList<Resource *> value)
+{
+
 }
 
 void Krita::addDockWidget(DockWidget *dockWidget)
@@ -186,9 +216,12 @@ Document* Krita::createDocument()
     return 0;
 }
 
-Document* Krita::openDocument()
+Document* Krita::openDocument(const QString &filename)
 {
-    return 0;
+    KisDocument *document = KisPart::instance()->createDocument();
+    KisPart::instance()->addDocument(document);
+    document->openUrl(QUrl::fromLocalFile(filename), KisDocument::OPEN_URL_FLAG_DO_NOT_ADD_TO_RECENT_FILES);
+    return new Document(document);
 }
 
 Window* Krita::openWindow()

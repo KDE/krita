@@ -158,7 +158,7 @@ bool KisNodeManager::Private::activateNodeImpl(KisNodeSP node)
         selection->setActiveLayer(shapeLayer);
 
         imageView->setCurrentNode(node);
-        if (KisLayerSP layer = dynamic_cast<KisLayer*>(node.data())) {
+        if (KisLayerSP layer = qobject_cast<KisLayer*>(node.data())) {
             maskManager.activateMask(0);
             layerManager.activateLayer(layer);
         } else if (KisMaskSP mask = dynamic_cast<KisMask*>(node.data())) {
@@ -287,7 +287,7 @@ void KisNodeManager::setup(KActionCollection * actionCollection, KisActionManage
 
     action = actionManager->createAction("new_from_visible");
     connect(action, SIGNAL(triggered()), this, SLOT(createFromVisible()));
-    
+
     NEW_LAYER_ACTION("add_new_paint_layer", "KisPaintLayer");
 
     NEW_LAYER_ACTION("add_new_group_layer", "KisGroupLayer");
@@ -383,7 +383,7 @@ void KisNodeManager::moveNodeAt(KisNodeSP node, KisNodeSP parent, int index)
     if (parent->allowAsChild(node)) {
         if (node->inherits("KisSelectionMask") && parent->inherits("KisLayer")) {
             KisSelectionMask *m = dynamic_cast<KisSelectionMask*>(node.data());
-            KisLayer *l = dynamic_cast<KisLayer*>(parent.data());
+            KisLayer *l = qobject_cast<KisLayer*>(parent.data());
             KisSelectionMaskSP selMask = l->selectionMask();
             if (m && m->active() && l && l->selectionMask())
                 selMask->setActive(false);
@@ -950,7 +950,6 @@ void KisNodeManager::Private::saveDeviceAsImage(KisPaintDeviceSP device,
     QString mimefilter = KisMimeDatabase::mimeTypeForFile(filename);;
 
     QScopedPointer<KisDocument> d(KisPart::instance()->createDocument());
-    d->prepareForImport();
 
     KisImageSP dst = new KisImage(d->createUndoStore(),
                                   bounds.width(),

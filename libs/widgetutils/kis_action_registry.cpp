@@ -33,7 +33,6 @@
 #include "kactioncollection.h"
 #include "kactioncategory.h"
 
-
 #include "kis_action_registry.h"
 #include "kshortcutschemeshelper_p.h"
 
@@ -134,31 +133,6 @@ KisActionRegistry::KisActionRegistry()
     loadShortcutScheme(schemeName);
     loadCustomShortcuts();
 }
-
-QList<QKeySequence> KisActionRegistry::getCustomShortcut(const QString &name)
-{
-    return d->actionInfo(name).customShortcuts;
-};
-
-QList<QKeySequence> KisActionRegistry::getPreferredShortcut(const QString &name)
-{
-    return preferredShortcuts(d->actionInfo(name));
-};
-
-QString KisActionRegistry::getCategory(const QString &name)
-{
-    return d->actionInfo(name).categoryName;
-};
-
-QStringList KisActionRegistry::allActions()
-{
-    return d->actionInfoList.keys();
-};
-
-KActionCollection * KisActionRegistry::getDefaultCollection()
-{
-    return d->actionCollections.value("Krita");
-};
 
 void KisActionRegistry::addAction(const QString &name, QAction *a)
 {
@@ -345,31 +319,6 @@ QString KisActionRegistry::getActionProperty(const QString &name, const QString 
 
 }
 
-
-void KisActionRegistry::writeCustomShortcuts(KConfigBase *config) const
-{
-
-    KConfigGroup cg;
-    if (config == 0) {
-        cg = KConfigGroup(KSharedConfig::openConfig("kritashortcutsrc"),
-                          QStringLiteral("Shortcuts"));
-    } else {
-        cg = KConfigGroup(config, QStringLiteral("Shortcuts"));
-    }
-
-    for (auto it = d->actionInfoList.constBegin();
-         it != d->actionInfoList.constEnd(); ++it) {
-
-        QString actionName = it.key();
-        QString s = QKeySequence::listToString(it.value().customShortcuts);
-        if (s.isEmpty()) {
-            cg.deleteEntry(actionName, KConfigGroup::Persistent);
-        } else {
-            cg.writeEntry(actionName, s, KConfigGroup::Persistent);
-        }
-    }
-    cg.sync();
-}
 
 void KisActionRegistry::Private::loadActionFiles()
 {

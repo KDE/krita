@@ -50,7 +50,6 @@ KisAboutApplication::KisAboutApplication(QWidget *parent)
     splash->displayLinks();
     splash->setFixedSize(splash->sizeHint());
 
-
     wdg->addTab(splash, i18n("About"));
     setMinimumSize(wdg->sizeHint());
 
@@ -169,4 +168,5 @@ KisAboutApplication::KisAboutApplication(QWidget *parent)
 
 
     vlayout->addLayout(hlayout);
+
 }

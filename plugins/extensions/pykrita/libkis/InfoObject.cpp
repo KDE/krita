@@ -17,41 +17,49 @@
  */
 #include "InfoObject.h"
 
+#include <kis_properties_configuration.h>
+
 struct InfoObject::Private {
     Private() {}
+
+    KisPropertiesConfiguration properties;
 };
 
-InfoObject::InfoObject(QObject *parent) 
+InfoObject::InfoObject(QObject *parent)
     : QObject(parent)
     , d(new Private)
 {
 }
 
-InfoObject::~InfoObject() 
+InfoObject::~InfoObject()
 {
     delete d;
 }
 
 QMap<QString, QVariant> InfoObject::properties() const
 {
-    return QMap<QString, QVariant>();
+    return d->properties.getProperties();
 }
 
-void InfoObject::setproperties(QMap<QString, QVariant> value)
+void InfoObject::setproperties(QMap<QString, QVariant> proprertyMap)
 {
+    Q_FOREACH(const QString & key, proprertyMap.keys()) {
+        d->properties.setProperty(key, proprertyMap[key]);
+    }
 }
-
-
-
 
 void InfoObject::setProperty(const QString &key, QVariant value)
 {
+    d->properties.setProperty(key, value);
 }
 
 QVariant InfoObject::property(const QString &key)
 {
-    return QVariant();
+    QVariant v;
+    if (d->properties.hasProperty(key)) {
+        d->properties.getProperty(key, v);
+    }
+    return v;
 }
-
 
 

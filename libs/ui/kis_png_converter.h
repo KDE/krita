@@ -112,7 +112,7 @@ public:
     /**
      * Retrieve the constructed image
      */
-    KisImageWSP image();
+    KisImageSP image();
 
     static bool saveDeviceToStore(const QString &filename, const QRect &imageRect, const qreal xRes, const qreal yRes, KisPaintDeviceSP dev, KoStore *store, KisMetaData::Store* metaData = 0);
 
@@ -124,7 +124,7 @@ private:
     void progress(png_structp png_ptr, png_uint_32 row_number, int pass);
 private:
     png_uint_32 m_max_row;
-    KisImageWSP m_image;
+    KisImageSP m_image;
     KisDocument *m_doc;
     bool m_stop;
     bool m_batchMode;

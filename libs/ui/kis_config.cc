@@ -920,7 +920,7 @@ void KisConfig::setOutlineSizeMinimum(qreal outlineSizeMinimum) const
 
 int KisConfig::autoSaveInterval(bool defaultValue)  const
 {
-    return (defaultValue ? KisDocument::defaultAutoSave() : m_cfg.readEntry("AutoSaveInterval", KisDocument::defaultAutoSave()));
+    return (defaultValue ? 300 : m_cfg.readEntry("AutoSaveInterval", 300));
 }
 
 void KisConfig::setAutoSaveInterval(int seconds)  const
@@ -1171,9 +1171,9 @@ QString KisConfig::exportConfiguration(const QString &filterId, bool defaultValu
     return (defaultValue ? QString() : m_cfg.readEntry("ExportConfiguration-" + filterId, QString()));
 }
 
-void KisConfig::setExportConfiguration(const QString &filterId, const KisPropertiesConfiguration &properties) const
+void KisConfig::setExportConfiguration(const QString &filterId, KisPropertiesConfigurationSP properties) const
 {
-    QString exportConfig = properties.toXML();
+    QString exportConfig = properties->toXML();
     m_cfg.writeEntry("ExportConfiguration-" + filterId, exportConfig);
 
 }
@@ -1691,6 +1691,19 @@ int KisConfig::stabilizerSampleSize(bool defaultValue) const
 void KisConfig::setStabilizerSampleSize(int value)
 {
     m_cfg.writeEntry("stabilizerSampleSize", value);
+}
+
+int KisConfig::stabilizerDelayedPaintInterval(bool defaultValue) const
+{
+    const int defaultInterval = 20;
+
+    return defaultValue ?
+        defaultInterval : m_cfg.readEntry("stabilizerDelayedPaintInterval", defaultInterval);
+}
+
+void KisConfig::setStabilizerDelayedPaintInterval(int value)
+{
+    m_cfg.writeEntry("stabilizerDelayedPaintInterval", value);
 }
 
 QString KisConfig::customFFMpegPath(bool defaultValue) const

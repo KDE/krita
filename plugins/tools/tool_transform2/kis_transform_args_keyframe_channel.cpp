@@ -29,7 +29,19 @@ struct KisTransformArgsKeyframe : public KisKeyframe
         , args(args)
     {}
 
+    KisTransformArgsKeyframe(const KisTransformArgsKeyframe *rhs, KisKeyframeChannel *channel)
+        : KisKeyframe(rhs, channel)
+        , args(rhs->args)
+    {}
+
     ToolTransformArgs args;
+
+    KisKeyframeSP cloneFor(KisKeyframeChannel *channel) const
+    {
+        KisTransformArgsKeyframeChannel *argsChannel = dynamic_cast<KisTransformArgsKeyframeChannel*>(channel);
+        Q_ASSERT(argsChannel);
+        return toQShared(new KisTransformArgsKeyframe(this, channel));
+    }
 };
 
 KisTransformArgsKeyframeChannel::AddKeyframeCommand::AddKeyframeCommand(KisTransformArgsKeyframeChannel *channel, int time, const ToolTransformArgs &args, KUndo2Command *parentCommand)

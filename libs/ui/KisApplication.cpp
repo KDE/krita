@@ -1,4 +1,4 @@
- /* This file is part of the KDE project
+/* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
    Copyright (C) 2009 Thomas Zander <zander@kde.org>
    Copyright (C) 2012 Boudewijn Rempt <boud@valdyas.org>
@@ -97,7 +97,7 @@ public:
     KisApplicationPrivate()
         : splashScreen(0)
     {}
-    KisSplashScreen *splashScreen;
+    QPointer<KisSplashScreen> splashScreen;
 };
 
 class KisApplication::ResetStarting
@@ -118,24 +118,24 @@ public:
                 m_splash->hide();
             }
             else {
-                m_splash->setWindowFlags(Qt::Tool);
+                m_splash->setWindowFlags(Qt::Dialog);
                 QRect r(QPoint(), m_splash->size());
                 m_splash->move(QApplication::desktop()->availableGeometry().center() - r.center());
                 m_splash->setWindowTitle(qAppName());
-                m_splash->setParent(qApp->activeWindow());
+                m_splash->setParent(0);
                 Q_FOREACH (QObject *o, m_splash->children()) {
                     QWidget *w = qobject_cast<QWidget*>(o);
                     if (w && w->isHidden()) {
                         w->setVisible(true);
                     }
                 }
-
                 m_splash->show();
+                m_splash->activateWindow();
             }
         }
     }
 
-    KisSplashScreen *m_splash;
+    QPointer<KisSplashScreen> m_splash;
 };
 
 
@@ -152,7 +152,7 @@ KisApplication::KisApplication(const QString &key, int &argc, char **argv)
     setApplicationDisplayName("Krita");
     setApplicationName("krita");
     // Note: Qt docs suggest we set this, but if we do, we get resource paths of the form of krita/krita, which is weird.
-//    setOrganizationName("krita");
+    //    setOrganizationName("krita");
     setOrganizationDomain("krita.org");
 
     QString version = KritaVersionWrapper::versionString(true);
@@ -244,15 +244,15 @@ void addResourceTypes()
     KoResourcePaths::addResourceType("tags", "data", "/tags/");
     KoResourcePaths::addResourceType("templates", "data", "/templates");
 
-//    // Extra directories to look for create resources. (Does anyone actually use that anymore?)
-//    KoResourcePaths::addResourceDir("ko_gradients", "/usr/share/create/gradients/gimp");
-//    KoResourcePaths::addResourceDir("ko_gradients", QDir::homePath() + QString("/.create/gradients/gimp"));
-//    KoResourcePaths::addResourceDir("ko_patterns", "/usr/share/create/patterns/gimp");
-//    KoResourcePaths::addResourceDir("ko_patterns", QDir::homePath() + QString("/.create/patterns/gimp"));
-//    KoResourcePaths::addResourceDir("kis_brushes", "/usr/share/create/brushes/gimp");
-//    KoResourcePaths::addResourceDir("kis_brushes", QDir::homePath() + QString("/.create/brushes/gimp"));
-//    KoResourcePaths::addResourceDir("ko_palettes", "/usr/share/create/swatches");
-//    KoResourcePaths::addResourceDir("ko_palettes", QDir::homePath() + QString("/.create/swatches"));
+    //    // Extra directories to look for create resources. (Does anyone actually use that anymore?)
+    //    KoResourcePaths::addResourceDir("ko_gradients", "/usr/share/create/gradients/gimp");
+    //    KoResourcePaths::addResourceDir("ko_gradients", QDir::homePath() + QString("/.create/gradients/gimp"));
+    //    KoResourcePaths::addResourceDir("ko_patterns", "/usr/share/create/patterns/gimp");
+    //    KoResourcePaths::addResourceDir("ko_patterns", QDir::homePath() + QString("/.create/patterns/gimp"));
+    //    KoResourcePaths::addResourceDir("kis_brushes", "/usr/share/create/brushes/gimp");
+    //    KoResourcePaths::addResourceDir("kis_brushes", QDir::homePath() + QString("/.create/brushes/gimp"));
+    //    KoResourcePaths::addResourceDir("ko_palettes", "/usr/share/create/swatches");
+    //    KoResourcePaths::addResourceDir("ko_palettes", QDir::homePath() + QString("/.create/swatches"));
 
     // Make directories for all resources we can save, and tags
     QDir d;
@@ -271,23 +271,30 @@ void addResourceTypes()
 void KisApplication::loadResources()
 {
     setSplashScreenLoadingText(i18n("Loading Gradients..."));
+    processEvents();
     KoResourceServerProvider::instance()->gradientServer(true);
+
 
     // Load base resources
     setSplashScreenLoadingText(i18n("Loading Patterns..."));
+    processEvents();
     KoResourceServerProvider::instance()->patternServer(true);
 
     setSplashScreenLoadingText(i18n("Loading Palettes..."));
+    processEvents();
     KoResourceServerProvider::instance()->paletteServer(false);
 
     setSplashScreenLoadingText(i18n("Loading Brushes..."));
+    processEvents();
     KisBrushServer::instance()->brushServer(true);
 
     // load paintop presets
     setSplashScreenLoadingText(i18n("Loading Paint Operations..."));
+    processEvents();
     KisResourceServerProvider::instance()->paintOpPresetServer(true);
 
     setSplashScreenLoadingText(i18n("Loading Resource Bundles..."));
+    processEvents();
     KisResourceServerProvider::instance()->resourceBundleServer();
 }
 
@@ -304,17 +311,20 @@ void KisApplication::loadPlugins()
 
     // Load the krita-specific tools
     setSplashScreenLoadingText(i18n("Loading Plugins for Krita/Tool..."));
+    processEvents();
     KoPluginLoader::instance()->load(QString::fromLatin1("Krita/Tool"),
                                      QString::fromLatin1("[X-Krita-Version] == 28"));
 
 
     // Load dockers
     setSplashScreenLoadingText(i18n("Loading Plugins for Krita/Dock..."));
+    processEvents();
     KoPluginLoader::instance()->load(QString::fromLatin1("Krita/Dock"),
                                      QString::fromLatin1("[X-Krita-Version] == 28"));
 
     // XXX_EXIV: make the exiv io backends real plugins
     setSplashScreenLoadingText(i18n("Loading Plugins Exiv/IO..."));
+    processEvents();
     KisExiv2::initialize();
 }
 
@@ -337,6 +347,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
 #endif
 
     setSplashScreenLoadingText(i18n("Initializing Globals"));
+    processEvents();
     initializeGlobals(args);
 
     const bool doTemplate = args.doTemplate();
@@ -352,8 +363,8 @@ bool KisApplication::start(const KisApplicationArguments &args)
     // TODO: fix print & exportAsPdf to work without mainwindow shown
     const bool showmainWindow = !exportAs; // would be !batchRun;
 
-    const bool showSplashScreen = !m_batchRun && qEnvironmentVariableIsEmpty("NOSPLASH") &&  qgetenv("XDG_CURRENT_DESKTOP") != "GNOME";
-    if (showSplashScreen) {
+    const bool showSplashScreen = !m_batchRun && qEnvironmentVariableIsEmpty("NOSPLASH");// &&  qgetenv("XDG_CURRENT_DESKTOP") != "GNOME";
+    if (showSplashScreen && d->splashScreen) {
         d->splashScreen->show();
         d->splashScreen->repaint();
         processEvents();
@@ -373,6 +384,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
 
     // Make sure we can save resources and tags
     setSplashScreenLoadingText(i18n("Adding resource types"));
+    processEvents();
     addResourceTypes();
 
     // Load all resources and tags before the plugins do that
@@ -384,6 +396,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
     if (needsMainWindow) {
         // show a mainWindow asap, if we want that
         setSplashScreenLoadingText(i18n("Loading Main Window..."));
+        processEvents();
         m_mainWindow = KisPart::instance()->createMainWindow();
 
         if (showmainWindow) {
@@ -399,6 +412,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
     }
 
     setSplashScreenLoadingText(QString()); // done loading, so clear out label
+    processEvents();
 
     // Get the command line arguments which we have to parse
     int argsCount = args.filenames().count();
@@ -476,8 +490,10 @@ bool KisApplication::start(const KisApplicationArguments &args)
 
     // fixes BUG:369308  - Krita crashing on splash screen when loading.
     // trying to open a file before Krita has loaded can cause it to hang and crash
-    d->splashScreen->displayLinks();
-    d->splashScreen->displayRecentFiles();
+    if (d->splashScreen) {
+        d->splashScreen->displayLinks();
+        d->splashScreen->displayRecentFiles();
+    }
 
 
     // not calling this before since the program will quit there.
@@ -496,8 +512,10 @@ void KisApplication::setSplashScreen(QWidget *splashScreen)
 
 void KisApplication::setSplashScreenLoadingText(QString textToLoad)
 {
-   d->splashScreen->loadingLabel->setText(textToLoad);
-   d->splashScreen->repaint();
+    if (d->splashScreen) {
+        d->splashScreen->loadingLabel->setText(textToLoad);
+        d->splashScreen->repaint();
+    }
 }
 
 void KisApplication::hideSplashScreen()

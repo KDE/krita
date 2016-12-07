@@ -41,6 +41,7 @@
 #include <QMessageBox>
 #include <QDesktopWidget>
 #include <QFileDialog>
+#include <QFormLayout>
 
 #include <KisDocument.h>
 #include <KoColorProfile.h>
@@ -316,13 +317,13 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
     m_page->bnAddColorProfile->setToolTip( i18n("Open Color Profile") );
     connect(m_page->bnAddColorProfile, SIGNAL(clicked()), SLOT(installProfile()));
 
-    QGridLayout *monitorProfileGrid = new QGridLayout(m_page->monitorprofileholder);
+    QFormLayout *monitorProfileGrid = new QFormLayout(m_page->monitorprofileholder);
     for(int i = 0; i < QApplication::desktop()->screenCount(); ++i) {
         QLabel *lbl = new QLabel(i18nc("The number of the screen", "Screen %1:", i + 1));
-        monitorProfileGrid->addWidget(lbl, i, 0);
         m_monitorProfileLabels << lbl;
         SqueezedComboBox *cmb = new SqueezedComboBox();
-        monitorProfileGrid->addWidget(cmb, i, 1);
+        cmb->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
+        monitorProfileGrid->addRow(lbl, cmb);
         m_monitorProfileWidgets << cmb;
     }
 
@@ -475,10 +476,13 @@ void ColorSettingsTab::refillMonitorProfiles(const KoID & s)
     if (!csf)
         return;
 
-    QList<const KoColorProfile *>  profileList = KoColorSpaceRegistry::instance()->profilesFor(csf);
+    QMap<QString, const KoColorProfile *>  profileList;
+    Q_FOREACH(const KoColorProfile *profile, KoColorSpaceRegistry::instance()->profilesFor(csf)) {
+        profileList[profile->name()] = profile;
+    }
 
-    Q_FOREACH (const KoColorProfile *profile, profileList) {
-//        //dbgKrita << "Profile" << profile->name() << profile->isSuitableForDisplay() << csf->defaultProfile();
+    Q_FOREACH (const KoColorProfile *profile, profileList.values()) {
+        //qDebug() << "Profile" << profile->name() << profile->isSuitableForDisplay() << csf->defaultProfile();
         if (profile->isSuitableForDisplay()) {
             for (int i = 0; i < QApplication::desktop()->screenCount(); ++i) {
                 m_monitorProfileWidgets[i]->addSqueezedItem(profile->name());

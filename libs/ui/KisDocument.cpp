@@ -709,7 +709,7 @@ bool KisDocument::saveFile(KisPropertiesConfigurationSP exportConfiguration)
         unlockAfterSaving();
 
         ret = status == KisImportExportFilter::OK;
-        suppressErrorDialog = (status == KisImportExportFilter::UserCancelled || status == KisImportExportFilter::BadConversionGraph);
+        suppressErrorDialog = (status == KisImportExportFilter::UserCancelled || status == KisImportExportFilter::BadConversionGraph || d->importExportManager->getBatchMode());
         dbgFile << "Export status was" << status;
     } else {
         // Native format => normal save

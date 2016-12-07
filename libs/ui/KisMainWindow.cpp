@@ -799,7 +799,6 @@ void KisMainWindow::addViewAndNotifyLoadingCompleted(KisDocument *document)
 QStringList KisMainWindow::showOpenFileDialog()
 {
     KoFileDialog dialog(this, KoFileDialog::ImportFiles, "OpenDocument");
-    dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
     dialog.setMimeTypeFilters(KisImportExportManager::mimeFilter(KisImportExportManager::Import));
     dialog.setCaption(d->isImporting ? i18n("Import Images") : i18n("Open Images"));
 

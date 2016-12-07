@@ -2369,7 +2369,7 @@
       <whatsThis></whatsThis>
       <toolTip>Create a group layer containing selected layers</toolTip>
       <iconText>Quick Group</iconText>
-      <activationFlags>0</activationFlags>
+      <activationFlags>100000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>Ctrl+G</shortcut>
       <isCheckable>false</isCheckable>
@@ -2381,7 +2381,7 @@
       <whatsThis></whatsThis>
       <toolTip>Remove grouping of the layers or remove one layer out of the group</toolTip>
       <iconText>Quick Ungroup</iconText>
-      <activationFlags>0</activationFlags>
+      <activationFlags>100000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>Ctrl+Alt+G</shortcut>
       <isCheckable>false</isCheckable>
@@ -2393,7 +2393,7 @@
       <whatsThis></whatsThis>
       <toolTip>Group selected layers and add a layer with clipped alpha channel</toolTip>
       <iconText>Quick Clipping Group</iconText>
-      <activationFlags>0</activationFlags>
+      <activationFlags>100000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>Ctrl+Shift+G</shortcut>
       <isCheckable>false</isCheckable>

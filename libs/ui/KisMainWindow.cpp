@@ -801,6 +801,7 @@ void KisMainWindow::addViewAndNotifyLoadingCompleted(KisDocument *document)
 QStringList KisMainWindow::showOpenFileDialog()
 {
     KoFileDialog dialog(this, KoFileDialog::ImportFiles, "OpenDocument");
+    dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
     dialog.setMimeTypeFilters(KisImportExportManager::mimeFilter(KisImportExportManager::Import));
     dialog.setCaption(isImporting() ? i18n("Import Images") : i18n("Open Images"));
 
@@ -962,7 +963,7 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
         // don't want to be reminded about overwriting files etc.
         bool justChangingFilterOptions = false;
 
-        KoFileDialog dialog(this, KoFileDialog::SaveFile, "SaveDocument");
+        KoFileDialog dialog(this, KoFileDialog::SaveFile, "OpenDocument");
         dialog.setCaption(i18n("untitled"));
         if (isExporting() && !d->lastExportUrl.isEmpty()) {
             dialog.setDefaultDir(d->lastExportUrl.toLocalFile());
@@ -1591,7 +1592,7 @@ KisPrintJob* KisMainWindow::exportToPdf(KoPageLayout pageLayout, QString pdfFile
         pageLayout = layoutDlg->pageLayout();
         delete layoutDlg;
 
-        KoFileDialog dialog(this, KoFileDialog::SaveFile, "SaveDocument");
+        KoFileDialog dialog(this, KoFileDialog::SaveFile, "OpenDocument");
         dialog.setCaption(i18n("Export as PDF"));
         dialog.setDefaultDir(startUrl.toLocalFile());
         dialog.setMimeTypeFilters(QStringList() << "application/pdf");

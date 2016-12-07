@@ -1206,14 +1206,14 @@ void exrConverter::Private::reportLayersNotSaved(const QSet<KisNodeSP> &layersNo
     textStream.setCodec("UTF-8");
 
     Q_FOREACH (KisNodeSP node, layersNotSaved) {
-        textStream << "<item>" << i18nc("@item:unsupported-node-message", "%1 (type: \"%2\")", node->name(), node->metaObject()->className()) << "</item>";
+        textStream << "<li>" << i18nc("@item:unsupported-node-message", "%1 (type: \"%2\")", node->name(), node->metaObject()->className()) << "</li>";
     }
 
     QString msg =
             i18nc("@info",
-                  "<para>The following layers have a type that is not supported by EXR format:</para>"
-                  "<para><list>%1</list></para>"
-                  "<para><warning>these layers will NOT be saved to the final EXR file</warning></para>", layersList);
+                  "<p>The following layers have a type that is not supported by EXR format:</p>"
+                  "<p><ul>%1</list></p>"
+                  "<p><warning>these layers will NOT be saved to the final EXR file</warning></p>", layersList);
 
     if (this->showNotifications) {
         QMessageBox::information(0, i18nc("@title:window", "Layers will be lost"), msg);

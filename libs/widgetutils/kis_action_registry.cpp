@@ -125,6 +125,7 @@ public:
     }
 
     KisActionRegistry *q;
+    QSet<QString> sanityPropertizedShortcuts;
 };
 
 
@@ -228,6 +229,13 @@ void KisActionRegistry::updateShortcut(const QString &name, QAction *action)
 
     action->setShortcuts(info.effectiveShortcuts());
     action->setProperty("defaultShortcuts", qVariantFromValue(info.defaultShortcuts()));
+
+    d->sanityPropertizedShortcuts.insert(name);
+}
+
+bool KisActionRegistry::sanityCheckPropertized(const QString &name)
+{
+    return d->sanityPropertizedShortcuts.contains(name);
 }
 
 bool KisActionRegistry::propertizeAction(const QString &name, QAction * a)

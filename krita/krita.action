@@ -189,6 +189,18 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
+    <Action name="update_composition">
+      <icon></icon>
+      <text>Update Composition</text>
+      <whatsThis></whatsThis>
+      <toolTip>Update Composition</toolTip>
+      <iconText>Update Composition</iconText>
+      <activationFlags>0</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
   </Actions>
 
   <Actions category="Painting">

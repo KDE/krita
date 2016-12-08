@@ -19,9 +19,11 @@
 #include "KisActionsSnapshot.h"
 
 #include "kis_action_registry.h"
-#include "kactioncollection.h"
+#include "./kactioncollection.h"
 
 #include "kis_debug.h"
+
+//#define ACTIONS_CHECKSUM_SANITY_CHECK
 
 
 struct KisActionsSnapshot::Private
@@ -51,6 +53,12 @@ void KisActionsSnapshot::addAction(const QString &name, QAction *action)
         warnKrita << "WARNING: Uncategorized action" << name << "Dropping...";
         return;
     }
+
+#ifdef ACTIONS_CHECKSUM_SANITY_CHECK
+    if (!KisActionRegistry::instance()->sanityCheckPropertized(action->objectName())) {
+        warnKrita << "WARNING: action" << name  << "was not propertized!"  << ppVar(action->property("isShortcutConfigurable").toBool());
+    }
+#endif /* ACTIONS_CHECKSUM_SANITY_CHECK */
 
     KActionCollection *collection =  m_d->actionCollections[cat.componentName];
 

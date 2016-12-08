@@ -44,6 +44,7 @@
 #include <kis_paint_layer.h>
 #include <kis_action.h>
 #include <kis_action_manager.h>
+#include <kis_action_registry.h>
 
 #include "compositionmodel.h"
 
@@ -78,14 +79,7 @@ CompositionDockerDock::CompositionDockerDock( ) : QDockWidget(i18n("Compositions
     connect( exportButton, SIGNAL(clicked(bool)), this, SLOT(exportClicked()));
     saveNameEdit->setPlaceholderText(i18n("Insert Name"));
 
-    updateAction  = new KisAction(i18n("Update Composition"), this);
-    updateAction->setObjectName("update_composition");
-    connect(updateAction, SIGNAL(triggered()), this, SLOT(updateComposition()));
 
-    renameAction  = new KisAction(i18n("Rename Composition..."), this);
-    renameAction->setObjectName("rename_composition");
-    connect(renameAction, SIGNAL(triggered()), this, SLOT(renameComposition()));
-    m_actions.append(renameAction);
 }
 
 CompositionDockerDock::~CompositionDockerDock()
@@ -106,6 +100,16 @@ void CompositionDockerDock::setCanvas(KoCanvasBase * canvas)
 
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
     if (m_canvas && m_canvas->viewManager()) {
+        if (m_actions.isEmpty()) {
+            KisAction *updateAction = m_canvas->viewManager()->actionManager()->createAction("update_composition");
+            connect(updateAction, SIGNAL(triggered()), this, SLOT(updateComposition()));
+            m_actions.append(updateAction);
+
+            KisAction *renameAction = m_canvas->viewManager()->actionManager()->createAction("rename_composition");
+            connect(renameAction, SIGNAL(triggered()), this, SLOT(renameComposition()));
+            m_actions.append(renameAction);
+        }
+
         Q_FOREACH (KisAction *action, m_actions) {
             m_canvas->viewManager()->actionManager()->addAction(action->objectName(), action);
         }
@@ -260,9 +264,13 @@ void CompositionDockerDock::activateCurrentIndex()
 
 void CompositionDockerDock::customContextMenuRequested(QPoint pos)
 {
+    if (m_actions.isEmpty()) return;
+
     QMenu menu;
-    menu.addAction(updateAction);
-    menu.addAction(renameAction);
+    Q_FOREACH (KisAction *action, m_actions) {
+        menu.addAction(action);
+
+    }
     menu.exec(compositionView->mapToGlobal(pos));
 }
 

@@ -83,9 +83,7 @@ namespace {
     // Convenience macros to extract text of a child node.
     QString getChildContent(QDomElement xml, QString node) {
         return xml.firstChildElement(node).text();
-    };
-
-    ActionInfoItem emptyActionInfo;  // Used as default return value
+    }
 
     // Use Krita debug logging categories instead of KDE's default qDebug() for
     // harmless empty strings and translations
@@ -104,7 +102,7 @@ namespace {
 
         return translatedString;
     }
-};
+}
 
 
 
@@ -112,7 +110,7 @@ class Q_DECL_HIDDEN KisActionRegistry::Private
 {
 public:
 
-    Private(KisActionRegistry *_q) : q(_q) {};
+    Private(KisActionRegistry *_q) : q(_q) {}
 
     // This is the main place containing ActionInfoItems.
     QMap<QString, ActionInfoItem> actionInfoList;
@@ -124,18 +122,18 @@ public:
             dbgAction << "Tried to look up info for unknown action" << name;
         }
         return actionInfoList[name];
-    };
+    }
 
     KisActionRegistry *q;
 };
 
 
-Q_GLOBAL_STATIC(KisActionRegistry, s_instance);
+Q_GLOBAL_STATIC(KisActionRegistry, s_instance)
 
 KisActionRegistry *KisActionRegistry::instance()
 {
     return s_instance;
-};
+}
 
 
 KisActionRegistry::KisActionRegistry()
@@ -192,7 +190,7 @@ QAction * KisActionRegistry::makeQAction(const QString &name, QObject *parent)
 
     propertizeAction(name, a);
     return a;
-};
+}
 
 void KisActionRegistry::settingsPageSaved()
 {
@@ -380,7 +378,7 @@ void KisActionRegistry::Private::loadCustomShortcuts(QString filename)
             i.value().setCustomShortcuts(QList<QKeySequence>(), false);
         }
     }
-};
+}
 
 KisActionRegistry::ActionCategory::ActionCategory()
 {

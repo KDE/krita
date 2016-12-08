@@ -837,8 +837,6 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode, bool f
 {
     Q_ASSERT(!m_strokeData.strokeId());
 
-    KisPaintDeviceSP dev;
-
     KisResourcesSnapshotSP resources =
             new KisResourcesSnapshot(image(), currentNode(), this->canvas()->resourceManager());
 

@@ -129,12 +129,10 @@ void KisActionManager::addAction(const QString& name, KisAction* action)
     Q_ASSERT(d->viewManager->actionCollection());
 
     d->viewManager->actionCollection()->addAction(name, action);
-    action->setObjectName(name);
     action->setParent(d->viewManager->actionCollection());
-    d->viewManager->actionCollection()->setDefaultShortcut(action, action->defaultShortcut());
+
     d->actions.append(action);
     action->setActionManager(this);
-    KisActionRegistry::instance()->addAction(name, action);
 }
 
 void KisActionManager::takeAction(KisAction* action)
@@ -170,11 +168,10 @@ KisAction *KisActionManager::createAction(const QString &name)
     // will add them to the KisActionRegistry for the time being so we can get
     // properly categorized shortcuts.
     a = new KisAction();
-    auto actionRegistry = KisActionRegistry::instance();
+    KisActionRegistry *actionRegistry = KisActionRegistry::instance();
 
     // Add extra properties
     actionRegistry->propertizeAction(name, a);
-    actionRegistry->addAction(name, a);
     bool ok; // We will skip this check
     int activationFlags = actionRegistry->getActionProperty(name, "activationFlags").toInt(&ok, 2);
     int activationConditions = actionRegistry->getActionProperty(name, "activationConditions").toInt(&ok, 2);
@@ -353,6 +350,9 @@ KisAction *KisActionManager::createStandardAction(KStandardAction::StandardActio
             QObject::connect(action, SIGNAL(triggered(bool)), receiver, member);
         }
     }
+
+    KisActionRegistry *actionRegistry = KisActionRegistry::instance();
+    actionRegistry->propertizeAction(standardAction->objectName(), action);
 
     addAction(standardAction->objectName(), action);
     delete standardAction;

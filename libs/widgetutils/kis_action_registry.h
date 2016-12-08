@@ -88,12 +88,6 @@ public:
 
 
     /**
-     * Setup the shortcut configuration widget.
-     */
-    void setupDialog(KisShortcutsDialog *dlg);
-
-
-    /**
      * Called when "OK" button is pressed in settings dialog.
      */
     void settingsPageSaved();
@@ -102,7 +96,7 @@ public:
     /**
      * Reload custom shortcuts from kritashortcutsrc
      */
-    void loadCustomShortcuts(const QString &path = QString());
+    void loadCustomShortcuts();
 
     /**
      * Call after settings are changed.
@@ -111,6 +105,20 @@ public:
 
     // If config == 0, reload defaults
     void applyShortcutScheme(const KConfigBase *config = 0);
+
+    struct ActionCategory {
+        ActionCategory();
+        ActionCategory(const QString &_componentName, const QString &_categoryName);
+        QString componentName;
+        QString categoryName;
+
+        bool isValid() const;
+
+    private:
+        bool m_isValid = false;
+    };
+
+    ActionCategory fetchActionCategory(const QString &name) const;
 
     /**
      * Constructor.  Please don't touch!

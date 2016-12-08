@@ -308,9 +308,9 @@ void ShortcutSettingsTab::saveChanges()
     KisActionRegistry::instance()->settingsPageSaved();
 }
 
-void ShortcutSettingsTab::revertChanges()
+void ShortcutSettingsTab::cancelChanges()
 {
-    m_page->allDefault();
+    m_page->undo();
 }
 
 ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
@@ -858,6 +858,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     addPage(page);
     m_shortcutSettings = new ShortcutSettingsTab(vbox);
     connect(this, SIGNAL(accepted()), m_shortcutSettings, SLOT(saveChanges()));
+    connect(this, SIGNAL(rejected()), m_shortcutSettings, SLOT(cancelChanges()));
 
     // Canvas input settings
     m_inputConfiguration = new KisInputConfigurationPage();

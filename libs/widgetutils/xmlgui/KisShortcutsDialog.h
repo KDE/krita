@@ -141,6 +141,8 @@ public:
      *  Called when the "OK" button in the main configuration page is pressed.
      */
     void save();
+    void allDefault();
+    void undo();
 
     /**
      * Import shortcut scheme file from @p path
@@ -161,10 +163,6 @@ public:
      * Exports custom shortcuts to @p path
      */
     void saveCustomShortcuts(const QString &path) const;
-
-public Q_SLOTS:
-
-    void allDefault();
 
 private:
     Q_PRIVATE_SLOT(d, void changeShortcutScheme(const QString &))

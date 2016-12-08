@@ -262,6 +262,9 @@ void GeneralTab::clearBackgroundImage()
     m_backgroundimage->setText("");
 }
 
+#include "kactioncollection.h"
+#include "KisActionsSnapshot.h"
+
 ShortcutSettingsTab::ShortcutSettingsTab(QWidget *parent, const char *name)
     : QWidget(parent)
 {
@@ -272,8 +275,26 @@ ShortcutSettingsTab::ShortcutSettingsTab(QWidget *parent, const char *name)
     m_page = new WdgShortcutSettings(this);
     l->addWidget(m_page, 0, 0);
 
-    KisPart::instance()->loadActions();
-    KisActionRegistry::instance()->setupDialog(m_page);
+
+    m_snapshot.reset(new KisActionsSnapshot);
+
+    KActionCollection *collection =
+        KisPart::instance()->currentMainwindow()->actionCollection();
+
+    Q_FOREACH (QAction *action, collection->actions()) {
+        m_snapshot->addAction(action->objectName(), action);
+    }
+
+    QMap<QString, KActionCollection*> sortedCollections =
+        m_snapshot->actionCollections();
+
+    for (auto it = sortedCollections.constBegin(); it != sortedCollections.constEnd(); ++it) {
+        m_page->addCollection(it.value(), it.key());
+    }
+}
+
+ShortcutSettingsTab::~ShortcutSettingsTab()
+{
 }
 
 void ShortcutSettingsTab::setDefault()

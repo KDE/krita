@@ -124,7 +124,7 @@ public:
 
 public Q_SLOTS:
     void saveChanges();
-    void revertChanges();
+    void cancelChanges();
 };
 
 

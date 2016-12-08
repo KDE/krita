@@ -420,8 +420,8 @@ KisProofingConfigurationSP KisImageConfig::defaultProofingconfiguration()
     } else {
                 proofingConfig->conversionFlags  = proofingConfig->conversionFlags & ~KoColorConversionTransformation::ConversionFlag::BlackpointCompensation;
     }
-    QColor def;
-    def =  m_config.readEntry("defaultProofingGamutwarning", QColor(Qt::gray));
+    QColor def(Qt::green);
+    m_config.readEntry("defaultProofingGamutwarning", def);
     KoColor col(KoColorSpaceRegistry::instance()->rgb8());
     col.fromQColor(def);
     col.setOpacity(1.0);
@@ -438,7 +438,7 @@ void KisImageConfig::setDefaultProofingConfig(const KoColorSpace *proofingSpace,
     m_config.writeEntry("defaultProofingProfileIntent", proofingIntent);
     m_config.writeEntry("defaultProofingBlackpointCompensation", blackPointCompensation);
     QColor c;
-    warningColor.toQColor(&c);
+    c = warningColor.toQColor();
     m_config.writeEntry("defaultProofingGamutwarning", c);
     m_config.writeEntry("defaultProofingAdaptationState",adaptationState);
 }

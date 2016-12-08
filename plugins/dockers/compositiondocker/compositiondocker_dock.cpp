@@ -108,10 +108,10 @@ void CompositionDockerDock::setCanvas(KoCanvasBase * canvas)
             KisAction *renameAction = m_canvas->viewManager()->actionManager()->createAction("rename_composition");
             connect(renameAction, SIGNAL(triggered()), this, SLOT(renameComposition()));
             m_actions.append(renameAction);
-        }
-
-        Q_FOREACH (KisAction *action, m_actions) {
-            m_canvas->viewManager()->actionManager()->addAction(action->objectName(), action);
+        } else {
+            Q_FOREACH (KisAction *action, m_actions) {
+                m_canvas->viewManager()->actionManager()->addAction(action->objectName(), action);
+            }
         }
         updateModel();
     }

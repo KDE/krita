@@ -16,6 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#ifndef KIS_ACTION_REGISTRY_H
+#define KIS_ACTION_REGISTRY_H
 
 #include <QString>
 #include <QKeySequence>
@@ -135,6 +137,8 @@ public:
     // Undocumented
     void updateShortcut(const QString &name, QAction *ac);
 
+    bool sanityCheckPropertized(const QString &name);
+
 Q_SIGNALS:
     void shortcutsUpdated();
 
@@ -143,3 +147,5 @@ private:
     class Private;
     Private * const d;
 };
+
+#endif /* KIS_ACTION_REGISTRY_H */

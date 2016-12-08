@@ -345,7 +345,14 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
     m_page->sldAdaptationState->setMinimum(0);
     m_page->sldAdaptationState->setValue((int)proofingConfig->adaptationState*20);
 
-    const KoColorSpace *proofingSpace =  KoColorSpaceRegistry::instance()->colorSpace(proofingConfig->proofingModel,proofingConfig->proofingDepth,proofingConfig->proofingProfile);
+    //probably this should become the screenprofile?
+    KoColor ga(KoColorSpaceRegistry::instance()->rgb8());
+    ga.fromKoColor(proofingConfig->warningColor);
+    m_page->gamutAlarm->setColor(ga);
+
+    const KoColorSpace *proofingSpace =  KoColorSpaceRegistry::instance()->colorSpace(proofingConfig->proofingModel,
+                                                                                      proofingConfig->proofingDepth,
+                                                                                      proofingConfig->proofingProfile);
     m_page->proofingSpaceSelector->setCurrentColorSpace(proofingSpace);
 
     m_page->cmbProofingIntent->setCurrentIndex((int)proofingConfig->intent);
@@ -1003,7 +1010,11 @@ bool KisDlgPreferences::editPreferences()
         cfg.setWorkingColorSpace(dialog->m_colorSettings->m_page->cmbWorkingColorSpace->currentItem().id());
 
         KisImageConfig cfgImage;
-        cfgImage.setDefaultProofingConfig(dialog->m_colorSettings->m_page->proofingSpaceSelector->currentColorSpace(), dialog->m_colorSettings->m_page->cmbProofingIntent->currentIndex(), dialog->m_colorSettings->m_page->ckbProofBlackPoint->isChecked(), dialog->m_colorSettings->m_page->gamutAlarm->color(), (double)dialog->m_colorSettings->m_page->sldAdaptationState->value()/20);
+        cfgImage.setDefaultProofingConfig(dialog->m_colorSettings->m_page->proofingSpaceSelector->currentColorSpace(),
+                                          dialog->m_colorSettings->m_page->cmbProofingIntent->currentIndex(),
+                                          dialog->m_colorSettings->m_page->ckbProofBlackPoint->isChecked(),
+                                          dialog->m_colorSettings->m_page->gamutAlarm->color(),
+                                          (double)dialog->m_colorSettings->m_page->sldAdaptationState->value()/20);
         cfg.setUseBlackPointCompensation(dialog->m_colorSettings->m_page->chkBlackpoint->isChecked());
         cfg.setAllowLCMSOptimization(dialog->m_colorSettings->m_page->chkAllowLCMSOptimization->isChecked());
         cfg.setPasteBehaviour(dialog->m_colorSettings->m_pasteBehaviourGroup.checkedId());

@@ -38,6 +38,7 @@
 #include <kis_color_source_option.h>
 #include <kis_pressure_spacing_option.h>
 #include <kis_brush_based_paintop_settings.h>
+#include <kis_global_settings_option.h>
 
 class KisPainter;
 class KisColorSource;
@@ -61,6 +62,7 @@ private:
     KisPressureSpacingOption m_spacingOption;
     KisPressureFlowOption m_flowOption;
     KisFlowOpacityOption m_opacityOption;
+    KisgGlobalSettingsOption m_globalSettingsOption;
     KisPressureSoftnessOption m_softnessOption;
     KisPressureSharpnessOption m_sharpnessOption;
     KisPressureDarkenOption m_darkenOption;

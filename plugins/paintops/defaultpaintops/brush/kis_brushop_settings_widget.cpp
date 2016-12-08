@@ -38,12 +38,14 @@
 #include <kis_pressure_sharpness_option_widget.h>
 #include <kis_color_source_option_widget.h>
 #include <kis_compositeop_option.h>
+#include <kis_global_settings_option.h>
 #include <kis_pressure_flow_opacity_option_widget.h>
 #include <kis_pressure_spacing_option_widget.h>
 #include "kis_texture_option.h"
 #include "kis_curve_option_widget.h"
 #include <kis_pressure_mirror_option_widget.h>
 #include "kis_pressure_texture_strength_option.h"
+
 
 
 KisBrushOpSettingsWidget::KisBrushOpSettingsWidget(QWidget* parent)
@@ -55,6 +57,7 @@ KisBrushOpSettingsWidget::KisBrushOpSettingsWidget(QWidget* parent)
     // Brush tip options
     addPaintOpOption(new KisCompositeOpOption(true), i18n("Blending Mode"));
     addPaintOpOption(new KisFlowOpacityOptionWidget(), i18n("Opacity"));
+    addPaintOpOption(new KisgGlobalSettingsOption(true), i18n("Global Preferences"));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureFlowOption(), i18n("0%"), i18n("100%")), i18n("Flow"));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption(), i18n("0%"), i18n("100%")), i18n("Size"));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureRatioOption(), i18n("0%"), i18n("100%")), i18n("Ratio"));

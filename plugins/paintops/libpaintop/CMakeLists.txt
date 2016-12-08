@@ -21,6 +21,7 @@ set(kritalibpaintop_LIB_SRCS
     kis_dynamic_sensor.cc
     kis_dab_cache.cpp
     kis_filter_option.cpp
+    kis_global_settings_option.cpp
     kis_multi_sensors_model_p.cpp
     kis_multi_sensors_selector.cpp
     kis_paint_action_type_option.cpp
@@ -67,6 +68,7 @@ ki18n_wrap_ui(kritalibpaintop_LIB_SRCS
     forms/wdgcurveoption.ui
     forms/wdgcustombrush.ui
     forms/wdgclipboardbrush.ui
+    forms/wdgglobalsettingsoption.ui
     forms/wdgtextbrush.ui
     forms/wdgincremental.ui
     forms/wdgmultisensorsselector.ui

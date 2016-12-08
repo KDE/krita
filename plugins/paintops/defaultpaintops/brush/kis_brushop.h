@@ -62,7 +62,6 @@ private:
     KisPressureSpacingOption m_spacingOption;
     KisPressureFlowOption m_flowOption;
     KisFlowOpacityOption m_opacityOption;
-    KisgGlobalSettingsOption m_globalSettingsOption;
     KisPressureSoftnessOption m_softnessOption;
     KisPressureSharpnessOption m_sharpnessOption;
     KisPressureDarkenOption m_darkenOption;

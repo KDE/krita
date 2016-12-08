@@ -99,10 +99,7 @@ public:
 
     void setCleanIcon(const QIcon &icon);
     QIcon cleanIcon() const;
-    
-    void mousePressEvent(QMouseEvent *event);
 
-    //my new imba function
     void setCanvas(KisCanvas2* canvas);
 
 public Q_SLOTS:

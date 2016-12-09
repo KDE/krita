@@ -273,6 +273,8 @@ void TimelineFramesView::setModel(QAbstractItemModel *model)
 
     connect(selectionModel(), SIGNAL(selectionChanged(const QItemSelection &, const QItemSelection &)),
             &m_d->selectionChangedCompressor, SLOT(start()));
+
+    connect(m_d->model, SIGNAL(sigEnsureRowVisible(int)), SLOT(slotEnsureRowVisible(int)));
 }
 
 void TimelineFramesView::setFramesPerSecond(int fps)
@@ -413,6 +415,15 @@ void TimelineFramesView::slotReselectCurrentIndex()
 {
     QModelIndex index = currentIndex();
     currentChanged(index, index);
+}
+
+void TimelineFramesView::slotEnsureRowVisible(int row)
+{
+    QModelIndex index = currentIndex();
+    if (!index.isValid() || row < 0) return;
+
+    index = m_d->model->index(row, index.column());
+    scrollTo(index);
 }
 
 void TimelineFramesView::slotDataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight)

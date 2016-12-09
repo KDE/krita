@@ -24,7 +24,6 @@
 #include <brushengine/kis_paint_information.h>
 #include <kritapaintop_export.h>
 
-
 /**
  * The global preferences option defines settings that happen across all brushes
  */
@@ -35,6 +34,12 @@ class PAINTOP_EXPORT KisgGlobalSettingsOption : public KisPaintOpOption
 public:
     KisgGlobalSettingsOption(bool createConfigWidget = false);
     ~KisgGlobalSettingsOption();
+
+
+public Q_SLOTS:
+    void slotRememberBrushSize(bool rememberSize);
+    void slotRememberBrushOpacity(bool rememberOpacity);
+
 
 private:
     bool m_createConfigWidget;

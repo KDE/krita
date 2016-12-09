@@ -22,6 +22,7 @@
 #include <KoColor.h>
 #include <kis_types.h>
 #include <ui_wdgglobalsettingsoption.h>
+#include <kis_config.h>
 
 KisgGlobalSettingsOption::KisgGlobalSettingsOption(bool createConfigWidget):
         KisPaintOpOption(KisPaintOpOption::GENERAL, true),
@@ -39,12 +40,27 @@ KisgGlobalSettingsOption::KisgGlobalSettingsOption(bool createConfigWidget):
 
         setConfigurationPage(widget);
         createConfigWidget = true;
-    }
 
+
+        // create connections for checkboxes
+        connect(ui.rememberBrushSizeCheckbox, SIGNAL(clicked(bool)), this, SLOT(slotRememberBrushSize(bool)));
+        connect(ui.rememberOpacityCheckbox, SIGNAL(clicked(bool)), this, SLOT(slotRememberBrushOpacity(bool)));
+    }
 
     setObjectName("KisGlobalSettingsOption");
 }
 
 KisgGlobalSettingsOption::~KisgGlobalSettingsOption() {
-
 }
+
+
+void KisgGlobalSettingsOption::slotRememberBrushSize(bool rememberSize) {
+    KisConfig cfg;
+    cfg.setUseEraserBrushSize(rememberSize);
+}
+
+void KisgGlobalSettingsOption::slotRememberBrushOpacity(bool rememberOpacity) {
+    KisConfig cfg;
+    cfg.setUseEraserBrushOpacity(rememberOpacity);
+}
+

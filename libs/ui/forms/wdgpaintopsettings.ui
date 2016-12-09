@@ -46,7 +46,7 @@
        </widget>
       </item>
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="0,0,0,0,0">
+       <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="0,0,0">
         <property name="spacing">
          <number>20</number>
         </property>
@@ -63,25 +63,6 @@
          <number>5</number>
         </property>
         <item>
-         <widget class="QCheckBox" name="eraserBrushSizeCheckBox">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="toolTip">
-           <string>Erase mode will use a separate brush size</string>
-          </property>
-          <property name="text">
-           <string>Eraser switch size</string>
-          </property>
-          <property name="checked">
-           <bool>false</bool>
-          </property>
-         </widget>
-        </item>
-        <item>
          <widget class="QCheckBox" name="dirtyPresetCheckBox">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
@@ -94,25 +75,6 @@
           </property>
           <property name="checked">
            <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QCheckBox" name="eraserBrushOpacityCheckBox">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="toolTip">
-           <string>Erase mode will use a separate brush opacity</string>
-          </property>
-          <property name="text">
-           <string>Eraser switch opacity</string>
-          </property>
-          <property name="checked">
-           <bool>false</bool>
           </property>
          </widget>
         </item>

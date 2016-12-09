@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>537</width>
+    <width>494</width>
     <height>300</height>
    </rect>
   </property>
@@ -95,7 +95,7 @@
         <string>Use to set the size from which the Automatic Precision Setting should begin. The Precision will remain 5 before this value.</string>
        </property>
        <property name="text">
-        <string>Starting Brush Size:</string>
+        <string>Starting Size:</string>
        </property>
       </widget>
      </item>
@@ -168,15 +168,15 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KisDoubleParseSpinBox</class>
-   <extends>QDoubleSpinBox</extends>
-   <header>kis_double_parse_spin_box.h</header>
-  </customwidget>
-  <customwidget>
    <class>KisSliderSpinBox</class>
    <extends>QWidget</extends>
    <header>kis_slider_spin_box.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KisDoubleParseSpinBox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header>kis_double_parse_spin_box.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

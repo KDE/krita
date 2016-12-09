@@ -310,11 +310,8 @@ void KisPaintOpPresetsPopup::setPaintOpSettingsWidget(QWidget * widget)
                                              this, SLOT(slotUpdateLodAvailability()));
 
         widget->setFont(m_d->smallFont);
+        widget->setMaximumWidth(650); // TODO: try to reduce this more once the precision area is in the performance section
 
-        QSize hint = widget->sizeHint();
-        m_d->minimumSettingsWidgetSize = QSize(qMax(hint.width(), m_d->minimumSettingsWidgetSize.width()),
-                                               qMax(hint.height(), m_d->minimumSettingsWidgetSize.height()));
-        widget->setMinimumSize(m_d->minimumSettingsWidgetSize);
         m_d->layout->addWidget(widget);
 
         m_d->layout->update();

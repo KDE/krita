@@ -1,5 +1,4 @@
-from PyQt5.QtWidgets import QAction
-
+from PyQt5.QtWidgets import QAction, QFileDialog, QMessageBox
 
 class OpenAction(QAction):
 
@@ -16,4 +15,19 @@ class OpenAction(QAction):
         return 'File'
 
     def open(self):
-        print('opening file')
+        dialog = QFileDialog(self.scripter.uicontroller.mainWidget)
+        dialog.setNameFilter('Python files (*.py)')
+
+        if dialog.exec():
+            try:
+                selectedFile = dialog.selectedFiles()[0]
+                fileExtension = selectedFile.rsplit('.', maxsplit=1)[1]
+
+                if fileExtension=='py':
+                    document = self.scripter.documentcontroller.openDocument(selectedFile)
+                    self.scripter.uicontroller.setDocumentEditor(document)
+
+            except:
+                QMessageBox.information(self.scripter.uicontroller.mainWidget,
+                                        'Invalid File',
+                                        'Open files with .py extension')

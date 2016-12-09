@@ -3,7 +3,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from krita import *
 from scripter import uicontroller
-
+from scripter import documentcontroller
 
 class ScripterViewExtension(ViewExtension):
 
@@ -17,6 +17,7 @@ class ScripterViewExtension(ViewExtension):
 
     def initialize(self):
         self.uicontroller = uicontroller.UIController(QDialog())
+        self.documentcontroller = documentcontroller.DocumentController()
         self.uicontroller.initialize(self)
 
 Krita.instance().addViewExtension(ScripterViewExtension(Krita.instance()))

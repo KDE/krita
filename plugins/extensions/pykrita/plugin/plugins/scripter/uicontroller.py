@@ -63,12 +63,10 @@ class UIController(object):
     def loadActions(self):
         module_path = 'scripter.ui_scripter.actions'
         actions_module = importlib.import_module(module_path)
-        print(actions_module)
         modules = []
 
         for class_path in actions_module.action_classes:
             _module, _klass =  class_path.rsplit('.', maxsplit=1)
-            print(_module, _klass)
             modules.append(dict(module='{0}.{1}'.format(module_path, _module),
                                 klass=_klass))
 
@@ -81,3 +79,9 @@ class UIController(object):
 
         for action in self.actions:
             action['parent'].addAction(action['action'])
+
+    def setDocumentEditor(self, document):
+        self.editor.clear()
+
+        for line in document.data():
+            self.editor.appendPlainText(line)

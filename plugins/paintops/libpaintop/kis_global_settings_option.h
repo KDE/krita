@@ -39,7 +39,7 @@ public:
 public Q_SLOTS:
     void slotRememberBrushSize(bool rememberSize);
     void slotRememberBrushOpacity(bool rememberOpacity);
-
+    void slotTemporarilySaveTweaks(bool rememberTweaks);
 
 private:
     bool m_createConfigWidget;

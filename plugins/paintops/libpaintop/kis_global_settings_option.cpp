@@ -45,6 +45,7 @@ KisgGlobalSettingsOption::KisgGlobalSettingsOption(bool createConfigWidget):
         // create connections for checkboxes
         connect(ui.rememberBrushSizeCheckbox, SIGNAL(clicked(bool)), this, SLOT(slotRememberBrushSize(bool)));
         connect(ui.rememberOpacityCheckbox, SIGNAL(clicked(bool)), this, SLOT(slotRememberBrushOpacity(bool)));
+        connect(ui.temporarilySaveTweaksCheckbox, SIGNAL(clicked(bool)), this, SLOT(slotTemporarilySaveTweaks(bool)));
     }
 
     setObjectName("KisGlobalSettingsOption");
@@ -62,5 +63,10 @@ void KisgGlobalSettingsOption::slotRememberBrushSize(bool rememberSize) {
 void KisgGlobalSettingsOption::slotRememberBrushOpacity(bool rememberOpacity) {
     KisConfig cfg;
     cfg.setUseEraserBrushOpacity(rememberOpacity);
+}
+
+void KisgGlobalSettingsOption::slotTemporarilySaveTweaks(bool rememberTweaks) {
+    KisConfig cfg;
+    cfg.setUseDirtyPresets(rememberTweaks);
 }
 

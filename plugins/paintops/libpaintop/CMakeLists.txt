@@ -25,6 +25,7 @@ set(kritalibpaintop_LIB_SRCS
     kis_multi_sensors_model_p.cpp
     kis_multi_sensors_selector.cpp
     kis_paint_action_type_option.cpp
+    kis_performance_option.cpp
     kis_precision_option.cpp
     kis_pressure_darken_option.cpp
     kis_pressure_hsv_option.cpp
@@ -69,6 +70,7 @@ ki18n_wrap_ui(kritalibpaintop_LIB_SRCS
     forms/wdgcustombrush.ui
     forms/wdgclipboardbrush.ui
     forms/wdgglobalsettingsoption.ui
+    forms/wdgperformanceoption.ui
     forms/wdgtextbrush.ui
     forms/wdgincremental.ui
     forms/wdgmultisensorsselector.ui

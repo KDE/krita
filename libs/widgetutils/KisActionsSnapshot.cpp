@@ -32,13 +32,19 @@ struct KisActionsSnapshot::Private
 
     ~Private() {
         qDeleteAll(actionCollections);
+        qDeleteAll(fakeActions);
     }
+
+    QSet<QString> nonRegisteredShortcuts;
+    QVector<QAction*> fakeActions;
 };
 
 KisActionsSnapshot::KisActionsSnapshot()
     : m_d(new Private)
 {
-
+    m_d->nonRegisteredShortcuts =
+        QSet<QString>::fromList(
+            KisActionRegistry::instance()->registeredShortcutIds());
 }
 
 KisActionsSnapshot::~KisActionsSnapshot()
@@ -47,6 +53,7 @@ KisActionsSnapshot::~KisActionsSnapshot()
 
 void KisActionsSnapshot::addAction(const QString &name, QAction *action)
 {
+    m_d->nonRegisteredShortcuts.remove(name);
     KisActionRegistry::ActionCategory cat = KisActionRegistry::instance()->fetchActionCategory(name);
 
     if (!cat.isValid()) {
@@ -70,8 +77,30 @@ void KisActionsSnapshot::addAction(const QString &name, QAction *action)
     collection->addCategorizedAction(name, action, cat.categoryName);
 }
 
-QMap<QString, KActionCollection *> KisActionsSnapshot::actionCollections() const
+QMap<QString, KActionCollection *> KisActionsSnapshot::actionCollections()
 {
+    /**
+     * A small heruistics to show warnings only when unknown shortcuts arppear
+     * in the non-registered list
+     */
+    if (m_d->nonRegisteredShortcuts.size() > 4 &&
+        m_d->nonRegisteredShortcuts.size() < 160) {
+
+        warnKrita << "WARNING: The following shortcuts are not registeren in the collection, "
+                     "they might have wrong shortcuts in the end:";
+        Q_FOREACH (const QString &str, m_d->nonRegisteredShortcuts) {
+            warnKrita << str;
+        }
+        warnKrita << "=== end ===";
+    }
+
+    // try to workaround non-registered shortcuts by faking them manually
+    Q_FOREACH (const QString &str, m_d->nonRegisteredShortcuts) {
+        QAction *action = KisActionRegistry::instance()->makeQAction(str, 0);
+        m_d->fakeActions << action;
+        addAction(action->objectName(), action);
+    }
+
     return m_d->actionCollections;
 }
 

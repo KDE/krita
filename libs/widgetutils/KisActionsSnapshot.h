@@ -49,7 +49,7 @@ public:
      * WARNING: the collections are owned by the shapshot! Don't destroy
      *          the snapshot before you are done with the collections!
      */
-    QMap<QString, KActionCollection*> actionCollections() const;
+    QMap<QString, KActionCollection*> actionCollections();
 
 private:
     struct Private;

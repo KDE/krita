@@ -30,17 +30,26 @@
 
 struct KisDelayedSaveDialog::Private
 {
-    Private(KisImageSP _image, int _busyWait) : image(_image), busyWait(_busyWait) {}
+    Private(KisImageSP _image, int _busyWait, Type _type) : image(_image), busyWait(_busyWait), type(_type) {}
 
     KisImageSP image;
     QTimer updateTimer;
     int busyWait;
+
+
+    bool checkImageIdle() {
+        const bool allowLocked = type != SaveDialog;
+        return image->isIdle(allowLocked);
+    }
+
+private:
+    Type type;
 };
 
 KisDelayedSaveDialog::KisDelayedSaveDialog(KisImageSP image, Type type, int busyWait, QWidget *parent)
     : QDialog(parent),
       ui(new Ui::KisDelayedSaveDialog),
-      m_d(new Private(image, busyWait))
+      m_d(new Private(image, busyWait, type))
 {
     KIS_ASSERT_RECOVER_NOOP(image);
 
@@ -74,7 +83,7 @@ KisDelayedSaveDialog::~KisDelayedSaveDialog()
 
 void KisDelayedSaveDialog::blockIfImageIsBusy()
 {
-    if (m_d->image->isIdle()) {
+    if (m_d->checkImageIdle()) {
         setResult(Accepted);
         return;
     }
@@ -87,7 +96,7 @@ void KisDelayedSaveDialog::blockIfImageIsBusy()
     while (t.elapsed() < m_d->busyWait) {
         QApplication::processEvents();
 
-        if (m_d->image->isIdle()) {
+        if (m_d->checkImageIdle()) {
             setResult(Accepted);
             return;
         }
@@ -102,7 +111,7 @@ void KisDelayedSaveDialog::blockIfImageIsBusy()
 
 void KisDelayedSaveDialog::slotTimerTimeout()
 {
-    if (m_d->image->isIdle()) {
+    if (m_d->checkImageIdle()) {
         accept();
     }
 }

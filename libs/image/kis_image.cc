@@ -498,9 +498,9 @@ bool KisImage::tryBarrierLock(bool readOnly)
     return result;
 }
 
-bool KisImage::isIdle()
+bool KisImage::isIdle(bool allowLocked)
 {
-    return !locked() && m_d->scheduler.isIdle();
+    return (allowLocked || !locked()) && m_d->scheduler.isIdle();
 }
 
 void KisImage::lock()

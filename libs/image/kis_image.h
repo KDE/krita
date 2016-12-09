@@ -757,7 +757,7 @@ Q_SIGNALS:
 public Q_SLOTS:
     KisCompositeProgressProxy* compositeProgressProxy();
 
-    bool isIdle();
+    bool isIdle(bool allowLocked = false);
 
     /**
      * @brief barrierLock APIDOX

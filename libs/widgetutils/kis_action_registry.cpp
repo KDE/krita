@@ -238,6 +238,11 @@ bool KisActionRegistry::sanityCheckPropertized(const QString &name)
     return d->sanityPropertizedShortcuts.contains(name);
 }
 
+QList<QString> KisActionRegistry::registeredShortcutIds() const
+{
+    return d->actionInfoList.keys();
+}
+
 bool KisActionRegistry::propertizeAction(const QString &name, QAction * a)
 {
     if (!d->actionInfoList.contains(name)) {

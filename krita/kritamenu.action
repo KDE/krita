@@ -62,6 +62,7 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
+<!-- commented out in the code right now
     <Action name="file_reload_file">
       <icon></icon>
       <text>Reload</text>
@@ -74,6 +75,7 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
+-->
     <Action name="file_import_file">
       <icon>document-import</icon>
       <text>Open ex&amp;isting Document as Untitled Document...</text>

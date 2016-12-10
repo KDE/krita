@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>287</width>
+    <width>359</width>
     <height>205</height>
    </rect>
   </property>
@@ -31,6 +31,16 @@
     </widget>
    </item>
    <item>
+    <widget class="KisLodAvailabilityWidget" name="wdgLodAvailability" native="true">
+     <property name="minimumSize">
+      <size>
+       <width>60</width>
+       <height>20</height>
+      </size>
+     </property>
+    </widget>
+   </item>
+   <item>
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -45,6 +55,14 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KisLodAvailabilityWidget</class>
+   <extends>QWidget</extends>
+   <header>kis_lod_availability_widget.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

@@ -442,7 +442,7 @@
     </Action>
     <Action name="stroke_selection">
       <icon></icon>
-      <text>Stroke selec&amp;tion</text>
+      <text>Stroke Selec&amp;tion...</text>
       <whatsThis></whatsThis>
       <toolTip>Stroke selection</toolTip>
       <iconText>Stroke selection</iconText>

@@ -112,6 +112,7 @@ public Q_SLOTS:
 Q_SIGNALS:
     void requestCurrentNodeChanged(KisNodeSP node);
     void sigInfiniteTimelineUpdateNeeded();
+    void sigEnsureRowVisible(int row);
 
 private:
     struct Private;

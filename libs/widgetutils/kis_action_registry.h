@@ -23,6 +23,7 @@
 #include <QKeySequence>
 #include <QDomElement>
 #include <QAction>
+#include <QList>
 
 #include "kritawidgetutils_export.h"
 
@@ -138,6 +139,8 @@ public:
     void updateShortcut(const QString &name, QAction *ac);
 
     bool sanityCheckPropertized(const QString &name);
+
+    QList<QString> registeredShortcutIds() const;
 
 Q_SIGNALS:
     void shortcutsUpdated();

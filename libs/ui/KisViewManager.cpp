@@ -150,7 +150,7 @@ class KisViewManager::KisViewManagerPrivate
 
 public:
 
-    KisViewManagerPrivate(KisViewManager *_q, QWidget *_q_parent)
+    KisViewManagerPrivate(KisViewManager *_q, KActionCollection *_actionCollection, QWidget *_q_parent)
         : filterManager(_q)
         , createTemplate(0)
         , saveIncremental(0)
@@ -174,13 +174,14 @@ public:
         , gridManager(_q)
         , canvasControlsManager(_q)
         , paintingAssistantsManager(_q)
-        , actionManager(_q)
+        , actionManager(_q, _actionCollection)
         , mainWindow(0)
         , showFloatingMessage(true)
         , currentImageView(0)
         , canvasResourceProvider(_q)
         , canvasResourceManager()
         , guiUpdateCompressor(30, KisSignalCompressor::POSTPONE, _q)
+        , actionCollection(_actionCollection)
         , mirrorManager(_q)
         , inputManager(_q)
         , actionAuthor(0)
@@ -248,7 +249,7 @@ public:
 
 
 KisViewManager::KisViewManager(QWidget *parent, KActionCollection *_actionCollection)
-    : d(new KisViewManagerPrivate(this, parent))
+    : d(new KisViewManagerPrivate(this, _actionCollection, parent))
 {
     d->actionCollection = _actionCollection;
     d->mainWindow = dynamic_cast<QMainWindow*>(parent);
@@ -1082,9 +1083,18 @@ void KisViewManager::switchCanvasOnly(bool toggled)
 
     if (cfg.hideDockersFullscreen()) {
         KisAction* action = qobject_cast<KisAction*>(main->actionCollection()->action("view_toggledockers"));
-        action->setCheckable(true);
-        if (action && action->isChecked() == toggled) {
-            action->setChecked(!toggled);
+        if (action) {
+            action->setCheckable(true);
+            if (toggled) {
+                if (action->isChecked()) {
+                    cfg.setShowDockers(action->isChecked());
+                    action->setChecked(false);
+                } else {
+                    cfg.setShowDockers(false);
+                }
+            } else {
+                action->setChecked(cfg.showDockers());
+            }
         }
     }
 

@@ -54,6 +54,9 @@ public:
 
     virtual void externalConfigChanged() = 0;
 
+    virtual void activatePrimaryAction();
+    virtual void deactivatePrimaryAction();
+
     virtual bool beginPrimaryAction(KoPointerEvent *event) = 0;
     virtual void continuePrimaryAction(KoPointerEvent *event) = 0;
     virtual bool endPrimaryAction(KoPointerEvent *event) = 0;

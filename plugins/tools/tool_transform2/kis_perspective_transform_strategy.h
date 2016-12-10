@@ -52,7 +52,7 @@ public:
     using KisTransformStrategyBase::endPrimaryAction;
 
     bool beginPrimaryAction(const QPointF &pt);
-    void continuePrimaryAction(const QPointF &pt, bool specialModifierActve);
+    void continuePrimaryAction(const QPointF &pt, bool shiftModifierActve, bool altModifierActive);
     bool endPrimaryAction();
 
 Q_SIGNALS:

@@ -406,9 +406,10 @@ QVector<QPointF*> KisWarpTransformStrategy::Private::getSelectedPoints(QPointF *
     return selectedPoints;
 }
 
-void KisWarpTransformStrategy::continuePrimaryAction(const QPointF &pt, bool specialModifierActve)
+void KisWarpTransformStrategy::continuePrimaryAction(const QPointF &pt, bool shiftModifierActve, bool altModifierActive)
 {
-    Q_UNUSED(specialModifierActve);
+    Q_UNUSED(shiftModifierActve);
+    Q_UNUSED(altModifierActive);
 
     // toplevel code switches to HOVER mode if nothing is selected
     KIS_ASSERT_RECOVER_RETURN(m_d->mode == Private::MOVE_MODE ||

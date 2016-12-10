@@ -37,6 +37,7 @@ struct KisSimplifiedActionPolicyStrategy::Private
     bool changeSizeModifierActive;
     bool anyPickerModifierActive;
     QPointF dragOffset;
+    QPointF lastImagePos;
 };
 
 
@@ -76,7 +77,10 @@ bool KisSimplifiedActionPolicyStrategy::beginPrimaryAction(KoPointerEvent *event
         m_d->snapGuide->snap(event->point, m_d->dragOffset, event->modifiers()) :
         event->point;
 
-    return beginPrimaryAction(m_d->converter->documentToImage(pos));
+    QPointF imagePos = m_d->converter->documentToImage(pos);
+    m_d->lastImagePos = imagePos;
+
+    return beginPrimaryAction(imagePos);
 }
 
 void KisSimplifiedActionPolicyStrategy::continuePrimaryAction(KoPointerEvent *event)
@@ -94,24 +98,38 @@ void KisSimplifiedActionPolicyStrategy::continuePrimaryAction(KoPointerEvent *ev
      * See bug 340496
      */
     const bool shiftIsActive = event->modifiers() & Qt::ShiftModifier;
+    const bool altIsActive = event->modifiers() & Qt::AltModifier;
 
     const QPointF pos =
         m_d->snapGuide ?
         m_d->snapGuide->snap(event->point, m_d->dragOffset, event->modifiers()) :
         event->point;
 
-    return continuePrimaryAction(m_d->converter->documentToImage(pos), shiftIsActive);
+    QPointF imagePos = m_d->converter->documentToImage(pos);
+    m_d->lastImagePos = imagePos;
+
+    return continuePrimaryAction(imagePos, shiftIsActive, altIsActive);
 }
 
 void KisSimplifiedActionPolicyStrategy::hoverActionCommon(KoPointerEvent *event)
 {
-    hoverActionCommon(m_d->converter->documentToImage(event->point));
+    QPointF imagePos = m_d->converter->documentToImage(event->point);
+    m_d->lastImagePos = imagePos;
+
+    hoverActionCommon(imagePos);
 }
 
 bool KisSimplifiedActionPolicyStrategy::endPrimaryAction(KoPointerEvent *event)
 {
-    Q_UNUSED(event);
+    QPointF imagePos = m_d->converter->documentToImage(event->point);
+    m_d->lastImagePos = imagePos;
+
     return endPrimaryAction();
+}
+
+void KisSimplifiedActionPolicyStrategy::activatePrimaryAction()
+{
+    setTransformFunction(m_d->lastImagePos, m_d->anyPickerModifierActive);
 }
 
 void KisSimplifiedActionPolicyStrategy::activateAlternateAction(KisTool::AlternateAction action)
@@ -123,6 +141,8 @@ void KisSimplifiedActionPolicyStrategy::activateAlternateAction(KisTool::Alterna
 
         m_d->anyPickerModifierActive = true;
     }
+
+    setTransformFunction(m_d->lastImagePos, m_d->anyPickerModifierActive);
 }
 
 void KisSimplifiedActionPolicyStrategy::deactivateAlternateAction(KisTool::AlternateAction action)
@@ -142,7 +162,10 @@ bool KisSimplifiedActionPolicyStrategy::beginAlternateAction(KoPointerEvent *eve
 
     if (!m_d->changeSizeModifierActive && !m_d->anyPickerModifierActive) return false;
 
-    return beginPrimaryAction(m_d->converter->documentToImage(event->point));
+    QPointF imagePos = m_d->converter->documentToImage(event->point);
+    m_d->lastImagePos = imagePos;
+
+    return beginPrimaryAction(imagePos);
 }
 
 void KisSimplifiedActionPolicyStrategy::continueAlternateAction(KoPointerEvent *event, KisTool::AlternateAction action)
@@ -150,16 +173,22 @@ void KisSimplifiedActionPolicyStrategy::continueAlternateAction(KoPointerEvent *
     Q_UNUSED(action);
 
     if (!m_d->changeSizeModifierActive && !m_d->anyPickerModifierActive) return;
+    const bool altIsActive = event->modifiers() & Qt::AltModifier;
 
-    continuePrimaryAction(m_d->converter->documentToImage(event->point), m_d->changeSizeModifierActive);
+    QPointF imagePos = m_d->converter->documentToImage(event->point);
+    m_d->lastImagePos = imagePos;
+
+    continuePrimaryAction(imagePos, m_d->changeSizeModifierActive, altIsActive);
 }
 
 bool KisSimplifiedActionPolicyStrategy::endAlternateAction(KoPointerEvent *event, KisTool::AlternateAction action)
 {
-    Q_UNUSED(event);
     Q_UNUSED(action);
 
     if (!m_d->changeSizeModifierActive && !m_d->anyPickerModifierActive) return false;
+
+    QPointF imagePos = m_d->converter->documentToImage(event->point);
+    m_d->lastImagePos = imagePos;
 
     return endPrimaryAction();
 }

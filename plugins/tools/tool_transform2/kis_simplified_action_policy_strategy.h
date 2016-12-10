@@ -34,6 +34,8 @@ public:
     KisSimplifiedActionPolicyStrategy(const KisCoordinatesConverter *_converter, KoSnapGuide *snapGuide = 0);
     ~KisSimplifiedActionPolicyStrategy();
 
+    void activatePrimaryAction();
+
     virtual bool beginPrimaryAction(KoPointerEvent *event);
     virtual void continuePrimaryAction(KoPointerEvent *event);
     virtual bool endPrimaryAction(KoPointerEvent *event);
@@ -53,7 +55,7 @@ protected:
     virtual void setTransformFunction(const QPointF &mousePos, bool perspectiveModifierActive) = 0;
 
     virtual bool beginPrimaryAction(const QPointF &pt) = 0;
-    virtual void continuePrimaryAction(const QPointF &pt, bool specialModifierActve) = 0;
+    virtual void continuePrimaryAction(const QPointF &pt, bool shiftModifierActve, bool altModifierActive) = 0;
     virtual bool endPrimaryAction() = 0;
     virtual void hoverActionCommon(const QPointF &pt);
 

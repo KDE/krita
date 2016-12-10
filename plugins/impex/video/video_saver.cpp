@@ -208,7 +208,7 @@ bool VideoSaver::hasFFMpeg() const
 KisImageBuilder_Result VideoSaver::encode(const QString &filename, KisPropertiesConfigurationSP configuration)
 {
 
-    dbgFile << "ffmpeg" << m_ffmpegPath << "filename" << filename << "configuration" << configuration->toXML();
+    qDebug() << "ffmpeg" << m_ffmpegPath << "filename" << filename << "configuration" << configuration->toXML();
 
     if (m_ffmpegPath.isEmpty()) {
         m_ffmpegPath = configuration->getString("ffmpeg_path");
@@ -226,7 +226,13 @@ KisImageBuilder_Result VideoSaver::encode(const QString &filename, KisProperties
 
     const QDir framesDir(configuration->getString("directory"));
 
-    const QString resultFile = framesDir.absolutePath() + "/" + filename;
+    QString resultFile;
+    if (QFileInfo(filename).isAbsolute()) {
+        resultFile = filename;
+    }
+    else {
+        resultFile = framesDir.absolutePath() + "/" + filename;
+    }
     const QFileInfo info(resultFile);
     const QString suffix = info.suffix().toLower();
 

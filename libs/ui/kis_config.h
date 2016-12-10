@@ -288,6 +288,9 @@ public:
     bool showDockerTitleBars(bool defaultValue = false) const;
     void setShowDockerTitleBars(const bool value) const;
 
+    bool showDockers(bool defaultValue = false) const;
+    void setShowDockers(const bool value) const;
+
     bool showStatusBar(bool defaultValue = false) const;
     void setShowStatusBar(const bool value) const;
 

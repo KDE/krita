@@ -1084,9 +1084,18 @@ void KisViewManager::switchCanvasOnly(bool toggled)
 
     if (cfg.hideDockersFullscreen()) {
         KisAction* action = qobject_cast<KisAction*>(main->actionCollection()->action("view_toggledockers"));
-        action->setCheckable(true);
-        if (action && action->isChecked() == toggled) {
-            action->setChecked(!toggled);
+        if (action) {
+            action->setCheckable(true);
+            if (toggled) {
+                if (action->isChecked()) {
+                    cfg.setShowDockers(action->isChecked());
+                    action->setChecked(false);
+                } else {
+                    cfg.setShowDockers(false);
+                }
+            } else {
+                action->setChecked(cfg.showDockers());
+            }
         }
     }
 

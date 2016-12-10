@@ -1086,6 +1086,16 @@ void KisConfig::setShowDockerTitleBars(const bool value) const
     m_cfg.writeEntry("showDockerTitleBars", value);
 }
 
+bool KisConfig::showDockers(bool defaultValue) const
+{
+    return (defaultValue ? true : m_cfg.readEntry("showDockers", true));
+}
+
+void KisConfig::setShowDockers(const bool value) const
+{
+    m_cfg.writeEntry("showDockers", value);
+}
+
 bool KisConfig::showStatusBar(bool defaultValue) const
 {
     return (defaultValue ? true : m_cfg.readEntry("showStatusBar", true));

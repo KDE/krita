@@ -2261,6 +2261,7 @@ void KisMainWindow::applyDefaultSettings(QPrinter &printer) {
 void KisMainWindow::createActions()
 {
     KisActionManager *actionManager = d->actionManager();
+    KisConfig cfg;
 
     actionManager->createStandardAction(KStandardAction::New, this, SLOT(slotFileNew()));
     actionManager->createStandardAction(KStandardAction::Open, this, SLOT(slotFileOpen()));
@@ -2323,14 +2324,12 @@ void KisMainWindow::createActions()
 
 
     d->toggleDockers = actionManager->createAction("view_toggledockers");
+    cfg.showDockers(true);
     d->toggleDockers->setChecked(true);
     connect(d->toggleDockers, SIGNAL(toggled(bool)), SLOT(toggleDockersVisibility(bool)));
 
     d->toggleDockerTitleBars = actionManager->createAction("view_toggledockertitlebars");
-    {
-        KisConfig cfg;
-        d->toggleDockerTitleBars->setChecked(cfg.showDockerTitleBars());
-    }
+    d->toggleDockerTitleBars->setChecked(cfg.showDockerTitleBars());
     connect(d->toggleDockerTitleBars, SIGNAL(toggled(bool)), SLOT(showDockerTitleBars(bool)));
 
     actionCollection()->addAction("settings_dockers_menu", d->dockWidgetMenu);

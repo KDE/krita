@@ -326,8 +326,7 @@ void KisToolTransformConfigWidget::slotUpdateIcons()
     middleBottomButton->setIcon(KisIconUtils::loadIcon("arrow-down"));
     bottomRightButton->setIcon(KisIconUtils::loadIcon("arrow-downright"));
 
-    // TODO: change the icon!
-    btnTransformAroundPivotPoint->setIcon(KisIconUtils::loadIcon("transform_icons_liquify_main"));
+    btnTransformAroundPivotPoint->setIcon(KisIconUtils::loadIcon("pivot-point"));
 
 
     // pressure icons

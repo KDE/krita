@@ -70,6 +70,7 @@
 #include <KoPluginLoader.h>
 #include <KoDocumentInfo.h>
 #include <KoGlobal.h>
+#include <KoColorSpaceRegistry.h>
 
 #include "input/kis_input_manager.h"
 #include "canvas/kis_canvas2.h"
@@ -120,17 +121,17 @@
 #include <kis_undo_adapter.h>
 #include "KisView.h"
 #include "kis_zoom_manager.h"
-#include "kra/kis_kra_loader.h"
 #include "widgets/kis_floating_message.h"
 #include "kis_signal_auto_connection.h"
 #include "kis_icon_utils.h"
 #include "kis_guides_manager.h"
 #include "kis_derived_resources.h"
+#include "dialogs/kis_delayed_save_dialog.h"
 
 
 class BlockingUserInputEventFilter : public QObject
 {
-    bool eventFilter(QObject *watched, QEvent *event)
+    bool eventFilter(QObject *watched, QEvent *event) override
     {
         Q_UNUSED(watched);
         if(dynamic_cast<QWheelEvent*>(event)
@@ -149,7 +150,7 @@ class KisViewManager::KisViewManagerPrivate
 
 public:
 
-    KisViewManagerPrivate(KisViewManager *_q, QWidget *_q_parent)
+    KisViewManagerPrivate(KisViewManager *_q, KActionCollection *_actionCollection, QWidget *_q_parent)
         : filterManager(_q)
         , createTemplate(0)
         , saveIncremental(0)
@@ -173,13 +174,14 @@ public:
         , gridManager(_q)
         , canvasControlsManager(_q)
         , paintingAssistantsManager(_q)
-        , actionManager(_q)
+        , actionManager(_q, _actionCollection)
         , mainWindow(0)
         , showFloatingMessage(true)
         , currentImageView(0)
         , canvasResourceProvider(_q)
         , canvasResourceManager()
         , guiUpdateCompressor(30, KisSignalCompressor::POSTPONE, _q)
+        , actionCollection(_actionCollection)
         , mirrorManager(_q)
         , inputManager(_q)
         , actionAuthor(0)
@@ -241,11 +243,13 @@ public:
     KSelectAction *actionAuthor; // Select action for author profile.
 
     QByteArray canvasState;
+
+    bool blockUntillOperationsFinishedImpl(KisImageSP image, bool force);
 };
 
 
 KisViewManager::KisViewManager(QWidget *parent, KActionCollection *_actionCollection)
-    : d(new KisViewManagerPrivate(this, parent))
+    : d(new KisViewManagerPrivate(this, _actionCollection, parent))
 {
     d->actionCollection = _actionCollection;
     d->mainWindow = dynamic_cast<QMainWindow*>(parent);
@@ -297,7 +301,11 @@ KisViewManager::~KisViewManager()
     KisConfig cfg;
     if (resourceProvider() && resourceProvider()->currentPreset()) {
         cfg.writeEntry("LastPreset", resourceProvider()->currentPreset()->name());
+        cfg.writeKoColor("LastForeGroundColor",resourceProvider()->fgColor());
+        cfg.writeKoColor("LastBackGroundColor",resourceProvider()->bgColor());
+
     }
+
     cfg.writeEntry("baseLength", KoResourceItemChooserSync::instance()->baseLength());
 
     delete d;
@@ -342,7 +350,7 @@ void KisViewManager::setCurrentView(KisView *view)
         d->viewConnections.clear();
     }
 
-    // Restore the last used brush preset
+    // Restore the last used brush preset, color and background color.
     if (first) {
         KisConfig cfg;
         KisPaintOpPresetResourceServer * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
@@ -358,6 +366,12 @@ void KisViewManager::setCurrentView(KisView *view)
         if (preset) {
             paintOpBox()->restoreResource(preset.data());
         }
+
+        const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
+        KoColor foreground(Qt::black, cs);
+        d->canvasResourceProvider.setFGColor(cfg.readKoColor("LastForeGroundColor",foreground));
+        KoColor background(Qt::white, cs);
+        d->canvasResourceProvider.setBGColor(cfg.readKoColor("LastBackGroundColor",background));
 
     }
 
@@ -397,7 +411,7 @@ void KisViewManager::setCurrentView(KisView *view)
 
         imageView->zoomManager()->setShowRulers(d->showRulersAction->isChecked());
         imageView->zoomManager()->setRulersTrackMouse(d->rulersTrackMouseAction->isChecked());
-
+        
         showHideScrollbars();
     }
 
@@ -733,6 +747,26 @@ int KisViewManager::viewCount() const
     return 0;
 }
 
+bool KisViewManager::KisViewManagerPrivate::blockUntillOperationsFinishedImpl(KisImageSP image, bool force)
+{
+    const int busyWaitDelay = 1000;
+    KisDelayedSaveDialog dialog(image, !force ? KisDelayedSaveDialog::GeneralDialog : KisDelayedSaveDialog::ForcedDialog, busyWaitDelay, mainWindow);
+    dialog.blockIfImageIsBusy();
+
+    return dialog.result() == QDialog::Accepted;
+}
+
+
+bool KisViewManager::blockUntillOperationsFinished(KisImageSP image)
+{
+    return d->blockUntillOperationsFinishedImpl(image, false);
+}
+
+void KisViewManager::blockUntillOperationsFinishedForced(KisImageSP image)
+{
+    d->blockUntillOperationsFinishedImpl(image, true);
+}
+
 void KisViewManager::slotCreateTemplate()
 {
     if (!document()) return;
@@ -1049,9 +1083,18 @@ void KisViewManager::switchCanvasOnly(bool toggled)
 
     if (cfg.hideDockersFullscreen()) {
         KisAction* action = qobject_cast<KisAction*>(main->actionCollection()->action("view_toggledockers"));
-        action->setCheckable(true);
-        if (action && action->isChecked() == toggled) {
-            action->setChecked(!toggled);
+        if (action) {
+            action->setCheckable(true);
+            if (toggled) {
+                if (action->isChecked()) {
+                    cfg.setShowDockers(action->isChecked());
+                    action->setChecked(false);
+                } else {
+                    cfg.setShowDockers(false);
+                }
+            } else {
+                action->setChecked(cfg.showDockers());
+            }
         }
     }
 
@@ -1250,5 +1293,3 @@ void KisViewManager::slotUpdateAuthorProfileActions()
         d->actionAuthor->setCurrentItem(0);
     }
 }
-
-

@@ -38,7 +38,6 @@ KisFigurePaintingToolHelper::KisFigurePaintingToolHelper(const KUndo2MagicString
     m_resources =
         new KisResourcesSnapshot(image,
                                  currentNode,
-                                 image->postExecutionUndoAdapter(),
                                  resourceManager);
 
     m_resources->setStrokeStyle(strokeStyle);
@@ -135,7 +134,7 @@ void KisFigurePaintingToolHelper::setBrush(const KisPaintOpPresetSP &brush)
 
 void KisFigurePaintingToolHelper::paintPainterPathQPen(const QPainterPath path, const QPen &pen, const KoColor &color)
 {
-        m_strokesFacade->addJob(m_strokeId,
+    m_strokesFacade->addJob(m_strokeId,
         new FreehandStrokeStrategy::Data(m_resources->currentNode(),
                                          0,
                                          FreehandStrokeStrategy::Data::QPAINTER_PATH,
@@ -145,8 +144,8 @@ void KisFigurePaintingToolHelper::paintPainterPathQPen(const QPainterPath path, 
 void KisFigurePaintingToolHelper::paintPainterPathQPenFill(const QPainterPath path, const QPen &pen, const KoColor &color)
 {
     m_strokesFacade->addJob(m_strokeId,
-    new FreehandStrokeStrategy::Data(m_resources->currentNode(),
-                                     0,
-                                     FreehandStrokeStrategy::Data::QPAINTER_PATH_FILL,
-                                    path, pen, color));
+        new FreehandStrokeStrategy::Data(m_resources->currentNode(),
+                                         0,
+                                         FreehandStrokeStrategy::Data::QPAINTER_PATH_FILL,
+                                         path, pen, color));
 }

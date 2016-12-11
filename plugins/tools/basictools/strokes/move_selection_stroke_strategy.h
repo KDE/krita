@@ -32,7 +32,7 @@ public:
     MoveSelectionStrokeStrategy(KisPaintLayerSP paintLayer,
                                 KisSelectionSP selection,
                                 KisUpdatesFacade *updatesFacade,
-                                KisPostExecutionUndoAdapter *undoAdapter);
+                                KisStrokeUndoFacade *undoFacade);
 
     void initStrokeCallback();
     void finishStrokeCallback();
@@ -40,9 +40,8 @@ public:
     void doStrokeCallback(KisStrokeJobData *data);
 
 private:
-    MoveSelectionStrokeStrategy(const MoveSelectionStrokeStrategy &rhs, bool suppressUndo);
+    MoveSelectionStrokeStrategy(const MoveSelectionStrokeStrategy &rhs);
 
-    void setUndoEnabled(bool value);
     KisStrokeStrategy* createLodClone(int levelOfDetail);
 
 private:
@@ -51,7 +50,6 @@ private:
     KisUpdatesFacade *m_updatesFacade;
     QPoint m_finalOffset;
     QPoint m_initialDeviceOffset;
-    bool m_undoEnabled;
 };
 
 #endif /* __MOVE_SELECTION_STROKE_STRATEGY_H */

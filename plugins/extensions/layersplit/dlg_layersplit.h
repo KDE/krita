@@ -55,9 +55,9 @@ private Q_SLOTS:
     void slotSetPalette(KoColorSet *pal);
 
 private:
-    WdgLayerSplit* m_page;
-    KisColorsetChooser *m_colorSetChooser;
-    KoColorSet *m_palette;
+    WdgLayerSplit *m_page {0};
+    KisColorsetChooser *m_colorSetChooser {0};
+    KoColorSet *m_palette {0};
 };
 
 #endif // DLG_LAYERSPLIT

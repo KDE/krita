@@ -414,8 +414,10 @@ bool QWindowsWinTab32DLL::init()
     if (wTInfo)
         return true;
     QLibrary library(QStringLiteral("wintab32"));
-    if (!library.load())
+    if (!library.load()) {
+        qWarning() << "Could not load wintab32 dll";
         return false;
+    }
     wTOpen         = (PtrWTOpen)         library.resolve("WTOpenW");
     wTClose        = (PtrWTClose)        library.resolve("WTClose");
     wTInfo         = (PtrWTInfo)         library.resolve("WTInfoW");
@@ -425,7 +427,20 @@ bool QWindowsWinTab32DLL::init()
     wTGet          = (PtrWTGet)          library.resolve("WTGetW");
     wTQueueSizeGet = (PtrWTQueueSizeGet) library.resolve("WTQueueSizeGet");
     wTQueueSizeSet = (PtrWTQueueSizeSet) library.resolve("WTQueueSizeSet");
-    return wTOpen && wTClose && wTInfo && wTEnable && wTOverlap && wTPacketsGet && wTQueueSizeGet && wTQueueSizeSet;
+
+    if (wTOpen && wTClose && wTInfo && wTEnable && wTOverlap && wTPacketsGet && wTQueueSizeGet && wTQueueSizeSet) {
+        return true;
+    }
+    qWarning() << "Could not resolve the following symbols:\n"
+               << "\t wTOpen" << wTOpen << "\n"
+               << "\t wtClose" << wTClose << "\n"
+               << "\t wtInfo" << wTInfo << "\n"
+               << "\t wTEnable" << wTEnable << "\n"
+               << "\t wTOverlap" << wTOverlap << "\n"
+               << "\t wTPacketsGet" << wTPacketsGet << "\n"
+               << "\t wTQueueSizeGet" << wTQueueSizeGet << "\n"
+               << "\t wTQueueSizeSet" << wTQueueSizeSet << "\n";
+    return false;
 }
 
 

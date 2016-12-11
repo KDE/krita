@@ -38,13 +38,13 @@ public:
         setSourceModel(model);
     }
 
-    virtual int columnCount(const QModelIndex &parent = QModelIndex()) const
+    int columnCount(const QModelIndex &parent = QModelIndex()) const override
     {
         Q_UNUSED(parent);
         return 1; // We have one column with "Name of section"
     }
 
-    virtual QVariant headerData(int section, Qt::Orientation orientation, int role) const
+    QVariant headerData(int section, Qt::Orientation orientation, int role) const override
     {
         if (orientation != Qt::Horizontal || section != 0) {
             return QVariant();
@@ -56,7 +56,7 @@ public:
         return QVariant();
     }
 
-    virtual QVariant data(const QModelIndex &proxyIndex, int role = Qt::DisplayRole) const
+    QVariant data(const QModelIndex &proxyIndex, int role = Qt::DisplayRole) const override
     {
         if (!proxyIndex.isValid() || proxyIndex.column() != 0) {
             return QVariant();
@@ -79,7 +79,7 @@ public:
 
 private:
     // Make it private. It is intented to be used only with KoSectionModel that is passed through constructor
-    virtual void setSourceModel(QAbstractItemModel *sourceModel)
+    void setSourceModel(QAbstractItemModel *sourceModel) override
     {
         QAbstractProxyModel::setSourceModel(sourceModel);
     }
@@ -95,7 +95,7 @@ public:
     {
     }
 
-    virtual State validate(QString &input, int &pos) const
+    State validate(QString &input, int &pos) const override
     {
         Q_UNUSED(pos);
         if (m_section->name() == input || m_sectionModel->isValidNewName(input)) {

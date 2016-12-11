@@ -60,12 +60,21 @@ public:
     KoResourceItemChooser *itemChooser();
     void setPresetFilter(const QString& paintOpId);
 
+    /// get the base size for the icons. Used by the slider in the view options
+    int iconSize();
+
 Q_SIGNALS:
     void resourceSelected(KoResource *resource);
     void resourceClicked(KoResource *resource);
 
 public Q_SLOTS:
     void updateViewSettings();
+
+    /// sets the icon size. Used by slider in view menu
+    void setIconSize(int newSize);
+
+    /// saves the icon size for the presets. called by the horizontal slider release event.
+    void saveIconSize();
 
 private Q_SLOTS:
     void notifyConfigChanged();

@@ -212,8 +212,7 @@ void KisToolLine::updateStroke()
     m_helper->repaintLine(canvas()->resourceManager(),
                           image(),
                           currentNode(),
-                          image().data(),
-                          image()->postExecutionUndoAdapter());
+                          image().data());
 }
 
 void KisToolLine::continuePrimaryAction(KoPointerEvent *event)

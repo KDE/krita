@@ -61,7 +61,7 @@ KisSpecificColorSelectorWidget::KisSpecificColorSelectorWidget(QWidget* parent)
     m_chkShowColorSpaceSelector = new QCheckBox(i18n("Show Colorspace Selector"), this);
     connect(m_chkShowColorSpaceSelector, SIGNAL(toggled(bool)), m_colorspaceSelector, SLOT(setVisible(bool)));
 
-    KConfigGroup cfg =  KSharedConfig::openConfig()->group("");
+    KConfigGroup cfg =  KSharedConfig::openConfig()->group(QString());
     m_chkShowColorSpaceSelector->setChecked(cfg.readEntry("SpecificColorSelector/ShowColorSpaceSelector", true));
 
     m_colorspaceSelector->setVisible(m_chkShowColorSpaceSelector->isChecked());
@@ -76,7 +76,7 @@ KisSpecificColorSelectorWidget::KisSpecificColorSelectorWidget(QWidget* parent)
 
 KisSpecificColorSelectorWidget::~KisSpecificColorSelectorWidget()
 {
-    KConfigGroup cfg =  KSharedConfig::openConfig()->group("");
+    KConfigGroup cfg =  KSharedConfig::openConfig()->group(QString());
     cfg.writeEntry("SpecificColorSelector/ShowColorSpaceSelector", m_chkShowColorSpaceSelector->isChecked());
 }
 

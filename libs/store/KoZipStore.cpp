@@ -89,7 +89,7 @@ KoZipStore::~KoZipStore()
     delete m_pZip;
 
     // When writing, we write to a temp file that then gets copied over the original filename
-    if (d->mode == Write) {
+    if (d->mode == Write && (!d->localFileName.isEmpty() && !d->url.isEmpty())) {
         QFile f(d->localFileName);
         if (f.copy(d->url.toLocalFile())) {
             f.remove();

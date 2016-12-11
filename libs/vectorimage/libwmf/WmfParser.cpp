@@ -46,6 +46,7 @@
 namespace Libwmf
 {
 
+#if defined(DEBUG_RECORDS)
 // Used for debugging of records
 static const struct KoWmfFunc {
     const char *name;
@@ -164,7 +165,7 @@ static const struct KoWmfFunc {
     { "createBitmap" }, // 110 0xfe
     { "createRegion" } // 111 0xff
 };
-
+#endif
 
 WmfParser::WmfParser()
 {
@@ -423,8 +424,8 @@ bool WmfParser::play(WmfAbstractBackend* backend)
             if (index > 0x5F) {
                 index -= 0x90;
             }
-            
-#if DEBUG_RECORDS
+
+#if defined(DEBUG_RECORDS)
             debugVectorImage << "Record = " << koWmfFunc[ index ].name
                           << " (" << hex << recordType
                           << ", index" << dec << index << ")";

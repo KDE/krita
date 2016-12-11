@@ -238,7 +238,7 @@ KoShape * KoShapeRegistry::createShapeFromOdf(const KoXmlElement & e, KoShapeLoa
                         // in any way, so we disable the tools of the shape. This can
                         // be done in a hacky way (courtesy of Jaham) by setting its
                         // shapeID to "".
-                        childShape->setShapeId("");
+                        childShape->setShapeId(QString());
                         break;
                     }
                 }

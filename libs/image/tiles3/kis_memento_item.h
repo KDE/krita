@@ -145,7 +145,7 @@ public:
 
     inline KisTileSP tile(KisMementoManager *mm) {
         Q_ASSERT(m_tileData);
-        return new KisTile(m_col, m_row, m_tileData, mm);
+        return KisTileSP(new KisTile(m_col, m_row, m_tileData, mm));
     }
 
     inline enumType type() {

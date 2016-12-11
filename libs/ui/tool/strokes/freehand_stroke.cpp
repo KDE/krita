@@ -132,7 +132,7 @@ void FreehandStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
         info->painter->setBackgroundColor(d->customColor);
         info->painter->fillPainterPath(d->path);}
         info->painter->drawPainterPath(d->path, d->pen);    
-
+        break;
     };
 
     QVector<QRect> dirtyRects = info->painter->takeDirtyRegion();
@@ -145,6 +145,5 @@ KisStrokeStrategy* FreehandStrokeStrategy::createLodClone(int levelOfDetail)
     if (!m_d->resources->presetAllowsLod()) return 0;
 
     FreehandStrokeStrategy *clone = new FreehandStrokeStrategy(*this, levelOfDetail);
-    clone->setUndoEnabled(false);
     return clone;
 }

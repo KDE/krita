@@ -178,14 +178,13 @@ void KisToolOptionsPopup::switchDetached(bool show)
 
         if (d->detached) {
             d->ignoreHideEvents = true;
-            parentWidget()->setWindowFlags(Qt::Tool);
+
             if (show) {
                 parentWidget()->show();
             }
             d->ignoreHideEvents = false;
         }
         else {
-            parentWidget()->setWindowFlags(Qt::Popup);
             KisConfig cfg;
             parentWidget()->hide();
         }

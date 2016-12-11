@@ -51,7 +51,7 @@ public:
         const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
         QList<KoGradientStop> stops;
 
-        KoStopGradient* gradient = new KoStopGradient("");
+        KoStopGradient* gradient = new KoStopGradient();
         gradient->setType(QGradient::LinearGradient);
         gradient->setName("Foreground to Transparent");
         stops << KoGradientStop(0.0, KoColor(Qt::black, cs)) << KoGradientStop(1.0, KoColor(QColor(0, 0, 0, 0), cs));
@@ -62,7 +62,7 @@ public:
         addResource(gradient, false, true);
         m_foregroundToTransparent = gradient;
 
-        gradient = new KoStopGradient("");
+        gradient = new KoStopGradient();
         gradient->setType(QGradient::LinearGradient);
         gradient->setName("Foreground to Background");
 
@@ -80,7 +80,7 @@ private:
 
     friend class KoResourceBundle;
 
-    virtual KoAbstractGradient* createResource( const QString & filename ) {
+    KoAbstractGradient* createResource( const QString & filename ) override {
 
         QString fileExtension;
         int index = filename.lastIndexOf('.');
@@ -98,7 +98,7 @@ private:
         return grad;
     }
 
-    virtual QList< KoAbstractGradient* > sortedResources() {
+    QList< KoAbstractGradient* > sortedResources() override {
         QList< KoAbstractGradient* > resources = KoResourceServer<KoAbstractGradient>::sortedResources();
         QList< KoAbstractGradient* > sorted;
         if (m_foregroundToTransparent && resources.contains(m_foregroundToTransparent)) {
@@ -190,7 +190,7 @@ KoResourceServerProvider::KoResourceServerProvider() : d(new Private)
 //        d->gradientThread->barrier();
 //    }
 
-    d->paletteServer = new KoResourceServerSimpleConstruction<KoColorSet>("ko_palettes", "*.gpl:*.pal:*.act:*.aco:*.css:*.colors");
+    d->paletteServer = new KoResourceServerSimpleConstruction<KoColorSet>("ko_palettes", "*.gpl:*.pal:*.act:*.aco:*.css:*.colors;*.xml");
     if (!QFileInfo(d->paletteServer->saveLocation()).exists()) {
         QDir().mkpath(d->paletteServer->saveLocation());
     }

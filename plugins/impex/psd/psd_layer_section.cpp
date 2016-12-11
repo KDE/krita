@@ -369,7 +369,7 @@ KisNodeSP findOnlyTransparencyMask(KisNodeSP node, FlattenedNode::Type type)
         return 0;
     }
 
-    KisLayer *layer = dynamic_cast<KisLayer*>(node.data());
+    KisLayer *layer = qobject_cast<KisLayer*>(node.data());
     QList<KisEffectMaskSP> masks = layer->effectMasks();
 
     if (masks.size() != 1) return 0;

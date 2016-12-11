@@ -20,8 +20,6 @@
 #include <kpluginfactory.h>
 #include <QFileInfo>
 
-#include <KisFilterChain.h>
-
 #include <KisDocument.h>
 #include <kis_image.h>
 
@@ -37,61 +35,41 @@ OraImport::~OraImport()
 {
 }
 
-KisImportExportFilter::ConversionStatus OraImport::convert(const QByteArray&, const QByteArray& to, KisPropertiesConfigurationSP configuration)
+KisImportExportFilter::ConversionStatus OraImport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
 {
-    dbgFile << "Importing using ORAImport!";
+    OraConverter oraConverter(document);
 
-    if (to != "application/x-krita")
+
+    switch (oraConverter.buildImage(io)) {
+    case KisImageBuilder_RESULT_UNSUPPORTED:
+        return KisImportExportFilter::NotImplemented;
+        break;
+    case KisImageBuilder_RESULT_INVALID_ARG:
         return KisImportExportFilter::BadMimeType;
-
-    KisDocument * doc = outputDocument();
-
-    if (!doc)
-        return KisImportExportFilter::NoDocumentCreated;
-
-    QString filename = inputFile();
-
-    doc->prepareForImport();
-
-    if (!filename.isEmpty()) {
-
-        if (!QFileInfo(filename).exists()) {
-            return KisImportExportFilter::FileNotFound;
+        break;
+    case KisImageBuilder_RESULT_NO_URI:
+    case KisImageBuilder_RESULT_NOT_LOCAL:
+        return KisImportExportFilter::FileNotFound;
+        break;
+    case KisImageBuilder_RESULT_BAD_FETCH:
+    case KisImageBuilder_RESULT_EMPTY:
+        return KisImportExportFilter::ParsingError;
+        break;
+    case KisImageBuilder_RESULT_FAILURE:
+        return KisImportExportFilter::InternalError;
+        break;
+    case KisImageBuilder_RESULT_OK:
+        document->setCurrentImage(oraConverter.image());
+        if (oraConverter.activeNodes().size() > 0) {
+            document->setPreActivatedNode(oraConverter.activeNodes()[0]);
         }
-
-        OraConverter ib(doc);
-
-
-        switch (ib.buildImage(filename)) {
-        case KisImageBuilder_RESULT_UNSUPPORTED:
-            return KisImportExportFilter::NotImplemented;
-            break;
-        case KisImageBuilder_RESULT_INVALID_ARG:
-            return KisImportExportFilter::BadMimeType;
-            break;
-        case KisImageBuilder_RESULT_NO_URI:
-        case KisImageBuilder_RESULT_NOT_LOCAL:
-            return KisImportExportFilter::FileNotFound;
-            break;
-        case KisImageBuilder_RESULT_BAD_FETCH:
-        case KisImageBuilder_RESULT_EMPTY:
-            return KisImportExportFilter::ParsingError;
-            break;
-        case KisImageBuilder_RESULT_FAILURE:
-            return KisImportExportFilter::InternalError;
-            break;
-        case KisImageBuilder_RESULT_OK:
-            doc->setCurrentImage(ib.image());
-            if (ib.activeNodes().size() > 0) {
-                doc->setPreActivatedNode(ib.activeNodes()[0]);
-            }
-            return KisImportExportFilter::OK;
-        default:
-            break;
-        }
-
+        return KisImportExportFilter::OK;
+    default:
+        break;
     }
-    return KisImportExportFilter::StorageCreationError;
+
+
+    return KisImportExportFilter::InternalError;
 }
 
 #include <ora_import.moc>

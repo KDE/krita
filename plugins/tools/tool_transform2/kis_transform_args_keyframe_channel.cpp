@@ -29,7 +29,19 @@ struct KisTransformArgsKeyframe : public KisKeyframe
         , args(args)
     {}
 
+    KisTransformArgsKeyframe(const KisTransformArgsKeyframe *rhs, KisKeyframeChannel *channel)
+        : KisKeyframe(rhs, channel)
+        , args(rhs->args)
+    {}
+
     ToolTransformArgs args;
+
+    KisKeyframeSP cloneFor(KisKeyframeChannel *channel) const
+    {
+        KisTransformArgsKeyframeChannel *argsChannel = dynamic_cast<KisTransformArgsKeyframeChannel*>(channel);
+        Q_ASSERT(argsChannel);
+        return toQShared(new KisTransformArgsKeyframe(this, channel));
+    }
 };
 
 KisTransformArgsKeyframeChannel::AddKeyframeCommand::AddKeyframeCommand(KisTransformArgsKeyframeChannel *channel, int time, const ToolTransformArgs &args, KUndo2Command *parentCommand)
@@ -59,6 +71,7 @@ bool KisTransformArgsKeyframeChannel::hasScalarValue() const
 
 KisKeyframeSP KisTransformArgsKeyframeChannel::createKeyframe(int time, const KisKeyframeSP copySrc, KUndo2Command *parentCommand)
 {
+    Q_UNUSED(parentCommand);
     KisTransformArgsKeyframe *srcKey = dynamic_cast<KisTransformArgsKeyframe*>(copySrc.data());
     KisTransformArgsKeyframe *newKey;
 
@@ -75,10 +88,15 @@ void KisTransformArgsKeyframeChannel::destroyKeyframe(KisKeyframeSP, KUndo2Comma
 {}
 
 void KisTransformArgsKeyframeChannel::uploadExternalKeyframe(KisKeyframeChannel *srcChannel, int srcTime, KisKeyframeSP dstFrame)
-{}
+{
+    Q_UNUSED(srcChannel);
+    Q_UNUSED(srcTime);
+    Q_UNUSED(dstFrame);
+}
 
 QRect KisTransformArgsKeyframeChannel::affectedRect(KisKeyframeSP key)
 {
+    Q_UNUSED(key);
     // TODO
     return QRect();
 }
@@ -96,6 +114,7 @@ KisKeyframeSP KisTransformArgsKeyframeChannel::loadKeyframe(const QDomElement &k
 
 void KisTransformArgsKeyframeChannel::saveKeyframe(KisKeyframeSP keyframe, QDomElement keyframeElement, const QString &layerFilename)
 {
+    Q_UNUSED(layerFilename);
     KisTransformArgsKeyframe *key = dynamic_cast<KisTransformArgsKeyframe*>(keyframe.data());
     KIS_ASSERT_RECOVER_RETURN(key);
 

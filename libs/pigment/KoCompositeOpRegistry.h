@@ -38,6 +38,8 @@ const QString COMPOSITE_ERASE        = "erase";
 const QString COMPOSITE_IN           = "in";
 const QString COMPOSITE_OUT          = "out";
 const QString COMPOSITE_ALPHA_DARKEN = "alphadarken";
+const QString COMPOSITE_DESTINATION_IN = "destination-in";
+const QString COMPOSITE_DESTINATION_ATOP = "destination-atop";
 
 const QString COMPOSITE_XOR                   = "xor";
 const QString COMPOSITE_PLUS                  = "plus";

@@ -53,11 +53,11 @@ class KisPresetDelegate : public QAbstractItemDelegate
 {
 public:
     KisPresetDelegate(QObject * parent = 0) : QAbstractItemDelegate(parent), m_showText(false), m_useDirtyPresets(false) {}
-    virtual ~KisPresetDelegate() {}
+    ~KisPresetDelegate() override {}
     /// reimplemented
-    virtual void paint(QPainter *, const QStyleOptionViewItem &, const QModelIndex &) const;
+    void paint(QPainter *, const QStyleOptionViewItem &, const QModelIndex &) const override;
     /// reimplemented
-    QSize sizeHint(const QStyleOptionViewItem & option, const QModelIndex &) const {
+    QSize sizeHint(const QStyleOptionViewItem & option, const QModelIndex &) const override {
         return option.decorationSize;
     }
 
@@ -99,7 +99,13 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
         painter->drawImage(paintRect.x(), paintRect.y(),
                            preview.scaled(pixSize, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
-        painter->drawText(pixSize.width() + 10, option.rect.y() + option.rect.height() - 10, preset->name());
+        // Put an asterisk after the preset if it is dirty. This will help in case the pixmap icon is too small
+         QString dirtyPresetIndicator = QString("");
+        if (m_useDirtyPresets && preset->isPresetDirty()) {
+            dirtyPresetIndicator = QString("*");
+        }
+
+        painter->drawText(pixSize.width() + 10, option.rect.y() + option.rect.height() - 10, preset->name().append(dirtyPresetIndicator));
     }
     if (m_useDirtyPresets && preset->isPresetDirty()) {
         const QIcon icon = KisIconUtils::loadIcon(koIconName("dirty-preset"));
@@ -134,9 +140,9 @@ public:
     {
         setSortingEnabled(true);
     }
-    virtual ~KisPresetProxyAdapter() {}
+    ~KisPresetProxyAdapter() override {}
 
-    virtual QList< KoResource* > resources() {
+    QList< KoResource* > resources() override {
 
         QList<KoResource*> serverResources =
             KisPaintOpPresetResourceServerAdapter::resources();
@@ -204,6 +210,8 @@ KisPresetChooser::KisPresetChooser(QWidget *parent, const char *name)
 
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()),
             SLOT(notifyConfigChanged()));
+
+
     notifyConfigChanged();
 }
 
@@ -232,6 +240,8 @@ void KisPresetChooser::notifyConfigChanged()
 {
     KisConfig cfg;
     m_delegate->setUseDirtyPresets(cfg.useDirtyPresets());
+    setIconSize(cfg.presetIconSize() );
+
     updateViewSettings();
 }
 
@@ -243,6 +253,8 @@ void KisPresetChooser::updateViewSettings()
     } else if (m_mode == DETAIL) {
         m_chooser->setSynced(false);
         m_chooser->setColumnCount(1);
+        m_chooser->setColumnWidth(m_chooser->width());
+
         KoResourceItemChooserSync* chooserSync = KoResourceItemChooserSync::instance();
         m_chooser->setRowHeight(chooserSync->baseLength());
         m_delegate->setShowText(true);
@@ -295,6 +307,7 @@ KoResourceItemChooser *KisPresetChooser::itemChooser()
     return m_chooser;
 }
 
+
 void KisPresetChooser::setPresetFilter(const QString& paintOpId)
 {
     KisPresetProxyAdapter *adapter = static_cast<KisPresetProxyAdapter*>(m_adapter.data());
@@ -305,5 +318,25 @@ void KisPresetChooser::setPresetFilter(const QString& paintOpId)
     }
 }
 
+void KisPresetChooser::setIconSize(int newSize)
+{
+    KoResourceItemChooserSync* chooserSync = KoResourceItemChooserSync::instance();
+    chooserSync->setBaseLength(newSize);
+    updateViewSettings();
+}
+
+int KisPresetChooser::iconSize()
+{
+    KoResourceItemChooserSync* chooserSync = KoResourceItemChooserSync::instance();
+
+    return chooserSync->baseLength();
+}
 
 
+
+void KisPresetChooser::saveIconSize()
+{
+    // save icon size
+    KisConfig cfg;
+    cfg.setPresetIconSize(iconSize());
+}

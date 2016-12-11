@@ -62,9 +62,12 @@ KisSelectionBasedLayer::KisSelectionBasedLayer(KisImageWSP image,
         initSelection();
     else
         setInternalSelection(selection);
-
-    m_d->paintDevice = new KisPaintDevice(this, image->colorSpace(), new KisDefaultBounds(image));
-    connect(image.data(), SIGNAL(sigSizeChanged(QPointF,QPointF)), SLOT(slotImageSizeChanged()));
+    KisImageSP imageSP = image.toStrongRef();
+    if (!imageSP) {
+        return;
+    }
+    m_d->paintDevice = KisPaintDeviceSP(new KisPaintDevice(this, imageSP->colorSpace(), KisDefaultBoundsSP(new KisDefaultBounds(image))));
+    connect(imageSP.data(), SIGNAL(sigSizeChanged(QPointF,QPointF)), SLOT(slotImageSizeChanged()));
 }
 
 KisSelectionBasedLayer::KisSelectionBasedLayer(const KisSelectionBasedLayer& rhs)
@@ -86,7 +89,7 @@ KisSelectionBasedLayer::~KisSelectionBasedLayer()
 
 void KisSelectionBasedLayer::initSelection()
 {
-    m_d->selection = new KisSelection(new KisDefaultBounds(image()));
+    m_d->selection = KisSelectionSP(new KisSelection(KisDefaultBoundsSP(new KisDefaultBounds(image()))));
     m_d->selection->pixelSelection()->setDefaultPixel(KoColor(Qt::white, m_d->selection->pixelSelection()->colorSpace()));
     m_d->selection->setParentNode(this);
     m_d->selection->updateProjection();
@@ -106,7 +109,7 @@ void KisSelectionBasedLayer::slotImageSizeChanged()
 
 void KisSelectionBasedLayer::setImage(KisImageWSP image)
 {
-    m_d->paintDevice->setDefaultBounds(new KisDefaultBounds(image));
+    m_d->paintDevice->setDefaultBounds(KisDefaultBoundsSP(new KisDefaultBounds(image)));
     KisLayer::setImage(image);
 
     connect(image.data(), SIGNAL(sigSizeChanged(QPointF,QPointF)), SLOT(slotImageSizeChanged()));
@@ -140,12 +143,12 @@ void KisSelectionBasedLayer::setUseSelectionInProjection(bool value) const
 
 KisSelectionSP KisSelectionBasedLayer::fetchComposedInternalSelection(const QRect &rect) const
 {
-    if (!m_d->selection) return 0;
+    if (!m_d->selection) return KisSelectionSP();
     m_d->selection->updateProjection(rect);
 
     KisSelectionSP tempSelection = m_d->selection;
 
-    lockTemporaryTarget();
+    KisIndirectPaintingSupport::ReadLocker l(this);
 
     if (hasTemporaryTarget()) {
         /**
@@ -158,8 +161,6 @@ KisSelectionSP KisSelectionBasedLayer::fetchComposedInternalSelection(const QRec
         setupTemporaryPainter(&gc2);
         gc2.bitBlt(rect.topLeft(), temporaryTarget(), rect);
     }
-
-    unlockTemporaryTarget();
 
     return tempSelection;
 }
@@ -193,13 +194,17 @@ QRect KisSelectionBasedLayer::needRect(const QRect &rect, PositionToFilthy pos) 
 
 void KisSelectionBasedLayer::resetCache(const KoColorSpace *colorSpace)
 {
+    KisImageSP imageSP = image().toStrongRef();
+    if (!imageSP) {
+        return;
+    }
     if (!colorSpace)
-        colorSpace = image()->colorSpace();
+        colorSpace = imageSP->colorSpace();
 
     if (!m_d->paintDevice ||
             *m_d->paintDevice->colorSpace() != *colorSpace) {
 
-        m_d->paintDevice = new KisPaintDevice(this, colorSpace, new KisDefaultBounds(image()));
+        m_d->paintDevice = KisPaintDeviceSP(new KisPaintDevice(KisNodeWSP(this), colorSpace, new KisDefaultBounds(image())));
     } else {
         m_d->paintDevice->clear();
     }
@@ -220,11 +225,15 @@ void KisSelectionBasedLayer::setInternalSelection(KisSelectionSP selection)
         m_d->selection = 0;
     }
 
-    if (selection->pixelSelection()->defaultBounds()->bounds() != image()->bounds()) {
+    KisImageSP imageSP = image().toStrongRef();
+    if (!imageSP) {
+        return;
+    }
+    if (selection->pixelSelection()->defaultBounds()->bounds() != imageSP->bounds()) {
         qWarning() << "WARNING: KisSelectionBasedLayer::setInternalSelection"
                    << "New selection has suspicious default bounds";
         qWarning() << "WARNING:" << ppVar(selection->pixelSelection()->defaultBounds()->bounds());
-        qWarning() << "WARNING:" << ppVar(image()->bounds());
+        qWarning() << "WARNING:" << ppVar(imageSP->bounds());
     }
 }
 
@@ -271,24 +280,34 @@ KisKeyframeChannel *KisSelectionBasedLayer::requestKeyframeChannel(const QString
 void KisSelectionBasedLayer::setDirty()
 {
     Q_ASSERT(image());
-
-    setDirty(image()->bounds());
+    KisImageSP imageSP = image().toStrongRef();
+    if (!imageSP) {
+        return;
+    }
+    setDirty(imageSP->bounds());
 }
 
 QRect KisSelectionBasedLayer::extent() const
 {
     Q_ASSERT(image());
-
+    KisImageSP imageSP = image().toStrongRef();
+    if (!imageSP) {
+        return QRect();
+    }
     return m_d->selection ?
-           m_d->selection->selectedRect() : image()->bounds();
+           m_d->selection->selectedRect() : imageSP->bounds();
 }
 
 QRect KisSelectionBasedLayer::exactBounds() const
 {
     Q_ASSERT(image());
+    KisImageSP imageSP = image().toStrongRef();
+    if (!imageSP) {
+        return QRect();
+    }
 
     return m_d->selection ?
-           m_d->selection->selectedExactRect() : image()->bounds();
+           m_d->selection->selectedExactRect() : imageSP->bounds();
 }
 
 QImage KisSelectionBasedLayer::createThumbnail(qint32 w, qint32 h)

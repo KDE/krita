@@ -18,6 +18,8 @@
 #ifndef _KIS_NODE_FACADE_H
 #define _KIS_NODE_FACADE_H
 
+#include <QScopedPointer>
+
 #include "kis_types.h"
 #include "kis_node.h"
 #include "kritaimage_export.h"
@@ -72,7 +74,7 @@ public:
      * @param node the node to be added
      * @param parent the parent node
      */
-    bool addNode(KisNodeSP node, KisNodeSP parent = 0);
+    bool addNode(KisNodeSP node, KisNodeSP parent = KisNodeSP());
 
     /**
      * Add already existing node to the graph.
@@ -135,6 +137,6 @@ public:
 private:
 
     struct Private;
-    Private * const m_d;
+    QScopedPointer<Private> m_d;
 };
 #endif

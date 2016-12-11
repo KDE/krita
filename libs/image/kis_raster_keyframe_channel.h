@@ -59,7 +59,7 @@ public:
     /**
      * When choosing filenames for frames, this will be appended to the node filename
      */
-    void setFilenameSuffix(const QString suffix);
+    void setFilenameSuffix(const QString &suffix);
 
     bool hasScalarValue() const;
 

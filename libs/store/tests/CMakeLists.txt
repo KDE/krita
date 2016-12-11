@@ -1,21 +1,19 @@
 set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 
-########### next target ###############
+include(ECMAddTests)
 
-set(lzftest_SRCS ../KoLZF.cpp TestKoLZF.cpp )
-kde4_add_unit_test(TestKoLZF TESTNAME libs-odf-TestKoLZF ${lzftest_SRCS})
-target_link_libraries(TestKoLZF kritastore Qt5::Test)
+ecm_add_test(
+    ../KoLZF.cpp TestKoLZF.cpp
+    TEST_NAME libs-odf-TestKoLZF
+    LINK_LIBRARIES kritastore Qt5::Test)
 
-########### next target ###############
+ecm_add_test(
+    ../KoLZF.cpp TestKoXmlVector.cpp
+    TEST_NAME libs-odf-TestKoXmlVector
+    LINK_LIBRARIES kritastore Qt5::Test)
 
-set(xmlvectortest_SRCS ../KoLZF.cpp TestKoXmlVector.cpp )
-kde4_add_unit_test(TestKoXmlVector TESTNAME libs-odf-TestKoXmlVector ${xmlvectortest_SRCS})
-target_link_libraries(TestKoXmlVector kritastore Qt5::Test)
+########### manual test for file contents ###############
 
-########### next target ###############
-
-set(storedroptest_SRCS storedroptest.cpp )
-kde4_add_executable(storedroptest TEST ${storedroptest_SRCS})
+add_executable(storedroptest storedroptest.cpp)
 target_link_libraries(storedroptest kritastore Qt5::Widgets)
-
-
+ecm_mark_as_test(storedroptest)

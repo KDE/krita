@@ -29,6 +29,7 @@ class KoRgbU8ColorSpaceTester : public QObject
 private Q_SLOTS:
     void testBasics();
     void testMixColors();
+    void testMixColorsAverage();
     void testCompositeOpsWithChannelFlags();
 };
 

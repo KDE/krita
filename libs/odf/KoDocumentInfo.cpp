@@ -391,7 +391,7 @@ void KoDocumentInfo::updateParametersAndBumpNumCycles()
 void KoDocumentInfo::updateParameters()
 {
     KoDocumentBase *doc = dynamic_cast< KoDocumentBase *>(parent());
-    if (doc && (!doc->isModified() && !doc->isEmpty())) {
+    if (doc && (!doc->isModified())) {
         return;
     }
 

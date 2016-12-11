@@ -35,6 +35,10 @@
 class KoResource;
 class KoColorSet;
 
+namespace KisToolUtils {
+struct ColorPickerConfig;
+}
+
 class ColorPickerOptionsWidget : public QWidget, public Ui::ColorPickerOptionsWidget
 {
     Q_OBJECT
@@ -102,7 +106,8 @@ private:
     void pickColor(const QPointF& pos);
     void updateOptionWidget();
 
-    Configuration m_config;
+    //Configuration m_config;
+    QScopedPointer<KisToolUtils::ColorPickerConfig> m_config;
     ToolActivation m_toolActivationSource;
     bool m_isActivated;
 
@@ -123,8 +128,8 @@ public:
     KisToolColorPickerFactory()
             : KoToolFactoryBase("KritaSelected/KisToolColorPicker") {
         setToolTip(i18n("Color Selector Tool"));
-        setToolType(TOOL_TYPE_FILL);
-        setPriority(15);
+        setSection(TOOL_TYPE_FILL);
+        setPriority(2);
         setIconName(koIconNameCStr("krita_tool_color_picker"));
         setShortcut(QKeySequence(Qt::Key_P));
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);

@@ -220,6 +220,12 @@ void QXcbConnection::xi2SetupDevices()
             isTablet = true;
             tabletData.pointerType = QTabletEvent::Pen;
             dbgType = QLatin1String("pen");
+        } else if (name.contains("waltop") && name.contains("tablet")) {
+            // other "Genius" tablets
+            // WALTOP International Corp. Slim Tablet
+            isTablet = true;
+            tabletData.pointerType = QTabletEvent::Pen;
+            dbgType = QLatin1String("pen");
         } else if (name.contains("uc-logic")) {
             isTablet = true;
             tabletData.pointerType = QTabletEvent::Pen;

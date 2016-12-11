@@ -70,7 +70,8 @@ public:
 
 private Q_SLOTS:
 
-    void selectRenderType();
+    void selectRenderType(int i);
+    void selectRenderOptions();
     void toggleSequenceType(bool toggle);
     void sequenceMimeTypeSelected();
     void ffmpegLocationChanged(const QString&);
@@ -80,6 +81,8 @@ protected Q_SLOTS:
     void slotButtonClicked(int button);
 
 private:
+
+    static QString findFFMpeg();
 
     KisImageWSP m_image;
     WdgAnimaterionRenderer *m_page {0};

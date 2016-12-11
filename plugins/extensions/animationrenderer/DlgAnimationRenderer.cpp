@@ -23,10 +23,12 @@
 #include <QJsonObject>
 #include <QMessageBox>
 #include <QStringList>
+#include <QProcess>
 
 #include <klocalizedstring.h>
 #include <kpluginfactory.h>
 
+#include <KoResourcePaths.h>
 #include <kis_properties_configuration.h>
 #include <kis_debug.h>
 #include <KisMimeDatabase.h>
@@ -129,18 +131,16 @@ DlgAnimationRenderer::DlgAnimationRenderer(KisDocument *doc, QWidget *parent)
 
     connect(m_page->grpRender, SIGNAL(toggled(bool)), this, SLOT(toggleSequenceType(bool)));
     connect(m_page->bnExportOptions, SIGNAL(clicked()), this, SLOT(sequenceMimeTypeSelected()));
-    connect(m_page->bnRenderOptions, SIGNAL(clicked()), this, SLOT(selectRenderType()));
+    connect(m_page->bnRenderOptions, SIGNAL(clicked()), this, SLOT(selectRenderOptions()));
 
-    QString ffmpeg = cfg.customFFMpegPath();
-    m_page->ffmpegLocation->setFileName(ffmpeg);
+    m_page->ffmpegLocation->setFileName(findFFMpeg());
     m_page->ffmpegLocation->setMode(KoFileDialog::OpenFile);
     connect(m_page->ffmpegLocation, SIGNAL(fileSelected(QString)), this, SLOT(ffmpegLocationChanged(QString)));
 
     m_page->grpRender->setChecked(cfg.readEntry<bool>("AnimationRenderer/render_animation", false));
     m_page->chkDeleteSequence->setChecked(cfg.readEntry<bool>("AnimationRenderer/delete_sequence", false));
     m_page->cmbRenderType->setCurrentIndex(cfg.readEntry<int>("AnimationRenderer/render_type", 0));
-
-
+    connect(m_page->cmbRenderType, SIGNAL(currentIndexChanged(int)), this, SLOT(selectRenderType(int)));
 }
 
 DlgAnimationRenderer::~DlgAnimationRenderer()
@@ -202,6 +202,7 @@ KisPropertiesConfigurationSP DlgAnimationRenderer::getFrameExportConfiguration()
         cfg->setProperty("first_frame", m_page->intStart->value());
         cfg->setProperty("last_frame", m_page->intEnd->value());
         cfg->setProperty("sequence_start", m_page->sequenceStart->value());
+        cfg->setProperty("ffmpeg_path", m_page->ffmpegLocation->fileName());
 
         return m_frameExportConfigWidget->configuration();
     }
@@ -219,7 +220,12 @@ KisPropertiesConfigurationSP DlgAnimationRenderer::getVideoConfiguration() const
         return 0;
     }
     KisPropertiesConfigurationSP cfg = new KisPropertiesConfiguration();
-    cfg->setProperty("filename", m_page->videoFilename->fileName());
+    QString filename = m_page->videoFilename->fileName();
+    if (QFileInfo(filename).completeSuffix().isEmpty()) {
+        QString mimetype = m_page->cmbRenderType->itemData(m_page->cmbRenderType->currentIndex()).toString();
+        filename += "." + KisMimeDatabase::suffixesForMimeType(mimetype).first();
+    }
+    cfg->setProperty("filename", filename);
     cfg->setProperty("delete_sequence", m_page->chkDeleteSequence->isChecked());
     return cfg;
 }
@@ -259,7 +265,19 @@ QSharedPointer<KisImportExportFilter> DlgAnimationRenderer::encoderFilter() cons
     return QSharedPointer<KisImportExportFilter>(0);
 }
 
-void DlgAnimationRenderer::selectRenderType()
+void DlgAnimationRenderer::selectRenderType(int index)
+{
+    if (index >= m_renderFilters.size()) return;
+    QString mimetype = m_page->cmbRenderType->itemData(index).toString();
+
+    if (!m_page->videoFilename->fileName().isEmpty() && QFileInfo(m_page->videoFilename->fileName()).completeBaseName() != m_defaultFileName) {
+        m_defaultFileName = QFileInfo(m_page->videoFilename->fileName()).completeBaseName();
+    }
+    m_page->videoFilename->setMimeTypeFilters(QStringList() << mimetype, mimetype);
+    m_page->videoFilename->setFileName(m_defaultFileName + "." + KisMimeDatabase::suffixesForMimeType(mimetype).first());
+}
+
+void DlgAnimationRenderer::selectRenderOptions()
 {
     int index = m_page->cmbRenderType->currentIndex();
 
@@ -272,13 +290,6 @@ void DlgAnimationRenderer::selectRenderType()
 
     QSharedPointer<KisImportExportFilter> filter = m_renderFilters[index];
     QString mimetype = m_page->cmbRenderType->itemData(index).toString();
-
-    if (!m_page->videoFilename->fileName().isEmpty() && QFileInfo(m_page->videoFilename->fileName()).completeBaseName() != m_defaultFileName) {
-        m_defaultFileName = QFileInfo(m_page->videoFilename->fileName()).completeBaseName();
-    }
-    m_page->videoFilename->setMimeTypeFilters(QStringList() << mimetype, mimetype);
-    m_page->videoFilename->setFileName(m_defaultFileName + "." + KisMimeDatabase::suffixesForMimeType(mimetype).first());
-
     if (filter) {
         m_encoderConfigWidget = filter->createConfigurationWidget(0, KisDocument::nativeFormatMimeType(), mimetype.toLatin1());
         if (m_encoderConfigWidget) {
@@ -297,6 +308,7 @@ void DlgAnimationRenderer::selectRenderType()
     else {
         m_encoderConfigWidget = 0;
     }
+
 }
 
 void DlgAnimationRenderer::toggleSequenceType(bool toggle)
@@ -320,7 +332,7 @@ void DlgAnimationRenderer::sequenceMimeTypeSelected()
     }
 
     QString mimetype = m_page->cmbMimetype->itemData(index).toString();
-    KisImportExportFilter *filter = KisImportExportManager::filterForMimeType(mimetype, KisImportExportManager::Export);
+    QSharedPointer<KisImportExportFilter> filter(KisImportExportManager::filterForMimeType(mimetype, KisImportExportManager::Export));
     if (filter) {
         m_frameExportConfigWidget = filter->createConfigurationWidget(0, KisDocument::nativeFormatMimeType(), mimetype.toLatin1());
         if (m_frameExportConfigWidget) {
@@ -335,7 +347,6 @@ void DlgAnimationRenderer::sequenceMimeTypeSelected()
             m_frameExportConfigWidget->setParent(0);
             dlg.setMainWidget(0);
         }
-        delete filter;
     }
 }
 
@@ -366,5 +377,41 @@ void DlgAnimationRenderer::slotButtonClicked(int button)
         }
     }
     KoDialog::slotButtonClicked(button);
+}
+
+QString DlgAnimationRenderer::findFFMpeg()
+{
+    QString result;
+
+    QStringList proposedPaths;
+
+    QString customPath = KisConfig().customFFMpegPath();
+    proposedPaths << customPath;
+    proposedPaths << customPath + QDir::separator() + "ffmpeg";
+
+    proposedPaths << QDir::homePath() + "/bin/ffmpeg";
+    proposedPaths << "/usr/bin/ffmpeg";
+    proposedPaths << "/usr/local/bin/ffmpeg";
+    proposedPaths << KoResourcePaths::getApplicationRoot() +
+        QDir::separator() + "bin" + QDir::separator() + "ffmpeg";
+
+    Q_FOREACH (const QString &path, proposedPaths) {
+        if (path.isEmpty()) continue;
+
+        QProcess testProcess;
+        testProcess.start(path, QStringList() << "-version");
+        testProcess.waitForFinished(1000);
+
+        const bool successfulStart =
+            testProcess.state() == QProcess::NotRunning &&
+            testProcess.error() == QProcess::UnknownError;
+
+        if (successfulStart) {
+            result = path;
+            break;
+        }
+    }
+
+    return result;
 }
 

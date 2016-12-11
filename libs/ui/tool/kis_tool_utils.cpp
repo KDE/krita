@@ -18,22 +18,53 @@
 #include <kis_tool_utils.h>
 
 #include <KoColorSpace.h>
+#include <KoMixColorsOp.h>
 #include <kis_paint_device.h>
 #include <kis_layer.h>
 #include <kis_group_layer.h>
 #include <kis_wrapped_rect.h>
 #include <kis_image.h>
 #include <kis_transaction.h>
-
+#include <kis_sequential_iterator.h>
+#include <kis_properties_configuration.h>
+#include <kconfiggroup.h>
+#include <ksharedconfig.h>
 
 namespace KisToolUtils {
 
-    bool pick(KisPaintDeviceSP dev, const QPoint& pos, KoColor *color)
+    bool pick(KisPaintDeviceSP dev, const QPoint& pos, KoColor *color, int radius)
     {
         KIS_ASSERT(dev);
         KoColor pickedColor;
 
-        dev->pixel(pos.x(), pos.y(), &pickedColor);
+        if (radius <= 1) {
+            dev->pixel(pos.x(), pos.y(), &pickedColor);
+        } else {
+            const KoColorSpace* cs = dev->colorSpace();
+            pickedColor = KoColor(Qt::transparent, cs);
+
+            QVector<const quint8*> pixels;
+
+            const int effectiveRadius = radius - 1;
+
+            const QRect pickRect(pos.x() - effectiveRadius, pos.y() - effectiveRadius,
+                                 2 * effectiveRadius + 1, 2 * effectiveRadius + 1);
+            KisSequentialConstIterator it(dev, pickRect);
+
+            const int radiusSq = pow2(effectiveRadius);
+
+            do {
+                const QPoint realPos(it.x(),  it.y());
+                const QPoint pt = realPos - pos;
+                if (pow2(pt.x()) + pow2(pt.y()) < radiusSq) {
+                    pixels << it.oldRawData();
+                }
+            } while (it.nextPixel());
+
+            const quint8** cpixels = const_cast<const quint8**>(pixels.constData());
+            cs->mixColorsOp()->mixColors(cpixels, pixels.size(), pickedColor.data());
+        }
+
         pickedColor.convertTo(dev->compositionSourceColorSpace());
 
         bool validColorPicked =
@@ -51,7 +82,7 @@ namespace KisToolUtils {
     {
         KisNodeSP foundNode = 0;
         while (node) {
-            KisLayerSP layer = dynamic_cast<KisLayer*>(node.data());
+            KisLayerSP layer = qobject_cast<KisLayer*>(node.data());
 
             if (!layer || !layer->isEditable()) {
                 node = node->prevSibling();
@@ -107,4 +138,52 @@ namespace KisToolUtils {
         }
         return false;
     }
+
+    const QString ColorPickerConfig::CONFIG_GROUP_NAME = "tool_color_picker";
+
+    ColorPickerConfig::ColorPickerConfig()
+        : toForegroundColor(true)
+        , updateColor(true)
+        , addPalette(false)
+        , normaliseValues(false)
+        , sampleMerged(true)
+        , radius(1)
+    {
+    }
+
+    inline QString getConfigKey(bool defaultActivation) {
+        return defaultActivation ?
+            "ColorPickerDefaultActivation" : "ColorPickerTemporaryActivation";
+    }
+
+    void ColorPickerConfig::save(bool defaultActivation) const
+    {
+        KisPropertiesConfiguration props;
+        props.setProperty("toForegroundColor", toForegroundColor);
+        props.setProperty("updateColor", updateColor);
+        props.setProperty("addPalette", addPalette);
+        props.setProperty("normaliseValues", normaliseValues);
+        props.setProperty("sampleMerged", sampleMerged);
+        props.setProperty("radius", radius);
+
+        KConfigGroup config =  KSharedConfig::openConfig()->group(CONFIG_GROUP_NAME);
+
+        config.writeEntry(getConfigKey(defaultActivation), props.toXML());
+    }
+
+    void ColorPickerConfig::load(bool defaultActivation)
+    {
+        KisPropertiesConfiguration props;
+
+        KConfigGroup config =  KSharedConfig::openConfig()->group(CONFIG_GROUP_NAME);
+        props.fromXML(config.readEntry(getConfigKey(defaultActivation)));
+
+        toForegroundColor = props.getBool("toForegroundColor", true);
+        updateColor = props.getBool("updateColor", true);
+        addPalette = props.getBool("addPalette", false);
+        normaliseValues = props.getBool("normaliseValues", false);
+        sampleMerged = props.getBool("sampleMerged", !defaultActivation ? false : true);
+        radius = props.getInt("radius", 1);
+    }
+
 }

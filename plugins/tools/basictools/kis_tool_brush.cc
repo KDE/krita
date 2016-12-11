@@ -316,12 +316,12 @@ QWidget * KisToolBrush::createOptionWidget()
     // Line smoothing configuration
     m_cmbSmoothingType = new QComboBox(optionsWidget);
     m_cmbSmoothingType->addItems(QStringList()
-            << i18n("No Smoothing")
-            << i18n("Basic Smoothing")
-            << i18n("Weighted Smoothing")
+            << i18n("None")
+            << i18n("Basic")
+            << i18n("Weighted")
             << i18n("Stabilizer"));
     connect(m_cmbSmoothingType, SIGNAL(currentIndexChanged(int)), this, SLOT(slotSetSmoothingType(int)));
-    addOptionWidgetOption(m_cmbSmoothingType);
+    addOptionWidgetOption(m_cmbSmoothingType, new QLabel(i18n("Brush Smoothing:")));
 
     m_sliderSmoothnessDistance = new KisDoubleSliderSpinBox(optionsWidget);
     m_sliderSmoothnessDistance->setRange(3.0, MAXIMUM_SMOOTHNESS_DISTANCE, 1);
@@ -399,25 +399,33 @@ QWidget * KisToolBrush::createOptionWidget()
     connect(m_chkUseScalableDistance, SIGNAL(toggled(bool)), this, SLOT(setUseScalableDistance(bool)));
     addOptionWidgetOption(m_chkUseScalableDistance, new QLabel(QString("%1:").arg(i18n("Scalable Distance"))));
 
+
+    // add a line spacer so we know that the next set of options are for different settings
+    QFrame* line = new QFrame(optionsWidget);
+    line->setObjectName(QString::fromUtf8("line"));
+    line->setFrameShape(QFrame::HLine);
+    addOptionWidgetOption(line);
+
+
+
     // Drawing assistant configuration
     QWidget* assistantWidget = new QWidget(optionsWidget);
-    QHBoxLayout* assistantLayout = new QHBoxLayout(assistantWidget);
-    assistantLayout->setContentsMargins(0,0,0,0);
-    assistantLayout->setSpacing(1);
-    QLabel* assistantLabel = new QLabel(i18n("Assistant:"), optionsWidget);
-    assistantLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    assistantLayout->addWidget(assistantLabel);
+    QGridLayout* assistantLayout = new QGridLayout(assistantWidget);
+    assistantLayout->setContentsMargins(10,0,0,0);
+    assistantLayout->setSpacing(5);
+
+
     m_chkAssistant = new QCheckBox(optionsWidget);
-    m_chkAssistant->setLayoutDirection(Qt::RightToLeft);
+    m_chkAssistant->setText(i18n("Snap to Assistants"));
+
     assistantWidget->setToolTip(i18n("You need to add Ruler Assistants before this tool will work."));
     connect(m_chkAssistant, SIGNAL(toggled(bool)), this, SLOT(setAssistant(bool)));
-    assistantLayout->addWidget(m_chkAssistant);
+    assistantLayout->addWidget(m_chkAssistant, 1, 1, 1, 1, Qt::AlignLeft);
 
     m_sliderMagnetism = new KisSliderSpinBox(optionsWidget);
     m_sliderMagnetism->setToolTip(i18n("Assistant Magnetism"));
     m_sliderMagnetism->setRange(0, MAXIMUM_MAGNETISM);
-    m_sliderMagnetism->setEnabled(false);
-    connect(m_chkAssistant, SIGNAL(toggled(bool)), m_sliderMagnetism, SLOT(setEnabled(bool)));
+
     m_sliderMagnetism->setValue(m_magnetism * MAXIMUM_MAGNETISM);
     connect(m_sliderMagnetism, SIGNAL(valueChanged(int)), SLOT(slotSetMagnetism(int)));
     
@@ -426,13 +434,28 @@ QWidget * KisToolBrush::createOptionWidget()
     toggleaction->setShortcut(QKeySequence(Qt::ControlModifier + Qt::ShiftModifier + Qt::Key_L));
     connect(toggleaction, SIGNAL(triggered(bool)), m_chkAssistant, SLOT(toggle()));
 
+
     addOptionWidgetOption(m_sliderMagnetism, assistantWidget);
-    
+
+    QLabel* snapSingleLabel = new QLabel(i18n("Snap Single:"));
+
     m_chkOnlyOneAssistant = new QCheckBox(optionsWidget);
     m_chkOnlyOneAssistant->setToolTip(i18nc("@info:tooltip","Make it only snap to a single assistant, prevents snapping mess while using the infinite assistants."));
     m_chkOnlyOneAssistant->setCheckState(Qt::Checked);//turn on by default.
     connect(m_chkOnlyOneAssistant, SIGNAL(toggled(bool)), this, SLOT(setOnlyOneAssistantSnap(bool)));
-    addOptionWidgetOption(m_chkOnlyOneAssistant, new QLabel(i18n("Snap single:")));
+    addOptionWidgetOption(m_chkOnlyOneAssistant, snapSingleLabel);
+
+
+    // set the assistant snapping options to hidden by default and toggle their visibility based based off snapping checkbox
+    m_sliderMagnetism->setVisible(false);
+    m_chkOnlyOneAssistant->setVisible(false);
+    snapSingleLabel->setVisible(false);
+
+   connect(m_chkAssistant, SIGNAL(toggled(bool)), m_sliderMagnetism, SLOT(setVisible(bool)));
+   connect(m_chkAssistant, SIGNAL(toggled(bool)), m_chkOnlyOneAssistant, SLOT(setVisible(bool)));
+   connect(m_chkAssistant, SIGNAL(toggled(bool)), snapSingleLabel, SLOT(setVisible(bool)));
+
+
 
     KisConfig cfg;
     slotSetSmoothingType(cfg.lineSmoothingType());

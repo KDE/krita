@@ -104,7 +104,7 @@ void KisTimeBasedItemModel::setImage(KisImageWSP image)
         slotCurrentTimeChanged(ai->currentUITime());
 
         connect(ai, SIGNAL(sigFramerateChanged()), SLOT(slotFramerateChanged()));
-        connect(ai, SIGNAL(sigTimeChanged(int)), SLOT(slotCurrentTimeChanged(int)));
+        connect(ai, SIGNAL(sigUiTimeChanged(int)), SLOT(slotCurrentTimeChanged(int)));
     }
 
     if (image != oldImage) {
@@ -298,6 +298,10 @@ bool KisTimeBasedItemModel::offsetFrames(QModelIndexList srcIndexes, const QPoin
 
         KisNodeSP srcNode = nodeAt(srcIndex);
         KisNodeSP dstNode = nodeAt(dstIndex);
+
+        if (!srcNode || !dstNode) {
+            return false;
+        }
 
         QList<KisKeyframeChannel*> channels = channelsAt(srcIndex);
         Q_FOREACH(KisKeyframeChannel *channel, channels) {

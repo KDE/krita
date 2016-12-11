@@ -96,7 +96,7 @@ void KisNodeDelegate::paint(QPainter *p, const QStyleOptionViewItem &o, const QM
     p->save();
 
     {
-	QStyleOptionViewItemV4 option = getOptions(o, index);
+        QStyleOptionViewItem option = getOptions(o, index);
         QStyle *style = option.widget ? option.widget->style() : QApplication::style();
         style->drawPrimitive(QStyle::PE_PanelItemViewItem, &option, p, option.widget);
 
@@ -819,9 +819,9 @@ bool KisNodeDelegate::eventFilter(QObject *object, QEvent *event)
 // PRIVATE
 
 
-QStyleOptionViewItemV4 KisNodeDelegate::getOptions(const QStyleOptionViewItem &o, const QModelIndex &index)
+QStyleOptionViewItem KisNodeDelegate::getOptions(const QStyleOptionViewItem &o, const QModelIndex &index)
 {
-    QStyleOptionViewItemV4 option = o;
+    QStyleOptionViewItem option = o;
     QVariant v = index.data(Qt::FontRole);
     if (v.isValid()) {
         option.font = v.value<QFont>();
@@ -854,7 +854,7 @@ void KisNodeDelegate::drawProgressBar(QPainter *p, const QStyleOptionViewItem &o
         {
             p->setClipRect(r);
             QStyle* style = QApplication::style();
-            QStyleOptionProgressBarV2 opt;
+            QStyleOptionProgressBar opt;
 
             opt.minimum = 0;
             opt.maximum = 100;

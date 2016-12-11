@@ -91,7 +91,7 @@
      id="layer1"
      transform="translate(0,-1030.3622)">
     <rect
-       style="fill:#4d4d4d;fill-opacity:1;stroke:none"
+       style="fill:#373737;fill-opacity:1;stroke:none"
        id="rect4139"
        width="5.0000019"
        height="5.0000019"
@@ -99,12 +99,12 @@
        y="1033.3622"
        ry="2.500001" />
     <path
-       style="fill:#4d4d4d;fill-opacity:1;stroke:none"
+       style="fill:#373737;fill-opacity:1;stroke:none"
        d="M 5.5 14 C 4.1149999 14 3 15.115 3 16.5 C 3 17.885 4.1149999 19 5.5 19 C 6.8850001 19 8 17.885 8 16.5 C 8 15.115 6.8850001 14 5.5 14 z M 5.5 15 C 6.3310001 15 7 15.669 7 16.5 C 7 17.331 6.3310001 18 5.5 18 C 4.6689999 18 4 17.331 4 16.5 C 4 15.669 4.6689999 15 5.5 15 z "
        id="rect4141"
        transform="translate(0,1030.3622)" />
     <rect
-       style="fill:#4d4d4d;fill-opacity:1;stroke:none"
+       style="fill:#373737;fill-opacity:1;stroke:none"
        id="rect4200"
        width="16"
        height="0.9999826"
@@ -112,7 +112,7 @@
        y="1035.3622"
        ry="0" />
     <rect
-       style="fill:#4d4d4d;fill-opacity:1;stroke:none"
+       style="fill:#373737;fill-opacity:1;stroke:none"
        id="rect4206"
        width="12"
        height="0.9999826"

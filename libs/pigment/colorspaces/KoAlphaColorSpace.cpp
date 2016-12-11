@@ -62,7 +62,7 @@ public:
                    qint32 rows,
                    qint32 cols,
                    quint8 opacity,
-                   const QBitArray & channelFlags) const {
+                   const QBitArray & channelFlags) const override {
         Q_UNUSED(src);
         Q_UNUSED(srcstride);
         Q_UNUSED(opacity);
@@ -135,7 +135,7 @@ public:
                    qint32 rows,
                    qint32 cols,
                    quint8 opacity,
-                   const QBitArray & channelFlags) const {
+                   const QBitArray & channelFlags) const override {
 
         Q_UNUSED(opacity);
         Q_UNUSED(channelFlags);
@@ -207,7 +207,7 @@ public:
                    qint32 rows,
                    qint32 cols,
                    quint8 opacity,
-                   const QBitArray & channelFlags) const {
+                   const QBitArray & channelFlags) const override {
 
         Q_UNUSED(opacity);
         Q_UNUSED(channelFlags);

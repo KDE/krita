@@ -32,7 +32,7 @@ public:
     {
     }
     int priority;
-    QString toolType;
+    QString section;
     QString tooltip;
     QString activationId;
     QString iconName;
@@ -61,9 +61,9 @@ int KoToolFactoryBase::priority() const
     return d->priority;
 }
 
-QString KoToolFactoryBase::toolType() const
+QString KoToolFactoryBase::section() const
 {
-    return d->toolType;
+    return d->section;
 }
 
 QString KoToolFactoryBase::toolTip() const
@@ -96,9 +96,9 @@ void KoToolFactoryBase::setToolTip(const QString & tooltip)
     d->tooltip = tooltip;
 }
 
-void KoToolFactoryBase::setToolType(const QString & toolType)
+void KoToolFactoryBase::setSection(const QString & section)
 {
-    d->toolType = toolType;
+    d->section = section;
 }
 
 void KoToolFactoryBase::setIconName(const char *iconName)

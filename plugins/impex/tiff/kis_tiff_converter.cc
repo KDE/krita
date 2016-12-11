@@ -359,7 +359,7 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory(TIFF* image)
         TIFFClose(image);
         return KisImageBuilder_RESULT_INVALID_ARG;
     }
-    // Creating the KisImageWSP
+    // Creating the KisImageSP
     if (! m_image) {
         m_image = new KisImage(m_doc->createUndoStore(), width, height, cs, "built image");
         m_image->setResolution( POINT_TO_INCH(xres), POINT_TO_INCH(yres )); // It is the "invert" macro because we convert from pointer-per-inchs to points
@@ -620,13 +620,13 @@ KisImageBuilder_Result KisTIFFConverter::buildImage(const QString &filename)
 }
 
 
-KisImageWSP KisTIFFConverter::image()
+KisImageSP KisTIFFConverter::image()
 {
     return m_image;
 }
 
 
-KisImageBuilder_Result KisTIFFConverter::buildFile(const QString &filename, KisImageWSP kisimage, KisTIFFOptions options)
+KisImageBuilder_Result KisTIFFConverter::buildFile(const QString &filename, KisImageSP kisimage, KisTIFFOptions options)
 {
     dbgFile << "Start writing TIFF File";
     if (!kisimage)

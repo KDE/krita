@@ -24,7 +24,6 @@
 #include <QDebug>
 #include <QFileInfo>
 
-#include <KisFilterChain.h>
 #include <KisImportExportManager.h>
 
 #include <KisDocument.h>
@@ -42,53 +41,36 @@ KisCSVImport::~KisCSVImport()
 {
 }
 
-KisImportExportFilter::ConversionStatus KisCSVImport::convert(const QByteArray&, const QByteArray& to, KisPropertiesConfigurationSP configuration)
+KisImportExportFilter::ConversionStatus KisCSVImport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
 {
-    dbgFile << "Importing using CSVImport!";
+    CSVLoader ib(document, batchMode());
 
-    if (to != "application/x-krita")
+    KisImageBuilder_Result result = ib.buildAnimation(io, filename());
+
+    switch (result) {
+    case KisImageBuilder_RESULT_UNSUPPORTED:
+        return KisImportExportFilter::NotImplemented;
+    case KisImageBuilder_RESULT_INVALID_ARG:
         return KisImportExportFilter::BadMimeType;
-
-    KisDocument * doc = outputDocument();
-
-    if (!doc)
-        return KisImportExportFilter::NoDocumentCreated;
-
-    QString filename = inputFile();
-
-    doc -> prepareForImport();
-
-    if (!filename.isEmpty() && QFileInfo(filename).exists()) {
-
-        CSVLoader ib(doc, getBatchMode());
-
-        KisImageBuilder_Result result = ib.buildAnimation(filename);
-
-        switch (result) {
-        case KisImageBuilder_RESULT_UNSUPPORTED:
-            return KisImportExportFilter::NotImplemented;
-        case KisImageBuilder_RESULT_INVALID_ARG:
-            return KisImportExportFilter::BadMimeType;
-        case KisImageBuilder_RESULT_NO_URI:
-        case KisImageBuilder_RESULT_NOT_EXIST:
-        case KisImageBuilder_RESULT_NOT_LOCAL:
-            qDebug() << "ib returned KisImageBuilder_RESULT_NOT_LOCAL";
-            return KisImportExportFilter::FileNotFound;
-        case KisImageBuilder_RESULT_BAD_FETCH:
-        case KisImageBuilder_RESULT_EMPTY:
-            return KisImportExportFilter::ParsingError;
-        case KisImageBuilder_RESULT_FAILURE:
-            return KisImportExportFilter::InternalError;
-        case KisImageBuilder_RESULT_CANCEL:
-            return KisImportExportFilter::ProgressCancelled;
-        case KisImageBuilder_RESULT_OK:
-            doc -> setCurrentImage( ib.image());
-            return KisImportExportFilter::OK;
-        default:
-            return KisImportExportFilter::StorageCreationError;
-        }
+    case KisImageBuilder_RESULT_NO_URI:
+    case KisImageBuilder_RESULT_NOT_EXIST:
+    case KisImageBuilder_RESULT_NOT_LOCAL:
+        qDebug() << "ib returned KisImageBuilder_RESULT_NOT_LOCAL";
+        return KisImportExportFilter::FileNotFound;
+    case KisImageBuilder_RESULT_BAD_FETCH:
+    case KisImageBuilder_RESULT_EMPTY:
+        return KisImportExportFilter::ParsingError;
+    case KisImageBuilder_RESULT_FAILURE:
+        return KisImportExportFilter::InternalError;
+    case KisImageBuilder_RESULT_CANCEL:
+        return KisImportExportFilter::ProgressCancelled;
+    case KisImageBuilder_RESULT_OK:
+        document -> setCurrentImage( ib.image());
+        return KisImportExportFilter::OK;
+    default:
+        return KisImportExportFilter::StorageCreationError;
     }
-    return KisImportExportFilter::StorageCreationError;
+    return KisImportExportFilter::InternalError;
 }
 
 #include <kis_csv_import.moc>

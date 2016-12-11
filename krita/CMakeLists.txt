@@ -10,11 +10,6 @@ add_subdirectory( data )
 add_subdirectory( integration )
 add_subdirectory( pics/app )
 
-if (WIN32 AND USE_BREAKPAD)
-    add_subdirectory( crashreporter )
-    include_directories(${CMAKE_SOURCE_DIR}/3rdparty/google-breakpad/src)
-endif ()
-
 set(krita_SRCS main.cc)
 
 if (NOT APPLE)
@@ -32,14 +27,17 @@ else()
 endif() 
 ecm_add_app_icon(krita_SRCS ICONS ${ICON_SRCS})
 
-if(WIN32 AND USE_BREAKPAD)
-    set(krita_SRCS ${krita_SRCS} kis_crash_handler.cpp)
-    find_library(BREAKPAD_LIBS breakpad)
-    if(NOT BREAKPAD_LIBS)
-        message(FATAL_ERROR "Couldn't find Google Breakpad library!")
-    endif()
-endif()
-
+ecm_install_icons(ICONS
+    "${CMAKE_CURRENT_SOURCE_DIR}/pics/mimetypes/16-mimetypes-application-x-krita.png"
+    "${CMAKE_CURRENT_SOURCE_DIR}/pics/mimetypes/22-mimetypes-application-x-krita.png"
+    "${CMAKE_CURRENT_SOURCE_DIR}/pics/mimetypes/32-mimetypes-application-x-krita.png"
+    "${CMAKE_CURRENT_SOURCE_DIR}/pics/mimetypes/48-mimetypes-application-x-krita.png"
+    "${CMAKE_CURRENT_SOURCE_DIR}/pics/mimetypes/64-mimetypes-application-x-krita.png"
+    "${CMAKE_CURRENT_SOURCE_DIR}/pics/mimetypes/128-mimetypes-application-x-krita.png"
+    "${CMAKE_CURRENT_SOURCE_DIR}/pics/mimetypes/256-mimetypes-application-x-krita.png"
+    "${CMAKE_CURRENT_SOURCE_DIR}/pics/mimetypes/512-mimetypes-application-x-krita.png"
+    "${CMAKE_CURRENT_SOURCE_DIR}/pics/mimetypes/1024-mimetypes-application-x-krita.png"
+    DESTINATION ${KDE_INSTALL_ICONDIR} THEME hicolor)
 
 # separate listing, both used by Krita and KritaSketch
 set(krita_QRCS
@@ -76,13 +74,9 @@ target_link_libraries(krita
                       Qt5::Network
                       Qt5::PrintSupport
                       Qt5::Svg
-                      ${BREAKPAD_LIBS}
                       Qt5::Concurrent)
 if(HAVE_KCRASH)
-    target_link_libraries(krita
-        PRIVATE
-                          KF5::Crash
-    )
+    target_link_libraries(krita PRIVATE KF5::Crash)
 endif()
 
 if (APPLE)

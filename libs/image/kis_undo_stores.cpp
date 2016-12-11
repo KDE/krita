@@ -76,6 +76,11 @@ void KisSurrogateUndoStore::purgeRedoState()
     m_undoStack->purgeRedoState();
 }
 
+void KisSurrogateUndoStore::clear()
+{
+    m_undoStack->clear();
+}
+
 void KisSurrogateUndoStore::undoAll()
 {
     while(m_undoStack->canUndo()) {

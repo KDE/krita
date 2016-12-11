@@ -51,9 +51,6 @@ public:
 
     ~KisRandomSource();
 
-    qint64 min() const;
-    qint64 max() const;
-
     /**
      * Generates a random number in a range from min() to max()
      */

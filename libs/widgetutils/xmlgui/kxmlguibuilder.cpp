@@ -40,6 +40,10 @@
 
 #include <kis_icon_utils.h>
 
+#if defined(KCONFIG_BEFORE_5_24)
+# define authorizeAction authorizeKAction
+#endif
+
 using namespace KDEPrivate;
 
 class KXMLGUIBuilderPrivate
@@ -166,7 +170,7 @@ QWidget *KXMLGUIBuilder::createContainer(QWidget *parent, int index, const QDomE
 
         QString name = element.attribute(d->attrName);
 
-        if (!KAuthorized::authorizeKAction(name)) {
+        if (!KAuthorized::authorizeAction(name)) {
             return 0;
         }
 

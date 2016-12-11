@@ -35,7 +35,10 @@ KisHistogram::KisHistogram(const KisPaintLayerSP layer,
 {
     Q_ASSERT(producer);
 
-    m_bounds = layer->image()->bounds();
+    KisImageSP imageSP = layer->image().toStrongRef();
+    if (imageSP) {
+        m_bounds = imageSP->bounds();
+    }
     m_type = type;
     m_producer = producer;
     m_selection = false;

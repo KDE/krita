@@ -107,7 +107,7 @@ struct TimelineFramesView::Private
     QPoint lastPressedPosition;
     KisSignalCompressor selectionChangedCompressor;
 
-    QStyleOptionViewItemV4 viewOptionsV4() const;
+    QStyleOptionViewItem viewOptionsV4() const;
     QItemViewPaintPairs draggablePaintPairs(const QModelIndexList &indexes, QRect *r) const;
     QPixmap renderToPixmap(const QModelIndexList &indexes, QRect *r) const;
 
@@ -273,6 +273,8 @@ void TimelineFramesView::setModel(QAbstractItemModel *model)
 
     connect(selectionModel(), SIGNAL(selectionChanged(const QItemSelection &, const QItemSelection &)),
             &m_d->selectionChangedCompressor, SLOT(start()));
+
+    connect(m_d->model, SIGNAL(sigEnsureRowVisible(int)), SLOT(slotEnsureRowVisible(int)));
 }
 
 void TimelineFramesView::setFramesPerSecond(int fps)
@@ -415,6 +417,15 @@ void TimelineFramesView::slotReselectCurrentIndex()
     currentChanged(index, index);
 }
 
+void TimelineFramesView::slotEnsureRowVisible(int row)
+{
+    QModelIndex index = currentIndex();
+    if (!index.isValid() || row < 0) return;
+
+    index = m_d->model->index(row, index.column());
+    scrollTo(index);
+}
+
 void TimelineFramesView::slotDataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight)
 {
     if (m_d->model->isPlaybackActive()) return;
@@ -476,9 +487,9 @@ inline bool isIndexDragEnabled(QAbstractItemModel *model, const QModelIndex &ind
     return (model->flags(index) & Qt::ItemIsDragEnabled);
 }
 
-QStyleOptionViewItemV4 TimelineFramesView::Private::viewOptionsV4() const
+QStyleOptionViewItem TimelineFramesView::Private::viewOptionsV4() const
 {
-    QStyleOptionViewItemV4 option = q->viewOptions();
+    QStyleOptionViewItem option = q->viewOptions();
     option.locale = q->locale();
     option.locale.setNumberOptions(QLocale::OmitGroupSeparator);
     option.widget = q;
@@ -512,7 +523,7 @@ QPixmap TimelineFramesView::Private::renderToPixmap(const QModelIndexList &index
     QPixmap pixmap(r->size());
     pixmap.fill(Qt::transparent);
     QPainter painter(&pixmap);
-    QStyleOptionViewItemV4 option = viewOptionsV4();
+    QStyleOptionViewItem option = viewOptionsV4();
     option.state |= QStyle::State_Selected;
     for (int j = 0; j < paintPairs.count(); ++j) {
         option.rect = paintPairs.at(j).first.translated(-r->topLeft());

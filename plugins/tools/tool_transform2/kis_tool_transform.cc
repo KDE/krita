@@ -256,8 +256,8 @@ void KisToolTransform::beginActionImpl(KoPointerEvent *event, bool usePrimaryAct
         return;
     }
 
-    if (currentNode()->inherits("KisShapeLayer")) {
-        QString message = i18n("The transform tool cannot transform a vector layer.");
+    if (currentNode()->inherits("KisShapeLayer") || currentNode()->inherits("KisFileLayer")) {
+        QString message = i18n("The transform tool cannot transform a vector or file layer. Use a transform mask instead.");
         KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
         kiscanvas->viewManager()->showFloatingMessage(message, koIcon("object-locked"));
         event->ignore();

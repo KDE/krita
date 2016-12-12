@@ -79,6 +79,7 @@
 
 #include "processing/kis_mirror_processing_visitor.h"
 #include "KisView.h"
+#include "kis_config.h"
 
 struct KisNodeManager::Private {
 
@@ -307,7 +308,9 @@ void KisNodeManager::setup(KActionCollection * actionCollection, KisActionManage
 
     NEW_LAYER_ACTION("add_new_filter_mask", "KisFilterMask");
 
-    NEW_LAYER_ACTION("add_new_colorize_mask", "KisColorizeMask");
+    if (!KisConfig().disableColorizeMaskFeature()) {
+        NEW_LAYER_ACTION("add_new_colorize_mask", "KisColorizeMask");
+    }
 
     NEW_LAYER_ACTION("add_new_transform_mask", "KisTransformMask");
 

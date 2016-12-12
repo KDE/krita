@@ -1747,6 +1747,11 @@ void KisConfig::setBrushHudSetting(const QString &value) const
     m_cfg.writeEntry("brushHudSettings", value);
 }
 
+bool KisConfig::disableColorizeMaskFeature() const
+{
+    return m_cfg.readEntry("disableColorizeMaskFeature", true);
+}
+
 #include <QDomDocument>
 #include <QDomElement>
 

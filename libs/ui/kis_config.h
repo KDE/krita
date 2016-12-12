@@ -497,6 +497,8 @@ public:
     QString brushHudSetting(bool defaultValue = false) const;
     void setBrushHudSetting(const QString &value) const;
 
+    bool disableColorizeMaskFeature() const;
+
     template<class T>
     void writeEntry(const QString& name, const T& value) {
         m_cfg.writeEntry(name, value);

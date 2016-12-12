@@ -28,6 +28,8 @@
 #include "kis_paint_device.h"
 #include "kis_tool_lazy_brush.h"
 
+#include "kis_config.h"
+
 
 K_PLUGIN_FACTORY_WITH_JSON(DefaultToolsFactory, "kritatoollazybrush.json", registerPlugin<ToolLazyBrush>();)
 
@@ -35,7 +37,9 @@ K_PLUGIN_FACTORY_WITH_JSON(DefaultToolsFactory, "kritatoollazybrush.json", regis
 ToolLazyBrush::ToolLazyBrush(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
-    KoToolRegistry::instance()->add(new KisToolLazyBrushFactory());
+    if (!KisConfig().disableColorizeMaskFeature()) {
+        KoToolRegistry::instance()->add(new KisToolLazyBrushFactory());
+    }
 }
 
 ToolLazyBrush::~ToolLazyBrush()

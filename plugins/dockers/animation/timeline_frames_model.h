@@ -87,7 +87,7 @@ public:
 
 
     struct NodeManipulationInterface {
-        virtual ~NodeManipulationInterface() {};
+        virtual ~NodeManipulationInterface() {}
         virtual KisLayerSP addPaintLayer() const = 0;
         virtual void removeNode(KisNodeSP node) const = 0;
     };

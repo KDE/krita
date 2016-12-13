@@ -31,6 +31,7 @@
 
 #include <QColor>
 #include <QPainter>
+#include <QDir>
 
 #include <KoShape.h>
 #include <KoShapeRegistry.h>
@@ -79,6 +80,15 @@ SvgParser::~SvgParser()
 void SvgParser::setXmlBaseDir(const QString &baseDir)
 {
     m_context.setInitialXmlBaseDir(baseDir);
+
+    setFileFetcher(
+        [this](const QString &name) {
+            const QString fileName = m_context.xmlBaseDir() + QDir::separator() + name;
+            QFile file(fileName);
+            KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(file.exists(), QByteArray());
+            file.open(QIODevice::ReadOnly);
+            return file.readAll();
+        });
 }
 
 void SvgParser::setResolution(const QRectF boundsInPixels, qreal pixelsPerInch)
@@ -1195,14 +1205,16 @@ QList<KoShape*> SvgParser::parseSingleElement(const KoXmlElement &b)
         shapes += parseContainer(b);
         m_context.popGraphicsContext();
     } else if (b.tagName() == "defs") {
-        /**
-         * WARNING: 'defs' are basically 'display:none' style, therefore they should not play
-         *          any role in shapes outline calculation. But setVisible(false) shapes do!
-         *          Should be fixed in the future!
-         */
-        KoShape *defsShape = parseGroup(b);
-        defsShape->setVisible(false);
-        shapes += defsShape;
+        if (b.childNodesCount() > 0) {
+            /**
+             * WARNING: 'defs' are basically 'display:none' style, therefore they should not play
+             *          any role in shapes outline calculation. But setVisible(false) shapes do!
+             *          Should be fixed in the future!
+             */
+            KoShape *defsShape = parseGroup(b);
+            defsShape->setVisible(false);
+            shapes += defsShape;
+        }
     } else if (b.tagName() == "linearGradient" || b.tagName() == "radialGradient") {
         parseGradient(b);
     } else if (b.tagName() == "pattern") {

@@ -386,8 +386,33 @@ void KisShapeLayer::setVisible(bool visible, bool isLoading)
     KisExternalLayer::setVisible(visible, isLoading);
 }
 
+#include "SvgWriter.h"
+#include "SvgParser.h"
+#include <QXmlStreamReader>
+
 bool KisShapeLayer::saveLayer(KoStore * store) const
 {
+    if (!store->open("content.svg")) {
+        return false;
+    }
+
+    // FIXME: we handle xRes() only!
+    const QSizeF sizeInPt = image()->bounds().size() * image()->xRes();
+
+    KoStoreDevice storeDev(store);
+    storeDev.open(QIODevice::WriteOnly);
+
+    QList<KoShape*> shapes = this->shapes();
+    qSort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
+
+    SvgWriter writer(shapes, sizeInPt);
+    writer.save(storeDev);
+
+    if (!store->close()) {
+        return false;
+    }
+
+#if 0
 
     KoOdfWriteStore odfStore(store);
     KoXmlWriter* manifestWriter = odfStore.manifestWriter("application/vnd.oasis.opendocument.graphics");
@@ -480,11 +505,66 @@ bool KisShapeLayer::saveLayer(KoStore * store) const
         return false;
     }
 
+#endif
+
     return true;
+}
+
+void KisShapeLayer::loadSvg(QIODevice *device, const QString &baseXmlDir)
+{
+    QXmlStreamReader reader(device);
+    reader.setNamespaceProcessing(false);
+
+    QString errorMsg;
+    int errorLine = 0;
+    int errorColumn;
+
+    KoXmlDocument doc;
+    bool ok = doc.setContent(&reader, &errorMsg, &errorLine, &errorColumn);
+    if (!ok) {
+        errKrita << "Parsing error in " << "contents.svg" << "! Aborting!" << endl
+        << " In line: " << errorLine << ", column: " << errorColumn << endl
+        << " Error message: " << errorMsg << endl;
+        errKrita << i18n("Parsing error in the main document at line %1, column %2\nError message: %3"
+                         , errorLine , errorColumn , errorMsg);
+    }
+
+    QSizeF fragmentSize; // unused!
+    KisImageSP image = this->image();
+
+    // FIXME: we handle xRes() only!
+    KIS_SAFE_ASSERT_RECOVER_NOOP(qFuzzyCompare(image->xRes(), image->yRes()));
+    const qreal resolutionPPI = 72.0 * image->xRes();
+
+    SvgParser parser(m_d->controller->resourceManager());
+    parser.setXmlBaseDir(baseXmlDir);
+    parser.setResolution(image->bounds() /* px */, resolutionPPI /* ppi */);
+    QList<KoShape*> shapes =
+        parser.parseSvg(doc.documentElement(), &fragmentSize);
+
+    Q_FOREACH (KoShape *shape, shapes) {
+        addShape(shape);
+    }
 }
 
 bool KisShapeLayer::loadLayer(KoStore* store)
 {
+    if (!store) {
+        warnKrita << i18n("No store backend");
+        return false;
+    }
+
+    if (store->open("content.svg")) {
+        KoStoreDevice storeDev(store);
+        storeDev.open(QIODevice::ReadOnly);
+
+        loadSvg(&storeDev, "");
+
+        store->close();
+
+        return true;
+    }
+
     KoOdfReadStore odfStore(store);
     QString errorMessage;
 

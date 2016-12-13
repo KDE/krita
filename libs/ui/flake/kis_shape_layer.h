@@ -105,7 +105,10 @@ public:
     KoShapeManager *shapeManager() const;
 
     bool saveLayer(KoStore * store) const;
+
+    void loadSvg(QIODevice *device, const QString &baseXmlDir);
     bool loadLayer(KoStore* store);
+
 
     KUndo2Command* crop(const QRect & rect);
     KUndo2Command* transform(const QTransform &transform);

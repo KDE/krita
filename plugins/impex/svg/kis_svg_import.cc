@@ -22,13 +22,13 @@
 #include <kpluginfactory.h>
 #include <QFileInfo>
 
-#include <KisFilterChain.h>
-#include <KisImportExportManager.h>
-
 #include <KisDocument.h>
 #include <kis_image.h>
 
-#include <KisViewManager.h>
+#include <SvgParser.h>
+#include <KoColorSpaceRegistry.h>
+#include "kis_shape_layer.h"
+#include <KoShapeBasedDocumentBase.h>
 
 K_PLUGIN_FACTORY_WITH_JSON(SVGImportFactory, "krita_svg_import.json", registerPlugin<KisSVGImport>();)
 
@@ -40,49 +40,21 @@ KisSVGImport::~KisSVGImport()
 {
 }
 
-#include <SvgParser.h>
-#include <KoColorSpaceRegistry.h>
-#include "kis_shape_layer.h"
-#include <KoShapeBasedDocumentBase.h>
-
-KisImportExportFilter::ConversionStatus KisSVGImport::convert(const QByteArray&, const QByteArray& to, KisPropertiesConfigurationSP configuration)
+KisImportExportFilter::ConversionStatus KisSVGImport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration)
 {
-    dbgFile << "Importing using SVGImport!";
+    KisDocument * doc = document;
 
-    if (to != "application/x-krita")
-        return KisImportExportFilter::BadMimeType;
-
-    KisDocument * doc = outputDocument();
-
-    if (!doc) {
-        return KisImportExportFilter::NoDocumentCreated;
-    }
-
-    QString filename = inputFile();
-
-    ENTER_FUNCTION() << ppVar(filename);
-
-    doc -> prepareForImport();
-
-    if (filename.isEmpty() || !QFileInfo(filename).exists()) {
-        return KisImportExportFilter::FileNotFound;
-    }
-
-    const QString baseXmlDir = QFileInfo(filename).canonicalPath();
-    QFile file(filename);
-    file.open(QIODevice::ReadOnly);
+    const QString baseXmlDir = QFileInfo(filename()).canonicalPath();
 
     const qreal resolutionPPI = 100;
     const qreal resolution = resolutionPPI / 72.0;
 
     QSizeF fragmentSize;
     QList<KoShape*> shapes =
-            KisShapeLayer::createShapesFromSvg(&file, baseXmlDir,
+            KisShapeLayer::createShapesFromSvg(io, baseXmlDir,
                                                QRectF(0,0,1200,800), resolutionPPI,
                                                doc->shapeController()->resourceManager(),
                                                &fragmentSize);
-    ENTER_FUNCTION() << ppVar(shapes.size());
-
 
     QRectF rawImageRect(QPointF(), fragmentSize);
     QRect imageRect(rawImageRect.toAlignedRect());
@@ -97,16 +69,9 @@ KisImportExportFilter::ConversionStatus KisSVGImport::convert(const QByteArray&,
                               i18n("Vector Layer"),
                               OPACITY_OPAQUE_U8);
 
-
-    //        if (!shapes.isEmpty()) {
-    //            dbgKrita << "Could not load vector layer!";
-    //            return KisImportExportFilter::CreationError;
-    //        }
-
     Q_FOREACH (KoShape *shape, shapes) {
         shapeLayer->addShape(shape);
     }
-
 
     image->addNode(shapeLayer);
     return KisImportExportFilter::OK;

@@ -30,7 +30,7 @@ public:
     KisSVGImport(QObject *parent, const QVariantList &);
     virtual ~KisSVGImport();
 public:
-    virtual KisImportExportFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration = 0);
+    virtual KisImportExportFilter::ConversionStatus convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration);
 };
 
 #endif

@@ -83,6 +83,7 @@ void testFiles(const QString& _dirname, const QStringList& exclusions, const QSt
 
             QTemporaryFile tmpFile(QDir::tempPath() + QLatin1String("/krita_XXXXXX") + QLatin1String(".png"));
             tmpFile.open();
+            doc->setFileBatchMode(true);
             doc->setBackupFile(false);
             doc->setOutputMimeType("image/png");
             doc->saveAs(QUrl("file://" + tmpFile.fileName()));

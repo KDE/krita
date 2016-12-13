@@ -1212,7 +1212,7 @@ void exrConverter::Private::reportLayersNotSaved(const QSet<KisNodeSP> &layersNo
     QString msg =
             i18nc("@info",
                   "<p>The following layers have a type that is not supported by EXR format:</p>"
-                  "<p><ul>%1</list></p>"
+                  "<p><ul>%1</ul></p>"
                   "<p><warning>these layers will NOT be saved to the final EXR file</warning></p>", layersList);
 
     if (this->showNotifications) {

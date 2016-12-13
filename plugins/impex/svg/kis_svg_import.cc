@@ -42,6 +42,8 @@ KisSVGImport::~KisSVGImport()
 
 KisImportExportFilter::ConversionStatus KisSVGImport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration)
 {
+    Q_UNUSED(configuration);
+
     KisDocument * doc = document;
 
     const QString baseXmlDir = QFileInfo(filename()).canonicalPath();

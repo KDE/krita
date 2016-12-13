@@ -1026,6 +1026,16 @@ void KisConfig::setPresetChooserViewMode(const int mode) const
     m_cfg.writeEntry("presetChooserViewMode", mode);
 }
 
+int KisConfig::presetIconSize(bool defaultValue) const
+{
+    return (defaultValue ? 30 : m_cfg.readEntry("presetIconSize", 30));
+}
+
+void KisConfig::setPresetIconSize(const int value) const
+{
+    m_cfg.writeEntry("presetIconSize", value);
+}
+
 bool KisConfig::firstRun(bool defaultValue) const
 {
     return (defaultValue ? true : m_cfg.readEntry("firstRun", true));
@@ -1084,6 +1094,16 @@ bool KisConfig::showDockerTitleBars(bool defaultValue) const
 void KisConfig::setShowDockerTitleBars(const bool value) const
 {
     m_cfg.writeEntry("showDockerTitleBars", value);
+}
+
+bool KisConfig::showDockers(bool defaultValue) const
+{
+    return (defaultValue ? true : m_cfg.readEntry("showDockers", true));
+}
+
+void KisConfig::setShowDockers(const bool value) const
+{
+    m_cfg.writeEntry("showDockers", value);
 }
 
 bool KisConfig::showStatusBar(bool defaultValue) const

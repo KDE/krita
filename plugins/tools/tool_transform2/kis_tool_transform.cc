@@ -151,9 +151,7 @@ void KisToolTransform::canvasUpdateRequested()
 
 void KisToolTransform::resetCursorStyle()
 {
-    KisTool::resetCursorStyle();
-
-    overrideCursorIfNotEditable();
+    setFunctionalCursor();
 }
 
 void KisToolTransform::resetRotationCenterButtonsRequested()
@@ -258,6 +256,14 @@ void KisToolTransform::beginActionImpl(KoPointerEvent *event, bool usePrimaryAct
         return;
     }
 
+    if (currentNode()->inherits("KisShapeLayer") || currentNode()->inherits("KisFileLayer")) {
+        QString message = i18n("The transform tool cannot transform a vector or file layer. Use a transform mask instead.");
+        KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
+        kiscanvas->viewManager()->showFloatingMessage(message, koIcon("object-locked"));
+        event->ignore();
+        return;
+    }
+
     if (!m_strokeData.strokeId()) {
         startStroke(m_currentArgs.mode(), false);
     } else {
@@ -338,9 +344,21 @@ void KisToolTransform::endPrimaryAction(KoPointerEvent *event)
     endActionImpl(event, true, KisTool::NONE);
 }
 
+void KisToolTransform::activatePrimaryAction()
+{
+    currentStrategy()->activatePrimaryAction();
+    setFunctionalCursor();
+}
+
+void KisToolTransform::deactivatePrimaryAction()
+{
+    currentStrategy()->deactivatePrimaryAction();
+}
+
 void KisToolTransform::activateAlternateAction(AlternateAction action)
 {
     currentStrategy()->activateAlternateAction(action);
+    setFunctionalCursor();
 }
 
 void KisToolTransform::deactivateAlternateAction(AlternateAction action)
@@ -828,8 +846,6 @@ void KisToolTransform::requestStrokeCancellation()
 void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode, bool forceReset)
 {
     Q_ASSERT(!m_strokeData.strokeId());
-
-    KisPaintDeviceSP dev;
 
     KisResourcesSnapshotSP resources =
             new KisResourcesSnapshot(image(), currentNode(), this->canvas()->resourceManager());

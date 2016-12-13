@@ -101,11 +101,6 @@ KisImageBuilder_Result OraConverter::buildFile(QIODevice *io, KisImageSP image, 
     }
 
     KisPaintDeviceSP dev = image->projection();
-    if (!KisPNGConverter::isColorSpaceSupported(dev->colorSpace())) {
-        dev = new KisPaintDevice(*dev.data());
-        KUndo2Command *cmd = dev->convertTo(KoColorSpaceRegistry::instance()->rgb8());
-        delete cmd;
-    }
     KisPNGConverter::saveDeviceToStore("mergedimage.png", image->bounds(), image->xRes(), image->yRes(), dev, store);
 
     delete store;

@@ -119,6 +119,11 @@ void KisShortcutsDialog::allDefault()
     d->m_shortcutsEditor->allDefault();
 }
 
+void KisShortcutsDialog::undo()
+{
+    d->undo();
+}
+
 void KisShortcutsDialog::importConfiguration(const QString &path)
 {
     auto config = KSharedConfig::openConfig(path);

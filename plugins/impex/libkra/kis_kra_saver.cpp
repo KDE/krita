@@ -275,12 +275,6 @@ bool KisKraSaver::saveBinaryData(KoStore* store, KisImageSP image, const QString
 
     if (!autosave) {
         KisPaintDeviceSP dev = image->projection();
-        if (!KisPNGConverter::isColorSpaceSupported(dev->colorSpace())) {
-            dev = new KisPaintDevice(*dev.data());
-            KUndo2Command *cmd = dev->convertTo(KoColorSpaceRegistry::instance()->rgb8());
-            delete cmd;
-        }
-
         KisPNGConverter::saveDeviceToStore("mergedimage.png", image->bounds(), image->xRes(), image->yRes(), dev, store);
     }
 

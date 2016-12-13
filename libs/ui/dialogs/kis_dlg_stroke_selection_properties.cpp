@@ -58,7 +58,7 @@ KisDlgStrokeSelection::KisDlgStrokeSelection(KisImageWSP image, KisViewManager *
     converter = view->canvasBase()->displayColorConverter();
     setButtons(Ok | Cancel);
     setDefaultButton(Ok);
-    setCaption(i18n("Stroke selection properties"));
+    setCaption(i18nc("@title:window", "Stroke Selection Properties"));
     m_page = new WdgStrokeSelection(this);
 
     m_image = image;

@@ -400,29 +400,42 @@ void KisPerspectiveTransformStrategy::Private::transformIntoArgs(const Eigen::Ma
 
     m = T.inverse() * m;
 
-    const qreal factor = (m(1,1) / m(0,1) - m(1,0) / m(0,0));
+    // TODO: implement matrix decomposition as described here
+    // https://www.w3.org/TR/css-transforms-1/#decomposing-a-3d-matrix
 
-    qreal scaleX = m(0,0) / m(2,2);
-    qreal scaleY = m(0,1) / m(2,2) * factor;
+    // For now use an extremely hackish approximation
+    if (m(0,1) != 0.0 && m(0,0) != 0.0 && m(2,2) != 0.0) {
 
-    Eigen::Matrix3f SC = fromScale(scaleX, scaleY);
+        const qreal factor = (m(1,1) / m(0,1) - m(1,0) / m(0,0));
 
-    qreal shearX = 1.0 / factor;
-    qreal shearY = m(1,0) / m(0,0);
+        qreal scaleX = m(0,0) / m(2,2);
+        qreal scaleY = m(0,1) / m(2,2) * factor;
 
-    Eigen::Matrix3f S = fromShear(shearX, shearY);
+        Eigen::Matrix3f SC = fromScale(scaleX, scaleY);
 
-    currentArgs.setScaleX(scaleX);
-    currentArgs.setScaleY(scaleY);
+        qreal shearX = 1.0 / factor;
+        qreal shearY = m(1,0) / m(0,0);
 
-    currentArgs.setShearX(shearX);
-    currentArgs.setShearY(shearY);
+        Eigen::Matrix3f S = fromShear(shearX, shearY);
+
+        currentArgs.setScaleX(scaleX);
+        currentArgs.setScaleY(scaleY);
+
+        currentArgs.setShearX(shearX);
+        currentArgs.setShearY(shearY);
+
+        m = m * SC.inverse();
+        m = m * S.inverse();
+        m /= m(2,2);
+    } else {
+        currentArgs.setScaleX(1.0);
+        currentArgs.setScaleY(1.0);
+
+        currentArgs.setShearX(0.0);
+        currentArgs.setShearY(0.0);
+    }
 
     currentArgs.setTransformedCenter(QPointF(tX, tY));
-
-    m = m * SC.inverse();
-    m = m * S.inverse();
-    m /= m(2,2);
     currentArgs.setFlattenedPerspectiveTransform(toQTransform(m));
 }
 
@@ -440,9 +453,10 @@ QPointF toQPointF(const QVector4D &v) {
     return v.toVector2DAffine().toPointF();
 }
 
-void KisPerspectiveTransformStrategy::continuePrimaryAction(const QPointF &mousePos, bool specialModifierActve)
+void KisPerspectiveTransformStrategy::continuePrimaryAction(const QPointF &mousePos, bool shiftModifierActve, bool altModifierActive)
 {
-    Q_UNUSED(specialModifierActve);
+    Q_UNUSED(shiftModifierActve);
+    Q_UNUSED(altModifierActive);
 
     switch (m_d->function) {
     case NONE:

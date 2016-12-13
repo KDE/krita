@@ -55,7 +55,7 @@
       </widget>
      </item>
      <item>
-      <widget class="KisSliderSpinBox" name="spinBoxLength">
+      <widget class="KisSliderSpinBox" name="spinBoxLength" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
          <horstretch>0</horstretch>
@@ -66,10 +66,10 @@
         <number>1</number>
        </property>
        <property name="maximum" stdset="0">
-        <number>99999</number>
+        <number>5000</number>
        </property>
        <property name="value" stdset="0">
-        <number>1000</number>
+        <number>200</number>
        </property>
       </widget>
      </item>

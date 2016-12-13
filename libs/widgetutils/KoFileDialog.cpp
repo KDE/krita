@@ -85,13 +85,11 @@ void KoFileDialog::setCaption(const QString &caption)
 
 void KoFileDialog::setDefaultDir(const QString &defaultDir)
 {
-    QFileInfo f(defaultDir);
-    d->defaultDirectory = f.absoluteFilePath();
-}
-
-void KoFileDialog::setOverrideDir(const QString &overrideDir)
-{
-    d->defaultDirectory = overrideDir;
+    //qDebug() << d->defaultDirectory << d->dialogName << getUsedDir(d->dialogName);
+    if (d->defaultDirectory.isEmpty()) {
+        QFileInfo f(defaultDir);
+        d->defaultDirectory = f.absoluteFilePath();
+    }
 }
 
 void KoFileDialog::setImageFilters()
@@ -381,7 +379,7 @@ QString KoFileDialog::getUsedDir(const QString &dialogName)
     if (dialogName.isEmpty()) return "";
 
     KConfigGroup group =  KSharedConfig::openConfig()->group("File Dialogs");
-    QString dir = group.readEntry(dialogName);
+    QString dir = group.readEntry(dialogName, "");
 
     return dir;
 }

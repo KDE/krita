@@ -45,6 +45,12 @@ public:
     KisKeyframe(KisKeyframeChannel *channel, int time);
     virtual ~KisKeyframe();
 
+    /**
+     * Create a copy of the keyframe for insertion into given channel.
+     * Used when constructing a copy of a keyframe channel.
+     */
+    virtual KisKeyframeSP cloneFor(KisKeyframeChannel *channel) const = 0;
+
     int time() const;
     void setTime(int time);
 
@@ -60,6 +66,9 @@ public:
     void setColorLabel(int label);
 
     KisKeyframeChannel *channel() const;
+
+protected:
+    KisKeyframe(const KisKeyframe *rhs, KisKeyframeChannel *channel);
 
 private:
     struct Private;

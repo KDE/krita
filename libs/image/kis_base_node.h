@@ -142,19 +142,19 @@ public:
      * @return the paint device to paint on. Can be 0 if the actual
      *         node type does not support painting.
      */
-    virtual KisPaintDeviceSP paintDevice() const;
+    virtual KisPaintDeviceSP paintDevice() const = 0;
 
     /**
      * @return the rendered representation of a node
      * before the effect masks have had their go at it. Can be 0.
      */
-    virtual KisPaintDeviceSP original() const;
+    virtual KisPaintDeviceSP original() const = 0;
 
     /**
      * @return the fully rendered representation of this layer: its
      * rendered original and its effect masks. Can be 0.
      */
-    virtual KisPaintDeviceSP projection() const;
+    virtual KisPaintDeviceSP projection() const = 0;
 
     virtual const KoColorSpace *colorSpace() const = 0;
 
@@ -235,7 +235,7 @@ public:
      */
     virtual QIcon icon() const {
         return QIcon();
-    };
+    }
 
     /**
      * Return a the properties of this base node (locked, visible etc,
@@ -507,7 +507,7 @@ protected:
      * the node stack
      */
     virtual KisBaseNodeSP parentCallback() const {
-        return 0;
+        return KisBaseNodeSP();
     }
 
     virtual void notifyParentVisibilityChanged(bool value) {

@@ -49,11 +49,11 @@ class KisOperation;
  * Ultimately it would be nice to unify these things more fully.
  *
  */
-class KRITAUI_EXPORT KisActionManager
+class KRITAUI_EXPORT KisActionManager : public QObject
 {
-
+    Q_OBJECT
 public:
-    KisActionManager(KisViewManager* viewManager);
+    KisActionManager(KisViewManager* viewManager, KActionCollection *actionCollection);
     virtual ~KisActionManager();
 
     void setView(QPointer<KisView> imageView);
@@ -99,6 +99,9 @@ public:
      */
     KisAction *createStandardAction(KStandardAction::StandardAction,
                                     const QObject *receiver, const char *member);
+
+private Q_SLOTS:
+    void slotActionAddedToCollection(QAction *action);
 
 private:
     void dumpActionFlags();

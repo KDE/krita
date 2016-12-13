@@ -24,7 +24,6 @@
 #include <KoXmlWriter.h>
 #include <KoStore.h>
 #include <KoResourceServerProvider.h>
-
 #include <KoResourcePaths.h>
 
 #include <QScopedPointer>
@@ -197,15 +196,16 @@ bool KisResourceBundle::load()
          * If no version is found it's an old bundle with md5 hashes to fix, or if some manifest resource entry
          * doesn't not correspond to a file the bundle is "broken", in both cases we need to recreate the bundle.
          */
-        if(!versionFound) {
+        if (!versionFound) {
             m_metadata.insert("bundle-version", "1");
             warnKrita << filename() << " has an old version and possibly wrong resources md5, so it will be recreated.";
             toRecreate = true;
         }
 
-        if(toRecreate) {
+        if (toRecreate) {
             recreateBundle(resourceStore);
         }
+
 
         m_installed = true;
         setValid(true);
@@ -709,8 +709,11 @@ bool KisResourceBundle::install()
 
 bool KisResourceBundle::uninstall()
 {
-    m_installed = false;
 
+    m_installed = false;
+    QStringList tags = getTagsList();
+    tags << m_manifest.tags();
+    tags << name();
 
     KoResourceServer<KoAbstractGradient>* gradientServer = KoResourceServerProvider::instance()->gradientServer();
     //Q_FOREACH (const KisResourceBundleManifest::ResourceReference &ref, m_manifest.files("gradients")) {
@@ -747,6 +750,7 @@ bool KisResourceBundle::uninstall()
             paletteServer->removeResourceFromServer(res);
         }
     }
+
     KoResourceServer< KisWorkspaceResource >* workspaceServer = KisResourceServerProvider::instance()->workspaceServer();
     //Q_FOREACH (const KisResourceBundleManifest::ResourceReference &ref, m_manifest.files("workspaces")) {
     Q_FOREACH (const QByteArray md5, m_workspacesMd5Installed) {
@@ -755,7 +759,6 @@ bool KisResourceBundle::uninstall()
             workspaceServer->removeResourceFromServer(res);
         }
     }
-
     KisPaintOpPresetResourceServer* paintoppresetServer = KisResourceServerProvider::instance()->paintOpPresetServer();
     //Q_FOREACH (const KisResourceBundleManifest::ResourceReference &ref, m_manifest.files("paintoppresets")) {
     Q_FOREACH (const QByteArray md5, m_presetsMd5Installed) {
@@ -764,6 +767,16 @@ bool KisResourceBundle::uninstall()
             paintoppresetServer->removeResourceFromServer(res);
         }
     }
+
+    Q_FOREACH(const QString &tag, tags) {
+        paintoppresetServer->tagCategoryRemoved(tag);
+        workspaceServer->tagCategoryRemoved(tag);
+        paletteServer->tagCategoryRemoved(tag);
+        brushServer->tagCategoryRemoved(tag);
+        patternServer->tagCategoryRemoved(tag);
+        gradientServer->tagCategoryRemoved(tag);
+    }
+
 
     return true;
 }

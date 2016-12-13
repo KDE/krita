@@ -138,6 +138,8 @@ public:
     void continueActionImpl(KoPointerEvent *event, bool usePrimaryAction, KisTool::AlternateAction action);
     void endActionImpl(KoPointerEvent *event, bool usePrimaryAction, KisTool::AlternateAction action);
 
+    void activatePrimaryAction();
+    void deactivatePrimaryAction();
     void beginPrimaryAction(KoPointerEvent *event);
     void continuePrimaryAction(KoPointerEvent *event);
     void endPrimaryAction(KoPointerEvent *event);
@@ -312,10 +314,10 @@ public:
     KisToolTransformFactory()
             : KoToolFactoryBase("KisToolTransform") {
         setToolTip(i18n("Transform a layer or a selection"));
-        setToolType(TOOL_TYPE_TRANSFORM);
+        setSection(TOOL_TYPE_TRANSFORM);
         setIconName(koIconNameCStr("krita_tool_transform"));
         setShortcut(QKeySequence(Qt::CTRL + Qt::Key_T));
-        setPriority(11);
+        setPriority(2);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
     }
 

@@ -69,11 +69,11 @@ struct NodeManagerInterface : TimelineFramesModel::NodeManipulationInterface
 {
     NodeManagerInterface(KisNodeManager *manager) : m_manager(manager) {}
 
-    KisLayerSP addPaintLayer() const {
+    KisLayerSP addPaintLayer() const override {
         return m_manager->createPaintLayer();
     }
 
-    void removeNode(KisNodeSP node) const {
+    void removeNode(KisNodeSP node) const override {
         m_manager->removeSingleNode(node);
     }
 

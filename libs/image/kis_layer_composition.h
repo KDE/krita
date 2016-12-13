@@ -38,6 +38,8 @@ public:
     KisLayerComposition(KisImageWSP image, const QString& name);
     ~KisLayerComposition();
 
+    KisLayerComposition(const KisLayerComposition &rhs, KisImageWSP otherImage = 0);
+
    /**
     * Sets name of the composition
     */

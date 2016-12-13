@@ -341,7 +341,7 @@ public:
     {
     }
 
-    void run() {
+    void run() override {
         for (int i = 0; i < NUM_CYCLES; i++) {
             if(i % NTH_CHECK == 0) {
                 m_scheduler->blockUpdates();

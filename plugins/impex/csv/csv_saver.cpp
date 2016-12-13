@@ -52,7 +52,7 @@
 #include "csv_layer_record.h"
 
 CSVSaver::CSVSaver(KisDocument *doc, bool batchMode)
-    : m_image(doc->image())
+    : m_image(doc->savingImage())
     , m_doc(doc)
     , m_batchMode(batchMode)
     , m_stop(false)
@@ -63,12 +63,12 @@ CSVSaver::~CSVSaver()
 {
 }
 
-KisImageWSP CSVSaver::image()
+KisImageSP CSVSaver::image()
 {
     return m_image;
 }
 
-KisImageBuilder_Result CSVSaver::encode(const QString &filename)
+KisImageBuilder_Result CSVSaver::encode(QIODevice *io)
 {
     int idx;
     int start, end;
@@ -79,16 +79,11 @@ KisImageBuilder_Result CSVSaver::encode(const QString &filename)
 
     KisImageAnimationInterface *animation = m_image->animationInterface();
 
-    //open the csv file for writing
-    QFile f(filename);
-    if (!f.open(QIODevice::WriteOnly)) {
-        return KisImageBuilder_RESULT_NOT_LOCAL;
-    }
-
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
-    //DataStream instead of TextStream for correct line endings
-    QDataStream stream(&f);
+// XXX: Stream was unused?
+//    //DataStream instead of TextStream for correct line endings
+//    QDataStream stream(&f);
 
     //Using the original local path
     QString path = m_doc->localFilePath();
@@ -96,11 +91,9 @@ KisImageBuilder_Result CSVSaver::encode(const QString &filename)
     if (path.right(4).toUpper() == ".CSV")
         path = path.left(path.size() - 4);
     else {
-        //something is wrong: the local file name is not .csv!
-        //trying the given (probably temporary) filename as well
-
-        path= filename;
-
+        // something is wrong: the local file name is not .csv!
+        // trying the given (probably temporary) filename as well
+        // XXX: unbreak this!
         if (path.right(4).toUpper() == ".CSV")
             path = path.left(path.size() - 4);
     }
@@ -123,8 +116,8 @@ KisImageBuilder_Result CSVSaver::encode(const QString &filename)
     idx = 0;
 
     while (node) {
-        if (node->inherits("KisPaintLayer")) {
-            KisPaintLayer* paintLayer = dynamic_cast<KisPaintLayer*>(node.data());
+        if (node->inherits("KisLayer")) {
+            KisLayer* paintLayer = qobject_cast<KisLayer*>(node.data());
             CSVLayerRecord* layerRecord = new CSVLayerRecord();
             layers.prepend(layerRecord); //reverse order!
 
@@ -195,92 +188,92 @@ KisImageBuilder_Result CSVSaver::encode(const QString &filename)
         switch(step) {
 
         case 0 :    //first row
-            if (f.write("UTF-8, TVPaint, \"CSV 1.0\"\r\n") < 0) {
+            if (io->write("UTF-8, TVPaint, \"CSV 1.0\"\r\n") < 0) {
                 retval = KisImageBuilder_RESULT_FAILURE;
             }
             break;
 
         case 1 :    //scene header names
-            if (f.write("Project Name, Width, Height, Frame Count, Layer Count, Frame Rate, Pixel Aspect Ratio, Field Mode\r\n") < 0) {
+            if (io->write("Project Name, Width, Height, Frame Count, Layer Count, Frame Rate, Pixel Aspect Ratio, Field Mode\r\n") < 0) {
                 retval = KisImageBuilder_RESULT_FAILURE;
             }
             break;
 
         case 2 :    //scene header values
             ba = QString("\"%1\", ").arg(m_image->objectName()).toUtf8();
-            if (f.write(ba.data()) < 0) {
+            if (io->write(ba.data()) < 0) {
                 retval = KisImageBuilder_RESULT_FAILURE;
                 break;
             }
             ba = QString("%1, %2, ").arg(m_image->width()).arg(m_image->height()).toUtf8();
-            if (f.write(ba.data()) < 0) {
+            if (io->write(ba.data()) < 0) {
                 retval = KisImageBuilder_RESULT_FAILURE;
                 break;
             }
 
             ba = QString("%1, %2, ").arg(end - start + 1).arg(layers.size()).toUtf8();
-            if (f.write(ba.data()) < 0) {
+            if (io->write(ba.data()) < 0) {
                 retval = KisImageBuilder_RESULT_FAILURE;
                 break;
             }
             //the framerate is an integer here
             ba = QString("%1, ").arg((double)(animation->framerate()),0,'f',6).toUtf8();
-            if (f.write(ba.data()) < 0) {
+            if (io->write(ba.data()) < 0) {
                 retval = KisImageBuilder_RESULT_FAILURE;
                 break;
             }
             ba = QString("%1, Progressive\r\n").arg((double)(m_image->xRes() / m_image->yRes()),0,'f',6).toUtf8();
-            if (f.write(ba.data()) < 0) {
+            if (io->write(ba.data()) < 0) {
                 retval = KisImageBuilder_RESULT_FAILURE;
                 break;
             }
             break;
 
         case 3 :    //layer header values
-            if (f.write("#Layers") < 0) {          //Layers
+            if (io->write("#Layers") < 0) {          //Layers
                 retval = KisImageBuilder_RESULT_FAILURE;
                 break;
             }
 
             for (idx = 0; idx < layers.size(); idx++) {
                 ba = QString(", \"%1\"").arg(layers.at(idx)->name).toUtf8();
-                if (f.write(ba.data()) < 0)
+                if (io->write(ba.data()) < 0)
                     break;
             }
             break;
 
         case 4 :
-            if (f.write("\r\n#Density") < 0) {     //Density
+            if (io->write("\r\n#Density") < 0) {     //Density
                 retval = KisImageBuilder_RESULT_FAILURE;
                 break;
             }
             for (idx = 0; idx < layers.size(); idx++) {
                 ba = QString(", %1").arg((double)(layers.at(idx)->density), 0, 'f', 6).toUtf8();
-                if (f.write(ba.data()) < 0)
+                if (io->write(ba.data()) < 0)
                     break;
             }
             break;
 
         case 5 :
-            if (f.write("\r\n#Blending") < 0) {     //Blending
+            if (io->write("\r\n#Blending") < 0) {     //Blending
                 retval = KisImageBuilder_RESULT_FAILURE;
                 break;
             }
             for (idx = 0; idx < layers.size(); idx++) {
                 ba = QString(", \"%1\"").arg(layers.at(idx)->blending).toUtf8();
-                if (f.write(ba.data()) < 0)
+                if (io->write(ba.data()) < 0)
                     break;
             }
             break;
 
         case 6 :
-            if (f.write("\r\n#Visible") < 0) {     //Visible
+            if (io->write("\r\n#Visible") < 0) {     //Visible
                 retval = KisImageBuilder_RESULT_FAILURE;
                 break;
             }
             for (idx = 0; idx < layers.size(); idx++) {
                 ba = QString(", %1").arg(layers.at(idx)->visible).toUtf8();
-                if (f.write(ba.data()) < 0)
+                if (io->write(ba.data()) < 0)
                     break;
             }
             if (idx < layers.size()) {
@@ -291,7 +284,7 @@ KisImageBuilder_Result CSVSaver::encode(const QString &filename)
         default :    //frames
 
             if (frame > end) {
-                if (f.write("\r\n") < 0)
+                if (io->write("\r\n") < 0)
                     retval = KisImageBuilder_RESULT_FAILURE;
 
                 step = 8;
@@ -299,7 +292,7 @@ KisImageBuilder_Result CSVSaver::encode(const QString &filename)
             }
 
             ba = QString("\r\n#%1").arg(frame, 5, 10, QChar('0')).toUtf8();
-            if (f.write(ba.data()) < 0) {
+            if (io->write(ba.data()) < 0) {
                 retval = KisImageBuilder_RESULT_FAILURE;
                 break;
             }
@@ -331,7 +324,7 @@ KisImageBuilder_Result CSVSaver::encode(const QString &filename)
                 }
                 ba = QString(", \"%1\"").arg(layer->last).toUtf8();
 
-                if (f.write(ba.data()) < 0)
+                if (io->write(ba.data()) < 0)
                     break;
             }
             if (idx < layers.size())
@@ -345,7 +338,7 @@ KisImageBuilder_Result CSVSaver::encode(const QString &filename)
     } while((retval == KisImageBuilder_RESULT_OK) && (step < 8));
 
     qDeleteAll(layers);
-    f.close();
+    io->close();
 
     if (!m_batchMode) {
         disconnect(m_doc, SIGNAL(sigProgressCanceled()), this, SLOT(cancel()));
@@ -393,7 +386,7 @@ QString CSVSaver::convertToBlending(const QString &opid)
 KisImageBuilder_Result CSVSaver::getLayer(CSVLayerRecord* layer, KisDocument* exportDoc, KisKeyframeSP keyframe, const QString &path, int frame, int idx)
 {
     //render to the temp layer
-    KisImageWSP image = exportDoc->image();
+    KisImageSP image = exportDoc->savingImage();
     KisPaintDeviceSP device = image->rootLayer()->firstChild()->projection();
 
     if (!keyframe.isNull()) {
@@ -413,7 +406,6 @@ KisImageBuilder_Result CSVSaver::getLayer(CSVLayerRecord* layer, KisDocument* ex
     filename.append(layer->last);
 
     //save to PNG
-
     KisSequentialConstIterator it(device, image->bounds());
     const KoColorSpace* cs = device->colorSpace();
 
@@ -452,11 +444,11 @@ KisImageBuilder_Result CSVSaver::getLayer(CSVLayerRecord* layer, KisDocument* ex
 
 void CSVSaver::createTempImage(KisDocument* exportDoc)
 {
-    exportDoc->setAutoSave(0);
+    exportDoc->setAutoSaveDelay(0);
     exportDoc->setOutputMimeType("image/png");
     exportDoc->setFileBatchMode(true);
 
-    KisImageWSP exportImage = new KisImage(exportDoc->createUndoStore(),
+    KisImageSP exportImage = new KisImage(exportDoc->createUndoStore(),
                                            m_image->width(), m_image->height(), m_image->colorSpace(),
                                            QString());
 
@@ -468,11 +460,12 @@ void CSVSaver::createTempImage(KisDocument* exportDoc)
 }
 
 
-KisImageBuilder_Result CSVSaver::buildAnimation(const QString &filename)
+KisImageBuilder_Result CSVSaver::buildAnimation(QIODevice *io)
 {
-    if (!m_image)
+    if (!m_image) {
         return KisImageBuilder_RESULT_EMPTY;
-    return encode(filename);
+    }
+    return encode(io);
 }
 
 void CSVSaver::cancel()

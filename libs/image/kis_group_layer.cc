@@ -206,7 +206,7 @@ KisLayer* KisGroupLayer::onlyMeaningfulChild() const
     KisLayer *onlyLayer = 0;
 
     while (child) {
-        KisLayer *layer = dynamic_cast<KisLayer*>(child);
+        KisLayer *layer = qobject_cast<KisLayer*>(child);
         if (layer) {
             if (onlyLayer) return 0;
             onlyLayer = layer;
@@ -260,6 +260,11 @@ KisPaintDeviceSP KisGroupLayer::original() const
     }
 
     return realOriginal;
+}
+
+KisPaintDeviceSP KisGroupLayer::paintDevice() const
+{
+    return 0;
 }
 
 bool KisGroupLayer::projectionIsValid() const

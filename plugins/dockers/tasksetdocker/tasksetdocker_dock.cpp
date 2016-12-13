@@ -47,9 +47,9 @@ class KisTasksetDelegate : public QStyledItemDelegate
 {
 public:
     KisTasksetDelegate(QObject * parent = 0) : QStyledItemDelegate(parent) {}
-    virtual ~KisTasksetDelegate() {}
+    ~KisTasksetDelegate() override {}
     /// reimplemented
-    QSize sizeHint(const QStyleOptionViewItem & option, const QModelIndex & index) const {
+    QSize sizeHint(const QStyleOptionViewItem & option, const QModelIndex & index) const override {
         return QSize(QStyledItemDelegate::sizeHint(option, index).width(),
                      qMin(QStyledItemDelegate::sizeHint(option, index).width(), 25));
     }
@@ -59,9 +59,9 @@ class KisTasksetResourceDelegate : public QStyledItemDelegate
 {
 public:
     KisTasksetResourceDelegate(QObject * parent = 0) : QStyledItemDelegate(parent) {}
-    virtual ~KisTasksetResourceDelegate() {}
+    ~KisTasksetResourceDelegate() override {}
     /// reimplemented
-    virtual void paint(QPainter *, const QStyleOptionViewItem &, const QModelIndex &) const;
+    void paint(QPainter *, const QStyleOptionViewItem &, const QModelIndex &) const override;
 };
 
 void KisTasksetResourceDelegate::paint(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index) const
@@ -194,7 +194,7 @@ void TasksetDockerDock::saveClicked()
 
     m_taskThread->barrier();
 
-    TasksetResource* taskset = new TasksetResource("");
+    TasksetResource* taskset = new TasksetResource(QString());
 
     QStringList actionNames;
     Q_FOREACH (QAction* action, m_model->actions()) {

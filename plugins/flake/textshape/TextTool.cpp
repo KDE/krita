@@ -122,7 +122,7 @@ public:
     {
     }
 
-    bool hasSelection()
+    bool hasSelection() override
     {
         if (!m_editor.isNull()) {
             return m_editor.data()->hasSelection();
@@ -1658,7 +1658,7 @@ void TextTool::keyPressEvent(QKeyEvent *event)
         } else if (hit(item, KStandardShortcut::ForwardWord)) {
             moveOperation = QTextCursor::WordRight;
         }
-#ifdef Q_WS_MAC
+#ifdef Q_OS_OSX
         // Don't reject "alt" key, it may be used for typing text on Mac OS
         else if ((event->modifiers() & Qt::ControlModifier) || event->text().length() == 0) {
 #else
@@ -2648,14 +2648,14 @@ void TextTool::startMacro(const QString &title)
     {
     public:
         MacroCommand(const KUndo2MagicString &title) : KUndo2Command(title), m_first(true) {}
-        virtual void redo()
+        void redo() override
         {
             if (!m_first) {
                 KUndo2Command::redo();
             }
             m_first = false;
         }
-        virtual bool mergeWith(const KUndo2Command *)
+        bool mergeWith(const KUndo2Command *) override
         {
             return false;
         }

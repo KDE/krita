@@ -23,7 +23,8 @@ macro (KRITA_ADD_BENCHMARK _test_NAME)
         set(_nogui "NOGUI")
     endif()
 
-    kde4_add_executable( ${_test_NAME} TEST ${_srcList} )
+    add_executable( ${_test_NAME} ${_srcList} )
+    ecm_mark_as_test(${_test_NAME})
 
     if(NOT KDE4_TEST_OUTPUT)
         set(KDE4_TEST_OUTPUT plaintext)
@@ -48,7 +49,7 @@ macro (KRITA_ADD_BENCHMARK _test_NAME)
       # .bat because of rpath handling
       set(_executable "${loc}.bat")
     else()
-      if (Q_WS_MAC AND NOT _nogui)
+      if (Q_OS_OSX AND NOT _nogui)
         set(_executable ${EXECUTABLE_OUTPUT_PATH}/${_test_NAME}.app/Contents/MacOS/${_test_NAME})
       else ()
         # .shell because of rpath handling

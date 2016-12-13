@@ -40,7 +40,7 @@ class ShapeGroupContainerModel : public SimpleShapeContainerModel
 {
 public:
     ShapeGroupContainerModel(KoShapeGroup *group) : m_group(group) {}
-    ~ShapeGroupContainerModel() {}
+    ~ShapeGroupContainerModel() override {}
 
     ShapeGroupContainerModel(const ShapeGroupContainerModel &rhs, KoShapeGroup *group)
         : SimpleShapeContainerModel(rhs),
@@ -48,19 +48,19 @@ public:
     {
     }
 
-    virtual void add(KoShape *child)
+    void add(KoShape *child) override
     {
         SimpleShapeContainerModel::add(child);
         m_group->invalidateSizeCache();
     }
 
-    virtual void remove(KoShape *child)
+    void remove(KoShape *child) override
     {
         SimpleShapeContainerModel::remove(child);
         m_group->invalidateSizeCache();
     }
 
-    virtual void childChanged(KoShape *shape, KoShape::ChangeType type)
+    void childChanged(KoShape *shape, KoShape::ChangeType type) override
     {
         SimpleShapeContainerModel::childChanged(shape, type);
         //debugFlake << type;
@@ -101,7 +101,7 @@ public:
         model = new ShapeGroupContainerModel(*otherModel, q);
     }
 
-    ~KoShapeGroupPrivate()
+    ~KoShapeGroupPrivate() override
     {
     }
 

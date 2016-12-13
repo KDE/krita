@@ -62,18 +62,6 @@ KisAction::~KisAction()
     delete d;
 }
 
-KisAction *makeKisAction(QString name, QObject *parent)
-{
-    KisAction* a = new KisAction(parent);
-    KisActionRegistry::instance()->propertizeAction(name, a);
-    KisActionRegistry::instance()->addAction(name, a);
-
-    // TODO: Add other static data (activationFlags, etc.) using getActionXml()
-
-    return a;
-}
-
-
 // Using a dynamic QObject property is done for compatibility with KAction and
 // XmlGui. We may merge KisAction into the XmlGui code to make this unnecessary,
 // but that is probably a lot of work for little benefit. We currently store a

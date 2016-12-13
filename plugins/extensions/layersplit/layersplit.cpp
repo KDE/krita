@@ -149,7 +149,11 @@ void LayerSplit::slotLayerSplit()
                 }
 
                 if (!found) {
-                    QString name = dlg.palette()->closestColorName(c);
+                    QString name = "";
+                    if (dlg.palette()) {
+                       name = dlg.palette()->closestColorName(c);
+                    }
+
                     if (name.toLower() == "untitled" || name.toLower() == "none" || name.toLower() == "") {
                         name = KoColor::toQString(c);
                     }

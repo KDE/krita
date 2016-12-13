@@ -187,6 +187,7 @@ set(kritaimage_LIB_SRCS
    kis_projection_updates_filter.cpp
    kis_suspend_projection_updates_stroke_strategy.cpp
    kis_regenerate_frame_stroke_strategy.cpp
+   kis_switch_time_stroke_strategy.cpp
    kis_crop_saved_extra_data.cpp
    kis_signal_compressor.cpp
    kis_signal_compressor_with_param.cpp

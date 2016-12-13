@@ -1,3 +1,3 @@
 if (APPLE)
-    add_subdirectory(quicklook)
+    add_subdirectory(kritaquicklook)
 endif()

@@ -216,6 +216,7 @@ public Q_SLOTS:
     void slotSoftProofing(bool softProofing);
     void slotGamutCheck(bool gamutCheck);
     void slotChangeProofingConfig();
+    void slotZoomChanged(int zoom);
 
     void channelSelectionChanged();
 

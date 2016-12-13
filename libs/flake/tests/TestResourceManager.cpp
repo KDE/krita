@@ -58,11 +58,11 @@ struct DerivedResource : public KoDerivedResourceConverter
 {
     DerivedResource(int key, int sourceKey) : KoDerivedResourceConverter(key, sourceKey) {}
 
-    QVariant fromSource(const QVariant &value) {
+    QVariant fromSource(const QVariant &value) override {
         return value.toInt() + 10;
     }
 
-    QVariant toSource(const QVariant &value, const QVariant &sourceValue) {
+    QVariant toSource(const QVariant &value, const QVariant &sourceValue) override {
         Q_UNUSED(sourceValue);
         return value.toInt() - 10;
     }
@@ -164,14 +164,14 @@ struct ComplexConverter : public KoDerivedResourceConverter
 {
     ComplexConverter(int key, int sourceKey) : KoDerivedResourceConverter(key, sourceKey) {}
 
-    QVariant fromSource(const QVariant &value) {
+    QVariant fromSource(const QVariant &value) override {
         KIS_ASSERT(value.canConvert<ComplexResourceSP>());
         ComplexResourceSP res = value.value<ComplexResourceSP>();
 
         return res->m_resources[key()];
     }
 
-    QVariant toSource(const QVariant &value, const QVariant &sourceValue) {
+    QVariant toSource(const QVariant &value, const QVariant &sourceValue) override {
         KIS_ASSERT(sourceValue.canConvert<ComplexResourceSP>());
         ComplexResourceSP res = sourceValue.value<ComplexResourceSP>();
 
@@ -184,7 +184,7 @@ struct ComplexMediator : public KoResourceUpdateMediator
 {
     ComplexMediator(int key) : KoResourceUpdateMediator(key) {}
 
-    void connectResource(QVariant sourceResource) {
+    void connectResource(QVariant sourceResource) override {
         m_res = sourceResource;
     }
 

@@ -70,9 +70,9 @@ void KisDynamicSensorTime::setPeriodic(bool periodic)
     m_periodic = periodic;
 }
 
-void KisDynamicSensorTime::setLength(int length)
+void KisDynamicSensorTime::setLength(qreal length)
 {
-    m_length = length * 1000;
+    m_length = (int)(length * 1000); // convert to milliseconds
 }
 
 QWidget* KisDynamicSensorTime::createConfigurationWidget(QWidget* parent, QWidget* ss)
@@ -83,9 +83,16 @@ QWidget* KisDynamicSensorTime::createConfigurationWidget(QWidget* parent, QWidge
     stc.checkBoxRepeat->setChecked(m_periodic);
     connect(stc.checkBoxRepeat, SIGNAL(toggled(bool)), SLOT(setPeriodic(bool)));
     connect(stc.checkBoxRepeat, SIGNAL(toggled(bool)), ss, SIGNAL(parametersChanged()));
+
+    stc.spinBoxDuration->setRange(0.02, 10.0, 2);
+    stc.spinBoxDuration->setSuffix(i18n(" s"));
+
     stc.spinBoxDuration->setValue(m_length / 1000);
-    connect(stc.spinBoxDuration, SIGNAL(valueChanged(int)), SLOT(setLength(int)));
-    connect(stc.spinBoxDuration, SIGNAL(valueChanged(int)), ss, SIGNAL(parametersChanged()));
+    connect(stc.spinBoxDuration, SIGNAL(valueChanged(qreal)), SLOT(setLength(qreal)));
+    connect(stc.spinBoxDuration, SIGNAL(valueChanged(qreal)), ss, SIGNAL(parametersChanged()));
+
+
+
     return wdg;
 }
 

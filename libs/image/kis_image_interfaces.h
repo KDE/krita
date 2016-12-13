@@ -25,6 +25,7 @@
 class QRect;
 class KisStrokeStrategy;
 class KisStrokeJobData;
+class KisPostExecutionUndoAdapter;
 
 
 class KRITAIMAGE_EXPORT KisStrokesFacade
@@ -51,7 +52,7 @@ public:
     virtual void disableDirtyRequests() = 0;
     virtual void enableDirtyRequests() = 0;
 
-    virtual void refreshGraphAsync(KisNodeSP root = 0) = 0;
+    virtual void refreshGraphAsync(KisNodeSP root) = 0;
     virtual void refreshGraphAsync(KisNodeSP root, const QRect &rc) = 0;
     virtual void refreshGraphAsync(KisNodeSP root, const QRect &rc, const QRect &cropRect) = 0;
 
@@ -64,6 +65,13 @@ class KRITAIMAGE_EXPORT KisProjectionUpdateListener
 public:
     virtual ~KisProjectionUpdateListener();
     virtual void notifyProjectionUpdated(const QRect &rc) = 0;
+};
+
+class KRITAIMAGE_EXPORT KisStrokeUndoFacade
+{
+public:
+    virtual ~KisStrokeUndoFacade();
+    virtual KisPostExecutionUndoAdapter* postExecutionUndoAdapter() const = 0;
 };
 
 #endif /* __KIS_IMAGE_INTERFACES_H */

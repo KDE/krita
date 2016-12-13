@@ -50,10 +50,8 @@ void KisPSDTest::testOpening()
     KisImportExportManager manager(doc.data());
     manager.setBatchMode(true);
 
-    KisImportExportFilter::ConversionStatus status;
-    QString s = manager.importDocument(sourceFileInfo.absoluteFilePath(), QString(),
-                                       status);
-    dbgKrita << s;
+    KisImportExportFilter::ConversionStatus status = manager.importDocument(sourceFileInfo.absoluteFilePath(), QString());
+    QCOMPARE(status, KisImportExportFilter::OK);
 
     Q_ASSERT(doc->image());
 }
@@ -65,9 +63,8 @@ QSharedPointer<KisDocument> openPsdDocument(const QFileInfo &fileInfo)
     KisImportExportManager manager(doc.data());
     manager.setBatchMode(true);
 
-    KisImportExportFilter::ConversionStatus status;
-    QString s = manager.importDocument(fileInfo.absoluteFilePath(), QString(),
-                                       status);
+    KisImportExportFilter::ConversionStatus status = manager.importDocument(fileInfo.absoluteFilePath(), QString());
+    Q_UNUSED(status);
 
     return doc;
 }
@@ -139,7 +136,7 @@ void KisPSDTest::testOpenLayerStyles()
     QSharedPointer<KisDocument> doc = openPsdDocument(sourceFileInfo);
     QVERIFY(doc->image());
 
-    KisLayerSP layer = dynamic_cast<KisLayer*>(doc->image()->root()->lastChild().data());
+    KisLayerSP layer = qobject_cast<KisLayer*>(doc->image()->root()->lastChild().data());
     QVERIFY(layer->layerStyle());
     QVERIFY(layer->layerStyle()->dropShadow());
     QVERIFY(layer->layerStyle()->dropShadow()->effectEnabled());
@@ -154,7 +151,7 @@ void KisPSDTest::testOpenLayerStylesWithPattern()
     QSharedPointer<KisDocument> doc = openPsdDocument(sourceFileInfo);
     QVERIFY(doc->image());
 
-    KisLayerSP layer = dynamic_cast<KisLayer*>(doc->image()->root()->lastChild().data());
+    KisLayerSP layer = qobject_cast<KisLayer*>(doc->image()->root()->lastChild().data());
     QVERIFY(layer->layerStyle());
     QVERIFY(layer->layerStyle()->patternOverlay());
     QVERIFY(layer->layerStyle()->patternOverlay()->effectEnabled());
@@ -171,7 +168,7 @@ void KisPSDTest::testOpenLayerStylesWithPatternMulti()
     QSharedPointer<KisDocument> doc = openPsdDocument(sourceFileInfo);
     QVERIFY(doc->image());
 
-    KisLayerSP layer = dynamic_cast<KisLayer*>(doc->image()->root()->lastChild().data());
+    KisLayerSP layer = qobject_cast<KisLayer*>(doc->image()->root()->lastChild().data());
     QVERIFY(layer->layerStyle());
 
     QVERIFY(layer->layerStyle()->patternOverlay());
@@ -194,7 +191,7 @@ void KisPSDTest::testSaveLayerStylesWithPatternMulti()
     QSharedPointer<KisDocument> doc = openPsdDocument(sourceFileInfo);
     QVERIFY(doc->image());
 
-    KisLayerSP layer = dynamic_cast<KisLayer*>(doc->image()->root()->lastChild().data());
+    KisLayerSP layer = qobject_cast<KisLayer*>(doc->image()->root()->lastChild().data());
     QVERIFY(layer->layerStyle());
 
     QVERIFY(layer->layerStyle()->patternOverlay());
@@ -221,7 +218,7 @@ void KisPSDTest::testSaveLayerStylesWithPatternMulti()
         QImage result = doc->image()->projection()->convertToQImage(0, doc->image()->bounds());
         //QVERIFY(TestUtil::checkQImageExternal(result, "psd_test", "transparency_masks", "kiki_single"));
 
-        KisLayerSP layer = dynamic_cast<KisLayer*>(doc->image()->root()->lastChild().data());
+        KisLayerSP layer = qobject_cast<KisLayer*>(doc->image()->root()->lastChild().data());
         QVERIFY(layer->layerStyle());
 
         QVERIFY(layer->layerStyle()->patternOverlay());

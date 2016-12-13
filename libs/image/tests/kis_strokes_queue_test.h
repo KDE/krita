@@ -36,6 +36,11 @@ private Q_SLOTS:
     void testOpenedStrokeCounter();
     void testAsyncCancelWhileOpenedStroke();
     void testStrokesLevelOfDetail();
+    void testLodUndoBase();
+    void testLodUndoBase2();
+
+private:
+    struct LodStrokesQueueTester;
 };
 
 #endif /* __KIS_STROKES_QUEUE_TEST_H */

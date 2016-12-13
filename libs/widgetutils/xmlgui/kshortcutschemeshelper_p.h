@@ -31,11 +31,6 @@ class KShortcutSchemesHelper
 public:
 
     /**
-     * @return the current shortcut scheme name for the application.
-     */
-    static QString currentShortcutSchemeName();
-
-    /**
      * @return the name of the (writable) file to save the shortcut scheme to.
      */
     static QString shortcutSchemeFileName(const QString &schemeName);

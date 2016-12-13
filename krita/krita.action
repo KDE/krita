@@ -50,18 +50,6 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
-    <Action name="import_resources">
-      <icon></icon>
-      <text>Import Resources or Bundles...</text>
-      <whatsThis></whatsThis>
-      <toolTip>Import Resources or Bundles</toolTip>
-      <iconText>Import Resources or Bundles</iconText>
-      <activationFlags>0</activationFlags>
-      <activationConditions>0</activationConditions>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
     <Action name="create_bundle">
       <icon></icon>
       <text>Create Resource Bundle...</text>
@@ -183,6 +171,18 @@
       <whatsThis></whatsThis>
       <toolTip>Rename Composition</toolTip>
       <iconText>Rename Composition</iconText>
+      <activationFlags>0</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="update_composition">
+      <icon></icon>
+      <text>Update Composition</text>
+      <whatsThis></whatsThis>
+      <toolTip>Update Composition</toolTip>
+      <iconText>Update Composition</iconText>
       <activationFlags>0</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
@@ -498,26 +498,6 @@
       <iconText>Hide Brushes and Stuff Toolbar</iconText>
       <shortcut></shortcut>
       <isCheckable>true</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-    <Action name="zoom_in">
-      <icon>zoom-in</icon>
-      <text>Zoom &amp;In</text>
-      <whatsThis></whatsThis>
-      <toolTip>Zoom In</toolTip>
-      <iconText>Zoom In</iconText>
-      <shortcut>Ctrl++; Ctrl+=</shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-    <Action name="zoom_out">
-      <icon>zoom-out</icon>
-      <text>Zoom &amp;Out</text>
-      <whatsThis></whatsThis>
-      <toolTip>Zoom Out</toolTip>
-      <iconText>Zoom Out</iconText>
-      <shortcut>Ctrl+-</shortcut>
-      <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
     <Action name="reset_fg_bg">
@@ -1002,10 +982,10 @@
     </Action>
     <Action name="krita_filter_phongbumpmap">
       <icon></icon>
-      <text>&amp;PhongBumpmap...</text>
+      <text>&amp;Phong Bumpmap...</text>
       <whatsThis></whatsThis>
-      <toolTip>PhongBumpmap</toolTip>
-      <iconText>PhongBumpmap</iconText>
+      <toolTip>Phong Bumpmap</toolTip>
+      <iconText>Phong Bumpmap</iconText>
       <activationFlags>10000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
@@ -1602,20 +1582,12 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
-    <Action name="KisToolSelectBrush">
-      <icon></icon>
-      <text>Brush Selection Tool</text>
-      <whatsThis></whatsThis>
-      <toolTip>Brush Selection Tool</toolTip>
-      <iconText>Brush Selection Tool</iconText>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
   </Actions>
 
   <Actions category="Blending Modes">
     <text>Blending Modes</text>
+
+<!-- commented out in the code right now
     <Action name="Next Blending Mode">
       <icon></icon>
       <text>Next Blending Mode</text>
@@ -1636,6 +1608,7 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
+-->
     <Action name="Select Normal Blending Mode">
       <icon></icon>
       <text>Select Normal Blending Mode</text>
@@ -2105,7 +2078,7 @@
       <whatsThis></whatsThis>
       <toolTip>Activate next layer</toolTip>
       <iconText>Activate next layer</iconText>
-      <activationFlags>100000</activationFlags>
+      <activationFlags>1000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>PgUp</shortcut>
       <isCheckable>false</isCheckable>
@@ -2117,7 +2090,7 @@
       <whatsThis></whatsThis>
       <toolTip>Activate previous layer</toolTip>
       <iconText>Activate previous layer</iconText>
-      <activationFlags>100000</activationFlags>
+      <activationFlags>1000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>PgDown</shortcut>
       <isCheckable>false</isCheckable>
@@ -2369,7 +2342,7 @@
       <whatsThis></whatsThis>
       <toolTip>Create a group layer containing selected layers</toolTip>
       <iconText>Quick Group</iconText>
-      <activationFlags>0</activationFlags>
+      <activationFlags>100000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>Ctrl+G</shortcut>
       <isCheckable>false</isCheckable>
@@ -2381,7 +2354,7 @@
       <whatsThis></whatsThis>
       <toolTip>Remove grouping of the layers or remove one layer out of the group</toolTip>
       <iconText>Quick Ungroup</iconText>
-      <activationFlags>0</activationFlags>
+      <activationFlags>100000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>Ctrl+Alt+G</shortcut>
       <isCheckable>false</isCheckable>
@@ -2393,7 +2366,7 @@
       <whatsThis></whatsThis>
       <toolTip>Group selected layers and add a layer with clipped alpha channel</toolTip>
       <iconText>Quick Clipping Group</iconText>
-      <activationFlags>0</activationFlags>
+      <activationFlags>100000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>Ctrl+Shift+G</shortcut>
       <isCheckable>false</isCheckable>
@@ -2864,16 +2837,6 @@
       <activationFlags>100000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>Ctrl+Shift+E</shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-    <Action name="merge_selected_layers">
-      <icon></icon>
-      <text>&amp;Merge Selected Layers</text>
-      <whatsThis></whatsThis>
-      <toolTip>Merge Selected Layers</toolTip>
-      <iconText>Merge Selected Layers</iconText>
-      <shortcut>Ctrl+Alt+E</shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>

@@ -34,17 +34,17 @@ public:
     OraConverter(KisDocument *doc);
     virtual ~OraConverter();
 public:
-    KisImageBuilder_Result buildImage(const QString &filename);
-    KisImageBuilder_Result buildFile(const QString &filename, KisImageWSP image, vKisNodeSP activeNodes);
+    KisImageBuilder_Result buildImage(QIODevice *io);
+    KisImageBuilder_Result buildFile(QIODevice *io, KisImageSP image, vKisNodeSP activeNodes);
     /**
      * Retrieve the constructed image
      */
-    KisImageWSP image();
+    KisImageSP image();
     vKisNodeSP activeNodes();
 public Q_SLOTS:
     virtual void cancel();
 private:
-    KisImageWSP m_image;
+    KisImageSP m_image;
     KisDocument *m_doc;
     vKisNodeSP m_activeNodes;
     bool m_stop;

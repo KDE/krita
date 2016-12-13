@@ -181,7 +181,7 @@ public:
     {
     }
 
-    void run(KisStrokeJobData *data) {
+    void run(KisStrokeJobData *data) override {
         Q_UNUSED(data);
 
         m_counter.ref();

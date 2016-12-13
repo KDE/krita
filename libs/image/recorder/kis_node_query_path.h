@@ -33,6 +33,7 @@ public:
     KisNodeQueryPath(const KisNodeQueryPath&);
     KisNodeQueryPath& operator=(const KisNodeQueryPath&);
     QList<KisNodeSP> queryNodes(KisImageWSP image, KisNodeSP currentNode) const;
+    KisNodeSP queryUniqueNode(KisImageWSP image, KisNodeSP currentNode = 0) const;
     bool isRelative() const;
     // Use "///" style because of the needed "/*"
     /// This function return a string representing this path. Which is a list separated by '\' of:

@@ -79,7 +79,7 @@ public:
     {
     }
 
-    virtual ~KoTextShapeDataPrivate()
+    ~KoTextShapeDataPrivate() override
     {
     }
 

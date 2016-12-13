@@ -20,6 +20,8 @@
 #define _HISTORY_DOCK_H_
 
 #include <QDockWidget>
+#include <QToolButton>
+
 #include "KisUndoView.h"
 
 #include <KoCanvasObserverBase.h>
@@ -42,9 +44,13 @@ public:
     QString observerName() { return "HistoryDock"; }
     virtual void setCanvas(KoCanvasBase *canvas);
     virtual void unsetCanvas() { m_historyCanvas = 0; setEnabled(false); m_undoView->setStack(0); }
+
+private Q_SLOTS:
+    void configure();
 private:
-    KisUndoView* m_undoView;
-    KoCanvasBase* m_historyCanvas;
+    KisUndoView *m_undoView;
+    QToolButton *m_bnConfigure;
+    KoCanvasBase *m_historyCanvas;
 };
 
 

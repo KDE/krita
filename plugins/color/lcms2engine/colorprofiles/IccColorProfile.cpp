@@ -84,7 +84,7 @@ IccColorProfile::IccColorProfile(const QString &fileName)
 }
 
 IccColorProfile::IccColorProfile(const QByteArray &rawData)
-    : KoColorProfile(""), d(new Private)
+    : KoColorProfile(QString()), d(new Private)
 {
     d->shared = QSharedPointer<Private::Shared>(new Private::Shared());
     d->shared->data.reset(new Data());

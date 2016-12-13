@@ -25,6 +25,8 @@ class KisBrushOpTest : public QObject
 {
     Q_OBJECT
 private Q_SLOTS:
+    void initTestCase();
+
     void testRotationMirroring();
     void testRotationMirroringDrawingAngle();
     void testMagicSeven();

@@ -32,7 +32,14 @@ class KisDelayedSaveDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit KisDelayedSaveDialog(KisImageSP image, QWidget *parent = 0);
+    enum Type {
+        SaveDialog,
+        GeneralDialog,
+        ForcedDialog
+    };
+
+public:
+    explicit KisDelayedSaveDialog(KisImageSP image, Type type, int busyWait, QWidget *parent = 0);
     ~KisDelayedSaveDialog();
 
     void blockIfImageIsBusy();

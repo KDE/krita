@@ -69,7 +69,7 @@ public:
     ToolTransformArgs(TransformMode mode,
                       QPointF transformedCenter,
                       QPointF originalCenter,
-                      QPointF rotationCenterOffset,
+                      QPointF rotationCenterOffset, bool transformAroundRotationCenter,
                       double aX, double aY, double aZ,
                       double scaleX, double scaleY,
                       double shearX, double shearY,
@@ -148,6 +148,9 @@ public:
     inline QPointF rotationCenterOffset() const {
         return m_rotationCenterOffset;
     }
+    inline bool transformAroundRotationCenter() const {
+        return m_transformAroundRotationCenter;
+    }
     inline double aX() const {
         return m_aX;
     }
@@ -185,6 +188,7 @@ public:
     inline void setRotationCenterOffset(QPointF rotationCenterOffset) {
         m_rotationCenterOffset = rotationCenterOffset;
     }
+    void setTransformAroundRotationCenter(bool value);
     inline void setAX(double aX) {
         KIS_ASSERT_RECOVER_NOOP(aX == normalizeAngle(aX));
         m_aX = aX;
@@ -289,6 +293,9 @@ private:
     QPointF m_rotationCenterOffset; // the position of the rotation center relative to
                                     // the original top left corner of the selection
                                     // before any transformation
+    bool m_transformAroundRotationCenter; // In freehand mode makes the scaling and other transformations
+                                          // be anchored to the rotation center point.
+
     double m_aX;
     double m_aY;
     double m_aZ;

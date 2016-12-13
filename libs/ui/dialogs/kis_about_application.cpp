@@ -47,9 +47,12 @@ KisAboutApplication::KisAboutApplication(QWidget *parent)
 
     KisSplashScreen *splash = new KisSplashScreen(qApp->applicationVersion(), QPixmap(splash_screen_xpm), true);
     splash->setWindowFlags(Qt::Widget);
+    splash->displayLinks();
     splash->setFixedSize(splash->sizeHint());
+
     wdg->addTab(splash, i18n("About"));
     setMinimumSize(wdg->sizeHint());
+
 
     QTextEdit *lblAuthors = new QTextEdit();
     lblAuthors->setReadOnly(true);
@@ -158,9 +161,12 @@ KisAboutApplication::KisAboutApplication(QWidget *parent)
     connect(bnClose, SIGNAL(clicked()), SLOT(close()));
 
     QHBoxLayout *hlayout = new QHBoxLayout;
-    hlayout->setMargin(0);
+    hlayout->setMargin(10);
     hlayout->addStretch(10);
     hlayout->addWidget(bnClose);
 
+
+
     vlayout->addLayout(hlayout);
+
 }

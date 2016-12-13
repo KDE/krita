@@ -65,10 +65,8 @@ void testFiles(const QString& _dirname, const QStringList& exclusions, const QSt
             KisImportExportManager manager(doc);
             manager.setBatchMode(true);
 
-            KisImportExportFilter::ConversionStatus status;
-            QString s = manager.importDocument(sourceFileInfo.absoluteFilePath(), QString(),
-                                               status);
-            dbgKrita << s;
+            KisImportExportFilter::ConversionStatus status = manager.importDocument(sourceFileInfo.absoluteFilePath(), QString());
+            Q_UNUSED(status);
 
             if (!doc->image()) {
                 failuresDocImage << sourceFileInfo.fileName();

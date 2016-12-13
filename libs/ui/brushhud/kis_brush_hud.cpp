@@ -252,6 +252,8 @@ bool KisBrushHud::event(QEvent *event)
     case QEvent::Wheel:
         event->accept();
         return true;
+    default:
+        break;
     }
 
     return QWidget::event(event);

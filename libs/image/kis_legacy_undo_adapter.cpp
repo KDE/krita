@@ -47,6 +47,7 @@ void KisLegacyUndoAdapter::addCommand(KUndo2Command *command)
         undoStore()->addCommand(command);
     }
     else {
+        // TODO: add feedback
         m_image->barrierLock();
         undoStore()->addCommand(command);
         m_image->unlock();
@@ -56,6 +57,7 @@ void KisLegacyUndoAdapter::addCommand(KUndo2Command *command)
 void KisLegacyUndoAdapter::beginMacro(const KUndo2MagicString& macroName)
 {
     if(!m_macroCounter) {
+        // TODO: add feedback
         m_image->barrierLock();
     }
 

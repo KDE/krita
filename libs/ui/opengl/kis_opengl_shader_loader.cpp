@@ -60,7 +60,7 @@ KisShaderProgram *KisOpenGLShaderLoader::loadShader(QString vertPath, QString fr
     QByteArray vertSource;
 
 // XXX Check can be removed and set to the MAC version after we move to Qt5.7
-#ifdef Q_OS_MAC
+#ifdef Q_OS_OSX
     vertSource.append(KisOpenGL::hasOpenGL3() ? "#version 150 core\n" : "#version 120\n");
 #else
     vertSource.append(KisOpenGL::supportsLoD() ? "#version 130\n" : "#version 120\n");
@@ -72,13 +72,13 @@ KisShaderProgram *KisOpenGLShaderLoader::loadShader(QString vertPath, QString fr
 
     result = shader->addShaderFromSourceCode(QOpenGLShader::Vertex, vertSource);
     if (!result)
-        throw ShaderLoaderException(QString("Failed to add vertex shader source from file: ").append(vertPath));
+        throw ShaderLoaderException(QString("%1: %2 - Cause: %3").arg("Failed to add vertex shader source from file", vertPath, shader->log()));
 
     // Load fragment shader
     QByteArray fragSource;
 
 // XXX Check can be removed and set to the MAC version after we move to Qt5.7
-#ifdef Q_OS_MAC
+#ifdef Q_OS_OSX
     fragSource.append(KisOpenGL::hasOpenGL3() ? "#version 150 core\n" : "#version 120\n");
 #else
     fragSource.append(KisOpenGL::supportsLoD() ? "#version 130\n" : "#version 120\n");
@@ -90,7 +90,7 @@ KisShaderProgram *KisOpenGLShaderLoader::loadShader(QString vertPath, QString fr
 
     result = shader->addShaderFromSourceCode(QOpenGLShader::Fragment, fragSource);
     if (!result)
-        throw ShaderLoaderException(QString("Failed to add fragment shader source from file: ").append(fragPath));
+        throw ShaderLoaderException(QString("%1: %2 - Cause: %3").arg("Failed to add fragment shader source from file", fragPath, shader->log()));
 
     // Bind attributes
     shader->bindAttributeLocation("a_vertexPosition", PROGRAM_VERTEX_ATTRIBUTE);

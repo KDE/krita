@@ -50,7 +50,7 @@ public:
     {
     }
 
-    ~KoPatternBackgroundPrivate() {
+    ~KoPatternBackgroundPrivate() override {
         delete imageData;
     }
 

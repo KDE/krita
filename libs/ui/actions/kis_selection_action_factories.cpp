@@ -150,7 +150,7 @@ void KisSelectAllActionFactory::run(KisViewManager *view)
     struct SelectAll : public KisTransactionBasedCommand {
         SelectAll(KisImageSP image) : m_image(image) {}
         KisImageSP m_image;
-        KUndo2Command* paint() {
+        KUndo2Command* paint() override {
             KisSelectionSP selection = m_image->globalSelection();
             KisSelectionTransaction transaction(selection->pixelSelection());
             selection->pixelSelection()->select(m_image->bounds());
@@ -215,7 +215,7 @@ void KisFillActionFactory::run(const QString &fillSource, KisViewManager *view)
                                        kundo2_i18n("Flood Fill Layer"));
 
     KisResourcesSnapshotSP resources =
-        new KisResourcesSnapshot(view->image(), node, 0, view->resourceProvider()->resourceManager());
+        new KisResourcesSnapshot(view->image(), node, view->resourceProvider()->resourceManager());
     if (!fillSource.contains("opacity")) {
         resources->setOpacity(1.0);
     }
@@ -318,7 +318,7 @@ void KisCutCopyActionFactory::run(bool willCut, bool makeSharpClip, KisViewManag
                     KisNodeSP m_node;
                     KisSelectionSP m_sel;
 
-                    KUndo2Command* paint() {
+                    KUndo2Command* paint() override {
                         KisSelectionSP cutSelection = m_sel;
                         // Shrinking the cutting area was previously used
                         // for getting seamless cut-paste. Now we use makeSharpClip
@@ -369,6 +369,7 @@ void KisCopyMergedActionFactory::run(KisViewManager *view)
 {
     KisImageWSP image = view->image();
     if (!image) return;
+    if (!view->blockUntillOperationsFinished(image)) return;
 
     image->barrierLock();
     KisPaintDeviceSP dev = image->root()->projection();
@@ -478,10 +479,10 @@ public:
     {
     }
 
-    virtual ~KisShapeSelectionPaste() {
+    ~KisShapeSelectionPaste() override {
     }
 
-    virtual bool process(const KoXmlElement & body, KoOdfReadStore & odfStore) {
+    bool process(const KoXmlElement & body, KoOdfReadStore & odfStore) override {
         KoOdfLoadingContext loadingContext(odfStore.styles(), odfStore.store());
         KoShapeLoadingContext context(loadingContext, m_view->canvasBase()->shapeController()->resourceManager());
         KoXmlElement child;
@@ -521,9 +522,7 @@ void KisShapesToVectorSelectionActionFactory::run(KisViewManager* view)
 void KisSelectionToShapeActionFactory::run(KisViewManager *view)
 {
     KisSelectionSP selection = view->selection();
-
     if (!selection->outlineCacheValid()) {
-
         return;
     }
 
@@ -543,26 +542,24 @@ void KisSelectionToShapeActionFactory::run(KisViewManager *view)
 void KisStrokeSelectionActionFactory::run(KisViewManager *view, StrokeSelectionOptions params)
 {
     KisImageWSP image = view->image();
-    if (!image )     {
-
+    if (!image) {
         return;
     }
 
     KisSelectionSP selection = view->selection();
-    if (!selection)    {
-
+    if (!selection) {
         return;
     }
 
     int size = params.lineSize;
 
-    KisPixelSelectionSP pixelSelection = selection->projection();    if (!pixelSelection->outlineCacheValid()) {
+    KisPixelSelectionSP pixelSelection = selection->projection();
+    if (!pixelSelection->outlineCacheValid()) {
         pixelSelection->recalculateOutlineCache();
     }
 
     QPainterPath outline = pixelSelection->outlineCache();
     QColor color = params.color.toQColor();
-
 
     KisNodeSP currentNode = view->resourceProvider()->resourceManager()->resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeWSP>();
     if (!currentNode->inherits("KisShapeLayer") && currentNode->childCount() == 0) {
@@ -607,14 +604,12 @@ void KisStrokeSelectionActionFactory::run(KisViewManager *view, StrokeSelectionO
 void KisStrokeBrushSelectionActionFactory::run(KisViewManager *view, StrokeSelectionOptions params)
 {
     KisImageWSP image = view->image();
-    if (!image )     {
-
+    if (!image) {
         return;
     }
 
     KisSelectionSP selection = view->selection();
-    if (!selection)    {
-
+    if (!selection) {
         return;
     }
 
@@ -643,6 +638,4 @@ void KisStrokeBrushSelectionActionFactory::run(KisViewManager *view, StrokeSelec
         helper.paintPainterPath(outline);
         image->setModified();
     }
-
-
 }

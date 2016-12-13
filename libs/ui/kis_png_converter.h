@@ -112,8 +112,12 @@ public:
     /**
      * Retrieve the constructed image
      */
-    KisImageWSP image();
+    KisImageSP image();
 
+    /**
+     * @brief saveDeviceToStore saves the given paint device to the KoStore. If the device is not 8 bits sRGB, it will be converted to 8 bits sRGB.
+     * @return true if the saving succeeds
+     */
     static bool saveDeviceToStore(const QString &filename, const QRect &imageRect, const qreal xRes, const qreal yRes, KisPaintDeviceSP dev, KoStore *store, KisMetaData::Store* metaData = 0);
 
     static bool isColorSpaceSupported(const KoColorSpace *cs);
@@ -124,7 +128,7 @@ private:
     void progress(png_structp png_ptr, png_uint_32 row_number, int pass);
 private:
     png_uint_32 m_max_row;
-    KisImageWSP m_image;
+    KisImageSP m_image;
     KisDocument *m_doc;
     bool m_stop;
     bool m_batchMode;

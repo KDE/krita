@@ -2,7 +2,7 @@
     "Id": "Krita CSV Import Filter",
     "NoDisplay": "true",
     "Type": "Service",
-    "X-KDE-Export": "application/x-krita",
+    
     "X-KDE-Import": "text/csv",
     "X-KDE-Library": "kritacsvimport",
     "X-KDE-ServiceTypes": [

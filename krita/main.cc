@@ -32,6 +32,8 @@
 #include <QLocale>
 #include <QSettings>
 
+#include <time.h>
+
 #include <KisApplication.h>
 #include <KoConfig.h>
 #include <KoResourcePaths.h>
@@ -56,23 +58,43 @@
 
 #if defined HAVE_KCRASH
 #include <kcrash.h>
-
-#elif defined USE_BREAKPAD
-    #include "kis_crash_handler.h"
+#elif defined USE_DRMINGW
+namespace
+{
+void tryInitDrMingw()
+{
+    wchar_t path[MAX_PATH];
+    QString pathStr = QCoreApplication::applicationDirPath().replace(L'/', L'\\') + QStringLiteral("\\exchndl.dll");
+    if (pathStr.size() > MAX_PATH - 1) {
+        return;
+    }
+    int pathLen = pathStr.toWCharArray(path);
+    path[pathLen] = L'\0'; // toWCharArray doesn't add NULL terminator
+    HMODULE hMod = LoadLibraryW(path);
+    if (!hMod) {
+        return;
+    }
+    // No need to call ExcHndlInit since the crash handler is installed on DllMain
+    auto myExcHndlSetLogFileNameA = reinterpret_cast<BOOL (APIENTRY *)(const char *)>(GetProcAddress(hMod, "ExcHndlSetLogFileNameA"));
+    if (!myExcHndlSetLogFileNameA) {
+        return;
+    }
+    // Set the log file path to %LocalAppData%\kritacrash.log
+    QString logFile = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation).replace(L'/', L'\\') + QStringLiteral("\\kritacrash.log");
+    myExcHndlSetLogFileNameA(logFile.toLocal8Bit());
+}
+} // namespace
 #endif
 extern "C" int main(int argc, char **argv)
 {
-    /**
-     * Add a workaround for Qt 5.6, which implemented compression of the tablet events.
-     * Since Qt 5.6.1 there will be this hacky environment variable option. After that,
-     * Qt developers promised to give us better control for that. Please make sure the env
-     * variable is set *before* the construction of QApplication!
-     */
-#if defined Q_OS_LINUX && QT_VERSION >= 0x050600
-    qputenv("QT_XCB_NO_EVENT_COMPRESSION", "1");
-#endif
 
+    // The global initialization of the random generator
+    qsrand(time(0));
     bool runningInKDE = !qgetenv("KDE_FULL_SESSION").isEmpty();
+    
+#if defined HAVE_X11 
+    qputenv("QT_QPA_PLATFORM", "xcb"); 
+#endif
 
     /**
      * Disable debug output by default. (krita.input enables tablet debugging.)
@@ -164,10 +186,8 @@ extern "C" int main(int argc, char **argv)
 
 #if defined HAVE_KCRASH
     KCrash::initialize();
-#elif defined USE_BREAKPAD
-    qputenv("KDE_DEBUG", "1");
-    KisCrashHandler crashHandler;
-    Q_UNUSED(crashHandler);
+#elif defined USE_DRMINGW
+    tryInitDrMingw();
 #endif
 
     // If we should clear the config, it has to be done as soon as possible after
@@ -224,6 +244,10 @@ extern "C" int main(int argc, char **argv)
         return 1;
     }
 
+#if QT_VERSION >= 0x050700
+    app.setAttribute(Qt::AA_CompressHighFrequencyEvents, false);
+#endif
+    
     // Set up remote arguments.
     QObject::connect(&app, SIGNAL(messageReceived(QByteArray,QObject*)),
                      &app, SLOT(remoteArguments(QByteArray,QObject*)));
@@ -232,7 +256,7 @@ extern "C" int main(int argc, char **argv)
                      &app, SLOT(fileOpenRequested(QString)));
 
     int state = app.exec();
-
+    
     return state;
 }
 

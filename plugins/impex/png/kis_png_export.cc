@@ -23,16 +23,15 @@
 #include <QSlider>
 #include <QApplication>
 
-#include <KoDialog.h>
 #include <kpluginfactory.h>
-#include <QMessageBox>
 
 #include <KoColorSpace.h>
-#include <KisFilterChain.h>
 #include <KisImportExportManager.h>
 #include <KoColorProfile.h>
 #include <KoColorModelStandardIds.h>
 #include <KoColorSpaceRegistry.h>
+
+#include <KisExportCheckRegistry.h>
 
 #include <kis_properties_configuration.h>
 #include <kis_paint_device.h>
@@ -70,120 +69,43 @@ bool hasVisibleWidgets()
     return false;
 }
 
-KisImportExportFilter::ConversionStatus KisPNGExport::convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration)
+KisImportExportFilter::ConversionStatus KisPNGExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration)
 {
-    dbgFile << "Png export! From:" << from << ", To:" << to << "";
-
-    KisDocument *input = inputDocument();
-    QString filename = outputFile();
-
-    if (!input)
-        return KisImportExportFilter::NoDocumentCreated;
-
-
-    if (filename.isEmpty()) return KisImportExportFilter::FileNotFound;
-
-    if (from != "application/x-krita")
-        return KisImportExportFilter::NotImplemented;
-
-
-
-    KisImageWSP image = input->image();
-
-    // the image must be locked at the higher levels
-    KIS_SAFE_ASSERT_RECOVER_NOOP(image->locked());
-    KisPaintDeviceSP pd;
-    pd = new KisPaintDevice(*image->projection());
-    KisPaintLayerSP l = new KisPaintLayer(image, "projection", OPACITY_OPAQUE_U8, pd);
-
-
-    if (!KisPNGConverter::isColorSpaceSupported(pd->colorSpace())) {
-        if (!getBatchMode()) {
-            QMessageBox::critical(0, i18nc("@title:window", "Krita PNG Export"), i18n("You can only save grayscale and RGB images to PNG. Convert your image before exporting to PNG."));
-        }
-        return KisImportExportFilter::UsageError;
-    }
-
-
-    KisSequentialConstIterator it(l->paintDevice(), image->bounds());
-    const KoColorSpace* cs = l->paintDevice()->colorSpace();
+    KisImageSP image = document->savingImage();
 
     KisPNGOptions options;
-    bool isThereAlpha = false;
-    KisPropertiesConfigurationSP cfg = defaultConfiguration();
-    do {
-        if (cs->opacityU8(it.oldRawData()) != OPACITY_OPAQUE_U8) {
-            isThereAlpha = true;
-            break;
-        }
-    } while (it.nextPixel());
 
-    if (!qApp->applicationName().toLower().contains("test")) {
-
-        KoDialog kdb;
-        kdb.setCaption(i18n("PNG Export Options"));
-        kdb.setButtons(KoDialog::Ok | KoDialog::Cancel);
-        KisConfigWidget *wdg = createConfigurationWidget(&kdb, from, to);
-        kdb.setMainWidget(wdg);
-
-        // If a configuration object was passed to the convert method, we use that, otherwise we load from the settings
-        if (configuration) {
-            cfg->fromXML(configuration->toXML());
-        }
-        else {
-            cfg = lastSavedConfiguration(from, to);
-        }
-
-        cfg->setProperty("ColorModelID", cs->colorModelId().id());
-
-        bool sRGB = (cs->profile()->name().contains(QLatin1String("srgb"), Qt::CaseInsensitive)
-                     && !cs->profile()->name().contains(QLatin1String("g10")));
-        cfg->setProperty("sRGB", sRGB);
-        cfg->setProperty("isThereAlpha", isThereAlpha);
-        wdg->setConfiguration(cfg);
-
-        QApplication::restoreOverrideCursor();
-        if (hasVisibleWidgets()) {
-            if (!getBatchMode()) {
-                if (kdb.exec() == QDialog::Rejected) {
-                    return KisImportExportFilter::UserCancelled;
-                }
-                cfg = wdg->configuration();
-                KisConfig().setExportConfiguration("PNG", *cfg.data());
-
-            }
-        }
-    }
-
-    options.alpha = cfg->getBool("alpha", true);
-    options.interlace = cfg->getBool("interlaced", false);
-    options.compression = cfg->getInt("compression", 0);
-    options.tryToSaveAsIndexed = cfg->getBool("indexed", false);
-    options.transparencyFillColor = cfg->getColor("transparencyFillColor").toQColor();
-    options.saveSRGBProfile = cfg->getBool("saveSRGBProfile", false);
-    options.forceSRGB = cfg->getBool("forceSRGB", true);
-
-    KisPNGConverter kpc(input);
+    options.alpha = configuration->getBool("alpha", true);
+    options.interlace = configuration->getBool("interlaced", false);
+    options.compression = configuration->getInt("compression", 0);
+    options.tryToSaveAsIndexed = configuration->getBool("indexed", false);
+    options.transparencyFillColor = configuration->getColor("transparencyFillColor").toQColor();
+    options.saveSRGBProfile = configuration->getBool("saveSRGBProfile", false);
+    options.forceSRGB = configuration->getBool("forceSRGB", true);
 
     vKisAnnotationSP_it beginIt = image->beginAnnotations();
     vKisAnnotationSP_it endIt = image->endAnnotations();
-    KisImageBuilder_Result res;
-
 
     KisExifInfoVisitor eIV;
     eIV.visit(image->rootLayer().data());
-    KisMetaData::Store* eI = 0;
-    if (eIV.countPaintLayer() == 1)
+    KisMetaData::Store *eI = 0;
+    if (eIV.countPaintLayer() == 1) {
         eI = eIV.exifInfo();
+    }
     if (eI) {
         KisMetaData::Store* copy = new KisMetaData::Store(*eI);
         eI = copy;
     }
-    if ((res = kpc.buildFile(filename, image->bounds(), image->xRes(), image->yRes(), l->paintDevice(), beginIt, endIt, options, eI)) == KisImageBuilder_RESULT_OK) {
-        dbgFile << "success !";
+
+    KisPNGConverter pngConverter(document);
+
+    KisImageBuilder_Result res = pngConverter.buildFile(io, image->bounds(), image->xRes(), image->yRes(), image->projection(), beginIt, endIt, options, eI);
+
+    if (res == KisImageBuilder_RESULT_OK) {
         delete eI;
         return KisImportExportFilter::OK;
     }
+
     delete eI;
     dbgFile << " Result =" << res;
     return KisImportExportFilter::InternalError;
@@ -214,6 +136,18 @@ KisPropertiesConfigurationSP KisPNGExport::lastSavedConfiguration(const QByteArr
 KisConfigWidget *KisPNGExport::createConfigurationWidget(QWidget *parent, const QByteArray &, const QByteArray &) const
 {
     return new KisWdgOptionsPNG(parent);
+}
+
+void KisPNGExport::initializeCapabilities()
+{
+    addCapability(KisExportCheckRegistry::instance()->get("sRGBProfileCheck")->create(KisExportCheckBase::SUPPORTED));
+    QList<QPair<KoID, KoID> > supportedColorModels;
+    supportedColorModels << QPair<KoID, KoID>()
+            << QPair<KoID, KoID>(RGBAColorModelID, Integer8BitsColorDepthID)
+            << QPair<KoID, KoID>(RGBAColorModelID, Integer16BitsColorDepthID)
+            << QPair<KoID, KoID>(GrayAColorModelID, Integer8BitsColorDepthID)
+            << QPair<KoID, KoID>(GrayAColorModelID, Integer16BitsColorDepthID);
+    addSupportedColorModels(supportedColorModels, "PNG");
 }
 
 void KisWdgOptionsPNG::setConfiguration(const KisPropertiesConfigurationSP cfg)

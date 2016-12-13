@@ -46,11 +46,6 @@ KisTIFFOptionsWidget::KisTIFFOptionsWidget(QWidget *parent)
     setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
 }
 
-KisTIFFOptionsWidget::~KisTIFFOptionsWidget()
-{
-    delete optionswdg;
-}
-
 void KisTIFFOptionsWidget::setConfiguration(const KisPropertiesConfigurationSP cfg)
 {
     kComboBoxCompressionType->setCurrentIndex(cfg->getInt("compressiontype", 0));

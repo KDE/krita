@@ -104,7 +104,6 @@ private:
 
     KisPaintDeviceSP m_targetDevice;
     KisSelectionSP m_activeSelection;
-    bool m_undoEnabled;
     bool m_useMergeID;
 };
 

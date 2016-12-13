@@ -206,7 +206,11 @@ qreal KisDistanceInformation::getNextPointPositionAnisotropic(const QPointF &sta
     qreal y = m_d->distance.y();
 
     static const qreal eps = 2e-3; // < 0.2 deg
-    const qreal currentRotation = m_d->spacing.rotation();
+
+    qreal currentRotation = m_d->spacing.rotation();
+    if (m_d->spacing.coordinateSystemFlipped()) {
+        currentRotation = 2 * M_PI - currentRotation;
+    }
 
     QPointF diff = end - start;
 

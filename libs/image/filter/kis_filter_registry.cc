@@ -51,7 +51,7 @@ KisFilterRegistry::~KisFilterRegistry()
 
 KisFilterRegistry* KisFilterRegistry::instance()
 {
-    KisFilterRegistry *reg = qApp->findChild<KisFilterRegistry *>("");
+    KisFilterRegistry *reg = qApp->findChild<KisFilterRegistry *>(QString());
     if (!reg) {
         reg = new KisFilterRegistry(qApp);
         KoPluginLoader::instance()->load("Krita/Filter", "Type == 'Service' and ([X-Krita-Version] == 28)");
@@ -74,7 +74,7 @@ KisFilterConfigurationSP KisFilterRegistry::cloneConfiguration(const KisFilterCo
 {
     Q_ASSERT(kfc);
     KisFilterSP filter = value(kfc->name());
-    KisFilterConfigurationSP newkfc = filter->defaultConfiguration(0);
+    KisFilterConfigurationSP newkfc(filter->defaultConfiguration(KisPaintDeviceSP()));
     newkfc->fromXML(kfc->toXML());
     return newkfc;
 }

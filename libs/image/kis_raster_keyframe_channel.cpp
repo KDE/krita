@@ -33,7 +33,20 @@ struct KisRasterKeyframe : public KisKeyframe
         , frameId(frameId)
     {}
 
+    KisRasterKeyframe(const KisRasterKeyframe *rhs, KisRasterKeyframeChannel *channel)
+        : KisKeyframe(rhs, channel)
+        , frameId(rhs->frameId)
+    {}
+
     int frameId;
+
+    KisKeyframeSP cloneFor(KisKeyframeChannel *channel) const
+    {
+        KisRasterKeyframeChannel *rasterChannel = dynamic_cast<KisRasterKeyframeChannel*>(channel);
+        Q_ASSERT(rasterChannel);
+        return toQShared(new KisRasterKeyframe(this, rasterChannel));
+    }
+
 };
 
 struct KisRasterKeyframeChannel::Private
@@ -108,7 +121,7 @@ QString KisRasterKeyframeChannel::frameFilename(int frameId) const
     return m_d->frameFilenames.value(frameId, QString());
 }
 
-void KisRasterKeyframeChannel::setFilenameSuffix(const QString suffix)
+void KisRasterKeyframeChannel::setFilenameSuffix(const QString &suffix)
 {
     m_d->filenameSuffix = suffix;
 }

@@ -50,6 +50,8 @@ public:
 
     void purgeRedoState();
 
+    void clear();
+
 private:
     KUndo2Stack *m_undoStack;
 };

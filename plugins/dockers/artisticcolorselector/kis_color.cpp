@@ -25,7 +25,7 @@
 template<class HSXType>
 struct CoreImpl: public KisColor::Core
 {
-    virtual void setRGB(float r, float g, float b, float a) {
+    void setRGB(float r, float g, float b, float a) override {
         rgb(0) = r;
         rgb(1) = g;
         rgb(2) = b;
@@ -33,7 +33,7 @@ struct CoreImpl: public KisColor::Core
         updateHSX();
     }
     
-    virtual void setHSX(float h, float s, float x, float a) {
+    void setHSX(float h, float s, float x, float a) override {
         hsx(0) = h;
         hsx(1) = s;
         hsx(2) = x;
@@ -41,7 +41,7 @@ struct CoreImpl: public KisColor::Core
         updateRGB();
     }
     
-    virtual void updateRGB() {
+    void updateRGB() override {
         float h = qBound(0.0f, hsx(0), 1.0f);
         float s = qBound(0.0f, hsx(1), 1.0f);
         float x = qBound(0.0f, hsx(2), 1.0f);
@@ -52,7 +52,7 @@ struct CoreImpl: public KisColor::Core
         rgb = gray + (rgb - gray) * s;
     }
     
-    virtual void updateHSX() {
+    void updateHSX() override {
         float r = qBound(0.0f, rgb(0), 1.0f);
         float g = qBound(0.0f, rgb(1), 1.0f);
         float b = qBound(0.0f, rgb(2), 1.0f);

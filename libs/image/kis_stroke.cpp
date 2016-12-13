@@ -142,7 +142,10 @@ void KisStroke::cancelStroke()
     // case 6
     if (m_isCancelled) return;
 
-    if(!m_strokeInitialized) {
+    const bool effectivelyInitialized =
+        m_strokeInitialized || m_strokeStrategy->needsExplicitCancel();
+
+    if(!effectivelyInitialized) {
         /**
          * Lod0 stroke cannot be suspended and !initialized at the
          * same time, because the suspend job is created iff the
@@ -157,7 +160,7 @@ void KisStroke::cancelStroke()
                                 sanityCheckAllJobsAreCancellable());
         clearQueueOnCancel();
     }
-    else if(m_strokeInitialized &&
+    else if(effectivelyInitialized &&
             (!m_jobsQueue.isEmpty() || !m_strokeEnded)) {
 
         clearQueueOnCancel();
@@ -170,6 +173,12 @@ void KisStroke::cancelStroke()
 
     m_isCancelled = true;
     m_strokeEnded = true;
+}
+
+bool KisStroke::canCancel() const
+{
+    return m_isCancelled || !m_strokeInitialized ||
+        !m_jobsQueue.isEmpty() || !m_strokeEnded;
 }
 
 bool KisStroke::sanityCheckAllJobsAreCancellable() const

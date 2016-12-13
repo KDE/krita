@@ -29,6 +29,8 @@
 #include "kis_transparency_mask.h"
 #include "kis_selection_mask.h"
 #include "lazybrush/kis_colorize_mask.h"
+#include "kis_layer_utils.h"
+#include "kis_node_query_path.h"
 
 #include <QDomDocument>
 
@@ -43,8 +45,8 @@ public:
     {        
     }
 
-    virtual bool visit(KisNode* node) { return process(node); }
-    virtual bool visit(KisGroupLayer* layer)
+    bool visit(KisNode* node) override { return process(node); }
+    bool visit(KisGroupLayer* layer) override
     { 
         bool result = visitAll(layer);
         if(layer == layer->image()->rootLayer()) {
@@ -52,16 +54,16 @@ public:
         }        
         return result && process(layer);
     }
-    virtual bool visit(KisAdjustmentLayer* layer) { return process(layer); }
-    virtual bool visit(KisPaintLayer* layer) { return process(layer); }
-    virtual bool visit(KisExternalLayer* layer) { return process(layer); }
-    virtual bool visit(KisGeneratorLayer* layer) { return process(layer); }
-    virtual bool visit(KisCloneLayer* layer) { return process(layer); }
-    virtual bool visit(KisFilterMask* mask) { return process(mask); }
-    virtual bool visit(KisTransformMask* mask) { return process(mask); }
-    virtual bool visit(KisTransparencyMask* mask) { return process(mask); }
-    virtual bool visit(KisSelectionMask* mask) { return process(mask); }
-    virtual bool visit(KisColorizeMask* mask) { return process(mask); }
+    bool visit(KisAdjustmentLayer* layer) override { return process(layer); }
+    bool visit(KisPaintLayer* layer) override { return process(layer); }
+    bool visit(KisExternalLayer* layer) override { return process(layer); }
+    bool visit(KisGeneratorLayer* layer) override { return process(layer); }
+    bool visit(KisCloneLayer* layer) override { return process(layer); }
+    bool visit(KisFilterMask* mask) override { return process(mask); }
+    bool visit(KisTransformMask* mask) override { return process(mask); }
+    bool visit(KisTransparencyMask* mask) override { return process(mask); }
+    bool visit(KisSelectionMask* mask) override { return process(mask); }
+    bool visit(KisColorizeMask* mask) override { return process(mask); }
 
     bool process(KisNode* node) {
         if(m_mode == STORE) {
@@ -96,6 +98,42 @@ KisLayerComposition::KisLayerComposition(KisImageWSP image, const QString& name)
 KisLayerComposition::~KisLayerComposition()
 {
 
+}
+
+KisLayerComposition::KisLayerComposition(const KisLayerComposition &rhs, KisImageWSP otherImage)
+    : m_image(otherImage ? otherImage : rhs.m_image),
+      m_name(rhs.m_name),
+      m_exportEnabled(rhs.m_exportEnabled)
+{
+    {
+        auto it = rhs.m_visibilityMap.constBegin();
+        for (; it != rhs.m_visibilityMap.constEnd(); ++it) {
+            QUuid nodeUuid = it.key();
+            KisNodeSP node = KisLayerUtils::findNodeByUuid(rhs.m_image->root(), nodeUuid);
+            if (node) {
+                KisNodeQueryPath path = KisNodeQueryPath::absolutePath(node);
+                KisNodeSP newNode = path.queryUniqueNode(m_image);
+                KIS_ASSERT_RECOVER(newNode) { continue; }
+
+                m_visibilityMap.insert(newNode->uuid(), it.value());
+            }
+        }
+    }
+
+    {
+        auto it = rhs.m_collapsedMap.constBegin();
+        for (; it != rhs.m_collapsedMap.constEnd(); ++it) {
+            QUuid nodeUuid = it.key();
+            KisNodeSP node = KisLayerUtils::findNodeByUuid(rhs.m_image->root(), nodeUuid);
+            if (node) {
+                KisNodeQueryPath path = KisNodeQueryPath::absolutePath(node);
+                KisNodeSP newNode = path.queryUniqueNode(m_image);
+                KIS_ASSERT_RECOVER(newNode) { continue; }
+
+                m_collapsedMap.insert(newNode->uuid(), it.value());
+            }
+        }
+    }
 }
 
 void KisLayerComposition::setName(const QString& name)

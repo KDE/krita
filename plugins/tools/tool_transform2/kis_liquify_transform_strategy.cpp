@@ -139,6 +139,7 @@ void KisLiquifyTransformStrategy::paint(QPainter &gc)
 
 void KisLiquifyTransformStrategy::externalConfigChanged()
 {
+    if (!m_d->currentArgs.liquifyWorker()) return;
     m_d->recalculateTransformations();
 }
 

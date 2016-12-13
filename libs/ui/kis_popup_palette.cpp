@@ -109,10 +109,15 @@ KisPopupPalette::KisPopupPalette(KisFavoriteResourceManager* manager, const KoCo
 {
 
     const int borderWidth = 3;
-    //m_triangleColorSelector  = new PopupColorTriangle(displayRenderer, this);
-    m_triangleColorSelector = new KisVisualColorSelector(this);
+    if (KisConfig().readEntry<bool>("popuppalette/usevisualcolorselector", false)) {
+        m_triangleColorSelector = new KisVisualColorSelector(this);
+    }
+    else {
+        m_triangleColorSelector  = new PopupColorTriangle(displayRenderer, this);
+    }
+
     m_triangleColorSelector->setDisplayRenderer(displayRenderer);
-    m_triangleColorSelector->setConfig(true,false);
+    m_triangleColorSelector->setConfig(true, false);
     m_triangleColorSelector->move(widgetSize/2-colorInnerRadius+borderWidth, widgetSize/2-colorInnerRadius+borderWidth);
     m_triangleColorSelector->resize(colorInnerRadius*2-borderWidth*2, colorInnerRadius*2-borderWidth*2);
     m_triangleColorSelector->setVisible(true);
@@ -127,7 +132,7 @@ KisPopupPalette::KisPopupPalette(KisFavoriteResourceManager* manager, const KoCo
 
     //setAttribute(Qt::WA_TranslucentBackground, true);
 
-    connect(m_triangleColorSelector, SIGNAL(sigNewColor(KoColor)),
+    connect(m_triangleColorSelector, SIGNAL(sigNewColor(const KoColor &)),
             m_colorChangeCompressor.data(), SLOT(start()));
     connect(m_colorChangeCompressor.data(), SIGNAL(timeout()),
             SLOT(slotEmitColorChanged()));
@@ -192,7 +197,6 @@ KisPopupPalette::KisPopupPalette(KisFavoriteResourceManager* manager, const KoCo
 
 void KisPopupPalette::slotExternalFgColorChanged(const KoColor &color)
 {
-    //m_triangleColorSelector->setRealColor(color);
     //hack to get around cmyk for now.
     if (color.colorSpace()->colorChannelCount()>3) {
         KoColor c(KoColorSpaceRegistry::instance()->rgb8());

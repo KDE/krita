@@ -23,7 +23,7 @@
 #include <QWidget>
 #include <QQueue>
 #include <KoColorDisplayRendererInterface.h>
-
+#include <KisColorSelectorInterface.h>
 
 class KisFavoriteResourceManager;
 class QWidget;
@@ -100,7 +100,7 @@ private:
     int m_hoveredColor;
     int m_selectedColor;
     KisFavoriteResourceManager* m_resourceManager;
-    KisVisualColorSelector* m_triangleColorSelector;
+    KisColorSelectorInterface* m_triangleColorSelector {0};
 
     QTimer* m_timer;
 

@@ -206,6 +206,11 @@ bool KisUpdateScheduler::tryCancelCurrentStrokeAsync()
     return m_d->strokesQueue.tryCancelCurrentStrokeAsync();
 }
 
+UndoResult KisUpdateScheduler::tryUndoLastStrokeAsync()
+{
+    return m_d->strokesQueue.tryUndoLastStrokeAsync();
+}
+
 bool KisUpdateScheduler::wrapAroundModeSupported() const
 {
     return m_d->strokesQueue.wrapAroundModeSupported();
@@ -263,6 +268,11 @@ void KisUpdateScheduler::setSuspendUpdatesStrokeStrategyFactory(const KisSuspend
 void KisUpdateScheduler::setResumeUpdatesStrokeStrategyFactory(const KisSuspendResumeStrategyFactory &factory)
 {
     m_d->strokesQueue.setResumeUpdatesStrokeStrategyFactory(factory);
+}
+
+KisPostExecutionUndoAdapter *KisUpdateScheduler::lodNPostExecutionUndoAdapter() const
+{
+    return m_d->strokesQueue.lodNPostExecutionUndoAdapter();
 }
 
 void KisUpdateScheduler::updateSettings()

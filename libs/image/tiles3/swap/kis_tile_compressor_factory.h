@@ -28,14 +28,14 @@ public:
     static KisAbstractTileCompressorSP create(qint32 version) {
         switch(version) {
         case 1:
-            return new KisLegacyTileCompressor();
+            return KisAbstractTileCompressorSP(new KisLegacyTileCompressor());
             break;
         case 2:
-            return new KisTileCompressor2();
+            return KisAbstractTileCompressorSP(new KisTileCompressor2());
             break;
         default:
             qFatal("Unknown version of the tiles");
-            return 0;
+            return KisAbstractTileCompressorSP();
         };
     }
 

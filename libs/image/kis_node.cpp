@@ -160,7 +160,7 @@ void KisNode::Private::processDuplicatedClones(const KisNode *srcDuplicationRoot
                                                         clone->copyFrom());
 
         if (newCopyFrom) {
-            KisLayer *newCopyFromLayer = dynamic_cast<KisLayer*>(const_cast<KisNode*>(newCopyFrom));
+            KisLayer *newCopyFromLayer = qobject_cast<KisLayer*>(const_cast<KisNode*>(newCopyFrom));
             KIS_ASSERT_RECOVER_RETURN(newCopyFromLayer);
 
             clone->setCopyFrom(newCopyFromLayer);
@@ -297,7 +297,7 @@ void KisNode::setParent(KisNodeWSP parent)
 KisNodeSP KisNode::parent() const
 {
     QReadLocker l(&m_d->nodeSubgraphLock);
-    return m_d->parent.isValid() ? KisNodeSP(m_d->parent) : 0;
+    return m_d->parent.isValid() ? KisNodeSP(m_d->parent) : KisNodeSP();
 }
 
 KisBaseNodeSP KisNode::parentCallback() const

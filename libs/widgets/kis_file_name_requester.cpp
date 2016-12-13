@@ -20,6 +20,7 @@
 #include "ui_wdg_file_name_requester.h"
 
 #include <QDesktopServices>
+#include <QDebug>
 
 #include "KoIcon.h"
 
@@ -47,15 +48,8 @@ void KisFileNameRequester::setStartDir(const QString &path)
 
 void KisFileNameRequester::setFileName(const QString &path)
 {
-    QString realPath = path;
-
-    if (!m_basePath.isEmpty()) {
-        QDir d(m_basePath);
-        realPath = d.relativeFilePath(path);
-    }
-
-    m_ui->txtFileName->setText(realPath);
-    emit fileSelected(realPath);
+    m_ui->txtFileName->setText(path);
+    emit fileSelected(path);
 }
 
 QString KisFileNameRequester::fileName() const
@@ -91,7 +85,12 @@ void KisFileNameRequester::slotSelectFile()
     {
         dialog.setCaption(i18n("Select a directory to load..."));
     }
-    dialog.setDefaultDir(m_basePath.isEmpty() ? QDesktopServices::storageLocation(QDesktopServices::PicturesLocation) : m_basePath);
+    if (m_basePath.isEmpty()) {
+        dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
+    }
+    else {
+        dialog.setDefaultDir(m_basePath);
+    }
 
     Q_ASSERT(!m_mime_filter_list.isEmpty());
     dialog.setMimeTypeFilters(m_mime_filter_list, m_mime_default_filter);

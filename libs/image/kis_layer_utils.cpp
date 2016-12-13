@@ -20,6 +20,7 @@
 
 #include <algorithm>
 
+#include <QUuid>
 #include <KoColorSpaceConstants.h>
 
 #include "kis_painter.h"
@@ -55,7 +56,7 @@ namespace KisLayerUtils {
     void fetchSelectionMasks(KisNodeList mergedNodes, QVector<KisSelectionMaskSP> &selectionMasks)
     {
         foreach (KisNodeSP node, mergedNodes) {
-            KisLayerSP layer = dynamic_cast<KisLayer*>(node.data());
+            KisLayerSP layer = qobject_cast<KisLayer*>(node.data());
 
             KisSelectionMaskSP mask;
 
@@ -110,7 +111,7 @@ namespace KisLayerUtils {
         }
 
         KisLayerSP dstLayer() override {
-            return dynamic_cast<KisLayer*>(dstNode.data());
+            return qobject_cast<KisLayer*>(dstNode.data());
         }
     };
 
@@ -160,6 +161,30 @@ namespace KisLayerUtils {
                                             KisBaseNode::PropertyList props = node->sectionModelProperties();
                                             KisLayerPropertiesIcons::setNodeProperty(&props,
                                                                                      KisLayerPropertiesIcons::colorizeEditKeyStrokes,
+                                                                                     false);
+
+                                            addCommand(new KisNodePropertyListCommand(node, props));
+                                        }
+                                    });
+            }
+        }
+
+    private:
+        MergeDownInfoBaseSP m_info;
+    };
+
+    struct DisableOnionSkins : public KisCommandUtils::AggregateCommand {
+        DisableOnionSkins(MergeDownInfoBaseSP info) : m_info(info) {}
+
+        void populateChildCommands() override {
+            Q_FOREACH (KisNodeSP node, m_info->allSrcNodes()) {
+                recursiveApplyNodes(node,
+                                    [this] (KisNodeSP node) {
+                                        if (KisLayerPropertiesIcons::nodeProperty(node, KisLayerPropertiesIcons::onionSkins, false).toBool()) {
+
+                                            KisBaseNode::PropertyList props = node->sectionModelProperties();
+                                            KisLayerPropertiesIcons::setNodeProperty(&props,
+                                                                                     KisLayerPropertiesIcons::onionSkins,
                                                                                      false);
 
                                             addCommand(new KisNodePropertyListCommand(node, props));
@@ -319,7 +344,7 @@ namespace KisLayerUtils {
                     break;
                 }
 
-                KisLayerSP layer = dynamic_cast<KisLayer*>(node.data());
+                KisLayerSP layer = qobject_cast<KisLayer*>(node.data());
                 if (layer && layer->layerStyle()) {
                     compositionVaries = true;
                     break;
@@ -481,7 +506,7 @@ namespace KisLayerUtils {
     bool RemoveNodeHelper::scanForLastLayer(KisImageWSP image, KisNodeList nodesToRemove) {
         bool removeLayers = false;
         Q_FOREACH(KisNodeSP nodeToRemove, nodesToRemove) {
-            if (dynamic_cast<KisLayer*>(nodeToRemove.data())) {
+            if (qobject_cast<KisLayer*>(nodeToRemove.data())) {
                 removeLayers = true;
                 break;
             }
@@ -492,7 +517,7 @@ namespace KisLayerUtils {
         KisNodeSP node = image->root()->firstChild();
         while (node) {
             if (!nodesToRemove.contains(node) &&
-                dynamic_cast<KisLayer*>(node.data())) {
+                qobject_cast<KisLayer*>(node.data())) {
 
                 lastLayer = false;
                 break;
@@ -568,8 +593,7 @@ namespace KisLayerUtils {
 
             if (!parent) {
                 KisNodeSP oldRoot = m_info->image->root();
-                KisNodeSP newRoot =
-                    new KisGroupLayer(m_info->image, "root", OPACITY_OPAQUE_U8);
+                KisNodeSP newRoot(new KisGroupLayer(m_info->image, "root", OPACITY_OPAQUE_U8));
 
                 addCommand(new KisImageLayerAddCommand(m_info->image,
                                                        m_info->dstNode,
@@ -720,7 +744,7 @@ namespace KisLayerUtils {
         if (!layer->prevSibling()) return;
 
         // XXX: this breaks if we allow free mixing of masks and layers
-        KisLayerSP prevLayer = dynamic_cast<KisLayer*>(layer->prevSibling().data());
+        KisLayerSP prevLayer = qobject_cast<KisLayer*>(layer->prevSibling().data());
         if (!prevLayer) return;
 
         if (!layer->visible() && !prevLayer->visible()) {
@@ -738,9 +762,10 @@ namespace KisLayerUtils {
         if (layer->visible() && prevLayer->visible()) {
             MergeDownInfoSP info(new MergeDownInfo(image, prevLayer, layer));
 
-            // disable key strokes on all colorize masks and wait until
-            // update is finished with a barrier
+            // disable key strokes on all colorize masks, all onion skins on
+            // paint layers and wait until update is finished with a barrier
             applicator.applyCommand(new DisableColorizeKeyStrokes(info));
+            applicator.applyCommand(new DisableOnionSkins(info));
             applicator.applyCommand(new KUndo2Command(), KisStrokeJobData::BARRIER);
 
             applicator.applyCommand(new KeepMergedNodesSelected(info, false));
@@ -853,7 +878,7 @@ namespace KisLayerUtils {
         KisNodeList::iterator it = nodes.begin();
 
         while (it != nodes.end()) {
-            if ((!allowMasks && !dynamic_cast<KisLayer*>(it->data())) ||
+            if ((!allowMasks && !qobject_cast<KisLayer*>(it->data())) ||
                 checkIsChildOf(*it, nodes)) {
 
                 qDebug() << "Skipping node" << ppVar((*it)->name());
@@ -994,6 +1019,10 @@ namespace KisLayerUtils {
                                            bool flattenSingleLayer, const KUndo2MagicString &actionName, 
                                            bool cleanupNodes = true, const QString layerName = QString())
     {
+        if (!putAfter) {
+            putAfter = mergedNodes.first();
+        }
+
         filterMergableNodes(mergedNodes);
         {
             KisNodeList tempNodes;
@@ -1029,9 +1058,10 @@ namespace KisLayerUtils {
         if (mergedNodes.size() > 1 || invisibleNodes.isEmpty()) {
             MergeMultipleInfoSP info(new MergeMultipleInfo(image, mergedNodes));
 
-            // disable key strokes on all colorize masks and wait until
-            // update is finished with a barrier
+            // disable key strokes on all colorize masks, all onion skins on
+            // paint layers and wait until update is finished with a barrier
             applicator.applyCommand(new DisableColorizeKeyStrokes(info));
+            applicator.applyCommand(new DisableOnionSkins(info));
             applicator.applyCommand(new KUndo2Command(), KisStrokeJobData::BARRIER);
 
             applicator.applyCommand(new KeepMergedNodesSelected(info, putAfter, false));
@@ -1094,7 +1124,7 @@ namespace KisLayerUtils {
 
             KisLayerSP parentLayer;
             do {
-                parentLayer = dynamic_cast<KisLayer*>(parent.data());
+                parentLayer = qobject_cast<KisLayer*>(parent.data());
 
                 parent = parent->parent();
             } while(!parentLayer && parent);
@@ -1150,7 +1180,7 @@ namespace KisLayerUtils {
 
         if (mergedNodes.isEmpty()) return false;
 
-        KisLayerSP parentLayer = dynamic_cast<KisLayer*>(selectionMasks.first()->parent().data());
+        KisLayerSP parentLayer = qobject_cast<KisLayer*>(selectionMasks.first()->parent().data());
         KIS_ASSERT_RECOVER(parentLayer) { return 0; }
 
         KisImageSignalVector emitSignals;
@@ -1237,4 +1267,13 @@ namespace KisLayerUtils {
 
         return 0;
     }
+
+    KisNodeSP findNodeByUuid(KisNodeSP root, const QUuid &uuid)
+    {
+        return recursiveFindNode(root,
+            [uuid] (KisNodeSP node) {
+                return node->uuid() == uuid;
+            });
+    }
+
 }

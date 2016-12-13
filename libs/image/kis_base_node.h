@@ -235,7 +235,7 @@ public:
      */
     virtual QIcon icon() const {
         return QIcon();
-    };
+    }
 
     /**
      * Return a the properties of this base node (locked, visible etc,
@@ -507,7 +507,7 @@ protected:
      * the node stack
      */
     virtual KisBaseNodeSP parentCallback() const {
-        return 0;
+        return KisBaseNodeSP();
     }
 
     virtual void notifyParentVisibilityChanged(bool value) {

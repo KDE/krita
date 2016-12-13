@@ -7,6 +7,7 @@ set(kritahistorydocker_SOURCES
     KisUndoView.h
     KisUndoModel.h
     KisUndoModel.cpp
+    DlgConfigureHistoryDock.cpp
 )
 
 add_library(kritahistorydocker MODULE ${kritahistorydocker_SOURCES})

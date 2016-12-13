@@ -39,9 +39,9 @@ public:
 
 public:
 
-    KisImageBuilder_Result buildFile(const QString &filename);
+    KisImageBuilder_Result buildFile(QIODevice *io);
 
-    KisImageWSP image();
+    KisImageSP image();
 
 public Q_SLOTS:
 
@@ -49,7 +49,7 @@ public Q_SLOTS:
 
 private:
 
-    KisImageWSP m_image;
+    KisImageSP m_image;
     KisDocument *m_doc;
     bool m_stop;
 };

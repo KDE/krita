@@ -41,8 +41,8 @@
 
 TransformStrokeStrategy::TransformStrokeStrategy(KisNodeSP rootNode,
                                                  KisSelectionSP selection,
-                                                 KisPostExecutionUndoAdapter *undoAdapter)
-    : KisStrokeStrategyUndoCommandBased(kundo2_i18n("Transform"), false, undoAdapter),
+                                                 KisStrokeUndoFacade *undoFacade)
+    : KisStrokeStrategyUndoCommandBased(kundo2_i18n("Transform"), false, undoFacade),
       m_selection(selection)
 {
     if (rootNode->childCount() || !rootNode->paintDevice()) {

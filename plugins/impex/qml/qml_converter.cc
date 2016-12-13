@@ -35,14 +35,9 @@ QMLConverter::~QMLConverter()
 {
 }
 
-KisImageBuilder_Result QMLConverter::buildFile(const QString &filename, KisImageWSP image)
+KisImageBuilder_Result QMLConverter::buildFile(const QString &filename, QIODevice *io, KisImageSP image)
 {
-    QFile file(filename);
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-         return KisImageBuilder_RESULT_FAILURE;
-    }
-
-    QTextStream out(&file);
+    QTextStream out(io);
     out.setCodec("UTF-8");
     out << "import QtQuick 1.1" << "\n\n";
     out << "Rectangle {\n";
@@ -50,7 +45,7 @@ KisImageBuilder_Result QMLConverter::buildFile(const QString &filename, KisImage
     writeInt(out, 1, "height", image->height());
     out << "\n";
 
-    QFileInfo info(file);
+    QFileInfo info(filename);
     KisNodeSP node = image->rootLayer()->firstChild();
     QString imageDir = info.baseName() + "_images";
     QString imagePath = info.absolutePath() + '/' + imageDir;
@@ -79,9 +74,6 @@ KisImageBuilder_Result QMLConverter::buildFile(const QString &filename, KisImage
         node = node->nextSibling();
     }
     out << "}\n";
-
-
-    file.close();
 
     return KisImageBuilder_RESULT_OK;
 }

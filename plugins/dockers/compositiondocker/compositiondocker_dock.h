@@ -55,8 +55,6 @@ private:
     CompositionModel *m_model;
 
     QVector<KisAction*> m_actions;
-    KisAction* updateAction;
-    KisAction* renameAction;
 };
 
 

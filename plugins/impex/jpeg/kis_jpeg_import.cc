@@ -23,7 +23,6 @@
 
 #include <kpluginfactory.h>
 
-#include <KisFilterChain.h>
 #include <KisDocument.h>
 #include <kis_image.h>
 #include <KisViewManager.h>
@@ -41,62 +40,40 @@ KisJPEGImport::~KisJPEGImport()
 {
 }
 
-KisImportExportFilter::ConversionStatus KisJPEGImport::convert(const QByteArray&, const QByteArray& to, KisPropertiesConfigurationSP /*configuration*/)
+KisImportExportFilter::ConversionStatus KisJPEGImport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
 {
-    dbgFile << "Importing using JPEGImport!";
 
-    if (to != "application/x-krita")
+    KisJPEGConverter ib(document, batchMode());
+
+    switch (ib.buildImage(io)) {
+    case KisImageBuilder_RESULT_UNSUPPORTED:
+    case KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE:
+        return KisImportExportFilter::NotImplemented;
+        break;
+    case KisImageBuilder_RESULT_INVALID_ARG:
         return KisImportExportFilter::BadMimeType;
-
-    KisDocument * doc = outputDocument();
-
-    if (!doc)
-        return KisImportExportFilter::NoDocumentCreated;
-
-    QString filename = inputFile();
-
-    doc->prepareForImport();
-
-    if (!filename.isEmpty()) {
-
-        if (!QFileInfo(filename).exists()) {
-            return KisImportExportFilter::FileNotFound;
-        }
-
-        KisJPEGConverter ib(doc, getBatchMode());
-
-//        if (view != 0)
-//            view -> canvasSubject() ->  progressDisplay() -> setSubject(&ib, false, true);
-
-        switch (ib.buildImage(filename)) {
-        case KisImageBuilder_RESULT_UNSUPPORTED:
-        case KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE:
-            return KisImportExportFilter::NotImplemented;
-            break;
-        case KisImageBuilder_RESULT_INVALID_ARG:
-            return KisImportExportFilter::BadMimeType;
-            break;
-        case KisImageBuilder_RESULT_NO_URI:
-        case KisImageBuilder_RESULT_NOT_LOCAL:
-            return KisImportExportFilter::FileNotFound;
-            break;
-        case KisImageBuilder_RESULT_BAD_FETCH:
-        case KisImageBuilder_RESULT_EMPTY:
-            return KisImportExportFilter::ParsingError;
-            break;
-        case KisImageBuilder_RESULT_FAILURE:
-            return KisImportExportFilter::InternalError;
-            break;
-        case KisImageBuilder_RESULT_OK:
-            doc->setCurrentImage(ib.image());
-            return KisImportExportFilter::OK;
-        default:
-            break;
-        }
-
+        break;
+    case KisImageBuilder_RESULT_NO_URI:
+    case KisImageBuilder_RESULT_NOT_LOCAL:
+        return KisImportExportFilter::FileNotFound;
+        break;
+    case KisImageBuilder_RESULT_BAD_FETCH:
+    case KisImageBuilder_RESULT_EMPTY:
+        return KisImportExportFilter::ParsingError;
+        break;
+    case KisImageBuilder_RESULT_FAILURE:
+        return KisImportExportFilter::InternalError;
+        break;
+    case KisImageBuilder_RESULT_OK:
+        document->setCurrentImage(ib.image());
+        return KisImportExportFilter::OK;
+    default:
+        break;
 
     }
-    return KisImportExportFilter::StorageCreationError;
+
+    return KisImportExportFilter::InternalError;
+
 }
 
 #include <kis_jpeg_import.moc>

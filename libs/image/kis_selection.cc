@@ -51,7 +51,7 @@ KisSelection::KisSelection(KisDefaultBoundsBaseSP defaultBounds)
     : m_d(new Private)
 {
     if (!defaultBounds) {
-        defaultBounds = new KisSelectionDefaultBounds();
+        defaultBounds = new KisSelectionDefaultBounds(KisPaintDeviceSP());
     }
     m_d->defaultBounds = defaultBounds;
 

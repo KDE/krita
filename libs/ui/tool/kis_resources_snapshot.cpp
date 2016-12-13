@@ -34,6 +34,7 @@
 #include "recorder/kis_recorded_paint_action.h"
 #include "kis_selection.h"
 #include "kis_selection_mask.h"
+#include "kis_algebra_2d.h"
 
 
 struct KisResourcesSnapshot::Private {
@@ -47,7 +48,6 @@ struct KisResourcesSnapshot::Private {
 
     KisImageSP image;
     KisDefaultBoundsBaseSP bounds;
-    KisPostExecutionUndoAdapter *undoAdapter;
     KoColor currentFgColor;
     KoColor currentBgColor;
     KoPattern *currentPattern;
@@ -74,7 +74,7 @@ struct KisResourcesSnapshot::Private {
     KisSelectionSP selectionOverride;
 };
 
-KisResourcesSnapshot::KisResourcesSnapshot(KisImageSP image, KisNodeSP currentNode, KisPostExecutionUndoAdapter *undoAdapter, KoCanvasResourceManager *resourceManager, KisDefaultBoundsBaseSP bounds)
+KisResourcesSnapshot::KisResourcesSnapshot(KisImageSP image, KisNodeSP currentNode, KoCanvasResourceManager *resourceManager, KisDefaultBoundsBaseSP bounds)
     : m_d(new Private())
 {
     m_d->image = image;
@@ -82,7 +82,6 @@ KisResourcesSnapshot::KisResourcesSnapshot(KisImageSP image, KisNodeSP currentNo
         bounds = new KisDefaultBounds(m_d->image);
     }
     m_d->bounds = bounds;
-    m_d->undoAdapter = undoAdapter;
     m_d->currentFgColor = resourceManager->resource(KoCanvasResourceManager::ForegroundColor).value<KoColor>();
     m_d->currentBgColor = resourceManager->resource(KoCanvasResourceManager::BackgroundColor).value<KoColor>();
     m_d->currentPattern = resourceManager->resource(KisCanvasResourceProvider::CurrentPattern).value<KoPattern*>();
@@ -103,11 +102,12 @@ KisResourcesSnapshot::KisResourcesSnapshot(KisImageSP image, KisNodeSP currentNo
     m_d->currentExposure = resourceManager->resource(KisCanvasResourceProvider::HdrExposure).toDouble();
     m_d->currentGenerator = resourceManager->resource(KisCanvasResourceProvider::CurrentGeneratorConfiguration).value<KisFilterConfiguration*>();
 
-    m_d->axesCenter = resourceManager->resource(KisCanvasResourceProvider::MirrorAxesCenter).toPointF();
-    if (m_d->axesCenter.isNull()){
-        QRect bounds = m_d->bounds->bounds();
-        m_d->axesCenter = QPointF(0.5 * bounds.width(), 0.5 * bounds.height());
+
+    QPointF relativeAxesCenter(0.5, 0.5);
+    if (m_d->image) {
+        relativeAxesCenter = m_d->image->mirrorAxesCenter();
     }
+    m_d->axesCenter = KisAlgebra2D::relativeToAbsolute(relativeAxesCenter, m_d->bounds->bounds());
 
     m_d->mirrorMaskHorizontal = resourceManager->resource(KisCanvasResourceProvider::MirrorHorizontal).toBool();
     m_d->mirrorMaskVertical = resourceManager->resource(KisCanvasResourceProvider::MirrorVertical).toBool();
@@ -185,7 +185,7 @@ void KisResourcesSnapshot::setupPaintAction(KisRecordedPaintAction *action)
 
 KisPostExecutionUndoAdapter* KisResourcesSnapshot::postExecutionUndoAdapter() const
 {
-    return m_d->undoAdapter;
+    return m_d->image ? m_d->image->postExecutionUndoAdapter() : 0;
 }
 
 void KisResourcesSnapshot::setCurrentNode(KisNodeSP node)
@@ -243,9 +243,9 @@ KisSelectionSP KisResourcesSnapshot::activeSelection() const
 
     KisSelectionSP selection = m_d->image ? m_d->image->globalSelection() : 0;
 
-    KisLayerSP layer = dynamic_cast<KisLayer*>(m_d->currentNode.data());
+    KisLayerSP layer = qobject_cast<KisLayer*>(m_d->currentNode.data());
     KisSelectionMaskSP mask;
-    if((layer = dynamic_cast<KisLayer*>(m_d->currentNode.data()))) {
+    if((layer = qobject_cast<KisLayer*>(m_d->currentNode.data()))) {
          selection = layer->selection();
     } else if ((mask = dynamic_cast<KisSelectionMask*>(m_d->currentNode.data())) &&
                mask->selection() == selection) {

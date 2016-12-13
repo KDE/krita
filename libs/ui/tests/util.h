@@ -87,7 +87,7 @@ QTransform createTestingTransform() {
     return QTransform(1,2,3,4,5,6,7,8,9);
 }
 
-KisDocument* createCompleteDocument()
+KisDocument* createCompleteDocument(bool shouldMaskToShapeLayer = false)
 {
     KisImageWSP image = new KisImage(0, 1024, 1024, KoColorSpaceRegistry::instance()->rgb8(), "test for roundtrip");
 
@@ -206,6 +206,14 @@ KisDocument* createCompleteDocument()
                                           new KisDumbTransformMaskParams(createTestingTransform())));
 
     image->addNode(transformMask, paintLayer2);
+
+    if (shouldMaskToShapeLayer) {
+        // add all-visible transparency mask to crash a shape layer
+        KisTransparencyMaskSP transparencyMask3 = new KisTransparencyMask();
+        transparencyMask3->setName("crashy-transparency-mask");
+        transparencyMask3->initSelection(shapeLayer);
+        image->addNode(transparencyMask3, shapeLayer);
+    }
 
     return doc;
 }

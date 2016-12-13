@@ -82,12 +82,12 @@ void KisGeneratorLayer::slotDelayedStaticUpdate()
      * meanwhile. Just ignore the updates in the case.
      */
 
-    KisLayerSP parentLayer = dynamic_cast<KisLayer*>(parent().data());
+    KisLayerSP parentLayer(qobject_cast<KisLayer*>(parent().data()));
     if (!parentLayer) return;
 
     KisImageSP image = parentLayer->image();
     if (image) {
-        image->addSpontaneousJob(new KisRecalculateGeneratorLayerJob(this));
+        image->addSpontaneousJob(new KisRecalculateGeneratorLayerJob(KisGeneratorLayerSP(this)));
     }
 }
 
@@ -110,7 +110,7 @@ void KisGeneratorLayer::update()
 
     KisProcessingInformation dstCfg(originalDevice,
                                     processRect.topLeft(),
-                                    0);
+                                    KisSelectionSP());
 
     f->generate(dstCfg, processRect.size(), filterConfig.data());
 

@@ -19,6 +19,7 @@
 #include "kis_stroke_strategy_undo_command_based.h"
 
 #include <QMutexLocker>
+#include "kis_image_interfaces.h"
 #include "kis_post_execution_undo_adapter.h"
 #include "commands_new/kis_saved_commands.h"
 
@@ -26,14 +27,14 @@
 KisStrokeStrategyUndoCommandBased::
 KisStrokeStrategyUndoCommandBased(const KUndo2MagicString &name,
                                   bool undo,
-                                  KisPostExecutionUndoAdapter *undoAdapter,
+                                  KisStrokeUndoFacade *undoFacade,
                                   KUndo2CommandSP initCommand,
                                   KUndo2CommandSP finishCommand)
   : KisSimpleStrokeStrategy("STROKE_UNDO_COMMAND_BASED", name),
     m_undo(undo),
     m_initCommand(initCommand),
     m_finishCommand(finishCommand),
-    m_undoAdapter(undoAdapter),
+    m_undoFacade(undoFacade),
     m_macroId(-1),
     m_macroCommand(0)
 {
@@ -44,13 +45,12 @@ KisStrokeStrategyUndoCommandBased(const KUndo2MagicString &name,
 }
 
 KisStrokeStrategyUndoCommandBased::
-KisStrokeStrategyUndoCommandBased(const KisStrokeStrategyUndoCommandBased &rhs,
-                                  bool suppressUndo)
+KisStrokeStrategyUndoCommandBased(const KisStrokeStrategyUndoCommandBased &rhs)
   : KisSimpleStrokeStrategy(rhs),
     m_undo(false),
     m_initCommand(rhs.m_initCommand),
     m_finishCommand(rhs.m_finishCommand),
-    m_undoAdapter(!suppressUndo ? rhs.m_undoAdapter : 0),
+    m_undoFacade(rhs.m_undoFacade),
     m_macroCommand(0)
 {
     KIS_ASSERT_RECOVER_NOOP(!rhs.m_macroCommand &&
@@ -76,8 +76,8 @@ void KisStrokeStrategyUndoCommandBased::executeCommand(KUndo2CommandSP command, 
 
 void KisStrokeStrategyUndoCommandBased::initStrokeCallback()
 {
-    if(m_undoAdapter) {
-        m_macroCommand = m_undoAdapter->createMacro(name());
+    if(m_undoFacade) {
+        m_macroCommand = m_undoFacade->postExecutionUndoAdapter()->createMacro(name());
     }
 
     executeCommand(m_initCommand, m_undo);
@@ -95,9 +95,9 @@ void KisStrokeStrategyUndoCommandBased::finishStrokeCallback()
 
     QMutexLocker locker(&m_mutex);
     if(m_macroCommand) {
-        Q_ASSERT(m_undoAdapter);
+        Q_ASSERT(m_undoFacade);
         postProcessToplevelCommand(m_macroCommand);
-        m_undoAdapter->addMacro(m_macroCommand);
+        m_undoFacade->postExecutionUndoAdapter()->addMacro(m_macroCommand);
         m_macroCommand = 0;
     }
 }
@@ -143,7 +143,7 @@ void KisStrokeStrategyUndoCommandBased::notifyCommandDone(KUndo2CommandSP comman
 
 void KisStrokeStrategyUndoCommandBased::setCommandExtraData(KUndo2CommandExtraData *data)
 {
-    if (m_undoAdapter && m_macroCommand) {
+    if (m_undoFacade && m_macroCommand) {
         warnKrita << "WARNING: KisStrokeStrategyUndoCommandBased::setCommandExtraData():"
                    << "the extra data is set while the stroke has already been started!"
                    << "The result is undefined, continued actions may not work!";

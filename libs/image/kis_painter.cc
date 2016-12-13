@@ -273,7 +273,7 @@ KisPaintDeviceSP KisPainter::convertToAlphaAsAlpha(KisPaintDeviceSP src)
 {
     const KoColorSpace *srcCS = src->colorSpace();
     const QRect processRect = src->extent();
-    KisPaintDeviceSP dst = new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8());
+    KisPaintDeviceSP dst(new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8()));
 
     KisSequentialConstIterator srcIt(src, processRect);
     KisSequentialIterator dstIt(dst, processRect);
@@ -295,7 +295,7 @@ KisPaintDeviceSP KisPainter::convertToAlphaAsGray(KisPaintDeviceSP src)
 {
     const KoColorSpace *srcCS = src->colorSpace();
     const QRect processRect = src->extent();
-    KisPaintDeviceSP dst = new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8());
+    KisPaintDeviceSP dst(new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8()));
 
     KisSequentialConstIterator srcIt(src, processRect);
     KisSequentialIterator dstIt(dst, processRect);
@@ -449,6 +449,8 @@ inline bool KisPainter::Private::tryReduceSourceRect(const KisPaintDevice *srcDe
      * the image.
      */
     if (compositeOp->id() != COMPOSITE_COPY &&
+        compositeOp->id() != COMPOSITE_DESTINATION_IN  &&
+        compositeOp->id() != COMPOSITE_DESTINATION_ATOP &&
         !srcDev->defaultBounds()->wrapAroundMode()) {
 
         /**
@@ -654,7 +656,7 @@ void KisPainter::bitBltImpl(qint32 dstX, qint32 dstY,
     the other bit blit operations. This one is longer than the rest in an effort to
     optimize speed and memory use */
     if (d->selection) {
-        KisPaintDeviceSP selectionProjection = d->selection->projection();
+        KisPaintDeviceSP selectionProjection(d->selection->projection());
         KisRandomConstAccessorSP maskIt = selectionProjection->createRandomConstAccessorNG(dstX, dstY);
 
         while (rowsRemaining > 0) {
@@ -806,7 +808,7 @@ void KisPainter::fill(qint32 x, qint32 y, qint32 width, qint32 height, const KoC
     KisRandomAccessorSP dstIt = d->device->createRandomAccessorNG(x, y);
 
     if(d->selection) {
-        KisPaintDeviceSP selectionProjection = d->selection->projection();
+        KisPaintDeviceSP selectionProjection(d->selection->projection());
         KisRandomConstAccessorSP maskIt = selectionProjection->createRandomConstAccessorNG(x, y);
 
         while(rowsRemaining > 0) {
@@ -934,7 +936,7 @@ void KisPainter::bltFixed(qint32 dstX, qint32 dstY,
     if (d->selection) {
         /* d->selection is a KisPaintDevice, so first a readBytes is performed to
         get the area of interest... */
-        KisPaintDeviceSP selectionProjection = d->selection->projection();
+        KisPaintDeviceSP selectionProjection(d->selection->projection());
         quint8* selBytes = 0;
         try {
             selBytes = new quint8[srcWidth * srcHeight * selectionProjection->pixelSize()];
@@ -2805,7 +2807,7 @@ void KisPainter::renderMirrorMask(QRect rc, KisFixedPaintDeviceSP dab, KisFixedP
 
 void KisPainter::renderMirrorMask(QRect rc, KisPaintDeviceSP dab){
     if (d->mirrorHorizontally || d->mirrorVertically){
-        KisFixedPaintDeviceSP mirrorDab = new KisFixedPaintDevice(dab->colorSpace());
+        KisFixedPaintDeviceSP mirrorDab(new KisFixedPaintDevice(dab->colorSpace()));
         QRect dabRc( QPoint(0,0), QSize(rc.width(),rc.height()) );
         mirrorDab->setRect(dabRc);
         mirrorDab->initialize();
@@ -2819,7 +2821,7 @@ void KisPainter::renderMirrorMask(QRect rc, KisPaintDeviceSP dab){
 void KisPainter::renderMirrorMask(QRect rc, KisPaintDeviceSP dab, int sx, int sy, KisFixedPaintDeviceSP mask)
 {
     if (d->mirrorHorizontally || d->mirrorVertically){
-        KisFixedPaintDeviceSP mirrorDab = new KisFixedPaintDevice(dab->colorSpace());
+        KisFixedPaintDeviceSP mirrorDab(new KisFixedPaintDevice(dab->colorSpace()));
         QRect dabRc( QPoint(0,0), QSize(rc.width(),rc.height()) );
         mirrorDab->setRect(dabRc);
         mirrorDab->initialize();

@@ -84,6 +84,8 @@
 #include "kis_painting_assistants_decoration.h"
 
 #include "kis_canvas_updates_compressor.h"
+#include "KoZoomController.h"
+
 
 class Q_DECL_HIDDEN KisCanvas2::KisCanvas2Private
 {
@@ -286,15 +288,15 @@ bool KisCanvas2::yAxisMirrored() const
 
 void KisCanvas2::channelSelectionChanged()
 {
-    KisImageWSP image = this->image();
+    KisImageSP image = this->image();
     m_d->channelFlags = image->rootLayer()->channelFlags();
+
+    m_d->view->viewManager()->blockUntillOperationsFinishedForced(image);
 
     image->barrierLock();
     m_d->canvasWidget->channelSelectionChanged(m_d->channelFlags);
     startUpdateInPatches(image->bounds());
-
     image->unlock();
-
 }
 
 void KisCanvas2::addCommand(KUndo2Command *command)
@@ -522,12 +524,12 @@ void KisCanvas2::startUpdateInPatches(const QRect &imageRect)
 void KisCanvas2::setDisplayFilter(QSharedPointer<KisDisplayFilter> displayFilter)
 {
     m_d->displayColorConverter.setDisplayFilter(displayFilter);
-    KisImageWSP image = this->image();
+    KisImageSP image = this->image();
+
+    m_d->view->viewManager()->blockUntillOperationsFinishedForced(image);
 
     image->barrierLock();
-
     m_d->canvasWidget->setDisplayFilter(displayFilter);
-
     image->unlock();
 }
 
@@ -852,8 +854,17 @@ QPoint KisCanvas2::documentOffset() const
 
 void KisCanvas2::setFavoriteResourceManager(KisFavoriteResourceManager* favoriteResourceManager)
 {
-    m_d->popupPalette = new KisPopupPalette(favoriteResourceManager, displayColorConverter()->displayRendererInterface(), m_d->view->resourceProvider(), m_d->canvasWidget->widget());
+    m_d->popupPalette = new KisPopupPalette(viewManager(), m_d->coordinatesConverter, favoriteResourceManager, displayColorConverter()->displayRendererInterface(),
+                                            m_d->view->resourceProvider(), m_d->canvasWidget->widget());
+    connect(m_d->popupPalette, SIGNAL(zoomLevelChanged(int)), this, SLOT(slotZoomChanged(int)));
+    connect(m_d->popupPalette, SIGNAL(sigUpdateCanvas()), this, SLOT(updateCanvas()));
+
     m_d->popupPalette->showPopupPalette(false);
+}
+
+void KisCanvas2::slotZoomChanged(int zoom ) {
+    m_d->view->viewManager()->zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, (qreal)(zoom/100.0)); // 1.0 is 100% zoom
+    notifyZoomChanged();
 }
 
 void KisCanvas2::setCursor(const QCursor &cursor)

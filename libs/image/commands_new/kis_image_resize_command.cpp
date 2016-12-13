@@ -29,16 +29,28 @@ KisImageResizeCommand::KisImageResizeCommand(KisImageWSP image,
       m_image(image)
 {
     // do we really need a translatable name for the command?
-    m_sizeBefore = image->size();
+    KisImageSP imageSP = m_image.toStrongRef();
+    if (!imageSP) {
+        return;
+    }
+    m_sizeBefore = imageSP->size();
     m_sizeAfter = newSize;
 }
 
 void KisImageResizeCommand::redo()
 {
-    m_image->setSize(m_sizeAfter);
+    KisImageSP image = m_image.toStrongRef();
+    if (!image) {
+        return;
+    }
+    image->setSize(m_sizeAfter);
 }
 
 void KisImageResizeCommand::undo()
 {
-    m_image->setSize(m_sizeBefore);
+    KisImageSP image = m_image.toStrongRef();
+    if (!image) {
+        return;
+    }
+    image->setSize(m_sizeBefore);
 }

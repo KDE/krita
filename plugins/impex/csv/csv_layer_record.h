@@ -35,7 +35,7 @@ public:
     float       density;
     int         visible;
 
-    KisPaintLayer* layer;
+    KisLayer*   layer;
     KisRasterKeyframeChannel *channel;
     QString     last;
     QString     path;

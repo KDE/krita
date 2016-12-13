@@ -70,7 +70,7 @@ KisPaintOpPreset::~KisPaintOpPreset()
 
 KisPaintOpPresetSP KisPaintOpPreset::clone() const
 {
-    KisPaintOpPresetSP preset = new KisPaintOpPreset();
+    KisPaintOpPresetSP preset(new KisPaintOpPreset());
 
     if (settings()) {
         preset->setSettings(settings()); // the settings are cloned inside!

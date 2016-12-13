@@ -54,7 +54,10 @@ void KisLayerProjectionPlane::apply(KisPainter *painter, const QRect &rect)
 
     QRect needRect = rect;
 
-    if (m_d->layer->compositeOpId() != COMPOSITE_COPY) {
+    if (m_d->layer->compositeOpId() != COMPOSITE_COPY &&
+        m_d->layer->compositeOpId() != COMPOSITE_DESTINATION_IN  &&
+        m_d->layer->compositeOpId() != COMPOSITE_DESTINATION_ATOP) {
+
         needRect &= device->extent();
     }
 

@@ -121,11 +121,6 @@ KisMirrorAxis::KisMirrorAxis(KisCanvasResourceProvider* provider, QPointer<KisVi
 
 
     d->image = parent->canvasBase()->image();
-
-    int imageWidth = d->image->width();
-    int imageHeight = d->image->height();
-    QPointF point(imageWidth / 2, imageHeight / 2);
-    d->resourceProvider->resourceManager()->setResource(KisCanvasResourceProvider::MirrorAxesCenter, point);
 }
 
 KisMirrorAxis::~KisMirrorAxis()
@@ -376,12 +371,12 @@ void KisMirrorAxis::moveVerticalAxisToCenter()
 }
 
 
-
 void KisMirrorAxis::Private::setAxisPosition(float x, float y)
 {
     QPointF newPosition = QPointF(x, y);
 
-    resourceProvider->resourceManager()->setResource(KisCanvasResourceProvider::MirrorAxesCenter, newPosition);
+    const QPointF relativePosition = KisAlgebra2D::absoluteToRelative(newPosition, image->bounds());
+    image->setMirrorAxesCenter(relativePosition);
 
     q->view()->canvasBase()->updateCanvas();
 }
@@ -391,7 +386,7 @@ void KisMirrorAxis::Private::recomputeVisibleAxes(QRect viewport)
 {
     KisCoordinatesConverter *converter = q->view()->viewConverter();
 
-    axisPosition = resourceProvider->resourceManager()->resource(KisCanvasResourceProvider::MirrorAxesCenter).toPointF();
+    axisPosition = KisAlgebra2D::relativeToAbsolute(image->mirrorAxesCenter(), image->bounds());
 
     QPointF samplePt1 = converter->imageToWidget<QPointF>(axisPosition);
     QPointF samplePt2 = converter->imageToWidget<QPointF>(QPointF(axisPosition.x(), axisPosition.y() - 100));

@@ -38,8 +38,6 @@ extern "C" {
 #include <QBuffer>
 #include <QApplication>
 
-#include <QMessageBox>
-
 #include <klocalizedstring.h>
 #include <QFileInfo>
 
@@ -145,7 +143,7 @@ KisJPEGConverter::~KisJPEGConverter()
 {
 }
 
-KisImageBuilder_Result KisJPEGConverter::decode(const QString &filename)
+KisImageBuilder_Result KisJPEGConverter::decode(QIODevice *io)
 {
     struct jpeg_decompress_struct cinfo;
     struct jpeg_error_mgr jerr;
@@ -155,16 +153,8 @@ KisImageBuilder_Result KisJPEGConverter::decode(const QString &filename)
 
     try {
         jpeg_create_decompress(&cinfo);
-        // open the file
-        QFile file(filename);
-        if (!file.exists()) {
-            return (KisImageBuilder_RESULT_NOT_EXIST);
-        }
-        if (!file.open(QIODevice::ReadOnly)) {
-            return (KisImageBuilder_RESULT_BAD_FETCH);
-        }
 
-        KisJPEGSource::setSource(&cinfo, &file);
+        KisJPEGSource::setSource(&cinfo, io);
 
         jpeg_save_markers(&cinfo, JPEG_COM, 0xFFFF);
         /* Save APP0..APP15 markers */
@@ -454,9 +444,9 @@ KisImageBuilder_Result KisJPEGConverter::decode(const QString &filename)
 
 
 
-KisImageBuilder_Result KisJPEGConverter::buildImage(const QString &filename)
+KisImageBuilder_Result KisJPEGConverter::buildImage(QIODevice *io)
 {
-    return decode(filename);
+    return decode(io);
 }
 
 
@@ -466,26 +456,19 @@ KisImageSP KisJPEGConverter::image()
 }
 
 
-KisImageBuilder_Result KisJPEGConverter::buildFile(const QString &filename, KisPaintLayerSP layer, vKisAnnotationSP_it /*annotationsStart*/, vKisAnnotationSP_it /*annotationsEnd*/, KisJPEGOptions options, KisMetaData::Store* metaData)
+KisImageBuilder_Result KisJPEGConverter::buildFile(QIODevice *io, KisPaintLayerSP layer, KisJPEGOptions options, KisMetaData::Store* metaData)
 {
     if (!layer)
         return KisImageBuilder_RESULT_INVALID_ARG;
 
-    KisImageWSP image = KisImageWSP(layer->image());
+    KisImageSP image = KisImageSP(layer->image());
     if (!image)
         return KisImageBuilder_RESULT_EMPTY;
 
     const KoColorSpace * cs = layer->colorSpace();
     J_COLOR_SPACE color_type = getColorTypeforColorSpace(cs);
 
-    if (!m_d->batchMode && cs->colorDepthId() != Integer8BitsColorDepthID) {
-        QMessageBox::information(0, i18nc("@title:window", "Krita"), i18n("Warning: JPEG only supports 8 bits per channel. Your image uses: %1. Krita will save your image as 8 bits per channel.", cs->name()));
-    }
-
     if (color_type == JCS_UNKNOWN) {
-        if (!m_d->batchMode) {
-            QMessageBox::information(0, i18nc("@title:window", "Krita"), i18n("Cannot export images in %1.\nWill save as RGB.", cs->name()));
-        }
         KUndo2Command *tmp = layer->paintDevice()->convertTo(KoColorSpaceRegistry::instance()->rgb8(), KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
         delete tmp;
         cs = KoColorSpaceRegistry::instance()->rgb8();
@@ -500,13 +483,6 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const QString &filename, KisP
         color_type = JCS_RGB;
     }
 
-
-    // Open file for writing
-    QFile file(filename);
-    if (!file.open(QIODevice::WriteOnly)) {
-        return (KisImageBuilder_RESULT_FAILURE);
-    }
-
     uint height = image->height();
     uint width = image->width();
     // Initialize structure
@@ -516,7 +492,7 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const QString &filename, KisP
     cinfo.err = jpeg_std_error(&jerr);
     jpeg_create_compress(&cinfo);
     // Initialize output stream
-    KisJPEGDestination::setDestination(&cinfo, &file);
+    KisJPEGDestination::setDestination(&cinfo, io);
 
     cinfo.image_width = width;  // image width and height, in pixels
     cinfo.image_height = height;
@@ -738,7 +714,6 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const QString &filename, KisP
 
     // Writing is over
     jpeg_finish_compress(&cinfo);
-    file.close();
 
     delete [] row_pointer;
     // Free memory

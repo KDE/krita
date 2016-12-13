@@ -270,6 +270,10 @@ public:
     int presetChooserViewMode(bool defaultValue = false) const;
     void setPresetChooserViewMode(const int mode) const;
 
+    int presetIconSize(bool defaultValue = false) const;
+    void setPresetIconSize(const int value) const;
+
+
     bool firstRun(bool defaultValue = false) const;
     void setFirstRun(const bool firstRun) const;
 
@@ -287,6 +291,9 @@ public:
 
     bool showDockerTitleBars(bool defaultValue = false) const;
     void setShowDockerTitleBars(const bool value) const;
+
+    bool showDockers(bool defaultValue = false) const;
+    void setShowDockers(const bool value) const;
 
     bool showStatusBar(bool defaultValue = false) const;
     void setShowStatusBar(const bool value) const;
@@ -313,7 +320,7 @@ public:
     void setFavoriteCompositeOps(const QStringList& compositeOps) const;
 
     QString exportConfiguration(const QString &filterId, bool defaultValue = false) const;
-    void setExportConfiguration(const QString &filterId, const KisPropertiesConfiguration &properties) const;
+    void setExportConfiguration(const QString &filterId, KisPropertiesConfigurationSP properties) const;
 
     bool useOcio(bool defaultValue = false) const;
     void setUseOcio(bool useOCIO) const;
@@ -441,7 +448,7 @@ public:
 
     bool useEraserBrushOpacity(bool defaultValue = false) const;
     void setUseEraserBrushOpacity(bool value);
-    
+
     QColor getMDIBackgroundColor(bool defaultValue = false) const;
     void setMDIBackgroundColor(const QColor & v) const;
 
@@ -481,6 +488,9 @@ public:
 
     int stabilizerSampleSize(bool defaultValue = false) const;
     void setStabilizerSampleSize(int value);
+
+    int stabilizerDelayedPaintInterval(bool defaultValue = false) const;
+    void setStabilizerDelayedPaintInterval(int value);
 
     QString customFFMpegPath(bool defaultValue = false) const;
     void setCustomFFMpegPath(const QString &value) const;

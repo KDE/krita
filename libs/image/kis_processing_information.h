@@ -32,7 +32,7 @@
 class KRITAIMAGE_EXPORT KisConstProcessingInformation
 {
 public:
-    KisConstProcessingInformation(const KisPaintDeviceSP device, const QPoint& topLeft, const KisSelectionSP selection = 0);
+    KisConstProcessingInformation(const KisPaintDeviceSP device, const QPoint& topLeft, const KisSelectionSP selection);
     KisConstProcessingInformation(const KisConstProcessingInformation& _rhs);
     KisConstProcessingInformation& operator=(const KisConstProcessingInformation& _rhs);
     ~KisConstProcessingInformation();
@@ -62,7 +62,7 @@ private:
 class KRITAIMAGE_EXPORT KisProcessingInformation : public KisConstProcessingInformation
 {
 public:
-    KisProcessingInformation(KisPaintDeviceSP device, const QPoint& topLeft, const KisSelectionSP selection = 0);
+    KisProcessingInformation(KisPaintDeviceSP device, const QPoint& topLeft, const KisSelectionSP selection);
     KisProcessingInformation(const KisProcessingInformation& _rhs);
     KisProcessingInformation& operator=(const KisProcessingInformation& _rhs);
     ~KisProcessingInformation();

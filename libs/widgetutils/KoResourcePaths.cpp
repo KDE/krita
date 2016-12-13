@@ -80,14 +80,14 @@ static const Qt::CaseSensitivity cs = Qt::CaseInsensitive;
 static const Qt::CaseSensitivity cs = Qt::CaseSensitive;
 #endif
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_OSX
 #include <ApplicationServices/ApplicationServices.h>
 #include <CoreFoundation/CoreFoundation.h>
 #include <CoreServices/CoreServices.h>
 #endif
 
 QString getInstallationPrefix() {
-#ifdef Q_OS_MAC
+#ifdef Q_OS_OSX
      QString appPath = qApp->applicationDirPath();
 
      debugWidgetUtils << "1" << appPath;
@@ -343,7 +343,7 @@ QStringList KoResourcePaths::findDirsInternal(const QString &type)
             QStandardPaths::locateAll(d->mapTypeToQStandardPaths(type), alias + '/', QStandardPaths::LocateDirectory);
         appendResources(&dirs, aliasDirs, true);
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_OSX
         debugWidgetUtils << "MAC:" << getApplicationRoot();
         QStringList bundlePaths;
         bundlePaths << getApplicationRoot() + "/share/krita/" + alias;
@@ -425,9 +425,14 @@ QStringList KoResourcePaths::findAllResourcesInternal(const QString &type,
         debugWidgetUtils << "\t\talias:" << alias;
         QStringList dirs;
 
-        dirs << QStandardPaths::locateAll(d->mapTypeToQStandardPaths(type), alias, QStandardPaths::LocateDirectory)
-             << getInstallationPrefix() + "share/" + alias + "/"
-             << getInstallationPrefix() + "share/krita/" + alias + "/";
+        QFileInfo dirInfo(alias);
+        if (dirInfo.exists() && dirInfo.isDir() && dirInfo.isAbsolute()) {
+            dirs << alias;
+        } else {
+            dirs << QStandardPaths::locateAll(d->mapTypeToQStandardPaths(type), alias, QStandardPaths::LocateDirectory)
+                 << getInstallationPrefix() + "share/" + alias + "/"
+                 << getInstallationPrefix() + "share/krita/" + alias + "/";
+        }
 
         Q_FOREACH (const QString &dir, dirs) {
             appendResources(&resources,

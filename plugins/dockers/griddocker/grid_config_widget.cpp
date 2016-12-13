@@ -45,9 +45,27 @@ GridConfigWidget::GridConfigWidget(QWidget *parent) :
     ui->colorSubdivision->setAlphaChannelEnabled(true);
     ui->colorGuides->setAlphaChannelEnabled(true);
 
+
+    ui->angleLeftSpinbox->setSuffix(QChar(Qt::Key_degree));
+    ui->angleRightSpinbox->setSuffix(QChar(Qt::Key_degree));
+    ui->cellSpacingSpinbox->setSuffix(i18n(" px"));
+
+
+    ui->gridTypeCombobox->addItem(i18n("Rectangle"));
+    ui->gridTypeCombobox->addItem(i18n("Isometric"));
+    ui->gridTypeCombobox->setCurrentIndex(0); // set to rectangle by default
+    slotGridTypeChanged(); // update the UI to hide any elements we don't need
+
+
+    connect(ui->gridTypeCombobox, SIGNAL(currentIndexChanged(int)), SLOT(slotGridTypeChanged()));
+
+
+    m_isGridEnabled = false;
+
     setGridConfig(m_d->gridConfig);
     setGuidesConfig(m_d->guidesConfig);
 
+    // hide offset UI elements if offset is disabled
     connect(ui->chkOffset, SIGNAL(toggled(bool)), ui->lblXOffset, SLOT(setVisible(bool)));
     connect(ui->chkOffset, SIGNAL(toggled(bool)), ui->lblYOffset, SLOT(setVisible(bool)));
     connect(ui->chkOffset, SIGNAL(toggled(bool)), ui->intXOffset, SLOT(setVisible(bool)));
@@ -69,6 +87,11 @@ GridConfigWidget::GridConfigWidget(QWidget *parent) :
     connect(ui->chkLockGuides, SIGNAL(stateChanged(int)), SLOT(slotGuidesGuiChanged()));
 
     connect(ui->intSubdivision, SIGNAL(valueChanged(int)), SLOT(slotGridGuiChanged()));
+    connect(ui->angleLeftSpinbox, SIGNAL(valueChanged(int)), SLOT(slotGridGuiChanged()));
+    connect(ui->angleRightSpinbox, SIGNAL(valueChanged(int)), SLOT(slotGridGuiChanged()));
+    connect(ui->cellSpacingSpinbox, SIGNAL(valueChanged(int)), SLOT(slotGridGuiChanged()));
+
+
 
     connect(ui->selectMainStyle, SIGNAL(currentIndexChanged(int)), SLOT(slotGridGuiChanged()));
     connect(ui->colorMain, SIGNAL(changed(const QColor&)), SLOT(slotGridGuiChanged()));
@@ -121,20 +144,29 @@ void GridConfigWidget::setGridConfigImpl(const KisGridConfig &value)
     ui->offsetAspectButton->setKeepAspectRatio(m_d->gridConfig.offsetAspectLocked());
     ui->spacingAspectButton->setKeepAspectRatio(m_d->gridConfig.spacingAspectLocked());
     ui->chkShowGrid->setChecked(m_d->gridConfig.showGrid());
-    ui->chkSnapToGrid->setChecked(m_d->gridConfig.snapToGrid());
     ui->intHSpacing->setValue(m_d->gridConfig.spacing().x());
     ui->intVSpacing->setValue(m_d->gridConfig.spacing().y());
     ui->intXOffset->setValue(m_d->gridConfig.offset().x());
     ui->intYOffset->setValue(m_d->gridConfig.offset().y());
     ui->intSubdivision->setValue(m_d->gridConfig.subdivision());
+    ui->chkSnapToGrid->setChecked(m_d->gridConfig.snapToGrid());
+    ui->angleLeftSpinbox->setValue(m_d->gridConfig.angleLeft());
+    ui->angleRightSpinbox->setValue(m_d->gridConfig.angleRight());
+    ui->cellSpacingSpinbox->setValue(m_d->gridConfig.cellSpacing());
+
 
     ui->selectMainStyle->setCurrentIndex(int(m_d->gridConfig.lineTypeMain()));
     ui->selectSubdivisionStyle->setCurrentIndex(int(m_d->gridConfig.lineTypeSubdivision()));
+    ui->gridTypeCombobox->setCurrentIndex(m_d->gridConfig.gridType());
 
     ui->colorMain->setColor(m_d->gridConfig.colorMain());
     ui->colorSubdivision->setColor(m_d->gridConfig.colorSubdivision());
 
     m_d->guiSignalsBlocked = false;
+
+
+
+
 
     emit gridValueChanged();
 }
@@ -190,6 +222,10 @@ KisGridConfig GridConfigWidget::fetchGuiGridConfig() const
     config.setOffset(pt);
 
     config.setSubdivision(ui->intSubdivision->value());
+    config.setAngleLeft(ui->angleLeftSpinbox->value());
+    config.setAngleRight(ui->angleRightSpinbox->value());
+    config.setCellSpacing(ui->cellSpacingSpinbox->value());
+    config.setGridType(ui->gridTypeCombobox->currentIndex());
 
     config.setOffsetAspectLocked(ui->offsetAspectButton->keepAspectRatio());
     config.setSpacingAspectLocked(ui->spacingAspectButton->keepAspectRatio());
@@ -236,3 +272,61 @@ void GridConfigWidget::slotGuidesGuiChanged()
 
     setGuidesConfigImpl(currentConfig);
 }
+
+void GridConfigWidget::slotGridTypeChanged() {
+
+
+    bool showRectangleControls = ui->gridTypeCombobox->currentIndex() == 0;
+
+
+    // specific rectangle UI controls
+    ui->lblXSpacing->setVisible(showRectangleControls);
+    ui->lblYSpacing->setVisible(showRectangleControls);
+    ui->intHSpacing->setVisible(showRectangleControls);
+    ui->intVSpacing->setVisible(showRectangleControls);
+    ui->spacingAspectButton->setVisible(showRectangleControls);
+
+    ui->lblSubdivision->setVisible(showRectangleControls);
+    ui->intSubdivision->setVisible(showRectangleControls);
+    ui->lblSubdivisionStyle->setVisible(showRectangleControls);
+    ui->selectSubdivisionStyle->setVisible(showRectangleControls);
+    ui->colorSubdivision->setVisible(showRectangleControls);
+
+
+    // specific isometric UI controls
+    ui->leftAngleLabel->setVisible(!showRectangleControls);
+    ui->rightAngleLabel->setVisible(!showRectangleControls);
+    ui->angleLeftSpinbox->setVisible(!showRectangleControls);
+    ui->angleRightSpinbox->setVisible(!showRectangleControls);
+    ui->cellSpacingLabel->setVisible(!showRectangleControls);
+    ui->cellSpacingSpinbox->setVisible(!showRectangleControls);
+
+
+
+    // disable snapping for isometric grid type for now
+    // remember if we had snapping enabled if it was on the rectangule mode
+    if (!showRectangleControls) {
+        m_isGridEnabled = ui->chkSnapToGrid->isChecked();
+        ui->chkSnapToGrid->setEnabled(false);
+        ui->chkSnapToGrid->setChecked(false);
+    } else {
+        ui->chkSnapToGrid->setEnabled(true);
+        ui->chkSnapToGrid->setChecked(m_isGridEnabled);
+    }
+
+
+
+
+
+
+
+
+
+
+    slotGridGuiChanged();
+}
+
+
+
+
+

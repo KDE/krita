@@ -29,7 +29,6 @@ struct KisStabilizedEventsSampler::Private
 {
     Private(int _sampleTime) : sampleTime(_sampleTime), elapsedTimeOverride(0) {}
 
-    std::function<void(const KisPaintInformation &)> paintLine;
     QElapsedTimer lastPaintTime;
     QList<KisPaintInformation> realEvents;
     int sampleTime;
@@ -45,11 +44,6 @@ KisStabilizedEventsSampler::KisStabilizedEventsSampler(int sampleTime)
 
 KisStabilizedEventsSampler::~KisStabilizedEventsSampler()
 {
-}
-
-void KisStabilizedEventsSampler::setLineFunction(std::function<void(const KisPaintInformation &)> func)
-{
-    m_d->paintLine = func;
 }
 
 void KisStabilizedEventsSampler::clear()
@@ -73,23 +67,14 @@ void KisStabilizedEventsSampler::addEvent(const KisPaintInformation &pi)
 
 void KisStabilizedEventsSampler::addFinishingEvent(int numSamples)
 {
-    clear();
+    if (m_d->realEvents.size() > 0) {
+        dbgKrita << "DEBUG: KisStabilizedEventsSampler::addFinishingEvent called "
+                    "before `realEvents` is cleared";
+        clear();
+    }
 
     m_d->elapsedTimeOverride = numSamples;
     m_d->realEvents.append(m_d->lastPaintInformation);
-}
-
-void KisStabilizedEventsSampler::processAllEvents()
-{
-    const int elapsed = m_d->lastPaintTime.restart();
-
-    const qreal alpha = qreal(m_d->realEvents.size()) / elapsed;
-
-    for (int i = 0; i < elapsed; i += m_d->sampleTime) {
-        const int k = qFloor(alpha * i);
-
-        m_d->paintLine(m_d->realEvents[k]);
-    }
 }
 
 const KisPaintInformation& KisStabilizedEventsSampler::iterator::dereference() const

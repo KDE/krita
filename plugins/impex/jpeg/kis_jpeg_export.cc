@@ -25,18 +25,16 @@
 #include <QString>
 #include <QStringList>
 #include <QApplication>
-
-#include <KoDialog.h>
-#include <kpluginfactory.h>
 #include <QFileInfo>
+
+#include <kpluginfactory.h>
 
 #include <KoColorSpace.h>
 #include <KoColorProfile.h>
-#include <KisImportExportManager.h>
-#include <KisFilterChain.h>
 #include <KoColorSpaceConstants.h>
 #include <KoColorSpaceRegistry.h>
 
+#include <KisImportExportManager.h>
 #include <kis_slider_spin_box.h>
 #include <KisDocument.h>
 #include <kis_image.h>
@@ -49,9 +47,9 @@
 #include <metadata/kis_meta_data_filter_registry_model.h>
 #include <metadata/kis_exif_info_visitor.h>
 #include <generator/kis_generator_layer.h>
-#include "kis_jpeg_converter.h"
 #include <KisImportExportManager.h>
-
+#include <KisExportCheckRegistry.h>
+#include "kis_jpeg_converter.h"
 
 class KisExternalLayer;
 
@@ -65,99 +63,53 @@ KisJPEGExport::~KisJPEGExport()
 {
 }
 
-KisImportExportFilter::ConversionStatus KisJPEGExport::convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration)
+KisImportExportFilter::ConversionStatus KisJPEGExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration)
 {
-    dbgFile << "JPEG export! From:" << from << ", To:" << to << "";
-
-    if (from != "application/x-krita")
-        return KisImportExportFilter::NotImplemented;
-
-    KisDocument *input = inputDocument();
-    if (!input)
-        return KisImportExportFilter::NoDocumentCreated;
-
-    KisImageWSP image = input->image();
+    KisImageSP image = document->savingImage();
     Q_CHECK_PTR(image);
-
-    KoDialog kdb;
-    kdb.setWindowTitle(i18n("JPEG Export Options"));
-    kdb.setButtons(KoDialog::Ok | KoDialog::Cancel);
-    KisConfigWidget *wdg = createConfigurationWidget(&kdb, from, to);
-    kdb.setMainWidget(wdg);
-    kdb.resize(kdb.minimumSize());
-
-    // If a configuration object was passed to the convert method, we use that, otherwise we load from the settings
-    KisPropertiesConfigurationSP cfg(new KisPropertiesConfiguration());
-    if (configuration) {
-        cfg->fromXML(configuration->toXML());
-    }
-    else {
-        cfg = lastSavedConfiguration(from, to);
-    }
 
     // An extra option to pass to the config widget to set the state correctly, this isn't saved
     const KoColorSpace* cs = image->projection()->colorSpace();
     bool sRGB = cs->profile()->name().contains(QLatin1String("srgb"), Qt::CaseInsensitive);
-    cfg->setProperty("is_sRGB", sRGB);
-
-    wdg->setConfiguration(cfg);
-
-
-    QApplication::restoreOverrideCursor();
-
-    if (!getBatchMode()) {
-        if (kdb.exec() == QDialog::Rejected) {
-            return KisImportExportFilter::UserCancelled;
-        }
-        cfg = wdg->configuration();
-        KisConfig().setExportConfiguration("JPEG", *cfg.data());
-
-    }
+    configuration->setProperty("is_sRGB", sRGB);
 
     KisJPEGOptions options;
-    options.progressive = cfg->getBool("progressive", false);
-    options.quality = cfg->getInt("quality", 80);
-    options.forceSRGB = cfg->getBool("forceSRGB", false);
-    options.saveProfile = cfg->getBool("saveProfile", true);
-    options.optimize = cfg->getBool("optimize", true);
-    options.smooth = cfg->getInt("smoothing", 0);
-    options.baseLineJPEG = cfg->getBool("baseline", true);
-    options.subsampling = cfg->getInt("subsampling", 0);
-    options.exif = cfg->getBool("exif", true);
-    options.iptc = cfg->getBool("iptc", true);
-    options.xmp = cfg->getBool("xmp", true);
-    options.transparencyFillColor = cfg->getColor("transparencyFillcolor").toQColor();
+    options.progressive = configuration->getBool("progressive", false);
+    options.quality = configuration->getInt("quality", 80);
+    options.forceSRGB = configuration->getBool("forceSRGB", false);
+    options.saveProfile = configuration->getBool("saveProfile", true);
+    options.optimize = configuration->getBool("optimize", true);
+    options.smooth = configuration->getInt("smoothing", 0);
+    options.baseLineJPEG = configuration->getBool("baseline", true);
+    options.subsampling = configuration->getInt("subsampling", 0);
+    options.exif = configuration->getBool("exif", true);
+    options.iptc = configuration->getBool("iptc", true);
+    options.xmp = configuration->getBool("xmp", true);
+    options.transparencyFillColor = configuration->getColor("transparencyFillcolor").toQColor();
     KisMetaData::FilterRegistryModel m;
-    m.setEnabledFilters(cfg->getString("filters").split(","));
+    m.setEnabledFilters(configuration->getString("filters").split(","));
     options.filters = m.enabledFilters();
 
-    QString filename = outputFile();
-
-    if (filename.isEmpty()) return KisImportExportFilter::FileNotFound;
-
-    // the image must be locked at the higher levels
-    KIS_SAFE_ASSERT_RECOVER_NOOP(input->image()->locked());
     KisPaintDeviceSP pd = new KisPaintDevice(*image->projection());
 
-    KisJPEGConverter kpc(input, getBatchMode());
+    KisJPEGConverter kpc(document, batchMode());
     KisPaintLayerSP l = new KisPaintLayer(image, "projection", OPACITY_OPAQUE_U8, pd);
-
-    vKisAnnotationSP_it beginIt = image->beginAnnotations();
-    vKisAnnotationSP_it endIt = image->endAnnotations();
-    KisImageBuilder_Result res;
 
     KisExifInfoVisitor eIV;
     eIV.visit(image->rootLayer().data());
 
     KisMetaData::Store* eI = 0;
-    if (eIV.countPaintLayer() == 1)
+    if (eIV.countPaintLayer() == 1) {
         eI = eIV.exifInfo();
+    }
     if (eI) {
         KisMetaData::Store* copy = new KisMetaData::Store(*eI);
         eI = copy;
     }
-    if ((res = kpc.buildFile(filename, l, beginIt, endIt, options, eI)) == KisImageBuilder_RESULT_OK) {
-        dbgFile << "success !";
+
+    KisImageBuilder_Result res = kpc.buildFile(io, l, options, eI);
+
+    if (res == KisImageBuilder_RESULT_OK) {
         delete eI;
         return KisImportExportFilter::OK;
     }
@@ -189,7 +141,7 @@ KisPropertiesConfigurationSP KisJPEGExport::defaultConfiguration(const QByteArra
 KisPropertiesConfigurationSP KisJPEGExport::lastSavedConfiguration(const QByteArray &from, const QByteArray &to) const
 {
     KisPropertiesConfigurationSP cfg = defaultConfiguration(from, to);
-    QString filterConfig = KisConfig().exportConfiguration("JPEG");
+    QString filterConfig = KisConfig().exportConfiguration(to);
     cfg->fromXML(filterConfig, false);
     return cfg;
 }
@@ -198,6 +150,20 @@ KisConfigWidget *KisJPEGExport::createConfigurationWidget(QWidget *parent, const
 {
     return new KisWdgOptionsJPEG(parent);
 }
+
+void KisJPEGExport::initializeCapabilities()
+{
+    addCapability(KisExportCheckRegistry::instance()->get("sRGBProfileCheck")->create(KisExportCheckBase::SUPPORTED));
+    addCapability(KisExportCheckRegistry::instance()->get("ExifCheck")->create(KisExportCheckBase::SUPPORTED));
+
+    QList<QPair<KoID, KoID> > supportedColorModels;
+    supportedColorModels << QPair<KoID, KoID>()
+            << QPair<KoID, KoID>(RGBAColorModelID, Integer8BitsColorDepthID)
+            << QPair<KoID, KoID>(GrayAColorModelID, Integer8BitsColorDepthID)
+            << QPair<KoID, KoID>(CMYKAColorModelID, Integer8BitsColorDepthID);
+    addSupportedColorModels(supportedColorModels, "JPEG");
+}
+
 
 KisWdgOptionsJPEG::KisWdgOptionsJPEG(QWidget *parent)
     : KisConfigWidget(parent)

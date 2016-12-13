@@ -85,7 +85,7 @@ void KisStrokeStrategyUndoCommandBasedTest::testCancelledStroke()
 
     KisStrokeStrategy *strategy =
         new KisStrokeStrategyUndoCommandBased(kundo2_noi18n("test"), false,
-                                              image->postExecutionUndoAdapter(),
+                                              image.data(),
                                               initCommand, finishCommand);
 
     KisStrokeId id = image->startStroke(strategy);

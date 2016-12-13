@@ -51,7 +51,7 @@ void KisCropProcessingVisitor::moveNodeImpl(KisNode *node, KisUndoAdapter *undoA
     if (m_moveLayers) {
         QPoint oldPos(node->x(), node->y());
         QPoint newPos(node->x() - m_rect.x(), node->y() - m_rect.y());
-        KUndo2Command *command = new KisNodeMoveCommand2(node, oldPos, newPos);
+        KUndo2Command *command = new KisNodeMoveCommand2(KisNodeSP(node), oldPos, newPos);
         undoAdapter->addCommand(command);
     }
 }

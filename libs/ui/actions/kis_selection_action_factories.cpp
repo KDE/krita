@@ -215,7 +215,7 @@ void KisFillActionFactory::run(const QString &fillSource, KisViewManager *view)
                                        kundo2_i18n("Flood Fill Layer"));
 
     KisResourcesSnapshotSP resources =
-        new KisResourcesSnapshot(view->image(), node, 0, view->resourceProvider()->resourceManager());
+        new KisResourcesSnapshot(view->image(), node, view->resourceProvider()->resourceManager());
     if (!fillSource.contains("opacity")) {
         resources->setOpacity(1.0);
     }
@@ -369,6 +369,7 @@ void KisCopyMergedActionFactory::run(KisViewManager *view)
 {
     KisImageWSP image = view->image();
     if (!image) return;
+    if (!view->blockUntillOperationsFinished(image)) return;
 
     image->barrierLock();
     KisPaintDeviceSP dev = image->root()->projection();

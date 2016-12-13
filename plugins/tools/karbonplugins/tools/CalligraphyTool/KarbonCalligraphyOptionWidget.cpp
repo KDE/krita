@@ -164,7 +164,6 @@ KarbonCalligraphyOptionWidget::KarbonCalligraphyOptionWidget()
 KarbonCalligraphyOptionWidget::~KarbonCalligraphyOptionWidget()
 {
     qDeleteAll(m_profiles);
-    qDebug() << "dtor!!!!";
 }
 
 void KarbonCalligraphyOptionWidget::emitAll()
@@ -186,7 +185,6 @@ void KarbonCalligraphyOptionWidget::loadProfile(const QString &name)
     if (m_changingProfile) {
         return;
     }
-    qDebug() << "trying profile" << name;
     // write the new profile in the config file
     KConfig config(RCFILENAME);
     KConfigGroup generalGroup(&config, "General");
@@ -449,16 +447,13 @@ void KarbonCalligraphyOptionWidget::loadCurrentProfile()
     KConfig config(RCFILENAME);
     KConfigGroup generalGroup(&config, "General");
     QString currentProfile = generalGroup.readEntry("profile", QString());
-    qDebug() << currentProfile;
     // find the index needed by the comboBox
     int index = profilePosition(currentProfile);
 
     if (currentProfile.isEmpty() || index < 0) {
-        qDebug() << "invalid karboncalligraphyrc!!" << currentProfile << index;
         return;
     }
 
-    qDebug() << m_comboBox->currentIndex() << index;
     m_comboBox->setCurrentIndex(index);
 
     Profile *profile = m_profiles[currentProfile];
@@ -479,7 +474,6 @@ void KarbonCalligraphyOptionWidget::loadCurrentProfile()
 
 void KarbonCalligraphyOptionWidget::saveProfile(const QString &name)
 {
-    qDebug() << name;
     Profile *profile = new Profile;
     profile->name = name;
     profile->usePath = m_usePath->isChecked();
@@ -502,22 +496,17 @@ void KarbonCalligraphyOptionWidget::saveProfile(const QString &name)
         profile->index = m_profiles.count();
         m_profiles.insert(name, profile);
         // add the profile to the combobox
-        qDebug() << "BEFORE:";
         QString dbg;
         for (int i = 0; i < m_comboBox->count(); ++i) {
             dbg += m_comboBox->itemText(i) + ' ';
         }
-        qDebug() << dbg;
         int pos = profilePosition(name);
         m_changingProfile = true;
         m_comboBox->insertItem(pos, name);
         m_changingProfile = false;
-        qDebug() << "AFTER:";
         for (int i = 0; i < m_comboBox->count(); ++i) {
             dbg += m_comboBox->itemText(i) + ' ';
         }
-        qDebug() << dbg;
-        qDebug() << "new at" << pos << m_comboBox->itemText(pos) << name;
     }
 
     KConfig config(RCFILENAME);
@@ -540,18 +529,12 @@ void KarbonCalligraphyOptionWidget::saveProfile(const QString &name)
     generalGroup.writeEntry("profile", name);
 
     config.sync();
-    qDebug() << name;
 
-    int pos = profilePosition(name);
-    qDebug() << "adding in" << pos << m_comboBox->itemText(pos);
     m_comboBox->setCurrentIndex(profilePosition(name));
-    qDebug() << m_comboBox->currentText();
 }
 
 void KarbonCalligraphyOptionWidget::removeProfile(const QString &name)
 {
-    qDebug() << "removing profile" << name;
-
     int index = profilePosition(name);
     if (index < 0) {
         return;    // no such profile
@@ -561,7 +544,6 @@ void KarbonCalligraphyOptionWidget::removeProfile(const QString &name)
     KConfig config(RCFILENAME);
     int deletedIndex = m_profiles[name]->index;
     QString deletedGroup = "Profile" + QString::number(deletedIndex);
-    qDebug() << deletedGroup;
     config.deleteGroup(deletedGroup);
     config.sync();
 

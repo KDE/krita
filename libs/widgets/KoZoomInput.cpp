@@ -44,7 +44,7 @@ class KoZoomInput::Private
 KoZoomInput::KoZoomInput(QWidget* parent)
     : QStackedWidget(parent), d(new Private)
 {
-#ifdef Q_OS_MAC
+#ifdef Q_OS_OSX
     setAttribute(Qt::WA_MacMiniSize, true);
 #endif
 

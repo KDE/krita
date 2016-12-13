@@ -37,9 +37,6 @@ protected:
     bool viewportEvent(QEvent *e);
     void mousePressEvent(QMouseEvent *e);
 
-private Q_SLOTS:
-    void slotActivateSection(int logicalIndex);
-
 Q_SIGNALS:
     void sigRequestContextMenu(const QPoint &pos);
 

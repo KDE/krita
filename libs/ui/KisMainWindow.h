@@ -45,6 +45,7 @@ class KoDockFactoryBase;
 class QDockWidget;
 class KisView;
 class KisViewManager;
+class KoCanvasController;
 
 
 /**
@@ -215,7 +216,7 @@ public Q_SLOTS:
      */
     void slotFileSave();
 
-    KisPrintJob* exportToPdf(const QString &pdfFileName = QString());
+    KisPrintJob* exportToPdf(QString pdfFileName = QString());
 
     void slotProgress(int value);
 
@@ -223,21 +224,18 @@ public Q_SLOTS:
      * Saves the document, asking for a filename if necessary.
      *
      * @param saveas if set to TRUE the user is always prompted for a filename
-     *
      * @param silent if set to TRUE rootDocument()->setTitleModified will not be called.
-     *
-     * @param specialOutputFlag set to enums defined in KisDocument if save to special output format
      *
      * @return TRUE on success, false on error or cancel
      *         (don't display anything in this case, the error dialog box is also implemented here
      *         but restore the original URL in slotFileSaveAs)
      */
-    bool saveDocument(KisDocument *document, bool saveas = false, bool silent = false, int specialOutputFlag = 0);
+    bool saveDocument(KisDocument *document, bool saveas = false);
 
     /**
      * Update the option widgets to the argument ones, removing the currently set widgets.
      */
-    void newOptionWidgets(const QList<QPointer<QWidget> > & optionWidgetList);
+    void newOptionWidgets(KoCanvasController *controller, const QList<QPointer<QWidget> > & optionWidgetList);
 
 
 private Q_SLOTS:
@@ -270,8 +268,6 @@ private Q_SLOTS:
     void slotFileSaveAs();
 
     void slotFilePrintPreview();
-
-    KisPrintJob* exportToPdf(KoPageLayout pageLayout, QString pdfFileName = QString());
 
     void importAnimation();
 
@@ -329,16 +325,14 @@ private Q_SLOTS:
     /**
      * File --> Import
      *
-     * This will call slotFileOpen().  To differentiate this from an ordinary
-     * call to slotFileOpen() call @ref isImporting().
+     * This will call slotFileOpen().
      */
     void slotImportFile();
 
     /**
      * File --> Export
      *
-     * This will call slotFileSaveAs().  To differentiate this from an ordinary
-     * call to slotFileSaveAs() call @ref isExporting().
+     * This will call slotFileSaveAs().
      */
     void slotExportFile();
 
@@ -404,26 +398,6 @@ private:
     bool openDocumentInternal(const QUrl &url, KisDocument *newdoc = 0);
 
     /**
-     * Returns whether or not the current slotFileSave[As]() or saveDocument()
-     * call is actually an export operation (like File --> Export).
-     *
-     * If this is true, you must call KisDocument::export() instead of
-     * KisDocument::save() or KisDocument::saveAs(), in any reimplementation of
-     * saveDocument().
-     */
-    bool isExporting() const;
-
-    /**
-     * Returns whether or not the current slotFileOpen() or openDocument()
-     * call is actually an import operation (like File --> Import).
-     *
-     * If this is true, you must call KisDocument::import() instead of
-     * KisDocument::openUrl(), in any reimplementation of openDocument() or
-     * openDocumentInternal().
-     */
-    bool isImporting() const;
-
-    /**
      * Reloads the recent documents list.
      */
     void reloadRecentFileList();
@@ -439,8 +413,6 @@ private:
     QPointer<KisView>activeKisView();
 
     void applyDefaultSettings(QPrinter &printer);
-
-    bool exportConfirmation(const QByteArray &outputFormat);
 
     void createActions();
 

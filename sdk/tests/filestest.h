@@ -100,7 +100,8 @@ void testFiles(const QString& _dirname, const QStringList& exclusions, const QSt
 
             if (!TestUtil::compareQImages(pt, resultImage, sourceImage, fuzzy)) {
                 failuresCompare << sourceFileInfo.fileName() + ": " + QString("Pixel (%1,%2) has different values").arg(pt.x()).arg(pt.y()).toLatin1();
-                resultImage.save(sourceFileInfo.fileName() + ".png");
+                sourceImage.save(sourceFileInfo.fileName() + ".png");
+                resultImage.save(resultFileInfo.fileName() + ".expected.png");
                 continue;
             }
 

@@ -34,6 +34,7 @@ class KoShapeManager;
 class KoStore;
 class KoViewConverter;
 class KoShapeBasedDocumentBase;
+class KoDocumentResourceManager;
 
 const QString KIS_SHAPE_LAYER_ID = "KisShapeLayer";
 /**
@@ -106,8 +107,13 @@ public:
 
     bool saveLayer(KoStore * store) const;
 
-    void loadSvg(QIODevice *device, const QString &baseXmlDir);
+    bool loadSvg(QIODevice *device, const QString &baseXmlDir);
     bool loadLayer(KoStore* store);
+
+    static QList<KoShape*> createShapesFromSvg(QIODevice *device, const QString &baseXmlDir,
+                                               const QRectF &rectInPixels, qreal resolutionPPI,
+                                               KoDocumentResourceManager *resourceManager,
+                                               QSizeF *fragmentSize);
 
 
     KUndo2Command* crop(const QRect & rect);

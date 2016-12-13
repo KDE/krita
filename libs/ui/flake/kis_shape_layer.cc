@@ -510,7 +510,11 @@ bool KisShapeLayer::saveLayer(KoStore * store) const
     return true;
 }
 
-void KisShapeLayer::loadSvg(QIODevice *device, const QString &baseXmlDir)
+QList<KoShape *> KisShapeLayer::createShapesFromSvg(QIODevice *device, const QString &baseXmlDir,
+                                                    const QRectF &rectInPixels,
+                                                    qreal resolutionPPI,
+                                                    KoDocumentResourceManager *resourceManager,
+                                                    QSizeF *fragmentSize)
 {
     QXmlStreamReader reader(device);
     reader.setNamespaceProcessing(false);
@@ -529,6 +533,14 @@ void KisShapeLayer::loadSvg(QIODevice *device, const QString &baseXmlDir)
                          , errorLine , errorColumn , errorMsg);
     }
 
+    SvgParser parser(resourceManager);
+    parser.setXmlBaseDir(baseXmlDir);
+    parser.setResolution(rectInPixels /* px */, resolutionPPI /* ppi */);
+    return parser.parseSvg(doc.documentElement(), fragmentSize);
+}
+
+bool KisShapeLayer::loadSvg(QIODevice *device, const QString &baseXmlDir)
+{
     QSizeF fragmentSize; // unused!
     KisImageSP image = this->image();
 
@@ -536,15 +548,17 @@ void KisShapeLayer::loadSvg(QIODevice *device, const QString &baseXmlDir)
     KIS_SAFE_ASSERT_RECOVER_NOOP(qFuzzyCompare(image->xRes(), image->yRes()));
     const qreal resolutionPPI = 72.0 * image->xRes();
 
-    SvgParser parser(m_d->controller->resourceManager());
-    parser.setXmlBaseDir(baseXmlDir);
-    parser.setResolution(image->bounds() /* px */, resolutionPPI /* ppi */);
     QList<KoShape*> shapes =
-        parser.parseSvg(doc.documentElement(), &fragmentSize);
+        createShapesFromSvg(device, baseXmlDir,
+                            image->bounds(), resolutionPPI,
+                            m_d->controller->resourceManager(),
+                            &fragmentSize);
 
     Q_FOREACH (KoShape *shape, shapes) {
         addShape(shape);
     }
+
+    return true;
 }
 
 bool KisShapeLayer::loadLayer(KoStore* store)

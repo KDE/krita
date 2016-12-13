@@ -20,5 +20,29 @@ class Document(object):
 
         _file.close()
 
+    def save(self):
+        with open(self._filePath, 'w') as pythonFile:
+            for line in self._document:
+                print(line, file=pythonFile)
+
+    def compare(self, new_doc):
+        if len(self._document) != len(new_doc):
+            return False
+
+        for line in range(len(new_doc)):
+            if new_doc[line] != self._document[line]:
+                return False
+
+        return True
+
+    @property
     def data(self):
         return self._document
+
+    @data.setter
+    def data(self, data):
+        self._document = data
+
+    @property
+    def filePath(self):
+        return self._filePath

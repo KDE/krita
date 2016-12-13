@@ -16,3 +16,18 @@ class DocumentController(object):
             newDocument.open()
             self._activeDocument = newDocument
             return newDocument
+
+    def saveDocument(self, data, filePath):
+        if not self._activeDocument:
+            self._activeDocument = document.Document(filePath)
+
+        dataList = str(data).splitlines()
+
+        if not self._activeDocument.compare(dataList):
+            self._activeDocument.data = dataList
+            self._activeDocument.save()
+
+        return self._activeDocument
+
+    def clearActiveDocument(self):
+        self._activeDocument = None

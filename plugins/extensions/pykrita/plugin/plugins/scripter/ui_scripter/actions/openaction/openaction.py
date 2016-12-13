@@ -1,5 +1,6 @@
 from PyQt5.QtWidgets import QAction, QFileDialog, QMessageBox
 
+
 class OpenAction(QAction):
 
     def __init__(self, scripter, parent=None):
@@ -9,6 +10,7 @@ class OpenAction(QAction):
         self.triggered.connect(self.open)
 
         self.setText('Open')
+        self.setObjectName('open')
 
     @property
     def parent(self):
@@ -26,6 +28,7 @@ class OpenAction(QAction):
                 if fileExtension=='py':
                     document = self.scripter.documentcontroller.openDocument(selectedFile)
                     self.scripter.uicontroller.setDocumentEditor(document)
+                    self.scripter.uicontroller.setStatusBar(document.filePath)
 
             except:
                 QMessageBox.information(self.scripter.uicontroller.mainWidget,

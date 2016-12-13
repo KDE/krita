@@ -1,0 +1,38 @@
+from PyQt5.QtWidgets import QAction, QFileDialog
+
+class SaveAction(QAction):
+
+    def __init__(self, scripter, parent=None):
+        super(SaveAction, self).__init__(parent)
+        self.scripter = scripter
+        self.editor = self.scripter.uicontroller.editor
+
+        self.triggered.connect(self.save)
+
+        self.setText('Save')
+        self.setObjectName('save')
+
+    @property
+    def parent(self):
+        return 'File'
+
+    def save(self):
+        text = self.editor.toPlainText()
+        fileName = ''
+
+        if not self.scripter.documentcontroller.activeDocument:
+            fileName = QFileDialog.getSaveFileName(self.scripter.uicontroller.mainWidget,
+                                                   'Save Python File', '',
+                                                   'Python File (*.py)')[0]
+            if not fileName:
+                return
+
+            fileExtension = fileName.rsplit('.', maxsplit=1)[1]
+            if not fileExtension=='py':
+                return
+
+        document = self.scripter.documentcontroller.saveDocument(text, fileName)
+        if document:
+            self.scripter.uicontroller.setStatusBar(document.filePath)
+        else:
+            self.scripter.uicontroller.setStatusBar('untitled')

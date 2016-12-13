@@ -22,6 +22,7 @@ class UIController(object):
         self.mainWidget.setWindowModality(Qt.NonModal)
         self.editor = pythoneditor.CodeEditor()
         self.output = QPlainTextEdit()
+        self.statusBar = QLabel('untitled')
         self.highlight = syntax.PythonHighlighter(self.editor.document(), syntaxstyles.DefaultSyntaxStyle())
 
     def initialize(self, scripter):
@@ -35,6 +36,7 @@ class UIController(object):
         vbox.addWidget(self.editor)
         vbox.addWidget(self.actionToolbar)
         vbox.addWidget(self.output)
+        vbox.addWidget(self.statusBar)
 
         self.mainWidget.resize(400, 500)
         self.mainWidget.setWindowTitle("Scripter")
@@ -80,8 +82,21 @@ class UIController(object):
         for action in self.actions:
             action['parent'].addAction(action['action'])
 
+    def invokeAction(self, actionName):
+        for action in self.actions:
+            if action['action'].objectName() == actionName:
+                method = getattr(action['action'], actionName)
+                if method:
+                    return method()
+
     def setDocumentEditor(self, document):
         self.editor.clear()
 
-        for line in document.data():
+        for line in document.data:
             self.editor.appendPlainText(line)
+
+    def setStatusBar(self, value='untitled'):
+        self.statusBar.setText(value)
+
+    def clearEditor(self):
+        self.editor.clear()

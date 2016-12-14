@@ -37,6 +37,7 @@
 
 #include <QTemporaryFile>
 #include <QFileInfo>
+#include <QApplication>
 
 namespace TestUtil
 {
@@ -81,19 +82,15 @@ void testFiles(const QString& _dirname, const QStringList& exclusions, const QSt
                                                     KoColorConversionTransformation::NoOptimization);
             }
 
-            QTemporaryFile tmpFile(QDir::tempPath() + QLatin1String("/krita_XXXXXX") + QLatin1String(".png"));
-            tmpFile.open();
-            doc->setFileBatchMode(true);
-            doc->setBackupFile(false);
-            doc->setOutputMimeType("image/png");
-            doc->saveAs(QUrl("file://" + tmpFile.fileName()));
+            qApp->processEvents();
+            doc->image()->waitForDone();
+            QImage sourceImage = doc->image()->projection()->convertToQImage(0, doc->image()->bounds());
+
+
 
             QImage resultImage(resultFileInfo.absoluteFilePath());
             resultImage = resultImage.convertToFormat(QImage::Format_ARGB32);
-            QImage sourceImage(tmpFile.fileName());
             sourceImage = sourceImage.convertToFormat(QImage::Format_ARGB32);
-
-            tmpFile.close();
 
             QPoint pt;
 

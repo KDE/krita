@@ -33,29 +33,6 @@ class KRITALIBKIS_EXPORT Node : public QObject
     Q_OBJECT
     Q_DISABLE_COPY(Node)
 
-    Q_PROPERTY(bool AlphaLocked READ alphaLocked WRITE setAlphaLocked)
-    Q_PROPERTY(QString BlendingMode READ blendingMode WRITE setBlendingMode)
-    Q_PROPERTY(QList<Channel*> Channels READ channels WRITE setChannels)
-    Q_PROPERTY(QList<Node*> ChildNodes READ childNodes WRITE setChildNodes)
-    Q_PROPERTY(ColorDepth* ColorDepth READ colorDepth WRITE setColorDepth)
-    Q_PROPERTY(QString ColorLabel READ colorLabel WRITE setColorLabel)
-    Q_PROPERTY(ColorModel* ColorModel READ colorModel WRITE setColorModel)
-    Q_PROPERTY(ColorProfile* ColorProfile READ colorProfile WRITE setColorProfile)
-    Q_PROPERTY(bool InheritAlpha READ inheritAlpha WRITE setInheritAlpha)
-    Q_PROPERTY(bool Locked READ locked WRITE setLocked)
-    Q_PROPERTY(QString Name READ name WRITE setName)
-    Q_PROPERTY(int Opacity READ opacity WRITE setOpacity)
-    Q_PROPERTY(Node* ParentNode READ parentNode WRITE setParentNode)
-    Q_PROPERTY(QString Type READ type WRITE setType)
-    Q_PROPERTY(bool Visible READ visible WRITE setVisible)
-    Q_PROPERTY(InfoObject* MetaDataInfo READ metaDataInfo WRITE setMetaDataInfo)
-    Q_PROPERTY(Generator* Generator READ generator WRITE setGenerator)
-    Q_PROPERTY(Filter* Filter READ filter WRITE setFilter)
-    Q_PROPERTY(Transformation* Transformation READ transformation WRITE setTransformation)
-    Q_PROPERTY(Selection* Selection READ selection WRITE setSelection)
-    Q_PROPERTY(QString FileName READ fileName WRITE setFileName)
-    Q_PROPERTY(QByteArray PixelData READ pixelData WRITE setPixelData)
-
 public:
     explicit Node(KisNodeSP node, QObject *parent = 0);
     virtual ~Node();

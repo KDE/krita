@@ -77,7 +77,14 @@ void Node::setChannels(QList<Channel*> value)
 
 QList<Node*> Node::childNodes() const
 {
-    return QList<Node*>();
+    QList<Node*> nodes;
+    if (d->node) {
+        int childCount = d->node->childCount();
+        for (int i = 0; i < childCount; ++i) {
+            nodes << new Node(d->node->at(i));
+        }
+    }
+    return nodes;
 }
 
 void Node::setChildNodes(QList<Node*> value)
@@ -147,7 +154,7 @@ void Node::setLocked(bool value)
 
 QString Node::name() const
 {
-    return QString();
+    return d->node->name();
 }
 
 void Node::setName(QString value)
@@ -157,11 +164,12 @@ void Node::setName(QString value)
 
 int Node::opacity() const
 {
-    return 0;
+    return d->node->opacity();
 }
 
 void Node::setOpacity(int value)
 {
+    d->node->setOpacity(value);
 }
 
 
@@ -284,7 +292,7 @@ Node* Node::duplicate()
     return 0;
 }
 
-bool Node::save(const QString &filename) 
+bool Node::save(const QString &filename)
 {
     return false;
 }

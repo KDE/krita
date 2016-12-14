@@ -102,7 +102,17 @@ extern "C" int main(int argc, char **argv)
         return 1;
     }
 
-    py.functionCall(parser.value(functionOption).toUtf8().constData(), parser.value(scriptOption).toUtf8().constData());
+    PyObject *argsList = PyList_New(parser.positionalArguments().length());
+    int i = 0;
+    Q_FOREACH(const QString arg, parser.positionalArguments()) {
+        PyList_Append(argsList, py.unicode(arg));
+        i++;
+    }
+
+    PyObject *args = PyTuple_New(1);
+    PyTuple_SetItem(args, 0, argsList);
+
+    py.functionCall(parser.value(functionOption).toUtf8().constData(), parser.value(scriptOption).toUtf8().constData(), args);
 
     app.quit();
     return 0;

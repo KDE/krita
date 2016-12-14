@@ -164,7 +164,7 @@ QString Python::lastTraceback() const
 void Python::libraryLoad()
 {
     if (!s_pythonLibrary) {
-        qDebug() << "Creating s_pythonLibrary" << PYKRITA_PYTHON_LIBRARY;
+        dbgScript << "Creating s_pythonLibrary" << PYKRITA_PYTHON_LIBRARY;
         s_pythonLibrary = new QLibrary(PYKRITA_PYTHON_LIBRARY);
         if (!s_pythonLibrary)
             errScript << "Could not create" << PYKRITA_PYTHON_LIBRARY;

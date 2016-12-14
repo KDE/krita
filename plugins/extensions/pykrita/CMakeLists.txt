@@ -30,6 +30,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${SIP_INCLUDE_DIR} ${PYTHON_INCL
 add_subdirectory(libkis)
 add_subdirectory(sip)
 add_subdirectory(plugin)
+add_subdirectory(kritarunner)
 
 
 endif ()

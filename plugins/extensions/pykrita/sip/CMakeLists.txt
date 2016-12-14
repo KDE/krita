@@ -10,7 +10,7 @@ set(SIP_EXTRA_OPTIONS -g -x PyKDE_QVector)
 set(PYTHON_SITE_PACKAGES_INSTALL_DIR ${DATA_INSTALL_DIR}/krita/pykrita/)
 add_sip_python_module(PyKrita.krita ./krita/kritamod.sip kritalibkis kritaui kritaimage kritalibbrush)
 
-install(FILES
-    ./__init__.py
-    DESTINATION ${PYTHON_SITE_PACKAGES_INSTALL_DIR})
+#install(FILES
+#    ./__init__.py
+#    DESTINATION ${PYTHON_SITE_PACKAGES_INSTALL_DIR})
 

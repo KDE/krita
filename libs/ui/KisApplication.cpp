@@ -177,6 +177,10 @@ KisApplication::KisApplication(const QString &key, int &argc, char **argv)
         qDebug() << "Style override disabled, using" << style()->objectName();
     }
 
+    if (KisConfig().readEntry("EnableHiDPI", false)) {
+        QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+    }
+
     KisOpenGL::initialize();
     qDebug() << "krita has opengl" << KisOpenGL::hasOpenGL();
 }

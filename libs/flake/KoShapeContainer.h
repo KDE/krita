@@ -105,13 +105,6 @@ public:
     void removeShape(KoShape *shape);
 
     /**
-     * Remove all children to be completely separated from the container.
-     *
-     * All the shapes will only be removed from the container but not be deleted.
-     */
-    void removeAllShapes();
-
-    /**
      * Return the current number of children registered.
      * @return the current number of children registered.
      */
@@ -210,6 +203,40 @@ public:
      * return the model for this container
      */
     KoShapeContainerModel *model() const;
+
+
+    /**
+     * A special interface for KoShape to use during setParent call. Don't use
+     * these method directly for managing shapes hierarchy! Use shape->setParent()
+     * instead.
+     */
+    struct ShapeInterface {
+        ShapeInterface(KoShapeContainer *_q);
+
+        /**
+         * Add a child to this container.
+         *
+         * This container will NOT take over ownership of the shape. The caller or those creating
+         * the shape is responsible to delete it if not needed any longer.
+         *
+         * @param shape the child to be managed in the container.
+         */
+        void addShape(KoShape *shape);
+
+        /**
+         * Remove a child to be completely separated from the container.
+         *
+         * The shape will only be removed from this container but not be deleted.
+         *
+         * @param shape the child to be removed.
+         */
+        void removeShape(KoShape *shape);
+
+    protected:
+        KoShapeContainer *q;
+    };
+
+    ShapeInterface* shapeInterface();
 
 protected:
     /**

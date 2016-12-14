@@ -34,7 +34,8 @@
 
 KoShapeContainerPrivate::KoShapeContainerPrivate(KoShapeContainer *q)
     : KoShapePrivate(q),
-    model(0)
+      shapeInterface(q),
+      model(0)
 {
 }
 
@@ -45,6 +46,7 @@ KoShapeContainerPrivate::~KoShapeContainerPrivate()
 
 KoShapeContainerPrivate::KoShapeContainerPrivate(const KoShapeContainerPrivate &rhs, KoShapeContainer *q)
     : KoShapePrivate(rhs, q),
+      shapeInterface(q),
       model(0)
 {
 }
@@ -81,49 +83,12 @@ KoShapeContainer::~KoShapeContainer()
 
 void KoShapeContainer::addShape(KoShape *shape)
 {
-    Q_D(KoShapeContainer);
-    Q_ASSERT(shape);
-    if (shape->parent() == this && shapes().contains(shape))
-        return;
-    // TODO add a method to create a default model depending on the shape container
-    if (d->model == 0)
-        d->model = new SimpleShapeContainerModel();
-    if (shape->parent() && shape->parent() != this)
-        shape->parent()->removeShape(shape);
-    d->model->add(shape);
     shape->setParent(this);
 }
 
 void KoShapeContainer::removeShape(KoShape *shape)
 {
-    Q_D(KoShapeContainer);
-    Q_ASSERT(shape);
-    if (d->model == 0)
-        return;
-    d->model->remove(shape);
     shape->setParent(0);
-
-    KoShapeContainer * grandparent = parent();
-    if (grandparent) {
-        grandparent->model()->childChanged(this, KoShape::ChildChanged);
-    }
-}
-
-void KoShapeContainer::removeAllShapes()
-{
-    Q_D(KoShapeContainer);
-    if (d->model == 0)
-        return;
-    for(int i = d->model->shapes().count() - 1; i >= 0; --i) {
-        KoShape *shape = d->model->shapes()[i];
-        d->model->remove(shape);
-        shape->setParent(0);
-    }
-
-    KoShapeContainer * grandparent = parent();
-    if (grandparent) {
-        grandparent->model()->childChanged(this, KoShape::ChildChanged);
-    }
 }
 
 int  KoShapeContainer::shapeCount() const
@@ -268,4 +233,52 @@ KoShapeContainerModel *KoShapeContainer::model() const
 {
     Q_D(const KoShapeContainer);
     return d->model;
+}
+
+KoShapeContainer::ShapeInterface *KoShapeContainer::shapeInterface()
+{
+    Q_D(KoShapeContainer);
+    return &d->shapeInterface;
+}
+
+KoShapeContainer::ShapeInterface::ShapeInterface(KoShapeContainer *_q)
+    : q(_q)
+{
+}
+
+void KoShapeContainer::ShapeInterface::addShape(KoShape *shape)
+{
+    KoShapeContainerPrivate * const d = q->d_func();
+
+    Q_ASSERT(shape);
+    if (shape->parent() == q && q->shapes().contains(shape)) {
+        return;
+    }
+
+    // TODO add a method to create a default model depending on the shape container
+    if (!d->model) {
+        d->model = new SimpleShapeContainerModel();
+    }
+
+    if (shape->parent() && shape->parent() != q) {
+        shape->parent()->shapeInterface()->removeShape(shape);
+    }
+
+    d->model->add(shape);
+}
+
+void KoShapeContainer::ShapeInterface::removeShape(KoShape *shape)
+{
+    KoShapeContainerPrivate * const d = q->d_func();
+
+    KIS_SAFE_ASSERT_RECOVER_RETURN(shape);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(d->model);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(d->model->shapes().contains(shape));
+
+    d->model->remove(shape);
+
+    KoShapeContainer *grandparent = q->parent();
+    if (grandparent) {
+        grandparent->model()->childChanged(q, KoShape::ChildChanged);
+    }
 }

@@ -70,6 +70,8 @@
 #include <QByteArray>
 #include <FlakeDebug.h>
 
+#include "kis_assert.h"
+
 #include <limits>
 #include "KoOdfGradientBackground.h"
 
@@ -594,16 +596,25 @@ bool KoShape::compareShapeZIndex(KoShape *s1, KoShape *s2)
 void KoShape::setParent(KoShapeContainer *parent)
 {
     Q_D(KoShape);
-    if (d->parent == parent)
+
+    if (d->parent == parent) {
         return;
+    }
+
     KoShapeContainer *oldParent = d->parent;
     d->parent = 0; // avoids recursive removing
-    if (oldParent)
-        oldParent->removeShape(this);
+
+    if (oldParent) {
+        oldParent->shapeInterface()->removeShape(this);
+    }
+
+    KIS_SAFE_ASSERT_RECOVER_NOOP(parent != this);
+
     if (parent && parent != this) {
         d->parent = parent;
-        parent->addShape(this);
+        parent->shapeInterface()->addShape(this);
     }
+
     notifyChanged();
     d->shapeChanged(ParentChanged);
 }

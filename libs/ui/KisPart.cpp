@@ -107,21 +107,8 @@ public:
 
     KisIdleWatcher idleWatcher;
     KisAnimationCachePopulator animationCachePopulator;
-    void loadActions();
 };
 
-// Basically, we are going to insert the current UI/MainWindow ActionCollection
-// into the KisActionRegistry.
-void KisPart::loadActions()
-{
-    d->actionCollection = currentMainwindow()->viewManager()->actionCollection();
-
-    KisActionRegistry * actionRegistry = KisActionRegistry::instance();
-
-    Q_FOREACH (QAction *action, d->actionCollection->actions()) {
-        actionRegistry->addAction(action->objectName(), action);
-    }
-};
 
 KisPart* KisPart::instance()
 {

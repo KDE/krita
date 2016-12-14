@@ -284,5 +284,7 @@ Node* Node::duplicate()
     return 0;
 }
 
-
-
+bool Node::save(const QString &filename) 
+{
+    return false;
+}

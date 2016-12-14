@@ -127,7 +127,6 @@ public:
     void setPixelData(QByteArray value);
 
 
-
 public Q_SLOTS:
 
     void move(int x, int y);
@@ -138,7 +137,7 @@ public Q_SLOTS:
 
     Node* duplicate();
 
-
+    bool save(const QString &filename);
 
 Q_SIGNALS:
 

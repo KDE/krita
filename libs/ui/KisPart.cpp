@@ -160,7 +160,9 @@ void KisPart::updateIdleWatcherConnections()
     QVector<KisImageSP> images;
 
     Q_FOREACH (QPointer<KisDocument> document, documents()) {
-        images << document->image();
+        if (document->image()) {
+            images << document->image();
+        }
     }
 
     d->idleWatcher.setTrackedImages(images);

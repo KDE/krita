@@ -1584,17 +1584,20 @@ void KisDocument::setFileProgressUpdater(const QString &text)
         d->progressUpdater = new KoProgressUpdater(d->progressProxy, KoProgressUpdater::Unthreaded);
         d->progressUpdater->start(100, text);
         d->importExportManager->setProgresUpdater(d->progressUpdater);
-
-        connect(this, SIGNAL(sigProgress(int)), KisPart::instance()->currentMainwindow(), SLOT(slotProgress(int)));
-        connect(KisPart::instance()->currentMainwindow(), SIGNAL(sigProgressCanceled()), this, SIGNAL(sigProgressCanceled()));
+        if (KisPart::instance()->currentMainwindow()) {
+            connect(this, SIGNAL(sigProgress(int)), KisPart::instance()->currentMainwindow(), SLOT(slotProgress(int)));
+            connect(KisPart::instance()->currentMainwindow(), SIGNAL(sigProgressCanceled()), this, SIGNAL(sigProgressCanceled()));
+        }
     }
 }
 
 void KisDocument::clearFileProgressUpdater()
 {
     if (!d->suppressProgress && d->progressUpdater) {
-        disconnect(KisPart::instance()->currentMainwindow(), SIGNAL(sigProgressCanceled()), this, SIGNAL(sigProgressCanceled()));
-        disconnect(this, SIGNAL(sigProgress(int)), KisPart::instance()->currentMainwindow(), SLOT(slotProgress(int)));
+        if (KisPart::instance()->currentMainwindow()) {
+            disconnect(KisPart::instance()->currentMainwindow(), SIGNAL(sigProgressCanceled()), this, SIGNAL(sigProgressCanceled()));
+            disconnect(this, SIGNAL(sigProgress(int)), KisPart::instance()->currentMainwindow(), SLOT(slotProgress(int)));
+        }
         delete d->progressUpdater;
         d->importExportManager->setProgresUpdater(0);
         d->progressUpdater = 0;

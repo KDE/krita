@@ -81,9 +81,11 @@ void KisIdleWatcher::setTrackedImages(const QVector<KisImageSP> &images)
     m_d->trackedImages.clear();
 
     Q_FOREACH (KisImageSP image, images) {
-        m_d->trackedImages << image;
-        m_d->connectionsStore.addConnection(image, SIGNAL(sigImageModified()),
-                                            this, SLOT(slotImageModified()));
+        if (image) {
+            m_d->trackedImages << image;
+            m_d->connectionsStore.addConnection(image, SIGNAL(sigImageModified()),
+                                                this, SLOT(slotImageModified()));
+        }
     }
 }
 

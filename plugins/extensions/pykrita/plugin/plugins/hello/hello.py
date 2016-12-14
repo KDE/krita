@@ -4,8 +4,7 @@ from PyQt5.QtWidgets import *
 from krita import *
 
 def hello():
-    QMessageBox.information(QWidget(), "Test", "Hello Krita")
-    print(dir(Krita.instance()))
+    QMessageBox.information(QWidget(), "Test", "Hello! This is Krita " + Application.version())
 
 class HelloViewExtension(ViewExtension):
 
@@ -14,7 +13,7 @@ class HelloViewExtension(ViewExtension):
 
   def setup(self):
       qDebug("Hello Setup")
-      action = Krita.instance().createAction("Hello")
+      action = Krita.instance().createAction("hello")
       action.triggered.connect(hello)
 
 Scripter.addViewExtension(HelloViewExtension(Krita.instance()))

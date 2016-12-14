@@ -34,6 +34,8 @@ class QAction;
 
 /**
  * Krita is a singleton class that offers the root access to the Krita object hierarchy.
+ *
+ * The Krita.instance() is aliased as two builtins: Scripter and Application.
  */
 class KRITALIBKIS_EXPORT Krita : public QObject
 {

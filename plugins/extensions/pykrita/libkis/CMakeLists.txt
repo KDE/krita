@@ -28,7 +28,7 @@ set(kritalibkis_LIB_SRCS
 add_library(kritalibkis SHARED ${kritalibkis_LIB_SRCS} )
 generate_export_header(kritalibkis)
 
-target_link_libraries(kritalibkis kritaui kritaimage)
+target_link_libraries(kritalibkis kritaui kritaimage kritaversion)
 target_link_libraries(kritalibkis LINK_INTERFACE_LIBRARIES kritaimage kritaui)
 
 set_target_properties(kritalibkis PROPERTIES

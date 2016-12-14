@@ -28,6 +28,7 @@
 #include <kis_action.h>
 #include <kis_script_manager.h>
 #include <KisViewManager.h>
+#include <KritaVersionWrapper.h>
 
 #include "View.h"
 #include "Document.h"
@@ -165,7 +166,7 @@ void Krita::setPreferences(InfoObject* value)
 
 QString Krita::version() const
 {
-    return QString();
+    return KritaVersionWrapper::versionString(true);
 }
 
 QList<View *> Krita::views() const

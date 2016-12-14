@@ -45,10 +45,32 @@ public:
     explicit Krita(QObject *parent = 0);
     virtual ~Krita();
 
+    /**
+     * @return the currently active document, if there is one.
+     */
     Document* activeDocument() const;
+
+    /**
+     * @brief setActiveDocument activates the first view that shows the given document
+     * @param value the document we want to activate
+     */
     void setActiveDocument(Document* value);
 
+    /**
+     * @brief batchmode determines whether the script is run in batch mode. If batchmode
+     * is true, scripts should now show messageboxes or dialog boxes.
+     *
+     * Note that this separate from Document.setBatchmode(), which determines whether
+     * export/save option dialogs are shown.
+     *
+     * @return true if the script is run in batchmode
+     */
     bool batchmode() const;
+
+    /**
+     * @brief setBatchmode sets the the batchmode to @param value; if true, scripts should
+     * not show dialogs or messageboxes.
+     */
     void setBatchmode(bool value);
 
     QList<Action*> actions() const;
@@ -69,6 +91,13 @@ public:
     InfoObject* preferences() const;
     void setPreferences(InfoObject* value);
 
+    /**
+     * @brief version Determine the version of Krita
+     *
+     * Usage: print(Application.version ())
+     *
+     * @return the version string including git sha1 if Krita was built from git
+     */
     QString version() const;
 
     QList<View*> views() const;

@@ -45,6 +45,18 @@ Document::~Document()
     delete d;
 }
 
+bool Document::batchmode() const
+{
+    if (!d->document) return false;
+    return d->document->fileBatchMode();
+}
+
+void Document::setBatchmode(bool value)
+{
+    if (!d->document) return;
+    d->document->setFileBatchMode(value);
+}
+
 Node *Document::activeNode() const
 {
     QList<KisNodeSP> activeNodes;
@@ -290,6 +302,11 @@ void Document::openView()
 Node* Document::createNode(const QString &name, const QString &nodeType)
 {
     return 0;
+}
+
+QPointer<KisDocument> Document::document() const
+{
+    return d->document;
 }
 
 

@@ -7,6 +7,8 @@ class Document : QObject /NoDefaultCtors/
 public:
     Node * activeNode() const;
     void setActiveNode(Node*  value);
+    bool batchmode() const;
+    void setBatchmode(bool value);
     ColorDepth * colorDepth() const;
     void setColorDepth(ColorDepth*  value);
     ColorManager * colorManager() const;

@@ -37,6 +37,9 @@ public:
     explicit Document(KisDocument *document, bool ownsDocument = false, QObject *parent = 0);
     virtual ~Document();
 
+    bool batchmode() const;
+    void setBatchmode(bool value);
+
     Node* activeNode() const;
     void setActiveNode(Node* value);
 
@@ -101,6 +104,12 @@ public Q_SLOTS:
     void openView();
 
     Node* createNode(const QString &name, const QString &nodeType);
+
+private:
+
+    friend class Krita;
+    QPointer<KisDocument> document() const;
+
 
 private:
     struct Private;

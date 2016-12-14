@@ -105,8 +105,13 @@ Document* Krita::activeDocument() const
 
 void Krita::setActiveDocument(Document* value)
 {
+    Q_FOREACH(KisView *view, KisPart::instance()->views()) {
+        if (view->document() == value->document().data()) {
+            view->activateWindow();
+            break;
+        }
+    }
 }
-
 
 bool Krita::batchmode() const
 {

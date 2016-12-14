@@ -23,13 +23,11 @@ except ImportError:
 import excepthook
 excepthook.install()
 
-# Import helper modules
-from scripter_hooks import MenuHooks
-from mikro import create_pyqt_object, Error as MiKroError
-
 import builtins
-builtins.Scripter = create_pyqt_object(krita.Krita.instance())
 builtins.i18n = lambda s: unicode(QCoreApplication.translate("PyKrita", s))
+builtins.Scripter = Krita.instance()
+builtins.Application = Krita.instance()
+builtins.Scripter = Krita.instance()
 
 def qDebug(text):
     '''Use KDE way to show debug info

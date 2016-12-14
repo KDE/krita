@@ -83,6 +83,12 @@ Krita is a Qt-based application. In principle, you can use any Python
 binding to Qt as long as it's using exactly the same version of Qt
 that Krita uses. In our examples we will be using [PyQt](https://www.riverbankcomputing.com/software/pyqt/intro).
 
+The easiest access to the Krita api is by simply importing the "krita"
+module. This automatically adds two built-ins: Scripter and Application.
+
+This is an alias for Krita.instance(), which is the first place from
+which to access the running Krita instance.
+
 @code
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
@@ -110,6 +116,14 @@ The Krita Object Model
 The starting point is the @see Krita class, which provides a singleton
 object for easy reference. From the Krita class, a hierarchy is provided
 where you can access windows, views, documents, nodes and channels.
+
+You can access the Krita class as
+
+ * Krita.instance()
+ * Application
+ * Scripter
+
+For ease of use.
 
 The Document class is provided to allow access to the images Krita has
 loaded. *Note*: internally, Krita distinguishes between images and documents.

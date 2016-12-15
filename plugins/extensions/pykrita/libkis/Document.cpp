@@ -178,11 +178,20 @@ void Document::setName(QString value)
 
 int Document::resolution() const
 {
-    return 0;
+    if (!d->document) return 0;
+    KisImageSP image = d->document->image();
+    if (!image) return 0;
+
+    return qRound(d->document->image()->xRes() * 72);
 }
 
 void Document::setResolution(int value)
 {
+    if (!d->document) return;
+    KisImageSP image = d->document->image();
+    if (!image) return;
+
+    d->document->image()->setResolution(value / 72.0, value / 72.0);
 }
 
 
@@ -221,6 +230,34 @@ void Document::setWidth(int value)
     QRect rc = image->bounds();
     rc.setWidth(value);
     image->resizeImage(rc);
+}
+
+double Document::xRes() const
+{
+    if (!d->document) return 0.0;
+    if (!d->document->image()) return 0.0;
+    return d->document->image()->xRes();
+}
+
+void Document::setXRes(double xRes) const
+{
+    if (!d->document) return;
+    if (!d->document->image()) return;
+    d->document->image()->setResolution(xRes, d->document->image()->yRes());
+}
+
+double Document::yRes() const
+{
+    if (!d->document) return 0.0;
+    if (!d->document->image()) return 0.0;
+    return d->document->image()->yRes();
+}
+
+void Document::setyRes(double yRes) const
+{
+    if (!d->document) return;
+    if (!d->document->image()) return;
+    d->document->image()->setResolution(d->document->image()->xRes(), yRes);
 }
 
 

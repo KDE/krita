@@ -70,7 +70,14 @@ public:
     QString name() const;
     void setName(QString value);
 
+    /**
+     * @return the resolution in pixels per inch
+     */
     int resolution() const;
+    /**
+     * @brief setResolution set the resolution of the image; this does not scale the image
+     * @param value the resolution in pixels per inch
+     */
     void setResolution(int value);
 
     Node* rootNode() const;
@@ -80,6 +87,18 @@ public:
 
     int width() const;
     void setWidth(int value);
+
+    /**
+     * @return xRes the horizontal resolution of the image in pixels per pt (there are 72 pts to an inch)
+     */
+    double xRes() const;
+    void setXRes(double xRes) const;
+
+    /**
+     * @return yRes the vertical resolution of the image in pixels per pt (there are 72 pts to an inch)
+     */
+    double yRes() const;
+    void setyRes(double yRes) const;
 
     QByteArray pixelData() const;
 

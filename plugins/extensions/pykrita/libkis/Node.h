@@ -114,7 +114,14 @@ public Q_SLOTS:
 
     Node* duplicate();
 
-    bool save(const QString &filename);
+    /**
+     * @brief save exports the given node with this filename. The extension of the filename determins the filetype.
+     * @param filename the filename including extension
+     * @param xRes the horizontal resolution in pixels per pt (there are 72 pts in an inch)
+     * @param yRes the horizontal resolution in pixels per pt (there are 72 pts in an inch)
+     * @return true if saving succeeded, false if it failed.
+     */
+    bool save(const QString &filename, double xRes, double yRes);
 
 Q_SIGNALS:
 

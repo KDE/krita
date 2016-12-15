@@ -34,6 +34,11 @@ public:
     void setSelection(Selection*  value);
     int width() const;
     void setWidth(int value);
+    double xRes() const;
+    void setXRes(double xRes) const;
+
+    double yRes() const;
+    void setyRes(double yRes) const;
     QByteArray pixelData() const;
 public Q_SLOTS:
     bool close();

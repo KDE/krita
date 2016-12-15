@@ -10,10 +10,10 @@ from krita import *
 def __main__(args):
     print("Arguments:", args)
     Application.setBatchmode(True)
-    print(Application.batchmode())
+    print("Batchmode: ", Application.batchmode())
     document = Application.openDocument(args[0])
-    print(document, document.batchmode(), document.fileName(), document.height(), document.width())
+    print("Opened", document.fileName(), "WxH", document.width(), document.height(), "resolution", document.xRes(), document.yRes(), "in ppi", document.resolution())
     node = document.rootNode()
-    print(node, node.name(), "opacity", node.opacity())
-    children = node.childNodes()
-    print(children)
+    print("Root", node.name(), "opacity", node.opacity())
+    for child in node.childNodes():
+        print("\tChild", child.name(), "opacity", node.opacity())

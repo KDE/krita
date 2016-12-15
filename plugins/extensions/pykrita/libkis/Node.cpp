@@ -272,9 +272,6 @@ void Node::setPixelData(QByteArray value)
 {
 }
 
-
-
-
 void Node::move(int x, int y)
 {
 }
@@ -292,7 +289,9 @@ Node* Node::duplicate()
     return 0;
 }
 
-bool Node::save(const QString &filename)
+bool Node::save(const QString &filename, double xRes, double yRes)
 {
-    return false;
+    KisPaintDeviceSP projection = d->node->projection();
+
+    return true;
 }

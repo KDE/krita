@@ -16,5 +16,8 @@ def __main__(args):
     node = document.rootNode()
     print("Root", node.name(), "opacity", node.opacity())
     for child in node.childNodes():
-        print("\tChild", child.name(), "opacity", node.opacity())
-        r = child.save(child.name() + ".png", document.xRes(), document.yRes());
+        print("\tChild", child.name(), "opacity", node.opacity(), node.blendingMode())
+        child.setBlendingMode("parallel")
+        print("\t\tBlending mode is now", child.blendingMode())
+        #r = child.save(child.name() + ".png", document.xRes(), document.yRes());
+        

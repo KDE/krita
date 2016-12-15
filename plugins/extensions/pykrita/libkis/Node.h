@@ -37,10 +37,27 @@ public:
     explicit Node(KisNodeSP node, QObject *parent = 0);
     virtual ~Node();
 
+    /**
+     * @brief alphaLocked checks whether the node is a paint layer and returns whether it is alpha locked
+     * @return whether the paint layer is alpha locked, or false if the node is not a paint layer
+     */
     bool alphaLocked() const;
+
+    /**
+     * @brief setAlphaLocked set the layer to value if the the node is paint layer.
+     */
     void setAlphaLocked(bool value);
 
+    /**
+     * @return the blending mode of the layer. The values of the blending modes are defined in @see KoCompositeOpRegistry.h
+     *
+     */
     QString blendingMode() const;
+
+    /**
+     * @brief setBlendingMode set the blending mode of the node to the given value
+     * @param value one of the string values from @see KoCompositeOpRegistry.h
+     */
     void setBlendingMode(QString value);
 
     QList<Channel*> channels() const;

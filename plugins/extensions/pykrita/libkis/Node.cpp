@@ -61,31 +61,47 @@ Node::~Node()
 
 bool Node::alphaLocked() const
 {
+    if (!d->node) return false;
+    KisPaintLayerSP paintLayer = qobject_cast<KisPaintLayer*>(d->node.data());
+    if (paintLayer) {
+        return paintLayer->alphaLocked();
+    }
     return false;
 }
 
 void Node::setAlphaLocked(bool value)
 {
+    if (!d->node) return;
+    KisPaintLayerSP paintLayer = qobject_cast<KisPaintLayer*>(d->node.data());
+    if (paintLayer) {
+        paintLayer->setAlphaLocked(value);
+    }
 }
 
 
 QString Node::blendingMode() const
 {
-    return QString();
+    if (!d->node) return QString();
+
+    return d->node->compositeOpId();
 }
 
 void Node::setBlendingMode(QString value)
 {
+    if (!d->node) return;
+    d->node->setCompositeOpId(value);
 }
 
 
 QList<Channel*> Node::channels() const
 {
+    if (!d->node) return QList<Channel*>();
     return QList<Channel*>();
 }
 
 void Node::setChannels(QList<Channel*> value)
 {
+    if (!d->node) return;
 }
 
 
@@ -103,203 +119,244 @@ QList<Node*> Node::childNodes() const
 
 void Node::setChildNodes(QList<Node*> value)
 {
+    if (!d->node) return;
 }
 
 
 ColorDepth* Node::colorDepth() const
 {
+    if (!d->node) return 0;
     return 0;
 }
 
 void Node::setColorDepth(ColorDepth* value)
 {
+    if (!d->node) return;
 }
 
 
 QString Node::colorLabel() const
 {
+    if (!d->node) return QString();
     return QString();
 }
 
 void Node::setColorLabel(QString value)
 {
+    if (!d->node) return;
 }
 
 
 ColorModel* Node::colorModel() const
 {
+    if (!d->node) return 0;
     return 0;
 }
 
 void Node::setColorModel(ColorModel* value)
 {
+    if (!d->node) return;
 }
 
 
 ColorProfile* Node::colorProfile() const
 {
+    if (!d->node) return 0;
     return 0;
 }
 
 void Node::setColorProfile(ColorProfile* value)
 {
+    if (!d->node) return;
 }
 
 
 bool Node::inheritAlpha() const
 {
+    if (!d->node) return false;
     return false;
 }
 
 void Node::setInheritAlpha(bool value)
 {
+    if (!d->node) return;
 }
 
 
 bool Node::locked() const
 {
+    if (!d->node) return false;
     return false;
 }
 
 void Node::setLocked(bool value)
 {
+    if (!d->node) return;
 }
 
 
 QString Node::name() const
 {
+    if (!d->node) return QString();
     return d->node->name();
 }
 
 void Node::setName(QString value)
 {
+    if (!d->node) return;
 }
 
 
 int Node::opacity() const
 {
+    if (!d->node) return 0;
     return d->node->opacity();
 }
 
 void Node::setOpacity(int value)
 {
+    if (!d->node) return;
     d->node->setOpacity(value);
 }
 
 
 Node* Node::parentNode() const
 {
+    if (!d->node) return 0;
     return 0;
 }
 
 void Node::setParentNode(Node* value)
 {
+    if (!d->node) return;
 }
 
 
 QString Node::type() const
 {
+    if (!d->node) return QString();
     return QString();
 }
 
 void Node::setType(QString value)
 {
+    if (!d->node) return;
 }
 
 
 bool Node::visible() const
 {
+    if (!d->node) return false;
     return false;
 }
 
 void Node::setVisible(bool value)
 {
+    if (!d->node) return;
 }
 
 
 InfoObject* Node::metaDataInfo() const
 {
+    if (!d->node) return 0;
     return 0;
 }
 
 void Node::setMetaDataInfo(InfoObject* value)
 {
+    if (!d->node) return;
 }
 
 
 Generator* Node::generator() const
 {
+    if (!d->node) return 0;
     return 0;
 }
 
 void Node::setGenerator(Generator* value)
 {
+    if (!d->node) return;
 }
 
 
 Filter* Node::filter() const
 {
+    if (!d->node) return 0;
     return 0;
 }
 
 void Node::setFilter(Filter* value)
 {
+    if (!d->node) return;
 }
 
 
 Transformation* Node::transformation() const
 {
+    if (!d->node) return 0;
     return 0;
 }
 
 void Node::setTransformation(Transformation* value)
 {
+    if (!d->node) return;
 }
 
 
 Selection* Node::selection() const
 {
+    if (!d->node) return 0;
     return 0;
 }
 
 void Node::setSelection(Selection* value)
 {
+    if (!d->node) return;
 }
 
 
 QString Node::fileName() const
 {
+    if (!d->node) return QString();
     return QString();
 }
 
 void Node::setFileName(QString value)
 {
+    if (!d->node) return;
 }
 
 
 QByteArray Node::pixelData() const
 {
+    if (!d->node) return QByteArray();
     return QByteArray();
 }
 
 void Node::setPixelData(QByteArray value)
 {
+    if (!d->node) return;
 }
 
 void Node::move(int x, int y)
 {
+    if (!d->node) return;
 }
 
 void Node::moveToParent(Node *parent)
 {
+    if (!d->node) return;
 }
 
 void Node::remove()
 {
+    if (!d->node) return;
 }
 
 Node* Node::duplicate()
 {
+    if (!d->node) return 0;
     return 0;
 }
 

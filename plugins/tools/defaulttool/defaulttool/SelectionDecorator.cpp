@@ -24,6 +24,10 @@
 #include <KoShape.h>
 #include <KoSelection.h>
 #include <KoResourcePaths.h>
+#include "kis_algebra_2d.h"
+
+#include "kis_debug.h"
+#include <KisHandlePainterHelper.h>
 
 #define HANDLE_DISTANCE 10
 
@@ -33,8 +37,8 @@ SelectionDecorator::SelectionDecorator(KoFlake::SelectionHandle arrows, bool rot
     : m_rotationHandles(rotationHandles)
     , m_shearHandles(shearHandles)
     , m_arrows(arrows)
-    , m_handleRadius(3)
-    , m_lineWidth(1)
+    , m_handleRadius(7)
+    , m_lineWidth(2)
 {
 }
 
@@ -73,14 +77,14 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
     pen.setWidth(m_lineWidth);
     pen.setJoinStyle(Qt::RoundJoin);
     painter.setPen(pen);
+
     bool editable = false;
     foreach (KoShape *shape, m_selection->selectedShapes(KoFlake::StrippedSelection)) {
-        // apply the shape transformation on top of the old painter transformation
         painter.setWorldTransform(shape->absoluteTransformation(&converter) * painterMatrix);
-        // apply the zoom factor
         KoShape::applyConversion(painter, converter);
-        // draw the shape bounding rect
-        painter.drawRect(QRectF(QPointF(), shape->size()));
+
+        KisHandlePainterHelper helper(&painter);
+        helper.drawRubberLine(QRectF(QPointF(), shape->size()));
 
         if (!shape->isGeometryProtected()) {
             editable = true;
@@ -88,73 +92,57 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
     }
 
     if (m_selection->count() > 1) {
-        // more than one shape selected, so we need to draw the selection bounding rect
         painter.setPen(Qt::blue);
-        // apply the selection transformation on top of the old painter transformation
-        painter.setWorldTransform(m_selection->absoluteTransformation(&converter) * painterMatrix);
-        // apply the zoom factor
+        painter.setTransform(m_selection->absoluteTransformation(&converter) * painterMatrix);
         KoShape::applyConversion(painter, converter);
-        // draw the selection bounding rect
-        painter.drawRect(QRectF(QPointF(), m_selection->size()));
-        // save the selection bounding rect for later drawing the selection handles
         handleArea = QRectF(QPointF(), m_selection->size());
+
+        {
+            KisHandlePainterHelper helper(&painter);
+            helper.drawRubberLine(handleArea);
+        }
+
     } else if (m_selection->firstSelectedShape()) {
-        // only one shape selected, so we compose the correct painter matrix
-        painter.setWorldTransform(m_selection->firstSelectedShape()->absoluteTransformation(&converter) * painterMatrix);
+        painter.setTransform(m_selection->firstSelectedShape()->absoluteTransformation(&converter) * painterMatrix);
         KoShape::applyConversion(painter, converter);
-        // save the only selected shapes bounding rect for later drawing the handles
+
         handleArea = QRectF(QPointF(), m_selection->firstSelectedShape()->size());
     }
 
-    painterMatrix = painter.worldTransform();
-    painter.restore();
+    // if we have no editable shape selected there
+    // is no need drawing the selection handles
+    if (editable) {
 
-    // if we have no editable shape selected there is no need drawing the selection handles
-    if (!editable) {
-        return;
+        painter.setPen(pen);
+        painter.setBrush(pen.color());
+
+        QPolygonF outline = handleArea;
+
+        {
+            KisHandlePainterHelper helper(&painter, m_handleRadius);
+            helper.drawHandleRect(outline.value(0));
+            helper.drawHandleRect(outline.value(1));
+            helper.drawHandleRect(outline.value(2));
+            helper.drawHandleRect(outline.value(3));
+            helper.drawHandleRect(0.5 * (outline.value(0) + outline.value(1)));
+            helper.drawHandleRect(0.5 * (outline.value(1) + outline.value(2)));
+            helper.drawHandleRect(0.5 * (outline.value(2) + outline.value(3)));
+            helper.drawHandleRect(0.5 * (outline.value(3) + outline.value(0)));
+
+            // draw the hot position
+            painter.setBrush(Qt::red);
+            QPointF hotPos;
+            switch (m_hotPosition) {
+            case KoFlake::TopLeftCorner: hotPos = handleArea.topLeft(); break;
+            case KoFlake::TopRightCorner: hotPos = handleArea.topRight(); break;
+            case KoFlake::BottomLeftCorner: hotPos = handleArea.bottomLeft(); break;
+            case KoFlake::BottomRightCorner: hotPos = handleArea.bottomRight(); break;
+            case KoFlake::CenteredPosition: hotPos = handleArea.center(); break;
+            }
+
+            helper.drawHandleRect(hotPos);
+        }
     }
-
-    painter.save();
-
-    painter.setTransform(QTransform());
-    painter.setRenderHint(QPainter::Antialiasing, false);
-
-    painter.setPen(pen);
-    painter.setBrush(pen.color());
-
-    QPolygonF outline = painterMatrix.map(handleArea);
-
-    // the 8 move rects
-    QRectF rect(QPointF(0.5, 0.5), QSizeF(2 * m_handleRadius, 2 * m_handleRadius));
-    rect.moveCenter(outline.value(0));
-    painter.drawRect(rect);
-    rect.moveCenter(outline.value(1));
-    painter.drawRect(rect);
-    rect.moveCenter(outline.value(2));
-    painter.drawRect(rect);
-    rect.moveCenter(outline.value(3));
-    painter.drawRect(rect);
-    rect.moveCenter((outline.value(0) + outline.value(1)) / 2);
-    painter.drawRect(rect);
-    rect.moveCenter((outline.value(1) + outline.value(2)) / 2);
-    painter.drawRect(rect);
-    rect.moveCenter((outline.value(2) + outline.value(3)) / 2);
-    painter.drawRect(rect);
-    rect.moveCenter((outline.value(3) + outline.value(0)) / 2);
-    painter.drawRect(rect);
-
-    // draw the hot position
-    painter.setBrush(Qt::red);
-    QPointF pos;
-    switch (m_hotPosition) {
-    case KoFlake::TopLeftCorner: pos = handleArea.topLeft(); break;
-    case KoFlake::TopRightCorner: pos = handleArea.topRight(); break;
-    case KoFlake::BottomLeftCorner: pos = handleArea.bottomLeft(); break;
-    case KoFlake::BottomRightCorner: pos = handleArea.bottomRight(); break;
-    case KoFlake::CenteredPosition: pos = handleArea.center(); break;
-    }
-    rect.moveCenter(painterMatrix.map(pos));
-    painter.drawRect(rect);
 
     painter.restore();
 }

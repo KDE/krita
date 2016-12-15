@@ -14,6 +14,7 @@ set(kritaglobal_LIB_SRCS
     kis_shared.cpp
     kis_dom_utils.cpp
     kis_painting_tweaks.cpp
+    KisHandlePainterHelper.cpp
 )
 
 add_library(kritaglobal SHARED ${kritaglobal_LIB_SRCS} )

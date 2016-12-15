@@ -31,6 +31,9 @@ private Q_SLOTS:
     void testQuadraticEquation();
     void testIntersections();
     void testWeirdIntersections();
+
+    void testMatrixDecomposition1();
+    void testMatrixDecomposition2();
 };
 
 #endif /* __KIS_ALGEBRA_2D_TEST_H */

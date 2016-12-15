@@ -23,6 +23,7 @@
 #include <QPointF>
 #include <QVector>
 #include <QPolygonF>
+#include <QTransform>
 #include <cmath>
 #include <kis_global.h>
 #include <kritaglobal_export.h>
@@ -405,6 +406,74 @@ inline QPointF absoluteToRelative(const QPointF &pt, const QRectF &rc) {
     return QPointF(rel.x() / rc.width(), rel.y() / rc.height());
 
 }
+
+/**
+ * Compare the matrices with tolerance \p delta
+ */
+bool KRITAGLOBAL_EXPORT fuzzyMatrixCompare(const QTransform &t1, const QTransform &t2, qreal delta);
+
+struct KRITAGLOBAL_EXPORT DecomposedMatix {
+    DecomposedMatix();
+
+    DecomposedMatix(const QTransform &t0);
+
+    inline QTransform scaleTransform() const
+    {
+        return QTransform::fromScale(scaleX, scaleY);
+    }
+
+    inline QTransform shearTransform() const
+    {
+        QTransform t;
+        t.shear(shearXY, 0);
+        return t;
+    }
+
+    inline QTransform rotateTransform() const
+    {
+        QTransform t;
+        t.rotate(angle);
+        return t;
+    }
+
+    inline QTransform translateTransform() const
+    {
+        return QTransform::fromTranslate(dx, dy);
+    }
+
+    inline QTransform projectTransform() const
+    {
+        return
+            QTransform(
+                1,0,proj[0],
+                0,1,proj[1],
+                0,0,proj[2]);
+    }
+
+    inline QTransform transform() const {
+        return
+            scaleTransform() *
+            shearTransform() *
+            rotateTransform() *
+            translateTransform() *
+            projectTransform();
+    }
+
+    inline bool isValid() const {
+        return valid;
+    }
+
+    qreal scaleX = 1.0;
+    qreal scaleY = 1.0;
+    qreal shearXY = 0.0;
+    qreal angle = 0.0;
+    qreal dx = 0.0;
+    qreal dy = 0.0;
+    qreal proj[3] = {0.0, 0.0, 1.0};
+
+private:
+    bool valid = true;
+};
 
 }
 

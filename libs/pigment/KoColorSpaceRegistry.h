@@ -92,13 +92,13 @@ public:
     void addProfile(KoColorProfile* profile);
     void addProfile(const KoColorProfile* profile); // TODO why ?
     void removeProfile(KoColorProfile* profile);
-    
+
     /**
      * Create an alias to a profile with a different name. Then @ref profileByName
      * will return the profile @p to when passed @p name as a parameter.
      */
     void addProfileAlias(const QString& name, const QString& to);
-    
+
     /**
      * @return the profile alias, or name if not aliased
      */
@@ -226,9 +226,15 @@ public:
     KoID colorSpaceColorDepthId(const QString & _colorSpaceId) const;
 
     /**
-     * Convenience method to get the often used alpha colorspace
+     * Convenience methods to get the often used alpha colorspaces
      */
-    const KoColorSpace * alpha8();
+    const KoColorSpace *alpha8();
+    const KoColorSpace *alpha16();
+#include <KoConfig.h>
+#ifdef HAVE_OPENEXR
+    const KoColorSpace *alpha16f();
+#endif
+    const KoColorSpace *alpha32f();
 
     /**
      * Convenience method to get an RGBA 8bit colorspace. If a profile is not specified,

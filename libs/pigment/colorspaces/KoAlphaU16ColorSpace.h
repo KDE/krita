@@ -1,6 +1,5 @@
 /*
- *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (c) 2006 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2016 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -16,8 +15,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KOALPHACOLORSPACE_H
-#define KOALPHACOLORSPACE_H
+#ifndef KOALPHAU16COLORSPACE_H
+#define KOALPHAU16COLORSPACE_H
 
 #include <QColor>
 
@@ -30,7 +29,7 @@
 #include "KoColorModelStandardIds.h"
 #include "KoSimpleColorSpaceFactory.h"
 
-typedef KoColorSpaceTrait<quint8, 1, 0> AlphaU8Traits;
+typedef KoColorSpaceTrait<quint16, 1, 0> AlphaU16Traits;
 
 class QBitArray;
 
@@ -38,16 +37,16 @@ class QBitArray;
  * The alpha mask is a special color strategy that treats all pixels as
  * alpha value with a color common to the mask. The default color is white.
  */
-class KRITAPIGMENT_EXPORT KoAlphaColorSpace : public KoColorSpaceAbstract<AlphaU8Traits>
+class KRITAPIGMENT_EXPORT KoAlphaU16ColorSpace : public KoColorSpaceAbstract<AlphaU16Traits>
 {
 
 public:
 
-    KoAlphaColorSpace();
+    KoAlphaU16ColorSpace();
 
-    virtual ~KoAlphaColorSpace();
+    virtual ~KoAlphaU16ColorSpace();
 
-    static QString colorSpaceId() { return "ALPHA"; }
+    static QString colorSpaceId() { return "ALPHAU16"; }
 
     virtual KoID colorModelId() const {
         return AlphaColorModelID;
@@ -185,5 +184,4 @@ private:
     QList<KoCompositeOp*> m_compositeOps;
 };
 
-
-#endif // KO_COLORSPACE_ALPHA_H_
+#endif

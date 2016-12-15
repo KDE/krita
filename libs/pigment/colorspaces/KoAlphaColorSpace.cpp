@@ -38,7 +38,6 @@
 
 namespace
 {
-const quint8 PIXEL_MASK = 0;
 
 class CompositeClear : public KoCompositeOp
 {
@@ -165,10 +164,10 @@ public:
                     ++mask;
                 }
 
-                if (d[PIXEL_MASK] <= s[PIXEL_MASK]) {
-                    d[PIXEL_MASK] = OPACITY_TRANSPARENT_U8;
+                if (d[0] <= s[0]) {
+                    d[0] = OPACITY_TRANSPARENT_U8;
                 } else {
-                    d[PIXEL_MASK] -= s[PIXEL_MASK];
+                    d[0] -= s[0];
                 }
             }
 
@@ -238,7 +237,7 @@ public:
                 }
 
                 // here comes the math
-                destination[PIXEL_MASK] = KoColorSpaceMaths<quint8>::multiply(destination[PIXEL_MASK], source[PIXEL_MASK]);
+                destination[0] = KoColorSpaceMaths<quint8>::multiply(destination[0], source[0]);
 
             }
 
@@ -284,18 +283,18 @@ KoAlphaColorSpace::~KoAlphaColorSpace()
 
 void KoAlphaColorSpace::fromQColor(const QColor& c, quint8 *dst, const KoColorProfile * /*profile*/) const
 {
-    dst[PIXEL_MASK] = c.alpha();
+    dst[0] = c.alpha();
 }
 
 void KoAlphaColorSpace::toQColor(const quint8 * src, QColor *c, const KoColorProfile * /*profile*/) const
 {
-    c->setRgba(qRgba(255, 255, 255, src[PIXEL_MASK]));
+    c->setRgba(qRgba(255, 255, 255, src[0]));
 }
 
 quint8 KoAlphaColorSpace::difference(const quint8 *src1, const quint8 *src2) const
 {
     // Arithmetic operands smaller than int are converted to int automatically
-    return qAbs(src2[PIXEL_MASK] - src1[PIXEL_MASK]);
+    return qAbs(src2[0] - src1[0]);
 }
 
 quint8 KoAlphaColorSpace::differenceA(const quint8 *src1, const quint8 *src2) const
@@ -327,14 +326,14 @@ void KoAlphaColorSpace::convolveColors(quint8** colors, qreal * kernelValues, qu
         qreal weight = *kernelValues;
 
         if (weight != 0) {
-            totalAlpha += (*colors)[PIXEL_MASK] * weight;
+            totalAlpha += (*colors)[0] * weight;
         }
         ++colors;
         ++kernelValues;
     }
 
-    if (channelFlags.isEmpty() || channelFlags.testBit(PIXEL_MASK))
-        dst[PIXEL_MASK] = CLAMP((totalAlpha / factor) + offset, 0, SCHAR_MAX);
+    if (channelFlags.isEmpty() || channelFlags.testBit(0))
+        dst[0] = CLAMP((totalAlpha / factor) + offset, 0, SCHAR_MAX);
 }
 
 

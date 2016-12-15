@@ -60,9 +60,9 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
     cmbFilter->setToolTip(i18nc("@info:tooltip",
                                 "<p>Select filtering mode:\n"
                                 "<ul>"
-                                "<li><interface>Bilinear</interface> for areas with uniform color to avoid artifacts</li>"
-                                "<li><interface>Bicubic</interface> for smoother results</li>"
-                                "<li><interface>Lanczos3</interface> for sharp results. May produce aerials.</il>"
+                                "<li><b>Bilinear</b> for areas with uniform color to avoid artifacts</li>"
+                                "<li><b>Bicubic</b> for smoother results</li>"
+                                "<li><b>Lanczos3</b> for sharp results. May produce aerials.</il>"
                                 "</ul></p>"));
     connect(cmbFilter, SIGNAL(activated(const KoID &)),
             this, SLOT(slotFilterChanged(const KoID &)));
@@ -229,11 +229,11 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
 
     liquifySizePressureBox->setChecked(true);
     connect(liquifySizePressureBox, SIGNAL(toggled(bool)), this, SLOT(liquifySizePressureChanged(bool)));
-    liquifySizePressureBox->setToolTip(i18nc("@info:tooltip", "Scale <interface>Size</interface> value according to current stylus pressure"));
+    liquifySizePressureBox->setToolTip(i18nc("@info:tooltip", "Scale <b>Size</b> value according to current stylus pressure"));
 
     liquifyAmountPressureBox->setChecked(true);
     connect(liquifyAmountPressureBox, SIGNAL(toggled(bool)), this, SLOT(liquifyAmountPressureChanged(bool)));
-    liquifyAmountPressureBox->setToolTip(i18nc("@info:tooltip", "Scale <interface>Amount</interface> value according to current stylus pressure"));
+    liquifyAmountPressureBox->setToolTip(i18nc("@info:tooltip", "Scale <b>Amount</b> value according to current stylus pressure"));
 
     liquifyReverseDirectionChk->setChecked(false);
     connect(liquifyReverseDirectionChk, SIGNAL(toggled(bool)), this, SLOT(liquifyReverseDirectionChanged(bool)));

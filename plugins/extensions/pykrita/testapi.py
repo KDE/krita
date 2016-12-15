@@ -17,3 +17,4 @@ def __main__(args):
     print("Root", node.name(), "opacity", node.opacity())
     for child in node.childNodes():
         print("\tChild", child.name(), "opacity", node.opacity())
+        r = child.save(child.name() + ".png", document.xRes(), document.yRes());

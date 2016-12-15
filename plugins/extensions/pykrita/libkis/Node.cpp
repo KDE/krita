@@ -15,6 +15,22 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include <QUrl>
+#include <QScopedPointer>
+
+#include <KoColorSpace.h>
+
+#include <KisDocument.h>
+#include <KisMimeDatabase.h>
+#include <KisPart.h>
+#include <kis_image.h>
+#include <kis_types.h>
+#include <kis_node.h>
+#include <kis_paint_layer.h>
+#include <kis_group_layer.h>
+#include <kis_layer.h>
+
+#include "Krita.h"
 #include "Node.h"
 #include "Channel.h"
 #include "ColorDepth.h"
@@ -25,8 +41,6 @@
 #include "Transformation.h"
 #include "Selection.h"
 
-#include <kis_types.h>
-#include <kis_node.h>
 
 struct Node::Private {
     Private() {}
@@ -291,7 +305,28 @@ Node* Node::duplicate()
 
 bool Node::save(const QString &filename, double xRes, double yRes)
 {
-    KisPaintDeviceSP projection = d->node->projection();
+    if (!d->node) return false;
+    if (filename.isEmpty()) return false;
 
-    return true;
+    KisPaintDeviceSP projection = d->node->projection();
+    QRect bounds = d->node->exactBounds();
+
+    QString mimefilter = KisMimeDatabase::mimeTypeForFile(filename);;
+    QScopedPointer<KisDocument> doc(KisPart::instance()->createDocument());
+
+    KisImageSP dst = new KisImage(doc->createUndoStore(),
+                                  bounds.width(),
+                                  bounds.height(),
+                                  projection->compositionSourceColorSpace(),
+                                  d->node->name());
+    dst->setResolution(xRes, yRes);
+    doc->setFileBatchMode(Krita::instance()->batchmode());
+    doc->setCurrentImage(dst);
+    KisPaintLayer* paintLayer = new KisPaintLayer(dst, "paint device", d->node->opacity());
+    paintLayer->paintDevice()->makeCloneFrom(projection, bounds);
+    dst->addNode(paintLayer, dst->rootLayer(), KisLayerSP(0));
+    dst->initialRefreshGraph();
+    doc->setOutputMimeType(mimefilter.toLatin1());
+
+    return doc->exportDocument(QUrl::fromLocalFile(filename));
 }

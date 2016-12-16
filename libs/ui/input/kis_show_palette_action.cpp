@@ -48,14 +48,9 @@ int KisShowPaletteAction::priority() const
 
 void KisShowPaletteAction::begin(int, QEvent *event)
 {
-    QList<QAction*> actions = inputManager()->toolProxy()->popupActionList();
+    m_menu = inputManager()->toolProxy()->popupActionsMenu();
 
-    if (!actions.isEmpty()) {
-        m_menu.reset(new QMenu(inputManager()->canvas()->canvasWidget()));
-        Q_FOREACH (QAction *action, actions) {
-            m_menu->addAction(action);
-        }
-
+    if (m_menu) {
         /**
          * Opening a menu changes the focus of the windows, so we should not open it
          * inside the filtering loop. Just raise it using the timer.
@@ -74,6 +69,8 @@ void KisShowPaletteAction::begin(int, QEvent *event)
 
 void KisShowPaletteAction::slotShowMenu()
 {
-    m_menu->exec(QCursor::pos());
-    m_menu.reset();
+    if (m_menu) {
+        m_menu->exec(QCursor::pos());
+        m_menu.clear();
+    }
 }

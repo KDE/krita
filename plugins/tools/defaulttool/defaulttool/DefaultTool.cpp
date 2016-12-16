@@ -64,6 +64,7 @@
 
 #include <KoCanvasController.h>
 #include <kactioncollection.h>
+#include <QMenu>
 
 #include <math.h>
 
@@ -224,8 +225,7 @@ void DefaultTool::setupActions()
     addAction("object_ungroup", actionUngroupBottom);
     connect(actionUngroupBottom, SIGNAL(triggered()), this, SLOT(selectionUngroup()));
 
-    m_separatorAction = new QAction(this);
-    m_separatorAction->setSeparator(true);
+    m_contextMenu.reset(new QMenu());
 }
 
 qreal DefaultTool::rotationOfHandle(KoFlake::SelectionHandle handle, bool useEdgeRotation)
@@ -1209,39 +1209,40 @@ void DefaultTool::updateActions()
     }
     action("object_ungroup")->setEnabled(groupShape);
 
-    {
-        KActionCollection *collection = this->canvas()->canvasController()->actionCollection();
-
-        QList<QAction*> actions;
-
-        actions << collection->action("edit_cut");
-        actions << collection->action("edit_copy");
-        actions << collection->action("edit_paste");
-
-        actions << m_separatorAction;
-
-        actions << action("object_order_front");
-        actions << action("object_order_raise");
-        actions << action("object_order_lower");
-        actions << action("object_order_back");
-
-        actions << m_separatorAction;
-
-        if (action("object_group")->isEnabled() || action("object_ungroup")->isEnabled()) {
-            actions << m_separatorAction;
-            actions << action("object_group");
-            actions << action("object_ungroup");
-        }
-
-        setPopupActionList(actions);
-    }
-
     emit selectionChanged(selection->count());
 }
 
 KoToolSelection *DefaultTool::selection()
 {
     return m_selectionHandler;
+}
+
+QMenu* DefaultTool::popupActionsMenu()
+{
+    if (m_contextMenu) {
+        m_contextMenu->clear();
+
+        KActionCollection *collection = this->canvas()->canvasController()->actionCollection();
+
+        m_contextMenu->addAction(collection->action("edit_cut"));
+        m_contextMenu->addAction(collection->action("edit_copy"));
+        m_contextMenu->addAction(collection->action("edit_paste"));
+
+        m_contextMenu->addSeparator();
+
+        m_contextMenu->addAction(action("object_order_front"));
+        m_contextMenu->addAction(action("object_order_raise"));
+        m_contextMenu->addAction(action("object_order_lower"));
+        m_contextMenu->addAction(action("object_order_back"));
+
+        if (action("object_group")->isEnabled() || action("object_ungroup")->isEnabled()) {
+            m_contextMenu->addSeparator();
+            m_contextMenu->addAction(action("object_group"));
+            m_contextMenu->addAction(action("object_ungroup"));
+        }
+    }
+
+    return m_contextMenu.data();
 }
 
 QList<KoShape *> DefaultTool::filterEditableShapes(const QList<KoShape *> &shapes)

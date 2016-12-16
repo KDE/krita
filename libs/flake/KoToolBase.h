@@ -50,6 +50,7 @@ class QDragMoveEvent;
 class QDragLeaveEvent;
 class QDropEvent;
 class QTouchEvent;
+class QMenu;
 
 /**
  * Abstract base class for all tools. Tools can create or manipulate
@@ -339,9 +340,10 @@ public:
     virtual void dropEvent(QDropEvent *event, const QPointF &point);
 
     /**
-     * @return A list of actions to be used for a popup.
+     * @return a menu with context-aware actions for the currect selection. If
+     *         the returned value is null, no context menu is shown.
      */
-    QList<QAction*> popupActionList() const;
+    virtual QMenu* popupActionsMenu();
 
     /// Returns the canvas the tool is working on
     KoCanvasBase *canvas() const;
@@ -475,13 +477,6 @@ protected:
      *      read-only documents
      */
     void addAction(const QString &name, QAction *action);
-
-    /**
-     * Set the list of actions to be used as popup menu.
-     * @param list the list of actions.
-     * @see popupActionList
-     */
-    void setPopupActionList(const QList<QAction*> &list);
 
     /// Convenience function to get the current handle radius
     uint handleRadius() const;

@@ -22,7 +22,7 @@
 #include "kis_abstract_input_action.h"
 
 #include <QObject>
-#include <QScopedPointer>
+#include <QPointer>
 class QMenu;
 
 /**
@@ -46,7 +46,7 @@ private Q_SLOTS:
     void slotShowMenu();
 
 private:
-    QScopedPointer<QMenu> m_menu;
+    QPointer<QMenu> m_menu;
 };
 
 #endif // KIS_SHOW_PALETTE_ACTION_H

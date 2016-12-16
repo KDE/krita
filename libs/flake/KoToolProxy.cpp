@@ -478,6 +478,11 @@ void KoToolProxy::inputMethodEvent(QInputMethodEvent *event)
     if (d->activeTool) d->activeTool->inputMethodEvent(event);
 }
 
+QMenu *KoToolProxy::popupActionsMenu()
+{
+    return d->activeTool ? d->activeTool->popupActionsMenu() : 0;
+}
+
 void KoToolProxy::setActiveTool(KoToolBase *tool)
 {
     if (d->activeTool)
@@ -613,13 +618,6 @@ QStringList KoToolProxy::supportedPasteMimeTypes() const
         return d->activeTool->supportedPasteMimeTypes();
 
     return QStringList();
-}
-
-QList<QAction*> KoToolProxy::popupActionList() const
-{
-    if (d->activeTool)
-        return d->activeTool->popupActionList();
-    return QList<QAction*>();
 }
 
 void KoToolProxy::deleteSelection()

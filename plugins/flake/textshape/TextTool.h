@@ -63,6 +63,7 @@ class KUndo2Command;
 
 class QDrag;
 class QMimeData;
+class QMenu;
 
 class MockCanvas;
 class TextToolSelection;
@@ -324,6 +325,8 @@ private Q_SLOTS:
 
     void updateActions();
 
+    QMenu* popupActionsMenu();
+
 private:
     void repaintCaret();
     void repaintSelection();
@@ -420,6 +423,8 @@ private:
     bool m_clickWithinSelection;
     QDrag *m_drag;
     QAbstractTextDocumentLayout::Selection m_preDragSelection;
+
+    QScopedPointer<QMenu> m_contextMenu;
 };
 
 #endif

@@ -44,6 +44,7 @@ class QDropEvent;
 class QTouchEvent;
 class QPainter;
 class QPointF;
+class QMenu;
 
 /**
  * Tool proxy object which allows an application to address the current tool.
@@ -116,7 +117,7 @@ public:
     void inputMethodEvent(QInputMethodEvent *event);
 
     /// Forwarded to the current KoToolBase
-    QList<QAction*> popupActionList() const;
+    QMenu* popupActionsMenu();
 
     /// Forwarded to the current KoToolBase
     void deleteSelection();

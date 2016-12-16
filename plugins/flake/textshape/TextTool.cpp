@@ -185,22 +185,22 @@ TextTool::TextTool(KoCanvasBase *canvas)
         }
     }
 
+    m_contextMenu.reset(new QMenu());
+
     // setup the context list.
     QSignalMapper *signalMapper = new QSignalMapper(this);
     connect(signalMapper, SIGNAL(mapped(QString)), this, SLOT(startTextEditingPlugin(QString)));
-    QList<QAction *> list;
-    list.append(this->action("format_font"));
+    m_contextMenu->addAction(this->action("format_font"));
     foreach (const QString &key, KoTextEditingRegistry::instance()->keys()) {
         KoTextEditingFactory *factory =  KoTextEditingRegistry::instance()->value(key);
         if (factory->showInMenu()) {
             QAction *a = new QAction(factory->title(), this);
             connect(a, SIGNAL(triggered()), signalMapper, SLOT(map()));
             signalMapper->setMapping(a, factory->id());
-            list.append(a);
+            m_contextMenu->addAction(a);
             addAction(QString("apply_%1").arg(factory->id()), a);
         }
     }
-    setPopupActionList(list);
 
     connect(canvas->shapeManager()->selection(), SIGNAL(selectionChanged()), this, SLOT(shapeAddedToCanvas()));
 
@@ -1969,6 +1969,11 @@ void TextTool::updateActions()
     emit blockChanged(textEditor->block());
     emit charFormatChanged(cf, textEditor->blockCharFormat());
     emit blockFormatChanged(bf);
+}
+
+QMenu *TextTool::popupActionsMenu()
+{
+    return m_contextMenu.data();
 }
 
 void TextTool::updateStyleManager()

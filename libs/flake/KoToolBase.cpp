@@ -292,16 +292,9 @@ void KoToolBase::cut()
     deleteSelection();
 }
 
-QList<QAction*> KoToolBase::popupActionList() const
+QMenu *KoToolBase::popupActionsMenu()
 {
-    Q_D(const KoToolBase);
-    return d->popupActionList;
-}
-
-void KoToolBase::setPopupActionList(const QList<QAction*> &list)
-{
-    Q_D(KoToolBase);
-    d->popupActionList = list;
+    return 0;
 }
 
 KoCanvasBase * KoToolBase::canvas() const

@@ -78,7 +78,6 @@ public:
     QCursor currentCursor;
     QHash<QString, QAction *> actions;
     QString toolId;
-    QList<QAction*> popupActionList;
     KoToolBase *q;
     KoCanvasBase *canvas; ///< the canvas interface this tool will work for.
     bool isInTextMode;

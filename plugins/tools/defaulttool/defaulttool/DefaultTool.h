@@ -78,6 +78,8 @@ public:
     ///reimplemented
     virtual KoToolSelection *selection();
 
+    QMenu* popupActionsMenu() override;
+
     /**
      * Returns which selection handle is at params point (or NoHandle if none).
      * @return which selection handle is at params point (or NoHandle if none).
@@ -168,7 +170,7 @@ private:
     KoToolSelection *m_selectionHandler;
     friend class SelectionHandler;
     KoInteractionStrategy *m_customEventStrategy;
-    QPointer<QAction> m_separatorAction;
+    QScopedPointer<QMenu> m_contextMenu;
 };
 
 #endif

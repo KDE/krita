@@ -42,7 +42,15 @@ public:
     explicit Channel(KisNodeSP node, KoChannelInfo *channel, QObject *parent = 0);
     virtual ~Channel();
 
+    /**
+     * @brief visible checks whether this channel is visible in the node
+     * @return the status of this channel
+     */
     bool visible() const;
+
+    /**
+     * @brief setvisible set the visibility of the channel to the given value.
+     */
     void setvisible(bool value);
 
     /**

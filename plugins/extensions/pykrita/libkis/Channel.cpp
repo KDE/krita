@@ -25,6 +25,7 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoColorSpace.h>
 #include <kis_sequential_iterator.h>
+#include <kis_layer.h>
 
 #ifdef HAVE_OPENEXR
 #include <half.h>
@@ -53,11 +54,37 @@ Channel::~Channel()
 
 bool Channel::visible() const
 {
+    if (!d->node || !d->channel) return false;
+    if (!d->node->inherits("KisLayer")) return false;
+    for (int i = 0; i < d->node->colorSpace()->channelCount(); ++i) {
+        if (d->node->colorSpace()->channels()[i] == d->channel) {
+            KisLayerSP layer = qobject_cast<KisLayer*>(d->node.data());
+            if (!layer) return false;
+
+            QBitArray flags = layer->channelFlags();
+            return flags.testBit(i);
+            break;
+        }
+    }
     return false;
 }
 
 void Channel::setvisible(bool value)
 {
+    if (!d->node || !d->channel) return;
+    if (!d->node->inherits("KisLayer")) return;
+
+    for (int i = 0; i < d->node->colorSpace()->channelCount(); ++i) {
+        if (d->node->colorSpace()->channels()[i] == d->channel) {
+            QBitArray flags = d->node->colorSpace()->channelFlags(true, true);
+            flags.setBit(i, value);
+            KisLayerSP layer = qobject_cast<KisLayer*>(d->node.data());
+            if (!layer) return;
+            layer->setChannelFlags(flags);
+            break;
+        }
+    }
+
 }
 
 QString Channel::name() const

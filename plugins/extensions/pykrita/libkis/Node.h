@@ -71,6 +71,10 @@ public:
      */
     QList<Channel*> channels() const;
 
+    /**
+     * Return a list of child nodes of the current node. The nodes are ordered from the bottommost up.
+     * The function is not recursive.
+     */
     QList<Node*> childNodes() const;
     void setChildNodes(QList<Node*> value);
 

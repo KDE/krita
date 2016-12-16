@@ -17,8 +17,18 @@
  */
 #include "Channel.h"
 
+#include <QByteArray>
+#include <QDataStream>
+
+#include <KoColorModelStandardIds.h>
+#include <KoConfig.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorSpace.h>
+#include <kis_sequential_iterator.h>
+
+#ifdef HAVE_OPENEXR
+#include <half.h>
+#endif
 
 struct Channel::Private {
     Private() {}
@@ -67,20 +77,119 @@ int Channel::channelSize() const
 
 QRect Channel::bounds() const
 {
+    if (!d->node || !d->channel) return QRect();
+
+    QRect rect = d->node->exactBounds();
+
+    KisPaintDeviceSP dev;
+    if (d->node->colorSpace()->colorDepthId() == Integer8BitsColorDepthID) {
+        dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8());
+    }
+    else if (d->node->colorSpace()->colorDepthId() ==  Integer16BitsColorDepthID) {
+        dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha16());
+    }
+#ifdef HAVE_OPENEXR
+    else if (d->node->colorSpace()->colorDepthId() == Float16BitsColorDepthID) {
+        dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha16f());
+    }
+#endif
+    else if (d->node->colorSpace()->colorDepthId() == Float32BitsColorDepthID) {
+        dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha32f());
+    }
+
+    KisSequentialConstIterator srcIt(d->node->projection(), rect);
+    KisSequentialIterator dstIt(dev, rect);
+
+    do {
+        const quint8 *srcPtr = srcIt.rawDataConst();
+        memcpy(dstIt.rawData(), srcPtr + d->channel->pos(), d->channel->size());
+
+    } while(srcIt.nextPixel() && dstIt.nextPixel());
+
+    if (dev) {
+        return dev->exactBounds();
+    }
+
     return QRect();
 }
 
 QByteArray Channel::pixelData(const QRect &rect) const
 {
-    return QByteArray();
+    QByteArray ba;
+
+    if (!d->node || !d->channel) return ba;
+
+    QDataStream stream(&ba, QIODevice::WriteOnly);
+    KisSequentialConstIterator srcIt(d->node->projection(), rect);
+
+    if (d->node->colorSpace()->colorDepthId() == Integer8BitsColorDepthID) {
+        do {
+            stream << (quint8) *srcIt.rawDataConst();
+        } while(srcIt.nextPixel());
+    }
+    else if (d->node->colorSpace()->colorDepthId() ==  Integer16BitsColorDepthID) {
+        do {
+            stream << (quint16) *srcIt.rawDataConst();
+        } while(srcIt.nextPixel());
+    }
+#ifdef HAVE_OPENEXR
+    else if (d->node->colorSpace()->colorDepthId() == Float16BitsColorDepthID) {
+        do {
+            half h = (half)*srcIt.rawDataConst();
+            stream << (float)h;
+        } while(srcIt.nextPixel());
+    }
+#endif
+    else if (d->node->colorSpace()->colorDepthId() == Float32BitsColorDepthID) {
+        do {
+            stream << (float) *srcIt.rawDataConst();
+        } while(srcIt.nextPixel());
+
+    }
+
+    return ba;
 }
 
 void Channel::setPixelData(QByteArray value, const QRect &rect)
 {
+    if (!d->node || !d->channel || d->node->paintDevice() == 0) return;
 
+    QDataStream stream(&value, QIODevice::ReadOnly);
+    KisSequentialIterator dstIt(d->node->paintDevice(), rect);
+
+    if (d->node->colorSpace()->colorDepthId() == Integer8BitsColorDepthID) {
+        do {
+            quint8 v;
+            stream >> v;
+            *dstIt.rawData() = v ;
+        } while(dstIt.nextPixel());
+    }
+    else if (d->node->colorSpace()->colorDepthId() ==  Integer16BitsColorDepthID) {
+        do {
+            quint16 v;
+            stream >> v;
+            *dstIt.rawData() = v ;
+        } while(dstIt.nextPixel());
+    }
+#ifdef HAVE_OPENEXR
+    else if (d->node->colorSpace()->colorDepthId() == Float16BitsColorDepthID) {
+        do {
+            float f;
+            stream >> f;
+            half v = f;
+            *dstIt.rawData() = v ;
+        } while(dstIt.nextPixel());
+
+    }
+#endif
+    else if (d->node->colorSpace()->colorDepthId() == Float32BitsColorDepthID) {
+        do {
+            float v;
+            stream >> v;
+            *dstIt.rawData() = v ;
+        } while(dstIt.nextPixel());
+    }
 }
-
-
 
 
 

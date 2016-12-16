@@ -59,7 +59,7 @@ public:
     int channelSize() const;
 
     /**
-     * @return the exact bounds of the channel. This can be smaller than the bounds of the Node this channel is part of
+     * @return the exact bounds of the channel. This can be smaller than the bounds of the Node this channel is part of.
      */
     QRect bounds() const;
 
@@ -69,13 +69,15 @@ public:
     QByteArray pixelData(const QRect &rect) const;
 
     /**
-     * @brief setPixelData writes the given data to the relevant channel in the Node.
+     * @brief setPixelData writes the given data to the relevant channel in the Node. This is only possible for Nodes
+     * that have a paintDevice, so nothing will happen when trying to write to e.g. a group layer.
      * @param value a byte array with exactly enough bytes.
      * @param rect the rectangle to write the bytes into
      */
     void setPixelData(QByteArray value, const QRect &rect);
 
 private:
+
     struct Private;
     Private *const d;
 

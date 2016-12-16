@@ -339,6 +339,12 @@ void Node::setPixelData(QByteArray value)
     if (!d->node) return;
 }
 
+QRect Node::bounds() const
+{
+    if (!d->node) return QRect();
+    return d->node->exactBounds();
+}
+
 void Node::move(int x, int y)
 {
     if (!d->node) return;

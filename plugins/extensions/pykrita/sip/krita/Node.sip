@@ -50,6 +50,7 @@ public:
     void setFileName(QString value);
     QByteArray pixelData() const;
     void setPixelData(QByteArray value);
+    QRect bounds() const;
 public Q_SLOTS:
     void move(int x, int y);
     void moveToParent(Node*  parent);

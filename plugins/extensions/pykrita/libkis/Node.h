@@ -119,6 +119,8 @@ public:
     QByteArray pixelData() const;
     void setPixelData(QByteArray value);
 
+    QRect bounds() const;
+
 
 public Q_SLOTS:
 

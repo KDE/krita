@@ -11,7 +11,6 @@ public:
     QString blendingMode() const;
     void setBlendingMode(QString value);
     QList<Channel *> channels() const;
-    void setChannels(QList<Channel *> value);
     QList<Node *> childNodes() const;
     void setChildNodes(QList<Node *> value);
     ColorDepth * colorDepth() const;

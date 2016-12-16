@@ -17,7 +17,7 @@ def __main__(args):
     print("Root", node.name(), "opacity", node.opacity())
     for child in node.childNodes():
         print("\tChild", child.name(), "opacity", node.opacity(), node.blendingMode())
-        child.setBlendingMode("parallel")
-        print("\t\tBlending mode is now", child.blendingMode())
-        #r = child.save(child.name() + ".png", document.xRes(), document.yRes());
-        
+        r = child.save(child.name() + ".png", document.xRes(), document.yRes());
+        print("Saving result:", r)
+        for channel in child.channels():
+            print("Channel", channel.name(), "contents:", len(channel.pixelData(node.bounds())))

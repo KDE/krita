@@ -95,15 +95,18 @@ void Node::setBlendingMode(QString value)
 
 QList<Channel*> Node::channels() const
 {
-    if (!d->node) return QList<Channel*>();
-    return QList<Channel*>();
-}
+    QList<Channel*> channels;
 
-void Node::setChannels(QList<Channel*> value)
-{
-    if (!d->node) return;
-}
+    if (!d->node) return channels;
+    if (!d->node->inherits("KisLayer")) return channels;
 
+    Q_FOREACH(KoChannelInfo *info, d->node->colorSpace()->channels()) {
+        Channel *channel = new Channel(d->node, info);
+        channels << channel;
+    }
+
+    return channels;
+}
 
 QList<Node*> Node::childNodes() const
 {
@@ -391,5 +394,9 @@ bool Node::save(const QString &filename, double xRes, double yRes)
     dst->initialRefreshGraph();
     doc->setOutputMimeType(mimefilter.toLatin1());
 
-    return doc->exportDocument(QUrl::fromLocalFile(filename));
+    bool r = doc->exportDocument(QUrl::fromLocalFile(filename));
+    if (!r) {
+        qWarning() << doc->errorMessage();
+    }
+    return r;
 }

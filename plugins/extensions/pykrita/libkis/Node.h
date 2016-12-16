@@ -59,8 +59,17 @@ public:
      */
     void setBlendingMode(QString value);
 
+    /**
+     * @brief channels creates a list of Channel objects that can be used individually to
+     * show or hide certain channels, and to retrieve the contents of each channel in a
+     * node separately.
+     *
+     * Only layers have channels, masks do not, and calling channels on a Node that is a mask
+     * will return an empty list.
+     *
+     * @return the list of channels ordered in by position of the channels in pixel position
+     */
     QList<Channel*> channels() const;
-    void setChannels(QList<Channel*> value);
 
     QList<Node*> childNodes() const;
     void setChildNodes(QList<Node*> value);

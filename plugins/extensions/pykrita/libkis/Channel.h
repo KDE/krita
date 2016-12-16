@@ -23,6 +23,9 @@
 #include "kritalibkis_export.h"
 #include "libkis.h"
 
+#include <KoChannelInfo.h>
+#include <kis_node.h>
+
 /**
  * Channel
  */
@@ -30,29 +33,51 @@ class KRITALIBKIS_EXPORT Channel : public QObject
 {
     Q_OBJECT
     Q_DISABLE_COPY(Channel)
-    
+
     Q_PROPERTY(bool visible READ visible WRITE setvisible)
 
 public:
-    explicit Channel(QObject *parent = 0);
+    explicit Channel(KisNodeSP node, KoChannelInfo *channel, QObject *parent = 0);
     virtual ~Channel();
 
     bool visible() const;
     void setvisible(bool value);
 
+    /**
+     * @return the name of the channel
+     */
+    QString name() const;
 
+    /**
+     * @returns the position of the first byte of the channel in the pixel
+     */
+    int position() const;
 
-public Q_SLOTS:
-    
+    /**
+     * @return the number of bytes this channel takes
+     */
+    int channelSize() const;
 
-    
-Q_SIGNALS:
+    /**
+     * @return the exact bounds of the channel. This can be smaller than the bounds of the Node this channel is part of
+     */
+    QRect bounds() const;
 
+    /**
+     * Read the values of the channel into the a byte array for each pixel in the rect from the Node this channel is part of, and returns it,
+     */
+    QByteArray pixelData(const QRect &rect) const;
 
+    /**
+     * @brief setPixelData writes the given data to the relevant channel in the Node.
+     * @param value a byte array with exactly enough bytes.
+     * @param rect the rectangle to write the bytes into
+     */
+    void setPixelData(QByteArray value, const QRect &rect);
 
 private:
     struct Private;
-    const Private *const d;
+    Private *const d;
 
 };
 

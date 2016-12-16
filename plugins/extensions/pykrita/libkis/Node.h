@@ -50,7 +50,6 @@ public:
 
     /**
      * @return the blending mode of the layer. The values of the blending modes are defined in @see KoCompositeOpRegistry.h
-     *
      */
     QString blendingMode() const;
 

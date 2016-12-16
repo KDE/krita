@@ -17,17 +17,26 @@
  */
 #include "Channel.h"
 
+#include <KoColorSpaceRegistry.h>
+#include <KoColorSpace.h>
+
 struct Channel::Private {
     Private() {}
+
+    KisNodeSP node;
+    KoChannelInfo *channel;
+
 };
 
-Channel::Channel(QObject *parent) 
+Channel::Channel(KisNodeSP node, KoChannelInfo *channel, QObject *parent)
     : QObject(parent)
     , d(new Private)
 {
+    d->node = node;
+    d->channel = channel;
 }
 
-Channel::~Channel() 
+Channel::~Channel()
 {
     delete d;
 }
@@ -39,6 +48,36 @@ bool Channel::visible() const
 
 void Channel::setvisible(bool value)
 {
+}
+
+QString Channel::name() const
+{
+    return d->channel->name();
+}
+
+int Channel::position() const
+{
+    return d->channel->pos();
+}
+
+int Channel::channelSize() const
+{
+    return d->channel->size();
+}
+
+QRect Channel::bounds() const
+{
+    return QRect();
+}
+
+QByteArray Channel::pixelData(const QRect &rect) const
+{
+    return QByteArray();
+}
+
+void Channel::setPixelData(QByteArray value, const QRect &rect)
+{
+
 }
 
 

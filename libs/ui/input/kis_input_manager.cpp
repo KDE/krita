@@ -419,6 +419,18 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
 
         stop_ignore_cursor_events();
         break;
+
+    case QEvent::FocusOut: {
+        d->debugEvent<QEvent, false>(event);
+        KisAbstractInputAction::setInputManager(this);
+
+        QPointF currentLocalPos =
+            canvas()->canvasWidget()->mapFromGlobal(QCursor::pos());
+
+        d->matcher.lostFocusEvent(currentLocalPos);
+
+        break;
+    }
     case QEvent::TabletRelease: {
 #ifdef Q_OS_OSX
         stop_ignore_cursor_events();

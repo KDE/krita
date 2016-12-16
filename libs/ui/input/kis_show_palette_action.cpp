@@ -19,11 +19,13 @@
 #include "kis_show_palette_action.h"
 
 #include <QCursor>
+#include <QMenu>
 
 #include <klocalizedstring.h>
 
 #include <kis_favorite_resource_manager.h>
 #include <kis_canvas2.h>
+#include "kis_tool_proxy.h"
 
 #include "kis_input_manager.h"
 
@@ -46,10 +48,32 @@ int KisShowPaletteAction::priority() const
 
 void KisShowPaletteAction::begin(int, QEvent *event)
 {
-    QPoint pos = eventPos(event);
-    if (pos.isNull()) {
-        pos = inputManager()->canvas()->canvasWidget()->mapFromGlobal(QCursor::pos());
-    }
+    QList<QAction*> actions = inputManager()->toolProxy()->popupActionList();
 
-    inputManager()->canvas()->slotShowPopupPalette(pos);
+    if (!actions.isEmpty()) {
+        m_menu.reset(new QMenu(inputManager()->canvas()->canvasWidget()));
+        Q_FOREACH (QAction *action, actions) {
+            m_menu->addAction(action);
+        }
+
+        /**
+         * Opening a menu changes the focus of the windows, so we should not open it
+         * inside the filtering loop. Just raise it using the timer.
+         */
+        QTimer::singleShot(0, this, SLOT(slotShowMenu()));
+
+    } else {
+        QPoint pos = eventPos(event);
+        if (pos.isNull()) {
+            pos = inputManager()->canvas()->canvasWidget()->mapFromGlobal(QCursor::pos());
+        }
+
+        inputManager()->canvas()->slotShowPopupPalette(pos);
+    }
+}
+
+void KisShowPaletteAction::slotShowMenu()
+{
+    m_menu->exec(QCursor::pos());
+    m_menu.reset();
 }

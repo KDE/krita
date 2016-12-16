@@ -21,13 +21,19 @@
 
 #include "kis_abstract_input_action.h"
 
+#include <QObject>
+#include <QScopedPointer>
+class QMenu;
+
 /**
  * \brief Show Palette implementation of KisAbstractInputAction.
  *
  * The Show Palette action shows the popup palette.
  */
-class KisShowPaletteAction : public KisAbstractInputAction
+class KisShowPaletteAction : public QObject, public KisAbstractInputAction
 {
+    Q_OBJECT
+
 public:
     explicit KisShowPaletteAction();
     virtual ~KisShowPaletteAction();
@@ -35,6 +41,12 @@ public:
     virtual int priority() const;
 
     virtual void begin(int, QEvent *);
+
+private Q_SLOTS:
+    void slotShowMenu();
+
+private:
+    QScopedPointer<QMenu> m_menu;
 };
 
 #endif // KIS_SHOW_PALETTE_ACTION_H

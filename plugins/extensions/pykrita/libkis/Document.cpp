@@ -42,6 +42,7 @@ Document::Document(KisDocument *document, bool ownsDocument, QObject *parent)
 
 Document::~Document()
 {
+    qDebug() << "Document" << this << "deleted";
     delete d;
 }
 

@@ -30,11 +30,11 @@ public Q_SLOTS:
     void addDockWidget(DockWidget*  dockWidget);
     void addAction(Action*  action);
     bool closeApplication();
-    Document * createDocument();
+    Document * createDocument(int width, int height, const QString &name, const QString &colorModel, const QString &colorDepth, const QString &profile);
     Document * openDocument(const QString &filename);
     Window * openWindow();
     QAction * createAction(const QString & text);
-    
+
     void addViewExtension(ViewExtension* _viewExtension /GetWrapper/);
 %MethodCode
         Py_BEGIN_ALLOW_THREADS

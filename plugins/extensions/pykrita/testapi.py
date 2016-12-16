@@ -21,3 +21,9 @@ def __main__(args):
         print("Saving result:", r)
         for channel in child.channels():
             print("Channel", channel.name(), "contents:", len(channel.pixelData(node.bounds())))
+
+    document.close()
+    
+    document = Application.createDocument(100, 100, "test", "GRAYA", "U16", "")
+    document.setBatchmode(True)
+    document.saveAs("test.kra")

@@ -74,13 +74,20 @@ public:
     QRect bounds() const;
 
     /**
-     * Read the values of the channel into the a byte array for each pixel in the rect from the Node this channel is part of, and returns it,
+     * Read the values of the channel into the a byte array for each pixel in the rect from the Node this channel is part of, and returns it.
+     *
+     * Note that if Krita is built with OpenEXR and the Node has the 16 bits floating point channel depth type, Krita returns
+     * 32 bits float for every channel; the libkis scripting API does not support half.
      */
     QByteArray pixelData(const QRect &rect) const;
 
     /**
      * @brief setPixelData writes the given data to the relevant channel in the Node. This is only possible for Nodes
      * that have a paintDevice, so nothing will happen when trying to write to e.g. a group layer.
+     *
+     * Note that if Krita is built with OpenEXR and the Node has the 16 bits floating point channel depth type, Krita expects
+     * to be given a 4 byte, 32 bits float for every channel; the libkis scripting API does not support half.
+     *
      * @param value a byte array with exactly enough bytes.
      * @param rect the rectangle to write the bytes into
      */

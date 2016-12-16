@@ -116,11 +116,45 @@ public Q_SLOTS:
 
     bool closeApplication();
 
-    Document* createDocument();
+    /**
+     * @brief createDocument creates a new document and image and registers the document with the Krita application.
+     *
+     * The document will have one transparent layer.
+     *
+     * @param width the width in pixels
+     * @param height the height in pixels
+     * @param name the name of the image (not the filename of the document)
+     * @param colorModel A string describing the color model of the image:
+     * <ul>
+     * <li>A: Alpha mask</li>
+     * <li>RGBA: RGB with alpha channel (The actual order of channels is most often BGR!)</li>
+     * <li>XYZA: XYZ with alpha channel</li>
+     * <li>LABA: LAB with alpha channel</li>
+     * <li>CMYKA: CMYK with alpha channel</li>
+     * <li>GRAYA: Gray with alpha channel</li>
+     * <li>YCbCrA: YCbCr with alpha channel</li>
+     * </ul>
+     * @param colorDepth A string describing the color depth of the image:
+     * <ul>
+     * <li>U8: unsigned 8 bits integer, the most common type</li>
+     * <li>U16: unsigned 16 bits integer</li>
+     * <li>F16: half, 16 bits floating point. Only available if Krita was built with OpenEXR</li>
+     * <li>F32: 32 bits floating point</li>
+     * </ul>
+     * @param profile The name of an icc profile that is known to Krita. If an empty string is passed, the default is
+     * taken.
+     * @return the created document.
+     */
+    Document *createDocument(int width, int height, const QString &name, const QString &colorModel, const QString &colorDepth, const QString &profile);
 
-    Document* openDocument(const QString &filename);
+    /**
+     * @brief openDocument creates a new Document, registers it with the Krita application and loads the given file.
+     * @param filename the file to open in the document
+     * @return the document
+     */
+    Document *openDocument(const QString &filename);
 
-    Window* openWindow();
+    Window *openWindow();
 
     QAction *createAction(const QString &text);
 

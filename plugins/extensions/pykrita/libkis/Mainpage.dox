@@ -141,7 +141,6 @@ The Window class is provided to allow access to the windows and views Krita
 has open. A given Document can be shown in more than one View, and in more than
 one Window. You can open and close windows and views.
 
-
  */
 
 // DOXYGEN_SET_PROJECT_NAME = Krita

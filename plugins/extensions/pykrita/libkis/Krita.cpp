@@ -19,6 +19,8 @@
 
 #include <QPointer>
 
+#include <KoColorSpaceRegistry.h>
+#include <KoColorSpace.h>
 #include <KoDockRegistry.h>
 #include <kactioncollection.h>
 #include <KisPart.h>
@@ -217,9 +219,18 @@ bool Krita::closeApplication()
     return false;
 }
 
-Document* Krita::createDocument()
+Document* Krita::createDocument(int width, int height, const QString &name, const QString &colorModel, const QString &colorDepth, const QString &profile)
 {
-    return 0;
+    KisDocument *document = KisPart::instance()->createDocument();
+    KisPart::instance()->addDocument(document);
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->colorSpace(colorModel, colorDepth, profile);
+    QColor qc(Qt::white);
+    qc.setAlpha(0);
+    KoColor bgColor(qc, cs);
+
+    document->newImage(name, width, height, cs, bgColor, true, 1, "", 100.0);
+
+    return new Document(document, true);
 }
 
 Document* Krita::openDocument(const QString &filename)

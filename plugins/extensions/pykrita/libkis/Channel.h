@@ -27,7 +27,9 @@
 #include <kis_node.h>
 
 /**
- * Channel
+ * A Channel represents a singel channel in a Node. Krita does not
+ * use channels to store local selections: these are strictly the
+ * color and alpha channels.
  */
 class KRITALIBKIS_EXPORT Channel : public QObject
 {

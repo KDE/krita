@@ -56,7 +56,7 @@ KoTagFilterWidget::KoTagFilterWidget(QWidget* parent): QWidget(parent)
             "<tt>[Tagname]</tt> or <tt>![Tagname]</tt>.</p>"
             "<p>Case sensitive and full name matching in-/exclusion:<br/>"
             "<tt>\"ExactMatch\"</tt> or <tt>!\"ExactMatch\"</tt>.</p>"
-            "Filter results cannot be saved for the <b>All Presets</b> view.<br>"
+            "Filter results cannot be saved for the <b>All Presets</b> view.<br/>"
             "In this view, pressing <b>Enter</b> or clearing the filter box will restore all items.<br/>"
             "Create and/or switch to a different tag if you want to save filtered resources into named sets."
             );

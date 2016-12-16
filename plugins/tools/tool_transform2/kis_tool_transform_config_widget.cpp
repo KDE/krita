@@ -62,7 +62,7 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
                                 "<ul>"
                                 "<li><b>Bilinear</b> for areas with uniform color to avoid artifacts</li>"
                                 "<li><b>Bicubic</b> for smoother results</li>"
-                                "<li><b>Lanczos3</b> for sharp results. May produce aerials.</il>"
+                                "<li><b>Lanczos3</b> for sharp results. May produce aerials.</li>"
                                 "</ul></p>"));
     connect(cmbFilter, SIGNAL(activated(const KoID &)),
             this, SLOT(slotFilterChanged(const KoID &)));

@@ -168,6 +168,7 @@ private:
     KoToolSelection *m_selectionHandler;
     friend class SelectionHandler;
     KoInteractionStrategy *m_customEventStrategy;
+    QPointer<QAction> m_separatorAction;
 };
 
 #endif

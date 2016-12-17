@@ -30,10 +30,10 @@ public Q_SLOTS:
     void addDockWidget(DockWidget*  dockWidget);
     void addAction(Action*  action);
     bool closeApplication();
-    Document * createDocument(int width, int height, const QString &name, const QString &colorModel, const QString &colorDepth, const QString &profile);
-    Document * openDocument(const QString &filename);
+    Document * createDocument(int width, int height, const QString &name, const QString &colorModel, const QString &colorDepth, const QString &profile)  /Factory/;
+    Document * openDocument(const QString &filename)  /Factory/;
     Window * openWindow();
-    QAction * createAction(const QString & text);
+    QAction * createAction(const QString & text)  /Factory/;
 
     void addViewExtension(ViewExtension* _viewExtension /GetWrapper/);
 %MethodCode

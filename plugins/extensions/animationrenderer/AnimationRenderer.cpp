@@ -125,8 +125,9 @@ void AnimaterionRenderer::slotRenderAnimation()
                 res = KisImportExportFilter::CreationError;
             }
             else {
-                 res = encoder->convert(doc, &fi, encoderConfig);
-                 fi.close();
+                encoder->setFilename(fi.fileName());
+                res = encoder->convert(doc, &fi, encoderConfig);
+                fi.close();
             }
             if (res != KisImportExportFilter::OK) {
                 QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Could not render animation:\n%1", doc->errorMessage()));
@@ -154,8 +155,7 @@ void AnimaterionRenderer::slotRenderSequenceAgain()
     if (!image->animationInterface()->hasAnimation()) return;
 
     KisDocument *doc = m_view->document();
-    doc->setFileProgressProxy();
-    doc->setFileProgressUpdater(i18n("Export frames"));
+    doc->setFileProgressProxy();    doc->setFileProgressUpdater(i18n("Export frames"));
 
     KisConfig kisConfig;
     KisPropertiesConfigurationSP cfg = new KisPropertiesConfiguration();

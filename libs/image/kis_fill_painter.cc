@@ -50,15 +50,9 @@
 #include <resources/KoPattern.h>
 #include "KoColorSpace.h"
 #include "kis_transaction.h"
-
 #include "kis_pixel_selection.h"
-
 #include <KoCompositeOpRegistry.h>
 #include <floodfill/kis_scanline_fill.h>
-
-#include "kis_random_accessor_ng.h"
-
-
 #include "kis_selection_filters.h"
 
 KisFillPainter::KisFillPainter()

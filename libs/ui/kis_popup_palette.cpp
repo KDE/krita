@@ -48,7 +48,48 @@
 #include "brushhud/kis_round_hud_button.h"
 #include <kis_action.h>
 
+class PopupColorTriangle : public KoTriangleColorSelector
+{
+public:
+    PopupColorTriangle(const KoColorDisplayRendererInterface *displayRenderer, QWidget* parent)
+        : KoTriangleColorSelector(displayRenderer, parent)
+        , m_dragging(false) {
+    }
 
+    ~PopupColorTriangle() override {}
+
+    void tabletEvent(QTabletEvent* event) override {
+        event->accept();
+        QMouseEvent* mouseEvent = 0;
+        switch (event->type()) {
+        case QEvent::TabletPress:
+            mouseEvent = new QMouseEvent(QEvent::MouseButtonPress, event->pos(),
+                                         Qt::LeftButton, Qt::LeftButton, event->modifiers());
+            m_dragging = true;
+            mousePressEvent(mouseEvent);
+            break;
+        case QEvent::TabletMove:
+            mouseEvent = new QMouseEvent(QEvent::MouseMove, event->pos(),
+                                         (m_dragging) ? Qt::LeftButton : Qt::NoButton,
+                                         (m_dragging) ? Qt::LeftButton : Qt::NoButton, event->modifiers());
+            mouseMoveEvent(mouseEvent);
+            break;
+        case QEvent::TabletRelease:
+            mouseEvent = new QMouseEvent(QEvent::MouseButtonRelease, event->pos(),
+                                         Qt::LeftButton,
+                                         Qt::LeftButton,
+                                         event->modifiers());
+            m_dragging = false;
+            mouseReleaseEvent(mouseEvent);
+            break;
+        default: break;
+        }
+        delete mouseEvent;
+    }
+
+private:
+    bool m_dragging;
+};
 
 KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConverter* coordinatesConverter ,KisFavoriteResourceManager* manager,
                                  const KoColorDisplayRendererInterface *displayRenderer, KisCanvasResourceProvider *provider, QWidget *parent)
@@ -74,7 +115,12 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
 
     const int borderWidth = 3;
 
-    m_triangleColorSelector = new KisVisualColorSelector(this);
+    if (KisConfig().readEntry<bool>("popuppalette/usevisualcolorselector", false)) {
+        m_triangleColorSelector = new KisVisualColorSelector(this);
+    }
+    else {
+        m_triangleColorSelector  = new PopupColorTriangle(displayRenderer, this);
+    }
     m_triangleColorSelector->setDisplayRenderer(displayRenderer);
     m_triangleColorSelector->setConfig(true,false);
     m_triangleColorSelector->move(m_popupPaletteSize/2-m_colorHistoryInnerRadius+borderWidth, m_popupPaletteSize/2-m_colorHistoryInnerRadius+borderWidth);
@@ -91,7 +137,7 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
 
     //setAttribute(Qt::WA_TranslucentBackground, true);
 
-    connect(m_triangleColorSelector, SIGNAL(sigNewColor(KoColor)),
+    connect(m_triangleColorSelector, SIGNAL(sigNewColor(const KoColor &)),
             m_colorChangeCompressor.data(), SLOT(start()));
     connect(m_colorChangeCompressor.data(), SIGNAL(timeout()),
             SLOT(slotEmitColorChanged()));
@@ -205,7 +251,6 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
 
 void KisPopupPalette::slotExternalFgColorChanged(const KoColor &color)
 {
-    //m_triangleColorSelector->setRealColor(color);
     //hack to get around cmyk for now.
     if (color.colorSpace()->colorChannelCount()>3) {
         KoColor c(KoColorSpaceRegistry::instance()->rgb8());

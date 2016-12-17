@@ -982,10 +982,10 @@
     </Action>
     <Action name="krita_filter_phongbumpmap">
       <icon></icon>
-      <text>&amp;PhongBumpmap...</text>
+      <text>&amp;Phong Bumpmap...</text>
       <whatsThis></whatsThis>
-      <toolTip>PhongBumpmap</toolTip>
-      <iconText>PhongBumpmap</iconText>
+      <toolTip>Phong Bumpmap</toolTip>
+      <iconText>Phong Bumpmap</iconText>
       <activationFlags>10000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>

@@ -29,7 +29,7 @@
 #include "KoColorDisplayRendererInterface.h"
 
 #include "KisColorSelectorConfiguration.h"
-
+#include "KisColorSelectorInterface.h"
 #include "kritaui_export.h"
 
 /**
@@ -40,7 +40,7 @@
  * Unlike other color selectors, this one draws the full gamut of the given
  * colorspace.
  */
-class KRITAUI_EXPORT KisVisualColorSelector : public QWidget
+class KRITAUI_EXPORT KisVisualColorSelector : public KisColorSelectorInterface
 {
     Q_OBJECT
 public:
@@ -56,24 +56,24 @@ public:
      * force self-update is for making it update itself when using a modal dialog.
      */
     void setConfig(bool forceCircular, bool forceSelfUpdate);
-    KoColor getCurrentColor();
-
-Q_SIGNALS:
-    void sigNewColor(KoColor c);
+    KoColor getCurrentColor() const;
 
 public Q_SLOTS:
 
-    void slotSetColor(KoColor c);
+    void slotSetColor(const KoColor &c);
     void slotsetColorSpace(const KoColorSpace *cs);
     void slotRebuildSelectors();
     void configurationChanged();
     void setDisplayRenderer (const KoColorDisplayRendererInterface *displayRenderer);
+
 private Q_SLOTS:
     void updateFromWidgets(KoColor c);
     void HSXwrangler();
+
 protected:
     void leaveEvent(QEvent *);
     void resizeEvent(QResizeEvent *);
+
 private:
     struct Private;
     const QScopedPointer<Private> m_d;

@@ -32,7 +32,7 @@
 #include "kis_coordinates_converter.h"
 #include "kis_tool_button.h"
 #include "kis_highlighted_button.h"
-
+#include <KisColorSelectorInterface.h>
 
 class KisFavoriteResourceManager;
 class QWidget;
@@ -115,7 +115,7 @@ private:
 
     KisActionManager* m_actionManager;
     KisFavoriteResourceManager* m_resourceManager;
-    KisVisualColorSelector* m_triangleColorSelector;
+    KisColorSelectorInterface* m_triangleColorSelector {0};
     const KoColorDisplayRendererInterface *m_displayRenderer;
     QScopedPointer<KisSignalCompressor> m_colorChangeCompressor;
     KActionCollection* m_actionCollection;

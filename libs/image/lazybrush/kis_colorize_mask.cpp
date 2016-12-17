@@ -130,7 +130,7 @@ KisColorizeMask::KisColorizeMask(const KisColorizeMask& rhs)
 
 void KisColorizeMask::initializeCompositeOp()
 {
-    KisLayerSP parentLayer(dynamic_cast<KisLayer*>(parent().data()));
+    KisLayerSP parentLayer(qobject_cast<KisLayer*>(parent().data()));
     if (!parentLayer || !parentLayer->original()) return;
 
     KisImageSP image = parentLayer->image();
@@ -258,7 +258,7 @@ void KisColorizeMask::slotUpdateRegenerateFilling()
     m_d->originalSequenceNumber = src->sequenceNumber();
     m_d->coloringProjection->clear();
 
-    KisLayerSP parentLayer(dynamic_cast<KisLayer*>(parent().data()));
+    KisLayerSP parentLayer(qobject_cast<KisLayer*>(parent().data()));
     if (!parentLayer) return;
 
     KisImageSP image = parentLayer->image();
@@ -491,7 +491,7 @@ QRect KisColorizeMask::nonDependentExtent() const
 
 KisImageSP KisColorizeMask::fetchImage() const
 {
-    KisLayerSP parentLayer(dynamic_cast<KisLayer*>(parent().data()));
+    KisLayerSP parentLayer(qobject_cast<KisLayer*>(parent().data()));
     if (!parentLayer) return KisImageSP();
 
     return parentLayer->image();

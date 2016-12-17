@@ -207,6 +207,11 @@ public:
     }
 };
 
+#include <KoResourcePaths.h>
+void KisBrushOpTest::initTestCase()
+{
+    KoResourcePaths::addResourceDir("kis_brushes", QString(SYSTEM_RESOURCES_DATA_DIR) + "/brushes");
+}
 
 void KisBrushOpTest::testRotationMirroring()
 {

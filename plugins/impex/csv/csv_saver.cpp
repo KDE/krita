@@ -52,7 +52,7 @@
 #include "csv_layer_record.h"
 
 CSVSaver::CSVSaver(KisDocument *doc, bool batchMode)
-    : m_image(doc->image())
+    : m_image(doc->savingImage())
     , m_doc(doc)
     , m_batchMode(batchMode)
     , m_stop(false)
@@ -117,7 +117,7 @@ KisImageBuilder_Result CSVSaver::encode(QIODevice *io)
 
     while (node) {
         if (node->inherits("KisLayer")) {
-            KisLayer* paintLayer = dynamic_cast<KisLayer*>(node.data());
+            KisLayer* paintLayer = qobject_cast<KisLayer*>(node.data());
             CSVLayerRecord* layerRecord = new CSVLayerRecord();
             layers.prepend(layerRecord); //reverse order!
 
@@ -386,7 +386,7 @@ QString CSVSaver::convertToBlending(const QString &opid)
 KisImageBuilder_Result CSVSaver::getLayer(CSVLayerRecord* layer, KisDocument* exportDoc, KisKeyframeSP keyframe, const QString &path, int frame, int idx)
 {
     //render to the temp layer
-    KisImageSP image = exportDoc->image();
+    KisImageSP image = exportDoc->savingImage();
     KisPaintDeviceSP device = image->rootLayer()->firstChild()->projection();
 
     if (!keyframe.isNull()) {

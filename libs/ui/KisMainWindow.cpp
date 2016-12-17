@@ -315,7 +315,7 @@ KisMainWindow::KisMainWindow()
     if (d->toolOptionsDocker) {
         dockwidgetActions[d->toolOptionsDocker->toggleViewAction()->text()] = d->toolOptionsDocker->toggleViewAction();
     }
-    connect(KoToolManager::instance(), SIGNAL(toolOptionWidgetsChanged(QList<QPointer<QWidget> >)), this, SLOT(newOptionWidgets(QList<QPointer<QWidget> >)));
+    connect(KoToolManager::instance(), SIGNAL(toolOptionWidgetsChanged(KoCanvasController*, QList<QPointer<QWidget> >)), this, SLOT(newOptionWidgets(KoCanvasController*, QList<QPointer<QWidget> >)));
 
     Q_FOREACH (QString title, dockwidgetActions.keys()) {
         d->dockWidgetMenu->addAction(dockwidgetActions[title]);
@@ -881,7 +881,8 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas)
     std::unique_lock<StdLockableWrapper<QMutex>> l(wrapper, std::try_to_lock);
     if (!l.owns_lock()) return false;
 
-    KisDelayedSaveDialog dlg(document->image(), this);
+    // no busy wait for saving because it is dangerous!
+    KisDelayedSaveDialog dlg(document->image(), KisDelayedSaveDialog::SaveDialog, 0, this);
     dlg.blockIfImageIsBusy();
 
     if (dlg.result() != QDialog::Accepted) {
@@ -953,13 +954,13 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas)
         // don't want to be reminded about overwriting files etc.
         bool justChangingFilterOptions = false;
 
-        KoFileDialog dialog(this, KoFileDialog::SaveFile, "SaveDocument");
+        KoFileDialog dialog(this, KoFileDialog::SaveFile, "OpenDocument");
         dialog.setCaption(i18n("untitled"));
         if (d->isExporting && !d->lastExportUrl.isEmpty()) {
-            dialog.setDefaultDir(d->lastExportUrl.toLocalFile(), true);
+            dialog.setDefaultDir(d->lastExportUrl.toLocalFile());
         }
         else {
-            dialog.setDefaultDir(suggestedURL.toLocalFile(), true);
+            dialog.setDefaultDir(suggestedURL.toLocalFile());
         }
         // Default to all supported file types if user is exporting, otherwise use Krita default
         dialog.setMimeTypeFilters(mimeFilter, QString(_native_format));
@@ -1551,7 +1552,7 @@ KisPrintJob* KisMainWindow::exportToPdf(QString pdfFileName)
         pageLayout = layoutDlg->pageLayout();
         delete layoutDlg;
 
-        KoFileDialog dialog(this, KoFileDialog::SaveFile, "SaveDocument");
+        KoFileDialog dialog(this, KoFileDialog::SaveFile, "OpenDocument");
         dialog.setCaption(i18n("Export as PDF"));
         dialog.setDefaultDir(startUrl.toLocalFile());
         dialog.setMimeTypeFilters(QStringList() << "application/pdf");
@@ -2158,9 +2159,19 @@ QPointer<KisView>KisMainWindow::activeKisView()
     return qobject_cast<KisView*>(activeSubWindow->widget());
 }
 
-
-void KisMainWindow::newOptionWidgets(const QList<QPointer<QWidget> > &optionWidgetList)
+void KisMainWindow::newOptionWidgets(KoCanvasController *controller, const QList<QPointer<QWidget> > &optionWidgetList)
 {
+    KIS_ASSERT_RECOVER_NOOP(controller == KoToolManager::instance()->activeCanvasController());
+    bool isOurOwnView = false;
+
+    Q_FOREACH (QPointer<KisView> view, KisPart::instance()->views()) {
+        if (view && view->canvasController() == controller) {
+            isOurOwnView = view->mainWindow() == this;
+        }
+    }
+
+    if (!isOurOwnView) return;
+
     Q_FOREACH (QWidget *w, optionWidgetList) {
 #ifdef Q_OS_OSX
         w->setAttribute(Qt::WA_MacSmallSize, true);
@@ -2201,6 +2212,7 @@ void KisMainWindow::applyDefaultSettings(QPrinter &printer) {
 void KisMainWindow::createActions()
 {
     KisActionManager *actionManager = d->actionManager();
+    KisConfig cfg;
 
     actionManager->createStandardAction(KStandardAction::New, this, SLOT(slotFileNew()));
     actionManager->createStandardAction(KStandardAction::Open, this, SLOT(slotFileOpen()));
@@ -2263,14 +2275,12 @@ void KisMainWindow::createActions()
 
 
     d->toggleDockers = actionManager->createAction("view_toggledockers");
+    cfg.showDockers(true);
     d->toggleDockers->setChecked(true);
     connect(d->toggleDockers, SIGNAL(toggled(bool)), SLOT(toggleDockersVisibility(bool)));
 
     d->toggleDockerTitleBars = actionManager->createAction("view_toggledockertitlebars");
-    {
-        KisConfig cfg;
-        d->toggleDockerTitleBars->setChecked(cfg.showDockerTitleBars());
-    }
+    d->toggleDockerTitleBars->setChecked(cfg.showDockerTitleBars());
     connect(d->toggleDockerTitleBars, SIGNAL(toggled(bool)), SLOT(showDockerTitleBars(bool)));
 
     actionCollection()->addAction("settings_dockers_menu", d->dockWidgetMenu);

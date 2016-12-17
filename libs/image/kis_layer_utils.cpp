@@ -56,7 +56,7 @@ namespace KisLayerUtils {
     void fetchSelectionMasks(KisNodeList mergedNodes, QVector<KisSelectionMaskSP> &selectionMasks)
     {
         foreach (KisNodeSP node, mergedNodes) {
-            KisLayerSP layer = dynamic_cast<KisLayer*>(node.data());
+            KisLayerSP layer = qobject_cast<KisLayer*>(node.data());
 
             KisSelectionMaskSP mask;
 
@@ -111,7 +111,7 @@ namespace KisLayerUtils {
         }
 
         KisLayerSP dstLayer() override {
-            return dynamic_cast<KisLayer*>(dstNode.data());
+            return qobject_cast<KisLayer*>(dstNode.data());
         }
     };
 
@@ -344,7 +344,7 @@ namespace KisLayerUtils {
                     break;
                 }
 
-                KisLayerSP layer = dynamic_cast<KisLayer*>(node.data());
+                KisLayerSP layer = qobject_cast<KisLayer*>(node.data());
                 if (layer && layer->layerStyle()) {
                     compositionVaries = true;
                     break;
@@ -506,7 +506,7 @@ namespace KisLayerUtils {
     bool RemoveNodeHelper::scanForLastLayer(KisImageWSP image, KisNodeList nodesToRemove) {
         bool removeLayers = false;
         Q_FOREACH(KisNodeSP nodeToRemove, nodesToRemove) {
-            if (dynamic_cast<KisLayer*>(nodeToRemove.data())) {
+            if (qobject_cast<KisLayer*>(nodeToRemove.data())) {
                 removeLayers = true;
                 break;
             }
@@ -517,7 +517,7 @@ namespace KisLayerUtils {
         KisNodeSP node = image->root()->firstChild();
         while (node) {
             if (!nodesToRemove.contains(node) &&
-                dynamic_cast<KisLayer*>(node.data())) {
+                qobject_cast<KisLayer*>(node.data())) {
 
                 lastLayer = false;
                 break;
@@ -744,7 +744,7 @@ namespace KisLayerUtils {
         if (!layer->prevSibling()) return;
 
         // XXX: this breaks if we allow free mixing of masks and layers
-        KisLayerSP prevLayer = dynamic_cast<KisLayer*>(layer->prevSibling().data());
+        KisLayerSP prevLayer = qobject_cast<KisLayer*>(layer->prevSibling().data());
         if (!prevLayer) return;
 
         if (!layer->visible() && !prevLayer->visible()) {
@@ -878,7 +878,7 @@ namespace KisLayerUtils {
         KisNodeList::iterator it = nodes.begin();
 
         while (it != nodes.end()) {
-            if ((!allowMasks && !dynamic_cast<KisLayer*>(it->data())) ||
+            if ((!allowMasks && !qobject_cast<KisLayer*>(it->data())) ||
                 checkIsChildOf(*it, nodes)) {
 
                 qDebug() << "Skipping node" << ppVar((*it)->name());
@@ -1124,7 +1124,7 @@ namespace KisLayerUtils {
 
             KisLayerSP parentLayer;
             do {
-                parentLayer = dynamic_cast<KisLayer*>(parent.data());
+                parentLayer = qobject_cast<KisLayer*>(parent.data());
 
                 parent = parent->parent();
             } while(!parentLayer && parent);
@@ -1180,7 +1180,7 @@ namespace KisLayerUtils {
 
         if (mergedNodes.isEmpty()) return false;
 
-        KisLayerSP parentLayer = dynamic_cast<KisLayer*>(selectionMasks.first()->parent().data());
+        KisLayerSP parentLayer = qobject_cast<KisLayer*>(selectionMasks.first()->parent().data());
         KIS_ASSERT_RECOVER(parentLayer) { return 0; }
 
         KisImageSignalVector emitSignals;

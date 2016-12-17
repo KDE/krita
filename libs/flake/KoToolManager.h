@@ -327,7 +327,7 @@ Q_SIGNALS:
     /**
      * Emit the new tool option widgets to be used with this canvas.
      */
-    void toolOptionWidgetsChanged(const QList<QPointer<QWidget> > &widgets);
+    void toolOptionWidgetsChanged(KoCanvasController *controller, const QList<QPointer<QWidget> > &widgets);
 private:
     KoToolManager(const KoToolManager&);
     KoToolManager operator=(const KoToolManager&);

@@ -53,10 +53,10 @@ KisColorSpaceConvertVisitor::~KisColorSpaceConvertVisitor()
 bool KisColorSpaceConvertVisitor::visit(KisGroupLayer * layer)
 {
     convertPaintDevice(layer);
-    KisLayerSP child = dynamic_cast<KisLayer*>(layer->firstChild().data());
+    KisLayerSP child = qobject_cast<KisLayer*>(layer->firstChild().data());
     while (child) {
         child->accept(*this);
-        child = dynamic_cast<KisLayer*>(child->nextSibling().data());
+        child = qobject_cast<KisLayer*>(child->nextSibling().data());
     }
 
     layer->resetCache();

@@ -23,6 +23,8 @@
 
 #include <KoColorSpaceRegistry.h>
 #include <KoChannelInfo.h>
+#include <KoColorConversionTransformation.h>
+#include <KoColorSpace.h>
 
 Q_GLOBAL_STATIC(KoDumbColorDisplayRenderer, s_instance)
 
@@ -32,6 +34,11 @@ KoColorDisplayRendererInterface::KoColorDisplayRendererInterface()
 
 KoColorDisplayRendererInterface::~KoColorDisplayRendererInterface()
 {
+}
+
+QImage KoDumbColorDisplayRenderer::convertToQImage(const KoColorSpace *srcColorSpace, const quint8 *data, qint32 width, qint32 height) const
+{
+    return srcColorSpace->convertToQImage(data, width, height, 0, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
 }
 
 QColor KoDumbColorDisplayRenderer::toQColor(const KoColor &c) const

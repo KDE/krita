@@ -105,6 +105,8 @@ public:
     { }
 };
 
+class KisActionsSnapshot;
+
 class ShortcutSettingsTab : public QWidget
 {
     Q_OBJECT
@@ -112,15 +114,17 @@ class ShortcutSettingsTab : public QWidget
 public:
 
     ShortcutSettingsTab(QWidget *parent = 0, const char *name = 0);
+    ~ShortcutSettingsTab();
 
 public:
     void setDefault();
     WdgShortcutSettings  *m_page;
+    QScopedPointer<KisActionsSnapshot> m_snapshot;
 
 
 public Q_SLOTS:
     void saveChanges();
-    void revertChanges();
+    void cancelChanges();
 };
 
 

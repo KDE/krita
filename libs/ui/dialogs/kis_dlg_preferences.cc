@@ -41,6 +41,7 @@
 #include <QMessageBox>
 #include <QDesktopWidget>
 #include <QFileDialog>
+#include <QFormLayout>
 
 #include <KisDocument.h>
 #include <KoColorProfile.h>
@@ -123,6 +124,7 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     m_backgroundimage->setText(cfg.getMDIBackgroundImage());
     m_chkCanvasMessages->setChecked(cfg.showCanvasMessages());
     m_chkCompressKra->setChecked(cfg.compressKra());
+    m_chkHiDPI->setChecked(cfg.readEntry("EnableHiDPI", false));
     m_radioToolOptionsInDocker->setChecked(cfg.toolOptionsInDocker());
     m_chkSwitchSelectionCtrlAlt->setChecked(cfg.switchSelectionCtrlAlt());
     m_chkConvertOnImport->setChecked(cfg.convertToImageColorspaceOnImport());
@@ -154,6 +156,7 @@ void GeneralTab::setDefault()
     m_backgroundimage->setText(cfg.getMDIBackgroundImage(true));
     m_chkCanvasMessages->setChecked(cfg.showCanvasMessages(true));
     m_chkCompressKra->setChecked(cfg.compressKra(true));
+    m_chkHiDPI->setChecked(true);
     m_radioToolOptionsInDocker->setChecked(cfg.toolOptionsInDocker(true));
     m_chkSwitchSelectionCtrlAlt->setChecked(cfg.switchSelectionCtrlAlt(true));
     m_chkConvertOnImport->setChecked(cfg.convertToImageColorspaceOnImport(true));
@@ -261,6 +264,9 @@ void GeneralTab::clearBackgroundImage()
     m_backgroundimage->setText("");
 }
 
+#include "kactioncollection.h"
+#include "KisActionsSnapshot.h"
+
 ShortcutSettingsTab::ShortcutSettingsTab(QWidget *parent, const char *name)
     : QWidget(parent)
 {
@@ -271,8 +277,26 @@ ShortcutSettingsTab::ShortcutSettingsTab(QWidget *parent, const char *name)
     m_page = new WdgShortcutSettings(this);
     l->addWidget(m_page, 0, 0);
 
-    KisPart::instance()->loadActions();
-    KisActionRegistry::instance()->setupDialog(m_page);
+
+    m_snapshot.reset(new KisActionsSnapshot);
+
+    KActionCollection *collection =
+        KisPart::instance()->currentMainwindow()->actionCollection();
+
+    Q_FOREACH (QAction *action, collection->actions()) {
+        m_snapshot->addAction(action->objectName(), action);
+    }
+
+    QMap<QString, KActionCollection*> sortedCollections =
+        m_snapshot->actionCollections();
+
+    for (auto it = sortedCollections.constBegin(); it != sortedCollections.constEnd(); ++it) {
+        m_page->addCollection(it.value(), it.key());
+    }
+}
+
+ShortcutSettingsTab::~ShortcutSettingsTab()
+{
 }
 
 void ShortcutSettingsTab::setDefault()
@@ -286,9 +310,9 @@ void ShortcutSettingsTab::saveChanges()
     KisActionRegistry::instance()->settingsPageSaved();
 }
 
-void ShortcutSettingsTab::revertChanges()
+void ShortcutSettingsTab::cancelChanges()
 {
-    m_page->allDefault();
+    m_page->undo();
 }
 
 ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
@@ -309,9 +333,6 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
     m_page->chkUseSystemMonitorProfile->setChecked(cfg.useSystemMonitorProfile());
     connect(m_page->chkUseSystemMonitorProfile, SIGNAL(toggled(bool)), this, SLOT(toggleAllowMonitorProfileSelection(bool)));
 
-    if (KisColorManager::instance()->devices().size() > 0) {
-        m_page->chkUseSystemMonitorProfile->setVisible(false);
-    }
     m_page->cmbWorkingColorSpace->setIDList(KoColorSpaceRegistry::instance()->listKeys());
     m_page->cmbWorkingColorSpace->setCurrent(cfg.workingColorSpace());
 
@@ -319,13 +340,13 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
     m_page->bnAddColorProfile->setToolTip( i18n("Open Color Profile") );
     connect(m_page->bnAddColorProfile, SIGNAL(clicked()), SLOT(installProfile()));
 
-    QGridLayout *monitorProfileGrid = new QGridLayout(m_page->monitorprofileholder);
+    QFormLayout *monitorProfileGrid = new QFormLayout(m_page->monitorprofileholder);
     for(int i = 0; i < QApplication::desktop()->screenCount(); ++i) {
         QLabel *lbl = new QLabel(i18nc("The number of the screen", "Screen %1:", i + 1));
-        monitorProfileGrid->addWidget(lbl, i, 0);
         m_monitorProfileLabels << lbl;
         SqueezedComboBox *cmb = new SqueezedComboBox();
-        monitorProfileGrid->addWidget(cmb, i, 1);
+        cmb->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
+        monitorProfileGrid->addRow(lbl, cmb);
         m_monitorProfileWidgets << cmb;
     }
 
@@ -347,7 +368,14 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
     m_page->sldAdaptationState->setMinimum(0);
     m_page->sldAdaptationState->setValue((int)proofingConfig->adaptationState*20);
 
-    const KoColorSpace *proofingSpace =  KoColorSpaceRegistry::instance()->colorSpace(proofingConfig->proofingModel,proofingConfig->proofingDepth,proofingConfig->proofingProfile);
+    //probably this should become the screenprofile?
+    KoColor ga(KoColorSpaceRegistry::instance()->rgb8());
+    ga.fromKoColor(proofingConfig->warningColor);
+    m_page->gamutAlarm->setColor(ga);
+
+    const KoColorSpace *proofingSpace =  KoColorSpaceRegistry::instance()->colorSpace(proofingConfig->proofingModel,
+                                                                                      proofingConfig->proofingDepth,
+                                                                                      proofingConfig->proofingProfile);
     m_page->proofingSpaceSelector->setCurrentColorSpace(proofingSpace);
 
     m_page->cmbProofingIntent->setCurrentIndex((int)proofingConfig->intent);
@@ -384,13 +412,11 @@ void ColorSettingsTab::installProfile()
     QString saveLocation = KoResourcePaths::saveLocation("icc_profiles");
 
     Q_FOREACH (const QString &profileName, profileNames) {
-        QUrl file(profileName);
-        if (!QFile::copy(profileName, saveLocation + file.fileName())) {
-            dbgKrita << "Could not install profile!";
-            return;
+        if (!QFile::copy(profileName, saveLocation + QFileInfo(profileName).fileName())) {
+            qWarning() << "Could not install profile!" << saveLocation + QFileInfo(profileName).fileName();
+            continue;
         }
-        iccEngine->addProfile(saveLocation + file.fileName());
-
+        iccEngine->addProfile(saveLocation + QFileInfo(profileName).fileName());
     }
 
     KisConfig cfg;
@@ -478,10 +504,13 @@ void ColorSettingsTab::refillMonitorProfiles(const KoID & s)
     if (!csf)
         return;
 
-    QList<const KoColorProfile *>  profileList = KoColorSpaceRegistry::instance()->profilesFor(csf);
+    QMap<QString, const KoColorProfile *>  profileList;
+    Q_FOREACH(const KoColorProfile *profile, KoColorSpaceRegistry::instance()->profilesFor(csf)) {
+        profileList[profile->name()] = profile;
+    }
 
-    Q_FOREACH (const KoColorProfile *profile, profileList) {
-//        //dbgKrita << "Profile" << profile->name() << profile->isSuitableForDisplay() << csf->defaultProfile();
+    Q_FOREACH (const KoColorProfile *profile, profileList.values()) {
+        //qDebug() << "Profile" << profile->name() << profile->isSuitableForDisplay() << csf->defaultProfile();
         if (profile->isSuitableForDisplay()) {
             for (int i = 0; i < QApplication::desktop()->screenCount(); ++i) {
                 m_monitorProfileWidgets[i]->addSqueezedItem(profile->name());
@@ -691,7 +720,7 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
         cmbFilterMode->setEnabled(cfg.useOpenGL());
         cmbFilterMode->setCurrentIndex(cfg.openGLFilteringMode());
         // Don't show the high quality filtering mode if it's not available
-        if (!KisOpenGL::hasOpenGL3()) {
+        if (!KisOpenGL::supportsLoD()) {
             cmbFilterMode->removeItem(3);
         }
     }
@@ -807,7 +836,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     : KPageDialog(parent)
 {
     Q_UNUSED(name);
-    setWindowTitle(i18n("Preferences"));
+    setWindowTitle(i18n("Configure Krita"));
     setStandardButtons(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::RestoreDefaults);
     button(QDialogButtonBox::Ok)->setDefault(true);
 
@@ -831,6 +860,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     addPage(page);
     m_shortcutSettings = new ShortcutSettingsTab(vbox);
     connect(this, SIGNAL(accepted()), m_shortcutSettings, SLOT(saveChanges()));
+    connect(this, SIGNAL(rejected()), m_shortcutSettings, SLOT(cancelChanges()));
 
     // Canvas input settings
     m_inputConfiguration = new KisInputConfigurationPage();
@@ -970,6 +1000,7 @@ bool KisDlgPreferences::editPreferences()
         cfg.setBackupFile(dialog->m_general->m_backupFileCheckBox->isChecked());
         cfg.setShowCanvasMessages(dialog->m_general->showCanvasMessages());
         cfg.setCompressKra(dialog->m_general->compressKra());
+        cfg.writeEntry("EnableHiDPI", dialog->m_general->m_chkHiDPI->isChecked());
         cfg.setToolOptionsInDocker(dialog->m_general->toolOptionsInDocker());
         cfg.setSwitchSelectionCtrlAlt(dialog->m_general->switchSelectionCtrlAlt());
         cfg.setConvertToImageColorspaceOnImport(dialog->m_general->convertToImageColorspaceOnImport());
@@ -1004,7 +1035,11 @@ bool KisDlgPreferences::editPreferences()
         cfg.setWorkingColorSpace(dialog->m_colorSettings->m_page->cmbWorkingColorSpace->currentItem().id());
 
         KisImageConfig cfgImage;
-        cfgImage.setDefaultProofingConfig(dialog->m_colorSettings->m_page->proofingSpaceSelector->currentColorSpace(), dialog->m_colorSettings->m_page->cmbProofingIntent->currentIndex(), dialog->m_colorSettings->m_page->ckbProofBlackPoint->isChecked(), dialog->m_colorSettings->m_page->gamutAlarm->color(), (double)dialog->m_colorSettings->m_page->sldAdaptationState->value()/20);
+        cfgImage.setDefaultProofingConfig(dialog->m_colorSettings->m_page->proofingSpaceSelector->currentColorSpace(),
+                                          dialog->m_colorSettings->m_page->cmbProofingIntent->currentIndex(),
+                                          dialog->m_colorSettings->m_page->ckbProofBlackPoint->isChecked(),
+                                          dialog->m_colorSettings->m_page->gamutAlarm->color(),
+                                          (double)dialog->m_colorSettings->m_page->sldAdaptationState->value()/20);
         cfg.setUseBlackPointCompensation(dialog->m_colorSettings->m_page->chkBlackpoint->isChecked());
         cfg.setAllowLCMSOptimization(dialog->m_colorSettings->m_page->chkAllowLCMSOptimization->isChecked());
         cfg.setPasteBehaviour(dialog->m_colorSettings->m_pasteBehaviourGroup.checkedId());

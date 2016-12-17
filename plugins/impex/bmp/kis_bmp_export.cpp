@@ -45,8 +45,8 @@ KisBMPExport::~KisBMPExport()
 
 KisImportExportFilter::ConversionStatus KisBMPExport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigurationSP /*configuration*/)
 {
-    QRect rc = document->image()->bounds();
-    QImage image = document->image()->projection()->convertToQImage(0, 0, 0, rc.width(), rc.height(), KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
+    QRect rc = document->savingImage()->bounds();
+    QImage image = document->savingImage()->projection()->convertToQImage(0, 0, 0, rc.width(), rc.height(), KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
     image.save(io, QFileInfo(filename()).suffix().toLatin1());
     return KisImportExportFilter::OK;
 }

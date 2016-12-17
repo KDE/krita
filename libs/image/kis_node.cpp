@@ -160,7 +160,7 @@ void KisNode::Private::processDuplicatedClones(const KisNode *srcDuplicationRoot
                                                         clone->copyFrom());
 
         if (newCopyFrom) {
-            KisLayer *newCopyFromLayer = dynamic_cast<KisLayer*>(const_cast<KisNode*>(newCopyFrom));
+            KisLayer *newCopyFromLayer = qobject_cast<KisLayer*>(const_cast<KisNode*>(newCopyFrom));
             KIS_ASSERT_RECOVER_RETURN(newCopyFromLayer);
 
             clone->setCopyFrom(newCopyFromLayer);

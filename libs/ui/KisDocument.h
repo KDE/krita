@@ -508,6 +508,16 @@ public:
 
 
     KisImageWSP image() const;
+
+    /**
+     * @brief savingImage provides a detached, shallow copy of the original image that must be used when saving.
+     * Any strokes in progress will not be applied to this image, so the result might be missing some data. On
+     * the other hand, it won't block.
+     *
+     * @return a shallow copy of the original image, or 0 is saving is not in progress
+     */
+    KisImageSP savingImage() const;
+
     /**
      * Adds progressproxy for file operations
      */
@@ -579,6 +589,10 @@ private Q_SLOTS:
 
 
 private:
+
+    bool prepareLocksForSaving();
+
+    void unlockAfterSaving();
 
     QString prettyPathOrUrl() const;
 

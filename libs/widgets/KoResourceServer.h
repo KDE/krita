@@ -283,7 +283,7 @@ public:
 
         return true;
     }
-    
+
     /*Removes a given resource from the blacklist.
      */
     bool removeFromBlacklist(PointerType resource) {
@@ -295,8 +295,8 @@ public:
                 warnWidgets<<"Doesn't contain filename";
                 return false;
             }
-        
-        
+
+
         //then return true//
         return true;
     }

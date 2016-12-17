@@ -23,11 +23,13 @@
 
 #include "kritawidgets_export.h"
 
+#include <KisColorSelectorInterface.h>
+
 class KoColor;
 class KoColorDisplayRendererInterface;
 
 
-class KRITAWIDGETS_EXPORT KoTriangleColorSelector : public QWidget {
+class KRITAWIDGETS_EXPORT KoTriangleColorSelector : public KisColorSelectorInterface {
     Q_OBJECT
     public:
         explicit KoTriangleColorSelector(QWidget *parent);
@@ -43,7 +45,7 @@ class KRITAWIDGETS_EXPORT KoTriangleColorSelector : public QWidget {
         int hue() const;
         int value() const;
         int saturation() const;
-        KoColor realColor() const;
+        KoColor getCurrentColor() const;
 
         // please use realColor() instead!
         Q_DECL_DEPRECATED QColor color() const;
@@ -53,10 +55,9 @@ class KRITAWIDGETS_EXPORT KoTriangleColorSelector : public QWidget {
         void setValue(int v);
         void setSaturation(int s);
         void setHSV(int h, int s, int v);
-        void setRealColor(const KoColor& );
+        void slotSetColor(const KoColor& );
     Q_SIGNALS:
         void colorChanged(const QColor& );
-        void realColorChanged(const KoColor& );
     private Q_SLOTS:
         void configurationChanged();
     private:

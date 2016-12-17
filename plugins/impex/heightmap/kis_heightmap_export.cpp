@@ -91,9 +91,9 @@ void KisHeightMapExport::initializeCapabilities()
 
 KisImportExportFilter::ConversionStatus KisHeightMapExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration)
 {
-    KisImageSP image = document->image();
+    KisImageSP image = document->savingImage();
 
-    if (document->image()->width() != document->image()->height()) {
+    if (image->width() != image->height()) {
         document->setErrorMessage(i18n("Cannot export this image to a heightmap: it is not square"));
         return KisImportExportFilter::WrongFormat;
     }
@@ -104,8 +104,6 @@ KisImportExportFilter::ConversionStatus KisHeightMapExport::convert(KisDocument 
 
     bool downscale = false;
 
-    // the image must be locked at the higher levels
-    KIS_SAFE_ASSERT_RECOVER_NOOP(image->locked());
     KisPaintDeviceSP pd = new KisPaintDevice(*image->projection());
 
     QDataStream s(io);

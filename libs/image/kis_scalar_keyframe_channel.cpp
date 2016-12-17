@@ -31,7 +31,17 @@ struct KisScalarKeyframe : public KisKeyframe
         , value(value)
     {}
 
+    KisScalarKeyframe(const KisScalarKeyframe *rhs, KisKeyframeChannel *channel)
+        : KisKeyframe(rhs, channel)
+        , value(rhs->value)
+    {}
+
     qreal value;
+
+    KisKeyframeSP cloneFor(KisKeyframeChannel *channel) const
+    {
+        return toQShared(new KisScalarKeyframe(this, channel));
+    }
 };
 
 

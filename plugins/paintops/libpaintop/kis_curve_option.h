@@ -104,9 +104,16 @@ public:
         qreal minSizeLikeValue;
         qreal maxSizeLikeValue;
 
-        qreal rotationLikeValue(qreal baseAngle) const {
+        /**
+         * @param normalizedBaseAngle canvas rotation alngle normalized to range [0; 1]
+         * @param absoluteAxesFlipped true if underlying image coordinate system is flipped (horiz. mirror != vert. mirror)
+         */
+
+        qreal rotationLikeValue(qreal normalizedBaseAngle, bool absoluteAxesFlipped) const {
             const qreal offset =
-                hasAbsoluteOffset ? absoluteOffset : baseAngle;
+                !hasAbsoluteOffset ? normalizedBaseAngle :
+                absoluteAxesFlipped ? 1.0 - absoluteOffset :
+                absoluteOffset;
 
             const qreal realScalingPart = hasScaling ? KisDynamicSensor::scalingToAdditive(scaling) : 0.0;
             const qreal realAdditivePart = hasAdditive ? additive : 0;
@@ -157,7 +164,7 @@ public:
     ValueComponents computeValueComponents(const KisPaintInformation& info) const;
 
     qreal computeSizeLikeValue(const KisPaintInformation &info) const;
-    qreal computeRotationLikeValue(const KisPaintInformation& info, qreal baseValue) const;
+    qreal computeRotationLikeValue(const KisPaintInformation& info, qreal baseValue, bool absoluteAxesFlipped) const;
 
 protected:
 

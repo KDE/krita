@@ -134,6 +134,23 @@ public:
         qreal m_minDistance;
         Function m_function;
     };
+
+    /**
+     * A special class that ensures that the view position of the anchor point of the
+     * transformation is unchanged during the lifetime of the object. On destruction
+     * of the keeper the position of the anchor point will be restored.
+     */
+    struct AnchorHolder {
+        AnchorHolder(bool enabled, ToolTransformArgs *config);
+        ~AnchorHolder();
+
+    private:
+        bool m_enabled;
+        ToolTransformArgs *m_config;
+        QPointF m_staticPoint;
+        QPointF m_oldStaticPointInView;
+
+    };
 };
 
 #endif /* __KIS_TRANSFORM_UTILS_H */

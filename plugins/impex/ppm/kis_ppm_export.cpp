@@ -141,10 +141,7 @@ KisImportExportFilter::ConversionStatus KisPPMExport::convert(KisDocument *docum
 
     bool bitmap = (mimeType() == "image/x-portable-bitmap");
 
-    KisImageSP image = document->image();
-    Q_CHECK_PTR(image);
-    // the image must be locked at the higher levels
-    KIS_SAFE_ASSERT_RECOVER_NOOP(document->image()->locked());
+    KisImageSP image = document->savingImage();
     KisPaintDeviceSP pd = new KisPaintDevice(*image->projection());
 
     // Test color space

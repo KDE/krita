@@ -87,6 +87,7 @@
 #include "kis_progress_widget.h"
 #include "kis_signal_compressor.h"
 #include "kis_filter_manager.h"
+#include "kis_file_layer.h"
 #include "krita_utils.h"
 #include "input/kis_input_manager.h"
 #include "KisRemoteFileFetcher.h"
@@ -535,19 +536,28 @@ void KisView::dropEvent(QDropEvent *event)
             QAction *insertAsNewLayer = new QAction(i18n("Insert as New Layer"), &popup);
             QAction *insertManyLayers = new QAction(i18n("Insert Many Layers"), &popup);
 
+            QAction *insertAsNewFileLayer = new QAction(i18n("Insert as New File Layer"), &popup);
+            QAction *insertManyFileLayers = new QAction(i18n("Insert Many File Layers"), &popup);
+
             QAction *openInNewDocument = new QAction(i18n("Open in New Document"), &popup);
             QAction *openManyDocuments = new QAction(i18n("Open Many Documents"), &popup);
 
             QAction *cancel = new QAction(i18n("Cancel"), &popup);
 
             popup.addAction(insertAsNewLayer);
+            popup.addAction(insertAsNewFileLayer);
             popup.addAction(openInNewDocument);
+
             popup.addAction(insertManyLayers);
+            popup.addAction(insertManyFileLayers);
             popup.addAction(openManyDocuments);
 
             insertAsNewLayer->setEnabled(image() && urls.count() == 1);
+            insertAsNewFileLayer->setEnabled(image() && urls.count() == 1);
             openInNewDocument->setEnabled(urls.count() == 1);
+
             insertManyLayers->setEnabled(image() && urls.count() > 1);
+            insertManyFileLayers->setEnabled(image() && urls.count() > 1);
             openManyDocuments->setEnabled(urls.count() > 1);
 
             popup.addSeparator();
@@ -556,7 +566,7 @@ void KisView::dropEvent(QDropEvent *event)
             QAction *action = popup.exec(QCursor::pos());
             if (action != 0 && action != cancel) {
                 QTemporaryFile *tmp = 0;
-                Q_FOREACH (QUrl url, urls) {
+                for (QUrl url : urls) {
 
                     if (!url.isLocalFile()) {
                         // download the file and substitute the url
@@ -573,6 +583,12 @@ void KisView::dropEvent(QDropEvent *event)
                         if (action == insertAsNewLayer || action == insertManyLayers) {
                             d->viewManager->imageManager()->importImage(url);
                             activateWindow();
+                        }
+                        else if (action == insertAsNewFileLayer || action == insertManyFileLayers) {
+                            KisNodeCommandsAdapter adapter(viewManager());
+                            KisFileLayer *fileLayer = new KisFileLayer(image(), "", url.toLocalFile(),
+                                                                       KisFileLayer::None, image()->nextLayerName(), OPACITY_OPAQUE_U8);
+                            adapter.addNode(fileLayer, viewManager()->activeNode()->parent(), viewManager()->activeNode());
                         }
                         else {
                             Q_ASSERT(action == openInNewDocument || action == openManyDocuments);
@@ -788,7 +804,7 @@ KisLayerSP KisView::currentLayer() const
     else {
         node = d->currentNode;
     }
-    return dynamic_cast<KisLayer*>(node.data());
+    return qobject_cast<KisLayer*>(node.data());
 }
 
 KisMaskSP KisView::currentMask() const

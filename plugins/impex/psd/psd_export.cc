@@ -42,29 +42,6 @@ class KisExternalLayer;
 
 K_PLUGIN_FACTORY_WITH_JSON(ExportFactory, "krita_psd_export.json", registerPlugin<psdExport>();)
 
-bool checkHomogenity(KisNodeSP root, const KoColorSpace* cs)
-{
-    bool res = true;
-    KisNodeSP child = root->firstChild();
-    while (child) {
-        if (child->childCount() > 0) {
-            res = checkHomogenity(child, cs);
-            if (res == false) {
-                break;
-            }
-        }
-        KisLayer *layer = dynamic_cast<KisLayer*>(child.data());
-        if (layer) {
-            if (layer->colorSpace() != cs) {
-                res = false;
-                break;
-            }
-        }
-        child = child->nextSibling();
-    }
-    return res;
-}
-
 psdExport::psdExport(QObject *parent, const QVariantList &) : KisImportExportFilter(parent)
 {
 }

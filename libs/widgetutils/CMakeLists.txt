@@ -11,6 +11,7 @@ set(kritawidgetutils_LIB_SRCS
 
     kis_icon_utils.cpp
     kis_action_registry.cpp
+    KisActionsSnapshot.cpp
     KoGroupButton.cpp
     KoProgressBar.cpp
     KoProgressUpdater.cpp

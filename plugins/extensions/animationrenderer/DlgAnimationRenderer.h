@@ -70,7 +70,8 @@ public:
 
 private Q_SLOTS:
 
-    void selectRenderType();
+    void selectRenderType(int i);
+    void selectRenderOptions();
     void toggleSequenceType(bool toggle);
     void sequenceMimeTypeSelected();
     void ffmpegLocationChanged(const QString&);

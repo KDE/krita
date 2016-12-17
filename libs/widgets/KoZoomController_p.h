@@ -69,8 +69,7 @@ public:
 
     void init(KoCanvasController *co,
               KoZoomHandler *zh,
-              KActionCollection *actionCollection,
-              bool createZoomShortcuts);
+              KActionCollection *actionCollection);
 
     KoCanvasController *canvasController;
     KoZoomHandler *zoomHandler;

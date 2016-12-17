@@ -52,6 +52,8 @@ KisODGImport::~KisODGImport()
 
 KisImportExportFilter::ConversionStatus KisODGImport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration)
 {
+    Q_UNUSED(configuration);
+
     KoStore* store = KoStore::createStore(io, KoStore::Read, "application/vnd.oasis.opendocument.graphics", KoStore::Zip);
     if (!store || store->bad()) {
         delete store;

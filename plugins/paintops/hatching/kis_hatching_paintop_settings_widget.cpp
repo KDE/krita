@@ -45,7 +45,6 @@
 KisHatchingPaintOpSettingsWidget:: KisHatchingPaintOpSettingsWidget(QWidget* parent)
     : KisBrushBasedPaintopOptionWidget(parent)
 {
-    setPrecisionEnabled(true);
 
     //-------Adding widgets to the screen------------
 

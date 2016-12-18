@@ -65,26 +65,13 @@ public:
         return m_presetIsValid;
     }
 
-    void writeOptionSetting(KisPropertiesConfigurationSP settings) const;
-    void readOptionSetting(const KisPropertiesConfigurationSP setting);
-
-
-    void setPrecisionEnabled(bool value);
-    bool autoPrecisionEnabled();
-
     void hideOptions(const QStringList &options);
 
 Q_SIGNALS:
-
     void sigBrushChanged();
-    void sigPrecisionChanged();
 
 private Q_SLOTS:
     void buttonClicked(int id);
-    void precisionChanged(int value);
-    void setAutoPrecisionEnabled(int value);
-    void setSizeToStartFrom(double value);
-    void setDeltaValue(double value);
 
 private:
     void setCurrentWidget(QWidget * widget);

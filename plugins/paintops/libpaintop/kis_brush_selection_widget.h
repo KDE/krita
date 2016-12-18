@@ -68,6 +68,7 @@ public:
     void writeOptionSetting(KisPropertiesConfigurationSP settings) const;
     void readOptionSetting(const KisPropertiesConfigurationSP setting);
 
+
     void setPrecisionEnabled(bool value);
     bool autoPrecisionEnabled();
 

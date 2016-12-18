@@ -38,7 +38,7 @@ public:
 
     int precisionLevel() const;
     void setPrecisionLevel(int precisionLevel);
-    void setAutoPrecisionEnabled(int);
+    void setAutoPrecisionEnabled(bool);
     void setDeltaValue(double);
     void setSizeToStartFrom(double);
     bool autoPrecisionEnabled();

@@ -46,7 +46,7 @@ void KisPrecisionOption::setPrecisionLevel(int precisionLevel)
 {
     m_precisionLevel = precisionLevel;
 }
-void KisPrecisionOption::setAutoPrecisionEnabled(int value)
+void KisPrecisionOption::setAutoPrecisionEnabled(bool value)
 {
     m_autoPrecisionEnabled = value;
 }

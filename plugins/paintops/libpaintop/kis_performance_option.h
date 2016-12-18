@@ -23,6 +23,9 @@
 #include <brushengine/kis_paint_information.h>
 #include <kritapaintop_export.h>
 #include <kis_paintop_option.h>
+#include "kis_precision_option.h"
+#include <ui_wdgperformanceoption.h>
+
 
 /**
  * The global preferences option defines settings that happen across all brushes
@@ -35,8 +38,26 @@ public:
     KisPerformanceOption(bool createConfigWidget = false);
     ~KisPerformanceOption();
 
+Q_SIGNALS:
+    void sigPrecisionChanged();
+
 private:
+
+    void updatePrecisionCalculationsTable();
+    void showPrecisionCalculationsTable(bool show);
     bool m_createConfigWidget;
+    KisPrecisionOption m_precisionOption;
+    Ui_wdgPerformanceOption ui;
+
+    void readOptionSetting(const KisPropertiesConfigurationSP config);
+    void writeOptionSetting(const KisPropertiesConfigurationSP config) const;
+
+private Q_SLOTS:
+    void setAutoPrecisionEnabled(bool value);
+    void precisionChanged(int value);
+    void setDeltaValue(double value);
+    void setSizeToStartFrom(double value);
+
 };
 
 

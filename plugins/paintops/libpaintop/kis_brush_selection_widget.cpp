@@ -70,6 +70,7 @@ KisBrushSelectionWidget::KisBrushSelectionWidget(QWidget * parent)
 
     setCurrentWidget(m_autoBrushWidget);
 
+    // following group is all precision related init stuff. can remove once this gets moved to the performance area
     uiWdgBrushChooser.sliderPrecision->setRange(1, 5);
     uiWdgBrushChooser.sliderPrecision->setSingleStep(1);
     uiWdgBrushChooser.sliderPrecision->setPageStep(1);
@@ -232,6 +233,12 @@ void KisBrushSelectionWidget::precisionChanged(int value)
     emit sigPrecisionChanged();
 }
 
+void KisBrushSelectionWidget::setPrecisionEnabled(bool value)
+{
+    uiWdgBrushChooser.sliderPrecision->setVisible(value);
+    uiWdgBrushChooser.lblPrecision->setVisible(value);
+}
+
 void KisBrushSelectionWidget::writeOptionSetting(KisPropertiesConfigurationSP settings) const
 {
     m_precisionOption.writeOptionSetting(settings);
@@ -246,11 +253,8 @@ void KisBrushSelectionWidget::readOptionSetting(const KisPropertiesConfiguration
     uiWdgBrushChooser.sizeToStartFromSpinBox ->setValue(m_precisionOption.sizeToStartFrom());
 }
 
-void KisBrushSelectionWidget::setPrecisionEnabled(bool value)
-{
-    uiWdgBrushChooser.sliderPrecision->setVisible(value);
-    uiWdgBrushChooser.lblPrecision->setVisible(value);
-}
+
+
 
 void KisBrushSelectionWidget::hideOptions(const QStringList &options)
 {

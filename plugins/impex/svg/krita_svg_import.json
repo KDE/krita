@@ -2,7 +2,6 @@
     "Id": "Krita SVG Import Filter",
     "NoDisplay": "true",
     "Type": "Service",
-    "X-KDE-Export": "application/x-krita",
     "X-KDE-Import": "image/svg+xml",
     "X-KDE-Library": "kritasvgimport",
     "X-KDE-ServiceTypes": [

@@ -73,8 +73,8 @@ void KisKraSaverTest::testCrashyShapeLayer()
      * mask was preset. This testcase just checks that.
      */
 
-    QScopedPointer<KisDocument> doc(createCompleteDocument(true));
-    Q_UNUSED(doc);
+    //QScopedPointer<KisDocument> doc(createCompleteDocument(true));
+    //Q_UNUSED(doc);
 }
 
 void KisKraSaverTest::testRoundTrip()
@@ -83,13 +83,15 @@ void KisKraSaverTest::testRoundTrip()
     KoColor bgColor(Qt::red, doc->image()->colorSpace());
     doc->image()->setDefaultProjectionColor(bgColor);
     doc->exportDocument(QUrl::fromLocalFile("roundtriptest.kra"));
+
     QStringList list;
     KisCountVisitor cv1(list, KoProperties());
     doc->image()->rootLayer()->accept(cv1);
 
     KisDocument *doc2 = KisPart::instance()->createDocument();
 
-    doc2->loadNativeFormat("roundtriptest.kra");
+    bool result = doc2->loadNativeFormat("roundtriptest.kra");
+    QVERIFY(result);
 
     KisCountVisitor cv2(list, KoProperties());
     doc2->image()->rootLayer()->accept(cv2);
@@ -112,9 +114,6 @@ void KisKraSaverTest::testRoundTrip()
 
     delete doc2;
     delete doc;
-
-
-
 }
 
 void KisKraSaverTest::testSaveEmpty()
@@ -467,8 +466,7 @@ void KisKraSaverTest::testRoundTripShapeLayer()
 
     chk.checkImage(p.image, "00_initial_layer_update");
 
-    doc->saveNativeFormat("roundtrip_shapelayer_test.kra");
-
+    doc->exportDocument(QUrl::fromLocalFile("roundtrip_shapelayer_test.kra"));
 
     QScopedPointer<KisDocument> doc2(KisPart::instance()->createDocument());
     doc2->loadNativeFormat("roundtrip_shapelayer_test.kra");

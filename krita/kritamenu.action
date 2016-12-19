@@ -285,7 +285,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="edit_redo">
-      <icon>_edit-redo</icon>
+      <icon>edit-redo</icon>
       <text>Redo</text>
       <whatsThis></whatsThis>
       <toolTip>Redo last undone action</toolTip>

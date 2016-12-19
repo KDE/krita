@@ -154,17 +154,9 @@ KisShapeLayer::KisShapeLayer(const KisShapeLayer& _rhs, KoShapeBasedDocumentBase
 
     initShapeLayer(controller);
 
-    KoShapeOdfSaveHelper saveHelper(_rhs.shapes());
-    KoDrag drag;
-    drag.setOdf(KoOdf::mimeType(KoOdf::Text), saveHelper);
-    QMimeData* mimeData = drag.mimeData();
-
-    Q_ASSERT(mimeData->hasFormat(KoOdf::mimeType(KoOdf::Text)));
-
-    KisShapeLayerShapePaste paste(this, m_d->controller);
-    bool success = paste.paste(KoOdf::Text, mimeData);
-    Q_ASSERT(success);
-    Q_UNUSED(success); // for release build
+    Q_FOREACH (KoShape *shape, _rhs.shapes()) {
+        addShape(shape->cloneShape());
+    }
 }
 
 KisShapeLayer::KisShapeLayer(const KisShapeLayer& _rhs, const KisShapeLayer &_addShapes)
@@ -178,33 +170,13 @@ KisShapeLayer::KisShapeLayer(const KisShapeLayer& _rhs, const KisShapeLayer &_ad
     initShapeLayer(_rhs.m_d->controller);
 
     // copy in _rhs's shapes
-    {
-        KoShapeOdfSaveHelper saveHelper(_rhs.shapes());
-        KoDrag drag;
-        drag.setOdf(KoOdf::mimeType(KoOdf::Text), saveHelper);
-        QMimeData* mimeData = drag.mimeData();
-
-        Q_ASSERT(mimeData->hasFormat(KoOdf::mimeType(KoOdf::Text)));
-
-        KisShapeLayerShapePaste paste(this, m_d->controller);
-        bool success = paste.paste(KoOdf::Text, mimeData);
-        Q_ASSERT(success);
-        Q_UNUSED(success); // for release build
+    Q_FOREACH (KoShape *shape, _rhs.shapes()) {
+        addShape(shape->cloneShape());
     }
 
     // copy in _addShapes's shapes
-    {
-        KoShapeOdfSaveHelper saveHelper(_addShapes.shapes());
-        KoDrag drag;
-        drag.setOdf(KoOdf::mimeType(KoOdf::Text), saveHelper);
-        QMimeData* mimeData = drag.mimeData();
-
-        Q_ASSERT(mimeData->hasFormat(KoOdf::mimeType(KoOdf::Text)));
-
-        KisShapeLayerShapePaste paste(this, m_d->controller);
-        bool success = paste.paste(KoOdf::Text, mimeData);
-        Q_ASSERT(success);
-        Q_UNUSED(success); // for release build
+    Q_FOREACH (KoShape *shape, _addShapes.shapes()) {
+        addShape(shape->cloneShape());
     }
 }
 

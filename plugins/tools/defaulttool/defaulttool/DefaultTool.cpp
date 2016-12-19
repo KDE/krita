@@ -1023,9 +1023,6 @@ void DefaultTool::selectionReorder(KoShapeReorderCommand::MoveShapeType order)
 QList<QPointer<QWidget> > DefaultTool::createOptionWidgets()
 {
     QList<QPointer<QWidget> > widgets;
-    DefaultToolArrangeWidget *defaultArrange = new DefaultToolArrangeWidget(this);
-    defaultArrange->setWindowTitle(i18n("Arrange"));
-    widgets.append(defaultArrange);
     DefaultToolWidget *defaultTool = new DefaultToolWidget(this);
     defaultTool->setWindowTitle(i18n("Geometry"));
     widgets.append(defaultTool);

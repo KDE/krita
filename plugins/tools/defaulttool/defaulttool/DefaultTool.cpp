@@ -23,7 +23,6 @@
 
 #include "DefaultTool.h"
 #include "DefaultToolWidget.h"
-#include "DefaultToolArrangeWidget.h"
 #include "SelectionDecorator.h"
 #include "ShapeMoveStrategy.h"
 #include "ShapeRotateStrategy.h"
@@ -1040,10 +1039,10 @@ QList<QPointer<QWidget> > DefaultTool::createOptionWidgets()
     fillWidget->setCanvas(canvas());
     widgets.append(fillWidget);
 
-    KoShadowConfigWidget *shadowWidget = new KoShadowConfigWidget(0);
-    shadowWidget->setWindowTitle(i18n("Shadow"));
-    shadowWidget->setCanvas(canvas());
-    widgets.append(shadowWidget);
+    //KoShadowConfigWidget *shadowWidget = new KoShadowConfigWidget(0);
+    //shadowWidget->setWindowTitle(i18n("Shadow"));
+    //shadowWidget->setCanvas(canvas());
+    //widgets.append(shadowWidget);
 
     return widgets;
 }

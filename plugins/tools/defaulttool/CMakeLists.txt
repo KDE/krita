@@ -5,7 +5,6 @@ set ( defaulttools_SRCS
     defaulttool/DefaultTool.cpp
     defaulttool/DefaultToolFactory.cpp
     defaulttool/DefaultToolWidget.cpp
-    defaulttool/DefaultToolArrangeWidget.cpp
     defaulttool/DefaultToolTransformWidget.cpp
     defaulttool/ShapeMoveStrategy.cpp
     defaulttool/ShapeResizeStrategy.cpp
@@ -25,7 +24,6 @@ set ( defaulttools_SRCS
 
 ki18n_wrap_ui(defaulttools_SRCS
     defaulttool/DefaultToolWidget.ui
-    defaulttool/DefaultToolArrangeWidget.ui
     defaulttool/DefaultToolTransformWidget.ui
     connectionTool/ConnectionPointWidget.ui
 )

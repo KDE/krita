@@ -1,17 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>DefaultToolArrangeWidget</class>
- <widget class="QWidget" name="DefaultToolArrangeWidget">
+ <class>ArrangeDockerWidget</class>
+ <widget class="QWidget" name="ArrangeDockerWidget">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
     <width>208</width>
-    <height>70</height>
+    <height>72</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout_4">
-   <property name="margin">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
     <number>0</number>
    </property>
    <item row="0" column="0">
@@ -21,6 +30,9 @@
      </property>
      <item row="0" column="0">
       <widget class="QToolButton" name="leftAlign">
+       <property name="focusPolicy">
+        <enum>Qt::NoFocus</enum>
+       </property>
        <property name="text">
         <string/>
        </property>
@@ -28,6 +40,9 @@
      </item>
      <item row="0" column="1">
       <widget class="QToolButton" name="hCenterAlign">
+       <property name="focusPolicy">
+        <enum>Qt::NoFocus</enum>
+       </property>
        <property name="text">
         <string/>
        </property>
@@ -35,6 +50,9 @@
      </item>
      <item row="0" column="2">
       <widget class="QToolButton" name="rightAlign">
+       <property name="focusPolicy">
+        <enum>Qt::NoFocus</enum>
+       </property>
        <property name="text">
         <string/>
        </property>
@@ -42,6 +60,9 @@
      </item>
      <item row="1" column="0">
       <widget class="QToolButton" name="topAlign">
+       <property name="focusPolicy">
+        <enum>Qt::NoFocus</enum>
+       </property>
        <property name="text">
         <string/>
        </property>
@@ -49,6 +70,9 @@
      </item>
      <item row="1" column="1">
       <widget class="QToolButton" name="vCenterAlign">
+       <property name="focusPolicy">
+        <enum>Qt::NoFocus</enum>
+       </property>
        <property name="text">
         <string/>
        </property>
@@ -56,6 +80,9 @@
      </item>
      <item row="1" column="2">
       <widget class="QToolButton" name="bottomAlign">
+       <property name="focusPolicy">
+        <enum>Qt::NoFocus</enum>
+       </property>
        <property name="text">
         <string/>
        </property>
@@ -80,6 +107,9 @@
      </property>
      <item row="0" column="0">
       <widget class="QToolButton" name="bringToFront">
+       <property name="focusPolicy">
+        <enum>Qt::NoFocus</enum>
+       </property>
        <property name="text">
         <string/>
        </property>
@@ -87,6 +117,9 @@
      </item>
      <item row="0" column="1">
       <widget class="QToolButton" name="raiseLevel">
+       <property name="focusPolicy">
+        <enum>Qt::NoFocus</enum>
+       </property>
        <property name="text">
         <string/>
        </property>
@@ -94,6 +127,9 @@
      </item>
      <item row="1" column="0">
       <widget class="QToolButton" name="sendBack">
+       <property name="focusPolicy">
+        <enum>Qt::NoFocus</enum>
+       </property>
        <property name="text">
         <string/>
        </property>
@@ -101,6 +137,9 @@
      </item>
      <item row="1" column="1">
       <widget class="QToolButton" name="lowerLevel">
+       <property name="focusPolicy">
+        <enum>Qt::NoFocus</enum>
+       </property>
        <property name="text">
         <string/>
        </property>
@@ -125,6 +164,9 @@
      </property>
      <item row="1" column="0">
       <widget class="QToolButton" name="ungroup">
+       <property name="focusPolicy">
+        <enum>Qt::NoFocus</enum>
+       </property>
        <property name="text">
         <string/>
        </property>
@@ -132,6 +174,9 @@
      </item>
      <item row="0" column="0">
       <widget class="QToolButton" name="group">
+       <property name="focusPolicy">
+        <enum>Qt::NoFocus</enum>
+       </property>
        <property name="text">
         <string/>
        </property>
@@ -156,7 +201,7 @@
     </spacer>
    </item>
    <item row="1" column="0">
-    <widget class="QWidget" name="SpecialSpacer">
+    <widget class="QWidget" name="SpecialSpacer" native="true">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
        <horstretch>0</horstretch>

@@ -169,8 +169,11 @@ void KoShapeContainer::paint(QPainter &painter, const KoViewConverter &converter
         //debugFlake <<"KoShapeContainer::painting shape:" << shape->shapeId() <<"," << shape->boundingRect();
         if (!shape->isVisible())
             continue;
-        if (!isClipped(shape))  // the shapeManager will have to draw those, or else we can't do clipRects
-            continue;
+
+        // FIXME:this line breaks painting of the grouped shapes (probably deprecate clipping?)
+        //if (!isClipped(shape))  // the shapeManager will have to draw those, or else we can't do clipRects
+        //    continue;
+
         // don't try to draw a child shape that is not in the clipping rect of the painter.
         if (!clipRect.intersects(shape->boundingRect()))
 

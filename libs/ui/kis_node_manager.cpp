@@ -106,6 +106,8 @@ struct KisNodeManager::Private {
     KisNodeList selectedNodes;
     QPointer<KisNodeJugglerCompressed> nodeJuggler;
 
+    KisNodeWSP previouslyActiveNode;
+
     bool activateNodeImpl(KisNodeSP node);
 
     QSignalMapper nodeCreationSignalMapper;
@@ -144,7 +146,10 @@ bool KisNodeManager::Private::activateNodeImpl(KisNodeSP node)
         imageView->setCurrentNode(0);
         maskManager.activateMask(0);
         layerManager.activateLayer(0);
+        previouslyActiveNode = q->activeNode();
     } else {
+
+        previouslyActiveNode = q->activeNode();
 
         KoShape * shape = view->document()->shapeForNode(node);
         KIS_ASSERT_RECOVER_RETURN_VALUE(shape, false);
@@ -246,6 +251,9 @@ void KisNodeManager::setup(KActionCollection * actionCollection, KisActionManage
 
     action = actionManager->createAction("activatePreviousLayer");
     connect(action, SIGNAL(triggered()), this, SLOT(activatePreviousNode()));
+
+    action = actionManager->createAction("switchToPreviouslyActiveNode");
+    connect(action, SIGNAL(triggered()), this, SLOT(switchToPreviouslyActiveNode()));
 
     action  = actionManager->createAction("save_node_as_image");
     connect(action, SIGNAL(triggered()), this, SLOT(saveNodeAsImage()));
@@ -865,6 +873,13 @@ void KisNodeManager::activatePreviousNode()
 
     if (node) {
         slotNonUiActivatedNode(node);
+    }
+}
+
+void KisNodeManager::switchToPreviouslyActiveNode()
+{
+    if (m_d->previouslyActiveNode && m_d->previouslyActiveNode->parent()) {
+        slotNonUiActivatedNode(m_d->previouslyActiveNode);
     }
 }
 

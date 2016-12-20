@@ -83,7 +83,7 @@ public:
 
     virtual QString name() const
     {
-        return i18n("XYZ (32-bit float/channel)");
+        return i18n("XYZ (16-bit float/channel)");
     }
 
     virtual bool userVisible() const

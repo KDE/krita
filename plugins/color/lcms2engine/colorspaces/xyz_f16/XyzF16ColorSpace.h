@@ -43,7 +43,7 @@ public:
 
     virtual KoID colorDepthId() const
     {
-        return Float32BitsColorDepthID;
+        return Float16BitsColorDepthID;
     }
 
     virtual KoColorSpace *clone() const;

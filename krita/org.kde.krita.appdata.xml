@@ -3,7 +3,6 @@
   <id>org.kde.krita.desktop</id>
   <metadata_license>CC0-1.0</metadata_license>
   <summary>Digital Painting, Creative Freedom</summary>
-  <summary xml:lang="ast">Pintura dixital, llibertá creativa</summary>
   <summary xml:lang="bs">Digitalno crtanje, kreativna sloboda</summary>
   <summary xml:lang="ca">Dibuix digital, Llibertat creativa</summary>
   <summary xml:lang="ca-valencia">Dibuix digital, Llibertat creativa</summary>
@@ -30,7 +29,6 @@
   <summary xml:lang="zh-CN">数码绘图，自由创作</summary>
   <description>
     <p>Krita is the full-featured digital art studio.</p>
-    <p xml:lang="ast">Krita ye l'estudiu dixital d'arte completu.</p>
     <p xml:lang="bs">Krita je potpuni digitalni umjetnički studio.</p>
     <p xml:lang="ca">Krita és l'estudi d'art digital ple de funcionalitats.</p>
     <p xml:lang="ca-valencia">Krita és l'estudi d'art digital ple de funcionalitats.</p>

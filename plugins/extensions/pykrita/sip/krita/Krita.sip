@@ -33,7 +33,7 @@ public Q_SLOTS:
     Document * createDocument(int width, int height, const QString &name, const QString &colorModel, const QString &colorDepth, const QString &profile)  /Factory/;
     Document * openDocument(const QString &filename)  /Factory/;
     Window * openWindow();
-    QAction * createAction(const QString & text)  /Factory/;
+    QAction * createAction(const QString & text);
 
     void addViewExtension(ViewExtension* _viewExtension /GetWrapper/);
 %MethodCode

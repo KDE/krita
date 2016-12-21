@@ -159,8 +159,8 @@ void KisToolSelectOutline::finishSelectionAction()
 
     KisSelectionToolHelper helper(kisCanvas, kundo2_i18n("Select by Outline"));
 
-    if (m_points.count() > 2 &&
-        !helper.tryDeselectCurrentSelection(boundingViewRect, selectionAction())) {
+    if (!helper.tryDeselectCurrentSelection(boundingViewRect, selectionAction()) &&
+        m_points.count() > 2) {
 
         QApplication::setOverrideCursor(KisCursor::waitCursor());
 

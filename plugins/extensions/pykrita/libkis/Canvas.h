@@ -33,18 +33,11 @@ class KRITALIBKIS_EXPORT Canvas : public QObject
     Q_OBJECT
     Q_DISABLE_COPY(Canvas)
 
-    Q_PROPERTY(Document* Document READ document WRITE setDocument)
-    Q_PROPERTY(int ZoomLevel READ zoomLevel WRITE setZoomLevel)
-    Q_PROPERTY(int Rotation READ rotation WRITE setRotation)
-    Q_PROPERTY(bool Mirror READ mirror WRITE setMirror)
-    Q_PROPERTY(ColorManager* ColorManager READ colorManager WRITE setColorManager)
-
 public:
     explicit Canvas(KoCanvasBase *canvas, QObject *parent = 0);
     virtual ~Canvas();
 
     Document* document() const;
-    void setDocument(Document* value);
 
     int zoomLevel() const;
     void setZoomLevel(int value);

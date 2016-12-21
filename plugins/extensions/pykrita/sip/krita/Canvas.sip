@@ -6,7 +6,6 @@ class Canvas : QObject
     Canvas(const Canvas & __0);
 public:
     Document * document() const;
-    void setDocument(Document*  value);
     int zoomLevel() const;
     void setZoomLevel(int value);
     int rotation() const;

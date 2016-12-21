@@ -33,26 +33,18 @@ class KRITALIBKIS_EXPORT View : public QObject
     Q_OBJECT
     Q_DISABLE_COPY(View)
 
-    Q_PROPERTY(Window* Window READ window WRITE setWindow)
-    Q_PROPERTY(Document* Document READ document WRITE setDocument)
-    Q_PROPERTY(bool Visible READ visible WRITE setVisible)
-    Q_PROPERTY(Canvas* Canvas READ canvas WRITE setCanvas)
-
 public:
     explicit View(KisView *view, QObject *parent = 0);
     virtual ~View();
 
     Window* window() const;
-    void setWindow(Window* value);
 
     Document* document() const;
-    void setDocument(Document* value);
 
     bool visible() const;
     void setVisible(bool value);
 
     Canvas* canvas() const;
-    void setCanvas(Canvas* value);
 
 public Q_SLOTS:
 

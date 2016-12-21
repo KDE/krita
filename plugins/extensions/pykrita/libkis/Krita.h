@@ -73,18 +73,21 @@ public:
      */
     void setBatchmode(bool value);
 
+    /**
+     * @brief actions
+     * @return
+     */
     QList<Action*> actions() const;
     Action *action(const QString &name) const;
 
+    /**
+     * @return a list of all open Documents
+     */
     QList<Document*> documents() const;
-
-    QList<Exporter*> exporters() const;
 
     QList<Filter*> filters() const;
 
     QList<Generator *> generators() const;
-
-    QList<Importer *> importers() const;
 
     Notifier* notifier() const;
 
@@ -100,8 +103,19 @@ public:
      */
     QString version() const;
 
+    /**
+     * @return a list of all views. A Document can be shown in more than one view.
+     */
     QList<View*> views() const;
 
+    /**
+     * @return the currently active window or None if there is no window
+     */
+    Window * activeWindow() const;
+
+    /**
+     * @return a list of all windows
+     */
     QList<Window *> windows() const;
 
     QList<Resource*> resources() const;

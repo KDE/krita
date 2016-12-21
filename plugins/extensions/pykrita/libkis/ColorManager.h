@@ -30,9 +30,6 @@ class KRITALIBKIS_EXPORT ColorManager : public QObject
 {
     Q_OBJECT
     Q_DISABLE_COPY(ColorManager)
-    
-    Q_PROPERTY(QString Type READ type WRITE setType)
-    Q_PROPERTY(InfoObject* OcioSettings READ ocioSettings WRITE setOcioSettings)
 
 public:
     explicit ColorManager(QObject *parent = 0);
@@ -43,15 +40,6 @@ public:
 
     InfoObject* ocioSettings() const;
     void setOcioSettings(InfoObject* value);
-
-
-
-public Q_SLOTS:
-    
-
-    
-Q_SIGNALS:
-
 
 
 private:

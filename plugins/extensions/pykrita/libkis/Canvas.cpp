@@ -42,11 +42,6 @@ Document* Canvas::document() const
     return 0;
 }
 
-void Canvas::setDocument(Document* value)
-{
-}
-
-
 int Canvas::zoomLevel() const
 {
     return 0;

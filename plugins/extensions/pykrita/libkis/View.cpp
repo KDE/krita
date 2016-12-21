@@ -45,18 +45,10 @@ Window* View::window() const
     return 0;
 }
 
-void View::setWindow(Window* value)
-{
-}
-
 
 Document* View::document() const
 {
     return 0;
-}
-
-void View::setDocument(Document* value)
-{
 }
 
 
@@ -74,13 +66,6 @@ Canvas* View::canvas() const
 {
     return 0;
 }
-
-void View::setCanvas(Canvas* value)
-{
-}
-
-
-
 
 void View::close(bool confirm)
 {

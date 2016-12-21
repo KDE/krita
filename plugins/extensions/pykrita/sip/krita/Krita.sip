@@ -14,16 +14,15 @@ public:
     QList<Action *> actions() const;
     Action * action(const QString & name) const;
     QList<Document *> documents() const;
-    QList<Exporter *> exporters() const;
     QList<Filter *> filters() const;
     QList<Generator *> generators() const;
-    QList<Importer *> importers() const;
     Notifier * notifier() const;
     InfoObject * preferences() const;
     void setPreferences(InfoObject*  value);
     QString version() const;
-    QList<View *> views() const;
-    QList<Window *> windows() const;
+    QList<View *> views() const /Factory/;
+    Window * activeWindow() const /Factory/;
+    QList<Window *> windows() const /Factory/;
     QList<Resource *> resources() const;
     void setResources(QList<Resource *> value);
 public Q_SLOTS:

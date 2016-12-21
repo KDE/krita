@@ -9,10 +9,8 @@ set(kritalibkis_LIB_SRCS
     DockWidget.cpp
     DockWidgetFactoryBase.cpp
     Document.cpp
-    Exporter.cpp
     Filter.cpp
     Generator.cpp
-    Importer.cpp
     InfoObject.cpp
     Krita.cpp
     Node.cpp

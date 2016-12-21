@@ -135,11 +135,6 @@ QList<Document *> Krita::documents() const
     return ret;
 }
 
-QList<Exporter *> Krita::exporters() const
-{
-    return QList<Exporter*>();
-}
-
 QList<Filter*> Krita::filters() const
 {
     return QList<Filter*>();
@@ -148,11 +143,6 @@ QList<Filter*> Krita::filters() const
 QList<Generator*> Krita::generators() const
 {
     return QList<Generator*> ();
-}
-
-QList<Importer*>  Krita::importers() const
-{
-    return QList<Importer*>();
 }
 
 Notifier* Krita::notifier() const
@@ -183,6 +173,15 @@ QList<View *> Krita::views() const
         ret << new View(view);
     }
     return ret;
+}
+
+Window *Krita::activeWindow() const
+{
+    KisMainWindow *mainWindow = KisPart::instance()->currentMainwindow();
+    if (!mainWindow) {
+        return 0;
+    }
+    return new Window(mainWindow);
 }
 
 QList<Window*>  Krita::windows() const

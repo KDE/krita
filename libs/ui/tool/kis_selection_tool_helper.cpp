@@ -41,6 +41,9 @@
 #include "kis_command_utils.h"
 #include "commands/kis_deselect_global_selection_command.h"
 
+#include "kis_algebra_2d.h"
+#include "kis_config.h"
+
 
 KisSelectionToolHelper::KisSelectionToolHelper(KisCanvas2* canvas, const KUndo2MagicString& name)
         : m_canvas(canvas)
@@ -242,4 +245,19 @@ void KisSelectionToolHelper::cropPathIfNeeded(QPainterPath *path)
         cropPath.addRect(image->bounds());
         *path &= cropPath;
     }
+}
+
+bool KisSelectionToolHelper::tryDeselectCurrentSelection(const QRectF selectionViewRect, SelectionAction action)
+{
+    bool result = false;
+
+    if (KisAlgebra2D::maxDimension(selectionViewRect) < KisConfig().selectionViewSizeMinimum() &&
+        (action == SELECTION_INTERSECT || action == SELECTION_REPLACE)) {
+
+        // Queueing this action to ensure we avoid a race condition when unlocking the node system
+        QTimer::singleShot(0, m_canvas->viewManager()->selectionManager(), SLOT(deselect()));
+        result = true;
+    }
+
+    return result;
 }

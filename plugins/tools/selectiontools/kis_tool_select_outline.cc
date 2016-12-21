@@ -59,7 +59,7 @@ KisToolSelectOutline::KisToolSelectOutline(KoCanvasBase * canvas)
     : KisToolSelect(canvas,
                     KisCursor::load("tool_outline_selection_cursor.png", 5, 5),
                     i18n("Outline Selection")),
-      m_paintPath(new QPainterPath())
+      m_continuedMode(false)
 {
     connect(&m_widgetHelper, &KisSelectionToolConfigWidgetHelper::selectionActionChanged,
             this, &KisToolSelectOutline::setSelectionAction);
@@ -67,7 +67,37 @@ KisToolSelectOutline::KisToolSelectOutline(KoCanvasBase * canvas)
 
 KisToolSelectOutline::~KisToolSelectOutline()
 {
-    delete m_paintPath;
+}
+
+void KisToolSelectOutline::keyPressEvent(QKeyEvent *event)
+{
+    if (event->key() == Qt::Key_Control) {
+        m_continuedMode = true;
+    }
+
+    KisToolSelect::keyPressEvent(event);
+}
+
+void KisToolSelectOutline::keyReleaseEvent(QKeyEvent *event)
+{
+    if (event->key() == Qt::Key_Control ||
+        !(event->modifiers() & Qt::ControlModifier)) {
+
+        m_continuedMode = false;
+        if (mode() != PAINT_MODE && !m_points.isEmpty()) {
+            finishSelectionAction();
+        }
+    }
+
+    KisToolSelect::keyReleaseEvent(event);
+}
+
+void KisToolSelectOutline::mouseMoveEvent(KoPointerEvent *event)
+{
+    m_lastCursorPos = convertToPixelCoord(event);
+    if (m_continuedMode && mode() != PAINT_MODE) {
+        updateContinuedMode();
+    }
 }
 
 void KisToolSelectOutline::beginPrimaryAction(KoPointerEvent *event)
@@ -81,10 +111,13 @@ void KisToolSelectOutline::beginPrimaryAction(KoPointerEvent *event)
 
     setMode(KisTool::PAINT_MODE);
 
-    m_points.clear();
-    m_points.append(convertToPixelCoord(event));
-    m_paintPath->moveTo(pixelToView(convertToPixelCoord(event)));
+    if (m_continuedMode && !m_points.isEmpty()) {
+        m_paintPath.lineTo(pixelToView(convertToPixelCoord(event)));
+    } else {
+        m_paintPath.moveTo(pixelToView(convertToPixelCoord(event)));
+    }
 
+    m_points.append(convertToPixelCoord(event));
 }
 
 void KisToolSelectOutline::continuePrimaryAction(KoPointerEvent *event)
@@ -93,7 +126,7 @@ void KisToolSelectOutline::continuePrimaryAction(KoPointerEvent *event)
     KisToolSelectBase::continuePrimaryAction(event);
 
     QPointF point = convertToPixelCoord(event);
-    m_paintPath->lineTo(pixelToView(point));
+    m_paintPath.lineTo(pixelToView(point));
     m_points.append(point);
     updateFeedback();
 
@@ -107,6 +140,13 @@ void KisToolSelectOutline::endPrimaryAction(KoPointerEvent *event)
     KisToolSelectBase::endPrimaryAction(event);
     setMode(KisTool::HOVER_MODE);
 
+    if (!m_continuedMode) {
+        finishSelectionAction();
+    }
+}
+
+void KisToolSelectOutline::finishSelectionAction()
+{
     KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
     KIS_ASSERT_RECOVER_RETURN(kisCanvas);
     kisCanvas->updateCanvas();
@@ -154,16 +194,21 @@ void KisToolSelectOutline::endPrimaryAction(KoPointerEvent *event)
     }
 
     m_points.clear();
-    delete m_paintPath;
-    m_paintPath = new QPainterPath();
+    m_paintPath = QPainterPath();
 }
 
 void KisToolSelectOutline::paint(QPainter& gc, const KoViewConverter &converter)
 {
     Q_UNUSED(converter);
 
-    if (mode() == KisTool::PAINT_MODE && !m_points.isEmpty()) {
-            paintToolOutline(&gc, *m_paintPath);
+    if ((mode() == KisTool::PAINT_MODE || m_continuedMode) &&
+        !m_points.isEmpty()) {
+
+        QPainterPath outline = m_paintPath;
+        if (m_continuedMode && mode() != KisTool::PAINT_MODE) {
+            outline.lineTo(pixelToView(m_lastCursorPos));
+        }
+        paintToolOutline(&gc, outline);
     }
 }
 
@@ -175,7 +220,19 @@ void KisToolSelectOutline::updateFeedback()
         qint32 lastPointIndex = m_points.count() - 1;
 
         QRectF updateRect = QRectF(m_points[lastPointIndex - 1], m_points[lastPointIndex]).normalized();
-        updateRect.adjust(-FEEDBACK_LINE_WIDTH, -FEEDBACK_LINE_WIDTH, FEEDBACK_LINE_WIDTH, FEEDBACK_LINE_WIDTH);
+        updateRect = kisGrowRect(updateRect, FEEDBACK_LINE_WIDTH);
+
+        updateCanvasPixelRect(updateRect);
+    }
+}
+
+void KisToolSelectOutline::updateContinuedMode()
+{
+    if (!m_points.isEmpty()) {
+        qint32 lastPointIndex = m_points.count() - 1;
+
+        QRectF updateRect = QRectF(m_points[lastPointIndex - 1], m_lastCursorPos).normalized();
+        updateRect = kisGrowRect(updateRect, FEEDBACK_LINE_WIDTH);
 
         updateCanvasPixelRect(updateRect);
     }
@@ -186,6 +243,8 @@ void KisToolSelectOutline::deactivate()
     KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
     KIS_ASSERT_RECOVER_RETURN(kisCanvas);
     kisCanvas->updateCanvas();
+
+    m_continuedMode = false;
 
     KisTool::deactivate();
 }

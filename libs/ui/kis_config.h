@@ -239,6 +239,9 @@ public:
     qreal outlineSizeMinimum(bool defaultValue = false) const;
     void setOutlineSizeMinimum(qreal outlineSizeMinimum) const;
 
+    qreal selectionViewSizeMinimum(bool defaultValue = false) const;
+    void setSelectionViewSizeMinimum(qreal outlineSizeMinimum) const;
+
     int autoSaveInterval(bool defaultValue = false) const;
     void setAutoSaveInterval(int seconds) const;
 

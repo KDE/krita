@@ -1677,7 +1677,7 @@ bool KisDocument::prepareLocksForSaving()
         if (locker.successfullyLocked()) {
             copiedImage = d->image->clone(true);
         }
-        else {
+        else if (!isAutosaving()) {
             // even though it is a recovery operation, we should ensure we do not enter saving twice!
             std::unique_lock<StdLockableWrapper<QMutex>> l(d->savingLock, std::try_to_lock);
 

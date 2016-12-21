@@ -52,6 +52,9 @@
 #include "kis_pixel_selection.h"
 #include "kis_selection_tool_helper.h"
 
+#include "kis_algebra_2d.h"
+
+
 #define FEEDBACK_LINE_WIDTH 2
 
 
@@ -151,10 +154,17 @@ void KisToolSelectOutline::finishSelectionAction()
     KIS_ASSERT_RECOVER_RETURN(kisCanvas);
     kisCanvas->updateCanvas();
 
-    if (m_points.count() > 2) {
+    QRectF boundingViewRect =
+        pixelToView(KisAlgebra2D::accumulateBounds(m_points));
+
+    KisSelectionToolHelper helper(kisCanvas, kundo2_i18n("Select by Outline"));
+
+    if (m_points.count() > 2 &&
+        !helper.tryDeselectCurrentSelection(boundingViewRect, selectionAction())) {
+
         QApplication::setOverrideCursor(KisCursor::waitCursor());
 
-        KisSelectionToolHelper helper(kisCanvas, kundo2_i18n("Select by Outline"));
+
 
         if (selectionMode() == PIXEL_SELECTION) {
 

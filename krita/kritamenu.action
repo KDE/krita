@@ -527,7 +527,7 @@
       <activationFlags>0</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>Ctrl+Shift+F</shortcut>
-      <isCheckable>false</isCheckable>
+      <isCheckable>true</isCheckable>
       <statusTip></statusTip>
     </Action>
     <Action name="wrap_around_mode">

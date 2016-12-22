@@ -321,7 +321,7 @@ void KisViewManager::slotViewAdded(KisView *view)
 {
     d->inputManager.addTrackedCanvas(view->canvasBase());
 
-    if (viewCount() == 0) {
+    if (viewCount() != 0) {
         d->statusBar.showAllStatusBarItems();
     }
 }
@@ -351,30 +351,6 @@ void KisViewManager::setCurrentView(KisView *view)
         d->viewConnections.clear();
     }
 
-    // Restore the last used brush preset, color and background color.
-    if (first) {
-        KisConfig cfg;
-        KisPaintOpPresetResourceServer * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
-        QString lastPreset = cfg.readEntry("LastPreset", QString("Basic_tip_default"));
-        KisPaintOpPresetSP preset = rserver->resourceByName(lastPreset);
-        if (!preset) {
-            preset = rserver->resourceByName("Basic_tip_default");
-        }
-
-        if (!preset) {
-            preset = rserver->resources().first();
-        }
-        if (preset) {
-            paintOpBox()->restoreResource(preset.data());
-        }
-
-        const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
-        KoColor foreground(Qt::black, cs);
-        d->canvasResourceProvider.setFGColor(cfg.readKoColor("LastForeGroundColor",foreground));
-        KoColor background(Qt::white, cs);
-        d->canvasResourceProvider.setBGColor(cfg.readKoColor("LastBackGroundColor",background));
-
-    }
 
     d->softProof->setChecked(view->softProofing());
     d->gamutCheck->setChecked(view->gamutCheck());
@@ -387,6 +363,31 @@ void KisViewManager::setCurrentView(KisView *view)
         //        connect(canvasController()->proxyObject, SIGNAL(documentMousePositionChanged(QPointF)), d->statusBar, SLOT(documentMousePositionChanged(QPointF)));
 
         d->currentImageView = imageView;
+        // Restore the last used brush preset, color and background color.
+        if (first) {
+            KisConfig cfg;
+            KisPaintOpPresetResourceServer * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
+            QString lastPreset = cfg.readEntry("LastPreset", QString("Basic_tip_default"));
+            KisPaintOpPresetSP preset = rserver->resourceByName(lastPreset);
+            if (!preset) {
+                preset = rserver->resourceByName("Basic_tip_default");
+            }
+
+            if (!preset) {
+                preset = rserver->resources().first();
+            }
+            if (preset) {
+                paintOpBox()->restoreResource(preset.data());
+            }
+
+            const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
+            KoColor foreground(Qt::black, cs);
+            d->canvasResourceProvider.setFGColor(cfg.readKoColor("LastForeGroundColor",foreground));
+            KoColor background(Qt::white, cs);
+            d->canvasResourceProvider.setBGColor(cfg.readKoColor("LastBackGroundColor",background));
+
+        }
+
         KisCanvasController *canvasController = dynamic_cast<KisCanvasController*>(d->currentImageView->canvasController());
 
         d->viewConnections.addUniqueConnection(&d->nodeManager, SIGNAL(sigNodeActivated(KisNodeSP)), doc->image(), SLOT(requestStrokeEndActiveNode()));
@@ -455,6 +456,8 @@ void KisViewManager::setCurrentView(KisView *view)
 
     resourceProvider()->slotImageSizeChanged();
     resourceProvider()->slotOnScreenResolutionChanged();
+
+
     Q_EMIT viewChanged();
 }
 

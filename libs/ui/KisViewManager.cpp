@@ -321,7 +321,7 @@ void KisViewManager::slotViewAdded(KisView *view)
 {
     d->inputManager.addTrackedCanvas(view->canvasBase());
 
-    if (viewCount() != 0) {
+    if (viewCount() == 0) {
         d->statusBar.showAllStatusBarItems();
     }
 }

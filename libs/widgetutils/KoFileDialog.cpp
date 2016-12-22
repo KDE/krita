@@ -59,6 +59,7 @@ public:
     QString dialogName;
     QString caption;
     QString defaultDirectory;
+    QString proposedFileName;
     QStringList filterList;
     QString defaultFilter;
     QScopedPointer<QFileDialog> fileDialog;
@@ -90,6 +91,7 @@ void KoFileDialog::setDefaultDir(const QString &defaultDir)
         QFileInfo f(defaultDir);
         d->defaultDirectory = f.absoluteFilePath();
     }
+    d->proposedFileName = QFileInfo(defaultDir).fileName();
 }
 
 void KoFileDialog::setImageFilters()
@@ -127,9 +129,9 @@ QString KoFileDialog::selectedMimeType() const
 
 void KoFileDialog::createFileDialog()
 {
-    //qDebug() << "createFileDialog. Parent:" << d->parent << "Caption:" << d->caption << "Default directory:" << d->defaultDirectory << "Default iflter:" << d->defaultFilter;
+    //qDebug() << "createFileDialog. Parent:" << d->parent << "Caption:" << d->caption << "Default directory:" << d->defaultDirectory << "proposed filename" << d->proposedFileName << "Default filter:" << d->defaultFilter;
 
-    d->fileDialog.reset(new QFileDialog(d->parent, d->caption, d->defaultDirectory));
+    d->fileDialog.reset(new QFileDialog(d->parent, d->caption, d->defaultDirectory + "/" + d->proposedFileName));
     bool dontUseNative = false;
 #ifdef Q_OS_UNIX
     if (qgetenv("XDG_CURRENT_DESKTOP") != "KDE") {
@@ -176,9 +178,9 @@ void KoFileDialog::createFileDialog()
 
     d->fileDialog->setNameFilters(d->filterList);
 
-    if (!QFileInfo(d->defaultDirectory).isDir()) {
+    if (!d->proposedFileName.isEmpty()) {
         //qDebug() << "Finding the right mimetype for the given file" << d->defaultDirectory;
-        QString mime = KisMimeDatabase::mimeTypeForFile(d->defaultDirectory);
+        QString mime = KisMimeDatabase::mimeTypeForFile(d->proposedFileName);
         QString description = KisMimeDatabase::descriptionForMimeType(mime);
         Q_FOREACH(const QString &filter, d->filterList) {
             //qDebug() << "\tConsidering" << filter;

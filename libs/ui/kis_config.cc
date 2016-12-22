@@ -930,7 +930,7 @@ void KisConfig::setSelectionViewSizeMinimum(qreal outlineSizeMinimum) const
 
 int KisConfig::autoSaveInterval(bool defaultValue)  const
 {
-    return (defaultValue ? 300 : m_cfg.readEntry("AutoSaveInterval", 300));
+    return (defaultValue ? 15 * 60 : m_cfg.readEntry("AutoSaveInterval", 15 * 60));
 }
 
 void KisConfig::setAutoSaveInterval(int seconds)  const

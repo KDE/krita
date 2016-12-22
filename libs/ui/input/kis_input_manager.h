@@ -79,7 +79,6 @@ public:
      * Event filter method. Overridden from QObject.
      */
     bool eventFilter(QObject* object, QEvent* event );
-    bool eventFilterImpl(QEvent * event);
 
     void attachPriorityEventFilter(QObject *filter, int priority = 0);
     void detachPriorityEventFilter(QObject *filter);
@@ -116,6 +115,7 @@ private Q_SLOTS:
     void slotCompressedMoveEvent();
 
 private:
+    bool eventFilterImpl(QEvent * event);
     template <class Event>
         bool compressMoveEventCommon(Event *event);
 

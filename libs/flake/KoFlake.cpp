@@ -79,7 +79,9 @@ QPointF KoFlake::toAbsolute(const QPointF &relative, const QSizeF &size)
 #include "kis_debug.h"
 #include "kis_algebra_2d.h"
 
-void KoFlake::resizeShape(KoShape *shape, qreal scaleX, qreal scaleY, const QPointF &absoluteStillPoint, bool usePostScaling)
+void KoFlake::resizeShape(KoShape *shape, qreal scaleX, qreal scaleY,
+                          const QPointF &absoluteStillPoint,
+                          bool usePostScaling, const QTransform &postScalingCoveringTransform)
 {
     QPointF localStillPoint = shape->absoluteTransformation(0).inverted().map(absoluteStillPoint);
 
@@ -88,7 +90,9 @@ void KoFlake::resizeShape(KoShape *shape, qreal scaleX, qreal scaleY, const QPoi
 
     if (usePostScaling) {
         const QTransform scale = QTransform::fromScale(scaleX, scaleY);
-        shape->setTransformation(shape->transformation() * scale);
+        shape->setTransformation(shape->transformation() *
+                                 postScalingCoveringTransform.inverted() *
+                                 scale * postScalingCoveringTransform);
     } else {
         using namespace KisAlgebra2D;
 

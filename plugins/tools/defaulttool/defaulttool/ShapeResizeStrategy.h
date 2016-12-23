@@ -56,6 +56,7 @@ private:
     QList<QSizeF> m_initialSizes;
     QList<QTransform> m_initialTransforms;
 
+    QTransform m_postScalingCoveringTransform;
     QSizeF m_initialSelectionSize;
     QTransform m_unwindMatrix;
     bool m_top, m_left, m_bottom, m_right;

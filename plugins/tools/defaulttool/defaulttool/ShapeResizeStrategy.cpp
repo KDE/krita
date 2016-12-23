@@ -111,9 +111,9 @@ ShapeResizeStrategy::ShapeResizeStrategy(KoToolBase *tool, const QPointF &clicke
         m_globalStillPoint = shape->absoluteTransformation(0).map(p0 + m_globalStillPoint);
         m_globalCenterPoint = shape->absolutePosition(KoFlake::CenteredPosition);
 
-        // TODO: deprecate
         m_unwindMatrix = shape->absoluteTransformation(0).inverted();
         m_initialSelectionSize = shape->size();
+        m_postScalingCoveringTransform = shape->transformation();
     }
 
     tool->setStatusText(i18n("Press CTRL to resize from center."));
@@ -213,7 +213,9 @@ void ShapeResizeStrategy::resizeBy(const QPointF &stillPoint, qreal zoomX, qreal
 
         shape->setTransformation(m_initialTransforms[i]);
         shape->setSize(m_initialSizes[i]);
-        KoFlake::resizeShape(shape, zoomX, zoomY, stillPoint, usePostScaling);
+        KoFlake::resizeShape(shape, zoomX, zoomY,
+                             stillPoint,
+                             usePostScaling, m_postScalingCoveringTransform);
 
         shape->update();
         i++;

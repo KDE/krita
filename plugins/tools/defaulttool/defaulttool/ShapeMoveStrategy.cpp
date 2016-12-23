@@ -57,7 +57,7 @@ ShapeMoveStrategy::ShapeMoveStrategy(KoToolBase *tool, const QPointF &clicked)
     m_initialOffset = selection->absolutePosition(SelectionDecorator::hotPosition()) - m_start;
     m_canvas->snapGuide()->setIgnoredShapes(KoShape::linearizeSubtree(selection->selectedShapes()));
 
-    tool->setStatusText(i18n("Press ALT to hold x- or y-position."));
+    tool->setStatusText(i18n("Press Shift to hold x- or y-position."));
 }
 
 void ShapeMoveStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModifiers modifiers)

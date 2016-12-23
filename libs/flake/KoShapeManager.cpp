@@ -80,7 +80,6 @@ void KoShapeManager::Private::updateTree()
 
     detector.fireSignals();
     if (selectionModified) {
-        selection->updateSizeAndPosition();
         emit q->selectionContentChanged();
     }
     if (anyModified) {

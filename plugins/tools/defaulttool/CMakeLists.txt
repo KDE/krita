@@ -11,7 +11,6 @@ set ( defaulttools_SRCS
     defaulttool/ShapeRotateStrategy.cpp
     defaulttool/ShapeShearStrategy.cpp
     defaulttool/SelectionDecorator.cpp
-    defaulttool/SelectionTransformCommand.cpp
 
     connectionTool/ConnectionTool.cpp
     connectionTool/ConnectionToolFactory.cpp

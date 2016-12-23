@@ -21,7 +21,6 @@
 
 #include "ShapeShearStrategy.h"
 #include "SelectionDecorator.h"
-#include "SelectionTransformCommand.h"
 
 #include <KoToolBase.h>
 #include <KoCanvasBase.h>
@@ -43,7 +42,7 @@ ShapeShearStrategy::ShapeShearStrategy(KoToolBase *tool, const QPointF &clicked,
     , m_start(clicked)
 {
     KoSelection *sel = tool->canvas()->shapeManager()->selection();
-    QList<KoShape *> selectedShapes = sel->selectedShapes(KoFlake::StrippedSelection);
+    QList<KoShape *> selectedShapes = sel->selectedShapes(KoFlake::TopLevelSelection);
     Q_FOREACH (KoShape *shape, selectedShapes) {
         if (!shape->isEditable()) {
             continue;
@@ -51,8 +50,6 @@ ShapeShearStrategy::ShapeShearStrategy(KoToolBase *tool, const QPointF &clicked,
         m_selectedShapes << shape;
         m_oldTransforms << shape->transformation();
     }
-
-    m_initialSelectionMatrix = sel->transformation();
 
     // Eventhoug we aren't currently activated by the corner handles we might as well code like it
     switch (direction) {
@@ -89,6 +86,8 @@ ShapeShearStrategy::ShapeShearStrategy(KoToolBase *tool, const QPointF &clicked,
         m_solidPoint -= QPointF(m_initialSize.width() / 2, 0);
     }
 
+    m_solidPoint = sel->absoluteTransformation(0).map(sel->outlineRect().topLeft() + m_solidPoint);
+
     QPointF edge;
     qreal angle = 0.0;
     if (m_top) {
@@ -106,9 +105,6 @@ ShapeShearStrategy::ShapeShearStrategy(KoToolBase *tool, const QPointF &clicked,
     }
     qreal currentAngle = atan2(edge.y(), edge.x()) / M_PI * 180;
     m_initialSelectionAngle = currentAngle - angle;
-
-    qDebug() << " PREsol.x=" << m_solidPoint.x() << " sol.y=" << m_solidPoint.y();
-    m_solidPoint = tool->canvas()->shapeManager()->selection()->absoluteTransformation(0).map(m_solidPoint);
 
     // use crossproduct of top edge and left edge of selection bounding rect
     // to determine if the selection is mirrored
@@ -158,7 +154,6 @@ void ShapeShearStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModif
         shape->applyAbsoluteTransformation(applyMatrix);
         shape->update();
     }
-    tool()->canvas()->shapeManager()->selection()->applyAbsoluteTransformation(applyMatrix);
     m_shearMatrix = matrix;
 }
 
@@ -178,7 +173,5 @@ KUndo2Command *ShapeShearStrategy::createCommand()
     }
     KoShapeTransformCommand *cmd = new KoShapeTransformCommand(m_selectedShapes, m_oldTransforms, newTransforms);
     cmd->setText(kundo2_i18n("Shear"));
-    KoSelection *sel = tool()->canvas()->shapeManager()->selection();
-    new SelectionTransformCommand(sel, m_initialSelectionMatrix, sel->transformation(), cmd);
     return cmd;
 }

@@ -24,8 +24,12 @@
 class KisShapeCommandsTest : public QObject
 {
     Q_OBJECT
+    void testResizeShape(bool normalizeGroup);
+
 private Q_SLOTS:
-    void test();
+    void testGrouping();
+    void testResizeShape();
+    void testResizeShapeNormalized();
 };
 
 #endif /* __KIS_SHAPE_COMMANDS_TEST_H */

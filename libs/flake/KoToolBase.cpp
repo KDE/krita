@@ -190,21 +190,6 @@ void KoToolBase::inputMethodEvent(QInputMethodEvent * event)
     event->accept();
 }
 
-void KoToolBase::customPressEvent(KoPointerEvent * event)
-{
-    event->ignore();
-}
-
-void KoToolBase::customReleaseEvent(KoPointerEvent * event)
-{
-    event->ignore();
-}
-
-void KoToolBase::customMoveEvent(KoPointerEvent * event)
-{
-    event->ignore();
-}
-
 bool KoToolBase::wantsTouch() const
 {
     return false;

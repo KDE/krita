@@ -20,7 +20,7 @@
 #define __KIS_SIGNAL_COMPRESSOR_H
 
 #include <QTimer>
-#include "kritaimage_export.h"
+#include "kritaglobal_export.h"
 
 class QTimer;
 
@@ -52,7 +52,7 @@ class QTimer;
  * the timer has elapsed.
  *
  */
-class KRITAIMAGE_EXPORT KisSignalCompressor : public QObject
+class KRITAGLOBAL_EXPORT KisSignalCompressor : public QObject
 {
     Q_OBJECT
 

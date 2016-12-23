@@ -55,8 +55,6 @@ public:
     /// reimplemented from superclass
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     /// reimplemented method
-    virtual void customMoveEvent(KoPointerEvent *event);
-    /// reimplemented method
     virtual void mouseDoubleClickEvent(KoPointerEvent *event);
 
 

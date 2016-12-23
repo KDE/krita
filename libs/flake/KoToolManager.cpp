@@ -400,18 +400,6 @@ QString KoToolManager::preferredToolForSelection(const QList<KoShape*> &shapes)
     return toolType;
 }
 
-void KoToolManager::injectDeviceEvent(KoInputDeviceHandlerEvent * event)
-{
-    if (d->canvasData && d->canvasData->canvas->canvas()) {
-        if (static_cast<KoInputDeviceHandlerEvent::Type>(event->type()) == KoInputDeviceHandlerEvent::ButtonPressed)
-            d->canvasData->activeTool->customPressEvent(event->pointerEvent());
-        else if (static_cast<KoInputDeviceHandlerEvent::Type>(event->type()) == KoInputDeviceHandlerEvent::ButtonReleased)
-            d->canvasData->activeTool->customReleaseEvent(event->pointerEvent());
-        else if (static_cast<KoInputDeviceHandlerEvent::Type>(event->type()) ==  KoInputDeviceHandlerEvent::PositionChanged)
-            d->canvasData->activeTool->customMoveEvent(event->pointerEvent());
-    }
-}
-
 void KoToolManager::addDeferredToolFactory(KoToolFactoryBase *toolFactory)
 {
     ToolHelper *tool = new ToolHelper(toolFactory);

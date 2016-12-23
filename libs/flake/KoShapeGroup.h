@@ -60,6 +60,7 @@ public:
     /// always returns false since the group itself can't be selected or hit
     virtual bool hitTest(const QPointF &position) const;
     QSizeF size() const override;
+    void setSize(const QSizeF &size) override;
     QRectF outlineRect() const override;
     /// a group's boundingRect
     QRectF boundingRect() const override;

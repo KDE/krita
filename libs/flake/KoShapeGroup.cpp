@@ -151,10 +151,7 @@ void KoShapeGroupPrivate::tryUpdateCachedSize() const
     if (!sizeCached) {
         QRectF bound;
         Q_FOREACH (KoShape *shape, q->shapes()) {
-            if (bound.isEmpty())
-                bound = shape->transformation().mapRect(shape->outlineRect());
-            else
-                bound |= shape->transformation().mapRect(shape->outlineRect());
+            bound |= shape->transformation().mapRect(shape->outlineRect());
         }
         savedOutlineRect = bound;
         size = bound.size();
@@ -170,6 +167,19 @@ QSizeF KoShapeGroup::size() const
     return d->size;
 }
 
+void KoShapeGroup::setSize(const QSizeF &size)
+{
+    QSizeF oldSize = this->size();
+    if (!shapeCount() || oldSize.isNull()) return;
+
+    const QTransform scale =
+        QTransform::fromScale(size.width() / oldSize.width(), size.height() / oldSize.height());
+
+    setTransformation(scale * transformation());
+
+    KoShapeContainer::setSize(size);
+}
+
 QRectF KoShapeGroup::outlineRect() const
 {
     Q_D(const KoShapeGroup);
@@ -180,15 +190,9 @@ QRectF KoShapeGroup::outlineRect() const
 
 QRectF KoShapeGroup::boundingRect() const
 {
-    bool first = true;
     QRectF groupBound;
     Q_FOREACH (KoShape* shape, shapes()) {
-        if (first) {
-            groupBound = shape->boundingRect();
-            first = false;
-        } else {
-            groupBound = groupBound.united(shape->boundingRect());
-        }
+        groupBound |= shape->boundingRect();
     }
 
     if (shadow()) {
@@ -274,6 +278,8 @@ void KoShapeGroup::shapeChanged(ChangeType type, KoShape *shape)
     default:
         break;
     }
+
+    invalidateSizeCache();
 }
 
 void KoShapeGroup::invalidateSizeCache()

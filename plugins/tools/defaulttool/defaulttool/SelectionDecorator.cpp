@@ -84,29 +84,27 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
         KoShape::applyConversion(painter, converter);
 
         KisHandlePainterHelper helper(&painter);
-        helper.drawRubberLine(QRectF(QPointF(), shape->size()));
+        helper.drawRubberLine(shape->outlineRect());
 
         if (!shape->isGeometryProtected()) {
             editable = true;
         }
     }
 
-    if (m_selection->count() > 1) {
+    QList<KoShape*> selectedShapes = m_selection->selectedShapes(KoFlake::TopLevelSelection);
+    if (selectedShapes.isEmpty()) return;
+
+    handleArea = m_selection->outlineRect();
+    painter.setTransform(m_selection->absoluteTransformation(&converter) * painterMatrix);
+    KoShape::applyConversion(painter, converter);
+
+    // draw extra rubber line around all the shapes
+    if (selectedShapes.size() > 1) {
         painter.setPen(Qt::blue);
-        painter.setTransform(m_selection->absoluteTransformation(&converter) * painterMatrix);
-        KoShape::applyConversion(painter, converter);
-        handleArea = QRectF(QPointF(), m_selection->size());
 
-        {
-            KisHandlePainterHelper helper(&painter);
-            helper.drawRubberLine(handleArea);
-        }
+        KisHandlePainterHelper helper(&painter);
+        helper.drawRubberLine(handleArea);
 
-    } else if (m_selection->firstSelectedShape()) {
-        painter.setTransform(m_selection->firstSelectedShape()->absoluteTransformation(&converter) * painterMatrix);
-        KoShape::applyConversion(painter, converter);
-
-        handleArea = QRectF(QPointF(), m_selection->firstSelectedShape()->size());
     }
 
     // if we have no editable shape selected there

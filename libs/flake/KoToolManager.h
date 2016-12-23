@@ -230,9 +230,6 @@ public:
     /// Request tool activation for the given canvas controller
     void requestToolActivation(KoCanvasController *controller);
 
-    /// Injects an input event from a plugin based input device
-    void injectDeviceEvent(KoInputDeviceHandlerEvent *event);
-
     /// Returns the toolId of the currently active tool
     QString activeToolId() const;
 

@@ -34,9 +34,9 @@
 #include <KoShapeGroupCommand.h>
 
 
-void KisShapeCommandsTest::test()
+void KisShapeCommandsTest::testGrouping()
 {
-    TestUtil::ExternalImageChecker chk("shape_commands_test", "grouping");
+    TestUtil::ExternalImageChecker chk("grouping", "shape_commands_test");
 
     QRect refRect(0,0,64,64);
 
@@ -118,6 +118,112 @@ void KisShapeCommandsTest::test()
 
     QVERIFY(chk.testPassed());
 
+}
+
+void KisShapeCommandsTest::testResizeShape(bool normalizeGroup)
+{
+    TestUtil::ExternalImageChecker chk("resize_shape", "shape_commands_test");
+
+    QRect refRect(0,0,64,64);
+
+    QScopedPointer<KisDocument> doc(KisPart::instance()->createDocument());
+    TestUtil::MaskParent p(refRect);
+
+    const qreal resolution = 72.0 / 72.0;
+    p.image->setResolution(resolution, resolution);
+
+    doc->setCurrentImage(p.image);
+
+    KisShapeLayerSP shapeLayer = new KisShapeLayer(doc->shapeController(), p.image, "shapeLayer1", 75);
+
+    {
+        KoPathShape* path = new KoPathShape();
+        path->setShapeId(KoPathShapeId);
+        path->moveTo(QPointF(5, 5));
+        path->lineTo(QPointF(5, 55));
+        path->lineTo(QPointF(55, 55));
+        path->lineTo(QPointF(55,  5));
+        path->close();
+        path->normalize();
+        path->setBackground(toQShared(new KoColorBackground(Qt::red)));
+
+        path->setName("shape1");
+        path->setZIndex(1);
+        shapeLayer->addShape(path);
+    }
+
+    {
+        KoPathShape* path = new KoPathShape();
+        path->setShapeId(KoPathShapeId);
+        path->moveTo(QPointF(30, 30));
+        path->lineTo(QPointF(30, 60));
+        path->lineTo(QPointF(60, 60));
+        path->lineTo(QPointF(60, 30));
+        path->close();
+        path->normalize();
+        path->setBackground(toQShared(new KoColorBackground(Qt::green)));
+
+        path->setName("shape2");
+        path->setZIndex(2);
+        shapeLayer->addShape(path);
+    }
+
+    p.image->addNode(shapeLayer);
+
+    shapeLayer->setDirty();
+    qApp->processEvents();
+    p.image->waitForDone();
+
+    chk.checkImage(p.image, "00_initial_layer_update");
+
+    QList<KoShape*> shapes = shapeLayer->shapes();
+
+    KoShapeGroup *group = new KoShapeGroup();
+    group->setName("group_shape");
+    shapeLayer->addShape(group);
+
+    QScopedPointer<KoShapeGroupCommand> cmd(
+        new KoShapeGroupCommand(group, shapes, false, true, normalizeGroup));
+
+    cmd->redo();
+
+    shapeLayer->setDirty();
+    qApp->processEvents();
+    p.image->waitForDone();
+
+    chk.checkImage(p.image, "00_initial_layer_update");
+
+    qDebug() << "Before:";
+    qDebug() << ppVar(group->absolutePosition(KoFlake::TopLeftCorner));
+    qDebug() << ppVar(group->absolutePosition(KoFlake::BottomRightCorner));
+    qDebug() << ppVar(group->outlineRect());
+    qDebug() << ppVar(group->transformation());
+
+    QCOMPARE(group->absolutePosition(KoFlake::TopLeftCorner), QPointF(5,5));
+    QCOMPARE(group->absolutePosition(KoFlake::BottomRightCorner), QPointF(60,60));
+
+
+    const QPointF stillPoint = group->absolutePosition(KoFlake::BottomRightCorner);
+    KoFlake::resizeShape(group, 1.2, 1.4, stillPoint);
+
+    qDebug() << "After:";
+    qDebug() << ppVar(group->absolutePosition(KoFlake::TopLeftCorner));
+    qDebug() << ppVar(group->absolutePosition(KoFlake::BottomRightCorner));
+    qDebug() << ppVar(group->outlineRect());
+    qDebug() << ppVar(group->transformation());
+
+    QCOMPARE(group->absolutePosition(KoFlake::TopLeftCorner), QPointF(-6,-17));
+    QCOMPARE(group->absolutePosition(KoFlake::BottomRightCorner), QPointF(60,60));
+}
+
+void KisShapeCommandsTest::testResizeShape()
+{
+    testResizeShape(false);
+}
+
+void KisShapeCommandsTest::testResizeShapeNormalized()
+{
+    testResizeShape(true);
 }
 
 QTEST_MAIN(KisShapeCommandsTest)

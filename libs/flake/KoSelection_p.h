@@ -21,27 +21,28 @@
 
 #include "KoShape_p.h"
 
+#include "kis_signal_compressor.h"
+
 class KoShapeGroup;
 
 class KoSelectionPrivate : public KoShapePrivate
 {
 public:
     explicit KoSelectionPrivate(KoSelection *parent)
-        : KoShapePrivate(parent), eventTriggered(false), activeLayer(0) {}
+        : KoShapePrivate(parent),
+          activeLayer(0),
+          selectionChangedCompressor(1, KisSignalCompressor::FIRST_INACTIVE)
+    {}
     QList<KoShape*> selectedShapes;
-    bool eventTriggered;
-
     KoShapeLayer *activeLayer;
 
-    void requestSelectionChangedEvent();
-    void selectGroupChildren(KoShapeGroup *group);
-    void deselectGroupChildren(KoShapeGroup *group);
+    KisSignalCompressor selectionChangedCompressor;
 
-    void selectionChangedEvent();
 
-    QRectF sizeRect();
+    QList<QTransform> savedMatrices;
 
-    QRectF globalBound;
+    QList<QTransform> fetchShapesMatrices() const;
+    bool checkMatricesConsistent(const QList<QTransform> &matrices, QTransform *newTransform);
 
     Q_DECLARE_PUBLIC(KoSelection)
 };

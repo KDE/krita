@@ -73,3 +73,41 @@ QPointF KoFlake::toAbsolute(const QPointF &relative, const QSizeF &size)
 {
     return QPointF(relative.x() * size.width(), relative.y() * size.height());
 }
+
+#include <KoShape.h>
+#include <QTransform>
+#include "kis_debug.h"
+#include "kis_algebra_2d.h"
+
+void KoFlake::resizeShape(KoShape *shape, qreal scaleX, qreal scaleY, const QPointF &absoluteStillPoint, bool usePostScaling)
+{
+    QPointF localStillPoint = shape->absoluteTransformation(0).inverted().map(absoluteStillPoint);
+
+    QPointF relativeStillPoint = KisAlgebra2D::absoluteToRelative(localStillPoint, shape->outlineRect());
+    QPointF parentalStillPointBefore = shape->transformation().map(localStillPoint);
+
+    if (usePostScaling) {
+        const QTransform scale = QTransform::fromScale(scaleX, scaleY);
+        shape->setTransformation(shape->transformation() * scale);
+    } else {
+        using namespace KisAlgebra2D;
+
+        const QSizeF oldSize(shape->size());
+        const QSizeF newSize(oldSize.width() * qAbs(scaleX), oldSize.height() * qAbs(scaleY));
+
+        const QTransform mirrorTransform = QTransform::fromScale(signPZ(scaleX), signPZ(scaleY));
+
+        shape->setSize(newSize);
+
+        if (!mirrorTransform.isIdentity()) {
+            shape->setTransformation(mirrorTransform * shape->transformation());
+        }
+
+    }
+
+    QPointF newLocalStillPoint = KisAlgebra2D::relativeToAbsolute(relativeStillPoint, shape->outlineRect());
+    QPointF parentalStillPointAfter = shape->transformation().map(newLocalStillPoint);
+
+    QPointF diff = parentalStillPointBefore - parentalStillPointAfter;
+    shape->setTransformation(shape->transformation() * QTransform::fromTranslate(diff.x(), diff.y()));
+}

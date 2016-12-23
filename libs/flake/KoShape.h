@@ -1092,6 +1092,25 @@ public:
      */
     KoShapePrivate *priv();
 
+public:
+
+    struct ShapeChangeListener {
+        virtual ~ShapeChangeListener();
+        virtual void notifyShapeChanged(ChangeType type, KoShape *shape) = 0;
+
+    private:
+        friend class KoShape;
+        friend class KoShapePrivate;
+        void registerShape(KoShape *shape);
+        void unregisterShape(KoShape *shape);
+        void notifyShapeChangedImpl(ChangeType type, KoShape *shape);
+
+        QList<KoShape*> m_registeredShapes;
+    };
+
+    void addShapeChangeListener(ShapeChangeListener *listener);
+    void removeShapeChangeListener(ShapeChangeListener *listener);
+
 protected:
     /// constructor
     KoShape(KoShapePrivate *);

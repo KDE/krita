@@ -121,8 +121,6 @@ public: // Events
 
     virtual void keyPressEvent(QKeyEvent *event);
 
-    virtual void customMoveEvent(KoPointerEvent *event);
-
 protected:
     QList<QPointer<QWidget> > createOptionWidgets();
 
@@ -130,7 +128,7 @@ protected:
 
 private:
     void setupActions();
-    void recalcSelectionBox();
+    void recalcSelectionBox(KoSelection *selection);
     void updateCursor();
     /// Returns rotation angle of given handle of the current selection
     qreal rotationOfHandle(KoFlake::SelectionHandle handle, bool useEdgeRotation);

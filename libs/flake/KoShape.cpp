@@ -174,9 +174,16 @@ void KoShapePrivate::shapeChanged(KoShape::ChangeType type)
     Q_Q(KoShape);
     if (parent)
         parent->model()->childChanged(q, type);
+
     q->shapeChanged(type);
-    Q_FOREACH (KoShape * shape, dependees)
+
+    Q_FOREACH (KoShape * shape, dependees) {
         shape->shapeChanged(type, q);
+    }
+
+    Q_FOREACH (KoShape::ShapeChangeListener *listener, listeners) {
+       listener->notifyShapeChangedImpl(type, q);
+    }
 }
 
 void KoShapePrivate::updateStroke()
@@ -680,13 +687,15 @@ QPainterPath KoShape::shadowOutline() const
 
 QPointF KoShape::absolutePosition(KoFlake::Position anchor) const
 {
+    const QRectF rc = outlineRect();
+
     QPointF point;
     switch (anchor) {
-    case KoFlake::TopLeftCorner: break;
-    case KoFlake::TopRightCorner: point = QPointF(size().width(), 0.0); break;
-    case KoFlake::BottomLeftCorner: point = QPointF(0.0, size().height()); break;
-    case KoFlake::BottomRightCorner: point = QPointF(size().width(), size().height()); break;
-    case KoFlake::CenteredPosition: point = QPointF(size().width() / 2.0, size().height() / 2.0); break;
+    case KoFlake::TopLeftCorner: point = rc.topLeft(); break;
+    case KoFlake::TopRightCorner: point = rc.topRight(); break;
+    case KoFlake::BottomLeftCorner: point = rc.bottomLeft(); break;
+    case KoFlake::BottomRightCorner: point = rc.bottomRight(); break;
+    case KoFlake::CenteredPosition: point = rc.center(); break;
     }
     return absoluteTransformation(0).map(point);
 }
@@ -812,7 +821,7 @@ QSizeF KoShape::size() const
 QPointF KoShape::position() const
 {
     Q_D(const KoShape);
-    QPointF center(0.5*size().width(), 0.5*size().height());
+    QPointF center = outlineRect().center();
     return d->localMatrix.map(center) - center;
 }
 
@@ -2305,4 +2314,52 @@ KoShapePrivate *KoShape::priv()
 {
     Q_D(KoShape);
     return d;
+}
+
+KoShape::ShapeChangeListener::~ShapeChangeListener()
+{
+    Q_FOREACH(KoShape *shape, m_registeredShapes) {
+        shape->removeShapeChangeListener(this);
+    }
+}
+
+void KoShape::ShapeChangeListener::registerShape(KoShape *shape)
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(!m_registeredShapes.contains(shape));
+    m_registeredShapes.append(shape);
+}
+
+void KoShape::ShapeChangeListener::unregisterShape(KoShape *shape)
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_registeredShapes.contains(shape));
+    m_registeredShapes.removeAll(shape);
+}
+
+void KoShape::ShapeChangeListener::notifyShapeChangedImpl(KoShape::ChangeType type, KoShape *shape)
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_registeredShapes.contains(shape));
+
+    notifyShapeChanged(type, shape);
+
+    if (type == KoShape::Deleted) {
+        unregisterShape(shape);
+    }
+}
+
+void KoShape::addShapeChangeListener(KoShape::ShapeChangeListener *listener)
+{
+    Q_D(KoShape);
+
+    KIS_SAFE_ASSERT_RECOVER_RETURN(!d->listeners.contains(listener));
+    listener->registerShape(this);
+    d->listeners.append(listener);
+}
+
+void KoShape::removeShapeChangeListener(KoShape::ShapeChangeListener *listener)
+{
+    Q_D(KoShape);
+
+    KIS_SAFE_ASSERT_RECOVER_RETURN(d->listeners.contains(listener));
+    d->listeners.removeAll(listener);
+    listener->unregisterShape(this);
 }

@@ -50,12 +50,11 @@ public:
     KUndo2Command *createCommand();
     void finishInteraction(Qt::KeyboardModifiers modifiers);
     virtual void paint(QPainter &painter, const KoViewConverter &converter);
-    virtual void handleCustomEvent(KoPointerEvent *event);
 private:
-    void moveSelection();
+    void moveSelection(const QPointF &diff);
     QList<QPointF> m_previousPositions;
     QList<QPointF> m_newPositions;
-    QPointF m_start, m_diff, m_initialSelectionPosition, m_initialOffset;
+    QPointF m_start, m_finalMove, m_initialOffset;
     QList<KoShape *> m_selectedShapes;
     KoCanvasBase *m_canvas;
 };

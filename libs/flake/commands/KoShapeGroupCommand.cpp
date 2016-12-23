@@ -215,20 +215,14 @@ void KoShapeGroupCommand::undo()
 
 QRectF KoShapeGroupCommandPrivate::containerBoundingRect()
 {
-    bool boundingRectInitialized = true;
     QRectF bound;
-    if (container->shapeCount() > 0)
-        bound = container->boundingRect();
-    else
-        boundingRectInitialized = false;
+    if (container->shapeCount() > 0) {
+        bound = container->absoluteTransformation(0).mapRect(container->outlineRect());
+    }
 
     Q_FOREACH (KoShape *shape, shapes) {
-        if (boundingRectInitialized)
-            bound = bound.united(shape->boundingRect());
-        else {
-            bound = shape->boundingRect();
-            boundingRectInitialized = true;
-        }
+        bound |= shape->absoluteTransformation(0).mapRect(shape->outlineRect());
     }
+
     return bound;
 }

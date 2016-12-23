@@ -182,7 +182,7 @@ void TestShapeContainer::testScaling2()
     groupCommand->redo();
 
     KoSelection* selection = new KoSelection();
-    selection->select(shape1, true);
+    selection->select(shape1);
 
     QList<KoShape*> transformShapes;
     transformShapes.append(selection->selectedShapes());
@@ -212,7 +212,7 @@ void TestShapeContainer::testScaling2()
     QSizeF shapeSize=r1.united(r2).size();
 
     selection = new KoSelection();
-    selection->select(shape1, true);
+    selection->select(shape1);
     QSizeF selecSize = selection->size();
 
     bool works=false;

@@ -27,6 +27,11 @@ class QGradient;
 class QPointF;
 class QSizeF;
 
+class KoShape;
+class QTransform;
+
+#include <QtGlobal>
+
 /**
  * Flake reference
  */
@@ -101,6 +106,9 @@ namespace KoFlake
      * @return absolute position
      */
     KRITAFLAKE_EXPORT QPointF toAbsolute(const QPointF &relative, const QSizeF &size);
+
+    KRITAFLAKE_EXPORT void resizeShape(KoShape *shape, qreal scaleX, qreal scaleY,
+                                       const QPointF &absoluteStillPoint, bool usePostScaling = true);
 }
 
 #endif

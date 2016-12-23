@@ -15,6 +15,8 @@ set(kritaglobal_LIB_SRCS
     kis_dom_utils.cpp
     kis_painting_tweaks.cpp
     KisHandlePainterHelper.cpp
+    kis_signal_compressor.cpp
+    kis_signal_compressor_with_param.cpp
 )
 
 add_library(kritaglobal SHARED ${kritaglobal_LIB_SRCS} )

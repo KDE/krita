@@ -36,7 +36,7 @@
  * called. std::bind allows us to call any method of any class without
  * changing signature of the class or creating special wrappers.
  */
-class KRITAIMAGE_EXPORT SignalToFunctionProxy : public QObject
+class KRITAGLOBAL_EXPORT SignalToFunctionProxy : public QObject
 {
     Q_OBJECT
 public:

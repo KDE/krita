@@ -174,10 +174,8 @@ bool KoSelection::hitTest(const QPointF &position) const
     return false;
 }
 
-const QList<KoShape*> KoSelection::selectedShapes(KoFlake::SelectionType strip) const
+const QList<KoShape*> KoSelection::selectedShapes() const
 {
-    Q_UNUSED(strip);
-
     Q_D(const KoSelection);
     return d->selectedShapes;
 }
@@ -196,10 +194,8 @@ bool KoSelection::isSelected(const KoShape *shape) const
     return tmpShape;
 }
 
-KoShape *KoSelection::firstSelectedShape(KoFlake::SelectionType strip) const
+KoShape *KoSelection::firstSelectedShape() const
 {
-    Q_UNUSED(strip);
-
     Q_D(const KoSelection);
     return !d->selectedShapes.isEmpty() ? d->selectedShapes.first() : 0;
 }
@@ -219,6 +215,7 @@ KoShapeLayer* KoSelection::activeLayer() const
 
 void KoSelection::notifyShapeChanged(KoShape::ChangeType type, KoShape *shape)
 {
+    Q_UNUSED(shape);
     Q_D(KoSelection);
 
     if (type >= KoShape::PositionChanged && type <= KoShape::GenericMatrixChange) {

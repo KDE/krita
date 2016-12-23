@@ -36,7 +36,7 @@ ShapeRotateStrategy::ShapeRotateStrategy(KoToolBase *tool, const QPointF &clicke
     : KoInteractionStrategy(tool)
     , m_start(clicked)
 {
-    QList<KoShape *> selectedShapes = tool->canvas()->shapeManager()->selection()->selectedShapes(KoFlake::TopLevelSelection);
+    QList<KoShape *> selectedShapes = tool->canvas()->shapeManager()->selection()->selectedShapes();
     Q_FOREACH (KoShape *shape, selectedShapes) {
         if (!shape->isEditable()) {
             continue;

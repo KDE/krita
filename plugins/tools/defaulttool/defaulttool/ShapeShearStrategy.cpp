@@ -42,7 +42,7 @@ ShapeShearStrategy::ShapeShearStrategy(KoToolBase *tool, const QPointF &clicked,
     , m_start(clicked)
 {
     KoSelection *sel = tool->canvas()->shapeManager()->selection();
-    QList<KoShape *> selectedShapes = sel->selectedShapes(KoFlake::TopLevelSelection);
+    QList<KoShape *> selectedShapes = sel->selectedShapes();
     Q_FOREACH (KoShape *shape, selectedShapes) {
         if (!shape->isEditable()) {
             continue;

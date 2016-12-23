@@ -2363,3 +2363,19 @@ void KoShape::removeShapeChangeListener(KoShape::ShapeChangeListener *listener)
     d->listeners.removeAll(listener);
     listener->unregisterShape(this);
 }
+
+QList<KoShape *> KoShape::linearizeSubtree(const QList<KoShape *> &shapes)
+{
+    QList<KoShape *> result;
+
+    Q_FOREACH (KoShape *shape, shapes) {
+        result << shape;
+
+        KoShapeContainer *container = dynamic_cast<KoShapeContainer*>(shape);
+        if (container) {
+            result << linearizeSubtree(container->shapes());
+        }
+    }
+
+    return result;
+}

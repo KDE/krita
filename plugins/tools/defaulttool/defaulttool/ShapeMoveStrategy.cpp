@@ -41,7 +41,7 @@ ShapeMoveStrategy::ShapeMoveStrategy(KoToolBase *tool, const QPointF &clicked)
     , m_start(clicked)
     , m_canvas(tool->canvas())
 {
-    QList<KoShape *> selectedShapes = m_canvas->shapeManager()->selection()->selectedShapes(KoFlake::TopLevelSelection);
+    QList<KoShape *> selectedShapes = m_canvas->shapeManager()->selection()->selectedShapes();
 
     QRectF boundingRect;
     Q_FOREACH (KoShape *shape, selectedShapes) {
@@ -55,7 +55,7 @@ ShapeMoveStrategy::ShapeMoveStrategy(KoToolBase *tool, const QPointF &clicked)
     }
     KoSelection *selection = m_canvas->shapeManager()->selection();
     m_initialOffset = selection->absolutePosition(SelectionDecorator::hotPosition()) - m_start;
-    m_canvas->snapGuide()->setIgnoredShapes(selection->selectedShapes(KoFlake::FullSelection));
+    m_canvas->snapGuide()->setIgnoredShapes(KoShape::linearizeSubtree(selection->selectedShapes()));
 
     tool->setStatusText(i18n("Press ALT to hold x- or y-position."));
 }

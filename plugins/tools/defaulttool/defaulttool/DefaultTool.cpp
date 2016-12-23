@@ -80,7 +80,7 @@ QPolygonF selectionPolygon(KoSelection *selection)
 {
     QPolygonF result;
 
-    QList<KoShape*> selectedShapes = selection->selectedShapes(KoFlake::TopLevelSelection);
+    QList<KoShape*> selectedShapes = selection->selectedShapes();
 
     if (!selectedShapes.size()) {
         return result;
@@ -382,7 +382,7 @@ void DefaultTool::updateCursor()
     QString statusText;
 
     if (koSelection()->count() > 0) { // has a selection
-        bool editable = editableShapesCount(koSelection()->selectedShapes(KoFlake::StrippedSelection));
+        bool editable = editableShapesCount(koSelection()->selectedShapes());
 
         if (!m_mouseWasInsideHandles) {
             m_angle = rotationOfHandle(m_lastHandle, true);
@@ -623,7 +623,7 @@ bool DefaultTool::moveSelection(int direction, Qt::KeyboardModifiers modifiers)
         QList<QPointF> prevPos;
         QList<QPointF> newPos;
         QList<KoShape *> shapes;
-        Q_FOREACH (KoShape *shape, koSelection()->selectedShapes(KoFlake::TopLevelSelection)) {
+        Q_FOREACH (KoShape *shape, koSelection()->selectedShapes()) {
             if (shape->isGeometryProtected()) {
                 continue;
             }
@@ -690,7 +690,7 @@ void DefaultTool::repaintDecorations()
 
 void DefaultTool::copy() const
 {
-    QList<KoShape *> shapes = canvas()->shapeManager()->selection()->selectedShapes(KoFlake::TopLevelSelection);
+    QList<KoShape *> shapes = canvas()->shapeManager()->selection()->selectedShapes();
     if (!shapes.empty()) {
         KoShapeOdfSaveHelper saveHelper(shapes);
         KoDrag drag;
@@ -702,7 +702,7 @@ void DefaultTool::copy() const
 void DefaultTool::deleteSelection()
 {
     QList<KoShape *> shapes;
-    foreach (KoShape *s, canvas()->shapeManager()->selection()->selectedShapes(KoFlake::TopLevelSelection)) {
+    foreach (KoShape *s, canvas()->shapeManager()->selection()->selectedShapes()) {
         if (s->isGeometryProtected()) {
             continue;
         }
@@ -867,7 +867,7 @@ void DefaultTool::selectionGroup()
         return;
     }
 
-    QList<KoShape *> selectedShapes = selection->selectedShapes(KoFlake::TopLevelSelection);
+    QList<KoShape *> selectedShapes = selection->selectedShapes();
     QList<KoShape *> groupedShapes;
 
     // only group shapes with an unselected parent
@@ -895,7 +895,7 @@ void DefaultTool::selectionUngroup()
         return;
     }
 
-    QList<KoShape *> selectedShapes = selection->selectedShapes(KoFlake::TopLevelSelection);
+    QList<KoShape *> selectedShapes = selection->selectedShapes();
     QList<KoShape *> containerSet;
 
     // only ungroup shape groups with an unselected parent
@@ -930,7 +930,7 @@ void DefaultTool::selectionAlign(KoShapeAlignCommand::Align align)
         return;
     }
 
-    QList<KoShape *> selectedShapes = selection->selectedShapes(KoFlake::TopLevelSelection);
+    QList<KoShape *> selectedShapes = selection->selectedShapes();
     if (selectedShapes.count() < 1) {
         return;
     }
@@ -985,7 +985,7 @@ void DefaultTool::selectionReorder(KoShapeReorderCommand::MoveShapeType order)
         return;
     }
 
-    QList<KoShape *> selectedShapes = selection->selectedShapes(KoFlake::TopLevelSelection);
+    QList<KoShape *> selectedShapes = selection->selectedShapes();
     if (selectedShapes.count() < 1) {
         return;
     }
@@ -1040,7 +1040,7 @@ KoInteractionStrategy *DefaultTool::createStrategy(KoPointerEvent *event)
     bool insideSelection = false;
     KoFlake::SelectionHandle handle = handleAt(event->point, &insideSelection);
 
-    bool editableShape = editableShapesCount(selection->selectedShapes(KoFlake::TopLevelSelection));
+    bool editableShape = editableShapesCount(selection->selectedShapes());
 
     // TODO: use modifiers instead
     if (event->buttons() & Qt::MidButton) {
@@ -1154,7 +1154,7 @@ void DefaultTool::updateActions()
     QList<KoShape*> selectedShapes;
 
     if (koSelection()) {
-        selectedShapes = koSelection()->selectedShapes(KoFlake::TopLevelSelection);
+        selectedShapes = koSelection()->selectedShapes();
     }
 
 

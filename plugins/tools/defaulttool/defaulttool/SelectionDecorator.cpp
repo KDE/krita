@@ -79,7 +79,11 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
     painter.setPen(pen);
 
     bool editable = false;
-    foreach (KoShape *shape, m_selection->selectedShapes(KoFlake::StrippedSelection)) {
+
+    QList<KoShape*> selectedShapes = m_selection->selectedShapes();
+    if (selectedShapes.isEmpty()) return;
+
+    foreach (KoShape *shape, KoShape::linearizeSubtree(selectedShapes)) {
         painter.setWorldTransform(shape->absoluteTransformation(&converter) * painterMatrix);
         KoShape::applyConversion(painter, converter);
 
@@ -90,9 +94,6 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
             editable = true;
         }
     }
-
-    QList<KoShape*> selectedShapes = m_selection->selectedShapes(KoFlake::TopLevelSelection);
-    if (selectedShapes.isEmpty()) return;
 
     handleArea = m_selection->outlineRect();
     painter.setTransform(m_selection->absoluteTransformation(&converter) * painterMatrix);

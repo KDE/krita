@@ -78,7 +78,7 @@ void DefaultToolTransformWidget::resourceChanged(int key, const QVariant &res)
 
 void DefaultToolTransformWidget::rotationChanged()
 {
-    QList<KoShape *> selectedShapes = m_tool->canvas()->shapeManager()->selection()->selectedShapes(KoFlake::TopLevelSelection);
+    QList<KoShape *> selectedShapes = m_tool->canvas()->shapeManager()->selection()->selectedShapes();
     QList<QTransform> oldTransforms;
 
     Q_FOREACH (KoShape *shape, selectedShapes) {
@@ -113,7 +113,7 @@ void DefaultToolTransformWidget::rotationChanged()
 void DefaultToolTransformWidget::shearXChanged()
 {
     KoSelection *selection = m_tool->canvas()->shapeManager()->selection();
-    QList<KoShape *> selectedShapes = selection->selectedShapes(KoFlake::TopLevelSelection);
+    QList<KoShape *> selectedShapes = selection->selectedShapes();
     QList<QTransform> oldTransforms;
 
     Q_FOREACH (KoShape *shape, selectedShapes) {
@@ -148,7 +148,7 @@ void DefaultToolTransformWidget::shearXChanged()
 void DefaultToolTransformWidget::shearYChanged()
 {
     KoSelection *selection = m_tool->canvas()->shapeManager()->selection();
-    QList<KoShape *> selectedShapes = selection->selectedShapes(KoFlake::TopLevelSelection);
+    QList<KoShape *> selectedShapes = selection->selectedShapes();
     QList<QTransform> oldTransforms;
 
     Q_FOREACH (KoShape *shape, selectedShapes) {
@@ -182,7 +182,7 @@ void DefaultToolTransformWidget::shearYChanged()
 
 void DefaultToolTransformWidget::scaleXChanged()
 {
-    QList<KoShape *> selectedShapes = m_tool->canvas()->shapeManager()->selection()->selectedShapes(KoFlake::TopLevelSelection);
+    QList<KoShape *> selectedShapes = m_tool->canvas()->shapeManager()->selection()->selectedShapes();
     QList<QTransform> oldTransforms;
 
     Q_FOREACH (KoShape *shape, selectedShapes) {
@@ -222,7 +222,7 @@ void DefaultToolTransformWidget::scaleXChanged()
 
 void DefaultToolTransformWidget::scaleYChanged()
 {
-    QList<KoShape *> selectedShapes = m_tool->canvas()->shapeManager()->selection()->selectedShapes(KoFlake::TopLevelSelection);
+    QList<KoShape *> selectedShapes = m_tool->canvas()->shapeManager()->selection()->selectedShapes();
     QList<QTransform> oldTransforms;
 
     Q_FOREACH (KoShape *shape, selectedShapes) {
@@ -256,7 +256,7 @@ void DefaultToolTransformWidget::scaleYChanged()
 
 void DefaultToolTransformWidget::resetTransformations()
 {
-    QList<KoShape *> selectedShapes = m_tool->canvas()->shapeManager()->selection()->selectedShapes(KoFlake::TopLevelSelection);
+    QList<KoShape *> selectedShapes = m_tool->canvas()->shapeManager()->selection()->selectedShapes();
     QList<QTransform> oldTransforms;
 
     Q_FOREACH (KoShape *shape, selectedShapes) {

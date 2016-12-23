@@ -159,7 +159,7 @@ void KoShadowConfigWidget::applyChanges()
 {
     if (d->canvas) {
         KoSelection *selection = d->canvas->shapeManager()->selection();
-        KoShape * shape = selection->firstSelectedShape(KoFlake::TopLevelSelection);
+        KoShape * shape = selection->firstSelectedShape();
         if (! shape) {
             return;
         }
@@ -169,7 +169,7 @@ void KoShadowConfigWidget::applyChanges()
         newShadow->setColor(shadowColor());
         newShadow->setOffset(shadowOffset());
         newShadow->setBlur(shadowBlur());
-        d->canvas->addCommand(new KoShapeShadowCommand(selection->selectedShapes(KoFlake::TopLevelSelection), newShadow));
+        d->canvas->addCommand(new KoShapeShadowCommand(selection->selectedShapes(), newShadow));
     }
 }
 
@@ -180,7 +180,7 @@ void KoShadowConfigWidget::selectionChanged()
     }
 
     KoSelection *selection = d->canvas->shapeManager()->selection();
-    KoShape * shape = selection->firstSelectedShape(KoFlake::TopLevelSelection);
+    KoShape * shape = selection->firstSelectedShape();
 
     setEnabled(shape != 0);
 

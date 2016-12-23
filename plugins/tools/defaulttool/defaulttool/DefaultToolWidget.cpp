@@ -107,7 +107,7 @@ void DefaultToolWidget::updatePosition()
     positionXSpinBox->changeValue(selPosition.x());
     positionYSpinBox->changeValue(selPosition.y());
 
-    QList<KoShape *> selectedShapes = selection->selectedShapes(KoFlake::TopLevelSelection);
+    QList<KoShape *> selectedShapes = selection->selectedShapes();
     bool aspectLocked = false;
     foreach (KoShape *shape, selectedShapes) {
         aspectLocked = aspectLocked | shape->keepAspectRatio();
@@ -130,7 +130,7 @@ void DefaultToolWidget::positionHasChanged()
         return;
     }
 
-    QList<KoShape *> selectedShapes = selection->selectedShapes(KoFlake::TopLevelSelection);
+    QList<KoShape *> selectedShapes = selection->selectedShapes();
     QPointF moveBy = newPos - oldPos;
     QList<QPointF> oldPositions;
     QList<QPointF> newPositions;
@@ -197,7 +197,7 @@ void DefaultToolWidget::sizeHasChanged()
         resizeMatrix.scale(rect.width() ? newSize.width() / rect.width() : 1, rect.height() ? newSize.height() / rect.height() : 1);
         resizeMatrix.translate(-scaleCenter.x(), -scaleCenter.y());
 
-        QList<KoShape *> selectedShapes = selection->selectedShapes(KoFlake::StrippedSelection);
+        QList<KoShape *> selectedShapes = selection->selectedShapes();
         QList<QSizeF> oldSizes, newSizes;
         QList<QTransform> oldState;
         QList<QTransform> newState;
@@ -271,7 +271,7 @@ void DefaultToolWidget::aspectButtonToggled(bool keepAspect)
         return;
     }
     KoSelection *selection = m_tool->canvas()->shapeManager()->selection();
-    foreach (KoShape *shape, selection->selectedShapes(KoFlake::TopLevelSelection)) {
+    foreach (KoShape *shape, selection->selectedShapes()) {
         shape->setKeepAspectRatio(keepAspect);
     }
 }

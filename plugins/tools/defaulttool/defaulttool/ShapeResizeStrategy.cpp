@@ -40,7 +40,7 @@ ShapeResizeStrategy::ShapeResizeStrategy(KoToolBase *tool, const QPointF &clicke
     : KoInteractionStrategy(tool)
 {
     Q_ASSERT(tool->canvas()->shapeManager()->selection()->count() > 0);
-    QList<KoShape *> selectedShapes = tool->canvas()->shapeManager()->selection()->selectedShapes(KoFlake::TopLevelSelection);
+    QList<KoShape *> selectedShapes = tool->canvas()->shapeManager()->selection()->selectedShapes();
     Q_FOREACH (KoShape *shape, selectedShapes) {
         if (!shape->isEditable()) {
             continue;

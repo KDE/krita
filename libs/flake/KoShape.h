@@ -1111,6 +1111,9 @@ public:
     void addShapeChangeListener(ShapeChangeListener *listener);
     void removeShapeChangeListener(ShapeChangeListener *listener);
 
+public:
+    static QList<KoShape*> linearizeSubtree(const QList<KoShape*> &shapes);
+
 protected:
     /// constructor
     KoShape(KoShapePrivate *);

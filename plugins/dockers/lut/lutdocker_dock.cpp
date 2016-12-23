@@ -446,6 +446,14 @@ void LutDockerDock::selectOcioConfiguration()
 
 void LutDockerDock::resetOcioConfiguration()
 {
+    if (cfg.ocioColorManagementMode() == m_colorManagement->currentIndex()
+            && cfg.useOcio() == m_chkUseOcio->isChecked()
+            && cfg.ocioLockColorVisualRepresentation() == m_btnConvertCurrentColor->isChecked()
+            && cfg.ocioConfigurationPath() == m_txtConfigurationPath->text()
+            ) {
+        return;
+    }
+
     m_ocioConfig.reset();
     KisConfig cfg;
     try {

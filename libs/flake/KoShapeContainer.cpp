@@ -146,23 +146,20 @@ void KoShapeContainer::paint(QPainter &painter, const KoViewConverter &converter
     // Do the following to revert the absolute transformation of the container
     // that is re-applied in shape->absoluteTransformation() later on. The transformation matrix
     // of the container has already been applied once before this function is called.
-    QTransform baseMatrix = absoluteTransformation(&converter).inverted() * painter.transform();
+    const QTransform baseMatrix = absoluteTransformation(&converter).inverted() * painter.transform();
+
+    // We'll use this clipRect to see if our child shapes lie within it.
+    // Because shape->boundingRect() uses absoluteTransformation(0) we'll
+    // use that as well to have the same (absolute) reference transformation
+    // of our and the child's bounding boxes.
+    const QRectF fullClipRect = boundingRect();
 
     // clip the children to the parent outline.
     QTransform m;
     qreal zoomX, zoomY;
     converter.zoom(&zoomX, &zoomY);
     m.scale(zoomX, zoomY);
-    painter.setClipPath(m.map(outline()), Qt::IntersectClip);
-
-    QRectF toPaintRect = converter.viewToDocument(KisPaintingTweaks::safeClipBoundingRect(painter));
-    toPaintRect = transform().mapRect(toPaintRect);
-    // We'll use this clipRect to see if our child shapes lie within it.
-    // Because shape->boundingRect() uses absoluteTransformation(0) we'll
-    // use that as well to have the same (absolute) reference transformation
-    // of our and the child's bounding boxes.
-    QTransform absTrans = absoluteTransformation(0);
-    QRectF clipRect = absTrans.map(outline()).boundingRect();
+    painter.setClipRect(m.mapRect(absoluteTransformation(0).inverted().mapRect(fullClipRect)), Qt::IntersectClip);
 
 
     Q_FOREACH (KoShape *shape, sortedObjects) {
@@ -175,7 +172,7 @@ void KoShapeContainer::paint(QPainter &painter, const KoViewConverter &converter
         //    continue;
 
         // don't try to draw a child shape that is not in the clipping rect of the painter.
-        if (!clipRect.intersects(shape->boundingRect()))
+        if (!fullClipRect.intersects(shape->boundingRect()))
 
             continue;
 

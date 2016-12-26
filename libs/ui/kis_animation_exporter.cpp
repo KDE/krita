@@ -250,7 +250,7 @@ struct KisAnimationExportSaver::Private
         , tmpDoc(KisPart::instance()->createDocument())
         , exporter(document, fromTime, toTime)
     {
-        tmpDoc->setAutoSave(0);
+        tmpDoc->setAutoSaveDelay(0);
 
         tmpImage = new KisImage(tmpDoc->createUndoStore(),
                                 image->bounds().width(),

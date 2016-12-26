@@ -22,6 +22,7 @@
 
 #include "kis_tool_brush.h"
 #include <kis_icon.h>
+#include "kis_tool_multihand_config.h"
 
 class QPushButton;
 class QCheckBox;
@@ -55,7 +56,7 @@ private:
 private Q_SLOTS:
     void activateAxesPointModeSetup();
     void slotSetHandsCount(int count);
-    void slotSetAxesAngle(qreal angle);
+    void slotSetAxesAngle(int angle);
     void slotSetTransformMode(int qcomboboxIndex);
     void slotSetAxesVisible(bool vis);
     void slotSetMirrorVertically(bool mirror);
@@ -85,6 +86,9 @@ private:
     QCheckBox *m_mirrorHorizontallyChCkBox;
     KisSliderSpinBox *m_translateRadiusSlider;
     QPushButton *m_axesPointBtn;
+
+
+    KisToolMultiHandConfigWidget* customUI;
 };
 
 

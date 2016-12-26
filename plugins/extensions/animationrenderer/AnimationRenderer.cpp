@@ -36,7 +36,6 @@
 #include <KisMimeDatabase.h>
 #include <kis_time_range.h>
 #include <KisImportExportManager.h>
-#include <KisFilterChain.h>
 
 #include "DlgAnimationRenderer.h"
 
@@ -95,7 +94,7 @@ void AnimaterionRenderer::slotRenderAnimation()
 
     if (dlgAnimationRenderer.exec() == QDialog::Accepted) {
         KisPropertiesConfigurationSP sequenceConfig = dlgAnimationRenderer.getSequenceConfiguration();
-        kisConfig.setExportConfiguration("IMAGESEQUENCE", *sequenceConfig.data());
+        kisConfig.setExportConfiguration("IMAGESEQUENCE", sequenceConfig);
         QString mimetype = sequenceConfig->getString("mimetype");
         QString extension = KisMimeDatabase::suffixesForMimeType(mimetype).first();
         QString baseFileName = QString("%1/%2.%3").arg(sequenceConfig->getString("directory"))
@@ -109,23 +108,30 @@ void AnimaterionRenderer::slotRenderAnimation()
 
         KisPropertiesConfigurationSP videoConfig = dlgAnimationRenderer.getVideoConfiguration();
         if (videoConfig) {
-            kisConfig.setExportConfiguration("ANIMATION_RENDERER", *videoConfig.data());
+            kisConfig.setExportConfiguration("ANIMATION_RENDERER", videoConfig);
 
             KisPropertiesConfigurationSP encoderConfig = dlgAnimationRenderer.getEncoderConfiguration();
             if (encoderConfig) {
-                kisConfig.setExportConfiguration("FFMPEG_CONFIG", *encoderConfig.data());
+                kisConfig.setExportConfiguration("FFMPEG_CONFIG", encoderConfig);
                 encoderConfig->setProperty("savedFilesMask", savedFilesMask);
             }
 
             QSharedPointer<KisImportExportFilter> encoder = dlgAnimationRenderer.encoderFilter();
-            KisFilterChainSP chain(new KisFilterChain(doc->importExportManager()));
-            chain->setOutputFile(videoConfig->getString("filename"));
-            encoder->setChain(chain);
-            KisImportExportFilter::ConversionStatus res = encoder->convert(KisDocument::nativeFormatMimeType(), encoderConfig->getString("mimetype").toLatin1(), encoderConfig);
+            encoder->setMimeType(mimetype.toLatin1());
+            QFile fi(videoConfig->getString("filename"));
+            KisImportExportFilter::ConversionStatus res;
+            if (!fi.open(QIODevice::WriteOnly)) {
+                qWarning() << "Could not open" << fi.fileName() << "for writing!";
+                res = KisImportExportFilter::CreationError;
+            }
+            else {
+                encoder->setFilename(fi.fileName());
+                res = encoder->convert(doc, &fi, encoderConfig);
+                fi.close();
+            }
             if (res != KisImportExportFilter::OK) {
                 QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Could not render animation:\n%1", doc->errorMessage()));
             }
-
             if (videoConfig->getBool("delete_sequence", false)) {
                 QDir d(sequenceConfig->getString("directory"));
                 QStringList sequenceFiles = d.entryList(QStringList() << sequenceConfig->getString("basename") + "*." + extension, QDir::Files);
@@ -149,8 +155,7 @@ void AnimaterionRenderer::slotRenderSequenceAgain()
     if (!image->animationInterface()->hasAnimation()) return;
 
     KisDocument *doc = m_view->document();
-    doc->setFileProgressProxy();
-    doc->setFileProgressUpdater(i18n("Export frames"));
+    doc->setFileProgressProxy();    doc->setFileProgressUpdater(i18n("Export frames"));
 
     KisConfig kisConfig;
     KisPropertiesConfigurationSP cfg = new KisPropertiesConfiguration();

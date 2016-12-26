@@ -31,6 +31,7 @@
 #include <QAction>
 #include <QShowEvent>
 #include <QFontDatabase>
+#include <QWidgetAction>
 
 #include <kconfig.h>
 #include <klocalizedstring.h>
@@ -53,6 +54,12 @@
 #include "kis_lod_availability_widget.h"
 
 #include "kis_signal_auto_connection.h"
+
+
+// ones from brush engine selector
+#include <brushengine/kis_paintop_factory.h>
+#include "../kis_paint_ops_model.h"
+
 
 
 struct KisPaintOpPresetsPopup::Private
@@ -80,6 +87,8 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
     setObjectName("KisPaintOpPresetsPopup");
     setFont(KoDockRegistry::dockFont());
 
+    current_paintOpId = "";
+
     m_d->resourceProvider = resourceProvider;
 
     m_d->uiWdgPaintOpPresetSettings.setupUi(this);
@@ -95,6 +104,86 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
     m_d->uiWdgPaintOpPresetSettings.fillSolid->setIcon(KisIconUtils::loadIcon("krita_tool_color_fill"));
     m_d->uiWdgPaintOpPresetSettings.eraseScratchPad->setIcon(KisIconUtils::loadIcon("edit-delete"));
     m_d->uiWdgPaintOpPresetSettings.paintPresetIcon->setIcon(KisIconUtils::loadIcon("krita_tool_freehand"));
+
+
+    // DETAIL and THUMBNAIL view changer
+    QMenu* menu = new QMenu(this);
+
+    menu->setStyleSheet("margin: 6px");
+    menu->addSection(i18n("Display"));
+
+    QActionGroup *actionGroup = new QActionGroup(this);
+
+    KisPresetChooser::ViewMode mode = (KisPresetChooser::ViewMode)KisConfig().presetChooserViewMode();
+
+    QAction* action = menu->addAction(KisIconUtils::loadIcon("view-preview"), i18n("Thumbnails"), m_d->uiWdgPaintOpPresetSettings.presetWidget, SLOT(slotThumbnailMode()));
+    action->setCheckable(true);
+    action->setChecked(mode == KisPresetChooser::THUMBNAIL);
+    action->setActionGroup(actionGroup);
+
+    action = menu->addAction(KisIconUtils::loadIcon("view-list-details"), i18n("Details"), m_d->uiWdgPaintOpPresetSettings.presetWidget, SLOT(slotDetailMode()));
+    action->setCheckable(true);
+    action->setChecked(mode == KisPresetChooser::DETAIL);
+    action->setActionGroup(actionGroup);
+
+
+    // add horizontal slider for the icon size
+    QSlider* iconSizeSlider = new QSlider(this);
+    iconSizeSlider->setOrientation(Qt::Horizontal);
+    iconSizeSlider->setRange(30, 80);
+    iconSizeSlider->setValue(m_d->uiWdgPaintOpPresetSettings.presetWidget->iconSize());
+    iconSizeSlider->setMinimumHeight(20);
+    iconSizeSlider->setMinimumWidth(40);
+    iconSizeSlider->setTickInterval(10);
+
+
+    QWidgetAction *sliderAction= new QWidgetAction(this);
+    sliderAction->setDefaultWidget(iconSizeSlider);
+
+    menu->addSection(i18n("Icon Size"));
+    menu->addAction(sliderAction);
+
+
+
+
+    // configure the button and assign menu
+    m_d->uiWdgPaintOpPresetSettings.presetChangeViewToolButton->setMenu(menu);
+    m_d->uiWdgPaintOpPresetSettings.presetChangeViewToolButton->setIcon(KisIconUtils::loadIcon("view-choose"));
+    m_d->uiWdgPaintOpPresetSettings.presetChangeViewToolButton->setPopupMode(QToolButton::InstantPopup);
+
+
+    // show/hide buttons
+
+    KisConfig cfg;
+
+    m_d->uiWdgPaintOpPresetSettings.showScratchpadButton->setCheckable(true);
+    m_d->uiWdgPaintOpPresetSettings.showScratchpadButton->setChecked(cfg.scratchpadVisible());
+    m_d->uiWdgPaintOpPresetSettings.showEditorButton->setCheckable(true);
+    m_d->uiWdgPaintOpPresetSettings.showEditorButton->setChecked(true);
+
+    m_d->uiWdgPaintOpPresetSettings.showPresetsButton->setText(i18n("Presets"));
+    m_d->uiWdgPaintOpPresetSettings.showPresetsButton->setCheckable(true);
+    m_d->uiWdgPaintOpPresetSettings.showPresetsButton->setChecked(false);  // use a config to load/save this state
+   slotSwitchShowPresets(false); // hide presets by default
+
+
+    // Connections
+
+
+    connect(iconSizeSlider, SIGNAL(sliderMoved(int)),
+            m_d->uiWdgPaintOpPresetSettings.presetWidget, SLOT(slotSetIconSize(int)));
+
+    connect(iconSizeSlider, SIGNAL(sliderReleased()),
+            m_d->uiWdgPaintOpPresetSettings.presetWidget, SLOT(slotSaveIconSize()));
+
+
+    connect(m_d->uiWdgPaintOpPresetSettings.showScratchpadButton, SIGNAL(clicked(bool)),
+            this, SLOT(slotSwitchScratchpad(bool)));
+
+    connect(m_d->uiWdgPaintOpPresetSettings.showEditorButton, SIGNAL(clicked(bool)),
+            this, SLOT(slotSwitchShowEditor(bool)));
+
+    connect(m_d->uiWdgPaintOpPresetSettings.showPresetsButton, SIGNAL(clicked(bool)), this, SLOT(slotSwitchShowPresets(bool)));
 
     connect(m_d->uiWdgPaintOpPresetSettings.eraseScratchPad, SIGNAL(clicked()),
             m_d->uiWdgPaintOpPresetSettings.scratchPad, SLOT(fillDefault()));
@@ -138,9 +227,11 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
     connect(m_d->uiWdgPaintOpPresetSettings.txtPreset, SIGNAL(textChanged(QString)),
             SLOT(slotWatchPresetNameLineEdit()));
 
-    connect(m_d->uiWdgPaintOpPresetSettings.paintopList, SIGNAL(activated(QString)),
+    connect(m_d->uiWdgPaintOpPresetSettings.brushEgineComboBox, SIGNAL(activated(QString)),
             this, SIGNAL(paintopActivated(QString)));
 
+
+    // preset widget connections
     connect(m_d->uiWdgPaintOpPresetSettings.presetWidget->smallPresetChooser, SIGNAL(resourceSelected(KoResource*)),
             this, SIGNAL(signalResourceSelected(KoResource*)));
 
@@ -150,11 +241,11 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
     connect(m_d->uiWdgPaintOpPresetSettings.reload, SIGNAL(clicked()),
             m_d->uiWdgPaintOpPresetSettings.presetWidget->smallPresetChooser, SLOT(updateViewSettings()));
 
-    KisConfig cfg;
-    m_d->detached = !cfg.paintopPopupDetached();
+
+
+    m_d->detached = false;
     m_d->ignoreHideEvents = false;
     m_d->minimumSettingsWidgetSize = QSize(0, 0);
-    m_d->uiWdgPaintOpPresetSettings.presetWidget->setVisible(cfg.presetStripVisible());
     m_d->uiWdgPaintOpPresetSettings.scratchpadControls->setVisible(cfg.scratchpadVisible());
     m_d->detachedGeometry = QRect(100, 100, 0, 0);
     m_d->uiWdgPaintOpPresetSettings.dirtyPresetCheckBox->setChecked(cfg.useDirtyPresets());
@@ -162,6 +253,9 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
     m_d->uiWdgPaintOpPresetSettings.eraserBrushOpacityCheckBox->setChecked(cfg.useEraserBrushOpacity());
 
     m_d->uiWdgPaintOpPresetSettings.wdgLodAvailability->setCanvasResourceManager(resourceProvider->resourceManager());
+
+    // brush engine is changed
+   connect(m_d->uiWdgPaintOpPresetSettings.brushEgineComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(slotPaintOpChanged(int)));
 
     connect(resourceProvider->resourceManager(),
             SIGNAL(canvasResourceChanged(int,QVariant)),
@@ -174,7 +268,12 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
     slotResourceChanged(KisCanvasResourceProvider::LodAvailability,
                         resourceProvider->resourceManager()->
                             resource(KisCanvasResourceProvider::LodAvailability));
+
+
+    connect(m_d->uiWdgPaintOpPresetSettings.brushEgineComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(slotPaintOpChanged(int)));
+
 }
+
 
 void KisPaintOpPresetsPopup::slotResourceChanged(int key, const QVariant &value)
 {
@@ -237,6 +336,8 @@ void KisPaintOpPresetsPopup::setPaintOpSettingsWidget(QWidget * widget)
         widget->show();
 
     }
+
+    slotUpdateLodAvailability();
 }
 
 void KisPaintOpPresetsPopup::slotUpdateLodAvailability()
@@ -285,21 +386,6 @@ QImage KisPaintOpPresetsPopup::cutOutOverlay()
 void KisPaintOpPresetsPopup::contextMenuEvent(QContextMenuEvent *e)
 {
     Q_UNUSED(e);
-
-#if 0
-    QMenu menu(this);
-    QAction* action = menu.addAction(m_d->detached ? i18n("Attach to Toolbar") : i18n("Detach from Toolbar"));
-    connect(action, SIGNAL(triggered()), this, SLOT(switchDetached()));
-    QAction* showPresetStrip = menu.addAction(i18n("Show Preset Strip"));
-    showPresetStrip->setCheckable(true);
-    showPresetStrip->setChecked(m_d->uiWdgPaintOpPresetSettings.presetWidget->isVisible());
-    connect(showPresetStrip, SIGNAL(triggered(bool)), this, SLOT(slotSwitchPresetStrip(bool)));
-    QAction* showScratchPad = menu.addAction(i18n("Show Scratchpad"));
-    showScratchPad->setCheckable(true);
-    showScratchPad->setChecked(m_d->uiWdgPaintOpPresetSettings.scratchPad->isVisible());
-    connect(showScratchPad, SIGNAL(triggered(bool)), this, SLOT(slotSwitchScratchpad(bool)));
-    menu.exec(e->globalPos());
-#endif
 }
 
 void KisPaintOpPresetsPopup::switchDetached(bool show)
@@ -310,17 +396,15 @@ void KisPaintOpPresetsPopup::switchDetached(bool show)
 
         if (m_d->detached) {
             m_d->ignoreHideEvents = true;
-            parentWidget()->setWindowFlags(Qt::Tool);
-            m_d->uiWdgPaintOpPresetSettings.scratchpadControls->setVisible(false);
+
             if (show) {
                 parentWidget()->show();
             }
             m_d->ignoreHideEvents = false;
+
         }
         else {
-            parentWidget()->setWindowFlags(Qt::Popup);
             KisConfig cfg;
-            m_d->uiWdgPaintOpPresetSettings.scratchpadControls->setVisible(cfg.scratchpadVisible());
             parentWidget()->hide();
         }
 
@@ -350,22 +434,87 @@ void KisPaintOpPresetsPopup::resourceSelected(KoResource* resource)
     m_d->uiWdgPaintOpPresetSettings.presetWidget->smallPresetChooser->setCurrentResource(resource);
     m_d->uiWdgPaintOpPresetSettings.txtPreset->setText(resource->name());
     slotWatchPresetNameLineEdit();
+    m_d->uiWdgPaintOpPresetSettings.currentBrushNameLabel->setText(resource->name());
+}
+
+bool variantLessThan(const KisPaintOpInfo v1, const KisPaintOpInfo v2)
+{
+    return v1.priority < v2.priority;
 }
 
 void KisPaintOpPresetsPopup::setPaintOpList(const QList< KisPaintOpFactory* >& list)
 {
-   m_d->uiWdgPaintOpPresetSettings.paintopList->setPaintOpList(list);
+       m_d->uiWdgPaintOpPresetSettings.brushEgineComboBox->clear(); // reset combobox list just in case
+
+       // create a new list so we can sort it and populate the brush engine combo box
+        QList<KisPaintOpInfo> sortedList;
+        for(int i=0; i < list.length(); i++) {
+
+            QString fileName = KoResourcePaths::findResource("kis_images", list.at(i)->pixmap());
+            QPixmap pixmap(fileName);
+
+            if(pixmap.isNull()){
+                pixmap = QPixmap(22,22);
+                pixmap.fill();
+            }
+
+            KisPaintOpInfo paintOpInfo;
+            paintOpInfo.id = list.at(i)->id();
+            paintOpInfo.name = list.at(i)->name();
+            paintOpInfo.icon = pixmap;
+            paintOpInfo.priority = list.at(i)->priority();
+
+            sortedList.append(paintOpInfo);
+        }
+
+        qStableSort(sortedList.begin(), sortedList.end(), variantLessThan );
+
+        // add an "All" option at the front to show all presets
+        QPixmap emptyPixmap = QPixmap(22,22);
+        emptyPixmap.fill(palette().color(QPalette::Background));
+        sortedList.push_front(KisPaintOpInfo(QString("all_options"), i18n("All"), QString(""), emptyPixmap, 0 ));
+
+        // fill the list into the brush combo box
+        for (int m = 0; m < sortedList.length(); m++) {
+            m_d->uiWdgPaintOpPresetSettings.brushEgineComboBox->addItem(sortedList[m].icon, sortedList[m].name, QVariant(sortedList[m].id));
+        }
+
+
 }
+
 
 void KisPaintOpPresetsPopup::setCurrentPaintOp(const QString& paintOpId)
 {
-    m_d->uiWdgPaintOpPresetSettings.paintopList->setCurrent(paintOpId);
-    m_d->uiWdgPaintOpPresetSettings.presetWidget->setPresetFilter(paintOpId);
+    // iterate through the items and find the engine we need the combo box to switch to
+    for (int i= 0; i < m_d->uiWdgPaintOpPresetSettings.brushEgineComboBox->count(); i++) {
+
+        QVariant userData = m_d->uiWdgPaintOpPresetSettings.brushEgineComboBox->itemData(i); // grab paintOpID from data
+        QString currentPaintOpId = userData.toString();
+
+        if (paintOpId == currentPaintOpId) {
+            m_d->uiWdgPaintOpPresetSettings.brushEgineComboBox->setCurrentIndex(i); // found it!
+        }
+    }
+
+    // if the "all" option is set, set the filter to "", that way it clears the filter and shows everything
+    QString paintOpFilter = paintOpId;
+    if (paintOpFilter == "all_options") {
+        paintOpFilter = "";
+    }
+
+    m_d->uiWdgPaintOpPresetSettings.presetWidget->setPresetFilter(paintOpFilter);
+
 }
 
 QString KisPaintOpPresetsPopup::currentPaintOp()
 {
-    return m_d->uiWdgPaintOpPresetSettings.paintopList->currentItem();
+    QVariant userData = m_d->uiWdgPaintOpPresetSettings.brushEgineComboBox->currentData(); // grab paintOpID from data
+    QString currentPaintOpId = userData.toString();
+    return currentPaintOpId;
+}
+
+QString KisPaintOpPresetsPopup::currentPaintOpId() {
+    return current_paintOpId;
 }
 
 void KisPaintOpPresetsPopup::setPresetImage(const QImage& image)
@@ -403,19 +552,32 @@ bool KisPaintOpPresetsPopup::detached() const
     return m_d->detached;
 }
 
-void KisPaintOpPresetsPopup::slotSwitchPresetStrip(bool visible)
-{
-    m_d->uiWdgPaintOpPresetSettings.presetWidget->setVisible(visible);
-    KisConfig cfg;
-    cfg.setPresetStripVisible(visible);
-}
-
 void KisPaintOpPresetsPopup::slotSwitchScratchpad(bool visible)
 {
     m_d->uiWdgPaintOpPresetSettings.scratchpadControls->setVisible(visible);
     KisConfig cfg;
     cfg.setScratchpadVisible(visible);
 }
+
+void KisPaintOpPresetsPopup::slotSwitchShowEditor(bool visible) {
+   m_d->uiWdgPaintOpPresetSettings.brushEditorSettingsControls->setVisible(visible);
+}
+
+void KisPaintOpPresetsPopup::slotSwitchShowPresets(bool visible) {
+    m_d->uiWdgPaintOpPresetSettings.presetsContainer->setVisible(visible);
+}
+
+void KisPaintOpPresetsPopup::slotPaintOpChanged(int index) {
+
+    Q_UNUSED(index);
+
+    QVariant userData = m_d->uiWdgPaintOpPresetSettings.brushEgineComboBox->currentData(); // grab paintOpID from data
+    QString currentPaintOpId = userData.toString();
+
+    setCurrentPaintOp(currentPaintOpId);
+    emit paintopActivated(currentPaintOpId); // tell the toolbar to change the active icon
+}
+
 
 void KisPaintOpPresetsPopup::updateViewSettings()
 {
@@ -435,4 +597,5 @@ void KisPaintOpPresetsPopup::updateThemedIcons()
     m_d->uiWdgPaintOpPresetSettings.fillSolid->setIcon(KisIconUtils::loadIcon("krita_tool_color_fill"));
     m_d->uiWdgPaintOpPresetSettings.eraseScratchPad->setIcon(KisIconUtils::loadIcon("edit-delete"));
     m_d->uiWdgPaintOpPresetSettings.paintPresetIcon->setIcon(KisIconUtils::loadIcon("krita_tool_freehand"));
+    m_d->uiWdgPaintOpPresetSettings.presetChangeViewToolButton->setIcon(KisIconUtils::loadIcon("view-choose"));
 }

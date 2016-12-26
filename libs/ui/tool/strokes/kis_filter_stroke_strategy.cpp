@@ -204,6 +204,5 @@ KisStrokeStrategy* KisFilterStrokeStrategy::createLodClone(int levelOfDetail)
     if (!m_d->filter->supportsLevelOfDetail(m_d->filterConfig.data(), levelOfDetail)) return 0;
 
     KisFilterStrokeStrategy *clone = new KisFilterStrokeStrategy(*this, levelOfDetail);
-    clone->setUndoEnabled(false);
     return clone;
 }

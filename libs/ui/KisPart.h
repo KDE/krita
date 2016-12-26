@@ -134,11 +134,6 @@ public:
     KisMainWindow *currentMainwindow() const;
 
     /**
-     * Load actions for currently active main window into KisActionRegistry.
-     */
-    void loadActions();
-
-    /**
      * @return the application-wide KisIdleWatcher.
      */
     KisIdleWatcher *idleWatcher() const;

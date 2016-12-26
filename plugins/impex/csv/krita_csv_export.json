@@ -3,7 +3,7 @@
     "NoDisplay": "true",
     "Type": "Service",
     "X-KDE-Export": "text/csv",
-    "X-KDE-Import": "application/x-krita",
+    
     "X-KDE-Library": "kritacsvexport",
     "X-KDE-ServiceTypes": [
         "Krita/FileFilter"

@@ -44,6 +44,14 @@ QPainterPath KisTransformStrategyBase::getCursorOutline() const
     return QPainterPath();
 }
 
+void KisTransformStrategyBase::activatePrimaryAction()
+{
+}
+
+void KisTransformStrategyBase::deactivatePrimaryAction()
+{
+}
+
 QImage KisTransformStrategyBase::originalImage() const
 {
     return m_d->originalImage;

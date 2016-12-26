@@ -33,15 +33,17 @@
 #include <KoCompositeOpRegistry.h>
 #include <KoSelection.h>
 #include <KoUnit.h>
+#include "kis_image_view_converter.h"
 
 #include <kis_debug.h>
 
 //#define DEBUG_REPAINT
 
-KisShapeLayerCanvas::KisShapeLayerCanvas(KisShapeLayer *parent, KoViewConverter * viewConverter)
+KisShapeLayerCanvas::KisShapeLayerCanvas(KisShapeLayer *parent, KisImageWSP image)
         : QObject()
         , KoCanvasBase(0)
-        , m_viewConverter(viewConverter)
+        , m_isDestroying(false)
+        , m_viewConverter(new KisImageViewConverter(image))
         , m_shapeManager(new KoShapeManager(this))
         , m_projection(0)
         , m_parentLayer(parent)
@@ -53,6 +55,16 @@ KisShapeLayerCanvas::KisShapeLayerCanvas(KisShapeLayer *parent, KoViewConverter 
 KisShapeLayerCanvas::~KisShapeLayerCanvas()
 {
     delete m_shapeManager;
+}
+
+void KisShapeLayerCanvas::setImage(KisImageWSP image)
+{
+    m_viewConverter->setImage(image);
+}
+
+void KisShapeLayerCanvas::prepareForDestroying()
+{
+    m_isDestroying = true;
 }
 
 void KisShapeLayerCanvas::gridSize(QPointF *offset, QSizeF *spacing) const
@@ -86,7 +98,7 @@ void KisShapeLayerCanvas::updateCanvas(const QRectF& rc)
 {
     dbgUI << "KisShapeLayerCanvas::updateCanvas()" << rc;
     //image is 0, if parentLayer is being deleted so don't update
-    if (!m_parentLayer->image()) {
+    if (!m_parentLayer->image() || m_isDestroying) {
         return;
     }
 
@@ -146,9 +158,9 @@ KoToolProxy * KisShapeLayerCanvas::toolProxy() const
     return 0;
 }
 
-KoViewConverter *KisShapeLayerCanvas::viewConverter() const
+KoViewConverter* KisShapeLayerCanvas::viewConverter() const
 {
-    return m_viewConverter;
+    return m_viewConverter.data();
 }
 
 QWidget* KisShapeLayerCanvas::canvasWidget()

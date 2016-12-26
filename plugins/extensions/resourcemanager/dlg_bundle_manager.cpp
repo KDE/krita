@@ -172,6 +172,7 @@ void DlgBundleManager::accept()
         QByteArray ba = item->data(Qt::UserRole).toByteArray();
         KisResourceBundle *bundle = bundleServer->resourceByMD5(ba);
 
+
         if (bundle && bundle->isInstalled()) {
             bundle->uninstall();
             bundleServer->removeResourceAndBlacklist(bundle);

@@ -86,6 +86,7 @@ KisGmicPlugin::KisGmicPlugin(QObject *parent, const QVariantList &)
             m_filteringIsRunning(false)
 {
     KisAction *action  = createAction("gmic");
+    action->setActivationFlags(KisAction::ACTIVE_DEVICE);
     connect(action, SIGNAL(triggered()), this, SLOT(slotShowGmicDialog()));
 
     m_blacklistPath = KoResourcePaths::findResource("gmic_definitions", STANDARD_GMIC_DEFINITION + ".blacklist");
@@ -243,7 +244,7 @@ void KisGmicPlugin::slotCloseGmicDialog()
 {
     dbgPlugins << "progress manager: " << m_progressManager;
 
-    // reset state 
+    // reset state
     {
         m_gmicWidget = 0;
 

@@ -73,8 +73,7 @@ struct KisFreeTransformStrategy::Private
         scaleCursors[6] = KisCursor::sizeVerCursor();
         scaleCursors[7] = KisCursor::sizeBDiagCursor();
 
-        shearCursorPixmap.load(KoResourcePaths::locate("data", "icons/cursor_shear.png"));
-
+        shearCursorPixmap.load(":/shear_cursor.png");
     }
 
     KisFreeTransformStrategy *q;
@@ -383,15 +382,20 @@ bool KisFreeTransformStrategy::beginPrimaryAction(const QPointF &pt)
     return true;
 }
 
-void KisFreeTransformStrategy::continuePrimaryAction(const QPointF &mousePos, bool specialModifierActive)
+void KisFreeTransformStrategy::continuePrimaryAction(const QPointF &mousePos,
+                                                     bool shiftModifierActive,
+                                                     bool altModifierActive)
 {
-    // Note: "specialModifierActive" just tells us if the shift key is being pressed
+    // Note: "shiftModifierActive" just tells us if the shift key is being pressed
+    // Note: "altModifierActive" just tells us if the alt key is being pressed
+
+    const QPointF anchorPoint = m_d->clickArgs.originalCenter() + m_d->clickArgs.rotationCenterOffset();
 
     switch (m_d->function) {
     case MOVE: {
         QPointF diff = mousePos - m_d->clickPos;
 
-        if (specialModifierActive) {
+        if (shiftModifierActive) {
 
             KisTransformUtils::MatricesPack m(m_d->clickArgs);
             QTransform t = m.S * m.projectedP;
@@ -426,7 +430,7 @@ void KisFreeTransformStrategy::continuePrimaryAction(const QPointF &mousePos, bo
         qreal theta = a2 - a1;
 
         // Snap with shift key
-        if (specialModifierActive) {
+        if (shiftModifierActive) {
             const qreal snapAngle = M_PI_4 / 6.0; // fifteen degrees
             qint32 thetaIndex = static_cast<qint32>((theta / snapAngle) + 0.5);
             m_d->currentArgs.setAZ(normalizeAngle(thetaIndex * snapAngle));
@@ -472,7 +476,6 @@ void KisFreeTransformStrategy::continuePrimaryAction(const QPointF &mousePos, bo
         qreal extraSign;
 
         if (m_d->function == TOPSCALE) {
-
             staticPoint = m_d->transaction.originalMiddleBottom();
             movingPoint = m_d->transaction.originalMiddleTop();
             extraSign = -1.0;
@@ -480,6 +483,13 @@ void KisFreeTransformStrategy::continuePrimaryAction(const QPointF &mousePos, bo
             staticPoint = m_d->transaction.originalMiddleTop();
             movingPoint = m_d->transaction.originalMiddleBottom();
             extraSign = 1.0;
+        }
+
+        // override scale static point if it is locked
+        if ((m_d->currentArgs.transformAroundRotationCenter() ^ altModifierActive) &&
+            !qFuzzyCompare(anchorPoint.y(), movingPoint.y())) {
+
+            staticPoint = anchorPoint;
         }
 
         QPointF mouseImagePos = m_d->transform.inverted().map(mousePos);
@@ -498,7 +508,7 @@ void KisFreeTransformStrategy::continuePrimaryAction(const QPointF &mousePos, bo
                                  movingPoint,
                                  dist);
 
-        if (specialModifierActive ||  m_d->currentArgs.keepAspectRatio()) {
+        if (shiftModifierActive ||  m_d->currentArgs.keepAspectRatio()) {
             qreal aspectRatio = m_d->clickArgs.scaleX() / m_d->clickArgs.scaleY();
             m_d->currentArgs.setScaleX(aspectRatio * result.scale);
         }
@@ -525,6 +535,13 @@ void KisFreeTransformStrategy::continuePrimaryAction(const QPointF &mousePos, bo
             extraSign = 1.0;
         }
 
+        // override scale static point if it is locked
+        if ((m_d->currentArgs.transformAroundRotationCenter() ^ altModifierActive) &&
+            !qFuzzyCompare(anchorPoint.x(), movingPoint.x())) {
+
+            staticPoint = anchorPoint;
+        }
+
         QPointF mouseImagePos = m_d->transform.inverted().map(mousePos);
 
         qreal sign = mouseImagePos.x() <= staticPoint.x() ? -extraSign : extraSign;
@@ -541,7 +558,7 @@ void KisFreeTransformStrategy::continuePrimaryAction(const QPointF &mousePos, bo
                                  movingPoint,
                                  dist);
 
-        if (specialModifierActive  ||  m_d->currentArgs.keepAspectRatio()) {
+        if (shiftModifierActive  ||  m_d->currentArgs.keepAspectRatio()) {
             qreal aspectRatio = m_d->clickArgs.scaleY() / m_d->clickArgs.scaleX();
             m_d->currentArgs.setScaleY(aspectRatio * result.scale);
         }
@@ -571,10 +588,18 @@ void KisFreeTransformStrategy::continuePrimaryAction(const QPointF &mousePos, bo
             movingPoint = m_d->transaction.originalBottomLeft();
         }
 
+        // override scale static point if it is locked
+        if ((m_d->currentArgs.transformAroundRotationCenter() ^ altModifierActive) &&
+            !(qFuzzyCompare(anchorPoint.x(), movingPoint.x()) ||
+              qFuzzyCompare(anchorPoint.y(), movingPoint.y()))) {
+
+            staticPoint = anchorPoint;
+        }
+
         QPointF staticPointInView = m_d->transform.map(staticPoint);
         QPointF movingPointInView = mousePos;
 
-        if (specialModifierActive  ||  m_d->currentArgs.keepAspectRatio()) {
+        if (shiftModifierActive  ||  m_d->currentArgs.keepAspectRatio()) {
             KisTransformUtils::MatricesPack m(m_d->clickArgs);
             QTransform t = m.finalTransform();
 
@@ -603,7 +628,7 @@ void KisFreeTransformStrategy::continuePrimaryAction(const QPointF &mousePos, bo
 
         QPointF newRotationCenterOffset = pt - m_d->currentArgs.originalCenter();
 
-        if (specialModifierActive) {
+        if (shiftModifierActive) {
             if (qAbs(newRotationCenterOffset.x()) > qAbs(newRotationCenterOffset.y())) {
                 newRotationCenterOffset.ry() = 0;
             } else {

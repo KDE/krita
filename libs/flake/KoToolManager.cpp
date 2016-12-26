@@ -744,7 +744,7 @@ void KoToolManager::Private::postSwitchTool(bool temporary)
 
     emit q->changedTool(canvasData->canvas, uniqueToolIds.value(canvasData->activeTool));
 
-    emit q->toolOptionWidgetsChanged(optionWidgetList);
+    emit q->toolOptionWidgetsChanged(canvasData->canvas, optionWidgetList);
 }
 
 
@@ -818,7 +818,7 @@ void KoToolManager::Private::detachCanvas(KoCanvasController *controller)
         if (newCanvas) {
             switchCanvasData(canvasses.value(newCanvas).first());
         } else {
-            emit q->toolOptionWidgetsChanged(QList<QPointer<QWidget> >());
+            emit q->toolOptionWidgetsChanged(controller, QList<QPointer<QWidget> >());
             // as a last resort just set a blank one
             canvasData = 0;
         }

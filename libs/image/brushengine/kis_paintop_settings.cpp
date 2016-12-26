@@ -77,11 +77,13 @@ struct Q_DECL_HIDDEN KisPaintOpSettings::Private {
     };
 
     KisPaintopSettingsUpdateProxy* updateProxyNoCreate() const {
-        return preset ? preset->updateProxyNoCreate() : 0;
+        auto presetSP = preset.toStrongRef();
+        return presetSP ? presetSP->updateProxyNoCreate() : 0;
     }
 
     KisPaintopSettingsUpdateProxy* updateProxyCreate() const {
-        return preset ? preset->updateProxy() : 0;
+        auto presetSP = preset.toStrongRef();
+        return presetSP ? presetSP->updateProxy() : 0;
     }
 };
 
@@ -379,9 +381,11 @@ void KisPaintOpSettings::setCanvasMirroring(bool xAxisMirrored, bool yAxisMirror
 void KisPaintOpSettings::setProperty(const QString & name, const QVariant & value)
 {
     if (value != KisPropertiesConfiguration::getProperty(name) &&
-            !d->disableDirtyNotifications && this->preset()) {
-
-        this->preset()->setPresetDirty(true);
+            !d->disableDirtyNotifications) {
+        KisPaintOpPresetSP presetSP = preset().toStrongRef();
+        if (presetSP) {
+            presetSP->setPresetDirty(true);
+        }
     }
 
     KisPropertiesConfiguration::setProperty(name, value);

@@ -150,7 +150,7 @@ bool KisSelectionMask::active() const
 void KisSelectionMask::setActive(bool active)
 {
     KisImageWSP image = this->image();
-    KisLayerSP parentLayer = dynamic_cast<KisLayer*>(parent().data());
+    KisLayerSP parentLayer = qobject_cast<KisLayer*>(parent().data());
 
     if (active && parentLayer) {
         KisSelectionMaskSP activeMask = parentLayer->selectionMask();

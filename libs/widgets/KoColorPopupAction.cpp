@@ -118,7 +118,7 @@ KoColorPopupAction::~KoColorPopupAction()
 
 void KoColorPopupAction::setCurrentColor( const KoColor &color )
 {
-    d->colorChooser->setRealColor( color );
+    d->colorChooser->slotSetColor( color );
 
     KoColor minColor( color );
     d->currentColor = minColor;

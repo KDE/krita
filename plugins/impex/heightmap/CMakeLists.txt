@@ -20,7 +20,7 @@ ki18n_wrap_ui(kritaheightmapexport_SOURCES kis_wdg_options_heightmap.ui )
 
 add_library(kritaheightmapexport MODULE ${kritaheightmapexport_SOURCES})
 
-target_link_libraries(kritaheightmapexport kritaui  )
+target_link_libraries(kritaheightmapexport kritaui kritaimpex)
 
 install(TARGETS kritaheightmapexport  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 install( PROGRAMS  krita_heightmap.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})

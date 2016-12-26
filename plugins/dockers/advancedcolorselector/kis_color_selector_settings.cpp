@@ -486,7 +486,7 @@ void KisColorSelectorSettings::loadPreferences()
 
     //color selector
     KisColorSelectorComboBox* cstw = dynamic_cast<KisColorSelectorComboBox*>(ui->colorSelectorConfiguration);
-    cstw->setConfiguration(KisColorSelector::Configuration::fromString(cfg.readEntry("colorSelectorConfiguration", "3|0|5|0"))); // triangle selector
+    cstw->setConfiguration(KisColorSelectorConfiguration::fromString(cfg.readEntry("colorSelectorConfiguration", "3|0|5|0"))); // triangle selector
     
     //luma values//
     ui->l_lumaR->setValue(cfg.readEntry("lumaR", 0.2126));
@@ -578,7 +578,7 @@ void KisColorSelectorSettings::loadDefaultPreferences()
     ui->colorSelectorTypeComboBox->setCurrentIndex(0);
     
     KisColorSelectorComboBox* cstw = dynamic_cast<KisColorSelectorComboBox*>(ui->colorSelectorConfiguration);
-    cstw->setConfiguration(KisColorSelector::Configuration("3|0|5|0")); // triangle selector
+    cstw->setConfiguration(KisColorSelectorConfiguration("3|0|5|0")); // triangle selector
     
     //luma//
     ui->l_lumaR->setValue(0.2126);

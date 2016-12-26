@@ -43,7 +43,6 @@ struct KisKeyframeChannel::Private
 {
     Private() {}
     Private(const Private &rhs, KisNodeWSP newParentNode) {
-        keys = rhs.keys;
         node = newParentNode;
         id = rhs.id;
         defaultBounds = rhs.defaultBounds;
@@ -67,6 +66,10 @@ KisKeyframeChannel::KisKeyframeChannel(const KisKeyframeChannel &rhs, KisNodeWSP
     : m_d(new Private(*rhs.m_d, newParentNode))
 {
     KIS_ASSERT_RECOVER_NOOP(&rhs != this);
+
+    Q_FOREACH(KisKeyframeSP keyframe, rhs.m_d->keys) {
+        m_d->keys.insert(keyframe->time(), keyframe->cloneFor(this));
+    }
 }
 
 KisKeyframeChannel::~KisKeyframeChannel()

@@ -87,7 +87,7 @@ public:
 
 
     struct NodeManipulationInterface {
-        virtual ~NodeManipulationInterface() {};
+        virtual ~NodeManipulationInterface() {}
         virtual KisLayerSP addPaintLayer() const = 0;
         virtual void removeNode(KisNodeSP node) const = 0;
     };
@@ -112,6 +112,7 @@ public Q_SLOTS:
 Q_SIGNALS:
     void requestCurrentNodeChanged(KisNodeSP node);
     void sigInfiniteTimelineUpdateNeeded();
+    void sigEnsureRowVisible(int row);
 
 private:
     struct Private;

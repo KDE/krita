@@ -66,7 +66,7 @@ KisChannelSeparator::KisChannelSeparator(KisViewManager * view)
 
 void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOptions alphaOps, enumSepSource sourceOps, enumSepOutput outputOps, bool downscale, bool toColor)
 {
-    KisImageWSP image = m_view->image();
+    KisImageSP image = m_view->image();
     if (!image) return;
 
     KisPaintDeviceSP src;
@@ -100,7 +100,7 @@ void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOpti
 
     QRect rect = src->exactBounds();
 
-    m_view->image()->lock();
+    image->lock();
     int i = 0;
     for (QList<KoChannelInfo *>::const_iterator it = begin; it != end; ++it) {
 
@@ -249,7 +249,6 @@ void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOpti
                 QRect r = l->exactBounds();
 
                 KisDocument *d = KisPart::instance()->createDocument();
-                d->prepareForImport();
 
                 KisImageWSP dst = KisImageWSP(new KisImage(d->createUndoStore(), r.width(), r.height(), (*deviceIt)->colorSpace(), l->name()));
                 d->setCurrentImage(dst);
@@ -268,8 +267,7 @@ void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOpti
         if (outputOps == TO_LAYERS) {
             undo->endMacro();
         }
-        m_view->image()->unlock();
+        image->unlock();
         image->setModified();
     }
-
 }

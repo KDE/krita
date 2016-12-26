@@ -52,8 +52,6 @@ class QTimer;
  * the timer has elapsed.
  *
  */
-
-
 class KRITAIMAGE_EXPORT KisSignalCompressor : public QObject
 {
     Q_OBJECT

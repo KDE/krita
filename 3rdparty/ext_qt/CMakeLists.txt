@@ -35,8 +35,8 @@ elseif (NOT APPLE)
       INSTALL_DIR ${EXTPREFIX_qt}
       CONFIGURE_COMMAND <SOURCE_DIR>/configure -prefix ${EXTPREFIX_qt} -opensource -confirm-license -nomake examples -no-sql-sqlite -no-openssl -no-qml-debug -no-mtdev  -no-journald  -no-syslog -no-nis  -no-cups -no-tslib -no-directfb -no-linuxfb -no-libproxy -no-pch -qt-zlib -qt-pcre -qt-libpng -qt-libjpeg  -qt-harfbuzz -qt-freetype -qt-xcb -qt-xkbcommon-x11 -optimized-qmake -skip qt3d -skip qtactiveqt -skip qtcanvas3d -skip qtconnectivity -skip qtenginio -skip qtgraphicaleffects -skip qtlocation -skip qtmultimedia -skip qtwayland -skip qtwebchannel -skip qtwebengine -skip qtwebsockets -skip qtwebview -skip qtandroidextras -skip qtserialport
 
-      BUILD_COMMAND make
-      INSTALL_COMMAND make install
+      BUILD_COMMAND $(MAKE)
+      INSTALL_COMMAND $(MAKE) install
       UPDATE_COMMAND ""
       BUILD_IN_SOURCE 1
       ALWAYS 0

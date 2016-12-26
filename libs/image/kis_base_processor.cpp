@@ -32,10 +32,10 @@ public:
     KisBaseProcessorConfigurationFactory(KisBaseProcessor* _generator) : m_generator(_generator) {}
     ~KisBaseProcessorConfigurationFactory() override {}
     KisSerializableConfigurationSP createDefault() override {
-        return m_generator->factoryConfiguration(0);
+        return m_generator->factoryConfiguration(KisPaintDeviceSP());
     }
     KisSerializableConfigurationSP create(const QDomElement& e) override {
-        KisSerializableConfigurationSP config = m_generator->factoryConfiguration(0);
+        KisSerializableConfigurationSP config = m_generator->factoryConfiguration(KisPaintDeviceSP());
         config->fromXML(e);
         return config;
     }

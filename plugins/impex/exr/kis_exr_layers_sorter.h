@@ -28,7 +28,7 @@ class QDomDocument;
 class KisExrLayersSorter
 {
 public:
-    KisExrLayersSorter(const QDomDocument &extraData, KisImageWSP image);
+    KisExrLayersSorter(const QDomDocument &extraData, KisImageSP image);
     ~KisExrLayersSorter();
 
 private:

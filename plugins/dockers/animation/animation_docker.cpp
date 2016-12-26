@@ -68,6 +68,7 @@ AnimationDocker::AnimationDocker()
 
     m_animationWidget->setupUi(mainWidget);
 
+    // TODO: create all the actions using action manager!
     m_previousFrameAction = new KisAction(i18n("Previous Frame"), m_animationWidget->btnPreviousFrame);
     m_previousFrameAction->setActivationFlags(KisAction::ACTIVE_IMAGE);
     m_animationWidget->btnPreviousFrame->setDefaultAction(m_previousFrameAction);

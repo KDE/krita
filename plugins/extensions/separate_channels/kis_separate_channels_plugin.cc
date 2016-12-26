@@ -58,7 +58,7 @@ KisSeparateChannelsPlugin::~KisSeparateChannelsPlugin()
 
 void KisSeparateChannelsPlugin::slotSeparate()
 {
-    KisImageWSP image = m_view->image();
+    KisImageSP image = m_view->image();
     if (!image) return;
 
     KisLayerSP l = m_view->nodeManager()->activeLayer();

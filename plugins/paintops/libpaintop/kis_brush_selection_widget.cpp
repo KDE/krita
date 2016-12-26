@@ -54,9 +54,9 @@ KisBrushSelectionWidget::KisBrushSelectionWidget(QWidget * parent)
     connect(m_autoBrushWidget, SIGNAL(sigBrushChanged()), SIGNAL(sigBrushChanged()));
     addChooser(i18n("Auto"), m_autoBrushWidget, AUTOBRUSH, KoGroupButton::GroupLeft);
 
-    m_brushChooser = new KisBrushChooser(this);
-    connect(m_brushChooser, SIGNAL(sigBrushChanged()), SIGNAL(sigBrushChanged()));
-    addChooser(i18n("Predefined"), m_brushChooser, PREDEFINEDBRUSH, KoGroupButton::GroupCenter);
+    m_predefinedBrushWidget = new KisPredefinedBrushChooser(this);
+    connect(m_predefinedBrushWidget, SIGNAL(sigBrushChanged()), SIGNAL(sigBrushChanged()));
+    addChooser(i18n("Predefined"), m_predefinedBrushWidget, PREDEFINEDBRUSH, KoGroupButton::GroupCenter);
 
     m_textBrushWidget = new KisTextBrushChooser(this, "textbrush", i18n("Text"));
     connect(m_textBrushWidget, SIGNAL(sigBrushChanged()), SIGNAL(sigBrushChanged()));
@@ -103,7 +103,7 @@ KisBrushSP KisBrushSelectionWidget::brush() const
         theBrush = m_autoBrushWidget->brush();
         break;
     case PREDEFINEDBRUSH:
-        theBrush = m_brushChooser->brush();
+        theBrush = m_predefinedBrushWidget->brush();
         break;
     case TEXTBRUSH:
         theBrush = m_textBrushWidget->brush();
@@ -148,7 +148,7 @@ void KisBrushSelectionWidget::setTextBrush(bool on)
 
 void KisBrushSelectionWidget::setImage(KisImageWSP image)
 {
-    m_brushChooser->setImage(image);
+    m_predefinedBrushWidget->setImage(image);
 }
 
 void KisBrushSelectionWidget::setCurrentBrush(KisBrushSP brush)
@@ -168,8 +168,8 @@ void KisBrushSelectionWidget::setCurrentBrush(KisBrushSP brush)
         m_textBrushWidget->setBrush(brush);
     }
     else {
-        setCurrentWidget(m_brushChooser);
-        m_brushChooser->setBrush(brush);
+        setCurrentWidget(m_predefinedBrushWidget);
+        m_predefinedBrushWidget->setBrush(brush);
     }
 
 }
@@ -264,7 +264,7 @@ void KisBrushSelectionWidget::hideOptions(const QStringList &options)
             o = m_autoBrushWidget->findChild<QObject*>(l[1]);
         }
         else if (l[0] == "KisBrushChooser") {
-            o = m_brushChooser->findChild<QObject*>(l[1]);
+            o = m_predefinedBrushWidget->findChild<QObject*>(l[1]);
         }
         else if (l[0] == "KisTextBrushChooser") {
             o = m_textBrushWidget->findChild<QObject*>(l[1]);

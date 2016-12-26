@@ -273,6 +273,8 @@ void TimelineFramesView::setModel(QAbstractItemModel *model)
 
     connect(selectionModel(), SIGNAL(selectionChanged(const QItemSelection &, const QItemSelection &)),
             &m_d->selectionChangedCompressor, SLOT(start()));
+
+    connect(m_d->model, SIGNAL(sigEnsureRowVisible(int)), SLOT(slotEnsureRowVisible(int)));
 }
 
 void TimelineFramesView::setFramesPerSecond(int fps)
@@ -289,13 +291,13 @@ void TimelineFramesView::setFramesPerSecond(int fps)
 void TimelineFramesView::slotZoomButtonPressed(qreal staticPoint)
 {
     m_d->zoomStillPointIndex =
-        qIsNaN(staticPoint) ? currentIndex().column() : staticPoint;
+            qIsNaN(staticPoint) ? currentIndex().column() : staticPoint;
 
     const int w = m_d->horizontalRuler->defaultSectionSize();
 
     m_d->zoomStillPointOriginalOffset =
-        w * m_d->zoomStillPointIndex -
-        horizontalScrollBar()->value();
+            w * m_d->zoomStillPointIndex -
+            horizontalScrollBar()->value();
 }
 
 void TimelineFramesView::slotZoomButtonChanged(qreal zoomLevel)
@@ -326,8 +328,8 @@ void TimelineFramesView::slotUpdateInfiniteFramesCount()
 
     const int sectionWidth = m_d->horizontalRuler->defaultSectionSize();
     const int calculatedIndex =
-        (horizontalScrollBar()->value() +
-         m_d->horizontalRuler->width() - 1) / sectionWidth;
+            (horizontalScrollBar()->value() +
+             m_d->horizontalRuler->width() - 1) / sectionWidth;
 
     m_d->model->setLastVisibleFrame(calculatedIndex);
 }
@@ -358,27 +360,27 @@ QItemSelectionModel::SelectionFlags TimelineFramesView::selectionCommand(const Q
      */
 
     if (event &&
-        (event->type() == QEvent::MouseButtonPress ||
-         event->type() == QEvent::MouseButtonRelease) &&
-        index.isValid()) {
+            (event->type() == QEvent::MouseButtonPress ||
+             event->type() == QEvent::MouseButtonRelease) &&
+            index.isValid()) {
 
         const QMouseEvent *mevent = static_cast<const QMouseEvent*>(event);
 
         if (mevent->button() == Qt::RightButton &&
-            selectionModel()->selectedIndexes().contains(index)) {
+                selectionModel()->selectedIndexes().contains(index)) {
 
             // Allow calling context menu for multiple layers
             return QItemSelectionModel::NoUpdate;
         }
 
         if (event->type() == QEvent::MouseButtonPress &&
-            (mevent->modifiers() & Qt::ControlModifier)) {
+                (mevent->modifiers() & Qt::ControlModifier)) {
 
             return QItemSelectionModel::NoUpdate;
         }
 
         if (event->type() == QEvent::MouseButtonRelease &&
-            (mevent->modifiers() & Qt::ControlModifier)) {
+                (mevent->modifiers() & Qt::ControlModifier)) {
 
             return QItemSelectionModel::Toggle;
         }
@@ -415,6 +417,15 @@ void TimelineFramesView::slotReselectCurrentIndex()
     currentChanged(index, index);
 }
 
+void TimelineFramesView::slotEnsureRowVisible(int row)
+{
+    QModelIndex index = currentIndex();
+    if (!index.isValid() || row < 0) return;
+
+    index = m_d->model->index(row, index.column());
+    scrollTo(index);
+}
+
 void TimelineFramesView::slotDataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight)
 {
     if (m_d->model->isPlaybackActive()) return;
@@ -423,8 +434,8 @@ void TimelineFramesView::slotDataChanged(const QModelIndex &topLeft, const QMode
 
     for (int j = topLeft.column(); j <= bottomRight.column(); j++) {
         QVariant value = m_d->model->data(
-            m_d->model->index(topLeft.row(), j),
-            TimelineFramesModel::ActiveFrameRole);
+                    m_d->model->index(topLeft.row(), j),
+                    TimelineFramesModel::ActiveFrameRole);
 
         if (value.isValid() && value.toBool()) {
             selectedColumn = j;
@@ -619,8 +630,8 @@ void TimelineFramesView::startDrag(Qt::DropActions supportedActions)
         selectionModel()->clearSelection();
         Q_FOREACH (const QModelIndex &idx, selectionBefore) {
             QModelIndex newIndex =
-                model()->index(idx.row() + selectionOffset.y(),
-                               idx.column() + selectionOffset.x());
+                    model()->index(idx.row() + selectionOffset.y(),
+                                   idx.column() + selectionOffset.x());
             selectionModel()->select(newIndex, QItemSelectionModel::Select);
         }
     }
@@ -682,8 +693,8 @@ void TimelineFramesView::mousePressEvent(QMouseEvent *event)
         } else if (event->button() == Qt::LeftButton) {
             m_d->initialDragPanPos = event->pos();
             m_d->initialDragPanValue =
-                QPoint(horizontalScrollBar()->value(),
-                       verticalScrollBar()->value());
+                    QPoint(horizontalScrollBar()->value(),
+                           verticalScrollBar()->value());
         }
         event->accept();
 
@@ -692,21 +703,21 @@ void TimelineFramesView::mousePressEvent(QMouseEvent *event)
         int numSelectedItems = selectionModel()->selectedIndexes().size();
 
         if (index.isValid() &&
-            numSelectedItems <= 1 &&
-            m_d->model->data(index, TimelineFramesModel::FrameEditableRole).toBool()) {
+                numSelectedItems <= 1 &&
+                m_d->model->data(index, TimelineFramesModel::FrameEditableRole).toBool()) {
 
             model()->setData(index, true, TimelineFramesModel::ActiveLayerRole);
             model()->setData(index, true, TimelineFramesModel::ActiveFrameRole);
             setCurrentIndex(index);
 
             if (model()->data(index, TimelineFramesModel::FrameExistsRole).toBool() ||
-                model()->data(index, TimelineFramesModel::SpecialKeyframeExists).toBool()) {
+                    model()->data(index, TimelineFramesModel::SpecialKeyframeExists).toBool()) {
 
                 {
-                KisSignalsBlocker b(m_d->colorSelector);
-                QVariant colorLabel = index.data(TimelineFramesModel::ColorLabel);
-                int labelIndex = colorLabel.isValid() ? colorLabel.toInt() : 0;
-                m_d->colorSelector->setCurrentIndex(labelIndex);
+                    KisSignalsBlocker b(m_d->colorSelector);
+                    QVariant colorLabel = index.data(TimelineFramesModel::ColorLabel);
+                    int labelIndex = colorLabel.isValid() ? colorLabel.toInt() : 0;
+                    m_d->colorSelector->setCurrentIndex(labelIndex);
                 }
 
                 m_d->frameEditingMenu->exec(event->globalPos());
@@ -746,7 +757,7 @@ void TimelineFramesView::mousePressEvent(QMouseEvent *event)
         }
 
         m_d->lastPressedPosition =
-            QPoint(horizontalOffset(), verticalOffset()) + event->pos();
+                QPoint(horizontalOffset(), verticalOffset()) + event->pos();
 
         QAbstractItemView::mousePressEvent(event);
     }
@@ -867,7 +878,7 @@ void TimelineFramesView::slotNewFrame()
 {
     QModelIndex index = currentIndex();
     if (!index.isValid() ||
-        !m_d->model->data(index, TimelineFramesModel::FrameEditableRole).toBool()) {
+            !m_d->model->data(index, TimelineFramesModel::FrameEditableRole).toBool()) {
 
         return;
     }
@@ -879,7 +890,7 @@ void TimelineFramesView::slotCopyFrame()
 {
     QModelIndex index = currentIndex();
     if (!index.isValid() ||
-        !m_d->model->data(index, TimelineFramesModel::FrameEditableRole).toBool()) {
+            !m_d->model->data(index, TimelineFramesModel::FrameEditableRole).toBool()) {
 
         return;
     }

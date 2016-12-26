@@ -41,9 +41,11 @@ OSStatus GeneratePreviewForURL(void *thisInterface, QLPreviewRequestRef preview,
     if (appPlist != nil || appPlist.length) {
     
         appIcon = [[NSImage alloc] initWithData:appPlist];
+
+        NSImageRep *rep = [[appIcon representations] objectAtIndex:0];
         
-        NSSize canvasSize = appIcon.size;
-        NSRect renderRect = NSMakeRect(0.0, 0.0, appIcon.size.width, appIcon.size.height);
+        NSSize canvasSize = NSMakeSize(rep.pixelsWide, rep.pixelsHigh);
+        NSRect renderRect = NSMakeRect(0.0, 0.0, rep.pixelsWide, rep.pixelsHigh);
         
         CGContextRef _context = QLPreviewRequestCreateContext(preview, canvasSize, true, NULL);
         

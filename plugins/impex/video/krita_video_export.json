@@ -3,7 +3,6 @@
     "NoDisplay": "true",
     "Type": "Service",
     "X-KDE-Export": "video/x-matroska,image/gif,video/ogg,video/mp4",
-    "X-KDE-Import": "application/x-krita",
     "X-KDE-Library": "kritavideoexport",
     "X-KDE-ServiceTypes": [
         "Krita/AnimationExporter"

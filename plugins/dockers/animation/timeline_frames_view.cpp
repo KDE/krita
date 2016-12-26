@@ -28,6 +28,7 @@
 
 #include <QPainter>
 
+#include <QFileInfo>
 #include <QApplication>
 #include <QHeaderView>
 #include <QDropEvent>
@@ -53,6 +54,11 @@
 #include "kis_signal_compressor.h"
 #include "kis_time_range.h"
 #include "kis_color_label_selector_widget.h"
+
+#include <KoFileDialog.h>
+#include <QDesktopServices>
+
+#include "config-qtmultimedia.h"
 
 typedef QPair<QRect, QModelIndex> QItemViewPaintPair;
 typedef QList<QItemViewPaintPair> QItemViewPaintPairs;
@@ -84,10 +90,16 @@ struct TimelineFramesView::Private
     QToolButton *addLayersButton;
     KisAction *showHideLayerAction;
 
+    QToolButton *audioOptionsButton;
+
     KisColorLabelSelectorWidget *colorSelector;
     QWidgetAction *colorSelectorAction;
     KisColorLabelSelectorWidget *multiframeColorSelector;
     QWidgetAction *multiframeColorSelectorAction;
+
+    QMenu *audioOptionsMenu;
+    QAction *openAudioAction;
+    QAction *audioMuteAction;
 
     QMenu *layerEditingMenu;
     QMenu *existingLayersMenu;
@@ -149,6 +161,9 @@ TimelineFramesView::TimelineFramesView(QWidget *parent)
     connect(horizontalScrollBar(), SIGNAL(valueChanged(int)), SLOT(slotUpdateInfiniteFramesCount()));
     connect(horizontalScrollBar(), SIGNAL(sliderReleased()), SLOT(slotUpdateInfiniteFramesCount()));
 
+
+    /********** New Layer Menu ***********************************************************/
+
     m_d->addLayersButton = new QToolButton(this);
     m_d->addLayersButton->setAutoRaise(true);
     m_d->addLayersButton->setIcon(KisIconUtils::loadIcon("addlayer"));
@@ -176,6 +191,36 @@ TimelineFramesView::TimelineFramesView(QWidget *parent)
 
     m_d->addLayersButton->setMenu(m_d->layerEditingMenu);
 
+    /********** Audio Channel Menu *******************************************************/
+
+    m_d->audioOptionsButton = new QToolButton(this);
+    m_d->audioOptionsButton->setAutoRaise(true);
+    m_d->audioOptionsButton->setIcon(KisIconUtils::loadIcon("zoom-horizontal"));
+    m_d->audioOptionsButton->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+    m_d->audioOptionsButton->setPopupMode(QToolButton::InstantPopup);
+
+    m_d->audioOptionsMenu = new QMenu(this);
+
+#ifndef HAVE_QT_MULTIMEDIA
+    m_d->audioOptionsMenu->addSection(i18nc("@item:inmenu", "Audio playback is not suported in this build!"));
+#endif
+
+    m_d->openAudioAction= new QAction("XXX", this);
+    connect(m_d->openAudioAction, SIGNAL(triggered()), this, SLOT(slotSelectAudioChannelFile()));
+    m_d->audioOptionsMenu->addAction(m_d->openAudioAction);
+
+    m_d->audioMuteAction = new QAction(i18nc("@item:inmenu", "Mute"), this);
+    m_d->audioMuteAction->setCheckable(true);
+    connect(m_d->audioMuteAction, SIGNAL(triggered(bool)), SLOT(slotAudioChannelMute(bool)));
+
+    m_d->audioOptionsMenu->addAction(m_d->audioMuteAction);
+
+    m_d->audioOptionsMenu->addAction(i18nc("@item:inmenu", "Remove audio"), this, SLOT(slotAudioChannelRemove()));
+
+    m_d->audioOptionsButton->setMenu(m_d->audioOptionsMenu);
+
+    /********** Frame Editing Context Menu ***********************************************/
+
     m_d->frameCreationMenu = new QMenu(this);
     m_d->frameCreationMenu->addAction(KisAnimationUtils::addFrameActionName, this, SLOT(slotNewFrame()));
     m_d->frameCreationMenu->addAction(KisAnimationUtils::duplicateFrameActionName, this, SLOT(slotCopyFrame()));
@@ -197,6 +242,8 @@ TimelineFramesView::TimelineFramesView(QWidget *parent)
     m_d->multipleFrameEditingMenu = new QMenu(this);
     m_d->multipleFrameEditingMenu->addAction(KisAnimationUtils::removeFramesActionName, this, SLOT(slotRemoveFrame()));
     m_d->multipleFrameEditingMenu->addAction(m_d->multiframeColorSelectorAction);
+
+    /********** Zoom Button **************************************************************/
 
     m_d->zoomDragButton = new KisZoomButton(this);
     m_d->zoomDragButton->setAutoRaise(true);
@@ -240,11 +287,13 @@ void TimelineFramesView::updateGeometries()
     const int minimalSize = availableHeight - 2 * margin;
 
     resizeToMinimalSize(m_d->addLayersButton, minimalSize);
+    resizeToMinimalSize(m_d->audioOptionsButton, minimalSize);
     resizeToMinimalSize(m_d->zoomDragButton, minimalSize);
 
     int x = 2 * margin;
     int y = (availableHeight - minimalSize) / 2;
     m_d->addLayersButton->move(x, 2 * y);
+    m_d->audioOptionsButton->move(x + minimalSize + 2 * margin, 2 * y);
 
     const int availableWidth = m_d->layersHeader->width();
 
@@ -271,10 +320,15 @@ void TimelineFramesView::setModel(QAbstractItemModel *model)
     connect(m_d->model, SIGNAL(sigInfiniteTimelineUpdateNeeded()),
             this, SLOT(slotUpdateInfiniteFramesCount()));
 
+    connect(m_d->model, SIGNAL(sigAudioChannelChanged()),
+            this, SLOT(slotUpdateAudioActions()));
+
     connect(selectionModel(), SIGNAL(selectionChanged(const QItemSelection &, const QItemSelection &)),
             &m_d->selectionChangedCompressor, SLOT(start()));
 
     connect(m_d->model, SIGNAL(sigEnsureRowVisible(int)), SLOT(slotEnsureRowVisible(int)));
+
+    slotUpdateAudioActions();
 }
 
 void TimelineFramesView::setFramesPerSecond(int fps)
@@ -320,6 +374,70 @@ void TimelineFramesView::slotColorLabelChanged(int label)
 
     KisImageConfig config;
     config.setDefaultFrameColorLabel(label);
+}
+
+void TimelineFramesView::slotSelectAudioChannelFile()
+{
+    if (!m_d->model) return;
+
+    KoFileDialog dialog(this, KoFileDialog::ImportFiles, "ImportAudio");
+
+    QString defaultDir = QDesktopServices::storageLocation(QDesktopServices::MusicLocation);
+
+    const QString currentFile = m_d->model->audioChannelFileName();
+    QDir baseDir = QFileInfo(currentFile).absoluteDir();
+    if (baseDir.exists()) {
+        defaultDir = baseDir.absolutePath();
+    }
+
+    dialog.setDefaultDir(defaultDir);
+
+    QStringList mimeTypes;
+    mimeTypes << "audio/mpeg";
+    mimeTypes << "audio/ogg";
+    mimeTypes << "audio/vorbis";
+    mimeTypes << "audio/vnd.wave";
+
+    dialog.setMimeTypeFilters(mimeTypes);
+    dialog.setCaption(i18nc("@titile:window", "Open Audio"));
+
+    const QString result = dialog.filename();
+    const QFileInfo info(result);
+
+    if (info.exists()) {
+        m_d->model->setAudioChannelFileName(info.absoluteFilePath());
+    }
+}
+
+void TimelineFramesView::slotAudioChannelMute(bool value)
+{
+    if (!m_d->model) return;
+
+    if (value != m_d->model->isAudioMuted()) {
+        m_d->model->setAudioMuted(value);
+    }
+}
+
+void TimelineFramesView::slotAudioChannelRemove()
+{
+    if (!m_d->model) return;
+    m_d->model->setAudioChannelFileName(QString());
+}
+
+void TimelineFramesView::slotUpdateAudioActions()
+{
+    if (!m_d->model) return;
+
+    const QString currentFile = m_d->model->audioChannelFileName();
+
+    if (currentFile.isEmpty()) {
+        m_d->openAudioAction->setText(i18nc("@item:inmenu", "Open audio..."));
+    } else {
+        QFileInfo info(currentFile);
+        m_d->openAudioAction->setText(i18nc("@item:inmenu", "Change audio (%1)...", info.fileName()));
+    }
+
+    m_d->audioMuteAction->setChecked(m_d->model->isAudioMuted());
 }
 
 void TimelineFramesView::slotUpdateInfiniteFramesCount()

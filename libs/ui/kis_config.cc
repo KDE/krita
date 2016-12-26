@@ -1675,6 +1675,16 @@ void KisConfig::setScribbingUpdatesDelay(int value)
     m_cfg.writeEntry("scribbingUpdatesDelay", value);
 }
 
+int KisConfig::scribbingAudioUpdatesDelay(bool defaultValue) const
+{
+    return (defaultValue ? 200 : m_cfg.readEntry("scribbingAudioUpdatesDelay", 200));
+}
+
+void KisConfig::setScribbingAudioUpdatesDelay(int value)
+{
+    m_cfg.writeEntry("scribbingAudioUpdatesDelay", value);
+}
+
 bool KisConfig::switchSelectionCtrlAlt(bool defaultValue) const
 {
     return defaultValue ? false : m_cfg.readEntry("switchSelectionCtrlAlt", false);

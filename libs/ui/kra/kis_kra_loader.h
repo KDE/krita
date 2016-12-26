@@ -103,6 +103,7 @@ private:
     void loadAssistantsList(const KoXmlElement& elem);
     void loadGrid(const KoXmlElement& elem);
     void loadGuides(const KoXmlElement& elem);
+    void loadAudio(const KoXmlElement& elem, KisImageSP image);
 private:
 
     struct Private;

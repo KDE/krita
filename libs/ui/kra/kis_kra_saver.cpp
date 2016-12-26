@@ -57,6 +57,9 @@
 #include "kis_guides_config.h"
 #include "KisProofingConfiguration.h"
 
+#include <QFileInfo>
+#include <QDir>
+
 
 using namespace KRA;
 
@@ -126,6 +129,7 @@ QDomElement KisKraSaver::saveXML(QDomDocument& doc,  KisImageWSP image)
     saveAssistantsList(doc,imageElement);
     saveGrid(doc,imageElement);
     saveGuides(doc,imageElement);
+    saveAudio(doc,imageElement);
 
     QDomElement animationElement = doc.createElement("animation");
     KisDomUtils::saveValue(&animationElement, "framerate", image->animationInterface()->framerate());
@@ -414,6 +418,31 @@ bool KisKraSaver::saveGuides(QDomDocument& doc, QDomElement& element)
         QDomElement guidesElement = guides.saveToXml(doc, "guides");
         element.appendChild(guidesElement);
     }
+
+    return true;
+}
+
+bool KisKraSaver::saveAudio(QDomDocument& doc, QDomElement& element)
+{
+    QString fileName = m_d->doc->image()->animationInterface()->audioChannelFileName();
+    if (fileName.isEmpty()) return true;
+
+    if (!QFileInfo::exists(fileName)) {
+        m_d->errorMessages << i18n("Audio channel file %1 doesn't exist!", fileName);
+        return false;
+    }
+
+    const QDir documentDir = QFileInfo(m_d->doc->localFilePath()).absoluteDir();
+    KIS_ASSERT_RECOVER_RETURN_VALUE(documentDir.exists(), false);
+
+    fileName = documentDir.relativeFilePath(fileName);
+    fileName = QDir::fromNativeSeparators(fileName);
+
+    KIS_ASSERT_RECOVER_RETURN_VALUE(!fileName.isEmpty(), false);
+
+    QDomElement audioElement = doc.createElement("audio");
+    KisDomUtils::saveValue(&audioElement, "masterChannelPath", fileName);
+    element.appendChild(audioElement);
 
     return true;
 }

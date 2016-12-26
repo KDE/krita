@@ -479,6 +479,9 @@ public:
     int scribbingUpdatesDelay(bool defaultValue = false) const;
     void setScribbingUpdatesDelay(int value);
 
+    int scribbingAudioUpdatesDelay(bool defaultValue = false) const;
+    void setScribbingAudioUpdatesDelay(int value);
+
     bool switchSelectionCtrlAlt(bool defaultValue = false) const;
     void setSwitchSelectionCtrlAlt(bool value);
 

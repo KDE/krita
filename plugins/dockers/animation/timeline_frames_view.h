@@ -73,6 +73,11 @@ private Q_SLOTS:
     void slotEnsureRowVisible(int row);
 
 
+    void slotSelectAudioChannelFile();
+    void slotAudioChannelMute(bool value);
+    void slotAudioChannelRemove();
+    void slotUpdateAudioActions();
+
 private:
     void setFramesPerSecond(int fps);
 

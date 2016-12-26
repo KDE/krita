@@ -54,7 +54,6 @@ struct KisTimeBasedItemModel::Private
 
     QScopedPointer<KisSignalCompressorWithParam<int> > scrubbingCompressor;
 
-
     int baseNumFrames() const {
         if (image.isNull()) return 0;
 
@@ -343,6 +342,10 @@ void KisTimeBasedItemModel::setScrubState(bool active)
     if (!m_d->scrubInProgress && active) {
         m_d->scrubStartFrame = m_d->activeFrameIndex;
         m_d->scrubInProgress = true;
+    }
+
+    if (m_d->animationPlayer && !m_d->animationPlayer->isPlaying()) {
+        m_d->animationPlayer->setScrubState(active, m_d->activeFrameIndex);
     }
 
     if (m_d->scrubInProgress && !active) {

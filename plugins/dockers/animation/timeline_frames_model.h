@@ -51,6 +51,12 @@ public:
     bool createFrame(const QModelIndex &dstIndex);
     bool copyFrame(const QModelIndex &dstIndex);
 
+    QString audioChannelFileName() const;
+    void setAudioChannelFileName(const QString &fileName);
+
+    bool isAudioMuted() const;
+    void setAudioMuted(bool value);
+
     void setLastClickedIndex(const QModelIndex &index);
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
@@ -112,6 +118,7 @@ public Q_SLOTS:
 Q_SIGNALS:
     void requestCurrentNodeChanged(KisNodeSP node);
     void sigInfiniteTimelineUpdateNeeded();
+    void sigAudioChannelChanged();
 
 private:
     struct Private;

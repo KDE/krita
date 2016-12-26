@@ -50,6 +50,8 @@ public:
     qreal realFps() const;
     qreal framesDroppedPortion() const;
 
+    void setScrubState(bool value, int currentFrame);
+
 public Q_SLOTS:
     void slotUpdate();
     void slotCancelPlayback();
@@ -57,6 +59,10 @@ public Q_SLOTS:
     void slotUpdatePlaybackSpeed(double value);
     void slotUpdatePlaybackTimer();
     void slotUpdateDropFramesMode();
+
+private Q_SLOTS:
+    void slotSyncScrubbingAudio(int msecTime);
+    void slotAudioChannelChanged();
 
 Q_SIGNALS:
     void sigFrameChanged();

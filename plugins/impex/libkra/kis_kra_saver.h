@@ -55,6 +55,7 @@ private:
     bool saveAssistantsList(QDomDocument& doc, QDomElement& element);
     bool saveGrid(QDomDocument& doc, QDomElement& element);
     bool saveGuides(QDomDocument& doc, QDomElement& element);
+    bool saveAudio(QDomDocument& doc, QDomElement& element);
     bool saveNodeKeyframes(KoStore *store, QString location, const KisNode *node);
     struct Private;
     Private * const m_d;

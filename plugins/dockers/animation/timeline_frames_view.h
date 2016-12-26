@@ -71,6 +71,11 @@ private Q_SLOTS:
 
     void slotColorLabelChanged(int);
 
+    void slotSelectAudioChannelFile();
+    void slotAudioChannelMute(bool value);
+    void slotAudioChannelRemove();
+    void slotUpdateAudioActions();
+
 private:
     void setFramesPerSecond(int fps);
 

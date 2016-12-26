@@ -342,6 +342,8 @@ KisImageSP KisKraLoader::loadXML(const KoXmlElement& element)
             loadGuides(e);
         } else if (e.tagName() == "assistants") {
             loadAssistantsList(e);
+        } else if (e.tagName() == "audio") {
+            loadAudio(e, image);
         }
     }
 
@@ -1102,4 +1104,29 @@ void KisKraLoader::loadGuides(const KoXmlElement& elem)
     KisGuidesConfig guides;
     guides.loadFromXml(domElement);
     m_d->document->setGuidesConfig(guides);
+}
+
+void KisKraLoader::loadAudio(const KoXmlElement& elem, KisImageSP image)
+{
+    QDomDocument dom;
+    KoXml::asQDomElement(dom, elem);
+    QDomElement qElement = dom.firstChildElement();
+
+    QString fileName;
+    if (KisDomUtils::loadValue(qElement, "masterChannelPath", &fileName)) {
+        fileName = QDir::toNativeSeparators(fileName);
+
+        QDir baseDirectory = QFileInfo(m_d->document->localFilePath()).absoluteDir();
+        qDebug() << ppVar(baseDirectory);
+
+        fileName = baseDirectory.absoluteFilePath(fileName);
+
+        QFileInfo info(fileName);
+
+        if (!info.exists()) {
+            m_d->errorMessages << i18n("Audio channel file %1 doesn't exist!", fileName);
+        } else {
+            image->animationInterface()->setAudioChannelFileName(info.absoluteFilePath());
+        }
+    }
 }

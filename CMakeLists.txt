@@ -242,6 +242,8 @@ find_package(Qt5 ${MIN_QT_VERSION}
         Svg
         Test
         Concurrent
+        OPTIONAL_COMPONENTS
+        Multimedia
 )
 
 
@@ -291,6 +293,9 @@ else()
     set(HAVE_X11 FALSE)
     set(HAVE_XCB FALSE)
 endif()
+
+macro_bool_to_01(Qt5Multimedia_FOUND HAVE_QT_MULTIMEDIA)
+configure_file(config-qtmultimedia.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-qtmultimedia.h )
 
 add_definitions(
   -DQT_USE_QSTRINGBUILDER

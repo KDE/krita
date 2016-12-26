@@ -220,8 +220,10 @@ KisBaseNode::PropertyList KisLayer::sectionModelProperties() const
     KisBaseNode::PropertyList l = KisBaseNode::sectionModelProperties();
     l << KisBaseNode::Property(KoID("opacity", i18n("Opacity")), i18n("%1%", percentOpacity()));
 
-    if (compositeOp()) {
-        l << KisBaseNode::Property(KoID("compositeop", i18n("Composite Mode")), compositeOp()->description());
+    const KoCompositeOp * compositeOp = this->compositeOp();
+
+    if (compositeOp) {
+        l << KisBaseNode::Property(KoID("compositeop", i18n("Composite Mode")), compositeOp->description());
     }
 
     if (m_d->layerStyle && !m_d->layerStyle->isEmpty()) {

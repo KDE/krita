@@ -83,6 +83,8 @@ set(kritawidgets_LIB_SRCS
     kis_double_parse_spin_box.cpp
     kis_double_parse_unit_spin_box.cpp
     kis_int_parse_spin_box.cpp
+
+    KisColorSelectorInterface.cpp
 )
 
 ki18n_wrap_ui( kritawidgets_LIB_SRCS

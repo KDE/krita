@@ -356,6 +356,7 @@ bool TimelineFramesModel::setData(const QModelIndex &index, const QVariant &valu
             KIS_ASSERT_RECOVER(dummy) { return true; }
 
             emit requestCurrentNodeChanged(dummy->node());
+            emit sigEnsureRowVisible(m_d->activeLayerIndex);
         }
         break;
     }

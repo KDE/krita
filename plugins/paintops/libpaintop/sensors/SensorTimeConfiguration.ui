@@ -55,7 +55,7 @@
       </widget>
      </item>
      <item>
-      <widget class="KisSliderSpinBox" name="spinBoxDuration">
+      <widget class="KisDoubleSliderSpinBox" name="spinBoxDuration" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
          <horstretch>0</horstretch>
@@ -63,20 +63,13 @@
         </sizepolicy>
        </property>
        <property name="minimum" stdset="0">
-        <number>1</number>
+        <number>0</number>
        </property>
        <property name="maximum" stdset="0">
-        <number>9999</number>
+        <number>10</number>
        </property>
        <property name="value" stdset="0">
-        <number>30</number>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="label">
-       <property name="text">
-        <string>s</string>
+        <number>2</number>
        </property>
       </widget>
      </item>
@@ -86,7 +79,7 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KisSliderSpinBox</class>
+   <class>KisDoubleSliderSpinBox</class>
    <extends>QWidget</extends>
    <header>kis_slider_spin_box.h</header>
    <container>1</container>

@@ -70,6 +70,8 @@ private Q_SLOTS:
     void slotZoomButtonChanged(qreal value);
 
     void slotColorLabelChanged(int);
+    void slotEnsureRowVisible(int row);
+
 
     void slotSelectAudioChannelFile();
     void slotAudioChannelMute(bool value);

@@ -165,6 +165,24 @@ public:  // Krita specific interfaces
 
     int viewCount() const;
 
+    /**
+     * @brief blockUntillOperationsFinished blocks the GUI of the application until execution
+     *        of actions on \p image is finished
+     * @param image the image which we should wait for
+     * @return true if the image has finished execution of the actions, false if
+     *         the user cancelled operation
+     */
+    bool blockUntillOperationsFinished(KisImageSP image);
+
+
+    /**
+     * @brief blockUntillOperationsFinished blocks the GUI of the application until execution
+     *        of actions on \p image is finished. Does *not* provide a "Cancel" button. So the
+     *        user is forced to wait.
+     * @param image the image which we should wait for
+     */
+    void blockUntillOperationsFinishedForced(KisImageSP image);
+
 public:
 
     KisGridManager * gridManager() const;

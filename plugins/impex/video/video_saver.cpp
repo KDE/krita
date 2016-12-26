@@ -112,7 +112,7 @@ public:
                 << "logPath" << logPath
                 << "totalFrames" << totalFrames;
 
-        QTemporaryFile progressFile("KritaFFmpegProgress.XXXXXX");
+        QTemporaryFile progressFile(QDir::tempPath() + QDir::separator() + "KritaFFmpegProgress.XXXXXX");
         progressFile.open();
 
         m_process.setStandardOutputFile(logPath);
@@ -122,6 +122,8 @@ public:
              << "-nostdin"
              << "-progress" << progressFile.fileName()
              << specialArgs;
+
+        qDebug() << "\t" << m_ffmpegPath << args.join(" ");
 
         m_cancelled = false;
         m_process.start(m_ffmpegPath, args);
@@ -147,7 +149,7 @@ private:
         progress.setCancelButton(0);
         progress.setMinimumDuration(0);
         progress.setValue(0);
-        progress.setRange(0,100);
+        progress.setRange(0, 100);
 
         QEventLoop loop;
         loop.connect(&watcher, SIGNAL(sigProcessingFinished()), SLOT(quit()));
@@ -180,12 +182,12 @@ private:
 };
 
 
-VideoSaver::VideoSaver(KisDocument *doc, bool batchMode)
+VideoSaver::VideoSaver(KisDocument *doc, const QString &ffmpegPath, bool batchMode)
     : m_image(doc->image())
     , m_doc(doc)
     , m_batchMode(batchMode)
-    , m_ffmpegPath(findFFMpeg())
-    , m_runner(new KisFFMpegRunner(m_ffmpegPath))
+    , m_ffmpegPath(ffmpegPath)
+    , m_runner(new KisFFMpegRunner(ffmpegPath))
 {
 }
 
@@ -203,46 +205,17 @@ bool VideoSaver::hasFFMpeg() const
     return !m_ffmpegPath.isEmpty();
 }
 
-QString VideoSaver::findFFMpeg()
-{
-    QString result;
-
-    QStringList proposedPaths;
-
-    QString customPath = KisConfig().customFFMpegPath();
-    proposedPaths << customPath;
-    proposedPaths << customPath + QDir::separator() + "ffmpeg";
-
-    proposedPaths << "ffmpeg";
-    proposedPaths << KoResourcePaths::getApplicationRoot() +
-        QDir::separator() + "bin" + QDir::separator() + "ffmpeg";
-
-    Q_FOREACH (const QString &path, proposedPaths) {
-        if (path.isEmpty()) continue;
-
-        QProcess testProcess;
-        testProcess.start(path, QStringList() << "-version");
-        testProcess.waitForFinished(1000);
-
-        const bool successfulStart =
-            testProcess.state() == QProcess::NotRunning &&
-            testProcess.error() == QProcess::UnknownError;
-
-        if (successfulStart) {
-            result = path;
-            break;
-        }
-    }
-
-    return result;
-}
-
 KisImageBuilder_Result VideoSaver::encode(const QString &filename, KisPropertiesConfigurationSP configuration)
 {
 
-    //qDebug() << "ffmpeg" << m_ffmpegPath << "filename" << filename << "configuration" << configuration->toXML();
+    qDebug() << "ffmpeg" << m_ffmpegPath << "filename" << filename << "configuration" << configuration->toXML();
 
-    if (m_ffmpegPath.isEmpty()) return KisImageBuilder_RESULT_FAILURE;
+    if (m_ffmpegPath.isEmpty()) {
+        m_ffmpegPath = configuration->getString("ffmpeg_path");
+        if (!QFileInfo(m_ffmpegPath).exists()) {
+            return KisImageBuilder_RESULT_FAILURE;
+        }
+    }
 
     KisImageBuilder_Result result = KisImageBuilder_RESULT_OK;
 
@@ -253,7 +226,13 @@ KisImageBuilder_Result VideoSaver::encode(const QString &filename, KisProperties
 
     const QDir framesDir(configuration->getString("directory"));
 
-    const QString resultFile = framesDir.absolutePath() + "/" + filename;
+    QString resultFile;
+    if (QFileInfo(filename).isAbsolute()) {
+        resultFile = filename;
+    }
+    else {
+        resultFile = framesDir.absolutePath() + "/" + filename;
+    }
     const QFileInfo info(resultFile);
     const QString suffix = info.suffix().toLower();
 
@@ -276,7 +255,7 @@ KisImageBuilder_Result VideoSaver::encode(const QString &filename, KisProperties
                                     framesDir.filePath("log_generate_palette_gif.log"),
                                     clipRange.duration() + clipRange.start());
 
-            if (result) {
+            if (result != KisImageBuilder_RESULT_OK) {
                 return result;
             }
         }
@@ -290,12 +269,14 @@ KisImageBuilder_Result VideoSaver::encode(const QString &filename, KisProperties
                  << additionalOptionsList
                  << "-y" << resultFile;
 
+            dbgFile << "savedFilesMask" << savedFilesMask << "start" << clipRange.start() << "duration" << clipRange.duration();
+
             KisImageBuilder_Result result =
                 m_runner->runFFMpeg(args, i18n("Encoding frames..."),
                                     framesDir.filePath("log_encode_gif.log"),
                                     clipRange.duration() + clipRange.start());
 
-            if (result) {
+            if (result != KisImageBuilder_RESULT_OK) {
                 return result;
             }
         }

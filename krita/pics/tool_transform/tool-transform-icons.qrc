@@ -1,40 +1,40 @@
 <RCC>
     <qresource prefix="/">
-        <file>dark_transform_icons_cage.png</file>
-        <file>dark_transform_icons_liquify_erase.png</file>
-        <file>dark_transform_icons_liquify_main.png</file>
-        <file>dark_transform_icons_liquify_move.png</file>
-        <file>dark_transform_icons_liquify_offset.png</file>
-        <file>dark_transform_icons_liquify_resize.png</file>
-        <file>dark_transform_icons_liquify_rotate.png</file>
-        <file>dark_transform_icons_liquify_rotateCCW.png</file>
-        <file>dark_transform_icons_main.png</file>
-        <file>dark_transform_icons_perspective.png</file>
-        <file>dark_transform_icons_warp.png</file>
-        <file>dark_transform_icons_penPressure.png</file>
+        <file>dark_transform_icons_cage.svg</file>
+        <file>dark_transform_icons_liquify_erase.svg</file>
+        <file>dark_transform_icons_liquify_main.svg</file>
+        <file>dark_transform_icons_liquify_move.svg</file>
+        <file>dark_transform_icons_liquify_offset.svg</file>
+        <file>dark_transform_icons_liquify_resize.svg</file>
+        <file>dark_transform_icons_liquify_rotate.svg</file>
+        <file>dark_transform_icons_liquify_rotateCCW.svg</file>
+        <file>dark_transform_icons_main.svg</file>
+        <file>dark_transform_icons_perspective.svg</file>
+        <file>dark_transform_icons_warp.svg</file>
+        <file>dark_transform_icons_penPressure.svg</file>
         <file>dark_krita_tool_transform_recursive.png</file>
         <file>dark_transform_icons_mirror_x.svg</file>
         <file>dark_transform_icons_mirror_y.svg</file>
         <file>dark_transform_icons_rotate_cw.svg</file>
         <file>dark_transform_icons_rotate_ccw.svg</file>
-        <file>light_transform_icons_cage.png</file>
-        <file>light_transform_icons_liquify_erase.png</file>
-        <file>light_transform_icons_liquify_main.png</file>
-        <file>light_transform_icons_liquify_move.png</file>
-        <file>light_transform_icons_liquify_offset.png</file>
-        <file>light_transform_icons_liquify_resize.png</file>
-        <file>light_transform_icons_liquify_rotate.png</file>
-        <file>light_transform_icons_liquify_rotateCCW.png</file>
-        <file>light_transform_icons_main.png</file>
-        <file>light_transform_icons_perspective.png</file>
-        <file>light_transform_icons_warp.png</file>
-        <file>light_transform_icons_penPressure.png</file>
+        <file>light_transform_icons_cage.svg</file>
+        <file>light_transform_icons_liquify_erase.svg</file>
+        <file>light_transform_icons_liquify_main.svg</file>
+        <file>light_transform_icons_liquify_move.svg</file>
+        <file>light_transform_icons_liquify_offset.svg</file>
+        <file>light_transform_icons_liquify_resize.svg</file>
+        <file>light_transform_icons_liquify_rotate.svg</file>
+        <file>light_transform_icons_liquify_rotateCCW.svg</file>
+        <file>light_transform_icons_main.svg</file>
+        <file>light_transform_icons_perspective.svg</file>
+        <file>light_transform_icons_warp.svg</file>
+        <file>light_transform_icons_penPressure.svg</file>
         <file>light_krita_tool_transform_recursive.png</file>
         <file>light_transform_icons_mirror_x.svg</file>
         <file>light_transform_icons_mirror_y.svg</file>
         <file>light_transform_icons_rotate_cw.svg</file>
         <file>light_transform_icons_rotate_ccw.svg</file>
-        <file>dark_transform_icons_penPressure_locked.png</file>
-        <file>light_transform_icons_penPressure_locked.png</file>
+        <file>dark_transform_icons_penPressure_locked.svg</file>
+        <file>light_transform_icons_penPressure_locked.svg</file>
     </qresource>
 </RCC>

@@ -183,7 +183,7 @@ void KisUpdateTimeMonitor::printValues()
     qint64 strokeTime = m_d->strokeTime.elapsed();
     qreal responseTime = qreal(m_d->responseTime) / m_d->numTickets;
     qreal nonUpdateTime = qreal(m_d->jobsTime) / m_d->numTickets;
-    qreal jobsPerUpdate = qreal(m_d->numTickets) / m_d->numUpdates;
+    qreal jobsPerUpdate = qreal(m_d->numTickets) / m_d->numUpdates;    
     qreal mouseSpeed = qreal(m_d->mousePath) / strokeTime;
 
     QString prefix;
@@ -198,10 +198,12 @@ void KisUpdateTimeMonitor::printValues()
     QFile logFile(QString("log/%1stroke.rdata").arg(prefix));
     logFile.open(QIODevice::Append);
     QTextStream stream(&logFile);
-    stream << mouseSpeed << "\t"
-           << jobsPerUpdate << "\t"
-           << nonUpdateTime << "\t"
-           << responseTime << "\n";
+
+    stream << i18n("Stroke Time:") << strokeTime << "\t"
+           << i18n("Mouse Speed:") << QString::number( mouseSpeed, 'f', 3 ) << "\t"
+           << i18n("Jobs/Update:") << QString::number( jobsPerUpdate, 'f', 3 ) << "\t"
+           << i18n("Non Update Time:") << QString::number( nonUpdateTime, 'f', 3 ) << "\t"
+           << i18n("Response Time:") << responseTime << endl; // 'endl' will use the correct OS line ending
     logFile.close();
 }
 

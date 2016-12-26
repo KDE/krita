@@ -43,7 +43,7 @@ public:
 
     virtual KoID colorDepthId() const
     {
-        return Float32BitsColorDepthID;
+        return Float16BitsColorDepthID;
     }
 
     virtual KoColorSpace *clone() const;
@@ -83,7 +83,7 @@ public:
 
     virtual QString name() const
     {
-        return i18n("XYZ (32-bit float/channel)");
+        return i18n("XYZ (16-bit float/channel)");
     }
 
     virtual bool userVisible() const

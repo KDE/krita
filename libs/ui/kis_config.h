@@ -239,6 +239,9 @@ public:
     qreal outlineSizeMinimum(bool defaultValue = false) const;
     void setOutlineSizeMinimum(qreal outlineSizeMinimum) const;
 
+    qreal selectionViewSizeMinimum(bool defaultValue = false) const;
+    void setSelectionViewSizeMinimum(qreal outlineSizeMinimum) const;
+
     int autoSaveInterval(bool defaultValue = false) const;
     void setAutoSaveInterval(int seconds) const;
 
@@ -270,6 +273,10 @@ public:
     int presetChooserViewMode(bool defaultValue = false) const;
     void setPresetChooserViewMode(const int mode) const;
 
+    int presetIconSize(bool defaultValue = false) const;
+    void setPresetIconSize(const int value) const;
+
+
     bool firstRun(bool defaultValue = false) const;
     void setFirstRun(const bool firstRun) const;
 
@@ -287,6 +294,9 @@ public:
 
     bool showDockerTitleBars(bool defaultValue = false) const;
     void setShowDockerTitleBars(const bool value) const;
+
+    bool showDockers(bool defaultValue = false) const;
+    void setShowDockers(const bool value) const;
 
     bool showStatusBar(bool defaultValue = false) const;
     void setShowStatusBar(const bool value) const;

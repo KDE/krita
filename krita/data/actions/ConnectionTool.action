@@ -1,3 +1,5 @@
+<!-- Disabled, since Connection Tool is disabled in Krita
+
 <?xml version="1.0" encoding="UTF-8"?>
 <ActionCollection version="2" name="Tools">
   <Actions category="connection-tool">
@@ -154,3 +156,5 @@
     </Action>
   </Actions>
 </ActionCollection>
+
+commented out! -->

@@ -16,11 +16,14 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#ifndef KIS_ACTION_REGISTRY_H
+#define KIS_ACTION_REGISTRY_H
 
 #include <QString>
 #include <QKeySequence>
 #include <QDomElement>
 #include <QAction>
+#include <QList>
 
 #include "kritawidgetutils_export.h"
 
@@ -88,12 +91,6 @@ public:
 
 
     /**
-     * Setup the shortcut configuration widget.
-     */
-    void setupDialog(KisShortcutsDialog *dlg);
-
-
-    /**
      * Called when "OK" button is pressed in settings dialog.
      */
     void settingsPageSaved();
@@ -102,7 +99,7 @@ public:
     /**
      * Reload custom shortcuts from kritashortcutsrc
      */
-    void loadCustomShortcuts(const QString &path = QString());
+    void loadCustomShortcuts();
 
     /**
      * Call after settings are changed.
@@ -111,6 +108,20 @@ public:
 
     // If config == 0, reload defaults
     void applyShortcutScheme(const KConfigBase *config = 0);
+
+    struct ActionCategory {
+        ActionCategory();
+        ActionCategory(const QString &_componentName, const QString &_categoryName);
+        QString componentName;
+        QString categoryName;
+
+        bool isValid() const;
+
+    private:
+        bool m_isValid = false;
+    };
+
+    ActionCategory fetchActionCategory(const QString &name) const;
 
     /**
      * Constructor.  Please don't touch!
@@ -127,6 +138,10 @@ public:
     // Undocumented
     void updateShortcut(const QString &name, QAction *ac);
 
+    bool sanityCheckPropertized(const QString &name);
+
+    QList<QString> registeredShortcutIds() const;
+
 Q_SIGNALS:
     void shortcutsUpdated();
 
@@ -135,3 +150,5 @@ private:
     class Private;
     Private * const d;
 };
+
+#endif /* KIS_ACTION_REGISTRY_H */

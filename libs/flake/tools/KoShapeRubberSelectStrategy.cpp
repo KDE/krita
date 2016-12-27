@@ -69,7 +69,7 @@ void KoShapeRubberSelectStrategy::handleMouseMove(const QPointF &p, Qt::Keyboard
 {
     Q_D(KoShapeRubberSelectStrategy);
     QPointF point = d->snapGuide->snap(p, modifiers);
-    if (modifiers & Qt::AltModifier || modifiers & Qt::ControlModifier) {
+    if (modifiers & Qt::ControlModifier) {
         d->tool->canvas()->updateCanvas(d->selectedRect());
         d->selectRect.moveTopLeft(d->selectRect.topLeft() - (d->lastPos - point));
         d->lastPos = point;

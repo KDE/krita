@@ -327,21 +327,8 @@ void KoToolProxy::mouseDoubleClickEvent(KoPointerEvent *event)
 
 void KoToolProxy::mouseMoveEvent(QMouseEvent *event, const QPointF &point)
 {
-    if (d->mouseLeaveWorkaround) {
-        d->mouseLeaveWorkaround = false;
-        return;
-    }
-    KoInputDevice id;
-    KoToolManager::instance()->priv()->switchInputDevice(id);
-    if (d->activeTool == 0) {
-        event->ignore();
-        return;
-    }
-
     KoPointerEvent ev(event, point);
-    d->activeTool->mouseMoveEvent(&ev);
-
-    d->checkAutoScroll(ev);
+    mouseMoveEvent(&ev);
 }
 
 void KoToolProxy::mouseMoveEvent(KoPointerEvent *event)
@@ -364,38 +351,8 @@ void KoToolProxy::mouseMoveEvent(KoPointerEvent *event)
 
 void KoToolProxy::mouseReleaseEvent(QMouseEvent *event, const QPointF &point)
 {
-    d->mouseLeaveWorkaround = false;
-    KoInputDevice id;
-    KoToolManager::instance()->priv()->switchInputDevice(id);
-    d->scrollTimer.stop();
-
     KoPointerEvent ev(event, point);
-    if (d->activeTool) {
-        d->activeTool->mouseReleaseEvent(&ev);
-
-        if (! event->isAccepted() && event->button() == Qt::LeftButton && event->modifiers() == 0
-                && qAbs(d->mouseDownPoint.x() - event->x()) < 5
-                && qAbs(d->mouseDownPoint.y() - event->y()) < 5) {
-            // we potentially will change the selection
-            Q_ASSERT(d->activeTool->canvas());
-            KoShapeManager *manager = d->activeTool->canvas()->shapeManager();
-            Q_ASSERT(manager);
-            // only change the selection if that will not lead to losing a complex selection
-            if (manager->selection()->count() <= 1) {
-                KoShape *shape = manager->shapeAt(point);
-                if (shape && !manager->selection()->isSelected(shape)) { // make the clicked shape the active one
-                    manager->selection()->deselectAll();
-                    manager->selection()->select(shape);
-                    QList<KoShape*> shapes;
-                    shapes << shape;
-                    QString tool = KoToolManager::instance()->preferredToolForSelection(shapes);
-                    KoToolManager::instance()->switchToolRequested(tool);
-                }
-            }
-        }
-    } else {
-        event->ignore();
-    }
+    mouseReleaseEvent(&ev);
 }
 
 void KoToolProxy::mouseReleaseEvent(KoPointerEvent* event)
@@ -408,6 +365,7 @@ void KoToolProxy::mouseReleaseEvent(KoPointerEvent* event)
     if (d->activeTool) {
         d->activeTool->mouseReleaseEvent(event);
 
+        // FIXME: What happens here??!!!!
         if (!event->isAccepted() && event->button() == Qt::LeftButton && event->modifiers() == 0
                 && qAbs(d->mouseDownPoint.x() - event->x()) < 5
                 && qAbs(d->mouseDownPoint.y() - event->y()) < 5) {

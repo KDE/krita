@@ -115,7 +115,33 @@ public:
 
     void handleMouseMove(const QPointF & /*mouseLocation*/, Qt::KeyboardModifiers /*modifiers*/) override {}
     void finishInteraction(Qt::KeyboardModifiers /*modifiers*/) override {}
+
+    void paint(QPainter &painter, const KoViewConverter &converter) {
+        SelectionDecorator decorator(KoFlake::NoHandle, false, false);
+        decorator.setSelection(tool()->canvas()->shapeManager()->selection());
+        decorator.setHandleRadius(handleRadius());
+        decorator.paint(painter, converter);
+    }
 };
+
+class SelectionInteractionStrategy : public KoShapeRubberSelectStrategy
+{
+public:
+    explicit SelectionInteractionStrategy(KoToolBase *parent, const QPointF &clicked, bool useSnapToGrid)
+        : KoShapeRubberSelectStrategy(parent, clicked, useSnapToGrid)
+    {
+    }
+
+    void paint(QPainter &painter, const KoViewConverter &converter) {
+        SelectionDecorator decorator(KoFlake::NoHandle, false, false);
+        decorator.setSelection(tool()->canvas()->shapeManager()->selection());
+        decorator.setHandleRadius(handleRadius());
+        decorator.paint(painter, converter);
+
+        KoShapeRubberSelectStrategy::paint(painter, converter);
+    }
+};
+
 
 class SelectionHandler : public KoToolSelection
 {
@@ -1023,7 +1049,9 @@ QList<QPointer<QWidget> > DefaultTool::createOptionWidgets()
 void DefaultTool::canvasResourceChanged(int key, const QVariant &res)
 {
     if (key == HotPosition) {
+
         m_hotPosition = static_cast<KoFlake::Position>(res.toInt());
+        ENTER_FUNCTION() << ppVar(m_hotPosition);
         repaintDecorations();
     }
 }
@@ -1042,8 +1070,11 @@ KoInteractionStrategy *DefaultTool::createStrategy(KoPointerEvent *event)
 
     bool editableShape = editableShapesCount(selection->selectedShapes());
 
-    // TODO: use modifiers instead
-    if (event->buttons() & Qt::MidButton) {
+    const bool selectMultiple = event->modifiers() & Qt::ShiftModifier;
+    const bool selectNextInStack = event->modifiers() & Qt::ControlModifier;
+    const bool avoidSelection = event->modifiers() & Qt::AltModifier;
+
+    if (selectNextInStack) {
         // change the hot selection position when middle clicking on a handle
         KoFlake::Position newHotPosition = m_hotPosition;
         switch (handle) {
@@ -1075,28 +1106,22 @@ KoInteractionStrategy *DefaultTool::createStrategy(KoPointerEvent *event)
         }
         if (m_hotPosition != newHotPosition) {
             canvas()->resourceManager()->setResource(HotPosition, newHotPosition);
+            return new NopInteractionStrategy(this);
         }
-        return 0;
     }
 
-    bool selectMultiple = event->modifiers() & Qt::ControlModifier;
-    bool selectNextInStack = event->modifiers() & Qt::ShiftModifier;
-
-    if (editableShape) {
-
+    if (!avoidSelection && editableShape) {
         // manipulation of selected shapes goes first
         if (handle != KoFlake::NoHandle) {
-            if (event->buttons() == Qt::LeftButton) {
-                // resizing or shearing only with left mouse button
-                if (insideSelection) {
-                    return new ShapeResizeStrategy(this, event->point, handle);
-                }
+            // resizing or shearing only with left mouse button
+            if (insideSelection) {
+                return new ShapeResizeStrategy(this, event->point, handle);
+            }
 
-                if (handle == KoFlake::TopMiddleHandle || handle == KoFlake::RightMiddleHandle ||
-                        handle == KoFlake::BottomMiddleHandle || handle == KoFlake::LeftMiddleHandle) {
+            if (handle == KoFlake::TopMiddleHandle || handle == KoFlake::RightMiddleHandle ||
+                handle == KoFlake::BottomMiddleHandle || handle == KoFlake::LeftMiddleHandle) {
 
-                    return new ShapeShearStrategy(this, event->point, handle);
-                }
+                return new ShapeShearStrategy(this, event->point, handle);
             }
 
             // rotating is allowed for rigth mouse button too
@@ -1107,25 +1132,21 @@ KoInteractionStrategy *DefaultTool::createStrategy(KoPointerEvent *event)
             }
         }
 
-        if (!(selectMultiple || selectNextInStack) && event->buttons() == Qt::LeftButton) {
+        if (!selectMultiple && !selectNextInStack) {
             if (insideSelection) {
                 return new ShapeMoveStrategy(this, event->point);
             }
         }
     }
 
-    if ((event->buttons() & Qt::LeftButton) == 0) {
-        return 0;    // Nothing to do for middle/right mouse button
-    }
-
     KoShape *shape = shapeManager->shapeAt(event->point, selectNextInStack ? KoFlake::NextUnselected : KoFlake::ShapeOnTop);
 
-    if (!shape && handle == KoFlake::NoHandle) {
+    if (avoidSelection || (!shape && handle == KoFlake::NoHandle)) {
         if (!selectMultiple) {
             repaintDecorations();
             selection->deselectAll();
         }
-        return new KoShapeRubberSelectStrategy(this, event->point);
+        return new SelectionInteractionStrategy(this, event->point, false);
     }
 
     if (selection->isSelected(shape)) {

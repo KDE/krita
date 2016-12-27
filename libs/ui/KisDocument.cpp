@@ -676,7 +676,7 @@ bool KisDocument::saveFile(const QString &filePath, KisPropertiesConfigurationSP
     Q_ASSERT(!tempororaryFileName.isEmpty());
 
     //qDebug() << "saving to tempory file" << tempororaryFileName;
-    status = d->importExportManager->exportDocument(tempororaryFileName, outputMimeType, !d->isExporting , exportConfiguration);
+    status = d->importExportManager->exportDocument(tempororaryFileName, filePath, outputMimeType, !d->isExporting , exportConfiguration);
 
     ret = (status == KisImportExportFilter::OK);
     suppressErrorDialog = (isAutosaving() || status == KisImportExportFilter::UserCancelled || status == KisImportExportFilter::BadConversionGraph);

@@ -37,6 +37,7 @@ public:
     QPointer<KoUpdater> updater;
     QByteArray mime;
     QString filename;
+    QString realFilename;
     bool batchmode;
 
     QMap<QString, KisExportCheckBase*> capabilities;
@@ -69,10 +70,14 @@ KisImportExportFilter::~KisImportExportFilter()
     delete d;
 }
 
-
 QString KisImportExportFilter::filename() const
 {
     return d->filename;
+}
+
+QString KisImportExportFilter::realFilename() const
+{
+    return d->realFilename;
 }
 
 bool KisImportExportFilter::batchMode() const
@@ -90,6 +95,12 @@ void KisImportExportFilter::setFilename(const QString &filename)
 {
     d->filename = filename;
 }
+
+void KisImportExportFilter::setRealFilename(const QString &filename)
+{
+    d->realFilename = filename;
+}
+
 
 void KisImportExportFilter::setMimeType(const QString &mime)
 {

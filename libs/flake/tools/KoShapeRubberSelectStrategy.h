@@ -33,6 +33,9 @@ class KoShapeRubberSelectStrategyPrivate;
 
 /**
  * Implement the rubber band selection of flake objects.
+ *
+ * When the user selects stuff in left-to-right way, selection is in "covering"
+ * (or "containing") mode, when in "left-to-right" in "crossing" mode
  */
 class KRITAFLAKE_EXPORT KoShapeRubberSelectStrategy : public KoInteractionStrategy
 {
@@ -56,6 +59,13 @@ public:
 protected:
     /// constructor
     KoShapeRubberSelectStrategy(KoShapeRubberSelectStrategyPrivate &);
+
+    enum SelectionMode {
+        CrossingSelection,
+        CoveringSelection
+    };
+
+    virtual SelectionMode currentMode() const;
 
 private:
     Q_DECLARE_PRIVATE(KoShapeRubberSelectStrategy)

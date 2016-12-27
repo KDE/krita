@@ -105,6 +105,16 @@ public:
     QList<T> contains(const QPointF &point) const;
 
     /**
+     * @brief Find all data item which contain the point
+     * The items are sorted by insertion time in ascending order.
+     *
+     * @param point which should be contained in the objects
+     *
+     * @return objects which contain the point
+     */
+    QList<T> contained(const QRectF &point) const;
+
+    /**
      * @brief Find all data rectangles
      * The order is NOT guaranteed to be the same as that used by values().
      *
@@ -162,6 +172,7 @@ protected:
 
         virtual void intersects(const QRectF& rect, QMap<int, T> & result) const = 0;
         virtual void contains(const QPointF & point, QMap<int, T> & result) const = 0;
+        virtual void contained(const QRectF & point, QMap<int, T> & result) const = 0;
 
         virtual void keys(QList<QRectF> & result) const = 0;
         virtual void values(QMap<int, T> & result) const = 0;
@@ -252,6 +263,7 @@ class NonLeafNode : virtual public Node
 
         virtual void intersects(const QRectF& rect, QMap<int, T> & result) const;
         virtual void contains(const QPointF & point, QMap<int, T> & result) const;
+        virtual void contained(const QRectF & point, QMap<int, T> & result) const;
 
         virtual void keys(QList<QRectF> & result) const;
         virtual void values(QMap<int, T> & result) const;
@@ -286,6 +298,7 @@ class LeafNode : virtual public Node
 
         virtual void intersects(const QRectF& rect, QMap<int, T> & result) const;
         virtual void contains(const QPointF & point, QMap<int, T> & result) const;
+        virtual void contained(const QRectF & point, QMap<int, T> & result) const;
 
         virtual void keys(QList<QRectF> & result) const;
         virtual void values(QMap<int, T> & result) const;
@@ -469,6 +482,15 @@ QList<T> KoRTree<T>::contains(const QPointF &point) const
     m_root->contains(point, found);
     return found.values();
 }
+
+template <typename T>
+QList<T> KoRTree<T>::contained(const QRectF& rect) const
+{
+    QMap<int, T> found;
+    m_root->contained(rect, found);
+    return found.values();
+}
+
 
 template <typename T>
 QList<QRectF> KoRTree<T>::keys() const
@@ -871,6 +893,16 @@ void KoRTree<T>::NonLeafNode::contains(const QPointF & point, QMap<int, T> & res
 }
 
 template <typename T>
+void KoRTree<T>::NonLeafNode::contained(const QRectF& rect, QMap<int, T> & result) const
+{
+    for (int i = 0; i < this->m_counter; ++i) {
+        if (this->m_childBoundingBox[i].intersects(rect)) {
+            m_childs[i]->contained(rect, result);
+        }
+    }
+}
+
+template <typename T>
 void KoRTree<T>::NonLeafNode::keys(QList<QRectF> & result) const
 {
     for (int i = 0; i < this->m_counter; ++i) {
@@ -1035,6 +1067,16 @@ void KoRTree<T>::LeafNode::contains(const QPointF & point, QMap<int, T> & result
 {
     for (int i = 0; i < this->m_counter; ++i) {
         if (this->m_childBoundingBox[i].contains(point)) {
+            result.insert(m_dataIds[i], m_data[i]);
+        }
+    }
+}
+
+template <typename T>
+void KoRTree<T>::LeafNode::contained(const QRectF& rect, QMap<int, T> & result) const
+{
+    for (int i = 0; i < this->m_counter; ++i) {
+        if (rect.contains(this->m_childBoundingBox[i])) {
             result.insert(m_dataIds[i], m_data[i]);
         }
     }

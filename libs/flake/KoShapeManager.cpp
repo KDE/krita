@@ -497,25 +497,36 @@ KoShape *KoShapeManager::shapeAt(const QPointF &position, KoFlake::ShapeSelectio
     return 0; // missed everything
 }
 
-QList<KoShape *> KoShapeManager::shapesAt(const QRectF &rect, bool omitHiddenShapes)
+QList<KoShape *> KoShapeManager::shapesAt(const QRectF &rect, bool omitHiddenShapes, bool containedMode)
 { 
     d->updateTree();
-    QList<KoShape*> intersectedShapes(d->tree.intersects(rect));
-    
-    for (int count = intersectedShapes.count() - 1; count >= 0; count--) {
+    QList<KoShape*> shapes(containedMode ? d->tree.contained(rect) : d->tree.intersects(rect));
+
+    for (int count = shapes.count() - 1; count >= 0; count--) {
      
-        KoShape *shape = intersectedShapes.at(count);
+        KoShape *shape = shapes.at(count);
        
-        if (omitHiddenShapes && ! shape->isVisible(true)) {
-            intersectedShapes.removeAt(count);
+        if (omitHiddenShapes && !shape->isVisible(true)) {
+            shapes.removeAt(count);
         } else {
             const QPainterPath outline = shape->absoluteTransformation(0).map(shape->outline());
-            if (! outline.intersects(rect) && ! outline.contains(rect)) { 
-                intersectedShapes.removeAt(count);
+
+            if (!containedMode && !outline.intersects(rect) && !outline.contains(rect)) {
+                shapes.removeAt(count);
+
+            } else if (containedMode) {
+
+                QPainterPath containingPath;
+                containingPath.addRect(rect);
+
+                if (!containingPath.contains(outline)) {
+                    shapes.removeAt(count);
+                }
             }
         }
     }
-    return intersectedShapes;
+
+    return shapes;
 }
 
 void KoShapeManager::update(QRectF &rect, const KoShape *shape, bool selectionHandles)

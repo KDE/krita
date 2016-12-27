@@ -147,7 +147,7 @@ public:
      * @param rect the rectangle in the document coordinate system.
      * @param omitHiddenShapes if true, only visible shapes are considered
      */
-    QList<KoShape *> shapesAt(const QRectF &rect, bool omitHiddenShapes = true);
+    QList<KoShape *> shapesAt(const QRectF &rect, bool omitHiddenShapes = true, bool containedMode = false);
 
     /**
      * Request a repaint to be queued.

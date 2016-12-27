@@ -29,6 +29,7 @@
 #include "KoSelection.h"
 #include "KoCanvasBase.h"
 
+
 KoShapeRubberSelectStrategy::KoShapeRubberSelectStrategy(KoToolBase *tool, const QPointF &clicked, bool useSnapToGrid)
     : KoInteractionStrategy(*(new KoShapeRubberSelectStrategyPrivate(tool)))
 {
@@ -44,14 +45,23 @@ void KoShapeRubberSelectStrategy::paint(QPainter &painter, const KoViewConverter
     Q_D(KoShapeRubberSelectStrategy);
     painter.setRenderHint(QPainter::Antialiasing, false);
 
-    QColor selectColor(Qt::blue);   // TODO make configurable
-    selectColor.setAlphaF(0.5);
-    QBrush sb(selectColor, Qt::SolidPattern);
-    painter.setPen(QPen(sb, 0));
-    painter.setBrush(sb);
+    const QColor crossingColor(80,130,8);
+    const QColor coveringColor(8,60,167);
+
+    QColor selectColor(
+        currentMode() == CrossingSelection ?
+        crossingColor : coveringColor);
+
+    selectColor.setAlphaF(0.8);
+    painter.setPen(QPen(selectColor, 0));
+
+    selectColor.setAlphaF(0.4);
+    const QBrush fillBrush(selectColor);
+    painter.setBrush(fillBrush);
+
     QRectF paintRect = converter.documentToView(d->selectedRect());
     paintRect = paintRect.normalized();
-    paintRect.adjust(0., -0.5, 0.5, 0.);
+
     painter.drawRect(paintRect);
 }
 
@@ -59,7 +69,7 @@ void KoShapeRubberSelectStrategy::handleMouseMove(const QPointF &p, Qt::Keyboard
 {
     Q_D(KoShapeRubberSelectStrategy);
     QPointF point = d->snapGuide->snap(p, modifiers);
-    if ((modifiers & Qt::AltModifier) != 0) {
+    if (modifiers & Qt::AltModifier || modifiers & Qt::ControlModifier) {
         d->tool->canvas()->updateCanvas(d->selectedRect());
         d->selectRect.moveTopLeft(d->selectRect.topLeft() - (d->lastPos - point));
         d->lastPos = point;
@@ -101,14 +111,27 @@ void KoShapeRubberSelectStrategy::finishInteraction(Qt::KeyboardModifiers modifi
     Q_D(KoShapeRubberSelectStrategy);
     Q_UNUSED(modifiers);
     KoSelection * selection = d->tool->canvas()->shapeManager()->selection();
-    QList<KoShape *> shapes(d->tool->canvas()->shapeManager()->shapesAt(d->selectRect));
+
+    const bool useContainedMode = currentMode() == CoveringSelection;
+
+    QList<KoShape *> shapes =
+        d->tool->canvas()->shapeManager()->
+            shapesAt(d->selectedRect(), true, useContainedMode);
+
     Q_FOREACH (KoShape * shape, shapes) {
-        if (!(shape->isSelectable() && shape->isVisible()))
-            continue;
+        if (!shape->isSelectable()) continue;
+
         selection->select(shape);
     }
+
     d->tool->repaintDecorations();
     d->tool->canvas()->updateCanvas(d->selectedRect());
+}
+
+KoShapeRubberSelectStrategy::SelectionMode KoShapeRubberSelectStrategy::currentMode() const
+{
+    Q_D(const KoShapeRubberSelectStrategy);
+    return d->selectRect.left() < d->selectRect.right() ? CoveringSelection : CrossingSelection;
 }
 
 KUndo2Command *KoShapeRubberSelectStrategy::createCommand()

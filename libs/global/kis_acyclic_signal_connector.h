@@ -20,7 +20,7 @@
 #define __KIS_ACYCLIC_SIGNAL_CONNECTOR_H
 
 #include <QObject>
-#include "kritaimage_export.h"
+#include "kritaglobal_export.h"
 
 
 /**
@@ -43,7 +43,7 @@
  * See an example in KisToolCropConfigWidget.
  */
 
-class KRITAIMAGE_EXPORT KisAcyclicSignalConnector : public QObject
+class KRITAGLOBAL_EXPORT KisAcyclicSignalConnector : public QObject
 {
     Q_OBJECT
 public:

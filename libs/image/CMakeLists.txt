@@ -190,7 +190,6 @@ set(kritaimage_LIB_SRCS
    kis_switch_time_stroke_strategy.cpp
    kis_crop_saved_extra_data.cpp
    kis_thread_safe_signal_compressor.cpp
-   kis_acyclic_signal_connector.cpp
    kis_timed_signal_threshold.cpp
    kis_layer.cc
    kis_indirect_painting_support.cpp

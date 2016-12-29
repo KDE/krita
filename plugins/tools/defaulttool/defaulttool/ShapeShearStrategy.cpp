@@ -159,7 +159,7 @@ void ShapeShearStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModif
 
 void ShapeShearStrategy::paint(QPainter &painter, const KoViewConverter &converter)
 {
-    SelectionDecorator decorator(KoFlake::NoHandle, true, false);
+    SelectionDecorator decorator(tool()->canvas()->resourceManager());
     decorator.setSelection(tool()->canvas()->shapeManager()->selection());
     decorator.setHandleRadius(handleRadius());
     decorator.paint(painter, converter);

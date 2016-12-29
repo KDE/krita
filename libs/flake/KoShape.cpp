@@ -700,7 +700,34 @@ QPointF KoShape::absolutePosition(KoFlake::Position anchor) const
     return absoluteTransformation(0).map(point);
 }
 
+QPointF KoShape::absolutePosition(KoFlake::AnchorPosition anchor) const
+{
+    const QRectF rc = outlineRect();
+
+    QPointF point = rc.topLeft();
+
+    bool valid = false;
+    QPointF anchoredPoint = KoFlake::anchorToPoint(anchor, rc, &valid);
+    if (valid) {
+        point = anchoredPoint;
+    }
+
+    return absoluteTransformation(0).map(point);
+}
+
 void KoShape::setAbsolutePosition(const QPointF &newPosition, KoFlake::Position anchor)
+{
+    Q_D(KoShape);
+    QPointF currentAbsPosition = absolutePosition(anchor);
+    QPointF translate = newPosition - currentAbsPosition;
+    QTransform translateMatrix;
+    translateMatrix.translate(translate.x(), translate.y());
+    applyAbsoluteTransformation(translateMatrix);
+    notifyChanged();
+    d->shapeChanged(PositionChanged);
+}
+
+void KoShape::setAbsolutePosition(const QPointF &newPosition, KoFlake::AnchorPosition anchor)
 {
     Q_D(KoShape);
     QPointF currentAbsPosition = absolutePosition(anchor);
@@ -1139,6 +1166,9 @@ void KoShape::setKeepAspectRatio(bool keepAspect)
 {
     Q_D(KoShape);
     d->keepAspect = keepAspect;
+
+    d->shapeChanged(KeepAspectRatioChange);
+    notifyChanged();
 }
 
 bool KoShape::keepAspectRatio() const

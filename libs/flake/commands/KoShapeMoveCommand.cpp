@@ -28,15 +28,17 @@ class Q_DECL_HIDDEN KoShapeMoveCommand::Private
 public:
     QList<KoShape*> shapes;
     QList<QPointF> previousPositions, newPositions;
+    KoFlake::AnchorPosition anchor;
 };
 
-KoShapeMoveCommand::KoShapeMoveCommand(const QList<KoShape*> &shapes, QList<QPointF> &previousPositions, QList<QPointF> &newPositions, KUndo2Command *parent)
+KoShapeMoveCommand::KoShapeMoveCommand(const QList<KoShape*> &shapes, QList<QPointF> &previousPositions, QList<QPointF> &newPositions, KoFlake::AnchorPosition anchor, KUndo2Command *parent)
         : KUndo2Command(parent),
         d(new Private())
 {
     d->shapes = shapes;
     d->previousPositions = previousPositions;
     d->newPositions = newPositions;
+    d->anchor = anchor;
     Q_ASSERT(d->shapes.count() == d->previousPositions.count());
     Q_ASSERT(d->shapes.count() == d->newPositions.count());
 
@@ -53,7 +55,7 @@ void KoShapeMoveCommand::redo()
     KUndo2Command::redo();
     for (int i = 0; i < d->shapes.count(); i++) {
         d->shapes.at(i)->update();
-        d->shapes.at(i)->setPosition(d->newPositions.at(i));
+        d->shapes.at(i)->setAbsolutePosition(d->newPositions.at(i), d->anchor);
         d->shapes.at(i)->update();
     }
 }
@@ -63,13 +65,32 @@ void KoShapeMoveCommand::undo()
     KUndo2Command::undo();
     for (int i = 0; i < d->shapes.count(); i++) {
         d->shapes.at(i)->update();
-        d->shapes.at(i)->setPosition(d->previousPositions.at(i));
+        d->shapes.at(i)->setAbsolutePosition(d->previousPositions.at(i), d->anchor);
         d->shapes.at(i)->update();
     }
+}
+
+int KoShapeMoveCommand::id() const
+{
+    return 954687634; // TODO: use better system for making ids unique
 }
 
 /// update newPositions list with new postions.
 void KoShapeMoveCommand::setNewPositions(QList<QPointF> newPositions)
 {
     d->newPositions = newPositions;
+}
+
+bool KoShapeMoveCommand::mergeWith(const KUndo2Command *command)
+{
+    const KoShapeMoveCommand *other = dynamic_cast<const KoShapeMoveCommand*>(command);
+
+    if (other->d->shapes != d->shapes ||
+        other->d->anchor != d->anchor) {
+
+        return false;
+    }
+
+    d->newPositions = other->d->newPositions;
+    return true;
 }

@@ -246,7 +246,7 @@ void ShapeResizeStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
 
 void ShapeResizeStrategy::paint(QPainter &painter, const KoViewConverter &converter)
 {
-    SelectionDecorator decorator(KoFlake::NoHandle, false, false);
+    SelectionDecorator decorator(tool()->canvas()->resourceManager());
     decorator.setSelection(tool()->canvas()->shapeManager()->selection());
     decorator.setHandleRadius(handleRadius());
     decorator.paint(painter, converter);

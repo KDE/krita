@@ -16,44 +16,38 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KIS_ASPECT_RATIO_LOCKER_H
-#define __KIS_ASPECT_RATIO_LOCKER_H
+#ifndef KOANCHORSELECTIONWIDGET_H
+#define KOANCHORSELECTIONWIDGET_H
 
-#include <QScopedPointer>
-#include <QObject>
-#include "kritaui_export.h"
+#include <QWidget>
+#include <KoFlake.h>
 
-class QSpinBox;
-class QDoubleSpinBox;
-class KisSliderSpinBox;
-class KisDoubleSliderSpinBox;
-class KoAspectButton;
+#include "kritawidgets_export.h"
 
-class KRITAUI_EXPORT KisAspectRatioLocker : public QObject
+
+class KRITAWIDGETS_EXPORT KoAnchorSelectionWidget : public QWidget
 {
     Q_OBJECT
 public:
-    KisAspectRatioLocker(QObject *parent = 0);
-    ~KisAspectRatioLocker();
+    explicit KoAnchorSelectionWidget(QWidget *parent = 0);
+    ~KoAnchorSelectionWidget();
 
-    template <class SpinBoxType>
-        void connectSpinBoxes(SpinBoxType *spinOne, SpinBoxType *spinTwo, KoAspectButton *aspectButton);
+    KoFlake::AnchorPosition value() const;
+    QPointF value(const QRectF rect, bool *valid) const;
 
-    void setBlockUpdateSignalOnDrag(bool block);
-    void updateAspect();
+    void setValue(KoFlake::AnchorPosition value);
 
-private Q_SLOTS:
-    void slotSpinOneChanged();
-    void slotSpinTwoChanged();
-    void slotAspectButtonChanged();
+    QSize sizeHint() const;
+    QSize minimumSizeHint() const;
 
 Q_SIGNALS:
-    void sliderValueChanged();
-    void aspectButtonChanged();
+    void valueChanged(KoFlake::AnchorPosition id);
 
+public Q_SLOTS:
+    void slotGroupClicked(int id);
 private:
     struct Private;
-    const QScopedPointer<Private> m_d;
+    QScopedPointer<Private> m_d;
 };
 
-#endif /* __KIS_ASPECT_RATIO_LOCKER_H */
+#endif // KOANCHORSELECTIONWIDGET_H

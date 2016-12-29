@@ -115,3 +115,33 @@ void KoFlake::resizeShape(KoShape *shape, qreal scaleX, qreal scaleY,
     QPointF diff = parentalStillPointBefore - parentalStillPointAfter;
     shape->setTransformation(shape->transformation() * QTransform::fromTranslate(diff.x(), diff.y()));
 }
+
+QPointF KoFlake::anchorToPoint(AnchorPosition anchor, const QRectF rect, bool *valid)
+{
+    static QVector<QPointF> anchorTable;
+
+    if (anchorTable.isEmpty()) {
+        anchorTable << QPointF(0.0,0.0);
+        anchorTable << QPointF(0.5,0.0);
+        anchorTable << QPointF(1.0,0.0);
+
+        anchorTable << QPointF(0.0,0.5);
+        anchorTable << QPointF(0.5,0.5);
+        anchorTable << QPointF(1.0,0.5);
+
+        anchorTable << QPointF(0.0,1.0);
+        anchorTable << QPointF(0.5,1.0);
+        anchorTable << QPointF(1.0,1.0);
+    }
+
+    if (anchor == NoAnchor) {
+        if (valid) {
+            *valid = false;
+        }
+        return rect.topLeft();
+    } else if (valid) {
+        *valid = true;
+    }
+
+    return KisAlgebra2D::relativeToAbsolute(anchorTable[int(anchor)], rect);
+}

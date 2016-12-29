@@ -27,6 +27,7 @@
 #include <QPainter>
 
 class KoSelection;
+class KoCanvasResourceManager;
 
 /**
  * The SelectionDecorator is used to paint extra user-interface items on top of a selection.
@@ -40,7 +41,7 @@ public:
      * @param rotationHandles if true; the rotation handles will be drawn
      * @param shearHandles if true; the shearhandles will be drawn
      */
-    SelectionDecorator(KoFlake::SelectionHandle arrows, bool rotationHandles, bool shearHandles);
+    SelectionDecorator(KoCanvasResourceManager *resourceManager);
     ~SelectionDecorator() {}
 
     /**
@@ -62,16 +63,8 @@ public:
      */
     void setHandleRadius(int radius);
 
-    /// Sets the hot position to highlight
-    static void setHotPosition(KoFlake::Position hotPosition);
-
-    /// Returns the hot position
-    static KoFlake::Position hotPosition();
-
 private:
-    bool m_rotationHandles, m_shearHandles;
-    KoFlake::SelectionHandle m_arrows;
-    static KoFlake::Position m_hotPosition;
+    KoFlake::AnchorPosition m_hotPosition;
     KoSelection *m_selection;
     int m_handleRadius;
     int m_lineWidth;

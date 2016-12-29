@@ -26,6 +26,7 @@
 #include <kundo2command.h>
 #include <QList>
 #include <QPointF>
+#include <KoFlake.h>
 
 class KoShape;
 
@@ -43,12 +44,15 @@ public:
      * @param parent the parent command used for macro commands
      */
     KoShapeMoveCommand(const QList<KoShape*> &shapes, QList<QPointF> &previousPositions, QList<QPointF> &newPositions,
-                       KUndo2Command *parent = 0);
+                       KoFlake::AnchorPosition anchor = KoFlake::Center, KUndo2Command *parent = 0);
     ~KoShapeMoveCommand();
     /// redo the command
-    void redo();
+    void redo() override;
     /// revert the actions done in redo
-    void undo();
+    void undo() override;
+
+    int id() const override;
+    bool mergeWith(const KUndo2Command *command) override;
 
     /// update newPositions list with new postions.
     void setNewPositions(QList<QPointF> newPositions);

@@ -26,6 +26,7 @@
 #include <KoSelection.h>
 #include <KoPointerEvent.h>
 #include <KoShapeManager.h>
+#include <KoCanvasResourceManager.h>
 #include <commands/KoShapeTransformCommand.h>
 
 #include <QPointF>
@@ -45,11 +46,13 @@ ShapeRotateStrategy::ShapeRotateStrategy(KoToolBase *tool, const QPointF &clicke
         m_oldTransforms << shape->transformation();
     }
 
-    if (buttons & Qt::RightButton) {
-        m_rotationCenter = tool->canvas()->shapeManager()->selection()->absolutePosition(SelectionDecorator::hotPosition());
-    } else {
-        m_rotationCenter = tool->canvas()->shapeManager()->selection()->absolutePosition(KoFlake::CenteredPosition);
-    }
+
+
+    KoFlake::AnchorPosition anchor = !(buttons & Qt::RightButton) ?
+                KoFlake::Center :
+                KoFlake::AnchorPosition(tool->canvas()->resourceManager()->resource(KoFlake::HotPosition).toInt());
+
+    m_rotationCenter = tool->canvas()->shapeManager()->selection()->absolutePosition(anchor);
 
     tool->setStatusText(i18n("Press ALT to rotate in 45 degree steps."));
 }
@@ -92,7 +95,7 @@ void ShapeRotateStrategy::rotateBy(qreal angle)
 
 void ShapeRotateStrategy::paint(QPainter &painter, const KoViewConverter &converter)
 {
-    SelectionDecorator decorator(KoFlake::NoHandle, true, false);
+    SelectionDecorator decorator(tool()->canvas()->resourceManager());
     decorator.setSelection(tool()->canvas()->shapeManager()->selection());
     decorator.setHandleRadius(handleRadius());
     decorator.paint(painter, converter);

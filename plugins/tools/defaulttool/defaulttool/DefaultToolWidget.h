@@ -26,29 +26,38 @@
 
 #include <QWidget>
 
+
 class KoInteractionTool;
+class KisAspectRatioLocker;
 
 class DefaultToolWidget : public QWidget, Ui::DefaultToolWidget
 {
     Q_OBJECT
 public:
     explicit DefaultToolWidget(KoInteractionTool *tool, QWidget *parent = 0);
+    ~DefaultToolWidget();
 
     /// Sets the unit used by the unit aware child widgets
     void setUnit(const KoUnit &unit);
 
 private Q_SLOTS:
-    void positionSelected(KoFlake::Position position);
-    void updatePosition();
-    void positionHasChanged();
-    void updateSize();
-    void sizeHasChanged();
+    void slotAnchorPointChanged();
     void resourceChanged(int key, const QVariant &res);
-    void aspectButtonToggled(bool keepAspect);
+
+    void slotUpdatePositionBoxes();
+    void slotRepositionShapes();
+
+    void slotUpdateSizeBoxes();
+    void slotResizeShapes();
+
+    void slotUpdateCheckboxes();
+
+    void slotAspectButtonToggled();
+    void slotUpdateAspectButton();
 
 private:
     KoInteractionTool *m_tool;
-    bool m_blockSignals;
+    QScopedPointer<KisAspectRatioLocker> m_sizeAspectLocker;
 };
 
 #endif

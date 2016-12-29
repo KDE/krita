@@ -126,6 +126,7 @@ set(kritaflake_SRCS
     commands/KoShapeDistributeCommand.cpp
     commands/KoShapeLockCommand.cpp
     commands/KoShapeMoveCommand.cpp
+    commands/KoShapeResizeCommand.cpp
     commands/KoShapeShearCommand.cpp
     commands/KoShapeSizeCommand.cpp
     commands/KoShapeStrokeCommand.cpp

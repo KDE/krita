@@ -24,6 +24,7 @@
 #include "kritaflake_export.h"
 
 class QGradient;
+class QRectF;
 class QPointF;
 class QSizeF;
 
@@ -82,6 +83,26 @@ namespace KoFlake
     enum StyleType {
         Background, ///< the background / fill style is active
         Foreground  ///< the foreground / stroke style is active
+    };
+
+    enum AnchorPosition {
+        TopLeft,
+        Top,
+        TopRight,
+        Left,
+        Center,
+        Right,
+        BottomLeft,
+        Bottom,
+        BottomRight,
+        NoAnchor,
+        NumAnchorPositions
+    };
+
+    KRITAFLAKE_EXPORT QPointF anchorToPoint(AnchorPosition anchor, const QRectF rect, bool *valid = 0);
+
+    enum CanvasResource {
+        HotPosition = 1410100299
     };
 
     /// clones the given gradient

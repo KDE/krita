@@ -26,6 +26,7 @@
 #include <KoShapeManager.h>
 #include <KoShapeContainer.h>
 #include <KoShapeContainerModel.h>
+#include <KoCanvasResourceManager.h>
 #include <commands/KoShapeMoveCommand.h>
 #include <KoSnapGuide.h>
 #include <KoPointerEvent.h>
@@ -49,12 +50,17 @@ ShapeMoveStrategy::ShapeMoveStrategy(KoToolBase *tool, const QPointF &clicked)
             continue;
         }
         m_selectedShapes << shape;
-        m_previousPositions << shape->position();
-        m_newPositions << shape->position();
+        m_previousPositions << shape->absolutePosition(KoFlake::Center);
+        m_newPositions << shape->absolutePosition(KoFlake::Center);
         boundingRect = boundingRect.united(shape->boundingRect());
     }
+
+    KoFlake::AnchorPosition anchor =
+            KoFlake::AnchorPosition(
+                m_canvas->resourceManager()->resource(KoFlake::HotPosition).toInt());
+
     KoSelection *selection = m_canvas->shapeManager()->selection();
-    m_initialOffset = selection->absolutePosition(SelectionDecorator::hotPosition()) - m_start;
+    m_initialOffset = selection->absolutePosition(anchor) - m_start;
     m_canvas->snapGuide()->setIgnoredShapes(KoShape::linearizeSubtree(selection->selectedShapes()));
 
     tool->setStatusText(i18n("Press Shift to hold x- or y-position."));
@@ -88,15 +94,15 @@ void ShapeMoveStrategy::moveSelection(const QPointF &diff)
 
     int i = 0;
     Q_FOREACH (KoShape *shape, m_selectedShapes) {
-        QPointF delta = m_previousPositions.at(i) + diff - shape->position();
+        QPointF delta = m_previousPositions.at(i) + diff - shape->absolutePosition(KoFlake::Center);
         if (shape->parent()) {
             shape->parent()->model()->proposeMove(shape, delta);
         }
         tool()->canvas()->clipToDocument(shape, delta);
-        QPointF newPos(shape->position() + delta);
+        QPointF newPos(shape->absolutePosition(KoFlake::Center) + delta);
         m_newPositions[i] = newPos;
         shape->update();
-        shape->setPosition(newPos);
+        shape->setAbsolutePosition(newPos, KoFlake::Center);
         shape->update();
         i++;
     }
@@ -119,7 +125,7 @@ void ShapeMoveStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
 
 void ShapeMoveStrategy::paint(QPainter &painter, const KoViewConverter &converter)
 {
-    SelectionDecorator decorator(KoFlake::NoHandle, false, false);
+    SelectionDecorator decorator(tool()->canvas()->resourceManager());
     decorator.setSelection(tool()->canvas()->shapeManager()->selection());
     decorator.setHandleRadius(handleRadius());
     decorator.paint(painter, converter);

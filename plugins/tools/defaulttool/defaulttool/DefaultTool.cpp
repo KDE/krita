@@ -117,7 +117,7 @@ public:
     void finishInteraction(Qt::KeyboardModifiers /*modifiers*/) override {}
 
     void paint(QPainter &painter, const KoViewConverter &converter) {
-        SelectionDecorator decorator(KoFlake::NoHandle, false, false);
+        SelectionDecorator decorator(tool()->canvas()->resourceManager());
         decorator.setSelection(tool()->canvas()->shapeManager()->selection());
         decorator.setHandleRadius(handleRadius());
         decorator.paint(painter, converter);
@@ -133,7 +133,7 @@ public:
     }
 
     void paint(QPainter &painter, const KoViewConverter &converter) {
-        SelectionDecorator decorator(KoFlake::NoHandle, false, false);
+        SelectionDecorator decorator(tool()->canvas()->resourceManager());
         decorator.setSelection(tool()->canvas()->shapeManager()->selection());
         decorator.setHandleRadius(handleRadius());
         decorator.paint(painter, converter);
@@ -165,7 +165,7 @@ private:
 DefaultTool::DefaultTool(KoCanvasBase *canvas)
     : KoInteractionTool(canvas)
     , m_lastHandle(KoFlake::NoHandle)
-    , m_hotPosition(KoFlake::TopLeftCorner)
+    , m_hotPosition(KoFlake::TopLeft)
     , m_mouseWasInsideHandles(false)
     , m_moveCommand(0)
     , m_selectionHandler(new SelectionHandler(this))
@@ -518,11 +518,9 @@ void DefaultTool::paint(QPainter &painter, const KoViewConverter &converter)
 {
     KoInteractionTool::paint(painter, converter);
     if (currentStrategy() == 0 && koSelection()->count() > 0) {
-        SelectionDecorator decorator(m_mouseWasInsideHandles ? m_lastHandle : KoFlake::NoHandle,
-                                     true, true);
+        SelectionDecorator decorator(canvas()->resourceManager());
         decorator.setSelection(koSelection());
         decorator.setHandleRadius(handleRadius());
-        decorator.setHotPosition(m_hotPosition);
         decorator.paint(painter, converter);
     }
     painter.save();
@@ -1049,9 +1047,7 @@ QList<QPointer<QWidget> > DefaultTool::createOptionWidgets()
 void DefaultTool::canvasResourceChanged(int key, const QVariant &res)
 {
     if (key == HotPosition) {
-
-        m_hotPosition = static_cast<KoFlake::Position>(res.toInt());
-        ENTER_FUNCTION() << ppVar(m_hotPosition);
+        m_hotPosition = KoFlake::AnchorPosition(res.toInt());
         repaintDecorations();
     }
 }
@@ -1076,21 +1072,34 @@ KoInteractionStrategy *DefaultTool::createStrategy(KoPointerEvent *event)
 
     if (selectNextInStack) {
         // change the hot selection position when middle clicking on a handle
-        KoFlake::Position newHotPosition = m_hotPosition;
+        KoFlake::AnchorPosition newHotPosition = m_hotPosition;
         switch (handle) {
-        case KoFlake::TopLeftHandle:
-            newHotPosition = KoFlake::TopLeftCorner;
+        case KoFlake::TopMiddleHandle:
+            newHotPosition = KoFlake::Top;
             break;
         case KoFlake::TopRightHandle:
-            newHotPosition = KoFlake::TopRightCorner;
+            newHotPosition = KoFlake::TopRight;
             break;
-        case KoFlake::BottomLeftHandle:
-            newHotPosition = KoFlake::BottomLeftCorner;
+        case KoFlake::RightMiddleHandle:
+            newHotPosition = KoFlake::Right;
             break;
         case KoFlake::BottomRightHandle:
-            newHotPosition = KoFlake::BottomRightCorner;
+            newHotPosition = KoFlake::BottomRight;
             break;
-        default: {
+        case KoFlake::BottomMiddleHandle:
+            newHotPosition = KoFlake::Bottom;
+            break;
+        case KoFlake::BottomLeftHandle:
+            newHotPosition = KoFlake::BottomLeft;
+            break;
+        case KoFlake::LeftMiddleHandle:
+            newHotPosition = KoFlake::Left;
+            break;
+        case KoFlake::TopLeftHandle:
+            newHotPosition = KoFlake::TopLeft;
+            break;
+        case KoFlake::NoHandle:
+        default:
             // check if we had hit the center point
             const KoViewConverter *converter = canvas()->viewConverter();
             QPointF pt = converter->documentToView(event->point);
@@ -1099,11 +1108,12 @@ KoInteractionStrategy *DefaultTool::createStrategy(KoPointerEvent *event)
             QPointF centerPt = converter->documentToView(selection->absolutePosition());
 
             if (kisSquareDistance(pt, centerPt) < HANDLE_DISTANCE_SQ) {
-                newHotPosition = KoFlake::CenteredPosition;
+                newHotPosition = KoFlake::Center;
             }
+
             break;
         }
-        }
+
         if (m_hotPosition != newHotPosition) {
             canvas()->resourceManager()->setResource(HotPosition, newHotPosition);
             return new NopInteractionStrategy(this);

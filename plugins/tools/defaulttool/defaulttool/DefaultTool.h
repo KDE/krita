@@ -152,7 +152,7 @@ private:
     uint editableShapesCount(const QList<KoShape *> &shapes);
 
     KoFlake::SelectionHandle m_lastHandle;
-    KoFlake::Position m_hotPosition;
+    KoFlake::AnchorPosition m_hotPosition;
     bool m_mouseWasInsideHandles;
     QPointF m_selectionBox[8];
     QPolygonF m_selectionOutline;

@@ -28,18 +28,18 @@
 
 #include "kis_debug.h"
 #include <KisHandlePainterHelper.h>
+#include <KoCanvasResourceManager.h>
 
 #define HANDLE_DISTANCE 10
 
-KoFlake::Position SelectionDecorator::m_hotPosition = KoFlake::TopLeftCorner;
-
-SelectionDecorator::SelectionDecorator(KoFlake::SelectionHandle arrows, bool rotationHandles, bool shearHandles)
-    : m_rotationHandles(rotationHandles)
-    , m_shearHandles(shearHandles)
-    , m_arrows(arrows)
+SelectionDecorator::SelectionDecorator(KoCanvasResourceManager *resourceManager)
+    : m_hotPosition(KoFlake::Center)
     , m_handleRadius(7)
     , m_lineWidth(2)
 {
+    m_hotPosition =
+        KoFlake::AnchorPosition(
+            resourceManager->resource(KoFlake::HotPosition).toInt());
 }
 
 void SelectionDecorator::setSelection(KoSelection *selection)
@@ -51,16 +51,6 @@ void SelectionDecorator::setHandleRadius(int radius)
 {
     m_handleRadius = radius;
     m_lineWidth = qMax(1, (int)(radius / 2));
-}
-
-void SelectionDecorator::setHotPosition(KoFlake::Position hotPosition)
-{
-    m_hotPosition = hotPosition;
-}
-
-KoFlake::Position SelectionDecorator::hotPosition()
-{
-    return m_hotPosition;
 }
 
 void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &converter)
@@ -130,15 +120,7 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
 
             // draw the hot position
             painter.setBrush(Qt::red);
-            QPointF hotPos;
-            switch (m_hotPosition) {
-            case KoFlake::TopLeftCorner: hotPos = handleArea.topLeft(); break;
-            case KoFlake::TopRightCorner: hotPos = handleArea.topRight(); break;
-            case KoFlake::BottomLeftCorner: hotPos = handleArea.bottomLeft(); break;
-            case KoFlake::BottomRightCorner: hotPos = handleArea.bottomRight(); break;
-            case KoFlake::CenteredPosition: hotPos = handleArea.center(); break;
-            }
-
+            QPointF hotPos = KoFlake::anchorToPoint(m_hotPosition, handleArea);
             helper.drawHandleRect(hotPos);
         }
     }

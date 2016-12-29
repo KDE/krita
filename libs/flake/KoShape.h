@@ -116,6 +116,7 @@ public:
         ShearChanged,   ///< used after a shear()
         SizeChanged,    ///< used after a setSize()
         GenericMatrixChange,    ///< used after the matrix was changed without knowing which property explicitly changed
+        KeepAspectRatioChange, ///< used after setKeepAspectRatio()
         ParentChanged,   ///< used after a setParent()
         CollisionDetected, ///< used when another shape moved in our boundingrect
         Deleted, ///< the shape was deleted
@@ -802,6 +803,8 @@ public:
      */
     QPointF absolutePosition(KoFlake::Position anchor = KoFlake::CenteredPosition) const;
 
+    QPointF absolutePosition(KoFlake::AnchorPosition anchor) const;
+
     /**
      * Move this shape to an absolute position where the end location will be the same
      * regardless of the shape's rotation/skew/scaling and regardless of this shape having
@@ -817,6 +820,8 @@ public:
      * @param anchor The place on the (unaltered) shape that you set the position of.
      */
     void setAbsolutePosition(const QPointF &newPosition, KoFlake::Position anchor = KoFlake::CenteredPosition);
+
+    void setAbsolutePosition(const QPointF &newPosition, KoFlake::AnchorPosition anchor);
 
     /**
      * Set a data object on the shape to be used by an application.

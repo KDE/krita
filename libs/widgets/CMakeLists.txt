@@ -85,6 +85,7 @@ set(kritawidgets_LIB_SRCS
     kis_int_parse_spin_box.cpp
 
     KisColorSelectorInterface.cpp
+    KoAnchorSelectionWidget.cpp
 )
 
 ki18n_wrap_ui( kritawidgets_LIB_SRCS

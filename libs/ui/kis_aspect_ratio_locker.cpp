@@ -200,3 +200,9 @@ void KisAspectRatioLocker::setBlockUpdateSignalOnDrag(bool value)
 {
     m_d->blockUpdatesOnDrag = value;
 }
+
+void KisAspectRatioLocker::updateAspect()
+{
+    KisSignalsBlocker b(this);
+    slotAspectButtonChanged();
+}

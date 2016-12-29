@@ -29,12 +29,15 @@
 #include <KoShapeManager.h>
 #include <KoSelection.h>
 #include <KoUnit.h>
+#include <commands/KoShapeResizeCommand.h>
 #include <commands/KoShapeMoveCommand.h>
 #include <commands/KoShapeSizeCommand.h>
 #include <commands/KoShapeTransformCommand.h>
+#include <commands/KoShapeKeepAspectRatioCommand.h>
 #include <KoPositionSelector.h>
 #include "SelectionDecorator.h"
-#include "DefaultToolTransformWidget.h"
+
+#include "KoAnchorSelectionWidget.h"
 
 #include <QAction>
 #include <QSize>
@@ -44,213 +47,308 @@
 #include <QDoubleSpinBox>
 #include <QList>
 #include <QTransform>
+#include <kis_algebra_2d.h>
+
+#include "kis_aspect_ratio_locker.h"
+#include "kis_debug.h"
+#include "kis_acyclic_signal_connector.h"
 
 DefaultToolWidget::DefaultToolWidget(KoInteractionTool *tool, QWidget *parent)
     : QWidget(parent)
     , m_tool(tool)
-    , m_blockSignals(false)
+    , m_sizeAspectLocker(new KisAspectRatioLocker())
 {
     setupUi(this);
 
     setUnit(m_tool->canvas()->unit());
 
+    // Connect and initialize automated aspect locker
+    m_sizeAspectLocker->connectSpinBoxes(widthSpinBox, heightSpinBox, aspectButton);
     aspectButton->setKeepAspectRatio(false);
-    updatePosition();
-    updateSize();
 
-    connect(positionSelector, SIGNAL(positionSelected(KoFlake::Position)),
-            this, SLOT(positionSelected(KoFlake::Position)));
 
-    connect(positionXSpinBox, SIGNAL(editingFinished()), this, SLOT(positionHasChanged()));
-    connect(positionYSpinBox, SIGNAL(editingFinished()), this, SLOT(positionHasChanged()));
+    // TODO: use valueChanged() instead!
+    connect(positionXSpinBox, SIGNAL(editingFinished()), this, SLOT(slotRepositionShapes()));
+    connect(positionYSpinBox, SIGNAL(editingFinished()), this, SLOT(slotRepositionShapes()));
 
-    connect(widthSpinBox, SIGNAL(editingFinished()), this, SLOT(sizeHasChanged()));
-    connect(heightSpinBox, SIGNAL(editingFinished()), this, SLOT(sizeHasChanged()));
+    // TODO: use valueChanged() instead!
+    connect(widthSpinBox, SIGNAL(editingFinished()), this, SLOT(slotResizeShapes()));
+    connect(heightSpinBox, SIGNAL(editingFinished()), this, SLOT(slotResizeShapes()));
 
     KoSelection *selection = m_tool->canvas()->shapeManager()->selection();
-    connect(selection, SIGNAL(selectionChanged()), this, SLOT(updatePosition()));
-    connect(selection, SIGNAL(selectionChanged()), this, SLOT(updateSize()));
+    connect(selection, SIGNAL(selectionChanged()), this, SLOT(slotUpdatePositionBoxes()));
+    connect(selection, SIGNAL(selectionChanged()), this, SLOT(slotUpdateSizeBoxes()));
+    connect(selection, SIGNAL(selectionChanged()), this, SLOT(slotUpdateCheckboxes()));
+
     KoShapeManager *manager = m_tool->canvas()->shapeManager();
-    connect(manager, SIGNAL(selectionContentChanged()), this, SLOT(updatePosition()));
-    connect(manager, SIGNAL(selectionContentChanged()), this, SLOT(updateSize()));
+    connect(manager, SIGNAL(selectionContentChanged()), this, SLOT(slotUpdatePositionBoxes()));
+    connect(manager, SIGNAL(selectionContentChanged()), this, SLOT(slotUpdateSizeBoxes()));
 
-    connect(m_tool->canvas()->resourceManager(), SIGNAL(canvasResourceChanged(int,QVariant)),
-            this, SLOT(resourceChanged(int,QVariant)));
+    connect(chkGlobalCoordinates, SIGNAL(toggled(bool)), SLOT(slotUpdateSizeBoxes()));
 
-    connect(aspectButton, SIGNAL(keepAspectRatioChanged(bool)),
-            this, SLOT(aspectButtonToggled(bool)));
+    KisAcyclicSignalConnector *acyclicConnector = new KisAcyclicSignalConnector(this);
+    acyclicConnector->connectForwardVoid(m_sizeAspectLocker.data(), SIGNAL(aspectButtonChanged()), this, SLOT(slotAspectButtonToggled()));
+    acyclicConnector->connectBackwardVoid(selection, SIGNAL(selectionChanged()), this, SLOT(slotUpdateAspectButton()));
+    acyclicConnector->connectBackwardVoid(manager, SIGNAL(selectionContentChanged()), this, SLOT(slotUpdateAspectButton()));
+
+
+    // Connect and initialize anchor point resource
+    KoCanvasResourceManager *resourceManager = m_tool->canvas()->resourceManager();
+    connect(resourceManager,
+            SIGNAL(canvasResourceChanged(int,QVariant)),
+            SLOT(resourceChanged(int,QVariant)));
+    resourceManager->setResource(DefaultTool::HotPosition, int(KoFlake::Center));
+
+    // Connect anchor point selector
+    connect(positionSelector, SIGNAL(valueChanged(KoFlake::AnchorPosition)), SLOT(slotAnchorPointChanged()));
 }
 
-void DefaultToolWidget::positionSelected(KoFlake::Position position)
+DefaultToolWidget::~DefaultToolWidget()
 {
-    m_tool->canvas()->resourceManager()->setResource(DefaultTool::HotPosition, QVariant(position));
-    updatePosition();
 }
 
-void DefaultToolWidget::updatePosition()
+#include <functional>
+
+// FIXME: remove code duplication with KritaUtils!
+template <class C>
+    void filterContainer(C &container, std::function<bool(typename C::reference)> keepIf) {
+
+        auto newEnd = std::remove_if(container.begin(), container.end(), std::unary_negate<decltype(keepIf)>(keepIf));
+        while (newEnd != container.end()) {
+           newEnd = container.erase(newEnd);
+        }
+}
+
+void tryAnchorPosition(KoFlake::AnchorPosition anchor,
+                       const QRectF &rect,
+                       QPointF *position)
 {
-    QPointF selPosition(0, 0);
-    KoFlake::Position position = positionSelector->position();
+    bool valid = false;
+    QPointF anchoredPosition = KoFlake::anchorToPoint(anchor, rect, &valid);
+
+    if (valid) {
+        *position = anchoredPosition;
+    }
+}
+
+QList<KoShape*> fetchEditableShapes(KoSelection *selection)
+{
+    QList<KoShape*> shapes = selection->selectedShapes();
+
+    filterContainer (shapes, [](KoShape *shape) {
+        return shape->isEditable();
+    });
+
+    return shapes;
+}
+
+QRectF calculateSelectionBounds(KoSelection *selection,
+                                KoFlake::AnchorPosition anchor,
+                                bool useGlobalSize,
+                                QList<KoShape*> *outShapes = 0)
+{
+    QList<KoShape*> shapes = fetchEditableShapes(selection);
+
+    KoShape *shape = shapes.size() == 1 ? shapes.first() : selection;
+
+    QRectF resultRect = shape->outlineRect();
+
+    QPointF resultPoint = resultRect.topLeft();
+    tryAnchorPosition(anchor, resultRect, &resultPoint);
+
+    if (useGlobalSize) {
+        resultRect = shape->absoluteTransformation(0).mapRect(resultRect);
+    } else {
+        /**
+         * Some shapes, e.g. KoSelection and KoShapeGroup don't have real size() and
+         * do all the resizing with transformation(), just try to cover this case and
+         * fetch their scale using the transform.
+         */
+
+        KisAlgebra2D::DecomposedMatix matrix(shape->transformation());
+        resultRect = matrix.scaleTransform().mapRect(resultRect);
+    }
+
+    resultPoint = shape->absoluteTransformation(0).map(resultPoint);
+
+    if (outShapes) {
+        *outShapes = shapes;
+    }
+
+    return QRectF(resultPoint, resultRect.size());
+}
+
+void DefaultToolWidget::slotAnchorPointChanged()
+{
+    QVariant newValue(positionSelector->value());
+    m_tool->canvas()->resourceManager()->setResource(DefaultTool::HotPosition, newValue);
+    slotUpdatePositionBoxes();
+}
+
+void DefaultToolWidget::slotUpdateCheckboxes()
+{
+    KoSelection *selection = m_tool->canvas()->shapeManager()->selection();
+    QList<KoShape*> shapes = fetchEditableShapes(selection);
+
+    chkUniformScaling->setEnabled(shapes.size() == 1);
+
+    // TODO: not implemented yet!
+    chkAnchorLock->setEnabled(false);
+    chkGlobalCoordinates->setEnabled(false);
+}
+
+void DefaultToolWidget::slotAspectButtonToggled()
+{
+    KoSelection *selection = m_tool->canvas()->shapeManager()->selection();
+    QList<KoShape*> shapes = fetchEditableShapes(selection);
+
+    QList<bool> oldKeepAspectRatio;
+    QList<bool> newKeepAspectRatio;
+
+    Q_FOREACH (KoShape *shape, shapes) {
+        oldKeepAspectRatio << shape->keepAspectRatio();
+        newKeepAspectRatio << aspectButton->keepAspectRatio();
+    }
+
+    KUndo2Command *cmd =
+        new KoShapeKeepAspectRatioCommand(shapes, oldKeepAspectRatio, newKeepAspectRatio);
+
+    m_tool->canvas()->addCommand(cmd);
+}
+
+void DefaultToolWidget::slotUpdateAspectButton()
+{
+    KoSelection *selection = m_tool->canvas()->shapeManager()->selection();
+    QList<KoShape*> shapes = fetchEditableShapes(selection);
+
+    bool hasKeepAspectRatio = false;
+    bool hasNotKeepAspectRatio = false;
+
+    Q_FOREACH (KoShape *shape, shapes) {
+        if (shape->keepAspectRatio()) {
+            hasKeepAspectRatio = true;
+        } else {
+            hasNotKeepAspectRatio = true;
+        }
+
+        if (hasKeepAspectRatio && hasNotKeepAspectRatio) break;
+    }
+
+    Q_UNUSED(hasNotKeepAspectRatio); // TODO: use for tristated mode of the checkbox
+
+    aspectButton->setKeepAspectRatio(hasKeepAspectRatio);
+}
+
+void DefaultToolWidget::slotUpdateSizeBoxes()
+{
+    const bool useGlobalSize = chkGlobalCoordinates->isChecked();
+    const KoFlake::AnchorPosition anchor = positionSelector->value();
 
     KoSelection *selection = m_tool->canvas()->shapeManager()->selection();
-    if (selection->count()) {
-        selPosition = selection->absolutePosition(position);
-    }
+    QRectF bounds = calculateSelectionBounds(selection, anchor, useGlobalSize);
 
-    positionXSpinBox->setEnabled(selection->count());
-    positionYSpinBox->setEnabled(selection->count());
+    const bool hasSizeConfiguration = !bounds.isNull();
 
-    if (m_blockSignals) {
-        return;
-    }
-    m_blockSignals = true;
-    positionXSpinBox->changeValue(selPosition.x());
-    positionYSpinBox->changeValue(selPosition.y());
+    widthSpinBox->setEnabled(hasSizeConfiguration);
+    heightSpinBox->setEnabled(hasSizeConfiguration);
 
-    QList<KoShape *> selectedShapes = selection->selectedShapes();
-    bool aspectLocked = false;
-    foreach (KoShape *shape, selectedShapes) {
-        aspectLocked = aspectLocked | shape->keepAspectRatio();
+    if (hasSizeConfiguration) {
+        widthSpinBox->changeValue(bounds.width());
+        heightSpinBox->changeValue(bounds.height());
+        m_sizeAspectLocker->updateAspect();
     }
-    aspectButton->setKeepAspectRatio(aspectLocked);
-    m_blockSignals = false;
 }
 
-void DefaultToolWidget::positionHasChanged()
+void DefaultToolWidget::slotUpdatePositionBoxes()
 {
+    const bool useGlobalSize = chkGlobalCoordinates->isChecked();
+    const KoFlake::AnchorPosition anchor = positionSelector->value();
+
     KoSelection *selection = m_tool->canvas()->shapeManager()->selection();
-    if (!selection->count()) {
-        return;
-    }
+    QRectF bounds = calculateSelectionBounds(selection, anchor, useGlobalSize);
 
-    KoFlake::Position position = positionSelector->position();
-    QPointF newPos(positionXSpinBox->value(), positionYSpinBox->value());
-    QPointF oldPos = selection->absolutePosition(position);
-    if (oldPos == newPos) {
-        return;
-    }
+    const bool hasSizeConfiguration = !bounds.isNull();
 
-    QList<KoShape *> selectedShapes = selection->selectedShapes();
-    QPointF moveBy = newPos - oldPos;
+    positionXSpinBox->setEnabled(hasSizeConfiguration);
+    positionYSpinBox->setEnabled(hasSizeConfiguration);
+
+    if (hasSizeConfiguration) {
+        positionXSpinBox->changeValue(bounds.x());
+        positionYSpinBox->changeValue(bounds.y());
+    }
+}
+
+void DefaultToolWidget::slotRepositionShapes()
+{
+    const bool useGlobalSize = chkGlobalCoordinates->isChecked();
+    const KoFlake::AnchorPosition anchor = positionSelector->value();
+
+    QList<KoShape*> shapes;
+    KoSelection *selection = m_tool->canvas()->shapeManager()->selection();
+    QRectF bounds = calculateSelectionBounds(selection, anchor, useGlobalSize, &shapes);
+
+    if (bounds.isNull()) return;
+
+    const QPointF oldPosition = bounds.topLeft();
+    const QPointF newPosition(positionXSpinBox->value(), positionYSpinBox->value());
+    const QPointF diff = newPosition - oldPosition;
+
+    if (diff.manhattanLength() < 1e-6) return;
+
     QList<QPointF> oldPositions;
     QList<QPointF> newPositions;
-    Q_FOREACH (KoShape *shape, selectedShapes) {
-        oldPositions.append(shape->position());
-        newPositions.append(shape->position() + moveBy);
+
+    Q_FOREACH (KoShape *shape, shapes) {
+        const QPointF oldShapePosition = shape->absolutePosition(anchor);
+
+        oldPositions << shape->absolutePosition(anchor);
+        newPositions << oldShapePosition + diff;
     }
-    selection->setPosition(selection->position() + moveBy);
-    m_tool->canvas()->addCommand(new KoShapeMoveCommand(selectedShapes, oldPositions, newPositions));
-    updatePosition();
+
+    KUndo2Command *cmd = new KoShapeMoveCommand(shapes, oldPositions, newPositions, anchor);
+    m_tool->canvas()->addCommand(cmd);
 }
 
-void DefaultToolWidget::updateSize()
+
+void DefaultToolWidget::slotResizeShapes()
 {
-    QSizeF selSize(0, 0);
+    const bool useGlobalSize = chkGlobalCoordinates->isChecked();
+    const KoFlake::AnchorPosition anchor = positionSelector->value();
+
+    QList<KoShape*> shapes;
     KoSelection *selection = m_tool->canvas()->shapeManager()->selection();
-    uint selectionCount = selection->count();
-    if (selectionCount) {
-        selSize = selection->boundingRect().size();
-    }
+    QRectF bounds = calculateSelectionBounds(selection, anchor, useGlobalSize, &shapes);
 
-    widthSpinBox->setEnabled(selectionCount);
-    heightSpinBox->setEnabled(selectionCount);
+    if (bounds.isNull()) return;
 
-    if (m_blockSignals) {
-        return;
-    }
-    m_blockSignals = true;
-    widthSpinBox->changeValue(selSize.width());
-    heightSpinBox->changeValue(selSize.height());
-    m_blockSignals = false;
-}
+    const QSizeF oldSize(bounds.size());
+    const QSizeF newSize(widthSpinBox->value(), heightSpinBox->value());
 
-void DefaultToolWidget::sizeHasChanged()
-{
-    if (aspectButton->hasFocus()) {
-        return;
-    }
-    if (m_blockSignals) {
-        return;
-    }
+    const qreal scaleX = newSize.width() / oldSize.width();
+    const qreal scaleY = newSize.height() / oldSize.height();
 
-    QSizeF newSize(widthSpinBox->value(), heightSpinBox->value());
+    if (qAbs(scaleX - 1.0) < 1e-6 && qAbs(scaleY - 1.0) < 1e-6) return;
 
-    KoSelection *selection = m_tool->canvas()->shapeManager()->selection();
-    QRectF rect = selection->boundingRect();
+    const bool usePostScaling =
+        shapes.size() > 1 || chkUniformScaling->isChecked();
 
-    if (aspectButton->keepAspectRatio()) {
-        qreal aspect = rect.width() / rect.height();
-        if (rect.width() != newSize.width()) {
-            newSize.setHeight(newSize.width() / aspect);
-        } else if (rect.height() != newSize.height()) {
-            newSize.setWidth(newSize.height() * aspect);
-        }
-    }
-
-    if (rect.width() != newSize.width() || rect.height() != newSize.height()) {
-        // get the scale/resize center from the position selector
-        QPointF scaleCenter = selection->absolutePosition(positionSelector->position());
-
-        QTransform resizeMatrix;
-        resizeMatrix.translate(scaleCenter.x(), scaleCenter.y());
-        // make sure not to divide by 0 in case the selection is a line and has no width. In this case just scale by 1.
-        resizeMatrix.scale(rect.width() ? newSize.width() / rect.width() : 1, rect.height() ? newSize.height() / rect.height() : 1);
-        resizeMatrix.translate(-scaleCenter.x(), -scaleCenter.y());
-
-        QList<KoShape *> selectedShapes = selection->selectedShapes();
-        QList<QSizeF> oldSizes, newSizes;
-        QList<QTransform> oldState;
-        QList<QTransform> newState;
-
-        Q_FOREACH (KoShape *shape, selectedShapes) {
-            shape->update();
-            QSizeF oldSize = shape->size();
-            oldState << shape->transformation();
-            QTransform shapeMatrix = shape->absoluteTransformation(0);
-
-            // calculate the matrix we would apply to the local shape matrix
-            // that tells us the effective scale values we have to use for the resizing
-            QTransform localMatrix = shapeMatrix * resizeMatrix * shapeMatrix.inverted();
-            // save the effective scale values, without any mirroring portion
-            const qreal scaleX = qAbs(localMatrix.m11());
-            const qreal scaleY = qAbs(localMatrix.m22());
-
-            // calculate the scale matrix which is equivalent to our resizing above
-            QTransform scaleMatrix = (QTransform().scale(scaleX, scaleY));
-            scaleMatrix =  shapeMatrix.inverted() * scaleMatrix * shapeMatrix;
-
-            // calculate the new size of the shape, using the effective scale values
-            oldSizes << oldSize;
-            QSizeF newSize = QSizeF(scaleX * oldSize.width(), scaleY * oldSize.height());
-            newSizes << newSize;
-            shape->setSize(newSize);
-
-            // apply the rest of the transformation without the resizing part
-            shape->applyAbsoluteTransformation(scaleMatrix.inverted() * resizeMatrix);
-            newState << shape->transformation();
-        }
-        m_tool->repaintDecorations();
-        selection->applyAbsoluteTransformation(resizeMatrix);
-        KUndo2Command *cmd = new KUndo2Command(kundo2_i18n("Resize"));
-        new KoShapeSizeCommand(selectedShapes, oldSizes, newSizes, cmd);
-        new KoShapeTransformCommand(selectedShapes, oldState, newState, cmd);
-        m_tool->canvas()->addCommand(cmd);
-        updateSize();
-        updatePosition();
-    }
+    KUndo2Command *cmd = new KoShapeResizeCommand(shapes,
+                                                  scaleX, scaleY,
+                                                  bounds.topLeft(),
+                                                  usePostScaling,
+                                                  selection->transformation());
+    m_tool->canvas()->addCommand(cmd);
 }
 
 void DefaultToolWidget::setUnit(const KoUnit &unit)
 {
-    m_blockSignals = true;
     positionXSpinBox->setUnit(unit);
     positionYSpinBox->setUnit(unit);
     widthSpinBox->setUnit(unit);
     heightSpinBox->setUnit(unit);
-    m_blockSignals = false;
 
-    updatePosition();
-    updateSize();
+    slotUpdatePositionBoxes();
+    slotUpdateSizeBoxes();
 }
 
 void DefaultToolWidget::resourceChanged(int key, const QVariant &res)
@@ -258,20 +356,6 @@ void DefaultToolWidget::resourceChanged(int key, const QVariant &res)
     if (key == KoCanvasResourceManager::Unit) {
         setUnit(res.value<KoUnit>());
     } else if (key == DefaultTool::HotPosition) {
-        if (res.toInt() != positionSelector->position()) {
-            positionSelector->setPosition(static_cast<KoFlake::Position>(res.toInt()));
-            updatePosition();
-        }
-    }
-}
-
-void DefaultToolWidget::aspectButtonToggled(bool keepAspect)
-{
-    if (m_blockSignals) {
-        return;
-    }
-    KoSelection *selection = m_tool->canvas()->shapeManager()->selection();
-    foreach (KoShape *shape, selection->selectedShapes()) {
-        shape->setKeepAspectRatio(keepAspect);
+        positionSelector->setValue(KoFlake::AnchorPosition(res.toInt()));
     }
 }

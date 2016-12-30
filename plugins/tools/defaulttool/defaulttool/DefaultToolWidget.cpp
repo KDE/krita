@@ -34,8 +34,8 @@
 #include <commands/KoShapeSizeCommand.h>
 #include <commands/KoShapeTransformCommand.h>
 #include <commands/KoShapeKeepAspectRatioCommand.h>
-#include <KoPositionSelector.h>
 #include "SelectionDecorator.h"
+#include <KoShapeGroup.h>
 
 #include "KoAnchorSelectionWidget.h"
 
@@ -191,7 +191,13 @@ void DefaultToolWidget::slotUpdateCheckboxes()
     KoSelection *selection = m_tool->canvas()->shapeManager()->selection();
     QList<KoShape*> shapes = fetchEditableShapes(selection);
 
-    const bool uniformScalingAvailable = shapes.size() <= 1;
+    KoShapeGroup *onlyGroupShape = 0;
+
+    if (shapes.size() == 1) {
+        onlyGroupShape = dynamic_cast<KoShapeGroup*>(shapes.first());
+    }
+
+    const bool uniformScalingAvailable = shapes.size() <= 1 && !onlyGroupShape;
 
     if (uniformScalingAvailable && !chkUniformScaling->isEnabled()) {
         chkUniformScaling->setChecked(m_savedUniformScaling);

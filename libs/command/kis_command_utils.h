@@ -42,13 +42,31 @@ namespace KisCommandUtils
 
     struct KRITACOMMAND_EXPORT SkipFirstRedoWrapper : public KUndo2Command {
         SkipFirstRedoWrapper(KUndo2Command *child = 0, KUndo2Command *parent = 0);
-        void redo();
-        void undo();
+        void redo() override;
+        void undo() override;
 
     private:
         bool m_firstRedo;
         QScopedPointer<KUndo2Command> m_child;
     };
+
+    struct KRITACOMMAND_EXPORT SkipFirstRedoBase : public KUndo2Command {
+        SkipFirstRedoBase(bool skipFirstRedo, KUndo2Command *parent = 0);
+        SkipFirstRedoBase(bool skipFirstRedo, const KUndo2MagicString &text, KUndo2Command *parent = 0);
+
+        void redo() final;
+        void undo() final;
+
+        void setSkipOneRedo(bool value);
+
+    protected:
+        virtual void redoImpl() = 0;
+        virtual void undoImpl() = 0;
+
+    private:
+        bool m_firstRedo;
+    };
+
 
     struct KRITACOMMAND_EXPORT FlipFlopCommand : public KUndo2Command {
         FlipFlopCommand(bool finalize, KUndo2Command *parent = 0);

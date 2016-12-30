@@ -19,6 +19,7 @@
 #include "KoShapeResizeCommand.h"
 
 #include <KoShape.h>
+#include "kis_command_ids.h"
 
 
 struct Q_DECL_HIDDEN KoShapeResizeCommand::Private
@@ -43,7 +44,7 @@ KoShapeResizeCommand::KoShapeResizeCommand(const QList<KoShape*> &shapes,
                                            bool usePostScaling,
                                            const QTransform &postScalingCoveringTransform,
                                            KUndo2Command *parent)
-    : KUndo2Command(kundo2_i18n("Resize"), parent),
+    : SkipFirstRedoBase(false, kundo2_i18n("Resize"), parent),
       m_d(new Private)
 {
     m_d->shapes = shapes;
@@ -64,7 +65,7 @@ KoShapeResizeCommand::~KoShapeResizeCommand()
 {
 }
 
-void KoShapeResizeCommand::redo()
+void KoShapeResizeCommand::redoImpl()
 {
     Q_FOREACH (KoShape *shape, m_d->shapes) {
         shape->update();
@@ -80,7 +81,7 @@ void KoShapeResizeCommand::redo()
     }
 }
 
-void KoShapeResizeCommand::undo()
+void KoShapeResizeCommand::undoImpl()
 {
     for (int i = 0; i < m_d->shapes.size(); i++) {
         KoShape *shape = m_d->shapes[i];
@@ -90,4 +91,37 @@ void KoShapeResizeCommand::undo()
         shape->setTransformation(m_d->oldTransforms[i]);
         shape->update();
     }
+}
+
+int KoShapeResizeCommand::id() const
+{
+    return KisCommandUtils::ResizeShapeId;
+}
+
+bool KoShapeResizeCommand::mergeWith(const KUndo2Command *command)
+{
+    const KoShapeResizeCommand *other = dynamic_cast<const KoShapeResizeCommand*>(command);
+
+    if (!other ||
+        other->m_d->absoluteStillPoint != m_d->absoluteStillPoint ||
+        other->m_d->shapes != m_d->shapes ||
+        other->m_d->useGlobalMode != m_d->useGlobalMode ||
+        other->m_d->usePostScaling != m_d->usePostScaling) {
+
+        return false;
+    }
+
+    // check if the significant orientations coincide
+    if (m_d->useGlobalMode && !m_d->usePostScaling) {
+        Qt::Orientation our = KoFlake::significantScaleOrientation(m_d->scaleX, m_d->scaleY);
+        Qt::Orientation their = KoFlake::significantScaleOrientation(other->m_d->scaleX, other->m_d->scaleY);
+
+        if (our != their) {
+            return false;
+        }
+    }
+
+    m_d->scaleX *= other->m_d->scaleX;
+    m_d->scaleY *= other->m_d->scaleY;
+    return true;
 }

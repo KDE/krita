@@ -22,6 +22,7 @@
 
 #include <KoShape.h>
 #include <klocalizedstring.h>
+#include "kis_command_ids.h"
 
 class Q_DECL_HIDDEN KoShapeMoveCommand::Private
 {
@@ -72,7 +73,7 @@ void KoShapeMoveCommand::undo()
 
 int KoShapeMoveCommand::id() const
 {
-    return 954687634; // TODO: use better system for making ids unique
+    return KisCommandUtils::MoveShapeId;
 }
 
 /// update newPositions list with new postions.

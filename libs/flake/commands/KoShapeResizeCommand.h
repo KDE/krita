@@ -21,6 +21,7 @@
 
 #include "kritaflake_export.h"
 #include "kundo2command.h"
+#include "kis_command_utils.h"
 
 #include <QList>
 #include <QPointF>
@@ -31,7 +32,7 @@
 class KoShape;
 
 
-class KRITAFLAKE_EXPORT KoShapeResizeCommand : public KUndo2Command
+class KRITAFLAKE_EXPORT KoShapeResizeCommand : public KisCommandUtils::SkipFirstRedoBase
 {
 public:
     KoShapeResizeCommand(const QList<KoShape*> &shapes,
@@ -41,11 +42,11 @@ public:
                          KUndo2Command *parent = 0);
 
     ~KoShapeResizeCommand();
-    void redo() override;
-    void undo() override;
+    void redoImpl() override;
+    void undoImpl() override;
 
-    //int id() const override;
-    //bool mergeWith(const KUndo2Command *command) override;
+    int id() const override;
+    bool mergeWith(const KUndo2Command *command) override;
 
 private:
     class Private;

@@ -23,12 +23,14 @@
 #include <KoInteractionStrategy.h>
 #include <KoFlake.h>
 
+#include <QScopedPointer>
 #include <QPointF>
 #include <QList>
 #include <QTransform>
 
 class KoToolBase;
 class KoShape;
+class KoShapeResizeCommand;
 
 /**
  * A strategy for the KoInteractionTool.
@@ -42,7 +44,7 @@ public:
      * Constructor
      */
     ShapeResizeStrategy(KoToolBase *tool, const QPointF &clicked, KoFlake::SelectionHandle direction);
-    virtual ~ShapeResizeStrategy() {}
+    ~ShapeResizeStrategy();
 
     void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers);
     KUndo2Command *createCommand();
@@ -53,8 +55,6 @@ private:
 
     QPointF m_start;
     QList<KoShape *> m_selectedShapes;
-    QList<QSizeF> m_initialSizes;
-    QList<QTransform> m_initialTransforms;
 
     QTransform m_postScalingCoveringTransform;
     QSizeF m_initialSelectionSize;
@@ -63,6 +63,7 @@ private:
 
     QPointF m_globalStillPoint;
     QPointF m_globalCenterPoint;
+    QScopedPointer<KoShapeResizeCommand> m_executedCommand;
 };
 
 #endif

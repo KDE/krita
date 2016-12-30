@@ -31,7 +31,7 @@ class QSizeF;
 class KoShape;
 class QTransform;
 
-#include <QtGlobal>
+#include <Qt>
 
 /**
  * Flake reference
@@ -127,6 +127,8 @@ namespace KoFlake
      * @return absolute position
      */
     KRITAFLAKE_EXPORT QPointF toAbsolute(const QPointF &relative, const QSizeF &size);
+
+    KRITAFLAKE_EXPORT Qt::Orientation significantScaleOrientation(qreal scaleX, qreal scaleY);
 
     KRITAFLAKE_EXPORT void resizeShape(KoShape *shape, qreal scaleX, qreal scaleY,
                                        const QPointF &absoluteStillPoint,

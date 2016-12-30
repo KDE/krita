@@ -45,7 +45,7 @@ namespace KisCommandUtils
     }
 
     SkipFirstRedoWrapper::SkipFirstRedoWrapper(KUndo2Command *child, KUndo2Command *parent)
-        : KUndo2Command(parent), m_firstRedo(true), m_child(child) {}
+        : KUndo2Command(child->text(), parent), m_firstRedo(true), m_child(child) {}
 
     void SkipFirstRedoWrapper::redo()
     {
@@ -65,6 +65,39 @@ namespace KisCommandUtils
         if (m_child) {
             m_child->undo();
         }
+    }
+
+    SkipFirstRedoBase::SkipFirstRedoBase(bool skipFirstRedo, KUndo2Command *parent)
+        : KUndo2Command(parent),
+          m_firstRedo(skipFirstRedo)
+    {
+    }
+
+    SkipFirstRedoBase::SkipFirstRedoBase(bool skipFirstRedo, const KUndo2MagicString &text, KUndo2Command *parent)
+        : KUndo2Command(text, parent),
+          m_firstRedo(skipFirstRedo)
+    {
+    }
+
+    void SkipFirstRedoBase::redo()
+    {
+        if (m_firstRedo) {
+            m_firstRedo = false;
+        } else {
+            redoImpl();
+            KUndo2Command::redo();
+        }
+    }
+
+    void SkipFirstRedoBase::undo()
+    {
+        KUndo2Command::undo();
+        undoImpl();
+    }
+
+    void SkipFirstRedoBase::setSkipOneRedo(bool value)
+    {
+        m_firstRedo = true;
     }
 
     FlipFlopCommand::FlipFlopCommand(bool finalize, KUndo2Command *parent)

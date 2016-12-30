@@ -24,8 +24,8 @@
 #include <KoShapeManager.h>
 #include <KoPointerEvent.h>
 #include <KoCanvasBase.h>
-#include <commands/KoShapeSizeCommand.h>
-#include <commands/KoShapeTransformCommand.h>
+#include <commands/KoShapeResizeCommand.h>
+#include <kis_command_utils.h>
 #include <KoSnapGuide.h>
 #include <KoToolBase.h>
 #include <KoSelection.h>
@@ -46,8 +46,6 @@ ShapeResizeStrategy::ShapeResizeStrategy(KoToolBase *tool, const QPointF &clicke
             continue;
         }
         m_selectedShapes << shape;
-        m_initialTransforms << shape->transformation();
-        m_initialSizes << shape->size();
     }
     m_start = clicked;
 
@@ -117,6 +115,11 @@ ShapeResizeStrategy::ShapeResizeStrategy(KoToolBase *tool, const QPointF &clicke
     }
 
     tool->setStatusText(i18n("Press CTRL to resize from center."));
+}
+
+ShapeResizeStrategy::~ShapeResizeStrategy()
+{
+
 }
 
 void ShapeResizeStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModifiers modifiers)
@@ -205,38 +208,31 @@ void ShapeResizeStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModi
 
 void ShapeResizeStrategy::resizeBy(const QPointF &stillPoint, qreal zoomX, qreal zoomY)
 {
+    if (m_executedCommand) {
+        m_executedCommand->undo();
+        m_executedCommand.reset();
+    }
+
     const bool usePostScaling = m_selectedShapes.size() > 1;
 
-    int i = 0;
-    Q_FOREACH (KoShape *shape, m_selectedShapes) {
-        shape->update();
-
-        shape->setTransformation(m_initialTransforms[i]);
-        shape->setSize(m_initialSizes[i]);
-        KoFlake::resizeShape(shape, zoomX, zoomY,
-                             stillPoint,
-                             false,
-                             usePostScaling, m_postScalingCoveringTransform);
-
-        shape->update();
-        i++;
-    }
+    m_executedCommand.reset(
+         new KoShapeResizeCommand(
+                    m_selectedShapes,
+                    zoomX, zoomY,
+                    stillPoint,
+                    false, usePostScaling, m_postScalingCoveringTransform));
+    m_executedCommand->redo();
 }
 
 KUndo2Command *ShapeResizeStrategy::createCommand()
 {
     tool()->canvas()->snapGuide()->reset();
-    QList<QSizeF> newSizes;
-    QList<QTransform> transformations;
-    const int shapeCount = m_selectedShapes.count();
-    for (int i = 0; i < shapeCount; ++i) {
-        newSizes << m_selectedShapes[i]->size();
-        transformations << m_selectedShapes[i]->transformation();
+
+    if (m_executedCommand) {
+        m_executedCommand->setSkipOneRedo(true);
     }
-    KUndo2Command *cmd = new KUndo2Command(kundo2_i18n("Resize"));
-    new KoShapeSizeCommand(m_selectedShapes, m_initialSizes, newSizes, cmd);
-    new KoShapeTransformCommand(m_selectedShapes, m_initialTransforms, transformations, cmd);
-    return cmd;
+
+    return m_executedCommand.take();
 }
 
 void ShapeResizeStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)

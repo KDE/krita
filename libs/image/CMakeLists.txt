@@ -333,7 +333,7 @@ target_link_libraries(kritaimage
         kritawidgets 
         kritaglobal kritapsd 
         kritaodf kritapigment 
-        kritaundo2 
+        kritacommand
         kritawidgetutils 
         Qt5::Concurrent
 )

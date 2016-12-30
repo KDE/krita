@@ -26,7 +26,7 @@
 
 #include <klocalizedstring.h>
 
-#include "kritaundo2_export.h"
+#include "kritacommand_export.h"
 
 /**
  * \class KUndo2MagicString is a special wrapper for a string that is
@@ -48,7 +48,7 @@
  *       because in many languages you cannot combine words without
  *       knowing the proper case.
  */
-class KRITAUNDO2_EXPORT KUndo2MagicString
+class KRITACOMMAND_EXPORT KUndo2MagicString
 {
 public:
     /**

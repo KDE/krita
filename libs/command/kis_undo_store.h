@@ -22,7 +22,7 @@
 #include <QString>
 #include <QVector>
 
-#include <kritaundo2_export.h>
+#include <kritacommand_export.h>
 
 class KUndo2Command;
 class KUndo2MagicString;
@@ -54,7 +54,7 @@ class KUndo2MagicString;
  * KisDocument::createUndoStore() is just a factory method, the document
  * doesn't store the undo store itself.
  */
-class KRITAUNDO2_EXPORT KisUndoStore
+class KRITACOMMAND_EXPORT KisUndoStore
 {
 public:
     KisUndoStore();

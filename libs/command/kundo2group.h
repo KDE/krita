@@ -45,7 +45,7 @@
 #include <QObject>
 #include <QString>
 
-#include "kritaundo2_export.h"
+#include "kritacommand_export.h"
 
 class KUndo2GroupPrivate;
 class KUndo2QStack;
@@ -53,7 +53,7 @@ class QAction;
 
 #ifndef QT_NO_UNDOGROUP
 
-class KRITAUNDO2_EXPORT KUndo2Group : public QObject
+class KRITACOMMAND_EXPORT KUndo2Group : public QObject
 {
     Q_OBJECT
     Q_DECLARE_PRIVATE(KUndo2Group)

@@ -135,7 +135,7 @@ ecm_add_test(kis_layer_style_filter_environment_test.cpp
 
 ecm_add_test(kis_asl_parser_test.cpp
     TEST_NAME kritalibpsd-asl_parser_test
-    LINK_LIBRARIES kritapsd kritapigment kritawidgetutils kritaundo2  Qt5::Xml Qt5::Test)
+    LINK_LIBRARIES kritapsd kritapigment kritawidgetutils kritacommand Qt5::Xml Qt5::Test)
 
 # ecm_add_test(kis_dom_utils_test.cpp
 #    TEST_NAME krita-image-DomUtils-Test

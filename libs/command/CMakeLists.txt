@@ -1,4 +1,4 @@
-set(kritaundo2_LIB_SRCS
+set(kritacommand_LIB_SRCS
 	kundo2stack.cpp
 	kundo2group.cpp
 	kundo2view.cpp
@@ -10,10 +10,10 @@ set(kritaundo2_LIB_SRCS
         kis_command_utils.cpp
 )
 
-add_library(kritaundo2 SHARED ${kritaundo2_LIB_SRCS})
-generate_export_header(kritaundo2 BASE_NAME kritaundo2)
+add_library(kritacommand SHARED ${kritacommand_LIB_SRCS})
+generate_export_header(kritacommand BASE_NAME kritacommand)
 
-target_link_libraries(kritaundo2 
+target_link_libraries(kritacommand
     PUBLIC
         kritawidgetutils 
         KF5::I18n 
@@ -22,7 +22,7 @@ target_link_libraries(kritaundo2
         Qt5::Widgets
 )
 
-set_target_properties(kritaundo2 PROPERTIES
+set_target_properties(kritacommand PROPERTIES
     VERSION ${GENERIC_KRITA_LIB_VERSION} SOVERSION ${GENERIC_KRITA_LIB_SOVERSION}
 )
-install(TARGETS kritaundo2 ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS kritacommand ${INSTALL_TARGETS_DEFAULT_ARGS})

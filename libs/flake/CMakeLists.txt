@@ -219,7 +219,7 @@ target_include_directories(kritaflake
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/svg>
 )
 
-target_link_libraries(kritaflake kritapigment kritawidgetutils kritaodf kritaundo2 KF5::WidgetsAddons Qt5::Svg)
+target_link_libraries(kritaflake kritapigment kritawidgetutils kritaodf kritacommand KF5::WidgetsAddons Qt5::Svg)
 
 set_target_properties(kritaflake PROPERTIES
     VERSION ${GENERIC_KRITA_LIB_VERSION} SOVERSION ${GENERIC_KRITA_LIB_SOVERSION}

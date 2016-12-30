@@ -40,6 +40,7 @@ struct KisImageAnimationInterface::Private
           frameInvalidationBlocked(false),
           cachedLastFrameValue(-1),
           audioChannelMuted(false),
+          audioChannelVolume(0.5),
           m_currentTime(0),
           m_currentUITime(0)
     {
@@ -55,6 +56,7 @@ struct KisImageAnimationInterface::Private
           cachedLastFrameValue(-1),
           audioChannelFileName(rhs.audioChannelFileName),
           audioChannelMuted(rhs.audioChannelMuted),
+          audioChannelVolume(rhs.audioChannelVolume),
           m_currentTime(rhs.m_currentTime),
           m_currentUITime(rhs.m_currentUITime)
     {
@@ -70,6 +72,7 @@ struct KisImageAnimationInterface::Private
     int cachedLastFrameValue;
     QString audioChannelFileName;
     bool audioChannelMuted;
+    qreal audioChannelVolume;
 
     KisSwitchTimeStrokeStrategy::SharedTokenWSP switchToken;
 
@@ -187,6 +190,17 @@ void KisImageAnimationInterface::setAudioMuted(bool value)
 {
     m_d->audioChannelMuted = value;
     emit sigAudioChannelChanged();
+}
+
+qreal KisImageAnimationInterface::audioVolume() const
+{
+    return m_d->audioChannelVolume;
+}
+
+void KisImageAnimationInterface::setAudioVolume(qreal value)
+{
+    m_d->audioChannelVolume = value;
+    emit sigAudioVolumeChanged();
 }
 
 void KisImageAnimationInterface::setFramerate(int fps)

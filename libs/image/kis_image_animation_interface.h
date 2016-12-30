@@ -143,6 +143,16 @@ public:
      */
     void setAudioMuted(bool value);
 
+    /**
+     * Returns the preferred audio value in rangle [0, 1]
+     */
+    qreal audioVolume() const;
+
+    /**
+     * Set the preferred volume for the audio channel in range [0, 1]
+     */
+    void setAudioVolume(qreal value);
+
 public Q_SLOTS:
     void setFramerate(int fps);
 public:
@@ -183,6 +193,12 @@ Q_SIGNALS:
      * Emitted when the audio channel of the document is changed
      */
     void sigAudioChannelChanged();
+
+    /**
+     * Emitted when audion volume changes. Please note that it doesn't change
+     * when you mute the channel! When muting, sigAudioChannelChanged() is used instead!
+     */
+    void sigAudioVolumeChanged();
 
 private:
     struct Private;

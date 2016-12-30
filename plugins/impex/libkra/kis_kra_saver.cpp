@@ -424,7 +424,8 @@ bool KisKraSaver::saveGuides(QDomDocument& doc, QDomElement& element)
 
 bool KisKraSaver::saveAudio(QDomDocument& doc, QDomElement& element)
 {
-    QString fileName = m_d->doc->image()->animationInterface()->audioChannelFileName();
+    const KisImageAnimationInterface *interface = m_d->doc->image()->animationInterface();
+    QString fileName = interface->audioChannelFileName();
     if (fileName.isEmpty()) return true;
 
     if (!QFileInfo::exists(fileName)) {
@@ -442,6 +443,8 @@ bool KisKraSaver::saveAudio(QDomDocument& doc, QDomElement& element)
 
     QDomElement audioElement = doc.createElement("audio");
     KisDomUtils::saveValue(&audioElement, "masterChannelPath", fileName);
+    KisDomUtils::saveValue(&audioElement, "audioMuted", interface->isAudioMuted());
+    KisDomUtils::saveValue(&audioElement, "audioVolume", interface->audioVolume());
     element.appendChild(audioElement);
 
     return true;

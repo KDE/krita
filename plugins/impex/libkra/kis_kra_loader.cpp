@@ -1117,8 +1117,6 @@ void KisKraLoader::loadAudio(const KoXmlElement& elem, KisImageSP image)
         fileName = QDir::toNativeSeparators(fileName);
 
         QDir baseDirectory = QFileInfo(m_d->document->localFilePath()).absoluteDir();
-        qDebug() << ppVar(baseDirectory);
-
         fileName = baseDirectory.absoluteFilePath(fileName);
 
         QFileInfo info(fileName);
@@ -1128,5 +1126,15 @@ void KisKraLoader::loadAudio(const KoXmlElement& elem, KisImageSP image)
         } else {
             image->animationInterface()->setAudioChannelFileName(info.absoluteFilePath());
         }
+    }
+
+    bool audioMuted = false;
+    if (KisDomUtils::loadValue(qElement, "audioMuted", &audioMuted)) {
+        image->animationInterface()->setAudioMuted(audioMuted);
+    }
+
+    qreal audioVolume = 0.5;
+    if (KisDomUtils::loadValue(qElement, "audioVolume", &audioVolume)) {
+        image->animationInterface()->setAudioVolume(audioVolume);
     }
 }

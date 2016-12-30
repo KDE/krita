@@ -16,6 +16,8 @@ public:
 
     bool isPlaying() const;
 
+    void setVolume(qreal value);
+
 public Q_SLOTS:
     void setSpeed(qreal value);
     void play(qint64 startPosition);

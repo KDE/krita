@@ -57,6 +57,9 @@ public:
     bool isAudioMuted() const;
     void setAudioMuted(bool value);
 
+    qreal audioVolume() const;
+    void setAudioVolume(qreal value);
+
     void setLastClickedIndex(const QModelIndex &index);
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const;

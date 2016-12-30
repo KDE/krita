@@ -195,7 +195,6 @@ set(kritaimage_LIB_SRCS
    kis_indirect_painting_support.cpp
    kis_abstract_projection_plane.cpp
    kis_layer_projection_plane.cpp
-   kis_command_utils.cpp
    kis_layer_utils.cpp
    kis_mask_projection_plane.cpp
    kis_projection_leaf.cpp
@@ -244,8 +243,6 @@ set(kritaimage_LIB_SRCS
    kis_liquify_transform_worker.cpp
    kis_green_coordinates_math.cpp
    kis_transparency_mask.cc
-   kis_undo_store.cpp
-   kis_undo_stores.cpp
    kis_undo_adapter.cpp
    kis_macro_based_undo_store.cpp
    kis_surrogate_undo_adapter.cpp

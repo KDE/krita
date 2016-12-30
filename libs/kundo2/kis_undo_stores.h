@@ -30,7 +30,7 @@ class KUndo2MagicString;
  * internal stack. Used for wrapping around legacy code into
  * a single command.
  */
-class KRITAIMAGE_EXPORT KisSurrogateUndoStore : public KisUndoStore
+class KRITAUNDO2_EXPORT KisSurrogateUndoStore : public KisUndoStore
 {
 public:
     KisSurrogateUndoStore();
@@ -60,7 +60,7 @@ private:
  * @brief The KisDumbUndoStore class doesn't actually save commands,
  * so you cannot undo or redo!
  */
-class KRITAIMAGE_EXPORT KisDumbUndoStore : public KisUndoStore
+class KRITAUNDO2_EXPORT KisDumbUndoStore : public KisUndoStore
 {
 public:
     const KUndo2Command* presentCommand();

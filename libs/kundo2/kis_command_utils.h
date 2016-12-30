@@ -21,11 +21,11 @@
 
 #include "kundo2command.h"
 #include "kis_undo_stores.h"
-#include "kritaimage_export.h"
+#include "kritaundo2_export.h"
 
 namespace KisCommandUtils
 {
-    struct KRITAIMAGE_EXPORT AggregateCommand : public KUndo2Command {
+    struct KRITAUNDO2_EXPORT AggregateCommand : public KUndo2Command {
         AggregateCommand();
 
         void redo();
@@ -40,7 +40,7 @@ namespace KisCommandUtils
         KisSurrogateUndoStore m_store;
     };
 
-    struct KRITAIMAGE_EXPORT SkipFirstRedoWrapper : public KUndo2Command {
+    struct KRITAUNDO2_EXPORT SkipFirstRedoWrapper : public KUndo2Command {
         SkipFirstRedoWrapper(KUndo2Command *child = 0, KUndo2Command *parent = 0);
         void redo();
         void undo();
@@ -50,7 +50,7 @@ namespace KisCommandUtils
         QScopedPointer<KUndo2Command> m_child;
     };
 
-    struct KRITAIMAGE_EXPORT FlipFlopCommand : public KUndo2Command {
+    struct KRITAUNDO2_EXPORT FlipFlopCommand : public KUndo2Command {
         FlipFlopCommand(bool finalize, KUndo2Command *parent = 0);
 
         void redo();
@@ -67,7 +67,7 @@ namespace KisCommandUtils
         bool m_firstRedo;
     };
 
-    struct KRITAIMAGE_EXPORT CompositeCommand : public KUndo2Command {
+    struct KRITAUNDO2_EXPORT CompositeCommand : public KUndo2Command {
         CompositeCommand(KUndo2Command *parent = 0);
         ~CompositeCommand();
 

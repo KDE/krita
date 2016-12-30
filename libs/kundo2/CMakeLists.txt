@@ -5,6 +5,9 @@ set(kritaundo2_LIB_SRCS
 	kundo2model.cpp
 	kundo2magicstring.cpp
 	kundo2commandextradata.cpp
+        kis_undo_store.cpp
+        kis_undo_stores.cpp
+        kis_command_utils.cpp
 )
 
 add_library(kritaundo2 SHARED ${kritaundo2_LIB_SRCS})

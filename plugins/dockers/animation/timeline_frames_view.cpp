@@ -195,7 +195,7 @@ TimelineFramesView::TimelineFramesView(QWidget *parent)
 
     m_d->audioOptionsButton = new QToolButton(this);
     m_d->audioOptionsButton->setAutoRaise(true);
-    m_d->audioOptionsButton->setIcon(KisIconUtils::loadIcon("zoom-horizontal"));
+    m_d->audioOptionsButton->setIcon(KisIconUtils::loadIcon("audio-none"));
     m_d->audioOptionsButton->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     m_d->audioOptionsButton->setPopupMode(QToolButton::InstantPopup);
 
@@ -438,6 +438,19 @@ void TimelineFramesView::slotUpdateAudioActions()
     }
 
     m_d->audioMuteAction->setChecked(m_d->model->isAudioMuted());
+
+    QIcon audioIcon;
+    if (currentFile.isEmpty()) {
+        audioIcon = KisIconUtils::loadIcon("audio-none");
+    } else {
+        if (m_d->model->isAudioMuted()) {
+            audioIcon = KisIconUtils::loadIcon("audio-volume-mute");
+        } else {
+            audioIcon = KisIconUtils::loadIcon("audio-volume-high");
+        }
+    }
+
+    m_d->audioOptionsButton->setIcon(audioIcon);
 }
 
 void TimelineFramesView::slotUpdateInfiniteFramesCount()

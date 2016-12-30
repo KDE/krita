@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   version="1.1"
+   id="svg4355"
+   height="22"
+   width="22">
+  <defs
+     id="defs4357" />
+  <metadata
+     id="metadata4360">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     transform="translate(-544.57141,-742.93359)"
+     id="layer1">
+    <path
+       id="path6"
+       class="ColorScheme-Text"
+       d="m 555.55969,745.93316 -4.98828,4.99023 0,0.01 0,1 0,4 0,1 0,0.01 4.98828,4.9902 1.01172,0 0,-0.40234 0,-15.19532 0,-0.40234 -1.01172,0 z m -7.98828,5 0,1 0,4 0,1 2,0 0,-1 0,-4 0,-1 z"
+       style="fill:#cacaca;fill-opacity:1;stroke:none" />
+    <path
+       id="path8"
+       class="ColorScheme-NegativeText"
+       d="m 557.57141,752.93359 0,2 6,0 0,-2 -6,0 z"
+       style="color:#da4453;fill:currentColor;fill-opacity:1;stroke:none" />
+  </g>
+</svg>

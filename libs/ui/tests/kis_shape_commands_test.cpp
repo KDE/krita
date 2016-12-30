@@ -204,7 +204,7 @@ void KisShapeCommandsTest::testResizeShape(bool normalizeGroup)
 
 
     const QPointF stillPoint = group->absolutePosition(KoFlake::BottomRightCorner);
-    KoFlake::resizeShape(group, 1.2, 1.4, stillPoint, true, QTransform());
+    KoFlake::resizeShape(group, 1.2, 1.4, stillPoint, false, true, QTransform());
 
     qDebug() << "After:";
     qDebug() << ppVar(group->absolutePosition(KoFlake::TopLeftCorner));

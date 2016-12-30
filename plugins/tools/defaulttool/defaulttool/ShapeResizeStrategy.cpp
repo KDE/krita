@@ -215,6 +215,7 @@ void ShapeResizeStrategy::resizeBy(const QPointF &stillPoint, qreal zoomX, qreal
         shape->setSize(m_initialSizes[i]);
         KoFlake::resizeShape(shape, zoomX, zoomY,
                              stillPoint,
+                             false,
                              usePostScaling, m_postScalingCoveringTransform);
 
         shape->update();

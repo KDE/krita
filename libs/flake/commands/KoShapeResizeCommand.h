@@ -36,7 +36,7 @@ class KRITAFLAKE_EXPORT KoShapeResizeCommand : public KUndo2Command
 public:
     KoShapeResizeCommand(const QList<KoShape*> &shapes,
                          qreal scaleX, qreal scaleY,
-                         const QPointF &absoluteStillPoint,
+                         const QPointF &absoluteStillPoint, bool useGLobalMode,
                          bool usePostScaling, const QTransform &postScalingCoveringTransform,
                          KUndo2Command *parent = 0);
 

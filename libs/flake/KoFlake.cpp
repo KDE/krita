@@ -79,8 +79,46 @@ QPointF KoFlake::toAbsolute(const QPointF &relative, const QSizeF &size)
 #include "kis_debug.h"
 #include "kis_algebra_2d.h"
 
+namespace {
+
+qreal getScaleByPointsPair(qreal x1, qreal x2, qreal expX1, qreal expX2)
+{
+    static const qreal eps = 1e-10;
+
+    const qreal diff = x2 - x1;
+    const qreal expDiff = expX2 - expX1;
+
+    return qAbs(diff) > eps ? expDiff / diff : 1.0;
+}
+
+void findMinMaxPoints(const QPolygonF &poly, int *minPoint, int *maxPoint, std::function<qreal(const QPointF&)> dimension)
+{
+    KIS_ASSERT_RECOVER_RETURN(minPoint);
+    KIS_ASSERT_RECOVER_RETURN(maxPoint);
+
+    qreal minValue = dimension(poly[*minPoint]);
+    qreal maxValue = dimension(poly[*maxPoint]);
+
+    for (int i = 0; i < poly.size(); i++) {
+        const qreal value = dimension(poly[i]);
+
+        if (value < minValue) {
+            *minPoint = i;
+            minValue = value;
+        }
+
+        if (value > maxValue) {
+            *maxPoint = i;
+            maxValue = value;
+        }
+    }
+}
+
+}
+
 void KoFlake::resizeShape(KoShape *shape, qreal scaleX, qreal scaleY,
                           const QPointF &absoluteStillPoint,
+                          bool useGlobalMode,
                           bool usePostScaling, const QTransform &postScalingCoveringTransform)
 {
     QPointF localStillPoint = shape->absoluteTransformation(0).inverted().map(absoluteStillPoint);
@@ -90,11 +128,92 @@ void KoFlake::resizeShape(KoShape *shape, qreal scaleX, qreal scaleY,
 
     if (usePostScaling) {
         const QTransform scale = QTransform::fromScale(scaleX, scaleY);
-        shape->setTransformation(shape->transformation() *
-                                 postScalingCoveringTransform.inverted() *
-                                 scale * postScalingCoveringTransform);
+
+        if (!useGlobalMode) {
+            shape->setTransformation(shape->transformation() *
+                                     postScalingCoveringTransform.inverted() *
+                                     scale * postScalingCoveringTransform);
+        } else {
+            const QTransform uniformGlobalTransform =
+                    shape->absoluteTransformation(0) *
+                    scale *
+                    shape->absoluteTransformation(0).inverted() *
+                    shape->transformation();
+
+            shape->setTransformation(uniformGlobalTransform);
+        }
     } else {
         using namespace KisAlgebra2D;
+
+        if (useGlobalMode) {
+            const QTransform scale = QTransform::fromScale(scaleX, scaleY);
+            const QTransform uniformGlobalTransform =
+                    shape->absoluteTransformation(0) *
+                    scale *
+                    shape->absoluteTransformation(0).inverted();
+
+            const QRectF rect = shape->outlineRect();
+
+            /**
+             * The basic idea of such global scaling:
+             *
+             * 1) We choose two the most distant points of the original outline rect
+             * 2) Calculate their expected position if transformed using `uniformGlobalTransform`
+             * 3) NOTE1: we do not transform the entire shape using `uniformGlobalTransform`,
+             *           because it will cause massive shearing. We transform only two points
+             *           and adjust other points using dumb scaling.
+             * 4) NOTE2: given that `scale` transform is much more simpler than
+             *           `uniformGlobalTransform`, we cannot guarantee equivalent changes on
+             *           both globalScaleX and globalScaleY at the same time. We can guarantee
+             *           only one of them. Therefore we select the most "important" axis and
+             *           guarantee scael along it. The scale along the other direction is not
+             *           controlled.
+             * 5) After we have the two most distant points, we can just calculate the scale
+             *    by dividing difference between their expected and original positions. This
+             *    formula can be derived from equation:
+             *
+             *    localPoint_i * ScaleMatrix = localPoint_i * UniformGlobalTransform = expectedPoint_i
+             */
+
+            // choose the most significant scale direction
+            qreal scaleXDeviation = qAbs(1.0 - scaleX);
+            qreal scaleYDeviation = qAbs(1.0 - scaleY);
+
+            std::function<qreal(const QPointF&)> dimension;
+
+            if (scaleXDeviation > scaleYDeviation) {
+                dimension = [] (const QPointF &pt) {
+                    return pt.x();
+                };
+
+            } else {
+                dimension = [] (const QPointF &pt) {
+                    return pt.y();
+                };
+            }
+
+            // find min and max points (in absolute coordinates),
+            // by default use top-left and bottom-right
+            QPolygonF localPoints(rect);
+            QPolygonF globalPoints = shape->absoluteTransformation(0).map(localPoints);
+
+            int minPointIndex = 0;
+            int maxPointIndex = 2;
+
+            findMinMaxPoints(globalPoints, &minPointIndex, &maxPointIndex, dimension);
+
+            // calculate the scale using the extremum points
+            const QPointF minPoint = localPoints[minPointIndex];
+            const QPointF maxPoint = localPoints[maxPointIndex];
+
+            const QPointF minPointExpected = uniformGlobalTransform.map(minPoint);
+            const QPointF maxPointExpected = uniformGlobalTransform.map(maxPoint);
+
+            scaleX = getScaleByPointsPair(minPoint.x(), maxPoint.x(),
+                                          minPointExpected.x(), maxPointExpected.x());
+            scaleY = getScaleByPointsPair(minPoint.y(), maxPoint.y(),
+                                          minPointExpected.y(), maxPointExpected.y());
+        }
 
         const QSizeF oldSize(shape->size());
         const QSizeF newSize(oldSize.width() * qAbs(scaleX), oldSize.height() * qAbs(scaleY));

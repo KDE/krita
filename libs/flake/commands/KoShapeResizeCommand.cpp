@@ -27,6 +27,7 @@ struct Q_DECL_HIDDEN KoShapeResizeCommand::Private
     qreal scaleX;
     qreal scaleY;
     QPointF absoluteStillPoint;
+    bool useGlobalMode;
     bool usePostScaling;
     QTransform postScalingCoveringTransform;
 
@@ -38,6 +39,7 @@ struct Q_DECL_HIDDEN KoShapeResizeCommand::Private
 KoShapeResizeCommand::KoShapeResizeCommand(const QList<KoShape*> &shapes,
                                            qreal scaleX, qreal scaleY,
                                            const QPointF &absoluteStillPoint,
+                                           bool useGLobalMode,
                                            bool usePostScaling,
                                            const QTransform &postScalingCoveringTransform,
                                            KUndo2Command *parent)
@@ -48,6 +50,7 @@ KoShapeResizeCommand::KoShapeResizeCommand(const QList<KoShape*> &shapes,
     m_d->scaleX = scaleX;
     m_d->scaleY = scaleY;
     m_d->absoluteStillPoint = absoluteStillPoint;
+    m_d->useGlobalMode = useGLobalMode;
     m_d->usePostScaling = usePostScaling;
     m_d->postScalingCoveringTransform = postScalingCoveringTransform;
 
@@ -69,6 +72,7 @@ void KoShapeResizeCommand::redo()
         KoFlake::resizeShape(shape,
                              m_d->scaleX, m_d->scaleY,
                              m_d->absoluteStillPoint,
+                             m_d->useGlobalMode,
                              m_d->usePostScaling,
                              m_d->postScalingCoveringTransform);
 

@@ -129,7 +129,9 @@ namespace KoFlake
     KRITAFLAKE_EXPORT QPointF toAbsolute(const QPointF &relative, const QSizeF &size);
 
     KRITAFLAKE_EXPORT void resizeShape(KoShape *shape, qreal scaleX, qreal scaleY,
-                                       const QPointF &absoluteStillPoint, bool usePostScaling, const QTransform &postScalingCoveringTransform);
+                                       const QPointF &absoluteStillPoint,
+                                       bool useGlobalMode,
+                                       bool usePostScaling, const QTransform &postScalingCoveringTransform);
 }
 
 #endif

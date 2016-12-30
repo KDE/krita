@@ -280,6 +280,8 @@ void DefaultToolWidget::slotUpdatePositionBoxes()
 
 void DefaultToolWidget::slotRepositionShapes()
 {
+    static const qreal eps = 1e-6;
+
     const bool useGlobalSize = chkGlobalCoordinates->isChecked();
     const KoFlake::AnchorPosition anchor = positionSelector->value();
 
@@ -293,7 +295,7 @@ void DefaultToolWidget::slotRepositionShapes()
     const QPointF newPosition(positionXSpinBox->value(), positionYSpinBox->value());
     const QPointF diff = newPosition - oldPosition;
 
-    if (diff.manhattanLength() < 1e-6) return;
+    if (diff.manhattanLength() < eps) return;
 
     QList<QPointF> oldPositions;
     QList<QPointF> newPositions;
@@ -312,6 +314,8 @@ void DefaultToolWidget::slotRepositionShapes()
 
 void DefaultToolWidget::slotResizeShapes()
 {
+    static const qreal eps = 1e-4;
+
     const bool useGlobalSize = chkGlobalCoordinates->isChecked();
     const KoFlake::AnchorPosition anchor = positionSelector->value();
 
@@ -327,7 +331,7 @@ void DefaultToolWidget::slotResizeShapes()
     const qreal scaleX = newSize.width() / oldSize.width();
     const qreal scaleY = newSize.height() / oldSize.height();
 
-    if (qAbs(scaleX - 1.0) < 1e-6 && qAbs(scaleY - 1.0) < 1e-6) return;
+    if (qAbs(scaleX - 1.0) < eps && qAbs(scaleY - 1.0) < eps) return;
 
     const bool usePostScaling =
         shapes.size() > 1 || chkUniformScaling->isChecked();
@@ -335,6 +339,7 @@ void DefaultToolWidget::slotResizeShapes()
     KUndo2Command *cmd = new KoShapeResizeCommand(shapes,
                                                   scaleX, scaleY,
                                                   bounds.topLeft(),
+                                                  useGlobalSize,
                                                   usePostScaling,
                                                   selection->transformation());
     m_tool->canvas()->addCommand(cmd);

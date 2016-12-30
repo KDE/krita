@@ -54,9 +54,11 @@
 #include "kis_signal_compressor.h"
 #include "kis_time_range.h"
 #include "kis_color_label_selector_widget.h"
+#include "kis_slider_spin_box.h"
 
 #include <KoFileDialog.h>
 #include <QDesktopServices>
+#include <QWidgetAction>
 
 #include "config-qtmultimedia.h"
 
@@ -100,6 +102,8 @@ struct TimelineFramesView::Private
     QMenu *audioOptionsMenu;
     QAction *openAudioAction;
     QAction *audioMuteAction;
+    KisSliderSpinBox *volumeSlider;
+
 
     QMenu *layerEditingMenu;
     QMenu *existingLayersMenu;
@@ -214,8 +218,22 @@ TimelineFramesView::TimelineFramesView(QWidget *parent)
     connect(m_d->audioMuteAction, SIGNAL(triggered(bool)), SLOT(slotAudioChannelMute(bool)));
 
     m_d->audioOptionsMenu->addAction(m_d->audioMuteAction);
-
     m_d->audioOptionsMenu->addAction(i18nc("@item:inmenu", "Remove audio"), this, SLOT(slotAudioChannelRemove()));
+
+    m_d->audioOptionsMenu->addSeparator();
+
+    m_d->volumeSlider = new KisSliderSpinBox(this);
+    m_d->volumeSlider->setRange(0, 100);
+    m_d->volumeSlider->setSuffix("%");
+    m_d->volumeSlider->setPrefix(i18nc("@item:inmenu, slider", "Volume:"));
+    m_d->volumeSlider->setSingleStep(1);
+    m_d->volumeSlider->setPageStep(10);
+    m_d->volumeSlider->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Fixed);
+    connect(m_d->volumeSlider, SIGNAL(valueChanged(int)), SLOT(slotAudioVolumeChanged(int)));
+
+    QWidgetAction *volumeAction = new QWidgetAction(m_d->audioOptionsMenu);
+    volumeAction->setDefaultWidget(m_d->volumeSlider);
+    m_d->audioOptionsMenu->addAction(volumeAction);
 
     m_d->audioOptionsButton->setMenu(m_d->audioOptionsMenu);
 
@@ -451,6 +469,16 @@ void TimelineFramesView::slotUpdateAudioActions()
     }
 
     m_d->audioOptionsButton->setIcon(audioIcon);
+
+    m_d->volumeSlider->setEnabled(!m_d->model->isAudioMuted());
+
+    KisSignalsBlocker b(m_d->volumeSlider);
+    m_d->volumeSlider->setValue(qRound(m_d->model->audioVolume() * 100.0));
+}
+
+void TimelineFramesView::slotAudioVolumeChanged(int value)
+{
+    m_d->model->setAudioVolume(qreal(value) / 100.0);
 }
 
 void TimelineFramesView::slotUpdateInfiniteFramesCount()

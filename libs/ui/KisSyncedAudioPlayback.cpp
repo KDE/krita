@@ -79,6 +79,11 @@ bool KisSyncedAudioPlayback::isPlaying() const
     return m_d->player.state() == QMediaPlayer::PlayingState;
 }
 
+void KisSyncedAudioPlayback::setVolume(qreal value)
+{
+    m_d->player.setVolume(qRound(100.0 * value));
+}
+
 void KisSyncedAudioPlayback::setSpeed(qreal value)
 {
     if (qFuzzyCompare(value, m_d->player.playbackRate())) return;

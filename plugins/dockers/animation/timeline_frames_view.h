@@ -77,6 +77,7 @@ private Q_SLOTS:
     void slotAudioChannelMute(bool value);
     void slotAudioChannelRemove();
     void slotUpdateAudioActions();
+    void slotAudioVolumeChanged(int value);
 
 private:
     void setFramesPerSecond(int fps);

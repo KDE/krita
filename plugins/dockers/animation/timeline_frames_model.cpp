@@ -239,6 +239,8 @@ void TimelineFramesModel::setDummiesFacade(KisDummiesFacadeBase *dummiesFacade, 
                 SIGNAL(sigFullClipRangeChanged()), SIGNAL(sigInfiniteTimelineUpdateNeeded()));
         connect(m_d->image->animationInterface(),
                 SIGNAL(sigAudioChannelChanged()), SIGNAL(sigAudioChannelChanged()));
+        connect(m_d->image->animationInterface(),
+                SIGNAL(sigAudioVolumeChanged()), SIGNAL(sigAudioChannelChanged()));
     }
 
     if (m_d->dummiesFacade != oldDummiesFacade) {
@@ -669,4 +671,15 @@ void TimelineFramesModel::setAudioMuted(bool value)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->image);
     m_d->image->animationInterface()->setAudioMuted(value);
+}
+
+qreal TimelineFramesModel::audioVolume() const
+{
+    return m_d->image ? m_d->image->animationInterface()->audioVolume() : 0.5;
+}
+
+void TimelineFramesModel::setAudioVolume(qreal value)
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->image);
+    m_d->image->animationInterface()->setAudioVolume(value);
 }

@@ -157,6 +157,7 @@ KisAnimationPlayer::KisAnimationPlayer(KisCanvas2 *canvas)
     connect(&m_d->stopAudioOnScrubbingCompressor, SIGNAL(timeout()), SLOT(slotTryStopScrubbingAudio()));
 
     connect(m_d->canvas->image()->animationInterface(), SIGNAL(sigAudioChannelChanged()), SLOT(slotAudioChannelChanged()));
+    connect(m_d->canvas->image()->animationInterface(), SIGNAL(sigAudioVolumeChanged()), SLOT(slotAudioVolumeChanged()));
     slotAudioChannelChanged();
 }
 
@@ -195,12 +196,22 @@ void KisAnimationPlayer::slotTryStopScrubbingAudio()
 void KisAnimationPlayer::slotAudioChannelChanged()
 {
 
-    QString fileName = m_d->canvas->image()->animationInterface()->audioChannelFileName();
+    KisImageAnimationInterface *interface = m_d->canvas->image()->animationInterface();
+    QString fileName = interface->audioChannelFileName();
     QFileInfo info(fileName);
-    if (info.exists() && !m_d->canvas->image()->animationInterface()->isAudioMuted()) {
+    if (info.exists() && !interface->isAudioMuted()) {
         m_d->syncedAudio.reset(new KisSyncedAudioPlayback(info.absoluteFilePath()));
+        m_d->syncedAudio->setVolume(interface->audioVolume());
     } else {
         m_d->syncedAudio.reset();
+    }
+}
+
+void KisAnimationPlayer::slotAudioVolumeChanged()
+{
+    KisImageAnimationInterface *interface = m_d->canvas->image()->animationInterface();
+    if (m_d->syncedAudio) {
+        m_d->syncedAudio->setVolume(interface->audioVolume());
     }
 }
 

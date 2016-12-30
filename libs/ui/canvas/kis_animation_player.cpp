@@ -348,17 +348,6 @@ void KisAnimationPlayer::slotUpdate()
     uploadFrame(-1);
 }
 
-void KisAnimationPlayer::setScrubState(bool value, int currentFrame)
-{
-    if (!m_d->syncedAudio || isPlaying()) return;
-
-    if (value) {
-        slotSyncScrubbingAudio(m_d->frameToMSec(currentFrame));
-    } else {
-        m_d->syncedAudio->stop();
-    }
-}
-
 void KisAnimationPlayer::uploadFrame(int frame)
 {
     if (frame < 0) {

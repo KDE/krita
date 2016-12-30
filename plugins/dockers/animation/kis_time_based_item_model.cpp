@@ -344,10 +344,6 @@ void KisTimeBasedItemModel::setScrubState(bool active)
         m_d->scrubInProgress = true;
     }
 
-    if (m_d->animationPlayer && !m_d->animationPlayer->isPlaying()) {
-        m_d->animationPlayer->setScrubState(active, m_d->activeFrameIndex);
-    }
-
     if (m_d->scrubInProgress && !active) {
 
         m_d->scrubInProgress = false;

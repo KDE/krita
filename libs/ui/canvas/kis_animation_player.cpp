@@ -63,7 +63,8 @@ public:
           expectedFrame(0),
           lastTimerInterval(0),
           lastPaintedFrame(0),
-          playbackStatisticsCompressor(1000, KisSignalCompressor::FIRST_INACTIVE)
+          playbackStatisticsCompressor(1000, KisSignalCompressor::FIRST_INACTIVE),
+          stopAudioOnScrubbingCompressor(100, KisSignalCompressor::POSTPONE)
           {}
 
     KisAnimationPlayer *q;
@@ -102,6 +103,7 @@ public:
 
     QScopedPointer<KisSyncedAudioPlayback> syncedAudio;
     QScopedPointer<KisSignalCompressorWithParam<int> > audioSyncScrubbingCompressor;
+    KisSignalCompressor stopAudioOnScrubbingCompressor;
 
     void stopImpl(bool doUpdates);
 
@@ -151,6 +153,9 @@ KisAnimationPlayer::KisAnimationPlayer(KisCanvas2 *canvas)
     m_d->audioSyncScrubbingCompressor.reset(
         new KisSignalCompressorWithParam<int>(cfg.scribbingAudioUpdatesDelay(), callback, KisSignalCompressor::FIRST_ACTIVE));
 
+    m_d->stopAudioOnScrubbingCompressor.setDelay(1.5 * cfg.scribbingAudioUpdatesDelay());
+    connect(&m_d->stopAudioOnScrubbingCompressor, SIGNAL(timeout()), SLOT(slotTryStopScrubbingAudio()));
+
     connect(m_d->canvas->image()->animationInterface(), SIGNAL(sigAudioChannelChanged()), SLOT(slotAudioChannelChanged()));
     slotAudioChannelChanged();
 }
@@ -167,7 +172,24 @@ void KisAnimationPlayer::slotUpdateDropFramesMode()
 void KisAnimationPlayer::slotSyncScrubbingAudio(int msecTime)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->syncedAudio);
-    m_d->syncedAudio->syncWithVideo(msecTime);
+
+    if (!m_d->syncedAudio->isPlaying()) {
+        m_d->syncedAudio->play(msecTime);
+    } else {
+        m_d->syncedAudio->syncWithVideo(msecTime);
+    }
+
+    if (!isPlaying()) {
+        m_d->stopAudioOnScrubbingCompressor.start();
+    }
+}
+
+void KisAnimationPlayer::slotTryStopScrubbingAudio()
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->syncedAudio);
+    if (m_d->syncedAudio && !isPlaying()) {
+        m_d->syncedAudio->stop();
+    }
 }
 
 void KisAnimationPlayer::slotAudioChannelChanged()
@@ -320,7 +342,7 @@ void KisAnimationPlayer::setScrubState(bool value, int currentFrame)
     if (!m_d->syncedAudio || isPlaying()) return;
 
     if (value) {
-        m_d->syncedAudio->play(m_d->frameToMSec(currentFrame));
+        slotSyncScrubbingAudio(m_d->frameToMSec(currentFrame));
     } else {
         m_d->syncedAudio->stop();
     }

@@ -58,6 +58,7 @@ private Q_SLOTS:
 private:
     KoInteractionTool *m_tool;
     QScopedPointer<KisAspectRatioLocker> m_sizeAspectLocker;
+    bool m_savedUniformScaling;
 };
 
 #endif

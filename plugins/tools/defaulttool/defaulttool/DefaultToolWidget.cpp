@@ -57,6 +57,7 @@ DefaultToolWidget::DefaultToolWidget(KoInteractionTool *tool, QWidget *parent)
     : QWidget(parent)
     , m_tool(tool)
     , m_sizeAspectLocker(new KisAspectRatioLocker())
+    , m_savedUniformScaling(false)
 {
     setupUi(this);
 
@@ -190,11 +191,19 @@ void DefaultToolWidget::slotUpdateCheckboxes()
     KoSelection *selection = m_tool->canvas()->shapeManager()->selection();
     QList<KoShape*> shapes = fetchEditableShapes(selection);
 
-    chkUniformScaling->setEnabled(shapes.size() == 1);
+    const bool uniformScalingAvailable = shapes.size() <= 1;
+
+    if (uniformScalingAvailable && !chkUniformScaling->isEnabled()) {
+        chkUniformScaling->setChecked(m_savedUniformScaling);
+        chkUniformScaling->setEnabled(uniformScalingAvailable);
+    } else if (!uniformScalingAvailable && chkUniformScaling->isEnabled()) {
+        m_savedUniformScaling = chkUniformScaling->isChecked();
+        chkUniformScaling->setChecked(true);
+        chkUniformScaling->setEnabled(uniformScalingAvailable);
+    }
 
     // TODO: not implemented yet!
     chkAnchorLock->setEnabled(false);
-    chkGlobalCoordinates->setEnabled(false);
 }
 
 void DefaultToolWidget::slotAspectButtonToggled()

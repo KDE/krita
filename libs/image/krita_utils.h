@@ -31,6 +31,7 @@ class QPainter;
 #include <QVector>
 #include "kritaimage_export.h"
 #include "kis_types.h"
+#include "krita_container_utils.h"
 #include <functional>
 
 
@@ -73,38 +74,6 @@ namespace KritaUtils
     QString KRITAIMAGE_EXPORT toLocalizedOnOff(bool value);
 
     KisNodeSP KRITAIMAGE_EXPORT nearestNodeAfterRemoval(KisNodeSP node);
-
-    template <class T>
-        bool compareListsUnordered(const QList<T> &a, const QList<T> &b) {
-        if (a.size() != b.size()) return false;
-
-        Q_FOREACH(const T &t, a) {
-            if (!b.contains(t)) return false;
-        }
-
-        return true;
-    }
-
-    template <class C>
-        void makeContainerUnique(C &container) {
-        std::sort(container.begin(), container.end());
-        auto newEnd = std::unique(container.begin(), container.end());
-
-        while (newEnd != container.end()) {
-            newEnd = container.erase(newEnd);
-        }
-    }
-
-
-    template <class C>
-        void filterContainer(C &container, std::function<bool(typename C::reference)> keepIf) {
-
-            auto newEnd = std::remove_if(container.begin(), container.end(), std::unary_negate<decltype(keepIf)>(keepIf));
-            while (newEnd != container.end()) {
-               newEnd = container.erase(newEnd);
-            }
-    }
-
 
     /**
      * When drawing a rect Qt uses quite a weird algorithm. It

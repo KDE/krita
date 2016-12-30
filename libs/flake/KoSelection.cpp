@@ -28,6 +28,7 @@
 #include "KoPointerEvent.h"
 #include "KoShapePaintingContext.h"
 #include "kis_algebra_2d.h"
+#include "krita_container_utils.h"
 
 #include <QPainter>
 
@@ -178,6 +179,19 @@ const QList<KoShape*> KoSelection::selectedShapes() const
 {
     Q_D(const KoSelection);
     return d->selectedShapes;
+}
+
+const QList<KoShape *> KoSelection::selectedEditableShapes() const
+{
+    Q_D(const KoSelection);
+
+    QList<KoShape*> shapes = selectedShapes();
+
+    KritaUtils::filterContainer (shapes, [](KoShape *shape) {
+        return shape->isEditable();
+    });
+
+    return shapes;
 }
 
 bool KoSelection::isSelected(const KoShape *shape) const

@@ -107,6 +107,12 @@ public:
     const QList<KoShape*> selectedShapes() const;
 
     /**
+     * Same as selectedShapes() but only for editable shapes. Used by
+     * the algorithms that modify the image
+     */
+    const QList<KoShape*> selectedEditableShapes() const;
+
+    /**
      * Return the first selected shape, or 0 if there is nothing selected.
      * @param strip if StrippedSelection, the returned list will not include any children
      *    of a grouped shape if the group-parent is itself also in the set.

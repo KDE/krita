@@ -53,6 +53,7 @@
 #include "kis_debug.h"
 #include "kis_acyclic_signal_connector.h"
 
+
 DefaultToolWidget::DefaultToolWidget(KoInteractionTool *tool, QWidget *parent)
     : QWidget(parent)
     , m_tool(tool)
@@ -108,17 +109,7 @@ DefaultToolWidget::~DefaultToolWidget()
 {
 }
 
-#include <functional>
-
-// FIXME: remove code duplication with KritaUtils!
-template <class C>
-    void filterContainer(C &container, std::function<bool(typename C::reference)> keepIf) {
-
-        auto newEnd = std::remove_if(container.begin(), container.end(), std::unary_negate<decltype(keepIf)>(keepIf));
-        while (newEnd != container.end()) {
-           newEnd = container.erase(newEnd);
-        }
-}
+namespace {
 
 void tryAnchorPosition(KoFlake::AnchorPosition anchor,
                        const QRectF &rect,
@@ -132,23 +123,12 @@ void tryAnchorPosition(KoFlake::AnchorPosition anchor,
     }
 }
 
-QList<KoShape*> fetchEditableShapes(KoSelection *selection)
-{
-    QList<KoShape*> shapes = selection->selectedShapes();
-
-    filterContainer (shapes, [](KoShape *shape) {
-        return shape->isEditable();
-    });
-
-    return shapes;
-}
-
 QRectF calculateSelectionBounds(KoSelection *selection,
                                 KoFlake::AnchorPosition anchor,
                                 bool useGlobalSize,
                                 QList<KoShape*> *outShapes = 0)
 {
-    QList<KoShape*> shapes = fetchEditableShapes(selection);
+    QList<KoShape*> shapes = selection->selectedEditableShapes();
 
     KoShape *shape = shapes.size() == 1 ? shapes.first() : selection;
 
@@ -179,6 +159,8 @@ QRectF calculateSelectionBounds(KoSelection *selection,
     return QRectF(resultPoint, resultRect.size());
 }
 
+}
+
 void DefaultToolWidget::slotAnchorPointChanged()
 {
     QVariant newValue(positionSelector->value());
@@ -189,7 +171,7 @@ void DefaultToolWidget::slotAnchorPointChanged()
 void DefaultToolWidget::slotUpdateCheckboxes()
 {
     KoSelection *selection = m_tool->canvas()->shapeManager()->selection();
-    QList<KoShape*> shapes = fetchEditableShapes(selection);
+    QList<KoShape*> shapes = selection->selectedEditableShapes();
 
     KoShapeGroup *onlyGroupShape = 0;
 
@@ -215,7 +197,7 @@ void DefaultToolWidget::slotUpdateCheckboxes()
 void DefaultToolWidget::slotAspectButtonToggled()
 {
     KoSelection *selection = m_tool->canvas()->shapeManager()->selection();
-    QList<KoShape*> shapes = fetchEditableShapes(selection);
+    QList<KoShape*> shapes = selection->selectedEditableShapes();
 
     QList<bool> oldKeepAspectRatio;
     QList<bool> newKeepAspectRatio;
@@ -234,7 +216,7 @@ void DefaultToolWidget::slotAspectButtonToggled()
 void DefaultToolWidget::slotUpdateAspectButton()
 {
     KoSelection *selection = m_tool->canvas()->shapeManager()->selection();
-    QList<KoShape*> shapes = fetchEditableShapes(selection);
+    QList<KoShape*> shapes = selection->selectedEditableShapes();
 
     bool hasKeepAspectRatio = false;
     bool hasNotKeepAspectRatio = false;

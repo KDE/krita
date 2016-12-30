@@ -42,13 +42,10 @@ ShapeMoveStrategy::ShapeMoveStrategy(KoToolBase *tool, const QPointF &clicked)
     , m_start(clicked)
     , m_canvas(tool->canvas())
 {
-    QList<KoShape *> selectedShapes = m_canvas->shapeManager()->selection()->selectedShapes();
+    QList<KoShape *> selectedShapes = m_canvas->shapeManager()->selection()->selectedEditableShapes();
 
     QRectF boundingRect;
     Q_FOREACH (KoShape *shape, selectedShapes) {
-        if (!shape->isEditable()) {
-            continue;
-        }
         m_selectedShapes << shape;
         m_previousPositions << shape->absolutePosition(KoFlake::Center);
         m_newPositions << shape->absolutePosition(KoFlake::Center);

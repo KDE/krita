@@ -47,7 +47,7 @@ KisImportExportFilter::ConversionStatus QMLExport::convert(KisDocument *document
     Q_CHECK_PTR(image);
 
     QMLConverter converter;
-    KisImageBuilder_Result result = converter.buildFile(filename(), io, image);
+    KisImageBuilder_Result result = converter.buildFile(filename(), realFilename(), io, image);
     if (result == KisImageBuilder_RESULT_OK) {
         dbgFile << "success !";
         return KisImportExportFilter::OK;

@@ -39,6 +39,13 @@ KisPerformanceOption ::KisPerformanceOption (bool createConfigWidget):
         QWidget* widget = new QWidget();
         ui.setupUi(widget);
 
+
+        // instant preview checkbox
+        connect(ui.instantPreviewCheckbox, SIGNAL(clicked(bool)), this, SLOT(instantPreviewChanged(bool)));
+
+
+
+
         ui.precisionFixedSpinbox->setEnabled(false);
 
         // signals for when values changes with precision options
@@ -79,11 +86,15 @@ void KisPerformanceOption::readOptionSetting(const KisPropertiesConfigurationSP 
     ui.precisionStartingSizeSpinbox->setValue(m_precisionOption.sizeToStartFrom());
 
     setAutoPrecisionEnabled(m_precisionOption.autoPrecisionEnabled());
+
+    // read in LOD (Instant Preview) field in
+    config->getBool("KisLevelOfDetailOption/enableLevelOfDetail",true);
 }
 
 void KisPerformanceOption::writeOptionSetting(KisPropertiesConfigurationSP config) const
 {
     m_precisionOption.writeOptionSetting(config);
+    config->setProperty("KisLevelOfDetailOption/enableLevelOfDetail", ui.instantPreviewCheckbox->isEnabled());
 }
 
 void KisPerformanceOption::precisionChanged(int value)
@@ -203,7 +214,6 @@ void KisPerformanceOption::showPrecisionCalculationsTable(bool show)
 
 }
 
-
 void KisPerformanceOption::updatePrecisionCalculationsTable()
 {
     double startingValue = ui.precisionStartingSizeSpinbox->value();
@@ -236,6 +246,9 @@ void KisPerformanceOption::setSizeToStartFrom(double value)
     emit sigPrecisionChanged();
 }
 
-
+void KisPerformanceOption::instantPreviewChanged(bool enable)
+{
+    // TODO: nothing actually happens to the settings when this is changed, so not sure if I need this
+}
 
 

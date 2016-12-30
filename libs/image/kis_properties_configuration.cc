@@ -71,6 +71,7 @@ bool KisPropertiesConfiguration::fromXML(const QString & xml, bool clear)
 
 void KisPropertiesConfiguration::fromXML(const QDomElement& e)
 {
+
     QDomNode n = e.firstChild();
 
     while (!n.isNull()) {

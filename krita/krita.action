@@ -2096,6 +2096,18 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
+    <Action name="switchToPreviouslyActiveNode">
+      <icon></icon>
+      <text>Activate previously selected layer</text>
+      <whatsThis></whatsThis>
+      <toolTip>Activate previously selected layer</toolTip>
+      <iconText>Activate previously selected layer</iconText>
+      <activationFlags>1000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut>;</shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
     <Action name="add_new_group_layer">
       <icon>groupLayer</icon>
       <text>&amp;Group Layer</text>

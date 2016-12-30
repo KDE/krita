@@ -41,6 +41,7 @@ struct PointTypeTraits<QPoint>
 {
     typedef int value_type;
     typedef qreal calculation_type;
+    typedef QRect rect_type;
 };
 
 template <>
@@ -48,6 +49,7 @@ struct PointTypeTraits<QPointF>
 {
     typedef qreal value_type;
     typedef qreal calculation_type;
+    typedef QRectF rect_type;
 };
 
 
@@ -201,6 +203,27 @@ inline void accumulateBounds(const Point &pt, Rect *bounds)
     }
 }
 
+template <template <class T> class Container, class Point, class Rect>
+inline void accumulateBounds(const Container<Point> &points, Rect *bounds)
+{
+    Q_FOREACH (const Point &pt, points) {
+        accumulateBounds(pt, bounds);
+    }
+}
+
+template <template <class T> class Container, class Point>
+inline typename PointTypeTraits<Point>::rect_type
+accumulateBounds(const Container<Point> &points)
+{
+    typename PointTypeTraits<Point>::rect_type result;
+
+    Q_FOREACH (const Point &pt, points) {
+        accumulateBounds(pt, &result);
+    }
+
+    return result;
+}
+
 template <class Point, class Rect>
 inline Point clampPoint(Point pt, const Rect &bounds)
 {
@@ -223,7 +246,12 @@ inline Point clampPoint(Point pt, const Rect &bounds)
     return pt;
 }
 
-QPainterPath KRITAIMAGE_EXPORT smallArrow();
+template <class Size>
+auto maxDimension(Size size) -> decltype(size.width()) {
+    return qMax(size.width(), size.height());
+}
+
+QPainterPath KRITAGLOBAL_EXPORT smallArrow();
 
 /**
  * Multiply width and height of \p rect by \p coeff keeping the

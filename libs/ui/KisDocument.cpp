@@ -676,7 +676,7 @@ bool KisDocument::saveFile(const QString &filePath, KisPropertiesConfigurationSP
     Q_ASSERT(!tempororaryFileName.isEmpty());
 
     //qDebug() << "saving to tempory file" << tempororaryFileName;
-    status = d->importExportManager->exportDocument(tempororaryFileName, outputMimeType, !d->isExporting , exportConfiguration);
+    status = d->importExportManager->exportDocument(tempororaryFileName, filePath, outputMimeType, !d->isExporting , exportConfiguration);
 
     ret = (status == KisImportExportFilter::OK);
     suppressErrorDialog = (isAutosaving() || status == KisImportExportFilter::UserCancelled || status == KisImportExportFilter::BadConversionGraph);
@@ -1674,7 +1674,7 @@ bool KisDocument::prepareLocksForSaving()
         if (locker.successfullyLocked()) {
             copiedImage = d->image->clone(true);
         }
-        else {
+        else if (!isAutosaving()) {
             // even though it is a recovery operation, we should ensure we do not enter saving twice!
             std::unique_lock<StdLockableWrapper<QMutex>> l(d->savingLock, std::try_to_lock);
 

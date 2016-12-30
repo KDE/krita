@@ -81,12 +81,12 @@ KisImportExportManager::~KisImportExportManager()
 
 KisImportExportFilter::ConversionStatus KisImportExportManager::importDocument(const QString& location, const QString& mimeType)
 {
-    return convert(Import, location, mimeType, false, 0);
+    return convert(Import, location, location, mimeType, false, 0);
 }
 
-KisImportExportFilter::ConversionStatus KisImportExportManager::exportDocument(const QString& location, QByteArray& mimeType, bool showWarnings, KisPropertiesConfigurationSP exportConfiguration)
+KisImportExportFilter::ConversionStatus KisImportExportManager::exportDocument(const QString& location, const QString& realLocation, QByteArray& mimeType, bool showWarnings, KisPropertiesConfigurationSP exportConfiguration)
 {
-    return convert(Export, location, mimeType, showWarnings, exportConfiguration);
+    return convert(Export, location, realLocation, mimeType, showWarnings, exportConfiguration);
 }
 
 // The static method to figure out to which parts of the
@@ -190,7 +190,7 @@ void KisImportExportManager::setProgresUpdater(KoProgressUpdater *updater)
     d->progressUpdater = updater;
 }
 
-KisImportExportFilter::ConversionStatus KisImportExportManager::convert(KisImportExportManager::Direction direction, const QString &location, const QString &mimeType, bool showWarnings, KisPropertiesConfigurationSP exportConfiguration)
+KisImportExportFilter::ConversionStatus KisImportExportManager::convert(KisImportExportManager::Direction direction, const QString &location, const QString& realLocation, const QString &mimeType, bool showWarnings, KisPropertiesConfigurationSP exportConfiguration)
 {
 
     QString typeName = mimeType;
@@ -204,6 +204,7 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::convert(KisImpor
     }
 
     filter->setFilename(location);
+    filter->setRealFilename(realLocation);
     filter->setBatchMode(batchMode());
     filter->setMimeType(typeName);
 

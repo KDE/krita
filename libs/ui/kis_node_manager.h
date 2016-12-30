@@ -177,6 +177,7 @@ public Q_SLOTS:
     void mirrorNode(KisNodeSP node, const KUndo2MagicString& commandName, Qt::Orientation orientation);
     void activateNextNode();
     void activatePreviousNode();
+    void switchToPreviouslyActiveNode();
 
     /**
      * move the active node up the nodestack.

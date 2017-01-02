@@ -74,7 +74,7 @@ KisSelectionMask::KisSelectionMask(const KisSelectionMask& rhs)
     setActive(false);
     m_d->image = rhs.image();
     connect(m_d->updatesCompressor, SIGNAL(timeout()), SLOT(slotSelectionChangedCompressed()));
-    this->setObjectName("KisSelectionMask");
+    this->setObjectName(rhs.objectName());
     this->moveToThread(m_d->image->thread());
 }
 

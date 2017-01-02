@@ -42,7 +42,8 @@
 #include "kis_curve_option_widget.h"
 #include <kis_pressure_mirror_option_widget.h>
 #include "kis_pressure_texture_strength_option.h"
-
+#include <kis_global_settings_option.h>
+#include <kis_performance_option.h>
 
 
 KisTangentNormalPaintOpSettingsWidget::KisTangentNormalPaintOpSettingsWidget(QWidget* parent):
@@ -53,9 +54,11 @@ KisTangentNormalPaintOpSettingsWidget::KisTangentNormalPaintOpSettingsWidget(QWi
     addPaintOpOption(new KisCompositeOpOption(true), i18n("Blending Mode"));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption(), i18n("Transparent"), i18n("Opaque")), i18n("Opacity"));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureFlowOption(), i18n("0%"), i18n("100%")), i18n("Flow"));
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption(), i18n("0%"), i18n("100%")), i18n("Size"));
-
     addPaintOpOption(new KisTangentTiltOption(), i18n("Tangent Tilt"));
+    addPaintOpOption(new KisgGlobalSettingsOption(true), i18n("Global Preferences"));
+    addPaintOpOption(new KisPerformanceOption(true), i18n("Performance"));
+
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption(), i18n("0%"), i18n("100%")), i18n("Size"));
 
     addPaintOpOption(new KisPressureSpacingOptionWidget(), i18n("Spacing"));
     addPaintOpOption(new KisPressureMirrorOptionWidget(), i18n("Mirror"));
@@ -64,8 +67,10 @@ KisTangentNormalPaintOpSettingsWidget::KisTangentNormalPaintOpSettingsWidget(QWi
     addPaintOpOption(new KisPressureSharpnessOptionWidget(), i18n("Sharpness"));
     addPaintOpOption(new KisPressureScatterOptionWidget(), i18n("Scatter"));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureRotationOption(), i18n("-180°"), i18n("180°")), i18n("Rotation"));
-    addPaintOpOption(new KisAirbrushOption(false), i18n("Airbrush"));
+
     addPaintOpOption(new KisPaintActionTypeOption(), i18n("Painting Mode"));
+    addPaintOpOption(new KisAirbrushOption(false), i18n("Airbrush"));
+
 
     addPaintOpOption(new KisTextureOption(), i18n("Pattern"));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureTextureStrengthOption(), i18n("Weak"), i18n("Strong")), i18n("Strength"));

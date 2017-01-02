@@ -25,6 +25,8 @@
 #include <kis_paint_action_type_option.h>
 #include <kis_airbrush_option.h>
 #include <kis_compositeop_option.h>
+#include <kis_global_settings_option.h>
+#include <kis_performance_option.h>
 
 KisParticlePaintOpSettingsWidget:: KisParticlePaintOpSettingsWidget(QWidget* parent)
     : KisPaintOpSettingsWidget(parent)
@@ -34,8 +36,12 @@ KisParticlePaintOpSettingsWidget:: KisParticlePaintOpSettingsWidget(QWidget* par
 
     addPaintOpOption(m_particleOption, i18n("Brush size"));
     addPaintOpOption(new KisCompositeOpOption(true), i18n("Blending Mode"));
-    addPaintOpOption(new KisAirbrushOption(), i18n("Airbrush"));
+    addPaintOpOption(new KisgGlobalSettingsOption(true), i18n("Global Preferences"));
+    addPaintOpOption(new KisPerformanceOption(true), i18n("Performance"));
+
     addPaintOpOption(m_paintActionTypeOption, i18n("Painting Mode"));
+    addPaintOpOption(new KisAirbrushOption(), i18n("Airbrush"));
+
 }
 
 KisParticlePaintOpSettingsWidget::~ KisParticlePaintOpSettingsWidget()

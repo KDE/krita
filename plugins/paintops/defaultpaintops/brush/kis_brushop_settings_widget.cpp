@@ -33,13 +33,13 @@
 #include <kis_curve_option_widget.h>
 #include <kis_pressure_hsv_option.h>
 #include <kis_airbrush_option.h>
-#include <kis_performance_option.h>
 #include <kis_pressure_scatter_option_widget.h>
 #include <kis_pressure_softness_option.h>
 #include <kis_pressure_sharpness_option_widget.h>
 #include <kis_color_source_option_widget.h>
 #include <kis_compositeop_option.h>
 #include <kis_global_settings_option.h>
+#include <kis_performance_option.h>
 #include <kis_pressure_flow_opacity_option_widget.h>
 #include <kis_pressure_spacing_option_widget.h>
 #include "kis_texture_option.h"
@@ -74,6 +74,7 @@ KisBrushOpSettingsWidget::KisBrushOpSettingsWidget(QWidget* parent)
     addPaintOpOption(new KisPressureScatterOptionWidget(), i18n("Scatter"));
 
     // Colors options
+    addPaintOpOption(new KisPaintActionTypeOption(), i18n("Painting Mode"));
     addPaintOpOption(new KisColorSourceOptionWidget(), i18n("Source"));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureDarkenOption(), i18n("0.0"), i18n("1.0")), i18n("Darken"));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureMixOption(), i18n("Foreground"), i18n("Background")), i18n("Mix"));
@@ -81,7 +82,7 @@ KisBrushOpSettingsWidget::KisBrushOpSettingsWidget(QWidget* parent)
     addPaintOpOption(new KisCurveOptionWidget(KisPressureHSVOption::createSaturationOption(), KisPressureHSVOption::saturationMinLabel(), KisPressureHSVOption::saturationmaxLabel()), i18n("Saturation"));
     addPaintOpOption(new KisCurveOptionWidget(KisPressureHSVOption::createValueOption(), KisPressureHSVOption::valueMinLabel(), KisPressureHSVOption::valuemaxLabel()), i18n("Value"));
     addPaintOpOption(new KisAirbrushOption(false), i18n("Airbrush"));
-    addPaintOpOption(new KisPaintActionTypeOption(), i18n("Painting Mode"));
+
 
     addPaintOpOption(new KisTextureOption(), i18n("Pattern"));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureTextureStrengthOption(), i18n("Weak"), i18n("Strong")), i18n("Strength"));

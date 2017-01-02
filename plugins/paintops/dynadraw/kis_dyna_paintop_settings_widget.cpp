@@ -25,14 +25,20 @@
 #include <kis_airbrush_option.h>
 #include <kis_compositeop_option.h>
 #include <klocalizedstring.h>
+#include <kis_global_settings_option.h>
+#include <kis_performance_option.h>
 
 KisDynaPaintOpSettingsWidget:: KisDynaPaintOpSettingsWidget(QWidget* parent)
     : KisPaintOpSettingsWidget(parent)
 {
     addPaintOpOption(new KisDynaOpOption(), i18n("Brush size"));
     addPaintOpOption(new KisCompositeOpOption(true), i18n("Blending Mode"));
-    addPaintOpOption(new KisAirbrushOption(), i18n("Airbrush"));
+    addPaintOpOption(new KisgGlobalSettingsOption(true), i18n("Global Preferences"));
+    addPaintOpOption(new KisPerformanceOption(true), i18n("Performance"));
+
     addPaintOpOption(new KisPaintActionTypeOption(), i18n("Painting Mode"));
+    addPaintOpOption(new KisAirbrushOption(), i18n("Airbrush"));
+
 }
 
 KisDynaPaintOpSettingsWidget::~ KisDynaPaintOpSettingsWidget()

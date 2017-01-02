@@ -27,6 +27,8 @@
 #include <kis_paint_action_type_option.h>
 #include <kis_compositeop_option.h>
 #include <klocalizedstring.h>
+#include <kis_global_settings_option.h>
+#include <kis_performance_option.h>
 
 KisGridPaintOpSettingsWidget:: KisGridPaintOpSettingsWidget(QWidget* parent)
     : KisPaintOpSettingsWidget(parent)
@@ -38,6 +40,9 @@ KisGridPaintOpSettingsWidget:: KisGridPaintOpSettingsWidget(QWidget* parent)
     addPaintOpOption(m_gridOption, i18n("Brush size"));
     addPaintOpOption(m_gridShapeOption, i18n("Particle type"));
     addPaintOpOption(new KisCompositeOpOption(true), i18n("Blending Mode"));
+    addPaintOpOption(new KisgGlobalSettingsOption(true), i18n("Global Preferences"));
+    addPaintOpOption(new KisPerformanceOption(true), i18n("Performance"));
+
     addPaintOpOption(m_ColorOption, i18n("Color options"));
     addPaintOpOption(new KisPaintActionTypeOption(), i18n("Painting Mode"));
 }

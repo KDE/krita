@@ -28,13 +28,17 @@
 #include <kis_pressure_size_option.h>
 #include <kis_curve_option_widget.h>
 #include <kis_compositeop_option.h>
+#include <kis_global_settings_option.h>
+#include <kis_performance_option.h>
+
 
 KisExperimentPaintOpSettingsWidget:: KisExperimentPaintOpSettingsWidget(QWidget* parent)
     : KisPaintOpSettingsWidget(parent)
 {
     addPaintOpOption(new KisExperimentOpOption(), i18n("Experiment option"));
     addPaintOpOption(new KisCompositeOpOption(true), i18n("Blending Mode"));
-    //addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption(), i18n("Transparent"), i18n("Opaque")), i18n("Opacity"));
+    addPaintOpOption(new KisgGlobalSettingsOption(true), i18n("Global Preferences"));
+    addPaintOpOption(new KisPerformanceOption(true), i18n("Performance"));
 }
 
 KisExperimentPaintOpSettingsWidget::~ KisExperimentPaintOpSettingsWidget()

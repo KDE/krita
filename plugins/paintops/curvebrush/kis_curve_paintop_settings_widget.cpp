@@ -26,16 +26,21 @@
 #include <kis_pressure_opacity_option.h>
 #include <kis_linewidth_option.h>
 #include "kis_curves_opacity_option.h"
+#include <kis_global_settings_option.h>
+#include <kis_performance_option.h>
 
 KisCurvePaintOpSettingsWidget:: KisCurvePaintOpSettingsWidget(QWidget* parent)
     : KisPaintOpSettingsWidget(parent)
 {
     m_curveOption = new KisCurveOpOption();
     addPaintOpOption(m_curveOption, i18n("Value"));
+    addPaintOpOption(new KisCompositeOpOption(true), i18n("Blending Mode"));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption(), i18n("Transparent"), i18n("Opaque")), i18n("Opacity"));
+    addPaintOpOption(new KisgGlobalSettingsOption(true), i18n("Global Preferences"));
+    addPaintOpOption(new KisPerformanceOption(true), i18n("Performance"));
+
     addPaintOpOption(new KisCurveOptionWidget(new KisLineWidthOption(), i18n("0%"), i18n("100%")), i18n("Line width"));
     addPaintOpOption(new KisCurveOptionWidget(new KisCurvesOpacityOption(), i18n("0%"), i18n("100%")), i18n("Curves opacity"));
-    addPaintOpOption(new KisCompositeOpOption(true), i18n("Blending Mode"));
     addPaintOpOption(new KisPaintActionTypeOption(), i18n("Painting Mode"));
 }
 

@@ -43,9 +43,6 @@ KisPerformanceOption ::KisPerformanceOption (bool createConfigWidget):
         // instant preview checkbox
         connect(ui.instantPreviewCheckbox, SIGNAL(clicked(bool)), this, SLOT(instantPreviewChanged(bool)));
 
-
-
-
         ui.precisionFixedSpinbox->setEnabled(false);
 
         // signals for when values changes with precision options
@@ -88,7 +85,23 @@ void KisPerformanceOption::readOptionSetting(const KisPropertiesConfigurationSP 
     setAutoPrecisionEnabled(m_precisionOption.autoPrecisionEnabled());
 
     // read in LOD (Instant Preview) field in
-    config->getBool("KisLevelOfDetailOption/enableLevelOfDetail",true);
+    // some engines do not support LOD. remove instant preview option and disable it if so.
+    QString paintOpEngine = config->getString("paintop");
+    qDebug() << "paintOp Engine: " << paintOpEngine;
+
+    if (paintOpEngine == "dynabrush" || paintOpEngine == "deformbrush" || paintOpEngine == "particlebrush" ) {
+
+        ui.instantPreviewCheckbox->setChecked(false);
+        ui.instantPreviewCheckbox->setEnabled(false);
+        ui.lodInstructions->setText(i18n("Instant Preview is not available for this Engine"));
+    }
+    else {
+        config->getBool("KisLevelOfDetailOption/enableLevelOfDetail",true);
+        ui.instantPreviewCheckbox->setEnabled(true);
+        ui.lodInstructions->setText(QString(""));
+    }
+
+
 }
 
 void KisPerformanceOption::writeOptionSetting(KisPropertiesConfigurationSP config) const

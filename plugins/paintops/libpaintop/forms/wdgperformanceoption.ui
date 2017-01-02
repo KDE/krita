@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>338</width>
-    <height>309</height>
+    <height>314</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -15,6 +15,13 @@
     <widget class="QCheckBox" name="instantPreviewCheckbox">
      <property name="text">
       <string>Instant Preview</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="lodInstructions">
+     <property name="text">
+      <string>Instant Preview Message</string>
      </property>
     </widget>
    </item>

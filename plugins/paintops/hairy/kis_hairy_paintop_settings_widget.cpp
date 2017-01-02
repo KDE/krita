@@ -29,17 +29,22 @@
 #include <kis_pressure_opacity_option.h>
 #include <kis_compositeop_option.h>
 #include <kis_brush_option_widget.h>
+#include <kis_global_settings_option.h>
+#include <kis_performance_option.h>
 
 KisHairyPaintOpSettingsWidget:: KisHairyPaintOpSettingsWidget(QWidget* parent)
     : KisBrushBasedPaintopOptionWidget(parent)
 {
     addPaintOpOption(new KisHairyBristleOption(), i18n("Bristle options"));
-    addPaintOpOption(new KisHairyInkOption(), i18n("Ink depletion"));
     addPaintOpOption(new KisCompositeOpOption(true), i18n("Blending Mode"));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption(), i18n("Transparent"), i18n("Opaque")), i18n("Opacity"));
+    addPaintOpOption(new KisgGlobalSettingsOption(true), i18n("Global Preferences"));
+    addPaintOpOption(new KisPerformanceOption(true), i18n("Performance"));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption(), i18n("0%"), i18n("100%")), i18n("Size"));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureRotationOption(), i18n("-180°"), i18n("180°")), i18n("Rotation"));
+
     addPaintOpOption(new KisPaintActionTypeOption(), i18n("Painting Mode"));
+    addPaintOpOption(new KisHairyInkOption(), i18n("Ink depletion"));
 
 
     KisBrushOptionWidget *brushWidget = brushOptionWidget();

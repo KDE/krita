@@ -35,21 +35,25 @@
 #include "kis_density_option.h"
 #include "kis_linewidth_option.h"
 #include "kis_offset_scale_option.h"
+#include <kis_global_settings_option.h>
+#include <kis_performance_option.h>
 
 KisSketchPaintOpSettingsWidget::KisSketchPaintOpSettingsWidget(QWidget* parent)
     : KisBrushBasedPaintopOptionWidget(parent)
 {
     m_sketchOption =  new KisSketchOpOption();
 
-    addPaintOpOption(m_sketchOption, i18n("Brush size"));
+    addPaintOpOption(m_sketchOption, i18n("Brush Size"));
     addPaintOpOption(new KisCompositeOpOption(true), i18n("Blending Mode"));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption(), i18n("Transparent"), i18n("Opaque")), i18n("Opacity"));
+    addPaintOpOption(new KisgGlobalSettingsOption(true), i18n("Global Preferences"));
+    addPaintOpOption(new KisPerformanceOption(true), i18n("Performance"));
+
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption(), i18n("0%"), i18n("100%")), i18n("Size"));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureRotationOption(), i18n("-180°"), i18n("180°")), i18n("Rotation"));
     addPaintOpOption(new KisCurveOptionWidget(new KisLineWidthOption()  , i18n("0%"), i18n("100%")), i18n("Line width"));
     addPaintOpOption(new KisCurveOptionWidget(new KisOffsetScaleOption(), i18n("0%"), i18n("100%")), i18n("Offset scale"));
     addPaintOpOption(new KisCurveOptionWidget(new KisDensityOption(), i18n("0%"), i18n("100%")), i18n("Density"));
-    addPaintOpOption(new KisAirbrushOption(false), i18n("Airbrush"));
 
     m_paintActionType = new KisPaintActionTypeOption();
     KisPropertiesConfigurationSP defaultSetting = new KisPropertiesConfiguration();
@@ -57,6 +61,7 @@ KisSketchPaintOpSettingsWidget::KisSketchPaintOpSettingsWidget(QWidget* parent)
     m_paintActionType->readOptionSetting(defaultSetting);
 
     addPaintOpOption(m_paintActionType, i18n("Painting Mode"));
+    addPaintOpOption(new KisAirbrushOption(false), i18n("Airbrush"));
 
     KisPropertiesConfigurationSP reconfigurationCourier = configuration();
     QDomDocument xMLAnalyzer;

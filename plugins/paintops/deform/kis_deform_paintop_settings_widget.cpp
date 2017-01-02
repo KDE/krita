@@ -28,6 +28,9 @@
 #include <kis_curve_option_widget.h>
 #include <kis_airbrush_option.h>
 #include <kis_compositeop_option.h>
+#include <kis_global_settings_option.h>
+#include <kis_performance_option.h>
+
 
 KisDeformPaintOpSettingsWidget::KisDeformPaintOpSettingsWidget(QWidget* parent)
     : KisPaintOpSettingsWidget(parent)
@@ -37,11 +40,14 @@ KisDeformPaintOpSettingsWidget::KisDeformPaintOpSettingsWidget(QWidget* parent)
     m_brushSizeOption->setDiameter(200);
 
     addPaintOpOption(m_brushSizeOption, i18n("Brush size"));
-    addPaintOpOption(m_deformOption, i18n("Deform Options"));
     addPaintOpOption(new KisCompositeOpOption(true), i18n("Blending Mode"));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption(), i18n("Transparent"), i18n("Opaque")), i18n("Opacity"));
+    addPaintOpOption(new KisgGlobalSettingsOption(true), i18n("Global Preferences"));
+    addPaintOpOption(new KisPerformanceOption(true), i18n("Performance"));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption(), i18n("0%"), i18n("100%")), i18n("Size"));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureRotationOption(), i18n("-180°"), i18n("180°")), i18n("Rotation"));
+
+    addPaintOpOption(m_deformOption, i18n("Deform Options"));
     addPaintOpOption(new KisAirbrushOption(), i18n("Airbrush"));
 }
 

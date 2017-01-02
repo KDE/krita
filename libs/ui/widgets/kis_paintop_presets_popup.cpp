@@ -311,6 +311,9 @@ void KisPaintOpPresetsPopup::setPaintOpSettingsWidget(QWidget * widget)
 
         widget->setFont(m_d->smallFont);
         widget->setMaximumWidth(650); // TODO: try to reduce this more once the precision area is in the performance section
+        widget->setMinimumHeight(450); // TODO: to get this smaller, we probably need to make the settings area scrollable
+        widget->setMaximumHeight(451);
+
 
         m_d->layout->addWidget(widget);
 

@@ -58,8 +58,7 @@ public:
 
     void setPaintOpList(const QList<KisPaintOpFactory*>& list);
 
-    void setCurrentPaintOp(const QString & paintOpId);
-    QString currentPaintOp();
+    void setCurrentPaintOpId(const QString & paintOpId);
 
     /// returns the internal ID for the paint op (brush engine)
     QString currentPaintOpId();
@@ -108,7 +107,7 @@ private Q_SLOTS:
     void slotResourceChanged(int key, const QVariant &value);
     void slotLodAvailabilityChanged(bool value);
     void slotSwitchShowEditor(bool visible);
-    void slotPaintOpChanged(int index);
+    void slotUpdatePaintOpFilter();
     void slotSwitchShowPresets(bool visible);
 
 

@@ -627,7 +627,8 @@ void KisPaintopBox::setCurrentPaintop(KisPaintOpPresetSP preset)
     QString pixFilename = KoResourcePaths::findResource("kis_images", paintOp->pixmap());
 
     m_brushEditorPopupButton->setIcon(QIcon(pixFilename));
-    m_presetsPopup->setCurrentPaintOp(paintop.id());
+    m_presetsPopup->setCurrentPaintOpId(paintop.id());
+
 
     ////qDebug() << "\tsetting the new preset for" << m_currTabletToolID.uniqueID << "to" << preset->name();
     m_paintOpPresetMap[m_resourceProvider->currentPreset()->paintOp()] = preset;
@@ -635,7 +636,7 @@ void KisPaintopBox::setCurrentPaintop(KisPaintOpPresetSP preset)
     m_tabletToolMap[m_currTabletToolID].paintOpID = preset->paintOp();
 
 
-    if (m_presetsPopup->currentPaintOp() != paintop.id()) {
+    if (m_presetsPopup->currentPaintOpId() != paintop.id()) {
         // Must change the paintop as the current one is not supported
         // by the new colorspace.
         dbgKrita << "current paintop " << paintop.name() << " was not set, not supported by colorspace";

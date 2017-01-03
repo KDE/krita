@@ -29,7 +29,7 @@
 
 
 KisGenerator::KisGenerator(const KoID& _id, const KoID & category, const QString & entry)
-        : KisBaseProcessor(_id, category, entry)
+    : KisBaseProcessor(_id, category, entry)
 {
     init(id() + "_generator_bookmarks");
 }
@@ -44,11 +44,6 @@ void KisGenerator::generate(KisProcessingInformation dst,
                            ) const
 {
     generate(dst, size, config, 0);
-}
-
-const KoColorSpace * KisGenerator::colorSpace()
-{
-    return 0;
 }
 
 QRect KisGenerator::generatedRect(QRect _imageArea, const KisFilterConfigurationSP) const

@@ -774,6 +774,7 @@ void KisPaintopBox::slotCanvasResourceChanged(int key, const QVariant &value)
          * Update currently selected preset in both the popup widgets
          */
         m_presetsChooserPopup->canvasResourceChanged(preset);
+
         m_presetsPopup->currentPresetChanged(preset);
 
         if (key == KisCanvasResourceProvider::CurrentCompositeOp) {

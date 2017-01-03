@@ -218,13 +218,13 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
     connect(m_d->uiWdgPaintOpPresetSettings.txtPreset, SIGNAL(textChanged(QString)),
             SLOT(slotWatchPresetNameLineEdit()));
 
-    connect(m_d->uiWdgPaintOpPresetSettings.brushEgineComboBox, SIGNAL(activated(QString)),
-            this, SIGNAL(paintopActivated(QString)));
-
 
     // preset widget connections
     connect(m_d->uiWdgPaintOpPresetSettings.presetWidget->smallPresetChooser, SIGNAL(resourceSelected(KoResource*)),
             this, SIGNAL(signalResourceSelected(KoResource*)));
+
+    connect(m_d->uiWdgPaintOpPresetSettings.presetWidget->smallPresetChooser, SIGNAL(resourceClicked(KoResource*)),
+            this, SIGNAL(paintopActivated(currentPaintOpId())));
 
     connect(m_d->uiWdgPaintOpPresetSettings.bnSave, SIGNAL(clicked()),
             m_d->uiWdgPaintOpPresetSettings.presetWidget->smallPresetChooser, SLOT(updateViewSettings()));
@@ -548,8 +548,6 @@ void KisPaintOpPresetsPopup::currentPresetChanged(KisPaintOpPresetSP preset)
 {     
      m_d->uiWdgPaintOpPresetSettings.presetWidget->smallPresetChooser->setCurrentResource(preset.data());
      setCurrentPaintOpId(preset->paintOp().id());
-
-     emit paintopActivated(currentPaintOpId()); // tell the toolbar to change the active icon
 }
 
 void KisPaintOpPresetsPopup::updateThemedIcons()

@@ -47,8 +47,8 @@ private:
 
 KisDlgImportImageSequence::KisDlgImportImageSequence(KisMainWindow *mainWindow, KisDocument *document) :
     KoDialog(mainWindow),
-    mainWindow(mainWindow),
-    document(document)
+    m_mainWindow(mainWindow),
+    m_document(document)
 {
     setButtons(Ok | Cancel);
     setDefaultButton(Ok);
@@ -103,7 +103,7 @@ void KisDlgImportImageSequence::slotAddFiles()
 
     if (!urls.isEmpty()) {
         Q_FOREACH(QString url, urls) {
-            new ListItem(url, ui.lstFiles, &collator);
+            new ListItem(url, ui.lstFiles, &m_collator);
         }
 
         sortFileList();
@@ -137,7 +137,7 @@ void KisDlgImportImageSequence::slotRemoveFiles()
 
 void KisDlgImportImageSequence::slotSkipChanged(int)
 {
-    int documentFps = document->image()->animationInterface()->framerate();
+    int documentFps = m_document->image()->animationInterface()->framerate();
     float sourceFps = 1.0f * documentFps / ui.spinStep->value();
 
     ui.lblFramerate->setText(i18n("Source fps: %1", sourceFps));
@@ -153,6 +153,6 @@ void KisDlgImportImageSequence::sortFileList()
     int order = ui.cmbOrder->currentData().toInt();
     bool numeric = ui.cmbSortMode->currentData().toInt() == Numerical;
 
-    collator.setNumericMode(numeric);
+    m_collator.setNumericMode(numeric);
     ui.lstFiles->sortItems((order == Ascending) ? Qt::AscendingOrder : Qt::DescendingOrder);
 }

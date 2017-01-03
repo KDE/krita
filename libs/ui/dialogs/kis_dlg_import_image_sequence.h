@@ -32,7 +32,7 @@ class KisDlgImportImageSequence : public KoDialog
     Q_OBJECT
 
 public:
-    KisDlgImportImageSequence(KisMainWindow *mainWindow, KisDocument *document);
+    KisDlgImportImageSequence(KisMainWindow *m_mainWindow, KisDocument *m_document);
 
     QStringList showOpenFileDialog();
     QStringList files();
@@ -50,8 +50,8 @@ private:
 
 private:
     Ui_WdgImportImageSequence ui;
-    KisMainWindow *mainWindow;
-    KisDocument *document;
+    KisMainWindow *m_mainWindow;
+    KisDocument *m_document;
 
     enum OrderingOptions {
         Ascending = 1,
@@ -61,7 +61,7 @@ private:
     };
 
     class ListItem;
-    QCollator collator;
+    QCollator m_collator;
 };
 
 #endif // KISDLGIMPORTIMAGESEQUENCE_H

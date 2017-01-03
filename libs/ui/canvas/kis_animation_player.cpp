@@ -45,6 +45,10 @@
 #include "KisSyncedAudioPlayback.h"
 #include "kis_signal_compressor_with_param.h"
 
+#include "KisViewManager.h"
+#include "kis_icon_utils.h"
+
+
 using namespace boost::accumulators;
 typedef accumulator_set<qreal, stats<tag::rolling_mean> > FpsAccumulator;
 
@@ -202,6 +206,8 @@ void KisAnimationPlayer::slotAudioChannelChanged()
     if (info.exists() && !interface->isAudioMuted()) {
         m_d->syncedAudio.reset(new KisSyncedAudioPlayback(info.absoluteFilePath()));
         m_d->syncedAudio->setVolume(interface->audioVolume());
+        connect(m_d->syncedAudio.data(), SIGNAL(error(const QString &, const QString &)), SLOT(slotOnAudioError(const QString &, const QString &)));
+
     } else {
         m_d->syncedAudio.reset();
     }
@@ -213,6 +219,12 @@ void KisAnimationPlayer::slotAudioVolumeChanged()
     if (m_d->syncedAudio) {
         m_d->syncedAudio->setVolume(interface->audioVolume());
     }
+}
+
+void KisAnimationPlayer::slotOnAudioError(const QString &fileName, const QString &message)
+{
+    QString errorMessage(i18nc("floating on-canvas message", "Cannot open audio: \"%1\"\nError: %2", fileName, message));
+    m_d->canvas->viewManager()->showFloatingMessage(errorMessage, KisIconUtils::loadIcon("dialog-warning"));
 }
 
 void KisAnimationPlayer::connectCancelSignals()

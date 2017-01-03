@@ -23,6 +23,12 @@ public Q_SLOTS:
     void play(qint64 startPosition);
     void stop();
 
+Q_SIGNALS:
+    void error(const QString &filename, const QString &message);
+
+private Q_SLOTS:
+    void slotOnError();
+
 private:
     struct Private;
     const QScopedPointer<Private> m_d;

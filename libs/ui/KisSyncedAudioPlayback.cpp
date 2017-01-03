@@ -56,6 +56,8 @@ KisSyncedAudioPlayback::KisSyncedAudioPlayback(const QString &fileName)
 
     m_d->player.setMedia(QUrl::fromLocalFile(fileInfo.absoluteFilePath()));
     m_d->player.setVolume(50);
+
+    connect(&m_d->player, SIGNAL(error(QMediaPlayer::Error)), SLOT(slotOnError()));
 }
 
 KisSyncedAudioPlayback::~KisSyncedAudioPlayback()
@@ -109,4 +111,9 @@ void KisSyncedAudioPlayback::play(qint64 startPosition)
 void KisSyncedAudioPlayback::stop()
 {
     m_d->player.stop();
+}
+
+void KisSyncedAudioPlayback::slotOnError()
+{
+    emit error(m_d->player.media().canonicalUrl().toLocalFile(), m_d->player.errorString());
 }

@@ -49,7 +49,7 @@ private:
     void sortFileList();
 
 private:
-    Ui_WdgImportImageSequence ui;
+    Ui_WdgImportImageSequence m_ui;
     KisMainWindow *m_mainWindow;
     KisDocument *m_document;
 

@@ -918,9 +918,19 @@ void KisConfig::setOutlineSizeMinimum(qreal outlineSizeMinimum) const
     m_cfg.writeEntry("OutlineSizeMinimum", outlineSizeMinimum);
 }
 
+qreal KisConfig::selectionViewSizeMinimum(bool defaultValue) const
+{
+    return (defaultValue ? 5.0 : m_cfg.readEntry("SelectionViewSizeMinimum", 5.0));
+}
+
+void KisConfig::setSelectionViewSizeMinimum(qreal outlineSizeMinimum) const
+{
+    m_cfg.writeEntry("SelectionViewSizeMinimum", outlineSizeMinimum);
+}
+
 int KisConfig::autoSaveInterval(bool defaultValue)  const
 {
-    return (defaultValue ? 300 : m_cfg.readEntry("AutoSaveInterval", 300));
+    return (defaultValue ? 15 * 60 : m_cfg.readEntry("AutoSaveInterval", 15 * 60));
 }
 
 void KisConfig::setAutoSaveInterval(int seconds)  const

@@ -900,10 +900,10 @@ void KisLayerBox::watchOpacityChannel(KisKeyframeChannel *channel)
 
     m_opacityChannel = channel;
     if (m_opacityChannel) {
-        connect(m_opacityChannel, &KisKeyframeChannel::sigKeyframeAdded, this, &KisLayerBox::slotOpacityKeyframeChanged);
-        connect(m_opacityChannel, &KisKeyframeChannel::sigKeyframeRemoved, this, &KisLayerBox::slotOpacityKeyframeChanged);
-        connect(m_opacityChannel, &KisKeyframeChannel::sigKeyframeMoved, this, &KisLayerBox::slotOpacityKeyframeMoved);
-        connect(m_opacityChannel, &KisKeyframeChannel::sigKeyframeChanged, this, &KisLayerBox::slotOpacityKeyframeChanged);
+        connect(m_opacityChannel, SIGNAL(sigKeyframeAdded(KisKeyframeSP)), this, SLOT(slotOpacityKeyframeChanged(KisKeyframeSP)));
+        connect(m_opacityChannel, SIGNAL(sigKeyframeRemoved(KisKeyframeSP)), this, SLOT(slotOpacityKeyframeChanged(KisKeyframeSP)));
+        connect(m_opacityChannel, SIGNAL(sigKeyframeMoved(KisKeyframeSP)), this, SLOT(slotOpacityKeyframeMoved(KisKeyframeSP)));
+        connect(m_opacityChannel, SIGNAL(sigKeyframeChanged(KisKeyframeSP)), this, SLOT(slotOpacityKeyframeChanged(KisKeyframeSP)));
     }
 }
 

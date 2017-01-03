@@ -292,6 +292,9 @@
          <property name="toolTip">
           <string>Ratio</string>
          </property>
+         <property name="singleStep">
+          <double>0.100000000000000</double>
+         </property>
          <property name="precision" stdset="0">
           <number>2</number>
          </property>

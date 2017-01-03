@@ -285,7 +285,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="edit_redo">
-      <icon>_edit-redo</icon>
+      <icon>edit-redo</icon>
       <text>Redo</text>
       <whatsThis></whatsThis>
       <toolTip>Redo last undone action</toolTip>
@@ -527,7 +527,7 @@
       <activationFlags>0</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>Ctrl+Shift+F</shortcut>
-      <isCheckable>false</isCheckable>
+      <isCheckable>true</isCheckable>
       <statusTip></statusTip>
     </Action>
     <Action name="wrap_around_mode">

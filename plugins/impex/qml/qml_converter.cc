@@ -35,7 +35,7 @@ QMLConverter::~QMLConverter()
 {
 }
 
-KisImageBuilder_Result QMLConverter::buildFile(const QString &filename, QIODevice *io, KisImageSP image)
+KisImageBuilder_Result QMLConverter::buildFile(const QString &filename, const QString &realFilename, QIODevice *io, KisImageSP image)
 {
     QTextStream out(io);
     out.setCodec("UTF-8");
@@ -46,9 +46,10 @@ KisImageBuilder_Result QMLConverter::buildFile(const QString &filename, QIODevic
     out << "\n";
 
     QFileInfo info(filename);
+    QFileInfo infoRealFile(realFilename);
     KisNodeSP node = image->rootLayer()->firstChild();
-    QString imageDir = info.baseName() + "_images";
-    QString imagePath = info.absolutePath() + '/' + imageDir;
+    QString imageDir = infoRealFile.baseName() + "_images";
+    QString imagePath = infoRealFile.absolutePath() + '/' + imageDir;
     if (node) {
         QDir dir;
         dir.mkpath(imagePath);

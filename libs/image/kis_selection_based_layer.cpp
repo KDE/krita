@@ -189,18 +189,17 @@ QRect KisSelectionBasedLayer::needRect(const QRect &rect, PositionToFilthy pos) 
     return rect;
 }
 
-void KisSelectionBasedLayer::resetCache(const KoColorSpace *colorSpace)
+void KisSelectionBasedLayer::resetCache()
 {
-    if (!colorSpace)
-        colorSpace = image()->colorSpace();
+    if (!image()) {
+        return;
+    }
 
-    if (!m_d->paintDevice ||
-            *m_d->paintDevice->colorSpace() != *colorSpace) {
-
-        m_d->paintDevice = new KisPaintDevice(this, colorSpace, new KisDefaultBounds(image()));
+    if (!m_d->paintDevice || *m_d->paintDevice->colorSpace() != *image()->colorSpace()) {
+        m_d->paintDevice = KisPaintDeviceSP(new KisPaintDevice(KisNodeWSP(this), image()->colorSpace(), new KisDefaultBounds(image())));
     } else {
         m_d->paintDevice->clear();
-    }
+  }
 }
 
 KisSelectionSP KisSelectionBasedLayer::internalSelection() const

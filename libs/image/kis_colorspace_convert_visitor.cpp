@@ -28,6 +28,8 @@
 #include "filter/kis_filter_configuration.h"
 #include "filter/kis_filter_registry.h"
 #include "filter/kis_filter.h"
+#include "kis_generator.h"
+#include "kis_generator_registry.h"
 #include "generator/kis_generator_layer.h"
 #include "kis_time_range.h"
 #include <kundo2command.h>
@@ -71,7 +73,8 @@ bool KisColorSpaceConvertVisitor::visit(KisPaintLayer *layer)
 
 bool KisColorSpaceConvertVisitor::visit(KisGeneratorLayer *layer)
 {
-    return convertPaintDevice(layer);
+    layer->resetCache();
+    return true;
 }
 
 bool KisColorSpaceConvertVisitor::visit(KisAdjustmentLayer * layer)
@@ -87,12 +90,6 @@ bool KisColorSpaceConvertVisitor::visit(KisAdjustmentLayer * layer)
     }
 
     layer->resetCache();
-    return true;
-}
-
-bool KisColorSpaceConvertVisitor::visit(KisExternalLayer *layer)
-{
-    Q_UNUSED(layer)
     return true;
 }
 

@@ -73,7 +73,7 @@ public:
      * resets cached projection of lower layer to a new device
      * @return void
      */
-    void resetCache(const KoColorSpace *colorSpace = 0);
+    void resetCache();
 
     /**
      * for KisLayer::setDirty(const QRegion&)

@@ -73,13 +73,6 @@ public:
                          ) const;
 
     /**
-     * A generator may be specialized for working in a certain colorspace.
-     * If so, this function returns in instance of that colorspace, else
-     * it return 0.
-     */
-    virtual const KoColorSpace * colorSpace();
-
-    /**
      * @param _imageArea the rectangle of the image
      * @return the rectangle that is affected by this generator, if the generator
      *         is supposed to affect all pixels, then the function should return

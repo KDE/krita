@@ -71,7 +71,7 @@ public:
     }
     virtual QString name() const
     {
-        return i18n("RGB (16-bit integer/channel)");
+        return QString("%1 (%2)").arg(RGBAColorModelID.name()).arg(Integer16BitsColorDepthID.name());
     }
 
     virtual bool userVisible() const

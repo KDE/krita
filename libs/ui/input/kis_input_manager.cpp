@@ -561,12 +561,13 @@ void KisInputManager::slotToolChanged()
     if (tool && tool->isInTextMode()) {
         d->forwardAllEventsToTool = true;
         d->matcher.suppressAllActions(true);
+        d->maskSyntheticEvents(tool->maskSyntheticEvents());
     } else {
         d->forwardAllEventsToTool = false;
         d->matcher.suppressAllActions(false);
     }
 
-    d->maskSyntheticEvents(tool->maskSyntheticEvents());
+
 }
 
 QPointF KisInputManager::widgetToDocument(const QPointF& position)

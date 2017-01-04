@@ -55,6 +55,7 @@
 #include "kis_time_range.h"
 #include "kis_color_label_selector_widget.h"
 #include "kis_slider_spin_box.h"
+#include <KisImportExportManager.h>
 
 #include <KoFileDialog.h>
 #include <QDesktopServices>
@@ -397,8 +398,6 @@ void TimelineFramesView::slotSelectAudioChannelFile()
 {
     if (!m_d->model) return;
 
-    KoFileDialog dialog(this, KoFileDialog::ImportFiles, "ImportAudio");
-
     QString defaultDir = QDesktopServices::storageLocation(QDesktopServices::MusicLocation);
 
     const QString currentFile = m_d->model->audioChannelFileName();
@@ -407,19 +406,7 @@ void TimelineFramesView::slotSelectAudioChannelFile()
         defaultDir = baseDir.absolutePath();
     }
 
-    dialog.setDefaultDir(defaultDir);
-
-    QStringList mimeTypes;
-    mimeTypes << "audio/mpeg";
-    mimeTypes << "audio/ogg";
-    mimeTypes << "audio/vorbis";
-    mimeTypes << "audio/vnd.wave";
-    mimeTypes << "audio/flac";
-
-    dialog.setMimeTypeFilters(mimeTypes);
-    dialog.setCaption(i18nc("@titile:window", "Open Audio"));
-
-    const QString result = dialog.filename();
+    const QString result = KisImportExportManager::askForAudioFileName(defaultDir, this);
     const QFileInfo info(result);
 
     if (info.exists()) {

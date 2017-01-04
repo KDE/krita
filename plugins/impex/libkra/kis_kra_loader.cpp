@@ -797,9 +797,9 @@ KisNodeSP KisKraLoader::loadFileLayer(const KoXmlElement& element, KisImageSP im
         qApp->setOverrideCursor(Qt::ArrowCursor);
         QString msg = i18nc(
             "@info",
-            "The file associated to a file layer with the name \"%1\" is not found.<nl/><nl/>"
-            "Expected path:<nl/>"
-            "%2<nl/><nl/>"
+            "The file associated to a file layer with the name \"%1\" is not found.\n\n"
+            "Expected path:\n>"
+            "%2\n\n"
             "Do you want to locate it manually?", name, fullPath);
 
         int result = QMessageBox::warning(0, i18nc("@title:window", "File not found"), msg, QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
@@ -1122,8 +1122,24 @@ void KisKraLoader::loadAudio(const KoXmlElement& elem, KisImageSP image)
         QFileInfo info(fileName);
 
         if (!info.exists()) {
-            m_d->errorMessages << i18n("Audio channel file %1 doesn't exist!", fileName);
-        } else {
+            qApp->setOverrideCursor(Qt::ArrowCursor);
+            QString msg = i18nc(
+                "@info",
+                "Audio channel file \"%1\" doesn't exist!\n\n"
+                "Expected path:\n"
+                "%2\n\n"
+                "Do you want to locate it manually?", info.fileName(), info.absoluteFilePath());
+
+            int result = QMessageBox::warning(0, i18nc("@title:window", "File not found"), msg, QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+
+            if (result == QMessageBox::Yes) {
+                info.setFile(KisImportExportManager::askForAudioFileName(info.absolutePath(), 0));
+            }
+
+            qApp->restoreOverrideCursor();
+        }
+
+        if (info.exists()) {
             image->animationInterface()->setAudioChannelFileName(info.absoluteFilePath());
         }
     }

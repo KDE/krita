@@ -72,6 +72,11 @@ DlgAnimationRenderer::DlgAnimationRenderer(KisDocument *doc, QWidget *parent)
     m_page->intEnd->setMaximum(doc->image()->animationInterface()->fullClipRange().end());
     m_page->intEnd->setValue(doc->image()->animationInterface()->playbackRange().end());
 
+    QFileInfo audioFileInfo(doc->image()->animationInterface()->audioChannelFileName());
+    const bool hasAudio = audioFileInfo.exists();
+    m_page->chkIncludeAudio->setEnabled(hasAudio);
+    m_page->chkIncludeAudio->setChecked(hasAudio && !doc->image()->animationInterface()->isAudioMuted());
+
     QStringList mimes = KisImportExportManager::mimeFilter(KisImportExportManager::Export);
     mimes.sort();
     Q_FOREACH(const QString &mime, mimes) {
@@ -251,6 +256,7 @@ KisPropertiesConfigurationSP DlgAnimationRenderer::getEncoderConfiguration() con
     cfg->setProperty("first_frame", m_page->intStart->value());
     cfg->setProperty("last_frame", m_page->intEnd->value());
     cfg->setProperty("sequence_start", m_page->sequenceStart->value());
+    cfg->setProperty("include_audio", m_page->chkIncludeAudio->isChecked());
 
     return cfg;
 }

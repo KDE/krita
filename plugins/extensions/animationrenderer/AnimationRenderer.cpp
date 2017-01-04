@@ -103,40 +103,44 @@ void AnimaterionRenderer::slotRenderAnimation()
 
         KisAnimationExportSaver exporter(doc, baseFileName, sequenceConfig->getInt("first_frame"), sequenceConfig->getInt("last_frame"), sequenceConfig->getInt("sequence_start"));
         bool success = exporter.exportAnimation(dlgAnimationRenderer.getFrameExportConfiguration());
-        Q_ASSERT(success);
-        QString savedFilesMask = exporter.savedFilesMask();
 
-        KisPropertiesConfigurationSP videoConfig = dlgAnimationRenderer.getVideoConfiguration();
-        if (videoConfig) {
-            kisConfig.setExportConfiguration("ANIMATION_RENDERER", videoConfig);
+        // the folder could have been read-only or something else could happen
+        if (success) {
 
-            KisPropertiesConfigurationSP encoderConfig = dlgAnimationRenderer.getEncoderConfiguration();
-            if (encoderConfig) {
-                kisConfig.setExportConfiguration("FFMPEG_CONFIG", encoderConfig);
-                encoderConfig->setProperty("savedFilesMask", savedFilesMask);
-            }
+            QString savedFilesMask = exporter.savedFilesMask();
 
-            QSharedPointer<KisImportExportFilter> encoder = dlgAnimationRenderer.encoderFilter();
-            encoder->setMimeType(mimetype.toLatin1());
-            QFile fi(videoConfig->getString("filename"));
-            KisImportExportFilter::ConversionStatus res;
-            if (!fi.open(QIODevice::WriteOnly)) {
-                qWarning() << "Could not open" << fi.fileName() << "for writing!";
-                res = KisImportExportFilter::CreationError;
-            }
-            else {
-                encoder->setFilename(fi.fileName());
-                res = encoder->convert(doc, &fi, encoderConfig);
-                fi.close();
-            }
-            if (res != KisImportExportFilter::OK) {
-                QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Could not render animation:\n%1", doc->errorMessage()));
-            }
-            if (videoConfig->getBool("delete_sequence", false)) {
-                QDir d(sequenceConfig->getString("directory"));
-                QStringList sequenceFiles = d.entryList(QStringList() << sequenceConfig->getString("basename") + "*." + extension, QDir::Files);
-                Q_FOREACH(const QString &f, sequenceFiles) {
-                    d.remove(f);
+            KisPropertiesConfigurationSP videoConfig = dlgAnimationRenderer.getVideoConfiguration();
+            if (videoConfig) {
+                kisConfig.setExportConfiguration("ANIMATION_RENDERER", videoConfig);
+
+                KisPropertiesConfigurationSP encoderConfig = dlgAnimationRenderer.getEncoderConfiguration();
+                if (encoderConfig) {
+                    kisConfig.setExportConfiguration("FFMPEG_CONFIG", encoderConfig);
+                    encoderConfig->setProperty("savedFilesMask", savedFilesMask);
+                }
+
+                QSharedPointer<KisImportExportFilter> encoder = dlgAnimationRenderer.encoderFilter();
+                encoder->setMimeType(mimetype.toLatin1());
+                QFile fi(videoConfig->getString("filename"));
+                KisImportExportFilter::ConversionStatus res;
+                if (!fi.open(QIODevice::WriteOnly)) {
+                    qWarning() << "Could not open" << fi.fileName() << "for writing!";
+                    res = KisImportExportFilter::CreationError;
+                }
+                else {
+                    encoder->setFilename(fi.fileName());
+                    res = encoder->convert(doc, &fi, encoderConfig);
+                    fi.close();
+                }
+                if (res != KisImportExportFilter::OK) {
+                    QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Could not render animation:\n%1", doc->errorMessage()));
+                }
+                if (videoConfig->getBool("delete_sequence", false)) {
+                    QDir d(sequenceConfig->getString("directory"));
+                    QStringList sequenceFiles = d.entryList(QStringList() << sequenceConfig->getString("basename") + "*." + extension, QDir::Files);
+                    Q_FOREACH(const QString &f, sequenceFiles) {
+                        d.remove(f);
+                    }
                 }
             }
         }

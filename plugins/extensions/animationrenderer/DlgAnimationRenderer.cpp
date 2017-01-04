@@ -227,6 +227,9 @@ KisPropertiesConfigurationSP DlgAnimationRenderer::getVideoConfiguration() const
     }
     cfg->setProperty("filename", filename);
     cfg->setProperty("delete_sequence", m_page->chkDeleteSequence->isChecked());
+    cfg->setProperty("first_frame", m_page->intStart->value());
+    cfg->setProperty("last_frame", m_page->intEnd->value());
+    cfg->setProperty("sequence_start", m_page->sequenceStart->value());
     return cfg;
 }
 

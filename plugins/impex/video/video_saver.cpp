@@ -43,6 +43,7 @@
 #include <QEventLoop>
 #include <QTemporaryFile>
 #include <QTemporaryDir>
+#include <QTime>
 
 #include "KisPart.h"
 
@@ -221,7 +222,7 @@ KisImageBuilder_Result VideoSaver::encode(const QString &filename, KisProperties
 
     KisImageAnimationInterface *animation = m_image->animationInterface();
     const KisTimeRange fullRange = animation->fullClipRange();
-    const KisTimeRange clipRange(configuration->getInt("firstframe", fullRange.start()), configuration->getInt("lastFrame"), fullRange.end());
+    const KisTimeRange clipRange(configuration->getInt("first_frame", fullRange.start()), configuration->getInt("last_frame", fullRange.end()));
     const int frameRate = animation->framerate();
 
     const QDir framesDir(configuration->getString("directory"));
@@ -283,8 +284,24 @@ KisImageBuilder_Result VideoSaver::encode(const QString &filename, KisProperties
     } else {
         QStringList args;
         args << "-r" << QString::number(frameRate)
-             << "-i" << savedFilesMask
-             << additionalOptionsList
+             << "-i" << savedFilesMask;
+
+        QFileInfo audioFileInfo = animation->audioChannelFileName();
+        if (!animation->isAudioMuted() && audioFileInfo.exists()) {
+            const int msecStart = clipRange.start() * 1000 / animation->framerate();
+            const int msecDuration = clipRange.duration() * 1000 / animation->framerate();
+
+            const QTime startTime = QTime::fromMSecsSinceStartOfDay(msecStart);
+            const QTime durationTime = QTime::fromMSecsSinceStartOfDay(msecDuration);
+            const QString ffmpegTimeFormat("H:m:s.zzz");
+
+            args << "-ss" << startTime.toString(ffmpegTimeFormat);
+            args << "-t" << durationTime.toString(ffmpegTimeFormat);
+
+            args << "-i" << audioFileInfo.absoluteFilePath();
+        }
+
+        args << additionalOptionsList
              << "-y" << resultFile;
 
         result = m_runner->runFFMpeg(args, i18n("Encoding frames..."),

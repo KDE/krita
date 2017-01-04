@@ -44,13 +44,15 @@
 
 struct Node::Private {
     Private() {}
+    KisImageSP image;
     KisNodeSP node;
 };
 
-Node::Node(KisNodeSP node, QObject *parent)
+Node::Node(KisImageSP image, KisNodeSP node, QObject *parent)
     : QObject(parent)
     , d(new Private)
 {
+    d->image = image;
     d->node = node;
 }
 
@@ -114,7 +116,7 @@ QList<Node*> Node::childNodes() const
     if (d->node) {
         int childCount = d->node->childCount();
         for (int i = 0; i < childCount; ++i) {
-            nodes << new Node(d->node->at(i));
+            nodes << new Node(d->image, d->node->at(i));
         }
     }
     return nodes;
@@ -399,4 +401,14 @@ bool Node::save(const QString &filename, double xRes, double yRes)
         qWarning() << doc->errorMessage();
     }
     return r;
+}
+
+KisPaintDeviceSP Node::paintDevice() const
+{
+    return d->node->paintDevice();
+}
+
+KisImageSP Node::image() const
+{
+    return d->image;
 }

@@ -34,7 +34,7 @@ class KRITALIBKIS_EXPORT Node : public QObject
     Q_DISABLE_COPY(Node)
 
 public:
-    explicit Node(KisNodeSP node, QObject *parent = 0);
+    explicit Node(KisImageSP image, KisNodeSP node, QObject *parent = 0);
     virtual ~Node();
 
     /**
@@ -154,11 +154,17 @@ public Q_SLOTS:
      */
     bool save(const QString &filename, double xRes, double yRes);
 
-Q_SIGNALS:
-
-
-
 private:
+
+    friend class Filter;
+
+    /**
+     * @brief paintDevice gives access to the internal paint device of this Node
+     * @return the paintdevice or 0 if the node does not have an editable paint device.
+     */
+    KisPaintDeviceSP paintDevice() const;
+    KisImageSP image() const;
+
     struct Private;
     Private *d;
 

@@ -43,11 +43,23 @@ public:
     void setViews(QList<View*> value);
 
     QString viewMode() const;
+
+
     void setViewMode(QString value);
 
 public Q_SLOTS:
 
-    void Close(bool confirm);
+    /**
+     * @brief activate activates this Window.
+     */
+    void activate();
+
+    /**
+     * @brief close the active window and all its Views. If there
+     * are no Views left for a given Document, that Document will
+     * also be closed.
+     */
+    void close();
 
 private:
     struct Private;

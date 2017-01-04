@@ -74,8 +74,7 @@ public:
     void setBatchmode(bool value);
 
     /**
-     * @brief actions
-     * @return
+     * @return return a list of all actions for the currently active mainWindow.
      */
     QList<Action*> actions() const;
     Action *action(const QString &name) const;
@@ -85,7 +84,20 @@ public:
      */
     QList<Document*> documents() const;
 
-    QList<Filter*> filters() const;
+    /**
+     * @brief Filters are identified by an internal name. This function returns a list
+     * of all existing registered filters.
+     * @return a list of all registered filters
+     */
+    QStringList filters() const;
+
+    /**
+     * @brief filter construct a Filter object with a default configuration.
+     * @param name the name of the filter. Use Krita.instance().filters() to get
+     * a list of all possible filters.
+     * @return the filter or None if there is no such filter.
+     */
+    Filter *filter(const QString &name) const;
 
     QList<Generator *> generators() const;
 
@@ -125,8 +137,6 @@ public:
 public Q_SLOTS:
 
     void addDockWidget(DockWidget *dockWidget);
-
-    void addAction(Action *action);
 
     bool closeApplication();
 
@@ -170,7 +180,13 @@ public Q_SLOTS:
 
     Window *openWindow();
 
-    QAction *createAction(const QString &text);
+    /**
+     * @brief createAction creates an action with the given text and passes it to Krita. Every newly created
+     *     mainwindow will create an instance of this action.
+     * @param text the user-visible text
+     * @return  the QAction you can connect a slot to.
+     */
+    Action *createAction(const QString &text);
 
     void addViewExtension(ViewExtension* viewExtension);
     QList<ViewExtension*> viewExtensions();

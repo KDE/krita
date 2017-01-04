@@ -32,3 +32,4 @@
 %Include Selection.sip
 %Include Transformation.sip
 %Include ViewExtension.sip
+%Include CubicCurve.sip

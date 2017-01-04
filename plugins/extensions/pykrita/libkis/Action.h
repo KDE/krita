@@ -18,7 +18,7 @@
 #ifndef LIBKIS_ACTION_H
 #define LIBKIS_ACTION_H
 
-#include <QObject>
+#include <kis_action.h>
 
 #include "kritalibkis_export.h"
 #include "libkis.h"
@@ -65,14 +65,13 @@ public:
     void setEnabled(bool value);
 
 
-
 public Q_SLOTS:
 
     void trigger();
 
 Q_SIGNALS:
 
-    void triggered();
+    void triggered(bool);
 
 private:
     struct Private;

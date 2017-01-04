@@ -24,8 +24,9 @@ public:
 public Q_SLOTS:
     void trigger();
 Q_SIGNALS:
-    void triggered();
+    void triggered(bool);
 private:
     private:
-        Action(const Action &); // Generated
+    Action(const Action &); // Generated
 };
+

@@ -31,6 +31,7 @@ Action::Action(QObject *parent)
     , d(new Private)
 {
     d->action = new QAction(this);
+    connect(d->action, SIGNAL(triggered(bool)), SIGNAL(triggered(bool)));
 }
 
 Action::Action(const QString &name, QAction *action, QObject *parent)
@@ -39,6 +40,7 @@ Action::Action(const QString &name, QAction *action, QObject *parent)
 {
     d->name = name;
     d->action = action;
+    connect(d->action, SIGNAL(triggered(bool)), SIGNAL(triggered(bool)));
 }
 
 Action::~Action()
@@ -124,6 +126,3 @@ void Action::trigger()
 {
     d->action->trigger();
 }
-
-
-

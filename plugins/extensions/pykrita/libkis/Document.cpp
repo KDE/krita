@@ -67,9 +67,9 @@ Node *Document::activeNode() const
         }
     }
     if (activeNodes.size() > 0) {
-        return new Node(activeNodes.first());
+        return new Node(d->document->image(), activeNodes.first());
     }
-    return new Node(d->document->image()->root()->firstChild());
+    return new Node(d->document->image(), d->document->image()->root()->firstChild());
 }
 
 void Document::setActiveNode(Node* value)
@@ -202,7 +202,7 @@ Node *Document::rootNode() const
     KisImageSP image = d->document->image();
     if (!image) return 0;
 
-    return new Node(image->root());
+    return new Node(image, image->root());
 }
 
 Selection *Document::selection() const

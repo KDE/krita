@@ -22,8 +22,15 @@
 struct InfoObject::Private {
     Private() {}
 
-    KisPropertiesConfiguration properties;
+    KisPropertiesConfigurationSP properties;
 };
+
+InfoObject::InfoObject(KisPropertiesConfigurationSP configuration)
+    : QObject(0)
+    , d(new Private)
+{
+    d->properties = configuration;
+}
 
 InfoObject::InfoObject(QObject *parent)
     : QObject(parent)
@@ -38,28 +45,33 @@ InfoObject::~InfoObject()
 
 QMap<QString, QVariant> InfoObject::properties() const
 {
-    return d->properties.getProperties();
+    return d->properties->getProperties();
 }
 
 void InfoObject::setproperties(QMap<QString, QVariant> proprertyMap)
 {
     Q_FOREACH(const QString & key, proprertyMap.keys()) {
-        d->properties.setProperty(key, proprertyMap[key]);
+        d->properties->setProperty(key, proprertyMap[key]);
     }
 }
 
 void InfoObject::setProperty(const QString &key, QVariant value)
 {
-    d->properties.setProperty(key, value);
+    d->properties->setProperty(key, value);
 }
 
 QVariant InfoObject::property(const QString &key)
 {
     QVariant v;
-    if (d->properties.hasProperty(key)) {
-        d->properties.getProperty(key, v);
+    if (d->properties->hasProperty(key)) {
+        d->properties->getProperty(key, v);
     }
     return v;
+}
+
+KisPropertiesConfigurationSP InfoObject::configuration() const
+{
+    return d->properties;
 }
 
 

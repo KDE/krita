@@ -17,35 +17,86 @@
  */
 #include "Filter.h"
 
+#include <kis_filter.h>
+#include <kis_filter.h>
+#include <kis_properties_configuration.h>
+#include <kis_filter_configuration.h>
+#include <kis_filter_registry.h>
+#include <InfoObject.h>
+#include <Node.h>
+
 struct Filter::Private {
     Private() {}
+    QString name;
+    InfoObject *configuration {0};
 };
 
-Filter::Filter(QObject *parent) 
-    : QObject(parent)
+Filter::Filter()
+    : QObject(0)
     , d(new Private)
 {
 }
 
 Filter::~Filter() 
 {
+    qDebug() << "Deleting filter" << d->name;
+    delete d->configuration;
     delete d;
+}
+
+
+QString Filter::name() const
+{
+    return d->name;
+}
+
+void Filter::setName(const QString &name)
+{
+    d->name = name;
+    delete d->configuration;
+    d->configuration = new InfoObject();
 }
 
 InfoObject* Filter::configuration() const
 {
-    return 0;
+    return d->configuration;
 }
 
 void Filter::setConfiguration(InfoObject* value)
 {
+    d->configuration = value;
 }
 
-
-
-
-void Filter::Apply(int x, int y, int w, int h)
+bool Filter::apply(Node *node, int x, int y, int w, int h)
 {
+    qDebug() << node << node->name() << node->locked() << node->paintDevice();
+
+    if (node->locked()) return false;
+
+    KisPaintDeviceSP dev = node->paintDevice();
+    if (!dev) return false;
+
+
+    QRect applyRect = QRect(x, y, w, h);
+
+    KisImageSP image = node->image();
+    if (image) {
+        image->lock();
+    }
+
+    KisFilterConfigurationSP config = static_cast<KisFilterConfiguration*>(d->configuration->configuration().data());
+    KisFilterSP filter = KisFilterRegistry::instance()->value(d->name);
+    filter->process(dev, applyRect, config);
+
+    if (image) {
+        image->unlock();
+        image->initialRefreshGraph();
+    }
+
+    qDebug() << "filter applied!" << filter->changedRect(QRect(x, y, w, h), config, 0);
+
+    return true;
+
 }
 
 

@@ -31,12 +31,18 @@
 #include <kis_script_manager.h>
 #include <KisViewManager.h>
 #include <KritaVersionWrapper.h>
+#include <kis_filter_registry.h>
+#include <kis_filter.h>
+#include <kis_filter_configuration.h>
+#include <kis_properties_configuration.h>
 
 #include "View.h"
 #include "Document.h"
 #include "Window.h"
 #include "ViewExtension.h"
 #include "DockWidgetFactoryBase.h"
+#include "Filter.h"
+#include "InfoObject.h"
 
 #include <QVariant>
 
@@ -135,9 +141,22 @@ QList<Document *> Krita::documents() const
     return ret;
 }
 
-QList<Filter*> Krita::filters() const
+QStringList Krita::filters() const
 {
-    return QList<Filter*>();
+    return KisFilterRegistry::instance()->keys();
+}
+
+Filter *Krita::filter(const QString &name) const
+{
+    if (!filters().contains(name)) return 0;
+
+    Filter *filter = new Filter();
+    filter->setName(name);
+    KisFilterSP f = KisFilterRegistry::instance()->value(name);
+    KisFilterConfigurationSP fc = f->defaultConfiguration(0);
+    InfoObject *info = new InfoObject(fc);
+    filter->setConfiguration(info);
+    return filter;
 }
 
 QList<Generator*> Krita::generators() const
@@ -208,10 +227,6 @@ void Krita::addDockWidget(DockWidget *dockWidget)
 {
 }
 
-void Krita::addAction(Action *action)
-{
-}
-
 bool Krita::closeApplication()
 {
     qDebug() << "closeApplication called";
@@ -246,11 +261,11 @@ Window* Krita::openWindow()
 }
 
 
-QAction *Krita::createAction(const QString &text)
+Action *Krita::createAction(const QString &text)
 {
     KisAction *action = new KisAction(text, this);
     KisPart::instance()->addScriptAction(action);
-    return action;
+    return new Action(action->objectName(), action);
 }
 
 void Krita::addViewExtension(ViewExtension* viewExtension)
@@ -282,9 +297,7 @@ Krita* Krita::instance()
  * variant is a QVariant
  * returns instance of QObject-subclass
  *
- * This is a helper method for PyQt
- * Because PyQt cannot cast a variant to a QObject or QWidget
- * I hope that will change some time.
+ * This is a helper method for PyQt because PyQt cannot cast a variant to a QObject or QWidget
  */
 QObject *Krita::fromVariant(const QVariant& v)
 {

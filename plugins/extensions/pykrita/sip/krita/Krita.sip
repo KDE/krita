@@ -7,32 +7,32 @@ public:
 public:
     Krita(QObject*  parent /TransferThis/ = 0);
     virtual ~Krita();
-    Document * activeDocument() const;
+    Document * activeDocument() const /Factory/;
     void setActiveDocument(Document*  value);
     bool batchmode() const;
     void setBatchmode(bool value);
-    QList<Action *> actions() const;
+    QList<Action *> actions() const /Factory/;
     Action * action(const QString & name) const;
-    QList<Document *> documents() const;
-    QList<Filter *> filters() const;
-    QList<Generator *> generators() const;
-    Notifier * notifier() const;
-    InfoObject * preferences() const;
+    QList<Document *> documents() const /Factory/;
+    QStringList filters() const;
+    Filter * filter(const QString &name) const /Factory/;
+    QList<Generator *> generators() const /Factory/;
+    Notifier * notifier() const /Factory/;
+    InfoObject * preferences() const /Factory/;
     void setPreferences(InfoObject*  value);
     QString version() const;
     QList<View *> views() const /Factory/;
     Window * activeWindow() const /Factory/;
     QList<Window *> windows() const /Factory/;
-    QList<Resource *> resources() const;
+    QList<Resource *> resources() const /Factory/;
     void setResources(QList<Resource *> value);
 public Q_SLOTS:
     void addDockWidget(DockWidget*  dockWidget);
-    void addAction(Action*  action);
     bool closeApplication();
     Document * createDocument(int width, int height, const QString &name, const QString &colorModel, const QString &colorDepth, const QString &profile)  /Factory/;
     Document * openDocument(const QString &filename)  /Factory/;
     Window * openWindow();
-    QAction * createAction(const QString & text);
+    Action * createAction(const QString & text);
 
     void addViewExtension(ViewExtension* _viewExtension /GetWrapper/);
 %MethodCode

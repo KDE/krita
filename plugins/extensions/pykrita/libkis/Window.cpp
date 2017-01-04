@@ -58,8 +58,18 @@ void Window::setViewMode(QString value)
 {
 }
 
-void Window::Close(bool confirm)
+void Window::activate()
 {
+    if (!d->window) {
+        d->window->activateWindow();
+    }
+}
+
+void Window::close()
+{
+    if (d->window) {
+        d->window->close();
+    }
 }
 
 

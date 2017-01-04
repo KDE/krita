@@ -5,11 +5,12 @@ class Window : QObject
 %End
     Window(const Window & __0);
 public:
-    QList<View *> views() const;
+    QList<View *> views() const /Factory/;
     void setViews(QList<View *> value);
     QString viewMode() const;
     void setViewMode(QString value);
 public Q_SLOTS:
-    void Close(bool confirm);
+    void activate();
+    void close();
 private:
 };

@@ -35,11 +35,13 @@ class KRITALIBKIS_EXPORT InfoObject : public QObject
     Q_PROPERTY(QMap<QString, QVariant> properties READ properties WRITE setproperties)
 
 public:
+    InfoObject(KisPropertiesConfigurationSP configuration);
     explicit InfoObject(QObject *parent = 0);
     virtual ~InfoObject();
 
     QMap<QString, QVariant> properties() const;
     void setproperties(QMap<QString, QVariant> proprertyMap);
+
 
 public Q_SLOTS:
 
@@ -48,6 +50,15 @@ public Q_SLOTS:
 
 
 private:
+
+    friend class Filter;
+    /**
+     * @brief configuration gives access to the internal configuration object. Must
+     * be used used internally in libkis
+     * @return the internal configuration object.
+     */
+    KisPropertiesConfigurationSP configuration() const;
+
     struct Private;
     Private *d;
 

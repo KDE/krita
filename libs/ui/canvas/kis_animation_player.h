@@ -61,6 +61,7 @@ public Q_SLOTS:
 private Q_SLOTS:
     void slotSyncScrubbingAudio(int msecTime);
     void slotTryStopScrubbingAudio();
+    void slotUpdateAudioChunkLength();
     void slotAudioChannelChanged();
     void slotAudioVolumeChanged();
     void slotOnAudioError(const QString &fileName, const QString &message);

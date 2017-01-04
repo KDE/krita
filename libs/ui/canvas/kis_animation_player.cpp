@@ -153,12 +153,16 @@ KisAnimationPlayer::KisAnimationPlayer(KisCanvas2 *canvas)
     std::function<void (int)> callback(
         std::bind(&KisAnimationPlayer::slotSyncScrubbingAudio, this, _1));
 
-    KisConfig cfg;
-    m_d->audioSyncScrubbingCompressor.reset(
-        new KisSignalCompressorWithParam<int>(cfg.scribbingAudioUpdatesDelay(), callback, KisSignalCompressor::FIRST_ACTIVE));
+    const int defaultScrubbingUdpatesDelay = 40; /* 40 ms == 25 fps */
 
-    m_d->stopAudioOnScrubbingCompressor.setDelay(1.5 * cfg.scribbingAudioUpdatesDelay());
+    m_d->audioSyncScrubbingCompressor.reset(
+        new KisSignalCompressorWithParam<int>(defaultScrubbingUdpatesDelay, callback, KisSignalCompressor::FIRST_ACTIVE));
+
+    m_d->stopAudioOnScrubbingCompressor.setDelay(defaultScrubbingUdpatesDelay);
     connect(&m_d->stopAudioOnScrubbingCompressor, SIGNAL(timeout()), SLOT(slotTryStopScrubbingAudio()));
+
+    connect(m_d->canvas->image()->animationInterface(), SIGNAL(sigFramerateChanged()), SLOT(slotUpdateAudioChunkLength()));
+    slotUpdateAudioChunkLength();
 
     connect(m_d->canvas->image()->animationInterface(), SIGNAL(sigAudioChannelChanged()), SLOT(slotAudioChannelChanged()));
     connect(m_d->canvas->image()->animationInterface(), SIGNAL(sigAudioVolumeChanged()), SLOT(slotAudioVolumeChanged()));
@@ -257,6 +261,20 @@ void KisAnimationPlayer::connectCancelSignals()
 void KisAnimationPlayer::disconnectCancelSignals()
 {
     m_d->cancelStrokeConnections.clear();
+}
+
+void KisAnimationPlayer::slotUpdateAudioChunkLength()
+{
+    KisConfig cfg;
+    int scrubbingAudioUdpatesDelay = cfg.scribbingAudioUpdatesDelay();
+
+    if (scrubbingAudioUdpatesDelay < 0) {
+        const KisImageAnimationInterface *animation = m_d->canvas->image()->animationInterface();
+        scrubbingAudioUdpatesDelay = qMax(1, 1000 / animation->framerate());
+    }
+
+    m_d->audioSyncScrubbingCompressor->setDelay(scrubbingAudioUdpatesDelay);
+    m_d->stopAudioOnScrubbingCompressor.setDelay(scrubbingAudioUdpatesDelay);
 }
 
 void KisAnimationPlayer::slotUpdatePlaybackTimer()

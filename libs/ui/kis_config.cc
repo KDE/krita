@@ -1677,7 +1677,7 @@ void KisConfig::setScribbingUpdatesDelay(int value)
 
 int KisConfig::scribbingAudioUpdatesDelay(bool defaultValue) const
 {
-    return (defaultValue ? 200 : m_cfg.readEntry("scribbingAudioUpdatesDelay", 200));
+    return (defaultValue ? -1 : m_cfg.readEntry("scribbingAudioUpdatesDelay", -1));
 }
 
 void KisConfig::setScribbingAudioUpdatesDelay(int value)

@@ -58,6 +58,11 @@ KisSyncedAudioPlayback::KisSyncedAudioPlayback(const QString &fileName)
     m_d->player.setVolume(50);
 
     connect(&m_d->player, SIGNAL(error(QMediaPlayer::Error)), SLOT(slotOnError()));
+
+#ifdef Q_OS_WIN
+	m_d->player.play();
+	m_d->player.pause();
+#endif
 }
 
 KisSyncedAudioPlayback::~KisSyncedAudioPlayback()
@@ -105,12 +110,17 @@ void KisSyncedAudioPlayback::setSpeed(qreal value)
 void KisSyncedAudioPlayback::play(qint64 startPosition)
 {
     m_d->player.setPosition(startPosition);
-    m_d->player.play();
+
+	m_d->player.play();
 }
 
 void KisSyncedAudioPlayback::stop()
 {
-    m_d->player.stop();
+#ifdef Q_OS_WIN
+	m_d->player.pause();
+#else
+	m_d->player.stop();
+#endif
 }
 
 void KisSyncedAudioPlayback::slotOnError()

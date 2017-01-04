@@ -74,6 +74,11 @@ KisDlgImportImageSequence::KisDlgImportImageSequence(KisMainWindow *mainWindow, 
     connect(m_ui.spinStep, SIGNAL(valueChanged(int)), this, SLOT(slotSkipChanged(int)));
     connect(m_ui.cmbOrder, SIGNAL(currentIndexChanged(int)), this, SLOT(slotOrderOptionsChanged(int)));
     connect(m_ui.cmbSortMode, SIGNAL(currentIndexChanged(int)), this, SLOT(slotOrderOptionsChanged(int)));
+
+    // cold initialization of the controls
+    slotSkipChanged(m_ui.spinStep->value());
+    slotOrderOptionsChanged(m_ui.cmbOrder->currentIndex());
+    slotOrderOptionsChanged(m_ui.cmbSortMode->currentIndex());
 }
 
 QStringList KisDlgImportImageSequence::files()

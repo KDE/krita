@@ -228,5 +228,14 @@ void KisBrushSelectionWidget::addChooser(const QString& text, QWidget* widget, i
     widget->hide();
 }
 
+void KisBrushSelectionWidget::writeOptionSetting(KisPropertiesConfigurationSP settings) const
+{
+    Q_UNUSED(settings);
+}
+
+void KisBrushSelectionWidget::readOptionSetting(const KisPropertiesConfigurationSP setting)
+{
+   Q_UNUSED(setting);
+}
 
 #include "moc_kis_brush_selection_widget.cpp"

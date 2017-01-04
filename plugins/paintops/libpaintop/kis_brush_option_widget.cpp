@@ -91,4 +91,17 @@ void KisBrushOptionWidget::hideOptions(const QStringList &options)
     m_brushSelectionWidget->hideOptions(options);
 }
 
+void KisBrushOptionWidget::writeOptionSetting(KisPropertiesConfigurationSP settings) const
+{
+    m_brushSelectionWidget->writeOptionSetting(settings);
+    m_brushOption.writeOptionSetting(settings);
+}
+
+void KisBrushOptionWidget::readOptionSetting(const KisPropertiesConfigurationSP setting)
+{
+    m_brushSelectionWidget->readOptionSetting(setting);
+    m_brushOption.readOptionSetting(setting);
+    m_brushSelectionWidget->setCurrentBrush(m_brushOption.brush());
+}
+
 #include "moc_kis_brush_option_widget.cpp"

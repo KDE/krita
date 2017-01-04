@@ -65,6 +65,9 @@ public:
         return m_presetIsValid;
     }
 
+    void writeOptionSetting(KisPropertiesConfigurationSP settings) const;
+    void readOptionSetting(const KisPropertiesConfigurationSP setting);
+
     void hideOptions(const QStringList &options);
 
 Q_SIGNALS:

@@ -50,6 +50,7 @@
 DlgAnimationRenderer::DlgAnimationRenderer(KisDocument *doc, QWidget *parent)
     : KoDialog(parent)
     , m_image(doc->image())
+    , m_doc(doc)
     , m_defaultFileName(QFileInfo(doc->url().toLocalFile()).completeBaseName())
 {
     KisConfig cfg;
@@ -177,6 +178,7 @@ KisPropertiesConfigurationSP DlgAnimationRenderer::getSequenceConfiguration() co
 {
     KisPropertiesConfigurationSP cfg = new KisPropertiesConfiguration();
     cfg->setProperty("basename", m_page->txtBasename->text());
+    cfg->setProperty("last_document_path", m_doc->localFilePath());
     cfg->setProperty("directory", m_page->dirRequester->fileName());
     cfg->setProperty("first_frame", m_page->intStart->value());
     cfg->setProperty("last_frame", m_page->intEnd->value());
@@ -188,6 +190,13 @@ KisPropertiesConfigurationSP DlgAnimationRenderer::getSequenceConfiguration() co
 void DlgAnimationRenderer::setSequenceConfiguration(KisPropertiesConfigurationSP cfg)
 {
     m_page->txtBasename->setText(cfg->getString("basename", "frame"));
+
+    if (cfg->getString("last_document_path") != m_doc->localFilePath()) {
+        cfg->removeProperty("first_frame");
+        cfg->removeProperty("last_frame");
+        cfg->removeProperty("sequence_start");
+    }
+
     m_page->dirRequester->setFileName(cfg->getString("directory", QStandardPaths::writableLocation(QStandardPaths::PicturesLocation)));
     m_page->intStart->setValue(cfg->getInt("first_frame", m_image->animationInterface()->playbackRange().start()));
     m_page->intEnd->setValue(cfg->getInt("last_frame", m_image->animationInterface()->playbackRange().end()));

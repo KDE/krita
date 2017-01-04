@@ -78,9 +78,6 @@ void AnimaterionRenderer::slotRenderAnimation()
     KisConfig kisConfig;
     KisPropertiesConfigurationSP cfg = new KisPropertiesConfiguration();
     cfg->fromXML(kisConfig.exportConfiguration("IMAGESEQUENCE"));
-    // Override the saved start/end with the ones from the image in case of using gui.
-    cfg->setProperty("first_frame", image->animationInterface()->playbackRange().start());
-    cfg->setProperty("last_frame", image->animationInterface()->playbackRange().end());
     dlgAnimationRenderer.setSequenceConfiguration(cfg);
 
     cfg->clearProperties();

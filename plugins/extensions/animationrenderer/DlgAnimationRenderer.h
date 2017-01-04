@@ -84,7 +84,8 @@ private:
 
     static QString findFFMpeg();
 
-    KisImageWSP m_image;
+    KisImageSP m_image;
+    KisDocument *m_doc;
     WdgAnimaterionRenderer *m_page {0};
     QList<QSharedPointer<KisImportExportFilter>> m_renderFilters;
     KisConfigWidget *m_encoderConfigWidget {0};

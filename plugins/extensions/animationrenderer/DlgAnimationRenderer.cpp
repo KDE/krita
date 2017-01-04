@@ -145,7 +145,10 @@ DlgAnimationRenderer::DlgAnimationRenderer(KisDocument *doc, QWidget *parent)
     m_page->grpRender->setChecked(cfg.readEntry<bool>("AnimationRenderer/render_animation", false));
     m_page->chkDeleteSequence->setChecked(cfg.readEntry<bool>("AnimationRenderer/delete_sequence", false));
     m_page->cmbRenderType->setCurrentIndex(cfg.readEntry<int>("AnimationRenderer/render_type", 0));
+
+    // connect and cold init
     connect(m_page->cmbRenderType, SIGNAL(currentIndexChanged(int)), this, SLOT(selectRenderType(int)));
+    selectRenderType(m_page->cmbRenderType->currentIndex());
 }
 
 DlgAnimationRenderer::~DlgAnimationRenderer()

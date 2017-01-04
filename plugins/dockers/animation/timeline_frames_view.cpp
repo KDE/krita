@@ -414,6 +414,7 @@ void TimelineFramesView::slotSelectAudioChannelFile()
     mimeTypes << "audio/ogg";
     mimeTypes << "audio/vorbis";
     mimeTypes << "audio/vnd.wave";
+    mimeTypes << "audio/flac";
 
     dialog.setMimeTypeFilters(mimeTypes);
     dialog.setCaption(i18nc("@titile:window", "Open Audio"));

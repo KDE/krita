@@ -48,6 +48,7 @@ private:
     bool m_createConfigWidget;
     KisPrecisionOption m_precisionOption;
     Ui_wdgPerformanceOption ui;
+    bool m_instantPreviewEnabled;
 
     void readOptionSetting(const KisPropertiesConfigurationSP config);
     void writeOptionSetting(const KisPropertiesConfigurationSP config) const;

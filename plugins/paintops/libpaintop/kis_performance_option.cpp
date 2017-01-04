@@ -87,7 +87,6 @@ void KisPerformanceOption::readOptionSetting(const KisPropertiesConfigurationSP 
     // read in LOD (Instant Preview) field in
     // some engines do not support LOD. remove instant preview option and disable it if so.
     QString paintOpEngine = config->getString("paintop");
-    qDebug() << "paintOp Engine: " << paintOpEngine;
 
     if (paintOpEngine == "dynabrush" || paintOpEngine == "deformbrush" || paintOpEngine == "particlebrush" ) {
 
@@ -96,9 +95,11 @@ void KisPerformanceOption::readOptionSetting(const KisPropertiesConfigurationSP 
         ui.lodInstructions->setText(i18n("Instant Preview is not available for this Engine"));
     }
     else {
-        config->getBool("KisLevelOfDetailOption/enableLevelOfDetail",true);
         ui.instantPreviewCheckbox->setEnabled(true);
         ui.lodInstructions->setText(QString(""));
+
+        m_instantPreviewEnabled = config->getBool("KisLevelOfDetailOption/enableLevelOfDetail",true);
+        ui.instantPreviewCheckbox->setChecked(m_instantPreviewEnabled);
     }
 
 
@@ -107,7 +108,7 @@ void KisPerformanceOption::readOptionSetting(const KisPropertiesConfigurationSP 
 void KisPerformanceOption::writeOptionSetting(KisPropertiesConfigurationSP config) const
 {
     m_precisionOption.writeOptionSetting(config);
-    config->setProperty("KisLevelOfDetailOption/enableLevelOfDetail", ui.instantPreviewCheckbox->isEnabled());
+    config->setProperty("KisLevelOfDetailOption/enableLevelOfDetail", m_instantPreviewEnabled);
 }
 
 void KisPerformanceOption::precisionChanged(int value)
@@ -261,7 +262,8 @@ void KisPerformanceOption::setSizeToStartFrom(double value)
 
 void KisPerformanceOption::instantPreviewChanged(bool enable)
 {
-    // TODO: nothing actually happens to the settings when this is changed, so not sure if I need this
+    m_instantPreviewEnabled = enable;
+    emitSettingChanged();
 }
 
 

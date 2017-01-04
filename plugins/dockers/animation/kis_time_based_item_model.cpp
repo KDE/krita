@@ -85,7 +85,7 @@ KisTimeBasedItemModel::KisTimeBasedItemModel(QObject *parent)
         std::bind(&KisTimeBasedItemModel::slotInternalScrubPreviewRequested, this, _1));
 
     m_d->scrubbingCompressor.reset(
-        new KisSignalCompressorWithParam<int>(cfg.scribbingUpdatesDelay(), callback, KisSignalCompressor::FIRST_ACTIVE));
+        new KisSignalCompressorWithParam<int>(cfg.scrubbingUpdatesDelay(), callback, KisSignalCompressor::FIRST_ACTIVE));
 }
 
 KisTimeBasedItemModel::~KisTimeBasedItemModel()

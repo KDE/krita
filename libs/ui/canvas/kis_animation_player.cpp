@@ -266,7 +266,7 @@ void KisAnimationPlayer::disconnectCancelSignals()
 void KisAnimationPlayer::slotUpdateAudioChunkLength()
 {
     KisConfig cfg;
-    int scrubbingAudioUdpatesDelay = cfg.scribbingAudioUpdatesDelay();
+    int scrubbingAudioUdpatesDelay = cfg.scrubbingAudioUpdatesDelay();
 
     if (scrubbingAudioUdpatesDelay < 0) {
         const KisImageAnimationInterface *animation = m_d->canvas->image()->animationInterface();

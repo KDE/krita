@@ -480,11 +480,11 @@ public:
     bool animationDropFrames(bool defaultValue = false) const;
     void setAnimationDropFrames(bool value);
 
-    int scribbingUpdatesDelay(bool defaultValue = false) const;
-    void setScribbingUpdatesDelay(int value);
+    int scrubbingUpdatesDelay(bool defaultValue = false) const;
+    void setScrubbingUpdatesDelay(int value);
 
-    int scribbingAudioUpdatesDelay(bool defaultValue = false) const;
-    void setScribbingAudioUpdatesDelay(int value);
+    int scrubbingAudioUpdatesDelay(bool defaultValue = false) const;
+    void setScrubbingAudioUpdatesDelay(int value);
 
     bool switchSelectionCtrlAlt(bool defaultValue = false) const;
     void setSwitchSelectionCtrlAlt(bool value);

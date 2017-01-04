@@ -1675,24 +1675,24 @@ bool KisConfig::animationDropFrames(bool defaultValue) const
     return (defaultValue ? true : m_cfg.readEntry("animationDropFrames", true));
 }
 
-int KisConfig::scribbingUpdatesDelay(bool defaultValue) const
+int KisConfig::scrubbingUpdatesDelay(bool defaultValue) const
 {
-    return (defaultValue ? 30 : m_cfg.readEntry("scribbingUpdatesDelay", 30));
+    return (defaultValue ? 30 : m_cfg.readEntry("scrubbingUpdatesDelay", 30));
 }
 
-void KisConfig::setScribbingUpdatesDelay(int value)
+void KisConfig::setScrubbingUpdatesDelay(int value)
 {
-    m_cfg.writeEntry("scribbingUpdatesDelay", value);
+    m_cfg.writeEntry("scrubbingUpdatesDelay", value);
 }
 
-int KisConfig::scribbingAudioUpdatesDelay(bool defaultValue) const
+int KisConfig::scrubbingAudioUpdatesDelay(bool defaultValue) const
 {
-    return (defaultValue ? -1 : m_cfg.readEntry("scribbingAudioUpdatesDelay", -1));
+    return (defaultValue ? -1 : m_cfg.readEntry("scrubbingAudioUpdatesDelay", -1));
 }
 
-void KisConfig::setScribbingAudioUpdatesDelay(int value)
+void KisConfig::setScrubbingAudioUpdatesDelay(int value)
 {
-    m_cfg.writeEntry("scribbingAudioUpdatesDelay", value);
+    m_cfg.writeEntry("scrubbingAudioUpdatesDelay", value);
 }
 
 bool KisConfig::switchSelectionCtrlAlt(bool defaultValue) const

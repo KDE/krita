@@ -37,6 +37,7 @@ Boston, MA 02110-1301, USA.
 #include <ksqueezedtextlabel.h>
 #include <kpluginfactory.h>
 
+#include "KoFileDialog.h"
 #include "KoProgressUpdater.h"
 #include "KoJsonTrader.h"
 
@@ -327,6 +328,27 @@ bool KisImportExportManager::getBatchMode(void) const
 void KisImportExportManager::setProgresUpdater(KoProgressUpdater *updater)
 {
     d->progressUpdater = updater;
+}
+
+QString KisImportExportManager::askForAudioFileName(const QString &defaultDir, QWidget *parent)
+{
+    KoFileDialog dialog(parent, KoFileDialog::ImportFiles, "ImportAudio");
+
+    if (!defaultDir.isEmpty()) {
+        dialog.setDefaultDir(defaultDir);
+    }
+
+    QStringList mimeTypes;
+    mimeTypes << "audio/mpeg";
+    mimeTypes << "audio/ogg";
+    mimeTypes << "audio/vorbis";
+    mimeTypes << "audio/vnd.wave";
+    mimeTypes << "audio/flac";
+
+    dialog.setMimeTypeFilters(mimeTypes);
+    dialog.setCaption(i18nc("@titile:window", "Open Audio"));
+
+    return dialog.filename();
 }
 
 KoProgressUpdater* KisImportExportManager::progressUpdater() const

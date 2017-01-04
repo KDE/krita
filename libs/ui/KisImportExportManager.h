@@ -142,6 +142,8 @@ public:
      **/
     KoProgressUpdater *progressUpdater() const;
 
+    static QString askForAudioFileName(const QString &defaultDir, QWidget *parent);
+
 private:
     // === API for KisFilterChains === (internal)
     // The friend methods are private in KisFilterChain and

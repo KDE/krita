@@ -59,6 +59,10 @@ DlgAnimationRenderer::DlgAnimationRenderer(KisDocument *doc, QWidget *parent)
     setButtons(Ok | Cancel);
     setDefaultButton(Ok);
 
+    if (m_defaultFileName.isEmpty()) {
+        m_defaultFileName = i18n("Untitled");
+    }
+
     m_page = new WdgAnimaterionRenderer(this);
     m_page->layout()->setMargin(0);
     m_page->dirRequester->setMode(KoFileDialog::OpenDirectory);
@@ -295,6 +299,7 @@ void DlgAnimationRenderer::selectRenderType(int index)
         m_defaultFileName = QFileInfo(m_page->videoFilename->fileName()).completeBaseName();
     }
     m_page->videoFilename->setMimeTypeFilters(QStringList() << mimetype, mimetype);
+
     m_page->videoFilename->setFileName(m_defaultFileName + "." + KisMimeDatabase::suffixesForMimeType(mimetype).first());
 }
 

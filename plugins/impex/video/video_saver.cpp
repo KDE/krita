@@ -253,6 +253,7 @@ KisImageBuilder_Result VideoSaver::encode(const QString &filename, KisProperties
         {
             QStringList args;
             args << "-r" << QString::number(frameRate)
+                 << "-pattern_type" << "glob"
                  << "-i" << savedFilesMask
                  << "-vf" << "palettegen"
                  << "-y" << palettePath;
@@ -270,6 +271,7 @@ KisImageBuilder_Result VideoSaver::encode(const QString &filename, KisProperties
         {
             QStringList args;
             args << "-r" << QString::number(frameRate)
+                 << "-pattern_type" << "glob"
                  << "-i" << savedFilesMask
                  << "-i" << palettePath
                  << "-lavfi" << "[0:v][1:v] paletteuse"
@@ -289,10 +291,9 @@ KisImageBuilder_Result VideoSaver::encode(const QString &filename, KisProperties
         }
     } else {
         QStringList args;
-        args << "-r" << QString::number(frameRate)
-             << "-i" << savedFilesMask;
-
-
+        args << "-r" << QString::number(frameRate);
+        args << "-pattern_type" << "glob";
+        args << "-i" << savedFilesMask;
 
 
         QFileInfo audioFileInfo = animation->audioChannelFileName();

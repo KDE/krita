@@ -34,6 +34,7 @@ private Q_SLOTS:
     void testSerialization();
     void testDefaultValues();
     void testNotSavedValues();
+    void testCopy();
 private:
     KisPropertiesConfigurationSP createConfig();
     void testConfig(KisPropertiesConfigurationSP config);

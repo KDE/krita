@@ -92,5 +92,20 @@ void KisPropertiesConfigurationTest::testNotSavedValues()
 
 }
 
+void KisPropertiesConfigurationTest::testCopy()
+{
+    KisPropertiesConfigurationSP p1 = createConfig();
+    p1->setProperty("v6", "bla");
+    p1->setPropertyNotSaved("v6");
+    KisPropertiesConfiguration config = KisPropertiesConfiguration(*p1.data());
+    QVERIFY(config.getInt("v1", 0) == v1);
+    QVERIFY(config.getString("v2", QString()) == v2);
+    QVERIFY(config.getDouble("v3", 0.0) == v3);
+    QVERIFY(config.getBool("v4", !v4) == v4);
+    QVERIFY(config.getCubicCurve("v5") == v5);
+    QVERIFY(config.hasProperty("v6") == false);
+
+}
+
 QTEST_MAIN(KisPropertiesConfigurationTest)
 

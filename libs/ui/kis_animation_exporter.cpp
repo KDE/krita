@@ -22,6 +22,7 @@
 #include <QProgressDialog>
 #include <KisMimeDatabase.h>
 #include <QEventLoop>
+#include <QMessageBox>
 
 #include "KoFileDialog.h"
 #include "KisDocument.h"
@@ -308,6 +309,56 @@ KisAnimationExportSaver::~KisAnimationExportSaver()
 
 KisImportExportFilter::ConversionStatus KisAnimationExportSaver::exportAnimation(KisPropertiesConfigurationSP cfg)
 {
+    QFileInfo info(savedFilesMask());
+
+    QDir dir(info.absolutePath());
+    QStringList filesList = dir.entryList({ info.fileName() });
+
+    if (!filesList.isEmpty()) {
+        if (m_d->document->fileBatchMode()) {
+            return KisImportExportFilter::CreationError;
+        }
+
+        QStringList truncatedList = filesList;
+
+        while (truncatedList.size() > 3) {
+            truncatedList.takeLast();
+        }
+
+        QString exampleFiles = truncatedList.join(", ");
+        if (truncatedList.size() != filesList.size()) {
+            exampleFiles += QString(", ...");
+        }
+
+        QMessageBox::StandardButton result =
+                QMessageBox::warning(0,
+                                     i18n("Delete old frames?"),
+                                     i18n("Frames with the same naming "
+                                          "scheme exist in the destination "
+                                          "directory. The are going to be "
+                                          "deleted, continue?\n\n"
+                                          "Directory: %1\n"
+                                          "Files: %2",
+                                          info.absolutePath(), exampleFiles),
+                                     QMessageBox::Yes | QMessageBox::No,
+                                     QMessageBox::No);
+
+        if (result == QMessageBox::Yes) {
+            Q_FOREACH (const QString &file, filesList) {
+                if (!dir.remove(file)) {
+                    QMessageBox::critical(0,
+                                          i18n("Failed to delete"),
+                                          i18n("Failed to delete an old frame file:\n\n"
+                                               "%1\n\n"
+                                               "Rendering cancelled.", dir.absoluteFilePath(file)));
+                    return KisImportExportFilter::CreationError;
+                }
+            }
+        } else {
+            return KisImportExportFilter::UserCancelled;
+        }
+    }
+
     m_d->exporter.setExportConfiguration(cfg);
     return m_d->exporter.exportAnimation();
 }
@@ -316,7 +367,7 @@ KisImportExportFilter::ConversionStatus KisAnimationExportSaver::saveFrameCallba
 {
     KisImportExportFilter::ConversionStatus status = KisImportExportFilter::OK;
 
-    QString frameNumber = QString("%1").arg(time + m_d->sequenceNumberingOffset, 4, 10, QChar('0'));
+    QString frameNumber = QString("%1").arg(time - m_d->firstFrame + m_d->sequenceNumberingOffset, 4, 10, QChar('0'));
     QString filename = m_d->filenamePrefix + frameNumber + m_d->filenameSuffix;
 
     QRect rc = m_d->image->bounds();
@@ -330,5 +381,5 @@ KisImportExportFilter::ConversionStatus KisAnimationExportSaver::saveFrameCallba
 
 QString KisAnimationExportSaver::savedFilesMask() const
 {
-    return m_d->filenamePrefix + "%04d" + m_d->filenameSuffix;
+    return m_d->filenamePrefix + "????" + m_d->filenameSuffix;
 }

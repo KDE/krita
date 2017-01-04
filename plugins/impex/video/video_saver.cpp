@@ -222,8 +222,14 @@ KisImageBuilder_Result VideoSaver::encode(const QString &filename, KisProperties
 
     KisImageAnimationInterface *animation = m_image->animationInterface();
     const KisTimeRange fullRange = animation->fullClipRange();
-    const KisTimeRange clipRange(configuration->getInt("first_frame", fullRange.start()), configuration->getInt("last_frame", fullRange.end()));
     const int frameRate = animation->framerate();
+
+    KIS_SAFE_ASSERT_RECOVER_NOOP(configuration->hasProperty("first_frame"));
+    KIS_SAFE_ASSERT_RECOVER_NOOP(configuration->hasProperty("last_frame"));
+    KIS_SAFE_ASSERT_RECOVER_NOOP(configuration->hasProperty("include_audio"));
+
+    const KisTimeRange clipRange(configuration->getInt("first_frame", fullRange.start()), configuration->getInt("last_frame", fullRange.end()));
+    const bool includeAudio = configuration->getBool("include_audio", true);
 
     const QDir framesDir(configuration->getString("directory"));
 
@@ -286,8 +292,11 @@ KisImageBuilder_Result VideoSaver::encode(const QString &filename, KisProperties
         args << "-r" << QString::number(frameRate)
              << "-i" << savedFilesMask;
 
+
+
+
         QFileInfo audioFileInfo = animation->audioChannelFileName();
-        if (!animation->isAudioMuted() && audioFileInfo.exists()) {
+        if (includeAudio && audioFileInfo.exists()) {
             const int msecStart = clipRange.start() * 1000 / animation->framerate();
             const int msecDuration = clipRange.duration() * 1000 / animation->framerate();
 

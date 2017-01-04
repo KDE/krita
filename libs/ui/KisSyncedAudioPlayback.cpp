@@ -43,7 +43,7 @@ struct QMediaPlayer {
 struct KisSyncedAudioPlayback::Private
 {
     QMediaPlayer player;
-    qint64 tolerance = 40;
+    qint64 tolerance = 200;
 };
 
 

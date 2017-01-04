@@ -102,11 +102,10 @@ void AnimaterionRenderer::slotRenderAnimation()
                 .arg(extension);
 
         KisAnimationExportSaver exporter(doc, baseFileName, sequenceConfig->getInt("first_frame"), sequenceConfig->getInt("last_frame"), sequenceConfig->getInt("sequence_start"));
-        bool success = exporter.exportAnimation(dlgAnimationRenderer.getFrameExportConfiguration());
+        bool success = exporter.exportAnimation(dlgAnimationRenderer.getFrameExportConfiguration()) == KisImportExportFilter::OK;
 
         // the folder could have been read-only or something else could happen
         if (success) {
-
             QString savedFilesMask = exporter.savedFilesMask();
 
             KisPropertiesConfigurationSP videoConfig = dlgAnimationRenderer.getVideoConfiguration();

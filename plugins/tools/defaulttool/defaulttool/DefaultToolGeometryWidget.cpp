@@ -20,7 +20,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "DefaultToolWidget.h"
+#include "DefaultToolGeometryWidget.h"
 #include "DefaultTool.h"
 
 #include <KoInteractionTool.h>
@@ -54,7 +54,7 @@
 #include "kis_acyclic_signal_connector.h"
 
 
-DefaultToolWidget::DefaultToolWidget(KoInteractionTool *tool, QWidget *parent)
+DefaultToolGeometryWidget::DefaultToolGeometryWidget(KoInteractionTool *tool, QWidget *parent)
     : QWidget(parent)
     , m_tool(tool)
     , m_sizeAspectLocker(new KisAspectRatioLocker())
@@ -105,7 +105,7 @@ DefaultToolWidget::DefaultToolWidget(KoInteractionTool *tool, QWidget *parent)
     connect(positionSelector, SIGNAL(valueChanged(KoFlake::AnchorPosition)), SLOT(slotAnchorPointChanged()));
 }
 
-DefaultToolWidget::~DefaultToolWidget()
+DefaultToolGeometryWidget::~DefaultToolGeometryWidget()
 {
 }
 
@@ -161,14 +161,14 @@ QRectF calculateSelectionBounds(KoSelection *selection,
 
 }
 
-void DefaultToolWidget::slotAnchorPointChanged()
+void DefaultToolGeometryWidget::slotAnchorPointChanged()
 {
     QVariant newValue(positionSelector->value());
     m_tool->canvas()->resourceManager()->setResource(DefaultTool::HotPosition, newValue);
     slotUpdatePositionBoxes();
 }
 
-void DefaultToolWidget::slotUpdateCheckboxes()
+void DefaultToolGeometryWidget::slotUpdateCheckboxes()
 {
     KoSelection *selection = m_tool->canvas()->shapeManager()->selection();
     QList<KoShape*> shapes = selection->selectedEditableShapes();
@@ -194,7 +194,7 @@ void DefaultToolWidget::slotUpdateCheckboxes()
     chkAnchorLock->setEnabled(false);
 }
 
-void DefaultToolWidget::slotAspectButtonToggled()
+void DefaultToolGeometryWidget::slotAspectButtonToggled()
 {
     KoSelection *selection = m_tool->canvas()->shapeManager()->selection();
     QList<KoShape*> shapes = selection->selectedEditableShapes();
@@ -213,7 +213,7 @@ void DefaultToolWidget::slotAspectButtonToggled()
     m_tool->canvas()->addCommand(cmd);
 }
 
-void DefaultToolWidget::slotUpdateAspectButton()
+void DefaultToolGeometryWidget::slotUpdateAspectButton()
 {
     KoSelection *selection = m_tool->canvas()->shapeManager()->selection();
     QList<KoShape*> shapes = selection->selectedEditableShapes();
@@ -236,7 +236,7 @@ void DefaultToolWidget::slotUpdateAspectButton()
     aspectButton->setKeepAspectRatio(hasKeepAspectRatio);
 }
 
-void DefaultToolWidget::slotUpdateSizeBoxes()
+void DefaultToolGeometryWidget::slotUpdateSizeBoxes()
 {
     const bool useGlobalSize = chkGlobalCoordinates->isChecked();
     const KoFlake::AnchorPosition anchor = positionSelector->value();
@@ -256,7 +256,7 @@ void DefaultToolWidget::slotUpdateSizeBoxes()
     }
 }
 
-void DefaultToolWidget::slotUpdatePositionBoxes()
+void DefaultToolGeometryWidget::slotUpdatePositionBoxes()
 {
     const bool useGlobalSize = chkGlobalCoordinates->isChecked();
     const KoFlake::AnchorPosition anchor = positionSelector->value();
@@ -275,7 +275,7 @@ void DefaultToolWidget::slotUpdatePositionBoxes()
     }
 }
 
-void DefaultToolWidget::slotRepositionShapes()
+void DefaultToolGeometryWidget::slotRepositionShapes()
 {
     static const qreal eps = 1e-6;
 
@@ -308,7 +308,7 @@ void DefaultToolWidget::slotRepositionShapes()
     m_tool->canvas()->addCommand(cmd);
 }
 
-void DefaultToolWidget::slotResizeShapes()
+void DefaultToolGeometryWidget::slotResizeShapes()
 {
     static const qreal eps = 1e-4;
 
@@ -343,7 +343,7 @@ void DefaultToolWidget::slotResizeShapes()
     m_tool->canvas()->addCommand(cmd);
 }
 
-void DefaultToolWidget::setUnit(const KoUnit &unit)
+void DefaultToolGeometryWidget::setUnit(const KoUnit &unit)
 {
     positionXSpinBox->setUnit(unit);
     positionYSpinBox->setUnit(unit);
@@ -354,7 +354,7 @@ void DefaultToolWidget::setUnit(const KoUnit &unit)
     slotUpdateSizeBoxes();
 }
 
-void DefaultToolWidget::resourceChanged(int key, const QVariant &res)
+void DefaultToolGeometryWidget::resourceChanged(int key, const QVariant &res)
 {
     if (key == KoCanvasResourceManager::Unit) {
         setUnit(res.value<KoUnit>());

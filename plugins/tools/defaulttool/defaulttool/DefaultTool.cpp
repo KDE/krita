@@ -22,7 +22,7 @@
 */
 
 #include "DefaultTool.h"
-#include "DefaultToolWidget.h"
+#include "DefaultToolGeometryWidget.h"
 #include "SelectionDecorator.h"
 #include "ShapeMoveStrategy.h"
 #include "ShapeRotateStrategy.h"
@@ -1028,7 +1028,7 @@ void DefaultTool::selectionReorder(KoShapeReorderCommand::MoveShapeType order)
 QList<QPointer<QWidget> > DefaultTool::createOptionWidgets()
 {
     QList<QPointer<QWidget> > widgets;
-    DefaultToolWidget *defaultTool = new DefaultToolWidget(this);
+    DefaultToolGeometryWidget *defaultTool = new DefaultToolGeometryWidget(this);
     defaultTool->setWindowTitle(i18n("Geometry"));
     widgets.append(defaultTool);
     KoStrokeConfigWidget *strokeWidget = new KoStrokeConfigWidget(0);

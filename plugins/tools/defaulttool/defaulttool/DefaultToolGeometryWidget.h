@@ -18,10 +18,10 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef DEFAULTTOOLWIDGET_H
-#define DEFAULTTOOLWIDGET_H
+#ifndef DEFAULTTOOLGEOMETRYWIDGET_H
+#define DEFAULTTOOLGEOMETRYWIDGET_H
 
-#include <ui_DefaultToolWidget.h>
+#include <ui_DefaultToolGeometryWidget.h>
 #include <KoFlake.h>
 
 #include <QWidget>
@@ -30,12 +30,12 @@
 class KoInteractionTool;
 class KisAspectRatioLocker;
 
-class DefaultToolWidget : public QWidget, Ui::DefaultToolWidget
+class DefaultToolGeometryWidget : public QWidget, Ui::DefaultToolGeometryWidget
 {
     Q_OBJECT
 public:
-    explicit DefaultToolWidget(KoInteractionTool *tool, QWidget *parent = 0);
-    ~DefaultToolWidget();
+    explicit DefaultToolGeometryWidget(KoInteractionTool *tool, QWidget *parent = 0);
+    ~DefaultToolGeometryWidget();
 
     /// Sets the unit used by the unit aware child widgets
     void setUnit(const KoUnit &unit);

@@ -55,6 +55,7 @@ set(kritawidgets_LIB_SRCS
     KoDockWidgetTitleBarButton.cpp
     KoResourceFiltering.cpp
     KoResourceModelBase.cpp
+    KoTitledTabWidget.cpp
 
     KoToolBoxButton.cpp
     KoToolBox.cpp

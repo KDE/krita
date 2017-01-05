@@ -4,6 +4,7 @@ set ( defaulttools_SRCS
     Plugin.cpp
     defaulttool/DefaultTool.cpp
     defaulttool/DefaultToolFactory.cpp
+    defaulttool/DefaultToolTabbedWidget.cpp
     defaulttool/DefaultToolGeometryWidget.cpp
     defaulttool/ShapeMoveStrategy.cpp
     defaulttool/ShapeResizeStrategy.cpp

@@ -465,3 +465,5 @@ LastReturnType=Custom Document
 
 [theme]
 Theme=Krita dark
+
+favoriteCompositeOps=normal,erase,multiply,burn,darken,add,dodge,screen,overlay,soft_light_svg,luminize,lighten,saturation,color

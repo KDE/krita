@@ -59,4 +59,169 @@
  <resource md5="eq70dIWrKGFNRz58q4hOpw==" identifier="Ink_gpen_10.kpp">
   <tag>demo</tag>
  </resource>
+ <resource identifier="Block_bristles.kpp" >
+  <tag>Block</tag>
+ </resource>
+ <resource identifier="Block_wet_tilt.kpp" >
+  <tag>Block</tag>
+  <tag>Wet</tag>
+ </resource>
+ <resource identifier="Block_mix_tilt.kpp" >
+  <tag>Block</tag>
+  <tag>Mix</tag>
+ </resource>
+ <resource identifier="FX_overlay.kpp" >
+  <tag>FX</tag>
+ </resource>
+ <resource identifier="Bristles_mix.kpp" >
+  <tag>Mix</tag>
+ </resource>
+ <resource identifier="FX_glow_add.kpp" >
+  <tag>FX</tag>
+ </resource>
+ <resource identifier="Ink_gpen_10.kpp" >
+  <tag>Ink</tag>
+ </resource>
+ <resource identifier="Screentones_eraser.kpp" >
+  <tag>Erasers</tag>
+ </resource>
+ <resource identifier="Eraser_soft.kpp" >
+  <tag>Erasers</tag>
+ </resource>
+ <resource identifier="Basic_wet.kpp" >
+  <tag>Wet</tag>
+ </resource>
+ <resource identifier="Basic_circle.kpp" >
+  <tag>Circle</tag>
+ </resource>
+ <resource identifier="Ink_tilt_20.kpp" >
+  <tag>Ink</tag>
+ </resource>
+ <resource identifier="Block_fuzzy.kpp" >
+  <tag>Block</tag>
+ </resource>
+ <resource identifier="Smudge_block_tilt.kpp" >
+  <tag>Block</tag>
+  <tag>Smudge</tag>
+ </resource>
+ <resource identifier="Basic_mix.kpp" >
+  <tag>Mix</tag>
+ </resource>
+ <resource identifier="Basic_tip_soft.kpp" >
+  <tag>Circle</tag>
+ </resource>
+ <resource identifier="Basic_wet_soft.kpp" >
+  <tag>Wet</tag>
+ </resource>
+ <resource identifier="FX_blur_light.kpp" >
+  <tag>FX</tag>
+ </resource>
+ <resource identifier="Basic_mix_soft.kpp" >
+  <tag>Mix</tag>
+ </resource>
+ <resource identifier="FX_splat_starfield.kpp" >
+  <tag>FX</tag>
+ </resource>
+ <resource identifier="Layout_circle_soft.kpp" >
+  <tag>Circle</tag>
+ </resource>
+ <resource identifier="Smudge_soft.kpp" >
+  <tag>Smudge</tag>
+ </resource>
+ <resource identifier="Layout_block.kpp" >
+  <tag>Block</tag>
+ </resource>
+ <resource identifier="Splat_mix_cells.kpp" >
+  <tag>Mix</tag>
+ </resource>
+ <resource identifier="Basic_tip_gaussian.kpp" >
+  <tag>Circle</tag>
+ </resource>
+ <resource identifier="Fill_block.kpp" >
+  <tag>Block</tag>
+ </resource>
+ <resource identifier="Block_tilt.kpp" >
+  <tag>Block</tag>
+ </resource>
+ <resource identifier="Ink_gpen_25.kpp" >
+  <tag>Ink</tag>
+ </resource>
+ <resource identifier="Splat_wet_cells.kpp" >
+  <tag>Wet</tag>
+ </resource>
+ <resource identifier="Ink_ballpen.kpp" >
+  <tag>Ink</tag>
+ </resource>
+ <resource identifier="Eraser_circle.kpp" >
+  <tag>Erasers</tag>
+ </resource>
+ <resource identifier="ink_precision_03.kpp" >
+  <tag>Ink</tag>
+ </resource>
+ <resource identifier="Smudge_rake_2.kpp" >
+  <tag>Smudge</tag>
+ </resource>
+ <resource identifier="Smudge_textured.kpp" >
+  <tag>Smudge</tag>
+ </resource>
+ <resource identifier="Block_basic.kpp" >
+  <tag>Block</tag>
+ </resource>
+ <resource identifier="Ink_brush_25.kpp" >
+  <tag>Ink</tag>
+ </resource>
+ <resource identifier="Ink_circle_10.kpp" >
+  <tag>Circle</tag>
+  <tag>Ink</tag>
+ </resource>
+ <resource identifier="Ink_circle_05.kpp" >
+  <tag>Circle</tag>
+  <tag>Ink</tag>
+ </resource>
+ <resource identifier="Bristles_wet.kpp" >
+  <tag>Wet</tag>
+ </resource>
+ <resource identifier="Eraser_hard.kpp" >
+  <tag>Erasers</tag>
+ </resource>
+ <resource identifier="Airbrush_eraser.kpp" >
+  <tag>Erasers</tag>
+ </resource>
+ <resource identifier="Smudge_rake.kpp" >
+  <tag>Smudge</tag>
+ </resource>
+ <resource identifier="Sparkle_wet_soft.kpp" >
+  <tag>Wet</tag>
+ </resource>
+ <resource identifier="Fill_circle.kpp" >
+  <tag>Circle</tag>
+ </resource>
+ <resource identifier="FX_color_HSY.kpp" >
+  <tag>FX</tag>
+ </resource>
+ <resource identifier="Ink_tilt_10.kpp" >
+  <tag>Ink</tag>
+ </resource>
+ <resource identifier="Sparkle_wet.kpp" >
+  <tag>Wet</tag>
+ </resource>
+ <resource identifier="Basic_tip_default.kpp" >
+  <tag>Circle</tag>
+ </resource>
+ <resource identifier="FX_explode.kpp" >
+  <tag>FX</tag>
+ </resource>
+ <resource identifier="Pixelart_dither.kpp" >
+  <tag>PixelArt</tag>
+ </resource>
+ <resource identifier="Pixelart_round.kpp" >
+  <tag>PixelArt</tag>
+ </resource>
+ <resource identifier="Pixelart_square.kpp" >
+  <tag>PixelArt</tag>
+ </resource>
+ <resource identifier="pixel1.kpp" >
+  <tag>PixelArt</tag>
+ </resource>
+
 </tags>

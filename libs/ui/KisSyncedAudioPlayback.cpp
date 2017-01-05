@@ -11,7 +11,21 @@ class QIODevice;
 
 namespace {
 
-struct QMediaPlayer {
+    class QMediaPlayer : public QObject {
+        Q_OBJECT
+    public:
+
+    enum Error
+    {
+        NoError,
+        ResourceError,
+        FormatError,
+        NetworkError,
+        AccessDeniedError,
+        ServiceMissingError,
+        MediaIsPlaylist
+    };
+
     enum State
     {
         StoppedState,
@@ -30,7 +44,11 @@ struct QMediaPlayer {
     void setPlaybackRate(qreal) {}
     void setVolume(int) {}
     void setMedia(const QUrl&, QIODevice * device = 0) { Q_UNUSED(device);}
-};
+    QString errorString() const { return QString(); }
+
+    Q_SIGNALS:
+    void error(Error value);
+    };
 }
 #endif
 
@@ -115,5 +133,11 @@ void KisSyncedAudioPlayback::stop()
 
 void KisSyncedAudioPlayback::slotOnError()
 {
+#ifdef HAVE_QT_MULTIMEDIA
     emit error(m_d->player.media().canonicalUrl().toLocalFile(), m_d->player.errorString());
+#endif
 }
+
+#ifndef HAVE_QT_MULTIMEDIA
+#include "KisSyncedAudioPlayback.moc"
+#endif

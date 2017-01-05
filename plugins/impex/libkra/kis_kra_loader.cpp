@@ -798,7 +798,7 @@ KisNodeSP KisKraLoader::loadFileLayer(const KoXmlElement& element, KisImageSP im
         QString msg = i18nc(
             "@info",
             "The file associated to a file layer with the name \"%1\" is not found.\n\n"
-            "Expected path:\n>"
+            "Expected path:\n"
             "%2\n\n"
             "Do you want to locate it manually?", name, fullPath);
 

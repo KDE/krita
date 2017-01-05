@@ -207,7 +207,7 @@ TimelineFramesView::TimelineFramesView(QWidget *parent)
     m_d->audioOptionsMenu = new QMenu(this);
 
 #ifndef HAVE_QT_MULTIMEDIA
-    m_d->audioOptionsMenu->addSection(i18nc("@item:inmenu", "Audio playback is not suported in this build!"));
+    m_d->audioOptionsMenu->addSection(i18nc("@item:inmenu", "Audio playback is not supported in this build!"));
 #endif
 
     m_d->openAudioAction= new QAction("XXX", this);

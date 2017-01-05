@@ -335,7 +335,7 @@ KisImportExportFilter::ConversionStatus KisAnimationExportSaver::exportAnimation
                                      i18n("Delete old frames?"),
                                      i18n("Frames with the same naming "
                                           "scheme exist in the destination "
-                                          "directory. The are going to be "
+                                          "directory. They are going to be "
                                           "deleted, continue?\n\n"
                                           "Directory: %1\n"
                                           "Files: %2",

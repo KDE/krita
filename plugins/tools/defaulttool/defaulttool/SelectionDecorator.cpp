@@ -101,9 +101,8 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
     // if we have no editable shape selected there
     // is no need drawing the selection handles
     if (editable) {
-
         painter.setPen(pen);
-        painter.setBrush(pen.color());
+        painter.setBrush(Qt::white);
 
         QPolygonF outline = handleArea;
 

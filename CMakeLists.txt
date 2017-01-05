@@ -242,8 +242,6 @@ find_package(Qt5 ${MIN_QT_VERSION}
         Svg
         Test
         Concurrent
-        OPTIONAL_COMPONENTS
-        Multimedia
 )
 
 
@@ -254,11 +252,22 @@ macro_ensure_out_of_source_build("Compiling Krita inside the source directory is
 
 # Note: OPTIONAL_COMPONENTS does not seem to be reliable
 # (as of ECM 5.15.0, CMake 3.2)
+
+find_package(Qt5Multimedia ${MIN_QT_VERSION})
+set_package_properties(Qt5Multimedia PROPERTIES
+        DESCRIPTION "Qt multimedia integration"
+        URL "http://www.qt.io/"
+        TYPE OPTIONAL
+        PURPOSE "Optionally used to provide sound support for animations")
+
+macro_bool_to_01(Qt5Multimedia_FOUND HAVE_QT_MULTIMEDIA)
+configure_file(config-qtmultimedia.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-qtmultimedia.h )
+
 if (NOT WIN32 AND NOT APPLE)
 
     find_package(Qt5 ${MIN_QT_VERSION} REQUIRED X11Extras)
 
-    find_package(Qt5DBus ${MIN_QT_VERSION} QUIET)
+    find_package(Qt5DBus ${MIN_QT_VERSION})
     set(HAVE_DBUS ${Qt5DBus_FOUND})
     set_package_properties(Qt5DBus PROPERTIES
         DESCRIPTION "Qt DBUS integration"
@@ -266,7 +275,7 @@ if (NOT WIN32 AND NOT APPLE)
         TYPE OPTIONAL
         PURPOSE "Optionally used to provide a dbus api on Linux")
 
-    find_package(KF5KIO ${MIN_FRAMEWORKS_VERSION} QUIET)
+    find_package(KF5KIO ${MIN_FRAMEWORKS_VERSION})
     macro_bool_to_01(KF5KIO_FOUND HAVE_KIO)
     set_package_properties(KF5KIO PROPERTIES
         DESCRIPTION "KDE's KIO Framework"
@@ -274,7 +283,7 @@ if (NOT WIN32 AND NOT APPLE)
         TYPE OPTIONAL
         PURPOSE "Optionally used for recent document handling")
 
-    find_package(KF5Crash ${MIN_FRAMEWORKS_VERSION} QUIET) 
+    find_package(KF5Crash ${MIN_FRAMEWORKS_VERSION}) 
     macro_bool_to_01(KF5Crash_FOUND HAVE_KCRASH)
     set_package_properties(KF5Crash PROPERTIES
         DESCRIPTION "KDE's Crash Handler"
@@ -294,8 +303,6 @@ else()
     set(HAVE_XCB FALSE)
 endif()
 
-macro_bool_to_01(Qt5Multimedia_FOUND HAVE_QT_MULTIMEDIA)
-configure_file(config-qtmultimedia.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-qtmultimedia.h )
 
 add_definitions(
   -DQT_USE_QSTRINGBUILDER

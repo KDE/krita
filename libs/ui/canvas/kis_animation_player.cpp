@@ -68,7 +68,8 @@ public:
           lastTimerInterval(0),
           lastPaintedFrame(0),
           playbackStatisticsCompressor(1000, KisSignalCompressor::FIRST_INACTIVE),
-          stopAudioOnScrubbingCompressor(100, KisSignalCompressor::POSTPONE)
+          stopAudioOnScrubbingCompressor(100, KisSignalCompressor::POSTPONE),
+          audioOffsetTolerance(-1)
           {}
 
     KisAnimationPlayer *q;
@@ -108,6 +109,8 @@ public:
     QScopedPointer<KisSyncedAudioPlayback> syncedAudio;
     QScopedPointer<KisSignalCompressorWithParam<int> > audioSyncScrubbingCompressor;
     KisSignalCompressor stopAudioOnScrubbingCompressor;
+
+    int audioOffsetTolerance;
 
     void stopImpl(bool doUpdates);
 
@@ -210,8 +213,9 @@ void KisAnimationPlayer::slotAudioChannelChanged()
     if (info.exists() && !interface->isAudioMuted()) {
         m_d->syncedAudio.reset(new KisSyncedAudioPlayback(info.absoluteFilePath()));
         m_d->syncedAudio->setVolume(interface->audioVolume());
-        connect(m_d->syncedAudio.data(), SIGNAL(error(const QString &, const QString &)), SLOT(slotOnAudioError(const QString &, const QString &)));
+        m_d->syncedAudio->setSoundOffsetTolerance(m_d->audioOffsetTolerance);
 
+        connect(m_d->syncedAudio.data(), SIGNAL(error(const QString &, const QString &)), SLOT(slotOnAudioError(const QString &, const QString &)));
     } else {
         m_d->syncedAudio.reset();
     }
@@ -265,16 +269,28 @@ void KisAnimationPlayer::disconnectCancelSignals()
 
 void KisAnimationPlayer::slotUpdateAudioChunkLength()
 {
+    const KisImageAnimationInterface *animation = m_d->canvas->image()->animationInterface();
+    const int animationFramePeriod = qMax(1, 1000 / animation->framerate());
+
     KisConfig cfg;
     int scrubbingAudioUdpatesDelay = cfg.scrubbingAudioUpdatesDelay();
 
     if (scrubbingAudioUdpatesDelay < 0) {
-        const KisImageAnimationInterface *animation = m_d->canvas->image()->animationInterface();
-        scrubbingAudioUdpatesDelay = qMax(1, 1000 / animation->framerate());
+
+        scrubbingAudioUdpatesDelay = qMax(1, animationFramePeriod);
     }
 
     m_d->audioSyncScrubbingCompressor->setDelay(scrubbingAudioUdpatesDelay);
     m_d->stopAudioOnScrubbingCompressor.setDelay(scrubbingAudioUdpatesDelay);
+
+    m_d->audioOffsetTolerance = cfg.audioOffsetTolerance();
+    if (m_d->audioOffsetTolerance < 0) {
+        m_d->audioOffsetTolerance = animationFramePeriod;
+    }
+
+    if (m_d->syncedAudio) {
+        m_d->syncedAudio->setSoundOffsetTolerance(m_d->audioOffsetTolerance);
+    }
 }
 
 void KisAnimationPlayer::slotUpdatePlaybackTimer()

@@ -276,6 +276,29 @@ QPointF KRITAGLOBAL_EXPORT ensureInRect(QPointF pt, const QRectF &bounds);
 
 QRect KRITAGLOBAL_EXPORT ensureRectNotSmaller(QRect rc, const QSize &size);
 
+template <class Size>
+Size ensureSizeNotSmaller(const Size &size, const Size &bounds)
+{
+    Size result = size;
+
+    const auto widthBound = qAbs(bounds.width());
+    auto width = result.width();
+    if (qAbs(width) < widthBound) {
+        width = copysign(widthBound, width);
+        result.setWidth(width);
+    }
+
+    const auto heightBound = qAbs(bounds.height());
+    auto height = result.height();
+    if (qAbs(height) < heightBound) {
+        height = copysign(heightBound, height);
+        result.setHeight(height);
+    }
+
+    return result;
+}
+
+
 /**
  * Attempt to intersect a line to the area of the a rectangle.
  *

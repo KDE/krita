@@ -308,7 +308,6 @@ void DefaultToolWidget::slotRepositionShapes()
     m_tool->canvas()->addCommand(cmd);
 }
 
-
 void DefaultToolWidget::slotResizeShapes()
 {
     static const qreal eps = 1e-4;
@@ -323,7 +322,9 @@ void DefaultToolWidget::slotResizeShapes()
     if (bounds.isNull()) return;
 
     const QSizeF oldSize(bounds.size());
-    const QSizeF newSize(widthSpinBox->value(), heightSpinBox->value());
+
+    QSizeF newSize(widthSpinBox->value(), heightSpinBox->value());
+    newSize = KisAlgebra2D::ensureSizeNotSmaller(newSize, QSizeF(eps, eps));
 
     const qreal scaleX = newSize.width() / oldSize.width();
     const qreal scaleY = newSize.height() / oldSize.height();

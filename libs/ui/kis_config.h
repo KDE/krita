@@ -482,6 +482,9 @@ public:
     int scrubbingAudioUpdatesDelay(bool defaultValue = false) const;
     void setScrubbingAudioUpdatesDelay(int value);
 
+    int audioOffsetTolerance(bool defaultValue = false) const;
+    void setAudioOffsetTolerance(int value);
+
     bool switchSelectionCtrlAlt(bool defaultValue = false) const;
     void setSwitchSelectionCtrlAlt(bool value);
 

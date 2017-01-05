@@ -1685,6 +1685,16 @@ void KisConfig::setScrubbingAudioUpdatesDelay(int value)
     m_cfg.writeEntry("scrubbingAudioUpdatesDelay", value);
 }
 
+int KisConfig::audioOffsetTolerance(bool defaultValue) const
+{
+    return (defaultValue ? -1 : m_cfg.readEntry("audioOffsetTolerance", -1));
+}
+
+void KisConfig::setAudioOffsetTolerance(int value)
+{
+    m_cfg.writeEntry("audioOffsetTolerance", value);
+}
+
 bool KisConfig::switchSelectionCtrlAlt(bool defaultValue) const
 {
     return defaultValue ? false : m_cfg.readEntry("switchSelectionCtrlAlt", false);

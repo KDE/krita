@@ -96,11 +96,11 @@ void TestPosition::testAbsolutePosition()
     shape1->setPosition(QPointF(10, 10));
 
     QCOMPARE(shape1->absolutePosition(), QPointF(10 + 25, 10 + 25));
-    QCOMPARE(shape1->absolutePosition(KoFlake::CenteredPosition), QPointF(10 + 25, 10 + 25));
-    QCOMPARE(shape1->absolutePosition(KoFlake::TopLeftCorner), QPointF(10 + 50, 10));
-    QCOMPARE(shape1->absolutePosition(KoFlake::BottomRightCorner), QPointF(10, 10 + 50));
+    QCOMPARE(shape1->absolutePosition(KoFlake::Center), QPointF(10 + 25, 10 + 25));
+    QCOMPARE(shape1->absolutePosition(KoFlake::TopLeft), QPointF(10 + 50, 10));
+    QCOMPARE(shape1->absolutePosition(KoFlake::BottomRight), QPointF(10, 10 + 50));
 
-    QCOMPARE(container2->absolutePosition(KoFlake::TopLeftCorner), QPointF(200, 200));
+    QCOMPARE(container2->absolutePosition(KoFlake::TopLeft), QPointF(200, 200));
 }
 
 void TestPosition::testSetAbsolutePosition()
@@ -135,20 +135,20 @@ void TestPosition::testSetAbsolutePosition2()
     shape1->setAbsolutePosition(QPointF(100, 100));
     QCOMPARE(shape1->absolutePosition(), QPointF(100, 100));
 
-    shape1->setAbsolutePosition(QPointF(100, 100), KoFlake::TopLeftCorner);
-    QCOMPARE(shape1->absolutePosition(KoFlake::TopLeftCorner), QPointF(100, 100));
+    shape1->setAbsolutePosition(QPointF(100, 100), KoFlake::TopLeft);
+    QCOMPARE(shape1->absolutePosition(KoFlake::TopLeft), QPointF(100, 100));
 
-    childShape1->setAbsolutePosition(QPointF(0, 0), KoFlake::BottomRightCorner);
+    childShape1->setAbsolutePosition(QPointF(0, 0), KoFlake::BottomRight);
     QCOMPARE(childShape1->position(), QPointF(-150, -150));
 
-    childShape1->setAbsolutePosition(QPointF(0, 0), KoFlake::BottomLeftCorner);
+    childShape1->setAbsolutePosition(QPointF(0, 0), KoFlake::BottomLeft);
     QCOMPARE(childShape1->position(), QPointF(-100, -150));
 
-    childShape1->setAbsolutePosition(QPointF(0, 0), KoFlake::TopRightCorner);
+    childShape1->setAbsolutePosition(QPointF(0, 0), KoFlake::TopRight);
     QCOMPARE(childShape1->position(), QPointF(-150, -100));
 
     container2->setInheritsTransform(childShape2, true);
-    childShape2->setAbsolutePosition(QPointF(0, 0), KoFlake::TopLeftCorner);
+    childShape2->setAbsolutePosition(QPointF(0, 0), KoFlake::TopLeft);
     QCOMPARE(childShape2->position(), QPointF(-200, 200));
 }
 

@@ -87,16 +87,16 @@ ShapeShearStrategy::ShapeShearStrategy(KoToolBase *tool, const QPointF &clicked,
     QPointF edge;
     qreal angle = 0.0;
     if (m_top) {
-        edge = sel->absolutePosition(KoFlake::BottomLeftCorner) - sel->absolutePosition(KoFlake::BottomRightCorner);
+        edge = sel->absolutePosition(KoFlake::BottomLeft) - sel->absolutePosition(KoFlake::BottomRight);
         angle = 180.0;
     } else if (m_bottom) {
-        edge = sel->absolutePosition(KoFlake::TopRightCorner) - sel->absolutePosition(KoFlake::TopLeftCorner);
+        edge = sel->absolutePosition(KoFlake::TopRight) - sel->absolutePosition(KoFlake::TopLeft);
         angle = 0.0;
     } else if (m_left) {
-        edge = sel->absolutePosition(KoFlake::BottomLeftCorner) - sel->absolutePosition(KoFlake::TopLeftCorner);
+        edge = sel->absolutePosition(KoFlake::BottomLeft) - sel->absolutePosition(KoFlake::TopLeft);
         angle = 90.0;
     } else if (m_right) {
-        edge = sel->absolutePosition(KoFlake::TopRightCorner) - sel->absolutePosition(KoFlake::BottomRightCorner);
+        edge = sel->absolutePosition(KoFlake::TopRight) - sel->absolutePosition(KoFlake::BottomRight);
         angle = 270.0;
     }
     qreal currentAngle = atan2(edge.y(), edge.x()) / M_PI * 180;
@@ -104,8 +104,8 @@ ShapeShearStrategy::ShapeShearStrategy(KoToolBase *tool, const QPointF &clicked,
 
     // use crossproduct of top edge and left edge of selection bounding rect
     // to determine if the selection is mirrored
-    QPointF top = sel->absolutePosition(KoFlake::TopRightCorner) - sel->absolutePosition(KoFlake::TopLeftCorner);
-    QPointF left = sel->absolutePosition(KoFlake::BottomLeftCorner) - sel->absolutePosition(KoFlake::TopLeftCorner);
+    QPointF top = sel->absolutePosition(KoFlake::TopRight) - sel->absolutePosition(KoFlake::TopLeft);
+    QPointF left = sel->absolutePosition(KoFlake::BottomLeft) - sel->absolutePosition(KoFlake::TopLeft);
     m_isMirrored = (top.x() * left.y() - top.y() * left.x()) < 0.0;
 }
 

@@ -685,21 +685,6 @@ QPainterPath KoShape::shadowOutline() const
     return QPainterPath();
 }
 
-QPointF KoShape::absolutePosition(KoFlake::Position anchor) const
-{
-    const QRectF rc = outlineRect();
-
-    QPointF point;
-    switch (anchor) {
-    case KoFlake::TopLeftCorner: point = rc.topLeft(); break;
-    case KoFlake::TopRightCorner: point = rc.topRight(); break;
-    case KoFlake::BottomLeftCorner: point = rc.bottomLeft(); break;
-    case KoFlake::BottomRightCorner: point = rc.bottomRight(); break;
-    case KoFlake::CenteredPosition: point = rc.center(); break;
-    }
-    return absoluteTransformation(0).map(point);
-}
-
 QPointF KoShape::absolutePosition(KoFlake::AnchorPosition anchor) const
 {
     const QRectF rc = outlineRect();
@@ -713,18 +698,6 @@ QPointF KoShape::absolutePosition(KoFlake::AnchorPosition anchor) const
     }
 
     return absoluteTransformation(0).map(point);
-}
-
-void KoShape::setAbsolutePosition(const QPointF &newPosition, KoFlake::Position anchor)
-{
-    Q_D(KoShape);
-    QPointF currentAbsPosition = absolutePosition(anchor);
-    QPointF translate = newPosition - currentAbsPosition;
-    QTransform translateMatrix;
-    translateMatrix.translate(translate.x(), translate.y());
-    applyAbsoluteTransformation(translateMatrix);
-    notifyChanged();
-    d->shapeChanged(PositionChanged);
 }
 
 void KoShape::setAbsolutePosition(const QPointF &newPosition, KoFlake::AnchorPosition anchor)
@@ -1952,14 +1925,14 @@ QTransform KoShape::parseOdfTransform(const QString &transform)
                 scaleMatrix.scale(params[0].toDouble(), params[0].toDouble());
             matrix = matrix * scaleMatrix;
         } else if (cmd == "skewx") {
-            QPointF p = absolutePosition(KoFlake::TopLeftCorner);
+            QPointF p = absolutePosition(KoFlake::TopLeft);
             QTransform shearMatrix;
             shearMatrix.translate(p.x(), p.y());
             shearMatrix.shear(tan(-params[0].toDouble()), 0.0F);
             shearMatrix.translate(-p.x(), -p.y());
             matrix = matrix * shearMatrix;
         } else if (cmd == "skewy") {
-            QPointF p = absolutePosition(KoFlake::TopLeftCorner);
+            QPointF p = absolutePosition(KoFlake::TopLeft);
             QTransform shearMatrix;
             shearMatrix.translate(p.x(), p.y());
             shearMatrix.shear(0.0F, tan(-params[0].toDouble()));

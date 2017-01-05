@@ -68,15 +68,6 @@ namespace KoFlake
         ShapeOnTop  ///< return the shape highest z-ordering, regardless of selection.
     };
 
-    /// position. See KoShape::absolutePosition()
-    enum Position {
-        TopLeftCorner, ///< the top left corner
-        TopRightCorner, ///< the top right corner
-        BottomLeftCorner, ///< the bottom left corner
-        BottomRightCorner, ///< the bottom right corner
-        CenteredPosition ///< the centred corner
-    };
-
     /**
      * Used to see which style type is active
      */

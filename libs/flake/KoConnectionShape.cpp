@@ -73,7 +73,7 @@ QPointF KoConnectionShapePrivate::escapeDirection(int handleId) const
         KoConnectionPoint::EscapeDirection ed = attachedShape->connectionPoint(connectionPointId).escapeDirection;
         if (ed == KoConnectionPoint::AllDirections) {
             QPointF handlePoint = q->shapeToDocument(handles[handleId]);
-            QPointF centerPoint = attachedShape->absolutePosition(KoFlake::CenteredPosition);
+            QPointF centerPoint = attachedShape->absolutePosition(KoFlake::Center);
 
             /*
              * Determine the best escape direction from the position of the handle point
@@ -88,11 +88,11 @@ QPointF KoConnectionShapePrivate::escapeDirection(int handleId) const
              * of the orthogonal direction.
              */
             // define our edge points in the right order
-            const KoFlake::Position corners[4] = {
-                KoFlake::BottomRightCorner,
-                KoFlake::BottomLeftCorner,
-                KoFlake::TopLeftCorner,
-                KoFlake::TopRightCorner
+            const KoFlake::AnchorPosition corners[4] = {
+                KoFlake::BottomRight,
+                KoFlake::BottomLeft,
+                KoFlake::TopLeft,
+                KoFlake::TopRight
             };
 
             QPointF vHandle = handlePoint-centerPoint;
@@ -130,7 +130,7 @@ QPointF KoConnectionShapePrivate::escapeDirection(int handleId) const
             }
         } else if (ed == KoConnectionPoint::HorizontalDirections) {
             QPointF handlePoint = q->shapeToDocument(handles[handleId]);
-            QPointF centerPoint = attachedShape->absolutePosition(KoFlake::CenteredPosition);
+            QPointF centerPoint = attachedShape->absolutePosition(KoFlake::Center);
             // use horizontal direction pointing away from center point
             if (handlePoint.x() < centerPoint.x())
                 direction = QPointF(-1.0, 0.0);
@@ -138,7 +138,7 @@ QPointF KoConnectionShapePrivate::escapeDirection(int handleId) const
                 direction = QPointF(1.0, 0.0);
         } else if (ed == KoConnectionPoint::VerticalDirections) {
             QPointF handlePoint = q->shapeToDocument(handles[handleId]);
-            QPointF centerPoint = attachedShape->absolutePosition(KoFlake::CenteredPosition);
+            QPointF centerPoint = attachedShape->absolutePosition(KoFlake::Center);
             // use vertical direction pointing away from center point
             if (handlePoint.y() < centerPoint.y())
                 direction = QPointF(0.0, -1.0);

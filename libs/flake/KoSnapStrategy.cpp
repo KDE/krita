@@ -510,12 +510,12 @@ bool BoundingBoxSnapStrategy::snap(const QPointF &mousePosition, KoSnapProxy *pr
     rect.moveCenter(mousePosition);
     QPointF snappedPoint = mousePosition;
 
-    KoFlake::Position pointId[5] = {
-        KoFlake::TopLeftCorner,
-        KoFlake::TopRightCorner,
-        KoFlake::BottomRightCorner,
-        KoFlake::BottomLeftCorner,
-        KoFlake::CenteredPosition
+    KoFlake::AnchorPosition pointId[5] = {
+        KoFlake::TopLeft,
+        KoFlake::TopRight,
+        KoFlake::BottomRight,
+        KoFlake::BottomLeft,
+        KoFlake::Center
     };
 
     QList<KoShape*> shapes = proxy->shapesInRect(rect, true);

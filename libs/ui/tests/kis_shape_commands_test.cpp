@@ -194,26 +194,26 @@ void KisShapeCommandsTest::testResizeShape(bool normalizeGroup)
     chk.checkImage(p.image, "00_initial_layer_update");
 
     qDebug() << "Before:";
-    qDebug() << ppVar(group->absolutePosition(KoFlake::TopLeftCorner));
-    qDebug() << ppVar(group->absolutePosition(KoFlake::BottomRightCorner));
+    qDebug() << ppVar(group->absolutePosition(KoFlake::TopLeft));
+    qDebug() << ppVar(group->absolutePosition(KoFlake::BottomRight));
     qDebug() << ppVar(group->outlineRect());
     qDebug() << ppVar(group->transformation());
 
-    QCOMPARE(group->absolutePosition(KoFlake::TopLeftCorner), QPointF(5,5));
-    QCOMPARE(group->absolutePosition(KoFlake::BottomRightCorner), QPointF(60,60));
+    QCOMPARE(group->absolutePosition(KoFlake::TopLeft), QPointF(5,5));
+    QCOMPARE(group->absolutePosition(KoFlake::BottomRight), QPointF(60,60));
 
 
-    const QPointF stillPoint = group->absolutePosition(KoFlake::BottomRightCorner);
+    const QPointF stillPoint = group->absolutePosition(KoFlake::BottomRight);
     KoFlake::resizeShape(group, 1.2, 1.4, stillPoint, false, true, QTransform());
 
     qDebug() << "After:";
-    qDebug() << ppVar(group->absolutePosition(KoFlake::TopLeftCorner));
-    qDebug() << ppVar(group->absolutePosition(KoFlake::BottomRightCorner));
+    qDebug() << ppVar(group->absolutePosition(KoFlake::TopLeft));
+    qDebug() << ppVar(group->absolutePosition(KoFlake::BottomRight));
     qDebug() << ppVar(group->outlineRect());
     qDebug() << ppVar(group->transformation());
 
-    QCOMPARE(group->absolutePosition(KoFlake::TopLeftCorner), QPointF(-6,-17));
-    QCOMPARE(group->absolutePosition(KoFlake::BottomRightCorner), QPointF(60,60));
+    QCOMPARE(group->absolutePosition(KoFlake::TopLeft), QPointF(-6,-17));
+    QCOMPARE(group->absolutePosition(KoFlake::BottomRight), QPointF(60,60));
 }
 
 void KisShapeCommandsTest::testResizeShape()

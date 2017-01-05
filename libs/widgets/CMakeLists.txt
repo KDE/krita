@@ -15,7 +15,6 @@ set(kritawidgets_LIB_SRCS
     KoResourceItemChooserContextMenu.cpp
     KoAspectButton.cpp
     KoPagePreviewWidget.cpp
-    KoPositionSelector.cpp
     KoSliderCombo.cpp
     KoColorPopupButton.cpp
     KoConfigAuthorPage.cpp

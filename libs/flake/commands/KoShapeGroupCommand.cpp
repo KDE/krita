@@ -116,8 +116,8 @@ void KoShapeGroupCommand::redo()
 
     if (d->shouldNormalize &&  dynamic_cast<KoShapeGroup*>(d->container)) {
         QRectF bound = d->containerBoundingRect();
-        QPointF oldGroupPosition = d->container->absolutePosition(KoFlake::TopLeftCorner);
-        d->container->setAbsolutePosition(bound.topLeft(), KoFlake::TopLeftCorner);
+        QPointF oldGroupPosition = d->container->absolutePosition(KoFlake::TopLeft);
+        d->container->setAbsolutePosition(bound.topLeft(), KoFlake::TopLeft);
         d->container->setSize(bound.size());
 
         if (d->container->shapeCount() > 0) {
@@ -190,7 +190,7 @@ void KoShapeGroupCommand::undo()
     }
 
     if (d->shouldNormalize && dynamic_cast<KoShapeGroup*>(d->container)) {
-        QPointF oldGroupPosition = d->container->absolutePosition(KoFlake::TopLeftCorner);
+        QPointF oldGroupPosition = d->container->absolutePosition(KoFlake::TopLeft);
         if (d->container->shapeCount() > 0) {
             bool boundingRectInitialized = false;
             QRectF bound;
@@ -207,7 +207,7 @@ void KoShapeGroupCommand::undo()
             Q_FOREACH (KoShape * child, d->container->shapes())
                 child->setAbsolutePosition(child->absolutePosition() + positionOffset);
 
-            d->container->setAbsolutePosition(bound.topLeft(), KoFlake::TopLeftCorner);
+            d->container->setAbsolutePosition(bound.topLeft(), KoFlake::TopLeft);
             d->container->setSize(bound.size());
         }
     }

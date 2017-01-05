@@ -290,57 +290,57 @@ qreal DefaultTool::rotationOfHandle(KoFlake::SelectionHandle handle, bool useEdg
     switch (handle) {
     case KoFlake::TopMiddleHandle:
         if (useEdgeRotation) {
-            direction = koSelection()->absolutePosition(KoFlake::TopRightCorner)
-                        - koSelection()->absolutePosition(KoFlake::TopLeftCorner);
+            direction = koSelection()->absolutePosition(KoFlake::TopRight)
+                        - koSelection()->absolutePosition(KoFlake::TopLeft);
         } else {
-            QPointF handlePosition = koSelection()->absolutePosition(KoFlake::TopLeftCorner);
-            handlePosition += 0.5 * (koSelection()->absolutePosition(KoFlake::TopRightCorner) - handlePosition);
+            QPointF handlePosition = koSelection()->absolutePosition(KoFlake::TopLeft);
+            handlePosition += 0.5 * (koSelection()->absolutePosition(KoFlake::TopRight) - handlePosition);
             direction = handlePosition - selectionCenter;
         }
         break;
     case KoFlake::TopRightHandle:
-        direction = (QVector2D(koSelection()->absolutePosition(KoFlake::TopRightCorner) - koSelection()->absolutePosition(KoFlake::TopLeftCorner)).normalized() + QVector2D(koSelection()->absolutePosition(KoFlake::TopRightCorner) - koSelection()->absolutePosition(KoFlake::BottomRightCorner)).normalized()).toPointF();
+        direction = (QVector2D(koSelection()->absolutePosition(KoFlake::TopRight) - koSelection()->absolutePosition(KoFlake::TopLeft)).normalized() + QVector2D(koSelection()->absolutePosition(KoFlake::TopRight) - koSelection()->absolutePosition(KoFlake::BottomRight)).normalized()).toPointF();
         break;
     case KoFlake::RightMiddleHandle:
         if (useEdgeRotation) {
-            direction = koSelection()->absolutePosition(KoFlake::BottomRightCorner)
-                        - koSelection()->absolutePosition(KoFlake::TopRightCorner);
+            direction = koSelection()->absolutePosition(KoFlake::BottomRight)
+                        - koSelection()->absolutePosition(KoFlake::TopRight);
         } else {
-            QPointF handlePosition = koSelection()->absolutePosition(KoFlake::TopRightCorner);
-            handlePosition += 0.5 * (koSelection()->absolutePosition(KoFlake::BottomRightCorner) - handlePosition);
+            QPointF handlePosition = koSelection()->absolutePosition(KoFlake::TopRight);
+            handlePosition += 0.5 * (koSelection()->absolutePosition(KoFlake::BottomRight) - handlePosition);
             direction = handlePosition - selectionCenter;
         }
         break;
     case KoFlake::BottomRightHandle:
-        direction = (QVector2D(koSelection()->absolutePosition(KoFlake::BottomRightCorner) - koSelection()->absolutePosition(KoFlake::BottomLeftCorner)).normalized() + QVector2D(koSelection()->absolutePosition(KoFlake::BottomRightCorner) - koSelection()->absolutePosition(KoFlake::TopRightCorner)).normalized()).toPointF();
+        direction = (QVector2D(koSelection()->absolutePosition(KoFlake::BottomRight) - koSelection()->absolutePosition(KoFlake::BottomLeft)).normalized() + QVector2D(koSelection()->absolutePosition(KoFlake::BottomRight) - koSelection()->absolutePosition(KoFlake::TopRight)).normalized()).toPointF();
         break;
     case KoFlake::BottomMiddleHandle:
         if (useEdgeRotation) {
-            direction = koSelection()->absolutePosition(KoFlake::BottomLeftCorner)
-                        - koSelection()->absolutePosition(KoFlake::BottomRightCorner);
+            direction = koSelection()->absolutePosition(KoFlake::BottomLeft)
+                        - koSelection()->absolutePosition(KoFlake::BottomRight);
         } else {
-            QPointF handlePosition = koSelection()->absolutePosition(KoFlake::BottomLeftCorner);
-            handlePosition += 0.5 * (koSelection()->absolutePosition(KoFlake::BottomRightCorner) - handlePosition);
+            QPointF handlePosition = koSelection()->absolutePosition(KoFlake::BottomLeft);
+            handlePosition += 0.5 * (koSelection()->absolutePosition(KoFlake::BottomRight) - handlePosition);
             direction = handlePosition - selectionCenter;
         }
         break;
     case KoFlake::BottomLeftHandle:
-        direction = koSelection()->absolutePosition(KoFlake::BottomLeftCorner) - selectionCenter;
-        direction = (QVector2D(koSelection()->absolutePosition(KoFlake::BottomLeftCorner) - koSelection()->absolutePosition(KoFlake::BottomRightCorner)).normalized() + QVector2D(koSelection()->absolutePosition(KoFlake::BottomLeftCorner) - koSelection()->absolutePosition(KoFlake::TopLeftCorner)).normalized()).toPointF();
+        direction = koSelection()->absolutePosition(KoFlake::BottomLeft) - selectionCenter;
+        direction = (QVector2D(koSelection()->absolutePosition(KoFlake::BottomLeft) - koSelection()->absolutePosition(KoFlake::BottomRight)).normalized() + QVector2D(koSelection()->absolutePosition(KoFlake::BottomLeft) - koSelection()->absolutePosition(KoFlake::TopLeft)).normalized()).toPointF();
         break;
     case KoFlake::LeftMiddleHandle:
         if (useEdgeRotation) {
-            direction = koSelection()->absolutePosition(KoFlake::TopLeftCorner)
-                        - koSelection()->absolutePosition(KoFlake::BottomLeftCorner);
+            direction = koSelection()->absolutePosition(KoFlake::TopLeft)
+                        - koSelection()->absolutePosition(KoFlake::BottomLeft);
         } else {
-            QPointF handlePosition = koSelection()->absolutePosition(KoFlake::TopLeftCorner);
-            handlePosition += 0.5 * (koSelection()->absolutePosition(KoFlake::BottomLeftCorner) - handlePosition);
+            QPointF handlePosition = koSelection()->absolutePosition(KoFlake::TopLeft);
+            handlePosition += 0.5 * (koSelection()->absolutePosition(KoFlake::BottomLeft) - handlePosition);
             direction = handlePosition - selectionCenter;
         }
         break;
     case KoFlake::TopLeftHandle:
-        direction = koSelection()->absolutePosition(KoFlake::TopLeftCorner) - selectionCenter;
-        direction = (QVector2D(koSelection()->absolutePosition(KoFlake::TopLeftCorner) - koSelection()->absolutePosition(KoFlake::TopRightCorner)).normalized() + QVector2D(koSelection()->absolutePosition(KoFlake::TopLeftCorner) - koSelection()->absolutePosition(KoFlake::BottomLeftCorner)).normalized()).toPointF();
+        direction = koSelection()->absolutePosition(KoFlake::TopLeft) - selectionCenter;
+        direction = (QVector2D(koSelection()->absolutePosition(KoFlake::TopLeft) - koSelection()->absolutePosition(KoFlake::TopRight)).normalized() + QVector2D(koSelection()->absolutePosition(KoFlake::TopLeft) - koSelection()->absolutePosition(KoFlake::BottomLeft)).normalized()).toPointF();
         break;
     case KoFlake::NoHandle:
         return 0.0;

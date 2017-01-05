@@ -82,7 +82,6 @@ public:
     int initialFrame;
     int firstFrame;
     int lastFrame;
-    int fps;
     qreal playbackSpeed;
 
     KisCanvas2 *canvas;
@@ -122,10 +121,10 @@ public:
         return frame;
     }
 
-    qint64 frameToMSec(int value) {
+    qint64 frameToMSec(int value, int fps) {
         return qreal(value) / fps * 1000.0;
     }
-    int msecToFrame(qint64 value) {
+    int msecToFrame(qint64 value, int fps) {
         return qreal(value) * fps / 1000.0;
     }
 };
@@ -136,7 +135,6 @@ KisAnimationPlayer::KisAnimationPlayer(KisCanvas2 *canvas)
 {
     m_d->useFastFrameUpload = false;
     m_d->playing = false;
-    m_d->fps = 15;
     m_d->canvas = canvas;
     m_d->playbackSpeed = 1.0;
 
@@ -301,14 +299,14 @@ void KisAnimationPlayer::slotUpdatePlaybackTimer()
     const KisTimeRange &range = animation->playbackRange();
     if (!range.isValid()) return;
 
-    m_d->fps = animation->framerate();
+    const int fps = animation->framerate();
 
     m_d->initialFrame = animation->currentUITime();
     m_d->firstFrame = range.start();
     m_d->lastFrame = range.end();
     m_d->expectedFrame = qBound(m_d->firstFrame, m_d->expectedFrame, m_d->lastFrame);
 
-    m_d->expectedInterval = qreal(1000) / m_d->fps / m_d->playbackSpeed;
+    m_d->expectedInterval = qreal(1000) / fps / m_d->playbackSpeed;
     m_d->lastTimerInterval = m_d->expectedInterval;
 
     if (m_d->syncedAudio) {
@@ -337,7 +335,8 @@ void KisAnimationPlayer::play()
     connectCancelSignals();
 
     if (m_d->syncedAudio) {
-        m_d->syncedAudio->play(m_d->frameToMSec(m_d->firstFrame));
+        KisImageAnimationInterface *animationInterface = m_d->canvas->image()->animationInterface();
+        m_d->syncedAudio->play(m_d->frameToMSec(m_d->firstFrame, animationInterface->framerate()));
     }
 }
 
@@ -396,6 +395,8 @@ void KisAnimationPlayer::slotUpdate()
 
 void KisAnimationPlayer::uploadFrame(int frame)
 {
+    KisImageAnimationInterface *animationInterface = m_d->canvas->image()->animationInterface();
+
     if (frame < 0) {
         const int currentTime = m_d->playbackTime.elapsed();
         const int framesDiff = currentTime - m_d->nextFrameExpectedTime;
@@ -424,7 +425,7 @@ void KisAnimationPlayer::uploadFrame(int frame)
     }
 
     if (m_d->syncedAudio) {
-        const int msecTime = m_d->frameToMSec(frame);
+        const int msecTime = m_d->frameToMSec(frame, animationInterface->framerate());
         if (isPlaying()) {
             slotSyncScrubbingAudio(msecTime);
         } else {
@@ -444,7 +445,7 @@ void KisAnimationPlayer::uploadFrame(int frame)
         m_d->canvas->image()->unlock();
 
         // no OpenGL cache or the frame just not cached yet
-        m_d->canvas->image()->animationInterface()->switchCurrentTimeAsync(frame);
+        animationInterface->switchCurrentTimeAsync(frame);
 
         emit sigFrameChanged();
     }

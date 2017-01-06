@@ -106,6 +106,16 @@ void KisAcyclicSignalConnector::connectBackwardVariant(QObject *sender, const ch
     connect(this, SIGNAL(backwardSignalVariant(const QVariant&)), receiver, method);
 }
 
+void KisAcyclicSignalConnector::lock()
+{
+    m_signalsBlocked++;
+}
+
+void KisAcyclicSignalConnector::unlock()
+{
+    m_signalsBlocked--;
+}
+
 void KisAcyclicSignalConnector::forwardSlotDouble(double value)
 {
     if (m_signalsBlocked) return;

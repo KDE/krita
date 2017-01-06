@@ -366,7 +366,6 @@ QList<QPointer<QWidget> > KarbonCalligraphyTool::createOptionWidgets()
 
     KoFillConfigWidget *fillWidget = new KoFillConfigWidget(0);
     fillWidget->setWindowTitle(i18n("Fill"));
-    fillWidget->setCanvas(canvas());
     widgets.append(fillWidget);
 
     KarbonCalligraphyOptionWidget *widget = new KarbonCalligraphyOptionWidget;

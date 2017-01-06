@@ -42,7 +42,8 @@ DefaultToolTabbedWidget::DefaultToolTabbedWidget(KoInteractionTool *tool, QWidge
 
     KoFillConfigWidget *fillWidget = new KoFillConfigWidget(this);
     fillWidget->setWindowTitle(i18n("Fill"));
-    fillWidget->setCanvas(tool->canvas());
+    // TODO: pass canvas to teh c-tor instead
+    //fillWidget->setCanvas(tool->canvas());
     addTab(fillWidget, KisIconUtils::loadIcon("krita_tool_color_fill"), QString());
 }
 

@@ -38,6 +38,8 @@ public:
 
     virtual ~KoColorBackground();
 
+    bool compareTo(const KoShapeBackground *other) const override;
+
     /// Returns the background color
     QColor color() const;
 

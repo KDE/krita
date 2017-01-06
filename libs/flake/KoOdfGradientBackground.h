@@ -39,6 +39,8 @@ public:
     // destructor
     virtual ~KoOdfGradientBackground();
 
+    bool compareTo(const KoShapeBackground *other) const override;
+
     /// reimplemented from KoShapeBackground
     virtual void fillStyle(KoGenStyle& style, KoShapeSavingContext& context);
     /// reimplemented from KoShapeBackground

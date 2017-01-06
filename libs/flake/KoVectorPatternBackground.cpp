@@ -57,6 +57,12 @@ KoVectorPatternBackground::~KoVectorPatternBackground()
 
 }
 
+bool KoVectorPatternBackground::compareTo(const KoShapeBackground *other) const
+{
+    Q_UNUSED(other);
+    return false;
+}
+
 void KoVectorPatternBackground::setReferenceCoordinates(KoFlake::CoordinateSystem value)
 {
     Q_D(KoVectorPatternBackground);

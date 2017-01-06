@@ -21,6 +21,7 @@
 
 #include <QObject>
 #include "kritaglobal_export.h"
+#include <mutex>
 
 
 /**
@@ -47,7 +48,11 @@ class KRITAGLOBAL_EXPORT KisAcyclicSignalConnector : public QObject
 {
     Q_OBJECT
 public:
-    KisAcyclicSignalConnector(QObject *parent);
+    typedef std::lock_guard<KisAcyclicSignalConnector> Blocker;
+
+public:
+
+    KisAcyclicSignalConnector(QObject *parent = 0);
 
     void connectForwardDouble(QObject *sender, const char *signal,
                               QObject *receiver, const char *method);
@@ -78,6 +83,9 @@ public:
 
     void connectBackwardVariant(QObject *sender, const char *signal,
                                 QObject *receiver, const char *method);
+
+    void lock();
+    void unlock();
 
 private Q_SLOTS:
     void forwardSlotDouble(double value);

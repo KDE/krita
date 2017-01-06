@@ -35,7 +35,7 @@ class KRITAWIDGETS_EXPORT KoFillConfigWidget : public QWidget
 {
     Q_OBJECT
     enum StyleButton {
-        None,
+        None = 0,
         Solid,
         Gradient,
         Pattern
@@ -44,16 +44,12 @@ public:
     explicit KoFillConfigWidget(QWidget *parent);
     ~KoFillConfigWidget();
 
-    void setCanvas(KoCanvasBase *canvas);
-
-    KoCanvasBase *canvas();
-
     /// Returns the list of the selected shape
     /// If you need to use only one shape, call currentShape()
     virtual QList<KoShape*> currentShapes();
 
-    /// Returns the first selected shape of the resource
-    virtual KoShape *currentShape();
+protected:
+    void showEvent(QShowEvent *event);
 
 private Q_SLOTS:
     void styleButtonPressed(int buttonId);
@@ -70,6 +66,11 @@ private Q_SLOTS:
     void patternChanged(QSharedPointer<KoShapeBackground> background);
 
     virtual void shapeChanged();
+
+    void slotUpdateFillTitle();
+
+    void slotCanvasResourceChanged(int key, const QVariant &value);
+
 private:
     /// update the widget with the KoShape background
     void updateWidget(KoShape *shape);

@@ -35,6 +35,8 @@ public:
     KoVectorPatternBackground();
     ~KoVectorPatternBackground();
 
+    bool compareTo(const KoShapeBackground *other) const override;
+
     void setReferenceCoordinates(KoFlake::CoordinateSystem value);
     KoFlake::CoordinateSystem referenceCoordinates() const;
 

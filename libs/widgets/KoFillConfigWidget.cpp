@@ -22,6 +22,7 @@
 
 #include <QToolButton>
 #include <QHBoxLayout>
+#include <QVBoxLayout>
 #include <QButtonGroup>
 #include <QLabel>
 #include <QSizePolicy>
@@ -31,7 +32,6 @@
 
 #include <klocalizedstring.h>
 
-#include <KoGroupButton.h>
 #include <KoIcon.h>
 #include <KoColor.h>
 #include <KoColorPopupAction.h>
@@ -56,6 +56,15 @@
 #include <KoResourcePopupAction.h>
 #include "KoZoomHandler.h"
 #include "KoColorPopupButton.h"
+#include "ui_KoFillConfigWidget.h"
+#include <kis_signals_blocker.h>
+#include <kis_signal_compressor.h>
+#include <kis_acyclic_signal_connector.h>
+#include <kis_assert.h>
+#include <KoCanvasResourceManager.h>
+
+
+#include "kis_debug.h"
 
 static const char* const buttonnone[]={
     "16 16 3 1",
@@ -64,18 +73,18 @@ static const char* const buttonnone[]={
     "- c #ffffff",
     "################",
     "#--------------#",
-    "#--------------#",
-    "#--------------#",
-    "#--------------#",
-    "#--------------#",
-    "#--------------#",
-    "#--------------#",
-    "#--------------#",
-    "#--------------#",
-    "#--------------#",
-    "#--------------#",
-    "#--------------#",
-    "#--------------#",
+    "#-e----------e-#",
+    "#--e--------e--#",
+    "#---e------e---#",
+    "#----e----e----#",
+    "#-----e--e-----#",
+    "#------ee------#",
+    "#------ee------#",
+    "#-----e--e-----#",
+    "#----e----e----#",
+    "#---e------e---#",
+    "#--e--------e--#",
+    "#-e----------e-#",
     "#--------------#",
     "################"};
 
@@ -164,9 +173,12 @@ class Q_DECL_HIDDEN KoFillConfigWidget::Private
 {
 public:
     Private()
-    : canvas(0)
+    : canvas(0),
+      colorChangedCompressor(100, KisSignalCompressor::FIRST_ACTIVE)
     {
     }
+
+#if 0
     /// Apply the gradient stops using the shape background
     QSharedPointer<KoShapeBackground> applyFillGradientStops(KoShape *shape, const QGradientStops &stops)
     {
@@ -192,80 +204,79 @@ public:
         }
         return QSharedPointer<KoGradientBackground>(newGradient);
     }
+#endif
 
-    KoColorPopupButton *colorButton;
-    QAction *noFillAction;
     KoColorPopupAction *colorAction;
     KoResourcePopupAction *gradientAction;
     KoResourcePopupAction *patternAction;
     QButtonGroup *group;
 
-    QWidget *spacer;
     KoCanvasBase *canvas;
+
+    KisSignalCompressor colorChangedCompressor;
+    KisAcyclicSignalConnector shapeChangedAcyclicConnector;
+
+    Ui_KoFillConfigWidget *ui;
 };
 
 KoFillConfigWidget::KoFillConfigWidget(QWidget *parent)
-:  QWidget(parent)
-, d(new Private())
+    :  QWidget(parent)
+    , d(new Private())
 {
-    setObjectName("Fill widget");
-    QHBoxLayout *layout = new QHBoxLayout(this);
-    layout->setMargin(0);
-    layout->setSpacing(0);
+    // connect to the canvas
+    KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
+    d->canvas = canvasController->canvas();
+
+    d->shapeChangedAcyclicConnector.connectBackwardVoid(
+                d->canvas->shapeManager()->selection(), SIGNAL(selectionChanged()),
+                this, SLOT(shapeChanged()));
+
+    d->shapeChangedAcyclicConnector.connectBackwardVoid(
+                d->canvas->shapeManager(), SIGNAL(selectionContentChanged()),
+                this, SLOT(shapeChanged()));
+
+    // WARNING: not acyclic!
+    connect(d->canvas->resourceManager(), SIGNAL(canvasResourceChanged(int,QVariant)),
+            this, SLOT(slotCanvasResourceChanged(int,QVariant)));
+
+    // confure GUI
+
+    d->ui = new Ui_KoFillConfigWidget();
+    d->ui->setupUi(this);
 
     d->group = new QButtonGroup(this);
     d->group->setExclusive(true);
 
-    // The button for no fill
-    KoGroupButton *button = new KoGroupButton(KoGroupButton::GroupLeft, this);
-    QPixmap noFillButtonIcon((const char **) buttonnone);
-    noFillButtonIcon.setMask(QBitmap(noFillButtonIcon));
-    button->setIcon(noFillButtonIcon);
-    button->setToolTip(i18nc("No stroke or fill", "None"));
-    button->setCheckable(true);
-    d->group->addButton(button, None);
-    layout->addWidget(button);
+    d->ui->btnNoFill->setIcon(QPixmap((const char **) buttonnone));
+    d->group->addButton(d->ui->btnNoFill, None);
 
-    // The button for solid fill
-    button = new KoGroupButton(KoGroupButton::GroupCenter, this);
-    button->setIcon(QPixmap((const char **) buttonsolid));
-    button->setToolTip(i18nc("Solid color stroke or fill", "Solid"));
-    button->setCheckable(true);
-    d->group->addButton(button, Solid);
-    layout->addWidget(button);
+    d->ui->btnSolidFill->setIcon(QPixmap((const char **) buttonsolid));
+    d->group->addButton(d->ui->btnSolidFill, Solid);
 
-    // The button for gradient fill
-    button = new KoGroupButton(KoGroupButton::GroupCenter, this);
-    button->setIcon(QPixmap((const char **) buttongradient));
-    button->setToolTip(i18n("Gradient"));
-    button->setCheckable(true);
-    d->group->addButton(button, Gradient);
-    layout->addWidget(button);
+    d->ui->btnGradientFill->setIcon(QPixmap((const char **) buttongradient));
+    d->group->addButton(d->ui->btnGradientFill, Gradient);
 
-    // The button for pattern fill
-    button = new KoGroupButton(KoGroupButton::GroupRight, this);
-    button->setIcon(QPixmap((const char **) buttonpattern));
-    button->setToolTip(i18n("Pattern"));
-    button->setCheckable(true);
-    d->group->addButton(button, Pattern);
-    layout->addWidget(button);
+    d->ui->btnPatternFill->setIcon(QPixmap((const char **) buttonpattern));
+    d->group->addButton(d->ui->btnPatternFill, Pattern);
 
-    connect(d->group, SIGNAL(buttonClicked(int)), this, SLOT(styleButtonPressed(int)));
-
-    d->colorButton = new KoColorPopupButton(this);
-    d->colorButton->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    layout->addWidget(d->colorButton);
-
-    d->noFillAction = new QAction(0);
-
-    d->colorAction = new KoColorPopupAction(d->colorButton);
+    d->colorAction = new KoColorPopupAction(d->ui->btnChooseSolidColor);
     d->colorAction->setToolTip(i18n("Change the filling color"));
     d->colorAction->setCurrentColor(Qt::white);
-    d->colorButton->setDefaultAction(d->colorAction);
-    d->colorButton->setPopupMode(QToolButton::InstantPopup);
-    connect(d->colorAction, SIGNAL(colorChanged(const KoColor &)), this, SLOT(colorChanged()));
-    connect(d->colorButton, SIGNAL(iconSizeChanged()), d->colorAction, SLOT(updateIcon()));
 
+    d->ui->btnChooseSolidColor->setDefaultAction(d->colorAction);
+    d->ui->btnChooseSolidColor->setPopupMode(QToolButton::InstantPopup);
+
+    connect(d->colorAction, SIGNAL(colorChanged(const KoColor &)), &d->colorChangedCompressor, SLOT(start()));
+    connect(&d->colorChangedCompressor, SIGNAL(timeout()), SLOT(colorChanged()));
+
+    connect(d->ui->btnChooseSolidColor, SIGNAL(iconSizeChanged()), d->colorAction, SLOT(updateIcon()));
+
+    connect(d->group, SIGNAL(buttonClicked(int)), SLOT(styleButtonPressed(int)));
+    connect(d->ui->stackWidget, SIGNAL(currentChanged(int)), SLOT(slotUpdateFillTitle()));
+    slotUpdateFillTitle();
+    styleButtonPressed(d->group->checkedId());
+
+#if 0
     // Gradient selector
     KoResourceServerProvider *serverProvider = KoResourceServerProvider::instance();
     QSharedPointer<KoAbstractResourceServerAdapter> gradientResourceAdapter(new KoResourceServerAdapter<KoAbstractGradient>(serverProvider->gradientServer()));
@@ -281,116 +292,107 @@ KoFillConfigWidget::KoFillConfigWidget(QWidget *parent)
     connect(d->patternAction, SIGNAL(resourceSelected(QSharedPointer<KoShapeBackground> )), this, SLOT(patternChanged(QSharedPointer<KoShapeBackground> )));
     connect(d->colorButton, SIGNAL(iconSizeChanged()), d->patternAction, SLOT(updateIcon()));
 
-    // Spacer
-    d->spacer = new QWidget();
-    d->spacer->setObjectName("SpecialSpacer");
-    layout->addWidget(d->spacer);
+#endif
 
-    KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
-    KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
-    if (selection) {
-        d->canvas = canvasController->canvas();
-        connect(selection, SIGNAL(selectionChanged()), this, SLOT(shapeChanged()));
-    }
 }
 
 KoFillConfigWidget::~KoFillConfigWidget()
 {
-    delete d->noFillAction;
     delete d;
 }
 
-void KoFillConfigWidget::setCanvas( KoCanvasBase *canvas )
+void KoFillConfigWidget::slotUpdateFillTitle()
 {
-    KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
-    KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
-
-    connect(selection, SIGNAL(selectionChanged()), this, SLOT(shapeChanged()));
-
-    d->canvas = canvas;
+    QString text = d->group->checkedButton() ? d->group->checkedButton()->text() : QString();
+    text.replace('&', QString());
+    d->ui->lblFillTitle->setText(text);
 }
 
-KoCanvasBase* KoFillConfigWidget::canvas()
+void KoFillConfigWidget::slotCanvasResourceChanged(int key, const QVariant &value)
 {
-    return d->canvas;
+    if (!isVisible()) return;
+
+    if (key == KoCanvasResourceManager::ForegroundColor) {
+        KoColor color = value.value<KoColor>();
+
+        const int checkedId = d->group->checkedId();
+
+        if ((checkedId < 0 || checkedId == None || checkedId == Solid) &&
+            !(checkedId == Solid && d->colorAction->currentKoColor() == color)) {
+
+            d->ui->stackWidget->setCurrentIndex(Solid);
+            d->colorAction->setCurrentColor(color);
+            d->colorChangedCompressor.start();
+        }
+    }
 }
 
 QList<KoShape*> KoFillConfigWidget::currentShapes()
 {
-    KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
-    KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
-    return selection->selectedShapes();
-}
 
-KoShape *KoFillConfigWidget::currentShape()
-{
-    KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
-    KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
-    return selection->firstSelectedShape();
+    return d->canvas->shapeManager()->selection()->selectedEditableShapes();
 }
-
 
 void KoFillConfigWidget::styleButtonPressed(int buttonId)
 {
-    d->colorButton->setEnabled(true);
     switch (buttonId) {
         case KoFillConfigWidget::None:
-            // Direct manipulation
-            d->colorButton->setDefaultAction(d->noFillAction);
-             d->colorButton->setDisabled(true);
             noColorSelected();
             break;
         case KoFillConfigWidget::Solid:
-            d->colorButton->setDefaultAction(d->colorAction);
             colorChanged();
             break;
         case KoFillConfigWidget::Gradient:
             // Only select mode in the widget, don't set actual gradient :/
-            d->colorButton->setDefaultAction(d->gradientAction);
-            gradientChanged(d->gradientAction->currentBackground());
+            //d->colorButton->setDefaultAction(d->gradientAction);
+            //gradientChanged(d->gradientAction->currentBackground());
             break;
         case KoFillConfigWidget::Pattern:
             // Only select mode in the widget, don't set actual pattern :/
-            d->colorButton->setDefaultAction(d->patternAction);
-            patternChanged(d->patternAction->currentBackground());
+            //d->colorButton->setDefaultAction(d->patternAction);
+            //patternChanged(d->patternAction->currentBackground());
             break;
     }
-    d->colorButton->setPopupMode(QToolButton::InstantPopup);
+
+    if (buttonId >= None && buttonId <= Pattern) {
+        d->ui->stackWidget->setCurrentIndex(buttonId);
+    }
 }
 
 void KoFillConfigWidget::noColorSelected()
 {
+    KisAcyclicSignalConnector::Blocker b(d->shapeChangedAcyclicConnector);
+
     QList<KoShape*> selectedShapes = currentShapes();
     if (selectedShapes.isEmpty()) {
         return;
     }
     KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
-    canvasController->canvas()->addCommand(new KoShapeBackgroundCommand(selectedShapes, QSharedPointer<KoShapeBackground>(0)));
+    canvasController->canvas()->addCommand(new KoShapeBackgroundCommand(selectedShapes, QSharedPointer<KoShapeBackground>()));
 }
 
 void KoFillConfigWidget::colorChanged()
 {
+    KisAcyclicSignalConnector::Blocker b(d->shapeChangedAcyclicConnector);
+
     QList<KoShape*> selectedShapes = currentShapes();
     if (selectedShapes.isEmpty()) {
         return;
     }
 
     QSharedPointer<KoShapeBackground> fill(new KoColorBackground(d->colorAction->currentColor()));
-    KUndo2Command *firstCommand = 0;
-    foreach (KoShape *shape, selectedShapes) {
-        if (! firstCommand) {
-            firstCommand = new KoShapeBackgroundCommand(shape, fill);
-        } else {
-            new KoShapeBackgroundCommand(shape, fill, firstCommand);
-        }
-    }
+
+    KUndo2Command *cmd = new KoShapeBackgroundCommand(selectedShapes, fill);
 
     KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
-    canvasController->canvas()->addCommand(firstCommand);
+    canvasController->canvas()->addCommand(cmd);
 }
 
 void KoFillConfigWidget::gradientChanged(QSharedPointer<KoShapeBackground>  background)
 {
+    Q_UNUSED(background);
+
+#if 0
     QList<KoShape*> selectedShapes = currentShapes();
     if (selectedShapes.isEmpty()) {
         return;
@@ -418,10 +420,14 @@ void KoFillConfigWidget::gradientChanged(QSharedPointer<KoShapeBackground>  back
     }
     KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
     canvasController->canvas()->addCommand(firstCommand);
+#endif
 }
 
 void KoFillConfigWidget::patternChanged(QSharedPointer<KoShapeBackground>  background)
 {
+    Q_UNUSED(background);
+
+#if 0
     QSharedPointer<KoPatternBackground> patternBackground = qSharedPointerDynamicCast<KoPatternBackground>(background);
     if (! patternBackground) {
         return;
@@ -439,73 +445,87 @@ void KoFillConfigWidget::patternChanged(QSharedPointer<KoShapeBackground>  backg
         fill->setPattern(patternBackground->pattern());
         canvasController->canvas()->addCommand(new KoShapeBackgroundCommand(selectedShapes, fill));
     }
+#endif
+}
+
+void KoFillConfigWidget::showEvent(QShowEvent *event)
+{
+    QWidget::showEvent(event);
+    shapeChanged();
+}
+
+bool compareBackgrounds(const QList<KoShape*> shapes, QSharedPointer<KoShapeBackground> bg)
+{
+    Q_FOREACH (KoShape *shape, shapes) {
+        if (
+            !(
+              (!bg && !shape->background()) ||
+              (bg && bg->compareTo(shape->background().data()))
+             )) {
+
+            return false;
+        }
+    }
+
+    return true;
 }
 
 void KoFillConfigWidget::shapeChanged()
 {
-    KoShape *shape = currentShape();
-    if (! shape) {
-        d->group->button(KoFillConfigWidget::None)->setChecked(false);
-        d->group->button(KoFillConfigWidget::Solid)->setChecked(false);
-        d->group->button(KoFillConfigWidget::Gradient)->setChecked(false);
-        d->group->button(KoFillConfigWidget::Pattern)->setChecked(false);
-        d->colorButton->setDisabled(true);
-        return;
-    }
+    if (!isVisible()) return;
 
-    d->colorAction->blockSignals(true);
-    updateWidget(shape);
-    d->colorAction->blockSignals(false);
+    QList<KoShape*> shapes = currentShapes();
+    QSharedPointer<KoShapeBackground> bg =
+            !shapes.isEmpty() ?
+                shapes.first()->background() :
+                QSharedPointer<KoShapeBackground>();
+
+    if (shapes.isEmpty() || (shapes.size() > 1 && !compareBackgrounds(shapes, bg))) {
+
+        Q_FOREACH (QAbstractButton *button, d->group->buttons()) {
+            button->setEnabled(!shapes.isEmpty());
+        }
+
+        d->group->button(None)->setChecked(true);
+        d->ui->stackWidget->setCurrentIndex(None);
+
+    } else {
+        Q_FOREACH (QAbstractButton *button, d->group->buttons()) {
+            button->setEnabled(true);
+        }
+
+        KoShape *shape = shapes.first();
+        updateWidget(shape);
+    }
 }
+
 
 
 void KoFillConfigWidget::updateWidget(KoShape *shape)
 {
-    if (! shape) {
-        return;
-    }
+    KIS_SAFE_ASSERT_RECOVER_RETURN(shape);
 
-    KoZoomHandler zoomHandler;
-    const qreal realWidth = zoomHandler.resolutionX() * width();
-    const qreal realHeight = zoomHandler.resolutionX() * height();
-
-    const qreal zoom = (realWidth > realHeight) ? realHeight : realWidth;
-    zoomHandler.setZoom(zoom);
-
-    shape->waitUntilReady(zoomHandler, false);
-
-    d->colorButton->setEnabled(true);
     QSharedPointer<KoShapeBackground> background = shape->background();
-    if (! background) {
-        // No Fill
-        d->group->button(KoFillConfigWidget::None)->setChecked(true);
-        d->colorButton->setDefaultAction(d->noFillAction);
-        d->colorButton->setDisabled(true);
-        d->colorButton->setPopupMode(QToolButton::InstantPopup);
-        return;
+
+    StyleButton newActiveButton = None;
+
+    if (background) {
+        QSharedPointer<KoColorBackground> colorBackground = qSharedPointerDynamicCast<KoColorBackground>(background);
+        QSharedPointer<KoGradientBackground> gradientBackground = qSharedPointerDynamicCast<KoGradientBackground>(background);
+        QSharedPointer<KoPatternBackground> patternBackground = qSharedPointerDynamicCast<KoPatternBackground>(background);
+
+        if (colorBackground) {
+            newActiveButton = KoFillConfigWidget::Solid;
+            d->colorAction->setCurrentColor(colorBackground->color());
+        } else if (gradientBackground) {
+            newActiveButton = KoFillConfigWidget::Gradient;
+            d->gradientAction->setCurrentBackground(background);
+        } else if (patternBackground) {
+            newActiveButton = KoFillConfigWidget::Pattern;
+            d->patternAction->setCurrentBackground(background);
+        }
     }
 
-    QSharedPointer<KoColorBackground> colorBackground = qSharedPointerDynamicCast<KoColorBackground>(background);
-    QSharedPointer<KoGradientBackground> gradientBackground = qSharedPointerDynamicCast<KoGradientBackground>(background);
-    QSharedPointer<KoPatternBackground> patternBackground = qSharedPointerDynamicCast<KoPatternBackground>(background);
-
-    if (colorBackground) {
-        d->colorAction->setCurrentColor(colorBackground->color());
-        d->group->button(KoFillConfigWidget::Solid)->setChecked(true);
-        d->colorButton->setDefaultAction(d->colorAction);
-    } else if (gradientBackground) {
-        d->gradientAction->setCurrentBackground(background);
-        d->group->button(KoFillConfigWidget::Gradient)->setChecked(true);
-        d->colorButton->setDefaultAction(d->gradientAction);
-    } else if (patternBackground) {
-        d->patternAction->setCurrentBackground(background);
-        d->group->button(KoFillConfigWidget::Pattern)->setChecked(true);
-        d->colorButton->setDefaultAction(d->patternAction);
-    } else {
-        // No Fill
-        d->group->button(KoFillConfigWidget::None)->setChecked(true);
-        d->colorButton->setDefaultAction(d->noFillAction);
-        d->colorButton->setDisabled(true);
-    }
-    d->colorButton->setPopupMode(QToolButton::InstantPopup);
+    d->group->button(newActiveButton)->setChecked(true);
+    d->ui->stackWidget->setCurrentIndex(newActiveButton);
 }

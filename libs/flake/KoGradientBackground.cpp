@@ -69,6 +69,12 @@ KoGradientBackground::~KoGradientBackground()
     delete d->gradient;
 }
 
+bool KoGradientBackground::compareTo(const KoShapeBackground *other) const
+{
+    Q_UNUSED(other);
+    return false;
+}
+
 void KoGradientBackground::setTransform(const QTransform &matrix)
 {
     Q_D(KoGradientBackground);

@@ -265,6 +265,10 @@ KoFillConfigWidget::KoFillConfigWidget(QWidget *parent)
 
     d->ui->btnChooseSolidColor->setDefaultAction(d->colorAction);
     d->ui->btnChooseSolidColor->setPopupMode(QToolButton::InstantPopup);
+    d->ui->btnSolidColorPick->setIcon(KisIconUtils::loadIcon("krita_tool_color_picker"));
+
+    // TODO: for now the color picking button is disabled!
+    d->ui->btnSolidColorPick->setEnabled(false);
 
     connect(d->colorAction, SIGNAL(colorChanged(const KoColor &)), &d->colorChangedCompressor, SLOT(start()));
     connect(&d->colorChangedCompressor, SIGNAL(timeout()), SLOT(colorChanged()));

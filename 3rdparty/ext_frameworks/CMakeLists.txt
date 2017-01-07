@@ -28,7 +28,6 @@ ExternalProject_Add(
                 -DCMAKE_SYSTEM_PREFIX_PATH=${EXTPREFIX} 
                 -DBUILD_TESTING=false
     UPDATE_COMMAND ""
-    ALWAYS 0
 )
 
 
@@ -44,7 +43,6 @@ ExternalProject_Add(
                 -DCMAKE_SYSTEM_PREFIX_PATH=${EXTPREFIX} 
                 -DBUILD_TESTING=false
     UPDATE_COMMAND ""
-    ALWAYS 0
     DEPENDS ext_extra_cmake_modules
 )
 
@@ -62,7 +60,6 @@ ExternalProject_Add(
                 -DCMAKE_SYSTEM_PREFIX_PATH=${EXTPREFIX} 
                 -DBUILD_TESTING=false
     UPDATE_COMMAND ""
-    ALWAYS 0
     DEPENDS ext_karchive
 )
 
@@ -80,7 +77,6 @@ ExternalProject_Add(
                 -DCMAKE_SYSTEM_PREFIX_PATH=${EXTPREFIX} 
                 -DBUILD_TESTING=false
     UPDATE_COMMAND ""
-    ALWAYS 0
     DEPENDS ext_kconfig
 )
 
@@ -97,7 +93,6 @@ ExternalProject_Add(
                 -DCMAKE_SYSTEM_PREFIX_PATH=${EXTPREFIX} 
                 -DBUILD_TESTING=false
     UPDATE_COMMAND ""
-    ALWAYS 0
     DEPENDS ext_kwidgetsaddons
 )
 
@@ -115,7 +110,6 @@ ExternalProject_Add(
                 -DCMAKE_SYSTEM_PREFIX_PATH=${EXTPREFIX} 
                 -DBUILD_TESTING=false
     UPDATE_COMMAND ""
-    ALWAYS 0
     DEPENDS ext_kcompletion
 )
 
@@ -132,7 +126,6 @@ ExternalProject_Add(
                 -DCMAKE_SYSTEM_PREFIX_PATH=${EXTPREFIX} 
                 -DBUILD_TESTING=false
     UPDATE_COMMAND ""
-    ALWAYS 0
     DEPENDS ext_kcoreaddons
 )
 
@@ -151,7 +144,6 @@ ExternalProject_Add(
                 -DCMAKE_SYSTEM_PREFIX_PATH=${EXTPREFIX} 
                 -DBUILD_TESTING=false
     UPDATE_COMMAND ""
-    ALWAYS 0
     DEPENDS ext_kguiaddons
 )
 
@@ -168,7 +160,6 @@ ExternalProject_Add(
                 -DCMAKE_SYSTEM_PREFIX_PATH=${EXTPREFIX} 
                 -DBUILD_TESTING=false
     UPDATE_COMMAND ""
-    ALWAYS 0
     DEPENDS ext_ki18n
 )
 
@@ -184,7 +175,6 @@ ExternalProject_Add(
                 -DCMAKE_SYSTEM_PREFIX_PATH=${EXTPREFIX} 
                 -DBUILD_TESTING=false
     UPDATE_COMMAND ""
-    ALWAYS 0
     DEPENDS ext_kitemmodels
 )
 
@@ -201,7 +191,6 @@ ExternalProject_Add(
                 -DCMAKE_SYSTEM_PREFIX_PATH=${EXTPREFIX} 
                 -DBUILD_TESTING=false
     UPDATE_COMMAND ""
-    ALWAYS 0
     DEPENDS ext_kitemviews
 )
 
@@ -218,7 +207,6 @@ ExternalProject_Add(
                 -DCMAKE_SYSTEM_PREFIX_PATH=${EXTPREFIX} 
                 -DBUILD_TESTING=false
     UPDATE_COMMAND ""
-    ALWAYS 0
     DEPENDS ext_kimageformats
 )
 
@@ -234,6 +222,5 @@ ExternalProject_Add(
                 -DCMAKE_SYSTEM_PREFIX_PATH=${EXTPREFIX} 
                 -DBUILD_TESTING=false
     UPDATE_COMMAND ""
-    ALWAYS 0
     DEPENDS ext_kwindowsystem
 )

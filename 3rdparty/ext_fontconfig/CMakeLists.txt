@@ -9,5 +9,4 @@ ExternalProject_Add( ext_fontconfig
     INSTALL_COMMAND make install      
 
     UPDATE_COMMAND ""
-    ALWAYS 0
 )

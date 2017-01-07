@@ -7,7 +7,6 @@ ExternalProject_Add( ext_ilmbase
         CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${PREFIX_ext_ilmbase} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE} -DNAMESPACE_VERSIONING=OFF
 
         UPDATE_COMMAND ""
-        ALWAYS 0
 )
 
 if (MSVC)

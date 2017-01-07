@@ -21,7 +21,6 @@ if (WIN32)
       INSTALL_COMMAND mingw32-make install
       UPDATE_COMMAND ""
       BUILD_IN_SOURCE 1
-      ALWAYS 0
       DEPENDS ext_patch
   )
 elseif (NOT APPLE)
@@ -39,7 +38,6 @@ elseif (NOT APPLE)
       INSTALL_COMMAND $(MAKE) install
       UPDATE_COMMAND ""
       BUILD_IN_SOURCE 1
-      ALWAYS 0
   )
 else( APPLE )
 
@@ -181,6 +179,5 @@ else( APPLE )
         INSTALL_COMMAND make install
         UPDATE_COMMAND ""
         BUILD_IN_SOURCE 1
-        ALWAYS 0
       )
 endif()

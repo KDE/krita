@@ -55,6 +55,9 @@ private Q_SLOTS:
     void slotAspectButtonToggled();
     void slotUpdateAspectButton();
 
+    void slotOpacitySliderChanged();
+    void slotUpdateOpacitySlider();
+
 private:
     KoInteractionTool *m_tool;
     QScopedPointer<KisAspectRatioLocker> m_sizeAspectLocker;

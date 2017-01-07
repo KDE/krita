@@ -768,6 +768,9 @@ void KoShape::setTransparency(qreal transparency)
 {
     Q_D(KoShape);
     d->transparency = qBound<qreal>(0.0, transparency, 1.0);
+
+    d->shapeChanged(TransparencyChanged);
+    notifyChanged();
 }
 
 qreal KoShape::transparency(bool recursive) const

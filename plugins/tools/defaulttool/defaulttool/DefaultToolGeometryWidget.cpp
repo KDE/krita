@@ -34,6 +34,7 @@
 #include <commands/KoShapeSizeCommand.h>
 #include <commands/KoShapeTransformCommand.h>
 #include <commands/KoShapeKeepAspectRatioCommand.h>
+#include <commands/KoShapeTransparencyCommand.h>
 #include "SelectionDecorator.h"
 #include <KoShapeGroup.h>
 
@@ -52,6 +53,8 @@
 #include "kis_aspect_ratio_locker.h"
 #include "kis_debug.h"
 #include "kis_acyclic_signal_connector.h"
+#include "kis_signal_compressor.h"
+#include "kis_signals_blocker.h"
 
 
 DefaultToolGeometryWidget::DefaultToolGeometryWidget(KoInteractionTool *tool, QWidget *parent)
@@ -81,10 +84,12 @@ DefaultToolGeometryWidget::DefaultToolGeometryWidget(KoInteractionTool *tool, QW
     connect(selection, SIGNAL(selectionChanged()), this, SLOT(slotUpdatePositionBoxes()));
     connect(selection, SIGNAL(selectionChanged()), this, SLOT(slotUpdateSizeBoxes()));
     connect(selection, SIGNAL(selectionChanged()), this, SLOT(slotUpdateCheckboxes()));
+    connect(selection, SIGNAL(selectionChanged()), this, SLOT(slotUpdateOpacitySlider()));
 
     KoShapeManager *manager = m_tool->canvas()->shapeManager();
     connect(manager, SIGNAL(selectionContentChanged()), this, SLOT(slotUpdatePositionBoxes()));
     connect(manager, SIGNAL(selectionContentChanged()), this, SLOT(slotUpdateSizeBoxes()));
+    connect(manager, SIGNAL(selectionContentChanged()), this, SLOT(slotUpdateOpacitySlider()));
 
     connect(chkGlobalCoordinates, SIGNAL(toggled(bool)), SLOT(slotUpdateSizeBoxes()));
 
@@ -103,6 +108,21 @@ DefaultToolGeometryWidget::DefaultToolGeometryWidget(KoInteractionTool *tool, QW
 
     // Connect anchor point selector
     connect(positionSelector, SIGNAL(valueChanged(KoFlake::AnchorPosition)), SLOT(slotAnchorPointChanged()));
+
+
+    dblOpacity->setRange(0.0, 1.0, 2);
+    dblOpacity->setSingleStep(0.01);
+    dblOpacity->setFastSliderStep(0.1);
+
+    {
+        KisSignalCompressor *opacityCompressor =
+            new KisSignalCompressor(100, KisSignalCompressor::FIRST_ACTIVE, this);
+        connect(dblOpacity, SIGNAL(valueChanged(qreal)), opacityCompressor, SLOT(start()));
+        connect(opacityCompressor, SIGNAL(timeout()), SLOT(slotOpacitySliderChanged()));
+
+        // cold init
+        slotUpdateOpacitySlider();
+    }
 }
 
 DefaultToolGeometryWidget::~DefaultToolGeometryWidget()
@@ -234,6 +254,77 @@ void DefaultToolGeometryWidget::slotUpdateAspectButton()
     Q_UNUSED(hasNotKeepAspectRatio); // TODO: use for tristated mode of the checkbox
 
     aspectButton->setKeepAspectRatio(hasKeepAspectRatio);
+}
+
+namespace {
+qreal calculateCommonShapeTransparency(const QList<KoShape*> &shapes)
+{
+    qreal commonTransparency = -1.0;
+
+    Q_FOREACH (KoShape *shape, shapes) {
+        if (commonTransparency < 0) {
+            commonTransparency = shape->transparency();
+        } else if (!qFuzzyCompare(commonTransparency, shape->transparency())) {
+            commonTransparency = -1.0;
+            break;
+        }
+    }
+
+    return commonTransparency;
+}
+}
+
+void DefaultToolGeometryWidget::slotOpacitySliderChanged()
+{
+    static const qreal eps = 1e-3;
+
+    KoSelection *selection = m_tool->canvas()->shapeManager()->selection();
+    QList<KoShape*> shapes = selection->selectedEditableShapes();
+    if (shapes.isEmpty()) return;
+
+    const qreal newTransparency = 1.0 - dblOpacity->value();
+    const qreal commonTransparency = calculateCommonShapeTransparency(shapes);
+    if (qAbs(commonTransparency - newTransparency) < eps) {
+        return;
+    }
+
+    KUndo2Command *cmd =
+        new KoShapeTransparencyCommand(shapes, newTransparency);
+
+    m_tool->canvas()->addCommand(cmd);
+}
+
+void DefaultToolGeometryWidget::slotUpdateOpacitySlider()
+{
+    if (!isVisible()) return;
+
+    const QString opacityNormalPrefix = i18n("Opacity: ");
+    const QString opacityVariesPrefix = i18n("Opacity [*varies*]: ");
+
+
+    KoSelection *selection = m_tool->canvas()->shapeManager()->selection();
+    QList<KoShape*> shapes = selection->selectedEditableShapes();
+
+    if (shapes.isEmpty()) {
+        KisSignalsBlocker b(dblOpacity);
+        dblOpacity->setEnabled(false);
+        dblOpacity->setValue(1.0);
+        dblOpacity->setPrefix(opacityNormalPrefix);
+    } else {
+        const qreal commonTransparency = calculateCommonShapeTransparency(shapes);
+
+        dblOpacity->setEnabled(true);
+
+        if (commonTransparency >= 0.0) {
+            KisSignalsBlocker b(dblOpacity);
+            dblOpacity->setValue(1.0 - commonTransparency);
+            dblOpacity->setPrefix(opacityNormalPrefix);
+        } else {
+            KisSignalsBlocker b(dblOpacity);
+            dblOpacity->setValue(1.0);
+            dblOpacity->setPrefix(opacityVariesPrefix);
+        }
+    }
 }
 
 void DefaultToolGeometryWidget::slotUpdateSizeBoxes()

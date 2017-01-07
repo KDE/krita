@@ -23,7 +23,8 @@ namespace KisCommandUtils {
 enum CommandId {
     MoveShapeId = 9999,
     ResizeShapeId,
-    TransformShapeId
+    TransformShapeId,
+    ChangeShapeTransparencyId
 };
 
 }

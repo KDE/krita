@@ -6,29 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>245</width>
-    <height>178</height>
+    <width>305</width>
+    <height>303</height>
    </rect>
   </property>
   <property name="focusPolicy">
    <enum>Qt::NoFocus</enum>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
-   <property name="spacing">
-    <number>3</number>
-   </property>
-   <property name="leftMargin">
-    <number>3</number>
-   </property>
-   <property name="topMargin">
-    <number>3</number>
-   </property>
-   <property name="rightMargin">
-    <number>3</number>
-   </property>
-   <property name="bottomMargin">
-    <number>3</number>
-   </property>
    <item>
     <layout class="QGridLayout" name="gridLayout">
      <property name="spacing">
@@ -202,14 +187,27 @@
     </layout>
    </item>
    <item>
-    <widget class="QWidget" name="SpecialSpacer" native="true">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
+    <widget class="Line" name="line_2">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
      </property>
     </widget>
+   </item>
+   <item>
+    <widget class="KisDoubleSliderSpinBox" name="dblOpacity" native="true"/>
+   </item>
+   <item>
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>1</height>
+      </size>
+     </property>
+    </spacer>
    </item>
   </layout>
  </widget>
@@ -229,6 +227,12 @@
    <class>KoAnchorSelectionWidget</class>
    <extends>QWidget</extends>
    <header>KoAnchorSelectionWidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KisDoubleSliderSpinBox</class>
+   <extends>QWidget</extends>
+   <header location="global">kis_slider_spin_box.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

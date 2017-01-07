@@ -24,12 +24,14 @@
 #include <QAction>
 
 #include <QSharedPointer>
+#include "kritawidgets_export.h"
+
 
 class KoShapeBackground;
 class KoAbstractResourceServerAdapter;
 class QModelIndex;
 
-class KoResourcePopupAction : public QAction
+class KRITAWIDGETS_EXPORT KoResourcePopupAction : public QAction
 {
     Q_OBJECT
 

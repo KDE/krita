@@ -11,6 +11,7 @@ set ( defaulttools_SRCS
     defaulttool/ShapeRotateStrategy.cpp
     defaulttool/ShapeShearStrategy.cpp
     defaulttool/SelectionDecorator.cpp
+    defaulttool/KoFillConfigWidget.cpp
 
     connectionTool/ConnectionTool.cpp
     connectionTool/ConnectionToolFactory.cpp
@@ -23,6 +24,7 @@ set ( defaulttools_SRCS
 
 ki18n_wrap_ui(defaulttools_SRCS
     defaulttool/DefaultToolGeometryWidget.ui
+    defaulttool/KoFillConfigWidget.ui
     connectionTool/ConnectionPointWidget.ui
 )
 

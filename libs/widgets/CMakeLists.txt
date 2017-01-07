@@ -33,7 +33,6 @@ set(kritawidgets_LIB_SRCS
     KoEditColorSetDialog.cpp
     KoTriangleColorSelector.cpp
     KoResourcePopupAction.cpp
-    KoFillConfigWidget.cpp
     KoIconToolTip.cpp
     KoResourceItemChooser.cpp
     KoResourceItemChooserSync.cpp
@@ -96,7 +95,6 @@ ki18n_wrap_ui( kritawidgets_LIB_SRCS
     wdg_file_name_requester.ui
     KoPageLayoutWidget.ui
     KoShadowConfigWidget.ui
-    KoFillConfigWidget.ui
 )
 
 add_library(kritawidgets SHARED ${kritawidgets_LIB_SRCS})

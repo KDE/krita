@@ -34,7 +34,6 @@
 #include <KoCanvasResourceManager.h>
 #include <KoColor.h>
 #include <KoShapePaintingContext.h>
-#include <KoFillConfigWidget.h>
 #include <KoViewConverter.h>
 
 #include <QAction>
@@ -364,9 +363,9 @@ QList<QPointer<QWidget> > KarbonCalligraphyTool::createOptionWidgets()
     // if the widget don't exists yet create it
     QList<QPointer<QWidget> > widgets;
 
-    KoFillConfigWidget *fillWidget = new KoFillConfigWidget(0);
-    fillWidget->setWindowTitle(i18n("Fill"));
-    widgets.append(fillWidget);
+    //KoFillConfigWidget *fillWidget = new KoFillConfigWidget(0);
+    //fillWidget->setWindowTitle(i18n("Fill"));
+    //widgets.append(fillWidget);
 
     KarbonCalligraphyOptionWidget *widget = new KarbonCalligraphyOptionWidget;
     connect(widget, SIGNAL(usePathChanged(bool)),

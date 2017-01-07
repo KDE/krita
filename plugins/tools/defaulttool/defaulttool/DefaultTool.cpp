@@ -51,8 +51,6 @@
 #include <commands/KoShapeUngroupCommand.h>
 #include <KoSnapGuide.h>
 #include <KoStrokeConfigWidget.h>
-#include <KoFillConfigWidget.h>
-#include <KoShadowConfigWidget.h>
 #include "kis_action_registry.h"
 
 #include <KoIcon.h>

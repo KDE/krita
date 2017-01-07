@@ -8,7 +8,6 @@ ExternalProject_Add( ext_libraw
         CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${PREFIX_ext_libraw} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE}
 
         UPDATE_COMMAND ""
-        ALWAYS 0
     	DEPENDS ext_lcms2 ext_jpeg
 )
 

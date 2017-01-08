@@ -48,6 +48,8 @@ class KRITAWIDGETUTILS_EXPORT KisSpinBoxUnitManagerBuilder
 
 public:
 
+	virtual ~KisSpinBoxUnitManagerBuilder() {}
+
     virtual KisSpinBoxUnitManager* buildUnitManager(QObject* parent) = 0; //this pure virtual function is used to build a unitmanager, it will be used by the unitManagerFactory.
 };
 
@@ -89,7 +91,7 @@ public:
     Q_DECLARE_FLAGS(Constrains, Constrain)
 
     explicit KisSpinBoxUnitManager(QObject *parent = 0);
-    ~KisSpinBoxUnitManager();
+	virtual ~KisSpinBoxUnitManager();
 
     int getUnitDimensionType() const;
     QString getReferenceUnitSymbol() const;
@@ -113,6 +115,7 @@ Q_SIGNALS:
     void unitDimensionChanged(int dimCode);
     void unitChanged(QString symbol);
     void conversionFactorChanged(qreal newConversionFactor, qreal oldConversionFactor) const;
+	void conversionConstantChanged(qreal newConversionFactor, qreal oldConversionFactor) const;
     void unitListChanged();
 
 public Q_SLOTS:

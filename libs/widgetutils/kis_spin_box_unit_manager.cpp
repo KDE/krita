@@ -216,6 +216,9 @@ QStringList KisSpinBoxUnitManager::getsUnitSymbolList(bool withName) const{
 
 qreal KisSpinBoxUnitManager::getConversionConstant(UnitDimension dim, QString symbol) const
 {
+	Q_UNUSED(dim);
+	Q_UNUSED(symbol);
+
     return 0; // all units managed here are transform via a linear function, so this wll alway be 0 in this class.
 }
 
@@ -443,6 +446,10 @@ void KisSpinBoxUnitManager::recomputeConvesrionConstant() const
     qreal oldConversionConstant = d->conversionConstant;
 
     d->conversionConstant = getConversionConstant(d->dim, d->unitSymbol);
+
+	if (oldConversionConstant != d->conversionConstant) {
+		emit conversionConstantChanged(d->conversionConstant, oldConversionConstant);
+	}
 }
 
 void KisSpinBoxUnitManager::grantDocumentRelativeUnits()

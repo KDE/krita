@@ -36,7 +36,7 @@ class KRITAWIDGETS_EXPORT KisDoubleParseSpinBox : public QDoubleSpinBox
     Q_OBJECT
 public:
     KisDoubleParseSpinBox(QWidget* parent = 0);
-    ~KisDoubleParseSpinBox();
+	virtual ~KisDoubleParseSpinBox(); //KisDoubleParseSpinBox may be used polymorphycally as a QDoubleSpinBox.
 
     virtual double valueFromText(const QString & text) const;
     virtual QString textFromValue(double val) const;

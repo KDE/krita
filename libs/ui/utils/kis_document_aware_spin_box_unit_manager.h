@@ -25,6 +25,9 @@
 #include "kritaui_export.h"
 class KisDocumentAwareSpinBoxUnitManagerBuilder : public KisSpinBoxUnitManagerBuilder
 {
+
+public:
+
     KisSpinBoxUnitManager* buildUnitManager(QObject* parent);
 };
 

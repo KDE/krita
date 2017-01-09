@@ -12,7 +12,6 @@ ExternalProject_Add( ext_openexr
         CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_openexr} -DILMBASE_PACKAGE_PREFIX=${EXTPREFIX_openexr} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE} -DNAMESPACE_VERSIONING=OFF
 
         UPDATE_COMMAND ""
-        ALWAYS 0
         DEPENDS ext_ilmbase ext_zlib
 )
 else()
@@ -27,7 +26,6 @@ ExternalProject_Add(ext_openexr
         CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_openexr} -DILMBASE_PACKAGE_PREFIX=${EXTPREFIX_openexr} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE} -DNAMESPACE_VERSIONING=OFF
 
         UPDATE_COMMAND ""
-        ALWAYS 0
         DEPENDS ext_ilmbase ext_zlib
 )
 endif()

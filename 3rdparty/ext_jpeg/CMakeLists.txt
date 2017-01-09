@@ -9,7 +9,6 @@ ExternalProject_Add( ext_jpeg
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${PREFIX_ext_jpeg} -DWITH_SIMD=OFF -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE}
 
     UPDATE_COMMAND ""
-	ALWAYS 0
 )
 else()
 ExternalProject_Add( ext_jpeg
@@ -22,6 +21,5 @@ ExternalProject_Add( ext_jpeg
     INSTALL_COMMAND make install      
 
     UPDATE_COMMAND ""
-    ALWAYS 0
 )
 endif()

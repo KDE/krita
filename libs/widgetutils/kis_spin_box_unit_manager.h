@@ -21,6 +21,7 @@
 
 #include <QObject>
 #include <QStringList>
+#include <QAbstractListModel>
 
 #include "kritawidgetutils_export.h"
 
@@ -58,13 +59,15 @@ public:
  *
  * The class make a difference between unit dimension (distance, angle, time).
  *
- * The class allow to converte values between reference unit and apparent unit, but also to get other information like possible units symbols.
+ * The class allow to convert values between reference unit and apparent unit, but also to get other information like possible units symbols.
  *
  * This class don't allow to use relative units (units which conversion factor is dependant of the context), even if it's private data are prepared to manage it.
  * The reason for this is that from the library of this class it's very hard to acess easily the informations needed. So all will be managed by subclasses in other libs.
  *
+ * The class is a subclass of QAbstractListModel, so that available list of units is easily acessed by other Qt standard components, like QComboBoxes.
+ *
  */
-class KRITAWIDGETUTILS_EXPORT KisSpinBoxUnitManager : public QObject
+class KRITAWIDGETUTILS_EXPORT KisSpinBoxUnitManager : public  QAbstractListModel
 {
     Q_OBJECT
 
@@ -110,6 +113,9 @@ public:
     //! \brief some units conversions are done via an affine transform, not just a linear transform. This function gives the constant of this affine transform (usually 0).
     virtual qreal getConversionConstant(UnitDimension dim, QString symbol) const;
 
+	virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
+	virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+
 Q_SIGNALS:
 
     void unitDimensionChanged(int dimCode);
@@ -122,6 +128,7 @@ public Q_SLOTS:
 
     void setUnitDim(UnitDimension dim);
     void setApparentUnitFromSymbol(QString pSymbol);
+	void selectApparentUnitFromIndex(int index);
 
 protected:
 

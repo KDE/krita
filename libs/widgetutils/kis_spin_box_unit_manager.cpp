@@ -101,7 +101,7 @@ public:
     bool canAccessDocument;
 };
 
-KisSpinBoxUnitManager::KisSpinBoxUnitManager(QObject *parent) : QObject(parent)
+KisSpinBoxUnitManager::KisSpinBoxUnitManager(QObject *parent) : QAbstractListModel(parent)
 {
     d = new Private();
 }
@@ -240,6 +240,22 @@ qreal KisSpinBoxUnitManager::getReferenceValue(double apparentValue) const
 
     return v;
 
+}
+
+int KisSpinBoxUnitManager::rowCount(const QModelIndex &parent) const {
+	if (parent == QModelIndex()) {
+		return getsUnitSymbolList().size();
+	}
+	return 0;
+}
+
+QVariant KisSpinBoxUnitManager::data(const QModelIndex &index, int role) const {
+
+	if (role == Qt::DisplayRole) {
+		return getsUnitSymbolList(true).at(index.row());
+	}
+
+	return QVariant();
 }
 
 qreal KisSpinBoxUnitManager::getApparentValue(double refValue) const
@@ -419,6 +435,14 @@ void KisSpinBoxUnitManager::setApparentUnitFromSymbol(QString pSymbol)
 
     d->unitSymbol = newSymb;
     emit unitChanged(newSymb);
+
+}
+
+void KisSpinBoxUnitManager::selectApparentUnitFromIndex(int index) {
+
+	if (index >= 0 && index < rowCount()) {
+		setApparentUnitFromSymbol(getsUnitSymbolList().at(index));
+	}
 
 }
 

@@ -58,7 +58,6 @@ private Q_SLOTS:
     void precisionChanged(int value);
     void setDeltaValue(double value);
     void setSizeToStartFrom(double value);
-    void instantPreviewChanged(bool enable);
 };
 
 

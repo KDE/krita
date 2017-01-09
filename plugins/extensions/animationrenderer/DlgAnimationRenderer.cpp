@@ -50,6 +50,7 @@
 DlgAnimationRenderer::DlgAnimationRenderer(KisDocument *doc, QWidget *parent)
     : KoDialog(parent)
     , m_image(doc->image())
+    , m_doc(doc)
     , m_defaultFileName(QFileInfo(doc->url().toLocalFile()).completeBaseName())
 {
     KisConfig cfg;
@@ -57,6 +58,10 @@ DlgAnimationRenderer::DlgAnimationRenderer(KisDocument *doc, QWidget *parent)
     setCaption(i18n("Render Animation"));
     setButtons(Ok | Cancel);
     setDefaultButton(Ok);
+
+    if (m_defaultFileName.isEmpty()) {
+        m_defaultFileName = i18n("Untitled");
+    }
 
     m_page = new WdgAnimaterionRenderer(this);
     m_page->layout()->setMargin(0);
@@ -71,6 +76,11 @@ DlgAnimationRenderer::DlgAnimationRenderer(KisDocument *doc, QWidget *parent)
     m_page->intEnd->setMinimum(doc->image()->animationInterface()->fullClipRange().start());
     m_page->intEnd->setMaximum(doc->image()->animationInterface()->fullClipRange().end());
     m_page->intEnd->setValue(doc->image()->animationInterface()->playbackRange().end());
+
+    QFileInfo audioFileInfo(doc->image()->animationInterface()->audioChannelFileName());
+    const bool hasAudio = audioFileInfo.exists();
+    m_page->chkIncludeAudio->setEnabled(hasAudio);
+    m_page->chkIncludeAudio->setChecked(hasAudio && !doc->image()->animationInterface()->isAudioMuted());
 
     QStringList mimes = KisImportExportManager::mimeFilter(KisImportExportManager::Export);
     mimes.sort();
@@ -140,7 +150,10 @@ DlgAnimationRenderer::DlgAnimationRenderer(KisDocument *doc, QWidget *parent)
     m_page->grpRender->setChecked(cfg.readEntry<bool>("AnimationRenderer/render_animation", false));
     m_page->chkDeleteSequence->setChecked(cfg.readEntry<bool>("AnimationRenderer/delete_sequence", false));
     m_page->cmbRenderType->setCurrentIndex(cfg.readEntry<int>("AnimationRenderer/render_type", 0));
+
+    // connect and cold init
     connect(m_page->cmbRenderType, SIGNAL(currentIndexChanged(int)), this, SLOT(selectRenderType(int)));
+    selectRenderType(m_page->cmbRenderType->currentIndex());
 }
 
 DlgAnimationRenderer::~DlgAnimationRenderer()
@@ -169,6 +182,7 @@ KisPropertiesConfigurationSP DlgAnimationRenderer::getSequenceConfiguration() co
 {
     KisPropertiesConfigurationSP cfg = new KisPropertiesConfiguration();
     cfg->setProperty("basename", m_page->txtBasename->text());
+    cfg->setProperty("last_document_path", m_doc->localFilePath());
     cfg->setProperty("directory", m_page->dirRequester->fileName());
     cfg->setProperty("first_frame", m_page->intStart->value());
     cfg->setProperty("last_frame", m_page->intEnd->value());
@@ -180,6 +194,13 @@ KisPropertiesConfigurationSP DlgAnimationRenderer::getSequenceConfiguration() co
 void DlgAnimationRenderer::setSequenceConfiguration(KisPropertiesConfigurationSP cfg)
 {
     m_page->txtBasename->setText(cfg->getString("basename", "frame"));
+
+    if (cfg->getString("last_document_path") != m_doc->localFilePath()) {
+        cfg->removeProperty("first_frame");
+        cfg->removeProperty("last_frame");
+        cfg->removeProperty("sequence_start");
+    }
+
     m_page->dirRequester->setFileName(cfg->getString("directory", QStandardPaths::writableLocation(QStandardPaths::PicturesLocation)));
     m_page->intStart->setValue(cfg->getInt("first_frame", m_image->animationInterface()->playbackRange().start()));
     m_page->intEnd->setValue(cfg->getInt("last_frame", m_image->animationInterface()->playbackRange().end()));
@@ -227,6 +248,9 @@ KisPropertiesConfigurationSP DlgAnimationRenderer::getVideoConfiguration() const
     }
     cfg->setProperty("filename", filename);
     cfg->setProperty("delete_sequence", m_page->chkDeleteSequence->isChecked());
+    cfg->setProperty("first_frame", m_page->intStart->value());
+    cfg->setProperty("last_frame", m_page->intEnd->value());
+    cfg->setProperty("sequence_start", m_page->sequenceStart->value());
     return cfg;
 }
 
@@ -248,6 +272,7 @@ KisPropertiesConfigurationSP DlgAnimationRenderer::getEncoderConfiguration() con
     cfg->setProperty("first_frame", m_page->intStart->value());
     cfg->setProperty("last_frame", m_page->intEnd->value());
     cfg->setProperty("sequence_start", m_page->sequenceStart->value());
+    cfg->setProperty("include_audio", m_page->chkIncludeAudio->isChecked());
 
     return cfg;
 }
@@ -274,6 +299,7 @@ void DlgAnimationRenderer::selectRenderType(int index)
         m_defaultFileName = QFileInfo(m_page->videoFilename->fileName()).completeBaseName();
     }
     m_page->videoFilename->setMimeTypeFilters(QStringList() << mimetype, mimetype);
+
     m_page->videoFilename->setFileName(m_defaultFileName + "." + KisMimeDatabase::suffixesForMimeType(mimetype).first());
 }
 

@@ -243,7 +243,7 @@ xcopy /Y /S /I %BUILDDIR_INSTALL%\share\locale %pkg_root%\bin\locale
 copy %BUILDDIR_SRC%\packaging\windows\krita.lnk %pkg_root%
 
 :: windeployqt
-%BUILDDIR_INSTALL%\bin\windeployqt.exe --release -concurrent -network -printsupport -svg -xml %pkg_root%\bin\krita.exe
+%BUILDDIR_INSTALL%\bin\windeployqt.exe --release -concurrent -network -printsupport -svg -xml -multimedia %pkg_root%\bin\krita.exe
 
 :: For chopping relative path
 :: 512 should be enough

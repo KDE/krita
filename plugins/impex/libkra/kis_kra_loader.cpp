@@ -342,6 +342,8 @@ KisImageSP KisKraLoader::loadXML(const KoXmlElement& element)
             loadGuides(e);
         } else if (e.tagName() == "assistants") {
             loadAssistantsList(e);
+        } else if (e.tagName() == "audio") {
+            loadAudio(e, image);
         }
     }
 
@@ -795,9 +797,9 @@ KisNodeSP KisKraLoader::loadFileLayer(const KoXmlElement& element, KisImageSP im
         qApp->setOverrideCursor(Qt::ArrowCursor);
         QString msg = i18nc(
             "@info",
-            "The file associated to a file layer with the name \"%1\" is not found.<nl/><nl/>"
-            "Expected path:<nl/>"
-            "%2<nl/><nl/>"
+            "The file associated to a file layer with the name \"%1\" is not found.\n\n"
+            "Expected path:\n"
+            "%2\n\n"
             "Do you want to locate it manually?", name, fullPath);
 
         int result = QMessageBox::warning(0, i18nc("@title:window", "File not found"), msg, QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
@@ -1102,4 +1104,53 @@ void KisKraLoader::loadGuides(const KoXmlElement& elem)
     KisGuidesConfig guides;
     guides.loadFromXml(domElement);
     m_d->document->setGuidesConfig(guides);
+}
+
+void KisKraLoader::loadAudio(const KoXmlElement& elem, KisImageSP image)
+{
+    QDomDocument dom;
+    KoXml::asQDomElement(dom, elem);
+    QDomElement qElement = dom.firstChildElement();
+
+    QString fileName;
+    if (KisDomUtils::loadValue(qElement, "masterChannelPath", &fileName)) {
+        fileName = QDir::toNativeSeparators(fileName);
+
+        QDir baseDirectory = QFileInfo(m_d->document->localFilePath()).absoluteDir();
+        fileName = baseDirectory.absoluteFilePath(fileName);
+
+        QFileInfo info(fileName);
+
+        if (!info.exists()) {
+            qApp->setOverrideCursor(Qt::ArrowCursor);
+            QString msg = i18nc(
+                "@info",
+                "Audio channel file \"%1\" doesn't exist!\n\n"
+                "Expected path:\n"
+                "%2\n\n"
+                "Do you want to locate it manually?", info.fileName(), info.absoluteFilePath());
+
+            int result = QMessageBox::warning(0, i18nc("@title:window", "File not found"), msg, QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+
+            if (result == QMessageBox::Yes) {
+                info.setFile(KisImportExportManager::askForAudioFileName(info.absolutePath(), 0));
+            }
+
+            qApp->restoreOverrideCursor();
+        }
+
+        if (info.exists()) {
+            image->animationInterface()->setAudioChannelFileName(info.absoluteFilePath());
+        }
+    }
+
+    bool audioMuted = false;
+    if (KisDomUtils::loadValue(qElement, "audioMuted", &audioMuted)) {
+        image->animationInterface()->setAudioMuted(audioMuted);
+    }
+
+    qreal audioVolume = 0.5;
+    if (KisDomUtils::loadValue(qElement, "audioVolume", &audioVolume)) {
+        image->animationInterface()->setAudioVolume(audioVolume);
+    }
 }

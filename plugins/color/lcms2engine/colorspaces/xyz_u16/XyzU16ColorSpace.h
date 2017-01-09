@@ -73,7 +73,7 @@ public:
     }
     virtual QString name() const
     {
-        return i18n("XYZ (16-bit integer/channel)");
+        return QString("%1 (%2)").arg(XYZAColorModelID.name()).arg(Integer16BitsColorDepthID.name());
     }
     virtual bool userVisible() const
     {

@@ -119,6 +119,8 @@ public:
 
     void setProgresUpdater(KoProgressUpdater *updater);
 
+    static QString askForAudioFileName(const QString &defaultDir, QWidget *parent);
+
 private Q_SLOTS:
 
 

@@ -37,6 +37,7 @@
 #include <ksqueezedtextlabel.h>
 #include <kpluginfactory.h>
 
+#include <KoFileDialog.h>
 #include <kis_icon_utils.h>
 #include <KoDialog.h>
 #include <KoProgressUpdater.h>
@@ -188,6 +189,27 @@ bool KisImportExportManager::batchMode(void) const
 void KisImportExportManager::setProgresUpdater(KoProgressUpdater *updater)
 {
     d->progressUpdater = updater;
+}
+
+QString KisImportExportManager::askForAudioFileName(const QString &defaultDir, QWidget *parent)
+{
+    KoFileDialog dialog(parent, KoFileDialog::ImportFiles, "ImportAudio");
+
+    if (!defaultDir.isEmpty()) {
+        dialog.setDefaultDir(defaultDir);
+    }
+
+    QStringList mimeTypes;
+    mimeTypes << "audio/mpeg";
+    mimeTypes << "audio/ogg";
+    mimeTypes << "audio/vorbis";
+    mimeTypes << "audio/vnd.wave";
+    mimeTypes << "audio/flac";
+
+    dialog.setMimeTypeFilters(mimeTypes);
+    dialog.setCaption(i18nc("@titile:window", "Open Audio"));
+
+    return dialog.filename();
 }
 
 KisImportExportFilter::ConversionStatus KisImportExportManager::convert(KisImportExportManager::Direction direction, const QString &location, const QString& realLocation, const QString &mimeType, bool showWarnings, KisPropertiesConfigurationSP exportConfiguration)

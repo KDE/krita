@@ -30,24 +30,17 @@
 class KRITALIBKIS_EXPORT Window : public QObject
 {
     Q_OBJECT
-    Q_DISABLE_COPY(Window)
-
-    Q_PROPERTY(QList<View*> Views READ views WRITE setViews)
-    Q_PROPERTY(QString ViewMode READ viewMode WRITE setViewMode)
 
 public:
     explicit Window(KisMainWindow *window, QObject *parent = 0);
     virtual ~Window();
 
-    QList<View*> views() const;
-    void setViews(QList<View*> value);
-
-    QString viewMode() const;
-
-
-    void setViewMode(QString value);
-
 public Q_SLOTS:
+
+    QList<View*> views() const;
+    void addView(Document *document);
+    void showView(View *view);
+
 
     /**
      * @brief activate activates this Window.

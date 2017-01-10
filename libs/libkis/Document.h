@@ -131,6 +131,7 @@ Q_SIGNALS:
 private:
 
     friend class Krita;
+    friend class Window;
     QPointer<KisDocument> document() const;
 
 

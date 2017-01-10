@@ -18,8 +18,12 @@
 #include "Window.h"
 
 #include <KisMainWindow.h>
+#include <KisPart.h>
+#include <KisDocument.h>
 
+#include <Document.h>
 #include <View.h>
+
 
 struct Window::Private {
     Private() {}
@@ -42,26 +46,41 @@ Window::~Window()
 
 QList<View*> Window::views() const
 {
-    return QList<View*>();
+    QList<View *> ret;
+    if (d->window) {
+        foreach(QPointer<KisView> view, KisPart::instance()->views()) {
+            if (view->mainWindow() == d->window) {
+                ret << new View(view);
+            }
+        }
+    }
+    return ret;
+
 }
 
-void Window::setViews(QList<View*> value)
+void Window::addView(Document *document)
 {
+    if (d->window) {
+        KisView *view = KisPart::instance()->createView(document->document(),
+                                                    d->window->resourceManager(),
+                                                    d->window->actionCollection(),
+                                                    d->window);
+        d->window->addView(view);
+    }
+
 }
 
-
-QString Window::viewMode() const
+void Window::showView(View *view)
 {
-    return QString();
-}
-
-void Window::setViewMode(QString value)
-{
+    if (views().contains(view)) {
+        KisView *v = view->view();
+        d->window->showView(v);
+    }
 }
 
 void Window::activate()
 {
-    if (!d->window) {
+    if (d->window) {
         d->window->activateWindow();
     }
 }

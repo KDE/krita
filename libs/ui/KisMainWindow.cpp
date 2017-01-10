@@ -109,7 +109,6 @@
 #include "kis_clipboard.h"
 #include "kis_config.h"
 #include "kis_config_notifier.h"
-#include "kis_config_notifier.h"
 #include "kis_custom_image_widget.h"
 #include <KisDocument.h>
 #include "KisDocument.h"
@@ -535,7 +534,7 @@ void KisMainWindow::addView(KisView *view)
 
 void KisMainWindow::showView(KisView *imageView)
 {
-    if (imageView && activeView() != imageView) {
+    if (imageView && activeView() != imageView ) {
         // XXX: find a better way to initialize this!
         imageView->setViewManager(d->viewManager);
 

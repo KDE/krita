@@ -4,12 +4,10 @@ class Window : QObject
 #include "Window.h"
 %End
     Window(const Window & __0);
-public:
-    QList<View *> views() const /Factory/;
-    void setViews(QList<View *> value);
-    QString viewMode() const;
-    void setViewMode(QString value);
 public Q_SLOTS:
+    QList<View *> views() const /Factory/;
+    void addView(Document *document);
+    void showView(View *view);
     void activate();
     void close();
 Q_SIGNALS:

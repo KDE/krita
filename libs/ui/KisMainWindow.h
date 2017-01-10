@@ -375,7 +375,9 @@ protected:
 
     void setToolbarList(QList<QAction*> toolbarList);
 
-private:
+
+public:
+
     /**
      * Add a the given view to the list of views of this mainwindow.
      * This is a private implementation. For public usage please use
@@ -383,6 +385,7 @@ private:
      */
     void addView(KisView *view);
 
+private:
 
     friend class KisApplication;
 

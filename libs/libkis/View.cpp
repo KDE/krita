@@ -71,5 +71,10 @@ void View::close(bool confirm)
 {
 }
 
+KisView *View::view()
+{
+    return d->view;
+}
+
 
 

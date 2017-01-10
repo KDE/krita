@@ -51,6 +51,10 @@ public Q_SLOTS:
     void close(bool confirm);
 
 private:
+
+    friend class Window;
+    KisView *view();
+
     struct Private;
     Private *const d;
 

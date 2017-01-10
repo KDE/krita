@@ -78,17 +78,72 @@ public:
     QList<Node*> childNodes() const;
     void setChildNodes(QList<Node*> value);
 
-    ColorDepth* colorDepth() const;
-    void setColorDepth(ColorDepth* value);
+    /**
+     * colorDepth A string describing the color depth of the image:
+     * <ul>
+     * <li>U8: unsigned 8 bits integer, the most common type</li>
+     * <li>U16: unsigned 16 bits integer</li>
+     * <li>F16: half, 16 bits floating point. Only available if Krita was built with OpenEXR</li>
+     * <li>F32: 32 bits floating point</li>
+     * </ul>
+     * @return the color depth.
+     */
+    QString colorDepth() const;
+
+    /**
+     * @brief colorModel retrieve the current color model of this document:
+     * <ul>
+     * <li>A: Alpha mask</li>
+     * <li>RGBA: RGB with alpha channel (The actual order of channels is most often BGR!)</li>
+     * <li>XYZA: XYZ with alpha channel</li>
+     * <li>LABA: LAB with alpha channel</li>
+     * <li>CMYKA: CMYK with alpha channel</li>
+     * <li>GRAYA: Gray with alpha channel</li>
+     * <li>YCbCrA: YCbCr with alpha channel</li>
+     * </ul>
+     * @return the internal color model string.
+     */
+    QString colorModel() const;
+
+    /**
+     * @return the name of the current color profile
+     */
+    QString colorProfile() const;
+
+    /**
+     * @brief setColorProfile set the color profile of the image to the given profile. The profile has to
+     * be registered with krita and be compatible with the current color model and depth; the image data
+     * is <i>not</i> converted.
+     * @param colorProfile
+     */
+    void setColorProfile(const QString &colorProfile);
+
+    /**
+     * @brief setColorSpace convert the node to the given colorspace
+     * @param colorModel A string describing the color model of the node:
+     * <ul>
+     * <li>A: Alpha mask</li>
+     * <li>RGBA: RGB with alpha channel (The actual order of channels is most often BGR!)</li>
+     * <li>XYZA: XYZ with alpha channel</li>
+     * <li>LABA: LAB with alpha channel</li>
+     * <li>CMYKA: CMYK with alpha channel</li>
+     * <li>GRAYA: Gray with alpha channel</li>
+     * <li>YCbCrA: YCbCr with alpha channel</li>
+     * </ul>
+     * @param colorDepth A string describing the color depth of the image:
+     * <ul>
+     * <li>U8: unsigned 8 bits integer, the most common type</li>
+     * <li>U16: unsigned 16 bits integer</li>
+     * <li>F16: half, 16 bits floating point. Only available if Krita was built with OpenEXR</li>
+     * <li>F32: 32 bits floating point</li>
+     * </ul>
+     * @param colorProfile a valid color profile for this color model and color depth combinatiojn.
+     */
+    void setColorSpace(const QString &colorModel, const QString &colorDepth, const QString &colorProfile);
 
     QString colorLabel() const;
     void setColorLabel(QString value);
 
-    ColorModel* colorModel() const;
-    void setColorModel(ColorModel* value);
-
-    ColorProfile* colorProfile() const;
-    void setColorProfile(ColorProfile* value);
 
     bool inheritAlpha() const;
     void setInheritAlpha(bool value);

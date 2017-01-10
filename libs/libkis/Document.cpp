@@ -80,7 +80,7 @@ Node *Document::activeNode() const
 void Document::setActiveNode(Node* value)
 {
     if (!value->node()) return;
-    KisMainWindow *mainWin = KisPart::currentMainwindow();
+    KisMainWindow *mainWin = KisPart::instance()->currentMainwindow();
     if (!mainWin) return;
     KisViewManager *viewManager = mainWin->viewManager();
     if (!viewManager) return;
@@ -93,33 +93,29 @@ void Document::setActiveNode(Node* value)
 }
 
 
-ColorDepth* Document::colorDepth() const
+QString Document::colorDepth() const
 {
-    return 0;
+    return "";
 }
 
-void Document::setColorDepth(ColorDepth* value)
+QString Document::colorModel() const
+{
+    return "";
+}
+
+QString Document::colorProfile() const
+{
+    return "";
+}
+
+void Document::setColorProfile(const QString &value)
 {
 }
 
 
-ColorModel* Document::colorModel() const
+void Document::setColorSpace(const QString &colorModel, const QString &colorDepth, const QString &colorProfile)
 {
-    return 0;
-}
 
-void Document::setColorModel(ColorModel* value)
-{
-}
-
-
-ColorProfile* Document::colorProfile() const
-{
-    return 0;
-}
-
-void Document::setColorProfile(ColorProfile* value)
-{
 }
 
 
@@ -290,11 +286,6 @@ bool Document::close()
         KisPart::instance()->removeDocument(d->document);
     }
     return d->document->closeUrl(false);
-}
-
-bool Document::convert(const QString &colorModel, const ColorProfile *profile)
-{
-    return false;
 }
 
 void Document::crop(int x, int y, int w, int h)

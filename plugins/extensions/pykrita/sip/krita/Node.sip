@@ -13,14 +13,12 @@ public:
     QList<Channel *> channels() const;
     QList<Node *> childNodes() const;
     void setChildNodes(QList<Node *> value);
-    ColorDepth * colorDepth() const;
-    void setColorDepth(ColorDepth*  value);
+    QString colorDepth() const;
     QString colorLabel() const;
     void setColorLabel(QString value);
-    ColorModel * colorModel() const;
-    void setColorModel(ColorModel*  value);
-    ColorProfile * colorProfile() const;
-    void setColorProfile(ColorProfile*  value);
+    QString colorModel() const;
+    QString colorProfile() const;
+    void setColorSpace(const QString &colorModel, const QString &colorDepth, const QString &colorProfile);
     bool inheritAlpha() const;
     void setInheritAlpha(bool value);
     bool locked() const;

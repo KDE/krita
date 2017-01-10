@@ -107,7 +107,7 @@ public:
     /**
      * create a profile of the specified type.
      */
-    const KoColorProfile* createColorProfile(const QString & colorModelId, const QString & colorDepthId, const QByteArray& rawData);
+    const KoColorProfile *createColorProfile(const QString & colorModelId, const QString & colorDepthId, const QByteArray& rawData);
 
     /**
      * Return a profile by its given name, or 0 if none registered.
@@ -116,7 +116,7 @@ public:
      * @see addProfile()
      * @see KoColorProfile::productName()
      */
-    const KoColorProfile *  profileByName(const QString & name) const ;
+    const KoColorProfile * profileByName(const QString & name) const ;
 
     /**
      * Return the list of profiles for the argument colorspacefactory.

@@ -12,9 +12,6 @@
 %Include Action.sip
 %Include Canvas.sip
 %Include Channel.sip
-%Include ColorDepth.sip
-%Include ColorModel.sip
-%Include ColorProfile.sip
 %Include DockWidgetFactoryBase.sip
 %Include DockWidget.sip
 %Include Document.sip

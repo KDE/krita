@@ -40,7 +40,7 @@ Notifier::Notifier(QObject *parent)
     connect(KisPart::instance(), SIGNAL(sigViewAdded(KisView*)), SLOT(viewCreated(KisView*)));
     connect(KisPart::instance(), SIGNAL(sigViewRemoved(KisView*)), SLOT(viewClosed(KisView*)));
 
-    connect(KisPart::instance(), SIGNAL(sigWindowAdded(KisMainWindow*)), SLOT(WindowCreated(KisMainWindow*)));
+    connect(KisPart::instance(), SIGNAL(sigWindowAdded(KisMainWindow*)), SLOT(windowCreated(KisMainWindow*)));
 
 }
 

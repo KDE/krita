@@ -9,12 +9,11 @@ public Q_SLOTS:
     void setActiveNode(Node*  value);
     bool batchmode() const;
     void setBatchmode(bool value);
-    ColorDepth * colorDepth() const;
-    void setColorDepth(ColorDepth*  value);
-    ColorModel * colorModel() const;
-    void setColorModel(ColorModel*  value);
-    ColorProfile * colorProfile() const;
-    void setColorProfile(ColorProfile*  value);
+    QString colorDepth() const;
+    QString colorModel() const;
+    QString colorProfile() const;
+    void setColorProfile(const QString &colorProfile);
+    void setColorSpace(const QString &value, const QString &colorDepth, const QString &colorProfile);
     InfoObject * documentInfo() const;
     void setDocumentInfo(InfoObject*  value);
     QString fileName() const;
@@ -39,7 +38,6 @@ public Q_SLOTS:
     void setyRes(double yRes) const;
     QByteArray pixelData() const;
     bool close();
-    bool convert(const QString & colorModel, const ColorProfile*  profile);
     void crop(int x, int y, int w, int h);
     bool exportImage(const QString &filename, const InfoObject & exportConfiguration);
     void flatten();

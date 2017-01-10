@@ -2,9 +2,6 @@ set(kritalibkis_LIB_SRCS
     Action.cpp
     Canvas.cpp
     Channel.cpp
-    ColorDepth.cpp
-    ColorModel.cpp
-    ColorProfile.cpp
     DockWidget.cpp
     DockWidgetFactoryBase.cpp
     Document.cpp

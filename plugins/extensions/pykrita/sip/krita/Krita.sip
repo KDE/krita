@@ -18,6 +18,7 @@ public Q_SLOTS:
     Filter * filter(const QString &name) const /Factory/;
     QStringList generators() const /Factory/;
     Generator * generator(const QString &name) const /Factory/;
+    QStringList profiles(const QString &colorModel, const QString &ColorDepth) const;
     Notifier * notifier() const;
     InfoObject * preferences() const /Factory/;
     void setPreferences(InfoObject*  value);

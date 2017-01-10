@@ -33,9 +33,6 @@
 #include "Krita.h"
 #include "Node.h"
 #include "Channel.h"
-#include "ColorDepth.h"
-#include "ColorModel.h"
-#include "ColorProfile.h"
 #include "Generator.h"
 #include "Filter.h"
 #include "Transformation.h"
@@ -128,17 +125,6 @@ void Node::setChildNodes(QList<Node*> value)
 }
 
 
-ColorDepth* Node::colorDepth() const
-{
-    if (!d->node) return 0;
-    return 0;
-}
-
-void Node::setColorDepth(ColorDepth* value)
-{
-    if (!d->node) return;
-}
-
 
 QString Node::colorLabel() const
 {
@@ -151,28 +137,30 @@ void Node::setColorLabel(QString value)
     if (!d->node) return;
 }
 
-
-ColorModel* Node::colorModel() const
+QString Node::colorDepth() const
 {
-    if (!d->node) return 0;
-    return 0;
-}
-
-void Node::setColorModel(ColorModel* value)
-{
-    if (!d->node) return;
+    if (!d->node) return "";
+    return "";
 }
 
 
-ColorProfile* Node::colorProfile() const
+
+QString Node::colorModel() const
 {
-    if (!d->node) return 0;
-    return 0;
+    if (!d->node) return "";
+    return "";
 }
 
-void Node::setColorProfile(ColorProfile* value)
+
+QString Node::colorProfile() const
 {
-    if (!d->node) return;
+    if (!d->node) return "";
+    return "";
+}
+
+void Node::setColorSpace(const QString &colorModel, const QString &colorDepth, const QString &colorProfile)
+{
+
 }
 
 

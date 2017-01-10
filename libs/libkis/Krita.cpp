@@ -23,6 +23,7 @@
 #include <kis_generator_registry.h>
 #include <kis_generator.h>
 #include <KoColorSpaceRegistry.h>
+#include <KoColorProfile.h>
 #include <KoColorSpace.h>
 #include <KoDockRegistry.h>
 #include <kactioncollection.h>
@@ -181,6 +182,17 @@ Generator *Krita::generator(const QString &name) const
 //    InfoObject *info = new InfoObject(fc);
 //    generator->setConfiguration(info);
     return generator;
+}
+
+QStringList Krita::profiles(const QString &colorModel, const QString &colorDepth) const
+{
+    QSet<QString> profileNames;
+    QString id = KoColorSpaceRegistry::instance()->colorSpaceId(colorModel, colorDepth);
+    QList<const KoColorProfile *> profiles = KoColorSpaceRegistry::instance()->profilesFor(id);
+    Q_FOREACH(const KoColorProfile *profile, profiles) {
+        profileNames << profile->name();
+    }
+    return profileNames.toList();
 }
 
 

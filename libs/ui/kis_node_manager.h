@@ -130,7 +130,7 @@ public Q_SLOTS:
      *
      * \see activateNode
      */
-    void slotUiActivatedNode(KisNodeSP node);
+    void slotUiActiatedNode(KisNodeSP node);
 
     /**
      * Adds a list of nodes without searching appropriate position for

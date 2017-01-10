@@ -22,6 +22,11 @@
 #include <kis_image.h>
 #include <KisPart.h>
 #include <kis_paint_device.h>
+#include <KisMainWindow.h>
+#include <kis_node_manager.h>
+#include <kis_node_selection_adapter.h>
+#include <KisViewManager.h>
+
 
 #include <InfoObject.h>
 #include <Node.h>
@@ -74,6 +79,17 @@ Node *Document::activeNode() const
 
 void Document::setActiveNode(Node* value)
 {
+    if (!value->node()) return;
+    KisMainWindow *mainWin = KisPart::currentMainwindow();
+    if (!mainWin) return;
+    KisViewManager *viewManager = mainWin->viewManager();
+    if (!viewManager) return;
+    KisNodeManager *nodeManager = viewManager->nodeManager();
+    if (!nodeManager) return;
+    KisNodeSelectionAdapter *selectionAdapter = nodeManager->nodeSelectionAdapter();
+    if (!selectionAdapter) return;
+    selectionAdapter->setActiveNode(value->node());
+
 }
 
 

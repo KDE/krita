@@ -461,7 +461,7 @@ void KisLayerBox::updateUI()
 
 
 /**
- * This method is callen *only* when non-GUI code requested the
+ * This method is called *only* when non-GUI code requested the
  * change of the current node
  */
 void KisLayerBox::setCurrentNode(KisNodeSP node)

@@ -412,3 +412,8 @@ KisImageSP Node::image() const
 {
     return d->image;
 }
+
+KisNodeSP Node::node() const
+{
+    return d->node;
+}

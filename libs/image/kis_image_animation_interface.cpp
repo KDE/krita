@@ -18,6 +18,8 @@
 
 #include "kis_image_animation_interface.h"
 
+#include <QFileInfo>
+
 #include "kis_global.h"
 #include "kis_image.h"
 #include "kis_regenerate_frame_stroke_strategy.h"
@@ -37,6 +39,8 @@ struct KisImageAnimationInterface::Private
           externalFrameActive(false),
           frameInvalidationBlocked(false),
           cachedLastFrameValue(-1),
+          audioChannelMuted(false),
+          audioChannelVolume(0.5),
           m_currentTime(0),
           m_currentUITime(0)
     {
@@ -50,6 +54,9 @@ struct KisImageAnimationInterface::Private
           playbackRange(rhs.playbackRange),
           framerate(rhs.framerate),
           cachedLastFrameValue(-1),
+          audioChannelFileName(rhs.audioChannelFileName),
+          audioChannelMuted(rhs.audioChannelMuted),
+          audioChannelVolume(rhs.audioChannelVolume),
           m_currentTime(rhs.m_currentTime),
           m_currentUITime(rhs.m_currentUITime)
     {
@@ -63,6 +70,9 @@ struct KisImageAnimationInterface::Private
     KisTimeRange playbackRange;
     int framerate;
     int cachedLastFrameValue;
+    QString audioChannelFileName;
+    bool audioChannelMuted;
+    qreal audioChannelVolume;
 
     KisSwitchTimeStrokeStrategy::SharedTokenWSP switchToken;
 
@@ -154,6 +164,43 @@ void KisImageAnimationInterface::setPlaybackRange(const KisTimeRange range)
 int KisImageAnimationInterface::framerate() const
 {
     return m_d->framerate;
+}
+
+QString KisImageAnimationInterface::audioChannelFileName() const
+{
+    return m_d->audioChannelFileName;
+}
+
+void KisImageAnimationInterface::setAudioChannelFileName(const QString &fileName)
+{
+    QFileInfo info(fileName);
+
+    KIS_SAFE_ASSERT_RECOVER_NOOP(fileName.isEmpty() || info.isAbsolute());
+    m_d->audioChannelFileName = fileName.isEmpty() ? fileName : info.absoluteFilePath();
+
+    emit sigAudioChannelChanged();
+}
+
+bool KisImageAnimationInterface::isAudioMuted() const
+{
+    return m_d->audioChannelMuted;
+}
+
+void KisImageAnimationInterface::setAudioMuted(bool value)
+{
+    m_d->audioChannelMuted = value;
+    emit sigAudioChannelChanged();
+}
+
+qreal KisImageAnimationInterface::audioVolume() const
+{
+    return m_d->audioChannelVolume;
+}
+
+void KisImageAnimationInterface::setAudioVolume(qreal value)
+{
+    m_d->audioChannelVolume = value;
+    emit sigAudioVolumeChanged();
 }
 
 void KisImageAnimationInterface::setFramerate(int fps)

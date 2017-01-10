@@ -231,7 +231,7 @@
       <item row="2" column="1">
        <widget class="KisFileNameRequester" name="ffmpegLocation" native="true"/>
       </item>
-      <item row="3" column="0" colspan="2">
+      <item row="4" column="0" colspan="2">
        <widget class="QCheckBox" name="chkDeleteSequence">
         <property name="text">
          <string>Delete Sequence After Rendering</string>
@@ -241,7 +241,7 @@
         </property>
        </widget>
       </item>
-      <item row="4" column="0">
+      <item row="5" column="0">
        <spacer name="verticalSpacer">
         <property name="orientation">
          <enum>Qt::Vertical</enum>
@@ -253,6 +253,13 @@
          </size>
         </property>
        </spacer>
+      </item>
+      <item row="3" column="0">
+       <widget class="QCheckBox" name="chkIncludeAudio">
+        <property name="text">
+         <string>Include Audio</string>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>

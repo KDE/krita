@@ -220,6 +220,7 @@ void TimelineFramesModel::setDummiesFacade(KisDummiesFacadeBase *dummiesFacade, 
     KisDummiesFacadeBase *oldDummiesFacade = m_d->dummiesFacade;
 
     if (m_d->dummiesFacade) {
+        m_d->image->animationInterface()->disconnect(this);
         m_d->image->disconnect(this);
         m_d->dummiesFacade->disconnect(this);
     }
@@ -236,6 +237,10 @@ void TimelineFramesModel::setDummiesFacade(KisDummiesFacadeBase *dummiesFacade, 
                 SLOT(slotDummyChanged(KisNodeDummy*)));
         connect(m_d->image->animationInterface(),
                 SIGNAL(sigFullClipRangeChanged()), SIGNAL(sigInfiniteTimelineUpdateNeeded()));
+        connect(m_d->image->animationInterface(),
+                SIGNAL(sigAudioChannelChanged()), SIGNAL(sigAudioChannelChanged()));
+        connect(m_d->image->animationInterface(),
+                SIGNAL(sigAudioVolumeChanged()), SIGNAL(sigAudioChannelChanged()));
     }
 
     if (m_d->dummiesFacade != oldDummiesFacade) {
@@ -244,6 +249,7 @@ void TimelineFramesModel::setDummiesFacade(KisDummiesFacadeBase *dummiesFacade, 
 
     if (m_d->dummiesFacade) {
         emit sigInfiniteTimelineUpdateNeeded();
+        emit sigAudioChannelChanged();
     }
 }
 
@@ -643,4 +649,37 @@ bool TimelineFramesModel::copyFrame(const QModelIndex &dstIndex)
     }
 
     return result;
+}
+
+QString TimelineFramesModel::audioChannelFileName() const
+{
+    return m_d->image ? m_d->image->animationInterface()->audioChannelFileName() : QString();
+}
+
+void TimelineFramesModel::setAudioChannelFileName(const QString &fileName)
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->image);
+    m_d->image->animationInterface()->setAudioChannelFileName(fileName);
+}
+
+bool TimelineFramesModel::isAudioMuted() const
+{
+    return m_d->image ? m_d->image->animationInterface()->isAudioMuted() : false;
+}
+
+void TimelineFramesModel::setAudioMuted(bool value)
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->image);
+    m_d->image->animationInterface()->setAudioMuted(value);
+}
+
+qreal TimelineFramesModel::audioVolume() const
+{
+    return m_d->image ? m_d->image->animationInterface()->audioVolume() : 0.5;
+}
+
+void TimelineFramesModel::setAudioVolume(qreal value)
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->image);
+    m_d->image->animationInterface()->setAudioVolume(value);
 }

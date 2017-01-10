@@ -121,6 +121,10 @@ KisSignalCompressorWithParam(int delay, CallbackFunction function, KisSignalComp
         return m_compressor.isActive();
     }
 
+    void setDelay(int value) {
+        m_compressor.setDelay(value);
+    }
+
 private:
     void fakeSlotTimeout() {
         m_function(m_currentParamValue);

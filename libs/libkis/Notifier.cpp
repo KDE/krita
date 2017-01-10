@@ -16,6 +16,11 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include "Notifier.h"
+#include <KisApplication.h>
+#include <KisPart.h>
+#include "View.h"
+#include "Window.h"
+#include "Document.h"
 
 struct Notifier::Private {
     Private() {}
@@ -26,6 +31,17 @@ Notifier::Notifier(QObject *parent)
     : QObject(parent)
     , d(new Private)
 {
+    connect(qApp, SIGNAL(aboutToQuit()), SIGNAL(applicationClosing()));
+
+    connect(KisPart::instance(), SIGNAL(sigDocumentAdded(KisDocument*)), SLOT(imageCreated(KisDocument*)));
+    connect(KisPart::instance(), SIGNAL(sigDocumentSaved(QString)), SIGNAL(imageSaved(QString)));
+    connect(KisPart::instance(), SIGNAL(sigDocumentRemoved(QString)), SIGNAL(imageClosed(QString)));
+
+    connect(KisPart::instance(), SIGNAL(sigViewAdded(KisView*)), SLOT(viewCreated(KisView*)));
+    connect(KisPart::instance(), SIGNAL(sigViewRemoved(KisView*)), SLOT(viewClosed(KisView*)));
+
+    connect(KisPart::instance(), SIGNAL(sigWindowAdded(KisMainWindow*)), SLOT(WindowCreated(KisMainWindow*)));
+
 }
 
 Notifier::~Notifier()
@@ -43,8 +59,27 @@ void Notifier::setActive(bool value)
     d->active = value;
 }
 
+void Notifier::imageCreated(KisDocument* document)
+{
+    Document *doc = new Document(document);
+    emit imageCreated(doc);
+}
 
+void Notifier::viewCreated(KisView *view)
+{
+    View *v = new View(view);
+    emit viewCreated(v);
+}
 
+void Notifier::viewClosed(KisView *view)
+{
+    View *v = new View(view);
+    emit viewClosed(v);
+}
 
-
+void Notifier::windowCreated(KisMainWindow *window)
+{
+    Window *w = new Window(window);
+    emit windowCreated(w);
+}
 

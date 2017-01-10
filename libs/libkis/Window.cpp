@@ -32,6 +32,7 @@ Window::Window(KisMainWindow *window, QObject *parent)
     , d(new Private)
 {
     d->window = window;
+    connect(window, SIGNAL(destroyed(QObject*)), SIGNAL(windowClosed()));
 }
 
 Window::~Window()

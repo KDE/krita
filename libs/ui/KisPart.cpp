@@ -175,6 +175,8 @@ void KisPart::addDocument(KisDocument *document)
     if (!d->documents.contains(document)) {
         d->documents.append(document);
         emit documentOpened('/'+objectName());
+        emit sigDocumentAdded(document);
+        connect(document, SIGNAL(sigSavingFinished()), SLOT(slotDocumentSaved()));
     }
 }
 
@@ -199,6 +201,7 @@ void KisPart::removeDocument(KisDocument *document)
 {
     d->documents.removeAll(document);
     emit documentClosed('/'+objectName());
+    emit sigDocumentRemoved(document->url().toLocalFile());
     document->deleteLater();
 }
 
@@ -210,7 +213,7 @@ KisMainWindow *KisPart::createMainWindow()
     }
     dbgUI <<"mainWindow" << (void*)mw << "added to view" << this;
     d->mainWindows.append(mw);
-
+    emit sigWindowAdded(mw);
     return mw;
 }
 
@@ -312,6 +315,11 @@ int KisPart::viewCount(KisDocument *doc) const
     }
 }
 
+void KisPart::slotDocumentSaved()
+{
+    KisDocument *doc = qobject_cast<KisDocument*>(sender());
+    emit sigDocumentSaved(doc->url().toLocalFile());
+}
 
 void KisPart::removeMainWindow(KisMainWindow *mainWindow)
 {

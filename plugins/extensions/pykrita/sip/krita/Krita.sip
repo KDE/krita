@@ -4,7 +4,7 @@ class Krita : QObject
 #include "Krita.h"
 %End
 public:
-public:
+public Q_SLOTS:
     Krita(QObject*  parent /TransferThis/ = 0);
     virtual ~Krita();
     Document * activeDocument() const /Factory/;
@@ -18,7 +18,7 @@ public:
     Filter * filter(const QString &name) const /Factory/;
     QStringList generators() const /Factory/;
     Generator * generator(const QString &name) const /Factory/;
-    Notifier * notifier() const /Factory/;
+    Notifier * notifier() const;
     InfoObject * preferences() const /Factory/;
     void setPreferences(InfoObject*  value);
     QString version() const;
@@ -27,7 +27,7 @@ public:
     QList<Window *> windows() const /Factory/;
     QList<Resource *> resources() const /Factory/;
     void setResources(QList<Resource *> value);
-public Q_SLOTS:
+
     void addDockWidget(DockWidget*  dockWidget);
     bool closeApplication();
     Document * createDocument(int width, int height, const QString &name, const QString &colorModel, const QString &colorDepth, const QString &profile)  /Factory/;

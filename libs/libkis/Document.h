@@ -124,6 +124,10 @@ public Q_SLOTS:
 
     Node* createNode(const QString &name, const QString &nodeType);
 
+Q_SIGNALS:
+
+    void nodeCreated(Node *node);
+
 private:
 
     friend class Krita;

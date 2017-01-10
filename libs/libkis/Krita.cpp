@@ -175,11 +175,11 @@ Generator *Krita::generator(const QString &name) const
     if (!generators().contains(name)) return 0;
 
     Generator *generator = new Generator();
-    generator->setName(name);
-    KisGeneratorSP f = KisGeneratorRegistry::instance()->value(name);
-    KisGeneratorConfigurationSP fc = f->defaultConfiguration(0);
-    InfoObject *info = new InfoObject(fc);
-    generator->setConfiguration(info);
+//    generator->setName(name);
+//    KisGeneratorSP f = KisGeneratorRegistry::instance()->value(name);
+//    KisGeneratorConfigurationSP fc = f->defaultConfiguration(0);
+//    InfoObject *info = new InfoObject(fc);
+//    generator->setConfiguration(info);
     return generator;
 }
 

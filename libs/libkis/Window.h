@@ -61,6 +61,10 @@ public Q_SLOTS:
      */
     void close();
 
+Q_SIGNALS:
+    /// Emitted when the window is closed.
+    void windowClosed();
+
 private:
     struct Private;
     Private *const d;

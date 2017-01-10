@@ -21,7 +21,11 @@
 #include <QObject>
 
 #include "kritalibkis_export.h"
+#include <kis_types.h>
 #include "libkis.h"
+#include <KisDocument.h>
+#include <KisView.h>
+#include <KisMainWindow.h>
 
 /**
  * Notifier
@@ -42,13 +46,58 @@ public:
 
 Q_SIGNALS:
 
-    void applicationStarted();
-    void applicationClosed();
+    /**
+     * @brief applicationClosing is emitted when the application is about to close. This
+     * happens after any documents and windows are closed.
+     */
+    void applicationClosing();
+
+    /**
+     * @brief imageCreated is emitted whenever a new image is created and registered with
+     * the application.
+     */
     void imageCreated(Document *image);
-    void imageLoaded(Document *image);
-    void imageSaved(Document *image);
-    void imageClosed(Document *image);
-    void nodeCreated(Document *node);
+
+    /**
+     * @brief imageSaved is emitted whenever a document is saved.
+     * @param filename the filename of the document that has been saved.
+     */
+    void imageSaved(const QString &filename);
+
+    /**
+     * @brief imageClosed is emitted whenever the last view on an image is closed. The image
+     * does not exist anymore in Krita
+     * @param filename the filename of the image.
+     */
+    void imageClosed(const QString &filename);
+
+    /**
+     * @brief viewCreated is emitted whenever a new view is created.
+     * @param view the view
+     */
+    void viewCreated(View *view);
+
+    /**
+     * @brief viewClosed is emitted whenever a view is closed
+     * @param view the view
+     */
+    void viewClosed(View *view);
+
+    /**
+     * @brief windowCreated is emitted whenever a window is created
+     * @param window the window
+     */
+    void windowCreated(Window *window);
+
+
+private Q_SLOTS:
+
+    void imageCreated(KisDocument *document);
+
+    void viewCreated(KisView *view);
+    void viewClosed(KisView *view);
+
+    void windowCreated(KisMainWindow *window);
 
 
 private:

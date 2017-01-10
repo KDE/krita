@@ -51,6 +51,8 @@ public Q_SLOTS:
     bool saveAs(const QString & filename);
     void openView();
     Node * createNode(const QString & name, const QString & nodeType);
+Q_SIGNALS:
+    void nodeCreated(Node *node);
 private:
 
 };

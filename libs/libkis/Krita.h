@@ -45,6 +45,9 @@ public:
     explicit Krita(QObject *parent = 0);
     virtual ~Krita();
 
+public Q_SLOTS:
+
+
     /**
      * @return the currently active document, if there is one.
      */
@@ -99,7 +102,20 @@ public:
      */
     Filter *filter(const QString &name) const;
 
+    /**
+     * @brief Create a list of all available generator plugins. Generators are identified
+     * by an internal name; this name can be used to construct a Generator object. The
+     * Generator object can then be used to create a Node object representing a Fill Layer.
+     * @return the list of available generators.
+     */
     QStringList generators() const;
+
+    /**
+     * @brief generator construct a Generator object with a default configuration.
+     * @param name the name of the generator. Use Krita.instance().generators() to get
+     * a list of all possible filters.
+     * @return the generator or None if there is no such generator.
+     */
     Generator *generator(const QString &name) const;
 
     Notifier* notifier() const;
@@ -134,8 +150,6 @@ public:
     QList<Resource*> resources() const;
     void setResources(QList<Resource*> value);
 
-
-public Q_SLOTS:
 
     void addDockWidget(DockWidget *dockWidget);
 

@@ -12,5 +12,7 @@ public:
 public Q_SLOTS:
     void activate();
     void close();
+Q_SIGNALS:
+    void windowClosed();
 private:
 };

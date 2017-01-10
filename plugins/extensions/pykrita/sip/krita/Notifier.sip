@@ -10,12 +10,11 @@ public:
     bool active() const;
     void setActive(bool value);
 Q_SIGNALS:
-    void applicationStarted();
-    void applicationClosed();
+    void applicationClosing();
     void imageCreated(Document*  image);
-    void imageLoaded(Document*  image);
-    void imageSaved(Document*  image);
-    void imageClosed(Document*  image);
-    void nodeCreated(Document*  node);
-private:
+    void imageSaved(const QString &filename);
+    void imageClosed(const QString &filename);
+    void viewCreated(View *view);
+    void viewClosed(View *view);
+    void windowCreated(Window *window);
 };

@@ -27,8 +27,8 @@
 #include <kis_preference_set_registry.h>
 #include "pyqtpluginsettings.h"
 
-#include <libkis/Krita.h>
-#include <libkis/ViewExtension.h>
+#include <Krita.h>
+#include <ViewExtension.h>
 
 K_PLUGIN_FACTORY_WITH_JSON(KritaPyQtPluginFactory, "kritapykrita.json", registerPlugin<KritaPyQtPlugin>();)
 

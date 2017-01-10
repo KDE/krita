@@ -37,16 +37,18 @@ public:
     explicit View(KisView *view, QObject *parent = 0);
     virtual ~View();
 
+public Q_SLOTS:
+
     Window* window() const;
 
     Document* document() const;
 
     bool visible() const;
-    void setVisible(bool value);
+    void setVisible();
 
     Canvas* canvas() const;
 
-public Q_SLOTS:
+
 
     void close(bool confirm);
 

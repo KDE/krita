@@ -19,9 +19,12 @@
 #include <QPointer>
 
 #include <KisView.h>
-
+#include <KisMainWindow.h>
+#include <KoCanvasBase.h>
+#include <kis_canvas2.h>
 #include "Document.h"
 #include "Canvas.h"
+#include "Window.h"
 
 struct View::Private {
     Private() {}
@@ -42,33 +45,45 @@ View::~View()
 
 Window* View::window() const
 {
-    return 0;
+    if (!d->view) return 0;
+    KisMainWindow *mainwin = d->view->mainWindow();
+    Window *win = new Window(mainwin);
+    return win;
 }
 
 
 Document* View::document() const
 {
-    return 0;
+    if (!d->view) return 0;
+    Document *doc = new Document(d->view->document());
+    return doc;
 }
-
 
 bool View::visible() const
 {
-    return false;
+    if (!d->view) return false;
+    return d->view->isVisible();
 }
 
-void View::setVisible(bool value)
+void View::setVisible()
 {
+    if (!d->view) return;
+    KisMainWindow *mainwin = d->view->mainWindow();
+    mainwin->setActiveView(d->view);
+    mainwin->subWindowActivated();
 }
 
 
 Canvas* View::canvas() const
 {
-    return 0;
+    if (!d->view) return 0;
+    Canvas *c = new Canvas(d->view->canvasBase());
+    return c;
 }
 
 void View::close(bool confirm)
 {
+    if (!d->view) return;
 }
 
 KisView *View::view()

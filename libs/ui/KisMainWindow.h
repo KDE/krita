@@ -348,7 +348,6 @@ private Q_SLOTS:
 
     void undo();
     void redo();
-    void subWindowActivated();
     void updateWindowMenu();
     void setActiveSubWindow(QWidget *window);
     void configChanged();
@@ -364,8 +363,6 @@ protected:
     void closeEvent(QCloseEvent * e);
     void resizeEvent(QResizeEvent * e);
 
-    /// Set the active view, this will update the undo/redo actions
-    virtual void setActiveView(KisView *view);
 
     // QWidget overrides
     virtual void dragEnterEvent(QDragEnterEvent * event);
@@ -376,7 +373,7 @@ protected:
     void setToolbarList(QList<QAction*> toolbarList);
 
 
-public:
+public Q_SLOTS:
 
     /**
      * Add a the given view to the list of views of this mainwindow.
@@ -384,6 +381,12 @@ public:
      * newView() and addViewAndNotifyLoadingCompleted().
      */
     void addView(KisView *view);
+
+    /// Set the active view, this will update the undo/redo actions
+    void setActiveView(KisView *view);
+
+    void subWindowActivated();
+
 
 private:
 

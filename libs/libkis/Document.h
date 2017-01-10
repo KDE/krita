@@ -37,6 +37,8 @@ public:
     explicit Document(KisDocument *document, bool ownsDocument = false, QObject *parent = 0);
     virtual ~Document();
 
+public Q_SLOTS:
+
     bool batchmode() const;
     void setBatchmode(bool value);
 
@@ -45,9 +47,6 @@ public:
 
     ColorDepth* colorDepth() const;
     void setColorDepth(ColorDepth* value);
-
-    ColorManager* colorManager() const;
-    void setColorManager(ColorManager* value);
 
     ColorModel* colorModel() const;
     void setColorModel(ColorModel* value);
@@ -102,7 +101,6 @@ public:
 
     QByteArray pixelData() const;
 
-public Q_SLOTS:
 
     bool close();
 

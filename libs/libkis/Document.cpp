@@ -87,16 +87,6 @@ void Document::setColorDepth(ColorDepth* value)
 }
 
 
-ColorManager* Document::colorManager() const
-{
-    return 0;
-}
-
-void Document::setColorManager(ColorManager* value)
-{
-}
-
-
 ColorModel* Document::colorModel() const
 {
     return 0;

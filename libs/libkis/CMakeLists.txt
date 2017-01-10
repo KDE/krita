@@ -3,7 +3,6 @@ set(kritalibkis_LIB_SRCS
     Canvas.cpp
     Channel.cpp
     ColorDepth.cpp
-    ColorManager.cpp
     ColorModel.cpp
     ColorProfile.cpp
     DockWidget.cpp

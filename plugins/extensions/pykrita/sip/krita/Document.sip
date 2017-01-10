@@ -4,15 +4,13 @@ class Document : QObject /NoDefaultCtors/
 #include "Document.h"
 %End
     Document(const Document & __0);
-public:
+public Q_SLOTS:
     Node * activeNode() const;
     void setActiveNode(Node*  value);
     bool batchmode() const;
     void setBatchmode(bool value);
     ColorDepth * colorDepth() const;
     void setColorDepth(ColorDepth*  value);
-    ColorManager * colorManager() const;
-    void setColorManager(ColorManager*  value);
     ColorModel * colorModel() const;
     void setColorModel(ColorModel*  value);
     ColorProfile * colorProfile() const;
@@ -40,7 +38,6 @@ public:
     double yRes() const;
     void setyRes(double yRes) const;
     QByteArray pixelData() const;
-public Q_SLOTS:
     bool close();
     bool convert(const QString & colorModel, const ColorProfile*  profile);
     void crop(int x, int y, int w, int h);

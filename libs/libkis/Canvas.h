@@ -37,6 +37,8 @@ public:
     explicit Canvas(KoCanvasBase *canvas, QObject *parent = 0);
     virtual ~Canvas();
 
+public Q_SLOTS:
+
     Document* document() const;
 
     int zoomLevel() const;
@@ -47,18 +49,6 @@ public:
 
     bool mirror() const;
     void setMirror(bool value);
-
-    ColorManager* colorManager() const;
-    void setColorManager(ColorManager* value);
-
-public Q_SLOTS:
-
-
-
-Q_SIGNALS:
-
-
-
 private:
     struct Private;
     Private *const d;

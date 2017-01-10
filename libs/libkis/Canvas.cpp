@@ -18,7 +18,7 @@
 #include "Canvas.h"
 #include <KoCanvasBase.h>
 #include <QPointer>
-#include <ColorManager.h>
+
 
 struct Canvas::Private {
     Private() {}
@@ -70,19 +70,4 @@ bool Canvas::mirror() const
 void Canvas::setMirror(bool value)
 {
 }
-
-
-ColorManager* Canvas::colorManager() const
-{
-    return 0;
-}
-
-void Canvas::setColorManager(ColorManager* value)
-{
-}
-
-
-
-
-
 

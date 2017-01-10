@@ -142,6 +142,13 @@ public Q_SLOTS:
      */
     QStringList profiles(const QString &colorModel, const QString &colorDepth) const;
 
+    /**
+     * @brief addProfile load the given profile into the profile registry.
+     * @param profilePath the path to the profile.
+     * @return true if adding the profile succeeded.
+     */
+    bool addProfile(const QString &profilePath);
+
     Notifier* notifier() const;
 
     InfoObject* preferences() const;

@@ -26,6 +26,9 @@
 #include <KoColorProfile.h>
 #include <KoColorSpace.h>
 #include <KoDockRegistry.h>
+#include <KoColorSpaceEngine.h>
+#include <KoColorModelStandardIds.h>
+
 #include <kactioncollection.h>
 #include <KisPart.h>
 #include <KisMainWindow.h>
@@ -195,6 +198,11 @@ QStringList Krita::profiles(const QString &colorModel, const QString &colorDepth
     return profileNames.toList();
 }
 
+bool Krita::addProfile(const QString &profilePath)
+{
+    KoColorSpaceEngine *iccEngine = KoColorSpaceEngineRegistry::instance()->get("icc");
+    return iccEngine->addProfile(profilePath);
+}
 
 Notifier* Krita::notifier() const
 {

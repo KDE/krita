@@ -44,7 +44,7 @@ void Generator::setConfiguration(InfoObject* value)
 
 
 
-Node* Generator::CreateNode()
+Node* Generator::createNode()
 {
     return 0;
 }

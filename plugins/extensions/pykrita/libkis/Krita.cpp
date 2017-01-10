@@ -18,7 +18,10 @@
 #include "Krita.h"
 
 #include <QPointer>
+#include <QVariant>
 
+#include <kis_generator_registry.h>
+#include <kis_generator.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorSpace.h>
 #include <KoDockRegistry.h>
@@ -43,8 +46,7 @@
 #include "DockWidgetFactoryBase.h"
 #include "Filter.h"
 #include "InfoObject.h"
-
-#include <QVariant>
+#include "Generator.h"
 
 Krita* Krita::s_instance = 0;
 
@@ -143,7 +145,9 @@ QList<Document *> Krita::documents() const
 
 QStringList Krita::filters() const
 {
-    return KisFilterRegistry::instance()->keys();
+    QStringList ls = KisFilterRegistry::instance()->keys();
+    qSort(ls);
+    return ls;
 }
 
 Filter *Krita::filter(const QString &name) const
@@ -159,10 +163,26 @@ Filter *Krita::filter(const QString &name) const
     return filter;
 }
 
-QList<Generator*> Krita::generators() const
+QStringList Krita::generators() const
 {
-    return QList<Generator*> ();
+    QStringList ls = KisGeneratorRegistry::instance()->keys();
+    qSort(ls);
+    return ls;
 }
+
+Generator *Krita::generator(const QString &name) const
+{
+    if (!generators().contains(name)) return 0;
+
+    Generator *generator = new Generator();
+    generator->setName(name);
+    KisGeneratorSP f = KisGeneratorRegistry::instance()->value(name);
+    KisGeneratorConfigurationSP fc = f->defaultConfiguration(0);
+    InfoObject *info = new InfoObject(fc);
+    generator->setConfiguration(info);
+    return generator;
+}
+
 
 Notifier* Krita::notifier() const
 {

@@ -65,7 +65,15 @@ public Q_SLOTS:
      * @brief setName set the filter's name to the given name.
      */
     void setName(const QString &name);
+
+    /**
+     * @return the configuration object for the filter
+     */
     InfoObject* configuration() const;
+
+    /**
+     * @brief setConfiguration set the configuration object for the filter
+     */
     void setConfiguration(InfoObject* value);
 
     /**

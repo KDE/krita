@@ -99,7 +99,8 @@ public:
      */
     Filter *filter(const QString &name) const;
 
-    QList<Generator *> generators() const;
+    QStringList generators() const;
+    Generator *generator(const QString &name) const;
 
     Notifier* notifier() const;
 

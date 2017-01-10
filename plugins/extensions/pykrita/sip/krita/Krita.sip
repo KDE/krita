@@ -16,7 +16,8 @@ public:
     QList<Document *> documents() const /Factory/;
     QStringList filters() const;
     Filter * filter(const QString &name) const /Factory/;
-    QList<Generator *> generators() const /Factory/;
+    QStringList generators() const /Factory/;
+    Generator * generator(const QString &name) const /Factory/;
     Notifier * notifier() const /Factory/;
     InfoObject * preferences() const /Factory/;
     void setPreferences(InfoObject*  value);

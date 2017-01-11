@@ -33,20 +33,20 @@ class ScripterViewExtension(ViewExtension):
         sys.stdout = output
         sys.stderr = output
         script = self.editor.document().toPlainText()
+        QApplication.setOverrideCursor(Qt.WaitCursor)
         try:
             bc = compile(script, "<string>", "exec")
+            exec(bc)
         except Exception as e:
             QMessageBox.critical(self.editor, "Error compiling script", str(e))
-            return
-
-        exec(bc)
-
-        sys.stdout = stdout
-        sys.stderr = stderr
+        finally:
+            QApplication.restoreOverrideCursor() 
+            sys.stdout = stdout
+            sys.stderr = stderr
 
     def showScripter(self):
         dialog = QDialog()
-        dialog.setWindowModality(Qt.NonModal)
+        dialog.setWindowModality(Qt.Modal)
         self.editor = QPlainTextEdit()
         f = QFont("monospace", 10, QFont.Normal)
         f.setFixedPitch(True)

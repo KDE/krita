@@ -333,8 +333,13 @@ bool Document::close()
 {
     if (d->ownsDocument) {
         KisPart::instance()->removeDocument(d->document);
+
     }
-    return d->document->closeUrl(false);
+    bool retval = d->document->closeUrl(false);
+    if (d->ownsDocument) {
+        delete d->document;
+    }
+    return retval;
 }
 
 void Document::crop(int x, int y, int w, int h)

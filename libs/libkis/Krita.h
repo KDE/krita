@@ -156,9 +156,6 @@ public Q_SLOTS:
      */
     Notifier* notifier() const;
 
-    InfoObject* preferences() const;
-    void setPreferences(InfoObject* value);
-
     /**
      * @brief version Determine the version of Krita
      *

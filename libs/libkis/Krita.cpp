@@ -209,17 +209,6 @@ Notifier* Krita::notifier() const
     return d->notifier;
 }
 
-
-InfoObject* Krita::preferences() const
-{
-    return 0;
-}
-
-void Krita::setPreferences(InfoObject* value)
-{
-}
-
-
 QString Krita::version() const
 {
     return KritaVersionWrapper::versionString(true);

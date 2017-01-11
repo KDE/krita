@@ -21,8 +21,6 @@ public Q_SLOTS:
     QStringList profiles(const QString &colorModel, const QString &ColorDepth) const;
     bool addProfile(const QString &profilePath);
     Notifier * notifier() const;
-    InfoObject * preferences() const /Factory/;
-    void setPreferences(InfoObject*  value);
     QString version() const;
     QList<View *> views() const /Factory/;
     Window * activeWindow() const /Factory/;

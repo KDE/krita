@@ -69,9 +69,12 @@ void TestKrita::testKrita()
     QCOMPARE(krita->version(), KritaVersionWrapper::versionString(true));
 
     doc->close();
+    delete doc;
     QCOMPARE(krita->documents().size(), 0);
 
     m_win->close();
+    delete m_win;
+    m_win = 0;
     QCOMPARE(krita->windows().count(), 0);
 }
 

@@ -115,8 +115,12 @@ public Q_SLOTS:
     bool setColorSpace(const QString &colorModel, const QString &colorDepth, const QString &colorProfile);
 
 
-    InfoObject* documentInfo() const;
-    void setDocumentInfo(InfoObject* value);
+    /**
+     * @brief documentInfo creates and XML document representing document and author information.
+     * @return a string containing a valid XML document
+     */
+    QString documentInfo() const;
+    void setDocumentInfo(const QString &document);
 
     QString fileName() const;
     void setFileName(QString value);

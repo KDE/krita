@@ -18,6 +18,9 @@
 #include "Document.h"
 #include <QPointer>
 #include <QUrl>
+#include <QDomDocument>
+
+#include <KoXmlReader.h>
 #include <KisDocument.h>
 #include <kis_image.h>
 #include <KisPart.h>
@@ -30,6 +33,8 @@
 #include <KoColorProfile.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorConversionTransformation.h>
+#include <KoDocumentInfo.h>
+
 #include <InfoObject.h>
 #include <Node.h>
 
@@ -144,15 +149,22 @@ bool Document::setColorSpace(const QString &colorModel, const QString &colorDept
 }
 
 
-InfoObject* Document::documentInfo() const
+QString Document::documentInfo() const
 {
-    return 0;
+    QDomDocument doc = KisDocument::createDomDocument("document-info"
+                                                      /*DTD name*/, "document-info" /*tag name*/, "1.1");
+    doc = d->document->documentInfo()->save(doc);
+    return doc.toString();
 }
 
-void Document::setDocumentInfo(InfoObject* value)
+void Document::setDocumentInfo(const QString &document)
 {
+    KoXmlDocument doc = KoXmlDocument(true);
+    QString errorMsg;
+    int errorLine, errorColumn;
+    doc.setContent(document, &errorMsg, &errorLine, &errorColumn);
+    d->document->documentInfo()->load(doc);
 }
-
 
 QString Document::fileName() const
 {
@@ -162,6 +174,8 @@ QString Document::fileName() const
 
 void Document::setFileName(QString value)
 {
+    if (!d->document) return;
+    d->document->setUrl(QUrl::fromLocalFile(value));
 }
 
 
@@ -196,7 +210,8 @@ void Document::setMetaData(InfoObject* value)
 
 QString Document::name() const
 {
-    return QString();
+    if (!d->document) return "";
+    return d->document->documentInfo()->aboutInfo("title");
 }
 
 void Document::setName(QString value)

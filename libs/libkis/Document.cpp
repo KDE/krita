@@ -26,8 +26,10 @@
 #include <kis_node_manager.h>
 #include <kis_node_selection_adapter.h>
 #include <KisViewManager.h>
-
-
+#include <KoColorSpace.h>
+#include <KoColorProfile.h>
+#include <KoColorSpaceRegistry.h>
+#include <KoColorConversionTransformation.h>
 #include <InfoObject.h>
 #include <Node.h>
 
@@ -95,27 +97,48 @@ void Document::setActiveNode(Node* value)
 
 QString Document::colorDepth() const
 {
-    return "";
+    if (!d->document) return "";
+    return d->document->image()->colorSpace()->colorDepthId().id();
 }
 
 QString Document::colorModel() const
 {
-    return "";
+    if (!d->document) return "";
+    return d->document->image()->colorSpace()->colorModelId().id();
 }
 
 QString Document::colorProfile() const
 {
-    return "";
+    if (!d->document) return "";
+    return d->document->image()->colorSpace()->profile()->name();
 }
 
-void Document::setColorProfile(const QString &value)
+bool Document::setColorProfile(const QString &value)
 {
+    if (!d->document) return false;
+    if (!d->document->image()) return false;
+    const KoColorProfile *profile = KoColorSpaceRegistry::instance()->profileByName(value);
+    if (!profile) return false;
+    d->document->image()->lock();
+    bool retval = d->document->image()->assignImageProfile(profile);
+    d->document->image()->unlock();
+    d->document->image()->initialRefreshGraph();
+    return retval;
 }
 
-
-void Document::setColorSpace(const QString &colorModel, const QString &colorDepth, const QString &colorProfile)
+bool Document::setColorSpace(const QString &colorModel, const QString &colorDepth, const QString &colorProfile)
 {
-
+    if (!d->document) return false;
+    if (!d->document->image()) return false;
+    const KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->colorSpace(colorModel, colorDepth, colorProfile);
+    if (!colorSpace) return false;
+    d->document->image()->lock();
+    d->document->image()->convertImageColorSpace(colorSpace,
+                                                 KoColorConversionTransformation::IntentPerceptual,
+                                                 KoColorConversionTransformation::HighQuality | KoColorConversionTransformation::NoOptimization);
+    d->document->image()->unlock();
+    d->document->image()->initialRefreshGraph();
+    return true;
 }
 
 

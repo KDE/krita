@@ -140,7 +140,7 @@ void Node::setColorLabel(QString value)
 QString Node::colorDepth() const
 {
     if (!d->node) return "";
-    return "";
+    return d->node->colorSpace()->colorDepthId().id();
 }
 
 
@@ -148,14 +148,14 @@ QString Node::colorDepth() const
 QString Node::colorModel() const
 {
     if (!d->node) return "";
-    return "";
+    return d->node->colorSpace()->colorModelId().id();
 }
 
 
 QString Node::colorProfile() const
 {
     if (!d->node) return "";
-    return "";
+    return d->node->colorSpace()->profile()->name();
 }
 
 void Node::setColorSpace(const QString &colorModel, const QString &colorDepth, const QString &colorProfile)

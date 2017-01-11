@@ -82,11 +82,16 @@ public Q_SLOTS:
      * be registered with krita and be compatible with the current color model and depth; the image data
      * is <i>not</i> converted.
      * @param colorProfile
+     * @return false if the colorProfile name does not correspond to to a registered profile or if assigning
+     * the profile failed.
      */
-    void setColorProfile(const QString &colorProfile);
+    bool setColorProfile(const QString &colorProfile);
 
     /**
-     * @brief setColorSpace convert the nodes and the image to the given colorspace
+     * @brief setColorSpace convert the nodes and the image to the given colorspace. The conversion is
+     * done with Perceptual as intent, High Quality and No LCMS Optimizations as flags and no blackpoint
+     * compensation.
+     *
      * @param colorModel A string describing the color model of the image:
      * <ul>
      * <li>A: Alpha mask</li>
@@ -104,9 +109,10 @@ public Q_SLOTS:
      * <li>F16: half, 16 bits floating point. Only available if Krita was built with OpenEXR</li>
      * <li>F32: 32 bits floating point</li>
      * </ul>
-     * @param colorProfile a valid color profile for this color model and color depth combinatiojn.
+     * @param colorProfile a valid color profile for this color model and color depth combination.
+     * @return false the combination of these arguments does not correspond to a colorspace.
      */
-    void setColorSpace(const QString &colorModel, const QString &colorDepth, const QString &colorProfile);
+    bool setColorSpace(const QString &colorModel, const QString &colorDepth, const QString &colorProfile);
 
 
     InfoObject* documentInfo() const;

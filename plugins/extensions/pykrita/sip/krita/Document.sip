@@ -12,7 +12,7 @@ public Q_SLOTS:
     QString colorDepth() const;
     QString colorModel() const;
     QString colorProfile() const;
-    void setColorProfile(const QString &colorProfile);
+    bool setColorProfile(const QString &colorProfile);
     void setColorSpace(const QString &value, const QString &colorDepth, const QString &colorProfile);
     InfoObject * documentInfo() const;
     void setDocumentInfo(InfoObject*  value);

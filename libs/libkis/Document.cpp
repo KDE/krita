@@ -198,16 +198,6 @@ void Document::setHeight(int value)
 }
 
 
-InfoObject* Document::metaData() const
-{
-    return 0;
-}
-
-void Document::setMetaData(InfoObject* value)
-{
-}
-
-
 QString Document::name() const
 {
     if (!d->document) return "";
@@ -216,6 +206,8 @@ QString Document::name() const
 
 void Document::setName(QString value)
 {
+    if (!d->document) return;
+    d->document->documentInfo()->setAboutInfo("title", value);
 }
 
 
@@ -345,6 +337,13 @@ bool Document::exportImage(const QString &filename, const InfoObject &exportConf
 
 void Document::flatten()
 {
+    if (!d->document) return;
+    if (!d->document->image()) return;
+    d->document->image()->lock();
+    d->document->image()->flatten();
+    d->document->image()->unlock();
+    d->document->image()->setModified();
+    d->document->image()->initialRefreshGraph();
 }
 
 void Document::resizeImage(int w, int h)

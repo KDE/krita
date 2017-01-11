@@ -128,9 +128,6 @@ public Q_SLOTS:
     int height() const;
     void setHeight(int value);
 
-    InfoObject* metaData() const;
-    void setMetaData(InfoObject* value);
-
     QString name() const;
     void setName(QString value);
 

@@ -20,8 +20,6 @@ public Q_SLOTS:
     void setFileName(QString value);
     int height() const;
     void setHeight(int value);
-    InfoObject * metaData() const;
-    void setMetaData(InfoObject*  value);
     QString name() const;
     void setName(QString value);
     int resolution() const;

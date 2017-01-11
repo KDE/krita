@@ -180,6 +180,37 @@ public Q_SLOTS:
 
     void openView();
 
+    /**
+     * @brief createNode create a new node of the given type. The node is not added
+     * to the node hierarchy; you need to do that by finding the right parent node,
+     * getting its list of child nodes and adding the node in the right place, then
+     * calling Node::SetChildNodes
+     *
+     * @param name The name of the node
+     *
+     * @param nodeType The type of the node. Valid types are:
+     * <ul>
+     *  <li>paintlayer
+     *  <li>grouplayer
+     *  <li>filelayer
+     *  <li>filterlayer
+     *  <li>filllayer
+     *  <li>clonelayer
+     *  <li>vectorlayer
+     *  <li>transparencymask
+     *  <li>filtermask
+     *  <li>transformmask
+     *  <li>localselectionmask
+     * </ul>
+     *
+     * When relevant, the new Node will have the colorspace of the image by default;
+     * that can be changed with Node::setColorSpace.
+     *
+     * The settings and selections for relevant layer and mask types can also be set
+     * after the Node has been created.
+     *
+     * @return the new Node.
+     */
     Node* createNode(const QString &name, const QString &nodeType);
 
 Q_SIGNALS:

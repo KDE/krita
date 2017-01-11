@@ -76,6 +76,11 @@ public:
      * The function is not recursive.
      */
     QList<Node*> childNodes() const;
+
+    /**
+     * @brief setChildNodes this replaces the existing set of child nodes with the new set.
+     * @param value
+     */
     void setChildNodes(QList<Node*> value);
 
     /**
@@ -143,7 +148,6 @@ public:
 
     QString colorLabel() const;
     void setColorLabel(QString value);
-
 
     bool inheritAlpha() const;
     void setInheritAlpha(bool value);

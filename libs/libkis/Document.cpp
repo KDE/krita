@@ -20,6 +20,7 @@
 #include <QUrl>
 #include <QDomDocument>
 
+#include <KoColorSpaceConstants.h>
 #include <KoXmlReader.h>
 #include <KisDocument.h>
 #include <kis_image.h>
@@ -29,6 +30,22 @@
 #include <kis_node_manager.h>
 #include <kis_node_selection_adapter.h>
 #include <KisViewManager.h>
+#include <kis_file_layer.h>
+#include <kis_adjustment_layer.h>
+#include <kis_mask.h>
+#include <kis_clone_layer.h>
+#include <kis_group_layer.h>
+#include <kis_filter_mask.h>
+#include <kis_transform_mask.h>
+#include <kis_transparency_mask.h>
+#include <kis_selection_mask.h>
+#include <kis_effect_mask.h>
+#include <kis_paint_layer.h>
+#include <kis_generator_layer.h>
+#include <kis_shape_layer.h>
+#include <kis_filter_configuration.h>
+#include <kis_selection.h>
+
 #include <KoColorSpace.h>
 #include <KoColorProfile.h>
 #include <KoColorSpaceRegistry.h>
@@ -375,7 +392,47 @@ void Document::openView()
 
 Node* Document::createNode(const QString &name, const QString &nodeType)
 {
-    return 0;
+    if (!d->document) return 0;
+    if (!d->document->image()) return 0;
+    KisImageSP image = d->document->image();
+
+    Node *node = 0;
+
+    if (nodeType == "paintlayer") {
+        node = new Node(image, new KisPaintLayer(image, name, OPACITY_OPAQUE_U8));
+    }
+    else if (nodeType == "grouplayer") {
+        node = new Node(image, new KisGroupLayer(image, name, OPACITY_OPAQUE_U8));
+    }
+    else if (nodeType == "filelayer") {
+        node = new Node(image, new KisFileLayer(image, name, OPACITY_OPAQUE_U8));
+    }
+    else if (nodeType == "filterlayer") {
+        node = new Node(image, new KisAdjustmentLayer(image, name, 0, 0));
+    }
+    else if (nodeType == "filllayer") {
+        node = new Node(image, new KisGeneratorLayer(image, name, 0, 0));
+    }
+    else if (nodeType == "clonelayer") {
+        node = new Node(image, new KisCloneLayer(0, image, name, OPACITY_OPAQUE_U8));
+    }
+    else if (nodeType == "vectorlayer") {
+        node = new Node(image, new KisShapeLayer(d->document->shapeController(), image, name, OPACITY_OPAQUE_U8));
+    }
+    else if (nodeType == "transparencymask") {
+        node = new Node(image, new KisTransparencyMask());
+    }
+    else if (nodeType == "filtermask") {
+        node = new Node(image, new KisFilterMask());
+    }
+    else if (nodeType == "transformmask") {
+        node = new Node(image, new KisTransformMask());
+    }
+    else if (nodeType == "localselectionmask") {
+        node = new Node(image, new KisSelectionMask(image));
+    }
+
+    return node;
 }
 
 QPointer<KisDocument> Document::document() const

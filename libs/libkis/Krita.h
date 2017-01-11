@@ -229,6 +229,9 @@ public Q_SLOTS:
      */
     Document *openDocument(const QString &filename);
 
+    /**
+     * @brief openWindow create a new main window. The window is not shown by default.
+     */
     Window *openWindow();
 
     /**

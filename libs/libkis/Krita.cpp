@@ -278,11 +278,19 @@ Document* Krita::createDocument(int width, int height, const QString &name, cons
     KisDocument *document = KisPart::instance()->createDocument();
     KisPart::instance()->addDocument(document);
     const KoColorSpace *cs = KoColorSpaceRegistry::instance()->colorSpace(colorModel, colorDepth, profile);
+    Q_ASSERT(cs);
+
     QColor qc(Qt::white);
     qc.setAlpha(0);
     KoColor bgColor(qc, cs);
 
-    document->newImage(name, width, height, cs, bgColor, true, 1, "", 100.0);
+    if (!document->newImage(name, width, height, cs, bgColor, true, 1, "", 100.0)) {
+        qDebug() << "Could not create a new image";
+        return 0;
+    }
+
+    Q_ASSERT(document->image());
+    qDebug() << document->image()->objectName();
 
     return new Document(document, true);
 }
@@ -297,7 +305,8 @@ Document* Krita::openDocument(const QString &filename)
 
 Window* Krita::openWindow()
 {
-    return 0;
+    KisMainWindow *mw = KisPart::instance()->createMainWindow();
+    return new Window(mw);
 }
 
 

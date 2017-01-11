@@ -93,6 +93,7 @@ void Window::activate()
 void Window::close()
 {
     if (d->window) {
+        KisPart::instance()->removeMainWindow(d->window);
         d->window->close();
     }
 }

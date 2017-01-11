@@ -89,6 +89,11 @@ Q_SIGNALS:
      */
     void windowCreated(Window *window);
 
+    /**
+     * @brief configurationChanged is emitted every time Krita's configuration
+     * has changed.
+     */
+    void configurationChanged();
 
 private Q_SLOTS:
 

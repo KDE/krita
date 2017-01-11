@@ -17,4 +17,5 @@ Q_SIGNALS:
     void viewCreated(View *view);
     void viewClosed(View *view);
     void windowCreated(Window *window);
+    void configurationChanged();
 };

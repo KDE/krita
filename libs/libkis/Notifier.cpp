@@ -18,6 +18,7 @@
 #include "Notifier.h"
 #include <KisApplication.h>
 #include <KisPart.h>
+#include <kis_config_notifier.h>
 #include "View.h"
 #include "Window.h"
 #include "Document.h"
@@ -42,7 +43,10 @@ Notifier::Notifier(QObject *parent)
 
     connect(KisPart::instance(), SIGNAL(sigWindowAdded(KisMainWindow*)), SLOT(windowCreated(KisMainWindow*)));
 
+    connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SIGNAL(configurationChanged()));
+
 }
+
 
 Notifier::~Notifier()
 {
@@ -57,6 +61,7 @@ bool Notifier::active() const
 void Notifier::setActive(bool value)
 {
     d->active = value;
+    blockSignals(value);
 }
 
 void Notifier::imageCreated(KisDocument* document)

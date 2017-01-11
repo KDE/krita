@@ -149,6 +149,11 @@ public Q_SLOTS:
      */
     bool addProfile(const QString &profilePath);
 
+    /**
+     * @brief notifier the Notifier singleton emits signals when documents are opened and
+     * closed, the configuration changes, views are opened and closed or windows are opened.
+     * @return the notifier object
+     */
     Notifier* notifier() const;
 
     InfoObject* preferences() const;

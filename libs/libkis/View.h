@@ -47,9 +47,6 @@ public Q_SLOTS:
     void setVisible();
 
     Canvas* canvas() const;
-
-
-
     void close(bool confirm);
 
 private:

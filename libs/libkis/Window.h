@@ -19,6 +19,7 @@
 #define LIBKIS_WINDOW_H
 
 #include <QObject>
+#include <QMainWindow>
 
 #include "kritalibkis_export.h"
 #include "libkis.h"
@@ -37,10 +38,15 @@ public:
 
 public Q_SLOTS:
 
+    /**
+     * Return a handle to the QMainWindow widget. This is useful
+     * to e.g. parent dialog boxes and message box.
+     */
+    QMainWindow *qwindow() const;
+
     QList<View*> views() const;
     void addView(Document *document);
     void showView(View *view);
-
 
     /**
      * @brief activate activates this Window.

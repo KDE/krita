@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Service
+ServiceTypes=Krita/PythonPlugin
+X-KDE-Library=assignprofiledialog
+X-Python-2-Compatible=false
+Name=Assign Profile to Image
+Comment=Assign a profile to an image without converting it.

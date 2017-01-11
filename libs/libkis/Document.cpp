@@ -122,6 +122,7 @@ bool Document::setColorProfile(const QString &value)
     d->document->image()->lock();
     bool retval = d->document->image()->assignImageProfile(profile);
     d->document->image()->unlock();
+    d->document->image()->setModified();
     d->document->image()->initialRefreshGraph();
     return retval;
 }
@@ -137,6 +138,7 @@ bool Document::setColorSpace(const QString &colorModel, const QString &colorDept
                                                  KoColorConversionTransformation::IntentPerceptual,
                                                  KoColorConversionTransformation::HighQuality | KoColorConversionTransformation::NoOptimization);
     d->document->image()->unlock();
+    d->document->image()->setModified();
     d->document->image()->initialRefreshGraph();
     return true;
 }

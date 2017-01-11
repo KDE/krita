@@ -73,7 +73,7 @@ function(install_pykrita_plugin name)
 endfunction()
 
 install_pykrita_plugin(hello)
-install_pykrita_plugin(selectionsbagdocker)
+install_pykrita_plugin(assignprofiledialog)
 install_pykrita_plugin(scripter)
 
 # if(PYTHON_VERSION_MAJOR VERSION_EQUAL 3)

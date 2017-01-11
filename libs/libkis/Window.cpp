@@ -44,6 +44,11 @@ Window::~Window()
     delete d;
 }
 
+QMainWindow *Window::qwindow() const
+{
+    return d->window;
+}
+
 QList<View*> Window::views() const
 {
     QList<View *> ret;

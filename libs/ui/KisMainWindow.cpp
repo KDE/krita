@@ -2004,7 +2004,9 @@ void KisMainWindow::updateWindowMenu()
     Q_FOREACH (QPointer<KisDocument> doc, KisPart::instance()->documents()) {
         if (doc) {
             QString title = doc->url().toDisplayString();
-            if (title.isEmpty()) title = doc->image()->objectName();
+            if (title.isEmpty() && doc->image()) {
+                title = doc->image()->objectName();
+            }
             QAction *action = docMenu->addAction(title);
             action->setIcon(qApp->windowIcon());
             connect(action, SIGNAL(triggered()), d->documentMapper, SLOT(map()));

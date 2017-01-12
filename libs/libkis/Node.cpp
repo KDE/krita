@@ -301,19 +301,6 @@ void Node::setTransformation(Transformation* value)
     if (!d->node) return;
 }
 
-
-Selection* Node::selection() const
-{
-    if (!d->node) return 0;
-    return 0;
-}
-
-void Node::setSelection(Selection* value)
-{
-    if (!d->node) return;
-}
-
-
 QString Node::fileName() const
 {
     if (!d->node) return QString();

@@ -177,6 +177,16 @@ void KisToolPaint::activate(ToolActivation toolActivation, const QSet<KoShape*> 
 
 void KisToolPaint::deactivate()
 {
+    // WORKAROUND: deactivate picking if tool is switched.
+    // TODO: fix it in KisShortcutMatcher instead!
+
+    if (m_pickerStrokeId) {
+        image()->endStroke(m_pickerStrokeId);
+        m_pickerStrokeId.clear();
+        requestUpdateOutline(m_outlineDocPoint, 0);
+        setMode(HOVER_MODE);
+    }
+
     disconnect(actions().value("increase_brush_size"), 0, this, 0);
     disconnect(actions().value("decrease_brush_size"), 0, this, 0);
     KisTool::deactivate();
@@ -712,7 +722,7 @@ void KisToolPaint::requestUpdateOutline(const QPointF &outlineDocPoint, const Ko
     }
 
     m_outlineDocPoint = outlineDocPoint;
-    m_currentOutline = getOutlinePath(m_outlineDocPoint, event, outlineMode);
+    m_currentOutline = event ? getOutlinePath(m_outlineDocPoint, event, outlineMode) : QPainterPath();
 
     QRectF outlinePixelRect = m_currentOutline.boundingRect();
     QRectF outlineDocRect = currentImage()->pixelToDocument(outlinePixelRect);

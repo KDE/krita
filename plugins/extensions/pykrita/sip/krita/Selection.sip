@@ -17,7 +17,6 @@ public Q_SLOTS:
     void contract(int value);
     void cut(Node *node);
     void paste(Node *source, Node*destination);
-    void deselect();
     void erode();
     void dilate();
     void border(int xRadius, int yRadius);

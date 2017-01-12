@@ -95,13 +95,8 @@ void Selection::cut(Node* node)
 {
 }
 
-void Selection::paste(Node *source, Node*destination)
+void Selection::paste(Node *source, Node *destination)
 {
-}
-
-void Selection::deselect()
-{
-    if (!d->selection) return;
 }
 
 void Selection::erode()

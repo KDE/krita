@@ -56,8 +56,6 @@ public Q_SLOTS:
 
     void paste(Node *source, Node* destination);
 
-    void deselect();
-
     void erode();
 
     void dilate();

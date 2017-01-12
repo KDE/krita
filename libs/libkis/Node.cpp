@@ -121,6 +121,7 @@ QList<Node*> Node::childNodes() const
 
 void Node::setChildNodes(QList<Node*> value)
 {
+    // UNIMPLEMENTED
     if (!d->node) return;
 }
 
@@ -128,25 +129,27 @@ void Node::setChildNodes(QList<Node*> value)
 
 QString Node::colorLabel() const
 {
+    // UNIMPLEMENTED
     if (!d->node) return QString();
     return QString();
 }
 
 void Node::setColorLabel(QString value)
 {
+    // UNIMPLEMENTED
     if (!d->node) return;
 }
 
 QString Node::colorDepth() const
 {
+    // UNIMPLEMENTED
     if (!d->node) return "";
     return d->node->colorSpace()->colorDepthId().id();
 }
 
-
-
 QString Node::colorModel() const
 {
+    // UNIMPLEMENTED
     if (!d->node) return "";
     return d->node->colorSpace()->colorModelId().id();
 }
@@ -154,41 +157,46 @@ QString Node::colorModel() const
 
 QString Node::colorProfile() const
 {
+    // UNIMPLEMENTED
     if (!d->node) return "";
     return d->node->colorSpace()->profile()->name();
 }
 
 void Node::setColorProfile(const QString &colorProfile)
 {
-
+    // UNIMPLEMENTED
 }
 
 void Node::setColorSpace(const QString &colorModel, const QString &colorDepth, const QString &colorProfile)
 {
-
+    // UNIMPLEMENTED
 }
 
 
 bool Node::inheritAlpha() const
 {
+    // UNIMPLEMENTED
     if (!d->node) return false;
     return false;
 }
 
 void Node::setInheritAlpha(bool value)
 {
+    // UNIMPLEMENTED
     if (!d->node) return;
 }
 
 
 bool Node::locked() const
 {
+    // UNIMPLEMENTED
     if (!d->node) return false;
     return false;
 }
 
 void Node::setLocked(bool value)
 {
+    // UNIMPLEMENTED
     if (!d->node) return;
 }
 
@@ -201,6 +209,7 @@ QString Node::name() const
 
 void Node::setName(QString value)
 {
+    // UNIMPLEMENTED
     if (!d->node) return;
 }
 
@@ -220,95 +229,111 @@ void Node::setOpacity(int value)
 
 Node* Node::parentNode() const
 {
+    // UNIMPLEMENTED
     if (!d->node) return 0;
     return 0;
 }
 
 void Node::setParentNode(Node* value)
 {
+    // UNIMPLEMENTED
     if (!d->node) return;
 }
 
 
 QString Node::type() const
 {
+    // UNIMPLEMENTED
     if (!d->node) return QString();
     return QString();
 }
 
 void Node::setType(QString value)
 {
+    // UNIMPLEMENTED
     if (!d->node) return;
 }
 
 
 bool Node::visible() const
 {
+    // UNIMPLEMENTED
     if (!d->node) return false;
     return false;
 }
 
 void Node::setVisible(bool value)
 {
+    // UNIMPLEMENTED
     if (!d->node) return;
 }
 
 
 InfoObject* Node::metaDataInfo() const
 {
+    // UNIMPLEMENTED
     if (!d->node) return 0;
     return 0;
 }
 
 void Node::setMetaDataInfo(InfoObject* value)
 {
+    // UNIMPLEMENTED
     if (!d->node) return;
 }
 
 
 Generator* Node::generator() const
 {
+    // UNIMPLEMENTED
     if (!d->node) return 0;
     return 0;
 }
 
 void Node::setGenerator(Generator* value)
 {
+    // UNIMPLEMENTED
     if (!d->node) return;
 }
 
 
 Filter* Node::filter() const
 {
+    // UNIMPLEMENTED
     if (!d->node) return 0;
     return 0;
 }
 
 void Node::setFilter(Filter* value)
 {
+    // UNIMPLEMENTED
     if (!d->node) return;
 }
 
 
 Transformation* Node::transformation() const
 {
+    // UNIMPLEMENTED
     if (!d->node) return 0;
     return 0;
 }
 
 void Node::setTransformation(Transformation* value)
 {
+    // UNIMPLEMENTED
     if (!d->node) return;
 }
 
 QString Node::fileName() const
 {
+    // UNIMPLEMENTED
     if (!d->node) return QString();
     return QString();
 }
 
 void Node::setFileName(QString value)
 {
+    // UNIMPLEMENTED
     if (!d->node) return;
 }
 
@@ -361,21 +386,25 @@ QRect Node::bounds() const
 
 void Node::move(int x, int y)
 {
+    // UNIMPLEMENTED
     if (!d->node) return;
 }
 
 void Node::moveToParent(Node *parent)
 {
+    // UNIMPLEMENTED
     if (!d->node) return;
 }
 
 void Node::remove()
 {
+    // UNIMPLEMENTED
     if (!d->node) return;
 }
 
 Node* Node::duplicate()
 {
+    // UNIMPLEMENTED
     if (!d->node) return 0;
     return 0;
 }

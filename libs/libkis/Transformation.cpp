@@ -34,11 +34,13 @@ Transformation::~Transformation()
 
 QString Transformation::definition() const
 {
+    // UNIMPLEMENTED
     return QString();
 }
 
 void Transformation::setDefinition(QString value)
 {
+    // UNIMPLEMENTED
 }
 
 

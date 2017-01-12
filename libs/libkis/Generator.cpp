@@ -34,18 +34,18 @@ Generator::~Generator()
 
 InfoObject* Generator::configuration() const
 {
+    // UNIMPLEMENTED
     return 0;
 }
 
 void Generator::setConfiguration(InfoObject* value)
 {
+    // UNIMPLEMENTED
 }
-
-
-
 
 Node* Generator::createNode()
 {
+    // UNIMPLEMENTED
     return 0;
 }
 

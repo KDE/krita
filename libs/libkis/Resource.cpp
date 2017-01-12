@@ -34,31 +34,37 @@ Resource::~Resource()
 
 QString Resource::type() const
 {
+    // UNIMPLEMENTED
     return QString();
 }
 
 void Resource::setType(QString value)
 {
+    // UNIMPLEMENTED
 }
 
 
 QString Resource::name() const
 {
+    // UNIMPLEMENTED
     return QString();
 }
 
 void Resource::setName(QString value)
 {
+    // UNIMPLEMENTED
 }
 
 
 QString Resource::filename() const
 {
+    // UNIMPLEMENTED
     return QString();
 }
 
 void Resource::setFilename(QString value)
 {
+    // UNIMPLEMENTED
 }
 
 

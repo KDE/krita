@@ -405,6 +405,7 @@ bool Document::saveAs(const QString &filename)
 
 void Document::openView()
 {
+    // UNIMPLEMENTED
 }
 
 Node* Document::createNode(const QString &name, const QString &nodeType)

@@ -72,12 +72,13 @@ int Selection::x() const
 int Selection::y() const
 {
     if (!d->selection) return 0;
-    return 0;
+    return d->selection->y();
 }
 
 void Selection::move(int x, int y)
 {
     if (!d->selection) return;
+    d->selection->pixelSelection()->moveTo(QPoint(x, y));
 }
 
 
@@ -89,14 +90,18 @@ void Selection::clear()
 
 void Selection::contract(int value)
 {
+    if (!d->selection) return;
+    d->selection->pixelSelection()->select(QRect(x(), y(), w - value, h - value));
 }
 
 void Selection::cut(Node* node)
 {
+    // UNIMPLEMENTED
 }
 
 void Selection::paste(Node *source, Node *destination)
 {
+    // UNIMPLEMENTED
 }
 
 void Selection::erode()

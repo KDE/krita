@@ -7,21 +7,18 @@ class Selection : QObject
 public:
     Selection(QObject*  parent /TransferThis/ = 0);
     virtual ~Selection();
-    int width() const;
-    void setWidth(int value);
-    int height() const;
-    void setHeight(int value);
-    int x() const;
-    void setX(int value);
-    int y() const;
-    void setY(int value);
-    QString type() const;
-    void setType(QString value);
 public Q_SLOTS:
+
+    int width() const;
+    int height() const;
+    int x() const;
+    int y() const;
+    void move(int x, int y);
+
     void clear();
     void contract(int value);
-    Selection * copy(int x, int y, int w, int h);
-    void cut(Node*  node);
+    void cut(Node *node);
+    void paste(Node *source, Node*destination);
     void deselect();
     void expand(int value);
     void feather(int value);
@@ -32,6 +29,9 @@ public Q_SLOTS:
     void rotate(int degrees);
     void select(int x, int y, int w, int h, int value);
     void selectAll(Node*  node);
+    QByteArray pixelData(int x, int y, int w, int h) const;
+    void setPixelData(QByteArray value, int x, int y, int w, int h);
+
 Q_SIGNALS:
 private:
 };

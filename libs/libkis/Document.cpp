@@ -313,7 +313,7 @@ void Document::setyRes(double yRes) const
 }
 
 
-QByteArray Document::pixelData() const
+QByteArray Document::pixelData(int x, int y, int w, int h) const
 {
     QByteArray ba;
 
@@ -322,9 +322,9 @@ QByteArray Document::pixelData() const
     if (!image) return ba;
 
     KisPaintDeviceSP dev = image->projection();
-    quint8 *data = new quint8[image->width() * image->height() * dev->pixelSize()];
-    dev->readBytes(data, 0, 0, image->width(), image->height());
-    ba = QByteArray((const char*)data, (int)(image->width() * image->height() * dev->pixelSize()));
+    quint8 *data = new quint8[w * h * dev->pixelSize()];
+    dev->readBytes(data, x, y, w, h);
+    ba = QByteArray((const char*)data, (int)(w * h * dev->pixelSize()));
     delete[] data;
     return ba;
 }

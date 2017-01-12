@@ -33,8 +33,8 @@
 
 #include "kis_global.h"
 
-
-/* The data area is divided into tiles each say 64x64 pixels (defined at compiletime)
+/*
+ * The data area is divided into tiles, each say 64x64 pixels (defined at compiletime)
  * The tiles are laid out in a matrix that can have negative indexes.
  * The matrix grows automatically if needed (a call for writeacces to a tile
  * outside the current extent)

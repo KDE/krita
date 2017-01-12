@@ -36,7 +36,7 @@ class KRITALIBKIS_EXPORT Node : public QObject
 public:
     explicit Node(KisImageSP image, KisNodeSP node, QObject *parent = 0);
     virtual ~Node();
-
+public Q_SLOTS:
     /**
      * @brief alphaLocked checks whether the node is a paint layer and returns whether it is alpha locked
      * @return whether the paint layer is alpha locked, or false if the node is not a paint layer
@@ -182,19 +182,87 @@ public:
     Transformation* transformation() const;
     void setTransformation(Transformation* value);
 
+    /**
+     * Get the embedded selection object. This does not return the local selection mask,
+     * which is a child node, but the embedded selection for filter and generator layers
+     * and for masks.
+     */
     Selection* selection() const;
     void setSelection(Selection* value);
 
     QString fileName() const;
     void setFileName(QString value);
 
-    QByteArray pixelData() const;
-    void setPixelData(QByteArray value);
+    /**
+     * @brief pixelData reads the given rectangle from the Node's projection (that is, what the node
+     * looks like after all sub-Nodes (like layers in a group or masks on a layer) have been applied,
+     * and returns it as a byte array. The pixel data starts top-left, and is ordered row-first.
+     *
+     * The byte array can be interpreted as follows: 8 bits images have one byte per channel,
+     * and as many bytes as there are channels. 16 bits integer images have two bytes per channel,
+     * representing an unsigned short. 16 bits float images have two bytes per channel, representing
+     * a half, or 16 bits float. 32 bits float images have four bytes per channel, representing a
+     * float.
+     *
+     * You can read outside the node boundaries; those pixels will be transparent black.
+     *
+     * The order of channels is:
+     *
+     * <ul>
+     * <li>Integer RGBA: Blue, Green, Red, Alpha
+     * <li>Float RGBA: Red, Green, Blue, Alpha
+     * <li>GrayA: Gray, Alpha
+     * <li>Selection: selectedness
+     * <li>LabA: L, a, b, Alpha
+     * <li>CMYKA: Cyan, Magenta, Yellow, Key, Alpha
+     * <li>XYZA: X, Y, Z, A
+     * <li>YCbCrA: Y, Cb, Cr, Alpha
+     * </ul>
+     *
+     * The byte array is a copy of the original node data. In Python, you can use bytes, bytearray
+     * and the struct module to interpret the data and construct, for instance, a Pillow Image object.
+     *
+     * If you read the projection of a mask, you get the selection bytes, which is one channel with
+     * values in the range from 0..255. To read the selection mask of a filter layer or generator layer
+     * first get the Node's Selection object and read its pixel data.
+     *
+     * If you want to change the pixels of a node you can write the pixels back after manipulation
+     * with setPixelData(). This will only succeed on nodes with writable pixel data, e.g not on groups
+     * or file layers.
+     *
+     * @param x x position from where to start reading
+     * @param y y position from where to start reading
+     * @param w row length to read
+     * @param h number of rows to read
+     * @return a QByteArray with the pixel data. The byte array may be empty.
+     */
+    QByteArray pixelData(int x, int y, int w, int h) const;
+
+    /**
+     * @brief setPixelData writes the given bytes, of which there must be enough, into the
+     * Node, if the Node has writable pixel data:
+     *
+     * <ul>
+     * <li>paint layer: the layer's original pixels are overwritten
+     * <li>filter layer, generator layer, any mask: the embedded selection's pixels are overwritten.
+     * <b>Note:</b> for these
+     * </ul>
+     *
+     * File layers, Group layers, Clone layers cannot be written to. Calling setPixelData on
+     * those layer types will silently do nothing.
+     *
+     * @param value the byte array representing the pixels. There must be enough bytes available.
+     * Krita will take the raw pointer from the QByteArray and start reading, not stopping before
+     * (number of channels * size of channel * w * h) bytes are read.
+     *
+     * @param x the x position to start writing from
+     * @param y the y position to start writing from
+     * @param w the width of each row
+     * @param h the number of rows to write
+     */
+    void setPixelData(QByteArray value, int x, int y, int w, int h);
 
     QRect bounds() const;
-
-
-public Q_SLOTS:
 
     void move(int x, int y);
 
@@ -226,7 +294,7 @@ private:
     KisNodeSP node() const;
 
     struct Private;
-    Private *d;
+    Private *const d;
 
 };
 

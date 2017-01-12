@@ -158,6 +158,11 @@ QString Node::colorProfile() const
     return d->node->colorSpace()->profile()->name();
 }
 
+void Node::setColorProfile(const QString &colorProfile)
+{
+
+}
+
 void Node::setColorSpace(const QString &colorModel, const QString &colorDepth, const QString &colorProfile)
 {
 
@@ -321,15 +326,27 @@ void Node::setFileName(QString value)
 }
 
 
-QByteArray Node::pixelData() const
+QByteArray Node::pixelData(int x, int y, int w, int h) const
 {
-    if (!d->node) return QByteArray();
-    return QByteArray();
+    QByteArray ba;
+
+    if (!d->node) return ba;
+
+    KisPaintDeviceSP dev = d->node->projection();
+    quint8 *data = new quint8[w * h * dev->pixelSize()];
+    dev->readBytes(data, x, y, w, h);
+    ba = QByteArray((const char*)data, (int)(w * h * dev->pixelSize()));
+    delete[] data;
+
+    return ba;
 }
 
-void Node::setPixelData(QByteArray value)
+void Node::setPixelData(QByteArray value, int x, int y, int w, int h)
 {
     if (!d->node) return;
+    KisPaintDeviceSP dev = d->node->paintDevice();
+    if (!dev) return;
+    dev->writeBytes((const quint8*)value.constData(), x, y, w, h);
 }
 
 QRect Node::bounds() const

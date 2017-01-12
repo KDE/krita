@@ -6,6 +6,7 @@ class Node : QObject
     Node(const Node & __0);
 public:
     virtual ~Node();
+public Q_SLOTS:
     bool alphaLocked() const;
     void setAlphaLocked(bool value);
     QString blendingMode() const;
@@ -45,10 +46,9 @@ public:
     void setSelection(Selection*  value);
     QString fileName() const;
     void setFileName(QString value);
-    QByteArray pixelData() const;
-    void setPixelData(QByteArray value);
+    QByteArray pixelData(int x, int y, int w, int h) const;
+    void setPixelData(QByteArray value, int x, int y, int w, int h);
     QRect bounds() const;
-public Q_SLOTS:
     void move(int x, int y);
     void moveToParent(Node*  parent);
     void remove();

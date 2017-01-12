@@ -17,14 +17,30 @@
  */
 #include "Selection.h"
 
+#include <kis_selection.h>
+#include <kis_pixel_selection.h>
+#include <kis_paint_device.h>
+
+#include <QByteArray>
+
 struct Selection::Private {
     Private() {}
+    KisSelectionSP selection;
 };
+
+Selection::Selection(KisSelectionSP selection, QObject *parent)
+    : QObject(parent)
+    , d(new Private)
+{
+    d->selection = selection;
+}
+
 
 Selection::Selection(QObject *parent) 
     : QObject(parent)
     , d(new Private)
 {
+    d->selection = new KisSelection();
 }
 
 Selection::~Selection() 
@@ -37,49 +53,26 @@ int Selection::width() const
     return 0;
 }
 
-void Selection::setWidth(int value)
-{
-}
-
-
 int Selection::height() const
 {
     return 0;
 }
-
-void Selection::setHeight(int value)
-{
-}
-
 
 int Selection::x() const
 {
     return 0;
 }
 
-void Selection::setX(int value)
-{
-}
-
-
 int Selection::y() const
 {
     return 0;
 }
 
-void Selection::setY(int value)
+void Selection::move(int x, int y)
 {
+
 }
 
-
-QString Selection::type() const
-{
-    return QString();
-}
-
-void Selection::setType(QString value)
-{
-}
 
 void Selection::clear()
 {
@@ -89,13 +82,13 @@ void Selection::contract(int value)
 {
 }
 
-Selection* Selection::copy(int x, int y, int w, int h)
-{
-    return 0;
-}
-
 void Selection::cut(Node* node)
 {
+}
+
+void Selection::paste(Node *source, Node*destination)
+{
+
 }
 
 void Selection::deselect()
@@ -138,5 +131,24 @@ void Selection::selectAll(Node *node)
 {
 }
 
+QByteArray Selection::pixelData(int x, int y, int w, int h) const
+{
+    QByteArray ba;
+    if (!d->selection) return ba;
+    KisPaintDeviceSP dev = d->selection->projection();
+    quint8 *data = new quint8[w * h];
+    dev->readBytes(data, x, y, w, h);
+    ba = QByteArray((const char*)data, (int)(w * h));
+    delete[] data;
+    return ba;
+}
+
+void Selection::setPixelData(QByteArray value, int x, int y, int w, int h)
+{
+    if (!d->selection) return;
+    KisPixelSelectionSP dev = d->selection->pixelSelection();
+    if (!dev) return;
+    dev->writeBytes((const quint8*)value.constData(), x, y, w, h);
+}
 
 

@@ -58,11 +58,19 @@ public Q_SLOTS:
 
     void deselect();
 
-    void expand(int value);
+    void erode();
 
-    void feather(int value);
+    void dilate();
+
+    void border(int xRadius, int yRadius);
+
+    void feather(int radius);
 
     void grow(int xradius, int yradius);
+
+    void shrink(int xRadius, int yRadius, bool edgeLock);
+
+    void smooth();
 
     void invert();
 

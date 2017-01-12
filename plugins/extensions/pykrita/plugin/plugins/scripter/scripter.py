@@ -46,7 +46,6 @@ class ScripterViewExtension(ViewExtension):
 
     def showScripter(self):
         dialog = QDialog()
-        dialog.setWindowModality(Qt.Modal)
         self.editor = QPlainTextEdit()
         f = QFont("monospace", 10, QFont.Normal)
         f.setFixedPitch(True)

@@ -104,29 +104,70 @@ void Selection::deselect()
     if (!d->selection) return;
 }
 
-void Selection::expand(int value)
+void Selection::erode()
 {
     if (!d->selection) return;
+    KisErodeSelectionFilter esf;
+    QRect rc = esf.changeRect(d->selection->selectedExactRect());
+    esf.process(d->selection->pixelSelection(), rc);
 }
 
-void Selection::feather(int value)
+void Selection::dilate()
 {
     if (!d->selection) return;
+    KisDilateSelectionFilter dsf;
+    QRect rc = dsf.changeRect(d->selection->selectedExactRect());
+    dsf.process(d->selection->pixelSelection(), rc);
+}
+
+void Selection::border(int xRadius, int yRadius)
+{
+    if (!d->selection) return;
+    KisBorderSelectionFilter sf(xRadius, yRadius);
+    QRect rc = sf.changeRect(d->selection->selectedExactRect());
+    sf.process(d->selection->pixelSelection(), rc);
+}
+
+void Selection::feather(int radius)
+{
+    if (!d->selection) return;
+    KisFeatherSelectionFilter fsf(radius);
+    QRect rc = fsf.changeRect(d->selection->selectedExactRect());
+    fsf.process(d->selection->pixelSelection(), rc);
 }
 
 void Selection::grow(int xradius, int yradius)
 {
     if (!d->selection) return;
-
     KisGrowSelectionFilter gsf(xradius, yradius);
     QRect rc = gsf.changeRect(d->selection->selectedExactRect());
     gsf.process(d->selection->pixelSelection(), rc);
 }
 
+
+void Selection::shrink(int xRadius, int yRadius, bool edgeLock)
+{
+    if (!d->selection) return;
+    KisShrinkSelectionFilter sf(xRadius, yRadius, edgeLock);
+    QRect rc = sf.changeRect(d->selection->selectedExactRect());
+    sf.process(d->selection->pixelSelection(), rc);
+}
+
+void Selection::smooth()
+{
+    if (!d->selection) return;
+    KisSmoothSelectionFilter sf;
+    QRect rc = sf.changeRect(d->selection->selectedExactRect());
+    sf.process(d->selection->pixelSelection(), rc);
+}
+
+
 void Selection::invert()
 {
     if (!d->selection) return;
-    d->selection->pixelSelection()->invert();
+    KisInvertSelectionFilter sf;
+    QRect rc = sf.changeRect(d->selection->selectedExactRect());
+    sf.process(d->selection->pixelSelection(), rc);
 }
 
 void Selection::resize(int w, int h)

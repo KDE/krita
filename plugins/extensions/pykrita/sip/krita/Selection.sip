@@ -18,9 +18,13 @@ public Q_SLOTS:
     void cut(Node *node);
     void paste(Node *source, Node*destination);
     void deselect();
-    void expand(int value);
-    void feather(int value);
+    void erode();
+    void dilate();
+    void border(int xRadius, int yRadius);
+    void feather(int radius);
     void grow(int xradius, int yradius);
+    void shrink(int xRadius, int yRadius, bool edgeLock);
+    void smooth();
     void invert();
     void resize(int w, int h);
     void select(int x, int y, int w, int h, int value);

@@ -144,6 +144,7 @@ public:
 
 class KRITAIMAGE_EXPORT KisInvertSelectionFilter : public KisSelectionFilter
 {
+public:
     KUndo2MagicString name();
 
     QRect changeRect(const QRect &rect);

@@ -54,7 +54,7 @@ public Q_SLOTS:
 
     void cut(Node* node);
 
-    void paste(Node *source, Node*destination);
+    void paste(Node *source, Node* destination);
 
     void deselect();
 
@@ -74,7 +74,15 @@ public Q_SLOTS:
 
     void select(int x, int y, int w, int h, int value);
 
-    void selectAll(Node *node);
+    void selectAll(Node *node, int value);
+
+    void replace(Selection *selection);
+
+    void add(Selection *selection);
+
+    void subtract(Selection *selection);
+
+    void intersect(Selection *selection);
 
     /**
      * @brief pixelData reads the given rectangle from the Selection's mask and returns it as a
@@ -110,6 +118,9 @@ public Q_SLOTS:
     void setPixelData(QByteArray value, int x, int y, int w, int h);
 
 private:
+
+    KisSelectionSP selection() const;
+
     struct Private;
     Private *const d;
 

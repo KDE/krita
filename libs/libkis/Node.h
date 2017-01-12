@@ -285,6 +285,7 @@ private:
 
     friend class Filter;
     friend class Document;
+    friend class Selection;
     /**
      * @brief paintDevice gives access to the internal paint device of this Node
      * @return the paintdevice or 0 if the node does not have an editable paint device.

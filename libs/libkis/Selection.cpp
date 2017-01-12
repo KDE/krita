@@ -23,6 +23,8 @@
 
 #include <QByteArray>
 
+#include <Node.h>
+
 struct Selection::Private {
     Private() {}
     KisSelectionSP selection;
@@ -50,32 +52,38 @@ Selection::~Selection()
 
 int Selection::width() const
 {
-    return 0;
+    if (!d->selection) return 0;
+    return d->selection->selectedExactRect().width();
 }
 
 int Selection::height() const
 {
-    return 0;
+    if (!d->selection) return 0;
+    return d->selection->selectedExactRect().height();
 }
 
 int Selection::x() const
 {
-    return 0;
+    if (!d->selection) return 0;
+    return d->selection->x();
 }
 
 int Selection::y() const
 {
+    if (!d->selection) return 0;
     return 0;
 }
 
 void Selection::move(int x, int y)
 {
-
+    if (!d->selection) return;
 }
 
 
 void Selection::clear()
 {
+    if (!d->selection) return;
+    d->selection->clear();
 }
 
 void Selection::contract(int value)
@@ -88,48 +96,80 @@ void Selection::cut(Node* node)
 
 void Selection::paste(Node *source, Node*destination)
 {
-
 }
 
 void Selection::deselect()
 {
+    if (!d->selection) return;
 }
 
 void Selection::expand(int value)
 {
+    if (!d->selection) return;
 }
 
 void Selection::feather(int value)
 {
+    if (!d->selection) return;
 }
 
 void Selection::fill(Node* node)
 {
+    if (!d->selection) return;
 }
 
 void Selection::grow(int value)
 {
+    if (!d->selection) return;
 }
 
 void Selection::invert()
 {
+    if (!d->selection) return;
 }
 
 void Selection::resize(int w, int h)
 {
+    if (!d->selection) return;
 }
 
 void Selection::rotate(int degrees)
 {
+    if (!d->selection) return;
 }
 
 void Selection::select(int x, int y, int w, int h, int value)
 {
+    if (!d->selection) return;
+    d->selection->pixelSelection()->select(QRect(x, y, w, h), value);
 }
 
-void Selection::selectAll(Node *node)
+void Selection::selectAll(Node *node, int value)
 {
+    if (!d->selection) return;
+    d->selection->pixelSelection()->select(node->node()->exactBounds(), value);
 }
+
+void Selection::replace(Selection *selection)
+{
+    d->selection->pixelSelection()->applySelection(selection->selection(), SELECTION_REPLACE);
+}
+
+void Selection::add(Selection *selection)
+{
+    d->selection->pixelSelection()->applySelection(selection->selection(), SELECTION_ADD);
+}
+
+void Selection::subtract(Selection *selection)
+{
+    d->selection->pixelSelection()->applySelection(selection->selection(), SELECTION_SUBTRACT);
+}
+
+void Selection::intersect(Selection *selection)
+{
+    d->selection->pixelSelection()->applySelection(selection->selection(), SELECTION_INTERSECT);
+}
+
 
 QByteArray Selection::pixelData(int x, int y, int w, int h) const
 {
@@ -149,6 +189,11 @@ void Selection::setPixelData(QByteArray value, int x, int y, int w, int h)
     KisPixelSelectionSP dev = d->selection->pixelSelection();
     if (!dev) return;
     dev->writeBytes((const quint8*)value.constData(), x, y, w, h);
+}
+
+KisSelectionSP Selection::selection() const
+{
+    return d->selection;
 }
 
 

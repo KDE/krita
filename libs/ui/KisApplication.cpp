@@ -178,7 +178,9 @@ KisApplication::KisApplication(const QString &key, int &argc, char **argv)
     }
 
     if (KisConfig().readEntry("EnableHiDPI", false)) {
+#if QT_VERSION >= 0x050600
         QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+#endif
     }
 
     KisOpenGL::initialize();

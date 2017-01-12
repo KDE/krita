@@ -34,7 +34,7 @@ public Q_SLOTS:
 
     double yRes() const;
     void setyRes(double yRes) const;
-    QByteArray pixelData() const;
+    QByteArray pixelData(int x, int y, int w, int h) const;
     bool close();
     void crop(int x, int y, int w, int h);
     bool exportImage(const QString &filename, const InfoObject & exportConfiguration);

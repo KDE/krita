@@ -161,8 +161,39 @@ public Q_SLOTS:
     double yRes() const;
     void setyRes(double yRes) const;
 
-    QByteArray pixelData() const;
-
+    /**
+     * @brief pixelData reads the given rectangle from the image projection and returns it as a byte
+     * array. The pixel data starts top-left, and is ordered row-first.
+     *
+     * The byte array can be interpreted as follows: 8 bits images have one byte per channel,
+     * and as many bytes as there are channels. 16 bits integer images have two bytes per channel,
+     * representing an unsigned short. 16 bits float images have two bytes per channel, representing
+     * a half, or 16 bits float. 32 bits float images have four bytes per channel, representing a
+     * float.
+     *
+     * You can read outside the image boundaries; those pixels will be transparent black.
+     *
+     * The order of channels is:
+     *
+     * <ul>
+     * <li>Integer RGBA: Blue, Green, Red, Alpha
+     * <li>Float RGBA: Red, Green, Blue, Alpha
+     * <li>LabA: L, a, b, Alpha
+     * <li>CMYKA: Cyan, Magenta, Yellow, Key, Alpha
+     * <li>XYZA: X, Y, Z, A
+     * <li>YCbCrA: Y, Cb, Cr, Alpha
+     * </ul>
+     *
+     * The byte array is a copy of the original image data. In Python, you can use bytes, bytearray
+     * and the struct module to interpret the data and construct, for instance, a Pillow Image object.
+     *
+     * @param x x position from where to start reading
+     * @param y y position from where to start reading
+     * @param w row length to read
+     * @param h number of rows to read
+     * @return a QByteArray with the pixel data. The byte array may be empty.
+     */
+    QByteArray pixelData(int x, int y, int w, int h) const;
 
     bool close();
 

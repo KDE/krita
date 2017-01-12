@@ -62,8 +62,6 @@ public Q_SLOTS:
 
     void feather(int value);
 
-    void fill(Node* node);
-
     void grow(int xradius, int yradius);
 
     void invert();

@@ -114,11 +114,6 @@ void Selection::feather(int value)
     if (!d->selection) return;
 }
 
-void Selection::fill(Node* node)
-{
-    if (!d->selection) return;
-}
-
 void Selection::grow(int xradius, int yradius)
 {
     if (!d->selection) return;

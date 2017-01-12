@@ -143,7 +143,16 @@ public Q_SLOTS:
 
     Node* rootNode() const;
 
+    /**
+     * @brief selection Create a Selection object around the global selection, if there is one.
+     * @return the global selection or None if there is no global selection.
+     */
     Selection* selection() const;
+
+    /**
+     * @brief setSelection set or replace the global selection
+     * @param value a valid selection object.
+     */
     void setSelection(Selection* value);
 
     int width() const;

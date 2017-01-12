@@ -54,6 +54,7 @@
 
 #include <InfoObject.h>
 #include <Node.h>
+#include <Selection.h>
 
 struct Document::Private {
     Private() {}
@@ -258,11 +259,17 @@ Node *Document::rootNode() const
 
 Selection *Document::selection() const
 {
-    return 0;
+    if (!d->document) return 0;
+    if (!d->document->image()) return 0;
+    if (!d->document->image()->globalSelection()) return 0;
+    return new Selection(d->document->image()->globalSelection());
 }
 
 void Document::setSelection(Selection* value)
 {
+    if (!d->document) return 0;
+    if (!d->document->image()) return 0;
+    d->document->image()->setGlobalSelection(value->selection());
 }
 
 

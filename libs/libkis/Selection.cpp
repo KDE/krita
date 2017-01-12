@@ -20,6 +20,7 @@
 #include <kis_selection.h>
 #include <kis_pixel_selection.h>
 #include <kis_paint_device.h>
+#include <kis_selection_filters.h>
 
 #include <QByteArray>
 
@@ -118,19 +119,25 @@ void Selection::fill(Node* node)
     if (!d->selection) return;
 }
 
-void Selection::grow(int value)
+void Selection::grow(int xradius, int yradius)
 {
     if (!d->selection) return;
+
+    KisGrowSelectionFilter gsf(xradius, yradius);
+    QRect rc = gsf.changeRect(d->selection->selectedExactRect());
+    gsf.process(d->selection->pixelSelection(), rc);
 }
 
 void Selection::invert()
 {
     if (!d->selection) return;
+    d->selection->pixelSelection()->invert();
 }
 
 void Selection::resize(int w, int h)
 {
     if (!d->selection) return;
+    d->selection->pixelSelection()->select(QRect(x(), y(), w, h));
 }
 
 void Selection::select(int x, int y, int w, int h, int value)
@@ -147,22 +154,26 @@ void Selection::selectAll(Node *node, int value)
 
 void Selection::replace(Selection *selection)
 {
-    d->selection->pixelSelection()->applySelection(selection->selection(), SELECTION_REPLACE);
+    if (!d->selection) return;
+    d->selection->pixelSelection()->applySelection(selection->selection()->pixelSelection(), SELECTION_REPLACE);
 }
 
 void Selection::add(Selection *selection)
 {
-    d->selection->pixelSelection()->applySelection(selection->selection(), SELECTION_ADD);
+    if (!d->selection) return;
+    d->selection->pixelSelection()->applySelection(selection->selection()->pixelSelection(), SELECTION_ADD);
 }
 
 void Selection::subtract(Selection *selection)
 {
-    d->selection->pixelSelection()->applySelection(selection->selection(), SELECTION_SUBTRACT);
+    if (!d->selection) return;
+    d->selection->pixelSelection()->applySelection(selection->selection()->pixelSelection(), SELECTION_SUBTRACT);
 }
 
 void Selection::intersect(Selection *selection)
 {
-    d->selection->pixelSelection()->applySelection(selection->selection(), SELECTION_INTERSECT);
+    if (!d->selection) return;
+    d->selection->pixelSelection()->applySelection(selection->selection()->pixelSelection(), SELECTION_INTERSECT);
 }
 
 

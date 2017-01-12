@@ -325,8 +325,25 @@ void Node::setFileName(QString value)
     if (!d->node) return;
 }
 
-
 QByteArray Node::pixelData(int x, int y, int w, int h) const
+{
+    QByteArray ba;
+
+    if (!d->node) return ba;
+
+    KisPaintDeviceSP dev = d->node->paintDevice();
+    if (!dev) return ba;
+
+    quint8 *data = new quint8[w * h * dev->pixelSize()];
+    dev->readBytes(data, x, y, w, h);
+    ba = QByteArray((const char*)data, (int)(w * h * dev->pixelSize()));
+    delete[] data;
+
+    return ba;
+}
+
+
+QByteArray Node::projectionPixelData(int x, int y, int w, int h) const
 {
     QByteArray ba;
 

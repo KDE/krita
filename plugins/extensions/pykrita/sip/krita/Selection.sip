@@ -21,7 +21,7 @@ public Q_SLOTS:
     void expand(int value);
     void feather(int value);
     void fill(Node*  node);
-    void grow(int value);
+    void grow(int xradius, int yradius);
     void invert();
     void resize(int w, int h);
     void select(int x, int y, int w, int h, int value);

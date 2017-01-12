@@ -64,7 +64,7 @@ public Q_SLOTS:
 
     void fill(Node* node);
 
-    void grow(int value);
+    void grow(int xradius, int yradius);
 
     void invert();
 
@@ -116,6 +116,7 @@ public Q_SLOTS:
     void setPixelData(QByteArray value, int x, int y, int w, int h);
 
 private:
+    friend class Document;
 
     KisSelectionSP selection() const;
 

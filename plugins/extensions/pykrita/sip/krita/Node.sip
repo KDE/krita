@@ -42,11 +42,10 @@ public Q_SLOTS:
     void setFilter(Filter*  value);
     Transformation * transformation() const;
     void setTransformation(Transformation*  value);
-    Selection * selection() const;
-    void setSelection(Selection*  value);
     QString fileName() const;
     void setFileName(QString value);
     QByteArray pixelData(int x, int y, int w, int h) const;
+    QByteArray projectionPixelData(int x, int y, int w, int h) const;
     void setPixelData(QByteArray value, int x, int y, int w, int h);
     QRect bounds() const;
     void move(int x, int y);

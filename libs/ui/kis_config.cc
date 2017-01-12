@@ -918,9 +918,19 @@ void KisConfig::setOutlineSizeMinimum(qreal outlineSizeMinimum) const
     m_cfg.writeEntry("OutlineSizeMinimum", outlineSizeMinimum);
 }
 
+qreal KisConfig::selectionViewSizeMinimum(bool defaultValue) const
+{
+    return (defaultValue ? 5.0 : m_cfg.readEntry("SelectionViewSizeMinimum", 5.0));
+}
+
+void KisConfig::setSelectionViewSizeMinimum(qreal outlineSizeMinimum) const
+{
+    m_cfg.writeEntry("SelectionViewSizeMinimum", outlineSizeMinimum);
+}
+
 int KisConfig::autoSaveInterval(bool defaultValue)  const
 {
-    return (defaultValue ? 300 : m_cfg.readEntry("AutoSaveInterval", 300));
+    return (defaultValue ? 15 * 60 : m_cfg.readEntry("AutoSaveInterval", 15 * 60));
 }
 
 void KisConfig::setAutoSaveInterval(int seconds)  const
@@ -1026,6 +1036,16 @@ void KisConfig::setPresetChooserViewMode(const int mode) const
     m_cfg.writeEntry("presetChooserViewMode", mode);
 }
 
+int KisConfig::presetIconSize(bool defaultValue) const
+{
+    return (defaultValue ? 30 : m_cfg.readEntry("presetIconSize", 30));
+}
+
+void KisConfig::setPresetIconSize(const int value) const
+{
+    m_cfg.writeEntry("presetIconSize", value);
+}
+
 bool KisConfig::firstRun(bool defaultValue) const
 {
     return (defaultValue ? true : m_cfg.readEntry("firstRun", true));
@@ -1084,6 +1104,16 @@ bool KisConfig::showDockerTitleBars(bool defaultValue) const
 void KisConfig::setShowDockerTitleBars(const bool value) const
 {
     m_cfg.writeEntry("showDockerTitleBars", value);
+}
+
+bool KisConfig::showDockers(bool defaultValue) const
+{
+    return (defaultValue ? true : m_cfg.readEntry("showDockers", true));
+}
+
+void KisConfig::setShowDockers(const bool value) const
+{
+    m_cfg.writeEntry("showDockers", value);
 }
 
 bool KisConfig::showStatusBar(bool defaultValue) const
@@ -1645,14 +1675,34 @@ bool KisConfig::animationDropFrames(bool defaultValue) const
     return (defaultValue ? true : m_cfg.readEntry("animationDropFrames", true));
 }
 
-int KisConfig::scribbingUpdatesDelay(bool defaultValue) const
+int KisConfig::scrubbingUpdatesDelay(bool defaultValue) const
 {
-    return (defaultValue ? 30 : m_cfg.readEntry("scribbingUpdatesDelay", 30));
+    return (defaultValue ? 30 : m_cfg.readEntry("scrubbingUpdatesDelay", 30));
 }
 
-void KisConfig::setScribbingUpdatesDelay(int value)
+void KisConfig::setScrubbingUpdatesDelay(int value)
 {
-    m_cfg.writeEntry("scribbingUpdatesDelay", value);
+    m_cfg.writeEntry("scrubbingUpdatesDelay", value);
+}
+
+int KisConfig::scrubbingAudioUpdatesDelay(bool defaultValue) const
+{
+    return (defaultValue ? -1 : m_cfg.readEntry("scrubbingAudioUpdatesDelay", -1));
+}
+
+void KisConfig::setScrubbingAudioUpdatesDelay(int value)
+{
+    m_cfg.writeEntry("scrubbingAudioUpdatesDelay", value);
+}
+
+int KisConfig::audioOffsetTolerance(bool defaultValue) const
+{
+    return (defaultValue ? -1 : m_cfg.readEntry("audioOffsetTolerance", -1));
+}
+
+void KisConfig::setAudioOffsetTolerance(int value)
+{
+    m_cfg.writeEntry("audioOffsetTolerance", value);
 }
 
 bool KisConfig::switchSelectionCtrlAlt(bool defaultValue) const

@@ -84,11 +84,6 @@ public:
     KisAction(const QIcon& icon, const QString& text, QObject* parent = 0);
     virtual ~KisAction();
 
-    /**
-     * Produces a new KisAction based on .action data files.
-     */
-    static KisAction *makeKisAction(QString name, QObject *parent);
-
     void setDefaultShortcut(const QKeySequence & shortcut);
     QKeySequence defaultShortcut() const;
 

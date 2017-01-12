@@ -251,7 +251,7 @@ KisImage::KisImage(KisUndoStore *undoStore, qint32 width, qint32 height, const K
 
 KisImage::~KisImage()
 {
-    dbgImage << "deleting kisimage" << objectName();
+    qDebug() << "deleting kisimage" << objectName();
 
     /**
      * Request the tools to end currently running strokes
@@ -490,9 +490,9 @@ bool KisImage::tryBarrierLock(bool readOnly)
     return result;
 }
 
-bool KisImage::isIdle()
+bool KisImage::isIdle(bool allowLocked)
 {
-    return !locked() && m_d->scheduler.isIdle();
+    return (allowLocked || !locked()) && m_d->scheduler.isIdle();
 }
 
 void KisImage::lock()
@@ -865,7 +865,11 @@ bool KisImage::assignImageProfile(const KoColorProfile *profile)
     m_d->colorSpace = dstCs;
 
     KisChangeProfileVisitor visitor(srcCs, dstCs);
-    return m_d->rootLayer->accept(visitor);
+    bool rv = m_d->rootLayer->accept(visitor);
+    if (rv) {
+        emit sigProfileChanged(profile);
+    }
+    return rv;
 
 }
 

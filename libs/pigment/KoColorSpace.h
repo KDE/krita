@@ -125,7 +125,7 @@ public:
     /// Return a list describing all the channels this color model has. The order
     /// of the channels in the list is the order of channels in the pixel. To find
     /// out the preferred display position, use KoChannelInfo::displayPosition.
-    virtual QList<KoChannelInfo *> channels() const;
+    QList<KoChannelInfo *> channels() const;
 
     /**
      * The total number of channels for a single pixel in this color model
@@ -199,13 +199,13 @@ public:
      * it is usually the concatenation of the id of the color model and of the color
      * depth, for instance "RGBA8" or "CMYKA16" or "XYZA32f".
      */
-    virtual QString id() const;
+    QString id() const;
 
     /**
      * User visible name which contains the name of the color model and of the color depth.
      * For intance "RGBA (8-bits)" or "CMYKA (16-bits)".
      */
-    virtual QString name() const;
+    QString name() const;
 
     /**
      * @return a string that identify the color model (for instance "RGB" or "CMYK" ...)

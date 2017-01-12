@@ -5,12 +5,13 @@ class Filter : QObject
 %End
     Filter(const Filter & __0);
 public:
-    Filter(QObject*  parent /TransferThis/ = 0);
+    Filter();
     virtual ~Filter();
+public Q_SLOTS:
+    QString name() const;
+    void setName(const QString &);
     InfoObject * configuration() const;
     void setConfiguration(InfoObject*  value);
-public Q_SLOTS:
-    void Apply(int x, int y, int w, int h);
-Q_SIGNALS:
+    void apply(Node *node, int x, int y, int w, int h);
 private:
 };

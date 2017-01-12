@@ -5,12 +5,15 @@ class Channel : QObject
 %End
     Channel(const Channel & __0);
 public:
-    Channel(QObject*  parent /TransferThis/ = 0);
     virtual ~Channel();
     bool visible() const;
     void setvisible(bool value);
-public Q_SLOTS:
-Q_SIGNALS:
+    QString name() const;
+    int position() const;
+    int channelSize() const;
+    QRect bounds() const;
+    QByteArray pixelData(const QRect &rect) const;
+    void setPixelData(QByteArray value, const QRect &rect);
 private:
 
 };

@@ -4,37 +4,37 @@ class Krita : QObject
 #include "Krita.h"
 %End
 public:
-public:
+public Q_SLOTS:
     Krita(QObject*  parent /TransferThis/ = 0);
     virtual ~Krita();
-    Document * activeDocument() const;
+    Document * activeDocument() const /Factory/;
     void setActiveDocument(Document*  value);
     bool batchmode() const;
     void setBatchmode(bool value);
-    QList<Action *> actions() const;
+    QList<Action *> actions() const /Factory/;
     Action * action(const QString & name) const;
-    QList<Document *> documents() const;
-    QList<Exporter *> exporters() const;
-    QList<Filter *> filters() const;
-    QList<Generator *> generators() const;
-    QList<Importer *> importers() const;
+    QList<Document *> documents() const /Factory/;
+    QStringList filters() const;
+    Filter * filter(const QString &name) const /Factory/;
+    QStringList generators() const /Factory/;
+    Generator * generator(const QString &name) const /Factory/;
+    QStringList profiles(const QString &colorModel, const QString &ColorDepth) const;
+    bool addProfile(const QString &profilePath);
     Notifier * notifier() const;
-    InfoObject * preferences() const;
-    void setPreferences(InfoObject*  value);
     QString version() const;
-    QList<View *> views() const;
-    QList<Window *> windows() const;
-    QList<Resource *> resources() const;
+    QList<View *> views() const /Factory/;
+    Window * activeWindow() const /Factory/;
+    QList<Window *> windows() const /Factory/;
+    QList<Resource *> resources() const /Factory/;
     void setResources(QList<Resource *> value);
-public Q_SLOTS:
+
     void addDockWidget(DockWidget*  dockWidget);
-    void addAction(Action*  action);
     bool closeApplication();
-    Document * createDocument();
-    Document * openDocument(const QString &filename);
+    Document * createDocument(int width, int height, const QString &name, const QString &colorModel, const QString &colorDepth, const QString &profile)  /Factory/;
+    Document * openDocument(const QString &filename)  /Factory/;
     Window * openWindow();
-    QAction * createAction(const QString & text);
-    
+    Action * createAction(const QString & text);
+
     void addViewExtension(ViewExtension* _viewExtension /GetWrapper/);
 %MethodCode
         Py_BEGIN_ALLOW_THREADS

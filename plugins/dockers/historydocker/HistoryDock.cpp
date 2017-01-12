@@ -20,13 +20,33 @@
 #include "HistoryDock.h"
 #include <KoDocumentResourceManager.h>
 #include <kis_config.h>
+#include <kis_icon_utils.h>
+
+#include <QDebug>
+#include <QWidget>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
+#include <QSpacerItem>
+
+#include <DlgConfigureHistoryDock.h>
 
 HistoryDock::HistoryDock()
     : QDockWidget()
     , m_historyCanvas(0)
 {
+    QWidget *page = new QWidget(this);
+    QVBoxLayout *vl = new QVBoxLayout(page);
     m_undoView = new KisUndoView(this);
-    setWidget(m_undoView);
+    vl->addWidget(m_undoView);
+    QHBoxLayout *hl = new QHBoxLayout(page);
+    hl->addSpacerItem(new QSpacerItem(10, 1,  QSizePolicy::Expanding, QSizePolicy::Fixed));
+    m_bnConfigure = new QToolButton(page);
+    m_bnConfigure->setIcon(KisIconUtils::loadIcon("configure"));
+    connect(m_bnConfigure, SIGNAL(clicked(bool)), SLOT(configure()));
+    hl->addWidget(m_bnConfigure);
+    vl->addItem(hl);
+
+    setWidget(page);
     setWindowTitle(i18n("Undo History"));
 }
 
@@ -47,4 +67,9 @@ void HistoryDock::setCanvas(KoCanvasBase *canvas) {
     }
     m_undoView->setCanvas( myCanvas );
 
+}
+void HistoryDock::configure()
+{
+    DlgConfigureHistoryDock dlg(m_undoView->stack(), this);
+    dlg.exec();
 }

@@ -4,25 +4,22 @@ class Document : QObject /NoDefaultCtors/
 #include "Document.h"
 %End
     Document(const Document & __0);
-public:
+public Q_SLOTS:
     Node * activeNode() const;
     void setActiveNode(Node*  value);
-    ColorDepth * colorDepth() const;
-    void setColorDepth(ColorDepth*  value);
-    ColorManager * colorManager() const;
-    void setColorManager(ColorManager*  value);
-    ColorModel * colorModel() const;
-    void setColorModel(ColorModel*  value);
-    ColorProfile * colorProfile() const;
-    void setColorProfile(ColorProfile*  value);
-    InfoObject * documentInfo() const;
-    void setDocumentInfo(InfoObject*  value);
+    bool batchmode() const;
+    void setBatchmode(bool value);
+    QString colorDepth() const;
+    QString colorModel() const;
+    QString colorProfile() const;
+    bool setColorProfile(const QString &colorProfile);
+    void setColorSpace(const QString &value, const QString &colorDepth, const QString &colorProfile);
+    QString documentInfo() const;
+    void setDocumentInfo(const QString &document);
     QString fileName() const;
     void setFileName(QString value);
     int height() const;
     void setHeight(int value);
-    InfoObject * metaData() const;
-    void setMetaData(InfoObject*  value);
     QString name() const;
     void setName(QString value);
     int resolution() const;
@@ -32,10 +29,13 @@ public:
     void setSelection(Selection*  value);
     int width() const;
     void setWidth(int value);
+    double xRes() const;
+    void setXRes(double xRes) const;
+
+    double yRes() const;
+    void setyRes(double yRes) const;
     QByteArray pixelData() const;
-public Q_SLOTS:
     bool close();
-    bool convert(const QString & colorModel, const ColorProfile*  profile);
     void crop(int x, int y, int w, int h);
     bool exportImage(const QString &filename, const InfoObject & exportConfiguration);
     void flatten();
@@ -44,6 +44,8 @@ public Q_SLOTS:
     bool saveAs(const QString & filename);
     void openView();
     Node * createNode(const QString & name, const QString & nodeType);
+Q_SIGNALS:
+    void nodeCreated(Node *node);
 private:
 
 };

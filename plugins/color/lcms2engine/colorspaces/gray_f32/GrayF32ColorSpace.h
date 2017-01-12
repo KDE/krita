@@ -83,7 +83,7 @@ public:
 
     virtual QString name() const
     {
-        return i18n("Grayscale/Alpha (32-bit float/channel)");
+        return QString("%1 (%2)").arg(GrayAColorModelID.name()).arg(Float32BitsColorDepthID.name());
     }
 
     virtual KoID colorModelId() const

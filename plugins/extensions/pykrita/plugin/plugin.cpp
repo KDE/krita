@@ -25,10 +25,10 @@
 #include <KoResourcePaths.h>
 
 #include <kis_preference_set_registry.h>
-#include <pyqtpluginsettings.h>
+#include "pyqtpluginsettings.h"
 
-#include <libkis/Krita.h>
-#include <libkis/ViewExtension.h>
+#include <Krita.h>
+#include <ViewExtension.h>
 
 K_PLUGIN_FACTORY_WITH_JSON(KritaPyQtPluginFactory, "kritapykrita.json", registerPlugin<KritaPyQtPlugin>();)
 
@@ -44,7 +44,6 @@ KritaPyQtPlugin::KritaPyQtPlugin(QObject *parent, const QVariantList &)
     PyQtPluginSettingsFactory* settingsFactory = new PyQtPluginSettingsFactory(&m_engine);
 
     QByteArray pythonPath = qgetenv("PYTHONPATH");
-
     qDebug() << "\tPython path:" << pythonPath;
 
     QStringList pluginDirectories = KoResourcePaths::findDirs("pythonscripts");

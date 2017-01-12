@@ -4,18 +4,14 @@ class Canvas : QObject
 #include "Canvas.h"
 %End
     Canvas(const Canvas & __0);
-public:
+public Q_SLOTS:
     Document * document() const;
-    void setDocument(Document*  value);
     int zoomLevel() const;
     void setZoomLevel(int value);
     int rotation() const;
     void setRotation(int value);
     bool mirror() const;
     void setMirror(bool value);
-    ColorManager * colorManager() const;
-    void setColorManager(ColorManager*  value);
-public Q_SLOTS:
 Q_SIGNALS:
 private:
 };

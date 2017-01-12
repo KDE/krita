@@ -46,9 +46,11 @@ public:
     bool canShortcutToNoop(const QRect &rect, SelectionAction action);
     void cropPathIfNeeded(QPainterPath *path);
 
+    bool tryDeselectCurrentSelection(const QRectF selectionViewRect, SelectionAction action);
+
 private:
     KisCanvas2* m_canvas;
-    KisImageWSP m_image;
+    KisImageSP m_image;
     KisLayerSP m_layer;
     KUndo2MagicString m_name;
 };

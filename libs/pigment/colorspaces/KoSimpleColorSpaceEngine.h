@@ -31,7 +31,7 @@ public:
                                                                        const KoColorSpace* dstColorSpace,
                                                                        KoColorConversionTransformation::Intent renderingIntent,
                                                                        KoColorConversionTransformation::ConversionFlags conversionFlags) const;
-    virtual void addProfile(const QString &profile ) { Q_UNUSED(profile); }
+    virtual bool addProfile(const QString &profile ) { Q_UNUSED(profile); return true;}
     virtual void removeProfile(const QString &profile ) { Q_UNUSED(profile); }
 };
 

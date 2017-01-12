@@ -676,7 +676,7 @@ bool KisDocument::saveFile(const QString &filePath, KisPropertiesConfigurationSP
     Q_ASSERT(!tempororaryFileName.isEmpty());
 
     //qDebug() << "saving to tempory file" << tempororaryFileName;
-    status = d->importExportManager->exportDocument(tempororaryFileName, outputMimeType, !d->isExporting , exportConfiguration);
+    status = d->importExportManager->exportDocument(tempororaryFileName, filePath, outputMimeType, !d->isExporting , exportConfiguration);
 
     ret = (status == KisImportExportFilter::OK);
     suppressErrorDialog = (isAutosaving() || status == KisImportExportFilter::UserCancelled || status == KisImportExportFilter::BadConversionGraph);
@@ -1584,17 +1584,20 @@ void KisDocument::setFileProgressUpdater(const QString &text)
         d->progressUpdater = new KoProgressUpdater(d->progressProxy, KoProgressUpdater::Unthreaded);
         d->progressUpdater->start(100, text);
         d->importExportManager->setProgresUpdater(d->progressUpdater);
-
-        connect(this, SIGNAL(sigProgress(int)), KisPart::instance()->currentMainwindow(), SLOT(slotProgress(int)));
-        connect(KisPart::instance()->currentMainwindow(), SIGNAL(sigProgressCanceled()), this, SIGNAL(sigProgressCanceled()));
+        if (KisPart::instance()->currentMainwindow()) {
+            connect(this, SIGNAL(sigProgress(int)), KisPart::instance()->currentMainwindow(), SLOT(slotProgress(int)));
+            connect(KisPart::instance()->currentMainwindow(), SIGNAL(sigProgressCanceled()), this, SIGNAL(sigProgressCanceled()));
+        }
     }
 }
 
 void KisDocument::clearFileProgressUpdater()
 {
     if (!d->suppressProgress && d->progressUpdater) {
-        disconnect(KisPart::instance()->currentMainwindow(), SIGNAL(sigProgressCanceled()), this, SIGNAL(sigProgressCanceled()));
-        disconnect(this, SIGNAL(sigProgress(int)), KisPart::instance()->currentMainwindow(), SLOT(slotProgress(int)));
+        if (KisPart::instance()->currentMainwindow()) {
+            disconnect(KisPart::instance()->currentMainwindow(), SIGNAL(sigProgressCanceled()), this, SIGNAL(sigProgressCanceled()));
+            disconnect(this, SIGNAL(sigProgress(int)), KisPart::instance()->currentMainwindow(), SLOT(slotProgress(int)));
+        }
         delete d->progressUpdater;
         d->importExportManager->setProgresUpdater(0);
         d->progressUpdater = 0;
@@ -1674,7 +1677,7 @@ bool KisDocument::prepareLocksForSaving()
         if (locker.successfullyLocked()) {
             copiedImage = d->image->clone(true);
         }
-        else {
+        else if (!isAutosaving()) {
             // even though it is a recovery operation, we should ensure we do not enter saving twice!
             std::unique_lock<StdLockableWrapper<QMutex>> l(d->savingLock, std::try_to_lock);
 

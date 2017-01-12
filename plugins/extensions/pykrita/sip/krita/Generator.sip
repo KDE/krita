@@ -10,6 +10,6 @@ public:
     InfoObject * configuration() const;
     void setConfiguration(InfoObject*  value);
 public Q_SLOTS:
-    Node * CreateNode();
+    Node * createNode();
 private:
 };

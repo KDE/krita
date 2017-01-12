@@ -196,7 +196,9 @@ void KisFilterManager::showFilterDialog(const QString &filterId)
      * The UI should show only after every running stroke is finished,
      * so a virtual barrier is added here.
      */
-    d->view->image()->waitForDone();
+    if (!d->view->blockUntillOperationsFinished(d->view->image())) {
+        return;
+    }
 
     Q_ASSERT(d->view);
     Q_ASSERT(d->view->activeNode());

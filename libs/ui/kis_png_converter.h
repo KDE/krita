@@ -114,6 +114,10 @@ public:
      */
     KisImageSP image();
 
+    /**
+     * @brief saveDeviceToStore saves the given paint device to the KoStore. If the device is not 8 bits sRGB, it will be converted to 8 bits sRGB.
+     * @return true if the saving succeeds
+     */
     static bool saveDeviceToStore(const QString &filename, const QRect &imageRect, const qreal xRes, const qreal yRes, KisPaintDeviceSP dev, KoStore *store, KisMetaData::Store* metaData = 0);
 
     static bool isColorSpaceSupported(const KoColorSpace *cs);

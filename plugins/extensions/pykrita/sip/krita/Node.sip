@@ -11,17 +11,14 @@ public:
     QString blendingMode() const;
     void setBlendingMode(QString value);
     QList<Channel *> channels() const;
-    void setChannels(QList<Channel *> value);
     QList<Node *> childNodes() const;
     void setChildNodes(QList<Node *> value);
-    ColorDepth * colorDepth() const;
-    void setColorDepth(ColorDepth*  value);
+    QString colorDepth() const;
     QString colorLabel() const;
     void setColorLabel(QString value);
-    ColorModel * colorModel() const;
-    void setColorModel(ColorModel*  value);
-    ColorProfile * colorProfile() const;
-    void setColorProfile(ColorProfile*  value);
+    QString colorModel() const;
+    QString colorProfile() const;
+    void setColorSpace(const QString &colorModel, const QString &colorDepth, const QString &colorProfile);
     bool inheritAlpha() const;
     void setInheritAlpha(bool value);
     bool locked() const;
@@ -50,11 +47,13 @@ public:
     void setFileName(QString value);
     QByteArray pixelData() const;
     void setPixelData(QByteArray value);
+    QRect bounds() const;
 public Q_SLOTS:
     void move(int x, int y);
     void moveToParent(Node*  parent);
     void remove();
     Node * duplicate();
+    void save(const QString &filename, double xRes, double yRes);
 Q_SIGNALS:
 private:
 };

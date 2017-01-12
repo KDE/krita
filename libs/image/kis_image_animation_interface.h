@@ -122,6 +122,37 @@ public:
 
     int framerate() const;
 
+    /**
+     * @return **absolute** file name of the audio channel file
+     */
+    QString audioChannelFileName() const;
+
+    /**
+     * Sets **absolute** file name of the audio channel file. Dont' try to pass
+     * a relative path, it'll assert!
+     */
+    void setAudioChannelFileName(const QString &fileName);
+
+    /**
+     * @return is the audio channel is currently muted
+     */
+    bool isAudioMuted() const;
+
+    /**
+     * Mutes the audio channel
+     */
+    void setAudioMuted(bool value);
+
+    /**
+     * Returns the preferred audio value in rangle [0, 1]
+     */
+    qreal audioVolume() const;
+
+    /**
+     * Set the preferred volume for the audio channel in range [0, 1]
+     */
+    void setAudioVolume(qreal value);
+
 public Q_SLOTS:
     void setFramerate(int fps);
 public:
@@ -157,6 +188,17 @@ Q_SIGNALS:
     void sigFramerateChanged();
     void sigFullClipRangeChanged();
     void sigPlaybackRangeChanged();
+
+    /**
+     * Emitted when the audio channel of the document is changed
+     */
+    void sigAudioChannelChanged();
+
+    /**
+     * Emitted when audion volume changes. Please note that it doesn't change
+     * when you mute the channel! When muting, sigAudioChannelChanged() is used instead!
+     */
+    void sigAudioVolumeChanged();
 
 private:
     struct Private;

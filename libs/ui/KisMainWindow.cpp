@@ -109,7 +109,6 @@
 #include "kis_clipboard.h"
 #include "kis_config.h"
 #include "kis_config_notifier.h"
-#include "kis_config_notifier.h"
 #include "kis_custom_image_widget.h"
 #include <KisDocument.h>
 #include "KisDocument.h"
@@ -535,7 +534,7 @@ void KisMainWindow::addView(KisView *view)
 
 void KisMainWindow::showView(KisView *imageView)
 {
-    if (imageView && activeView() != imageView) {
+    if (imageView && activeView() != imageView ) {
         // XXX: find a better way to initialize this!
         imageView->setViewManager(d->viewManager);
 
@@ -878,7 +877,8 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas)
     std::unique_lock<StdLockableWrapper<QMutex>> l(wrapper, std::try_to_lock);
     if (!l.owns_lock()) return false;
 
-    KisDelayedSaveDialog dlg(document->image(), this);
+    // no busy wait for saving because it is dangerous!
+    KisDelayedSaveDialog dlg(document->image(), KisDelayedSaveDialog::SaveDialog, 0, this);
     dlg.blockIfImageIsBusy();
 
     if (dlg.result() != QDialog::Accepted) {
@@ -950,7 +950,7 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas)
         // don't want to be reminded about overwriting files etc.
         bool justChangingFilterOptions = false;
 
-        KoFileDialog dialog(this, KoFileDialog::SaveFile, "SaveDocument");
+        KoFileDialog dialog(this, KoFileDialog::SaveFile, "OpenDocument");
         dialog.setCaption(i18n("untitled"));
         if (d->isExporting && !d->lastExportUrl.isEmpty()) {
             dialog.setDefaultDir(d->lastExportUrl.toLocalFile());
@@ -1548,7 +1548,7 @@ KisPrintJob* KisMainWindow::exportToPdf(QString pdfFileName)
         pageLayout = layoutDlg->pageLayout();
         delete layoutDlg;
 
-        KoFileDialog dialog(this, KoFileDialog::SaveFile, "SaveDocument");
+        KoFileDialog dialog(this, KoFileDialog::SaveFile, "OpenDocument");
         dialog.setCaption(i18n("Export as PDF"));
         dialog.setDefaultDir(startUrl.toLocalFile());
         dialog.setMimeTypeFilters(QStringList() << "application/pdf");
@@ -2004,7 +2004,9 @@ void KisMainWindow::updateWindowMenu()
     Q_FOREACH (QPointer<KisDocument> doc, KisPart::instance()->documents()) {
         if (doc) {
             QString title = doc->url().toDisplayString();
-            if (title.isEmpty()) title = doc->image()->objectName();
+            if (title.isEmpty() && doc->image()) {
+                title = doc->image()->objectName();
+            }
             QAction *action = docMenu->addAction(title);
             action->setIcon(qApp->windowIcon());
             connect(action, SIGNAL(triggered()), d->documentMapper, SLOT(map()));
@@ -2208,6 +2210,7 @@ void KisMainWindow::applyDefaultSettings(QPrinter &printer) {
 void KisMainWindow::createActions()
 {
     KisActionManager *actionManager = d->actionManager();
+    KisConfig cfg;
 
     actionManager->createStandardAction(KStandardAction::New, this, SLOT(slotFileNew()));
     actionManager->createStandardAction(KStandardAction::Open, this, SLOT(slotFileOpen()));
@@ -2270,14 +2273,12 @@ void KisMainWindow::createActions()
 
 
     d->toggleDockers = actionManager->createAction("view_toggledockers");
+    cfg.showDockers(true);
     d->toggleDockers->setChecked(true);
     connect(d->toggleDockers, SIGNAL(toggled(bool)), SLOT(toggleDockersVisibility(bool)));
 
     d->toggleDockerTitleBars = actionManager->createAction("view_toggledockertitlebars");
-    {
-        KisConfig cfg;
-        d->toggleDockerTitleBars->setChecked(cfg.showDockerTitleBars());
-    }
+    d->toggleDockerTitleBars->setChecked(cfg.showDockerTitleBars());
     connect(d->toggleDockerTitleBars, SIGNAL(toggled(bool)), SLOT(showDockerTitleBars(bool)));
 
     actionCollection()->addAction("settings_dockers_menu", d->dockWidgetMenu);

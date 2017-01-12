@@ -4,16 +4,13 @@ class View : QObject
 #include "View.h"
 %End
     View(const View & __0);
-public:
-    Window * window() const;
-    void setWindow(Window*  value);
-    Document * document() const;
-    void setDocument(Document*  value);
-    bool visible() const;
-    void setVisible(bool value);
-    Canvas * canvas() const;
-    void setCanvas(Canvas*  value);
 public Q_SLOTS:
+    Window * window() const /Factory/;
+    Document * document() const /Factory/;
+    bool visible() const;
+    void setVisible();
+    Canvas * canvas() const /Factory/;
+
     void close(bool confirm);
 private:
 };

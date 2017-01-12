@@ -56,18 +56,22 @@ public:
     }
 
     KisViewManager* viewManager;
+    KActionCollection *actionCollection;
+
     QList<KisAction*> actions;
     KoGenericRegistry<KisOperationUIFactory*> uiRegistry;
     KisOperationRegistry operationRegistry;
 
 };
 
-KisActionManager::KisActionManager(KisViewManager* viewManager)
+KisActionManager::KisActionManager(KisViewManager* viewManager, KActionCollection *actionCollection)
     : d(new Private)
 {
     d->viewManager = viewManager;
+    d->actionCollection = actionCollection;
 
-
+    connect(d->actionCollection,
+            SIGNAL(inserted(QAction*)), SLOT(slotActionAddedToCollection(QAction*)));
 }
 
 KisActionManager::~KisActionManager()
@@ -121,20 +125,30 @@ void KisActionManager::setView(QPointer<KisView> imageView)
     Q_UNUSED(imageView);
 }
 
+void KisActionManager::slotActionAddedToCollection(QAction *action)
+{
+    /**
+     * Small hack alert: not all the actions are still created by the manager and
+     * immediately added to the action collection. Some plugins add actions
+     * directly to the action collection when a document is created. Here we
+     * catch these cases
+     */
+
+    KisActionRegistry::instance()->updateShortcut(action->objectName(), action);
+}
+
 void KisActionManager::addAction(const QString& name, KisAction* action)
 {
     Q_ASSERT(!name.isEmpty());
     Q_ASSERT(action);
     Q_ASSERT(d->viewManager);
-    Q_ASSERT(d->viewManager->actionCollection());
+    Q_ASSERT(d->actionCollection);
 
-    d->viewManager->actionCollection()->addAction(name, action);
-    action->setObjectName(name);
-    action->setParent(d->viewManager->actionCollection());
-    d->viewManager->actionCollection()->setDefaultShortcut(action, action->defaultShortcut());
+    d->actionCollection->addAction(name, action);
+    action->setParent(d->actionCollection);
+
     d->actions.append(action);
     action->setActionManager(this);
-    KisActionRegistry::instance()->addAction(name, action);
 }
 
 void KisActionManager::takeAction(KisAction* action)
@@ -142,8 +156,8 @@ void KisActionManager::takeAction(KisAction* action)
     d->actions.removeOne(action);
 
     if (!action->objectName().isEmpty()) {
-        KIS_ASSERT_RECOVER_RETURN(d->viewManager->actionCollection());
-        d->viewManager->actionCollection()->takeAction(action);
+        KIS_ASSERT_RECOVER_RETURN(d->actionCollection);
+        d->actionCollection->takeAction(action);
     }
 }
 
@@ -170,11 +184,10 @@ KisAction *KisActionManager::createAction(const QString &name)
     // will add them to the KisActionRegistry for the time being so we can get
     // properly categorized shortcuts.
     a = new KisAction();
-    auto actionRegistry = KisActionRegistry::instance();
+    KisActionRegistry *actionRegistry = KisActionRegistry::instance();
 
     // Add extra properties
     actionRegistry->propertizeAction(name, a);
-    actionRegistry->addAction(name, a);
     bool ok; // We will skip this check
     int activationFlags = actionRegistry->getActionProperty(name, "activationFlags").toInt(&ok, 2);
     int activationConditions = actionRegistry->getActionProperty(name, "activationConditions").toInt(&ok, 2);
@@ -353,6 +366,9 @@ KisAction *KisActionManager::createStandardAction(KStandardAction::StandardActio
             QObject::connect(action, SIGNAL(triggered(bool)), receiver, member);
         }
     }
+
+    KisActionRegistry *actionRegistry = KisActionRegistry::instance();
+    actionRegistry->propertizeAction(standardAction->objectName(), action);
 
     addAction(standardAction->objectName(), action);
     delete standardAction;

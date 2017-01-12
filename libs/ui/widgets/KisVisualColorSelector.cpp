@@ -59,7 +59,7 @@ struct KisVisualColorSelector::Private
 };
 
 KisVisualColorSelector::KisVisualColorSelector(QWidget *parent)
-    : QWidget(parent)
+    : KisColorSelectorInterface(parent)
     , m_d(new Private)
 {
     this->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
@@ -77,7 +77,7 @@ KisVisualColorSelector::~KisVisualColorSelector()
     delete m_d->updateTimer;
 }
 
-void KisVisualColorSelector::slotSetColor(KoColor c)
+void KisVisualColorSelector::slotSetColor(const KoColor &c)
 {
     if (m_d->updateSelf == false) {
         m_d->currentcolor = c;
@@ -102,7 +102,7 @@ void KisVisualColorSelector::setConfig(bool forceCircular, bool forceSelfUpdate)
     m_d->updateLonesome = forceSelfUpdate;
 }
 
-KoColor KisVisualColorSelector::getCurrentColor()
+KoColor KisVisualColorSelector::getCurrentColor() const
 {
     return m_d->currentcolor;
 }

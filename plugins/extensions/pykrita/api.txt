@@ -4,10 +4,8 @@ class Krita :
         ActiveDocument : Document*
         Batchmode : bool 
         Documents : QList<Document*>
-        Exporters : QList<Exporter*>
         Filters : QList<Filter*>
         Generators : QList<Generator*>
-        Importers  : QList<Importer*>
         Notifier : Notifier*
         Preferences : InfoObject*
         Version : QString
@@ -138,20 +136,6 @@ class ColorManager :
     Properties:
         Type : QString
         OcioSettings : InfoObject*
-        
-class Exporter :
-    Properties:
-        Document : Document*
-        ExportSetttings : InfoObject*
-    Slots:
-        Export(const QString &filename) : bool
-        
-class Importer :
-    Properties:
-        Document : Document*
-        ImportSettings : InfoObject*
-    Slots:
-        Import(const QString &filename) : bool
         
 class View :
     Properties:

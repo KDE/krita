@@ -106,6 +106,8 @@ struct KisNodeManager::Private {
     KisNodeList selectedNodes;
     QPointer<KisNodeJugglerCompressed> nodeJuggler;
 
+    KisNodeWSP previouslyActiveNode;
+
     bool activateNodeImpl(KisNodeSP node);
 
     QSignalMapper nodeCreationSignalMapper;
@@ -144,15 +146,19 @@ bool KisNodeManager::Private::activateNodeImpl(KisNodeSP node)
         imageView->setCurrentNode(0);
         maskManager.activateMask(0);
         layerManager.activateLayer(0);
+        previouslyActiveNode = q->activeNode();
     } else {
 
+        previouslyActiveNode = q->activeNode();
+
         KoShape * shape = view->document()->shapeForNode(node);
-        Q_ASSERT(shape);
+        KIS_ASSERT_RECOVER_RETURN_VALUE(shape, false);
 
         selection->select(shape);
         KoShapeLayer * shapeLayer = dynamic_cast<KoShapeLayer*>(shape);
 
-        Q_ASSERT(shapeLayer);
+        KIS_ASSERT_RECOVER_RETURN_VALUE(shapeLayer, false);
+
 //         shapeLayer->setGeometryProtected(node->userLocked());
 //         shapeLayer->setVisible(node->visible());
         selection->setActiveLayer(shapeLayer);
@@ -245,6 +251,9 @@ void KisNodeManager::setup(KActionCollection * actionCollection, KisActionManage
 
     action = actionManager->createAction("activatePreviousLayer");
     connect(action, SIGNAL(triggered()), this, SLOT(activatePreviousNode()));
+
+    action = actionManager->createAction("switchToPreviouslyActiveNode");
+    connect(action, SIGNAL(triggered()), this, SLOT(switchToPreviouslyActiveNode()));
 
     action  = actionManager->createAction("save_node_as_image");
     connect(action, SIGNAL(triggered()), this, SLOT(saveNodeAsImage()));
@@ -867,6 +876,13 @@ void KisNodeManager::activatePreviousNode()
     }
 }
 
+void KisNodeManager::switchToPreviouslyActiveNode()
+{
+    if (m_d->previouslyActiveNode && m_d->previouslyActiveNode->parent()) {
+        slotNonUiActivatedNode(m_d->previouslyActiveNode);
+    }
+}
+
 void KisNodeManager::mergeLayer()
 {
     m_d->layerManager.mergeLayer();
@@ -949,23 +965,23 @@ void KisNodeManager::Private::saveDeviceAsImage(KisPaintDeviceSP device,
 
     QString mimefilter = KisMimeDatabase::mimeTypeForFile(filename);;
 
-    QScopedPointer<KisDocument> d(KisPart::instance()->createDocument());
+    QScopedPointer<KisDocument> doc(KisPart::instance()->createDocument());
 
-    KisImageSP dst = new KisImage(d->createUndoStore(),
+    KisImageSP dst = new KisImage(doc->createUndoStore(),
                                   bounds.width(),
                                   bounds.height(),
                                   device->compositionSourceColorSpace(),
                                   defaultName);
     dst->setResolution(xRes, yRes);
-    d->setCurrentImage(dst);
+    doc->setCurrentImage(dst);
     KisPaintLayer* paintLayer = new KisPaintLayer(dst, "paint device", opacity);
     paintLayer->paintDevice()->makeCloneFrom(device, bounds);
     dst->addNode(paintLayer, dst->rootLayer(), KisLayerSP(0));
 
     dst->initialRefreshGraph();
 
-    d->setOutputMimeType(mimefilter.toLatin1());
-    d->exportDocument(url);
+    doc->setOutputMimeType(mimefilter.toLatin1());
+    doc->exportDocument(url);
 }
 
 void KisNodeManager::saveNodeAsImage()

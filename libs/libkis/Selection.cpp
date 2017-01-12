@@ -133,11 +133,6 @@ void Selection::resize(int w, int h)
     if (!d->selection) return;
 }
 
-void Selection::rotate(int degrees)
-{
-    if (!d->selection) return;
-}
-
 void Selection::select(int x, int y, int w, int h, int value)
 {
     if (!d->selection) return;

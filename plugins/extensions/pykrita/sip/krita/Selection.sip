@@ -24,7 +24,6 @@ public Q_SLOTS:
     void grow(int value);
     void invert();
     void resize(int w, int h);
-    void rotate(int degrees);
     void select(int x, int y, int w, int h, int value);
     void selectAll(Node*  node, int value);
     void replace(Selection *selection);

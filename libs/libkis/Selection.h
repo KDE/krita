@@ -70,8 +70,6 @@ public Q_SLOTS:
 
     void resize(int w, int h);
 
-    void rotate(int degrees);
-
     void select(int x, int y, int w, int h, int value);
 
     void selectAll(Node *node, int value);

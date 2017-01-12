@@ -73,6 +73,11 @@ Document::Document(KisDocument *document, bool ownsDocument, QObject *parent)
 Document::~Document()
 {
     qDebug() << "Document" << this << "deleted";
+    if (d->ownsDocument) {
+        KisPart::instance()->removeDocument(d->document);
+        delete d->document;
+    }
+
     delete d;
 }
 
@@ -267,8 +272,8 @@ Selection *Document::selection() const
 
 void Document::setSelection(Selection* value)
 {
-    if (!d->document) return 0;
-    if (!d->document->image()) return 0;
+    if (!d->document) return;
+    if (!d->document->image()) return;
     d->document->image()->setGlobalSelection(value->selection());
 }
 

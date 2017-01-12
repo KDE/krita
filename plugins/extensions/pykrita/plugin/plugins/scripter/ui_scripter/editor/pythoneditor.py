@@ -1,28 +1,34 @@
-# -*- coding: utf-8 -*-
-
-
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
-from scripter.ui_scripter.editor import linenumberarea
 from PyQt5.QtGui import *
+from scripter.ui_scripter.editor import linenumberarea, debugarea
 
 
 class CodeEditor(QPlainTextEdit):
 
-    def __init__(self, parent=None):
+    DEBUG_AREA_WIDTH = 20
+
+    def __init__(self, scripter, parent=None):
         super(CodeEditor, self).__init__(parent)
 
         self.setLineWrapMode(self.NoWrap)
 
+        self.scripter = scripter
         self.lineNumberArea = linenumberarea.LineNumberArea(self)
+        self.debugArea = debugarea.DebugArea(self)
+        self.debugIcon = QIcon('/home/eliakincosta/Pictures/debug_arrow.svg')
 
-        self.blockCountChanged.connect(self.updateLineNumberAreaWidth)
+        self.blockCountChanged.connect(self.updateMarginsWidth)
         self.updateRequest.connect(self.updateLineNumberArea)
         self.cursorPositionChanged.connect(self.highlightCurrentLine)
 
-        self.updateLineNumberAreaWidth()
+        self.updateMarginsWidth()
         self.highlightCurrentLine()
         self.font = "Monospace"
+        self._stepped = False
+
+    def debugAreaWidth(self):
+        return self.DEBUG_AREA_WIDTH
 
     def lineNumberAreaWidth(self):
         """The lineNumberAreaWidth is the quatity of decimal places in blockCount"""
@@ -37,24 +43,33 @@ class CodeEditor(QPlainTextEdit):
         return space
 
     def resizeEvent(self, event):
-          super(CodeEditor, self).resizeEvent(event)
+        super(CodeEditor, self).resizeEvent(event)
 
-          qRect = self.contentsRect();
-          self.lineNumberArea.setGeometry(QRect(qRect.left(), qRect.top(), self.lineNumberAreaWidth(), qRect.height()));
+        qRect = self.contentsRect()
+        self.debugArea.setGeometry(QRect(qRect.left(),
+                                         qRect.top(),
+                                         self.debugAreaWidth(),
+                                         qRect.height()))
 
-    def updateLineNumberAreaWidth(self):
-        self.setViewportMargins(self.lineNumberAreaWidth(), 0, 0, 0)
+        self.lineNumberArea.setGeometry(QRect(qRect.left() + self.debugAreaWidth(),
+                                            qRect.top(),
+                                            self.lineNumberAreaWidth(),
+                                            qRect.height()))
+
+    def updateMarginsWidth(self):
+        self.setViewportMargins(self.lineNumberAreaWidth() + self.debugAreaWidth(), 0, 0, 0)
 
     def updateLineNumberArea(self, rect, dy):
         """ This slot is invoked when the editors viewport has been scrolled """
 
         if dy:
             self.lineNumberArea.scroll(0, dy)
+            self.debugArea.scroll(0, dy)
         else:
             self.lineNumberArea.update(0, rect.y(), self.lineNumberArea.width(), rect.height())
 
         if rect.contains(self.viewport().rect()):
-            self.updateLineNumberAreaWidth()
+            self.updateMarginsWidth()
 
     def lineNumberAreaPaintEvent(self, event):
         """This method draws the current lineNumberArea for while"""
@@ -65,7 +80,6 @@ class CodeEditor(QPlainTextEdit):
         blockNumber = block.blockNumber()
         top = int(self.blockBoundingGeometry(block).translated(self.contentOffset()).top())
         bottom = top + int(self.blockBoundingRect(block).height())
-
         while block.isValid() and top <= event.rect().bottom():
             if block.isVisible() and bottom >= event.rect().top():
                 number = str(blockNumber + 1)
@@ -77,6 +91,23 @@ class CodeEditor(QPlainTextEdit):
             top = bottom
             bottom = top + int(self.blockBoundingRect(block).height())
             blockNumber += 1
+
+    def debugAreaPaintEvent(self, event):
+        if self.scripter.debugcontroller.isActive and self.scripter.debugcontroller.currentLine:
+            lineNumber = self.scripter.debugcontroller.currentLine
+            block = self.document().findBlockByLineNumber(lineNumber-1)
+
+            if self._stepped:
+                cursor = QTextCursor(block)
+                self.setTextCursor(cursor)
+                self._stepped = False
+
+            top = int(self.blockBoundingGeometry(block).translated(self.contentOffset()).top())
+            bottom = top + int(self.blockBoundingRect(block).height())
+
+            painter = QPainter(self.debugArea)
+            pixmap = self.debugIcon.pixmap(QSize(self.debugAreaWidth()-3, int(self.blockBoundingRect(block).height())))
+            painter.drawPixmap(QPoint(0, top), pixmap)
 
     def highlightCurrentLine(self):
         """Highlight current line under cursor"""
@@ -110,3 +141,9 @@ class CodeEditor(QPlainTextEdit):
     def font(self, font):
         self._font = font
         self.setFont(QFont(font, 10))
+
+    def setStepped(self, status):
+        self._stepped = status
+
+    def repaintDebugArea(self):
+        self.debugArea.repaint()

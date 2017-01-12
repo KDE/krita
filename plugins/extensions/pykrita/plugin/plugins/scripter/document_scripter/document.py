@@ -10,28 +10,20 @@ class Document(object):
     def open(self, filePath=''):
         if filePath:
             self._filePath = filePath
-        _file = QFile(self._filePath)
 
-        if _file.open(QIODevice.ReadOnly | QIODevice.Text):
-            out = QTextStream(_file)
-            while not out.atEnd():
-                line = out.readLine()
-                self._document.append(line)
-
-        _file.close()
+        with open(self._filePath, 'r') as pythonFile:
+            self._document = pythonFile.read()
 
     def save(self):
         with open(self._filePath, 'w') as pythonFile:
-            for line in self._document:
-                print(line, file=pythonFile)
+            print(self._document, file=pythonFile)
 
     def compare(self, new_doc):
         if len(self._document) != len(new_doc):
             return False
 
-        for line in range(len(new_doc)):
-            if new_doc[line] != self._document[line]:
-                return False
+        if new_doc != self._document:
+            return False
 
         return True
 

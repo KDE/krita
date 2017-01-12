@@ -21,10 +21,10 @@ class DocumentController(object):
         if not self._activeDocument:
             self._activeDocument = document.Document(filePath)
 
-        dataList = str(data).splitlines()
+        text = str(data)
 
-        if not self._activeDocument.compare(dataList):
-            self._activeDocument.data = dataList
+        if not self._activeDocument.compare(text):
+            self._activeDocument.data = text
             self._activeDocument.save()
 
         return self._activeDocument

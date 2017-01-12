@@ -20,33 +20,38 @@ class UIController(object):
         self.actions = []
 
         self.mainWidget.setWindowModality(Qt.NonModal)
-        self.editor = pythoneditor.CodeEditor()
-        self.output = QPlainTextEdit()
+    def initialize(self, scripter):
+        self.editor = pythoneditor.CodeEditor(scripter)
+        self.widgetSelector = QComboBox()
+        self.stackedWidget = QStackedWidget()
         self.statusBar = QLabel('untitled')
         self.highlight = syntax.PythonHighlighter(self.editor.document(), syntaxstyles.DefaultSyntaxStyle())
 
-    def initialize(self, scripter):
         self.scripter = scripter
 
         self.loadMenus()
+        self.loadWidgets()
         self.loadActions()
+
+        self.widgetSelector.currentIndexChanged.connect(self._currentIndexChanged)
 
         vbox = QVBoxLayout(self.mainWidget)
         vbox.addWidget(self.menu_bar)
         vbox.addWidget(self.editor)
         vbox.addWidget(self.actionToolbar)
-        vbox.addWidget(self.output)
+        vbox.addWidget(self.widgetSelector)
+        vbox.addWidget(self.stackedWidget)
         vbox.addWidget(self.statusBar)
 
         self.mainWidget.resize(400, 500)
         self.mainWidget.setWindowTitle("Scripter")
         self.mainWidget.setSizeGripEnabled(True)
+        self.addMenu('Edit', 'Edit')
         self.mainWidget.show()
         self.mainWidget.activateWindow()
 
     def loadMenus(self):
         self.addMenu('File', 'File')
-        self.addMenu('Edit', 'Edit')
 
     def addMenu(self, menuName, parentName):
         parent = self.menu_bar.findChild(QObject, parentName)
@@ -82,6 +87,23 @@ class UIController(object):
         for action in self.actions:
             action['parent'].addAction(action['action'])
 
+    def loadWidgets(self):
+        modulePath = 'scripter.ui_scripter.stackwidgets'
+        widgetsModule = importlib.import_module(modulePath)
+        modules = []
+
+        for classPath in widgetsModule.widgetClasses:
+            _module, _klass =  classPath.rsplit('.', maxsplit=1)
+            modules.append(dict(module='{0}.{1}'.format(modulePath, _module),
+                                klass=_klass))
+
+        for module in modules:
+            m = importlib.import_module(module['module'])
+            widgetClass = getattr(m, module['klass'])
+            obj = widgetClass(self.scripter)
+            self.stackedWidget.addWidget(obj)
+            self.widgetSelector.addItem(obj.objectName())
+
     def invokeAction(self, actionName):
         for action in self.actions:
             if action['action'].objectName() == actionName:
@@ -89,14 +111,34 @@ class UIController(object):
                 if method:
                     return method()
 
+    def findStackWidget(self, widgetName):
+        for index in range(self.stackedWidget.count()):
+            widget = self.stackedWidget.widget(index)
+            if widget.objectName() == widgetName:
+                return widget
+
     def setDocumentEditor(self, document):
         self.editor.clear()
-
-        for line in document.data:
-            self.editor.appendPlainText(line)
+        self.editor.appendPlainText(document.data)
 
     def setStatusBar(self, value='untitled'):
         self.statusBar.setText(value)
 
+    def setActiveWidget(self, widgetName):
+        index = self.widgetSelector.findText(widgetName)
+
+        if index!=-1:
+            self.widgetSelector.setCurrentIndex(index)
+
+    def setStepped(self, status):
+        self.editor.setStepped(status)
+
     def clearEditor(self):
         self.editor.clear()
+
+    def _currentIndexChanged(self, index):
+        if index != -1:
+            self.stackedWidget.setCurrentIndex(index)
+
+    def repaintDebugArea(self):
+        self.editor.repaintDebugArea()

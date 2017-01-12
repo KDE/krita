@@ -1,4 +1,5 @@
-from PyQt5.QtWidgets import QAction, QFileDialog
+from PyQt5.QtWidgets import QAction, QFileDialog, QMessageBox
+
 
 class SaveAction(QAction):
 
@@ -19,16 +20,22 @@ class SaveAction(QAction):
     def save(self):
         text = self.editor.toPlainText()
         fileName = ''
+        fileExtension = ''
 
         if not self.scripter.documentcontroller.activeDocument:
-            fileName = QFileDialog.getSaveFileName(self.scripter.uicontroller.mainWidget,
-                                                   'Save Python File', '',
-                                                   'Python File (*.py)')[0]
-            if not fileName:
-                return
+            try:
+                fileName = QFileDialog.getSaveFileName(self.scripter.uicontroller.mainWidget,
+                                                       'Save Python File', '',
+                                                       'Python File (*.py)')[0]
+                if not fileName:
+                    return
 
-            fileExtension = fileName.rsplit('.', maxsplit=1)[1]
-            if not fileExtension=='py':
+                fileExtension = fileName.rsplit('.', maxsplit=1)[1]
+            except:
+                if not fileExtension=='py':
+                    QMessageBox.information(self.scripter.uicontroller.mainWidget,
+                                            'Invalid File',
+                                            'Save files with .py extension')
                 return
 
         document = self.scripter.documentcontroller.saveDocument(text, fileName)
@@ -36,3 +43,5 @@ class SaveAction(QAction):
             self.scripter.uicontroller.setStatusBar(document.filePath)
         else:
             self.scripter.uicontroller.setStatusBar('untitled')
+
+        return document

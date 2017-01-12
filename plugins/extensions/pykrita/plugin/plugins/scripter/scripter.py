@@ -2,8 +2,8 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from krita import *
-from scripter import uicontroller
-from scripter import documentcontroller
+from scripter import uicontroller, documentcontroller, debugcontroller
+
 
 class ScripterViewExtension(ViewExtension):
 
@@ -18,6 +18,7 @@ class ScripterViewExtension(ViewExtension):
     def initialize(self):
         self.uicontroller = uicontroller.UIController(QDialog())
         self.documentcontroller = documentcontroller.DocumentController()
+        self.debugcontroller = debugcontroller.DebugController(self)
         self.uicontroller.initialize(self)
 
 Krita.instance().addViewExtension(ScripterViewExtension(Krita.instance()))

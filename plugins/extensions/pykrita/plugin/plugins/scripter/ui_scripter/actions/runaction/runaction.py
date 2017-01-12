@@ -10,19 +10,20 @@ class RunAction(QAction):
         self.scripter = scripter
 
         self.editor = self.scripter.uicontroller.editor
-        self.output = self.scripter.uicontroller.output
+        self.output = self.scripter.uicontroller.findStackWidget('OutPut')
 
         self.triggered.connect(self.run)
 
         self.setText('Run')
         # path to the icon
-        #self.setIcon(QIcon('/home/eliakincosta/Pictures/play.svg'))
+        self.setIcon(QIcon('/home/eliakincosta/Pictures/play.svg'))
 
     @property
     def parent(self):
         return 'toolBar'
 
     def run(self):
+        print('roda roda')
         stdout = sys.stdout
         stderr = sys.stderr
         output = docwrapper.DocWrapper(self.output.document())

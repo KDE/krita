@@ -68,7 +68,7 @@ void KisBContrastBenchmark::cleanupTestCase()
 void KisBContrastBenchmark::benchmarkFilter()
 {
     KisFilterSP filter = KisFilterRegistry::instance()->value("brightnesscontrast");
-    KisFilterConfigurationSP  kfc = filter->defaultConfiguration(m_device);
+    KisFilterConfigurationSP  kfc = filter->defaultConfiguration();
 
     // Get the predefined configuration from a file
     QFile file(QString(FILES_DATA_DIR) + QDir::separator() + filter->id() + ".cfg");

@@ -58,7 +58,7 @@ public:
                      const KisFilterConfigurationSP config,
                      KoUpdater *progressUpdater) const;
 
-    virtual KisFilterConfigurationSP factoryConfiguration(const KisPaintDeviceSP) const;
+    virtual KisFilterConfigurationSP factoryConfiguration() const;
 
     virtual KisConfigWidget *createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev) const;
 

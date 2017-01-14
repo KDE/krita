@@ -46,7 +46,7 @@ public:
     QRect changedRect(const QRect &rect, const KisFilterConfigurationSP config, int lod) const;
 
     virtual KisConfigWidget *createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev) const;
-    virtual KisFilterConfigurationSP factoryConfiguration(const KisPaintDeviceSP) const;
+    virtual KisFilterConfigurationSP factoryConfiguration() const;
 private:
     //bool m_usenormalmap;
 };

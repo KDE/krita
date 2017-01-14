@@ -240,7 +240,7 @@ void KisOpenRasterStackLoadVisitor::loadGroupLayer(const QDomElement& elem, KisG
                 if (filterTypeSplit[0] == "applications" && filterTypeSplit[1] == "krita") {
                     f = KisFilterRegistry::instance()->value(filterTypeSplit[2]);
                 }
-                KisFilterConfigurationSP  kfc = f->defaultConfiguration(0);
+                KisFilterConfigurationSP  kfc = f->defaultConfiguration();
                 KisAdjustmentLayerSP layer = new KisAdjustmentLayer(gL->image() , "", kfc, KisSelectionSP(0));
                 d->image->addNode(layer.data(), gL.data(), 0);
                 loadAdjustmentLayer(subelem, layer);

@@ -240,7 +240,7 @@ void KisFilterManager::showFilterDialog(const QString &filterId)
         d->filterDialog->setFilter(filter);
         d->filterDialog->setVisible(true);
     } else {
-        apply(KisFilterConfigurationSP(filter->defaultConfiguration(d->view->activeNode()->original())));
+        apply(KisFilterConfigurationSP(filter->defaultConfiguration()));
         finish();
     }
 }

@@ -32,10 +32,10 @@ public:
     KisBaseProcessorConfigurationFactory(KisBaseProcessor* _generator) : m_generator(_generator) {}
     ~KisBaseProcessorConfigurationFactory() override {}
     KisSerializableConfigurationSP createDefault() override {
-        return m_generator->factoryConfiguration(KisPaintDeviceSP());
+        return m_generator->factoryConfiguration();
     }
     KisSerializableConfigurationSP create(const QDomElement& e) override {
-        KisSerializableConfigurationSP config = m_generator->factoryConfiguration(KisPaintDeviceSP());
+        KisSerializableConfigurationSP config = m_generator->factoryConfiguration();
         config->fromXML(e);
         return config;
     }
@@ -85,21 +85,14 @@ KisBaseProcessor::~KisBaseProcessor()
     delete d;
 }
 
-KisFilterConfigurationSP  KisBaseProcessor::factoryConfiguration(const KisPaintDeviceSP) const
+KisFilterConfigurationSP KisBaseProcessor::factoryConfiguration() const
 {
     return new KisFilterConfiguration(id(), 0);
 }
 
-KisFilterConfigurationSP  KisBaseProcessor::defaultConfiguration(const KisPaintDeviceSP pd) const
+KisFilterConfigurationSP KisBaseProcessor::defaultConfiguration() const
 {
-    KisFilterConfigurationSP fc = 0;
-//     if (bookmarkManager()) {
-//         fc = dynamic_cast<KisFilterConfiguration*>(bookmarkManager()->defaultConfiguration());
-//     }
-    if (!fc || !fc->isCompatible(pd)) {
-        fc = factoryConfiguration(pd);
-    }
-    return fc;
+    return factoryConfiguration();
 }
 
 KisConfigWidget * KisBaseProcessor::createConfigurationWidget(QWidget *, const KisPaintDeviceSP) const

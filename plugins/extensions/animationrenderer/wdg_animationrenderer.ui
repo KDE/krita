@@ -383,11 +383,6 @@
     </spacer>
    </item>
   </layout>
-  <zorder>shouldExportOnlyImageSequence</zorder>
-  <zorder>horizontalLayoutWidget</zorder>
-  <zorder>horizontalLayoutWidget_2</zorder>
-  <zorder>verticalSpacer</zorder>
-  <zorder>horizontalLayoutWidget_3</zorder>
  </widget>
  <customwidgets>
   <customwidget>

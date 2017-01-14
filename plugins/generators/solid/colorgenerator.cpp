@@ -59,7 +59,7 @@ KisColorGenerator::KisColorGenerator() : KisGenerator(id(), KoID("basic"), i18n(
     setSupportsPainting(true);
 }
 
-KisFilterConfigurationSP KisColorGenerator::factoryConfiguration(const KisPaintDeviceSP) const
+KisFilterConfigurationSP KisColorGenerator::factoryConfiguration() const
 {
     KisFilterConfigurationSP config = new KisFilterConfiguration("color", 1);
 

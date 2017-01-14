@@ -66,7 +66,7 @@ KoPatternGenerator::KoPatternGenerator() : KisGenerator(id(), KoID("basic"), i18
     setSupportsPainting(true);
 }
 
-KisFilterConfigurationSP KoPatternGenerator::factoryConfiguration(const KisPaintDeviceSP) const
+KisFilterConfigurationSP KoPatternGenerator::factoryConfiguration() const
 {
     KisFilterConfigurationSP config = new KisFilterConfiguration("pattern", 1);
 

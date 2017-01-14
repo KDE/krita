@@ -123,7 +123,7 @@ KisFilterConfigurationSP  KisDlgAdjLayerProps::filterConfiguration() const
             return config;
         }
     }
-    return m_currentFilter->defaultConfiguration(m_paintDevice);
+    return m_currentFilter->defaultConfiguration();
 }
 
 QString KisDlgAdjLayerProps::layerName() const

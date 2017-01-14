@@ -12,7 +12,7 @@ class DebugAction(QAction):
 
         self.setText('Debug')
         # path to the icon
-        self.setIcon(QIcon('/home/eliakincosta/Pictures/debug.svg'))
+        #self.setIcon(QIcon('/home/eliakincosta/Pictures/debug.svg'))
 
     @property
     def parent(self):

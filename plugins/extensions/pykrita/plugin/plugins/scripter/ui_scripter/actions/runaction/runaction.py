@@ -2,6 +2,7 @@ from PyQt5.QtWidgets import QAction, QMessageBox
 from PyQt5.QtGui import QIcon
 import sys
 from . import docwrapper
+import os
 
 class RunAction(QAction):
 
@@ -16,28 +17,30 @@ class RunAction(QAction):
 
         self.setText('Run')
         # path to the icon
-        self.setIcon(QIcon('/home/eliakincosta/Pictures/play.svg'))
+        #self.setIcon(QIcon('/home/eliakincosta/Pictures/play.svg'))
 
     @property
     def parent(self):
         return 'toolBar'
 
     def run(self):
-        print('roda roda')
-        stdout = sys.stdout
-        stderr = sys.stderr
-        output = docwrapper.DocWrapper(self.output.document())
-        output.write("======================================\n")
-        sys.stdout = output
-        sys.stderr = output
-        script = self.editor.document().toPlainText()
-        try:
-            bc = compile(script, "<string>", "exec")
-        except Exception as e:
-            QMessageBox.critical(self.editor, "Error compiling script", str(e))
-            return
+        document = self.scripter.uicontroller.invokeAction('save')
 
-        exec(bc)
+        if document:
+            stdout = sys.stdout
+            stderr = sys.stderr
+            output = docwrapper.DocWrapper(self.output.document())
+            output.write("======================================\n")
+            sys.stdout = output
+            sys.stderr = output
+            script = self.editor.document().toPlainText()
+            try:
+                bc = compile(document.data, document.filePath, "exec")
+            except Exception as e:
+                QMessageBox.critical(self.editor, "Error compiling script", str(e))
+                return
 
-        sys.stdout = stdout
-        sys.stderr = stderr
+            exec(bc)
+
+            sys.stdout = stdout
+            sys.stderr = stderr

@@ -1,6 +1,6 @@
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QToolBar, QTableWidget,QAction
-from PyQt5.QtGui import QIcon
+from PyQt5.QtWidgets import QWidget, QVBoxLayout, QToolBar, QTableWidget, QAction
 from . import stepaction, stopaction
+
 
 class DebuggerWidget(QWidget):
 
@@ -11,8 +11,8 @@ class DebuggerWidget(QWidget):
         self.setObjectName('Debugger')
         self.layout = QVBoxLayout()
 
-        self.toolbar = QToolBar()
         self.stopAction = stopaction.StopAction(self.scripter, self)
+        self.toolbar = QToolBar()
         self.stepAction = stepaction.StepAction(self.scripter, self)
         self.toolbar.addAction(self.stopAction)
         self.toolbar.addAction(self.stepAction)

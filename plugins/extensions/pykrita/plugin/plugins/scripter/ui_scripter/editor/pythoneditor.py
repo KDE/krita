@@ -16,7 +16,6 @@ class CodeEditor(QPlainTextEdit):
         self.scripter = scripter
         self.lineNumberArea = linenumberarea.LineNumberArea(self)
         self.debugArea = debugarea.DebugArea(self)
-        self.debugIcon = QIcon('/home/eliakincosta/Pictures/debug_arrow.svg')
 
         self.blockCountChanged.connect(self.updateMarginsWidth)
         self.updateRequest.connect(self.updateLineNumberArea)
@@ -106,8 +105,7 @@ class CodeEditor(QPlainTextEdit):
             bottom = top + int(self.blockBoundingRect(block).height())
 
             painter = QPainter(self.debugArea)
-            pixmap = self.debugIcon.pixmap(QSize(self.debugAreaWidth()-3, int(self.blockBoundingRect(block).height())))
-            painter.drawPixmap(QPoint(0, top), pixmap)
+            painter.fillRect(0, top, self.debugAreaWidth()-3, int(self.blockBoundingRect(block).height()), QColor(Qt.yellow).darker(300))
 
     def highlightCurrentLine(self):
         """Highlight current line under cursor"""

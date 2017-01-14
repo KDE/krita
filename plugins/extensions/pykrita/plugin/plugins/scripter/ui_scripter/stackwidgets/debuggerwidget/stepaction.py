@@ -13,7 +13,7 @@ class StepAction(QAction):
 
         self.setText('Step Over')
         # path to the icon
-        self.setIcon(QIcon('/home/eliakincosta/Pictures/step.svg'))
+        #self.setIcon(QIcon('/home/eliakincosta/Pictures/step.svg'))
 
     def step(self):
         status = self.scripter.debugcontroller.isActive

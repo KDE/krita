@@ -3,6 +3,8 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from krita import *
 from scripter import uicontroller, documentcontroller, debugcontroller
+import os as osp
+import sys
 
 
 class ScripterViewExtension(ViewExtension):

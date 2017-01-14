@@ -13,7 +13,7 @@ class StopAction(QAction):
 
         self.setText('Stop')
         # path to the icon
-        self.setIcon(QIcon('/home/eliakincosta/Pictures/stop.svg'))
+        #self.setIcon(QIcon('/home/eliakincosta/Pictures/stop.svg'))
 
     def stop(self):
         self.scripter.debugcontroller.stop()

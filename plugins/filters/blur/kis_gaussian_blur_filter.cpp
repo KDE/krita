@@ -53,7 +53,7 @@ KisConfigWidget * KisGaussianBlurFilter::createConfigurationWidget(QWidget* pare
     return new KisWdgGaussianBlur(parent);
 }
 
-KisFilterConfigurationSP KisGaussianBlurFilter::factoryConfiguration(const KisPaintDeviceSP) const
+KisFilterConfigurationSP KisGaussianBlurFilter::factoryConfiguration() const
 {
     KisFilterConfigurationSP config = new KisFilterConfiguration(id().id(), 1);
     config->setProperty("horizRadius", 5);

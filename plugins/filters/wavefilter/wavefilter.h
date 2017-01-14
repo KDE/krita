@@ -51,7 +51,7 @@ public:
         return KoID("wave", i18n("Wave"));
     }
 
-    virtual KisFilterConfigurationSP factoryConfiguration(const KisPaintDeviceSP) const;
+    virtual KisFilterConfigurationSP factoryConfiguration() const;
 public:
     virtual QRect neededRect(const QRect& rect, const KisFilterConfigurationSP config = 0, int lod = 0) const;
 

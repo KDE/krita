@@ -385,11 +385,11 @@ KisConfigWidget * KisRainDropsFilter::createConfigurationWidget(QWidget* parent,
     param.push_back(KisIntegerWidgetParam(1, 500, 80, i18n("Number"), "number"));
     param.push_back(KisIntegerWidgetParam(1, 100, 30, i18n("Fish eyes"), "fishEyes"));
     KisMultiIntegerFilterWidget * w = new KisMultiIntegerFilterWidget(id().id(), parent, id().id(), param);
-    w->setConfiguration(factoryConfiguration(0));
+    w->setConfiguration(factoryConfiguration());
     return w;
 }
 
-KisFilterConfigurationSP KisRainDropsFilter::factoryConfiguration(const KisPaintDeviceSP) const
+KisFilterConfigurationSP KisRainDropsFilter::factoryConfiguration() const
 {
     KisFilterConfigurationSP config = new KisFilterConfiguration("raindrops", 2);
     config->setProperty("dropsize", 80);

@@ -42,7 +42,7 @@ public:
         return KoID("gaussiannoisereducer", i18n("Gaussian Noise Reducer"));
     }
 protected:
-    virtual KisFilterConfigurationSP  factoryConfiguration(const KisPaintDeviceSP) const;
+    virtual KisFilterConfigurationSP  factoryConfiguration() const;
 };
 
 #endif

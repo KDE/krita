@@ -84,7 +84,7 @@ void KritaFilterGradientMap::processImpl(KisPaintDeviceSP device,
 
 }
 
-KisFilterConfigurationSP KritaFilterGradientMap::factoryConfiguration(const KisPaintDeviceSP) const
+KisFilterConfigurationSP KritaFilterGradientMap::factoryConfiguration() const
 {
     KisFilterConfigurationSP config = new KisFilterConfiguration("gradientmap", 1);
     KoAbstractGradient *gradient = KoResourceServerProvider::instance()->gradientServer(false)->resources().first();

@@ -50,7 +50,7 @@ public:
         return KoID("indexcolors", i18n("Index Colors"));
     }
 protected:
-    virtual KisFilterConfigurationSP factoryConfiguration(const KisPaintDeviceSP) const;
+    virtual KisFilterConfigurationSP factoryConfiguration() const;
 };
 
 class KisIndexColorTransformation : public KoColorTransformation

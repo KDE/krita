@@ -88,6 +88,9 @@ void AnimaterionRenderer::slotRenderAnimation()
     cfg->fromXML(kisConfig.exportConfiguration("FFMPEG_CONFIG"));
     dlgAnimationRenderer.setEncoderConfiguration(cfg);
 
+    // update the UI to show the selected export options
+    dlgAnimationRenderer.updateExportUIOptions();
+
 
     if (dlgAnimationRenderer.exec() == QDialog::Accepted) {
         KisPropertiesConfigurationSP sequenceConfig = dlgAnimationRenderer.getSequenceConfiguration();

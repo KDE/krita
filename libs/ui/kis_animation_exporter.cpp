@@ -63,26 +63,6 @@ KisAnimationExporterUI::~KisAnimationExporterUI()
     }
 }
 
-KisImportExportFilter::ConversionStatus KisAnimationExporterUI::exportSequence(KisDocument *document)
-{
-    KoFileDialog dialog(m_d->parentWidget, KoFileDialog::SaveFile, "exportsequence");
-    dialog.setCaption(i18n("Export sequence"));
-    dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
-    dialog.setMimeTypeFilters(KisImportExportManager::mimeFilter(KisImportExportManager::Export));
-    QString filename = dialog.filename();
-
-    // if the user presses cancel, it returns empty
-    if (filename.isEmpty()) return KisImportExportFilter::UserCancelled;
-
-    const KisTimeRange fullClipRange = document->image()->animationInterface()->fullClipRange();
-    int firstFrame = fullClipRange.start();
-    int lastFrame = fullClipRange.end();
-
-    m_d->exporter = new KisAnimationExportSaver(document, filename, firstFrame, lastFrame);
-    return m_d->exporter->exportAnimation();
-}
-
-
 struct KisAnimationExporter::Private
 {
     Private(KisDocument *document, int fromTime, int toTime)

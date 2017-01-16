@@ -253,6 +253,13 @@ public Q_SLOTS:
      */
     Node* createNode(const QString &name, const QString &nodeType);
 
+    /**
+     * @brief mergeDown merges the given node with the first visible node underneath this node in the layerstack
+     * @param node the node to merge down; this node will be removed from the layer stack
+     * @return the merged node
+     */
+    Note *mergeDown(Node *node);
+
 Q_SIGNALS:
 
     void nodeCreated(Node *node);

@@ -453,6 +453,12 @@ Node* Document::createNode(const QString &name, const QString &nodeType)
     return node;
 }
 
+Node *Document::mergeDown(Node *node)
+{
+    if (!d->document) return 0;
+    // UNINMPLEMENTED
+}
+
 QPointer<KisDocument> Document::document() const
 {
     return d->document;

@@ -43,8 +43,6 @@ class KRITALIBKIS_EXPORT Filter : public QObject
     Q_OBJECT
     Q_DISABLE_COPY(Filter)
     
-    Q_PROPERTY(InfoObject* Configuration READ configuration WRITE setConfiguration)
-
 public:
     /**
      * @brief Filter: create an empty filter object. Until a name is set, the filter cannot

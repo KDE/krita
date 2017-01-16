@@ -51,7 +51,7 @@ public Q_SLOTS:
     void move(int x, int y);
     void moveToParent(Node*  parent);
     void remove();
-    Node * duplicate();
+    Node *duplicate();
     void save(const QString &filename, double xRes, double yRes);
 Q_SIGNALS:
 private:

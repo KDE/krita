@@ -15,10 +15,8 @@ class AssignProfileDialog(ViewExtension):
             return
     
         self.dialog = QDialog(Application.activeWindow().qwindow())
-        self.dialog.setWindowModality(Qt.NonModal)
-    
+   
         self.cmbProfile = QComboBox(self.dialog)
-        
         for profile in sorted(Application.profiles(doc.colorModel(), doc.colorDepth())):
             self.cmbProfile.addItem(profile)
     
@@ -33,7 +31,7 @@ class AssignProfileDialog(ViewExtension):
         vbox.addWidget(self.buttonBox)
         self.dialog.show()
         self.dialog.activateWindow()
-        self.dialog.exec()
+        self.dialog.exec_()
         
     def accept(self):
         doc = Application.activeDocument()

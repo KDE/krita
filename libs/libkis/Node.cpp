@@ -119,6 +119,12 @@ QList<Node*> Node::childNodes() const
     return nodes;
 }
 
+void Node::addChildNode(Node *child, Node *above)
+{
+    // UNIMPLEMENTED
+    if (!d->node) return;
+}
+
 void Node::setChildNodes(QList<Node*> value)
 {
     // UNIMPLEMENTED
@@ -142,14 +148,12 @@ void Node::setColorLabel(QString value)
 
 QString Node::colorDepth() const
 {
-    // UNIMPLEMENTED
     if (!d->node) return "";
     return d->node->colorSpace()->colorDepthId().id();
 }
 
 QString Node::colorModel() const
 {
-    // UNIMPLEMENTED
     if (!d->node) return "";
     return d->node->colorSpace()->colorModelId().id();
 }
@@ -157,7 +161,6 @@ QString Node::colorModel() const
 
 QString Node::colorProfile() const
 {
-    // UNIMPLEMENTED
     if (!d->node) return "";
     return d->node->colorSpace()->profile()->name();
 }

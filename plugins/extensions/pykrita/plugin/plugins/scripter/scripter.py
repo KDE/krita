@@ -63,7 +63,7 @@ class ScripterViewExtension(ViewExtension):
         dialog.setSizeGripEnabled(True)
         dialog.show()
         dialog.activateWindow()
-        dialog.exec()
+        dialog.exec_()
 
 
 Krita.instance().addViewExtension(ScripterViewExtension(Krita.instance()))

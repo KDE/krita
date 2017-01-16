@@ -78,6 +78,13 @@ public Q_SLOTS:
     QList<Node*> childNodes() const;
 
     /**
+     * @brief addChildNode
+     * @param child
+     * @param above
+     */
+    void addChildNode(Node *child, Node *above);
+
+    /**
      * @brief setChildNodes this replaces the existing set of child nodes with the new set.
      * @param value
      */
@@ -305,6 +312,10 @@ public Q_SLOTS:
 
     void remove();
 
+    /**
+     * @brief duplicate
+     * @return
+     */;
     Node* duplicate();
 
     /**

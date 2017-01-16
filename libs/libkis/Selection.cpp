@@ -91,7 +91,7 @@ void Selection::clear()
 void Selection::contract(int value)
 {
     if (!d->selection) return;
-    d->selection->pixelSelection()->select(QRect(x(), y(), w - value, h - value));
+    d->selection->pixelSelection()->select(QRect(x(), y(), width() - value, height() - value));
 }
 
 void Selection::cut(Node* node)

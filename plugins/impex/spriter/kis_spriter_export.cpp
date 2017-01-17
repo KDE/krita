@@ -349,6 +349,18 @@ void KisSpriterExport::fillScml(QDomDocument &scml, const QString &entityName)
             fileElement.setAttribute("name", file.name);
             fileElement.setAttribute("width", QString::number(file.width, 'f', 2));
             fileElement.setAttribute("height", QString::number(file.height, 'f', 2));
+            qreal pivotX=0;
+            qreal pivotY=1;
+            Q_FOREACH(const SpriterObject &object, m_objects) {
+                if(file.id == object.fileId)
+                {
+                    pivotX = (0.0 -(object.fixLocalX / file.width));
+                    pivotY = (1.0 -(object.fixLocalY / file.height));
+                    break;
+                }
+            }
+            fileElement.setAttribute("pivot_x", QString::number(pivotX, 'f', 2));
+            fileElement.setAttribute("pivot_y", QString::number(pivotY, 'f', 2));
         }
     }
 
@@ -415,9 +427,6 @@ void KisSpriterExport::fillScml(QDomDocument &scml, const QString &entityName)
 
         QString objectName = "object-" + file.baseName;
 
-        qreal pivotX = (0.0 -(object.fixLocalX / file.width));
-        qreal pivotY = (1.0 -(object.fixLocalY / file.height));
-
         QDomElement timeline = scml.createElement("timeline");
         animation.appendChild(timeline);
         timeline.setAttribute("id", m_timelineid++);
@@ -434,8 +443,6 @@ void KisSpriterExport::fillScml(QDomDocument &scml, const QString &entityName)
         objectEl.setAttribute("file", object.fileId);
         objectEl.setAttribute("x", "0");
         objectEl.setAttribute("y", "0");
-        objectEl.setAttribute("pivot_x", QString::number(pivotX, 'f', 2));
-        objectEl.setAttribute("pivot_y", QString::number(pivotY, 'f', 2));
         objectEl.setAttribute("angle", QString::number(kisRadiansToDegrees(object.fixLocalAngle), 'f', 2));
         objectEl.setAttribute("scale_x", QString::number(object.fixLocalScaleX, 'f', 2));
         objectEl.setAttribute("scale_y", QString::number(object.fixLocalScaleY, 'f', 2));

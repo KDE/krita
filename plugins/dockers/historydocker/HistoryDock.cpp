@@ -70,6 +70,6 @@ void HistoryDock::setCanvas(KoCanvasBase *canvas) {
 }
 void HistoryDock::configure()
 {
-    DlgConfigureHistoryDock dlg(m_undoView->stack(), this);
+    DlgConfigureHistoryDock dlg(m_undoView, m_undoView->stack(), this);
     dlg.exec();
 }

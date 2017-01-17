@@ -64,6 +64,10 @@
         <file>light_lazyframeOff.svg</file>
         <file>dark_lazyframeOn.svg</file>
         <file>dark_lazyframeOff.svg</file>
+        <file>dark_mirror-view.svg</file>
+        <file>light_mirror-view.svg</file>
+        <file>dark_rotation-reset.svg</file>
+        <file>light_rotation-reset.svg</file>
 
         <file>dark_animation_play.svg</file>
         <file>dark_animation_stop.svg</file>

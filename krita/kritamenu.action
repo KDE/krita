@@ -575,7 +575,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="mirror_canvas">
-      <icon></icon>
+      <icon>mirror-view</icon>
       <text>Mirror View</text>
       <whatsThis></whatsThis>
       <toolTip>Mirror View</toolTip>
@@ -645,7 +645,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="reset_canvas_rotation">
-      <icon></icon>
+      <icon>rotation-reset</icon>
       <text>Reset Canvas Rotation</text>
       <whatsThis></whatsThis>
       <toolTip>Reset Canvas Rotation</toolTip>

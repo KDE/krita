@@ -54,7 +54,7 @@ void KisCategorizedItemDelegate::paint(QPainter* painter, const QStyleOptionView
             bool locked = index.data(__CategorizedListModelBase::isLockedRole).toBool();
 
 
-            QIcon icon = KisIconUtils::loadIcon("locked");
+            QIcon icon = locked ? KisIconUtils::loadIcon(koIconName("layer-locked")) : KisIconUtils::loadIcon(koIconName("layer-unlocked"));
 
             // to be able to make an icon more transparent. we need to create a new image
             // and use the QPainter to make a more transparent version of it.

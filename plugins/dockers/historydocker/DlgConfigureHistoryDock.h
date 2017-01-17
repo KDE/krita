@@ -24,12 +24,13 @@
 #include <QObject>
 #include <QWidget>
 #include <kundo2stack.h>
+#include <KisUndoView.h>
 
 class DlgConfigureHistoryDock : public KoDialog
 {
     Q_OBJECT
 public:
-    DlgConfigureHistoryDock(KUndo2QStack *stack, QWidget *parent = 0);
+    DlgConfigureHistoryDock(KisUndoView *view, KUndo2QStack *stack, QWidget *parent = 0);
 private:
     KUndo2QStack *m_stack;
 };

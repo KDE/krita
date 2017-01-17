@@ -597,11 +597,11 @@
       <statusTip></statusTip>
     </Action>
     <Action name="view_zoom_in">
-      <icon></icon>
+      <icon>zoom-in</icon>
       <text>Zoom &amp;In</text>
       <whatsThis></whatsThis>
       <toolTip>Zoom In</toolTip>
-      <iconText>Zoom In</iconText>
+      <iconText></iconText>
       <activationFlags>0</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>Ctrl++</shortcut>
@@ -609,11 +609,11 @@
       <statusTip></statusTip>
     </Action>
     <Action name="view_zoom_out">
-      <icon></icon>
+      <icon>zoom-out</icon>
       <text>Zoom &amp;Out</text>
       <whatsThis></whatsThis>
       <toolTip>Zoom Out</toolTip>
-      <iconText>Zoom Out</iconText>
+      <iconText></iconText>
       <activationFlags>0</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>Ctrl+-</shortcut>

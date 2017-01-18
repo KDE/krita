@@ -2374,10 +2374,8 @@ void KisMainWindow::applyToolBarLayout()
         }
         //Hide text for buttons with an icon in the toolbar
         Q_FOREACH (QAction *ac, toolBar->actions()){
-            if (ac->icon().isNull() == false){
+            if (ac->icon().pixmap(QSize(8,8)).isNull() == false){
                 ac->setPriority(QAction::LowPriority);
-            } else {
-                ac->setPriority(QAction::NormalPriority);
             }
         }
     }

@@ -443,13 +443,6 @@ KisMainWindow::KisMainWindow()
         if (toolBar) {
             if (toolBar->objectName() == "BrushesAndStuff") {
                 toolBar->setEnabled(false);
-                
-                //Hide text for buttons with an icon in the toolbar
-                Q_FOREACH (QAction *ac, toolBar->actions()){
-                    if (ac->icon().isNull() == false){
-                        ac->setPriority(QAction::LowPriority);
-                    }
-                }
             }
 
             KToggleAction* act = new KToggleAction(i18n("Show %1 Toolbar", toolBar->windowTitle()), this);
@@ -2378,6 +2371,14 @@ void KisMainWindow::applyToolBarLayout()
         toolBar->layout()->setSpacing(4);
         if (isPlastiqueStyle) {
             toolBar->setContentsMargins(0, 0, 0, 2);
+        }
+        //Hide text for buttons with an icon in the toolbar
+        Q_FOREACH (QAction *ac, toolBar->actions()){
+            if (ac->icon().isNull() == false){
+                ac->setPriority(QAction::LowPriority);
+            } else {
+                ac->setPriority(QAction::NormalPriority);
+            }
         }
     }
 }

@@ -68,6 +68,14 @@
         <file>light_mirror-view.svg</file>
         <file>dark_rotation-reset.svg</file>
         <file>light_rotation-reset.svg</file>
+        <file>light_smoothing-basic.svg</file>
+        <file>light_smoothing-no.svg</file>
+        <file>light_smoothing-stabilizer.svg</file>
+        <file>light_smoothing-weighted.svg</file>
+        <file>dark_smoothing-basic.svg</file>
+        <file>dark_smoothing-no.svg</file>
+        <file>dark_smoothing-stabilizer.svg</file>
+        <file>dark_smoothing-weighted.svg</file>
 
         <file>dark_animation_play.svg</file>
         <file>dark_animation_stop.svg</file>

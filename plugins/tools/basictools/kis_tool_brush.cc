@@ -20,6 +20,7 @@
  */
 
 #include "kis_tool_brush.h"
+#include <kis_icon.h>
 
 #include <QCheckBox>
 #include <QComboBox>
@@ -42,7 +43,7 @@
 #define MAXIMUM_MAGNETISM 1000
 
 
-void KisToolBrush::addSmoothingAction(int enumId, const QString &id, const QString &name, KActionCollection *globalCollection)
+void KisToolBrush::addSmoothingAction(int enumId, const QString &id, const QString &name, const QIcon &icon, KActionCollection *globalCollection)
 {
     /**
      * KisToolBrush is the base of several tools, but the actions
@@ -50,6 +51,7 @@ void KisToolBrush::addSmoothingAction(int enumId, const QString &id, const QStri
      */
     if (!globalCollection->action(id)) {
         QAction *action = new QAction(name, globalCollection);
+        action->setIcon(icon);
         globalCollection->addAction(id, action);
     }
 
@@ -70,11 +72,11 @@ KisToolBrush::KisToolBrush(KoCanvasBase * canvas)
 
     KActionCollection *collection = this->canvas()->canvasController()->actionCollection();
 
-    addSmoothingAction(KisSmoothingOptions::NO_SMOOTHING, "set_no_brush_smoothing", i18nc("@action", "Brush Smoothing: Disabled"), collection);
-    addSmoothingAction(KisSmoothingOptions::SIMPLE_SMOOTHING, "set_simple_brush_smoothing", i18nc("@action", "Brush Smoothing: Basic"), collection);
-    addSmoothingAction(KisSmoothingOptions::WEIGHTED_SMOOTHING, "set_weighted_brush_smoothing", i18nc("@action", "Brush Smoothing: Weighted"), collection);
-    addSmoothingAction(KisSmoothingOptions::STABILIZER, "set_stabilizer_brush_smoothing", i18nc("@action", "Brush Smoothing: Stabilizer"), collection);
-
+    addSmoothingAction(KisSmoothingOptions::NO_SMOOTHING, "set_no_brush_smoothing", i18nc("@action", "Brush Smoothing: Disabled"), KisIconUtils::loadIcon("smoothing-no"), collection);
+    addSmoothingAction(KisSmoothingOptions::SIMPLE_SMOOTHING, "set_simple_brush_smoothing", i18nc("@action", "Brush Smoothing: Basic"), KisIconUtils::loadIcon("smoothing-basic"), collection);
+    addSmoothingAction(KisSmoothingOptions::WEIGHTED_SMOOTHING, "set_weighted_brush_smoothing", i18nc("@action", "Brush Smoothing: Weighted"), KisIconUtils::loadIcon("smoothing-weighted"), collection);
+    addSmoothingAction(KisSmoothingOptions::STABILIZER, "set_stabilizer_brush_smoothing", i18nc("@action", "Brush Smoothing: Stabilizer"), KisIconUtils::loadIcon("smoothing-stabilizer"), collection);
+    
 }
 
 KisToolBrush::~KisToolBrush()

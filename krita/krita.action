@@ -521,7 +521,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="set_weighted_brush_smoothing">
-      <icon></icon>
+      <icon>smoothing-weighted</icon>
       <text>Brush Smoothing: Weighted</text>
       <whatsThis></whatsThis>
       <toolTip>Brush Smoothing: Weighted</toolTip>
@@ -531,7 +531,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="set_no_brush_smoothing">
-      <icon></icon>
+      <icon>smoothing-no</icon>
       <text>Brush Smoothing: Disabled</text>
       <whatsThis></whatsThis>
       <toolTip>Brush Smoothing: Disabled</toolTip>
@@ -541,7 +541,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="set_stabilizer_brush_smoothing">
-      <icon></icon>
+      <icon>smoothing-stabilizer</icon>
       <text>Brush Smoothing: Stabilizer</text>
       <whatsThis></whatsThis>
       <toolTip>Brush Smoothing: Stabilizer</toolTip>
@@ -563,7 +563,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="set_simple_brush_smoothing">
-      <icon></icon>
+      <icon>smoothing-basic</icon>
       <text>Brush Smoothing: Basic</text>
       <whatsThis></whatsThis>
       <toolTip>Brush Smoothing: Basic</toolTip>

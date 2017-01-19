@@ -2805,7 +2805,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="merge_layer">
-      <icon></icon>
+      <icon>merge-layer-below</icon>
       <text>&amp;Merge with Layer Below</text>
       <whatsThis></whatsThis>
       <toolTip>Merge with Layer Below</toolTip>

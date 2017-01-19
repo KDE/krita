@@ -76,6 +76,8 @@
         <file>dark_smoothing-no.svg</file>
         <file>dark_smoothing-stabilizer.svg</file>
         <file>dark_smoothing-weighted.svg</file>
+        <file>light_merge-layer-below.svg</file>
+        <file>dark_merge-layer-below.svg</file>
 
         <file>dark_animation_play.svg</file>
         <file>dark_animation_stop.svg</file>

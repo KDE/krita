@@ -78,7 +78,11 @@
         <file>dark_smoothing-weighted.svg</file>
         <file>light_merge-layer-below.svg</file>
         <file>dark_merge-layer-below.svg</file>
-
+        <file>light_rotate-canvas-left.svg</file>
+        <file>light_rotate-canvas-right.svg</file>
+        <file>dark_rotate-canvas-left.svg</file>
+        <file>dark_rotate-canvas-right.svg</file>
+        
         <file>dark_animation_play.svg</file>
         <file>dark_animation_stop.svg</file>
         <file>dark_dropframe.svg</file>

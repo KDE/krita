@@ -621,26 +621,26 @@
       <statusTip></statusTip>
     </Action>
     <Action name="rotate_canvas_right">
-      <icon></icon>
+      <icon>rotate-canvas-right</icon>
       <text>Rotate &amp;Canvas Right</text>
       <whatsThis></whatsThis>
       <toolTip>Rotate Canvas Right</toolTip>
       <iconText>Rotate Canvas Right</iconText>
       <activationFlags>1</activationFlags>
       <activationConditions>0</activationConditions>
-      <shortcut>Ctrl+]</shortcut>
+      <shortcut></shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
     <Action name="rotate_canvas_left">
-      <icon></icon>
+      <icon>rotate-canvas-left</icon>
       <text>Rotate Canvas &amp;Left</text>
       <whatsThis></whatsThis>
       <toolTip>Rotate Canvas Left</toolTip>
       <iconText>Rotate Canvas Left</iconText>
       <activationFlags>1</activationFlags>
       <activationConditions>0</activationConditions>
-      <shortcut>Ctrl+[</shortcut>
+      <shortcut></shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>

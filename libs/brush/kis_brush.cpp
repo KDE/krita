@@ -383,6 +383,8 @@ qint32 KisBrush::maskHeight(KisDabShape const& shape, qreal subPixelX, qreal sub
     qreal angle = normalizeAngle(shape.rotation() + d->angle);
     qreal scale = shape.scale() * d->scale;
 
+    qDebug() << "KisBrush::maskHeight. width" << width() << "height" << height() << "Scale" << scale << "angle" << angle;
+
     return KisQImagePyramid::imageSize(QSize(width(), height()),
                                        KisDabShape(scale, shape.ratio(), angle),
                                        subPixelX, subPixelY).height();

@@ -104,6 +104,13 @@ void FreehandStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
     case Data::CURVE:
         d->pi1.setRandomSource(rnd);
         d->pi2.setRandomSource(rnd);
+
+        qDebug() << "doStrokeCallback Data::Curve" << d->pi1
+                 << d->control1
+                 << d->control2
+                 << d->pi2
+                 << info->dragDistance;
+
         info->painter->paintBezierCurve(d->pi1,
                                         d->control1,
                                         d->control2,
@@ -131,7 +138,7 @@ void FreehandStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
     case Data::QPAINTER_PATH_FILL: {
         info->painter->setBackgroundColor(d->customColor);
         info->painter->fillPainterPath(d->path);}
-        info->painter->drawPainterPath(d->path, d->pen);    
+        info->painter->drawPainterPath(d->path, d->pen);
         break;
     };
 

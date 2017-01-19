@@ -109,11 +109,10 @@ inline QRect roundRect(const QRectF &rc)
 
     QRectF rect(rc);
 
-    if (rect.x() <= -1e-6 || rect.y() <= -0.000001) {
-        qWarning() << "roundRect receives a broken rect, returning:" << rect;
-    }
-//    KIS_ASSERT_RECOVER_NOOP(rect.x() > -0.000001);
-//    KIS_ASSERT_RECOVER_NOOP(rect.y() > -0.000001);
+    qDebug() << "roundRect" << rc;
+
+    KIS_ASSERT_RECOVER_NOOP(rect.x() > -0.000001);
+    KIS_ASSERT_RECOVER_NOOP(rect.y() > -0.000001);
 
     if (rect.x() < 0.0) {
         rect.setLeft(0.0);
@@ -147,6 +146,7 @@ void KisQImagePyramid::calculateParams(KisDabShape const& shape,
                                        const QSize &originalSize,
                                        QTransform *outputTransform, QSize *outputSize)
 {
+    qDebug() << ppVar(subPixelX) << ppVar(subPixelY) << ppVar(originalSize) << ppVar(outputTransform) << ppVar(outputSize);
     calculateParams(shape,
                     subPixelX, subPixelY,
                     originalSize, 1.0, originalSize,

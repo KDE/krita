@@ -114,6 +114,8 @@ static void paintBezierCurve(KisPaintOp *paintOp,
     qreal d1 = line.absDistance(control1);
     qreal d2 = line.absDistance(control2);
 
+    qDebug() << "paintBezierCurve" << d1 << d2 << BEZIER_FLATNESS_THRESHOLD;
+
     if ((d1 < BEZIER_FLATNESS_THRESHOLD && d2 < BEZIER_FLATNESS_THRESHOLD)
             || qIsNaN(d1) || qIsNaN(d2)) {
         paintOp->paintLine(pi1, pi2, currentDistance);

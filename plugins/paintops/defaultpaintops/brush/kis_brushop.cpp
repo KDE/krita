@@ -124,9 +124,9 @@ KisSpacingInformation KisBrushOp::paintAt(const KisPaintInformation& info)
 
     KisDabShape shape(scale, ratio, rotation);
     QPointF cursorPos =
-        m_scatterOption.apply(info,
-                              brush->maskWidth(shape, 0, 0, info),
-                              brush->maskHeight(shape, 0, 0, info));
+            m_scatterOption.apply(info,
+                                  brush->maskWidth(shape, 0, 0, info),
+                                  brush->maskHeight(shape, 0, 0, info));
 
     quint8 origOpacity = painter()->opacity();
 
@@ -144,12 +144,12 @@ KisSpacingInformation KisBrushOp::paintAt(const KisPaintInformation& info)
 
     QRect dabRect;
     KisFixedPaintDeviceSP dab = m_dabCache->fetchDab(device->compositionSourceColorSpace(),
-                                m_colorSource,
-                                cursorPos,
-                                shape,
-                                info,
-                                m_softnessOption.apply(info),
-                                &dabRect);
+                                                     m_colorSource,
+                                                     cursorPos,
+                                                     shape,
+                                                     info,
+                                                     m_softnessOption.apply(info),
+                                                     &dabRect);
 
     // sanity check for the size calculation code
     if (dab->bounds().size() != dabRect.size()) {
@@ -184,8 +184,8 @@ void KisBrushOp::paintLine(const KisPaintInformation& pi1, const KisPaintInforma
 
         QRect rc = m_lineCacheDevice->extent();
         painter()->bitBlt(rc.x(), rc.y(), m_lineCacheDevice, rc.x(), rc.y(), rc.width(), rc.height());
-    //fixes Bug 338011
-    painter()->renderMirrorMask(rc, m_lineCacheDevice);
+        //fixes Bug 338011
+        painter()->renderMirrorMask(rc, m_lineCacheDevice);
     }
     else {
         KisPaintOp::paintLine(pi1, pi2, currentDistance);

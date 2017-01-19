@@ -2327,6 +2327,8 @@ void KisMainWindow::applyToolBarLayout()
         Q_FOREACH (QAction *ac, toolBar->actions()){
             if (ac->icon().pixmap(QSize(1,1)).isNull() == false){
                 ac->setPriority(QAction::LowPriority);
+            }else {
+                ac->setIcon(QIcon());
             }
         }
     }

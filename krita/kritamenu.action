@@ -628,7 +628,7 @@
       <iconText>Rotate Canvas Right</iconText>
       <activationFlags>1</activationFlags>
       <activationConditions>0</activationConditions>
-      <shortcut></shortcut>
+      <shortcut>Ctrl+]</shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -640,7 +640,7 @@
       <iconText>Rotate Canvas Left</iconText>
       <activationFlags>1</activationFlags>
       <activationConditions>0</activationConditions>
-      <shortcut></shortcut>
+      <shortcut>Ctrl+[</shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>

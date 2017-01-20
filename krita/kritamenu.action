@@ -1381,7 +1381,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="gmic">
-      <icon></icon>
+      <icon>gmic</icon>
       <text>G'MIC</text>
       <whatsThis></whatsThis>
       <toolTip>Apply G'Mic Action</toolTip>

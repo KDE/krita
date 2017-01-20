@@ -82,6 +82,12 @@
         <file>light_rotate-canvas-right.svg</file>
         <file>dark_rotate-canvas-left.svg</file>
         <file>dark_rotate-canvas-right.svg</file>
+        <file>light_gmic.svg</file>
+        <file>dark_gmic.svg</file>
+        <file>light_split-layer.svg</file>
+        <file>dark_split-layer.svg</file>
+        <file>light_color-to-alpha.svg</file>
+        <file>dark_color-to-alpha.svg</file>
         
         <file>dark_animation_play.svg</file>
         <file>dark_animation_stop.svg</file>

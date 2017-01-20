@@ -681,7 +681,7 @@
   <Actions category="Filters">
     <text>Filters</text>
     <Action name="krita_filter_colortoalpha">
-      <icon></icon>
+      <icon>color-to-alpha</icon>
       <text>&amp;Color to Alpha...</text>
       <whatsThis></whatsThis>
       <toolTip>Color to Alpha</toolTip>
@@ -2625,7 +2625,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="layersplit">
-      <icon></icon>
+      <icon>split-layer</icon>
       <text>Split Layer...</text>
       <whatsThis></whatsThis>
       <toolTip>Split Layer</toolTip>

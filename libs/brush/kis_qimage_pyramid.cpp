@@ -30,7 +30,7 @@
 
 KisQImagePyramid::KisQImagePyramid(const QImage &baseImage)
 {
-    Q_ASSERT(!baseImage.isNull());
+    KIS_SAFE_ASSERT_RECOVER_RETURN(!baseImage.isNull());
 
     m_originalSize = baseImage.size();
 
@@ -109,11 +109,8 @@ inline QRect roundRect(const QRectF &rc)
 
     QRectF rect(rc);
 
-    if (rect.x() <= -1e-6 || rect.y() <= -0.000001) {
-        qWarning() << "roundRect receives a broken rect, returning:" << rect;
-    }
-//    KIS_ASSERT_RECOVER_NOOP(rect.x() > -0.000001);
-//    KIS_ASSERT_RECOVER_NOOP(rect.y() > -0.000001);
+    KIS_SAFE_ASSERT_RECOVER_NOOP(rect.x() > -0.000001);
+    KIS_SAFE_ASSERT_RECOVER_NOOP(rect.y() > -0.000001);
 
     if (rect.x() < 0.0) {
         rect.setLeft(0.0);
@@ -189,8 +186,8 @@ void KisQImagePyramid::calculateParams(KisDabShape shape,
         }
     }
 #endif
-    KIS_ASSERT_RECOVER_NOOP(expectedDstRect.x() >= 0);
-    KIS_ASSERT_RECOVER_NOOP(expectedDstRect.y() >= 0);
+    KIS_SAFE_ASSERT_RECOVER_NOOP(expectedDstRect.x() >= 0);
+    KIS_SAFE_ASSERT_RECOVER_NOOP(expectedDstRect.y() >= 0);
 
     int width = expectedDstRect.x() + expectedDstRect.width();
     int height = expectedDstRect.y() + expectedDstRect.height();

@@ -143,7 +143,16 @@ public Q_SLOTS:
 
     Node* rootNode() const;
 
+    /**
+     * @brief selection Create a Selection object around the global selection, if there is one.
+     * @return the global selection or None if there is no global selection.
+     */
     Selection* selection() const;
+
+    /**
+     * @brief setSelection set or replace the global selection
+     * @param value a valid selection object.
+     */
     void setSelection(Selection* value);
 
     int width() const;
@@ -243,6 +252,13 @@ public Q_SLOTS:
      * @return the new Node.
      */
     Node* createNode(const QString &name, const QString &nodeType);
+
+    /**
+     * @brief mergeDown merges the given node with the first visible node underneath this node in the layerstack
+     * @param node the node to merge down; this node will be removed from the layer stack
+     * @return the merged node
+     */
+    Node *mergeDown(Node *node);
 
 Q_SIGNALS:
 

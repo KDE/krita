@@ -67,7 +67,7 @@ KisFilterNoise::KisFilterNoise() : KisFilter(id(), categoryOther(), i18n("&Rando
     setSupportsPainting(true);
 }
 
-KisFilterConfigurationSP KisFilterNoise::factoryConfiguration(const KisPaintDeviceSP) const
+KisFilterConfigurationSP KisFilterNoise::factoryConfiguration() const
 {
     KisFilterConfigurationSP config = new KisFilterConfiguration("noise", 1);
     config->setProperty("level", 50);

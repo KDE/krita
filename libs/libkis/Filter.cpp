@@ -54,7 +54,9 @@ void Filter::setName(const QString &name)
 {
     d->name = name;
     delete d->configuration;
-    d->configuration = new InfoObject();
+
+    KisFilterSP filter = KisFilterRegistry::instance()->value(d->name);
+    d->configuration = new InfoObject(filter->defaultConfiguration());
 }
 
 InfoObject* Filter::configuration() const
@@ -69,9 +71,10 @@ void Filter::setConfiguration(InfoObject* value)
 
 bool Filter::apply(Node *node, int x, int y, int w, int h)
 {
-    qDebug() << node << node->name() << node->locked() << node->paintDevice();
-
     if (node->locked()) return false;
+
+    KisFilterSP filter = KisFilterRegistry::instance()->value(d->name);
+    if (!filter) return false;
 
     KisPaintDeviceSP dev = node->paintDevice();
     if (!dev) return false;
@@ -85,7 +88,7 @@ bool Filter::apply(Node *node, int x, int y, int w, int h)
     }
 
     KisFilterConfigurationSP config = static_cast<KisFilterConfiguration*>(d->configuration->configuration().data());
-    KisFilterSP filter = KisFilterRegistry::instance()->value(d->name);
+
     filter->process(dev, applyRect, config);
 
     if (image) {

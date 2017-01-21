@@ -329,7 +329,7 @@ void KisWalkersTest::testVisitingWithTopmostMask()
     filterMask1->initSelection(groupLayer);
     KisFilterSP filter = KisFilterRegistry::instance()->value("blur");
     Q_ASSERT(filter);
-    KisFilterConfigurationSP configuration1 = filter->defaultConfiguration(0);
+    KisFilterConfigurationSP configuration1 = filter->defaultConfiguration();
     filterMask1->setFilter(configuration1);
 
     image->addNode(paintLayer1, image->rootLayer());
@@ -843,8 +843,8 @@ void KisWalkersTest::testMasksVisiting()
 
     KisFilterSP filter = KisFilterRegistry::instance()->value("blur");
     Q_ASSERT(filter);
-    KisFilterConfigurationSP configuration1 = filter->defaultConfiguration(0);
-    KisFilterConfigurationSP configuration2 = filter->defaultConfiguration(0);
+    KisFilterConfigurationSP configuration1 = filter->defaultConfiguration();
+    KisFilterConfigurationSP configuration2 = filter->defaultConfiguration();
 
     filterMask1->setFilter(configuration1);
     filterMask2->setFilter(configuration2);
@@ -916,8 +916,8 @@ void KisWalkersTest::testMasksVisitingNoFilthy()
 
     KisFilterSP filter = KisFilterRegistry::instance()->value("blur");
     Q_ASSERT(filter);
-    KisFilterConfigurationSP configuration1 = filter->defaultConfiguration(0);
-    KisFilterConfigurationSP configuration2 = filter->defaultConfiguration(0);
+    KisFilterConfigurationSP configuration1 = filter->defaultConfiguration();
+    KisFilterConfigurationSP configuration2 = filter->defaultConfiguration();
 
     filterMask1->setFilter(configuration1);
     filterMask2->setFilter(configuration2);
@@ -993,8 +993,8 @@ void KisWalkersTest::testMasksOverlapping()
     KisFilterSP invertFilter = KisFilterRegistry::instance()->value("invert");
     Q_ASSERT(blurFilter);
     Q_ASSERT(invertFilter);
-    KisFilterConfigurationSP blurConfiguration = blurFilter->defaultConfiguration(0);
-    KisFilterConfigurationSP invertConfiguration = invertFilter->defaultConfiguration(0);
+    KisFilterConfigurationSP blurConfiguration = blurFilter->defaultConfiguration();
+    KisFilterConfigurationSP invertConfiguration = invertFilter->defaultConfiguration();
 
     filterMask1->setFilter(invertConfiguration);
     filterMask2->setFilter(blurConfiguration);
@@ -1151,14 +1151,14 @@ void KisWalkersTest::testRectsChecksum()
     walker.collectRects(adjustmentLayer, dirtyRect);
     QCOMPARE(walker.checksumValid(), true);
 
-    configuration = filter->defaultConfiguration(0);
+    configuration = filter->defaultConfiguration();
     adjustmentLayer->setFilter(configuration);
     QCOMPARE(walker.checksumValid(), false);
 
     walker.recalculate(dirtyRect);
     QCOMPARE(walker.checksumValid(), true);
 
-    configuration = filter->defaultConfiguration(0);
+    configuration = filter->defaultConfiguration();
     configuration->setProperty("halfWidth", 20);
     configuration->setProperty("halfHeight", 20);
     adjustmentLayer->setFilter(configuration);
@@ -1167,7 +1167,7 @@ void KisWalkersTest::testRectsChecksum()
     walker.recalculate(dirtyRect);
     QCOMPARE(walker.checksumValid(), true);
 
-    configuration = filter->defaultConfiguration(0);
+    configuration = filter->defaultConfiguration();
     configuration->setProperty("halfWidth", 21);
     configuration->setProperty("halfHeight", 21);
     adjustmentLayer->setFilter(configuration);

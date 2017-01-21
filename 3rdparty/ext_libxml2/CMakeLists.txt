@@ -10,7 +10,6 @@ if (MSVC OR MINGW)
         CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${PREFIX_ext_libxml2} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE}
 
         UPDATE_COMMAND ""
-        ALWAYS 0
         DEPENDS ext_patch ext_iconv ext_zlib
     )
 else (MSVC OR MINGW)
@@ -25,7 +24,6 @@ else (MSVC OR MINGW)
             INSTALL_COMMAND make install
 
             UPDATE_COMMAND ""
-            ALWAYS 0
             DEPENDS ext_iconv ext_zlib
     )
 endif (MSVC OR MINGW)

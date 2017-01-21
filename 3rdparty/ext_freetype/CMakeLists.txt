@@ -8,5 +8,4 @@ ExternalProject_Add( ext_freetype
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${PREFIX_ext_freetype} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE}        
 
     UPDATE_COMMAND ""
-	ALWAYS 0
 )

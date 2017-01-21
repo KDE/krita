@@ -161,7 +161,7 @@ Filter *Krita::filter(const QString &name) const
     Filter *filter = new Filter();
     filter->setName(name);
     KisFilterSP f = KisFilterRegistry::instance()->value(name);
-    KisFilterConfigurationSP fc = f->defaultConfiguration(0);
+    KisFilterConfigurationSP fc = f->defaultConfiguration();
     InfoObject *info = new InfoObject(fc);
     filter->setConfiguration(info);
     return filter;
@@ -176,6 +176,7 @@ QStringList Krita::generators() const
 
 Generator *Krita::generator(const QString &name) const
 {
+    // UNIMPLEMENTED
     if (!generators().contains(name)) return 0;
 
     Generator *generator = new Generator();
@@ -239,21 +240,22 @@ QList<Window*>  Krita::windows() const
         ret << new Window(mainWin);
     }
     return ret;
-
 }
 
 QList<Resource *> Krita::resources() const
 {
+    // UNIMPLEMENTED
     return QList<Resource *> ();
 }
 
 void Krita::setResources(QList<Resource *> value)
 {
-
+    // UNIMPLEMENTED
 }
 
 void Krita::addDockWidget(DockWidget *dockWidget)
 {
+    // UNIMPLEMENTED
 }
 
 bool Krita::closeApplication()

@@ -9,7 +9,6 @@ ExternalProject_Add( ext_iconv
 	CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${PREFIX_ext_iconv} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE}
 
 	UPDATE_COMMAND ""
-	ALWAYS 0
 )
 else ()
 ExternalProject_Add( ext_iconv
@@ -25,7 +24,6 @@ ExternalProject_Add( ext_iconv
 	
     UPDATE_COMMAND ""
 	BUILD_IN_SOURCE 1
-	ALWAYS 0
 )
 
 endif ()

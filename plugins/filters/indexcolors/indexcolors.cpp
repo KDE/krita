@@ -84,7 +84,7 @@ KisConfigWidget* KisFilterIndexColors::createConfigurationWidget(QWidget* parent
     return w;
 }
 
-KisFilterConfigurationSP KisFilterIndexColors::factoryConfiguration(const KisPaintDeviceSP) const
+KisFilterConfigurationSP KisFilterIndexColors::factoryConfiguration() const
 {
     KisColorTransformationConfigurationSP config = new KisColorTransformationConfiguration(id().id(), 0);
 

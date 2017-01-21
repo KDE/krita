@@ -78,6 +78,13 @@ public Q_SLOTS:
     QList<Node*> childNodes() const;
 
     /**
+     * @brief addChildNode
+     * @param child
+     * @param above
+     */
+    void addChildNode(Node *child, Node *above);
+
+    /**
      * @brief setChildNodes this replaces the existing set of child nodes with the new set.
      * @param value
      */
@@ -182,19 +189,55 @@ public Q_SLOTS:
     Transformation* transformation() const;
     void setTransformation(Transformation* value);
 
-    /**
-     * Get the embedded selection object. This does not return the local selection mask,
-     * which is a child node, but the embedded selection for filter and generator layers
-     * and for masks.
-     */
-    Selection* selection() const;
-    void setSelection(Selection* value);
-
     QString fileName() const;
     void setFileName(QString value);
 
     /**
-     * @brief pixelData reads the given rectangle from the Node's projection (that is, what the node
+     * @brief pixelData reads the given rectangle from the Node's paintable pixels, if those
+     * exist, and returns it as a byte array. The pixel data starts top-left, and is ordered row-first.
+     *
+     * The byte array can be interpreted as follows: 8 bits images have one byte per channel,
+     * and as many bytes as there are channels. 16 bits integer images have two bytes per channel,
+     * representing an unsigned short. 16 bits float images have two bytes per channel, representing
+     * a half, or 16 bits float. 32 bits float images have four bytes per channel, representing a
+     * float.
+     *
+     * You can read outside the node boundaries; those pixels will be transparent black.
+     *
+     * The order of channels is:
+     *
+     * <ul>
+     * <li>Integer RGBA: Blue, Green, Red, Alpha
+     * <li>Float RGBA: Red, Green, Blue, Alpha
+     * <li>GrayA: Gray, Alpha
+     * <li>Selection: selectedness
+     * <li>LabA: L, a, b, Alpha
+     * <li>CMYKA: Cyan, Magenta, Yellow, Key, Alpha
+     * <li>XYZA: X, Y, Z, A
+     * <li>YCbCrA: Y, Cb, Cr, Alpha
+     * </ul>
+     *
+     * The byte array is a copy of the original node data. In Python, you can use bytes, bytearray
+     * and the struct module to interpret the data and construct, for instance, a Pillow Image object.
+     *
+     * If you read the pixeldata of a mask, a filter or generator layer, you get the selection bytes,
+     * which is one channel with values in the range from 0..255.
+     *
+     * If you want to change the pixels of a node you can write the pixels back after manipulation
+     * with setPixelData(). This will only succeed on nodes with writable pixel data, e.g not on groups
+     * or file layers.
+     *
+     * @param x x position from where to start reading
+     * @param y y position from where to start reading
+     * @param w row length to read
+     * @param h number of rows to read
+     * @return a QByteArray with the pixel data. The byte array may be empty.
+
+     */
+    QByteArray pixelData(int x, int y, int w, int h) const;
+
+    /**
+     * @brief projectionPixelData reads the given rectangle from the Node's projection (that is, what the node
      * looks like after all sub-Nodes (like layers in a group or masks on a layer) have been applied,
      * and returns it as a byte array. The pixel data starts top-left, and is ordered row-first.
      *
@@ -223,8 +266,7 @@ public Q_SLOTS:
      * and the struct module to interpret the data and construct, for instance, a Pillow Image object.
      *
      * If you read the projection of a mask, you get the selection bytes, which is one channel with
-     * values in the range from 0..255. To read the selection mask of a filter layer or generator layer
-     * first get the Node's Selection object and read its pixel data.
+     * values in the range from 0..255.
      *
      * If you want to change the pixels of a node you can write the pixels back after manipulation
      * with setPixelData(). This will only succeed on nodes with writable pixel data, e.g not on groups
@@ -236,7 +278,7 @@ public Q_SLOTS:
      * @param h number of rows to read
      * @return a QByteArray with the pixel data. The byte array may be empty.
      */
-    QByteArray pixelData(int x, int y, int w, int h) const;
+    QByteArray projectionPixelData(int x, int y, int w, int h) const;
 
     /**
      * @brief setPixelData writes the given bytes, of which there must be enough, into the
@@ -270,6 +312,10 @@ public Q_SLOTS:
 
     void remove();
 
+    /**
+     * @brief duplicate
+     * @return
+     */;
     Node* duplicate();
 
     /**
@@ -285,6 +331,7 @@ private:
 
     friend class Filter;
     friend class Document;
+    friend class Selection;
     /**
      * @brief paintDevice gives access to the internal paint device of this Node
      * @return the paintdevice or 0 if the node does not have an editable paint device.

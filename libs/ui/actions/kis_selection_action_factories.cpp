@@ -433,7 +433,7 @@ void KisPasteNewActionFactory::run(KisViewManager *viewManager)
     win->addViewAndNotifyLoadingCompleted(doc);
 }
 
-void KisInvertSelectionOperaton::runFromXML(KisViewManager* view, const KisOperationConfiguration& config)
+void KisInvertSelectionOperation::runFromXML(KisViewManager* view, const KisOperationConfiguration& config)
 {
     KisSelectionFilter* filter = new KisInvertSelectionFilter();
     runFilter(filter, view, config);

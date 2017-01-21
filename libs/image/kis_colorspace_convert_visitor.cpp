@@ -86,7 +86,7 @@ bool KisColorSpaceConvertVisitor::visit(KisAdjustmentLayer * layer)
         // XXX: Make this more generic for after 1.6, when we'll have many
         // channel-specific filters.
         KisFilterSP f = KisFilterRegistry::instance()->value("perchannel");
-        layer->setFilter(f->defaultConfiguration(0));
+        layer->setFilter(f->defaultConfiguration());
     }
 
     layer->resetCache();

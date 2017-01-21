@@ -955,6 +955,7 @@ private:
     friend class KisReselectGlobalSelectionCommand;
     friend class KisSetGlobalSelectionCommand;
     friend class KisImageTest;
+    friend class Document; // For libkis
 
     /**
      * Replaces the current global selection with globalSelection. If

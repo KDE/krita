@@ -206,11 +206,11 @@ KisConfigWidget * KisOilPaintFilter::createConfigurationWidget(QWidget* parent, 
     param.push_back(KisIntegerWidgetParam(1, 5, 1, i18n("Brush size"), "brushSize"));
     param.push_back(KisIntegerWidgetParam(10, 255, 30, i18nc("smooth out the painting strokes the filter creates", "Smooth"), "smooth"));
     KisMultiIntegerFilterWidget * w = new KisMultiIntegerFilterWidget(id().id(),  parent,  id().id(),  param);
-    w->setConfiguration(factoryConfiguration(0));
+    w->setConfiguration(factoryConfiguration());
     return w;
 }
 
-KisFilterConfigurationSP KisOilPaintFilter::factoryConfiguration(const KisPaintDeviceSP) const
+KisFilterConfigurationSP KisOilPaintFilter::factoryConfiguration() const
 {
     KisFilterConfigurationSP config = new KisFilterConfiguration("oilpaint", 1);
     config->setProperty("brushSize", 1);

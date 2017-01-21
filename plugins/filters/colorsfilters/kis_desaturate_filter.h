@@ -46,7 +46,7 @@ public:
         return KoID("desaturate", i18n("Desaturate"));
     }
 
-    virtual KisFilterConfigurationSP factoryConfiguration(const KisPaintDeviceSP) const;
+    virtual KisFilterConfigurationSP factoryConfiguration() const;
 
 };
 

@@ -75,6 +75,7 @@ endfunction()
 install_pykrita_plugin(hello)
 install_pykrita_plugin(assignprofiledialog)
 install_pykrita_plugin(scripter)
+install_pykrita_plugin(highpass)
 
 # if(PYTHON_VERSION_MAJOR VERSION_EQUAL 3)
 #     install_pykrita_plugin(cmake_utils)

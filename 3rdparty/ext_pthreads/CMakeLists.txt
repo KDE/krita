@@ -9,6 +9,5 @@ ExternalProject_Add( ext_pthreads
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${PREFIX_ext_pthreads} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE}
 
     UPDATE_COMMAND ""
-    ALWAYS 0
     DEPENDS ext_patch
 )

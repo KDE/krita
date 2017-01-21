@@ -119,8 +119,15 @@ QList<Node*> Node::childNodes() const
     return nodes;
 }
 
+void Node::addChildNode(Node *child, Node *above)
+{
+    // UNIMPLEMENTED
+    if (!d->node) return;
+}
+
 void Node::setChildNodes(QList<Node*> value)
 {
+    // UNIMPLEMENTED
     if (!d->node) return;
 }
 
@@ -128,12 +135,14 @@ void Node::setChildNodes(QList<Node*> value)
 
 QString Node::colorLabel() const
 {
+    // UNIMPLEMENTED
     if (!d->node) return QString();
     return QString();
 }
 
 void Node::setColorLabel(QString value)
 {
+    // UNIMPLEMENTED
     if (!d->node) return;
 }
 
@@ -142,8 +151,6 @@ QString Node::colorDepth() const
     if (!d->node) return "";
     return d->node->colorSpace()->colorDepthId().id();
 }
-
-
 
 QString Node::colorModel() const
 {
@@ -160,35 +167,39 @@ QString Node::colorProfile() const
 
 void Node::setColorProfile(const QString &colorProfile)
 {
-
+    // UNIMPLEMENTED
 }
 
 void Node::setColorSpace(const QString &colorModel, const QString &colorDepth, const QString &colorProfile)
 {
-
+    // UNIMPLEMENTED
 }
 
 
 bool Node::inheritAlpha() const
 {
+    // UNIMPLEMENTED
     if (!d->node) return false;
     return false;
 }
 
 void Node::setInheritAlpha(bool value)
 {
+    // UNIMPLEMENTED
     if (!d->node) return;
 }
 
 
 bool Node::locked() const
 {
+    // UNIMPLEMENTED
     if (!d->node) return false;
     return false;
 }
 
 void Node::setLocked(bool value)
 {
+    // UNIMPLEMENTED
     if (!d->node) return;
 }
 
@@ -201,6 +212,7 @@ QString Node::name() const
 
 void Node::setName(QString value)
 {
+    // UNIMPLEMENTED
     if (!d->node) return;
 }
 
@@ -220,113 +232,133 @@ void Node::setOpacity(int value)
 
 Node* Node::parentNode() const
 {
+    // UNIMPLEMENTED
     if (!d->node) return 0;
     return 0;
 }
 
 void Node::setParentNode(Node* value)
 {
+    // UNIMPLEMENTED
     if (!d->node) return;
 }
 
 
 QString Node::type() const
 {
+    // UNIMPLEMENTED
     if (!d->node) return QString();
     return QString();
 }
 
 void Node::setType(QString value)
 {
+    // UNIMPLEMENTED
     if (!d->node) return;
 }
 
 
 bool Node::visible() const
 {
+    // UNIMPLEMENTED
     if (!d->node) return false;
     return false;
 }
 
 void Node::setVisible(bool value)
 {
+    // UNIMPLEMENTED
     if (!d->node) return;
 }
 
 
 InfoObject* Node::metaDataInfo() const
 {
+    // UNIMPLEMENTED
     if (!d->node) return 0;
     return 0;
 }
 
 void Node::setMetaDataInfo(InfoObject* value)
 {
+    // UNIMPLEMENTED
     if (!d->node) return;
 }
 
 
 Generator* Node::generator() const
 {
+    // UNIMPLEMENTED
     if (!d->node) return 0;
     return 0;
 }
 
 void Node::setGenerator(Generator* value)
 {
+    // UNIMPLEMENTED
     if (!d->node) return;
 }
 
 
 Filter* Node::filter() const
 {
+    // UNIMPLEMENTED
     if (!d->node) return 0;
     return 0;
 }
 
 void Node::setFilter(Filter* value)
 {
+    // UNIMPLEMENTED
     if (!d->node) return;
 }
 
 
 Transformation* Node::transformation() const
 {
+    // UNIMPLEMENTED
     if (!d->node) return 0;
     return 0;
 }
 
 void Node::setTransformation(Transformation* value)
 {
+    // UNIMPLEMENTED
     if (!d->node) return;
 }
-
-
-Selection* Node::selection() const
-{
-    if (!d->node) return 0;
-    return 0;
-}
-
-void Node::setSelection(Selection* value)
-{
-    if (!d->node) return;
-}
-
 
 QString Node::fileName() const
 {
+    // UNIMPLEMENTED
     if (!d->node) return QString();
     return QString();
 }
 
 void Node::setFileName(QString value)
 {
+    // UNIMPLEMENTED
     if (!d->node) return;
 }
 
-
 QByteArray Node::pixelData(int x, int y, int w, int h) const
+{
+    QByteArray ba;
+
+    if (!d->node) return ba;
+
+    KisPaintDeviceSP dev = d->node->paintDevice();
+    if (!dev) return ba;
+
+    quint8 *data = new quint8[w * h * dev->pixelSize()];
+    dev->readBytes(data, x, y, w, h);
+    ba = QByteArray((const char*)data, (int)(w * h * dev->pixelSize()));
+    delete[] data;
+
+    return ba;
+}
+
+
+QByteArray Node::projectionPixelData(int x, int y, int w, int h) const
 {
     QByteArray ba;
 
@@ -357,21 +389,25 @@ QRect Node::bounds() const
 
 void Node::move(int x, int y)
 {
+    // UNIMPLEMENTED
     if (!d->node) return;
 }
 
 void Node::moveToParent(Node *parent)
 {
+    // UNIMPLEMENTED
     if (!d->node) return;
 }
 
 void Node::remove()
 {
+    // UNIMPLEMENTED
     if (!d->node) return;
 }
 
 Node* Node::duplicate()
 {
+    // UNIMPLEMENTED
     if (!d->node) return 0;
     return 0;
 }

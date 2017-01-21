@@ -20,8 +20,11 @@
 #include <kis_selection.h>
 #include <kis_pixel_selection.h>
 #include <kis_paint_device.h>
+#include <kis_selection_filters.h>
 
 #include <QByteArray>
+
+#include <Node.h>
 
 struct Selection::Private {
     Private() {}
@@ -50,86 +53,165 @@ Selection::~Selection()
 
 int Selection::width() const
 {
-    return 0;
+    if (!d->selection) return 0;
+    return d->selection->selectedExactRect().width();
 }
 
 int Selection::height() const
 {
-    return 0;
+    if (!d->selection) return 0;
+    return d->selection->selectedExactRect().height();
 }
 
 int Selection::x() const
 {
-    return 0;
+    if (!d->selection) return 0;
+    return d->selection->x();
 }
 
 int Selection::y() const
 {
-    return 0;
+    if (!d->selection) return 0;
+    return d->selection->y();
 }
 
 void Selection::move(int x, int y)
 {
-
+    if (!d->selection) return;
+    d->selection->pixelSelection()->moveTo(QPoint(x, y));
 }
 
 
 void Selection::clear()
 {
+    if (!d->selection) return;
+    d->selection->clear();
 }
 
 void Selection::contract(int value)
 {
+    if (!d->selection) return;
+    d->selection->pixelSelection()->select(QRect(x(), y(), width() - value, height() - value));
 }
 
 void Selection::cut(Node* node)
 {
+    // UNIMPLEMENTED
 }
 
-void Selection::paste(Node *source, Node*destination)
+void Selection::paste(Node *source, Node *destination)
 {
-
+    // UNIMPLEMENTED
 }
 
-void Selection::deselect()
+void Selection::erode()
 {
+    if (!d->selection) return;
+    KisErodeSelectionFilter esf;
+    QRect rc = esf.changeRect(d->selection->selectedExactRect());
+    esf.process(d->selection->pixelSelection(), rc);
 }
 
-void Selection::expand(int value)
+void Selection::dilate()
 {
+    if (!d->selection) return;
+    KisDilateSelectionFilter dsf;
+    QRect rc = dsf.changeRect(d->selection->selectedExactRect());
+    dsf.process(d->selection->pixelSelection(), rc);
 }
 
-void Selection::feather(int value)
+void Selection::border(int xRadius, int yRadius)
 {
+    if (!d->selection) return;
+    KisBorderSelectionFilter sf(xRadius, yRadius);
+    QRect rc = sf.changeRect(d->selection->selectedExactRect());
+    sf.process(d->selection->pixelSelection(), rc);
 }
 
-void Selection::fill(Node* node)
+void Selection::feather(int radius)
 {
+    if (!d->selection) return;
+    KisFeatherSelectionFilter fsf(radius);
+    QRect rc = fsf.changeRect(d->selection->selectedExactRect());
+    fsf.process(d->selection->pixelSelection(), rc);
 }
 
-void Selection::grow(int value)
+void Selection::grow(int xradius, int yradius)
 {
+    if (!d->selection) return;
+    KisGrowSelectionFilter gsf(xradius, yradius);
+    QRect rc = gsf.changeRect(d->selection->selectedExactRect());
+    gsf.process(d->selection->pixelSelection(), rc);
 }
+
+
+void Selection::shrink(int xRadius, int yRadius, bool edgeLock)
+{
+    if (!d->selection) return;
+    KisShrinkSelectionFilter sf(xRadius, yRadius, edgeLock);
+    QRect rc = sf.changeRect(d->selection->selectedExactRect());
+    sf.process(d->selection->pixelSelection(), rc);
+}
+
+void Selection::smooth()
+{
+    if (!d->selection) return;
+    KisSmoothSelectionFilter sf;
+    QRect rc = sf.changeRect(d->selection->selectedExactRect());
+    sf.process(d->selection->pixelSelection(), rc);
+}
+
 
 void Selection::invert()
 {
+    if (!d->selection) return;
+    KisInvertSelectionFilter sf;
+    QRect rc = sf.changeRect(d->selection->selectedExactRect());
+    sf.process(d->selection->pixelSelection(), rc);
 }
 
 void Selection::resize(int w, int h)
 {
-}
-
-void Selection::rotate(int degrees)
-{
+    if (!d->selection) return;
+    d->selection->pixelSelection()->select(QRect(x(), y(), w, h));
 }
 
 void Selection::select(int x, int y, int w, int h, int value)
 {
+    if (!d->selection) return;
+    d->selection->pixelSelection()->select(QRect(x, y, w, h), value);
 }
 
-void Selection::selectAll(Node *node)
+void Selection::selectAll(Node *node, int value)
 {
+    if (!d->selection) return;
+    d->selection->pixelSelection()->select(node->node()->exactBounds(), value);
 }
+
+void Selection::replace(Selection *selection)
+{
+    if (!d->selection) return;
+    d->selection->pixelSelection()->applySelection(selection->selection()->pixelSelection(), SELECTION_REPLACE);
+}
+
+void Selection::add(Selection *selection)
+{
+    if (!d->selection) return;
+    d->selection->pixelSelection()->applySelection(selection->selection()->pixelSelection(), SELECTION_ADD);
+}
+
+void Selection::subtract(Selection *selection)
+{
+    if (!d->selection) return;
+    d->selection->pixelSelection()->applySelection(selection->selection()->pixelSelection(), SELECTION_SUBTRACT);
+}
+
+void Selection::intersect(Selection *selection)
+{
+    if (!d->selection) return;
+    d->selection->pixelSelection()->applySelection(selection->selection()->pixelSelection(), SELECTION_INTERSECT);
+}
+
 
 QByteArray Selection::pixelData(int x, int y, int w, int h) const
 {
@@ -149,6 +231,11 @@ void Selection::setPixelData(QByteArray value, int x, int y, int w, int h)
     KisPixelSelectionSP dev = d->selection->pixelSelection();
     if (!dev) return;
     dev->writeBytes((const quint8*)value.constData(), x, y, w, h);
+}
+
+KisSelectionSP Selection::selection() const
+{
+    return d->selection;
 }
 
 

@@ -19,6 +19,8 @@
 #include <QPointer>
 
 #include <KisView.h>
+#include <KisViewManager.h>
+#include <kis_selection_manager.h>
 #include <KisMainWindow.h>
 #include <KoCanvasBase.h>
 #include <kis_canvas2.h>
@@ -72,7 +74,6 @@ void View::setVisible()
     mainwin->setActiveView(d->view);
     mainwin->subWindowActivated();
 }
-
 
 Canvas* View::canvas() const
 {

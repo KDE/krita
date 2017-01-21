@@ -71,7 +71,7 @@ void KisFilterTest::testWithProgressUpdater()
     KisFilterSP f = KisFilterRegistry::instance()->value("invert");
     Q_ASSERT(f);
 
-    KisFilterConfigurationSP  kfc = f->defaultConfiguration(0);
+    KisFilterConfigurationSP  kfc = f->defaultConfiguration();
     Q_ASSERT(kfc);
 
     f->process(dev, QRect(QPoint(0,0), qimage.size()), kfc, updater);
@@ -97,7 +97,7 @@ void KisFilterTest::testSingleThreaded()
     KisFilterSP f = KisFilterRegistry::instance()->value("invert");
     Q_ASSERT(f);
 
-    KisFilterConfigurationSP  kfc = f->defaultConfiguration(0);
+    KisFilterConfigurationSP  kfc = f->defaultConfiguration();
     Q_ASSERT(kfc);
 
     f->process(dev, QRect(QPoint(0,0), qimage.size()), kfc);
@@ -126,7 +126,7 @@ void KisFilterTest::testDifferentSrcAndDst()
     KisFilterSP f = KisFilterRegistry::instance()->value("invert");
     Q_ASSERT(f);
 
-    KisFilterConfigurationSP  kfc = f->defaultConfiguration(0);
+    KisFilterConfigurationSP  kfc = f->defaultConfiguration();
     Q_ASSERT(kfc);
 
     f->process(src, dst, sel, QRect(QPoint(0,0), qimage.size()), kfc);
@@ -167,7 +167,7 @@ void KisFilterTest::testOldDataApiAfterCopy()
 
     KisFilterSP f = KisFilterRegistry::instance()->value("invert");
     Q_ASSERT(f);
-    KisFilterConfigurationSP  kfc = f->defaultConfiguration(0);
+    KisFilterConfigurationSP  kfc = f->defaultConfiguration();
     Q_ASSERT(kfc);
 
     /**
@@ -215,7 +215,7 @@ void KisFilterTest::testBlurFilterApplicationRect()
 
     KisFilterSP f = KisFilterRegistry::instance()->value("blur");
     Q_ASSERT(f);
-    KisFilterConfigurationSP  kfc = f->defaultConfiguration(0);
+    KisFilterConfigurationSP  kfc = f->defaultConfiguration();
     Q_ASSERT(kfc);
 
     f->process(src1, dst1, 0, filterRect, kfc);

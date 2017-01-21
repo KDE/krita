@@ -161,7 +161,7 @@ Filter *Krita::filter(const QString &name) const
     Filter *filter = new Filter();
     filter->setName(name);
     KisFilterSP f = KisFilterRegistry::instance()->value(name);
-    KisFilterConfigurationSP fc = f->defaultConfiguration(0);
+    KisFilterConfigurationSP fc = f->defaultConfiguration();
     InfoObject *info = new InfoObject(fc);
     filter->setConfiguration(info);
     return filter;

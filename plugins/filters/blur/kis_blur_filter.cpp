@@ -49,7 +49,7 @@ KisConfigWidget * KisBlurFilter::createConfigurationWidget(QWidget* parent, cons
     return new KisWdgBlur(parent);
 }
 
-KisFilterConfigurationSP KisBlurFilter::factoryConfiguration(const KisPaintDeviceSP) const
+KisFilterConfigurationSP KisBlurFilter::factoryConfiguration() const
 {
     KisFilterConfigurationSP config = new KisFilterConfiguration(id().id(), 1);
     config->setProperty("halfWidth", 5);

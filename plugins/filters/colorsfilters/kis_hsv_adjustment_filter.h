@@ -51,7 +51,7 @@ public:
         return KoID("hsvadjustment", i18n("HSV/HSL Adjustment"));
     }
 
-    virtual KisFilterConfigurationSP factoryConfiguration(const KisPaintDeviceSP) const;
+    virtual KisFilterConfigurationSP factoryConfiguration() const;
 
 };
 

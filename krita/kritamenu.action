@@ -285,7 +285,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="edit_redo">
-      <icon>_edit-redo</icon>
+      <icon>edit-redo</icon>
       <text>Redo</text>
       <whatsThis></whatsThis>
       <toolTip>Redo last undone action</toolTip>
@@ -527,7 +527,7 @@
       <activationFlags>0</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>Ctrl+Shift+F</shortcut>
-      <isCheckable>false</isCheckable>
+      <isCheckable>true</isCheckable>
       <statusTip></statusTip>
     </Action>
     <Action name="wrap_around_mode">
@@ -575,7 +575,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="mirror_canvas">
-      <icon></icon>
+      <icon>mirror-view</icon>
       <text>Mirror View</text>
       <whatsThis></whatsThis>
       <toolTip>Mirror View</toolTip>
@@ -585,7 +585,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="zoom_to_100pct">
-      <icon></icon>
+      <icon>zoom-original</icon>
       <text>&amp;Reset zoom</text>
       <whatsThis></whatsThis>
       <toolTip>Reset zoom</toolTip>
@@ -597,11 +597,11 @@
       <statusTip></statusTip>
     </Action>
     <Action name="view_zoom_in">
-      <icon></icon>
+      <icon>zoom-in</icon>
       <text>Zoom &amp;In</text>
       <whatsThis></whatsThis>
       <toolTip>Zoom In</toolTip>
-      <iconText>Zoom In</iconText>
+      <iconText></iconText>
       <activationFlags>0</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>Ctrl++</shortcut>
@@ -609,11 +609,11 @@
       <statusTip></statusTip>
     </Action>
     <Action name="view_zoom_out">
-      <icon></icon>
+      <icon>zoom-out</icon>
       <text>Zoom &amp;Out</text>
       <whatsThis></whatsThis>
       <toolTip>Zoom Out</toolTip>
-      <iconText>Zoom Out</iconText>
+      <iconText></iconText>
       <activationFlags>0</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>Ctrl+-</shortcut>
@@ -621,7 +621,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="rotate_canvas_right">
-      <icon></icon>
+      <icon>rotate-canvas-right</icon>
       <text>Rotate &amp;Canvas Right</text>
       <whatsThis></whatsThis>
       <toolTip>Rotate Canvas Right</toolTip>
@@ -633,7 +633,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="rotate_canvas_left">
-      <icon></icon>
+      <icon>rotate-canvas-left</icon>
       <text>Rotate Canvas &amp;Left</text>
       <whatsThis></whatsThis>
       <toolTip>Rotate Canvas Left</toolTip>
@@ -645,7 +645,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="reset_canvas_rotation">
-      <icon></icon>
+      <icon>rotation-reset</icon>
       <text>Reset Canvas Rotation</text>
       <whatsThis></whatsThis>
       <toolTip>Reset Canvas Rotation</toolTip>
@@ -1381,7 +1381,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="gmic">
-      <icon></icon>
+      <icon>gmic</icon>
       <text>G'MIC</text>
       <whatsThis></whatsThis>
       <toolTip>Apply G'Mic Action</toolTip>

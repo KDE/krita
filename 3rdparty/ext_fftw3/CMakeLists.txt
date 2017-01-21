@@ -14,7 +14,6 @@ if (MSVC)
                     COMMAND ${CMAKE_COMMAND} -E copy_directory <SOURCE_DIR>/include ${PREFIX_ext_fftw3}/include
 
             UPDATE_COMMAND ""
-            ALWAYS 0
         )
     else()
          ExternalProject_Add( ext_fftw3
@@ -30,7 +29,6 @@ if (MSVC)
                     COMMAND ${CMAKE_COMMAND} -E copy_directory <SOURCE_DIR>/include ${PREFIX_ext_fftw3}/include
 
             UPDATE_COMMAND ""
-            ALWAYS 0
         )
     endif()
 elseif (MINGW)
@@ -48,7 +46,6 @@ elseif (MINGW)
                     COMMAND ${CMAKE_COMMAND} -E copy_directory <SOURCE_DIR>/include ${PREFIX_ext_fftw3}/include
 
             UPDATE_COMMAND ""
-            ALWAYS 0
         )
     else("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
         ExternalProject_Add( ext_fftw3
@@ -64,7 +61,6 @@ elseif (MINGW)
                     COMMAND ${CMAKE_COMMAND} -E copy_directory <SOURCE_DIR>/include ${PREFIX_ext_fftw3}/include
 
             UPDATE_COMMAND ""
-            ALWAYS 0
         )
     endif("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
 else ()
@@ -79,6 +75,5 @@ ExternalProject_Add( ext_fftw3
         INSTALL_COMMAND make install
 
         UPDATE_COMMAND ""
-        ALWAYS 0
 )
 endif ()

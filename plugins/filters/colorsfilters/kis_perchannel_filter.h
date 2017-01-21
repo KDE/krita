@@ -85,7 +85,7 @@ public:
     KisPerChannelFilter();
 public:
     virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
-    virtual KisFilterConfigurationSP  factoryConfiguration(const KisPaintDeviceSP) const;
+    virtual KisFilterConfigurationSP  factoryConfiguration() const;
 
     virtual KoColorTransformation* createTransformation(const KoColorSpace* cs, const KisFilterConfigurationSP config) const;
 

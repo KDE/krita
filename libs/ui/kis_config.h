@@ -239,6 +239,9 @@ public:
     qreal outlineSizeMinimum(bool defaultValue = false) const;
     void setOutlineSizeMinimum(qreal outlineSizeMinimum) const;
 
+    qreal selectionViewSizeMinimum(bool defaultValue = false) const;
+    void setSelectionViewSizeMinimum(qreal outlineSizeMinimum) const;
+
     int autoSaveInterval(bool defaultValue = false) const;
     void setAutoSaveInterval(int seconds) const;
 
@@ -477,8 +480,14 @@ public:
     bool animationDropFrames(bool defaultValue = false) const;
     void setAnimationDropFrames(bool value);
 
-    int scribbingUpdatesDelay(bool defaultValue = false) const;
-    void setScribbingUpdatesDelay(int value);
+    int scrubbingUpdatesDelay(bool defaultValue = false) const;
+    void setScrubbingUpdatesDelay(int value);
+
+    int scrubbingAudioUpdatesDelay(bool defaultValue = false) const;
+    void setScrubbingAudioUpdatesDelay(int value);
+
+    int audioOffsetTolerance(bool defaultValue = false) const;
+    void setAudioOffsetTolerance(int value);
 
     bool switchSelectionCtrlAlt(bool defaultValue = false) const;
     void setSwitchSelectionCtrlAlt(bool value);

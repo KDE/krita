@@ -38,7 +38,7 @@ bool KisCrashFilterTest::applyFilter(const KoColorSpace * cs,  KisFilterSP f)
     dev->convertFromQImage(qimage, 0, 0, 0);
 
     // Get the predefined configuration from a file
-    KisFilterConfigurationSP  kfc = f->defaultConfiguration(dev);
+    KisFilterConfigurationSP  kfc = f->defaultConfiguration();
 
     QFile file(QString(FILES_DATA_DIR) + QDir::separator() + f->id() + ".cfg");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {

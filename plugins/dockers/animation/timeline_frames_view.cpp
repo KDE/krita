@@ -28,6 +28,7 @@
 
 #include <QPainter>
 
+#include <QFileInfo>
 #include <QApplication>
 #include <QHeaderView>
 #include <QDropEvent>
@@ -53,6 +54,14 @@
 #include "kis_signal_compressor.h"
 #include "kis_time_range.h"
 #include "kis_color_label_selector_widget.h"
+#include "kis_slider_spin_box.h"
+#include <KisImportExportManager.h>
+
+#include <KoFileDialog.h>
+#include <QDesktopServices>
+#include <QWidgetAction>
+
+#include "config-qtmultimedia.h"
 
 typedef QPair<QRect, QModelIndex> QItemViewPaintPair;
 typedef QList<QItemViewPaintPair> QItemViewPaintPairs;
@@ -84,10 +93,18 @@ struct TimelineFramesView::Private
     QToolButton *addLayersButton;
     KisAction *showHideLayerAction;
 
+    QToolButton *audioOptionsButton;
+
     KisColorLabelSelectorWidget *colorSelector;
     QWidgetAction *colorSelectorAction;
     KisColorLabelSelectorWidget *multiframeColorSelector;
     QWidgetAction *multiframeColorSelectorAction;
+
+    QMenu *audioOptionsMenu;
+    QAction *openAudioAction;
+    QAction *audioMuteAction;
+    KisSliderSpinBox *volumeSlider;
+
 
     QMenu *layerEditingMenu;
     QMenu *existingLayersMenu;
@@ -149,6 +166,9 @@ TimelineFramesView::TimelineFramesView(QWidget *parent)
     connect(horizontalScrollBar(), SIGNAL(valueChanged(int)), SLOT(slotUpdateInfiniteFramesCount()));
     connect(horizontalScrollBar(), SIGNAL(sliderReleased()), SLOT(slotUpdateInfiniteFramesCount()));
 
+
+    /********** New Layer Menu ***********************************************************/
+
     m_d->addLayersButton = new QToolButton(this);
     m_d->addLayersButton->setAutoRaise(true);
     m_d->addLayersButton->setIcon(KisIconUtils::loadIcon("addlayer"));
@@ -176,6 +196,50 @@ TimelineFramesView::TimelineFramesView(QWidget *parent)
 
     m_d->addLayersButton->setMenu(m_d->layerEditingMenu);
 
+    /********** Audio Channel Menu *******************************************************/
+
+    m_d->audioOptionsButton = new QToolButton(this);
+    m_d->audioOptionsButton->setAutoRaise(true);
+    m_d->audioOptionsButton->setIcon(KisIconUtils::loadIcon("audio-none"));
+    m_d->audioOptionsButton->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+    m_d->audioOptionsButton->setPopupMode(QToolButton::InstantPopup);
+
+    m_d->audioOptionsMenu = new QMenu(this);
+
+#ifndef HAVE_QT_MULTIMEDIA
+    m_d->audioOptionsMenu->addSection(i18nc("@item:inmenu", "Audio playback is not supported in this build!"));
+#endif
+
+    m_d->openAudioAction= new QAction("XXX", this);
+    connect(m_d->openAudioAction, SIGNAL(triggered()), this, SLOT(slotSelectAudioChannelFile()));
+    m_d->audioOptionsMenu->addAction(m_d->openAudioAction);
+
+    m_d->audioMuteAction = new QAction(i18nc("@item:inmenu", "Mute"), this);
+    m_d->audioMuteAction->setCheckable(true);
+    connect(m_d->audioMuteAction, SIGNAL(triggered(bool)), SLOT(slotAudioChannelMute(bool)));
+
+    m_d->audioOptionsMenu->addAction(m_d->audioMuteAction);
+    m_d->audioOptionsMenu->addAction(i18nc("@item:inmenu", "Remove audio"), this, SLOT(slotAudioChannelRemove()));
+
+    m_d->audioOptionsMenu->addSeparator();
+
+    m_d->volumeSlider = new KisSliderSpinBox(this);
+    m_d->volumeSlider->setRange(0, 100);
+    m_d->volumeSlider->setSuffix("%");
+    m_d->volumeSlider->setPrefix(i18nc("@item:inmenu, slider", "Volume:"));
+    m_d->volumeSlider->setSingleStep(1);
+    m_d->volumeSlider->setPageStep(10);
+    m_d->volumeSlider->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Fixed);
+    connect(m_d->volumeSlider, SIGNAL(valueChanged(int)), SLOT(slotAudioVolumeChanged(int)));
+
+    QWidgetAction *volumeAction = new QWidgetAction(m_d->audioOptionsMenu);
+    volumeAction->setDefaultWidget(m_d->volumeSlider);
+    m_d->audioOptionsMenu->addAction(volumeAction);
+
+    m_d->audioOptionsButton->setMenu(m_d->audioOptionsMenu);
+
+    /********** Frame Editing Context Menu ***********************************************/
+
     m_d->frameCreationMenu = new QMenu(this);
     m_d->frameCreationMenu->addAction(KisAnimationUtils::addFrameActionName, this, SLOT(slotNewFrame()));
     m_d->frameCreationMenu->addAction(KisAnimationUtils::duplicateFrameActionName, this, SLOT(slotCopyFrame()));
@@ -197,6 +261,8 @@ TimelineFramesView::TimelineFramesView(QWidget *parent)
     m_d->multipleFrameEditingMenu = new QMenu(this);
     m_d->multipleFrameEditingMenu->addAction(KisAnimationUtils::removeFramesActionName, this, SLOT(slotRemoveFrame()));
     m_d->multipleFrameEditingMenu->addAction(m_d->multiframeColorSelectorAction);
+
+    /********** Zoom Button **************************************************************/
 
     m_d->zoomDragButton = new KisZoomButton(this);
     m_d->zoomDragButton->setAutoRaise(true);
@@ -240,11 +306,13 @@ void TimelineFramesView::updateGeometries()
     const int minimalSize = availableHeight - 2 * margin;
 
     resizeToMinimalSize(m_d->addLayersButton, minimalSize);
+    resizeToMinimalSize(m_d->audioOptionsButton, minimalSize);
     resizeToMinimalSize(m_d->zoomDragButton, minimalSize);
 
     int x = 2 * margin;
     int y = (availableHeight - minimalSize) / 2;
     m_d->addLayersButton->move(x, 2 * y);
+    m_d->audioOptionsButton->move(x + minimalSize + 2 * margin, 2 * y);
 
     const int availableWidth = m_d->layersHeader->width();
 
@@ -271,10 +339,14 @@ void TimelineFramesView::setModel(QAbstractItemModel *model)
     connect(m_d->model, SIGNAL(sigInfiniteTimelineUpdateNeeded()),
             this, SLOT(slotUpdateInfiniteFramesCount()));
 
+    connect(m_d->model, SIGNAL(sigAudioChannelChanged()),
+            this, SLOT(slotUpdateAudioActions()));
+
     connect(selectionModel(), SIGNAL(selectionChanged(const QItemSelection &, const QItemSelection &)),
             &m_d->selectionChangedCompressor, SLOT(start()));
 
     connect(m_d->model, SIGNAL(sigEnsureRowVisible(int)), SLOT(slotEnsureRowVisible(int)));
+    slotUpdateAudioActions();
 }
 
 void TimelineFramesView::setFramesPerSecond(int fps)
@@ -291,13 +363,13 @@ void TimelineFramesView::setFramesPerSecond(int fps)
 void TimelineFramesView::slotZoomButtonPressed(qreal staticPoint)
 {
     m_d->zoomStillPointIndex =
-        qIsNaN(staticPoint) ? currentIndex().column() : staticPoint;
+            qIsNaN(staticPoint) ? currentIndex().column() : staticPoint;
 
     const int w = m_d->horizontalRuler->defaultSectionSize();
 
     m_d->zoomStillPointOriginalOffset =
-        w * m_d->zoomStillPointIndex -
-        horizontalScrollBar()->value();
+            w * m_d->zoomStillPointIndex -
+            horizontalScrollBar()->value();
 }
 
 void TimelineFramesView::slotZoomButtonChanged(qreal zoomLevel)
@@ -322,14 +394,88 @@ void TimelineFramesView::slotColorLabelChanged(int label)
     config.setDefaultFrameColorLabel(label);
 }
 
+void TimelineFramesView::slotSelectAudioChannelFile()
+{
+    if (!m_d->model) return;
+
+    QString defaultDir = QDesktopServices::storageLocation(QDesktopServices::MusicLocation);
+
+    const QString currentFile = m_d->model->audioChannelFileName();
+    QDir baseDir = QFileInfo(currentFile).absoluteDir();
+    if (baseDir.exists()) {
+        defaultDir = baseDir.absolutePath();
+    }
+
+    const QString result = KisImportExportManager::askForAudioFileName(defaultDir, this);
+    const QFileInfo info(result);
+
+    if (info.exists()) {
+        m_d->model->setAudioChannelFileName(info.absoluteFilePath());
+    }
+}
+
+void TimelineFramesView::slotAudioChannelMute(bool value)
+{
+    if (!m_d->model) return;
+
+    if (value != m_d->model->isAudioMuted()) {
+        m_d->model->setAudioMuted(value);
+    }
+}
+
+void TimelineFramesView::slotAudioChannelRemove()
+{
+    if (!m_d->model) return;
+    m_d->model->setAudioChannelFileName(QString());
+}
+
+void TimelineFramesView::slotUpdateAudioActions()
+{
+    if (!m_d->model) return;
+
+    const QString currentFile = m_d->model->audioChannelFileName();
+
+    if (currentFile.isEmpty()) {
+        m_d->openAudioAction->setText(i18nc("@item:inmenu", "Open audio..."));
+    } else {
+        QFileInfo info(currentFile);
+        m_d->openAudioAction->setText(i18nc("@item:inmenu", "Change audio (%1)...", info.fileName()));
+    }
+
+    m_d->audioMuteAction->setChecked(m_d->model->isAudioMuted());
+
+    QIcon audioIcon;
+    if (currentFile.isEmpty()) {
+        audioIcon = KisIconUtils::loadIcon("audio-none");
+    } else {
+        if (m_d->model->isAudioMuted()) {
+            audioIcon = KisIconUtils::loadIcon("audio-volume-mute");
+        } else {
+            audioIcon = KisIconUtils::loadIcon("audio-volume-high");
+        }
+    }
+
+    m_d->audioOptionsButton->setIcon(audioIcon);
+
+    m_d->volumeSlider->setEnabled(!m_d->model->isAudioMuted());
+
+    KisSignalsBlocker b(m_d->volumeSlider);
+    m_d->volumeSlider->setValue(qRound(m_d->model->audioVolume() * 100.0));
+}
+
+void TimelineFramesView::slotAudioVolumeChanged(int value)
+{
+    m_d->model->setAudioVolume(qreal(value) / 100.0);
+}
+
 void TimelineFramesView::slotUpdateInfiniteFramesCount()
 {
     if (horizontalScrollBar()->isSliderDown()) return;
 
     const int sectionWidth = m_d->horizontalRuler->defaultSectionSize();
     const int calculatedIndex =
-        (horizontalScrollBar()->value() +
-         m_d->horizontalRuler->width() - 1) / sectionWidth;
+            (horizontalScrollBar()->value() +
+             m_d->horizontalRuler->width() - 1) / sectionWidth;
 
     m_d->model->setLastVisibleFrame(calculatedIndex);
 }
@@ -360,27 +506,27 @@ QItemSelectionModel::SelectionFlags TimelineFramesView::selectionCommand(const Q
      */
 
     if (event &&
-        (event->type() == QEvent::MouseButtonPress ||
-         event->type() == QEvent::MouseButtonRelease) &&
-        index.isValid()) {
+            (event->type() == QEvent::MouseButtonPress ||
+             event->type() == QEvent::MouseButtonRelease) &&
+            index.isValid()) {
 
         const QMouseEvent *mevent = static_cast<const QMouseEvent*>(event);
 
         if (mevent->button() == Qt::RightButton &&
-            selectionModel()->selectedIndexes().contains(index)) {
+                selectionModel()->selectedIndexes().contains(index)) {
 
             // Allow calling context menu for multiple layers
             return QItemSelectionModel::NoUpdate;
         }
 
         if (event->type() == QEvent::MouseButtonPress &&
-            (mevent->modifiers() & Qt::ControlModifier)) {
+                (mevent->modifiers() & Qt::ControlModifier)) {
 
             return QItemSelectionModel::NoUpdate;
         }
 
         if (event->type() == QEvent::MouseButtonRelease &&
-            (mevent->modifiers() & Qt::ControlModifier)) {
+                (mevent->modifiers() & Qt::ControlModifier)) {
 
             return QItemSelectionModel::Toggle;
         }
@@ -434,8 +580,8 @@ void TimelineFramesView::slotDataChanged(const QModelIndex &topLeft, const QMode
 
     for (int j = topLeft.column(); j <= bottomRight.column(); j++) {
         QVariant value = m_d->model->data(
-            m_d->model->index(topLeft.row(), j),
-            TimelineFramesModel::ActiveFrameRole);
+                    m_d->model->index(topLeft.row(), j),
+                    TimelineFramesModel::ActiveFrameRole);
 
         if (value.isValid() && value.toBool()) {
             selectedColumn = j;
@@ -630,8 +776,8 @@ void TimelineFramesView::startDrag(Qt::DropActions supportedActions)
         selectionModel()->clearSelection();
         Q_FOREACH (const QModelIndex &idx, selectionBefore) {
             QModelIndex newIndex =
-                model()->index(idx.row() + selectionOffset.y(),
-                               idx.column() + selectionOffset.x());
+                    model()->index(idx.row() + selectionOffset.y(),
+                                   idx.column() + selectionOffset.x());
             selectionModel()->select(newIndex, QItemSelectionModel::Select);
         }
     }
@@ -693,8 +839,8 @@ void TimelineFramesView::mousePressEvent(QMouseEvent *event)
         } else if (event->button() == Qt::LeftButton) {
             m_d->initialDragPanPos = event->pos();
             m_d->initialDragPanValue =
-                QPoint(horizontalScrollBar()->value(),
-                       verticalScrollBar()->value());
+                    QPoint(horizontalScrollBar()->value(),
+                           verticalScrollBar()->value());
         }
         event->accept();
 
@@ -703,21 +849,21 @@ void TimelineFramesView::mousePressEvent(QMouseEvent *event)
         int numSelectedItems = selectionModel()->selectedIndexes().size();
 
         if (index.isValid() &&
-            numSelectedItems <= 1 &&
-            m_d->model->data(index, TimelineFramesModel::FrameEditableRole).toBool()) {
+                numSelectedItems <= 1 &&
+                m_d->model->data(index, TimelineFramesModel::FrameEditableRole).toBool()) {
 
             model()->setData(index, true, TimelineFramesModel::ActiveLayerRole);
             model()->setData(index, true, TimelineFramesModel::ActiveFrameRole);
             setCurrentIndex(index);
 
             if (model()->data(index, TimelineFramesModel::FrameExistsRole).toBool() ||
-                model()->data(index, TimelineFramesModel::SpecialKeyframeExists).toBool()) {
+                    model()->data(index, TimelineFramesModel::SpecialKeyframeExists).toBool()) {
 
                 {
-                KisSignalsBlocker b(m_d->colorSelector);
-                QVariant colorLabel = index.data(TimelineFramesModel::ColorLabel);
-                int labelIndex = colorLabel.isValid() ? colorLabel.toInt() : 0;
-                m_d->colorSelector->setCurrentIndex(labelIndex);
+                    KisSignalsBlocker b(m_d->colorSelector);
+                    QVariant colorLabel = index.data(TimelineFramesModel::ColorLabel);
+                    int labelIndex = colorLabel.isValid() ? colorLabel.toInt() : 0;
+                    m_d->colorSelector->setCurrentIndex(labelIndex);
                 }
 
                 m_d->frameEditingMenu->exec(event->globalPos());
@@ -757,7 +903,7 @@ void TimelineFramesView::mousePressEvent(QMouseEvent *event)
         }
 
         m_d->lastPressedPosition =
-            QPoint(horizontalOffset(), verticalOffset()) + event->pos();
+                QPoint(horizontalOffset(), verticalOffset()) + event->pos();
 
         QAbstractItemView::mousePressEvent(event);
     }
@@ -878,7 +1024,7 @@ void TimelineFramesView::slotNewFrame()
 {
     QModelIndex index = currentIndex();
     if (!index.isValid() ||
-        !m_d->model->data(index, TimelineFramesModel::FrameEditableRole).toBool()) {
+            !m_d->model->data(index, TimelineFramesModel::FrameEditableRole).toBool()) {
 
         return;
     }
@@ -890,7 +1036,7 @@ void TimelineFramesView::slotCopyFrame()
 {
     QModelIndex index = currentIndex();
     if (!index.isValid() ||
-        !m_d->model->data(index, TimelineFramesModel::FrameEditableRole).toBool()) {
+            !m_d->model->data(index, TimelineFramesModel::FrameEditableRole).toBool()) {
 
         return;
     }

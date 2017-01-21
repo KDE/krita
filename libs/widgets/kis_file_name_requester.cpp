@@ -95,5 +95,9 @@ void KisFileNameRequester::slotSelectFile()
     Q_ASSERT(!m_mime_filter_list.isEmpty());
     dialog.setMimeTypeFilters(m_mime_filter_list, m_mime_default_filter);
 
-    setFileName(dialog.filename());
+    QString newFileName = dialog.filename();
+
+    if (!newFileName.isEmpty()) {
+        setFileName(newFileName);
+    }
 }

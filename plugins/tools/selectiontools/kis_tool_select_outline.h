@@ -43,6 +43,10 @@ public:
     void endPrimaryAction(KoPointerEvent *event);
     virtual void paint(QPainter& gc, const KoViewConverter &converter);
 
+    void keyPressEvent(QKeyEvent *event);
+    void keyReleaseEvent(QKeyEvent *event);
+
+    void mouseMoveEvent(KoPointerEvent *event);
 
 public Q_SLOTS:
     virtual void deactivate();
@@ -52,11 +56,15 @@ protected:
     using KisToolSelectBase::m_widgetHelper;
 
 private:
+    void finishSelectionAction();
     void updateFeedback();
+    void updateContinuedMode();
     void updateCanvas();
 
-    QPainterPath * m_paintPath;
+    QPainterPath m_paintPath;
     vQPointF m_points;
+    bool m_continuedMode;
+    QPointF m_lastCursorPos;
 };
 
 class KisToolSelectOutlineFactory : public KoToolFactoryBase

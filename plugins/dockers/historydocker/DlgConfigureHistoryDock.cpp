@@ -25,7 +25,7 @@
 #include <kis_double_parse_spin_box.h>
 #include <kis_int_parse_spin_box.h>
 
-DlgConfigureHistoryDock::DlgConfigureHistoryDock(KUndo2QStack *stack, QWidget *parent)
+DlgConfigureHistoryDock::DlgConfigureHistoryDock(KisUndoView *view, KUndo2QStack *stack, QWidget *parent)
     : KoDialog(parent)
     , m_stack(stack)
 {
@@ -36,7 +36,7 @@ DlgConfigureHistoryDock::DlgConfigureHistoryDock(KUndo2QStack *stack, QWidget *p
     QFormLayout *form = new QFormLayout(page);
     QCheckBox *chkCumulative = new QCheckBox(i18n("Enable Cumulative Undo"), page);
     chkCumulative->setChecked(stack->useCumulativeUndoRedo());
-    connect(chkCumulative, SIGNAL(toggled(bool)), m_stack, SLOT(toggleCumulativeUndoRedo()));
+    connect(chkCumulative, SIGNAL(toggled(bool)), view, SLOT(toggleCumulativeUndoRedo()));
 
     form->addRow(chkCumulative, new QWidget(page));
 
@@ -48,7 +48,7 @@ DlgConfigureHistoryDock::DlgConfigureHistoryDock(KUndo2QStack *stack, QWidget *p
     form->addRow(l, s);
     s->setEnabled(chkCumulative->isChecked());
     connect(chkCumulative, SIGNAL(toggled(bool)), s, SLOT(setEnabled(bool)));
-    connect(s, SIGNAL(valueChanged(double)), m_stack, SLOT(setStackT1(double)));
+    connect(s, SIGNAL(valueChanged(double)), view, SLOT(setStackT1(double)));
 
     QLabel *l1 = new QLabel(i18n("Group time"));
     QDoubleSpinBox *s1 = new KisDoubleParseSpinBox();
@@ -58,7 +58,7 @@ DlgConfigureHistoryDock::DlgConfigureHistoryDock(KUndo2QStack *stack, QWidget *p
     form->addRow(l1, s1);
     s1->setEnabled(chkCumulative->isChecked());
     connect(chkCumulative, SIGNAL(toggled(bool)), s1, SLOT(setEnabled(bool)));
-    connect(s1, SIGNAL(valueChanged(double)), m_stack, SLOT(setStackT2(double)));
+    connect(s1, SIGNAL(valueChanged(double)), view, SLOT(setStackT2(double)));
 
     QLabel *l2 = new QLabel(i18n("Split Strokes"));
     QSpinBox *s2 = new KisIntParseSpinBox();
@@ -68,7 +68,7 @@ DlgConfigureHistoryDock::DlgConfigureHistoryDock(KUndo2QStack *stack, QWidget *p
     form->addRow(l2, s2);
     s2->setEnabled(chkCumulative->isChecked());
     connect(chkCumulative, SIGNAL(toggled(bool)), s2, SLOT(setEnabled(bool)));
-    connect(s2,SIGNAL(valueChanged(int)),SLOT(setStackN(int)));
+    connect(s2,SIGNAL(valueChanged(int)),SLOT(view(int)));
 
     setMainWidget(page);
 }

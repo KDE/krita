@@ -69,10 +69,10 @@ KisConfigWidget * KisFilterFastColorTransfer::createConfigurationWidget(QWidget*
     return new KisWdgFastColorTransfer(parent);
 }
 
-KisFilterConfigurationSP KisFilterFastColorTransfer::factoryConfiguration(const KisPaintDeviceSP) const
+KisFilterConfigurationSP KisFilterFastColorTransfer::factoryConfiguration() const
 {
     KisFilterConfigurationSP config = new KisFilterConfiguration(id().id(), 1);
-    config->setProperty("filename", "");  // TODO: put an exemple image in share/krita, like a sunset that what's give the best results
+    config->setProperty("filename", "");
     return config;
 }
 

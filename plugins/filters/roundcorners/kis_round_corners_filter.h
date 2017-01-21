@@ -38,7 +38,7 @@ public:
     static inline KoID id() {
         return KoID("roundcorners", i18n("Round Corners"));
     }
-    virtual KisFilterConfigurationSP factoryConfiguration(const KisPaintDeviceSP) const;
+    virtual KisFilterConfigurationSP factoryConfiguration() const;
 public:
     virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
 private:

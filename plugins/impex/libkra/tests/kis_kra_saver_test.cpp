@@ -182,7 +182,7 @@ void KisKraSaverTest::testRoundTripFillLayerColor()
     Q_ASSERT(generator);
 
     // warning: we pass null paint device to the default constructed value
-    KisFilterConfigurationSP config = generator->factoryConfiguration(0);
+    KisFilterConfigurationSP config = generator->factoryConfiguration();
     Q_ASSERT(config);
 
     QVariant v;
@@ -198,7 +198,7 @@ void KisKraSaverTest::testRoundTripFillLayerPattern()
     QVERIFY(generator);
 
     // warning: we pass null paint device to the default constructed value
-    KisFilterConfigurationSP config = generator->factoryConfiguration(0);
+    KisFilterConfigurationSP config = generator->factoryConfiguration();
     QVERIFY(config);
 
     QVariant v;

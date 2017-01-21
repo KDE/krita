@@ -77,7 +77,7 @@ KisConfigWidget* KisFilterPosterize::createConfigurationWidget(QWidget* parent, 
     return new KisMultiIntegerFilterWidget(id().id(), parent, id().id(), param);
 }
 
-KisFilterConfigurationSP KisFilterPosterize::factoryConfiguration(const KisPaintDeviceSP) const
+KisFilterConfigurationSP KisFilterPosterize::factoryConfiguration() const
 {
     KisColorTransformationConfigurationSP config = new KisColorTransformationConfiguration(id().id(), 0);
     config->setProperty("steps", 16);

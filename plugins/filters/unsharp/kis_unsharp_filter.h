@@ -40,7 +40,7 @@ public:
     }
 
     virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
-    virtual KisFilterConfigurationSP factoryConfiguration(const KisPaintDeviceSP) const;
+    virtual KisFilterConfigurationSP factoryConfiguration() const;
 
     QRect changedRect(const QRect & rect, const KisFilterConfigurationSP _config, int lod) const;
     QRect neededRect(const QRect & rect, const KisFilterConfigurationSP _config, int lod) const;

@@ -202,7 +202,7 @@ public:
     KisAction *saveActionAs {0};
 //    KisAction *printAction;
 //    KisAction *printActionPreview;
-    KisAction *exportPdf {0};
+//    KisAction *exportPdf {0};
     KisAction *importAnimation {0};
     KisAction *closeAll {0};
 //    KisAction *reloadFile;
@@ -2243,8 +2243,8 @@ void KisMainWindow::createActions()
     d->redo = actionManager->createStandardAction(KStandardAction::Redo, this, SLOT(redo()));
     d->redo->setActivationFlags(KisAction::ACTIVE_IMAGE);
 
-    d->exportPdf  = actionManager->createAction("file_export_pdf");
-    connect(d->exportPdf, SIGNAL(triggered()), this, SLOT(exportToPdf()));
+//    d->exportPdf  = actionManager->createAction("file_export_pdf");
+//    connect(d->exportPdf, SIGNAL(triggered()), this, SLOT(exportToPdf()));
 
     d->importAnimation  = actionManager->createAction("file_import_animation");
     d->importAnimation->setActivationFlags(KisAction::IMAGE_HAS_ANIMATION);
@@ -2322,6 +2322,14 @@ void KisMainWindow::applyToolBarLayout()
         toolBar->layout()->setSpacing(4);
         if (isPlastiqueStyle) {
             toolBar->setContentsMargins(0, 0, 0, 2);
+        }
+        //Hide text for buttons with an icon in the toolbar
+        Q_FOREACH (QAction *ac, toolBar->actions()){
+            if (ac->icon().pixmap(QSize(1,1)).isNull() == false){
+                ac->setPriority(QAction::LowPriority);
+            }else {
+                ac->setIcon(QIcon());
+            }
         }
     }
 }

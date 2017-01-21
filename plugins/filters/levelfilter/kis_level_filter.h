@@ -43,7 +43,7 @@ public:
 
 public:
 
-//     virtual KisFilterConfigurationSP factoryConfiguration(const KisPaintDeviceSP) const;
+//     virtual KisFilterConfigurationSP factoryConfiguration() const;
     virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
 
     virtual KoColorTransformation* createTransformation(const KoColorSpace* cs, const KisFilterConfigurationSP config) const;

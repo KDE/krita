@@ -391,7 +391,7 @@ void KisRecordedPaintActionFactory::setupPaintAction(KisRecordedPaintAction* act
         KisFilterConfigurationSP config = 0;
         if (g)
         {
-            config = g->defaultConfiguration(0);
+            config = g->defaultConfiguration();
             QDomElement paramsElt = elt.firstChildElement("Generator");
             if (config && !paramsElt.isNull()) {
                 config->fromXML(paramsElt);

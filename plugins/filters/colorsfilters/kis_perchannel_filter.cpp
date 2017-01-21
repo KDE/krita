@@ -475,7 +475,7 @@ KisConfigWidget * KisPerChannelFilter::createConfigurationWidget(QWidget *parent
     return new KisPerChannelConfigWidget(parent, dev);
 }
 
-KisFilterConfigurationSP  KisPerChannelFilter::factoryConfiguration(const KisPaintDeviceSP) const
+KisFilterConfigurationSP  KisPerChannelFilter::factoryConfiguration() const
 {
     return new KisPerChannelFilterConfiguration(0);
 }

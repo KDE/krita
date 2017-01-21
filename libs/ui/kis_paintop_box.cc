@@ -1237,7 +1237,7 @@ void KisPaintopBox::slotUpdateSelectionIcon()
     m_vMirrorAction->setIcon(KisIconUtils::loadIcon("symmetry-vertical"));
 
     KisConfig cfg;
-    if (!cfg.toolOptionsInDocker()) {
+    if (!cfg.toolOptionsInDocker() && m_toolOptionsPopupButton) {
         m_toolOptionsPopupButton->setIcon(KisIconUtils::loadIcon("configure"));
     }
 

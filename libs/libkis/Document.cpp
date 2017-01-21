@@ -457,6 +457,7 @@ Node *Document::mergeDown(Node *node)
 {
     if (!d->document) return 0;
     // UNINMPLEMENTED
+    return 0;
 }
 
 QPointer<KisDocument> Document::document() const

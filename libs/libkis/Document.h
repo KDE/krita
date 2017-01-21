@@ -258,7 +258,7 @@ public Q_SLOTS:
      * @param node the node to merge down; this node will be removed from the layer stack
      * @return the merged node
      */
-    Note *mergeDown(Node *node);
+    Node *mergeDown(Node *node);
 
 Q_SIGNALS:
 

@@ -2,6 +2,7 @@ import bdb
 import asyncio
 import inspect
 import multiprocessing
+import re
 
 
 class Debugger(bdb.Bdb):
@@ -26,17 +27,26 @@ class Debugger(bdb.Bdb):
 
     def user_line(self, frame):
         """Handler that executes with every line of code"""
-        self.setCurrentLine(frame.f_lineno)
-        self.applicationq.put({ "lineNumber": self.getCurrentLine()})
+        co = frame.f_code
+        self.currentLine = frame.f_lineno
+        self.applicationq.put({ "code": { "file": co.co_filename,
+                                          "name": co.co_name,
+                                          "lineNumber": str(frame.f_lineno)
+                                        },
+                                "frame": { "firstLineNumber": co.co_firstlineno,
+                                           "locals": self.format_data(frame.f_locals),
+                                           "globals": self.format_data(frame.f_globals)
+                                          },
+                                "trace": "line"
+                              })
 
         if self.quit:
             return self.set_quit()
 
-        if self.getCurrentLine()==0:
+        if self.currentLine==0:
             return
         else:
             # Get a reference to the code object and source
-            co = frame.f_code
             source = inspect.getsourcelines(co)[0]
 
             # Wait for a debug command
@@ -58,11 +68,20 @@ class Debugger(bdb.Bdb):
     def user_exception(self, frame, exception):
         name = frame.f_code.co_name or "<unknown>"
 
-    def getCurrentLine(self):
-        return self.currentLine
+    def format_data(self, data):
+        globals()['types'] = __import__('types')
 
-    def setCurrentLine(self, line):
-        self.currentLine = line
+        exclude_keys = ['copyright', 'credits', 'False',
+                        'True', 'None', 'Ellipsis', 'quit']
+        exclude_valuetypes = [types.BuiltinFunctionType,
+                              types.BuiltinMethodType,
+                              types.ModuleType,
+                              types.FunctionType]
+
+        return [{k: v} for k, v in data.items() if not (k in exclude_keys or
+                                                    type(v) in exclude_valuetypes or
+                                                    re.search(r'^(__).*\1$', k))]
+
 
     async def display(self):
         """Coroutine for updating the UI"""
@@ -70,7 +89,7 @@ class Debugger(bdb.Bdb):
         # Wait for the application queue to have an update to the GUI
         while True:
             if self.applicationq.empty():
-                await asyncio.sleep(0.5)
+                await asyncio.sleep(0.3)
             else:
                 # The application queue has at least one item, let's act on every item that's in it
                 while not self.applicationq.empty():
@@ -91,3 +110,5 @@ class Debugger(bdb.Bdb):
     async def stop(self):
         # Tell the debugger we're stopping execution
         self.debugq.put("stop")
+        self.applicationq.put({ "quit": True})
+        await self.display()

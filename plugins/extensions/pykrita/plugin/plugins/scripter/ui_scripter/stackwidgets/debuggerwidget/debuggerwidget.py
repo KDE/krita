@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QToolBar, QTableWidget, QAction
-from . import stepaction, stopaction
+from . import stepaction, stopaction, debuggertable
 
 
 class DebuggerWidget(QWidget):
@@ -18,7 +18,7 @@ class DebuggerWidget(QWidget):
         self.toolbar.addAction(self.stepAction)
         self.disableToolbar(True)
 
-        self.table = QTableWidget(4, 4)
+        self.table = debuggertable.DebuggerTable()
 
         self.layout.addWidget(self.toolbar)
         self.layout.addWidget(self.table)
@@ -30,3 +30,7 @@ class DebuggerWidget(QWidget):
     def disableToolbar(self, status):
         for action in self.toolbar.actions():
             action.setDisabled(status)
+
+    def updateWidget(self):
+        data = self.scripter.debugcontroller.debuggerData
+        self.table.updateTable(data)

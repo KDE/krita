@@ -46,15 +46,27 @@ class DebugController (object):
     def currentLine(self):
         try:
             if self._debugger:
-                return int(self._debugger.application_data['lineNumber'])
+                return int(self._debugger.application_data['code']['lineNumber'])
         except:
             return 0
 
     def updateUIDebugger(self):
+        widget = self.scripter.uicontroller.findStackWidget('Debugger')
+
         if not self.isActive or self._quitDebugger():
-            widget = self.scripter.uicontroller.findStackWidget('Debugger')
             widget.disableToolbar(True)
+
         self.scripter.uicontroller.repaintDebugArea()
+        widget.updateWidget()
+
+    @property
+    def debuggerData(self):
+        try:
+            if self._debugger:
+                return self._debugger.application_data
+        except:
+            return
+
 
     def _quitDebugger(self):
         try:

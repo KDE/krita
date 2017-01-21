@@ -105,7 +105,7 @@ class CodeEditor(QPlainTextEdit):
             bottom = top + int(self.blockBoundingRect(block).height())
 
             painter = QPainter(self.debugArea)
-            painter.fillRect(0, top, self.debugAreaWidth()-3, int(self.blockBoundingRect(block).height()), QColor(Qt.yellow).darker(300))
+            painter.fillRect(0, top, self.debugAreaWidth()-3, int(self.blockBoundingRect(block).height()), QColor(Qt.yellow))
 
     def highlightCurrentLine(self):
         """Highlight current line under cursor"""

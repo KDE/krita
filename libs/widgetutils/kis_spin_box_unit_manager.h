@@ -119,7 +119,9 @@ public:
 Q_SIGNALS:
 
     void unitDimensionChanged(int dimCode);
+	void unitAboutToChange();
     void unitChanged(QString symbol);
+	void unitChanged(int index);
     void conversionFactorChanged(qreal newConversionFactor, qreal oldConversionFactor) const;
 	void conversionConstantChanged(qreal newConversionFactor, qreal oldConversionFactor) const;
     void unitListChanged();
@@ -134,6 +136,9 @@ protected:
 
     class Private;
     Private * d;
+
+	//! \brief convert a unitChanged signal with a QString to one with an index.
+	void newUnitSymbolToUnitIndex(QString symbol);
 
     //unit's that may be used only if acess to the document informations exists.
     static const QStringList documentRelativeLengthUnitSymbols;

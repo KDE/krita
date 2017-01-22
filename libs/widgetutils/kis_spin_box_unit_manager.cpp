@@ -104,6 +104,8 @@ public:
 KisSpinBoxUnitManager::KisSpinBoxUnitManager(QObject *parent) : QAbstractListModel(parent)
 {
     d = new Private();
+
+	connect(this, (void (KisSpinBoxUnitManager::*)( QString )) &KisSpinBoxUnitManager::unitChanged, this, &KisSpinBoxUnitManager::newUnitSymbolToUnitIndex);
 }
 KisSpinBoxUnitManager::~KisSpinBoxUnitManager()
 {
@@ -252,7 +254,7 @@ int KisSpinBoxUnitManager::rowCount(const QModelIndex &parent) const {
 QVariant KisSpinBoxUnitManager::data(const QModelIndex &index, int role) const {
 
 	if (role == Qt::DisplayRole) {
-		return getsUnitSymbolList(true).at(index.row());
+		return getsUnitSymbolList(false).at(index.row());
 	}
 
 	return QVariant();
@@ -355,6 +357,8 @@ void KisSpinBoxUnitManager::setApparentUnitFromSymbol(QString pSymbol)
         return;
     }
 
+	emit unitAboutToChange();
+
     QString newSymb = "";
 
     switch (d->dim) {
@@ -444,6 +448,14 @@ void KisSpinBoxUnitManager::selectApparentUnitFromIndex(int index) {
 		setApparentUnitFromSymbol(getsUnitSymbolList().at(index));
 	}
 
+}
+
+void KisSpinBoxUnitManager::newUnitSymbolToUnitIndex(QString symbol) {
+	int id = getsUnitSymbolList().indexOf(symbol);
+
+	if (id >= 0) {
+		emit unitChanged(id);
+	}
 }
 
 void KisSpinBoxUnitManager::recomputeConversionFactor() const

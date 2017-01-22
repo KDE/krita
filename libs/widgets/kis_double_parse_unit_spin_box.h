@@ -101,6 +101,9 @@ public:
 
     void setUnitChangeFromOutsideBehavior(bool toggle); //if set to false, setting the unit using KoUnit won't have any effect.
 
+	//! \brief display the unit symbol in the spinbox or not. For example if the unit is displayed in a combobox connected to the unit manager.
+	void setDisplayUnit(bool toggle);
+
 Q_SIGNALS:
     /// emitted like valueChanged in the parent, but this one emits the point value
     void valueChangedPt( qreal );
@@ -112,6 +115,11 @@ private:
 
     QString detectUnit();
     QString makeTextClean(QString const& txt) const;
+
+	//thoses functions are usefull to sync the spinbox with it's unitmanager.
+	//! \brief change the unit, reset the spin box everytime. From the outside it's alway set unit that should be called.
+	void internalUnitChange(QString const& symbol);
+	void prepareUnitChange();
 
 private Q_SLOTS:
     // exists to do emits for valueChangedPt

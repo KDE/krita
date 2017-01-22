@@ -33,7 +33,8 @@ public:
         defaultUnitManager(unitManager),
         isDeleting(false),
         unitHasBeenChangedFromOutSideOnce(false),
-        letUnitBeChangedFromOutsideMoreThanOnce(true)
+		letUnitBeChangedFromOutsideMoreThanOnce(true),
+		displayUnit(true)
     {
     }
 
@@ -42,6 +43,9 @@ public:
     double stepInPoints;  ///< step in points
     KoUnit unit;
 
+	double previousValueInPoint; ///< allow to store the previous value in point, usefull in some cases, even if, usually, we prefere to refer to the actual value (in selected unit) and convert it, since this is not alway updated.
+	QString previousSymbol;
+
     KisSpinBoxUnitManager* unitManager; //manage more units than permitted by KoUnit.
     KisSpinBoxUnitManager* defaultUnitManager; //the default unit manager is the one the spinbox rely on and go back to if a connected unit manager is destroyed before the spinbox.
 
@@ -49,6 +53,8 @@ public:
 
     bool unitHasBeenChangedFromOutSideOnce; //in some part of the code the unit is reset. We want to prevent this overriding the unit defined by the user. We use this switch to do so.
     bool letUnitBeChangedFromOutsideMoreThanOnce;
+
+	bool displayUnit;
 
 };
 
@@ -59,12 +65,12 @@ KisDoubleParseUnitSpinBox::KisDoubleParseUnitSpinBox(QWidget *parent) :
     setUnit( KoUnit(KoUnit::Point) );
     setAlignment( Qt::AlignRight );
 
-    connect(this, SIGNAL(valueChanged( double )), SLOT(privateValueChanged()));
+	connect(this, SIGNAL(valueChanged( double )), this, SLOT(privateValueChanged()));
     connect(lineEdit(), SIGNAL(textChanged(QString)),
             this, SLOT(detectUnitChanges()) );
 
-
-
+	connect(d->unitManager, (void (KisSpinBoxUnitManager::*)()) &KisSpinBoxUnitManager::unitAboutToChange, this, (void (KisDoubleParseUnitSpinBox::*)()) &KisDoubleParseUnitSpinBox::prepareUnitChange);
+	connect(d->unitManager, (void (KisSpinBoxUnitManager::*)( QString )) &KisSpinBoxUnitManager::unitChanged, this, (void (KisDoubleParseUnitSpinBox::*)( QString const& )) &KisDoubleParseUnitSpinBox::internalUnitChange);
 
 }
 
@@ -111,13 +117,19 @@ void KisDoubleParseUnitSpinBox::setUnitManager(KisSpinBoxUnitManager* unitManage
 
     if (d->unitManager != d->defaultUnitManager) {
         disconnect(d->unitManager, &QObject::destroyed,
-                   this, &KisDoubleParseUnitSpinBox::disconnectExternalUnitManager); //there's no dependance anymore.
-    }
+				   this, &KisDoubleParseUnitSpinBox::disconnectExternalUnitManager); //there's no dependance anymore.
+	}
+	disconnect(d->unitManager, (void (KisSpinBoxUnitManager::*)()) &KisSpinBoxUnitManager::unitAboutToChange, this, (void (KisDoubleParseUnitSpinBox::*)()) &KisDoubleParseUnitSpinBox::prepareUnitChange);
+	disconnect(d->unitManager, (void (KisSpinBoxUnitManager::*)( QString )) &KisSpinBoxUnitManager::unitChanged, this, (void (KisDoubleParseUnitSpinBox::*)( QString const& )) &KisDoubleParseUnitSpinBox::internalUnitChange);
 
     d->unitManager = unitManager;
 
     connect(d->unitManager, &QObject::destroyed,
             this, &KisDoubleParseUnitSpinBox::disconnectExternalUnitManager);
+
+
+	connect(d->unitManager, (void (KisSpinBoxUnitManager::*)()) &KisSpinBoxUnitManager::unitAboutToChange, this, (void (KisDoubleParseUnitSpinBox::*)()) &KisDoubleParseUnitSpinBox::prepareUnitChange);
+	connect(d->unitManager, (void (KisSpinBoxUnitManager::*)( QString )) &KisSpinBoxUnitManager::unitChanged, this, (void (KisDoubleParseUnitSpinBox::*)( QString const& )) &KisDoubleParseUnitSpinBox::internalUnitChange);
 
     KisDoubleParseSpinBox::setValue(newVal);
 }
@@ -146,37 +158,39 @@ void KisDoubleParseUnitSpinBox::setUnit( const KoUnit & unit)
 }
 void KisDoubleParseUnitSpinBox::setUnit(const QString &symbol)
 {
+	d->unitManager->setApparentUnitFromSymbol(symbol); //via signals and slots, the correct functions should be called.
+}
 
-    double oldValue = d->unitManager->getReferenceValue(KisDoubleParseSpinBox::value());
-    QString oldSymbol = d->unitManager->getApparentUnitSymbol();
+void KisDoubleParseUnitSpinBox::prepareUnitChange() {
 
-    if (symbol == oldSymbol) {
-        return;
-    }
-
-    d->unitManager->setApparentUnitFromSymbol(symbol);
-
-    if (d->unitManager->getApparentUnitSymbol() == oldSymbol) { //the setApparentUnitFromSymbol is a bit clever, for example in regard of Casesensitivity. So better check like this.
-        return;
-    }
-
-    KisDoubleParseSpinBox::setMinimum( d->unitManager->getApparentValue( d->lowerInPoints ) );
-    KisDoubleParseSpinBox::setMaximum( d->unitManager->getApparentValue( d->upperInPoints ) );
-
-    qreal step = d->unitManager->getApparentValue( d->stepInPoints );
-
-    if (symbol == KoUnit(KoUnit::Pixel).symbol()) {
-        // limit the pixel step by 1.0
-        step = qMax(qreal(1.0), step);
-    }
-
-    KisDoubleParseSpinBox::setSingleStep( step );
-    KisDoubleParseSpinBox::setValue( d->unitManager->getApparentValue( oldValue ) );
-
-    d->unitHasBeenChangedFromOutSideOnce = true;
+	d->previousValueInPoint = d->unitManager->getReferenceValue(KisDoubleParseSpinBox::value());
+	d->previousSymbol = d->unitManager->getApparentUnitSymbol();
 
 }
 
+void KisDoubleParseUnitSpinBox::internalUnitChange(const QString &symbol) {
+
+	//d->unitManager->setApparentUnitFromSymbol(symbol);
+
+	if (d->unitManager->getApparentUnitSymbol() == d->previousSymbol) { //the setApparentUnitFromSymbol is a bit clever, for example in regard of Casesensitivity. So better check like this.
+		return;
+	}
+
+	KisDoubleParseSpinBox::setMinimum( d->unitManager->getApparentValue( d->lowerInPoints ) );
+	KisDoubleParseSpinBox::setMaximum( d->unitManager->getApparentValue( d->upperInPoints ) );
+
+	qreal step = d->unitManager->getApparentValue( d->stepInPoints );
+
+	if (symbol == KoUnit(KoUnit::Pixel).symbol()) {
+		// limit the pixel step by 1.0
+		step = qMax(qreal(1.0), step);
+	}
+
+	KisDoubleParseSpinBox::setSingleStep( step );
+	KisDoubleParseSpinBox::setValue( d->unitManager->getApparentValue( d->previousValueInPoint ) );
+
+	d->unitHasBeenChangedFromOutSideOnce = true;
+}
 
 void KisDoubleParseUnitSpinBox::setDimensionType(int dim)
 {
@@ -227,23 +241,27 @@ void KisDoubleParseUnitSpinBox::setMinMaxStep( double min, double max, double st
 
 QValidator::State KisDoubleParseUnitSpinBox::validate(QString &input, int &pos) const
 {
-    Q_UNUSED(pos);
+	Q_UNUSED(pos);
 
     QRegExp regexp ("([ a-zA-Z]+)$"); // Letters or spaces at end
     const int res = input.indexOf( regexp );
 
-    if ( res == -1 ) {
+	/*if ( res == -1 ) {
         // Nothing like an unit? The user is probably editing the unit
         return QValidator::Intermediate;
-    }
+	}*/
 
-    QString expr ( input.left( res ) );
-    const QString unitName ( regexp.cap( 1 ).trimmed().toLower() );
+	QString expr ( (res > 0) ? input.left( res ) : input );
+	const QString unitName ( (res > 0) ? regexp.cap( 1 ).trimmed().toLower() : "" );
 
     bool ok = true;
     bool interm = false;
 
     QValidator::State exprState = KisDoubleParseSpinBox::validate(expr, pos);
+
+	if (res < 0) {
+		return exprState;
+	}
 
     if (exprState == QValidator::Invalid) {
         return exprState;
@@ -265,9 +283,11 @@ QValidator::State KisDoubleParseUnitSpinBox::validate(QString &input, int &pos) 
 QString KisDoubleParseUnitSpinBox::textFromValue( double value ) const
 {
     QString txt = KisDoubleParseSpinBox::textFromValue(value);
-    if (!txt.endsWith(d->unitManager->getApparentUnitSymbol())) {
-        txt += " " + d->unitManager->getApparentUnitSymbol();
-    }
+	if (d->displayUnit) {
+		if (!txt.endsWith(d->unitManager->getApparentUnitSymbol())) {
+			txt += " " + d->unitManager->getApparentUnitSymbol();
+		}
+	}
     return txt;
 }
 
@@ -288,6 +308,12 @@ double KisDoubleParseUnitSpinBox::valueFromText( const QString& str ) const
 
 void KisDoubleParseUnitSpinBox::setUnitChangeFromOutsideBehavior(bool toggle) {
     d->letUnitBeChangedFromOutsideMoreThanOnce = toggle;
+}
+
+void KisDoubleParseUnitSpinBox::setDisplayUnit(bool toggle) {
+
+	d->displayUnit = toggle;
+
 }
 
 void KisDoubleParseUnitSpinBox::privateValueChanged()
@@ -321,7 +347,7 @@ void KisDoubleParseUnitSpinBox::detectUnitChanges()
 
     QString oldUnitSymb = d->unitManager->getApparentUnitSymbol();
 
-    setUnit(unitSymb);
+	setUnit(unitSymb);
     setValue(valueFromText(cleanText())); //change value keep the old value, but converted to new unit... which is different from the value the user entered in the new unit. So we need to set the new value.
 
     if (oldUnitSymb != d->unitManager->getApparentUnitSymbol()) {
@@ -345,7 +371,7 @@ QString KisDoubleParseUnitSpinBox::makeTextClean(QString const& txt) const
         expr.remove(expr.size()-symbol.size(), symbol.size());
     }
 
-    return expr;
+	return expr.trimmed();
 }
 
 void KisDoubleParseUnitSpinBox::disconnectExternalUnitManager()

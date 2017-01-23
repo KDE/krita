@@ -2296,7 +2296,6 @@ void KisMainWindow::createActions()
 //    connect(d->exportPdf, SIGNAL(triggered()), this, SLOT(exportToPdf()));
 
     d->importAnimation  = actionManager->createAction("file_import_animation");
-    d->importAnimation->setActivationFlags(KisAction::IMAGE_HAS_ANIMATION);
     connect(d->importAnimation, SIGNAL(triggered()), this, SLOT(importAnimation()));
 
     d->closeAll = actionManager->createAction("file_close_all");

@@ -134,7 +134,6 @@ void KoFileDialog::createFileDialog()
     d->fileDialog.reset(new QFileDialog(d->parent, d->caption, d->defaultDirectory + "/" + d->proposedFileName));
     KConfigGroup group = KSharedConfig::openConfig()->group("File Dialogs");
 
-
     bool dontUseNative = true;
 #ifdef Q_OS_UNIX
     if (qgetenv("XDG_CURRENT_DESKTOP") != "KDE") {
@@ -405,6 +404,7 @@ void KoFileDialog::saveUsedDir(const QString &fileName,
 {
 
     if (dialogName.isEmpty()) return;
+    if (d->type == SaveFile) return;
 
     QFileInfo fileInfo(fileName);
     KConfigGroup group =  KSharedConfig::openConfig()->group("File Dialogs");

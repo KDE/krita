@@ -44,6 +44,19 @@
           </property>
          </widget>
         </item>
+        <item>
+         <widget class="QPushButton" name="createBundleButton">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string>Create New Bundle</string>
+          </property>
+         </widget>
+        </item>
        </layout>
       </widget>
      </item>
@@ -186,19 +199,6 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="createBundleButton">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="text">
-        <string>Create New Bundle</string>
-       </property>
-      </widget>
-     </item>
-     <item>
       <widget class="QPushButton" name="deleteBackupFilesButton">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
@@ -297,7 +297,7 @@
                <bool>false</bool>
               </property>
               <property name="text">
-               <string>&amp;Create a new bundle from this bundle</string>
+               <string>&amp;Edit bundle...</string>
               </property>
              </widget>
             </item>
@@ -364,6 +364,9 @@
                 </property>
                 <property name="text">
                  <string/>
+                </property>
+                <property name="scaledContents">
+                 <bool>true</bool>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignCenter</set>

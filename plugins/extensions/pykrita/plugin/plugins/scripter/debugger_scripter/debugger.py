@@ -14,7 +14,7 @@ class Debugger(bdb.Bdb):
         self.debugq = multiprocessing.Queue()
         self.scripter = scripter
         self.applicationq = multiprocessing.Queue()
-
+        self.filePath = self.scripter.documentcontroller.activeDocument.filePath
         # Create the debug process
         self.debugprocess = multiprocessing.Process(target=self.run, args=(cmd,))
         self.application_data = {}
@@ -28,6 +28,10 @@ class Debugger(bdb.Bdb):
     def user_line(self, frame):
         """Handler that executes with every line of code"""
         co = frame.f_code
+
+        if self.filePath!=co.co_filename:
+            return
+
         self.currentLine = frame.f_lineno
         self.applicationq.put({ "code": { "file": co.co_filename,
                                           "name": co.co_name,
@@ -39,16 +43,12 @@ class Debugger(bdb.Bdb):
                                           },
                                 "trace": "line"
                               })
-
         if self.quit:
             return self.set_quit()
 
         if self.currentLine==0:
             return
         else:
-            # Get a reference to the code object and source
-            source = inspect.getsourcelines(co)[0]
-
             # Wait for a debug command
             cmd = self.debugq.get()
 

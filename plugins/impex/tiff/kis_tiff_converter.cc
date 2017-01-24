@@ -283,16 +283,20 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory(TIFF* image)
         memcpy(rawdata.data(), EmbedBuffer, EmbedLen);
         profile = KoColorSpaceRegistry::instance()->createColorProfile(colorSpaceId.first, colorSpaceId.second, rawdata);
     }
-    else {
-        dbgFile << "No Profile found";
-    }
 
     // Check that the profile is used by the color space
 
     if (profile && !KoColorSpaceRegistry::instance()->colorSpaceFactory(KoColorSpaceRegistry::instance()->colorSpaceId(colorSpaceId.first, colorSpaceId.second))->profileIsCompatible(profile)) {
-        warnFile << "The profile " << profile->name() << " is not compatible with the color space model " << colorSpaceId.first << " " << colorSpaceId.second;
+        dbgFile << "The profile " << profile->name() << " is not compatible with the color space model " << colorSpaceId.first << " " << colorSpaceId.second;
         profile = 0;
     }
+
+    // Do not use the linear gamma profile for 16 bits/channel by default, tiff files are usually created with
+    // gamma correction. XXX: Should we ask the user?
+    if (!profile && colorSpaceId.first == RGBAColorModelID.id() && colorSpaceId.second == Integer16BitsColorDepthID.id()) {
+        profile = KoColorSpaceRegistry::instance()->profileByName("sRGB-elle-V2-srgbtrc.icc");
+        dbgFile << "Getting srgb profile" << profile;
+     }
 
     // Retrieve a pointer to the colorspace
     const KoColorSpace* cs = 0;
@@ -303,6 +307,7 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory(TIFF* image)
     else {
         cs = KoColorSpaceRegistry::instance()->colorSpace(colorSpaceId.first, colorSpaceId.second, 0);
     }
+
     if (cs == 0) {
         dbgFile << "Colorspace" << colorSpaceId.first << colorSpaceId.second << " is not available, please check your installation.";
         TIFFClose(image);

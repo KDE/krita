@@ -963,7 +963,7 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
         // don't want to be reminded about overwriting files etc.
         bool justChangingFilterOptions = false;
 
-        KoFileDialog dialog(this, KoFileDialog::SaveFile, "OpenDocument");
+        KoFileDialog dialog(this, KoFileDialog::SaveFile, "SaveAs");
         dialog.setCaption(i18n("untitled"));
         if (isExporting() && !d->lastExportUrl.isEmpty()) {
             dialog.setDefaultDir(d->lastExportUrl.toLocalFile());

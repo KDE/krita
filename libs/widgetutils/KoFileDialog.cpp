@@ -401,6 +401,7 @@ void KoFileDialog::saveUsedDir(const QString &fileName,
 {
 
     if (dialogName.isEmpty()) return;
+    if (d->type == SaveFile) return;
 
     QFileInfo fileInfo(fileName);
     KConfigGroup group =  KSharedConfig::openConfig()->group("File Dialogs");

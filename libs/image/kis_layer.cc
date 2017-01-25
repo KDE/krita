@@ -788,6 +788,10 @@ QRect KisLayer::outgoingChangeRect(const QRect &rect) const
 
 QImage KisLayer::createThumbnail(qint32 w, qint32 h)
 {
+    if (w == 0 || h == 0) {
+        return QImage();
+    }
+
     KisPaintDeviceSP originalDevice = original();
 
     return originalDevice ?

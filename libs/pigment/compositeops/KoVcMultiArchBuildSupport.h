@@ -57,17 +57,9 @@ namespace Vc {
     };
 }
 
-#ifdef DO_PACKAGERS_BUILD
-#ifdef __GNUC__
-#warning "Packagers build is not available without the presence of Vc library. Disabling."
-#endif
-#undef DO_PACKAGERS_BUILD
-#endif
 
 #endif /* HAVE_VC */
 
-
-#ifdef DO_PACKAGERS_BUILD
 
 #include <QDebug>
 #include <ksharedconfig.h>
@@ -112,21 +104,5 @@ createOptimizedClass(typename FactoryType::ParamType param)
         return FactoryType::template create<Vc::ScalarImpl>(param);
     }
 }
-
-#else /* DO_PACKAGERS_BUILD */
-
-/**
- * When doing not a packager's build we have one architecture only,
- * so the factory methods are simplified
- */
-
-template<class FactoryType>
-typename FactoryType::ReturnType
-createOptimizedClass(typename FactoryType::ParamType param)
-{
-    return FactoryType::template create<Vc::CurrentImplementation::current()>(param);
-}
-
-#endif /* DO_PACKAGERS_BUILD */
 
 #endif /* __KOVCMULTIARCHBUILDSUPPORT_H */

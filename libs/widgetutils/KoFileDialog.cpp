@@ -136,12 +136,17 @@ void KoFileDialog::createFileDialog()
 
     bool dontUseNative = true;
 #ifdef Q_OS_UNIX
-    if (qgetenv("XDG_CURRENT_DESKTOP") != "KDE") {
+    if (qgetenv("XDG_CURRENT_DESKTOP") == "KDE") {
         dontUseNative = false;
     }
 #endif
 
     d->fileDialog->setOption(QFileDialog::DontUseNativeDialog, group.readEntry("DontUseNativeFileDialog", dontUseNative));
+
+//    qDebug() << "DontUseNativeDialog" << d->fileDialog->testOption(QFileDialog::DontUseNativeDialog)
+//             << dontUseNative
+//             << group.readEntry("DontUseNativeFileDialog", dontUseNative);
+
     d->fileDialog->setOption(QFileDialog::DontConfirmOverwrite, false);
     d->fileDialog->setOption(QFileDialog::HideNameFilterDetails, true);
 

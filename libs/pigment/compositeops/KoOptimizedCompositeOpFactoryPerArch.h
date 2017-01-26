@@ -50,13 +50,5 @@ struct KoOptimizedCompositeOpFactoryPerArch
     static ReturnType create(ParamType param);
 };
 
-struct KoReportCurrentArch
-{
-    typedef void* ParamType;
-    typedef void ReturnType;
-
-    template<Vc::Implementation _impl>
-    static ReturnType create(ParamType);
-};
 
 #endif /* KOOPTIMIZEDCOMPOSITEOPFACTORYPERARCH_H */

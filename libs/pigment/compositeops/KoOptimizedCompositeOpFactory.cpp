@@ -25,13 +25,6 @@
 #endif
 
 
-static struct ArchReporter {
-    ArchReporter() {
-        createOptimizedClass<KoReportCurrentArch>(0);
-    }
-} StaticReporter;
-
-
 KoCompositeOp* KoOptimizedCompositeOpFactory::createAlphaDarkenOp32(const KoColorSpace *cs)
 {
     return createOptimizedClass<KoOptimizedCompositeOpFactoryPerArch<KoOptimizedCompositeOpAlphaDarken32> >(cs);

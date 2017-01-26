@@ -46,6 +46,10 @@
 #include "kis_projection_leaf.h"
 #include "kis_time_range.h"
 
+#include "kis_node_view_color_scheme.h"
+#include "krita_utils.h"
+#include <QApplication>
+
 struct TimelineFramesModel::Private
 {
     Private()
@@ -132,6 +136,12 @@ struct TimelineFramesModel::Private
         if (!frame) return;
 
         frame->setColorLabel(color);
+    }
+
+    int layerColorLabel(int row) const {
+        KisNodeDummy *dummy = converter->dummyFromRow(row);
+        if (!dummy) return -1;
+        return dummy->node()->colorLabelIndex();
     }
 
     QVariant layerProperties(int row) const {
@@ -321,7 +331,7 @@ QVariant TimelineFramesModel::data(const QModelIndex &index, int role) const
     case SpecialKeyframeExists: {
         return m_d->specialKeyframeExists(index.row(), index.column());
     }
-    case ColorLabel: {
+    case FrameColorLabelIndexRole: {
         int label = m_d->frameColorLabel(index.row(), index.column());
         return label > 0 ? label : QVariant();
     }
@@ -362,7 +372,7 @@ bool TimelineFramesModel::setData(const QModelIndex &index, const QVariant &valu
         }
         break;
     }
-    case ColorLabel: {
+    case FrameColorLabelIndexRole: {
         m_d->setFrameColorLabel(index.row(), index.column(), value.toInt());
     }
         break;
@@ -427,6 +437,18 @@ QVariant TimelineFramesModel::headerData(int section, Qt::Orientation orientatio
             KisNodeDummy *dummy = m_d->converter->dummyFromRow(section);
             if (!dummy) return QVariant();
             return dummy->node()->useInTimeline();
+        }
+        case Qt::BackgroundRole: {
+            int label = m_d->layerColorLabel(section);
+            if (label > 0) {
+                KisNodeViewColorScheme scm;
+                QColor color = scm.colorLabel(label);
+                QPalette pal = qApp->palette();
+                color = KritaUtils::blendColors(color, pal.color(QPalette::Button), 0.3);
+                return QBrush(color);
+            } else {
+                return QVariant();
+            }
         }
         }
     }

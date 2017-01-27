@@ -5,6 +5,9 @@ import multiprocessing
 import re
 
 
+from . import debuggerformatter
+
+
 class Debugger(bdb.Bdb):
 
     def __init__(self, scripter, cmd):
@@ -38,11 +41,12 @@ class Debugger(bdb.Bdb):
                                           "lineNumber": str(frame.f_lineno)
                                         },
                                 "frame": { "firstLineNumber": co.co_firstlineno,
-                                           "locals": self.format_data(frame.f_locals),
-                                           "globals": self.format_data(frame.f_globals)
+                                           "locals": debuggerformatter.format_data(frame.f_locals),
+                                           "globals": debuggerformatter.format_data(frame.f_globals)
                                           },
                                 "trace": "line"
                               })
+
         if self.quit:
             return self.set_quit()
 
@@ -67,21 +71,6 @@ class Debugger(bdb.Bdb):
 
     def user_exception(self, frame, exception):
         name = frame.f_code.co_name or "<unknown>"
-
-    def format_data(self, data):
-        globals()['types'] = __import__('types')
-
-        exclude_keys = ['copyright', 'credits', 'False',
-                        'True', 'None', 'Ellipsis', 'quit']
-        exclude_valuetypes = [types.BuiltinFunctionType,
-                              types.BuiltinMethodType,
-                              types.ModuleType,
-                              types.FunctionType]
-
-        return [{k: v} for k, v in data.items() if not (k in exclude_keys or
-                                                    type(v) in exclude_valuetypes or
-                                                    re.search(r'^(__).*\1$', k))]
-
 
     async def display(self):
         """Coroutine for updating the UI"""

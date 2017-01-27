@@ -83,7 +83,7 @@ createOptimizedClass(typename FactoryType::ParamType param)
         qWarning() << "WARNING: vector instructions disabled by \'amdDisableVectorWorkaround\' option!";
         return FactoryType::template create<Vc::ScalarImpl>(param);
     }
-
+#ifdef HAVE_VC
     /**
      * We use SSE2, SSSE3, SSE4.1, AVX and AVX2.
      * The rest are integer and string instructions mostly.
@@ -101,8 +101,12 @@ createOptimizedClass(typename FactoryType::ParamType param)
     } else if (Vc::isImplementationSupported(Vc::SSE2Impl)) {
         return FactoryType::template create<Vc::SSE2Impl>(param);
     } else {
+#endif
         return FactoryType::template create<Vc::ScalarImpl>(param);
+#ifdef HAVE_VC
     }
+#endif
+
 }
 
 #endif /* __KOVCMULTIARCHBUILDSUPPORT_H */

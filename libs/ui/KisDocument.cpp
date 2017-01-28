@@ -1686,6 +1686,7 @@ bool KisDocument::prepareLocksForSaving()
                 d->lastErrorMessage = i18n("The image was still busy while saving. Your saved image might be incomplete.");
                 d->image->lock();
                 copiedImage = d->image->clone(true);
+                copiedImage->initialRefreshGraph();
                 d->image->unlock();
             }
         }

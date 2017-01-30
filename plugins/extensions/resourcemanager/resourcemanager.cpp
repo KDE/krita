@@ -27,6 +27,7 @@
 
 #include <QMessageBox>
 #include <QGlobalStatic>
+#include <QDesktopServices>
 
 #include <klocalizedstring.h>
 #include <KoResourcePaths.h>
@@ -224,6 +225,7 @@ void ResourceManager::slotManageBundles()
 QStringList ResourceManager::importResources(const QString &title, const QStringList &mimes) const
 {
     KoFileDialog dialog(m_view->mainWindow(), KoFileDialog::OpenFiles, "krita_resources");
+    dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::HomeLocation));
     dialog.setCaption(title);
     dialog.setMimeTypeFilters(mimes);
     return dialog.filenames();

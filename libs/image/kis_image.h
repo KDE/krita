@@ -111,7 +111,7 @@ public:
      * expected to use the copied image anywhere except for saving. Don't use
      * this option if you plan to work with the copied image later.
      */
-    KisImage* clone(bool exactCopy = false);
+    KisImage *clone(bool exactCopy = false);
 
     /**
      * Render the projection onto a QImage.

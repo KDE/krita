@@ -84,7 +84,7 @@ public:
         TimelinePropertiesRole,
         OtherLayersRole,
         LayerUsedInTimelineRole,
-        ColorLabel
+        FrameColorLabelIndexRole
     };
 
     // metatype is added by the original implementation

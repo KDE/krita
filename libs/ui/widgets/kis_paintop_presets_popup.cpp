@@ -227,13 +227,13 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
     connect(m_d->uiWdgPaintOpPresetSettings.txtPreset, SIGNAL(textChanged(QString)),
             SLOT(slotWatchPresetNameLineEdit()));
 
-    connect(m_d->uiWdgPaintOpPresetSettings.brushEgineComboBox, SIGNAL(activated(QString)),
-            this, SIGNAL(paintopActivated(QString)));
-
 
     // preset widget connections
     connect(m_d->uiWdgPaintOpPresetSettings.presetWidget->smallPresetChooser, SIGNAL(resourceSelected(KoResource*)),
             this, SIGNAL(signalResourceSelected(KoResource*)));
+
+    connect(m_d->uiWdgPaintOpPresetSettings.presetWidget->smallPresetChooser, SIGNAL(resourceClicked(KoResource*)),
+            this, SIGNAL(paintopActivated(currentPaintOpId())));
 
     connect(m_d->uiWdgPaintOpPresetSettings.bnSave, SIGNAL(clicked()),
             m_d->uiWdgPaintOpPresetSettings.presetWidget->smallPresetChooser, SLOT(updateViewSettings()));
@@ -270,7 +270,7 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
                             resource(KisCanvasResourceProvider::LodAvailability));
 
 
-    connect(m_d->uiWdgPaintOpPresetSettings.brushEgineComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(slotPaintOpChanged(int)));
+    connect(m_d->uiWdgPaintOpPresetSettings.brushEgineComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(slotUpdatePaintOpFilter()));
 
 }
 
@@ -483,35 +483,11 @@ void KisPaintOpPresetsPopup::setPaintOpList(const QList< KisPaintOpFactory* >& l
 }
 
 
-void KisPaintOpPresetsPopup::setCurrentPaintOp(const QString& paintOpId)
+void KisPaintOpPresetsPopup::setCurrentPaintOpId(const QString& paintOpId)
 {
-    // iterate through the items and find the engine we need the combo box to switch to
-    for (int i= 0; i < m_d->uiWdgPaintOpPresetSettings.brushEgineComboBox->count(); i++) {
-
-        QVariant userData = m_d->uiWdgPaintOpPresetSettings.brushEgineComboBox->itemData(i); // grab paintOpID from data
-        QString currentPaintOpId = userData.toString();
-
-        if (paintOpId == currentPaintOpId) {
-            m_d->uiWdgPaintOpPresetSettings.brushEgineComboBox->setCurrentIndex(i); // found it!
-        }
-    }
-
-    // if the "all" option is set, set the filter to "", that way it clears the filter and shows everything
-    QString paintOpFilter = paintOpId;
-    if (paintOpFilter == "all_options") {
-        paintOpFilter = "";
-    }
-
-    m_d->uiWdgPaintOpPresetSettings.presetWidget->setPresetFilter(paintOpFilter);
-
+    current_paintOpId = paintOpId;
 }
 
-QString KisPaintOpPresetsPopup::currentPaintOp()
-{
-    QVariant userData = m_d->uiWdgPaintOpPresetSettings.brushEgineComboBox->currentData(); // grab paintOpID from data
-    QString currentPaintOpId = userData.toString();
-    return currentPaintOpId;
-}
 
 QString KisPaintOpPresetsPopup::currentPaintOpId() {
     return current_paintOpId;
@@ -567,17 +543,16 @@ void KisPaintOpPresetsPopup::slotSwitchShowPresets(bool visible) {
     m_d->uiWdgPaintOpPresetSettings.presetsContainer->setVisible(visible);
 }
 
-void KisPaintOpPresetsPopup::slotPaintOpChanged(int index) {
-
-    Q_UNUSED(index);
-
+void KisPaintOpPresetsPopup::slotUpdatePaintOpFilter() {
     QVariant userData = m_d->uiWdgPaintOpPresetSettings.brushEgineComboBox->currentData(); // grab paintOpID from data
-    QString currentPaintOpId = userData.toString();
+    QString filterPaintOpId = userData.toString();
 
-    setCurrentPaintOp(currentPaintOpId);
-    emit paintopActivated(currentPaintOpId); // tell the toolbar to change the active icon
+
+    if (filterPaintOpId == "all_options") {
+        filterPaintOpId = "";
+    }
+    m_d->uiWdgPaintOpPresetSettings.presetWidget->setPresetFilter(filterPaintOpId);
 }
-
 
 void KisPaintOpPresetsPopup::updateViewSettings()
 {
@@ -585,8 +560,9 @@ void KisPaintOpPresetsPopup::updateViewSettings()
 }
 
 void KisPaintOpPresetsPopup::currentPresetChanged(KisPaintOpPresetSP preset)
-{
+{     
      m_d->uiWdgPaintOpPresetSettings.presetWidget->smallPresetChooser->setCurrentResource(preset.data());
+     setCurrentPaintOpId(preset->paintOp().id());
 }
 
 void KisPaintOpPresetsPopup::updateThemedIcons()

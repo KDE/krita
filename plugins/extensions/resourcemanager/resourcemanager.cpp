@@ -27,6 +27,7 @@
 
 #include <QMessageBox>
 #include <QGlobalStatic>
+#include <QDesktopServices>
 
 #include <klocalizedstring.h>
 #include <KoResourcePaths.h>
@@ -128,9 +129,10 @@ void ResourceManager::slotCreateBundle()
     saveBundle(dlgCreateBundle);
 }
 
-void ResourceManager::saveBundle(const DlgCreateBundle &dlgCreateBundle)
+KisResourceBundle *ResourceManager::saveBundle(const DlgCreateBundle &dlgCreateBundle)
 {
     QString bundlePath =  dlgCreateBundle.saveLocation() + "/" + dlgCreateBundle.bundleName() + ".bundle";
+
     KisResourceBundle *newBundle = new KisResourceBundle(bundlePath);
 
     newBundle->addMeta("name", dlgCreateBundle.bundleName());
@@ -139,6 +141,7 @@ void ResourceManager::saveBundle(const DlgCreateBundle &dlgCreateBundle)
     newBundle->addMeta("license", dlgCreateBundle.license());
     newBundle->addMeta("website", dlgCreateBundle.website());
     newBundle->addMeta("description", dlgCreateBundle.description());
+    newBundle->setThumbnail(dlgCreateBundle.previewImage());
 
     QStringList res = dlgCreateBundle.selectedBrushes();
     Q_FOREACH (const QString &r, res) {
@@ -192,13 +195,23 @@ void ResourceManager::saveBundle(const DlgCreateBundle &dlgCreateBundle)
     newBundle->addMeta("fileName", bundlePath);
     newBundle->addMeta("created", QDate::currentDate().toString("dd/MM/yyyy"));
 
-    newBundle->setThumbnail(dlgCreateBundle.previewImage());
-
     if (!newBundle->save()) {
         QMessageBox::critical(m_view->mainWindow(), i18nc("@title:window", "Krita"), i18n("Could not create the new bundle."));
     }
+    else {
+        newBundle->setValid(true);
+        if (QDir(KisResourceServerProvider::instance()->resourceBundleServer()->saveLocation()) != QDir(QFileInfo(bundlePath).path())) {
+            newBundle->setFilename(KisResourceServerProvider::instance()->resourceBundleServer()->saveLocation() + "/" + dlgCreateBundle.bundleName() + ".bundle");
+        }
+        if (KisResourceServerProvider::instance()->resourceBundleServer()->resourceByName(newBundle->name())) {
+            KisResourceServerProvider::instance()->resourceBundleServer()->removeResourceFromServer(
+                        KisResourceServerProvider::instance()->resourceBundleServer()->resourceByName(newBundle->name()));
+        }
+        KisResourceServerProvider::instance()->resourceBundleServer()->addResource(newBundle, true);
+        newBundle->load();
+    }
 
-
+    return newBundle;
 }
 
 void ResourceManager::slotManageBundles()
@@ -212,6 +225,7 @@ void ResourceManager::slotManageBundles()
 QStringList ResourceManager::importResources(const QString &title, const QStringList &mimes) const
 {
     KoFileDialog dialog(m_view->mainWindow(), KoFileDialog::OpenFiles, "krita_resources");
+    dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::HomeLocation));
     dialog.setCaption(title);
     dialog.setMimeTypeFilters(mimes);
     return dialog.filenames();

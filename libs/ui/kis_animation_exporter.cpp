@@ -63,26 +63,6 @@ KisAnimationExporterUI::~KisAnimationExporterUI()
     }
 }
 
-KisImportExportFilter::ConversionStatus KisAnimationExporterUI::exportSequence(KisDocument *document)
-{
-    KoFileDialog dialog(m_d->parentWidget, KoFileDialog::SaveFile, "exportsequence");
-    dialog.setCaption(i18n("Export sequence"));
-    dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
-    dialog.setMimeTypeFilters(KisImportExportManager::mimeFilter(KisImportExportManager::Export));
-    QString filename = dialog.filename();
-
-    // if the user presses cancel, it returns empty
-    if (filename.isEmpty()) return KisImportExportFilter::UserCancelled;
-
-    const KisTimeRange fullClipRange = document->image()->animationInterface()->fullClipRange();
-    int firstFrame = fullClipRange.start();
-    int lastFrame = fullClipRange.end();
-
-    m_d->exporter = new KisAnimationExportSaver(document, filename, firstFrame, lastFrame);
-    return m_d->exporter->exportAnimation();
-}
-
-
 struct KisAnimationExporter::Private
 {
     Private(KisDocument *document, int fromTime, int toTime)
@@ -115,6 +95,7 @@ struct KisAnimationExporter::Private
     KisPaintDeviceSP tmpDevice;
 
     KisPropertiesConfigurationSP exportConfiguration;
+    QProgressDialog progress;
 
 };
 
@@ -144,15 +125,18 @@ void KisAnimationExporter::setSaveFrameCallback(SaveFrameCallback func)
 
 KisImportExportFilter::ConversionStatus KisAnimationExporter::exportAnimation()
 {
-    QScopedPointer<QProgressDialog> progress;
 
     if (!m_d->batchMode) {
-        QString message = i18n("Export frames...");
-        progress.reset(new QProgressDialog(message, "", 0, 0, KisPart::instance()->currentMainwindow()));
-        progress->setWindowModality(Qt::ApplicationModal);
-        progress->setCancelButton(0);
-        progress->setMinimumDuration(0);
-        progress->setValue(0);
+        QString message = i18n("Preparing to export frames...");
+
+        m_d->progress.reset();
+        m_d->progress.setLabelText(message);
+        m_d->progress.setWindowModality(Qt::ApplicationModal);
+        m_d->progress.setCancelButton(0);
+        m_d->progress.setMinimumDuration(0);
+        m_d->progress.setValue(0);
+        m_d->progress.setMinimum(0);
+        m_d->progress.setMaximum(100);
 
         emit m_d->document->statusBarMessage(message);
         emit m_d->document->sigProgress(0);
@@ -184,7 +168,7 @@ KisImportExportFilter::ConversionStatus KisAnimationExporter::exportAnimation()
         disconnect(m_d->document, SIGNAL(sigProgressCanceled()), this, SLOT(cancel()));
         emit m_d->document->sigProgress(100);
         emit m_d->document->clearStatusBarMessage();
-        progress.reset();
+        m_d->progress.reset();
     }
 
     return m_d->status;
@@ -231,6 +215,12 @@ void KisAnimationExporter::frameReadyToSave()
     }
 
     qDebug() << result << time << m_d->lastFrame;
+
+    QString dialogText = QString("Exporting Frame ").append(QString::number(time)).append(" of ").append(QString::number(m_d->lastFrame));
+    int percentageProcessed = (float(time) / float(m_d->lastFrame) * 100);
+
+    m_d->progress.setLabelText(dialogText);
+    m_d->progress.setValue(int(percentageProcessed));
 
     if (result == KisImportExportFilter::OK && time < m_d->lastFrame) {
         m_d->currentFrame = time + 1;
@@ -301,6 +291,9 @@ KisAnimationExportSaver::KisAnimationExportSaver(KisDocument *document, const QS
 
     using namespace std::placeholders; // For _1 placeholder
     m_d->exporter.setSaveFrameCallback(std::bind(&KisAnimationExportSaver::saveFrameCallback, this, _1, _2, _3));
+    
+   
+    
 }
 
 KisAnimationExportSaver::~KisAnimationExportSaver()

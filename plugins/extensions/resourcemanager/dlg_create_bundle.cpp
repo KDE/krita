@@ -77,6 +77,56 @@ DlgCreateBundle::DlgCreateBundle(KisResourceBundle *bundle, QWidget *parent)
         m_ui->editWebsite->setText(bundle->getMeta("website"));
         m_ui->editDescription->document()->setPlainText(bundle->getMeta("description"));
         m_ui->lblPreview->setPixmap(QPixmap::fromImage(bundle->image().scaled(256, 256, Qt::KeepAspectRatio, Qt::SmoothTransformation)));
+
+        Q_FOREACH (const QString & resType, bundle->resourceTypes()) {
+            if (resType == "gradients") {
+                Q_FOREACH (const KoResource *res, bundle->resources(resType)) {
+                    if (res) {
+                        m_selectedGradients << res->shortFilename();
+                    }
+                }
+
+            }
+            else if (resType  == "patterns") {
+                Q_FOREACH (const KoResource *res, bundle->resources(resType)) {
+                    if (res) {
+                        m_selectedPatterns << res->shortFilename();
+                    }
+                }
+
+            }
+            else if (resType  == "brushes") {
+                Q_FOREACH (const KoResource *res, bundle->resources(resType)) {
+                    if (res) {
+                        m_selectedBrushes << res->shortFilename();
+                    }
+                }
+
+            }
+            else if (resType  == "palettes") {
+                Q_FOREACH (const KoResource *res, bundle->resources(resType)) {
+                    if (res) {
+                        m_selectedPalettes << res->shortFilename();
+                    }
+                }
+
+            }
+            else if (resType  == "workspaces") {
+                Q_FOREACH (const KoResource *res, bundle->resources(resType)) {
+                    if (res) {
+                        m_selectedWorkspaces << res->shortFilename();
+                    }
+                }
+
+            }
+            else if (resType  == "paintoppresets") {
+                Q_FOREACH (const KoResource *res, bundle->resources(resType)) {
+                    if (res) {
+                        m_selectedPresets << res->shortFilename();
+                    }
+                }
+            }
+        }
     }
     else {
 
@@ -173,7 +223,7 @@ void DlgCreateBundle::accept()
     else {
         QFileInfo fileInfo(m_ui->lblSaveLocation->text() + "/" + name + ".bundle");
 
-        if (fileInfo.exists()) {
+        if (fileInfo.exists() && !m_bundle) {
             m_ui->editBundleName->setStyleSheet("border: 1px solid red");
             QMessageBox::warning(this, i18nc("@title:window", "Krita"), i18n("A bundle with this name already exists."));
             return;
@@ -375,7 +425,7 @@ void DlgCreateBundle::resourceTypeSelected(int idx)
 void DlgCreateBundle::getPreviewImage()
 {
     KoFileDialog dialog(this, KoFileDialog::OpenFile, "BundlePreviewImage");
-    dialog.setCaption(i18n("Select file to use as dynamic file layer."));
+    dialog.setCaption(i18n("Select file to use as bundle icon"));
     dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
     dialog.setMimeTypeFilters(KisImportExportManager::mimeFilter(KisImportExportManager::Import));
     m_previewImage = dialog.filename();
@@ -383,5 +433,6 @@ void DlgCreateBundle::getPreviewImage()
     img = img.scaled(256, 256, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     m_ui->lblPreview->setPixmap(QPixmap::fromImage(img));
 }
+
 
 

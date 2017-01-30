@@ -88,7 +88,11 @@ public:
     QImage createThumbnail(qint32 w, qint32 h, qreal oversample, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags) {
         QImage thumbnail;
 
-        if(m_thumbnailsValid) {
+        if (h == 0 || w == 0) {
+            return thumbnail;
+        }
+
+        if (m_thumbnailsValid) {
             thumbnail = findThumbnail(w, h, oversample);
         }
         else {
@@ -96,7 +100,7 @@ public:
             m_thumbnailsValid = true;
         }
 
-        if(thumbnail.isNull()) {
+        if (thumbnail.isNull()) {
             thumbnail = m_paintDevice->createThumbnail(w, h, QRect(), oversample, renderingIntent, conversionFlags);
             cacheThumbnail(w, h, oversample, thumbnail);
         }

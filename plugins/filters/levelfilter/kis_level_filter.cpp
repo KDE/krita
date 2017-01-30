@@ -279,7 +279,7 @@ KisPropertiesConfigurationSP  KisLevelConfigWidget::configuration() const
 
     config->setProperty("blackvalue", m_page.blackspin->value());
     config->setProperty("whitevalue", m_page.whitespin->value());
-    config->setProperty("gammavalue", m_page.ingradient->getGamma());
+    config->setProperty("gammavalue", m_page.gammaspin->value());
     config->setProperty("outblackvalue", m_page.outblackspin->value());
     config->setProperty("outwhitevalue", m_page.outwhitespin->value());
 

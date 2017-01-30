@@ -174,12 +174,11 @@ class Q_DECL_HIDDEN KoFillConfigWidget::Private
 public:
     Private()
     : canvas(0),
-      colorChangedCompressor(100, KisSignalCompressor::FIRST_ACTIVE)
+      colorChangedCompressor(100, KisSignalCompressor::FIRST_ACTIVE),
+      gradientChangedCompressor(100, KisSignalCompressor::FIRST_ACTIVE)
     {
     }
 
-#if 0
-    /// Apply the gradient stops using the shape background
     QSharedPointer<KoShapeBackground> applyFillGradientStops(KoShape *shape, const QGradientStops &stops)
     {
         if (! shape || ! stops.count()) {
@@ -204,7 +203,6 @@ public:
         }
         return QSharedPointer<KoGradientBackground>(newGradient);
     }
-#endif
 
     KoColorPopupAction *colorAction;
     KoResourcePopupAction *gradientAction;
@@ -215,6 +213,9 @@ public:
 
     KisSignalCompressor colorChangedCompressor;
     KisAcyclicSignalConnector shapeChangedAcyclicConnector;
+
+    QSharedPointer<KoStopGradient> activeGradient;
+    KisSignalCompressor gradientChangedCompressor;
 
     Ui_KoFillConfigWidget *ui;
 };
@@ -280,14 +281,32 @@ KoFillConfigWidget::KoFillConfigWidget(QWidget *parent)
     slotUpdateFillTitle();
     styleButtonPressed(d->group->checkedId());
 
-#if 0
     // Gradient selector
+    d->ui->wdgGradientEditor->setCompactMode(true);
+    connect(d->ui->wdgGradientEditor, SIGNAL(sigGradientChanged()), &d->gradientChangedCompressor, SLOT(start()));
+    connect(&d->gradientChangedCompressor, SIGNAL(timeout()), SLOT(activeGradientChanged()));
+
     KoResourceServerProvider *serverProvider = KoResourceServerProvider::instance();
-    QSharedPointer<KoAbstractResourceServerAdapter> gradientResourceAdapter(new KoResourceServerAdapter<KoAbstractGradient>(serverProvider->gradientServer()));
-    d->gradientAction = new KoResourcePopupAction(gradientResourceAdapter, d->colorButton);
-    d->gradientAction->setToolTip(i18n("Change the filling gradient"));
-    connect(d->gradientAction, SIGNAL(resourceSelected(QSharedPointer<KoShapeBackground> )), this, SLOT(gradientChanged(QSharedPointer<KoShapeBackground> )));
-    connect(d->colorButton, SIGNAL(iconSizeChanged()), d->gradientAction, SLOT(updateIcon()));
+    QSharedPointer<KoAbstractResourceServerAdapter> gradientResourceAdapter(
+                new KoResourceServerAdapter<KoAbstractGradient>(serverProvider->gradientServer()));
+
+    d->gradientAction = new KoResourcePopupAction(gradientResourceAdapter,
+                                                  d->ui->btnChoosePredefinedGradient);
+
+    d->gradientAction->setToolTip(i18n("Change filling gradient"));
+    d->ui->btnChoosePredefinedGradient->setDefaultAction(d->gradientAction);
+    d->ui->btnChoosePredefinedGradient->setPopupMode(QToolButton::InstantPopup);
+
+    connect(d->gradientAction, SIGNAL(resourceSelected(QSharedPointer<KoShapeBackground> )),
+            SLOT(gradientResourceChanged()));
+    connect(d->ui->btnChoosePredefinedGradient, SIGNAL(iconSizeChanged()), d->gradientAction, SLOT(updateIcon()));
+
+    d->ui->btnSaveGradient->setIcon(KisIconUtils::loadIcon("document-save"));
+    connect(d->ui->btnSaveGradient, SIGNAL(clicked()), SLOT(slotSavePredefinedGradientClicked()));
+
+
+
+#if 0
 
     // Pattern selector
     QSharedPointer<KoAbstractResourceServerAdapter>patternResourceAdapter(new KoResourceServerAdapter<KoPattern>(serverProvider->patternServer()));
@@ -347,9 +366,7 @@ void KoFillConfigWidget::styleButtonPressed(int buttonId)
             colorChanged();
             break;
         case KoFillConfigWidget::Gradient:
-            // Only select mode in the widget, don't set actual gradient :/
-            //d->colorButton->setDefaultAction(d->gradientAction);
-            //gradientChanged(d->gradientAction->currentBackground());
+            gradientResourceChanged();
             break;
         case KoFillConfigWidget::Pattern:
             // Only select mode in the widget, don't set actual pattern :/
@@ -392,39 +409,76 @@ void KoFillConfigWidget::colorChanged()
     canvasController->canvas()->addCommand(cmd);
 }
 
-void KoFillConfigWidget::gradientChanged(QSharedPointer<KoShapeBackground>  background)
+void KoFillConfigWidget::slotSavePredefinedGradientClicked()
 {
-    Q_UNUSED(background);
+    ENTER_FUNCTION() << "WARNING: Saving of the gradients is not implemented yet!";
+}
 
-#if 0
+void KoFillConfigWidget::activeGradientChanged()
+{
+    setNewGradientBackgroundToShape();
+    updateGradientSaveButtonAvailability();
+}
+
+void KoFillConfigWidget::gradientResourceChanged()
+{
+    uploadNewGradientBackground(d->gradientAction->currentBackground());
+
+    setNewGradientBackgroundToShape();
+    updateGradientSaveButtonAvailability();
+}
+
+void KoFillConfigWidget::uploadNewGradientBackground(QSharedPointer<KoShapeBackground> newBackground)
+{
+    QSharedPointer<KoGradientBackground> gradientBackground =
+            qSharedPointerDynamicCast<KoGradientBackground>(newBackground);
+    if (!gradientBackground) return;
+
+    {
+        KisSignalsBlocker b1(d->ui->wdgGradientEditor);
+
+        d->ui->wdgGradientEditor->setGradient(0);
+        d->activeGradient.reset(KoStopGradient::fromQGradient(gradientBackground->gradient()));
+        d->ui->wdgGradientEditor->setGradient(d->activeGradient.data());
+    }
+}
+
+void KoFillConfigWidget::setNewGradientBackgroundToShape()
+{
     QList<KoShape*> selectedShapes = currentShapes();
     if (selectedShapes.isEmpty()) {
         return;
     }
 
-    QSharedPointer<KoGradientBackground> gradientBackground = qSharedPointerDynamicCast<KoGradientBackground>(background);
-    if (!gradientBackground) {
-        return;
-    }
+    KisAcyclicSignalConnector::Blocker b(d->shapeChangedAcyclicConnector);
 
-    QGradientStops newStops = gradientBackground->gradient()->stops();
-    gradientBackground.clear();
+    QGradientStops newStops = d->activeGradient->toQGradient()->stops();
+    QList<QSharedPointer<KoShapeBackground>> newBackgrounds;
 
-    KUndo2Command *firstCommand = 0;
     foreach (KoShape *shape, selectedShapes) {
-        QSharedPointer<KoShapeBackground> fill = d->applyFillGradientStops(shape, newStops);
-        if (! fill) {
-            continue;
-        }
-        if (! firstCommand) {
-            firstCommand = new KoShapeBackgroundCommand(shape, fill);
-        } else {
-            new KoShapeBackgroundCommand(shape, fill, firstCommand);
-        }
+        newBackgrounds <<  d->applyFillGradientStops(shape, newStops);
     }
+
+    KUndo2Command *cmd = new KoShapeBackgroundCommand(selectedShapes, newBackgrounds);
+
     KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
-    canvasController->canvas()->addCommand(firstCommand);
-#endif
+    canvasController->canvas()->addCommand(cmd);
+}
+
+void KoFillConfigWidget::updateGradientSaveButtonAvailability()
+{
+    bool savingEnabled = false;
+
+    QScopedPointer<QGradient> currentGradient(d->activeGradient->toQGradient());
+    QSharedPointer<KoShapeBackground> bg = d->gradientAction->currentBackground();
+    if (bg) {
+        QSharedPointer<KoGradientBackground> resourceBackground =
+            qSharedPointerDynamicCast<KoGradientBackground>(bg);
+
+        savingEnabled = resourceBackground->gradient()->stops() != currentGradient->stops();
+    }
+
+    d->ui->btnSaveGradient->setEnabled(savingEnabled);
 }
 
 void KoFillConfigWidget::patternChanged(QSharedPointer<KoShapeBackground>  background)
@@ -523,10 +577,10 @@ void KoFillConfigWidget::updateWidget(KoShape *shape)
             d->colorAction->setCurrentColor(colorBackground->color());
         } else if (gradientBackground) {
             newActiveButton = KoFillConfigWidget::Gradient;
-            d->gradientAction->setCurrentBackground(background);
+            uploadNewGradientBackground(background);
+            updateGradientSaveButtonAvailability();
         } else if (patternBackground) {
             newActiveButton = KoFillConfigWidget::Pattern;
-            d->patternAction->setCurrentBackground(background);
         }
     }
 

@@ -205,7 +205,7 @@ void KoStopGradient::colorAt(KoColor& dst, qreal t) const
     }
 }
 
-KoStopGradient * KoStopGradient::fromQGradient(QGradient * gradient)
+KoStopGradient * KoStopGradient::fromQGradient(const QGradient * gradient)
 {
     if (! gradient)
         return 0;
@@ -216,21 +216,21 @@ KoStopGradient * KoStopGradient::fromQGradient(QGradient * gradient)
 
     switch (gradient->type()) {
     case QGradient::LinearGradient: {
-        QLinearGradient * g = static_cast<QLinearGradient*>(gradient);
+        const QLinearGradient * g = static_cast<const QLinearGradient*>(gradient);
         newGradient->m_start = g->start();
         newGradient->m_stop = g->finalStop();
         newGradient->m_focalPoint = g->start();
         break;
     }
     case QGradient::RadialGradient: {
-        QRadialGradient * g = static_cast<QRadialGradient*>(gradient);
+        const QRadialGradient * g = static_cast<const QRadialGradient*>(gradient);
         newGradient->m_start = g->center();
         newGradient->m_stop = g->center() + QPointF(g->radius(), 0);
         newGradient->m_focalPoint = g->focalPoint();
         break;
     }
     case QGradient::ConicalGradient: {
-        QConicalGradient * g = static_cast<QConicalGradient*>(gradient);
+        const QConicalGradient * g = static_cast<const QConicalGradient*>(gradient);
         qreal radian = g->angle() * M_PI / 180.0;
         newGradient->m_start = g->center();
         newGradient->m_stop = QPointF(100.0 * cos(radian), 100.0 * sin(radian));

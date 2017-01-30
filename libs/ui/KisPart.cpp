@@ -476,6 +476,8 @@ void KisPart::startCustomDocument(KisDocument* doc)
 
 KisInputManager* KisPart::currentInputManager()
 {
-    return instance()->currentMainwindow()->viewManager()->inputManager();
+    KisMainWindow *mw = currentMainwindow();
+    KisViewManager *manager = mw ? mw->viewManager() : 0;
+    return manager ? manager->inputManager() : 0;
 }
 

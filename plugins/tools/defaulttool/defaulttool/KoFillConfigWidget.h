@@ -59,9 +59,6 @@ private Q_SLOTS:
     /// apply color changes to the selected shape
     void colorChanged();
 
-    /// the gradient of the fill changed, apply the changes
-    void gradientChanged(QSharedPointer<KoShapeBackground> background);
-
     /// the pattern of the fill changed, apply the changes
     void patternChanged(QSharedPointer<KoShapeBackground> background);
 
@@ -71,9 +68,17 @@ private Q_SLOTS:
 
     void slotCanvasResourceChanged(int key, const QVariant &value);
 
+    void slotSavePredefinedGradientClicked();
+
+    void activeGradientChanged();
+    void gradientResourceChanged();
 private:
     /// update the widget with the KoShape background
     void updateWidget(KoShape *shape);
+
+    void uploadNewGradientBackground(QSharedPointer<KoShapeBackground> newBackground);
+    void setNewGradientBackgroundToShape();
+    void updateGradientSaveButtonAvailability();
 
     class Private;
     Private * const d;

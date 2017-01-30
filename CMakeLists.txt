@@ -141,9 +141,6 @@ set(KRITA_BROKEN_TESTS "" CACHE INTERNAL "KRITA_BROKEN_TESTS")
 
 include(FeatureSummary)
 
-option(PACKAGERS_BUILD "Build support of multiple CPU architectures in one binary. Should be used by packagers only or Krita developers. Only switch off when you're an artist optimizing a build for your very own machine." ON)
-add_feature_info("Packagers' Build" PACKAGERS_BUILD "Support several CPU arch in one binary. Recommended for packages. Switch this off to make a build for only your machine.")
-
 if (WIN32)
     option(USE_DRMINGW "Support the Dr. Mingw crash handler (only on windows)" ON)
     add_feature_info("Dr. Mingw" USE_DRMINGW "Enable the Dr. Mingw crash handler")
@@ -525,7 +522,6 @@ if( NOT MSVC)
         TYPE OPTIONAL
         PURPOSE "Required by the Krita for vectorization")
     macro_bool_to_01(Vc_FOUND HAVE_VC)
-    macro_bool_to_01(PACKAGERS_BUILD DO_PACKAGERS_BUILD)
 endif()
 configure_file(config-vc.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-vc.h )
 
@@ -551,25 +547,12 @@ if(HAVE_VC)
     endif()
 
     macro(ko_compile_for_all_implementations_no_scalar _objs _src)
-    if(PACKAGERS_BUILD)
         vc_compile_for_all_implementations(${_objs} ${_src} FLAGS ${ADDITIONAL_VC_FLAGS} ONLY SSE2 SSSE3 SSE4_1 AVX AVX2+FMA+BMI2)
-    else()
-        set(${_objs} ${_src})
-    endif()
     endmacro()
 
     macro(ko_compile_for_all_implementations _objs _src)
-    if(PACKAGERS_BUILD)
         vc_compile_for_all_implementations(${_objs} ${_src} FLAGS ${ADDITIONAL_VC_FLAGS} ONLY Scalar SSE2 SSSE3 SSE4_1 AVX AVX2+FMA+BMI2)
-    else()
-        set(${_objs} ${_src})
-    endif()
     endmacro()
-
-    if (NOT PACKAGERS_BUILD)
-        # Optimize everything for the current architecture
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Vc_DEFINITIONS}")
-    endif ()
 endif()
 set(CMAKE_MODULE_PATH ${OLD_CMAKE_MODULE_PATH} )
 

@@ -29,8 +29,6 @@ There are four forks of 3rd party libraries that are relevant and cannot be repl
 
 == Build flags ==
 
-Packagers must build krita with the PACKAGERS_BUILD flag enabled. This makes sure that object files for all SIMD vectorization extensions krita supports are built. The right one is then selected run-time. 
-
 Krita no longer supports a build without OpenGL.
 
 For alpha and beta packages, please build with debug output enabled, but for production packages the -DCMAKE_CXX_FLAGS="-DKDE_NO_DEBUG_OUTPUT" is recommended. A significant performance increase will be the result.

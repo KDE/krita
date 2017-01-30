@@ -86,12 +86,14 @@ void KoFileDialog::setCaption(const QString &caption)
 
 void KoFileDialog::setDefaultDir(const QString &defaultDir)
 {
-    //qDebug() << d->defaultDirectory << d->dialogName << getUsedDir(d->dialogName);
+    qDebug() << d->defaultDirectory << d->dialogName << getUsedDir(d->dialogName);
     if (d->defaultDirectory.isEmpty()) {
         QFileInfo f(defaultDir);
         d->defaultDirectory = f.absoluteFilePath();
     }
-    d->proposedFileName = QFileInfo(defaultDir).fileName();
+    if (!QFileInfo(defaultDir).isDir()) {
+        d->proposedFileName = QFileInfo(defaultDir).fileName();
+    }
 }
 
 void KoFileDialog::setImageFilters()
@@ -129,7 +131,11 @@ QString KoFileDialog::selectedMimeType() const
 
 void KoFileDialog::createFileDialog()
 {
-    //qDebug() << "createFileDialog. Parent:" << d->parent << "Caption:" << d->caption << "Default directory:" << d->defaultDirectory << "proposed filename" << d->proposedFileName << "Default filter:" << d->defaultFilter;
+    qDebug() << "createFileDialog. Parent:" << d->parent
+             << "Caption:" << d->caption
+             << "Default directory:" << d->defaultDirectory
+             << "proposed filename" << d->proposedFileName
+             << "Default filter:" << d->defaultFilter;
 
     d->fileDialog.reset(new QFileDialog(d->parent, d->caption, d->defaultDirectory + "/" + d->proposedFileName));
     KConfigGroup group = KSharedConfig::openConfig()->group("File Dialogs");
@@ -187,11 +193,11 @@ void KoFileDialog::createFileDialog()
     d->fileDialog->setNameFilters(d->filterList);
 
     if (!d->proposedFileName.isEmpty()) {
-        //qDebug() << "Finding the right mimetype for the given file" << d->defaultDirectory;
+        qDebug() << "Finding the right mimetype for the given file" << d->defaultDirectory;
         QString mime = KisMimeDatabase::mimeTypeForFile(d->proposedFileName);
         QString description = KisMimeDatabase::descriptionForMimeType(mime);
         Q_FOREACH(const QString &filter, d->filterList) {
-            //qDebug() << "\tConsidering" << filter;
+            qDebug() << "\tConsidering" << filter;
             if (filter.startsWith(description)) {
                 d->fileDialog->selectNameFilter(filter);
                 break;

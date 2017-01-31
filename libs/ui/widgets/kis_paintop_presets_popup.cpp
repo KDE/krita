@@ -232,9 +232,6 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
     connect(m_d->uiWdgPaintOpPresetSettings.presetWidget->smallPresetChooser, SIGNAL(resourceSelected(KoResource*)),
             this, SIGNAL(signalResourceSelected(KoResource*)));
 
-    connect(m_d->uiWdgPaintOpPresetSettings.presetWidget->smallPresetChooser, SIGNAL(resourceClicked(KoResource*)),
-            this, SIGNAL(paintopActivated(currentPaintOpId())));
-
     connect(m_d->uiWdgPaintOpPresetSettings.bnSave, SIGNAL(clicked()),
             m_d->uiWdgPaintOpPresetSettings.presetWidget->smallPresetChooser, SLOT(updateViewSettings()));
 
@@ -253,9 +250,6 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
     m_d->uiWdgPaintOpPresetSettings.eraserBrushOpacityCheckBox->setChecked(cfg.useEraserBrushOpacity());
 
     m_d->uiWdgPaintOpPresetSettings.wdgLodAvailability->setCanvasResourceManager(resourceProvider->resourceManager());
-
-    // brush engine is changed
-   connect(m_d->uiWdgPaintOpPresetSettings.brushEgineComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(slotPaintOpChanged(int)));
 
     connect(resourceProvider->resourceManager(),
             SIGNAL(canvasResourceChanged(int,QVariant)),

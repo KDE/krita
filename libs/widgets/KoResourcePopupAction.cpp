@@ -134,6 +134,14 @@ void KoResourcePopupAction::setCurrentResource(KoResource *resource)
     }
 }
 
+KoResource* KoResourcePopupAction::currentResource() const
+{
+    QModelIndex index = d->resourceList->currentIndex();
+    if (!index.isValid()) return 0;
+
+    return static_cast<KoResource*>(index.internalPointer());
+}
+
 void KoResourcePopupAction::indexChanged(const QModelIndex &modelIndex)
 {
     if (! modelIndex.isValid()) {

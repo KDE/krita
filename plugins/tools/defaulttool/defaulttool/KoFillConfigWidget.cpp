@@ -62,6 +62,7 @@
 #include <kis_acyclic_signal_connector.h>
 #include <kis_assert.h>
 #include <KoCanvasResourceManager.h>
+#include "kis_canvas_resource_provider.h"
 #include <KoStopGradient.h>
 #include <QInputDialog>
 
@@ -353,6 +354,13 @@ void KoFillConfigWidget::slotCanvasResourceChanged(int key, const QVariant &valu
             d->colorChangedCompressor.start();
         } else if (checkedId == Gradient) {
             d->ui->wdgGradientEditor->notifyGlobalColorChanged(color);
+        }
+    } else if (key == KisCanvasResourceProvider::CurrentGradient) {
+        KoResource *gradient = value.value<KoAbstractGradient*>();
+        const int checkedId = d->group->checkedId();
+
+        if (gradient && (checkedId < 0 || checkedId == None || checkedId == Gradient)) {
+            d->gradientAction->setCurrentResource(gradient);
         }
     }
 }

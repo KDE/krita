@@ -53,6 +53,7 @@ public:
     void setCurrentBackground(QSharedPointer<KoShapeBackground> background);
 
     void setCurrentResource(KoResource *resource);
+    KoResource *currentResource() const;
 
 Q_SIGNALS:
     /// Emitted when a resource was selected

@@ -99,6 +99,8 @@ namespace KoFlake
     /// clones the given gradient
     KRITAFLAKE_EXPORT QGradient *cloneGradient(const QGradient *gradient);
 
+    KRITAFLAKE_EXPORT QGradient *mergeGradient(const QGradient *coordsSource, const QGradient *fillSource);
+
     /**
      * Convert absolute to relative position
      *

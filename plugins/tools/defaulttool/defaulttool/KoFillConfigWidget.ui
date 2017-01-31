@@ -239,7 +239,7 @@
           </widget>
          </item>
          <item row="0" column="1">
-          <widget class="QComboBox" name="comboBox">
+          <widget class="QComboBox" name="cmbGradientType">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -266,7 +266,7 @@
           </widget>
          </item>
          <item row="1" column="1">
-          <widget class="QComboBox" name="comboBox_2">
+          <widget class="QComboBox" name="cmbGradientRepeat">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -280,12 +280,12 @@
            </item>
            <item>
             <property name="text">
-             <string>Reflect</string>
+             <string>Repeat</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>Repeat</string>
+             <string>Reflect</string>
             </property>
            </item>
           </widget>

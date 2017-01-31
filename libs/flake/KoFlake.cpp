@@ -25,6 +25,7 @@
 
 #include <QGradient>
 #include <math.h>
+#include "kis_global.h"
 
 QGradient *KoFlake::cloneGradient(const QGradient *gradient)
 {
@@ -59,6 +60,67 @@ QGradient *KoFlake::cloneGradient(const QGradient *gradient)
     clone->setCoordinateMode(gradient->coordinateMode());
     clone->setSpread(gradient->spread());
     clone->setStops(gradient->stops());
+
+    return clone;
+}
+
+QGradient *KoFlake::mergeGradient(const QGradient *coordsSource, const QGradient *fillSource)
+{
+    QPointF start;
+    QPointF end;
+    QPointF focalPoint;
+
+    switch (coordsSource->type()) {
+    case QGradient::LinearGradient: {
+        const QLinearGradient *lg = static_cast<const QLinearGradient*>(coordsSource);
+        start = lg->start();
+        focalPoint = start;
+        end = lg->finalStop();
+        break;
+    }
+    case QGradient::RadialGradient: {
+        const QRadialGradient *rg = static_cast<const QRadialGradient*>(coordsSource);
+        start = rg->center();
+        end = start + QPointF(rg->radius(), 0);
+        focalPoint = rg->focalPoint();
+        break;
+    }
+    case QGradient::ConicalGradient: {
+        const QConicalGradient *cg = static_cast<const QConicalGradient*>(coordsSource);
+
+        start = cg->center();
+        focalPoint = start;
+
+        QLineF l (start, start + QPointF(1.0, 0));
+        l.setAngle(cg->angle());
+        end = l.p2();
+        break;
+    }
+    default:
+        return 0;
+    }
+
+    QGradient *clone = 0;
+
+    switch (fillSource->type()) {
+    case QGradient::LinearGradient:
+        clone = new QLinearGradient(start, end);
+        break;
+    case QGradient::RadialGradient:
+        clone = new QRadialGradient(start, kisDistance(start, end), focalPoint);
+        break;
+    case QGradient::ConicalGradient: {
+        QLineF l(start, end);
+        clone = new QConicalGradient(l.p1(), l.angle());
+        break;
+    }
+    default:
+        return 0;
+    }
+
+    clone->setCoordinateMode(fillSource->coordinateMode());
+    clone->setSpread(fillSource->spread());
+    clone->setStops(fillSource->stops());
 
     return clone;
 }

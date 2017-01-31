@@ -127,6 +127,9 @@ QGradient* KoStopGradient::toQGradient() const
         i->second.toQColor(&color);
         gradient->setColorAt(i->first , color);
     }
+
+    gradient->setCoordinateMode(QGradient::ObjectBoundingMode);
+
     return gradient;
 }
 

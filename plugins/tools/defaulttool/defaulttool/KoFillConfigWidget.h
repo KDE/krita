@@ -72,6 +72,10 @@ private Q_SLOTS:
 
     void activeGradientChanged();
     void gradientResourceChanged();
+
+    void slotGradientTypeChanged();
+    void slotGradientRepeatChanged();
+
 private:
     /// update the widget with the KoShape background
     void updateWidget(KoShape *shape);

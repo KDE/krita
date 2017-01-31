@@ -62,7 +62,7 @@
 #include <kis_acyclic_signal_connector.h>
 #include <kis_assert.h>
 #include <KoCanvasResourceManager.h>
-
+#include <KoStopGradient.h>
 
 #include "kis_debug.h"
 
@@ -179,9 +179,12 @@ public:
     {
     }
 
-    QSharedPointer<KoShapeBackground> applyFillGradientStops(KoShape *shape, const QGradientStops &stops)
+    QSharedPointer<KoShapeBackground> applyFillGradientStops(KoShape *shape, const KoStopGradient *stopGradient)
     {
-        if (! shape || ! stops.count()) {
+        QScopedPointer<QGradient> srcQGradient(stopGradient->toQGradient());
+        QGradientStops stops = srcQGradient->stops();
+
+        if (!shape || !stops.count()) {
             return QSharedPointer<KoShapeBackground>();
         }
 
@@ -189,16 +192,16 @@ public:
         QSharedPointer<KoGradientBackground> oldGradient = qSharedPointerDynamicCast<KoGradientBackground>(shape->background());
         if (oldGradient) {
             // just copy the gradient and set the new stops
-            QGradient *g = KoFlake::cloneGradient(oldGradient->gradient());
-            g->setStops(stops);
+            QGradient *g = KoFlake::mergeGradient(oldGradient->gradient(), srcQGradient.data());
             newGradient = new KoGradientBackground(g);
             newGradient->setTransform(oldGradient->transform());
         }
         else {
             // No gradient yet, so create a new one.
-            QLinearGradient *g = new QLinearGradient(QPointF(0, 0), QPointF(1, 1));
-            g->setCoordinateMode(QGradient::ObjectBoundingMode);
-            g->setStops(stops);
+            QScopedPointer<QLinearGradient> fakeShapeGradient(new QLinearGradient(QPointF(0, 0), QPointF(1, 1)));
+            fakeShapeGradient->setCoordinateMode(QGradient::ObjectBoundingMode);
+
+            QGradient *g = KoFlake::mergeGradient(fakeShapeGradient.data(), srcQGradient.data());
             newGradient = new KoGradientBackground(g);
         }
         return QSharedPointer<KoGradientBackground>(newGradient);
@@ -304,7 +307,8 @@ KoFillConfigWidget::KoFillConfigWidget(QWidget *parent)
     d->ui->btnSaveGradient->setIcon(KisIconUtils::loadIcon("document-save"));
     connect(d->ui->btnSaveGradient, SIGNAL(clicked()), SLOT(slotSavePredefinedGradientClicked()));
 
-
+    connect(d->ui->cmbGradientRepeat, SIGNAL(currentIndexChanged(int)), SLOT(slotGradientRepeatChanged()));
+    connect(d->ui->cmbGradientType, SIGNAL(currentIndexChanged(int)), SLOT(slotGradientTypeChanged()));
 
 #if 0
 
@@ -428,6 +432,25 @@ void KoFillConfigWidget::gradientResourceChanged()
     updateGradientSaveButtonAvailability();
 }
 
+void KoFillConfigWidget::slotGradientTypeChanged()
+{
+    QGradient::Type type =
+        d->ui->cmbGradientType->currentIndex() == 0 ?
+            QGradient::LinearGradient : QGradient::RadialGradient;
+
+    d->activeGradient->setType(type);
+    activeGradientChanged();
+}
+
+void KoFillConfigWidget::slotGradientRepeatChanged()
+{
+    QGradient::Spread spread =
+        QGradient::Spread(d->ui->cmbGradientRepeat->currentIndex());
+
+    d->activeGradient->setSpread(spread);
+    activeGradientChanged();
+}
+
 void KoFillConfigWidget::uploadNewGradientBackground(QSharedPointer<KoShapeBackground> newBackground)
 {
     QSharedPointer<KoGradientBackground> gradientBackground =
@@ -452,11 +475,10 @@ void KoFillConfigWidget::setNewGradientBackgroundToShape()
 
     KisAcyclicSignalConnector::Blocker b(d->shapeChangedAcyclicConnector);
 
-    QGradientStops newStops = d->activeGradient->toQGradient()->stops();
     QList<QSharedPointer<KoShapeBackground>> newBackgrounds;
 
     foreach (KoShape *shape, selectedShapes) {
-        newBackgrounds <<  d->applyFillGradientStops(shape, newStops);
+        newBackgrounds <<  d->applyFillGradientStops(shape, d->activeGradient.data());
     }
 
     KUndo2Command *cmd = new KoShapeBackgroundCommand(selectedShapes, newBackgrounds);

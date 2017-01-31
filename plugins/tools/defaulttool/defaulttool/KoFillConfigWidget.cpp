@@ -63,6 +63,7 @@
 #include <kis_assert.h>
 #include <KoCanvasResourceManager.h>
 #include <KoStopGradient.h>
+#include <QInputDialog>
 
 #include "kis_debug.h"
 
@@ -413,9 +414,48 @@ void KoFillConfigWidget::colorChanged()
     canvasController->canvas()->addCommand(cmd);
 }
 
+template <class ResourceServer>
+QString findFirstAvailableResourceName(const QString &baseName, ResourceServer *server)
+{
+    if (!server->resourceByName(baseName)) return baseName;
+
+    int counter = 1;
+    QString result;
+    while ((result = QString("%1%2").arg(baseName).arg(counter)),
+           server->resourceByName(result)) {
+
+        counter++;
+    }
+
+    return result;
+}
+
+
 void KoFillConfigWidget::slotSavePredefinedGradientClicked()
 {
-    ENTER_FUNCTION() << "WARNING: Saving of the gradients is not implemented yet!";
+    KoResourceServerProvider *serverProvider = KoResourceServerProvider::instance();
+    auto server = serverProvider->gradientServer();
+
+    const QString defaultGradientNamePrefix = i18nc("default prefix for the saved gradient", "gradient");
+
+    QString name = d->activeGradient->name().isEmpty() ? defaultGradientNamePrefix : d->activeGradient->name();
+    name = findFirstAvailableResourceName(name, server);
+    name = QInputDialog::getText(this, i18nc("@title:window", "Save Gradient"), i18n("Enter gradient name:"), QLineEdit::Normal, name);
+
+    // TODO: currently we do not allow the user to
+    //       create two resources with the same name!
+    //       Please add some feedback for it!
+    name = findFirstAvailableResourceName(name, server);
+
+    d->activeGradient->setName(name);
+
+    const QString saveLocation = server->saveLocation();
+    d->activeGradient->setFilename(saveLocation + d->activeGradient->name() + d->activeGradient->defaultFileExtension());
+
+    KoAbstractGradient *newGradient = d->activeGradient->clone();
+    server->addResource(newGradient);
+
+    d->gradientAction->setCurrentResource(newGradient);
 }
 
 void KoFillConfigWidget::activeGradientChanged()
@@ -458,11 +498,17 @@ void KoFillConfigWidget::uploadNewGradientBackground(QSharedPointer<KoShapeBackg
     if (!gradientBackground) return;
 
     {
-        KisSignalsBlocker b1(d->ui->wdgGradientEditor);
+        KisSignalsBlocker b1(d->ui->wdgGradientEditor,
+                             d->ui->cmbGradientType,
+                             d->ui->cmbGradientRepeat);
 
         d->ui->wdgGradientEditor->setGradient(0);
+
         d->activeGradient.reset(KoStopGradient::fromQGradient(gradientBackground->gradient()));
+
         d->ui->wdgGradientEditor->setGradient(d->activeGradient.data());
+        d->ui->cmbGradientType->setCurrentIndex(d->activeGradient->type() != QGradient::LinearGradient);
+        d->ui->cmbGradientRepeat->setCurrentIndex(int(d->activeGradient->spread()));
     }
 }
 
@@ -498,6 +544,8 @@ void KoFillConfigWidget::updateGradientSaveButtonAvailability()
             qSharedPointerDynamicCast<KoGradientBackground>(bg);
 
         savingEnabled = resourceBackground->gradient()->stops() != currentGradient->stops();
+        savingEnabled |= resourceBackground->gradient()->type() != currentGradient->type();
+        savingEnabled |= resourceBackground->gradient()->spread() != currentGradient->spread();
     }
 
     d->ui->btnSaveGradient->setEnabled(savingEnabled);

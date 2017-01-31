@@ -45,10 +45,11 @@
 class KoResourcePopupAction::Private
 {
 public:
-    QMenu *menu {0};
-    KoResourceItemView *resourceList {0};
+    QMenu *menu = 0;
+    KoResourceModel *model = 0;
+    KoResourceItemView *resourceList = 0;
     QSharedPointer<KoShapeBackground> background;
-    KoImageCollection *imageCollection {0};
+    KoImageCollection *imageCollection = 0;
     KoCheckerBoardPainter checkerPainter {4};
 };
 
@@ -64,8 +65,8 @@ KoResourcePopupAction::KoResourcePopupAction(QSharedPointer<KoAbstractResourceSe
 
     d->resourceList = new KoResourceItemView(widget);
 
-    KoResourceModel *model = new KoResourceModel(resourceAdapter, widget);
-    d->resourceList->setModel(model);
+    d->model = new KoResourceModel(resourceAdapter, widget);
+    d->resourceList->setModel(d->model);
     d->resourceList->setItemDelegate(new KoResourceItemDelegate(widget));
     KoResourceModel * resourceModel = qobject_cast<KoResourceModel*>(d->resourceList->model());
     if (resourceModel) {
@@ -76,7 +77,7 @@ KoResourcePopupAction::KoResourcePopupAction(QSharedPointer<KoAbstractResourceSe
     QList<KoResource*> resources = resourceAdapter->resources();
     if (resources.count() > 0) {
         resource = resources.at(0);
-        d->resourceList->setCurrentIndex(model->indexFromResource(resource));
+        d->resourceList->setCurrentIndex(d->model->indexFromResource(resource));
         indexChanged(d->resourceList->currentIndex());
     }
 
@@ -122,6 +123,15 @@ void KoResourcePopupAction::setCurrentBackground(QSharedPointer<KoShapeBackgroun
     d->background = background;
 
     updateIcon();
+}
+
+void KoResourcePopupAction::setCurrentResource(KoResource *resource)
+{
+    QModelIndex index = d->model->indexFromResource(resource);
+    if (index.isValid()) {
+        d->resourceList->setCurrentIndex(index);
+        indexChanged(index);
+    }
 }
 
 void KoResourcePopupAction::indexChanged(const QModelIndex &modelIndex)

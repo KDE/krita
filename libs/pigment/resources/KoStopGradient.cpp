@@ -129,6 +129,7 @@ QGradient* KoStopGradient::toQGradient() const
     }
 
     gradient->setCoordinateMode(QGradient::ObjectBoundingMode);
+    gradient->setSpread(this->spread());
 
     return gradient;
 }
@@ -250,6 +251,8 @@ KoStopGradient * KoStopGradient::fromQGradient(const QGradient * gradient)
         color.fromQColor(stop.second);
         newGradient->m_stops.append(KoGradientStop(stop.first, color));
     }
+
+    newGradient->setValid(true);
 
     return newGradient;
 }

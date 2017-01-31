@@ -30,6 +30,7 @@
 class KoShapeBackground;
 class KoAbstractResourceServerAdapter;
 class QModelIndex;
+class KoResource;
 
 class KRITAWIDGETS_EXPORT KoResourcePopupAction : public QAction
 {
@@ -50,6 +51,8 @@ public:
 
     QSharedPointer<KoShapeBackground> currentBackground() const;
     void setCurrentBackground(QSharedPointer<KoShapeBackground> background);
+
+    void setCurrentResource(KoResource *resource);
 
 Q_SIGNALS:
     /// Emitted when a resource was selected

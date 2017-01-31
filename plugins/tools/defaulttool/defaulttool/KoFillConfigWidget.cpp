@@ -351,6 +351,8 @@ void KoFillConfigWidget::slotCanvasResourceChanged(int key, const QVariant &valu
             d->ui->stackWidget->setCurrentIndex(Solid);
             d->colorAction->setCurrentColor(color);
             d->colorChangedCompressor.start();
+        } else if (checkedId == Gradient) {
+            d->ui->wdgGradientEditor->notifyGlobalColorChanged(color);
         }
     }
 }

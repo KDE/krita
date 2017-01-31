@@ -37,6 +37,8 @@ public:
 
     void setGradient(KoStopGradient* gradient);
 
+    void notifyGlobalColorChanged(const KoColor &color);
+
 Q_SIGNALS:
     void sigGradientChanged();
 

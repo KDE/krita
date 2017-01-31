@@ -92,6 +92,15 @@ void KisStopGradientEditor::setGradient(KoStopGradient *gradient)
     emit sigGradientChanged();
 }
 
+void KisStopGradientEditor::notifyGlobalColorChanged(const KoColor &color)
+{
+    if (colorButton->isEnabled() &&
+        color != colorButton->color()) {
+
+        colorButton->setColor(color);
+    }
+}
+
 void KisStopGradientEditor::stopChanged(int stop)
 {
     const bool hasStopSelected = stop >= 0;

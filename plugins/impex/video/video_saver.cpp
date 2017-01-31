@@ -253,7 +253,7 @@ KisImageBuilder_Result VideoSaver::encode(const QString &filename, KisProperties
         {
             QStringList args;
             args << "-r" << QString::number(frameRate)
-                 << "-pattern_type" << "glob"
+                 << "-start_number" << QString::number(clipRange.start())
                  << "-i" << savedFilesMask
                  << "-vf" << "palettegen"
                  << "-y" << palettePath;
@@ -261,7 +261,7 @@ KisImageBuilder_Result VideoSaver::encode(const QString &filename, KisProperties
             KisImageBuilder_Result result =
                 m_runner->runFFMpeg(args, i18n("Fetching palette..."),
                                     framesDir.filePath("log_generate_palette_gif.log"),
-                                    clipRange.duration() + clipRange.start());
+                                    clipRange.duration());
 
             if (result != KisImageBuilder_RESULT_OK) {
                 return result;
@@ -271,19 +271,19 @@ KisImageBuilder_Result VideoSaver::encode(const QString &filename, KisProperties
         {
             QStringList args;
             args << "-r" << QString::number(frameRate)
-                 << "-pattern_type" << "glob"
+                 << "-start_number" << QString::number(clipRange.start())
                  << "-i" << savedFilesMask
                  << "-i" << palettePath
                  << "-lavfi" << "[0:v][1:v] paletteuse"
                  << additionalOptionsList
                  << "-y" << resultFile;
 
-            dbgFile << "savedFilesMask" << savedFilesMask << "start" << clipRange.start() << "duration" << clipRange.duration();
+            dbgFile << "savedFilesMask" << savedFilesMask << "start" << QString::number(clipRange.start()) << "duration" << clipRange.duration();
 
             KisImageBuilder_Result result =
                 m_runner->runFFMpeg(args, i18n("Encoding frames..."),
                                     framesDir.filePath("log_encode_gif.log"),
-                                    clipRange.duration() + clipRange.start());
+                                    clipRange.duration());
 
             if (result != KisImageBuilder_RESULT_OK) {
                 return result;
@@ -291,9 +291,9 @@ KisImageBuilder_Result VideoSaver::encode(const QString &filename, KisProperties
         }
     } else {
         QStringList args;
-        args << "-r" << QString::number(frameRate);
-        args << "-pattern_type" << "glob";
-        args << "-i" << savedFilesMask;
+        args << "-r" << QString::number(frameRate)
+             << "-start_number" << QString::number(clipRange.start())
+             << "-i" << savedFilesMask;
 
 
         QFileInfo audioFileInfo = animation->audioChannelFileName();
@@ -316,7 +316,7 @@ KisImageBuilder_Result VideoSaver::encode(const QString &filename, KisProperties
 
         result = m_runner->runFFMpeg(args, i18n("Encoding frames..."),
                                      framesDir.filePath("log_encode.log"),
-                                     clipRange.duration() + clipRange.start());
+                                     clipRange.duration());
     }
 
     return result;

@@ -7,7 +7,7 @@ class Window : QObject
 public Q_SLOTS:
     QMainWindow *qwindow() const;
     QList<View *> views() const /Factory/;
-    void addView(Document *document);
+    View *addView(Document *document)  /Factory/;
     void showView(View *view);
     void activate();
     void close();

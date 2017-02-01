@@ -26,9 +26,6 @@ public Q_SLOTS:
     Window * activeWindow() const /Factory/;
     QList<Window *> windows() const /Factory/;
     QList<Resource *> resources() const /Factory/;
-    void setResources(QList<Resource *> value);
-
-    void addDockWidget(DockWidget*  dockWidget);
     bool closeApplication();
     Document * createDocument(int width, int height, const QString &name, const QString &colorModel, const QString &colorDepth, const QString &profile)  /Factory/;
     Document * openDocument(const QString &filename)  /Factory/;

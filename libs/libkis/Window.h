@@ -45,7 +45,7 @@ public Q_SLOTS:
     QMainWindow *qwindow() const;
 
     QList<View*> views() const;
-    void addView(Document *document);
+    View *addView(Document *document);
     void showView(View *view);
 
     /**

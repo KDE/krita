@@ -181,10 +181,6 @@ public Q_SLOTS:
     QList<Window *> windows() const;
 
     QList<Resource*> resources() const;
-    void setResources(QList<Resource*> value);
-
-
-    void addDockWidget(DockWidget *dockWidget);
 
     bool closeApplication();
 

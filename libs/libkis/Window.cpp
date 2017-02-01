@@ -63,7 +63,7 @@ QList<View*> Window::views() const
 
 }
 
-void Window::addView(Document *document)
+View *Window::addView(Document *document)
 {
     if (d->window) {
         KisView *view = KisPart::instance()->createView(document->document(),
@@ -71,8 +71,9 @@ void Window::addView(Document *document)
                                                     d->window->actionCollection(),
                                                     d->window);
         d->window->addView(view);
+        return new View(view);
     }
-
+    return 0;
 }
 
 void Window::showView(View *view)

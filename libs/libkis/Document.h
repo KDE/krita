@@ -26,7 +26,8 @@
 class KisDocument;
 
 /**
- * Document
+ * The Document class encapsulates a Krita Document/Image. A Krita document is an Image with
+ * a filename.
  */
 class KRITALIBKIS_EXPORT Document : public QObject
 {
@@ -34,7 +35,7 @@ class KRITALIBKIS_EXPORT Document : public QObject
     Q_DISABLE_COPY(Document)
 
 public:
-    explicit Document(KisDocument *document, bool ownsDocument = false, QObject *parent = 0);
+    explicit Document(KisDocument *document, QObject *parent = 0);
     virtual ~Document();
 
 public Q_SLOTS:
@@ -42,8 +43,29 @@ public Q_SLOTS:
     bool batchmode() const;
     void setBatchmode(bool value);
 
+    /**
+     * @brief activeNode retrieve the node that is currently active in the currently active window
+     * @return the active node. If there is no active window, the first child node is returned.
+     */
     Node* activeNode() const;
+
+    /**
+     * @brief setActiveNode make the given node active in the currently active view and window
+     * @param value the node to make active.
+     */
     void setActiveNode(Node* value);
+
+    /**
+     * @brief toplevelNodels return a list with all top level nodes in the image graph
+     */
+    QList<Node*> toplevelNodes() const;
+
+    /**
+     * @brief nodeByName searches the node tree for a node with the given name and returns it
+     * @param name the name of the node
+     * @return the first node with the given name or 0 if no node is found
+     */
+    Node *nodeByName(const QString &name) const;
 
     /**
      * colorDepth A string describing the color depth of the image:
@@ -141,6 +163,11 @@ public Q_SLOTS:
      */
     void setResolution(int value);
 
+    /**
+     * @brief rootNode the root node is the invisible group layer that contains the entire node
+     * hierarchy.
+     * @return the root of the image
+     */
     Node* rootNode() const;
 
     /**
@@ -204,6 +231,12 @@ public Q_SLOTS:
      */
     QByteArray pixelData(int x, int y, int w, int h) const;
 
+    /**
+     * @brief close Close the document: remove it from Krita's internal list of documents and
+     * close all views. If the document is modified, you should save it first. There will be
+     * no prompt for saving.
+     * @return true if the document is closed.
+     */
     bool close();
 
     void crop(int x, int y, int w, int h);
@@ -252,13 +285,6 @@ public Q_SLOTS:
      * @return the new Node.
      */
     Node* createNode(const QString &name, const QString &nodeType);
-
-    /**
-     * @brief mergeDown merges the given node with the first visible node underneath this node in the layerstack
-     * @param node the node to merge down; this node will be removed from the layer stack
-     * @return the merged node
-     */
-    Node *mergeDown(Node *node);
 
 Q_SIGNALS:
 

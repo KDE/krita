@@ -53,6 +53,7 @@ public Q_SLOTS:
     void remove();
     Node *duplicate();
     void save(const QString &filename, double xRes, double yRes);
+    Node *mergeDown()  /Factory/;
 Q_SIGNALS:
 private:
 };

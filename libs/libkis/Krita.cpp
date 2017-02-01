@@ -248,16 +248,6 @@ QList<Resource *> Krita::resources() const
     return QList<Resource *> ();
 }
 
-void Krita::setResources(QList<Resource *> value)
-{
-    // UNIMPLEMENTED
-}
-
-void Krita::addDockWidget(DockWidget *dockWidget)
-{
-    // UNIMPLEMENTED
-}
-
 bool Krita::closeApplication()
 {
     qDebug() << "closeApplication called";
@@ -283,7 +273,7 @@ Document* Krita::createDocument(int width, int height, const QString &name, cons
     Q_ASSERT(document->image());
     qDebug() << document->image()->objectName();
 
-    return new Document(document, true);
+    return new Document(document);
 }
 
 Document* Krita::openDocument(const QString &filename)

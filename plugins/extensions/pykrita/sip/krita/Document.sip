@@ -5,8 +5,10 @@ class Document : QObject /NoDefaultCtors/
 %End
     Document(const Document & __0);
 public Q_SLOTS:
-    Node * activeNode() const;
+    Node * activeNode() const  /Factory/;
     void setActiveNode(Node*  value);
+    QList<Node*> toplevelNodes() const  /Factory/;
+    Node *nodeByName(const QString &node) const  /Factory/;
     bool batchmode() const;
     void setBatchmode(bool value);
     QString colorDepth() const;
@@ -24,8 +26,8 @@ public Q_SLOTS:
     void setName(QString value);
     int resolution() const;
     void setResolution(int value);
-    Node * rootNode() const;
-    Selection * selection() const;
+    Node * rootNode() const  /Factory/;
+    Selection * selection() const  /Factory/;
     void setSelection(Selection*  value);
     int width() const;
     void setWidth(int value);
@@ -43,8 +45,8 @@ public Q_SLOTS:
     bool save();
     bool saveAs(const QString & filename);
     void openView();
-    Node *createNode(const QString & name, const QString & nodeType);
-    Node *mergeDown(Node *node);
+    Node *createNode(const QString & name, const QString & nodeType)  /Factory/;
+
 Q_SIGNALS:
     void nodeCreated(Node *node);
 private:

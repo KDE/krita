@@ -59,25 +59,17 @@
 struct Document::Private {
     Private() {}
     QPointer<KisDocument> document;
-    bool ownsDocument {false};
 };
 
-Document::Document(KisDocument *document, bool ownsDocument, QObject *parent)
+Document::Document(KisDocument *document, QObject *parent)
     : QObject(parent)
     , d(new Private)
 {
     d->document = document;
-    d->ownsDocument = ownsDocument;
 }
 
 Document::~Document()
 {
-    qDebug() << "Document" << this << "deleted";
-    if (d->ownsDocument) {
-        KisPart::instance()->removeDocument(d->document);
-        delete d->document;
-    }
-
     delete d;
 }
 
@@ -120,6 +112,21 @@ void Document::setActiveNode(Node* value)
     if (!selectionAdapter) return;
     selectionAdapter->setActiveNode(value->node());
 
+}
+
+QList<Node *> Document::toplevelNodes() const
+{
+    if (!d->document) return QList<Node *>();
+    Node n(d->document->image(), d->document->image()->rootLayer());
+    return n.childNodes();
+}
+
+
+Node *Document::nodeByName(const QString &name) const
+{
+    if (!d->document) return 0;
+    KisNodeSP node = d->document->image()->rootLayer()->findChildByName(name);
+    return new Node(d->document->image(), node);
 }
 
 
@@ -343,14 +350,9 @@ QByteArray Document::pixelData(int x, int y, int w, int h) const
 
 bool Document::close()
 {
-    if (d->ownsDocument) {
-        KisPart::instance()->removeDocument(d->document);
-
-    }
+    KisPart::instance()->removeDocument(d->document);
     bool retval = d->document->closeUrl(false);
-    if (d->ownsDocument) {
-        delete d->document;
-    }
+    delete d->document;
     return retval;
 }
 
@@ -451,13 +453,6 @@ Node* Document::createNode(const QString &name, const QString &nodeType)
     }
 
     return node;
-}
-
-Node *Document::mergeDown(Node *node)
-{
-    if (!d->document) return 0;
-    // UNINMPLEMENTED
-    return 0;
 }
 
 QPointer<KisDocument> Document::document() const

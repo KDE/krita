@@ -29,6 +29,8 @@
 #include <kis_paint_layer.h>
 #include <kis_group_layer.h>
 #include <kis_layer.h>
+#include <kis_meta_data_merge_strategy.h>
+#include <metadata/kis_meta_data_merge_strategy_registry.h>
 
 #include "Krita.h"
 #include "Node.h"
@@ -442,6 +444,17 @@ bool Node::save(const QString &filename, double xRes, double yRes)
         qWarning() << doc->errorMessage();
     }
     return r;
+}
+
+Node *Node::mergeDown()
+{
+    if (!d->node) return 0;
+    if (!qobject_cast<KisLayer*>(d->node.data())) return 0;
+    if (!d->node->prevSibling()) return 0;
+    KisLayerSP layer = qobject_cast<KisLayer*>(d->node->prevSibling().data());
+    if (!layer) return 0;
+    d->image->mergeDown(qobject_cast<KisLayer*>(d->node.data()), KisMetaData::MergeStrategyRegistry::instance()->get("Drop"));
+    return new Node(d->image, layer);
 }
 
 KisPaintDeviceSP Node::paintDevice() const

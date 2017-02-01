@@ -35,7 +35,7 @@ x86_64-w64-mingw32.shared-cmake  --build . --target ext_poppler
 
 # build krita
 cd ../build
-x86_64-w64-mingw32.shared-cmake ../krita  -DDEFINE_NO_DEPRECATED=1 -DBUILD_TESTING=OFF -DKDE4_BUILD_TESTS=OFF -DPACKAGERS_BUILD=ON 
+x86_64-w64-mingw32.shared-cmake ../krita  -DDEFINE_NO_DEPRECATED=1 -DBUILD_TESTING=OFF -DKDE4_BUILD_TESTS=OFF 
 make -j4 install
 
 # to test, configure wine

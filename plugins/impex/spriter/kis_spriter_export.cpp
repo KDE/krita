@@ -93,13 +93,17 @@ bool KisSpriterExport::savePaintDevice(KisPaintDeviceSP dev, const QString &file
     return (res == KisImageBuilder_RESULT_OK);
 }
 
-void KisSpriterExport::parseFolder(KisGroupLayerSP parentGroup, const QString &folderName, const QString &basePath)
+void KisSpriterExport::parseFolder(KisGroupLayerSP parentGroup, const QString &folderName, const QString &basePath, int *folderId)
 {
 //    qDebug() << "parseFolder: parent" << parentGroup->name()
 //                << "folderName" << folderName
 //                << "basepath" << basePath;
 
-    static int folderId = 0;
+    int currentFolder=0;
+	if(folderId == 0)
+	{
+		folderId = &currentFolder;
+	}
     QString pathName;
     if (!folderName.isEmpty()) {
         pathName = folderName + "/";
@@ -108,13 +112,13 @@ void KisSpriterExport::parseFolder(KisGroupLayerSP parentGroup, const QString &f
     KisNodeSP child = parentGroup->lastChild();
     while (child) {
         if (child->visible() && child->inherits("KisGroupLayer")) {
-            parseFolder(qobject_cast<KisGroupLayer*>(child.data()), child->name().split(" ").first(), basePath + "/" + pathName);
+            parseFolder(qobject_cast<KisGroupLayer*>(child.data()), child->name().split(" ").first(), basePath + "/" + pathName, folderId);
         }
         child = child->prevSibling();
     }
 
     Folder folder;
-    folder.id = folderId;
+    folder.id = *folderId;
     folder.name = folderName;
     folder.groupName = parentGroup->name();
 
@@ -152,7 +156,7 @@ void KisSpriterExport::parseFolder(KisGroupLayerSP parentGroup, const QString &f
     if (folder.files.size() > 0) {
         //qDebug() << "Adding folder" << folder.id << folder.name << folder.groupName << folder.files.length();
         m_folders.append(folder);
-        folderId++;
+        (*folderId)++;
     }
 }
 
@@ -347,18 +351,18 @@ void KisSpriterExport::fillScml(QDomDocument &scml, const QString &entityName)
             fileElement.setAttribute("name", file.name);
             fileElement.setAttribute("width", QString::number(file.width, 'f', 2));
             fileElement.setAttribute("height", QString::number(file.height, 'f', 2));
-            qreal pivotX=0;
-            qreal pivotY=1;
-            Q_FOREACH(const SpriterObject &object, m_objects) {
-                if(file.id == object.fileId)
-                {
-                    pivotX = (0.0 -(object.fixLocalX / file.width));
-                    pivotY = (1.0 -(object.fixLocalY / file.height));
-                    break;
-                }
-            }
-            fileElement.setAttribute("pivot_x", QString::number(pivotX, 'f', 2));
-            fileElement.setAttribute("pivot_y", QString::number(pivotY, 'f', 2));
+            // qreal pivotX=0;
+            // qreal pivotY=1;
+            // Q_FOREACH(const SpriterObject &object, m_objects) {
+                // if(file.id == object.fileId)
+                // {
+                    // pivotX = (0.0 -(object.fixLocalX / file.width));
+                    // pivotY = (1.0 -(object.fixLocalY / file.height));
+                    // break;
+                // }
+            // }
+            // fileElement.setAttribute("pivot_x", QString::number(pivotX, 'f', 2));
+            // fileElement.setAttribute("pivot_y", QString::number(pivotY, 'f', 2));
         }
     }
 
@@ -439,8 +443,8 @@ void KisSpriterExport::fillScml(QDomDocument &scml, const QString &entityName)
         key.appendChild(objectEl);
         objectEl.setAttribute("folder", object.folderId);
         objectEl.setAttribute("file", object.fileId);
-        objectEl.setAttribute("x", "0");
-        objectEl.setAttribute("y", "0");
+        objectEl.setAttribute("x", object.fixLocalX);
+        objectEl.setAttribute("y", object.fixLocalY);
         objectEl.setAttribute("angle", QString::number(kisRadiansToDegrees(object.fixLocalAngle), 'f', 2));
         objectEl.setAttribute("scale_x", QString::number(object.fixLocalScaleX, 'f', 2));
         objectEl.setAttribute("scale_y", QString::number(object.fixLocalScaleY, 'f', 2));

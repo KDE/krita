@@ -44,7 +44,6 @@ public Q_SLOTS:
     void resizeImage(int w, int h);
     bool save();
     bool saveAs(const QString & filename);
-    void openView();
     Node *createNode(const QString & name, const QString & nodeType)  /Factory/;
 
 Q_SIGNALS:

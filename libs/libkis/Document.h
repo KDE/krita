@@ -251,8 +251,6 @@ public Q_SLOTS:
 
     bool saveAs(const QString &filename);
 
-    void openView();
-
     /**
      * @brief createNode create a new node of the given type. The node is not added
      * to the node hierarchy; you need to do that by finding the right parent node,

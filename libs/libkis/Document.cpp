@@ -405,11 +405,6 @@ bool Document::saveAs(const QString &filename)
     return d->document->saveAs(QUrl::fromLocalFile(filename));
 }
 
-void Document::openView()
-{
-    // UNIMPLEMENTED
-}
-
 Node* Document::createNode(const QString &name, const QString &nodeType)
 {
     if (!d->document) return 0;

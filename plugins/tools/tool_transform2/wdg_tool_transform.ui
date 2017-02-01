@@ -1344,11 +1344,7 @@
            </widget>
           </item>
           <item>
-<<<<<<< HEAD
            <spacer name="horizontalSpacer1">
-=======
-           <spacer name="horizontalSpacer">
->>>>>>> c5690b1... Basic implementation of the Scale Around Pivot Point
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
             </property>

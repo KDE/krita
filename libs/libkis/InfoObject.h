@@ -52,6 +52,7 @@ public Q_SLOTS:
 private:
 
     friend class Filter;
+    friend class Document;
     /**
      * @brief configuration gives access to the internal configuration object. Must
      * be used used internally in libkis

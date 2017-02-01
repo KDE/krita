@@ -368,7 +368,7 @@ void Document::crop(int x, int y, int w, int h)
 bool Document::exportImage(const QString &filename, const InfoObject &exportConfiguration)
 {
     if (!d->document) return false;
-    return d->document->exportDocument(QUrl::fromLocalFile(filename));
+    return d->document->exportDocument(QUrl::fromLocalFile(filename), exportConfiguration.configuration());
 }
 
 void Document::flatten()

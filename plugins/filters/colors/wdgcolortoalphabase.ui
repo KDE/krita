@@ -63,7 +63,7 @@
     </layout>
    </item>
    <item>
-    <widget class="KisVisualColorSelector" name="colorSelector" native="true">
+    <widget class="KoTriangleColorSelector" name="colorSelector" native="true">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
        <horstretch>0</horstretch>
@@ -192,9 +192,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KisVisualColorSelector</class>
+   <class>KoTriangleColorSelector</class>
    <extends>QWidget</extends>
-   <header>KisVisualColorSelector.h</header>
+   <header>KoTriangleColorSelector.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>

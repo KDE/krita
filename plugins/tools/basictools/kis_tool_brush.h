@@ -114,7 +114,7 @@ Q_SIGNALS:
     void stabilizeSensorsChanged();
 
 private:
-    void addSmoothingAction(int enumId, const QString &id, const QString &name, KActionCollection *globalCollection);
+    void addSmoothingAction(int enumId, const QString &id, const QString &name, const QIcon &icon, KActionCollection *globalCollection);
 
 private:
     QComboBox *m_cmbSmoothingType;

@@ -96,10 +96,13 @@ KisDlgFilter::KisDlgFilter(KisViewManager *view, KisNodeSP node, KisFilterManage
     KConfigGroup group( KSharedConfig::openConfig(), "filterdialog");
     d->uiFilterDialog.checkBoxPreview->setChecked(group.readEntry("showPreview", true));
 
+    restoreGeometry(KisConfig().readEntry("filterdialog/geometry", QByteArray()));
+
 }
 
 KisDlgFilter::~KisDlgFilter()
 {
+    KisConfig().writeEntry("filterdialog/geometry", saveGeometry());
     delete d;
 }
 
@@ -220,15 +223,15 @@ void KisDlgFilter::resizeEvent(QResizeEvent* event)
 {
     QDialog::resizeEvent(event);
 
-    // Workaround, after the initalisation don't center the dialog anymore
-    if(d->resizeCount < 2) {
-        QWidget* canvas = d->view->canvas();
-        QRect rect(canvas->mapToGlobal(canvas->geometry().topLeft()), size());
-        int deltaX = (canvas->geometry().width() - geometry().width())/2;
-        int deltaY = (canvas->geometry().height() - geometry().height())/2;
-        rect.translate(deltaX, deltaY);
-        setGeometry(rect);
+//    // Workaround, after the initalisation don't center the dialog anymore
+//    if(d->resizeCount < 2) {
+//        QWidget* canvas = d->view->canvas();
+//        QRect rect(canvas->mapToGlobal(canvas->geometry().topLeft()), size());
+//        int deltaX = (canvas->geometry().width() - geometry().width())/2;
+//        int deltaY = (canvas->geometry().height() - geometry().height())/2;
+//        rect.translate(deltaX, deltaY);
+//        setGeometry(rect);
 
-        d->resizeCount++;
-    }
+//        d->resizeCount++;
+//    }
 }

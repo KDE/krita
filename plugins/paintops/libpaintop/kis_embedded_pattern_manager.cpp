@@ -115,14 +115,7 @@ KoPattern* KisEmbeddedPatternManager::loadEmbeddedPattern(const KisPropertiesCon
 
     pattern = Private::tryLoadEmbeddedPattern(setting);
     if (pattern) {
-        KoPattern *existingPattern = Private::tryFetchPatternByMd5(pattern->md5());
-        if (existingPattern) {
-            delete pattern;
-            pattern = existingPattern;
-        }
-        else {
-            KoResourceServerProvider::instance()->patternServer()->addResource(pattern, false);
-        }
+        KoResourceServerProvider::instance()->patternServer()->addResource(pattern, false);
     }
 
 

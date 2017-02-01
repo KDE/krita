@@ -57,17 +57,9 @@ namespace Vc {
     };
 }
 
-#ifdef DO_PACKAGERS_BUILD
-#ifdef __GNUC__
-#warning "Packagers build is not available without the presence of Vc library. Disabling."
-#endif
-#undef DO_PACKAGERS_BUILD
-#endif
 
 #endif /* HAVE_VC */
 
-
-#ifdef DO_PACKAGERS_BUILD
 
 #include <QDebug>
 #include <ksharedconfig.h>
@@ -91,7 +83,7 @@ createOptimizedClass(typename FactoryType::ParamType param)
         qWarning() << "WARNING: vector instructions disabled by \'amdDisableVectorWorkaround\' option!";
         return FactoryType::template create<Vc::ScalarImpl>(param);
     }
-
+#ifdef HAVE_VC
     /**
      * We use SSE2, SSSE3, SSE4.1, AVX and AVX2.
      * The rest are integer and string instructions mostly.
@@ -109,24 +101,12 @@ createOptimizedClass(typename FactoryType::ParamType param)
     } else if (Vc::isImplementationSupported(Vc::SSE2Impl)) {
         return FactoryType::template create<Vc::SSE2Impl>(param);
     } else {
+#endif
         return FactoryType::template create<Vc::ScalarImpl>(param);
+#ifdef HAVE_VC
     }
+#endif
+
 }
-
-#else /* DO_PACKAGERS_BUILD */
-
-/**
- * When doing not a packager's build we have one architecture only,
- * so the factory methods are simplified
- */
-
-template<class FactoryType>
-typename FactoryType::ReturnType
-createOptimizedClass(typename FactoryType::ParamType param)
-{
-    return FactoryType::template create<Vc::CurrentImplementation::current()>(param);
-}
-
-#endif /* DO_PACKAGERS_BUILD */
 
 #endif /* __KOVCMULTIARCHBUILDSUPPORT_H */

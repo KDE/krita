@@ -388,7 +388,7 @@ void TimelineFramesView::slotZoomButtonChanged(qreal zoomLevel)
 void TimelineFramesView::slotColorLabelChanged(int label)
 {
     Q_FOREACH(QModelIndex index, selectedIndexes()) {
-        m_d->model->setData(index, label, TimelineFramesModel::ColorLabel);
+        m_d->model->setData(index, label, TimelineFramesModel::FrameColorLabelIndexRole);
     }
 
     KisImageConfig config;
@@ -861,10 +861,10 @@ void TimelineFramesView::mousePressEvent(QMouseEvent *event)
                 model()->data(index, TimelineFramesModel::SpecialKeyframeExists).toBool()) {
 
                 {
-                KisSignalsBlocker b(m_d->colorSelector);
-                QVariant colorLabel = index.data(TimelineFramesModel::ColorLabel);
-                int labelIndex = colorLabel.isValid() ? colorLabel.toInt() : 0;
-                m_d->colorSelector->setCurrentIndex(labelIndex);
+                    KisSignalsBlocker b(m_d->colorSelector);
+                    QVariant colorLabel = index.data(TimelineFramesModel::FrameColorLabelIndexRole);
+                    int labelIndex = colorLabel.isValid() ? colorLabel.toInt() : 0;
+                    m_d->colorSelector->setCurrentIndex(labelIndex);
                 }
 
                 m_d->frameEditingMenu->exec(event->globalPos());
@@ -876,7 +876,7 @@ void TimelineFramesView::mousePressEvent(QMouseEvent *event)
             bool haveFrames = false;
             Q_FOREACH(QModelIndex index, selectedIndexes()) {
                 haveFrames |= index.data(TimelineFramesModel::FrameExistsRole).toBool();
-                QVariant colorLabel = index.data(TimelineFramesModel::ColorLabel);
+                QVariant colorLabel = index.data(TimelineFramesModel::FrameColorLabelIndexRole);
                 if (colorLabel.isValid()) {
                     if (labelIndex == 0) {
                         labelIndex = colorLabel.toInt();

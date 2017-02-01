@@ -33,6 +33,10 @@
 #include <QAbstractItemDelegate>
 #include <klocalizedstring.h>
 
+#include <kconfig.h>
+#include <ksharedconfig.h>
+#include <kconfiggroup.h>
+
 #include <KoResourceItemChooser.h>
 
 #include <kis_icon.h>
@@ -105,7 +109,7 @@ KisPredefinedBrushChooser::KisPredefinedBrushChooser(QWidget *parent, const char
 
     setupUi(this);
 
-    brushSizeSpinBox->setRange(0, 1000, 2);
+    brushSizeSpinBox->setRange(0, KSharedConfig::openConfig()->group("").readEntry("maximumBrushSize", 1000), 2);
     brushSizeSpinBox->setValue(5);
     brushSizeSpinBox->setExponentRatio(3.0);
     brushSizeSpinBox->setSuffix(i18n(" px"));

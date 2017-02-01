@@ -17,7 +17,7 @@
  */
 #include "kis_dynaop_option.h"
 #include <klocalizedstring.h>
-
+#include <kis_config.h>
 #include <brushengine/kis_paintop_lod_limitations.h>
 
 #include "ui_wdgdynaoptions.h"
@@ -33,7 +33,7 @@ public:
         angleSlider->setSingleStep(1);
         angleSlider->setSuffix(QChar(Qt::Key_degree));
 
-        diameterDSSB->setRange(0, 1000, 0);
+        diameterDSSB->setRange(0, KisConfig().readEntry("maximumBrushSize", 1000), 0);
         diameterDSSB->setValue(20);
         diameterDSSB->setExponentRatio(3.0);
 

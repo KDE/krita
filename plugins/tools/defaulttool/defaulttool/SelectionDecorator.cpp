@@ -29,6 +29,7 @@
 #include "kis_debug.h"
 #include <KisHandlePainterHelper.h>
 #include <KoCanvasResourceManager.h>
+#include <KisQPainterStateSaver.h>
 
 #define HANDLE_DISTANCE 10
 
@@ -56,7 +57,7 @@ void SelectionDecorator::setHandleRadius(int radius)
 void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &converter)
 {
     QRectF handleArea;
-    painter.save();
+    KisQPainterStateSaver s(&painter);
 
     // save the original painter transformation
     QTransform painterMatrix = painter.worldTransform();
@@ -123,7 +124,5 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
             helper.drawHandleRect(hotPos);
         }
     }
-
-    painter.restore();
 }
 

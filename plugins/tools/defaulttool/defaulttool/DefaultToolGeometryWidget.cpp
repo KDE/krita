@@ -73,12 +73,12 @@ DefaultToolGeometryWidget::DefaultToolGeometryWidget(KoInteractionTool *tool, QW
 
 
     // TODO: use valueChanged() instead!
-    connect(positionXSpinBox, SIGNAL(editingFinished()), this, SLOT(slotRepositionShapes()));
-    connect(positionYSpinBox, SIGNAL(editingFinished()), this, SLOT(slotRepositionShapes()));
+    connect(positionXSpinBox, SIGNAL(valueChangedPt(qreal)), this, SLOT(slotRepositionShapes()));
+    connect(positionYSpinBox, SIGNAL(valueChangedPt(qreal)), this, SLOT(slotRepositionShapes()));
 
     // TODO: use valueChanged() instead!
-    connect(widthSpinBox, SIGNAL(editingFinished()), this, SLOT(slotResizeShapes()));
-    connect(heightSpinBox, SIGNAL(editingFinished()), this, SLOT(slotResizeShapes()));
+    connect(widthSpinBox, SIGNAL(valueChangedPt(qreal)), this, SLOT(slotResizeShapes()));
+    connect(heightSpinBox, SIGNAL(valueChangedPt(qreal)), this, SLOT(slotResizeShapes()));
 
     KoSelection *selection = m_tool->canvas()->shapeManager()->selection();
     connect(selection, SIGNAL(selectionChanged()), this, SLOT(slotUpdatePositionBoxes()));

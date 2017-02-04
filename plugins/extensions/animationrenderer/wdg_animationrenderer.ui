@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>904</width>
-    <height>287</height>
+    <height>309</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -345,7 +345,7 @@
           <item row="3" column="0">
            <widget class="QLabel" name="label_5">
             <property name="text">
-             <string>Naming Prefix:</string>
+             <string>Start numbering at:</string>
             </property>
            </widget>
           </item>

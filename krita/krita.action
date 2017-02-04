@@ -481,7 +481,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="previous_preset">
-      <icon></icon>
+      <icon>preset-switcher</icon>
       <text>Switch to Previous Preset</text>
       <whatsThis></whatsThis>
       <toolTip>Switch to Previous Preset</toolTip>

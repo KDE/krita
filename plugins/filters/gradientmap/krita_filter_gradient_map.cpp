@@ -41,7 +41,7 @@ KritaFilterGradientMap::KritaFilterGradientMap() : KisFilter(id(), categoryMap()
     setShowConfigurationWidget(true);
     setSupportsLevelOfDetail(true);
     setSupportsPainting(true);
-    setSupportsAdjustmentLayers(true);
+    setSupportsAdjustmentLayers(false);
     setSupportsThreading(true);
 }
 
@@ -57,6 +57,10 @@ void KritaFilterGradientMap::processImpl(KisPaintDeviceSP device,
     }
 
     KoAbstractGradient *gradient = KoResourceServerProvider::instance()->gradientServer(false)->resourceByName(config->getString("gradientName"));
+    if (!gradient) {
+        qDebug() << "Could not find gradient" << config->getString("gradientName");
+        return;
+    }
 
     KoColorSet *gradientCache = new KoColorSet();
     for (int i=0; i<256; i++) {

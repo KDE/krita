@@ -27,7 +27,7 @@
 #include "kis_config.h"
 
 KoID KisCompositeOpListModel::favoriteCategory() {
-    static KoID category("favorites", i18n("Favorites"));
+    static KoID category("favorites", ki18n("Favorites"));
     return category;
 }
 

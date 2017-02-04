@@ -91,9 +91,9 @@ extern "C" int main(int argc, char **argv)
     // The global initialization of the random generator
     qsrand(time(0));
     bool runningInKDE = !qgetenv("KDE_FULL_SESSION").isEmpty();
-    
-#if defined HAVE_X11 
-    qputenv("QT_QPA_PLATFORM", "xcb"); 
+
+#if defined HAVE_X11
+    qputenv("QT_QPA_PLATFORM", "xcb");
 #endif
 
     /**
@@ -142,7 +142,6 @@ extern "C" int main(int argc, char **argv)
 
     // Now that the paths are set, set the language. First check the override from the langage
     // selection dialog.
-    KLocalizedString::clearLanguages();
     const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
     QSettings languageoverride(configPath + QStringLiteral("/klanguageoverridesrc"), QSettings::IniFormat);
     languageoverride.beginGroup(QStringLiteral("Language"));
@@ -163,6 +162,7 @@ extern "C" int main(int argc, char **argv)
         // XXX: This doesn't work, for some !@#$% reason.
         QLocale locale = QLocale::system();
         if (locale.bcp47Name() != QStringLiteral("en")) {
+            qputenv("LANG", locale.bcp47Name().toLatin1());
             KLocalizedString::setLanguages(QStringList() << locale.bcp47Name());
         }
     }
@@ -247,7 +247,7 @@ extern "C" int main(int argc, char **argv)
 #if QT_VERSION >= 0x050700
     app.setAttribute(Qt::AA_CompressHighFrequencyEvents, false);
 #endif
-    
+
     // Set up remote arguments.
     QObject::connect(&app, SIGNAL(messageReceived(QByteArray,QObject*)),
                      &app, SLOT(remoteArguments(QByteArray,QObject*)));
@@ -256,7 +256,7 @@ extern "C" int main(int argc, char **argv)
                      &app, SLOT(fileOpenRequested(QString)));
 
     int state = app.exec();
-    
+
     return state;
 }
 

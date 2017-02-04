@@ -86,12 +86,14 @@ void KoFileDialog::setCaption(const QString &caption)
 
 void KoFileDialog::setDefaultDir(const QString &defaultDir)
 {
-    //qDebug() << d->defaultDirectory << d->dialogName << getUsedDir(d->dialogName);
+    qDebug() << d->defaultDirectory << d->dialogName << getUsedDir(d->dialogName);
     if (d->defaultDirectory.isEmpty()) {
         QFileInfo f(defaultDir);
         d->defaultDirectory = f.absoluteFilePath();
     }
-    d->proposedFileName = QFileInfo(defaultDir).fileName();
+    if (!QFileInfo(defaultDir).isDir()) {
+        d->proposedFileName = QFileInfo(defaultDir).fileName();
+    }
 }
 
 void KoFileDialog::setImageFilters()
@@ -129,20 +131,28 @@ QString KoFileDialog::selectedMimeType() const
 
 void KoFileDialog::createFileDialog()
 {
-    //qDebug() << "createFileDialog. Parent:" << d->parent << "Caption:" << d->caption << "Default directory:" << d->defaultDirectory << "proposed filename" << d->proposedFileName << "Default filter:" << d->defaultFilter;
+    qDebug() << "createFileDialog. Parent:" << d->parent
+             << "Caption:" << d->caption
+             << "Default directory:" << d->defaultDirectory
+             << "proposed filename" << d->proposedFileName
+             << "Default filter:" << d->defaultFilter;
 
     d->fileDialog.reset(new QFileDialog(d->parent, d->caption, d->defaultDirectory + "/" + d->proposedFileName));
     KConfigGroup group = KSharedConfig::openConfig()->group("File Dialogs");
 
-
     bool dontUseNative = true;
 #ifdef Q_OS_UNIX
-    if (qgetenv("XDG_CURRENT_DESKTOP") != "KDE") {
+    if (qgetenv("XDG_CURRENT_DESKTOP") == "KDE") {
         dontUseNative = false;
     }
 #endif
 
     d->fileDialog->setOption(QFileDialog::DontUseNativeDialog, group.readEntry("DontUseNativeFileDialog", dontUseNative));
+
+//    qDebug() << "DontUseNativeDialog" << d->fileDialog->testOption(QFileDialog::DontUseNativeDialog)
+//             << dontUseNative
+//             << group.readEntry("DontUseNativeFileDialog", dontUseNative);
+
     d->fileDialog->setOption(QFileDialog::DontConfirmOverwrite, false);
     d->fileDialog->setOption(QFileDialog::HideNameFilterDetails, true);
 
@@ -183,11 +193,11 @@ void KoFileDialog::createFileDialog()
     d->fileDialog->setNameFilters(d->filterList);
 
     if (!d->proposedFileName.isEmpty()) {
-        //qDebug() << "Finding the right mimetype for the given file" << d->defaultDirectory;
+        qDebug() << "Finding the right mimetype for the given file" << d->defaultDirectory;
         QString mime = KisMimeDatabase::mimeTypeForFile(d->proposedFileName);
         QString description = KisMimeDatabase::descriptionForMimeType(mime);
         Q_FOREACH(const QString &filter, d->filterList) {
-            //qDebug() << "\tConsidering" << filter;
+            qDebug() << "\tConsidering" << filter;
             if (filter.startsWith(description)) {
                 d->fileDialog->selectNameFilter(filter);
                 break;
@@ -405,6 +415,7 @@ void KoFileDialog::saveUsedDir(const QString &fileName,
 {
 
     if (dialogName.isEmpty()) return;
+    if (d->type == SaveFile) return;
 
     QFileInfo fileInfo(fileName);
     KConfigGroup group =  KSharedConfig::openConfig()->group("File Dialogs");

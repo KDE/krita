@@ -105,7 +105,7 @@ public:
     bool isInstalled();
     /**
      * @brief setInstalled
-     * This allows you to set installed or uninstalled upon loading. This is used with blacklists. 
+     * This allows you to set installed or uninstalled upon loading. This is used with blacklists.
      */
     void setInstalled(bool install);
 
@@ -132,9 +132,9 @@ public:
     void recreateBundle(QScopedPointer<KoStore> &oldStore);
 
 
-    QStringList resourceTypes();
-    QList<KoResource*> resources(const QString &resType);
-
+    QStringList resourceTypes() const;
+    QList<KoResource*> resources(const QString &resType = QString::null) const;
+    int resourceCount() const;
 private:
 
     void writeMeta(const char *metaTag, const QString &metaKey, KoXmlWriter *writer);
@@ -153,7 +153,7 @@ private:
     QList<QByteArray> m_workspacesMd5Installed;
     QList<QByteArray> m_presetsMd5Installed;
     QString m_bundleVersion;
-    
+
 };
 
 #endif // KORESOURCEBUNDLE_H

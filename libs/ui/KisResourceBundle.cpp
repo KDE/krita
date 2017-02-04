@@ -54,6 +54,7 @@ KisResourceBundle::KisResourceBundle(QString const& fileName)
 {
     setName(QFileInfo(fileName).baseName());
     m_metadata["generator"] = "Krita (" + KritaVersionWrapper::versionString(true) + ")";
+
 }
 
 KisResourceBundle::~KisResourceBundle()
@@ -813,12 +814,12 @@ bool KisResourceBundle::isInstalled()
 }
 
 
-QStringList KisResourceBundle::resourceTypes()
+QStringList KisResourceBundle::resourceTypes() const
 {
     return m_manifest.types();
 }
 
-QList<KoResource*> KisResourceBundle::resources(const QString &resType)
+QList<KoResource*> KisResourceBundle::resources(const QString &resType) const
 {
     QList<KisResourceBundleManifest::ResourceReference> references = m_manifest.files(resType);
 
@@ -863,7 +864,6 @@ void KisResourceBundle::setThumbnail(QString filename)
     if (QFileInfo(filename).exists()) {
         m_thumbnail = QImage(filename);
         m_thumbnail = m_thumbnail.scaled(256, 256, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-        Q_ASSERT(!m_thumbnail.isNull());
     }
     else {
         m_thumbnail = QImage(256, 256, QImage::Format_ARGB32);
@@ -871,6 +871,8 @@ void KisResourceBundle::setThumbnail(QString filename)
         gc.fillRect(0, 0, 256, 256, Qt::red);
         gc.end();
     }
+
+    setImage(m_thumbnail);
 }
 
 void KisResourceBundle::writeMeta(const char *metaTag, const QString &metaKey, KoXmlWriter *writer)
@@ -999,4 +1001,10 @@ void KisResourceBundle::recreateBundle(QScopedPointer<KoStore> &oldStore)
     file.remove();
     file.setFileName(newStoreName);
     file.rename(filename());
+}
+
+
+int KisResourceBundle::resourceCount() const
+{
+    return m_manifest.files().count();
 }

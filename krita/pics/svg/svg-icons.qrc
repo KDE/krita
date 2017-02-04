@@ -88,6 +88,8 @@
         <file>dark_split-layer.svg</file>
         <file>light_color-to-alpha.svg</file>
         <file>dark_color-to-alpha.svg</file>
+        <file>light_preset-switcher.svg</file>
+        <file>dark_preset-switcher.svg</file>
         
         <file>dark_animation_play.svg</file>
         <file>dark_animation_stop.svg</file>

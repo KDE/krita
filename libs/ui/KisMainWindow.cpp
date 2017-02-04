@@ -954,7 +954,7 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas)
         // don't want to be reminded about overwriting files etc.
         bool justChangingFilterOptions = false;
 
-        KoFileDialog dialog(this, KoFileDialog::SaveFile, "OpenDocument");
+        KoFileDialog dialog(this, KoFileDialog::SaveFile, "SaveAs");
         dialog.setCaption(i18n("untitled"));
         if (d->isExporting && !d->lastExportUrl.isEmpty()) {
             dialog.setDefaultDir(d->lastExportUrl.toLocalFile());
@@ -2247,7 +2247,6 @@ void KisMainWindow::createActions()
 //    connect(d->exportPdf, SIGNAL(triggered()), this, SLOT(exportToPdf()));
 
     d->importAnimation  = actionManager->createAction("file_import_animation");
-    d->importAnimation->setActivationFlags(KisAction::IMAGE_HAS_ANIMATION);
     connect(d->importAnimation, SIGNAL(triggered()), this, SLOT(importAnimation()));
 
     d->closeAll = actionManager->createAction("file_close_all");

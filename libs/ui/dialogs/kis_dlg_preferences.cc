@@ -119,6 +119,8 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     KConfigGroup group = KSharedConfig::openConfig()->group("File Dialogs");
     m_chkNativeFileDialog->setChecked(!group.readEntry("DontUseNativeFileDialog", true));
 
+    intMaxBrushSize->setValue(cfg.readEntry("maximumBrushSize", 1000));
+
     m_cmbMDIType->setCurrentIndex(cfg.readEntry<int>("mdi_viewmode", (int)QMdiArea::TabbedView));
     m_chkRubberBand->setChecked(cfg.readEntry<int>("mdi_rubberband", cfg.useOpenGL()));
     m_favoritePresetsSpinBox->setValue(cfg.favoritePresets());
@@ -128,7 +130,6 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     m_backgroundimage->setText(cfg.getMDIBackgroundImage());
     m_chkCanvasMessages->setChecked(cfg.showCanvasMessages());
     m_chkCompressKra->setChecked(cfg.compressKra());
-    m_chkHiDPI->setChecked(cfg.readEntry("EnableHiDPI", false));
     m_radioToolOptionsInDocker->setChecked(cfg.toolOptionsInDocker());
     m_chkSwitchSelectionCtrlAlt->setChecked(cfg.switchSelectionCtrlAlt());
     m_chkConvertOnImport->setChecked(cfg.convertToImageColorspaceOnImport());
@@ -152,6 +153,7 @@ void GeneralTab::setDefault()
     m_showOutlinePainting->setChecked(cfg.showOutlineWhilePainting(true));
     m_hideSplashScreen->setChecked(cfg.hideSplashScreen(true));
     m_chkNativeFileDialog->setChecked(false);
+    intMaxBrushSize->setValue(1000);
 
     m_cmbMDIType->setCurrentIndex((int)QMdiArea::TabbedView);
     m_chkRubberBand->setChecked(cfg.useOpenGL(true));
@@ -162,7 +164,6 @@ void GeneralTab::setDefault()
     m_backgroundimage->setText(cfg.getMDIBackgroundImage(true));
     m_chkCanvasMessages->setChecked(cfg.showCanvasMessages(true));
     m_chkCompressKra->setChecked(cfg.compressKra(true));
-    m_chkHiDPI->setChecked(true);
     m_radioToolOptionsInDocker->setChecked(cfg.toolOptionsInDocker(true));
     m_chkSwitchSelectionCtrlAlt->setChecked(cfg.switchSelectionCtrlAlt(true));
     m_chkConvertOnImport->setChecked(cfg.convertToImageColorspaceOnImport(true));
@@ -1003,6 +1004,8 @@ bool KisDlgPreferences::editPreferences()
         KConfigGroup group = KSharedConfig::openConfig()->group("File Dialogs");
         group.writeEntry("DontUseNativeFileDialog", !dialog->m_general->m_chkNativeFileDialog->isChecked());
 
+        cfg.writeEntry<int>("maximumBrushSize", dialog->m_general->intMaxBrushSize->value());
+
         cfg.writeEntry<int>("mdi_viewmode", dialog->m_general->mdiMode());
         cfg.setMDIBackgroundColor(dialog->m_general->m_mdiColor->color().toQColor());
         cfg.setMDIBackgroundImage(dialog->m_general->m_backgroundimage->text());
@@ -1010,7 +1013,6 @@ bool KisDlgPreferences::editPreferences()
         cfg.setBackupFile(dialog->m_general->m_backupFileCheckBox->isChecked());
         cfg.setShowCanvasMessages(dialog->m_general->showCanvasMessages());
         cfg.setCompressKra(dialog->m_general->compressKra());
-        cfg.writeEntry("EnableHiDPI", dialog->m_general->m_chkHiDPI->isChecked());
         cfg.setToolOptionsInDocker(dialog->m_general->toolOptionsInDocker());
         cfg.setSwitchSelectionCtrlAlt(dialog->m_general->switchSelectionCtrlAlt());
         cfg.setConvertToImageColorspaceOnImport(dialog->m_general->convertToImageColorspaceOnImport());

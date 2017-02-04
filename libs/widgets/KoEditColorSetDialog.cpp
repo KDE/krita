@@ -49,7 +49,7 @@ KoEditColorSetWidget::KoEditColorSetWidget(const QList<KoColorSet *> &palettes, 
 {
     widget.setupUi(this);
     foreach (KoColorSet *colorSet, m_colorSets) {
-        colorSet->load();
+        //colorSet->load(); resources are loaded at startup...
         widget.selector->addItem(colorSet->name());
     }
     connect(widget.selector, SIGNAL(currentIndexChanged(int)), this, SLOT(setActiveColorSet(int)));
@@ -117,6 +117,7 @@ KoEditColorSetWidget::~KoEditColorSetWidget()
 void KoEditColorSetWidget::setActiveColorSet(int index)
 {
     if (m_gridLayout) {
+        qDeleteAll(m_gridLayout->children());
         delete m_gridLayout;
         m_activePatch = 0;
     }
@@ -129,6 +130,7 @@ void KoEditColorSetWidget::setActiveColorSet(int index)
     m_activeColorSet = m_colorSets.value(index);
     setEnabled(m_activeColorSet != 0);
     int columns = 16;
+
     if (m_activeColorSet) {
         columns = m_activeColorSet->columnCount();
         if (columns==0){columns=16;}
@@ -187,7 +189,7 @@ void KoEditColorSetWidget::removeColor()
     for (quint32 i = 0; i < m_activeColorSet->nColors(); i++) {
         KoColorSetEntry c = m_activeColorSet->getColorGlobal(i);
         if (m_activePatch->color() == c.color) {
-            m_activeColorSet->remove(c);
+            m_activeColorSet->removeAt(i);
             setActiveColorSet(widget.selector->currentIndex());
             break;
         }

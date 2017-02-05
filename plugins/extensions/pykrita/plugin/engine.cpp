@@ -432,19 +432,6 @@ bool PyKrita::Engine::isPythonPluginUsable(const PyPlugin *pythonPlugin)
         dbgScript << "Ignore desktop file w/o a module to import";
         return false;
     }
-    // Check Python compatibility
-    // ATTENTION Python 3 is a default platform! Assume all modules are
-    // compatible! Do checks only if someone tries to build krita w/ Python 2.
-    // So, Python 2 modules must be marked explicitly!
-#if PY_MAJOR_VERSION < 3
-    const QVariant is_compatible = pythonPlugin->property("X-Python-2-Compatible", QVariant::Bool);
-    if (!(is_compatible.isValid() && is_compatible.toBool())) {
-        dbgScript << pythonPlugin->name() << "is incompatible w/ embedded Python version";
-        // Do not even show incompatible modules in the manager...
-        return false;
-    }
-#endif
-
     return true;
 }
 

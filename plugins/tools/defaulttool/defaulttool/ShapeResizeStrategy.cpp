@@ -109,6 +109,7 @@ ShapeResizeStrategy::ShapeResizeStrategy(KoToolBase *tool, const QPointF &clicke
     }
 
     tool->setStatusText(i18n("Press CTRL to resize from center."));
+    tool->canvas()->snapGuide()->setIgnoredShapes(KoShape::linearizeSubtree(m_selectedShapes));
 }
 
 ShapeResizeStrategy::~ShapeResizeStrategy()

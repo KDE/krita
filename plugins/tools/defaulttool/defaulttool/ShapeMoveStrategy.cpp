@@ -58,7 +58,7 @@ ShapeMoveStrategy::ShapeMoveStrategy(KoToolBase *tool, const QPointF &clicked)
 
     KoSelection *selection = m_canvas->shapeManager()->selection();
     m_initialOffset = selection->absolutePosition(anchor) - m_start;
-    m_canvas->snapGuide()->setIgnoredShapes(KoShape::linearizeSubtree(selection->selectedShapes()));
+    m_canvas->snapGuide()->setIgnoredShapes(KoShape::linearizeSubtree(m_selectedShapes));
 
     tool->setStatusText(i18n("Press Shift to hold x- or y-position."));
 }

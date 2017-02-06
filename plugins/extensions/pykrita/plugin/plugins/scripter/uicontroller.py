@@ -20,6 +20,7 @@ class UIController(object):
         self.actions = []
 
         self.mainWidget.setWindowModality(Qt.NonModal)
+
     def initialize(self, scripter):
         self.editor = pythoneditor.CodeEditor(scripter)
         self.widgetSelector = QComboBox()
@@ -116,6 +117,9 @@ class UIController(object):
             widget = self.stackedWidget.widget(index)
             if widget.objectName() == widgetName:
                 return widget
+
+    def showException(self, exception):
+        QMessageBox.critical(self.editor, "Error running script", str(exception))
 
     def setDocumentEditor(self, document):
         self.editor.clear()

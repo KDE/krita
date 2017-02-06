@@ -25,6 +25,12 @@ class Debugger(bdb.Bdb):
         # initialize parent
         bdb.Bdb.reset(self)
 
+    def run(self, cmd):
+        try:
+            super(Debugger, self).run(cmd)
+        except:
+            print('terminado')
+
     def user_call(self, frame, args):
         name = frame.f_code.co_name or "<unknown>"
 
@@ -71,6 +77,9 @@ class Debugger(bdb.Bdb):
 
     def user_exception(self, frame, exception):
         name = frame.f_code.co_name or "<unknown>"
+        print(str(exception))
+        self.applicationq.put({ "exception": str(exception)})
+
 
     async def display(self):
         """Coroutine for updating the UI"""

@@ -23,6 +23,7 @@ class DebugController (object):
         loop.run_until_complete(self._debugger.step())
         self.scripter.uicontroller.setStepped(True)
         self.updateUIDebugger()
+        print('depois')
 
     def stop(self):
         loop = asyncio.get_event_loop()
@@ -52,7 +53,11 @@ class DebugController (object):
 
     def updateUIDebugger(self):
         widget = self.scripter.uicontroller.findStackWidget('Debugger')
+        exception = self._debuggerException()
+        print(exception)
 
+        if exception:
+            self.scripter.uicontroller.showException(exception)
         if not self.isActive or self._quitDebugger():
             widget.disableToolbar(True)
 
@@ -71,5 +76,11 @@ class DebugController (object):
     def _quitDebugger(self):
         try:
             return self._debugger.application_data['quit']
+        except:
+            return False
+
+    def _debuggerException(self):
+        try:
+            return self._debugger.application_data['exception']
         except:
             return False

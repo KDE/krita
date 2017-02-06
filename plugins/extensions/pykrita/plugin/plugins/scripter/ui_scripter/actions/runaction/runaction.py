@@ -4,6 +4,7 @@ import sys
 from . import docwrapper
 import os
 
+
 class RunAction(QAction):
 
     def __init__(self, scripter, parent=None):

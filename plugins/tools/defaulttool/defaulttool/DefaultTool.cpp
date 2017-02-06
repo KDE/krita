@@ -74,6 +74,7 @@
 
 #define HANDLE_DISTANCE 10
 #define HANDLE_DISTANCE_SQ (HANDLE_DISTANCE * HANDLE_DISTANCE)
+
 #define INNER_HANDLE_DISTANCE_SQ 16
 
 namespace {
@@ -201,18 +202,28 @@ private:
 
         KoShape *shape = onlyEditableShape();
         if (shape) {
+            KoFlake::SelectionHandle globalHandle = q->handleAt(pos);
+            const qreal distanceThresholdSq =
+                globalHandle == KoFlake::NoHandle ?
+                    HANDLE_DISTANCE_SQ : 0.25 * HANDLE_DISTANCE_SQ;
+
+            const KoViewConverter *converter = q->canvas()->viewConverter();
+            const QPointF viewPoint = converter->documentToView(pos);
             qreal minDistanceSq = std::numeric_limits<qreal>::max();
 
             KoShapeGradientHandles sh(shape);
             Q_FOREACH (const KoShapeGradientHandles::Handle &handle, sh.handles()) {
-                const qreal distanceSq = kisSquareDistance(handle.pos, pos);
+                const QPointF handlePoint = converter->documentToView(handle.pos);
+                const qreal distanceSq = kisSquareDistance(viewPoint, handlePoint);
 
-                if (distanceSq < HANDLE_DISTANCE_SQ && distanceSq < minDistanceSq) {
+                if (distanceSq < distanceThresholdSq && distanceSq < minDistanceSq) {
                     result = handle;
                     minDistanceSq = distanceSq;
                 }
             }
         }
+
+
 
         return result;
     }

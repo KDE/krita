@@ -10,8 +10,10 @@ set ( defaulttools_SRCS
     defaulttool/ShapeResizeStrategy.cpp
     defaulttool/ShapeRotateStrategy.cpp
     defaulttool/ShapeShearStrategy.cpp
+    defaulttool/ShapeGradientEditStrategy.cpp
     defaulttool/SelectionDecorator.cpp
     defaulttool/KoFillConfigWidget.cpp
+    defaulttool/KoShapeGradientHandles.cpp
 
     connectionTool/ConnectionTool.cpp
     connectionTool/ConnectionToolFactory.cpp

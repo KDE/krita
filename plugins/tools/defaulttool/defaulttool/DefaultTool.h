@@ -124,7 +124,10 @@ public: // Events
 protected:
     QList<QPointer<QWidget> > createOptionWidgets();
 
-    virtual KoInteractionStrategy *createStrategy(KoPointerEvent *event);
+    KoInteractionStrategy *createStrategy(KoPointerEvent *event) override;
+
+private:
+    class MoveGradientHandleInteractionFactory;
 
 private:
     void setupActions();

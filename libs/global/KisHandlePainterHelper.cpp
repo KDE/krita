@@ -19,6 +19,7 @@
 #include "KisHandlePainterHelper.h"
 
 #include <QPainter>
+#include "kis_algebra_2d.h"
 
 
 KisHandlePainterHelper::KisHandlePainterHelper(QPainter *_painter, qreal handleRadius)
@@ -48,6 +49,82 @@ void KisHandlePainterHelper::drawHandleRect(const QPointF &center, qreal radius)
 
 void KisHandlePainterHelper::drawHandleRect(const QPointF &center) {
     m_painter->drawPolygon(m_handlePolygon.translated(m_painterTransform.map(center)));
+}
+
+void KisHandlePainterHelper::drawGradientHandle(const QPointF &center, qreal radius) {
+    QPolygonF handlePolygon;
+
+    handlePolygon << QPointF(-radius, 0);
+    handlePolygon << QPointF(0, radius);
+    handlePolygon << QPointF(radius, 0);
+    handlePolygon << QPointF(0, -radius);
+
+    handlePolygon = m_handleTransform.map(handlePolygon);
+    m_painter->drawPolygon(handlePolygon.translated(m_painterTransform.map(center)));
+}
+
+void KisHandlePainterHelper::drawGradientCrossHandle(const QPointF &center, qreal radius) {
+
+    { // Draw a cross
+        QPainterPath p;
+        p.moveTo(-radius, -radius);
+        p.lineTo(radius, radius);
+        p.moveTo(radius, -radius);
+        p.lineTo(-radius, radius);
+
+        p = m_handleTransform.map(p);
+        m_painter->drawPath(p.translated(m_painterTransform.map(center)));
+    }
+
+    { // Draw a square
+        const qreal halfRadius = 0.5 * radius;
+
+        QPolygonF handlePolygon;
+        handlePolygon << QPointF(-halfRadius, 0);
+        handlePolygon << QPointF(0, halfRadius);
+        handlePolygon << QPointF(halfRadius, 0);
+        handlePolygon << QPointF(0, -halfRadius);
+
+        handlePolygon = m_handleTransform.map(handlePolygon);
+        m_painter->drawPolygon(handlePolygon.translated(m_painterTransform.map(center)));
+    }
+}
+
+void KisHandlePainterHelper::drawArrow(const QPointF &pos, const QPointF &from, qreal radius)
+{
+    QPainterPath p;
+
+    QLineF line(pos, from);
+    line.setLength(radius);
+
+    QPointF norm = KisAlgebra2D::leftUnitNormal(pos - from);
+    norm *= 0.34 * radius;
+
+    p.moveTo(line.p2() + norm);
+    p.lineTo(line.p1());
+    p.lineTo(line.p2() - norm);
+
+    p.translate(-pos);
+
+    m_painter->drawPath(m_handleTransform.map(p).translated(m_painterTransform.map(pos)));
+}
+
+void KisHandlePainterHelper::drawGradientArrow(const QPointF &start, const QPointF &end, qreal radius)
+{
+    QPainterPath p;
+    p.moveTo(start);
+    p.lineTo(end);
+    m_painter->drawPath(m_painterTransform.map(p));
+
+    const qreal length = kisDistance(start, end);
+    const QPointF diff = end - start;
+
+    if (length > 5 * radius) {
+        drawArrow(start + 0.33 * diff, start, radius);
+        drawArrow(start + 0.66 * diff, start, radius);
+    } else if (length > 3 * radius) {
+        drawArrow(start + 0.5 * diff, start, radius);
+    }
 }
 
 void KisHandlePainterHelper::drawRubberLine(const QPolygonF &poly) {

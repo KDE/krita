@@ -30,6 +30,7 @@
 #include <KisHandlePainterHelper.h>
 #include <KoCanvasResourceManager.h>
 #include <KisQPainterStateSaver.h>
+#include "KoShapeGradientHandles.h"
 
 #define HANDLE_DISTANCE 10
 
@@ -123,6 +124,41 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
             QPointF hotPos = KoFlake::anchorToPoint(m_hotPosition, handleArea);
             helper.drawHandleRect(hotPos);
         }
+    }
+
+    if (editable && selectedShapes.size() == 1) {
+        KoShape *shape = selectedShapes.first();
+
+        KoShapeGradientHandles gradientHandles(shape);
+        QVector<KoShapeGradientHandles::Handle> handles = gradientHandles.handles();
+
+        KisHandlePainterHelper helper(&painter);
+        const QTransform t = shape->absoluteTransformation(0).inverted();
+
+        painter.setPen(pen);
+        painter.setBrush(Qt::white);
+
+        if (gradientHandles.type() == QGradient::LinearGradient) {
+            KIS_SAFE_ASSERT_RECOVER_NOOP(handles.size() == 2);
+
+            if (handles.size() == 2) {
+                helper.drawGradientArrow(t.map(handles[0].pos), t.map(handles[1].pos), 1.5 * m_handleRadius);
+            }
+        }
+
+        pen.setColor(QColor(255, 197, 39));
+        painter.setPen(pen);
+        painter.setBrush(Qt::white);
+
+        Q_FOREACH (const KoShapeGradientHandles::Handle &h, handles) {
+            if (h.type == KoShapeGradientHandles::Handle::RadialCenter) {
+                helper.drawGradientCrossHandle(t.map(h.pos), 1.2 * m_handleRadius);
+            } else {
+                helper.drawGradientHandle(t.map(h.pos), 1.2 * m_handleRadius);
+            }
+        }
+
+
     }
 }
 

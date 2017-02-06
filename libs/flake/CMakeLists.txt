@@ -179,6 +179,7 @@ set(kritaflake_SRCS
     tools/KoPanToolFactory.cpp
     tools/KoInteractionTool.cpp
     tools/KoInteractionStrategy.cpp
+    tools/KoInteractionStrategyFactory.cpp
     tools/KoCreateShapesTool.cpp
     tools/KoCreateShapesToolFactory.cpp
     tools/KoShapeRubberSelectStrategy.cpp

@@ -52,6 +52,7 @@
 #include <KoSnapGuide.h>
 #include <KoStrokeConfigWidget.h>
 #include "kis_action_registry.h"
+#include <KoInteractionStrategyFactory.h>
 
 #include <KoIcon.h>
 
@@ -116,10 +117,6 @@ public:
     void finishInteraction(Qt::KeyboardModifiers /*modifiers*/) override {}
 
     void paint(QPainter &painter, const KoViewConverter &converter) {
-        SelectionDecorator decorator(tool()->canvas()->resourceManager());
-        decorator.setSelection(tool()->canvas()->shapeManager()->selection());
-        decorator.setHandleRadius(handleRadius());
-        decorator.paint(painter, converter);
     }
 };
 
@@ -132,15 +129,94 @@ public:
     }
 
     void paint(QPainter &painter, const KoViewConverter &converter) {
-        SelectionDecorator decorator(tool()->canvas()->resourceManager());
-        decorator.setSelection(tool()->canvas()->shapeManager()->selection());
-        decorator.setHandleRadius(handleRadius());
-        decorator.paint(painter, converter);
-
         KoShapeRubberSelectStrategy::paint(painter, converter);
     }
 };
+#include <KoGradientBackground.h>
+#include "KoShapeGradientHandles.h"
+#include "ShapeGradientEditStrategy.h"
 
+class DefaultTool::MoveGradientHandleInteractionFactory : public KoInteractionStrategyFactory
+{
+public:
+    MoveGradientHandleInteractionFactory(DefaultTool *_q)
+        : KoInteractionStrategyFactory(0, "move_gradient_handle"),
+          q(_q)
+    {
+    }
+
+    KoInteractionStrategy* createStrategy(KoPointerEvent *ev) override
+    {
+        m_currentHandle = handleAt(ev->point);
+
+        if (m_currentHandle.type != KoShapeGradientHandles::Handle::None) {
+            KoShape *shape = onlyEditableShape();
+            KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(shape, 0);
+
+            return new ShapeGradientEditStrategy(q, shape, m_currentHandle.type, ev->point);
+        }
+
+        return 0;
+    }
+
+    bool hoverEvent(KoPointerEvent *ev) override
+    {
+        m_currentHandle = handleAt(ev->point);
+        return false;
+    }
+
+    bool paintOnHover(QPainter &painter, const KoViewConverter &converter) override
+    {
+        return false;
+    }
+
+    bool tryUseCustomCursor() {
+        if (m_currentHandle.type != KoShapeGradientHandles::Handle::None) {
+            q->useCursor(Qt::OpenHandCursor);
+        }
+
+        return m_currentHandle.type != KoShapeGradientHandles::Handle::None;
+    }
+
+private:
+
+    KoShape* onlyEditableShape() const {
+        KoSelection *selection = q->koSelection();
+        QList<KoShape*> shapes = selection->selectedEditableShapes();
+
+        KoShape *shape = 0;
+        if (shapes.size() == 1) {
+            shape = shapes.first();
+        }
+
+        return shape;
+    }
+
+    KoShapeGradientHandles::Handle handleAt(const QPointF &pos) {
+        KoShapeGradientHandles::Handle result;
+
+        KoShape *shape = onlyEditableShape();
+        if (shape) {
+            qreal minDistanceSq = std::numeric_limits<qreal>::max();
+
+            KoShapeGradientHandles sh(shape);
+            Q_FOREACH (const KoShapeGradientHandles::Handle &handle, sh.handles()) {
+                const qreal distanceSq = kisSquareDistance(handle.pos, pos);
+
+                if (distanceSq < HANDLE_DISTANCE_SQ && distanceSq < minDistanceSq) {
+                    result = handle;
+                    minDistanceSq = distanceSq;
+                }
+            }
+        }
+
+        return result;
+    }
+
+private:
+    DefaultTool *q;
+    KoShapeGradientHandles::Handle m_currentHandle;
+};
 
 class SelectionHandler : public KoToolSelection
 {
@@ -215,6 +291,8 @@ DefaultTool::DefaultTool(KoCanvasBase *canvas)
 
     KoShapeManager *manager = canvas->shapeManager();
     connect(manager, SIGNAL(selectionChanged()), this, SLOT(updateActions()));
+
+    addInteractionFactory(new MoveGradientHandleInteractionFactory(this));
 }
 
 DefaultTool::~DefaultTool()
@@ -402,6 +480,8 @@ qreal DefaultTool::rotationOfHandle(KoFlake::SelectionHandle handle, bool useEdg
 
 void DefaultTool::updateCursor()
 {
+    if (tryUseCustomCursor()) return;
+
     QCursor cursor = Qt::ArrowCursor;
 
     QString statusText;
@@ -515,13 +595,13 @@ void DefaultTool::updateCursor()
 
 void DefaultTool::paint(QPainter &painter, const KoViewConverter &converter)
 {
+    SelectionDecorator decorator(canvas()->resourceManager());
+    decorator.setSelection(koSelection());
+    decorator.setHandleRadius(handleRadius());
+    decorator.paint(painter, converter);
+
     KoInteractionTool::paint(painter, converter);
-    if (currentStrategy() == 0 && koSelection()->count() > 0) {
-        SelectionDecorator decorator(canvas()->resourceManager());
-        decorator.setSelection(koSelection());
-        decorator.setHandleRadius(handleRadius());
-        decorator.paint(painter, converter);
-    }
+
     painter.save();
     KoShape::applyConversion(painter, converter);
     canvas()->snapGuide()->paint(painter, converter);

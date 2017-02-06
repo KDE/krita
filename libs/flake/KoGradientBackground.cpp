@@ -128,6 +128,7 @@ void KoGradientBackground::paint(QPainter &painter, const KoViewConverter &/*con
         QTransform gradientToUser(boundingRect.width(), 0, 0, boundingRect.height(),
                                   boundingRect.x(), boundingRect.y());
 
+        // TODO: how about slicing the object?
         QGradient g = *d->gradient;
         g.setCoordinateMode(QGradient::LogicalMode);
 

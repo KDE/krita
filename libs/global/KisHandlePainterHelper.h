@@ -62,9 +62,32 @@ public:
     void drawHandleRect(const QPointF &center);
 
     /**
+     * Draw a rotated handle representing the gradient handle
+     */
+    void drawGradientHandle(const QPointF &center, qreal radius);
+
+    /**
+     * Draw a special handle representing the center of the gradient
+     */
+    void drawGradientCrossHandle(const QPointF &center, qreal radius);
+
+    /**
+     * Draw an arrow representing gradient position
+     */
+    void drawGradientArrow(const QPointF &start, const QPointF &end, qreal radius);
+
+    /**
      * Draw a line showing the bounding box of the selection
      */
     void drawRubberLine(const QPolygonF &poly);
+
+private:
+
+    /**
+     * Draw a single arrow with the tip at position \p pos, directed from \p from,
+     * of size \p radius.
+     */
+    void drawArrow(const QPointF &pos, const QPointF &from, qreal radius);
 
 private:
     QPainter *m_painter;
@@ -72,7 +95,6 @@ private:
     KisAlgebra2D::DecomposedMatix m_decomposedMatrix;
     QTransform m_handleTransform;
     QPolygonF m_handlePolygon;
-
 };
 
 #endif // KISHANDLEPAINTERHELPER_H

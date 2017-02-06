@@ -28,7 +28,7 @@
 #include "KoDocumentResourceManager.h"
 #include "KoShapePaintingContext.h"
 #include "KoShapeStroke.h"
-#include "KoStrokeConfigWidget.h"
+#include <widgets/KoStrokeConfigWidget.h>
 #include "KoCanvasBase.h"
 #include "kis_int_parse_spin_box.h"
 #include <KoColor.h>

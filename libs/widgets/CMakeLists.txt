@@ -66,7 +66,6 @@ set(kritawidgets_LIB_SRCS
     KoPageLayoutWidget.cpp
     KoPageLayoutDialog.cpp
     KoShadowConfigWidget.cpp
-    KoStrokeConfigWidget.cpp
     KoMarkerSelector.cpp
     KoMarkerModel.cpp
     KoMarkerItemDelegate.cpp

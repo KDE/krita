@@ -254,6 +254,8 @@ set(kritaui_LIB_SRCS
     widgets/KisVisualEllipticalSelectorShape.cpp
     widgets/KisVisualRectangleSelectorShape.cpp
     widgets/KisVisualTriangleSelectorShape.cpp
+    widgets/KoStrokeConfigWidget.cpp
+    widgets/KoFillConfigWidget.cpp
 
     input/kis_input_manager.cpp
     input/kis_input_manager_p.cpp
@@ -404,6 +406,7 @@ endif()
 
 
 ki18n_wrap_ui(kritaui_LIB_SRCS
+    widgets/KoFillConfigWidget.ui
     forms/wdgdlgpngimport.ui
     forms/wdgfullscreensettings.ui
     forms/wdgautogradient.ui

@@ -12,7 +12,7 @@ set ( defaulttools_SRCS
     defaulttool/ShapeShearStrategy.cpp
     defaulttool/ShapeGradientEditStrategy.cpp
     defaulttool/SelectionDecorator.cpp
-    defaulttool/KoFillConfigWidget.cpp
+
     defaulttool/KoShapeGradientHandles.cpp
 
     connectionTool/ConnectionTool.cpp
@@ -26,7 +26,6 @@ set ( defaulttools_SRCS
 
 ki18n_wrap_ui(defaulttools_SRCS
     defaulttool/DefaultToolGeometryWidget.ui
-    defaulttool/KoFillConfigWidget.ui
     connectionTool/ConnectionPointWidget.ui
 )
 

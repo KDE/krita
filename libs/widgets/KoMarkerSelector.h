@@ -20,13 +20,15 @@
 #ifndef KOMARKERSELECTOR_H
 #define KOMARKERSELECTOR_H
 
+#include "kritawidgets_export.h"
+
 #include <QComboBox>
 #include <KoMarkerData.h>
 
 class KoMarker;
 
 
-class KoMarkerSelector : public QComboBox
+class KRITAWIDGETS_EXPORT KoMarkerSelector : public QComboBox
 {
     Q_OBJECT
 public:

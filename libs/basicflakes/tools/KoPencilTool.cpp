@@ -34,7 +34,7 @@
 #include <KoPathPointData.h>
 #include <KoPathPointMergeCommand.h>
 #include <KoShapePaintingContext.h>
-#include <KoStrokeConfigWidget.h>
+#include <widgets/KoStrokeConfigWidget.h>
 
 #include <klocalizedstring.h>
 

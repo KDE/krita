@@ -63,11 +63,19 @@ public:
      */
     void setHandleRadius(int radius);
 
+
+    /**
+     * Set true if you want to render gradient handles on the canvas.
+     * Default value: false
+     */
+    void setShowFillGradientHandles(bool value);
+
 private:
     KoFlake::AnchorPosition m_hotPosition;
     KoSelection *m_selection;
     int m_handleRadius;
     int m_lineWidth;
+    bool m_showFillGradientHandles;
 };
 
 #endif

@@ -38,6 +38,7 @@ SelectionDecorator::SelectionDecorator(KoCanvasResourceManager *resourceManager)
     : m_hotPosition(KoFlake::Center)
     , m_handleRadius(7)
     , m_lineWidth(2)
+    , m_showFillGradientHandles(false)
 {
     m_hotPosition =
         KoFlake::AnchorPosition(
@@ -53,6 +54,11 @@ void SelectionDecorator::setHandleRadius(int radius)
 {
     m_handleRadius = radius;
     m_lineWidth = qMax(1, (int)(radius / 2));
+}
+
+void SelectionDecorator::setShowFillGradientHandles(bool value)
+{
+    m_showFillGradientHandles = value;
 }
 
 void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &converter)
@@ -126,7 +132,9 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
         }
     }
 
-    if (editable && selectedShapes.size() == 1) {
+    if (m_showFillGradientHandles &&
+        editable && selectedShapes.size() == 1) {
+
         KoShape *shape = selectedShapes.first();
 
         KoShapeGradientHandles gradientHandles(shape);

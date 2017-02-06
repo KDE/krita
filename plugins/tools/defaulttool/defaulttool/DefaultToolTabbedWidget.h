@@ -31,7 +31,20 @@ public:
     explicit DefaultToolTabbedWidget(KoInteractionTool *tool, QWidget *parent = 0);
     ~DefaultToolTabbedWidget();
 
+    enum TabType {
+        GeometryTab,
+        StrokeTab,
+        FillTab
+    };
+
+Q_SIGNALS:
+    void sigSwitchModeEditFillGradient(bool value);
+
+private Q_SLOTS:
+    void slotCurrentIndexChanged(int current);
+
 private:
+    int m_oldTabIndex;
 };
 
 #endif // DEFAULTTOOLTABBEDWIDGET_H

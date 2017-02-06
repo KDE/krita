@@ -45,8 +45,24 @@ DefaultToolTabbedWidget::DefaultToolTabbedWidget(KoInteractionTool *tool, QWidge
     // TODO: pass canvas to teh c-tor instead
     //fillWidget->setCanvas(tool->canvas());
     addTab(fillWidget, KisIconUtils::loadIcon("krita_tool_color_fill"), QString());
+
+    connect(this, SIGNAL(currentChanged(int)), SLOT(slotCurrentIndexChanged(int)));
+    m_oldTabIndex = currentIndex();
 }
 
 DefaultToolTabbedWidget::~DefaultToolTabbedWidget()
 {
+}
+
+void DefaultToolTabbedWidget::slotCurrentIndexChanged(int current)
+{
+    if (m_oldTabIndex == FillTab) {
+        emit sigSwitchModeEditFillGradient(false);
+    }
+
+    m_oldTabIndex = current;
+
+    if (current == FillTab) {
+        emit sigSwitchModeEditFillGradient(true);
+    }
 }

@@ -76,6 +76,10 @@
 #define HANDLE_DISTANCE_SQ (HANDLE_DISTANCE * HANDLE_DISTANCE)
 #define INNER_HANDLE_DISTANCE_SQ 16
 
+namespace {
+static const QString EditFillGradientFactoryId = "edit_fill_gradient";
+}
+
 QPolygonF selectionPolygon(KoSelection *selection)
 {
     QPolygonF result;
@@ -139,8 +143,8 @@ public:
 class DefaultTool::MoveGradientHandleInteractionFactory : public KoInteractionStrategyFactory
 {
 public:
-    MoveGradientHandleInteractionFactory(DefaultTool *_q)
-        : KoInteractionStrategyFactory(0, "move_gradient_handle"),
+    MoveGradientHandleInteractionFactory(int priority, const QString &id, DefaultTool *_q)
+        : KoInteractionStrategyFactory(priority, id),
           q(_q)
     {
     }
@@ -291,12 +295,21 @@ DefaultTool::DefaultTool(KoCanvasBase *canvas)
 
     KoShapeManager *manager = canvas->shapeManager();
     connect(manager, SIGNAL(selectionChanged()), this, SLOT(updateActions()));
-
-    addInteractionFactory(new MoveGradientHandleInteractionFactory(this));
 }
 
 DefaultTool::~DefaultTool()
 {
+}
+
+void DefaultTool::slotActivateEditFillGradient(bool value)
+{
+    if (value) {
+        addInteractionFactory(
+            new MoveGradientHandleInteractionFactory(0, EditFillGradientFactoryId, this));
+    } else {
+        removeInteractionFactory(EditFillGradientFactoryId);
+    }
+    repaintDecorations();
 }
 
 bool DefaultTool::wantsAutoScroll() const
@@ -598,6 +611,7 @@ void DefaultTool::paint(QPainter &painter, const KoViewConverter &converter)
     SelectionDecorator decorator(canvas()->resourceManager());
     decorator.setSelection(koSelection());
     decorator.setHandleRadius(handleRadius());
+    decorator.setShowFillGradientHandles(hasInteractioFactory(EditFillGradientFactoryId));
     decorator.paint(painter, converter);
 
     KoInteractionTool::paint(painter, converter);
@@ -1110,6 +1124,10 @@ QList<QPointer<QWidget> > DefaultTool::createOptionWidgets()
 
     DefaultToolTabbedWidget *tabbedWidget = new DefaultToolTabbedWidget(this);
     widgets.append(tabbedWidget);
+
+    connect(tabbedWidget,
+            SIGNAL(sigSwitchModeEditFillGradient(bool)),
+            SLOT(slotActivateEditFillGradient(bool)));
 
     return widgets;
 }

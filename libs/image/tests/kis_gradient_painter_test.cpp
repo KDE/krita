@@ -60,18 +60,17 @@ void KisGradientPainterTest::testSimplifyPath()
     QCOMPARE(simplifiedPath, ref);
 }
 
-void KisGradientPainterTest::testShapedGradient()
-{
+void testGradient(int width, int height) {
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
 
     QPolygonF selectionPolygon;
     selectionPolygon << QPointF(0, 0);
-    selectionPolygon << QPointF(700, 0);
-    selectionPolygon << QPointF(700, 700);
-    selectionPolygon << QPointF(0, 700);
+    selectionPolygon << QPointF(width, 0);
+    selectionPolygon << QPointF(width, height);
+    selectionPolygon << QPointF(0, height);
 
-    QRect imageRect(0, 0, 700, 700);
+    QRect imageRect(0, 0, width, height);
 
     KisSelectionSP selection = new KisSelection();
     KisPixelSelectionSP pixelSelection = selection->pixelSelection();
@@ -109,7 +108,15 @@ void KisGradientPainterTest::testShapedGradient()
     QVERIFY(TestUtil::checkQImageExternal(dev->convertToQImage(0, imageRect),
                                           "shaped_gradient_test",
                                           "fill",
-                                          "gradient", 1, 1, 0));
+                                          "gradient_" + QString::number(width) + "_" + QString::number(height),
+                                          1, 1, 0));
+}
+
+void KisGradientPainterTest::testShapedGradient()
+{
+    testGradient(300, 300);
+    testGradient(700, 700);
+    testGradient(2000, 2000);
 }
 
 void testShapedGradientPainterImpl(const QPolygonF &selectionPolygon,

@@ -452,7 +452,23 @@ void KoFillConfigWidget::noColorSelected()
     if (d->fillType == Fill) {
         command = new KoShapeBackgroundCommand(selectedShapes, QSharedPointer<KoShapeBackground>());
     } else {
-        command = new KoShapeStrokeCommand(selectedShapes, KoShapeStrokeModelSP());
+        QList<KoShapeStrokeModelSP> strokes;
+
+        Q_FOREACH(KoShape *shape, selectedShapes) {
+            if (shape->stroke()) {
+                KoShapeStrokeSP stroke = qSharedPointerDynamicCast<KoShapeStroke>(shape->stroke());
+                KIS_SAFE_ASSERT_RECOVER_RETURN(stroke);
+
+                KoShapeStrokeSP newStroke(new KoShapeStroke(*stroke));
+                newStroke->setLineBrush(Qt::NoBrush);
+                newStroke->setColor(Qt::transparent);
+                strokes << newStroke;
+            } else {
+                strokes << KoShapeStrokeSP();
+            }
+        }
+
+        command = new KoShapeStrokeCommand(selectedShapes, strokes);
     }
 
     KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();

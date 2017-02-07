@@ -40,7 +40,7 @@ DefaultToolTabbedWidget::DefaultToolTabbedWidget(KoInteractionTool *tool, QWidge
     strokeWidget->setCanvas(tool->canvas());
     addTab(strokeWidget, KisIconUtils::loadIcon("krita_tool_line"), QString());
 
-    KoFillConfigWidget *fillWidget = new KoFillConfigWidget(this);
+    KoFillConfigWidget *fillWidget = new KoFillConfigWidget(KoFillConfigWidget::Fill, this);
     fillWidget->setWindowTitle(i18n("Fill"));
     // TODO: pass canvas to teh c-tor instead
     //fillWidget->setCanvas(tool->canvas());

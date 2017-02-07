@@ -65,6 +65,7 @@
 #include <KoShapeManager.h>
 #include <KoShapeStrokeCommand.h>
 #include <KoShapeStrokeModel.h>
+#include <KoFillConfigWidget.h>
 
 // Krita
 #include "kis_double_parse_unit_spin_box.h"
@@ -162,7 +163,8 @@ class Q_DECL_HIDDEN KoStrokeConfigWidget::Private
 public:
     Private()
         : canvas(0),
-        active(true)
+        active(true),
+        fillConfigWidget(0)
     {
     }
 
@@ -180,6 +182,8 @@ public:
     KoCanvasBase *canvas;
 
     bool active;
+
+    KoFillConfigWidget *fillConfigWidget;
 };
 
 KoStrokeConfigWidget::KoStrokeConfigWidget(QWidget * parent)
@@ -246,6 +250,18 @@ KoStrokeConfigWidget::KoStrokeConfigWidget(QWidget * parent)
 
     mainLayout->addLayout(firstLineLayout);
     mainLayout->addLayout(secondLineLayout);
+
+    { // add separator line
+        QFrame* line = new QFrame();
+        line->setFrameShape(QFrame::HLine);
+        mainLayout->addWidget(line);
+    }
+
+    {
+        d->fillConfigWidget = new KoFillConfigWidget(KoFillConfigWidget::Stroke, this);
+        mainLayout->addWidget(d->fillConfigWidget);
+    }
+
 
     // Spacer
     d->spacer = new QWidget();

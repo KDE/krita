@@ -163,14 +163,16 @@ void KoShapeStroke::paint(KoShape *shape, QPainter &painter, const KoViewConvert
     d->paintBorder(shape, painter, pen);
 }
 
-void KoShapeStroke::paint(KoShape *shape, QPainter &painter, const KoViewConverter &converter, const QColor &color)
+bool KoShapeStroke::compareTo(const KoShapeStrokeModel *other)
 {
-    KoShape::applyConversion(painter, converter);
+    if (!other) return false;
 
-    QPen pen = d->pen;
-    pen.setColor(color);
+    const KoShapeStroke *stroke = dynamic_cast<const KoShapeStroke*>(other);
+    if (!stroke) return false;
 
-    d->paintBorder(shape, painter, pen);
+    return d->pen == stroke->d->pen &&
+            d->brush == stroke->d->brush &&
+            d->color == stroke->d->color;
 }
 
 void KoShapeStroke::setCapStyle(Qt::PenCapStyle style)

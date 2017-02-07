@@ -77,18 +77,7 @@ public:
      */
     virtual void paint(KoShape *shape, QPainter &painter, const KoViewConverter &converter) = 0;
 
-    /**
-     * Paint the stroke in the given color
-     *
-     * This method should paint the stroke around the shape in the given color.
-     *
-     * @param shape the shape to paint around
-     * @param painter the painter to paint to, the painter will have the topleft of the
-     *       shape as its start coordinate.
-     * @param converter to convert between internal and view coordinates.
-     * @param color to use to paint the stroke.
-     */
-    virtual void paint(KoShape *shape, QPainter &painter, const KoViewConverter &converter, const QColor &color) = 0;
+    virtual bool compareTo(const KoShapeStrokeModel *other) = 0;
 
     /**
      * Increments the use-value.

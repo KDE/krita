@@ -37,7 +37,7 @@
 #include "kis_polygonal_gradient_shape_strategy.h"
 #include "kis_cached_gradient_shape_strategy.h"
 #include "krita_utils.h"
-
+#include "boost/random.hpp"
 
 class CachedGradient : public KoAbstractGradient
 {
@@ -51,11 +51,28 @@ public:
         m_colorSpace = cs;
 
         m_black = KoColor(cs);
+        qreal count = 1;
+        qreal lastcount = 1;
+
 
         KoColor tmpColor(m_colorSpace);
+        KoColor nextColor(m_colorSpace);
+        m_subject->colorAt(tmpColor, qreal(0) / m_max);
+        nextColor = tmpColor;
+
         for(qint32 i = 0; i < steps; i++) {
             m_subject->colorAt(tmpColor, qreal(i) / m_max);
             m_colors << tmpColor;
+            if(nextColor == tmpColor) {
+                count++;
+                m_step << (qreal(lastcount) / m_max);
+            }
+            else {
+                m_step << (qreal(count) / m_max);
+                lastcount = count;
+                count = 1;
+                nextColor = tmpColor;
+            }
         }
     }
 
@@ -87,6 +104,34 @@ public:
         }
     }
 
+
+    /// gets step of change t at position 0 <= t <= 1
+    double stepAt(qreal t) const
+    {
+        qint32 tInt = t * m_max + 0.5;
+        if (m_step.size() > tInt) {
+            return m_step[tInt];
+        }
+        else {
+            return 0;
+        }
+    }
+
+
+    /// gets step of change t at position 0 <= t <= 1
+    KoColor colorAt(qreal t) const
+    {
+        qint32 tInt = t * m_max + 0.5;
+        if (m_colors.size() > tInt) {
+            return m_colors[tInt];
+        }
+        else {
+            return m_black;
+        }
+    }
+
+
+
     void setColorSpace(KoColorSpace* colorSpace) { m_colorSpace = colorSpace; }
     const KoColorSpace * colorSpace() const { return m_colorSpace; }
 
@@ -97,6 +142,8 @@ private:
     const KoColorSpace *m_colorSpace;
     qint32 m_max;
     QVector<KoColor> m_colors;
+    QVector<qreal> m_step;
+
     KoColor m_black;
 };
 
@@ -705,6 +752,7 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
 
     const KoColorSpace * colorSpace = dev->colorSpace();
     const qint32 pixelSize = colorSpace->pixelSize();
+    boost::mt11213b  gen(37);
 
     Q_FOREACH (const Private::ProcessRegion &r, m_d->processRegions) {
         QRect processRect = r.processRect;
@@ -722,6 +770,23 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
 
             if (reverseGradient) {
                 t = 1 - t;
+            }
+            boost::random::uniform_01 <> distribution;
+            double r = distribution(gen);
+            if(cachedGradient.colorAt(t) == cachedGradient.colorAt(t + cachedGradient.stepAt(t) / 2)) {
+                if (r < 0.5){
+                    t += cachedGradient.stepAt(t) / 2;
+                }  else {
+                       if (r >= 0.5) {
+                           t -= cachedGradient.stepAt(t) / 2;
+                       }
+                }
+            }
+            if (t > 1) {
+                t = 1;
+            } else
+                 if(t < 0){
+                     t = 0;
             }
 
             memcpy(it.rawData(), cachedGradient.cachedAt(t), pixelSize);

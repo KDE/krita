@@ -60,6 +60,58 @@ void KisGradientPainterTest::testSimplifyPath()
     QCOMPARE(simplifiedPath, ref);
 }
 
+void KisGradientPainterTest::testShapedGradient()
+{
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    KisPaintDeviceSP dev = new KisPaintDevice(cs);
+
+    QPolygonF selectionPolygon;
+    selectionPolygon << QPointF(0, 0);
+    selectionPolygon << QPointF(700, 0);
+    selectionPolygon << QPointF(700, 700);
+    selectionPolygon << QPointF(0, 700);
+
+    QRect imageRect(0, 0, 700, 700);
+
+    KisSelectionSP selection = new KisSelection();
+    KisPixelSelectionSP pixelSelection = selection->pixelSelection();
+
+    KisPainter selPainter(pixelSelection);
+    selPainter.setFillStyle(KisPainter::FillStyleForegroundColor);
+    selPainter.setPaintColor(KoColor(Qt::white, pixelSelection->colorSpace()));
+    selPainter.paintPolygon(selectionPolygon);
+
+    selPainter.end();
+
+    pixelSelection->invalidateOutlineCache();
+
+    QLinearGradient testGradient;
+    testGradient.setColorAt(0.0, Qt::black);
+    testGradient.setColorAt(1.0, Qt::white);
+    testGradient.setSpread(QGradient::ReflectSpread);
+    QScopedPointer<KoStopGradient> gradient(
+        KoStopGradient::fromQGradient(&testGradient));
+
+    KisGradientPainter gc(dev, selection);
+    gc.setGradient(gradient.data());
+    gc.setGradientShape(KisGradientPainter::GradientShapeLinear);
+
+    gc.paintGradient(selectionPolygon.boundingRect().topLeft(),
+                     selectionPolygon.boundingRect().bottomRight(),
+                     KisGradientPainter::GradientRepeatNone,
+                     0,
+                     false,
+                     imageRect.x(),
+                     imageRect.y(),
+                     imageRect.width(),
+                     imageRect.height());
+
+    QVERIFY(TestUtil::checkQImageExternal(dev->convertToQImage(0, imageRect),
+                                          "shaped_gradient_test",
+                                          "fill",
+                                          "gradient", 1, 1, 0));
+}
+
 void testShapedGradientPainterImpl(const QPolygonF &selectionPolygon,
                                    const QString &testName,
                                    const QPolygonF &selectionErasePolygon = QPolygonF())

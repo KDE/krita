@@ -37,6 +37,7 @@ private Q_SLOTS:
     void testSplitDisjointPaths();
 
     void testCachedStrategy();
+    void testShapedGradient();
 };
 
 #endif

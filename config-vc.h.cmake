@@ -2,4 +2,3 @@
 
 /* Define if you have Vc, the vectorization library */
 #cmakedefine HAVE_VC 1
-#cmakedefine DO_PACKAGERS_BUILD 1

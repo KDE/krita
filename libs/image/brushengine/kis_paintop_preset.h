@@ -106,6 +106,20 @@ public:
         bool m_isDirty;
     };
 
+    /**
+     * @brief The UpdatedPostponer class
+     * @see KisPaintopSettingsUpdateProxy::postponeSettingsChanges()
+     */
+    class UpdatedPostponer{
+    public:
+        UpdatedPostponer(KisPaintOpPreset *preset);
+
+        ~UpdatedPostponer();
+
+    private:
+        KisPaintopSettingsUpdateProxy *m_updateProxy;
+    };
+
     void setOptionsWidget(KisPaintOpConfigWidget *widget);
 
     KisPaintopSettingsUpdateProxy* updateProxy() const;

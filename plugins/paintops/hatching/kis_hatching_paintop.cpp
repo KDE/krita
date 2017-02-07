@@ -181,7 +181,7 @@ KisSpacingInformation KisHatchingPaintOp::paintAt(const KisPaintInformation& inf
                                     !m_dabCache->needSeparateOriginal());
     painter()->setOpacity(origOpacity);
 
-    return effectiveSpacing(scale, 0.0);
+    return effectiveSpacing(scale);
 }
 
 double KisHatchingPaintOp::spinAngle(double spin)

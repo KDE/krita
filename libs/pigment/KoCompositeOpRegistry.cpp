@@ -76,18 +76,20 @@ KoCompositeOpRegistry::KoCompositeOpRegistry()
     m_map.insert(m_categories[3], KoID(COMPOSITE_EXCLUSION            , i18n("Exclusion")));
     m_map.insert(m_categories[3], KoID(COMPOSITE_ARC_TANGENT          , i18n("Arcus Tangent")));
 
-    m_map.insert(m_categories[4], KoID(COMPOSITE_OVER          , i18n("Normal")));
-    m_map.insert(m_categories[4], KoID(COMPOSITE_BEHIND        , i18n("Behind")));
-    m_map.insert(m_categories[4], KoID(COMPOSITE_GREATER        , i18n("Greater")));
-    m_map.insert(m_categories[4], KoID(COMPOSITE_OVERLAY       , i18n("Overlay")));
-    m_map.insert(m_categories[4], KoID(COMPOSITE_ERASE         , i18n("Erase")));
-    m_map.insert(m_categories[4], KoID(COMPOSITE_ALPHA_DARKEN  , i18n("Alpha Darken")));
-    m_map.insert(m_categories[4], KoID(COMPOSITE_HARD_MIX      , i18n("Hard Mix")));
-    m_map.insert(m_categories[4], KoID(COMPOSITE_GRAIN_MERGE   , i18n("Grain Merge")));
-    m_map.insert(m_categories[4], KoID(COMPOSITE_GRAIN_EXTRACT , i18n("Grain Extract")));
-    m_map.insert(m_categories[4], KoID(COMPOSITE_PARALLEL      , i18n("Parallel")));
-    m_map.insert(m_categories[4], KoID(COMPOSITE_ALLANON       , i18n("Allanon")));
-    m_map.insert(m_categories[4], KoID(COMPOSITE_GEOMETRIC_MEAN, i18n("Geometric Mean")));
+    m_map.insert(m_categories[4], KoID(COMPOSITE_OVER            , i18n("Normal")));
+    m_map.insert(m_categories[4], KoID(COMPOSITE_BEHIND          , i18n("Behind")));
+    m_map.insert(m_categories[4], KoID(COMPOSITE_GREATER         , i18n("Greater")));
+    m_map.insert(m_categories[4], KoID(COMPOSITE_OVERLAY         , i18n("Overlay")));
+    m_map.insert(m_categories[4], KoID(COMPOSITE_ERASE           , i18n("Erase")));
+    m_map.insert(m_categories[4], KoID(COMPOSITE_ALPHA_DARKEN    , i18n("Alpha Darken")));
+    m_map.insert(m_categories[4], KoID(COMPOSITE_HARD_MIX        , i18n("Hard Mix")));
+    m_map.insert(m_categories[4], KoID(COMPOSITE_GRAIN_MERGE     , i18n("Grain Merge")));
+    m_map.insert(m_categories[4], KoID(COMPOSITE_GRAIN_EXTRACT   , i18n("Grain Extract")));
+    m_map.insert(m_categories[4], KoID(COMPOSITE_PARALLEL        , i18n("Parallel")));
+    m_map.insert(m_categories[4], KoID(COMPOSITE_ALLANON         , i18n("Allanon")));
+    m_map.insert(m_categories[4], KoID(COMPOSITE_GEOMETRIC_MEAN  , i18n("Geometric Mean")));
+    m_map.insert(m_categories[4], KoID(COMPOSITE_DESTINATION_ATOP, i18n("Destination Atop")));
+    m_map.insert(m_categories[4], KoID(COMPOSITE_DESTINATION_IN  , i18n("Destination In")));
 
     m_map.insert(m_categories[5], KoID(COMPOSITE_BUMPMAP   , i18n("Bumpmap")));
     m_map.insert(m_categories[5], KoID(COMPOSITE_COMBINE_NORMAL, i18n("Combine Normal Map")));

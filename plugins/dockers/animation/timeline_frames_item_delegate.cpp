@@ -108,7 +108,7 @@ void TimelineFramesItemDelegate::drawBackground(QPainter *painter, const QModelI
     bool active = index.data(TimelineFramesModel::ActiveLayerRole).toBool();
     bool present = index.data(TimelineFramesModel::FrameExistsRole).toBool();
     bool editable = index.data(TimelineFramesModel::FrameEditableRole).toBool();
-    QVariant colorLabel = index.data(TimelineFramesModel::ColorLabel);
+    QVariant colorLabel = index.data(TimelineFramesModel::FrameColorLabelIndexRole);
 
     QColor color = colorLabel.isValid() ? labelColors.at(colorLabel.toInt()) :
             TimelineColorScheme::instance()->frameColor(present, active);

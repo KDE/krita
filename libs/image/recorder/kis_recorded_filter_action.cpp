@@ -47,7 +47,7 @@ struct Q_DECL_HIDDEN KisRecordedFilterAction::Private {
 
     KisFilterConfigurationSP configuration() {
         if (!filterConfiguration) {
-            filterConfiguration = filter->defaultConfiguration(0);
+            filterConfiguration = filter->defaultConfiguration();
             if (filterConfiguration) {
                 filterConfiguration->fromXML(configstr);
             }
@@ -96,7 +96,7 @@ void KisRecordedFilterAction::play(KisNodeSP node, const KisPlayInfo& _info, KoU
 {
     KisFilterConfigurationSP  kfc = d->configuration();
     KisPaintDeviceSP dev = node->paintDevice();
-    KisLayerSP layer = dynamic_cast<KisLayer*>(node.data());
+    KisLayerSP layer = qobject_cast<KisLayer*>(node.data());
     QRect r1 = dev->extent();
     KisTransaction transaction(kundo2_i18n("Filter: \"%1\"", d->filter->name()), dev);
 
@@ -162,7 +162,7 @@ KisRecordedAction* KisRecordedFilterActionFactory::fromXML(const QDomElement& el
     KisNodeQueryPath pathnode = KisNodeQueryPath::fromString(elt.attribute("path"));
     const KisFilterSP filter = KisFilterRegistry::instance()->get(elt.attribute("filter"));
     if (filter) {
-        KisFilterConfigurationSP config = filter->defaultConfiguration(0);
+        KisFilterConfigurationSP config = filter->defaultConfiguration();
         QDomElement paramsElt = elt.firstChildElement("Params");
         if (config && !paramsElt.isNull()) {
             config->fromXML(paramsElt);

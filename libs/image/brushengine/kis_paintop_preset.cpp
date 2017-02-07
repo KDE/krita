@@ -70,7 +70,7 @@ KisPaintOpPreset::~KisPaintOpPreset()
 
 KisPaintOpPresetSP KisPaintOpPreset::clone() const
 {
-    KisPaintOpPresetSP preset = new KisPaintOpPreset();
+    KisPaintOpPresetSP preset(new KisPaintOpPreset());
 
     if (settings()) {
         preset->setSettings(settings()); // the settings are cloned inside!
@@ -91,11 +91,8 @@ KisPaintOpPresetSP KisPaintOpPreset::clone() const
 void KisPaintOpPreset::setPresetDirty(bool value)
 {
     m_d->dirtyPreset = value;
-
-    if (m_d->updateProxy && m_d->dirtyPreset != value) {
-        m_d->updateProxy->notifySettingsChanged();
-    }
 }
+
 bool KisPaintOpPreset::isPresetDirty() const
 {
     return m_d->dirtyPreset;
@@ -127,7 +124,7 @@ void KisPaintOpPreset::setOptionsWidget(KisPaintOpConfigWidget* widget)
 void KisPaintOpPreset::setSettings(KisPaintOpSettingsSP settings)
 {
     Q_ASSERT(settings);
-    Q_ASSERT(!settings->getString("paintop", "").isEmpty());
+    Q_ASSERT(!settings->getString("paintop", QString()).isEmpty());
 
     DirtyStateSaver dirtyStateSaver(this);
 
@@ -161,7 +158,7 @@ void KisPaintOpPreset::setSettings(KisPaintOpSettingsSP settings)
 KisPaintOpSettingsSP KisPaintOpPreset::settings() const
 {
     Q_ASSERT(m_d->settings);
-    Q_ASSERT(!m_d->settings->getString("paintop", "").isEmpty());
+    Q_ASSERT(!m_d->settings->getString("paintop", QString()).isEmpty());
 
     return m_d->settings;
 }
@@ -275,7 +272,7 @@ bool KisPaintOpPreset::save()
     if (filename().isEmpty())
         return false;
 
-    QString paintopid = m_d->settings->getString("paintop", "");
+    QString paintopid = m_d->settings->getString("paintop", QString());
 
     if (paintopid.isEmpty())
         return false;
@@ -288,7 +285,7 @@ bool KisPaintOpPreset::save()
 
 void KisPaintOpPreset::toXML(QDomDocument& doc, QDomElement& elt) const
 {
-    QString paintopid = m_d->settings->getString("paintop", "");
+    QString paintopid = m_d->settings->getString("paintop", QString());
 
     elt.setAttribute("paintopid", paintopid);
     elt.setAttribute("name", name());
@@ -323,7 +320,7 @@ void KisPaintOpPreset::fromXML(const QDomElement& presetElt)
         return;
     }
 
-    KoID id(paintopid, "");
+    KoID id(paintopid, QString());
 
     KisPaintOpSettingsSP settings = KisPaintOpRegistry::instance()->settings(id);
     if (!settings) {
@@ -390,4 +387,19 @@ KisPaintopSettingsUpdateProxy* KisPaintOpPreset::updateProxyNoCreate() const
 QList<KisUniformPaintOpPropertySP> KisPaintOpPreset::uniformProperties()
 {
     return m_d->settings->uniformProperties(m_d->settings);
+}
+
+KisPaintOpPreset::UpdatedPostponer::UpdatedPostponer(KisPaintOpPreset *preset)
+    : m_updateProxy(preset->updateProxyNoCreate())
+{
+    if (m_updateProxy) {
+        m_updateProxy->postponeSettingsChanges();
+    }
+}
+
+KisPaintOpPreset::UpdatedPostponer::~UpdatedPostponer()
+{
+    if (m_updateProxy) {
+        m_updateProxy->unpostponeSettingsChanges();
+    }
 }

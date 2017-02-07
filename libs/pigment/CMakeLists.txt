@@ -96,13 +96,6 @@ endif()
 add_library(kritapigment SHARED ${kritapigment_SRCS})
 generate_export_header(kritapigment)
 
-if (HAVE_VC)
-    target_link_libraries(kritapigment PUBLIC KF5::I18n KF5::ConfigCore)
-    if (NOT PACKAGERS_BUILD)
-        set_property(TARGET kritapigment APPEND PROPERTY COMPILE_OPTIONS "${Vc_ARCHITECTURE_FLAGS}")
-    endif()
-endif()
-
 target_include_directories( kritapigment
     PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/resources>
@@ -114,6 +107,7 @@ target_link_libraries( kritapigment
         kritaplugin
         ${EXTRA_LIBRARIES}
         KF5::I18n 
+        KF5::ConfigCore
         Qt5::Core
         Qt5::Gui
         Qt5::Xml

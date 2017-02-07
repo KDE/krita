@@ -37,7 +37,7 @@ void KisNodeMoveCommand2::undo() {
 
 void KisNodeMoveCommand2::tryNotifySelection(KisNodeSP node)
 {
-    KisSelectionMaskSP mask = dynamic_cast<KisSelectionMask*>(node.data());
+    KisSelectionMask *mask = dynamic_cast<KisSelectionMask*>(node.data());
     if (!mask) return;
 
     mask->notifySelectionChangedCompressed();

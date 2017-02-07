@@ -75,7 +75,10 @@ struct KisAnimationCurvesModel::Private
         , undoCommand(0)
     {}
 
-    KisAnimationCurve * getCurveAt(const QModelIndex& index) {
+    KisAnimationCurve *getCurveAt(const QModelIndex& index) {
+
+        if (!index.isValid()) return 0;
+
         int row = index.row();
 
         if (row < 0 || row >= curves.size()) {
@@ -347,7 +350,11 @@ void KisAnimationCurvesModel::setCurveVisible(KisAnimationCurve *curve, bool vis
 
 KisNodeSP KisAnimationCurvesModel::nodeAt(QModelIndex index) const
 {
-    return KisNodeSP(m_d->getCurveAt(index)->channel()->node());
+    KisAnimationCurve *curve = m_d->getCurveAt(index);
+    if (curve && curve->channel() && curve->channel()->node()) {
+        return KisNodeSP(curve->channel()->node());
+    }
+    return 0;
 }
 
 QList<KisKeyframeChannel *> KisAnimationCurvesModel::channelsAt(QModelIndex index) const

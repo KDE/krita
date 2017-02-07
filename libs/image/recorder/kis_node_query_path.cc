@@ -142,6 +142,14 @@ QList<KisNodeSP> KisNodeQueryPath::queryNodes(KisImageWSP image, KisNodeSP curre
     return result;
 }
 
+KisNodeSP KisNodeQueryPath::queryUniqueNode(KisImageWSP image, KisNodeSP currentNode) const
+{
+    QList<KisNodeSP> result = queryNodes(image, currentNode);
+    KIS_ASSERT_RECOVER_NOOP(result.size() <= 1);
+
+    return !result.isEmpty() ? result.first() : 0;
+}
+
 QString KisNodeQueryPath::toString() const
 {
     QString str;

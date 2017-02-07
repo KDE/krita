@@ -30,7 +30,7 @@
 
 KisQImagePyramid::KisQImagePyramid(const QImage &baseImage)
 {
-    Q_ASSERT(!baseImage.isNull());
+    KIS_SAFE_ASSERT_RECOVER_RETURN(!baseImage.isNull());
 
     m_originalSize = baseImage.size();
 
@@ -109,14 +109,14 @@ inline QRect roundRect(const QRectF &rc)
 
     QRectF rect(rc);
 
-    KIS_ASSERT_RECOVER_NOOP(rect.x() > -1e-6);
-    KIS_ASSERT_RECOVER_NOOP(rect.y() > -1e-6);
+    KIS_SAFE_ASSERT_RECOVER_NOOP(rect.x() > -0.000001);
+    KIS_SAFE_ASSERT_RECOVER_NOOP(rect.y() > -0.000001);
 
-    if (rect.x() < 0.0) {
+    if (rect.x() < 0.000001) {
         rect.setLeft(0.0);
     }
 
-    if (rect.y() < 0.0) {
+    if (rect.y() < 0.000001) {
         rect.setTop(0.0);
     }
 
@@ -130,7 +130,7 @@ QTransform baseBrushTransform(KisDabShape const& shape,
     QTransform transform;
     transform.scale(shape.scaleX(), shape.scaleY());
 
-    if (!qFuzzyCompare(shape.rotation(), 0)) {
+    if (!qFuzzyCompare(shape.rotation(), 0) && !qIsNaN(shape.rotation())) {
         transform = transform * QTransform().rotateRadians(shape.rotation());
         QRectF rotatedBounds = transform.mapRect(baseBounds);
         transform = transform * QTransform::fromTranslate(-rotatedBounds.x(), -rotatedBounds.y());
@@ -159,9 +159,7 @@ void KisQImagePyramid::calculateParams(KisDabShape shape,
     Q_UNUSED(baseScale);
 
     QRectF originalBounds = QRectF(QPointF(), originalSize);
-    QTransform originalTransform =
-        baseBrushTransform(shape, subPixelX, subPixelY,
-                           originalBounds);
+    QTransform originalTransform = baseBrushTransform(shape, subPixelX, subPixelY, originalBounds);
 
     qreal realBaseScaleX = qreal(baseSize.width()) / originalSize.width();
     qreal realBaseScaleY = qreal(baseSize.height()) / originalSize.height();
@@ -170,32 +168,49 @@ void KisQImagePyramid::calculateParams(KisDabShape shape,
     shape = KisDabShape(scaleX, scaleY/scaleX, shape.rotation());
 
     QRectF baseBounds = QRectF(QPointF(), baseSize);
+    QTransform transform = baseBrushTransform(shape, subPixelX, subPixelY, baseBounds);
+    QRectF mappedRect = originalTransform.mapRect(originalBounds);
 
-    QTransform transform =
-        baseBrushTransform(shape,
-                           subPixelX, subPixelY,
-                           baseBounds);
-    QRect expectedDstRect = roundRect(originalTransform.mapRect(originalBounds));
+    // Set up a 0,0,1,1 size and identity transform in case the transform fails to
+    // produce a usable result.
+    int width = 1;
+    int height = 1;
+    *outputTransform = QTransform();
+
+    if (mappedRect.isValid()) {
+        QRect expectedDstRect = roundRect(mappedRect);
+
 #if 0 // Only enable when debugging; users shouldn't see this warning
-    {
-        QRect testingRect = roundRect(transform.mapRect(baseBounds));
-        if (testingRect != expectedDstRect) {
-            warnKrita << "WARNING: expected and real dab rects do not coincide!";
-            warnKrita << "         expected rect:" << expectedDstRect;
-            warnKrita << "         real rect:    " << testingRect;
+        {
+            QRect testingRect = roundRect(transform.mapRect(baseBounds));
+            if (testingRect != expectedDstRect) {
+                warnKrita << "WARNING: expected and real dab rects do not coincide!";
+                warnKrita << "         expected rect:" << expectedDstRect;
+                warnKrita << "         real rect:    " << testingRect;
+            }
         }
-    }
 #endif
-    KIS_ASSERT_RECOVER_NOOP(expectedDstRect.x() >= 0);
-    KIS_ASSERT_RECOVER_NOOP(expectedDstRect.y() >= 0);
+        KIS_SAFE_ASSERT_RECOVER_NOOP(expectedDstRect.x() >= 0);
+        KIS_SAFE_ASSERT_RECOVER_NOOP(expectedDstRect.y() >= 0);
 
-    int width = expectedDstRect.x() + expectedDstRect.width();
-    int height = expectedDstRect.y() + expectedDstRect.height();
+        width = expectedDstRect.x() + expectedDstRect.width();
+        height = expectedDstRect.y() + expectedDstRect.height();
 
-    // we should not return invalid image, so adjust the image to be
-    // at least 1 px in size.
-    width = qMax(1, width);
-    height = qMax(1, height);
+        // we should not return invalid image, so adjust the image to be
+        // at least 1 px in size.
+        width = qMax(1, width);
+        height = qMax(1, height);
+    }
+    else {
+        qWarning() << "Brush transform generated an invalid rectangle!" 
+            << ppVar(shape.scaleX()) << ppVar(shape.scaleY()) << ppVar(shape.rotation())
+            << ppVar(subPixelX) << ppVar(subPixelY)
+            << ppVar(originalSize)
+            << ppVar(baseScale)
+            << ppVar(baseSize)
+            << ppVar(baseBounds)
+            << ppVar(mappedRect);
+    }
 
     *outputTransform = transform;
     *outputSize = QSize(width, height);
@@ -236,9 +251,10 @@ void KisQImagePyramid::appendPyramidLevel(const QImage &image)
      * it is rotated.  To workaround this bug we need to add one pixel
      * wide border to the image, so that it transforms smoothly.
      *
-     * See a unittest in: KisGimpBrushTest::testQPainterTransformationBorder
+     * See a unittest in: KisGbrBrushTest::testQPainterTransformationBorder
      */
-    QSize levelSize = image.size();
+    
+QSize levelSize = image.size();
     QImage tmp = image.convertToFormat(QImage::Format_ARGB32);
     tmp = tmp.copy(-QPAINTER_WORKAROUND_BORDER,
                    -QPAINTER_WORKAROUND_BORDER,

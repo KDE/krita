@@ -25,6 +25,7 @@
 #include "kis_stroke_job_strategy.h"
 #include "kis_stroke_strategy.h"
 #include "kis_stroke_strategy_factory.h"
+#include "kis_strokes_queue_undo_result.h"
 
 
 
@@ -32,6 +33,7 @@ class KisUpdaterContext;
 class KisStroke;
 class KisStrokeStrategy;
 class KisStrokeJobData;
+class KisPostExecutionUndoAdapter;
 
 
 class KRITAIMAGE_EXPORT KisStrokesQueue
@@ -47,6 +49,8 @@ public:
     bool cancelStroke(KisStrokeId id);
 
     bool tryCancelCurrentStrokeAsync();
+
+    UndoResult tryUndoLastStrokeAsync();
 
     void processQueue(KisUpdaterContext &updaterContext,
                       bool externalJobsPending);
@@ -64,6 +68,7 @@ public:
     void setLod0ToNStrokeStrategyFactory(const KisLodSyncStrokeStrategyFactory &factory);
     void setSuspendUpdatesStrokeStrategyFactory(const KisSuspendResumeStrategyFactory &factory);
     void setResumeUpdatesStrokeStrategyFactory(const KisSuspendResumeStrategyFactory &factory);
+    KisPostExecutionUndoAdapter* lodNPostExecutionUndoAdapter() const;
 
     /**
      * Notifies the queue, that someone else (neither strokes nor the
@@ -71,6 +76,8 @@ public:
      * should be regenerated
      */
     void notifyUFOChangedImage();
+
+    void debugDumpAllStrokes();
 
 private:
     bool processOneJob(KisUpdaterContext &updaterContext,
@@ -82,6 +89,10 @@ private:
     bool checkBarrierProperty(qint32 numMergeJobs, qint32 numStrokeJobs,
                               bool externalJobsPending);
     bool checkLevelOfDetailProperty(int runningLevelOfDetail);
+
+    class LodNUndoStrokesFacade;
+    KisStrokeId startLodNUndoStroke(KisStrokeStrategy *strokeStrategy);
+
 private:
     struct Private;
     Private * const m_d;

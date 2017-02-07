@@ -1,5 +1,7 @@
 project(kritafilters)
 
+add_subdirectory(libkra)
+
 if(CMAKE_SIZEOF_VOID_P EQUAL 4)
   add_definitions( -DCPU_32_BITS )
 endif()
@@ -41,3 +43,4 @@ add_subdirectory(heightmap)
 add_subdirectory(brush)
 add_subdirectory(spriter)
 add_subdirectory(video)
+add_subdirectory(kra)

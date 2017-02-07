@@ -79,9 +79,9 @@ public:
         : KoToolFactoryBase("KisToolSelectContiguous")
     {
         setToolTip(i18n("Contiguous Selection Tool"));
-        setToolType(TOOL_TYPE_SELECTED);
+        setSection(TOOL_TYPE_SELECTION);
         setIconName(koIconNameCStr("tool_contiguous_selection"));
-        setPriority(56);
+        setPriority(4);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
     }
 

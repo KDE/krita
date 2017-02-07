@@ -43,6 +43,7 @@
 #include <QEventLoop>
 #include <QTemporaryFile>
 #include <QTemporaryDir>
+#include <QTime>
 
 #include "KisPart.h"
 
@@ -79,6 +80,7 @@ private Q_SLOTS:
             emit sigProgressChanged(100);
             emit sigProcessingFinished();
         } else {
+
             emit sigProgressChanged(100 * currentFrame / m_totalFrames);
         }
     }
@@ -106,12 +108,12 @@ public:
                                      const QString &logPath,
                                      int totalFrames)
     {
-//        qDebug() << "runFFMpeg: specialArgs" << specialArgs
-//                 << "actionName" << actionName
-//                 << "logPath" << logPath
-//                 << "totalFrames" << totalFrames;
+        dbgFile << "runFFMpeg: specialArgs" << specialArgs
+                << "actionName" << actionName
+                << "logPath" << logPath
+                << "totalFrames" << totalFrames;
 
-        QTemporaryFile progressFile("KritaFFmpegProgress.XXXXXX");
+        QTemporaryFile progressFile(QDir::tempPath() + QDir::separator() + "KritaFFmpegProgress.XXXXXX");
         progressFile.open();
 
         m_process.setStandardOutputFile(logPath);
@@ -121,6 +123,8 @@ public:
              << "-nostdin"
              << "-progress" << progressFile.fileName()
              << specialArgs;
+
+        qDebug() << "\t" << m_ffmpegPath << args.join(" ");
 
         m_cancelled = false;
         m_process.start(m_ffmpegPath, args);
@@ -146,7 +150,7 @@ private:
         progress.setCancelButton(0);
         progress.setMinimumDuration(0);
         progress.setValue(0);
-        progress.setRange(0,100);
+        progress.setRange(0, 100);
 
         QEventLoop loop;
         loop.connect(&watcher, SIGNAL(sigProcessingFinished()), SLOT(quit()));
@@ -179,12 +183,12 @@ private:
 };
 
 
-VideoSaver::VideoSaver(KisDocument *doc, bool batchMode)
+VideoSaver::VideoSaver(KisDocument *doc, const QString &ffmpegPath, bool batchMode)
     : m_image(doc->image())
     , m_doc(doc)
     , m_batchMode(batchMode)
-    , m_ffmpegPath(findFFMpeg())
-    , m_runner(new KisFFMpegRunner(m_ffmpegPath))
+    , m_ffmpegPath(ffmpegPath)
+    , m_runner(new KisFFMpegRunner(ffmpegPath))
 {
 }
 
@@ -202,57 +206,40 @@ bool VideoSaver::hasFFMpeg() const
     return !m_ffmpegPath.isEmpty();
 }
 
-QString VideoSaver::findFFMpeg()
-{
-    QString result;
-
-    QStringList proposedPaths;
-
-    QString customPath = KisConfig().customFFMpegPath();
-    proposedPaths << customPath;
-    proposedPaths << customPath + QDir::separator() + "ffmpeg";
-
-    proposedPaths << "ffmpeg";
-    proposedPaths << KoResourcePaths::getApplicationRoot() +
-        QDir::separator() + "bin" + QDir::separator() + "ffmpeg";
-
-    Q_FOREACH (const QString &path, proposedPaths) {
-        if (path.isEmpty()) continue;
-
-        QProcess testProcess;
-        testProcess.start(path, QStringList() << "-version");
-        testProcess.waitForFinished(1000);
-
-        const bool successfulStart =
-            testProcess.state() == QProcess::NotRunning &&
-            testProcess.error() == QProcess::UnknownError;
-
-        if (successfulStart) {
-            result = path;
-            break;
-        }
-    }
-
-    return result;
-}
-
 KisImageBuilder_Result VideoSaver::encode(const QString &filename, KisPropertiesConfigurationSP configuration)
 {
 
-    //qDebug() << "ffmpeg" << m_ffmpegPath << "filename" << filename << "configuration" << configuration->toXML();
+    qDebug() << "ffmpeg" << m_ffmpegPath << "filename" << filename << "configuration" << configuration->toXML();
 
-    if (m_ffmpegPath.isEmpty()) return KisImageBuilder_RESULT_FAILURE;
+    if (m_ffmpegPath.isEmpty()) {
+        m_ffmpegPath = configuration->getString("ffmpeg_path");
+        if (!QFileInfo(m_ffmpegPath).exists()) {
+            return KisImageBuilder_RESULT_FAILURE;
+        }
+    }
 
     KisImageBuilder_Result result = KisImageBuilder_RESULT_OK;
 
     KisImageAnimationInterface *animation = m_image->animationInterface();
     const KisTimeRange fullRange = animation->fullClipRange();
-    const KisTimeRange clipRange(configuration->getInt("firstframe", fullRange.start()), configuration->getInt("lastFrame"), fullRange.end());
     const int frameRate = animation->framerate();
+
+    KIS_SAFE_ASSERT_RECOVER_NOOP(configuration->hasProperty("first_frame"));
+    KIS_SAFE_ASSERT_RECOVER_NOOP(configuration->hasProperty("last_frame"));
+    KIS_SAFE_ASSERT_RECOVER_NOOP(configuration->hasProperty("include_audio"));
+
+    const KisTimeRange clipRange(configuration->getInt("first_frame", fullRange.start()), configuration->getInt("last_frame", fullRange.end()));
+    const bool includeAudio = configuration->getBool("include_audio", true);
 
     const QDir framesDir(configuration->getString("directory"));
 
-    const QString resultFile = framesDir.absolutePath() + "/" + filename;
+    QString resultFile;
+    if (QFileInfo(filename).isAbsolute()) {
+        resultFile = filename;
+    }
+    else {
+        resultFile = framesDir.absolutePath() + "/" + filename;
+    }
     const QFileInfo info(resultFile);
     const QString suffix = info.suffix().toLower();
 
@@ -266,16 +253,17 @@ KisImageBuilder_Result VideoSaver::encode(const QString &filename, KisProperties
         {
             QStringList args;
             args << "-r" << QString::number(frameRate)
+                 << "-start_number" << QString::number(clipRange.start())
                  << "-i" << savedFilesMask
                  << "-vf" << "palettegen"
                  << "-y" << palettePath;
 
             KisImageBuilder_Result result =
                 m_runner->runFFMpeg(args, i18n("Fetching palette..."),
-                                    framesDir.filePath("log_palettegen.log"),
+                                    framesDir.filePath("log_generate_palette_gif.log"),
                                     clipRange.duration());
 
-            if (result) {
+            if (result != KisImageBuilder_RESULT_OK) {
                 return result;
             }
         }
@@ -283,26 +271,47 @@ KisImageBuilder_Result VideoSaver::encode(const QString &filename, KisProperties
         {
             QStringList args;
             args << "-r" << QString::number(frameRate)
+                 << "-start_number" << QString::number(clipRange.start())
                  << "-i" << savedFilesMask
                  << "-i" << palettePath
                  << "-lavfi" << "[0:v][1:v] paletteuse"
                  << additionalOptionsList
                  << "-y" << resultFile;
 
+            dbgFile << "savedFilesMask" << savedFilesMask << "start" << QString::number(clipRange.start()) << "duration" << clipRange.duration();
+
             KisImageBuilder_Result result =
                 m_runner->runFFMpeg(args, i18n("Encoding frames..."),
-                                    framesDir.filePath("log_paletteuse.log"),
+                                    framesDir.filePath("log_encode_gif.log"),
                                     clipRange.duration());
 
-            if (result) {
+            if (result != KisImageBuilder_RESULT_OK) {
                 return result;
             }
         }
     } else {
         QStringList args;
         args << "-r" << QString::number(frameRate)
-             << "-i" << savedFilesMask
-             << additionalOptionsList
+             << "-start_number" << QString::number(clipRange.start())
+             << "-i" << savedFilesMask;
+
+
+        QFileInfo audioFileInfo = animation->audioChannelFileName();
+        if (includeAudio && audioFileInfo.exists()) {
+            const int msecStart = clipRange.start() * 1000 / animation->framerate();
+            const int msecDuration = clipRange.duration() * 1000 / animation->framerate();
+
+            const QTime startTime = QTime::fromMSecsSinceStartOfDay(msecStart);
+            const QTime durationTime = QTime::fromMSecsSinceStartOfDay(msecDuration);
+            const QString ffmpegTimeFormat("H:m:s.zzz");
+
+            args << "-ss" << startTime.toString(ffmpegTimeFormat);
+            args << "-t" << durationTime.toString(ffmpegTimeFormat);
+
+            args << "-i" << audioFileInfo.absoluteFilePath();
+        }
+
+        args << additionalOptionsList
              << "-y" << resultFile;
 
         result = m_runner->runFFMpeg(args, i18n("Encoding frames..."),

@@ -25,8 +25,11 @@
 
 struct KisRandomSource::Private
 {
-    Private() : uniformSource(qrand()) {}
-    Private(int seed) : uniformSource(seed) {}
+    Private()
+        : uniformSource(qrand()) {}
+
+    Private(int seed)
+        : uniformSource(seed) {}
 
     /**
      * Taus88's numbers are not too random, but it works fast and it
@@ -65,16 +68,6 @@ KisRandomSource& KisRandomSource::operator=(const KisRandomSource &rhs)
 
 KisRandomSource::~KisRandomSource()
 {
-}
-
-qint64 KisRandomSource::min() const
-{
-    return m_d->uniformSource.min();
-}
-
-qint64 KisRandomSource::max() const
-{
-    return m_d->uniformSource.max();
 }
 
 qint64 KisRandomSource::generate() const

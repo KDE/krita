@@ -39,6 +39,7 @@
 #include <KoColorProfile.h>
 
 #include <kis_debug.h>
+#include <kis_types.h>
 
 #include "kis_canvas_resource_provider.h"
 #include "kis_config_notifier.h"
@@ -917,9 +918,19 @@ void KisConfig::setOutlineSizeMinimum(qreal outlineSizeMinimum) const
     m_cfg.writeEntry("OutlineSizeMinimum", outlineSizeMinimum);
 }
 
+qreal KisConfig::selectionViewSizeMinimum(bool defaultValue) const
+{
+    return (defaultValue ? 5.0 : m_cfg.readEntry("SelectionViewSizeMinimum", 5.0));
+}
+
+void KisConfig::setSelectionViewSizeMinimum(qreal outlineSizeMinimum) const
+{
+    m_cfg.writeEntry("SelectionViewSizeMinimum", outlineSizeMinimum);
+}
+
 int KisConfig::autoSaveInterval(bool defaultValue)  const
 {
-    return (defaultValue ? KisDocument::defaultAutoSave() : m_cfg.readEntry("AutoSaveInterval", KisDocument::defaultAutoSave()));
+    return (defaultValue ? 15 * 60 : m_cfg.readEntry("AutoSaveInterval", 15 * 60));
 }
 
 void KisConfig::setAutoSaveInterval(int seconds)  const
@@ -1025,6 +1036,16 @@ void KisConfig::setPresetChooserViewMode(const int mode) const
     m_cfg.writeEntry("presetChooserViewMode", mode);
 }
 
+int KisConfig::presetIconSize(bool defaultValue) const
+{
+    return (defaultValue ? 30 : m_cfg.readEntry("presetIconSize", 30));
+}
+
+void KisConfig::setPresetIconSize(const int value) const
+{
+    m_cfg.writeEntry("presetIconSize", value);
+}
+
 bool KisConfig::firstRun(bool defaultValue) const
 {
     return (defaultValue ? true : m_cfg.readEntry("firstRun", true));
@@ -1083,6 +1104,16 @@ bool KisConfig::showDockerTitleBars(bool defaultValue) const
 void KisConfig::setShowDockerTitleBars(const bool value) const
 {
     m_cfg.writeEntry("showDockerTitleBars", value);
+}
+
+bool KisConfig::showDockers(bool defaultValue) const
+{
+    return (defaultValue ? true : m_cfg.readEntry("showDockers", true));
+}
+
+void KisConfig::setShowDockers(const bool value) const
+{
+    m_cfg.writeEntry("showDockers", value);
 }
 
 bool KisConfig::showStatusBar(bool defaultValue) const
@@ -1170,9 +1201,9 @@ QString KisConfig::exportConfiguration(const QString &filterId, bool defaultValu
     return (defaultValue ? QString() : m_cfg.readEntry("ExportConfiguration-" + filterId, QString()));
 }
 
-void KisConfig::setExportConfiguration(const QString &filterId, const KisPropertiesConfiguration &properties) const
+void KisConfig::setExportConfiguration(const QString &filterId, KisPropertiesConfigurationSP properties) const
 {
-    QString exportConfig = properties.toXML();
+    QString exportConfig = properties->toXML();
     m_cfg.writeEntry("ExportConfiguration-" + filterId, exportConfig);
 
 }
@@ -1644,14 +1675,34 @@ bool KisConfig::animationDropFrames(bool defaultValue) const
     return (defaultValue ? true : m_cfg.readEntry("animationDropFrames", true));
 }
 
-int KisConfig::scribbingUpdatesDelay(bool defaultValue) const
+int KisConfig::scrubbingUpdatesDelay(bool defaultValue) const
 {
-    return (defaultValue ? 30 : m_cfg.readEntry("scribbingUpdatesDelay", 30));
+    return (defaultValue ? 30 : m_cfg.readEntry("scrubbingUpdatesDelay", 30));
 }
 
-void KisConfig::setScribbingUpdatesDelay(int value)
+void KisConfig::setScrubbingUpdatesDelay(int value)
 {
-    m_cfg.writeEntry("scribbingUpdatesDelay", value);
+    m_cfg.writeEntry("scrubbingUpdatesDelay", value);
+}
+
+int KisConfig::scrubbingAudioUpdatesDelay(bool defaultValue) const
+{
+    return (defaultValue ? -1 : m_cfg.readEntry("scrubbingAudioUpdatesDelay", -1));
+}
+
+void KisConfig::setScrubbingAudioUpdatesDelay(int value)
+{
+    m_cfg.writeEntry("scrubbingAudioUpdatesDelay", value);
+}
+
+int KisConfig::audioOffsetTolerance(bool defaultValue) const
+{
+    return (defaultValue ? -1 : m_cfg.readEntry("audioOffsetTolerance", -1));
+}
+
+void KisConfig::setAudioOffsetTolerance(int value)
+{
+    m_cfg.writeEntry("audioOffsetTolerance", value);
 }
 
 bool KisConfig::switchSelectionCtrlAlt(bool defaultValue) const
@@ -1692,6 +1743,19 @@ void KisConfig::setStabilizerSampleSize(int value)
     m_cfg.writeEntry("stabilizerSampleSize", value);
 }
 
+int KisConfig::stabilizerDelayedPaintInterval(bool defaultValue) const
+{
+    const int defaultInterval = 20;
+
+    return defaultValue ?
+        defaultInterval : m_cfg.readEntry("stabilizerDelayedPaintInterval", defaultInterval);
+}
+
+void KisConfig::setStabilizerDelayedPaintInterval(int value)
+{
+    m_cfg.writeEntry("stabilizerDelayedPaintInterval", value);
+}
+
 QString KisConfig::customFFMpegPath(bool defaultValue) const
 {
     return defaultValue ? QString() : m_cfg.readEntry("ffmpegExecutablePath", QString());
@@ -1721,4 +1785,34 @@ QString KisConfig::brushHudSetting(bool defaultValue) const
 void KisConfig::setBrushHudSetting(const QString &value) const
 {
     m_cfg.writeEntry("brushHudSettings", value);
+}
+
+#include <QDomDocument>
+#include <QDomElement>
+
+void KisConfig::writeKoColor(const QString& name, const KoColor& color) const
+{
+    QDomDocument doc = QDomDocument(name);
+    QDomElement el = doc.createElement(name);
+    doc.appendChild(el);
+    color.toXML(doc, el);
+    m_cfg.writeEntry(name, doc.toString());
+}
+
+//ported from kispropertiesconfig.
+KoColor KisConfig::readKoColor(const QString& name, const KoColor& color) const
+{
+    QDomDocument doc;
+    if (!m_cfg.readEntry(name).isNull()) {
+        doc.setContent(m_cfg.readEntry(name));
+        QDomElement e = doc.documentElement().firstChild().toElement();
+        return KoColor::fromXML(e, Integer16BitsColorDepthID.id(), QHash<QString, QString>());
+    } else {
+        QString blackColor = "<!DOCTYPE Color>\n<Color>\n <RGB r=\"0\" space=\"sRGB-elle-V2-srgbtrc.icc\" b=\"0\" g=\"0\"/>\n</Color>\n";
+        doc.setContent(blackColor);
+        QDomElement e = doc.documentElement().firstChild().toElement();
+        return KoColor::fromXML(e, Integer16BitsColorDepthID.id(), QHash<QString, QString>());
+    }
+    return color;
+
 }

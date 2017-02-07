@@ -207,7 +207,7 @@ void KisTemplateCreateDia::createTemplate(const QString &templatesResourcePath,
         }
         fileName = tempFile.fileName();
     }
-    bool retval = document->saveNativeFormat(fileName);
+    bool retval = document->exportDocument(QUrl::fromLocalFile(fileName));
     if (!retval) {
         qWarning("Could not save template");
         return;
@@ -321,7 +321,7 @@ void KisTemplateCreateDia::slotOk() {
     // don't overwrite the hidden template file with a new non-hidden one
     if (!ignore) {
         if (!QFile::copy(d->m_filePath, dest)) {
-            qWarning() << QString("Could not copy %1 to %2.").arg(d->m_filePath).arg(dest).toUtf8();
+            qWarning() << "Could not copy" << d->m_filePath << "to" << dest;
         }
 
         // save the picture as icon

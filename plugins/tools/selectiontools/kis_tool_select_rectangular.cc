@@ -53,12 +53,13 @@ void __KisToolSelectRectangularLocal::finishRect(const QRectF& rect)
     KisSelectionToolHelper helper(kisCanvas, kundo2_i18n("Select Rectangle"));
 
     QRect rc(rect.normalized().toRect());
-    helper.cropRectIfNeeded(&rc);
+    helper.cropRectIfNeeded(&rc, selectionAction());
 
-    // If the user just clicks on the canvas deselect
-    if (rc.isEmpty()) {
-        // Queueing this action to ensure we avoid a race condition when unlocking the node system
-        QTimer::singleShot(0, kisCanvas->viewManager()->selectionManager(), SLOT(deselect()));
+    if (helper.tryDeselectCurrentSelection(pixelToView(rc), selectionAction())) {
+        return;
+    }
+
+    if (helper.canShortcutToNoop(rc, selectionAction())) {
         return;
     }
 

@@ -106,6 +106,8 @@ struct KisNodeManager::Private {
     KisNodeList selectedNodes;
     QPointer<KisNodeJugglerCompressed> nodeJuggler;
 
+    KisNodeWSP previouslyActiveNode;
+
     bool activateNodeImpl(KisNodeSP node);
 
     QSignalMapper nodeCreationSignalMapper;
@@ -144,21 +146,25 @@ bool KisNodeManager::Private::activateNodeImpl(KisNodeSP node)
         imageView->setCurrentNode(0);
         maskManager.activateMask(0);
         layerManager.activateLayer(0);
+        previouslyActiveNode = q->activeNode();
     } else {
 
+        previouslyActiveNode = q->activeNode();
+
         KoShape * shape = view->document()->shapeForNode(node);
-        Q_ASSERT(shape);
+        KIS_ASSERT_RECOVER_RETURN_VALUE(shape, false);
 
         selection->select(shape);
         KoShapeLayer * shapeLayer = dynamic_cast<KoShapeLayer*>(shape);
 
-        Q_ASSERT(shapeLayer);
+        KIS_ASSERT_RECOVER_RETURN_VALUE(shapeLayer, false);
+
 //         shapeLayer->setGeometryProtected(node->userLocked());
 //         shapeLayer->setVisible(node->visible());
         selection->setActiveLayer(shapeLayer);
 
         imageView->setCurrentNode(node);
-        if (KisLayerSP layer = dynamic_cast<KisLayer*>(node.data())) {
+        if (KisLayerSP layer = qobject_cast<KisLayer*>(node.data())) {
             maskManager.activateMask(0);
             layerManager.activateLayer(layer);
         } else if (KisMaskSP mask = dynamic_cast<KisMask*>(node.data())) {
@@ -246,6 +252,9 @@ void KisNodeManager::setup(KActionCollection * actionCollection, KisActionManage
     action = actionManager->createAction("activatePreviousLayer");
     connect(action, SIGNAL(triggered()), this, SLOT(activatePreviousNode()));
 
+    action = actionManager->createAction("switchToPreviouslyActiveNode");
+    connect(action, SIGNAL(triggered()), this, SLOT(switchToPreviouslyActiveNode()));
+
     action  = actionManager->createAction("save_node_as_image");
     connect(action, SIGNAL(triggered()), this, SLOT(saveNodeAsImage()));
 
@@ -287,7 +296,7 @@ void KisNodeManager::setup(KActionCollection * actionCollection, KisActionManage
 
     action = actionManager->createAction("new_from_visible");
     connect(action, SIGNAL(triggered()), this, SLOT(createFromVisible()));
-    
+
     NEW_LAYER_ACTION("add_new_paint_layer", "KisPaintLayer");
 
     NEW_LAYER_ACTION("add_new_group_layer", "KisGroupLayer");
@@ -383,7 +392,7 @@ void KisNodeManager::moveNodeAt(KisNodeSP node, KisNodeSP parent, int index)
     if (parent->allowAsChild(node)) {
         if (node->inherits("KisSelectionMask") && parent->inherits("KisLayer")) {
             KisSelectionMask *m = dynamic_cast<KisSelectionMask*>(node.data());
-            KisLayer *l = dynamic_cast<KisLayer*>(parent.data());
+            KisLayer *l = qobject_cast<KisLayer*>(parent.data());
             KisSelectionMaskSP selMask = l->selectionMask();
             if (m && m->active() && l && l->selectionMask())
                 selMask->setActive(false);
@@ -822,7 +831,7 @@ void KisNodeManager::activateNextNode()
 
     KisNodeSP node = activeNode->nextSibling();
 
-    while (node && node->childCount() > 0 && node->isEditable()) {
+    while (node && node->childCount() > 0) {
            node = node->firstChild();
     }
 
@@ -846,7 +855,7 @@ void KisNodeManager::activatePreviousNode()
 
     KisNodeSP node;
 
-    if (activeNode->childCount() > 0 && activeNode->isEditable()) {
+    if (activeNode->childCount() > 0) {
         node = activeNode->lastChild();
     }
     else {
@@ -864,6 +873,13 @@ void KisNodeManager::activatePreviousNode()
 
     if (node) {
         slotNonUiActivatedNode(node);
+    }
+}
+
+void KisNodeManager::switchToPreviouslyActiveNode()
+{
+    if (m_d->previouslyActiveNode && m_d->previouslyActiveNode->parent()) {
+        slotNonUiActivatedNode(m_d->previouslyActiveNode);
     }
 }
 
@@ -950,7 +966,6 @@ void KisNodeManager::Private::saveDeviceAsImage(KisPaintDeviceSP device,
     QString mimefilter = KisMimeDatabase::mimeTypeForFile(filename);;
 
     QScopedPointer<KisDocument> d(KisPart::instance()->createDocument());
-    d->prepareForImport();
 
     KisImageSP dst = new KisImage(d->createUndoStore(),
                                   bounds.width(),

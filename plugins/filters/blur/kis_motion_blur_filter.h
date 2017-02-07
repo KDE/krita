@@ -42,7 +42,7 @@ public:
         return KoID("motion blur", i18n("Motion Blur"));
     }
 
-    virtual KisFilterConfigurationSP factoryConfiguration(const KisPaintDeviceSP) const;
+    virtual KisFilterConfigurationSP factoryConfiguration() const;
 public:
     KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
     QRect neededRect(const QRect & rect, const KisFilterConfigurationSP _config, int lod) const;

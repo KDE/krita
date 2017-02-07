@@ -81,6 +81,19 @@ class KActionCollection;
 #include "kundo2commandextradata.h"
 
 
+/**
+ * WARNING: In general, don't derive undo commands from QObject. And
+ *          if you really need it, don't use QObject lifetime tracking
+ *          for the commands:  KUndo2Command has its own, *nonvirtual*
+ *          hierarchy, and don't make it a parent or a child of any
+ *          QObject. Otherwise two different parents will try to track
+ *          the lifetime of your command and, most probably, you'll
+ *          get a crash.
+ *
+ *          As a general rule: an undo command should be derived
+ *          from QObject only for the sake of signal/slots capabilities.
+ *          Nothing else.
+ */
 class KRITAUNDO2_EXPORT KUndo2Command
 {
     KUndo2CommandPrivate *d;

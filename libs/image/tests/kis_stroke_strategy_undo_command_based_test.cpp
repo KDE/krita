@@ -39,11 +39,11 @@ public:
     {
     }
 
-    void undo() {
+    void undo() override {
         m_result += QString(" ") + text().toString() + undoString(true);
     }
 
-    void redo() {
+    void redo() override {
         m_result += QString(" ") + text().toString() + undoString(false);
     }
 
@@ -85,7 +85,7 @@ void KisStrokeStrategyUndoCommandBasedTest::testCancelledStroke()
 
     KisStrokeStrategy *strategy =
         new KisStrokeStrategyUndoCommandBased(kundo2_noi18n("test"), false,
-                                              image->postExecutionUndoAdapter(),
+                                              image.data(),
                                               initCommand, finishCommand);
 
     KisStrokeId id = image->startStroke(strategy);
@@ -113,8 +113,8 @@ public:
           m_exclusive(exclusive)
     {
     }
-    void redo() { checkState(); }
-    void undo() { checkState(); }
+    void redo() override { checkState(); }
+    void undo() override { checkState(); }
 
 private:
     void checkState() {

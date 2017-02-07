@@ -59,34 +59,45 @@ KisImageLayerRemoveCommandImpl::~KisImageLayerRemoveCommandImpl()
 
 void KisImageLayerRemoveCommandImpl::redo()
 {
+    KisImageSP image = m_image.toStrongRef();
+    if (!image) {
+        return;
+    }
     m_d->processClones(m_d->node);
-    m_image->removeNode(m_d->node);
+    image->removeNode(m_d->node);
 }
 
 void KisImageLayerRemoveCommandImpl::undo()
 {
-    m_image->addNode(m_d->node, m_d->prevParent, m_d->prevAbove);
+    KisImageSP image = m_image.toStrongRef();
+    if (!image) {
+        return;
+    }
+    image->addNode(m_d->node, m_d->prevParent, m_d->prevAbove);
     m_d->restoreClones();
 }
 
 void KisImageLayerRemoveCommandImpl::Private::restoreClones()
 {
     Q_ASSERT(reincarnatedNodes.size() == clonesList.size());
-
+    KisImageSP image = q->m_image.toStrongRef();
+    if (!image) {
+        return;
+    }
     for (int i = 0; i < reincarnatedNodes.size(); i++) {
         KisCloneLayerSP clone = clonesList[i];
         KisLayerSP newNode = reincarnatedNodes[i];
 
-        q->m_image->addNode(clone, newNode->parent(), newNode);
+        image->addNode(clone, newNode->parent(), newNode);
         moveChildren(newNode, clone);
         moveClones(newNode, clone);
-        q->m_image->removeNode(newNode);
+        image->removeNode(newNode);
     }
 }
 
 void KisImageLayerRemoveCommandImpl::Private::processClones(KisNodeSP node)
 {
-    KisLayerSP layer = dynamic_cast<KisLayer*>(node.data());
+    KisLayerSP layer(qobject_cast<KisLayer*>(node.data()));
     if(!layer || !layer->hasClones()) return;
 
     if(reincarnatedNodes.isEmpty()) {
@@ -102,6 +113,11 @@ void KisImageLayerRemoveCommandImpl::Private::processClones(KisNodeSP node)
         }
     }
 
+    KisImageSP image = q->m_image.toStrongRef();
+    if (!image) {
+        return;
+    }
+
     /**
      * Move the children and transitive clones to the
      * reincarnated nodes
@@ -110,18 +126,22 @@ void KisImageLayerRemoveCommandImpl::Private::processClones(KisNodeSP node)
         KisCloneLayerSP clone = clonesList[i];
         KisLayerSP newNode = reincarnatedNodes[i];
 
-        q->m_image->addNode(newNode, clone->parent(), clone);
+        image->addNode(newNode, clone->parent(), clone);
         moveChildren(clone, newNode);
         moveClones(clone, newNode);
-        q->m_image->removeNode(clone);
+        image->removeNode(clone);
     }
 }
 
 void KisImageLayerRemoveCommandImpl::Private::moveChildren(KisNodeSP src, KisNodeSP dst)
 {
+    KisImageSP image = q->m_image.toStrongRef();
+    if (!image) {
+        return;
+    }
     KisNodeSP child = src->firstChild();
     while(child) {
-        q->m_image->moveNode(child, dst, dst->lastChild());
+        image->moveNode(child, dst, dst->lastChild());
         child = child->nextSibling();
     }
 }

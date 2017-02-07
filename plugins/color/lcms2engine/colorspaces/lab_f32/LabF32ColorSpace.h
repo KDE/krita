@@ -85,7 +85,7 @@ public:
 
     virtual QString name() const
     {
-        return i18n("L*a*b* (32-bit float/channel)");
+        return QString("%1 (%2)").arg(LABAColorModelID.name()).arg(Float32BitsColorDepthID.name());
     }
 
     virtual KoID colorModelId() const

@@ -49,7 +49,7 @@ KisGeneratorRegistry::~KisGeneratorRegistry()
 
 KisGeneratorRegistry* KisGeneratorRegistry::instance()
 {
-    KisGeneratorRegistry *reg = qApp->findChild<KisGeneratorRegistry *>("");
+    KisGeneratorRegistry *reg = qApp->findChild<KisGeneratorRegistry *>(QString());
     if (!reg) {
         reg = new KisGeneratorRegistry(qApp);
         KoPluginLoader::instance()->load("Krita/Generator", "Type == 'Service' and ([X-Krita-Version] == 28)");
@@ -73,7 +73,7 @@ void KisGeneratorRegistry::add(const QString &id, KisGeneratorSP item)
 KisFilterConfigurationSP KisGeneratorRegistry::cloneConfiguration(const KisFilterConfigurationSP kfc)
 {
     KisGeneratorSP filter = value(kfc->name());
-    KisFilterConfigurationSP newkfc = filter->defaultConfiguration(0);
+    KisFilterConfigurationSP newkfc(filter->defaultConfiguration());
     newkfc->fromXML(kfc->toXML());
     return newkfc;
 }

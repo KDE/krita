@@ -220,6 +220,12 @@ void QXcbConnection::xi2SetupDevices()
             isTablet = true;
             tabletData.pointerType = QTabletEvent::Pen;
             dbgType = QLatin1String("pen");
+        } else if (name.contains("waltop") && name.contains("tablet")) {
+            // other "Genius" tablets
+            // WALTOP International Corp. Slim Tablet
+            isTablet = true;
+            tabletData.pointerType = QTabletEvent::Pen;
+            dbgType = QLatin1String("pen");
         } else if (name.contains("uc-logic")) {
             isTablet = true;
             tabletData.pointerType = QTabletEvent::Pen;
@@ -671,6 +677,36 @@ Qt::MouseButton QXcbConnection::xiToQtMouseButton(uint32_t b)
     return Qt::NoButton;
 }
 
+Qt::MouseButtons QXcbConnection::xiToQtMouseButtons(xXIDeviceEvent *xiDeviceEvent)
+{
+    /**
+     * WARNING: we haven't tested this method on different tablets. For basic tablets
+     *          without any button remapping it seems to work. For more complex configurations
+     *          I just don't know. Right now it is only safe to check if buttons is
+     *          equal to Qt::NoButton!
+     */
+
+
+    int len = xiDeviceEvent->buttons_len;
+    const uint32_t *buttons = reinterpret_cast<const quint32*>(&xiDeviceEvent[1]);;
+
+    Qt::MouseButtons qtbuttons = Qt::NoButton;
+
+    const int numBits = len * 32;
+
+    for (int i = 1; i < numBits; i++) {
+        const int index = (i) / 32;
+        const int offset = (i) % 32;
+
+        const bool isActive = buttons[index] & (1 << offset);
+        if (isActive) {
+            qtbuttons |= xiToQtMouseButton(i);
+        }
+    }
+
+    return qtbuttons;
+}
+
 static QTabletEvent::TabletDevice toolIdToTabletDevice(quint32 toolId) {
     // keep in sync with wacom_intuos_inout() in Linux kernel driver wacom_wac.c
     switch (toolId) {
@@ -711,6 +747,39 @@ bool QXcbConnection::xi2HandleTabletEvent(void *event, TabletData *tabletData, Q
     Display *xDisplay = static_cast<Display *>(m_xlib_display);
     xXIGenericDeviceEvent *xiEvent = static_cast<xXIGenericDeviceEvent *>(event);
     xXIDeviceEvent *xiDeviceEvent = reinterpret_cast<xXIDeviceEvent *>(xiEvent);
+
+
+    /**
+     * On some systems we can lose tablet button release event if the tablet
+     * was "closing a popup window by clicking somewhere outside the app
+     * window". It means that we get a tablet press event, but get absolutely
+     * no tablet release event. That can cause quite a lot of troubles, so here we
+     * check if reported button state is consistent and if not, just reset it.
+     *
+     * WARNING: We haven't tested xiToQtMouseButtons() functions on all the
+     *          tablet models and configurations, so at the moment we rely only
+     *          on its Qt::NoButton state. If people test it on custom tablet
+     *          button configurations, we can just stop tracking
+     *          tabletData->buttons and use this mapping instead.
+     */
+
+    if (xiEvent->evtype == XI_Motion ||
+        xiEvent->evtype == XI_ButtonPress ||
+        xiEvent->evtype == XI_ButtonRelease) {
+
+        Qt::MouseButtons expectedButtons = xiToQtMouseButtons(xiDeviceEvent);
+
+        if (expectedButtons != tabletData->buttons) {
+            if (expectedButtons == Qt::NoButton) {
+                tabletData->buttons = expectedButtons;
+            } else {
+                qWarning() << "===";
+                qWarning() << "WARNING: Tracked tablet buttons are not consistent!";
+                qWarning() << "        "  << ppVar(tabletData->buttons);
+                qWarning() << "        "  << ppVar(expectedButtons);
+            }
+        }
+    }
 
     switch (xiEvent->evtype) {
     case XI_ButtonPress: {

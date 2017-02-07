@@ -134,14 +134,13 @@ KisPaintOpSettingsSP KisPaintOpRegistry::settings(const KoID& id) const
 
 KisPaintOpPresetSP KisPaintOpRegistry::defaultPreset(const KoID& id) const
 {
-    KisPaintOpPresetSP preset = new KisPaintOpPreset();
-    preset->setName(i18n("default"));
-
     KisPaintOpSettingsSP s = settings(id);
-
     if (s.isNull()) {
-        return 0;
+        return KisPaintOpPresetSP();
     }
+
+    KisPaintOpPresetSP preset(new KisPaintOpPreset());
+    preset->setName(i18n("default"));
 
     preset->setSettings(s);
     preset->setPaintOp(id);

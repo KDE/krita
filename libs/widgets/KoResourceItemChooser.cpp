@@ -112,6 +112,7 @@ KoResourceItemChooser::KoResourceItemChooser(QSharedPointer<KoAbstractResourceSe
     d->view->viewport()->installEventFilter(this);
 
     connect(d->view, SIGNAL(currentResourceChanged(QModelIndex)), this, SLOT(activated(QModelIndex)));
+    connect(d->view, SIGNAL(currentResourceClicked(QModelIndex)), this, SLOT(clicked(QModelIndex)));
     connect(d->view, SIGNAL(contextMenuRequested(QPoint)), this, SLOT(contextMenuRequested(QPoint)));
 
     connect(d->view, SIGNAL(sigSizeChanged()), this, SLOT(updateView()));
@@ -303,11 +304,9 @@ void KoResourceItemChooser::setCurrentResource(KoResource *resource)
     }
 
     QModelIndex index = d->model->indexFromResource(resource);
-    if (!index.isValid())
-        return;
 
     d->view->setCurrentIndex(index);
-    updatePreview(resource);
+    updatePreview(index.isValid() ? resource : 0);
 }
 
 void KoResourceItemChooser::slotBeforeResourcesLayoutReset(KoResource *activateAfterReset)
@@ -364,9 +363,18 @@ void KoResourceItemChooser::activated(const QModelIndex &/*index*/)
         d->updatesBlocked = true;
         emit resourceSelected(resource);
         d->updatesBlocked = false;
-
         updatePreview(resource);
         updateButtonState();
+    }
+}
+
+void KoResourceItemChooser::clicked(const QModelIndex &index)
+{
+    Q_UNUSED(index);
+
+    KoResource *resource = currentResource();
+    if (resource) {
+        emit resourceClicked(resource);
     }
 }
 
@@ -386,7 +394,12 @@ void KoResourceItemChooser::updateButtonState()
 
 void KoResourceItemChooser::updatePreview(KoResource *resource)
 {
-    if (!d->usePreview || !resource) return;
+    if (!d->usePreview) return;
+
+    if (!resource) {
+        d->previewLabel->setPixmap(QPixmap());
+        return;
+    }
 
     QImage image = resource->image();
 

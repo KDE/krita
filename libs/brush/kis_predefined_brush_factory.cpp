@@ -20,7 +20,7 @@
 
 #include <QDomDocument>
 #include "kis_brush_server.h"
-#include "kis_gimp_brush.h"
+#include "kis_gbr_brush.h"
 #include <kis_dom_utils.h>
 
 KisPredefinedBrushFactory::KisPredefinedBrushFactory(const QString &brushType)
@@ -69,10 +69,10 @@ KisBrushSP KisPredefinedBrushFactory::getOrCreateBrush(const QDomElement& brushD
     brush->setScale(scale);
 
     if (m_id == "gbr_brush") {
-        KisGimpBrush *gbrbrush = dynamic_cast<KisGimpBrush*>(brush.data());
+        KisGbrBrush *gbrbrush = dynamic_cast<KisGbrBrush*>(brush.data());
         if (gbrbrush) {
             /**
-             * WARNING: see comment in KisGimpBrush::setUseColorAsMask()
+             * WARNING: see comment in KisGbrBrush::setUseColorAsMask()
              */
             gbrbrush->setUseColorAsMask((bool)brushDefinition.attribute("ColorAsMask").toInt());
         }

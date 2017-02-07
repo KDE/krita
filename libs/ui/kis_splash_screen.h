@@ -36,6 +36,8 @@ public:
     void repaint();
 
     void show();
+    void displayLinks();
+    void displayRecentFiles();
 
 private Q_SLOTS:
 

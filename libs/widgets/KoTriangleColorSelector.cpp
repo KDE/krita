@@ -90,14 +90,14 @@ void KoTriangleColorSelector::Private::init()
 }
 
 KoTriangleColorSelector::KoTriangleColorSelector(QWidget* parent)
-    : QWidget(parent),
+    : KisColorSelectorInterface(parent),
       d(new Private(this, KoDumbColorDisplayRenderer::instance()))
 {
     d->init();
 }
 
 KoTriangleColorSelector::KoTriangleColorSelector(const KoColorDisplayRendererInterface *displayRenderer, QWidget *parent)
-    : QWidget(parent),
+    : KisColorSelectorInterface(parent),
       d(new Private(this, displayRenderer))
 {
     d->init();
@@ -160,7 +160,7 @@ void KoTriangleColorSelector::paintEvent( QPaintEvent * event )
         p.save();
         p.setPen( QPen( Qt::white, 1.0) );
 
-        QColor currentColor = d->displayRenderer->toQColor(realColor());
+        QColor currentColor = d->displayRenderer->toQColor(getCurrentColor());
 
         p.setBrush(currentColor);
         p.rotate( hue() + 150 );
@@ -240,14 +240,14 @@ void KoTriangleColorSelector::setHSV(int h, int s, int v)
     setSaturation(s);
 }
 
-KoColor KoTriangleColorSelector::realColor() const
+KoColor KoTriangleColorSelector::getCurrentColor() const
 {
     return d->displayRenderer->fromHsv(hue(), saturation(), value());
 }
 
-void KoTriangleColorSelector::setRealColor(const KoColor & color)
+void KoTriangleColorSelector::slotSetColor(const KoColor & color)
 {
-    if ( realColor() == color)
+    if ( getCurrentColor() == color)
         return;
 
     //displayrenderer->getHsv is what sets the foreground color in the application
@@ -266,13 +266,7 @@ void KoTriangleColorSelector::setRealColor(const KoColor & color)
 
 QColor KoTriangleColorSelector::color() const
 {
-    return realColor().toQColor();
-}
-
-void KoTriangleColorSelector::setQColor(const QColor& c)
-{
-    KoColor color(c, KoColorSpaceRegistry::instance()->rgb8());
-    setRealColor(color);
+    return getCurrentColor().toQColor();
 }
 
 void KoTriangleColorSelector::resizeEvent( QResizeEvent * event )
@@ -291,8 +285,8 @@ inline qreal pow2(qreal v)
 void KoTriangleColorSelector::tellColorChanged()
 {
     d->updateAllowed = false;
-    emit(realColorChanged(realColor()));
-    emit(colorChanged(realColor().toQColor()));
+    emit(sigNewColor(getCurrentColor()));
+    emit(colorChanged(getCurrentColor().toQColor()));
     d->updateAllowed = true;
 }
 
@@ -301,7 +295,7 @@ void KoTriangleColorSelector::generateTriangle()
     QImage image(d->sizeColorSelector, d->sizeColorSelector, QImage::Format_ARGB32);
     // Length of triangle
     int hue_ = hue();
-    
+
     for(int y = 0; y < d->sizeColorSelector; ++y)
     {
         qreal ynormalize = ( d->triangleTop - y ) / ( d->triangleTop - d->triangleBottom );
@@ -330,7 +324,7 @@ void KoTriangleColorSelector::generateTriangle()
             }
         }
     }
-    
+
     d->trianglePixmap = QPixmap::fromImage(image);
     d->invalidTriangle = false;
 }
@@ -401,14 +395,14 @@ void KoTriangleColorSelector::mouseMoveEvent( QMouseEvent * event )
 void KoTriangleColorSelector::selectColorAt(int _x, int _y, bool checkInWheel)
 {
     Q_UNUSED( checkInWheel );
-    
+
     if (d->lastX == _x && d->lastY == _y)
     {
         return;
     }
     d->lastX = _x;
     d->lastY = _y;
-    
+
     qreal x = _x - 0.5*width();
     qreal y = _y - 0.5*height();
     // Check if the click is inside the wheel

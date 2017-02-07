@@ -30,12 +30,20 @@ public:
     KoMixColorsOpImpl() {
     }
     virtual ~KoMixColorsOpImpl() { }
-    virtual void mixColors(const quint8 * const* colors, const qint16 *weights, quint32 nColors, quint8 *dst) const {
-        mixColorsImpl(ArrayOfPointers(colors), weights, nColors, dst);
+    virtual void mixColors(const quint8 * const* colors, const qint16 *weights, quint32 nColors, quint8 *dst) const override {
+        mixColorsImpl(ArrayOfPointers(colors), WeightsWrapper(weights), nColors, dst);
     }
 
-    virtual void mixColors(const quint8 *colors, const qint16 *weights, quint32 nColors, quint8 *dst) const {
-        mixColorsImpl(PointerToArray(colors, _CSTrait::pixelSize), weights, nColors, dst);
+    virtual void mixColors(const quint8 *colors, const qint16 *weights, quint32 nColors, quint8 *dst) const override {
+        mixColorsImpl(PointerToArray(colors, _CSTrait::pixelSize), WeightsWrapper(weights), nColors, dst);
+    }
+
+    virtual void mixColors(const quint8 * const* colors, quint32 nColors, quint8 *dst) const override {
+        mixColorsImpl(ArrayOfPointers(colors), NoWeightsSurrogate(nColors), nColors, dst);
+    }
+
+    virtual void mixColors(const quint8 *colors, quint32 nColors, quint8 *dst) const override {
+        mixColorsImpl(PointerToArray(colors, _CSTrait::pixelSize), NoWeightsSurrogate(nColors), nColors, dst);
     }
 
 private:
@@ -77,9 +85,56 @@ private:
         const int m_pixelSize;
     };
 
+    struct WeightsWrapper
+    {
+        typedef typename KoColorSpaceMathsTraits<typename _CSTrait::channels_type>::compositetype compositetype;
 
-    template<class AbstractSource>
-    void mixColorsImpl(AbstractSource source, const qint16 *weights, quint32 nColors, quint8 *dst) const {
+        WeightsWrapper(const qint16 *weights)
+            : m_weights(weights)
+        {
+        }
+
+        inline void nextPixel() {
+            m_weights++;
+        }
+
+        inline void premultiplyAlphaWithWeight(compositetype &alpha) const {
+            alpha *= *m_weights;
+        }
+
+        inline int normalizeFactor() const {
+            return 255;
+        }
+
+    private:
+        const qint16 *m_weights;
+    };
+
+    struct NoWeightsSurrogate
+    {
+        typedef typename KoColorSpaceMathsTraits<typename _CSTrait::channels_type>::compositetype compositetype;
+
+        NoWeightsSurrogate(int numPixels)
+            : m_numPixles(numPixels)
+        {
+        }
+
+        inline void nextPixel() {
+        }
+
+        inline void premultiplyAlphaWithWeight(compositetype &) const {
+        }
+
+        inline int normalizeFactor() const {
+            return m_numPixles;
+        }
+
+    private:
+        const int m_numPixles;
+    };
+
+    template<class AbstractSource, class WeightsWrapper>
+    void mixColorsImpl(AbstractSource source, WeightsWrapper weightsWrapper, quint32 nColors, quint8 *dst) const {
         // Create and initialize to 0 the array of totals
         typename KoColorSpaceMathsTraits<typename _CSTrait::channels_type>::compositetype totals[_CSTrait::channels_nb];
         typename KoColorSpaceMathsTraits<typename _CSTrait::channels_type>::compositetype totalAlpha = 0;
@@ -98,7 +153,7 @@ private:
                 alphaTimesWeight = KoColorSpaceMathsTraits<typename _CSTrait::channels_type>::unitValue;
             }
 
-            alphaTimesWeight *= *weights;
+            weightsWrapper.premultiplyAlphaWithWeight(alphaTimesWeight);
 
             for (int i = 0; i < (int)_CSTrait::channels_nb; i++) {
                 if (i != _CSTrait::alpha_pos) {
@@ -108,11 +163,11 @@ private:
 
             totalAlpha += alphaTimesWeight;
             source.nextPixel();
-            weights++;
+            weightsWrapper.nextPixel();
         }
 
         // set totalAlpha to the minimum between its value and the unit value of the channels
-        const int sumOfWeights = 255;
+        const int sumOfWeights = weightsWrapper.normalizeFactor();
 
         if (totalAlpha > KoColorSpaceMathsTraits<typename _CSTrait::channels_type>::unitValue * sumOfWeights) {
             totalAlpha = KoColorSpaceMathsTraits<typename _CSTrait::channels_type>::unitValue * sumOfWeights;
@@ -144,6 +199,7 @@ private:
             memset(dst, 0, sizeof(typename _CSTrait::channels_type) * _CSTrait::channels_nb);
         }
     }
+
 };
 
 #endif

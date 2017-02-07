@@ -12,7 +12,7 @@ set(kritalibbrush_LIB_SRCS
     kis_scaling_size_brush.cpp
     kis_brush_registry.cpp
     kis_brush_server.cpp
-    kis_gimp_brush.cpp
+    kis_gbr_brush.cpp
     kis_abr_brush.cpp
     kis_abr_brush_collection.cpp
     kis_imagepipe_brush.cpp
@@ -40,8 +40,6 @@ if(HAVE_VC)
   target_link_libraries(kritalibbrush  ${Vc_LIBRARIES})
 #  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Vc_DEFINITIONS}")
 endif()
-
-target_link_libraries(kritalibbrush LINK_INTERFACE_LIBRARIES kritaimage Qt5::Svg)
 
 set_target_properties(kritalibbrush PROPERTIES
     VERSION ${GENERIC_KRITA_LIB_VERSION} SOVERSION ${GENERIC_KRITA_LIB_SOVERSION}

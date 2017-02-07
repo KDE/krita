@@ -37,11 +37,13 @@ double KisPressureRotationOption::apply(const KisPaintInformation & info) const
 {
     if (!isChecked()) return m_defaultAngle;
 
-    qreal value = computeRotationLikeValue(info, m_defaultAngle);
+    const bool absoluteAxesFlipped = m_canvasAxisXMirrored != m_canvasAxisYMirrored;
+    const qreal normalizedBaseAngle = -m_defaultAngle / (2 * M_PI);
 
-    if (m_canvasAxisXMirrored == m_canvasAxisYMirrored) {
-        value = 1.0 - value;
-    }
+    qreal value = computeRotationLikeValue(info, normalizedBaseAngle, absoluteAxesFlipped);
+
+    // flip to conform global legacy code
+    value = 1.0 - value;
 
     return normalizeAngle(value * M_PI);
  }

@@ -24,7 +24,6 @@
 #include <KoXmlWriter.h>
 #include <KoStore.h>
 #include <KoResourceServerProvider.h>
-
 #include <KoResourcePaths.h>
 
 #include <QScopedPointer>
@@ -55,6 +54,7 @@ KisResourceBundle::KisResourceBundle(QString const& fileName)
 {
     setName(QFileInfo(fileName).baseName());
     m_metadata["generator"] = "Krita (" + KritaVersionWrapper::versionString(true) + ")";
+
 }
 
 KisResourceBundle::~KisResourceBundle()
@@ -197,15 +197,16 @@ bool KisResourceBundle::load()
          * If no version is found it's an old bundle with md5 hashes to fix, or if some manifest resource entry
          * doesn't not correspond to a file the bundle is "broken", in both cases we need to recreate the bundle.
          */
-        if(!versionFound) {
+        if (!versionFound) {
             m_metadata.insert("bundle-version", "1");
             warnKrita << filename() << " has an old version and possibly wrong resources md5, so it will be recreated.";
             toRecreate = true;
         }
 
-        if(toRecreate) {
+        if (toRecreate) {
             recreateBundle(resourceStore);
         }
+
 
         m_installed = true;
         setValid(true);
@@ -709,8 +710,11 @@ bool KisResourceBundle::install()
 
 bool KisResourceBundle::uninstall()
 {
-    m_installed = false;
 
+    m_installed = false;
+    QStringList tags = getTagsList();
+    tags << m_manifest.tags();
+    tags << name();
 
     KoResourceServer<KoAbstractGradient>* gradientServer = KoResourceServerProvider::instance()->gradientServer();
     //Q_FOREACH (const KisResourceBundleManifest::ResourceReference &ref, m_manifest.files("gradients")) {
@@ -747,6 +751,7 @@ bool KisResourceBundle::uninstall()
             paletteServer->removeResourceFromServer(res);
         }
     }
+
     KoResourceServer< KisWorkspaceResource >* workspaceServer = KisResourceServerProvider::instance()->workspaceServer();
     //Q_FOREACH (const KisResourceBundleManifest::ResourceReference &ref, m_manifest.files("workspaces")) {
     Q_FOREACH (const QByteArray md5, m_workspacesMd5Installed) {
@@ -755,7 +760,6 @@ bool KisResourceBundle::uninstall()
             workspaceServer->removeResourceFromServer(res);
         }
     }
-
     KisPaintOpPresetResourceServer* paintoppresetServer = KisResourceServerProvider::instance()->paintOpPresetServer();
     //Q_FOREACH (const KisResourceBundleManifest::ResourceReference &ref, m_manifest.files("paintoppresets")) {
     Q_FOREACH (const QByteArray md5, m_presetsMd5Installed) {
@@ -764,6 +768,16 @@ bool KisResourceBundle::uninstall()
             paintoppresetServer->removeResourceFromServer(res);
         }
     }
+
+    Q_FOREACH(const QString &tag, tags) {
+        paintoppresetServer->tagCategoryRemoved(tag);
+        workspaceServer->tagCategoryRemoved(tag);
+        paletteServer->tagCategoryRemoved(tag);
+        brushServer->tagCategoryRemoved(tag);
+        patternServer->tagCategoryRemoved(tag);
+        gradientServer->tagCategoryRemoved(tag);
+    }
+
 
     return true;
 }
@@ -800,12 +814,12 @@ bool KisResourceBundle::isInstalled()
 }
 
 
-QStringList KisResourceBundle::resourceTypes()
+QStringList KisResourceBundle::resourceTypes() const
 {
     return m_manifest.types();
 }
 
-QList<KoResource*> KisResourceBundle::resources(const QString &resType)
+QList<KoResource*> KisResourceBundle::resources(const QString &resType) const
 {
     QList<KisResourceBundleManifest::ResourceReference> references = m_manifest.files(resType);
 
@@ -850,7 +864,6 @@ void KisResourceBundle::setThumbnail(QString filename)
     if (QFileInfo(filename).exists()) {
         m_thumbnail = QImage(filename);
         m_thumbnail = m_thumbnail.scaled(256, 256, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-        Q_ASSERT(!m_thumbnail.isNull());
     }
     else {
         m_thumbnail = QImage(256, 256, QImage::Format_ARGB32);
@@ -858,6 +871,8 @@ void KisResourceBundle::setThumbnail(QString filename)
         gc.fillRect(0, 0, 256, 256, Qt::red);
         gc.end();
     }
+
+    setImage(m_thumbnail);
 }
 
 void KisResourceBundle::writeMeta(const char *metaTag, const QString &metaKey, KoXmlWriter *writer)
@@ -986,4 +1001,10 @@ void KisResourceBundle::recreateBundle(QScopedPointer<KoStore> &oldStore)
     file.remove();
     file.setFileName(newStoreName);
     file.rename(filename());
+}
+
+
+int KisResourceBundle::resourceCount() const
+{
+    return m_manifest.files().count();
 }

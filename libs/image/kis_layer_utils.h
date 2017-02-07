@@ -28,6 +28,7 @@
 
 class KoProperties;
 class KoColor;
+class QUuid;
 
 namespace KisMetaData
 {
@@ -168,7 +169,7 @@ namespace KisLayerUtils
     {
         bool valueDiffers = false;
         bool initialized = false;
-        T currentValue;
+        T currentValue = T();
         Q_FOREACH (KisNodeSP node, nodes) {
             if (!initialized) {
                 currentValue = checkerFunc(node);
@@ -193,6 +194,11 @@ namespace KisLayerUtils
      * node is returned to the caller.
      */
     KisNodeSP KRITAIMAGE_EXPORT recursiveFindNode(KisNodeSP node, std::function<bool(KisNodeSP)> func);
+
+    /**
+     * Recursively searches for a node with specified Uuid
+     */
+    KisNodeSP KRITAIMAGE_EXPORT findNodeByUuid(KisNodeSP root, const QUuid &uuid);
 };
 
 #endif /* __KIS_LAYER_UTILS_H */

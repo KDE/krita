@@ -30,6 +30,16 @@
 
 #include <QRegion>
 
+//#define USE_LAZY_FILL_SANITY_CHECKS 1
+
+#ifdef USE_LAZY_FILL_SANITY_CHECKS
+#define LF_SANITY_ASSERT(x) KIS_ASSERT(x)
+#define LF_SANITY_ASSERT_RECOVER(x) KIS_ASSERT_RECOVER(x)
+#else
+#define LF_SANITY_ASSERT(x)
+#define LF_SANITY_ASSERT_RECOVER(x) if (0)
+#endif /* USE_LAZY_FILL_SANITY_CHECKS */
+
 
 using namespace boost;
 
@@ -38,27 +48,6 @@ BOOST_CONCEPT_ASSERT(( ReadablePropertyMapConcept<ScribbleMap, vertex_descriptor
 */
 
 class KisLazyFillGraph;
-
-template <class Graph>
-struct MyScribbleLabelMap {
-    typedef typename Graph::vertex_descriptor key_type;
-    typedef float value_type;
-    typedef const float& reference;
-    typedef readable_property_map_tag category;
-
-    friend value_type get(const MyScribbleLabelMap<Graph> &map,
-                          const key_type &key) {
-        return 0;
-    }
-
-    friend QRegion region(const MyScribbleLabelMap<Graph> &map) {
-        return QRegion();
-    }
-
-    friend QRect boundingRect(const MyScribbleLabelMap<Graph> &map) {
-        return QRect(10,10,100,100);
-    }
-};
 
 //===================
 // Index Property Map
@@ -82,7 +71,7 @@ public:
 
     value_type operator[](key_type key) const {
         value_type index = m_graph->index_of(key);
-        KIS_ASSERT(index >= 0);
+        LF_SANITY_ASSERT(index >= 0);
         return index;
     }
 
@@ -507,8 +496,8 @@ public:
                 const bool edgeReversed = xDiff < 0 || yDiff < 0;
 
                 if (isReversed != edgeReversed ||
-                    (xAbsDiff && binId != HORIZONTAL && binId != HORIZONTAL_REVERSED) ||
-                    (yAbsDiff && binId != VERTICAL && binId != VERTICAL_REVERSED) ||
+                    (xDiff && binId != HORIZONTAL && binId != HORIZONTAL_REVERSED) ||
+                    (yDiff && binId != VERTICAL && binId != VERTICAL_REVERSED) ||
                     xAbsDiff > 1 ||
                     yAbsDiff > 1 ||
                     xAbsDiff == yAbsDiff) {
@@ -521,7 +510,11 @@ public:
                 std::swap(src_vertex, dst_vertex);
             }
 
-            if (!rect.contains(QPoint(src_vertex.x, src_vertex.y))) {
+            // using direct QRect::contains makes the code 30% slower
+            const int x = src_vertex.x;
+            const int y = src_vertex.y;
+            if (x < rect.x() || x > rect.right() ||
+                y < rect.y() || y > rect.bottom()) {
                 return -1;
             }
 
@@ -529,7 +522,7 @@ public:
                 (src_vertex.x - xOffset) +
                 (src_vertex.y - yOffset) * stride;
 
-            KIS_ASSERT_RECOVER(internalIndex >= 0 && internalIndex < size) {
+            LF_SANITY_ASSERT_RECOVER(internalIndex >= 0 && internalIndex < size) {
                 return -1;
             }
 
@@ -599,7 +592,6 @@ public:
     QVector<QRect> m_aLabelRects;
     QVector<QRect> m_bLabelRects;
 
-protected:
 public:
 
     // Returns the number of vertices in the graph
@@ -673,14 +665,12 @@ public:
     edges_size_type index_of(edge_descriptor edge) const {
         edges_size_type index = -1;
 
-        Q_FOREACH (const EdgeIndexBin &bin, m_edgeBins) {
-            index = bin.indexOf(edge);
+        auto it = m_edgeBins.constBegin();
+        for (; it != m_edgeBins.constEnd(); ++it) {
+
+            index = it->indexOf(edge);
             if (index >= 0) break;
         }
-
-
-        //ENTER_FUNCTION() << ppVar(edge) << ppVar(index);
-        //KIS_ASSERT(index >= 0);
 
         return index;
     }
@@ -710,8 +700,11 @@ private:
 
     static inline bool findInRects(const QVector<QRect> &rects, const QPoint &pt) {
         bool result = false;
-        Q_FOREACH (const QRect &rc, rects) {
-            if (rc.contains(pt)) {
+
+        auto it = rects.constBegin();
+        for (; it != rects.constEnd(); ++it) {
+
+            if (it->contains(pt)) {
                 result = true;
                 break;
             }
@@ -935,7 +928,7 @@ public:
         typename type::vertex_descriptor vertex) {
 
         type::vertices_size_type index = graph.index_of(vertex);
-        KIS_ASSERT(index >= 0);
+        LF_SANITY_ASSERT(index >= 0);
         return index;
     }
 
@@ -945,7 +938,7 @@ public:
         typename type::edge_descriptor edge) {
 
         type::edges_size_type index = graph.index_of(edge);
-        KIS_ASSERT(index >= 0);
+        LF_SANITY_ASSERT(index >= 0);
         return index;
     }
 

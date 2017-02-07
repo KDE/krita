@@ -110,18 +110,19 @@ public:
     KisSpriterExport(QObject *parent, const QVariantList &);
     virtual ~KisSpriterExport();
 public:
-    virtual KisImportExportFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration = 0);
+    virtual KisImportExportFilter::ConversionStatus convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration = 0);
+    void initializeCapabilities();
 private:
 
     bool savePaintDevice(KisPaintDeviceSP dev, const QString &fileName);
-    void parseFolder(KisGroupLayerSP parentGroup, const QString &folderName, const QString &basePath);
+    void parseFolder(KisGroupLayerSP parentGroup, const QString &folderName, const QString &basePath, int *folderId = 0);
     Bone *parseBone(const Bone *parent, KisGroupLayerSP groupLayer);
     void fixBone(Bone *bone);
     void fillScml(QDomDocument &scml, const QString &entityName);
     void writeBoneRef(const Bone *bone, QDomElement &mainline, QDomDocument &scml);
     void writeBone(const Bone *bone, QDomElement &timeline, QDomDocument &scml);
 
-    KisImageWSP m_image;
+    KisImageSP m_image;
     qreal m_timelineid;
     QList<Folder> m_folders;
     Bone *m_rootBone;

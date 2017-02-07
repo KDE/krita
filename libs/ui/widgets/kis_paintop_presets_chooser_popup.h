@@ -40,9 +40,10 @@ public:
     QString currentPaintOp() const;
 
 public Q_SLOTS:
-    void canvasResourceChanged( KoResource * resource, KisPaintOpPresetSP  preset  );
+    void canvasResourceChanged(KisPaintOpPresetSP  preset  );
 Q_SIGNALS:
     void resourceSelected( KoResource * resource);
+    void resourceClicked( KoResource * resource);
     
 private Q_SLOTS:
     void slotThumbnailMode();

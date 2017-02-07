@@ -106,9 +106,9 @@ void KisGridManager::setView(QPointer<KisView> imageView)
 
         KisGridConfig config = imageView->document()->gridConfig();
         setGridConfigImpl(config, false);
-        emit sigRequestUpdateGridConfig(config);
 
-        KisSignalsBlocker b1(m_toggleGrid, m_toggleSnapToGrid);
+        KisSignalsBlocker blocker(m_toggleGrid, m_toggleSnapToGrid);
+        Q_UNUSED(blocker);
         m_toggleGrid->setChecked(config.showGrid());
         m_toggleSnapToGrid->setChecked(config.snapToGrid());
     }

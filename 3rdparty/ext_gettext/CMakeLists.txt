@@ -11,7 +11,6 @@ ExternalProject_Add(
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${PREFIX_ext_gettext} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE}
 
     UPDATE_COMMAND ""
-    ALWAYS 0
     DEPENDS ext_patch ext_iconv
 )
 else (MSVC OR MINGW)
@@ -26,7 +25,6 @@ ExternalProject_Add( ext_gettext
         INSTALL_COMMAND make install
 
 	UPDATE_COMMAND ""
-	ALWAYS 0
 	DEPENDS ext_iconv
 )
 endif (MSVC OR MINGW)

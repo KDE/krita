@@ -58,7 +58,11 @@ void KisImageLayerRemoveCommand::addSubtree(KisImageWSP image, KisNodeSP node)
 
 void KisImageLayerRemoveCommand::redo()
 {
-    UpdateTarget target(m_image, m_node, m_image->bounds());
+    KisImageSP image = m_image.toStrongRef();
+    if (!image) {
+        return;
+    }
+    UpdateTarget target(image, m_node, image->bounds());
     KisImageCommand::redo();
 
     if (m_doRedoUpdates) {
@@ -75,6 +79,10 @@ void KisImageLayerRemoveCommand::undo()
          * We are removing the group recursively, so the updates should
          * come recursively as well
          */
-        m_image->refreshGraphAsync(m_node, m_image->bounds());
+        KisImageSP image = m_image.toStrongRef();
+        if (!image) {
+            return;
+        }
+        image->refreshGraphAsync(m_node, image->bounds());
     }
 }

@@ -92,10 +92,10 @@ bool KisSaveGroupVisitor::visit(KisColorizeMask* ) {
 bool KisSaveGroupVisitor::visit(KisGroupLayer *layer)
 {
     if (layer == m_image->rootLayer()) {
-        KisLayerSP child = dynamic_cast<KisLayer*>(layer->firstChild().data());
+        KisLayerSP child = qobject_cast<KisLayer*>(layer->firstChild().data());
         while (child) {
             child->accept(*this);
-            child = dynamic_cast<KisLayer*>(child->nextSibling().data());
+            child = qobject_cast<KisLayer*>(child->nextSibling().data());
         }
 
     }
@@ -105,9 +105,7 @@ bool KisSaveGroupVisitor::visit(KisGroupLayer *layer)
 
         KisDocument *exportDocument = KisPart::instance()->createDocument();
 
-        exportDocument->prepareForImport();
-
-        KisImageWSP dst = new KisImage(exportDocument->createUndoStore(), r.width(), r.height(), m_image->colorSpace(), layer->name());
+        KisImageSP dst = new KisImage(exportDocument->createUndoStore(), r.width(), r.height(), m_image->colorSpace(), layer->name());
         dst->setResolution(m_image->xRes(), m_image->yRes());
         exportDocument->setCurrentImage(dst);
         KisPaintLayer* paintLayer = new KisPaintLayer(dst, "projection", layer->opacity());

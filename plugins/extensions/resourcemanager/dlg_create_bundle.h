@@ -61,6 +61,7 @@ private Q_SLOTS:
     void resourceTypeSelected(int idx);
     void getPreviewImage();
 
+
 private:
     QWidget *m_page;
     Ui::WdgDlgCreateBundle *m_ui;

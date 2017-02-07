@@ -28,16 +28,25 @@
 KisImageSetProjectionColorSpaceCommand::KisImageSetProjectionColorSpaceCommand(KisImageWSP image, const KoColorSpace * afterColorSpace)
     : KisImageCommand(kundo2_i18n("Convert Image Type"), image)
 {
-    m_beforeColorSpace = image->colorSpace();
-    m_afterColorSpace = afterColorSpace;
+    KisImageSP imageSP = image.toStrongRef();
+    if (imageSP) {
+        m_beforeColorSpace = imageSP->colorSpace();
+        m_afterColorSpace = afterColorSpace;
+    }
 }
 
 void KisImageSetProjectionColorSpaceCommand::redo()
 {
-    m_image->setProjectionColorSpace(m_afterColorSpace);
+    KisImageSP image = m_image.toStrongRef();
+    if (image) {
+        image->setProjectionColorSpace(m_afterColorSpace);
+    }
 }
 
 void KisImageSetProjectionColorSpaceCommand::undo()
 {
-    m_image->setProjectionColorSpace(m_beforeColorSpace);
+    KisImageSP image = m_image.toStrongRef();
+    if (image) {
+        image->setProjectionColorSpace(m_beforeColorSpace);
+    }
 }

@@ -46,9 +46,9 @@
 class ThumbnailBounds : public KisDefaultBounds {
 public:
     ThumbnailBounds() : KisDefaultBounds() {}
-    virtual ~ThumbnailBounds() {}
+    ~ThumbnailBounds() override {}
 
-    QRect bounds() const
+    QRect bounds() const override
     {
         return QRect(0, 0, 100, 100);
     }
@@ -198,8 +198,7 @@ void KisFilterSelectorWidget::setFilter(KisFilterSP f)
         widget->layout()->setContentsMargins(0,0,0,0);
         d->currentFilterConfigurationWidget->setView(d->view);
         d->currentFilterConfigurationWidget->blockSignals(true);
-        d->currentFilterConfigurationWidget->setConfiguration(
-        d->currentFilter->defaultConfiguration(d->paintDevice));
+        d->currentFilterConfigurationWidget->setConfiguration(d->currentFilter->defaultConfiguration());
         d->currentFilterConfigurationWidget->blockSignals(false);
         d->uiFilterSelector.scrollArea->setContentsMargins(0,0,0,0);
         d->uiFilterSelector.scrollArea->setMinimumWidth(widget->sizeHint().width() + 18);
@@ -288,7 +287,7 @@ KisFilterConfigurationSP KisFilterSelectorWidget::configuration()
             return config;
         }
     } else if (d->currentFilter) {
-        return d->currentFilter->defaultConfiguration(d->paintDevice);
+        return d->currentFilter->defaultConfiguration();
     }
     return 0;
 

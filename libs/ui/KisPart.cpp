@@ -107,20 +107,6 @@ public:
     void loadActions();
 };
 
-// Basically, we are going to insert the current UI/MainWindow ActionCollection
-// into the KisActionRegistry.
-void KisPart::loadActions()
-{
-    d->actionCollection = currentMainwindow()->viewManager()->actionCollection();
-
-    KisActionRegistry * actionRegistry = KisActionRegistry::instance();
-
-    Q_FOREACH (auto action, d->actionCollection->actions()) {
-        auto name = action->objectName();
-        actionRegistry->addAction(action->objectName(), action);
-    }
-};
-
 KisPart* KisPart::instance()
 {
     return s_instance;
@@ -432,11 +418,16 @@ void KisPart::openTemplate(const QUrl &url)
         mimeType.remove( QRegExp( "-template$" ) );
         document->setMimeTypeAfterLoading(mimeType);
         document->resetURL();
-        document->setEmpty();
     }
     else {
-        document->showLoadingErrorDialog();
-        document->initEmpty();
+        if (document->errorMessage().isEmpty()) {
+            QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Could not create document from template\n%1", document->localFilePath()));
+        }
+        else {
+            QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Could not create document from template\n%1\nReason: %2", document->localFilePath(), document->errorMessage()));
+        }
+        delete document;
+        return;
     }
     addDocument(document);
 
@@ -446,7 +437,7 @@ void KisPart::openTemplate(const QUrl &url)
     KisOpenPane *pane = qobject_cast<KisOpenPane*>(sender());
     if (pane) {
         pane->hide();
-        delete pane;
+        pane->deleteLater();
 
     }
 
@@ -477,7 +468,7 @@ void KisPart::startCustomDocument(KisDocument* doc)
     KisOpenPane *pane = qobject_cast<KisOpenPane*>(sender());
     if (pane) {
         pane->hide();
-        delete pane;
+        pane->deleteLater();
     }
     mw->addViewAndNotifyLoadingCompleted(doc);
 

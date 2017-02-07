@@ -183,7 +183,7 @@
   <customwidget>
    <class>KisVisualColorSelector</class>
    <extends>QWidget</extends>
-   <header>kis_visual_color_selector.h</header>
+   <header>KisVisualColorSelector.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>

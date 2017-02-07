@@ -20,6 +20,7 @@
 #include <kis_paint_action_type_option.h>
 #include <kis_airbrush_option.h>
 #include "kis_dynaop_option.h"
+#include <kis_config.h>
 
 struct KisDynaPaintOpSettings::Private
 {
@@ -88,7 +89,7 @@ QList<KisUniformPaintOpPropertySP> KisDynaPaintOpSettings::uniformProperties(Kis
                     i18n("Diameter"),
                     settings, 0);
 
-            prop->setRange(0, 1000);
+            prop->setRange(0, KisConfig().readEntry("maximumBrushSize", 1000));
             prop->setSingleStep(1);
             prop->setSuffix(i18n(" px"));
 

@@ -12,5 +12,4 @@ ExternalProject_Add( ext_png2ico
 
 	UPDATE_COMMAND ""
 	BUILD_IN_SOURCE 1
-	ALWAYS 0
 )

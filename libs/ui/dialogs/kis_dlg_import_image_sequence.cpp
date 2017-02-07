@@ -22,6 +22,10 @@
 #include "KisMainWindow.h"
 #include "kis_image.h"
 #include "kis_image_animation_interface.h"
+#include "KisImportExportManager.h"
+#include "KoFileDialog.h"
+#include <QDesktopServices>
+
 
 class KisDlgImportImageSequence::ListItem : QListWidgetItem {
 
@@ -31,7 +35,7 @@ public:
        collator(collator)
     {}
 
-    bool operator <(const QListWidgetItem &other) const
+    bool operator <(const QListWidgetItem &other) const override
     {
         int cmp = collator->compare(this->text(), other.text());
         return cmp < 0;
@@ -43,41 +47,46 @@ private:
 
 KisDlgImportImageSequence::KisDlgImportImageSequence(KisMainWindow *mainWindow, KisDocument *document) :
     KoDialog(mainWindow),
-    mainWindow(mainWindow),
-    document(document)
+    m_mainWindow(mainWindow),
+    m_document(document)
 {
     setButtons(Ok | Cancel);
     setDefaultButton(Ok);
 
     QWidget * page = new QWidget(this);
-    ui.setupUi(page);
+    m_ui.setupUi(page);
     setMainWidget(page);
 
     enableButtonOk(false);
 
-    ui.cmbOrder->addItem(i18n("Ascending"), Ascending);
-    ui.cmbOrder->addItem(i18n("Descending"), Descending);
-    ui.cmbOrder->setCurrentIndex(0);
+    m_ui.cmbOrder->addItem(i18n("Ascending"), Ascending);
+    m_ui.cmbOrder->addItem(i18n("Descending"), Descending);
+    m_ui.cmbOrder->setCurrentIndex(0);
 
-    ui.cmbSortMode->addItem(i18n("Alphabetical"), Natural);
-    ui.cmbSortMode->addItem(i18n("Numerical"), Numerical);
-    ui.cmbSortMode->setCurrentIndex(1);
+    m_ui.cmbSortMode->addItem(i18n("Alphabetical"), Natural);
+    m_ui.cmbSortMode->addItem(i18n("Numerical"), Numerical);
+    m_ui.cmbSortMode->setCurrentIndex(1);
 
-    ui.lstFiles->setSelectionMode(QAbstractItemView::ExtendedSelection);
+    m_ui.lstFiles->setSelectionMode(QAbstractItemView::ExtendedSelection);
 
-    connect(ui.btnAddImages, &QAbstractButton::clicked, this, &KisDlgImportImageSequence::slotAddFiles);
-    connect(ui.btnRemove, &QAbstractButton::clicked, this, &KisDlgImportImageSequence::slotRemoveFiles);
-    connect(ui.spinStep, SIGNAL(valueChanged(int)), this, SLOT(slotSkipChanged(int)));
-    connect(ui.cmbOrder, SIGNAL(currentIndexChanged(int)), this, SLOT(slotOrderOptionsChanged(int)));
-    connect(ui.cmbSortMode, SIGNAL(currentIndexChanged(int)), this, SLOT(slotOrderOptionsChanged(int)));
+    connect(m_ui.btnAddImages, &QAbstractButton::clicked, this, &KisDlgImportImageSequence::slotAddFiles);
+    connect(m_ui.btnRemove, &QAbstractButton::clicked, this, &KisDlgImportImageSequence::slotRemoveFiles);
+    connect(m_ui.spinStep, SIGNAL(valueChanged(int)), this, SLOT(slotSkipChanged(int)));
+    connect(m_ui.cmbOrder, SIGNAL(currentIndexChanged(int)), this, SLOT(slotOrderOptionsChanged(int)));
+    connect(m_ui.cmbSortMode, SIGNAL(currentIndexChanged(int)), this, SLOT(slotOrderOptionsChanged(int)));
+
+    // cold initialization of the controls
+    slotSkipChanged(m_ui.spinStep->value());
+    slotOrderOptionsChanged(m_ui.cmbOrder->currentIndex());
+    slotOrderOptionsChanged(m_ui.cmbSortMode->currentIndex());
 }
 
 QStringList KisDlgImportImageSequence::files()
 {
     QStringList list;
 
-    for (int i=0; i < ui.lstFiles->count(); i++) {
-        list.append(ui.lstFiles->item(i)->text());
+    for (int i=0; i < m_ui.lstFiles->count(); i++) {
+        list.append(m_ui.lstFiles->item(i)->text());
     }
 
     return list;
@@ -85,46 +94,58 @@ QStringList KisDlgImportImageSequence::files()
 
 int KisDlgImportImageSequence::firstFrame()
 {
-    return ui.spinFirstFrame->value();
+    return m_ui.spinFirstFrame->value();
 }
 
 int KisDlgImportImageSequence::step()
 {
-    return ui.spinStep->value();
+    return m_ui.spinStep->value();
 }
 
 void KisDlgImportImageSequence::slotAddFiles()
 {
-    QStringList urls = mainWindow->showOpenFileDialog();
+    QStringList urls = showOpenFileDialog();
 
     if (!urls.isEmpty()) {
         Q_FOREACH(QString url, urls) {
-            new ListItem(url, ui.lstFiles, &collator);
+            new ListItem(url, m_ui.lstFiles, &m_collator);
         }
 
         sortFileList();
     }
 
-    enableButtonOk(ui.lstFiles->count() > 0);
+    enableButtonOk(m_ui.lstFiles->count() > 0);
 }
+
+QStringList KisDlgImportImageSequence::showOpenFileDialog()
+{
+    KoFileDialog dialog(this, KoFileDialog::ImportFiles, "OpenDocument");
+    dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
+    dialog.setMimeTypeFilters(KisImportExportManager::mimeFilter(KisImportExportManager::Import));
+    dialog.setCaption(i18n("Import Images"));
+
+    return dialog.filenames();
+}
+
+
 
 void KisDlgImportImageSequence::slotRemoveFiles()
 {
-    QList<QListWidgetItem*> selected = ui.lstFiles->selectedItems();
+    QList<QListWidgetItem*> selected = m_ui.lstFiles->selectedItems();
 
     Q_FOREACH(QListWidgetItem *item, selected) {
         delete item;
     }
 
-    enableButtonOk(ui.lstFiles->count() > 0);
+    enableButtonOk(m_ui.lstFiles->count() > 0);
 }
 
 void KisDlgImportImageSequence::slotSkipChanged(int)
 {
-    int documentFps = document->image()->animationInterface()->framerate();
-    float sourceFps = 1.0f * documentFps / ui.spinStep->value();
+    int documentFps = m_document->image()->animationInterface()->framerate();
+    float sourceFps = 1.0f * documentFps / m_ui.spinStep->value();
 
-    ui.lblFramerate->setText(i18n("Source fps: %1", sourceFps));
+    m_ui.lblFramerate->setText(i18n("Source fps: %1", sourceFps));
 }
 
 void KisDlgImportImageSequence::slotOrderOptionsChanged(int)
@@ -134,9 +155,9 @@ void KisDlgImportImageSequence::slotOrderOptionsChanged(int)
 
 void KisDlgImportImageSequence::sortFileList()
 {
-    int order = ui.cmbOrder->currentData().toInt();
-    bool numeric = ui.cmbSortMode->currentData().toInt() == Numerical;
+    int order = m_ui.cmbOrder->currentData().toInt();
+    bool numeric = m_ui.cmbSortMode->currentData().toInt() == Numerical;
 
-    collator.setNumericMode(numeric);
-    ui.lstFiles->sortItems((order == Ascending) ? Qt::AscendingOrder : Qt::DescendingOrder);
+    m_collator.setNumericMode(numeric);
+    m_ui.lstFiles->sortItems((order == Ascending) ? Qt::AscendingOrder : Qt::DescendingOrder);
 }

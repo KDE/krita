@@ -83,6 +83,8 @@ set(kritawidgets_LIB_SRCS
     kis_double_parse_spin_box.cpp
     kis_double_parse_unit_spin_box.cpp
     kis_int_parse_spin_box.cpp
+
+    KisColorSelectorInterface.cpp
 )
 
 ki18n_wrap_ui( kritawidgets_LIB_SRCS
@@ -102,8 +104,6 @@ target_link_libraries(kritawidgets kritaodf kritaflake kritapigment kritawidgetu
 if(X11_FOUND)
     target_link_libraries(kritawidgets Qt5::X11Extras ${X11_LIBRARIES})
 endif()
-
-target_link_libraries(kritawidgets LINK_INTERFACE_LIBRARIES  kritaodf kritaflake kritapigment kritawidgetutils Qt5::PrintSupport KF5::CoreAddons KF5::ConfigGui KF5::GuiAddons KF5::WidgetsAddons KF5::ConfigCore KF5::Completion)
 
 set_target_properties(kritawidgets PROPERTIES
     VERSION ${GENERIC_KRITA_LIB_VERSION} SOVERSION ${GENERIC_KRITA_LIB_SOVERSION}

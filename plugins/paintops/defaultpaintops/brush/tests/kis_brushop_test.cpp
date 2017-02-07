@@ -139,7 +139,6 @@ public:
         KisResourcesSnapshotSP resources =
             new KisResourcesSnapshot(image,
                                      paint1,
-                                     image->postExecutionUndoAdapter(),
                                      manager.data());
 
         resources->setupPainter(&gc);
@@ -167,7 +166,7 @@ public:
         : TestBrushOp(presetFileName) {
     }
 
-    void doPaint(KisPainter &gc) {
+    void doPaint(KisPainter &gc) override {
 
         QVector<KisPaintInformation> vector;
 
@@ -190,7 +189,7 @@ public:
         : TestBrushOp(presetFileName, prefix) {
     }
 
-    void doPaint(KisPainter &gc) {
+    void doPaint(KisPainter &gc) override {
 
         QVector<KisPaintInformation> vector;
 
@@ -208,6 +207,11 @@ public:
     }
 };
 
+#include <KoResourcePaths.h>
+void KisBrushOpTest::initTestCase()
+{
+    KoResourcePaths::addResourceDir("kis_brushes", QString(SYSTEM_RESOURCES_DATA_DIR) + "/brushes");
+}
 
 void KisBrushOpTest::testRotationMirroring()
 {

@@ -23,7 +23,6 @@
 
 #include "kis_hairy_paintop_settings.h"
 #include "kis_hairy_bristle_option.h"
-#include "kis_hairy_shape_option.h"
 #include "kis_brush_based_paintop_options_widget.h"
 #include "kis_boundary.h"
 

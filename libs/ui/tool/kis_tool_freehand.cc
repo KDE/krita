@@ -171,8 +171,7 @@ void KisToolFreehand::initStroke(KoPointerEvent *event)
     m_helper->initPaint(event, canvas()->resourceManager(),
                         image(),
                         currentNode(),
-                        image().data(),
-                        image()->postExecutionUndoAdapter());
+                        image().data());
 }
 
 void KisToolFreehand::doStroke(KoPointerEvent *event)

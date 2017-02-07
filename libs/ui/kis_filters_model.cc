@@ -43,22 +43,22 @@ struct KisFiltersModel::Private {
     };
     struct Filter : public Node {
 
-        virtual ~Filter() {}
+        ~Filter() override {}
 
         QString id;
         QPixmap icon;
         KisFilterSP filter;
-        virtual int childrenCount() {
+        int childrenCount() override {
             return 0;
         }
     };
     struct Category : public Node {
 
-        virtual ~Category() {}
+        ~Category() override {}
 
         QString id;
         QList<Filter> filters;
-        virtual int childrenCount() {
+        int childrenCount() override {
             return filters.count();
         }
     };
@@ -72,8 +72,11 @@ KisFiltersModel::KisFiltersModel(bool showAll, KisPaintDeviceSP thumb)
     : d(new Private)
 {
     d->thumb = thumb;
-    QList<KisFilterSP> filters = KisFilterRegistry::instance()->values();
-    Q_FOREACH (const KisFilterSP filter, filters) {
+    QStringList keys = KisFilterRegistry::instance()->keys();
+    keys.sort();
+
+    Q_FOREACH (const QString &filterName, keys) {
+        KisFilterSP filter = KisFilterRegistry::instance()->get(filterName);
         if (!showAll && !filter->supportsAdjustmentLayers()) {
             continue;
         }
@@ -89,7 +92,7 @@ KisFiltersModel::KisFiltersModel(bool showAll, KisPaintDeviceSP thumb)
         filt.id = filter->id();
         filt.name = filter->name();
         filt.filter = filter;
-        d->categories[ filter->menuCategory().id()].filters.append(filt);
+        d->categories[filter->menuCategory().id()].filters.append(filt);
     }
     qSort(d->categoriesKeys);
 

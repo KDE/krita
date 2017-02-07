@@ -52,40 +52,50 @@ qreal KisTransformUtils::scaleFromAffineMatrix(const QTransform &t) {
     return KoUnit::approxTransformScale(t);
 }
 
-qreal KisTransformUtils::scaleFromPerspectiveMatrix(const QTransform &t, const QPointF &basePt) {
-    const QRectF testRect(basePt, QSizeF(1.0, 1.0));
-    QRectF resultRect = t.mapRect(testRect);
+qreal KisTransformUtils::scaleFromPerspectiveMatrixX(const QTransform &t, const QPointF &basePt) {
+    const QPointF pt = basePt + QPointF(1.0, 0);
+    return kisDistance(t.map(pt), t.map(basePt));
+}
 
-    return 0.5 * (resultRect.width(), resultRect.height());
+qreal KisTransformUtils::scaleFromPerspectiveMatrixY(const QTransform &t, const QPointF &basePt) {
+    const QPointF pt = basePt + QPointF(0, 1.0);
+    return kisDistance(t.map(pt), t.map(basePt));
 }
 
 qreal KisTransformUtils::effectiveSize(const QRectF &rc) {
-    return 0.5 * (rc.width(), rc.height());
+    return 0.5 * (rc.width() + rc.height());
 }
 
-QRectF handleRectImpl(qreal radius, const QTransform &t, const QRectF &limitingRect, const QPointF &basePoint, qreal *dOut) {
-    qreal handlesExtraScale =
-        KisTransformUtils::scaleFromPerspectiveMatrix(t, basePoint);
+QRectF handleRectImpl(qreal radius, const QTransform &t, const QRectF &limitingRect, const QPointF &basePoint, qreal *dOutX, qreal *dOutY) {
+    const qreal handlesExtraScaleX =
+        KisTransformUtils::scaleFromPerspectiveMatrixX(t, basePoint);
+    const qreal handlesExtraScaleY =
+        KisTransformUtils::scaleFromPerspectiveMatrixY(t, basePoint);
 
     const qreal maxD = 0.2 * KisTransformUtils::effectiveSize(limitingRect);
-    const qreal d = qMin(maxD, radius / handlesExtraScale);
+    const qreal dX = qMin(maxD, radius / handlesExtraScaleX);
+    const qreal dY = qMin(maxD, radius / handlesExtraScaleY);
 
-    QRectF handleRect(-0.5 * d, -0.5 * d, d, d);
+    QRectF handleRect(-0.5 * dX, -0.5 * dY, dX, dY);
 
-    if (dOut) {
-        *dOut = d;
+    if (dOutX) {
+        *dOutX = dX;
+    }
+
+    if (dOutY) {
+        *dOutY = dY;
     }
 
     return handleRect;
 
 }
 
-QRectF KisTransformUtils::handleRect(qreal radius, const QTransform &t, const QRectF &limitingRect, qreal *dOut) {
-    return handleRectImpl(radius, t, limitingRect, limitingRect.center(), dOut);
+QRectF KisTransformUtils::handleRect(qreal radius, const QTransform &t, const QRectF &limitingRect, qreal *dOutX, qreal *dOutY) {
+    return handleRectImpl(radius, t, limitingRect, limitingRect.center(), dOutX, dOutY);
 }
 
 QRectF KisTransformUtils::handleRect(qreal radius, const QTransform &t, const QRectF &limitingRect, const QPointF &basePoint) {
-    return handleRectImpl(radius, t, limitingRect, basePoint, 0);
+    return handleRectImpl(radius, t, limitingRect, basePoint, 0, 0);
 }
 
 QPointF KisTransformUtils::clipInRect(QPointF p, QRectF r)
@@ -355,4 +365,27 @@ QRect KisTransformUtils::changeRect(const ToolTransformArgs &config,
     }
 
     return result;
+}
+
+KisTransformUtils::AnchorHolder::AnchorHolder(bool enabled, ToolTransformArgs *config)
+    : m_enabled(enabled),
+      m_config(config)
+{
+    if (!m_enabled) return;
+
+    m_staticPoint = m_config->originalCenter() + m_config->rotationCenterOffset();
+
+    const KisTransformUtils::MatricesPack m(*m_config);
+    m_oldStaticPointInView = m.finalTransform().map(m_staticPoint);
+}
+
+KisTransformUtils::AnchorHolder::~AnchorHolder() {
+    if (!m_enabled) return;
+
+    const KisTransformUtils::MatricesPack m(*m_config);
+    const QPointF newStaticPointInView = m.finalTransform().map(m_staticPoint);
+
+    const QPointF diff = m_oldStaticPointInView - newStaticPointInView;
+
+    m_config->setTransformedCenter(m_config->transformedCenter() + diff);
 }

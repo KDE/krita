@@ -72,6 +72,7 @@ KisGroupLayer::KisGroupLayer(const KisGroupLayer &rhs) :
     m_d->y = rhs.m_d->y;
     m_d->paintDevice->setDefaultPixel(const_cast<KisGroupLayer*>(&rhs)->m_d->paintDevice->defaultPixel());
     m_d->paintDevice->setProjectionDevice(true);
+    m_d->passThroughMode = rhs.passThroughMode();
 }
 
 KisGroupLayer::~KisGroupLayer()
@@ -206,7 +207,7 @@ KisLayer* KisGroupLayer::onlyMeaningfulChild() const
     KisLayer *onlyLayer = 0;
 
     while (child) {
-        KisLayer *layer = dynamic_cast<KisLayer*>(child);
+        KisLayer *layer = qobject_cast<KisLayer*>(child);
         if (layer) {
             if (onlyLayer) return 0;
             onlyLayer = layer;
@@ -260,6 +261,11 @@ KisPaintDeviceSP KisGroupLayer::original() const
     }
 
     return realOriginal;
+}
+
+KisPaintDeviceSP KisGroupLayer::paintDevice() const
+{
+    return 0;
 }
 
 bool KisGroupLayer::projectionIsValid() const

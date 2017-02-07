@@ -15,12 +15,17 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KIS_BRUSH_CHOOSER_H_
-#define KIS_BRUSH_CHOOSER_H_
+#ifndef KIS_PREDEFINED_BRUSH_CHOOSER_H_
+#define KIS_PREDEFINED_BRUSH_CHOOSER_H_
 
 #include <QLabel>
-#include "kritapaintop_export.h"
 #include <kis_brush.h>
+
+#include "kritapaintop_export.h"
+#include "ui_wdgpredefinedbrushchooser.h"
+
+
+
 
 class KisDoubleSliderSpinBox;
 class QLabel;
@@ -33,14 +38,14 @@ class KisClipboardBrushWidget;
 class KoResourceItemChooser;
 class KoResource;
 
-class PAINTOP_EXPORT KisBrushChooser : public QWidget
+class PAINTOP_EXPORT KisPredefinedBrushChooser : public QWidget, Ui::WdgPredefinedBrushChooser
 {
 
     Q_OBJECT
 
 public:
-    KisBrushChooser(QWidget *parent = 0, const char *name = 0);
-    virtual ~KisBrushChooser();
+    KisPredefinedBrushChooser(QWidget *parent = 0, const char *name = 0);
+    virtual ~KisPredefinedBrushChooser();
 
     KisBrushSP brush() {
         return m_brush;
@@ -60,22 +65,18 @@ private Q_SLOTS:
     void slotActivatedBrush(KoResource *);
     void slotOpenStampBrush();
     void slotOpenClipboardBrush();
+    void slotImportNewBrushResource();
+    void slotDeleteBrushResource();
     void slotNewPredefinedBrush(KoResource *);
     void update(KoResource *);
+
+
 
 Q_SIGNALS:
 
     void sigBrushChanged();
 
 private:
-    QLabel* m_lbName;
-    QLabel* m_lbRotation;
-    QLabel* m_lbSize;
-    QLabel* m_lbSpacing;
-    KisDoubleSliderSpinBox* m_slRotation;
-    KisDoubleSliderSpinBox* m_slSize;
-    KisSpacingSelectionWidget* m_slSpacing;
-    QCheckBox* m_chkColorMask;
     KisBrushSP m_brush;
     KoResourceItemChooser* m_itemChooser;
     KisImageWSP m_image;
@@ -84,4 +85,4 @@ private:
 
 };
 
-#endif // KIS_BRUSH_CHOOSER_H_
+#endif // KIS_PREDEFINED_BRUSH_CHOOSER_H_

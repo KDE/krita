@@ -14,7 +14,6 @@ if (MSVC)
                     COMMAND ${CMAKE_COMMAND} -E copy_directory <SOURCE_DIR>/include ${PREFIX_ext_fftw3}/include
 
             UPDATE_COMMAND ""
-            ALWAYS 0
         )
     else()
          ExternalProject_Add( ext_fftw3
@@ -30,10 +29,10 @@ if (MSVC)
                     COMMAND ${CMAKE_COMMAND} -E copy_directory <SOURCE_DIR>/include ${PREFIX_ext_fftw3}/include
 
             UPDATE_COMMAND ""
-            ALWAYS 0
         )
     endif()
 elseif (MINGW)
+    if("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
         ExternalProject_Add( ext_fftw3
             DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
             URL http://files.kde.org/krita/build/dependencies/fftw-3.3.4-dll64.zip
@@ -41,14 +40,29 @@ elseif (MINGW)
 
             INSTALL_DIR ${PREFIX_ext_fftw3}
             CONFIGURE_COMMAND ""
-            BUILD_COMMAND ${CMAKE_COMMAND} -E echo deploying fftw3 64 binary
+            BUILD_COMMAND ${CMAKE_COMMAND} -E echo deploying fftw3 64-bit binary
             INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_directory <SOURCE_DIR>/bin ${PREFIX_ext_fftw3}/bin
                     COMMAND ${CMAKE_COMMAND} -E copy_directory <SOURCE_DIR>/lib ${PREFIX_ext_fftw3}/lib
                     COMMAND ${CMAKE_COMMAND} -E copy_directory <SOURCE_DIR>/include ${PREFIX_ext_fftw3}/include
 
             UPDATE_COMMAND ""
-            ALWAYS 0
         )
+    else("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
+        ExternalProject_Add( ext_fftw3
+            DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+            URL http://files.kde.org/krita/build/dependencies/fftw-3.3.4-dll32.zip
+            URL_MD5 03754fe2a7fbaf983b0cc9a728e0a5b3
+
+            INSTALL_DIR ${PREFIX_ext_fftw3}
+            CONFIGURE_COMMAND ""
+            BUILD_COMMAND ${CMAKE_COMMAND} -E echo deploying fftw3 32-bit binary
+            INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_directory <SOURCE_DIR>/bin ${PREFIX_ext_fftw3}/bin
+                    COMMAND ${CMAKE_COMMAND} -E copy_directory <SOURCE_DIR>/lib ${PREFIX_ext_fftw3}/lib
+                    COMMAND ${CMAKE_COMMAND} -E copy_directory <SOURCE_DIR>/include ${PREFIX_ext_fftw3}/include
+
+            UPDATE_COMMAND ""
+        )
+    endif("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
 else ()
 ExternalProject_Add( ext_fftw3
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
@@ -61,6 +75,5 @@ ExternalProject_Add( ext_fftw3
         INSTALL_COMMAND make install
 
         UPDATE_COMMAND ""
-        ALWAYS 0
 )
 endif ()

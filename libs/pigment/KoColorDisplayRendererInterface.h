@@ -27,6 +27,7 @@
 #include "KoColor.h"
 
 class KoChannelInfo;
+class KoColorSpace;
 
 /**
  * A special interface class provided by pigment to let widgets render
@@ -43,6 +44,16 @@ class KRITAPIGMENT_EXPORT KoColorDisplayRendererInterface : public QObject
 public:
     KoColorDisplayRendererInterface();
     virtual ~KoColorDisplayRendererInterface();
+
+    /**
+     * @brief KoColorSpace::convertToQImage converts a whole row of colors in one go
+     * @param srcColorSpace the colorspace the pixel data is in
+     * @param data a pointer to a byte array with colors
+     * @param width of the resulting image
+     * @param height of the resulting image
+     * @return a QImage that can be displayed
+     */
+    virtual QImage convertToQImage(const KoColorSpace *srcColorSpace, const quint8 *data, qint32 width, qint32 height) const = 0;
 
     /**
      * Convert the color \p c to a custom QColor that will be
@@ -101,6 +112,7 @@ private:
 class KRITAPIGMENT_EXPORT KoDumbColorDisplayRenderer : public KoColorDisplayRendererInterface
 {
 public:
+    QImage convertToQImage(const KoColorSpace *srcColorSpace, const quint8 *data, qint32 width, qint32 height) const;
     QColor toQColor(const KoColor &c) const;
     KoColor approximateFromRenderedQColor(const QColor &c) const;
     KoColor fromHsv(int h, int s, int v, int a = 255) const;

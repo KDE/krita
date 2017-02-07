@@ -154,7 +154,7 @@ void KisMaskManager::createMaskCommon(KisMaskSP mask, KisNodeSP activeNode, KisP
     KisNodeSP above;
     adjustMaskPosition(mask, activeNode, avoidActiveNode, parent, above);
 
-    KisLayerSP parentLayer = dynamic_cast<KisLayer*>(parent.data());
+    KisLayerSP parentLayer = qobject_cast<KisLayer*>(parent.data());
     Q_ASSERT(parentLayer);
 
     if (!suppressSelection) {
@@ -208,7 +208,7 @@ void KisMaskManager::createFilterMask(KisNodeSP activeNode, KisPaintDeviceSP cop
 
     // If we are supposed to not disturb the user, don't start asking them about things.
     if(quiet) {
-        KisFilterConfigurationSP filter = KisFilterRegistry::instance()->values().first()->defaultConfiguration(originalDevice);
+        KisFilterConfigurationSP filter = KisFilterRegistry::instance()->values().first()->defaultConfiguration();
         if (filter) {
             mask->setFilter(filter);
             mask->setName(mask->name());
@@ -235,7 +235,7 @@ void KisMaskManager::createColorizeMask(KisNodeSP activeNode)
     createMaskCommon(mask, activeNode, 0, kundo2_i18n("Add Colorize Mask"), "KisColorizeMask", i18n("Colorize Mask"), true, false);
     mask->setImage(m_view->image());
     mask->initializeCompositeOp();
-    mask->setColorSpace(mask->parent()->colorSpace());
+    delete mask->setColorSpace(mask->parent()->colorSpace());
 }
 
 void KisMaskManager::createTransformMask(KisNodeSP activeNode)
@@ -251,7 +251,7 @@ void KisMaskManager::maskProperties()
     if (activeMask()->inherits("KisFilterMask")) {
         KisFilterMask *mask = static_cast<KisFilterMask*>(activeMask().data());
 
-        KisLayerSP layer = dynamic_cast<KisLayer*>(mask->parent().data());
+        KisLayerSP layer = qobject_cast<KisLayer*>(mask->parent().data());
         if (! layer)
             return;
 

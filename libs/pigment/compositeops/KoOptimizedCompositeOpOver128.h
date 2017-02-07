@@ -75,7 +75,7 @@ struct OverCompositor128 {
 
         const Vc::float_v::IndexType indexes(Vc::IndexesFromZero);
         Vc::InterleavedMemoryWrapper<Pixel, Vc::float_v> data(const_cast<Pixel*>(sp));
-        (src_c1, src_c2, src_c3, src_alpha) = data[indexes];
+        tie(src_c1, src_c2, src_c3, src_alpha) = data[indexes];
 
         //bool haveOpacity = opacity != 1.0;
         const Vc::float_v opacity_norm_vec(opacity);
@@ -102,7 +102,7 @@ struct OverCompositor128 {
         Vc::float_v dst_c3;
 
         Vc::InterleavedMemoryWrapper<Pixel, Vc::float_v> dataDest(dp);
-        (dst_c1, dst_c2, dst_c3, dst_alpha) = dataDest[indexes];
+        tie(dst_c1, dst_c2, dst_c3, dst_alpha) = dataDest[indexes];
 
         Vc::float_v src_blend;
         Vc::float_v new_alpha;
@@ -134,12 +134,12 @@ struct OverCompositor128 {
             dst_c2 = src_blend * (src_c2 - dst_c2) + dst_c2;
             dst_c3 = src_blend * (src_c3 - dst_c3) + dst_c3;
 
-            dataDest[indexes] = (dst_c1, dst_c2, dst_c3, new_alpha);
+            dataDest[indexes] = tie(dst_c1, dst_c2, dst_c3, new_alpha);
         } else {
 #if INFO_DEBUG
                 ++countTwo;
 #endif
-                dataDest[indexes] = (src_c1, src_c2, src_c3, new_alpha);
+                dataDest[indexes] = tie(src_c1, src_c2, src_c3, new_alpha);
         }
     }
 

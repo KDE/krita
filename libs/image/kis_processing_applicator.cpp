@@ -37,11 +37,11 @@ public:
     {
     }
 
-    void init() {
+    void init() override {
         m_image->disableUIUpdates();
     }
 
-    void end() {
+    void end() override {
         m_image->enableUIUpdates();
     }
 
@@ -64,7 +64,7 @@ public:
     }
 
 private:
-    void init() {
+    void init() override {
         /**
          * We disable all non-centralized updates here. Everything
          * should be done by this command's explicit updates.
@@ -76,7 +76,7 @@ private:
         m_image->disableDirtyRequests();
     }
 
-    void end() {
+    void end() override {
         m_image->enableDirtyRequests();
 
         if(m_flags.testFlag(KisProcessingApplicator::RECURSIVE)) {
@@ -97,7 +97,7 @@ private:
             prevNode = prevNode->prevSibling();
         }
 
-        KisLayer *layer = dynamic_cast<KisLayer*>(m_node.data());
+        KisLayer *layer = qobject_cast<KisLayer*>(m_node.data());
         if(layer && layer->hasClones()) {
             Q_FOREACH (KisCloneLayerSP clone, layer->registeredClones()) {
                 if(!clone) continue;
@@ -129,7 +129,7 @@ public:
     {
     }
 
-    void end() {
+    void end() override {
         if (isFinalizing()) {
             doUpdate(m_emitSignals);
         } else {
@@ -172,8 +172,7 @@ KisProcessingApplicator::KisProcessingApplicator(KisImageWSP image,
       m_finalSignalsEmitted(false)
 {
     KisStrokeStrategyUndoCommandBased *strategy =
-            new KisStrokeStrategyUndoCommandBased(name, false,
-                                                  m_image->postExecutionUndoAdapter());
+            new KisStrokeStrategyUndoCommandBased(name, false, m_image.data());
 
     if (m_flags.testFlag(SUPPORTS_WRAPAROUND_MODE)) {
         strategy->setSupportsWrapAroundMode(true);

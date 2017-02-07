@@ -67,6 +67,8 @@ KisPaintOpSettingsWidget::KisPaintOpSettingsWidget(QWidget * parent)
     QSizePolicy policy =  QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
     m_d->optionsList->setSizePolicy(policy);
 
+    m_d->optionsList->setMinimumWidth(130); // this should be just big enough to show all of the setting names
+
     m_d->optionsStack = new QStackedWidget(this);
     policy = QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     m_d->optionsStack->setSizePolicy(policy);
@@ -130,8 +132,6 @@ void KisPaintOpSettingsWidget::setConfiguration(const KisPropertiesConfiguration
         m_d->model->signalDataChanged(m_d->model->indexOf(info));
         indexcount++;
     }
-
-    KisPaintOpConfigWidget::setConfiguration(propertiesProxy);
 }
 
 void KisPaintOpSettingsWidget::writeConfiguration(KisPropertiesConfigurationSP config) const
@@ -140,8 +140,6 @@ void KisPaintOpSettingsWidget::writeConfiguration(KisPropertiesConfigurationSP c
     Q_FOREACH (const KisPaintOpOption* option, m_d->paintOpOptions) {
         option->startWriteOptionSetting(propertiesProxy);
     }
-
-    KisPaintOpConfigWidget::writeConfiguration(propertiesProxy);
 }
 
 KisPaintopLodLimitations KisPaintOpSettingsWidget::lodLimitations() const

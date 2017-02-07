@@ -27,27 +27,16 @@
 #include "kis_scalar_keyframe_channel.h"
 #include "KoColor.h"
 #include "kis_image_animation_interface.h"
+#include <sdk/tests/testing_nodes.h>
 
 #include <KoProperties.h>
 
-class TestNode : public KisBaseNode
+class TestNode : public TestUtil::DefaultNode
 {
     using KisBaseNode::accept;
 
-    bool accept(KisNodeVisitor &) {
-        return false;
-    }
-
-    KisPaintDeviceSP paintDevice() const {
-        return 0;
-    }
-
-    const KoColorSpace * colorSpace() const {
-        return 0;
-    }
-
-    virtual const KoCompositeOp * compositeOp() const {
-        return 0;
+    KisNodeSP clone() const override {
+        return new TestNode(*this);
     }
 };
 

@@ -67,8 +67,7 @@ ImageSize::~ImageSize()
 
 void ImageSize::slotImageSize()
 {
-    KisImageWSP image = m_view->image();
-
+    KisImageSP image = m_view->image().toStrongRef();
     if (!image) return;
 
     DlgImageSize * dlgImageSize = new DlgImageSize(m_view->mainWindow(), image->width(), image->height(), image->yRes());
@@ -133,7 +132,10 @@ void ImageSize::slotLayerSize()
 
 void ImageSize::slotSelectionScale()
 {
-    KisImageWSP image = m_view->image();
+    KisImageSP image = m_view->image();
+    if (!image) {
+        return;
+    }
     KisLayerSP layer = m_view->activeLayer();
 
     KIS_ASSERT_RECOVER_RETURN(image && layer);

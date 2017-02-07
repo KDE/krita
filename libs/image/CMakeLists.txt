@@ -187,6 +187,7 @@ set(kritaimage_LIB_SRCS
    kis_projection_updates_filter.cpp
    kis_suspend_projection_updates_stroke_strategy.cpp
    kis_regenerate_frame_stroke_strategy.cpp
+   kis_switch_time_stroke_strategy.cpp
    kis_crop_saved_extra_data.cpp
    kis_signal_compressor.cpp
    kis_signal_compressor_with_param.cpp
@@ -356,9 +357,6 @@ endif()
 
 if(HAVE_VC)
   target_link_libraries(kritaimage PUBLIC ${Vc_LIBRARIES})
-  if (NOT PACKAGERS_BUILD)
-      set_property(TARGET kritaimage APPEND PROPERTY COMPILE_OPTIONS "${Vc_ARCHITECTURE_FLAGS}")
-  endif()
 endif()
 
 if (NOT GSL_FOUND)

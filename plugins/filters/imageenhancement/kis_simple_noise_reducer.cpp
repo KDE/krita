@@ -55,7 +55,7 @@ KisConfigWidget * KisSimpleNoiseReducer::createConfigurationWidget(QWidget* pare
     return new KisMultiIntegerFilterWidget(id().id(), parent, id().id(), param);
 }
 
-KisFilterConfigurationSP  KisSimpleNoiseReducer::factoryConfiguration(const KisPaintDeviceSP) const
+KisFilterConfigurationSP  KisSimpleNoiseReducer::factoryConfiguration() const
 {
     KisFilterConfigurationSP config = new KisFilterConfiguration(id().id(), 0);
     config->setProperty("threshold", 15);
@@ -80,7 +80,7 @@ void KisSimpleNoiseReducer::processImpl(KisPaintDeviceSP device,
 
     int threshold, windowsize;
 
-    KisFilterConfigurationSP config = _config ? _config : defaultConfiguration(device);
+    KisFilterConfigurationSP config = _config ? _config : defaultConfiguration();
 
     if (progressUpdater) {
         progressUpdater->setRange(0, applyRect.width() * applyRect.height());

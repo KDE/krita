@@ -136,7 +136,7 @@ void TimelineLayersHeader::paintSection(QPainter *painter, const QRect &rect, in
 
         QVector<QLine> lines;
         lines << QLine(x0, y0 + lineWidth / 2, x1, y0 + lineWidth / 2);
-        lines << QLine(x0, y1 -  lineWidth / 2, x1,  y1 - lineWidth / 2);
+        lines << QLine(x0, y1 - lineWidth / 2, x1, y1 - lineWidth / 2);
 
         painter->drawLines(lines);
 
@@ -240,16 +240,11 @@ void TimelineLayersHeader::mousePressEvent(QMouseEvent *e)
             emit sigRequestContextMenu(e->globalPos());
             return;
         } else if (e->button() == Qt::LeftButton) {
-            slotActivateSection(logical);
+            model()->setHeaderData(logical, orientation(), true, TimelineFramesModel::ActiveLayerRole);
         }
     }
 
     QHeaderView::mousePressEvent(e);
-}
-
-void TimelineLayersHeader::slotActivateSection(int logicalIndex)
-{
-    model()->setHeaderData(logicalIndex, orientation(), true, TimelineFramesModel::ActiveLayerRole);
 }
 
 

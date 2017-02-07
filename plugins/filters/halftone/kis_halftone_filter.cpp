@@ -33,6 +33,8 @@
 #include <kis_sequential_iterator.h>
 #include <kis_types.h>
 #include <kis_painter.h>
+#include <kis_pixel_selection.h>
+#include <kis_selection.h>
 
 #include "kis_halftone_filter.h"
 
@@ -118,6 +120,8 @@ void KisHalftoneFilter::processImpl(KisPaintDeviceSP device,
     painter.setCompositeOp(device->colorSpace()->compositeOp(COMPOSITE_OVER));
     KisPaintDeviceSP dab = device->createCompositionSourceDevice();
     KisPainter dbPainter(dab);
+    KisSelectionSP alpha = new KisSelection();
+    alpha->pixelSelection()->copyAlphaFrom(device, applyRect);
     device->fill(applyRect, backgroundC);
     dbPainter.setAntiAliasPolygonFill(config->getBool("antiAliasing", true));
     dbPainter.setPaintColor(foregroundC);
@@ -163,12 +167,12 @@ void KisHalftoneFilter::processImpl(KisPaintDeviceSP device,
             }
         }
     }
+    alpha->pixelSelection()->invert();
+    device->clearSelection(alpha);
 }
 
-KisFilterConfigurationSP KisHalftoneFilter::factoryConfiguration(const KisPaintDeviceSP dev) const
+KisFilterConfigurationSP KisHalftoneFilter::factoryConfiguration() const
 {
-    Q_UNUSED(dev);
-
     KisFilterConfigurationSP config = new KisFilterConfiguration("halftone", 1);
     config->setProperty("cellSize", 8.0);
     config->setProperty("patternAngle", 45.0);

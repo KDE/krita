@@ -28,7 +28,7 @@
 #include <kis_image.h>
 #include <kis_paint_device.h>
 
-DlgImagesplit::DlgImagesplit(KisViewManager* view, QString suffix, QStringList listMimeFilter)
+DlgImagesplit::DlgImagesplit(KisViewManager* view, const QString &suffix, QStringList listMimeFilter, int defaultMimeIndex)
     : KoDialog(view->mainWindow())
 {
 
@@ -47,8 +47,8 @@ DlgImagesplit::DlgImagesplit(KisViewManager* view, QString suffix, QStringList l
     resize(m_page->sizeHint());
     m_page->cmbFileType->clear();
     m_page->cmbFileType->addItems(listMimeFilter);
-    m_page->cmbFileType->setCurrentIndex(0);
-    cmbIndex = 0;
+    m_page->cmbFileType->setCurrentIndex(defaultMimeIndex);
+    cmbIndex = defaultMimeIndex;
 
     connect(m_page->chkAutoSave, SIGNAL(stateChanged(int)), SLOT(lineEditEnable()));
     connect(m_page->cmbFileType, SIGNAL(activated(int)), this, SLOT(setMimeType(int)));

@@ -36,7 +36,7 @@ public:
 
 public:
 
-    KisSmoothingOptions();
+    KisSmoothingOptions(bool useSavedSmoothing = true);
 
     SmoothingType smoothingType() const;
     void setSmoothingType(SmoothingType value);

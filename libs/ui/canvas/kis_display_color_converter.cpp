@@ -101,35 +101,41 @@ struct KisDisplayColorConverter::Private
 
     class DisplayRenderer : public KoColorDisplayRendererInterface {
     public:
-        DisplayRenderer(KisDisplayColorConverter *parent, KoCanvasResourceManager *resourceManager)
-            : m_parent(parent),
+        DisplayRenderer(KisDisplayColorConverter *displayColorConverter, KoCanvasResourceManager *resourceManager)
+            : m_displayColorConverter(displayColorConverter),
               m_resourceManager(resourceManager)
         {
-            parent->connect(parent, SIGNAL(displayConfigurationChanged()),
+            displayColorConverter->connect(displayColorConverter, SIGNAL(displayConfigurationChanged()),
                             this, SIGNAL(displayConfigurationChanged()));
         }
 
-        QColor toQColor(const KoColor &c) const {
-            return m_parent->toQColor(c);
+        QImage convertToQImage(const KoColorSpace *srcColorSpace, const quint8 *data, qint32 width, qint32 height) const {
+            KisPaintDeviceSP dev = new KisPaintDevice(srcColorSpace);
+            dev->writeBytes(data, 0, 0, width, height);
+            return m_displayColorConverter->toQImage(dev);
         }
 
-        KoColor approximateFromRenderedQColor(const QColor &c) const {
-            return m_parent->approximateFromRenderedQColor(c);
+        QColor toQColor(const KoColor &c) const override {
+            return m_displayColorConverter->toQColor(c);
         }
 
-        KoColor fromHsv(int h, int s, int v, int a) const {
-            return m_parent->fromHsv(h, s, v, a);
+        KoColor approximateFromRenderedQColor(const QColor &c) const override {
+            return m_displayColorConverter->approximateFromRenderedQColor(c);
         }
 
-        void getHsv(const KoColor &srcColor, int *h, int *s, int *v, int *a) const {
-            m_parent->getHsv(srcColor, h, s, v, a);
+        KoColor fromHsv(int h, int s, int v, int a) const override {
+            return m_displayColorConverter->fromHsv(h, s, v, a);
         }
 
-        virtual qreal minVisibleFloatValue(const KoChannelInfo *chaninfo) const {
+        void getHsv(const KoColor &srcColor, int *h, int *s, int *v, int *a) const override {
+            m_displayColorConverter->getHsv(srcColor, h, s, v, a);
+        }
+
+        qreal minVisibleFloatValue(const KoChannelInfo *chaninfo) const override {
             return chaninfo->getUIMin();
         }
 
-        virtual qreal maxVisibleFloatValue(const KoChannelInfo *chaninfo) const {
+        qreal maxVisibleFloatValue(const KoChannelInfo *chaninfo) const override {
             qreal maxValue = chaninfo->getUIMax();
 
             if (m_resourceManager) {
@@ -141,12 +147,12 @@ struct KisDisplayColorConverter::Private
             return maxValue;
         }
 
-        virtual const KoColorSpace* getPaintingColorSpace() const {
-            return m_parent->paintingColorSpace();
+        const KoColorSpace* getPaintingColorSpace() const override {
+            return m_displayColorConverter->paintingColorSpace();
         }
 
     private:
-        KisDisplayColorConverter *m_parent;
+        KisDisplayColorConverter *m_displayColorConverter;
         QPointer<KoCanvasResourceManager> m_resourceManager;
     };
 

@@ -118,6 +118,9 @@ QStringList KisMimeDatabase::suffixesForMimeType(const QString &mimeType)
     QMimeType mime = db.mimeTypeForName(mimeType);
     if (mime.name() != "application/octet-stream" && !mime.suffixes().isEmpty()) {
         QString preferredSuffix = mime.preferredSuffix();
+        if (mimeType == "image/x-tga") {
+            preferredSuffix = "tga";
+        }
         QStringList suffixes = mime.suffixes();
         if (preferredSuffix != suffixes.first()) {
             suffixes.removeAll(preferredSuffix);
@@ -202,8 +205,8 @@ void KisMimeDatabase::fillMimeData()
         s_mimeDatabase << mimeType;
 
         mimeType.mimeType = "application/x-gimp-color-palette";
-        mimeType.description = i18nc("description of a file type", "Gimp Color Palette");
-        mimeType.suffixes = QStringList() << "*.gpl" << "*.pal" << "*.act" << "*.aco" << "*.colors";
+        mimeType.description = i18nc("description of a file type", "Color Palette");
+        mimeType.suffixes = QStringList() << "*.gpl" << "*.pal" << "*.act" << "*.aco" << "*.colors" << "*.xml";
         s_mimeDatabase << mimeType;
 
         mimeType.mimeType = "application/x-opencolorio-configuration";

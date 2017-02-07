@@ -158,7 +158,7 @@ void KisTransformMask::slotDelayedStaticUpdate()
      * meanwhile. Just ignore the updates in the case.
      */
 
-    KisLayerSP parentLayer = dynamic_cast<KisLayer*>(parent().data());
+    KisLayerSP parentLayer = qobject_cast<KisLayer*>(parent().data());
     if (!parentLayer) return;
 
     KisImageSP image = parentLayer->image();
@@ -175,7 +175,7 @@ KisPaintDeviceSP KisTransformMask::buildPreviewDevice()
      * is not entirely safe.
      */
 
-    KisLayerSP parentLayer = dynamic_cast<KisLayer*>(parent().data());
+    KisLayerSP parentLayer = qobject_cast<KisLayer*>(parent().data());
     KIS_ASSERT_RECOVER(parentLayer) { return new KisPaintDevice(colorSpace()); }
 
     KisPaintDeviceSP device =
@@ -195,7 +195,7 @@ void KisTransformMask::recaclulateStaticImage()
      * is not entirely safe.
      */
 
-    KisLayerSP parentLayer = dynamic_cast<KisLayer*>(parent().data());
+    KisLayerSP parentLayer = qobject_cast<KisLayer*>(parent().data());
     KIS_ASSERT_RECOVER_RETURN(parentLayer);
 
     if (!m_d->staticCacheDevice) {
@@ -386,7 +386,7 @@ QRect KisTransformMask::extent() const
 
     QRect partialChangeRect;
     QRect existentProjection;
-    KisLayerSP parentLayer = dynamic_cast<KisLayer*>(parent().data());
+    KisLayerSP parentLayer = qobject_cast<KisLayer*>(parent().data());
     if (parentLayer) {
         partialChangeRect = parentLayer->partialChangeRect(const_cast<KisTransformMask*>(this), rc);
         existentProjection = parentLayer->projection()->extent();
@@ -401,7 +401,7 @@ QRect KisTransformMask::exactBounds() const
 
     QRect partialChangeRect;
     QRect existentProjection;
-    KisLayerSP parentLayer = dynamic_cast<KisLayer*>(parent().data());
+    KisLayerSP parentLayer = qobject_cast<KisLayer*>(parent().data());
     if (parentLayer) {
         partialChangeRect = parentLayer->partialChangeRect(const_cast<KisTransformMask*>(this), rc);
         existentProjection = parentLayer->projection()->exactBounds();

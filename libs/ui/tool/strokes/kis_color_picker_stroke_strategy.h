@@ -48,7 +48,7 @@ public:
         QPoint pt;
     };
 public:
-    KisColorPickerStrokeStrategy();
+    KisColorPickerStrokeStrategy(int lod = 0);
     ~KisColorPickerStrokeStrategy();
 
     void doStrokeCallback(KisStrokeJobData *data);

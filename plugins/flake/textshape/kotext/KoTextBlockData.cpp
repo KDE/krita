@@ -39,7 +39,7 @@ public:
         layoutedMarkupRanges[KoTextBlockData::Grammar] = false;
     }
 
-    ~Private() {
+    ~Private() override {
         if (border && !border->deref())
             delete border;
         delete paintStrategy;

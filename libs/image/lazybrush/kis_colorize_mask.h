@@ -50,7 +50,7 @@ public:
     KisColorizeMask(const KisColorizeMask& rhs);
 
     void initializeCompositeOp();
-    const KoColorSpace* colorSpace() const;
+    const KoColorSpace* colorSpace() const override;
 
     // assign color profile without conversion of pixel data
     void setProfile(const KoColorProfile *profile);
@@ -59,33 +59,39 @@ public:
                                  KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::internalRenderingIntent(),
                                  KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::internalConversionFlags());
 
-    KisPaintDeviceSP paintDevice() const;
+    KisPaintDeviceSP paintDevice() const override;
     KisPaintDeviceSP coloringProjection() const;
 
-    KisNodeSP clone() const {
+    KisNodeSP clone() const override {
         return KisNodeSP(new KisColorizeMask(*this));
     }
 
-    QIcon icon() const;
+    QIcon icon() const override;
 
     void setImage(KisImageWSP image) override;
-    bool accept(KisNodeVisitor &v);
-    void accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter);
+    bool accept(KisNodeVisitor &v) override;
+    void accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter) override;
 
     QRect decorateRect(KisPaintDeviceSP &src,
                        KisPaintDeviceSP &dst,
                        const QRect & rc,
-                       PositionToFilthy maskPos) const;
+                       PositionToFilthy maskPos) const override;
 
-    void setCurrentColor(const KoColor &color);
-    void mergeToLayer(KisNodeSP layer, KisPostExecutionUndoAdapter *undoAdapter, const KUndo2MagicString &transactionText,int timedID);
-    void writeMergeData(KisPainter *painter, KisPaintDeviceSP src);
+    void setCurrentColor(const KoColor &color) override;
+    void mergeToLayer(KisNodeSP layer, KisPostExecutionUndoAdapter *undoAdapter, const KUndo2MagicString &transactionText,int timedID) override;
+    void writeMergeData(KisPainter *painter, KisPaintDeviceSP src) override;
 
-    QRect exactBounds() const;
-    QRect extent() const;
+    QRect exactBounds() const override;
+    QRect extent() const override;
 
-    void setSectionModelProperties(const KisBaseNode::PropertyList &properties);
-    KisBaseNode::PropertyList sectionModelProperties() const;
+    /**
+     * Colorize mask has its own "projection", so it should report it
+     * to the parent layer using non-dependent-extent property
+     */
+    QRect nonDependentExtent() const override;
+
+    void setSectionModelProperties(const KisBaseNode::PropertyList &properties) override;
+    KisBaseNode::PropertyList sectionModelProperties() const override;
 
     KeyStrokeColors keyStrokesColors() const;
     void setKeyStrokesColors(KeyStrokeColors colors);
@@ -102,12 +108,12 @@ public:
     QList<KisLazyFillTools::KeyStroke> fetchKeyStrokesDirect() const;
     void setKeyStrokesDirect(const QList<KisLazyFillTools::KeyStroke> &strokes);
 
-    qint32 x() const;
-    qint32 y() const;
-    void setX(qint32 x);
-    void setY(qint32 y);
+    qint32 x() const override;
+    qint32 y() const override;
+    void setX(qint32 x) override;
+    void setY(qint32 y) override;
 
-    KisPaintDeviceList getLodCapableDevices() const;
+    KisPaintDeviceList getLodCapableDevices() const override;
 
 private Q_SLOTS:
     void slotUpdateRegenerateFilling();

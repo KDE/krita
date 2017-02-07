@@ -129,6 +129,7 @@ void KisIndirectPaintingSupport::setupTemporaryPainter(KisPainter *painter) cons
 
 void KisIndirectPaintingSupport::mergeToLayer(KisNodeSP layer, KisPostExecutionUndoAdapter *undoAdapter, const KUndo2MagicString &transactionText,int timedID)
 {
+    QWriteLocker l(&d->lock);
     mergeToLayerImpl(layer->paintDevice(), undoAdapter, transactionText, timedID);
 }
 
@@ -140,8 +141,6 @@ void KisIndirectPaintingSupport::mergeToLayerImpl(KisPaintDeviceSP dst, KisPostE
      */
     KisPainter gc(dst);
     setupTemporaryPainter(&gc);
-
-    d->lock.lockForWrite();
 
     /**
      * Scratchpad may not have an undo adapter
@@ -159,8 +158,6 @@ void KisIndirectPaintingSupport::mergeToLayerImpl(KisPaintDeviceSP dst, KisPostE
     if(undoAdapter) {
         gc.endTransaction(undoAdapter);
     }
-
-    d->lock.unlock();
 }
 
 void KisIndirectPaintingSupport::writeMergeData(KisPainter *painter, KisPaintDeviceSP src)

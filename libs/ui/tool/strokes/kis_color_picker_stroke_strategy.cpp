@@ -33,13 +33,19 @@ struct KisColorPickerStrokeStrategy::Private
     Private() : shouldSkipWork(false) {}
 
     bool shouldSkipWork;
+    int radius = 1;
 };
 
-KisColorPickerStrokeStrategy::KisColorPickerStrokeStrategy()
+KisColorPickerStrokeStrategy::KisColorPickerStrokeStrategy(int lod)
     : m_d(new Private)
 {
     setSupportsWrapAroundMode(true);
     enableJob(KisSimpleStrokeStrategy::JOB_DOSTROKE);
+
+    KisToolUtils::ColorPickerConfig config;
+    config.load();
+
+    m_d->radius = qMax(1, qRound(config.radius * KisLodTransform::lodToScale(lod)));
 }
 
 KisColorPickerStrokeStrategy::~KisColorPickerStrokeStrategy()
@@ -54,7 +60,7 @@ void KisColorPickerStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
     KIS_ASSERT_RECOVER_RETURN(d);
 
     KoColor color;
-    bool result = KisToolUtils::pick(d->dev, d->pt, &color);
+    bool result = KisToolUtils::pick(d->dev, d->pt, &color, m_d->radius);
     Q_UNUSED(result);
 
     emit sigColorUpdated(color);
@@ -62,11 +68,9 @@ void KisColorPickerStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
 
 KisStrokeStrategy* KisColorPickerStrokeStrategy::createLodClone(int levelOfDetail)
 {
-    Q_UNUSED(levelOfDetail);
-
     m_d->shouldSkipWork = true;
 
-    KisColorPickerStrokeStrategy *lodStrategy = new KisColorPickerStrokeStrategy();
+    KisColorPickerStrokeStrategy *lodStrategy = new KisColorPickerStrokeStrategy(levelOfDetail);
     connect(lodStrategy, &KisColorPickerStrokeStrategy::sigColorUpdated,
             this, &KisColorPickerStrokeStrategy::sigColorUpdated,
             Qt::DirectConnection);

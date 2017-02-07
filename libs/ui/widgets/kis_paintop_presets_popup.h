@@ -58,9 +58,11 @@ public:
 
     void setPaintOpList(const QList<KisPaintOpFactory*>& list);
 
-    void setCurrentPaintOp(const QString & paintOpId);
-    QString currentPaintOp() const;
-    
+    void setCurrentPaintOpId(const QString & paintOpId);
+
+    /// returns the internal ID for the paint op (brush engine)
+    QString currentPaintOpId() const;
+
     ///fill the cutoutOverlay rect with the content of an image, used to get the image back when selecting a preset
     ///@param image image that will be used, should be image of an existing preset resource
     void setPresetImage(const QImage& image);
@@ -70,6 +72,8 @@ public:
     bool detached() const;
 
     void updateViewSettings();
+
+    void currentPresetChanged(KisPaintOpPresetSP  preset);
 
 protected:
     void contextMenuEvent(QContextMenuEvent *);
@@ -95,18 +99,24 @@ Q_SIGNALS:
     void dirtyPresetToggled(bool value);
     void eraserBrushSizeToggled(bool value);
     void eraserBrushOpacityToggled(bool value);
-    
     void sizeChanged();
     void brushEditorShown();
 
 private Q_SLOTS:
-    void slotSwitchPresetStrip(bool visible);
     void slotSwitchScratchpad(bool visible);
+    void slotResourceChanged(int key, const QVariant &value);
+    void slotLodAvailabilityChanged(bool value);
+    void slotSwitchShowEditor(bool visible);
+    void slotUpdatePaintOpFilter();
+    void slotSwitchShowPresets(bool visible);
+
+
 
 private:
 
     struct Private;
     Private * const m_d;
+    QString current_paintOpId;
 
 };
 

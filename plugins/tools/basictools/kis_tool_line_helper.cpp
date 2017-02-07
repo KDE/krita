@@ -39,7 +39,10 @@ struct KisToolLineHelper::Private
 KisToolLineHelper::KisToolLineHelper(KisPaintingInformationBuilder *infoBuilder,
                                      const KUndo2MagicString &transactionText,
                                      KisRecordingAdapter *recordingAdapter)
-    : KisToolFreehandHelper(infoBuilder, transactionText, recordingAdapter),
+    : KisToolFreehandHelper(infoBuilder,
+                            transactionText,
+                            recordingAdapter,
+                            new KisSmoothingOptions(false)),
       m_d(new Private(infoBuilder))
 {
 }
@@ -61,8 +64,7 @@ void KisToolLineHelper::setUseSensors(bool value)
 
 void KisToolLineHelper::repaintLine(KoCanvasResourceManager *resourceManager,
                                     KisImageWSP image, KisNodeSP node,
-                                    KisStrokesFacade *strokesFacade,
-                                    KisPostExecutionUndoAdapter *undoAdapter)
+                                    KisStrokesFacade *strokesFacade)
 {
     if (!m_d->enabled) return;
 
@@ -72,7 +74,7 @@ void KisToolLineHelper::repaintLine(KoCanvasResourceManager *resourceManager,
     QVector<KisPaintInformation>::const_iterator it = m_d->linePoints.constBegin();
     QVector<KisPaintInformation>::const_iterator end = m_d->linePoints.constEnd();
 
-    initPaintImpl(*it, resourceManager, image, node, strokesFacade, undoAdapter);
+    initPaintImpl(*it, resourceManager, image, node, strokesFacade);
     ++it;
 
     while (it != end) {

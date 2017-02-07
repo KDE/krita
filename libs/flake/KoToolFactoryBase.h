@@ -85,7 +85,7 @@ public:
      * returns the type of tool, used to group tools in the toolbox
      * @return the type of tool
      */
-    QString toolType() const;
+    QString section() const;
     /**
      * return a translated tooltip Text
      * @return a translated tooltip Text
@@ -208,7 +208,7 @@ protected:
      * Set the toolType. used to group tools in the toolbox
      * @param toolType the toolType
      */
-    void setToolType(const QString &toolType);
+    void setSection(const QString &section);
     /**
      * Set an icon to be used in the toolBox.
      * @param iconName the basename (without extension) of the icon

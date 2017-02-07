@@ -30,7 +30,7 @@
 
 #include "kis_abr_brush.h"
 #include "kis_abr_brush_collection.h"
-#include "kis_gimp_brush.h"
+#include "kis_gbr_brush.h"
 #include "kis_imagepipe_brush.h"
 #include "kis_png_brush.h"
 #include "kis_svg_brush.h"
@@ -49,7 +49,7 @@ public:
     }
 
     ///Reimplemented
-    virtual bool importResourceFile(const QString& filename, bool fileCreation = true) {
+    bool importResourceFile(const QString& filename, bool fileCreation = true) override {
         QFileInfo fi(filename);
         if (fi.exists() == false)
             return false;
@@ -77,7 +77,7 @@ public:
 private:
 
     ///Reimplemented
-    virtual QList<KisBrushSP> createResources(const QString & filename) {
+    QList<KisBrushSP> createResources(const QString & filename) override {
         QList<KisBrushSP> brushes;
 
         QString fileExtension = QFileInfo(filename).suffix().toLower();
@@ -97,14 +97,14 @@ private:
     }
 
     ///Reimplemented
-    virtual KisBrushSP createResource(const QString & filename) {
+    KisBrushSP createResource(const QString & filename) override {
 
         QString fileExtension = QFileInfo(filename).suffix().toLower();
 
         KisBrushSP brush;
 
         if (fileExtension == "gbr") {
-            brush = new KisGimpBrush(filename);
+            brush = new KisGbrBrush(filename);
         }
         else if (fileExtension == "gih") {
             brush = new KisImagePipeBrush(filename);

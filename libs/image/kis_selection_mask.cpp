@@ -63,7 +63,6 @@ KisSelectionMask::KisSelectionMask(KisImageWSP image)
             new KisThreadSafeSignalCompressor(300, KisSignalCompressor::POSTPONE);
 
     connect(m_d->updatesCompressor, SIGNAL(timeout()), SLOT(slotSelectionChangedCompressed()));
-    this->setObjectName("KisSelectionMask");
     this->moveToThread(image->thread());
 }
 
@@ -73,8 +72,10 @@ KisSelectionMask::KisSelectionMask(const KisSelectionMask& rhs)
 {
     setActive(false);
     m_d->image = rhs.image();
+    m_d->updatesCompressor =
+            new KisThreadSafeSignalCompressor(300, KisSignalCompressor::POSTPONE);
+
     connect(m_d->updatesCompressor, SIGNAL(timeout()), SLOT(slotSelectionChangedCompressed()));
-    this->setObjectName("KisSelectionMask");
     this->moveToThread(m_d->image->thread());
 }
 
@@ -150,7 +151,7 @@ bool KisSelectionMask::active() const
 void KisSelectionMask::setActive(bool active)
 {
     KisImageWSP image = this->image();
-    KisLayerSP parentLayer = dynamic_cast<KisLayer*>(parent().data());
+    KisLayerSP parentLayer = qobject_cast<KisLayer*>(parent().data());
 
     if (active && parentLayer) {
         KisSelectionMaskSP activeMask = parentLayer->selectionMask();

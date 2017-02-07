@@ -85,6 +85,8 @@ private:
     int m_lod;
 };
 
+static QStringList globalExecutedDabs;
+
 class KisNoopDabStrategy : public KisStrokeJobStrategy
 {
 public:
@@ -95,6 +97,8 @@ public:
 
     void run(KisStrokeJobData *data) {
         Q_UNUSED(data);
+
+        globalExecutedDabs << m_name;
     }
 
     QString name() {
@@ -140,10 +144,13 @@ public:
     KisTestingStrokeStrategy(const QString &prefix = QString(),
                              bool exclusive = false,
                              bool inhibitServiceJobs = false,
-                             bool forceAllowInitJob = false)
-        : m_prefix(prefix),
+                             bool forceAllowInitJob = false,
+                             bool forceAllowCancelJob = false)
+        : KisStrokeStrategy(prefix, kundo2_noi18n(prefix)),
+          m_prefix(prefix),
           m_inhibitServiceJobs(inhibitServiceJobs),
           m_forceAllowInitJob(forceAllowInitJob),
+          m_forceAllowCancelJob(forceAllowCancelJob),
           m_cancelSeqNo(0)
     {
         setExclusive(exclusive);
@@ -170,7 +177,7 @@ public:
     }
 
     KisStrokeJobStrategy* createCancelStrategy() {
-        return !m_inhibitServiceJobs ?
+        return m_forceAllowCancelJob || !m_inhibitServiceJobs ?
             new KisNoopDabStrategy(m_prefix + "cancel") : 0;
     }
 
@@ -200,6 +207,7 @@ private:
     QString m_prefix;
     bool m_inhibitServiceJobs;
     int m_forceAllowInitJob;
+    bool m_forceAllowCancelJob;
     int m_cancelSeqNo;
 };
 

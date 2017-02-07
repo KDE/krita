@@ -202,9 +202,9 @@ void DlgClonesArray::reapplyClones()
 {
     cancelClicked();
 
-    KisImageWSP image = m_view->image();
-    image->barrierLock();
-    image->unlock();
+    KisImageSP image = m_view->image();
+
+    if (!m_view->blockUntillOperationsFinished(image)) return;
 
     m_applicator =
         new KisProcessingApplicator(image, 0,

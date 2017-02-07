@@ -132,7 +132,7 @@ KisConfigWidget * KisPixelizeFilter::createConfigurationWidget(QWidget* parent, 
     return new KisMultiIntegerFilterWidget(id().id(),  parent,  id().id(),  param);
 }
 
-KisFilterConfigurationSP KisPixelizeFilter::factoryConfiguration(const KisPaintDeviceSP) const
+KisFilterConfigurationSP KisPixelizeFilter::factoryConfiguration() const
 {
     KisFilterConfigurationSP config = new KisFilterConfiguration("pixelize", 1);
     config->setProperty("pixelWidth", 10);

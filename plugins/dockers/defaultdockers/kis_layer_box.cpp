@@ -93,8 +93,11 @@
 
 inline void KisLayerBox::connectActionToButton(KisViewManager* view, QAbstractButton *button, const QString &id)
 {
-    Q_ASSERT(view);
+    if (!view || !button) return;
+
     KisAction *action = view->actionManager()->actionByName(id);
+
+    if (!action) return;
 
     connect(button, SIGNAL(clicked()), action, SLOT(trigger()));
     connect(action, SIGNAL(sigEnableSlaves(bool)), button, SLOT(setEnabled(bool)));
@@ -108,11 +111,11 @@ inline void KisLayerBox::addActionToMenu(QMenu *menu, const QString &id)
 }
 
 KisLayerBox::KisLayerBox()
-        : QDockWidget(i18n("Layers"))
-        , m_canvas(0)
-        , m_wdgLayerBox(new Ui_WdgLayerBox)
-        , m_thumbnailCompressor(500, KisSignalCompressor::FIRST_INACTIVE)
-        , m_colorLabelCompressor(900, KisSignalCompressor::FIRST_INACTIVE)
+    : QDockWidget(i18n("Layers"))
+    , m_canvas(0)
+    , m_wdgLayerBox(new Ui_WdgLayerBox)
+    , m_thumbnailCompressor(500, KisSignalCompressor::FIRST_INACTIVE)
+    , m_colorLabelCompressor(900, KisSignalCompressor::FIRST_INACTIVE)
 {
     KisConfig cfg;
 
@@ -192,7 +195,8 @@ KisLayerBox::KisLayerBox()
 
     KisAction *showGlobalSelectionMask = new KisAction(i18n("&Show Global Selection Mask"), this);
     showGlobalSelectionMask->setObjectName("show-global-selection-mask");
-    showGlobalSelectionMask->setToolTip(i18nc("@info:tooltip", "Shows global selection as a usual selection mask in <interface>Layers</interface> docker"));
+    showGlobalSelectionMask->setActivationFlags(KisAction::ACTIVE_IMAGE);
+    showGlobalSelectionMask->setToolTip(i18nc("@info:tooltip", "Shows global selection as a usual selection mask in <b>Layers</b> docker"));
     showGlobalSelectionMask->setCheckable(true);
     connect(showGlobalSelectionMask, SIGNAL(triggered(bool)), SLOT(slotEditGlobalSelection(bool)));
     m_actions.append(showGlobalSelectionMask);
@@ -255,8 +259,8 @@ void KisLayerBox::setMainWindow(KisViewManager* kisview)
 
     Q_FOREACH (KisAction *action, m_actions) {
         kisview->actionManager()->
-            addAction(action->objectName(),
-                      action);
+                addAction(action->objectName(),
+                          action);
     }
 
     connectActionToButton(kisview, m_wdgLayerBox->bnAdd, "add_new_paint_layer");
@@ -265,21 +269,26 @@ void KisLayerBox::setMainWindow(KisViewManager* kisview)
     KisActionManager *actionManager = kisview->actionManager();
 
     KisAction *action = actionManager->createAction("RenameCurrentLayer");
+    Q_ASSERT(action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotRenameCurrentNode()));
 
     m_propertiesAction = actionManager->createAction("layer_properties");
+    Q_ASSERT(m_propertiesAction);
     new SyncButtonAndAction(m_propertiesAction, m_wdgLayerBox->bnProperties, this);
     connect(m_propertiesAction, SIGNAL(triggered()), this, SLOT(slotPropertiesClicked()));
 
     m_removeAction = actionManager->createAction("remove_layer");
+    Q_ASSERT(m_removeAction);
     new SyncButtonAndAction(m_removeAction, m_wdgLayerBox->bnDelete, this);
     connect(m_removeAction, SIGNAL(triggered()), this, SLOT(slotRmClicked()));
 
     action = actionManager->createAction("move_layer_up");
+    Q_ASSERT(action);
     new SyncButtonAndAction(action, m_wdgLayerBox->bnRaise, this);
     connect(action, SIGNAL(triggered()), this, SLOT(slotRaiseClicked()));
 
     action = actionManager->createAction("move_layer_down");
+    Q_ASSERT(action);
     new SyncButtonAndAction(action, m_wdgLayerBox->bnLower, this);
     connect(action, SIGNAL(triggered()), this, SLOT(slotLowerClicked()));
 }
@@ -310,14 +319,13 @@ void KisLayerBox::setCanvas(KoCanvasBase *canvas)
 
     if (m_canvas) {
         m_image = m_canvas->image();
-
         connect(m_image, SIGNAL(sigImageUpdated(QRect)), &m_thumbnailCompressor, SLOT(start()));
 
         KisDocument* doc = static_cast<KisDocument*>(m_canvas->imageView()->document());
         KisShapeController *kritaShapeController =
-            dynamic_cast<KisShapeController*>(doc->shapeController());
+                dynamic_cast<KisShapeController*>(doc->shapeController());
         KisDummiesFacadeBase *kritaDummiesFacade =
-            static_cast<KisDummiesFacadeBase*>(kritaShapeController);
+                static_cast<KisDummiesFacadeBase*>(kritaShapeController);
         m_nodeModel->setDummiesFacade(kritaDummiesFacade, m_image, kritaShapeController, m_nodeManager->nodeSelectionAdapter(), m_nodeManager->nodeInsertionAdapter());
 
         connect(m_image, SIGNAL(sigAboutToBeDeleted()), SLOT(notifyImageDeleted()));
@@ -326,25 +334,24 @@ void KisLayerBox::setCanvas(KoCanvasBase *canvas)
         // cold start
         if (m_nodeManager) {
             setCurrentNode(m_nodeManager->activeNode());
+            // Connection KisNodeManager -> KisLayerBox
+            connect(m_nodeManager, SIGNAL(sigUiNeedChangeActiveNode(KisNodeSP)),
+                    this, SLOT(setCurrentNode(KisNodeSP)));
+
+            connect(m_nodeManager,
+                    SIGNAL(sigUiNeedChangeSelectedNodes(const QList<KisNodeSP> &)),
+                    SLOT(slotNodeManagerChangedSelection(const QList<KisNodeSP> &)));
         }
         else {
             setCurrentNode(m_canvas->imageView()->currentNode());
         }
-
-        // Connection KisNodeManager -> KisLayerBox
-        connect(m_nodeManager, SIGNAL(sigUiNeedChangeActiveNode(KisNodeSP)),
-                this, SLOT(setCurrentNode(KisNodeSP)));
-
-        connect(m_nodeManager,
-                SIGNAL(sigUiNeedChangeSelectedNodes(const QList<KisNodeSP> &)),
-                SLOT(slotNodeManagerChangedSelection(const QList<KisNodeSP> &)));
 
         // Connection KisLayerBox -> KisNodeManager (isolate layer)
         connect(m_nodeModel, SIGNAL(toggleIsolateActiveNode()),
                 m_nodeManager, SLOT(toggleIsolateActiveNode()));
 
         KisImageAnimationInterface *animation = m_image->animationInterface();
-        connect(animation, &KisImageAnimationInterface::sigTimeChanged, this, &KisLayerBox::slotImageTimeChanged);
+        connect(animation, &KisImageAnimationInterface::sigUiTimeChanged, this, &KisLayerBox::slotImageTimeChanged);
 
         expandNodesRecursively(m_image->rootLayer(), m_filteringModel, m_wdgLayerBox->listLayers);
         m_wdgLayerBox->listLayers->scrollTo(m_wdgLayerBox->listLayers->currentIndex());
@@ -401,19 +408,21 @@ void KisLayerBox::updateUI()
             m_activeNode->disconnect(this);
         m_activeNode = activeNode;
 
-        KisKeyframeChannel *opacityChannel = activeNode->getKeyframeChannel(KisKeyframeChannel::Opacity.id(), false);
-        if (opacityChannel) {
-            watchOpacityChannel(opacityChannel);
-        } else {
-            watchOpacityChannel(0);
-            connect(activeNode.data(), &KisNode::keyframeChannelAdded, this, &KisLayerBox::slotKeyframeChannelAdded);
+        if (activeNode) {
+            KisKeyframeChannel *opacityChannel = activeNode->getKeyframeChannel(KisKeyframeChannel::Opacity.id(), false);
+            if (opacityChannel) {
+                watchOpacityChannel(opacityChannel);
+            } else {
+                watchOpacityChannel(0);
+                connect(activeNode.data(), &KisNode::keyframeChannelAdded, this, &KisLayerBox::slotKeyframeChannelAdded);
+            }
         }
     }
 
     m_wdgLayerBox->bnRaise->setEnabled(activeNode && activeNode->isEditable(false) && (activeNode->nextSibling()
-                                       || (activeNode->parent() && activeNode->parent() != m_image->root())));
+                                                                                       || (activeNode->parent() && activeNode->parent() != m_image->root())));
     m_wdgLayerBox->bnLower->setEnabled(activeNode && activeNode->isEditable(false) && (activeNode->prevSibling()
-                                       || (activeNode->parent() && activeNode->parent() != m_image->root())));
+                                                                                       || (activeNode->parent() && activeNode->parent() != m_image->root())));
 
     m_wdgLayerBox->doubleOpacity->setEnabled(activeNode && activeNode->isEditable(false));
 
@@ -427,7 +436,7 @@ void KisLayerBox::updateUI()
         }
 
         if (activeNode->inherits("KisColorizeMask") ||
-            activeNode->inherits("KisLayer")) {
+                activeNode->inherits("KisLayer")) {
 
             m_wdgLayerBox->doubleOpacity->setEnabled(true);
 
@@ -534,14 +543,14 @@ void KisLayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex 
 
             addActionToMenu(&menu, "cut_layer_clipboard");
             addActionToMenu(&menu, "copy_layer_clipboard");
-            addActionToMenu(&menu, "paste_layer_from_clipboard");    
+            addActionToMenu(&menu, "paste_layer_from_clipboard");
             menu.addAction(m_removeAction);
             addActionToMenu(&menu, "duplicatelayer");
             addActionToMenu(&menu, "merge_layer");
 
             if (singleLayer) {
                 addActionToMenu(&menu, "flatten_image");
-                addActionToMenu(&menu, "flatten_layer");         
+                addActionToMenu(&menu, "flatten_layer");
             }
 
             menu.addSeparator();
@@ -701,8 +710,8 @@ inline bool isSelectionMask(KisNodeSP node)
 KisNodeSP KisLayerBox::findNonHidableNode(KisNodeSP startNode)
 {
     if (isSelectionMask(startNode) &&
-        startNode->parent() &&
-        !startNode->parent()->parent()) {
+            startNode->parent() &&
+            !startNode->parent()->parent()) {
 
 
         KisNodeSP node = startNode->prevSibling();
@@ -769,10 +778,10 @@ void KisLayerBox::selectionChanged(const QModelIndexList selection)
      */
     if (selection.isEmpty() && m_nodeManager->activeNode()) {
         QModelIndex selectedIndex =
-            m_filteringModel->indexFromNode(m_nodeManager->activeNode());
+                m_filteringModel->indexFromNode(m_nodeManager->activeNode());
 
         m_wdgLayerBox->listLayers->selectionModel()->
-            setCurrentIndex(selectedIndex, QItemSelectionModel::ClearAndSelect);
+                setCurrentIndex(selectedIndex, QItemSelectionModel::ClearAndSelect);
         return;
     }
 
@@ -804,7 +813,7 @@ void KisLayerBox::slotAboutToRemoveRows(const QModelIndex &parent, int start, in
     QAbstractItemModel *model = m_filteringModel;
 
     if (currentIndex.isValid() && parent == currentIndex.parent()
-        && currentIndex.row() >= start - 1 && currentIndex.row() <= end + 1) {
+            && currentIndex.row() >= start - 1 && currentIndex.row() <= end + 1) {
         QModelIndex old = currentIndex;
         if (model && end < model->rowCount(parent) - 1) // there are rows left below the change
             currentIndex = model->index(end + 1, old.column(), parent);
@@ -858,9 +867,9 @@ void KisLayerBox::slotColorLabelChanged(int label)
 
     Q_FOREACH(KisNodeSP node, nodes) {
         auto applyLabelFunc =
-            [label](KisNodeSP node) {
-                node->setColorLabelIndex(label);
-            };
+                [label](KisNodeSP node) {
+            node->setColorLabelIndex(label);
+        };
 
         KisLayerUtils::recursiveApplyNodes(node, applyLabelFunc);
     }
@@ -891,11 +900,12 @@ void KisLayerBox::watchOpacityChannel(KisKeyframeChannel *channel)
     }
 
     m_opacityChannel = channel;
-
-    connect(m_opacityChannel, &KisKeyframeChannel::sigKeyframeAdded, this, &KisLayerBox::slotOpacityKeyframeChanged);
-    connect(m_opacityChannel, &KisKeyframeChannel::sigKeyframeRemoved, this, &KisLayerBox::slotOpacityKeyframeChanged);
-    connect(m_opacityChannel, &KisKeyframeChannel::sigKeyframeMoved, this, &KisLayerBox::slotOpacityKeyframeMoved);
-    connect(m_opacityChannel, &KisKeyframeChannel::sigKeyframeChanged, this, &KisLayerBox::slotOpacityKeyframeChanged);
+    if (m_opacityChannel) {
+        connect(m_opacityChannel, SIGNAL(sigKeyframeAdded(KisKeyframeSP)), this, SLOT(slotOpacityKeyframeChanged(KisKeyframeSP)));
+        connect(m_opacityChannel, SIGNAL(sigKeyframeRemoved(KisKeyframeSP)), this, SLOT(slotOpacityKeyframeChanged(KisKeyframeSP)));
+        connect(m_opacityChannel, SIGNAL(sigKeyframeMoved(KisKeyframeSP)), this, SLOT(slotOpacityKeyframeMoved(KisKeyframeSP)));
+        connect(m_opacityChannel, SIGNAL(sigKeyframeChanged(KisKeyframeSP)), this, SLOT(slotOpacityKeyframeChanged(KisKeyframeSP)));
+    }
 }
 
 void KisLayerBox::slotOpacityKeyframeChanged(KisKeyframeSP keyframe)

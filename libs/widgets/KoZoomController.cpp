@@ -33,8 +33,7 @@
 
 void KoZoomController::Private::init(KoCanvasController *co,
                                      KoZoomHandler *zh,
-                                     KActionCollection *actionCollection,
-                                     bool createZoomShortcuts)
+                                     KActionCollection *actionCollection)
 {
     canvasController = co;
     fitMargin = co->margin();
@@ -50,11 +49,6 @@ void KoZoomController::Private::init(KoCanvasController *co,
 
     actionCollection->addAction("view_zoom", action);
 
-    if (createZoomShortcuts) {
-        actionCollection->addAction(KStandardAction::ZoomIn,  "zoom_in", action, SLOT(zoomIn()));
-        actionCollection->addAction(KStandardAction::ZoomOut,  "zoom_out", action, SLOT(zoomOut()));
-    }
-
     connect(canvasController->proxyObject, SIGNAL( sizeChanged(const QSize & ) ), parent, SLOT( setAvailableSize() ) );
 
     connect(canvasController->proxyObject, SIGNAL( zoomRelative(const qreal, const QPointF& ) ), parent, SLOT( requestZoomRelative( const qreal, const QPointF& ) ) );
@@ -64,15 +58,7 @@ KoZoomController::KoZoomController(KoCanvasController *co, KoZoomHandler *zh, KA
     : QObject(parent),
     d(new Private(this, specialButtons))
 {
-    d->init(co, zh, actionCollection, true);
-}
-
-
-KoZoomController::KoZoomController(KoCanvasController *co, KoZoomHandler *zh, KActionCollection *actionCollection, bool createZoomShortcuts, KoZoomAction::SpecialButtons specialButtons, QObject *parent)
-    : QObject(parent),
-    d(new Private(this, specialButtons))
-{
-    d->init(co, zh, actionCollection, createZoomShortcuts);
+    d->init(co, zh, actionCollection);
 }
 
 KoZoomController::~KoZoomController()

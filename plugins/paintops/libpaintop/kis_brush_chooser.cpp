@@ -33,6 +33,10 @@
 #include <QAbstractItemDelegate>
 #include <klocalizedstring.h>
 
+#include <kconfig.h>
+#include <ksharedconfig.h>
+#include <kconfiggroup.h>
+
 #include <KoResourceItemChooser.h>
 
 #include <kis_icon.h>
@@ -47,7 +51,7 @@
 #include "kis_clipboard_brush_widget.h"
 
 #include "kis_global.h"
-#include "kis_gimp_brush.h"
+#include "kis_gbr_brush.h"
 #include "kis_debug.h"
 #include "kis_image.h"
 
@@ -56,11 +60,11 @@ class KisBrushDelegate : public QAbstractItemDelegate
 {
 public:
     KisBrushDelegate(QObject * parent = 0) : QAbstractItemDelegate(parent) {}
-    virtual ~KisBrushDelegate() {}
+    ~KisBrushDelegate() override {}
     /// reimplemented
-    virtual void paint(QPainter *, const QStyleOptionViewItem &, const QModelIndex &) const;
+    void paint(QPainter *, const QStyleOptionViewItem &, const QModelIndex &) const override;
     /// reimplemented
-    QSize sizeHint(const QStyleOptionViewItem & option, const QModelIndex &) const {
+    QSize sizeHint(const QStyleOptionViewItem & option, const QModelIndex &) const override {
         return option.decorationSize;
     }
 };
@@ -96,121 +100,111 @@ void KisBrushDelegate::paint(QPainter * painter, const QStyleOptionViewItem & op
 }
 
 
-KisBrushChooser::KisBrushChooser(QWidget *parent, const char *name)
+KisPredefinedBrushChooser::KisPredefinedBrushChooser(QWidget *parent, const char *name)
     : QWidget(parent),
       m_stampBrushWidget(0),
       m_clipboardBrushWidget(0)
 {
     setObjectName(name);
 
-    m_lbSize = new QLabel(i18n("Size:"), this);
-    m_slSize = new KisDoubleSliderSpinBox(this);
-    m_slSize->setRange(0, 1000, 2);
-    m_slSize->setValue(5);
-    m_slSize->setExponentRatio(3.0);
-    m_slSize->setSuffix(i18n(" px"));
+    setupUi(this);
+
+    brushSizeSpinBox->setRange(0, KSharedConfig::openConfig()->group("").readEntry("maximumBrushSize", 1000), 2);
+    brushSizeSpinBox->setValue(5);
+    brushSizeSpinBox->setExponentRatio(3.0);
+    brushSizeSpinBox->setSuffix(i18n(" px"));
+    brushSizeSpinBox->setExponentRatio(3.0);
+
+    QObject::connect(brushSizeSpinBox, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetItemSize(qreal)));
 
 
-    m_slSize->setExponentRatio(3.0);
-    QObject::connect(m_slSize, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetItemSize(qreal)));
+    brushRotationSpinBox->setRange(0, 360, 0);
+    brushRotationSpinBox->setValue(0);
+    brushRotationSpinBox->setSuffix(QChar(Qt::Key_degree));
+    QObject::connect(brushRotationSpinBox, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetItemRotation(qreal)));
+
+    brushSpacingSelectionWidget->setSpacing(true, 1.0);
+    connect(brushSpacingSelectionWidget, SIGNAL(sigSpacingChanged()), SLOT(slotSpacingChanged()));
 
 
-    m_lbRotation = new QLabel(i18n("Rotation:"), this);
-    m_slRotation = new KisDoubleSliderSpinBox(this);
-    m_slRotation->setRange(0, 360, 0);
-    m_slRotation->setValue(0);
-    m_slRotation->setSuffix(QChar(Qt::Key_degree));
-    QObject::connect(m_slRotation, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetItemRotation(qreal)));
+    QObject::connect(useColorAsMaskCheckbox, SIGNAL(toggled(bool)), this, SLOT(slotSetItemUseColorAsMask(bool)));
 
-    m_lbSpacing = new QLabel(i18n("Spacing:"), this);
-    m_slSpacing = new KisSpacingSelectionWidget(this);
-    m_slSpacing->setSpacing(true, 1.0);
-    connect(m_slSpacing, SIGNAL(sigSpacingChanged()), SLOT(slotSpacingChanged()));
-
-    m_chkColorMask = new QCheckBox(i18n("Use color as mask"), this);
-    QObject::connect(m_chkColorMask, SIGNAL(toggled(bool)), this, SLOT(slotSetItemUseColorAsMask(bool)));
-
-    m_lbName = new QLabel(this);
 
     KisBrushResourceServer* rServer = KisBrushServer::instance()->brushServer();
     QSharedPointer<KisBrushResourceServerAdapter> adapter(new KisBrushResourceServerAdapter(rServer));
+
+
     m_itemChooser = new KoResourceItemChooser(adapter, this);
+
     m_itemChooser->showTaggingBar(true);
     m_itemChooser->setColumnCount(10);
     m_itemChooser->setRowHeight(30);
     m_itemChooser->setItemDelegate(new KisBrushDelegate(this));
     m_itemChooser->setCurrentItem(0, 0);
     m_itemChooser->setSynced(true);
+    m_itemChooser->setMinimumWidth(100);
+    m_itemChooser->setMinimumHeight(150);
+    m_itemChooser->showButtons(false); // turn the import and delete buttons since we want control over them
+
+
+    addPresetButton->setIcon(KisIconUtils::loadIcon("list-add"));
+    deleteBrushTipButton->setIcon(KisIconUtils::loadIcon("trash-empty"));
+
+
+
+    connect(addPresetButton, SIGNAL(clicked(bool)), this, SLOT(slotImportNewBrushResource()));
+    connect(deleteBrushTipButton, SIGNAL(clicked(bool)), this, SLOT(slotDeleteBrushResource()));
+
+    presetsLayout->addWidget(m_itemChooser);
+
 
     connect(m_itemChooser, SIGNAL(resourceSelected(KoResource *)), this, SLOT(update(KoResource *)));
 
-    QVBoxLayout *mainLayout = new QVBoxLayout(this);
-    mainLayout->setObjectName("main layout");
-    mainLayout->addWidget(m_lbName);
-    mainLayout->addWidget(m_itemChooser, 10);
-
-    QPushButton *stampButton = new QPushButton(KisIconUtils::loadIcon("list-add"), i18n("Stamp"), this);
-    QPushButton *clipboardButton = new QPushButton(KisIconUtils::loadIcon("edit-paste"), i18n("Clipboard"), this);
-
+    stampButton->setIcon(KisIconUtils::loadIcon("list-add"));
     stampButton->setToolTip(i18n("Creates a brush tip from the current image selection."
-                                 "\n If no selection is present the whole image will be used."));
+                               "\n If no selection is present the whole image will be used."));
+
+    clipboardButton->setIcon(KisIconUtils::loadIcon("list-add"));
     clipboardButton->setToolTip(i18n("Creates a brush tip from the image in the clipboard."));
 
-    m_itemChooser->addCustomButton(stampButton, 2);
-    m_itemChooser->addCustomButton(clipboardButton, 3);
+
     connect(stampButton, SIGNAL(clicked()), this,  SLOT(slotOpenStampBrush()));
     connect(clipboardButton, SIGNAL(clicked()), SLOT(slotOpenClipboardBrush()));
 
     QGridLayout *spacingLayout = new QGridLayout();
     spacingLayout->setObjectName("spacing grid layout");
 
-    mainLayout->addLayout(spacingLayout, 1);
-
-    spacingLayout->addWidget(m_lbSize, 1, 0);
-    spacingLayout->addWidget(m_slSize, 1, 1);
-    spacingLayout->addWidget(m_lbRotation, 2, 0);
-    spacingLayout->addWidget(m_slRotation, 2, 1);
-    spacingLayout->addWidget(m_lbSpacing, 3, 0);
-    spacingLayout->addWidget(m_slSpacing, 3, 1);
-    spacingLayout->setColumnStretch(1, 3);
-
-    QPushButton *resetBrushButton = new QPushButton(i18n("Reset Predefined Tip"), this);
     resetBrushButton->setToolTip(i18n("Reloads Spacing from file\nSets Scale to 1.0\nSets Rotation to 0.0"));
     connect(resetBrushButton, SIGNAL(clicked()), SLOT(slotResetBrush()));
-
-    QHBoxLayout *resetHLayout = new QHBoxLayout();
-    resetHLayout->addWidget(m_chkColorMask, 0);
-    resetHLayout->addWidget(resetBrushButton, 0, Qt::AlignRight);
-
-    spacingLayout->addLayout(resetHLayout, 4, 0, 1, 2);
 
     update(m_itemChooser->currentResource());
 }
 
-KisBrushChooser::~KisBrushChooser()
+KisPredefinedBrushChooser::~KisPredefinedBrushChooser()
 {
 }
 
-void KisBrushChooser::setBrush(KisBrushSP _brush)
+void KisPredefinedBrushChooser::setBrush(KisBrushSP _brush)
 {
     m_itemChooser->setCurrentResource(_brush.data());
     update(_brush.data());
 }
 
-void KisBrushChooser::slotResetBrush()
+void KisPredefinedBrushChooser::slotResetBrush()
 {
     KisBrush *brush = dynamic_cast<KisBrush *>(m_itemChooser->currentResource());
     if (brush) {
         brush->load();
         brush->setScale(1.0);
         brush->setAngle(0.0);
+
         slotActivatedBrush(brush);
         update(brush);
         emit sigBrushChanged();
     }
 }
 
-void KisBrushChooser::slotSetItemSize(qreal sizeValue)
+void KisPredefinedBrushChooser::slotSetItemSize(qreal sizeValue)
 {
     KisBrush *brush = dynamic_cast<KisBrush *>(m_itemChooser->currentResource());
 
@@ -223,7 +217,7 @@ void KisBrushChooser::slotSetItemSize(qreal sizeValue)
     }
 }
 
-void KisBrushChooser::slotSetItemRotation(qreal rotationValue)
+void KisPredefinedBrushChooser::slotSetItemRotation(qreal rotationValue)
 {
     KisBrush *brush = dynamic_cast<KisBrush *>(m_itemChooser->currentResource());
     if (brush) {
@@ -234,21 +228,21 @@ void KisBrushChooser::slotSetItemRotation(qreal rotationValue)
     }
 }
 
-void KisBrushChooser::slotSpacingChanged()
+void KisPredefinedBrushChooser::slotSpacingChanged()
 {
     KisBrush *brush = dynamic_cast<KisBrush *>(m_itemChooser->currentResource());
     if (brush) {
-        brush->setSpacing(m_slSpacing->spacing());
-        brush->setAutoSpacing(m_slSpacing->autoSpacingActive(), m_slSpacing->autoSpacingCoeff());
+        brush->setSpacing(brushSpacingSelectionWidget->spacing());
+        brush->setAutoSpacing(brushSpacingSelectionWidget->autoSpacingActive(), brushSpacingSelectionWidget->autoSpacingCoeff());
         slotActivatedBrush(brush);
 
         emit sigBrushChanged();
     }
 }
 
-void KisBrushChooser::slotSetItemUseColorAsMask(bool useColorAsMask)
+void KisPredefinedBrushChooser::slotSetItemUseColorAsMask(bool useColorAsMask)
 {
-    KisGimpBrush *brush = dynamic_cast<KisGimpBrush *>(m_itemChooser->currentResource());
+    KisGbrBrush *brush = dynamic_cast<KisGbrBrush *>(m_itemChooser->currentResource());
     if (brush) {
         brush->setUseColorAsMask(useColorAsMask);
         slotActivatedBrush(brush);
@@ -257,7 +251,7 @@ void KisBrushChooser::slotSetItemUseColorAsMask(bool useColorAsMask)
     }
 }
 
-void KisBrushChooser::slotOpenStampBrush()
+void KisPredefinedBrushChooser::slotOpenStampBrush()
 {
     if(!m_stampBrushWidget) {
         m_stampBrushWidget = new KisCustomBrushWidget(this, i18n("Stamp"), m_image);
@@ -272,7 +266,7 @@ void KisBrushChooser::slotOpenStampBrush()
         update(m_itemChooser->currentResource());
     }
 }
-void KisBrushChooser::slotOpenClipboardBrush()
+void KisPredefinedBrushChooser::slotOpenClipboardBrush()
 {
     if(!m_clipboardBrushWidget) {
         m_clipboardBrushWidget = new KisClipboardBrushWidget(this, i18n("Clipboard"), m_image);
@@ -288,38 +282,58 @@ void KisBrushChooser::slotOpenClipboardBrush()
     }
 }
 
-void KisBrushChooser::update(KoResource * resource)
+void KisPredefinedBrushChooser::update(KoResource * resource)
 {
     KisBrush* brush = dynamic_cast<KisBrush*>(resource);
 
     if (brush) {
-        QString text = QString("%1 (%2 x %3)")
-                       .arg(i18n(brush->name().toUtf8().data()))
+
+
+        brushTipNameLabel->setText(i18n(brush->name().toUtf8().data()));
+
+        QString brushTypeString = "";
+
+        if (brush->brushType() == INVALID) {
+            brushTypeString = i18n("Invalid");
+        } else if (brush->brushType() == MASK) {
+            brushTypeString = i18n("Mask");
+        } else if (brush->brushType() == IMAGE) {
+            brushTypeString = i18n("GBR");
+        } else if (brush->brushType() == PIPE_MASK ) {
+            brushTypeString = i18n("Animated Mask");
+        } else if (brush->brushType() == PIPE_IMAGE ) {
+            brushTypeString = i18n("Animated Image");
+        }
+
+
+        QString brushDetailsText = QString("%1 (%2 x %3)")
+                       .arg(brushTypeString)
                        .arg(brush->width())
                        .arg(brush->height());
 
-        m_lbName->setText(text);
+        brushDetailsLabel->setText(brushDetailsText);
 
-        m_slSpacing->setSpacing(brush->autoSpacingActive(),
+
+        brushSpacingSelectionWidget->setSpacing(brush->autoSpacingActive(),
                                 brush->autoSpacingActive() ?
                                 brush->autoSpacingCoeff() : brush->spacing());
 
-        m_slRotation->setValue(brush->angle() * 180 / M_PI);
-        m_slSize->setValue(brush->width() * brush->scale());
+        brushRotationSpinBox->setValue(brush->angle() * 180 / M_PI);
+        brushSizeSpinBox->setValue(brush->width() * brush->scale());
 
         // useColorAsMask support is only in gimp brush so far
-        KisGimpBrush *gimpBrush = dynamic_cast<KisGimpBrush*>(resource);
+        KisGbrBrush *gimpBrush = dynamic_cast<KisGbrBrush*>(resource);
         if (gimpBrush) {
-            m_chkColorMask->setChecked(gimpBrush->useColorAsMask());
+            useColorAsMaskCheckbox->setChecked(gimpBrush->useColorAsMask());
         }
-        m_chkColorMask->setEnabled(brush->hasColor() && gimpBrush);
+        useColorAsMaskCheckbox->setEnabled(brush->hasColor() && gimpBrush);
 
         slotActivatedBrush(brush);
         emit sigBrushChanged();
     }
 }
 
-void KisBrushChooser::slotActivatedBrush(KoResource * resource)
+void KisPredefinedBrushChooser::slotActivatedBrush(KoResource * resource)
 {
     KisBrush* brush = dynamic_cast<KisBrush*>(resource);
 
@@ -336,13 +350,13 @@ void KisBrushChooser::slotActivatedBrush(KoResource * resource)
     }
 }
 
-void KisBrushChooser::slotNewPredefinedBrush(KoResource *resource)
+void KisPredefinedBrushChooser::slotNewPredefinedBrush(KoResource *resource)
 {
     m_itemChooser->setCurrentResource(resource);
     update(resource);
 }
 
-void KisBrushChooser::setBrushSize(qreal xPixels, qreal yPixels)
+void KisPredefinedBrushChooser::setBrushSize(qreal xPixels, qreal yPixels)
 {
     Q_UNUSED(yPixels);
     qreal oldWidth = m_brush->width() * m_brush->scale();
@@ -350,13 +364,23 @@ void KisBrushChooser::setBrushSize(qreal xPixels, qreal yPixels)
 
     newWidth = qMax(newWidth, qreal(0.1));
 
-    m_slSize->setValue(newWidth);
+    brushSizeSpinBox->setValue(newWidth);
 }
 
-void KisBrushChooser::setImage(KisImageWSP image)
+void KisPredefinedBrushChooser::setImage(KisImageWSP image)
 {
     m_image = image;
 }
+
+void KisPredefinedBrushChooser::slotImportNewBrushResource() {
+    m_itemChooser->slotButtonClicked(KoResourceItemChooser::Button_Import);
+}
+
+void KisPredefinedBrushChooser::slotDeleteBrushResource() {
+    m_itemChooser->slotButtonClicked(KoResourceItemChooser::Button_Remove);
+}
+
+
 
 #include "moc_kis_brush_chooser.cpp"
 

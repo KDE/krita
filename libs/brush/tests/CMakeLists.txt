@@ -15,30 +15,16 @@ if(HAVE_VC)
   )
 endif()
 
-
-
 macro_add_unittest_definitions()
 
-########### next target ###############
+include(ECMAddTests)
 
-set(kis_auto_brush_test_SRCS kis_auto_brush_test.cpp )
-kde4_add_unit_test(KisAutoBrushTest TESTNAME krita-libbrush-KisAutoBrushTest ${kis_auto_brush_test_SRCS})
-target_link_libraries(KisAutoBrushTest   kritaimage kritalibbrush  Qt5::Test)
+ecm_add_tests(
+    kis_auto_brush_test.cpp
+    kis_gbr_brush_test.cpp
+    kis_boundary_test.cpp
+    kis_imagepipe_brush_test.cpp
+    NAME_PREFIX "krita-libbrush-"
+    LINK_LIBRARIES kritaimage kritalibbrush Qt5::Test
+)
 
-########### next target ###############
-
-set(kis_gimp_brush_test_SRCS kis_gimp_brush_test.cpp )
-kde4_add_unit_test(KisGimpBrushTest TESTNAME krita-libbrush-KisGimpBrushTest ${kis_gimp_brush_test_SRCS})
-target_link_libraries(KisGimpBrushTest   kritaimage kritalibbrush  Qt5::Test)
-
-########### next target ###############
-
-set(kis_boundary_test_SRCS kis_boundary_test.cpp )
-kde4_add_unit_test(KisBoundaryTest TESTNAME krita-libbrush-KisBoundaryTest ${kis_boundary_test_SRCS})
-target_link_libraries(KisBoundaryTest   kritaimage kritalibbrush  Qt5::Test)
-
-########### next target ###############
-
-set(kis_imagepipe_brush_test_SRCS kis_imagepipe_brush_test.cpp )
-kde4_add_unit_test(KisImagePipeBrushTest TESTNAME krita-libbrush-KisImagePipeBrushTest ${kis_imagepipe_brush_test_SRCS})
-target_link_libraries(KisImagePipeBrushTest   kritaimage kritalibbrush  Qt5::Test)

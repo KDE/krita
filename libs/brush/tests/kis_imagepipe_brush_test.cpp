@@ -33,7 +33,7 @@
 #include <kis_painter.h>
 
 #define COMPARE_ALL(brush, method)                                      \
-    Q_FOREACH (KisGimpBrush *child, brush->brushes()) {           \
+    Q_FOREACH (KisGbrBrush *child, brush->brushes()) {           \
         if(brush->method() != child->method()) {                        \
             dbgKrita << "Failing method:" << #method                    \
                      << "brush index:"                                  \
@@ -45,7 +45,7 @@
 inline void KisImagePipeBrushTest::checkConsistency(KisImagePipeBrush *brush)
 {
     qreal scale = 0.5; Q_UNUSED(scale);
-    KisGimpBrush *firstBrush = brush->brushes().first();
+    KisGbrBrush *firstBrush = brush->brushes().first();
 
     /**
      * This set of values is supposed to be constant, so
@@ -217,7 +217,7 @@ void KisImagePipeBrushTest::testColoredDabWash()
     KisPainter painter(layer);
     painter.setCompositeOp(COMPOSITE_ALPHA_DARKEN);
 
-    const QVector<KisGimpBrush*> gbrs = brush->brushes();
+    const QVector<KisGbrBrush*> gbrs = brush->brushes();
 
     KisFixedPaintDeviceSP dab = gbrs.at(0)->paintDevice(cs, KisDabShape(2.0, 1.0, 0.0), info);
     painter.bltFixed(0, 0, dab, 0, 0, dab->bounds().width(), dab->bounds().height());

@@ -28,6 +28,8 @@
 #include "filter/kis_filter_configuration.h"
 #include "filter/kis_filter_registry.h"
 #include "filter/kis_filter.h"
+#include "kis_generator.h"
+#include "kis_generator_registry.h"
 #include "generator/kis_generator_layer.h"
 #include "kis_time_range.h"
 #include <kundo2command.h>
@@ -53,10 +55,10 @@ KisColorSpaceConvertVisitor::~KisColorSpaceConvertVisitor()
 bool KisColorSpaceConvertVisitor::visit(KisGroupLayer * layer)
 {
     convertPaintDevice(layer);
-    KisLayerSP child = dynamic_cast<KisLayer*>(layer->firstChild().data());
+    KisLayerSP child = qobject_cast<KisLayer*>(layer->firstChild().data());
     while (child) {
         child->accept(*this);
-        child = dynamic_cast<KisLayer*>(child->nextSibling().data());
+        child = qobject_cast<KisLayer*>(child->nextSibling().data());
     }
 
     layer->resetCache();
@@ -71,7 +73,8 @@ bool KisColorSpaceConvertVisitor::visit(KisPaintLayer *layer)
 
 bool KisColorSpaceConvertVisitor::visit(KisGeneratorLayer *layer)
 {
-    return convertPaintDevice(layer);
+    layer->resetCache();
+    return true;
 }
 
 bool KisColorSpaceConvertVisitor::visit(KisAdjustmentLayer * layer)
@@ -83,16 +86,10 @@ bool KisColorSpaceConvertVisitor::visit(KisAdjustmentLayer * layer)
         // XXX: Make this more generic for after 1.6, when we'll have many
         // channel-specific filters.
         KisFilterSP f = KisFilterRegistry::instance()->value("perchannel");
-        layer->setFilter(f->defaultConfiguration(0));
+        layer->setFilter(f->defaultConfiguration());
     }
 
     layer->resetCache();
-    return true;
-}
-
-bool KisColorSpaceConvertVisitor::visit(KisExternalLayer *layer)
-{
-    Q_UNUSED(layer)
     return true;
 }
 
@@ -112,24 +109,29 @@ bool KisColorSpaceConvertVisitor::convertPaintDevice(KisLayer* layer)
         }
     }
 
+    KisImageSP image = m_image.toStrongRef();
+    if (!image) {
+        return false;
+    }
+
     if (layer->original()) {
         KUndo2Command* cmd = layer->original()->convertTo(m_dstColorSpace, m_renderingIntent, m_conversionFlags);
         if (cmd) {
-            m_image->undoAdapter()->addCommand(cmd);
+            image->undoAdapter()->addCommand(cmd);
         }
     }
 
     if (layer->paintDevice()) {
         KUndo2Command* cmd = layer->paintDevice()->convertTo(m_dstColorSpace, m_renderingIntent, m_conversionFlags);
         if (cmd) {
-            m_image->undoAdapter()->addCommand(cmd);
+            image->undoAdapter()->addCommand(cmd);
         }
     }
 
     if (layer->projection()) {
         KUndo2Command* cmd = layer->projection()->convertTo(m_dstColorSpace, m_renderingIntent, m_conversionFlags);
         if (cmd) {
-            m_image->undoAdapter()->addCommand(cmd);
+            image->undoAdapter()->addCommand(cmd);
         }
     }
 
@@ -146,9 +148,13 @@ bool KisColorSpaceConvertVisitor::convertPaintDevice(KisLayer* layer)
 
 bool KisColorSpaceConvertVisitor::visit(KisColorizeMask *mask)
 {
+    KisImageSP image = m_image.toStrongRef();
+    if (!image) {
+        return false;
+    }
     KUndo2Command* cmd = mask->setColorSpace(m_dstColorSpace, m_renderingIntent, m_conversionFlags);
     if (cmd) {
-        m_image->undoAdapter()->addCommand(cmd);
+        image->undoAdapter()->addCommand(cmd);
     }
     return true;
 }

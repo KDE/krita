@@ -31,7 +31,8 @@ public:
     KisTGAExport(QObject *parent, const QVariantList &);
     virtual ~KisTGAExport();
 public:
-    virtual KisImportExportFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration = 0);
+    virtual KisImportExportFilter::ConversionStatus convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration = 0);
+    void initializeCapabilities();
 };
 
 #endif

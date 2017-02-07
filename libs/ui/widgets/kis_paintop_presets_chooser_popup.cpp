@@ -23,6 +23,7 @@
 #include <QToolButton>
 #include <QCompleter>
 #include <QMenu>
+#include <QWidgetAction>
 
 #include <resources/KoResource.h>
 #include <KoResourceItemChooser.h>
@@ -47,7 +48,10 @@ KisPaintOpPresetsChooserPopup::KisPaintOpPresetsChooserPopup(QWidget * parent)
     , m_d(new Private())
 {
     m_d->uiWdgPaintOpPresets.setupUi(this);
-    QMenu* menu = new QMenu(this);
+    QMenu* menu = new QMenu(this);  
+    menu->setStyleSheet("margin: 6px");
+
+    menu->addSection(i18n("Display"));
 
     QActionGroup *actionGroup = new QActionGroup(this);
 
@@ -63,6 +67,25 @@ KisPaintOpPresetsChooserPopup::KisPaintOpPresetsChooserPopup(QWidget * parent)
     action->setChecked(mode == KisPresetChooser::DETAIL);
     action->setActionGroup(actionGroup);
 
+    // add widget slider to control icon size
+    QSlider* iconSizeSlider = new QSlider(this);
+    iconSizeSlider->setOrientation(Qt::Horizontal);
+    iconSizeSlider->setRange(30, 80);
+    iconSizeSlider->setValue(m_d->uiWdgPaintOpPresets.wdgPresetChooser->iconSize());
+    iconSizeSlider->setMinimumHeight(20);
+    iconSizeSlider->setMinimumWidth(40);
+    iconSizeSlider->setTickInterval(10);
+
+
+    QWidgetAction *sliderAction= new QWidgetAction(this);
+    sliderAction->setDefaultWidget(iconSizeSlider);
+
+    menu->addSection(i18n("Icon Size"));
+    menu->addAction(sliderAction);
+
+
+
+    // setting the view mode
     m_d->uiWdgPaintOpPresets.wdgPresetChooser->setViewMode(mode);
     m_d->uiWdgPaintOpPresets.wdgPresetChooser->showTaggingBar(true);
 
@@ -72,7 +95,16 @@ KisPaintOpPresetsChooserPopup::KisPaintOpPresetsChooserPopup(QWidget * parent)
 
     connect(m_d->uiWdgPaintOpPresets.wdgPresetChooser, SIGNAL(resourceSelected(KoResource*)),
             this, SIGNAL(resourceSelected(KoResource*)));
-    
+    connect(m_d->uiWdgPaintOpPresets.wdgPresetChooser, SIGNAL(resourceClicked(KoResource*)),
+            this, SIGNAL(resourceClicked(KoResource*))) ;
+
+
+    connect (iconSizeSlider, SIGNAL(sliderMoved(int)),
+             m_d->uiWdgPaintOpPresets.wdgPresetChooser, SLOT(setIconSize(int)));
+    connect( iconSizeSlider, SIGNAL(sliderReleased()),
+             m_d->uiWdgPaintOpPresets.wdgPresetChooser, SLOT(saveIconSize()));
+
+
     m_d->firstShown = true;
 
 }
@@ -109,16 +141,11 @@ void KisPaintOpPresetsChooserPopup::showButtons(bool show)
     m_d->uiWdgPaintOpPresets.wdgPresetChooser->showButtons(show);
 }
 
-void KisPaintOpPresetsChooserPopup::canvasResourceChanged(KoResource* resource , KisPaintOpPresetSP  preset2  )
+void KisPaintOpPresetsChooserPopup::canvasResourceChanged(KisPaintOpPresetSP  preset)
 {
-    Q_UNUSED(preset2);
-
-    if (resource) {
+    if (preset) {
         blockSignals(true);
-        KisPaintOpPresetResourceServer * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
-        KisPaintOpPresetSP preset = rserver->resourceByName(resource->name());
-
-        m_d->uiWdgPaintOpPresets.wdgPresetChooser->itemChooser()->setCurrentResource(preset.data());
+        m_d->uiWdgPaintOpPresets.wdgPresetChooser->setCurrentResource(preset.data());
         blockSignals(false);
     }
     m_d->uiWdgPaintOpPresets.wdgPresetChooser->updateViewSettings();

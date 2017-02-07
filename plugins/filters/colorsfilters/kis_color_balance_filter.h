@@ -53,7 +53,7 @@ public:
         return KoID("colorbalance", i18n("Color Balance"));
 	}
 
-    virtual KisFilterConfigurationSP  factoryConfiguration(const KisPaintDeviceSP) const;
+    virtual KisFilterConfigurationSP  factoryConfiguration() const;
 
 };
 

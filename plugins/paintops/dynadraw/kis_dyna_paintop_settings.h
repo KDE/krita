@@ -32,11 +32,11 @@ public:
     void setPaintOpSize(qreal value) override;
     qreal paintOpSize() const override;
 
-    bool paintIncremental();
-    virtual bool isAirbrushing() const;
-    virtual int rate() const;
+    bool paintIncremental() override;
+    bool isAirbrushing() const override;
+    int rate() const override;
 
-    QList<KisUniformPaintOpPropertySP> uniformProperties(KisPaintOpSettingsSP settings);
+    QList<KisUniformPaintOpPropertySP> uniformProperties(KisPaintOpSettingsSP settings) override;
 
 private:
     struct Private;

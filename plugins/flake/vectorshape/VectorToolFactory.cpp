@@ -31,8 +31,8 @@ VectorToolFactory::VectorToolFactory()
 {
     setToolTip(i18n("Vector Image (EMF/WMF/SVM/SVG) tool"));
     setIconName(koIconNameCStrNeededWithSubs("a generic vector image icon", "x-shape-vectorimage", "application-x-wmf"));
-    setToolType(dynamicToolType());
-    setPriority(1);
+    setSection(dynamicToolType());
+    setPriority(2);
     setActivationShapeId(VectorShape_SHAPEID);
 }
 

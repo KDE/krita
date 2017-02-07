@@ -13,7 +13,6 @@ if (MSVC)
 			INSTALL_DIR ${EXTPREFIX_boost}
 
 			UPDATE_COMMAND ""
-			ALWAYS 0
 			BUILD_IN_SOURCE 1
 		)
 		ExternalProject_Add_Step(
@@ -37,7 +36,6 @@ if (MSVC)
 			INSTALL_DIR ${EXTPREFIX_boost}
 
 			UPDATE_COMMAND ""
-			ALWAYS 0
 			BUILD_IN_SOURCE 1
         )
         ExternalProject_Add_Step(
@@ -48,6 +46,8 @@ if (MSVC)
 		)
 	endif()
 elseif(MINGW)
+   string(REGEX REPLACE "([0-9])\\.([0-9])(\\.[0-9])?" "\\1\\2"
+      KRITA_boost_COMPILER_VERSION ${CMAKE_CXX_COMPILER_VERSION})
    ExternalProject_Add(
        ext_boost
 
@@ -55,19 +55,18 @@ elseif(MINGW)
        URL http://files.kde.org/krita/build/dependencies/boost_1_61_0.zip
        URL_MD5 015ae4afa6f3e597232bfe1dab949ace
 
-       CONFIGURE_COMMAND <SOURCE_DIR>/bootstrap.bat --with-toolset=mingw --prefix=${PREFIX_ext_boost}
+       CONFIGURE_COMMAND <SOURCE_DIR>/bootstrap.bat gcc --prefix=${PREFIX_ext_boost}
        BUILD_COMMAND <SOURCE_DIR>/b2.exe --with-system --build-dir=build-dir --prefix=${PREFIX_ext_boost} toolset=gcc variant=release link=shared  threading=multi architecture=x86 variant=release install
        INSTALL_COMMAND ""
        INSTALL_DIR ${EXTPREFIX_boost}
 
        UPDATE_COMMAND ""
-       ALWAYS 0
        BUILD_IN_SOURCE 1
    )
    ExternalProject_Add_Step(
        ext_boost
        post_install
-       COMMAND ${CMAKE_COMMAND} -E copy ${PREFIX_ext_boost}/lib/libboost_system-mgw51-mt-1_61.dll ${PREFIX_ext_boost}/bin/
+       COMMAND ${CMAKE_COMMAND} -E copy ${PREFIX_ext_boost}/lib/libboost_system-mgw${KRITA_boost_COMPILER_VERSION}-mt-1_61.dll ${PREFIX_ext_boost}/bin/
        DEPENDEES install
    )
 else()
@@ -82,7 +81,6 @@ else()
         	INSTALL_DIR ${PREFIX_ext_boost}
 
 	        UPDATE_COMMAND ""
-        	ALWAYS 0
 	        BUILD_IN_SOURCE 1
 )
 endif()

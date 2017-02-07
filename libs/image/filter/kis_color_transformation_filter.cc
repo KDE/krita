@@ -82,7 +82,7 @@ void KisColorTransformationFilter::processImpl(KisPaintDeviceSP device,
 
 }
 
-KisFilterConfigurationSP  KisColorTransformationFilter::factoryConfiguration(const KisPaintDeviceSP) const
+KisFilterConfigurationSP  KisColorTransformationFilter::factoryConfiguration() const
 {
     return new KisColorTransformationConfiguration(id(), 0);
 }

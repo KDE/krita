@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
  */
 #ifndef WAVELETDECOMPOSE_H
-#define WAVETETDECOMPOSE_H
+#define WAVELETDECOMPOSE_H
 
 #include <QVariant>
 

@@ -65,18 +65,18 @@ public:
 
     void setCaption(const QString &caption);
 
+
     /**
-     * @brief setDefaultDir set the default directory to defaultDir
+     * Use the given filename as a proposal.
+     */
+    void setProposedFileName(const QString &filename);
+
+    /**
+     * @brief setDefaultDir set the default directory to defaultDir.
      *
      * @param defaultDir a path to a file or directory
      */
-    void setDefaultDir(const QString &defaultDir, bool override = false);
-
-    /**
-     * @brief setOverrideDir override both the default dir and the saved dir found by dialogName
-     * @param overrideDir a path to a file or directory
-     */
-    void setOverrideDir(const QString &overrideDir);
+    void setDefaultDir(const QString &defaultDir);
 
     /**
      * @brief setImageFilters sets the name filters for the file dialog to all

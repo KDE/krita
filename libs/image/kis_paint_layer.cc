@@ -62,8 +62,8 @@ public:
 };
 
 KisPaintLayer::KisPaintLayer(KisImageWSP image, const QString& name, quint8 opacity, KisPaintDeviceSP dev)
-        : KisLayer(image, name, opacity)
-        , m_d(new Private())
+    : KisLayer(image, name, opacity)
+    , m_d(new Private())
 {
     Q_ASSERT(dev);
 
@@ -73,8 +73,8 @@ KisPaintLayer::KisPaintLayer(KisImageWSP image, const QString& name, quint8 opac
 
 
 KisPaintLayer::KisPaintLayer(KisImageWSP image, const QString& name, quint8 opacity)
-        : KisLayer(image, name, opacity)
-        , m_d(new Private())
+    : KisLayer(image, name, opacity)
+    , m_d(new Private())
 {
     Q_ASSERT(image);
 
@@ -82,8 +82,8 @@ KisPaintLayer::KisPaintLayer(KisImageWSP image, const QString& name, quint8 opac
 }
 
 KisPaintLayer::KisPaintLayer(KisImageWSP image, const QString& name, quint8 opacity, const KoColorSpace * colorSpace)
-        : KisLayer(image, name, opacity)
-        , m_d(new Private())
+    : KisLayer(image, name, opacity)
+    , m_d(new Private())
 {
     if (!colorSpace) {
         Q_ASSERT(image);
@@ -94,12 +94,11 @@ KisPaintLayer::KisPaintLayer(KisImageWSP image, const QString& name, quint8 opac
 }
 
 KisPaintLayer::KisPaintLayer(const KisPaintLayer& rhs)
-        : KisLayer(rhs)
-        , KisIndirectPaintingSupport()
-        , m_d(new Private)
+    : KisLayer(rhs)
+    , KisIndirectPaintingSupport()
+    , m_d(new Private)
 {
     const bool copyFrames = (rhs.m_d->contentChannel != 0);
-
     if (!copyFrames) {
         init(new KisPaintDevice(*rhs.m_d->paintDevice.data()), rhs.m_d->paintChannelFlags);
     } else {
@@ -148,10 +147,10 @@ bool KisPaintLayer::needProjection() const
 }
 
 void KisPaintLayer::copyOriginalToProjection(const KisPaintDeviceSP original,
-        KisPaintDeviceSP projection,
-        const QRect& rect) const
+                                             KisPaintDeviceSP projection,
+                                             const QRect& rect) const
 {
-    lockTemporaryTarget();
+    KisIndirectPaintingSupport::ReadLocker l(this);
 
     KisPainter::copyAreaOptimized(rect.topLeft(), original, projection, rect);
 
@@ -162,9 +161,9 @@ void KisPaintLayer::copyOriginalToProjection(const KisPaintDeviceSP original,
     }
 
     if (m_d->contentChannel &&
-        m_d->contentChannel->keyframeCount() > 1 &&
-        onionSkinEnabled() &&
-        !m_d->paintDevice->defaultBounds()->externalFrameActive()) {
+            m_d->contentChannel->keyframeCount() > 1 &&
+            onionSkinEnabled() &&
+            !m_d->paintDevice->defaultBounds()->externalFrameActive()) {
 
         KisPaintDeviceSP skins = m_d->onionSkinCache.projection(m_d->paintDevice);
 
@@ -175,12 +174,11 @@ void KisPaintLayer::copyOriginalToProjection(const KisPaintDeviceSP original,
     }
 
     if (!m_d->contentChannel ||
-        (m_d->contentChannel && m_d->contentChannel->keyframeCount() <= 1) ||
-        !onionSkinEnabled()) {
+            (m_d->contentChannel && m_d->contentChannel->keyframeCount() <= 1) ||
+            !onionSkinEnabled()) {
 
         m_d->onionSkinCache.reset();
     }
-    unlockTemporaryTarget();
 }
 
 void KisPaintLayer::setDirty(const QRect & rect)
@@ -327,7 +325,7 @@ void KisPaintLayer::slotExternalUpdateOnionSkins()
     if (!onionSkinEnabled()) return;
 
     const QRect dirtyRect =
-        KisOnionSkinCompositor::instance()->calculateFullExtent(m_d->paintDevice);
+            KisOnionSkinCompositor::instance()->calculateFullExtent(m_d->paintDevice);
 
     setDirty(dirtyRect);
 }

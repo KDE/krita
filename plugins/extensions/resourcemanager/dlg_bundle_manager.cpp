@@ -50,12 +50,12 @@ DlgBundleManager::DlgBundleManager(ResourceManager *resourceManager, KisActionMa
     setDefaultButton(Ok);
 
     m_ui->listActive->setIconSize(QSize(ICON_SIZE, ICON_SIZE));
-    m_ui->listActive->setSelectionMode(QAbstractItemView::ExtendedSelection);
+    m_ui->listActive->setSelectionMode(QAbstractItemView::SingleSelection);
     connect(m_ui->listActive, SIGNAL(currentItemChanged(QListWidgetItem*,QListWidgetItem*)), SLOT(itemSelected(QListWidgetItem*,QListWidgetItem*)));
     connect(m_ui->listActive, SIGNAL(itemClicked(QListWidgetItem*)), SLOT(itemSelected(QListWidgetItem*)));
 
     m_ui->listInactive->setIconSize(QSize(ICON_SIZE, ICON_SIZE));
-    m_ui->listInactive->setSelectionMode(QAbstractItemView::ExtendedSelection);
+    m_ui->listInactive->setSelectionMode(QAbstractItemView::SingleSelection);
     connect(m_ui->listInactive, SIGNAL(currentItemChanged(QListWidgetItem*,QListWidgetItem*)), SLOT(itemSelected(QListWidgetItem*,QListWidgetItem*)));
     connect(m_ui->listInactive, SIGNAL(itemClicked(QListWidgetItem*)), SLOT(itemSelected(QListWidgetItem*)));
 
@@ -96,7 +96,6 @@ void DlgBundleManager::refreshListData()
 
     m_ui->listInactive->clear();
     m_ui->listActive->clear();
-
 
     Q_FOREACH (const QString &f, bundleServer->blackListedFiles()) {
         KisResourceBundle *bundle = new KisResourceBundle(f);
@@ -172,6 +171,7 @@ void DlgBundleManager::accept()
         QByteArray ba = item->data(Qt::UserRole).toByteArray();
         KisResourceBundle *bundle = bundleServer->resourceByMD5(ba);
 
+
         if (bundle && bundle->isInstalled()) {
             bundle->uninstall();
             bundleServer->removeResourceAndBlacklist(bundle);
@@ -201,14 +201,14 @@ void DlgBundleManager::removeSelected()
 void DlgBundleManager::itemSelected(QListWidgetItem *current, QListWidgetItem *)
 {
     if (!current) {
-        m_ui->lblName->setText("");
-        m_ui->lblAuthor->setText("");
-        m_ui->lblEmail->setText("");
-        m_ui->lblLicense->setText("");
-        m_ui->lblWebsite->setText("");
-        m_ui->lblDescription->setPlainText("");
-        m_ui->lblCreated->setText("");
-        m_ui->lblUpdated->setText("");
+        m_ui->lblName->clear();
+        m_ui->lblAuthor->clear();
+        m_ui->lblEmail->clear();
+        m_ui->lblLicense->clear();
+        m_ui->lblWebsite->clear();
+        m_ui->lblDescription->clear();
+        m_ui->lblCreated->clear();
+        m_ui->lblUpdated->clear();
         m_ui->lblPreview->setPixmap(QPixmap::fromImage(QImage()));
         m_ui->listBundleContents->clear();
         m_ui->bnEditBundle->setEnabled(false);
@@ -229,6 +229,7 @@ void DlgBundleManager::itemSelected(QListWidgetItem *current, QListWidgetItem *)
                 }
             }
         }
+
 
         if (bundle) {
 
@@ -295,10 +296,13 @@ void DlgBundleManager::editBundle()
 {
     if (m_currentBundle) {
         DlgCreateBundle dlg(m_currentBundle);
+        m_activeBundles.remove(m_currentBundle->filename());
+        m_currentBundle = 0;
         if (dlg.exec() != QDialog::Accepted) {
             return;
         }
-        m_resourceManager->saveBundle(dlg);
+        m_currentBundle = m_resourceManager->saveBundle(dlg);
+        refreshListData();
     }
 }
 
@@ -309,6 +313,7 @@ void DlgBundleManager::fillListWidget(QList<KisResourceBundle *> bundles, QListW
 
     Q_FOREACH (KisResourceBundle *bundle, bundles) {
         QPixmap pixmap(ICON_SIZE, ICON_SIZE);
+        pixmap.fill(Qt::gray);
         if (!bundle->image().isNull()) {
             QImage scaled = bundle->image().scaled(ICON_SIZE, ICON_SIZE, Qt::KeepAspectRatio, Qt::SmoothTransformation);
             int x = (ICON_SIZE - scaled.width()) / 2;
@@ -316,9 +321,6 @@ void DlgBundleManager::fillListWidget(QList<KisResourceBundle *> bundles, QListW
             QPainter gc(&pixmap);
             gc.drawImage(x, y, scaled);
             gc.end();
-        }
-        else {
-            pixmap.fill(Qt::gray);
         }
 
         QListWidgetItem *item = new QListWidgetItem(pixmap, bundle->name());
@@ -370,6 +372,7 @@ void DlgBundleManager::slotCreateBundle() {
     if (m_actionManager) {
         KisAction *action = m_actionManager->actionByName("create_bundle");
         action->trigger();
+        refreshListData();
     }
 }
 

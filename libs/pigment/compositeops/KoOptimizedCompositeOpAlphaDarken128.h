@@ -71,7 +71,7 @@ struct AlphaDarkenCompositor128 {
 
         const Vc::float_v::IndexType indexes(Vc::IndexesFromZero);
         Vc::InterleavedMemoryWrapper<Pixel, Vc::float_v> data(const_cast<Pixel*>(sp));
-        (src_c1, src_c2, src_c3, src_alpha) = data[indexes];
+        tie(src_c1, src_c2, src_c3, src_alpha) = data[indexes];
 
         Vc::float_v msk_norm_alpha;
         if (haveMask) {
@@ -94,7 +94,7 @@ struct AlphaDarkenCompositor128 {
         Vc::float_v dst_alpha;
 
         Vc::InterleavedMemoryWrapper<Pixel, Vc::float_v> dataDest(dp);
-        (dst_c1, dst_c2, dst_c3, dst_alpha) = dataDest[indexes];
+        tie(dst_c1, dst_c2, dst_c3, dst_alpha) = dataDest[indexes];
 
         Vc::float_m empty_dst_pixels_mask = dst_alpha == zeroValue;
 
@@ -140,7 +140,7 @@ struct AlphaDarkenCompositor128 {
             Vc::float_v flow_norm_vec(oparams.flow);
             dst_alpha = (fullFlowAlpha - zeroFlowAlpha) * flow_norm_vec + zeroFlowAlpha;
         }
-        dataDest[indexes] = (dst_c1, dst_c2, dst_c3, dst_alpha);
+        dataDest[indexes] = tie(dst_c1, dst_c2, dst_c3, dst_alpha);
     }
 
     /**

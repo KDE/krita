@@ -24,7 +24,9 @@ enum CommandId {
     MoveShapeId = 9999,
     ResizeShapeId,
     TransformShapeId,
-    ChangeShapeTransparencyId
+    ChangeShapeTransparencyId,
+    ChangeShapeBackgroundId,
+    ChangeShapeStrokeId
 };
 
 }

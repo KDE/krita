@@ -26,6 +26,9 @@
 
 #include <klocalizedstring.h>
 
+#include "kis_command_ids.h"
+
+
 class Q_DECL_HIDDEN KoShapeStrokeCommand::Private
 {
 public:
@@ -121,4 +124,23 @@ void KoShapeStrokeCommand::undo()
         shape->update();
         ++strokeIt;
     }
+}
+
+int KoShapeStrokeCommand::id() const
+{
+    return KisCommandUtils::ChangeShapeStrokeId;
+}
+
+bool KoShapeStrokeCommand::mergeWith(const KUndo2Command *command)
+{
+    const KoShapeStrokeCommand *other = dynamic_cast<const KoShapeStrokeCommand*>(command);
+
+    if (!other ||
+        other->d->shapes != d->shapes) {
+
+        return false;
+    }
+
+    d->newStrokes = other->d->newStrokes;
+    return true;
 }

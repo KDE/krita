@@ -213,13 +213,6 @@
      <widget class="QWidget" name="pageGradient">
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
-        <widget class="QCheckBox" name="chkEditGradient">
-         <property name="text">
-          <string>Edit gradient on canvas</string>
-         </property>
-        </widget>
-       </item>
-       <item>
         <widget class="KisStopGradientEditor" name="wdgGradientEditor" native="true"/>
        </item>
        <item>

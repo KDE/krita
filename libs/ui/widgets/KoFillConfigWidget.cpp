@@ -359,7 +359,11 @@ void KoFillConfigWidget::styleButtonPressed(int buttonId)
             colorChanged();
             break;
         case KoFillConfigWidget::Gradient:
-            gradientResourceChanged();
+            if (d->activeGradient) {
+                activeGradientChanged();
+            } else {
+                gradientResourceChanged();
+            }
             break;
         case KoFillConfigWidget::Pattern:
             // Only select mode in the widget, don't set actual pattern :/

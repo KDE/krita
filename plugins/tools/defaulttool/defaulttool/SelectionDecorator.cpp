@@ -82,6 +82,8 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
     pen.setJoinStyle(Qt::RoundJoin);
     painter.setPen(pen);
 
+    const bool haveOnlyOneEditableShape = m_selection->selectedEditableShapes().size() == 1;
+
     bool editable = false;
 
     QList<KoShape*> selectedShapes = m_selection->selectedShapes();
@@ -91,8 +93,10 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
         painter.setWorldTransform(shape->absoluteTransformation(&converter) * painterMatrix);
         KoShape::applyConversion(painter, converter);
 
-        KisHandlePainterHelper helper(&painter);
-        helper.drawRubberLine(shape->outlineRect());
+        if (!haveOnlyOneEditableShape || !m_showStrokeFillGradientHandles) {
+            KisHandlePainterHelper helper(&painter);
+            helper.drawRubberLine(shape->outlineRect());
+        }
 
         if (!shape->isGeometryProtected()) {
             editable = true;
@@ -138,8 +142,7 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
         }
     }
 
-    if (editable && selectedShapes.size() == 1) {
-
+    if (haveOnlyOneEditableShape) {
         KoShape *shape = selectedShapes.first();
 
         if (m_showFillGradientHandles) {

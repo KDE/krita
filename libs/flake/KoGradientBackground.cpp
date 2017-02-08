@@ -71,8 +71,12 @@ KoGradientBackground::~KoGradientBackground()
 
 bool KoGradientBackground::compareTo(const KoShapeBackground *other) const
 {
-    Q_UNUSED(other);
-    return false;
+    Q_D(const KoGradientBackground);
+    const KoGradientBackground *otherGradient = dynamic_cast<const KoGradientBackground*>(other);
+
+    return otherGradient &&
+        d->matrix == otherGradient->d_func()->matrix &&
+        *d->gradient == *otherGradient->d_func()->gradient;
 }
 
 void KoGradientBackground::setTransform(const QTransform &matrix)

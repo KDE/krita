@@ -63,12 +63,20 @@ public:
      */
     void setHandleRadius(int radius);
 
-
     /**
      * Set true if you want to render gradient handles on the canvas.
      * Default value: false
      */
     void setShowFillGradientHandles(bool value);
+
+    /**
+     * Set true if you want to render gradient handles on the canvas.
+     * Default value: false
+     */
+    void setShowStrokeFillGradientHandles(bool value);
+
+private:
+    void paintGradientHandles(KoShape *shape, KoFlake::FillVariant fillVariant, QPainter &painter, QPen pen);
 
 private:
     KoFlake::AnchorPosition m_hotPosition;
@@ -76,6 +84,7 @@ private:
     int m_handleRadius;
     int m_lineWidth;
     bool m_showFillGradientHandles;
+    bool m_showStrokeFillGradientHandles;
 };
 
 #endif

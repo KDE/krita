@@ -38,6 +38,18 @@ class QTransform;
  */
 namespace KoFlake
 {
+    enum FillVariant {
+        Fill,
+        StrokeFill
+    };
+
+    enum FillType {
+        None,
+        Solid,
+        Gradient,
+        Pattern
+    };
+
     /// the selection type for KoSelection::selectedObjects()
     enum SelectionType {
         FullSelection,      ///< Create a list of all user-shapes in the selection. This excludes KoShapeGroup grouping objects that may be selected.

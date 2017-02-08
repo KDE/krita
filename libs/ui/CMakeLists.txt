@@ -256,6 +256,7 @@ set(kritaui_LIB_SRCS
     widgets/KisVisualTriangleSelectorShape.cpp
     widgets/KoStrokeConfigWidget.cpp
     widgets/KoFillConfigWidget.cpp
+    widgets/KoShapeFillWrapper.cpp
 
     input/kis_input_manager.cpp
     input/kis_input_manager_p.cpp

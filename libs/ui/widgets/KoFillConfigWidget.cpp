@@ -67,6 +67,7 @@
 #include "kis_canvas_resource_provider.h"
 #include <KoStopGradient.h>
 #include <QInputDialog>
+#include <KoShapeFillWrapper.h>
 
 #include "kis_global.h"
 #include "kis_debug.h"
@@ -177,78 +178,12 @@ static const char* const buttonpattern[]={
 class Q_DECL_HIDDEN KoFillConfigWidget::Private
 {
 public:
-    Private(FillType _fillType)
+    Private(KoFlake::FillVariant _fillVariant)
     : canvas(0),
       colorChangedCompressor(100, KisSignalCompressor::FIRST_ACTIVE),
       gradientChangedCompressor(100, KisSignalCompressor::FIRST_ACTIVE),
-      fillType(_fillType)
+      fillVariant(_fillVariant)
     {
-    }
-
-    QSharedPointer<KoShapeBackground> applyFillGradientStops(KoShape *shape, const KoStopGradient *stopGradient)
-    {
-        QScopedPointer<QGradient> srcQGradient(stopGradient->toQGradient());
-        QGradientStops stops = srcQGradient->stops();
-
-        if (!shape || !stops.count()) {
-            return QSharedPointer<KoShapeBackground>();
-        }
-
-        KoGradientBackground *newGradient = 0;
-        QSharedPointer<KoGradientBackground> oldGradient = qSharedPointerDynamicCast<KoGradientBackground>(shape->background());
-        if (oldGradient) {
-            // just copy the gradient and set the new stops
-            QGradient *g = KoFlake::mergeGradient(oldGradient->gradient(), srcQGradient.data());
-            newGradient = new KoGradientBackground(g);
-            newGradient->setTransform(oldGradient->transform());
-        }
-        else {
-            // No gradient yet, so create a new one.
-            QScopedPointer<QLinearGradient> fakeShapeGradient(new QLinearGradient(QPointF(0, 0), QPointF(1, 1)));
-            fakeShapeGradient->setCoordinateMode(QGradient::ObjectBoundingMode);
-
-            QGradient *g = KoFlake::mergeGradient(fakeShapeGradient.data(), srcQGradient.data());
-            newGradient = new KoGradientBackground(g);
-        }
-        return QSharedPointer<KoGradientBackground>(newGradient);
-    }
-
-    KoShapeStrokeSP applyFillGradientStops(KoShapeStrokeSP shapeStroke, const KoStopGradient *stopGradient)
-    {
-        KoShapeStrokeSP newStroke;
-
-        QScopedPointer<QGradient> srcQGradient(stopGradient->toQGradient());
-        QGradientStops stops = srcQGradient->stops();
-
-        if (!stops.count()) {
-            return newStroke;
-        }
-
-        QLinearGradient fakeShapeGradient(QPointF(0, 0), QPointF(1, 1));
-        fakeShapeGradient.setCoordinateMode(QGradient::ObjectBoundingMode);
-        QTransform gradientTransform;
-        const QGradient *shapeGradient = 0;
-
-        if (shapeStroke) {
-            newStroke = toQShared(new KoShapeStroke(*shapeStroke));
-            QBrush brush = newStroke->lineBrush();
-
-            gradientTransform = brush.transform();
-            shapeGradient = brush.gradient() ? brush.gradient() : &fakeShapeGradient;
-
-        } else {
-            newStroke = toQShared(new KoShapeStroke());
-            shapeGradient = &fakeShapeGradient;
-        }
-
-        {
-            QScopedPointer<QGradient> g(KoFlake::mergeGradient(shapeGradient, srcQGradient.data()));
-            QBrush newBrush = *g;
-            newBrush.setTransform(gradientTransform);
-            newStroke->setLineBrush(newBrush);
-        }
-
-        return newStroke;
     }
 
     KoColorPopupAction *colorAction;
@@ -263,14 +198,14 @@ public:
 
     QSharedPointer<KoStopGradient> activeGradient;
     KisSignalCompressor gradientChangedCompressor;
-    FillType fillType;
+    KoFlake::FillVariant fillVariant;
 
     Ui_KoFillConfigWidget *ui;
 };
 
-KoFillConfigWidget::KoFillConfigWidget(FillType type, QWidget *parent)
+KoFillConfigWidget::KoFillConfigWidget(KoFlake::FillVariant fillVariant, QWidget *parent)
     :  QWidget(parent)
-    , d(new Private(type))
+    , d(new Private(fillVariant))
 {
     // connect to the canvas
     KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
@@ -447,32 +382,13 @@ void KoFillConfigWidget::noColorSelected()
         return;
     }
 
-    KUndo2Command *command = 0;
+    KoShapeFillWrapper wrapper(selectedShapes, d->fillVariant);
+    KUndo2Command *command = wrapper.setColor(QColor());
 
-    if (d->fillType == Fill) {
-        command = new KoShapeBackgroundCommand(selectedShapes, QSharedPointer<KoShapeBackground>());
-    } else {
-        QList<KoShapeStrokeModelSP> strokes;
-
-        Q_FOREACH(KoShape *shape, selectedShapes) {
-            if (shape->stroke()) {
-                KoShapeStrokeSP stroke = qSharedPointerDynamicCast<KoShapeStroke>(shape->stroke());
-                KIS_SAFE_ASSERT_RECOVER_RETURN(stroke);
-
-                KoShapeStrokeSP newStroke(new KoShapeStroke(*stroke));
-                newStroke->setLineBrush(Qt::NoBrush);
-                newStroke->setColor(Qt::transparent);
-                strokes << newStroke;
-            } else {
-                strokes << KoShapeStrokeSP();
-            }
-        }
-
-        command = new KoShapeStrokeCommand(selectedShapes, strokes);
+    if (command) {
+        KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
+        canvasController->canvas()->addCommand(command);
     }
-
-    KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
-    canvasController->canvas()->addCommand(command);
 }
 
 void KoFillConfigWidget::colorChanged()
@@ -484,36 +400,13 @@ void KoFillConfigWidget::colorChanged()
         return;
     }
 
-    KUndo2Command *command = 0;
+    KoShapeFillWrapper wrapper(selectedShapes, d->fillVariant);
+    KUndo2Command *command = wrapper.setColor(d->colorAction->currentColor());
 
-    if (d->fillType == Fill) {
-        QSharedPointer<KoShapeBackground> fill(new KoColorBackground(d->colorAction->currentColor()));
-        command = new KoShapeBackgroundCommand(selectedShapes, fill);
-    } else {
-        QList<KoShapeStrokeModelSP> strokes;
-
-        Q_FOREACH(KoShape *shape, selectedShapes) {
-            if (shape->stroke()) {
-                KoShapeStrokeSP stroke = qSharedPointerDynamicCast<KoShapeStroke>(shape->stroke());
-                KIS_SAFE_ASSERT_RECOVER_RETURN(stroke);
-
-                KoShapeStrokeSP newStroke(new KoShapeStroke(*stroke));
-                newStroke->setLineBrush(Qt::NoBrush);
-                newStroke->setColor(d->colorAction->currentColor());
-                strokes << newStroke;
-            } else {
-                KoShapeStrokeSP newStroke(new KoShapeStroke());
-                newStroke->setColor(d->colorAction->currentColor());
-                strokes << newStroke;
-            }
-        }
-
-        command = new KoShapeStrokeCommand(selectedShapes, strokes);
+    if (command) {
+        KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
+        canvasController->canvas()->addCommand(command);
     }
-
-
-    KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
-    canvasController->canvas()->addCommand(command);
 }
 
 template <class ResourceServer>
@@ -621,32 +514,14 @@ void KoFillConfigWidget::setNewGradientBackgroundToShape()
 
     KisAcyclicSignalConnector::Blocker b(d->shapeChangedAcyclicConnector);
 
+    KoShapeFillWrapper wrapper(selectedShapes, d->fillVariant);
+    QScopedPointer<QGradient> srcQGradient(d->activeGradient->toQGradient());
+    KUndo2Command *command = wrapper.applyGradientStopsOnly(srcQGradient.data());
 
-
-    KUndo2Command *command = 0;
-
-    if (d->fillType == Fill) {
-        QList<QSharedPointer<KoShapeBackground>> newBackgrounds;
-
-        foreach (KoShape *shape, selectedShapes) {
-            newBackgrounds <<  d->applyFillGradientStops(shape, d->activeGradient.data());
-        }
-
-        command = new KoShapeBackgroundCommand(selectedShapes, newBackgrounds);
-
-    } else {
-        QList<KoShapeStrokeModelSP> strokes;
-
-        Q_FOREACH(KoShape *shape, selectedShapes) {
-            KoShapeStrokeSP stroke = shape->stroke() ? qSharedPointerDynamicCast<KoShapeStroke>(shape->stroke()) : KoShapeStrokeSP();
-            strokes << d->applyFillGradientStops(stroke, d->activeGradient.data());
-        }
-
-        command = new KoShapeStrokeCommand(selectedShapes, strokes);
+    if (command) {
+        KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
+        canvasController->canvas()->addCommand(command);
     }
-
-    KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
-    canvasController->canvas()->addCommand(command);
 }
 
 void KoFillConfigWidget::updateGradientSaveButtonAvailability()
@@ -698,107 +573,14 @@ void KoFillConfigWidget::showEvent(QShowEvent *event)
     shapeChanged();
 }
 
-struct ShapeFillFetchPolicyBase
-{
-    enum Type {
-        None = 0,
-        Solid,
-        Gradient,
-        Pattern
-    };
-};
-
-struct ShapeBackgroundFetchPolicy : public ShapeFillFetchPolicyBase
-{
-    typedef QSharedPointer<KoShapeBackground> PointerType;
-    static PointerType getBackground(KoShape *shape) {
-        return shape->background();
-    }
-    static Type type(KoShape *shape) {
-        QSharedPointer<KoShapeBackground> background = shape->background();
-        QSharedPointer<KoColorBackground> colorBackground = qSharedPointerDynamicCast<KoColorBackground>(background);
-        QSharedPointer<KoGradientBackground> gradientBackground = qSharedPointerDynamicCast<KoGradientBackground>(background);
-        QSharedPointer<KoPatternBackground> patternBackground = qSharedPointerDynamicCast<KoPatternBackground>(background);
-
-        return colorBackground ? Solid :
-               gradientBackground ? Gradient :
-               patternBackground ? Pattern : None;
-    }
-
-    static QColor color(KoShape *shape) {
-        QSharedPointer<KoColorBackground> colorBackground = qSharedPointerDynamicCast<KoColorBackground>(shape->background());
-        return colorBackground ? colorBackground->color() : QColor();
-    }
-
-    static const QGradient* gradient(KoShape *shape) {
-        QSharedPointer<KoGradientBackground> gradientBackground = qSharedPointerDynamicCast<KoGradientBackground>(shape->background());
-        return gradientBackground ? gradientBackground->gradient() : 0;
-    }
-};
-
-struct ShapeStrokeFillFetchPolicy : public ShapeFillFetchPolicyBase
-{
-    typedef KoShapeStrokeModelSP PointerType;
-    static PointerType getBackground(KoShape *shape) {
-        return shape->stroke();
-    }
-    static Type type(KoShape *shape) {
-        KoShapeStrokeSP stroke = qSharedPointerDynamicCast<KoShapeStroke>(shape->stroke());
-        if (!stroke) return None;
-
-        // TODO: patterns are not supported yet!
-        return stroke->lineBrush().gradient() ? Gradient : Solid;
-    }
-
-    static QColor color(KoShape *shape) {
-        KoShapeStrokeSP stroke = qSharedPointerDynamicCast<KoShapeStroke>(shape->stroke());
-        return stroke ? stroke->color() : QColor();
-    }
-
-    static const QGradient* gradient(KoShape *shape) {
-        KoShapeStrokeSP stroke = qSharedPointerDynamicCast<KoShapeStroke>(shape->stroke());
-        return stroke ? stroke->lineBrush().gradient() : 0;
-    }
-};
-
-template <class Policy>
-bool compareBackgrounds(const QList<KoShape*> shapes)
-{
-    typename Policy::PointerType bg =
-        Policy::getBackground(shapes.first());
-
-    Q_FOREACH (KoShape *shape, shapes) {
-        if (
-            !(
-              (!bg && !Policy::getBackground(shape)) ||
-              (bg && bg->compareTo(Policy::getBackground(shape).data()))
-             )) {
-
-            return false;
-        }
-    }
-
-    return true;
-}
-
 void KoFillConfigWidget::shapeChanged()
-{
-    if (d->fillType == Fill) {
-        shapeChangedImpl<ShapeBackgroundFetchPolicy>();
-
-    } else {
-        shapeChangedImpl<ShapeStrokeFillFetchPolicy>();
-    }
-}
-
-template <class Policy>
-void KoFillConfigWidget::shapeChangedImpl()
 {
     if (!isVisible()) return;
 
     QList<KoShape*> shapes = currentShapes();
 
-    if (shapes.isEmpty() || (shapes.size() > 1 && !compareBackgrounds<Policy>(shapes))) {
+    if (shapes.isEmpty() ||
+        (shapes.size() > 1 && KoShapeFillWrapper(shapes, d->fillVariant).isMixedFill())) {
 
         Q_FOREACH (QAbstractButton *button, d->group->buttons()) {
             button->setEnabled(!shapes.isEmpty());
@@ -813,30 +595,30 @@ void KoFillConfigWidget::shapeChangedImpl()
         }
 
         KoShape *shape = shapes.first();
-        updateWidget<Policy>(shape);
+        updateWidget(shape);
     }
 }
 
-template <class Policy>
 void KoFillConfigWidget::updateWidget(KoShape *shape)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(shape);
 
     StyleButton newActiveButton = None;
+    KoShapeFillWrapper wrapper(shape, d->fillVariant);
 
-    switch (Policy::type(shape)) {
-    case None:
+    switch (wrapper.type()) {
+    case KoFlake::None:
         break;
-    case Solid:
+    case KoFlake::Solid:
         newActiveButton = KoFillConfigWidget::Solid;
-        d->colorAction->setCurrentColor(Policy::color(shape));
+        d->colorAction->setCurrentColor(wrapper.color());
         break;
-    case Gradient:
+    case KoFlake::Gradient:
         newActiveButton = KoFillConfigWidget::Gradient;
-        uploadNewGradientBackground(Policy::gradient(shape));
+        uploadNewGradientBackground(wrapper.gradient());
         updateGradientSaveButtonAvailability();
         break;
-    case Pattern:
+    case KoFlake::Pattern:
         newActiveButton = KoFillConfigWidget::Pattern;
         break;
     }

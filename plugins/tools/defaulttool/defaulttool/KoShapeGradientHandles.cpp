@@ -22,10 +22,12 @@
 #include <KoShape.h>
 #include <KoGradientBackground.h>
 #include <KoShapeBackgroundCommand.h>
+#include <KoShapeFillWrapper.h>
 #include <kis_assert.h>
 
-KoShapeGradientHandles::KoShapeGradientHandles(KoShape *shape)
-    : m_shape(shape)
+KoShapeGradientHandles::KoShapeGradientHandles(KoFlake::FillVariant fillVariant, KoShape *shape)
+    : m_fillVariant(fillVariant),
+      m_shape(shape)
 {
 }
 
@@ -91,21 +93,19 @@ KUndo2Command *KoShapeGradientHandles::moveGradientHandle(KoShapeGradientHandles
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(handleType != Handle::None, 0);
 
-    QSharedPointer<KoShapeBackground> bg = m_shape->background();
-    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(bg, 0);
-
-    QSharedPointer<KoGradientBackground> gradientBg =
-            qSharedPointerDynamicCast<KoGradientBackground>(bg);
-    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(gradientBg, 0);
+    KoShapeFillWrapper wrapper(m_shape, m_fillVariant);
+    const QGradient *originalGradient = wrapper.gradient();
+    QTransform originalTransform = wrapper.gradientTransform();
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(originalGradient, 0);
 
     QGradient *newGradient = 0;
 
-    switch (gradientBg->gradient()->type()) {
+    switch (originalGradient->type()) {
     case QGradient::LinearGradient: {
         KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(handleType == Handle::LinearStart ||
                                              handleType == Handle::LinearEnd, 0);
 
-        newGradient = KoFlake::cloneGradient(gradientBg->gradient());
+        newGradient = KoFlake::cloneGradient(originalGradient);
         QLinearGradient *lgradient = static_cast<QLinearGradient*>(newGradient);
 
         if (handleType == Handle::LinearStart) {
@@ -117,7 +117,7 @@ KUndo2Command *KoShapeGradientHandles::moveGradientHandle(KoShapeGradientHandles
         break;
     }
     case QGradient::RadialGradient: {
-        newGradient = KoFlake::cloneGradient(gradientBg->gradient());
+        newGradient = KoFlake::cloneGradient(originalGradient);
         QRadialGradient *rgradient = static_cast<QRadialGradient*>(newGradient);
 
         if (handleType == Handle::RadialCenter) {
@@ -139,10 +139,7 @@ KUndo2Command *KoShapeGradientHandles::moveGradientHandle(KoShapeGradientHandles
         break;
     }
 
-    QSharedPointer<KoGradientBackground> newFill(
-        new KoGradientBackground(newGradient, gradientBg->transform()));
-
-    return new KoShapeBackgroundCommand(m_shape, newFill);
+    return wrapper.setGradient(newGradient, originalTransform);
 }
 
 KoShapeGradientHandles::Handle KoShapeGradientHandles::getHandle(KoShapeGradientHandles::Handle::Type handleType)
@@ -160,14 +157,8 @@ KoShapeGradientHandles::Handle KoShapeGradientHandles::getHandle(KoShapeGradient
 }
 
 const QGradient *KoShapeGradientHandles::gradient() const {
-    QSharedPointer<KoShapeBackground> bg = m_shape->background();
-    if (!bg) return 0;
-
-    QSharedPointer<KoGradientBackground> gradientBg =
-            qSharedPointerDynamicCast<KoGradientBackground>(bg);
-    if (!gradientBg) return 0;
-
-    return gradientBg->gradient();
+    KoShapeFillWrapper wrapper(m_shape, m_fillVariant);
+    return wrapper.gradient();
 }
 
 QPointF KoShapeGradientHandles::getNewHandlePos(const QPointF &oldPos, const QPointF &absoluteOffset, QGradient::CoordinateMode mode)

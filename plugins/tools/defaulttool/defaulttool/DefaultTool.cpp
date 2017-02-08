@@ -79,6 +79,7 @@
 
 namespace {
 static const QString EditFillGradientFactoryId = "edit_fill_gradient";
+static const QString EditStrokeGradientFactoryId = "edit_stroke_gradient";
 }
 
 QPolygonF selectionPolygon(KoSelection *selection)
@@ -144,9 +145,11 @@ public:
 class DefaultTool::MoveGradientHandleInteractionFactory : public KoInteractionStrategyFactory
 {
 public:
-    MoveGradientHandleInteractionFactory(int priority, const QString &id, DefaultTool *_q)
+    MoveGradientHandleInteractionFactory(KoFlake::FillVariant fillVariant,
+                                         int priority, const QString &id, DefaultTool *_q)
         : KoInteractionStrategyFactory(priority, id),
-          q(_q)
+          q(_q),
+          m_fillVariant(fillVariant)
     {
     }
 
@@ -158,7 +161,7 @@ public:
             KoShape *shape = onlyEditableShape();
             KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(shape, 0);
 
-            return new ShapeGradientEditStrategy(q, shape, m_currentHandle.type, ev->point);
+            return new ShapeGradientEditStrategy(q, m_fillVariant, shape, m_currentHandle.type, ev->point);
         }
 
         return 0;
@@ -211,7 +214,7 @@ private:
             const QPointF viewPoint = converter->documentToView(pos);
             qreal minDistanceSq = std::numeric_limits<qreal>::max();
 
-            KoShapeGradientHandles sh(shape);
+            KoShapeGradientHandles sh(m_fillVariant, shape);
             Q_FOREACH (const KoShapeGradientHandles::Handle &handle, sh.handles()) {
                 const QPointF handlePoint = converter->documentToView(handle.pos);
                 const qreal distanceSq = kisSquareDistance(viewPoint, handlePoint);
@@ -223,13 +226,12 @@ private:
             }
         }
 
-
-
         return result;
     }
 
 private:
     DefaultTool *q;
+    KoFlake::FillVariant m_fillVariant;
     KoShapeGradientHandles::Handle m_currentHandle;
 };
 
@@ -316,9 +318,22 @@ void DefaultTool::slotActivateEditFillGradient(bool value)
 {
     if (value) {
         addInteractionFactory(
-            new MoveGradientHandleInteractionFactory(0, EditFillGradientFactoryId, this));
+            new MoveGradientHandleInteractionFactory(KoFlake::Fill,
+                                                     1, EditFillGradientFactoryId, this));
     } else {
         removeInteractionFactory(EditFillGradientFactoryId);
+    }
+    repaintDecorations();
+}
+
+void DefaultTool::slotActivateEditStrokeGradient(bool value)
+{
+    if (value) {
+        addInteractionFactory(
+            new MoveGradientHandleInteractionFactory(KoFlake::StrokeFill,
+                                                     0, EditStrokeGradientFactoryId, this));
+    } else {
+        removeInteractionFactory(EditStrokeGradientFactoryId);
     }
     repaintDecorations();
 }
@@ -623,6 +638,7 @@ void DefaultTool::paint(QPainter &painter, const KoViewConverter &converter)
     decorator.setSelection(koSelection());
     decorator.setHandleRadius(handleRadius());
     decorator.setShowFillGradientHandles(hasInteractioFactory(EditFillGradientFactoryId));
+    decorator.setShowStrokeFillGradientHandles(hasInteractioFactory(EditStrokeGradientFactoryId));
     decorator.paint(painter, converter);
 
     KoInteractionTool::paint(painter, converter);
@@ -1139,6 +1155,10 @@ QList<QPointer<QWidget> > DefaultTool::createOptionWidgets()
     connect(tabbedWidget,
             SIGNAL(sigSwitchModeEditFillGradient(bool)),
             SLOT(slotActivateEditFillGradient(bool)));
+
+    connect(tabbedWidget,
+            SIGNAL(sigSwitchModeEditStrokeGradient(bool)),
+            SLOT(slotActivateEditStrokeGradient(bool)));
 
     return widgets;
 }

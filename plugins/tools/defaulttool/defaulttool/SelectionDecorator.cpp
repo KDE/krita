@@ -39,6 +39,7 @@ SelectionDecorator::SelectionDecorator(KoCanvasResourceManager *resourceManager)
     , m_handleRadius(7)
     , m_lineWidth(2)
     , m_showFillGradientHandles(false)
+    , m_showStrokeFillGradientHandles(false)
 {
     m_hotPosition =
         KoFlake::AnchorPosition(
@@ -59,6 +60,11 @@ void SelectionDecorator::setHandleRadius(int radius)
 void SelectionDecorator::setShowFillGradientHandles(bool value)
 {
     m_showFillGradientHandles = value;
+}
+
+void SelectionDecorator::setShowStrokeFillGradientHandles(bool value)
+{
+    m_showStrokeFillGradientHandles = value;
 }
 
 void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &converter)
@@ -132,41 +138,46 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
         }
     }
 
-    if (m_showFillGradientHandles &&
-        editable && selectedShapes.size() == 1) {
+    if (editable && selectedShapes.size() == 1) {
 
         KoShape *shape = selectedShapes.first();
 
-        KoShapeGradientHandles gradientHandles(shape);
-        QVector<KoShapeGradientHandles::Handle> handles = gradientHandles.handles();
-
-        KisHandlePainterHelper helper(&painter);
-        const QTransform t = shape->absoluteTransformation(0).inverted();
-
-        painter.setPen(pen);
-        painter.setBrush(Qt::white);
-
-        if (gradientHandles.type() == QGradient::LinearGradient) {
-            KIS_SAFE_ASSERT_RECOVER_NOOP(handles.size() == 2);
-
-            if (handles.size() == 2) {
-                helper.drawGradientArrow(t.map(handles[0].pos), t.map(handles[1].pos), 1.5 * m_handleRadius);
-            }
+        if (m_showFillGradientHandles) {
+            paintGradientHandles(shape, KoFlake::Fill, painter, pen);
+        } else if (m_showStrokeFillGradientHandles) {
+            paintGradientHandles(shape, KoFlake::StrokeFill, painter, pen);
         }
-
-        pen.setColor(QColor(255, 197, 39));
-        painter.setPen(pen);
-        painter.setBrush(Qt::white);
-
-        Q_FOREACH (const KoShapeGradientHandles::Handle &h, handles) {
-            if (h.type == KoShapeGradientHandles::Handle::RadialCenter) {
-                helper.drawGradientCrossHandle(t.map(h.pos), 1.2 * m_handleRadius);
-            } else {
-                helper.drawGradientHandle(t.map(h.pos), 1.2 * m_handleRadius);
-            }
-        }
-
-
     }
 }
 
+void SelectionDecorator::paintGradientHandles(KoShape *shape, KoFlake::FillVariant fillVariant, QPainter &painter, QPen pen)
+{
+    KoShapeGradientHandles gradientHandles(fillVariant, shape);
+    QVector<KoShapeGradientHandles::Handle> handles = gradientHandles.handles();
+
+    KisHandlePainterHelper helper(&painter);
+    const QTransform t = shape->absoluteTransformation(0).inverted();
+
+    painter.setPen(pen);
+    painter.setBrush(Qt::white);
+
+    if (gradientHandles.type() == QGradient::LinearGradient) {
+        KIS_SAFE_ASSERT_RECOVER_NOOP(handles.size() == 2);
+
+        if (handles.size() == 2) {
+            helper.drawGradientArrow(t.map(handles[0].pos), t.map(handles[1].pos), 1.5 * m_handleRadius);
+        }
+    }
+
+    pen.setColor(QColor(255, 197, 39));
+    painter.setPen(pen);
+    painter.setBrush(Qt::white);
+
+    Q_FOREACH (const KoShapeGradientHandles::Handle &h, handles) {
+        if (h.type == KoShapeGradientHandles::Handle::RadialCenter) {
+            helper.drawGradientCrossHandle(t.map(h.pos), 1.2 * m_handleRadius);
+        } else {
+            helper.drawGradientHandle(t.map(h.pos), 1.2 * m_handleRadius);
+        }
+    }
+}

@@ -110,6 +110,7 @@ private Q_SLOTS:
     void selectionUngroup();
 
     void slotActivateEditFillGradient(bool value);
+    void slotActivateEditStrokeGradient(bool value);
 
     /// Update actions on selection change
     void updateActions();

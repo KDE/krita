@@ -26,7 +26,9 @@
 class ShapeGradientEditStrategy : public KoInteractionStrategy
 {
 public:
-    ShapeGradientEditStrategy(KoToolBase *tool, KoShape *shape,
+    ShapeGradientEditStrategy(KoToolBase *tool,
+                              KoFlake::FillVariant fillVariant,
+                              KoShape *shape,
                               KoShapeGradientHandles::Handle::Type startHandleType,
                               const QPointF &clicked);
     ~ShapeGradientEditStrategy();

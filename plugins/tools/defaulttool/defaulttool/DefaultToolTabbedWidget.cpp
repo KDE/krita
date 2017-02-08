@@ -40,7 +40,7 @@ DefaultToolTabbedWidget::DefaultToolTabbedWidget(KoInteractionTool *tool, QWidge
     strokeWidget->setCanvas(tool->canvas());
     addTab(strokeWidget, KisIconUtils::loadIcon("krita_tool_line"), QString());
 
-    KoFillConfigWidget *fillWidget = new KoFillConfigWidget(KoFillConfigWidget::Fill, this);
+    KoFillConfigWidget *fillWidget = new KoFillConfigWidget(KoFlake::Fill, this);
     fillWidget->setWindowTitle(i18n("Fill"));
     // TODO: pass canvas to teh c-tor instead
     //fillWidget->setCanvas(tool->canvas());
@@ -58,11 +58,15 @@ void DefaultToolTabbedWidget::slotCurrentIndexChanged(int current)
 {
     if (m_oldTabIndex == FillTab) {
         emit sigSwitchModeEditFillGradient(false);
+    } else if (m_oldTabIndex == StrokeTab) {
+        emit sigSwitchModeEditStrokeGradient(false);
     }
 
     m_oldTabIndex = current;
 
     if (current == FillTab) {
         emit sigSwitchModeEditFillGradient(true);
+    } else if (m_oldTabIndex == StrokeTab) {
+        emit sigSwitchModeEditStrokeGradient(true);
     }
 }

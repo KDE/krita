@@ -39,6 +39,7 @@ public:
 
 Q_SIGNALS:
     void sigSwitchModeEditFillGradient(bool value);
+    void sigSwitchModeEditStrokeGradient(bool value);
 
 private Q_SLOTS:
     void slotCurrentIndexChanged(int current);

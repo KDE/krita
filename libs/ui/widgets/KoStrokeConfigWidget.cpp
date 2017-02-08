@@ -258,7 +258,7 @@ KoStrokeConfigWidget::KoStrokeConfigWidget(QWidget * parent)
     }
 
     {
-        d->fillConfigWidget = new KoFillConfigWidget(KoFillConfigWidget::Stroke, this);
+        d->fillConfigWidget = new KoFillConfigWidget(KoFlake::StrokeFill, this);
         mainLayout->addWidget(d->fillConfigWidget);
     }
 

@@ -34,9 +34,9 @@
 
 struct ShapeGradientEditStrategy::Private
 {
-    Private(const QPointF &_start, KoShape *shape)
+    Private(const QPointF &_start, KoShape *shape, KoFlake::FillVariant fillVariant)
         : start(_start),
-          gradientHandles(shape)
+          gradientHandles(fillVariant, shape)
     {
     }
 
@@ -49,11 +49,12 @@ struct ShapeGradientEditStrategy::Private
 
 
 ShapeGradientEditStrategy::ShapeGradientEditStrategy(KoToolBase *tool,
+                                                     KoFlake::FillVariant fillVariant,
                                                      KoShape *shape,
                                                      KoShapeGradientHandles::Handle::Type startHandleType,
                                                      const QPointF &clicked)
     : KoInteractionStrategy(tool)
-    , m_d(new Private(clicked, shape))
+    , m_d(new Private(clicked, shape, fillVariant))
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(shape);
 

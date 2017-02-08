@@ -105,7 +105,7 @@ public:
     virtual bool hasTransparency() const;
     virtual void paint(KoShape *shape, QPainter &painter, const KoViewConverter &converter);
 
-    virtual bool compareTo(const KoShapeStrokeModel *other);
+    virtual bool compareFillTo(const KoShapeStrokeModel *other);
 
 private:
     class Private;

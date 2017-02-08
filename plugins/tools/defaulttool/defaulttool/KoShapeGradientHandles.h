@@ -20,8 +20,8 @@
 #define KOSHAPEGRADIENTHANDLES_H
 
 #include <QPointF>
-
 #include <QGradient>
+#include <KoFlake.h>
 
 class KoShape;
 class KoViewConverter;
@@ -48,7 +48,7 @@ public:
     };
 
 public:
-    KoShapeGradientHandles(KoShape *shape);
+    KoShapeGradientHandles(KoFlake::FillVariant fillVariant, KoShape *shape);
     QVector<Handle> handles(const KoViewConverter *converter = 0) const;
     QGradient::Type type() const;
 
@@ -62,6 +62,7 @@ private:
     QPointF getNewHandlePos(const QPointF &oldPos, const QPointF &absoluteOffset, QGradient::CoordinateMode mode);
 
 private:
+    KoFlake::FillVariant m_fillVariant;
     KoShape *m_shape;
 };
 

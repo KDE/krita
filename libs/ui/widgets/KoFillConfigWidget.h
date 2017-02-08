@@ -25,6 +25,7 @@
 
 #include <QWidget>
 #include <QSharedPointer>
+#include <KoFlake.h>
 
 class KoCanvasBase;
 class KoShapeBackground;
@@ -42,13 +43,7 @@ class KRITAUI_EXPORT KoFillConfigWidget : public QWidget
     };
 
 public:
-    enum FillType {
-        Fill,
-        Stroke
-    };
-
-public:
-    explicit KoFillConfigWidget(FillType type, QWidget *parent);
+    explicit KoFillConfigWidget(KoFlake::FillVariant fillVariant, QWidget *parent);
     ~KoFillConfigWidget();
 
     /// Returns the list of the selected shape
@@ -85,11 +80,7 @@ private Q_SLOTS:
 
 private:
     /// update the widget with the KoShape background
-    template <class Policy>
     void updateWidget(KoShape *shape);
-
-    template <class Policy>
-    void shapeChangedImpl();
 
     void uploadNewGradientBackground(const QGradient *gradient);
     void setNewGradientBackgroundToShape();

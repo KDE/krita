@@ -29,6 +29,7 @@ Name[sv]=Design film 16:10 [ 2484x1200, 96 punkter/tum RGB, 8 bitar ]
 Name[tr]=Sineme tasarla 16:10 [ 2484x1200 , 96dpi RGB , 8bit ]
 Name[uk]=Компонування кіноекрана 16:10 [2484⨯1200, 96 т./д., RGB, 8 бітів]
 Name[x-test]=xxDesign cinema 16:10 [ 2484x1200 , 96dpi RGB , 8bit ]xx
+Name[zh_CN]=设计影院 16:10 [ 2484x1200 像素, 96dpi RGB , 8 位 ]
 Type=Link
 URL[$e]=.source/Designcinema16_10_2484x1200_96dpiRGB_8bit_.kra
 X-KDE-Hidden=false

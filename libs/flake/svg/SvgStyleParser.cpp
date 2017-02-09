@@ -47,6 +47,7 @@ public:
         styleAttributes << "stroke" << "stroke-width" << "stroke-linejoin" << "stroke-linecap";
         styleAttributes << "stroke-dasharray" << "stroke-dashoffset" << "stroke-opacity" << "stroke-miterlimit";
         styleAttributes << "opacity" << "filter" << "clip-path" << "clip-rule" << "mask";
+        styleAttributes << "marker" << "marker-start" << "marker-mid" << "marker-end";
     }
 
     SvgLoadingContext &context;
@@ -307,6 +308,32 @@ void SvgStyleParser::parsePA(SvgGraphicsContext *gc, const QString &command, con
             unsigned int start = params.indexOf('#') + 1;
             unsigned int end = params.indexOf(')', start);
             gc->clipMaskId = params.mid(start, end - start);
+        }
+    } else if (command == "marker-start") {
+           if (params != "none" && params.startsWith("url(")) {
+               unsigned int start = params.indexOf('#') + 1;
+               unsigned int end = params.indexOf(')', start);
+               gc->markerStartId = params.mid(start, end - start);
+           }
+    } else if (command == "marker-end") {
+        if (params != "none" && params.startsWith("url(")) {
+            unsigned int start = params.indexOf('#') + 1;
+            unsigned int end = params.indexOf(')', start);
+            gc->markerEndId = params.mid(start, end - start);
+        }
+    } else if (command == "marker-mid") {
+        if (params != "none" && params.startsWith("url(")) {
+            unsigned int start = params.indexOf('#') + 1;
+            unsigned int end = params.indexOf(')', start);
+            gc->markerMidId = params.mid(start, end - start);
+        }
+    }  else if (command == "marker") {
+        if (params != "none" && params.startsWith("url(")) {
+            unsigned int start = params.indexOf('#') + 1;
+            unsigned int end = params.indexOf(')', start);
+            gc->markerStartId = params.mid(start, end - start);
+            gc->markerMidId = gc->markerStartId;
+            gc->markerEndId = gc->markerStartId;
         }
     }
 

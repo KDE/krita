@@ -30,6 +30,8 @@ class KoShapeLoadingContext;
 class KoShapeSavingContext;
 class QString;
 class QPainterPath;
+class KoShape;
+class QPainter;
 
 class  KRITAFLAKE_EXPORT KoMarker : public QSharedData
 {
@@ -70,6 +72,41 @@ public:
     QPainterPath path(qreal width) const;
 
     bool operator==(const KoMarker &other) const;
+
+    enum MarkerCoordinateSystem {
+        StrokeWidth,
+        UserSpaceOnUse
+    };
+
+    void setCoordinateSystem(MarkerCoordinateSystem value);
+    MarkerCoordinateSystem coordinateSystem() const;
+
+    static MarkerCoordinateSystem coordinateSystemFromString(const QString &value);
+    static QString coordinateSystemToString(MarkerCoordinateSystem value);
+
+    void setReferencePoint(const QPointF &value);
+    QPointF referencePoint() const;
+
+    void setReferenceSize(const QSizeF &size);
+    QSizeF referenceSize() const;
+
+    bool hasAutoOtientation() const;
+    void setAutoOrientation(bool value);
+
+    // measured in radians!
+    qreal explicitOrientation() const;
+
+    // measured in radians!
+    void setExplicitOrientation(qreal value);
+
+    void setShapes(const QList<KoShape*> &shapes);
+    QList<KoShape*> shapes() const;
+
+    /**
+     * @brief paintAtOrigin paints the marker at the position \p pos.
+     *        Scales and rotates the masrker if needed.
+     */
+    void paintAtPosition(QPainter *painter, const QPointF &pos, qreal strokeWidth, qreal nodeAngle);
 
 private:
     class Private;

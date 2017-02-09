@@ -63,8 +63,10 @@
 #include "parsers/SvgTransformParser.h"
 #include "kis_pointer_utils.h"
 #include <KoVectorPatternBackground.h>
+#include <KoMarker.h>
 
 #include "kis_debug.h"
+#include "kis_global.h"
 
 
 SvgParser::SvgParser(KoDocumentResourceManager *documentResourceManager)
@@ -529,6 +531,48 @@ bool SvgParser::parseFilter(const KoXmlElement &e, const KoXmlElement &reference
     return true;
 }
 
+bool SvgParser::parseMarker(const KoXmlElement &e)
+{
+    const QString id = e.attribute("id");
+    if (id.isEmpty()) return false;
+
+    QScopedPointer<KoMarker> marker(new KoMarker());
+    marker->setCoordinateSystem(
+        KoMarker::coordinateSystemFromString(e.attribute("markerUnits", "strokeWidth")));
+
+    marker->setReferencePoint(QPointF(parseUnitX(e.attribute("refX")),
+                                      parseUnitY(e.attribute("refY"))));
+
+    marker->setReferenceSize(QSizeF(parseUnitX(e.attribute("markerWidth", "3")),
+                                     parseUnitY(e.attribute("markerHeight", "3"))));
+
+    const QString orientation = e.attribute("orient", "0");
+
+    if (orientation == "auto") {
+        marker->setAutoOrientation(true);
+    } else {
+        // TODO: special angular values!
+        marker->setExplicitOrientation(kisDegreesToRadians(parseUnitXY(orientation)));
+    }
+
+    // ensure that the clip path is loaded in local coordinates system
+    m_context.pushGraphicsContext(e);
+    m_context.currentGC()->matrix = QTransform();
+    m_context.currentGC()->currentBoundingBox = QRectF(QPointF(0, 0), marker->referenceSize());
+
+    KoShape *markerShape = parseGroup(e);
+
+    m_context.popGraphicsContext();
+
+    if (!markerShape) return false;
+
+    marker->setShapes({markerShape});
+
+    m_markers.insert(id, QExplicitlySharedDataPointer<KoMarker>(marker.take()));
+
+    return true;
+}
+
 bool SvgParser::parseClipPath(const KoXmlElement &e)
 {
     SvgClipPathHelper clipPath;
@@ -618,6 +662,10 @@ void SvgParser::applyCurrentStyle(KoShape *shape, const QPointF &shapeToOriginal
         applyStrokeStyle(shape);
     }
 
+    if (KoPathShape *pathShape = dynamic_cast<KoPathShape*>(shape)) {
+        applyMarkers(pathShape);
+    }
+
     applyFilter(shape);
     applyClipping(shape, shapeToOriginalUserCoordinates);
     applyMaskClipping(shape, shapeToOriginalUserCoordinates);
@@ -658,6 +706,11 @@ void SvgParser::applyStyle(KoShape *obj, const SvgStyles &styles, const QPointF 
         applyFillStyle(obj);
         applyStrokeStyle(obj);
     }
+
+    if (KoPathShape *pathShape = dynamic_cast<KoPathShape*>(obj)) {
+        applyMarkers(pathShape);
+    }
+
     applyFilter(obj);
     applyClipping(obj, shapeToOriginalUserCoordinates);
     applyMaskClipping(obj, shapeToOriginalUserCoordinates);
@@ -943,6 +996,25 @@ void SvgParser::applyFilter(KoShape *shape)
     }
 }
 
+void SvgParser::applyMarkers(KoPathShape *shape)
+{
+    SvgGraphicsContext *gc = m_context.currentGC();
+    if (!gc)
+        return;
+
+    if (!gc->markerStartId.isEmpty() && m_markers.contains(gc->markerStartId)) {
+        shape->setMarkerNew(m_markers[gc->markerStartId].data(), KoPathShape::StartMarker);
+    }
+
+    if (!gc->markerMidId.isEmpty() && m_markers.contains(gc->markerMidId)) {
+        shape->setMarkerNew(m_markers[gc->markerMidId].data(), KoPathShape::MidMarker);
+    }
+
+    if (!gc->markerEndId.isEmpty() && m_markers.contains(gc->markerEndId)) {
+        shape->setMarkerNew(m_markers[gc->markerEndId].data(), KoPathShape::EndMarker);
+    }
+}
+
 void SvgParser::applyClipping(KoShape *shape, const QPointF &shapeToOriginalUserCoordinates)
 {
     SvgGraphicsContext *gc = m_context.currentGC();
@@ -1224,6 +1296,8 @@ QList<KoShape*> SvgParser::parseSingleElement(const KoXmlElement &b)
         parseClipPath(b);
     } else if (b.tagName() == "mask") {
         parseClipMask(b);
+    } else if (b.tagName() == "marker") {
+        parseMarker(b);
     } else if (b.tagName() == "style") {
         m_context.addStyleSheet(b);
     } else if (b.tagName() == "rect" ||

@@ -41,8 +41,13 @@
 #include "KoShapeSavingContext.h"
 #include "KoPathShape.h"
 #include "KoMarkerData.h"
+#include "KoMarker.h"
 #include "KoInsets.h"
+#include <KoPathSegment.h>
+#include <KoPathPoint.h>
+#include <cmath>
 
+#include "kis_global.h"
 
 class Q_DECL_HIDDEN KoShapeStroke::Private
 {
@@ -53,6 +58,23 @@ public:
     QBrush brush;
 };
 
+namespace {
+QPair<qreal, qreal> anglesForSegment(KoPathSegment segment) {
+    if (segment.degree() < 3) {
+        segment = segment.toCubic();
+    }
+
+    QList<QPointF> points = segment.controlPoints();
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(points.size() == 4, qMakePair(0.0, 0.0));
+    const QPointF vec1 = points[1] - points[0];
+    const QPointF vec2 = points[3] - points[2];
+
+    const qreal angle1 = std::atan2(vec1.y(), vec1.x());
+    const qreal angle2 = std::atan2(vec2.y(), vec2.x());
+    return qMakePair(angle1, angle2);
+}
+}
+
 void KoShapeStroke::Private::paintBorder(KoShape *shape, QPainter &painter, const QPen &pen) const
 {
     if (!pen.isCosmetic() && pen.style() != Qt::NoPen) {
@@ -60,8 +82,62 @@ void KoShapeStroke::Private::paintBorder(KoShape *shape, QPainter &painter, cons
         if (pathShape) {
             QPainterPath path = pathShape->pathStroke(pen);
             painter.fillPath(path, pen.brush());
+
+            if (!pathShape->hasMarkersNew()) return;
+
+            KoMarker *startMarker = pathShape->markerNew(KoPathShape::StartMarker);
+            KoMarker *midMarker = pathShape->markerNew(KoPathShape::MidMarker);
+            KoMarker *endMarker = pathShape->markerNew(KoPathShape::EndMarker);
+
+            for (int i = 0; i < pathShape->subpathCount(); i++) {
+                const int numSubPoints = pathShape->subpathPointCount(i);
+                if (numSubPoints < 2) continue;
+
+                const bool isClosedSubpath = pathShape->isClosedSubpath(i);
+
+                qreal firstAngle = 0.0;
+                {
+                    KoPathSegment segment = pathShape->segmentByIndex(KoPathPointIndex(i, 0));
+                    firstAngle= anglesForSegment(segment).first;
+                }
+
+                qreal lastAngle = 0.0;
+                {
+                    KoPathSegment segment = pathShape->segmentByIndex(KoPathPointIndex(i, numSubPoints - 2));
+                    lastAngle = anglesForSegment(segment).second;
+                }
+
+                qreal previousAngle = 0.0;
+
+                for (int j = 0; j < numSubPoints - 1; j++) {
+                    KoPathSegment segment = pathShape->segmentByIndex(KoPathPointIndex(i, j));
+                    QPair<qreal, qreal> angles = anglesForSegment(segment);
+
+                    const qreal angle1 = angles.first;
+                    const qreal angle2 = angles.second;
+
+                    if (j == 0 && startMarker) {
+                        const qreal angle = isClosedSubpath ? bisectorAngle(firstAngle, lastAngle) : firstAngle;
+                        startMarker->paintAtPosition(&painter, segment.first()->point(), pen.widthF(), angle);
+                    }
+
+                    if (j > 0 && midMarker) {
+                        const qreal angle = bisectorAngle(previousAngle, angle1);
+                        startMarker->paintAtPosition(&painter, segment.first()->point(), pen.widthF(), angle);
+                    }
+
+                    if (j == numSubPoints - 2 && endMarker) {
+                        const qreal angle = isClosedSubpath ? bisectorAngle(firstAngle, lastAngle) : lastAngle;
+                        startMarker->paintAtPosition(&painter, segment.second()->point(), pen.widthF(), angle);
+                    }
+
+                    previousAngle = angle2;
+                }
+            }
+
             return;
         }
+
         painter.strokePath(shape->outline(), pen);
     }
 }

@@ -28,6 +28,7 @@
 #include <QSizeF>
 #include <QRectF>
 #include <QSharedPointer>
+#include <QExplicitlySharedDataPointer>
 
 #include "kritaflake_export.h"
 #include "SvgGradientHelper.h"
@@ -42,6 +43,8 @@ class KoShape;
 class KoShapeGroup;
 class KoDocumentResourceManager;
 class KoVectorPatternBackground;
+class KoMarker;
+class KoPathShape;
 
 
 class KRITAFLAKE_EXPORT SvgParser
@@ -82,6 +85,7 @@ protected:
     /// Parses a clip path element
     bool parseClipPath(const KoXmlElement &);
     bool parseClipMask(const KoXmlElement &e);
+    bool parseMarker(const KoXmlElement &e);
     /// parses a length attribute
     qreal parseUnit(const QString &, bool horiz = false, bool vert = false, const QRectF &bbox = QRectF());
     /// parses a length attribute in x-direction
@@ -138,6 +142,7 @@ protected:
     /// Applies the current clip path to the object
     void applyClipping(KoShape *shape, const QPointF &shapeToOriginalUserCoordinates);
     void applyMaskClipping(KoShape *shape, const QPointF &shapeToOriginalUserCoordinates);
+    void applyMarkers(KoPathShape *shape);
 
     /// Applies id to specified shape
     void applyId(const QString &id, KoShape *shape);
@@ -153,6 +158,7 @@ private:
     QMap<QString, SvgFilterHelper> m_filters;
     QMap<QString, SvgClipPathHelper> m_clipPaths;
     QMap<QString, QSharedPointer<KoClipMask>> m_clipMasks;
+    QMap<QString, QExplicitlySharedDataPointer<KoMarker>> m_markers;
     KoDocumentResourceManager *m_documentResourceManager;
     QList<KoShape*> m_shapes;
     QList<KoShape*> m_toplevelShapes;

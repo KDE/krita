@@ -141,6 +141,11 @@ inline qreal incrementInDirection(qreal a, qreal inc, qreal direction) {
     return d1 < d2 ? b1 : b2;
 }
 
+inline qreal bisectorAngle(qreal a, qreal b) {
+    const qreal diff = shortestAngularDistance(a, b);
+    return incrementInDirection(a, 0.5 * diff, b);
+}
+
 template<typename PointType>
 inline PointType snapToClosestAxis(PointType P) {
     if (qAbs(P.x()) < qAbs(P.y())) {

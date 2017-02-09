@@ -28,21 +28,38 @@
 #include "KoShapeLoadingContext.h"
 #include "KoShapeSavingContext.h"
 #include "KoOdfWorkaround.h"
+#include "KoShapePainter.h"
+#include "KoViewConverter.h"
 
 #include <QString>
 #include <QUrl>
 #include <QPainterPath>
+#include <QPainter>
+
+#include "kis_global.h"
 
 class Q_DECL_HIDDEN KoMarker::Private
 {
 public:
     Private()
+        : coordinateSystem(StrokeWidth),
+          referenceSize(3,3),
+          hasAutoOrientation(false),
+          explicitOrientation(0)
     {}
 
     QString name;
     QString d;
     QPainterPath path;
     QRect viewBox;
+    MarkerCoordinateSystem coordinateSystem;
+    QPointF referencePoint;
+    QSizeF referenceSize;
+
+    bool hasAutoOrientation;
+    qreal explicitOrientation;
+
+    QList<KoShape*> shapes;
 };
 
 KoMarker::KoMarker()
@@ -122,4 +139,107 @@ QPainterPath KoMarker::path(qreal width) const
 bool KoMarker::operator==(const KoMarker &other) const
 {
     return (d->d == other.d->d && d->viewBox ==other.d->viewBox);
+}
+
+void KoMarker::setCoordinateSystem(KoMarker::MarkerCoordinateSystem value)
+{
+    d->coordinateSystem = value;
+}
+
+KoMarker::MarkerCoordinateSystem KoMarker::coordinateSystem() const
+{
+    return d->coordinateSystem;
+}
+
+KoMarker::MarkerCoordinateSystem KoMarker::coordinateSystemFromString(const QString &value)
+{
+    MarkerCoordinateSystem result = StrokeWidth;
+
+    if (value == "userSpaceOnUse") {
+        result = UserSpaceOnUse;
+    }
+
+    return result;
+}
+
+QString KoMarker::coordinateSystemToString(KoMarker::MarkerCoordinateSystem value)
+{
+    return
+        value == StrokeWidth ?
+        "strokeWidth" :
+                "userSpaceOnUse";
+}
+
+void KoMarker::setReferencePoint(const QPointF &value)
+{
+    d->referencePoint = value;
+}
+
+QPointF KoMarker::referencePoint() const
+{
+    return d->referencePoint;
+}
+
+void KoMarker::setReferenceSize(const QSizeF &size)
+{
+    d->referenceSize = size;
+}
+
+QSizeF KoMarker::referenceSize() const
+{
+    return d->referenceSize;
+}
+
+bool KoMarker::hasAutoOtientation() const
+{
+    return d->hasAutoOrientation;
+}
+
+void KoMarker::setAutoOrientation(bool value)
+{
+    d->hasAutoOrientation = value;
+}
+
+qreal KoMarker::explicitOrientation() const
+{
+    return d->explicitOrientation;
+}
+
+void KoMarker::setExplicitOrientation(qreal value)
+{
+    d->explicitOrientation = value;
+}
+
+void KoMarker::setShapes(const QList<KoShape *> &shapes)
+{
+    d->shapes = shapes;
+}
+
+QList<KoShape *> KoMarker::shapes() const
+{
+    return d->shapes;
+}
+
+void KoMarker::paintAtPosition(QPainter *painter, const QPointF &pos, qreal strokeWidth, qreal nodeAngle)
+{
+    QTransform oldTransform = painter->transform();
+
+    KoViewConverter converter;
+    KoShapePainter p;
+    p.setShapes(d->shapes);
+
+    painter->translate(pos);
+
+    const qreal angle = d->hasAutoOrientation ? nodeAngle : d->explicitOrientation;
+    painter->rotate(kisRadiansToDegrees(angle));
+
+    if (d->coordinateSystem == StrokeWidth) {
+        painter->scale(strokeWidth, strokeWidth);
+    }
+
+    painter->translate(-d->referencePoint);
+
+    p.paint(*painter, converter);
+
+    painter->setTransform(oldTransform);
 }

@@ -70,6 +70,10 @@ public:
     bool display;           ///< controls display of shape
     bool visible;           ///< controls visibility of the shape (inherited)
     qreal pixelsPerInch;    ///< controls the resolution of the image raster
+
+    QString markerStartId;
+    QString markerMidId;
+    QString markerEndId;
 };
 
 #endif // SVGGRAPHICCONTEXT_H

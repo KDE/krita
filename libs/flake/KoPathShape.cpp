@@ -1615,6 +1615,29 @@ KoMarkerData KoPathShape::markerData(KoMarkerData::MarkerPosition position) cons
     }
 }
 
+void KoPathShape::setMarkerNew(KoMarker *marker, KoPathShape::MarkerPositionNew pos)
+{
+    Q_D(KoPathShape);
+
+    if (!marker && d->markersNew.contains(pos)) {
+        d->markersNew.remove(pos);
+    } else {
+        d->markersNew[pos] = marker;
+    }
+}
+
+KoMarker *KoPathShape::markerNew(KoPathShape::MarkerPositionNew pos) const
+{
+    Q_D(const KoPathShape);
+    return d->markersNew[pos].data();
+}
+
+bool KoPathShape::hasMarkersNew() const
+{
+    Q_D(const KoPathShape);
+    return !d->markersNew.isEmpty();
+}
+
 QPainterPath KoPathShape::pathStroke(const QPen &pen) const
 {
     Q_D(const KoPathShape);

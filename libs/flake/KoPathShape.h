@@ -466,6 +466,16 @@ public:
 
     KoMarkerData markerData(KoMarkerData::MarkerPosition position) const;
 
+    enum MarkerPositionNew {
+        StartMarker,
+        MidMarker,
+        EndMarker
+    };
+
+    void setMarkerNew(KoMarker *marker, MarkerPositionNew pos);
+    KoMarker* markerNew(MarkerPositionNew pos) const;
+    bool hasMarkersNew() const;
+
 private:
     /// constructor: to be used in cloneShape(), not in descendants!
     /// \internal

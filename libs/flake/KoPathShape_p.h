@@ -21,6 +21,7 @@
 
 #include "KoPathShape.h"
 #include "KoTosContainer_p.h"
+#include "KoMarker.h"
 #include "KoMarkerData.h"
 
 class KoPathShapePrivate : public KoTosContainerPrivate
@@ -95,6 +96,8 @@ public:
     KoMarkerData endMarker;
 
     KoSubpathList subpaths;
+
+    QMap<KoPathShape::MarkerPositionNew, QExplicitlySharedDataPointer<KoMarker>> markersNew;
 };
 
 #endif

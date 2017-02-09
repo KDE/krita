@@ -149,6 +149,11 @@ private Q_SLOTS:
     void testDefsHidden();
     void testDefsUseInheritance();
     void testUseWithoutDefs();
+
+    void testMarkersAutoOrientation();
+    void testMarkersAutoOrientationScaled();
+    void testMarkersAutoOrientationScaledUserCoordinates();
+    void testMarkersCustomOrientation();
 };
 
 #endif // TESTSVGPARSER_H

@@ -25,6 +25,7 @@ Name[sv]=Webbdesign [ 2160x1440, 72 punkter/tum RGB, 8 bitar ]
 Name[tr]=Web Tasarımı [ 2160x1440 , 72ppi RGB , 8bit ]
 Name[uk]=Вебдизайн [2160⨯1440, 72 т./д., RGB, 8 бітів]
 Name[x-test]=xxWeb Design [ 2160x1440 , 72ppi RGB , 8bit ]xx
+Name[zh_CN]=网页设计 [ 2160x1440 像素, 72ppi RGB , 8 位 ]
 Type=Link
 URL[$e]=.source/web_design.kra
 X-KDE-Hidden=false

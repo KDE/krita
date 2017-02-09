@@ -29,6 +29,7 @@ Name[sv]=Struktur 4k 32-bitar skalär
 Name[tr]=Doku 4k 32bit sayısal
 Name[uk]=Текстура 4k, 32-бітова, скалярна
 Name[x-test]=xxTexture 4k 32bit scalarxx
+Name[zh_CN]=纹理 4K 像素 32 位 scalar 色彩空间
 Type=Link
 URL[$e]=.source/Texture4k32bitscalar.kra
 X-KDE-Hidden=false

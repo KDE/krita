@@ -69,13 +69,14 @@ KoPathShapePrivate::KoPathShapePrivate(const KoPathShapePrivate &rhs, KoPathShap
     : KoTosContainerPrivate(rhs, q),
       fillRule(rhs.fillRule),
       startMarker(rhs.startMarker),
-      endMarker(rhs.endMarker)
+      endMarker(rhs.endMarker),
+      markersNew(rhs.markersNew)
 {
     Q_FOREACH (KoSubpath *subPath, rhs.subpaths) {
         KoSubpath *clonedSubPath = new KoSubpath();
 
         Q_FOREACH (KoPathPoint *point, *subPath) {
-            *clonedSubPath << new KoPathPoint(*point);
+            *clonedSubPath << new KoPathPoint(*point, q);
         }
 
         subpaths << clonedSubPath;

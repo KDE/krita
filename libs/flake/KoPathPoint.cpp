@@ -60,6 +60,12 @@ KoPathPoint::KoPathPoint(const KoPathPoint &pathPoint)
     d->activeControlPoint2 = pathPoint.d->activeControlPoint2;
 }
 
+KoPathPoint::KoPathPoint(const KoPathPoint &pathPoint, KoPathShape *newParent)
+    : KoPathPoint(pathPoint)
+{
+    d->shape = newParent;
+}
+
 KoPathPoint::KoPathPoint()
         : d(new Private())
 {

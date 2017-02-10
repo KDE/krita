@@ -80,6 +80,7 @@ public:
      * @brief Copy Constructor
      */
     KoPathPoint(const KoPathPoint &pathPoint);
+    KoPathPoint(const KoPathPoint &pathPoint, KoPathShape *newParent);
 
     /**
      * @brief Assignment operator.

@@ -60,14 +60,26 @@ public:
 
 namespace {
 QPair<qreal, qreal> anglesForSegment(KoPathSegment segment) {
+    const qreal eps = 1e-6;
+
     if (segment.degree() < 3) {
         segment = segment.toCubic();
     }
 
     QList<QPointF> points = segment.controlPoints();
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(points.size() == 4, qMakePair(0.0, 0.0));
-    const QPointF vec1 = points[1] - points[0];
-    const QPointF vec2 = points[3] - points[2];
+    QPointF vec1 = points[1] - points[0];
+    QPointF vec2 = points[3] - points[2];
+
+    if (vec1.manhattanLength() < eps) {
+        points[1] = segment.pointAt(eps);
+        vec1 = points[1] - points[0];
+    }
+
+    if (vec2.manhattanLength() < eps) {
+        points[2] = segment.pointAt(1.0 - eps);
+        vec2 = points[3] - points[2];
+    }
 
     const qreal angle1 = std::atan2(vec1.y(), vec1.x());
     const qreal angle2 = std::atan2(vec2.y(), vec2.x());

@@ -813,7 +813,7 @@ void KoPathShapePrivate::updateLast(KoPathPoint **lastPoint)
         // get the first point of the subpath
         KoPathPoint *subpathStart = subpaths.last()->first();
         // clone the first point of the subpath...
-        KoPathPoint * newLastPoint = new KoPathPoint(*subpathStart);
+        KoPathPoint * newLastPoint = new KoPathPoint(*subpathStart, q);
         // ... and make it a normal point
         newLastPoint->setProperties(KoPathPoint::Normal);
         // now start a new subpath with the cloned start point
@@ -1021,6 +1021,7 @@ KoPathPoint * KoPathShape::removePoint(const KoPathPointIndex &pointIndex)
         return 0;
 
     KoPathPoint * point = subpath->takeAt(pointIndex.second);
+    point->setParent(0);
 
     //don't do anything (not even crash), if there was only one point
     if (pointCount()==0) {
@@ -1215,8 +1216,13 @@ KoSubpath * KoPathShape::removeSubpath(int subpathIndex)
     Q_D(KoPathShape);
     KoSubpath *subpath = d->subPath(subpathIndex);
 
-    if (subpath != 0)
+    if (subpath != 0) {
+        Q_FOREACH (KoPathPoint* point, *subpath) {
+            point->setParent(this);
+        }
+
         d->subpaths.removeAt(subpathIndex);
+    }
 
     return subpath;
 }
@@ -1227,6 +1233,10 @@ bool KoPathShape::addSubpath(KoSubpath * subpath, int subpathIndex)
 
     if (subpathIndex < 0 || subpathIndex > d->subpaths.size())
         return false;
+
+    Q_FOREACH (KoPathPoint* point, *subpath) {
+        point->setParent(this);
+    }
 
     d->subpaths.insert(subpathIndex, subpath);
 
@@ -1247,10 +1257,9 @@ bool KoPathShape::combine(KoPathShape *path)
         KoSubpath *newSubpath = new KoSubpath();
 
         Q_FOREACH (KoPathPoint* point, *subpath) {
-            KoPathPoint *newPoint = new KoPathPoint(*point);
+            KoPathPoint *newPoint = new KoPathPoint(*point, this);
             newPoint->map(pathMatrix);
             newPoint->map(myMatrix);
-            newPoint->setParent(this);
             newSubpath->append(newPoint);
         }
         d->subpaths.append(newSubpath);
@@ -1278,7 +1287,7 @@ bool KoPathShape::separate(QList<KoPathShape*> & separatedPaths)
         KoSubpath *newSubpath = new KoSubpath();
 
         Q_FOREACH (KoPathPoint* point, *subpath) {
-            KoPathPoint *newPoint = new KoPathPoint(*point);
+            KoPathPoint *newPoint = new KoPathPoint(*point, shape);
             newPoint->map(myMatrix);
             newSubpath->append(newPoint);
         }

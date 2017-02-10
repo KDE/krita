@@ -51,7 +51,7 @@ public:
 KoPathPoint::KoPathPoint(const KoPathPoint &pathPoint)
         : d(new Private())
 {
-    d->shape = pathPoint.d->shape;
+    d->shape = 0;
     d->point = pathPoint.d->point;
     d->controlPoint1 = pathPoint.d->controlPoint1;
     d->controlPoint2 = pathPoint.d->controlPoint2;

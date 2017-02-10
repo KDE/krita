@@ -55,7 +55,7 @@ SpiralShape::SpiralShape(const SpiralShape &rhs)
 {
     Q_FOREACH(KoPathPoint *point, rhs.m_points) {
         KIS_ASSERT_RECOVER(point) { continue; }
-        m_points << new KoPathPoint(*point);
+        m_points << new KoPathPoint(*point, this);
     }
 }
 

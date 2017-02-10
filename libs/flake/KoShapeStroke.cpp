@@ -123,12 +123,12 @@ void KoShapeStroke::Private::paintBorder(KoShape *shape, QPainter &painter, cons
 
                     if (j > 0 && midMarker) {
                         const qreal angle = bisectorAngle(previousAngle, angle1);
-                        startMarker->paintAtPosition(&painter, segment.first()->point(), pen.widthF(), angle);
+                        midMarker->paintAtPosition(&painter, segment.first()->point(), pen.widthF(), angle);
                     }
 
                     if (j == numSubPoints - 2 && endMarker) {
                         const qreal angle = isClosedSubpath ? bisectorAngle(firstAngle, lastAngle) : lastAngle;
-                        startMarker->paintAtPosition(&painter, segment.second()->point(), pen.widthF(), angle);
+                        endMarker->paintAtPosition(&painter, segment.second()->point(), pen.widthF(), angle);
                     }
 
                     previousAngle = angle2;

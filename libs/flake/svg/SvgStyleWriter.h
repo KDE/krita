@@ -58,6 +58,8 @@ protected:
     static void saveSvgClipping(KoShape *shape, SvgSavingContext &context);
     /// Saves masking of specified shape
     static void saveSvgMasking(KoShape *shape, SvgSavingContext &context);
+    /// Saves markers of the path shape if present
+    static void saveSvgMarkers(KoShape *shape, SvgSavingContext &context);
     /// Saves gradient color stops
     static void saveSvgColorStops(const QGradientStops &colorStops, SvgSavingContext &context);
     /// Saves gradient

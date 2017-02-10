@@ -48,6 +48,7 @@
 #include <KoShapeStroke.h>
 #include <KoClipPath.h>
 #include <KoClipMask.h>
+#include <KoMarker.h>
 #include <KoXmlWriter.h>
 
 #include <QBuffer>
@@ -68,6 +69,7 @@ void SvgStyleWriter::saveSvgStyle(KoShape *shape, SvgSavingContext &context)
     saveSvgEffects(shape, context);
     saveSvgClipping(shape, context);
     saveSvgMasking(shape, context);
+    saveSvgMarkers(shape, context);
     if (! shape->isVisible())
         context.shapeWriter().addAttribute("display", "none");
     if (shape->transparency() > 0.0)
@@ -232,6 +234,7 @@ void SvgStyleWriter::saveSvgMasking(KoShape *shape, SvgSavingContext &context)
 
     const QRectF rect = clipMask->maskRect();
 
+    // think funny duplication? please note the 'pt' suffix! :)
     if (clipMask->coordinates() == KoFlake::ObjectBoundingBox) {
         context.styleWriter().addAttribute("x", rect.x());
         context.styleWriter().addAttribute("y", rect.y());
@@ -249,6 +252,62 @@ void SvgStyleWriter::saveSvgMasking(KoShape *shape, SvgSavingContext &context)
     context.styleWriter().endElement(); // clipMask
 
     context.shapeWriter().addAttribute("mask", "url(#" + uid + ")");
+}
+
+namespace {
+void writeMarkerStyle(KoXmlWriter &styleWriter, const KoMarker *marker, const QString &assignedId) {
+
+    styleWriter.startElement("marker");
+    styleWriter.addAttribute("id", assignedId);
+    styleWriter.addAttribute("markerUnits", KoMarker::coordinateSystemToString(marker->coordinateSystem()));
+
+    const QPointF refPoint = marker->referencePoint();
+    styleWriter.addAttribute("refX", refPoint.x());
+    styleWriter.addAttribute("refY", refPoint.y());
+
+    const QSizeF refSize = marker->referenceSize();
+    styleWriter.addAttribute("markerWidth", refSize.width());
+    styleWriter.addAttribute("markerHeight", refSize.height());
+
+
+    if (marker->hasAutoOtientation()) {
+        styleWriter.addAttribute("orient", "auto");
+    } else {
+        // no suffix means 'degrees'
+        styleWriter.addAttribute("orient", kisRadiansToDegrees(marker->explicitOrientation()));
+    }
+
+    embedShapes(marker->shapes(), styleWriter);
+
+    styleWriter.endElement(); // marker
+}
+
+void tryEmbedMarker(const KoPathShape *pathShape,
+                    const QString &markerTag,
+                    KoPathShape::MarkerPositionNew markerPosition,
+                    SvgSavingContext &context)
+{
+    KoMarker *marker = pathShape->markerNew(markerPosition);
+
+    if (marker) {
+        const QString uid = context.createUID("lineMarker");
+        writeMarkerStyle(context.styleWriter(), marker, uid);
+        context.shapeWriter().addAttribute(markerTag.toLatin1().data(), "url(#" + uid + ")");
+    }
+}
+
+}
+
+
+void SvgStyleWriter::saveSvgMarkers(KoShape *shape, SvgSavingContext &context)
+{
+    KoPathShape *pathShape = dynamic_cast<KoPathShape*>(shape);
+    if (!pathShape || !pathShape->hasMarkersNew()) return;
+
+
+    tryEmbedMarker(pathShape, "marker-start", KoPathShape::StartMarker, context);
+    tryEmbedMarker(pathShape, "marker-mid", KoPathShape::MidMarker, context);
+    tryEmbedMarker(pathShape, "marker-end", KoPathShape::EndMarker, context);
 }
 
 void SvgStyleWriter::saveSvgColorStops(const QGradientStops &colorStops, SvgSavingContext &context)

@@ -102,6 +102,7 @@ public:
     // pure virtuals from KoShapeStrokeModel implemented here.
     virtual void fillStyle(KoGenStyle &style, KoShapeSavingContext &context) const;
     virtual void strokeInsets(const KoShape *shape, KoInsets &insets) const;
+    virtual qreal strokeMaxMarkersInset(const KoShape *shape) const;
     virtual bool hasTransparency() const;
     virtual void paint(KoShape *shape, QPainter &painter, const KoViewConverter &converter);
 

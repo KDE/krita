@@ -51,6 +51,8 @@
 #include <FlakeDebug.h>
 #include <QPainter>
 
+#include "kis_global.h"
+
 #include <qnumeric.h> // for qIsNaN
 static bool qIsNaNPoint(const QPointF &p) {
     return qIsNaN(p.x()) || qIsNaN(p.y());
@@ -572,6 +574,9 @@ QRectF KoPathShape::boundingRect() const
         qreal top = qMin(tl.y(),br.y());
         qreal bottom = qMax(tl.y(),br.y());
         bb.adjust(left, top, right, bottom);
+
+        // take care about markers!
+        bb = kisGrowRect(bb, stroke()->strokeMaxMarkersInset(this));
     }
     if (shadow()) {
         KoInsets insets;
@@ -1552,6 +1557,10 @@ bool KoPathShape::hitTest(const QPointF &position) const
         KoInsets insets;
         stroke()->strokeInsets(this, insets);
         QRectF roi(QPointF(-insets.left, -insets.top), QPointF(insets.right, insets.bottom));
+
+        // take care about markers!
+        roi = kisGrowRect(roi, stroke()->strokeMaxMarkersInset(this));
+
         roi.moveCenter(point);
         if (outlinePath.intersects(roi) || outlinePath.contains(roi))
             return true;

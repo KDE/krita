@@ -25,6 +25,8 @@
 
 #include "kritaflake_export.h"
 
+#include <QtGlobal>
+
 class KoShape;
 class KoGenStyle;
 class KoShapeSavingContext;
@@ -62,6 +64,13 @@ public:
      * @param insets the insets object that will be filled and returned.
      */
     virtual void strokeInsets(const KoShape *shape, KoInsets &insets) const = 0;
+
+    /**
+     * Return a maximum distance that the markers of the shape can take outside the
+     * shape itself
+     */
+    virtual qreal strokeMaxMarkersInset(const KoShape *shape) const = 0;
+
     /**
      * Returns true if there is some transparency, false if the stroke is fully opaque.
      * @return if the stroke is transparent.

@@ -108,6 +108,11 @@ public:
      */
     void paintAtPosition(QPainter *painter, const QPointF &pos, qreal strokeWidth, qreal nodeAngle);
 
+    /**
+     * Return maximum distance that the marker can take outside the shape itself
+     */
+    qreal maxInset(qreal strokeWidth) const;
+
 private:
     class Private;
     Private * const d;

@@ -232,6 +232,29 @@ void KoShapeStroke::strokeInsets(const KoShape *shape, KoInsets &insets) const
     insets.right = lineWidth;
 }
 
+qreal KoShapeStroke::strokeMaxMarkersInset(const KoShape *shape) const
+{
+    qreal result = 0.0;
+
+    const KoPathShape *pathShape = dynamic_cast<const KoPathShape *>(shape);
+    if (pathShape && pathShape->hasMarkersNew()) {
+        const qreal lineWidth = d->pen.widthF();
+
+        QVector<const KoMarker*> markers;
+        markers << pathShape->markerNew(KoPathShape::StartMarker);
+        markers << pathShape->markerNew(KoPathShape::MidMarker);
+        markers << pathShape->markerNew(KoPathShape::EndMarker);
+
+        Q_FOREACH (const KoMarker *marker, markers) {
+            if (marker) {
+                result = qMax(result, marker->maxInset(lineWidth));
+            }
+        }
+    }
+
+    return result;
+}
+
 bool KoShapeStroke::hasTransparency() const
 {
     return d->color.alpha() > 0;

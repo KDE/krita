@@ -243,3 +243,25 @@ void KoMarker::paintAtPosition(QPainter *painter, const QPointF &pos, qreal stro
 
     painter->setTransform(oldTransform);
 }
+
+qreal KoMarker::maxInset(qreal strokeWidth) const
+{
+    QRectF shapesBounds;
+
+    Q_FOREACH (KoShape *shape, d->shapes) {
+        shapesBounds |= shape->boundingRect();
+    }
+
+    qreal result = 0.0;
+
+    result = qMax(kisDistance(shapesBounds.topLeft(), d->referencePoint), result);
+    result = qMax(kisDistance(shapesBounds.topRight(), d->referencePoint), result);
+    result = qMax(kisDistance(shapesBounds.bottomLeft(), d->referencePoint), result);
+    result = qMax(kisDistance(shapesBounds.bottomRight(), d->referencePoint), result);
+
+    if (d->coordinateSystem == StrokeWidth) {
+        result *= strokeWidth;
+    }
+
+    return result;
+}

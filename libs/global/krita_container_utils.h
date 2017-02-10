@@ -46,10 +46,11 @@ template <class C>
 }
 
 
-template <class C>
-    void filterContainer(C &container, std::function<bool(typename C::reference)> keepIf) {
+template <class C, typename KeepIfFunction>
+    auto filterContainer(C &container, KeepIfFunction keepIf)
+        -> decltype(bool(keepIf(container[0])), void()) {
 
-        auto newEnd = std::remove_if(container.begin(), container.end(), std::unary_negate<decltype(keepIf)>(keepIf));
+        auto newEnd = std::remove_if(container.begin(), container.end(), [keepIf] (typename C::reference p) { return !keepIf(p); });
         while (newEnd != container.end()) {
            newEnd = container.erase(newEnd);
         }

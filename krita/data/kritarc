@@ -103,6 +103,7 @@ showAdditionalOnionSkinsSettings=true
 toolbarslider_1=opacity
 toolbarslider_2=size
 toolbarslider_3=flow
+favoriteCompositeOps=normal,erase,multiply,burn,darken,add,dodge,screen,overlay,soft_light_svg,luminize,lighten,saturation,color
 
 [advancedColorSelector]
 allowHorizontalLayout=true
@@ -466,4 +467,3 @@ LastReturnType=Custom Document
 [theme]
 Theme=Krita dark
 
-favoriteCompositeOps=normal,erase,multiply,burn,darken,add,dodge,screen,overlay,soft_light_svg,luminize,lighten,saturation,color

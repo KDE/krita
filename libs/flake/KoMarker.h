@@ -24,6 +24,7 @@
 #include <QSharedData>
 
 #include "kritaflake_export.h"
+#include <KoFlake.h>
 
 class KoXmlElement;
 class KoShapeLoadingContext;
@@ -38,21 +39,6 @@ class  KRITAFLAKE_EXPORT KoMarker : public QSharedData
 public:
     KoMarker();
     ~KoMarker();
-
-    /**
-     * Load the marker
-     *
-     * @param element The xml element containing the marker
-     * @param context The shape loading context
-     */
-    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
-
-    /**
-     * Save the marker
-     *
-     * @return The reference of the marker.
-     */
-    QString saveOdf(KoShapeSavingContext &context) const;
 
     /**
      * Display name of the marker
@@ -71,6 +57,7 @@ public:
      */
     QPainterPath path(qreal width) const;
 
+    KoMarker(const KoMarker &rhs);
     bool operator==(const KoMarker &other) const;
 
     enum MarkerCoordinateSystem {
@@ -112,6 +99,24 @@ public:
      * Return maximum distance that the marker can take outside the shape itself
      */
     qreal maxInset(qreal strokeWidth) const;
+
+    /**
+     * Bounding rect of the marker in local coordinates. It is assumed that the marker
+     * is painted with the reference point placed at position (0,0)
+     */
+    QRectF boundingRect(qreal strokeWidth, qreal nodeAngle) const;
+
+    /**
+     * Outline of the marker in local coordinates. It is assumed that the marker
+     * is painted with the reference point placed at position (0,0)
+     */
+    QPainterPath outline(qreal strokeWidth, qreal nodeAngle) const;
+
+    /**
+     * Draws a preview of the marker in \p previewRect of \p painter
+     */
+    void drawPreview(QPainter *painter, const QRectF &previewRect,
+                     const QPen &pen, KoFlake::MarkerPosition position);
 
 private:
     class Private;

@@ -50,6 +50,12 @@ namespace KoFlake
         Pattern
     };
 
+    enum MarkerPosition {
+        StartMarker,
+        MidMarker,
+        EndMarker
+    };
+
     /// the selection type for KoSelection::selectedObjects()
     enum SelectionType {
         FullSelection,      ///< Create a list of all user-shapes in the selection. This excludes KoShapeGroup grouping objects that may be selected.

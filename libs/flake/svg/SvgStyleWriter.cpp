@@ -284,7 +284,7 @@ void writeMarkerStyle(KoXmlWriter &styleWriter, const KoMarker *marker, const QS
 
 void tryEmbedMarker(const KoPathShape *pathShape,
                     const QString &markerTag,
-                    KoPathShape::MarkerPositionNew markerPosition,
+                    KoFlake::MarkerPosition markerPosition,
                     SvgSavingContext &context)
 {
     KoMarker *marker = pathShape->markerNew(markerPosition);
@@ -305,9 +305,9 @@ void SvgStyleWriter::saveSvgMarkers(KoShape *shape, SvgSavingContext &context)
     if (!pathShape || !pathShape->hasMarkersNew()) return;
 
 
-    tryEmbedMarker(pathShape, "marker-start", KoPathShape::StartMarker, context);
-    tryEmbedMarker(pathShape, "marker-mid", KoPathShape::MidMarker, context);
-    tryEmbedMarker(pathShape, "marker-end", KoPathShape::EndMarker, context);
+    tryEmbedMarker(pathShape, "marker-start", KoFlake::StartMarker, context);
+    tryEmbedMarker(pathShape, "marker-mid", KoFlake::MidMarker, context);
+    tryEmbedMarker(pathShape, "marker-end", KoFlake::EndMarker, context);
 }
 
 void SvgStyleWriter::saveSvgColorStops(const QGradientStops &colorStops, SvgSavingContext &context)

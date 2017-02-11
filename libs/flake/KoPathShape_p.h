@@ -97,7 +97,7 @@ public:
 
     KoSubpathList subpaths;
 
-    QMap<KoPathShape::MarkerPositionNew, QExplicitlySharedDataPointer<KoMarker>> markersNew;
+    QMap<KoFlake::MarkerPosition, QExplicitlySharedDataPointer<KoMarker>> markersNew;
 };
 
 #endif

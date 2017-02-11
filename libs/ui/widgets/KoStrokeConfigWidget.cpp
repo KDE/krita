@@ -199,7 +199,7 @@ KoStrokeConfigWidget::KoStrokeConfigWidget(QWidget * parent)
     // Start marker
     QList<KoMarker*> markers;
 
-    d->startMarkerSelector = new KoMarkerSelector(KoMarkerData::MarkerStart, this);
+    d->startMarkerSelector = new KoMarkerSelector(KoFlake::StartMarker, this);
     d->startMarkerSelector->updateMarkers(markers);
     d->startMarkerSelector->setMaximumWidth(50);
     firstLineLayout->addWidget(d->startMarkerSelector);
@@ -210,7 +210,7 @@ KoStrokeConfigWidget::KoStrokeConfigWidget(QWidget * parent)
     firstLineLayout->addWidget(d->lineStyle);
 
     // End marker
-    d->endMarkerSelector = new KoMarkerSelector(KoMarkerData::MarkerEnd, this);
+    d->endMarkerSelector = new KoMarkerSelector(KoFlake::EndMarker, this);
     d->endMarkerSelector->updateMarkers(markers);
     d->endMarkerSelector->setMaximumWidth(50);
     firstLineLayout->addWidget(d->endMarkerSelector);

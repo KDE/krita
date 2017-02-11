@@ -165,9 +165,9 @@ bool KoMarkerData::loadOdf(qreal penWidth, KoShapeLoadingContext &context)
 void KoMarkerData::saveStyle(KoGenStyle &style, qreal penWidth, KoShapeSavingContext &context) const
 {
     if (d->marker) {
-        QString markerRef = d->marker->saveOdf(context);
-        style.addProperty(markerOdfData[d->position].m_markerPositionSave, markerRef, KoGenStyle::GraphicType);
-        style.addPropertyPt(markerOdfData[d->position].m_markerWidthSave, width(penWidth), KoGenStyle::GraphicType);
-        style.addProperty(markerOdfData[d->position].m_markerCenterSave, d->center, KoGenStyle::GraphicType);
+//        QString markerRef = d->marker->saveOdf(context);
+//        style.addProperty(markerOdfData[d->position].m_markerPositionSave, markerRef, KoGenStyle::GraphicType);
+//        style.addPropertyPt(markerOdfData[d->position].m_markerWidthSave, width(penWidth), KoGenStyle::GraphicType);
+//        style.addProperty(markerOdfData[d->position].m_markerCenterSave, d->center, KoGenStyle::GraphicType);
     }
 }

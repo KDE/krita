@@ -20,7 +20,7 @@
 #ifndef KOMARKERMODEL_H
 #define KOMARKERMODEL_H
 
-#include <KoMarkerData.h>
+#include <KoFlake.h>
 #include <QAbstractListModel>
 
 class KoMarker;
@@ -28,7 +28,7 @@ class KoMarker;
 class KoMarkerModel : public QAbstractListModel
 {
 public:
-    KoMarkerModel(const QList<KoMarker*> markers, KoMarkerData::MarkerPosition position, QObject *parent = 0);
+    KoMarkerModel(const QList<KoMarker*> markers, KoFlake::MarkerPosition position, QObject *parent = 0);
     virtual ~KoMarkerModel();
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
@@ -36,11 +36,11 @@ public:
 
     int markerIndex(KoMarker *marker) const;
     QVariant marker(int index, int role = Qt::UserRole) const;
-    KoMarkerData::MarkerPosition position() const;
+    KoFlake::MarkerPosition position() const;
 
 private:
     QList<KoMarker*> m_markers;
-    KoMarkerData::MarkerPosition m_markerPosition;
+    KoFlake::MarkerPosition m_markerPosition;
 };
 
 #endif /* KOMARKERMODEL_H */

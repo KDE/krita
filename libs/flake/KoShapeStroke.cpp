@@ -97,9 +97,9 @@ void KoShapeStroke::Private::paintBorder(KoShape *shape, QPainter &painter, cons
 
             if (!pathShape->hasMarkersNew()) return;
 
-            KoMarker *startMarker = pathShape->markerNew(KoPathShape::StartMarker);
-            KoMarker *midMarker = pathShape->markerNew(KoPathShape::MidMarker);
-            KoMarker *endMarker = pathShape->markerNew(KoPathShape::EndMarker);
+            KoMarker *startMarker = pathShape->markerNew(KoFlake::StartMarker);
+            KoMarker *midMarker = pathShape->markerNew(KoFlake::MidMarker);
+            KoMarker *endMarker = pathShape->markerNew(KoFlake::EndMarker);
 
             for (int i = 0; i < pathShape->subpathCount(); i++) {
                 const int numSubPoints = pathShape->subpathPointCount(i);
@@ -241,9 +241,9 @@ qreal KoShapeStroke::strokeMaxMarkersInset(const KoShape *shape) const
         const qreal lineWidth = d->pen.widthF();
 
         QVector<const KoMarker*> markers;
-        markers << pathShape->markerNew(KoPathShape::StartMarker);
-        markers << pathShape->markerNew(KoPathShape::MidMarker);
-        markers << pathShape->markerNew(KoPathShape::EndMarker);
+        markers << pathShape->markerNew(KoFlake::StartMarker);
+        markers << pathShape->markerNew(KoFlake::MidMarker);
+        markers << pathShape->markerNew(KoFlake::EndMarker);
 
         Q_FOREACH (const KoMarker *marker, markers) {
             if (marker) {

@@ -37,6 +37,7 @@
 #include <QPainter>
 
 #include "kis_global.h"
+#include "kis_algebra_2d.h"
 
 class Q_DECL_HIDDEN KoMarker::Private
 {
@@ -48,10 +49,38 @@ public:
           explicitOrientation(0)
     {}
 
+    ~Private() {
+        qDeleteAll(shapes);
+    }
+
+    bool operator==(const KoMarker::Private &other) const
+    {
+        // WARNING: comparison of shapes is extremely fuzzy! Don't
+        //          trust it in life-critical cases!
+
+        return name == other.name &&
+            coordinateSystem == other.coordinateSystem &&
+            referencePoint == other.referencePoint &&
+            referenceSize == other.referenceSize &&
+            hasAutoOrientation == other.hasAutoOrientation &&
+            explicitOrientation == other.explicitOrientation &&
+            compareShapesTo(other.shapes);
+    }
+
+    Private(const Private &rhs)
+        : name(rhs.name),
+          coordinateSystem(rhs.coordinateSystem),
+          referencePoint(rhs.referencePoint),
+          referenceSize(rhs.referenceSize),
+          hasAutoOrientation(rhs.hasAutoOrientation),
+          explicitOrientation(rhs.explicitOrientation)
+    {
+        Q_FOREACH (KoShape *shape, rhs.shapes) {
+            shapes << shape->cloneShape();
+        }
+    }
+
     QString name;
-    QString d;
-    QPainterPath path;
-    QRect viewBox;
     MarkerCoordinateSystem coordinateSystem;
     QPointF referencePoint;
     QSizeF referenceSize;
@@ -60,6 +89,41 @@ public:
     qreal explicitOrientation;
 
     QList<KoShape*> shapes;
+
+    bool compareShapesTo(const QList<KoShape*> other) const {
+        if (shapes.size() != other.size()) return false;
+
+        for (int i = 0; i < shapes.size(); i++) {
+            if (shapes[i]->outline() != other[i]->outline() ||
+                shapes[i]->absoluteTransformation(0) != other[i]->absoluteTransformation(0)) {
+
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    QTransform markerTransform(qreal strokeWidth, qreal nodeAngle, const QPointF &pos = QPointF()) {
+        const QTransform translate = QTransform::fromTranslate(referencePoint.x(), referencePoint.y());
+
+        QTransform t = translate;
+
+        if (coordinateSystem == StrokeWidth) {
+            t *= QTransform::fromScale(strokeWidth, strokeWidth);
+        }
+
+        const qreal angle = hasAutoOrientation ? nodeAngle : explicitOrientation;
+        if (angle != 0.0) {
+            QTransform r;
+            r.rotateRadians(angle);
+            t *= r;
+        }
+
+        t *= QTransform::fromTranslate(pos.x(), pos.y());
+
+        return t;
+    }
 };
 
 KoMarker::KoMarker()
@@ -72,51 +136,6 @@ KoMarker::~KoMarker()
     delete d;
 }
 
-bool KoMarker::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
-{
-    Q_UNUSED(context);
-    // A shape uses draw:marker-end="Arrow" draw:marker-end-width="0.686cm" draw:marker-end-center="true" which marker and how the marker is used
-
-    //<draw:marker draw:name="Arrow" svg:viewBox="0 0 20 30" svg:d="m10 0-10 30h20z"/>
-    //<draw:marker draw:name="Arrowheads_20_1" draw:display-name="Arrowheads 1" svg:viewBox="0 0 10 10" svg:d="m0 0h10v10h-10z"/>
-
-    d->d =element.attributeNS(KoXmlNS::svg, "d");
-    if (d->d.isEmpty()) {
-        return false;
-    }
-
-#ifndef NWORKAROUND_ODF_BUGS
-    KoOdfWorkaround::fixMarkerPath(d->d);
-#endif
-
-    KoPathShape pathShape;
-    KoPathShapeLoader loader(&pathShape);
-    loader.parseSvg(d->d, true);
-
-    d->path = pathShape.outline();
-    d->viewBox = KoPathShape::loadOdfViewbox(element);
-
-    QString displayName(element.attributeNS(KoXmlNS::draw, "display-name"));
-    if (displayName.isEmpty()) {
-        displayName = element.attributeNS(KoXmlNS::draw, "name");
-    }
-    d->name = displayName;
-    return true;
-}
-
-QString KoMarker::saveOdf(KoShapeSavingContext &context) const
-{
-    KoGenStyle style(KoGenStyle::MarkerStyle);
-    style.addAttribute("draw:display-name", d->name);
-    style.addAttribute("svg:d", d->d);
-    const QString viewBox = QString::fromLatin1("%1 %2 %3 %4")
-        .arg(d->viewBox.x()).arg(d->viewBox.y())
-        .arg(d->viewBox.width()).arg(d->viewBox.height());
-    style.addAttribute(QLatin1String("svg:viewBox"), viewBox);
-    QString name = QString(QUrl::toPercentEncoding(d->name, "", " ")).replace('%', '_');
-    return context.mainStyles().insert(style, name, KoGenStyles::DontAddNumberToName);
-}
-
 QString KoMarker::name() const
 {
     return d->name;
@@ -124,21 +143,19 @@ QString KoMarker::name() const
 
 QPainterPath KoMarker::path(qreal width) const
 {
-    if (!d->viewBox.isValid() || width == 0) {
-        return QPainterPath();
-    }
+    Q_UNUSED(width);
+    return QPainterPath();
+}
 
-    // TODO: currently the <min-x>, <min-y> properties of viewbox are ignored, why? OOo-compat?
-    qreal height = width * d->viewBox.height() / d->viewBox.width();
-
-    QTransform transform;
-    transform.scale(width / d->viewBox.width(), height / d->viewBox.height());
-    return transform.map(d->path);
+KoMarker::KoMarker(const KoMarker &rhs)
+    : QSharedData(rhs),
+      d(new Private(*rhs.d))
+{
 }
 
 bool KoMarker::operator==(const KoMarker &other) const
 {
-    return (d->d == other.d->d && d->viewBox ==other.d->viewBox);
+    return *d == *other.d;
 }
 
 void KoMarker::setCoordinateSystem(KoMarker::MarkerCoordinateSystem value)
@@ -238,7 +255,6 @@ void KoMarker::paintAtPosition(QPainter *painter, const QPointF &pos, qreal stro
     }
 
     painter->translate(-d->referencePoint);
-
     p.paint(*painter, converter);
 
     painter->setTransform(oldTransform);
@@ -246,22 +262,81 @@ void KoMarker::paintAtPosition(QPainter *painter, const QPointF &pos, qreal stro
 
 qreal KoMarker::maxInset(qreal strokeWidth) const
 {
-    QRectF shapesBounds;
-
-    Q_FOREACH (KoShape *shape, d->shapes) {
-        shapesBounds |= shape->boundingRect();
-    }
-
+    QRectF shapesBounds = boundingRect(strokeWidth, 0.0); // normalized to 0,0
     qreal result = 0.0;
 
-    result = qMax(kisDistance(shapesBounds.topLeft(), d->referencePoint), result);
-    result = qMax(kisDistance(shapesBounds.topRight(), d->referencePoint), result);
-    result = qMax(kisDistance(shapesBounds.bottomLeft(), d->referencePoint), result);
-    result = qMax(kisDistance(shapesBounds.bottomRight(), d->referencePoint), result);
+    result = qMax(KisAlgebra2D::norm(shapesBounds.topLeft()), result);
+    result = qMax(KisAlgebra2D::norm(shapesBounds.topRight()), result);
+    result = qMax(KisAlgebra2D::norm(shapesBounds.bottomLeft()), result);
+    result = qMax(KisAlgebra2D::norm(shapesBounds.bottomRight()), result);
 
     if (d->coordinateSystem == StrokeWidth) {
         result *= strokeWidth;
     }
 
     return result;
+}
+
+QRectF KoMarker::boundingRect(qreal strokeWidth, qreal nodeAngle) const
+{
+    QRectF shapesBounds;
+
+    Q_FOREACH (KoShape *shape, d->shapes) {
+        shapesBounds |= shape->boundingRect();
+    }
+
+    const QTransform t = d->markerTransform(strokeWidth, nodeAngle);
+
+    if (!t.isIdentity()) {
+        shapesBounds = t.mapRect(shapesBounds);
+    }
+
+    return shapesBounds;
+}
+
+QPainterPath KoMarker::outline(qreal strokeWidth, qreal nodeAngle) const
+{
+    QPainterPath outline;
+    Q_FOREACH (KoShape *shape, d->shapes) {
+        outline |= shape->absoluteTransformation(0).map(shape->outline());
+    }
+
+    const QTransform t = d->markerTransform(strokeWidth, nodeAngle);
+
+    if (!t.isIdentity()) {
+        outline = t.map(outline);
+    }
+
+    return outline;
+}
+
+void KoMarker::drawPreview(QPainter *painter, const QRectF &previewRect, const QPen &pen, KoFlake::MarkerPosition position)
+{
+    const QRectF outlineRect = outline(pen.widthF(), 0).boundingRect(); // normalized to 0,0
+    QPointF marker;
+    QPointF start;
+    QPointF end;
+
+    if (position == KoFlake::StartMarker) {
+        marker = QPointF(-outlineRect.left() + previewRect.left(), previewRect.center().y());
+        start = marker;
+        end = QPointF(previewRect.right(), start.y());
+    } else if (position == KoFlake::MidMarker) {
+        start = QPointF(previewRect.left(), previewRect.center().y());
+        marker = QPointF(-outlineRect.center().x() + previewRect.center().x(), start.y());
+        end = QPointF(previewRect.right(), start.y());
+    } else if (position == KoFlake::EndMarker) {
+        start = QPointF(previewRect.left(), previewRect.center().y());
+        marker = QPointF(-outlineRect.right() + previewRect.right(), start.y());
+        end = marker;
+    }
+
+    painter->save();
+    painter->setPen(pen);
+    painter->setClipRect(previewRect);
+
+    painter->drawLine(start, end);
+    paintAtPosition(painter, marker, pen.widthF(), 0);
+
+    painter->restore();
 }

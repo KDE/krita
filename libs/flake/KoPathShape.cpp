@@ -575,6 +575,7 @@ QRectF KoPathShape::boundingRect() const
         qreal bottom = qMax(tl.y(),br.y());
         bb.adjust(left, top, right, bottom);
 
+        // TODO: take care about transformations!
         // take care about markers!
         bb = kisGrowRect(bb, stroke()->strokeMaxMarkersInset(this));
     }
@@ -1558,6 +1559,7 @@ bool KoPathShape::hitTest(const QPointF &position) const
         stroke()->strokeInsets(this, insets);
         QRectF roi(QPointF(-insets.left, -insets.top), QPointF(insets.right, insets.bottom));
 
+        // TODO: take care about transformations!
         // take care about markers!
         roi = kisGrowRect(roi, stroke()->strokeMaxMarkersInset(this));
 
@@ -1634,7 +1636,7 @@ KoMarkerData KoPathShape::markerData(KoMarkerData::MarkerPosition position) cons
     }
 }
 
-void KoPathShape::setMarkerNew(KoMarker *marker, KoPathShape::MarkerPositionNew pos)
+void KoPathShape::setMarkerNew(KoMarker *marker, KoFlake::MarkerPosition pos)
 {
     Q_D(KoPathShape);
 
@@ -1645,7 +1647,7 @@ void KoPathShape::setMarkerNew(KoMarker *marker, KoPathShape::MarkerPositionNew 
     }
 }
 
-KoMarker *KoPathShape::markerNew(KoPathShape::MarkerPositionNew pos) const
+KoMarker *KoPathShape::markerNew(KoFlake::MarkerPosition pos) const
 {
     Q_D(const KoPathShape);
     return d->markersNew[pos].data();

@@ -67,6 +67,8 @@ public:
     typedef std::function<QByteArray(const QString&)> FileFetcherFunc;
     void setFileFetcher(FileFetcherFunc func);
 
+    QList<QExplicitlySharedDataPointer<KoMarker>> knownMarkers() const;
+
 protected:
 
     /// Parses a group-like element element, saving all its topmost properties

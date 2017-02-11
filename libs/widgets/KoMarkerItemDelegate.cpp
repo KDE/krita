@@ -26,7 +26,9 @@
 #include <QPainter>
 #include <QPen>
 
-KoMarkerItemDelegate::KoMarkerItemDelegate(KoMarkerData::MarkerPosition position, QObject *parent)
+#include "kis_global.h"
+
+KoMarkerItemDelegate::KoMarkerItemDelegate(KoFlake::MarkerPosition position, QObject *parent)
 : QAbstractItemDelegate(parent)
 , m_position(position)
 {
@@ -38,34 +40,13 @@ KoMarkerItemDelegate::~KoMarkerItemDelegate()
 
 void KoMarkerItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-    painter->save();
-
-    if (option.state & QStyle::State_Selected)
+    if (option.state & QStyle::State_Selected) {
         painter->fillRect(option.rect, option.palette.highlight());
-
-    bool antialiasing = painter->testRenderHint(QPainter::Antialiasing);
-    if (!antialiasing) {
-        painter->setRenderHint(QPainter::Antialiasing, true);
     }
 
-    KoPathShape pathShape;
-    pathShape.moveTo(QPointF(option.rect.left(), option.rect.center().y()));
-    pathShape.lineTo(QPointF(option.rect.right(), option.rect.center().y()));
-    KoMarker *marker = index.data(Qt::DecorationRole).value<KoMarker*>();
-    if (marker != 0) {
-        pathShape.setMarker(marker, m_position);
-    }
-
-    // paint marker
     QPen pen(option.palette.text(), 2);
-    QPainterPath path = pathShape.pathStroke(pen);
-    painter->fillPath(path, pen.brush());
-
-    if (!antialiasing) {
-        painter->setRenderHint(QPainter::Antialiasing, false);
-    }
-
-    painter->restore();
+    KoMarker *marker = index.data(Qt::DecorationRole).value<KoMarker*>();
+    drawMarkerPreview(painter, option.rect.adjusted(1, 0, -1, 0), pen, marker, m_position);
 }
 
 QSize KoMarkerItemDelegate::sizeHint(const QStyleOptionViewItem & option, const QModelIndex &index) const
@@ -73,4 +54,17 @@ QSize KoMarkerItemDelegate::sizeHint(const QStyleOptionViewItem & option, const 
     Q_UNUSED(option)
     Q_UNUSED(index)
     return QSize(80,30);
+}
+
+void KoMarkerItemDelegate::drawMarkerPreview(QPainter *painter, const QRect &rect, const QPen &pen, KoMarker *marker, KoFlake::MarkerPosition position)
+{
+    if (marker) {
+        marker->drawPreview(painter, rect, pen, position);
+    } else {
+        const qreal centerY = QRectF(rect).center().y();
+        QPen oldPen = painter->pen();
+        painter->setPen(pen);
+        painter->drawLine(rect.left(), centerY, rect.right(), centerY);
+        painter->setPen(oldPen);
+    }
 }

@@ -466,14 +466,9 @@ public:
 
     KoMarkerData markerData(KoMarkerData::MarkerPosition position) const;
 
-    enum MarkerPositionNew {
-        StartMarker,
-        MidMarker,
-        EndMarker
-    };
 
-    void setMarkerNew(KoMarker *marker, MarkerPositionNew pos);
-    KoMarker* markerNew(MarkerPositionNew pos) const;
+    void setMarkerNew(KoMarker *marker, KoFlake::MarkerPosition pos);
+    KoMarker* markerNew(KoFlake::MarkerPosition pos) const;
     bool hasMarkersNew() const;
 
 private:

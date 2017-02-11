@@ -25,7 +25,7 @@
 #include <QSize>
 
 
-KoMarkerModel::KoMarkerModel(const QList<KoMarker*> markers, KoMarkerData::MarkerPosition position, QObject *parent)
+KoMarkerModel::KoMarkerModel(const QList<KoMarker*> markers, KoFlake::MarkerPosition position, QObject *parent)
 : QAbstractListModel(parent)
 , m_markers(markers)
 , m_markerPosition(position)
@@ -85,7 +85,7 @@ QVariant KoMarkerModel::marker(int index, int role) const
     }
 }
 
-KoMarkerData::MarkerPosition KoMarkerModel::position() const
+KoFlake::MarkerPosition KoMarkerModel::position() const
 {
     return m_markerPosition;
 }

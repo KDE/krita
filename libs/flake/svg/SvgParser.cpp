@@ -1003,15 +1003,15 @@ void SvgParser::applyMarkers(KoPathShape *shape)
         return;
 
     if (!gc->markerStartId.isEmpty() && m_markers.contains(gc->markerStartId)) {
-        shape->setMarkerNew(m_markers[gc->markerStartId].data(), KoPathShape::StartMarker);
+        shape->setMarkerNew(m_markers[gc->markerStartId].data(), KoFlake::StartMarker);
     }
 
     if (!gc->markerMidId.isEmpty() && m_markers.contains(gc->markerMidId)) {
-        shape->setMarkerNew(m_markers[gc->markerMidId].data(), KoPathShape::MidMarker);
+        shape->setMarkerNew(m_markers[gc->markerMidId].data(), KoFlake::MidMarker);
     }
 
     if (!gc->markerEndId.isEmpty() && m_markers.contains(gc->markerEndId)) {
-        shape->setMarkerNew(m_markers[gc->markerEndId].data(), KoPathShape::EndMarker);
+        shape->setMarkerNew(m_markers[gc->markerEndId].data(), KoFlake::EndMarker);
     }
 }
 
@@ -1169,6 +1169,11 @@ void SvgParser::applyViewBoxTransform(const KoXmlElement &element)
         gc->matrix = viewTransform * gc->matrix;
         gc->currentBoundingBox = viewRect;
     }
+}
+
+QList<QExplicitlySharedDataPointer<KoMarker> > SvgParser::knownMarkers() const
+{
+    return m_markers.values();
 }
 
 void SvgParser::setFileFetcher(SvgParser::FileFetcherFunc func)

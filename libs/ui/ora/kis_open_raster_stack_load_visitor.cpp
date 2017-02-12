@@ -191,7 +191,7 @@ void KisOpenRasterStackLoadVisitor::loadGroupLayer(const QDomElement& elem, KisG
                     opacity = KisDomUtils::toDouble(subelem.attribute("opacity", "1.0"));
                 }
                 KisGroupLayerSP layer = new KisGroupLayer(d->image, "", opacity * 255);
-                d->image->addNode(layer.data(), gL.data(), 0);
+                d->image->addNode(layer, gL, 0);
                 loadGroupLayer(subelem, layer);
             } else if (node.nodeName() == "layer") {
                 QString filename = subelem.attribute("src");
@@ -204,10 +204,9 @@ void KisOpenRasterStackLoadVisitor::loadGroupLayer(const QDomElement& elem, KisG
                         d->image->setResolution(d->xRes, d->yRes);
                         // now get the device
                         KisPaintDeviceSP device = pngImage->projection();
-                        delete pngImage.data();
 
                         KisPaintLayerSP layer = new KisPaintLayer(gL->image() , "", opacity * 255, device);
-                        d->image->addNode(layer.data(), gL.data(), 0);
+                        d->image->addNode(layer, gL, 0);
                         loadPaintLayer(subelem, layer);
                         dbgFile << "Loading was successful";
                     }

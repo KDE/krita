@@ -26,6 +26,7 @@
 #include <KoID.h>
 #include <kis_types.h>
 #include <brushengine/kis_paintop_factory.h>
+#include "../kis_paint_ops_model.h"
 
 class QString;
 class KisCanvasResourceProvider;
@@ -117,6 +118,7 @@ private:
     struct Private;
     Private * const m_d;
     QString current_paintOpId;
+    QList<KisPaintOpInfo> sortedBrushEnginesList;
 
 };
 

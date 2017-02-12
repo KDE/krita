@@ -58,7 +58,7 @@
 
 // ones from brush engine selector
 #include <brushengine/kis_paintop_factory.h>
-#include "../kis_paint_ops_model.h"
+
 
 
 
@@ -428,7 +428,18 @@ void KisPaintOpPresetsPopup::resourceSelected(KoResource* resource)
     m_d->uiWdgPaintOpPresetSettings.presetWidget->smallPresetChooser->setCurrentResource(resource);
     m_d->uiWdgPaintOpPresetSettings.txtPreset->setText(resource->name());
     slotWatchPresetNameLineEdit();
-    m_d->uiWdgPaintOpPresetSettings.currentBrushNameLabel->setText(resource->name());
+
+    // find the display name of the brush engine and append it to the selected preset display
+    QString currentBrushEngineName;
+    for(int i=0; i < sortedBrushEnginesList.length(); i++) {
+        if (sortedBrushEnginesList.at(i).id == currentPaintOpId() ) {
+             currentBrushEngineName = sortedBrushEnginesList.at(i).name;
+        }
+    }
+
+    QString selectedBrush = resource->name().append(" (").append(currentBrushEngineName).append(" ").append("Engine").append(")");
+
+    m_d->uiWdgPaintOpPresetSettings.currentBrushNameLabel->setText(selectedBrush);
 }
 
 bool variantLessThan(const KisPaintOpInfo v1, const KisPaintOpInfo v2)
@@ -440,8 +451,10 @@ void KisPaintOpPresetsPopup::setPaintOpList(const QList< KisPaintOpFactory* >& l
 {
        m_d->uiWdgPaintOpPresetSettings.brushEgineComboBox->clear(); // reset combobox list just in case
 
+
        // create a new list so we can sort it and populate the brush engine combo box
-        QList<KisPaintOpInfo> sortedList;
+       sortedBrushEnginesList.clear(); // just in case this function is called again, don't keep adding to the list
+
         for(int i=0; i < list.length(); i++) {
 
             QString fileName = KoResourcePaths::findResource("kis_images", list.at(i)->pixmap());
@@ -458,19 +471,19 @@ void KisPaintOpPresetsPopup::setPaintOpList(const QList< KisPaintOpFactory* >& l
             paintOpInfo.icon = pixmap;
             paintOpInfo.priority = list.at(i)->priority();
 
-            sortedList.append(paintOpInfo);
+            sortedBrushEnginesList.append(paintOpInfo);
         }
 
-        qStableSort(sortedList.begin(), sortedList.end(), variantLessThan );
+        qStableSort(sortedBrushEnginesList.begin(), sortedBrushEnginesList.end(), variantLessThan );
 
         // add an "All" option at the front to show all presets
         QPixmap emptyPixmap = QPixmap(22,22);
         emptyPixmap.fill(palette().color(QPalette::Background));
-        sortedList.push_front(KisPaintOpInfo(QString("all_options"), i18n("All"), QString(""), emptyPixmap, 0 ));
+        sortedBrushEnginesList.push_front(KisPaintOpInfo(QString("all_options"), i18n("All"), QString(""), emptyPixmap, 0 ));
 
         // fill the list into the brush combo box
-        for (int m = 0; m < sortedList.length(); m++) {
-            m_d->uiWdgPaintOpPresetSettings.brushEgineComboBox->addItem(sortedList[m].icon, sortedList[m].name, QVariant(sortedList[m].id));
+        for (int m = 0; m < sortedBrushEnginesList.length(); m++) {
+            m_d->uiWdgPaintOpPresetSettings.brushEgineComboBox->addItem(sortedBrushEnginesList[m].icon, sortedBrushEnginesList[m].name, QVariant(sortedBrushEnginesList[m].id));
         }
 
 

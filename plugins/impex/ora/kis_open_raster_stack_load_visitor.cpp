@@ -194,7 +194,7 @@ void KisOpenRasterStackLoadVisitor::loadPaintLayer(const QDomElement& elem, KisP
 
 void KisOpenRasterStackLoadVisitor::loadGroupLayer(const QDomElement& elem, KisGroupLayerSP groupLayer)
 {
-    dbFile << "Loading group layer" << d->image;
+    dbgFile << "Loading group layer" << d->image;
     loadLayerInfo(elem, groupLayer);
     for (QDomNode node = elem.firstChild(); !node.isNull(); node = node.nextSibling()) {
         if (node.isElement()) {

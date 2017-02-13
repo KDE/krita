@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>895</width>
-    <height>405</height>
+    <height>460</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -40,8 +40,14 @@
    </property>
    <item row="0" column="1">
     <layout class="QGridLayout" name="gridLayout_4">
+     <property name="verticalSpacing">
+      <number>12</number>
+     </property>
      <item row="0" column="0">
       <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <property name="spacing">
+        <number>12</number>
+       </property>
        <item>
         <widget class="QLabel" name="label_3">
          <property name="text">
@@ -66,17 +72,23 @@
      </item>
      <item row="1" column="0">
       <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <property name="spacing">
+        <number>12</number>
+       </property>
        <item>
         <layout class="QGridLayout" name="gridLayout">
          <property name="leftMargin">
           <number>0</number>
+         </property>
+         <property name="spacing">
+          <number>12</number>
          </property>
          <item row="1" column="1">
           <widget class="QListWidget" name="tableAvailable">
            <property name="minimumSize">
             <size>
              <width>0</width>
-             <height>250</height>
+             <height>350</height>
             </size>
            </property>
            <property name="spacing">
@@ -108,6 +120,9 @@
        </item>
        <item>
         <layout class="QVBoxLayout" name="verticalLayout">
+         <property name="spacing">
+          <number>12</number>
+         </property>
          <item>
           <spacer name="verticalSpacer_4">
            <property name="orientation">
@@ -152,12 +167,15 @@
        </item>
        <item>
         <layout class="QGridLayout" name="gridLayout_2">
+         <property name="spacing">
+          <number>12</number>
+         </property>
          <item row="1" column="0">
           <widget class="QListWidget" name="tableSelected">
            <property name="minimumSize">
             <size>
              <width>0</width>
-             <height>250</height>
+             <height>350</height>
             </size>
            </property>
            <property name="spacing">
@@ -198,6 +216,12 @@
      </property>
      <property name="labelAlignment">
       <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
+     </property>
+     <property name="horizontalSpacing">
+      <number>8</number>
+     </property>
+     <property name="verticalSpacing">
+      <number>8</number>
      </property>
      <item row="0" column="0">
       <widget class="QLabel" name="bundleName">
@@ -293,6 +317,9 @@
      </item>
      <item row="9" column="1">
       <layout class="QHBoxLayout" name="horizontalLayout">
+       <property name="spacing">
+        <number>8</number>
+       </property>
        <property name="topMargin">
         <number>3</number>
        </property>

@@ -283,7 +283,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
         slFlow->setFixedHeight(iconsize);
         slFlow->setBlockUpdateSignalOnDrag(true);
 
-        slSize->setRange(0, 1000, 2);
+        slSize->setRange(0, cfg.readEntry("maximumBrushSize", 1000), 2);
         slSize->setValue(100);
 
         slSize->setSingleStep(1);
@@ -386,7 +386,6 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     action = new QWidgetAction(this);
     KisActionRegistry::instance()->propertizeAction("previous_preset", action);
     view->actionCollection()->addAction("previous_preset", action);
-
     connect(action, SIGNAL(triggered()), this, SLOT(slotSwitchToPreviousPreset()));
 
     if (!cfg.toolOptionsInDocker()) {
@@ -431,12 +430,12 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
 
     m_presetsPopup = new KisPaintOpPresetsPopup(m_resourceProvider);
     m_brushEditorPopupButton->setPopupWidget(m_presetsPopup);
-    m_presetsPopup->switchDetached(false);
+    m_presetsPopup->parentWidget()->setWindowTitle(i18n("Brush Editor"));
+
     connect(m_presetsPopup, SIGNAL(brushEditorShown()), SLOT(slotUpdateOptionsWidgetPopup()));
     connect(m_viewManager->mainWindow(), SIGNAL(themeChanged()), m_presetsPopup, SLOT(updateThemedIcons()));
 
     m_presetsChooserPopup = new KisPaintOpPresetsChooserPopup();
-    m_presetsChooserPopup->setFixedSize(500, 600);
     m_presetSelectorPopupButton->setPopupWidget(m_presetsChooserPopup);
 
     m_currCompositeOpID = KoCompositeOpRegistry::instance().getDefaultCompositeOp().id();
@@ -473,10 +472,6 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
 
     connect(m_hMirrorAction        , SIGNAL(toggled(bool))                    , SLOT(slotHorizontalMirrorChanged(bool)));
     connect(m_vMirrorAction        , SIGNAL(toggled(bool))                    , SLOT(slotVerticalMirrorChanged(bool)));
-
-
-
-
     connect(m_reloadAction         , SIGNAL(triggered())                        , SLOT(slotReloadPreset()));
 
     connect(m_sliderChooser[0]->getWidget<KisDoubleSliderSpinBox>("opacity"), SIGNAL(valueChanged(qreal)), SLOT(slotSlider1Changed()));
@@ -516,6 +511,7 @@ KisPaintopBox::~KisPaintopBox()
     QMapIterator<TabletToolID, TabletToolData> iter(m_tabletToolMap);
     while (iter.hasNext()) {
         iter.next();
+        //qDebug() << "Writing last used preset for" << iter.key().pointer << iter.key().uniqueID << iter.value().preset->name();
         if ((iter.key().pointer) == QTabletEvent::Eraser) {
             cfg.writeEntry(QString("LastEraser_%1").arg(iter.key().uniqueID) , iter.value().preset->name());
         }
@@ -536,8 +532,9 @@ KisPaintopBox::~KisPaintopBox()
 void KisPaintopBox::restoreResource(KoResource* resource)
 {
     KisPaintOpPreset* preset = dynamic_cast<KisPaintOpPreset*>(resource);
+    //qDebug() << "restoreResource" << resource << preset;
     if (preset) {
-        setCurrentPaintop(preset->paintOp(), preset);
+        setCurrentPaintop(preset);
 
         m_presetsPopup->setPresetImage(preset->image());
         m_presetsPopup->resourceSelected(resource);
@@ -554,30 +551,42 @@ void KisPaintopBox::newOptionWidgets(const QList<QPointer<QWidget> > &optionWidg
 void KisPaintopBox::resourceSelected(KoResource* resource)
 {
     KisPaintOpPreset* preset = dynamic_cast<KisPaintOpPreset*>(resource);
-    if (preset) {
+    if (preset && preset != m_resourceProvider->currentPreset()) {
         if (!preset->settings()->isLoadable())
             return;
 
-        setCurrentPaintopAndReload(preset->paintOp(), preset);
+        if (!m_dirtyPresetsEnabled) {
+            KisSignalsBlocker blocker(m_optionWidget);
+            if (!preset->load()) {
+                warnKrita << "failed to load the preset.";
+            }
+        }
+        //qDebug() << "resourceSelected" << resource->name();
+        setCurrentPaintop(preset);
+
         m_presetsPopup->setPresetImage(preset->image());
         m_presetsPopup->resourceSelected(resource);
     }
 }
 
-void KisPaintopBox::setCurrentPaintopAndReload(const KoID& paintop, KisPaintOpPresetSP preset)
+void KisPaintopBox::setCurrentPaintop(const KoID& paintop)
 {
-    if (!m_dirtyPresetsEnabled) {
-        KisSignalsBlocker blocker(m_optionWidget);
-        if (!preset->load()) {
-            warnKrita << "failed to load the preset.";
-        }
-    }
-
-    setCurrentPaintop(paintop, preset);
+    KisPaintOpPresetSP preset = activePreset(paintop);
+    Q_ASSERT(preset && preset->settings());
+    //qDebug() << "setCurrentPaintop();" << paintop << preset;
+    setCurrentPaintop(preset);
 }
 
-void KisPaintopBox::setCurrentPaintop(const KoID& paintop, KisPaintOpPresetSP preset)
+void KisPaintopBox::setCurrentPaintop(KisPaintOpPresetSP preset)
 {
+
+    //qDebug() << "setCurrentPaintop(); " << preset->name();
+
+    if (preset == m_resourceProvider->currentPreset()) {
+        return;
+    }
+    Q_ASSERT(preset);
+    const KoID& paintop = preset->paintOp();
     m_presetConnections.clear();
 
     if (m_resourceProvider->currentPreset()) {
@@ -588,13 +597,7 @@ void KisPaintopBox::setCurrentPaintop(const KoID& paintop, KisPaintOpPresetSP pr
             m_optionWidget->hide();
         }
 
-        m_paintOpPresetMap[m_resourceProvider->currentPreset()->paintOp()] = m_resourceProvider->currentPreset();
-        m_tabletToolMap[m_currTabletToolID].preset = m_resourceProvider->currentPreset();
-        m_tabletToolMap[m_currTabletToolID].paintOpID = m_resourceProvider->currentPreset()->paintOp();
     }
-
-    preset = (!preset) ? activePreset(paintop) : preset;
-    Q_ASSERT(preset && preset->settings());
 
     if (!m_paintopOptionWidgets.contains(paintop))
         m_paintopOptionWidgets[paintop] = KisPaintOpRegistry::instance()->get(paintop.id())->createConfigWidget(this);
@@ -624,9 +627,16 @@ void KisPaintopBox::setCurrentPaintop(const KoID& paintop, KisPaintOpPresetSP pr
     QString pixFilename = KoResourcePaths::findResource("kis_images", paintOp->pixmap());
 
     m_brushEditorPopupButton->setIcon(QIcon(pixFilename));
-    m_presetsPopup->setCurrentPaintOp(paintop.id());
+    m_presetsPopup->setCurrentPaintOpId(paintop.id());
 
-    if (m_presetsPopup->currentPaintOp() != paintop.id()) {
+
+    ////qDebug() << "\tsetting the new preset for" << m_currTabletToolID.uniqueID << "to" << preset->name();
+    m_paintOpPresetMap[m_resourceProvider->currentPreset()->paintOp()] = preset;
+    m_tabletToolMap[m_currTabletToolID].preset = preset;
+    m_tabletToolMap[m_currTabletToolID].paintOpID = preset->paintOp();
+
+
+    if (m_presetsPopup->currentPaintOpId() != paintop.id()) {
         // Must change the paintop as the current one is not supported
         // by the new colorspace.
         dbgKrita << "current paintop " << paintop.name() << " was not set, not supported by colorspace";
@@ -689,6 +699,12 @@ void KisPaintopBox::updateCompositeOp(QString compositeOpID)
         if (compositeOpID != m_currCompositeOpID) {
             m_currCompositeOpID = compositeOpID;
         }
+        if (compositeOpID == COMPOSITE_ERASE) {
+            m_eraseModeButton->setChecked(true);
+        }
+        else {
+            m_eraseModeButton->setChecked(false);
+        }
     }
 }
 
@@ -729,6 +745,7 @@ void KisPaintopBox::slotSetPaintop(const QString& paintOpId)
 {
     if (KisPaintOpRegistry::instance()->get(paintOpId) != 0) {
         KoID id(paintOpId, KisPaintOpRegistry::instance()->get(paintOpId)->name());
+        //qDebug() << "slotsetpaintop" << id;
         setCurrentPaintop(id);
     }
 }
@@ -736,6 +753,8 @@ void KisPaintopBox::slotSetPaintop(const QString& paintOpId)
 void KisPaintopBox::slotInputDeviceChanged(const KoInputDevice& inputDevice)
 {
     TabletToolMap::iterator toolData = m_tabletToolMap.find(inputDevice);
+
+    //qDebug() << "slotInputDeviceChanged()" << inputDevice.device() << inputDevice.uniqueTabletId();
 
     if (toolData == m_tabletToolMap.end()) {
         KisConfig cfg;
@@ -746,16 +765,28 @@ void KisPaintopBox::slotInputDeviceChanged(const KoInputDevice& inputDevice)
         }
         else {
             preset = rserver->resourceByName(cfg.readEntry<QString>(QString("LastPreset_%1").arg(inputDevice.uniqueTabletId()), "Basic_tip_default"));
+            //if (preset)
+                //qDebug() << "found stored preset " << preset->name() << "for" << inputDevice.uniqueTabletId();
+            //else
+                //qDebug() << "no preset fcound for" << inputDevice.uniqueTabletId();
         }
         if (!preset) {
             preset = rserver->resourceByName("Basic_tip_default");
         }
         if (preset) {
-            setCurrentPaintop(preset->paintOp(), preset);
+            //qDebug() << "inputdevicechanged 1" << preset;
+            setCurrentPaintop(preset);
         }
     }
     else {
-        setCurrentPaintop(toolData->paintOpID, toolData->preset);
+        if (toolData->preset) {
+            //qDebug() << "inputdevicechanged 2" << toolData->preset;
+            setCurrentPaintop(toolData->preset);
+        }
+        else {
+            //qDebug() << "inputdevicechanged 3" << toolData->paintOpID;
+            setCurrentPaintop(toolData->paintOpID);
+        }
     }
 
     m_currTabletToolID = TabletToolID(inputDevice);
@@ -776,6 +807,7 @@ void KisPaintopBox::slotCanvasResourceChanged(int key, const QVariant &value)
          * Update currently selected preset in both the popup widgets
          */
         m_presetsChooserPopup->canvasResourceChanged(preset);
+
         m_presetsPopup->currentPresetChanged(preset);
 
         if (key == KisCanvasResourceProvider::CurrentCompositeOp) {
@@ -1101,7 +1133,8 @@ void KisPaintopBox::slotNextFavoritePreset()
 void KisPaintopBox::slotSwitchToPreviousPreset()
 {
     if (m_resourceProvider->previousPreset()) {
-        setCurrentPaintop(m_resourceProvider->previousPreset()->paintOp(), m_resourceProvider->previousPreset());
+        //qDebug() << "slotSwitchToPreviousPreset();" << m_resourceProvider->previousPreset();
+        setCurrentPaintop(m_resourceProvider->previousPreset());
     }
 }
 
@@ -1144,9 +1177,21 @@ void KisPaintopBox::slotReloadPreset()
 }
 void KisPaintopBox::slotGuiChangedCurrentPreset() // Called only when UI is changed and not when preset is changed
 {
-    m_optionWidget->writeConfigurationSafe(const_cast<KisPaintOpSettings*>(m_resourceProvider->currentPreset()->settings().data()));
+    KisPaintOpPresetSP preset = m_resourceProvider->currentPreset();
 
-    //m_presetsPopup->resourceSelected(m_resourceProvider->currentPreset().data());
+    {
+        /**
+         * Here we postpone all the settings updates events until thye entire writing
+         * operation will be finished. As soon as it is finished, the updates will be
+         * emitted happily (if there were any).
+         */
+
+        KisPaintOpPreset::UpdatedPostponer postponer(preset.data());
+        m_optionWidget->writeConfigurationSafe(const_cast<KisPaintOpSettings*>(preset->settings().data()));
+    }
+
+    // we should also update the preset strip to update the status of the "dirty" mark
+    m_presetsPopup->resourceSelected(m_resourceProvider->currentPreset().data());
 
     // TODO!!!!!!!!
     //m_presetsPopup->updateViewSettings();
@@ -1220,7 +1265,7 @@ void KisPaintopBox::slotUpdateSelectionIcon()
     m_vMirrorAction->setIcon(KisIconUtils::loadIcon("symmetry-vertical"));
 
     KisConfig cfg;
-    if (!cfg.toolOptionsInDocker()) {
+    if (!cfg.toolOptionsInDocker() && m_toolOptionsPopupButton) {
         m_toolOptionsPopupButton->setIcon(KisIconUtils::loadIcon("configure"));
     }
 

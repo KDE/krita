@@ -54,6 +54,15 @@ KisKeyframe::KisKeyframe(KisKeyframeChannel *channel, int time)
     m_d->colorLabel = config.defaultFrameColorLabel();
 }
 
+KisKeyframe::KisKeyframe(const KisKeyframe *rhs, KisKeyframeChannel *channel)
+    : m_d(new Private(channel, rhs->time()))
+{
+    m_d->interpolationMode = rhs->m_d->interpolationMode;
+    m_d->tangentsMode = rhs->m_d->tangentsMode;
+    m_d->leftTangent = rhs->m_d->leftTangent;
+    m_d->rightTangent = rhs->m_d->rightTangent;
+    m_d->colorLabel = rhs->m_d->colorLabel;
+}
 
 KisKeyframe::~KisKeyframe()
 {}

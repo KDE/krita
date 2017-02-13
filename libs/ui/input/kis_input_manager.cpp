@@ -224,7 +224,7 @@ bool KisInputManager::compressMoveEventCommon(Event *event)
      */
     static_assert(std::is_same<Event, QMouseEvent>::value ||
                   std::is_same<Event, QTabletEvent>::value,
-                  "event should a mouse or a tablet event");
+                  "event should be a mouse or a tablet event");
 
     bool retval = false;
 
@@ -347,7 +347,7 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
          * Ignore delta 0 events on OSX, since they are triggered by tablet
          * proximity when using Wacom devices.
          */
-#ifdef Q_OS_MAC
+#ifdef Q_OS_OSX
         if(wheelEvent->delta() == 0) {
             retval = true;
             break;
@@ -420,7 +420,7 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
         stop_ignore_cursor_events();
         break;
     case QEvent::TabletRelease: {
-#ifdef Q_OS_MAC
+#ifdef Q_OS_OSX
         stop_ignore_cursor_events();
 #endif
         // break_if_touch_blocked_press_events();
@@ -481,11 +481,10 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
             retval = d->matcher.touchBeginEvent(static_cast<QTouchEvent*>(event));
             event->accept();
         }
-        // d->resetSavedTabletEvent(event->type());
         break;
     case QEvent::TouchUpdate: {
         QTouchEvent *tevent = static_cast<QTouchEvent*>(event);
-#ifdef Q_OS_MAC
+#ifdef Q_OS_OSX
         int count = 0;
         Q_FOREACH (const QTouchEvent::TouchPoint &point, tevent->touchPoints()) {
             if (point.state() != Qt::TouchPointReleased) {
@@ -504,12 +503,11 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
             touch_start_block_press_events();
             KisAbstractInputAction::setInputManager(this);
             retval = d->matcher.touchUpdateEvent(tevent);
-#ifdef Q_OS_MAC
+#ifdef Q_OS_OSX
         }
 #endif
         event->accept();
 
-        // d->resetSavedTabletEvent(event->type());
         break;
     }
     case QEvent::TouchEnd:
@@ -517,7 +515,6 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
         d->saveTouchEvent(static_cast<QTouchEvent*>(event));
         retval = d->matcher.touchEndEvent(static_cast<QTouchEvent*>(event));
         event->accept();
-        // d->resetSavedTabletEvent(event->type());
         delete d->lastTouchEvent;
         d->lastTouchEvent = 0;
         break;
@@ -559,17 +556,18 @@ QTouchEvent *KisInputManager::lastTouchEvent() const
 
 void KisInputManager::slotToolChanged()
 {
-    auto toolManager = KoToolManager::instance();
-    auto tool = toolManager->toolById(canvas(), toolManager->activeToolId());
-    if (tool->isInTextMode()) {
+    KoToolManager *toolManager = KoToolManager::instance();
+    KoToolBase *tool = toolManager->toolById(canvas(), toolManager->activeToolId());
+    if (tool && tool->isInTextMode()) {
         d->forwardAllEventsToTool = true;
         d->matcher.suppressAllActions(true);
+        d->maskSyntheticEvents(tool->maskSyntheticEvents());
     } else {
         d->forwardAllEventsToTool = false;
         d->matcher.suppressAllActions(false);
     }
 
-    d->maskSyntheticEvents(tool->maskSyntheticEvents());
+
 }
 
 QPointF KisInputManager::widgetToDocument(const QPointF& position)

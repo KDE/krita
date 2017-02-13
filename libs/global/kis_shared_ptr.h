@@ -408,6 +408,19 @@ public:
 
         return d && weakReference && isOdd((int)*weakReference);
     }
+
+    /**
+     * @brief toStrongRef returns a KisSharedPtr which may be dereferenced.
+     *
+     * Weak pointers should only be used to track ownership but never be used as pointers.
+     * This has historically not been the case, but in new API this function should be used
+     * instead of directly using a weak pointer as pointer.
+     * @return a KisSharedPtr, which may be null
+     */
+    inline KisSharedPtr<T> toStrongRef() const {
+        return KisSharedPtr<T>(*this);
+    }
+
 private:
     static const qint32 WEAK_REF = 2;
     static inline bool isOdd(const qint32 &x) {

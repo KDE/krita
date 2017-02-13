@@ -234,12 +234,12 @@ private:
         {
         }
 
-        void redo()
+        void redo() override
         {
             doSwap(m_insert);
         }
 
-        void undo()
+        void undo() override
         {
             doSwap(!m_insert);
         }
@@ -385,7 +385,7 @@ public:
 
     KoColor frameDefaultPixel(int frameId) const
     {
-        DataSP data = m_frames[frameId];  
+        DataSP data = m_frames[frameId];
         return KoColor(data->dataManager()->defaultPixel(),
                        data->colorSpace());
     }
@@ -466,7 +466,7 @@ private:
 
     inline Data* currentData() const
     {
-        Data *data = m_data.data();
+        Data *data;
 
         if (defaultBounds->currentLevelOfDetail()) {
             ensureLodDataPresent();
@@ -832,7 +832,7 @@ KUndo2Command* KisPaintDevice::Private::convertColorSpace(const KoColorSpace * d
             m_device->setDirty();
         }
 
-        void redo()
+        void redo() override
         {
             KUndo2Command::redo();
 
@@ -844,7 +844,7 @@ KUndo2Command* KisPaintDevice::Private::convertColorSpace(const KoColorSpace * d
             emitNotifications();
         }
 
-        void undo()
+        void undo() override
         {
             KUndo2Command::undo();
             emitNotifications();
@@ -1493,7 +1493,7 @@ QImage KisPaintDevice::convertToQImage(const KoColorProfile *dstProfile,
                            renderingIntent, conversionFlags);
 }
 
-QImage KisPaintDevice::convertToQImage(const KoColorProfile *  dstProfile, qint32 x1, qint32 y1, qint32 w, qint32 h, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags) const
+QImage KisPaintDevice::convertToQImage(const KoColorProfile *dstProfile, qint32 x1, qint32 y1, qint32 w, qint32 h, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags) const
 {
 
     if (w < 0)
@@ -1553,24 +1553,39 @@ static KisPaintDeviceSP createThumbnailDeviceInternal(const KisPaintDevice* srcD
     return thumbnail;
 }
 
+QSize fixThumbnailSize(QSize size)
+{
+    if (!size.width() && size.height()) {
+        size.setWidth(1);
+    }
+
+    if (size.width() && !size.height()) {
+        size.setHeight(1);
+    }
+
+    return size;
+}
+
 KisPaintDeviceSP KisPaintDevice::createThumbnailDevice(qint32 w, qint32 h, QRect rect, QRect outputRect) const
 {
     QSize thumbnailSize(w, h);
 
-    int srcWidth, srcHeight;
-    int srcX0, srcY0;
     QRect imageRect = rect.isValid() ? rect : extent();
-
-    //can't create thumbnail for an empty device, e.g. layer thumbnail for empty image
-    if (imageRect.isEmpty() || !imageRect.isValid()) {
-        return new KisPaintDevice(colorSpace());
-    }
-
-    imageRect.getRect(&srcX0, &srcY0, &srcWidth, &srcHeight);
 
     if ((thumbnailSize.width() > imageRect.width()) || (thumbnailSize.height() > imageRect.height())) {
         thumbnailSize.scale(imageRect.size(), Qt::KeepAspectRatio);
     }
+
+    thumbnailSize = fixThumbnailSize(thumbnailSize);
+
+    //can't create thumbnail for an empty device, e.g. layer thumbnail for empty image
+    if (imageRect.isEmpty() || thumbnailSize.isEmpty()) {
+        return new KisPaintDevice(colorSpace());
+    }
+
+    int srcWidth, srcHeight;
+    int srcX0, srcY0;
+    imageRect.getRect(&srcX0, &srcY0, &srcWidth, &srcHeight);
 
     if (!outputRect.isValid()) {
         outputRect = QRect(0, 0, w, h);
@@ -1589,17 +1604,19 @@ KisPaintDeviceSP KisPaintDevice::createThumbnailDeviceOversampled(qint32 w, qint
     QSize thumbnailOversampledSize = oversampleAdjusted * thumbnailSize;
 
     QRect outputRect;
-    QRect imageRect = (rect.isValid() && !rect.isNull()) ? rect : extent();
-
-    //can't create thumbnail for an empty device, e.g. layer thumbnail for empty image
-    if (imageRect.isEmpty() || !imageRect.isValid()) {
-        return new KisPaintDevice(colorSpace());
-    }
+    QRect imageRect = rect.isValid() ? rect : extent();
 
     qint32 hstart = thumbnailOversampledSize.height();
 
     if ((thumbnailOversampledSize.width() > imageRect.width()) || (thumbnailOversampledSize.height() > imageRect.height())) {
         thumbnailOversampledSize.scale(imageRect.size(), Qt::KeepAspectRatio);
+    }
+
+    thumbnailOversampledSize = fixThumbnailSize(thumbnailOversampledSize);
+
+    //can't create thumbnail for an empty device, e.g. layer thumbnail for empty image
+    if (imageRect.isEmpty() || thumbnailSize.isEmpty() || thumbnailOversampledSize.isEmpty()) {
+        return new KisPaintDevice(colorSpace());
     }
 
     oversampleAdjusted *= (hstart > 0) ? ((qreal)thumbnailOversampledSize.height() / hstart) : 1.; //readjusting oversample ratio, given that we had to adjust thumbnail size
@@ -1626,14 +1643,18 @@ KisPaintDeviceSP KisPaintDevice::createThumbnailDeviceOversampled(qint32 w, qint
 
 QImage KisPaintDevice::createThumbnail(qint32 w, qint32 h, QRect rect, qreal oversample, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags)
 {
-    KisPaintDeviceSP dev = createThumbnailDeviceOversampled(w, h, oversample, rect);
+    QSize size = fixThumbnailSize(QSize(w, h));
+
+    KisPaintDeviceSP dev = createThumbnailDeviceOversampled(size.width(), size.height(), oversample, rect);
     QImage thumbnail = dev->convertToQImage(KoColorSpaceRegistry::instance()->rgb8()->profile(), 0, 0, w, h, renderingIntent, conversionFlags);
     return thumbnail;
 }
 
 QImage KisPaintDevice::createThumbnail(qint32 w, qint32 h, qreal oversample, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags)
 {
-    return m_d->cache()->createThumbnail(w, h, oversample, renderingIntent, conversionFlags);
+    QSize size = fixThumbnailSize(QSize(w, h));
+
+    return m_d->cache()->createThumbnail(size.width(), size.height(), oversample, renderingIntent, conversionFlags);
 }
 
 KisHLineIteratorSP KisPaintDevice::createHLineIteratorNG(qint32 x, qint32 y, qint32 w)

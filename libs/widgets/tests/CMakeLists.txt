@@ -5,28 +5,21 @@ add_definitions(-DFILES_OUTPUT_DIR="${CMAKE_CURRENT_BINARY_DIR}")
 
 #add_subdirectory(filedialogtester)
 
-########### next target ###############
+include(ECMAddTests)
+include(KritaAddBrokenUnitTest)
 
-set(zoomhandler_test_SRCS zoomhandler_test.cpp )
-kde4_add_unit_test(zoomhandler_test TESTNAME libs-widgets-zoomhandler_test  ${zoomhandler_test_SRCS})
-target_link_libraries(zoomhandler_test kritawidgets Qt5::Test)
+ecm_add_tests(
+    zoomhandler_test.cpp
+    zoomcontroller_test.cpp
+    NAME_PREFIX "libs-widgets-"
+    LINK_LIBRARIES kritawidgets Qt5::Test)
 
-########### next target ###############
+krita_add_broken_unit_test(
+    KoResourceTaggingTest.cpp
+    TEST_NAME libs-widgets-KoResourceTaggingTest
+    LINK_LIBRARIES kritawidgets Qt5::Test)
 
-set(zoomcontroller_test_SRCS zoomcontroller_test.cpp )
-kde4_add_unit_test(zoomcontroller_test TESTNAME libs-widgets-zoomcontroller_test  ${zoomcontroller_test_SRCS})
-target_link_libraries(zoomcontroller_test  kritawidgets Qt5::Test)
-
-########### next target ###############
-
-set(KoResourceTaggingTest_SRCS KoResourceTaggingTest.cpp )
-kde4_add_broken_unit_test(KoResourceTaggingTest TESTNAME libs-widgets-KoResourceTaggingTest  ${KoResourceTaggingTest_SRCS})
-target_link_libraries(KoResourceTaggingTest  kritawidgets Qt5::Test)
-
-########### next target ###############
-
-set(kis_parse_spin_boxes_test_SRCS kis_parse_spin_boxes_test.cpp)
-kde4_add_unit_test(KisParseSpinBoxesTest TESTNAME krita-ui-KisParseSpinBoxesTest ${kis_parse_spin_boxes_test_SRCS})
-target_link_libraries(KisParseSpinBoxesTest kritaui Qt5::Test)
-
-########### end ###############
+ecm_add_tests(
+    kis_parse_spin_boxes_test.cpp
+    NAME_PREFIX "krita-ui-"
+    LINK_LIBRARIES kritaui Qt5::Test)

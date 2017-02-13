@@ -30,8 +30,8 @@ ConnectionToolFactory::ConnectionToolFactory()
 {
     setToolTip(i18n("Connect shapes"));
     setIconName(koIconNameCStr("x-shape-connection"));
-    setToolType(mainToolType());
-    setPriority(1);
+    setSection(mainToolType());
+    setPriority(5);
     setActivationShapeId("flake/always");
 }
 

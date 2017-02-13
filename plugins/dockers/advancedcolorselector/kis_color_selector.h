@@ -19,6 +19,8 @@
 #define KIS_COLOR_SELECTOR_H
 
 #include "kis_color_selector_base.h"
+#include <KisColorSelectorConfiguration.h>
+
 
 class KisColorSelectorRing;
 class KisColorSelectorComponent;
@@ -31,68 +33,13 @@ class KisColorSelector : public KisColorSelectorBase
 {
     Q_OBJECT
 public:
-    enum Type {Ring, Square, Wheel, Triangle, Slider};
-    enum Parameters {H, hsvS, V, hslS, L, SL, SV, SV2, hsvSH, hslSH, VH, LH, SI, SY, hsiSH, hsySH, I, Y, IH, YH, hsiS, hsyS};
-    struct Configuration {
-        Type mainType;
-        Type subType;
-        Parameters mainTypeParameter;
-        Parameters subTypeParameter;
-        Configuration(Type mainT = Triangle,
-                              Type subT = Ring,
-                              Parameters mainTP = SL,
-                              Parameters subTP = H)
-                                  : mainType(mainT),
-                                  subType(subT),
-                                  mainTypeParameter(mainTP),
-                                  subTypeParameter(subTP)
-        {}
-        Configuration(QString string)
-        {
-            readString(string);
-        }
 
-        QString toString() const
-        {
-            return QString("%1|%2|%3|%4").arg(mainType).arg(subType).arg(mainTypeParameter).arg(subTypeParameter);
-        }
-        void readString(QString string)
-        {
-            QStringList strili = string.split('|');
-            if(strili.length()!=4) return;
-
-            int imt=strili.at(0).toInt();
-            int ist=strili.at(1).toInt();
-            int imtp=strili.at(2).toInt();
-            int istp=strili.at(3).toInt();
-
-            if(imt>Slider || ist>Slider || imtp>hsyS || istp>hsyS)//this was LH before
-                return;
-
-            mainType = Type(imt);
-            subType = Type(ist);
-            mainTypeParameter = Parameters(imtp);
-            subTypeParameter = Parameters(istp);
-        }
-        static Configuration fromString(QString string)
-        {
-            Configuration ret;
-            ret.readString(string);
-            return ret;
-        }
-    };
-
-//    enum MainType {Ring, Square, Wheel};
-//    enum SubType {Triangle, Square, Slider};
-//    enum MainTypeParameter {SL, SV, SH, VH, LH, VSV/*experimental*/, SI, SY, YH, IH};
-//    enum SubTypeParameter {H, S, V, L, I, Y, hsiS, hsyS};
-
-    KisColorSelector(Configuration conf, QWidget* parent = 0);
+    KisColorSelector(KisColorSelectorConfiguration conf, QWidget* parent = 0);
     KisColorSelector(QWidget* parent=0);
     KisColorSelectorBase* createPopup() const;
 
-    void setConfiguration(Configuration conf);
-    Configuration configuration() const;
+    void setConfiguration(KisColorSelectorConfiguration conf);
+    KisColorSelectorConfiguration configuration() const;
     void setColor(const KoColor &color);
 
 public Q_SLOTS:
@@ -127,7 +74,7 @@ private:
 
     KisSignalCompressor *m_signalCompressor;
 
-    Configuration m_configuration;
+    KisColorSelectorConfiguration m_configuration;
 
     KoColor m_lastRealColor;
     KoColor m_currentRealColor;

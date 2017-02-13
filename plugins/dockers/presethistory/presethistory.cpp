@@ -33,7 +33,7 @@ public:
     {
     }
 
-    virtual QString id() const
+    QString id() const override
     {
         return QString( "PresetHistory" );
     }
@@ -43,14 +43,14 @@ public:
         return Qt::RightDockWidgetArea;
     }
 
-    virtual QDockWidget* createDockWidget()
+    QDockWidget* createDockWidget() override
     {
         PresetHistoryDock * dockWidget = new PresetHistoryDock();
         dockWidget->setObjectName(id());
         return dockWidget;
     }
 
-    DockPosition defaultDockPosition() const
+    DockPosition defaultDockPosition() const override
     {
         return DockMinimized;
     }

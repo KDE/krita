@@ -21,7 +21,6 @@
 
 #include <QScopedPointer>
 
-#include <functional>
 #include <boost/iterator/iterator_facade.hpp>
 
 #include "kritaui_export.h"
@@ -36,12 +35,9 @@ public:
     KisStabilizedEventsSampler(int sampleTime = 1);
     ~KisStabilizedEventsSampler();
 
-    void setLineFunction(std::function<void(const KisPaintInformation &)> func);
-
     void clear();
     void addEvent(const KisPaintInformation &pi);
     void addFinishingEvent(int numSamples);
-    void processAllEvents();
 
 public:
     class iterator :

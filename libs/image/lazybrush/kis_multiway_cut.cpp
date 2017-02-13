@@ -104,7 +104,7 @@ bool keyStrokesOrder(const KeyStroke &a, const KeyStroke &b)
 
 void KisMultiwayCut::run()
 {
-    KisPaintDeviceSP other = new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8());
+    KisPaintDeviceSP other(new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8()));
 
     /**
      * First sort all the key strokes in a way that all the

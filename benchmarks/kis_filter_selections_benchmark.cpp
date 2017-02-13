@@ -106,7 +106,7 @@ void KisFilterSelectionsBenchmark::initFilter(const QString &name)
 {
     m_filter = KisFilterRegistry::instance()->value(name);
     Q_ASSERT(m_filter);
-    m_configuration = m_filter->defaultConfiguration(0);
+    m_configuration = m_filter->defaultConfiguration();
 
     dbgKrita << "Filter initialized:" << name;
 }

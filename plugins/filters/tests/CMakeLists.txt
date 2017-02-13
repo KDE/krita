@@ -5,12 +5,8 @@ macro_add_unittest_definitions()
 
 ########### next target ###############
 
-set(kis_all_filter_test_SRCS kis_all_filter_test.cpp )
-kde4_add_executable(KisAllFilterTest TEST ${kis_all_filter_test_SRCS})
-target_link_libraries(KisAllFilterTest  kritaimage Qt5::Test)
-
-########### next target ###############
-
-set(kis_crash_filter_test_SRCS kis_crash_filter_test.cpp )
-kde4_add_executable(KisCrashFilterTest TEST ${kis_crash_filter_test_SRCS})
-target_link_libraries(KisCrashFilterTest  kritaimage Qt5::Test)
+ecm_add_tests(
+    kis_all_filter_test.cpp
+    kis_crash_filter_test.cpp
+    NAME_PREFIX "krita-filters-"
+    LINK_LIBRARIES kritaimage Qt5::Test)

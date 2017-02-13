@@ -55,8 +55,7 @@ void MoveSelectionStrokeTest::test()
     KisResourcesSnapshotSP resources =
         new KisResourcesSnapshot(image,
                                  image->root()->firstChild(),
-                                 image->postExecutionUndoAdapter(),
-                                     manager.data());
+                                 manager.data());
 
     KisNodeSP currentNode = resources->currentNode();
     KisPaintLayerSP currentPaintLayer = dynamic_cast<KisPaintLayer*>(currentNode.data());
@@ -89,7 +88,7 @@ void MoveSelectionStrokeTest::test()
             new MoveSelectionStrokeStrategy(currentPaintLayer,
                                             image->globalSelection(),
                                             image.data(),
-                                            image->postExecutionUndoAdapter());
+                                            image.data());
 
         KisStrokeId id = image->startStroke(strategy);
         image->addJob(id, new MoveStrokeStrategy::Data(QPoint(100,100)));
@@ -110,7 +109,7 @@ void MoveSelectionStrokeTest::test()
             new MoveSelectionStrokeStrategy(currentPaintLayer,
                                             image->globalSelection(),
                                             image.data(),
-                                            image->postExecutionUndoAdapter());
+                                            image.data());
 
         KisStrokeId id = image->startStroke(strategy);
         image->addJob(id, new MoveStrokeStrategy::Data(QPoint(-200,50)));

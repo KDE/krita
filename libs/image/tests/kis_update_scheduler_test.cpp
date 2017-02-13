@@ -51,7 +51,7 @@ KisImageSP KisUpdateSchedulerTest::buildTestingImage()
 
     KisFilterSP filter = KisFilterRegistry::instance()->value("blur");
     Q_ASSERT(filter);
-    KisFilterConfigurationSP configuration = filter->defaultConfiguration(0);
+    KisFilterConfigurationSP configuration = filter->defaultConfiguration();
     Q_ASSERT(configuration);
 
     KisPaintLayerSP paintLayer1 = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE_U8);
@@ -341,7 +341,7 @@ public:
     {
     }
 
-    void run() {
+    void run() override {
         for (int i = 0; i < NUM_CYCLES; i++) {
             if(i % NTH_CHECK == 0) {
                 m_scheduler->blockUpdates();

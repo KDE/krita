@@ -114,7 +114,7 @@ Q_SIGNALS:
     void stabilizeSensorsChanged();
 
 private:
-    void addSmoothingAction(int enumId, const QString &id, const QString &name, KActionCollection *globalCollection);
+    void addSmoothingAction(int enumId, const QString &id, const QString &name, const QIcon &icon, KActionCollection *globalCollection);
 
 private:
     QComboBox *m_cmbSmoothingType;
@@ -146,7 +146,7 @@ public:
         setToolTip(i18n("Freehand Brush Tool"));
 
         // Temporarily
-        setToolType(TOOL_TYPE_SHAPE);
+        setSection(TOOL_TYPE_SHAPE);
         setIconName(koIconNameCStr("krita_tool_freehand"));
         setShortcut(QKeySequence(Qt::Key_B));
         setPriority(0);

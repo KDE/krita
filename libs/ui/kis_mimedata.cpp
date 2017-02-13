@@ -33,6 +33,7 @@
 #include "kis_node_insertion_adapter.h"
 #include "kis_dummies_facade_base.h"
 #include "kis_node_dummies_graph.h"
+#include "KisImportExportManager.h"
 
 #include <KoProperties.h>
 #include <KoStore.h>
@@ -110,13 +111,15 @@ QByteArray serializeToByteArray(QList<KisNodeSP> nodes)
     QByteArray byteArray;
     QBuffer buffer(&byteArray);
 
-    KoStore *store = KoStore::createStore(&buffer, KoStore::Write);
-    Q_ASSERT(!store->bad());
-    
     KisDocument *doc = createDocument(nodes);
-    doc->saveNativeFormatCalligra(store);
+    KisImportExportFilter *filter = KisImportExportManager::filterForMimeType(doc->nativeFormatMimeType(), KisImportExportManager::Export);
+    filter->setBatchMode(true);
+    filter->setMimeType(doc->nativeFormatMimeType());
+    if (filter->convert(doc, &buffer) != KisImportExportFilter::OK) {
+        qWarning() << "serializeToByteArray():: Could not export to our native format";
+    }
+    delete filter;
     delete doc;
-
     return byteArray;
 }
 
@@ -182,20 +185,20 @@ QVariant KisMimeData::retrieveData(const QString &mimetype, QVariant::Type prefe
     }
 }
 
-void KisMimeData::initializeExternalNode(KisNodeSP &node,
+void KisMimeData::initializeExternalNode(KisNodeSP *node,
                                          KisImageWSP image,
                                          KisShapeController *shapeController)
 {
     // layers store a link to the image, so update it
-    KisLayer *layer = dynamic_cast<KisLayer*>(node.data());
+    KisLayer *layer = qobject_cast<KisLayer*>(node->data());
     if (layer) {
         layer->setImage(image);
     }
-    KisShapeLayer *shapeLayer = dynamic_cast<KisShapeLayer*>(node.data());
+    KisShapeLayer *shapeLayer = dynamic_cast<KisShapeLayer*>(node->data());
     if (shapeLayer) {
         // attach the layer to a new shape controller
         KisShapeLayer *shapeLayer2 = new KisShapeLayer(*shapeLayer, shapeController);
-        node = shapeLayer2;
+        *node = shapeLayer2;
     }
 }
 
@@ -252,7 +255,7 @@ QList<KisNodeSP> KisMimeData::tryLoadInternalNodes(const QMimeData *data,
             if ((forceCopy || copyNode) && initialListener == image.data()) {
                 KisLayerUtils::addCopyOfNameTag(node);
             }
-            initializeExternalNode(node, image, shapeController);
+            initializeExternalNode(&node, image, shapeController);
             clones << node;
         }
         nodes = clones;
@@ -272,40 +275,41 @@ QList<KisNodeSP> KisMimeData::loadNodes(const QMimeData *data,
     QList<KisNodeSP> nodes;
 
     if (data->hasFormat("application/x-krita-node")) {
-        QByteArray ba = data->data("application/x-krita-node");
-
         KisDocument *tempDoc = KisPart::instance()->createDocument();
-        bool result = tempDoc->loadNativeFormatFromByteArray(ba);
+        QByteArray ba = data->data("application/x-krita-node");
+        QBuffer buf(&ba);
+        KisImportExportFilter *filter = tempDoc->importExportManager()->filterForMimeType(tempDoc->nativeFormatMimeType(), KisImportExportManager::Import);
+        filter->setBatchMode(true);
+        bool result = (filter->convert(tempDoc, &buf) == KisImportExportFilter::OK);
 
         if (result) {
             KisImageWSP tempImage = tempDoc->image();
             Q_FOREACH (KisNodeSP node, tempImage->root()->childNodes(QStringList(), KoProperties())) {
-                nodes << node;
                 tempImage->removeNode(node);
-                initializeExternalNode(node, image, shapeController);
+                initializeExternalNode(&node, image, shapeController);
+                nodes << node;
             }
         }
+        delete filter;
         delete tempDoc;
     }
 
     if (nodes.isEmpty() && data->hasFormat("application/x-krita-node-url")) {
         QByteArray ba = data->data("application/x-krita-node-url");
-        QString localFile = QUrl::fromEncoded(ba).toLocalFile();
-
         KisDocument *tempDoc = KisPart::instance()->createDocument();
-        bool result = tempDoc->loadNativeFormat(localFile);
+        Q_ASSERT(QUrl::fromEncoded(ba).isLocalFile());
+        bool result = tempDoc->openUrl(QUrl::fromEncoded(ba));
 
         if (result) {
             KisImageWSP tempImage = tempDoc->image();
             Q_FOREACH (KisNodeSP node, tempImage->root()->childNodes(QStringList(), KoProperties())) {
-                nodes << node;
                 tempImage->removeNode(node);
-                initializeExternalNode(node, image, shapeController);
+                initializeExternalNode(&node, image, shapeController);
+                nodes << node;
             }
         }
         delete tempDoc;
-
-        QFile::remove(localFile);
+        QFile::remove(QUrl::fromEncoded(ba).toLocalFile());
     }
 
     if (nodes.isEmpty() && data->hasImage()) {

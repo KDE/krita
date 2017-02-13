@@ -562,6 +562,10 @@ void KisTiledDataManagerTest::benchmarkReadOnlyTileLazy()
 class KisSimpleClass : public KisShared
 {
     qint64 m_int;
+public:
+    KisSimpleClass() {
+        Q_UNUSED(m_int);
+    }
 };
 
 typedef KisSharedPtr<KisSimpleClass> KisSimpleClassSP;
@@ -674,7 +678,7 @@ public:
     {
     }
 
-    void run() {
+    void run() override {
         qsrand(QTime::currentTime().msec());
         for(qint32 i = 0; i < NUM_CYCLES; i++) {
             qint32 type = qrand() % NUM_TYPES;

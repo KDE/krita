@@ -59,7 +59,7 @@ class KisKeyframeChannel;
 
 /**
  * A widget that shows a visualization of the layer structure.
- * 
+ *
  * The center of the layer box is KisNodeModel, which shows the actual layers.
  * This widget adds docking functionality and command buttons.
  *
@@ -160,7 +160,7 @@ private:
     KisSignalCompressor m_colorLabelCompressor;
 
     KisNodeSP m_activeNode;
-    KisKeyframeChannel* m_opacityChannel {0};
+    QPointer<KisKeyframeChannel> m_opacityChannel;
     bool m_blockOpacityUpdate {false};
 };
 

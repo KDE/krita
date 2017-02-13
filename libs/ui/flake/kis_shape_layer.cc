@@ -95,12 +95,12 @@ public:
         : q(parent)
 {}
 
-    void add(KoShape *child) {
+    void add(KoShape *child) override {
         SimpleShapeContainerModel::add(child);
         q->shapeManager()->addShape(child);
     }
 
-    void remove(KoShape *child) {
+    void remove(KoShape *child) override {
         q->shapeManager()->remove(child);
         SimpleShapeContainerModel::remove(child);
     }
@@ -114,14 +114,12 @@ struct KisShapeLayer::Private
 {
 public:
     Private()
-        : converter(0)
-        , canvas(0)
+        : canvas(0)
         , controller(0)
         , x(0)
         , y(0)
          {}
 
-    KoViewConverter * converter;
     KisPaintDeviceSP paintDevice;
     KisShapeLayerCanvas * canvas;
     KoShapeBasedDocumentBase* controller;
@@ -213,17 +211,15 @@ KisShapeLayer::KisShapeLayer(const KisShapeLayer& _rhs, const KisShapeLayer &_ad
 KisShapeLayer::~KisShapeLayer()
 {
     /**
-     * Small hack alert: we set the image to null to disable
-     * updates those will be emitted on shape deletion
+     * Small hack alert: we should avoid updates on shape deletion
      */
-    KisLayer::setImage(0);
+    m_d->canvas->prepareForDestroying();
 
     Q_FOREACH (KoShape *shape, shapes()) {
         shape->setParent(0);
         delete shape;
     }
 
-    delete m_d->converter;
     delete m_d->canvas;
     delete m_d;
 }
@@ -233,14 +229,12 @@ void KisShapeLayer::initShapeLayer(KoShapeBasedDocumentBase* controller)
     setSupportsLodMoves(false);
     setShapeId(KIS_SHAPE_LAYER_ID);
 
-    m_d->converter = new KisImageViewConverter(image());
-
     KIS_ASSERT_RECOVER_NOOP(this->image());
     m_d->paintDevice = new KisPaintDevice(image()->colorSpace());
     m_d->paintDevice->setDefaultBounds(new KisDefaultBounds(this->image()));
     m_d->paintDevice->setParentNode(this);
 
-    m_d->canvas = new KisShapeLayerCanvas(this, m_d->converter);
+    m_d->canvas = new KisShapeLayerCanvas(this, image());
     m_d->canvas->setProjection(m_d->paintDevice);
     m_d->canvas->moveToThread(this->thread());
     m_d->controller = controller;
@@ -262,9 +256,9 @@ bool KisShapeLayer::allowAsChild(KisNodeSP node) const
 void KisShapeLayer::setImage(KisImageWSP _image)
 {
     KisLayer::setImage(_image);
-    delete m_d->converter;
-    m_d->converter = new KisImageViewConverter(image());
-    m_d->paintDevice = new KisPaintDevice(image()->colorSpace());
+    m_d->canvas->setImage(_image);
+    m_d->paintDevice->convertTo(_image->colorSpace());
+    m_d->paintDevice->setDefaultBounds(new KisDefaultBounds(_image));
 }
 
 KisLayerSP KisShapeLayer::createMergedLayerTemplate(KisLayerSP prevLayer)
@@ -318,7 +312,7 @@ qint32 KisShapeLayer::y() const
 void KisShapeLayer::setX(qint32 x)
 {
     qint32 delta = x - this->x();
-    QPointF diff = QPointF(m_d->converter->viewToDocumentX(delta), 0);
+    QPointF diff = QPointF(m_d->canvas->viewConverter()->viewToDocumentX(delta), 0);
     emit sigMoveShapes(diff);
 
     // Save new value to satisfy LSP
@@ -328,7 +322,7 @@ void KisShapeLayer::setX(qint32 x)
 void KisShapeLayer::setY(qint32 y)
 {
     qint32 delta = y - this->y();
-    QPointF diff = QPointF(0, m_d->converter->viewToDocumentY(delta));
+    QPointF diff = QPointF(0, m_d->canvas->viewConverter()->viewToDocumentY(delta));
     emit sigMoveShapes(diff);
 
     // Save new value to satisfy LSP
@@ -373,7 +367,7 @@ KoShapeManager* KisShapeLayer::shapeManager() const
 
 KoViewConverter* KisShapeLayer::converter() const
 {
-    return m_d->converter;
+    return m_d->canvas->viewConverter();
 }
 
 bool KisShapeLayer::visible(bool recursive) const
@@ -392,7 +386,7 @@ bool KisShapeLayer::saveLayer(KoStore * store) const
     KoOdfWriteStore odfStore(store);
     KoXmlWriter* manifestWriter = odfStore.manifestWriter("application/vnd.oasis.opendocument.graphics");
     KoEmbeddedDocumentSaver embeddedSaver;
-    KisDocument::SavingContext documentContext(odfStore, embeddedSaver);
+    KoDocumentBase::SavingContext documentContext(odfStore, embeddedSaver);
 
     if (!store->open("content.xml"))
         return false;
@@ -401,9 +395,9 @@ bool KisShapeLayer::saveLayer(KoStore * store) const
     KoXmlWriter * docWriter = KoOdfWriteStore::createOasisXmlWriter(&storeDev, "office:document-content");
 
     // for office:master-styles
-    QTemporaryFile masterStyles;
-    masterStyles.open();
-    KoXmlWriter masterStylesTmpWriter(&masterStyles, 1);
+//    QTemporaryFile masterStyles;
+//    masterStyles.open();
+//    KoXmlWriter masterStylesTmpWriter(&masterStyles, 1);
 
     KoPageLayout page;
     page.format = KoPageFormat::defaultFormat();
@@ -586,7 +580,7 @@ KUndo2Command* KisShapeLayer::transform(const QTransform &transform) {
     QList<KoShape*> shapes = m_d->canvas->shapeManager()->shapes();
     if(shapes.isEmpty()) return 0;
 
-    KisImageViewConverter *converter = dynamic_cast<KisImageViewConverter*>(m_d->converter);
+    KisImageViewConverter *converter = dynamic_cast<KisImageViewConverter*>(this->converter());
     QTransform realTransform = converter->documentToView() *
         transform * converter->viewToDocument();
 

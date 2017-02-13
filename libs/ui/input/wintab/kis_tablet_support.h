@@ -39,7 +39,7 @@
 
 struct QTabletDeviceData
 {
-#ifndef Q_WS_MAC
+#ifndef Q_OS_OSX
     int minPressure;
     int maxPressure;
     int minTanPressure;
@@ -54,7 +54,7 @@ struct QTabletDeviceData
                               int outOriginY, int outExtentY) const;
 #endif
 
-#if defined(HAVE_X11) || (defined(Q_WS_MAC) && !defined(QT_MAC_USE_COCOA))
+#if defined(HAVE_X11) || (defined(Q_OS_OSX) && !defined(QT_MAC_USE_COCOA))
     QPointer<QWidget> widgetToGetPress;
 #endif
 
@@ -74,7 +74,7 @@ struct QTabletDeviceData
     int xinput_button_release;
     int xinput_proximity_in;
     int xinput_proximity_out;
-#elif defined(Q_WS_MAC)
+#elif defined(Q_OS_OSX)
     quint64 tabletUniqueID;
     int tabletDeviceType;
     int tabletPointerType;
@@ -82,7 +82,7 @@ struct QTabletDeviceData
 #endif
 
     // Added by Krita
-#if defined(Q_OS_MAC) || defined(Q_OS_WIN32)
+#if defined(Q_OS_OSX) || defined(Q_OS_WIN32)
   QMap<quint8, quint8> buttonsMap;
   qint64 llId;
   int currentPointerType;
@@ -195,7 +195,7 @@ static inline int sign(int x)
     return x >= 0 ? 1 : -1;
 }
 
-#ifndef Q_WS_MAC
+#ifndef Q_OS_OSX
 inline QPointF QTabletDeviceData::scaleCoord(int coordX, int coordY,
                                             int outOriginX, int outExtentX,
                                             int outOriginY, int outExtentY) const

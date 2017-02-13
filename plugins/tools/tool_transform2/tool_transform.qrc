@@ -2,5 +2,6 @@
 <RCC version="1.0">
     <qresource>
         <file>rotate_cursor.xpm</file>
+        <file>shear_cursor.png</file>
     </qresource>
 </RCC>

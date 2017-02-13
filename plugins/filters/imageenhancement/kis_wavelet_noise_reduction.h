@@ -50,7 +50,7 @@ public:
     }
 
 private:
-    virtual KisFilterConfigurationSP  factoryConfiguration(const KisPaintDeviceSP) const;
+    virtual KisFilterConfigurationSP  factoryConfiguration() const;
 
 };
 

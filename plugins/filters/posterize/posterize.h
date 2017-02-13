@@ -43,7 +43,7 @@ public:
         return KoID("posterize", i18n("Posterize"));
     }
 protected:
-    virtual KisFilterConfigurationSP factoryConfiguration(const KisPaintDeviceSP) const;
+    virtual KisFilterConfigurationSP factoryConfiguration() const;
 };
 
 class KisPosterizeColorTransformation : public KoColorTransformation

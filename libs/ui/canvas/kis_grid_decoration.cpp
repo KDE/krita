@@ -96,32 +96,129 @@ void KisGridDecoration::drawDecoration(QPainter& gc, const QRectF& updateArea, c
         converter->imageRectInImagePixels();
     imageRect.getCoords(&x1, &y1, &x2, &y2);
 
-    {   // vertical lines
-        const int offset = m_d->config.offset().x();
-        const int step = scaleCoeff * m_d->config.spacing().x();
-        const int lineIndexFirst = qCeil((x1 - offset) / step);
-        const int lineIndexLast = qFloor((x2 - offset) / step);
 
-        for (int i = lineIndexFirst; i <= lineIndexLast; i++) {
-            int w = offset + i * step;
+    // for angles. This will later be a combobox to select different types of options
+    // also add options to hide specific lines (vertical, horizonta, angle 1, etc
+    int gridType = m_d->config.gridType();
 
-            gc.setPen(i % subdivision == 0 ? mainPen : subdivisionPen);
-            gc.drawLine(QPointF(w, y1),QPointF(w, y2));
+    if (gridType == 0) { // rectangle
+
+        {
+            // vertical lines
+            const int offset = m_d->config.offset().x();
+            const int step = scaleCoeff * m_d->config.spacing().x();
+            const int lineIndexFirst = qCeil((x1 - offset) / step);
+            const int lineIndexLast = qFloor((x2 - offset) / step);
+
+            for (int i = lineIndexFirst; i <= lineIndexLast; i++) {
+                int w = offset + i * step;
+
+                gc.setPen(i % subdivision == 0 ? mainPen : subdivisionPen);
+                gc.drawLine(QPointF(w, y1),QPointF(w, y2));
+            }
+        }
+
+        {
+            // horizontal lines
+            const int offset = m_d->config.offset().y();
+            const int step = scaleCoeff * m_d->config.spacing().y();
+            const int lineIndexFirst = qCeil((y1 - offset) / step);
+            const int lineIndexLast = qFloor((y2 - offset) / step);
+
+            for (int i = lineIndexFirst; i <= lineIndexLast; i++) {
+                int w = offset + i * step;
+
+                gc.setPen(i % subdivision == 0 ? mainPen : subdivisionPen);
+                gc.drawLine(QPointF(x1, w),QPointF(x2, w));
+            }
         }
     }
 
-    {   // horizontal lines
-        const int offset = m_d->config.offset().y();
+    if (gridType== 1)  { // isometric
+
+        const int offset = m_d->config.offset().x();
+        const int offsetY = m_d->config.offset().y();
         const int step = scaleCoeff * m_d->config.spacing().y();
         const int lineIndexFirst = qCeil((y1 - offset) / step);
-        const int lineIndexLast = qFloor((y2 - offset) / step);
+        const int cellSpacing = m_d->config.cellSpacing();
 
-        for (int i = lineIndexFirst; i <= lineIndexLast; i++) {
-            int w = offset + i * step;
+        gc.setClipping(true);
+        gc.setClipRect(imageRect, Qt::IntersectClip);
 
-            gc.setPen(i % subdivision == 0 ? mainPen : subdivisionPen);
-            gc.drawLine(QPointF(x1, w),QPointF(x2, w));
+
+
+
+
+        // left angle
+        {
+            int gridXAngle = m_d->config.angleLeft();
+            int counter = lineIndexFirst;
+            int bottomRightOfImageY = y2; // this should be the height of the image
+            int finalY = 0;
+
+
+            // figure out the spacing based off the angle. The spacing needs to be perpendicular to the angle,
+            // so we need to do a bit of trig to get the correct spacing.
+            float correctedAngleSpacing = cellSpacing;
+            if (gridXAngle > 0) {
+                correctedAngleSpacing = cellSpacing / qCos( qDegreesToRadians((float)gridXAngle));
+
+            }
+
+
+            while (finalY < bottomRightOfImageY) {
+
+                int w = (counter * correctedAngleSpacing) - offsetY;
+                gc.setPen(mainPen);
+
+                // calculate where the ending point will be based off the angle
+                int startingY = w;
+                int horizontalDistance = x2;
+
+                int length2 = qTan( qDegreesToRadians((float)gridXAngle)) * x2; // qTan takes radians, so convert first before sending it
+
+                finalY = startingY - length2;
+                gc.drawLine(QPointF(x1, w),QPointF(horizontalDistance, finalY));
+
+                counter = counter +1;
+            }
         }
+
+
+        // right angle (almost the same thing, except starting the lines on the right side)
+        {
+            int gridXAngle = m_d->config.angleRight(); // TODO: add another angle property
+            int counter = lineIndexFirst;
+            int bottomLeftOfImageY = y2;
+            int finalY = 0;
+
+
+            // figure out the spacing based off the angle
+            float correctedAngleSpacing = cellSpacing;
+            if (gridXAngle > 0) {
+                correctedAngleSpacing = cellSpacing / qCos( qDegreesToRadians((float)gridXAngle));
+            }
+
+
+            while (finalY < bottomLeftOfImageY) {
+
+                int w = (counter * correctedAngleSpacing) - offsetY - offset;
+                gc.setPen(mainPen);
+
+                // calculate where the ending point will be based off the angle
+                int startingY = w;
+                int horizontalDistance = x2; // distance is the same (width of the image)
+
+                int length2 = qTan( qDegreesToRadians((float)gridXAngle)) * horizontalDistance; // qTan takes radians, so convert first before sending it
+
+                finalY = startingY - length2;
+                gc.drawLine(QPointF(x2, w),QPointF(0, finalY));
+
+                counter = counter +1;
+            }
+        }
+
+
     }
 
     gc.restore();

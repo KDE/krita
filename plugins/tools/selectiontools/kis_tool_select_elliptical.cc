@@ -48,14 +48,11 @@ void __KisToolSelectEllipticalLocal::finishRect(const QRectF &rect)
     KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
     Q_ASSERT(kisCanvas);
 
-    // If the user just clicks on the canvas deselect
-    if (rect.isEmpty()) {
-        // Queueing this action to ensure we avoid a race condition when unlocking the node system
-        QTimer::singleShot(0, kisCanvas->viewManager()->selectionManager(), SLOT(deselect()));
+    KisSelectionToolHelper helper(kisCanvas, kundo2_i18n("Select Ellipse"));
+
+    if (helper.tryDeselectCurrentSelection(pixelToView(rect), selectionAction())) {
         return;
     }
-
-    KisSelectionToolHelper helper(kisCanvas, kundo2_i18n("Select Ellipse"));
 
     if (selectionMode() == PIXEL_SELECTION) {
         KisPixelSelectionSP tmpSel = new KisPixelSelection();

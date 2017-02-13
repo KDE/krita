@@ -29,7 +29,6 @@
 
 #include <kis_debug.h>
 #include <KisImportExportManager.h>
-#include <KisFilterChain.h>
 #include <KoColorSpaceConstants.h>
 #include <KoDialog.h>
 #include "KisPart.h"
@@ -57,36 +56,32 @@ KisVideoExport::~KisVideoExport()
 {
 }
 
-KisImportExportFilter::ConversionStatus KisVideoExport::convert(const QByteArray &from, const QByteArray &to, KisPropertiesConfigurationSP configuration)
+KisImportExportFilter::ConversionStatus KisVideoExport::convert(KisDocument *document, QIODevice */*io*/,  KisPropertiesConfigurationSP configuration)
 {
-    Q_UNUSED(to);
+    QString ffmpegPath = configuration->getString("ffmpeg_path");
+    if (ffmpegPath.isEmpty()) {
+        KisConfig cfg;
+        ffmpegPath = cfg.customFFMpegPath();
+        if (ffmpegPath.isEmpty()) {
+            const QString warningMessage =
+                    i18n("Could not find \'ffmpeg\' binary. Saving to video formats is impossible.");
 
-    if (from != "application/x-krita")
-        return KisImportExportFilter::NotImplemented;
-
-    KisDocument *input = inputDocument();
-    QString filename = outputFile();
-
-    if (!input)
-        return KisImportExportFilter::NoDocumentCreated;
-
-    if (filename.isEmpty()) return KisImportExportFilter::FileNotFound;
-
-    VideoSaver videoSaver(input, getBatchMode());
-
-    if (!videoSaver.hasFFMpeg()) {
-        const QString warningMessage =
-                i18n("Could not find \'ffmpeg\' binary. Saving to video formats is impossible.");
-
-        if (!getBatchMode()) {
-            QMessageBox::critical(KisPart::instance()->currentMainwindow(),
-                                  i18n("Video Export Error"),
-                                  warningMessage);
+            if (!batchMode()) {
+                QMessageBox::critical(KisPart::instance()->currentMainwindow(),
+                                      i18n("Video Export Error"),
+                                      warningMessage);
+            }
+            else {
+                qWarning() << warningMessage;
+            }
+            return KisImportExportFilter::UsageError;
         }
-        return KisImportExportFilter::UsageError;
     }
 
-    KisImageBuilder_Result res = videoSaver.encode(filename, configuration);
+    VideoSaver videoSaver(document, ffmpegPath, batchMode());
+
+
+    KisImageBuilder_Result res = videoSaver.encode(filename(), configuration);
 
     if (res == KisImageBuilder_RESULT_OK) {
         return KisImportExportFilter::OK;
@@ -95,7 +90,7 @@ KisImportExportFilter::ConversionStatus KisVideoExport::convert(const QByteArray
         return KisImportExportFilter::ProgressCancelled;
     }
     else {
-        input->setErrorMessage(i18n("FFMpeg failed to convert the image sequence. Check the logfile in your output directory for more information."));
+        document->setErrorMessage(i18n("FFMpeg failed to convert the image sequence. Check the logfile in your output directory for more information."));
     }
 
     return KisImportExportFilter::InternalError;

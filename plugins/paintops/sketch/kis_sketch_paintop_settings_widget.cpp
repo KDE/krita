@@ -59,7 +59,7 @@ KisSketchPaintOpSettingsWidget::KisSketchPaintOpSettingsWidget(QWidget* parent)
     addPaintOpOption(m_paintActionType, i18n("Painting Mode"));
 
     KisPropertiesConfigurationSP reconfigurationCourier = configuration();
-    QDomDocument xMLAnalyzer("");
+    QDomDocument xMLAnalyzer;
     xMLAnalyzer.setContent(reconfigurationCourier->getString("brush_definition"));
 
     QDomElement firstTag = xMLAnalyzer.documentElement();

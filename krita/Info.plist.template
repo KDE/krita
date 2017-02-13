@@ -41,6 +41,8 @@
     <key>CFBundleDocumentTypes</key>
     <array>
       <dict>
+        <key>CFBundleTypeIconFile</key>
+        <string>kra_SRCS</string>
         <key>CFBundleTypeExtensions</key>
         <array>
           <string>kra</string>

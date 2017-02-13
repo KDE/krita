@@ -66,7 +66,7 @@ void KisThumbnailBenchmark::initTestCase()
     const float angle = 2 * 3.1415926 / 360.;
     const float endWidth = 30;
 
-    for (float i = 0; i < 90; i += 5) {
+    for (int i = 0; i < 90; i += 5) {
         painter.drawThickLine(QPointF(0, 0), QPointF(radius * std::sin(angle * i), radius * std::cos(angle * i)), 1, endWidth);
         painter.drawThickLine(QPointF(IMAGE_WIDTH, IMAGE_HEIGHT),
                               QPointF(IMAGE_WIDTH - radius * std::sin(angle * i), IMAGE_HEIGHT - radius * std::cos(angle * i)), 1, endWidth);

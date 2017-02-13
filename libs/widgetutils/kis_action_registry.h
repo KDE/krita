@@ -16,11 +16,14 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#ifndef KIS_ACTION_REGISTRY_H
+#define KIS_ACTION_REGISTRY_H
 
 #include <QString>
 #include <QKeySequence>
 #include <QDomElement>
 #include <QAction>
+#include <QList>
 
 #include "kritawidgetutils_export.h"
 
@@ -58,27 +61,6 @@ class KRITAWIDGETUTILS_EXPORT KisActionRegistry : public QObject
 public:
     static KisActionRegistry *instance();
 
-
-    /**
-     * Get shortcut for an action
-     */
-    QList<QKeySequence> getPreferredShortcut(const QString &name);
-
-    /**
-     * Get shortcut for an action
-     */
-    QList<QKeySequence> getDefaultShortcut(const QString &name);
-
-    /**
-     * Get custom shortcut for an action
-     */
-    QList<QKeySequence> getCustomShortcut(const QString &name);
-
-    /**
-     * Get category name
-     */
-    QString getCategory(const QString &name);
-
     /**
      * @return value @p property for an action @p name.
      *
@@ -109,17 +91,6 @@ public:
 
 
     /**
-     * @return list of actions with data available.
-     */
-    QStringList allActions();
-
-    /**
-     * Setup the shortcut configuration widget.
-     */
-    void setupDialog(KisShortcutsDialog *dlg);
-
-
-    /**
      * Called when "OK" button is pressed in settings dialog.
      */
     void settingsPageSaved();
@@ -128,38 +99,56 @@ public:
     /**
      * Reload custom shortcuts from kritashortcutsrc
      */
-    void loadCustomShortcuts(const QString &path = QString());
-
-
-    /**
-     * Write custom shortcuts to a specific file
-     */
-    void writeCustomShortcuts(KConfigBase *config) const;
-
+    void loadCustomShortcuts();
 
     /**
      * Call after settings are changed.
      */
     void notifySettingsUpdated();
 
+    // If config == 0, reload defaults
+    void applyShortcutScheme(const KConfigBase *config = 0);
+
+    struct ActionCategory {
+        ActionCategory();
+        ActionCategory(const QString &_componentName, const QString &_categoryName);
+        QString componentName;
+        QString categoryName;
+
+        bool isValid() const;
+
+    private:
+        bool m_isValid = false;
+    };
+
+    ActionCategory fetchActionCategory(const QString &name) const;
+
     /**
      * Constructor.  Please don't touch!
      */
     KisActionRegistry();
 
+
+    /**
+     * @brief loadShortcutScheme
+     * @param schemeName
+     */
+    void loadShortcutScheme(const QString &schemeName);
+
     // Undocumented
     void updateShortcut(const QString &name, QAction *ac);
-    KActionCollection * getDefaultCollection();
 
+    bool sanityCheckPropertized(const QString &name);
 
-    void loadShortcutScheme(const QString &schemeName);
-    // If config == 0, reload defaults
-    void applyShortcutScheme(const KConfigBase *config = 0);
+    QList<QString> registeredShortcutIds() const;
 
 Q_SIGNALS:
     void shortcutsUpdated();
 
 private:
+
     class Private;
     Private * const d;
 };
+
+#endif /* KIS_ACTION_REGISTRY_H */

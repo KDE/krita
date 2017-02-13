@@ -19,18 +19,18 @@
 
 #include "kis_config.h"
 
-KisSmoothingOptions::KisSmoothingOptions()
+KisSmoothingOptions::KisSmoothingOptions(bool useSavedSmoothing)
 {
     KisConfig cfg;
-    m_smoothingType = (SmoothingType)cfg.lineSmoothingType();
-    m_smoothnessDistance = cfg.lineSmoothingDistance();
-    m_tailAggressiveness = cfg.lineSmoothingTailAggressiveness();
-    m_smoothPressure = cfg.lineSmoothingSmoothPressure();
-    m_useScalableDistance = cfg.lineSmoothingScalableDistance();
-    m_delayDistance = cfg.lineSmoothingDelayDistance();
-    m_useDelayDistance = cfg.lineSmoothingUseDelayDistance();
-    m_finishStabilizedCurve = cfg.lineSmoothingFinishStabilizedCurve();
-    m_stabilizeSensors = cfg.lineSmoothingStabilizeSensors();
+    m_smoothingType = (SmoothingType)cfg.lineSmoothingType(!useSavedSmoothing);
+    m_smoothnessDistance = cfg.lineSmoothingDistance(!useSavedSmoothing);
+    m_tailAggressiveness = cfg.lineSmoothingTailAggressiveness(!useSavedSmoothing);
+    m_smoothPressure = cfg.lineSmoothingSmoothPressure(!useSavedSmoothing);
+    m_useScalableDistance = cfg.lineSmoothingScalableDistance(!useSavedSmoothing);
+    m_delayDistance = cfg.lineSmoothingDelayDistance(!useSavedSmoothing);
+    m_useDelayDistance = cfg.lineSmoothingUseDelayDistance(!useSavedSmoothing);
+    m_finishStabilizedCurve = cfg.lineSmoothingFinishStabilizedCurve(!useSavedSmoothing);
+    m_stabilizeSensors = cfg.lineSmoothingStabilizeSensors(!useSavedSmoothing);
 }
 
 KisSmoothingOptions::SmoothingType KisSmoothingOptions::smoothingType() const

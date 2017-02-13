@@ -235,7 +235,7 @@ void KisAbstractSliderSpinBox::paintFusion(QPainter &painter)
     int progressIndicatorPos = (progressOpts.progress - qreal(progressOpts.minimum)) / qMax(qreal(1.0),
                                qreal(progressOpts.maximum) - progressOpts.minimum) * rect.width();
 
-    if (progressIndicatorPos >= 0 && progressIndicatorPos <= rect.width() && (progressOpts.progress != 0)) {
+    if (progressIndicatorPos >= 0 && progressIndicatorPos <= rect.width()) {
         leftRect = QRect(rect.left(), rect.top(), progressIndicatorPos, rect.height());
     } else if (progressIndicatorPos > rect.width()) {
         painter.setPen(palette().highlightedText().color());
@@ -292,7 +292,7 @@ void KisAbstractSliderSpinBox::paintPlastique(QPainter &painter)
     int progressIndicatorPos = (progressOpts.progress - qreal(progressOpts.minimum)) / qMax(qreal(1.0),
                                qreal(progressOpts.maximum) - progressOpts.minimum) * rect.width();
 
-    if (progressIndicatorPos >= 0 && progressIndicatorPos <= rect.width() && (progressOpts.progress != 0)) {
+    if (progressIndicatorPos >= 0 && progressIndicatorPos <= rect.width()) {
         leftRect = QRect(rect.left(), rect.top(), progressIndicatorPos, rect.height());
     } else if (progressIndicatorPos > rect.width()) {
         painter.setPen(palette().highlightedText().color());

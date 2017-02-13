@@ -70,6 +70,14 @@ private Q_SLOTS:
     void slotZoomButtonChanged(qreal value);
 
     void slotColorLabelChanged(int);
+    void slotEnsureRowVisible(int row);
+
+
+    void slotSelectAudioChannelFile();
+    void slotAudioChannelMute(bool value);
+    void slotAudioChannelRemove();
+    void slotUpdateAudioActions();
+    void slotAudioVolumeChanged(int value);
 
 private:
     void setFramesPerSecond(int fps);

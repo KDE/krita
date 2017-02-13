@@ -27,7 +27,7 @@ KisActivateSelectionMaskCommand::KisActivateSelectionMaskCommand(KisSelectionMas
       m_value(value)
 {
     if (m_previousActiveMask != m_selectionMask) {
-        KisLayerSP parent = dynamic_cast<KisLayer*>(selectionMask->parent().data());
+        KisLayerSP parent(qobject_cast<KisLayer*>(selectionMask->parent().data()));
         if (parent) {
             m_previousActiveMask = parent->selectionMask();
         }

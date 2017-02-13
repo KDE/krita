@@ -74,7 +74,6 @@ public:
         return true;
     }
 
-
     bool visit(KisGroupLayer* layer) {
         dbgFile << "Visiting on grouplayer" << layer->name() << "";
         return visitAll(layer, true);

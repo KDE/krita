@@ -75,8 +75,6 @@ class KisPart;
 class KRITAUI_EXPORT KisDocument : public QObject, public KoDocumentBase
 {
     Q_OBJECT
-    Q_PROPERTY(bool backupFile READ backupFile WRITE setBackupFile)
-    Q_PROPERTY(int pageCount READ pageCount)
 
 protected:
 
@@ -159,21 +157,6 @@ public:
     /// be saved by KisDocument without a filter, in *addition* to the main one
     static QStringList extraNativeMimeTypes() { return QStringList() << KIS_MIME_TYPE; }
 
-
-    /// Enum values used by specialOutputFlag - note that it's a bitfield for supportedSpecialFormats
-    enum { /*SaveAsCalligra1dot1 = 1,*/ // old and removed
-        SaveAsDirectoryStore = 2,
-        SaveAsFlatXML = 4,
-        SaveEncrypted = 8
-                        // bitfield! next value is 16
-    };
-
-    /**
-     * Return the set of SupportedSpecialFormats that the application wants to
-     * offer in the "Save" file dialog.
-     */
-    virtual int supportedSpecialFormats() const;
-
     /**
      * Returns the actual mimetype of the document
      */
@@ -194,28 +177,9 @@ public:
      * have to call it.
      *
      * @param mimeType the mime type (format) to use.
-     * @param specialOutputFlag is for "save as older version" etc.
      */
-    void setOutputMimeType(const QByteArray & mimeType, int specialOutputFlag = 0);
+    void setOutputMimeType(const QByteArray & mimeType);
     QByteArray outputMimeType() const;
-    int specialOutputFlag() const;
-
-    /**
-     * Returns true if this document was the result of opening a foreign
-     * file format and if the user hasn't yet saved the document (in any
-     * format).
-     *
-     * Used by KisMainWindow to warn the user when s/he lazily presses
-     * CTRL+S to save in the same foreign format, putting all his/her
-     * formatting at risk (normally an export confirmation only comes up
-     * with Save As).
-     *
-     * @param exporting specifies whether this is the setting for a
-     * File --> Export or File --> Save/Save As operation.
-     */
-    bool confirmNonNativeSave(const bool exporting) const;
-    void setConfirmNonNativeSave(const bool exporting, const bool on);
-
 
     /**
      * @return true if file operations should inhibit the option dialog
@@ -240,16 +204,6 @@ public:
      */
     QString errorMessage() const;
 
-
-    /**
-     * Show the last error message in a message box.
-     * The dialog box will mention a loading problem.
-     * openUrl/openFile takes care of doing it, but not loadNativeFormat itself,
-     * so this is often called after loadNativeFormat returned false.
-     */
-    void showLoadingErrorDialog();
-
-
     /**
      * @brief Generates a preview picture of the document
      * @note The preview is used in the File Dialog and also to create the Thumbnail
@@ -264,11 +218,6 @@ public:
     void setTitleModified();
 
     /**
-     *  @return true if the document is empty.
-     */
-    virtual bool isEmpty() const;
-
-    /**
      *  @brief Sets the document to empty.
      *
      *  Used after loading a template
@@ -276,41 +225,7 @@ public:
      *
      *  @see isEmpty()
      */
-    void setEmpty();
-
-    /**
-     *  @brief Loads a document from a store.
-     *
-     *  You should never have to reimplement.
-     *
-     *  @param store The store to load from
-     *  @param url An internal url, like tar:/1/2
-     */
-    bool loadFromStore(KoStore *store, const QString& url);
-
-    /// Unused
-    virtual bool loadOdf(KoOdfReadStore & odfStore);
-    /// Unused
-    virtual bool saveOdf(SavingContext &documentContext);
-
-    /**
-     *  @brief Saves a sub-document to a store.
-     *
-     *  You should not have to reimplement this.
-     */
-    virtual bool saveToStore(KoStore *store, const QString& path);
-
-    /**
-     *  Reimplement this method to load the contents of your Calligra document,
-     *  from the XML document. This is for the pre-Oasis file format (maindoc.xml).
-     */
-    virtual bool loadXML(const KoXmlDocument & doc, KoStore *store);
-
-    /**
-     *  Reimplement this to save the contents of the %Calligra document into
-     *  a QDomDocument. The framework takes care of saving it to the store.
-     */
-    QDomDocument saveXML();
+    void setEmpty(bool empty = true);
 
     /**
      *  Return a correctly created QDomDocument for this KisDocument,
@@ -330,15 +245,7 @@ public:
      */
     static QDomDocument createDomDocument(const QString& appName, const QString& tagName, const QString& version);
 
-    /**
-     *  The first thing to do in loadOasis is get hold of the office:body tag, then its child.
-     *  If the child isn't the expected one, the error message can indicate what it is instead.
-     *  This method returns a translated name for the type of document,
-     *  e.g. i18n("Word Processing") for office:text.
-     */
-    static QString tagNameToDocumentType(const QString& localName);
-
-    /**
+   /**
      *  Loads a document in the native format from a given URL.
      *  Reimplement if your native format isn't XML.
      *
@@ -347,40 +254,10 @@ public:
     bool loadNativeFormat(const QString & file);
 
     /**
-     *  Saves the document in native format, to a given file
-     *  You should never have to reimplement.
-     *  Made public for writing templates.
-     */
-    bool saveNativeFormat(const QString & file);
-
-    /**
-     * Saves the document in the native format to the given store.
-     */
-    bool saveNativeFormatCalligra(KoStore *store);
-
-    /**
      * Activate/deactivate/configure the autosave feature.
      * @param delay in seconds, 0 to disable
      */
-    void setAutoSave(int delay);
-
-    /**
-     * Set whether the next openUrl call should show error message boxes in case
-     * of errors. This is usually the case, but e.g. not when generating thumbnail
-     * previews.
-     */
-    void setAutoErrorHandlingEnabled(bool b);
-
-    /**
-     * Checks whether error message boxes should be shown.
-     */
-    bool isAutoErrorHandlingEnabled() const;
-
-    /**
-     * Retrieve the default value for autosave in seconds.
-     * Called by the applications to use the correct default in their config
-     */
-    static int defaultAutoSave();
+    void setAutoSaveDelay(int delay);
 
     /**
      * @return the information concerning this document.
@@ -406,48 +283,20 @@ public:
     KoProgressProxy* progressProxy() const;
 
     /**
-     * Return true if url() is a real filename, false if url() is
-     * an internal url in the store, like "tar:/..."
-     */
-    virtual bool isStoredExtern() const;
-
-    /**
-     * @return the page layout associated with this document (margins, pageSize, etc).
-     * Override this if you want to provide different sized pages.
-     *
-     * @see KoPageLayout
-     */
-    KoPageLayout pageLayout(int pageNumber = 0) const;
-    void setPageLayout(const KoPageLayout &pageLayout);
-
-    /**
      * Performs a cleanup of unneeded backup files
      */
     void removeAutoSaveFiles();
 
-    void setBackupFile(bool _b);
-
-    bool backupFile()const;
+    /**
+     * @brief setBackupFile enable/disable saving a backup of the file on saving
+     * @param saveBackup if true, Krita will save a backup of the file
+     */
+    void setBackupFile(bool saveBackup);
 
     /**
      * Returns true if this document or any of its internal child documents are modified.
      */
     bool isModified() const;
-
-    /**
-     * Returns true during loading (openUrl can be asynchronous)
-     */
-    bool isLoading() const;
-
-    /**
-     * Sets the backup path of the document
-     */
-    void setBackupPath(const QString & _path);
-
-    /**
-     * @return path to the backup document
-     */
-    QString backupPath()const;
 
     /**
      * @return caption of the document
@@ -468,26 +317,9 @@ public:
     void resetURL();
 
     /**
-     * Set when you want an external embedded document to be stored internally
-     */
-    void setStoreInternal(bool i);
-
-    /**
-     * @return true when external embedded documents are stored internally
-     */
-    bool storeInternal() const;
-
-    bool hasExternURL() const;
-
-    /**
      * @internal (public for KisMainWindow)
      */
     void setMimeTypeAfterLoading(const QString& mimeType);
-
-    /**
-     * @return returns the number of pages in the document.
-     */
-    virtual int pageCount() const;
 
     /**
      * Returns the unit used to display all measures/distances.
@@ -498,13 +330,6 @@ public:
      * Sets the unit used to display all measures/distances.
      */
     void setUnit(const KoUnit &unit);
-
-    /**
-     * Save the unit to the settings writer
-     *
-     * @param settingsWriter
-     */
-    bool loadNativeFormatFromByteArray(QByteArray &data);
 
     KisGridConfig gridConfig() const;
     void setGridConfig(const KisGridConfig &config);
@@ -523,11 +348,6 @@ public:
     void setModified(bool _mod);
 
     void updateEditingTime(bool forceStoreElapsed);
-
-    /**
-     * Initialize an empty document using default values
-     */
-    void initEmpty();
 
     /**
      * Returns the global undo stack
@@ -617,7 +437,7 @@ private:
      */
     QString newObjectName();
 
-    QString autoSaveFile(const QString & path) const;
+    QString generateAutoSaveFileName(const QString & path) const;
 
     /**
      *  Loads a document
@@ -634,29 +454,10 @@ private:
     /**
      *  Saves a document
      *
-     *  Applies a filter if necessary, and calls saveNativeFormat in any case
+     *  Applies a filter if necessary, and calls exportDocument in any case
      *  You should not have to reimplement, except for very special cases.
      */
-    bool saveFile(KisPropertiesConfigurationSP exportConfiguration = 0);
-
-    /**
-     *  Overload this function if you have to load additional files
-     *  from a store. This function is called after loadXML()
-     *  and after loadChildren() have been called.
-     */
-    bool completeLoading(KoStore *store);
-
-    /**
-     *  If you want to write additional files to a store,
-     *  then you must do it here.
-     *  In the implementation, you should prepend the document
-     *  url (using url().url()) before the filename, so that everything is kept relative
-     *  to this document. For instance it will produce urls such as
-     *  tar:/1/pictures/picture0.png, if the doc url is tar:/1
-     *  But do this ONLY if the document is not stored extern (see isStoredExtern() ).
-     *  If it is, then the pictures should be saved to tar:/pictures.
-     */
-    bool completeSaving(KoStore *store);
+    bool saveFile(const QString &filePath, KisPropertiesConfigurationSP exportConfiguration = 0);
 
 
     /** @internal */
@@ -678,10 +479,8 @@ private:
      */
     bool isExporting() const;
 
-    /**
-     * Legacy method from KoDocumentBase. Don't use it anywhere
-     * outside KisDocument!
-     */
+public:
+
     bool isAutosaving() const;
 
 public:
@@ -700,37 +499,6 @@ public:
 
     bool saveAs(const QUrl &url, KisPropertiesConfigurationSP exportConfigration = 0);
 
-public Q_SLOTS:
-
-    bool save(KisPropertiesConfigurationSP exportConfiguration = 0);
-    bool waitSaveComplete();
-
-Q_SIGNALS:
-
-    void completed();
-    void canceled(const QString &);
-
-private Q_SLOTS:
-
-    void setImageModified();
-
-    void slotAutoSave();
-
-    /// Called by the undo stack when undo or redo is called
-    void slotUndoStackIndexChanged(int idx);
-
-protected:
-
-    bool oldLoadAndParse(KoStore *store, const QString& filename, KoXmlDocument& doc);
-
-public:
-
-    /**
-     * Create a new image that has this document as a parent and
-     * replace the current image with this image.
-     */
-    bool newImage(const QString& name, qint32 width, qint32 height, const KoColorSpace * cs, const KoColor &bgColor, const QString &imageDescription, const double imageResolution);
-
     /**
      * Create a new image that has this document as a parent and
      * replace the current image with this image.
@@ -738,18 +506,17 @@ public:
     bool newImage(const QString& name, qint32 width, qint32 height, const KoColorSpace * cs, const KoColor &bgColor, bool backgroundAsLayer,
                   int numberOfLayers, const QString &imageDescription, const double imageResolution);
 
-    /**
-     * Create a new image that has this document as a parent and
-     * replace the current image with this image.
-     */
-    KisImageWSP newImage(const QString& name, qint32 width, qint32 height, const KoColorSpace * colorspace);
 
     KisImageWSP image() const;
 
     /**
-     * Makes an otherwise empty document ready for import/export
+     * @brief savingImage provides a detached, shallow copy of the original image that must be used when saving.
+     * Any strokes in progress will not be applied to this image, so the result might be missing some data. On
+     * the other hand, it won't block.
+     *
+     * @return a shallow copy of the original image, or 0 is saving is not in progress
      */
-    void prepareForImport();
+    KisImageSP savingImage() const;
 
     /**
      * Adds progressproxy for file operations
@@ -804,19 +571,31 @@ public:
     QList<KisPaintingAssistantSP> assistants() const;
     void setAssistants(const QList<KisPaintingAssistantSP> value);
 
+    bool save(KisPropertiesConfigurationSP exportConfiguration = 0);
+
+Q_SIGNALS:
+
+    void completed();
+    void canceled(const QString &);
+
+private Q_SLOTS:
+
+    void setImageModified();
+
+    void slotAutoSave();
+
+    /// Called by the undo stack when undo or redo is called
+    void slotUndoStackIndexChanged(int idx);
+
+
 private:
 
-    void init();
+    bool prepareLocksForSaving();
 
-    bool saveToStream(QIODevice *dev);
-
-    bool loadNativeFormatFromStoreInternal(KoStore *store);
-
-    bool savePreview(KoStore *store);
+    void unlockAfterSaving();
 
     QString prettyPathOrUrl() const;
 
-    bool saveToUrl();
     bool openUrlInternal(const QUrl &url);
 
     class Private;

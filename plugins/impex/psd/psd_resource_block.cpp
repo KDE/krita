@@ -258,7 +258,7 @@ bool PSDResourceBlock::read(QIODevice* io)
     return valid();
 }
 
-bool PSDResourceBlock::write(QIODevice* io)
+bool PSDResourceBlock::write(QIODevice* io) const
 {
 
     dbgFile << "Writing Resource Block" << PSDImageResourceSection::idToString((PSDImageResourceSection::PSDResourceID)identifier) << identifier;

@@ -380,7 +380,7 @@ void KisCustomImageWidget::saveAsPredefined()
         return;
     }
     QString saveLocation = KoResourcePaths::saveLocation("data", "predefined_image_sizes/", true);
-    QFile f(saveLocation + '/' + fileName.replace(' ', '_').replace('(', '_').replace(')', '_') + ".predefinedimage");
+    QFile f(saveLocation + '/' + fileName.replace(' ', '_').replace('(', '_').replace(')', '_').replace(':', '_') + ".predefinedimage");
 
     f.open(QIODevice::WriteOnly | QIODevice::Truncate);
     KisPropertiesConfigurationSP predefined = new KisPropertiesConfiguration();

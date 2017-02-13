@@ -59,7 +59,7 @@ public:
             : KoToolFactoryBase("KritaShape/KisToolRectangle") {
         setToolTip(i18n("Rectangle Tool"));
 
-        setToolType(TOOL_TYPE_SHAPE);
+        setSection(TOOL_TYPE_SHAPE);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
         setIconName(koIconNameCStr("krita_tool_rectangle"));
         //setShortcut( Qt::Key_F6 );

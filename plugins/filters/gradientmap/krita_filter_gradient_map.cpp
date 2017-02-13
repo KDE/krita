@@ -41,7 +41,7 @@ KritaFilterGradientMap::KritaFilterGradientMap() : KisFilter(id(), categoryMap()
     setShowConfigurationWidget(true);
     setSupportsLevelOfDetail(true);
     setSupportsPainting(true);
-    setSupportsAdjustmentLayers(true);
+    setSupportsAdjustmentLayers(false);
     setSupportsThreading(true);
 }
 
@@ -57,6 +57,10 @@ void KritaFilterGradientMap::processImpl(KisPaintDeviceSP device,
     }
 
     KoAbstractGradient *gradient = KoResourceServerProvider::instance()->gradientServer(false)->resourceByName(config->getString("gradientName"));
+    if (!gradient) {
+        qDebug() << "Could not find gradient" << config->getString("gradientName");
+        return;
+    }
 
     KoColorSet *gradientCache = new KoColorSet();
     for (int i=0; i<256; i++) {
@@ -75,6 +79,7 @@ void KritaFilterGradientMap::processImpl(KisPaintDeviceSP device,
     do {
         grey = device->colorSpace()->intensity8(it.oldRawData());
         outColor = gradientCache->getColor((quint32)grey).color;
+        outColor.setOpacity(qMin(KoColor(it.oldRawData(), device->colorSpace()).opacityF(), outColor.opacityF()));
         outColor.convertTo(device->colorSpace());
         memcpy(it.rawData(), outColor.data(), pixelSize);
         if (progressUpdater) progressUpdater->setValue(p++);
@@ -83,7 +88,7 @@ void KritaFilterGradientMap::processImpl(KisPaintDeviceSP device,
 
 }
 
-KisFilterConfigurationSP KritaFilterGradientMap::factoryConfiguration(const KisPaintDeviceSP) const
+KisFilterConfigurationSP KritaFilterGradientMap::factoryConfiguration() const
 {
     KisFilterConfigurationSP config = new KisFilterConfiguration("gradientmap", 1);
     KoAbstractGradient *gradient = KoResourceServerProvider::instance()->gradientServer(false)->resources().first();

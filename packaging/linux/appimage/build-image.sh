@@ -24,7 +24,6 @@ grep -r "CentOS release 6" /etc/redhat-release || exit 1
 #NO_DOWNLOAD=1
 
 # clean up
-rm -f krita-3.0-l10n-win-current.tar.gz
 rm -rf /out/*
 rm -rf /krita.appdir
 
@@ -195,16 +194,6 @@ rm -f ./usr/lib/libdbus-1.so.3 || true
 cp ../AppImageKit/AppRun .
 cp ./usr/share/applications/org.kde.krita.desktop krita.desktop
 cp /krita/krita/pics/app/64-apps-calligrakrita.png calligrakrita.png
-
-#
-# Fetch and install the translations
-#
-cd /
-rm -f krita-3.0-l10-win-current.tar.gz || true
-wget http://files.kde.org/krita/build/krita-3.0-l10n-win-current.tar.gz
-tar -xf krita-3.0-l10n-win-current.tar.gz
-cd /krita.appdir/usr/share
-tar -xf /krita-3.0-l10n-win-current.tar.gz
 
 # replace krita with the lib-checking startup script.
 #cd /krita.appdir/usr/bin

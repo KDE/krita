@@ -338,10 +338,10 @@ public:
         png_uint_32 rowbytes = png_get_rowbytes(png_ptr, info_ptr);
         row_pointer = new png_byte[rowbytes];
     }
-    virtual ~KisPNGReaderLineByLine() {
+    ~KisPNGReaderLineByLine() override {
         delete[] row_pointer;
     }
-    virtual png_bytep readLine() {
+    png_bytep readLine() override {
         png_read_row(png_ptr, row_pointer, 0);
         return row_pointer;
     }
@@ -360,13 +360,13 @@ public:
         }
         png_read_image(png_ptr, row_pointers);
     }
-    virtual ~KisPNGReaderFullImage() {
+    ~KisPNGReaderFullImage() override {
         for (int i = 0; i < height; i++) {
             delete[] row_pointers[i];
         }
         delete[] row_pointers;
     }
-    virtual png_bytep readLine() {
+    png_bytep readLine() override {
         return row_pointers[y++];
     }
 private:
@@ -412,10 +412,6 @@ void _flush_fn(png_structp png_ptr)
 KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
 {
     dbgFile << "Start decoding PNG File";
-    if (!iod->open(QIODevice::ReadOnly)) {
-        dbgFile << "Failed to open PNG File";
-        return (KisImageBuilder_RESULT_FAILURE);
-    }
 
     png_byte signature[8];
     iod->peek((char*)signature, 8);
@@ -645,7 +641,7 @@ png_get_text(png_ptr, info_ptr, &text_ptr, &num_comments);
     png_uint_32 x_resolution, y_resolution;
 
     png_get_pHYs(png_ptr, info_ptr, &x_resolution, &y_resolution, &unit_type);
-    if (unit_type == PNG_RESOLUTION_METER) {
+    if (x_resolution > 0 && y_resolution > 0 && unit_type == PNG_RESOLUTION_METER) {
         m_image->setResolution((double) POINT_TO_CM(x_resolution) / 100.0, (double) POINT_TO_CM(y_resolution) / 100.0); // It is the "invert" macro because we convert from pointer-per-inchs to points
     }
 
@@ -665,7 +661,7 @@ png_get_text(png_ptr, info_ptr, &text_ptr, &num_comments);
             } else if (key == "description") {
                 info->setAboutInfo("comment", text_ptr[i].text);
             } else if (key == "author") {
-		qDebug()<<"Author:"<<text_ptr[i].text;
+        qDebug()<<"Author:"<<text_ptr[i].text;
                 info->setAuthorInfo("creator", text_ptr[i].text);
             } else if (key.contains("Raw profile type exif")) {
                 decode_meta_data(text_ptr + i, layer->metaData(), "exif", 6);
@@ -821,6 +817,11 @@ KisImageBuilder_Result KisPNGConverter::buildImage(const QString &filename)
 
     QFile fp(filename);
     if (fp.exists()) {
+        if (!fp.open(QIODevice::ReadOnly)) {
+            dbgFile << "Failed to open PNG File";
+            return (KisImageBuilder_RESULT_FAILURE);
+        }
+
         return buildImage(&fp);
     }
     return (KisImageBuilder_RESULT_NOT_EXIST);
@@ -828,7 +829,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(const QString &filename)
 }
 
 
-KisImageWSP KisPNGConverter::image()
+KisImageSP KisPNGConverter::image()
 {
     return m_image;
 }
@@ -852,6 +853,14 @@ bool KisPNGConverter::saveDeviceToStore(const QString &filename, const QRect &im
         options.interlace = false;
         options.tryToSaveAsIndexed = false;
         options.alpha = true;
+        options.saveSRGBProfile = false;
+
+        if (dev->colorSpace()->id() != "RGBA") {
+            dev = new KisPaintDevice(*dev.data());
+            KUndo2Command *cmd = dev->convertTo(KoColorSpaceRegistry::instance()->rgb8());
+            delete cmd;
+        }
+
         bool success = pngconv.buildFile(&io, imageRect, xRes, yRes, dev, annotIt, annotIt, options, metaDataStore);
         if (success != KisImageBuilder_RESULT_OK) {
             dbgFile << "Saving PNG failed:" << filename;
@@ -877,6 +886,11 @@ KisImageBuilder_Result KisPNGConverter::buildFile(const QString &filename, const
     dbgFile << "Start writing PNG File " << filename;
     // Open a QIODevice for writing
     QFile fp (filename);
+    if (!fp.open(QIODevice::WriteOnly)) {
+        dbgFile << "Failed to open PNG File for writing";
+        return (KisImageBuilder_RESULT_FAILURE);
+    }
+
     KisImageBuilder_Result result = buildFile(&fp, imageRect, xRes, yRes, device, annotationsStart, annotationsEnd, options, metaData);
 
     return result;
@@ -884,11 +898,6 @@ KisImageBuilder_Result KisPNGConverter::buildFile(const QString &filename, const
 
 KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, const QRect &imageRect, const qreal xRes, const qreal yRes, KisPaintDeviceSP device, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisPNGOptions options, KisMetaData::Store* metaData)
 {
-    if (!iodevice->open(QIODevice::WriteOnly)) {
-        dbgFile << "Failed to open PNG File for writing";
-        return (KisImageBuilder_RESULT_FAILURE);
-    }
-
     if (!device)
         return KisImageBuilder_RESULT_INVALID_ARG;
 
@@ -1022,9 +1031,9 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, const QRe
      * This automatically writes the correct gamma and chroma chunks along with the sRGB chunk, but firefox's
      * color management is bugged, so once you give it any incentive to start color managing an sRGB image it
      * will turn, for example, a nice desaturated rusty red into bright poppy red. So this is disabled for now.
-     */    
+     */
     /*if (!options.saveSRGBProfile && sRGB) {
-	    png_set_sRGB_gAMA_and_cHRM(png_ptr, info_ptr, PNG_sRGB_INTENT_PERCEPTUAL);
+        png_set_sRGB_gAMA_and_cHRM(png_ptr, info_ptr, PNG_sRGB_INTENT_PERCEPTUAL);
     }*/
     // set the palette
     if (color_type == PNG_COLOR_TYPE_PALETTE) {

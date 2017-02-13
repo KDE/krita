@@ -233,6 +233,7 @@ void KisShortcutsEditor::exportConfiguration(KConfigBase *config) const
 
 void KisShortcutsEditor::saveShortcuts(KConfigGroup *config) const
 {
+    qDebug() << "Saving shortcuts";
     // This is a horrible mess with pointers...
     KConfigGroup cg;
     if (config == 0) {

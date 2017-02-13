@@ -46,23 +46,31 @@ public:
     bool visit(KisGroupLayer *layer);
     bool visit(KisAdjustmentLayer* layer);
     bool visit(KisGeneratorLayer * layer);
-    bool visit(KisExternalLayer *);
+
+    bool visit(KisExternalLayer *) {
+        return true;
+    }
 
     bool visit(KisNode*) {
         return true;
     }
+
     bool visit(KisCloneLayer*) {
         return true;
     }
+
     bool visit(KisFilterMask*) {
         return true;
     }
+
     bool visit(KisTransformMask*) {
         return true;
     }
+
     bool visit(KisTransparencyMask*) {
         return true;
     }
+
     bool visit(KisSelectionMask*) {
         return true;
     }

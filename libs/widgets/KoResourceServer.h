@@ -283,7 +283,7 @@ public:
 
         return true;
     }
-    
+
     /*Removes a given resource from the blacklist.
      */
     bool removeFromBlacklist(PointerType resource) {
@@ -295,8 +295,8 @@ public:
                 warnWidgets<<"Doesn't contain filename";
                 return false;
             }
-        
-        
+
+
         //then return true//
         return true;
     }
@@ -510,7 +510,7 @@ public:
     // don't use these method directly since it doesn't update views!
     void delTag( KoResource* resource,const QString& tag)
     {
-        m_tagStore->delTag(resource,tag);
+        m_tagStore->delTag(resource, tag);
     }
 
     QStringList searchTag(const QString& lineEditText)

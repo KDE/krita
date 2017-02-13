@@ -30,7 +30,7 @@
 #include "ui_wdgbrushchooser.h"
 
 class KisAutoBrushWidget;
-class KisBrushChooser;
+class KisPredefinedBrushChooser;
 class KisTextBrushChooser;
 class KisCustomBrushWidget;
 class KisClipboardBrushWidget;
@@ -71,6 +71,8 @@ public:
     void setPrecisionEnabled(bool value);
     bool autoPrecisionEnabled();
 
+    void hideOptions(const QStringList &options);
+
 Q_SIGNALS:
 
     void sigBrushChanged();
@@ -106,7 +108,7 @@ private:
     QSize m_mininmumSize;
 
     KisAutoBrushWidget * m_autoBrushWidget;
-    KisBrushChooser * m_brushChooser;
+    KisPredefinedBrushChooser * m_predefinedBrushWidget;
     KisTextBrushChooser * m_textBrushWidget;
 
     KisPrecisionOption m_precisionOption;

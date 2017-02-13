@@ -80,7 +80,7 @@ KoColorTransformation* KisDesaturateFilter::createTransformation(const KoColorSp
     return  cs->createColorTransformation("desaturate_adjustment", params);
 }
 
-KisFilterConfigurationSP KisDesaturateFilter::factoryConfiguration(const KisPaintDeviceSP) const
+KisFilterConfigurationSP KisDesaturateFilter::factoryConfiguration() const
 {
     KisColorTransformationConfigurationSP config = new KisColorTransformationConfiguration(id().id(), 1);
     config->setProperty("type", 0);

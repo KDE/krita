@@ -1,23 +1,21 @@
-﻿/* This file is part of the KDE project
-   Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
-                 2000, 2001 Werner Trobin <trobin@kde.org>
-   Copyright (C) 2004 Nicolas Goutte <goutte@kde.org>
-
-This library is free software; you can redistribute it and/or
-modify it under the terms of the GNU Library General Public
-License as published by the Free Software Foundation; either
-version 2 of the License, or (at your option) any later version.
-
-This library is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-Library General Public License for more details.
-
-You should have received a copy of the GNU Library General Public License
-along with this library; see the file COPYING.LIB.  If not, write to
-the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-Boston, MA 02110-1301, USA.
-*/
+﻿/*
+ * Copyright (C) 2016 Boudewijn Rempt <boud@valdyas.org>
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public License
+ * along with this library; see the file COPYING.LIB.  If not, write to
+ * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301, USA.
+ */
 
 #ifndef KIS_IMPORT_EXPORT_MANAGER_H
 #define KIS_IMPORT_EXPORT_MANAGER_H
@@ -27,11 +25,10 @@ Boston, MA 02110-1301, USA.
 #include <QByteArray>
 #include <QUrl>
 
-#include "KisFilterGraph.h"
 #include "KisImportExportFilter.h"
 
 #include "kritaui_export.h"
-class KisFilterChain;
+
 class KisDocument;
 class KoProgressUpdater;
 
@@ -62,21 +59,7 @@ public:
      */
     explicit KisImportExportManager(KisDocument *document);
 
-    /**
-     * Create a filter manager for the Shape Collection docker.
-     * @param mimeType the mimetype to import to.
-     */
-    explicit KisImportExportManager(const QByteArray& mimeType);
-
-    /**
-     * Create a filter manager for a filter which wants to embed something.
-     * The path it passes is the file to convert. You cannot use
-     * the @ref importDocument() method -- use @ref exportDocument() to convert
-     * the file to the destination mimetype you prefer.
-     *
-     * @param path The location you want to export
-     */
-    explicit KisImportExportManager(const QString& location);
+public:
 
     virtual ~KisImportExportManager();
 
@@ -86,13 +69,12 @@ public:
      * @p path can be either a URL or a filename.
      * @p documentMimeType gives importDocument a hint about what type
      * the document may be. It can be left empty.
-     * @p status signals the success/error of the conversion.
+     *
+     * @return  status signals the success/error of the conversion.
      * If the QString which is returned isEmpty() and the status is OK,
      * then we imported the file directly into the document.
      */
-    QString importDocument(const QString& location,
-                           const QString& documentMimeType,
-                           KisImportExportFilter::ConversionStatus& status);
+    KisImportExportFilter::ConversionStatus importDocument(const QString &location, const QString &mimeType);
 
     /**
      * @brief Exports the given file/document to the specified URL/mimetype.
@@ -101,7 +83,7 @@ public:
      * and when the method returns @p mimeType contains this mimetype.
      * Oh, well, export is a C++ keyword ;)
      */
-    KisImportExportFilter::ConversionStatus exportDocument(const QString& location, QByteArray& mimeType, KisPropertiesConfigurationSP exportConfiguration = 0);
+    KisImportExportFilter::ConversionStatus exportDocument(const QString &location, const QString& realLocation, QByteArray &mimeType, bool showWarnings = true, KisPropertiesConfigurationSP exportConfiguration = 0);
 
     ///@name Static API
     //@{
@@ -133,65 +115,25 @@ public:
      * Get if the filter manager is batch mode (true)
      * or in interactive mode (true)
      */
-    bool getBatchMode(void) const;
+    bool batchMode(void) const;
 
     void setProgresUpdater(KoProgressUpdater *updater);
 
-    /**
-     * Return the KoProgressUpdater or 0 if there is none.
-     **/
-    KoProgressUpdater *progressUpdater() const;
+    static QString askForAudioFileName(const QString &defaultDir, QWidget *parent);
+
+private Q_SLOTS:
+
+
 
 private:
-    // === API for KisFilterChains === (internal)
-    // The friend methods are private in KisFilterChain and
-    // just forward calls to the methods here. Should be
-    // pretty safe.
-    friend QString KisFilterChain::filterManagerImportFile() const;
-    QString importFile() const
-    {
-        return m_importFileName;
-    }
 
-    friend QString KisFilterChain::filterManagerExportFile() const;
-    QString exportFile() const
-    {
-        return m_exportFileName;
-    }
-
-    friend KisDocument *KisFilterChain::filterManagerKisDocument() const;
-    KisDocument *document() const
-    {
-        return m_document;
-    }
-
-    friend int KisFilterChain::filterManagerDirection() const;
-    int direction() const
-    {
-        return static_cast<int>(m_direction);
-    }
-
-    friend KisPropertiesConfigurationSP KisFilterChain::filterManagerExportConfiguration() const;
-    KisPropertiesConfigurationSP exportConfiguration() const
-    {
-        return m_exportConfiguration;
-    }
+    KisImportExportFilter::ConversionStatus convert(Direction direction, const QString &location, const QString& realLocation, const QString &mimeType, bool showWarnings, KisPropertiesConfigurationSP exportConfiguration);
 
     // Private API
     KisImportExportManager(const KisImportExportManager& rhs);
     KisImportExportManager &operator=(const KisImportExportManager& rhs);
 
-    // Convert file path string or URL string into QUrl
-    QUrl locationToUrl(QString location) const;
-
-    void importErrorHelper(const QString& mimeType, const bool suppressDialog = false);
-
     KisDocument *m_document;
-    QString m_importFileName;
-    QString m_exportFileName;
-    CalligraFilter::Graph m_graph;
-    Direction m_direction;
-    KisPropertiesConfigurationSP m_exportConfiguration;
 
     /// A static cache for the availability checks of filters
     static QStringList m_importMimeTypes;

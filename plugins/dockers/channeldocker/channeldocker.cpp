@@ -45,7 +45,7 @@ public:
     {
     }
 
-    virtual QString id() const
+    QString id() const override
     {
         return QString( "ChannelDocker" );
     }
@@ -55,7 +55,7 @@ public:
         return Qt::RightDockWidgetArea;
     }
 
-    virtual QDockWidget* createDockWidget()
+    QDockWidget* createDockWidget() override
     {
         ChannelDockerDock * dockWidget = new ChannelDockerDock();
         
@@ -64,7 +64,7 @@ public:
         return dockWidget;
     }
 
-    DockPosition defaultDockPosition() const
+    DockPosition defaultDockPosition() const override
     {
         return DockMinimized;
     }

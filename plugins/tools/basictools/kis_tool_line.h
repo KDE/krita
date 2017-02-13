@@ -116,7 +116,7 @@ public:
             : KoToolFactoryBase("KritaShape/KisToolLine") {
         setToolTip(i18n("Line Tool"));
         // Temporarily
-        setToolType(TOOL_TYPE_SHAPE);
+        setSection(TOOL_TYPE_SHAPE);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
         setPriority(1);
         setIconName(koIconNameCStr("krita_tool_line"));

@@ -3,9 +3,8 @@ include_directories(     ${CMAKE_SOURCE_DIR}/sdk/tests )
 
 include(KritaAddBrokenUnitTest)
 
-macro_add_unittest_definitions()
 
-########### next target ###############
+macro_add_unittest_definitions()
 
 include(ECMAddTests)
 

@@ -55,10 +55,3 @@ KoOptimizedCompositeOpFactoryPerArch<KoOptimizedCompositeOpOver128>::create<Vc::
 {
     return new KoCompositeOpOver<KoRgbF32Traits>(param);
 }
-
-template<>
-KoReportCurrentArch::ReturnType
-KoReportCurrentArch::create<Vc::ScalarImpl>(ParamType)
-{
-    dbgPigment << "Legacy integer arithmetics implementation";
-}

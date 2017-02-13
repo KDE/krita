@@ -28,6 +28,11 @@ KisImageViewConverter::KisImageViewConverter(const KisImageWSP image)
     setZoom(0.1); // set the superclass to not hit the optimization of zoom=100%
 }
 
+void KisImageViewConverter::setImage(KisImageWSP image)
+{
+    m_image = image;
+}
+
 QTransform KisImageViewConverter::documentToView() const
 {
     return QTransform::fromScale(m_image->xRes(), m_image->yRes());

@@ -125,7 +125,7 @@ KisFilterConfigurationSP KisWdgGenerator::configuration()
             return config;
         }
     } else {
-        return d->currentGenerator->defaultConfiguration(0);
+        return d->currentGenerator->defaultConfiguration();
     }
     return 0;
 }
@@ -152,7 +152,7 @@ void KisWdgGenerator::slotGeneratorActivated(int row)
         } else {
             d->centralWidget = widget;
             widget->setView(d->view);
-            widget->setConfiguration(d->currentGenerator->defaultConfiguration(d->dev));
+            widget->setConfiguration(d->currentGenerator->defaultConfiguration());
         }
     }
     d->widgetLayout->addWidget(d->centralWidget, 0 , 0);

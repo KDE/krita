@@ -61,6 +61,8 @@ void KisOpenGL::initialize()
 
     QOpenGLContext context;
     context.create();
+    if (!context.isValid()) return;
+
     context.makeCurrent( &surface );
 
     QOpenGLFunctions  *funcs = context.functions();
@@ -183,7 +185,7 @@ bool KisOpenGL::needsPixmapCacheWorkaround()
 void KisOpenGL::setDefaultFormat()
 {
     QSurfaceFormat format;
-#ifdef Q_OS_MAC
+#ifdef Q_OS_OSX
     format.setVersion(3, 2);
     format.setProfile(QSurfaceFormat::CoreProfile);
 #else

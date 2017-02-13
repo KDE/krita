@@ -23,8 +23,6 @@
 
 #include <kpluginfactory.h>
 
-#include <KisFilterChain.h>
-
 #include <KisDocument.h>
 #include <kis_image.h>
 
@@ -42,57 +40,32 @@ KisTIFFImport::~KisTIFFImport()
 {
 }
 
-KisImportExportFilter::ConversionStatus KisTIFFImport::convert(const QByteArray&, const QByteArray& to, KisPropertiesConfigurationSP configuration)
+KisImportExportFilter::ConversionStatus KisTIFFImport::convert(KisDocument *document, QIODevice */*io*/,  KisPropertiesConfigurationSP /*configuration*/)
 {
-    dbgFile << "Importing using TIFFImport!";
+    KisTIFFConverter tiffConverter(document);
 
-    if (to != "application/x-krita")
+    switch (tiffConverter.buildImage(filename())) {
+    case KisImageBuilder_RESULT_UNSUPPORTED:
+        return KisImportExportFilter::NotImplemented;
+    case KisImageBuilder_RESULT_INVALID_ARG:
         return KisImportExportFilter::BadMimeType;
-
-    KisDocument * doc = outputDocument();
-
-    if (!doc)
-        return KisImportExportFilter::NoDocumentCreated;
-
-    QString filename = inputFile();
-
-    doc -> prepareForImport();
-
-    if (!filename.isEmpty()) {
-
-        if (!QFileInfo(filename).exists()) {
-            return KisImportExportFilter::FileNotFound;
-        }
-
-        KisTIFFConverter ib(doc);
-
-//        if (view != 0)
-//            view -> canvasSubject() ->  progressDisplay() -> setSubject(&ib, false, true);
-
-        switch (ib.buildImage(filename)) {
-        case KisImageBuilder_RESULT_UNSUPPORTED:
-            return KisImportExportFilter::NotImplemented;
-        case KisImageBuilder_RESULT_INVALID_ARG:
-            return KisImportExportFilter::BadMimeType;
-        case KisImageBuilder_RESULT_NO_URI:
-        case KisImageBuilder_RESULT_NOT_LOCAL:
-            return KisImportExportFilter::FileNotFound;
-        case KisImageBuilder_RESULT_BAD_FETCH:
-        case KisImageBuilder_RESULT_EMPTY:
-            return KisImportExportFilter::ParsingError;
-        case KisImageBuilder_RESULT_FAILURE:
-            return KisImportExportFilter::InternalError;
-        case KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE:
-            return KisImportExportFilter::WrongFormat;
-        case KisImageBuilder_RESULT_OK:
-            doc -> setCurrentImage(ib.image());
-            return KisImportExportFilter::OK;
-        default:
-            break;
-        }
-
+    case KisImageBuilder_RESULT_NO_URI:
+    case KisImageBuilder_RESULT_NOT_LOCAL:
+        return KisImportExportFilter::FileNotFound;
+    case KisImageBuilder_RESULT_BAD_FETCH:
+    case KisImageBuilder_RESULT_EMPTY:
+        return KisImportExportFilter::ParsingError;
+    case KisImageBuilder_RESULT_FAILURE:
+        return KisImportExportFilter::InternalError;
+    case KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE:
+        return KisImportExportFilter::WrongFormat;
+    case KisImageBuilder_RESULT_OK:
+        document -> setCurrentImage(tiffConverter.image());
+        return KisImportExportFilter::OK;
+    default:
+        break;
     }
-    return KisImportExportFilter::StorageCreationError;
+    return KisImportExportFilter::InternalError;
 }
 
 #include <kis_tiff_import.moc>

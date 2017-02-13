@@ -136,9 +136,9 @@ ShortcutToolAction* ToolHelper::createShortcutToolAction(QObject *parent)
     return action;
 }
 
-QString ToolHelper::toolType() const
+QString ToolHelper::section() const
 {
-    return m_toolFactory->toolType();
+    return m_toolFactory->section();
 }
 
 int ToolHelper::priority() const
@@ -210,7 +210,7 @@ QKeySequence KoToolAction::shortcut() const
 
 QString KoToolAction::section() const
 {
-    return d->toolHelper->toolType();
+    return d->toolHelper->section();
 }
 
 int KoToolAction::priority() const

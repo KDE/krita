@@ -257,127 +257,8 @@ const QTextCursor KoTextEditor::constCursor() const
     return QTextCursor(d->caret);
 }
 
-void KoTextEditor::registerTrackedChange(QTextCursor &selection, KoGenChange::Type changeType, const KUndo2MagicString &title, QTextFormat& format, QTextFormat& prevFormat, bool applyToWholeBlock)
+void KoTextEditor::registerTrackedChange(QTextCursor &/*selection*/, KoGenChange::Type /*changeType*/, const KUndo2MagicString &/*title*/, QTextFormat& /*format*/, QTextFormat& /*prevFormat*/, bool /*applyToWholeBlock*/)
 {
-    KoChangeTracker *changeTracker = KoTextDocument(d->document).changeTracker();
-    if (!changeTracker || !changeTracker->recordChanges()) {
-        // clear the ChangeTrackerId from the passed in selection, without recursively registring
-        // change tracking again  ;)
-        int start = qMin(selection.position(), selection.anchor());
-        int end = qMax(selection.position(), selection.anchor());
-
-        QTextBlock block = selection.block();
-        if (block.position() > start)
-            block = block.document()->findBlock(start);
-
-        while (block.isValid() && block.position() < end) {
-            QTextBlock::iterator iter = block.begin();
-            while (!iter.atEnd()) {
-                QTextFragment fragment = iter.fragment();
-                if (fragment.position() > end) {
-                    break;
-                }
-
-                if (fragment.position() + fragment.length() <= start) {
-                    ++iter;
-                    continue;
-                }
-
-                QTextCursor cursor(block);
-                cursor.setPosition(fragment.position());
-                QTextCharFormat fm = fragment.charFormat();
-
-                if (fm.hasProperty(KoCharacterStyle::ChangeTrackerId)) {
-                    fm.clearProperty(KoCharacterStyle::ChangeTrackerId);
-                    int to = qMin(end, fragment.position() + fragment.length());
-                    cursor.setPosition(to, QTextCursor::KeepAnchor);
-                    cursor.setCharFormat(fm);
-                    iter = block.begin();
-                } else {
-                    ++iter;
-                }
-            }
-            block = block.next();
-        }
-    } else {
-        if (changeType != KoGenChange::DeleteChange) {
-            //first check if there already is an identical change registered just before or just after the selection. If so, merge appropriatly.
-            //TODO implement for format change. handle the prevFormat/newFormat check.
-            QTextCursor checker = QTextCursor(selection);
-            int idBefore = 0;
-            int idAfter = 0;
-            int changeId = 0;
-            int selectionBegin = qMin(checker.anchor(), checker.position());
-            int selectionEnd = qMax(checker.anchor(), checker.position());
-
-            checker.setPosition(selectionBegin);
-            if (!checker.atBlockStart()) {
-                int changeId = checker.charFormat().property(KoCharacterStyle::ChangeTrackerId).toInt();
-                if (changeId && changeTracker->elementById(changeId)->getChangeType() == changeType)
-                    idBefore = changeId;
-            } else {
-                if (!checker.currentTable()) {
-                    int changeId = checker.blockFormat().intProperty(KoCharacterStyle::ChangeTrackerId);
-                    if (changeId && changeTracker->elementById(changeId)->getChangeType() == changeType)
-                        idBefore = changeId;
-                } else {
-                    idBefore = checker.currentTable()->format().intProperty(KoCharacterStyle::ChangeTrackerId);
-                    if (!idBefore) {
-                        idBefore = checker.currentTable()->cellAt(checker).format().intProperty(KoCharacterStyle::ChangeTrackerId);
-                    }
-                }
-            }
-
-            checker.setPosition(selectionEnd);
-            if (!checker.atEnd()) {
-                checker.movePosition(QTextCursor::NextCharacter);
-                idAfter = changeTracker->mergeableId(changeType, title, checker.charFormat().property( KoCharacterStyle::ChangeTrackerId ).toInt());
-            }
-            changeId = (idBefore)?idBefore:idAfter;
-
-            switch (changeType) {//TODO: this whole thing actually needs to be done like a visitor. If the selection contains several change regions, the parenting needs to be individualised.
-            case KoGenChange::InsertChange:
-                if (!changeId)
-                    changeId = changeTracker->getInsertChangeId(title, 0);
-                break;
-            case KoGenChange::FormatChange:
-                if (!changeId)
-                    changeId = changeTracker->getFormatChangeId(title, format, prevFormat, 0);
-                break;
-            case KoGenChange::DeleteChange:
-                //this should never be the case
-                break;
-            default:
-                ;// do nothing
-            }
-
-            if (applyToWholeBlock) {
-                selection.movePosition(QTextCursor::StartOfBlock);
-                selection.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-            }
-
-            QTextCharFormat f;
-            f.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
-            selection.mergeCharFormat(f);
-
-            QTextBlock startBlock = selection.document()->findBlock(selection.anchor());
-            QTextBlock endBlock = selection.document()->findBlock(selection.position());
-
-            while (startBlock.isValid() && startBlock != endBlock) {
-                startBlock = startBlock.next();
-                QTextCursor cursor(startBlock);
-                QTextBlockFormat blockFormat;
-                blockFormat.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
-                cursor.mergeBlockFormat(blockFormat);
-
-                QTextCharFormat blockCharFormat = cursor.blockCharFormat();
-                if (blockCharFormat.hasProperty(KoCharacterStyle::ChangeTrackerId)) {
-                    blockCharFormat.clearProperty(KoCharacterStyle::ChangeTrackerId);
-                    cursor.setBlockCharFormat(blockCharFormat);
-                }
-            }
-        }
-    }
 }
 
 // To figure out if a the blocks of the selection are write protected we need to
@@ -570,7 +451,7 @@ void KoTextEditor::insertInlineObject(KoInlineObject *inliner, KUndo2Command *cm
     InsertInlineObjectCommand *insertInlineObjectCommand = new InsertInlineObjectCommand(inliner, d->document, topCommand);
     Q_UNUSED(insertInlineObjectCommand);
     d->caret.endEditBlock();
- 
+
     if (!cmd) {
         addCommand(topCommand);
         endEditBlock();
@@ -902,11 +783,11 @@ public:
     }
 
     // override super's implementation to not waste cpu cycles
-    virtual void visitBlock(QTextBlock&, const QTextCursor &)
+    void visitBlock(QTextBlock&, const QTextCursor &) override
     {
     }
 
-    virtual void nonVisit()
+    void nonVisit() override
     {
         setAbortVisiting(true);
     }
@@ -1441,7 +1322,7 @@ void KoTextEditor::insertHtml(const QString &html)
         QTextList *currentTextList = currentBlock.textList();
         if(currentTextList && !pastedLists.contains(currentBlock.textList())) {
             KoListStyle *listStyle = KoTextDocument(d->document).styleManager()->defaultListStyle()->clone();
-            listStyle->setName("");
+            listStyle->setName(QString());
             listStyle->setStyleId(0);
             currentPastedList = new KoList(d->document, listStyle);
             QTextListFormat currentTextListFormat = currentTextList->format();
@@ -1449,8 +1330,8 @@ void KoTextEditor::insertHtml(const QString &html)
             KoListLevelProperties levelProperty = listStyle->levelProperties(currentTextListFormat.indent());
             levelProperty.setStyle(static_cast<KoListStyle::Style>(currentTextListFormat.style()));
             levelProperty.setLevel(currentTextListFormat.indent());
-            levelProperty.setListItemPrefix("");
-            levelProperty.setListItemSuffix("");
+            levelProperty.setListItemPrefix(QString());
+            levelProperty.setListItemSuffix(QString());
             levelProperty.setListId((KoListStyle::ListIdType)currentTextList);
             listStyle->setLevelProperties(levelProperty);
 
@@ -1586,7 +1467,7 @@ public:
     {
     }
 
-    virtual void visitBlock(QTextBlock &block, const QTextCursor &caret)
+    void visitBlock(QTextBlock &block, const QTextCursor &caret) override
     {
         if (m_position >= qMax(block.position(), caret.selectionStart())
                     && m_position <= qMin(block.position() + block.length(), caret.selectionEnd())) {

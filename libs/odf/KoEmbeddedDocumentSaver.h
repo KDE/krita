@@ -47,14 +47,6 @@ public:
     QString getFilename(const QString &prefix);
 
     /**
-     * Adds the object specific attributes to the tag, but does NOT
-     * write the content of the embedded document. Saving of the
-     * embedded documents themselves is done in @ref save. This
-     * function should be called from within KoDocumentBase::saveOdf.
-     */
-    void embedDocument(KoXmlWriter &writer, KoDocumentBase *doc);
-
-    /**
      * Adds the object specific attributes to the tag, and queues the
      * file for saving into the store.
      *

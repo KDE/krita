@@ -20,6 +20,7 @@
 #include "kis_mirror_manager.h"
 #include "KisViewManager.h"
 #include <kis_canvas_controller.h>
+#include <kis_icon.h>
 
 #include <klocalizedstring.h>
 #include <kguiitem.h>
@@ -43,6 +44,7 @@ void KisMirrorManager::setup(KActionCollection * collection)
 {
     m_mirrorCanvas = new KToggleAction(i18n("Mirror View"), this);
     m_mirrorCanvas->setChecked(false);
+    m_mirrorCanvas->setIcon(KisIconUtils::loadIcon("mirror-view"));
 
     collection->addAction("mirror_canvas", m_mirrorCanvas);
     collection->setDefaultShortcut(m_mirrorCanvas, QKeySequence(Qt::Key_M));

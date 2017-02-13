@@ -31,11 +31,19 @@ KisImageLockCommand::KisImageLockCommand(KisImageWSP image, bool lockImage)
 
 void KisImageLockCommand::redo()
 {
-    m_image->refreshGraph();
+    KisImageSP image = m_image.toStrongRef();
+    if (!image) {
+        return;
+    }
+    image->refreshGraph();
 }
 
 void KisImageLockCommand::undo()
 {
-    m_image->refreshGraph();
+    KisImageSP image = m_image.toStrongRef();
+    if (!image) {
+        return;
+    }
+    image->refreshGraph();
 }
 

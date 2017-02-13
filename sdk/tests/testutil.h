@@ -35,6 +35,7 @@
 #include "kis_node_graph_listener.h"
 #include "kis_iterator_ng.h"
 #include "kis_image.h"
+#include "testing_nodes.h"
 
 
 #ifndef FILES_DATA_DIR
@@ -62,7 +63,7 @@ inline KisNodeSP findNode(KisNodeSP root, const QString &name) {
         child = child->nextSibling();
     }
 
-    return 0;
+    return KisNodeSP();
 }
 
 
@@ -398,13 +399,18 @@ struct ExternalImageChecker
         : m_prefix(prefix),
           m_testName(testName),
           m_success(true),
-          m_maxFailingPixels(100)
+          m_maxFailingPixels(100),
+          m_fuzzy(1)
         {
         }
 
 
     void setMaxFailingPixels(int value) {
         m_maxFailingPixels = value;
+    }
+
+    void setFuzzy(int fuzzy){
+        m_fuzzy = fuzzy;
     }
 
     bool testPassed() const {
@@ -416,7 +422,7 @@ struct ExternalImageChecker
             checkQImageExternal(device->convertToQImage(0, image->bounds()),
                                 m_testName,
                                 m_prefix,
-                                caseName, 1, 1, m_maxFailingPixels);
+                                caseName, m_fuzzy, m_fuzzy, m_maxFailingPixels);
 
         m_success &= result;
         return result;
@@ -435,6 +441,7 @@ private:
 
     bool m_success;
     int m_maxFailingPixels;
+    int m_fuzzy;
 };
 
 
@@ -474,14 +481,13 @@ inline bool checkAlphaDeviceFilledWithPixel(KisPaintDeviceSP dev, const QRect &r
     return true;
 }
 
-class TestNode : public KisNode
+class TestNode : public DefaultNode
 {
     Q_OBJECT
 public:
-    KisNodeSP clone() const;
-    bool allowAsChild(KisNodeSP) const;
-    const KoColorSpace * colorSpace() const;
-    const KoCompositeOp * compositeOp() const;
+    KisNodeSP clone() const {
+        return KisNodeSP(new TestNode(*this));
+    }
 };
 
 class TestGraphListener : public KisNodeGraphListener
@@ -550,8 +556,8 @@ struct MaskParent
         const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
         undoStore = new KisSurrogateUndoStore();
         image = new KisImage(undoStore, imageRect.width(), imageRect.height(), cs, "test image");
-        layer = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE_U8);
-        image->addNode(layer);
+        layer = KisPaintLayerSP(new KisPaintLayer(image, "paint1", OPACITY_OPAQUE_U8));
+        image->addNode(KisNodeSP(layer.data()));
     }
 
     KisSurrogateUndoStore *undoStore;

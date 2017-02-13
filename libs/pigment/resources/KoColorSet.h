@@ -22,6 +22,7 @@
 #include <QObject>
 #include <QColor>
 #include <QVector>
+#include <QScopedPointer>
 
 #include <resources/KoResource.h>
 #include "KoColor.h"
@@ -33,6 +34,9 @@ struct KoColorSetEntry {
 
     KoColor color;
     QString name;
+    QString id;
+    bool spotColor {false};
+
     bool operator==(const KoColorSetEntry& rhs) const {
         return color == rhs.color && name == rhs.name;
     }
@@ -53,7 +57,8 @@ public:
         RIFF_PAL,           // RIFF
         ACT,                // Photoshop binary
         PSP_PAL,            // PaintShop Pro
-        ACO                 // Photoshop Swatches
+        ACO,                // Photoshop Swatches
+        XML                 // XML palette (Scribus)
     };
 
 
@@ -120,13 +125,10 @@ private:
     bool loadRiff();
     bool loadPsp();
     bool loadAco();
+    bool loadXml();
 
-    QByteArray m_data;
-    bool m_ownData;
-    QString m_name;
-    QString m_comment;
-    qint32 m_columns;
-    QVector<KoColorSetEntry> m_colors;
+    struct Private;
+    const QScopedPointer<Private> d;
 
 };
 #endif // KOCOLORSET

@@ -51,12 +51,12 @@ public:
 class UniversalSelector : public CssSelectorBase
 {
 public:
-    virtual bool match(const KoXmlElement &)
+    bool match(const KoXmlElement &) override
     {
         // matches always
         return true;
     }
-    virtual QString toString() const
+    QString toString() const override
     {
         return "*";
     }
@@ -70,15 +70,15 @@ public:
     : m_type(type)
     {
     }
-    virtual bool match(const KoXmlElement &e)
+    bool match(const KoXmlElement &e) override
     {
         return e.tagName() == m_type;
     }
-    virtual QString toString() const
+    QString toString() const override
     {
         return m_type;
     }
-    virtual int priority()
+    int priority() override
     {
         return 1;
     }
@@ -97,15 +97,15 @@ public:
         if (id.startsWith('#'))
             m_id = id.mid(1);
     }
-    virtual bool match(const KoXmlElement &e)
+    bool match(const KoXmlElement &e) override
     {
         return e.attribute("id") == m_id;
     }
-    virtual QString toString() const
+    QString toString() const override
     {
         return '#'+m_id;
     }
-    virtual int priority()
+    int priority() override
     {
         return 100;
     }
@@ -148,7 +148,7 @@ public:
         }
     }
 
-    virtual bool match(const KoXmlElement &e)
+    bool match(const KoXmlElement &e) override
     {
         switch(m_type) {
             case Exists:
@@ -170,7 +170,7 @@ public:
                 return false;
         }
     }
-    virtual QString toString() const
+    QString toString() const override
     {
         QString str('[');
         str += m_attribute;
@@ -185,7 +185,7 @@ public:
         str += ']';
         return str;
     }
-    virtual int priority()
+    int priority() override
     {
         return 10;
     }
@@ -212,7 +212,7 @@ public:
     {
     }
 
-    virtual bool match(const KoXmlElement &e)
+    bool match(const KoXmlElement &e) override
     {
         if (m_pseudoClass == ":first-child") {
             KoXmlNode parent = e.parentNode();
@@ -228,11 +228,11 @@ public:
             return false;
         }
     }
-    virtual QString toString() const
+    QString toString() const override
     {
         return m_pseudoClass;
     }
-    virtual int priority()
+    int priority() override
     {
         return 10;
     }
@@ -250,12 +250,12 @@ public:
     {
         compile();
     }
-    virtual ~CssSimpleSelector()
+    ~CssSimpleSelector() override
     {
         qDeleteAll(m_selectors);
     }
 
-    virtual bool match(const KoXmlElement &e)
+    bool match(const KoXmlElement &e) override
     {
         Q_FOREACH (CssSelectorBase *s, m_selectors) {
             if (!s->match(e))
@@ -265,7 +265,7 @@ public:
         return true;
     }
 
-    QString toString() const
+    QString toString() const override
     {
         QString str;
         Q_FOREACH (CssSelectorBase *s, m_selectors) {
@@ -273,7 +273,7 @@ public:
         }
         return str;
     }
-    virtual int priority()
+    int priority() override
     {
         int p = 0;
         Q_FOREACH (CssSelectorBase *s, m_selectors) {
@@ -386,11 +386,11 @@ public:
     {
         compile(tokens);
     }
-    virtual ~CssComplexSelector()
+    ~CssComplexSelector() override
     {
         qDeleteAll(m_selectors);
     }
-    QString toString() const
+    QString toString() const override
     {
         QString str;
         int selectorCount = m_selectors.count();
@@ -404,7 +404,7 @@ public:
         return str;
     }
 
-    virtual bool match(const KoXmlElement &e)
+    bool match(const KoXmlElement &e) override
     {
         int selectorCount = m_selectors.count();
         int combinatorCount = m_combinators.length();
@@ -469,7 +469,7 @@ public:
         }
         return true;
     }
-    virtual int priority()
+    int priority() override
     {
         int p = 0;
         Q_FOREACH (CssSelectorBase *s, m_selectors) {

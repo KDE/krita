@@ -53,9 +53,10 @@ public:
     /// the tag is added but unused
     void addTag(KoResource* resource, const QString& tag);
 
-    /// Remove the given tag for the given resource.
+    /// Remove the given tag for the given resource. It will be blacklisted if there are no users left.
     void delTag(KoResource* resource, const QString& tag);
 
+    /// Remove the tag altogether. It will be blacklisted, too.
     void delTag(const QString& tag);
 
     /// @return a list of all the tags in this store

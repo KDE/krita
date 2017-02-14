@@ -271,7 +271,7 @@ public Q_SLOTS:
      *  <li>transparencymask
      *  <li>filtermask
      *  <li>transformmask
-     *  <li>localselectionmask
+     *  <li>selectionmask
      * </ul>
      *
      * When relevant, the new Node will have the colorspace of the image by default;

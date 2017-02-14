@@ -28,6 +28,16 @@
 #include <kis_node.h>
 #include <kis_paint_layer.h>
 #include <kis_group_layer.h>
+#include <kis_file_layer.h>
+#include <kis_adjustment_layer.h>
+#include <kis_generator_layer.h>
+#include <kis_clone_layer.h>
+#include <kis_shape_layer.h>
+#include <kis_transparency_mask.h>
+#include <kis_filter_mask.h>
+#include <kis_transform_mask.h>
+#include <kis_selection_mask.h>
+#include <lazybrush/kis_colorize_mask.h>
 #include <kis_layer.h>
 #include <kis_meta_data_merge_strategy.h>
 #include <metadata/kis_meta_data_merge_strategy_registry.h>
@@ -121,31 +131,41 @@ QList<Node*> Node::childNodes() const
     return nodes;
 }
 
-void Node::addChildNode(Node *child, Node *above)
+bool Node::addChildNode(Node *child, Node *above)
 {
-    // UNIMPLEMENTED
-    if (!d->node) return;
+    if (!d->node) return false;
+    return d->image->addNode(child->node(), d->node, above->node());
 }
 
-void Node::setChildNodes(QList<Node*> value)
+bool Node::removeChildNode(Node *child)
 {
-    // UNIMPLEMENTED
-    if (!d->node) return;
+    if (!d->node) return false;
+    return d->image->removeNode(child->node());
 }
 
-
-
-QString Node::colorLabel() const
+void Node::setChildNodes(QList<Node*> nodes)
 {
-    // UNIMPLEMENTED
-    if (!d->node) return QString();
-    return QString();
+    if (!d->node) return;
+    KisNodeSP node = d->node->firstChild();
+    while (node) {
+        d->image->removeNode(node);
+        node = node->nextSibling();
+    }
+    Q_FOREACH(Node *node, nodes) {
+        d->image->addNode(node->node(), d->node);
+    }
 }
 
-void Node::setColorLabel(QString value)
+int Node::colorLabel() const
 {
-    // UNIMPLEMENTED
+    if (!d->node) return 0;
+    return d->node->colorLabelIndex();
+}
+
+void Node::setColorLabel(int index)
+{
     if (!d->node) return;
+    d->node->setColorLabelIndex(index);
 }
 
 QString Node::colorDepth() const
@@ -239,26 +259,47 @@ Node* Node::parentNode() const
     return 0;
 }
 
-void Node::setParentNode(Node* value)
-{
-    // UNIMPLEMENTED
-    if (!d->node) return;
-}
-
-
 QString Node::type() const
 {
-    // UNIMPLEMENTED
     if (!d->node) return QString();
     return QString();
+    if (qobject_cast<const KisPaintLayer*>(d->node)) {
+        return "paintlayer";
+    }
+    else if (qobject_cast<const KisGroupLayer*>(d->node)) {
+        return "grouplayer";
+    }
+    if (qobject_cast<const KisFileLayer*>(d->node)) {
+        return "filelayer";
+    }
+    if (qobject_cast<const KisAdjustmentLayer*>(d->node)) {
+        return "filterlayer";
+    }
+    if (qobject_cast<const KisGeneratorLayer*>(d->node)) {
+        return "filllayer";
+    }
+    if (qobject_cast<const KisCloneLayer*>(d->node)) {
+        return "clonelayer";
+    }
+    if (qobject_cast<const KisShapeLayer*>(d->node)) {
+        return "shapelayer";
+    }
+    if (qobject_cast<const KisTransparencyMask*>(d->node)) {
+        return "transparencymask";
+    }
+    if (qobject_cast<const KisFilterMask*>(d->node)) {
+        return "filtermask";
+    }
+    if (qobject_cast<const KisTransformMask*>(d->node)) {
+        return "transformmask";
+    }
+    if (qobject_cast<const KisSelectionMask*>(d->node)) {
+        return "selectionmask";
+    }
+    if (qobject_cast<const KisColorizeMask*>(d->node)) {
+        return "colorizemask";
+    }
 }
-
-void Node::setType(QString value)
-{
-    // UNIMPLEMENTED
-    if (!d->node) return;
-}
-
 
 bool Node::visible() const
 {
@@ -401,17 +442,17 @@ void Node::moveToParent(Node *parent)
     if (!d->node) return;
 }
 
-void Node::remove()
+bool Node::remove()
 {
-    // UNIMPLEMENTED
-    if (!d->node) return;
+    if (!d->node) return false;
+    if (!d->node->parent()) return false;
+    return d->image->removeNode(d->node);
 }
 
 Node* Node::duplicate()
 {
-    // UNIMPLEMENTED
     if (!d->node) return 0;
-    return 0;
+    return new Node(d->image, d->node->clone());
 }
 
 bool Node::save(const QString &filename, double xRes, double yRes)

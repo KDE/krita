@@ -443,10 +443,9 @@ Node* Document::createNode(const QString &name, const QString &nodeType)
     else if (nodeType == "transformmask") {
         node = new Node(image, new KisTransformMask());
     }
-    else if (nodeType == "localselectionmask") {
+    else if (nodeType == "selectionmask") {
         node = new Node(image, new KisSelectionMask(image));
     }
-
     return node;
 }
 

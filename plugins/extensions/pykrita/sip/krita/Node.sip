@@ -13,10 +13,12 @@ public Q_SLOTS:
     void setBlendingMode(QString value);
     QList<Channel *> channels() const;
     QList<Node *> childNodes() const;
-    void setChildNodes(QList<Node *> value);
+    bool addChildNode(Node *child, Node *above);
+    bool removeChildNode(Node *child);
+    void setChildNodes(QList<Node *> nodes);
     QString colorDepth() const;
-    QString colorLabel() const;
-    void setColorLabel(QString value);
+    int colorLabel() const;
+    void setColorLabel(int value);
     QString colorModel() const;
     QString colorProfile() const;
     void setColorSpace(const QString &colorModel, const QString &colorDepth, const QString &colorProfile);
@@ -28,17 +30,15 @@ public Q_SLOTS:
     void setName(QString value);
     int opacity() const;
     void setOpacity(int value);
-    Node * parentNode() const;
-    void setParentNode(Node*  value);
+    Node * parentNode() const  /Factory/;
     QString type() const;
-    void setType(QString value);
     bool visible() const;
     void setVisible(bool value);
-    InfoObject * metaDataInfo() const;
+    InfoObject * metaDataInfo() const /Factory/;
     void setMetaDataInfo(InfoObject*  value);
-    Generator * generator() const;
+    Generator * generator() const /Factory/;
     void setGenerator(Generator*  value);
-    Filter * filter() const;
+    Filter * filter() const /Factory/;
     void setFilter(Filter*  value);
     Transformation * transformation() const;
     void setTransformation(Transformation*  value);
@@ -50,10 +50,10 @@ public Q_SLOTS:
     QRect bounds() const;
     void move(int x, int y);
     void moveToParent(Node*  parent);
-    void remove();
-    Node *duplicate();
+    bool remove();
+    Node *duplicate() /Factory/;
     void save(const QString &filename, double xRes, double yRes);
-    Node *mergeDown()  /Factory/;
+    Node *mergeDown() /Factory/;
 Q_SIGNALS:
 private:
 };

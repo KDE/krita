@@ -78,17 +78,25 @@ public Q_SLOTS:
     QList<Node*> childNodes() const;
 
     /**
-     * @brief addChildNode
-     * @param child
-     * @param above
+     * @brief addChildNode adds the given node in the list of children.
+     * @param child the node to be added
+     * @param above the node above which this node will be placed
+     * @return false if adding the node failed
      */
-    void addChildNode(Node *child, Node *above);
+    bool addChildNode(Node *child, Node *above);
+
+    /**
+     * @brief removeChildNode removes the given node from the list of children.
+     * @param child the node to be removed
+     */
+    bool removeChildNode(Node *child);
 
     /**
      * @brief setChildNodes this replaces the existing set of child nodes with the new set.
-     * @param value
+     * @param nodes The list of nodes that will become children, bottom-up -- the first node,
+     * is the bottom-most node in the stack.
      */
-    void setChildNodes(QList<Node*> value);
+    void setChildNodes(QList<Node*> nodes);
 
     /**
      * colorDepth A string describing the color depth of the image:
@@ -153,8 +161,20 @@ public Q_SLOTS:
      */
     void setColorSpace(const QString &colorModel, const QString &colorDepth, const QString &colorProfile);
 
-    QString colorLabel() const;
-    void setColorLabel(QString value);
+    /**
+     * Sets a color label index associated to the layer.  The actual
+     * color of the label and the number of available colors is
+     * defined by Krita GUI configuration.
+     */
+    int colorLabel() const;
+
+    /**
+     * @brief setColorLabel sets a color label index associated to the layer.  The actual
+     * color of the label and the number of available colors is
+     * defined by Krita GUI configuration.
+     * @param index an integer corresponding to the set of available color labels.
+     */
+    void setColorLabel(int index);
 
     bool inheritAlpha() const;
     void setInheritAlpha(bool value);
@@ -169,10 +189,31 @@ public Q_SLOTS:
     void setOpacity(int value);
 
     Node* parentNode() const;
-    void setParentNode(Node* value);
 
+    /**
+     * @brief type Krita has several types of nodes, split in layers and masks. Group
+     * layers can contain other layers, any layer can contain masks.
+     *
+     * @return The type of the node. Valid types are:
+     * <ul>
+     *  <li>paintlayer
+     *  <li>grouplayer
+     *  <li>filelayer
+     *  <li>filterlayer
+     *  <li>filllayer
+     *  <li>clonelayer
+     *  <li>vectorlayer
+     *  <li>transparencymask
+     *  <li>filtermask
+     *  <li>transformmask
+     *  <li>selectionmask
+     *  <li>colorizemask
+     * </ul>
+     *
+     * If the Node object isn't wrapping a valid Krita layer or mask object, and
+     * empty string is returned.
+     */
     QString type() const;
-    void setType(QString value);
 
     bool visible() const;
     void setVisible(bool value);
@@ -310,12 +351,15 @@ public Q_SLOTS:
 
     void moveToParent(Node *parent);
 
-    void remove();
+    /**
+     * @brief remove removes this node from its parent image.
+     */
+    bool remove();
 
     /**
-     * @brief duplicate
-     * @return
-     */;
+     * @brief duplicate returns a full copy of the current node. The node is not inserted in the graphc
+     * @return a valid Node object or 0 if the node couldn't be duplicated.
+     */
     Node* duplicate();
 
     /**

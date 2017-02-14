@@ -74,8 +74,6 @@ public:
     void setCanvas(KoCanvasBase *canvas);
     void setActive(bool active);
 
-
-    void updateStyleControls(KoShapeStrokeModelSP stroke, KoMarker *startMarker, KoMarker *midMarker, KoMarker *endMarker);
     void updateStyleControlsAvailability(bool enabled);
 
     void updateMarkers(const QList<KoMarker*> &markers);

@@ -362,50 +362,6 @@ KoShapeStrokeSP KoStrokeConfigWidget::createShapeStroke() const
 // ----------------------------------------------------------------
 //                         Other public functions
 
-void KoStrokeConfigWidget::updateStyleControls(KoShapeStrokeModelSP stroke, KoMarker *startMarker, KoMarker *midMarker, KoMarker *endMarker)
-{
-    blockChildSignals(true);
-
-    const KoShapeStrokeSP lineStroke = qSharedPointerDynamicCast<KoShapeStroke>(stroke);
-
-    if (lineStroke) {
-        d->lineWidth->changeValue(lineStroke->lineWidth());
-
-        {
-            Qt::PenCapStyle capStyle = lineStroke->capStyle() >= 0 ? lineStroke->capStyle() : Qt::FlatCap;
-            QAbstractButton *button = d->capNJoinMenu->capGroup->button(capStyle);
-            KIS_SAFE_ASSERT_RECOVER_RETURN(button);
-            button->setChecked(true);
-        }
-
-        {
-            Qt::PenJoinStyle joinStyle = lineStroke->joinStyle() >= 0 ? lineStroke->joinStyle() : Qt::MiterJoin;
-            QAbstractButton *button = d->capNJoinMenu->joinGroup->button(joinStyle);
-            KIS_SAFE_ASSERT_RECOVER_RETURN(button);
-            button->setChecked(true);
-        }
-
-        d->capNJoinMenu->miterLimit->changeValue(lineStroke->miterLimit());
-        d->capNJoinMenu->miterLimit->setEnabled(lineStroke->joinStyle() == Qt::MiterJoin);
-
-        d->lineStyle->setLineStyle(lineStroke->lineStyle(), lineStroke->lineDashes());
-    }
-    else {
-        d->lineWidth->changeValue(0.0);
-        d->capNJoinMenu->capGroup->button(Qt::FlatCap)->setChecked(true);
-        d->capNJoinMenu->joinGroup->button(Qt::MiterJoin)->setChecked(true);
-        d->capNJoinMenu->miterLimit->changeValue(0.0);
-        d->capNJoinMenu->miterLimit->setEnabled(true);
-        d->lineStyle->setLineStyle(Qt::SolidLine, QVector<qreal>());
-    }
-
-    d->startMarkerSelector->setMarker(startMarker);
-    d->midMarkerSelector->setMarker(midMarker);
-    d->endMarkerSelector->setMarker(endMarker);
-
-    blockChildSignals(false);
-}
-
 void KoStrokeConfigWidget::updateStyleControlsAvailability(bool enabled)
 {
     d->lineWidth->setEnabled(enabled);
@@ -416,8 +372,6 @@ void KoStrokeConfigWidget::updateStyleControlsAvailability(bool enabled)
     d->midMarkerSelector->setEnabled(enabled);
     d->endMarkerSelector->setEnabled(enabled);
 }
-
-
 
 void KoStrokeConfigWidget::setUnit(const KoUnit &unit)
 {
@@ -553,14 +507,36 @@ void KoStrokeConfigWidget::applyMarkerChanges(int rawPosition)
 
 // ----------------------------------------------------------------
 
-struct CheckShapeStrokeStylePolicy
+struct CheckShapeStrokeStyleBasePolicy
 {
-    typedef KoShapeStrokeModelSP PointerType;
+    typedef KoShapeStrokeSP PointerType;
     static PointerType getProperty(KoShape *shape) {
-        return shape->stroke();
+        return qSharedPointerDynamicCast<KoShapeStroke>(shape->stroke());
     }
+};
+
+struct CheckShapeStrokeDashesPolicy : public CheckShapeStrokeStyleBasePolicy
+{
     static bool compareTo(PointerType p1, PointerType p2) {
-        return p1->compareStyleTo(p2.data());
+        return p1->lineStyle() == p2->lineStyle() &&
+                p1->lineDashes() == p2->lineDashes() &&
+                p1->dashOffset() == p2->dashOffset();
+    }
+};
+
+struct CheckShapeStrokeCapJoinPolicy : public CheckShapeStrokeStyleBasePolicy
+{
+    static bool compareTo(PointerType p1, PointerType p2) {
+        return p1->capStyle() == p2->capStyle() &&
+                p1->joinStyle() == p2->joinStyle() &&
+                p1->miterLimit() == p2->miterLimit();
+    }
+};
+
+struct CheckShapeStrokeWidthPolicy : public CheckShapeStrokeStyleBasePolicy
+{
+    static bool compareTo(PointerType p1, PointerType p2) {
+        return p1->lineWidth() == p2->lineWidth();
     }
 };
 
@@ -599,33 +575,67 @@ void KoStrokeConfigWidget::selectionChanged()
 
     QList<KoShape*> shapes = selection->selectedEditableShapes();
 
-    KoShapeStrokeModelSP stroke;
-    KoMarker *startMarker = 0;
-    KoMarker *midMarker = 0;
-    KoMarker *endMarker = 0;
+    KoShape *shape = !shapes.isEmpty() ? shapes.first() : 0;
+    const KoShapeStrokeSP stroke = shape ? qSharedPointerDynamicCast<KoShapeStroke>(shape->stroke()) : KoShapeStrokeSP();
 
-    if (!shapes.isEmpty()) {
-        KoShape *shape = shapes.first();
+    blockChildSignals(true);
 
-        if (KoFlake::compareShapePropertiesEqual<CheckShapeStrokeStylePolicy>(shapes)) {
-            stroke = shape->stroke();
+    // line width
+    if (stroke && KoFlake::compareShapePropertiesEqual<CheckShapeStrokeWidthPolicy>(shapes)) {
+        d->lineWidth->changeValue(stroke->lineWidth());
+    } else {
+        d->lineWidth->changeValue(0);
+    }
+
+    // caps & joins
+    if (stroke && KoFlake::compareShapePropertiesEqual<CheckShapeStrokeCapJoinPolicy>(shapes)) {
+        Qt::PenCapStyle capStyle = stroke->capStyle() >= 0 ? stroke->capStyle() : Qt::FlatCap;
+        Qt::PenJoinStyle joinStyle = stroke->joinStyle() >= 0 ? stroke->joinStyle() : Qt::MiterJoin;
+
+        {
+            QAbstractButton *button = d->capNJoinMenu->capGroup->button(capStyle);
+            KIS_SAFE_ASSERT_RECOVER_RETURN(button);
+            button->setChecked(true);
         }
 
-        KoPathShape *pathShape = dynamic_cast<KoPathShape *>(shape);
-        if (pathShape) {
-            if (KoFlake::compareShapePropertiesEqual(shapes, CheckShapeMarkerPolicy(KoFlake::StartMarker))) {
-                startMarker = pathShape->markerNew(KoFlake::StartMarker);
-            }
-            if (KoFlake::compareShapePropertiesEqual(shapes, CheckShapeMarkerPolicy(KoFlake::MidMarker))) {
-                midMarker = pathShape->markerNew(KoFlake::MidMarker);
-            }
-            if (KoFlake::compareShapePropertiesEqual(shapes, CheckShapeMarkerPolicy(KoFlake::EndMarker))) {
-                endMarker = pathShape->markerNew(KoFlake::EndMarker);
-            }
+        {
+            QAbstractButton *button = d->capNJoinMenu->joinGroup->button(joinStyle);
+            KIS_SAFE_ASSERT_RECOVER_RETURN(button);
+            button->setChecked(true);
+        }
+
+        d->capNJoinMenu->miterLimit->changeValue(stroke->miterLimit());
+        d->capNJoinMenu->miterLimit->setEnabled(joinStyle == Qt::MiterJoin);
+    } else {
+        d->capNJoinMenu->capGroup->button(Qt::FlatCap)->setChecked(true);
+        d->capNJoinMenu->joinGroup->button(Qt::MiterJoin)->setChecked(true);
+        d->capNJoinMenu->miterLimit->changeValue(0.0);
+        d->capNJoinMenu->miterLimit->setEnabled(true);
+    }
+
+    // dashes style
+    if (stroke && KoFlake::compareShapePropertiesEqual<CheckShapeStrokeDashesPolicy>(shapes)) {
+        d->lineStyle->setLineStyle(stroke->lineStyle(), stroke->lineDashes());
+    } else {
+        d->lineStyle->setLineStyle(Qt::SolidLine, QVector<qreal>());
+    }
+
+    // markers
+    KoPathShape *pathShape = dynamic_cast<KoPathShape *>(shape);
+    if (pathShape) {
+        if (KoFlake::compareShapePropertiesEqual(shapes, CheckShapeMarkerPolicy(KoFlake::StartMarker))) {
+            d->startMarkerSelector->setMarker(pathShape->markerNew(KoFlake::StartMarker));
+        }
+        if (KoFlake::compareShapePropertiesEqual(shapes, CheckShapeMarkerPolicy(KoFlake::MidMarker))) {
+            d->midMarkerSelector->setMarker(pathShape->markerNew(KoFlake::MidMarker));
+        }
+        if (KoFlake::compareShapePropertiesEqual(shapes, CheckShapeMarkerPolicy(KoFlake::EndMarker))) {
+            d->endMarkerSelector->setMarker(pathShape->markerNew(KoFlake::EndMarker));
         }
     }
 
-    updateStyleControls(stroke, startMarker, midMarker, endMarker);
+    blockChildSignals(false);
+
     updateStyleControlsAvailability(!shapes.isEmpty());
 }
 

@@ -78,7 +78,7 @@ KoTagFilterWidget::KoTagFilterWidget(QWidget* parent): QWidget(parent)
 
     d->tagSearchLineEdit = new QLineEdit(this);
     d->tagSearchLineEdit->setClearButtonEnabled(true);
-    d->tagSearchLineEdit->setPlaceholderText(i18n("Enter resource filters here"));
+    d->tagSearchLineEdit->setPlaceholderText(i18n("Search"));
     d->tagSearchLineEdit->setToolTip(d->tagSearchBarTooltip_saving_disabled);
     d->tagSearchLineEdit->setEnabled(true);
 

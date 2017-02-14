@@ -104,7 +104,6 @@ void KisOpenRasterStackLoadVisitor::loadImage()
 
             dbgFile << ppVar(width) << ppVar(height);
             d->image = new KisImage(d->undoStore, width, height, KoColorSpaceRegistry::instance()->rgb8(), "OpenRaster Image (name)");
-
             for (QDomNode node2 = node.firstChild(); !node2.isNull(); node2 = node2.nextSibling()) {
                 if (node2.isElement() && node2.nodeName() == "stack") { // it's the root layer !
                     QDomElement subelem2 = node2.toElement();
@@ -193,10 +192,10 @@ void KisOpenRasterStackLoadVisitor::loadPaintLayer(const QDomElement& elem, KisP
     dbgFile << "Loading was unsuccessful";
 }
 
-void KisOpenRasterStackLoadVisitor::loadGroupLayer(const QDomElement& elem, KisGroupLayerSP gL)
+void KisOpenRasterStackLoadVisitor::loadGroupLayer(const QDomElement& elem, KisGroupLayerSP groupLayer)
 {
-    dbgFile << "Loading group layer";
-    loadLayerInfo(elem, gL);
+    dbgFile << "Loading group layer" << d->image;
+    loadLayerInfo(elem, groupLayer);
     for (QDomNode node = elem.firstChild(); !node.isNull(); node = node.nextSibling()) {
         if (node.isElement()) {
             QDomElement subelem = node.toElement();
@@ -211,7 +210,7 @@ void KisOpenRasterStackLoadVisitor::loadGroupLayer(const QDomElement& elem, KisG
                     passThrough = false;
                 }
                 layer->setPassThroughMode(passThrough);
-                d->image->addNode(layer.data(), gL.data(), 0);
+                d->image->addNode(layer, groupLayer.data(), 0);
                 loadGroupLayer(subelem, layer);
             } else if (node.nodeName() == "layer") {
                 QString filename = subelem.attribute("src");
@@ -224,10 +223,9 @@ void KisOpenRasterStackLoadVisitor::loadGroupLayer(const QDomElement& elem, KisG
                         d->image->setResolution(d->xRes, d->yRes);
                         // now get the device
                         KisPaintDeviceSP device = pngImage->projection();
-                        delete pngImage.data();
 
-                        KisPaintLayerSP layer = new KisPaintLayer(gL->image() , "", opacity * 255, device);
-                        d->image->addNode(layer.data(), gL.data(), 0);
+                        KisPaintLayerSP layer = new KisPaintLayer(groupLayer->image() , "", opacity * 255, device);
+                        d->image->addNode(layer, groupLayer, 0);
                         loadPaintLayer(subelem, layer);
                         dbgFile << "Loading was successful";
                     }
@@ -241,8 +239,8 @@ void KisOpenRasterStackLoadVisitor::loadGroupLayer(const QDomElement& elem, KisG
                     f = KisFilterRegistry::instance()->value(filterTypeSplit[2]);
                 }
                 KisFilterConfigurationSP  kfc = f->defaultConfiguration();
-                KisAdjustmentLayerSP layer = new KisAdjustmentLayer(gL->image() , "", kfc, KisSelectionSP(0));
-                d->image->addNode(layer.data(), gL.data(), 0);
+                KisAdjustmentLayerSP layer = new KisAdjustmentLayer(groupLayer->image() , "", kfc, KisSelectionSP(0));
+                d->image->addNode(layer.data(), groupLayer.data(), 0);
                 loadAdjustmentLayer(subelem, layer);
 
             } else {

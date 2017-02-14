@@ -53,7 +53,13 @@ Note: on all operating systems the entire procedure is done in a terminal window
 == Prepare the externals build ==
 
 1. enter the BUILDROOT/b directory
-2. run cmake:
+
+2. The cmake command needs to point to your BUILDROOT like /dev/d, not c:\dev\d.
+
+    set PATH=BUILDROOT\i\bin\;BUILDROOT\i\lib;%PATH%
+    cmake ..\krita\3rdparty -DEXTERNALS_DOWNLOAD_DIR=/dev/d -DINSTALL_ROOT=/dev/i  -G "MinGW Makefiles"
+
+3. run cmake:
 
     * Linux:
     export PATH=$BUILDROOT/i/bin
@@ -86,7 +92,7 @@ Note that the cmake command needs to point to your BUILDROOT like /dev/d, not c:
     set PATH=BUILDROOT\i\bin\;BUILDROOT\i\lib;%PATH%
     cmake ..\krita\3rdparty -DEXTERNALS_DOWNLOAD_DIR=/dev/d -DINSTALL_ROOT=/dev/i  -G "MinGW Makefiles"
 
-3. build the packages:
+4. build the packages:
 
 With a judicious application of DEPENDS statements, it's possible to build it all in one go, but in my experience that fails always, so it's better to build the dependencies independently.
 

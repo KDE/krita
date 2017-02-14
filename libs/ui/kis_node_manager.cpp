@@ -831,7 +831,7 @@ void KisNodeManager::activateNextNode()
 
     KisNodeSP node = activeNode->nextSibling();
 
-    while (node && node->childCount() > 0 && node->isEditable()) {
+    while (node && node->childCount() > 0) {
            node = node->firstChild();
     }
 
@@ -855,7 +855,7 @@ void KisNodeManager::activatePreviousNode()
 
     KisNodeSP node;
 
-    if (activeNode->childCount() > 0 && activeNode->isEditable()) {
+    if (activeNode->childCount() > 0) {
         node = activeNode->lastChild();
     }
     else {

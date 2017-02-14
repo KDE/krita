@@ -194,7 +194,6 @@
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
         <widget class="KisColorSpaceSelector" name="colorSpaceSelector" native="true">
-         <zorder>grpImage</zorder>
         </widget>
        </item>
        <item>

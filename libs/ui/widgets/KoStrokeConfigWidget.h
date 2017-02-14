@@ -53,7 +53,7 @@ public:
     explicit KoStrokeConfigWidget(QWidget *parent);
     ~KoStrokeConfigWidget();
 
-    void setEnableWidgetsWhenNoShapes(bool value);
+    void setNoSelectionTrackingMode(bool value);
 
     // Getters
     Qt::PenStyle lineStyle() const;
@@ -79,6 +79,9 @@ public:
     void updateStyleControlsAvailability(bool enabled);
 
     void updateMarkers(const QList<KoMarker*> &markers);
+
+protected:
+    void showEvent(QShowEvent *event);
 
 private Q_SLOTS:
 

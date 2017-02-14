@@ -47,7 +47,7 @@ public:
     explicit KoFillConfigWidget(KoFlake::FillVariant fillVariant, QWidget *parent);
     ~KoFillConfigWidget();
 
-    void setEnableWidgetsWhenNoShapes(bool value);
+    void setNoSelectionTrackingMode(bool value);
 
     /// Returns the list of the selected shape
     /// If you need to use only one shape, call currentShape()

@@ -354,7 +354,7 @@ QList<QPointer<QWidget> > KoPencilTool::createOptionWidgets()
     widgets.append(optionWidget);
 
     m_strokeWidget = new KoStrokeConfigWidget(0);
-    m_strokeWidget->setEnableWidgetsWhenNoShapes(true);
+    m_strokeWidget->setNoSelectionTrackingMode(true);
     m_strokeWidget->setWindowTitle(i18n("Line"));
     m_strokeWidget->setCanvas(canvas());
     widgets.append(m_strokeWidget);

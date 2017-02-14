@@ -119,23 +119,6 @@ KoUnit KoCanvasResourceManager::unitResource(int key) const
     return resource(key).value<KoUnit>();
 }
 
-
-void KoCanvasResourceManager::setActiveStroke(const KoShapeStroke &stroke)
-{
-    QVariant v;
-    v.setValue(stroke);
-    setResource(ActiveStroke, v);
-}
-
-KoShapeStroke KoCanvasResourceManager::activeStroke() const
-{
-    if (!d->manager.hasResource(ActiveStroke)) {
-        KoShapeStroke empty;
-        return empty;
-    }
-    return resource(ActiveStroke).value<KoShapeStroke>();
-}
-
 bool KoCanvasResourceManager::boolResource(int key) const
 {
     return d->manager.boolResource(key);

@@ -22,16 +22,17 @@
 #include "KoCreatePathTool.h"
 #include "KoCreatePathTool_p.h"
 
+#include <KoUnit.h>
 #include "KoPointerEvent.h"
 #include "KoPathShape.h"
 #include "KoSelection.h"
 #include "KoDocumentResourceManager.h"
 #include "KoShapePaintingContext.h"
 #include "KoShapeStroke.h"
-#include <widgets/KoStrokeConfigWidget.h>
 #include "KoCanvasBase.h"
 #include "kis_int_parse_spin_box.h"
 #include <KoColor.h>
+#include "kis_canvas_resource_provider.h"
 
 #include <klocalizedstring.h>
 
@@ -56,12 +57,6 @@ void KoCreatePathTool::paint(QPainter &painter, const KoViewConverter &converter
     Q_D(KoCreatePathTool);
 
     if (pathStarted()) {
-
-        KoShapeStrokeSP stroke(createStroke());
-
-        if (stroke) {
-            d->shape->setStroke(stroke);
-        }
 
         painter.save();
         paintPath(*(d->shape), painter, converter);
@@ -199,7 +194,10 @@ void KoCreatePathTool::mousePressEvent(KoPointerEvent *event)
         d->shape = pathShape;
         pathShape->setShapeId(KoPathShapeId);
 
-        KoShapeStrokeSP stroke(new KoShapeStroke(canvas()->resourceManager()->activeStroke()));
+        KoShapeStrokeSP stroke(new KoShapeStroke());
+        const qreal size = canvas()->resourceManager()->resource(KisCanvasResourceProvider::Size).toReal();
+
+        stroke->setLineWidth(canvas()->unit().fromUserValue(size));
         stroke->setColor(canvas()->resourceManager()->foregroundColor().toQColor());
 
         pathShape->setStroke(stroke);
@@ -451,7 +449,6 @@ void KoCreatePathTool::addPathShape(KoPathShape *pathShape)
     d->existingStartPoint.validate(canvas());
     d->existingEndPoint.validate(canvas());
 
-    pathShape->setStroke(createStroke());
     if (d->connectPaths(pathShape, d->existingStartPoint, d->existingEndPoint)) {
         if (d->existingStartPoint.isValid()) {
             startShape = d->existingStartPoint.path;
@@ -506,27 +503,10 @@ QList<QPointer<QWidget> > KoCreatePathTool::createOptionWidgets()
     angleWidget->setWindowTitle(i18n("Angle Constraints"));
     list.append(angleWidget);
 
-    d->strokeWidget = new KoStrokeConfigWidget(0);
-    d->strokeWidget->setWindowTitle(i18n("Line"));
-    d->strokeWidget->setCanvas(canvas());
-    d->strokeWidget->setActive(false);
-    list.append(d->strokeWidget);
-
     connect(angleEdit, SIGNAL(valueChanged(int)), this, SLOT(angleDeltaChanged(int)));
     connect(angleSnap, SIGNAL(stateChanged(int)), this, SLOT(angleSnapChanged(int)));
 
     return list;
-}
-
-KoShapeStrokeSP KoCreatePathTool::createStroke()
-{
-    Q_D(KoCreatePathTool);
-
-    KoShapeStrokeSP stroke;
-    if (d->strokeWidget) {
-        stroke = d->strokeWidget->createShapeStroke();
-    }
-    return stroke;
 }
 
 //have to include this because of Q_PRIVATE_SLOT

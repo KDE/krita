@@ -68,6 +68,9 @@
 #include <KoShapeStrokeModel.h>
 #include <KoFillConfigWidget.h>
 #include <KoFlakeUtils.h>
+#include <KoCanvasBase.h>
+
+#include "kis_canvas_resource_provider.h"
 
 // Krita
 #include "kis_double_parse_unit_spin_box.h"
@@ -167,7 +170,7 @@ public:
         : canvas(0),
         active(true),
         fillConfigWidget(0),
-        enableWidgetsWhenNoShapes(false)
+        noSelectionTrackingMode(false)
     {
     }
 
@@ -187,7 +190,7 @@ public:
     bool active;
 
     KoFillConfigWidget *fillConfigWidget;
-    bool enableWidgetsWhenNoShapes;
+    bool noSelectionTrackingMode;
 };
 
 KoStrokeConfigWidget::KoStrokeConfigWidget(QWidget * parent)
@@ -225,6 +228,7 @@ KoStrokeConfigWidget::KoStrokeConfigWidget(QWidget * parent)
         // Line style
         d->lineStyle = new KoLineStyleSelector(this);
         d->lineStyle->setMinimumWidth(70);
+        d->lineStyle->setLineStyle(Qt::SolidLine,  QVector<qreal>());
         firstLineLayout->addWidget(d->lineStyle);
 
         mainLayout->addLayout(firstLineLayout);
@@ -302,11 +306,13 @@ KoStrokeConfigWidget::~KoStrokeConfigWidget()
     delete d;
 }
 
-void KoStrokeConfigWidget::setEnableWidgetsWhenNoShapes(bool value)
+void KoStrokeConfigWidget::setNoSelectionTrackingMode(bool value)
 {
-    d->fillConfigWidget->setEnableWidgetsWhenNoShapes(value);
-    d->enableWidgetsWhenNoShapes = value;
-    selectionChanged();
+    d->fillConfigWidget->setNoSelectionTrackingMode(value);
+    d->noSelectionTrackingMode = value;
+    if (!d->noSelectionTrackingMode) {
+        selectionChanged();
+    }
 }
 
 // ----------------------------------------------------------------
@@ -571,6 +577,8 @@ struct CheckShapeMarkerPolicy
 
 void KoStrokeConfigWidget::selectionChanged()
 {
+    if (!isVisible() || d->noSelectionTrackingMode) return;
+
     if (d->canvas) {
         // see a comment in setUnit()
         setUnit(d->canvas->unit());
@@ -643,7 +651,7 @@ void KoStrokeConfigWidget::selectionChanged()
 
     blockChildSignals(false);
 
-    updateStyleControlsAvailability(!shapes.isEmpty() || d->enableWidgetsWhenNoShapes);
+    updateStyleControlsAvailability(!shapes.isEmpty());
 }
 
 void KoStrokeConfigWidget::setCanvas( KoCanvasBase *canvas )
@@ -675,5 +683,24 @@ void KoStrokeConfigWidget::canvasResourceChanged(int key, const QVariant &value)
     case KoCanvasResourceManager::Unit:
         setUnit(value.value<KoUnit>());
         break;
+    case KisCanvasResourceProvider::Size:
+        if (d->noSelectionTrackingMode) {
+            d->lineWidth->changeValue(d->canvas->unit().fromUserValue(value.toReal()));
+        }
+        break;
+    }
+}
+
+void KoStrokeConfigWidget::showEvent(QShowEvent *event)
+{
+    QWidget::showEvent(event);
+
+    if (!d->noSelectionTrackingMode) {
+        selectionChanged();
+    } else {
+        if (d->canvas) {
+            const QVariant value = d->canvas->resourceManager()->resource(KisCanvasResourceProvider::Size);
+            canvasResourceChanged(KisCanvasResourceProvider::Size, value);
+        }
     }
 }

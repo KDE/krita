@@ -102,8 +102,6 @@ protected:
     virtual QList<QPointer<QWidget> > createOptionWidgets();
 
 private:
-    KoShapeStrokeSP createStroke();
-
     Q_DECLARE_PRIVATE(KoCreatePathTool)
     Q_PRIVATE_SLOT(d_func(), void angleDeltaChanged(int))
     Q_PRIVATE_SLOT(d_func(), void angleSnapChanged(int))

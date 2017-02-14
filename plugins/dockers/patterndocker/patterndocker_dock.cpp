@@ -34,6 +34,8 @@ PatternDockerDock::PatternDockerDock( )
     m_patternChooser->setPreviewOrientation(Qt::Vertical);
     m_patternChooser->setCurrentItem(0,0);
     m_patternChooser->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+    m_patternChooser->setMinimumHeight(160);
+
     setWidget(m_patternChooser);
 }
 

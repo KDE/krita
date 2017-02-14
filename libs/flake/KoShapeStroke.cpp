@@ -285,6 +285,23 @@ bool KoShapeStroke::compareFillTo(const KoShapeStrokeModel *other)
             (!d->brush.gradient() && d->color == stroke->d->color);
 }
 
+bool KoShapeStroke::compareStyleTo(const KoShapeStrokeModel *other)
+{
+    if (!other) return false;
+
+    const KoShapeStroke *stroke = dynamic_cast<const KoShapeStroke*>(other);
+    if (!stroke) return false;
+
+    QPen pen1 = d->pen;
+    QPen pen2 = stroke->d->pen;
+
+    // just a random color top avoid comparison of that property
+    pen1.setColor(Qt::magenta);
+    pen2.setColor(Qt::magenta);
+
+    return pen1 == pen2;
+}
+
 void KoShapeStroke::setCapStyle(Qt::PenCapStyle style)
 {
     d->pen.setCapStyle(style);

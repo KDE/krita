@@ -24,17 +24,17 @@
 
 #include <klocalizedstring.h>
 
-KoPathShapeMarkerCommand::KoPathShapeMarkerCommand(const QList<KoPathShape*> &shapes, KoMarker *marker, KoMarkerData::MarkerPosition position, KUndo2Command *parent)
-: KUndo2Command(parent)
-, m_shapes(shapes)
-, m_marker(marker)
-, m_position(position)
+KoPathShapeMarkerCommand::KoPathShapeMarkerCommand(const QList<KoPathShape*> &shapes, KoMarker *marker, KoFlake::MarkerPosition position, KUndo2Command *parent)
+    : KUndo2Command(parent)
+    , m_shapes(shapes)
+    , m_marker(marker)
+    , m_position(position)
 {
     setText(kundo2_i18n("Set marker"));
 
     // save old markers
     Q_FOREACH (KoPathShape *shape, m_shapes) {
-        m_oldMarkers.append(shape->marker(position));
+        m_oldMarkers.append(shape->markerNew(position));
     }
 }
 
@@ -46,7 +46,8 @@ void KoPathShapeMarkerCommand::redo()
 {
     KUndo2Command::redo();
     Q_FOREACH (KoPathShape *shape, m_shapes) {
-        shape->setMarker(m_marker, m_position);
+        shape->update();
+        shape->setMarkerNew(m_marker, m_position);
         shape->update();
     }
 }
@@ -56,7 +57,8 @@ void KoPathShapeMarkerCommand::undo()
     KUndo2Command::undo();
     QList<KoMarker*>::iterator markerIt = m_oldMarkers.begin();
     Q_FOREACH (KoPathShape *shape, m_shapes) {
-        shape->setMarker(*markerIt, m_position);
+        shape->update();
+        shape->setMarkerNew(*markerIt, m_position);
         shape->update();
         ++markerIt;
     }

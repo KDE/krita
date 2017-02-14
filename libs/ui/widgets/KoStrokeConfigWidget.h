@@ -35,6 +35,7 @@
 #include <QWidget>
 #include <KoMarkerData.h>
 #include <KoFlakeTypes.h>
+#include <KoFlake.h>
 
 class KoUnit;
 class KoShapeStrokeModel;
@@ -73,30 +74,29 @@ public:
     void setCanvas(KoCanvasBase *canvas);
     void setActive(bool active);
 
-private Q_SLOTS:
-    void updateControls(KoShapeStrokeModelSP stroke, KoMarker *startMarker, KoMarker *endMarker);
+
+    void updateStyleControls(KoShapeStrokeModelSP stroke, KoMarker *startMarker, KoMarker *midMarker, KoMarker *endMarker);
+    void updateStyleControlsAvailability(bool enabled);
 
     void updateMarkers(const QList<KoMarker*> &markers);
 
-    /// start marker has changed
-    void startMarkerChanged();
-    /// end marker has changed
-    void endMarkerChanged();
+private Q_SLOTS:
 
     void canvasResourceChanged(int key, const QVariant &value);
 
     /// selection has changed
     void selectionChanged();
 
-    /// apply line changes to the selected shape
-    void applyChanges();
+    /// apply line changes to the selected shapes
+    void applyDashStyleChanges();
+    void applyLineWidthChanges();
+    void applyJoinCapChanges();
+
+    /// apply marker changes to the selected shape
+    void applyMarkerChanges(int rawPosition);
 
 private:
     void setUnit(const KoUnit &unit);
-
-    /// apply marker changes to the selected shape
-    void applyMarkerChanges(KoMarkerData::MarkerPosition position);
-
     void blockChildSignals(bool block);
 
 private:

@@ -39,6 +39,7 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QSizePolicy>
+#include <QSignalMapper>
 
 // KDE
 #include <klocalizedstring.h>
@@ -66,6 +67,7 @@
 #include <KoShapeStrokeCommand.h>
 #include <KoShapeStrokeModel.h>
 #include <KoFillConfigWidget.h>
+#include <KoFlakeUtils.h>
 
 // Krita
 #include "kis_double_parse_unit_spin_box.h"
@@ -171,11 +173,11 @@ public:
     KoLineStyleSelector *lineStyle;
     KisDoubleParseUnitSpinBox *lineWidth;
     KoMarkerSelector    *startMarkerSelector;
+    KoMarkerSelector    *midMarkerSelector;
     KoMarkerSelector    *endMarkerSelector;
 
+    QToolButton *capNJoinButton;
     CapNJoinMenu *capNJoinMenu;
-    QToolButton *colorButton;
-    KoColorPopupAction *colorAction;
 
     QWidget *spacer;
 
@@ -194,26 +196,37 @@ KoStrokeConfigWidget::KoStrokeConfigWidget(QWidget * parent)
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
     mainLayout->setMargin(0);
 
-    QHBoxLayout *firstLineLayout = new QHBoxLayout();
+    {
+        QHBoxLayout *firstLineLayout = new QHBoxLayout();
 
-    // Start marker
-    QList<KoMarker*> markers;
+        QList<KoMarker*> emptyMarkers;
 
-    d->startMarkerSelector = new KoMarkerSelector(KoFlake::StartMarker, this);
-    d->startMarkerSelector->updateMarkers(markers);
-    d->startMarkerSelector->setMaximumWidth(50);
-    firstLineLayout->addWidget(d->startMarkerSelector);
+        d->startMarkerSelector = new KoMarkerSelector(KoFlake::StartMarker, this);
+        d->startMarkerSelector->updateMarkers(emptyMarkers);
+        firstLineLayout->addWidget(d->startMarkerSelector);
 
-    // Line style
-    d->lineStyle = new KoLineStyleSelector(this);
-    d->lineStyle->setMinimumWidth(70);
-    firstLineLayout->addWidget(d->lineStyle);
+        d->midMarkerSelector = new KoMarkerSelector(KoFlake::MidMarker, this);
+        d->midMarkerSelector->updateMarkers(emptyMarkers);
+        firstLineLayout->addWidget(d->midMarkerSelector);
 
-    // End marker
-    d->endMarkerSelector = new KoMarkerSelector(KoFlake::EndMarker, this);
-    d->endMarkerSelector->updateMarkers(markers);
-    d->endMarkerSelector->setMaximumWidth(50);
-    firstLineLayout->addWidget(d->endMarkerSelector);
+        d->endMarkerSelector = new KoMarkerSelector(KoFlake::EndMarker, this);
+        d->endMarkerSelector->updateMarkers(emptyMarkers);
+        firstLineLayout->addWidget(d->endMarkerSelector);
+
+        mainLayout->addLayout(firstLineLayout);
+    }
+
+
+    {
+        QHBoxLayout *firstLineLayout = new QHBoxLayout();
+
+        // Line style
+        d->lineStyle = new KoLineStyleSelector(this);
+        d->lineStyle->setMinimumWidth(70);
+        firstLineLayout->addWidget(d->lineStyle);
+
+        mainLayout->addLayout(firstLineLayout);
+    }
 
     QHBoxLayout *secondLineLayout = new QHBoxLayout();
 
@@ -232,23 +245,15 @@ KoStrokeConfigWidget::KoStrokeConfigWidget(QWidget * parent)
     d->lineWidth->setToolTip(i18n("Set line width of actual selection"));
     secondLineLayout->addWidget(d->lineWidth);
 
-    QToolButton *capNJoinButton = new QToolButton(this);
-    capNJoinButton->setMinimumHeight(25);
+    d->capNJoinButton = new QToolButton(this);
+    d->capNJoinButton->setMinimumHeight(25);
     d->capNJoinMenu = new CapNJoinMenu(this);
-    capNJoinButton->setMenu(d->capNJoinMenu);
-    capNJoinButton->setText("...");
-    capNJoinButton->setPopupMode(QToolButton::InstantPopup);
+    d->capNJoinButton->setMenu(d->capNJoinMenu);
+    d->capNJoinButton->setText("...");
+    d->capNJoinButton->setPopupMode(QToolButton::InstantPopup);
 
-    secondLineLayout->addWidget(capNJoinButton);
+    secondLineLayout->addWidget(d->capNJoinButton);
 
-    d->colorButton = new QToolButton(this);
-    secondLineLayout->addWidget(d->colorButton);
-    d->colorAction = new KoColorPopupAction(this);
-    d->colorAction->setIcon(koIcon("format-stroke-color"));
-    d->colorAction->setToolTip(i18n("Change the color of the line/border"));
-    d->colorButton->setDefaultAction(d->colorAction);
-
-    mainLayout->addLayout(firstLineLayout);
     mainLayout->addLayout(secondLineLayout);
 
     { // add separator line
@@ -262,27 +267,32 @@ KoStrokeConfigWidget::KoStrokeConfigWidget(QWidget * parent)
         mainLayout->addWidget(d->fillConfigWidget);
     }
 
-
     // Spacer
     d->spacer = new QWidget();
     d->spacer->setObjectName("SpecialSpacer");
     mainLayout->addWidget(d->spacer);
 
+    connect(d->lineStyle,  SIGNAL(currentIndexChanged(int)), this, SLOT(applyDashStyleChanges()));
+    connect(d->lineWidth,  SIGNAL(valueChangedPt(qreal)),    this, SLOT(applyLineWidthChanges()));
 
-    // set sensitive defaults
-    d->lineStyle->setLineStyle(Qt::SolidLine);
-    d->lineWidth->changeValue(1);
-    d->colorAction->setCurrentColor(Qt::black);
+    connect(d->capNJoinMenu->capGroup,   SIGNAL(buttonClicked(int)),       this, SLOT(applyJoinCapChanges()));
+    connect(d->capNJoinMenu->joinGroup,  SIGNAL(buttonClicked(int)),       this, SLOT(applyJoinCapChanges()));
+    connect(d->capNJoinMenu->miterLimit, SIGNAL(valueChangedPt(qreal)),    this, SLOT(applyJoinCapChanges()));
 
-    // Make the signals visible on the outside of this widget.
-    connect(d->lineStyle,  SIGNAL(currentIndexChanged(int)), this, SLOT(applyChanges()));
-    connect(d->lineWidth,  SIGNAL(valueChangedPt(qreal)),    this, SLOT(applyChanges()));
-    connect(d->colorAction, SIGNAL(colorChanged(const KoColor &)), this, SLOT(applyChanges()));
-    connect(d->capNJoinMenu->capGroup,   SIGNAL(buttonClicked(int)),       this, SLOT(applyChanges()));
-    connect(d->capNJoinMenu->joinGroup,  SIGNAL(buttonClicked(int)),       this, SLOT(applyChanges()));
-    connect(d->capNJoinMenu->miterLimit, SIGNAL(valueChangedPt(qreal)),    this, SLOT(applyChanges()));
-    connect(d->startMarkerSelector,  SIGNAL(currentIndexChanged(int)), this, SLOT(startMarkerChanged()));
-    connect(d->endMarkerSelector,  SIGNAL(currentIndexChanged(int)), this, SLOT(endMarkerChanged()));
+    { // Map the marker signals correclty
+        QSignalMapper *mapper = new QSignalMapper(this);
+        connect(mapper, SIGNAL(mapped(int)), SLOT(applyMarkerChanges(int)));
+
+        connect(d->startMarkerSelector,  SIGNAL(currentIndexChanged(int)), mapper, SLOT(map()));
+        connect(d->midMarkerSelector,  SIGNAL(currentIndexChanged(int)), mapper, SLOT(map()));
+        connect(d->endMarkerSelector,  SIGNAL(currentIndexChanged(int)), mapper, SLOT(map()));
+
+        mapper->setMapping(d->startMarkerSelector, KoFlake::StartMarker);
+        mapper->setMapping(d->midMarkerSelector, KoFlake::MidMarker);
+        mapper->setMapping(d->endMarkerSelector, KoFlake::EndMarker);
+    }
+
+    selectionChanged();
 }
 
 KoStrokeConfigWidget::~KoStrokeConfigWidget()
@@ -307,11 +317,6 @@ QVector<qreal> KoStrokeConfigWidget::lineDashes() const
 qreal KoStrokeConfigWidget::lineWidth() const
 {
     return d->lineWidth->value();
-}
-
-QColor KoStrokeConfigWidget::color() const
-{
-    return d->colorAction->currentColor();
 }
 
 qreal KoStrokeConfigWidget::miterLimit() const
@@ -343,7 +348,8 @@ KoShapeStrokeSP KoStrokeConfigWidget::createShapeStroke() const
 {
     KoShapeStrokeSP stroke(new KoShapeStroke());
 
-    stroke->setColor(color());
+    // FIXME:
+    stroke->setColor(Qt::red);
     stroke->setLineWidth(lineWidth());
     stroke->setCapStyle(capStyle());
     stroke->setJoinStyle(joinStyle());
@@ -356,25 +362,33 @@ KoShapeStrokeSP KoStrokeConfigWidget::createShapeStroke() const
 // ----------------------------------------------------------------
 //                         Other public functions
 
-void KoStrokeConfigWidget::updateControls(KoShapeStrokeModelSP stroke, KoMarker *startMarker, KoMarker *endMarker)
+void KoStrokeConfigWidget::updateStyleControls(KoShapeStrokeModelSP stroke, KoMarker *startMarker, KoMarker *midMarker, KoMarker *endMarker)
 {
     blockChildSignals(true);
 
     const KoShapeStrokeSP lineStroke = qSharedPointerDynamicCast<KoShapeStroke>(stroke);
+
     if (lineStroke) {
         d->lineWidth->changeValue(lineStroke->lineWidth());
-        QAbstractButton *button = d->capNJoinMenu->capGroup->button(lineStroke->capStyle());
-        if (button) {
+
+        {
+            Qt::PenCapStyle capStyle = lineStroke->capStyle() >= 0 ? lineStroke->capStyle() : Qt::FlatCap;
+            QAbstractButton *button = d->capNJoinMenu->capGroup->button(capStyle);
+            KIS_SAFE_ASSERT_RECOVER_RETURN(button);
             button->setChecked(true);
         }
-        button = d->capNJoinMenu->joinGroup->button(lineStroke->joinStyle());
-        if (button) {
+
+        {
+            Qt::PenJoinStyle joinStyle = lineStroke->joinStyle() >= 0 ? lineStroke->joinStyle() : Qt::MiterJoin;
+            QAbstractButton *button = d->capNJoinMenu->joinGroup->button(joinStyle);
+            KIS_SAFE_ASSERT_RECOVER_RETURN(button);
             button->setChecked(true);
         }
+
         d->capNJoinMenu->miterLimit->changeValue(lineStroke->miterLimit());
         d->capNJoinMenu->miterLimit->setEnabled(lineStroke->joinStyle() == Qt::MiterJoin);
+
         d->lineStyle->setLineStyle(lineStroke->lineStyle(), lineStroke->lineDashes());
-        d->colorAction->setCurrentColor(lineStroke->color());
     }
     else {
         d->lineWidth->changeValue(0.0);
@@ -382,14 +396,28 @@ void KoStrokeConfigWidget::updateControls(KoShapeStrokeModelSP stroke, KoMarker 
         d->capNJoinMenu->joinGroup->button(Qt::MiterJoin)->setChecked(true);
         d->capNJoinMenu->miterLimit->changeValue(0.0);
         d->capNJoinMenu->miterLimit->setEnabled(true);
-        d->lineStyle->setLineStyle(Qt::NoPen, QVector<qreal>());
+        d->lineStyle->setLineStyle(Qt::SolidLine, QVector<qreal>());
     }
 
     d->startMarkerSelector->setMarker(startMarker);
+    d->midMarkerSelector->setMarker(midMarker);
     d->endMarkerSelector->setMarker(endMarker);
 
     blockChildSignals(false);
 }
+
+void KoStrokeConfigWidget::updateStyleControlsAvailability(bool enabled)
+{
+    d->lineWidth->setEnabled(enabled);
+    d->capNJoinMenu->setEnabled(enabled);
+    d->lineStyle->setEnabled(enabled);
+
+    d->startMarkerSelector->setEnabled(enabled);
+    d->midMarkerSelector->setEnabled(enabled);
+    d->endMarkerSelector->setEnabled(enabled);
+}
+
+
 
 void KoStrokeConfigWidget::setUnit(const KoUnit &unit)
 {
@@ -419,12 +447,12 @@ void KoStrokeConfigWidget::setUnit(const KoUnit &unit)
 void KoStrokeConfigWidget::updateMarkers(const QList<KoMarker*> &markers)
 {
     d->startMarkerSelector->updateMarkers(markers);
+    d->midMarkerSelector->updateMarkers(markers);
     d->endMarkerSelector->updateMarkers(markers);
 }
 
 void KoStrokeConfigWidget::blockChildSignals(bool block)
 {
-    d->colorAction->blockSignals(block);
     d->lineWidth->blockSignals(block);
     d->capNJoinMenu->capGroup->blockSignals(block);
     d->capNJoinMenu->joinGroup->blockSignals(block);
@@ -440,100 +468,165 @@ void KoStrokeConfigWidget::setActive(bool active)
 }
 
 //------------------------
-void KoStrokeConfigWidget::applyChanges()
+
+template <typename ModifyFunction>
+    auto applyChangeToStrokes(ModifyFunction modifyFunction)
+        -> decltype(modifyFunction(KoShapeStrokeSP()), void())
 {
     KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
     KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
 
-    //FIXME d->canvas->resourceManager()->setActiveStroke( d->stroke );
+    if (!selection) return;
 
-    if (!selection || !selection->count()) {
-        return;
-    }
+    QList<KoShape*> shapes = selection->selectedEditableShapes();
 
-    KoShapeStrokeSP newStroke(new KoShapeStroke());
-    KoShapeStrokeSP oldStroke = qSharedPointerDynamicCast<KoShapeStroke>( selection->firstSelectedShape()->stroke() );
+    KUndo2Command *command = KoFlake::modifyShapesStrokes(shapes, modifyFunction);
 
-    if (oldStroke) {
-        newStroke->setLineBrush(oldStroke->lineBrush());
-    }
-    newStroke->setColor(color());
-    newStroke->setLineWidth(lineWidth());
-    newStroke->setCapStyle(static_cast<Qt::PenCapStyle>(d->capNJoinMenu->capGroup->checkedId()));
-    newStroke->setJoinStyle(static_cast<Qt::PenJoinStyle>(d->capNJoinMenu->joinGroup->checkedId()));
-    newStroke->setMiterLimit(miterLimit());
-    newStroke->setLineStyle(lineStyle(), lineDashes());
-
-    if (d->active) {
-        KoShapeStrokeCommand *cmd = new KoShapeStrokeCommand(selection->selectedShapes(), newStroke);
-        canvasController->canvas()->addCommand(cmd);
+    if (command) {
+        canvasController->canvas()->addCommand(command);
     }
 }
 
-void KoStrokeConfigWidget::applyMarkerChanges(KoMarkerData::MarkerPosition position)
+void KoStrokeConfigWidget::applyDashStyleChanges()
 {
+    applyChangeToStrokes(
+        [this] (KoShapeStrokeSP stroke) {
+            stroke->setLineStyle(lineStyle(), lineDashes());
+        });
+}
+
+void KoStrokeConfigWidget::applyLineWidthChanges()
+{
+    applyChangeToStrokes(
+        [this] (KoShapeStrokeSP stroke) {
+            stroke->setLineWidth(lineWidth());
+        });
+}
+
+void KoStrokeConfigWidget::applyJoinCapChanges()
+{
+    applyChangeToStrokes(
+        [this] (KoShapeStrokeSP stroke) {
+
+            stroke->setCapStyle(static_cast<Qt::PenCapStyle>(d->capNJoinMenu->capGroup->checkedId()));
+            stroke->setJoinStyle(static_cast<Qt::PenJoinStyle>(d->capNJoinMenu->joinGroup->checkedId()));
+            stroke->setMiterLimit(miterLimit());
+        });
+}
+
+void KoStrokeConfigWidget::applyMarkerChanges(int rawPosition)
+{
+    KoFlake::MarkerPosition position = KoFlake::MarkerPosition(rawPosition);
+
     KoMarker *marker = 0;
-    if (position == KoMarkerData::MarkerStart) {
-        marker = startMarker();
-    }
-    else if (position == KoMarkerData::MarkerEnd) {
-        marker = endMarker();
+
+    switch (position) {
+    case KoFlake::StartMarker:
+        marker = d->startMarkerSelector->marker();
+        break;
+    case KoFlake::MidMarker:
+        marker = d->midMarkerSelector->marker();
+        break;
+    case KoFlake::EndMarker:
+        marker = d->endMarkerSelector->marker();
+        break;
     }
 
     KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
     KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
+    if (!selection) return;
 
-    if (! selection || !selection->count()) {
-        return;
-    }
-
-    QList<KoShape*> shapeList = selection->selectedShapes();
-    QList<KoPathShape*> pathShapeList;
-    for (QList<KoShape*>::iterator itShape = shapeList.begin(); itShape != shapeList.end(); ++itShape) {
-        KoPathShape* pathShape = dynamic_cast<KoPathShape*>(*itShape);
+    QList<KoShape*> shapes = selection->selectedEditableShapes();
+    QList<KoPathShape*> pathShapes;
+    Q_FOREACH (KoShape *shape, shapes) {
+        KoPathShape *pathShape = dynamic_cast<KoPathShape*>(shape);
         if (pathShape) {
-            pathShapeList << pathShape;
+            pathShapes << pathShape;
         }
     }
 
-    if (pathShapeList.size()) {
-        KoPathShapeMarkerCommand* cmdMarker = new KoPathShapeMarkerCommand(pathShapeList, marker, position);
-        canvasController->canvas()->addCommand(cmdMarker);
-    }
+    if (pathShapes.isEmpty()) return;
+
+    KUndo2Command* command = new KoPathShapeMarkerCommand(pathShapes, marker, position);
+    canvasController->canvas()->addCommand(command);
 }
 
-void KoStrokeConfigWidget::startMarkerChanged()
-{
-    applyMarkerChanges(KoMarkerData::MarkerStart);
-}
-
-void KoStrokeConfigWidget::endMarkerChanged()
-{
-    applyMarkerChanges(KoMarkerData::MarkerEnd);
-}
 // ----------------------------------------------------------------
 
+struct CheckShapeStrokeStylePolicy
+{
+    typedef KoShapeStrokeModelSP PointerType;
+    static PointerType getProperty(KoShape *shape) {
+        return shape->stroke();
+    }
+    static bool compareTo(PointerType p1, PointerType p2) {
+        return p1->compareStyleTo(p2.data());
+    }
+};
 
+struct CheckShapeMarkerPolicy
+{
+    CheckShapeMarkerPolicy(KoFlake::MarkerPosition position)
+        : m_position(position)
+    {
+    }
+
+    typedef KoMarker* PointerType;
+    PointerType getProperty(KoShape *shape) const {
+        KoPathShape *pathShape = dynamic_cast<KoPathShape*>(shape);
+        return pathShape ? pathShape->markerNew(m_position) : 0;
+    }
+    bool compareTo(PointerType p1, PointerType p2) const {
+        if ((!p1 || !p2) && p1 != p2) return false;
+        if (!p1 && p1 == p2) return true;
+
+        return p1 == p2 || *p1 == *p2;
+    }
+
+    KoFlake::MarkerPosition m_position;
+};
 
 void KoStrokeConfigWidget::selectionChanged()
 {
-    // see a comment in setUnit()
-    setUnit(d->canvas->unit());
-
+    if (d->canvas) {
+        // see a comment in setUnit()
+        setUnit(d->canvas->unit());
+    }
 
     KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
     KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
-    KoShape * shape = selection->firstSelectedShape();
-    if (shape && shape->stroke()) {
+    if (!selection) return;
+
+    QList<KoShape*> shapes = selection->selectedEditableShapes();
+
+    KoShapeStrokeModelSP stroke;
+    KoMarker *startMarker = 0;
+    KoMarker *midMarker = 0;
+    KoMarker *endMarker = 0;
+
+    if (!shapes.isEmpty()) {
+        KoShape *shape = shapes.first();
+
+        if (KoFlake::compareShapePropertiesEqual<CheckShapeStrokeStylePolicy>(shapes)) {
+            stroke = shape->stroke();
+        }
+
         KoPathShape *pathShape = dynamic_cast<KoPathShape *>(shape);
         if (pathShape) {
-            updateControls(shape->stroke(), pathShape->marker(KoMarkerData::MarkerStart),
-                                             pathShape->marker(KoMarkerData::MarkerEnd));
-        }
-        else {
-            updateControls(shape->stroke(), 0 ,0);
+            if (KoFlake::compareShapePropertiesEqual(shapes, CheckShapeMarkerPolicy(KoFlake::StartMarker))) {
+                startMarker = pathShape->markerNew(KoFlake::StartMarker);
+            }
+            if (KoFlake::compareShapePropertiesEqual(shapes, CheckShapeMarkerPolicy(KoFlake::MidMarker))) {
+                midMarker = pathShape->markerNew(KoFlake::MidMarker);
+            }
+            if (KoFlake::compareShapePropertiesEqual(shapes, CheckShapeMarkerPolicy(KoFlake::EndMarker))) {
+                endMarker = pathShape->markerNew(KoFlake::EndMarker);
+            }
         }
     }
+
+    updateStyleControls(stroke, startMarker, midMarker, endMarker);
+    updateStyleControlsAvailability(!shapes.isEmpty());
 }
 
 void KoStrokeConfigWidget::setCanvas( KoCanvasBase *canvas )

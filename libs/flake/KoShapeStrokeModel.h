@@ -87,6 +87,7 @@ public:
     virtual void paint(KoShape *shape, QPainter &painter, const KoViewConverter &converter) = 0;
 
     virtual bool compareFillTo(const KoShapeStrokeModel *other) = 0;
+    virtual bool compareStyleTo(const KoShapeStrokeModel *other) = 0;
 
     /**
      * Increments the use-value.

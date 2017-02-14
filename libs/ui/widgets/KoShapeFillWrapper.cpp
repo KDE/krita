@@ -33,6 +33,8 @@
 #include "kis_debug.h"
 #include "kis_global.h"
 
+#include <KoFlakeUtils.h>
+
 struct ShapeBackgroundFetchPolicy
 {
     typedef KoFlake::FillType Type;
@@ -141,7 +143,7 @@ struct KoShapeFillWrapper::Private
     KoFlake::FillVariant fillVariant= KoFlake::Fill;
 
     QSharedPointer<KoShapeBackground> applyFillGradientStops(KoShape *shape, const QGradient *srcQGradient);
-    KoShapeStrokeSP applyFillGradientStops(KoShapeStrokeSP shapeStroke, const QGradient *stopGradient);
+    void applyFillGradientStops(KoShapeStrokeSP shapeStroke, const QGradient *stopGradient);
 };
 
 QSharedPointer<KoShapeBackground> KoShapeFillWrapper::Private::applyFillGradientStops(KoShape *shape, const QGradient *stopGradient)
@@ -171,41 +173,28 @@ QSharedPointer<KoShapeBackground> KoShapeFillWrapper::Private::applyFillGradient
     return QSharedPointer<KoGradientBackground>(newGradient);
 }
 
-KoShapeStrokeSP KoShapeFillWrapper::Private::applyFillGradientStops(KoShapeStrokeSP shapeStroke, const QGradient *stopGradient)
+void KoShapeFillWrapper::Private::applyFillGradientStops(KoShapeStrokeSP shapeStroke, const QGradient *stopGradient)
 {
-    KoShapeStrokeSP newStroke;
-
     QGradientStops stops = stopGradient->stops();
-
-    if (!stops.count()) {
-        return newStroke;
-    }
+    if (!stops.count()) return;
 
     QLinearGradient fakeShapeGradient(QPointF(0, 0), QPointF(1, 1));
     fakeShapeGradient.setCoordinateMode(QGradient::ObjectBoundingMode);
     QTransform gradientTransform;
     const QGradient *shapeGradient = 0;
 
-    if (shapeStroke) {
-        newStroke = toQShared(new KoShapeStroke(*shapeStroke));
-        QBrush brush = newStroke->lineBrush();
-
+    {
+        QBrush brush = shapeStroke->lineBrush();
         gradientTransform = brush.transform();
         shapeGradient = brush.gradient() ? brush.gradient() : &fakeShapeGradient;
-
-    } else {
-        newStroke = toQShared(new KoShapeStroke());
-        shapeGradient = &fakeShapeGradient;
     }
 
     {
         QScopedPointer<QGradient> g(KoFlake::mergeGradient(shapeGradient, stopGradient));
         QBrush newBrush = *g;
         newBrush.setTransform(gradientTransform);
-        newStroke->setLineBrush(newBrush);
+        shapeStroke->setLineBrush(newBrush);
     }
-
-    return newStroke;
 }
 
 /******************************************************************************/
@@ -310,25 +299,12 @@ KUndo2Command *KoShapeFillWrapper::setColor(const QColor &color)
         QSharedPointer<KoShapeBackground> fill(bg);
         command = new KoShapeBackgroundCommand(m_d->shapes, fill);
     } else {
-        QList<KoShapeStrokeModelSP> strokes;
+        command = KoFlake::modifyShapesStrokes(m_d->shapes,
+            [color] (KoShapeStrokeSP stroke) {
+                stroke->setLineBrush(Qt::NoBrush);
+                stroke->setColor(color.isValid() ? color : Qt::transparent);
 
-        Q_FOREACH(KoShape *shape, m_d->shapes) {
-            if (shape->stroke()) {
-                KoShapeStrokeSP stroke = qSharedPointerDynamicCast<KoShapeStroke>(shape->stroke());
-                KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(stroke, 0);
-
-                KoShapeStrokeSP newStroke(new KoShapeStroke(*stroke));
-                newStroke->setLineBrush(Qt::NoBrush);
-                newStroke->setColor(color.isValid() ? color : Qt::transparent);
-                strokes << newStroke;
-            } else {
-                KoShapeStrokeSP newStroke(new KoShapeStroke());
-                newStroke->setColor(color.isValid() ? color : Qt::transparent);
-                strokes << newStroke;
-            }
-        }
-
-        command = new KoShapeStrokeCommand(m_d->shapes, strokes);
+            });
     }
 
     return command;
@@ -352,28 +328,14 @@ KUndo2Command *KoShapeFillWrapper::setGradient(const QGradient *gradient, const 
         command = new KoShapeBackgroundCommand(m_d->shapes, newBackgrounds);
 
     } else {
-        QList<KoShapeStrokeModelSP> newStrokes;
+        command = KoFlake::modifyShapesStrokes(m_d->shapes,
+            [gradient, transform] (KoShapeStrokeSP stroke) {
+                QBrush newBrush = *gradient;
+                newBrush.setTransform(transform);
 
-        Q_FOREACH(KoShape *shape, m_d->shapes) {
-            KoShapeStrokeSP shapeStroke = shape->stroke() ?
-                qSharedPointerDynamicCast<KoShapeStroke>(shape->stroke()) :
-                KoShapeStrokeSP();
-
-            KoShapeStrokeSP newStroke =
-                toQShared(shapeStroke ?
-                              new KoShapeStroke(*shapeStroke) :
-                              new KoShapeStroke());
-
-            QBrush newBrush = *gradient;
-            newBrush.setTransform(transform);
-
-            newStroke->setLineBrush(newBrush);
-            newStroke->setColor(Qt::transparent);
-
-            newStrokes << newStroke;
-        }
-
-        command = new KoShapeStrokeCommand(m_d->shapes, newStrokes);
+                stroke->setLineBrush(newBrush);
+                stroke->setColor(Qt::transparent);
+            });
     }
 
     return command;
@@ -398,14 +360,10 @@ KUndo2Command* KoShapeFillWrapper::applyGradientStopsOnly(const QGradient *gradi
         command = new KoShapeBackgroundCommand(m_d->shapes, newBackgrounds);
 
     } else {
-        QList<KoShapeStrokeModelSP> strokes;
-
-        Q_FOREACH(KoShape *shape, m_d->shapes) {
-            KoShapeStrokeSP stroke = shape->stroke() ? qSharedPointerDynamicCast<KoShapeStroke>(shape->stroke()) : KoShapeStrokeSP();
-            strokes << m_d->applyFillGradientStops(stroke, gradient);
-        }
-
-        command = new KoShapeStrokeCommand(m_d->shapes, strokes);
+        command = KoFlake::modifyShapesStrokes(m_d->shapes,
+            [this, gradient] (KoShapeStrokeSP stroke) {
+                m_d->applyFillGradientStops(stroke, gradient);
+            });
     }
 
     return command;

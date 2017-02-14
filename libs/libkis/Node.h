@@ -162,6 +162,27 @@ public Q_SLOTS:
     void setColorSpace(const QString &colorModel, const QString &colorDepth, const QString &colorProfile);
 
     /**
+     * @brief Krita layers can be animated, i.e., have frames.
+     * @return return true if the layer has frames
+     */
+    bool animated() const;
+
+    /**
+     * @brief enableAnimation make the current layer animated, so it can have frames.
+     */
+    void enableAnimation() const;
+
+    /**
+     * Sets the state of the node to the value of @param collapsed
+     */
+    void setCollapsed(bool collapsed);
+
+    /**
+     * returns the collapsed state of this node
+     */
+    bool collapsed() const;
+
+    /**
      * Sets a color label index associated to the layer.  The actual
      * color of the label and the number of available colors is
      * defined by Krita GUI configuration.
@@ -183,7 +204,7 @@ public Q_SLOTS:
     void setLocked(bool value);
 
     QString name() const;
-    void setName(QString value);
+    void setName(QString name);
 
     int opacity() const;
     void setOpacity(int value);
@@ -216,22 +237,7 @@ public Q_SLOTS:
     QString type() const;
 
     bool visible() const;
-    void setVisible(bool value);
-
-    InfoObject* metaDataInfo() const;
-    void setMetaDataInfo(InfoObject* value);
-
-    Generator* generator() const;
-    void setGenerator(Generator* value);
-
-    Filter* filter() const;
-    void setFilter(Filter* value);
-
-    Transformation* transformation() const;
-    void setTransformation(Transformation* value);
-
-    QString fileName() const;
-    void setFileName(QString value);
+    void setVisible(bool visible);
 
     /**
      * @brief pixelData reads the given rectangle from the Node's paintable pixels, if those
@@ -345,11 +351,22 @@ public Q_SLOTS:
      */
     void setPixelData(QByteArray value, int x, int y, int w, int h);
 
+    /**
+     * @brief bounds return the exact bounds of the node's paint device
+     * @return the bounds, or an empty QRect if the node has no paint device or is empty.
+     */
     QRect bounds() const;
 
+    /**
+     *  move the pixels to the given x, y location in the image coordinate space.
+     */
     void move(int x, int y);
 
-    void moveToParent(Node *parent);
+    /**
+     * @brief position returns the position of the paint device of this node
+     * @return the top-left position of the node
+     */
+    QPoint position() const;
 
     /**
      * @brief remove removes this node from its parent image.
@@ -378,6 +395,14 @@ public Q_SLOTS:
      */
     Node *mergeDown();
 
+    /**
+     * @brief thumbnail create a thumbnail of the given dimensions. The thumbnail is sized according
+     * to the layer dimensions, not the image dimensions. If the requested size is too big a null
+     * QImage is created. If the current node cannot generate a thumbnail, a transparent QImage of the
+     * requested size is generated.
+     * @return a QImage representing the layer contents.
+     */
+    QImage thumbnail(int w, int h);
 
 private:
 

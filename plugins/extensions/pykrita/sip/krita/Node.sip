@@ -17,6 +17,10 @@ public Q_SLOTS:
     bool removeChildNode(Node *child);
     void setChildNodes(QList<Node *> nodes);
     QString colorDepth() const;
+    bool animated() const;
+    void enableAnimation() const;
+    void setCollapsed(bool collapsed);
+    bool collapsed() const;
     int colorLabel() const;
     void setColorLabel(int value);
     QString colorModel() const;
@@ -34,26 +38,17 @@ public Q_SLOTS:
     QString type() const;
     bool visible() const;
     void setVisible(bool value);
-    InfoObject * metaDataInfo() const /Factory/;
-    void setMetaDataInfo(InfoObject*  value);
-    Generator * generator() const /Factory/;
-    void setGenerator(Generator*  value);
-    Filter * filter() const /Factory/;
-    void setFilter(Filter*  value);
-    Transformation * transformation() const;
-    void setTransformation(Transformation*  value);
-    QString fileName() const;
-    void setFileName(QString value);
     QByteArray pixelData(int x, int y, int w, int h) const;
     QByteArray projectionPixelData(int x, int y, int w, int h) const;
     void setPixelData(QByteArray value, int x, int y, int w, int h);
     QRect bounds() const;
     void move(int x, int y);
-    void moveToParent(Node*  parent);
+    QPoint position() const;
     bool remove();
     Node *duplicate() /Factory/;
     void save(const QString &filename, double xRes, double yRes);
     Node *mergeDown() /Factory/;
+    QImage thumbnail(int w, int h);
 Q_SIGNALS:
 private:
 };

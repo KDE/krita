@@ -197,32 +197,54 @@ void Node::setColorSpace(const QString &colorModel, const QString &colorDepth, c
     // UNIMPLEMENTED
 }
 
+bool Node::animated() const
+{
+    if (!d->node) return false;
+    return d->node->isAnimated();
+}
+
+void Node::enableAnimation() const
+{
+    if (!d->node) return;
+    d->node->enableAnimation();
+}
+
+bool Node::collapsed() const
+{
+    if (!d->node) return false;
+    return d->node->collapsed();
+}
+
+void Node::setCollapsed(bool collapsed)
+{
+    if (!d->node) return;
+    d->node->setCollapsed(collapsed);
+}
 
 bool Node::inheritAlpha() const
 {
-    // UNIMPLEMENTED
     if (!d->node) return false;
-    return false;
+    if (!d->node->inherits("KisLayer")) return false;
+    return qobject_cast<const KisLayer*>(d->node)->alphaChannelDisabled();
 }
 
 void Node::setInheritAlpha(bool value)
 {
-    // UNIMPLEMENTED
     if (!d->node) return;
+    if (!d->node->inherits("KisLayer")) return;
+    const_cast<KisLayer*>(qobject_cast<const KisLayer*>(d->node))->disableAlphaChannel(value);
 }
-
 
 bool Node::locked() const
 {
-    // UNIMPLEMENTED
     if (!d->node) return false;
-    return false;
+    return d->node->userLocked() || d->node->systemLocked();
 }
 
 void Node::setLocked(bool value)
 {
-    // UNIMPLEMENTED
     if (!d->node) return;
+    d->node->setUserLocked(value);
 }
 
 
@@ -232,10 +254,10 @@ QString Node::name() const
     return d->node->name();
 }
 
-void Node::setName(QString value)
+void Node::setName(QString name)
 {
-    // UNIMPLEMENTED
     if (!d->node) return;
+    d->node->setName(name);
 }
 
 
@@ -254,9 +276,8 @@ void Node::setOpacity(int value)
 
 Node* Node::parentNode() const
 {
-    // UNIMPLEMENTED
     if (!d->node) return 0;
-    return 0;
+    return new Node(d->image, d->node->parent());
 }
 
 QString Node::type() const
@@ -303,85 +324,16 @@ QString Node::type() const
 
 bool Node::visible() const
 {
-    // UNIMPLEMENTED
     if (!d->node) return false;
-    return false;
+    return d->node->visible();;
 }
 
-void Node::setVisible(bool value)
+void Node::setVisible(bool visible)
 {
-    // UNIMPLEMENTED
     if (!d->node) return;
+    d->node->setVisible(visible);
 }
 
-
-InfoObject* Node::metaDataInfo() const
-{
-    // UNIMPLEMENTED
-    if (!d->node) return 0;
-    return 0;
-}
-
-void Node::setMetaDataInfo(InfoObject* value)
-{
-    // UNIMPLEMENTED
-    if (!d->node) return;
-}
-
-
-Generator* Node::generator() const
-{
-    // UNIMPLEMENTED
-    if (!d->node) return 0;
-    return 0;
-}
-
-void Node::setGenerator(Generator* value)
-{
-    // UNIMPLEMENTED
-    if (!d->node) return;
-}
-
-
-Filter* Node::filter() const
-{
-    // UNIMPLEMENTED
-    if (!d->node) return 0;
-    return 0;
-}
-
-void Node::setFilter(Filter* value)
-{
-    // UNIMPLEMENTED
-    if (!d->node) return;
-}
-
-
-Transformation* Node::transformation() const
-{
-    // UNIMPLEMENTED
-    if (!d->node) return 0;
-    return 0;
-}
-
-void Node::setTransformation(Transformation* value)
-{
-    // UNIMPLEMENTED
-    if (!d->node) return;
-}
-
-QString Node::fileName() const
-{
-    // UNIMPLEMENTED
-    if (!d->node) return QString();
-    return QString();
-}
-
-void Node::setFileName(QString value)
-{
-    // UNIMPLEMENTED
-    if (!d->node) return;
-}
 
 QByteArray Node::pixelData(int x, int y, int w, int h) const
 {
@@ -432,14 +384,15 @@ QRect Node::bounds() const
 
 void Node::move(int x, int y)
 {
-    // UNIMPLEMENTED
     if (!d->node) return;
+    d->node->setX(x);
+    d->node->setY(y);
 }
 
-void Node::moveToParent(Node *parent)
+QPoint Node::position() const
 {
-    // UNIMPLEMENTED
-    if (!d->node) return;
+    if (!d->node) return QPoint();
+    return QPoint(d->node->x(), d->node->y());
 }
 
 bool Node::remove()
@@ -496,6 +449,12 @@ Node *Node::mergeDown()
     if (!layer) return 0;
     d->image->mergeDown(qobject_cast<KisLayer*>(d->node.data()), KisMetaData::MergeStrategyRegistry::instance()->get("Drop"));
     return new Node(d->image, layer);
+}
+
+QImage Node::thumbnail(int w, int h)
+{
+    if (!d->node) return QImage();
+    return d->node->createThumbnail(w, h);
 }
 
 KisPaintDeviceSP Node::paintDevice() const

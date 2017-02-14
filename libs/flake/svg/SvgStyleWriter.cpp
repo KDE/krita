@@ -287,7 +287,7 @@ void tryEmbedMarker(const KoPathShape *pathShape,
                     KoFlake::MarkerPosition markerPosition,
                     SvgSavingContext &context)
 {
-    KoMarker *marker = pathShape->markerNew(markerPosition);
+    KoMarker *marker = pathShape->marker(markerPosition);
 
     if (marker) {
         const QString uid = context.createUID("lineMarker");
@@ -302,7 +302,7 @@ void tryEmbedMarker(const KoPathShape *pathShape,
 void SvgStyleWriter::saveSvgMarkers(KoShape *shape, SvgSavingContext &context)
 {
     KoPathShape *pathShape = dynamic_cast<KoPathShape*>(shape);
-    if (!pathShape || !pathShape->hasMarkersNew()) return;
+    if (!pathShape || !pathShape->hasMarkers()) return;
 
 
     tryEmbedMarker(pathShape, "marker-start", KoFlake::StartMarker, context);

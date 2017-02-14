@@ -1003,15 +1003,15 @@ void SvgParser::applyMarkers(KoPathShape *shape)
         return;
 
     if (!gc->markerStartId.isEmpty() && m_markers.contains(gc->markerStartId)) {
-        shape->setMarkerNew(m_markers[gc->markerStartId].data(), KoFlake::StartMarker);
+        shape->setMarker(m_markers[gc->markerStartId].data(), KoFlake::StartMarker);
     }
 
     if (!gc->markerMidId.isEmpty() && m_markers.contains(gc->markerMidId)) {
-        shape->setMarkerNew(m_markers[gc->markerMidId].data(), KoFlake::MidMarker);
+        shape->setMarker(m_markers[gc->markerMidId].data(), KoFlake::MidMarker);
     }
 
     if (!gc->markerEndId.isEmpty() && m_markers.contains(gc->markerEndId)) {
-        shape->setMarkerNew(m_markers[gc->markerEndId].data(), KoFlake::EndMarker);
+        shape->setMarker(m_markers[gc->markerEndId].data(), KoFlake::EndMarker);
     }
 }
 

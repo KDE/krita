@@ -563,7 +563,7 @@ struct CheckShapeMarkerPolicy
     typedef KoMarker* PointerType;
     PointerType getProperty(KoShape *shape) const {
         KoPathShape *pathShape = dynamic_cast<KoPathShape*>(shape);
-        return pathShape ? pathShape->markerNew(m_position) : 0;
+        return pathShape ? pathShape->marker(m_position) : 0;
     }
     bool compareTo(PointerType p1, PointerType p2) const {
         if ((!p1 || !p2) && p1 != p2) return false;
@@ -639,13 +639,13 @@ void KoStrokeConfigWidget::selectionChanged()
     KoPathShape *pathShape = dynamic_cast<KoPathShape *>(shape);
     if (pathShape) {
         if (KoFlake::compareShapePropertiesEqual(shapes, CheckShapeMarkerPolicy(KoFlake::StartMarker))) {
-            d->startMarkerSelector->setMarker(pathShape->markerNew(KoFlake::StartMarker));
+            d->startMarkerSelector->setMarker(pathShape->marker(KoFlake::StartMarker));
         }
         if (KoFlake::compareShapePropertiesEqual(shapes, CheckShapeMarkerPolicy(KoFlake::MidMarker))) {
-            d->midMarkerSelector->setMarker(pathShape->markerNew(KoFlake::MidMarker));
+            d->midMarkerSelector->setMarker(pathShape->marker(KoFlake::MidMarker));
         }
         if (KoFlake::compareShapePropertiesEqual(shapes, CheckShapeMarkerPolicy(KoFlake::EndMarker))) {
-            d->endMarkerSelector->setMarker(pathShape->markerNew(KoFlake::EndMarker));
+            d->endMarkerSelector->setMarker(pathShape->marker(KoFlake::EndMarker));
         }
     }
 

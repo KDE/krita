@@ -1578,61 +1578,7 @@ bool KoPathShape::hitTest(const QPointF &position) const
     return outlinePath.contains(point);
 }
 
-void KoPathShape::setMarker(const KoMarkerData &markerData)
-{
-    Q_D(KoPathShape);
-
-    if (markerData.position() == KoMarkerData::MarkerStart) {
-        d->startMarker = markerData;
-    }
-    else {
-        d->endMarker = markerData;
-    }
-}
-
-void KoPathShape::setMarker(KoMarker *marker, KoMarkerData::MarkerPosition position)
-{
-    Q_D(KoPathShape);
-
-    if (position == KoMarkerData::MarkerStart) {
-        if (!d->startMarker.marker()) {
-            d->startMarker.setWidth(MM_TO_POINT(DefaultMarkerWidth), qreal(0.0));
-        }
-        d->startMarker.setMarker(marker);
-    }
-    else {
-        if (!d->endMarker.marker()) {
-            d->endMarker.setWidth(MM_TO_POINT(DefaultMarkerWidth), qreal(0.0));
-        }
-        d->endMarker.setMarker(marker);
-    }
-}
-
-KoMarker *KoPathShape::marker(KoMarkerData::MarkerPosition position) const
-{
-    Q_D(const KoPathShape);
-
-    if (position == KoMarkerData::MarkerStart) {
-        return d->startMarker.marker();
-    }
-    else {
-        return d->endMarker.marker();
-    }
-}
-
-KoMarkerData KoPathShape::markerData(KoMarkerData::MarkerPosition position) const
-{
-    Q_D(const KoPathShape);
-
-    if (position == KoMarkerData::MarkerStart) {
-        return d->startMarker;
-    }
-    else {
-        return d->endMarker;
-    }
-}
-
-void KoPathShape::setMarkerNew(KoMarker *marker, KoFlake::MarkerPosition pos)
+void KoPathShape::setMarker(KoMarker *marker, KoFlake::MarkerPosition pos)
 {
     Q_D(KoPathShape);
 
@@ -1643,13 +1589,13 @@ void KoPathShape::setMarkerNew(KoMarker *marker, KoFlake::MarkerPosition pos)
     }
 }
 
-KoMarker *KoPathShape::markerNew(KoFlake::MarkerPosition pos) const
+KoMarker *KoPathShape::marker(KoFlake::MarkerPosition pos) const
 {
     Q_D(const KoPathShape);
     return d->markersNew[pos].data();
 }
 
-bool KoPathShape::hasMarkersNew() const
+bool KoPathShape::hasMarkers() const
 {
     Q_D(const KoPathShape);
     return !d->markersNew.isEmpty();
@@ -1677,125 +1623,6 @@ QPainterPath KoPathShape::pathStroke(const QPen &pen) const
     KoPathPoint *preLastPoint = 0;
 
     KoSubpath *firstSubpath = d->subpaths.first();
-    bool twoPointPath = subpathPointCount(0) == 2;
-    bool closedPath = isClosedSubpath(0);
-
-    /*
-     * The geometry is horizontally centered. It is vertically positioned relative to an offset value which
-     * is specified by a draw:marker-start-center attribute for markers referenced by a
-     * draw:marker-start attribute, and by the draw:marker-end-center attribute for markers
-     * referenced by a draw:marker-end attribute. The attribute value true defines an offset of 0.5
-     * and the attribute value false defines an offset of 0.3, which is also the default value. The offset
-     * specifies the marker's vertical position in a range from 0.0 to 1.0, where the value 0.0 means the
-     * geometry's bottom bound is aligned to the X axis of the local coordinate system of the marker
-     * geometry, and where the value 1.0 means the top bound to be aligned to the X axis of the local
-     * coordinate system of the marker geometry.
-     *
-     * The shorten factor to use results of the 0.3 which means we need to start at 0.7 * height of the marker
-     */
-    static const qreal shortenFactor = 0.7;
-
-    KoMarkerData mdStart = markerData(KoMarkerData::MarkerStart);
-    KoMarkerData mdEnd = markerData(KoMarkerData::MarkerEnd);
-    if (mdStart.marker() && !closedPath) {
-        QPainterPath markerPath = mdStart.marker()->path(mdStart.width(pen.widthF()));
-
-        KoPathSegment firstSegment = segmentByIndex(KoPathPointIndex(0, 0));
-        if (firstSegment.isValid()) {
-            QRectF pathBoundingRect = markerPath.boundingRect();
-            qreal shortenLength = pathBoundingRect.height() * shortenFactor;
-            debugFlake << "length" << firstSegment.length() << shortenLength;
-            qreal t = firstSegment.paramAtLength(shortenLength);
-            firstSegments = firstSegment.splitAt(t);
-            // transform the marker so that it goes from the first point of the first segment to the second point of the first segment
-            QPointF startPoint = firstSegments.first.first()->point();
-            QPointF newStartPoint = firstSegments.first.second()->point();
-            QLineF vector(newStartPoint, startPoint);
-            qreal angle = -vector.angle() + 90;
-            QTransform transform;
-            transform.translate(startPoint.x(), startPoint.y())
-                     .rotate(angle)
-                     .translate(-pathBoundingRect.width() / 2.0, 0);
-
-            markerPath = transform.map(markerPath);
-            QPainterPath startOutline = stroker.createStroke(markerPath);
-            startOutline = startOutline.united(markerPath);
-            pathOutline.addPath(startOutline);
-            firstPoint = firstSubpath->first();
-            if (firstPoint->properties() & KoPathPoint::StartSubpath) {
-                firstSegments.second.first()->setProperty(KoPathPoint::StartSubpath);
-            }
-            debugFlake << "start marker" << angle << startPoint << newStartPoint << firstPoint->point();
-
-            if (!twoPointPath) {
-                if (firstSegment.second()->activeControlPoint2()) {
-                    firstSegments.second.second()->setControlPoint2(firstSegment.second()->controlPoint2());
-                }
-                secondPoint = (*firstSubpath)[1];
-            }
-            else if (!mdEnd.marker()) {
-                // in case it is two point path with no end marker we need to modify the last point via the secondPoint
-                secondPoint = (*firstSubpath)[1];
-            }
-        }
-    }
-    if (mdEnd.marker() && !closedPath) {
-        QPainterPath markerPath = mdEnd.marker()->path(mdEnd.width(pen.widthF()));
-
-        KoPathSegment lastSegment;
-
-        /*
-         * if the path consits only of 2 point and it it has an marker on both ends
-         * use the firstSegments.second as that is the path that needs to be shortened
-         */
-        if (twoPointPath && firstPoint) {
-            lastSegment = firstSegments.second;
-        }
-        else {
-            lastSegment = segmentByIndex(KoPathPointIndex(0, firstSubpath->count() - 2));
-        }
-
-        if (lastSegment.isValid()) {
-            QRectF pathBoundingRect = markerPath.boundingRect();
-            qreal shortenLength = lastSegment.length() - pathBoundingRect.height() * shortenFactor;
-            qreal t = lastSegment.paramAtLength(shortenLength);
-            lastSegments = lastSegment.splitAt(t);
-            // transform the marker so that it goes from the last point of the first segment to the previous point of the last segment
-            QPointF startPoint = lastSegments.second.second()->point();
-            QPointF newStartPoint = lastSegments.second.first()->point();
-            QLineF vector(newStartPoint, startPoint);
-            qreal angle = -vector.angle() + 90;
-            QTransform transform;
-            transform.translate(startPoint.x(), startPoint.y()).rotate(angle).translate(-pathBoundingRect.width() / 2.0, 0);
-
-            markerPath = transform.map(markerPath);
-            QPainterPath endOutline = stroker.createStroke(markerPath);
-            endOutline = endOutline.united(markerPath);
-            pathOutline.addPath(endOutline);
-            lastPoint = firstSubpath->last();
-            debugFlake << "end marker" << angle << startPoint << newStartPoint << lastPoint->point();
-            if (twoPointPath) {
-                if (firstSegments.second.isValid()) {
-                    if (lastSegments.first.first()->activeControlPoint2()) {
-                        firstSegments.second.first()->setControlPoint2(lastSegments.first.first()->controlPoint2());
-                    }
-                }
-                else {
-                    // if there is no start marker we need the first point needs to be changed via the preLastPoint
-                    // the flag needs to be set so the moveTo is done
-                    lastSegments.first.first()->setProperty(KoPathPoint::StartSubpath);
-                    preLastPoint = (*firstSubpath)[firstSubpath->count()-2];
-                }
-            }
-            else {
-                if (lastSegment.first()->activeControlPoint1()) {
-                    lastSegments.first.first()->setControlPoint1(lastSegment.first()->controlPoint1());
-                }
-                preLastPoint = (*firstSubpath)[firstSubpath->count()-2];
-            }
-        }
-    }
-
 
     stroker.setWidth(pen.widthF());
     stroker.setJoinStyle(pen.joinStyle());

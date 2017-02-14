@@ -141,12 +141,6 @@ QString KoMarker::name() const
     return d->name;
 }
 
-QPainterPath KoMarker::path(qreal width) const
-{
-    Q_UNUSED(width);
-    return QPainterPath();
-}
-
 KoMarker::KoMarker(const KoMarker &rhs)
     : QSharedData(rhs),
       d(new Private(*rhs.d))

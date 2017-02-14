@@ -47,16 +47,6 @@ public:
      */
     QString name() const;
 
-    /**
-     * Get the path of the marker
-     *
-     * It calculates the offset depending on the line width
-     *
-     * @param The width of the line the marker is attached to.
-     * @return the path of the marker
-     */
-    QPainterPath path(qreal width) const;
-
     KoMarker(const KoMarker &rhs);
     bool operator==(const KoMarker &other) const;
 

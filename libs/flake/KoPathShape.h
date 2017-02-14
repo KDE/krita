@@ -455,21 +455,9 @@ public:
     /// Returns the viewbox from the given xml element.
     static QRect loadOdfViewbox(const KoXmlElement &element);
 
-    /// Marker setter
-    void setMarker(const KoMarkerData &markerData);
-
-    /// Marker setter
-    void setMarker(KoMarker *marker, KoMarkerData::MarkerPosition position);
-
-    /// returns the list of all the markers of the path
-    KoMarker *marker(KoMarkerData::MarkerPosition position) const;
-
-    KoMarkerData markerData(KoMarkerData::MarkerPosition position) const;
-
-
-    void setMarkerNew(KoMarker *marker, KoFlake::MarkerPosition pos);
-    KoMarker* markerNew(KoFlake::MarkerPosition pos) const;
-    bool hasMarkersNew() const;
+    void setMarker(KoMarker *marker, KoFlake::MarkerPosition pos);
+    KoMarker* marker(KoFlake::MarkerPosition pos) const;
+    bool hasMarkers() const;
 
 private:
     /// constructor: to be used in cloneShape(), not in descendants!

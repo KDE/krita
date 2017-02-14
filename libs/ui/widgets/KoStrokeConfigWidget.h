@@ -53,6 +53,8 @@ public:
     explicit KoStrokeConfigWidget(QWidget *parent);
     ~KoStrokeConfigWidget();
 
+    void setEnableWidgetsWhenNoShapes(bool value);
+
     // Getters
     Qt::PenStyle lineStyle() const;
     QVector<qreal> lineDashes() const;

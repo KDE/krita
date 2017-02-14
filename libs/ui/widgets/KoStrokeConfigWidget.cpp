@@ -166,7 +166,8 @@ public:
     Private()
         : canvas(0),
         active(true),
-        fillConfigWidget(0)
+        fillConfigWidget(0),
+        enableWidgetsWhenNoShapes(false)
     {
     }
 
@@ -186,6 +187,7 @@ public:
     bool active;
 
     KoFillConfigWidget *fillConfigWidget;
+    bool enableWidgetsWhenNoShapes;
 };
 
 KoStrokeConfigWidget::KoStrokeConfigWidget(QWidget * parent)
@@ -300,6 +302,13 @@ KoStrokeConfigWidget::~KoStrokeConfigWidget()
     delete d;
 }
 
+void KoStrokeConfigWidget::setEnableWidgetsWhenNoShapes(bool value)
+{
+    d->fillConfigWidget->setEnableWidgetsWhenNoShapes(value);
+    d->enableWidgetsWhenNoShapes = value;
+    selectionChanged();
+}
+
 // ----------------------------------------------------------------
 //                         getters and setters
 
@@ -346,10 +355,8 @@ Qt::PenJoinStyle KoStrokeConfigWidget::joinStyle() const
 
 KoShapeStrokeSP KoStrokeConfigWidget::createShapeStroke() const
 {
-    KoShapeStrokeSP stroke(new KoShapeStroke());
+    KoShapeStrokeSP stroke(d->fillConfigWidget->createShapeStroke());
 
-    // FIXME:
-    stroke->setColor(Qt::red);
     stroke->setLineWidth(lineWidth());
     stroke->setCapStyle(capStyle());
     stroke->setJoinStyle(joinStyle());
@@ -636,7 +643,7 @@ void KoStrokeConfigWidget::selectionChanged()
 
     blockChildSignals(false);
 
-    updateStyleControlsAvailability(!shapes.isEmpty());
+    updateStyleControlsAvailability(!shapes.isEmpty() || d->enableWidgetsWhenNoShapes);
 }
 
 void KoStrokeConfigWidget::setCanvas( KoCanvasBase *canvas )

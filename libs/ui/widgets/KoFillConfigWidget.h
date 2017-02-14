@@ -26,6 +26,7 @@
 #include <QWidget>
 #include <QSharedPointer>
 #include <KoFlake.h>
+#include <KoFlakeTypes.h>
 
 class KoCanvasBase;
 class KoShapeBackground;
@@ -46,9 +47,13 @@ public:
     explicit KoFillConfigWidget(KoFlake::FillVariant fillVariant, QWidget *parent);
     ~KoFillConfigWidget();
 
+    void setEnableWidgetsWhenNoShapes(bool value);
+
     /// Returns the list of the selected shape
     /// If you need to use only one shape, call currentShape()
-    virtual QList<KoShape*> currentShapes();
+    QList<KoShape*> currentShapes();
+
+    KoShapeStrokeSP createShapeStroke() const;
 
 protected:
     void showEvent(QShowEvent *event);
@@ -64,7 +69,7 @@ private Q_SLOTS:
     /// the pattern of the fill changed, apply the changes
     void patternChanged(QSharedPointer<KoShapeBackground> background);
 
-    virtual void shapeChanged();
+    void shapeChanged();
 
     void slotUpdateFillTitle();
 

@@ -182,7 +182,8 @@ public:
     : canvas(0),
       colorChangedCompressor(100, KisSignalCompressor::FIRST_ACTIVE),
       gradientChangedCompressor(100, KisSignalCompressor::FIRST_ACTIVE),
-      fillVariant(_fillVariant)
+      fillVariant(_fillVariant),
+      enableWidgetsWhenNoShapes(false)
     {
     }
 
@@ -199,6 +200,8 @@ public:
     QSharedPointer<KoStopGradient> activeGradient;
     KisSignalCompressor gradientChangedCompressor;
     KoFlake::FillVariant fillVariant;
+
+    bool enableWidgetsWhenNoShapes;
 
     Ui_KoFillConfigWidget *ui;
 };
@@ -308,6 +311,12 @@ KoFillConfigWidget::~KoFillConfigWidget()
     delete d;
 }
 
+void KoFillConfigWidget::setEnableWidgetsWhenNoShapes(bool value)
+{
+    d->enableWidgetsWhenNoShapes = value;
+    shapeChanged();
+}
+
 void KoFillConfigWidget::slotUpdateFillTitle()
 {
     QString text = d->group->checkedButton() ? d->group->checkedButton()->text() : QString();
@@ -376,6 +385,33 @@ void KoFillConfigWidget::styleButtonPressed(int buttonId)
         d->ui->stackWidget->setCurrentIndex(buttonId);
     }
 }
+
+KoShapeStrokeSP KoFillConfigWidget::createShapeStroke() const
+{
+    KoShapeStrokeSP stroke(new KoShapeStroke());
+    KIS_ASSERT_RECOVER_RETURN_VALUE(d->fillVariant == KoFlake::StrokeFill, stroke);
+
+    switch (d->group->checkedId()) {
+    case KoFillConfigWidget::None:
+        stroke->setColor(Qt::transparent);
+        break;
+    case KoFillConfigWidget::Solid:
+        stroke->setColor(d->colorAction->currentColor());
+        break;
+    case KoFillConfigWidget::Gradient: {
+        QScopedPointer<QGradient> g(d->activeGradient->toQGradient());
+        QBrush newBrush = *g;
+        stroke->setLineBrush(newBrush);
+        stroke->setColor(Qt::transparent);
+        break;
+    }
+    case KoFillConfigWidget::Pattern:
+        break;
+    }
+
+    return stroke;
+}
+
 
 void KoFillConfigWidget::noColorSelected()
 {
@@ -587,7 +623,7 @@ void KoFillConfigWidget::shapeChanged()
         (shapes.size() > 1 && KoShapeFillWrapper(shapes, d->fillVariant).isMixedFill())) {
 
         Q_FOREACH (QAbstractButton *button, d->group->buttons()) {
-            button->setEnabled(!shapes.isEmpty());
+            button->setEnabled(!shapes.isEmpty() || d->enableWidgetsWhenNoShapes);
         }
 
         d->group->button(None)->setChecked(true);

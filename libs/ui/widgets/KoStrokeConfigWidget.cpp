@@ -202,46 +202,50 @@ KoStrokeConfigWidget::KoStrokeConfigWidget(QWidget * parent)
     mainLayout->setMargin(0);
 
     {
-        QHBoxLayout *firstLineLayout = new QHBoxLayout();
+        QHBoxLayout *markersLineLayout = new QHBoxLayout();
 
         QList<KoMarker*> emptyMarkers;
 
         d->startMarkerSelector = new KoMarkerSelector(KoFlake::StartMarker, this);
+        d->startMarkerSelector->setToolTip(i18nc("@info:tooltip", "Start marker"));
         d->startMarkerSelector->updateMarkers(emptyMarkers);
-        firstLineLayout->addWidget(d->startMarkerSelector);
+        markersLineLayout->addWidget(d->startMarkerSelector);
 
         d->midMarkerSelector = new KoMarkerSelector(KoFlake::MidMarker, this);
+        d->midMarkerSelector->setToolTip(i18nc("@info:tooltip", "Node marker"));
         d->midMarkerSelector->updateMarkers(emptyMarkers);
-        firstLineLayout->addWidget(d->midMarkerSelector);
+        markersLineLayout->addWidget(d->midMarkerSelector);
 
         d->endMarkerSelector = new KoMarkerSelector(KoFlake::EndMarker, this);
+        d->endMarkerSelector->setToolTip(i18nc("@info:tooltip", "End marker"));
         d->endMarkerSelector->updateMarkers(emptyMarkers);
-        firstLineLayout->addWidget(d->endMarkerSelector);
+        markersLineLayout->addWidget(d->endMarkerSelector);
 
-        mainLayout->addLayout(firstLineLayout);
+        mainLayout->addLayout(markersLineLayout);
     }
 
 
     {
-        QHBoxLayout *firstLineLayout = new QHBoxLayout();
+        QHBoxLayout *styleLineLayout = new QHBoxLayout();
 
         // Line style
         d->lineStyle = new KoLineStyleSelector(this);
+        d->lineStyle->setToolTip(i18nc("@info:tooltip", "Line style"));
         d->lineStyle->setMinimumWidth(70);
         d->lineStyle->setLineStyle(Qt::SolidLine,  QVector<qreal>());
-        firstLineLayout->addWidget(d->lineStyle);
+        styleLineLayout->addWidget(d->lineStyle);
 
-        mainLayout->addLayout(firstLineLayout);
+        mainLayout->addLayout(styleLineLayout);
     }
 
-    QHBoxLayout *secondLineLayout = new QHBoxLayout();
+    QHBoxLayout *widthLineLayout = new QHBoxLayout();
 
     // Line width
     QLabel *l = new QLabel(this);
     l->setText(i18n("Thickness:"));
     l->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     l->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    secondLineLayout->addWidget(l);
+    widthLineLayout->addWidget(l);
 
     // set min/max/step and value in points, then set actual unit
     d->lineWidth = new KisDoubleParseUnitSpinBox(this);
@@ -249,7 +253,7 @@ KoStrokeConfigWidget::KoStrokeConfigWidget(QWidget * parent)
     d->lineWidth->setDecimals(2);
     d->lineWidth->setUnit(KoUnit(KoUnit::Point));
     d->lineWidth->setToolTip(i18n("Set line width of actual selection"));
-    secondLineLayout->addWidget(d->lineWidth);
+    widthLineLayout->addWidget(d->lineWidth);
 
     d->capNJoinButton = new QToolButton(this);
     d->capNJoinButton->setMinimumHeight(25);
@@ -258,9 +262,9 @@ KoStrokeConfigWidget::KoStrokeConfigWidget(QWidget * parent)
     d->capNJoinButton->setText("...");
     d->capNJoinButton->setPopupMode(QToolButton::InstantPopup);
 
-    secondLineLayout->addWidget(d->capNJoinButton);
+    widthLineLayout->addWidget(d->capNJoinButton);
 
-    mainLayout->addLayout(secondLineLayout);
+    mainLayout->addLayout(widthLineLayout);
 
     { // add separator line
         QFrame* line = new QFrame();

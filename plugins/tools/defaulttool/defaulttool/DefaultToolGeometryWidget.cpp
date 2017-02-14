@@ -341,6 +341,7 @@ void DefaultToolGeometryWidget::slotUpdateSizeBoxes()
     heightSpinBox->setEnabled(hasSizeConfiguration);
 
     if (hasSizeConfiguration) {
+        KisSignalsBlocker b(widthSpinBox, heightSpinBox);
         widthSpinBox->changeValue(bounds.width());
         heightSpinBox->changeValue(bounds.height());
         m_sizeAspectLocker->updateAspect();
@@ -361,6 +362,7 @@ void DefaultToolGeometryWidget::slotUpdatePositionBoxes()
     positionYSpinBox->setEnabled(hasSizeConfiguration);
 
     if (hasSizeConfiguration) {
+        KisSignalsBlocker b(positionXSpinBox, positionYSpinBox);
         positionXSpinBox->changeValue(bounds.x());
         positionYSpinBox->changeValue(bounds.y());
     }

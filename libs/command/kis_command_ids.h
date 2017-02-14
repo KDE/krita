@@ -26,7 +26,8 @@ enum CommandId {
     TransformShapeId,
     ChangeShapeTransparencyId,
     ChangeShapeBackgroundId,
-    ChangeShapeStrokeId
+    ChangeShapeStrokeId,
+    ChangeShapeMarkersId
 };
 
 }

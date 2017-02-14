@@ -21,20 +21,32 @@
 #include "KoPathShapeMarkerCommand.h"
 #include "KoMarker.h"
 #include "KoPathShape.h"
+#include <QExplicitlySharedDataPointer>"
+
+#include "kis_command_ids.h"
 
 #include <klocalizedstring.h>
 
-KoPathShapeMarkerCommand::KoPathShapeMarkerCommand(const QList<KoPathShape*> &shapes, KoMarker *marker, KoFlake::MarkerPosition position, KUndo2Command *parent)
-    : KUndo2Command(parent)
-    , m_shapes(shapes)
-    , m_marker(marker)
-    , m_position(position)
+class Q_DECL_HIDDEN KoPathShapeMarkerCommand::Private
 {
-    setText(kundo2_i18n("Set marker"));
+public:
+    QList<KoPathShape*> shapes;  ///< the shapes to set marker for
+    QList<QExplicitlySharedDataPointer<KoMarker>> oldMarkers; ///< the old markers, one for each shape
+    QExplicitlySharedDataPointer<KoMarker> marker; ///< the new marker to set
+    KoFlake::MarkerPosition position;
+};
+
+KoPathShapeMarkerCommand::KoPathShapeMarkerCommand(const QList<KoPathShape*> &shapes, KoMarker *marker, KoFlake::MarkerPosition position, KUndo2Command *parent)
+    : KUndo2Command(kundo2_i18n("Set marker"), parent),
+      m_d(new Private)
+{
+    m_d->shapes = shapes;
+    m_d->marker = marker;
+    m_d->position = position;
 
     // save old markers
-    Q_FOREACH (KoPathShape *shape, m_shapes) {
-        m_oldMarkers.append(shape->marker(position));
+    Q_FOREACH (KoPathShape *shape, m_d->shapes) {
+        m_d->oldMarkers.append(QExplicitlySharedDataPointer<KoMarker>(shape->marker(position)));
     }
 }
 
@@ -45,9 +57,9 @@ KoPathShapeMarkerCommand::~KoPathShapeMarkerCommand()
 void KoPathShapeMarkerCommand::redo()
 {
     KUndo2Command::redo();
-    Q_FOREACH (KoPathShape *shape, m_shapes) {
+    Q_FOREACH (KoPathShape *shape, m_d->shapes) {
         shape->update();
-        shape->setMarker(m_marker, m_position);
+        shape->setMarker(m_d->marker.data(), m_d->position);
         shape->update();
     }
 }
@@ -55,11 +67,31 @@ void KoPathShapeMarkerCommand::redo()
 void KoPathShapeMarkerCommand::undo()
 {
     KUndo2Command::undo();
-    QList<KoMarker*>::iterator markerIt = m_oldMarkers.begin();
-    Q_FOREACH (KoPathShape *shape, m_shapes) {
+    auto markerIt = m_d->oldMarkers.begin();
+    Q_FOREACH (KoPathShape *shape, m_d->shapes) {
         shape->update();
-        shape->setMarker(*markerIt, m_position);
+        shape->setMarker((*markerIt).data(), m_d->position);
         shape->update();
         ++markerIt;
     }
+}
+
+int KoPathShapeMarkerCommand::id() const
+{
+    return KisCommandUtils::ChangeShapeMarkersId;
+}
+
+bool KoPathShapeMarkerCommand::mergeWith(const KUndo2Command *command)
+{
+    const KoPathShapeMarkerCommand *other = dynamic_cast<const KoPathShapeMarkerCommand*>(command);
+
+    if (!other ||
+        other->m_d->shapes != m_d->shapes ||
+        other->m_d->position != m_d->position) {
+
+        return false;
+    }
+
+    m_d->marker = other->m_d->marker;
+    return true;
 }

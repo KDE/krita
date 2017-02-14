@@ -1559,10 +1559,6 @@ bool KoPathShape::hitTest(const QPointF &position) const
         stroke()->strokeInsets(this, insets);
         QRectF roi(QPointF(-insets.left, -insets.top), QPointF(insets.right, insets.bottom));
 
-        // TODO: take care about transformations!
-        // take care about markers!
-        roi = kisGrowRect(roi, stroke()->strokeMaxMarkersInset(this));
-
         roi.moveCenter(point);
         if (outlinePath.intersects(roi) || outlinePath.contains(roi))
             return true;

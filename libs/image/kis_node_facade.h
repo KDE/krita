@@ -66,6 +66,7 @@ public:
      * childCount() is a valid index and appends to the end.
      */
     bool moveNode(KisNodeSP node, KisNodeSP parent, quint32 index);
+
     /**
      * Add an already existing node to the image. The node is put on top
      * of the nodes in the specified nodegroup. If parent is 0, then

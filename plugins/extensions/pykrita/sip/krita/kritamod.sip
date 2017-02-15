@@ -26,7 +26,6 @@
 %Include Notifier.sip
 %Include Resource.sip
 %Include Selection.sip
-%Include Transformation.sip
 %Include ViewExtension.sip
 
 %Include KisCubicCurve.sip

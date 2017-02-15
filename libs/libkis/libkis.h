@@ -23,7 +23,6 @@ class Node;
 class Notifier;
 class Resource;
 class Selection;
-class Transformation;
 class View;
 class ViewExtension;
 class Window;

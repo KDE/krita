@@ -13,7 +13,6 @@ set(kritalibkis_LIB_SRCS
     Notifier.cpp
     Resource.cpp
     Selection.cpp
-    Transformation.cpp
     View.cpp
     ViewExtension.cpp
     Window.cpp

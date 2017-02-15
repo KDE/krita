@@ -1013,6 +1013,8 @@ void SvgParser::applyMarkers(KoPathShape *shape)
     if (!gc->markerEndId.isEmpty() && m_markers.contains(gc->markerEndId)) {
         shape->setMarker(m_markers[gc->markerEndId].data(), KoFlake::EndMarker);
     }
+
+    shape->setAutoFillMarkers(gc->autoFillMarkers);
 }
 
 void SvgParser::applyClipping(KoShape *shape, const QPointF &shapeToOriginalUserCoordinates)

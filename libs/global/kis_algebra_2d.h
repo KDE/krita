@@ -274,7 +274,23 @@ Rect blowRect(const Rect &rect, qreal coeff)
 QPoint KRITAGLOBAL_EXPORT ensureInRect(QPoint pt, const QRect &bounds);
 QPointF KRITAGLOBAL_EXPORT ensureInRect(QPointF pt, const QRectF &bounds);
 
-QRect KRITAGLOBAL_EXPORT ensureRectNotSmaller(QRect rc, const QSize &size);
+template <class Rect>
+Rect ensureRectNotSmaller(Rect rc, const decltype(Rect().size()) &size)
+{
+    typedef decltype(Rect().size()) Size;
+    typedef decltype(Rect().top()) ValueType;
+
+    if (rc.width() < size.width() ||
+        rc.height() < size.height()) {
+
+        ValueType width = qMax(rc.width(), size.width());
+        ValueType  height = qMax(rc.height(), size.height());
+
+        rc = Rect(rc.topLeft(), Size(width, height));
+    }
+
+    return rc;
+}
 
 template <class Size>
 Size ensureSizeNotSmaller(const Size &size, const Size &bounds)

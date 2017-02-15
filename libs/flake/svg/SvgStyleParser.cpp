@@ -47,7 +47,7 @@ public:
         styleAttributes << "stroke" << "stroke-width" << "stroke-linejoin" << "stroke-linecap";
         styleAttributes << "stroke-dasharray" << "stroke-dashoffset" << "stroke-opacity" << "stroke-miterlimit";
         styleAttributes << "opacity" << "filter" << "clip-path" << "clip-rule" << "mask";
-        styleAttributes << "marker" << "marker-start" << "marker-mid" << "marker-end";
+        styleAttributes << "marker" << "marker-start" << "marker-mid" << "marker-end" << "krita:marker-fill-method";
     }
 
     SvgLoadingContext &context;
@@ -327,7 +327,7 @@ void SvgStyleParser::parsePA(SvgGraphicsContext *gc, const QString &command, con
             unsigned int end = params.indexOf(')', start);
             gc->markerMidId = params.mid(start, end - start);
         }
-    }  else if (command == "marker") {
+    } else if (command == "marker") {
         if (params != "none" && params.startsWith("url(")) {
             unsigned int start = params.indexOf('#') + 1;
             unsigned int end = params.indexOf(')', start);
@@ -335,6 +335,8 @@ void SvgStyleParser::parsePA(SvgGraphicsContext *gc, const QString &command, con
             gc->markerMidId = gc->markerStartId;
             gc->markerEndId = gc->markerStartId;
         }
+    } else if (command == "krita:marker-fill-method") {
+        gc->autoFillMarkers = params == "auto";
     }
 
     gc->fillColor = fillcolor;
@@ -499,6 +501,10 @@ SvgStyles SvgStyleParser::collectStyles(const KoXmlElement &e)
                 continue;
             QString command = substyle[0].trimmed();
             QString params  = substyle[1].trimmed();
+
+            // toggle the namespace selector into the xml-like one
+            command.replace("|", ":");
+
             // only use style and font attributes
             if (d->styleAttributes.contains(command) || d->fontAttributes.contains(command))
                 styleMap[command] = params;

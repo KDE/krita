@@ -22,6 +22,8 @@
 
 #include <KoFlake.h>
 #include <QAbstractListModel>
+#include <QExplicitlySharedDataPointer>
+
 
 class KoMarker;
 
@@ -35,12 +37,21 @@ public:
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
 
     int markerIndex(KoMarker *marker) const;
+
+    // returns index of the newly added temporary marker
+    int addTemporaryMarker(KoMarker *marker);
+    // removes a temporary marker added by \ref addTemporaryMarker
+    void removeTemporaryMarker();
+
+    int temporaryMarkerPosition() const;
+
     QVariant marker(int index, int role = Qt::UserRole) const;
     KoFlake::MarkerPosition position() const;
 
 private:
-    QList<KoMarker*> m_markers;
+    QList<QExplicitlySharedDataPointer<KoMarker>> m_markers;
     KoFlake::MarkerPosition m_markerPosition;
+    int m_temporaryMarkerPosition;
 };
 
 #endif /* KOMARKERMODEL_H */

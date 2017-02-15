@@ -156,6 +156,10 @@ private Q_SLOTS:
     void testMarkersCustomOrientation();
 
     void testMarkersDifferent();
+
+    void testMarkersFillAsShape();
+
+    void testGradientRecoveringTrasnform();
 };
 
 #endif // TESTSVGPARSER_H

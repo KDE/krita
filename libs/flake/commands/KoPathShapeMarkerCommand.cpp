@@ -21,7 +21,7 @@
 #include "KoPathShapeMarkerCommand.h"
 #include "KoMarker.h"
 #include "KoPathShape.h"
-#include <QExplicitlySharedDataPointer>"
+#include <QExplicitlySharedDataPointer>
 
 #include "kis_command_ids.h"
 
@@ -34,6 +34,7 @@ public:
     QList<QExplicitlySharedDataPointer<KoMarker>> oldMarkers; ///< the old markers, one for each shape
     QExplicitlySharedDataPointer<KoMarker> marker; ///< the new marker to set
     KoFlake::MarkerPosition position;
+    QList<bool> oldAutoFillMarkers;
 };
 
 KoPathShapeMarkerCommand::KoPathShapeMarkerCommand(const QList<KoPathShape*> &shapes, KoMarker *marker, KoFlake::MarkerPosition position, KUndo2Command *parent)
@@ -47,6 +48,7 @@ KoPathShapeMarkerCommand::KoPathShapeMarkerCommand(const QList<KoPathShape*> &sh
     // save old markers
     Q_FOREACH (KoPathShape *shape, m_d->shapes) {
         m_d->oldMarkers.append(QExplicitlySharedDataPointer<KoMarker>(shape->marker(position)));
+        m_d->oldAutoFillMarkers.append(shape->autoFillMarkers());
     }
 }
 
@@ -60,6 +62,10 @@ void KoPathShapeMarkerCommand::redo()
     Q_FOREACH (KoPathShape *shape, m_d->shapes) {
         shape->update();
         shape->setMarker(m_d->marker.data(), m_d->position);
+
+        // we have no GUI for selection auto-filling yet! So just enable it!
+        shape->setAutoFillMarkers(true);
+
         shape->update();
     }
 }
@@ -68,9 +74,11 @@ void KoPathShapeMarkerCommand::undo()
 {
     KUndo2Command::undo();
     auto markerIt = m_d->oldMarkers.begin();
+    auto autoFillIt = m_d->oldAutoFillMarkers.begin();
     Q_FOREACH (KoPathShape *shape, m_d->shapes) {
         shape->update();
         shape->setMarker((*markerIt).data(), m_d->position);
+        shape->setAutoFillMarkers(*autoFillIt);
         shape->update();
         ++markerIt;
     }

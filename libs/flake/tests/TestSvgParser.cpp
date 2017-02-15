@@ -2997,5 +2997,106 @@ void TestSvgParser::testMarkersDifferent()
     t.test_standard_30px_72ppi("markers_different", false);
 }
 
+void TestSvgParser::testMarkersFillAsShape()
+{
+    const QString data =
+            "<svg width=\"30px\" height=\"30px\""
+            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+
+            "<defs>"
+            "    <linearGradient id=\"testGrad\" x1=\"0%\" y1=\"50%\" x2=\"100%\" y2=\"50%\">"
+            "        <stop offset=\"5%\" stop-color=\"#F60\" />"
+            "        <stop offset=\"80%\" stop-color=\"#FF6\" />"
+            "    </linearGradient>"
+
+            "    <marker id=\"SimpleRectMarker\""
+            "        orient=\"auto\" refY=\"12.5\" refX=\"12.5\" >"
+
+            "        <rect id=\"markerRect\" x=\"10\" y=\"10\" width=\"5\" height=\"5\""
+            "            fill=\"red\" stroke=\"none\"/>"
+            "        <rect id=\"markerRect\" x=\"14\" y=\"12\" width=\"1\" height=\"1\""
+            "            fill=\"yellow\" stroke=\"none\"/>"
+            "        <rect id=\"markerRect\" x=\"12\" y=\"12\" width=\"1\" height=\"1\""
+            "            fill=\"white\" stroke=\"none\"/>"
+            "    </marker>"
+
+            "</defs>"
+
+            "<path id=\"testRect\""
+            "    style=\"fill:none;stroke:url(#testGrad) magenta;stroke-width:2px;marker-start:url(#SimpleRectMarker);marker-end:url(#SimpleRectMarker);marker-mid:url(#SimpleRectMarker);krita|marker-fill-method:auto\""
+            "    d=\"M5,15 C5,5 25,5 25,15 L15,25\"/>"
+            //"    d=\"M5,15 L25,15\"/>"
+
+            "</svg>";
+
+    SvgRenderTester t (data);
+
+    t.test_standard_30px_72ppi("markers_scaled_fill_as_shape", false);
+}
+
+
+void TestSvgParser::testGradientRecoveringTrasnform()
+{
+    // used for experimenting purposes only!
+
+    QImage image(100,100,QImage::Format_ARGB32);
+    image.fill(0);
+    QPainter painter(&image);
+
+    painter.setPen(QPen(Qt::black, 0));
+
+
+    QLinearGradient gradient(0, 0.5, 1, 0.5);
+    gradient.setCoordinateMode(QGradient::ObjectBoundingMode);
+
+    //QLinearGradient gradient(0, 50, 100, 50);
+    //gradient.setCoordinateMode(QGradient::LogicalMode);
+
+    gradient.setColorAt(0.0, Qt::red);
+    gradient.setColorAt(1.0, Qt::blue);
+
+    QTransform gradientTrasnform;
+    gradientTrasnform.shear(0.2, 0);
+
+    {
+        QBrush brush(gradient);
+        brush.setTransform(gradientTrasnform);
+        painter.setBrush(brush);
+    }
+
+    QRect mainShape(3,3,94,94);
+    painter.drawRect(mainShape);
+
+    QTransform gradientToUser(mainShape.width(), 0, 0, mainShape.height(),
+                              mainShape.x(), mainShape.y());
+
+    QRect smallShape(0,0,20,20);
+    QTransform smallShapeTransform;
+
+    {
+        smallShapeTransform =
+            QTransform::fromTranslate(-smallShape.center().x(), -smallShape.center().y());
+
+        QTransform r; r.rotate(90);
+        smallShapeTransform *= r;
+
+        smallShapeTransform *=
+            QTransform::fromTranslate(mainShape.center().x(), mainShape.center().y());
+    }
+
+
+    {
+        gradient.setCoordinateMode(QGradient::LogicalMode);
+        QBrush brush(gradient);
+        brush.setTransform(gradientTrasnform * gradientToUser * smallShapeTransform.inverted());
+        painter.setBrush(brush);
+        painter.setPen(Qt::NoPen);
+    }
+
+    painter.setTransform(smallShapeTransform);
+    painter.drawRect(smallShape);
+
+    //image.save("gradient_recovering_transform.png");
+}
 
 QTEST_MAIN(TestSvgParser)

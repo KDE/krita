@@ -92,12 +92,10 @@ public:
 
     Q_DECLARE_PUBLIC(KoPathShape)
 
-    KoMarkerData startMarker;
-    KoMarkerData endMarker;
-
     KoSubpathList subpaths;
 
     QMap<KoFlake::MarkerPosition, QExplicitlySharedDataPointer<KoMarker>> markersNew;
+    bool autoFillMarkers;
 };
 
 #endif

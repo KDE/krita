@@ -459,6 +459,9 @@ public:
     KoMarker* marker(KoFlake::MarkerPosition pos) const;
     bool hasMarkers() const;
 
+    bool autoFillMarkers() const;
+    void setAutoFillMarkers(bool value);
+
 private:
     /// constructor: to be used in cloneShape(), not in descendants!
     /// \internal

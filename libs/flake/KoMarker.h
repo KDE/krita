@@ -33,6 +33,7 @@ class QString;
 class QPainterPath;
 class KoShape;
 class QPainter;
+class KoShapeStroke;
 
 class  KRITAFLAKE_EXPORT KoMarker : public QSharedData
 {
@@ -107,6 +108,9 @@ public:
      */
     void drawPreview(QPainter *painter, const QRectF &previewRect,
                      const QPen &pen, KoFlake::MarkerPosition position);
+
+
+    void applyShapeStroke(KoShape *shape, KoShapeStroke *stroke, const QPointF &pos, qreal strokeWidth, qreal nodeAngle);
 
 private:
     class Private;

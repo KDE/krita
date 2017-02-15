@@ -489,17 +489,23 @@ void KoStrokeConfigWidget::applyMarkerChanges(int rawPosition)
 {
     KoFlake::MarkerPosition position = KoFlake::MarkerPosition(rawPosition);
 
-    KoMarker *marker = 0;
+    QScopedPointer<KoMarker> marker;
 
     switch (position) {
     case KoFlake::StartMarker:
-        marker = d->startMarkerSelector->marker();
+        if (d->startMarkerSelector->marker()) {
+            marker.reset(new KoMarker(*d->startMarkerSelector->marker()));
+        }
         break;
     case KoFlake::MidMarker:
-        marker = d->midMarkerSelector->marker();
+        if (d->midMarkerSelector->marker()) {
+            marker.reset(new KoMarker(*d->midMarkerSelector->marker()));
+        }
         break;
     case KoFlake::EndMarker:
-        marker = d->endMarkerSelector->marker();
+        if (d->endMarkerSelector->marker()) {
+            marker.reset(new KoMarker(*d->endMarkerSelector->marker()));
+        }
         break;
     }
 
@@ -518,7 +524,7 @@ void KoStrokeConfigWidget::applyMarkerChanges(int rawPosition)
 
     if (pathShapes.isEmpty()) return;
 
-    KUndo2Command* command = new KoPathShapeMarkerCommand(pathShapes, marker, position);
+    KUndo2Command* command = new KoPathShapeMarkerCommand(pathShapes, marker.take(), position);
     canvasController->canvas()->addCommand(command);
 }
 

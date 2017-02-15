@@ -74,6 +74,8 @@ public:
     QString markerStartId;
     QString markerMidId;
     QString markerEndId;
+
+    bool autoFillMarkers;
 };
 
 #endif // SVGGRAPHICCONTEXT_H

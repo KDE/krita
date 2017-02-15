@@ -82,6 +82,11 @@ void KoMarkerSelector::setMarker(KoMarker *marker)
     int index = d->model->markerIndex(marker);
     if (index >= 0) {
         setCurrentIndex(index);
+        if (index != d->model->temporaryMarkerPosition()) {
+            d->model->removeTemporaryMarker();
+        }
+    } else {
+        setCurrentIndex(d->model->addTemporaryMarker(marker));
     }
 }
 

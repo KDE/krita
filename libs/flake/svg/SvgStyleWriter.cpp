@@ -298,7 +298,6 @@ void tryEmbedMarker(const KoPathShape *pathShape,
 
 }
 
-
 void SvgStyleWriter::saveSvgMarkers(KoShape *shape, SvgSavingContext &context)
 {
     KoPathShape *pathShape = dynamic_cast<KoPathShape*>(shape);
@@ -308,6 +307,10 @@ void SvgStyleWriter::saveSvgMarkers(KoShape *shape, SvgSavingContext &context)
     tryEmbedMarker(pathShape, "marker-start", KoFlake::StartMarker, context);
     tryEmbedMarker(pathShape, "marker-mid", KoFlake::MidMarker, context);
     tryEmbedMarker(pathShape, "marker-end", KoFlake::EndMarker, context);
+
+    if (pathShape->autoFillMarkers()) {
+        context.shapeWriter().addAttribute("krita:marker-fill-method", "auto");
+    }
 }
 
 void SvgStyleWriter::saveSvgColorStops(const QGradientStops &colorStops, SvgSavingContext &context)

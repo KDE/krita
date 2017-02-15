@@ -30,6 +30,10 @@
 #include "KoOdfWorkaround.h"
 #include "KoShapePainter.h"
 #include "KoViewConverter.h"
+#include <KoShapeStroke.h>
+#include <KoGradientBackground.h>
+#include <KoColorBackground.h>
+
 
 #include <QString>
 #include <QUrl>
@@ -38,6 +42,7 @@
 
 #include "kis_global.h"
 #include "kis_algebra_2d.h"
+
 
 class Q_DECL_HIDDEN KoMarker::Private
 {
@@ -105,7 +110,7 @@ public:
     }
 
     QTransform markerTransform(qreal strokeWidth, qreal nodeAngle, const QPointF &pos = QPointF()) {
-        const QTransform translate = QTransform::fromTranslate(referencePoint.x(), referencePoint.y());
+        const QTransform translate = QTransform::fromTranslate(-referencePoint.x(), -referencePoint.y());
 
         QTransform t = translate;
 
@@ -239,16 +244,8 @@ void KoMarker::paintAtPosition(QPainter *painter, const QPointF &pos, qreal stro
     KoShapePainter p;
     p.setShapes(d->shapes);
 
-    painter->translate(pos);
+    painter->setTransform(d->markerTransform(strokeWidth, nodeAngle, pos), true);
 
-    const qreal angle = d->hasAutoOrientation ? nodeAngle : d->explicitOrientation;
-    painter->rotate(kisRadiansToDegrees(angle));
-
-    if (d->coordinateSystem == StrokeWidth) {
-        painter->scale(strokeWidth, strokeWidth);
-    }
-
-    painter->translate(-d->referencePoint);
     p.paint(*painter, converter);
 
     painter->setTransform(oldTransform);
@@ -333,4 +330,81 @@ void KoMarker::drawPreview(QPainter *painter, const QRectF &previewRect, const Q
     paintAtPosition(painter, marker, pen.widthF(), 0);
 
     painter->restore();
+}
+
+void KoMarker::applyShapeStroke(KoShape *parentShape, KoShapeStroke *stroke, const QPointF &pos, qreal strokeWidth, qreal nodeAngle)
+{
+    const QGradient *originalGradient = stroke->lineBrush().gradient();
+
+    if (!originalGradient) {
+        QList<KoShape*> linearizedShapes = KoShape::linearizeSubtree(d->shapes);
+        Q_FOREACH(KoShape *shape, linearizedShapes) {
+            // update the stroke
+            KoShapeStrokeSP shapeStroke = shape->stroke() ?
+                        qSharedPointerDynamicCast<KoShapeStroke>(shape->stroke()) :
+                        KoShapeStrokeSP();
+
+            if (shapeStroke) {
+                shapeStroke = toQShared(new KoShapeStroke(*shapeStroke));
+
+                shapeStroke->setLineBrush(QBrush());
+                shapeStroke->setColor(stroke->color());
+
+                shape->setStroke(shapeStroke);
+            }
+
+            // update the background
+            if (shape->background()) {
+                QSharedPointer<KoColorBackground> bg(new KoColorBackground(stroke->color()));
+                shape->setBackground(bg);
+            }
+        }
+    } else {
+        QScopedPointer<QGradient> g(KoFlake::cloneGradient(originalGradient));
+        KIS_ASSERT_RECOVER_RETURN(g);
+
+        const QTransform markerTransformInverted =
+                d->markerTransform(strokeWidth, nodeAngle, pos).inverted();
+
+        QTransform gradientToUser;
+
+        // Unwrap the gradient to work in global mode
+        if (g->coordinateMode() == QGradient::ObjectBoundingMode) {
+            const QRectF boundingRect =
+                    KisAlgebra2D::ensureRectNotSmaller(parentShape->outline().boundingRect(), QSizeF(1.0, 1.0));
+
+            gradientToUser = QTransform(boundingRect.width(), 0, 0, boundingRect.height(),
+                                        boundingRect.x(), boundingRect.y());
+
+            g->setCoordinateMode(QGradient::LogicalMode);
+        }
+
+        QList<KoShape*> linearizedShapes = KoShape::linearizeSubtree(d->shapes);
+        Q_FOREACH(KoShape *shape, linearizedShapes) {
+            // shape-unwinding transform
+            QTransform t = gradientToUser * markerTransformInverted * shape->absoluteTransformation(0).inverted();
+
+            // update the stroke
+            KoShapeStrokeSP shapeStroke = shape->stroke() ?
+                        qSharedPointerDynamicCast<KoShapeStroke>(shape->stroke()) :
+                        KoShapeStrokeSP();
+
+            if (shapeStroke) {
+                shapeStroke = toQShared(new KoShapeStroke(*shapeStroke));
+
+                QBrush brush(*g);
+                brush.setTransform(t);
+                shapeStroke->setLineBrush(brush);
+                shapeStroke->setColor(Qt::transparent);
+                shape->setStroke(shapeStroke);
+            }
+
+            // update the background
+            if (shape->background()) {
+
+                QSharedPointer<KoGradientBackground> bg(new KoGradientBackground(KoFlake::cloneGradient(g.data()), t));
+                shape->setBackground(bg);
+            }
+        }
+    }
 }

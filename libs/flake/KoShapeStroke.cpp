@@ -52,6 +52,9 @@
 class Q_DECL_HIDDEN KoShapeStroke::Private
 {
 public:
+    Private(KoShapeStroke *_q) : q(_q) {}
+    KoShapeStroke *q;
+
     void paintBorder(KoShape *shape, QPainter &painter, const QPen &pen) const;
     QColor color;
     QPen pen;
@@ -97,6 +100,7 @@ void KoShapeStroke::Private::paintBorder(KoShape *shape, QPainter &painter, cons
 
             if (!pathShape->hasMarkers()) return;
 
+            const bool autoFillMarkers = pathShape->autoFillMarkers();
             KoMarker *startMarker = pathShape->marker(KoFlake::StartMarker);
             KoMarker *midMarker = pathShape->marker(KoFlake::MidMarker);
             KoMarker *endMarker = pathShape->marker(KoFlake::EndMarker);
@@ -130,16 +134,25 @@ void KoShapeStroke::Private::paintBorder(KoShape *shape, QPainter &painter, cons
 
                     if (j == 0 && startMarker) {
                         const qreal angle = isClosedSubpath ? bisectorAngle(firstAngle, lastAngle) : firstAngle;
+                        if (autoFillMarkers) {
+                            startMarker->applyShapeStroke(shape, q, segment.first()->point(), pen.widthF(), angle);
+                        }
                         startMarker->paintAtPosition(&painter, segment.first()->point(), pen.widthF(), angle);
                     }
 
                     if (j > 0 && midMarker) {
                         const qreal angle = bisectorAngle(previousAngle, angle1);
+                        if (autoFillMarkers) {
+                            midMarker->applyShapeStroke(shape, q, segment.first()->point(), pen.widthF(), angle);
+                        }
                         midMarker->paintAtPosition(&painter, segment.first()->point(), pen.widthF(), angle);
                     }
 
                     if (j == numSubPoints - 2 && endMarker) {
                         const qreal angle = isClosedSubpath ? bisectorAngle(firstAngle, lastAngle) : lastAngle;
+                        if (autoFillMarkers) {
+                            endMarker->applyShapeStroke(shape, q, segment.second()->point(), pen.widthF(), angle);
+                        }
                         endMarker->paintAtPosition(&painter, segment.second()->point(), pen.widthF(), angle);
                     }
 
@@ -156,7 +169,7 @@ void KoShapeStroke::Private::paintBorder(KoShape *shape, QPainter &painter, cons
 
 
 KoShapeStroke::KoShapeStroke()
-        : d(new Private())
+        : d(new Private(this))
 {
     d->color = QColor(Qt::black);
     // we are not rendering stroke with zero width anymore
@@ -165,7 +178,7 @@ KoShapeStroke::KoShapeStroke()
 }
 
 KoShapeStroke::KoShapeStroke(const KoShapeStroke &other)
-        : KoShapeStrokeModel(), d(new Private())
+        : KoShapeStrokeModel(), d(new Private(this))
 {
     d->color = other.d->color;
     d->pen = other.d->pen;
@@ -173,7 +186,7 @@ KoShapeStroke::KoShapeStroke(const KoShapeStroke &other)
 }
 
 KoShapeStroke::KoShapeStroke(qreal lineWidth, const QColor &color)
-        : d(new Private())
+        : d(new Private(this))
 {
     d->pen.setWidthF(qMax(qreal(0.0), lineWidth));
     d->pen.setJoinStyle(Qt::MiterJoin);

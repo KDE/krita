@@ -51,4 +51,6 @@ SvgGraphicsContext::SvgGraphicsContext()
     letterSpacing = 0.0;
     wordSpacing = 0.0;
     pixelsPerInch = 72.0;
+
+    autoFillMarkers = false;
 }

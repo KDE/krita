@@ -62,17 +62,15 @@ static const qreal DefaultMarkerWidth = 3.0;
 KoPathShapePrivate::KoPathShapePrivate(KoPathShape *q)
     : KoTosContainerPrivate(q),
     fillRule(Qt::OddEvenFill),
-    startMarker(KoMarkerData::MarkerStart),
-    endMarker(KoMarkerData::MarkerEnd)
+    autoFillMarkers(false)
 {
 }
 
 KoPathShapePrivate::KoPathShapePrivate(const KoPathShapePrivate &rhs, KoPathShape *q)
     : KoTosContainerPrivate(rhs, q),
       fillRule(rhs.fillRule),
-      startMarker(rhs.startMarker),
-      endMarker(rhs.endMarker),
-      markersNew(rhs.markersNew)
+      markersNew(rhs.markersNew),
+      autoFillMarkers(rhs.autoFillMarkers)
 {
     Q_FOREACH (KoSubpath *subPath, rhs.subpaths) {
         KoSubpath *clonedSubPath = new KoSubpath();
@@ -338,8 +336,8 @@ QString KoPathShape::saveStyle(KoGenStyle &style, KoShapeSavingContext &context)
     if (lineBorder) {
         lineWidth = lineBorder->lineWidth();
     }
-    d->startMarker.saveStyle(style, lineWidth, context);
-    d->endMarker.saveStyle(style, lineWidth, context);
+
+    Q_UNUSED(lineWidth)
 
     return KoTosContainer::saveStyle(style, context);
 }
@@ -368,8 +366,7 @@ void KoPathShape::loadStyle(const KoXmlElement & element, KoShapeLoadingContext 
         lineWidth = lineBorder->lineWidth();
     }
 
-    d->startMarker.loadOdf(lineWidth, context);
-    d->endMarker.loadOdf(lineWidth, context);
+    Q_UNUSED(lineWidth);
 }
 
 QRect KoPathShape::loadOdfViewbox(const KoXmlElement & element)
@@ -1599,6 +1596,18 @@ bool KoPathShape::hasMarkers() const
 {
     Q_D(const KoPathShape);
     return !d->markersNew.isEmpty();
+}
+
+bool KoPathShape::autoFillMarkers() const
+{
+    Q_D(const KoPathShape);
+    return d->autoFillMarkers;
+}
+
+void KoPathShape::setAutoFillMarkers(bool value)
+{
+    Q_D(KoPathShape);
+    d->autoFillMarkers = value;
 }
 
 QPainterPath KoPathShape::pathStroke(const QPen &pen) const

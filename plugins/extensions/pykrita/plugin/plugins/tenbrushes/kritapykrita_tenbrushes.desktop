@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Service
+ServiceTypes=Krita/PythonPlugin
+X-KDE-Library=tenbrushes
+X-Python-2-Compatible=false
+Name=Hello World
+Comment=Basic plugin to test PyKrita

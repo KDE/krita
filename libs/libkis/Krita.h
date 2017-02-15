@@ -180,7 +180,22 @@ public Q_SLOTS:
      */
     QList<Window *> windows() const;
 
-    QList<Resource*> resources() const;
+    /**
+     * @brief resources returns a list of Resource objects of the given type
+     * @param type Valid types are:
+     *
+     * <ul>
+     * <li>pattern</li>
+     * <li>gradient</li>
+     * <li>brush</li>
+     * <li>preset</li>
+     * <li>palette</li>
+     * <li>workspace</li>
+     * <li>: </li>
+     * </ul>
+
+     */
+    QList<Resource*> resources(const QString &type) const;
 
     bool closeApplication();
 
@@ -235,13 +250,48 @@ public Q_SLOTS:
      */
     Action *createAction(const QString &text);
 
+    /**
+     * @brief addViewExtension add the given plugin to Krita. For every window, a new instance of this
+     * extension will be made.
+     * @param viewExtension
+     */
     void addViewExtension(ViewExtension* viewExtension);
     QList<ViewExtension*> viewExtensions();
 
+    /**
+     * @brief addDockWidgetFactory Add the given docker factory to the application. For scripts
+     * loaded on startup, this means that every window will have one of the dockers created by the
+     * factory.
+     * @param factory The factory object.
+     */
     void addDockWidgetFactory(DockWidgetFactoryBase* factory );
 
+    /**
+     * @brief writeSetting write the given setting under the given name to the kritarc file in
+     * the given settings group.
+     * @param group The group the setting belongs to. If empty, then the setting is written in the
+     * general section
+     * @param name The name of the setting
+     * @param value The value of the setting. Script settings are always written as strings.
+     */
+    void writeSetting(const QString &group, const QString &name, const QString &value);
+
+    /**
+     * @brief readSetting read the given setting value from the kritarc file.
+     * @param group The group the setting is part of. If empty, then the setting is read from
+     * the general group.
+     * @param name The name of the setting
+     * @param defaultValue The default value of the setting
+     * @return a string representing the setting.
+     */
+    QString readSetting(const QString &group, const QString &name, const QString &defaultValue);
+
+    /**
+     * @brief instance retrieve the singleton instance of the Application object.
+     */
     static Krita* instance();
 
+    /// For mikro.py
     static QObject *fromVariant(const QVariant& v);
 
 private:

@@ -58,7 +58,6 @@ void Action::setName(QString value)
     d->name = value;
 }
 
-
 QString Action::menu() const
 {
     return d->menu;
@@ -71,55 +70,71 @@ void Action::setMenu(QString value)
 
 bool Action::isCheckable() const
 {
+    if (!d->action) return false;
     return d->action->isCheckable();
 }
 
 void Action::setCheckable(bool value)
 {
+    if (!d->action) return;
     d->action->setCheckable(value);
 }
 
 bool Action::isChecked() const
 {
+    if (!d->action) return false;
     return d->action->isChecked();
 }
 
 void Action::setChecked(bool value)
 {
+    if (!d->action) return;
     d->action->setChecked(value);
 }
 
 
 QString Action::shortcut() const
 {
+    if (!d->action) return QString();
     return d->action->shortcut().toString();
 }
 
 void Action::setShortcut(QString value)
 {
+    if (!d->action) return;
     d->action->setShortcut(QKeySequence::fromString(value));
 }
 
 
 bool Action::isVisible() const
 {
+    if (!d->action) return false;
     return d->action->isVisible();
 }
 
 void Action::setVisible(bool value)
 {
+    if (!d->action) return;
     d->action->setVisible(value);
 }
 
 
 bool Action::isEnabled() const
 {
+    if (!d->action) return false;
     return d->action->isEnabled();
 }
 
 void Action::setEnabled(bool value)
 {
+    if (!d->action) return;
     d->action->setEnabled(value);
+}
+
+void Action::setToolTip(QString tooltip)
+{
+    if (!d->action) return;
+    d->action->setToolTip(tooltip);
 }
 
 void Action::trigger()

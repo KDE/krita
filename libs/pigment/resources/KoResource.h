@@ -60,7 +60,7 @@ public:
 
     /**
      * Save this resource.
-     *@return true if saving the resource succeeded.
+ Layer     *@return true if saving the resource succeeded.
      */
     virtual bool save() = 0;
     virtual bool saveToDevice(QIODevice* dev) const;

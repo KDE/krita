@@ -19,9 +19,12 @@
 #define LIBKIS_RESOURCE_H
 
 #include <QObject>
-
+#include <kis_types.h>
 #include "kritalibkis_export.h"
 #include "libkis.h"
+
+
+class KoResource;
 
 /**
  * Resource
@@ -29,34 +32,25 @@
 class KRITALIBKIS_EXPORT Resource : public QObject
 {
     Q_OBJECT
-    Q_DISABLE_COPY(Resource)
-    
-    Q_PROPERTY(QString Type READ type WRITE setType)
-    Q_PROPERTY(QString Name READ name WRITE setName)
-    Q_PROPERTY(QString Filename READ filename WRITE setFilename)
 
 public:
-    explicit Resource(QObject *parent = 0);
+    explicit Resource(KoResource *resource, QObject *parent = 0);
     virtual ~Resource();
 
+public Q_SLOTS:
+    
     QString type() const;
-    void setType(QString value);
 
     QString name() const;
     void setName(QString value);
 
     QString filename() const;
-    void setFilename(QString value);
 
+    QImage image() const;
+    void setImage(QImage image);
 
-
-public Q_SLOTS:
-    
-
-    
-Q_SIGNALS:
-
-
+    QByteArray data() const;
+    bool setData(QByteArray data);
 
 private:
     struct Private;

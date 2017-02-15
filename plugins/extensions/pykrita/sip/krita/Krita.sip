@@ -25,7 +25,7 @@ public Q_SLOTS:
     QList<View *> views() const /Factory/;
     Window * activeWindow() const /Factory/;
     QList<Window *> windows() const /Factory/;
-    QList<Resource *> resources() const /Factory/;
+    QList<Resource *> resources(const QString &type) const /Factory/;
     bool closeApplication();
     Document * createDocument(int width, int height, const QString &name, const QString &colorModel, const QString &colorDepth, const QString &profile)  /Factory/;
     Document * openDocument(const QString &filename)  /Factory/;
@@ -48,6 +48,9 @@ public Q_SLOTS:
 
         sipTransferTo(a0Wrapper, Py_None);
 %End
+
+    void writeSetting(const QString &group, const QString &name, const QString &value);
+    QString readSetting(const QString &group, const QString &name, const QString &defaultValue);
 
     static Krita * instance();
     static QObject * fromVariant(const QVariant & v);

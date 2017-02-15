@@ -66,13 +66,13 @@ class HighpassViewExtension(ViewExtension):
         colors_layer = None;
         
         # if keeping colors
-        if self.cmbMode.currentIndex() == 1 || self.cmbMode.currentIndex() == 3:
+        if self.cmbMode.currentIndex() == 1 or self.cmbMode.currentIndex() == 3:
             colors_layer = working_layer.duplicate() # XXX: Unimplemented
             colors_layer.setName("colors")
             original.parentNode().addChildNode(working_layer, colors_layer) # XXX: Unimplemented
             
         # if greyscale, desature
-        if (self.cmbMode.currentIndex() == 2 || self.cmbMode.currentIndex() == 3):
+        if (self.cmbMode.currentIndex() == 2 or self.cmbMode.currentIndex() == 3):
             filter = Application.filter("desaturate")
             filter.apply(working_layer, 0, 0, image.width(), image.height())
         

@@ -7,6 +7,7 @@ public:
     Action(QObject*  parent /TransferThis/ = 0);
     Action(const QString & name, QAction*  action, QObject*  parent /TransferThis/ = 0);
     virtual ~Action();
+public Q_SLOTS:
     QString name() const;
     void setName(QString value);
     QString menu() const;
@@ -21,7 +22,7 @@ public:
     void setVisible(bool value);
     bool isEnabled() const;
     void setEnabled(bool value);
-public Q_SLOTS:
+    void setToolTip(QString tooltip);
     void trigger();
 Q_SIGNALS:
     void triggered(bool);

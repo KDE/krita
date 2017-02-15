@@ -16,14 +16,28 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include "Resource.h"
+#include <KoResource.h>
+#include <QByteArray>
+#include <QBuffer>
+
+#include <KoPattern.h>
+#include <KoAbstractGradient.h>
+#include <kis_brush.h>
+#include <kis_paintop_preset.h>
+#include <KoColorSet.h>
+#include <kis_workspace_resource.h>
 
 struct Resource::Private {
-    Private() {}
+    Private(KoResource *_resource)
+        : resource(_resource)
+    {}
+
+    KoResource *resource;
 };
 
-Resource::Resource(QObject *parent) 
+Resource::Resource(KoResource *resource, QObject *parent)
     : QObject(parent)
-    , d(new Private)
+    , d(new Private(resource))
 {
 }
 
@@ -34,37 +48,64 @@ Resource::~Resource()
 
 QString Resource::type() const
 {
-    // UNIMPLEMENTED
-    return QString();
+    if (!d->resource) return QString();
+    if (dynamic_cast<KoPattern*>(d->resource)) return "pattern";
+    else if (dynamic_cast<KoAbstractGradient*>(d->resource)) return "gradient";
+    else if (dynamic_cast<KisBrush*>(d->resource)) return "brush";
+    else if (dynamic_cast<KisPaintOpPreset*>(d->resource)) return "preset";
+    else if (dynamic_cast<KoColorSet*>(d->resource)) return "palette";
+    else if (dynamic_cast<KisWorkspaceResource*>(d->resource)) return "workspace";
+    else return "";
 }
-
-void Resource::setType(QString value)
-{
-    // UNIMPLEMENTED
-}
-
 
 QString Resource::name() const
 {
-    // UNIMPLEMENTED
-    return QString();
+    if (!d->resource) return QString();
+    return d->resource->name();
 }
 
 void Resource::setName(QString value)
 {
-    // UNIMPLEMENTED
+    if (!d->resource) return;
+    d->resource->setName(value);
 }
 
 
 QString Resource::filename() const
 {
-    // UNIMPLEMENTED
-    return QString();
+    if (!d->resource) return QString();
+    return d->resource->filename();
 }
 
-void Resource::setFilename(QString value)
+
+QImage Resource::image() const
 {
-    // UNIMPLEMENTED
+    if (!d->resource) return QImage();
+    return d->resource->image();
+}
+
+void Resource::setImage(QImage image)
+{
+    if (!d->resource) return;
+    d->resource->setImage(image);
+}
+
+QByteArray Resource::data() const
+{
+    QByteArray ba;
+
+    if (!d->resource) return ba;
+
+    QBuffer buf(&ba);
+    d->resource->saveToDevice(&buf);
+    return ba;
+}
+
+bool Resource::setData(QByteArray data)
+{
+    if (!d->resource) return false;
+    QBuffer buf(&data);
+    return d->resource->loadFromDevice(&buf);
 }
 
 

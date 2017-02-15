@@ -20,6 +20,9 @@
 #include <QPointer>
 #include <QVariant>
 
+#include <ksharedconfig.h>
+#include <kconfiggroup.h>
+
 #include <kis_generator_registry.h>
 #include <kis_generator.h>
 #include <KoColorSpaceRegistry.h>
@@ -42,6 +45,12 @@
 #include <kis_filter.h>
 #include <kis_filter_configuration.h>
 #include <kis_properties_configuration.h>
+#include <kis_config.h>
+#include <kis_resource_server_provider.h>
+#include <kis_workspace_resource.h>
+#include <brushengine/kis_paintop_preset.h>
+#include <kis_brush_server.h>
+#include <KoResourceServerProvider.h>
 
 #include "View.h"
 #include "Document.h"
@@ -51,6 +60,7 @@
 #include "Filter.h"
 #include "InfoObject.h"
 #include "Generator.h"
+#include "Resource.h"
 
 Krita* Krita::s_instance = 0;
 
@@ -242,10 +252,47 @@ QList<Window*>  Krita::windows() const
     return ret;
 }
 
-QList<Resource *> Krita::resources() const
+QList<Resource *> Krita::resources(const QString &type) const
 {
-    // UNIMPLEMENTED
-    return QList<Resource *> ();
+    QList<Resource *> resources = QList<Resource *> ();
+
+    if (type == "pattern") {
+        KoResourceServer<KoPattern>* server = KoResourceServerProvider::instance()->patternServer();
+        Q_FOREACH (KoResource *res, server->resources()) {
+            resources << new Resource(res);
+        }
+    }
+    else if (type == "gradient") {
+        KoResourceServer<KoAbstractGradient>* server = KoResourceServerProvider::instance()->gradientServer();
+        Q_FOREACH (KoResource *res, server->resources()) {
+            resources << new Resource(res);
+        }
+    }
+    else if (type == "brush") {
+        KisBrushResourceServer* server = KisBrushServer::instance()->brushServer();
+        Q_FOREACH (KisBrushSP res, server->resources()) {
+            resources << new Resource(res.data());
+        }
+    }
+    else if (type == "preset") {
+        KisPaintOpPresetResourceServer* server = KisResourceServerProvider::instance()->paintOpPresetServer();
+        Q_FOREACH (KisPaintOpPresetSP res, server->resources()) {
+            resources << new Resource(res.data());
+        }
+    }
+    else if (type == "palette") {
+        KoResourceServer<KoColorSet>* server = KoResourceServerProvider::instance()->paletteServer();
+        Q_FOREACH (KoResource *res, server->resources()) {
+            resources << new Resource(res);
+        }
+    }
+    else if (type == "workspace") {
+        KoResourceServer< KisWorkspaceResource >* server = KisResourceServerProvider::instance()->workspaceServer();
+        Q_FOREACH (KoResource *res, server->resources()) {
+            resources << new Resource(res);
+        }
+    }
+    return resources;
 }
 
 bool Krita::closeApplication()
@@ -306,6 +353,18 @@ void Krita::addViewExtension(ViewExtension* viewExtension)
 QList< ViewExtension* > Krita::viewExtensions()
 {
     return d->viewExtensions;
+}
+
+void Krita::writeSetting(const QString &group, const QString &name, const QString &value)
+{
+    KConfigGroup grp = KSharedConfig::openConfig()->group(group);
+    grp.writeEntry(name, value);
+}
+
+QString Krita::readSetting(const QString &group, const QString &name, const QString &defaultValue)
+{
+    KConfigGroup grp = KSharedConfig::openConfig()->group(group);
+    return grp.readEntry(name, defaultValue);
 }
 
 void Krita::addDockWidgetFactory(DockWidgetFactoryBase* factory)

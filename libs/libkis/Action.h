@@ -30,18 +30,12 @@ class KRITALIBKIS_EXPORT Action : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY(QString Name READ name WRITE setName)
-    Q_PROPERTY(QString Menu READ menu WRITE setMenu)
-    Q_PROPERTY(bool Checkable READ isCheckable WRITE setCheckable)
-    Q_PROPERTY(bool Checked READ isChecked WRITE setChecked)
-    Q_PROPERTY(QString Shortcut READ shortcut WRITE setShortcut)
-    Q_PROPERTY(bool Visible READ isVisible WRITE setVisible)
-    Q_PROPERTY(bool Enabled READ isEnabled WRITE setEnabled)
-
 public:
     explicit Action(QObject *parent = 0);
     Action(const QString &name, QAction *action, QObject *parent = 0);
     virtual ~Action();
+
+public Q_SLOTS:
 
     QString name() const;
     void setName(QString value);
@@ -64,8 +58,7 @@ public:
     bool isEnabled() const;
     void setEnabled(bool value);
 
-
-public Q_SLOTS:
+    void setToolTip(QString tooltip);
 
     void trigger();
 

@@ -19,8 +19,6 @@
 #ifndef IMAGESHAPE_H
 #define IMAGESHAPE_H
 
-#include "kritaflake_export.h"
-
 #include <QScopedPointer>
 
 #include "KoTosContainer.h"
@@ -29,7 +27,7 @@
 #define ImageShapeId "ImageShape"
 
 
-class KRITAFLAKE_EXPORT ImageShape : public KoTosContainer, public SvgShape
+class ImageShape : public KoTosContainer, public SvgShape
 {
 public:
     ImageShape();

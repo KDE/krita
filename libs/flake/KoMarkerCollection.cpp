@@ -21,7 +21,7 @@
 
 #include <QFile>
 
-#include "klocale.h"
+#include <klocalizedstring.h>
 #include "KoMarker.h"
 #include <KoXmlReader.h>
 #include <FlakeDebug.h>

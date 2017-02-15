@@ -23,7 +23,6 @@ class DebugController (object):
         loop.run_until_complete(self._debugger.step())
         self.scripter.uicontroller.setStepped(True)
         self.updateUIDebugger()
-        print('depois')
 
     def stop(self):
         loop = asyncio.get_event_loop()
@@ -47,14 +46,13 @@ class DebugController (object):
     def currentLine(self):
         try:
             if self._debugger:
-                return int(self._debugger.application_data['code']['lineNumber'])
+                return int(self.debuggerData['code']['lineNumber'])
         except:
             return 0
 
     def updateUIDebugger(self):
         widget = self.scripter.uicontroller.findStackWidget('Debugger')
         exception = self._debuggerException()
-        print(exception)
 
         if exception:
             self.scripter.uicontroller.showException(exception)
@@ -72,15 +70,15 @@ class DebugController (object):
         except:
             return
 
-
     def _quitDebugger(self):
         try:
-            return self._debugger.application_data['quit']
+            return self.debuggerData['quit']
         except:
             return False
 
     def _debuggerException(self):
         try:
-            return self._debugger.application_data['exception']
+            print(self.debuggerData['exception'])
+            return self.debuggerData['exception']
         except:
             return False

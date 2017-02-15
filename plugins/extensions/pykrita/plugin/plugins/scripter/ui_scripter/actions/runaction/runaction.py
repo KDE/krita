@@ -37,11 +37,8 @@ class RunAction(QAction):
             script = self.editor.document().toPlainText()
             try:
                 bc = compile(document.data, document.filePath, "exec")
+                exec(bc)
             except Exception as e:
-                QMessageBox.critical(self.editor, "Error compiling script", str(e))
-                return
-
-            exec(bc)
-
+                self.scripter.uicontroller.showException(str(e))
             sys.stdout = stdout
             sys.stderr = stderr

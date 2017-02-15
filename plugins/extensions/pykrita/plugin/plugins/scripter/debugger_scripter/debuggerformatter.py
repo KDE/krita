@@ -19,7 +19,7 @@ def format_data(data):
                           types.ModuleType,
                           types.FunctionType]
 
-    return [{k: v} for k, v in data.items() if not (k in exclude_keys or
+    return [{k: {'value': str(v), 'type': str(type(v))}} for k, v in data.items() if not (k in exclude_keys or
                                                 type(v) in exclude_valuetypes or
                                                 re.search(r'^(__).*\1$', k) or
                                                 inspect.isclass(v) or

@@ -16,7 +16,7 @@ class DebuggerTable(QTableWidget):
         self.clearContents()
         self.setRowCount(0)
 
-        if data and not data.get('quit'):
+        if data and not data.get('quit') and not data.get('exception'):
             locals_list = data['frame']['locals']
             globals_list = data['frame']['globals']
 
@@ -29,5 +29,5 @@ class DebuggerTable(QTableWidget):
                         self.insertRow(row)
                         self.setItem(row, 0, QTableWidgetItem(str(scope_key)))
                         self.setItem(row, 1, QTableWidgetItem(key))
-                        self.setItem(row, 2, QTableWidgetItem(str(value)))
-                        self.setItem(row, 3, QTableWidgetItem(str(type(value))))
+                        self.setItem(row, 2, QTableWidgetItem(value['value']))
+                        self.setItem(row, 3, QTableWidgetItem(value['type']))

@@ -27,8 +27,8 @@ class Debugger(bdb.Bdb):
     def run(self, cmd):
         try:
             super(Debugger, self).run(cmd)
-        except:
-            print('deu merda cara')
+        except Execept as e:
+            raise e
 
     def user_call(self, frame, args):
         name = frame.f_code.co_name or "<unknown>"

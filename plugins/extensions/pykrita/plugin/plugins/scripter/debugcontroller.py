@@ -78,7 +78,6 @@ class DebugController (object):
 
     def _debuggerException(self):
         try:
-            print(self.debuggerData['exception'])
             return self.debuggerData['exception']
         except:
             return False

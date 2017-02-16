@@ -117,15 +117,17 @@ void KoShapeStroke::Private::paintBorder(KoShape *shape, QPainter &painter, cons
                     firstAngle= anglesForSegment(segment).first;
                 }
 
+                const int numSegments = isClosedSubpath ? numSubPoints : numSubPoints - 1;
+
                 qreal lastAngle = 0.0;
                 {
-                    KoPathSegment segment = pathShape->segmentByIndex(KoPathPointIndex(i, numSubPoints - 2));
+                    KoPathSegment segment = pathShape->segmentByIndex(KoPathPointIndex(i, numSegments - 1));
                     lastAngle = anglesForSegment(segment).second;
                 }
 
                 qreal previousAngle = 0.0;
 
-                for (int j = 0; j < numSubPoints - 1; j++) {
+                for (int j = 0; j < numSegments; j++) {
                     KoPathSegment segment = pathShape->segmentByIndex(KoPathPointIndex(i, j));
                     QPair<qreal, qreal> angles = anglesForSegment(segment);
 
@@ -148,7 +150,7 @@ void KoShapeStroke::Private::paintBorder(KoShape *shape, QPainter &painter, cons
                         midMarker->paintAtPosition(&painter, segment.first()->point(), pen.widthF(), angle);
                     }
 
-                    if (j == numSubPoints - 2 && endMarker) {
+                    if (j == numSegments - 1 && endMarker) {
                         const qreal angle = isClosedSubpath ? bisectorAngle(firstAngle, lastAngle) : lastAngle;
                         if (autoFillMarkers) {
                             endMarker->applyShapeStroke(shape, q, segment.second()->point(), pen.widthF(), angle);

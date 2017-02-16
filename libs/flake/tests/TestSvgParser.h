@@ -160,6 +160,7 @@ private Q_SLOTS:
     void testMarkersFillAsShape();
 
     void testGradientRecoveringTrasnform();
+    void testMarkersOnClosedPath();
 };
 
 #endif // TESTSVGPARSER_H

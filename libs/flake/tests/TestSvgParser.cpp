@@ -3034,6 +3034,56 @@ void TestSvgParser::testMarkersFillAsShape()
     t.test_standard_30px_72ppi("markers_scaled_fill_as_shape", false);
 }
 
+void TestSvgParser::testMarkersOnClosedPath()
+{
+    const QString data =
+            "<svg width=\"30px\" height=\"30px\""
+            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+
+            "<marker id=\"SimpleRectMarker1\""
+            "    orient=\"auto\" refY=\"12.5\" refX=\"12.5\" >"
+
+            "    <rect id=\"markerRect\" x=\"9\" y=\"9\" width=\"7\" height=\"7\""
+            "        fill=\"red\" stroke=\"none\"/>"
+            "    <rect id=\"markerRect\" x=\"14\" y=\"12\" width=\"1\" height=\"1\""
+            "        fill=\"yellow\" stroke=\"none\"/>"
+            "    <rect id=\"markerRect\" x=\"12\" y=\"12\" width=\"1\" height=\"1\""
+            "        fill=\"white\" stroke=\"none\"/>"
+            "</marker>"
+
+            "<marker id=\"SimpleRectMarker2\""
+            "    orient=\"auto\" refY=\"12.5\" refX=\"12.5\" >"
+
+            "    <rect id=\"markerRect\" x=\"10\" y=\"10\" width=\"5\" height=\"5\""
+            "        fill=\"green\" stroke=\"none\"/>"
+            "    <rect id=\"markerRect\" x=\"14\" y=\"12\" width=\"1\" height=\"1\""
+            "        fill=\"yellow\" stroke=\"none\"/>"
+            "    <rect id=\"markerRect\" x=\"12\" y=\"12\" width=\"1\" height=\"1\""
+            "        fill=\"white\" stroke=\"none\"/>"
+            "</marker>"
+
+            "<marker id=\"SimpleRectMarker3\""
+            "    orient=\"auto\" refY=\"12.5\" refX=\"12.5\" >"
+
+            "    <rect id=\"markerRect\" x=\"10\" y=\"10\" width=\"5\" height=\"5\""
+            "        fill=\"blue\" stroke=\"none\"/>"
+            "    <rect id=\"markerRect\" x=\"14\" y=\"12\" width=\"1\" height=\"1\""
+            "        fill=\"yellow\" stroke=\"none\"/>"
+            "    <rect id=\"markerRect\" x=\"12\" y=\"12\" width=\"1\" height=\"1\""
+            "        fill=\"white\" stroke=\"none\"/>"
+            "</marker>"
+
+            "<path id=\"testRect\""
+            "    style=\"fill:none;stroke:#000000;stroke-width:1px;marker-start:url(#SimpleRectMarker1);marker-end:url(#SimpleRectMarker2);marker-mid:url(#SimpleRectMarker3)\""
+            "    d=\"M5,15 C5,5 25,5 25,15 L15,25 z\"/>"
+
+            "</svg>";
+
+    SvgRenderTester t (data);
+
+    t.test_standard_30px_72ppi("markers_on_closed_path", false);
+}
+
 
 void TestSvgParser::testGradientRecoveringTrasnform()
 {

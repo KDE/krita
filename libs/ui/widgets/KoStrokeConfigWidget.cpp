@@ -487,8 +487,23 @@ void KoStrokeConfigWidget::applyJoinCapChanges()
 
 void KoStrokeConfigWidget::applyMarkerChanges(int rawPosition)
 {
-    KoFlake::MarkerPosition position = KoFlake::MarkerPosition(rawPosition);
+    KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
+    KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
+    if (!selection) return;
 
+    QList<KoShape*> shapes = selection->selectedEditableShapes();
+    QList<KoPathShape*> pathShapes;
+    Q_FOREACH (KoShape *shape, shapes) {
+        KoPathShape *pathShape = dynamic_cast<KoPathShape*>(shape);
+        if (pathShape) {
+            pathShapes << pathShape;
+        }
+    }
+
+    if (pathShapes.isEmpty()) return;
+
+
+    KoFlake::MarkerPosition position = KoFlake::MarkerPosition(rawPosition);
     QScopedPointer<KoMarker> marker;
 
     switch (position) {
@@ -508,21 +523,6 @@ void KoStrokeConfigWidget::applyMarkerChanges(int rawPosition)
         }
         break;
     }
-
-    KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
-    KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
-    if (!selection) return;
-
-    QList<KoShape*> shapes = selection->selectedEditableShapes();
-    QList<KoPathShape*> pathShapes;
-    Q_FOREACH (KoShape *shape, shapes) {
-        KoPathShape *pathShape = dynamic_cast<KoPathShape*>(shape);
-        if (pathShape) {
-            pathShapes << pathShape;
-        }
-    }
-
-    if (pathShapes.isEmpty()) return;
 
     KUndo2Command* command = new KoPathShapeMarkerCommand(pathShapes, marker.take(), position);
     canvasController->canvas()->addCommand(command);

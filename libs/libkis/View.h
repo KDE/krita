@@ -49,6 +49,12 @@ public Q_SLOTS:
     Canvas* canvas() const;
     void close(bool confirm);
 
+    /**
+     * @brief activateResource activates the given resource.
+     * @param resource: a pattern, gradient or paintop preset
+     */
+    void activateResource(Resource *resource);
+
 private:
 
     friend class Window;

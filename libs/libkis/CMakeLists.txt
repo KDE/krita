@@ -11,6 +11,7 @@ set(kritalibkis_LIB_SRCS
     Krita.cpp
     Node.cpp
     Notifier.cpp
+    PresetChooser
     Resource.cpp
     Selection.cpp
     View.cpp

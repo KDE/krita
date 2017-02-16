@@ -173,7 +173,7 @@ public Q_SLOTS:
     /**
      * @return the currently active window or None if there is no window
      */
-    Window * activeWindow() const;
+    Window *activeWindow() const;
 
     /**
      * @return a list of all windows
@@ -195,9 +195,7 @@ public Q_SLOTS:
      * </ul>
 
      */
-    QList<Resource*> resources(const QString &type) const;
-
-    bool closeApplication();
+    QMap<QString, Resource*> resources(const QString &type) const;
 
     /**
      * @brief createDocument creates a new document and image and registers the document with the Krita application.

@@ -10,7 +10,7 @@ public Q_SLOTS:
     bool visible() const;
     void setVisible();
     Canvas * canvas() const /Factory/;
-
     void close(bool confirm);
+    void activateResource(Resource *resource);
 private:
 };

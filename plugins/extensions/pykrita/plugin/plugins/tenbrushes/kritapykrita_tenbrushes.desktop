@@ -3,5 +3,5 @@ Type=Service
 ServiceTypes=Krita/PythonPlugin
 X-KDE-Library=tenbrushes
 X-Python-2-Compatible=false
-Name=Hello World
-Comment=Basic plugin to test PyKrita
+Name=Ten Brushes
+Comment=Assign a preset to ctrl-1 to ctrl-0

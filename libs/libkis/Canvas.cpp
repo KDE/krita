@@ -39,35 +39,42 @@ Canvas::~Canvas()
 
 Document* Canvas::document() const
 {
+    // UNIMPLEMENTED
     return 0;
 }
 
 int Canvas::zoomLevel() const
 {
+    // UNIMPLEMENTED
     return 0;
 }
 
 void Canvas::setZoomLevel(int value)
 {
+    // UNIMPLEMENTED
 }
 
 
 int Canvas::rotation() const
 {
+    // UNIMPLEMENTED
     return 0;
 }
 
 void Canvas::setRotation(int value)
 {
+    // UNIMPLEMENTED
 }
 
 
 bool Canvas::mirror() const
 {
+    // UNIMPLEMENTED
     return false;
 }
 
 void Canvas::setMirror(bool value)
 {
+    // UNIMPLEMENTED
 }
 

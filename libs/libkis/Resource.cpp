@@ -32,7 +32,7 @@ struct Resource::Private {
         : resource(_resource)
     {}
 
-    KoResource *resource;
+    KoResource *resource {0};
 };
 
 Resource::Resource(KoResource *resource, QObject *parent)
@@ -106,6 +106,11 @@ bool Resource::setData(QByteArray data)
     if (!d->resource) return false;
     QBuffer buf(&data);
     return d->resource->loadFromDevice(&buf);
+}
+
+KoResource *Resource::resource() const
+{
+    return d->resource;
 }
 
 

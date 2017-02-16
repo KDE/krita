@@ -18,15 +18,22 @@
 #include "View.h"
 #include <QPointer>
 
+#include <KoPattern.h>
+#include <KoAbstractGradient.h>
+#include <kis_paintop_preset.h>
 #include <KisView.h>
 #include <KisViewManager.h>
 #include <kis_selection_manager.h>
+#include <kis_canvas_resource_provider.h>
+#include <kis_paintop_box.h>
+#include <KisViewManager.h>
 #include <KisMainWindow.h>
 #include <KoCanvasBase.h>
 #include <kis_canvas2.h>
 #include "Document.h"
 #include "Canvas.h"
 #include "Window.h"
+#include "Resource.h"
 
 struct View::Private {
     Private() {}
@@ -84,12 +91,37 @@ Canvas* View::canvas() const
 
 void View::close(bool confirm)
 {
+    // UNINPLEMENTED
     if (!d->view) return;
 }
 
 KisView *View::view()
 {
     return d->view;
+}
+
+void View::activateResource(Resource *resource)
+{
+    if (!d->view) return;
+    if (!resource) return;
+
+    KoResource *r= resource->resource();
+    if (!r) return;
+
+    if (dynamic_cast<KoPattern*>(r)) {
+        QVariant v;
+        v.setValue(static_cast<void*>(r));
+        d->view->canvasBase()->resourceManager()->setResource(KisCanvasResourceProvider::CurrentPattern, v);
+    }
+    else if (dynamic_cast<KoAbstractGradient*>(r)) {
+        QVariant v;
+        v.setValue(static_cast<void*>(r));
+        d->view->canvasBase()->resourceManager()->setResource(KisCanvasResourceProvider::CurrentGradient, v);
+    }
+    else if (dynamic_cast<KisPaintOpPreset*>(r)) {
+        d->view->viewManager()->paintOpBox()->resourceSelected(r);
+    }
+
 }
 
 

@@ -44,7 +44,7 @@ protected Q_SLOTS: // Krita API
     virtual void setCanvas(KoCanvasBase* canvas);
     virtual void unsetCanvas();
 
-protected Q_SLOTS: // PyKRita API
+protected Q_SLOTS: // PyKrita API
 
     Canvas* canvas() const;
     virtual void canvasChanged(Canvas *canvas) = 0;

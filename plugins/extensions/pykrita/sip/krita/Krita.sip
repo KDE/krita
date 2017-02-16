@@ -1,3 +1,4 @@
+
 class Krita : QObject
 {
 %TypeHeaderCode
@@ -25,8 +26,7 @@ public Q_SLOTS:
     QList<View *> views() const /Factory/;
     Window * activeWindow() const /Factory/;
     QList<Window *> windows() const /Factory/;
-    QList<Resource *> resources(const QString &type) const /Factory/;
-    bool closeApplication();
+    QMap<QString, Resource *> resources(const QString &type) const /Factory/;
     Document * createDocument(int width, int height, const QString &name, const QString &colorModel, const QString &colorDepth, const QString &profile)  /Factory/;
     Document * openDocument(const QString &filename)  /Factory/;
     Window * openWindow();

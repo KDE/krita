@@ -26,7 +26,8 @@
 
 #include <KisMainWindow.h>
 /**
- * Window
+ * Window represents one Krita mainwindow. A window can have any number
+ * of views open on any number of documents.
  */
 class KRITALIBKIS_EXPORT Window : public QObject
 {

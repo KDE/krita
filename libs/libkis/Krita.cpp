@@ -252,53 +252,47 @@ QList<Window*>  Krita::windows() const
     return ret;
 }
 
-QList<Resource *> Krita::resources(const QString &type) const
+QMap<QString, Resource *> Krita::resources(const QString &type) const
 {
-    QList<Resource *> resources = QList<Resource *> ();
+    QMap<QString, Resource *> resources = QMap<QString, Resource *> ();
 
     if (type == "pattern") {
         KoResourceServer<KoPattern>* server = KoResourceServerProvider::instance()->patternServer();
         Q_FOREACH (KoResource *res, server->resources()) {
-            resources << new Resource(res);
+            resources[res->name()] = new Resource(res);
         }
     }
     else if (type == "gradient") {
         KoResourceServer<KoAbstractGradient>* server = KoResourceServerProvider::instance()->gradientServer();
         Q_FOREACH (KoResource *res, server->resources()) {
-            resources << new Resource(res);
+            resources[res->name()] = new Resource(res);
         }
     }
     else if (type == "brush") {
         KisBrushResourceServer* server = KisBrushServer::instance()->brushServer();
         Q_FOREACH (KisBrushSP res, server->resources()) {
-            resources << new Resource(res.data());
+            resources[res->name()] = new Resource(res.data());
         }
     }
     else if (type == "preset") {
         KisPaintOpPresetResourceServer* server = KisResourceServerProvider::instance()->paintOpPresetServer();
         Q_FOREACH (KisPaintOpPresetSP res, server->resources()) {
-            resources << new Resource(res.data());
+            resources[res->name()] = new Resource(res.data());
         }
     }
     else if (type == "palette") {
         KoResourceServer<KoColorSet>* server = KoResourceServerProvider::instance()->paletteServer();
         Q_FOREACH (KoResource *res, server->resources()) {
-            resources << new Resource(res);
+            resources[res->name()] = new Resource(res);
         }
     }
     else if (type == "workspace") {
         KoResourceServer< KisWorkspaceResource >* server = KisResourceServerProvider::instance()->workspaceServer();
         Q_FOREACH (KoResource *res, server->resources()) {
-            resources << new Resource(res);
+            resources[res->name()] = new Resource(res);
         }
     }
     return resources;
-}
-
-bool Krita::closeApplication()
-{
-    qDebug() << "closeApplication called";
-    return false;
 }
 
 Document* Krita::createDocument(int width, int height, const QString &name, const QString &colorModel, const QString &colorDepth, const QString &profile)

@@ -21,6 +21,7 @@
 #include <QDomElement>
 #include <QScopedPointer>
 
+#include "kis_vec.h"
 #include "kis_paintop.h"
 #include "kis_algebra_2d.h"
 #include "kis_lod_transform.h"

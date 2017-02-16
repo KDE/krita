@@ -9,6 +9,7 @@
 %Import QtXml/QtXmlmod.sip
 %Import QtWidgets/QtWidgetsmod.sip
 
+%Include Conversions.sip
 %Include Action.sip
 %Include Canvas.sip
 %Include Channel.sip
@@ -27,5 +28,6 @@
 %Include Resource.sip
 %Include Selection.sip
 %Include ViewExtension.sip
+%Include PresetChooser.sip
 
 %Include KisCubicCurve.sip

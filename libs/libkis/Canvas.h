@@ -49,6 +49,7 @@ public Q_SLOTS:
 
     bool mirror() const;
     void setMirror(bool value);
+
 private:
     struct Private;
     Private *const d;

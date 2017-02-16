@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2016 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2017 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -15,52 +15,43 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef LIBKIS_RESOURCE_H
-#define LIBKIS_RESOURCE_H
+#ifndef PRESETCHOOSER_H
+#define PRESETCHOOSER_H
 
 #include <QObject>
-#include <kis_types.h>
+#include <QWidget>
+
+#include <kis_preset_chooser.h>
+
 #include "kritalibkis_export.h"
 #include "libkis.h"
 
-
-class KoResource;
+class Resource;
 
 /**
- * Resource
+ * @brief The PresetChooser widget provides
  */
-class KRITALIBKIS_EXPORT Resource : public QObject
+class KRITALIBKIS_EXPORT PresetChooser : public KisPresetChooser
 {
     Q_OBJECT
-
 public:
-    explicit Resource(KoResource *resource, QObject *parent = 0);
-    virtual ~Resource();
+    PresetChooser(QWidget *parent = 0);
+    virtual ~PresetChooser() {}
 
 public Q_SLOTS:
-    
-    QString type() const;
 
-    QString name() const;
-    void setName(QString value);
+    void setCurrentPreset(Resource *resource);
+    Resource *currentPreset() const;
 
-    QString filename() const;
+Q_SIGNALS:
 
-    QImage image() const;
-    void setImage(QImage image);
+    void presetSelected(Resource *resource);
+    void presetClicked(Resource *resource);
 
-    QByteArray data() const;
-    bool setData(QByteArray data);
+private Q_SLOTS:
 
-private:
-
-    friend class PresetChooser;
-    friend class View;
-    KoResource *resource() const;
-
-    struct Private;
-    const Private *const d;
-
+    void slotResourceSelected(KoResource *resource);
+    void slotResourceClicked(KoResource *resource);
 };
 
-#endif // LIBKIS_RESOURCE_H
+#endif // PRESETCHOOSER_H

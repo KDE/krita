@@ -370,8 +370,12 @@ void KoMarker::applyShapeStroke(KoShape *parentShape, KoShapeStroke *stroke, con
 
         // Unwrap the gradient to work in global mode
         if (g->coordinateMode() == QGradient::ObjectBoundingMode) {
-            const QRectF boundingRect =
-                    KisAlgebra2D::ensureRectNotSmaller(parentShape->outline().boundingRect(), QSizeF(1.0, 1.0));
+            QRectF boundingRect =
+                parentShape ?
+                parentShape->outline().boundingRect() :
+                this->boundingRect(strokeWidth, nodeAngle);
+
+            boundingRect = KisAlgebra2D::ensureRectNotSmaller(boundingRect, QSizeF(1.0, 1.0));
 
             gradientToUser = QTransform(boundingRect.width(), 0, 0, boundingRect.height(),
                                         boundingRect.x(), boundingRect.y());

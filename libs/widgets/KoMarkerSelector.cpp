@@ -68,7 +68,10 @@ void KoMarkerSelector::paintEvent(QPaintEvent *pe)
         painter.setRenderHint(QPainter::Antialiasing, true);
     }
 
-    QPen pen(option.palette.text(), 2);
+    if (!(option.state & QStyle::State_Enabled)) {
+        painter.setOpacity(0.5);
+    }
+    QPen pen(Qt::black, 2);
     KoMarker *marker = itemData(currentIndex(), Qt::DecorationRole).value<KoMarker*>();
     KoMarkerItemDelegate::drawMarkerPreview(&painter, rect, pen, marker, d->model->position());
 

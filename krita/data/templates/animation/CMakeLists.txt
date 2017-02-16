@@ -10,6 +10,7 @@ install( FILES
 DESTINATION ${DATA_INSTALL_DIR}/krita/templates/animation/.source)
 
 install( FILES  
+    .directory
     Anim-Jp-EN.desktop 
     Anim-Jp-JP.desktop
 DESTINATION ${DATA_INSTALL_DIR}/krita/templates/animation)

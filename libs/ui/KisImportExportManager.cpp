@@ -137,8 +137,7 @@ KisImportExportFilter *KisImportExportManager::filterForMimeType(const QString &
 {
     int weight = -1;
     KisImportExportFilter *filter = 0;
-    KoJsonTrader trader;
-    QList<QPluginLoader *>list = trader.query("Krita/FileFilter", "");
+    QList<QPluginLoader *>list = KoJsonTrader::instance()->query("Krita/FileFilter", "");
     Q_FOREACH(QPluginLoader *loader, list) {
         QJsonObject json = loader->metaData().value("MetaData").toObject();
         QString directionKey = direction == Export ? "X-KDE-Export" : "X-KDE-Import";
@@ -172,7 +171,8 @@ KisImportExportFilter *KisImportExportManager::filterForMimeType(const QString &
         }
     }
     qDeleteAll(list);
-    filter->setMimeType(mimetype);
+    if( filter )
+        filter->setMimeType(mimetype);
     return filter;
 }
 

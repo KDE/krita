@@ -21,8 +21,6 @@
 
 #include <QtTest>
 
-#include "kis_types.h"
-
 class KisCloneOpTest : public QObject
 {
     Q_OBJECT

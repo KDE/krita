@@ -43,7 +43,7 @@ public:
     QMap<QString, KisExportCheckBase*> capabilities;
 
     Private()
-        : updater(0)
+        : updater(0), mime("")
         , batchmode(false)
     {}
 
@@ -63,7 +63,7 @@ KisImportExportFilter::KisImportExportFilter(QObject *parent)
 
 KisImportExportFilter::~KisImportExportFilter()
 {
-    Q_ASSERT(d->updater);
+    //Q_ASSERT(d->updater);
     if (d->updater) {
         d->updater->setProgress(100);
     }

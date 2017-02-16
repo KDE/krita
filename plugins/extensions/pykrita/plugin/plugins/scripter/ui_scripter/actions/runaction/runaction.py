@@ -25,20 +25,16 @@ class RunAction(QAction):
         return 'toolBar'
 
     def run(self):
-        document = self.scripter.uicontroller.invokeAction('save')
-
-        if document:
-            stdout = sys.stdout
-            stderr = sys.stderr
-            output = docwrapper.DocWrapper(self.output.document())
-            output.write("======================================\n")
-            sys.stdout = output
-            sys.stderr = output
-            script = self.editor.document().toPlainText()
-            try:
-                bc = compile(document.data, document.filePath, "exec")
-                exec(bc)
-            except Exception as e:
-                self.scripter.uicontroller.showException(str(e))
-            sys.stdout = stdout
-            sys.stderr = stderr
+        stdout = sys.stdout
+        stderr = sys.stderr
+        output = docwrapper.DocWrapper(self.output.document())
+        output.write("======================================\n")
+        sys.stdout = output
+        sys.stderr = output
+        script = self.editor.document().toPlainText()
+        try:
+            exec(script)
+        except Exception as e:
+            self.scripter.uicontroller.showException(str(e))
+        sys.stdout = stdout
+        sys.stderr = stderr

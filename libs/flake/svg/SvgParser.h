@@ -96,6 +96,8 @@ protected:
     qreal parseUnitY(const QString &unit);
     /// parses a length attribute in xy-direction
     qreal parseUnitXY(const QString &unit);
+    /// parses a angular attribute values, result in radians
+    qreal parseAngular(const QString &unit);
 
     KoShape *createObjectDirect(const KoXmlElement &b);
 

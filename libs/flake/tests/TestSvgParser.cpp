@@ -3149,4 +3149,57 @@ void TestSvgParser::testGradientRecoveringTrasnform()
     //image.save("gradient_recovering_transform.png");
 }
 
+void TestSvgParser::testMarkersAngularUnits()
+{
+    const QString data =
+            "<svg width=\"30px\" height=\"30px\""
+            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+
+            // start
+            "<marker id=\"SimpleRectMarker1\""
+            "    orient=\"45deg\" refY=\"12.5\" refX=\"12.5\" >"
+
+            "    <rect id=\"markerRect\" x=\"10\" y=\"10\" width=\"5\" height=\"5\""
+            "        fill=\"red\" stroke=\"none\"/>"
+            "    <rect id=\"markerRect\" x=\"14\" y=\"12\" width=\"1\" height=\"1\""
+            "        fill=\"yellow\" stroke=\"none\"/>"
+            "    <rect id=\"markerRect\" x=\"12\" y=\"12\" width=\"1\" height=\"1\""
+            "        fill=\"white\" stroke=\"none\"/>"
+            "</marker>"
+
+            // end
+            "<marker id=\"SimpleRectMarker2\""
+            "    orient=\"200grad\" refY=\"12.5\" refX=\"12.5\" >"
+
+            "    <rect id=\"markerRect\" x=\"10\" y=\"10\" width=\"5\" height=\"5\""
+            "        fill=\"green\" stroke=\"none\"/>"
+            "    <rect id=\"markerRect\" x=\"14\" y=\"12\" width=\"1\" height=\"1\""
+            "        fill=\"yellow\" stroke=\"none\"/>"
+            "    <rect id=\"markerRect\" x=\"12\" y=\"12\" width=\"1\" height=\"1\""
+            "        fill=\"white\" stroke=\"none\"/>"
+            "</marker>"
+
+            // mid
+            "<marker id=\"SimpleRectMarker3\""
+            "    orient=\"-1.57rad\" refY=\"12.5\" refX=\"12.5\" >"
+
+            "    <rect id=\"markerRect\" x=\"10\" y=\"10\" width=\"5\" height=\"5\""
+            "        fill=\"blue\" stroke=\"none\"/>"
+            "    <rect id=\"markerRect\" x=\"14\" y=\"12\" width=\"1\" height=\"1\""
+            "        fill=\"yellow\" stroke=\"none\"/>"
+            "    <rect id=\"markerRect\" x=\"12\" y=\"12\" width=\"1\" height=\"1\""
+            "        fill=\"white\" stroke=\"none\"/>"
+            "</marker>"
+
+            "<path id=\"testRect\""
+            "    style=\"fill:none;stroke:#000000;stroke-width:1px;marker-start:url(#SimpleRectMarker1);marker-end:url(#SimpleRectMarker2);marker-mid:url(#SimpleRectMarker3)\""
+            "    d=\"M5,15 C5,5 25,5 25,15 L15,25\"/>"
+
+            "</svg>";
+
+    SvgRenderTester t (data);
+
+    t.test_standard_30px_72ppi("markers_angular_units", false);
+}
+
 QTEST_MAIN(TestSvgParser)

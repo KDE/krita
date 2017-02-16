@@ -213,6 +213,12 @@ qreal SvgParser::parseUnitXY(const QString &unit)
     return SvgUtil::parseUnitXY(m_context.currentGC(), unit);
 }
 
+qreal SvgParser::parseAngular(const QString &unit)
+{
+    return SvgUtil::parseUnitAngular(m_context.currentGC(), unit);
+}
+
+
 SvgGradientHelper* SvgParser::parseGradient(const KoXmlElement &e)
 {
     // IMPROVEMENTS:
@@ -551,8 +557,7 @@ bool SvgParser::parseMarker(const KoXmlElement &e)
     if (orientation == "auto") {
         marker->setAutoOrientation(true);
     } else {
-        // TODO: special angular values!
-        marker->setExplicitOrientation(kisDegreesToRadians(parseUnitXY(orientation)));
+        marker->setExplicitOrientation(parseAngular(orientation));
     }
 
     // ensure that the clip path is loaded in local coordinates system

@@ -102,6 +102,9 @@ public:
     /// parses a length attribute in xy-direction
     static qreal parseUnitXY(SvgGraphicsContext *gc, const QString &unit);
 
+    /// parses angle, result in *radians*!
+    static qreal parseUnitAngular(SvgGraphicsContext *gc, const QString &unit);
+
     /// parses the number into parameter number
     static const char * parseNumber(const char *ptr, qreal &number);
 

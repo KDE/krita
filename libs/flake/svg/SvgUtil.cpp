@@ -31,6 +31,7 @@
 
 #include <math.h>
 #include "kis_debug.h"
+#include "kis_global.h"
 
 #include "kis_dom_utils.h"
 
@@ -301,6 +302,37 @@ qreal SvgUtil::parseUnitXY(SvgGraphicsContext *gc, const QString &unit)
     } else {
         return SvgUtil::parseUnit(gc, unit, true, true, gc->currentBoundingBox);
     }
+}
+
+qreal SvgUtil::parseUnitAngular(SvgGraphicsContext *gc, const QString &unit)
+{
+    Q_UNUSED(gc);
+
+    qreal value = 0.0;
+
+    if (unit.isEmpty()) return value;
+    QByteArray unitLatin1 = unit.toLower().toLatin1();
+
+    const char *start = unitLatin1.data();
+    if (!start) return value;
+
+    const char *end = parseNumber(start, value);
+
+    if (int(end - start) < unit.length()) {
+        if (unit.right(3) == "deg") {
+            value = kisDegreesToRadians(value);
+        } else if (unit.right(4) == "grad") {
+            value *= M_PI / 200;
+        } else if (unit.right(3) == "rad") {
+            // noop!
+        } else {
+            value = kisDegreesToRadians(value);
+        }
+    } else {
+        value = kisDegreesToRadians(value);
+    }
+
+    return value;
 }
 
 const char * SvgUtil::parseNumber(const char *ptr, qreal &number)

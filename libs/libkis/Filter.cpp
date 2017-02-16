@@ -39,7 +39,6 @@ Filter::Filter()
 
 Filter::~Filter() 
 {
-    qDebug() << "Deleting filter" << d->name;
     delete d->configuration;
     delete d;
 }
@@ -95,11 +94,7 @@ bool Filter::apply(Node *node, int x, int y, int w, int h)
         image->unlock();
         image->initialRefreshGraph();
     }
-
-    qDebug() << "filter applied!" << filter->changedRect(QRect(x, y, w, h), config, 0);
-
     return true;
-
 }
 
 

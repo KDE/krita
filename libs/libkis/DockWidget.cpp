@@ -46,7 +46,6 @@ Canvas* DockWidget::canvas() const
 
 void DockWidget::setCanvas(KoCanvasBase* canvas)
 {
-    qDebug() << "New canvas" << canvas;
     delete d->canvas;
     d->canvas = new Canvas(canvas);
     canvasChanged(d->canvas);

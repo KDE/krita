@@ -28,5 +28,4 @@ ViewExtension::ViewExtension(QObject* parent)
 
 ViewExtension::~ViewExtension()
 {
-    qDebug() << "deleting View Extension";
 }

@@ -413,7 +413,7 @@ void KoPathTool::breakAtSegment()
         }
     }
 }
-
+#include <KoShapeStrokeModel.h>
 void KoPathTool::paint(QPainter &painter, const KoViewConverter &converter)
 {
     Q_D(KoToolBase);
@@ -428,6 +428,11 @@ void KoPathTool::paint(QPainter &painter, const KoViewConverter &converter)
             parameterShape->paintHandles(helper);
         } else {
             shape->paintPoints(helper);
+        }
+
+        if (!shape->stroke() || !shape->stroke()->isVisible()) {
+            helper.setHandleStyle(KisHandleStyle::secondarySelection());
+            helper.drawPath(shape->outline());
         }
     }
 

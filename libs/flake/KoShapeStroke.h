@@ -108,6 +108,7 @@ public:
 
     virtual bool compareFillTo(const KoShapeStrokeModel *other);
     virtual bool compareStyleTo(const KoShapeStrokeModel *other);
+    virtual bool isVisible() const;
 
 private:
     class Private;

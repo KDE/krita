@@ -88,6 +88,7 @@ public:
 
     virtual bool compareFillTo(const KoShapeStrokeModel *other) = 0;
     virtual bool compareStyleTo(const KoShapeStrokeModel *other) = 0;
+    virtual bool isVisible() const = 0;
 
     /**
      * Increments the use-value.

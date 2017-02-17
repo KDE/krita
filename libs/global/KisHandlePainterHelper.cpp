@@ -263,3 +263,13 @@ void KisHandlePainterHelper::drawConnectionLine(const QPointF &p1, const QPointF
         m_painter->drawLine(realP1, realP2);
     }
 }
+
+void KisHandlePainterHelper::drawPath(const QPainterPath &path)
+{
+    const QPainterPath realPath = m_painterTransform.map(path);
+
+    Q_FOREACH (KisHandleStyle::IterationStyle it, m_handleStyle.lineIterations) {
+        PenBrushSaver saver(it.isValid ? m_painter : 0, it.stylePair, PenBrushSaver::allow_noop);
+        m_painter->drawPath(realPath);
+    }
+}

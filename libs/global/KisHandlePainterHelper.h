@@ -134,6 +134,11 @@ public:
      */
     void drawConnectionLine(const QPointF &p1, const QPointF &p2);
 
+    /**
+     * Draw an arbitrary path
+     */
+    void drawPath(const QPainterPath &path);
+
 private:
 
     /**

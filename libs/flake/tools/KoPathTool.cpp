@@ -50,6 +50,7 @@
 #include "KoSnapGuide.h"
 #include "KoShapeController.h"
 #include "kis_action_registry.h"
+#include <KisHandlePainterHelper.h>
 
 #include <KoIcon.h>
 
@@ -416,23 +417,18 @@ void KoPathTool::breakAtSegment()
 void KoPathTool::paint(QPainter &painter, const KoViewConverter &converter)
 {
     Q_D(KoToolBase);
-    painter.setRenderHint(QPainter::Antialiasing, true);
-    // use different colors so that it is also visible on a background of the same color
-    painter.setBrush(Qt::white);
-    painter.setPen(Qt::blue);
 
     Q_FOREACH (KoPathShape *shape, m_pointSelection.selectedShapes()) {
-        painter.save();
-        painter.setTransform(shape->absoluteTransformation(&converter) * painter.transform());
+        KisHandlePainterHelper helper =
+            KoShape::createHandlePainterHelper(&painter, shape, converter, m_handleRadius);
+        helper.setHandleStyle(KisHandleStyle::primarySelection());
 
         KoParameterShape * parameterShape = dynamic_cast<KoParameterShape*>(shape);
         if (parameterShape && parameterShape->isParametricShape()) {
-            parameterShape->paintHandles(painter, converter, m_handleRadius);
+            parameterShape->paintHandles(helper);
         } else {
-            shape->paintPoints(painter, converter, m_handleRadius);
+            shape->paintPoints(helper);
         }
-
-        painter.restore();
     }
 
     if (m_currentStrategy) {
@@ -441,17 +437,11 @@ void KoPathTool::paint(QPainter &painter, const KoViewConverter &converter)
         painter.restore();
     }
 
-    painter.setBrush(Qt::green);
-    painter.setPen(Qt::blue);
-
-    m_pointSelection.paint(painter, converter);
-
-    painter.setBrush(Qt::red);
-    painter.setPen(Qt::blue);
+    m_pointSelection.paint(painter, converter, m_handleRadius);
 
     if (m_activeHandle) {
         if (m_activeHandle->check(m_pointSelection.selectedShapes())) {
-            m_activeHandle->paint(painter, converter);
+            m_activeHandle->paint(painter, converter, m_handleRadius);
         } else {
             delete m_activeHandle;
             m_activeHandle = 0;

@@ -21,9 +21,13 @@
 
 #include "kritaglobal_export.h"
 
+#include <QPen>
+#include <QBrush>
+
 class QPainter;
 class QRegion;
 class QRect;
+class QPen;
 
 namespace KisPaintingTweaks {
 
@@ -40,6 +44,53 @@ namespace KisPaintingTweaks {
      * \see safeClipRegion()
      */
     KRITAGLOBAL_EXPORT QRect safeClipBoundingRect(const QPainter &painter);
+
+    KRITAGLOBAL_EXPORT void initAntsPen(QPen *antsPen, QPen *outlinePen,
+                                        int antLength = 4, int antSpace = 4);
+
+
+    /**
+     * A special class to save painter->pen() and painter->brush() using RAII
+     * principle.
+     */
+    class KRITAGLOBAL_EXPORT PenBrushSaver
+    {
+    public:
+        struct allow_noop_t { explicit allow_noop_t() = default; };
+        static constexpr allow_noop_t	allow_noop { };
+
+        /**
+         * Saves pen and brush state of the provided painter object. \p painter cannot be null.
+         */
+        PenBrushSaver(QPainter *painter);
+
+        /**
+         * Overrides pen and brush of \p painter with the provided values. \p painter cannot be null.
+         */
+        PenBrushSaver(QPainter *painter, const QPen &pen, const QBrush &brush);
+
+        /**
+         * Overrides pen and brush of \p painter with the provided values. \p painter cannot be null.
+         */
+        PenBrushSaver(QPainter *painter, const QPair<QPen, QBrush> &pair);
+
+        /**
+         * A special contructor of PenBrushSaver that allows \p painter to be null. Passing null
+         * pointer will basically mean that the whole saver existance will be a noop.
+         */
+        PenBrushSaver(QPainter *painter, const QPair<QPen, QBrush> &pair, allow_noop_t);
+
+        /**
+         * Restores the state of the painter that has been saved during the construction of the saver
+         */
+        ~PenBrushSaver();
+
+    private:
+        PenBrushSaver(const PenBrushSaver &rhs) = delete;
+        QPainter *m_painter;
+        QPen m_pen;
+        QBrush m_brush;
+    };
 }
 
 #endif /* __KIS_PAINTING_TWEAKS_H */

@@ -35,6 +35,7 @@
 #include <KoPathPointMergeCommand.h>
 #include <KoShapePaintingContext.h>
 #include <widgets/KoStrokeConfigWidget.h>
+#include <KisHandlePainterHelper.h>
 
 #include <klocalizedstring.h>
 
@@ -93,15 +94,11 @@ void KoPencilTool::paint(QPainter &painter, const KoViewConverter &converter)
     }
 
     if (m_hoveredPoint) {
-        painter.save();
-        painter.setTransform(m_hoveredPoint->parent()->absoluteTransformation(&converter), true);
-        KoShape::applyConversion(painter, converter);
+        KisHandlePainterHelper helper =
+            KoShape::createHandlePainterHelper(&painter, m_hoveredPoint->parent(), converter, handleRadius());
 
-        painter.setPen(QPen(Qt::blue, 0));      //TODO make configurable
-        painter.setBrush(Qt::white);   //TODO make configurable
-        m_hoveredPoint->paint(painter, handleRadius(), KoPathPoint::Node);
-
-        painter.restore();
+        helper.setHandleStyle(KisHandleStyle::primarySelection());
+        m_hoveredPoint->paint(helper, KoPathPoint::Node);
     }
 }
 

@@ -31,6 +31,7 @@ class QPointF;
 class QTransform;
 class QRectF;
 class QPainter;
+class KisHandlePainterHelper;
 
 /**
  * @brief A KoPathPoint represents a point in a path.
@@ -213,7 +214,7 @@ public:
      * @param active If true only the given active points are painted
      *               If false all given points are used.
      */
-    void paint(QPainter &painter, int handleRadius, PointTypes types, bool active = true);
+    void paint(KisHandlePainterHelper &handlesHelper, PointTypes types, bool active = true);
 
     /**
      * @brief Sets the parent path shape.

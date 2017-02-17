@@ -21,6 +21,8 @@
 #include "KoParameterShape.h"
 #include "KoParameterShape_p.h"
 
+#include <KisHandlePainterHelper.h>
+
 #include <QPainter>
 #include <FlakeDebug.h>
 
@@ -88,42 +90,20 @@ QPointF KoParameterShape::handlePosition(int handleId) const
     return d->handles.value(handleId);
 }
 
-void KoParameterShape::paintHandles(QPainter & painter, const KoViewConverter & converter, int handleRadius)
+void KoParameterShape::paintHandles(KisHandlePainterHelper &handlesHelper)
 {
     Q_D(KoParameterShape);
-    applyConversion(painter, converter);
-
-    QTransform worldMatrix = painter.worldTransform();
-    painter.setTransform(QTransform());
-
-    QTransform matrix;
-    matrix.rotate(45.0);
-    QPolygonF poly(d->handleRect(QPointF(0, 0), handleRadius));
-    poly = matrix.map(poly);
 
     QList<QPointF>::const_iterator it(d->handles.constBegin());
     for (; it != d->handles.constEnd(); ++it) {
-        QPointF moveVector = worldMatrix.map(*it);
-        poly.translate(moveVector.x(), moveVector.y());
-        painter.drawPolygon(poly);
-        poly.translate(-moveVector.x(), -moveVector.y());
+        handlesHelper.drawGradientHandle(*it);
     }
 }
 
-void KoParameterShape::paintHandle(QPainter & painter, const KoViewConverter & converter, int handleId, int handleRadius)
+void KoParameterShape::paintHandle(KisHandlePainterHelper &handlesHelper, int handleId)
 {
     Q_D(KoParameterShape);
-    applyConversion(painter, converter);
-
-    QTransform worldMatrix = painter.worldTransform();
-    painter.setTransform(QTransform());
-
-    QTransform matrix;
-    matrix.rotate(45.0);
-    QPolygonF poly(d->handleRect(QPointF(0, 0), handleRadius));
-    poly = matrix.map(poly);
-    poly.translate(worldMatrix.map(d->handles[handleId]));
-    painter.drawPolygon(poly);
+    handlesHelper.drawGradientHandle(d->handles[handleId]);
 }
 
 void KoParameterShape::setSize(const QSizeF &newSize)

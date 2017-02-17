@@ -51,6 +51,7 @@
 #include <KoConnectionShapeConfigWidget.h>
 #include <KoPathConnectionPointStrategy.h>
 #include <KoStrokeConfigWidget.h>
+#include <KisHandlePainterHelper.h>
 
 #include <KoIcon.h>
 #include "kis_action_registry.h"
@@ -217,12 +218,9 @@ void ConnectionTool::paint(QPainter &painter, const KoViewConverter &converter)
             int radius = handleRadius() + 1;
             int handleCount = connectionShape->handleCount();
             for (int i = 0; i < handleCount; ++i) {
-                painter.save();
-                painter.setPen(Qt::blue);
-                painter.setBrush(i == m_activeHandle ? Qt::red : Qt::white);
-                painter.setTransform(connectionShape->absoluteTransformation(&converter) * painter.transform());
-                connectionShape->paintHandle(painter, converter, i, radius);
-                painter.restore();
+                KisHandlePainterHelper helper = KoShape::createHandlePainterHelper(&painter, connectionShape, converter, radius);
+                helper.setHandleStyle(i == m_activeHandle ? KisHandleStyle::highlightedPrimaryHandles() : KisHandleStyle::primarySelection());
+                connectionShape->paintHandle(helper, i);
             }
         }
     }

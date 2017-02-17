@@ -26,7 +26,7 @@
 #include "kis_coordinates_converter.h"
 #include "tool_transform_args.h"
 #include "transform_transaction_properties.h"
-#include "krita_utils.h"
+#include "kis_painting_tweaks.h"
 #include "kis_cursor.h"
 #include "kis_transform_utils.h"
 #include "kis_algebra_2d.h"
@@ -209,7 +209,7 @@ void KisWarpTransformStrategy::drawConnectionLines(QPainter &gc,
     QPen antsPen;
     QPen outlinePen;
 
-    KritaUtils::initAntsPen(&antsPen, &outlinePen);
+    KisPaintingTweaks::initAntsPen(&antsPen, &outlinePen);
 
     const int numPoints = origPoints.size();
 

@@ -59,7 +59,7 @@ class KoShapeAnchor;
 class KoBorder;
 struct KoInsets;
 class KoShapeBackground;
-
+class KisHandlePainterHelper;
 
 
 /**
@@ -903,6 +903,13 @@ public:
      * @param converter the converter for the current views zoom.
      */
     static void applyConversion(QPainter &painter, const KoViewConverter &converter);
+
+    /**
+     * A convenience method that creates a handles helper with applying transformations at
+     * the same time. Please note that you shouldn't save/restore additionally. All the work
+     * on restoring original painter's transformations is done by the helper.
+     */
+    static KisHandlePainterHelper createHandlePainterHelper(QPainter *painter, KoShape *shape, const KoViewConverter &converter, qreal handleRadius = 0.0);
 
     /**
      * @brief Transforms point from shape coordinates to document coordinates

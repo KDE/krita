@@ -33,6 +33,7 @@
 #include "kis_int_parse_spin_box.h"
 #include <KoColor.h>
 #include "kis_canvas_resource_provider.h"
+#include <KisHandlePainterHelper.h>
 
 #include <klocalizedstring.h>
 
@@ -62,52 +63,35 @@ void KoCreatePathTool::paint(QPainter &painter, const KoViewConverter &converter
         paintPath(*(d->shape), painter, converter);
         painter.restore();
 
-        painter.save();
+        KisHandlePainterHelper helper =
+            KoShape::createHandlePainterHelper(&painter, d->shape, converter, d->handleRadius);
 
-        painter.setTransform(d->shape->absoluteTransformation(&converter) * painter.transform());
+        const bool firstPointActive = d->firstPoint == d->activePoint;
 
-        KoShape::applyConversion(painter, converter);
-
-        QPen pen(QBrush(Qt::blue), 1);
-        pen.setCosmetic(true);
-        painter.setPen(pen);
-        painter.setBrush(Qt::white);
-
-        const bool firstPoint = (d->firstPoint == d->activePoint);
-
-        if (d->pointIsDragged || firstPoint) {
+        if (d->pointIsDragged || firstPointActive) {
             const bool onlyPaintActivePoints = false;
             KoPathPoint::PointTypes paintFlags = KoPathPoint::ControlPoint2;
 
             if (d->activePoint->activeControlPoint1()) {
                 paintFlags |= KoPathPoint::ControlPoint1;
             }
-            d->activePoint->paint(painter, d->handleRadius, paintFlags, onlyPaintActivePoints);
+
+            helper.setHandleStyle(KisHandleStyle::highlightedPrimaryHandles());
+            d->activePoint->paint(helper, paintFlags, onlyPaintActivePoints);
         }
 
-
-        // check if we have to color the first point
-        if (d->mouseOverFirstPoint) {
-            painter.setBrush(Qt::red);
-        } else {
-            painter.setBrush(Qt::white);
+        if (!firstPointActive) {
+            helper.setHandleStyle(d->mouseOverFirstPoint ?
+                                      KisHandleStyle::highlightedPrimaryHandles() :
+                                      KisHandleStyle::primarySelection());
+            d->firstPoint->paint(helper, KoPathPoint::Node);
         }
-
-        d->firstPoint->paint(painter, d->handleRadius, KoPathPoint::Node);
-
-        painter.restore();
     }
 
     if (d->hoveredPoint) {
-        painter.save();
-        painter.setTransform(d->hoveredPoint->parent()->absoluteTransformation(&converter), true);
-        KoShape::applyConversion(painter, converter);
-        QPen pen(QBrush(Qt::blue), 1);
-        pen.setCosmetic(true);
-        painter.setPen(pen);
-        painter.setBrush(Qt::white);
-        d->hoveredPoint->paint(painter, d->handleRadius, KoPathPoint::Node);
-        painter.restore();
+        KisHandlePainterHelper helper = KoShape::createHandlePainterHelper(&painter, d->hoveredPoint->parent(), converter, d->handleRadius);
+        helper.setHandleStyle(KisHandleStyle::highlightedPrimaryHandles());
+        d->hoveredPoint->paint(helper, KoPathPoint::Node);
     }
 
     painter.save();

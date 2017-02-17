@@ -22,7 +22,7 @@
 #include <QPointF>
 #include <QPainter>
 
-#include "krita_utils.h"
+#include "kis_painting_tweaks.h"
 #include "kis_cursor.h"
 #include <kis_cage_transform_worker.h>
 
@@ -64,7 +64,7 @@ void KisCageTransformStrategy::drawConnectionLines(QPainter &gc,
     QPen antsPen;
     QPen outlinePen;
 
-    KritaUtils::initAntsPen(&antsPen, &outlinePen);
+    KisPaintingTweaks::initAntsPen(&antsPen, &outlinePen);
 
     const int iterateLimit = isEditingPoints ? numPoints : numPoints + 1;
 

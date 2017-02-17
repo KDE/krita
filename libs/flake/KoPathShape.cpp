@@ -461,18 +461,16 @@ void KoPathShapePrivate::debugPath() const
 }
 #endif
 
-void KoPathShape::paintPoints(QPainter &painter, const KoViewConverter &converter, int handleRadius)
+void KoPathShape::paintPoints(KisHandlePainterHelper &handlesHelper)
 {
     Q_D(KoPathShape);
-
-    applyConversion(painter, converter);
 
     KoSubpathList::const_iterator pathIt(d->subpaths.constBegin());
 
     for (; pathIt != d->subpaths.constEnd(); ++pathIt) {
         KoSubpath::const_iterator it((*pathIt)->constBegin());
         for (; it != (*pathIt)->constEnd(); ++it)
-            (*it)->paint(painter, handleRadius, KoPathPoint::Node);
+            (*it)->paint(handlesHelper, KoPathPoint::Node);
     }
 }
 

@@ -46,9 +46,6 @@ namespace KritaUtils
                                              const QVector<QPointF> &points);
     QRegion KRITAIMAGE_EXPORT splitPath(const QPainterPath &path);
 
-    void KRITAIMAGE_EXPORT initAntsPen(QPen *antsPen, QPen *outlinePen,
-                                       int antLength = 4, int antSpace = 4);
-
     QString KRITAIMAGE_EXPORT prettyFormatReal(qreal value);
 
     qreal KRITAIMAGE_EXPORT maxDimensionPortion(const QRectF &bounds, qreal portion, qreal minValue);

@@ -76,7 +76,7 @@ public:
     void setShowStrokeFillGradientHandles(bool value);
 
 private:
-    void paintGradientHandles(KoShape *shape, KoFlake::FillVariant fillVariant, QPainter &painter, QPen pen);
+    void paintGradientHandles(KoShape *shape, KoFlake::FillVariant fillVariant, QPainter &painter, const KoViewConverter &converter);
 
 private:
     KoFlake::AnchorPosition m_hotPosition;

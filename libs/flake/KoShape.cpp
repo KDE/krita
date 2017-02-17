@@ -74,6 +74,7 @@
 
 #include <limits>
 #include "KoOdfGradientBackground.h"
+#include <KisHandlePainterHelper.h>
 
 // KoShapePrivate
 
@@ -2169,6 +2170,17 @@ void KoShape::applyConversion(QPainter &painter, const KoViewConverter &converte
     qreal zoomX, zoomY;
     converter.zoom(&zoomX, &zoomY);
     painter.scale(zoomX, zoomY);
+}
+
+KisHandlePainterHelper KoShape::createHandlePainterHelper(QPainter *painter, KoShape *shape, const KoViewConverter &converter, qreal handleRadius)
+{
+    const QTransform originalPainterTransform = painter->transform();
+
+    painter->setTransform(shape->absoluteTransformation(&converter) * painter->transform());
+    KoShape::applyConversion(*painter, converter);
+
+    // move c-tor
+    return KisHandlePainterHelper(painter, originalPainterTransform, handleRadius);
 }
 
 QPointF KoShape::shapeToDocument(const QPointF &point) const

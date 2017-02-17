@@ -32,6 +32,8 @@
 #include <KisQPainterStateSaver.h>
 #include "KoShapeGradientHandles.h"
 
+#include "kis_painting_tweaks.h"
+
 #define HANDLE_DISTANCE 10
 
 SelectionDecorator::SelectionDecorator(KoCanvasResourceManager *resourceManager)
@@ -69,19 +71,6 @@ void SelectionDecorator::setShowStrokeFillGradientHandles(bool value)
 
 void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &converter)
 {
-    QRectF handleArea;
-    KisQPainterStateSaver s(&painter);
-
-    // save the original painter transformation
-    QTransform painterMatrix = painter.worldTransform();
-
-    QPen pen;
-    //Use the #00adf5 color with 50% opacity
-    pen.setColor(QColor(0, 173, 245, 127));
-    pen.setWidth(m_lineWidth);
-    pen.setJoinStyle(Qt::RoundJoin);
-    painter.setPen(pen);
-
     const bool haveOnlyOneEditableShape = m_selection->selectedEditableShapes().size() == 1;
 
     bool editable = false;
@@ -90,11 +79,11 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
     if (selectedShapes.isEmpty()) return;
 
     foreach (KoShape *shape, KoShape::linearizeSubtree(selectedShapes)) {
-        painter.setWorldTransform(shape->absoluteTransformation(&converter) * painterMatrix);
-        KoShape::applyConversion(painter, converter);
-
         if (!haveOnlyOneEditableShape || !m_showStrokeFillGradientHandles) {
-            KisHandlePainterHelper helper(&painter);
+            KisHandlePainterHelper helper =
+                KoShape::createHandlePainterHelper(&painter, shape, converter, m_handleRadius);
+
+            helper.setHandleStyle(KisHandleStyle::secondarySelection());
             helper.drawRubberLine(shape->outlineRect());
         }
 
@@ -103,29 +92,27 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
         }
     }
 
-    handleArea = m_selection->outlineRect();
-    painter.setTransform(m_selection->absoluteTransformation(&converter) * painterMatrix);
-    KoShape::applyConversion(painter, converter);
+    const QRectF handleArea = m_selection->outlineRect();
 
     // draw extra rubber line around all the shapes
     if (selectedShapes.size() > 1) {
-        painter.setPen(Qt::blue);
+        KisHandlePainterHelper helper =
+            KoShape::createHandlePainterHelper(&painter, m_selection, converter, m_handleRadius);
 
-        KisHandlePainterHelper helper(&painter);
+        helper.setHandleStyle(KisHandleStyle::primarySelection());
         helper.drawRubberLine(handleArea);
-
     }
 
     // if we have no editable shape selected there
     // is no need drawing the selection handles
     if (editable) {
-        painter.setPen(pen);
-        painter.setBrush(Qt::white);
+        KisHandlePainterHelper helper =
+            KoShape::createHandlePainterHelper(&painter, m_selection, converter, m_handleRadius);
+        helper.setHandleStyle(KisHandleStyle::primarySelection());
 
         QPolygonF outline = handleArea;
 
         {
-            KisHandlePainterHelper helper(&painter, m_handleRadius);
             helper.drawHandleRect(outline.value(0));
             helper.drawHandleRect(outline.value(1));
             helper.drawHandleRect(outline.value(2));
@@ -135,9 +122,8 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
             helper.drawHandleRect(0.5 * (outline.value(2) + outline.value(3)));
             helper.drawHandleRect(0.5 * (outline.value(3) + outline.value(0)));
 
-            // draw the hot position
-            painter.setBrush(Qt::red);
             QPointF hotPos = KoFlake::anchorToPoint(m_hotPosition, handleArea);
+            helper.setHandleStyle(KisHandleStyle::highlightedPrimaryHandles());
             helper.drawHandleRect(hotPos);
         }
     }
@@ -146,35 +132,33 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
         KoShape *shape = selectedShapes.first();
 
         if (m_showFillGradientHandles) {
-            paintGradientHandles(shape, KoFlake::Fill, painter, pen);
+            paintGradientHandles(shape, KoFlake::Fill, painter, converter);
         } else if (m_showStrokeFillGradientHandles) {
-            paintGradientHandles(shape, KoFlake::StrokeFill, painter, pen);
+            paintGradientHandles(shape, KoFlake::StrokeFill, painter, converter);
         }
     }
 }
 
-void SelectionDecorator::paintGradientHandles(KoShape *shape, KoFlake::FillVariant fillVariant, QPainter &painter, QPen pen)
+void SelectionDecorator::paintGradientHandles(KoShape *shape, KoFlake::FillVariant fillVariant, QPainter &painter, const KoViewConverter &converter)
 {
     KoShapeGradientHandles gradientHandles(fillVariant, shape);
     QVector<KoShapeGradientHandles::Handle> handles = gradientHandles.handles();
 
-    KisHandlePainterHelper helper(&painter);
-    const QTransform t = shape->absoluteTransformation(0).inverted();
+    KisHandlePainterHelper helper =
+        KoShape::createHandlePainterHelper(&painter, shape, converter, m_handleRadius);
 
-    painter.setPen(pen);
-    painter.setBrush(Qt::white);
+    const QTransform t = shape->absoluteTransformation(0).inverted();
 
     if (gradientHandles.type() == QGradient::LinearGradient) {
         KIS_SAFE_ASSERT_RECOVER_NOOP(handles.size() == 2);
 
         if (handles.size() == 2) {
+            helper.setHandleStyle(KisHandleStyle::gradientArrows());
             helper.drawGradientArrow(t.map(handles[0].pos), t.map(handles[1].pos), 1.5 * m_handleRadius);
         }
     }
 
-    pen.setColor(QColor(255, 197, 39));
-    painter.setPen(pen);
-    painter.setBrush(Qt::white);
+    helper.setHandleStyle(KisHandleStyle::gradientHandles());
 
     Q_FOREACH (const KoShapeGradientHandles::Handle &h, handles) {
         if (h.type == KoShapeGradientHandles::Handle::RadialCenter) {

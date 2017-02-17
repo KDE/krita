@@ -135,8 +135,9 @@ public Q_SLOTS:
      * be registered with krita and be compatible with the current color model and depth; the image data
      * is <i>not</i> converted.
      * @param colorProfile
+     * @return if assigining the colorprofiel worked
      */
-    void setColorProfile(const QString &colorProfile);
+    bool setColorProfile(const QString &colorProfile);
 
     /**
      * @brief setColorSpace convert the node to the given colorspace
@@ -159,7 +160,7 @@ public Q_SLOTS:
      * </ul>
      * @param colorProfile a valid color profile for this color model and color depth combinatiojn.
      */
-    void setColorSpace(const QString &colorModel, const QString &colorDepth, const QString &colorProfile);
+    bool setColorSpace(const QString &colorModel, const QString &colorDepth, const QString &colorProfile);
 
     /**
      * @brief Krita layers can be animated, i.e., have frames.

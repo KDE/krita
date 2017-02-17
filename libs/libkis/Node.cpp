@@ -19,10 +19,14 @@
 #include <QScopedPointer>
 
 #include <KoColorSpace.h>
+#include <KoColorSpaceRegistry.h>
+#include <KoColorTransformation.h>
 
 #include <KisDocument.h>
 #include <KisMimeDatabase.h>
 #include <KisPart.h>
+#include <kis_change_profile_visitor.h>
+#include <kis_colorspace_convert_visitor.h>
 #include <kis_image.h>
 #include <kis_types.h>
 #include <kis_node.h>
@@ -185,14 +189,32 @@ QString Node::colorProfile() const
     return d->node->colorSpace()->profile()->name();
 }
 
-void Node::setColorProfile(const QString &colorProfile)
+bool Node::setColorProfile(const QString &colorProfile)
 {
-    // UNIMPLEMENTED
+    if (!d->node) return false;
+    if (!d->node->inherits("KisLayer")) return false;
+    KisLayer *layer = qobject_cast<KisLayer*>(d->node.data());
+    const KoColorProfile *profile = KoColorSpaceRegistry::instance()->profileByName(colorProfile);
+    const KoColorSpace *srcCS = layer->colorSpace();
+    const KoColorSpace *dstCs = KoColorSpaceRegistry::instance()->colorSpace(srcCS->colorModelId().id(),
+                                                                             srcCS->colorDepthId().id(),
+                                                                             profile);
+    KisChangeProfileVisitor v(srcCS, dstCs);
+    return layer->accept(v);
 }
 
-void Node::setColorSpace(const QString &colorModel, const QString &colorDepth, const QString &colorProfile)
+bool Node::setColorSpace(const QString &colorModel, const QString &colorDepth, const QString &colorProfile)
 {
-    // UNIMPLEMENTED
+    if (!d->node) return false;
+    if (!d->node->inherits("KisLayer")) return false;
+    KisLayer *layer = qobject_cast<KisLayer*>(d->node.data());
+    const KoColorProfile *profile = KoColorSpaceRegistry::instance()->profileByName(colorProfile);
+    const KoColorSpace *srcCS = layer->colorSpace();
+    const KoColorSpace *dstCs = KoColorSpaceRegistry::instance()->colorSpace(colorModel,
+                                                                             colorDepth,
+                                                                             profile);
+    KisColorSpaceConvertVisitor v(d->image, srcCS, dstCs, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
+    return layer->accept(v);
 }
 
 bool Node::animated() const

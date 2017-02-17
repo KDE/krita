@@ -25,7 +25,8 @@ public Q_SLOTS:
     void setColorLabel(int value);
     QString colorModel() const;
     QString colorProfile() const;
-    void setColorSpace(const QString &colorModel, const QString &colorDepth, const QString &colorProfile);
+    bool setColorProfile(const QString &colorProfile);
+    bool setColorSpace(const QString &colorModel, const QString &colorDepth, const QString &colorProfile);
     bool inheritAlpha() const;
     void setInheritAlpha(bool value);
     bool locked() const;

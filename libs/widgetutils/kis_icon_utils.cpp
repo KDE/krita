@@ -39,9 +39,9 @@ QIcon loadIcon(const QString &name)
 {
 
     // try load themed icon
-    QColor background = qApp->palette().background().color();
-    bool useDarkIcons = background.value() > 100;
-    const char * const prefix = useDarkIcons ? "dark_" : "light_";
+
+
+    const char * const prefix = useDarkIcons() ? "dark_" : "light_";
 
     QString  realName = QLatin1String(prefix) + name;
 
@@ -108,6 +108,11 @@ QIcon loadIcon(const QString &name)
     QIcon icon = QIcon::fromTheme(name);
     qWarning() << "\tfalling back on QIcon::FromTheme:" << name;
     return icon;
+}
+
+bool useDarkIcons() {
+     QColor background = qApp->palette().background().color();
+    return  background.value() > 100;
 }
 
 bool adjustIcon(QIcon *icon)

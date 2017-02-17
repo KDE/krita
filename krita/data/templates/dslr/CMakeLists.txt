@@ -1,5 +1,7 @@
 install( FILES 
 template_dslr.png
+light_template_dslr.png
+dark_template_dslr.png
 DESTINATION
 ${DATA_INSTALL_DIR}/krita/pics )
 

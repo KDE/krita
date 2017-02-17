@@ -281,7 +281,12 @@ void Document::setSelection(Selection* value)
 {
     if (!d->document) return;
     if (!d->document->image()) return;
-    d->document->image()->setGlobalSelection(value->selection());
+    if (value) {
+        d->document->image()->setGlobalSelection(value->selection());
+    }
+    else {
+        d->document->image()->setGlobalSelection(0);
+    }
 }
 
 

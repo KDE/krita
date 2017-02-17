@@ -17,11 +17,15 @@
  */
 #include "Selection.h"
 
+#include <KoColorSpace.h>
+#include "kis_iterator_ng.h"
 #include <kis_selection.h>
 #include <kis_pixel_selection.h>
 #include <kis_paint_device.h>
 #include <kis_selection_filters.h>
-
+#include <kis_painter.h>
+#include <kis_clipboard.h>
+#include <kis_painter.h>
 #include <QByteArray>
 
 #include <Node.h>
@@ -94,14 +98,74 @@ void Selection::contract(int value)
     d->selection->pixelSelection()->select(QRect(x(), y(), width() - value, height() - value));
 }
 
-void Selection::cut(Node* node)
+void Selection::copy(Node *node)
 {
-    // UNIMPLEMENTED
+    if (!node) return;
+    if (!d->selection) return;
+    if (node->node()->exactBounds().isEmpty()) return;
+    if (!node->node()->hasEditablePaintDevice()) return;
+
+    KisPaintDeviceSP dev = node->node()->paintDevice();
+    KisPaintDeviceSP clip = new KisPaintDevice(dev->colorSpace());
+    KisPaintDeviceSP selectionProjection = d->selection->projection();
+
+    const KoColorSpace *cs = clip->colorSpace();
+    const KoColorSpace *selCs = d->selection->projection()->colorSpace();
+
+    QRect rc = d->selection->selectedExactRect();
+
+    KisPainter::copyAreaOptimized(QPoint(), dev, clip, rc);
+
+    KisHLineIteratorSP layerIt = clip->createHLineIteratorNG(0, 0, rc.width());
+    KisHLineConstIteratorSP selectionIt = selectionProjection->createHLineIteratorNG(rc.x(), rc.y(), rc.width());
+
+    for (qint32 y = 0; y < rc.height(); y++) {
+        for (qint32 x = 0; x < rc.width(); x++) {
+
+            qreal dstAlpha = cs->opacityF(layerIt->rawData());
+            qreal sel = selCs->opacityF(selectionIt->oldRawData());
+            qreal newAlpha = sel * dstAlpha / (1.0 - dstAlpha + sel * dstAlpha);
+            float mask = newAlpha / dstAlpha;
+
+            cs->applyAlphaNormedFloatMask(layerIt->rawData(), &mask, 1);
+
+            layerIt->nextPixel();
+            selectionIt->nextPixel();
+        }
+        layerIt->nextRow();
+        selectionIt->nextRow();
+    }
+
+    KisClipboard::instance()->setClip(clip, rc.topLeft());
 }
 
-void Selection::paste(Node *source, Node *destination)
+void Selection::cut(Node* node)
 {
-    // UNIMPLEMENTED
+    if (!node) return;
+    if (!d->selection) return;
+    if (node->node()->exactBounds().isEmpty()) return;
+    if (!node->node()->hasEditablePaintDevice()) return;
+    KisPaintDeviceSP dev = node->node()->paintDevice();
+    copy(node);
+    dev->clearSelection(d->selection);
+    node->node()->setDirty(d->selection->selectedExactRect());
+}
+
+void Selection::paste(Node *destination, int x, int y)
+{
+    if (!destination) return;
+    if (!d->selection) return;
+    if (!KisClipboard::instance()->hasClip()) return;
+
+    KisPaintDeviceSP src = KisClipboard::instance()->clip(QRect(), false);
+    KisPaintDeviceSP dst = destination->node()->paintDevice();
+    if (!dst) return;
+    KisPainter::copyAreaOptimized(QPoint(x, y),
+                                  src,
+                                  dst,
+                                  src->exactBounds(),
+                                  d->selection);
+    destination->node()->setDirty();
 }
 
 void Selection::erode()

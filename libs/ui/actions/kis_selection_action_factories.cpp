@@ -311,7 +311,7 @@ void KisCutCopyActionFactory::run(bool willCut, bool makeSharpClip, KisViewManag
         if (willCut) {
             KUndo2Command *command = 0;
 
-            if (willCut && node->hasEditablePaintDevice()) {
+            if (node->hasEditablePaintDevice()) {
                 struct ClearSelection : public KisTransactionBasedCommand {
                     ClearSelection(KisNodeSP node, KisSelectionSP sel)
                         : m_node(node), m_sel(sel) {}

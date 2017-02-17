@@ -52,9 +52,26 @@ public Q_SLOTS:
 
     void contract(int value);
 
-    void cut(Node* node);
+    /**
+     * @brief copy copies the area defined by the selection from the node to the clipboard.
+     * @param node the node from where the pixels will be copied.
+     */
+    void copy(Node *node);
 
-    void paste(Node *source, Node* destination);
+    /**
+     * @brief cut erases the area defined by the selection from the node and puts a copy on the clipboard.
+     * @param node the node from which the selection will be cut.
+     */
+    void cut(Node *node);
+
+    /**
+     * @brief paste pastes the content of the clipboard to the given node, limited by the area of the current
+     * selection.
+     * @param destination the node where the pixels will be written
+     * @param x: the x position at which the clip will be written
+     * @param y: the y position at which the clip will be written
+     */
+    void paste(Node *destination, int x, int y);
 
     void erode();
 

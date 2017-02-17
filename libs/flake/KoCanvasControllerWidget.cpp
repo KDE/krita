@@ -527,11 +527,6 @@ void KoCanvasControllerWidget::dragLeaveEvent(QDragLeaveEvent *event)
     d->viewportWidget->handleDragLeaveEvent(event);
 }
 
-void KoCanvasControllerWidget::keyPressEvent(QKeyEvent *event)
-{
-    KoToolManager::instance()->priv()->switchToolByShortcut(event);
-}
-
 void KoCanvasControllerWidget::wheelEvent(QWheelEvent *event)
 {
     if (d->zoomWithWheel != ((event->modifiers() & Qt::ControlModifier) == Qt::ControlModifier)) {

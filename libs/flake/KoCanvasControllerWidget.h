@@ -171,8 +171,6 @@ protected:
     /// reimplemented from QWidget
     virtual void wheelEvent(QWheelEvent *event);
     /// reimplemented from QWidget
-    virtual void keyPressEvent(QKeyEvent *event);
-    /// reimplemented from QWidget
     virtual bool focusNextPrevChild(bool next);
 
 private:

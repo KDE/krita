@@ -1056,16 +1056,5 @@ void KoToolManager::Private::registerToolProxy(KoToolProxy *proxy, KoCanvasBase 
     }
 }
 
-void KoToolManager::Private::switchToolByShortcut(QKeyEvent *event)
-{
-    QKeySequence item(event->key() | ((Qt::ControlModifier | Qt::AltModifier) & event->modifiers()));
-
-    if (event->key() == Qt::Key_Space && event->modifiers() == 0) {
-        switchTool(KoPanTool_ID, true);
-    } else if (event->key() == Qt::Key_Escape && event->modifiers() == 0) {
-        switchTool(KoInteractionTool_ID, false);
-    }
-}
-
 //have to include this because of Q_PRIVATE_SLOT
 #include "moc_KoToolManager.cpp"

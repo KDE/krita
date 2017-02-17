@@ -51,6 +51,7 @@
 #include "KoShapeController.h"
 #include "kis_action_registry.h"
 #include <KisHandlePainterHelper.h>
+#include <KoShapeStrokeModel.h>
 
 #include <KoIcon.h>
 
@@ -413,7 +414,7 @@ void KoPathTool::breakAtSegment()
         }
     }
 }
-#include <KoShapeStrokeModel.h>
+
 void KoPathTool::paint(QPainter &painter, const KoViewConverter &converter)
 {
     Q_D(KoToolBase);

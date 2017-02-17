@@ -320,7 +320,7 @@ bool KoShapeStroke::compareStyleTo(const KoShapeStrokeModel *other)
 bool KoShapeStroke::isVisible() const
 {
     return d->pen.widthF() > 0 &&
-        d->brush.gradient() || d->color.alpha() > 0;
+        (d->brush.gradient() || d->color.alpha() > 0);
 }
 
 void KoShapeStroke::setCapStyle(Qt::PenCapStyle style)

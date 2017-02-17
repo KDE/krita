@@ -39,16 +39,24 @@ public:
 
 public Q_SLOTS:
 
-    Document* document() const;
+    qreal zoomLevel() const;
+    void setZoomLevel(qreal value);
+    void resetZoom();
 
-    int zoomLevel() const;
-    void setZoomLevel(int value);
-
-    int rotation() const;
-    void setRotation(int value);
+    void resetRotation();
+    qreal rotation() const;
+    void setRotation(qreal angle);
 
     bool mirror() const;
     void setMirror(bool value);
+
+    bool wrapAroundMode() const;
+    void setWrapAroundMode(bool enable);
+
+    bool levelOfDetailMode() const;
+    void setLevelOfDetailMode(bool enable);
+
+    View *view() const;
 
 private:
     struct Private;

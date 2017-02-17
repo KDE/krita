@@ -17,19 +17,24 @@
  */
 #include "Canvas.h"
 #include <KoCanvasBase.h>
+#include <kis_canvas2.h>
+#include <KisView.h>
+#include <KoCanvasController.h>
+#include <kis_canvas_controller.h>
+#include <kis_zoom_manager.h>
 #include <QPointer>
-
+#include <View.h>
 
 struct Canvas::Private {
     Private() {}
-    KoCanvasBase *canvas;
+    KisCanvas2 *canvas;
 };
 
 Canvas::Canvas(KoCanvasBase *canvas, QObject *parent)
     : QObject(parent)
     , d(new Private)
 {
-    d->canvas = canvas;
+    d->canvas = static_cast<KisCanvas2*>(canvas);
 }
 
 Canvas::~Canvas()
@@ -37,44 +42,83 @@ Canvas::~Canvas()
     delete d;
 }
 
-Document* Canvas::document() const
+qreal Canvas::zoomLevel() const
 {
-    // UNIMPLEMENTED
-    return 0;
+    if (!d->canvas) return 100;
+    return d->canvas->imageView()->zoomManager()->zoom();
 }
 
-int Canvas::zoomLevel() const
+void Canvas::setZoomLevel(qreal value)
 {
-    // UNIMPLEMENTED
-    return 0;
+    if (!d->canvas) return;
+    d->canvas->imageView()->zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, value);
 }
 
-void Canvas::setZoomLevel(int value)
+void Canvas::resetZoom()
 {
-    // UNIMPLEMENTED
+    if (!d->canvas) return;
+    d->canvas->imageView()->zoomManager()->zoomTo100();
 }
 
 
-int Canvas::rotation() const
+void Canvas::resetRotation()
 {
-    // UNIMPLEMENTED
-    return 0;
+    if (!d->canvas) return;
+    d->canvas->imageView()->canvasController()->resetCanvasRotation();
 }
 
-void Canvas::setRotation(int value)
+qreal Canvas::rotation() const
 {
-    // UNIMPLEMENTED
+    if (!d->canvas) return 0;
+    return d->canvas->imageView()->canvasController()->rotation();
+}
+
+void Canvas::setRotation(qreal angle)
+{
+    if (!d->canvas) return;
+    d->canvas->imageView()->canvasController()->rotateCanvas(angle);
 }
 
 
 bool Canvas::mirror() const
 {
-    // UNIMPLEMENTED
-    return false;
+    if (!d->canvas) return false;
+    return d->canvas->imageView()->canvasIsMirrored();
 }
 
 void Canvas::setMirror(bool value)
 {
-    // UNIMPLEMENTED
+    if (!d->canvas) return;
+    d->canvas->imageView()->canvasController()->mirrorCanvas(value);
 }
 
+View *Canvas::view() const
+{
+    if (!d->canvas) return 0;
+    View *view = new View(d->canvas->imageView());
+    return view;
+}
+
+bool Canvas::wrapAroundMode() const
+{
+    if (!d->canvas) return false;
+    return d->canvas->imageView()->canvasController()->levelOfDetailMode();
+}
+
+void Canvas::setWrapAroundMode(bool enable)
+{
+    if (!d->canvas) return;
+    d->canvas->imageView()->canvasController()->slotToggleWrapAroundMode(enable);
+}
+
+bool Canvas::levelOfDetailMode() const
+{
+    if (!d->canvas) return false;
+    return d->canvas->imageView()->canvasController()->levelOfDetailMode();
+}
+
+void Canvas::setLevelOfDetailMode(bool enable)
+{
+    if (!d->canvas) return;
+    return d->canvas->imageView()->canvasController()->slotToggleLevelOfDetailMode(enable);
+}

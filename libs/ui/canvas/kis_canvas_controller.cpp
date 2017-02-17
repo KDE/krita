@@ -214,6 +214,11 @@ void KisCanvasController::rotateCanvasLeft15()
     rotateCanvas(-15.0);
 }
 
+qreal KisCanvasController::rotation() const
+{
+    return m_d->coordinatesConverter->rotationAngle();
+}
+
 void KisCanvasController::resetCanvasRotation()
 {
     QPoint newOffset = m_d->coordinatesConverter->resetRotation(m_d->coordinatesConverter->widgetCenterPoint());

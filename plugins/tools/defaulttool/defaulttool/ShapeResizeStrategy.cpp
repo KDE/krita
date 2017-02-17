@@ -238,4 +238,6 @@ void ShapeResizeStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
 
 void ShapeResizeStrategy::paint(QPainter &painter, const KoViewConverter &converter)
 {
+    Q_UNUSED(painter);
+    Q_UNUSED(converter);
 }

@@ -96,6 +96,8 @@ KUndo2Command *ShapeGradientEditStrategy::createCommand()
 
 void ShapeGradientEditStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
 {
+    Q_UNUSED(modifiers);
+
     const QRectF dirtyRect = tool()->canvas()->snapGuide()->boundingRect();
     tool()->canvas()->snapGuide()->reset();
     tool()->canvas()->updateCanvas(dirtyRect);
@@ -103,5 +105,7 @@ void ShapeGradientEditStrategy::finishInteraction(Qt::KeyboardModifiers modifier
 
 void ShapeGradientEditStrategy::paint(QPainter &painter, const KoViewConverter &converter)
 {
+    Q_UNUSED(painter);
+    Q_UNUSED(converter);
 }
 

@@ -155,6 +155,8 @@ void ShapeShearStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModif
 
 void ShapeShearStrategy::paint(QPainter &painter, const KoViewConverter &converter)
 {
+    Q_UNUSED(painter);
+    Q_UNUSED(converter);
 }
 
 KUndo2Command *ShapeShearStrategy::createCommand()

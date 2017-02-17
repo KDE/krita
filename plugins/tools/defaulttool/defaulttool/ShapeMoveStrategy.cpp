@@ -122,4 +122,6 @@ void ShapeMoveStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
 
 void ShapeMoveStrategy::paint(QPainter &painter, const KoViewConverter &converter)
 {
+    Q_UNUSED(painter);
+    Q_UNUSED(converter);
 }

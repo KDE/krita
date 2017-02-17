@@ -123,6 +123,8 @@ public:
     void finishInteraction(Qt::KeyboardModifiers /*modifiers*/) override {}
 
     void paint(QPainter &painter, const KoViewConverter &converter) {
+        Q_UNUSED(painter);
+        Q_UNUSED(converter);
     }
 };
 
@@ -175,6 +177,8 @@ public:
 
     bool paintOnHover(QPainter &painter, const KoViewConverter &converter) override
     {
+        Q_UNUSED(painter);
+        Q_UNUSED(converter);
         return false;
     }
 

@@ -6,7 +6,6 @@ set(kritalibkis_LIB_SRCS
     DockWidgetFactoryBase.cpp
     Document.cpp
     Filter.cpp
-    Generator.cpp
     InfoObject.cpp
     Krita.cpp
     Node.cpp

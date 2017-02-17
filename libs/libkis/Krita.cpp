@@ -23,8 +23,6 @@
 #include <ksharedconfig.h>
 #include <kconfiggroup.h>
 
-#include <kis_generator_registry.h>
-#include <kis_generator.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorProfile.h>
 #include <KoColorSpace.h>
@@ -59,7 +57,6 @@
 #include "DockWidgetFactoryBase.h"
 #include "Filter.h"
 #include "InfoObject.h"
-#include "Generator.h"
 #include "Resource.h"
 
 Krita* Krita::s_instance = 0;
@@ -175,27 +172,6 @@ Filter *Krita::filter(const QString &name) const
     InfoObject *info = new InfoObject(fc);
     filter->setConfiguration(info);
     return filter;
-}
-
-QStringList Krita::generators() const
-{
-    QStringList ls = KisGeneratorRegistry::instance()->keys();
-    qSort(ls);
-    return ls;
-}
-
-Generator *Krita::generator(const QString &name) const
-{
-    // UNIMPLEMENTED
-    if (!generators().contains(name)) return 0;
-
-    Generator *generator = new Generator();
-//    generator->setName(name);
-//    KisGeneratorSP f = KisGeneratorRegistry::instance()->value(name);
-//    KisGeneratorConfigurationSP fc = f->defaultConfiguration(0);
-//    InfoObject *info = new InfoObject(fc);
-//    generator->setConfiguration(info);
-    return generator;
 }
 
 QStringList Krita::profiles(const QString &colorModel, const QString &colorDepth) const

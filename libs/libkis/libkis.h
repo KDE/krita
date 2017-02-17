@@ -16,7 +16,6 @@ class DockWidget;
 class DockWidgetFactoryBase;
 class Document;
 class Filter;
-class Generator;
 class InfoObject;
 class Krita;
 class Node;

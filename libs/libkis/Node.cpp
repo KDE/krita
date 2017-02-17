@@ -45,7 +45,6 @@
 #include "Krita.h"
 #include "Node.h"
 #include "Channel.h"
-#include "Generator.h"
 #include "Filter.h"
 #include "Selection.h"
 

@@ -17,7 +17,6 @@
 %Include DockWidget.sip
 %Include Document.sip
 %Include Filter.sip
-%Include Generator.sip
 %Include InfoObject.sip
 %Include ViewExtension.sip
 %Include View.sip

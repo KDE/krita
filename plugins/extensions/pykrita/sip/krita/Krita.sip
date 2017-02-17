@@ -17,8 +17,6 @@ public Q_SLOTS:
     QList<Document *> documents() const /Factory/;
     QStringList filters() const;
     Filter * filter(const QString &name) const /Factory/;
-    QStringList generators() const /Factory/;
-    Generator * generator(const QString &name) const /Factory/;
     QStringList profiles(const QString &colorModel, const QString &ColorDepth) const;
     bool addProfile(const QString &profilePath);
     Notifier * notifier() const;

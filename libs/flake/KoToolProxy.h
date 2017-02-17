@@ -162,6 +162,16 @@ public:
     /// \internal
     KoToolProxyPrivate *priv();
 
+protected Q_SLOTS:
+    /// Forwarded to the current KoToolBase
+    void requestUndoDuringStroke();
+
+    /// Forwarded to the current KoToolBase
+    void requestStrokeCancellation();
+
+    /// Forwarded to the current KoToolBase
+    void requestStrokeEnd();
+
 Q_SIGNALS:
     /**
      * A tool can have a selection that is copy-able, this signal is emitted when that status changes.

@@ -30,6 +30,13 @@ KisToolProxy::KisToolProxy(KoCanvasBase *canvas, QObject *parent)
 {
 }
 
+void KisToolProxy::initializeImage(KisImageSP image)
+{
+    connect(image, SIGNAL(sigUndoDuringStrokeRequested()), SLOT(requestUndoDuringStroke()), Qt::UniqueConnection);
+    connect(image, SIGNAL(sigStrokeCancellationRequested()), SLOT(requestStrokeCancellation()), Qt::UniqueConnection);
+    connect(image, SIGNAL(sigStrokeEndRequested()), SLOT(requestStrokeEnd()), Qt::UniqueConnection);
+}
+
 QPointF KisToolProxy::tabletToDocument(const QPointF &globalPos)
 {
     const QPointF pos = globalPos - QPointF(canvas()->canvasWidget()->mapToGlobal(QPoint(0, 0)));

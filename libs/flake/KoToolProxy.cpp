@@ -557,7 +557,7 @@ QStringList KoToolProxy::supportedPasteMimeTypes() const
 void KoToolProxy::deleteSelection()
 {
     if (d->activeTool)
-        return d->activeTool->deleteSelection();
+        d->activeTool->deleteSelection();
 }
 
 void KoToolProxy::processEvent(QEvent *e) const
@@ -568,6 +568,27 @@ void KoToolProxy::processEvent(QEvent *e) const
        && (static_cast<QKeyEvent*>(e)->modifiers()==Qt::NoModifier ||
            static_cast<QKeyEvent*>(e)->modifiers()==Qt::ShiftModifier)) {
         e->accept();
+    }
+}
+
+void KoToolProxy::requestUndoDuringStroke()
+{
+    if (d->activeTool) {
+        d->activeTool->requestUndoDuringStroke();
+    }
+}
+
+void KoToolProxy::requestStrokeCancellation()
+{
+    if (d->activeTool) {
+        d->activeTool->requestStrokeCancellation();
+    }
+}
+
+void KoToolProxy::requestStrokeEnd()
+{
+    if (d->activeTool) {
+        d->activeTool->requestStrokeEnd();
     }
 }
 

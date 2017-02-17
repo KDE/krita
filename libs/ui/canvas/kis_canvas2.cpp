@@ -148,8 +148,6 @@ KisCanvas2::KisCanvas2(KisCoordinatesConverter *coordConverter, KoCanvasResource
 
     m_d->updateSignalCompressor.setDelay(10);
     m_d->updateSignalCompressor.setMode(KisSignalCompressor::FIRST_ACTIVE);
-
-
 }
 
 void KisCanvas2::setup()
@@ -455,9 +453,10 @@ void KisCanvas2::createCanvas(bool useOpenGL)
 
 void KisCanvas2::initializeImage()
 {
-    KisImageWSP image = m_d->view->image();
+    KisImageSP image = m_d->view->image();
 
     m_d->coordinatesConverter->setImage(image);
+    m_d->toolProxy.initializeImage(image);
 
     connect(image, SIGNAL(sigImageUpdated(QRect)), SLOT(startUpdateCanvasProjection(QRect)), Qt::DirectConnection);
     connect(this, SIGNAL(sigCanvasCacheUpdated()), SLOT(updateCanvasProjection()));

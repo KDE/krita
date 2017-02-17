@@ -393,6 +393,22 @@ bool KoToolBase::isInTextMode() const
     return d->isInTextMode;
 }
 
+void KoToolBase::requestUndoDuringStroke()
+{
+    /**
+     * Default implementation just cancells the stroke
+     */
+    requestStrokeCancellation();
+}
+
+void KoToolBase::requestStrokeCancellation()
+{
+}
+
+void KoToolBase::requestStrokeEnd()
+{
+}
+
 bool KoToolBase::maskSyntheticEvents() const
 {
     Q_D(const KoToolBase);

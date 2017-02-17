@@ -716,34 +716,20 @@ void DefaultTool::mouseReleaseEvent(KoPointerEvent *event)
 
 void DefaultTool::mouseDoubleClickEvent(KoPointerEvent *event)
 {
-    QList<KoShape *> shapes;
-    Q_FOREACH (KoShape *shape, koSelection()->selectedShapes()) {
-        if (shape->boundingRect().contains(event->point) && // first 'cheap' check
-                shape->outline().contains(event->point)) { // this is more expensive but weeds out the almost hits
-            shapes.append(shape);
+    KoShapeManager *shapeManager = canvas()->shapeManager();
+    KoSelection *selection = shapeManager->selection();
+
+    KoShape *shape = shapeManager->shapeAt(event->point, KoFlake::ShapeOnTop);
+    if (shape && !selection->isSelected(shape)) {
+
+        if (!(event->modifiers() & Qt::ShiftModifier)) {
+            selection->deselectAll();
         }
-    }
-    if (shapes.count() == 0) { // nothing in the selection was clicked on.
-        KoShape *shape = canvas()->shapeManager()->shapeAt(event->point, KoFlake::ShapeOnTop);
-        if (shape) {
-            shapes.append(shape);
-        } // there used to be guides... :'''(
+
+        selection->select(shape);
     }
 
-    QList<KoShape *> shapes2;
-    foreach (KoShape *shape, shapes) {
-        QSet<KoShape *> delegates = shape->toolDelegates();
-        if (delegates.isEmpty()) {
-            shapes2.append(shape);
-        } else {
-            foreach (KoShape *delegatedShape, delegates) {
-                shapes2.append(delegatedShape);
-            }
-        }
-    }
-
-    KoToolManager::instance()->switchToolRequested(
-        KoToolManager::instance()->preferredToolForSelection(shapes2));
+    requestStrokeEnd();
 }
 
 bool DefaultTool::moveSelection(int direction, Qt::KeyboardModifiers modifiers)
@@ -1415,4 +1401,10 @@ uint DefaultTool::editableShapesCount(const QList<KoShape *> &shapes)
     }
 
     return count;
+}
+
+void DefaultTool::requestStrokeEnd()
+{
+    QList<KoShape *> shapes = koSelection()->selectedEditableShapesAndDelegates();
+    emit activateTemporary(KoToolManager::instance()->preferredToolForSelection(shapes));
 }

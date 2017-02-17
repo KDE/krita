@@ -194,6 +194,22 @@ const QList<KoShape *> KoSelection::selectedEditableShapes() const
     return shapes;
 }
 
+const QList<KoShape *> KoSelection::selectedEditableShapesAndDelegates() const
+{
+    QList<KoShape*> shapes;
+    Q_FOREACH (KoShape *shape, selectedShapes()) {
+        QSet<KoShape *> delegates = shape->toolDelegates();
+        if (delegates.isEmpty()) {
+            shapes.append(shape);
+        } else {
+            Q_FOREACH (KoShape *delegatedShape, delegates) {
+                shapes.append(delegatedShape);
+            }
+        }
+    }
+    return shapes;
+}
+
 bool KoSelection::isSelected(const KoShape *shape) const
 {
     Q_D(const KoSelection);

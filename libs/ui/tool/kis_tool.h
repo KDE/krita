@@ -331,31 +331,6 @@ protected Q_SLOTS:
      */
     virtual void resetCursorStyle();
 
-    /**
-     * Called when the user requested undo while the stroke is
-     * active. If you tool supports undo of the part of its actions,
-     * override this method and do the needed work there.
-     *
-     * NOTE: Default implementation forwards this request to
-     *       requestStrokeCancellation() method, so that the stroke
-     *       would be cancelled.
-     */
-    virtual void requestUndoDuringStroke();
-
-    /**
-     * Called when the user requested the cancellation of the current
-     * stroke. If you tool supports cancelling, override this method
-     * and do the needed work there
-     */
-    virtual void requestStrokeCancellation();
-
-    /**
-     * Called when the image decided that the stroke should better be
-     * ended. If you tool supports long strokes, override this method
-     * and do the needed work there
-     */
-    virtual void requestStrokeEnd();
-
 private Q_SLOTS:
     void slotToggleFgBg();
     void slotResetFgBg();

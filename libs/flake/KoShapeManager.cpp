@@ -580,34 +580,6 @@ KoSelection *KoShapeManager::selection() const
     return d->selection;
 }
 
-void KoShapeManager::suggestChangeTool(KoPointerEvent *event)
-{
-    QList<KoShape*> shapes;
-
-    KoShape *clicked = shapeAt(event->point);
-    if (clicked) {
-        if (! selection()->isSelected(clicked)) {
-            selection()->deselectAll();
-            selection()->select(clicked);
-        }
-        shapes.append(clicked);
-    }
-
-    QList<KoShape*> shapes2;
-    foreach (KoShape *shape, shapes) {
-        QSet<KoShape*> delegates = shape->toolDelegates();
-        if (delegates.isEmpty()) {
-            shapes2.append(shape);
-        } else {
-            foreach (KoShape *delegatedShape, delegates) {
-                shapes2.append(delegatedShape);
-            }
-        }
-    }
-    KoToolManager::instance()->switchToolRequested(
-        KoToolManager::instance()->preferredToolForSelection(shapes2));
-}
-
 void KoShapeManager::setPaintingStrategy(KoShapeManagerPaintingStrategy *strategy)
 {
     delete d->strategy;

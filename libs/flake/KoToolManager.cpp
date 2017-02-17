@@ -382,8 +382,6 @@ QString KoToolManager::preferredToolForSelection(const QList<KoShape*> &shapes)
     Q_FOREACH (ToolHelper *helper, d->tools) {
         if (helper->priority() >= prio)
             continue;
-        if (helper->section() == KoToolFactoryBase::mainToolType())
-            continue;
 
         bool toolWillWork = false;
         foreach (const QString &type, types) {
@@ -392,6 +390,7 @@ QString KoToolManager::preferredToolForSelection(const QList<KoShape*> &shapes)
                 break;
             }
         }
+
         if (toolWillWork) {
             toolType = helper->id();
             prio = helper->priority();
@@ -681,14 +680,7 @@ void KoToolManager::Private::postSwitchTool(bool temporary)
         KoSelection *selection = canvasData->activeTool->canvas()->shapeManager()->selection();
         Q_ASSERT(selection);
 
-        Q_FOREACH (KoShape *shape, selection->selectedShapes()) {
-            QSet<KoShape*> delegates = shape->toolDelegates();
-            if (delegates.isEmpty()) { // no delegates, just the orig shape
-                shapesToOperateOn << shape;
-            } else {
-                shapesToOperateOn += delegates;
-            }
-        }
+        shapesToOperateOn = QSet<KoShape*>::fromList(selection->selectedEditableShapesAndDelegates());
     }
 
     if (canvasData->canvas->canvas()) {

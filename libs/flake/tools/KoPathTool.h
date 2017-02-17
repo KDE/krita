@@ -46,34 +46,20 @@ public:
     explicit KoPathTool(KoCanvasBase *canvas);
     ~KoPathTool();
 
-    /// reimplemented
-    virtual void paint(QPainter &painter, const KoViewConverter &converter);
-
-    /// reimplemented
-    virtual void repaintDecorations();
-
-    /// reimplemented
-    virtual void mousePressEvent(KoPointerEvent *event);
-    /// reimplemented
-    virtual void mouseMoveEvent(KoPointerEvent *event);
-    /// reimplemented
-    virtual void mouseReleaseEvent(KoPointerEvent *event);
-    /// reimplemented
-    virtual void keyPressEvent(QKeyEvent *event);
-    /// reimplemented
-    virtual void keyReleaseEvent(QKeyEvent *event);
-    /// reimplemented
-    virtual void mouseDoubleClickEvent(KoPointerEvent *event);
-    /// reimplemented
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
-    /// reimplemented
-    virtual void deactivate();
-
-    /// reimplemented
-    virtual void deleteSelection();
-
-    /// reimplemented
-    virtual KoToolSelection* selection();
+    void paint(QPainter &painter, const KoViewConverter &converter) override;
+    void repaintDecorations() override;
+    void mousePressEvent(KoPointerEvent *event) override;
+    void mouseMoveEvent(KoPointerEvent *event) override;
+    void mouseReleaseEvent(KoPointerEvent *event) override;
+    void keyPressEvent(QKeyEvent *event) override;
+    void keyReleaseEvent(QKeyEvent *event) override;
+    void mouseDoubleClickEvent(KoPointerEvent *event) override;
+    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
+    void deactivate() override;
+    void deleteSelection() override;
+    KoToolSelection* selection() override;
+    void requestStrokeCancellation() override;
+    void requestStrokeEnd() override;
 
     /// repaints the specified rect
     void repaint(const QRectF &repaintRect);
@@ -109,7 +95,10 @@ private Q_SLOTS:
     void updateActions();
     void pointToLine();
     void pointToCurve();
-    void activate();
+    void slotSelectionChanged();
+
+private:
+    void initializeWithShapes(const QList<KoShape*> shapes);
 
 protected:
     KoPathToolSelection m_pointSelection; ///< the point selection
@@ -145,6 +134,7 @@ private:
     QAction *m_actionMergePoints;
     QAction *m_actionConvertToPath;
     QCursor m_moveCursor;
+    bool m_activatedTemporarily;
 
     Q_DECLARE_PRIVATE(KoToolBase)
 };

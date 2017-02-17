@@ -106,6 +106,7 @@ KoPathTool::KoPathTool(KoCanvasBase *canvas)
         , m_handleRadius(3)
         , m_activeSegment(0)
         , m_currentStrategy(0)
+        , m_activatedTemporarily(false)
 {
     QActionGroup *points = new QActionGroup(this);
     // m_pointTypeGroup->setExclusive(true);
@@ -491,9 +492,23 @@ void KoPathTool::mousePressEvent(KoPointerEvent *event)
                 delete m_activeSegment;
                 m_activeSegment = 0;
             } else {
-                Q_ASSERT(m_currentStrategy == 0);
-                m_currentStrategy = new KoPathPointRubberSelectStrategy(this, event->point);
-                event->accept();
+
+                KoShapeManager *shapeManager = canvas()->shapeManager();
+                KoSelection *selection = shapeManager->selection();
+
+                KoShape *shape = shapeManager->shapeAt(event->point, KoFlake::ShapeOnTop);
+                if (shape && !selection->isSelected(shape)) {
+
+                    if (!(event->modifiers() & Qt::ShiftModifier)) {
+                        selection->deselectAll();
+                    }
+
+                    selection->select(shape);
+                } else {
+                    KIS_ASSERT_RECOVER_RETURN(m_currentStrategy == 0);
+                    m_currentStrategy = new KoPathPointRubberSelectStrategy(this, event->point);
+                    event->accept();
+                }
             }
         }
     }
@@ -745,6 +760,8 @@ void KoPathTool::mouseDoubleClickEvent(KoPointerEvent *event)
         }
         updateActions();
         event->accept();
+    } else if (!m_activeHandle && !m_activeSegment && m_activatedTemporarily) {
+        emit done();
     }
 }
 
@@ -800,11 +817,30 @@ KoPathTool::PathSegment* KoPathTool::segmentAtPoint(const QPointF &point)
 void KoPathTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
     Q_D(KoToolBase);
-    Q_UNUSED(toolActivation);
+
+    m_activatedTemporarily = toolActivation == TemporaryActivation;
+
     // retrieve the actual global handle radius
     m_handleRadius = handleRadius();
     d->canvas->snapGuide()->reset();
 
+    useCursor(m_selectCursor);
+    connect(d->canvas->shapeManager()->selection(), SIGNAL(selectionChanged()), this, SLOT(slotSelectionChanged()));
+
+    initializeWithShapes(shapes.toList());
+}
+
+void KoPathTool::slotSelectionChanged()
+{
+    Q_D(KoToolBase);
+    QList<KoShape*> shapes =
+        d->canvas->shapeManager()->selection()->selectedEditableShapesAndDelegates();
+
+    initializeWithShapes(shapes);
+}
+
+void KoPathTool::initializeWithShapes(const QList<KoShape*> shapes)
+{
     repaintDecorations();
     QList<KoPathShape*> selectedShapes;
     Q_FOREACH (KoShape *shape, shapes) {
@@ -818,30 +854,10 @@ void KoPathTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &s
             selectedShapes.append(pathShape);
         }
     }
-    if (selectedShapes.isEmpty()) {
-        emit done();
-        return;
-    }
+
     m_pointSelection.setSelectedShapes(selectedShapes);
-    useCursor(m_selectCursor);
-    connect(d->canvas->shapeManager()->selection(), SIGNAL(selectionChanged()), this, SLOT(activate()));
     updateOptionsWidget();
     updateActions();
-}
-
-void KoPathTool::activate()
-{
-    Q_D(KoToolBase);
-    QSet<KoShape*> shapes;
-    Q_FOREACH (KoShape *shape, d->canvas->shapeManager()->selection()->selectedShapes()) {
-        QSet<KoShape*> delegates = shape->toolDelegates();
-        if (delegates.isEmpty()) {
-            shapes << shape;
-        } else {
-            shapes += delegates;
-        }
-    }
-    activate(DefaultActivation, shapes);
 }
 
 void KoPathTool::updateOptionsWidget()
@@ -888,7 +904,7 @@ void KoPathTool::updateActions()
 void KoPathTool::deactivate()
 {
     Q_D(KoToolBase);
-    disconnect(d->canvas->shapeManager()->selection(), SIGNAL(selectionChanged()), this, SLOT(activate()));
+    disconnect(d->canvas->shapeManager()->selection(), SIGNAL(selectionChanged()), this, SLOT(slotSelectionChanged()));
     m_pointSelection.clear();
     m_pointSelection.setSelectedShapes(QList<KoPathShape*>());
     delete m_activeHandle;
@@ -941,4 +957,16 @@ void KoPathTool::deleteSelection()
 KoToolSelection * KoPathTool::selection()
 {
     return &m_pointSelection;
+}
+
+void KoPathTool::requestStrokeCancellation()
+{
+    requestStrokeEnd();
+}
+
+void KoPathTool::requestStrokeEnd()
+{
+    if (m_activatedTemporarily) {
+        emit done();
+    }
 }

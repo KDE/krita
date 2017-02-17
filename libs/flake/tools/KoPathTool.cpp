@@ -491,10 +491,6 @@ void KoPathTool::mousePressEvent(KoPointerEvent *event)
                 delete m_activeSegment;
                 m_activeSegment = 0;
             } else {
-                if ((event->modifiers() & Qt::ControlModifier) == 0) {
-                    m_pointSelection.clear();
-                }
-                // start rubberband selection
                 Q_ASSERT(m_currentStrategy == 0);
                 m_currentStrategy = new KoPathPointRubberSelectStrategy(this, event->point);
                 event->accept();
@@ -514,8 +510,10 @@ void KoPathTool::mouseMoveEvent(KoPointerEvent *event)
 
         // repaint new handle positions
         m_pointSelection.repaint();
-        if (m_activeHandle)
+        if (m_activeHandle) {
             m_activeHandle->repaint();
+        }
+
         return;
     }
 
@@ -612,8 +610,11 @@ void KoPathTool::mouseMoveEvent(KoPointerEvent *event)
     }
 
     useCursor(m_selectCursor);
-    if (m_activeHandle)
+
+    if (m_activeHandle) {
         m_activeHandle->repaint();
+    }
+
     delete m_activeHandle;
     m_activeHandle = 0;
 
@@ -681,17 +682,6 @@ void KoPathTool::keyPressEvent(QKeyEvent *event)
         }
     } else {
         switch (event->key()) {
-// TODO move these to the actions in the constructor.
-        case Qt::Key_I: {
-            KoDocumentResourceManager *rm = d->canvas->shapeController()->resourceManager();
-            int handleRadius = rm->handleRadius();
-            if (event->modifiers() & Qt::ControlModifier)
-                handleRadius--;
-            else
-                handleRadius++;
-            rm->setHandleRadius(handleRadius);
-            break;
-        }
 #ifndef NDEBUG
         case Qt::Key_D:
             if (m_pointSelection.objectCount() == 1) {
@@ -740,14 +730,11 @@ void KoPathTool::mouseDoubleClickEvent(KoPointerEvent *event)
     event->ignore();
 
     // check if we are doing something else at the moment
-    if (m_currentStrategy)
-        return;
+    if (m_currentStrategy) return;
 
-    PathSegment *s = segmentAtPoint(event->point);
-    if (!s)
-        return;
+    QScopedPointer<PathSegment> s(segmentAtPoint(event->point));
 
-    if (s->isValid()) {
+    if (s && s->isValid()) {
         QList<KoPathPointData> segments;
         segments.append(KoPathPointData(s->path, s->path->pathPointIndex(s->segmentStart)));
         KoPathPointInsertCommand *cmd = new KoPathPointInsertCommand(segments, s->positionOnSegment);
@@ -759,7 +746,6 @@ void KoPathTool::mouseDoubleClickEvent(KoPointerEvent *event)
         updateActions();
         event->accept();
     }
-    delete s;
 }
 
 KoPathTool::PathSegment* KoPathTool::segmentAtPoint(const QPointF &point)
@@ -772,7 +758,7 @@ KoPathTool::PathSegment* KoPathTool::segmentAtPoint(const QPointF &point)
     // the max allowed distance from a segment
     const qreal maxSquaredDistance = clickOffset.x()*clickOffset.x();
 
-    PathSegment *segment = new PathSegment;
+    QScopedPointer<PathSegment> segment(new PathSegment);
 
     Q_FOREACH (KoPathShape *shape, m_pointSelection.selectedShapes()) {
         KoParameterShape * parameterShape = dynamic_cast<KoParameterShape*>(shape);
@@ -805,11 +791,10 @@ KoPathTool::PathSegment* KoPathTool::segmentAtPoint(const QPointF &point)
     }
 
     if (!segment->isValid()) {
-        delete segment;
-        segment = 0;
+        segment.reset();
     }
 
-    return segment;
+    return segment.take();
 }
 
 void KoPathTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)

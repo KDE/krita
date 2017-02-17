@@ -31,7 +31,7 @@ TextToolFactory::TextToolFactory()
     setToolTip(i18n("Text editing"));
     setSection(dynamicToolType() + ",calligrawords,calligraauthor");
     setIconName(koIconNameCStr("tool-text"));
-    setPriority(0);
+    setPriority(2);
     setActivationShapeId(TextShape_SHAPEID "," AnnotationShape_SHAPEID);
 }
 

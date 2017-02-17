@@ -31,6 +31,8 @@
 class KisExternalLayer;
 // #include "kis_external_layer_iface.h"
 
+#include <kritaimage_export.h>
+
 /**
  * The Change Profile visitor walks over all layers and if the current
  * layer has the specified colorspace AND the specified old profile, sets
@@ -38,7 +40,7 @@ class KisExternalLayer;
  * conversions. This is essential if you have loaded an image that didn't
  * have an embedded profile to which you want to attach the right profile.
  */
-class KisChangeProfileVisitor : public KisNodeVisitor
+class KRITAIMAGE_EXPORT KisChangeProfileVisitor : public KisNodeVisitor
 {
 public:
 

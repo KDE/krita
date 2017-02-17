@@ -6,7 +6,6 @@ qtcreator-build
 *~
 .kateconfig
 CMakeLists.txt.user*
-.directory
 *.autosave
 *.swp
 .gdb_history

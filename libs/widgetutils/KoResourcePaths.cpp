@@ -28,7 +28,6 @@
 #include <QApplication>
 #include <QMutex>
 #include "kis_debug.h"
-
 #include "WidgetUtilsDebug.h"
 
 Q_GLOBAL_STATIC(KoResourcePaths, s_instance);
@@ -307,12 +306,13 @@ QString KoResourcePaths::findResourceInternal(const QString &type, const QString
         Q_FOREACH (const QString &alias, aliases) {
             resource = approot + "/share/" + alias + '/' + fileName;
             debugWidgetUtils << "\t1" << resource;
+
             if (QFile::exists(resource)) {
                 continue;
             }
         }
     }
-    if (resource.isEmpty() || !QFile::exists(resource)) {
+    if (resource.isEmpty() || !QFile::exists(resource)) {        
         QString approot = getApplicationRoot();
         Q_FOREACH (const QString &alias, aliases) {
             resource = approot + "/share/krita/" + alias + '/' + fileName;

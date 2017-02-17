@@ -94,6 +94,7 @@ public:
     qreal explicitOrientation;
 
     QList<KoShape*> shapes;
+    QScopedPointer<KoShapePainter> shapePainter;
 
     bool compareShapesTo(const QList<KoShape*> other) const {
         if (shapes.size() != other.size()) return false;
@@ -229,6 +230,10 @@ void KoMarker::setExplicitOrientation(qreal value)
 void KoMarker::setShapes(const QList<KoShape *> &shapes)
 {
     d->shapes = shapes;
+
+    if (d->shapePainter) {
+        d->shapePainter->setShapes(shapes);
+    }
 }
 
 QList<KoShape *> KoMarker::shapes() const
@@ -241,12 +246,14 @@ void KoMarker::paintAtPosition(QPainter *painter, const QPointF &pos, qreal stro
     QTransform oldTransform = painter->transform();
 
     KoViewConverter converter;
-    KoShapePainter p;
-    p.setShapes(d->shapes);
+
+    if (!d->shapePainter) {
+        d->shapePainter.reset(new KoShapePainter());
+        d->shapePainter->setShapes(d->shapes);
+    }
 
     painter->setTransform(d->markerTransform(strokeWidth, nodeAngle, pos), true);
-
-    p.paint(*painter, converter);
+    d->shapePainter->paint(*painter, converter);
 
     painter->setTransform(oldTransform);
 }

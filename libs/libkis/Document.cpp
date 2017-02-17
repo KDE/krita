@@ -449,6 +449,18 @@ Node* Document::createNode(const QString &name, const QString &nodeType)
     return node;
 }
 
+QImage Document::projection(int x, int y, int w, int h) const
+{
+    if (!d->document || !d->document->image()) return QImage();
+    return d->document->image()->convertToQImage(x, y, w, h, 0);
+}
+
+QImage Document::thumbnail(int w, int h) const
+{
+    if (!d->document || !d->document->image()) return QImage();
+    return d->document->generatePreview(QSize(w, h)).toImage();
+}
+
 QPointer<KisDocument> Document::document() const
 {
     return d->document;

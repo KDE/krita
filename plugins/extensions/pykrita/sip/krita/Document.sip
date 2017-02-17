@@ -33,7 +33,6 @@ public Q_SLOTS:
     void setWidth(int value);
     double xRes() const;
     void setXRes(double xRes) const;
-
     double yRes() const;
     void setyRes(double yRes) const;
     QByteArray pixelData(int x, int y, int w, int h) const;
@@ -45,7 +44,8 @@ public Q_SLOTS:
     bool save();
     bool saveAs(const QString & filename);
     Node *createNode(const QString & name, const QString & nodeType)  /Factory/;
-
+    QImage projection(int x = 0, int y = 0, int w = 0, int h = 0) const;
+    QImage thumbnail(int w, int h) const;
 Q_SIGNALS:
     void nodeCreated(Node *node);
 private:

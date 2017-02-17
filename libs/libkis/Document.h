@@ -284,6 +284,21 @@ public Q_SLOTS:
      */
     Node* createNode(const QString &name, const QString &nodeType);
 
+    /**
+     * @brief projection creates a QImage from the rendered image or
+     * a cutout rectangle.
+     */
+    QImage projection(int x = 0, int y = 0, int w = 0, int h = 0) const;
+
+    /**
+     * @brief thumbnail create a thumbnail of the given dimensions.
+     *
+     * If the requested size is too big a null QImage is created.
+     *
+     * @return a QImage representing the layer contents.
+     */
+    QImage thumbnail(int w, int h) const;
+
 Q_SIGNALS:
 
     void nodeCreated(Node *node);

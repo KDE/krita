@@ -25,6 +25,10 @@
 #include <ui_PathToolOptionWidgetBase.h>
 
 class KoPathTool;
+class KoPathShape;
+class KoShapeConfigWidgetBase;
+class KoCanvasBase;
+
 
 class PathToolOptionWidget : public QWidget
 {
@@ -41,9 +45,17 @@ public:
 
 public Q_SLOTS:
     void setSelectionType(int type);
+    void setCurrentShape(KoPathShape *pathShape);
+
+private Q_SLOTS:
+    void slotShapePropertyChanged();
 
 private:
     Ui::PathToolOptionWidgetBase widget;
+
+    KoPathShape *m_currentShape;
+    KoShapeConfigWidgetBase *m_currentPanel;
+    KoCanvasBase *m_canvas;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(PathToolOptionWidget::Types)

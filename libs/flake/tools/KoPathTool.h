@@ -69,7 +69,8 @@ public Q_SLOTS:
 
 Q_SIGNALS:
     void typeChanged(int types);
-    void pathChanged(KoPathShape* path); // TODO this is unused, can we remove this one?
+    void singleShapeChanged(KoPathShape* path);
+
 protected:
     /// reimplemented
     virtual QList<QPointer<QWidget> >  createOptionWidgets();

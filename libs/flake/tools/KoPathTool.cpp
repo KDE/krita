@@ -198,8 +198,9 @@ QList<QPointer<QWidget> >  KoPathTool::createOptionWidgets()
 
     PathToolOptionWidget * toolOptions = new PathToolOptionWidget(this);
     connect(this, SIGNAL(typeChanged(int)), toolOptions, SLOT(setSelectionType(int)));
+    connect(this, SIGNAL(singleShapeChanged(KoPathShape*)), toolOptions, SLOT(setCurrentShape(KoPathShape*)));
     updateOptionsWidget();
-    toolOptions->setWindowTitle(i18n("Line/Curve"));
+    toolOptions->setWindowTitle(i18n("Edit Shape"));
     list.append(toolOptions);
 
     return list;
@@ -665,11 +666,6 @@ void KoPathTool::mouseReleaseEvent(KoPointerEvent *event)
         }
         delete m_currentStrategy;
         m_currentStrategy = 0;
-
-        if (m_pointSelection.selectedShapes().count() == 1)
-            emit pathChanged(m_pointSelection.selectedShapes().first());
-        else
-            emit pathChanged(0);
     }
 }
 
@@ -869,10 +865,8 @@ void KoPathTool::updateOptionsWidget()
         type |= parameterShape && parameterShape->isParametricShape() ?
                 PathToolOptionWidget::ParametricShape : PathToolOptionWidget::PlainPath;
     }
-    if (selectedShapes.count() == 1)
-        emit pathChanged(selectedShapes.first());
-    else
-        emit pathChanged(0);
+
+    emit singleShapeChanged(selectedShapes.size() == 1 ? selectedShapes.first() : 0);
     emit typeChanged(type);
 }
 

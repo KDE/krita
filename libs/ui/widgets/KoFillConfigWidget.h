@@ -53,7 +53,7 @@ public:
     /// If you need to use only one shape, call currentShape()
     QList<KoShape*> currentShapes();
 
-    KoShapeStrokeSP createShapeStroke() const;
+    KoShapeStrokeSP createShapeStroke();
 
 protected:
     void showEvent(QShowEvent *event);
@@ -90,6 +90,7 @@ private:
     void uploadNewGradientBackground(const QGradient *gradient);
     void setNewGradientBackgroundToShape();
     void updateGradientSaveButtonAvailability();
+    void loadCurrentFillFromResourceServer();
 
     class Private;
     Private * const d;

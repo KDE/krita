@@ -363,8 +363,12 @@ Qt::PenJoinStyle KoStrokeConfigWidget::joinStyle() const
     return static_cast<Qt::PenJoinStyle>(d->capNJoinMenu->joinGroup->checkedId());
 }
 
-KoShapeStrokeSP KoStrokeConfigWidget::createShapeStroke() const
+KoShapeStrokeSP KoStrokeConfigWidget::createShapeStroke()
 {
+    if (d->noSelectionTrackingMode && !isVisible()) {
+        loadCurrentStrokeFillFromResourceServer();
+    }
+
     KoShapeStrokeSP stroke(d->fillConfigWidget->createShapeStroke());
 
     stroke->setLineWidth(lineWidth());
@@ -689,6 +693,8 @@ void KoStrokeConfigWidget::setCanvas( KoCanvasBase *canvas )
 
 void KoStrokeConfigWidget::canvasResourceChanged(int key, const QVariant &value)
 {
+    if (!isVisible() && !d->noSelectionTrackingMode) return;
+
     switch (key) {
     case KoCanvasResourceManager::Unit:
         setUnit(value.value<KoUnit>());
@@ -708,9 +714,14 @@ void KoStrokeConfigWidget::showEvent(QShowEvent *event)
     if (!d->noSelectionTrackingMode) {
         selectionChanged();
     } else {
-        if (d->canvas) {
-            const QVariant value = d->canvas->resourceManager()->resource(KisCanvasResourceProvider::Size);
-            canvasResourceChanged(KisCanvasResourceProvider::Size, value);
-        }
+        loadCurrentStrokeFillFromResourceServer();
+    }
+}
+
+void KoStrokeConfigWidget::loadCurrentStrokeFillFromResourceServer()
+{
+    if (d->canvas) {
+        const QVariant value = d->canvas->resourceManager()->resource(KisCanvasResourceProvider::Size);
+        canvasResourceChanged(KisCanvasResourceProvider::Size, value);
     }
 }

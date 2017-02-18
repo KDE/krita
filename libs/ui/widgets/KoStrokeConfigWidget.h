@@ -70,7 +70,7 @@ public:
      * configured by the widget. The caller is in charge of
      * deletion of the returned object
      */
-    KoShapeStrokeSP createShapeStroke() const;
+    KoShapeStrokeSP createShapeStroke();
 
     void setCanvas(KoCanvasBase *canvas);
     void setActive(bool active);
@@ -100,6 +100,7 @@ private Q_SLOTS:
 private:
     void setUnit(const KoUnit &unit);
     void blockChildSignals(bool block);
+    void loadCurrentStrokeFillFromResourceServer();
 
 private:
     class Private;

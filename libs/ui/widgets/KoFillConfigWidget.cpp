@@ -328,7 +328,7 @@ void KoFillConfigWidget::slotUpdateFillTitle()
 
 void KoFillConfigWidget::slotCanvasResourceChanged(int key, const QVariant &value)
 {
-    if (!isVisible()) return;
+    if (!isVisible() && !d->noSelectionTrackingMode) return;
 
     if (key == KoCanvasResourceManager::ForegroundColor) {
         KoColor color = value.value<KoColor>();
@@ -390,8 +390,13 @@ void KoFillConfigWidget::styleButtonPressed(int buttonId)
     }
 }
 
-KoShapeStrokeSP KoFillConfigWidget::createShapeStroke() const
+KoShapeStrokeSP KoFillConfigWidget::createShapeStroke()
 {
+
+    if (d->noSelectionTrackingMode && !isVisible()) {
+        loadCurrentFillFromResourceServer();
+    }
+
     KoShapeStrokeSP stroke(new KoShapeStroke());
     KIS_ASSERT_RECOVER_RETURN_VALUE(d->fillVariant == KoFlake::StrokeFill, stroke);
 
@@ -618,10 +623,15 @@ void KoFillConfigWidget::showEvent(QShowEvent *event)
     if (!d->noSelectionTrackingMode) {
         shapeChanged();
     } else {
-        KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
-        KoColor color = canvasController->canvas()->resourceManager()->foregroundColor();
-        slotCanvasResourceChanged(KoCanvasResourceManager::ForegroundColor, QVariant::fromValue(color));
+        loadCurrentFillFromResourceServer();
     }
+}
+
+void KoFillConfigWidget::loadCurrentFillFromResourceServer()
+{
+    KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
+    KoColor color = canvasController->canvas()->resourceManager()->foregroundColor();
+    slotCanvasResourceChanged(KoCanvasResourceManager::ForegroundColor, QVariant::fromValue(color));
 }
 
 void KoFillConfigWidget::shapeChanged()

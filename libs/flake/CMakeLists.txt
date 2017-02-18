@@ -41,10 +41,8 @@ set(kritaflake_SRCS
     KoShapePaintingContext.cpp
     KoFrameShape.cpp
     KoUnavailShape.cpp
-    KoMarkerData.cpp
     KoMarker.cpp
     KoMarkerCollection.cpp
-    KoMarkerSharedLoadingData.cpp
     KoToolBase.cpp
     KoCanvasController.cpp
     KoCanvasControllerWidget.cpp

@@ -40,7 +40,6 @@
 #include "KoShape.h"
 #include "KoShapeSavingContext.h"
 #include "KoPathShape.h"
-#include "KoMarkerData.h"
 #include "KoMarker.h"
 #include "KoInsets.h"
 #include <KoPathSegment.h>

@@ -22,7 +22,6 @@
 #include "KoPathShape.h"
 #include "KoTosContainer_p.h"
 #include "KoMarker.h"
-#include "KoMarkerData.h"
 
 class KoPathShapePrivate : public KoTosContainerPrivate
 {

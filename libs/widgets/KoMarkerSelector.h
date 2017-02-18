@@ -24,7 +24,6 @@
 
 #include <KoFlake.h>
 #include <QComboBox>
-#include <KoMarkerData.h>
 
 class KoMarker;
 

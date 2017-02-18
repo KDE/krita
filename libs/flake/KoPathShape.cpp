@@ -36,7 +36,6 @@
 #include "KoShapeContainer.h"
 #include "KoFilterEffectStack.h"
 #include "KoMarker.h"
-#include "KoMarkerSharedLoadingData.h"
 #include "KoShapeStroke.h"
 #include "KoInsets.h"
 

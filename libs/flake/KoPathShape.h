@@ -29,7 +29,6 @@
 #include <QTransform>
 
 #include "KoTosContainer.h"
-#include "KoMarkerData.h"
 
 #define KoPathShapeId "KoPathShape"
 

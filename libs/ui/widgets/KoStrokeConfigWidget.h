@@ -33,7 +33,6 @@
 #include "kritaui_export.h"
 
 #include <QWidget>
-#include <KoMarkerData.h>
 #include <KoFlakeTypes.h>
 #include <KoFlake.h>
 

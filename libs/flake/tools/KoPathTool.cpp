@@ -953,6 +953,11 @@ KoToolSelection * KoPathTool::selection()
     return &m_pointSelection;
 }
 
+void KoPathTool::requestUndoDuringStroke()
+{
+    // noop!
+}
+
 void KoPathTool::requestStrokeCancellation()
 {
     requestStrokeEnd();

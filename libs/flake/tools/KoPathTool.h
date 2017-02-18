@@ -58,6 +58,7 @@ public:
     void deactivate() override;
     void deleteSelection() override;
     KoToolSelection* selection() override;
+    void requestUndoDuringStroke();
     void requestStrokeCancellation() override;
     void requestStrokeEnd() override;
 

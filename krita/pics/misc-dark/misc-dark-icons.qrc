@@ -28,5 +28,19 @@
         <file>dark_onionOff.svg</file>
         <file>dark_onionOn.svg</file>
         <file>dark_onion_skin_options.svg</file>
+        <file>dark_onion_skin_options.svg</file>
+        <file>dark_path-break-point.svg</file>
+        <file>dark_path-break-segment.svg</file>
+        <file>dark_pathpoint-corner.svg</file>
+        <file>dark_pathpoint-curve.svg</file>
+        <file>dark_pathpoint-insert.svg</file>
+        <file>dark_pathpoint-join.svg</file>
+        <file>dark_pathpoint-line.svg</file>
+        <file>dark_pathpoint-merge.svg</file>
+        <file>dark_pathpoint-remove.svg</file>
+        <file>dark_pathpoint-smooth.svg</file>
+        <file>dark_pathpoint-symmetric.svg</file>
+        <file>dark_pathsegment-curve.svg</file>
+        <file>dark_pathsegment-line.svg</file>
     </qresource>
 </RCC>

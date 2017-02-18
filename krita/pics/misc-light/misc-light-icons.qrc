@@ -28,5 +28,18 @@
         <file>light_onionOff.svg</file>
         <file>light_onionOn.svg</file>
         <file>light_onion_skin_options.svg</file>
+        <file>light_path-break-point.svg</file>
+        <file>light_path-break-segment.svg</file>
+        <file>light_pathpoint-corner.svg</file>
+        <file>light_pathpoint-curve.svg</file>
+        <file>light_pathpoint-insert.svg</file>
+        <file>light_pathpoint-join.svg</file>
+        <file>light_pathpoint-line.svg</file>
+        <file>light_pathpoint-merge.svg</file>
+        <file>light_pathpoint-remove.svg</file>
+        <file>light_pathpoint-smooth.svg</file>
+        <file>light_pathpoint-symmetric.svg</file>
+        <file>light_pathsegment-curve.svg</file>
+        <file>light_pathsegment-line.svg</file>
     </qresource>
 </RCC>

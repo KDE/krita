@@ -40,8 +40,8 @@ EllipseShapeConfigWidget::EllipseShapeConfigWidget()
     widget.endAngle->setMaximum(360.0);
 
     connect(widget.ellipseType, SIGNAL(currentIndexChanged(int)), this, SIGNAL(propertyChanged()));
-    connect(widget.startAngle, SIGNAL(editingFinished()), this, SIGNAL(propertyChanged()));
-    connect(widget.endAngle, SIGNAL(editingFinished()), this, SIGNAL(propertyChanged()));
+    connect(widget.startAngle, SIGNAL(valueChanged(double)), this, SIGNAL(propertyChanged()));
+    connect(widget.endAngle, SIGNAL(valueChanged(double)), this, SIGNAL(propertyChanged()));
     connect(widget.closeEllipse, SIGNAL(clicked(bool)), this, SLOT(closeEllipse()));
 }
 

@@ -704,13 +704,10 @@ int KoPathShape::arcToCurve(qreal rx, qreal ry, qreal startAngle, qreal sweepAng
 {
     int pointCnt = 0;
 
-    // check Parameters
-    if (sweepAngle == 0)
-        return pointCnt;
-    if (sweepAngle > 360)
-        sweepAngle = 360;
-    else if (sweepAngle < -360)
-        sweepAngle = - 360;
+    sweepAngle = normalizeAngleDegrees(sweepAngle);
+    if (sweepAngle < 1e-3) {
+        sweepAngle = 360.0;
+    }
 
     if (rx == 0 || ry == 0) {
         //TODO

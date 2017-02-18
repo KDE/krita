@@ -837,6 +837,13 @@ void KoPathTool::slotSelectionChanged()
 
 void KoPathTool::initializeWithShapes(const QList<KoShape*> shapes)
 {
+    delete m_activeHandle;
+    m_activeHandle = 0;
+    delete m_activeSegment;
+    m_activeSegment = 0;
+
+    m_pointSelection.clear();
+
     repaintDecorations();
     QList<KoPathShape*> selectedShapes;
     Q_FOREACH (KoShape *shape, shapes) {

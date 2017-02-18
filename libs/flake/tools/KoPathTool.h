@@ -100,6 +100,7 @@ private Q_SLOTS:
     void slotSelectionChanged();
 
 private:
+    void clearActivePointSelectionReferences();
     void initializeWithShapes(const QList<KoShape*> shapes);
 
 protected:

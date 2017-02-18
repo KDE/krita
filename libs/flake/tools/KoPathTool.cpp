@@ -259,7 +259,7 @@ void KoPathTool::removePoints()
             delete m_activeHandle;
             m_activeHandle = 0;
         }
-        m_pointSelection.clear();
+        clearActivePointSelectionReferences();
         d->canvas->addCommand(cmd);
     }
 }
@@ -389,9 +389,21 @@ void KoPathTool::mergePoints()
     if (index2.second != 0 && index2.second != path->subpathPointCount(index2.first)-1)
         return;
 
+    clearActivePointSelectionReferences();
+
     // now we can start merging the endpoints
     KoPathPointMergeCommand *cmd = new KoPathPointMergeCommand(pd1, pd2);
     d->canvas->addCommand(cmd);
+
+    KoPathPoint *pt = path->pointByIndex(index1);
+    if (!pt) {
+        pt = path->pointByIndex(index2);
+    }
+
+    if (pt) {
+        m_pointSelection.add(pt, true);
+    }
+
     updateActions();
 }
 
@@ -835,7 +847,7 @@ void KoPathTool::slotSelectionChanged()
     initializeWithShapes(shapes);
 }
 
-void KoPathTool::initializeWithShapes(const QList<KoShape*> shapes)
+void KoPathTool::clearActivePointSelectionReferences()
 {
     delete m_activeHandle;
     m_activeHandle = 0;
@@ -843,6 +855,11 @@ void KoPathTool::initializeWithShapes(const QList<KoShape*> shapes)
     m_activeSegment = 0;
 
     m_pointSelection.clear();
+}
+
+void KoPathTool::initializeWithShapes(const QList<KoShape*> shapes)
+{
+    clearActivePointSelectionReferences();
 
     repaintDecorations();
     QList<KoPathShape*> selectedShapes;

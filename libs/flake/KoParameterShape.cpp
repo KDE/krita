@@ -66,7 +66,6 @@ void KoParameterShape::moveHandle(int handleId, const QPointF & point, Qt::Keybo
 
     updatePath(size());
     update();
-    d->shapeChanged(ParameterChanged);
 }
 
 
@@ -155,6 +154,8 @@ void KoParameterShape::setHandles(const QList<QPointF> &handles)
 {
     Q_D(KoParameterShape);
     d->handles = handles;
+
+    d->shapeChanged(ParameterChanged);
 }
 
 int KoParameterShape::handleCount() const

@@ -20,6 +20,8 @@
 #include "RectangleShapeConfigCommand.h"
 #include "RectangleShape.h"
 #include <klocalizedstring.h>
+#include "kis_command_ids.h"
+
 
 RectangleShapeConfigCommand::RectangleShapeConfigCommand(RectangleShape *rectangle, qreal cornerRadiusX, qreal cornerRadiusY, KUndo2Command *parent)
     : KUndo2Command(parent)
@@ -65,4 +67,23 @@ void RectangleShapeConfigCommand::undo()
     }
 
     m_rectangle->update();
+}
+
+int RectangleShapeConfigCommand::id() const
+{
+    return KisCommandUtils::ChangeRectangleShapeId;
+}
+
+bool RectangleShapeConfigCommand::mergeWith(const KUndo2Command *command)
+{
+    const RectangleShapeConfigCommand *other = dynamic_cast<const RectangleShapeConfigCommand*>(command);
+
+    if (!other || other->m_rectangle != m_rectangle) {
+        return false;
+    }
+
+    m_newCornerRadiusX = other->m_newCornerRadiusX;
+    m_newCornerRadiusY = other->m_newCornerRadiusY;
+
+    return true;
 }

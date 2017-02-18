@@ -27,7 +27,10 @@ enum CommandId {
     ChangeShapeTransparencyId,
     ChangeShapeBackgroundId,
     ChangeShapeStrokeId,
-    ChangeShapeMarkersId
+    ChangeShapeMarkersId,
+    ChangeShapeParameterId,
+    ChangeEllipseShapeId,
+    ChangeRectangleShapeId
 };
 
 }

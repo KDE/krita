@@ -200,7 +200,7 @@ void KoCreatePathTool::mousePressEvent(KoPointerEvent *event)
         canvas()->updateCanvas(handlePaintRect(point));
         canvas()->updateCanvas(canvas()->snapGuide()->boundingRect());
 
-        canvas()->snapGuide()->setEditedShape(pathShape);
+        canvas()->snapGuide()->setAdditionalEditedShape(pathShape);
 
         d->angleSnapStrategy = new AngleSnapStrategy(d->angleSnappingDelta, d->angleSnapStatus);
         canvas()->snapGuide()->addCustomSnapStrategy(d->angleSnapStrategy);

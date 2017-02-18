@@ -145,7 +145,7 @@ bool NodeSnapStrategy::snap(const QPointF &mousePosition, KoSnapProxy * proxy, q
 
     QRectF rect(-maxSnapDistance, -maxSnapDistance, maxSnapDistance, maxSnapDistance);
     rect.moveCenter(mousePosition);
-    QList<QPointF> points = proxy->pointsInRect(rect);
+    QList<QPointF> points = proxy->pointsInRect(rect, false);
     QPointF snappedPoint = mousePosition;
 
     foreach (const QPointF &point, points) {
@@ -387,7 +387,7 @@ bool IntersectionSnapStrategy::snap(const QPointF &mousePosition, KoSnapProxy *p
     rect.moveCenter(mousePosition);
     QPointF snappedPoint = mousePosition;
 
-    QList<KoPathSegment> segments = proxy->segmentsInRect(rect);
+    QList<KoPathSegment> segments = proxy->segmentsInRect(rect, false);
     int segmentCount = segments.count();
     for (int i = 0; i < segmentCount; ++i) {
         const KoPathSegment &s1 = segments[i];

@@ -1,5 +1,4 @@
 install( FILES 
-template_animation.png
 light_template_animation.png
 dark_template_animation.png
 DESTINATION

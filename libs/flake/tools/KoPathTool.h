@@ -104,6 +104,7 @@ private:
     void clearActivePointSelectionReferences();
     void initializeWithShapes(const QList<KoShape*> shapes);
     KUndo2Command* createPointToCurveCommand(const QList<KoPathPointData> &points);
+    void repaintSegment(PathSegment *pathSegment);
 
 protected:
     KoPathToolSelection m_pointSelection; ///< the point selection

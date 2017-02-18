@@ -485,7 +485,30 @@ void KoPathTool::paint(QPainter &painter, const KoViewConverter &converter)
             delete m_activeHandle;
             m_activeHandle = 0;
         }
+    } else if (m_activeSegment && m_activeSegment->isValid()) {
+
+        KoPathShape *shape = m_activeSegment->path;
+
+        // if the stroke is invisible, then we already painted the outline of the shape!
+        if (shape->stroke() && shape->stroke()->isVisible()) {
+            KoPathPointIndex index = shape->pathPointIndex(m_activeSegment->segmentStart);
+            KoPathSegment segment = shape->segmentByIndex(index).toCubic();
+
+            KisHandlePainterHelper helper =
+                KoShape::createHandlePainterHelper(&painter, shape, converter, m_handleRadius);
+            helper.setHandleStyle(KisHandleStyle::secondarySelection());
+
+            QPainterPath path;
+            path.moveTo(segment.first()->point());
+            path.cubicTo(segment.first()->controlPoint2(),
+                         segment.second()->controlPoint1(),
+                         segment.second()->point());
+
+            helper.drawPath(path);
+        }
     }
+
+
 
     if (m_currentStrategy) {
         painter.save();
@@ -521,8 +544,6 @@ void KoPathTool::mousePressEvent(KoPointerEvent *event)
                 KoPathPointData data(m_activeSegment->path, index);
                 m_currentStrategy = new KoPathSegmentChangeStrategy(this, event->point, data, m_activeSegment->positionOnSegment);
                 event->accept();
-                delete m_activeSegment;
-                m_activeSegment = 0;
             } else {
 
                 KoShapeManager *shapeManager = canvas()->shapeManager();
@@ -561,11 +582,21 @@ void KoPathTool::mouseMoveEvent(KoPointerEvent *event)
             m_activeHandle->repaint();
         }
 
+        if (m_activeSegment) {
+            repaintSegment(m_activeSegment);
+        }
+
         return;
     }
 
-    delete m_activeSegment;
-    m_activeSegment = 0;
+    if (m_activeSegment) {
+        KoPathPointIndex index = m_activeSegment->path->pathPointIndex(m_activeSegment->segmentStart);
+        KoPathSegment segment = m_activeSegment->path->segmentByIndex(index);
+        repaint(segment.boundingRect());
+
+        delete m_activeSegment;
+        m_activeSegment = 0;
+    }
 
     Q_FOREACH (KoPathShape *shape, m_pointSelection.selectedShapes()) {
         QRectF roi = handleGrabRect(shape->documentToShape(event->point));
@@ -670,6 +701,7 @@ void KoPathTool::mouseMoveEvent(KoPointerEvent *event)
         useCursor(Qt::PointingHandCursor);
         emit statusTextChanged(i18n("Drag to change curve directly. Double click to insert new path point."));
         m_activeSegment = hoveredSegment;
+        repaintSegment(m_activeSegment);
     } else {
         uint selectedPointCount = m_pointSelection.size();
         if (selectedPointCount == 0)
@@ -679,6 +711,15 @@ void KoPathTool::mouseMoveEvent(KoPointerEvent *event)
         else
             emit statusTextChanged(i18n("Press B to break path at selected segments."));
     }
+}
+
+void KoPathTool::repaintSegment(PathSegment *pathSegment)
+{
+    if (!pathSegment || !pathSegment->isValid()) return;
+
+    KoPathPointIndex index = pathSegment->path->pathPointIndex(pathSegment->segmentStart);
+    KoPathSegment segment = pathSegment->path->segmentByIndex(index);
+    repaint(segment.boundingRect());
 }
 
 void KoPathTool::mouseReleaseEvent(KoPointerEvent *event)

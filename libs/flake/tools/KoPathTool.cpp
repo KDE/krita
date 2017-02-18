@@ -52,6 +52,7 @@
 #include "kis_action_registry.h"
 #include <KisHandlePainterHelper.h>
 #include <KoShapeStrokeModel.h>
+#include "kis_command_utils.h"
 
 #include <KoIcon.h>
 
@@ -211,24 +212,29 @@ void KoPathTool::pointTypeChanged(QAction *type)
     Q_D(KoToolBase);
     if (m_pointSelection.hasSelection()) {
         QList<KoPathPointData> selectedPoints = m_pointSelection.selectedPointsData();
-        QList<KoPathPointData> pointToChange;
 
-        QList<KoPathPointData>::const_iterator it(selectedPoints.constBegin());
-        for (; it != selectedPoints.constEnd(); ++it) {
-            KoPathPoint *point = it->pathShape->pointByIndex(it->pointIndex);
-            if (point) {
-                if (point->activeControlPoint1() && point->activeControlPoint2()) {
-                    pointToChange.append(*it);
-                }
-            }
+        KUndo2Command *initialConversionCommand = createPointToCurveCommand(selectedPoints);
+
+        // conversion should happen before the c-tor
+        // of KoPathPointTypeCommand is executed!
+        if (initialConversionCommand) {
+            initialConversionCommand->redo();
         }
 
-        if (!pointToChange.isEmpty()) {
-            KoPathPointTypeCommand *cmd = new KoPathPointTypeCommand(pointToChange,
-                    static_cast<KoPathPointTypeCommand::PointType>(type->data().toInt()));
-            d->canvas->addCommand(cmd);
-            updateActions();
+        KUndo2Command *command =
+            new KoPathPointTypeCommand(selectedPoints,
+                                       static_cast<KoPathPointTypeCommand::PointType>(type->data().toInt()));
+
+        if (initialConversionCommand) {
+            using namespace KisCommandUtils;
+            CompositeCommand *parent = new CompositeCommand();
+            parent->setText(command->text());
+            parent->addCommand(new SkipFirstRedoWrapper(initialConversionCommand));
+            parent->addCommand(command);
+            command = parent;
         }
+
+        d->canvas->addCommand(command);
     }
 }
 
@@ -290,20 +296,33 @@ void KoPathTool::pointToCurve()
     Q_D(KoToolBase);
     if (m_pointSelection.hasSelection()) {
         QList<KoPathPointData> selectedPoints = m_pointSelection.selectedPointsData();
-        QList<KoPathPointData> pointToChange;
 
-        QList<KoPathPointData>::const_iterator it(selectedPoints.constBegin());
-        for (; it != selectedPoints.constEnd(); ++it) {
-            KoPathPoint *point = it->pathShape->pointByIndex(it->pointIndex);
-            if (point && (! point->activeControlPoint1() || ! point->activeControlPoint2()))
-                pointToChange.append(*it);
-        }
+        KUndo2Command *command = createPointToCurveCommand(selectedPoints);
 
-        if (! pointToChange.isEmpty()) {
-            d->canvas->addCommand(new KoPathPointTypeCommand(pointToChange, KoPathPointTypeCommand::Curve));
+        if (command) {
+            d->canvas->addCommand(command);
             updateActions();
         }
     }
+}
+
+KUndo2Command* KoPathTool::createPointToCurveCommand(const QList<KoPathPointData> &points)
+{
+    KUndo2Command *command = 0;
+    QList<KoPathPointData> pointToChange;
+
+    QList<KoPathPointData>::const_iterator it(points.constBegin());
+    for (; it != points.constEnd(); ++it) {
+        KoPathPoint *point = it->pathShape->pointByIndex(it->pointIndex);
+        if (point && (! point->activeControlPoint1() || ! point->activeControlPoint2()))
+            pointToChange.append(*it);
+    }
+
+    if (!pointToChange.isEmpty()) {
+        command = new KoPathPointTypeCommand(pointToChange, KoPathPointTypeCommand::Curve);
+    }
+
+    return command;
 }
 
 void KoPathTool::segmentToLine()

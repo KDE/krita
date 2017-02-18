@@ -34,6 +34,7 @@ class KoCanvasBase;
 class KoInteractionStrategy;
 class KoPathToolHandle;
 class KoParameterShape;
+class KUndo2Command;
 
 class QAction;
 
@@ -102,6 +103,7 @@ private Q_SLOTS:
 private:
     void clearActivePointSelectionReferences();
     void initializeWithShapes(const QList<KoShape*> shapes);
+    KUndo2Command* createPointToCurveCommand(const QList<KoPathPointData> &points);
 
 protected:
     KoPathToolSelection m_pointSelection; ///< the point selection

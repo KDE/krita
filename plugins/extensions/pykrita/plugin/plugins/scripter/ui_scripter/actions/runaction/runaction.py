@@ -3,6 +3,7 @@ from PyQt5.QtGui import QIcon
 import sys
 from . import docwrapper
 import os
+from scripter import resources_rc
 
 
 class RunAction(QAction):
@@ -17,8 +18,7 @@ class RunAction(QAction):
         self.triggered.connect(self.run)
 
         self.setText('Run')
-        # path to the icon
-        #self.setIcon(QIcon('/home/eliakincosta/Pictures/play.svg'))
+        self.setIcon(QIcon(':/icons/run.svg'))
 
     @property
     def parent(self):

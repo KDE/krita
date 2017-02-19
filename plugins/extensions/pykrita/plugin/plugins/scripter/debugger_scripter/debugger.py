@@ -19,15 +19,19 @@ class Debugger(bdb.Bdb):
         self.filePath = self.scripter.documentcontroller.activeDocument.filePath
         self.application_data = {}
         self.exception_data = {}
-        self.debugprocess = multiprocessing.Process(target=self.run, args=(cmd,))
+        self.debugprocess = multiprocessing.Process(target=self._run, args=(self.filePath,))
         self.currentLine = 0
 
         bdb.Bdb.reset(self)
 
-    def run(self, cmd):
+    def _run(self, filename):
         try:
-            super(Debugger, self).run(cmd)
-        except Execept as e:
+            self.mainpyfile = self.canonic(filename)
+            with open(filename, "rb") as fp:
+                statement = "exec(compile(%r, %r, 'exec'))" % \
+                            (fp.read(), self.mainpyfile)
+            self.run(statement)
+        except Exception as e:
             raise e
 
     def user_call(self, frame, args):

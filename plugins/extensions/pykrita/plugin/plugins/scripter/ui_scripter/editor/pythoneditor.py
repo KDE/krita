@@ -2,6 +2,7 @@ from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from scripter.ui_scripter.editor import linenumberarea, debugarea
+from scripter import resources_rc
 
 
 class CodeEditor(QPlainTextEdit):
@@ -25,6 +26,8 @@ class CodeEditor(QPlainTextEdit):
         self.highlightCurrentLine()
         self.font = "Monospace"
         self._stepped = False
+        self.debugArrow = QIcon(':/icons/debug_arrow.svg')
+
 
     def debugAreaWidth(self):
         return self.DEBUG_AREA_WIDTH
@@ -105,7 +108,8 @@ class CodeEditor(QPlainTextEdit):
             bottom = top + int(self.blockBoundingRect(block).height())
 
             painter = QPainter(self.debugArea)
-            painter.fillRect(0, top, self.debugAreaWidth()-3, int(self.blockBoundingRect(block).height()), QColor(Qt.yellow))
+            pixmap = self.debugArrow.pixmap(QSize(self.debugAreaWidth()-3, int(self.blockBoundingRect(block).height())))
+            painter.drawPixmap(QPoint(0, top), pixmap)
 
     def highlightCurrentLine(self):
         """Highlight current line under cursor"""

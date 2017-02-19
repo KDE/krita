@@ -1,5 +1,6 @@
 from PyQt5.QtWidgets import QAction
 from PyQt5.QtGui import QIcon
+from scripter import resources_rc
 
 
 class StopAction(QAction):
@@ -13,7 +14,7 @@ class StopAction(QAction):
 
         self.setText('Stop')
         # path to the icon
-        #self.setIcon(QIcon('/home/eliakincosta/Pictures/stop.svg'))
+        self.setIcon(QIcon(':/icons/stop.svg'))
 
     def stop(self):
         self.scripter.debugcontroller.stop()

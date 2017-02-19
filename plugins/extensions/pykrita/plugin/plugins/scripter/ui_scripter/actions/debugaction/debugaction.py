@@ -1,5 +1,6 @@
 from PyQt5.QtWidgets import QAction
 from PyQt5.QtGui import QIcon, QPixmap
+from scripter import resources_rc
 
 
 class DebugAction(QAction):
@@ -12,7 +13,7 @@ class DebugAction(QAction):
 
         self.setText('Debug')
         # path to the icon
-        #self.setIcon(QIcon('/home/eliakincosta/Pictures/debug.svg'))
+        self.setIcon(QIcon(':/icons/debug.svg'))
 
     @property
     def parent(self):

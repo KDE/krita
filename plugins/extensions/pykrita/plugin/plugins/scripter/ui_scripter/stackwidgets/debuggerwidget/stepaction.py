@@ -1,5 +1,6 @@
 from PyQt5.QtWidgets import QAction
 from PyQt5.QtGui import QIcon
+from scripter import resources_rc
 
 
 class StepAction(QAction):
@@ -13,7 +14,7 @@ class StepAction(QAction):
 
         self.setText('Step Over')
         # path to the icon
-        #self.setIcon(QIcon('/home/eliakincosta/Pictures/step.svg'))
+        self.setIcon(QIcon(':/icons/step.svg'))
 
     def step(self):
         status = self.scripter.debugcontroller.isActive

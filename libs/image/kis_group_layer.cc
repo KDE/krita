@@ -72,6 +72,7 @@ KisGroupLayer::KisGroupLayer(const KisGroupLayer &rhs) :
     m_d->y = rhs.m_d->y;
     m_d->paintDevice->setDefaultPixel(const_cast<KisGroupLayer*>(&rhs)->m_d->paintDevice->defaultPixel());
     m_d->paintDevice->setProjectionDevice(true);
+    m_d->passThroughMode = rhs.passThroughMode();
 }
 
 KisGroupLayer::~KisGroupLayer()

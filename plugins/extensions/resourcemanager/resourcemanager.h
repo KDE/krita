@@ -37,7 +37,7 @@ class ResourceManager : public KisViewPlugin
 public:
     ResourceManager(QObject *parent, const QVariantList &);
     virtual ~ResourceManager();
-    void saveBundle(const DlgCreateBundle &dlgCreateBundle);
+    KisResourceBundle *saveBundle(const DlgCreateBundle &dlgCreateBundle);
 
 private Q_SLOTS:
     void slotCreateBundle();
@@ -53,7 +53,7 @@ private Q_SLOTS:
 
 
 private:
-    
+
     QStringList importResources(const QString &title, const QStringList &mimes) const;
 
     class Private;

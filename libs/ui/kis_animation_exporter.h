@@ -39,7 +39,6 @@ public:
 
     KisAnimationExporterUI(QWidget *parent);
     virtual ~KisAnimationExporterUI();
-    KisImportExportFilter::ConversionStatus exportSequence(KisDocument *document);
 
 private:
     struct Private;

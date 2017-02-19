@@ -136,7 +136,7 @@ void TimelineLayersHeader::paintSection(QPainter *painter, const QRect &rect, in
 
         QVector<QLine> lines;
         lines << QLine(x0, y0 + lineWidth / 2, x1, y0 + lineWidth / 2);
-        lines << QLine(x0, y1 -  lineWidth / 2, x1,  y1 - lineWidth / 2);
+        lines << QLine(x0, y1 - lineWidth / 2, x1, y1 - lineWidth / 2);
 
         painter->drawLines(lines);
 

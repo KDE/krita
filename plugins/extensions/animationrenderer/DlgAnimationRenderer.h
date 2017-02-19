@@ -58,8 +58,6 @@ public:
 
     KisPropertiesConfigurationSP getFrameExportConfiguration() const;
 
-    bool renderToVideo() const;
-
     KisPropertiesConfigurationSP getVideoConfiguration() const;
     void setVideoConfiguration(KisPropertiesConfigurationSP cfg);
 
@@ -68,13 +66,18 @@ public:
 
     QSharedPointer<KisImportExportFilter> encoderFilter() const;
 
+    // fires when the render animation action is called. makes sure the correct export type is selected for the UI
+    void updateExportUIOptions();
+
 private Q_SLOTS:
 
     void selectRenderType(int i);
     void selectRenderOptions();
-    void toggleSequenceType(bool toggle);
     void sequenceMimeTypeSelected();
     void ffmpegLocationChanged(const QString&);
+
+    void slotExportTypeChanged();
+
 
 protected Q_SLOTS:
 
@@ -84,7 +87,8 @@ private:
 
     static QString findFFMpeg();
 
-    KisImageWSP m_image;
+    KisImageSP m_image;
+    KisDocument *m_doc;
     WdgAnimaterionRenderer *m_page {0};
     QList<QSharedPointer<KisImportExportFilter>> m_renderFilters;
     KisConfigWidget *m_encoderConfigWidget {0};

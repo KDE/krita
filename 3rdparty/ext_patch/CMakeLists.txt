@@ -10,5 +10,4 @@ ExternalProject_Add( ext_patch
 		COMMAND ${CMAKE_COMMAND} -E copy bin/patch.exe ${PREFIX_ext_patch}/bin/myptch.exe
 	UPDATE_COMMAND ""
 	BUILD_IN_SOURCE 1
-	ALWAYS 0
 )

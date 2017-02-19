@@ -161,7 +161,6 @@ void KisToolSelectOutline::finishSelectionAction()
 
     if (m_points.count() > 2 &&
         !helper.tryDeselectCurrentSelection(boundingViewRect, selectionAction())) {
-
         QApplication::setOverrideCursor(KisCursor::waitCursor());
 
 

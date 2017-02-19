@@ -79,7 +79,6 @@ void KisToolSelectContiguous::activate(ToolActivation toolActivation, const QSet
 
 void KisToolSelectContiguous::beginPrimaryAction(KoPointerEvent *event)
 {
-
     KisToolSelectBase::beginPrimaryAction(event);
     KisPaintDeviceSP dev;
 
@@ -93,19 +92,20 @@ void KisToolSelectContiguous::beginPrimaryAction(KoPointerEvent *event)
 
     QApplication::setOverrideCursor(KisCursor::waitCursor());
 
+
     QPoint pos = convertToIntPixelCoord(event);
     QRect rc = currentImage()->bounds();
     KisFillPainter fillpainter(dev);
     fillpainter.setHeight(rc.height());
     fillpainter.setWidth(rc.width());
     fillpainter.setFillThreshold(m_fuzziness);
+    fillpainter.setFeather(m_feather);
+    fillpainter.setSizemod(m_sizemod);
 
     KisImageWSP image = currentImage();
     KisPaintDeviceSP sourceDevice = m_limitToCurrentLayer ? dev : image->projection();
 
     image->lock();
-    fillpainter.setFeather(m_feather);
-    fillpainter.setSizemod(m_sizemod);
     KisSelectionSP selection = fillpainter.createFloodSelection(pos.x(), pos.y(), sourceDevice);
     image->unlock();
 
@@ -136,6 +136,7 @@ void KisToolSelectContiguous::beginPrimaryAction(KoPointerEvent *event)
     KisSelectionToolHelper helper(kisCanvas, kundo2_i18n("Select Contiguous Area"));
     helper.selectPixelSelection(selection->pixelSelection(), selectionAction());
     QApplication::restoreOverrideCursor();
+
 }
 
 void KisToolSelectContiguous::paint(QPainter &painter, const KoViewConverter &converter)

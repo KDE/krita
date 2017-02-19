@@ -493,7 +493,6 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
             retval = d->matcher.touchBeginEvent(static_cast<QTouchEvent*>(event));
             event->accept();
         }
-        // d->resetSavedTabletEvent(event->type());
         break;
     case QEvent::TouchUpdate: {
         QTouchEvent *tevent = static_cast<QTouchEvent*>(event);
@@ -521,7 +520,6 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
 #endif
         event->accept();
 
-        // d->resetSavedTabletEvent(event->type());
         break;
     }
     case QEvent::TouchEnd:
@@ -529,7 +527,6 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
         d->saveTouchEvent(static_cast<QTouchEvent*>(event));
         retval = d->matcher.touchEndEvent(static_cast<QTouchEvent*>(event));
         event->accept();
-        // d->resetSavedTabletEvent(event->type());
         delete d->lastTouchEvent;
         d->lastTouchEvent = 0;
         break;
@@ -576,12 +573,13 @@ void KisInputManager::slotToolChanged()
     if (tool && tool->isInTextMode()) {
         d->forwardAllEventsToTool = true;
         d->matcher.suppressAllActions(true);
+        d->maskSyntheticEvents(tool->maskSyntheticEvents());
     } else {
         d->forwardAllEventsToTool = false;
         d->matcher.suppressAllActions(false);
     }
 
-    d->maskSyntheticEvents(tool->maskSyntheticEvents());
+
 }
 
 QPointF KisInputManager::widgetToDocument(const QPointF& position)

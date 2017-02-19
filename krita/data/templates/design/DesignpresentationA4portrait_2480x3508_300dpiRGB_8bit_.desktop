@@ -29,6 +29,7 @@ Name[sv]=Design presentation A4 porträtt [ 2480x3508, 300 punkter/tum RGB, 8 bi
 Name[tr]=A4 dikey sunum tasarla [ 2480x3508 , 300dpi RGB , 8bit ]
 Name[uk]=Компонування презентації, A4, книжкова [2480x3508, 300 т./д., RGB, 8 бітів]
 Name[x-test]=xxDesign presentation A4 portrait [ 2480x3508 , 300dpi RGB , 8bit ]xx
+Name[zh_CN]=设计展示 A4 竖版 [ 2480x3508 像素, 300dpi RGB , 8 位 ]
 Type=Link
 URL[$e]=.source/DesignpresentationA4portrait_2480x3508_300dpiRGB_8bit_.kra
 X-KDE-Hidden=false

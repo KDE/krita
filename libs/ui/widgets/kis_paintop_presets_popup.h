@@ -26,6 +26,7 @@
 #include <KoID.h>
 #include <kis_types.h>
 #include <brushengine/kis_paintop_factory.h>
+#include "../kis_paint_ops_model.h"
 
 class QString;
 class KisCanvasResourceProvider;
@@ -58,8 +59,7 @@ public:
 
     void setPaintOpList(const QList<KisPaintOpFactory*>& list);
 
-    void setCurrentPaintOp(const QString & paintOpId);
-    QString currentPaintOp();
+    void setCurrentPaintOpId(const QString & paintOpId);
 
     /// returns the internal ID for the paint op (brush engine)
     QString currentPaintOpId();
@@ -108,7 +108,7 @@ private Q_SLOTS:
     void slotResourceChanged(int key, const QVariant &value);
     void slotLodAvailabilityChanged(bool value);
     void slotSwitchShowEditor(bool visible);
-    void slotPaintOpChanged(int index);
+    void slotUpdatePaintOpFilter();
     void slotSwitchShowPresets(bool visible);
 
 
@@ -118,6 +118,7 @@ private:
     struct Private;
     Private * const m_d;
     QString current_paintOpId;
+    QList<KisPaintOpInfo> sortedBrushEnginesList;
 
 };
 

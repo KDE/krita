@@ -91,7 +91,7 @@ public:
     static inline KoID id() {
         return KoID("brightnesscontrast", i18n("Brightness / Contrast"));
     }
-    virtual KisFilterConfigurationSP factoryConfiguration(const KisPaintDeviceSP) const;
+    virtual KisFilterConfigurationSP factoryConfiguration() const;
 
     virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
 };

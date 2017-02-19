@@ -56,8 +56,8 @@ KoTagFilterWidget::KoTagFilterWidget(QWidget* parent): QWidget(parent)
             "<tt>[Tagname]</tt> or <tt>![Tagname]</tt>.</p>"
             "<p>Case sensitive and full name matching in-/exclusion:<br/>"
             "<tt>\"ExactMatch\"</tt> or <tt>!\"ExactMatch\"</tt>.</p>"
-            "Filter results cannot be saved for the <interface>All Presets</interface> view.<br>"
-            "In this view, pressing <interface>Enter</interface> or clearing the filter box will restore all items.<br/>"
+            "Filter results cannot be saved for the <b>All Presets</b> view.<br/>"
+            "In this view, pressing <b>Enter</b> or clearing the filter box will restore all items.<br/>"
             "Create and/or switch to a different tag if you want to save filtered resources into named sets."
             );
 
@@ -70,7 +70,7 @@ KoTagFilterWidget::KoTagFilterWidget(QWidget* parent): QWidget(parent)
             "<tt>[Tagname]</tt> or <tt>![Tagname]</tt>.</p>"
             "<p>Case sensitive and full name matching in-/exclusion:<br/>"
             "<tt>\"ExactMatch\"</tt> or <tt>!\"ExactMatch\"</tt>.</p>"
-            "Pressing <interface>Enter</interface> or clicking the <interface>Save</interface> button will save the changes."
+            "Pressing <b>Enter</b> or clicking the <b>Save</b> button will save the changes."
             );
 
     QGridLayout* filterBarLayout = new QGridLayout;
@@ -78,7 +78,7 @@ KoTagFilterWidget::KoTagFilterWidget(QWidget* parent): QWidget(parent)
 
     d->tagSearchLineEdit = new QLineEdit(this);
     d->tagSearchLineEdit->setClearButtonEnabled(true);
-    d->tagSearchLineEdit->setPlaceholderText(i18n("Enter resource filters here"));
+    d->tagSearchLineEdit->setPlaceholderText(i18n("Search"));
     d->tagSearchLineEdit->setToolTip(d->tagSearchBarTooltip_saving_disabled);
     d->tagSearchLineEdit->setEnabled(true);
 

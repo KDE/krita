@@ -208,7 +208,7 @@ void KisMaskManager::createFilterMask(KisNodeSP activeNode, KisPaintDeviceSP cop
 
     // If we are supposed to not disturb the user, don't start asking them about things.
     if(quiet) {
-        KisFilterConfigurationSP filter = KisFilterRegistry::instance()->values().first()->defaultConfiguration(originalDevice);
+        KisFilterConfigurationSP filter = KisFilterRegistry::instance()->values().first()->defaultConfiguration();
         if (filter) {
             mask->setFilter(filter);
             mask->setName(mask->name());

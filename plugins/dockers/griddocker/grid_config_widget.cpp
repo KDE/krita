@@ -164,10 +164,6 @@ void GridConfigWidget::setGridConfigImpl(const KisGridConfig &value)
 
     m_d->guiSignalsBlocked = false;
 
-
-
-
-
     emit gridValueChanged();
 }
 

@@ -115,6 +115,12 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     m_backupFileCheckBox->setChecked(cfg.backupFile());
     m_showOutlinePainting->setChecked(cfg.showOutlineWhilePainting());
     m_hideSplashScreen->setChecked(cfg.hideSplashScreen());
+
+    KConfigGroup group = KSharedConfig::openConfig()->group("File Dialogs");
+    m_chkNativeFileDialog->setChecked(!group.readEntry("DontUseNativeFileDialog", true));
+
+    intMaxBrushSize->setValue(cfg.readEntry("maximumBrushSize", 1000));
+
     m_cmbMDIType->setCurrentIndex(cfg.readEntry<int>("mdi_viewmode", (int)QMdiArea::TabbedView));
     m_chkRubberBand->setChecked(cfg.readEntry<int>("mdi_rubberband", cfg.useOpenGL()));
     m_favoritePresetsSpinBox->setValue(cfg.favoritePresets());
@@ -146,6 +152,9 @@ void GeneralTab::setDefault()
     m_backupFileCheckBox->setChecked(cfg.backupFile(true));
     m_showOutlinePainting->setChecked(cfg.showOutlineWhilePainting(true));
     m_hideSplashScreen->setChecked(cfg.hideSplashScreen(true));
+    m_chkNativeFileDialog->setChecked(false);
+    intMaxBrushSize->setValue(1000);
+
     m_cmbMDIType->setCurrentIndex((int)QMdiArea::TabbedView);
     m_chkRubberBand->setChecked(cfg.useOpenGL(true));
     m_favoritePresetsSpinBox->setValue(cfg.favoritePresets(true));
@@ -179,7 +188,7 @@ bool GeneralTab::showRootLayer()
 int GeneralTab::autoSaveInterval()
 {
     //convert to seconds
-    return m_autosaveCheckBox->isChecked() ? m_autosaveSpinBox->value()*60 : 0;
+    return m_autosaveCheckBox->isChecked() ? m_autosaveSpinBox->value() * 60 : 0;
 }
 
 int GeneralTab::undoStackSize()
@@ -991,6 +1000,12 @@ bool KisDlgPreferences::editPreferences()
         cfg.setShowRootLayer(dialog->m_general->showRootLayer());
         cfg.setShowOutlineWhilePainting(dialog->m_general->showOutlineWhilePainting());
         cfg.setHideSplashScreen(dialog->m_general->hideSplashScreen());
+
+        KConfigGroup group = KSharedConfig::openConfig()->group("File Dialogs");
+        group.writeEntry("DontUseNativeFileDialog", !dialog->m_general->m_chkNativeFileDialog->isChecked());
+
+        cfg.writeEntry<int>("maximumBrushSize", dialog->m_general->intMaxBrushSize->value());
+
         cfg.writeEntry<int>("mdi_viewmode", dialog->m_general->mdiMode());
         cfg.setMDIBackgroundColor(dialog->m_general->m_mdiColor->color().toQColor());
         cfg.setMDIBackgroundImage(dialog->m_general->m_backgroundimage->text());

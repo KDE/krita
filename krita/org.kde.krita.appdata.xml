@@ -30,7 +30,7 @@
   <summary xml:lang="zh-CN">数码绘图，自由创作</summary>
   <description>
     <p>Krita is the full-featured digital art studio.</p>
-    <p xml:lang="ast">Krita ye l'estudiu dixital d'arte completu.</p>
+    <p xml:lang="ast">Krita ye l'estudiu completu d'arte dixital.</p>
     <p xml:lang="bs">Krita je potpuni digitalni umjetnički studio.</p>
     <p xml:lang="ca">Krita és l'estudi d'art digital ple de funcionalitats.</p>
     <p xml:lang="ca-valencia">Krita és l'estudi d'art digital ple de funcionalitats.</p>
@@ -75,6 +75,7 @@
     <p xml:lang="sv">Den är perfekt för att skissa och måla, samt erbjuder en helomfattande lösning för att skapa digitala målningsfiler från grunden av mästare.</p>
     <p xml:lang="uk">Цей комплекс чудово пасує для створення ескізів та художніх зображень і є самодостатнім набором для створення файлів цифрових полотен «з нуля» для справжніх художників.</p>
     <p xml:lang="x-test">xxIt is perfect for sketching and painting, and presents an end–to–end solution for creating digital painting files from scratch by masters.xx</p>
+    <p xml:lang="zh-CN">适合做草图和绘画，为艺术大师提供了从草稿到数码绘画的完整解决方案。</p>
     <p>
       Krita is a great choice for creating concept art, comics, textures for rendering and matte paintings. Krita supports many colorspaces like RGB and CMYK
       at 8 and 16 bits integer channels, as well as 16 and 32 bits floating point channels.
@@ -100,6 +101,7 @@
     <p xml:lang="sv">Krita är ett utmärkt val för att skapa concept art, serier, strukturer för återgivning och bakgrundsmålningar. Krita stöder många färgrymder som RGB och CMYK med 8- och 16-bitars heltal, samt 16- och 32-bitars flyttal.</p>
     <p xml:lang="uk">Krita — чудовий інструмент для створення концептуального живопису, коміксів, текстур для моделей та декорацій. У Krita передбачено підтримку багатьох просторів кольорів, зокрема RGB та CMYK з 8-бітовими та 16-бітовими цілими значеннями, а також 16-бітовими та 32-бітовими значеннями з рухомою крапкою для каналів кольорів.</p>
     <p xml:lang="x-test">xxKrita is a great choice for creating concept art, comics, textures for rendering and matte paintings. Krita supports many colorspaces like RGB and CMYK at 8 and 16 bits integer channels, as well as 16 and 32 bits floating point channels.xx</p>
+    <p xml:lang="zh-CN">Krita 是创建抽象艺术，漫画，渲染纹理和亚光绘画的理想选择。Krita 支持非常多的色彩空间，比如 8 位和 16 位整数通道以及 16 位和 32 位浮点通道的 RGB 和 CMYK。</p>
     <p>Have fun painting with the advanced brush engines, amazing filters and many handy features that make Krita enormously productive.</p>
     <p xml:lang="bs">Zabavite se kreirajući napredne pogone četki, filtere i mnoge praktične osobine koje čine Krita vrlo produktivnim.</p>
     <p xml:lang="ca">Gaudiu pintant amb els motors de pinzells avançats, els filtres impressionants i moltes funcionalitats útils que fan el Krita molt productiu.</p>
@@ -122,6 +124,7 @@
     <p xml:lang="sv">Ha det så kul vid målning med de avancerade penselfunktionerna, fantastiska filtren och många praktiska funktioner som gör Krita så enormt produktiv.</p>
     <p xml:lang="uk">Отримуйте задоволення від малювання за допомогою пензлів з найширшими можливостями, чудових фільтрів та багатьох зручних можливостей, які роблять Krita надзвичайно продуктивним засобом малювання.</p>
     <p xml:lang="x-test">xxHave fun painting with the advanced brush engines, amazing filters and many handy features that make Krita enormously productive.xx</p>
+    <p xml:lang="zh-CN">尽情使用高级笔刷引擎，超赞的滤镜和很多手绘特性，发挥 Krita 绝佳的创造力。</p>
   </description>
   <url type="homepage">https://www.krita.org/</url>
   <url type="faq">https://krita.org/about/faq/</url>

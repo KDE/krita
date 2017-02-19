@@ -86,11 +86,7 @@ void KisScreenColorPicker::pickScreenColor()
     this->installEventFilter(m_d->colorPickingEventFilter);
     // If user pushes Escape, the last color before picking will be restored.
     m_d->beforeScreenColorPicking = currentColor();
-#ifndef QT_NO_CURSOR
     grabMouse(Qt::CrossCursor);
-#else
-    grabMouse();
-#endif
 
 #ifdef Q_OS_WIN32 // excludes WinCE and WinRT
     // On Windows mouse tracking doesn't work over other processes's windows
@@ -167,7 +163,6 @@ bool KisScreenColorPicker::handleColorPickingMouseMove(QMouseEvent *e)
     // If the cross is visible the grabbed color will be black most of the times
     //cp->setCrossVisible(!cp->geometry().contains(e->pos()));
 
-
     continueUpdateColorPicking(e->globalPos());
     return true;
 }
@@ -182,7 +177,6 @@ bool KisScreenColorPicker::handleColorPickingMouseButtonRelease(QMouseEvent *e)
 
 bool KisScreenColorPicker::handleColorPickingKeyPress(QKeyEvent *e)
 {
-    //Q_Q(QColorDialog);
 #if QT_VERSION >= 0x050600
     if (e->matches(QKeySequence::Cancel)) {
 #else
@@ -200,8 +194,7 @@ bool KisScreenColorPicker::handleColorPickingKeyPress(QKeyEvent *e)
 
 void KisScreenColorPicker::releaseColorPicking()
 {
-    //Q_Q(QColorDialog);
-    //cp->setCrossVisible(true);
+
     removeEventFilter(m_d->colorPickingEventFilter);
     releaseMouse();
 #ifdef Q_OS_WIN32
@@ -223,8 +216,6 @@ void KisScreenColorPicker::changeEvent(QEvent *e)
 
 void KisScreenColorPicker::updateColorPicking()
 {
-#ifndef QT_NO_CURSOR
-    //Q_Q(QColorDialog);
     static QPoint lastGlobalPos;
     QPoint newGlobalPos = QCursor::pos();
     if (lastGlobalPos == newGlobalPos)
@@ -237,7 +228,6 @@ void KisScreenColorPicker::updateColorPicking()
         m_d->dummyTransparentWindow.setPosition(newGlobalPos);
 #endif
     }
-#endif // ! QT_NO_CURSOR
 }
 
 void KisScreenColorPicker::continueUpdateColorPicking(const QPoint &globalPos)
@@ -251,7 +241,9 @@ void KisScreenColorPicker::continueUpdateColorPicking(const QPoint &globalPos)
 }
 
 // Event filter to be installed on the dialog while in color-picking mode.
-KisScreenColorPickingEventFilter::KisScreenColorPickingEventFilter(KisScreenColorPicker *w, QObject *parent) : QObject(parent), m_w(w)
+KisScreenColorPickingEventFilter::KisScreenColorPickingEventFilter(KisScreenColorPicker *w, QObject *parent)
+    : QObject(parent)
+    , m_w(w)
 {}
 
 bool KisScreenColorPickingEventFilter::eventFilter(QObject *, QEvent *event)

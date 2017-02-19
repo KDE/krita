@@ -202,7 +202,7 @@ public:
     KisAction *saveActionAs {0};
 //    KisAction *printAction;
 //    KisAction *printActionPreview;
-    KisAction *exportPdf {0};
+//    KisAction *exportPdf {0};
     KisAction *importAnimation {0};
     KisAction *closeAll {0};
 //    KisAction *reloadFile;
@@ -954,7 +954,7 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas)
         // don't want to be reminded about overwriting files etc.
         bool justChangingFilterOptions = false;
 
-        KoFileDialog dialog(this, KoFileDialog::SaveFile, "OpenDocument");
+        KoFileDialog dialog(this, KoFileDialog::SaveFile, "SaveAs");
         dialog.setCaption(i18n("untitled"));
         if (d->isExporting && !d->lastExportUrl.isEmpty()) {
             dialog.setDefaultDir(d->lastExportUrl.toLocalFile());
@@ -1293,7 +1293,7 @@ void KisMainWindow::slotFileNew()
                                            colorProfile,
                                            i18n("Unnamed"));
 
-    item.icon = "application-x-krita";
+    item.icon = "document-new";
 
     startupWidget->addCustomDocumentWidget(item.widget, item.title, item.icon);
 
@@ -1313,7 +1313,7 @@ void KisMainWindow::slotFileNew()
                                             i18n("Unnamed"));
 
     item.title = i18n("Create from Clipboard");
-    item.icon = "klipper";
+    item.icon = "tab-new";
 
     startupWidget->addCustomDocumentWidget(item.widget, item.title, item.icon);
 
@@ -1967,6 +1967,7 @@ void KisMainWindow::setToolbarList(QList<QAction *> toolbarList)
 
 void KisMainWindow::slotDocumentTitleModified(const QString &caption, bool mod)
 {
+    updateCaption();
     updateCaption(caption, mod);
     updateReloadFileAction(d->activeView ? d->activeView->document() : 0);
 }
@@ -2243,11 +2244,10 @@ void KisMainWindow::createActions()
     d->redo = actionManager->createStandardAction(KStandardAction::Redo, this, SLOT(redo()));
     d->redo->setActivationFlags(KisAction::ACTIVE_IMAGE);
 
-    d->exportPdf  = actionManager->createAction("file_export_pdf");
-    connect(d->exportPdf, SIGNAL(triggered()), this, SLOT(exportToPdf()));
+//    d->exportPdf  = actionManager->createAction("file_export_pdf");
+//    connect(d->exportPdf, SIGNAL(triggered()), this, SLOT(exportToPdf()));
 
     d->importAnimation  = actionManager->createAction("file_import_animation");
-    d->importAnimation->setActivationFlags(KisAction::IMAGE_HAS_ANIMATION);
     connect(d->importAnimation, SIGNAL(triggered()), this, SLOT(importAnimation()));
 
     d->closeAll = actionManager->createAction("file_close_all");
@@ -2322,6 +2322,14 @@ void KisMainWindow::applyToolBarLayout()
         toolBar->layout()->setSpacing(4);
         if (isPlastiqueStyle) {
             toolBar->setContentsMargins(0, 0, 0, 2);
+        }
+        //Hide text for buttons with an icon in the toolbar
+        Q_FOREACH (QAction *ac, toolBar->actions()){
+            if (ac->icon().pixmap(QSize(1,1)).isNull() == false){
+                ac->setPriority(QAction::LowPriority);
+            }else {
+                ac->setIcon(QIcon());
+            }
         }
     }
 }

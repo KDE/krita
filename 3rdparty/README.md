@@ -25,7 +25,12 @@ Note: on all operating systems the entire procedure is done in a terminal window
 3. Make sure you have a compiler:
     * Linux: gcc, minimum version 4.8
     * OSX: clang, you need to install xcode for this
-    * Windows: (http://tdm-gcc.tdragon.net/, version 5.1). MSVC cannot build G'Mic correctly. Remember to install the OpenMP plugin in tdm-gcc. Make sure mingw's bin folder is in your path.
+    * Windows: mingw-w64 5.4 (by mingw-builds)
+               - 32-bit (x86) target: https://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win32/Personal%20Builds/mingw-builds/5.4.0/threads-posix/dwarf/
+               - 64-bit (x64) target: https://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win64/Personal%20Builds/mingw-builds/5.4.0/threads-posix/seh/
+               Make sure mingw's bin folder is in your path. It might be a good
+               idea to create a batch file which sets the path and start cmd.
+               MSVC is *not* supported at the moment.
 4. If you compile Qt on Windows, you will also need Python: https://www.python.org. Make sure to have python.exe in your path.
 
 == Setup your environment ==
@@ -48,7 +53,13 @@ Note: on all operating systems the entire procedure is done in a terminal window
 == Prepare the externals build ==
 
 1. enter the BUILDROOT/b directory
-2. run cmake:
+
+2. The cmake command needs to point to your BUILDROOT like /dev/d, not c:\dev\d.
+
+    set PATH=BUILDROOT\i\bin\;BUILDROOT\i\lib;%PATH%
+    cmake ..\krita\3rdparty -DEXTERNALS_DOWNLOAD_DIR=/dev/d -DINSTALL_ROOT=/dev/i  -G "MinGW Makefiles"
+
+3. run cmake:
 
     * Linux:
     export PATH=$BUILDROOT/i/bin
@@ -72,12 +83,8 @@ Note: on all operating systems the entire procedure is done in a terminal window
 
     * Windows 64 bits:
 
-Note that the cmake command needs to point to your BUILDROOT like /dev/d, not c:\dev\d.
 
-    set PATH=BUILDROOT\i\bin\;BUILDROOT\i\lib;%PATH%
-    cmake ..\krita\3rdparty -DEXTERNALS_DOWNLOAD_DIR=/dev/d -DINSTALL_ROOT=/dev/i  -G "MinGW Makefiles"
-
-3. build the packages:
+4. build the packages:
 
 With a judicious application of DEPENDS statements, it's possible to build it all in one go, but in my experience that fails always, so it's better to build the dependencies independently.
 
@@ -171,19 +178,19 @@ On Windows
 
 Depending on what you want to use, run this command for MSBuild: 
 
-    cmake ..\krita -G "MinGW Makefiles" -DBoost_DEBUG=OFF -DBOOST_INCLUDEDIR=c:\dev\i\include -DBOOST_DEBUG=ON -DBOOST_ROOT=c:\dev\i -DBOOST_LIBRARYDIR=c:\dev\i\lib -DCMAKE_INSTALL_PREFIX=c:\dev\i -DCMAKE_PREFIX_PATH=c:\dev\i -DCMAKE_BUILD_TYPE=RelWithDebInfo -DBUILD_TESTING=OFF -DKDE4_BUILD_TESTS=OFF -DHAVE_MEMORY_LEAK_TRACKER=OFF -DPACKAGERS_BUILD=ON -Wno-dev -DDEFINE_NO_DEPRECATED=1
+    cmake ..\krita -G "MinGW Makefiles" -DBoost_DEBUG=OFF -DBOOST_INCLUDEDIR=c:\dev\i\include -DBOOST_DEBUG=ON -DBOOST_ROOT=c:\dev\i -DBOOST_LIBRARYDIR=c:\dev\i\lib -DCMAKE_INSTALL_PREFIX=c:\dev\i -DCMAKE_PREFIX_PATH=c:\dev\i -DCMAKE_BUILD_TYPE=RelWithDebInfo -DBUILD_TESTING=OFF -DKDE4_BUILD_TESTS=OFF -DHAVE_MEMORY_LEAK_TRACKER=OFF -Wno-dev -DDEFINE_NO_DEPRECATED=1
 
 Or this to use jom (faster compiling, uses all cores, ships with QtCreator/pre-built Qt binaries):
 
-    cmake ..\krita -G "MinGW Makefiles" -DBoost_DEBUG=OFF -DBOOST_INCLUDEDIR=c:\dev\i\include -DBOOST_DEBUG=ON -DBOOST_ROOT=c:\dev\i -DBOOST_LIBRARYDIR=c:\dev\i\lib -DCMAKE_INSTALL_PREFIX=c:\dev\i -DCMAKE_PREFIX_PATH=c:\dev\i -DCMAKE_BUILD_TYPE=RelWithDebInfo -DBUILD_TESTING=OFF -DKDE4_BUILD_TESTS=OFF -DHAVE_MEMORY_LEAK_TRACKER=OFF -DPACKAGERS_BUILD=ON -Wno-dev -DDEFINE_NO_DEPRECATED=1
+    cmake ..\krita -G "MinGW Makefiles" -DBoost_DEBUG=OFF -DBOOST_INCLUDEDIR=c:\dev\i\include -DBOOST_DEBUG=ON -DBOOST_ROOT=c:\dev\i -DBOOST_LIBRARYDIR=c:\dev\i\lib -DCMAKE_INSTALL_PREFIX=c:\dev\i -DCMAKE_PREFIX_PATH=c:\dev\i -DCMAKE_BUILD_TYPE=RelWithDebInfo -DBUILD_TESTING=OFF -DKDE4_BUILD_TESTS=OFF -DHAVE_MEMORY_LEAK_TRACKER=OFF -Wno-dev -DDEFINE_NO_DEPRECATED=1
 
 On Linux
 
-    cmake ../krita -DCMAKE_INSTALL_PREFIX=BUILDROOT/i -DDEFINE_NO_DEPRECATED=1 -DPACKAGERS_BUILD=ON -DBUILD_TESTING=OFF -DKDE4_BUILD_TESTS=OFF -DCMAKE_BUILD_TYPE=RelWithDebInfobg
+    cmake ../krita -DCMAKE_INSTALL_PREFIX=BUILDROOT/i -DDEFINE_NO_DEPRECATED=1 -DBUILD_TESTING=OFF -DKDE4_BUILD_TESTS=OFF -DCMAKE_BUILD_TYPE=RelWithDebInfobg
 
 On OSX
 
-    cmake ../krita -DCMAKE_INSTALL_PREFIX=/Users/boud/dev/i -DDEFINE_NO_DEPRECATED=1 -DBUILD_TESTING=OFF -DKDE4_BUILD_TESTS=OFF -DPACKAGERS_BUILD=ON  -DBUNDLE_INSTALL_DIR=$HOME/dev/i/bin -DCMAKE_BUILD_TYPE=RelWithDebInfo
+    cmake ../krita -DCMAKE_INSTALL_PREFIX=$BUILDROOT/i -DDEFINE_NO_DEPRECATED=1 -DBUILD_TESTING=OFF -DKDE4_BUILD_TESTS=OFF -DBUNDLE_INSTALL_DIR=$BUILDROOT/i/bin -DCMAKE_BUILD_TYPE=RelWithDebInfo
 
 
 4. Run 

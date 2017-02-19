@@ -95,6 +95,7 @@ public:
 
     void setBatchMode(bool batchmode);
     void setFilename(const QString &filename);
+    void setRealFilename(const QString &filename);
     void setMimeType(const QString &mime);
     void setUpdater(QPointer<KoUpdater> updater);
 
@@ -153,6 +154,7 @@ protected:
     KisImportExportFilter(QObject *parent = 0);
 
     QString filename() const;
+    QString realFilename() const;
     bool batchMode() const;
     QByteArray mimeType() const;
 

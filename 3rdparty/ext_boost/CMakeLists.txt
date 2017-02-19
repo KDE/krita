@@ -13,7 +13,6 @@ if (MSVC)
 			INSTALL_DIR ${EXTPREFIX_boost}
 
 			UPDATE_COMMAND ""
-			ALWAYS 0
 			BUILD_IN_SOURCE 1
 		)
 		ExternalProject_Add_Step(
@@ -37,7 +36,6 @@ if (MSVC)
 			INSTALL_DIR ${EXTPREFIX_boost}
 
 			UPDATE_COMMAND ""
-			ALWAYS 0
 			BUILD_IN_SOURCE 1
         )
         ExternalProject_Add_Step(
@@ -63,7 +61,6 @@ elseif(MINGW)
        INSTALL_DIR ${EXTPREFIX_boost}
 
        UPDATE_COMMAND ""
-       ALWAYS 0
        BUILD_IN_SOURCE 1
    )
    ExternalProject_Add_Step(
@@ -84,7 +81,6 @@ else()
         	INSTALL_DIR ${PREFIX_ext_boost}
 
 	        UPDATE_COMMAND ""
-        	ALWAYS 0
 	        BUILD_IN_SOURCE 1
 )
 endif()

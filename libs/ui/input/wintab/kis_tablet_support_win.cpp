@@ -219,7 +219,7 @@ static void handleTabletEvent(QWidget *windowWidget, const QPointF &local, const
 
 
     if ((type == QEvent::TabletRelease || buttons == Qt::NoButton) && (qt_tablet_target != 0)) {
-        dbgTablet << "releasing tablet target" << qt_tablet_target;
+        dbgInput << "releasing tablet target" << qt_tablet_target;
         qt_tablet_target = 0;
     }
 

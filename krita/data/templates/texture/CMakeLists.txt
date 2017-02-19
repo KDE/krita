@@ -1,5 +1,6 @@
 install( FILES 
-template_texture.png
+light_template_texture.png
+dark_template_texture.png
 DESTINATION
 ${DATA_INSTALL_DIR}/krita/pics )
 install( FILES  

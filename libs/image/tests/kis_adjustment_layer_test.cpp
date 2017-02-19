@@ -41,7 +41,7 @@ void KisAdjustmentLayerTest::testCreation()
     KisImageSP image = new KisImage(0, 512, 512, colorSpace, "adj layer test");
     KisFilterSP f = KisFilterRegistry::instance()->value("invert");
     Q_ASSERT(f);
-    KisFilterConfigurationSP  kfc = f->defaultConfiguration(0);
+    KisFilterConfigurationSP  kfc = f->defaultConfiguration();
     Q_ASSERT(kfc);
 
     KisAdjustmentLayerSP test = new KisAdjustmentLayer(image, "test", kfc, 0);
@@ -54,7 +54,7 @@ void KisAdjustmentLayerTest::testSetSelection()
     KisImageSP image = new KisImage(0, 512, 512, colorSpace, "adj layer test");
     KisFilterSP f = KisFilterRegistry::instance()->value("invert");
     Q_ASSERT(f);
-    KisFilterConfigurationSP  kfc = f->defaultConfiguration(0);
+    KisFilterConfigurationSP  kfc = f->defaultConfiguration();
     Q_ASSERT(kfc);
     sel->pixelSelection()->select(QRect(10, 10, 200, 200), 128);
     KisAdjustmentLayerSP l1 = new KisAdjustmentLayer(image, "bla", kfc, sel);
@@ -67,7 +67,7 @@ void KisAdjustmentLayerTest::testInverted()
     KisImageSP image = new KisImage(0, 512, 512, colorSpace, "adj layer test");
     KisFilterSP f = KisFilterRegistry::instance()->value("invert");
     Q_ASSERT(f);
-    KisFilterConfigurationSP  kfc = f->defaultConfiguration(0);
+    KisFilterConfigurationSP  kfc = f->defaultConfiguration();
     Q_ASSERT(kfc);
 
     KisSelectionSP sel2 = new KisSelection();
@@ -90,7 +90,7 @@ void KisAdjustmentLayerTest::testSelectionParent()
 
     {
         KisAdjustmentLayerSP adjLayer =
-            new KisAdjustmentLayer(image, "bla", f->defaultConfiguration(0), 0);
+            new KisAdjustmentLayer(image, "bla", f->defaultConfiguration(), 0);
 
         QCOMPARE(adjLayer->internalSelection()->parentNode(), KisNodeWSP(adjLayer));
     }
@@ -98,14 +98,14 @@ void KisAdjustmentLayerTest::testSelectionParent()
     {
         KisSelectionSP selection = new KisSelection();
         KisAdjustmentLayerSP adjLayer =
-            new KisAdjustmentLayer(image, "bla", f->defaultConfiguration(0), selection);
+            new KisAdjustmentLayer(image, "bla", f->defaultConfiguration(), selection);
 
         QCOMPARE(adjLayer->internalSelection()->parentNode(), KisNodeWSP(adjLayer));
     }
 
     {
         KisAdjustmentLayerSP adjLayer =
-            new KisAdjustmentLayer(image, "bla", f->defaultConfiguration(0), 0);
+            new KisAdjustmentLayer(image, "bla", f->defaultConfiguration(), 0);
 
         KisSelectionSP selection = new KisSelection();
         adjLayer->setInternalSelection(selection);

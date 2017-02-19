@@ -117,7 +117,7 @@ KoColorTransformation* KisHSVAdjustmentFilter::createTransformation(const KoColo
     return cs->createColorTransformation("hsv_adjustment", params);
 }
 
-KisFilterConfigurationSP KisHSVAdjustmentFilter::factoryConfiguration(const KisPaintDeviceSP) const
+KisFilterConfigurationSP KisHSVAdjustmentFilter::factoryConfiguration() const
 {
     KisColorTransformationConfigurationSP config = new KisColorTransformationConfiguration(id().id(), 1);
     config->setProperty("h", 0);

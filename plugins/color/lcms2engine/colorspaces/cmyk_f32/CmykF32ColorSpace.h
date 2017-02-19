@@ -88,7 +88,7 @@ public:
 
     virtual QString name() const
     {
-        return i18n("CMYK (32 bits floating/channel)");
+        return QString("%1 (%2)").arg(CMYKAColorModelID.name()).arg(Float32BitsColorDepthID.name());
     }
 
     virtual KoID colorModelId() const

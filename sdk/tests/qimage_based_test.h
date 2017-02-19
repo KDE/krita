@@ -79,7 +79,7 @@ protected:
 
         KisFilterSP filter = KisFilterRegistry::instance()->value("blur");
         Q_ASSERT(filter);
-        KisFilterConfigurationSP configuration = filter->defaultConfiguration(0);
+        KisFilterConfigurationSP configuration = filter->defaultConfiguration();
         Q_ASSERT(configuration);
 
         KisAdjustmentLayerSP blur1 = new KisAdjustmentLayer(image, "blur1", configuration, 0);

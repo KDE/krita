@@ -58,7 +58,7 @@
 
 // ones from brush engine selector
 #include <brushengine/kis_paintop_factory.h>
-#include "../kis_paint_ops_model.h"
+
 
 
 
@@ -227,9 +227,6 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
     connect(m_d->uiWdgPaintOpPresetSettings.txtPreset, SIGNAL(textChanged(QString)),
             SLOT(slotWatchPresetNameLineEdit()));
 
-    connect(m_d->uiWdgPaintOpPresetSettings.brushEgineComboBox, SIGNAL(activated(QString)),
-            this, SIGNAL(paintopActivated(QString)));
-
 
     // preset widget connections
     connect(m_d->uiWdgPaintOpPresetSettings.presetWidget->smallPresetChooser, SIGNAL(resourceSelected(KoResource*)),
@@ -254,9 +251,6 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
 
     m_d->uiWdgPaintOpPresetSettings.wdgLodAvailability->setCanvasResourceManager(resourceProvider->resourceManager());
 
-    // brush engine is changed
-   connect(m_d->uiWdgPaintOpPresetSettings.brushEgineComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(slotPaintOpChanged(int)));
-
     connect(resourceProvider->resourceManager(),
             SIGNAL(canvasResourceChanged(int,QVariant)),
             SLOT(slotResourceChanged(int, QVariant)));
@@ -270,7 +264,7 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
                             resource(KisCanvasResourceProvider::LodAvailability));
 
 
-    connect(m_d->uiWdgPaintOpPresetSettings.brushEgineComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(slotPaintOpChanged(int)));
+    connect(m_d->uiWdgPaintOpPresetSettings.brushEgineComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(slotUpdatePaintOpFilter()));
 
 }
 
@@ -434,7 +428,18 @@ void KisPaintOpPresetsPopup::resourceSelected(KoResource* resource)
     m_d->uiWdgPaintOpPresetSettings.presetWidget->smallPresetChooser->setCurrentResource(resource);
     m_d->uiWdgPaintOpPresetSettings.txtPreset->setText(resource->name());
     slotWatchPresetNameLineEdit();
-    m_d->uiWdgPaintOpPresetSettings.currentBrushNameLabel->setText(resource->name());
+
+    // find the display name of the brush engine and append it to the selected preset display
+    QString currentBrushEngineName;
+    for(int i=0; i < sortedBrushEnginesList.length(); i++) {
+        if (sortedBrushEnginesList.at(i).id == currentPaintOpId() ) {
+             currentBrushEngineName = sortedBrushEnginesList.at(i).name;
+        }
+    }
+
+    QString selectedBrush = resource->name().append(" (").append(currentBrushEngineName).append(" ").append("Engine").append(")");
+
+    m_d->uiWdgPaintOpPresetSettings.currentBrushNameLabel->setText(selectedBrush);
 }
 
 bool variantLessThan(const KisPaintOpInfo v1, const KisPaintOpInfo v2)
@@ -446,8 +451,10 @@ void KisPaintOpPresetsPopup::setPaintOpList(const QList< KisPaintOpFactory* >& l
 {
        m_d->uiWdgPaintOpPresetSettings.brushEgineComboBox->clear(); // reset combobox list just in case
 
+
        // create a new list so we can sort it and populate the brush engine combo box
-        QList<KisPaintOpInfo> sortedList;
+       sortedBrushEnginesList.clear(); // just in case this function is called again, don't keep adding to the list
+
         for(int i=0; i < list.length(); i++) {
 
             QString fileName = KoResourcePaths::findResource("kis_images", list.at(i)->pixmap());
@@ -464,54 +471,30 @@ void KisPaintOpPresetsPopup::setPaintOpList(const QList< KisPaintOpFactory* >& l
             paintOpInfo.icon = pixmap;
             paintOpInfo.priority = list.at(i)->priority();
 
-            sortedList.append(paintOpInfo);
+            sortedBrushEnginesList.append(paintOpInfo);
         }
 
-        qStableSort(sortedList.begin(), sortedList.end(), variantLessThan );
+        qStableSort(sortedBrushEnginesList.begin(), sortedBrushEnginesList.end(), variantLessThan );
 
         // add an "All" option at the front to show all presets
         QPixmap emptyPixmap = QPixmap(22,22);
         emptyPixmap.fill(palette().color(QPalette::Background));
-        sortedList.push_front(KisPaintOpInfo(QString("all_options"), i18n("All"), QString(""), emptyPixmap, 0 ));
+        sortedBrushEnginesList.push_front(KisPaintOpInfo(QString("all_options"), i18n("All"), QString(""), emptyPixmap, 0 ));
 
         // fill the list into the brush combo box
-        for (int m = 0; m < sortedList.length(); m++) {
-            m_d->uiWdgPaintOpPresetSettings.brushEgineComboBox->addItem(sortedList[m].icon, sortedList[m].name, QVariant(sortedList[m].id));
+        for (int m = 0; m < sortedBrushEnginesList.length(); m++) {
+            m_d->uiWdgPaintOpPresetSettings.brushEgineComboBox->addItem(sortedBrushEnginesList[m].icon, sortedBrushEnginesList[m].name, QVariant(sortedBrushEnginesList[m].id));
         }
 
 
 }
 
 
-void KisPaintOpPresetsPopup::setCurrentPaintOp(const QString& paintOpId)
+void KisPaintOpPresetsPopup::setCurrentPaintOpId(const QString& paintOpId)
 {
-    // iterate through the items and find the engine we need the combo box to switch to
-    for (int i= 0; i < m_d->uiWdgPaintOpPresetSettings.brushEgineComboBox->count(); i++) {
-
-        QVariant userData = m_d->uiWdgPaintOpPresetSettings.brushEgineComboBox->itemData(i); // grab paintOpID from data
-        QString currentPaintOpId = userData.toString();
-
-        if (paintOpId == currentPaintOpId) {
-            m_d->uiWdgPaintOpPresetSettings.brushEgineComboBox->setCurrentIndex(i); // found it!
-        }
-    }
-
-    // if the "all" option is set, set the filter to "", that way it clears the filter and shows everything
-    QString paintOpFilter = paintOpId;
-    if (paintOpFilter == "all_options") {
-        paintOpFilter = "";
-    }
-
-    m_d->uiWdgPaintOpPresetSettings.presetWidget->setPresetFilter(paintOpFilter);
-
+    current_paintOpId = paintOpId;
 }
 
-QString KisPaintOpPresetsPopup::currentPaintOp()
-{
-    QVariant userData = m_d->uiWdgPaintOpPresetSettings.brushEgineComboBox->currentData(); // grab paintOpID from data
-    QString currentPaintOpId = userData.toString();
-    return currentPaintOpId;
-}
 
 QString KisPaintOpPresetsPopup::currentPaintOpId() {
     return current_paintOpId;
@@ -567,17 +550,16 @@ void KisPaintOpPresetsPopup::slotSwitchShowPresets(bool visible) {
     m_d->uiWdgPaintOpPresetSettings.presetsContainer->setVisible(visible);
 }
 
-void KisPaintOpPresetsPopup::slotPaintOpChanged(int index) {
-
-    Q_UNUSED(index);
-
+void KisPaintOpPresetsPopup::slotUpdatePaintOpFilter() {
     QVariant userData = m_d->uiWdgPaintOpPresetSettings.brushEgineComboBox->currentData(); // grab paintOpID from data
-    QString currentPaintOpId = userData.toString();
+    QString filterPaintOpId = userData.toString();
 
-    setCurrentPaintOp(currentPaintOpId);
-    emit paintopActivated(currentPaintOpId); // tell the toolbar to change the active icon
+
+    if (filterPaintOpId == "all_options") {
+        filterPaintOpId = "";
+    }
+    m_d->uiWdgPaintOpPresetSettings.presetWidget->setPresetFilter(filterPaintOpId);
 }
-
 
 void KisPaintOpPresetsPopup::updateViewSettings()
 {
@@ -585,8 +567,9 @@ void KisPaintOpPresetsPopup::updateViewSettings()
 }
 
 void KisPaintOpPresetsPopup::currentPresetChanged(KisPaintOpPresetSP preset)
-{
+{     
      m_d->uiWdgPaintOpPresetSettings.presetWidget->smallPresetChooser->setCurrentResource(preset.data());
+     setCurrentPaintOpId(preset->paintOp().id());
 }
 
 void KisPaintOpPresetsPopup::updateThemedIcons()

@@ -54,6 +54,6 @@ KisFilterConfigurationSP KisBookmarkedFilterConfigurationsModel::configuration(c
 {
     KisFilterConfigurationSP config = dynamic_cast<KisFilterConfiguration*>(KisBookmarkedConfigurationsModel::configuration(index).data());
     if (config) return config;
-    return d->filter->defaultConfiguration(d->thumb);
+    return d->filter->defaultConfiguration();
 }
 

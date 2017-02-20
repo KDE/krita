@@ -1,10 +1,16 @@
 install( FILES 
-template_DIN_A3_landscape.png
-template_DIN_A4_portrait.png
-template_ratio_1610.png
-template_ratio_2391.png
-template_ratio_43.png
-template_web_design.png
+light_template_DIN_A3_landscape.png
+dark_template_DIN_A3_landscape.png
+light_template_DIN_A4_portrait.png
+dark_template_DIN_A4_portrait.png
+light_template_ratio_1610.png
+dark_template_ratio_1610.png
+light_template_ratio_2391.png
+dark_template_ratio_2391.png
+light_template_ratio_43.png
+dark_template_ratio_43.png
+light_template_web_design.png
+dark_template_web_design.png
 DESTINATION
 ${DATA_INSTALL_DIR}/krita/pics)
 

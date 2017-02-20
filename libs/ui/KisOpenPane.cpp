@@ -316,7 +316,13 @@ QTreeWidgetItem* KisOpenPane::addPane(const QString &title, const QString &iconN
 
     int id = d->m_widgetStack->addWidget(widget);
     KoSectionListItem* listItem = new KoSectionListItem(d->m_sectionList, title, sortWeight, id);
-    listItem->setIcon(0, KisIconUtils::loadIcon(iconName));
+
+    // resizes icons so they are a bit smaller
+    QIcon icon = KisIconUtils::loadIcon(iconName);
+    QPixmap iconPixmap = icon.pixmap(32, 32);
+
+    QIcon finalIcon(iconPixmap);
+    listItem->setIcon(0, finalIcon);
 
     return listItem;
 }
@@ -328,17 +334,20 @@ QTreeWidgetItem* KisOpenPane::addPane(const QString& title, const QPixmap& icon,
     }
 
     int id = d->m_widgetStack->addWidget(widget);
+
+    int iconSize = 32;
+
     KoSectionListItem* listItem = new KoSectionListItem(d->m_sectionList, title, sortWeight, id);
 
     if (!icon.isNull()) {
         QImage image = icon.toImage();
 
-        if ((image.width() > 48) || (image.height() > 48)) {
-            image = image.scaled(48, 48, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        if ((image.width() > iconSize) || (image.height() > iconSize)) {
+            image = image.scaled(iconSize, iconSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
         }
 
         image = image.convertToFormat(QImage::Format_ARGB32);
-        image = image.copy((image.width() - 48) / 2, (image.height() - 48) / 2, 48, 48);
+        image = image.copy((image.width() - iconSize) / 2, (image.height() - iconSize) / 2, iconSize, iconSize);
         listItem->setIcon(0, QIcon(QPixmap::fromImage(image)));
     }
 

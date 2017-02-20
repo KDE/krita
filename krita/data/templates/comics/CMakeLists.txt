@@ -1,5 +1,6 @@
 install( FILES 
-template_comics_empty.png
+light_template_comics_empty.png
+dark_template_comics_empty.png
 DESTINATION
 ${DATA_INSTALL_DIR}/krita/pics
 )

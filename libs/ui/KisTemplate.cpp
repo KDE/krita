@@ -65,7 +65,20 @@ const QPixmap &KisTemplate::loadPicture()
         return m_pixmap;
     }
     else { // relative path
-        QString filename = KoResourcePaths::findResource("kis_pics", m_picture + ".png");
+
+
+        // each template folder should have a light and dark version of the icon that will be for light and dark themes
+        QString themePrefix;
+        if( KisIconUtils::useDarkIcons()  ) {
+            themePrefix = "dark_";
+        } else {
+            themePrefix = "light_";
+        }
+
+
+        QString filenameBuilder = themePrefix.append(m_picture).append(".png");
+        QString filename = KoResourcePaths::findResource("kis_pics", filenameBuilder);
+
         if (filename.isEmpty()) {
 
         }

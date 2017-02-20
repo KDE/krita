@@ -2,6 +2,7 @@
 <RCC version="1.0">
     <qresource>
         <file>light_draw-eraser.svg</file>
+        <file>light_geometry.svg</file>
         <file alias="light_object-align-horizontal-center-calligra.svg">light_ox16-action-object-align-horizontal-center-calligra.svg</file>
         <file alias="light_object-align-horizontal-left-calligra.svg">light_ox16-action-object-align-horizontal-left-calligra.svg</file>
         <file alias="light_object-align-horizontal-right-calligra.svg">light_ox16-action-object-align-horizontal-right-calligra.svg</file>

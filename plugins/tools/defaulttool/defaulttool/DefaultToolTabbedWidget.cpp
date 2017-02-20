@@ -33,7 +33,7 @@ DefaultToolTabbedWidget::DefaultToolTabbedWidget(KoInteractionTool *tool, QWidge
 
     DefaultToolGeometryWidget *geometryWidget = new DefaultToolGeometryWidget(tool, this);
     geometryWidget->setWindowTitle(i18n("Geometry"));
-    addTab(geometryWidget, KisIconUtils::loadIcon("krita_tool_polygon"), QString());
+    addTab(geometryWidget, KisIconUtils::loadIcon("geometry"), QString());
 
     KoStrokeConfigWidget *strokeWidget = new KoStrokeConfigWidget(this);
     strokeWidget->setWindowTitle(i18n("Stroke"));

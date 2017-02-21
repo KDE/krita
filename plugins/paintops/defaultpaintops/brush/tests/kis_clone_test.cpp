@@ -122,6 +122,7 @@ DebugSaver* DebugSaver::instance(){ return s_instance; }
 
 class ImageView
 {
+
 protected:
     quint8* m_data;
     int m_imageWidth;
@@ -138,9 +139,11 @@ public:
     }
 
     ImageView() : m_data(nullptr)
+
     {
         m_imageHeight =  m_imageWidth = m_pixelSize = 0;
     }
+
 
     ImageView(quint8* _data, int _imageWidth, int _imageHeight, int _pixelSize)
     {
@@ -161,6 +164,7 @@ public:
                 delete[] m_data;
                 m_data = nullptr; //to preserve invariance if next line throws exception
                 m_data = new quint8[other.num_bytes()];
+
             }
             std::copy(other.data(), other.data() + other.num_bytes(), m_data);
             m_imageHeight = other.m_imageHeight;
@@ -407,6 +411,7 @@ public:
         int nmasked = countMasked();
         printf("Masked: %d size: %dx%d\n", nmasked, newW, newH);
         maskData.DebugDump("maskData");
+
     }
 #else
 
@@ -560,7 +565,6 @@ public:
         clone->imageData = this->imageData;
         clone->cs = this->cs;
         clone->csMask = this->csMask;
-
         return clone;
     }
 
@@ -631,7 +635,6 @@ public:
     {
         float dsq = 0;
         quint32 nchannels = channelCount();
-
         quint8* v1 = imageData(x,y);
         quint8* v2 = other.imageData(xo,yo);
 
@@ -911,7 +914,6 @@ public:
     static void ExpectationStep(KisSharedPtr<NearestNeighborField> nnf, bool sourceToTarget, Vote_type& vote, MaskedImageSP source, MaskedImageSP target, bool upscale);
 
     void EM_Step(MaskedImageSP source, MaskedImageSP target, int R, bool upscaled);
-
 };
 typedef KisSharedPtr<NearestNeighborField> NearestNeighborFieldSP;
 
@@ -919,6 +921,7 @@ typedef KisSharedPtr<NearestNeighborField> NearestNeighborFieldSP;
 class Inpaint
 {
 private:
+    KisPaintDeviceSP devCache;
     MaskedImageSP initial;
     NearestNeighborFieldSP nnf_TargetToSource;
     NearestNeighborFieldSP nnf_SourceToTarget;
@@ -931,6 +934,7 @@ public:
     {
         initial = new MaskedImage(dev, devMask);
         radius = _radius;
+        devCache = dev;
     }
     MaskedImageSP patch(void);
     MaskedImageSP patch_simple(void);
@@ -1014,16 +1018,12 @@ MaskedImageSP Inpaint::patch()
     while ((size.width() > radius) && (size.height() > radius) && source->countMasked() > 0) {
         std::cerr << "countMasked: " <<  source->countMasked() << "\n";
         source->downsample2x();
-
         source->DebugDump("Pyramid");
-
         pyramid.append(source->copy());
         size = source->size();
     }
     int maxlevel = pyramid.size();
     std::cerr << "MaxLevel: " <<  maxlevel << "\n";
-
-    return source;
 
     // The initial target is the same as the smallest source.
     // We consider that this target contains no masked pixels
@@ -1633,6 +1633,3 @@ QTEST_MAIN(KisCloneOpTest)
 
 //scaledImage->cacheEverything();
 //return scaledImage;
-
-
-

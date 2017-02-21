@@ -14,7 +14,6 @@ ecm_add_tests(
     LINK_LIBRARIES kritaimage kritaui kritalibpaintop hdf5_hl hdf5 Qt5::Test
 )
 
-
 krita_add_broken_unit_test(kis_brushop_test.cpp ../../../../../sdk/tests/stroke_testing_utils.cpp
     TEST_NAME krita-plugins-KisBrushOpTest
     LINK_LIBRARIES kritaimage kritaui kritalibpaintop Qt5::Test)

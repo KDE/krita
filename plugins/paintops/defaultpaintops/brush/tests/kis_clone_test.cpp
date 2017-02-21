@@ -278,6 +278,7 @@ private:
     int nChannels;
 
     const KoColorSpace* cs;
+    const KoColorSpace* csMask;
 
     ImageData maskData;
     ImageData imageData;
@@ -301,6 +302,7 @@ private:
     {
         Q_ASSERT(!imageSize.isEmpty() && imageSize.isValid());
         Q_ASSERT(maskDev->colorSpace()->pixelSize() == 1);
+        csMask = maskDev->colorSpace();
         maskData.Init(maskDev, imageSize);
     }
 
@@ -339,10 +341,13 @@ public:
         initialize(_imageDev, _maskDev);
     }
 
-#if 1
+#if 0
     void downsample2x(void)
     {
-        int kernel[6] = {1, 5, 10, 10, 5, 1};
+        std::vector<int> kernel = {1, 5, 10, 10, 5, 1};
+        const int kernelSuppNeg = 1 - kernel.size()/2;
+        const int kernelSuppPos = kernel.size()/2;
+        KoMixColorsOp* mix = cs->mixColorsOp();
 
         int H = imageSize.height();
         int W = imageSize.width();
@@ -355,18 +360,21 @@ public:
 
         QVector<float> colors(nChannels, 0.f);
 
+        qint16 weights[kernel.size()*kernel.size()];
+        quint8* pixels[kernel.size()*kernel.size()];
+
         for (int x = 0; x < W - 1; x += 2) {
             for (int y = 0; y < H - 1; y += 2) {
                 int ksum = 0;
                 int m = 0;
 
-                for (int dy = -2; dy <= 3; ++dy) {
+                for (int dy = kernelSuppNeg; dy <= kernelSuppPos; ++dy) {
                     int yk = y + dy;
                     if (yk < 0 || yk >= H)
                         continue;
 
-                    int ky = kernel[2 + dy];
-                    for (int dx = -2; dx <= 3; ++dx) {
+                    int ky = kernel[dy-kernelSuppNeg];
+                    for (int dx = kernelSuppNeg; dx <= kernelSuppPos; ++dx) {
                         int xk = x + dx;
                         if (xk < 0 || xk >= W)
                             continue;
@@ -374,24 +382,17 @@ public:
                         if (isMasked(xk, yk))
                             continue;
 
-                        int k = kernel[2 + dx] * ky;
-                        QVector<float> v = getImagePixels(xk, yk);
-                        for (int i = 0; i < nChannels; ++i) {
-                            colors[i] += k * v[i];
-                        }
+                        int k = kernel[dx-kernelSuppNeg] * ky;
+                        weights[m]=k;
+                        pixels[m]=imageData(xk,yk);
                         ksum += k;
                         m++;
                     }
                 }
-                if (ksum > 0) {
-                    for (int i = 0; i < nChannels; ++i) {
-                        colors[i] /= ksum;
-                    }
-                }
 
                 if (m != 0) {
-
-                    cs->fromNormalisedChannelsValue(newImage(x / 2, y / 2), colors);
+                    std::for_each(weights, weights+m, [ksum](qint16 &v){ v=(v*255)/ksum; });
+                    mix->mixColors(pixels, weights, m, newImage(x/2, y/2));
                     *newMask(x / 2, y / 2) = MASK_CLEAR;
                 } else {
                     *newMask(x / 2, y / 2) = MASK_SET;
@@ -409,54 +410,106 @@ public:
     }
 #else
 
-    void downsample2x( void ){
+    void downsample2x(void)
+    {
         int H = imageSize.height();
         int W = imageSize.width();
         int newW = W / 2, newH = H / 2;
 
-        ImageData newImage(newW, newH, cs->pixelSize());
-        //std::fill(newImage.data(), newImage.data() + newImage.num_bytes(), 0);
+        KisPaintDeviceSP imageDev = new KisPaintDevice( cs );
+        KisPaintDeviceSP maskDev = new KisPaintDevice( csMask );
+        imageDev->writeBytes( imageData.data(), 0, 0, W, H);
+        maskDev->writeBytes( maskData.data(), 0, 0, W, H);
 
+        ImageData newImage(newW, newH, cs->pixelSize());
         ImageData newMask(newW, newH, 1);
 
-        QVector<float> colors(nChannels, 0.f);
+        KoDummyUpdater updater;
+        KisTransformWorker worker(imageDev, 1. / 2., 1. / 2., 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+                                  &updater, KisFilterStrategyRegistry::instance()->value("Bicubic"));
+        worker.run();
 
-        KoMixColorsOp* mix = cs->mixColorsOp();
+        KisTransformWorker workerMask(maskDev, 1. / 2., 1. / 2., 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+                                      &updater, KisFilterStrategyRegistry::instance()->value("Bicubic"));
+        workerMask.run();
 
-        //average 4 pixels
-        std::vector<quint8*> pixels_in;
-        pixels_in.reserve(4);
-
-        static std::vector<std::vector<qint16>> weights = {{64, 64, 64, 63}, {85, 85, 85, 85}, {128, 128, 128, 128},{255, 255, 255, 255}}; //weights sum to 255 for averaging
-
-        for (int y = 0; y < H - 1; y += 2) {
-            for (int x = 0; x < W - 1; x += 2) {
-                if( !isMasked(x, y)) pixels_in.push_back( imageData(x, y) );
-                if( !isMasked(x+1, y)) pixels_in.push_back( imageData(x+1, y) );
-                if( !isMasked(x, y+1)) pixels_in.push_back( imageData(x, y+1) );
-                if( !isMasked(x+1, y+1)) pixels_in.push_back( imageData(x+1, y+1) );
-                int nMasked = 4 - pixels_in.size();
-
-                mix->mixColors(pixels_in.data(), weights[nMasked].data(), pixels_in.size(), newImage(x/2, y/2));
-                if( nMasked==4 ){
-                    *newMask(x/2, y/2) = MASK_SET;
-                }
-                else{
-                    *newMask(x/2, y/2) = MASK_CLEAR;
-                }
-
-                pixels_in.clear();
-            }
-        }
-
+        imageDev->readBytes( newImage.data(), 0, 0, newW, newH);
+        maskDev->readBytes( newMask.data(), 0, 0, newW, newH);
         imageData = std::move(newImage);
         maskData = std::move(newMask);
 
+        for(int i=0; i<imageData.num_elements(); ++i){
+            quint8* maskPix = maskData.data()+i*maskData.pixel_size();
+            if(*maskPix==MASK_SET){
+                for(int k=0; k<imageData.pixel_size(); k++)
+                    *(imageData.data()+i*imageData.pixel_size()+k)=0;
+            }
+            else{
+                *maskPix = MASK_CLEAR;
+            }
+        }
         imageSize = QRect(0, 0, newW, newH);
         int nmasked = countMasked();
         printf("Masked: %d size: %dx%d\n", nmasked, newW, newH);
         maskData.DebugDump("maskData");
     }
+
+//    void downsample2x( void ){
+//        int H = imageSize.height();
+//        int W = imageSize.width();
+//        int newW = W / 2, newH = H / 2;
+
+//        ImageData newImage(newW, newH, cs->pixelSize());
+//        //std::fill(newImage.data(), newImage.data() + newImage.num_bytes(), 0);
+
+//        ImageData newMask(newW, newH, 1);
+
+//        QVector<float> colors(nChannels, 0.f);
+
+//        KoMixColorsOp* mix = cs->mixColorsOp();
+
+//        //average 4 pixels
+//        std::vector<quint8*> pixels_in;
+//        pixels_in.reserve(4);
+
+//        static std::vector<std::vector<qint16>> weights = {{64, 64, 64, 63},  {85,85,85,85}, {128, 128, 128, 128},{255, 255, 255, 255}, {0,0,0,0}}; //weights sum to 255 for averaging
+
+//        for (int y = 0; y < H - 1; y += 2) {
+//            for (int x = 0; x < W - 1; x += 2) {
+//                if( !isMasked(x, y)) pixels_in.push_back( imageData(x, y) );
+//                if( !isMasked(x+1, y)) pixels_in.push_back( imageData(x+1, y) );
+//                if( !isMasked(x, y+1)) pixels_in.push_back( imageData(x, y+1) );
+//                if( !isMasked(x+1, y+1)) pixels_in.push_back( imageData(x+1, y+1) );
+//                int nMasked = 4 - pixels_in.size();
+
+////                pixels_in.push_back( imageData(x, y) );
+////                pixels_in.push_back( imageData(x+1, y) );
+////                pixels_in.push_back( imageData(x, y+1) );
+////                pixels_in.push_back( imageData(x+1, y+1) );
+//                bool allMasked = isMasked(x,y) && isMasked(x+1,y) && isMasked(x,y+1) && isMasked(x+1,y+1);
+
+//                if( allMasked ){
+//                    mix->mixColors(pixels_in.data(), weights[4].data(), 1, newImage(x/2, y/2));
+//                    *newMask(x/2, y/2) = MASK_SET;
+//                }
+//                else{
+//                    mix->mixColors(pixels_in.data(), weights[nMasked].data(), pixels_in.size(), newImage(x/2, y/2));
+//                    *newMask(x/2, y/2) = MASK_CLEAR;
+//                }
+
+//                pixels_in.clear();
+//            }
+//        }
+
+//        imageData = std::move(newImage);
+//        maskData = std::move(newMask);
+
+//        imageSize = QRect(0, 0, newW, newH);
+//        int nmasked = countMasked();
+//        printf("Masked: %d size: %dx%d\n", nmasked, newW, newH);
+//        maskData.DebugDump("maskData");
+//    }
+
 #endif
 
     void upscale(int newW, int newH)
@@ -506,6 +559,7 @@ public:
         clone->maskData = this->maskData;
         clone->imageData = this->imageData;
         clone->cs = this->cs;
+        clone->csMask = this->csMask;
 
         return clone;
     }
@@ -577,9 +631,14 @@ public:
     {
         float dsq = 0;
         quint32 nchannels = channelCount();
+
+        quint8* v1 = imageData(x,y);
+        quint8* v2 = other.imageData(xo,yo);
+
         for (quint32 chan = 0; chan < nchannels; chan++) {
             //It's very important not to lose precision in the next line
-            float v = (float)getImagePixelU8(x, y, chan) - (float)other.getImagePixelU8(xo, yo, chan);
+            //TODO: This code only works for 8bpp data. Refactor to make it universal.
+            float v = (float) (*((quint8*)v1+chan)) - (float) (*((quint8*)v2+chan));
             dsq += v * v;
         }
         return dsq;
@@ -955,11 +1014,16 @@ MaskedImageSP Inpaint::patch()
     while ((size.width() > radius) && (size.height() > radius) && source->countMasked() > 0) {
         std::cerr << "countMasked: " <<  source->countMasked() << "\n";
         source->downsample2x();
+
+        source->DebugDump("Pyramid");
+
         pyramid.append(source->copy());
         size = source->size();
     }
     int maxlevel = pyramid.size();
     std::cerr << "MaxLevel: " <<  maxlevel << "\n";
+
+    return source;
 
     // The initial target is the same as the smallest source.
     // We consider that this target contains no masked pixels
@@ -1204,8 +1268,8 @@ void TestClone::testPatchMatch()
 {
     KisDocument *doc = KisPart::instance()->createDocument();
 
-    doc->loadNativeFormat("/home/eugening/Projects/patch-inpainting/bungee.kra");
-    //doc->loadNativeFormat("/home/eugening/Projects/patch-inpainting/Yosemite_Winter.kra");
+    //doc->loadNativeFormat("/home/eugening/Projects/patch-inpainting/bungee.kra");
+    doc->loadNativeFormat("/home/eugening/Projects/patch-inpainting/Yosemite_Winter.kra");
 
     KisImageSP image = doc->image();
     image->lock();
@@ -1569,3 +1633,6 @@ QTEST_MAIN(KisCloneOpTest)
 
 //scaledImage->cacheEverything();
 //return scaledImage;
+
+
+

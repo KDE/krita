@@ -119,6 +119,8 @@ KoColorSet::KoColorSet(const KoColorSet& rhs)
     d->comment = rhs.d->comment;
     d->columns = rhs.d->columns;
     d->colors = rhs.d->colors;
+    d->groupNames = rhs.d->groupNames;
+    d->groups = rhs.d->groups;
     setValid(true);
 }
 
@@ -181,6 +183,8 @@ bool KoColorSet::saveToDevice(QIODevice *dev) const
 bool KoColorSet::init()
 {
     d->colors.clear(); // just in case this is a reload (eg by KoEditColorSetDialog),
+    d->groups.clear();
+    d->groupNames.clear();
 
     if (filename().isNull()) {
         warnPigment << "Cannot load palette" << name() << "there is no filename set";

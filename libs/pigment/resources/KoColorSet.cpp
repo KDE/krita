@@ -348,28 +348,6 @@ quint32 KoColorSet::insertBefore(const KoColorSetEntry &c, qint32 index, const Q
     return newIndex;
 }
 
-void KoColorSet::remove(const KoColorSetEntry & c)
-{
-    for (auto it = d->colors.begin(); it != d->colors.end(); /*noop*/) {
-        if ((*it) == c) {
-            it = d->colors.erase(it);
-            return;
-        }
-        ++it;
-    }
-    QMap<QString, QVector<KoColorSetEntry>>::const_iterator g = d->groups.constBegin();
-    while (g!= d->groups.constEnd()) {
-        for (auto it = d->groups[g.key()].begin(); it != d->groups[g.key()].end(); /*noop*/) {
-            if ((*it) == c) {
-                it = d->groups[g.key()].erase(it);
-                return;
-            }
-            ++it;
-        }
-        ++g;
-    }
-}
-
 void KoColorSet::removeAt(quint32 index, QString groupName)
 {
     if (d->groups.contains(groupName)){

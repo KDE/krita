@@ -111,12 +111,6 @@ public:
      */
     quint32 insertBefore(const KoColorSetEntry &, qint32 index, const QString &groupName = QString());
 
-    void remove(const KoColorSetEntry &);//unsure
-    /**
-     * @brief removeAt remove the color at this index.
-     * @param index index to remove at
-     * @param groupName group in which the color is.
-     */
     void removeAt(quint32 index, QString groupName = QString());
 
     /**

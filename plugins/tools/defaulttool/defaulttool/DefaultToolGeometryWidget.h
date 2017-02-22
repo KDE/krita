@@ -40,6 +40,9 @@ public:
     /// Sets the unit used by the unit aware child widgets
     void setUnit(const KoUnit &unit);
 
+protected:
+    void showEvent(QShowEvent *event);
+
 private Q_SLOTS:
     void slotAnchorPointChanged();
     void resourceChanged(int key, const QVariant &res);

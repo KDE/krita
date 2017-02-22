@@ -183,6 +183,8 @@ QRectF calculateSelectionBounds(KoSelection *selection,
 
 void DefaultToolGeometryWidget::slotAnchorPointChanged()
 {
+    if (!isVisible()) return;
+
     QVariant newValue(positionSelector->value());
     m_tool->canvas()->resourceManager()->setResource(DefaultTool::HotPosition, newValue);
     slotUpdatePositionBoxes();
@@ -190,6 +192,8 @@ void DefaultToolGeometryWidget::slotAnchorPointChanged()
 
 void DefaultToolGeometryWidget::slotUpdateCheckboxes()
 {
+    if (!isVisible()) return;
+
     KoSelection *selection = m_tool->canvas()->shapeManager()->selection();
     QList<KoShape*> shapes = selection->selectedEditableShapes();
 
@@ -235,6 +239,8 @@ void DefaultToolGeometryWidget::slotAspectButtonToggled()
 
 void DefaultToolGeometryWidget::slotUpdateAspectButton()
 {
+    if (!isVisible()) return;
+
     KoSelection *selection = m_tool->canvas()->shapeManager()->selection();
     QList<KoShape*> shapes = selection->selectedEditableShapes();
 
@@ -301,7 +307,6 @@ void DefaultToolGeometryWidget::slotUpdateOpacitySlider()
     const QString opacityNormalPrefix = i18n("Opacity: ");
     const QString opacityVariesPrefix = i18n("Opacity [*varies*]: ");
 
-
     KoSelection *selection = m_tool->canvas()->shapeManager()->selection();
     QList<KoShape*> shapes = selection->selectedEditableShapes();
 
@@ -329,6 +334,8 @@ void DefaultToolGeometryWidget::slotUpdateOpacitySlider()
 
 void DefaultToolGeometryWidget::slotUpdateSizeBoxes()
 {
+    if (!isVisible()) return;
+
     const bool useGlobalSize = chkGlobalCoordinates->isChecked();
     const KoFlake::AnchorPosition anchor = positionSelector->value();
 
@@ -350,6 +357,8 @@ void DefaultToolGeometryWidget::slotUpdateSizeBoxes()
 
 void DefaultToolGeometryWidget::slotUpdatePositionBoxes()
 {
+    if (!isVisible()) return;
+
     const bool useGlobalSize = chkGlobalCoordinates->isChecked();
     const KoFlake::AnchorPosition anchor = positionSelector->value();
 
@@ -445,6 +454,18 @@ void DefaultToolGeometryWidget::setUnit(const KoUnit &unit)
 
     slotUpdatePositionBoxes();
     slotUpdateSizeBoxes();
+}
+
+void DefaultToolGeometryWidget::showEvent(QShowEvent *event)
+{
+    QWidget::showEvent(event);
+
+    slotUpdatePositionBoxes();
+    slotUpdateSizeBoxes();
+    slotUpdateOpacitySlider();
+    slotUpdateAspectButton();
+    slotUpdateCheckboxes();
+    slotAnchorPointChanged();
 }
 
 void DefaultToolGeometryWidget::resourceChanged(int key, const QVariant &res)

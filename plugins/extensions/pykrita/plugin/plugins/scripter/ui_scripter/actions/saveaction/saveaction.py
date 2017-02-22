@@ -1,4 +1,6 @@
 from PyQt5.QtWidgets import QAction, QFileDialog, QMessageBox
+from PyQt5.QtGui import QKeySequence
+from PyQt5.QtCore import Qt
 
 
 class SaveAction(QAction):
@@ -12,6 +14,7 @@ class SaveAction(QAction):
 
         self.setText('Save')
         self.setObjectName('save')
+        self.setShortcut(QKeySequence(Qt.CTRL + Qt.Key_S))
 
     @property
     def parent(self):

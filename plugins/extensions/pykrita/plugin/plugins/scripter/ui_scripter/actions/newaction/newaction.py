@@ -1,4 +1,6 @@
 from PyQt5.QtWidgets import QAction, QMessageBox
+from PyQt5.QtGui import QKeySequence
+from PyQt5.QtCore import Qt
 
 
 class NewAction(QAction):
@@ -11,6 +13,7 @@ class NewAction(QAction):
 
         self.setText('New')
         self.setObjectName('new')
+        self.setShortcut(QKeySequence(Qt.CTRL + Qt.Key_N))
 
     @property
     def parent(self):

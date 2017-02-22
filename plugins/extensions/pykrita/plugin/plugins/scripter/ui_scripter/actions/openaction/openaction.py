@@ -1,4 +1,6 @@
 from PyQt5.QtWidgets import QAction, QFileDialog, QMessageBox
+from PyQt5.QtGui import QKeySequence
+from PyQt5.QtCore import Qt
 
 
 class OpenAction(QAction):
@@ -11,6 +13,7 @@ class OpenAction(QAction):
 
         self.setText('Open')
         self.setObjectName('open')
+        self.setShortcut(QKeySequence(Qt.CTRL + Qt.Key_O))
 
     @property
     def parent(self):

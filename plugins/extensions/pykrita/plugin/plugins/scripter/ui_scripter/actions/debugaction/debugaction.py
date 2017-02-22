@@ -1,6 +1,7 @@
 from PyQt5.QtWidgets import QAction
-from PyQt5.QtGui import QIcon, QPixmap
+from PyQt5.QtGui import QIcon, QPixmap, QKeySequence
 from scripter import resources_rc
+from PyQt5.QtCore import Qt
 
 
 class DebugAction(QAction):
@@ -12,8 +13,9 @@ class DebugAction(QAction):
         self.triggered.connect(self.debug)
 
         self.setText('Debug')
-        # path to the icon
+        self.setToolTip('Debug Ctrl+D')
         self.setIcon(QIcon(':/icons/debug.svg'))
+        self.setShortcut(QKeySequence(Qt.CTRL + Qt.Key_D))
 
     @property
     def parent(self):

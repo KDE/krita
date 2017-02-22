@@ -23,8 +23,7 @@ class UIController(object):
 
     def initialize(self, scripter):
         self.editor = pythoneditor.CodeEditor(scripter)
-        self.widgetSelector = QComboBox()
-        self.stackedWidget = QStackedWidget()
+        self.tabWidget = QTabWidget()
         self.statusBar = QLabel('untitled')
         self.highlight = syntax.PythonHighlighter(self.editor.document(), syntaxstyles.DefaultSyntaxStyle())
 
@@ -34,14 +33,11 @@ class UIController(object):
         self.loadWidgets()
         self.loadActions()
 
-        self.widgetSelector.currentIndexChanged.connect(self._currentIndexChanged)
-
         vbox = QVBoxLayout(self.mainWidget)
         vbox.addWidget(self.menu_bar)
-        vbox.addWidget(self.editor)
         vbox.addWidget(self.actionToolbar)
-        vbox.addWidget(self.widgetSelector)
-        vbox.addWidget(self.stackedWidget)
+        vbox.addWidget(self.editor)
+        vbox.addWidget(self.tabWidget)
         vbox.addWidget(self.statusBar)
 
         self.mainWidget.resize(400, 500)
@@ -102,8 +98,7 @@ class UIController(object):
             m = importlib.import_module(module['module'])
             widgetClass = getattr(m, module['klass'])
             obj = widgetClass(self.scripter)
-            self.stackedWidget.addWidget(obj)
-            self.widgetSelector.addItem(obj.objectName())
+            self.tabWidget.addTab(obj, obj.objectName())
 
     def invokeAction(self, actionName):
         for action in self.actions:
@@ -113,8 +108,8 @@ class UIController(object):
                     return method()
 
     def findStackWidget(self, widgetName):
-        for index in range(self.stackedWidget.count()):
-            widget = self.stackedWidget.widget(index)
+        for index in range(self.tabWidget.count()):
+            widget = self.tabWidget.widget(index)
             if widget.objectName() == widgetName:
                 return widget
 
@@ -131,20 +126,16 @@ class UIController(object):
         self.statusBar.setText(value)
 
     def setActiveWidget(self, widgetName):
-        index = self.widgetSelector.findText(widgetName)
+        widget = self.findStackWidget(widgetName)
 
-        if index!=-1:
-            self.widgetSelector.setCurrentIndex(index)
+        if widget:
+            self.tabWidget.setCurrentWidget(widget)
 
     def setStepped(self, status):
         self.editor.setStepped(status)
 
     def clearEditor(self):
         self.editor.clear()
-
-    def _currentIndexChanged(self, index):
-        if index != -1:
-            self.stackedWidget.setCurrentIndex(index)
 
     def repaintDebugArea(self):
         self.editor.repaintDebugArea()

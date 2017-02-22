@@ -1,5 +1,6 @@
 from PyQt5.QtWidgets import QAction, QMessageBox
-from PyQt5.QtGui import QIcon
+from PyQt5.QtGui import QIcon, QKeySequence
+from PyQt5.QtCore import Qt
 import sys
 from . import docwrapper
 import os
@@ -18,7 +19,9 @@ class RunAction(QAction):
         self.triggered.connect(self.run)
 
         self.setText('Run')
+        self.setToolTip('Run Ctrl+R')
         self.setIcon(QIcon(':/icons/run.svg'))
+        self.setShortcut(QKeySequence(Qt.CTRL + Qt.Key_R))
 
     @property
     def parent(self):

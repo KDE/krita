@@ -106,7 +106,9 @@ bool SvgWriter::save(QIODevice &outputDevice)
     // add some PR.  one line is more than enough.
     svgStream << "<!-- Created using Krita: http://krita.org -->" << endl;
 
-    svgStream << "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n";
+    svgStream << "<svg xmlns=\"http://www.w3.org/2000/svg\" \n";
+    svgStream << "    xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n";
+    svgStream << "    xmlns:krita=\"http://krita.org/kritasvg\"\n";
     svgStream << "    width=\"" << m_pageSize.width() << "pt\"\n";
     svgStream << "    height=\"" << m_pageSize.height() << "pt\"\n";
     svgStream << "    viewBox=\"0 0 "

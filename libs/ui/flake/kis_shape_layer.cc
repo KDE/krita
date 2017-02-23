@@ -363,7 +363,9 @@ bool KisShapeLayer::saveLayer(KoStore * store) const
     }
 
     // FIXME: we handle xRes() only!
-    const QSizeF sizeInPt = image()->bounds().size() * image()->xRes();
+
+    const QSizeF sizeInPx = image()->bounds().size();
+    const QSizeF sizeInPt(sizeInPx.width() / image()->xRes(), sizeInPx.height() / image()->yRes());
 
     KoStoreDevice storeDev(store);
     storeDev.open(QIODevice::WriteOnly);

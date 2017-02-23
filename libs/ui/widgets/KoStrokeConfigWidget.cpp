@@ -422,6 +422,9 @@ void KoStrokeConfigWidget::setUnit(const KoUnit &unit)
     d->lineWidth->setUnit(newUnit);
     d->capNJoinMenu->miterLimit->setUnit(newUnit);
 
+    d->lineWidth->setLineStep(1.0);
+    d->capNJoinMenu->miterLimit->setLineStep(1.0);
+
     blockChildSignals(false);
 }
 

@@ -452,6 +452,11 @@ void DefaultToolGeometryWidget::setUnit(const KoUnit &unit)
     widthSpinBox->setUnit(unit);
     heightSpinBox->setUnit(unit);
 
+    positionXSpinBox->setLineStep(1.0);
+    positionYSpinBox->setLineStep(1.0);
+    widthSpinBox->setLineStep(1.0);
+    heightSpinBox->setLineStep(1.0);
+
     slotUpdatePositionBoxes();
     slotUpdateSizeBoxes();
 }

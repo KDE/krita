@@ -882,11 +882,13 @@ KoPathTool::PathSegment* KoPathTool::segmentAtPoint(const QPointF &point)
     return segment.take();
 }
 
-void KoPathTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
+void KoPathTool::activate(ToolActivation activation, const QSet<KoShape*> &shapes)
 {
+    KoToolBase::activate(activation, shapes);
+
     Q_D(KoToolBase);
 
-    m_activatedTemporarily = toolActivation == TemporaryActivation;
+    m_activatedTemporarily = activation == TemporaryActivation;
 
     // retrieve the actual global handle radius
     m_handleRadius = handleRadius();
@@ -992,6 +994,8 @@ void KoPathTool::deactivate()
     delete m_currentStrategy;
     m_currentStrategy = 0;
     d->canvas->snapGuide()->reset();
+
+    KoToolBase::deactivate();
 }
 
 void KoPathTool::documentResourceChanged(int key, const QVariant & res)

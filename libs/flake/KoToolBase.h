@@ -379,7 +379,7 @@ public Q_SLOTS:
      *                  and should emit done when it is done.
      * @see deactivate()
      */
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) = 0;
+    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
 
     /**
      * This method is called whenever this tool is no longer the
@@ -516,6 +516,11 @@ protected:
      * Allows subclasses to specify whether synthetic mouse events should be accepted.
      */
     void setMaskSyntheticEvents(bool value);
+
+    /**
+     * Returns true if activate() has been called (more times than deactivate :) )
+     */
+    bool isActivated() const;
 
 protected:
     KoToolBase(KoToolBasePrivate &dd);

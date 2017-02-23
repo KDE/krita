@@ -22,6 +22,8 @@
 #include <KoTitledTabWidget.h>
 
 class KoInteractionTool;
+class KoFillConfigWidget;
+class KoStrokeConfigWidget;
 
 class DefaultToolTabbedWidget : public KoTitledTabWidget
 {
@@ -37,6 +39,9 @@ public:
         FillTab
     };
 
+    void activate();
+    void deactivate();
+
 Q_SIGNALS:
     void sigSwitchModeEditFillGradient(bool value);
     void sigSwitchModeEditStrokeGradient(bool value);
@@ -46,6 +51,9 @@ private Q_SLOTS:
 
 private:
     int m_oldTabIndex;
+
+    KoFillConfigWidget *m_fillWidget;
+    KoStrokeConfigWidget *m_strokeWidget;
 };
 
 #endif // DEFAULTTOOLTABBEDWIDGET_H

@@ -65,6 +65,7 @@ KoPencilTool::KoPencilTool(KoCanvasBase *canvas)
     , m_existingStartPoint(0)
     , m_existingEndPoint(0)
     , m_hoveredPoint(0)
+    , m_strokeWidget(0)
 {
 }
 
@@ -108,7 +109,9 @@ void KoPencilTool::repaintDecorations()
 
 void KoPencilTool::mousePressEvent(KoPointerEvent *event)
 {
-    if (! m_shape) {
+    KoShapeStrokeSP stroke = createStroke();
+
+    if (!m_shape && stroke && stroke->isVisible()) {
         m_shape = new KoPathShape();
         m_shape->setShapeId(KoPathShapeId);
         m_shape->setStroke(createStroke());
@@ -175,11 +178,17 @@ void KoPencilTool::keyPressEvent(QKeyEvent *event)
     }
 }
 
-void KoPencilTool::activate(ToolActivation, const QSet<KoShape*> &)
+void KoPencilTool::activate(ToolActivation activation, const QSet<KoShape*> &shapes)
 {
+    KoToolBase::activate(activation, shapes);
+
     m_points.clear();
     m_close = false;
-    useCursor(Qt::ArrowCursor);
+    slotUpdatePencilCursor();
+
+    if (m_strokeWidget) {
+        m_strokeWidget->activate();
+    }
 }
 
 void KoPencilTool::deactivate()
@@ -190,6 +199,18 @@ void KoPencilTool::deactivate()
     m_existingStartPoint = 0;
     m_existingEndPoint = 0;
     m_hoveredPoint = 0;
+
+    if (m_strokeWidget) {
+        m_strokeWidget->deactivate();
+    }
+
+    KoToolBase::deactivate();
+}
+
+void KoPencilTool::slotUpdatePencilCursor()
+{
+    KoShapeStrokeSP stroke = createStroke();
+    useCursor((stroke && stroke->isVisible()) ? Qt::ArrowCursor : Qt::ForbiddenCursor);
 }
 
 void KoPencilTool::addPoint(const QPointF & point)
@@ -354,6 +375,10 @@ QList<QPointer<QWidget> > KoPencilTool::createOptionWidgets()
     m_strokeWidget->setNoSelectionTrackingMode(true);
     m_strokeWidget->setWindowTitle(i18n("Line"));
     m_strokeWidget->setCanvas(canvas());
+    connect(m_strokeWidget, SIGNAL(sigStrokeChanged()), SLOT(slotUpdatePencilCursor()));
+    if (isActivated()) {
+        m_strokeWidget->activate();
+    }
     widgets.append(m_strokeWidget);
     return widgets;
 }

@@ -508,8 +508,10 @@ void ConnectionTool::keyPressEvent(QKeyEvent *event)
     }
 }
 
-void ConnectionTool::activate(ToolActivation, const QSet<KoShape *> &)
+void ConnectionTool::activate(ToolActivation activation, const QSet<KoShape *> &shapes)
 {
+    KoToolBase::activate(activation, shapes);
+
     // save old enabled snap strategies, set bounding box snap strategy
     m_oldSnapStrategies = canvas()->snapGuide()->enabledSnapStrategies();
     canvas()->snapGuide()->enableSnapStrategies(KoSnapGuide::BoundingBoxSnapping);
@@ -529,6 +531,7 @@ void ConnectionTool::deactivate()
     // restore previously set snap strategies
     canvas()->snapGuide()->enableSnapStrategies(m_oldSnapStrategies);
     canvas()->snapGuide()->reset();
+    KoToolBase::deactivate();
 }
 
 qreal ConnectionTool::squareDistance(const QPointF &p1, const QPointF &p2) const

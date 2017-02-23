@@ -33,6 +33,7 @@
 class KoInteractionStrategy;
 class KoShapeMoveCommand;
 class KoSelection;
+class DefaultToolTabbedWidget;
 
 /**
  * The default tool (associated with the arrow icon) implements the default
@@ -91,7 +92,8 @@ public:
     KoFlake::SelectionHandle handleAt(const QPointF &point, bool *innerHandleMeaning = 0);
 
 public Q_SLOTS:
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes);
+    void activate(ToolActivation activation, const QSet<KoShape *> &shapes) override;
+    void deactivate() override;
 
 private Q_SLOTS:
     void selectionAlignHorizontalLeft();
@@ -176,6 +178,8 @@ private:
     friend class SelectionHandler;
     KoInteractionStrategy *m_customEventStrategy;
     QScopedPointer<QMenu> m_contextMenu;
+
+    DefaultToolTabbedWidget *m_tabbedOptionWidget;
 };
 
 #endif

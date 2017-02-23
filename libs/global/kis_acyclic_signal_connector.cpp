@@ -106,6 +106,18 @@ void KisAcyclicSignalConnector::connectBackwardVariant(QObject *sender, const ch
     connect(this, SIGNAL(backwardSignalVariant(const QVariant&)), receiver, method);
 }
 
+void KisAcyclicSignalConnector::connectForwardResourcePair(QObject *sender, const char *signal, QObject *receiver, const char *method)
+{
+    connect(sender, signal, this, SLOT(forwardSlotResourcePair(int,QVariant)));
+    connect(this, SIGNAL(forwardSignalResourcePair(int,QVariant)), receiver, method);
+}
+
+void KisAcyclicSignalConnector::connectBackwardResourcePair(QObject *sender, const char *signal, QObject *receiver, const char *method)
+{
+    connect(sender, signal, this, SLOT(backwardSlotResourcePair(int,QVariant)));
+    connect(this, SIGNAL(backwardSignalResourcePair(int,QVariant)), receiver, method);
+}
+
 void KisAcyclicSignalConnector::lock()
 {
     m_signalsBlocked++;
@@ -203,5 +215,23 @@ void KisAcyclicSignalConnector::backwardSlotVariant(const QVariant &value)
 
     m_signalsBlocked++;
     emit backwardSignalVariant(value);
+    m_signalsBlocked--;
+}
+
+void KisAcyclicSignalConnector::forwardSlotResourcePair(int key, const QVariant &resource)
+{
+    if (m_signalsBlocked) return;
+
+    m_signalsBlocked++;
+    emit forwardSignalResourcePair(key, resource);
+    m_signalsBlocked--;
+}
+
+void KisAcyclicSignalConnector::backwardSlotResourcePair(int key, const QVariant &resource)
+{
+    if (m_signalsBlocked) return;
+
+    m_signalsBlocked++;
+    emit backwardSignalResourcePair(key, resource);
     m_signalsBlocked--;
 }

@@ -37,6 +37,12 @@ void KisToolPencil::resetCursorStyle()
     overrideCursorIfNotEditable();
 }
 
+void KisToolPencil::updatePencilCursor(bool value)
+{
+    setCursor(value ? Qt::ArrowCursor : Qt::ForbiddenCursor);
+    resetCursorStyle();
+}
+
 void KisToolPencil::mousePressEvent(KoPointerEvent *event)
 {
     if (!nodeEditable()) return;
@@ -65,4 +71,10 @@ void __KisToolPencilLocalTool::addPathShape(KoPathShape* pathShape, bool closePa
     }
 
     m_parentTool->addPathShape(pathShape, kundo2_i18n("Draw Freehand Path"));
+}
+
+void __KisToolPencilLocalTool::slotUpdatePencilCursor()
+{
+    KoShapeStrokeSP stroke = this->createStroke();
+    m_parentTool->updatePencilCursor(stroke && stroke->isVisible());
 }

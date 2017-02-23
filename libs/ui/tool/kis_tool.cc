@@ -116,10 +116,9 @@ KisTool::~KisTool()
     delete d;
 }
 
-void KisTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
+void KisTool::activate(ToolActivation activation, const QSet<KoShape*> &shapes)
 {
-    Q_UNUSED(toolActivation);
-    Q_UNUSED(shapes);
+    KoToolBase::activate(activation, shapes);
 
     resetCursorStyle();
 
@@ -173,6 +172,8 @@ void KisTool::deactivate()
 
     d->m_isActive = false;
     emit isActiveChanged();
+
+    KoToolBase::deactivate();
 }
 
 void KisTool::canvasResourceChanged(int key, const QVariant & v)
@@ -424,6 +425,11 @@ void KisTool::setMode(ToolMode mode) {
 
 KisTool::ToolMode KisTool::mode() const {
     return d->m_mode;
+}
+
+void KisTool::setCursor(const QCursor &cursor)
+{
+    d->cursor = cursor;
 }
 
 KisTool::AlternateAction KisTool::actionToAlternateAction(ToolAction action) {

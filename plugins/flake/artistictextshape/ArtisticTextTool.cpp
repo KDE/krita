@@ -491,9 +491,10 @@ void ArtisticTextTool::keyPressEvent(QKeyEvent *event)
     }
 }
 
-void ArtisticTextTool::activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes)
+void ArtisticTextTool::activate(ToolActivation activation, const QSet<KoShape *> &shapes)
 {
-    Q_UNUSED(toolActivation);
+    KoToolBase::activate(activation, shapes);
+
     foreach (KoShape *shape, shapes) {
         ArtisticTextShape *text = dynamic_cast<ArtisticTextShape *>(shape);
         if (text) {
@@ -536,6 +537,8 @@ void ArtisticTextTool::deactivate()
 
     KoShapeManager *manager = canvas()->shapeManager();
     disconnect(manager, SIGNAL(selectionChanged()), this, SLOT(shapeSelectionChanged()));
+
+    KoToolBase::deactivate();
 }
 
 void ArtisticTextTool::updateActions()

@@ -389,8 +389,10 @@ void KoCreatePathTool::removeLastPoint()
     }
 }
 
-void KoCreatePathTool::activate(ToolActivation, const QSet<KoShape*> &)
+void KoCreatePathTool::activate(ToolActivation activation, const QSet<KoShape*> &shapes)
 {
+    KoToolBase::activate(activation, shapes);
+
     Q_D(KoCreatePathTool);
     useCursor(Qt::ArrowCursor);
 
@@ -405,6 +407,7 @@ void KoCreatePathTool::activate(ToolActivation, const QSet<KoShape*> &)
 void KoCreatePathTool::deactivate()
 {
     cancelPath();
+    KoToolBase::deactivate();
 }
 
 void KoCreatePathTool::documentResourceChanged(int key, const QVariant & res)

@@ -101,6 +101,12 @@ void KisStopGradientEditor::notifyGlobalColorChanged(const KoColor &color)
     }
 }
 
+boost::optional<KoColor> KisStopGradientEditor::currentActiveStopColor() const
+{
+    if (!colorButton->isEnabled()) return boost::none;
+    return colorButton->color();
+}
+
 void KisStopGradientEditor::stopChanged(int stop)
 {
     const bool hasStopSelected = stop >= 0;

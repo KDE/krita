@@ -343,8 +343,10 @@ qreal KarbonCalligraphyTool::calculateAngle(const QPointF &oldSpeed, const QPoin
     return angle;
 }
 
-void KarbonCalligraphyTool::activate(ToolActivation, const QSet<KoShape *> &)
+void KarbonCalligraphyTool::activate(ToolActivation activation, const QSet<KoShape*> &shapes)
 {
+    KoToolBase::activate(activation, shapes);
+
     useCursor(Qt::CrossCursor);
     m_lastShape = 0;
 }
@@ -356,6 +358,8 @@ void KarbonCalligraphyTool::deactivate()
         selection->deselectAll();
         selection->select(m_lastShape);
     }
+
+    KoToolBase::deactivate();
 }
 
 QList<QPointer<QWidget> > KarbonCalligraphyTool::createOptionWidgets()

@@ -48,7 +48,7 @@ class KRITAGLOBAL_EXPORT KisAcyclicSignalConnector : public QObject
 {
     Q_OBJECT
 public:
-    typedef std::lock_guard<KisAcyclicSignalConnector> Blocker;
+    typedef std::unique_lock<KisAcyclicSignalConnector> Blocker;
 
 public:
 
@@ -84,6 +84,12 @@ public:
     void connectBackwardVariant(QObject *sender, const char *signal,
                                 QObject *receiver, const char *method);
 
+    void connectForwardResourcePair(QObject *sender, const char *signal,
+                                     QObject *receiver, const char *method);
+
+    void connectBackwardResourcePair(QObject *sender, const char *signal,
+                                     QObject *receiver, const char *method);
+
     void lock();
     void unlock();
 
@@ -103,6 +109,9 @@ private Q_SLOTS:
     void forwardSlotVariant(const QVariant &value);
     void backwardSlotVariant(const QVariant &value);
 
+    void forwardSlotResourcePair(int key, const QVariant &resource);
+    void backwardSlotResourcePair(int key, const QVariant &resource);
+
 Q_SIGNALS:
     void forwardSignalDouble(double value);
     void backwardSignalDouble(double value);
@@ -118,6 +127,9 @@ Q_SIGNALS:
 
     void forwardSignalVariant(const QVariant &value);
     void backwardSignalVariant(const QVariant &value);
+
+    void forwardSignalResourcePair(int key, const QVariant &value);
+    void backwardSignalResourcePair(int key, const QVariant &value);
 
 private:
     int m_signalsBlocked;

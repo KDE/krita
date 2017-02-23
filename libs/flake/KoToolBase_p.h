@@ -41,7 +41,8 @@ public:
         : currentCursor(Qt::ArrowCursor),
         q(qq),
         canvas(canvas_),
-        isInTextMode(false)
+        isInTextMode(false),
+        isActivated(false)
     {
     }
 
@@ -82,6 +83,7 @@ public:
     KoCanvasBase *canvas; ///< the canvas interface this tool will work for.
     bool isInTextMode;
     bool maskSyntheticEvents{false}; ///< Whether this tool masks synthetic events
+    bool isActivated;
 };
 
 #endif

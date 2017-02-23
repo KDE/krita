@@ -22,6 +22,7 @@
 
 #include "kritaui_export.h"
 #include "ui_wdgstopgradienteditor.h"
+#include <boost/optional.hpp>
 
 class KoStopGradient;
 
@@ -38,6 +39,8 @@ public:
     void setGradient(KoStopGradient* gradient);
 
     void notifyGlobalColorChanged(const KoColor &color);
+
+    boost::optional<KoColor> currentActiveStopColor() const;
 
 Q_SIGNALS:
     void sigGradientChanged();

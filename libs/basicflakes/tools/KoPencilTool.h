@@ -45,7 +45,7 @@ public:
     void mouseReleaseEvent(KoPointerEvent *event);
     void keyPressEvent(QKeyEvent *event);
 
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
+    virtual void activate(ToolActivation activation, const QSet<KoShape*> &shapes);
     void deactivate();
 
 protected:
@@ -66,6 +66,10 @@ private Q_SLOTS:
     void selectMode(int mode);
     void setOptimize(int state);
     void setDelta(double delta);
+
+protected Q_SLOTS:
+    virtual void slotUpdatePencilCursor();
+
 private:
 
     qreal lineAngle(const QPointF &p1, const QPointF &p2);

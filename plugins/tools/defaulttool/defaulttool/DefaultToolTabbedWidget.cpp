@@ -35,16 +35,16 @@ DefaultToolTabbedWidget::DefaultToolTabbedWidget(KoInteractionTool *tool, QWidge
     geometryWidget->setWindowTitle(i18n("Geometry"));
     addTab(geometryWidget, KisIconUtils::loadIcon("geometry"), QString());
 
-    KoStrokeConfigWidget *strokeWidget = new KoStrokeConfigWidget(this);
-    strokeWidget->setWindowTitle(i18n("Stroke"));
-    strokeWidget->setCanvas(tool->canvas());
-    addTab(strokeWidget, KisIconUtils::loadIcon("krita_tool_line"), QString());
+    m_strokeWidget = new KoStrokeConfigWidget(this);
+    m_strokeWidget->setWindowTitle(i18n("Stroke"));
+    m_strokeWidget->setCanvas(tool->canvas());
+    addTab(m_strokeWidget, KisIconUtils::loadIcon("krita_tool_line"), QString());
 
-    KoFillConfigWidget *fillWidget = new KoFillConfigWidget(KoFlake::Fill, this);
-    fillWidget->setWindowTitle(i18n("Fill"));
+    m_fillWidget = new KoFillConfigWidget(KoFlake::Fill, this);
+    m_fillWidget->setWindowTitle(i18n("Fill"));
     // TODO: pass canvas to teh c-tor instead
-    //fillWidget->setCanvas(tool->canvas());
-    addTab(fillWidget, KisIconUtils::loadIcon("krita_tool_color_fill"), QString());
+    //m_fillWidget->setCanvas(tool->canvas());
+    addTab(m_fillWidget, KisIconUtils::loadIcon("krita_tool_color_fill"), QString());
 
     connect(this, SIGNAL(currentChanged(int)), SLOT(slotCurrentIndexChanged(int)));
     m_oldTabIndex = currentIndex();
@@ -52,6 +52,18 @@ DefaultToolTabbedWidget::DefaultToolTabbedWidget(KoInteractionTool *tool, QWidge
 
 DefaultToolTabbedWidget::~DefaultToolTabbedWidget()
 {
+}
+
+void DefaultToolTabbedWidget::activate()
+{
+    m_fillWidget->activate();
+    m_strokeWidget->activate();
+}
+
+void DefaultToolTabbedWidget::deactivate()
+{
+    m_fillWidget->deactivate();
+    m_strokeWidget->deactivate();
 }
 
 void DefaultToolTabbedWidget::slotCurrentIndexChanged(int current)

@@ -79,8 +79,8 @@ public:
 
     void updateMarkers(const QList<KoMarker*> &markers);
 
-protected:
-    void showEvent(QShowEvent *event);
+    void activate();
+    void deactivate();
 
 private Q_SLOTS:
 
@@ -96,6 +96,9 @@ private Q_SLOTS:
 
     /// apply marker changes to the selected shape
     void applyMarkerChanges(int rawPosition);
+
+Q_SIGNALS:
+    void sigStrokeChanged();
 
 private:
     void setUnit(const KoUnit &unit);

@@ -266,6 +266,7 @@ DefaultTool::DefaultTool(KoCanvasBase *canvas)
     , m_moveCommand(0)
     , m_selectionHandler(new SelectionHandler(this))
     , m_customEventStrategy(0)
+    , m_tabbedOptionWidget(0)
 {
     setupActions();
 
@@ -955,13 +956,28 @@ void DefaultTool::recalcSelectionBox(KoSelection *selection)
     }
 }
 
-void DefaultTool::activate(ToolActivation, const QSet<KoShape *> &)
+void DefaultTool::activate(ToolActivation activation, const QSet<KoShape *> &shapes)
 {
+    KoToolBase::activate(activation, shapes);
+
     m_mouseWasInsideHandles = false;
     m_lastHandle = KoFlake::NoHandle;
     useCursor(Qt::ArrowCursor);
     repaintDecorations();
     updateActions();
+
+    if (m_tabbedOptionWidget) {
+        m_tabbedOptionWidget->activate();
+    }
+}
+
+void DefaultTool::deactivate()
+{
+    KoToolBase::deactivate();
+
+    if (m_tabbedOptionWidget) {
+        m_tabbedOptionWidget->deactivate();
+    }
 }
 
 void DefaultTool::selectionAlignHorizontalLeft()
@@ -1139,14 +1155,18 @@ QList<QPointer<QWidget> > DefaultTool::createOptionWidgets()
 {
     QList<QPointer<QWidget> > widgets;
 
-    DefaultToolTabbedWidget *tabbedWidget = new DefaultToolTabbedWidget(this);
-    widgets.append(tabbedWidget);
+    m_tabbedOptionWidget = new DefaultToolTabbedWidget(this);
 
-    connect(tabbedWidget,
+    if (isActivated()) {
+        m_tabbedOptionWidget->activate();
+    }
+    widgets.append(m_tabbedOptionWidget);
+
+    connect(m_tabbedOptionWidget,
             SIGNAL(sigSwitchModeEditFillGradient(bool)),
             SLOT(slotActivateEditFillGradient(bool)));
 
-    connect(tabbedWidget,
+    connect(m_tabbedOptionWidget,
             SIGNAL(sigSwitchModeEditStrokeGradient(bool)),
             SLOT(slotActivateEditStrokeGradient(bool)));
 

@@ -39,6 +39,9 @@ public:
 
     using KoPencilTool::createOptionWidgets;
 
+protected:
+    void slotUpdatePencilCursor() override;
+
 private:
     KisToolPencil* const m_parentTool;
 };
@@ -56,7 +59,10 @@ public:
     void mousePressEvent(KoPointerEvent *event);
 
 protected Q_SLOTS:
-    virtual void resetCursorStyle();
+    void resetCursorStyle() override;
+
+private:
+    void updatePencilCursor(bool value);
 
 private:
     friend class __KisToolPencilLocalTool;

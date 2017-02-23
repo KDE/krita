@@ -1988,9 +1988,10 @@ void TextTool::updateStyleManager()
     m_changeTracker = KoTextDocument(m_textShapeData->document()).changeTracker();
 }
 
-void TextTool::activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes)
+void TextTool::activate(ToolActivation activation, const QSet<KoShape *> &shapes)
 {
-    Q_UNUSED(toolActivation);
+    KoToolBase::activate(activation, shapes);
+
     m_caretTimer.start();
     m_caretTimerState = true;
     foreach (KoShape *shape, shapes) {
@@ -2052,6 +2053,8 @@ void TextTool::deactivate()
         m_specialCharacterDocker->setEnabled(false);
         m_specialCharacterDocker->setVisible(false);
     }
+
+    KoToolBase::deactivate();
 }
 
 void TextTool::repaintDecorations()

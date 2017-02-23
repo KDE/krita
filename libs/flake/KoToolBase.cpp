@@ -114,8 +114,24 @@ void KoToolBase::updateShapeController(KoShapeBasedDocumentBase *shapeController
     }
 }
 
+
+bool KoToolBase::isActivated() const
+{
+    Q_D(const KoToolBase);
+    return d->isActivated;
+}
+
+
+void KoToolBase::activate(KoToolBase::ToolActivation toolActivation, const QSet<KoShape *> &shapes)
+{
+    Q_D(KoToolBase);
+    d->isActivated = true;
+}
+
 void KoToolBase::deactivate()
 {
+    Q_D(KoToolBase);
+    d->isActivated = false;
 }
 
 void KoToolBase::canvasResourceChanged(int key, const QVariant & res)

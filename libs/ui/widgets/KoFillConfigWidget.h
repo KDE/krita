@@ -55,8 +55,8 @@ public:
 
     KoShapeStrokeSP createShapeStroke();
 
-protected:
-    void showEvent(QShowEvent *event);
+    void activate();
+    void deactivate();
 
 private Q_SLOTS:
     void styleButtonPressed(int buttonId);
@@ -82,6 +82,13 @@ private Q_SLOTS:
 
     void slotGradientTypeChanged();
     void slotGradientRepeatChanged();
+
+    void slotProposeCurrentColorToResourceManager();
+
+Q_SIGNALS:
+    void sigFillChanged();
+
+    void sigInternalRequestColorToResourceManager();
 
 private:
     /// update the widget with the KoShape background

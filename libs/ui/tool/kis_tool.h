@@ -204,7 +204,7 @@ public:
     bool isActive() const;
 
 public Q_SLOTS:
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
+    virtual void activate(ToolActivation activation, const QSet<KoShape*> &shapes);
     virtual void deactivate();
     virtual void canvasResourceChanged(int key, const QVariant & res);
     // Implement this slot in case there are any widgets or properties which need
@@ -324,6 +324,7 @@ protected:
 
     virtual void setMode(ToolMode mode);
     virtual ToolMode mode() const;
+    void setCursor(const QCursor &cursor);
 
 protected Q_SLOTS:
     /**

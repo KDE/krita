@@ -23,7 +23,7 @@
 #ifndef KIS_TOOL_LINE_H_
 #define KIS_TOOL_LINE_H_
 
-#include "kis_tool_paint.h"
+#include "kis_tool_shape.h"
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
@@ -43,7 +43,7 @@ class KisPaintingInformationBuilder;
 class KisToolLineHelper;
 
 
-class KisToolLine : public KisToolPaint
+class KisToolLine : public KisToolShape
 {
     Q_OBJECT
 

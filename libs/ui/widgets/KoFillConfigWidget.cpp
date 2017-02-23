@@ -359,7 +359,9 @@ void KoFillConfigWidget::slotUpdateFillTitle()
 void KoFillConfigWidget::slotCanvasResourceChanged(int key, const QVariant &value)
 {
     if ((key == KoCanvasResourceManager::ForegroundColor && d->fillVariant == KoFlake::Fill) ||
-        (key == KoCanvasResourceManager::BackgroundColor && d->fillVariant == KoFlake::StrokeFill)) {
+        (key == KoCanvasResourceManager::BackgroundColor &&
+         d->fillVariant == KoFlake::StrokeFill && !d->noSelectionTrackingMode) ||
+        (key == KoCanvasResourceManager::ForegroundColor && d->noSelectionTrackingMode)) {
 
         KoColor color = value.value<KoColor>();
 
@@ -686,13 +688,13 @@ void KoFillConfigWidget::loadCurrentFillFromResourceServer()
     KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
 
     {
-        KoColor color = canvasController->canvas()->resourceManager()->foregroundColor();
-        slotCanvasResourceChanged(KoCanvasResourceManager::ForegroundColor, QVariant::fromValue(color));
+        KoColor color = canvasController->canvas()->resourceManager()->backgroundColor();
+        slotCanvasResourceChanged(KoCanvasResourceManager::BackgroundColor, QVariant::fromValue(color));
     }
 
     {
-        KoColor color = canvasController->canvas()->resourceManager()->backgroundColor();
-        slotCanvasResourceChanged(KoCanvasResourceManager::BackgroundColor, QVariant::fromValue(color));
+        KoColor color = canvasController->canvas()->resourceManager()->foregroundColor();
+        slotCanvasResourceChanged(KoCanvasResourceManager::ForegroundColor, QVariant::fromValue(color));
     }
 
     Q_FOREACH (QAbstractButton *button, d->group->buttons()) {

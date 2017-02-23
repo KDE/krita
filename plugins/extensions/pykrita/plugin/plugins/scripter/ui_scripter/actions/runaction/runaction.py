@@ -14,7 +14,7 @@ class RunAction(QAction):
         self.scripter = scripter
 
         self.editor = self.scripter.uicontroller.editor
-        self.output = self.scripter.uicontroller.findStackWidget('OutPut')
+        self.output = self.scripter.uicontroller.findTabWidget('OutPut')
 
         self.triggered.connect(self.run)
 
@@ -28,6 +28,7 @@ class RunAction(QAction):
         return 'toolBar'
 
     def run(self):
+        self.scripter.uicontroller.setActiveWidget('OutPut')
         stdout = sys.stdout
         stderr = sys.stderr
         output = docwrapper.DocWrapper(self.output.document())

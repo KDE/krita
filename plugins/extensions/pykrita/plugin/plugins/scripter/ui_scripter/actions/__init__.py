@@ -3,4 +3,5 @@ action_classes = ['newaction.newaction.NewAction',
                   'saveaction.saveaction.SaveAction',
                   'runaction.runaction.RunAction',
                   'settingsaction.settingsaction.SettingsAction',
-                  'debugaction.debugaction.DebugAction']
+                  'debugaction.debugaction.DebugAction',
+                  'closeaction.closeaction.CloseAction']

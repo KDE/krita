@@ -25,5 +25,5 @@ class DebugAction(QAction):
         if self.scripter.uicontroller.invokeAction('save'):
             self.scripter.uicontroller.setActiveWidget('Debugger')
             self.scripter.debugcontroller.start(self.scripter.documentcontroller.activeDocument)
-            widget = self.scripter.uicontroller.findStackWidget('Debugger')
+            widget = self.scripter.uicontroller.findTabWidget('Debugger')
             widget.startDebugger()

@@ -51,7 +51,7 @@ class DebugController (object):
             return 0
 
     def updateUIDebugger(self):
-        widget = self.scripter.uicontroller.findStackWidget('Debugger')
+        widget = self.scripter.uicontroller.findTabWidget('Debugger')
         exception = self._debuggerException()
 
         if exception:

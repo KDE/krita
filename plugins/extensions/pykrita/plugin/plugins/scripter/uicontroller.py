@@ -43,7 +43,6 @@ class UIController(object):
         self.mainWidget.resize(400, 500)
         self.mainWidget.setWindowTitle("Scripter")
         self.mainWidget.setSizeGripEnabled(True)
-        self.addMenu('Edit', 'Edit')
         self.mainWidget.show()
         self.mainWidget.activateWindow()
 
@@ -85,7 +84,7 @@ class UIController(object):
             action['parent'].addAction(action['action'])
 
     def loadWidgets(self):
-        modulePath = 'scripter.ui_scripter.stackwidgets'
+        modulePath = 'scripter.ui_scripter.tabwidgets'
         widgetsModule = importlib.import_module(modulePath)
         modules = []
 
@@ -107,7 +106,7 @@ class UIController(object):
                 if method:
                     return method()
 
-    def findStackWidget(self, widgetName):
+    def findTabWidget(self, widgetName):
         for index in range(self.tabWidget.count()):
             widget = self.tabWidget.widget(index)
             if widget.objectName() == widgetName:
@@ -126,7 +125,7 @@ class UIController(object):
         self.statusBar.setText(value)
 
     def setActiveWidget(self, widgetName):
-        widget = self.findStackWidget(widgetName)
+        widget = self.findTabWidget(widgetName)
 
         if widget:
             self.tabWidget.setCurrentWidget(widget)
@@ -139,3 +138,6 @@ class UIController(object):
 
     def repaintDebugArea(self):
         self.editor.repaintDebugArea()
+
+    def closeScripter(self):
+        self.mainWidget.close()

@@ -162,6 +162,10 @@ private Q_SLOTS:
     void testGradientRecoveringTrasnform();
     void testMarkersOnClosedPath();
     void testMarkersAngularUnits();
+
+    void testSodipodiArcShape();
+    void testSodipodiArcShapeOpen();
+    void testKritaChordShape();
 };
 
 #endif // TESTSVGPARSER_H

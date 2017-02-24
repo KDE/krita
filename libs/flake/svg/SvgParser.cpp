@@ -1463,7 +1463,10 @@ KoShape * SvgParser::createShapeFromElement(const KoXmlElement &element, SvgLoad
 {
     KoShape *object = 0;
 
-    QList<KoShapeFactoryBase*> factories = KoShapeRegistry::instance()->factoriesForElement(KoXmlNS::svg, element.tagName());
+
+    const QString tagName = SvgUtil::mapExtendedShapeTag(element.tagName(), element);
+    QList<KoShapeFactoryBase*> factories = KoShapeRegistry::instance()->factoriesForElement(KoXmlNS::svg, tagName);
+
     foreach (KoShapeFactoryBase *f, factories) {
         KoShape *shape = f->createDefaultShape(m_documentResourceManager);
         if (!shape)

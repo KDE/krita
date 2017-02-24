@@ -3202,4 +3202,105 @@ void TestSvgParser::testMarkersAngularUnits()
     t.test_standard_30px_72ppi("markers_angular_units", false);
 }
 
+#include "KoParameterShape.h"
+
+void TestSvgParser::testSodipodiArcShape()
+{
+    const QString data =
+            "<svg width=\"30px\" height=\"30px\""
+            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\""
+            "    xmlns:sodipodi=\"http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd\""
+            ">"
+
+            "<path"
+            "    fill=\"red\" stroke=\"black\""
+            "    id=\"testRect\""
+
+            "    sodipodi:type=\"arc\""
+            "    sodipodi:cx=\"15.464287\""
+            "    sodipodi:cy=\"14.517863\""
+            "    sodipodi:rx=\"6.25\""
+            "    sodipodi:ry=\"8.5\""
+            "    sodipodi:start=\"5.5346039\""
+            "    sodipodi:end=\"4.0381334\""
+            //"    d=\"m 20.043381,8.7327624 a 6.25,8.5 0 0 1 1.053863,9.4677386 6.25,8.5 0 0 1 -6.094908,4.794113 6.25,8.5 0 0 1 -5.5086474,-5.963709 6.25,8.5 0 0 1 2.0686234,-9.1530031 l 3.901975,6.6399611 z\" />"
+            "    d=\" some weird unparsable text \" />"
+
+            "</svg>";
+
+    SvgRenderTester t (data);
+
+    t.test_standard_30px_72ppi("sodipodi_closed_arc", false);
+
+    KoShape *shape = t.findShape("testRect");
+    QVERIFY(dynamic_cast<KoParameterShape*>(shape));
+}
+
+void TestSvgParser::testSodipodiArcShapeOpen()
+{
+    const QString data =
+            "<svg width=\"30px\" height=\"30px\""
+            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\""
+            "    xmlns:sodipodi=\"http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd\""
+            ">"
+
+            "<path"
+            "    fill=\"red\" stroke=\"black\""
+            "    id=\"testRect\""
+
+            "    sodipodi:type=\"arc\""
+            "    sodipodi:open=\"true\""
+            "    sodipodi:cx=\"15.464287\""
+            "    sodipodi:cy=\"14.517863\""
+            "    sodipodi:rx=\"6.25\""
+            "    sodipodi:ry=\"8.5\""
+            "    sodipodi:start=\"5.5346039\""
+            "    sodipodi:end=\"4.0381334\""
+            //"    d=\"m 20.043381,8.7327624 a 6.25,8.5 0 0 1 1.053863,9.4677386 6.25,8.5 0 0 1 -6.094908,4.794113 6.25,8.5 0 0 1 -5.5086474,-5.963709 6.25,8.5 0 0 1 2.0686234,-9.1530031 l 3.901975,6.6399611 z\" />"
+            "    d=\" some weird unparsable text \" />"
+
+            "</svg>";
+
+    SvgRenderTester t (data);
+
+    t.test_standard_30px_72ppi("sodipodi_open_arc", false);
+
+    KoShape *shape = t.findShape("testRect");
+    QVERIFY(dynamic_cast<KoParameterShape*>(shape));
+}
+
+void TestSvgParser::testKritaChordShape()
+{
+    const QString data =
+            "<svg width=\"30px\" height=\"30px\""
+            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\""
+            "    xmlns:sodipodi=\"http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd\""
+            ">"
+
+            "<path"
+            "    fill=\"red\" stroke=\"black\""
+            "    id=\"testRect\""
+
+            "    krita:type=\"arc\""
+            "    krita:arcType=\"chord\""
+            "    krita:cx=\"15.464287\""
+            "    krita:cy=\"14.517863\""
+            "    krita:rx=\"6.25\""
+            "    krita:ry=\"8.5\""
+            "    krita:start=\"5.5346039\""
+            "    krita:end=\"4.0381334\""
+            //"    d=\"m 20.043381,8.7327624 a 6.25,8.5 0 0 1 1.053863,9.4677386 6.25,8.5 0 0 1 -6.094908,4.794113 6.25,8.5 0 0 1 -5.5086474,-5.963709 6.25,8.5 0 0 1 2.0686234,-9.1530031 l 3.901975,6.6399611 z\" />"
+            "    d=\" some weird unparsable text \" />"
+
+            "</svg>";
+
+    SvgRenderTester t (data);
+
+    t.test_standard_30px_72ppi("sodipodi_chord_arc", false);
+
+    KoShape *shape = t.findShape("testRect");
+    QVERIFY(dynamic_cast<KoParameterShape*>(shape));
+}
+
+
 QTEST_MAIN(TestSvgParser)

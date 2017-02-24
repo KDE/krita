@@ -52,8 +52,8 @@
 #include <kis_tablet_support_win.h>
 
 #elif defined HAVE_X11
-    #include <kis_tablet_support_x11.h>
-    #include <kis_xi2_event_filter.h>
+#include <kis_tablet_support_x11.h>
+#include <kis_xi2_event_filter.h>
 #endif
 
 #if defined HAVE_KCRASH
@@ -119,7 +119,12 @@ extern "C" int main(int argc, char **argv)
     QCoreApplication::setAttribute(Qt::AA_DontCreateNativeWidgetSiblings, true);
     QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps, true);
 
+    const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
 #if QT_VERSION >= 0x050600
+    QSettings kritarc(configPath + QStringLiteral("/kritarc"), QSettings::IniFormat);
+    if (kritarc.value("EnableHiDPI", false).toBool()) {
+        QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+    }
     if (!qgetenv("KRITA_HIDPI").isEmpty()) {
         QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     }
@@ -142,7 +147,6 @@ extern "C" int main(int argc, char **argv)
 
     // Now that the paths are set, set the language. First check the override from the langage
     // selection dialog.
-    const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
     QSettings languageoverride(configPath + QStringLiteral("/klanguageoverridesrc"), QSettings::IniFormat);
     languageoverride.beginGroup(QStringLiteral("Language"));
     QString language = languageoverride.value(qAppName(), "").toString();
@@ -226,7 +230,7 @@ extern "C" int main(int argc, char **argv)
     QWidget *splash = 0;
     if (currentDate > QDate(currentDate.year(), 12, 4) ||
             currentDate < QDate(currentDate.year(), 1, 9)) {
-         splash = new KisSplashScreen(app.applicationVersion(), QPixmap(splash_holidays_xpm));
+        splash = new KisSplashScreen(app.applicationVersion(), QPixmap(splash_holidays_xpm));
     }
     else {
         splash = new KisSplashScreen(app.applicationVersion(), QPixmap(splash_screen_xpm));

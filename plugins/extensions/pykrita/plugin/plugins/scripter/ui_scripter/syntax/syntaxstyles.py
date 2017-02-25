@@ -1,4 +1,4 @@
-from PyQt5.QtGui import *
+from PyQt5.QtGui import QColor, QTextCharFormat, QFont
 
 
 def format(color, style='', darker=100, lighter=100):

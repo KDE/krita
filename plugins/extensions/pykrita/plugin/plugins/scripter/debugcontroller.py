@@ -1,5 +1,4 @@
 from scripter.debugger_scripter import debugger
-from code import InteractiveConsole
 import asyncio
 
 

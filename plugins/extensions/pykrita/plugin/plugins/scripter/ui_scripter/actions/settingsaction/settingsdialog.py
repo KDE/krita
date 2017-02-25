@@ -1,7 +1,4 @@
-# -*- coding: utf-8 -*-
-
-
-from PyQt5.QtWidgets import *
+from PyQt5.QtWidgets import QDialog, QFormLayout
 from . import syntaxstylescombobox, fontscombobox
 
 

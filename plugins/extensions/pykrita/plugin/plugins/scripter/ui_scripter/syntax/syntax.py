@@ -2,8 +2,8 @@
 
 
 import sys
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
+from PyQt5.QtCore import QRegExp
+from PyQt5.QtGui import QSyntaxHighlighter
 
 
 class PythonHighlighter (QSyntaxHighlighter):

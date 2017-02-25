@@ -1,6 +1,7 @@
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
-from PyQt5.QtCore import *
+from PyQt5.QtGui import QTextCursor
+from PyQt5.QtWidgets import (QToolBar, QMenuBar, QTabWidget,
+                             QLabel, QVBoxLayout, QMessageBox)
+from PyQt5.QtCore import Qt, QObject
 from scripter.ui_scripter.syntax import syntax, syntaxstyles
 from scripter.ui_scripter.editor import pythoneditor
 import os
@@ -61,7 +62,6 @@ class UIController(object):
         self.newMenu.setObjectName(menuName)
 
         return self.newMenu
-
 
     def loadActions(self):
         module_path = 'scripter.ui_scripter.actions'

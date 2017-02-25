@@ -1,6 +1,6 @@
-from PyQt5.QtWidgets import *
-from PyQt5.QtGui import *
-from PyQt5.QtCore import *
+from PyQt5.QtWidgets import QComboBox, QCompleter
+from PyQt5.QtGui import QFontDatabase
+from PyQt5.QtCore import Qt
 
 
 class FontsComboBox(QComboBox):

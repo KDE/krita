@@ -1,5 +1,5 @@
-from PyQt5.QtWidgets import *
-from PyQt5.QtCore import *
+from PyQt5.QtWidgets import QWidget
+from PyQt5.QtCore import QSize
 
 
 class LineNumberArea(QWidget):

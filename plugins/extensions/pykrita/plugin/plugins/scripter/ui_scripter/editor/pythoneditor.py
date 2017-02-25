@@ -1,6 +1,6 @@
-from PyQt5.QtCore import *
-from PyQt5.QtWidgets import *
-from PyQt5.QtGui import *
+from PyQt5.QtCore import Qt, QRect, QSize, QPoint
+from PyQt5.QtWidgets import QPlainTextEdit, QTextEdit
+from PyQt5.QtGui import QIcon, QColor, QPainter, QTextFormat, QFont, QTextCursor
 from scripter.ui_scripter.editor import linenumberarea, debugarea
 from scripter import resources_rc
 

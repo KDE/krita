@@ -885,6 +885,7 @@ void KisImage::convertProjectionColorSpace(const KoColorSpace *dstColorSpace)
 void KisImage::setProjectionColorSpace(const KoColorSpace * colorSpace)
 {
     m_d->colorSpace = colorSpace;
+    assignImageProfile(colorSpace->profile());
     m_d->rootLayer->resetCache();
     m_d->signalRouter.emitNotification(ColorSpaceChangedSignal);
 }

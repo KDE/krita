@@ -653,6 +653,10 @@ void KisPaintopBox::slotUpdateOptionsWidgetPopup()
 
     m_presetsPopup->resourceSelected(preset.data());
     m_presetsPopup->updateViewSettings();
+
+    // the m_viewManager->image() is set earlier, but the reference will be missing when the stamp button is pressed
+    // need to later do some research on how and when we should be using weak shared pointers (WSP) that creates this situation
+    m_optionWidget->setImage(m_viewManager->image());
 }
 
 KisPaintOpPresetSP KisPaintopBox::defaultPreset(const KoID& paintOp)

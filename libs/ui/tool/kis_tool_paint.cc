@@ -94,7 +94,7 @@ KisToolPaint::KisToolPaint(KoCanvasBase * canvas, const QCursor & cursor)
     m_supportOutline = false;
 
     {
-        const int maxSize = 1000;
+        int maxSize = KisConfig().readEntry("maximumBrushSize", 1000);
 
         int brushSize = 1;
         do {

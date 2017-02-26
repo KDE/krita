@@ -171,8 +171,9 @@ KisImportExportFilter *KisImportExportManager::filterForMimeType(const QString &
         }
     }
     qDeleteAll(list);
-    if( filter )
+    if (filter) {
         filter->setMimeType(mimetype);
+    }
     return filter;
 }
 

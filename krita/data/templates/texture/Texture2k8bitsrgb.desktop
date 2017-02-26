@@ -29,6 +29,7 @@ Name[sv]=Struktur 2k 8-bitar SRGB
 Name[tr]=Doku 2k 8bit srgb
 Name[uk]=Текстура 2k, 8-бітова, srgb
 Name[x-test]=xxTexture 2k 8bit srgbxx
+Name[zh_CN]=纹理 2K 像素 8 位 sRGB 色彩空间
 Type=Link
 URL[$e]=.source/Texture2k8bitsrgb.kra
 X-KDE-Hidden=false

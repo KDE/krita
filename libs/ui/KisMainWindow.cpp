@@ -1293,7 +1293,7 @@ void KisMainWindow::slotFileNew()
                                            colorProfile,
                                            i18n("Unnamed"));
 
-    item.icon = "application-x-krita";
+    item.icon = "document-new";
 
     startupWidget->addCustomDocumentWidget(item.widget, item.title, item.icon);
 
@@ -1313,7 +1313,7 @@ void KisMainWindow::slotFileNew()
                                             i18n("Unnamed"));
 
     item.title = i18n("Create from Clipboard");
-    item.icon = "klipper";
+    item.icon = "tab-new";
 
     startupWidget->addCustomDocumentWidget(item.widget, item.title, item.icon);
 
@@ -1967,6 +1967,7 @@ void KisMainWindow::setToolbarList(QList<QAction *> toolbarList)
 
 void KisMainWindow::slotDocumentTitleModified(const QString &caption, bool mod)
 {
+    updateCaption();
     updateCaption(caption, mod);
     updateReloadFileAction(d->activeView ? d->activeView->document() : 0);
 }

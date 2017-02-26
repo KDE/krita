@@ -58,6 +58,12 @@ namespace KisIconUtils
     KRITAWIDGETUTILS_EXPORT QIcon loadIcon(const QString &name);
 
     /**
+     * Should we use a dark or light themeed icon? Useful for images that are loaded
+     * dynamically like document templates instead of being in static resource files
+     */
+    KRITAWIDGETUTILS_EXPORT bool useDarkIcons();
+
+    /**
      * This function updates an icon of \p object depending on its
      * type. See updateIcon() overrides to see the supported types
      */

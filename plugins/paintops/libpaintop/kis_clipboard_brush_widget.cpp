@@ -89,8 +89,9 @@ void KisClipboardBrushWidget::slotCreateBrush()
 
     if(m_brush == 0) {
         buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
-    } else {
+    } else {        
         buttonBox->button(QDialogButtonBox::Ok)->setEnabled(true);
+        colorAsmask->setChecked(true); // initializing this has to happen here since we need a valid brush for it to work
     }
 }
 

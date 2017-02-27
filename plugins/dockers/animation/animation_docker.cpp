@@ -93,7 +93,7 @@ AnimationDocker::AnimationDocker()
     m_lastFrameAction->setActivationFlags(KisAction::ACTIVE_IMAGE);
     m_animationWidget->btnLastFrame->setDefaultAction(m_lastFrameAction);
 
-    m_playPauseAction = new KisAction(i18n("Play / Pause"), m_animationWidget->btnPlay);
+    m_playPauseAction = new KisAction(i18n("Play / Stop"), m_animationWidget->btnPlay);
     m_playPauseAction->setActivationFlags(KisAction::ACTIVE_IMAGE);
     m_animationWidget->btnPlay->setDefaultAction(m_playPauseAction);
 

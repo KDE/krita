@@ -127,7 +127,7 @@ void PaletteDockerDock::setCanvas(KoCanvasBase *canvas)
 {
     setEnabled(canvas != 0);
     if (canvas) {
-        KisCanvas2 *cv = dynamic_cast<KisCanvas2*>(canvas);
+        KisCanvas2 *cv = qobject_cast<KisCanvas2*>(canvas);
         m_model->setDisplayRenderer(cv->displayColorConverter()->displayRendererInterface());
     }
     m_canvas = static_cast<KisCanvas2*>(canvas);

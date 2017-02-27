@@ -18,12 +18,15 @@
 #ifndef CHANNELDOCKER_DOCK_H
 #define CHANNELDOCKER_DOCK_H
 
+#include <QPointer>
 #include <QDockWidget>
+
 #include <KoCanvasObserverBase.h>
+
+#include <kis_canvas2.h>
 
 class ChannelModel;
 class QTableView;
-class KisCanvas2;
 class KisSignalCompressor;
 class KisIdleWatcher;
 
@@ -46,7 +49,7 @@ private Q_SLOTS:
 private:
     KisIdleWatcher* m_imageIdleWatcher;
     KisSignalCompressor *m_compressor;
-    KisCanvas2 *m_canvas;
+    QPointer<KisCanvas2> m_canvas;
     QTableView *m_channelTable;
     ChannelModel *m_model;
 };

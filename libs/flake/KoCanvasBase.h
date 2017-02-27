@@ -42,19 +42,20 @@ class KoSnapGuide;
 
 class QWidget;
 class QCursor;
-class QObject;
 class QPointF;
 class QRectF;
 class QSizeF;
+
+#include <QObject>
 
 /**
  * KoCanvasBase is the interface actual application canvas classes
  * should implement. Flake tools know about the canvas, so they can
  * do things like scroll, redraw, set a cursor etc.
  */
-class KRITAFLAKE_EXPORT KoCanvasBase
+class KRITAFLAKE_EXPORT KoCanvasBase : public QObject
 {
-
+    Q_OBJECT
 public:
 
     /**

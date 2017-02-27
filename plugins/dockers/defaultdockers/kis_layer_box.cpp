@@ -295,7 +295,7 @@ void KisLayerBox::setMainWindow(KisViewManager* kisview)
 
 void KisLayerBox::setCanvas(KoCanvasBase *canvas)
 {
-    if(m_canvas == canvas)
+    if (m_canvas == canvas)
         return;
 
     setEnabled(canvas != 0);

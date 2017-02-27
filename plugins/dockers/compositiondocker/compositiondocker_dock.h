@@ -20,11 +20,15 @@
 
 #include <QDockWidget>
 #include <QModelIndex>
+#include <QPointer>
+
 #include <KoCanvasObserverBase.h>
+
+#include <kis_canvas2.h>
+
 #include "ui_wdgcompositiondocker.h"
 
 class CompositionModel;
-class KisCanvas2;
 class KisAction;
 
 class CompositionDockerDock : public QDockWidget, public KoCanvasObserverBase, public Ui_WdgCompositionDocker {
@@ -51,7 +55,7 @@ private Q_SLOTS:
     void renameComposition();
 
 private:
-    KisCanvas2 *m_canvas;
+    QPointer<KisCanvas2> m_canvas;
     CompositionModel *m_model;
 
     QVector<KisAction*> m_actions;

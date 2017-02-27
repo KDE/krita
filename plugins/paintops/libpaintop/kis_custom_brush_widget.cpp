@@ -63,8 +63,10 @@ KisCustomBrushWidget::KisCustomBrushWidget(QWidget *parent, const QString& capti
 
     connect(this, SIGNAL(accepted()), SLOT(slotAddPredefined()));
     connect(brushStyle, SIGNAL(activated(int)), this, SLOT(slotUpdateCurrentBrush(int)));
-    connect(colorAsMask, SIGNAL(toggled(bool)), this, SLOT(slotUpdateUseColorAsMask(bool)));
+    connect(colorAsMask, SIGNAL(toggled(bool)), this, SLOT(slotUpdateUscColorAsMask(bool)));
 
+
+    colorAsMask->setChecked(true); // use color as mask by default. This is by far the most common way to make tip.
     spacingWidget->setSpacing(true, 1.0);
     connect(spacingWidget, SIGNAL(sigSpacingChanged()), SLOT(slotSpacingChanged()));
 }

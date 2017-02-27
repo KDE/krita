@@ -23,8 +23,10 @@
 
 #include "TextTool.h"
 #include <signal.h>
+#include <QPointer>
 
-class KoCanvasBase;
+#include <KoCanvasBase.h>
+
 class TableOfContentsConfigure;
 class SimpleTableOfContentsWidget;
 class SimpleFootEndNotesWidget;
@@ -101,7 +103,7 @@ private:
     SimpleCitationBibliographyWidget *m_scbw;
     SimpleLinksWidget *m_slw;
     LabeledWidget *m_bmark;
-    KoCanvasBase *m_canvas;
+    QPointer<KoCanvasBase> m_canvas;
 };
 
 class QAction;

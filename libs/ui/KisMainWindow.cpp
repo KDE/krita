@@ -698,7 +698,7 @@ void KisMainWindow::updateCaption()
     if (!d->mdiArea->activeSubWindow()) {
         updateCaption(QString(), false);
     }
-    else {
+    else if (d->activeView && d->activeView->document()){
         QString caption( d->activeView->document()->caption() );
         if (d->readOnly) {
             caption += ' ' + i18n("(write protected)");
@@ -2031,7 +2031,7 @@ void KisMainWindow::updateWindowMenu()
     QList<QMdiSubWindow *> windows = d->mdiArea->subWindowList();
     for (int i = 0; i < windows.size(); ++i) {
         QPointer<KisView>child = qobject_cast<KisView*>(windows.at(i)->widget());
-        if (child) {
+        if (child && child->document()) {
             QString text;
             if (i < 9) {
                 text = i18n("&%1 %2", i + 1, child->document()->url().toDisplayString());

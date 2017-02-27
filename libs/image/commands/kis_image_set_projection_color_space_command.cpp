@@ -32,6 +32,7 @@ KisImageSetProjectionColorSpaceCommand::KisImageSetProjectionColorSpaceCommand(K
     if (imageSP) {
         m_beforeColorSpace = imageSP->colorSpace();
         m_afterColorSpace = afterColorSpace;
+        imageSP->setProjectionColorSpace(m_afterColorSpace);
     }
 }
 

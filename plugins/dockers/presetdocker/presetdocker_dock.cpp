@@ -43,7 +43,7 @@ PresetDockerDock::PresetDockerDock( )
     setWidget(m_presetChooser);
 }
 
-void PresetDockerDock::setCanvas(KoCanvasBase * canvas)
+void PresetDockerDock::setCanvas(KoCanvasBase *canvas)
 {
     setEnabled(canvas != 0);
 
@@ -66,7 +66,7 @@ void PresetDockerDock::setCanvas(KoCanvasBase * canvas)
 
 void PresetDockerDock::canvasResourceChanged(int /*key*/, const QVariant& /*v*/)
 {
-    if (m_canvas) {
+    if (m_canvas && m_canvas->resourceManager()) {
         sender()->blockSignals(true);
         KisPaintOpPresetSP preset = m_canvas->resourceManager()->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
         if(preset)

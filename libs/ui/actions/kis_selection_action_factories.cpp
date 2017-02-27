@@ -65,6 +65,7 @@
 #include "KisPart.h"
 #include "kis_shape_layer.h"
 #include <kis_shape_controller.h>
+#include "kis_import_catcher.h"
 
 #include <processing/fill_processing_visitor.h>
 #include <kis_selection_tool_helper.h>
@@ -388,6 +389,7 @@ void KisPasteActionFactory::run(KisViewManager *view)
     KisPaintDeviceSP clip = KisClipboard::instance()->clip(image->bounds(), true);
 
     if (clip) {
+        KisImportCatcher::adaptClipToImageColorSpace(clip, image);
         KisPaintLayer *newLayer = new KisPaintLayer(image.data(), image->nextLayerName() + i18n("(pasted)"), OPACITY_OPAQUE_U8, clip);
         KisNodeSP aboveNode = view->activeLayer();
         KisNodeSP parentNode = aboveNode ? aboveNode->parent() : image->root();

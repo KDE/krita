@@ -110,14 +110,8 @@ void KisImportCatcher::slotLoadingFinished()
             m_d->view->nodeManager()->createNode(m_d->layerType, false, importedImage->projection());
         }
         else {
-            KisConfig cfg;
             KisPaintDeviceSP dev = importedImage->projection();
-            qDebug() << "dev" << dev->colorSpace() << "image" << m_d->view->image()->colorSpace() << "cfg" << cfg.convertToImageColorspaceOnImport();
-            if (cfg.convertToImageColorspaceOnImport() && dev->colorSpace() != m_d->view->image()->colorSpace()) {
-                /// XXX: do we need intent here?
-                KUndo2Command* cmd = dev->convertTo(m_d->view->image()->colorSpace());
-                delete cmd;
-            }
+            adaptClipToImageColorSpace(dev, m_d->view->image());
             m_d->importAsPaintLayer(dev);
         }
     }
@@ -134,5 +128,16 @@ void KisImportCatcher::deleteMyself()
 KisImportCatcher::~KisImportCatcher()
 {
     delete m_d;
+}
+
+void KisImportCatcher::adaptClipToImageColorSpace(KisPaintDeviceSP dev, KisImageSP image)
+{
+    KisConfig cfg;
+    qDebug() << "dev" << dev->colorSpace() << "image" << image->colorSpace() << "cfg" << cfg.convertToImageColorspaceOnImport();
+    if (cfg.convertToImageColorspaceOnImport() && *dev->colorSpace() != *image->colorSpace()) {
+        /// XXX: do we need intent here?
+        KUndo2Command* cmd = dev->convertTo(image->colorSpace());
+        delete cmd;
+    }
 }
 

@@ -130,8 +130,6 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas,
     , KisCanvasWidgetBase(canvas, coordinatesConverter)
     , d(new Private())
 {
-    abort();
-
     KisConfig cfg;
     cfg.setCanvasState("OPENGL_STARTED");
 

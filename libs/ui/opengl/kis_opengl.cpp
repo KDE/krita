@@ -160,9 +160,9 @@ void KisOpenGL::initializeContext(QOpenGLContext *ctx)
         QMessageBox::information(0,
                                  i18nc("@title:window", "Krita: Warning"),
                                  i18n("You have an Intel(R) HD Graphics video adapter.\n"
-                                      "If you experience problems like a black or blank screen,"
+                                      "If you experience problems like a crash, a black or blank screen,"
                                       "please update your display driver to the latest version.\n\n"
-                                      "You can also disable OpenGL rendering in Krita's Settings.\n"));
+                                      "If Krita crashes, it will disable OpenGL rendering. Please restart Krita in that case.\n After updating your drivers you can re-enable OpenGL in Krita's Settings.\n"));
         cfg.writeEntry("WarnedAboutIntel", true);
     }
 #endif

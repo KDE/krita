@@ -79,6 +79,7 @@ KisAnimationCurveChannelListModel::KisAnimationCurveChannelListModel(KisAnimatio
 KisAnimationCurveChannelListModel::~KisAnimationCurveChannelListModel()
 {
     qDeleteAll(m_d->items);
+    m_d->items.clear();
 }
 
 void KisAnimationCurveChannelListModel::setDummiesFacade(KisDummiesFacadeBase *facade)
@@ -89,20 +90,21 @@ void KisAnimationCurveChannelListModel::setDummiesFacade(KisDummiesFacadeBase *f
 void KisAnimationCurveChannelListModel::selectedNodesChanged(const KisNodeList &nodes)
 {
     // Remove unselected nodes
-    for (int i=m_d->items.count()-1; i >= 0; i--) {
+    for (int i = m_d->items.count()-1; i >= 0; i--) {
         NodeListItem *item = m_d->items.at(i);
+        if (item && item->dummy) {
+            if (!nodes.contains(item->dummy->node())) {
+                beginRemoveRows(QModelIndex(), i, i);
+                m_d->items.removeAt(i);
+                endRemoveRows();
 
-        if (!nodes.contains(item->dummy->node())) {
-            beginRemoveRows(QModelIndex(), i, i);
-            m_d->items.removeAt(i);
-            endRemoveRows();
+                Q_FOREACH(KisAnimationCurve *curve, item->curves) {
+                    m_d->curvesModel->removeCurve(curve);
+                }
 
-            Q_FOREACH(KisAnimationCurve *curve, item->curves) {
-                m_d->curvesModel->removeCurve(curve);
+                item->dummy->node()->disconnect(this);
+                delete item;
             }
-
-            item->dummy->node()->disconnect(this);
-            delete item;
         }
     }
 
@@ -237,4 +239,11 @@ bool KisAnimationCurveChannelListModel::setData(const QModelIndex &index, const 
     }
 
     return false;
+}
+
+
+void KisAnimationCurveChannelListModel::clear()
+{
+    qDeleteAll(m_d->items);
+    m_d->items.clear();
 }

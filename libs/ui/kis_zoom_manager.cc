@@ -239,8 +239,10 @@ void KisZoomManager::setRulersTrackMouse(bool value)
 
 void KisZoomManager::applyRulersUnit(const KoUnit &baseUnit)
 {
-    m_horizontalRuler->setUnit(KoUnit(baseUnit.type(), m_view->image()->xRes()));
-    m_verticalRuler->setUnit(KoUnit(baseUnit.type(), m_view->image()->yRes()));
+    if (m_view && m_view->image()) {
+        m_horizontalRuler->setUnit(KoUnit(baseUnit.type(), m_view->image()->xRes()));
+        m_verticalRuler->setUnit(KoUnit(baseUnit.type(), m_view->image()->yRes()));
+    }
 }
 
 void KisZoomManager::setMinMaxZoom()

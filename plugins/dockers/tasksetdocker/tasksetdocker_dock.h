@@ -20,15 +20,18 @@
 
 #include <QDockWidget>
 #include <QModelIndex>
-#include <KoCanvasObserverBase.h>
-#include "ui_wdgtasksetdocker.h"
-#include <KoResourceServer.h>
-#include "taskset_resource.h"
+#include <QPointer>
 
+#include <KoCanvasObserverBase.h>
+#include <KoResourceServer.h>
+
+#include <kis_canvas2.h>
+
+#include "taskset_resource.h"
+#include "ui_wdgtasksetdocker.h"
 
 class KoResourceLoaderThread;
 class TasksetModel;
-class KisCanvas2;
 
 class TasksetDockerDock : public QDockWidget, public KoCanvasObserverBase, public Ui_WdgTasksetDocker {
     Q_OBJECT
@@ -48,7 +51,7 @@ private Q_SLOTS:
     void resourceSelected( KoResource * resource );
 
 private:
-    KisCanvas2 *m_canvas;
+    QPointer<KisCanvas2> m_canvas;
     TasksetModel *m_model;
     bool m_blocked;
     KoResourceServer<TasksetResource>* m_rserver;

@@ -33,7 +33,7 @@ class KoUnit;
 /**
  * Dummy canvas just to have a shapemanager for the shape selection
  */
-class KisShapeSelectionCanvas : public QObject, public KoCanvasBase
+class KisShapeSelectionCanvas : public KoCanvasBase
 {
     Q_OBJECT
 public:

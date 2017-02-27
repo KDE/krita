@@ -46,7 +46,7 @@ ColorSliderDock::ColorSliderDock()
 {
 }
 
-void ColorSliderDock::setCanvas(KoCanvasBase * canvas)
+void ColorSliderDock::setCanvas(KoCanvasBase *canvas)
 {
     setEnabled(canvas != 0);
 

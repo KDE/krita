@@ -120,8 +120,9 @@ extern "C" int main(int argc, char **argv)
     QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps, true);
 
     const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
-#if QT_VERSION >= 0x050600
     QSettings kritarc(configPath + QStringLiteral("/kritarc"), QSettings::IniFormat);
+
+#if QT_VERSION >= 0x050600
     if (kritarc.value("EnableHiDPI", false).toBool()) {
         QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     }
@@ -260,6 +261,8 @@ extern "C" int main(int argc, char **argv)
                      &app, SLOT(fileOpenRequested(QString)));
 
     int state = app.exec();
+
+    kritarc.setValue("canvasState", "OPENGL_SUCCESS");
 
     return state;
 }

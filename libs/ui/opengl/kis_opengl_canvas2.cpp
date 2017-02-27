@@ -130,8 +130,10 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas,
     , KisCanvasWidgetBase(canvas, coordinatesConverter)
     , d(new Private())
 {
+    abort();
+
     KisConfig cfg;
-    cfg.writeEntry("canvasState", "OPENGL_STARTED");
+    cfg.setCanvasState("OPENGL_STARTED");
 
     d->openGLImageTextures =
             KisOpenGLImageTextures::getImageTextures(image,

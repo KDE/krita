@@ -135,7 +135,7 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas,
     , d(new Private())
 {
     KisConfig cfg;
-    cfg.writeEntry("canvasState", "OPENGL_STARTED");
+    cfg.setCanvasState("OPENGL_STARTED");
 
     d->openGLImageTextures =
             KisOpenGLImageTextures::getImageTextures(image,

@@ -148,6 +148,25 @@ void KisOpenGL::initializeContext(QOpenGLContext *ctx)
 
         QPixmapCache::setCacheLimit(qMax(minCacheSize, cacheSize));
     }
+
+
+    /**
+     * Warn about Intel's broken video drivers
+     */
+#if defined Q_OS_WIN
+    KisConfig cfg;
+    QString renderer = KisOpenGL::renderer();
+    if (cfg.useOpenGL() && renderer.startsWith("Intel") && !cfg.readEntry("WarnedAboutIntel", false)) {
+        QMessageBox::information(0,
+                                 i18nc("@title:window", "Krita: Warning"),
+                                 i18n("You have an Intel(R) HD Graphics video adapter.\n"
+                                      "If you experience problems like a crash, a black or blank screen,"
+                                      "please update your display driver to the latest version.\n\n"
+                                      "If Krita crashes, it will disable OpenGL rendering. Please restart Krita in that case.\n After updating your drivers you can re-enable OpenGL in Krita's Settings.\n"));
+        cfg.writeEntry("WarnedAboutIntel", true);
+    }
+#endif
+
 }
 
 // XXX Temporary function to allow LoD on OpenGL3 without triggering

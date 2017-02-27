@@ -331,9 +331,11 @@ void KisApplication::loadPlugins()
 
 bool KisApplication::start(const KisApplicationArguments &args)
 {
-#if defined(Q_OS_WIN)  || defined (Q_OS_MAC)
-#ifdef ENV32BIT
     KisConfig cfg;
+
+#if defined(Q_OS_WIN)
+#ifdef ENV32BIT
+
     if (isWow64() && !cfg.readEntry("WarnedAbout32Bits", false)) {
         QMessageBox::information(0,
                                  i18nc("@title:window", "Krita: Warning"),
@@ -345,6 +347,14 @@ bool KisApplication::start(const KisApplicationArguments &args)
     }
 #endif
 #endif
+
+    QString opengl = cfg.canvasState();
+    if (opengl == "OPENGL_NOT_TRIED" ) {
+        cfg.setCanvasState("TRY_OPENGL");
+    }
+    else if (opengl != "OPENGL_SUCCESS") {
+        cfg.setCanvasState("OPENGL_FAILED");
+    }
 
     setSplashScreenLoadingText(i18n("Initializing Globals"));
     processEvents();

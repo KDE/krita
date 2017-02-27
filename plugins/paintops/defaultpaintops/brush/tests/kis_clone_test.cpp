@@ -782,11 +782,11 @@ public:
                 //corresponding pixel in target patch
                 int xkt = xp + dx;
                 int ykt = yp + dy;
-                if (xkt < 0 || xkt > output->size().width() ) {
+                if (xkt < 0 || xkt >= output->size().width() ) {
                     distance+=ssdmax;
                     continue;
                 }
-                if (ykt < 0 || ykt > output->size().height() ) {
+                if (ykt < 0 || ykt >= output->size().height() ) {
                     distance+=ssdmax;
                     continue;
                 }
@@ -1061,8 +1061,8 @@ void TestClone::testPatchMatch()
     KisDocument *doc = KisPart::instance()->createDocument();
 
     //doc->loadNativeFormat("/home/eugening/Projects/patch-inpainting/bungee.kra");
-    doc->loadNativeFormat("/home/eugening/Projects/patch-inpainting/Yosemite_Winter_crop.kra");
-    //doc->loadNativeFormat("/home/eugening/Projects/patch-inpainting/Yosemite_Winter.kra");
+    //doc->loadNativeFormat("/home/eugening/Projects/patch-inpainting/Yosemite_Winter_crop.kra");
+    doc->loadNativeFormat("/home/eugening/Projects/patch-inpainting/Yosemite_Winter.kra");
 
     KisImageSP image = doc->image();
     image->lock();

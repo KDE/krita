@@ -333,7 +333,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
 {
     KisConfig cfg;
 
-#if defined(Q_OS_WIN)  || defined (Q_OS_OSX)
+#if defined(Q_OS_WIN)
 #ifdef ENV32BIT
 
     if (isWow64() && !cfg.readEntry("WarnedAbout32Bits", false)) {

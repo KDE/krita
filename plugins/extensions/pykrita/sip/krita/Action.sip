@@ -10,8 +10,6 @@ public:
 public Q_SLOTS:
     QString name() const;
     void setName(QString value);
-    QString menu() const;
-    void setMenu(QString value);
     bool isCheckable() const;
     void setCheckable(bool value);
     bool isChecked() const;

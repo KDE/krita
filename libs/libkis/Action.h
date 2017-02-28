@@ -24,7 +24,7 @@
 #include "libkis.h"
 
 /**
- * Action
+ * Action encapsulates a KisAction. By default, actions are put in the Tools/Scripts menu.
  */
 class KRITALIBKIS_EXPORT Action : public QObject
 {
@@ -38,10 +38,7 @@ public:
 public Q_SLOTS:
 
     QString name() const;
-    void setName(QString value);
-
-    QString menu() const;
-    void setMenu(QString value);
+    void setName(QString name);
 
     bool isCheckable() const;
     void setCheckable(bool value);
@@ -53,6 +50,10 @@ public Q_SLOTS:
     void setShortcut(QString value);
 
     bool isVisible() const;
+    /**
+     * @brief setVisible determines whether the action will be visible in the scripting menu.
+     * @param value true if the action is to be shown in the menu, false otherwise
+     */
     void setVisible(bool value);
 
     bool isEnabled() const;

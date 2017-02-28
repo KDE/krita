@@ -18,6 +18,9 @@
 
 #include "kis_script_manager.h"
 
+#include <QMenu>
+
+#include <kactionmenu.h>
 #include <klocalizedstring.h>
 #include <kactionmenu.h>
 #include <kactioncollection.h>
@@ -70,7 +73,8 @@ void KisScriptManager::updateGUI()
 
 void KisScriptManager::addAction(QAction *action)
 {
-    qDebug() << "Adding action" << action;
     Q_ASSERT(d->actionCollection);
-    d->scriptMenu->addAction(action);
+    if (action->property("menu").toString().toLower() == "tools/scripts") {
+        d->scriptMenu->addAction(action);
+    }
 }

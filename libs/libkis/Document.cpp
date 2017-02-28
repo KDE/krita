@@ -355,9 +355,16 @@ QByteArray Document::pixelData(int x, int y, int w, int h) const
 
 bool Document::close()
 {
-    KisPart::instance()->removeDocument(d->document);
     bool retval = d->document->closeUrl(false);
-    delete d->document;
+    Q_FOREACH(KisView *view, KisPart::instance()->views()) {
+        if (view->document() == d->document) {
+            view->close();
+            view->deleteLater();
+        }
+    }
+
+    d->document->deleteLater();
+    d->document = 0;
     return retval;
 }
 

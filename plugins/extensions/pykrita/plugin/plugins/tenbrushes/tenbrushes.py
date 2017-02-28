@@ -36,6 +36,7 @@ class TenBrushesViewExtension(ViewExtension):
         self.actions = []
         for i in ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']:
             action = Application.createAction("Activate Preset " + i)
+            action.setVisible(False)
             action.setShortcut("CTRL+" + i)
             action.triggered.connect(self.activatePreset)
             if j < len(selectedPresets) and selectedPresets[j] in allPresets:
@@ -44,7 +45,7 @@ class TenBrushesViewExtension(ViewExtension):
                 action.preset = None
             self.actions.append(action)
             j = j + 1
-            
+
       
     def activatePreset(self):
         allPresets = Application.resources("preset")

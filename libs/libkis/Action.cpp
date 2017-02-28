@@ -17,20 +17,18 @@
  */
 #include "Action.h"
 
-#include <QAction>
 
 struct Action::Private {
     Private() {}
     QAction *action {0};
-    QString name;
-    QString menu;
 };
 
 Action::Action(QObject *parent)
     : QObject(parent)
     , d(new Private)
 {
-    d->action = new QAction(this);
+    d->action = new KisAction(this);
+    d->action->setProperty("menu", "tools/scripts");
     connect(d->action, SIGNAL(triggered(bool)), SIGNAL(triggered(bool)));
 }
 
@@ -38,8 +36,9 @@ Action::Action(const QString &name, QAction *action, QObject *parent)
     : QObject(parent)
     , d(new Private)
 {
-    d->name = name;
     d->action = action;
+    d->action->setObjectName(name);
+    d->action->setProperty("menu", "tools/scripts");
     connect(d->action, SIGNAL(triggered(bool)), SIGNAL(triggered(bool)));
 }
 
@@ -50,22 +49,14 @@ Action::~Action()
 
 QString Action::name() const
 {
-    return d->name;
+    if (!d->action) return "";
+    return d->action->objectName();
 }
 
-void Action::setName(QString value)
+void Action::setName(QString name)
 {
-    d->name = value;
-}
-
-QString Action::menu() const
-{
-    return d->menu;
-}
-
-void Action::setMenu(QString value)
-{
-    d->menu = value;
+    if (!d->action) return;
+    d->action->setObjectName(name);
 }
 
 bool Action::isCheckable() const
@@ -92,7 +83,6 @@ void Action::setChecked(bool value)
     d->action->setChecked(value);
 }
 
-
 QString Action::shortcut() const
 {
     if (!d->action) return QString();
@@ -105,19 +95,22 @@ void Action::setShortcut(QString value)
     d->action->setShortcut(QKeySequence::fromString(value));
 }
 
-
 bool Action::isVisible() const
 {
     if (!d->action) return false;
-    return d->action->isVisible();
+    return d->action->property("menu").toString() == "tools/scripts";
 }
 
 void Action::setVisible(bool value)
 {
     if (!d->action) return;
-    d->action->setVisible(value);
+    if (value) {
+        d->action->setProperty("menu", "tools/scripts");
+    }
+    else {
+        d->action->setProperty("menu", "");
+    }
 }
-
 
 bool Action::isEnabled() const
 {

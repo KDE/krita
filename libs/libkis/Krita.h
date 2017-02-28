@@ -228,7 +228,7 @@ public Q_SLOTS:
      * @brief createAction creates an action with the given text and passes it to Krita. Every newly created
      *     mainwindow will create an instance of this action.
      * @param text the user-visible text
-     * @return  the QAction you can connect a slot to.
+     * @return the Action you can connect a slot to.
      */
     Action *createAction(const QString &text);
 

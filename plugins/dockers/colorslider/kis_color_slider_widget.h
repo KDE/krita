@@ -21,8 +21,11 @@
 #define _KIS_COLOR_SLIDER_WIDGET_H_
 
 #include <QWidget>
-#include "kis_canvas2.h"
+#include <QPointer>
+
 #include <KoColor.h>
+
+#include "kis_canvas2.h"
 
 class KoColorSpace;
 class KoColorDisplayRendererInterface;
@@ -67,7 +70,7 @@ private:
     KisSignalCompressor *m_updateCompressor;
     KisSignalCompressor *m_configCompressor;
     KoColorDisplayRendererInterface *m_displayRenderer;
-    KisCanvas2 *m_canvas;
+    QPointer<KisCanvas2> m_canvas;
     KisColorSliderInput* hsvH;
     KisColorSliderInput* hsvS;
     KisColorSliderInput* hsvV;

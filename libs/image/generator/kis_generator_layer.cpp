@@ -105,7 +105,8 @@ void KisGeneratorLayer::update()
 
     QRect processRect = exactBounds();
 
-    resetCache(f->colorSpace());
+    resetCache();
+
     KisPaintDeviceSP originalDevice = original();
 
     KisProcessingInformation dstCfg(originalDevice,

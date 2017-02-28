@@ -48,6 +48,7 @@
 #include <kis_paint_device.h>
 #include <kis_painter.h>
 
+#include "kis_import_catcher.h"
 #include "kis_clipboard.h"
 #include "KisDocument.h"
 #include "widgets/kis_cmb_idlist.h"
@@ -82,19 +83,19 @@ void KisImageFromClipboard::createImage()
 {
     KisDocument *doc = createNewImage();
     
-    KisImageWSP image = doc->image();
+    KisImageSP image = doc->image();
     if (image && image->root() && image->root()->firstChild()) {
         KisLayer * layer = qobject_cast<KisLayer*>(image->root()->firstChild().data());
 
         KisPaintDeviceSP clip = KisClipboard::instance()->clip(QRect(), true);
         if (clip) {
-            QRect r = clip->exactBounds();
+            KisImportCatcher::adaptClipToImageColorSpace(clip, image);
 
+            QRect r = clip->exactBounds();
             KisPainter::copyAreaOptimized(QPoint(), clip, layer->paintDevice(), r);
 
             layer->setDirty();
         }
-
     }
     doc->setModified(true);
     emit m_openPane->documentSelected(doc);

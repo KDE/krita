@@ -18,11 +18,12 @@
 #ifndef _PRESETDOCKER_DOCK_H_
 #define _PRESETDOCKER_DOCK_H_
 
+#include <QPointer>
 #include <QDockWidget>
 #include <KoCanvasObserverBase.h>
+#include <kis_canvas2.h>
 
 class KisPaintOpPresetsChooserPopup;
-class KisCanvas2;
 
 class PresetDockerDock : public QDockWidget, public KoCanvasObserverBase {
     Q_OBJECT
@@ -35,7 +36,7 @@ public Q_SLOTS:
     void canvasResourceChanged(int key, const QVariant& v);
 private Q_SLOTS:
 private:
-    KisCanvas2* m_canvas;
+    QPointer<KisCanvas2> m_canvas;
     KisPaintOpPresetsChooserPopup* m_presetChooser;
 };
 

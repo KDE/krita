@@ -20,13 +20,16 @@
 #ifndef KIS_PALETTEMODEL_H
 #define KIS_PALETTEMODEL_H
 
+#include <QPointer>
 #include <QModelIndex>
+
+#include <KoColorDisplayRendererInterface.h>
 
 #include <kis_types.h>
 #include "kritaui_export.h"
 
 class KoColorSet;
-class KoColorDisplayRendererInterface;
+
 
 class KRITAUI_EXPORT KisPaletteModel : public QAbstractTableModel
 {
@@ -59,7 +62,7 @@ private Q_SLOTS:
 
 private:
     KoColorSet* m_colorSet;
-    KoColorDisplayRendererInterface *m_displayRenderer;
+    QPointer<KoColorDisplayRendererInterface> m_displayRenderer;
 };
 
 #endif

@@ -57,7 +57,7 @@ protected:
 
         KisFilterSP filter = KisFilterRegistry::instance()->value(m_filterName);
         Q_ASSERT(filter);
-        KisFilterConfigurationSP filterConfig = filter->defaultConfiguration(0);
+        KisFilterConfigurationSP filterConfig = filter->defaultConfiguration();
         Q_ASSERT(filterConfig);
 
         return new KisFilterStrokeStrategy(filter, KisFilterConfigurationSP(filterConfig), resources);

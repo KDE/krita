@@ -57,7 +57,7 @@ KoColorTransformation * KisColorBalanceFilter::createTransformation(const KoColo
     return cs->createColorTransformation("ColorBalance" , params);
 }
 
-KisFilterConfigurationSP KisColorBalanceFilter::factoryConfiguration(const KisPaintDeviceSP) const
+KisFilterConfigurationSP KisColorBalanceFilter::factoryConfiguration() const
 {
     KisColorTransformationConfigurationSP config = new KisColorTransformationConfiguration(id().id(), 0);
     config->setProperty("cyan_red_midtones", 0);

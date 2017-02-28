@@ -22,16 +22,18 @@
 
 #include <QDockWidget>
 #include <QModelIndex>
+#include <QPointer>
+
 #include <KoCanvasObserverBase.h>
 #include <KoResourceServerAdapter.h>
 #include <KoResourceServerObserver.h>
 #include <resources/KoColorSet.h>
 
+#include <kis_canvas2.h>
 #include <kis_mainwindow_observer.h>
 
 class KisViewManager;
 class KisCanvasResourceProvider;
-class KisCanvas2;
 class KisWorkspaceResource;
 class KisColorsetChooser;
 class KisPaletteModel;
@@ -75,7 +77,7 @@ private:
     KoColorSet *m_currentColorSet;
     KisColorsetChooser *m_colorSetChooser;
     KisCanvasResourceProvider *m_resourceProvider;
-    KisCanvas2 *m_canvas;
+    QPointer<KisCanvas2> m_canvas;
 };
 
 

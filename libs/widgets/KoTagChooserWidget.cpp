@@ -190,6 +190,7 @@ void KoTagChooserWidget::removeItem(QString item)
     int pos = d->comboBox->findText(item);
     if (pos >= 0) {
         d->comboBox->removeItem(pos);
+        d->tags.removeOne(item);
     }
 }
 

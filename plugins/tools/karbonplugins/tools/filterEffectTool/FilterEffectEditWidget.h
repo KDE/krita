@@ -23,9 +23,11 @@
 #include "ui_FilterEffectEditWidget.h"
 #include "FilterEffectScene.h"
 #include <QWidget>
+#include <QPointer>
+
+#include <KoCanvasBase.h>
 
 class KoShape;
-class KoCanvasBase;
 class KoFilterEffect;
 class KoFilterEffectStack;
 
@@ -60,7 +62,7 @@ private:
 
     FilterEffectScene *m_scene;
     KoShape *m_shape;
-    KoCanvasBase *m_canvas;
+    QPointer<KoCanvasBase> m_canvas;
     KoFilterEffectStack *m_effects;
     ConnectionSource m_currentItem;
     KComboBox *m_defaultSourceSelector;

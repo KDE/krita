@@ -46,16 +46,45 @@ void KisCategorizedItemDelegate::paint(QPainter* painter, const QStyleOptionView
     if(!index.data(__CategorizedListModelBase::IsHeaderRole).toBool()) {
         QStyleOptionViewItem sovi(option);
 
+
+
         if (index.data(__CategorizedListModelBase::isLockableRole).toBool()) {
-            bool locked = index.data(__CategorizedListModelBase::isLockedRole).toBool();
-            const QIcon icon = locked ? KisIconUtils::loadIcon(koIconName("locked")) : KisIconUtils::loadIcon(koIconName("unlocked"));
+
             const int iconSize = qMax(16, m_minimumItemHeight - 2);
+            bool locked = index.data(__CategorizedListModelBase::isLockedRole).toBool();
+
+
+            QIcon icon = locked ? KisIconUtils::loadIcon(koIconName("layer-locked")) : KisIconUtils::loadIcon(koIconName("layer-unlocked"));
+
+            // to be able to make an icon more transparent. we need to create a new image
+            // and use the QPainter to make a more transparent version of it.
+            QImage image(iconSize, iconSize, QImage::Format_ARGB32_Premultiplied);
+            image.fill(Qt::transparent); // needs to happen, otherwise 'junk' pixels are used (looks bad)
+
+            QPainter p(&image);
+            p.setCompositionMode(QPainter::CompositionMode_Source);
+
+
+            // make unlocked icons more hidden
+            if (locked) {
+                p.setOpacity(1.0);
+            } else {
+                p.setOpacity(0.14);
+            }
+
+            p.drawPixmap(0, 0, icon.pixmap(iconSize, QIcon::Normal) );
+            p.end();
+
+            icon = QIcon( QPixmap::fromImage(image) ); // the new icon is ready
+
+
 
             sovi.decorationPosition = QStyleOptionViewItem::Right;
             sovi.decorationAlignment = Qt::AlignRight;
             sovi.decorationSize = QSize(iconSize, iconSize);
             sovi.features |= QStyleOptionViewItem::HasDecoration;
             sovi.icon = icon;
+
         }
 
         QStyledItemDelegate::paint(painter, sovi, index);

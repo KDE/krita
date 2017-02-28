@@ -20,9 +20,11 @@
 #define _KIS_COLOR_SLIDER_INPUT_H_
 
 #include <QWidget>
-#include "KoColorDisplayRendererInterface.h"
-#include "kis_canvas2.h"
+#include <QPointer>
 
+#include "KoColorDisplayRendererInterface.h"
+
+#include "kis_canvas2.h"
 
 class KoColor;
 class QWidget;
@@ -30,7 +32,6 @@ class QDoubleSpinBox;
 class KisDoubleParseSpinBox;
 class KisHSVSlider;
 class KisDisplayColorConverter;
-
 
 
 class KisColorSliderInput : public QWidget
@@ -48,7 +49,7 @@ protected:
     const int m_type;
     KoColor* m_color;
     KoColorDisplayRendererInterface *m_displayRenderer;
-    KisCanvas2* m_canvas;
+    QPointer<KisCanvas2> m_canvas;
     KisHSVSlider* m_hsvSlider;
 };
 
@@ -61,7 +62,7 @@ public:
     KisDisplayColorConverter* converter() const;
 protected:
     virtual QWidget* createInput();
-    KisCanvas2* m_canvas;
+    QPointer<KisCanvas2> m_canvas;
 public Q_SLOTS:
     void setValue(double);
     void update();

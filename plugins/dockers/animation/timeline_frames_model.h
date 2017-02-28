@@ -51,6 +51,15 @@ public:
     bool createFrame(const QModelIndex &dstIndex);
     bool copyFrame(const QModelIndex &dstIndex);
 
+    QString audioChannelFileName() const;
+    void setAudioChannelFileName(const QString &fileName);
+
+    bool isAudioMuted() const;
+    void setAudioMuted(bool value);
+
+    qreal audioVolume() const;
+    void setAudioVolume(qreal value);
+
     void setLastClickedIndex(const QModelIndex &index);
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
@@ -75,7 +84,7 @@ public:
         TimelinePropertiesRole,
         OtherLayersRole,
         LayerUsedInTimelineRole,
-        ColorLabel
+        FrameColorLabelIndexRole
     };
 
     // metatype is added by the original implementation
@@ -112,8 +121,9 @@ public Q_SLOTS:
 Q_SIGNALS:
     void requestCurrentNodeChanged(KisNodeSP node);
     void sigInfiniteTimelineUpdateNeeded();
+    void sigAudioChannelChanged();
     void sigEnsureRowVisible(int row);
-
+    
 private:
     struct Private;
     const QScopedPointer<Private> m_d;

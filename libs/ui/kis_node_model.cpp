@@ -22,6 +22,7 @@
 
 #include <QMimeData>
 #include <QBuffer>
+#include <QPointer>
 
 #include <KoColorSpaceConstants.h>
 
@@ -39,7 +40,7 @@
 #include <kis_paint_layer.h>
 #include <kis_group_layer.h>
 #include <kis_projection_leaf.h>
-
+#include <kis_shape_controller.h>
 
 #include "kis_dummies_facade_base.h"
 #include "kis_node_dummies_graph.h"
@@ -63,14 +64,14 @@ struct KisNodeModel::Private
     QTimer updateTimer;
 
     KisModelIndexConverterBase *indexConverter = 0;
-    KisDummiesFacadeBase *dummiesFacade = 0;
+    QPointer<KisDummiesFacadeBase> dummiesFacade = 0;
     bool needFinishRemoveRows = false;
     bool needFinishInsertRows = false;
     bool showRootLayer = false;
     bool showGlobalSelection = false;
     QPersistentModelIndex activeNodeIndex;
 
-    KisNodeDummy* parentOfRemovedNode = 0;
+    QPointer<KisNodeDummy> parentOfRemovedNode = 0;
 };
 
 KisNodeModel::KisNodeModel(QObject * parent)
@@ -95,7 +96,10 @@ KisNodeSP KisNodeModel::nodeFromIndex(const QModelIndex &index) const
     Q_ASSERT(index.isValid());
 
     KisNodeDummy *dummy = m_d->indexConverter->dummyFromIndex(index);
-    return dummy->node();
+    if (dummy) {
+        return dummy->node();
+    }
+    return 0;
 }
 
 QModelIndex KisNodeModel::indexFromNode(KisNodeSP node) const
@@ -247,16 +251,14 @@ void KisNodeModel::connectDummies(KisNodeDummy *dummy, bool needConnect)
 
 void KisNodeModel::setDummiesFacade(KisDummiesFacadeBase *dummiesFacade, KisImageWSP image, KisShapeController *shapeController, KisNodeSelectionAdapter *nodeSelectionAdapter, KisNodeInsertionAdapter *nodeInsertionAdapter)
 {
-    KisDummiesFacadeBase *oldDummiesFacade;
-    KisShapeController *oldShapeController;
-    oldShapeController = m_d->shapeController;
-    oldDummiesFacade = m_d->dummiesFacade;
+    QPointer<KisDummiesFacadeBase> oldDummiesFacade(m_d->dummiesFacade);
+    KisShapeController  *oldShapeController = m_d->shapeController;
 
     m_d->shapeController = shapeController;
     m_d->nodeSelectionAdapter = nodeSelectionAdapter;
     m_d->nodeInsertionAdapter = nodeInsertionAdapter;
 
-    if(oldDummiesFacade && m_d->image) {
+    if (oldDummiesFacade && m_d->image) {
         m_d->image->disconnect(this);
         oldDummiesFacade->disconnect(this);
         connectDummies(m_d->dummiesFacade->rootDummy(), false);
@@ -267,9 +269,9 @@ void KisNodeModel::setDummiesFacade(KisDummiesFacadeBase *dummiesFacade, KisImag
     m_d->parentOfRemovedNode = 0;
     resetIndexConverter();
 
-    if(m_d->dummiesFacade) {
+    if (m_d->dummiesFacade) {
         KisNodeDummy *rootDummy = m_d->dummiesFacade->rootDummy();
-        if(rootDummy) {
+        if (rootDummy) {
             connectDummies(rootDummy, true);
         }
 
@@ -285,12 +287,12 @@ void KisNodeModel::setDummiesFacade(KisDummiesFacadeBase *dummiesFacade, KisImag
         connect(m_d->dummiesFacade, SIGNAL(sigDummyChanged(KisNodeDummy*)),
                 SLOT(slotDummyChanged(KisNodeDummy*)));
 
-        if(m_d->image.isValid()) {
+        if (m_d->image.isValid()) {
             connect(m_d->image, SIGNAL(sigIsolatedModeChanged()), SLOT(slotIsolatedModeChanged()));
         }
     }
 
-    if(m_d->dummiesFacade != oldDummiesFacade || m_d->shapeController != oldShapeController) {
+    if (m_d->dummiesFacade != oldDummiesFacade || m_d->shapeController != oldShapeController) {
         reset();
     }
 }
@@ -476,6 +478,10 @@ QVariant KisNodeModel::data(const QModelIndex &index, int role) const
 
             QSize size = node->extent().size();
             size.scale(maxSize, maxSize, Qt::KeepAspectRatio);
+            if (size.width() == 0 || size.height() == 0) {
+                // No thumbnail can be shown if there isn't width or height...
+                return QVariant();
+            }
 
             return node->createThumbnail(size.width(), size.height());
         } else {

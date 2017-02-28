@@ -72,8 +72,6 @@ KisAdvancedColorSpaceSelector::KisAdvancedColorSpaceSelector(QWidget* parent, co
             this, SLOT(fillLstProfiles()));
     connect(d->colorSpaceSelector->lstProfile, SIGNAL(currentItemChanged(QListWidgetItem*, QListWidgetItem*)),
             this, SLOT(colorSpaceChanged()));
-    connect(d->colorSpaceSelector->lstProfile, SIGNAL(currentItemChanged(QListWidgetItem*, QListWidgetItem*)),
-            this, SLOT(buttonUpdate()));
     connect(this, SIGNAL(selectionChanged(bool)),
             this, SLOT(fillDescription()));
     connect(this, SIGNAL(selectionChanged(bool)), d->colorSpaceSelector->TongueWidget, SLOT(repaint()));
@@ -214,7 +212,7 @@ void KisAdvancedColorSpaceSelector::fillDescription()
         if (currentColorSpace()->profile()->hasTRC()){
             for (int i=0; i<=10; i++) {
                 QVector <qreal> linear(3);
-                linear.fill(i*0.1);            
+                linear.fill(i*0.1);
                 currentColorSpace()->profile()->linearizeFloatValue(linear);
                 estimatedCurve = estimatedCurve + ", " + QString::number(linear[0]);
                 QPointF tonepoint(linear[0],i*0.1);
@@ -249,7 +247,7 @@ void KisAdvancedColorSpaceSelector::fillDescription()
         if (currentColorSpace()->profile()->hasTRC()){
             for (int i=0; i<=10; i++) {
                 QVector <qreal> linear(3);
-                linear.fill(i*0.1);            
+                linear.fill(i*0.1);
                 currentColorSpace()->profile()->linearizeFloatValue(linear);
                 estimatedCurve = estimatedCurve + ", " + QString::number(linear[0]);
                 QPointF tonepoint(linear[0],i*0.1);
@@ -277,7 +275,7 @@ void KisAdvancedColorSpaceSelector::fillDescription()
         if (currentColorSpace()->profile()->hasTRC()){
             for (int i=0; i<=10; i++) {
                 QVector <qreal> linear(3);
-                linear.fill(i*0.1);            
+                linear.fill(i*0.1);
                 currentColorSpace()->profile()->linearizeFloatValue(linear);
                 estimatedCurve = estimatedCurve + ", " + QString::number(linear[0]);
                 QPointF tonepoint(linear[0],i*0.1);
@@ -301,7 +299,7 @@ void KisAdvancedColorSpaceSelector::fillDescription()
         if (currentColorSpace()->profile()->hasTRC()){
             for (int i=0; i<=10; i++) {
                 QVector <qreal> linear(3);
-                linear.fill(i*0.1);            
+                linear.fill(i*0.1);
                 currentColorSpace()->profile()->linearizeFloatValue(linear);
                 estimatedCurve = estimatedCurve + ", " + QString::number(linear[0]);
                 QPointF tonepoint(linear[0],i*0.1);
@@ -323,7 +321,7 @@ void KisAdvancedColorSpaceSelector::fillDescription()
         if (currentColorSpace()->profile()->hasTRC()){
             for (int i=0; i<=10; i++) {
                 QVector <qreal> linear(3);
-                linear.fill(i*0.1);            
+                linear.fill(i*0.1);
                 currentColorSpace()->profile()->linearizeFloatValue(linear);
                 estimatedCurve = estimatedCurve + ", " + QString::number(linear[0]);
                 QPointF tonepoint(linear[0],i*0.1);
@@ -346,7 +344,7 @@ void KisAdvancedColorSpaceSelector::fillDescription()
         if (currentColorSpace()->profile()->hasTRC()){
             for (int i=0; i<=10; i++) {
                 QVector <qreal> linear(3);
-                linear.fill(i*0.1);            
+                linear.fill(i*0.1);
                 currentColorSpace()->profile()->linearizeFloatValue(linear);
                 estimatedCurve = estimatedCurve + ", " + QString::number(linear[0]);
                 QPointF tonepoint(linear[0],i*0.1);

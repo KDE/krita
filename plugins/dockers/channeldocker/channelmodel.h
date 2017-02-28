@@ -20,10 +20,13 @@
 
 #include <QModelIndex>
 #include <QSize>
+#include <QPointer>
+
+#include <kis_canvas2.h>
 #include <kis_types.h>
 
 class KoColorSpace;
-class KisCanvas2;
+
 
 class ChannelModel : public QAbstractTableModel
 {
@@ -56,7 +59,7 @@ private:
     void updateThumbnails();
 
 private:
-    KisCanvas2* m_canvas;
+    QPointer<KisCanvas2> m_canvas;
     QVector<QImage> m_thumbnails;
     QSize m_thumbnailSizeLimit;
     int m_oversampleRatio;

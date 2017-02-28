@@ -19,6 +19,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include <QPointer>
+
 #include "KoShapeBasedDocumentBase.h"
 #include "KoDocumentResourceManager.h"
 #include "KoShapeRegistry.h"
@@ -59,7 +61,7 @@ public:
         delete resourceManager;
     }
 
-    KoDocumentResourceManager *resourceManager;
+    QPointer<KoDocumentResourceManager> resourceManager;
 };
 
 KoShapeBasedDocumentBase::KoShapeBasedDocumentBase()

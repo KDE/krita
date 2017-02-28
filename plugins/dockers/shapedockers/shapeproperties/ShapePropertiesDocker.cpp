@@ -34,6 +34,7 @@
 #include <klocalizedstring.h>
 
 #include <QStackedWidget>
+#include <QPointer>
 
 class ShapePropertiesDocker::Private
 {
@@ -49,7 +50,7 @@ public:
     QStackedWidget *widgetStack;
     KoShape *currentShape;
     KoShapeConfigWidgetBase *currentPanel;
-    KoCanvasBase *canvas;
+    QPointer<KoCanvasBase> canvas;
 };
 
 ShapePropertiesDocker::ShapePropertiesDocker(QWidget *parent)

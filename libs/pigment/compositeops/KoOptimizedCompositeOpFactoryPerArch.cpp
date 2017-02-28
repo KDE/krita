@@ -67,24 +67,3 @@ KoOptimizedCompositeOpFactoryPerArch<KoOptimizedCompositeOpOver128>::create<Vc::
 {
     return new KoOptimizedCompositeOpOver128<Vc::CurrentImplementation::current()>(param);
 }
-
-#define __stringify(_s) #_s
-#define stringify(_s) __stringify(_s)
-
-inline void printFeatureSupported(const QString &feature, Vc::Implementation impl)
-{
-  dbgPigment << "\t" << feature << "\t---\t" << (Vc::isImplementationSupported(impl) ? "yes" : "no");
-}
-
-template<>
-KoReportCurrentArch::ReturnType
-KoReportCurrentArch::create<Vc::CurrentImplementation::current()>(ParamType)
-{
-    dbgPigment << "Compiled for arch:" << Vc::CurrentImplementation::current();
-    dbgPigment << "Features supported:";
-    printFeatureSupported("SSE2", Vc::SSE2Impl);
-    printFeatureSupported("SSSE3", Vc::SSSE3Impl);
-    printFeatureSupported("SSE4.1", Vc::SSE41Impl);
-    printFeatureSupported("AVX ", Vc::AVXImpl);
-    printFeatureSupported("AVX2 ", Vc::AVX2Impl);
-}

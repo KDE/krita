@@ -676,7 +676,7 @@ bool KisDocument::saveFile(const QString &filePath, KisPropertiesConfigurationSP
     Q_ASSERT(!tempororaryFileName.isEmpty());
 
     //qDebug() << "saving to tempory file" << tempororaryFileName;
-    status = d->importExportManager->exportDocument(tempororaryFileName, outputMimeType, !d->isExporting , exportConfiguration);
+    status = d->importExportManager->exportDocument(tempororaryFileName, filePath, outputMimeType, !d->isExporting , exportConfiguration);
 
     ret = (status == KisImportExportFilter::OK);
     suppressErrorDialog = (isAutosaving() || status == KisImportExportFilter::UserCancelled || status == KisImportExportFilter::BadConversionGraph);
@@ -897,11 +897,14 @@ bool KisDocument::isModified() const
 
 QPixmap KisDocument::generatePreview(const QSize& size)
 {
-    if (d->image) {
-        QRect bounds = d->image->bounds();
+    KisImageSP image = d->image;
+    if (d->savingImage) image = d->savingImage;
+
+    if (image) {
+        QRect bounds = image->bounds();
         QSize newSize = bounds.size();
         newSize.scale(size, Qt::KeepAspectRatio);
-        QPixmap px = QPixmap::fromImage(d->image->convertToQImage(newSize, 0));
+        QPixmap px = QPixmap::fromImage(image->convertToQImage(newSize, 0));
         if (px.size() == QSize(0,0)) {
             px = QPixmap(newSize);
             QPainter gc(&px);
@@ -909,6 +912,7 @@ QPixmap KisDocument::generatePreview(const QSize& size)
             gc.fillRect(px.rect(), checkBrush);
             gc.end();
         }
+        return px;
     }
     return QPixmap(size);
 }
@@ -1682,6 +1686,7 @@ bool KisDocument::prepareLocksForSaving()
                 d->lastErrorMessage = i18n("The image was still busy while saving. Your saved image might be incomplete.");
                 d->image->lock();
                 copiedImage = d->image->clone(true);
+                copiedImage->initialRefreshGraph();
                 d->image->unlock();
             }
         }

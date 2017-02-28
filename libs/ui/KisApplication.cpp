@@ -178,11 +178,6 @@ KisApplication::KisApplication(const QString &key, int &argc, char **argv)
     else {
         qDebug() << "Style override disabled, using" << style()->objectName();
     }
-#if QT_VERSION >= 0x050600
-    if (KisConfig().readEntry("EnableHiDPI", false)) {
-        QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-    }
-#endif
 
     KisOpenGL::initialize();
     qDebug() << "krita has opengl" << KisOpenGL::hasOpenGL();
@@ -338,9 +333,11 @@ void KisApplication::loadPlugins()
 
 bool KisApplication::start(const KisApplicationArguments &args)
 {
-#if defined(Q_OS_WIN)  || defined (Q_OS_OSX)
-#ifdef ENV32BIT
     KisConfig cfg;
+
+#if defined(Q_OS_WIN)
+#ifdef ENV32BIT
+
     if (isWow64() && !cfg.readEntry("WarnedAbout32Bits", false)) {
         QMessageBox::information(0,
                                  i18nc("@title:window", "Krita: Warning"),
@@ -352,6 +349,14 @@ bool KisApplication::start(const KisApplicationArguments &args)
     }
 #endif
 #endif
+
+    QString opengl = cfg.canvasState();
+    if (opengl == "OPENGL_NOT_TRIED" ) {
+        cfg.setCanvasState("TRY_OPENGL");
+    }
+    else if (opengl != "OPENGL_SUCCESS") {
+        cfg.setCanvasState("OPENGL_FAILED");
+    }
 
     setSplashScreenLoadingText(i18n("Initializing Globals"));
     processEvents();

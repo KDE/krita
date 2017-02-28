@@ -46,6 +46,10 @@
 #include "kis_projection_leaf.h"
 #include "kis_time_range.h"
 
+#include "kis_node_view_color_scheme.h"
+#include "krita_utils.h"
+#include <QApplication>
+
 struct TimelineFramesModel::Private
 {
     Private()
@@ -59,7 +63,7 @@ struct TimelineFramesModel::Private
 
     int activeLayerIndex;
 
-    KisDummiesFacadeBase *dummiesFacade;
+    QPointer<KisDummiesFacadeBase> dummiesFacade;
     KisImageWSP image;
     bool needFinishInsertRows;
     bool needFinishRemoveRows;
@@ -132,6 +136,12 @@ struct TimelineFramesModel::Private
         if (!frame) return;
 
         frame->setColorLabel(color);
+    }
+
+    int layerColorLabel(int row) const {
+        KisNodeDummy *dummy = converter->dummyFromRow(row);
+        if (!dummy) return -1;
+        return dummy->node()->colorLabelIndex();
     }
 
     QVariant layerProperties(int row) const {
@@ -219,7 +229,8 @@ void TimelineFramesModel::setDummiesFacade(KisDummiesFacadeBase *dummiesFacade, 
 {
     KisDummiesFacadeBase *oldDummiesFacade = m_d->dummiesFacade;
 
-    if (m_d->dummiesFacade) {
+    if (m_d->dummiesFacade && m_d->image) {
+        m_d->image->animationInterface()->disconnect(this);
         m_d->image->disconnect(this);
         m_d->dummiesFacade->disconnect(this);
     }
@@ -236,6 +247,10 @@ void TimelineFramesModel::setDummiesFacade(KisDummiesFacadeBase *dummiesFacade, 
                 SLOT(slotDummyChanged(KisNodeDummy*)));
         connect(m_d->image->animationInterface(),
                 SIGNAL(sigFullClipRangeChanged()), SIGNAL(sigInfiniteTimelineUpdateNeeded()));
+        connect(m_d->image->animationInterface(),
+                SIGNAL(sigAudioChannelChanged()), SIGNAL(sigAudioChannelChanged()));
+        connect(m_d->image->animationInterface(),
+                SIGNAL(sigAudioVolumeChanged()), SIGNAL(sigAudioChannelChanged()));
     }
 
     if (m_d->dummiesFacade != oldDummiesFacade) {
@@ -244,6 +259,7 @@ void TimelineFramesModel::setDummiesFacade(KisDummiesFacadeBase *dummiesFacade, 
 
     if (m_d->dummiesFacade) {
         emit sigInfiniteTimelineUpdateNeeded();
+        emit sigAudioChannelChanged();
     }
 }
 
@@ -315,7 +331,7 @@ QVariant TimelineFramesModel::data(const QModelIndex &index, int role) const
     case SpecialKeyframeExists: {
         return m_d->specialKeyframeExists(index.row(), index.column());
     }
-    case ColorLabel: {
+    case FrameColorLabelIndexRole: {
         int label = m_d->frameColorLabel(index.row(), index.column());
         return label > 0 ? label : QVariant();
     }
@@ -356,7 +372,7 @@ bool TimelineFramesModel::setData(const QModelIndex &index, const QVariant &valu
         }
         break;
     }
-    case ColorLabel: {
+    case FrameColorLabelIndexRole: {
         m_d->setFrameColorLabel(index.row(), index.column(), value.toInt());
     }
         break;
@@ -421,6 +437,18 @@ QVariant TimelineFramesModel::headerData(int section, Qt::Orientation orientatio
             KisNodeDummy *dummy = m_d->converter->dummyFromRow(section);
             if (!dummy) return QVariant();
             return dummy->node()->useInTimeline();
+        }
+        case Qt::BackgroundRole: {
+            int label = m_d->layerColorLabel(section);
+            if (label > 0) {
+                KisNodeViewColorScheme scm;
+                QColor color = scm.colorLabel(label);
+                QPalette pal = qApp->palette();
+                color = KritaUtils::blendColors(color, pal.color(QPalette::Button), 0.3);
+                return QBrush(color);
+            } else {
+                return QVariant();
+            }
         }
         }
     }
@@ -643,4 +671,37 @@ bool TimelineFramesModel::copyFrame(const QModelIndex &dstIndex)
     }
 
     return result;
+}
+
+QString TimelineFramesModel::audioChannelFileName() const
+{
+    return m_d->image ? m_d->image->animationInterface()->audioChannelFileName() : QString();
+}
+
+void TimelineFramesModel::setAudioChannelFileName(const QString &fileName)
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->image);
+    m_d->image->animationInterface()->setAudioChannelFileName(fileName);
+}
+
+bool TimelineFramesModel::isAudioMuted() const
+{
+    return m_d->image ? m_d->image->animationInterface()->isAudioMuted() : false;
+}
+
+void TimelineFramesModel::setAudioMuted(bool value)
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->image);
+    m_d->image->animationInterface()->setAudioMuted(value);
+}
+
+qreal TimelineFramesModel::audioVolume() const
+{
+    return m_d->image ? m_d->image->animationInterface()->audioVolume() : 0.5;
+}
+
+void TimelineFramesModel::setAudioVolume(qreal value)
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->image);
+    m_d->image->animationInterface()->setAudioVolume(value);
 }

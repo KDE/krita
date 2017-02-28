@@ -216,6 +216,7 @@ public Q_SLOTS:
      */
     void slotFileSave();
 
+    // XXX: disabled
     KisPrintJob* exportToPdf(QString pdfFileName = QString());
 
     void slotProgress(int value);

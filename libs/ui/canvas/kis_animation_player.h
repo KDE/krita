@@ -58,6 +58,14 @@ public Q_SLOTS:
     void slotUpdatePlaybackTimer();
     void slotUpdateDropFramesMode();
 
+private Q_SLOTS:
+    void slotSyncScrubbingAudio(int msecTime);
+    void slotTryStopScrubbingAudio();
+    void slotUpdateAudioChunkLength();
+    void slotAudioChannelChanged();
+    void slotAudioVolumeChanged();
+    void slotOnAudioError(const QString &fileName, const QString &message);
+
 Q_SIGNALS:
     void sigFrameChanged();
     void sigPlaybackStopped();

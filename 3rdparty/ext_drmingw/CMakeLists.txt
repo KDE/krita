@@ -16,7 +16,6 @@ if (MSVC OR MINGW)
                     COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/bin/symsrv.yes ${PREFIX_ext_drmingw}/bin/
 
             UPDATE_COMMAND ""
-            ALWAYS 0
         )
     else ("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
         ExternalProject_Add(ext_drmingw
@@ -34,7 +33,6 @@ if (MSVC OR MINGW)
                     COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/bin/symsrv.yes ${PREFIX_ext_drmingw}/bin/
 
             UPDATE_COMMAND ""
-            ALWAYS 0
         )
     endif ("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
 endif (MSVC OR MINGW)

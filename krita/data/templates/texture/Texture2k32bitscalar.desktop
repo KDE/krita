@@ -29,6 +29,7 @@ Name[sv]=Struktur 2k 32-bitar skalär
 Name[tr]=Doku 2k 32bit sayısal
 Name[uk]=Текстура 2k, 32-бітова, скалярна
 Name[x-test]=xxTexture 2k 32bit scalarxx
+Name[zh_CN]=纹理 2K 像素 32 位 scalar 色彩空间
 Type=Link
 URL[$e]=.source/Texture2k32bitscalar.kra
 X-KDE-Hidden=false

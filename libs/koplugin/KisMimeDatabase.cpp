@@ -118,6 +118,9 @@ QStringList KisMimeDatabase::suffixesForMimeType(const QString &mimeType)
     QMimeType mime = db.mimeTypeForName(mimeType);
     if (mime.name() != "application/octet-stream" && !mime.suffixes().isEmpty()) {
         QString preferredSuffix = mime.preferredSuffix();
+        if (mimeType == "image/x-tga") {
+            preferredSuffix = "tga";
+        }
         QStringList suffixes = mime.suffixes();
         if (preferredSuffix != suffixes.first()) {
             suffixes.removeAll(preferredSuffix);

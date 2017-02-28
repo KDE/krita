@@ -25,6 +25,7 @@ Name[sv]=Struktur 256 x 256 8-bitar SRGB
 Name[tr]=Doku 256x256 8bit srgb
 Name[uk]=Текстура 256⨯256, 8-бітова, srgb
 Name[x-test]=xxTexture 256x256 8bit srgbxx
+Name[zh_CN]=纹理 256x256 像素 8 位 srgb 色彩空间
 Type=Link
 URL[$e]=.source/Texture256x2568bitsrgb.kra
 X-KDE-Hidden=false

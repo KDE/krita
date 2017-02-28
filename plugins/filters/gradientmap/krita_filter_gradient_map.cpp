@@ -35,13 +35,13 @@
 #include <kis_sequential_iterator.h>
 
 
-KritaFilterGradientMap::KritaFilterGradientMap() : KisFilter(id(), categoryMap(), i18n("&Gradient Map"))
+KritaFilterGradientMap::KritaFilterGradientMap() : KisFilter(id(), categoryMap(), i18n("&Gradient Map..."))
 {
     setColorSpaceIndependence(FULLY_INDEPENDENT);
     setShowConfigurationWidget(true);
     setSupportsLevelOfDetail(true);
     setSupportsPainting(true);
-    setSupportsAdjustmentLayers(true);
+    setSupportsAdjustmentLayers(false);
     setSupportsThreading(true);
 }
 
@@ -57,6 +57,10 @@ void KritaFilterGradientMap::processImpl(KisPaintDeviceSP device,
     }
 
     KoAbstractGradient *gradient = KoResourceServerProvider::instance()->gradientServer(false)->resourceByName(config->getString("gradientName"));
+    if (!gradient) {
+        qDebug() << "Could not find gradient" << config->getString("gradientName");
+        return;
+    }
 
     KoColorSet *gradientCache = new KoColorSet();
     for (int i=0; i<256; i++) {
@@ -84,7 +88,7 @@ void KritaFilterGradientMap::processImpl(KisPaintDeviceSP device,
 
 }
 
-KisFilterConfigurationSP KritaFilterGradientMap::factoryConfiguration(const KisPaintDeviceSP) const
+KisFilterConfigurationSP KritaFilterGradientMap::factoryConfiguration() const
 {
     KisFilterConfigurationSP config = new KisFilterConfiguration("gradientmap", 1);
     KoAbstractGradient *gradient = KoResourceServerProvider::instance()->gradientServer(false)->resources().first();

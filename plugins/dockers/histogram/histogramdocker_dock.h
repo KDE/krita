@@ -19,11 +19,14 @@
 #define _HISTOGRAM_DOCK_H_
 
 #include <QDockWidget>
+#include <QPointer>
+
 #include <KoCanvasObserverBase.h>
+
 #include <kis_paint_device.h>
+#include <kis_canvas2.h>
 
 class QVBoxLayout;
-class KisCanvas2;
 class KisHistogramView;
 class KisIdleWatcher;
 class KoHistogramProducer;
@@ -50,7 +53,7 @@ private:
     QVBoxLayout *m_layout;
     KisIdleWatcher *m_imageIdleWatcher;
     HistogramDockerWidget *m_histogramWidget;
-    KisCanvas2 *m_canvas;
+    QPointer<KisCanvas2> m_canvas;
 };
 
 

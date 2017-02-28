@@ -376,6 +376,7 @@ if(WIN32)
         )
     include_directories(${Qt5Gui_PRIVATE_INCLUDE_DIRS})
 endif()
+
     set(kritaui_LIB_SRCS
         ${kritaui_LIB_SRCS}
         kis_animation_frame_cache.cpp
@@ -383,6 +384,7 @@ endif()
         canvas/kis_animation_player.cpp
         kis_animation_exporter.cpp
         kis_animation_importer.cpp
+        KisSyncedAudioPlayback.cpp
     )
 
 if(UNIX)
@@ -485,6 +487,10 @@ generate_export_header(kritaui BASE_NAME kritaui)
 target_link_libraries(kritaui KF5::CoreAddons KF5::Completion KF5::I18n KF5::ItemViews Qt5::Network
                       kritaimpex kritacolor kritaimage kritalibbrush kritawidgets kritawidgetutils ${PNG_LIBRARIES} ${EXIV2_LIBRARIES}
 )
+
+if (HAVE_QT_MULTIMEDIA)
+    target_link_libraries(kritaui Qt5::Multimedia)
+endif()
 
 if (HAVE_KIO)
     target_link_libraries(kritaui KF5::KIOCore)

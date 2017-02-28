@@ -793,6 +793,11 @@ void KisPopupPalette::slotZoomToOneHundredPercentClicked() {
     if (action) {
           action->trigger();
     }
+
+    // also move the zoom slider to 100% position so they are in sync
+    zoomCanvasSlider->setValue(100);
+
+
 }
 
 

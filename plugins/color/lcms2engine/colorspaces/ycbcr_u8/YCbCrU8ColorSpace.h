@@ -78,7 +78,7 @@ public:
 
     virtual QString name() const
     {
-        return i18n("YCBCR (8-bit integer/channel)");
+        return QString("%1 (%2)").arg(YCbCrAColorModelID.name()).arg(Integer8BitsColorDepthID.name());
     }
 
     virtual bool userVisible() const

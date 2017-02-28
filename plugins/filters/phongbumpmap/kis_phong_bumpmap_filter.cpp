@@ -33,8 +33,8 @@
 #include "kis_painter.h"
 
 KisFilterPhongBumpmap::KisFilterPhongBumpmap()
-                      : KisFilter(KoID("phongbumpmap"     , i18n("PhongBumpmap")),
-                                  KisFilter::categoryMap(), i18n("&PhongBumpmap..."))
+                      : KisFilter(KoID("phongbumpmap"     , i18n("Phong Bumpmap")),
+                                  KisFilter::categoryMap(), i18n("&Phong Bumpmap..."))
 {
     setColorSpaceIndependence(TO_LAB16);
     setSupportsPainting(true);
@@ -52,7 +52,7 @@ void KisFilterPhongBumpmap::processImpl(KisPaintDeviceSP device,
     if (progressUpdater) progressUpdater->setProgress(0);
 
     QString userChosenHeightChannel = config->getString(PHONG_HEIGHT_CHANNEL, "FAIL");
-    bool m_usenormalmap = config->getBool(USE_NORMALMAP_IS_ENABLED);    
+    bool m_usenormalmap = config->getBool(USE_NORMALMAP_IS_ENABLED);
 
     if (userChosenHeightChannel == "FAIL") {
         qDebug("FIX YOUR FILTER");
@@ -99,7 +99,7 @@ void KisFilterPhongBumpmap::processImpl(KisPaintDeviceSP device,
     quint8         *bumpmapDataPointer       = bumpmap.data();
     quint32         ki                       = KoChannelInfo::displayPositionToChannelIndex(m_heightChannel->displayPosition(), device->colorSpace()->channels());
     PhongPixelProcessor tileRenderer(pixelsOfInputArea, config);
-    
+
 
     if (progressUpdater) progressUpdater->setProgress(2);
 
@@ -132,7 +132,7 @@ void KisFilterPhongBumpmap::processImpl(KisPaintDeviceSP device,
 
         const int tileHeightMinus1 = inputArea.height() - 1;
         const int tileWidthMinus1 = inputArea.width() - 1;
-    
+
         // Foreach INNER pixel in tile
         for (int y = 1; y < tileHeightMinus1; ++y) {
             for (int x = 1; x < tileWidthMinus1; ++x) {
@@ -140,12 +140,12 @@ void KisFilterPhongBumpmap::processImpl(KisPaintDeviceSP device,
                 posdown = (y - 1) * inputArea.width() + x;
                 posleft  = y * inputArea.width() + x - 1;
                 posright = y * inputArea.width() + x + 1;
-             
+
 
                memcpy(bumpmapDataPointer,
                       tileRenderer.IlluminatePixelFromHeightmap(posup, posdown, posleft, posright).data(),
                       pixelSize);
-            
+
                bumpmapDataPointer += pixelSize;
             }
         }
@@ -161,13 +161,13 @@ void KisFilterPhongBumpmap::processImpl(KisPaintDeviceSP device,
                 memcpy(bumpmapDataPointer,
                       tileRenderer.IlluminatePixelFromNormalmap(current_pixel_values[2], current_pixel_values[1], current_pixel_values[0]).data(),
                       pixelSize);
-                
+
                 curPixel++;
                 //pointer that crashes here, but not in the other if statement.
                 bumpmapDataPointer += pixelSize;
-                
-                
-                
+
+
+
             }
             while (iterator->nextPixel());
             iterator->nextRow();
@@ -184,12 +184,12 @@ void KisFilterPhongBumpmap::processImpl(KisPaintDeviceSP device,
                   outputArea.x(), outputArea.y(), outputArea.width(), outputArea.height());
     //device->prepareClone(bumpmapPaintDevice);
     //device->makeCloneFrom(bumpmapPaintDevice, bumpmapPaintDevice->extent());  // THIS COULD BE BUG GY
-    
+
     delete leaker;
     if (progressUpdater) progressUpdater->setProgress(100);
 }
 
-KisFilterConfigurationSP KisFilterPhongBumpmap::factoryConfiguration(const KisPaintDeviceSP) const
+KisFilterConfigurationSP KisFilterPhongBumpmap::factoryConfiguration() const
 {
     KisFilterConfigurationSP config = new KisFilterConfiguration(id(), 2);
     config->setProperty(PHONG_AMBIENT_REFLECTIVITY, 0.2);

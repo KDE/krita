@@ -52,8 +52,8 @@
 #include <kis_tablet_support_win.h>
 
 #elif defined HAVE_X11
-    #include <kis_tablet_support_x11.h>
-    #include <kis_xi2_event_filter.h>
+#include <kis_tablet_support_x11.h>
+#include <kis_xi2_event_filter.h>
 #endif
 
 #if defined HAVE_KCRASH
@@ -91,9 +91,9 @@ extern "C" int main(int argc, char **argv)
     // The global initialization of the random generator
     qsrand(time(0));
     bool runningInKDE = !qgetenv("KDE_FULL_SESSION").isEmpty();
-    
-#if defined HAVE_X11 
-    qputenv("QT_QPA_PLATFORM", "xcb"); 
+
+#if defined HAVE_X11
+    qputenv("QT_QPA_PLATFORM", "xcb");
 #endif
 
     /**
@@ -119,7 +119,13 @@ extern "C" int main(int argc, char **argv)
     QCoreApplication::setAttribute(Qt::AA_DontCreateNativeWidgetSiblings, true);
     QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps, true);
 
+    const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
+    QSettings kritarc(configPath + QStringLiteral("/kritarc"), QSettings::IniFormat);
+
 #if QT_VERSION >= 0x050600
+    if (kritarc.value("EnableHiDPI", false).toBool()) {
+        QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+    }
     if (!qgetenv("KRITA_HIDPI").isEmpty()) {
         QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     }
@@ -142,8 +148,6 @@ extern "C" int main(int argc, char **argv)
 
     // Now that the paths are set, set the language. First check the override from the langage
     // selection dialog.
-    KLocalizedString::clearLanguages();
-    const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
     QSettings languageoverride(configPath + QStringLiteral("/klanguageoverridesrc"), QSettings::IniFormat);
     languageoverride.beginGroup(QStringLiteral("Language"));
     QString language = languageoverride.value(qAppName(), "").toString();
@@ -163,6 +167,7 @@ extern "C" int main(int argc, char **argv)
         // XXX: This doesn't work, for some !@#$% reason.
         QLocale locale = QLocale::system();
         if (locale.bcp47Name() != QStringLiteral("en")) {
+            qputenv("LANG", locale.bcp47Name().toLatin1());
             KLocalizedString::setLanguages(QStringList() << locale.bcp47Name());
         }
     }
@@ -226,7 +231,7 @@ extern "C" int main(int argc, char **argv)
     QWidget *splash = 0;
     if (currentDate > QDate(currentDate.year(), 12, 4) ||
             currentDate < QDate(currentDate.year(), 1, 9)) {
-         splash = new KisSplashScreen(app.applicationVersion(), QPixmap(splash_holidays_xpm));
+        splash = new KisSplashScreen(app.applicationVersion(), QPixmap(splash_holidays_xpm));
     }
     else {
         splash = new KisSplashScreen(app.applicationVersion(), QPixmap(splash_screen_xpm));
@@ -247,7 +252,7 @@ extern "C" int main(int argc, char **argv)
 #if QT_VERSION >= 0x050700
     app.setAttribute(Qt::AA_CompressHighFrequencyEvents, false);
 #endif
-    
+
     // Set up remote arguments.
     QObject::connect(&app, SIGNAL(messageReceived(QByteArray,QObject*)),
                      &app, SLOT(remoteArguments(QByteArray,QObject*)));
@@ -256,7 +261,9 @@ extern "C" int main(int argc, char **argv)
                      &app, SLOT(fileOpenRequested(QString)));
 
     int state = app.exec();
-    
+
+    kritarc.setValue("canvasState", "OPENGL_SUCCESS");
+
     return state;
 }
 

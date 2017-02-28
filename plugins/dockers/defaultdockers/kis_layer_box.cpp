@@ -195,6 +195,7 @@ KisLayerBox::KisLayerBox()
 
     KisAction *showGlobalSelectionMask = new KisAction(i18n("&Show Global Selection Mask"), this);
     showGlobalSelectionMask->setObjectName("show-global-selection-mask");
+    showGlobalSelectionMask->setActivationFlags(KisAction::ACTIVE_IMAGE);
     showGlobalSelectionMask->setToolTip(i18nc("@info:tooltip", "Shows global selection as a usual selection mask in <b>Layers</b> docker"));
     showGlobalSelectionMask->setCheckable(true);
     connect(showGlobalSelectionMask, SIGNAL(triggered(bool)), SLOT(slotEditGlobalSelection(bool)));
@@ -294,7 +295,7 @@ void KisLayerBox::setMainWindow(KisViewManager* kisview)
 
 void KisLayerBox::setCanvas(KoCanvasBase *canvas)
 {
-    if(m_canvas == canvas)
+    if (m_canvas == canvas)
         return;
 
     setEnabled(canvas != 0);
@@ -900,10 +901,10 @@ void KisLayerBox::watchOpacityChannel(KisKeyframeChannel *channel)
 
     m_opacityChannel = channel;
     if (m_opacityChannel) {
-        connect(m_opacityChannel, &KisKeyframeChannel::sigKeyframeAdded, this, &KisLayerBox::slotOpacityKeyframeChanged);
-        connect(m_opacityChannel, &KisKeyframeChannel::sigKeyframeRemoved, this, &KisLayerBox::slotOpacityKeyframeChanged);
-        connect(m_opacityChannel, &KisKeyframeChannel::sigKeyframeMoved, this, &KisLayerBox::slotOpacityKeyframeMoved);
-        connect(m_opacityChannel, &KisKeyframeChannel::sigKeyframeChanged, this, &KisLayerBox::slotOpacityKeyframeChanged);
+        connect(m_opacityChannel, SIGNAL(sigKeyframeAdded(KisKeyframeSP)), this, SLOT(slotOpacityKeyframeChanged(KisKeyframeSP)));
+        connect(m_opacityChannel, SIGNAL(sigKeyframeRemoved(KisKeyframeSP)), this, SLOT(slotOpacityKeyframeChanged(KisKeyframeSP)));
+        connect(m_opacityChannel, SIGNAL(sigKeyframeMoved(KisKeyframeSP)), this, SLOT(slotOpacityKeyframeMoved(KisKeyframeSP)));
+        connect(m_opacityChannel, SIGNAL(sigKeyframeChanged(KisKeyframeSP)), this, SLOT(slotOpacityKeyframeChanged(KisKeyframeSP)));
     }
 }
 

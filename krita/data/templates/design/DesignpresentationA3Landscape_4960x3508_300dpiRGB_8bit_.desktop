@@ -29,6 +29,7 @@ Name[sv]=Design presentation A3 landskap [ 4960x3508, 300 punkter/tum RGB, 8 bit
 Name[tr]=A3 Yatay sunum tasarla [ 4960x3508 , 300dpi RGB , 8bit ]
 Name[uk]=Компонування презентації, A3, альбомна [4960⨯3508, 300 т./д., RGB, 8 бітів]
 Name[x-test]=xxDesign presentation A3 Landscape [ 4960x3508 , 300dpi RGB , 8bit ]xx
+Name[zh_CN]=设计展示 A3 横版 [ 4960x3508 像素, 300dpi RGB , 8 位]
 Type=Link
 URL[$e]=.source/DesignpresentationA3Landscape_4960x3508_300dpiRGB_8bit_.kra
 X-KDE-Hidden=false

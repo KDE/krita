@@ -145,13 +145,13 @@ void DlgLayerSize::slotHeightChanged(double h)
 {
 
 	//this slot receiv values in pt from the unitspinbox, so just use the resolution.
-	const double resValue = h*_widthUnitManager->getConversionFactor(KisSpinBoxUnitManager::LENGTH, "px");
+	const double resValue = h*_heightUnitManager->getConversionFactor(KisSpinBoxUnitManager::LENGTH, "px");
 	m_height = qRound(resValue);
 
 	if (m_keepAspect) {
-		m_width = qRound(m_height / m_aspectRatio);
+		m_width = qRound(m_height * m_aspectRatio);
 		m_page->newWidthDouble->blockSignals(true);
-		m_page->newWidthDouble->changeValue(h / m_aspectRatio);
+		m_page->newWidthDouble->changeValue(h * m_aspectRatio);
 		m_page->newWidthDouble->blockSignals(false);
 	}
 }

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>366</width>
+    <width>374</width>
     <height>201</height>
    </rect>
   </property>
@@ -55,7 +55,7 @@
       <item row="0" column="1">
        <widget class="QLabel" name="lblNewWidth">
         <property name="text">
-         <string>W&amp;idth:</string>
+         <string>Width:</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -122,7 +122,7 @@
       <item row="1" column="1">
        <widget class="QLabel" name="lblNewHeight">
         <property name="text">
-         <string>&amp;Height:</string>
+         <string>Height:</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -181,11 +181,6 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KisCmbIDList</class>
-   <extends></extends>
-   <header>widgets/kis_cmb_idlist.h</header>
-  </customwidget>
-  <customwidget>
    <class>KoAspectButton</class>
    <extends>QWidget</extends>
    <header>KoAspectButton.h</header>
@@ -195,6 +190,11 @@
    <class>KisDoubleParseUnitSpinBox</class>
    <extends>QDoubleSpinBox</extends>
    <header>kis_double_parse_unit_spin_box.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KisCmbIDList</class>
+   <extends></extends>
+   <header>widgets/kis_cmb_idlist.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

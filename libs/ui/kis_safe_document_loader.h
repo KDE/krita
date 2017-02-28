@@ -34,9 +34,8 @@ public:
 public:
     void setPath(const QString &path);
     void reloadImage();
-
 private Q_SLOTS:
-    void fileChanged();
+    void fileChanged(QString);
     void fileChangedCompressed(bool sync = false);
     void delayedLoadStart();
 

@@ -31,22 +31,74 @@ class KRITALIBKIS_EXPORT Action : public QObject
     Q_OBJECT
 
 public:
+    /**
+     * @brief Action Create a new action object
+     * @param parent the parent if it's in a QObject hierarchy
+     */
     explicit Action(QObject *parent = 0);
+
+    /**
+     * @brief Action Create a new action object
+     * @param name the name of the action
+     * @param action the QAction it wraps
+     * @param parent the parent if it's in a QObject hierarchy
+     */
     Action(const QString &name, QAction *action, QObject *parent = 0);
     virtual ~Action();
 
 public Q_SLOTS:
 
+    /**
+     * @return the user-visible text of the action.
+     */
+    QString text() const;
+
+    /**
+     * set the user-visible text of the action to @param text.
+     */
+    void settext(QString text);
+
+    /**
+     * @return the internal name of the action.
+     */
     QString name() const;
+
+    /**
+     * set the name of the action to @param name. This is not the user-visible name, but the internal one
+     */
     void setName(QString name);
 
+    /**
+     * @return true if the action is checkable, false if it isn't*
+     */
     bool isCheckable() const;
+
+    /**
+     * Set the action action checkable if @param value is true, unchecked if it's false
+     */
     void setCheckable(bool value);
 
+    /**
+     * @return true if the action is checked, false if it isn't
+     */
     bool isChecked() const;
+
+    /**
+     * Set the action checked if @param value is true, unchecked if it's false
+     */
     void setChecked(bool value);
 
+    /**
+     * Return the action's shortcut as a string
+     */
     QString shortcut() const;
+
+    /**
+     * set the action's shortcut to the given string.
+     * @code
+     * action.setShortcut("CTRL+SHIFT+S")
+     * @endcode
+     */
     void setShortcut(QString value);
 
     bool isVisible() const;
@@ -56,15 +108,31 @@ public Q_SLOTS:
      */
     void setVisible(bool value);
 
+    /**
+     * @return true if the action is enabled, false if not
+     */
     bool isEnabled() const;
+
+    /**
+     * Set the action enabled or disabled according to @param value
+     */
     void setEnabled(bool value);
 
+    /**
+     * Set the tooltip to the given @param tooltip
+     */
     void setToolTip(QString tooltip);
 
+    /**
+     * Trigger this action
+     */
     void trigger();
 
 Q_SIGNALS:
 
+    /**
+     * Emitted whenever the action is triggered.
+     */
     void triggered(bool);
 
 private:

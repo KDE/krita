@@ -63,7 +63,7 @@ Krita* Krita::s_instance = 0;
 
 struct Krita::Private {
     Private() {}
-    QList<Extension*> viewExtensions;
+    QList<Extension*> extensions;
     bool batchMode {false};
     Notifier *notifier{new Notifier()};
 };
@@ -77,7 +77,7 @@ Krita::Krita(QObject *parent)
 
 Krita::~Krita()
 {
-    qDeleteAll(d->viewExtensions);
+    qDeleteAll(d->extensions);
     delete d->notifier;
     delete d;
 }
@@ -315,14 +315,14 @@ Action *Krita::createAction(const QString &text)
     return new Action(action->objectName(), action);
 }
 
-void Krita::addExtension(Extension* viewExtension)
+void Krita::addExtension(Extension* extension)
 {
-    d->viewExtensions.append(viewExtension);
+    d->extensions.append(extension);
 }
 
-QList< Extension* > Krita::viewExtensions()
+QList< Extension* > Krita::extensions()
 {
-    return d->viewExtensions;
+    return d->extensions;
 }
 
 void Krita::writeSetting(const QString &group, const QString &name, const QString &value)

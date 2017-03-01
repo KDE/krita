@@ -290,6 +290,8 @@ int Node::opacity() const
 void Node::setOpacity(int value)
 {
     if (!d->node) return;
+    if (value < 0) value = 0;
+    if (value > 255) value = 255;
     d->node->setOpacity(value);
 }
 

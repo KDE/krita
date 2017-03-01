@@ -41,7 +41,7 @@ DockWidget::~DockWidget()
 
 Canvas* DockWidget::canvas() const
 {
-    return 0;
+    return d->canvas;
 }
 
 void DockWidget::setCanvas(KoCanvasBase* canvas)

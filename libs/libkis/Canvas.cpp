@@ -44,7 +44,7 @@ Canvas::~Canvas()
 
 qreal Canvas::zoomLevel() const
 {
-    if (!d->canvas) return 100;
+    if (!d->canvas) return 1.0;
     return d->canvas->imageView()->zoomManager()->zoom();
 }
 

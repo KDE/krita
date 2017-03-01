@@ -8,6 +8,8 @@ public:
     Action(const QString & name, QAction*  action, QObject*  parent /TransferThis/ = 0);
     virtual ~Action();
 public Q_SLOTS:
+    QString text() const;
+    void settext(QString text);
     QString name() const;
     void setName(QString value);
     bool isCheckable() const;

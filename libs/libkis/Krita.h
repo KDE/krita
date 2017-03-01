@@ -80,6 +80,10 @@ public Q_SLOTS:
      * @return return a list of all actions for the currently active mainWindow.
      */
     QList<Action*> actions() const;
+
+    /**
+     * @return the action that has been registered under the given name, or 0 if no such action exists.
+     */
     Action *action(const QString &name) const;
 
     /**
@@ -175,9 +179,7 @@ public Q_SLOTS:
      * <li>preset</li>
      * <li>palette</li>
      * <li>workspace</li>
-     * <li>: </li>
      * </ul>
-
      */
     QMap<QString, Resource*> resources(const QString &type) const;
 
@@ -233,12 +235,15 @@ public Q_SLOTS:
     Action *createAction(const QString &text);
 
     /**
-     * @brief addExtension add the given plugin to Krita. For every window, a new instance of this
-     * extension will be made.
-     * @param viewExtension
+     * @brief addExtension add the given plugin to Krita. There will be a single instance of each Extension in the Krita process.
+     * @param extension the extension to add.
      */
-    void addExtension(Extension* viewExtension);
-    QList<Extension*> viewExtensions();
+    void addExtension(Extension* extension);
+
+    /**
+     * return a list with all registered extension objects.
+     */
+    QList<Extension*> extensions();
 
     /**
      * @brief addDockWidgetFactory Add the given docker factory to the application. For scripts
@@ -273,7 +278,7 @@ public Q_SLOTS:
      */
     static Krita* instance();
 
-    /// For mikro.py
+    // Internal only: for use with mikro.py
     static QObject *fromVariant(const QVariant& v);
 
 private:

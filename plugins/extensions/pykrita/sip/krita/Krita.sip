@@ -30,7 +30,7 @@ public Q_SLOTS:
     Window * openWindow();
     Action * createAction(const QString & text);
 
-    void addExtension(Extension* _viewExtension /GetWrapper/);
+    void addExtension(Extension* _extension /GetWrapper/);
 %MethodCode
         Py_BEGIN_ALLOW_THREADS
         sipCpp->addExtension(a0);

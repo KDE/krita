@@ -46,8 +46,6 @@ public Q_SLOTS:
     Node *createNode(const QString & name, const QString & nodeType)  /Factory/;
     QImage projection(int x = 0, int y = 0, int w = 0, int h = 0) const;
     QImage thumbnail(int w, int h) const;
-Q_SIGNALS:
-    void nodeCreated(Node *node);
 private:
 
 };

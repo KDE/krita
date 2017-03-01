@@ -36,6 +36,7 @@ InfoObject::InfoObject(QObject *parent)
     : QObject(parent)
     , d(new Private)
 {
+    d->properties = new KisPropertiesConfiguration();
 }
 
 InfoObject::~InfoObject()

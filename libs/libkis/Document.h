@@ -27,7 +27,8 @@ class KisDocument;
 
 /**
  * The Document class encapsulates a Krita Document/Image. A Krita document is an Image with
- * a filename.
+ * a filename. Libkis does not differentiate between a document and an image, like Krita does
+ * internally.
  */
 class KRITALIBKIS_EXPORT Document : public QObject
 {
@@ -40,7 +41,16 @@ public:
 
 public Q_SLOTS:
 
+    /**
+     * Batchmode means that no actions on the document should show dialogs or popups.
+     * @return true if the document is in batchmode.
+     */
     bool batchmode() const;
+
+    /**
+     * Set batchmode to @param value. If batchmode is true, then there should be no popups
+     * or dialogs shown to the user.
+     */
     void setBatchmode(bool value);
 
     /**
@@ -139,18 +149,86 @@ public Q_SLOTS:
 
     /**
      * @brief documentInfo creates and XML document representing document and author information.
-     * @return a string containing a valid XML document
+     * @return a string containing a valid XML document with the right information about the document
+     * and author. The DTD can be found here:
+     *
+     * https://phabricator.kde.org/source/krita/browse/master/krita/dtd/
+     *
+     * @code
+     * <?xml version="1.0" encoding="UTF-8"?>
+     * <!DOCTYPE document-info PUBLIC '-//KDE//DTD document-info 1.1//EN' 'http://www.calligra.org/DTD/document-info-1.1.dtd'>
+     * <document-info xmlns="http://www.calligra.org/DTD/document-info">
+     * <about>
+     *  <title>My Document</title>
+     *   <description></description>
+     *   <subject></subject>
+     *   <abstract><![CDATA[]]></abstract>
+     *   <keyword></keyword>
+     *   <initial-creator>Unknown</initial-creator>
+     *   <editing-cycles>1</editing-cycles>
+     *   <editing-time>35</editing-time>
+     *   <date>2017-02-27T20:15:09</date>
+     *   <creation-date>2017-02-27T20:14:33</creation-date>
+     *   <language></language>
+     *  </about>
+     *  <author>
+     *   <full-name>Boudewijn Rempt</full-name>
+     *   <initial></initial>
+     *   <author-title></author-title>
+     *   <email></email>
+     *   <telephone></telephone>
+     *   <telephone-work></telephone-work>
+     *   <fax></fax>
+     *   <country></country>
+     *   <postal-code></postal-code>
+     *   <city></city>
+     *   <street></street>
+     *   <position></position>
+     *   <company></company>
+     *  </author>
+     * </document-info>
+     * @endcode
+     *
      */
     QString documentInfo() const;
+
+    /**
+     * @brief setDocumentInfo set the Document information to the information contained in document
+     * @param document A string containing a valid XML document that conforms to the document-info DTD
+     * that can be found here:
+     *
+     * https://phabricator.kde.org/source/krita/browse/master/krita/dtd/
+     */
     void setDocumentInfo(const QString &document);
 
+    /**
+     * @return the full path to the document, if it has been set.
+     */
     QString fileName() const;
+
+    /**
+     * @brief setFileName set the full path of the document to @param value
+     */
     void setFileName(QString value);
 
+    /**
+     * @return the height of the image in pixels
+     */
     int height() const;
+
+    /**
+     * @brief setHeight resize the document to @param value height. This is a canvas resize, not a scale.
+     */
     void setHeight(int value);
 
+    /**
+     * @return the name of the document. This is the title field in the @see documentInfo
+     */
     QString name() const;
+
+    /**
+     * @brief setName sets the name of the document to @param value. This is the title field in the @see documentInfo
+     */
     void setName(QString value);
 
     /**
@@ -182,19 +260,34 @@ public Q_SLOTS:
      */
     void setSelection(Selection* value);
 
+    /**
+     * @return the width of the image in pixels.
+     */
     int width() const;
+
+    /**
+     * @brief setWidth resize the document to @param value width. This is a canvas resize, not a scale.
+     */
     void setWidth(int value);
 
     /**
      * @return xRes the horizontal resolution of the image in pixels per pt (there are 72 pts to an inch)
      */
     double xRes() const;
+
+    /**
+     * @brief setXRes set the horizontal resolution of the image to xRes in pixels per pt. (there are 72 pts to an inch)
+     */
     void setXRes(double xRes) const;
 
     /**
      * @return yRes the vertical resolution of the image in pixels per pt (there are 72 pts to an inch)
      */
     double yRes() const;
+
+    /**
+     * @brief setYRes set the vertical resolution of the image to yRes in pixels per pt. (there are 72 pts to an inch)
+     */
     void setyRes(double yRes) const;
 
     /**
@@ -239,16 +332,45 @@ public Q_SLOTS:
      */
     bool close();
 
+    /**
+     * @brief crop the image to rectangle described by @param x, @param y,
+     * @param w and @param h
+     */
     void crop(int x, int y, int w, int h);
 
+    /**
+     * @brief exportImage export the image, without changing its URL to the given path.
+     * @param filename the full path to which the image is to be saved
+     * @param exportConfiguration a configuration object appropriate to the file format
+     * @return true if the export succeeded, false if it failed.
+     */
     bool exportImage(const QString &filename, const InfoObject &exportConfiguration);
 
+    /**
+     * @brief flatten all layers in the image
+     */
     void flatten();
 
+    /**
+     * @brief resizeImage resize the image to the given width and height.
+     * @param w the new width
+     * @param h the new height
+     */
     void resizeImage(int w, int h);
 
+    /**
+     * @brief save the image to its currently set path. The modified flag of the
+     * document will be reset
+     * @return true if saving succeeded, false otherwise.
+     */
     bool save();
 
+    /**
+     * @brief saveAs save the document under the @param filename. The document's
+     * filename will be reset to @param filename.
+     * @param filename the new filename (full path) for the document
+     * @return true if saving succeeded, false otherwise.
+     */
     bool saveAs(const QString &filename);
 
     /**
@@ -298,10 +420,6 @@ public Q_SLOTS:
      * @return a QImage representing the layer contents.
      */
     QImage thumbnail(int w, int h) const;
-
-Q_SIGNALS:
-
-    void nodeCreated(Node *node);
 
 private:
 

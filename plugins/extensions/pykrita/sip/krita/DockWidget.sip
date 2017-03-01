@@ -7,6 +7,7 @@ class DockWidget : public QDockWidget /NoDefaultCtors/
 public:
     explicit DockWidget();
 protected Q_SLOTS:
+    Canvas* canvas() const;
     virtual void canvasChanged(Canvas *canvas) = 0;
     
 };

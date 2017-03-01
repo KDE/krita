@@ -201,18 +201,51 @@ public Q_SLOTS:
      */
     void setColorLabel(int index);
 
+    /**
+     * @brief inheritAlpha checks whether this node has the inherits alpha flag set
+     * @return true if the Inherit Alpha is set
+     */
     bool inheritAlpha() const;
+
+    /**
+     * set the Inherit Alpha flag to the given value
+     */
     void setInheritAlpha(bool value);
 
+    /**
+     * @brief locked checkes whether the Node is locked. A locked node cannot be changed.
+     * @return true if the Node is locked, false if it hasn't been locked.
+     */
     bool locked() const;
+
+    /**
+     * set the Locked flag to the give value
+     */
     void setLocked(bool value);
 
+    /**
+     * @return the user-visible name of this node.
+     */
     QString name() const;
+
+    /**
+     * rename the Node to the given name
+     */
     void setName(QString name);
 
+    /**
+     * return the opacity of the Node. The opacity is a value between 0 and 255.
+     */
     int opacity() const;
+
+    /**
+     * set the opacity of the Node to the given value. The opacity is a value between 0 and 255.
+     */
     void setOpacity(int value);
 
+    /**
+     * return the Node that is the parent of the current Node, or 0 if this is the root Node.
+     */
     Node* parentNode() const;
 
     /**
@@ -240,7 +273,14 @@ public Q_SLOTS:
      */
     QString type() const;
 
+    /**
+     * Check whether the current Node is visible in the layer stack
+     */
     bool visible() const;
+
+    /**
+     * Set the visibility of the current node to @param visible
+     */
     void setVisible(bool visible);
 
     /**

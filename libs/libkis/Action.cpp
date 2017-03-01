@@ -47,6 +47,18 @@ Action::~Action()
     delete d;
 }
 
+QString Action::text() const
+{
+    if (!d->action) return "";
+    return d->action->text();
+}
+
+void Action::settext(QString text)
+{
+    if (!d->action) return;
+    d->action->setText(text);
+}
+
 QString Action::name() const
 {
     if (!d->action) return "";

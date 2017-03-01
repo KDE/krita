@@ -25,7 +25,8 @@
 #include "libkis.h"
 
 /**
- * InfoObject
+ * InfoObject wrap a properties map. These maps can be used to set the
+ * configuration for filters.
  */
 class KRITALIBKIS_EXPORT InfoObject : public QObject
 {
@@ -36,18 +37,33 @@ class KRITALIBKIS_EXPORT InfoObject : public QObject
 
 public:
     InfoObject(KisPropertiesConfigurationSP configuration);
+
+    /**
+     * Create a new, empty InfoObject.
+     */
     explicit InfoObject(QObject *parent = 0);
     virtual ~InfoObject();
 
+    /**
+     * Return all properties this InfoObject manages.
+     */
     QMap<QString, QVariant> properties() const;
+
+    /**
+     * Add all properties in the @param propertyMap to this InfoObject
+     */
     void setproperties(QMap<QString, QVariant> proprertyMap);
 
-
 public Q_SLOTS:
-
+    /**
+     * set the property identified by @key to @value
+     */
     void setProperty(const QString &key, QVariant value);
-    QVariant property(const QString &key);
 
+    /**
+     * return the value for the property identified by key, or None if there is no suck key.
+     */
+    QVariant property(const QString &key);
 
 private:
 

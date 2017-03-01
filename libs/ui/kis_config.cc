@@ -600,8 +600,8 @@ bool KisConfig::useOpenGL(bool defaultValue) const
     }
 
     //dbgKrita << "use opengl" << m_cfg.readEntry("useOpenGL", true) << "success" << m_cfg.readEntry("canvasState", "OPENGL_SUCCESS");
-    QString canvasState = m_cfg.readEntry("canvasState", "OPENGL_SUCCESS");
-    return (m_cfg.readEntry("useOpenGL", true) && (canvasState == "OPENGL_SUCCESS" || canvasState == "TRY_OPENGL"));
+    QString cs = canvasState();
+    return (m_cfg.readEntry("useOpenGL", true) && (cs == "OPENGL_SUCCESS" || cs == "TRY_OPENGL"));
 }
 
 void KisConfig::setUseOpenGL(bool useOpenGL) const

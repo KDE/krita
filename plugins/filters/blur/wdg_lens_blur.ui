@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>255</width>
-    <height>153</height>
+    <width>262</width>
+    <height>172</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -37,32 +37,32 @@
        <widget class="QComboBox" name="irisShapeCombo">
         <item>
          <property name="text">
-          <string>Triangle</string>
+          <string notr="true">Triangle</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>Quadrilateral (4)</string>
+          <string notr="true">Quadrilateral (4)</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>Pentagon (5)</string>
+          <string notr="true">Pentagon (5)</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>Hexagon (6)</string>
+          <string notr="true">Hexagon (6)</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>Heptagon (7)</string>
+          <string notr="true">Heptagon (7)</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>Octagon (8)</string>
+          <string notr="true">Octagon (8)</string>
          </property>
         </item>
        </widget>

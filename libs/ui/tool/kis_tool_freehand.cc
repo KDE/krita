@@ -353,8 +353,7 @@ void KisToolFreehand::continueAlternateAction(KoPointerEvent *event, AlternateAc
     qreal scaleY = 0;
     canvas2->coordinatesConverter()->imageScale(&scaleX, &scaleY);
 
-    // we have no centralized knowledge of the maximum brush size!
-    const qreal maxBrushSize = 1000.0;
+    const qreal maxBrushSize = KisConfig().readEntry("maximumBrushSize", 1000);
     const qreal effectiveMaxDragSize = 0.5 * screenRect.width();
     const qreal effectiveMaxBrushSize = qMin(maxBrushSize, effectiveMaxDragSize / scaleX);
 

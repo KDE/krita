@@ -28,7 +28,7 @@
 #include "pyqtpluginsettings.h"
 
 #include <Krita.h>
-#include <ViewExtension.h>
+#include <Extension.h>
 
 K_PLUGIN_FACTORY_WITH_JSON(KritaPyQtPluginFactory, "kritapykrita.json", registerPlugin<KritaPyQtPlugin>();)
 
@@ -79,7 +79,7 @@ KritaPyQtPlugin::KritaPyQtPlugin(QObject *parent, const QVariantList &)
         dbgScript << "Cannot load pykrita module";
         m_engine.setBroken();
     }
-    Q_FOREACH (ViewExtension* ext, Krita::instance()->viewExtensions())
+    Q_FOREACH (Extension* ext, Krita::instance()->viewExtensions())
     {
         ext->setup();
     }

@@ -89,12 +89,6 @@ Canvas* View::canvas() const
     return c;
 }
 
-void View::close(bool confirm)
-{
-    // UNINPLEMENTED
-    if (!d->view) return;
-}
-
 KisView *View::view()
 {
     return d->view;

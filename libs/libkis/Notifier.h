@@ -28,7 +28,7 @@
 #include <KisMainWindow.h>
 
 /**
- * Notifier
+ * The Notifier can be used to be informed of state changes in the Krita application.
  */
 class KRITALIBKIS_EXPORT Notifier : public QObject
 {
@@ -41,7 +41,14 @@ public:
     explicit Notifier(QObject *parent = 0);
     virtual ~Notifier();
 
+    /**
+     * @return true if the Notifier is active.
+     */
     bool active() const;
+    
+    /**
+     * Enable or disable the Notifier
+     */
     void setActive(bool value);
 
 Q_SIGNALS:

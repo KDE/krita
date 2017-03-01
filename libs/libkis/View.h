@@ -26,7 +26,8 @@
 class KisView;
 
 /**
- * View
+ * View represents one view on a document. A document can be 
+ * shown in more than one view at a time.
  */
 class KRITALIBKIS_EXPORT View : public QObject
 {
@@ -39,15 +40,31 @@ public:
 
 public Q_SLOTS:
 
+    /**
+     * @return the window this view is shown in.
+     */
     Window* window() const;
 
+    /**
+     * @return the document this view is showing.
+     */    
     Document* document() const;
 
+    /**
+     * @return true if the current view is visible, false if not.
+     */
     bool visible() const;
+    
+    /**
+     * Make the current view visible.
+     */
     void setVisible();
 
+    /**
+     * @return the canvas this view is showing. The canvas controls
+     * things like zoom and rotation.
+     */
     Canvas* canvas() const;
-    void close(bool confirm);
 
     /**
      * @brief activateResource activates the given resource.

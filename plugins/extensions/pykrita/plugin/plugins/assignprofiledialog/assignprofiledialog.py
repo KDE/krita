@@ -3,7 +3,7 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from krita import *
     
-class AssignProfileDialog(ViewExtension):
+class AssignProfileDialog(Extension):
 
     def __init__(self, parent):
         super().__init__(parent)
@@ -41,4 +41,4 @@ class AssignProfileDialog(ViewExtension):
         action = Application.createAction("Assign Profile to Image")
         action.triggered.connect(self.assignProfile)
 
-Scripter.addViewExtension(AssignProfileDialog(Application))
+Scripter.addExtension(AssignProfileDialog(Application))

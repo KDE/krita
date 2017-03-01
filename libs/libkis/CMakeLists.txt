@@ -14,7 +14,7 @@ set(kritalibkis_LIB_SRCS
     Resource.cpp
     Selection.cpp
     View.cpp
-    ViewExtension.cpp
+    Extension.cpp
     Window.cpp
 )
 

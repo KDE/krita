@@ -18,7 +18,7 @@
 %Include Document.sip
 %Include Filter.sip
 %Include InfoObject.sip
-%Include ViewExtension.sip
+%Include Extension.sip
 %Include View.sip
 %Include Window.sip
 %Include Krita.sip
@@ -26,7 +26,7 @@
 %Include Notifier.sip
 %Include Resource.sip
 %Include Selection.sip
-%Include ViewExtension.sip
+%Include Extension.sip
 %Include PresetChooser.sip
 
 %Include KisCubicCurve.sip

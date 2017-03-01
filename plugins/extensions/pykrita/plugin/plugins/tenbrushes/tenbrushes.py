@@ -16,7 +16,7 @@ class DropButton(QPushButton):
         self.setIcon(QIcon(QPixmap.fromImage(self.presetChooser.currentPreset().image())))
         
 
-class TenBrushesViewExtension(ViewExtension):
+class TenBrushesExtension(Extension):
 
     def __init__(self, parent):
         super().__init__(parent)
@@ -109,4 +109,4 @@ class TenBrushesViewExtension(ViewExtension):
         Application.writeSetting("", "tenbrushes", ','.join(map(str, presets)))
         self.dialog.accept()
 
-Scripter.addViewExtension(TenBrushesViewExtension(Application))
+Scripter.addExtension(TenBrushesExtension(Application))

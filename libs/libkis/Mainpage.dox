@@ -97,7 +97,7 @@ from krita import *
 def hello():
     QMessageBox.information(QWidget(), "Test", "Hello World")
 
-class HelloViewExtension(ViewExtension):
+class HelloExtension(Extension):
 
   def __init__(self, parent):
       super().__init__(parent)
@@ -106,7 +106,7 @@ class HelloViewExtension(ViewExtension):
       action = viewManager.createAction("Hello")
       action.triggered.connect(hello)
 
-Krita.instance().addViewExtension(HelloViewExtension(Krita.instance()))
+Krita.instance().addExtension(HelloExtension(Krita.instance()))
 @endcode
 
 

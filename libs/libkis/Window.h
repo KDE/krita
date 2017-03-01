@@ -45,8 +45,20 @@ public Q_SLOTS:
      */
     QMainWindow *qwindow() const;
 
+    /**
+     * @return a list of open views in this window
+     */
     QList<View*> views() const;
+    
+    /**
+     * Open a new view on the given document in this window
+     */
     View *addView(Document *document);
+    
+    /**
+     * Make the given view active in this window. If the view
+     * does not belong to this window, nothing happens.
+     */
     void showView(View *view);
 
     /**

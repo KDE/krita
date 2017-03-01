@@ -3,7 +3,7 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from krita import *
 
-class HighpassViewExtension(ViewExtension):
+class HighpassExtension(Extension):
 
     def __init__(self, parent):
         super().__init__(parent)
@@ -113,5 +113,5 @@ class HighpassViewExtension(ViewExtension):
             # copy the blurred layer
         # XXX: End undo macro
 
-Scripter.addViewExtension(HighpassViewExtension(Krita.instance()))
+Scripter.addExtension(HighpassExtension(Krita.instance()))
 

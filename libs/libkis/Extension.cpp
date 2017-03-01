@@ -17,15 +17,15 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "ViewExtension.h"
+#include "Extension.h"
 
 #include <QDebug>
 
-ViewExtension::ViewExtension(QObject* parent)
+Extension::Extension(QObject* parent)
     : QObject(parent)
 {
 }
 
-ViewExtension::~ViewExtension()
+Extension::~Extension()
 {
 }

@@ -23,5 +23,5 @@ class Notifier;
 class Resource;
 class Selection;
 class View;
-class ViewExtension;
+class Extension;
 class Window;

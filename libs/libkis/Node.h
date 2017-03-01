@@ -26,7 +26,9 @@
 #include "libkis.h"
 
 /**
- * Node
+ * Node represents a layer or mask in a Krita image's Node hierarchy. Group layers can contain 
+ * other layers and masks; layers can contain masks.
+ * 
  */
 class KRITALIBKIS_EXPORT Node : public QObject
 {
@@ -164,7 +166,8 @@ public Q_SLOTS:
 
     /**
      * @brief Krita layers can be animated, i.e., have frames.
-     * @return return true if the layer has frames
+     * @return return true if the layer has frames. Currently, the scripting framework
+     * does not give access to the animation features.
      */
     bool animated() const;
 

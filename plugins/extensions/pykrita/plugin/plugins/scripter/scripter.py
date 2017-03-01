@@ -4,7 +4,7 @@ from krita import *
 from scripter import uicontroller, documentcontroller, debugcontroller
 
 
-class ScripterViewExtension(ViewExtension):
+class ScripterExtension(Extension):
 
     def __init__(self, parent):
         super().__init__(parent)
@@ -22,4 +22,4 @@ class ScripterViewExtension(ViewExtension):
         self.uicontroller.initialize(self)
 
 
-Krita.instance().addViewExtension(ScripterViewExtension(Krita.instance()))
+Krita.instance().addExtension(ScripterExtension(Krita.instance()))

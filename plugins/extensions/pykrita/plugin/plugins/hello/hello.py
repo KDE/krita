@@ -6,7 +6,7 @@ from krita import *
 def hello():
     QMessageBox.information(QWidget(), "Test", "Hello! This is Krita " + Application.version())
 
-class HelloViewExtension(ViewExtension):
+class HelloExtension(Extension):
 
   def __init__(self, parent):
       super().__init__(parent)
@@ -16,7 +16,7 @@ class HelloViewExtension(ViewExtension):
       action = Krita.instance().createAction("hello")
       action.triggered.connect(hello)
 
-Scripter.addViewExtension(HelloViewExtension(Krita.instance()))
+Scripter.addExtension(HelloExtension(Krita.instance()))
 
 class HelloDocker(DockWidget):
   def __init__(self):

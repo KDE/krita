@@ -23,7 +23,7 @@
 #include "kritalibkis_export.h"
 #include "libkis.h"
 
-#include "ViewExtension.h"
+#include "Extension.h"
 #include "Document.h"
 #include "Window.h"
 #include "View.h"
@@ -233,12 +233,12 @@ public Q_SLOTS:
     Action *createAction(const QString &text);
 
     /**
-     * @brief addViewExtension add the given plugin to Krita. For every window, a new instance of this
+     * @brief addExtension add the given plugin to Krita. For every window, a new instance of this
      * extension will be made.
      * @param viewExtension
      */
-    void addViewExtension(ViewExtension* viewExtension);
-    QList<ViewExtension*> viewExtensions();
+    void addExtension(Extension* viewExtension);
+    QList<Extension*> viewExtensions();
 
     /**
      * @brief addDockWidgetFactory Add the given docker factory to the application. For scripts

@@ -53,7 +53,7 @@
 #include "View.h"
 #include "Document.h"
 #include "Window.h"
-#include "ViewExtension.h"
+#include "Extension.h"
 #include "DockWidgetFactoryBase.h"
 #include "Filter.h"
 #include "InfoObject.h"
@@ -63,7 +63,7 @@ Krita* Krita::s_instance = 0;
 
 struct Krita::Private {
     Private() {}
-    QList<ViewExtension*> viewExtensions;
+    QList<Extension*> viewExtensions;
     bool batchMode {false};
     Notifier *notifier{new Notifier()};
 };
@@ -315,12 +315,12 @@ Action *Krita::createAction(const QString &text)
     return new Action(action->objectName(), action);
 }
 
-void Krita::addViewExtension(ViewExtension* viewExtension)
+void Krita::addExtension(Extension* viewExtension)
 {
     d->viewExtensions.append(viewExtension);
 }
 
-QList< ViewExtension* > Krita::viewExtensions()
+QList< Extension* > Krita::viewExtensions()
 {
     return d->viewExtensions;
 }

@@ -37,6 +37,7 @@ public:
     };
 
     SvgGraphicsContext();
+    void workaroundClearInheritedFillProperties();
 
     StyleType     fillType;  ///< the current fill type
     Qt::FillRule  fillRule;  ///< the current fill rule

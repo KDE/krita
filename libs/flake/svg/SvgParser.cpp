@@ -405,9 +405,6 @@ QSharedPointer<KoVectorPatternBackground> SvgParser::parsePattern(const KoXmlEle
         pattHelper->setReferenceRect(referenceRect);
     }
 
-    m_context.pushGraphicsContext(e);
-    gc = m_context.currentGC();
-
     /**
      * In Krita shapes X,Y coordinates are baked into the the shape global transform, but
      * the pattern should be painted in "user" coordinates. Therefore, we should handle
@@ -422,6 +419,10 @@ QSharedPointer<KoVectorPatternBackground> SvgParser::parsePattern(const KoXmlEle
    const QTransform shapeOffsetTransform = dstShapeTransform * gc->matrix.inverted();
    KIS_SAFE_ASSERT_RECOVER_NOOP(shapeOffsetTransform.type() <= QTransform::TxTranslate);
    const QPointF extraShapeOffset(shapeOffsetTransform.dx(), shapeOffsetTransform.dy());
+
+   m_context.pushGraphicsContext(e);
+   gc = m_context.currentGC();
+   gc->workaroundClearInheritedFillProperties(); // HACK!
 
    // start building shape tree from scratch
    gc->matrix = QTransform();
@@ -561,7 +562,7 @@ bool SvgParser::parseMarker(const KoXmlElement &e)
     }
 
     // ensure that the clip path is loaded in local coordinates system
-    m_context.pushGraphicsContext(e);
+    m_context.pushGraphicsContext(e, false);
     m_context.currentGC()->matrix = QTransform();
     m_context.currentGC()->currentBoundingBox = QRectF(QPointF(0, 0), marker->referenceSize());
 
@@ -591,6 +592,7 @@ bool SvgParser::parseClipPath(const KoXmlElement &e)
     // ensure that the clip path is loaded in local coordinates system
     m_context.pushGraphicsContext(e);
     m_context.currentGC()->matrix = QTransform();
+    m_context.currentGC()->workaroundClearInheritedFillProperties(); // HACK!
 
     KoShape *clipShape = parseGroup(e);
 
@@ -636,6 +638,7 @@ bool SvgParser::parseClipMask(const KoXmlElement &e)
     // ensure that the clip mask is loaded in local coordinates system
     m_context.pushGraphicsContext(e);
     m_context.currentGC()->matrix = QTransform();
+    m_context.currentGC()->workaroundClearInheritedFillProperties(); // HACK!
 
     KoShape *clipShape = parseGroup(e);
 

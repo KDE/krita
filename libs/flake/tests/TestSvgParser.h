@@ -112,6 +112,7 @@ private Q_SLOTS:
     void testManualRenderPattern_ContentView_RefUser();
 
     void testRenderPattern_r_User_c_User();
+    void testRenderPattern_InfiniteRecursionWhenInherited();
     void testRenderPattern_r_User_c_View();
     void testRenderPattern_r_User_c_Obb();
 

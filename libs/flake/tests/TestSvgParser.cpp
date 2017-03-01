@@ -2002,6 +2002,41 @@ void TestSvgParser::testRenderPattern_r_User_c_User()
     t.test_standard_30px_72ppi("fill_pattern_base", false, QSize(160, 160));
 }
 
+void TestSvgParser::testRenderPattern_InfiniteRecursionWhenInherited()
+{
+    const QString data =
+            "<svg width=\"30px\" height=\"30px\""
+            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+
+            "<defs>"
+            "    <pattern id=\"TestPattern\" patternUnits=\"userSpaceOnUse\""
+            "        patternContentUnits=\"userSpaceOnUse\""
+            "        x=\"60\" y=\"0\" width=\"30\" height=\"20\">"
+
+            "        <g id=\"patternRect\">"
+            "            <rect id=\"patternRect1\" x=\"70\" y=\"0\" width=\"10\" height=\"13.3333\""
+            "                stroke=\"none\" />"
+
+            "            <rect id=\"patternRect2\" x=\"80\" y=\"6.3333\" width=\"10\" height=\"6.6666\""
+            "                stroke=\"none\" />"
+            "        </g>"
+
+            "    </pattern>"
+            "</defs>"
+
+            "<g>"
+            "    <rect id=\"testRect\" x=\"10\" y=\"20\" width=\"40\" height=\"120\""
+            "        transform=\"translate(40 30) scale(2 0.5)\""
+            "        fill=\"url(#TestPattern)blue\" stroke=\"none\"/>"
+            "</g>"
+
+            "</svg>";
+
+    SvgRenderTester t (data);
+
+    t.test_standard_30px_72ppi("fill_pattern_base_black", false, QSize(160, 160));
+}
+
 void TestSvgParser::testRenderPattern_r_User_c_View()
 {
     const QString data =

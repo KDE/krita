@@ -705,11 +705,16 @@ void TestSvgParser::testTransformRotation2()
 struct SvgRenderTester : public SvgTester
 {
     SvgRenderTester(const QString &data)
-        : SvgTester(data)
+        : SvgTester(data),
+          m_fuzzyThreshold(0)
     {
     }
 
-    static void testRender(KoShape *shape, const QString &prefix, const QString &testName, const QSize canvasSize) {
+    void setFuzzyThreshold(int fuzzyThreshold) {
+        m_fuzzyThreshold = fuzzyThreshold;
+    }
+
+    static void testRender(KoShape *shape, const QString &prefix, const QString &testName, const QSize canvasSize, int fuzzyThreshold = 0) {
         QImage canvas(canvasSize, QImage::Format_ARGB32);
         canvas.fill(0);
         KoViewConverter converter;
@@ -720,7 +725,7 @@ struct SvgRenderTester : public SvgTester
         painter.setClipRect(canvas.rect());
         p.paint(painter, converter);
 
-        QVERIFY(TestUtil::checkQImage(canvas, "svg_render", prefix, testName));
+        QVERIFY(TestUtil::checkQImage(canvas, "svg_render", prefix, testName, fuzzyThreshold));
     }
 
     void test_standard_30px_72ppi(const QString &testName, bool verifyGeometry = true, const QSize &canvasSize = QSize(30,30)) {
@@ -782,8 +787,11 @@ struct SvgRenderTester : public SvgTester
             }
         }
 
-        testRender(shape, "load", testName, canvasSize);
+        testRender(shape, "load", testName, canvasSize, m_fuzzyThreshold);
     }
+
+private:
+    int m_fuzzyThreshold;
 };
 
 void TestSvgParser::testRenderStrokeNone()
@@ -950,6 +958,7 @@ void TestSvgParser::testRenderStrokeOpacity()
             "</svg>";
 
     SvgRenderTester t (data);
+    t.setFuzzyThreshold(1);
     t.test_standard_30px_72ppi("stroke_blue_0_3_opacity");
 }
 
@@ -1124,6 +1133,7 @@ void TestSvgParser::testRenderFillOpacity()
             "</svg>";
 
     SvgRenderTester t (data);
+    t.setFuzzyThreshold(1);
     t.test_standard_30px_72ppi("fill_opacity_0_3");
 }
 
@@ -1508,6 +1518,7 @@ void TestSvgParser::testRenderFillRadialGradient()
             "</svg>";
 
     SvgRenderTester t (data);
+    t.setFuzzyThreshold(1);
     t.test_standard_30px_72ppi("fill_gradient_radial");
 }
 

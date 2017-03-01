@@ -86,7 +86,6 @@ endif ()
 # this list must be dependency-ordered
 if (UNIX)
     add_subdirectory( ext_python )
-    add_subdirectory( ext_llvm )
 endif ()
 if (MSVC)
     add_subdirectory( ext_patch )

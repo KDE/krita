@@ -23,7 +23,6 @@
 #include "KoToolBase_p.h"
 #include "KoPointerEvent.h"
 #include "KoCanvasBase.h"
-#include "KoPanTool.h"
 
 #include "kis_global.h"
 #include "kis_assert.h"
@@ -112,10 +111,11 @@ void KoInteractionTool::keyPressEvent(QKeyEvent *event)
 void KoInteractionTool::keyReleaseEvent(QKeyEvent *event)
 {
     Q_D(KoInteractionTool);
-    if (d->currentStrategy == 0) { // catch all cases where no current strategy is needed
-        if (event->key() == Qt::Key_Space)
-            emit activateTemporary(KoPanTool_ID);
-    } else if (event->key() == Qt::Key_Escape) {
+    if (!d->currentStrategy) {
+        KoToolBase::keyReleaseEvent(event);
+    }
+
+    if (event->key() == Qt::Key_Escape) {
         cancelCurrentStrategy();
         event->accept();
     } else if (event->key() == Qt::Key_Control ||

@@ -913,6 +913,17 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, const QRe
         device = tmp;
     }
 
+    if (device->colorSpace()->colorDepthId() == Float16BitsColorDepthID
+            || device->colorSpace()->colorDepthId() == Float32BitsColorDepthID
+            || device->colorSpace()->colorDepthId() == Float64BitsColorDepthID) {
+        const KoColorSpace *dstcs = KoColorSpaceRegistry::instance()->colorSpace(device->colorSpace()->colorModelId().id(), Integer8BitsColorDepthID.id(), "");
+        KisPaintDeviceSP tmp = new KisPaintDevice(dstcs);
+        KisPainter gc(tmp);
+        gc.bitBlt(imageRect.topLeft(), device, imageRect);
+        gc.end();
+        device = tmp;
+    }
+
     if (options.forceSRGB) {
         const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), device->colorSpace()->colorDepthId().id(), "sRGB built-in - (lcms internal)");
         device = new KisPaintDevice(*device);

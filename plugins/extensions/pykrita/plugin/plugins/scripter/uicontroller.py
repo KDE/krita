@@ -4,14 +4,15 @@ from PyQt5.QtWidgets import (QToolBar, QMenuBar, QTabWidget,
 from PyQt5.QtCore import Qt, QObject
 from scripter.ui_scripter.syntax import syntax, syntaxstyles
 from scripter.ui_scripter.editor import pythoneditor
+from scripter import scripterdialog
 import os
 import importlib
 
 
 class UIController(object):
 
-    def __init__(self, mainWidget):
-        self.mainWidget = mainWidget
+    def __init__(self):
+        self.mainWidget = scripterdialog.ScripterDialog(self)
         self.actionToolbar = QToolBar('toolBar', self.mainWidget)
         self.menu_bar = QMenuBar(self.mainWidget)
 
@@ -33,6 +34,7 @@ class UIController(object):
         self.loadMenus()
         self.loadWidgets()
         self.loadActions()
+        self._readSettings()
 
         vbox = QVBoxLayout(self.mainWidget)
         vbox.addWidget(self.menu_bar)
@@ -141,3 +143,44 @@ class UIController(object):
 
     def closeScripter(self):
         self.mainWidget.close()
+
+    def _writeSettings(self):
+        """ _writeSettings is a method invoked when the scripter starts, making
+            control inversion. Actions can implement a writeSettings method to
+            save your own settings without this method to know about it. """
+
+        self.scripter.settings.beginGroup('scripter')
+
+        document = self.scripter.documentcontroller.activeDocument
+        if document:
+            self.scripter.settings.setValue('activeDocumentPath', document.filePath)
+
+        for action in self.actions:
+            writeSettings = getattr(action['action'], "writeSettings", None)
+            if callable(writeSettings):
+                writeSettings()
+
+        self.scripter.settings.endGroup()
+
+
+    def _readSettings(self):
+        """ It's similar to _writeSettings, but reading the settings when the ScripterDialog is closed. """
+
+        self.scripter.settings.beginGroup('scripter')
+
+        activeDocumentPath = self.scripter.settings.value('activeDocumentPath', '')
+
+        if activeDocumentPath:
+            document = self.scripter.documentcontroller.openDocument(activeDocumentPath)
+            self.setStatusBar(document.filePath)
+            self.setDocumentEditor(document)
+
+        for action in self.actions:
+            readSettings = getattr(action['action'], "readSettings", None)
+            if callable(readSettings):
+                readSettings()
+
+        self.scripter.settings.endGroup()
+
+    def _saveSettings(self):
+        self.scripter.settings.sync()

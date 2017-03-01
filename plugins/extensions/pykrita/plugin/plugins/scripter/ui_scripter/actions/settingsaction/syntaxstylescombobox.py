@@ -22,3 +22,12 @@ class SyntaxStylesComboBox(QComboBox):
     def _currentIndexChanged(self, index):
         self.highlight.setSyntaxStyle(getattr(syntaxstyles, self.itemText(index))())
         self.highlight.rehighlight()
+
+    def readSettings(self, settings):
+        syntaxStyle = settings.value('syntaxStyle', '')
+
+        if syntaxStyle:
+            self.setCurrentIndex(self.findText(syntaxStyle))
+
+    def writeSettings(self, settings):
+        settings.setValue('syntaxStyle', type(self.highlight.getSyntaxStyle()).__name__)

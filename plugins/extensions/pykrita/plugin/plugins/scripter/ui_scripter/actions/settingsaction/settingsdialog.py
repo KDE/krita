@@ -12,3 +12,13 @@ class SettingsDialog(QDialog):
         self.mainLayout = QFormLayout(self)
         self.mainLayout.addRow('Syntax Highlither', syntaxstylescombobox.SyntaxStylesComboBox(self.scripter.uicontroller.highlight))
         self.mainLayout.addRow('Fonts', fontscombobox.FontsComboBox(self.scripter.uicontroller.editor))
+
+    def readSettings(self, settings):
+        for index in range(self.mainLayout.rowCount()):
+            widget = self.mainLayout.itemAt(index, QFormLayout.FieldRole).widget()
+            widget.readSettings(settings)
+
+    def writeSettings(self, settings):
+        for index in range(self.mainLayout.rowCount()):
+            widget = self.mainLayout.itemAt(index, QFormLayout.FieldRole).widget()
+            widget.writeSettings(settings)

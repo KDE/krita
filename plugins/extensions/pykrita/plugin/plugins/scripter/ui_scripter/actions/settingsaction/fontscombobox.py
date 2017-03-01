@@ -27,3 +27,12 @@ class FontsComboBox(QComboBox):
 
     def _currentIndexChanged(self, index):
         self.editor.font = self.itemText(index)
+
+    def readSettings(self, settings):
+        fontName = settings.value('fontName', '')
+
+        if fontName:
+            self.setCurrentIndex(self.findText(fontName))
+
+    def writeSettings(self, settings):
+        settings.setValue('fontName', self.editor.font)

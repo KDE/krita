@@ -1,4 +1,5 @@
 from PyQt5.QtWidgets import QDialog
+from PyQt5.QtCore import QSettings, QStandardPaths
 from krita import *
 from scripter import uicontroller, documentcontroller, debugcontroller
 
@@ -13,7 +14,9 @@ class ScripterViewExtension(ViewExtension):
         action.triggered.connect(self.initialize)
 
     def initialize(self):
-        self.uicontroller = uicontroller.UIController(QDialog())
+        configPath = QStandardPaths.writableLocation(QStandardPaths.GenericConfigLocation)
+        self.settings = QSettings(configPath + '/kritarc', QSettings.IniFormat)
+        self.uicontroller = uicontroller.UIController()
         self.documentcontroller = documentcontroller.DocumentController()
         self.debugcontroller = debugcontroller.DebugController(self)
         self.uicontroller.initialize(self)

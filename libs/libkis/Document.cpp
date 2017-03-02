@@ -226,11 +226,8 @@ int Document::height() const
 void Document::setHeight(int value)
 {
     if (!d->document) return;
-    KisImageSP image = d->document->image();
-    if (!image) return;
-    QRect rc = image->bounds();
-    rc.setHeight(value);
-    image->resizeImage(rc);
+    if (!d->document->image) return;
+    resizeImage(d->document->image()->width(), value);
 }
 
 
@@ -307,11 +304,8 @@ int Document::width() const
 void Document::setWidth(int value)
 {
     if (!d->document) return;
-    KisImageSP image = d->document->image();
-    if (!image) return;
-    QRect rc = image->bounds();
-    rc.setWidth(value);
-    image->resizeImage(rc);
+    if (!d->document->image) return;
+    resizeImage(value, d->document->image()->height());
 }
 
 double Document::xRes() const

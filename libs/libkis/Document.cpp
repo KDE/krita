@@ -226,7 +226,7 @@ int Document::height() const
 void Document::setHeight(int value)
 {
     if (!d->document) return;
-    if (!d->document->image) return;
+    if (!d->document->image()) return;
     resizeImage(d->document->image()->width(), value);
 }
 
@@ -304,7 +304,7 @@ int Document::width() const
 void Document::setWidth(int value)
 {
     if (!d->document) return;
-    if (!d->document->image) return;
+    if (!d->document->image()) return;
     resizeImage(value, d->document->image()->height());
 }
 

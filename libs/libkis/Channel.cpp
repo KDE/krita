@@ -69,7 +69,7 @@ bool Channel::visible() const
     return false;
 }
 
-void Channel::setvisible(bool value)
+void Channel::setVisible(bool value)
 {
     if (!d->node || !d->channel) return;
     if (!d->node->inherits("KisLayer")) return;

@@ -51,7 +51,7 @@ public:
     /**
      * @brief setvisible set the visibility of the channel to the given value.
      */
-    void setvisible(bool value);
+    void setVisible(bool value);
 
     /**
      * @return the name of the channel

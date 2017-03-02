@@ -7,7 +7,7 @@ class Channel : QObject
 public:
     virtual ~Channel();
     bool visible() const;
-    void setvisible(bool value);
+    void setVisible(bool value);
     QString name() const;
     int position() const;
     int channelSize() const;

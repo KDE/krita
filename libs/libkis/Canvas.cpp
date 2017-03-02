@@ -102,7 +102,7 @@ View *Canvas::view() const
 bool Canvas::wrapAroundMode() const
 {
     if (!d->canvas) return false;
-    return d->canvas->imageView()->canvasController()->levelOfDetailMode();
+    return d->canvas->imageView()->canvasController()->wrapAroundMode();
 }
 
 void Canvas::setWrapAroundMode(bool enable)

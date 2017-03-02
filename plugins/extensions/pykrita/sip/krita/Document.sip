@@ -34,7 +34,7 @@ public Q_SLOTS:
     double xRes() const;
     void setXRes(double xRes) const;
     double yRes() const;
-    void setyRes(double yRes) const;
+    void setYRes(double yRes) const;
     QByteArray pixelData(int x, int y, int w, int h) const;
     bool close();
     void crop(int x, int y, int w, int h);

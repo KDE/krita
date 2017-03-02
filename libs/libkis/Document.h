@@ -288,7 +288,7 @@ public Q_SLOTS:
     /**
      * @brief setYRes set the vertical resolution of the image to yRes in pixels per pt. (there are 72 pts to an inch)
      */
-    void setyRes(double yRes) const;
+    void setYRes(double yRes) const;
 
     /**
      * @brief pixelData reads the given rectangle from the image projection and returns it as a byte

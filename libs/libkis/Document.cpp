@@ -329,7 +329,7 @@ double Document::yRes() const
     return d->document->image()->yRes();
 }
 
-void Document::setyRes(double yRes) const
+void Document::setYRes(double yRes) const
 {
     if (!d->document) return;
     if (!d->document->image()) return;

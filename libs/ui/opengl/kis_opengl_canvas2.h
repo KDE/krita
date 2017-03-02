@@ -21,8 +21,7 @@
 #define KIS_OPENGL_CANVAS_2_H
 
 #include <QOpenGLWidget>
-#include <QOpenGLFunctions_3_0>
-
+#include <QOpenGLFunctions_3_2_Core>
 #include "canvas/kis_canvas_widget_base.h"
 #include "opengl/kis_opengl_image_textures.h"
 
@@ -42,9 +41,10 @@ class QPainterPath;
  * in the qpainter canvas.
  *
  */
-class KRITAUI_EXPORT KisOpenGLCanvas2 : public QOpenGLWidget, protected QOpenGLFunctions_3_0, public KisCanvasWidgetBase
-{
-
+class KRITAUI_EXPORT KisOpenGLCanvas2 : public QOpenGLWidget
+        , public KisCanvasWidgetBase
+        , protected QOpenGLFunctions_3_2_Core
+ {
     Q_OBJECT
 
 public:

@@ -66,9 +66,9 @@ public Q_SLOTS:
     void setActiveNode(Node* value);
 
     /**
-     * @brief toplevelNodels return a list with all top level nodes in the image graph
+     * @brief toplevelNodes return a list with all top level nodes in the image graph
      */
-    QList<Node*> toplevelNodes() const;
+    QList<Node*> topLevelNodes() const;
 
     /**
      * @brief nodeByName searches the node tree for a node with the given name and returns it

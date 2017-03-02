@@ -7,7 +7,7 @@ class Document : QObject /NoDefaultCtors/
 public Q_SLOTS:
     Node * activeNode() const  /Factory/;
     void setActiveNode(Node*  value);
-    QList<Node*> toplevelNodes() const  /Factory/;
+    QList<Node*> topLevelNodes() const  /Factory/;
     Node *nodeByName(const QString &node) const  /Factory/;
     bool batchmode() const;
     void setBatchmode(bool value);

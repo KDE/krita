@@ -114,7 +114,7 @@ void Document::setActiveNode(Node* value)
 
 }
 
-QList<Node *> Document::toplevelNodes() const
+QList<Node *> Document::topLevelNodes() const
 {
     if (!d->document) return QList<Node *>();
     Node n(d->document->image(), d->document->image()->rootLayer());

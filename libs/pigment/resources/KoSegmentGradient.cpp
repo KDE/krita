@@ -34,7 +34,6 @@
 
 #include "KoColorSpaceRegistry.h"
 #include "KoColorSpace.h"
-#include "KoMixColorsOp.h"
 
 #include <DebugPigment.h>
 #include <klocalizedstring.h>
@@ -490,47 +489,9 @@ KoGradientSegment::RGBColorInterpolationStrategy *KoGradientSegment::RGBColorInt
 
 void KoGradientSegment::RGBColorInterpolationStrategy::colorAt(KoColor& dst, qreal t, const KoColor& _start, const KoColor& _end) const
 {
-
-    KoColor buffer(m_colorSpace);
-    KoColor start(m_colorSpace);
-    KoColor end(m_colorSpace);
-
-    KoColor startDummy, endDummy;
-    //hack to get a color space with the bitdepth of the gradients(8bit), but with the colour profile of the image//
-    const KoColorSpace* mixSpace = KoColorSpaceRegistry::instance()->rgb8(dst.colorSpace()->profile());
-    //convert to the right colorspace for the start and end if we have our mixSpace.
-    if (mixSpace){
-        startDummy = KoColor(_start, mixSpace);
-        endDummy = KoColor(_end, mixSpace);
-    } else {
-        startDummy = _start;
-        endDummy = _end;
-    }
-
-    start.fromKoColor(_start);
-    end.fromKoColor(_end);
-
-    const quint8 *colors[2];
-    colors[0] = startDummy.data();
-    colors[1] = endDummy.data();
-
-    qint16 colorWeights[2];
-    colorWeights[0] = static_cast<quint8>((1.0 - t) * 255 + 0.5);
-    colorWeights[1] = 255 - colorWeights[0];
-
-    //check if our mixspace exists, it doesn't at startup.
-    if (mixSpace){
-        if (*buffer.colorSpace() != *mixSpace) {
-            buffer = KoColor(mixSpace);
-        }
-        mixSpace->mixColorsOp()->mixColors(colors, colorWeights, 2, buffer.data());
-    }
-    else {
-        buffer = KoColor(m_colorSpace);
-        m_colorSpace->mixColorsOp()->mixColors(colors, colorWeights, 2, buffer.data());
-    }
-
-    dst.fromKoColor(buffer);
+    //FIXME: hack to get a color space with the bitdepth of the gradients(8bit), but with the colour profile of the image//
+    const KoColorSpace* mixSpace = KoColorSpaceRegistry::instance()->rgb16(dst.colorSpace()->profile());
+    KoAbstractGradient::mixTwoColors(_start, _end, t, mixSpace, &dst);
 }
 
 KoGradientSegment::HSVCWColorInterpolationStrategy::HSVCWColorInterpolationStrategy()

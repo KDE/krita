@@ -96,6 +96,8 @@ KoColorSpace::~KoColorSpace()
 
 bool KoColorSpace::operator==(const KoColorSpace& rhs) const
 {
+    if (this == &rhs) return true;
+
     const KoColorProfile* p1 = rhs.profile();
     const KoColorProfile* p2 = profile();
     return d->idNumber == rhs.d->idNumber && ((p1 == p2) || (*p1 == *p2));

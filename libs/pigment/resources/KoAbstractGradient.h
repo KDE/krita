@@ -83,6 +83,8 @@ public:
 
     KoAbstractGradient(const KoAbstractGradient &rhs);
 
+    static void mixTwoColors(KoColor c1, KoColor c2, qreal t,
+                             const KoColorSpace *mixSpace, KoColor *dstColor);
 private:
     struct Private;
     Private* const d;

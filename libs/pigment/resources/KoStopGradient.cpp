@@ -31,7 +31,7 @@
 #include <DebugPigment.h>
 
 #include "KoColorSpaceRegistry.h"
-#include "KoMixColorsOp.h"
+
 
 #include <math.h>
 #include <KoColorModelStandardIds.h>
@@ -160,22 +160,10 @@ void KoStopGradient::colorAt(KoColor& dst, qreal t) const
         //    buffer = KoColor(colorSpace());
         //}
         //hack to get a color space with the bitdepth of the gradients(8bit), but with the colour profile of the image//
-        const KoColorSpace* mixSpace = KoColorSpaceRegistry::instance()->rgb8(dst.colorSpace()->profile());
+        const KoColorSpace* mixSpace = KoColorSpaceRegistry::instance()->rgb16(dst.colorSpace()->profile());
 
         const KoGradientStop& leftStop = *(stop - 1);
         const KoGradientStop& rightStop = *(stop);
-
-        KoColor startDummy, endDummy;
-        if (mixSpace){
-            startDummy = KoColor(leftStop.second, mixSpace);
-            endDummy = KoColor(rightStop.second, mixSpace);
-        } else {
-            startDummy = leftStop.second;
-            endDummy = rightStop.second;
-        }
-        const quint8 *colors[2];
-        colors[0] = startDummy.data();
-        colors[1] = endDummy.data();
 
         qreal localT;
         qreal stopDistance = rightStop.first - leftStop.first;
@@ -184,24 +172,8 @@ void KoStopGradient::colorAt(KoColor& dst, qreal t) const
         } else {
             localT = (t - leftStop.first) / stopDistance;
         }
-        qint16 colorWeights[2];
-        colorWeights[0] = static_cast<quint8>((1.0 - localT) * 255 + 0.5);
-        colorWeights[1] = 255 - colorWeights[0];
 
-
-        //check if our mixspace exists, it doesn't at startup.
-        if (mixSpace){
-            if (*buffer.colorSpace() != *mixSpace) {
-                buffer = KoColor(mixSpace);
-            }
-            mixSpace->mixColorsOp()->mixColors(colors, colorWeights, 2, buffer.data());
-        }
-        else {
-            buffer = KoColor(colorSpace());
-            colorSpace()->mixColorsOp()->mixColors(colors, colorWeights, 2, buffer.data());
-        }
-
-        dst.fromKoColor(buffer);
+        mixTwoColors(leftStop.second, rightStop.second, localT, mixSpace, &dst);
     }
 }
 

@@ -31,11 +31,15 @@ class KoMixColorsOp
 {
 public:
     virtual ~KoMixColorsOp() { }
+
+    static const qint16 weightsSum = 255;
+    static const qint16 weightsSum16 = 32767;
+
     /**
      * Mix the colors.
      * @param colors a pointer toward the source pixels
      * @param weights the coeffient of the source pixels (if you want
-     *                to average the sum of weights must be equal to 255)
+     *                to average the sum of weights must be equal to *255*)
      * @param nColors the number of pixels in the colors array
      * @param dst the destination pixel
      *
@@ -57,6 +61,17 @@ public:
     virtual void mixColors(const quint8 * const*colors, const qint16 *weights, quint32 nColors, quint8 *dst) const = 0;
     virtual void mixColors(const quint8 *colors, const qint16 *weights, quint32 nColors, quint8 *dst) const = 0;
 
+
+    /**
+     * Same as mixColors(), but the sum of the weights must be normzalized to 32767, instead of 255
+     *
+     * Please use this version of the mixing in new code! Otherwise you may get "stairy" gradients
+     * due to the lack of resulution in mixing.
+     *
+     * \see mixColors
+     */
+    virtual void mixColors16(const quint8 * const*colors, const qint16 *weights, quint32 nColors, quint8 *dst) const = 0;
+    virtual void mixColors16(const quint8 *colors, const qint16 *weights, quint32 nColors, quint8 *dst) const = 0;
 
     /**
      * Mix the colors uniformly, without weightening

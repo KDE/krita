@@ -31,11 +31,19 @@ public:
     }
     virtual ~KoMixColorsOpImpl() { }
     virtual void mixColors(const quint8 * const* colors, const qint16 *weights, quint32 nColors, quint8 *dst) const override {
-        mixColorsImpl(ArrayOfPointers(colors), WeightsWrapper(weights), nColors, dst);
+        mixColorsImpl(ArrayOfPointers(colors), WeightsWrapper<weightsSum>(weights), nColors, dst);
     }
 
     virtual void mixColors(const quint8 *colors, const qint16 *weights, quint32 nColors, quint8 *dst) const override {
-        mixColorsImpl(PointerToArray(colors, _CSTrait::pixelSize), WeightsWrapper(weights), nColors, dst);
+        mixColorsImpl(PointerToArray(colors, _CSTrait::pixelSize), WeightsWrapper<weightsSum>(weights), nColors, dst);
+    }
+
+    virtual void mixColors16(const quint8 * const* colors, const qint16 *weights, quint32 nColors, quint8 *dst) const override {
+        mixColorsImpl(ArrayOfPointers(colors), WeightsWrapper<weightsSum16>(weights), nColors, dst);
+    }
+
+    virtual void mixColors16(const quint8 *colors, const qint16 *weights, quint32 nColors, quint8 *dst) const override {
+        mixColorsImpl(PointerToArray(colors, _CSTrait::pixelSize), WeightsWrapper<weightsSum16>(weights), nColors, dst);
     }
 
     virtual void mixColors(const quint8 * const* colors, quint32 nColors, quint8 *dst) const override {
@@ -85,6 +93,7 @@ private:
         const int m_pixelSize;
     };
 
+    template <int WeightsSum>
     struct WeightsWrapper
     {
         typedef typename KoColorSpaceMathsTraits<typename _CSTrait::channels_type>::compositetype compositetype;
@@ -103,7 +112,7 @@ private:
         }
 
         inline int normalizeFactor() const {
-            return 255;
+            return WeightsSum;
         }
 
     private:

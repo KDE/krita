@@ -25,6 +25,8 @@
 
 #include <QBuffer>
 #include <QByteArray>
+#include "KoMixColorsOp.h"
+
 
 #define PREVIEW_WIDTH 64
 #define PREVIEW_HEIGHT 64
@@ -54,6 +56,28 @@ KoAbstractGradient::KoAbstractGradient(const KoAbstractGradient &rhs)
     : KoResource(rhs)
     , d(new Private(*rhs.d))
 {
+}
+
+void KoAbstractGradient::mixTwoColors(KoColor c1, KoColor c2, qreal t, const KoColorSpace *mixSpace, KoColor *dstColor)
+{
+    c1.convertTo(mixSpace);
+    c2.convertTo(mixSpace);
+
+    const quint8 *colors[2];
+    colors[0] = c1.data();
+    colors[1] = c2.data();
+
+    qint16 colorWeights[2];
+    colorWeights[0] = static_cast<qint16>((1.0 - t) * KoMixColorsOp::weightsSum16);
+    colorWeights[1] = KoMixColorsOp::weightsSum16 - colorWeights[0];
+
+    if (dstColor->colorSpace() != mixSpace) {
+        KoColor tmp(mixSpace);
+        mixSpace->mixColorsOp()->mixColors16(colors, colorWeights, 2, tmp.data());
+        dstColor->fromKoColor(tmp);
+    } else {
+        mixSpace->mixColorsOp()->mixColors16(colors, colorWeights, 2, dstColor->data());
+    }
 }
 
 void KoAbstractGradient::colorAt(KoColor&, qreal t) const

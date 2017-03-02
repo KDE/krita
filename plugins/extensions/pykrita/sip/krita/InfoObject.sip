@@ -8,7 +8,7 @@ public:
     InfoObject(QObject*  parent /TransferThis/ = 0);
     virtual ~InfoObject();
     QMap<QString, QVariant> properties() const;
-    void setproperties(QMap<QString, QVariant> value);
+    void setProperties(QMap<QString, QVariant> value);
 public Q_SLOTS:
     void setProperty(const QString & key, QVariant value);
     QVariant property(const QString & key);

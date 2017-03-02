@@ -31,9 +31,6 @@
 class KRITALIBKIS_EXPORT InfoObject : public QObject
 {
     Q_OBJECT
-    Q_DISABLE_COPY(InfoObject)
-
-    Q_PROPERTY(QMap<QString, QVariant> properties READ properties WRITE setproperties)
 
 public:
     InfoObject(KisPropertiesConfigurationSP configuration);
@@ -52,7 +49,7 @@ public:
     /**
      * Add all properties in the @param propertyMap to this InfoObject
      */
-    void setproperties(QMap<QString, QVariant> proprertyMap);
+    void setProperties(QMap<QString, QVariant> proprertyMap);
 
 public Q_SLOTS:
     /**

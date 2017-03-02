@@ -352,10 +352,8 @@ QByteArray Document::pixelData(int x, int y, int w, int h) const
     if (!image) return ba;
 
     KisPaintDeviceSP dev = image->projection();
-    quint8 *data = new quint8[w * h * dev->pixelSize()];
-    dev->readBytes(data, x, y, w, h);
-    ba = QByteArray((const char*)data, (int)(w * h * dev->pixelSize()));
-    delete[] data;
+    ba.resize(w * h * dev->pixelSize());
+    dev->readBytes(reinterpret_cast<quint8*>(ba.data()), x, y, w, h);
     return ba;
 }
 

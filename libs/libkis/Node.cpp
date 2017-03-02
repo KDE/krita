@@ -461,10 +461,12 @@ Node *Node::mergeDown()
     if (!d->node) return 0;
     if (!qobject_cast<KisLayer*>(d->node.data())) return 0;
     if (!d->node->prevSibling()) return 0;
-    KisLayerSP layer = qobject_cast<KisLayer*>(d->node->prevSibling().data());
-    if (!layer) return 0;
+    if (!d->node->parent()) return 0;
+
+    int index = d->node->parent()->index(d->node->prevSibling());
     d->image->mergeDown(qobject_cast<KisLayer*>(d->node.data()), KisMetaData::MergeStrategyRegistry::instance()->get("Drop"));
-    return new Node(d->image, layer);
+    d->image->waitForDone();
+    return new Node(d->image, d->node->parent()->at(index));
 }
 
 QImage Node::thumbnail(int w, int h)

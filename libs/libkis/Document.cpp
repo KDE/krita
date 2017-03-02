@@ -23,6 +23,7 @@
 #include <KoColorSpaceConstants.h>
 #include <KoXmlReader.h>
 #include <KisDocument.h>
+#include <kis_colorspace_convert_visitor.h>
 #include <kis_image.h>
 #include <KisPart.h>
 #include <kis_paint_device.h>
@@ -170,9 +171,13 @@ bool Document::setColorSpace(const QString &colorModel, const QString &colorDept
     const KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->colorSpace(colorModel, colorDepth, colorProfile);
     if (!colorSpace) return false;
     d->document->image()->lock();
-    d->document->image()->convertImageColorSpace(colorSpace,
-                                                 KoColorConversionTransformation::IntentPerceptual,
-                                                 KoColorConversionTransformation::HighQuality | KoColorConversionTransformation::NoOptimization);
+
+
+    KisColorSpaceConvertVisitor visitor(d->document->image(),
+                                        d->document->image()->colorSpace(),
+                                        colorSpace,
+                                        KoColorConversionTransformation::IntentPerceptual,
+                                        KoColorConversionTransformation::HighQuality | KoColorConversionTransformation::NoOptimization);
     d->document->image()->unlock();
     d->document->image()->setModified();
     d->document->image()->initialRefreshGraph();

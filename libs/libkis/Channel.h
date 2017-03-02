@@ -34,9 +34,6 @@
 class KRITALIBKIS_EXPORT Channel : public QObject
 {
     Q_OBJECT
-    Q_DISABLE_COPY(Channel)
-
-    Q_PROPERTY(bool visible READ visible WRITE setvisible)
 
 public:
     explicit Channel(KisNodeSP node, KoChannelInfo *channel, QObject *parent = 0);

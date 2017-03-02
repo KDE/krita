@@ -61,7 +61,6 @@ bool Channel::visible() const
             KisLayerSP layer = qobject_cast<KisLayer*>(d->node.data());
             QBitArray flags = layer->channelFlags();
             return flags.testBit(i);
-            break;
         }
     }
     return false;

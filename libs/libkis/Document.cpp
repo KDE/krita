@@ -391,11 +391,7 @@ void Document::flatten()
 {
     if (!d->document) return;
     if (!d->document->image()) return;
-    d->document->image()->lock();
     d->document->image()->flatten();
-    d->document->image()->unlock();
-    d->document->image()->setModified();
-    d->document->image()->initialRefreshGraph();
 }
 
 void Document::resizeImage(int w, int h)

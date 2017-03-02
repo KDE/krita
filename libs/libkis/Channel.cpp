@@ -59,8 +59,6 @@ bool Channel::visible() const
     for (int i = 0; i < d->node->colorSpace()->channelCount(); ++i) {
         if (d->node->colorSpace()->channels()[i] == d->channel) {
             KisLayerSP layer = qobject_cast<KisLayer*>(d->node.data());
-            if (!layer) return false;
-
             QBitArray flags = layer->channelFlags();
             return flags.testBit(i);
             break;

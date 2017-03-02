@@ -98,20 +98,7 @@ QString KoAlphaU16ColorSpace::normalisedChannelValueText(const quint8 *pixel, qu
 
 void KoAlphaU16ColorSpace::convolveColors(quint8** colors, qreal * kernelValues, quint8 *dst, qreal factor, qreal offset, qint32 nColors, const QBitArray & channelFlags) const
 {
-//    qreal totalAlpha = 0;
-
-//    while (nColors--) {
-//        qreal weight = *kernelValues;
-
-//        if (weight != 0) {
-//            totalAlpha += (*colors)[0] * weight;
-//        }
-//        ++colors;
-//        ++kernelValues;
-//    }
-
-//    if (channelFlags.isEmpty() || channelFlags.testBit(0))
-//        dst[0] = CLAMP((totalAlpha / factor) + offset, 0, SCHAR_MAX);
+    warnPigment << i18n("Undefined operation in the alpha color space");
 }
 
 
@@ -120,18 +107,8 @@ QImage KoAlphaU16ColorSpace::convertToQImage(const quint8 *data, qint32 width, q
                                           KoColorConversionTransformation::Intent /*renderingIntent*/,
                                           KoColorConversionTransformation::ConversionFlags /*conversionFlags*/) const
 {
+    warnPigment << i18n("Undefined operation in the alpha color space");
     QImage img(width, height, QImage::Format_Indexed8);
-//    QVector<QRgb> table;
-//    for (int i = 0; i < 256; ++i) table.append(qRgb(i, i, i));
-//    img.setColorTable(table);
-
-//    quint8* data_img;
-//    for (int i = 0; i < height; ++i) {
-//        data_img=img.scanLine(i);
-//        for (int j = 0; j < width; ++j)
-//            data_img[j]=*(data++);
-//    }
-
     return img;
 }
 

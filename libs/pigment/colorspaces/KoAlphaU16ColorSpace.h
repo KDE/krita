@@ -144,31 +144,39 @@ public:
         warnPigment << i18n("Undefined operation in the alpha color space");
         return 0;
     }
+
     virtual KoColorTransformation *createDarkenAdjustment(qint32 , bool , qreal) const {
         warnPigment << i18n("Undefined operation in the alpha color space");
         return 0;
     }
+
     virtual void invertColor(quint8*, qint32) const {
         warnPigment << i18n("Undefined operation in the alpha color space");
     }
+
     virtual void colorToXML(const quint8* , QDomDocument& , QDomElement&) const {
         warnPigment << i18n("Undefined operation in the alpha color space");
     }
+
     virtual void colorFromXML(quint8* , const QDomElement&) const {
         warnPigment << i18n("Undefined operation in the alpha color space");
     }
+
     virtual void toHSY(const QVector<double> &, qreal *, qreal *, qreal *) const {
         warnPigment << i18n("Undefined operation in the alpha color space");
     }
+
     virtual QVector <double> fromHSY(qreal *, qreal *, qreal *) const {
         warnPigment << i18n("Undefined operation in the alpha color space");
         QVector <double> channelValues (1);
         channelValues.fill(0.0);
         return channelValues;
     }
+
     virtual void toYUV(const QVector<double> &, qreal *, qreal *, qreal *) const {
         warnPigment << i18n("Undefined operation in the alpha color space");
     }
+
     virtual QVector <double> fromYUV(qreal *, qreal *, qreal *) const {
         warnPigment << i18n("Undefined operation in the alpha color space");
         QVector <double> channelValues (1);

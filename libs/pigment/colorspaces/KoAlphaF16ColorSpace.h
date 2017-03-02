@@ -111,6 +111,7 @@ public:
             lab += 4;
         }
     }
+
     virtual void fromLabA16(const quint8* src, quint8* dst, quint32 nPixels) const {
         const quint16* lab = reinterpret_cast<const quint16*>(src);
         while (nPixels--) {
@@ -128,6 +129,7 @@ public:
             rgb += 4;
         }
     }
+
     virtual void fromRgbA16(const quint8* src, quint8* dst, quint32 nPixels) const {
         const quint16* rgb = reinterpret_cast<const quint16*>(src);
         while (nPixels--) {
@@ -136,6 +138,7 @@ public:
             rgb += 4;
         }
     }
+
     virtual KoColorTransformation* createBrightnessContrastAdjustment(const quint16* transferValues) const {
         Q_UNUSED(transferValues);
         warnPigment << i18n("Undefined operation in the alpha color space");

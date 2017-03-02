@@ -366,11 +366,8 @@ QByteArray Node::pixelData(int x, int y, int w, int h) const
     KisPaintDeviceSP dev = d->node->paintDevice();
     if (!dev) return ba;
 
-    quint8 *data = new quint8[w * h * dev->pixelSize()];
-    dev->readBytes(data, x, y, w, h);
-    ba = QByteArray((const char*)data, (int)(w * h * dev->pixelSize()));
-    delete[] data;
-
+    ba.resize(w * h * dev->pixelSize());
+    dev->readBytes(reinterpret_cast<quint8*>(ba.data()), x, y, w, h);
     return ba;
 }
 
@@ -382,11 +379,8 @@ QByteArray Node::projectionPixelData(int x, int y, int w, int h) const
     if (!d->node) return ba;
 
     KisPaintDeviceSP dev = d->node->projection();
-    quint8 *data = new quint8[w * h * dev->pixelSize()];
-    dev->readBytes(data, x, y, w, h);
-    ba = QByteArray((const char*)data, (int)(w * h * dev->pixelSize()));
-    delete[] data;
-
+    ba.resize(w * h * dev->pixelSize());
+    dev->readBytes(reinterpret_cast<quint8*>(ba.data()), x, y, w, h);
     return ba;
 }
 

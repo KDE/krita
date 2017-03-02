@@ -23,6 +23,9 @@
 #include <KoToolBase.h>
 #include <KoPathShape.h>
 #include <QPointer>
+#include <QTime>
+#include <kis_painting_information_builder.h>
+#include <kis_paint_information.h>
 
 class KoPathShape;
 class KarbonCalligraphicShape;
@@ -98,6 +101,10 @@ private:
     QPointF m_lastMousePos;
 
     bool m_isDrawing;
+    QTime m_strokeTime;
+    KisPaintInformation m_lastInfo;
+    KisDistanceInformation m_currentDistance;
+    KisPaintingInformationBuilder *m_infoBuilder;
     int m_pointCount;
 
     // dynamic parameters

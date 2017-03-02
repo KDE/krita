@@ -62,15 +62,15 @@ KoShape *KarbonCalligraphicShape::cloneShape() const
     return new KarbonCalligraphicShape(*this);
 }
 
-void KarbonCalligraphicShape::appendPoint(const QPointF &point, qreal angle, qreal width)
+void KarbonCalligraphicShape::appendPoint(KisPaintInformation &paintInfo)
 {
     // convert the point from canvas to shape coordinates
-    QPointF p = point - position();
+    paintInfo.setPos(paintInfo.pos()-position());
     KarbonCalligraphicPoint *calligraphicPoint =
-        new KarbonCalligraphicPoint(p, angle, width);
+        new KarbonCalligraphicPoint(paintInfo);
 
     QList<QPointF> handles = this->handles();
-    handles.append(p);
+    handles.append(paintInfo.pos());
     setHandles(handles);
     m_points.append(calligraphicPoint);
     appendPointToPath(*calligraphicPoint);
@@ -78,9 +78,9 @@ void KarbonCalligraphicShape::appendPoint(const QPointF &point, qreal angle, qre
     // make the angle of the first point more in line with the actual
     // direction
     if (m_points.count() == 4) {
-        m_points[0]->setAngle(angle);
-        m_points[1]->setAngle(angle);
-        m_points[2]->setAngle(angle);
+        //m_points[0]->setAngle(angle);
+        //m_points[1]->setAngle(angle);
+        //m_points[2]->setAngle(angle);
     }
 }
 
@@ -173,6 +173,11 @@ void KarbonCalligraphicShape::appendPointsToPathAux(const QPointF &p1, const QPo
 
     insertPoint(pathPoint2, KoPathPointIndex(0, index));
     insertPoint(pathPoint1, KoPathPointIndex(0, index));
+}
+
+KarbonCalligraphicPoint *KarbonCalligraphicShape::lastPoint()
+{
+    return m_points.last();
 }
 
 void KarbonCalligraphicShape::smoothLastPoints()
@@ -417,6 +422,7 @@ void KarbonCalligraphicShape::simplifyGuidePath()
                 widthChange * widthDiff >= 0 &&
                 qAbs(widthChange + widthDiff) < 0.1) {
             // deleted point
+            //(*i)->paintInfo();
             delete *i;
             i = m_points.erase(i);
             directionChange += directionDiff;

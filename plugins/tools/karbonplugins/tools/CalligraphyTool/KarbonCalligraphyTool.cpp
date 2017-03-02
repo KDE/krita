@@ -36,6 +36,7 @@
 #include <KoShapePaintingContext.h>
 #include <KoViewConverter.h>
 
+#include <kis_painting_information_builder.h>
 #include <QAction>
 #include <QDebug>
 #include <klocalizedstring.h>
@@ -58,7 +59,7 @@ KarbonCalligraphyTool::KarbonCalligraphyTool(KoCanvasBase *canvas)
     , m_lastShape(0)
 {
     connect(canvas->shapeManager(), SIGNAL(selectionChanged()), SLOT(updateSelectedPath()));
-
+    m_infoBuilder = new KisPaintingInformationBuilder();
     updateSelectedPath();
 }
 
@@ -104,6 +105,8 @@ void KarbonCalligraphyTool::mousePressEvent(KoPointerEvent *event)
 
     m_isDrawing = true;
     m_pointCount = 0;
+    m_strokeTime.start();
+    m_lastInfo = m_infoBuilder->startStroke(event, m_strokeTime.elapsed(), canvas()->resourceManager());
     m_shape = new KarbonCalligraphicShape(m_caps);
     m_shape->setBackground(QSharedPointer<KoShapeBackground>(new KoColorBackground(canvas()->resourceManager()->foregroundColor().toQColor())));
     //addPoint( event );
@@ -145,7 +148,7 @@ void KarbonCalligraphyTool::mouseReleaseEvent(KoPointerEvent *event)
         m_isDrawing = false;
     }
 
-    m_shape->simplifyGuidePath();
+    //m_shape->simplifyGuidePath();
 
     KUndo2Command *cmd = canvas()->shapeController()->addShape(m_shape);
     if (cmd) {
@@ -185,11 +188,15 @@ void KarbonCalligraphyTool::addPoint(KoPointerEvent *event)
 
     QPointF newSpeed;
     QPointF newPoint = calculateNewPoint(event->point, &newSpeed);
-    qreal width = calculateWidth(event->pressure());
-    qreal angle = calculateAngle(m_speed, newSpeed);
+    //qreal width = calculateWidth(event->pressure());
+    //qreal angle = calculateAngle(m_speed, newSpeed);
 
     // add the previous point
-    m_shape->appendPoint(m_lastPoint, angle, width);
+    KisPaintInformation paintInfo = m_infoBuilder->continueStroke(event, m_strokeTime.elapsed());
+    KisDistanceInformation *dis = new KisDistanceInformation(m_lastInfo.pos(),m_strokeTime.elapsed());
+    KisPaintInformation::DistanceInformationRegistrar r= paintInfo.registerDistanceInformation(dis);
+    m_shape->appendPoint(paintInfo);
+    m_lastInfo = paintInfo;
 
     m_speed = newSpeed;
     m_lastPoint = newPoint;

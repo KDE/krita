@@ -63,7 +63,6 @@ void KoParameterShape::moveHandle(int handleId, const QPointF & point, Qt::Keybo
     update();
     // function to do special stuff
     moveHandleAction(handleId, documentToShape(point), modifiers);
-
     updatePath(size());
     update();
 }

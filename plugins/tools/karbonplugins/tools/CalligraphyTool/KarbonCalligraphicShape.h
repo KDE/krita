@@ -21,41 +21,46 @@
 #define KARBONCALLIGRAPHICSHAPE_H
 
 #include <KoParameterShape.h>
+#include <kis_paint_information.h>
 
 #define KarbonCalligraphicShapeId "KarbonCalligraphicShape"
 
 class KarbonCalligraphicPoint
 {
 public:
-    KarbonCalligraphicPoint(const QPointF &point, qreal angle, qreal width)
-        : m_point(point), m_angle(angle), m_width(width) {}
+    KarbonCalligraphicPoint(KisPaintInformation &paintInfo)
+        : m_paintInfo(paintInfo) {}
 
     QPointF point() const
     {
-        return m_point;
+        return m_paintInfo.pos();
     }
     qreal angle() const
     {
-        return m_angle;
+        return (fmod((m_paintInfo.drawingAngle()* 180.0 / M_PI)+90.0, 360.0)* M_PI / 180);
     }
     qreal width() const
     {
-        return m_width;
+        return m_paintInfo.pressure()*20.0;
+    }
+
+    KisPaintInformation paintInfo()
+    {
+        return m_paintInfo;
+    }
+
+    void setPaintInfo(KisPaintInformation &paintInfo)
+    {
+        m_paintInfo = paintInfo;
     }
 
     void setPoint(const QPointF &point)
     {
-        m_point = point;
-    }
-    void setAngle(qreal angle)
-    {
-        m_angle = angle;
+        m_paintInfo.setPos(point);
     }
 
 private:
-    QPointF m_point; // in shape coordinates
-    qreal m_angle;
-    qreal m_width;
+    KisPaintInformation m_paintInfo;
 };
 
 /*class KarbonCalligraphicShape::Point
@@ -91,8 +96,10 @@ public:
 
     KoShape* cloneShape() const override;
 
-    void appendPoint(const QPointF &p1, qreal angle, qreal width);
+    void appendPoint(KisPaintInformation &paintInfo);
     void appendPointToPath(const KarbonCalligraphicPoint &p);
+
+    KarbonCalligraphicPoint* lastPoint();
 
     // returns the bounding rect of whan needs to be repainted
     // after new points are added

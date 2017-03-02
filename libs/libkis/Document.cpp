@@ -106,6 +106,7 @@ void Document::setActiveNode(Node* value)
     if (!mainWin) return;
     KisViewManager *viewManager = mainWin->viewManager();
     if (!viewManager) return;
+    if (viewManager->document() != d->document) return;
     KisNodeManager *nodeManager = viewManager->nodeManager();
     if (!nodeManager) return;
     KisNodeSelectionAdapter *selectionAdapter = nodeManager->nodeSelectionAdapter();

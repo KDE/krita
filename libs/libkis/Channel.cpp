@@ -76,7 +76,6 @@ void Channel::setVisible(bool value)
             QBitArray flags = d->node->colorSpace()->channelFlags(true, true);
             flags.setBit(i, value);
             KisLayerSP layer = qobject_cast<KisLayer*>(d->node.data());
-            if (!layer) return;
             layer->setChannelFlags(flags);
             break;
         }

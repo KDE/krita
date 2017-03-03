@@ -150,13 +150,24 @@ QString KisRasterKeyframeChannel::chooseFrameFilename(int frameId, const QString
 
 KisKeyframeSP KisRasterKeyframeChannel::createKeyframe(int time, const KisKeyframeSP copySrc, KUndo2Command *parentCommand)
 {
-    int srcFrame = (copySrc != 0) ? frameId(copySrc) : 0;
+    KisRasterKeyframe *keyframe;
 
-    int frameId = m_d->paintDevice->framesInterface()->createFrame((copySrc != 0), srcFrame, QPoint(), parentCommand);
+    if (!copySrc) {
+        int frameId = m_d->paintDevice->framesInterface()->createFrame(false, 0, QPoint(), parentCommand);
+        keyframe = new KisRasterKeyframe(this, time, frameId);
+    } else {
+        int srcFrame = frameId(copySrc);
+        int frameId = m_d->paintDevice->framesInterface()->createFrame(true, srcFrame, QPoint(), parentCommand);
 
-    KisKeyframeSP keyframe(new KisRasterKeyframe(this, time, frameId));
+        KisRasterKeyframe *srcKeyframe = dynamic_cast<KisRasterKeyframe*>(copySrc.data());
+        Q_ASSERT(srcKeyframe);
+        keyframe = new KisRasterKeyframe(srcKeyframe, this);
 
-    return keyframe;
+        keyframe->setTime(time);
+        keyframe->frameId = frameId;
+    }
+
+    return toQShared(keyframe);
 }
 
 void KisRasterKeyframeChannel::destroyKeyframe(KisKeyframeSP key, KUndo2Command *parentCommand)

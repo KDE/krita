@@ -149,6 +149,7 @@ private:
     void addCap(int index1, int index2, int pointIndex, bool inverted = false);
 
     // the actual data then determines it's shape (guide path + data for points)
+    KisDistanceInformation m_strokeDistance;
     QList<KarbonCalligraphicPoint *> m_points;
     bool m_lastWasFlip;
     qreal m_caps;

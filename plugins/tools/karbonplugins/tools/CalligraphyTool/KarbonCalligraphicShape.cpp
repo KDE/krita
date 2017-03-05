@@ -315,8 +315,15 @@ void KarbonCalligraphicShape::updatePath(const QSizeF &size)
     clear();
     setPosition(QPoint(0, 0));
 
+    KarbonCalligraphicPoint *pLast = m_points.at(0);
+    m_strokeDistance = KisDistanceInformation(QPoint(), 0.0);
     Q_FOREACH (KarbonCalligraphicPoint *p, m_points) {
+
+        //m_strokeDistance = KisDistanceInformation(pLast->point(), 0);
+        //KisPaintInformation::DistanceInformationRegistrar r = p->paintInfo().registerDistanceInformation(&m_strokeDistance);
+
         appendPointToPath(*p);
+        pLast=p;
     }
 
     simplifyPath();

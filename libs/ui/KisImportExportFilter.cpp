@@ -63,7 +63,6 @@ KisImportExportFilter::KisImportExportFilter(QObject *parent)
 
 KisImportExportFilter::~KisImportExportFilter()
 {
-    Q_ASSERT(d->updater);
     if (d->updater) {
         d->updater->setProgress(100);
     }

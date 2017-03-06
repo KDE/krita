@@ -26,6 +26,7 @@
 #include "KoPathToolHandle.h"
 #include "KoCanvasBase.h"
 #include "KoShapeManager.h"
+#include "KoSelectedShapesProxy.h"
 #include "KoDocumentResourceManager.h"
 #include "KoViewConverter.h"
 #include "KoSelection.h"
@@ -895,7 +896,7 @@ void KoPathTool::activate(ToolActivation activation, const QSet<KoShape*> &shape
     d->canvas->snapGuide()->reset();
 
     useCursor(m_selectCursor);
-    connect(d->canvas->shapeManager()->selection(), SIGNAL(selectionChanged()), this, SLOT(slotSelectionChanged()));
+    connect(d->canvas->selectedShapesProxy(), SIGNAL(selectionChanged()), this, SLOT(slotSelectionChanged()));
 
     initializeWithShapes(shapes.toList());
 }
@@ -904,7 +905,7 @@ void KoPathTool::slotSelectionChanged()
 {
     Q_D(KoToolBase);
     QList<KoShape*> shapes =
-        d->canvas->shapeManager()->selection()->selectedEditableShapesAndDelegates();
+        d->canvas->selectedShapesProxy()->selection()->selectedEditableShapesAndDelegates();
 
     initializeWithShapes(shapes);
 }
@@ -984,7 +985,7 @@ void KoPathTool::updateActions()
 void KoPathTool::deactivate()
 {
     Q_D(KoToolBase);
-    disconnect(d->canvas->shapeManager()->selection(), SIGNAL(selectionChanged()), this, SLOT(slotSelectionChanged()));
+    disconnect(d->canvas->selectedShapesProxy(), SIGNAL(selectionChanged()), this, SLOT(slotSelectionChanged()));
     m_pointSelection.clear();
     m_pointSelection.setSelectedShapes(QList<KoPathShape*>());
     delete m_activeHandle;

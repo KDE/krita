@@ -28,6 +28,7 @@
 #include <KoCanvasBase.h>
 #include <KoShapeController.h>
 #include <KoShapeManager.h>
+#include <KoSelectedShapesProxy.h>
 #include <KoSelection.h>
 #include <KoCurveFit.h>
 #include <KoColorBackground.h>
@@ -57,7 +58,7 @@ KarbonCalligraphyTool::KarbonCalligraphyTool(KoCanvasBase *canvas)
     , m_speed(0, 0)
     , m_lastShape(0)
 {
-    connect(canvas->shapeManager(), SIGNAL(selectionChanged()), SLOT(updateSelectedPath()));
+    connect(canvas->selectedShapesProxy(), SIGNAL(selectionChanged()), SLOT(updateSelectedPath()));
 
     updateSelectedPath();
 }

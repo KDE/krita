@@ -60,12 +60,11 @@
 #include <KoCanvasController.h>
 #include <KoCanvasResourceManager.h>
 #include <KoDocumentResourceManager.h>
-#include <KoToolManager.h>
 #include <KoSelection.h>
 #include <KoShapeController.h>
-#include <KoShapeManager.h>
 #include <KoShapeStrokeCommand.h>
 #include <KoShapeStrokeModel.h>
+#include <KoSelectedShapesProxy.h>
 #include <KoFillConfigWidget.h>
 #include <KoFlakeUtils.h>
 #include <KoCanvasBase.h>
@@ -199,13 +198,30 @@ public:
     std::vector<KisAcyclicSignalConnector::Blocker> deactivationLocks;
 };
 
-KoStrokeConfigWidget::KoStrokeConfigWidget(QWidget * parent)
+
+KoStrokeConfigWidget::KoStrokeConfigWidget(KoCanvasBase *canvas, QWidget * parent)
     : QWidget(parent)
     , d(new Private())
 {
     setObjectName("Stroke widget");
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
     mainLayout->setMargin(0);
+
+    { // connect the canvas
+        d->shapeChangedAcyclicConnector.connectBackwardVoid(
+            canvas->selectedShapesProxy(), SIGNAL(selectionChanged()),
+            this, SLOT(selectionChanged()));
+
+        d->shapeChangedAcyclicConnector.connectBackwardVoid(
+            canvas->selectedShapesProxy(), SIGNAL(selectionContentChanged()),
+            this, SLOT(selectionChanged()));
+
+        d->resourceManagerAcyclicConnector.connectBackwardResourcePair(
+            canvas->resourceManager(), SIGNAL(canvasResourceChanged(int, const QVariant&)),
+            this, SLOT(canvasResourceChanged(int, const QVariant &)));
+
+        d->canvas = canvas;
+    }
 
     {
         QHBoxLayout *markersLineLayout = new QHBoxLayout();
@@ -279,7 +295,7 @@ KoStrokeConfigWidget::KoStrokeConfigWidget(QWidget * parent)
     }
 
     {
-        d->fillConfigWidget = new KoFillConfigWidget(KoFlake::StrokeFill, this);
+        d->fillConfigWidget = new KoFillConfigWidget(canvas, KoFlake::StrokeFill, this);
         mainLayout->addWidget(d->fillConfigWidget);
         connect(d->fillConfigWidget, SIGNAL(sigFillChanged()), SIGNAL(sigStrokeChanged()));
     }
@@ -307,6 +323,14 @@ KoStrokeConfigWidget::KoStrokeConfigWidget(QWidget * parent)
         mapper->setMapping(d->startMarkerSelector, KoFlake::StartMarker);
         mapper->setMapping(d->midMarkerSelector, KoFlake::MidMarker);
         mapper->setMapping(d->endMarkerSelector, KoFlake::EndMarker);
+    }
+
+    KoDocumentResourceManager *resourceManager = canvas->shapeController()->resourceManager();
+    if (resourceManager) {
+        KoMarkerCollection *collection = resourceManager->resource(KoDocumentResourceManager::MarkerCollection).value<KoMarkerCollection*>();
+        if (collection) {
+            updateMarkers(collection->markers());
+        }
     }
 
     selectionChanged();
@@ -400,13 +424,9 @@ void KoStrokeConfigWidget::updateStyleControlsAvailability(bool enabled)
     d->endMarkerSelector->setEnabled(enabled);
 }
 
-void KoStrokeConfigWidget::setUnit(const KoUnit &unit)
+void KoStrokeConfigWidget::setUnit(const KoUnit &unit, KoShape *representativeShape)
 {
     blockChildSignals(true);
-
-    KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
-    KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
-    KoShape * shape = selection->firstSelectedShape();
 
     /**
      * KoStrokeShape knows nothing about the transformations applied
@@ -415,8 +435,8 @@ void KoStrokeConfigWidget::setUnit(const KoUnit &unit)
      * and show the user correct values using the multiplier in KoUnit.
      */
     KoUnit newUnit(unit);
-    if (shape) {
-        newUnit.adjustByPixelTransform(shape->absoluteTransformation(0));
+    if (representativeShape) {
+        newUnit.adjustByPixelTransform(representativeShape->absoluteTransformation(0));
     }
 
     d->lineWidth->setUnit(newUnit);
@@ -465,6 +485,7 @@ void KoStrokeConfigWidget::blockChildSignals(bool block)
     d->capNJoinMenu->miterLimit->blockSignals(block);
     d->lineStyle->blockSignals(block);
     d->startMarkerSelector->blockSignals(block);
+    d->midMarkerSelector->blockSignals(block);
     d->endMarkerSelector->blockSignals(block);
 }
 
@@ -476,11 +497,10 @@ void KoStrokeConfigWidget::setActive(bool active)
 //------------------------
 
 template <typename ModifyFunction>
-    auto applyChangeToStrokes(ModifyFunction modifyFunction)
+    auto applyChangeToStrokes(KoCanvasBase *canvas, ModifyFunction modifyFunction)
         -> decltype(modifyFunction(KoShapeStrokeSP()), void())
 {
-    KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
-    KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
+    KoSelection *selection = canvas->selectedShapesProxy()->selection();
 
     if (!selection) return;
 
@@ -489,13 +509,14 @@ template <typename ModifyFunction>
     KUndo2Command *command = KoFlake::modifyShapesStrokes(shapes, modifyFunction);
 
     if (command) {
-        canvasController->canvas()->addCommand(command);
+        canvas->addCommand(command);
     }
 }
 
 void KoStrokeConfigWidget::applyDashStyleChanges()
 {
     applyChangeToStrokes(
+        d->canvas,
         [this] (KoShapeStrokeSP stroke) {
             stroke->setLineStyle(lineStyle(), lineDashes());
         });
@@ -506,6 +527,7 @@ void KoStrokeConfigWidget::applyDashStyleChanges()
 void KoStrokeConfigWidget::applyLineWidthChanges()
 {
     applyChangeToStrokes(
+        d->canvas,
         [this] (KoShapeStrokeSP stroke) {
             stroke->setLineWidth(lineWidth());
         });
@@ -516,6 +538,7 @@ void KoStrokeConfigWidget::applyLineWidthChanges()
 void KoStrokeConfigWidget::applyJoinCapChanges()
 {
     applyChangeToStrokes(
+        d->canvas,
         [this] (KoShapeStrokeSP stroke) {
 
             stroke->setCapStyle(static_cast<Qt::PenCapStyle>(d->capNJoinMenu->capGroup->checkedId()));
@@ -528,8 +551,7 @@ void KoStrokeConfigWidget::applyJoinCapChanges()
 
 void KoStrokeConfigWidget::applyMarkerChanges(int rawPosition)
 {
-    KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
-    KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
+    KoSelection *selection = d->canvas->selectedShapesProxy()->selection();
     if (!selection) {
         emit sigStrokeChanged();
         return;
@@ -572,7 +594,7 @@ void KoStrokeConfigWidget::applyMarkerChanges(int rawPosition)
     }
 
     KUndo2Command* command = new KoPathShapeMarkerCommand(pathShapes, marker.take(), position);
-    canvasController->canvas()->addCommand(command);
+    d->canvas->addCommand(command);
 
     emit sigStrokeChanged();
 }
@@ -636,19 +658,16 @@ struct CheckShapeMarkerPolicy
 
 void KoStrokeConfigWidget::selectionChanged()
 {
-    if (d->canvas) {
-        // see a comment in setUnit()
-        setUnit(d->canvas->unit());
-    }
-
-    KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
-    KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
+    KoSelection *selection = d->canvas->selectedShapesProxy()->selection();
     if (!selection) return;
 
     QList<KoShape*> shapes = selection->selectedEditableShapes();
 
     KoShape *shape = !shapes.isEmpty() ? shapes.first() : 0;
     const KoShapeStrokeSP stroke = shape ? qSharedPointerDynamicCast<KoShapeStroke>(shape->stroke()) : KoShapeStrokeSP();
+
+    // setUnit uses blockChildSignals() so take care not to use it inside the block
+    setUnit(d->canvas->unit(), shape);
 
     blockChildSignals(true);
 
@@ -711,42 +730,15 @@ void KoStrokeConfigWidget::selectionChanged()
     updateStyleControlsAvailability(!shapes.isEmpty());
 }
 
-void KoStrokeConfigWidget::setCanvas( KoCanvasBase *canvas )
-{
-    if (canvas) {
-
-        d->shapeChangedAcyclicConnector.connectBackwardVoid(
-             canvas->shapeManager()->selection(), SIGNAL(selectionChanged()),
-             this, SLOT(selectionChanged()));
-
-        d->shapeChangedAcyclicConnector.connectBackwardVoid(
-             canvas->shapeManager(), SIGNAL(selectionContentChanged()),
-             this, SLOT(selectionChanged()));
-
-        d->resourceManagerAcyclicConnector.connectBackwardResourcePair(
-             canvas->resourceManager(), SIGNAL(canvasResourceChanged(int, const QVariant&)),
-             this, SLOT(canvasResourceChanged(int, const QVariant &)));
-
-        setUnit(canvas->unit());
-
-        KoDocumentResourceManager *resourceManager = canvas->shapeController()->resourceManager();
-        if (resourceManager) {
-            KoMarkerCollection *collection = resourceManager->resource(KoDocumentResourceManager::MarkerCollection).value<KoMarkerCollection*>();
-            if (collection) {
-                updateMarkers(collection->markers());
-            }
-        }
-    }
-
-    d->canvas = canvas;
-}
-
 void KoStrokeConfigWidget::canvasResourceChanged(int key, const QVariant &value)
 {
     switch (key) {
     case KoCanvasResourceManager::Unit:
-        setUnit(value.value<KoUnit>());
-        break; case KisCanvasResourceProvider::Size:
+        // we request the whole selection to reload because the
+        // unit of the stroke width depends on the selected shape
+        selectionChanged();
+        break;
+    case KisCanvasResourceProvider::Size:
         if (d->noSelectionTrackingMode) {
             d->lineWidth->changeValue(d->canvas->unit().fromUserValue(value.toReal()));
         }

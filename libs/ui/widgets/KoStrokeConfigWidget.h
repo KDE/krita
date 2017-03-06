@@ -49,7 +49,7 @@ class KRITAUI_EXPORT KoStrokeConfigWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit KoStrokeConfigWidget(QWidget *parent);
+    explicit KoStrokeConfigWidget(KoCanvasBase *canvas, QWidget *parent);
     ~KoStrokeConfigWidget();
 
     void setNoSelectionTrackingMode(bool value);
@@ -72,7 +72,6 @@ public:
      */
     KoShapeStrokeSP createShapeStroke();
 
-    void setCanvas(KoCanvasBase *canvas);
     void setActive(bool active);
 
     void updateStyleControlsAvailability(bool enabled);
@@ -101,7 +100,7 @@ Q_SIGNALS:
     void sigStrokeChanged();
 
 private:
-    void setUnit(const KoUnit &unit);
+    void setUnit(const KoUnit &unit, KoShape *representativeShape);
     void blockChildSignals(bool block);
     void loadCurrentStrokeFillFromResourceServer();
 

@@ -22,6 +22,7 @@
 #include <QMutexLocker>
 
 #include <KoShapeManager.h>
+#include <KoSelectedShapesProxySimple.h>
 #include <KoViewConverter.h>
 #include <KoColorSpace.h>
 
@@ -45,6 +46,7 @@ KisShapeLayerCanvas::KisShapeLayerCanvas(KisShapeLayer *parent, KisImageWSP imag
         , m_isDestroying(false)
         , m_viewConverter(new KisImageViewConverter(image))
         , m_shapeManager(new KoShapeManager(this))
+        , m_selectedShapesProxy(new KoSelectedShapesProxySimple(m_shapeManager.data()))
         , m_projection(0)
         , m_parentLayer(parent)
 {
@@ -54,7 +56,6 @@ KisShapeLayerCanvas::KisShapeLayerCanvas(KisShapeLayer *parent, KisImageWSP imag
 
 KisShapeLayerCanvas::~KisShapeLayerCanvas()
 {
-    delete m_shapeManager;
 }
 
 void KisShapeLayerCanvas::setImage(KisImageWSP image)
@@ -87,7 +88,12 @@ void KisShapeLayerCanvas::addCommand(KUndo2Command *)
 
 KoShapeManager *KisShapeLayerCanvas::shapeManager() const
 {
-    return m_shapeManager;
+    return m_shapeManager.data();
+}
+
+KoSelectedShapesProxy *KisShapeLayerCanvas::selectedShapesProxy() const
+{
+    return m_selectedShapesProxy.data();
 }
 
 #ifdef DEBUG_REPAINT

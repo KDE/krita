@@ -102,7 +102,15 @@ void KoAnchorSelectionWidget::setValue(KoFlake::AnchorPosition value)
     if (value == this->value()) return;
 
     KisSignalsBlocker b(m_d->buttonGroup);
-    m_d->buttonGroup->button(int(value))->setChecked(true);
+
+    if (value >= 0) {
+        m_d->buttonGroup->button(int(value))->setChecked(true);
+    } else {
+        QAbstractButton *button = m_d->buttonGroup->checkedButton();
+        if (button) {
+            button->setChecked(false);
+        }
+    }
 
     emit valueChanged(value);
 }

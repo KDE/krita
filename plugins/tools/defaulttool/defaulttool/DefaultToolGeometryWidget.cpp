@@ -26,7 +26,7 @@
 #include <KoInteractionTool.h>
 #include <KoCanvasBase.h>
 #include <KoCanvasResourceManager.h>
-#include <KoShapeManager.h>
+#include <KoSelectedShapesProxy.h>
 #include <KoSelection.h>
 #include <KoUnit.h>
 #include <commands/KoShapeResizeCommand.h>
@@ -80,23 +80,23 @@ DefaultToolGeometryWidget::DefaultToolGeometryWidget(KoInteractionTool *tool, QW
     connect(widthSpinBox, SIGNAL(valueChangedPt(qreal)), this, SLOT(slotResizeShapes()));
     connect(heightSpinBox, SIGNAL(valueChangedPt(qreal)), this, SLOT(slotResizeShapes()));
 
-    KoSelection *selection = m_tool->canvas()->shapeManager()->selection();
-    connect(selection, SIGNAL(selectionChanged()), this, SLOT(slotUpdatePositionBoxes()));
-    connect(selection, SIGNAL(selectionChanged()), this, SLOT(slotUpdateSizeBoxes()));
-    connect(selection, SIGNAL(selectionChanged()), this, SLOT(slotUpdateCheckboxes()));
-    connect(selection, SIGNAL(selectionChanged()), this, SLOT(slotUpdateOpacitySlider()));
+    KoSelectedShapesProxy *selectedShapesProxy = m_tool->canvas()->selectedShapesProxy();
 
-    KoShapeManager *manager = m_tool->canvas()->shapeManager();
-    connect(manager, SIGNAL(selectionContentChanged()), this, SLOT(slotUpdatePositionBoxes()));
-    connect(manager, SIGNAL(selectionContentChanged()), this, SLOT(slotUpdateSizeBoxes()));
-    connect(manager, SIGNAL(selectionContentChanged()), this, SLOT(slotUpdateOpacitySlider()));
+    connect(selectedShapesProxy, SIGNAL(selectionChanged()), this, SLOT(slotUpdateCheckboxes()));
+    connect(selectedShapesProxy, SIGNAL(selectionChanged()), this, SLOT(slotUpdatePositionBoxes()));
+    connect(selectedShapesProxy, SIGNAL(selectionChanged()), this, SLOT(slotUpdateSizeBoxes()));
+    connect(selectedShapesProxy, SIGNAL(selectionChanged()), this, SLOT(slotUpdateOpacitySlider()));
+
+    connect(selectedShapesProxy, SIGNAL(selectionContentChanged()), this, SLOT(slotUpdatePositionBoxes()));
+    connect(selectedShapesProxy, SIGNAL(selectionContentChanged()), this, SLOT(slotUpdateSizeBoxes()));
+    connect(selectedShapesProxy, SIGNAL(selectionContentChanged()), this, SLOT(slotUpdateOpacitySlider()));
 
     connect(chkGlobalCoordinates, SIGNAL(toggled(bool)), SLOT(slotUpdateSizeBoxes()));
 
     KisAcyclicSignalConnector *acyclicConnector = new KisAcyclicSignalConnector(this);
     acyclicConnector->connectForwardVoid(m_sizeAspectLocker.data(), SIGNAL(aspectButtonChanged()), this, SLOT(slotAspectButtonToggled()));
-    acyclicConnector->connectBackwardVoid(selection, SIGNAL(selectionChanged()), this, SLOT(slotUpdateAspectButton()));
-    acyclicConnector->connectBackwardVoid(manager, SIGNAL(selectionContentChanged()), this, SLOT(slotUpdateAspectButton()));
+    acyclicConnector->connectBackwardVoid(selectedShapesProxy, SIGNAL(selectionChanged()), this, SLOT(slotUpdateAspectButton()));
+    acyclicConnector->connectBackwardVoid(selectedShapesProxy, SIGNAL(selectionContentChanged()), this, SLOT(slotUpdateAspectButton()));
 
 
     // Connect and initialize anchor point resource
@@ -194,7 +194,7 @@ void DefaultToolGeometryWidget::slotUpdateCheckboxes()
 {
     if (!isVisible()) return;
 
-    KoSelection *selection = m_tool->canvas()->shapeManager()->selection();
+    KoSelection *selection = m_tool->canvas()->selectedShapesProxy()->selection();
     QList<KoShape*> shapes = selection->selectedEditableShapes();
 
     KoShapeGroup *onlyGroupShape = 0;
@@ -220,7 +220,7 @@ void DefaultToolGeometryWidget::slotUpdateCheckboxes()
 
 void DefaultToolGeometryWidget::slotAspectButtonToggled()
 {
-    KoSelection *selection = m_tool->canvas()->shapeManager()->selection();
+    KoSelection *selection = m_tool->canvas()->selectedShapesProxy()->selection();
     QList<KoShape*> shapes = selection->selectedEditableShapes();
 
     QList<bool> oldKeepAspectRatio;
@@ -241,7 +241,7 @@ void DefaultToolGeometryWidget::slotUpdateAspectButton()
 {
     if (!isVisible()) return;
 
-    KoSelection *selection = m_tool->canvas()->shapeManager()->selection();
+    KoSelection *selection = m_tool->canvas()->selectedShapesProxy()->selection();
     QList<KoShape*> shapes = selection->selectedEditableShapes();
 
     bool hasKeepAspectRatio = false;
@@ -284,7 +284,7 @@ void DefaultToolGeometryWidget::slotOpacitySliderChanged()
 {
     static const qreal eps = 1e-3;
 
-    KoSelection *selection = m_tool->canvas()->shapeManager()->selection();
+    KoSelection *selection = m_tool->canvas()->selectedShapesProxy()->selection();
     QList<KoShape*> shapes = selection->selectedEditableShapes();
     if (shapes.isEmpty()) return;
 
@@ -307,7 +307,7 @@ void DefaultToolGeometryWidget::slotUpdateOpacitySlider()
     const QString opacityNormalPrefix = i18n("Opacity: ");
     const QString opacityVariesPrefix = i18n("Opacity [*varies*]: ");
 
-    KoSelection *selection = m_tool->canvas()->shapeManager()->selection();
+    KoSelection *selection = m_tool->canvas()->selectedShapesProxy()->selection();
     QList<KoShape*> shapes = selection->selectedEditableShapes();
 
     if (shapes.isEmpty()) {
@@ -339,7 +339,7 @@ void DefaultToolGeometryWidget::slotUpdateSizeBoxes()
     const bool useGlobalSize = chkGlobalCoordinates->isChecked();
     const KoFlake::AnchorPosition anchor = positionSelector->value();
 
-    KoSelection *selection = m_tool->canvas()->shapeManager()->selection();
+    KoSelection *selection = m_tool->canvas()->selectedShapesProxy()->selection();
     QRectF bounds = calculateSelectionBounds(selection, anchor, useGlobalSize);
 
     const bool hasSizeConfiguration = !bounds.isNull();
@@ -362,7 +362,7 @@ void DefaultToolGeometryWidget::slotUpdatePositionBoxes()
     const bool useGlobalSize = chkGlobalCoordinates->isChecked();
     const KoFlake::AnchorPosition anchor = positionSelector->value();
 
-    KoSelection *selection = m_tool->canvas()->shapeManager()->selection();
+    KoSelection *selection = m_tool->canvas()->selectedShapesProxy()->selection();
     QRectF bounds = calculateSelectionBounds(selection, anchor, useGlobalSize);
 
     const bool hasSizeConfiguration = !bounds.isNull();
@@ -385,7 +385,7 @@ void DefaultToolGeometryWidget::slotRepositionShapes()
     const KoFlake::AnchorPosition anchor = positionSelector->value();
 
     QList<KoShape*> shapes;
-    KoSelection *selection = m_tool->canvas()->shapeManager()->selection();
+    KoSelection *selection = m_tool->canvas()->selectedShapesProxy()->selection();
     QRectF bounds = calculateSelectionBounds(selection, anchor, useGlobalSize, &shapes);
 
     if (bounds.isNull()) return;
@@ -418,7 +418,7 @@ void DefaultToolGeometryWidget::slotResizeShapes()
     const KoFlake::AnchorPosition anchor = positionSelector->value();
 
     QList<KoShape*> shapes;
-    KoSelection *selection = m_tool->canvas()->shapeManager()->selection();
+    KoSelection *selection = m_tool->canvas()->selectedShapesProxy()->selection();
     QRectF bounds = calculateSelectionBounds(selection, anchor, useGlobalSize, &shapes);
 
     if (bounds.isNull()) return;

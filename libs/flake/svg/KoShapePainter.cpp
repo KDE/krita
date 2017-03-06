@@ -22,6 +22,7 @@
 #include "KoShapePainter.h"
 
 #include "KoCanvasBase.h"
+#include "KoSelectedShapesProxySimple.h"
 #include "KoShapeManager.h"
 #include "KoShapeManagerPaintingStrategy.h"
 #include "KoShape.h"
@@ -39,13 +40,14 @@ class SimpleCanvas : public KoCanvasBase
 {
 public:
     SimpleCanvas()
-        : KoCanvasBase(0), m_shapeManager(new KoShapeManager(this))
+        : KoCanvasBase(0),
+          m_shapeManager(new KoShapeManager(this)),
+          m_selectedShapesProxy(new KoSelectedShapesProxySimple(m_shapeManager.data()))
     {
     }
 
     ~SimpleCanvas() override
     {
-        delete m_shapeManager;
     }
 
     void gridSize(QPointF *offset, QSizeF *spacing) const override
@@ -65,7 +67,12 @@ public:
 
     KoShapeManager *shapeManager() const override
     {
-        return m_shapeManager;
+        return m_shapeManager.data();
+    }
+
+    KoSelectedShapesProxy *selectedShapesProxy() const override
+    {
+        return m_selectedShapesProxy.data();
     }
 
     void updateCanvas(const QRectF&) override
@@ -102,7 +109,8 @@ public:
     void setCursor(const QCursor &) override {}
 
 private:
-    KoShapeManager *m_shapeManager;
+    QScopedPointer<KoShapeManager> m_shapeManager;
+    QScopedPointer<KoSelectedShapesProxySimple> m_selectedShapesProxy;
 };
 
 class Q_DECL_HIDDEN KoShapePainter::Private

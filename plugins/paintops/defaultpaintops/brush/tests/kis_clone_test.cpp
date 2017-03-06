@@ -60,7 +60,6 @@
 
 
 
-#define isOdd(x) ((x) & 0x01)
 
 const int MAX_DIST = 65535;
 const quint8 MASK_SET = 0;
@@ -212,17 +211,6 @@ public:
     }
 
 };
-
-inline void alignRectBy2(qint32 &x, qint32 &y, qint32 &w, qint32 &h)
-{
-    x -= isOdd(x);
-    y -= isOdd(y);
-    w += isOdd(x);
-    w += isOdd(w);
-    h += isOdd(y);
-    h += isOdd(h);
-}
-
 
 class MaskedImage : public KisShared
 {
@@ -1052,7 +1040,7 @@ void TestClone::test(void)
 void KisCloneOpTest::testClone()
 {
     TestClone t;
-    DebugSaver::instance()->openDebugFile("/home/eugening/Projects/debug.h5");
+    //DebugSaver::instance()->openDebugFile("/home/eugening/Projects/debug.h5");
     //t.test();
     /*QBENCHMARK*/{
         t.testPatchMatch();

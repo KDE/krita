@@ -36,6 +36,7 @@
 #include <lazybrush/kis_colorize_mask.h>
 #include <kis_transform_mask.h>
 #include <kis_transparency_mask.h>
+#include <kis_inpaint_mask.h>
 #include <kis_selection_mask.h>
 #include <kis_effect_mask.h>
 #include "dialogs/kis_dlg_adjustment_layer.h"
@@ -189,6 +190,13 @@ void KisMaskManager::createTransparencyMask(KisNodeSP activeNode, KisPaintDevice
     createMaskCommon(mask, activeNode, copyFrom, kundo2_i18n("Add Transparency Mask"), "KisTransparencyMask", i18n("Transparency Mask"), false, avoidActiveNode);
 }
 
+void KisMaskManager::createInpaintMask(KisNodeSP activeNode, KisPaintDeviceSP copyFrom, bool avoidActiveNode)
+{
+    KisMaskSP mask = new KisInpaintMask();
+    createMaskCommon(mask, activeNode, copyFrom, kundo2_i18n("Add Inpaint Mask"), "KisInpaintMask", i18n("Inpaint Mask"), false, avoidActiveNode);
+}
+
+
 void KisMaskManager::createFilterMask(KisNodeSP activeNode, KisPaintDeviceSP copyFrom, bool quiet, bool avoidActiveNode)
 {
     KisFilterMaskSP mask = new KisFilterMask();
@@ -229,6 +237,14 @@ void KisMaskManager::createFilterMask(KisNodeSP activeNode, KisPaintDeviceSP cop
     }
 }
 
+void KisMaskManager::createEffectsMask(KisNodeSP activeNode)
+{
+    KisFilterMaskSP mask = new KisFilterMask();
+    createMaskCommon(mask, activeNode, 0, kundo2_i18n("Add Effect Mask"), "KisEffectMask", i18n("Inpaint Mask"), false, false);
+    mask->setImage(m_view->image());
+}
+
+
 void KisMaskManager::createColorizeMask(KisNodeSP activeNode)
 {
     KisColorizeMaskSP mask = new KisColorizeMask();
@@ -237,6 +253,7 @@ void KisMaskManager::createColorizeMask(KisNodeSP activeNode)
     mask->initializeCompositeOp();
     delete mask->setColorSpace(mask->parent()->colorSpace());
 }
+
 
 void KisMaskManager::createTransformMask(KisNodeSP activeNode)
 {

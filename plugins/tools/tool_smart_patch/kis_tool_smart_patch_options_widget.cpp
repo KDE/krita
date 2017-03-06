@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2016 Dmitry Kazakov <dimula73@gmail.com>
+ *  Copyright (c) 2017 Eugene Ingerman
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,9 +16,9 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_tool_lazy_brush_options_widget.h"
+#include "kis_tool_smart_patch_options_widget.h"
 
-#include "ui_kis_tool_lazy_brush_options_widget.h"
+#include "ui_kis_tool_smart_patch_options_widget.h"
 
 #include <KoColorSpaceRegistry.h>
 #include "KisPaletteModel.h"
@@ -34,7 +34,7 @@
 #include "kis_layer_properties_icons.h"
 
 
-struct KisToolLazyBrushOptionsWidget::Private
+struct KisToolSmartPatchOptionsWidget::Private
 {
     Private()
         : transparentColorIndex(-1),
@@ -42,7 +42,7 @@ struct KisToolLazyBrushOptionsWidget::Private
     {
     }
 
-    Ui_KisToolLazyBrushOptionsWidget *ui;
+    Ui_KisToolSmartPatchOptionsWidget *ui;
     KisPaletteModel *colorModel;
     KisCanvasResourceProvider *provider;
 
@@ -56,11 +56,11 @@ struct KisToolLazyBrushOptionsWidget::Private
     KisSignalCompressor baseNodeChangedCompressor;
 };
 
-KisToolLazyBrushOptionsWidget::KisToolLazyBrushOptionsWidget(KisCanvasResourceProvider *provider, QWidget *parent)
+KisToolSmartPatchOptionsWidget::KisToolSmartPatchOptionsWidget(KisCanvasResourceProvider *provider, QWidget *parent)
     : QWidget(parent),
       m_d(new Private)
 {
-    m_d->ui = new Ui_KisToolLazyBrushOptionsWidget();
+    m_d->ui = new Ui_KisToolSmartPatchOptionsWidget();
     m_d->ui->setupUi(this);
 
     m_d->colorModel = new KisPaletteModel(this);
@@ -92,11 +92,11 @@ KisToolLazyBrushOptionsWidget::KisToolLazyBrushOptionsWidget(KisCanvasResourcePr
     m_d->colorModel->setColorSet(&m_d->colorSet);
 }
 
-KisToolLazyBrushOptionsWidget::~KisToolLazyBrushOptionsWidget()
+KisToolSmartPatchOptionsWidget::~KisToolSmartPatchOptionsWidget()
 {
 }
 
-void KisToolLazyBrushOptionsWidget::showEvent(QShowEvent *event)
+void KisToolSmartPatchOptionsWidget::showEvent(QShowEvent *event)
 {
     QWidget::showEvent(event);
 
@@ -112,14 +112,14 @@ void KisToolLazyBrushOptionsWidget::showEvent(QShowEvent *event)
     slotCurrentFgColorChanged(m_d->provider->fgColor());
 }
 
-void KisToolLazyBrushOptionsWidget::hideEvent(QHideEvent *event)
+void KisToolSmartPatchOptionsWidget::hideEvent(QHideEvent *event)
 {
     QWidget::hideEvent(event);
 
     m_d->providerSignals.clear();
 }
 
-void KisToolLazyBrushOptionsWidget::entrySelected(QModelIndex index)
+void KisToolSmartPatchOptionsWidget::entrySelected(QModelIndex index)
 {
     if (!index.isValid()) return;
 
@@ -135,7 +135,7 @@ void KisToolLazyBrushOptionsWidget::entrySelected(QModelIndex index)
     m_d->ui->btnTransparent->setChecked(transparentChecked);
 }
 
-void KisToolLazyBrushOptionsWidget::slotCurrentFgColorChanged(const KoColor &color)
+void KisToolSmartPatchOptionsWidget::slotCurrentFgColorChanged(const KoColor &color)
 {
     int selectedIndex = -1;
 
@@ -162,7 +162,7 @@ void KisToolLazyBrushOptionsWidget::slotCurrentFgColorChanged(const KoColor &col
     }
 }
 
-void KisToolLazyBrushOptionsWidget::slotColorLabelsChanged()
+void KisToolSmartPatchOptionsWidget::slotColorLabelsChanged()
 {
     m_d->colorSet.clear();
     m_d->transparentColorIndex = -1;
@@ -181,7 +181,7 @@ void KisToolLazyBrushOptionsWidget::slotColorLabelsChanged()
     slotCurrentFgColorChanged(m_d->provider->fgColor());
 }
 
-void KisToolLazyBrushOptionsWidget::slotUpdateNodeProperties()
+void KisToolSmartPatchOptionsWidget::slotUpdateNodeProperties()
 {
     KisSignalsBlocker b(m_d->ui->chkAutoUpdates,
                         m_d->ui->btnUpdate,
@@ -207,7 +207,7 @@ void KisToolLazyBrushOptionsWidget::slotUpdateNodeProperties()
     m_d->ui->chkShowOutput->setChecked(value);
 }
 
-void KisToolLazyBrushOptionsWidget::slotCurrentNodeChanged(KisNodeSP node)
+void KisToolSmartPatchOptionsWidget::slotCurrentNodeChanged(KisNodeSP node)
 {
     m_d->maskSignals.clear();
 
@@ -229,7 +229,7 @@ void KisToolLazyBrushOptionsWidget::slotCurrentNodeChanged(KisNodeSP node)
     m_d->ui->colorView->setEnabled(m_d->activeMask);
 }
 
-void KisToolLazyBrushOptionsWidget::slotMakeTransparent(bool value)
+void KisToolSmartPatchOptionsWidget::slotMakeTransparent(bool value)
 {
     KIS_ASSERT_RECOVER_RETURN(m_d->activeMask);
 
@@ -250,7 +250,7 @@ void KisToolLazyBrushOptionsWidget::slotMakeTransparent(bool value)
     m_d->activeMask->setKeyStrokesColors(colors);
 }
 
-void KisToolLazyBrushOptionsWidget::slotRemove()
+void KisToolSmartPatchOptionsWidget::slotRemove()
 {
     KIS_ASSERT_RECOVER_RETURN(m_d->activeMask);
 
@@ -265,24 +265,24 @@ void KisToolLazyBrushOptionsWidget::slotRemove()
     m_d->activeMask->removeKeyStroke(color);
 }
 
-void KisToolLazyBrushOptionsWidget::slotUpdate()
+void KisToolSmartPatchOptionsWidget::slotUpdate()
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->activeMask);
     KisLayerPropertiesIcons::setNodeProperty(m_d->activeMask, KisLayerPropertiesIcons::colorizeNeedsUpdate, false, m_d->provider->currentImage());
 }
 
-void KisToolLazyBrushOptionsWidget::slotSetAutoUpdates(bool value)
+void KisToolSmartPatchOptionsWidget::slotSetAutoUpdates(bool value)
 {
     ENTER_FUNCTION() << ppVar(value);
 }
 
-void KisToolLazyBrushOptionsWidget::slotSetShowKeyStrokes(bool value)
+void KisToolSmartPatchOptionsWidget::slotSetShowKeyStrokes(bool value)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->activeMask);
     KisLayerPropertiesIcons::setNodeProperty(m_d->activeMask, KisLayerPropertiesIcons::colorizeEditKeyStrokes, value, m_d->provider->currentImage());
 }
 
-void KisToolLazyBrushOptionsWidget::slotSetShowOutput(bool value)
+void KisToolSmartPatchOptionsWidget::slotSetShowOutput(bool value)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->activeMask);
     KisLayerPropertiesIcons::setNodeProperty(m_d->activeMask, KisLayerPropertiesIcons::colorizeShowColoring, value, m_d->provider->currentImage());

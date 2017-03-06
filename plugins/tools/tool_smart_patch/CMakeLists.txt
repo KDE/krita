@@ -1,16 +1,16 @@
-set(kritatoolsmartpatch_SOURCES
+set(kritatoolSmartPatch_SOURCES
     tool_smartpatch.cpp
     kis_tool_smart_patch.cpp
     kis_tool_smart_patch_options_widget.cpp
     )
 
-#ki18n_wrap_ui(kritatoolsmartpatch_SOURCES kis_tool_smart_patch_options_widget.ui)
+ki18n_wrap_ui(kritatoolSmartPatch_SOURCES kis_tool_smart_patch_options_widget.ui)
 
-add_library(kritatoolsmartpatch MODULE ${kritatoolsmartpatch_SOURCES})
+add_library(kritatoolSmartPatch MODULE ${kritatoolSmartPatch_SOURCES})
 
-generate_export_header(kritatoolsmartpatch BASE_NAME kritatoolsmartpatch)
+generate_export_header(kritatoolSmartPatch BASE_NAME kritatoolSmartPatch)
 
-target_link_libraries(kritatoolsmartpatch kritaui)
+target_link_libraries(kritatoolSmartPatch kritaui)
 
-install(TARGETS kritatoolsmartpatch  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
+install(TARGETS kritatoolSmartPatch  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 

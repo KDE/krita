@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2016 Dmitry Kazakov <dimula73@gmail.com>
+ *  Copyright (c) 2017 Eugene Ingerman
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,7 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "tool_lazybrush.h"
+#include "tool_smartpatch.h"
 #include <QStringList>
 
 #include <kis_debug.h>
@@ -26,20 +26,20 @@
 #include <KoToolRegistry.h>
 
 #include "kis_paint_device.h"
-#include "kis_tool_lazy_brush.h"
+#include "kis_tool_smart_patch.h"
 
 
-K_PLUGIN_FACTORY_WITH_JSON(DefaultToolsFactory, "kritatoollazybrush.json", registerPlugin<ToolLazyBrush>();)
+K_PLUGIN_FACTORY_WITH_JSON(DefaultToolsFactory, "kritatoolsmartpatch.json", registerPlugin<ToolSmartPatch>();)
 
 
-ToolLazyBrush::ToolLazyBrush(QObject *parent, const QVariantList &)
+ToolSmartPatch::ToolSmartPatch(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
-    KoToolRegistry::instance()->add(new KisToolLazyBrushFactory());
+    KoToolRegistry::instance()->add(new KisToolSmartPatchFactory());
 }
 
-ToolLazyBrush::~ToolLazyBrush()
+ToolSmartPatch::~ToolSmartPatch()
 {
 }
 
-#include "tool_lazybrush.moc"
+#include "tool_smartpatch.moc"

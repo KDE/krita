@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2016 Dmitry Kazakov <dimula73@gmail.com>
+ *  Copyright (c) 2017 Eugene Ingerman
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,19 +16,19 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef TOOL_LAZYBRUSH_H_
-#define TOOL_LAZYBRUSH_H_
+#ifndef TOOL_SMARTPATCH_H_
+#define TOOL_SMARTPATCH_H_
 
 #include <QObject>
 #include <QVariant>
 
-class ToolLazyBrush : public QObject
+class ToolSmartPatch : public QObject
 {
     Q_OBJECT
 public:
-    ToolLazyBrush(QObject *parent, const QVariantList &);
-    virtual ~ToolLazyBrush();
+    ToolSmartPatch(QObject *parent, const QVariantList &);
+    virtual ~ToolSmartPatch();
 
 };
 
-#endif // TOOL_LAZYBRUSH_H_
+#endif // TOOL_SMARTPATCH_H_

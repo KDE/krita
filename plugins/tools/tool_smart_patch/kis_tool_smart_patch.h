@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2016 Dmitry Kazakov <dimula73@gmail.com>
+ *  Copyright (c) 2017 Eugene Ingerman
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,8 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_TOOL_LAZY_BRUSH_H_
-#define KIS_TOOL_LAZY_BRUSH_H_
+#ifndef KIS_TOOL_SMART_PATCH_H_
+#define KIS_TOOL_SMART_PATCH_H_
 
 #include <QScopedPointer>
 #include "kis_tool_freehand.h"
@@ -35,12 +35,12 @@
 class KActionCollection;
 class KoCanvasBase;
 
-class KisToolLazyBrush : public KisToolFreehand
+class KisToolSmartPatch : public KisToolFreehand
 {
     Q_OBJECT
 public:
-    KisToolLazyBrush(KoCanvasBase * canvas);
-    virtual ~KisToolLazyBrush();
+    KisToolSmartPatch(KoCanvasBase * canvas);
+    virtual ~KisToolSmartPatch();
 
     QWidget * createOptionWidget();
 
@@ -61,8 +61,8 @@ public Q_SLOTS:
 Q_SIGNALS:
 
 private:
-    bool colorizeMaskActive() const;
-    bool canCreateColorizeMask() const;
+    bool inpaintMaskActive() const;
+    bool canCreateInpaintMask() const;
 
 private:
     struct Private;
@@ -70,30 +70,30 @@ private:
 };
 
 
-class KisToolLazyBrushFactory : public KoToolFactoryBase
+class KisToolSmartPatchFactory : public KoToolFactoryBase
 {
 
 public:
-    KisToolLazyBrushFactory()
-            : KoToolFactoryBase("KritaShape/KisToolLazyBrush") {
+    KisToolSmartPatchFactory()
+            : KoToolFactoryBase("KritaShape/KisToolSmartPatch") {
 
-        setToolTip(i18n("Colorize Mask Editing Tool"));
+        setToolTip(i18n("Smart Patch Tool"));
 
         // Temporarily
         setSection(TOOL_TYPE_FILL);
-        setIconName(koIconNameCStr("krita_tool_lazybrush"));
+        setIconName(koIconNameCStr("krita_tool_smart_patch"));
         //setShortcut(QKeySequence(Qt::Key_Shift + Qt::Key_B));
-        setPriority(3);
+        setPriority(4);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
     }
 
-    virtual ~KisToolLazyBrushFactory() {}
+    virtual ~KisToolSmartPatchFactory() {}
 
     virtual KoToolBase * createTool(KoCanvasBase *canvas) {
-        return new KisToolLazyBrush(canvas);
+        return new KisToolSmartPatch(canvas);
     }
 
 };
 
 
-#endif // KIS_TOOL_LAZY_BRUSH_H_
+#endif // KIS_TOOL_SMART_PATCH_H_

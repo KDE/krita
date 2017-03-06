@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2016 Dmitry Kazakov <dimula73@gmail.com>
+ *  Copyright (c) 2017 Eugene Ingerman
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,7 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_tool_lazy_brush.h"
+#include "kis_tool_smart_patch.h"
 
 #include <klocalizedstring.h>
 #include <QAction>
@@ -35,66 +35,66 @@
 #include "KoProperties.h"
 #include "kis_node_manager.h"
 
-#include "kis_tool_lazy_brush_options_widget.h"
+#include "kis_tool_smart_patch_options_widget.h"
 
-struct KisToolLazyBrush::Private
+struct KisToolSmartPatch::Private
 {
     bool activateMaskMode = false;
 };
 
 
-KisToolLazyBrush::KisToolLazyBrush(KoCanvasBase * canvas)
+KisToolSmartPatch::KisToolSmartPatch(KoCanvasBase * canvas)
     : KisToolFreehand(canvas,
                       KisCursor::load("tool_freehand_cursor.png", 5, 5),
-                      kundo2_i18n("Colorize Mask Key Stroke")),
+                      kundo2_i18n("Smart Patch Stroke")),
       m_d(new Private)
 {
-    setObjectName("tool_lazybrush");
+    setObjectName("tool_SmartPatch");
 }
 
-KisToolLazyBrush::~KisToolLazyBrush()
+KisToolSmartPatch::~KisToolSmartPatch()
 {
 }
 
-void KisToolLazyBrush::activate(ToolActivation activation, const QSet<KoShape*> &shapes)
+void KisToolSmartPatch::activate(ToolActivation activation, const QSet<KoShape*> &shapes)
 {
     KisToolFreehand::activate(activation, shapes);
 }
 
-void KisToolLazyBrush::deactivate()
+void KisToolSmartPatch::deactivate()
 {
     KisToolFreehand::deactivate();
 }
 
-void KisToolLazyBrush::resetCursorStyle()
+void KisToolSmartPatch::resetCursorStyle()
 {
     KisToolFreehand::resetCursorStyle();
 }
 
-bool KisToolLazyBrush::colorizeMaskActive() const
+bool KisToolSmartPatch::inpaintMaskActive() const
 {
     KisNodeSP node = currentNode();
-    return node && node->inherits("KisColorizeMask");
+    return node && node->inherits("KisFilterMask");
 }
 
-bool KisToolLazyBrush::canCreateColorizeMask() const
+bool KisToolSmartPatch::canCreateInpaintMask() const
 {
     KisNodeSP node = currentNode();
     return node && node->inherits("KisLayer");
 }
 
-void KisToolLazyBrush::activatePrimaryAction()
+void KisToolSmartPatch::activatePrimaryAction()
 {
     KisToolFreehand::activatePrimaryAction();
 
-    if (!colorizeMaskActive() && canCreateColorizeMask()) {
-        useCursor(KisCursor::handCursor());
+    if (!inpaintMaskActive() && canCreateInpaintMask()) {
+        //useCursor(KisCursor::handCursor());
         m_d->activateMaskMode = true;
-        setOutlineEnabled(false);
+        setOutlineEnabled(true);
     }
 }
 
-void KisToolLazyBrush::deactivatePrimaryAction()
+void KisToolSmartPatch::deactivatePrimaryAction()
 {
     if (m_d->activateMaskMode) {
         m_d->activateMaskMode = false;
@@ -105,7 +105,7 @@ void KisToolLazyBrush::deactivatePrimaryAction()
     KisToolFreehand::deactivatePrimaryAction();
 }
 
-void KisToolLazyBrush::beginPrimaryAction(KoPointerEvent *event)
+void KisToolSmartPatch::beginPrimaryAction(KoPointerEvent *event)
 {
     if (m_d->activateMaskMode) {
         KisNodeSP node = currentNode();
@@ -113,41 +113,51 @@ void KisToolLazyBrush::beginPrimaryAction(KoPointerEvent *event)
 
         KoProperties properties;
         properties.setProperty("visible", true);
-        properties.setProperty("locked", false);
+        properties.setProperty("temporary", true);
+        properties.setProperty("smartpatch", true);
 
-        QList<KisNodeSP> masks = node->childNodes(QStringList("KisColorizeMask"), properties);
+        QList<KisNodeSP> masks = node->childNodes(QStringList("KisInpaintMask"), properties);
 
         if (!masks.isEmpty()) {
             KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
+
             KisViewManager* viewManager = kiscanvas->viewManager();
             viewManager->nodeManager()->slotNonUiActivatedNode(masks.first());
         } else {
             KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
             KisViewManager* viewManager = kiscanvas->viewManager();
-            viewManager->nodeManager()->createNode("KisColorizeMask");
+            viewManager->nodeManager()->createNode("KisInpaintMask", true);
+            KisNodeSP node = currentNode();
+
+            if ( node ){
+                node->setProperty("visible", true);
+                node->setProperty("temporary", true);
+                node->setProperty("smartpatch", true);
+            }
+
         }
     } else {
         KisToolFreehand::beginPrimaryAction(event);
     }
 }
 
-void KisToolLazyBrush::continuePrimaryAction(KoPointerEvent *event)
+void KisToolSmartPatch::continuePrimaryAction(KoPointerEvent *event)
 {
     if (m_d->activateMaskMode) return;
     KisToolFreehand::continuePrimaryAction(event);
 }
 
-void KisToolLazyBrush::endPrimaryAction(KoPointerEvent *event)
+void KisToolSmartPatch::endPrimaryAction(KoPointerEvent *event)
 {
     if (m_d->activateMaskMode) return;
     KisToolFreehand::endPrimaryAction(event);
 }
 
-QWidget * KisToolLazyBrush::createOptionWidget()
+QWidget * KisToolSmartPatch::createOptionWidget()
 {
     KisCanvas2 * kiscanvas = dynamic_cast<KisCanvas2*>(canvas());
 
-    QWidget *optionsWidget = new KisToolLazyBrushOptionsWidget(kiscanvas->viewManager()->resourceProvider(), 0);
+    QWidget *optionsWidget = new KisToolSmartPatchOptionsWidget(kiscanvas->viewManager()->resourceProvider(), 0);
     optionsWidget->setObjectName(toolId() + "option widget");
 
     // // See https://bugs.kde.org/show_bug.cgi?id=316896

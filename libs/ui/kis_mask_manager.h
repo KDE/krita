@@ -88,8 +88,10 @@ private:
     void createSelectionMask(KisNodeSP activeNode, KisPaintDeviceSP copyFrom, bool avoidActiveNode);
     void createFilterMask(KisNodeSP activeNode, KisPaintDeviceSP copyFrom, bool quiet, bool avoidActiveNode);
     void createColorizeMask(KisNodeSP activeNode);
+    void createEffectsMask(KisNodeSP activeNode);
     void createTransformMask(KisNodeSP activeNode);
     void createTransparencyMask(KisNodeSP activeNode, KisPaintDeviceSP copyFrom, bool avoidActiveNode);
+    void createInpaintMask(KisNodeSP activeNode, KisPaintDeviceSP copyFrom, bool avoidActiveNode);
 
     KisViewManager * m_view;
     QPointer<KisView>m_imageView;

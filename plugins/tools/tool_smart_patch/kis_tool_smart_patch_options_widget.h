@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2016 Dmitry Kazakov <dimula73@gmail.com>
+ *  Copyright (c) 2017 Eugene Ingerman
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,8 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KIS_TOOL_LAZY_BRUSH_OPTIONS_WIDGET_H
-#define __KIS_TOOL_LAZY_BRUSH_OPTIONS_WIDGET_H
+#ifndef __KIS_TOOL_SMART_PATCH_OPTIONS_WIDGET_H
+#define __KIS_TOOL_SMART_PATCH_OPTIONS_WIDGET_H
 
 #include <QScopedPointer>
 #include <QWidget>
@@ -29,12 +29,12 @@ class KisCanvasResourceProvider;
 class KoColor;
 
 
-class KisToolLazyBrushOptionsWidget : public QWidget
+class KisToolSmartPatchOptionsWidget : public QWidget
 {
     Q_OBJECT
 public:
-    KisToolLazyBrushOptionsWidget(KisCanvasResourceProvider *provider, QWidget *parent);
-    ~KisToolLazyBrushOptionsWidget();
+    KisToolSmartPatchOptionsWidget(KisCanvasResourceProvider *provider, QWidget *parent);
+    ~KisToolSmartPatchOptionsWidget();
 
 private Q_SLOTS:
     void entrySelected(QModelIndex index);
@@ -61,4 +61,4 @@ private:
     const QScopedPointer<Private> m_d;
 };
 
-#endif /* __KIS_TOOL_LAZY_BRUSH_OPTIONS_WIDGET_H */
+#endif /* __KIS_TOOL_SMART_PATCH_OPTIONS_WIDGET_H */

@@ -248,6 +248,7 @@ set(kritaimage_LIB_SRCS
    kis_green_coordinates_math.cpp
    kis_algebra_2d.cpp
    kis_transparency_mask.cc
+   kis_inpaint_mask.cpp
    kis_undo_store.cpp
    kis_undo_stores.cpp
    kis_undo_adapter.cpp

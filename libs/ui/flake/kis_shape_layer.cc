@@ -57,6 +57,7 @@
 #include <KoShapeGroup.h>
 #include <KoShapeLoadingContext.h>
 #include <KoShapeManager.h>
+#include <KoSelectedShapesProxy.h>
 #include <KoShapeRegistry.h>
 #include <KoShapeSavingContext.h>
 #include <KoStore.h>
@@ -213,8 +214,8 @@ void KisShapeLayer::initShapeLayer(KoShapeBasedDocumentBase* controller)
 
     m_d->canvas->shapeManager()->selection()->disconnect(this);
 
-    connect(m_d->canvas->shapeManager()->selection(), SIGNAL(selectionChanged()), this, SIGNAL(selectionChanged()));
-    connect(m_d->canvas->shapeManager()->selection(), SIGNAL(currentLayerChanged(const KoShapeLayer*)),
+    connect(m_d->canvas->selectedShapesProxy(), SIGNAL(selectionChanged()), this, SIGNAL(selectionChanged()));
+    connect(m_d->canvas->selectedShapesProxy(), SIGNAL(currentLayerChanged(const KoShapeLayer*)),
             this, SIGNAL(currentLayerChanged(const KoShapeLayer*)));
 
     connect(this, SIGNAL(sigMoveShapes(const QPointF&)), SLOT(slotMoveShapes(const QPointF&)));
@@ -363,7 +364,9 @@ bool KisShapeLayer::saveLayer(KoStore * store) const
     }
 
     // FIXME: we handle xRes() only!
-    const QSizeF sizeInPt = image()->bounds().size() * image()->xRes();
+
+    const QSizeF sizeInPx = image()->bounds().size();
+    const QSizeF sizeInPt(sizeInPx.width() / image()->xRes(), sizeInPx.height() / image()->yRes());
 
     KoStoreDevice storeDev(store);
     storeDev.open(QIODevice::WriteOnly);

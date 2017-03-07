@@ -29,6 +29,8 @@ set(kritaflake_SRCS
     KoPathPoint.cpp
     KoPathSegment.cpp
     KoSelection.cpp
+    KoSelectedShapesProxy.cpp
+    KoSelectedShapesProxySimple.cpp
     KoShape.cpp
     KoShapeAnchor.cpp
     KoShapeBasedDocumentBase.cpp

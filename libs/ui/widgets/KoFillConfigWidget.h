@@ -44,7 +44,7 @@ class KRITAUI_EXPORT KoFillConfigWidget : public QWidget
     };
 
 public:
-    explicit KoFillConfigWidget(KoFlake::FillVariant fillVariant, QWidget *parent);
+    explicit KoFillConfigWidget(KoCanvasBase *canvas, KoFlake::FillVariant fillVariant, QWidget *parent);
     ~KoFillConfigWidget();
 
     void setNoSelectionTrackingMode(bool value);

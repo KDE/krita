@@ -26,7 +26,7 @@
 #include "KoFilterEffectConfigWidgetBase.h"
 #include "KoCanvasBase.h"
 #include "KoDocumentResourceManager.h"
-#include "KoShapeManager.h"
+#include "KoSelectedShapesProxy.h"
 #include "KoViewConverter.h"
 #include "KoSelection.h"
 #include "FilterEffectEditWidget.h"
@@ -220,9 +220,9 @@ KarbonFilterEffectsTool::KarbonFilterEffectsTool(KoCanvasBase *canvas)
     : KoInteractionTool(canvas)
     , d(new Private())
 {
-    connect(canvas->shapeManager(), SIGNAL(selectionChanged()),
+    connect(canvas->selectedShapesProxy(), SIGNAL(selectionChanged()),
             this, SLOT(selectionChanged()));
-    connect(canvas->shapeManager(), SIGNAL(selectionContentChanged()),
+    connect(canvas->selectedShapesProxy(), SIGNAL(selectionContentChanged()),
             this, SLOT(selectionChanged()));
 }
 
@@ -281,7 +281,7 @@ void KarbonFilterEffectsTool::activate(ToolActivation toolActivation, const QSet
         return;
     }
 
-    d->currentShape = canvas()->shapeManager()->selection()->firstSelectedShape();
+    d->currentShape = canvas()->selectedShapesProxy()->selection()->firstSelectedShape();
     d->fillConfigSelector(d->currentShape, this);
 }
 
@@ -404,7 +404,7 @@ void KarbonFilterEffectsTool::filterSelected(int index)
 
 void KarbonFilterEffectsTool::selectionChanged()
 {
-    d->currentShape = canvas()->shapeManager()->selection()->firstSelectedShape();
+    d->currentShape = canvas()->selectedShapesProxy()->selection()->firstSelectedShape();
     d->fillConfigSelector(d->currentShape, this);
 }
 

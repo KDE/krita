@@ -44,6 +44,8 @@ EllipseShapeFactory::EllipseShapeFactory()
     elementNamesList.append(qMakePair(QString(KoXmlNS::draw), QStringList("ellipse")));
     elementNamesList.append(qMakePair(QString(KoXmlNS::svg), QStringList("circle")));
     elementNamesList.append(qMakePair(QString(KoXmlNS::svg), QStringList("ellipse")));
+    elementNamesList.append(qMakePair(QString(KoXmlNS::svg), QStringList("sodipodi:arc")));
+    elementNamesList.append(qMakePair(QString(KoXmlNS::svg), QStringList("krita:arc")));
     setXmlElements(elementNamesList);
 }
 

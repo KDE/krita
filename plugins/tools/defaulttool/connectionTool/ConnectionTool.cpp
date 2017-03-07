@@ -834,9 +834,8 @@ QList<QPointer<QWidget> > ConnectionTool::createOptionWidgets()
             list.append(cw);
         }
     }
-    KoStrokeConfigWidget *strokeWidget = new KoStrokeConfigWidget(0);
+    KoStrokeConfigWidget *strokeWidget = new KoStrokeConfigWidget(canvas(), 0);
     strokeWidget->setWindowTitle(i18n("Line"));
-    strokeWidget->setCanvas(canvas());
     list.append(strokeWidget);
 
     ConnectionPointWidget *connectPoint = new ConnectionPointWidget(this);

@@ -20,6 +20,7 @@
 #ifndef MOCKSHAPES_H
 #define MOCKSHAPES_H
 
+#include <KoSelectedShapesProxySimple.h>
 #include <KoShapeGroup.h>
 #include <KoCanvasBase.h>
 #include <KoShapeBasedDocumentBase.h>
@@ -79,7 +80,12 @@ class MockCanvas : public KoCanvasBase
 {
 public:
     MockCanvas(KoShapeBasedDocumentBase *aKoShapeBasedDocumentBase =0)//made for TestSnapStrategy.cpp
-            : KoCanvasBase(aKoShapeBasedDocumentBase), m_shapeManager(new KoShapeManager(this)) {}
+            : KoCanvasBase(aKoShapeBasedDocumentBase),
+              m_shapeManager(new KoShapeManager(this)),
+              m_selectedShapesProxy(new KoSelectedShapesProxySimple(m_shapeManager.data()))
+    {
+    }
+
     ~MockCanvas() {}
     void setHorz(qreal pHorz){
         m_horz = pHorz;
@@ -98,7 +104,10 @@ public:
     }
     void addCommand(KUndo2Command*) { }
     KoShapeManager *shapeManager() const  {
-        return m_shapeManager;
+        return m_shapeManager.data();
+    }
+    KoSelectedShapesProxy *selectedShapesProxy() const {
+        return m_selectedShapesProxy.data();
     }
     void updateCanvas(const QRectF&)  {}
     KoToolProxy * toolProxy() const {
@@ -119,7 +128,8 @@ public:
     void updateInputMethodInfo() {}
     void setCursor(const QCursor &) {}
     private:
-        KoShapeManager *m_shapeManager;
+        QScopedPointer<KoShapeManager> m_shapeManager;
+        QScopedPointer<KoSelectedShapesProxy> m_selectedShapesProxy;
         qreal m_horz;
         qreal m_vert;
 };

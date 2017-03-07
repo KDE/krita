@@ -335,6 +335,21 @@ qreal SvgUtil::parseUnitAngular(SvgGraphicsContext *gc, const QString &unit)
     return value;
 }
 
+qreal SvgUtil::parseNumber(const QString &string)
+{
+    qreal value = 0.0;
+
+    if (string.isEmpty()) return value;
+    QByteArray unitLatin1 = string.toLatin1();
+
+    const char *start = unitLatin1.data();
+    if (!start) return value;
+
+    const char *end = parseNumber(start, value);
+    KIS_SAFE_ASSERT_RECOVER_NOOP(int(end - start) == string.length());
+    return value;
+}
+
 const char * SvgUtil::parseNumber(const char *ptr, qreal &number)
 {
     int integer, exponent;
@@ -387,6 +402,24 @@ const char * SvgUtil::parseNumber(const char *ptr, qreal &number)
     number *= sign * pow((double)10, double(expsign * exponent));
 
     return ptr;
+}
+
+QString SvgUtil::mapExtendedShapeTag(const QString &tagName, const KoXmlElement &element)
+{
+    QString result = tagName;
+
+    if (tagName == "path") {
+        QString kritaType = element.attribute("krita:type", "");
+        QString sodipodiType = element.attribute("sodipodi:type", "");
+
+        if (kritaType == "arc") {
+            result = "krita:arc";
+        } else if (sodipodiType == "arc") {
+            result = "sodipodi:arc";
+        }
+    }
+
+    return result;
 }
 
 SvgUtil::PreserveAspectRatioParser::PreserveAspectRatioParser(const QString &str)

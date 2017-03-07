@@ -36,6 +36,7 @@
 #include <KoSelection.h>
 #include <KoShapeController.h>
 #include <KoShapeManager.h>
+#include <KoSelectedShapesProxy.h>
 #include <KoShapeGroup.h>
 #include <KoShapeLayer.h>
 #include <KoShapePaste.h>
@@ -311,8 +312,7 @@ DefaultTool::DefaultTool(KoCanvasBase *canvas)
     m_sizeCursors[6] = Qt::SizeHorCursor;
     m_sizeCursors[7] = Qt::SizeFDiagCursor;
 
-    KoShapeManager *manager = canvas->shapeManager();
-    connect(manager, SIGNAL(selectionChanged()), this, SLOT(updateActions()));
+    connect(canvas->selectedShapesProxy(), SIGNAL(selectionChanged()), this, SLOT(updateActions()));
 }
 
 DefaultTool::~DefaultTool()
@@ -717,10 +717,9 @@ void DefaultTool::mouseReleaseEvent(KoPointerEvent *event)
 
 void DefaultTool::mouseDoubleClickEvent(KoPointerEvent *event)
 {
-    KoShapeManager *shapeManager = canvas()->shapeManager();
-    KoSelection *selection = shapeManager->selection();
+    KoSelection *selection = canvas()->selectedShapesProxy()->selection();
 
-    KoShape *shape = shapeManager->shapeAt(event->point, KoFlake::ShapeOnTop);
+    KoShape *shape = canvas()->shapeManager()->shapeAt(event->point, KoFlake::ShapeOnTop);
     if (shape && !selection->isSelected(shape)) {
 
         if (!(event->modifiers() & Qt::ShiftModifier)) {
@@ -825,7 +824,7 @@ void DefaultTool::repaintDecorations()
 
 void DefaultTool::copy() const
 {
-    QList<KoShape *> shapes = canvas()->shapeManager()->selection()->selectedShapes();
+    QList<KoShape *> shapes = canvas()->selectedShapesProxy()->selection()->selectedShapes();
     if (!shapes.empty()) {
         KoShapeOdfSaveHelper saveHelper(shapes);
         KoDrag drag;
@@ -837,7 +836,7 @@ void DefaultTool::copy() const
 void DefaultTool::deleteSelection()
 {
     QList<KoShape *> shapes;
-    foreach (KoShape *s, canvas()->shapeManager()->selection()->selectedShapes()) {
+    foreach (KoShape *s, canvas()->selectedShapesProxy()->selection()->selectedShapes()) {
         if (s->isGeometryProtected()) {
             continue;
         }
@@ -864,8 +863,8 @@ QStringList DefaultTool::supportedPasteMimeTypes() const
 KoSelection *DefaultTool::koSelection()
 {
     Q_ASSERT(canvas());
-    Q_ASSERT(canvas()->shapeManager());
-    return canvas()->shapeManager()->selection();
+    Q_ASSERT(canvas()->selectedShapesProxy());
+    return canvas()->selectedShapesProxy()->selection();
 }
 
 KoFlake::SelectionHandle DefaultTool::handleAt(const QPointF &point, bool *innerHandleMeaning)
@@ -1040,7 +1039,7 @@ void DefaultTool::selectionGroup()
 
 void DefaultTool::selectionUngroup()
 {
-    KoSelection *selection = canvas()->shapeManager()->selection();
+    KoSelection *selection = canvas()->selectedShapesProxy()->selection();
     if (!selection) {
         return;
     }
@@ -1075,7 +1074,7 @@ void DefaultTool::selectionUngroup()
 
 void DefaultTool::selectionAlign(KoShapeAlignCommand::Align align)
 {
-    KoSelection *selection = canvas()->shapeManager()->selection();
+    KoSelection *selection = canvas()->selectedShapesProxy()->selection();
     if (!selection) {
         return;
     }
@@ -1130,7 +1129,7 @@ void DefaultTool::selectionSendToBack()
 
 void DefaultTool::selectionReorder(KoShapeReorderCommand::MoveShapeType order)
 {
-    KoSelection *selection = canvas()->shapeManager()->selection();
+    KoSelection *selection = canvas()->selectedShapesProxy()->selection();
     if (!selection) {
         return;
     }

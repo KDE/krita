@@ -67,7 +67,6 @@ private:
     QPointF documentToViewport(const QPointF &p);
     KoCanvasController *m_controller;
     QPointF m_lastPosition;
-    bool m_temporary;
     Q_DECLARE_PRIVATE(KoToolBase)
 };
 

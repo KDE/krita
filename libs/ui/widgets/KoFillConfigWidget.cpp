@@ -39,18 +39,16 @@
 #include "KoResourceServerAdapter.h"
 #include "KoResourceSelector.h"
 #include <KoSelection.h>
-#include <KoToolManager.h>
 #include <KoCanvasBase.h>
-#include <KoCanvasController.h>
 #include <KoCanvasResourceManager.h>
 #include <KoDocumentResourceManager.h>
 #include <KoShape.h>
-#include <KoShapeManager.h>
 #include <KoShapeController.h>
 #include <KoShapeBackground.h>
 #include <KoShapeBackgroundCommand.h>
 #include <KoShapeStrokeCommand.h>
 #include <KoShapeStroke.h>
+#include <KoSelectedShapesProxy.h>
 #include <KoColorBackground.h>
 #include <KoGradientBackground.h>
 #include <KoPatternBackground.h>
@@ -209,20 +207,18 @@ public:
     std::vector<KisAcyclicSignalConnector::Blocker> deactivationLocks;
 };
 
-KoFillConfigWidget::KoFillConfigWidget(KoFlake::FillVariant fillVariant, QWidget *parent)
+KoFillConfigWidget::KoFillConfigWidget(KoCanvasBase *canvas, KoFlake::FillVariant fillVariant, QWidget *parent)
     :  QWidget(parent)
     , d(new Private(fillVariant))
 {
-    // connect to the canvas
-    KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
-    d->canvas = canvasController->canvas();
+    d->canvas = canvas;
 
     d->shapeChangedAcyclicConnector.connectBackwardVoid(
-                d->canvas->shapeManager()->selection(), SIGNAL(selectionChanged()),
+                d->canvas->selectedShapesProxy(), SIGNAL(selectionChanged()),
                 this, SLOT(shapeChanged()));
 
     d->shapeChangedAcyclicConnector.connectBackwardVoid(
-                d->canvas->shapeManager(), SIGNAL(selectionContentChanged()),
+                d->canvas->selectedShapesProxy(), SIGNAL(selectionContentChanged()),
                 this, SLOT(shapeChanged()));
 
     d->resourceManagerAcyclicConnector.connectBackwardResourcePair(
@@ -390,8 +386,7 @@ void KoFillConfigWidget::slotCanvasResourceChanged(int key, const QVariant &valu
 
 QList<KoShape*> KoFillConfigWidget::currentShapes()
 {
-
-    return d->canvas->shapeManager()->selection()->selectedEditableShapes();
+    return d->canvas->selectedShapesProxy()->selection()->selectedEditableShapes();
 }
 
 void KoFillConfigWidget::styleButtonPressed(int buttonId)
@@ -462,8 +457,7 @@ void KoFillConfigWidget::noColorSelected()
     KUndo2Command *command = wrapper.setColor(QColor());
 
     if (command) {
-        KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
-        canvasController->canvas()->addCommand(command);
+        d->canvas->addCommand(command);
     }
 
     emit sigFillChanged();
@@ -483,9 +477,8 @@ void KoFillConfigWidget::colorChanged()
     KoShapeFillWrapper wrapper(selectedShapes, d->fillVariant);
     KUndo2Command *command = wrapper.setColor(d->colorAction->currentColor());
 
-    KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
     if (command) {
-        canvasController->canvas()->addCommand(command);
+        d->canvas->addCommand(command);
     }
 
     emit sigInternalRequestColorToResourceManager();
@@ -515,8 +508,7 @@ void KoFillConfigWidget::slotProposeCurrentColorToResourceManager()
     }
 
     if (hasColor) {
-        KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
-        canvasController->canvas()->resourceManager()->setResource(colorSlot, QVariant::fromValue(color));
+        d->canvas->resourceManager()->setResource(colorSlot, QVariant::fromValue(color));
     }
 }
 
@@ -633,8 +625,7 @@ void KoFillConfigWidget::setNewGradientBackgroundToShape()
     KUndo2Command *command = wrapper.applyGradientStopsOnly(srcQGradient.data());
 
     if (command) {
-        KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
-        canvasController->canvas()->addCommand(command);
+        d->canvas->addCommand(command);
     }
 
     emit sigFillChanged();
@@ -673,27 +664,24 @@ void KoFillConfigWidget::patternChanged(QSharedPointer<KoShapeBackground>  backg
         return;
     }
 
-    KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
-    KoImageCollection *imageCollection = canvasController->canvas()->shapeController()->resourceManager()->imageCollection();
+    KoImageCollection *imageCollection = d->canvas->shapeController()->resourceManager()->imageCollection();
     if (imageCollection) {
         QSharedPointer<KoPatternBackground> fill(new KoPatternBackground(imageCollection));
         fill->setPattern(patternBackground->pattern());
-        canvasController->canvas()->addCommand(new KoShapeBackgroundCommand(selectedShapes, fill));
+        d->canvas->addCommand(new KoShapeBackgroundCommand(selectedShapes, fill));
     }
 #endif
 }
 
 void KoFillConfigWidget::loadCurrentFillFromResourceServer()
 {
-    KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
-
     {
-        KoColor color = canvasController->canvas()->resourceManager()->backgroundColor();
+        KoColor color = d->canvas->resourceManager()->backgroundColor();
         slotCanvasResourceChanged(KoCanvasResourceManager::BackgroundColor, QVariant::fromValue(color));
     }
 
     {
-        KoColor color = canvasController->canvas()->resourceManager()->foregroundColor();
+        KoColor color = d->canvas->resourceManager()->foregroundColor();
         slotCanvasResourceChanged(KoCanvasResourceManager::ForegroundColor, QVariant::fromValue(color));
     }
 

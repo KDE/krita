@@ -33,6 +33,7 @@
 #include "KoShapeLayer.h"
 #include "KoShapeRegistry.h"
 #include "KoShapeManager.h"
+#include "KoSelectedShapesProxy.h"
 #include "KoCanvasBase.h"
 #include "KoInputDeviceHandlerRegistry.h"
 #include "KoInputDeviceHandlerEvent.h"
@@ -861,7 +862,7 @@ void KoToolManager::Private::attachCanvas(KoCanvasController *controller)
     Connector *connector = new Connector(controller->canvas()->shapeManager());
     connect(connector, SIGNAL(selectionChanged(QList<KoShape*>)), q,
             SLOT(selectionChanged(QList<KoShape*>)));
-    connect(controller->canvas()->shapeManager()->selection(),
+    connect(controller->canvas()->selectedShapesProxy(),
             SIGNAL(currentLayerChanged(const KoShapeLayer*)),
             q, SLOT(currentLayerChanged(const KoShapeLayer*)));
 

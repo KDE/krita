@@ -108,6 +108,10 @@ public:
     /// parses the number into parameter number
     static const char * parseNumber(const char *ptr, qreal &number);
 
+    static qreal parseNumber(const QString &string);
+
+    static QString mapExtendedShapeTag(const QString &tagName, const KoXmlElement &element);
+
     struct PreserveAspectRatioParser
     {
         PreserveAspectRatioParser(const QString &str);

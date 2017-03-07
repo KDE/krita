@@ -29,7 +29,7 @@
 #include <KoSelection.h>
 #include <KoShapeShadow.h>
 #include <KoShapeShadowCommand.h>
-#include <KoShapeManager.h>
+#include <KoSelectedShapesProxy.h>
 
 #include <klocalizedstring.h>
 
@@ -158,7 +158,7 @@ void KoShadowConfigWidget::visibilityChanged()
 void KoShadowConfigWidget::applyChanges()
 {
     if (d->canvas) {
-        KoSelection *selection = d->canvas->shapeManager()->selection();
+        KoSelection *selection = d->canvas->selectedShapesProxy()->selection();
         KoShape * shape = selection->firstSelectedShape();
         if (! shape) {
             return;
@@ -179,7 +179,7 @@ void KoShadowConfigWidget::selectionChanged()
         return;
     }
 
-    KoSelection *selection = d->canvas->shapeManager()->selection();
+    KoSelection *selection = d->canvas->selectedShapesProxy()->selection();
     KoShape * shape = selection->firstSelectedShape();
 
     setEnabled(shape != 0);
@@ -204,8 +204,8 @@ void KoShadowConfigWidget::selectionChanged()
 void KoShadowConfigWidget::setCanvas(KoCanvasBase *canvas)
 {
     d->canvas = canvas;
-    connect(canvas->shapeManager(), SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
-    connect(canvas->shapeManager(), SIGNAL(selectionContentChanged()), this, SLOT(selectionChanged()));
+    connect(canvas->selectedShapesProxy(), SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
+    connect(canvas->selectedShapesProxy(), SIGNAL(selectionContentChanged()), this, SLOT(selectionChanged()));
 
     setUnit(canvas->unit());
 

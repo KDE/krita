@@ -787,6 +787,7 @@ void KisView::resetImageSizeAndScroll(bool changeCentering,
 void KisView::setCurrentNode(KisNodeSP node)
 {
     d->currentNode = node;
+    d->canvas.slotTrySwitchShapeManager();
 }
 
 KisNodeSP KisView::currentNode() const

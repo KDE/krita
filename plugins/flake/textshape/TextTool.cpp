@@ -50,6 +50,7 @@
 #include <KoCanvasResourceManager.h>
 #include <KoSelection.h>
 #include <KoShapeManager.h>
+#include <KoSelectedShapesProxy.h>
 #include <KoPointerEvent.h>
 #include <KoColor.h>
 #include <KoColorBackground.h>
@@ -202,7 +203,7 @@ TextTool::TextTool(KoCanvasBase *canvas)
         }
     }
 
-    connect(canvas->shapeManager()->selection(), SIGNAL(selectionChanged()), this, SLOT(shapeAddedToCanvas()));
+    connect(canvas->selectedShapesProxy(), SIGNAL(selectionChanged()), this, SLOT(shapeAddedToCanvas()));
 
     m_caretTimer.setInterval(500);
     connect(&m_caretTimer, SIGNAL(timeout()), this, SLOT(blinkCaret()));
@@ -867,7 +868,7 @@ void TextTool::mousePressEvent(KoPointerEvent *event)
 
     updateSelectedShape(event->point, shiftPressed);
 
-    KoSelection *selection = canvas()->shapeManager()->selection();
+    KoSelection *selection = canvas()->selectedShapesProxy()->selection();
     if (m_textShape && !selection->isSelected(m_textShape) && m_textShape->isSelectable()) {
         selection->deselectAll();
         selection->select(m_textShape);
@@ -2789,7 +2790,7 @@ void TextTool::shapeAddedToCanvas()
 {
     qDebug();
     if (m_textShape) {
-        KoSelection *selection = canvas()->shapeManager()->selection();
+        KoSelection *selection = canvas()->selectedShapesProxy()->selection();
         KoShape *shape = selection->firstSelectedShape();
         if (shape != m_textShape && canvas()->shapeManager()->shapes().contains(m_textShape)) {
             // this situation applies when someone, not us, changed the selection by selecting another

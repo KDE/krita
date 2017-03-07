@@ -41,6 +41,7 @@
 #include <KoViewConverter.h>
 #include <KoSelection.h>
 #include <KoShapeManager.h>
+#include <KoSelectedShapesProxy.h>
 #include <KoShapeStroke.h>
 #include <KoColorSpace.h>
 #include <KoCompositeOp.h>
@@ -231,9 +232,7 @@ void KisSelectionManager::setView(QPointer<KisView>imageView)
 
     m_imageView = imageView;
     if (m_imageView) {
-        KoSelection * selection = m_imageView->canvasBase()->globalShapeManager()->selection();
-        Q_ASSERT(selection);
-        connect(selection, SIGNAL(selectionChanged()), this, SLOT(shapeSelectionChanged()));
+        connect(m_imageView->canvasBase()->selectedShapesProxy(), SIGNAL(selectionChanged()), this, SLOT(shapeSelectionChanged()));
 
         KisSelectionDecoration* decoration = qobject_cast<KisSelectionDecoration*>(m_imageView->canvasBase()->decoration("selection").data());
         if (!decoration) {
@@ -268,8 +267,8 @@ bool KisSelectionManager::havePixelsInClipboard()
 
 bool KisSelectionManager::haveShapesSelected()
 {
-    if (m_view && m_view->canvasBase() && m_view->canvasBase()->shapeManager() && m_view->canvasBase()->shapeManager()->selection()->count()) {
-        return m_view->canvasBase()->shapeManager()->selection()->count() > 0;
+    if (m_view && m_view->canvasBase()) {
+        return m_view->canvasBase()->selectedShapesProxy()->selection()->count() > 0;
     }
     return false;
 }

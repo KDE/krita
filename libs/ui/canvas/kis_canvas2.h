@@ -104,7 +104,13 @@ public: // KoCanvasBase implementation
      * layer's canvas' shapemanager, else the shapemanager associated
      * with the global krita canvas.
      */
-    KoShapeManager * shapeManager() const;
+    KoShapeManager * shapeManager() const override;
+
+    /**
+     * Since shapeManager() may change, we need a persistent object where we can
+     * connect to and thack the selection. See more comments in KoCanvasBase.
+     */
+    KoSelectedShapesProxy *selectedShapesProxy() const override;
 
     /**
      * Return the shape manager associated with this canvas
@@ -225,6 +231,8 @@ public Q_SLOTS:
      */
     void slotSetDisplayProfile(const KoColorProfile *profile);
     void startUpdateInPatches(const QRect &imageRect);
+
+    void slotTrySwitchShapeManager();
 
 private Q_SLOTS:
 

@@ -34,7 +34,6 @@ class KoSelection;
 class KoViewConverter;
 class KoCanvasBase;
 class KoPointerEvent;
-class KoShapeManagerPaintingStrategy;
 class KoShapePaintingContext;
 
 
@@ -179,16 +178,13 @@ public:
      * @param painter the painter to paint to.
      * @param converter to convert between document and view coordinates.
      */
-    void paintShape(KoShape *shape, QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext);
+    static void paintShape(KoShape *shape, QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext);
 
     /**
-     * Set the strategy of the KoShapeManager
-     *
-     * This can be used to change the behaviour of the painting of the shapes.
-     * @param strategy the new strategy. The ownership of the argument \p
-     *    strategy will be taken by the shape manager.
+     * @brief renderSingleShape renders a shape on \p painter. This method includes all the
+     * needed steps for painting a single shape: setting transformations, clipping and masking.
      */
-    void setPaintingStrategy(KoShapeManagerPaintingStrategy *strategy);
+    static void renderSingleShape(KoShape *shape, QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext);
 
 Q_SIGNALS:
     /// emitted when the selection is changed
@@ -203,8 +199,6 @@ Q_SIGNALS:
     void shapeChanged(KoShape *);
 
 private:
-
-    friend class KoShapeManagerPaintingStrategy;
     KoCanvasBase *canvas();
 
 

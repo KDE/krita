@@ -26,7 +26,6 @@
 #include "KoShape.h"
 #include "KoShape_p.h"
 #include "KoShapeContainer.h"
-#include "KoShapeManagerPaintingStrategy.h"
 #include <KoRTree.h>
 
 class KoShapeManager;
@@ -42,14 +41,12 @@ public:
         : selection(new KoSelection()),
           canvas(c),
           tree(4, 2),
-          strategy(new KoShapeManagerPaintingStrategy(shapeManager)),
           q(shapeManager)
     {
     }
 
     ~Private() {
         delete selection;
-        delete strategy;
     }
 
     /**
@@ -63,7 +60,7 @@ public:
      * This is needed for filter effects on group shapes where the filter effect
      * applies to all the children of the group shape at once
      */
-    void paintGroup(KoShapeGroup *group, QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext);
+    static void paintGroup(KoShapeGroup *group, QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext);
 
     class DetectCollision
     {
@@ -104,7 +101,6 @@ public:
     KoRTree<KoShape *> tree;
     QSet<KoShape *> aggregate4update;
     QHash<KoShape*, int> shapeIndexesBeforeUpdate;
-    KoShapeManagerPaintingStrategy *strategy;
     KoShapeManager *q;
 };
 

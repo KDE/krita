@@ -32,7 +32,6 @@
 #include "KoShapeStrokeModel.h"
 #include "KoShapeGroup.h"
 #include "KoToolProxy.h"
-#include "KoShapeManagerPaintingStrategy.h"
 #include "KoShapeShadow.h"
 #include "KoShapeLayer.h"
 #include "KoFilterEffect.h"
@@ -44,6 +43,7 @@
 #include "KoClipMaskPainter.h"
 #include "KoShapePaintingContext.h"
 #include "KoViewConverter.h"
+#include "KisQPainterStateSaver.h"
 
 #include <QPainter>
 #include <QTimer>
@@ -68,7 +68,6 @@ void KoShapeManager::Private::updateTree()
     foreach (KoShape *shape, aggregate4update) {
         tree.remove(shape);
         QRectF br(shape->boundingRect());
-        strategy->adapt(shape, br);
         tree.insert(br, shape);
     }
 
@@ -100,7 +99,7 @@ void KoShapeManager::Private::paintGroup(KoShapeGroup *group, QPainter &painter,
             paintGroup(childGroup, painter, converter, paintContext);
         } else {
             painter.save();
-            strategy->paint(child, painter, converter, paintContext);
+            KoShapeManager::renderSingleShape(child, painter, converter, paintContext);
             painter.restore();
         }
     }
@@ -264,20 +263,10 @@ void KoShapeManager::paint(QPainter &painter, const KoViewConverter &converter, 
 
     qSort(sortedShapes.begin(), sortedShapes.end(), KoShape::compareShapeZIndex);
 
+    KoShapePaintingContext paintContext(d->canvas, forPrint); //FIXME
+
     foreach (KoShape *shape, sortedShapes) {
-        if (shape->parent() != 0 && shape->parent()->isClipped(shape))
-            continue;
-
-        painter.save();
-
-        // apply shape clipping
-        KoClipPath::applyClipping(shape, painter, converter);
-
-        // let the painting strategy paint the shape
-        KoShapePaintingContext paintContext(d->canvas, forPrint); //FIXME
-        d->strategy->paint(shape, painter, converter, paintContext);
-
-        painter.restore();
+        renderSingleShape(shape, painter, converter, paintContext);
     }
 
 #ifdef CALLIGRA_RTREE_DEBUG
@@ -296,7 +285,21 @@ void KoShapeManager::paint(QPainter &painter, const KoViewConverter &converter, 
         d->selection->paint(painter, converter, paintContext);
     }
 }
-#include "kis_debug.h"
+
+void KoShapeManager::renderSingleShape(KoShape *shape, QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext)
+{
+    KisQPainterStateSaver saver(&painter);
+
+    // apply shape clipping
+    KoClipPath::applyClipping(shape, painter, converter);
+
+    // apply transformation
+    painter.setTransform(shape->absoluteTransformation(&converter) * painter.transform());
+
+    // paint the shape
+    paintShape(shape, painter, converter, paintContext);
+}
+
 void KoShapeManager::paintShape(KoShape *shape, QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext)
 {
     qreal transparency = shape->transparency(true);
@@ -368,7 +371,7 @@ void KoShapeManager::paintShape(KoShape *shape, QPainter &painter, const KoViewC
                 // the childrens matrix contains the groups matrix as well
                 // so we have to compensate for that before painting the children
                 imagePainter.setTransform(group->absoluteTransformation(&converter).inverted(), true);
-                d->paintGroup(group, imagePainter, converter, paintContext);
+                Private::paintGroup(group, imagePainter, converter, paintContext);
             } else {
                 imagePainter.save();
                 shape->paint(imagePainter, converter, paintContext);
@@ -578,12 +581,6 @@ QList<KoShape*> KoShapeManager::topLevelShapes() const
 KoSelection *KoShapeManager::selection() const
 {
     return d->selection;
-}
-
-void KoShapeManager::setPaintingStrategy(KoShapeManagerPaintingStrategy *strategy)
-{
-    delete d->strategy;
-    d->strategy = strategy;
 }
 
 KoCanvasBase *KoShapeManager::canvas()

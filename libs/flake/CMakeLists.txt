@@ -38,7 +38,6 @@ set(kritaflake_SRCS
     KoShapeContainer.cpp
     KoShapeContainerModel.cpp
     KoShapeGroup.cpp
-    KoShapeManagerPaintingStrategy.cpp
     KoShapeManager.cpp
     KoShapePaintingContext.cpp
     KoFrameShape.cpp

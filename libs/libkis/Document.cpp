@@ -172,12 +172,10 @@ bool Document::setColorSpace(const QString &colorModel, const QString &colorDept
     if (!colorSpace) return false;
     d->document->image()->lock();
 
+    d->document->image()->convertImageColorSpace(colorSpace,
+                                                 KoColorConversionTransformation::IntentPerceptual,
+                                                 KoColorConversionTransformation::HighQuality | KoColorConversionTransformation::NoOptimization);
 
-    KisColorSpaceConvertVisitor visitor(d->document->image(),
-                                        d->document->image()->colorSpace(),
-                                        colorSpace,
-                                        KoColorConversionTransformation::IntentPerceptual,
-                                        KoColorConversionTransformation::HighQuality | KoColorConversionTransformation::NoOptimization);
     d->document->image()->unlock();
     d->document->image()->setModified();
     d->document->image()->initialRefreshGraph();
@@ -471,6 +469,3 @@ QPointer<KisDocument> Document::document() const
 {
     return d->document;
 }
-
-
-

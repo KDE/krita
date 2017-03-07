@@ -15,7 +15,7 @@ public Q_SLOTS:
     QString colorModel() const;
     QString colorProfile() const;
     bool setColorProfile(const QString &colorProfile);
-    void setColorSpace(const QString &value, const QString &colorDepth, const QString &colorProfile);
+    bool setColorSpace(const QString &value, const QString &colorDepth, const QString &colorProfile);
     QString documentInfo() const;
     void setDocumentInfo(const QString &document);
     QString fileName() const;

@@ -70,6 +70,8 @@ struct KisPaintInformation::Private {
     }
 
     void copy(const Private &rhs) {
+        KIS_ASSERT(!rhs.currentDistanceInfo);
+
         pos = rhs.pos;
         pressure = rhs.pressure;
         xTilt = rhs.xTilt;

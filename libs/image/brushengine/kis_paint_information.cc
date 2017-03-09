@@ -130,9 +130,18 @@ DistanceInformationRegistrar(KisPaintInformation *_p, KisDistanceInformation *di
 }
 
 KisPaintInformation::DistanceInformationRegistrar::
+DistanceInformationRegistrar(KisPaintInformation::DistanceInformationRegistrar &&rhs)
+    : p(rhs.p)
+{
+    rhs.p = 0;
+}
+
+KisPaintInformation::DistanceInformationRegistrar::
 ~DistanceInformationRegistrar()
 {
-    p->d->unregisterDistanceInfo();
+    if (p) {
+        p->d->unregisterDistanceInfo();
+    }
 }
 
 KisPaintInformation::KisPaintInformation(const QPointF & pos,

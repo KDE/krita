@@ -167,6 +167,7 @@ private Q_SLOTS:
     void testSodipodiArcShape();
     void testSodipodiArcShapeOpen();
     void testKritaChordShape();
+    void testSodipodiChordShape();
 };
 
 #endif // TESTSVGPARSER_H

@@ -425,10 +425,6 @@ QString EllipseShape::pathShapeId() const
     return EllipseShapeId;
 }
 
-QByteArray buildNamespace(const QString &ns, const QString &tag) {
-    return (ns + ":" + tag).toLatin1();
-}
-
 bool EllipseShape::saveSvg(SvgSavingContext &context)
 {
     if (type() == EllipseShape::Arc && startAngle() == endAngle()) {
@@ -451,50 +447,30 @@ bool EllipseShape::saveSvg(SvgSavingContext &context)
 
         context.shapeWriter().endElement();
     } else {
-        const QString extendedNamespace =
-                type() == Arc || type() == Pie ? "sodipodi" : "krita";
-
         context.shapeWriter().startElement("path");
         context.shapeWriter().addAttribute("id", context.getID(this));
         context.shapeWriter().addAttribute("transform", SvgUtil::transformToString(transformation()));
 
-        context.shapeWriter().addAttribute(buildNamespace(extendedNamespace, "type"), "arc");
+        context.shapeWriter().addAttribute("sodipodi:type", "arc");
 
-        context.shapeWriter().addAttributePt(buildNamespace(extendedNamespace, "rx"), m_radii.x());
-        context.shapeWriter().addAttributePt(buildNamespace(extendedNamespace, "ry"), m_radii.y());
+        context.shapeWriter().addAttributePt("sodipodi:rx", m_radii.x());
+        context.shapeWriter().addAttributePt("sodipodi:ry", m_radii.y());
 
-        context.shapeWriter().addAttributePt(buildNamespace(extendedNamespace, "cx"), m_center.x());
-        context.shapeWriter().addAttributePt(buildNamespace(extendedNamespace, "cy"), m_center.y());
+        context.shapeWriter().addAttributePt("sodipodi:cx", m_center.x());
+        context.shapeWriter().addAttributePt("sodipodi:cy", m_center.y());
 
-        context.shapeWriter().addAttribute(buildNamespace(extendedNamespace, "start"), 2 * M_PI - kisDegreesToRadians(endAngle()));
-        context.shapeWriter().addAttribute(buildNamespace(extendedNamespace, "end"), 2 * M_PI - kisDegreesToRadians(startAngle()));
+        context.shapeWriter().addAttribute("sodipodi:start", 2 * M_PI - kisDegreesToRadians(endAngle()));
+        context.shapeWriter().addAttribute("sodipodi:end", 2 * M_PI - kisDegreesToRadians(startAngle()));
 
-        if (extendedNamespace == "krita") {
-            QString arcType;
-
-            switch (type()) {
-            case Arc:
-                arcType = "arc";
-                break;
-            case Pie:
-                arcType = "pie";
-                break;
-            case Chord:
-                arcType = "chord";
-                break;
-            }
-
-            context.shapeWriter().addAttribute(buildNamespace(extendedNamespace, "arcType"), arcType);
-        } else {
-            switch (type()) {
-            case Pie:
-                // noop
-                break;
-            case Arc:
-            case Chord:
-                context.shapeWriter().addAttribute(buildNamespace(extendedNamespace, "open"), "true");
-                break;
-            }
+        switch (type()) {
+        case Pie:
+            // noop
+            break;
+        case Chord:
+            context.shapeWriter().addAttribute("sodipodi:arc-type", "chord");
+        case Arc:
+            context.shapeWriter().addAttribute("sodipodi:open", "true");
+            break;
         }
 
         context.shapeWriter().addAttribute("d", this->toString(context.userSpaceTransform()));
@@ -538,7 +514,8 @@ bool EllipseShape::loadSvg(const KoXmlElement &element, SvgLoadingContext &conte
         start = 2 * M_PI - SvgUtil::parseNumber(element.attribute(extendedNamespace + ":end"));
         end = 2 * M_PI - SvgUtil::parseNumber(element.attribute(extendedNamespace + ":start"));
 
-        const QString kritaArcType = element.attribute("krita:arcType");
+        const QString kritaArcType =
+            element.attribute("sodipodi:arc-type", element.attribute("krita:arcType"));
 
         if (kritaArcType.isEmpty()) {
             if (element.attribute("sodipodi:open", "false") == "false") {

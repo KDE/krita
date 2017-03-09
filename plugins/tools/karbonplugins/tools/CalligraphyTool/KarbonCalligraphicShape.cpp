@@ -319,10 +319,15 @@ void KarbonCalligraphicShape::updatePath(const QSizeF &size)
     m_strokeDistance = new KisDistanceInformation(QPoint(), 0.0);
     Q_FOREACH (KarbonCalligraphicPoint *p, m_points) {
 
-        KisPaintInformation::DistanceInformationRegistrar r = p->paintInfo().registerDistanceInformation(m_strokeDistance);
-        m_strokeDistance->registerPaintedDab(p->paintInfo(), KisSpacingInformation(1.0));
+        {
+            KisPaintInformation::DistanceInformationRegistrar r = p->paintInfo()->registerDistanceInformation(m_strokeDistance);
+            // NOTE: only in this scope you can use all the methods of the painting information, including drawingAngle(), distance and speed.
+            appendPointToPath(*p);
+        }
 
-        appendPointToPath(*p);
+        // after the point is "painter" it should be added to the distance information as the "previous" point
+        m_strokeDistance->registerPaintedDab(*p->paintInfo(), KisSpacingInformation(1.0));
+
         pLast=p;
     }
 

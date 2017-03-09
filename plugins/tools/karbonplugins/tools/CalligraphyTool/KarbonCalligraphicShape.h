@@ -44,12 +44,12 @@ public:
         return m_paintInfo.pressure()*20.0;
     }
 
-    KisPaintInformation paintInfo()
+    KisPaintInformation* paintInfo()
     {
-        return m_paintInfo;
+        return &m_paintInfo;
     }
 
-    void setPaintInfo(KisPaintInformation &paintInfo)
+    void setPaintInfo(const KisPaintInformation &paintInfo)
     {
         m_paintInfo = paintInfo;
     }

@@ -1007,20 +1007,14 @@ void DefaultTool::selectionGroup()
         return;
     }
 
-    QList<KoShape *> selectedShapes = selection->selectedShapes();
-    QList<KoShape *> groupedShapes;
+    QList<KoShape *> selectedShapes = selection->selectedEditableShapes();
+    qSort(selectedShapes.begin(), selectedShapes.end(), KoShape::compareShapeZIndex);
 
-    // only group shapes with an unselected parent
-    foreach (KoShape *shape, selectedShapes) {
-        if (!selectedShapes.contains(shape->parent()) && shape->isEditable()) {
-            groupedShapes << shape;
-        }
-    }
     KoShapeGroup *group = new KoShapeGroup();
     // TODO what if only one shape is left?
     KUndo2Command *cmd = new KUndo2Command(kundo2_i18n("Group shapes"));
     canvas()->shapeController()->addShapeDirect(group, cmd);
-    new KoShapeGroupCommand(group, groupedShapes, false, true, true, cmd);
+    new KoShapeGroupCommand(group, selectedShapes, false, true, true, cmd);
     canvas()->addCommand(cmd);
 
     // update selection so we can ungroup immediately again
@@ -1035,20 +1029,13 @@ void DefaultTool::selectionUngroup()
         return;
     }
 
-    QList<KoShape *> selectedShapes = selection->selectedShapes();
-    QList<KoShape *> containerSet;
-
-    // only ungroup shape groups with an unselected parent
-    foreach (KoShape *shape, selectedShapes) {
-        if (!selectedShapes.contains(shape->parent()) && shape->isEditable()) {
-            containerSet << shape;
-        }
-    }
+    QList<KoShape *> selectedShapes = selection->selectedEditableShapes();
+    qSort(selectedShapes.begin(), selectedShapes.end(), KoShape::compareShapeZIndex);
 
     KUndo2Command *cmd = 0;
 
     // add a ungroup command for each found shape container to the macro command
-    Q_FOREACH (KoShape *shape, containerSet) {
+    Q_FOREACH (KoShape *shape, selectedShapes) {
         KoShapeGroup *group = dynamic_cast<KoShapeGroup *>(shape);
         if (group) {
             cmd = cmd ? cmd : new KUndo2Command(kundo2_i18n("Ungroup shapes"));

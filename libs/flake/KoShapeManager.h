@@ -99,25 +99,12 @@ public Q_SLOTS:
      */
     void addShape(KoShape *shape, KoShapeManager::Repaint repaint = PaintShapeOnAdd);
 
-    /**
-     * Add an additional shape to the manager.
-     *
-     * For additional shapes only updates are handled
-     */
-    void addAdditional(KoShape *shape);
 
     /**
      * Remove a KoShape from this manager
      * @param shape the shape to remove
      */
     void remove(KoShape *shape);
-
-    /**
-     * Remove an additional shape
-     *
-     * For additional shapes only updates are handled
-     */
-    void removeAdditional(KoShape *shape);
 
 public:
     /// return the selection shapes for this shapeManager

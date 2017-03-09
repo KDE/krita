@@ -56,6 +56,12 @@ public:
     void updateTree();
 
     /**
+     * Returns whether the shape should be added to the RTree for collision and ROI
+     * detection.
+     */
+    bool shapeUsedInRenderingTree(KoShape *shape);
+
+    /**
      * Recursively paints the given group shape to the specified painter
      * This is needed for filter effects on group shapes where the filter effect
      * applies to all the children of the group shape at once

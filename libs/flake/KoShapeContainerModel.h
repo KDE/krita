@@ -171,6 +171,9 @@ public:
      */
     virtual void childChanged(KoShape *shape, KoShape::ChangeType type);
 
+    virtual void shapeHasBeenAddedToHierarchy(KoShape *shape, KoShapeContainer *addedToSubtree);
+    virtual void shapeToBeRemovedFromHierarchy(KoShape *shape, KoShapeContainer *removedFromSubtree);
+
 protected:
     KoShapeContainerModel(const KoShapeContainerModel &rhs);
 };

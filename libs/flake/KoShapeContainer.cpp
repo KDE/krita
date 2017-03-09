@@ -203,7 +203,8 @@ void KoShapeContainer::ShapeInterface::addShape(KoShape *shape)
 {
     KoShapeContainerPrivate * const d = q->d_func();
 
-    Q_ASSERT(shape);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(shape);
+
     if (shape->parent() == q && q->shapes().contains(shape)) {
         return;
     }
@@ -218,6 +219,7 @@ void KoShapeContainer::ShapeInterface::addShape(KoShape *shape)
     }
 
     d->model->add(shape);
+    d->model->shapeHasBeenAddedToHierarchy(shape, q);
 }
 
 void KoShapeContainer::ShapeInterface::removeShape(KoShape *shape)
@@ -228,6 +230,7 @@ void KoShapeContainer::ShapeInterface::removeShape(KoShape *shape)
     KIS_SAFE_ASSERT_RECOVER_RETURN(d->model);
     KIS_SAFE_ASSERT_RECOVER_RETURN(d->model->shapes().contains(shape));
 
+    d->model->shapeToBeRemovedFromHierarchy(shape, q);
     d->model->remove(shape);
 
     KoShapeContainer *grandparent = q->parent();

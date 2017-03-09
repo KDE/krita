@@ -51,6 +51,10 @@
 
 #include "kis_painting_tweaks.h"
 
+bool KoShapeManager::Private::shapeUsedInRenderingTree(KoShape *shape)
+{
+    return !dynamic_cast<KoShapeGroup*>(shape) && !dynamic_cast<KoShapeLayer*>(shape);
+}
 
 void KoShapeManager::Private::updateTree()
 {
@@ -66,14 +70,17 @@ void KoShapeManager::Private::updateTree()
     }
 
     foreach (KoShape *shape, aggregate4update) {
+        if (!shapeUsedInRenderingTree(shape)) continue;
+
         tree.remove(shape);
         QRectF br(shape->boundingRect());
         tree.insert(br, shape);
     }
 
     // do it again to see which shapes we intersect with _after_ moving.
-    foreach (KoShape *shape, aggregate4update)
+    foreach (KoShape *shape, aggregate4update) {
         detector.detect(tree, shape, shapeIndexesBeforeUpdate[shape]);
+    }
     aggregate4update.clear();
     shapeIndexesBeforeUpdate.clear();
 
@@ -153,7 +160,7 @@ void KoShapeManager::addShape(KoShape *shape, Repaint repaint)
         return;
     shape->priv()->addShapeManager(this);
     d->shapes.append(shape);
-    if (! dynamic_cast<KoShapeGroup*>(shape) && ! dynamic_cast<KoShapeLayer*>(shape)) {
+    if (d->shapeUsedInRenderingTree(shape)) {
         QRectF br(shape->boundingRect());
         d->tree.insert(br, shape);
     }
@@ -175,17 +182,6 @@ void KoShapeManager::addShape(KoShape *shape, Repaint repaint)
     detector.fireSignals();
 }
 
-void KoShapeManager::addAdditional(KoShape *shape)
-{
-    if (shape) {
-        if (d->additionalShapes.contains(shape)) {
-            return;
-        }
-        shape->priv()->addShapeManager(this);
-        d->additionalShapes.append(shape);
-    }
-}
-
 void KoShapeManager::remove(KoShape *shape)
 {
     Private::DetectCollision detector;
@@ -196,7 +192,9 @@ void KoShapeManager::remove(KoShape *shape)
     shape->priv()->removeShapeManager(this);
     d->selection->deselect(shape);
     d->aggregate4update.remove(shape);
-    d->tree.remove(shape);
+    if (d->shapeUsedInRenderingTree(shape)) {
+        d->tree.remove(shape);
+    }
     d->shapes.removeAll(shape);
 
     // remove the children of a KoShapeContainer
@@ -210,14 +208,6 @@ void KoShapeManager::remove(KoShape *shape)
     // This signal is used in the annotation shape.
     // FIXME: Is this really what we want?  (and shouldn't it be called shapeDeleted()?)
     shapeRemoved(shape);
-}
-
-void KoShapeManager::removeAdditional(KoShape *shape)
-{
-    if (shape) {
-        shape->priv()->removeShapeManager(this);
-        d->additionalShapes.removeAll(shape);
-    }
 }
 
 void KoShapeManager::paint(QPainter &painter, const KoViewConverter &converter, bool forPrint)

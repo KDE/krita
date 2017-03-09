@@ -252,5 +252,74 @@ void TestShapePainting::testPaintOrder()
     delete bottom;
     delete root;
 }
+#include <kundo2command.h>
+#include <KoShapeController.h>
+#include <KoShapeGroupCommand.h>
+#include <KoShapeUngroupCommand.h>
+#include "kis_debug.h"
+void TestShapePainting::testGroupUngroup()
+{
+    MockShape *shape1 = new MockShape();
+    MockShape *shape2 = new MockShape();
+    shape1->setName("shape1");
+    shape2->setName("shape2");
+
+
+    QList<KoShape*> groupedShapes = {shape1, shape2};
+
+
+    MockShapeController controller;
+    MockCanvas canvas(&controller);
+    KoShapeManager *manager = canvas.shapeManager();
+
+    controller.addShape(shape1);
+    controller.addShape(shape2);
+
+    QImage image(100, 100,  QImage::Format_Mono);
+    QPainter painter(&image);
+    painter.setClipRect(image.rect());
+    KoViewConverter vc;
+
+    KoShapeGroup *group = 0;
+
+
+    for (int i = 0; i < 3; i++) {
+        {
+            group = new KoShapeGroup();
+            group->setName("group");
+
+            KUndo2Command groupingCommand;
+            canvas.shapeController()->addShapeDirect(group, &groupingCommand);
+            new KoShapeGroupCommand(group, groupedShapes, false, true, true, &groupingCommand);
+
+            groupingCommand.redo();
+
+            manager->paint(painter, vc, false);
+
+            QCOMPARE(shape1->paintedCount, 2 * i + 1);
+            QCOMPARE(shape2->paintedCount, 2 * i + 1);
+            QCOMPARE(manager->shapes().size(), 3);
+        }
+
+        {
+            KUndo2Command ungroupingCommand;
+
+            new KoShapeUngroupCommand(group, group->shapes(), QList<KoShape*>(), &ungroupingCommand);
+            canvas.shapeController()->removeShape(group, &ungroupingCommand);
+
+            ungroupingCommand.redo();
+
+            manager->paint(painter, vc, false);
+
+            QCOMPARE(shape1->paintedCount, 2 * i + 2);
+            QCOMPARE(shape2->paintedCount, 2 * i + 2);
+            QCOMPARE(manager->shapes().size(), 2);
+
+            group = 0;
+        }
+
+    }
+}
+
 
 QTEST_MAIN(TestShapePainting)

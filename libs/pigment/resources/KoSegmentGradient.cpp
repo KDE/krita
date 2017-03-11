@@ -37,6 +37,7 @@
 
 #include <DebugPigment.h>
 #include <klocalizedstring.h>
+#include "KoColorModelStandardIds.h"
 
 KoGradientSegment::RGBColorInterpolationStrategy *KoGradientSegment::RGBColorInterpolationStrategy::m_instance = 0;
 KoGradientSegment::HSVCWColorInterpolationStrategy *KoGradientSegment::HSVCWColorInterpolationStrategy::m_instance = 0;
@@ -490,7 +491,14 @@ KoGradientSegment::RGBColorInterpolationStrategy *KoGradientSegment::RGBColorInt
 void KoGradientSegment::RGBColorInterpolationStrategy::colorAt(KoColor& dst, qreal t, const KoColor& _start, const KoColor& _end) const
 {
     //FIXME: hack to get a color space with the bitdepth of the gradients(8bit), but with the colour profile of the image//
-    const KoColorSpace* mixSpace = KoColorSpaceRegistry::instance()->rgb16(dst.colorSpace()->profile());
+    const KoColorSpace* mixSpace =
+          KoColorSpaceRegistry::instance()->colorSpace(
+              dst.colorSpace()->colorModelId().name(),
+              Integer16BitsColorDepthID.name(),
+              dst.colorSpace()->profile());
+     if (!mixSpace) {
+         mixSpace = dst.colorSpace();
+     }
     KoAbstractGradient::mixTwoColors(_start, _end, t, mixSpace, &dst);
 }
 

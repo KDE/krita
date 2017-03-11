@@ -160,8 +160,14 @@ void KoStopGradient::colorAt(KoColor& dst, qreal t) const
         //    buffer = KoColor(colorSpace());
         //}
         //hack to get a color space with the bitdepth of the gradients(8bit), but with the colour profile of the image//
-        const KoColorSpace* mixSpace = KoColorSpaceRegistry::instance()->rgb16(dst.colorSpace()->profile());
-
+        const KoColorSpace* mixSpace =
+              KoColorSpaceRegistry::instance()->colorSpace(
+                  dst.colorSpace()->colorModelId().name(),
+                  Integer16BitsColorDepthID.name(),
+                  dst.colorSpace()->profile());
+         if (!mixSpace) {
+             mixSpace = dst.colorSpace();
+         }
         const KoGradientStop& leftStop = *(stop - 1);
         const KoGradientStop& rightStop = *(stop);
 

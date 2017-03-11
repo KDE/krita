@@ -154,7 +154,6 @@ void KisOpenGL::initializeContext(QOpenGLContext *ctx)
      * Warn about Intel's broken video drivers
      */
 #if defined Q_OS_WIN
-    KisConfig cfg;
     QString renderer = KisOpenGL::renderer();
     if (cfg.useOpenGL() && renderer.startsWith("Intel") && !cfg.readEntry("WarnedAboutIntel", false)) {
         QMessageBox::information(0,

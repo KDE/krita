@@ -133,60 +133,13 @@ bool KoShapeContainer::inheritsTransform(const KoShape *shape) const
 
 void KoShapeContainer::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext)
 {
+    // Shape container paints only its internal component part. All the children are rendered
+    // by the shape manager itself
+
     Q_D(KoShapeContainer);
     painter.save();
     paintComponent(painter, converter, paintcontext);
     painter.restore();
-    if (d->model == 0 || d->model->count() == 0)
-        return;
-
-    QList<KoShape*> sortedObjects = d->model->shapes();
-    qSort(sortedObjects.begin(), sortedObjects.end(), KoShape::compareShapeZIndex);
-
-    // Do the following to revert the absolute transformation of the container
-    // that is re-applied in shape->absoluteTransformation() later on. The transformation matrix
-    // of the container has already been applied once before this function is called.
-    const QTransform baseMatrix = absoluteTransformation(&converter).inverted() * painter.transform();
-
-    // We'll use this clipRect to see if our child shapes lie within it.
-    // Because shape->boundingRect() uses absoluteTransformation(0) we'll
-    // use that as well to have the same (absolute) reference transformation
-    // of our and the child's bounding boxes.
-    const QRectF fullClipRect = boundingRect();
-
-    // clip the children to the parent outline.
-    QTransform m;
-    qreal zoomX, zoomY;
-    converter.zoom(&zoomX, &zoomY);
-    m.scale(zoomX, zoomY);
-    painter.setClipRect(m.mapRect(absoluteTransformation(0).inverted().mapRect(fullClipRect)), Qt::IntersectClip);
-
-
-    Q_FOREACH (KoShape *shape, sortedObjects) {
-        //debugFlake <<"KoShapeContainer::painting shape:" << shape->shapeId() <<"," << shape->boundingRect();
-        if (!shape->isVisible())
-            continue;
-
-        // FIXME:this line breaks painting of the grouped shapes (probably deprecate clipping?)
-        //if (!isClipped(shape))  // the shapeManager will have to draw those, or else we can't do clipRects
-        //    continue;
-
-        // don't try to draw a child shape that is not in the clipping rect of the painter.
-        if (!fullClipRect.intersects(shape->boundingRect()))
-
-            continue;
-
-        painter.save();
-        painter.setTransform(shape->absoluteTransformation(&converter) * baseMatrix);
-        shape->paint(painter, converter, paintcontext);
-        painter.restore();
-        if (shape->stroke()) {
-            painter.save();
-            painter.setTransform(shape->absoluteTransformation(&converter) * baseMatrix);
-            shape->stroke()->paint(shape, painter, converter);
-            painter.restore();
-        }
-    }
 }
 
 void KoShapeContainer::shapeChanged(ChangeType type, KoShape* shape)
@@ -250,7 +203,8 @@ void KoShapeContainer::ShapeInterface::addShape(KoShape *shape)
 {
     KoShapeContainerPrivate * const d = q->d_func();
 
-    Q_ASSERT(shape);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(shape);
+
     if (shape->parent() == q && q->shapes().contains(shape)) {
         return;
     }
@@ -265,6 +219,7 @@ void KoShapeContainer::ShapeInterface::addShape(KoShape *shape)
     }
 
     d->model->add(shape);
+    d->model->shapeHasBeenAddedToHierarchy(shape, q);
 }
 
 void KoShapeContainer::ShapeInterface::removeShape(KoShape *shape)
@@ -275,6 +230,7 @@ void KoShapeContainer::ShapeInterface::removeShape(KoShape *shape)
     KIS_SAFE_ASSERT_RECOVER_RETURN(d->model);
     KIS_SAFE_ASSERT_RECOVER_RETURN(d->model->shapes().contains(shape));
 
+    d->model->shapeToBeRemovedFromHierarchy(shape, q);
     d->model->remove(shape);
 
     KoShapeContainer *grandparent = q->parent();

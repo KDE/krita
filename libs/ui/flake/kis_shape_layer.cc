@@ -98,12 +98,20 @@ public:
 
     void add(KoShape *child) override {
         SimpleShapeContainerModel::add(child);
-        q->shapeManager()->addShape(child);
     }
 
     void remove(KoShape *child) override {
-        q->shapeManager()->remove(child);
         SimpleShapeContainerModel::remove(child);
+    }
+
+    void shapeHasBeenAddedToHierarchy(KoShape *shape, KoShapeContainer *addedToSubtree) override {
+        q->shapeManager()->addShape(shape);
+        SimpleShapeContainerModel::shapeHasBeenAddedToHierarchy(shape, addedToSubtree);
+    }
+
+    void shapeToBeRemovedFromHierarchy(KoShape *shape, KoShapeContainer *removedFromSubtree) override {
+        q->shapeManager()->remove(shape);
+        SimpleShapeContainerModel::shapeToBeRemovedFromHierarchy(shape, removedFromSubtree);
     }
 
 private:

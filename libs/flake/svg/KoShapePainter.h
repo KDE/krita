@@ -27,7 +27,6 @@
 
 class KoShape;
 class KoViewConverter;
-class KoShapeManagerPaintingStrategy;
 class QPainter;
 class QImage;
 
@@ -40,7 +39,7 @@ class QImage;
 class KRITAFLAKE_EXPORT KoShapePainter
 {
 public:
-    explicit KoShapePainter(KoShapeManagerPaintingStrategy *strategy = 0);
+    explicit KoShapePainter();
     ~KoShapePainter();
 
     /**

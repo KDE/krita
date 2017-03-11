@@ -111,8 +111,10 @@ void KoInteractionTool::keyPressEvent(QKeyEvent *event)
 void KoInteractionTool::keyReleaseEvent(QKeyEvent *event)
 {
     Q_D(KoInteractionTool);
+
     if (!d->currentStrategy) {
         KoToolBase::keyReleaseEvent(event);
+        return;
     }
 
     if (event->key() == Qt::Key_Escape) {

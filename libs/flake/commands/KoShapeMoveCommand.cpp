@@ -76,12 +76,6 @@ int KoShapeMoveCommand::id() const
     return KisCommandUtils::MoveShapeId;
 }
 
-/// update newPositions list with new postions.
-void KoShapeMoveCommand::setNewPositions(QList<QPointF> newPositions)
-{
-    d->newPositions = newPositions;
-}
-
 bool KoShapeMoveCommand::mergeWith(const KUndo2Command *command)
 {
     const KoShapeMoveCommand *other = dynamic_cast<const KoShapeMoveCommand*>(command);

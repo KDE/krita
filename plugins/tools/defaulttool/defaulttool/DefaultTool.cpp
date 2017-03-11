@@ -264,7 +264,6 @@ DefaultTool::DefaultTool(KoCanvasBase *canvas)
     , m_lastHandle(KoFlake::NoHandle)
     , m_hotPosition(KoFlake::TopLeft)
     , m_mouseWasInsideHandles(false)
-    , m_moveCommand(0)
     , m_selectionHandler(new SelectionHandler(this))
     , m_customEventStrategy(0)
     , m_tabbedOptionWidget(0)
@@ -734,6 +733,8 @@ void DefaultTool::mouseDoubleClickEvent(KoPointerEvent *event)
 
 bool DefaultTool::moveSelection(int direction, Qt::KeyboardModifiers modifiers)
 {
+    bool result = false;
+
     qreal x = 0.0, y = 0.0;
     if (direction == Qt::Key_Left) {
         x = -5;
@@ -746,6 +747,7 @@ bool DefaultTool::moveSelection(int direction, Qt::KeyboardModifiers modifiers)
     }
 
     if (x != 0.0 || y != 0.0) { // actually move
+
         if ((modifiers & Qt::ShiftModifier) != 0) {
             x *= 10;
             y *= 10;
@@ -756,35 +758,24 @@ bool DefaultTool::moveSelection(int direction, Qt::KeyboardModifiers modifiers)
 
         QList<QPointF> prevPos;
         QList<QPointF> newPos;
-        QList<KoShape *> shapes;
-        Q_FOREACH (KoShape *shape, koSelection()->selectedShapes()) {
-            if (shape->isGeometryProtected()) {
-                continue;
-            }
-            shapes.append(shape);
-            QPointF p = shape->position();
-            prevPos.append(p);
-            p.setX(p.x() + x);
-            p.setY(p.y() + y);
-            newPos.append(p);
+        QList<KoShape *> shapes = koSelection()->selectedEditableShapes();
+
+        Q_FOREACH (KoShape *shape, shapes) {
+            QPointF pos = shape->absolutePosition();
+
+            prevPos.append(pos);
+            pos.rx() += x;
+            pos.ry() += y;
+            newPos.append(pos);
         }
-        if (shapes.count() > 0) {
-            // use a timeout to make sure we don't reuse a command possibly deleted by the commandHistory
-            if (m_lastUsedMoveCommand.msecsTo(QTime::currentTime()) > 5000) {
-                m_moveCommand = 0;
-            }
-            if (m_moveCommand) { // alter previous instead of creating new one.
-                m_moveCommand->setNewPositions(newPos);
-                m_moveCommand->redo();
-            } else {
-                m_moveCommand = new KoShapeMoveCommand(shapes, prevPos, newPos);
-                canvas()->addCommand(m_moveCommand);
-            }
-            m_lastUsedMoveCommand = QTime::currentTime();
-            return true;
+
+        if (!shapes.isEmpty()) {
+            canvas()->addCommand(new KoShapeMoveCommand(shapes, prevPos, newPos));
+            result = true;
         }
     }
-    return false;
+
+    return result;
 }
 
 void DefaultTool::keyPressEvent(QKeyEvent *event)
@@ -1016,20 +1007,14 @@ void DefaultTool::selectionGroup()
         return;
     }
 
-    QList<KoShape *> selectedShapes = selection->selectedShapes();
-    QList<KoShape *> groupedShapes;
+    QList<KoShape *> selectedShapes = selection->selectedEditableShapes();
+    qSort(selectedShapes.begin(), selectedShapes.end(), KoShape::compareShapeZIndex);
 
-    // only group shapes with an unselected parent
-    foreach (KoShape *shape, selectedShapes) {
-        if (!selectedShapes.contains(shape->parent()) && shape->isEditable()) {
-            groupedShapes << shape;
-        }
-    }
     KoShapeGroup *group = new KoShapeGroup();
     // TODO what if only one shape is left?
     KUndo2Command *cmd = new KUndo2Command(kundo2_i18n("Group shapes"));
     canvas()->shapeController()->addShapeDirect(group, cmd);
-    new KoShapeGroupCommand(group, groupedShapes, false, true, true, cmd);
+    new KoShapeGroupCommand(group, selectedShapes, false, true, true, cmd);
     canvas()->addCommand(cmd);
 
     // update selection so we can ungroup immediately again
@@ -1044,20 +1029,13 @@ void DefaultTool::selectionUngroup()
         return;
     }
 
-    QList<KoShape *> selectedShapes = selection->selectedShapes();
-    QList<KoShape *> containerSet;
-
-    // only ungroup shape groups with an unselected parent
-    foreach (KoShape *shape, selectedShapes) {
-        if (!selectedShapes.contains(shape->parent()) && shape->isEditable()) {
-            containerSet << shape;
-        }
-    }
+    QList<KoShape *> selectedShapes = selection->selectedEditableShapes();
+    qSort(selectedShapes.begin(), selectedShapes.end(), KoShape::compareShapeZIndex);
 
     KUndo2Command *cmd = 0;
 
     // add a ungroup command for each found shape container to the macro command
-    Q_FOREACH (KoShape *shape, containerSet) {
+    Q_FOREACH (KoShape *shape, selectedShapes) {
         KoShapeGroup *group = dynamic_cast<KoShapeGroup *>(shape);
         if (group) {
             cmd = cmd ? cmd : new KUndo2Command(kundo2_i18n("Ungroup shapes"));
@@ -1182,10 +1160,6 @@ void DefaultTool::canvasResourceChanged(int key, const QVariant &res)
 
 KoInteractionStrategy *DefaultTool::createStrategy(KoPointerEvent *event)
 {
-    // reset the move by keys when a new strategy is created otherwise we might change the
-    // command after a new command was added. This happend when you where faster than the timer.
-    m_moveCommand = 0;
-
     KoShapeManager *shapeManager = canvas()->shapeManager();
     KoSelection *selection = koSelection();
 

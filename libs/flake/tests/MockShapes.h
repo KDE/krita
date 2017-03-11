@@ -76,6 +76,34 @@ class MockGroup : public KoShapeGroup
 
 class KoToolProxy;
 
+class MockShapeController : public KoShapeBasedDocumentBase
+{
+public:
+    void addShape(KoShape* shape) {
+        m_shapes.insert(shape);
+        if (m_shapeManager) {
+            m_shapeManager->addShape(shape);
+        }
+    }
+    void removeShape(KoShape* shape) {
+        m_shapes.remove(shape);
+        if (m_shapeManager) {
+            m_shapeManager->remove(shape);
+        }
+    }
+    bool contains(KoShape* shape) {
+        return m_shapes.contains(shape);
+    }
+
+    void setShapeManager(KoShapeManager *shapeManager) {
+        m_shapeManager = shapeManager;
+    }
+
+private:
+    QSet<KoShape * > m_shapes;
+    KoShapeManager *m_shapeManager = 0;
+};
+
 class MockCanvas : public KoCanvasBase
 {
 public:
@@ -84,6 +112,9 @@ public:
               m_shapeManager(new KoShapeManager(this)),
               m_selectedShapesProxy(new KoSelectedShapesProxySimple(m_shapeManager.data()))
     {
+        if (MockShapeController *controller = dynamic_cast<MockShapeController*>(aKoShapeBasedDocumentBase)) {
+            controller->setShapeManager(m_shapeManager.data());
+        }
     }
 
     ~MockCanvas() {}
@@ -132,22 +163,6 @@ public:
         QScopedPointer<KoSelectedShapesProxy> m_selectedShapesProxy;
         qreal m_horz;
         qreal m_vert;
-};
-
-class MockShapeController : public KoShapeBasedDocumentBase
-{
-public:
-    void addShape(KoShape* shape) {
-        m_shapes.insert(shape);
-    }
-    void removeShape(KoShape* shape) {
-        m_shapes.remove(shape);
-    }
-    bool contains(KoShape* shape) {
-        return m_shapes.contains(shape);
-    }
-private:
-    QSet<KoShape * > m_shapes;
 };
 
 class MockContainerModel : public KoShapeContainerModel

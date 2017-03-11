@@ -31,6 +31,7 @@
 #include <QVarLengthArray>
 
 #include <QDebug>
+#include "kis_assert.h"
 
 // #define CALLIGRA_RTREE_DEBUG
 #ifdef CALLIGRA_RTREE_DEBUG
@@ -364,6 +365,9 @@ KoRTree<T>::~KoRTree()
 template <typename T>
 void KoRTree<T>::insert(const QRectF& bb, const T& data)
 {
+    // check if the shape is not already registered
+    KIS_SAFE_ASSERT_RECOVER_NOOP(!m_leafMap[data]);
+
     insertHelper(bb, data, LeafNode::dataIdCounter++);
 }
 
@@ -436,12 +440,20 @@ void KoRTree<T>::remove(const T&data)
 {
     //qDebug() << "KoRTree remove";
     LeafNode * leaf = m_leafMap[data];
-    if (leaf == 0) {
-        qWarning() << "KoRTree<T>::remove( const T&data) data not found";
-        return;
-    }
+
+    // Trying to remove unexistent leaf. Most probably, this leaf hasn't been added
+    // to the shape manager correctly
+    KIS_SAFE_ASSERT_RECOVER_RETURN(leaf);
+
     m_leafMap.remove(data);
     leaf->remove(data);
+
+    /**
+     * WARNING: after calling condenseTree() the temporary enters an inconsistent state!
+     *          m_leafMap still points to the nodes now stored in 'reinsert' list, although
+     *          they are not a part of the hierarchy. This state does not cause any use
+     *          visible changes, but should be considered while implementing sanity checks.
+     */
 
     QVector<Node *> reinsert;
     condenseTree(leaf, reinsert);
@@ -708,6 +720,14 @@ void KoRTree<T>::condenseTree(Node *node, QVector<Node*> & reinsert)
             //qDebug() << "  remove node";
             parent->remove(node->place());
             reinsert.push_back(node);
+
+            /**
+             * WARNING: here we leave the tree in an inconsistent state! 'reinsert'
+             *          nodes may still be kept in m_leafMap structure, but we will
+             *          *not* remove them for the efficiency reasons. They are guarenteed
+             *          to be readded in remove().
+             */
+
         } else {
             //qDebug() << "  update BB parent is root" << parent->isRoot();
             parent->setChildBoundingBox(node->place(), node->boundingBox());

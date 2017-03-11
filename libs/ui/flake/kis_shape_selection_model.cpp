@@ -165,6 +165,8 @@ void KisShapeSelectionModel::containerChanged(KoShapeContainer *, KoShape::Chang
 void KisShapeSelectionModel::childChanged(KoShape * child, KoShape::ChangeType type)
 {
     if (!m_shapeSelection) return;
+
+    // TODO: check if still needed
     if (type == KoShape::ParentChanged) return;
 
     QRectF changedRect = m_shapeMap[child];

@@ -54,9 +54,6 @@ public:
     int id() const override;
     bool mergeWith(const KUndo2Command *command) override;
 
-    /// update newPositions list with new postions.
-    void setNewPositions(QList<QPointF> newPositions);
-
 private:
     class Private;
     Private * const d;

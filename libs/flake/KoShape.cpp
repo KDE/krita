@@ -161,7 +161,6 @@ KoShapePrivate::~KoShapePrivate()
         parent->removeShape(q);
     Q_FOREACH (KoShapeManager *manager, shapeManagers) {
         manager->remove(q);
-        manager->removeAdditional(q);
     }
 
     if (shadow && !shadow->deref())

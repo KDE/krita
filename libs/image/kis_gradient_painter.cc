@@ -51,7 +51,7 @@ public:
         m_colorSpace = cs;
 
         if( KisGradientCacheStategy::minColorDepth(cs) == 1) {
-            m_cacheStategy.reset(new Bit8GradientCacheStategy(gradient, steps, cs));
+            m_cacheStategy.reset(new NotBit8GradientCacheStategy(gradient, steps, cs));
 
         } else {
              m_cacheStategy.reset(new NotBit8GradientCacheStategy(gradient, steps, cs));
@@ -717,23 +717,6 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
             if (reverseGradient) {
                 t = 1 - t;
             }
-//            boost::random::uniform_01 <> distribution;
-//            double r = distribution(gen);
-//            if(cachedGradient.colorAt(t) == cachedGradient.colorAt(t + cachedGradient.stepAt(t) / 2)) {
-//                if (r < 0.5){
-//                    t += cachedGradient.stepAt(t) / 2;
-//                }  else {
-//                       if (r >= 0.5) {
-//                           t -= cachedGradient.stepAt(t) / 2;
-//                       }
-//                }
-//            }
-//            if (t > 1) {
-//                t = 1;
-//            } else
-//                 if(t < 0){
-//                     t = 0;
-//            }
 
             memcpy(it.rawData(), cachedGradient.cachedAt(t), pixelSize);
 

@@ -50,8 +50,24 @@ class Bit8GradientCacheStategy : public KisGradientCacheStategy
 private:
     struct nearColors{
         nearColors(){}
-        nearColors(int alpha, const KoColorSpace *m_colorSpace);
-        QSharedPointer<KoColor> m_colors[8];
+        nearColors(QColor color, const KoColorSpace *m_colorSpace);
+        QSharedPointer<KoColor> m_colors[7];
+        QColor getColor(QSharedPointer<KoColor> color);
+    };
+
+    struct colorComponents{
+        colorComponents(QColor& color);
+        int m_red;
+        int m_green;
+        int m_blue;
+        int m_redMinus;
+        int m_greenMinus;
+        int m_blueMinus;
+        int m_alpha;
+        int m_alphaMinus;
+
+    private:
+        int checkBorders(int component);
     };
 
 public:

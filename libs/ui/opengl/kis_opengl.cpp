@@ -154,8 +154,7 @@ void KisOpenGL::initializeContext(QOpenGLContext *ctx)
      * Warn about Intel's broken video drivers
      */
 #if defined Q_OS_WIN
-    QString renderer = KisOpenGL::renderer();
-    if (cfg.useOpenGL() && renderer.startsWith("Intel") && !cfg.readEntry("WarnedAboutIntel", false)) {
+    if (cfg.useOpenGL() && Renderer.startsWith("Intel") && !cfg.readEntry("WarnedAboutIntel", false)) {
         QMessageBox::information(0,
                                  i18nc("@title:window", "Krita: Warning"),
                                  i18n("You have an Intel(R) HD Graphics video adapter.\n"

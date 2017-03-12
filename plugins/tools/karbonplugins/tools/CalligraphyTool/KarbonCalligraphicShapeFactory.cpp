@@ -39,7 +39,7 @@ KarbonCalligraphicShapeFactory::~KarbonCalligraphicShapeFactory()
 
 KoShape *KarbonCalligraphicShapeFactory::createDefaultShape(KoDocumentResourceManager *) const
 {
-    KarbonCalligraphicShape *path = new KarbonCalligraphicShape();
+    KarbonCalligraphicShape *path = new KarbonCalligraphicShape(KisPropertiesConfigurationSP());
 
     // FIXME: add points
     path->setShapeId(KarbonCalligraphicShapeId);

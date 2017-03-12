@@ -33,6 +33,7 @@
 #include <KoCurveFit.h>
 #include <KoColorBackground.h>
 #include <KoCanvasResourceManager.h>
+#include <kis_canvas_resource_provider.h>
 #include <KoColor.h>
 #include <KoShapePaintingContext.h>
 #include <KoViewConverter.h>
@@ -51,9 +52,8 @@ using std::pow;
 using std::sqrt;
 
 KarbonCalligraphyTool::KarbonCalligraphyTool(KoCanvasBase *canvas)
-    : KoToolBase(canvas)
+    : KisToolShape(canvas, QCursor(Qt::CrossCursor))
     , m_shape(0)
-    , m_angle(0)
     , m_selectedPath(0)
     , m_isDrawing(false)
     , m_speed(0, 0)
@@ -103,12 +103,16 @@ void KarbonCalligraphyTool::mousePressEvent(KoPointerEvent *event)
 
     m_lastPoint = event->point;
     m_speed = QPointF(0, 0);
-
     m_isDrawing = true;
     m_pointCount = 0;
     m_strokeTime.start();
-    //m_lastInfo = m_infoBuilder->startStroke(event, m_strokeTime.elapsed(), canvas()->resourceManager());
-    m_shape = new KarbonCalligraphicShape(m_caps);
+    m_lastInfo = m_infoBuilder->startStroke(event, m_strokeTime.elapsed(), canvas()->resourceManager());
+
+    KisPropertiesConfigurationSP settings = new KisPropertiesConfiguration();
+
+    settings->setProperty("strokeWidth", currentStrokeWidth());
+    settings->setProperty("capSize", m_caps);
+    m_shape = new KarbonCalligraphicShape(settings);
     m_shape->setBackground(QSharedPointer<KoShapeBackground>(new KoColorBackground(canvas()->resourceManager()->foregroundColor().toQColor())));
     //addPoint( event );
 }
@@ -174,7 +178,7 @@ void KarbonCalligraphyTool::addPoint(KoPointerEvent *event)
         m_endOfPath = false;
         m_followPathPosition = 0;
         m_lastMousePos = event->point;
-        m_lastPoint = calculateNewPoint(event->point, &m_speed);
+        //m_lastPoint = calculateNewPoint(event->point, &m_speed);
         m_deviceSupportsTilt = (event->xTilt() != 0 || event->yTilt() != 0);
         return;
     }
@@ -185,35 +189,24 @@ void KarbonCalligraphyTool::addPoint(KoPointerEvent *event)
 
     ++m_pointCount;
 
-    setAngle(event);
+    //setAngle(event);
 
-    QPointF newSpeed;
-    QPointF newPoint = calculateNewPoint(event->point, &newSpeed);
-    //qreal width = calculateWidth(event->pressure());
-    //qreal angle = calculateAngle(m_speed, newSpeed);
-
+    //QPointF newSpeed;
+    //QPointF newPoint = calculateNewPoint(event->point, &newSpeed);
     // add the previous point
-    KisPaintInformation paintInfo(event->pos(),
-                                  event->pressure(),
-                                  event->xTilt(),
-                                  event->yTilt(),
-                                  event->rotation()
-                                  );
-    //m_infoBuilder->continueStroke(event, m_strokeTime.elapsed());
-    //KisDistanceInformation *dis = new KisDistanceInformation(m_lastInfo.pos(),m_strokeTime.elapsed());
-    //KisPaintInformation::DistanceInformationRegistrar r= paintInfo.registerDistanceInformation(dis);
+    KisPaintInformation paintInfo = m_infoBuilder->continueStroke(event, m_strokeTime.elapsed());
     m_shape->appendPoint(paintInfo);
-    //m_lastInfo = paintInfo;
+    m_lastInfo = paintInfo;
 
-    m_speed = newSpeed;
-    m_lastPoint = newPoint;
+    //m_speed = newSpeed;
+    //m_lastPoint = newPoint;
     canvas()->updateCanvas(m_shape->lastPieceBoundingRect());
 
     if (m_usePath && m_selectedPath) {
         m_speed = QPointF(0, 0);    // following path
     }
 }
-
+/*
 void KarbonCalligraphyTool::setAngle(KoPointerEvent *event)
 {
     if (!m_useAngle) {
@@ -274,6 +267,7 @@ QPointF KarbonCalligraphyTool::calculateNewPoint(const QPointF &mousePos, QPoint
     *speed = res - m_lastPoint;
     return res;
 }
+
 
 qreal KarbonCalligraphyTool::calculateWidth(qreal pressure)
 {
@@ -356,12 +350,13 @@ qreal KarbonCalligraphyTool::calculateAngle(const QPointF &oldSpeed, const QPoin
 
     return angle;
 }
+*/
 
 void KarbonCalligraphyTool::activate(ToolActivation activation, const QSet<KoShape*> &shapes)
 {
     KoToolBase::activate(activation, shapes);
 
-    useCursor(Qt::CrossCursor);
+    //useCursor(Qt::CrossCursor);
     m_lastShape = 0;
 }
 
@@ -381,31 +376,9 @@ QList<QPointer<QWidget> > KarbonCalligraphyTool::createOptionWidgets()
     // if the widget don't exists yet create it
     QList<QPointer<QWidget> > widgets;
 
-    //KoFillConfigWidget *fillWidget = new KoFillConfigWidget(0);
-    //fillWidget->setWindowTitle(i18n("Fill"));
-    //widgets.append(fillWidget);
-
     KarbonCalligraphyOptionWidget *widget = new KarbonCalligraphyOptionWidget;
     connect(widget, SIGNAL(usePathChanged(bool)),
             this, SLOT(setUsePath(bool)));
-
-    connect(widget, SIGNAL(usePressureChanged(bool)),
-            this, SLOT(setUsePressure(bool)));
-
-    connect(widget, SIGNAL(useAngleChanged(bool)),
-            this, SLOT(setUseAngle(bool)));
-
-    connect(widget, SIGNAL(widthChanged(double)),
-            this, SLOT(setStrokeWidth(double)));
-
-    connect(widget, SIGNAL(thinningChanged(double)),
-            this, SLOT(setThinning(double)));
-
-    connect(widget, SIGNAL(angleChanged(int)),
-            this, SLOT(setAngle(int)));
-
-    connect(widget, SIGNAL(fixationChanged(double)),
-            this, SLOT(setFixation(double)));
 
     connect(widget, SIGNAL(capsChanged(double)),
             this, SLOT(setCaps(double)));
@@ -420,16 +393,7 @@ QList<QPointer<QWidget> > KarbonCalligraphyTool::createOptionWidgets()
             widget, SLOT(setUsePathEnabled(bool)));
 
     // add shortcuts
-    QAction *action = new QAction(i18n("Calligraphy: increase width"), this);
-    action->setShortcut(Qt::Key_Right);
-    connect(action, SIGNAL(triggered()), widget, SLOT(increaseWidth()));
-    addAction("calligraphy_increase_width", action);
-
-    action = new QAction(i18n("Calligraphy: decrease width"), this);
-    action->setShortcut(Qt::Key_Left);
-    connect(action, SIGNAL(triggered()), widget, SLOT(decreaseWidth()));
-    addAction("calligraphy_decrease_width", action);
-
+/*
     action = new QAction(i18n("Calligraphy: increase angle"), this);
     action->setShortcut(Qt::Key_Up);
     connect(action, SIGNAL(triggered()), widget, SLOT(increaseAngle()));
@@ -439,7 +403,7 @@ QList<QPointer<QWidget> > KarbonCalligraphyTool::createOptionWidgets()
     action->setShortcut(Qt::Key_Down);
     connect(action, SIGNAL(triggered()), widget, SLOT(decreaseAngle()));
     addAction("calligraphy_decrease_angle", action);
-
+*/
     // sync all parameters with the loaded profile
     widget->emitAll();
     widget->setObjectName(i18n("Calligraphy"));
@@ -447,26 +411,6 @@ QList<QPointer<QWidget> > KarbonCalligraphyTool::createOptionWidgets()
     widgets.append(widget);
 
     return widgets;
-}
-
-void KarbonCalligraphyTool::setStrokeWidth(double width)
-{
-    m_strokeWidth = width;
-}
-
-void KarbonCalligraphyTool::setThinning(double thinning)
-{
-    m_thinning = thinning;
-}
-
-void KarbonCalligraphyTool::setAngle(int angle)
-{
-    m_customAngle = angle;
-}
-
-void KarbonCalligraphyTool::setFixation(double fixation)
-{
-    m_fixation = fixation;
 }
 
 void KarbonCalligraphyTool::setMass(double mass)
@@ -482,16 +426,6 @@ void KarbonCalligraphyTool::setDrag(double drag)
 void KarbonCalligraphyTool::setUsePath(bool usePath)
 {
     m_usePath = usePath;
-}
-
-void KarbonCalligraphyTool::setUsePressure(bool usePressure)
-{
-    m_usePressure = usePressure;
-}
-
-void KarbonCalligraphyTool::setUseAngle(bool useAngle)
-{
-    m_useAngle = useAngle;
 }
 
 void KarbonCalligraphyTool::setCaps(double caps)

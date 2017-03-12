@@ -21,16 +21,18 @@
 #define KARBONCALLIGRAPHYTOOL_H
 
 #include <KoToolBase.h>
+#include <kis_tool_shape.h>
 #include <KoPathShape.h>
 #include <QPointer>
 #include <QTime>
 #include <kis_painting_information_builder.h>
 #include <kis_paint_information.h>
+#include <kis_properties_configuration.h>
 
 class KoPathShape;
 class KarbonCalligraphicShape;
 
-class KarbonCalligraphyTool : public KoToolBase
+class KarbonCalligraphyTool : public KisToolShape
 {
     Q_OBJECT
 public:
@@ -38,6 +40,13 @@ public:
     ~KarbonCalligraphyTool();
 
     void paint(QPainter &painter, const KoViewConverter &converter);
+
+    /**
+     * @brief configuration holds the interpretation of the paintinfo,
+     * this is similar to a vector version of a paintop.
+     * @return the configuration that is currently held by the object.
+     */
+    KisPropertiesConfigurationSP configuration();
 
     void mousePressEvent(KoPointerEvent *event);
     void mouseMoveEvent(KoPointerEvent *event);
@@ -52,13 +61,14 @@ Q_SIGNALS:
     void pathSelectedChanged(bool selection);
 
 private Q_SLOTS:
+    /**
+     * @brief setConfiguration
+     * Set the configuration of the paintinfo interpretation(the paintop, basically)
+     * This will update the full stroke.
+     * @param setting
+     */
+    //void setConfiguration(KisPropertiesConfigurationSP setting) const;
     void setUsePath(bool usePath);
-    void setUsePressure(bool usePressure);
-    void setUseAngle(bool useAngle);
-    void setStrokeWidth(double width);
-    void setThinning(double thinning);
-    void setAngle(int angle);   // set theangle in degrees
-    void setFixation(double fixation);
     void setCaps(double caps);
     void setMass(double mass);     // set the mass in user friendly format
     void setDrag(double drag);
@@ -68,12 +78,12 @@ private Q_SLOTS:
 private:
     void addPoint(KoPointerEvent *event);
     // auxiliary function that sets m_angle
-    void setAngle(KoPointerEvent *event);
+    //void setAngle(KoPointerEvent *event);
     // auxiliary functions to calculate the dynamic parameters
     // returns the new point and sets speed to the speed
-    QPointF calculateNewPoint(const QPointF &mousePos, QPointF *speed);
-    qreal calculateWidth(qreal pressure);
-    qreal calculateAngle(const QPointF &oldSpeed, const QPointF &newSpeed);
+    //QPointF calculateNewPoint(const QPointF &mousePos, QPointF *speed);
+    //qreal calculateWidth(qreal pressure);
+    //qreal calculateAngle(const QPointF &oldSpeed, const QPointF &newSpeed);
 
     QPointF m_lastPoint;
     KarbonCalligraphicShape *m_shape;
@@ -82,14 +92,7 @@ private:
     bool m_deviceSupportsTilt;
 
     bool m_usePath;         // follow selected path
-    bool m_usePressure;     // use tablet pressure
-    bool m_useAngle;        // use tablet angle
     qreal m_strokeWidth;
-    qreal m_lastWidth;
-    qreal m_customAngle;   // angle set by the user
-    qreal m_angle;  // angle to use, may use the device angle, in radians!!!
-    qreal m_fixation;
-    qreal m_thinning;
     qreal m_caps;
     qreal m_mass;  // in raw format (not user friendly)
     qreal m_drag;  // from 0.0 to 1.0

@@ -22,6 +22,7 @@
 
 #include <KoParameterShape.h>
 #include <kis_paint_information.h>
+#include <kis_properties_configuration.h>
 
 #define KarbonCalligraphicShapeId "KarbonCalligraphicShape"
 
@@ -38,10 +39,6 @@ public:
     qreal angle() const
     {
         return (fmod((m_paintInfo.drawingAngle()* 180.0 / M_PI)+90.0, 360.0)* M_PI / 180);
-    }
-    qreal width() const
-    {
-        return m_paintInfo.pressure()*20.0;
     }
 
     KisPaintInformation* paintInfo()
@@ -91,13 +88,28 @@ private:
 class KarbonCalligraphicShape : public KoParameterShape
 {
 public:
-    explicit KarbonCalligraphicShape(qreal caps = 0.0);
+    explicit KarbonCalligraphicShape(KisPropertiesConfigurationSP settings);
     ~KarbonCalligraphicShape();
+
+    /**
+     * @brief configuration holds the interpretation of the paintinfo,
+     * this is similar to a vector version of a paintop.
+     * @return the configuration that is currently held by the object.
+     */
+    KisPropertiesConfigurationSP configuration() const;
+
+    /**
+     * @brief setConfiguration
+     * Set the configuration of the paintinfo interpretation(the paintop, basically)
+     * This will update the full stroke.
+     * @param setting
+     */
+    void setConfiguration(KisPropertiesConfigurationSP setting);
 
     KoShape* cloneShape() const override;
 
     void appendPoint(KisPaintInformation &paintInfo);
-    void appendPointToPath(const KarbonCalligraphicPoint &p);
+    void appendPointToPath(KarbonCalligraphicPoint &p);
 
     KarbonCalligraphicPoint* lastPoint();
 
@@ -148,11 +160,18 @@ private:
     //
     void addCap(int index1, int index2, int pointIndex, bool inverted = false);
 
+    /**
+     * @brief calculateWidth calculate the current width.
+     * @param p the point for which you wish to calculate the width.
+     * @return the width as modulated by the paintinfo.
+     */
+    qreal calculateWidth(KisPaintInformation *p);
+
     // the actual data then determines it's shape (guide path + data for points)
     KisDistanceInformation *m_strokeDistance;
     QList<KarbonCalligraphicPoint *> m_points;
     bool m_lastWasFlip;
-    qreal m_caps;
+    KisPropertiesConfigurationSP m_strokeConfig;
 };
 
 #endif // KARBONCALLIGRAPHICSHAPE_H

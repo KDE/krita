@@ -35,9 +35,9 @@
 #undef M_PI
 const qreal M_PI = 3.1415927;
 
-KarbonCalligraphicShape::KarbonCalligraphicShape(qreal caps)
+KarbonCalligraphicShape::KarbonCalligraphicShape(KisPropertiesConfigurationSP settings)
     : m_lastWasFlip(false)
-    , m_caps(caps)
+    , m_strokeConfig(settings)
 {
     setShapeId(KoPathShapeId);
     setFillRule(Qt::WindingFill);
@@ -49,12 +49,23 @@ KarbonCalligraphicShape::KarbonCalligraphicShape(const KarbonCalligraphicShape &
     : KoParameterShape(new KoParameterShapePrivate(*rhs.d_func(), this)),
       m_points(rhs.m_points),
       m_lastWasFlip(rhs.m_lastWasFlip),
-      m_caps(rhs.m_caps)
+      m_strokeConfig(rhs.m_strokeConfig)
 {
 }
 
 KarbonCalligraphicShape::~KarbonCalligraphicShape()
 {
+}
+
+KisPropertiesConfigurationSP KarbonCalligraphicShape::configuration() const
+{
+    return m_strokeConfig;
+}
+
+void KarbonCalligraphicShape::setConfiguration(KisPropertiesConfigurationSP setting)
+{
+    m_strokeConfig = setting;
+    updatePath(this->size());
 }
 
 KoShape *KarbonCalligraphicShape::cloneShape() const
@@ -84,10 +95,11 @@ void KarbonCalligraphicShape::appendPoint(KisPaintInformation &paintInfo)
     }
 }
 
-void KarbonCalligraphicShape::appendPointToPath(const KarbonCalligraphicPoint &p)
+void KarbonCalligraphicShape::appendPointToPath(KarbonCalligraphicPoint &p)
 {
-    qreal dx = std::cos(p.angle()) * p.width();
-    qreal dy = std::sin(p.angle()) * p.width();
+    qreal width = calculateWidth(p.paintInfo());
+    qreal dx = std::cos(p.angle()) * width;
+    qreal dy = std::sin(p.angle()) * width;
 
     // find the outline points
     QPointF p1 = p.point() - QPointF(dx / 2, dy / 2);
@@ -315,7 +327,7 @@ void KarbonCalligraphicShape::updatePath(const QSizeF &size)
     clear();
     setPosition(QPoint(0, 0));
 
-    KarbonCalligraphicPoint *pLast = m_points.at(0);
+    //KarbonCalligraphicPoint *pLast = m_points.at(0);
     m_strokeDistance = new KisDistanceInformation(QPoint(), 0.0);
     Q_FOREACH (KarbonCalligraphicPoint *p, m_points) {
 
@@ -328,7 +340,7 @@ void KarbonCalligraphicShape::updatePath(const QSizeF &size)
         // after the point is "painter" it should be added to the distance information as the "previous" point
         m_strokeDistance->registerPaintedDab(*p->paintInfo(), KisSpacingInformation(1.0));
 
-        pLast=p;
+        //pLast=p;
     }
 
     simplifyPath();
@@ -370,8 +382,9 @@ void KarbonCalligraphicShape::addCap(int index1, int index2, int pointIndex, boo
     }
 
     QPointF direction = QLineF(QPointF(0, 0), delta).unitVector().p2();
-    qreal width = m_points[index2]->width();
-    QPointF p = p2 + direction * m_caps * width;
+    qreal width = calculateWidth(m_points[index2]->paintInfo());
+    qreal capSize = configuration()->getFloat("capSize");
+    QPointF p = p2 + direction * capSize * width;
 
     KoPathPoint *newPoint = new KoPathPoint(this, p);
 
@@ -386,6 +399,11 @@ void KarbonCalligraphicShape::addCap(int index1, int index2, int pointIndex, boo
     newPoint->setControlPoint2(QPointF(p.x() + dx / 2, p.y() + dy / 2));
 
     insertPoint(newPoint, KoPathPointIndex(0, pointIndex));
+}
+
+qreal KarbonCalligraphicShape::calculateWidth(KisPaintInformation *p)
+{
+    return configuration()->getFloat("strokeWidth", 10) * p->pressure();
 }
 
 QString KarbonCalligraphicShape::pathShapeId() const
@@ -413,8 +431,8 @@ void KarbonCalligraphicShape::simplifyGuidePath()
     while (i != m_points.end() - 1) {
         QPointF point = (*i)->point();
 
-        qreal width = (*i)->width();
-        qreal prevWidth = (*(i - 1))->width();
+        qreal width = calculateWidth((*i)->paintInfo());
+        qreal prevWidth = calculateWidth((*(i - 1))->paintInfo());
         qreal widthDiff = width - prevWidth;
         widthDiff /= qMax(width, prevWidth);
 

@@ -85,47 +85,6 @@ KarbonCalligraphyOptionWidget::KarbonCalligraphyOptionWidget()
     m_usePath = new QCheckBox(i18n("&Follow selected path"), this);
     detailsLayout->addWidget(m_usePath, 0, 0, 1, 4);
 
-    m_usePressure = new QCheckBox(i18n("Use tablet &pressure"), this);
-    detailsLayout->addWidget(m_usePressure, 1, 0, 1, 4);
-
-    QLabel *widthLabel = new QLabel(i18n("Width:"), this);
-    widthLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-    m_widthBox = new KisDoubleParseSpinBox(this);
-    m_widthBox->setRange(0.0, 999.0);
-    widthLabel->setBuddy(m_widthBox);
-    detailsLayout->addWidget(widthLabel, 2, 2);
-    detailsLayout->addWidget(m_widthBox, 2, 3);
-
-    QLabel *thinningLabel = new QLabel(i18n("Thinning:"), this);
-    thinningLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-    m_thinningBox = new KisDoubleParseSpinBox(this);
-    m_thinningBox->setRange(-1.0, 1.0);
-    m_thinningBox->setSingleStep(0.1);
-    thinningLabel->setBuddy(m_thinningBox);
-    detailsLayout->addWidget(thinningLabel, 2, 0);
-    detailsLayout->addWidget(m_thinningBox, 2, 1);
-
-    m_useAngle = new QCheckBox(i18n("Use tablet &angle"), this);
-    detailsLayout->addWidget(m_useAngle, 3, 0, 1, 4);
-
-    QLabel *angleLabel = new QLabel(i18n("Angle:"), this);
-    angleLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-    m_angleBox = new KisIntParseSpinBox(this);
-    m_angleBox->setRange(0, 179);
-    m_angleBox->setWrapping(true);
-    angleLabel->setBuddy(m_angleBox);
-    detailsLayout->addWidget(angleLabel, 4, 0);
-    detailsLayout->addWidget(m_angleBox, 4, 1);
-
-    QLabel *fixationLabel = new QLabel(i18n("Fixation:"), this);
-    fixationLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-    m_fixationBox = new KisDoubleParseSpinBox(this);
-    m_fixationBox->setRange(0.0, 1.0);
-    m_fixationBox->setSingleStep(0.1);
-    fixationLabel->setBuddy(m_fixationBox);
-    detailsLayout->addWidget(fixationLabel, 5, 0);
-    detailsLayout->addWidget(m_fixationBox, 5, 1);
-
     QLabel *capsLabel = new QLabel(i18n("Caps:"), this);
     capsLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     m_capsBox = new KisDoubleParseSpinBox(this);
@@ -169,12 +128,6 @@ KarbonCalligraphyOptionWidget::~KarbonCalligraphyOptionWidget()
 void KarbonCalligraphyOptionWidget::emitAll()
 {
     emit usePathChanged(m_usePath->isChecked());
-    emit usePressureChanged(m_usePressure->isChecked());
-    emit useAngleChanged(m_useAngle->isChecked());
-    emit widthChanged(m_widthBox->value());
-    emit thinningChanged(m_thinningBox->value());
-    emit angleChanged(m_angleBox->value());
-    emit fixationChanged(m_fixationBox->value());
     emit capsChanged(m_capsBox->value());
     emit massChanged(m_massBox->value());
     emit dragChanged(m_dragBox->value());
@@ -255,31 +208,6 @@ void KarbonCalligraphyOptionWidget::removeProfile()
     removeProfile(m_comboBox->currentText());
 }
 
-void KarbonCalligraphyOptionWidget::toggleUseAngle(bool checked)
-{
-    m_angleBox->setEnabled(! checked);
-}
-
-void KarbonCalligraphyOptionWidget::increaseWidth()
-{
-    m_widthBox->setValue(m_widthBox->value() + 1);
-}
-
-void KarbonCalligraphyOptionWidget::decreaseWidth()
-{
-    m_widthBox->setValue(m_widthBox->value() - 1);
-}
-
-void KarbonCalligraphyOptionWidget::increaseAngle()
-{
-    m_angleBox->setValue((m_angleBox->value() + 3) % 180);
-}
-
-void KarbonCalligraphyOptionWidget::decreaseAngle()
-{
-    m_angleBox->setValue((m_angleBox->value() - 3) % 180);
-}
-
 /******************************************************************************
  ************************* Convenience Functions ******************************
  ******************************************************************************/
@@ -293,24 +221,6 @@ void KarbonCalligraphyOptionWidget::createConnections()
     connect(m_usePath, SIGNAL(toggled(bool)),
             SIGNAL(usePathChanged(bool)));
 
-    connect(m_usePressure, SIGNAL(toggled(bool)),
-            SIGNAL(usePressureChanged(bool)));
-
-    connect(m_useAngle, SIGNAL(toggled(bool)),
-            SIGNAL(useAngleChanged(bool)));
-
-    connect(m_widthBox, SIGNAL(valueChanged(double)),
-            SIGNAL(widthChanged(double)));
-
-    connect(m_thinningBox, SIGNAL(valueChanged(double)),
-            SIGNAL(thinningChanged(double)));
-
-    connect(m_angleBox, SIGNAL(valueChanged(int)),
-            SIGNAL(angleChanged(int)));
-
-    connect(m_fixationBox, SIGNAL(valueChanged(double)),
-            SIGNAL(fixationChanged(double)));
-
     connect(m_capsBox, SIGNAL(valueChanged(double)),
             SIGNAL(capsChanged(double)));
 
@@ -323,25 +233,6 @@ void KarbonCalligraphyOptionWidget::createConnections()
     // update profile
     connect(m_usePath, SIGNAL(toggled(bool)),
             SLOT(updateCurrentProfile()));
-
-    connect(m_usePressure, SIGNAL(toggled(bool)),
-            SLOT(updateCurrentProfile()));
-
-    connect(m_useAngle, SIGNAL(toggled(bool)),
-            SLOT(updateCurrentProfile()));
-
-    connect(m_widthBox, SIGNAL(valueChanged(double)),
-            SLOT(updateCurrentProfile()));
-
-    connect(m_thinningBox, SIGNAL(valueChanged(double)),
-            SLOT(updateCurrentProfile()));
-
-    connect(m_angleBox, SIGNAL(valueChanged(int)),
-            SLOT(updateCurrentProfile()));
-
-    connect(m_fixationBox, SIGNAL(valueChanged(double)),
-            SLOT(updateCurrentProfile()));
-
     connect(m_capsBox, SIGNAL(valueChanged(double)),
             SLOT(updateCurrentProfile()));
 
@@ -355,7 +246,7 @@ void KarbonCalligraphyOptionWidget::createConnections()
     connect(m_removeButton, SIGNAL(clicked()), SLOT(removeProfile()));
 
     // visualization
-    connect(m_useAngle, SIGNAL(toggled(bool)), SLOT(toggleUseAngle(bool)));
+    //connect(m_useAngle, SIGNAL(toggled(bool)), SLOT(toggleUseAngle(bool)));
 }
 
 void KarbonCalligraphyOptionWidget::addDefaultProfiles()
@@ -417,12 +308,6 @@ void KarbonCalligraphyOptionWidget::loadProfiles()
         profile->index = i;
         profile->name =         profileGroup.readEntry("name", QString());
         profile->usePath =      profileGroup.readEntry("usePath", false);
-        profile->usePressure =  profileGroup.readEntry("usePressure", false);
-        profile->useAngle =     profileGroup.readEntry("useAngle", false);
-        profile->width =        profileGroup.readEntry("width", 30.0);
-        profile->thinning =     profileGroup.readEntry("thinning", 0.2);
-        profile->angle =        profileGroup.readEntry("angle", 30);
-        profile->fixation =     profileGroup.readEntry("fixation", 0.0);
         profile->caps =         profileGroup.readEntry("caps", 0.0);
         profile->mass =         profileGroup.readEntry("mass", 3.0);
         profile->drag =         profileGroup.readEntry("drag", 0.7);
@@ -460,12 +345,6 @@ void KarbonCalligraphyOptionWidget::loadCurrentProfile()
 
     m_changingProfile = true;
     m_usePath->setChecked(profile->usePath);
-    m_usePressure->setChecked(profile->usePressure);
-    m_useAngle->setChecked(profile->useAngle);
-    m_widthBox->setValue(profile->width);
-    m_thinningBox->setValue(profile->thinning);
-    m_angleBox->setValue(profile->angle);
-    m_fixationBox->setValue(profile->fixation);
     m_capsBox->setValue(profile->caps);
     m_massBox->setValue(profile->mass);
     m_dragBox->setValue(profile->drag);
@@ -477,12 +356,6 @@ void KarbonCalligraphyOptionWidget::saveProfile(const QString &name)
     Profile *profile = new Profile;
     profile->name = name;
     profile->usePath = m_usePath->isChecked();
-    profile->usePressure = m_usePressure->isChecked();
-    profile->useAngle = m_useAngle->isChecked();
-    profile->width = m_widthBox->value();
-    profile->thinning = m_thinningBox->value();
-    profile->angle = m_angleBox->value();
-    profile->fixation = m_fixationBox->value();
     profile->caps = m_capsBox->value();
     profile->mass = m_massBox->value();
     profile->drag = m_dragBox->value();
@@ -515,12 +388,6 @@ void KarbonCalligraphyOptionWidget::saveProfile(const QString &name)
 
     profileGroup.writeEntry("name", name);
     profileGroup.writeEntry("usePath", profile->usePath);
-    profileGroup.writeEntry("usePressure", profile->usePressure);
-    profileGroup.writeEntry("useAngle", profile->useAngle);
-    profileGroup.writeEntry("width", profile->width);
-    profileGroup.writeEntry("thinning", profile->thinning);
-    profileGroup.writeEntry("angle", profile->angle);
-    profileGroup.writeEntry("fixation", profile->fixation);
     profileGroup.writeEntry("caps", profile->caps);
     profileGroup.writeEntry("mass", profile->mass);
     profileGroup.writeEntry("drag", profile->drag);
@@ -580,12 +447,6 @@ void KarbonCalligraphyOptionWidget::removeProfile(const QString &name)
     KConfigGroup profileGroup(&config, deletedGroup);
     profileGroup.writeEntry("name", profile->name);
     profileGroup.writeEntry("usePath", profile->usePath);
-    profileGroup.writeEntry("usePressure", profile->usePressure);
-    profileGroup.writeEntry("useAngle", profile->useAngle);
-    profileGroup.writeEntry("width", profile->width);
-    profileGroup.writeEntry("thinning", profile->thinning);
-    profileGroup.writeEntry("angle", profile->angle);
-    profileGroup.writeEntry("fixation", profile->fixation);
     profileGroup.writeEntry("caps", profile->caps);
     profileGroup.writeEntry("mass", profile->mass);
     profileGroup.writeEntry("drag", profile->drag);

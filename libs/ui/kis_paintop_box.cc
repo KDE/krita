@@ -703,12 +703,6 @@ void KisPaintopBox::updateCompositeOp(QString compositeOpID)
         if (compositeOpID != m_currCompositeOpID) {
             m_currCompositeOpID = compositeOpID;
         }
-        if (compositeOpID == COMPOSITE_ERASE) {
-            m_eraseModeButton->setChecked(true);
-        }
-        else {
-            m_eraseModeButton->setChecked(false);
-        }
     }
 }
 

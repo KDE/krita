@@ -49,12 +49,6 @@ class QPainterPath;
  * in the qpainter canvas.
  *
  */
-<<<<<<< HEAD
-class KRITAUI_EXPORT KisOpenGLCanvas2 : public QOpenGLWidget
-        , public KisCanvasWidgetBase
-        , protected QOpenGLFunctions_3_2_Core
- {
-=======
 class KRITAUI_EXPORT KisOpenGLCanvas2
         : public QOpenGLWidget
 #ifndef Q_MOC_RUN
@@ -62,8 +56,6 @@ class KRITAUI_EXPORT KisOpenGLCanvas2
 #endif
         , public KisCanvasWidgetBase
 {
-
->>>>>>> a257e33... Better way to force the 3.2 core functions for OSX
     Q_OBJECT
 
 public:

@@ -23,6 +23,7 @@
 #include <KoParameterShape.h>
 #include <kis_paint_information.h>
 #include <kis_properties_configuration.h>
+#include <SvgShape.h>
 
 #define KarbonCalligraphicShapeId "KarbonCalligraphicShape"
 
@@ -85,7 +86,7 @@ private:
 //        7--6--5--4   <- pointCount() / 2
 // start  |        |   end    ==> (direction of the stroke)
 //        0--1--2--3
-class KarbonCalligraphicShape : public KoParameterShape
+class KarbonCalligraphicShape : public KoParameterShape, public SvgShape
 {
 public:
     explicit KarbonCalligraphicShape(KisPropertiesConfigurationSP settings);
@@ -128,6 +129,9 @@ public:
 
     // reimplemented
     virtual QString pathShapeId() const;
+
+    bool saveSvg(SvgSavingContext &context);
+    bool loadSvg(const KoXmlElement &element, SvgLoadingContext &context);
 
 protected:
     // reimplemented

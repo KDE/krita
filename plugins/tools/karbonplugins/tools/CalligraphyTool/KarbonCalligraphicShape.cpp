@@ -25,6 +25,13 @@
 #include "KarbonSimplifyPath.h"
 #include <KoCurveFit.h>
 #include <KoColorBackground.h>
+#include <SvgSavingContext.h>
+#include <SvgLoadingContext.h>
+#include <SvgUtil.h>
+#include <SvgStyleWriter.h>
+#include <KoXmlWriter.h>
+#include <QDomDocument>
+#include <QDomElement>
 
 #include <QDebug>
 #include <QColor>
@@ -409,6 +416,63 @@ qreal KarbonCalligraphicShape::calculateWidth(KisPaintInformation *p)
 QString KarbonCalligraphicShape::pathShapeId() const
 {
     return KarbonCalligraphicShapeId;
+}
+
+bool KarbonCalligraphicShape::saveSvg(SvgSavingContext &context)
+{
+    qDebug()<<"attempting to save svg";
+    context.shapeWriter().startElement("path");
+    context.shapeWriter().addAttribute("krita:type", "calligraphic-stroke");
+    context.shapeWriter().addAttribute("id", context.getID(this));
+    context.shapeWriter().addAttribute("transform", SvgUtil::transformToString(transformation()));
+    context.shapeWriter().addAttribute("d", this->toString(context.userSpaceTransform()));
+    SvgStyleWriter::saveSvgStyle(this, context);
+    QDomDocument doc= QDomDocument();
+    Q_FOREACH (KarbonCalligraphicPoint *p, m_points) {
+        QDomElement infoElt = doc.createElement("point");
+        p->paintInfo()->toXML(doc, infoElt);
+        doc.appendChild(infoElt);
+        context.shapeWriter().addCompleteElement(doc.toString().toUtf8());
+        doc.clear();
+    }
+    QDomElement configElt = doc.createElement("config");
+    configuration()->toXML(doc, configElt);
+    doc.appendChild(configElt);
+    context.shapeWriter().addCompleteElement(doc.toString().toUtf8());
+    context.shapeWriter().endElement();
+    return true;
+}
+
+bool KarbonCalligraphicShape::loadSvg(const KoXmlElement &element, SvgLoadingContext &context)
+{
+    qDebug()<<"attempt to load svg";
+
+    const QString extendedNamespace = element.attribute("krita:type");
+
+    if (element.tagName() == "path" && !extendedNamespace.isEmpty()) {
+
+        QDomDocument doc = QDomDocument();
+        KoXml::asQDomElement(doc, element);
+        QDomElement root = doc.firstChildElement();
+
+        QDomElement configElt = root.firstChildElement("config");
+        KisPropertiesConfigurationSP config = new KisPropertiesConfiguration();
+        config->fromXML(configElt);
+
+        QPolygonF poly;
+        QDomElement infoElt = root.firstChildElement("point");
+        while (!infoElt.isNull()) {
+            KisPaintInformation paintInfo = KisPaintInformation::fromXML(infoElt);
+            m_points.append(new KarbonCalligraphicPoint(paintInfo));
+            poly.append(paintInfo.pos());
+            infoElt = infoElt.nextSiblingElement("point");
+        }
+        setPosition(poly.boundingRect().topLeft());
+        setSize(poly.boundingRect().size());
+        setConfiguration(config);
+        return true;
+    }
+    return false;
 }
 
 void KarbonCalligraphicShape::simplifyGuidePath()

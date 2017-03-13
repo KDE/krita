@@ -417,6 +417,10 @@ QString SvgUtil::mapExtendedShapeTag(const QString &tagName, const KoXmlElement 
         } else if (sodipodiType == "arc") {
             result = "sodipodi:arc";
         }
+        if (kritaType == "calligraphic-stroke") {
+            result = "krita:calligraphic-stroke";
+        }
+
     }
 
     return result;

@@ -23,6 +23,7 @@
 #include <KoIcon.h>
 #include <klocalizedstring.h>
 #include <KoShapeLoadingContext.h>
+#include <KoXmlNS.h>
 
 KarbonCalligraphicShapeFactory::KarbonCalligraphicShapeFactory()
     : KoShapeFactoryBase(KarbonCalligraphicShapeId, i18n("A calligraphic shape"))
@@ -31,6 +32,10 @@ KarbonCalligraphicShapeFactory::KarbonCalligraphicShapeFactory()
     setIconName(koIconNameCStr("calligraphy"));
     setLoadingPriority(1);
     setHidden(true);
+
+    QList<QPair<QString, QStringList> > elementNamesList;
+    elementNamesList.append(qMakePair(QString(KoXmlNS::svg), QStringList("krita:calligraphic-stroke")));
+    setXmlElements(elementNamesList);
 }
 
 KarbonCalligraphicShapeFactory::~KarbonCalligraphicShapeFactory()

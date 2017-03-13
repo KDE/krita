@@ -21,6 +21,7 @@
 #define KIS_OPENGL_CANVAS_2_H
 
 #include <QOpenGLWidget>
+#include <QOpenGLFunctions_3_0>
 #include <QOpenGLFunctions_3_2_Core>
 #include "canvas/kis_canvas_widget_base.h"
 #include "opengl/kis_opengl_image_textures.h"
@@ -33,7 +34,14 @@ class KisDisplayColorConverter;
 class QOpenGLShaderProgram;
 class QPainterPath;
 
+#ifndef Q_MOC_RUN
+#ifndef Q_OS_MAC
+#define GLFunctions QOpenGLFunctions_3_0
+#else
+#define GLFunctions QOpenGLFunctions_3_2_Core
+#endif
 
+#endif
 /**
  * KisOpenGLCanvas is the widget that shows the actual image using OpenGL
  *
@@ -41,10 +49,21 @@ class QPainterPath;
  * in the qpainter canvas.
  *
  */
+<<<<<<< HEAD
 class KRITAUI_EXPORT KisOpenGLCanvas2 : public QOpenGLWidget
         , public KisCanvasWidgetBase
         , protected QOpenGLFunctions_3_2_Core
  {
+=======
+class KRITAUI_EXPORT KisOpenGLCanvas2
+        : public QOpenGLWidget
+#ifndef Q_MOC_RUN
+        , protected GLFunctions
+#endif
+        , public KisCanvasWidgetBase
+{
+
+>>>>>>> a257e33... Better way to force the 3.2 core functions for OSX
     Q_OBJECT
 
 public:

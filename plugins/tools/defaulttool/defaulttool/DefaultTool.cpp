@@ -755,21 +755,10 @@ bool DefaultTool::moveSelection(int direction, Qt::KeyboardModifiers modifiers)
             y /= 5;
         }
 
-        QList<QPointF> prevPos;
-        QList<QPointF> newPos;
         QList<KoShape *> shapes = koSelection()->selectedEditableShapes();
 
-        Q_FOREACH (KoShape *shape, shapes) {
-            QPointF pos = shape->absolutePosition();
-
-            prevPos.append(pos);
-            pos.rx() += x;
-            pos.ry() += y;
-            newPos.append(pos);
-        }
-
         if (!shapes.isEmpty()) {
-            canvas()->addCommand(new KoShapeMoveCommand(shapes, prevPos, newPos));
+            canvas()->addCommand(new KoShapeMoveCommand(shapes, QPointF(x, y)));
             result = true;
         }
     }

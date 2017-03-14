@@ -357,11 +357,6 @@ void KoToolBase::setTextMode(bool value)
     d->isInTextMode=value;
 }
 
-QStringList KoToolBase::supportedPasteMimeTypes() const
-{
-    return QStringList();
-}
-
 bool KoToolBase::paste()
 {
     return false;

@@ -75,8 +75,6 @@ public:
     ///reimplemented
     virtual bool paste();
     ///reimplemented
-    virtual QStringList supportedPasteMimeTypes() const;
-    ///reimplemented
     virtual KoToolSelection *selection();
 
     QMenu* popupActionsMenu() override;

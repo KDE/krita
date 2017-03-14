@@ -30,13 +30,8 @@
 #include <KoShapeController.h>
 #include <KoShapeRegistry.h>
 #include <KoCompositeOpRegistry.h>
-#include <KoOdfPaste.h>
-#include <KoOdfLoadingContext.h>
-#include <KoOdfReadStore.h>
 #include <KoShapeManager.h>
 #include <KoSelection.h>
-#include <KoDrag.h>
-#include <KoShapeOdfSaveHelper.h>
 #include <KoShapeController.h>
 #include <KoDocumentResourceManager.h>
 #include <KoShapeStroke.h>
@@ -449,52 +444,17 @@ void KisSelectionToVectorActionFactory::run(KisViewManager *view)
     endAction(ap, KisOperationConfiguration(id()).toXML());
 }
 
-
-class KisShapeSelectionPaste : public KoOdfPaste
-{
-public:
-    KisShapeSelectionPaste(KisViewManager* view) : m_view(view)
-    {
-    }
-
-    ~KisShapeSelectionPaste() override {
-    }
-
-    bool process(const KoXmlElement & body, KoOdfReadStore & odfStore) override {
-        KoOdfLoadingContext loadingContext(odfStore.styles(), odfStore.store());
-        KoShapeLoadingContext context(loadingContext, m_view->canvasBase()->shapeController()->resourceManager());
-        KoXmlElement child;
-
-        QList<KoShape*> shapes;
-        forEachElement(child, body) {
-            KoShape * shape = KoShapeRegistry::instance()->createShapeFromOdf(child, context);
-            if (shape) {
-                shapes.append(shape);
-            }
-        }
-        if (!shapes.isEmpty()) {
-            KisSelectionToolHelper helper(m_view->canvasBase(), kundo2_i18n("Convert shapes to vector selection"));
-            helper.addSelectionShapes(shapes);
-        }
-        return true;
-    }
-private:
-    KisViewManager* m_view;
-};
-
 void KisShapesToVectorSelectionActionFactory::run(KisViewManager* view)
 {
-    QList<KoShape*> shapes = view->canvasBase()->shapeManager()->selection()->selectedShapes();
+    const QList<KoShape*> originalShapes = view->canvasBase()->shapeManager()->selection()->selectedShapes();
 
-    KoShapeOdfSaveHelper saveHelper(shapes);
-    KoDrag drag;
-    drag.setOdf(KoOdf::mimeType(KoOdf::Text), saveHelper);
-    QMimeData* mimeData = drag.mimeData();
+    QList<KoShape*> clonedShapes;
+    Q_FOREACH (KoShape *shape, originalShapes) {
+        clonedShapes << shape->cloneShape();
+    }
 
-    Q_ASSERT(mimeData->hasFormat(KoOdf::mimeType(KoOdf::Text)));
-
-    KisShapeSelectionPaste paste(view);
-    paste.paste(KoOdf::Text, mimeData);
+    KisSelectionToolHelper helper(view->canvasBase(), kundo2_i18n("Convert shapes to vector selection"));
+    helper.addSelectionShapes(clonedShapes);
 }
 
 void KisSelectionToShapeActionFactory::run(KisViewManager *view)

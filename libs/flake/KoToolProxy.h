@@ -145,9 +145,6 @@ public:
     bool paste();
 
     /// Forwarded to the current KoToolBase
-    QStringList supportedPasteMimeTypes() const;
-
-    /// Forwarded to the current KoToolBase
     void dragMoveEvent(QDragMoveEvent *event, const QPointF &point);
 
     /// Forwarded to the current KoToolBase

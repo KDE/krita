@@ -46,6 +46,7 @@
 #include <KoColorSpace.h>
 #include <KoCompositeOp.h>
 #include <KoToolProxy.h>
+#include <KoSvgPaste.h>
 #include <kis_icon.h>
 
 #include "kis_adjustment_layer.h"
@@ -276,21 +277,8 @@ bool KisSelectionManager::haveShapesSelected()
 
 bool KisSelectionManager::haveShapesInClipboard()
 {
-    KisShapeLayer *shapeLayer =
-        dynamic_cast<KisShapeLayer*>(m_view->activeLayer().data());
-
-    if (shapeLayer) {
-        const QMimeData* data = QApplication::clipboard()->mimeData();
-        if (data) {
-            QStringList mimeTypes = m_view->canvasBase()->toolProxy()->supportedPasteMimeTypes();
-            Q_FOREACH (const QString & mimeType, mimeTypes) {
-                if (data->hasFormat(mimeType)) {
-                    return true;
-                }
-            }
-        }
-    }
-    return false;
+    KoSvgPaste paste;
+    return paste.hasShapes();
 }
 
 bool KisSelectionManager::havePixelSelectionWithPixels()

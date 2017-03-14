@@ -83,7 +83,6 @@ set(kritaflake_SRCS
     KoSvgPaste.cpp
     KoDragOdfSaveHelper.cpp
     KoShapeOdfSaveHelper.cpp
-    KoShapePaste.cpp
     KoConnectionPoint.cpp
     KoConnectionShape.cpp
     KoConnectionShapeLoadingUpdater.cpp

@@ -33,6 +33,7 @@
 #include <KoCompositeOp.h>
 #include <KoShapeManager.h>
 #include <KisDocument.h>
+
 #include <KoEmbeddedDocumentSaver.h>
 #include <KoGenStyles.h>
 #include <KoOdfLoadingContext.h>
@@ -58,7 +59,6 @@
 
 #include "kis_shape_selection_model.h"
 #include "kis_shape_selection_canvas.h"
-#include "kis_shape_layer_paste.h"
 #include "kis_take_all_shapes_command.h"
 #include "kis_image_view_converter.h"
 
@@ -97,18 +97,8 @@ KisShapeSelection::KisShapeSelection(const KisShapeSelection& rhs, KisSelection*
     m_canvas = new KisShapeSelectionCanvas();
     m_canvas->shapeManager()->addShape(this);
 
-    KoShapeOdfSaveHelper saveHelper(rhs.shapes());
-    KoDrag drag;
-    drag.setOdf(KoOdf::mimeType(KoOdf::Text), saveHelper);
-    QMimeData* mimeData = drag.mimeData();
-
-    Q_ASSERT(mimeData->hasFormat(KoOdf::mimeType(KoOdf::Text)));
-
-    KisShapeLayerShapePaste paste(this, 0);
-    bool success = paste.paste(KoOdf::Text, mimeData);
-    Q_ASSERT(success);
-    if (!success) {
-        warnUI << "Could not paste vector layer";
+    Q_FOREACH (KoShape *shape, rhs.shapes()) {
+        this->addShape(shape->cloneShape());
     }
 }
 

@@ -39,7 +39,6 @@
 #include <KoSelectedShapesProxy.h>
 #include <KoShapeGroup.h>
 #include <KoShapeLayer.h>
-#include <KoShapePaste.h>
 #include <KoShapeOdfSaveHelper.h>
 #include <KoDrag.h>
 #include <KoCanvasBase.h>
@@ -831,13 +830,6 @@ bool DefaultTool::paste()
 {
     // we no longer have to do anything as tool Proxy will do it for us
     return false;
-}
-
-QStringList DefaultTool::supportedPasteMimeTypes() const
-{
-    QStringList list;
-    list << KoOdf::mimeType(KoOdf::Text);
-    return list;
 }
 
 KoSelection *DefaultTool::koSelection()

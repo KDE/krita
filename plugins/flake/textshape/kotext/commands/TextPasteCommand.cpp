@@ -23,7 +23,6 @@
 #include <KoText.h>
 #include <KoTextEditor.h>
 #include <KoTextDocument.h>
-#include <KoTextPaste.h>
 #include <KoShapeController.h>
 #include <KoParagraphStyle.h>
 
@@ -35,6 +34,9 @@
 
 #include "DeleteCommand.h"
 #include "KoDocumentRdfBase.h"
+
+#include <KoOdf.h>
+#include <kis_assert.h>
 
 #ifdef SHOULD_BUILD_RDF
 #include <Soprano/Soprano>
@@ -114,8 +116,10 @@ void TextPasteCommand::redo()
                 }
 #endif
 
-                KoTextPaste paste(editor, m_shapeController, rdfModel, m_canvas, this);
-                paste.paste(odfType, m_mimeData);
+                KIS_SAFE_ASSERT_RECOVER_NOOP(0 && "Pasting of text is not implemented yet!");
+
+                //KoTextPaste paste(editor, m_shapeController, rdfModel, m_canvas, this);
+                //paste.paste(odfType, m_mimeData);
 
 #ifdef SHOULD_BUILD_RDF
                 if (m_rdf) {

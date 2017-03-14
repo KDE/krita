@@ -43,7 +43,6 @@
 #include "KoShapeManager.h"
 #include "KoSelection.h"
 #include "KoShapeLayer.h"
-#include "KoShapePaste.h"
 #include "KoShapeRegistry.h"
 #include "KoShapeController.h"
 #include "KoOdf.h"
@@ -529,14 +528,6 @@ void KoToolProxy::dropEvent(QDropEvent *event, const QPointF &point)
 {
     if (d->activeTool)
         d->activeTool->dropEvent(event, point);
-}
-
-QStringList KoToolProxy::supportedPasteMimeTypes() const
-{
-    if (d->activeTool)
-        return d->activeTool->supportedPasteMimeTypes();
-
-    return QStringList();
 }
 
 void KoToolProxy::deleteSelection()

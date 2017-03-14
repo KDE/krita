@@ -280,16 +280,9 @@ public:
      * Paste the clipboard selection.
      * A tool typically has one or more shapes selected and pasting should do something meaningful
      * for this specific shape and tool combination.  Inserting text in a text tool, for example.
-     * If you reimplement this function make sure to also reimplement supportedPasteMimeTypes().
      * @return will return true if pasting succeeded. False if nothing happened.
      */
     virtual bool paste();
-
-    /**
-     * Returns the mimetypes that this tool's paste() function can handle
-     * @return QStringList containing the mimetypes that's supported by paste()
-     */
-    virtual QStringList supportedPasteMimeTypes() const;
 
     /**
      * Handle the dragMoveEvent

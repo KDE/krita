@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
  * Copyright (C) 2007,2011 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2017 Boudewijn Rempt <boud@valdyas.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -38,7 +39,9 @@ ShapeResizeStrategy::ShapeResizeStrategy(KoToolBase *tool, const QPointF &clicke
     : KoInteractionStrategy(tool)
     , m_lastScale(1.0, 1.0)
 {
+    Q_ASSERT(tool->canvas()->shapeManager()->selection());
     Q_ASSERT(tool->canvas()->shapeManager()->selection()->count() > 0);
+
     QList<KoShape *> selectedShapes = tool->canvas()->shapeManager()->selection()->selectedShapes(KoFlake::StrippedSelection);
     Q_FOREACH (KoShape *shape, selectedShapes) {
         if (!shape->isEditable()) {

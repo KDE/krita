@@ -268,7 +268,11 @@ bool KisSelectionManager::havePixelsInClipboard()
 
 bool KisSelectionManager::haveShapesSelected()
 {
-    if (m_view && m_view->canvasBase() && m_view->canvasBase()->shapeManager() && m_view->canvasBase()->shapeManager()->selection()->count()) {
+    if (m_view
+            && m_view->canvasBase()
+            && m_view->canvasBase()->shapeManager()
+            && m_view->canvasBase()->shapeManager()->selection()
+            && m_view->canvasBase()->shapeManager()->selection()->count()) {
         return m_view->canvasBase()->shapeManager()->selection()->count() > 0;
     }
     return false;

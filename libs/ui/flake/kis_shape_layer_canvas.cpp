@@ -40,8 +40,7 @@
 //#define DEBUG_REPAINT
 
 KisShapeLayerCanvas::KisShapeLayerCanvas(KisShapeLayer *parent, KisImageWSP image)
-        : QObject()
-        , KoCanvasBase(0)
+        : KoCanvasBase(0)
         , m_isDestroying(false)
         , m_viewConverter(new KisImageViewConverter(image))
         , m_shapeManager(new KoShapeManager(this))

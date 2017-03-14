@@ -19,14 +19,15 @@
 #define _PRESETHISTORY_DOCK_H_
 
 #include <QDockWidget>
+#include <QPointer>
+
 #include <KoCanvasObserverBase.h>
 
+#include <kis_canvas2.h>
 #include <kis_types.h>
 
 class QListWidget;
 class QListWidgetItem;
-class KisCanvas2;
-
 
 class PresetHistoryDock : public QDockWidget, public KoCanvasObserverBase {
     Q_OBJECT
@@ -42,7 +43,7 @@ private Q_SLOTS:
 private:
     void addPreset(KisPaintOpPresetSP preset);
 private:
-    KisCanvas2 *m_canvas;
+    QPointer<KisCanvas2> m_canvas;
     QListWidget *m_presetHistory;
     bool m_block;
     bool m_initialized;

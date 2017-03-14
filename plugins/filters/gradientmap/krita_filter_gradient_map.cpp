@@ -35,7 +35,7 @@
 #include <kis_sequential_iterator.h>
 
 
-KritaFilterGradientMap::KritaFilterGradientMap() : KisFilter(id(), categoryMap(), i18n("&Gradient Map"))
+KritaFilterGradientMap::KritaFilterGradientMap() : KisFilter(id(), categoryMap(), i18n("&Gradient Map..."))
 {
     setColorSpaceIndependence(FULLY_INDEPENDENT);
     setShowConfigurationWidget(true);

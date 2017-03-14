@@ -30,6 +30,8 @@
 #include "kis_signal_compressor.h"
 #include "KisPart.h"
 
+Q_GLOBAL_STATIC(QFileSystemWatcher, s_fileSystemWatcher)
+
 struct KisSafeDocumentLoader::Private
 {
     Private()
@@ -40,11 +42,10 @@ struct KisSafeDocumentLoader::Private
     }
 
     QScopedPointer<KisDocument>  doc;
-    QFileSystemWatcher fileWatcher;
     KisSignalCompressor fileChangedSignalCompressor;
     QTimer delayedLoadTimer;
-    bool isLoading;
-    bool fileChangedFlag;
+    bool isLoading {true};
+    bool fileChangedFlag {false};
     QString path;
     QString temporaryPath;
 
@@ -56,10 +57,10 @@ KisSafeDocumentLoader::KisSafeDocumentLoader(const QString &path, QObject *paren
     : QObject(parent),
       m_d(new Private())
 {
-    connect(&m_d->fileWatcher, SIGNAL(fileChanged(QString)),
-            SLOT(fileChanged()));
+    connect(s_fileSystemWatcher, SIGNAL(fileChanged(QString)),
+            SLOT(fileChanged(QString)));
 
-    connect(&m_d->fileWatcher, SIGNAL(fileChanged(QString)),
+    connect(s_fileSystemWatcher, SIGNAL(fileChanged(QString)),
             &m_d->fileChangedSignalCompressor, SLOT(start()));
 
     connect(&m_d->fileChangedSignalCompressor, SIGNAL(timeout()),
@@ -76,6 +77,7 @@ KisSafeDocumentLoader::KisSafeDocumentLoader(const QString &path, QObject *paren
 
 KisSafeDocumentLoader::~KisSafeDocumentLoader()
 {
+    s_fileSystemWatcher->removePath(m_d->path);
     delete m_d;
 }
 
@@ -84,11 +86,11 @@ void KisSafeDocumentLoader::setPath(const QString &path)
     if (path.isEmpty()) return;
 
     if (!m_d->path.isEmpty()) {
-        m_d->fileWatcher.removePath(m_d->path);
+        s_fileSystemWatcher->removePath(m_d->path);
     }
 
     m_d->path = path;
-    m_d->fileWatcher.addPath(m_d->path);
+    s_fileSystemWatcher->addPath(m_d->path);
 }
 
 void KisSafeDocumentLoader::reloadImage()
@@ -96,9 +98,11 @@ void KisSafeDocumentLoader::reloadImage()
     fileChangedCompressed(true);
 }
 
-void KisSafeDocumentLoader::fileChanged()
+void KisSafeDocumentLoader::fileChanged(QString path)
 {
-    m_d->fileChangedFlag = true;
+    if (path == m_d->path) {
+        m_d->fileChangedFlag = true;
+    }
 }
 
 void KisSafeDocumentLoader::fileChangedCompressed(bool sync)
@@ -164,7 +168,8 @@ void KisSafeDocumentLoader::delayedLoadStart()
     if (!successfullyLoaded) {
         // Restart the attempt
         m_d->fileChangedSignalCompressor.start();
-    } else {
+    }
+    else {
         KisPaintDeviceSP paintDevice = new KisPaintDevice(m_d->doc->image()->colorSpace());
         KisPaintDeviceSP projection = m_d->doc->image()->projection();
         paintDevice->makeCloneFrom(projection, projection->extent());

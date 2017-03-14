@@ -144,16 +144,18 @@ void KoCanvasControllerWidget::Private::activate()
     if (!observerProvider) {
         return;
     }
+
+    KoCanvasBase *canvas = q->canvas();
     Q_FOREACH (KoCanvasObserverBase *docker, observerProvider->canvasObservers()) {
         KoCanvasObserverBase *observer = dynamic_cast<KoCanvasObserverBase*>(docker);
         if (observer) {
-            observer->setObservedCanvas(q->canvas());
+            observer->setObservedCanvas(canvas);
         }
     }
 
 }
 
-void KoCanvasControllerWidget::Private::unsetCanvas()
+void KoCanvasControllerWidget::Private::unsetCanvas(KoCanvasBase *canvas)
 {
     QWidget *parent = q;
     while (parent->parentWidget()) {
@@ -165,8 +167,10 @@ void KoCanvasControllerWidget::Private::unsetCanvas()
     }
     Q_FOREACH (KoCanvasObserverBase *docker, observerProvider->canvasObservers()) {
         KoCanvasObserverBase *observer = dynamic_cast<KoCanvasObserverBase*>(docker);
-        if (observer && observer->observedCanvas() == q->canvas()) {
-            observer->unsetObservedCanvas();
+       if (observer) {
+            if (!canvas || observer->observedCanvas() == q->canvas()) {
+                observer->unsetObservedCanvas();
+            }
         }
     }
 }
@@ -207,7 +211,7 @@ KoCanvasControllerWidget::KoCanvasControllerWidget(KActionCollection * actionCol
 
 KoCanvasControllerWidget::~KoCanvasControllerWidget()
 {
-    d->unsetCanvas();
+    d->unsetCanvas(0);
     delete d;
 }
 
@@ -247,7 +251,7 @@ void KoCanvasControllerWidget::setCanvas(KoCanvasBase *canvas)
 {
     Q_ASSERT(canvas); // param is not null
     if (d->canvas) {
-        d->unsetCanvas();
+        d->unsetCanvas(canvas);
         proxyObject->emitCanvasRemoved(this);
         canvas->setCanvasController(0);
         d->canvas->canvasWidget()->removeEventFilter(this);
@@ -266,6 +270,7 @@ void KoCanvasControllerWidget::setCanvas(KoCanvasBase *canvas)
 
 KoCanvasBase* KoCanvasControllerWidget::canvas() const
 {
+    if (d->canvas.isNull()) return 0;
     return d->canvas;
 }
 

@@ -52,8 +52,8 @@
 #include <kis_tablet_support_win.h>
 
 #elif defined HAVE_X11
-    #include <kis_tablet_support_x11.h>
-    #include <kis_xi2_event_filter.h>
+#include <kis_tablet_support_x11.h>
+#include <kis_xi2_event_filter.h>
 #endif
 
 #if defined HAVE_KCRASH
@@ -119,9 +119,18 @@ extern "C" int main(int argc, char **argv)
     QCoreApplication::setAttribute(Qt::AA_DontCreateNativeWidgetSiblings, true);
     QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps, true);
 
+    const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
+
+
 #if QT_VERSION >= 0x050600
-    if (!qgetenv("KRITA_HIDPI").isEmpty()) {
-        QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+    {
+        QSettings kritarc(configPath + QStringLiteral("/kritaopenglrc"), QSettings::IniFormat);
+        if (kritarc.value("EnableHiDPI", false).toBool()) {
+            QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+        }
+        if (!qgetenv("KRITA_HIDPI").isEmpty()) {
+            QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+        }
     }
 #endif
 
@@ -142,31 +151,32 @@ extern "C" int main(int argc, char **argv)
 
     // Now that the paths are set, set the language. First check the override from the langage
     // selection dialog.
-    const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
-    QSettings languageoverride(configPath + QStringLiteral("/klanguageoverridesrc"), QSettings::IniFormat);
-    languageoverride.beginGroup(QStringLiteral("Language"));
-    QString language = languageoverride.value(qAppName(), "").toString();
+    {
+        QSettings languageoverride(configPath + QStringLiteral("/klanguageoverridesrc"), QSettings::IniFormat);
+        languageoverride.beginGroup(QStringLiteral("Language"));
+        QString language = languageoverride.value(qAppName(), "").toString();
 
-    qDebug() << "Override language:" << language;
+        qDebug() << "Override language:" << language;
 
-    if (!language.isEmpty()) {
-        KLocalizedString::setLanguages(language.split(":"));
-        // And override Qt's locale, too
-        qputenv("LANG", language.split(":").first().toUtf8());
-        QLocale locale(language.split(":").first());
-        QLocale::setDefault(locale);
-        qDebug() << "Qt ui languages" << locale.uiLanguages();
-    }
-    else {
-        // And if there isn't one, check the one set by the system.
-        // XXX: This doesn't work, for some !@#$% reason.
-        QLocale locale = QLocale::system();
-        if (locale.bcp47Name() != QStringLiteral("en")) {
-            qputenv("LANG", locale.bcp47Name().toLatin1());
-            KLocalizedString::setLanguages(QStringList() << locale.bcp47Name());
+        if (!language.isEmpty()) {
+            KLocalizedString::setLanguages(language.split(":"));
+            // And override Qt's locale, too
+            qputenv("LANG", language.split(":").first().toUtf8());
+            QLocale locale(language.split(":").first());
+            QLocale::setDefault(locale);
+            qDebug() << "Qt ui languages" << locale.uiLanguages();
         }
-    }
+        else {
+            // And if there isn't one, check the one set by the system.
+            // XXX: This doesn't work, for some !@#$% reason.
+            QLocale locale = QLocale::system();
+            if (locale.bcp47Name() != QStringLiteral("en")) {
+                qputenv("LANG", locale.bcp47Name().toLatin1());
+                KLocalizedString::setLanguages(QStringList() << locale.bcp47Name());
+            }
+        }
 
+    }
 #ifdef Q_OS_WIN
     QDir appdir(KoResourcePaths::getApplicationRoot());
     QString path = qgetenv("PATH");
@@ -226,7 +236,7 @@ extern "C" int main(int argc, char **argv)
     QWidget *splash = 0;
     if (currentDate > QDate(currentDate.year(), 12, 4) ||
             currentDate < QDate(currentDate.year(), 1, 9)) {
-         splash = new KisSplashScreen(app.applicationVersion(), QPixmap(splash_holidays_xpm));
+        splash = new KisSplashScreen(app.applicationVersion(), QPixmap(splash_holidays_xpm));
     }
     else {
         splash = new KisSplashScreen(app.applicationVersion(), QPixmap(splash_screen_xpm));
@@ -256,6 +266,11 @@ extern "C" int main(int argc, char **argv)
                      &app, SLOT(fileOpenRequested(QString)));
 
     int state = app.exec();
+
+    {
+        QSettings kritarc(configPath + QStringLiteral("/kritaopenglrc"), QSettings::IniFormat);
+        kritarc.setValue("canvasState", "OPENGL_SUCCESS");
+    }
 
     return state;
 }

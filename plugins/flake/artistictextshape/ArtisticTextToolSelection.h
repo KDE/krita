@@ -22,9 +22,11 @@
 
 #include <KoToolSelection.h>
 #include <QPainterPath>
+#include <QPointer>
+
+#include <KoCanvasBase.h>
 
 class ArtisticTextShape;
-class KoCanvasBase;
 class KoViewConverter;
 class QPainter;
 
@@ -65,7 +67,7 @@ private:
     /// Returns the outline of the selection in document coordinates
     QPainterPath outline();
 
-    KoCanvasBase *m_canvas;
+    QPointer<KoCanvasBase> m_canvas;
     ArtisticTextShape *m_currentShape; ///< the currently selected text shape
     int m_selectionStart;
     int m_selectionCount;

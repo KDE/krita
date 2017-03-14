@@ -136,6 +136,12 @@ KoShapeController::~KoShapeController()
     delete d;
 }
 
+void KoShapeController::reset()
+{
+    d->canvas = 0;
+    d->shapeBasedDocument = 0;
+}
+
 KUndo2Command* KoShapeController::addShape(KoShape *shape, KUndo2Command *parent)
 {
     return d->addShape(shape, true, parent);

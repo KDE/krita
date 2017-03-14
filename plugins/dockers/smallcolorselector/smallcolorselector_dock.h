@@ -18,7 +18,10 @@
 #ifndef _SMALLCOLORSELECTOR_DOCK_H_
 #define _SMALLCOLORSELECTOR_DOCK_H_
 
+#include <QPointer>
 #include <QDockWidget>
+
+#include <KoCanvasBase.h>
 #include <KoCanvasObserverBase.h>
 
 class KisSmallColorWidget;
@@ -37,7 +40,7 @@ public Q_SLOTS:
     void canvasResourceChanged(int, const QVariant&);
 private:
     KisSmallColorWidget* m_smallColorWidget;
-    KoCanvasBase* m_canvas;
+    QPointer<KoCanvasBase> m_canvas;
 };
 
 

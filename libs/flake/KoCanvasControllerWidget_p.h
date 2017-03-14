@@ -55,10 +55,10 @@ public:
     void emitPointerPositionChangedSignals(QEvent *event);
 
     void activate();
-    void unsetCanvas();
+    void unsetCanvas(KoCanvasBase *canvas);
 
     KoCanvasControllerWidget *q;
-    KoCanvasBase *canvas;
+    QPointer<KoCanvasBase> canvas;
     Viewport *viewportWidget;
     bool ignoreScrollSignals;
     bool zoomWithWheel;

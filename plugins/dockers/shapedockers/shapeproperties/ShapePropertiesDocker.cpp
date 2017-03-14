@@ -34,22 +34,23 @@
 #include <klocalizedstring.h>
 
 #include <QStackedWidget>
+#include <QPointer>
 
 class ShapePropertiesDocker::Private
 {
 public:
-    Private() 
+    Private()
         : widgetStack(0)
         , currentShape(0)
         , currentPanel(0)
-        , canvas(0) 
+        , canvas(0)
     {
     }
-    
+
     QStackedWidget *widgetStack;
     KoShape *currentShape;
     KoShapeConfigWidgetBase *currentPanel;
-    KoCanvasBase *canvas;
+    QPointer<KoCanvasBase> canvas;
 };
 
 ShapePropertiesDocker::ShapePropertiesDocker(QWidget *parent)
@@ -99,7 +100,7 @@ void ShapePropertiesDocker::selectionChanged()
     }
 
     KoSelection *selection = d->canvas->shapeManager()->selection();
-    if (selection->count() == 1) {
+    if (selection && selection->count() == 1) {
         addWidgetForShape(selection->firstSelectedShape());
     } else {
         addWidgetForShape(0);

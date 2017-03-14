@@ -871,16 +871,18 @@ void TimelineFramesView::mousePressEvent(QMouseEvent *event)
                 m_d->frameCreationMenu->exec(event->globalPos());
             }
         } else if (numSelectedItems > 1) {
-            int labelIndex = 0;
+            int labelIndex = -1;
             bool haveFrames = false;
             Q_FOREACH(QModelIndex index, selectedIndexes()) {
                 haveFrames |= index.data(TimelineFramesModel::FrameExistsRole).toBool();
                 QVariant colorLabel = index.data(TimelineFramesModel::FrameColorLabelIndexRole);
                 if (colorLabel.isValid()) {
-                    if (labelIndex == 0) {
+                    if (labelIndex == -1) {
+                        // First label
                         labelIndex = colorLabel.toInt();
-                    } else {
-                        labelIndex = 0;
+                    } else if (labelIndex != colorLabel.toInt()) {
+                        // Mixed colors in selection
+                        labelIndex = -1;
                         break;
                     }
                 }

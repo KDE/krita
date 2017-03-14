@@ -18,16 +18,18 @@
 #ifndef H_IMAGEDOCKER_DOCK_H_
 #define H_IMAGEDOCKER_DOCK_H_
 
+#include <QPointer>
 #include <QDockWidget>
 #include <KoCanvasObserverBase.h>
 #include <QStringList>
 #include <QPixmap>
 #include <QMap>
 
+#include <KoCanvasBase.h>
+
 class QModelIndex;
 class QFileSystemModel;
 class QButtonGroup;
-class KoCanvasBase;
 class ImageFilter;
 class ImageStripScene;
 class ImageListModel;
@@ -94,7 +96,7 @@ private:
 private:
     QFileSystemModel*      m_model;
     QButtonGroup*          m_zoomButtons;
-    KoCanvasBase*          m_canvas;
+    QPointer<KoCanvasBase> m_canvas;
     ImageFilter*           m_proxyModel;
     ImageListModel*        m_imgListModel;
     QStringList            m_history;

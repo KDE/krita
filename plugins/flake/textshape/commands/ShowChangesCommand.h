@@ -22,12 +22,16 @@
 #define SHOWCHANGECOMMAND_H
 
 #include "KoTextCommandBase.h"
+
 #include <QObject>
+#include <QPointer>
 #include <QList>
+
+#include <KoCanvasBase.h>
 
 class KoChangeTracker;
 class KoTextEditor;
-class KoCanvasBase;
+
 
 class QTextDocument;
 
@@ -58,7 +62,7 @@ private:
     KoTextEditor *m_textEditor;
     bool m_first;
     bool m_showChanges;
-    KoCanvasBase *m_canvas;
+    QPointer<KoCanvasBase> m_canvas;
 
     QList<KUndo2Command *> m_shapeCommands;
 };

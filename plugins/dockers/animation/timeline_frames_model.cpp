@@ -63,7 +63,7 @@ struct TimelineFramesModel::Private
 
     int activeLayerIndex;
 
-    KisDummiesFacadeBase *dummiesFacade;
+    QPointer<KisDummiesFacadeBase> dummiesFacade;
     KisImageWSP image;
     bool needFinishInsertRows;
     bool needFinishRemoveRows;
@@ -229,7 +229,7 @@ void TimelineFramesModel::setDummiesFacade(KisDummiesFacadeBase *dummiesFacade, 
 {
     KisDummiesFacadeBase *oldDummiesFacade = m_d->dummiesFacade;
 
-    if (m_d->dummiesFacade) {
+    if (m_d->dummiesFacade && m_d->image) {
         m_d->image->animationInterface()->disconnect(this);
         m_d->image->disconnect(this);
         m_d->dummiesFacade->disconnect(this);

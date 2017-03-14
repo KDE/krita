@@ -43,7 +43,7 @@ public:
     HistoryDock();
     QString observerName() { return "HistoryDock"; }
     virtual void setCanvas(KoCanvasBase *canvas);
-    virtual void unsetCanvas() { m_historyCanvas = 0; setEnabled(false); m_undoView->setStack(0); }
+    virtual void unsetCanvas();
 
 private Q_SLOTS:
     void configure();

@@ -133,7 +133,6 @@ void KisActionManager::slotActionAddedToCollection(QAction *action)
      * directly to the action collection when a document is created. Here we
      * catch these cases
      */
-
     KisActionRegistry::instance()->updateShortcut(action->objectName(), action);
 }
 

@@ -1675,11 +1675,15 @@ bool KisDocument::isAutosaving() const
 bool KisDocument::prepareLocksForSaving()
 {
     KisImageSP copiedImage;
-
+    // XXX: Restore this when
+    // a) cloning works correctly and
+    // b) doesn't take ages because it needs to refresh its entire graph and finally,
+    // c) we do use the saving image to save in the background.
     {
         Private::SafeSavingLocker locker(d, this);
         if (locker.successfullyLocked()) {
-            copiedImage = d->image->clone(true);
+
+            copiedImage = d->image; //->clone(true);
         }
         else if (!isAutosaving()) {
             // even though it is a recovery operation, we should ensure we do not enter saving twice!
@@ -1688,8 +1692,8 @@ bool KisDocument::prepareLocksForSaving()
             if (l.owns_lock()) {
                 d->lastErrorMessage = i18n("The image was still busy while saving. Your saved image might be incomplete.");
                 d->image->lock();
-                copiedImage = d->image->clone(true);
-                copiedImage->initialRefreshGraph();
+                copiedImage = d->image; //->clone(true);
+                //copiedImage->initialRefreshGraph();
                 d->image->unlock();
             }
         }

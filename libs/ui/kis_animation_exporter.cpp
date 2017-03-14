@@ -210,8 +210,8 @@ void KisAnimationExporter::frameReadyToSave()
     result = m_d->saveFrameCallback(time, m_d->tmpDevice, m_d->exportConfiguration);
 
     if (!m_d->batchMode) {
-        emit m_d->document->sigProgress((time - m_d->firstFrame) * 100 /
-                                        (m_d->lastFrame - m_d->firstFrame));
+        int length = m_d->lastFrame - m_d->firstFrame + 1;
+        emit m_d->document->sigProgress((time - m_d->firstFrame) * 100 / length);
     }
 
     qDebug() << result << time << m_d->lastFrame;

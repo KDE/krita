@@ -63,8 +63,8 @@ void TestShapeStrokeCommand::refCounting()
     whiteStroke->strokeInsets(shape1, insets);
 
     delete cmd2;
-    delete shape1;
-    delete whiteStroke;
+    delete shape1; // This deletes whiteStroke
+
     delete blackStroke;
     delete redStroke;
 }

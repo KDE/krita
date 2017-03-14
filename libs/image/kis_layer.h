@@ -245,6 +245,8 @@ public:
 
     QImage createThumbnail(qint32 w, qint32 h) override;
 
+    QImage createThumbnailForFrame(qint32 w, qint32 h, int time) override;
+
 public:
     /**
      * Returns true if there are any effect masks present

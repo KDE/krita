@@ -111,6 +111,22 @@ public:
     void setShapeControllerBase(KoShapeBasedDocumentBase *shapeBasedDocument);
 
     /**
+     * The size of the document measured in rasterized pixels. This information is needed for loading
+     * SVG documents that use 'px' as the default unit.
+     */
+    QRectF documentRectInPixels() const;
+
+    /**
+     * Resolution of the rasterized representaiton of the document. Used to load SVG documents correctly.
+     */
+    qreal pixelsPerInch() const;
+
+    /**
+     * Document rect measured in 'pt'
+     */
+    QRectF documentRect() const;
+
+    /**
      * Return a pointer to the resource manager associated with the
      * shape-set (typically a document). The resource manager contains
      * document wide resources * such as variable managers, the image

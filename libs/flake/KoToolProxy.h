@@ -142,7 +142,7 @@ public:
     void copy() const;
 
     /// Forwarded to the current KoToolBase
-    bool paste();
+    bool paste(bool pasteAtCursorPosition = false);
 
     /// Forwarded to the current KoToolBase
     QStringList supportedPasteMimeTypes() const;

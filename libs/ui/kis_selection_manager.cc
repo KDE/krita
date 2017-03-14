@@ -383,12 +383,13 @@ void KisSelectionManager::copyMerged()
 void KisSelectionManager::paste()
 {
     KisPasteActionFactory factory;
-    factory.run(m_view);
+    factory.run(false, m_view);
 }
 
 void KisSelectionManager::pasteAt()
 {
-    //XXX
+    KisPasteActionFactory factory;
+    factory.run(true, m_view);
 }
 
 void KisSelectionManager::pasteNew()

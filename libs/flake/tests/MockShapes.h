@@ -99,6 +99,14 @@ public:
         m_shapeManager = shapeManager;
     }
 
+    QRectF documentRectInPixels() const {
+        return QRectF(0,0,100,100);
+    }
+
+    qreal pixelsPerInch() const {
+        return 72.0;
+    }
+
 private:
     QSet<KoShape * > m_shapes;
     KoShapeManager *m_shapeManager = 0;

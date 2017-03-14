@@ -45,6 +45,9 @@ public:
      */
     KoShapeMoveCommand(const QList<KoShape*> &shapes, QList<QPointF> &previousPositions, QList<QPointF> &newPositions,
                        KoFlake::AnchorPosition anchor = KoFlake::Center, KUndo2Command *parent = 0);
+
+    KoShapeMoveCommand(const QList<KoShape*> &shapes, const QPointF &offset, KUndo2Command *parent = 0);
+
     ~KoShapeMoveCommand();
     /// redo the command
     void redo() override;

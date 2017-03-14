@@ -381,14 +381,25 @@ void KisCopyMergedActionFactory::run(KisViewManager *view)
     endAction(ap, KisOperationConfiguration(id()).toXML());
 }
 
-void KisPasteActionFactory::run(KisViewManager *view)
+void KisPasteActionFactory::run(bool pasteAtCursorPosition, KisViewManager *view)
 {
-    KisImageWSP image = view->image();
+    KisImageSP image = view->image();
     if (!image) return;
 
-    KisPaintDeviceSP clip = KisClipboard::instance()->clip(image->bounds(), true);
+    const QRect fittingBounds = pasteAtCursorPosition ? QRect() : image->bounds();
+    KisPaintDeviceSP clip = KisClipboard::instance()->clip(fittingBounds, true);
 
     if (clip) {
+        if (pasteAtCursorPosition) {
+            const QPointF docPos = view->canvasBase()->canvasController()->currentCursorPosition();
+            const QPointF imagePos = view->canvasBase()->coordinatesConverter()->documentToImage(docPos);
+
+            const QPointF offset = (imagePos - QRectF(clip->exactBounds()).center()).toPoint();
+
+            clip->setX(clip->x() + offset.x());
+            clip->setY(clip->y() + offset.y());
+        }
+
         KisImportCatcher::adaptClipToImageColorSpace(clip, image);
         KisPaintLayer *newLayer = new KisPaintLayer(image.data(), image->nextLayerName() + i18n("(pasted)"), OPACITY_OPAQUE_U8, clip);
         KisNodeSP aboveNode = view->activeLayer();
@@ -400,7 +411,7 @@ void KisPasteActionFactory::run(KisViewManager *view)
         endAction(ap, KisOperationConfiguration(id()).toXML());
     } else {
         // XXX: "Add saving of XML data for Paste of shapes"
-        view->canvasBase()->toolProxy()->paste();
+        view->canvasBase()->toolProxy()->paste(pasteAtCursorPosition);
     }
 }
 

@@ -60,6 +60,12 @@ krita_add_broken_unit_test(TestPointMergeCommand.cpp
     LINK_LIBRARIES kritaflake Qt5::Test)
 
 ecm_add_test(
+    TestKoDrag.cpp
+    TEST_NAME libs-kritaflake-TestKoDrag
+    LINK_LIBRARIES kritaflake Qt5::Test
+)
+
+ecm_add_test(
     TestKoMarkerCollection.cpp
     TEST_NAME libs-kritaflake-TestKoMarkerCollection
     LINK_LIBRARIES kritaflake Qt5::Test

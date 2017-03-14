@@ -454,6 +454,15 @@ QRectF KoShape::boundingRect() const
     return bb;
 }
 
+QRectF KoShape::boundingRect(const QList<KoShape *> &shapes)
+{
+    QRectF boundingRect;
+    Q_FOREACH (KoShape *shape, shapes) {
+        boundingRect |= shape->boundingRect();
+    }
+    return boundingRect;
+}
+
 QTransform KoShape::absoluteTransformation(const KoViewConverter *converter) const
 {
     Q_D(const KoShape);

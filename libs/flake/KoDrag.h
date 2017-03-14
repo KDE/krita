@@ -22,11 +22,14 @@
 
 #include "kritaflake_export.h"
 
+#include <QList>
+
 class QMimeData;
 class QString;
 class QByteArray;
 class KoDragOdfSaveHelper;
 class KoDragPrivate;
+class KoShape;
 
 /**
  * Class for simplifying adding a odf to the clip board
@@ -50,7 +53,9 @@ public:
      * @param mimeType used for creating the odf document
      * @param helper helper for saving the body of the odf document
      */
-    bool setOdf(const char *mimeType, KoDragOdfSaveHelper &helper);
+    bool setOdf(const char *, KoDragOdfSaveHelper &);
+
+    bool setSvg(const QList<KoShape*> shapes);
 
     /**
      * Add additional mimeTypes

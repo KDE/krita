@@ -44,6 +44,8 @@
 #include "kis_action_registry.h"
 #include "KoToolFactoryBase.h"
 
+#include <krita_container_utils.h>
+
 // Qt + kde
 #include <QWidget>
 #include <QEvent>
@@ -374,13 +376,17 @@ KoCanvasController *KoToolManager::activeCanvasController() const
 QString KoToolManager::preferredToolForSelection(const QList<KoShape*> &shapes)
 {
     QList<QString> types;
-    Q_FOREACH (KoShape *shape, shapes)
-        if (! types.contains(shape->shapeId()))
-            types.append(shape->shapeId());
+    Q_FOREACH (KoShape *shape, shapes) {
+        types << shape->shapeId();
+    }
+
+    KritaUtils::makeContainerUnique(types);
 
     QString toolType = KoInteractionTool_ID;
     int prio = INT_MAX;
     Q_FOREACH (ToolHelper *helper, d->tools) {
+        if (helper->id() == KoCreateShapesTool_ID) continue;
+
         if (helper->priority() >= prio)
             continue;
 

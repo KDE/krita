@@ -59,7 +59,6 @@
 
 #include <QAction>
 #include <QKeyEvent>
-#include <QClipboard>
 #include <KoResourcePaths.h>
 
 #include <KoCanvasController.h>
@@ -815,11 +814,12 @@ void DefaultTool::repaintDecorations()
 
 void DefaultTool::copy() const
 {
+    // all the selected shapes, not only editable!
     QList<KoShape *> shapes = canvas()->selectedShapesProxy()->selection()->selectedShapes();
-    if (!shapes.empty()) {
-        KoShapeOdfSaveHelper saveHelper(shapes);
+
+    if (!shapes.isEmpty()) {
         KoDrag drag;
-        drag.setOdf(KoOdf::mimeType(KoOdf::Text), saveHelper);
+        drag.setSvg(shapes);
         drag.addToClipboard();
     }
 }

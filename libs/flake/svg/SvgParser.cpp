@@ -1300,7 +1300,6 @@ QList<KoShape*> SvgParser::parseSingleElement(const KoXmlElement &b)
              */
             KoShape *defsShape = parseGroup(b);
             defsShape->setVisible(false);
-            shapes += defsShape;
         }
     } else if (b.tagName() == "linearGradient" || b.tagName() == "radialGradient") {
     } else if (b.tagName() == "pattern") {

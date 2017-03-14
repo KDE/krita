@@ -89,9 +89,14 @@ struct KRITAUI_EXPORT KisCopyMergedActionFactory : public KisNoParameterActionFa
     void run(KisViewManager *view);
 };
 
-struct KRITAUI_EXPORT KisPasteActionFactory : public KisNoParameterActionFactory {
-    KisPasteActionFactory() : KisNoParameterActionFactory("paste-ui-action") {}
-    void run(KisViewManager *view);
+struct KRITAUI_EXPORT KisPasteActionFactory : public KisOperation {
+    KisPasteActionFactory() : KisOperation("paste-ui-action") {}
+
+    void runFromXML(KisViewManager *view, const KisOperationConfiguration &config) {
+        run(config.getBool("paste-at-cursor-position", false), view);
+    }
+
+    void run(bool pasteAtCursorPosition, KisViewManager *view);
 };
 
 struct KRITAUI_EXPORT KisPasteNewActionFactory : public KisNoParameterActionFactory {

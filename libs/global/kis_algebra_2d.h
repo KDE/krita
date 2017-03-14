@@ -479,6 +479,22 @@ inline QPointF absoluteToRelative(const QPointF &pt, const QRectF &rc) {
  */
 bool KRITAGLOBAL_EXPORT fuzzyMatrixCompare(const QTransform &t1, const QTransform &t2, qreal delta);
 
+/**
+ * Compare two rectangles with tolerance \p tolerance. The tolerance means that the
+ * coordinates of top left and bottom right corners should not differ more than \p tolerance
+ * pixels.
+ */
+template<class Rect, typename Difference = decltype(Rect::width())>
+bool fuzzyCompareRects(const Rect &r1, const Rect &r2, Difference tolerance) {
+    typedef decltype(r1.topLeft()) Point;
+
+    const Point d1 = abs(r1.topLeft() - r2.topLeft());
+    const Point d2 = abs(r1.bottomRight() - r2.bottomRight());
+
+    const Difference maxError = std::max({d1.x(), d1.y(), d2.x(), d2.y()});
+    return maxError < tolerance;
+}
+
 struct KRITAGLOBAL_EXPORT DecomposedMatix {
     DecomposedMatix();
 

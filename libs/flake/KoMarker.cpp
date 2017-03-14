@@ -277,11 +277,7 @@ qreal KoMarker::maxInset(qreal strokeWidth) const
 
 QRectF KoMarker::boundingRect(qreal strokeWidth, qreal nodeAngle) const
 {
-    QRectF shapesBounds;
-
-    Q_FOREACH (KoShape *shape, d->shapes) {
-        shapesBounds |= shape->boundingRect();
-    }
+    QRectF shapesBounds = KoShape::boundingRect(d->shapes);
 
     const QTransform t = d->markerTransform(strokeWidth, nodeAngle);
 

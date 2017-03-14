@@ -106,14 +106,7 @@ bool KoShapePaste::process(const KoXmlElement & body, KoOdfReadStore & odfStore)
 
     // position shapes
     if (pasteAtCursor) {
-        QRectF bbox;
-        // determine bounding rect of all pasted shapes
-        foreach (KoShape *shape, d->pastedShapes) {
-            if (bbox.isEmpty())
-                bbox = shape->boundingRect();
-            else
-                bbox |= shape->boundingRect();
-        }
+        QRectF bbox = KoShape::boundingRect(d->pastedShapes);
         // where is the cursor now?
         QWidget *canvasWidget = d->canvas->canvasWidget();
         KoCanvasController *cc = d->canvas->canvasController();

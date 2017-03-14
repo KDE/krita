@@ -80,12 +80,7 @@ QRectF KoSelection::outlineRect() const
 QRectF KoSelection::boundingRect() const
 {
     Q_D(const KoSelection);
-
-    QRectF result;
-    Q_FOREACH (KoShape *shape, d->selectedShapes) {
-        result |= shape->boundingRect();
-    }
-    return result;
+    return KoShape::boundingRect(d->selectedShapes);
 }
 
 void KoSelection::select(KoShape *shape)

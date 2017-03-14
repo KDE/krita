@@ -1076,9 +1076,7 @@ void DefaultTool::selectionAlign(KoShapeAlignCommand::Align align)
         }
         bb = QRectF(QPointF(0, 0), canvas()->resourceManager()->sizeResource(KoCanvasResourceManager::PageSize));
     } else {
-        Q_FOREACH (KoShape *shape, editableShapes) {
-            bb |= shape->boundingRect();
-        }
+        bb = KoShape::boundingRect(editableShapes);
     }
 
     KoShapeAlignCommand *cmd = new KoShapeAlignCommand(editableShapes, align, bb);

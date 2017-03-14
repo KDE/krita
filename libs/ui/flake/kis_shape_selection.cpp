@@ -61,6 +61,7 @@
 #include "kis_shape_selection_canvas.h"
 #include "kis_take_all_shapes_command.h"
 #include "kis_image_view_converter.h"
+#include "kis_shape_layer.h"
 
 
 #include <kis_debug.h>
@@ -109,100 +110,41 @@ KisSelectionComponent* KisShapeSelection::clone(KisSelection* selection)
 
 bool KisShapeSelection::saveSelection(KoStore * store) const
 {
-    
-    KoOdfWriteStore odfStore(store);
-    KoXmlWriter* manifestWriter = odfStore.manifestWriter("application/vnd.oasis.opendocument.graphics");
-    KoEmbeddedDocumentSaver embeddedSaver;
-    KisDocument::SavingContext documentContext(odfStore, embeddedSaver);
+    const QSizeF sizeInPx = m_image->bounds().size();
+    const QSizeF sizeInPt(sizeInPx.width() / m_image->xRes(), sizeInPx.height() / m_image->yRes());
 
-    if (!store->open("content.xml"))
-        return false;
-
-    KoStoreDevice storeDev(store);
-    KoXmlWriter * docWriter = KoOdfWriteStore::createOasisXmlWriter(&storeDev, "office:document-content");
-
-    // for office:master-styles
-    QTemporaryFile masterStyles;
-    masterStyles.open();
-    KoXmlWriter masterStylesTmpWriter(&masterStyles, 1);
-
-    KoPageLayout page;
-    page.format = KoPageFormat::defaultFormat();
-    QRectF rc = boundingRect();
-    page.width = rc.width();
-    page.height = rc.height();
-    if (page.width > page.height) {
-        page.orientation = KoPageFormat::Landscape;
-    } else {
-        page.orientation = KoPageFormat::Portrait;
-    }
-
-    KoGenStyles mainStyles;
-    KoGenStyle pageLayout = page.saveOdf();
-    QString layoutName = mainStyles.insert(pageLayout, "PL");
-    KoGenStyle masterPage(KoGenStyle::MasterPageStyle);
-    masterPage.addAttribute("style:page-layout-name", layoutName);
-    mainStyles.insert(masterPage, "Default", KoGenStyles::DontAddNumberToName);
-
-    QTemporaryFile contentTmpFile;
-    contentTmpFile.open();
-    KoXmlWriter contentTmpWriter(&contentTmpFile, 1);
-
-    contentTmpWriter.startElement("office:body");
-    contentTmpWriter.startElement("office:drawing");
-
-    KoShapeSavingContext shapeContext(contentTmpWriter, mainStyles, documentContext.embeddedSaver);
-
-    shapeContext.xmlWriter().startElement("draw:page");
-    shapeContext.xmlWriter().addAttribute("draw:name", "");
-
-    KoElementReference elementRef;
-    elementRef.saveOdf(&shapeContext.xmlWriter(), KoElementReference::DrawId);
-
-    shapeContext.xmlWriter().addAttribute("draw:master-page-name", "Default");
-
-    saveOdf(shapeContext);
-
-    shapeContext.xmlWriter().endElement(); // draw:page
-
-    contentTmpWriter.endElement(); // office:drawing
-    contentTmpWriter.endElement(); // office:body
-
-    mainStyles.saveOdfStyles(KoGenStyles::DocumentAutomaticStyles, docWriter);
-
-    // And now we can copy over the contents from the tempfile to the real one
-    contentTmpFile.seek(0);
-    docWriter->addCompleteElement(&contentTmpFile);
-
-    docWriter->endElement(); // Root element
-    docWriter->endDocument();
-    delete docWriter;
-
-    if (!store->close())
-        return false;
-
-    manifestWriter->addManifestEntry("content.xml", "text/xml");
-
-    if (! mainStyles.saveOdfStylesDotXml(store, manifestWriter)) {
-        return false;
-    }
-
-    manifestWriter->addManifestEntry("settings.xml", "text/xml");
-
-    if (! shapeContext.saveDataCenter(documentContext.odfStore.store(), documentContext.odfStore.manifestWriter()))
-        return false;
-
-    // Write out manifest file
-    if (!odfStore.closeManifestWriter()) {
-        dbgImage << "closing manifestWriter failed";
-        return false;
-    }
-
-    return true;
+    return KisShapeLayer::saveShapesToStore(store, this->shapes(), sizeInPt);
 }
 
 bool KisShapeSelection::loadSelection(KoStore* store)
 {
+    QSizeF fragmentSize; // unused!
+
+    // FIXME: we handle xRes() only!
+    KIS_SAFE_ASSERT_RECOVER_NOOP(qFuzzyCompare(m_image->xRes(), m_image->yRes()));
+    const qreal resolutionPPI = 72.0 * m_image->xRes();
+
+    QList<KoShape*> shapes;
+
+    if (store->open("content.svg")) {
+        KoStoreDevice storeDev(store);
+        storeDev.open(QIODevice::ReadOnly);
+
+        shapes = KisShapeLayer::createShapesFromSvg(&storeDev,
+                                                    "", m_image->bounds(),
+                                                    resolutionPPI, m_canvas->shapeController()->resourceManager(),
+                                                    &fragmentSize);
+
+        store->close();
+
+        Q_FOREACH (KoShape *shape, shapes) {
+            addShape(shape);
+        }
+
+        return true;
+    }
+
+
     KoOdfReadStore odfStore(store);
     QString errorMessage;
 
@@ -281,7 +223,6 @@ bool KisShapeSelection::loadSelection(KoStore* store)
     }
 
     return true;
-
 }
 
 void KisShapeSelection::setUpdatesEnabled(bool enabled)

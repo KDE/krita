@@ -480,4 +480,70 @@ void KisKraSaverTest::testRoundTripShapeLayer()
     QVERIFY(chk.testPassed());
 }
 
+void KisKraSaverTest::testRoundTripShapeSelection()
+{
+    TestUtil::ExternalImageChecker chk("kra_saver_test", "shape_selection");
+
+    QRect refRect(0,0,512,512);
+
+    QScopedPointer<KisDocument> doc(KisPart::instance()->createDocument());
+    TestUtil::MaskParent p(refRect);
+
+    const qreal resolution = 144.0 / 72.0;
+    p.image->setResolution(resolution, resolution);
+
+    doc->setCurrentImage(p.image);
+    doc->documentInfo()->setAboutInfo("title", p.image->objectName());
+
+    p.layer->paintDevice()->setDefaultPixel(KoColor(Qt::green, p.layer->colorSpace()));
+
+    KisSelectionSP selection = new KisSelection(p.layer->paintDevice()->defaultBounds());
+
+    KisShapeSelection *shapeSelection = new KisShapeSelection(p.image, selection);
+    selection->setShapeSelection(shapeSelection);
+
+    KoPathShape* path = new KoPathShape();
+    path->setShapeId(KoPathShapeId);
+    path->moveTo(QPointF(10, 10));
+    path->lineTo(QPointF( 10, 110));
+    path->lineTo(QPointF(110, 110));
+    path->lineTo(QPointF(110,  10));
+    path->close();
+    path->normalize();
+    path->setBackground(toQShared(new KoColorBackground(Qt::red)));
+    path->setName("my_precious_shape");
+
+    shapeSelection->addShape(path);
+
+    KisTransparencyMaskSP tmask = new KisTransparencyMask();
+    tmask->setSelection(selection);
+    p.image->addNode(tmask, p.layer);
+
+    tmask->setDirty(p.image->bounds());
+
+    qApp->processEvents();
+    p.image->waitForDone();
+
+    chk.checkImage(p.image, "00_initial_shape_selection");
+
+    doc->exportDocument(QUrl::fromLocalFile("roundtrip_shapeselection_test.kra"));
+
+    QScopedPointer<KisDocument> doc2(KisPart::instance()->createDocument());
+    doc2->loadNativeFormat("roundtrip_shapeselection_test.kra");
+
+    qApp->processEvents();
+    doc2->image()->waitForDone();
+    QCOMPARE(doc2->image()->xRes(), resolution);
+    QCOMPARE(doc2->image()->yRes(), resolution);
+    chk.checkImage(doc2->image(), "00_initial_shape_selection");
+
+    KisNodeSP node = doc2->image()->root()->firstChild()->firstChild();
+    KisTransparencyMask *newMask = dynamic_cast<KisTransparencyMask*>(node.data());
+    QVERIFY(newMask);
+
+    QVERIFY(newMask->selection()->hasShapeSelection());
+
+    QVERIFY(chk.testPassed());
+}
+
 QTEST_MAIN(KisKraSaverTest)

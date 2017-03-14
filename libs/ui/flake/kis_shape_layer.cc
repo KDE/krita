@@ -356,21 +356,15 @@ void KisShapeLayer::setVisible(bool visible, bool isLoading)
 #include "SvgParser.h"
 #include <QXmlStreamReader>
 
-bool KisShapeLayer::saveLayer(KoStore * store) const
+bool KisShapeLayer::saveShapesToStore(KoStore *store, QList<KoShape *> shapes, const QSizeF &sizeInPt)
 {
     if (!store->open("content.svg")) {
         return false;
     }
 
-    // FIXME: we handle xRes() only!
-
-    const QSizeF sizeInPx = image()->bounds().size();
-    const QSizeF sizeInPt(sizeInPx.width() / image()->xRes(), sizeInPx.height() / image()->yRes());
-
     KoStoreDevice storeDev(store);
     storeDev.open(QIODevice::WriteOnly);
 
-    QList<KoShape*> shapes = this->shapes();
     qSort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
 
     SvgWriter writer(shapes, sizeInPt);
@@ -383,11 +377,7 @@ bool KisShapeLayer::saveLayer(KoStore * store) const
     return true;
 }
 
-QList<KoShape *> KisShapeLayer::createShapesFromSvg(QIODevice *device, const QString &baseXmlDir,
-                                                    const QRectF &rectInPixels,
-                                                    qreal resolutionPPI,
-                                                    KoDocumentResourceManager *resourceManager,
-                                                    QSizeF *fragmentSize)
+QList<KoShape *> KisShapeLayer::createShapesFromSvg(QIODevice *device, const QString &baseXmlDir, const QRectF &rectInPixels, qreal resolutionPPI, KoDocumentResourceManager *resourceManager, QSizeF *fragmentSize)
 {
     QXmlStreamReader reader(device);
     reader.setNamespaceProcessing(false);
@@ -410,6 +400,17 @@ QList<KoShape *> KisShapeLayer::createShapesFromSvg(QIODevice *device, const QSt
     parser.setXmlBaseDir(baseXmlDir);
     parser.setResolution(rectInPixels /* px */, resolutionPPI /* ppi */);
     return parser.parseSvg(doc.documentElement(), fragmentSize);
+}
+
+
+bool KisShapeLayer::saveLayer(KoStore * store) const
+{
+    // FIXME: we handle xRes() only!
+
+    const QSizeF sizeInPx = image()->bounds().size();
+    const QSizeF sizeInPt(sizeInPx.width() / image()->xRes(), sizeInPx.height() / image()->yRes());
+
+    return saveShapesToStore(store, this->shapes(), sizeInPt);
 }
 
 bool KisShapeLayer::loadSvg(QIODevice *device, const QString &baseXmlDir)

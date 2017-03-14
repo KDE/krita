@@ -105,16 +105,19 @@ public:
 
     KoShapeManager *shapeManager() const;
 
+    static bool saveShapesToStore(KoStore *store, QList<KoShape*> shapes, const QSizeF &sizeInPt);
+
+    static QList<KoShape *> createShapesFromSvg(QIODevice *device,
+                                                const QString &baseXmlDir,
+                                                const QRectF &rectInPixels,
+                                                qreal resolutionPPI,
+                                                KoDocumentResourceManager *resourceManager,
+                                                QSizeF *fragmentSize);
+
+
+
     bool saveLayer(KoStore * store) const;
-
-    bool loadSvg(QIODevice *device, const QString &baseXmlDir);
     bool loadLayer(KoStore* store);
-
-    static QList<KoShape*> createShapesFromSvg(QIODevice *device, const QString &baseXmlDir,
-                                               const QRectF &rectInPixels, qreal resolutionPPI,
-                                               KoDocumentResourceManager *resourceManager,
-                                               QSizeF *fragmentSize);
-
 
     KUndo2Command* crop(const QRect & rect) override;
     KUndo2Command* transform(const QTransform &transform) override;
@@ -124,6 +127,8 @@ public:
 
 protected:
     using KoShape::isVisible;
+
+    bool loadSvg(QIODevice *device, const QString &baseXmlDir);
 
     friend class ShapeLayerContainerModel;
     KoViewConverter* converter() const;

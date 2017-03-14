@@ -60,11 +60,6 @@ KoDrag::~KoDrag()
     delete d;
 }
 
-bool KoDrag::setOdf(const char *, KoDragOdfSaveHelper &)
-{
-    return false;
-}
-
 bool KoDrag::setSvg(const QList<KoShape *> originalShapes)
 {
     QRectF boundingRect;

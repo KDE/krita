@@ -45,16 +45,10 @@ public:
     KoDrag();
     ~KoDrag();
 
-    /**
-     * Set odf mime type
-     *
-     * This calls helper.writeBody();
-     *
-     * @param mimeType used for creating the odf document
-     * @param helper helper for saving the body of the odf document
-     */
-    bool setOdf(const char *, KoDragOdfSaveHelper &);
 
+    /**
+     * Load SVG data into the current mime data
+     */
     bool setSvg(const QList<KoShape*> shapes);
 
     /**

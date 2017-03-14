@@ -4,6 +4,9 @@ class Canvas : QObject
 #include "Canvas.h"
 %End
     Canvas(const Canvas & __0);
+public:    
+    bool operator==(const Canvas &other) const;
+    bool operator!=(const Canvas &other) const;
 public Q_SLOTS:
     qreal zoomLevel() const;
     void setZoomLevel(qreal value);

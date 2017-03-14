@@ -41,9 +41,19 @@ Resource::Resource(KoResource *resource, QObject *parent)
 {
 }
 
-Resource::~Resource() 
+Resource::~Resource()
 {
     delete d;
+}
+
+bool Resource::operator==(const Resource &other) const
+{
+    return (d->resource == other.d->resource);
+}
+
+bool Resource::operator!=(const Resource &other) const
+{
+    return !(operator==(other));
 }
 
 QString Resource::type() const

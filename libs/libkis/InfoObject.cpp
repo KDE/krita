@@ -44,6 +44,16 @@ InfoObject::~InfoObject()
     delete d;
 }
 
+bool InfoObject::operator==(const InfoObject &other) const
+{
+    return (d->properties == other.d->properties);
+}
+
+bool InfoObject::operator!=(const InfoObject &other) const
+{
+    return !(operator==(other));
+}
+
 QMap<QString, QVariant> InfoObject::properties() const
 {
     return d->properties->getProperties();

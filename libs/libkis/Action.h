@@ -45,6 +45,9 @@ public:
      */
     Action(const QString &name, QAction *action, QObject *parent = 0);
     virtual ~Action();
+    
+    bool operator==(const Action &other) const;
+    bool operator!=(const Action &other) const;
 
 public Q_SLOTS:
 

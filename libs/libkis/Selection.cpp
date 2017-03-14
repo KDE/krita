@@ -43,16 +43,26 @@ Selection::Selection(KisSelectionSP selection, QObject *parent)
 }
 
 
-Selection::Selection(QObject *parent) 
+Selection::Selection(QObject *parent)
     : QObject(parent)
     , d(new Private)
 {
     d->selection = new KisSelection();
 }
 
-Selection::~Selection() 
+Selection::~Selection()
 {
     delete d;
+}
+
+bool Selection::operator==(const Selection &other) const
+{
+    return (d->selection == other.d->selection);
+}
+
+bool Selection::operator!=(const Selection &other) const
+{
+    return !(operator==(other));
 }
 
 int Selection::width() const

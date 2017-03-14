@@ -52,11 +52,24 @@ Channel::~Channel()
     delete d;
 }
 
+
+bool Channel::operator==(const Channel &other) const
+{
+    return (d->node == other.d->node
+            && d->channel == other.d->channel);
+}
+
+bool Channel::operator!=(const Channel &other) const
+{
+    return !(operator==(other));
+}
+
+
 bool Channel::visible() const
 {
     if (!d->node || !d->channel) return false;
     if (!d->node->inherits("KisLayer")) return false;
-    for (int i = 0; i < d->node->colorSpace()->channelCount(); ++i) {
+    for (uint i = 0; i < d->node->colorSpace()->channelCount(); ++i) {
         if (d->node->colorSpace()->channels()[i] == d->channel) {
             KisLayerSP layer = qobject_cast<KisLayer*>(d->node.data());
             QBitArray flags = layer->channelFlags();
@@ -71,7 +84,7 @@ void Channel::setVisible(bool value)
     if (!d->node || !d->channel) return;
     if (!d->node->inherits("KisLayer")) return;
 
-    for (int i = 0; i < d->node->colorSpace()->channelCount(); ++i) {
+    for (uint i = 0; i < d->node->colorSpace()->channelCount(); ++i) {
         if (d->node->colorSpace()->channels()[i] == d->channel) {
             QBitArray flags = d->node->colorSpace()->channelFlags(true, true);
             flags.setBit(i, value);

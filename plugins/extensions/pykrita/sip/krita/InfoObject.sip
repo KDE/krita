@@ -4,6 +4,9 @@ class InfoObject : QObject
 #include "InfoObject.h"
 %End
     InfoObject(const InfoObject & __0);
+public:    
+    bool operator==(const InfoObject &other) const;
+    bool operator!=(const InfoObject &other) const;
 public:
     InfoObject(QObject*  parent /TransferThis/ = 0);
     virtual ~InfoObject();

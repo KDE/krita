@@ -4,6 +4,10 @@ class Window : QObject
 #include "Window.h"
 %End
     Window(const Window & __0);
+public:    
+    bool operator==(const Window &other) const;
+    bool operator!=(const Window &other) const;
+
 public Q_SLOTS:
     QMainWindow *qwindow() const;
     QList<View *> views() const /Factory/;

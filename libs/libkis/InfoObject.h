@@ -41,6 +41,8 @@ public:
     explicit InfoObject(QObject *parent = 0);
     virtual ~InfoObject();
 
+    bool operator==(const InfoObject &other) const;
+    bool operator!=(const InfoObject &other) const;
     /**
      * Return all properties this InfoObject manages.
      */

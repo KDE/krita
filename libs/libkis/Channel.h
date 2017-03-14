@@ -39,6 +39,9 @@ public:
     explicit Channel(KisNodeSP node, KoChannelInfo *channel, QObject *parent = 0);
     virtual ~Channel();
 
+    bool operator==(const Channel &other) const;
+    bool operator!=(const Channel &other) const;
+    
     /**
      * @brief visible checks whether this channel is visible in the node
      * @return the status of this channel

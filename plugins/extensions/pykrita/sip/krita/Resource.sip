@@ -4,6 +4,9 @@ class Resource : QObject
 #include "Resource.h"
 %End
     Resource(const Resource & __0);
+public:    
+    bool operator==(const Resource &other) const;
+    bool operator!=(const Resource &other) const;
 public:
     virtual ~Resource();
 public Q_SLOTS:

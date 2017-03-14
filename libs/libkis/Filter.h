@@ -50,6 +50,9 @@ public:
      */
     explicit Filter();
     virtual ~Filter();
+    
+    bool operator==(const Filter &other) const;
+    bool operator!=(const Filter &other) const;
 
 public Q_SLOTS:
 

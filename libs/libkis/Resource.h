@@ -46,6 +46,9 @@ class KRITALIBKIS_EXPORT Resource : public QObject
 public:
     explicit Resource(KoResource *resource, QObject *parent = 0);
     virtual ~Resource();
+    bool operator==(const Resource &other) const;
+    bool operator!=(const Resource &other) const;
+
 
 public Q_SLOTS:
     

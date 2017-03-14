@@ -72,6 +72,18 @@ Node::~Node()
     delete d;
 }
 
+bool Node::operator==(const Node &other) const
+{
+    return (d->node == other.d->node
+            && d->image == other.d->image);
+}
+
+bool Node::operator!=(const Node &other) const
+{
+    return !(operator==(other));
+}
+
+
 bool Node::alphaLocked() const
 {
     if (!d->node) return false;

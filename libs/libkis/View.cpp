@@ -52,6 +52,16 @@ View::~View()
     delete d;
 }
 
+bool View::operator==(const View &other) const
+{
+    return (d->view == other.d->view);
+}
+
+bool View::operator!=(const View &other) const
+{
+    return !(operator==(other));
+}
+
 Window* View::window() const
 {
     if (!d->view) return 0;

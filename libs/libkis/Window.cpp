@@ -44,6 +44,16 @@ Window::~Window()
     delete d;
 }
 
+bool Window::operator==(const Window &other) const
+{
+    return (d->window == other.d->window);
+}
+
+bool Window::operator!=(const Window &other) const
+{
+    return !(operator==(other));
+}
+
 QMainWindow *Window::qwindow() const
 {
     return d->window;

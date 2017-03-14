@@ -38,6 +38,8 @@ class KRITALIBKIS_EXPORT Node : public QObject
 public:
     explicit Node(KisImageSP image, KisNodeSP node, QObject *parent = 0);
     virtual ~Node();
+    bool operator==(const Node &other) const;
+    bool operator!=(const Node &other) const;
 public Q_SLOTS:
     /**
      * @brief alphaLocked checks whether the node is a paint layer and returns whether it is alpha locked

@@ -6,6 +6,8 @@ class Channel : QObject
     Channel(const Channel & __0);
 public:
     virtual ~Channel();
+    bool operator==(const Channel &other) const;
+    bool operator!=(const Channel &other) const;
     bool visible() const;
     void setVisible(bool value);
     QString name() const;

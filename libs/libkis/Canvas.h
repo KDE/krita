@@ -38,6 +38,9 @@ public:
     explicit Canvas(KoCanvasBase *canvas, QObject *parent = 0);
     virtual ~Canvas();
 
+    bool operator==(const Canvas &other) const;
+    bool operator!=(const Canvas &other) const;
+    
 public Q_SLOTS:
 
     /**

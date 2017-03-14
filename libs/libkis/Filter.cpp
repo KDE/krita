@@ -37,10 +37,21 @@ Filter::Filter()
 {
 }
 
-Filter::~Filter() 
+Filter::~Filter()
 {
     delete d->configuration;
     delete d;
+}
+
+bool Filter::operator==(const Filter &other) const
+{
+    return (d->name == other.d->name
+            && d->configuration == other.d->configuration);
+}
+
+bool Filter::operator!=(const Filter &other) const
+{
+    return !(operator==(other));
 }
 
 

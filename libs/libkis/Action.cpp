@@ -47,6 +47,18 @@ Action::~Action()
     delete d;
 }
 
+
+bool Action::operator==(const Action &other) const
+{
+    return (d->action == other.d->action);
+}
+
+bool Action::operator!=(const Action &other) const
+{
+    return !(operator==(other));
+}
+
+
 QString Action::text() const
 {
     if (!d->action) return "";

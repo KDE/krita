@@ -42,6 +42,18 @@ Canvas::~Canvas()
     delete d;
 }
 
+
+bool Canvas::operator==(const Canvas &other) const
+{
+    return (d->canvas == other.d->canvas);
+}
+
+bool Canvas::operator!=(const Canvas &other) const
+{
+    return !(operator==(other));
+}
+
+
 qreal Canvas::zoomLevel() const
 {
     if (!d->canvas) return 1.0;

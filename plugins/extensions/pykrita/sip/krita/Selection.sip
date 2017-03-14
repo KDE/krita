@@ -7,6 +7,8 @@ class Selection : QObject
 public:
     Selection(QObject*  parent /TransferThis/ = 0);
     virtual ~Selection();
+    bool operator==(const Selection &other) const;
+    bool operator!=(const Selection &other) const;
 public Q_SLOTS:
     int width() const;
     int height() const;

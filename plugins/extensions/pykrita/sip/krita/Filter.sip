@@ -4,9 +4,13 @@ class Filter : QObject
 #include "Filter.h"
 %End
     Filter(const Filter & __0);
+
 public:
     Filter();
     virtual ~Filter();
+    bool operator==(const Filter &other) const;
+    bool operator!=(const Filter &other) const;
+
 public Q_SLOTS:
     QString name() const;
     void setName(const QString &);

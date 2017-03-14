@@ -74,6 +74,16 @@ Document::~Document()
     delete d;
 }
 
+bool Document::operator==(const Document &other) const
+{
+    return (d->document == other.d->document);
+}
+
+bool Document::operator!=(const Document &other) const
+{
+    return !(operator==(other));
+}
+
 bool Document::batchmode() const
 {
     if (!d->document) return false;

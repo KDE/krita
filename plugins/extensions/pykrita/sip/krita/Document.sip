@@ -4,7 +4,12 @@ class Document : QObject /NoDefaultCtors/
 #include "Document.h"
 %End
     Document(const Document & __0);
+public:
+    bool operator==(const Document &other) const;
+    bool operator!=(const Document &other) const;
+
 public Q_SLOTS:
+
     Node * activeNode() const  /Factory/;
     void setActiveNode(Node*  value);
     QList<Node*> topLevelNodes() const  /Factory/;

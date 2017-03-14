@@ -39,6 +39,9 @@ public:
     explicit Document(KisDocument *document, QObject *parent = 0);
     virtual ~Document();
 
+    bool operator==(const Document &other) const;
+    bool operator!=(const Document &other) const;
+    
 public Q_SLOTS:
 
     /**

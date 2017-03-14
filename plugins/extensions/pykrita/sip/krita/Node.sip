@@ -6,6 +6,8 @@ class Node : QObject
     Node(const Node & __0);
 public:
     virtual ~Node();
+    bool operator==(const Node &other) const;
+    bool operator!=(const Node &other) const;
 public Q_SLOTS:
     bool alphaLocked() const;
     void setAlphaLocked(bool value);

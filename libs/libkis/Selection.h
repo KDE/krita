@@ -43,6 +43,7 @@ class KRITALIBKIS_EXPORT Selection : public QObject
 {
     Q_OBJECT
 
+
 public:
     
     /**
@@ -55,6 +56,9 @@ public:
      */
     explicit Selection(QObject *parent = 0);
     virtual ~Selection();
+    
+    bool operator==(const Selection &other) const;
+    bool operator!=(const Selection &other) const;
 
 public Q_SLOTS:
 

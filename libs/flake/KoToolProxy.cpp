@@ -50,12 +50,6 @@
 #include "KoViewConverter.h"
 #include "KoShapeFactoryBase.h"
 
-#include <KoSvgPaste.h>
-#include <KoSelectedShapesProxy.h>
-#include "kis_algebra_2d.h"
-#include <KoShapeMoveCommand.h>
-#include <KoViewConverter.h>
-
 
 KoToolProxyPrivate::KoToolProxyPrivate(KoToolProxy *p)
     : activeTool(0),
@@ -462,128 +456,13 @@ void KoToolProxy::copy() const
         d->activeTool->copy();
 }
 
-
-namespace {
-QPointF getFittingOffset(QList<KoShape*> shapes,
-                         const QPointF &shapesOffset,
-                         const QRectF &documentRect,
-                         const qreal fitRatio)
-{
-    QPointF accumulatedFitOffset;
-
-    Q_FOREACH (KoShape *shape, shapes) {
-        const QRectF bounds = shape->boundingRect();
-
-        const QPointF center = bounds.center() + shapesOffset;
-
-        const qreal wMargin = (0.5 - fitRatio) * bounds.width();
-        const qreal hMargin = (0.5 - fitRatio) * bounds.height();
-        const QRectF allowedRect = documentRect.adjusted(-wMargin, -hMargin, wMargin, hMargin);
-
-        const QPointF fittedCenter = KisAlgebra2D::clampPoint(center, allowedRect);
-
-        accumulatedFitOffset += fittedCenter - center;
-    }
-
-    return accumulatedFitOffset;
-}
-}
-
-bool KoToolProxy::paste(bool pasteAtCursorPosition)
+bool KoToolProxy::paste()
 {
     bool success = false;
     KoCanvasBase *canvas = d->controller->canvas();
 
     if (d->activeTool && d->isActiveLayerEditable()) {
         success = d->activeTool->paste();
-    }
-
-    KoSvgPaste paste;
-    if (!success && paste.hasShapes()) {
-        QSizeF fragmentSize;
-
-        QList<KoShape*> shapes =
-            paste.fetchShapes(canvas->shapeController()->documentRectInPixels(),
-                              canvas->shapeController()->pixelsPerInch(), &fragmentSize);
-
-        if (!shapes.isEmpty()) {
-            KoShapeManager *shapeManager = canvas->shapeManager();
-            shapeManager->selection()->deselectAll();
-
-            KUndo2Command *parentCommand = new KUndo2Command(kundo2_i18n("Paste shapes"));
-
-            Q_FOREACH (KoShape *shape, shapes) {
-                canvas->shapeController()->addShapeDirect(shape, parentCommand);
-            }
-
-            QPointF finalShapesOffset;
-
-
-            if (pasteAtCursorPosition) {
-                QRectF boundingRect = KoShape::boundingRect(shapes);
-                const QPointF cursorPos = canvas->canvasController()->currentCursorPosition();
-                finalShapesOffset = cursorPos - boundingRect.center();
-
-            } else {
-                bool foundOverlapping = false;
-
-                QRectF boundingRect = KoShape::boundingRect(shapes);
-                const QPointF offsetStep = 0.1 * QPointF(boundingRect.width(), boundingRect.height());
-
-                QPointF offset;
-
-                Q_FOREACH (KoShape *shape, shapes) {
-                    QRectF br1 = shape->boundingRect();
-
-                    bool hasOverlappingShape = false;
-
-                    do {
-                        hasOverlappingShape = false;
-
-                        // we cannot use shapesAt() here, because the groups are not
-                        // handled in the shape manager's tree
-                        QList<KoShape*> conflicts = shapeManager->shapes();
-
-                        Q_FOREACH (KoShape *intersectedShape, conflicts) {
-                            if (intersectedShape == shape) continue;
-
-                            QRectF br2 = intersectedShape->boundingRect();
-
-                            const qreal tolerance = 2.0; /* pt */
-                            if (KisAlgebra2D::fuzzyCompareRects(br1, br2, tolerance)) {
-                                br1.translate(offsetStep.x(), offsetStep.y());
-                                offset += offsetStep;
-
-                                hasOverlappingShape = true;
-                                foundOverlapping = true;
-                                break;
-                            }
-                        }
-                    } while (hasOverlappingShape);
-
-                    if (foundOverlapping) break;
-                }
-
-                if (foundOverlapping) {
-                    finalShapesOffset = offset;
-                }
-            }
-
-            const QRectF documentRect = canvas->shapeController()->documentRect();
-            finalShapesOffset += getFittingOffset(shapes, finalShapesOffset, documentRect, 0.1);
-
-            if (!finalShapesOffset.isNull()) {
-                new KoShapeMoveCommand(shapes, finalShapesOffset, parentCommand);
-            }
-
-            canvas->addCommand(parentCommand);
-
-            Q_FOREACH (KoShape *shape, shapes) {
-                canvas->selectedShapesProxy()->selection()->select(shape);
-            }
-
-            success = true;
-        }
     }
 
     if (!success) {

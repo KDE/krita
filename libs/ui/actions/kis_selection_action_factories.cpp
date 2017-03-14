@@ -65,7 +65,6 @@
 #include "KisPart.h"
 #include "kis_shape_layer.h"
 #include <kis_shape_controller.h>
-#include "kis_import_catcher.h"
 
 #include <processing/fill_processing_visitor.h>
 #include <kis_selection_tool_helper.h>
@@ -379,40 +378,6 @@ void KisCopyMergedActionFactory::run(KisViewManager *view)
 
     KisProcessingApplicator *ap = beginAction(view, kundo2_i18n("Copy Merged"));
     endAction(ap, KisOperationConfiguration(id()).toXML());
-}
-
-void KisPasteActionFactory::run(bool pasteAtCursorPosition, KisViewManager *view)
-{
-    KisImageSP image = view->image();
-    if (!image) return;
-
-    const QRect fittingBounds = pasteAtCursorPosition ? QRect() : image->bounds();
-    KisPaintDeviceSP clip = KisClipboard::instance()->clip(fittingBounds, true);
-
-    if (clip) {
-        if (pasteAtCursorPosition) {
-            const QPointF docPos = view->canvasBase()->canvasController()->currentCursorPosition();
-            const QPointF imagePos = view->canvasBase()->coordinatesConverter()->documentToImage(docPos);
-
-            const QPointF offset = (imagePos - QRectF(clip->exactBounds()).center()).toPoint();
-
-            clip->setX(clip->x() + offset.x());
-            clip->setY(clip->y() + offset.y());
-        }
-
-        KisImportCatcher::adaptClipToImageColorSpace(clip, image);
-        KisPaintLayer *newLayer = new KisPaintLayer(image.data(), image->nextLayerName() + i18n("(pasted)"), OPACITY_OPAQUE_U8, clip);
-        KisNodeSP aboveNode = view->activeLayer();
-        KisNodeSP parentNode = aboveNode ? aboveNode->parent() : image->root();
-
-        KUndo2Command *cmd = new KisImageLayerAddCommand(image, newLayer, parentNode, aboveNode);
-        KisProcessingApplicator *ap = beginAction(view, cmd->text());
-        ap->applyCommand(cmd, KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::NORMAL);
-        endAction(ap, KisOperationConfiguration(id()).toXML());
-    } else {
-        // XXX: "Add saving of XML data for Paste of shapes"
-        view->canvasBase()->toolProxy()->paste(pasteAtCursorPosition);
-    }
 }
 
 void KisPasteNewActionFactory::run(KisViewManager *viewManager)

@@ -43,10 +43,6 @@ public:
         // read persistent application wide resources
         KSharedConfigPtr config =  KSharedConfig::openConfig();
         KConfigGroup miscGroup = config->group("Misc");
-        const qreal pasteOffset = miscGroup.readEntry("CopyOffset", 10.0);
-        resourceManager->setPasteOffset(pasteOffset);
-        const bool pasteAtCursor = miscGroup.readEntry("PasteAtCursor", true);
-        resourceManager->enablePasteAtCursor(pasteAtCursor);
         const uint grabSensitivity = miscGroup.readEntry("GrabSensitivity", 3);
         resourceManager->setGrabSensitivity(grabSensitivity);
         const uint handleRadius = miscGroup.readEntry("HandleRadius", 3);

@@ -25,11 +25,16 @@
 
 #include <klocalizedstring.h>
 
+#include "kis_assert.h"
+#include <KoShapeLayer.h>
+#include <KoShapeReorderCommand.h>
+
+
 class Q_DECL_HIDDEN KoShapeCreateCommand::Private
 {
 public:
     Private(KoShapeBasedDocumentBase *c, KoShape *s)
-            : controller(c),
+            : shapesDocument(c),
             shape(s),
             shapeParent(shape->parent()),
             deleteShape(true) {
@@ -39,10 +44,12 @@ public:
             delete shape;
     }
 
-    KoShapeBasedDocumentBase *controller;
+    KoShapeBasedDocumentBase *shapesDocument;
     KoShape *shape;
     KoShapeContainer *shapeParent;
     bool deleteShape;
+
+    QScopedPointer<KUndo2Command> reorderingCommand;
 };
 
 KoShapeCreateCommand::KoShapeCreateCommand(KoShapeBasedDocumentBase *controller, KoShape *shape, KUndo2Command *parent)
@@ -61,22 +68,40 @@ void KoShapeCreateCommand::redo()
 {
     KUndo2Command::redo();
     Q_ASSERT(d->shape);
-    Q_ASSERT(d->controller);
-    if (d->shapeParent)
+    Q_ASSERT(d->shapesDocument);
+
+    if (d->shapeParent) {
         d->shapeParent->addShape(d->shape);
+    }
     // the parent has to be there when it is added to the KoShapeBasedDocumentBase
-    d->controller->addShape(d->shape);
-    d->shapeParent = d->shape->parent(); // update parent if the 'addShape' changed it
+    d->shapesDocument->addShape(d->shape);
+    d->shapeParent = d->shape->parent(); // update parent if the 'addShape' changed it 
     d->deleteShape = false;
+
+    KIS_SAFE_ASSERT_RECOVER_NOOP(d->shapeParent ||
+                                 dynamic_cast<KoShapeLayer*>(d->shape));
+
+    if (d->shapeParent) {
+        d->reorderingCommand.reset(KoShapeReorderCommand::mergeInShape(d->shapeParent->shapes(), d->shape));
+        if (d->reorderingCommand) {
+            d->reorderingCommand->redo();
+        }
+    }
 }
 
 void KoShapeCreateCommand::undo()
 {
     KUndo2Command::undo();
     Q_ASSERT(d->shape);
-    Q_ASSERT(d->controller);
+    Q_ASSERT(d->shapesDocument);
+
+    if (d->reorderingCommand) {
+        d->reorderingCommand->undo();
+        d->reorderingCommand.reset();
+    }
+
     // the parent has to be there when it is removed from the KoShapeBasedDocumentBase
-    d->controller->removeShape(d->shape);
+    d->shapesDocument->removeShape(d->shape);
     if (d->shapeParent)
         d->shapeParent->removeShape(d->shape);
     d->deleteShape = true;

@@ -1091,17 +1091,12 @@ void DefaultTool::selectionReorder(KoShapeReorderCommand::MoveShapeType order)
         return;
     }
 
-    QList<KoShape *> selectedShapes = selection->selectedShapes();
-    if (selectedShapes.count() < 1) {
+    QList<KoShape *> selectedShapes = selection->selectedEditableShapes();
+    if (selectedShapes.isEmpty()) {
         return;
     }
 
-    QList<KoShape *> editableShapes = filterEditableShapes(selectedShapes);
-    if (editableShapes.count() < 1) {
-        return;
-    }
-
-    KUndo2Command *cmd = KoShapeReorderCommand::createCommand(editableShapes, canvas()->shapeManager(), order);
+    KUndo2Command *cmd = KoShapeReorderCommand::createCommand(selectedShapes, canvas()->shapeManager(), order);
     if (cmd) {
         canvas()->addCommand(cmd);
     }

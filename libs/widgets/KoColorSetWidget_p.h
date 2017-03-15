@@ -55,7 +55,7 @@ public:
     bool firstShowOfContainer;
     QWidget *colorSetContainer;
     QScrollArea *scrollArea;
-    QGridLayout *colorSetLayout;
+    QVBoxLayout *colorSetLayout;
     QHBoxLayout *recentsLayout;
     KoColorPatch *recentPatches[6];
     QToolButton *addRemoveButton;

@@ -1049,10 +1049,15 @@ void KoPathTool::requestUndoDuringStroke()
 
 void KoPathTool::requestStrokeCancellation()
 {
-    requestStrokeEnd();
+    explicitUserStrokeEndRequest();
 }
 
 void KoPathTool::requestStrokeEnd()
+{
+    // noop!
+}
+
+void KoPathTool::explicitUserStrokeEndRequest()
 {
     if (m_activatedTemporarily) {
         emit done();

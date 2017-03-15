@@ -190,6 +190,13 @@ public:
     virtual void touchEvent(QTouchEvent *event);
 
     /**
+     * @brief explicitUserStrokeEndRequest is called by the input manager
+     *        when the user presses Enter key or any equivalent. This callback
+     *        comes before requestStrokeEnd(), which comes from a different source.
+     */
+    virtual void explicitUserStrokeEndRequest();
+
+    /**
      * This method is used to query a set of properties of the tool to be
      * able to support complex input method operations as support for surrounding
      * text and reconversions.

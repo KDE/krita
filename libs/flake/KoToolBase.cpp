@@ -181,6 +181,10 @@ void KoToolBase::touchEvent(QTouchEvent *event)
     event->ignore();
 }
 
+void KoToolBase::explicitUserStrokeEndRequest()
+{
+}
+
 QVariant KoToolBase::inputMethodQuery(Qt::InputMethodQuery query, const KoViewConverter &) const
 {
     Q_D(const KoToolBase);

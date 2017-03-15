@@ -123,8 +123,8 @@ public: // Events
     void mouseDoubleClickEvent(KoPointerEvent *event) override;
 
     void keyPressEvent(QKeyEvent *event) override;
-    void requestStrokeEnd() override;
 
+    void explicitUserStrokeEndRequest() override;
 protected:
     QList<QPointer<QWidget> > createOptionWidgets();
 

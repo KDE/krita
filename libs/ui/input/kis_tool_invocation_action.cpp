@@ -113,6 +113,18 @@ void KisToolInvocationAction::begin(int shortcut, QEvent *event)
          * key event and the method call
          */
         inputManager()->canvas()->image()->requestStrokeEnd();
+
+        /**
+         * Some tools would like to distinguish automated requestStrokeEnd()
+         * calls from explicit user actions. Just let them do it!
+         *
+         * Please note that this call should happen **after**
+         * requestStrokeEnd(). Some of the tools will switch to another
+         * tool on this request, and this (next) tool does not expect to
+         * get requestStrokeEnd() right after switching in.
+         */
+        inputManager()->toolProxy()->explicitUserStrokeEndRequest();
+
     } else if (shortcut == CancelShortcut) {
         /**
          * The tools now have a KisTool::requestStrokeCancellation() method,

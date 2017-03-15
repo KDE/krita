@@ -111,6 +111,9 @@ public:
     void wheelEvent(KoPointerEvent *event);
 
     /// Forwarded to the current KoToolBase
+    void explicitUserStrokeEndRequest();
+
+    /// Forwarded to the current KoToolBase
     QVariant inputMethodQuery(Qt::InputMethodQuery query, const KoViewConverter &converter) const;
 
     /// Forwarded to the current KoToolBase

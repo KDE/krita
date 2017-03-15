@@ -726,7 +726,7 @@ void DefaultTool::mouseDoubleClickEvent(KoPointerEvent *event)
         selection->select(shape);
     }
 
-    requestStrokeEnd();
+    explicitUserStrokeEndRequest();
 }
 
 bool DefaultTool::moveSelection(int direction, Qt::KeyboardModifiers modifiers)
@@ -1370,7 +1370,7 @@ uint DefaultTool::editableShapesCount(const QList<KoShape *> &shapes)
     return count;
 }
 
-void DefaultTool::requestStrokeEnd()
+void DefaultTool::explicitUserStrokeEndRequest()
 {
     QList<KoShape *> shapes = koSelection()->selectedEditableShapesAndDelegates();
     emit activateTemporary(KoToolManager::instance()->preferredToolForSelection(shapes));

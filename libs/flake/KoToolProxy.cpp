@@ -399,6 +399,13 @@ void KoToolProxy::wheelEvent(KoPointerEvent *event)
         event->ignore();
 }
 
+void KoToolProxy::explicitUserStrokeEndRequest()
+{
+    if (d->activeTool) {
+        d->activeTool->explicitUserStrokeEndRequest();
+    }
+}
+
 QVariant KoToolProxy::inputMethodQuery(Qt::InputMethodQuery query, const KoViewConverter &converter) const
 {
     if (d->activeTool)

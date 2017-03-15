@@ -205,6 +205,19 @@ public:
     QString errorMessage() const;
 
     /**
+     * Sets the warning message to be shown to the user (use i18n()!)
+     * when loading or saving fails.
+     */
+    void setWarningMessage(const QString& warningMsg);
+
+    /**
+     * Return the last warning message set by loading or saving. Warnings
+     * mean that the document could not be completely loaded, but the errors
+     * were not absolutely fatal.
+     */
+    QString warningMessage() const;
+
+    /**
      * @brief Generates a preview picture of the document
      * @note The preview is used in the File Dialog and also to create the Thumbnail
      */

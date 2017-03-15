@@ -135,6 +135,7 @@ public:
     QList<KisPaintingAssistantSP> assistants;
     QMap<KisNode*, QString> keyframeFilenames;
     QStringList errorMessages;
+    QStringList warningMessages;
 };
 
 void convertColorSpaceNames(QString &colorspacename, QString &profileProductName) {
@@ -408,6 +409,9 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageSP image, const QStri
     if (!visitor.errorMessages().isEmpty()) {
         m_d->errorMessages.append(visitor.errorMessages());
     }
+    if (!visitor.warningMessages().isEmpty()) {
+        m_d->warningMessages.append(visitor.warningMessages());
+    }
 
     // annotations
     // exif
@@ -482,6 +486,12 @@ QStringList KisKraLoader::errorMessages() const
 {
     return m_d->errorMessages;
 }
+
+QStringList KisKraLoader::warningMessages() const
+{
+    return m_d->warningMessages;
+}
+
 
 void KisKraLoader::loadAssistants(KoStore *store, const QString &uri, bool external)
 {
@@ -596,7 +606,7 @@ KisNodeSP KisKraLoader::loadNode(const KoXmlElement& element, KisImageSP image, 
         colorSpace = KoColorSpaceRegistry::instance()->colorSpace(colorspaceModel, colorspaceDepth, "");
         dbgFile << "found colorspace" << colorSpace;
         if (!colorSpace) {
-            m_d->errorMessages << i18n("Layer %1 specifies an unsupported color model: %2.", name, colorspacename);
+            m_d->warningMessages << i18n("Layer %1 specifies an unsupported color model: %2.", name, colorspacename);
             return 0;
         }
     }
@@ -624,7 +634,7 @@ KisNodeSP KisKraLoader::loadNode(const KoXmlElement& element, KisImageSP image, 
     }
 
     if (nodeType.isEmpty()) {
-        m_d->errorMessages << i18n("Layer %1 has an unsupported type.", name);
+        m_d->warningMessages << i18n("Layer %1 has an unsupported type.", name);
         return 0;
     }
 
@@ -657,14 +667,14 @@ KisNodeSP KisKraLoader::loadNode(const KoXmlElement& element, KisImageSP image, 
         node = loadFileLayer(element, image, name, opacity);
     }
     else {
-        m_d->errorMessages << i18n("Layer %1 has an unsupported type: %2.", name, nodeType);
+        m_d->warningMessages << i18n("Layer %1 has an unsupported type: %2.", name, nodeType);
         return 0;
     }
 
     // Loading the node went wrong. Return empty node and leave to
     // upstream to complain to the user
     if (!node) {
-        m_d->errorMessages << i18n("Failure loading layer %1 of type: %2.", name, nodeType);
+        m_d->warningMessages << i18n("Failure loading layer %1 of type: %2.", name, nodeType);
         return 0;
     }
 
@@ -750,19 +760,6 @@ KisNodeSP KisKraLoader::loadPaintLayer(const KoXmlElement& element, KisImageSP i
 
     layer = new KisPaintLayer(image, name, opacity, cs);
     Q_CHECK_PTR(layer);
-
-    // Load exif info
-    /*TODO: write and use the legacy stuff to load that exif tag
-      for( KoXmlNode node = element.firstChild(); !node.isNull(); node = node.nextSibling() )
-      {
-      KoXmlElement e = node.toElement();
-      if ( !e.isNull() && e.tagName() == "ExifInfo" )
-      {
-      layer->paintDevice()->exifInfo()->load(e);
-      }
-      }*/
-    // TODO load metadata
-
     return layer;
 
 }

@@ -60,46 +60,5 @@ QRect KisInpaintMask::decorateRect(KisPaintDeviceSP &src,
     return rc;
 }
 
-QRect KisInpaintMask::extent() const
-{
-    return parent() ? parent()->extent() : QRect();
-}
 
-QRect KisInpaintMask::exactBounds() const
-{
-    return parent() ? parent()->exactBounds() : QRect();
-}
-
-QRect KisInpaintMask::changeRect(const QRect &rect, PositionToFilthy pos) const
-{
-    /**
-     * Selection on transparency masks have no special meaning:
-     * They do crop both: change and need area
-     */
-    return KisMask::changeRect(rect, pos);
-}
-
-QRect KisInpaintMask::needRect(const QRect &rect, PositionToFilthy pos) const
-{
-    /**
-     * Selection on transparency masks have no special meaning:
-     * They do crop both: change and need area
-     */
-    return KisMask::needRect(rect, pos);
-}
-
-QIcon KisInpaintMask::icon() const
-{
-    return KisIconUtils::loadIcon("transparencyMask");
-}
-
-bool KisInpaintMask::accept(KisNodeVisitor &v)
-{
-    return v.visit(this);
-}
-
-void KisInpaintMask::accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter)
-{
-    return visitor.visit(this, undoAdapter);
-}
 

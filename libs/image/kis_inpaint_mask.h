@@ -44,15 +44,6 @@ public:
     QRect decorateRect(KisPaintDeviceSP &src, KisPaintDeviceSP &dst,
                        const QRect & rc,
                        PositionToFilthy maskPos) const;
-    QIcon icon() const;
-    bool accept(KisNodeVisitor &v);
-    void accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter);
-
-    QRect extent() const;
-    QRect exactBounds() const;
-
-    QRect changeRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const;
-    QRect needRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const;
 };
 
 #endif //_KIS_INPAINT_MASK_

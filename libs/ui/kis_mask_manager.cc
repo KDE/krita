@@ -193,7 +193,7 @@ void KisMaskManager::createTransparencyMask(KisNodeSP activeNode, KisPaintDevice
 void KisMaskManager::createInpaintMask(KisNodeSP activeNode, KisPaintDeviceSP copyFrom, bool avoidActiveNode)
 {
     KisMaskSP mask = new KisInpaintMask();
-    createMaskCommon(mask, activeNode, copyFrom, kundo2_i18n("Add Inpaint Mask"), "KisInpaintMask", i18n("Inpaint Mask"), false, avoidActiveNode);
+    createMaskCommon(mask, activeNode, copyFrom, kundo2_i18n("Add Inpaint Mask"), "KisInpaintMask", i18n("Inpaint Mask"), false, avoidActiveNode, false);
 }
 
 

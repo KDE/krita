@@ -81,6 +81,20 @@ void KarbonCalligraphyTool::paint(QPainter &painter, const KoViewConverter &conv
         painter.restore();
     }
 
+    if (!m_intervalStore.isEmpty() && m_shape) {
+        painter.save();
+        painter.setPen(QColor(0, 200, 255));
+        Q_FOREACH(KisPaintInformation p, m_intervalStore) {
+            painter.drawEllipse(converter.documentToView(p.pos()), 1, 1);
+        }
+        if (!m_intervalStoreOld.isEmpty()) {
+            Q_FOREACH(KisPaintInformation p, m_intervalStoreOld) {
+                painter.drawEllipse(converter.documentToView(p.pos()), 1, 1);
+            }
+        }
+        painter.restore();
+    }
+
     if (!m_shape) {
         return;
     }
@@ -105,6 +119,7 @@ void KarbonCalligraphyTool::mousePressEvent(KoPointerEvent *event)
     m_speed = QPointF(0, 0);
     m_isDrawing = true;
     m_pointCount = 0;
+    m_intervalStore.clear();
     m_strokeTime.start();
     m_lastInfo = m_infoBuilder->startStroke(event, m_strokeTime.elapsed(), canvas()->resourceManager());
 
@@ -149,11 +164,11 @@ void KarbonCalligraphyTool::mouseReleaseEvent(KoPointerEvent *event)
         return;
     } else {
         m_endOfPath = false;    // allow last point being added
-        addPoint(event);        // add last point
+        addPoint(event, true);        // add last point
         m_isDrawing = false;
     }
 
-    m_shape->simplifyGuidePath();
+    //m_shape->simplifyGuidePath();
 
     KUndo2Command *cmd = canvas()->shapeController()->addShape(m_shape);
     if (cmd) {
@@ -168,7 +183,7 @@ void KarbonCalligraphyTool::mouseReleaseEvent(KoPointerEvent *event)
     m_shape = 0;
 }
 
-void KarbonCalligraphyTool::addPoint(KoPointerEvent *event)
+void KarbonCalligraphyTool::addPoint(KoPointerEvent *event, bool lastPoint)
 {
     if (m_pointCount == 0) {
         if (m_usePath && m_selectedPath) {
@@ -195,9 +210,28 @@ void KarbonCalligraphyTool::addPoint(KoPointerEvent *event)
     //QPointF newPoint = calculateNewPoint(event->point, &newSpeed);
     // add the previous point
     KisPaintInformation paintInfo = m_infoBuilder->continueStroke(event, m_strokeTime.elapsed());
-    m_shape->appendPoint(paintInfo);
-    m_lastInfo = paintInfo;
 
+    m_intervalStore.append(paintInfo);
+
+    qreal timeDiff = paintInfo.currentTime() - m_lastInfo.currentTime();
+    if (timeDiff>m_smoothIntervalTime) {
+        qreal distDiff = 0;
+        for (int i=0; i<m_intervalStore.count()-1; i++) {
+            distDiff += QLineF(m_intervalStore.at(i).pos(), m_intervalStore.at(i+1).pos()).length();
+        }
+        if (distDiff>m_smoothIntervalDistance) {
+            m_shape->appendPoint(m_intervalStore.first());
+            m_intervalStoreOld = m_intervalStore;
+            m_intervalStore.clear();
+            m_intervalStore.append(paintInfo);
+            m_lastInfo = paintInfo;
+        }
+    }
+    if (lastPoint) {
+        m_shape->appendPoint(paintInfo);
+        m_intervalStore.clear();
+        m_intervalStoreOld.clear();
+    }
     //m_speed = newSpeed;
     //m_lastPoint = newPoint;
     canvas()->updateCanvas(m_shape->lastPieceBoundingRect());
@@ -206,6 +240,7 @@ void KarbonCalligraphyTool::addPoint(KoPointerEvent *event)
         m_speed = QPointF(0, 0);    // following path
     }
 }
+
 /*
 void KarbonCalligraphyTool::setAngle(KoPointerEvent *event)
 {
@@ -392,6 +427,13 @@ QList<QPointer<QWidget> > KarbonCalligraphyTool::createOptionWidgets()
     connect(this, SIGNAL(pathSelectedChanged(bool)),
             widget, SLOT(setUsePathEnabled(bool)));
 
+    connect(widget, SIGNAL(smoothTimeChanged(double)),
+            this, SLOT(setSmoothIntervalTime(double)));
+
+    connect(widget, SIGNAL(smoothDistanceChanged(double)),
+            this, SLOT(setSmoothIntervalDistance(double)));
+
+
     // add shortcuts
 /*
     action = new QAction(i18n("Calligraphy: increase angle"), this);
@@ -421,6 +463,16 @@ void KarbonCalligraphyTool::setMass(double mass)
 void KarbonCalligraphyTool::setDrag(double drag)
 {
     m_drag = drag;
+}
+
+void KarbonCalligraphyTool::setSmoothIntervalTime(double time)
+{
+    m_smoothIntervalTime = time;
+}
+
+void KarbonCalligraphyTool::setSmoothIntervalDistance(double dist)
+{
+    m_smoothIntervalDistance = dist;
 }
 
 void KarbonCalligraphyTool::setUsePath(bool usePath)

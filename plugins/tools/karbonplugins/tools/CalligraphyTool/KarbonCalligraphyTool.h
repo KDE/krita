@@ -72,11 +72,17 @@ private Q_SLOTS:
     void setCaps(double caps);
     void setMass(double mass);     // set the mass in user friendly format
     void setDrag(double drag);
+    /**
+     * @brief setSmoothIntervalTime
+     * @param time in milliseconds.
+     */
+    void setSmoothIntervalTime(double time);
+    void setSmoothIntervalDistance(double dist);
 
     void updateSelectedPath();
 
 private:
-    void addPoint(KoPointerEvent *event);
+    void addPoint(KoPointerEvent *event, bool lastPoint = false);
     // auxiliary function that sets m_angle
     //void setAngle(KoPointerEvent *event);
     // auxiliary functions to calculate the dynamic parameters
@@ -84,6 +90,8 @@ private:
     //QPointF calculateNewPoint(const QPointF &mousePos, QPointF *speed);
     //qreal calculateWidth(qreal pressure);
     //qreal calculateAngle(const QPointF &oldSpeed, const QPointF &newSpeed);
+
+    void smoothPoints();
 
     QPointF m_lastPoint;
     KarbonCalligraphicShape *m_shape;
@@ -96,6 +104,8 @@ private:
     qreal m_caps;
     qreal m_mass;  // in raw format (not user friendly)
     qreal m_drag;  // from 0.0 to 1.0
+    qreal m_smoothIntervalTime;
+    qreal m_smoothIntervalDistance;
 
     KoPathShape *m_selectedPath;
     QPainterPath m_selectedPathOutline;
@@ -109,6 +119,9 @@ private:
     KisDistanceInformation m_currentDistance;
     KisPaintingInformationBuilder *m_infoBuilder;
     int m_pointCount;
+
+    QList<KisPaintInformation> m_intervalStore;
+    QList<KisPaintInformation> m_intervalStoreOld;
 
     // dynamic parameters
     QPointF m_speed; // used as a vector

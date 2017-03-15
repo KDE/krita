@@ -85,6 +85,24 @@ KarbonCalligraphyOptionWidget::KarbonCalligraphyOptionWidget()
     m_usePath = new QCheckBox(i18n("&Follow selected path"), this);
     detailsLayout->addWidget(m_usePath, 0, 0, 1, 4);
 
+    QLabel *smoothDistance = new QLabel(i18n("Dist-I:"), this);
+    smoothDistance->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+    m_smoothDistance = new KisDoubleParseSpinBox(this);
+    m_smoothDistance->setRange(1, 1000);
+    m_smoothDistance->setSingleStep(1);
+    smoothDistance->setBuddy(m_smoothDistance);
+    detailsLayout->addWidget(smoothDistance, 4, 0);
+    detailsLayout->addWidget(m_smoothDistance, 4, 1);
+
+    QLabel *smoothTime = new QLabel(i18n("Time-I:"), this);
+    smoothTime->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+    m_smoothTime = new KisDoubleParseSpinBox(this);
+    m_smoothTime->setRange(1, 1000);
+    m_smoothTime->setSingleStep(1);
+    smoothTime->setBuddy(m_smoothTime);
+    detailsLayout->addWidget(smoothTime, 4, 2);
+    detailsLayout->addWidget(m_smoothTime, 4, 3);
+
     QLabel *capsLabel = new QLabel(i18n("Caps:"), this);
     capsLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     m_capsBox = new KisDoubleParseSpinBox(this);
@@ -131,6 +149,8 @@ void KarbonCalligraphyOptionWidget::emitAll()
     emit capsChanged(m_capsBox->value());
     emit massChanged(m_massBox->value());
     emit dragChanged(m_dragBox->value());
+    emit smoothTimeChanged(m_smoothTime->value());
+    emit smoothDistanceChanged(m_smoothDistance->value());
 }
 
 void KarbonCalligraphyOptionWidget::loadProfile(const QString &name)
@@ -229,6 +249,11 @@ void KarbonCalligraphyOptionWidget::createConnections()
 
     connect(m_dragBox, SIGNAL(valueChanged(double)),
             SIGNAL(dragChanged(double)));
+
+    connect(m_smoothTime, SIGNAL(valueChanged(double)),
+            SIGNAL(smoothTimeChanged(double)));
+    connect(m_smoothDistance, SIGNAL(valueChanged(double)),
+            SIGNAL(smoothDistanceChanged(double)));
 
     // update profile
     connect(m_usePath, SIGNAL(toggled(bool)),

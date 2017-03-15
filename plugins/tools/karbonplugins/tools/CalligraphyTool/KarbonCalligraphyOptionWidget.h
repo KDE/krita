@@ -48,6 +48,8 @@ Q_SIGNALS:
     void capsChanged(double);
     void massChanged(double);
     void dragChanged(double);
+    void smoothTimeChanged(double);
+    void smoothDistanceChanged(double);
 
 public Q_SLOTS:
     // needed for the shortcuts
@@ -115,6 +117,8 @@ private:
     QDoubleSpinBox  *m_massBox;
     QDoubleSpinBox  *m_dragBox;
     QDoubleSpinBox  *m_capsBox;
+    QDoubleSpinBox  *m_smoothTime;
+    QDoubleSpinBox  *m_smoothDistance;
     QToolButton *m_saveButton;
     QToolButton *m_removeButton;
 

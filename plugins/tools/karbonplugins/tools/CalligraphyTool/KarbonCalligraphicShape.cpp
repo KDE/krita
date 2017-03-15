@@ -91,8 +91,12 @@ void KarbonCalligraphicShape::appendPoint(KisPaintInformation &paintInfo)
     handles.append(paintInfo.pos());
     setHandles(handles);
     m_points.append(calligraphicPoint);
-    appendPointToPath(*calligraphicPoint);
 
+    if (m_points.count()<2) {
+        appendPointToPath(*calligraphicPoint);
+    } else {
+        updatePath(QSize());
+    }
     // make the angle of the first point more in line with the actual
     // direction
     if (m_points.count() == 4) {
@@ -312,7 +316,7 @@ QPointF KarbonCalligraphicShape::normalize()
     for (int i = 0; i < m_points.size(); ++i) {
         m_points[i]->setPoint(matrix.map(m_points[i]->point()));
     }
-
+    m_lastOffset = offset;
     return offset;
 }
 
@@ -327,13 +331,8 @@ void KarbonCalligraphicShape::moveHandleAction(int handleId,
 void KarbonCalligraphicShape::updatePath(const QSizeF &size)
 {
     Q_UNUSED(size);
-
-    QPointF pos = position();
-
     // remove all points
     clear();
-    setPosition(QPoint(0, 0));
-
     //KarbonCalligraphicPoint *pLast = m_points.at(0);
     m_strokeDistance = new KisDistanceInformation(QPoint(), 0.0);
     Q_FOREACH (KarbonCalligraphicPoint *p, m_points) {
@@ -346,8 +345,6 @@ void KarbonCalligraphicShape::updatePath(const QSizeF &size)
 
         // after the point is "painter" it should be added to the distance information as the "previous" point
         m_strokeDistance->registerPaintedDab(*p->paintInfo(), KisSpacingInformation(1.0));
-
-        //pLast=p;
     }
 
     simplifyPath();
@@ -357,8 +354,6 @@ void KarbonCalligraphicShape::updatePath(const QSizeF &size)
         handles.append(p->point());
     }
     setHandles(handles);
-
-    setPosition(pos);
 }
 
 void KarbonCalligraphicShape::simplifyPath()

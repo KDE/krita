@@ -176,6 +176,7 @@ private:
     QList<KarbonCalligraphicPoint *> m_points;
     bool m_lastWasFlip;
     KisPropertiesConfigurationSP m_strokeConfig;
+    QPointF m_lastOffset;
 };
 
 #endif // KARBONCALLIGRAPHICSHAPE_H

@@ -513,7 +513,7 @@ bool KisKraLoadVisitor::loadProfile(KisPaintDeviceSP device, const QString& loca
             return true;
         }
     }
-    m_warningMessages << i18n("Could not load profile %1.", location);
+    m_warningMessages << i18n("Could not load profile: %1.", location);
     return true;
 }
 

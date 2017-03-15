@@ -1123,6 +1123,7 @@ bool KisDocument::openFile()
                             i18n("There were problems opening %1.", prettyPathOrUrl()),
                             warningMessage().split("\n"));
         dlg.exec();
+        setUrl(QUrl());
     }
 
     setMimeTypeAfterLoading(typeName);

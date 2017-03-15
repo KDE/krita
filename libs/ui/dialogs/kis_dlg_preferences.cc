@@ -42,6 +42,7 @@
 #include <QDesktopWidget>
 #include <QFileDialog>
 #include <QFormLayout>
+#include <QSettings>
 
 #include <KisDocument.h>
 #include <KoColorProfile.h>
@@ -130,7 +131,11 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     m_backgroundimage->setText(cfg.getMDIBackgroundImage());
     m_chkCanvasMessages->setChecked(cfg.showCanvasMessages());
     m_chkCompressKra->setChecked(cfg.compressKra());
-    m_chkHiDPI->setChecked(cfg.readEntry("EnableHiDPI", false));
+
+    const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
+    QSettings kritarc(configPath + QStringLiteral("/kritadisplayrc"), QSettings::IniFormat);
+    m_chkHiDPI->setChecked(kritarc.value("EnableHiDPI", false).toBool());
+
     m_radioToolOptionsInDocker->setChecked(cfg.toolOptionsInDocker());
     m_chkSwitchSelectionCtrlAlt->setChecked(cfg.switchSelectionCtrlAlt());
     m_chkConvertOnImport->setChecked(cfg.convertToImageColorspaceOnImport());
@@ -1015,7 +1020,11 @@ bool KisDlgPreferences::editPreferences()
         cfg.setBackupFile(dialog->m_general->m_backupFileCheckBox->isChecked());
         cfg.setShowCanvasMessages(dialog->m_general->showCanvasMessages());
         cfg.setCompressKra(dialog->m_general->compressKra());
-        cfg.writeEntry("EnableHiDPI", dialog->m_general->m_chkHiDPI->isChecked());
+
+        const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
+        QSettings kritarc(configPath + QStringLiteral("/kritadisplayrc"), QSettings::IniFormat);
+        kritarc.setValue("EnableHiDPI", dialog->m_general->m_chkHiDPI->isChecked());
+
         cfg.setToolOptionsInDocker(dialog->m_general->toolOptionsInDocker());
         cfg.setSwitchSelectionCtrlAlt(dialog->m_general->switchSelectionCtrlAlt());
         cfg.setConvertToImageColorspaceOnImport(dialog->m_general->convertToImageColorspaceOnImport());

@@ -124,7 +124,7 @@ extern "C" int main(int argc, char **argv)
 
 #if QT_VERSION >= 0x050600
     {
-        QSettings kritarc(configPath + QStringLiteral("/kritaopenglrc"), QSettings::IniFormat);
+        QSettings kritarc(configPath + QStringLiteral("/kritadisplayrc"), QSettings::IniFormat);
         if (kritarc.value("EnableHiDPI", false).toBool()) {
             QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
         }
@@ -268,7 +268,7 @@ extern "C" int main(int argc, char **argv)
     int state = app.exec();
 
     {
-        QSettings kritarc(configPath + QStringLiteral("/kritaopenglrc"), QSettings::IniFormat);
+        QSettings kritarc(configPath + QStringLiteral("/kritadisplayrc"), QSettings::IniFormat);
         kritarc.setValue("canvasState", "OPENGL_SUCCESS");
     }
 

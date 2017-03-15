@@ -62,6 +62,7 @@ public:
     void requestUndoDuringStroke();
     void requestStrokeCancellation() override;
     void requestStrokeEnd() override;
+    void explicitUserStrokeEndRequest() override;
 
     /// repaints the specified rect
     void repaint(const QRectF &repaintRect);

@@ -43,7 +43,6 @@
 #include "KoShapeManager.h"
 #include "KoSelection.h"
 #include "KoShapeLayer.h"
-#include "KoShapePaste.h"
 #include "KoShapeRegistry.h"
 #include "KoShapeController.h"
 #include "KoOdf.h"
@@ -400,6 +399,13 @@ void KoToolProxy::wheelEvent(KoPointerEvent *event)
         event->ignore();
 }
 
+void KoToolProxy::explicitUserStrokeEndRequest()
+{
+    if (d->activeTool) {
+        d->activeTool->explicitUserStrokeEndRequest();
+    }
+}
+
 QVariant KoToolProxy::inputMethodQuery(Qt::InputMethodQuery query, const KoViewConverter &converter) const
 {
     if (d->activeTool)
@@ -461,23 +467,8 @@ bool KoToolProxy::paste()
     bool success = false;
     KoCanvasBase *canvas = d->controller->canvas();
 
-    if (d->activeTool && d->isActiveLayerEditable())
+    if (d->activeTool && d->isActiveLayerEditable()) {
         success = d->activeTool->paste();
-
-    if (!success) {
-        const QMimeData *data = QApplication::clipboard()->mimeData();
-
-        if (data->hasFormat(KoOdf::mimeType(KoOdf::Text))) {
-            KoShapeManager *shapeManager = canvas->shapeManager();
-            KoShapePaste paste(canvas, shapeManager->selection()->activeLayer());
-            success = paste.paste(KoOdf::Text, data);
-            if (success) {
-                shapeManager->selection()->deselectAll();
-                Q_FOREACH (KoShape *shape, paste.pastedShapes()) {
-                    shapeManager->selection()->select(shape);
-                }
-            }
-        }
     }
 
     if (!success) {
@@ -544,14 +535,6 @@ void KoToolProxy::dropEvent(QDropEvent *event, const QPointF &point)
 {
     if (d->activeTool)
         d->activeTool->dropEvent(event, point);
-}
-
-QStringList KoToolProxy::supportedPasteMimeTypes() const
-{
-    if (d->activeTool)
-        return d->activeTool->supportedPasteMimeTypes();
-
-    return QStringList();
 }
 
 void KoToolProxy::deleteSelection()

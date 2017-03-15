@@ -33,7 +33,7 @@ public:
 };
 
 KoShapeMoveCommand::KoShapeMoveCommand(const QList<KoShape*> &shapes, QList<QPointF> &previousPositions, QList<QPointF> &newPositions, KoFlake::AnchorPosition anchor, KUndo2Command *parent)
-        : KUndo2Command(parent),
+        : KUndo2Command(kundo2_i18n("Move shapes"), parent),
         d(new Private())
 {
     d->shapes = shapes;
@@ -42,8 +42,21 @@ KoShapeMoveCommand::KoShapeMoveCommand(const QList<KoShape*> &shapes, QList<QPoi
     d->anchor = anchor;
     Q_ASSERT(d->shapes.count() == d->previousPositions.count());
     Q_ASSERT(d->shapes.count() == d->newPositions.count());
+}
 
-    setText(kundo2_i18n("Move shapes"));
+KoShapeMoveCommand::KoShapeMoveCommand(const QList<KoShape *> &shapes, const QPointF &offset, KUndo2Command *parent)
+    : KUndo2Command(kundo2_i18n("Move shapes"), parent),
+      d(new Private())
+{
+    d->shapes = shapes;
+    d->anchor = KoFlake::Center;
+
+    Q_FOREACH (KoShape *shape, d->shapes) {
+        const QPointF pos = shape->absolutePosition();
+
+        d->previousPositions << pos;
+        d->newPositions << pos + offset;
+    }
 }
 
 KoShapeMoveCommand::~KoShapeMoveCommand()

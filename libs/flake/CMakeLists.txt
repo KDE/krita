@@ -80,9 +80,9 @@ set(kritaflake_SRCS
     KoVectorPatternBackground.cpp
     KoShapeConfigWidgetBase.cpp
     KoDrag.cpp
+    KoSvgPaste.cpp
     KoDragOdfSaveHelper.cpp
     KoShapeOdfSaveHelper.cpp
-    KoShapePaste.cpp
     KoConnectionPoint.cpp
     KoConnectionShape.cpp
     KoConnectionShapeLoadingUpdater.cpp

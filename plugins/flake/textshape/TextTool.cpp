@@ -1138,13 +1138,6 @@ void TextTool::cut()
     }
 }
 
-QStringList TextTool::supportedPasteMimeTypes() const
-{
-    QStringList list;
-    list << "text/plain" << "text/html" << "application/vnd.oasis.opendocument.text";
-    return list;
-}
-
 void TextTool::dragMoveEvent(QDragMoveEvent *event, const QPointF &point)
 {
     if (event->mimeData()->hasFormat(KoOdf::mimeType(KoOdf::Text))

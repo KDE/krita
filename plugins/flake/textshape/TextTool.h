@@ -119,8 +119,6 @@ public:
     /// reimplemented from superclass
     virtual bool paste();
     /// reimplemented from superclass
-    virtual QStringList supportedPasteMimeTypes() const;
-    /// reimplemented from superclass
     virtual void dragMoveEvent(QDragMoveEvent *event, const QPointF &point);
     /// reimplemented from superclass
     void dragLeaveEvent(QDragLeaveEvent *event);

@@ -198,6 +198,16 @@ void KisShapeController::removeShape(KoShape* shape)
     m_d->doc->setModified(true);
 }
 
+QRectF KisShapeController::documentRectInPixels() const
+{
+    return m_d->doc->image()->bounds();
+}
+
+qreal KisShapeController::pixelsPerInch() const
+{
+    return m_d->doc->image()->xRes() * 72.0;
+}
+
 void KisShapeController::setInitialShapeForCanvas(KisCanvas2 *canvas)
 {
     if (!image()) return;

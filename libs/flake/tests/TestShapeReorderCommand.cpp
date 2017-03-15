@@ -558,5 +558,51 @@ void TestShapeReorderCommand::testNoCommand()
     cmd = KoShapeReorderCommand::createCommand(selectedShapes, &manager, KoShapeReorderCommand::LowerShape);
     QVERIFY(cmd == 0);
 }
+#include <kis_assert.h>
+#include <kis_debug.h>
+void testMergeInShapeImpl(const QVector<int> indexesProfile,
+                          int newShapeIndex,
+                          const QVector<int> expectedIndexes)
+{
+    KIS_ASSERT(indexesProfile.size() == expectedIndexes.size());
+
+    QVector<MockShape> shapesStore(indexesProfile.size());
+
+    QList<KoShape*> managedShapes;
+
+    for (int i = 0; i < shapesStore.size(); i++) {
+        shapesStore[i].setSize(QSizeF(100,100));
+        shapesStore[i].setZIndex(indexesProfile[i]);
+
+        managedShapes << &shapesStore[i];
+    }
+
+    QScopedPointer<KUndo2Command> cmd(
+        KoShapeReorderCommand::mergeInShape(managedShapes, &shapesStore[newShapeIndex]));
+    cmd->redo();
+
+    for (int i = 0; i < shapesStore.size(); i++) {
+        //qDebug() << ppVar(i) << ppVar(shapesStore[i].zIndex());
+        QCOMPARE(shapesStore[i].zIndex(), expectedIndexes[i]);
+    }
+}
+
+void TestShapeReorderCommand::testMergeInShape()
+{
+    QVector<int> indexesProfile({1,1,2,2,2,3,3,4,5,6});
+    int newShapeIndex = 3;
+    QVector<int> expectedIndexes({1,1,2,3,2,4,4,5,6,7});
+
+    testMergeInShapeImpl(indexesProfile, newShapeIndex, expectedIndexes);
+}
+
+void TestShapeReorderCommand::testMergeInShapeDistant()
+{
+    QVector<int> indexesProfile({1,1,2,2,2,4,4,5,6,7});
+    int newShapeIndex = 3;
+    QVector<int> expectedIndexes({1,1,2,3,2,4,4,5,6,7});
+
+    testMergeInShapeImpl(indexesProfile, newShapeIndex, expectedIndexes);
+}
 
 QTEST_MAIN(TestShapeReorderCommand)

@@ -583,7 +583,9 @@ bool KisKraLoadVisitor::loadSelection(const QString& location, KisSelectionSP ds
 
     // Shape selection
     QString shapeSelectionLocation = location + DOT_SHAPE_SELECTION;
-    if (m_store->hasFile(shapeSelectionLocation + "/content.xml")) {
+    if (m_store->hasFile(shapeSelectionLocation + "/content.svg") ||
+        m_store->hasFile(shapeSelectionLocation + "/content.xml")) {
+
         m_store->pushDirectory();
         m_store->enterDirectory(shapeSelectionLocation) ;
 

@@ -172,6 +172,21 @@ void KoShapeController::setShapeControllerBase(KoShapeBasedDocumentBase *shapeBa
     d->shapeBasedDocument = shapeBasedDocument;
 }
 
+QRectF KoShapeController::documentRectInPixels() const
+{
+    return d->shapeBasedDocument ? d->shapeBasedDocument->documentRectInPixels() : QRectF(0,0,1920,1080);
+}
+
+qreal KoShapeController::pixelsPerInch() const
+{
+    return d->shapeBasedDocument ? d->shapeBasedDocument->pixelsPerInch() : 72.0;
+}
+
+QRectF KoShapeController::documentRect() const
+{
+    return d->shapeBasedDocument ? d->shapeBasedDocument->documentRect() : documentRectInPixels();
+}
+
 KoDocumentResourceManager *KoShapeController::resourceManager() const
 {
     if (!d->shapeBasedDocument)

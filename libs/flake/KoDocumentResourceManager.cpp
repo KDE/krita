@@ -151,27 +151,6 @@ int KoDocumentResourceManager::grabSensitivity() const
     return 5; // default value (and is used just about everywhere)
 }
 
-void KoDocumentResourceManager::setPasteOffset(qreal pasteOffset)
-{
-    setResource(PasteOffset, QVariant(pasteOffset));
-}
-
-qreal KoDocumentResourceManager::pasteOffset() const
-{
-    return resource(PasteOffset).toDouble();
-}
-
-void KoDocumentResourceManager::enablePasteAtCursor(bool enable)
-{
-    setResource(PasteAtCursor, QVariant(enable));
-}
-
-bool KoDocumentResourceManager::pasteAtCursor() const
-{
-    return resource(PasteAtCursor).toBool();
-}
-
-
 void KoDocumentResourceManager::setUndoStack(KUndo2Stack *undoStack)
 {
     QVariant variant;

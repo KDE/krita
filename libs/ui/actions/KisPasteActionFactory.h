@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2007 Boudewijn Rempt boud@valdyas.org
+ *  Copyright (c) 2017 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,36 +16,20 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_KRA_SAVER_TEST_H
-#define KIS_KRA_SAVER_TEST_H
+#ifndef KISPASTEACTIONFACTORY_H
+#define KISPASTEACTIONFACTORY_H
 
-#include <QtTest>
+#include "operations/kis_operation.h"
+#include "operations/kis_operation_configuration.h"
 
-class KisKraSaverTest : public QObject
-{
-    Q_OBJECT
-private Q_SLOTS:
+struct KRITAUI_EXPORT KisPasteActionFactory : public KisOperation {
+    KisPasteActionFactory() : KisOperation("paste-ui-action") {}
 
-    void initTestCase();
+    void runFromXML(KisViewManager *view, const KisOperationConfiguration &config) {
+        run(config.getBool("paste-at-cursor-position", false), view);
+    }
 
-    void testCrashyShapeLayer();
-
-    // XXX: Also test roundtripping of metadata
-    void testRoundTrip();
-
-    void testSaveEmpty();
-    void testRoundTripFillLayerColor();
-    void testRoundTripFillLayerPattern();
-
-    void testRoundTripLayerStyles();
-
-    void testRoundTripAnimation();
-
-    void testRoundTripColorizeMask();
-
-    void testRoundTripShapeLayer();
-    void testRoundTripShapeSelection();
-
+    void run(bool pasteAtCursorPosition, KisViewManager *view);
 };
 
-#endif
+#endif // KISPASTEACTIONFACTORY_H

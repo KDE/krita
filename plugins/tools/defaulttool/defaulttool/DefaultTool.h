@@ -75,8 +75,6 @@ public:
     ///reimplemented
     virtual bool paste();
     ///reimplemented
-    virtual QStringList supportedPasteMimeTypes() const;
-    ///reimplemented
     virtual KoToolSelection *selection();
 
     QMenu* popupActionsMenu() override;
@@ -125,8 +123,8 @@ public: // Events
     void mouseDoubleClickEvent(KoPointerEvent *event) override;
 
     void keyPressEvent(QKeyEvent *event) override;
-    void requestStrokeEnd() override;
 
+    void explicitUserStrokeEndRequest() override;
 protected:
     QList<QPointer<QWidget> > createOptionWidgets();
 

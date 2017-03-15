@@ -332,6 +332,12 @@ public:
     virtual QRectF boundingRect() const;
 
     /**
+     * Get the united bounding box of a group of shapes. This is a utility
+     * function used in many places in Krita.
+     */
+    static QRectF boundingRect(const QList<KoShape*> &shapes);
+
+    /**
      * @brief Add a connector point to the shape
      *
      * A connector is a place on the shape that allows a graphical connection to be made

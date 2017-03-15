@@ -111,6 +111,9 @@ public:
     void wheelEvent(KoPointerEvent *event);
 
     /// Forwarded to the current KoToolBase
+    void explicitUserStrokeEndRequest();
+
+    /// Forwarded to the current KoToolBase
     QVariant inputMethodQuery(Qt::InputMethodQuery query, const KoViewConverter &converter) const;
 
     /// Forwarded to the current KoToolBase
@@ -143,9 +146,6 @@ public:
 
     /// Forwarded to the current KoToolBase
     bool paste();
-
-    /// Forwarded to the current KoToolBase
-    QStringList supportedPasteMimeTypes() const;
 
     /// Forwarded to the current KoToolBase
     void dragMoveEvent(QDragMoveEvent *event, const QPointF &point);

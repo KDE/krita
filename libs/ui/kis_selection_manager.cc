@@ -46,6 +46,7 @@
 #include <KoColorSpace.h>
 #include <KoCompositeOp.h>
 #include <KoToolProxy.h>
+#include <KoSvgPaste.h>
 #include <kis_icon.h>
 
 #include "kis_adjustment_layer.h"
@@ -85,6 +86,7 @@
 #include "dialogs/kis_dlg_stroke_selection_properties.h"
 
 #include "actions/kis_selection_action_factories.h"
+#include "actions/KisPasteActionFactory.h"
 #include "kis_action.h"
 #include "kis_action_manager.h"
 #include "operations/kis_operation_configuration.h"
@@ -275,21 +277,8 @@ bool KisSelectionManager::haveShapesSelected()
 
 bool KisSelectionManager::haveShapesInClipboard()
 {
-    KisShapeLayer *shapeLayer =
-        dynamic_cast<KisShapeLayer*>(m_view->activeLayer().data());
-
-    if (shapeLayer) {
-        const QMimeData* data = QApplication::clipboard()->mimeData();
-        if (data) {
-            QStringList mimeTypes = m_view->canvasBase()->toolProxy()->supportedPasteMimeTypes();
-            Q_FOREACH (const QString & mimeType, mimeTypes) {
-                if (data->hasFormat(mimeType)) {
-                    return true;
-                }
-            }
-        }
-    }
-    return false;
+    KoSvgPaste paste;
+    return paste.hasShapes();
 }
 
 bool KisSelectionManager::havePixelSelectionWithPixels()
@@ -383,12 +372,13 @@ void KisSelectionManager::copyMerged()
 void KisSelectionManager::paste()
 {
     KisPasteActionFactory factory;
-    factory.run(m_view);
+    factory.run(false, m_view);
 }
 
 void KisSelectionManager::pasteAt()
 {
-    //XXX
+    KisPasteActionFactory factory;
+    factory.run(true, m_view);
 }
 
 void KisSelectionManager::pasteNew()

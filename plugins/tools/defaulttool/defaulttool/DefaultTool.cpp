@@ -39,7 +39,6 @@
 #include <KoSelectedShapesProxy.h>
 #include <KoShapeGroup.h>
 #include <KoShapeLayer.h>
-#include <KoShapePaste.h>
 #include <KoShapeOdfSaveHelper.h>
 #include <KoDrag.h>
 #include <KoCanvasBase.h>
@@ -59,7 +58,6 @@
 
 #include <QAction>
 #include <QKeyEvent>
-#include <QClipboard>
 #include <KoResourcePaths.h>
 
 #include <KoCanvasController.h>
@@ -728,7 +726,7 @@ void DefaultTool::mouseDoubleClickEvent(KoPointerEvent *event)
         selection->select(shape);
     }
 
-    requestStrokeEnd();
+    explicitUserStrokeEndRequest();
 }
 
 bool DefaultTool::moveSelection(int direction, Qt::KeyboardModifiers modifiers)
@@ -756,21 +754,10 @@ bool DefaultTool::moveSelection(int direction, Qt::KeyboardModifiers modifiers)
             y /= 5;
         }
 
-        QList<QPointF> prevPos;
-        QList<QPointF> newPos;
         QList<KoShape *> shapes = koSelection()->selectedEditableShapes();
 
-        Q_FOREACH (KoShape *shape, shapes) {
-            QPointF pos = shape->absolutePosition();
-
-            prevPos.append(pos);
-            pos.rx() += x;
-            pos.ry() += y;
-            newPos.append(pos);
-        }
-
         if (!shapes.isEmpty()) {
-            canvas()->addCommand(new KoShapeMoveCommand(shapes, prevPos, newPos));
+            canvas()->addCommand(new KoShapeMoveCommand(shapes, QPointF(x, y)));
             result = true;
         }
     }
@@ -815,11 +802,12 @@ void DefaultTool::repaintDecorations()
 
 void DefaultTool::copy() const
 {
+    // all the selected shapes, not only editable!
     QList<KoShape *> shapes = canvas()->selectedShapesProxy()->selection()->selectedShapes();
-    if (!shapes.empty()) {
-        KoShapeOdfSaveHelper saveHelper(shapes);
+
+    if (!shapes.isEmpty()) {
         KoDrag drag;
-        drag.setOdf(KoOdf::mimeType(KoOdf::Text), saveHelper);
+        drag.setSvg(shapes);
         drag.addToClipboard();
     }
 }
@@ -842,13 +830,6 @@ bool DefaultTool::paste()
 {
     // we no longer have to do anything as tool Proxy will do it for us
     return false;
-}
-
-QStringList DefaultTool::supportedPasteMimeTypes() const
-{
-    QStringList list;
-    list << KoOdf::mimeType(KoOdf::Text);
-    return list;
 }
 
 KoSelection *DefaultTool::koSelection()
@@ -1076,9 +1057,7 @@ void DefaultTool::selectionAlign(KoShapeAlignCommand::Align align)
         }
         bb = QRectF(QPointF(0, 0), canvas()->resourceManager()->sizeResource(KoCanvasResourceManager::PageSize));
     } else {
-        Q_FOREACH (KoShape *shape, editableShapes) {
-            bb |= shape->boundingRect();
-        }
+        bb = KoShape::boundingRect(editableShapes);
     }
 
     KoShapeAlignCommand *cmd = new KoShapeAlignCommand(editableShapes, align, bb);
@@ -1112,17 +1091,12 @@ void DefaultTool::selectionReorder(KoShapeReorderCommand::MoveShapeType order)
         return;
     }
 
-    QList<KoShape *> selectedShapes = selection->selectedShapes();
-    if (selectedShapes.count() < 1) {
+    QList<KoShape *> selectedShapes = selection->selectedEditableShapes();
+    if (selectedShapes.isEmpty()) {
         return;
     }
 
-    QList<KoShape *> editableShapes = filterEditableShapes(selectedShapes);
-    if (editableShapes.count() < 1) {
-        return;
-    }
-
-    KUndo2Command *cmd = KoShapeReorderCommand::createCommand(editableShapes, canvas()->shapeManager(), order);
+    KUndo2Command *cmd = KoShapeReorderCommand::createCommand(selectedShapes, canvas()->shapeManager(), order);
     if (cmd) {
         canvas()->addCommand(cmd);
     }
@@ -1396,7 +1370,7 @@ uint DefaultTool::editableShapesCount(const QList<KoShape *> &shapes)
     return count;
 }
 
-void DefaultTool::requestStrokeEnd()
+void DefaultTool::explicitUserStrokeEndRequest()
 {
     QList<KoShape *> shapes = koSelection()->selectedEditableShapesAndDelegates();
     emit activateTemporary(KoToolManager::instance()->preferredToolForSelection(shapes));

@@ -181,6 +181,10 @@ void KoToolBase::touchEvent(QTouchEvent *event)
     event->ignore();
 }
 
+void KoToolBase::explicitUserStrokeEndRequest()
+{
+}
+
 QVariant KoToolBase::inputMethodQuery(Qt::InputMethodQuery query, const KoViewConverter &) const
 {
     Q_D(const KoToolBase);
@@ -355,11 +359,6 @@ void KoToolBase::setTextMode(bool value)
 {
     Q_D(KoToolBase);
     d->isInTextMode=value;
-}
-
-QStringList KoToolBase::supportedPasteMimeTypes() const
-{
-    return QStringList();
 }
 
 bool KoToolBase::paste()

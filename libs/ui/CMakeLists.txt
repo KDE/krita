@@ -285,6 +285,7 @@ set(kritaui_LIB_SRCS
     operations/kis_operation_ui_widget.cpp
     operations/kis_filter_selection_operation.cpp
     actions/kis_selection_action_factories.cpp
+    actions/KisPasteActionFactory.cpp
     input/kis_touch_shortcut.cpp
     kis_document_undo_store.cpp
     kis_transaction_based_command.cpp

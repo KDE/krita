@@ -27,6 +27,7 @@
 
 #include <QList>
 
+class QRectF;
 class KoShape;
 class KoShapeBasedDocumentBasePrivate;
 class KoDocumentResourceManager;
@@ -77,6 +78,22 @@ public:
      * collection and others.
      */
     virtual KoDocumentResourceManager *resourceManager() const;
+
+    /**
+     * The size of the document measured in rasterized pixels. This information is needed for loading
+     * SVG documents that use 'px' as the default unit.
+     */
+    virtual QRectF documentRectInPixels() const = 0;
+
+    /**
+     * The size of the document measured in 'pt'
+     */
+    QRectF documentRect() const;
+
+    /**
+     * Resolution of the rasterized representaiton of the document. Used to load SVG documents correctly.
+     */
+    virtual qreal pixelsPerInch() const = 0;
 
 private:
     KoShapeBasedDocumentBasePrivate * const d;

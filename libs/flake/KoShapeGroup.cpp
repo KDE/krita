@@ -190,10 +190,7 @@ QRectF KoShapeGroup::outlineRect() const
 
 QRectF KoShapeGroup::boundingRect() const
 {
-    QRectF groupBound;
-    Q_FOREACH (KoShape* shape, shapes()) {
-        groupBound |= shape->boundingRect();
-    }
+    QRectF groupBound = KoShape::boundingRect(shapes());
 
     if (shadow()) {
         KoInsets insets;

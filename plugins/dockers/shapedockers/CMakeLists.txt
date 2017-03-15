@@ -1,10 +1,8 @@
 project(calligradockers)
 
 set(calligradockers_SRCS
-    shapecollection/CollectionShapeFactory.cpp
     shapecollection/ShapeCollectionDocker.cpp
     shapecollection/CollectionItemModel.cpp
-    shapecollection/OdfCollectionLoader.cpp
 
     Plugin.cpp
 )

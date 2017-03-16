@@ -217,8 +217,10 @@ void KarbonCalligraphyTool::addPoint(KoPointerEvent *event, bool lastPoint)
     if (timeDiff>m_smoothIntervalTime) {
         qreal distDiff = 0;
         for (int i=0; i<m_intervalStore.count()-1; i++) {
-            distDiff += QLineF(m_intervalStore.at(i).pos(), m_intervalStore.at(i+1).pos()).length();
+            distDiff += QLineF(m_intervalStore.at(i).pos(),
+                               m_intervalStore.at(i+1).pos()).length();
         }
+        distDiff = canvas()->viewConverter()->documentToView(QSizeF(distDiff, 0)).width();
         if (distDiff>m_smoothIntervalDistance) {
             m_shape->appendPoint(m_intervalStore.first());
             m_intervalStoreOld = m_intervalStore;

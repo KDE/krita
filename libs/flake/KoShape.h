@@ -668,6 +668,15 @@ public:
      */
     void setParent(KoShapeContainer *parent);
 
+
+    /**
+     * @brief inheritsTransformFromAny checks if the shape inherits transformation from
+     *        any of the shapes listed in \p ancestorsInQuestion. The inheritance is checked
+     *        in recursive way.
+     * @return true if there is a (transitive) transformation-wise parent found in \p ancestorsInQuestion
+     */
+    bool inheritsTransformFromAny(const QList<KoShape*> ancestorsInQuestion) const;
+
     /**
      * Request a repaint to be queued.
      * The repaint will be of the entire Shape, including its selection handles should this

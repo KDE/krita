@@ -648,6 +648,28 @@ void KoShape::setParent(KoShapeContainer *parent)
     d->shapeChanged(ParentChanged);
 }
 
+bool KoShape::inheritsTransformFromAny(const QList<KoShape *> ancestorsInQuestion) const
+{
+    bool result = false;
+
+    KoShape *shape = const_cast<KoShape*>(this);
+    while (shape) {
+        KoShapeContainer *parent = shape->parent();
+        if (parent && !parent->inheritsTransform(shape)) {
+            break;
+        }
+
+        if (ancestorsInQuestion.contains(shape)) {
+            result = true;
+            break;
+        }
+
+        shape = parent;
+    }
+
+    return result;
+}
+
 int KoShape::zIndex() const
 {
     Q_D(const KoShape);

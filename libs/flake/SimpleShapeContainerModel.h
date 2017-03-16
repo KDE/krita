@@ -54,7 +54,7 @@ public:
             return;
         m_members.append(child);
         m_clipped.append(false);
-        m_inheritsTransform.append(false);
+        m_inheritsTransform.append(true);
     }
     void setClipped(const KoShape *shape, bool value) {
         const int index = indexOf(shape);
@@ -97,7 +97,7 @@ public:
     }
     bool inheritsTransform(const KoShape *shape) const {
         const int index = indexOf(shape);
-        KIS_SAFE_ASSERT_RECOVER(index >= 0)  { return false;}
+        KIS_SAFE_ASSERT_RECOVER(index >= 0)  { return true;}
         return m_inheritsTransform[index];
     }
 

@@ -157,6 +157,9 @@ private Q_SLOTS:
     void slotMoveShapes(const QPointF &diff);
 
 private:
+    QList<KoShape*> shapesToBeTransformed();
+
+private:
     struct Private;
     Private * const m_d;
 };

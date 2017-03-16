@@ -294,7 +294,7 @@
          </property>
         </widget>
        </item>
-       <item row="6" column="0" colspan="2">
+       <item row="7" column="0" colspan="2">
         <spacer name="verticalSpacer">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -318,6 +318,20 @@
         <widget class="QLabel" name="label_8">
          <property name="text">
           <string>Enable Hi-DPI support:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="1">
+        <widget class="QCheckBox" name="m_chkSingleApplication">
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="0">
+        <widget class="QLabel" name="label_r98">
+         <property name="text">
+          <string>Allow only one instance of Krita:</string>
          </property>
         </widget>
        </item>

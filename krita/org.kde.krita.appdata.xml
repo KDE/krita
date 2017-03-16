@@ -3,6 +3,13 @@
   <id>org.kde.krita.desktop</id>
   <metadata_license>CC0-1.0</metadata_license>
   <name>Krita</name>
+  <name xml:lang="ca">Krita</name>
+  <name xml:lang="cs">Krita</name>
+  <name xml:lang="nl">Krita</name>
+  <name xml:lang="pt">Krita</name>
+  <name xml:lang="sv">Krita</name>
+  <name xml:lang="uk">Krita</name>
+  <name xml:lang="x-test">xxKritaxx</name>
   <summary>Digital Painting, Creative Freedom</summary>
   <summary xml:lang="ast">Pintura dixital, llibertá creativa</summary>
   <summary xml:lang="bs">Digitalno crtanje, kreativna sloboda</summary>

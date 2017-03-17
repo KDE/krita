@@ -58,6 +58,7 @@
 
 #include <QAction>
 #include <QKeyEvent>
+#include <QSignalMapper>
 #include <KoResourcePaths.h>
 
 #include <KoCanvasController.h>
@@ -345,6 +346,16 @@ bool DefaultTool::wantsAutoScroll() const
     return true;
 }
 
+void DefaultTool::addMappedAction(QSignalMapper *mapper, const QString &actionId, int commandType)
+{
+    KisActionRegistry *actionRegistry = KisActionRegistry::instance();
+
+    QAction *action = actionRegistry->makeQAction(actionId, this);
+    addAction(actionId, action);
+    connect(action, SIGNAL(triggered()), mapper, SLOT(map()));
+    mapper->setMapping(action, commandType);
+}
+
 void DefaultTool::setupActions()
 {
     KisActionRegistry *actionRegistry = KisActionRegistry::instance();
@@ -365,29 +376,16 @@ void DefaultTool::setupActions()
     addAction("object_order_back", actionSendToBack);
     connect(actionSendToBack, SIGNAL(triggered()), this, SLOT(selectionSendToBack()));
 
-    QAction *actionAlignLeft = actionRegistry->makeQAction("object_align_horizontal_left", this);
-    addAction("object_align_horizontal_left", actionAlignLeft);
-    connect(actionAlignLeft, SIGNAL(triggered()), this, SLOT(selectionAlignHorizontalLeft()));
 
-    QAction *actionAlignCenter = actionRegistry->makeQAction("object_align_horizontal_center", this);
-    addAction("object_align_horizontal_center", actionAlignCenter);
-    connect(actionAlignCenter, SIGNAL(triggered()), this, SLOT(selectionAlignHorizontalCenter()));
+    QSignalMapper *alignSignalsMapper = new QSignalMapper(this);
+    connect(alignSignalsMapper, SIGNAL(mapped(int)), SLOT(selectionAlign(int)));
 
-    QAction *actionAlignRight = actionRegistry->makeQAction("object_align_horizontal_right", this);
-    addAction("object_align_horizontal_right", actionAlignRight);
-    connect(actionAlignRight, SIGNAL(triggered()), this, SLOT(selectionAlignHorizontalRight()));
-
-    QAction *actionAlignTop = actionRegistry->makeQAction("object_align_vertical_top", this);
-    addAction("object_align_vertical_top", actionAlignTop);
-    connect(actionAlignTop, SIGNAL(triggered()), this, SLOT(selectionAlignVerticalTop()));
-
-    QAction *actionAlignMiddle = actionRegistry->makeQAction("object_align_vertical_center", this);
-    addAction("object_align_vertical_center", actionAlignMiddle);
-    connect(actionAlignMiddle, SIGNAL(triggered()), this, SLOT(selectionAlignVerticalCenter()));
-
-    QAction *actionAlignBottom = actionRegistry->makeQAction("object_align_vertical_bottom", this);
-    addAction("object_align_vertical_bottom", actionAlignBottom);
-    connect(actionAlignBottom, SIGNAL(triggered()), this, SLOT(selectionAlignVerticalBottom()));
+    addMappedAction(alignSignalsMapper, "object_align_horizontal_left", KoShapeAlignCommand::HorizontalLeftAlignment);
+    addMappedAction(alignSignalsMapper, "object_align_horizontal_center", KoShapeAlignCommand::HorizontalCenterAlignment);
+    addMappedAction(alignSignalsMapper, "object_align_horizontal_right", KoShapeAlignCommand::HorizontalRightAlignment);
+    addMappedAction(alignSignalsMapper, "object_align_vertical_top", KoShapeAlignCommand::VerticalTopAlignment);
+    addMappedAction(alignSignalsMapper, "object_align_vertical_center", KoShapeAlignCommand::VerticalCenterAlignment);
+    addMappedAction(alignSignalsMapper, "object_align_vertical_bottom", KoShapeAlignCommand::VerticalBottomAlignment);
 
     QAction *actionGroupBottom = actionRegistry->makeQAction("object_group", this);
     addAction("object_group", actionGroupBottom);
@@ -951,36 +949,6 @@ void DefaultTool::deactivate()
     }
 }
 
-void DefaultTool::selectionAlignHorizontalLeft()
-{
-    selectionAlign(KoShapeAlignCommand::HorizontalLeftAlignment);
-}
-
-void DefaultTool::selectionAlignHorizontalCenter()
-{
-    selectionAlign(KoShapeAlignCommand::HorizontalCenterAlignment);
-}
-
-void DefaultTool::selectionAlignHorizontalRight()
-{
-    selectionAlign(KoShapeAlignCommand::HorizontalRightAlignment);
-}
-
-void DefaultTool::selectionAlignVerticalTop()
-{
-    selectionAlign(KoShapeAlignCommand::VerticalTopAlignment);
-}
-
-void DefaultTool::selectionAlignVerticalCenter()
-{
-    selectionAlign(KoShapeAlignCommand::VerticalCenterAlignment);
-}
-
-void DefaultTool::selectionAlignVerticalBottom()
-{
-    selectionAlign(KoShapeAlignCommand::VerticalBottomAlignment);
-}
-
 void DefaultTool::selectionGroup()
 {
     KoSelection *selection = koSelection();
@@ -1027,8 +995,11 @@ void DefaultTool::selectionUngroup()
     }
 }
 
-void DefaultTool::selectionAlign(KoShapeAlignCommand::Align align)
+void DefaultTool::selectionAlign(int _align)
 {
+    KoShapeAlignCommand::Align align =
+        static_cast<KoShapeAlignCommand::Align>(_align);
+
     KoSelection *selection = koSelection();
     if (!selection) return;
 

@@ -22,6 +22,7 @@
 #include <QFileInfo>
 #include <QLocalSocket>
 #include <QProcess>
+#include <QUuid>
 
 #include <klocalizedstring.h>
 #include <kpluginfactory.h>
@@ -35,6 +36,9 @@ GmicQt::GmicQt(QObject *parent, const QVariantList &)
 {
     KisAction *action = createAction("GmicQt");
     connect(action,  SIGNAL(triggered()), this, SLOT(slotGmicQt()));
+
+    KisAction *action = createAction("GmicQtAgain");
+    connect(action,  SIGNAL(triggered()), this, SLOT(slotGmicQtAgain()));
 }
 
 GmicQt::~GmicQt()
@@ -42,7 +46,12 @@ GmicQt::~GmicQt()
     delete m_localServer;
 }
 
-void GmicQt::slotGmicQt()
+void GmicQt::slotGmicQtAgain()
+{
+    slotGmicQt(true);
+}
+
+void GmicQt::slotGmicQt(bool again)
 {
     m_localServer = new QLocalServer();
     m_localServer->listen("krita-gmic");
@@ -54,7 +63,9 @@ void GmicQt::slotGmicQt()
 
     // start the plugin
     if (QFileInfo(pluginPath).exists()) {
-        int retval = QProcess::execute(pluginPath);
+        int retval = QProcess::execute(pluginPath + " "
+                                       + QUuid::createUuid().toString()
+                                       + (again ? " reapply" : QString::null));
         qDebug() << retval;
     }
 }
@@ -96,8 +107,22 @@ void GmicQt::connected()
         return;
     }
 
-    // Check the message: we can get two different ones
-    if (message.startsWith("gmic_qt_get_cropped_images")) {
+    // Check the message: we can get three different ones
+    QMap<QByteArray, QByteArray> messageMap;
+    Q_FOREACH(QByteArray line, message.split("\n")) {
+        QList<QByteArray> kv = line.split('=');
+        if (kv.size() == 2) {
+            messageMap[kv[0]] = kv[1];
+        }
+        else {
+            qWarning() << "line" << line << "is invalid.";
+        }
+    }
+
+    if (message.startsWith("")) {
+
+    }
+    else if (message.startsWith("gmic_qt_get_cropped_images")) {
         // Parse the message, create the shared memory segments, and create a new message to send back and waid for ack
         QByteArray ba;
         QDataStream ds(&socket);

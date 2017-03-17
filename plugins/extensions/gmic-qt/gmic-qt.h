@@ -31,8 +31,8 @@ public:
     virtual ~GmicQt();
 
 private Q_SLOTS:
-
-    void slotGmicQt();
+    void slotGmicQtAgain();
+    void slotGmicQt(bool again = false);
     void connected();
 private:
     QLocalServer *m_localServer {0};

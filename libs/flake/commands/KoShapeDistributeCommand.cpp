@@ -90,7 +90,7 @@ KoShapeDistributeCommand::KoShapeDistributeCommand(const QList<KoShape*> &shapes
     QMapIterator<qreal, KoShape*> it(sortedPos);
     while (it.hasNext()) {
         it.next();
-        position = it.value()->position();
+        position = it.value()->absolutePosition();
         previousPositions  << position;
 
         bRect = it.value()->absoluteOutlineRect();

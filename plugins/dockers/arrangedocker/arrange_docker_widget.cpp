@@ -70,6 +70,17 @@ void ArrangeDockerWidget::setActionCollection(KActionCollection *collection)
         replaceAction(ui->vCenterAlign, collection->action("object_align_vertical_center"));
         replaceAction(ui->bottomAlign, collection->action("object_align_vertical_bottom"));
 
+        replaceAction(ui->hDistributeLeft, collection->action("object_distribute_horizontal_left"));
+        replaceAction(ui->hDistributeCenter, collection->action("object_distribute_horizontal_center"));
+        replaceAction(ui->hDistributeRight, collection->action("object_distribute_horizontal_right"));
+        replaceAction(ui->hDistributeGaps, collection->action("object_distribute_horizontal_gaps"));
+
+        replaceAction(ui->vDistributeTop, collection->action("object_distribute_vertical_top"));
+        replaceAction(ui->vDistributeCenter, collection->action("object_distribute_vertical_center"));
+        replaceAction(ui->vDistributeBottom, collection->action("object_distribute_vertical_bottom"));
+        replaceAction(ui->vDistributeGaps, collection->action("object_distribute_vertical_gaps"));
+
+
         replaceAction(ui->group, collection->action("object_group"));
         replaceAction(ui->ungroup, collection->action("object_ungroup"));
     }

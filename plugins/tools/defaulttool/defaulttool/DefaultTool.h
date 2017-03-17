@@ -96,6 +96,7 @@ public Q_SLOTS:
 
 private Q_SLOTS:
     void selectionAlign(int _align);
+    void selectionDistribute(int _distribute);
 
     void selectionBringToFront();
     void selectionSendToBack();

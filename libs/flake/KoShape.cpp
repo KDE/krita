@@ -463,6 +463,20 @@ QRectF KoShape::boundingRect(const QList<KoShape *> &shapes)
     return boundingRect;
 }
 
+QRectF KoShape::absoluteOutlineRect(KoViewConverter *converter) const
+{
+    return absoluteTransformation(converter).map(outline()).boundingRect();
+}
+
+QRectF KoShape::absoluteOutlineRect(const QList<KoShape *> &shapes, KoViewConverter *converter)
+{
+    QRectF absoluteOutlineRect;
+    Q_FOREACH (KoShape *shape, shapes) {
+        absoluteOutlineRect |= shape->absoluteOutlineRect(converter);
+    }
+    return absoluteOutlineRect;
+}
+
 QTransform KoShape::absoluteTransformation(const KoViewConverter *converter) const
 {
     Q_D(const KoShape);

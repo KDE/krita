@@ -338,6 +338,20 @@ public:
     static QRectF boundingRect(const QList<KoShape*> &shapes);
 
     /**
+     * @return the bounding rect of the outline of the shape measured
+     *         in absolute coordinate system. Please note that in contrast to
+     *         boundingRect() this rect doesn't include the stroke and other
+     *         insets.
+     */
+    QRectF absoluteOutlineRect(KoViewConverter *converter = 0) const;
+
+    /**
+     * Same as a member function, but applies to a list of shapes and returns a
+     * united rect.
+     */
+    static QRectF absoluteOutlineRect(const QList<KoShape*> &shapes, KoViewConverter *converter = 0);
+
+    /**
      * @brief Add a connector point to the shape
      *
      * A connector is a place on the shape that allows a graphical connection to be made

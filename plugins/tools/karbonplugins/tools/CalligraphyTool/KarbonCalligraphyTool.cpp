@@ -210,7 +210,8 @@ void KarbonCalligraphyTool::addPoint(KoPointerEvent *event, bool lastPoint)
     //QPointF newPoint = calculateNewPoint(event->point, &newSpeed);
     // add the previous point
     KisPaintInformation paintInfo = m_infoBuilder->continueStroke(event, m_strokeTime.elapsed());
-
+    //apply the path following:
+    paintInfo.setPos(calculateNewPoint(paintInfo.pos()));
     m_intervalStore.append(paintInfo);
 
     qreal timeDiff = paintInfo.currentTime() - m_lastInfo.currentTime();
@@ -274,37 +275,32 @@ void KarbonCalligraphyTool::setAngle(KoPointerEvent *event)
         qDebug() << "using rotation" << m_angle;
     }
 }
-
-QPointF KarbonCalligraphyTool::calculateNewPoint(const QPointF &mousePos, QPointF *speed)
+*/
+QPointF KarbonCalligraphyTool::calculateNewPoint(const QPointF &mousePos)
 {
-    if (!m_usePath || !m_selectedPath) { // don't follow path
-        QPointF force = mousePos - m_lastPoint;
-        QPointF dSpeed = force / m_mass;
-        *speed = m_speed * (1.0 - m_drag) + dSpeed;
-        return m_lastPoint + *speed;
+    QPointF res = mousePos;
+    if (m_usePath && m_selectedPath) {
+        QPointF sp = mousePos - m_lastMousePos;
+        m_lastMousePos = mousePos;
+
+        // follow selected path
+        qreal step = QLineF(QPointF(0, 0), sp).length();
+        m_followPathPosition += step;
+
+        qreal t;
+        if (m_followPathPosition >= m_selectedPathOutline.length()) {
+            t = 1.0;
+            m_endOfPath = true;
+        } else {
+            t = m_selectedPathOutline.percentAtLength(m_followPathPosition);
+        }
+
+        res = m_selectedPathOutline.pointAtPercent(t)
+                + m_selectedPath->position();
     }
-
-    QPointF sp = mousePos - m_lastMousePos;
-    m_lastMousePos = mousePos;
-
-    // follow selected path
-    qreal step = QLineF(QPointF(0, 0), sp).length();
-    m_followPathPosition += step;
-
-    qreal t;
-    if (m_followPathPosition >= m_selectedPathOutline.length()) {
-        t = 1.0;
-        m_endOfPath = true;
-    } else {
-        t = m_selectedPathOutline.percentAtLength(m_followPathPosition);
-    }
-
-    QPointF res = m_selectedPathOutline.pointAtPercent(t)
-                  + m_selectedPath->position();
-    *speed = res - m_lastPoint;
     return res;
 }
-
+/*
 
 qreal KarbonCalligraphyTool::calculateWidth(qreal pressure)
 {

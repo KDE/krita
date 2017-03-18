@@ -87,7 +87,7 @@ private:
     //void setAngle(KoPointerEvent *event);
     // auxiliary functions to calculate the dynamic parameters
     // returns the new point and sets speed to the speed
-    //QPointF calculateNewPoint(const QPointF &mousePos, QPointF *speed);
+    QPointF calculateNewPoint(const QPointF &mousePos);
     //qreal calculateWidth(qreal pressure);
     //qreal calculateAngle(const QPointF &oldSpeed, const QPointF &newSpeed);
 

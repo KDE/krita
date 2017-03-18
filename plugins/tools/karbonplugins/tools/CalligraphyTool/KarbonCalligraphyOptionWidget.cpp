@@ -87,8 +87,8 @@ KarbonCalligraphyOptionWidget::KarbonCalligraphyOptionWidget()
 
     QLabel *smoothDistance = new QLabel(i18n("Dist-I:"), this);
     smoothDistance->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-    m_smoothDistance->setToolTip(i18n("The Distance interval samples based on the length of the stroke in the coordinates of the screen. So if you zoom in, you can make preciser strokes despite having the same distance interval."));
     m_smoothDistance = new KisDoubleParseSpinBox(this);
+    m_smoothDistance->setToolTip(i18n("The Distance interval samples based on the length of the stroke in the coordinates of the screen. So if you zoom in, you can make preciser strokes despite having the same distance interval."));
     m_smoothDistance->setRange(1, 1000);
     m_smoothDistance->setSingleStep(1);
     smoothDistance->setBuddy(m_smoothDistance);

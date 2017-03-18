@@ -39,6 +39,8 @@
 
 #include "kis_double_parse_spin_box.h"
 #include "kis_int_parse_spin_box.h"
+#include "ui_karboncalligraphytooloptions.h"
+#include "kis_slider_spin_box.h"
 
 /*
 Profiles are saved in karboncalligraphyrc
@@ -59,80 +61,37 @@ TODO: add a reset defaults option?
 // name of the configuration file
 const QString RCFILENAME = "karboncalligraphyrc";
 
+class KarbonCalligraphyToolOptions: public QWidget, public Ui::WdgCalligraphyToolOptions
+{
+public:
+    KarbonCalligraphyToolOptions(QWidget *parent = 0)
+        : QWidget(parent) {
+        setupUi(this);
+    }
+};
+
 KarbonCalligraphyOptionWidget::KarbonCalligraphyOptionWidget()
     : m_changingProfile(false)
 {
-    QGridLayout *layout = new QGridLayout(this);
-    layout->setContentsMargins(0, 0, 0, 0);
+    m_options = new KarbonCalligraphyToolOptions();
+    m_options->setupUi(this);
 
-    m_comboBox = new KComboBox(this);
-    layout->addWidget(m_comboBox, 0, 0);
+    m_options->sldDistanceInterval->setPrefix(i18n("Distance: "));
+    //the distance is in SCREEN coordinates!
+    m_options->sldDistanceInterval->setSuffix(i18n("px"));
+    m_options->sldDistanceInterval->setRange(1, 1000, 2);
+    m_options->sldDistanceInterval->setSingleStep(1);
 
-    m_saveButton = new QToolButton(this);
-    m_saveButton->setToolTip(i18n("Save profile as..."));
-    m_saveButton->setIcon(koIcon("document-save-as"));
-    layout->addWidget(m_saveButton, 0, 1);
+    m_options->sldTimeInterval->setPrefix(i18n("Time: "));
+    m_options->sldTimeInterval->setSuffix(i18n("ms"));
+    m_options->sldTimeInterval->setRange(1, 1000, 2);
+    m_options->sldTimeInterval->setSingleStep(1);
 
-    m_removeButton = new QToolButton(this);
-    m_removeButton->setToolTip(i18n("Remove profile"));
-    m_removeButton->setIcon(koIcon("list-remove"));
-    layout->addWidget(m_removeButton, 0, 2);
+    m_options->sldCaps->setPrefix(i18n("Caps: "));
+    m_options->sldCaps->setRange(0.0, 2.0, 2);
+    m_options->sldCaps->setSingleStep(0.03);
 
-    QGridLayout *detailsLayout = new QGridLayout();
-    detailsLayout->setContentsMargins(0, 0, 0, 0);
-    detailsLayout->setVerticalSpacing(0);
-
-    m_usePath = new QCheckBox(i18n("&Follow selected path"), this);
-    detailsLayout->addWidget(m_usePath, 0, 0, 1, 4);
-
-    QLabel *smoothDistance = new QLabel(i18n("Dist-I:"), this);
-    smoothDistance->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-    m_smoothDistance = new KisDoubleParseSpinBox(this);
-    m_smoothDistance->setToolTip(i18n("The Distance interval samples based on the length of the stroke in the coordinates of the screen. So if you zoom in, you can make preciser strokes despite having the same distance interval."));
-    m_smoothDistance->setRange(1, 1000);
-    m_smoothDistance->setSingleStep(1);
-    smoothDistance->setBuddy(m_smoothDistance);
-    detailsLayout->addWidget(smoothDistance, 4, 0);
-    detailsLayout->addWidget(m_smoothDistance, 4, 1);
-
-    QLabel *smoothTime = new QLabel(i18n("Time-I:"), this);
-    smoothTime->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-    m_smoothTime = new KisDoubleParseSpinBox(this);
-    m_smoothTime->setRange(1, 1000);
-    m_smoothTime->setSingleStep(1);
-    smoothTime->setBuddy(m_smoothTime);
-    detailsLayout->addWidget(smoothTime, 4, 2);
-    detailsLayout->addWidget(m_smoothTime, 4, 3);
-
-    QLabel *capsLabel = new QLabel(i18n("Caps:"), this);
-    capsLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-    m_capsBox = new KisDoubleParseSpinBox(this);
-    m_capsBox->setRange(0.0, 2.0);
-    m_capsBox->setSingleStep(0.03);
-    capsLabel->setBuddy(m_capsBox);
-    detailsLayout->addWidget(capsLabel, 5, 2);
-    detailsLayout->addWidget(m_capsBox, 5, 3);
-
-    QLabel *massLabel = new QLabel(i18n("Mass:"), this);
-    massLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-    m_massBox = new KisDoubleParseSpinBox(this);
-    m_massBox->setRange(0.0, 20.0);
-    m_massBox->setDecimals(1);
-    massLabel->setBuddy(m_massBox);
-    detailsLayout->addWidget(massLabel, 6, 0);
-    detailsLayout->addWidget(m_massBox, 6, 1);
-
-    QLabel *dragLabel = new QLabel(i18n("Drag:"), this);
-    dragLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-    m_dragBox = new KisDoubleParseSpinBox(this);
-    m_dragBox->setRange(0.0, 1.0);
-    m_dragBox->setSingleStep(0.1);
-    dragLabel->setBuddy(m_dragBox);
-    detailsLayout->addWidget(dragLabel, 6, 2);
-    detailsLayout->addWidget(m_dragBox, 6, 3);
-
-    layout->addLayout(detailsLayout, 1, 0, 1, 3);
-    layout->setRowStretch(2, 1);
+    m_options->tabRatio->setVisible(false);
 
     createConnections();
     addDefaultProfiles(); // if they are already added does nothing
@@ -146,12 +105,10 @@ KarbonCalligraphyOptionWidget::~KarbonCalligraphyOptionWidget()
 
 void KarbonCalligraphyOptionWidget::emitAll()
 {
-    emit usePathChanged(m_usePath->isChecked());
-    emit capsChanged(m_capsBox->value());
-    emit massChanged(m_massBox->value());
-    emit dragChanged(m_dragBox->value());
-    emit smoothTimeChanged(m_smoothTime->value());
-    emit smoothDistanceChanged(m_smoothDistance->value());
+    emit usePathChanged(m_options->rdAdjustPath->isChecked());
+    emit capsChanged(m_options->sldCaps->value());
+    emit smoothTimeChanged(m_options->sldTimeInterval->value());
+    emit smoothDistanceChanged(m_options->sldDistanceInterval->value());
 }
 
 void KarbonCalligraphyOptionWidget::loadProfile(const QString &name)
@@ -226,7 +183,7 @@ void KarbonCalligraphyOptionWidget::saveProfileAs()
 
 void KarbonCalligraphyOptionWidget::removeProfile()
 {
-    removeProfile(m_comboBox->currentText());
+    removeProfile(m_options->cmbProfiles->currentText());
 }
 
 /******************************************************************************
@@ -235,41 +192,29 @@ void KarbonCalligraphyOptionWidget::removeProfile()
 
 void KarbonCalligraphyOptionWidget::createConnections()
 {
-    connect(m_comboBox, SIGNAL(currentIndexChanged(QString)),
+    connect(m_options->cmbProfiles, SIGNAL(currentIndexChanged(QString)),
             SLOT(loadProfile(QString)));
 
     // propagate changes
-    connect(m_usePath, SIGNAL(toggled(bool)),
+    connect(m_options->rdAdjustPath, SIGNAL(toggled(bool)),
             SIGNAL(usePathChanged(bool)));
 
-    connect(m_capsBox, SIGNAL(valueChanged(double)),
+    connect(m_options->sldCaps, SIGNAL(valueChanged(double)),
             SIGNAL(capsChanged(double)));
 
-    connect(m_massBox, SIGNAL(valueChanged(double)),
-            SIGNAL(massChanged(double)));
-
-    connect(m_dragBox, SIGNAL(valueChanged(double)),
-            SIGNAL(dragChanged(double)));
-
-    connect(m_smoothTime, SIGNAL(valueChanged(double)),
+    connect(m_options->sldTimeInterval, SIGNAL(valueChanged(double)),
             SIGNAL(smoothTimeChanged(double)));
-    connect(m_smoothDistance, SIGNAL(valueChanged(double)),
+    connect(m_options->sldDistanceInterval, SIGNAL(valueChanged(double)),
             SIGNAL(smoothDistanceChanged(double)));
 
     // update profile
-    connect(m_usePath, SIGNAL(toggled(bool)),
+    connect(m_options->rdAdjustPath, SIGNAL(toggled(bool)),
             SLOT(updateCurrentProfile()));
-    connect(m_capsBox, SIGNAL(valueChanged(double)),
-            SLOT(updateCurrentProfile()));
-
-    connect(m_massBox, SIGNAL(valueChanged(double)),
+    connect(m_options->sldCaps, SIGNAL(valueChanged(double)),
             SLOT(updateCurrentProfile()));
 
-    connect(m_dragBox, SIGNAL(valueChanged(double)),
-            SLOT(updateCurrentProfile()));
-
-    connect(m_saveButton, SIGNAL(clicked()), SLOT(saveProfileAs()));
-    connect(m_removeButton, SIGNAL(clicked()), SLOT(removeProfile()));
+    connect(m_options->bnSaveProfile, SIGNAL(clicked()), SLOT(saveProfileAs()));
+    connect(m_options->bnRemoveProfile, SIGNAL(clicked()), SLOT(removeProfile()));
 
     // visualization
     //connect(m_useAngle, SIGNAL(toggled(bool)), SLOT(toggleUseAngle(bool)));
@@ -346,7 +291,7 @@ void KarbonCalligraphyOptionWidget::loadProfiles()
     ProfileMap::const_iterator it = m_profiles.constBegin();
     ProfileMap::const_iterator lastIt = m_profiles.constEnd();
     for (; it != lastIt; ++it) {
-        m_comboBox->addItem(it.key());
+        m_options->cmbProfiles->addItem(it.key());
     }
     m_changingProfile = false;
 
@@ -365,15 +310,13 @@ void KarbonCalligraphyOptionWidget::loadCurrentProfile()
         return;
     }
 
-    m_comboBox->setCurrentIndex(index);
+    m_options->cmbProfiles->setCurrentIndex(index);
 
     Profile *profile = m_profiles[currentProfile];
 
     m_changingProfile = true;
-    m_usePath->setChecked(profile->usePath);
-    m_capsBox->setValue(profile->caps);
-    m_massBox->setValue(profile->mass);
-    m_dragBox->setValue(profile->drag);
+    m_options->rdAdjustPath->setChecked(profile->usePath);
+    m_options->sldCaps->setValue(profile->caps);
     m_changingProfile = false;
 }
 
@@ -381,10 +324,8 @@ void KarbonCalligraphyOptionWidget::saveProfile(const QString &name)
 {
     Profile *profile = new Profile;
     profile->name = name;
-    profile->usePath = m_usePath->isChecked();
-    profile->caps = m_capsBox->value();
-    profile->mass = m_massBox->value();
-    profile->drag = m_dragBox->value();
+    profile->usePath = m_options->rdAdjustPath->isChecked();
+    profile->caps = m_options->sldCaps->value();
 
     if (m_profiles.contains(name)) {
         // there is already a profile with the same name, overwrite
@@ -396,15 +337,15 @@ void KarbonCalligraphyOptionWidget::saveProfile(const QString &name)
         m_profiles.insert(name, profile);
         // add the profile to the combobox
         QString dbg;
-        for (int i = 0; i < m_comboBox->count(); ++i) {
-            dbg += m_comboBox->itemText(i) + ' ';
+        for (int i = 0; i < m_options->cmbProfiles->count(); ++i) {
+            dbg += m_options->cmbProfiles->itemText(i) + ' ';
         }
         int pos = profilePosition(name);
         m_changingProfile = true;
-        m_comboBox->insertItem(pos, name);
+        m_options->cmbProfiles->insertItem(pos, name);
         m_changingProfile = false;
-        for (int i = 0; i < m_comboBox->count(); ++i) {
-            dbg += m_comboBox->itemText(i) + ' ';
+        for (int i = 0; i < m_options->cmbProfiles->count(); ++i) {
+            dbg += m_options->cmbProfiles->itemText(i) + ' ';
         }
     }
 
@@ -423,7 +364,7 @@ void KarbonCalligraphyOptionWidget::saveProfile(const QString &name)
 
     config.sync();
 
-    m_comboBox->setCurrentIndex(profilePosition(name));
+    m_options->cmbProfiles->setCurrentIndex(profilePosition(name));
 }
 
 void KarbonCalligraphyOptionWidget::removeProfile(const QString &name)
@@ -443,7 +384,7 @@ void KarbonCalligraphyOptionWidget::removeProfile(const QString &name)
     // and from profiles
     m_profiles.remove(name);
 
-    m_comboBox->removeItem(index);
+    m_options->cmbProfiles->removeItem(index);
 
     // now in the config file there is value ProfileN missing,
     // where N = configIndex, so put the last one there
@@ -497,5 +438,5 @@ int KarbonCalligraphyOptionWidget::profilePosition(const QString &profileName)
 
 void KarbonCalligraphyOptionWidget::setUsePathEnabled(bool enabled)
 {
-    m_usePath->setEnabled(enabled);
+    m_options->rdAdjustPath->setEnabled(enabled);
 }

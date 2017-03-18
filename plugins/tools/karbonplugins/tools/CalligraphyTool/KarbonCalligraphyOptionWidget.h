@@ -28,6 +28,7 @@ class QCheckBox;
 class QSpinBox;
 class QDoubleSpinBox;
 class QToolButton;
+class KarbonCalligraphyToolOptions;
 
 class KarbonCalligraphyOptionWidget : public QWidget
 {
@@ -111,16 +112,7 @@ private:
     typedef QMap<QString, Profile *> ProfileMap;
     ProfileMap m_profiles;
 
-    KComboBox *m_comboBox;
-    QCheckBox *m_usePath;
-
-    QDoubleSpinBox  *m_massBox;
-    QDoubleSpinBox  *m_dragBox;
-    QDoubleSpinBox  *m_capsBox;
-    QDoubleSpinBox  *m_smoothTime;
-    QDoubleSpinBox  *m_smoothDistance;
-    QToolButton *m_saveButton;
-    QToolButton *m_removeButton;
+    KarbonCalligraphyToolOptions *m_options;
 
     // when true updateCurrentProfile() doesn't do anything
     bool m_changingProfile;

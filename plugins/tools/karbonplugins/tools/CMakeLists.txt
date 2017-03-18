@@ -35,6 +35,7 @@ set(karbon_tools_SOURCES
 ki18n_wrap_ui(karbon_tools_SOURCES
     filterEffectTool/FilterEffectEditWidget.ui
     KarbonPatternOptionsWidget.ui
+    CalligraphyTool/karboncalligraphytooloptions.ui
 )
 
 qt5_add_resources(karbon_tools_SOURCES karbontools.qrc)

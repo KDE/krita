@@ -338,6 +338,20 @@ public:
     static QRectF boundingRect(const QList<KoShape*> &shapes);
 
     /**
+     * @return the bounding rect of the outline of the shape measured
+     *         in absolute coordinate system. Please note that in contrast to
+     *         boundingRect() this rect doesn't include the stroke and other
+     *         insets.
+     */
+    QRectF absoluteOutlineRect(KoViewConverter *converter = 0) const;
+
+    /**
+     * Same as a member function, but applies to a list of shapes and returns a
+     * united rect.
+     */
+    static QRectF absoluteOutlineRect(const QList<KoShape*> &shapes, KoViewConverter *converter = 0);
+
+    /**
      * @brief Add a connector point to the shape
      *
      * A connector is a place on the shape that allows a graphical connection to be made
@@ -667,6 +681,15 @@ public:
      * @param parent the new parent of this shape. Can be 0 if the shape has no parent anymore.
      */
     void setParent(KoShapeContainer *parent);
+
+
+    /**
+     * @brief inheritsTransformFromAny checks if the shape inherits transformation from
+     *        any of the shapes listed in \p ancestorsInQuestion. The inheritance is checked
+     *        in recursive way.
+     * @return true if there is a (transitive) transformation-wise parent found in \p ancestorsInQuestion
+     */
+    bool inheritsTransformFromAny(const QList<KoShape*> ancestorsInQuestion) const;
 
     /**
      * Request a repaint to be queued.

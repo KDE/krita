@@ -31,7 +31,6 @@
 #include <KoUnit.h>
 #include "kis_assert.h"
 
-
 PathToolOptionWidget::PathToolOptionWidget(KoPathTool *tool, QWidget *parent)
     : QWidget(parent),
       m_currentShape(0),
@@ -146,4 +145,10 @@ void PathToolOptionWidget::slotShapePropertyChanged()
     if (command) {
         m_canvas->addCommand(command);
     }
+}
+
+void PathToolOptionWidget::showEvent(QShowEvent *event)
+{
+    emit sigRequestUpdateActions();
+    QWidget::showEvent(event);
 }

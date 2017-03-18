@@ -57,6 +57,7 @@
 
 #include <KoIcon.h>
 
+#include <QMenu>
 #include <QAction>
 #include <FlakeDebug.h>
 #include <klocalizedstring.h>
@@ -172,6 +173,8 @@ KoPathTool::KoPathTool(KoCanvasBase *canvas)
     addAction("convert-to-path", m_actionConvertToPath);
     connect(m_actionConvertToPath, SIGNAL(triggered()), this, SLOT(convertToPath()));
 
+    m_contextMenu.reset(new QMenu());
+
 
     connect(points, SIGNAL(triggered(QAction*)), this, SLOT(pointTypeChanged(QAction*)));
     connect(&m_pointSelection, SIGNAL(selectionChanged()), this, SLOT(pointSelectionChanged()));
@@ -201,6 +204,7 @@ QList<QPointer<QWidget> >  KoPathTool::createOptionWidgets()
     PathToolOptionWidget * toolOptions = new PathToolOptionWidget(this);
     connect(this, SIGNAL(typeChanged(int)), toolOptions, SLOT(setSelectionType(int)));
     connect(this, SIGNAL(singleShapeChanged(KoPathShape*)), toolOptions, SLOT(setCurrentShape(KoPathShape*)));
+    connect(toolOptions, SIGNAL(sigRequestUpdateActions()), this, SLOT(updateActions()));
     updateOptionsWidget();
     toolOptions->setWindowTitle(i18n("Edit Shape"));
     list.append(toolOptions);
@@ -251,7 +255,6 @@ void KoPathTool::insertPoints()
             foreach (KoPathPoint * p, cmd->insertedPoints()) {
                 m_pointSelection.add(p, false);
             }
-            updateActions();
         }
     }
 }
@@ -287,7 +290,6 @@ void KoPathTool::pointToLine()
 
         if (! pointToChange.isEmpty()) {
             d->canvas->addCommand(new KoPathPointTypeCommand(pointToChange, KoPathPointTypeCommand::Line));
-            updateActions();
         }
     }
 }
@@ -302,7 +304,6 @@ void KoPathTool::pointToCurve()
 
         if (command) {
             d->canvas->addCommand(command);
-            updateActions();
         }
     }
 }
@@ -333,7 +334,6 @@ void KoPathTool::segmentToLine()
         QList<KoPathPointData> segments(m_pointSelection.selectedSegmentsData());
         if (segments.size() > 0) {
             d->canvas->addCommand(new KoPathSegmentTypeCommand(segments, KoPathSegmentTypeCommand::Line));
-            updateActions();
         }
     }
 }
@@ -345,7 +345,6 @@ void KoPathTool::segmentToCurve()
         QList<KoPathPointData> segments(m_pointSelection.selectedSegmentsData());
         if (segments.size() > 0) {
             d->canvas->addCommand(new KoPathSegmentTypeCommand(segments, KoPathSegmentTypeCommand::Curve));
-            updateActions();
         }
     }
 }
@@ -381,7 +380,6 @@ void KoPathTool::joinPoints()
             KoSubpathJoinCommand *cmd = new KoSubpathJoinCommand(pd1, pd2);
             d->canvas->addCommand(cmd);
         }
-        updateActions();
     }
 }
 
@@ -423,8 +421,6 @@ void KoPathTool::mergePoints()
     if (pt) {
         m_pointSelection.add(pt, true);
     }
-
-    updateActions();
 }
 
 void KoPathTool::breakAtPoint()
@@ -432,7 +428,6 @@ void KoPathTool::breakAtPoint()
     Q_D(KoToolBase);
     if (m_pointSelection.hasSelection()) {
         d->canvas->addCommand(new KoPathBreakAtPointCommand(m_pointSelection.selectedPointsData()));
-        updateActions();
     }
 }
 
@@ -444,7 +439,6 @@ void KoPathTool::breakAtSegment()
         QList<KoPathPointData> segments(m_pointSelection.selectedSegmentsData());
         if (segments.size() == 1) {
             d->canvas->addCommand(new KoPathSegmentBreakCommand(segments.at(0)));
-            updateActions();
         }
     }
 }
@@ -896,7 +890,8 @@ void KoPathTool::activate(ToolActivation activation, const QSet<KoShape*> &shape
     d->canvas->snapGuide()->reset();
 
     useCursor(m_selectCursor);
-    connect(d->canvas->selectedShapesProxy(), SIGNAL(selectionChanged()), this, SLOT(slotSelectionChanged()));
+    m_canvasConnections.addConnection(d->canvas->selectedShapesProxy(), SIGNAL(selectionChanged()), this, SLOT(slotSelectionChanged()));
+    m_canvasConnections.addConnection(d->canvas->selectedShapesProxy(), SIGNAL(selectionContentChanged()), this, SLOT(updateActions()));
 
     initializeWithShapes(shapes.toList());
 }
@@ -959,33 +954,89 @@ void KoPathTool::updateOptionsWidget()
 
 void KoPathTool::updateActions()
 {
-    const bool hasPointsSelected = m_pointSelection.hasSelection();
-    m_actionPathPointCorner->setEnabled(hasPointsSelected);
-    m_actionPathPointSmooth->setEnabled(hasPointsSelected);
-    m_actionPathPointSymmetric->setEnabled(hasPointsSelected);
-    m_actionRemovePoint->setEnabled(hasPointsSelected);
-    m_actionBreakPoint->setEnabled(hasPointsSelected);
-    m_actionCurvePoint->setEnabled(hasPointsSelected);
-    m_actionLinePoint->setEnabled(hasPointsSelected);
+    QList<KoPathPointData> pointData = m_pointSelection.selectedPointsData();
 
-    bool hasSegmentsSelected = false;
-    if (hasPointsSelected && m_pointSelection.size() > 1)
-        hasSegmentsSelected = !m_pointSelection.selectedSegmentsData().isEmpty();
-    m_actionAddPoint->setEnabled(hasSegmentsSelected);
-    m_actionLineSegment->setEnabled(hasSegmentsSelected);
-    m_actionCurveSegment->setEnabled(hasSegmentsSelected);
+    bool canBreakAtPoint = false;
 
-    const uint objectCount = m_pointSelection.objectCount();
-    const uint pointCount = m_pointSelection.size();
-    m_actionBreakSegment->setEnabled(objectCount == 1 && pointCount == 2);
-    m_actionJoinSegment->setEnabled(objectCount == 1 && pointCount == 2);
-    m_actionMergePoints->setEnabled(objectCount == 1 && pointCount == 2);
+    bool hasNonSmoothPoints = false;
+    bool hasNonSymmetricPoints = false;
+    bool hasNonSplitPoints = false;
+
+    bool hasNonLinePoints = false;
+    bool hasNonCurvePoints = false;
+
+    if (!pointData.isEmpty()) {
+        Q_FOREACH (const KoPathPointData &pd, pointData) {
+            const int subpathIndex = pd.pointIndex.first;
+            const int pointIndex = pd.pointIndex.second;
+
+            canBreakAtPoint |= pd.pathShape->isClosedSubpath(subpathIndex) ||
+                (pointIndex > 0 && pointIndex < pd.pathShape->subpathPointCount(subpathIndex) - 1);
+
+            KoPathPoint *point = pd.pathShape->pointByIndex(pd.pointIndex);
+
+            hasNonSmoothPoints |= !(point->properties() & KoPathPoint::IsSmooth);
+            hasNonSymmetricPoints |= !(point->properties() & KoPathPoint::IsSymmetric);
+            hasNonSplitPoints |=
+                point->properties() & KoPathPoint::IsSymmetric ||
+                point->properties() & KoPathPoint::IsSmooth;
+
+            hasNonLinePoints |= point->activeControlPoint1() || point->activeControlPoint2();
+            hasNonCurvePoints |= !point->activeControlPoint1() && !point->activeControlPoint2();
+        }
+    }
+
+    m_actionPathPointCorner->setEnabled(hasNonSplitPoints);
+    m_actionPathPointSmooth->setEnabled(hasNonSmoothPoints);
+    m_actionPathPointSymmetric->setEnabled(hasNonSymmetricPoints);
+
+    m_actionRemovePoint->setEnabled(!pointData.isEmpty());
+
+    m_actionBreakPoint->setEnabled(canBreakAtPoint);
+
+    m_actionCurvePoint->setEnabled(hasNonCurvePoints);
+    m_actionLinePoint->setEnabled(hasNonLinePoints);
+
+
+    QList<KoPathPointData> segments(m_pointSelection.selectedSegmentsData());
+
+    bool canJoinSubpaths = false;
+    bool canSplitAtSegment = false;
+    bool canConvertSegmentToLine = false;
+    bool canConvertSegmentToCurve= false;
+
+    if (!segments.isEmpty()) {
+
+        canSplitAtSegment = segments.size() == 1;
+
+        bool hasLines = false;
+        bool hasCurves = false;
+
+        Q_FOREACH (const KoPathPointData &pd, segments) {
+            KoPathSegment segment = pd.pathShape->segmentByIndex(pd.pointIndex);
+            hasLines |= segment.degree() == 1;
+            hasCurves |= segment.degree() > 1;
+        }
+
+        canConvertSegmentToLine = !segments.isEmpty() && hasCurves;
+        canConvertSegmentToCurve= !segments.isEmpty() && hasLines;
+    }
+
+    m_actionAddPoint->setEnabled(canSplitAtSegment);
+
+    m_actionLineSegment->setEnabled(canConvertSegmentToLine);
+    m_actionCurveSegment->setEnabled(canConvertSegmentToCurve);
+
+    m_actionBreakSegment->setEnabled(canSplitAtSegment);
+    m_actionJoinSegment->setEnabled(canJoinSubpaths);
+    m_actionMergePoints->setEnabled(canJoinSubpaths);
 }
 
 void KoPathTool::deactivate()
 {
     Q_D(KoToolBase);
-    disconnect(d->canvas->selectedShapesProxy(), SIGNAL(selectionChanged()), this, SLOT(slotSelectionChanged()));
+
+    m_canvasConnections.clear();
     m_pointSelection.clear();
     m_pointSelection.setSelectedShapes(QList<KoPathShape*>());
     delete m_activeHandle;
@@ -1030,6 +1081,65 @@ void KoPathTool::repaint(const QRectF &repaintRect)
     // widen border to take antialiasing into account
     qreal radius = m_handleRadius + 1;
     d->canvas->updateCanvas(repaintRect.adjusted(-radius, -radius, radius, radius));
+}
+
+namespace {
+void addActionsGroupIfEnabled(QMenu *menu, QAction *a1, QAction *a2)
+{
+    if (a1->isEnabled() || a2->isEnabled()) {
+        menu->addAction(a1);
+        menu->addAction(a2);
+        menu->addSeparator();
+    }
+}
+
+void addActionsGroupIfEnabled(QMenu *menu, QAction *a1, QAction *a2, QAction *a3)
+{
+    if (a1->isEnabled() || a2->isEnabled()) {
+        menu->addAction(a1);
+        menu->addAction(a2);
+        menu->addAction(a3);
+        menu->addSeparator();
+    }
+}
+}
+
+QMenu *KoPathTool::popupActionsMenu()
+{
+    if (m_contextMenu) {
+        m_contextMenu->clear();
+
+        addActionsGroupIfEnabled(m_contextMenu.data(),
+                                 m_actionPathPointCorner,
+                                 m_actionPathPointSmooth,
+                                 m_actionPathPointSymmetric);
+
+        addActionsGroupIfEnabled(m_contextMenu.data(),
+                                 m_actionCurvePoint,
+                                 m_actionLinePoint);
+
+        addActionsGroupIfEnabled(m_contextMenu.data(),
+                                 m_actionAddPoint,
+                                 m_actionRemovePoint);
+
+        addActionsGroupIfEnabled(m_contextMenu.data(),
+                                 m_actionLineSegment,
+                                 m_actionCurveSegment);
+
+        addActionsGroupIfEnabled(m_contextMenu.data(),
+                                 m_actionBreakPoint,
+                                 m_actionBreakSegment);
+
+        addActionsGroupIfEnabled(m_contextMenu.data(),
+                                 m_actionJoinSegment,
+                                 m_actionMergePoints);
+
+        m_contextMenu->addAction(m_actionConvertToPath);
+
+        m_contextMenu->addSeparator();
+    }
+
+    return m_contextMenu.data();
 }
 
 void KoPathTool::deleteSelection()

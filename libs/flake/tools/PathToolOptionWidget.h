@@ -50,6 +50,12 @@ public Q_SLOTS:
 private Q_SLOTS:
     void slotShapePropertyChanged();
 
+Q_SIGNALS:
+    void sigRequestUpdateActions();
+
+protected:
+    void showEvent(QShowEvent *event);
+
 private:
     Ui::PathToolOptionWidgetBase widget;
 

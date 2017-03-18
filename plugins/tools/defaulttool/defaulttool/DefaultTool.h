@@ -30,6 +30,7 @@
 #include <QPolygonF>
 #include <QTime>
 
+class QSignalMapper;
 class KoInteractionStrategy;
 class KoShapeMoveCommand;
 class KoSelection;
@@ -94,12 +95,8 @@ public Q_SLOTS:
     void deactivate() override;
 
 private Q_SLOTS:
-    void selectionAlignHorizontalLeft();
-    void selectionAlignHorizontalCenter();
-    void selectionAlignHorizontalRight();
-    void selectionAlignVerticalTop();
-    void selectionAlignVerticalCenter();
-    void selectionAlignVerticalBottom();
+    void selectionAlign(int _align);
+    void selectionDistribute(int _distribute);
 
     void selectionBringToFront();
     void selectionSendToBack();
@@ -140,7 +137,8 @@ private:
     /// Returns rotation angle of given handle of the current selection
     qreal rotationOfHandle(KoFlake::SelectionHandle handle, bool useEdgeRotation);
 
-    void selectionAlign(KoShapeAlignCommand::Align align);
+    void addMappedAction(QSignalMapper *mapper, const QString &actionId, int type);
+
     void selectionReorder(KoShapeReorderCommand::MoveShapeType order);
     bool moveSelection(int direction, Qt::KeyboardModifiers modifiers);
 
@@ -151,12 +149,6 @@ private:
     KoSelection *koSelection();
 
     void canvasResourceChanged(int key, const QVariant &res);
-
-    /// Returns list of editable shapes from the given list of shapes
-    QList<KoShape *> filterEditableShapes(const QList<KoShape *> &shapes);
-
-    /// Returns the number of editable shapes from the given list of shapes
-    uint editableShapesCount(const QList<KoShape *> &shapes);
 
     KoFlake::SelectionHandle m_lastHandle;
     KoFlake::AnchorPosition m_hotPosition;

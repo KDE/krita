@@ -112,6 +112,11 @@ void KisHandlePainterHelper::drawHandleCircle(const QPointF &center)
     drawHandleCircle(center, m_handleRadius);
 }
 
+void KisHandlePainterHelper::drawHandleSmallCircle(const QPointF &center)
+{
+    drawHandleCircle(center, 0.7 * m_handleRadius);
+}
+
 void KisHandlePainterHelper::drawHandleRect(const QPointF &center) {
     KIS_SAFE_ASSERT_RECOVER_RETURN(m_painter);
     QPolygonF paintingPolygon = m_handlePolygon.translated(m_painterTransform.map(center));

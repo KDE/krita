@@ -26,6 +26,7 @@
 #include "KoPathShape.h"
 #include "KoToolBase.h"
 #include "KoPathToolSelection.h"
+#include "kis_signal_auto_connection.h"
 #include <QList>
 #include <QCursor>
 
@@ -37,6 +38,8 @@ class KoParameterShape;
 class KUndo2Command;
 
 class QAction;
+class QMenu;
+
 
 /// The tool for editing a KoPathShape or a KoParameterShape.
 /// See KoCreatePathTool for code handling the initial path creation.
@@ -66,6 +69,8 @@ public:
 
     /// repaints the specified rect
     void repaint(const QRectF &repaintRect);
+
+    QMenu* popupActionsMenu() override;
 
 public Q_SLOTS:
     void documentResourceChanged(int key, const QVariant & res);
@@ -142,6 +147,8 @@ private:
     QAction *m_actionConvertToPath;
     QCursor m_moveCursor;
     bool m_activatedTemporarily;
+    QScopedPointer<QMenu> m_contextMenu;
+    KisSignalAutoConnectionsStore m_canvasConnections;
 
     Q_DECLARE_PRIVATE(KoToolBase)
 };

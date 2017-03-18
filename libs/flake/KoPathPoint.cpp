@@ -289,12 +289,12 @@ void KoPathPoint::paint(KisHandlePainterHelper &handlesHelper, PointTypes types,
 
     // then comes control point 2
     if (drawControlPoint2) {
-        handlesHelper.drawHandleCircle(controlPoint2());
+        handlesHelper.drawHandleSmallCircle(controlPoint2());
     }
 
     // then comes control point 1
     if (drawControlPoint1) {
-        handlesHelper.drawHandleCircle(controlPoint1());
+        handlesHelper.drawHandleSmallCircle(controlPoint1());
     }
 }
 

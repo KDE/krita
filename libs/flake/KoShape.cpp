@@ -463,6 +463,20 @@ QRectF KoShape::boundingRect(const QList<KoShape *> &shapes)
     return boundingRect;
 }
 
+QRectF KoShape::absoluteOutlineRect(KoViewConverter *converter) const
+{
+    return absoluteTransformation(converter).map(outline()).boundingRect();
+}
+
+QRectF KoShape::absoluteOutlineRect(const QList<KoShape *> &shapes, KoViewConverter *converter)
+{
+    QRectF absoluteOutlineRect;
+    Q_FOREACH (KoShape *shape, shapes) {
+        absoluteOutlineRect |= shape->absoluteOutlineRect(converter);
+    }
+    return absoluteOutlineRect;
+}
+
 QTransform KoShape::absoluteTransformation(const KoViewConverter *converter) const
 {
     Q_D(const KoShape);
@@ -646,6 +660,28 @@ void KoShape::setParent(KoShapeContainer *parent)
 
     notifyChanged();
     d->shapeChanged(ParentChanged);
+}
+
+bool KoShape::inheritsTransformFromAny(const QList<KoShape *> ancestorsInQuestion) const
+{
+    bool result = false;
+
+    KoShape *shape = const_cast<KoShape*>(this);
+    while (shape) {
+        KoShapeContainer *parent = shape->parent();
+        if (parent && !parent->inheritsTransform(shape)) {
+            break;
+        }
+
+        if (ancestorsInQuestion.contains(shape)) {
+            result = true;
+            break;
+        }
+
+        shape = parent;
+    }
+
+    return result;
 }
 
 int KoShape::zIndex() const

@@ -49,6 +49,7 @@
 #include <commands/KoShapeCreateCommand.h>
 #include <commands/KoShapeGroupCommand.h>
 #include <commands/KoShapeUngroupCommand.h>
+#include <commands/KoShapeDistributeCommand.h>
 #include <KoSnapGuide.h>
 #include <KoStrokeConfigWidget.h>
 #include "kis_action_registry.h"
@@ -58,6 +59,7 @@
 
 #include <QAction>
 #include <QKeyEvent>
+#include <QSignalMapper>
 #include <KoResourcePaths.h>
 
 #include <KoCanvasController.h>
@@ -345,6 +347,16 @@ bool DefaultTool::wantsAutoScroll() const
     return true;
 }
 
+void DefaultTool::addMappedAction(QSignalMapper *mapper, const QString &actionId, int commandType)
+{
+    KisActionRegistry *actionRegistry = KisActionRegistry::instance();
+
+    QAction *action = actionRegistry->makeQAction(actionId, this);
+    addAction(actionId, action);
+    connect(action, SIGNAL(triggered()), mapper, SLOT(map()));
+    mapper->setMapping(action, commandType);
+}
+
 void DefaultTool::setupActions()
 {
     KisActionRegistry *actionRegistry = KisActionRegistry::instance();
@@ -365,29 +377,29 @@ void DefaultTool::setupActions()
     addAction("object_order_back", actionSendToBack);
     connect(actionSendToBack, SIGNAL(triggered()), this, SLOT(selectionSendToBack()));
 
-    QAction *actionAlignLeft = actionRegistry->makeQAction("object_align_horizontal_left", this);
-    addAction("object_align_horizontal_left", actionAlignLeft);
-    connect(actionAlignLeft, SIGNAL(triggered()), this, SLOT(selectionAlignHorizontalLeft()));
 
-    QAction *actionAlignCenter = actionRegistry->makeQAction("object_align_horizontal_center", this);
-    addAction("object_align_horizontal_center", actionAlignCenter);
-    connect(actionAlignCenter, SIGNAL(triggered()), this, SLOT(selectionAlignHorizontalCenter()));
+    QSignalMapper *alignSignalsMapper = new QSignalMapper(this);
+    connect(alignSignalsMapper, SIGNAL(mapped(int)), SLOT(selectionAlign(int)));
 
-    QAction *actionAlignRight = actionRegistry->makeQAction("object_align_horizontal_right", this);
-    addAction("object_align_horizontal_right", actionAlignRight);
-    connect(actionAlignRight, SIGNAL(triggered()), this, SLOT(selectionAlignHorizontalRight()));
+    addMappedAction(alignSignalsMapper, "object_align_horizontal_left", KoShapeAlignCommand::HorizontalLeftAlignment);
+    addMappedAction(alignSignalsMapper, "object_align_horizontal_center", KoShapeAlignCommand::HorizontalCenterAlignment);
+    addMappedAction(alignSignalsMapper, "object_align_horizontal_right", KoShapeAlignCommand::HorizontalRightAlignment);
+    addMappedAction(alignSignalsMapper, "object_align_vertical_top", KoShapeAlignCommand::VerticalTopAlignment);
+    addMappedAction(alignSignalsMapper, "object_align_vertical_center", KoShapeAlignCommand::VerticalCenterAlignment);
+    addMappedAction(alignSignalsMapper, "object_align_vertical_bottom", KoShapeAlignCommand::VerticalBottomAlignment);
 
-    QAction *actionAlignTop = actionRegistry->makeQAction("object_align_vertical_top", this);
-    addAction("object_align_vertical_top", actionAlignTop);
-    connect(actionAlignTop, SIGNAL(triggered()), this, SLOT(selectionAlignVerticalTop()));
+    QSignalMapper *distributeSignalsMapper = new QSignalMapper(this);
+    connect(distributeSignalsMapper, SIGNAL(mapped(int)), SLOT(selectionDistribute(int)));
 
-    QAction *actionAlignMiddle = actionRegistry->makeQAction("object_align_vertical_center", this);
-    addAction("object_align_vertical_center", actionAlignMiddle);
-    connect(actionAlignMiddle, SIGNAL(triggered()), this, SLOT(selectionAlignVerticalCenter()));
+    addMappedAction(distributeSignalsMapper, "object_distribute_horizontal_left", KoShapeDistributeCommand::HorizontalLeftDistribution);
+    addMappedAction(distributeSignalsMapper, "object_distribute_horizontal_center", KoShapeDistributeCommand::HorizontalCenterDistribution);
+    addMappedAction(distributeSignalsMapper, "object_distribute_horizontal_right", KoShapeDistributeCommand::HorizontalRightDistribution);
+    addMappedAction(distributeSignalsMapper, "object_distribute_horizontal_gaps", KoShapeDistributeCommand::HorizontalGapsDistribution);
 
-    QAction *actionAlignBottom = actionRegistry->makeQAction("object_align_vertical_bottom", this);
-    addAction("object_align_vertical_bottom", actionAlignBottom);
-    connect(actionAlignBottom, SIGNAL(triggered()), this, SLOT(selectionAlignVerticalBottom()));
+    addMappedAction(distributeSignalsMapper, "object_distribute_vertical_top", KoShapeDistributeCommand::VerticalTopDistribution);
+    addMappedAction(distributeSignalsMapper, "object_distribute_vertical_center", KoShapeDistributeCommand::VerticalCenterDistribution);
+    addMappedAction(distributeSignalsMapper, "object_distribute_vertical_bottom", KoShapeDistributeCommand::VerticalBottomDistribution);
+    addMappedAction(distributeSignalsMapper, "object_distribute_vertical_gaps", KoShapeDistributeCommand::VerticalGapsDistribution);
 
     QAction *actionGroupBottom = actionRegistry->makeQAction("object_group", this);
     addAction("object_group", actionGroupBottom);
@@ -528,7 +540,7 @@ void DefaultTool::updateCursor()
     QString statusText;
 
     if (koSelection()->count() > 0) { // has a selection
-        bool editable = editableShapesCount(koSelection()->selectedShapes());
+        bool editable = !koSelection()->selectedEditableShapes().isEmpty();
 
         if (!m_mouseWasInsideHandles) {
             m_angle = rotationOfHandle(m_lastHandle, true);
@@ -951,42 +963,10 @@ void DefaultTool::deactivate()
     }
 }
 
-void DefaultTool::selectionAlignHorizontalLeft()
-{
-    selectionAlign(KoShapeAlignCommand::HorizontalLeftAlignment);
-}
-
-void DefaultTool::selectionAlignHorizontalCenter()
-{
-    selectionAlign(KoShapeAlignCommand::HorizontalCenterAlignment);
-}
-
-void DefaultTool::selectionAlignHorizontalRight()
-{
-    selectionAlign(KoShapeAlignCommand::HorizontalRightAlignment);
-}
-
-void DefaultTool::selectionAlignVerticalTop()
-{
-    selectionAlign(KoShapeAlignCommand::VerticalTopAlignment);
-}
-
-void DefaultTool::selectionAlignVerticalCenter()
-{
-    selectionAlign(KoShapeAlignCommand::VerticalCenterAlignment);
-}
-
-void DefaultTool::selectionAlignVerticalBottom()
-{
-    selectionAlign(KoShapeAlignCommand::VerticalBottomAlignment);
-}
-
 void DefaultTool::selectionGroup()
 {
     KoSelection *selection = koSelection();
-    if (!selection) {
-        return;
-    }
+    if (!selection) return;
 
     QList<KoShape *> selectedShapes = selection->selectedEditableShapes();
     qSort(selectedShapes.begin(), selectedShapes.end(), KoShape::compareShapeZIndex);
@@ -1005,10 +985,8 @@ void DefaultTool::selectionGroup()
 
 void DefaultTool::selectionUngroup()
 {
-    KoSelection *selection = canvas()->selectedShapesProxy()->selection();
-    if (!selection) {
-        return;
-    }
+    KoSelection *selection = koSelection();
+    if (!selection) return;
 
     QList<KoShape *> selectedShapes = selection->selectedEditableShapes();
     qSort(selectedShapes.begin(), selectedShapes.end(), KoShape::compareShapeZIndex);
@@ -1031,19 +1009,18 @@ void DefaultTool::selectionUngroup()
     }
 }
 
-void DefaultTool::selectionAlign(KoShapeAlignCommand::Align align)
+void DefaultTool::selectionAlign(int _align)
 {
-    KoSelection *selection = canvas()->selectedShapesProxy()->selection();
-    if (!selection) {
+    KoShapeAlignCommand::Align align =
+        static_cast<KoShapeAlignCommand::Align>(_align);
+
+    KoSelection *selection = koSelection();
+    if (!selection) return;
+
+    QList<KoShape *> editableShapes = selection->selectedEditableShapes();
+    if (editableShapes.isEmpty()) {
         return;
     }
-
-    QList<KoShape *> selectedShapes = selection->selectedShapes();
-    if (selectedShapes.count() < 1) {
-        return;
-    }
-
-    QList<KoShape *> editableShapes = filterEditableShapes(selectedShapes);
 
     // TODO add an option to the widget so that one can align to the page
     // with multiple selected shapes too
@@ -1057,10 +1034,28 @@ void DefaultTool::selectionAlign(KoShapeAlignCommand::Align align)
         }
         bb = QRectF(QPointF(0, 0), canvas()->resourceManager()->sizeResource(KoCanvasResourceManager::PageSize));
     } else {
-        bb = KoShape::boundingRect(editableShapes);
+        bb = KoShape::absoluteOutlineRect(editableShapes);
     }
 
     KoShapeAlignCommand *cmd = new KoShapeAlignCommand(editableShapes, align, bb);
+    canvas()->addCommand(cmd);
+}
+
+void DefaultTool::selectionDistribute(int _distribute)
+{
+    KoShapeDistributeCommand::Distribute distribute =
+        static_cast<KoShapeDistributeCommand::Distribute>(_distribute);
+
+    KoSelection *selection = koSelection();
+    if (!selection) return;
+
+    QList<KoShape *> editableShapes = selection->selectedEditableShapes();
+    if (editableShapes.size() < 3) {
+        return;
+    }
+
+    QRectF bb = KoShape::absoluteOutlineRect(editableShapes);
+    KoShapeDistributeCommand *cmd = new KoShapeDistributeCommand(editableShapes, distribute, bb);
     canvas()->addCommand(cmd);
 }
 
@@ -1140,7 +1135,7 @@ KoInteractionStrategy *DefaultTool::createStrategy(KoPointerEvent *event)
     bool insideSelection = false;
     KoFlake::SelectionHandle handle = handleAt(event->point, &insideSelection);
 
-    bool editableShape = editableShapesCount(selection->selectedShapes());
+    bool editableShape = !selection->selectedEditableShapes().isEmpty();
 
     const bool selectMultiple = event->modifiers() & Qt::ShiftModifier;
     const bool selectNextInStack = event->modifiers() & Qt::ControlModifier;
@@ -1258,59 +1253,56 @@ KoInteractionStrategy *DefaultTool::createStrategy(KoPointerEvent *event)
 
 void DefaultTool::updateActions()
 {
-    QList<KoShape*> selectedShapes;
+    QList<KoShape*> editableShapes;
 
     if (koSelection()) {
-        selectedShapes = koSelection()->selectedShapes();
+        editableShapes = koSelection()->selectedEditableShapes();
     }
 
+    const bool orderingEnabled = !editableShapes.isEmpty();
 
-    if (selectedShapes.isEmpty()) {
-        action("object_order_front")->setEnabled(false);
-        action("object_order_raise")->setEnabled(false);
-        action("object_order_lower")->setEnabled(false);
-        action("object_order_back")->setEnabled(false);
-        action("object_align_horizontal_left")->setEnabled(false);
-        action("object_align_horizontal_center")->setEnabled(false);
-        action("object_align_horizontal_right")->setEnabled(false);
-        action("object_align_vertical_top")->setEnabled(false);
-        action("object_align_vertical_center")->setEnabled(false);
-        action("object_align_vertical_bottom")->setEnabled(false);
-        action("object_group")->setEnabled(false);
-        action("object_ungroup")->setEnabled(false);
-    } else {
-        QList<KoShape *> editableShapes = filterEditableShapes(selectedShapes);
-        const bool enable = editableShapes.size() > 0;
+    action("object_order_front")->setEnabled(orderingEnabled);
+    action("object_order_raise")->setEnabled(orderingEnabled);
+    action("object_order_lower")->setEnabled(orderingEnabled);
+    action("object_order_back")->setEnabled(orderingEnabled);
 
-        action("object_order_front")->setEnabled(enable);
-        action("object_order_raise")->setEnabled(enable);
-        action("object_order_lower")->setEnabled(enable);
-        action("object_order_back")->setEnabled(enable);
+    const bool alignmentEnabled =
+       editableShapes.size() > 1 ||
+       (!editableShapes.isEmpty() &&
+        canvas()->resourceManager()->hasResource(KoCanvasResourceManager::PageSize));
 
-        const bool alignmentEnabled =
-            editableShapes.size() > 1 ||
-            (enable && canvas()->resourceManager()->hasResource(KoCanvasResourceManager::PageSize));
+    action("object_align_horizontal_left")->setEnabled(alignmentEnabled);
+    action("object_align_horizontal_center")->setEnabled(alignmentEnabled);
+    action("object_align_horizontal_right")->setEnabled(alignmentEnabled);
+    action("object_align_vertical_top")->setEnabled(alignmentEnabled);
+    action("object_align_vertical_center")->setEnabled(alignmentEnabled);
+    action("object_align_vertical_bottom")->setEnabled(alignmentEnabled);
 
-        action("object_align_horizontal_left")->setEnabled(alignmentEnabled);
-        action("object_align_horizontal_center")->setEnabled(alignmentEnabled);
-        action("object_align_horizontal_right")->setEnabled(alignmentEnabled);
-        action("object_align_vertical_top")->setEnabled(alignmentEnabled);
-        action("object_align_vertical_center")->setEnabled(alignmentEnabled);
-        action("object_align_vertical_bottom")->setEnabled(alignmentEnabled);
+    action("object_group")->setEnabled(editableShapes.size() > 1);
 
-        action("object_group")->setEnabled(editableShapes.size() > 1);
+    const bool distributionEnabled = editableShapes.size() > 2;
 
-        bool hasGroupShape = false;
-        foreach (KoShape *shape, editableShapes) {
-            if (dynamic_cast<KoShapeGroup *>(shape)) {
-                hasGroupShape = true;
-                break;
-            }
+    action("object_distribute_horizontal_left")->setEnabled(distributionEnabled);
+    action("object_distribute_horizontal_center")->setEnabled(distributionEnabled);
+    action("object_distribute_horizontal_right")->setEnabled(distributionEnabled);
+    action("object_distribute_horizontal_gaps")->setEnabled(distributionEnabled);
+
+    action("object_distribute_vertical_top")->setEnabled(distributionEnabled);
+    action("object_distribute_vertical_center")->setEnabled(distributionEnabled);
+    action("object_distribute_vertical_bottom")->setEnabled(distributionEnabled);
+    action("object_distribute_vertical_gaps")->setEnabled(distributionEnabled);
+
+
+    bool hasGroupShape = false;
+    foreach (KoShape *shape, editableShapes) {
+        if (dynamic_cast<KoShapeGroup *>(shape)) {
+            hasGroupShape = true;
+            break;
         }
-        action("object_ungroup")->setEnabled(hasGroupShape);
     }
+    action("object_ungroup")->setEnabled(hasGroupShape);
 
-    emit selectionChanged(selectedShapes.size());
+    emit selectionChanged(editableShapes.size());
 }
 
 KoToolSelection *DefaultTool::selection()
@@ -1344,30 +1336,6 @@ QMenu* DefaultTool::popupActionsMenu()
     }
 
     return m_contextMenu.data();
-}
-
-QList<KoShape *> DefaultTool::filterEditableShapes(const QList<KoShape *> &shapes)
-{
-    QList<KoShape *> editableShapes;
-    Q_FOREACH (KoShape *shape, shapes) {
-        if (shape->isEditable()) {
-            editableShapes.append(shape);
-        }
-    }
-
-    return editableShapes;
-}
-
-uint DefaultTool::editableShapesCount(const QList<KoShape *> &shapes)
-{
-    uint count = 0;
-    Q_FOREACH (KoShape *shape, shapes) {
-        if (shape->isEditable()) {
-            count++;
-        }
-    }
-
-    return count;
 }
 
 void DefaultTool::explicitUserStrokeEndRequest()

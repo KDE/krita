@@ -100,6 +100,12 @@ public:
     void drawHandleCircle(const QPointF &center);
 
     /**
+     * Optimized version of the drawing method for drawing handles of
+     * predefined size
+     */
+    void drawHandleSmallCircle(const QPointF &center);
+
+    /**
      * Draw a rotated handle representing the gradient handle
      */
     void drawGradientHandle(const QPointF &center, qreal radius);

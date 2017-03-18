@@ -47,7 +47,6 @@ private:
 
 
     static qreal simplifyThreshold(const QRectF &bounds);
-    static QPainterPath trySimplifyPath(const QPainterPath &path, qreal lengthThreshold);
     static QPointF getAngle(const QPointF& p1, const QPointF& p2, qreal distance);
     static QPainterPath applyDisplace(const QPainterPath& path, int speed);
 

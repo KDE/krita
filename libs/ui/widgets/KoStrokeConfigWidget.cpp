@@ -205,7 +205,7 @@ KoStrokeConfigWidget::KoStrokeConfigWidget(KoCanvasBase *canvas, QWidget * paren
 {
     setObjectName("Stroke widget");
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
-    mainLayout->setMargin(0);
+    mainLayout->setMargin(2);
 
     { // connect the canvas
         d->shapeChangedAcyclicConnector.connectBackwardVoid(
@@ -298,6 +298,8 @@ KoStrokeConfigWidget::KoStrokeConfigWidget(KoCanvasBase *canvas, QWidget * paren
         d->fillConfigWidget = new KoFillConfigWidget(canvas, KoFlake::StrokeFill, this);
         mainLayout->addWidget(d->fillConfigWidget);
         connect(d->fillConfigWidget, SIGNAL(sigFillChanged()), SIGNAL(sigStrokeChanged()));
+
+        d->fillConfigWidget->layout()->setMargin(0);
     }
 
     // Spacer

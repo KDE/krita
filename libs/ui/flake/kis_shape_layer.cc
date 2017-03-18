@@ -300,25 +300,49 @@ void KisShapeLayer::setY(qint32 y)
     // Save new value to satisfy LSP
     m_d->y = y;
 }
+namespace {
+void filterTransformableShapes(QList<KoShape*> &shapes)
+{
+    auto it = shapes.begin();
+    while (it != shapes.end()) {
+        if (shapes.size() == 1) break;
+
+        if ((*it)->inheritsTransformFromAny(shapes)) {
+            it = shapes.erase(it);
+        } else {
+            ++it;
+        }
+    }
+}
+}
+
+QList<KoShape *> KisShapeLayer::shapesToBeTransformed()
+{
+    QList<KoShape*> shapes = shapeManager()->shapes();
+
+    // We expect that **all** the shapes inherit the transform from its parent
+
+    // SANITY_CHECK: we expect all the shapes inside the
+    //               shape layer to inherit transform!
+    Q_FOREACH (KoShape *shape, shapes) {
+        if (shape->parent()) {
+            KIS_SAFE_ASSERT_RECOVER(shape->parent()->inheritsTransform(shape)) {
+                break;
+            }
+        }
+    }
+
+    shapes << this;
+    filterTransformableShapes(shapes);
+    return shapes;
+}
 
 void KisShapeLayer::slotMoveShapes(const QPointF &diff)
 {
-    QList<QPointF> prevPos;
-    QList<QPointF> newPos;
+    QList<KoShape*> shapes = shapesToBeTransformed();
+    if (shapes.isEmpty()) return;
 
-    QList<KoShape*> shapes;
-    Q_FOREACH (KoShape* shape, shapeManager()->shapes()) {
-        if (!dynamic_cast<KoShapeGroup*>(shape)) {
-            shapes.append(shape);
-        }
-    }
-    Q_FOREACH (KoShape* shape, shapes) {
-        QPointF pos = shape->position();
-        prevPos << pos;
-        newPos << pos + diff;
-    }
-
-    KoShapeMoveCommand cmd(shapes, prevPos, newPos);
+    KoShapeMoveCommand cmd(shapes, diff);
     cmd.redo();
 }
 
@@ -543,7 +567,8 @@ void KisShapeLayer::resetCache()
     }
 }
 
-KUndo2Command* KisShapeLayer::crop(const QRect & rect) {
+KUndo2Command* KisShapeLayer::crop(const QRect & rect)
+{
     QPoint oldPos(x(), y());
     QPoint newPos = oldPos - rect.topLeft();
 
@@ -551,8 +576,8 @@ KUndo2Command* KisShapeLayer::crop(const QRect & rect) {
 }
 
 KUndo2Command* KisShapeLayer::transform(const QTransform &transform) {
-    QList<KoShape*> shapes = m_d->canvas->shapeManager()->shapes();
-    if(shapes.isEmpty()) return 0;
+    QList<KoShape*> shapes = shapesToBeTransformed();
+    if (shapes.isEmpty()) return 0;
 
     KisImageViewConverter *converter = dynamic_cast<KisImageViewConverter*>(this->converter());
     QTransform realTransform = converter->documentToView() *
@@ -564,19 +589,13 @@ KUndo2Command* KisShapeLayer::transform(const QTransform &transform) {
     QList<KoShapeShadow*> newShadows;
     const qreal transformBaseScale = KoUnit::approxTransformScale(transform);
 
-
-    // this code won't work if there are shapes, that inherit the transformation from the parent container.
-    // the chart and tree shapes are examples for that, but they aren't used in krita and there are no other shapes like that.
     Q_FOREACH (const KoShape* shape, shapes) {
         QTransform oldTransform = shape->transformation();
         oldTransformations.append(oldTransform);
-        if (dynamic_cast<const KoShapeGroup*>(shape)) {
-            newTransformations.append(oldTransform);
-        } else {
-            QTransform globalTransform = shape->absoluteTransformation(0);
-            QTransform localTransform = globalTransform * realTransform * globalTransform.inverted();
-            newTransformations.append(localTransform*oldTransform);
-        }
+
+        QTransform globalTransform = shape->absoluteTransformation(0);
+        QTransform localTransform = globalTransform * realTransform * globalTransform.inverted();
+        newTransformations.append(localTransform * oldTransform);
 
         KoShapeShadow *shadow = 0;
 

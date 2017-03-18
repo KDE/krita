@@ -415,7 +415,6 @@ QString KarbonCalligraphicShape::pathShapeId() const
 
 bool KarbonCalligraphicShape::saveSvg(SvgSavingContext &context)
 {
-    qDebug()<<"attempting to save svg";
     context.shapeWriter().startElement("path");
     context.shapeWriter().addAttribute("krita:type", "calligraphic-stroke");
     context.shapeWriter().addAttribute("id", context.getID(this));
@@ -423,16 +422,17 @@ bool KarbonCalligraphicShape::saveSvg(SvgSavingContext &context)
     context.shapeWriter().addAttribute("d", this->toString(context.userSpaceTransform()));
     SvgStyleWriter::saveSvgStyle(this, context);
     QDomDocument doc= QDomDocument();
+    QDomElement baseNode = doc.createElement("krita:calligraphic-stroke-data");
+    baseNode.setAttribute("xmlns", "http://krita.org/kritasvg");
     Q_FOREACH (KarbonCalligraphicPoint *p, m_points) {
         QDomElement infoElt = doc.createElement("point");
         p->paintInfo()->toXML(doc, infoElt);
-        doc.appendChild(infoElt);
-        context.shapeWriter().addCompleteElement(doc.toString().toUtf8());
-        doc.clear();
+        baseNode.appendChild(infoElt);
     }
     QDomElement configElt = doc.createElement("config");
     configuration()->toXML(doc, configElt);
-    doc.appendChild(configElt);
+    baseNode.appendChild(configElt);
+    doc.appendChild(baseNode);
     context.shapeWriter().addCompleteElement(doc.toString().toUtf8());
     context.shapeWriter().endElement();
     return true;
@@ -440,7 +440,7 @@ bool KarbonCalligraphicShape::saveSvg(SvgSavingContext &context)
 
 bool KarbonCalligraphicShape::loadSvg(const KoXmlElement &element, SvgLoadingContext &context)
 {
-    qDebug()<<"attempt to load svg";
+    Q_UNUSED(context);
 
     const QString extendedNamespace = element.attribute("krita:type");
 
@@ -448,7 +448,7 @@ bool KarbonCalligraphicShape::loadSvg(const KoXmlElement &element, SvgLoadingCon
 
         QDomDocument doc = QDomDocument();
         KoXml::asQDomElement(doc, element);
-        QDomElement root = doc.firstChildElement();
+        QDomElement root = doc.firstChildElement().firstChildElement("krita:calligraphic-stroke-data");
 
         QDomElement configElt = root.firstChildElement("config");
         KisPropertiesConfigurationSP config = new KisPropertiesConfiguration();

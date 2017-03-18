@@ -211,7 +211,6 @@ KoCanvasControllerWidget::KoCanvasControllerWidget(KActionCollection * actionCol
 
 KoCanvasControllerWidget::~KoCanvasControllerWidget()
 {
-    d->unsetCanvas(0);
     delete d;
 }
 

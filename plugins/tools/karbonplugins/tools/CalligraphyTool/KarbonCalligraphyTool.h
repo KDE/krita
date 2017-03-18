@@ -69,9 +69,9 @@ private Q_SLOTS:
      */
     //void setConfiguration(KisPropertiesConfigurationSP setting) const;
     void setUsePath(bool usePath);
+    void setUseAssistant(bool useAssistant);
+    void setNoAdjust(bool none);
     void setCaps(double caps);
-    void setMass(double mass);     // set the mass in user friendly format
-    void setDrag(double drag);
     /**
      * @brief setSmoothIntervalTime
      * @param time in milliseconds.
@@ -87,7 +87,7 @@ private:
     //void setAngle(KoPointerEvent *event);
     // auxiliary functions to calculate the dynamic parameters
     // returns the new point and sets speed to the speed
-    QPointF calculateNewPoint(const QPointF &mousePos);
+    QPointF calculateNewPoint(const QPointF &mousePos, QPointF firstPathPosition);
     //qreal calculateWidth(qreal pressure);
     //qreal calculateAngle(const QPointF &oldSpeed, const QPointF &newSpeed);
 
@@ -100,15 +100,15 @@ private:
     bool m_deviceSupportsTilt;
 
     bool m_usePath;         // follow selected path
+    bool m_useAssistant;
     qreal m_strokeWidth;
     qreal m_caps;
-    qreal m_mass;  // in raw format (not user friendly)
-    qreal m_drag;  // from 0.0 to 1.0
     qreal m_smoothIntervalTime;
     qreal m_smoothIntervalDistance;
 
     KoPathShape *m_selectedPath;
     QPainterPath m_selectedPathOutline;
+    QPointF m_firstPathPosition;
     qreal m_followPathPosition;
     bool m_endOfPath;
     QPointF m_lastMousePos;

@@ -46,6 +46,8 @@ Q_SIGNALS:
     // all the following signals emit user friendly values, not the internal
     // values which are instead computed directly by KarbonCalligraphyTool
     void usePathChanged(bool);
+    void useAssistantChanged(bool);
+    void useNoAdjustChanged(bool);
     void capsChanged(double);
     void massChanged(double);
     void dragChanged(double);
@@ -66,8 +68,6 @@ private Q_SLOTS:
     void saveProfileAs();
     void removeProfile();
 
-    void setUsePathEnabled(bool enabled);
-
 private:
     // TODO: maybe make it a hash?? <QString, QVariant>
     //       is it needed al all??
@@ -75,9 +75,10 @@ private:
         QString name;
         int index; // index in the config file
         bool usePath;
+        bool useAssistants;
         qreal caps;
-        qreal mass;
-        qreal drag;
+        qreal timeInterval;
+        qreal distanceInterval;
     };
 
     // convenience functions:

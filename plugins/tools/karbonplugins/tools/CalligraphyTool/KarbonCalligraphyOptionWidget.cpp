@@ -198,6 +198,10 @@ void KarbonCalligraphyOptionWidget::createConnections()
     // propagate changes
     connect(m_options->rdAdjustPath, SIGNAL(toggled(bool)),
             SIGNAL(usePathChanged(bool)));
+    connect(m_options->rdAdjustAssistant, SIGNAL(toggled(bool)),
+            SIGNAL(useAssistantChanged(bool)));
+    connect(m_options->rdNoAdjust, SIGNAL(toggled(bool)),
+            SIGNAL(useNoAdjustChanged(bool)));
 
     connect(m_options->sldCaps, SIGNAL(valueChanged(double)),
             SIGNAL(capsChanged(double)));
@@ -210,7 +214,15 @@ void KarbonCalligraphyOptionWidget::createConnections()
     // update profile
     connect(m_options->rdAdjustPath, SIGNAL(toggled(bool)),
             SLOT(updateCurrentProfile()));
+    connect(m_options->rdAdjustAssistant, SIGNAL(toggled(bool)),
+            SLOT(updateCurrentProfile()));
+    connect(m_options->rdNoAdjust, SIGNAL(toggled(bool)),
+            SLOT(updateCurrentProfile()));
     connect(m_options->sldCaps, SIGNAL(valueChanged(double)),
+            SLOT(updateCurrentProfile()));
+    connect(m_options->sldTimeInterval, SIGNAL(valueChanged(double)),
+            SLOT(updateCurrentProfile()));
+    connect(m_options->sldDistanceInterval, SIGNAL(valueChanged(double)),
             SLOT(updateCurrentProfile()));
 
     connect(m_options->bnSaveProfile, SIGNAL(clicked()), SLOT(saveProfileAs()));
@@ -233,28 +245,10 @@ void KarbonCalligraphyOptionWidget::addDefaultProfiles()
     KConfigGroup profile0(&config, "Profile0");
     profile0.writeEntry("name", i18n("Mouse"));
     profile0.writeEntry("usePath", false);
-    profile0.writeEntry("usePressure", false);
-    profile0.writeEntry("useAngle", false);
-    profile0.writeEntry("width", 30.0);
-    profile0.writeEntry("thinning", 0.2);
-    profile0.writeEntry("angle", 30);
-    profile0.writeEntry("fixation", 1.0);
-    profile0.writeEntry("caps", 0.0);
-    profile0.writeEntry("mass", 3.0);
-    profile0.writeEntry("drag", 0.7);
 
     KConfigGroup profile1(&config, "Profile1");
     profile1.writeEntry("name", i18n("Graphics Pen"));
-    profile1.writeEntry("width", 50.0);
     profile1.writeEntry("usePath", false);
-    profile1.writeEntry("usePressure", false);
-    profile1.writeEntry("useAngle", false);
-    profile1.writeEntry("thinning", 0.2);
-    profile1.writeEntry("angle", 30);
-    profile1.writeEntry("fixation", 1.0);
-    profile1.writeEntry("caps", 0.0);
-    profile1.writeEntry("mass", 1.0);
-    profile1.writeEntry("drag", 0.9);
 
     generalGroup.writeEntry("profile", i18n("Mouse"));
     generalGroup.writeEntry("defaultProfilesAdded", true);
@@ -277,11 +271,12 @@ void KarbonCalligraphyOptionWidget::loadProfiles()
 
         Profile *profile = new Profile;
         profile->index = i;
-        profile->name =         profileGroup.readEntry("name", QString());
-        profile->usePath =      profileGroup.readEntry("usePath", false);
-        profile->caps =         profileGroup.readEntry("caps", 0.0);
-        profile->mass =         profileGroup.readEntry("mass", 3.0);
-        profile->drag =         profileGroup.readEntry("drag", 0.7);
+        profile->name =             profileGroup.readEntry("name", QString());
+        profile->usePath =          profileGroup.readEntry("usePath", false);
+        profile->useAssistants =          profileGroup.readEntry("useAssistants", false);
+        profile->caps =             profileGroup.readEntry("caps", 0.0);
+        profile->timeInterval =     profileGroup.readEntry("timeInterval", 0.0);
+        profile->distanceInterval = profileGroup.readEntry("distanceInterval", 0.0);
 
         m_profiles.insert(profile->name, profile);
         ++i;
@@ -316,7 +311,13 @@ void KarbonCalligraphyOptionWidget::loadCurrentProfile()
 
     m_changingProfile = true;
     m_options->rdAdjustPath->setChecked(profile->usePath);
+    m_options->rdAdjustAssistant->setChecked(profile->useAssistants);
+    if (profile->useAssistants == false && profile->usePath==false) {
+        m_options->rdNoAdjust->setChecked(true);
+    }
     m_options->sldCaps->setValue(profile->caps);
+    m_options->sldTimeInterval->setValue(profile->timeInterval);
+    m_options->sldDistanceInterval->setValue(profile->distanceInterval);
     m_changingProfile = false;
 }
 
@@ -326,6 +327,9 @@ void KarbonCalligraphyOptionWidget::saveProfile(const QString &name)
     profile->name = name;
     profile->usePath = m_options->rdAdjustPath->isChecked();
     profile->caps = m_options->sldCaps->value();
+    profile->useAssistants = m_options->rdAdjustAssistant->isChecked();
+    profile->timeInterval = m_options->sldTimeInterval->value();
+    profile->distanceInterval = m_options->sldDistanceInterval->value();
 
     if (m_profiles.contains(name)) {
         // there is already a profile with the same name, overwrite
@@ -355,9 +359,10 @@ void KarbonCalligraphyOptionWidget::saveProfile(const QString &name)
 
     profileGroup.writeEntry("name", name);
     profileGroup.writeEntry("usePath", profile->usePath);
+    profileGroup.writeEntry("useAssistants", profile->useAssistants);
     profileGroup.writeEntry("caps", profile->caps);
-    profileGroup.writeEntry("mass", profile->mass);
-    profileGroup.writeEntry("drag", profile->drag);
+    profileGroup.writeEntry("timeInterval", profile->timeInterval);
+    profileGroup.writeEntry("distanceInterval", profile->distanceInterval);
 
     KConfigGroup generalGroup(&config, "General");
     generalGroup.writeEntry("profile", name);
@@ -412,11 +417,12 @@ void KarbonCalligraphyOptionWidget::removeProfile(const QString &name)
     config.deleteGroup(lastGroup);
 
     KConfigGroup profileGroup(&config, deletedGroup);
-    profileGroup.writeEntry("name", profile->name);
+    profileGroup.writeEntry("name", name);
     profileGroup.writeEntry("usePath", profile->usePath);
+    profileGroup.writeEntry("useAssistants", profile->useAssistants);
     profileGroup.writeEntry("caps", profile->caps);
-    profileGroup.writeEntry("mass", profile->mass);
-    profileGroup.writeEntry("drag", profile->drag);
+    profileGroup.writeEntry("timeInterval", profile->timeInterval);
+    profileGroup.writeEntry("distanceInterval", profile->distanceInterval);
     config.sync();
 
     profile->index = deletedIndex;
@@ -434,9 +440,4 @@ int KarbonCalligraphyOptionWidget::profilePosition(const QString &profileName)
         ++res;
     }
     return -1;
-}
-
-void KarbonCalligraphyOptionWidget::setUsePathEnabled(bool enabled)
-{
-    m_options->rdAdjustPath->setEnabled(enabled);
 }

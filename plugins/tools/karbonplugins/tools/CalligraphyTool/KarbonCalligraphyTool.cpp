@@ -37,6 +37,7 @@
 #include <KoColor.h>
 #include <KoShapePaintingContext.h>
 #include <KoViewConverter.h>
+#include <kis_canvas2.h>
 
 #include <kis_painting_information_builder.h>
 #include <QAction>
@@ -193,7 +194,7 @@ void KarbonCalligraphyTool::addPoint(KoPointerEvent *event, bool lastPoint)
         m_endOfPath = false;
         m_followPathPosition = 0;
         m_lastMousePos = event->point;
-        //m_lastPoint = calculateNewPoint(event->point, &m_speed);
+        m_firstPathPosition = event->point;
         m_deviceSupportsTilt = (event->xTilt() != 0 || event->yTilt() != 0);
         return;
     }
@@ -211,7 +212,7 @@ void KarbonCalligraphyTool::addPoint(KoPointerEvent *event, bool lastPoint)
     // add the previous point
     KisPaintInformation paintInfo = m_infoBuilder->continueStroke(event, m_strokeTime.elapsed());
     //apply the path following:
-    paintInfo.setPos(calculateNewPoint(paintInfo.pos()));
+    paintInfo.setPos(calculateNewPoint(paintInfo.pos(), m_firstPathPosition));
     m_intervalStore.append(paintInfo);
 
     qreal timeDiff = paintInfo.currentTime() - m_lastInfo.currentTime();
@@ -239,9 +240,6 @@ void KarbonCalligraphyTool::addPoint(KoPointerEvent *event, bool lastPoint)
     //m_lastPoint = newPoint;
     canvas()->updateCanvas(m_shape->lastPieceBoundingRect());
 
-    if (m_usePath && m_selectedPath) {
-        m_speed = QPointF(0, 0);    // following path
-    }
 }
 
 /*
@@ -276,7 +274,7 @@ void KarbonCalligraphyTool::setAngle(KoPointerEvent *event)
     }
 }
 */
-QPointF KarbonCalligraphyTool::calculateNewPoint(const QPointF &mousePos)
+QPointF KarbonCalligraphyTool::calculateNewPoint(const QPointF &mousePos, QPointF firstPathPosition)
 {
     QPointF res = mousePos;
     if (m_usePath && m_selectedPath) {
@@ -297,6 +295,12 @@ QPointF KarbonCalligraphyTool::calculateNewPoint(const QPointF &mousePos)
 
         res = m_selectedPathOutline.pointAtPercent(t)
                 + m_selectedPath->position();
+    } else if (m_useAssistant) {
+        if (static_cast<KisCanvas2*>(canvas())->paintingAssistantsDecoration()) {
+            static_cast<KisCanvas2*>(canvas())->paintingAssistantsDecoration()->setOnlyOneAssistantSnap(false);
+            res = static_cast<KisCanvas2*>(canvas())->paintingAssistantsDecoration()->adjustPosition(mousePos, firstPathPosition);
+            //return (1.0 - m_magnetism) * point + m_magnetism * ap;
+        }
     }
     return res;
 }
@@ -412,15 +416,13 @@ QList<QPointer<QWidget> > KarbonCalligraphyTool::createOptionWidgets()
     KarbonCalligraphyOptionWidget *widget = new KarbonCalligraphyOptionWidget;
     connect(widget, SIGNAL(usePathChanged(bool)),
             this, SLOT(setUsePath(bool)));
+    connect(widget, SIGNAL(useAssistantChanged(bool)),
+            this, SLOT(setUseAssistant(bool)));
+    connect(widget, SIGNAL(useNoAdjustChanged(bool)),
+            this, SLOT(setNoAdjust(bool)));
 
     connect(widget, SIGNAL(capsChanged(double)),
             this, SLOT(setCaps(double)));
-
-    connect(widget, SIGNAL(massChanged(double)),
-            this, SLOT(setMass(double)));
-
-    connect(widget, SIGNAL(dragChanged(double)),
-            this, SLOT(setDrag(double)));
 
     connect(this, SIGNAL(pathSelectedChanged(bool)),
             widget, SLOT(setUsePathEnabled(bool)));
@@ -453,16 +455,6 @@ QList<QPointer<QWidget> > KarbonCalligraphyTool::createOptionWidgets()
     return widgets;
 }
 
-void KarbonCalligraphyTool::setMass(double mass)
-{
-    m_mass = mass * mass + 1;
-}
-
-void KarbonCalligraphyTool::setDrag(double drag)
-{
-    m_drag = drag;
-}
-
 void KarbonCalligraphyTool::setSmoothIntervalTime(double time)
 {
     m_smoothIntervalTime = time;
@@ -476,6 +468,21 @@ void KarbonCalligraphyTool::setSmoothIntervalDistance(double dist)
 void KarbonCalligraphyTool::setUsePath(bool usePath)
 {
     m_usePath = usePath;
+    m_useAssistant = !usePath;
+}
+
+void KarbonCalligraphyTool::setUseAssistant(bool useAssistant)
+{
+    m_usePath = !useAssistant;
+    m_useAssistant = useAssistant;
+}
+
+void KarbonCalligraphyTool::setNoAdjust(bool none)
+{
+    if (none){
+        m_usePath = false;
+        m_useAssistant = false;
+    }
 }
 
 void KarbonCalligraphyTool::setCaps(double caps)

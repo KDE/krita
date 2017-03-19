@@ -199,7 +199,7 @@ void KarbonCalligraphicShape::appendPointToPath(int index)
     // this code is here because this function is called from different places
     // pointCount() == 8 may causes crashes because it doesn't take possible
     // flips into account
-    if (m_points.count() >= 4 && p == m_points[3]) {
+    if (m_points.count() >= 4 && p == m_points[3] && configuration()->getFloat("capSize")>0) {
         addCap(3, 0, 0, true);
         // duplicate the last point to make the points remain "balanced"
         // needed to keep all indexes code (else I would need to change
@@ -479,16 +479,12 @@ bool KarbonCalligraphicShape::loadSvg(const KoXmlElement &element, SvgLoadingCon
         KisPropertiesConfigurationSP config = new KisPropertiesConfiguration();
         config->fromXML(configElt);
 
-        QPolygonF poly;
         QDomElement infoElt = root.firstChildElement("point");
         while (!infoElt.isNull()) {
             KisPaintInformation paintInfo = KisPaintInformation::fromXML(infoElt);
             m_points.append(new KarbonCalligraphicPoint(paintInfo));
-            poly.append(paintInfo.pos());
             infoElt = infoElt.nextSiblingElement("point");
         }
-        setPosition(poly.boundingRect().topLeft());
-        setSize(poly.boundingRect().size());
         setConfiguration(config);
         return true;
     }

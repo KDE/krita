@@ -110,7 +110,7 @@ public:
     KoShape* cloneShape() const override;
 
     void appendPoint(KisPaintInformation &paintInfo);
-    void appendPointToPath(KarbonCalligraphicPoint &p);
+    void appendPointToPath(int index);
 
     KarbonCalligraphicPoint* lastPoint();
 

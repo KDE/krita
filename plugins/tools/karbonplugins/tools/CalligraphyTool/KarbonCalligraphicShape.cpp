@@ -93,7 +93,7 @@ void KarbonCalligraphicShape::appendPoint(KisPaintInformation &paintInfo)
     m_points.append(calligraphicPoint);
 
     if (m_points.count()<2) {
-        appendPointToPath(*calligraphicPoint);
+        appendPointToPath(m_points.count()-1);
     } else {
         updatePath(QSize());
     }
@@ -106,15 +106,16 @@ void KarbonCalligraphicShape::appendPoint(KisPaintInformation &paintInfo)
     }
 }
 
-void KarbonCalligraphicShape::appendPointToPath(KarbonCalligraphicPoint &p)
+void KarbonCalligraphicShape::appendPointToPath(int index)
 {
-    qreal width = calculateWidth(p.paintInfo());
-    qreal dx = std::cos(p.angle()) * width;
-    qreal dy = std::sin(p.angle()) * width;
+    KarbonCalligraphicPoint *p = m_points.at(index);
+    qreal width = calculateWidth(p->paintInfo());
+    qreal dx = std::cos(p->angle()) * width;
+    qreal dy = std::sin(p->angle()) * width;
 
     // find the outline points
-    QPointF p1 = p.point() - QPointF(dx / 2, dy / 2);
-    QPointF p2 = p.point() + QPointF(dx / 2, dy / 2);
+    QPointF p1 = p->point() - QPointF(dx / 2, dy / 2);
+    QPointF p2 = p->point() + QPointF(dx / 2, dy / 2);
 
     if (pointCount() == 0) {
         moveTo(p1);
@@ -124,17 +125,41 @@ void KarbonCalligraphicShape::appendPointToPath(KarbonCalligraphicPoint &p)
     }
     // pointCount > 0
 
-    bool flip = (pointCount() >= 2) ? flipDetected(p1, p2) : false;
-
-    // if there was a flip add additional points
-    if (flip) {
-        appendPointsToPathAux(p2, p1);
-        if (pointCount() > 4) {
-            smoothLastPoints();
+    bool flip = false;
+    if (m_points.count()>2 && m_points.count()>index+1) {
+        QLineF line1(m_points.at(index-1)->point(), m_points.at(index)->point());
+        QLineF line2(m_points.at(index)->point(), m_points.at(index+1)->point());
+        qreal diffAngle = line1.angle(line2);
+        if (diffAngle>90.0 && diffAngle<270.0) {
+            flip = true;
         }
     }
 
-    appendPointsToPathAux(p1, p2);
+    // if there was a flip add additional points
+    if (flip) {
+        qreal pm1width = calculateWidth(m_points.at(index-1)->paintInfo());
+        QPointF pm1vec = QPointF(cos(m_points.at(index-1)->angle())*pm1width / 2, sin(m_points.at(index-1)->angle())*pm1width / 2);
+        QPointF p1m1 = m_points.at(index-1)->point() - pm1vec;
+        QPointF p2m1 = m_points.at(index-1)->point() + pm1vec;
+        qreal pp1width = calculateWidth(m_points.at(index+1)->paintInfo());
+        QPointF pp1vec = QPointF(cos(m_points.at(index+1)->angle())*pp1width / 2, sin(m_points.at(index+1)->angle())*pp1width / 2);
+        QPointF p1p1 = m_points.at(index+1)->point() - pp1vec;
+        QPointF p2p1 = m_points.at(index+1)->point() + pp1vec;
+
+        QPointF intersect;
+        if (QLineF(p1, p1p1).intersect(QLineF(p2m1, p2), &intersect) == QLineF::BoundedIntersection) {
+            appendPointsToPathAux(p1, intersect);
+            appendPointsToPathAux(p2, intersect);
+        } else if (QLineF(p1m1, p1).intersect(QLineF(p2, p2p1), &intersect) == QLineF::BoundedIntersection) {
+            appendPointsToPathAux(intersect, p2);
+            appendPointsToPathAux(intersect, p1);
+        } else {
+            appendPointsToPathAux(p1, p2);
+        }
+
+    } else {
+        appendPointsToPathAux(p1, p2);
+    }
 
     if (pointCount() > 4) {
         smoothLastPoints();
@@ -174,7 +199,7 @@ void KarbonCalligraphicShape::appendPointToPath(KarbonCalligraphicPoint &p)
     // this code is here because this function is called from different places
     // pointCount() == 8 may causes crashes because it doesn't take possible
     // flips into account
-    if (m_points.count() >= 4 && &p == m_points[3]) {
+    if (m_points.count() >= 4 && p == m_points[3]) {
         addCap(3, 0, 0, true);
         // duplicate the last point to make the points remain "balanced"
         // needed to keep all indexes code (else I would need to change
@@ -335,12 +360,12 @@ void KarbonCalligraphicShape::updatePath(const QSizeF &size)
     clear();
     //KarbonCalligraphicPoint *pLast = m_points.at(0);
     m_strokeDistance = new KisDistanceInformation(QPoint(), 0.0);
-    Q_FOREACH (KarbonCalligraphicPoint *p, m_points) {
-
+    for (int i=0; i< m_points.count(); i++) {
+        KarbonCalligraphicPoint *p = m_points.at(i);
         {
             KisPaintInformation::DistanceInformationRegistrar r = p->paintInfo()->registerDistanceInformation(m_strokeDistance);
             // NOTE: only in this scope you can use all the methods of the painting information, including drawingAngle(), distance and speed.
-            appendPointToPath(*p);
+            appendPointToPath(i);
         }
 
         // after the point is "painter" it should be added to the distance information as the "previous" point
@@ -451,6 +476,7 @@ bool KarbonCalligraphicShape::loadSvg(const KoXmlElement &element, SvgLoadingCon
         QDomElement root = doc.firstChildElement().firstChildElement("krita:calligraphic-stroke-data");
 
         QDomElement configElt = root.firstChildElement("config");
+        qDebug()<<configElt.childNodes();
         KisPropertiesConfigurationSP config = new KisPropertiesConfiguration();
         config->fromXML(configElt);
 

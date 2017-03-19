@@ -430,7 +430,7 @@ void KarbonCalligraphicShape::addCap(int index1, int index2, int pointIndex, boo
 
 qreal KarbonCalligraphicShape::calculateWidth(KisPaintInformation *p)
 {
-    return configuration()->getFloat("strokeWidth", 10) * p->pressure();
+    return configuration()->getDouble("strokeWidth", 10) * p->pressure();
 }
 
 QString KarbonCalligraphicShape::pathShapeId() const
@@ -473,10 +473,9 @@ bool KarbonCalligraphicShape::loadSvg(const KoXmlElement &element, SvgLoadingCon
 
         QDomDocument doc = QDomDocument();
         KoXml::asQDomElement(doc, element);
-        QDomElement root = doc.firstChildElement().firstChildElement("krita:calligraphic-stroke-data");
+        QDomElement root = doc.firstChildElement("path").firstChildElement("krita:calligraphic-stroke-data");
 
         QDomElement configElt = root.firstChildElement("config");
-        qDebug()<<configElt.childNodes();
         KisPropertiesConfigurationSP config = new KisPropertiesConfiguration();
         config->fromXML(configElt);
 

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>369</height>
+    <height>385</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -60,21 +60,30 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>3</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="tabSize">
+      <attribute name="icon">
+       <iconset theme="brush_size"/>
+      </attribute>
       <attribute name="title">
-       <string>Size</string>
+       <string/>
       </attribute>
      </widget>
      <widget class="QWidget" name="tabAngle">
+      <attribute name="icon">
+       <iconset theme="brush_rotation"/>
+      </attribute>
       <attribute name="title">
-       <string>Angle</string>
+       <string/>
       </attribute>
      </widget>
      <widget class="QWidget" name="tabRatio">
+      <attribute name="icon">
+       <iconset theme="brush_ratio"/>
+      </attribute>
       <attribute name="title">
-       <string>Ratio</string>
+       <string/>
       </attribute>
      </widget>
      <widget class="QWidget" name="tabAdjustment">

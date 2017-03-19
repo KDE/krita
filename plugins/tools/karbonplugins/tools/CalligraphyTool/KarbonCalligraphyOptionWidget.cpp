@@ -91,7 +91,9 @@ KarbonCalligraphyOptionWidget::KarbonCalligraphyOptionWidget()
     m_options->sldCaps->setRange(0.0, 2.0, 2);
     m_options->sldCaps->setSingleStep(0.03);
 
-    m_options->tabRatio->setVisible(false);
+    m_options->tabWidget->setTabIcon(0, kisIcon("brush_size"));
+    m_options->tabWidget->setTabIcon(1, kisIcon("brush_rotation"));
+    m_options->tabWidget->setTabIcon(2, kisIcon("brush_ratio"));
 
     createConnections();
     addDefaultProfiles(); // if they are already added does nothing

@@ -30,7 +30,8 @@
 #include "kis_input_manager.h"
 
 KisShowPaletteAction::KisShowPaletteAction()
-    : KisAbstractInputAction("Show Popup Palette")
+    : KisAbstractInputAction("Show Popup Palette"),
+      m_requestedWithStylus(false)
 {
     setName(i18n("Show Popup Palette"));
     setDescription(i18n("The <i>Show Popup Palette</i> displays the popup palette."));
@@ -56,6 +57,8 @@ void KisShowPaletteAction::begin(int, QEvent *event)
             m_menu->addAction(action);
         }
 
+        m_requestedWithStylus = event->type() == QEvent::TabletPress;
+
         /**
          * Opening a menu changes the focus of the windows, so we should not open it
          * inside the filtering loop. Just raise it using the timer.
@@ -72,8 +75,34 @@ void KisShowPaletteAction::begin(int, QEvent *event)
     }
 }
 
+struct SinglePressEventEater : public QObject
+{
+    bool eventFilter(QObject *, QEvent *event) {
+        if (hungry && event->type() == QEvent::MouseButtonPress) {
+            hungry = false;
+            return true;
+        }
+
+        return false;
+    }
+
+private:
+    bool hungry = true;
+};
+
 void KisShowPaletteAction::slotShowMenu()
 {
-    m_menu->exec(QCursor::pos());
+    if (!m_menu) return;
+
+    QPoint stylusOffset;
+    QScopedPointer<SinglePressEventEater> eater;
+
+    if (m_requestedWithStylus) {
+        eater.reset(new SinglePressEventEater());
+        m_menu->installEventFilter(eater.data());
+        stylusOffset += QPoint(10,10);
+    }
+
+    m_menu->exec(QCursor::pos() + stylusOffset);
     m_menu.reset();
 }

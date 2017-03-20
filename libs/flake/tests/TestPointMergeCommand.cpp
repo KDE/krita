@@ -303,7 +303,9 @@ void TestPointMergeCommand::testCombineShapes()
 }
 
 #include <commands/KoMultiPathPointMergeCommand.h>
+#include <commands/KoMultiPathPointJoinCommand.h>
 #include <KoSelection.h>
+#include "kis_algebra_2d.h"
 
 inline QPointF fetchPoint(KoPathShape *shape, int subpath, int pointIndex) {
     return shape->absoluteTransformation(0).map(
@@ -319,9 +321,9 @@ void dumpShape(KoPathShape *shape, const QString &fileName)
     tmp.save(fileName);
 }
 
+template <class MergeCommand = KoMultiPathPointMergeCommand>
 void testMultipathMergeShapesImpl(const int srcPointIndex1,
                                   const int srcPointIndex2,
-                                  const QRectF &expectedOutlineRect,
                                   const QList<QPointF> &expectedResultPoints,
                                   bool singleShape = false)
 {
@@ -351,7 +353,7 @@ void testMultipathMergeShapesImpl(const int srcPointIndex1,
         KoPathPointData pd1(shapes[0], KoPathPointIndex(0,srcPointIndex1));
         KoPathPointData pd2(shapes[singleShape ? 0 : 1], KoPathPointIndex(0,srcPointIndex2));
 
-        KoMultiPathPointMergeCommand cmd(pd1, pd2, &mockController, canvas.shapeManager()->selection());
+        MergeCommand cmd(pd1, pd2, &mockController, canvas.shapeManager()->selection());
 
         cmd.redo();
 
@@ -369,12 +371,14 @@ void testMultipathMergeShapesImpl(const int srcPointIndex1,
         }
 
         QCOMPARE(combinedShape->subpathCount(), 1);
-        QCOMPARE(combinedShape->absoluteOutlineRect(), expectedOutlineRect);
+
+        QRectF expectedOutlineRect;
+        KisAlgebra2D::accumulateBounds(expectedResultPoints, &expectedOutlineRect);
+        QVERIFY(KisAlgebra2D::fuzzyCompareRects(combinedShape->absoluteOutlineRect(), expectedOutlineRect, 0.01));
 
         if (singleShape) {
             QCOMPARE(combinedShape->isClosedSubpath(0), true);
         }
-
 
         QCOMPARE(combinedShape->subpathPointCount(0), expectedResultPoints.size());
         for (int i = 0; i < expectedResultPoints.size(); i++) {
@@ -403,7 +407,6 @@ void TestPointMergeCommand::testMultipathMergeShapesBothSequential()
 {
     // both sequential
     testMultipathMergeShapesImpl(2, 0,
-                                 QRectF(5,5,25,25),
                                  {
                                      QPointF(5,5),
                                      QPointF(15,15),
@@ -417,7 +420,6 @@ void TestPointMergeCommand::testMultipathMergeShapesFirstReversed()
 {
     // first reversed
     testMultipathMergeShapesImpl(0, 0,
-                                 QRectF(12.5,5,17.5,25),
                                  {
                                      QPointF(15,5),
                                      QPointF(15,15),
@@ -431,7 +433,6 @@ void TestPointMergeCommand::testMultipathMergeShapesSecondReversed()
 {
     // second reversed
     testMultipathMergeShapesImpl(2, 2,
-                                 QRectF(5,5,25,25),
                                  {
                                      QPointF(5,5),
                                      QPointF(15,15),
@@ -445,7 +446,6 @@ void TestPointMergeCommand::testMultipathMergeShapesBothReversed()
 {
     // both reversed
     testMultipathMergeShapesImpl(0, 2,
-                                 QRectF(15,5,15,25),
                                  {
                                      QPointF(15,5),
                                      QPointF(15,15),
@@ -459,7 +459,6 @@ void TestPointMergeCommand::testMultipathMergeShapesSingleShapeEndToStart()
 {
     // close end->start
     testMultipathMergeShapesImpl(2, 0,
-                                 QRectF(10,5,5,10),
                                  {
                                      QPointF(15,15),
                                      QPointF(10,5)
@@ -470,11 +469,96 @@ void TestPointMergeCommand::testMultipathMergeShapesSingleShapeStartToEnd()
 {
     // close start->end
     testMultipathMergeShapesImpl(0, 2,
-                                 QRectF(10,5,5,10),
                                  {
                                      QPointF(15,15),
                                      QPointF(10,5)
                                  }, true);
 }
+
+void TestPointMergeCommand::testMultipathJoinShapesBothSequential()
+{
+    // both sequential
+    testMultipathMergeShapesImpl<KoMultiPathPointJoinCommand>
+            (2, 0,
+             {
+                 QPointF(5,5),
+                 QPointF(15,15),
+                 QPointF(15,5),
+                 QPointF(20,20),
+                 QPointF(30,30),
+                 QPointF(30,20)
+             });
+}
+
+void TestPointMergeCommand::testMultipathJoinShapesFirstReversed()
+{
+    // first reversed
+    testMultipathMergeShapesImpl<KoMultiPathPointJoinCommand>
+            (0, 0,
+             {
+                 QPointF(15,5),
+                 QPointF(15,15),
+                 QPointF(5,5),
+                 QPointF(20,20),
+                 QPointF(30,30),
+                 QPointF(30,20)
+             });
+}
+
+void TestPointMergeCommand::testMultipathJoinShapesSecondReversed()
+{
+    // second reversed
+    testMultipathMergeShapesImpl<KoMultiPathPointJoinCommand>
+            (2, 2,
+             {
+                 QPointF(5,5),
+                 QPointF(15,15),
+                 QPointF(15,5),
+                 QPointF(30,20),
+                 QPointF(30,30),
+                 QPointF(20,20)
+             });
+}
+
+void TestPointMergeCommand::testMultipathJoinShapesBothReversed()
+{
+    // both reversed
+    testMultipathMergeShapesImpl<KoMultiPathPointJoinCommand>
+            (0, 2,
+             {
+                 QPointF(15,5),
+                 QPointF(15,15),
+                 QPointF(5,5),
+                 QPointF(30,20),
+                 QPointF(30,30),
+                 QPointF(20,20)
+             });
+}
+
+void TestPointMergeCommand::testMultipathJoinShapesSingleShapeEndToStart()
+{
+    // close end->start
+    testMultipathMergeShapesImpl<KoMultiPathPointJoinCommand>
+            (2, 0,
+             {
+                 QPointF(5,5),
+                 QPointF(15,15),
+                 QPointF(15,5)
+             }, true);
+}
+
+void TestPointMergeCommand::testMultipathJoinShapesSingleShapeStartToEnd()
+{
+    // close start->end
+    testMultipathMergeShapesImpl<KoMultiPathPointJoinCommand>
+            (0, 2,
+             {
+                 QPointF(5,5),
+                 QPointF(15,15),
+                 QPointF(15,5)
+             }, true);
+}
+
+
 
 QTEST_MAIN(TestPointMergeCommand)

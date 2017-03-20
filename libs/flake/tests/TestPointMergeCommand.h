@@ -36,8 +36,18 @@ private Q_SLOTS:
     void testMultipathMergeShapesFirstReversed();
     void testMultipathMergeShapesSecondReversed();
     void testMultipathMergeShapesBothReversed();
+
     void testMultipathMergeShapesSingleShapeEndToStart();
     void testMultipathMergeShapesSingleShapeStartToEnd();
+
+    void testMultipathJoinShapesBothSequential();
+    void testMultipathJoinShapesFirstReversed();
+    void testMultipathJoinShapesSecondReversed();
+    void testMultipathJoinShapesBothReversed();
+
+    void testMultipathJoinShapesSingleShapeEndToStart();
+    void testMultipathJoinShapesSingleShapeStartToEnd();
+
 };
 
 #endif // TESTPOINTMERGECOMMAND_H

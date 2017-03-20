@@ -43,7 +43,7 @@ struct Q_DECL_HIDDEN KoMultiPathPointMergeCommand::Private
 
 
     QScopedPointer<KoPathCombineCommand> combineCommand;
-    QScopedPointer<KoPathPointMergeCommand> mergeCommand;
+    QScopedPointer<KUndo2Command> mergeCommand;
 };
 
 KoMultiPathPointMergeCommand::KoMultiPathPointMergeCommand(const KoPathPointData &pointData1, const KoPathPointData &pointData2, KoShapeBasedDocumentBase *controller, KoSelection *selection, KUndo2Command *parent)
@@ -56,11 +56,18 @@ KoMultiPathPointMergeCommand::~KoMultiPathPointMergeCommand()
 {
 }
 
+KUndo2Command *KoMultiPathPointMergeCommand::createMergeCommand(const KoPathPointData &pointData1, const KoPathPointData &pointData2)
+{
+    return new KoPathPointMergeCommand(pointData1, pointData2);
+}
+
 void KoMultiPathPointMergeCommand::redo()
 {
     if (m_d->selection) {
         m_d->selection->deselectAll();
     }
+
+    KoShape *mergedShape = 0;
 
     if (m_d->pointData1.pathShape != m_d->pointData2.pathShape) {
         KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->controller);
@@ -72,16 +79,20 @@ void KoMultiPathPointMergeCommand::redo()
         KoPathPointData newPD1 = m_d->combineCommand->originalToCombined(m_d->pointData1);
         KoPathPointData newPD2 = m_d->combineCommand->originalToCombined(m_d->pointData2);
 
-        m_d->mergeCommand.reset(new KoPathPointMergeCommand(newPD1, newPD2));
+        m_d->mergeCommand.reset(createMergeCommand(newPD1, newPD2));
         m_d->mergeCommand->redo();
 
+        mergedShape = m_d->combineCommand->combinedPath();
+
     } else {
-        m_d->mergeCommand.reset(new KoPathPointMergeCommand(m_d->pointData1, m_d->pointData2));
+        m_d->mergeCommand.reset(createMergeCommand(m_d->pointData1, m_d->pointData2));
         m_d->mergeCommand->redo();
+
+        mergedShape = m_d->pointData1.pathShape;
     }
 
     if (m_d->selection) {
-        m_d->selection->select(m_d->mergeCommand->mergedPointData().pathShape);
+        m_d->selection->select(mergedShape);
     }
 
     KUndo2Command::redo();

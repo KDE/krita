@@ -16,41 +16,23 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KOMULTIPATHPOINTMERGECOMMAND_H
-#define KOMULTIPATHPOINTMERGECOMMAND_H
+#ifndef KOMULTIPATHPOINTJOINCOMMAND_H
+#define KOMULTIPATHPOINTJOINCOMMAND_H
 
-#include <kundo2command.h>
+#include <KoMultiPathPointMergeCommand.h>
 
-#include "kritaflake_export.h"
-#include <QScopedPointer>
-
-class KoSelection;
-class KoPathShape;
-class KoPathPointData;
-class KoShapeBasedDocumentBase;
-
-
-class KRITAFLAKE_EXPORT KoMultiPathPointMergeCommand : public KUndo2Command
+class KRITAFLAKE_EXPORT KoMultiPathPointJoinCommand : public KoMultiPathPointMergeCommand
 {
 public:
-    KoMultiPathPointMergeCommand(const KoPathPointData &pointData1,
-                                 const KoPathPointData &pointData2,
-                                 KoShapeBasedDocumentBase *controller,
-                                 KoSelection *selection,
-                                 KUndo2Command *parent = 0);
-    ~KoMultiPathPointMergeCommand();
-
-    void undo();
-    void redo();
-
-    KoPathShape *testingCombinedPath() const;
+    KoMultiPathPointJoinCommand(const KoPathPointData &pointData1,
+                                const KoPathPointData &pointData2,
+                                KoShapeBasedDocumentBase *controller,
+                                KoSelection *selection,
+                                KUndo2Command *parent = 0);
 
 protected:
     virtual KUndo2Command *createMergeCommand(const KoPathPointData &pointData1,
                                               const KoPathPointData &pointData2);
-private:
-    struct Private;
-    const QScopedPointer<Private> m_d;
 };
 
-#endif // KOMULTIPATHPOINTMERGECOMMAND_H
+#endif // KOMULTIPATHPOINTJOINCOMMAND_H

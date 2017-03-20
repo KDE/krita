@@ -111,14 +111,13 @@ private:
     void initializeWithShapes(const QList<KoShape*> shapes);
     KUndo2Command* createPointToCurveCommand(const QList<KoPathPointData> &points);
     void repaintSegment(PathSegment *pathSegment);
+    void mergePointsImpl(bool doJoin);
 
 protected:
     KoPathToolSelection m_pointSelection; ///< the point selection
     QCursor m_selectCursor;
 
 private:
-    static void resetSelectionCallback(QPointer<KoPathTool> tool, const QList<KoPathPointData> &pointsData);
-
     KoPathToolHandle * m_activeHandle;       ///< the currently active handle
     int m_handleRadius;    ///< the radius of the control point handles
     uint m_grabSensitivity; ///< the grab sensitivity

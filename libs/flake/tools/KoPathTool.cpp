@@ -40,6 +40,7 @@
 #include "commands/KoParameterToPathCommand.h"
 #include "commands/KoSubpathJoinCommand.h"
 #include <commands/KoMultiPathPointMergeCommand.h>
+#include <commands/KoMultiPathPointJoinCommand.h>
 #include "KoParameterShape.h"
 #include "KoPathPoint.h"
 #include "KoPathPointRubberSelectStrategy.h"
@@ -364,26 +365,7 @@ void KoPathTool::convertToPath()
     updateOptionsWidget();
 }
 
-void KoPathTool::joinPoints()
-{
-    Q_D(KoToolBase);
-    if (m_pointSelection.objectCount() == 1 && m_pointSelection.size() == 2) {
-        QList<KoPathPointData> pd(m_pointSelection.selectedPointsData());
-        const KoPathPointData & pd1 = pd.at(0);
-        const KoPathPointData & pd2 = pd.at(1);
-        KoPathShape * pathShape = pd1.pathShape;
-        if (!pathShape->isClosedSubpath(pd1.pointIndex.first) &&
-                (pd1.pointIndex.second == 0 ||
-                 pd1.pointIndex.second == pathShape->subpathPointCount(pd1.pointIndex.first) - 1) &&
-                !pathShape->isClosedSubpath(pd2.pointIndex.first) &&
-                (pd2.pointIndex.second == 0 ||
-                 pd2.pointIndex.second == pathShape->subpathPointCount(pd2.pointIndex.first) - 1)) {
-            KoSubpathJoinCommand *cmd = new KoSubpathJoinCommand(pd1, pd2);
-            d->canvas->addCommand(cmd);
-        }
-    }
-}
-
+namespace {
 bool checkCanJoinToPoints(const KoPathPointData & pd1, const KoPathPointData & pd2)
 {
     const KoPathPointIndex & index1 = pd1.pointIndex;
@@ -406,10 +388,12 @@ bool checkCanJoinToPoints(const KoPathPointData & pd1, const KoPathPointData & p
 
     return true;
 }
+}
 
-void KoPathTool::mergePoints()
+void KoPathTool::mergePointsImpl(bool doJoin)
 {
     Q_D(KoToolBase);
+
     if (m_pointSelection.size() != 2)
         return;
 
@@ -425,9 +409,24 @@ void KoPathTool::mergePoints()
 
     clearActivePointSelectionReferences();
 
-    // now we can start merging the endpoints
-    KoMultiPathPointMergeCommand *cmd = new KoMultiPathPointMergeCommand(pd1, pd2, d->canvas->shapeController()->documentBase(), d->canvas->shapeManager()->selection());
+    KUndo2Command *cmd = 0;
+
+    if (doJoin) {
+        cmd = new KoMultiPathPointJoinCommand(pd1, pd2, d->canvas->shapeController()->documentBase(), d->canvas->shapeManager()->selection());
+    } else {
+        cmd = new KoMultiPathPointMergeCommand(pd1, pd2, d->canvas->shapeController()->documentBase(), d->canvas->shapeManager()->selection());
+    }
     d->canvas->addCommand(cmd);
+}
+
+void KoPathTool::joinPoints()
+{
+    mergePointsImpl(true);
+}
+
+void KoPathTool::mergePoints()
+{
+    mergePointsImpl(false);
 }
 
 void KoPathTool::breakAtPoint()

@@ -38,13 +38,15 @@
 #include "kis_tool_smart_patch_options_widget.h"
 #include "libs/image/kis_paint_device_debug_utils.h"
 
-#include "kis_datamanager.h"
+#include "kis_resources_snapshot.h"
 
 struct KisToolSmartPatch::Private
 {
     KisNodeSP maskNode = nullptr;
     KisNodeSP paintNode = nullptr;
     KisPaintDeviceSP maskDev = nullptr;
+    KisResourcesSnapshotSP resources = nullptr;
+    KoColor currentFgColor;
 };
 
 
@@ -89,7 +91,8 @@ void KisToolSmartPatch::activatePrimaryAction()
     KisToolFreehand::activatePrimaryAction();
 
     if (!canCreateInpaintMask()) {
-        qDebug() << "Inpaint can only be applied to paint Layer";
+        QString message = i18n("Smart patch tool cannot paint on this layer.  Please select a paint layer.");
+        static_cast<KisCanvas2*>(canvas())->viewManager()->showFloatingMessage(message, koIcon("object-locked"));
     }
 }
 
@@ -125,6 +128,9 @@ void KisToolSmartPatch::beginPrimaryAction(KoPointerEvent *event)
         qDebug() << __FUNCTION__ << " 2";
         KisToolFreehand::beginPrimaryAction(event);
         qDebug() << __FUNCTION__ << " 3";
+
+        m_d->currentFgColor = canvas()->resourceManager()->foregroundColor(); //resource(KoCanvasResourceManager::ForegroundColor).value<KoColor>();
+        canvas()->resourceManager()->setForegroundColor(KoColor(Qt::gray, image()->colorSpace())); //maybe we should use alpha color space here
     }
 }
 
@@ -145,7 +151,8 @@ void KisToolSmartPatch::endPrimaryAction(KoPointerEvent *event)
 
     qDebug() << __FUNCTION__ << " 1";
 
-    //Wait for the paint operation to finish
+    //Next line is important. We need to wait for the paint operation to finish otherwise
+    //mask will be incomplete.
     image()->waitForDone();
 
     m_d->maskDev = new KisPaintDevice(currentNode()->paintDevice()->colorSpace());
@@ -161,6 +168,8 @@ void KisToolSmartPatch::endPrimaryAction(KoPointerEvent *event)
         viewManager->nodeManager()->slotNonUiActivatedNode( m_d->paintNode );
     m_d->paintNode = nullptr;
     m_d->maskNode = nullptr;
+    canvas()->resourceManager()->setForegroundColor(m_d->currentFgColor);
+
     qDebug() << __FUNCTION__ << " 3";
 }
 

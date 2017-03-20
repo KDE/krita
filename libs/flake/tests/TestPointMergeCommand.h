@@ -30,6 +30,14 @@ private Q_SLOTS:
     void closeSingleCurvePath();
     void connectLineSubpaths();
     void connectCurveSubpaths();
+
+    void testCombineShapes();
+    void testMultipathMergeShapesBothSequential();
+    void testMultipathMergeShapesFirstReversed();
+    void testMultipathMergeShapesSecondReversed();
+    void testMultipathMergeShapesBothReversed();
+    void testMultipathMergeShapesSingleShapeEndToStart();
+    void testMultipathMergeShapesSingleShapeStartToEnd();
 };
 
 #endif // TESTPOINTMERGECOMMAND_H

@@ -117,6 +117,7 @@ protected:
     QCursor m_selectCursor;
 
 private:
+    static void resetSelectionCallback(QPointer<KoPathTool> tool, const QList<KoPathPointData> &pointsData);
 
     KoPathToolHandle * m_activeHandle;       ///< the currently active handle
     int m_handleRadius;    ///< the radius of the control point handles

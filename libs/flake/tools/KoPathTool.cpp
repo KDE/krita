@@ -39,7 +39,7 @@
 #include "commands/KoPathSegmentBreakCommand.h"
 #include "commands/KoParameterToPathCommand.h"
 #include "commands/KoSubpathJoinCommand.h"
-#include "commands/KoPathPointMergeCommand.h"
+#include <commands/KoMultiPathPointMergeCommand.h>
 #include "KoParameterShape.h"
 #include "KoPathPoint.h"
 #include "KoPathPointRubberSelectStrategy.h"
@@ -54,6 +54,7 @@
 #include <KisHandlePainterHelper.h>
 #include <KoShapeStrokeModel.h>
 #include "kis_command_utils.h"
+
 
 #include <KoIcon.h>
 
@@ -383,44 +384,50 @@ void KoPathTool::joinPoints()
     }
 }
 
-void KoPathTool::mergePoints()
+bool checkCanJoinToPoints(const KoPathPointData & pd1, const KoPathPointData & pd2)
 {
-    Q_D(KoToolBase);
-    if (m_pointSelection.objectCount() != 1 || m_pointSelection.size() != 2)
-        return;
-
-    QList<KoPathPointData> pointData = m_pointSelection.selectedPointsData();
-    const KoPathPointData & pd1 = pointData.at(0);
-    const KoPathPointData & pd2 = pointData.at(1);
     const KoPathPointIndex & index1 = pd1.pointIndex;
     const KoPathPointIndex & index2 = pd2.pointIndex;
 
-    KoPathShape * path = pd1.pathShape;
+    KoPathShape *path1 = pd1.pathShape;
+    KoPathShape *path2 = pd2.pathShape;
 
     // check if subpaths are already closed
-    if (path->isClosedSubpath(index1.first) || path->isClosedSubpath(index2.first))
-        return;
+    if (path1->isClosedSubpath(index1.first) || path2->isClosedSubpath(index2.first))
+        return false;
+
     // check if first point is an endpoint
-    if (index1.second != 0 && index1.second != path->subpathPointCount(index1.first)-1)
-        return;
+    if (index1.second != 0 && index1.second != path1->subpathPointCount(index1.first)-1)
+        return false;
+
     // check if second point is an endpoint
-    if (index2.second != 0 && index2.second != path->subpathPointCount(index2.first)-1)
+    if (index2.second != 0 && index2.second != path2->subpathPointCount(index2.first)-1)
+        return false;
+
+    return true;
+}
+
+void KoPathTool::mergePoints()
+{
+    Q_D(KoToolBase);
+    if (m_pointSelection.size() != 2)
         return;
+
+    QList<KoPathPointData> pointData = m_pointSelection.selectedPointsData();
+    if (pointData.size() != 2) return;
+
+    const KoPathPointData & pd1 = pointData.at(0);
+    const KoPathPointData & pd2 = pointData.at(1);
+
+    if (!checkCanJoinToPoints(pd1, pd2)) {
+        return;
+    }
 
     clearActivePointSelectionReferences();
 
     // now we can start merging the endpoints
-    KoPathPointMergeCommand *cmd = new KoPathPointMergeCommand(pd1, pd2);
+    KoMultiPathPointMergeCommand *cmd = new KoMultiPathPointMergeCommand(pd1, pd2, d->canvas->shapeController()->documentBase(), d->canvas->shapeManager()->selection());
     d->canvas->addCommand(cmd);
-
-    KoPathPoint *pt = path->pointByIndex(index1);
-    if (!pt) {
-        pt = path->pointByIndex(index2);
-    }
-
-    if (pt) {
-        m_pointSelection.add(pt, true);
-    }
 }
 
 void KoPathTool::breakAtPoint()
@@ -917,23 +924,28 @@ void KoPathTool::clearActivePointSelectionReferences()
 
 void KoPathTool::initializeWithShapes(const QList<KoShape*> shapes)
 {
-    clearActivePointSelectionReferences();
-
-    repaintDecorations();
     QList<KoPathShape*> selectedShapes;
     Q_FOREACH (KoShape *shape, shapes) {
         KoPathShape *pathShape = dynamic_cast<KoPathShape*>(shape);
 
-        if (shape->isEditable() && pathShape) {
-            // as the tool is just in activation repaintDecorations does not yet get called
-            // so we need to use repaint of the tool and it is only needed to repaint the
-            // current canvas
-            repaint(pathShape->boundingRect());
+        if (pathShape && pathShape->isEditable()) {
             selectedShapes.append(pathShape);
         }
     }
 
-    m_pointSelection.setSelectedShapes(selectedShapes);
+    if (selectedShapes != m_pointSelection.selectedShapes()) {
+        clearActivePointSelectionReferences();
+        m_pointSelection.setSelectedShapes(selectedShapes);
+        repaintDecorations();
+    }
+
+    Q_FOREACH (KoPathShape *shape, selectedShapes) {
+        // as the tool is just in activation repaintDecorations does not yet get called
+        // so we need to use repaint of the tool and it is only needed to repaint the
+        // current canvas
+        repaint(shape->boundingRect());
+    }
+
     updateOptionsWidget();
     updateActions();
 }
@@ -965,6 +977,8 @@ void KoPathTool::updateActions()
     bool hasNonLinePoints = false;
     bool hasNonCurvePoints = false;
 
+    bool canJoinSubpaths = false;
+
     if (!pointData.isEmpty()) {
         Q_FOREACH (const KoPathPointData &pd, pointData) {
             const int subpathIndex = pd.pointIndex.first;
@@ -984,6 +998,13 @@ void KoPathTool::updateActions()
             hasNonLinePoints |= point->activeControlPoint1() || point->activeControlPoint2();
             hasNonCurvePoints |= !point->activeControlPoint1() && !point->activeControlPoint2();
         }
+
+        if (pointData.size() == 2) {
+            const KoPathPointData & pd1 = pointData.at(0);
+            const KoPathPointData & pd2 = pointData.at(1);
+
+            canJoinSubpaths = checkCanJoinToPoints(pd1, pd2);
+        }
     }
 
     m_actionPathPointCorner->setEnabled(hasNonSplitPoints);
@@ -997,10 +1018,12 @@ void KoPathTool::updateActions()
     m_actionCurvePoint->setEnabled(hasNonCurvePoints);
     m_actionLinePoint->setEnabled(hasNonLinePoints);
 
+    m_actionJoinSegment->setEnabled(canJoinSubpaths);
+    m_actionMergePoints->setEnabled(canJoinSubpaths);
 
     QList<KoPathPointData> segments(m_pointSelection.selectedSegmentsData());
 
-    bool canJoinSubpaths = false;
+
     bool canSplitAtSegment = false;
     bool canConvertSegmentToLine = false;
     bool canConvertSegmentToCurve= false;
@@ -1028,8 +1051,7 @@ void KoPathTool::updateActions()
     m_actionCurveSegment->setEnabled(canConvertSegmentToCurve);
 
     m_actionBreakSegment->setEnabled(canSplitAtSegment);
-    m_actionJoinSegment->setEnabled(canJoinSubpaths);
-    m_actionMergePoints->setEnabled(canJoinSubpaths);
+
 }
 
 void KoPathTool::deactivate()

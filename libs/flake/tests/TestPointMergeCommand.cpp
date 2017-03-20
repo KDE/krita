@@ -303,6 +303,7 @@ void TestPointMergeCommand::testCombineShapes()
 }
 
 #include <commands/KoMultiPathPointMergeCommand.h>
+#include <KoSelection.h>
 
 inline QPointF fetchPoint(KoPathShape *shape, int subpath, int pointIndex) {
     return shape->absoluteTransformation(0).map(
@@ -318,16 +319,10 @@ void dumpShape(KoPathShape *shape, const QString &fileName)
     tmp.save(fileName);
 }
 
-void resetSelectionFunc(const QList<KoPathPointData> &pointsData, QList<KoPathPointData> &store)
-{
-    store << pointsData;
-}
-
 void testMultipathMergeShapesImpl(const int srcPointIndex1,
                                   const int srcPointIndex2,
                                   const QRectF &expectedOutlineRect,
                                   const QList<QPointF> &expectedResultPoints,
-                                  int expectedMergePointIndex,
                                   bool singleShape = false)
 {
     MockShapeController mockController;
@@ -353,15 +348,10 @@ void testMultipathMergeShapesImpl(const int srcPointIndex1,
 
 
     {
-        using namespace std::placeholders;
-
         KoPathPointData pd1(shapes[0], KoPathPointIndex(0,srcPointIndex1));
         KoPathPointData pd2(shapes[singleShape ? 0 : 1], KoPathPointIndex(0,srcPointIndex2));
 
         KoMultiPathPointMergeCommand cmd(pd1, pd2, &mockController, canvas.shapeManager()->selection());
-
-        QList<KoPathPointData> selectedPoints;
-        cmd.setResetSelectionFunc(std::bind(resetSelectionFunc, _1, std::ref(selectedPoints)));
 
         cmd.redo();
 
@@ -397,20 +387,14 @@ void testMultipathMergeShapesImpl(const int srcPointIndex1,
             }
         }
 
-        QCOMPARE(selectedPoints.size(), 1);
-        QCOMPARE(selectedPoints[0].pathShape, combinedShape);
-        QCOMPARE(selectedPoints[0].pointIndex, KoPathPointIndex(0,expectedMergePointIndex));
-        selectedPoints.clear();
+        QList<KoShape*> shapes = canvas.shapeManager()->selection()->selectedEditableShapes();
+        QCOMPARE(shapes.size(), 1);
+        QCOMPARE(shapes.first(), combinedShape);
 
         //dumpShape(combinedShape, "tmp_0_seq.png");
         cmd.undo();
 
         QCOMPARE(canvas.shapeManager()->shapes().size(), 3);
-
-        QCOMPARE(selectedPoints.size(), 2);
-        QCOMPARE(selectedPoints[0], pd1);
-        QCOMPARE(selectedPoints[1], pd2);
-        selectedPoints.clear();
     }
 }
 
@@ -426,8 +410,7 @@ void TestPointMergeCommand::testMultipathMergeShapesBothSequential()
                                      QPointF(17.5,12.5), // merged by melding the points!
                                      QPointF(30,30),
                                      QPointF(30,20)
-                                 },
-                                 2);
+                                 });
 }
 
 void TestPointMergeCommand::testMultipathMergeShapesFirstReversed()
@@ -441,8 +424,7 @@ void TestPointMergeCommand::testMultipathMergeShapesFirstReversed()
                                      QPointF(12.5,12.5), // merged by melding the points!
                                      QPointF(30,30),
                                      QPointF(30,20)
-                                 },
-                                 2);
+                                 });
 }
 
 void TestPointMergeCommand::testMultipathMergeShapesSecondReversed()
@@ -456,8 +438,7 @@ void TestPointMergeCommand::testMultipathMergeShapesSecondReversed()
                                      QPointF(22.5,12.5), // merged by melding the points!
                                      QPointF(30,30),
                                      QPointF(20,20)
-                                 },
-                                 2);
+                                 });
 }
 
 void TestPointMergeCommand::testMultipathMergeShapesBothReversed()
@@ -471,8 +452,7 @@ void TestPointMergeCommand::testMultipathMergeShapesBothReversed()
                                      QPointF(17.5,12.5), // merged by melding the points!
                                      QPointF(30,30),
                                      QPointF(20,20)
-                                 },
-                                 2);
+                                 });
 }
 
 void TestPointMergeCommand::testMultipathMergeShapesSingleShapeEndToStart()
@@ -483,8 +463,7 @@ void TestPointMergeCommand::testMultipathMergeShapesSingleShapeEndToStart()
                                  {
                                      QPointF(15,15),
                                      QPointF(10,5)
-                                 },
-                                 1, true);
+                                 }, true);
 }
 
 void TestPointMergeCommand::testMultipathMergeShapesSingleShapeStartToEnd()
@@ -495,8 +474,7 @@ void TestPointMergeCommand::testMultipathMergeShapesSingleShapeStartToEnd()
                                  {
                                      QPointF(15,15),
                                      QPointF(10,5)
-                                 },
-                                 1, true);
+                                 }, true);
 }
 
 QTEST_MAIN(TestPointMergeCommand)

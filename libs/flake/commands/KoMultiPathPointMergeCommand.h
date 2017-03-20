@@ -23,7 +23,6 @@
 
 #include "kritaflake_export.h"
 #include <QScopedPointer>
-#include <functional>
 
 class KoSelection;
 class KoPathShape;
@@ -34,17 +33,12 @@ class KoShapeBasedDocumentBase;
 class KRITAFLAKE_EXPORT KoMultiPathPointMergeCommand : public KUndo2Command
 {
 public:
-    typedef std::function<void(const QList<KoPathPointData>&)> ResetSelectionFunc;
-
-public:
     KoMultiPathPointMergeCommand(const KoPathPointData &pointData1,
                                  const KoPathPointData &pointData2,
                                  KoShapeBasedDocumentBase *controller,
                                  KoSelection *selection,
                                  KUndo2Command *parent = 0);
     ~KoMultiPathPointMergeCommand();
-
-    void setResetSelectionFunc(ResetSelectionFunc func);
 
     void undo();
     void redo();

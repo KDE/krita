@@ -37,10 +37,13 @@
 
 #include "kis_tool_smart_patch_options_widget.h"
 #include "libs/image/kis_paint_device_debug_utils.h"
+
+#include "kis_datamanager.h"
+
 struct KisToolSmartPatch::Private
 {
-    bool activateMaskMode = false;
     KisNodeSP maskNode = nullptr;
+    KisNodeSP paintNode = nullptr;
     KisPaintDeviceSP maskDev = nullptr;
 };
 
@@ -65,8 +68,6 @@ void KisToolSmartPatch::activate(ToolActivation activation, const QSet<KoShape*>
 
 void KisToolSmartPatch::deactivate()
 {
-    if( !m_d->maskDev.isNull() )
-        KIS_DUMP_DEVICE_2(m_d->maskDev, m_d->maskDev->extent(), "output", "/home/eugening/Projects/Out");
 
     KisToolFreehand::deactivate();
 }
@@ -76,11 +77,6 @@ void KisToolSmartPatch::resetCursorStyle()
     KisToolFreehand::resetCursorStyle();
 }
 
-bool KisToolSmartPatch::inpaintMaskActive() const
-{
-    KisNodeSP node = currentNode();
-    return node && node->inherits("KisInpaintMask");
-}
 
 bool KisToolSmartPatch::canCreateInpaintMask() const
 {
@@ -92,81 +88,80 @@ void KisToolSmartPatch::activatePrimaryAction()
 {
     KisToolFreehand::activatePrimaryAction();
 
-    if (!inpaintMaskActive() && canCreateInpaintMask()) {
-        //useCursor(KisCursor::handCursor());
-        m_d->activateMaskMode = true;
-        setOutlineEnabled(true);
+    if (!canCreateInpaintMask()) {
+        qDebug() << "Inpaint can only be applied to paint Layer";
     }
 }
 
 void KisToolSmartPatch::deactivatePrimaryAction()
 {
-    if (m_d->activateMaskMode) {
-        m_d->activateMaskMode = false;
-        setOutlineEnabled(true);
-        resetCursorStyle();
-    }
-
     KisToolFreehand::deactivatePrimaryAction();
 }
 
 void KisToolSmartPatch::beginPrimaryAction(KoPointerEvent *event)
 {
-    if (m_d->activateMaskMode) {
-        KisNodeSP node = currentNode();
-        if (!node) return;
+    qDebug() << __FUNCTION__ << " 0";
 
-        if (!m_d->maskNode.isNull()) {
-            KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
-            KisViewManager* viewManager = kiscanvas->viewManager();
-            viewManager->nodeManager()->slotNonUiActivatedNode(m_d->maskNode);
-        } else {
-            KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
-            KisViewManager* viewManager = kiscanvas->viewManager();
-            viewManager->nodeManager()->createNode("KisInpaintMask", true);
-            m_d->maskNode = currentNode();
+    KisNodeSP node = currentNode();
+    if (!node) return;
+    KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
+    KisViewManager* viewManager = kiscanvas->viewManager();
 
-            if ( m_d->maskNode ){
-//                m_d->maskNode->setProperty("visible", false);
-//                m_d->maskNode->setProperty("temporary", true);
-                m_d->maskNode->setProperty("smartpatch", true);
-            }
-        }
+    if (!m_d->maskNode.isNull()) {
+        viewManager->nodeManager()->slotNonUiActivatedNode(m_d->maskNode);
+        qDebug() << __FUNCTION__ << " 1";
     } else {
+
+        m_d->paintNode = viewManager->nodeManager()->activeNode();
+        viewManager->nodeManager()->createNode("KisInpaintMask", true);
+        m_d->maskNode = currentNode();
+
+        if ( ! m_d->maskNode.isNull() ){
+            m_d->maskNode->setProperty("visible", false);
+            m_d->maskNode->setProperty("temporary", true);
+            m_d->maskNode->setProperty("inpaintmask", true);
+        }
+        viewManager->nodeManager()->slotNonUiActivatedNode(m_d->maskNode);
+        qDebug() << __FUNCTION__ << " 2";
         KisToolFreehand::beginPrimaryAction(event);
+        qDebug() << __FUNCTION__ << " 3";
     }
 }
 
 void KisToolSmartPatch::continuePrimaryAction(KoPointerEvent *event)
 {
-    if (m_d->activateMaskMode) return;
     KisToolFreehand::continuePrimaryAction(event);
 }
 
 
 void KisToolSmartPatch::endPrimaryAction(KoPointerEvent *event)
 {
-    if (m_d->activateMaskMode || m_d->maskNode.isNull()) return;
+    qDebug() << __FUNCTION__ << " 0";
+    if( mode() != KisTool::PAINT_MODE )
+        return;
 
     KisToolFreehand::endPrimaryAction(event);
 
-    m_d->maskDev = new KisPaintDevice(m_d->maskNode->paintDevice()->colorSpace());
-    m_d->maskDev->makeCloneFrom(m_d->maskNode->paintDevice(), m_d->maskNode->paintDevice()->extent());
 
-    qDebug() << "mask size: " << m_d->maskNode->paintDevice()->extent();
-    qDebug() << "mask size0: " << m_d->maskNode->paintDevice()->exactBounds();
-    qDebug() << "mask size1: " << m_d->maskDev->extent();
-    qDebug() << "mask size2: " << m_d->maskDev->exactBounds();
+    qDebug() << __FUNCTION__ << " 1";
 
-    //KIS_DUMP_DEVICE_2(m_d->maskDev, m_d->maskDev->extent(), "output", "/home/eugening/Projects/Out");
+    //Wait for the paint operation to finish
+    image()->waitForDone();
+
+    m_d->maskDev = new KisPaintDevice(currentNode()->paintDevice()->colorSpace());
+    m_d->maskDev->makeCloneFrom(currentNode()->paintDevice(), currentNode()->paintDevice()->extent());
+
+    KIS_DUMP_DEVICE_2(currentNode()->paintDevice(), currentNode()->paintDevice()->extent(), "output", "/home/eugening/Projects/Out");
 
     KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
-
-    qDebug() << "image size: " << kiscanvas->currentImage()->size();
-
     KisViewManager* viewManager = kiscanvas->viewManager();
-    viewManager->nodeManager()->removeSingleNode(m_d->maskNode);
+    if( ! m_d->maskNode.isNull() )
+        viewManager->nodeManager()->removeSingleNode(m_d->maskNode);
+    if( ! m_d->paintNode.isNull() )
+        viewManager->nodeManager()->slotNonUiActivatedNode( m_d->paintNode );
+    m_d->paintNode = nullptr;
     m_d->maskNode = nullptr;
+    qDebug() << __FUNCTION__ << " 3";
 }
 
 QWidget * KisToolSmartPatch::createOptionWidget()
@@ -181,7 +176,6 @@ QWidget * KisToolSmartPatch::createOptionWidget()
     // specialSpacer->setObjectName("SpecialSpacer");
     // specialSpacer->setFixedSize(0, 0);
     // optionsWidget->layout()->addWidget(specialSpacer);
-
 
     return optionsWidget;
 }

@@ -61,7 +61,6 @@ public Q_SLOTS:
 Q_SIGNALS:
 
 private:
-    bool inpaintMaskActive() const;
     bool canCreateInpaintMask() const;
 
 private:

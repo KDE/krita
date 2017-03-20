@@ -955,6 +955,8 @@ void KisPainter::bltFixed(qint32 dstX, qint32 dstY,
     d->colorSpace->bitBlt(srcDev->colorSpace(), d->paramInfo, d->compositeOp, d->renderingIntent, d->conversionFlags);
     d->device->writeBytes(dstBytes, dstX, dstY, srcWidth, srcHeight);
 
+    qDebug() << ":" << dstX << " x " << dstY;
+
     delete[] d->paramInfo.maskRowStart;
     delete[] dstBytes;
 

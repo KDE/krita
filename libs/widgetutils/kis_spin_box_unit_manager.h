@@ -74,9 +74,10 @@ class KRITAWIDGETUTILS_EXPORT KisSpinBoxUnitManager : public  QAbstractListModel
 public:
 
     enum UnitDimension{
-        LENGTH = 0,
-        ANGLE = 1,
-        TIME = 2
+		LENGTH = 0, //length, print size, reference is point
+		IMLENGTH = 1, //length, image size, reference is pixel. This dimension is used when the printing units must be avoided
+		ANGLE = 2,
+		TIME = 3
     };
 
     static inline bool isUnitId(int code) { return (code == LENGTH || code == ANGLE || code == TIME); }
@@ -109,9 +110,9 @@ public:
     qreal getApparentValue(double refValue) const;
 
     //! \brief gets the conversion factor of a managed unit, or -1 in case of error. This method is the one that need to be overridden to extend the ability of the KisSpinBoxUnitManager.
-    virtual qreal getConversionFactor(UnitDimension dim, QString symbol) const;
+	virtual qreal getConversionFactor(int dim, QString symbol) const;
     //! \brief some units conversions are done via an affine transform, not just a linear transform. This function gives the constant of this affine transform (usually 0).
-    virtual qreal getConversionConstant(UnitDimension dim, QString symbol) const;
+	virtual qreal getConversionConstant(int dim, QString symbol) const;
 
 	virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
 	virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;

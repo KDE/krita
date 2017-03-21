@@ -50,8 +50,8 @@ public:
 
     KisDocumentAwareSpinBoxUnitManager(QObject *parent = 0, int pPixDir = PIX_DIR_X);
 
-    virtual qreal getConversionFactor(UnitDimension dim, QString symbol) const;
-    virtual qreal getConversionConstant(UnitDimension dim, QString symbol) const;
+	virtual qreal getConversionFactor(int dim, QString symbol) const;
+	virtual qreal getConversionConstant(int dim, QString symbol) const;
 
 private:
 

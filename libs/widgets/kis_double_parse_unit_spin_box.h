@@ -43,7 +43,7 @@ public:
     void setUnitManager(KisSpinBoxUnitManager* unitManager);
 
     /**
-     * Set the new value in points which will then be converted to the current unit for display
+	 * Set the new value in points (or other reference unit) which will then be converted to the current unit for display
      * @param newValue the new value
      * @see value()
      */
@@ -54,6 +54,11 @@ public:
      */
     virtual void setUnit(const KoUnit &unit);
     virtual void setUnit(const QString & symbol);
+	/*!
+	 * \brief setReturnUnit set a unit, such that the spinbox now return values in this unit instead of the reference unit for the current dimension.
+	 * \param symbol the symbol of the new unit.
+	 */
+	void setReturnUnit(const QString & symbol);
 
     /**
      * @brief setDimensionType set the dimension (for example length or angle) of the units the spinbox manage
@@ -105,7 +110,7 @@ public:
 	void setDisplayUnit(bool toggle);
 
 Q_SIGNALS:
-    /// emitted like valueChanged in the parent, but this one emits the point value
+	/// emitted like valueChanged in the parent, but this one emits the point value, or converted to another reference unit.
     void valueChangedPt( qreal );
 
 

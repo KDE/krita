@@ -53,7 +53,7 @@ void KisSpinBoxUnitManagerFactory::clearUnitManagerBuilder()
     builder = nullptr;
 }
 
-const QStringList KisSpinBoxUnitManager::referenceUnitSymbols = {"pt", "°", "frame"};
+const QStringList KisSpinBoxUnitManager::referenceUnitSymbols = {"pt", "px", "°", "frame"};
 
 const QStringList KisSpinBoxUnitManager::documentRelativeLengthUnitSymbols = {"px", "vw", "vh"}; //px are relative to the resolution, vw and vh to the width and height.
 const QStringList KisSpinBoxUnitManager::documentRelativeTimeUnitSymbols = {"s", "%"}; //secondes are relative to the framerate, % to the sequence length.
@@ -173,7 +173,25 @@ QStringList KisSpinBoxUnitManager::getsUnitSymbolList(bool withName) const{
             }
         }
 
-        break;
+		break;
+
+	case IMLENGTH:
+
+		if (withName) {
+			list << KoUnit::unitDescription(KoUnit::Pixel);
+		} else {
+			list << "px";
+		}
+
+		if (d->canAccessDocument) {
+			// ad document relative units
+			if (withName) {
+				list << i18n("view width (vw)") << i18n("view height (vh)");
+			} else {
+				list << "vw" << "vh";
+			}
+		}
+		break;
 
     case ANGLE:
 
@@ -216,7 +234,7 @@ QStringList KisSpinBoxUnitManager::getsUnitSymbolList(bool withName) const{
 
 }
 
-qreal KisSpinBoxUnitManager::getConversionConstant(UnitDimension dim, QString symbol) const
+qreal KisSpinBoxUnitManager::getConversionConstant(int dim, QString symbol) const
 {
 	Q_UNUSED(dim);
 	Q_UNUSED(symbol);
@@ -279,7 +297,7 @@ qreal KisSpinBoxUnitManager::getApparentValue(double refValue) const
     return v;
 }
 
-qreal KisSpinBoxUnitManager::getConversionFactor(UnitDimension dim, QString symbol) const
+qreal KisSpinBoxUnitManager::getConversionFactor(int dim, QString symbol) const
 {
 
     qreal factor = -1;
@@ -300,6 +318,12 @@ qreal KisSpinBoxUnitManager::getConversionFactor(UnitDimension dim, QString symb
             factor = unit.toUserValue(1.0);
         } while (0) ;
         break;
+
+	case IMLENGTH:
+		if (symbol == "px") {
+			factor = 1;
+		}
+		break;
 
     case ANGLE:
         if (symbol == "°") {
@@ -328,6 +352,8 @@ qreal KisSpinBoxUnitManager::getConversionFactor(UnitDimension dim, QString symb
         factor = 1.0;
         break;
 
+	default:
+		break;
     }
 
     return factor;
@@ -399,6 +425,10 @@ void KisSpinBoxUnitManager::setApparentUnitFromSymbol(QString pSymbol)
         case LENGTH:
             speUnits = documentRelativeLengthUnitSymbols;
             goto default_identifier_conv_fact;
+
+		case IMLENGTH:
+			speUnits << "vw" << "vh";
+			goto default_identifier_conv_fact;
 
         case TIME:
             speUnits = documentRelativeTimeUnitSymbols;

@@ -25,6 +25,8 @@
 
 class KisFilterStrategy;
 class WdgImageSize;
+class KisDocumentAwareSpinBoxUnitManager;
+class KisSpinBoxUnitManager;
 
 #include "ui_wdg_imagesize.h"
 
@@ -54,20 +56,14 @@ public:
     KisFilterStrategy *filterType();
 
 private Q_SLOTS:
-    void slotPixelWidthChanged(int w);
-    void slotPixelHeightChanged(int h);
     void slotPixelWidthChanged(double w);
-    void slotPixelHeightChanged(double h);
-    void slotPixelWidthUnitChanged();
-    void slotPixelHeightUnitChanged();
+	void slotPixelHeightChanged(double h);
     void slotPrintWidthChanged(double w);
-    void slotPrintHeightChanged(double h);
-    void slotPrintWidthUnitChanged();
-    void slotPrintHeightUnitChanged();
+	void slotPrintHeightChanged(double h);
     void slotAspectChanged(bool keep);
     void slotPrintResolutionChanged(double r);
     void slotPrintResolutionEditFinished();
-    void slotPrintResolutionUnitChanged();
+	void slotPrintResolutionUnitChanged();
 
 private:
     void updatePixelWidthUIValue(double value);
@@ -84,6 +80,12 @@ private:
     const double m_originalResolution;
     double m_resolution;
     bool m_keepAspect;
+
+	KisDocumentAwareSpinBoxUnitManager* _widthUnitManager;
+	KisDocumentAwareSpinBoxUnitManager* _heightUnitManager;
+
+	KisSpinBoxUnitManager* _printWidthUnitManager;
+	KisSpinBoxUnitManager* _printHeightUnitManager;
 };
 
 #endif // DLG_IMAGESIZE

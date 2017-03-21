@@ -61,7 +61,7 @@ KisDocumentAwareSpinBoxUnitManager::KisDocumentAwareSpinBoxUnitManager(QObject *
 }
 
 
-qreal KisDocumentAwareSpinBoxUnitManager::getConversionFactor(UnitDimension dim, QString symbol) const
+qreal KisDocumentAwareSpinBoxUnitManager::getConversionFactor(int dim, QString symbol) const
 {
     qreal factor = KisSpinBoxUnitManager::getConversionFactor(dim, symbol);
 
@@ -116,6 +116,16 @@ qreal KisDocumentAwareSpinBoxUnitManager::getConversionFactor(UnitDimension dim,
         }
         break;
 
+	case IMLENGTH:
+
+		if (symbol == "vw") {
+			factor = 100.0/sizeX; //1 vw is 1% of document width, 1 vw in pixel is sizeX/100 so 1 pixel in vw is the inverse.
+
+		} else if (symbol == "vh") {
+			factor = 100.0/sizeY;
+		}
+		break;
+
     case TIME:
         {
             if (symbol == "s") {
@@ -139,7 +149,7 @@ qreal KisDocumentAwareSpinBoxUnitManager::getConversionFactor(UnitDimension dim,
     return factor;
 }
 
-qreal KisDocumentAwareSpinBoxUnitManager::getConversionConstant(UnitDimension dim, QString symbol) const
+qreal KisDocumentAwareSpinBoxUnitManager::getConversionConstant(int dim, QString symbol) const
 {
     if (dim == TIME && symbol == "%") {
         KisImage* img = KisPart::instance()->currentMainwindow()->activeView()->document()->image().data();

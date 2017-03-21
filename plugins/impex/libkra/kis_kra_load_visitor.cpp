@@ -401,6 +401,11 @@ QStringList KisKraLoadVisitor::errorMessages() const
     return m_errorMessages;
 }
 
+QStringList KisKraLoadVisitor::warningMessages() const
+{
+    return m_warningMessages;
+}
+
 struct SimpleDevicePolicy
 {
     bool read(KisPaintDeviceSP dev, QIODevice *stream) {
@@ -431,7 +436,6 @@ struct FramedDevicePolicy
 bool KisKraLoadVisitor::loadPaintDevice(KisPaintDeviceSP device, const QString& location)
 {
     // Layer data
-
     KisPaintDeviceFramesInterface *frameInterface = device->framesInterface();
     QList<int> frames;
 
@@ -446,11 +450,17 @@ bool KisKraLoadVisitor::loadPaintDevice(KisPaintDeviceSP device, const QString& 
 
         for (int i = 0; i < frames.count(); i++) {
             int id = frames[i];
-            QString frameFilename = getLocation(keyframeChannel->frameFilename(id));
-            Q_ASSERT(!frameFilename.isEmpty());
+            if (keyframeChannel->frameFilename(id).isEmpty()) {
+                m_warningMessages << i18n("Could not find keyframe pixel data for frame %1 in %2.").arg(id).arg(location);
+            }
+            else {
+                Q_ASSERT(!keyframeChannel->frameFilename(id).isEmpty());
+                QString frameFilename = getLocation(keyframeChannel->frameFilename(id));
+                Q_ASSERT(!frameFilename.isEmpty());
 
-            if (!loadPaintDeviceFrame(device, frameFilename, FramedDevicePolicy(id))) {
-                return false;
+                if (!loadPaintDeviceFrame(device, frameFilename, FramedDevicePolicy(id))) {
+                    m_warningMessages << i18n("Could not load keyframe pixel data for frame %1 in %2.").arg(id).arg(location);
+                }
             }
         }
     }
@@ -463,15 +473,15 @@ bool KisKraLoadVisitor::loadPaintDeviceFrame(KisPaintDeviceSP device, const QStr
 {
     if (m_store->open(location)) {
         if (!policy.read(device, m_store->device())) {
-            m_errorMessages << i18n("Could not read pixel data: %1.", location);
+            m_warningMessages << i18n("Could not read pixel data: %1.", location);
             device->disconnect();
             m_store->close();
-            return false;
+            return true;
         }
         m_store->close();
     } else {
-        m_errorMessages << i18n("Could not load pixel data: %1.", location);
-        return false;
+        m_warningMessages << i18n("Could not load pixel data: %1.", location);
+        return true;
     }
     if (m_store->open(location + ".defaultpixel")) {
         int pixelSize = device->colorSpace()->pixelSize();
@@ -503,8 +513,8 @@ bool KisKraLoadVisitor::loadProfile(KisPaintDeviceSP device, const QString& loca
             return true;
         }
     }
-    m_errorMessages << i18n("Could not load profile %1.", location);
-    return false;
+    m_warningMessages << i18n("Could not load profile: %1.", location);
+    return true;
 }
 
 bool KisKraLoadVisitor::loadFilterConfiguration(KisFilterConfigurationSP kfc, const QString& location)
@@ -515,7 +525,6 @@ bool KisKraLoadVisitor::loadFilterConfiguration(KisFilterConfigurationSP kfc, co
         data = m_store->read(m_store->size());
         m_store->close();
         if (!data.isEmpty()) {
-            QString xml(data);
             QDomDocument doc;
             doc.setContent(data);
             QDomElement e = doc.documentElement();
@@ -527,8 +536,8 @@ bool KisKraLoadVisitor::loadFilterConfiguration(KisFilterConfigurationSP kfc, co
             return true;
         }
     }
-    m_errorMessages << i18n("Could not filter configuration %1.", location);
-    return false;
+    m_warningMessages << i18n("Could not filter configuration %1.", location);
+    return true;
 }
 
 bool KisKraLoadVisitor::loadMetaData(KisNode* node)
@@ -536,8 +545,6 @@ bool KisKraLoadVisitor::loadMetaData(KisNode* node)
     dbgFile << "Load metadata for " << node->name();
     KisLayer* layer = qobject_cast<KisLayer*>(node);
     if (!layer) return true;
-
-    bool result = true;
 
     KisMetaData::IOBackend* backend = KisMetaData::IOBackendRegistry::instance()->get("xmp");
 
@@ -559,12 +566,10 @@ bool KisKraLoadVisitor::loadMetaData(KisNode* node)
         m_store->close();
         QBuffer buffer(&data);
         if (!backend->loadFrom(layer->metaData(), &buffer)) {
-            m_errorMessages << i18n("Could not load metadata for layer %1.", layer->name());
-            result = false;
+            m_warningMessages << i18n("Could not load metadata for layer %1.", layer->name());
         }
-
     }
-    return result;
+    return true;
 }
 
 bool KisKraLoadVisitor::loadSelection(const QString& location, KisSelectionSP dstSelection)
@@ -576,7 +581,7 @@ bool KisKraLoadVisitor::loadSelection(const QString& location, KisSelectionSP ds
         KisPixelSelectionSP pixelSelection = dstSelection->pixelSelection();
         result = loadPaintDevice(pixelSelection, pixelSelectionLocation);
         if (!result) {
-            m_errorMessages << i18n("Could not load raster selection %1.", location);
+            m_warningMessages << i18n("Could not load raster selection %1.", location);
         }
         pixelSelection->invalidateOutlineCache();
     }
@@ -592,10 +597,10 @@ bool KisKraLoadVisitor::loadSelection(const QString& location, KisSelectionSP ds
         result = shapeSelection->loadSelection(m_store);
         m_store->popDirectory();
         if (!result) {
-            m_errorMessages << i18n("Could not load vector selection %1.", location);
+            m_warningMessages << i18n("Could not load vector selection %1.", location);
         }
     }
-    return result;
+    return true;
 }
 
 QString KisKraLoadVisitor::getLocation(KisNode* node, const QString& suffix)
@@ -646,7 +651,7 @@ void KisKraLoadVisitor::loadNodeKeyframes(KisNode *node)
             KisKeyframeChannel *channel = node->getKeyframeChannel(id, true);
 
             if (!channel) {
-                m_errorMessages << i18n("unknown keyframe channel type: %1 in %2", id, location);
+                m_warningMessages << i18n("unknown keyframe channel type: %1 in %2", id, location);
                 continue;
             }
 

@@ -95,12 +95,12 @@ void DefaultToolWidget::updatePosition()
     KoFlake::Position position = positionSelector->position();
 
     KoSelection *selection = m_tool->canvas()->shapeManager()->selection();
-    if (selection->count()) {
+    if (selection && selection->count()) {
         selPosition = selection->absolutePosition(position);
     }
 
-    positionXSpinBox->setEnabled(selection->count());
-    positionYSpinBox->setEnabled(selection->count());
+    positionXSpinBox->setEnabled(selection && selection->count());
+    positionYSpinBox->setEnabled(selection && selection->count());
 
     if (m_blockSignals) {
         return;
@@ -121,7 +121,7 @@ void DefaultToolWidget::updatePosition()
 void DefaultToolWidget::positionHasChanged()
 {
     KoSelection *selection = m_tool->canvas()->shapeManager()->selection();
-    if (!selection->count()) {
+    if (!selection || selection->count() <= 0) {
         return;
     }
 
@@ -149,7 +149,10 @@ void DefaultToolWidget::updateSize()
 {
     QSizeF selSize(0, 0);
     KoSelection *selection = m_tool->canvas()->shapeManager()->selection();
-    uint selectionCount = selection->count();
+    uint selectionCount = 0;
+    if (selection && selection->count()) {
+        selectionCount = selection->count();
+    }
     if (selectionCount) {
         selSize = selection->boundingRect().size();
     }

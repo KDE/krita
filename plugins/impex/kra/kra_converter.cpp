@@ -296,7 +296,7 @@ bool KraConverter::loadXML(const KoXmlDocument &doc, KoStore *store)
                         m_doc->setErrorMessage(i18n("Unknown error."));
                     }
                     else {
-                        m_doc->setErrorMessage(m_kraLoader->errorMessages().join(".\n"));
+                        m_doc->setErrorMessage(m_kraLoader->errorMessages().join("\n"));
                     }
                     return false;
                 }
@@ -320,7 +320,7 @@ bool KraConverter::completeLoading(KoStore* store)
            m_doc->setErrorMessage(i18n("Unknown error."));
         }
         else {
-           m_doc->setErrorMessage(m_kraLoader->errorMessages().join(".\n"));
+           m_doc->setErrorMessage(m_kraLoader->errorMessages().join("\n"));
         }
         return false;
     }
@@ -332,9 +332,10 @@ bool KraConverter::completeLoading(KoStore* store)
     m_image->unblockUpdates();
 
     bool retval = true;
-    if (!m_kraLoader->errorMessages().isEmpty()) {
-       m_doc->setErrorMessage(m_kraLoader->errorMessages().join(".\n"));
-        retval = false;
+
+    if (!m_kraLoader->warningMessages().isEmpty()) {
+       m_doc->setWarningMessage(m_kraLoader->warningMessages().join("\n"));
+        retval = true;
     }
     if (retval) {
         m_activeNodes = m_kraLoader->selectedNodes();

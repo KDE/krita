@@ -58,6 +58,7 @@
 #include <KisImportExportManager.h>
 
 #include <KoFileDialog.h>
+#include <KoIconToolTip.h>
 #include <QDesktopServices>
 #include <QWidgetAction>
 
@@ -128,6 +129,7 @@ struct TimelineFramesView::Private
     QItemViewPaintPairs draggablePaintPairs(const QModelIndexList &indexes, QRect *r) const;
     QPixmap renderToPixmap(const QModelIndexList &indexes, QRect *r) const;
 
+    KoIconToolTip tip;
 };
 
 TimelineFramesView::TimelineFramesView(QWidget *parent)
@@ -871,16 +873,18 @@ void TimelineFramesView::mousePressEvent(QMouseEvent *event)
                 m_d->frameCreationMenu->exec(event->globalPos());
             }
         } else if (numSelectedItems > 1) {
-            int labelIndex = 0;
+            int labelIndex = -1;
             bool haveFrames = false;
             Q_FOREACH(QModelIndex index, selectedIndexes()) {
                 haveFrames |= index.data(TimelineFramesModel::FrameExistsRole).toBool();
                 QVariant colorLabel = index.data(TimelineFramesModel::FrameColorLabelIndexRole);
                 if (colorLabel.isValid()) {
-                    if (labelIndex == 0) {
+                    if (labelIndex == -1) {
+                        // First label
                         labelIndex = colorLabel.toInt();
-                    } else {
-                        labelIndex = 0;
+                    } else if (labelIndex != colorLabel.toInt()) {
+                        // Mixed colors in selection
+                        labelIndex = -1;
                         break;
                     }
                 }
@@ -896,7 +900,15 @@ void TimelineFramesView::mousePressEvent(QMouseEvent *event)
 
             m_d->multipleFrameEditingMenu->exec(event->globalPos());
         }
-
+    } else if (event->button() == Qt::MidButton) {
+        QModelIndex index = model()->buddy(indexAt(event->pos()));
+        if (index.isValid()) {
+            QStyleOptionViewItem option = viewOptions();
+            option.rect = visualRect(index);
+            // The offset of the headers is needed to get the correct position inside the view.
+            m_d->tip.showTip(this, event->pos() + QPoint(verticalHeader()->width(), horizontalHeader()->height()), option, index);
+        }
+        event->accept();
     } else {
         if (index.isValid()) {
             m_d->model->setLastClickedIndex(index);
@@ -924,6 +936,15 @@ void TimelineFramesView::mouseMoveEvent(QMouseEvent *e)
 
             horizontalScrollBar()->setValue(offset.x());
             verticalScrollBar()->setValue(offset.y() / height);
+        }
+        e->accept();
+    } else if (e->buttons() == Qt::MidButton) {
+        QModelIndex index = model()->buddy(indexAt(e->pos()));
+        if (index.isValid()) {
+            QStyleOptionViewItem option = viewOptions();
+            option.rect = visualRect(index);
+            // The offset of the headers is needed to get the correct position inside the view.
+            m_d->tip.showTip(this, e->pos() + QPoint(verticalHeader()->width(), horizontalHeader()->height()), option, index);
         }
         e->accept();
     } else {
@@ -1059,4 +1080,21 @@ void TimelineFramesView::slotRemoveFrame()
     if (!indexes.isEmpty()) {
         m_d->model->removeFrames(indexes);
     }
+}
+
+bool TimelineFramesView::viewportEvent(QEvent *event)
+{
+    if (event->type() == QEvent::ToolTip && model()) {
+        QHelpEvent *he = static_cast<QHelpEvent *>(event);
+        QModelIndex index = model()->buddy(indexAt(he->pos()));
+        if (index.isValid()) {
+            QStyleOptionViewItem option = viewOptions();
+            option.rect = visualRect(index);
+            // The offset of the headers is needed to get the correct position inside the view.
+            m_d->tip.showTip(this, he->pos() + QPoint(verticalHeader()->width(), horizontalHeader()->height()), option, index);
+            return true;
+        }
+    }
+
+    return QTableView::viewportEvent(event);
 }

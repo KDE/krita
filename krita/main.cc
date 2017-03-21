@@ -120,14 +120,18 @@ extern "C" int main(int argc, char **argv)
     QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps, true);
 
     const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
-    QSettings kritarc(configPath + QStringLiteral("/kritarc"), QSettings::IniFormat);
 
+    bool singleApplication = true;
 #if QT_VERSION >= 0x050600
-    if (kritarc.value("EnableHiDPI", false).toBool()) {
-        QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-    }
-    if (!qgetenv("KRITA_HIDPI").isEmpty()) {
-        QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+    {
+        QSettings kritarc(configPath + QStringLiteral("/kritadisplayrc"), QSettings::IniFormat);
+        singleApplication = kritarc.value("EnableSingleApplication").toBool();
+        if (kritarc.value("EnableHiDPI", false).toBool()) {
+            QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+        }
+        if (!qgetenv("KRITA_HIDPI").isEmpty()) {
+            QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+        }
     }
 #endif
 
@@ -148,30 +152,32 @@ extern "C" int main(int argc, char **argv)
 
     // Now that the paths are set, set the language. First check the override from the langage
     // selection dialog.
-    QSettings languageoverride(configPath + QStringLiteral("/klanguageoverridesrc"), QSettings::IniFormat);
-    languageoverride.beginGroup(QStringLiteral("Language"));
-    QString language = languageoverride.value(qAppName(), "").toString();
+    {
+        QSettings languageoverride(configPath + QStringLiteral("/klanguageoverridesrc"), QSettings::IniFormat);
+        languageoverride.beginGroup(QStringLiteral("Language"));
+        QString language = languageoverride.value(qAppName(), "").toString();
 
-    qDebug() << "Override language:" << language;
+        qDebug() << "Override language:" << language;
 
-    if (!language.isEmpty()) {
-        KLocalizedString::setLanguages(language.split(":"));
-        // And override Qt's locale, too
-        qputenv("LANG", language.split(":").first().toUtf8());
-        QLocale locale(language.split(":").first());
-        QLocale::setDefault(locale);
-        qDebug() << "Qt ui languages" << locale.uiLanguages();
-    }
-    else {
-        // And if there isn't one, check the one set by the system.
-        // XXX: This doesn't work, for some !@#$% reason.
-        QLocale locale = QLocale::system();
-        if (locale.bcp47Name() != QStringLiteral("en")) {
-            qputenv("LANG", locale.bcp47Name().toLatin1());
-            KLocalizedString::setLanguages(QStringList() << locale.bcp47Name());
+        if (!language.isEmpty()) {
+            KLocalizedString::setLanguages(language.split(":"));
+            // And override Qt's locale, too
+            qputenv("LANG", language.split(":").first().toUtf8());
+            QLocale locale(language.split(":").first());
+            QLocale::setDefault(locale);
+            qDebug() << "Qt ui languages" << locale.uiLanguages();
         }
-    }
+        else {
+            // And if there isn't one, check the one set by the system.
+            // XXX: This doesn't work, for some !@#$% reason.
+            QLocale locale = QLocale::system();
+            if (locale.bcp47Name() != QStringLiteral("en")) {
+                qputenv("LANG", locale.bcp47Name().toLatin1());
+                KLocalizedString::setLanguages(QStringList() << locale.bcp47Name());
+            }
+        }
 
+    }
 #ifdef Q_OS_WIN
     QDir appdir(KoResourcePaths::getApplicationRoot());
     QString path = qgetenv("PATH");
@@ -202,7 +208,7 @@ extern "C" int main(int argc, char **argv)
 
     KisApplicationArguments args(app);
 
-    if (app.isRunning()) {
+    if (singleApplication && app.isRunning()) {
         // only pass arguments to main instance if they are not for batch processing
         // any batch processing would be done in this separate instance
         const bool batchRun = (args.print() || args.exportAs() || args.exportAsPdf());
@@ -262,7 +268,10 @@ extern "C" int main(int argc, char **argv)
 
     int state = app.exec();
 
-    kritarc.setValue("canvasState", "OPENGL_SUCCESS");
+    {
+        QSettings kritarc(configPath + QStringLiteral("/kritadisplayrc"), QSettings::IniFormat);
+        kritarc.setValue("canvasState", "OPENGL_SUCCESS");
+    }
 
     return state;
 }

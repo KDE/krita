@@ -63,6 +63,7 @@ public:
     bool visit(KisColorizeMask *mask);
 
     QStringList errorMessages() const;
+    QStringList warningMessages() const;
 
 private:
 
@@ -90,6 +91,7 @@ private:
     QString m_name;
     int m_syntaxVersion;
     QStringList m_errorMessages;
+    QStringList m_warningMessages;
 };
 
 #endif // KIS_KRA_LOAD_VISITOR_H_

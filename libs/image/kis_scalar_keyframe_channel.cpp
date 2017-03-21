@@ -358,8 +358,15 @@ qreal KisScalarKeyframeChannel::currentValue() const
 
 KisKeyframeSP KisScalarKeyframeChannel::createKeyframe(int time, const KisKeyframeSP copySrc, KUndo2Command *parentCommand)
 {
-    qreal value = (copySrc.isNull() ? 0 : scalarValue(copySrc));
-    return createKeyframe(time, value, parentCommand);
+    if (copySrc) {
+        KisScalarKeyframe *srcKeyframe = dynamic_cast<KisScalarKeyframe*>(copySrc.data());
+        Q_ASSERT(srcKeyframe);
+        KisScalarKeyframe *keyframe = new KisScalarKeyframe(srcKeyframe, this);
+        keyframe->setTime(time);
+        return toQShared(keyframe);
+    } else {
+        return createKeyframe(time, 0, parentCommand);
+    }
 }
 
 KisKeyframeSP KisScalarKeyframeChannel::createKeyframe(int time, qreal value, KUndo2Command *parentCommand)

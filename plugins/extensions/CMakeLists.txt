@@ -16,7 +16,7 @@ add_subdirectory( resourcemanager )
 add_subdirectory( layersplit )
 add_subdirectory( animationrenderer )
 add_subdirectory( waveletdecompose )
-add_subdirectory( gmic-qt )
+add_subdirectory( qmic )
 
 # Allow to skip building GMIC plugin
 option(WITH_GMIC "Build the G'Mic plugin" ON)

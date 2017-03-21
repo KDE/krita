@@ -16,42 +16,53 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "gmic-qt.h"
+#include "QMic.h"
 
 #include <QDebug>
 #include <QFileInfo>
 #include <QLocalSocket>
 #include <QProcess>
+#include <QMessageBox>
 #include <QUuid>
 
 #include <klocalizedstring.h>
 #include <kpluginfactory.h>
 
+#include <kis_action.h>
 #include <kis_config.h>
+#include <kis_preference_set_registry.h>
 
-K_PLUGIN_FACTORY_WITH_JSON(GmicQtFactory, "kritagmic-qt.json", registerPlugin<GmicQt>();)
+#include <PluginSettings.h>
 
-GmicQt::GmicQt(QObject *parent, const QVariantList &)
-        : KisViewPlugin(parent)
+static const char ack[] = "ack";
+
+K_PLUGIN_FACTORY_WITH_JSON(QMicFactory, "kritaqmic.json", registerPlugin<QMic>();)
+
+QMic::QMic(QObject *parent, const QVariantList &)
+    : KisViewPlugin(parent)
 {
-    KisAction *action = createAction("GmicQt");
-    connect(action,  SIGNAL(triggered()), this, SLOT(slotGmicQt()));
+    KisPreferenceSetRegistry *preferenceSetRegistry = KisPreferenceSetRegistry::instance();
+    PluginSettingsFactory* settingsFactory = new PluginSettingsFactory();
+    preferenceSetRegistry->add("QMicPluginSettingsFactory", settingsFactory);
 
-    KisAction *action = createAction("GmicQtAgain");
-    connect(action,  SIGNAL(triggered()), this, SLOT(slotGmicQtAgain()));
+    KisAction *action = createAction("QMic");
+    connect(action,  SIGNAL(triggered()), this, SLOT(slotQMic()));
+
+    action = createAction("QMicAgain");
+    connect(action,  SIGNAL(triggered()), this, SLOT(slotQMicAgain()));
 }
 
-GmicQt::~GmicQt()
+QMic::~QMic()
 {
     delete m_localServer;
 }
 
-void GmicQt::slotGmicQtAgain()
+void QMic::slotQMicAgain()
 {
-    slotGmicQt(true);
+    slotQMic(true);
 }
 
-void GmicQt::slotGmicQt(bool again)
+void QMic::slotQMic(bool again)
 {
     m_localServer = new QLocalServer();
     m_localServer->listen("krita-gmic");
@@ -59,20 +70,24 @@ void GmicQt::slotGmicQt(bool again)
 
     // find the krita-gmic-qt plugin
     KisConfig cfg;
-    QString pluginPath = cfg.gmicQtPluginPath();
+    QString pluginPath = cfg.readEntry<QString>("gmic_qt_plugin_path", QString::null);
+
+    if (pluginPath.isEmpty() || !QFileInfo(pluginPath).exists()) {
+        QMessageBox::warning(0, i18nc("@title:window", "Krita"), i18n("Please download the gmic-qt plugin for Krita from <a href=\"http://gmic.eu/\">G'MIC.eu</a>."));
+        return;
+    }
 
     // start the plugin
-    if (QFileInfo(pluginPath).exists()) {
-        int retval = QProcess::execute(pluginPath + " "
-                                       + QUuid::createUuid().toString()
-                                       + (again ? " reapply" : QString::null));
-        qDebug() << retval;
-    }
+    int retval = QProcess::execute(pluginPath + " "
+                                   + QUuid::createUuid().toString()
+                                   + (again ? QString(" reapply") : QString::null));
+    qDebug() << retval;
+
 }
 
-void GmicQt::connected()
+void QMic::connected()
 {
-    QLocalSocke *socket = server->nextPendingConnection();
+    QLocalSocket *socket = m_localServer->nextPendingConnection();
     if (!socket) { return; }
 
     while (socket->bytesAvailable() < static_cast<int>(sizeof(quint32))) {
@@ -109,7 +124,7 @@ void GmicQt::connected()
 
     // Check the message: we can get three different ones
     QMap<QByteArray, QByteArray> messageMap;
-    Q_FOREACH(QByteArray line, message.split("\n")) {
+    Q_FOREACH(QByteArray line, message.split('\n')) {
         QList<QByteArray> kv = line.split('=');
         if (kv.size() == 2) {
             messageMap[kv[0]] = kv[1];
@@ -125,21 +140,21 @@ void GmicQt::connected()
     else if (message.startsWith("gmic_qt_get_cropped_images")) {
         // Parse the message, create the shared memory segments, and create a new message to send back and waid for ack
         QByteArray ba;
-        QDataStream ds(&socket);
+        QDataStream ds(socket);
         ds.writeBytes(ba.constData(), ba.length());
-        bool r = socket.waitForBytesWritten();
+        bool r = socket->waitForBytesWritten();
 
-        r &= socket.waitForReadyRead(timeout); // wait for ack
-        r &= (socket.read(qstrlen(ack)) == ack);
+        r &= socket->waitForReadyRead(); // wait for ack
+        r &= (socket->read(qstrlen(ack)) == ack);
 
     }
     else if (message.startsWith("gmic_qt_output_images")) {
         // Parse the message. read the shared memory segments, fix up the current image and send an ack
-        socket.write(ack, qstrlen(ack));
-        socket.waitForBytesWritten(1000);
+        socket->write(ack, qstrlen(ack));
+        socket->waitForBytesWritten(1000);
 
     }
-    socket.disconnectFromServer();
+    socket->disconnectFromServer();
     m_localServer->close();
     delete m_localServer;
     m_localServer = 0;
@@ -147,4 +162,4 @@ void GmicQt::connected()
 }
 
 
-#include "gmic-qt.moc"
+#include "QMic.moc"

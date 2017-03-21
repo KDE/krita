@@ -16,26 +16,26 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef GmicQt_H
-#define GmicQt_H
+#ifndef QMIC_H
+#define QMIC_H
 
 #include <QVariant>
 #include <kis_view_plugin.h>
 #include <QLocalServer>
 
-class GmicQt : public KisViewPlugin
+class QMic : public KisViewPlugin
 {
     Q_OBJECT
 public:
-    GmicQt(QObject *parent, const QVariantList &);
-    virtual ~GmicQt();
+    QMic(QObject *parent, const QVariantList &);
+    virtual ~QMic();
 
 private Q_SLOTS:
-    void slotGmicQtAgain();
-    void slotGmicQt(bool again = false);
+    void slotQMicAgain();
+    void slotQMic(bool again = false);
     void connected();
 private:
     QLocalServer *m_localServer {0};
 };
 
-#endif // GmicQt_H
+#endif // QMic_H

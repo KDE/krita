@@ -43,10 +43,6 @@ protected:
     void visitNodeWithPaintDevice(KisNode *node, KisUndoAdapter *undoAdapter);
     void visitExternalLayer(KisExternalLayer *layer, KisUndoAdapter *undoAdapter){ Q_UNUSED(layer); Q_UNUSED(undoAdapter); }
     void visitColorizeMask(KisColorizeMask *mask, KisUndoAdapter *undoAdapter) { Q_UNUSED(mask); Q_UNUSED(undoAdapter); }
-
-private:
-    void convertToGmicImageOpti(KisPaintDeviceSP dev, gmic_image<float>& gmicImage);
-    void init();
 private:
 
     KisNodeListSP m_nodes;

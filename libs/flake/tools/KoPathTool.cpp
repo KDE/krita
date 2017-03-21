@@ -248,15 +248,21 @@ void KoPathTool::pointTypeChanged(QAction *type)
 void KoPathTool::insertPoints()
 {
     Q_D(KoToolBase);
-    if (m_pointSelection.size() > 1) {
-        QList<KoPathPointData> segments(m_pointSelection.selectedSegmentsData());
-        if (!segments.isEmpty()) {
-            KoPathPointInsertCommand *cmd = new KoPathPointInsertCommand(segments, 0.5);
-            d->canvas->addCommand(cmd);
+    QList<KoPathPointData> segments(m_pointSelection.selectedSegmentsData());
+    if (segments.size() == 1) {
+        qreal positionInSegment = 0.5;
+        if (m_activeSegment && m_activeSegment->isValid()) {
+            positionInSegment = m_activeSegment->positionOnSegment;
+        }
 
-            foreach (KoPathPoint * p, cmd->insertedPoints()) {
-                m_pointSelection.add(p, false);
-            }
+        KoPathPointInsertCommand *cmd = new KoPathPointInsertCommand(segments, positionInSegment);
+        d->canvas->addCommand(cmd);
+
+        // TODO: this construction is dangerous. The canvas can remove the command right after
+        //       it has been added to it!
+        m_pointSelection.clear();
+        foreach (KoPathPoint * p, cmd->insertedPoints()) {
+            m_pointSelection.add(p, false);
         }
     }
 }
@@ -541,8 +547,15 @@ void KoPathTool::mousePressEvent(KoPointerEvent *event)
 
             // check if we hit a path segment
             if (m_activeSegment && m_activeSegment->isValid()) {
-                KoPathPointIndex index = m_activeSegment->path->pathPointIndex(m_activeSegment->segmentStart);
-                KoPathPointData data(m_activeSegment->path, index);
+
+                KoPathShape *shape = m_activeSegment->path;
+                KoPathPointIndex index = shape->pathPointIndex(m_activeSegment->segmentStart);
+                KoPathSegment segment = shape->segmentByIndex(index);
+
+                m_pointSelection.add(segment.first(), !(event->modifiers() & Qt::ShiftModifier));
+                m_pointSelection.add(segment.second(), false);
+
+                KoPathPointData data(shape, index);
                 m_currentStrategy = new KoPathSegmentChangeStrategy(this, event->point, data, m_activeSegment->positionOnSegment);
                 event->accept();
             } else {
@@ -1127,6 +1140,18 @@ void addActionsGroupIfEnabled(QMenu *menu, QAction *a1, QAction *a2, QAction *a3
 
 QMenu *KoPathTool::popupActionsMenu()
 {
+    if (m_activeHandle) {
+        m_activeHandle->trySelectHandle();
+    }
+
+    if (m_activeSegment && m_activeSegment->isValid()) {
+        KoPathShape *shape = m_activeSegment->path;
+        KoPathSegment segment = shape->segmentByIndex(shape->pathPointIndex(m_activeSegment->segmentStart));
+
+        m_pointSelection.add(segment.first(), true);
+        m_pointSelection.add(segment.second(), false);
+    }
+
     if (m_contextMenu) {
         m_contextMenu->clear();
 

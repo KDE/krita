@@ -49,6 +49,8 @@ public:
     // test if handle is still valid
     virtual bool check(const QList<KoPathShape*> &selectedShapes) = 0;
 
+    virtual void trySelectHandle() {};
+
 protected:
     uint handleRadius() const;
     KoPathTool *m_tool;
@@ -64,6 +66,7 @@ public:
     virtual bool check(const QList<KoPathShape*> &selectedShapes);
     KoPathPoint *activePoint() const;
     KoPathPoint::PointType activePointType() const;
+    void trySelectHandle() override;
 private:
     KoPathPoint *m_activePoint;
     KoPathPoint::PointType m_activePointType;

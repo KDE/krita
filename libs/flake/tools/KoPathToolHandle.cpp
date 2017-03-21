@@ -153,6 +153,16 @@ KoPathPoint::PointType PointHandle::activePointType() const
     return m_activePointType;
 }
 
+void PointHandle::trySelectHandle()
+{
+    KoPathToolSelection * selection = dynamic_cast<KoPathToolSelection*>(m_tool->selection());
+
+    if (!selection->contains(m_activePoint) && m_activePointType == KoPathPoint::Node) {
+        selection->clear();
+        selection->add(m_activePoint, false);
+    }
+}
+
 ParameterHandle::ParameterHandle(KoPathTool *tool, KoParameterShape *parameterShape, int handleId)
         : KoPathToolHandle(tool)
         , m_parameterShape(parameterShape)

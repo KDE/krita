@@ -33,6 +33,8 @@
 #include "kundo2magicstring.h"
 
 #include "KoProperties.h"
+#include "KoColorSpaceRegistry.h"
+
 #include "kis_node_manager.h"
 
 #include "kis_tool_smart_patch_options_widget.h"
@@ -40,10 +42,14 @@
 
 #include "kis_resources_snapshot.h"
 
+
+void patchImage(KisPaintDeviceSP imageDev, KisPaintDeviceSP maskDev, int radius);
+
 struct KisToolSmartPatch::Private
 {
     KisNodeSP maskNode = nullptr;
     KisNodeSP paintNode = nullptr;
+    KisPaintDeviceSP imageDev = nullptr;
     KisPaintDeviceSP maskDev = nullptr;
     KisResourcesSnapshotSP resources = nullptr;
     KoColor currentFgColor;
@@ -90,10 +96,10 @@ void KisToolSmartPatch::activatePrimaryAction()
 {
     KisToolFreehand::activatePrimaryAction();
 
-    if (!canCreateInpaintMask()) {
-        QString message = i18n("Smart patch tool cannot paint on this layer.  Please select a paint layer.");
-        static_cast<KisCanvas2*>(canvas())->viewManager()->showFloatingMessage(message, koIcon("object-locked"));
-    }
+//    if (!canCreateInpaintMask()) {
+//        QString message = i18n("Smart patch tool cannot paint on this layer.  Please select a paint layer.");
+//        static_cast<KisCanvas2*>(canvas())->viewManager()->showFloatingMessage(message, koIcon("object-locked"));
+//    }
 }
 
 void KisToolSmartPatch::deactivatePrimaryAction()
@@ -116,6 +122,7 @@ void KisToolSmartPatch::beginPrimaryAction(KoPointerEvent *event)
     } else {
 
         m_d->paintNode = viewManager->nodeManager()->activeNode();
+        m_d->imageDev = m_d->paintNode->paintDevice();
         viewManager->nodeManager()->createNode("KisInpaintMask", true);
         m_d->maskNode = currentNode();
 
@@ -130,7 +137,7 @@ void KisToolSmartPatch::beginPrimaryAction(KoPointerEvent *event)
         qDebug() << __FUNCTION__ << " 3";
 
         m_d->currentFgColor = canvas()->resourceManager()->foregroundColor(); //resource(KoCanvasResourceManager::ForegroundColor).value<KoColor>();
-        canvas()->resourceManager()->setForegroundColor(KoColor(Qt::gray, image()->colorSpace())); //maybe we should use alpha color space here
+        canvas()->resourceManager()->setForegroundColor(KoColor(Qt::black, KoColorSpaceRegistry::instance()->alpha8())); //maybe we should use alpha color space here
     }
 }
 
@@ -158,7 +165,9 @@ void KisToolSmartPatch::endPrimaryAction(KoPointerEvent *event)
     m_d->maskDev = new KisPaintDevice(currentNode()->paintDevice()->colorSpace());
     m_d->maskDev->makeCloneFrom(currentNode()->paintDevice(), currentNode()->paintDevice()->extent());
 
-    KIS_DUMP_DEVICE_2(currentNode()->paintDevice(), currentNode()->paintDevice()->extent(), "output", "/home/eugening/Projects/Out");
+    patchImage( m_d->imageDev, m_d->maskDev, 4 );
+    KIS_DUMP_DEVICE_2(m_d->imageDev, m_d->imageDev->extent(), "patched", "/home/eugening/Projects/Out");
+    KIS_DUMP_DEVICE_2(m_d->maskDev, m_d->imageDev->extent(), "output", "/home/eugening/Projects/Out");
 
     KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
     KisViewManager* viewManager = kiscanvas->viewManager();
@@ -168,6 +177,7 @@ void KisToolSmartPatch::endPrimaryAction(KoPointerEvent *event)
         viewManager->nodeManager()->slotNonUiActivatedNode( m_d->paintNode );
     m_d->paintNode = nullptr;
     m_d->maskNode = nullptr;
+
     canvas()->resourceManager()->setForegroundColor(m_d->currentFgColor);
 
     qDebug() << __FUNCTION__ << " 3";

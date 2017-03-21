@@ -54,7 +54,7 @@ QRect KisInpaintMask::decorateRect(KisPaintDeviceSP &src,
 
     if (src != dst) {
         KisPainter::copyAreaOptimized(rc.topLeft(), src, dst, rc);
-        src->fill(rc, KoColor(Qt::darkMagenta, src->colorSpace()));
+        src->fill(rc, KoColor(Qt::black, src->colorSpace()));
     }
 
     return rc;

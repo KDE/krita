@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2016 Eugene Ingerman
+ *  Copyright (c) 2017 Eugene Ingerman
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -33,12 +33,9 @@
 
 #include "kis_paint_device.h"
 
-#include "kis_clone_test.h"
 #include "kis_debug.h"
 #include "kis_paint_device_debug_utils.h"
 #include "kis_random_accessor_ng.h"
-
-#include <QTest>
 
 #include <QList>
 #include <kis_transform_worker.h>
@@ -48,22 +45,22 @@
 #include "KoChannelInfo.h"
 #include "KoMixColorsOp.h"
 #include "KoColorModelStandardIds.h"
+#include "KoColorSpaceRegistry.h"
 
 #include <KisPart.h>
 #include <kis_group_layer.h>
-#include <qimage_based_test.h>
-#include <stroke_testing_utils.h>
+
 #include <brushengine/kis_paint_information.h>
 #include <kis_canvas_resource_provider.h>
 #include <brushengine/kis_paintop_preset.h>
 #include <brushengine/kis_paintop_settings.h>
 
 
-
-
 const int MAX_DIST = 65535;
 const quint8 MASK_SET = 0;
 const quint8 MASK_CLEAR = 255;
+
+void patchImage(KisPaintDeviceSP, KisPaintDeviceSP, int radius);
 
 
 class ImageView
@@ -381,14 +378,14 @@ public:
     int countMasked(void)
     {
         int count = std::count_if(maskData.data(), maskData.data() + maskData.num_elements(), [](quint8 v) {
-            return v < MASK_CLEAR; //((MASK_SET + MASK_CLEAR / 2));
+            return v < MASK_CLEAR;
         });
         return count;
     }
 
     inline bool isMasked(int x, int y)
     {
-        return (*maskData(x, y) < MASK_CLEAR); // ((MASK_SET + MASK_CLEAR) / 2));
+        return (*maskData(x, y) < MASK_CLEAR);
     }
 
     //returns true if the patch contains a masked pixel
@@ -409,11 +406,6 @@ public:
         }
         return false;
     }
-
-//    const quint8* getImagePixel(int x, int y) {
-//        KisRandomConstAccessorSP it = imageDev->createRandomConstAccessorNG(x, y);
-//        return it->oldRawData(); //is this Ok to do?
-//    }
 
     inline quint8 getImagePixelU8(int x, int y, int chan) const
     {
@@ -763,16 +755,7 @@ public:
     MaskedImageSP patch_simple(void);
 };
 
-class TestClone : public TestUtil::QImageBasedTest
-{
-public:
-    TestClone() : QImageBasedTest("clonetest") {}
-    virtual ~TestClone() {}
-    void test();
-    void testPatchMatch();
-private:
-    MaskedImageSP patchImage(KisPaintDeviceSP, KisPaintDeviceSP, int radius);
-};
+
 
 MaskedImageSP Inpaint::patch()
 {
@@ -817,7 +800,7 @@ MaskedImageSP Inpaint::patch()
 
         //Build an upscaled target by EM-like algorithm (see "PatchMatch" - page 6)
         target = NearestNeighborField::ExpectationMaximization(nnf_TargetToSource, level, radius, pyramid);
-        //target->DebugDump( "target" );
+        target->DebugDump( "target" );
     }
     return target;
 }
@@ -971,157 +954,13 @@ void NearestNeighborField::ExpectationStep(NearestNeighborFieldSP nnf, MaskedIma
 }
 
 
-MaskedImageSP TestClone::patchImage(KisPaintDeviceSP dev, KisPaintDeviceSP devMask, int radius)
+
+void patchImage(KisPaintDeviceSP imageDev, KisPaintDeviceSP maskDev, int radius)
 {
+    Inpaint inpaint(imageDev, maskDev, radius);
+    MaskedImageSP output = inpaint.patch();
 
-    Inpaint inpaint(dev, devMask, radius);
-    //return inpaint.patch_simple();
-
-    return inpaint.patch();
-}
-
-void TestClone::testPatchMatch()
-{
-    KisDocument *doc = KisPart::instance()->createDocument();
-
-    //doc->loadNativeFormat("/home/eugening/Projects/patch-inpainting/bungee.kra");
-    doc->loadNativeFormat("/home/eugening/Projects/patch-inpainting/Yosemite_Winter_crop.kra");
-    //doc->loadNativeFormat("/home/eugening/Projects/patch-inpainting/Yosemite_Winter.kra");
-
-    KisImageSP image = doc->image();
-    image->lock();
-
-    KisGroupLayerSP groupLayer = image->rootLayer();
-    QObjectList children = groupLayer->children();
-
-    KisNodeSP node = image->root()->firstChild();
-    KisPaintDeviceSP mainDev = node->paintDevice();
-    const KoColorSpace* mainCS = mainDev->colorSpace();
-
-    KisNodeSP maskNode = node->firstChild();
-    KisPaintDeviceSP maskDev = maskNode->paintDevice();
-
-    const KoColorSpace* maskCS = maskDev->colorSpace();
-
-    QRect rect = mainDev->exactBounds();
-
-
-//    KIS_DUMP_DEVICE_2(mainDev, rect, "maindev", "/home/eugening/Projects/img");
-//    KIS_DUMP_DEVICE_2(maskDev, rect, "maskdev", "/home/eugening/Projects/img");
-
-    MaskedImageSP output = patchImage(mainDev, maskDev, 4);
-    if (!output.isNull()) {
-        output->toPaintDevice(mainDev);
-        KIS_DUMP_DEVICE_2(mainDev, output->size(), "output", "/home/eugening/Projects/Out");
-    }
-    delete doc;
+    output->toPaintDevice( imageDev );
 }
 
 
-void TestClone::test(void)
-{
-    KisSurrogateUndoStore *undoStore = new KisSurrogateUndoStore();
-
-    KisImageSP image = createImage(undoStore);
-    KisDocument *doc = KisPart::instance()->createDocument();
-    doc->setCurrentImage(image);
-
-    image->initialRefreshGraph();
-
-    KisLayerSP layer = new KisPaintLayer(image, "clone", OPACITY_OPAQUE_U8, image->colorSpace());
-    image->addNode(layer, image->root());
-
-    KisPaintDeviceSP dev = layer->paintDevice(); //chld->paintDevice(); //
-    KisPainter painter(dev);
-
-    delete doc;
-}
-
-void KisCloneOpTest::testClone()
-{
-    TestClone t;
-    //DebugSaver::instance()->openDebugFile("/home/eugening/Projects/debug.h5");
-    //t.test();
-    /*QBENCHMARK*/{
-        t.testPatchMatch();
-    }
-}
-
-
-void KisCloneOpTest::testProjection()
-{
-    KisDocument *doc = KisPart::instance()->createDocument();
-    doc->loadNativeFormat("/home/eugening/Pictures/Krita_Test/Img_20M_3Layer.kra");
-//    KisPaintDeviceSP pd = nullptr;
-
-    doc->image()->refreshGraph();
-//    QBENCHMARK_ONCE{
-//        doc->image()->refreshGraph();
-//    }
-//    QBENCHMARK_ONCE{
-//        pd = doc->image()->projection();
-//    }
-
-    //KIS_DUMP_DEVICE_2(proj,proj->exactBounds(),"Img20M","/home/eugening/Projects/Img20M");
-    delete doc;
-}
-
-QTEST_MAIN(KisCloneOpTest)
-
-
-
-
-//#if 1
-//#include "hdf5.h"
-//#include "hdf5_hl.h"
-//#endif
-//class DebugSaver {
-//    QString fname;
-//    hid_t file_id;
-//    int counter;
-
-//public:
-//    static DebugSaver* instance();
-
-//    DebugSaver() : counter(0) {};
-
-//    ~DebugSaver() {
-//        if( file_id != -1 )
-//            H5Fclose(file_id);
-//    }
-
-//    void openDebugFile( QString fname ){
-//        file_id = H5Fcreate(fname.toStdString().c_str(), H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT);
-//    }
-
-//    template< typename T> void debugDumpField( QString dset, const T& field )
-//    {
-//        if( file_id == -1 )
-//            return;
-
-//        QString dset_name = QString("/") + QString::number(counter);
-
-//        hsize_t dims[] = {field.shape()[0], field.shape()[1], 3}; //x,y,distance
-//        H5LTmake_dataset(file_id, dset_name.toStdString().c_str(), 3, dims, H5T_NATIVE_INT, (void*)field.data());
-//        H5LTset_attribute_string (file_id, dset_name.toStdString().c_str(), "name", dset.toStdString().c_str());
-
-//        counter++;
-//    }
-
-//    template< typename T> void debugDumpHistogram(QString dset, const T& histogram)
-//    {
-
-//        if( file_id == -1 )
-//            return;
-
-//        QString dset_name = QString("/") + QString::number(counter);
-//        H5LTmake_dataset(file_id, dset_name.toStdString().c_str(), histogram.num_dimensions(), (const hsize_t*)histogram.shape(), H5T_NATIVE_FLOAT, (void*)histogram.data());
-//        H5LTset_attribute_string (file_id, dset_name.toStdString().c_str(), "name", dset.toStdString().c_str());
-
-//        counter++;
-//    }
-//};
-
-//Q_GLOBAL_STATIC(DebugSaver, s_instance)
-
-//DebugSaver* DebugSaver::instance(){ return s_instance; }

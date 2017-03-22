@@ -21,7 +21,9 @@
 
 class QIcon;
 
-class PluginSettings : public KisPreferenceSet
+#include "ui_WdgQMicSettings.h"
+
+class PluginSettings : public KisPreferenceSet, public Ui::WdgQMicSettings
 {
     Q_OBJECT
 public:

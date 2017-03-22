@@ -17,23 +17,27 @@
 #include "PluginSettings.h"
 
 #include <QVBoxLayout>
-#include <QDialogButtonBox>
-#include <QPushButton>
+#include <QStandardPaths>
 
 #include <kconfiggroup.h>
 #include <klocalizedstring.h>
 
 #include <KoIcon.h>
 
+#include <kis_file_name_requester.h>
 #include "kis_config.h"
 
 PluginSettings::PluginSettings(QWidget *parent)
     : KisPreferenceSet(parent)
 {
+    setupUi(this);
+    fileRequester->setFileName(KisConfig().readEntry<QString>("gmic_qt_plugin_path"));
+    fileRequester->setStartDir(QStandardPaths::writableLocation(QStandardPaths::HomeLocation));
 }
 
 PluginSettings::~PluginSettings()
 {
+    KisConfig().writeEntry<QString>("gmic_qt_plugin_path", fileRequester->fileName());
 }
 
 QString PluginSettings::id()
@@ -60,13 +64,16 @@ QIcon PluginSettings::icon()
 
 void PluginSettings::savePreferences() const
 {
+    KisConfig().writeEntry<QString>("gmic_qt_plugin_path", fileRequester->fileName());
     Q_EMIT(settingsChanged());
 }
 
 void PluginSettings::loadPreferences()
 {
+    fileRequester->setFileName(KisConfig().readEntry<QString>("gmic_qt_plugin_path"));
 }
 
 void PluginSettings::loadDefaultPreferences()
 {
+    fileRequester->setFileName("");
 }

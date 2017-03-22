@@ -38,6 +38,7 @@ private Q_SLOTS:
     void slotQMicAgain();
     void slotQMic(bool again = false);
     void connected();
+    void pluginStateChanged(QProcess::ProcessState);
     void pluginFinished(int exitCode, QProcess::ExitStatus exitStatus);
 private:
     QProcess *m_pluginProcess {0};

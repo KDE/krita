@@ -18,6 +18,7 @@
 
 #include "QMic.h"
 
+#include <QApplication>
 #include <QDebug>
 #include <QFileInfo>
 #include <QLocalSocket>
@@ -73,7 +74,7 @@ void QMic::slotQMic(bool again)
     m_againAction->setEnabled(false);
 
     if (m_pluginProcess) {
-        qDebug() << "Plugin is already started";
+        qDebug() << "Plugin is already started" << m_pluginProcess->state();
         return;
     }
 
@@ -102,7 +103,14 @@ void QMic::slotQMic(bool again)
     connect(m_localServer, SIGNAL(newConnection()), SLOT(connected()));
     m_pluginProcess = new QProcess(this);
     connect(m_pluginProcess, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(pluginFinished(int,QProcess::ExitStatus)));
-    m_pluginProcess->startDetached(pluginPath, QStringList() << m_key << (again ? QString(" reapply") : QString::null));
+    connect(m_pluginProcess, SIGNAL(stateChanged(QProcess::ProcessState)), this, SLOT(pluginStateChanged(QProcess::ProcessState)));
+    m_pluginProcess->start(pluginPath, QStringList() << m_key << (again ? QString(" reapply") : QString::null));
+
+    bool r = m_pluginProcess->waitForStarted();
+    while (m_pluginProcess->waitForFinished(10)) {
+        qApp->processEvents();
+    }
+    qDebug() << "Plugin started" << r << m_pluginProcess->state();
 }
 
 void QMic::connected()
@@ -192,6 +200,11 @@ void QMic::connected()
     r &= (socket->read(qstrlen(ack)) == ack);
     socket->waitForDisconnected(-1);
 
+}
+
+void QMic::pluginStateChanged(QProcess::ProcessState state)
+{
+    qDebug() << "stateChanged" << state;
 }
 
 void QMic::pluginFinished(int exitCode, QProcess::ExitStatus exitStatus)

@@ -19,9 +19,13 @@
 #ifndef QMIC_H
 #define QMIC_H
 
+#include <QProcess>
 #include <QVariant>
+
 #include <kis_view_plugin.h>
-#include <QLocalServer>
+
+class KisAction;
+class QLocalServer;
 
 class QMic : public KisViewPlugin
 {
@@ -34,8 +38,13 @@ private Q_SLOTS:
     void slotQMicAgain();
     void slotQMic(bool again = false);
     void connected();
+    void pluginFinished(int exitCode, QProcess::ExitStatus exitStatus);
 private:
+    QProcess *m_pluginProcess {0};
     QLocalServer *m_localServer {0};
+    QString m_key;
+    KisAction *m_qmicAction {0};
+    KisAction *m_againAction {0};
 };
 
 #endif // QMic_H

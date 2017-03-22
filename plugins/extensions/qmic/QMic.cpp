@@ -22,15 +22,20 @@
 #include <QFileInfo>
 #include <QLocalSocket>
 #include <QProcess>
-#include <QMessageBox>
+#include <QLocalServer>
+#include <QVBoxLayout>
 #include <QUuid>
 
 #include <klocalizedstring.h>
 #include <kpluginfactory.h>
 
+#include <KoDialog.h>
+
+#include <KisViewManager.h>
 #include <kis_action.h>
 #include <kis_config.h>
 #include <kis_preference_set_registry.h>
+#include <kis_image.h>
 
 #include <PluginSettings.h>
 
@@ -45,11 +50,11 @@ QMic::QMic(QObject *parent, const QVariantList &)
     PluginSettingsFactory* settingsFactory = new PluginSettingsFactory();
     preferenceSetRegistry->add("QMicPluginSettingsFactory", settingsFactory);
 
-    KisAction *action = createAction("QMic");
-    connect(action,  SIGNAL(triggered()), this, SLOT(slotQMic()));
+    m_qmicAction = createAction("QMic");
+    connect(m_qmicAction ,  SIGNAL(triggered()), this, SLOT(slotQMic()));
 
-    action = createAction("QMicAgain");
-    connect(action,  SIGNAL(triggered()), this, SLOT(slotQMicAgain()));
+    m_againAction = createAction("QMicAgain");
+    connect(m_againAction,  SIGNAL(triggered()), this, SLOT(slotQMicAgain()));
 }
 
 QMic::~QMic()
@@ -64,42 +69,57 @@ void QMic::slotQMicAgain()
 
 void QMic::slotQMic(bool again)
 {
-    m_localServer = new QLocalServer();
-    m_localServer->listen("krita-gmic");
-    connect(m_localServer, SIGNAL(newConnection()), SLOT(connected()));
+    m_qmicAction->setEnabled(false);
+    m_againAction->setEnabled(false);
+
+    if (m_pluginProcess) {
+        qDebug() << "Plugin is already started";
+        return;
+    }
 
     // find the krita-gmic-qt plugin
     KisConfig cfg;
     QString pluginPath = cfg.readEntry<QString>("gmic_qt_plugin_path", QString::null);
 
     if (pluginPath.isEmpty() || !QFileInfo(pluginPath).exists()) {
-        QMessageBox::warning(0, i18nc("@title:window", "Krita"), i18n("Please download the gmic-qt plugin for Krita from <a href=\"http://gmic.eu/\">G'MIC.eu</a>."));
-        return;
+        KoDialog dlg;
+        dlg.setWindowTitle(i18nc("@title:Window", "Krita"));
+        QWidget *w = new QWidget(&dlg);
+        dlg.setMainWidget(w);
+        QVBoxLayout *l = new QVBoxLayout(w);
+        l->addWidget(new PluginSettings(w));
+        dlg.setButtons(KoDialog::Ok);
+        dlg.exec();
+        pluginPath = cfg.readEntry<QString>("gmic_qt_plugin_path", QString::null);
+        if (pluginPath.isEmpty() || !QFileInfo(pluginPath).exists()) {
+            return;
+        }
     }
 
-    // start the plugin
-    int retval = QProcess::execute(pluginPath + " "
-                                   + QUuid::createUuid().toString()
-                                   + (again ? QString(" reapply") : QString::null));
-    qDebug() << retval;
-
+    m_key = QUuid::createUuid().toString();
+    m_localServer = new QLocalServer();
+    m_localServer->listen(m_key);
+    connect(m_localServer, SIGNAL(newConnection()), SLOT(connected()));
+    m_pluginProcess = new QProcess(this);
+    connect(m_pluginProcess, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(pluginFinished(int,QProcess::ExitStatus)));
+    m_pluginProcess->startDetached(pluginPath, QStringList() << m_key << (again ? QString(" reapply") : QString::null));
 }
 
 void QMic::connected()
 {
+    qDebug() << "connected";
+
     QLocalSocket *socket = m_localServer->nextPendingConnection();
     if (!socket) { return; }
 
     while (socket->bytesAvailable() < static_cast<int>(sizeof(quint32))) {
         if (!socket->isValid()) { // stale request
-            m_localServer->close();
-            delete m_localServer;
-            m_localServer = 0;
             return;
         }
         socket->waitForReadyRead(1000);
     }
     QDataStream ds(socket);
+
     QByteArray message;
     quint32 remaining;
     ds >> remaining;
@@ -122,6 +142,8 @@ void QMic::connected()
         return;
     }
 
+    qDebug() << "Received" << QString::fromLatin1(message);
+
     // Check the message: we can get three different ones
     QMap<QByteArray, QByteArray> messageMap;
     Q_FOREACH(QByteArray line, message.split('\n')) {
@@ -134,31 +156,53 @@ void QMic::connected()
         }
     }
 
-    if (message.startsWith("")) {
-
+    if (!messageMap.contains("command")) {
+        qWarning() << "Message did not contain a command";
+        return;
     }
-    else if (message.startsWith("gmic_qt_get_cropped_images")) {
+
+
+    int mode = 0;
+    if (messageMap.contains("mode")) {
+        mode = messageMap["mode"].toInt();
+    }
+
+    QByteArray ba;
+
+    if (messageMap["command"] == "gmic_qt_get_image_size") {
+        ba = QByteArray::number(m_view->image()->width()) + "," + QByteArray::number(m_view->image()->height());
+    }
+    else if (messageMap["command"] == "gmic_qt_get_cropped_images") {
         // Parse the message, create the shared memory segments, and create a new message to send back and waid for ack
-        QByteArray ba;
-        QDataStream ds(socket);
-        ds.writeBytes(ba.constData(), ba.length());
-        bool r = socket->waitForBytesWritten();
-
-        r &= socket->waitForReadyRead(); // wait for ack
-        r &= (socket->read(qstrlen(ack)) == ack);
 
     }
-    else if (message.startsWith("gmic_qt_output_images")) {
+    else if (messageMap["command"] == "gmic_qt_output_images") {
         // Parse the message. read the shared memory segments, fix up the current image and send an ack
-        socket->write(ack, qstrlen(ack));
-        socket->waitForBytesWritten(1000);
 
     }
-    socket->disconnectFromServer();
-    m_localServer->close();
+    else {
+        qWarning() << "Received unknown command" << messageMap["command"];
+    }
+
+    ds.writeBytes(ba.constData(), ba.length());
+
+    // Wait for the ack
+    bool r;
+    r &= socket->waitForReadyRead(); // wait for ack
+    r &= (socket->read(qstrlen(ack)) == ack);
+    socket->waitForDisconnected(-1);
+
+}
+
+void QMic::pluginFinished(int exitCode, QProcess::ExitStatus exitStatus)
+{
+    qDebug() << "pluginFinished" << exitCode << exitStatus;
+    delete m_pluginProcess;
+    m_pluginProcess = 0;
     delete m_localServer;
     m_localServer = 0;
-
+    m_qmicAction->setEnabled(true);
+    m_againAction->setEnabled(true);
 }
 
 

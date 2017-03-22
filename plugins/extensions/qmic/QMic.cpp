@@ -191,6 +191,7 @@ void QMic::connected()
             cropRect.setY(cr[1].toInt());
             cropRect.setWidth(cr[2].toInt());
             cropRect.setHeight(cr[3].toInt());
+        }
     }
     else if (messageMap["command"] == "gmic_qt_output_images") {
         // Parse the message. read the shared memory segments, fix up the current image and send an ack

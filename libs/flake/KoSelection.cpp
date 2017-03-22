@@ -243,7 +243,12 @@ void KoSelection::notifyShapeChanged(KoShape::ChangeType type, KoShape *shape)
     Q_UNUSED(shape);
     Q_D(KoSelection);
 
-    if (type >= KoShape::PositionChanged && type <= KoShape::GenericMatrixChange) {
+    if (type == KoShape::Deleted) {
+        deselect(shape);
+        // HACK ALERT: the caller will also remove the listener, so re-add it here
+        shape->addShapeChangeListener(this);
+
+    } else if (type >= KoShape::PositionChanged && type <= KoShape::GenericMatrixChange) {
         QList<QTransform> matrices = d->fetchShapesMatrices();
 
         QTransform newTransform;

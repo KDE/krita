@@ -27,6 +27,7 @@
 
 class KoShapeBasedDocumentBase;
 class KoPathShape;
+class KoPathPointData;
 
 /// The undo / redo command for combining two or more paths into one
 class KRITAFLAKE_EXPORT KoPathCombineCommand : public KUndo2Command
@@ -44,6 +45,9 @@ public:
     void redo();
     /// revert the actions done in redo
     void undo();
+
+    KoPathShape *combinedPath() const;
+    KoPathPointData originalToCombined(KoPathPointData pd) const;
 
 private:
     class Private;

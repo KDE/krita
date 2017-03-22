@@ -47,6 +47,7 @@ private Q_SLOTS:
 
 private:
     QPointer<QMenu> m_menu;
+    bool m_requestedWithStylus;
 };
 
 #endif // KIS_SHOW_PALETTE_ACTION_H

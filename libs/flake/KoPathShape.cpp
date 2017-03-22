@@ -1240,13 +1240,11 @@ bool KoPathShape::addSubpath(KoSubpath * subpath, int subpathIndex)
 
     return true;
 }
-
-bool KoPathShape::combine(KoPathShape *path)
+int KoPathShape::combine(KoPathShape *path)
 {
     Q_D(KoPathShape);
-
-    if (! path)
-        return false;
+    int insertSegmentPosition = -1;
+    if (!path) return insertSegmentPosition;
 
     QTransform pathMatrix = path->absoluteTransformation(0);
     QTransform myMatrix = absoluteTransformation(0).inverted();
@@ -1261,9 +1259,13 @@ bool KoPathShape::combine(KoPathShape *path)
             newSubpath->append(newPoint);
         }
         d->subpaths.append(newSubpath);
+
+        if (insertSegmentPosition < 0) {
+            insertSegmentPosition = d->subpaths.size() - 1;
+        }
     }
     normalize();
-    return true;
+    return insertSegmentPosition;
 }
 
 bool KoPathShape::separate(QList<KoPathShape*> & separatedPaths)

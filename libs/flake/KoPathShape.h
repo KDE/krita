@@ -414,9 +414,9 @@ public:
     /**
      * @brief Combines two path shapes by appending the data of the specified path.
      * @param path the path to combine with
-     * @return true if combining was successful, else false
+     * @return index of the first segment inserted or -1 on failure
      */
-    bool combine(KoPathShape *path);
+    int combine(KoPathShape *path);
 
     /**
      * @brief Creates separate path shapes, one for each existing subpath.

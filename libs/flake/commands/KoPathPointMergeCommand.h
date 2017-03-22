@@ -47,6 +47,8 @@ public:
     /// revert the actions done in redo
     void undo();
 
+    KoPathPointData mergedPointData() const;
+
 private:
 
     class Private;

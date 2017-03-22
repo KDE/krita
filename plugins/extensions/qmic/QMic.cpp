@@ -169,7 +169,6 @@ void QMic::connected()
         return;
     }
 
-
     int mode = 0;
     if (messageMap.contains("mode")) {
         mode = messageMap["mode"].toInt();
@@ -182,10 +181,20 @@ void QMic::connected()
     }
     else if (messageMap["command"] == "gmic_qt_get_cropped_images") {
         // Parse the message, create the shared memory segments, and create a new message to send back and waid for ack
-
+        QRect cropRect = m_view->image()->bounds();
+        if (!messageMap.contains("croprect") || !messageMap["croprect"].split(',').size() == 4) {
+            qWarning() << "gmic-qt didn't send a croprect or not a valid croprect";
+        }
+        else {
+            QList<QByteArray> cr = messageMap["croprect"].split(',');
+            cropRect.setX(cr[0].toInt());
+            cropRect.setY(cr[1].toInt());
+            cropRect.setWidth(cr[2].toInt());
+            cropRect.setHeight(cr[3].toInt());
     }
     else if (messageMap["command"] == "gmic_qt_output_images") {
         // Parse the message. read the shared memory segments, fix up the current image and send an ack
+
 
     }
     else {

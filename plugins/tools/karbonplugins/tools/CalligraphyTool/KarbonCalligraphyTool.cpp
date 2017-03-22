@@ -123,12 +123,11 @@ void KarbonCalligraphyTool::mousePressEvent(KoPointerEvent *event)
     m_intervalStore.clear();
     m_strokeTime.start();
     m_lastInfo = m_infoBuilder->startStroke(event, m_strokeTime.elapsed(), canvas()->resourceManager());
-
-    KisPropertiesConfigurationSP settings = new KisPropertiesConfiguration();
-
-    settings->setProperty("strokeWidth", currentStrokeWidth());
-    settings->setProperty("capSize", m_caps);
-    m_shape = new KarbonCalligraphicShape(settings);
+    if (!m_settings) {
+        m_settings = new KisPropertiesConfiguration();
+    }
+    m_settings->setProperty("strokeWidth", currentStrokeWidth());
+    m_shape = new KarbonCalligraphicShape(m_settings);
     m_shape->setBackground(QSharedPointer<KoShapeBackground>(new KoColorBackground(canvas()->resourceManager()->foregroundColor().toQColor())));
     //addPoint( event );
 }
@@ -421,8 +420,8 @@ QList<QPointer<QWidget> > KarbonCalligraphyTool::createOptionWidgets()
     connect(widget, SIGNAL(useNoAdjustChanged(bool)),
             this, SLOT(setNoAdjust(bool)));
 
-    connect(widget, SIGNAL(capsChanged(double)),
-            this, SLOT(setCaps(double)));
+    connect(widget, SIGNAL(settingsChanged(KisPropertiesConfigurationSP)),
+            this, SLOT(setSettings(KisPropertiesConfigurationSP)));
 
     connect(this, SIGNAL(pathSelectedChanged(bool)),
             widget, SLOT(setUsePathEnabled(bool)));
@@ -485,9 +484,10 @@ void KarbonCalligraphyTool::setNoAdjust(bool none)
     }
 }
 
-void KarbonCalligraphyTool::setCaps(double caps)
+void KarbonCalligraphyTool::setSettings(KisPropertiesConfigurationSP settings)
 {
-    m_caps = caps;
+    settings->setProperty("strokeWidth", currentStrokeWidth());
+    m_settings = settings;
 }
 
 void KarbonCalligraphyTool::updateSelectedPath()

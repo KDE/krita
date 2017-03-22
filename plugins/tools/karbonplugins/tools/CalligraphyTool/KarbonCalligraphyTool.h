@@ -71,7 +71,7 @@ private Q_SLOTS:
     void setUsePath(bool usePath);
     void setUseAssistant(bool useAssistant);
     void setNoAdjust(bool none);
-    void setCaps(double caps);
+    void setSettings(KisPropertiesConfigurationSP settings);
     /**
      * @brief setSmoothIntervalTime
      * @param time in milliseconds.
@@ -102,7 +102,7 @@ private:
     bool m_usePath;         // follow selected path
     bool m_useAssistant;
     qreal m_strokeWidth;
-    qreal m_caps;
+    KisPropertiesConfigurationSP m_settings;
     qreal m_smoothIntervalTime;
     qreal m_smoothIntervalDistance;
 

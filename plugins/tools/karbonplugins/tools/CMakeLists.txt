@@ -42,7 +42,7 @@ qt5_add_resources(karbon_tools_SOURCES karbontools.qrc)
 
 add_library(krita_karbontools MODULE ${karbon_tools_SOURCES})
 
-target_link_libraries(krita_karbontools kritaui kritawidgets KF5::Completion)
+target_link_libraries(krita_karbontools kritalibpaintop kritaui kritawidgets KF5::Completion)
 
 install(TARGETS krita_karbontools DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 

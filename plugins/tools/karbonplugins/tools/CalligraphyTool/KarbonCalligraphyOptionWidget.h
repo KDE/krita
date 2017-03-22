@@ -22,6 +22,7 @@
 
 #include <QWidget>
 #include <QMap>
+#include <kis_properties_configuration.h>
 
 class KComboBox;
 class QCheckBox;
@@ -29,6 +30,7 @@ class QSpinBox;
 class QDoubleSpinBox;
 class QToolButton;
 class KarbonCalligraphyToolOptions;
+class KisCurveOptionWidget;
 
 class KarbonCalligraphyOptionWidget : public QWidget
 {
@@ -48,7 +50,7 @@ Q_SIGNALS:
     void usePathChanged(bool);
     void useAssistantChanged(bool);
     void useNoAdjustChanged(bool);
-    void capsChanged(double);
+    void settingsChanged(KisPropertiesConfigurationSP settings);
     void massChanged(double);
     void dragChanged(double);
     void smoothTimeChanged(double);
@@ -67,6 +69,7 @@ private Q_SLOTS:
     void updateCurrentProfile();
     void saveProfileAs();
     void removeProfile();
+    void generateSettings();
 
 private:
     // TODO: maybe make it a hash?? <QString, QVariant>
@@ -114,6 +117,9 @@ private:
     ProfileMap m_profiles;
 
     KarbonCalligraphyToolOptions *m_options;
+    KisCurveOptionWidget *m_sizeOption;
+    KisCurveOptionWidget *m_rotationOption;
+    KisCurveOptionWidget *m_ratioOption;
 
     // when true updateCurrentProfile() doesn't do anything
     bool m_changingProfile;

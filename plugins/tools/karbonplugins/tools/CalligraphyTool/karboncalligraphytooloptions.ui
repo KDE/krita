@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>385</height>
+    <height>459</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -58,94 +58,86 @@
     <widget class="KisDoubleSliderSpinBox" name="sldCaps" native="true"/>
    </item>
    <item>
-    <widget class="QTabWidget" name="tabWidget">
-     <property name="currentIndex">
-      <number>2</number>
+    <widget class="QGroupBox" name="gbStrokeConfig">
+     <property name="title">
+      <string>Stroke configuration</string>
      </property>
-     <widget class="QWidget" name="tabSize">
-      <attribute name="icon">
-       <iconset theme="brush_size"/>
-      </attribute>
-      <attribute name="title">
-       <string/>
-      </attribute>
-     </widget>
-     <widget class="QWidget" name="tabAngle">
-      <attribute name="icon">
-       <iconset theme="brush_rotation"/>
-      </attribute>
-      <attribute name="title">
-       <string/>
-      </attribute>
-     </widget>
-     <widget class="QWidget" name="tabRatio">
-      <attribute name="icon">
-       <iconset theme="brush_ratio"/>
-      </attribute>
-      <attribute name="title">
-       <string/>
-      </attribute>
-     </widget>
-     <widget class="QWidget" name="tabAdjustment">
-      <attribute name="title">
-       <string>Adjustment</string>
-      </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout_3">
-       <item>
-        <widget class="QGroupBox" name="gbGB_Adjust">
-         <property name="title">
-          <string>Adjust Position</string>
-         </property>
-         <layout class="QVBoxLayout" name="verticalLayout">
-          <item>
-           <widget class="QRadioButton" name="rdNoAdjust">
-            <property name="text">
-             <string>No adjustment</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QRadioButton" name="rdAdjustPath">
-            <property name="text">
-             <string>Follow Selected Path</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QRadioButton" name="rdAdjustAssistant">
-            <property name="text">
-             <string>Follow Assistants</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item>
-        <widget class="QGroupBox" name="gbSampling">
-         <property name="title">
-          <string>Sampling Interval</string>
-         </property>
-         <layout class="QVBoxLayout" name="verticalLayout_2">
-          <item>
-           <widget class="KisDoubleSliderSpinBox" name="sldTimeInterval" native="true">
-            <property name="toolTip">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The Time Interval samples based on the time it takes to make the stroke. The value is in milliseconds.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="KisDoubleSliderSpinBox" name="sldDistanceInterval" native="true">
-            <property name="toolTip">
-             <string>The Distance interval samples based on the length of the stroke in the coordinates of the screen. So if you zoom in, you can make preciser strokes despite having the same distance interval.</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-      </layout>
-     </widget>
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <item>
+       <widget class="KisPopupButton" name="bnSize">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="KisPopupButton" name="bnRotation">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="KisPopupButton" name="bnRatio">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="gbGB_Adjust">
+     <property name="title">
+      <string>Adjust Position</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <widget class="QRadioButton" name="rdNoAdjust">
+        <property name="text">
+         <string>No adjustment</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="rdAdjustPath">
+        <property name="text">
+         <string>Follow Selected Path</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="rdAdjustAssistant">
+        <property name="text">
+         <string>Follow Assistants</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="gbSampling">
+     <property name="title">
+      <string>Sampling Interval</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_2">
+      <item>
+       <widget class="KisDoubleSliderSpinBox" name="sldTimeInterval" native="true">
+        <property name="toolTip">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The Time Interval samples based on the time it takes to make the stroke. The value is in milliseconds.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="KisDoubleSliderSpinBox" name="sldDistanceInterval" native="true">
+        <property name="toolTip">
+         <string>The Distance interval samples based on the length of the stroke in the coordinates of the screen. So if you zoom in, you can make preciser strokes despite having the same distance interval.</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </widget>
    </item>
   </layout>
@@ -156,6 +148,11 @@
    <extends>QWidget</extends>
    <header>kis_slider_spin_box.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KisPopupButton</class>
+   <extends>QPushButton</extends>
+   <header>kis_popup_button.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

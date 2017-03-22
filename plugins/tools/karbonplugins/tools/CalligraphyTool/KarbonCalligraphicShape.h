@@ -23,6 +23,8 @@
 #include <KoParameterShape.h>
 #include <kis_paint_information.h>
 #include <kis_properties_configuration.h>
+#include <kis_pressure_size_option.h>
+#include <kis_pressure_rotation_option.h>
 #include <SvgShape.h>
 
 #define KarbonCalligraphicShapeId "KarbonCalligraphicShape"
@@ -37,11 +39,6 @@ public:
     {
         return m_paintInfo.pos();
     }
-    qreal angle() const
-    {
-        return (fmod((m_paintInfo.drawingAngle()* 180.0 / M_PI)+90.0, 360.0)* M_PI / 180);
-    }
-
     KisPaintInformation* paintInfo()
     {
         return &m_paintInfo;
@@ -170,6 +167,7 @@ private:
      * @return the width as modulated by the paintinfo.
      */
     qreal calculateWidth(KisPaintInformation *p);
+    qreal calculateAngle(KisPaintInformation *p);
 
     // the actual data then determines it's shape (guide path + data for points)
     KisDistanceInformation *m_strokeDistance;
@@ -177,6 +175,8 @@ private:
     bool m_lastWasFlip;
     KisPropertiesConfigurationSP m_strokeConfig;
     QPointF m_lastOffset;
+    KisPressureSizeOption     m_sizeOption;
+    KisPressureRotationOption m_rotationOption;
 };
 
 #endif // KARBONCALLIGRAPHICSHAPE_H

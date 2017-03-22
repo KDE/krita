@@ -50,6 +50,11 @@ KarbonCalligraphicShape::KarbonCalligraphicShape(KisPropertiesConfigurationSP se
     setFillRule(Qt::WindingFill);
     setBackground(QSharedPointer<KoShapeBackground>(new KoColorBackground(QColor(Qt::black))));
     setStroke(KoShapeStrokeModelSP());
+    m_sizeOption.readOptionSetting(settings);
+    m_rotationOption.readOptionSetting(settings);
+    m_sizeOption.resetAllSensors();
+    m_rotationOption.resetAllSensors();
+
 }
 
 KarbonCalligraphicShape::KarbonCalligraphicShape(const KarbonCalligraphicShape &rhs)
@@ -72,6 +77,14 @@ KisPropertiesConfigurationSP KarbonCalligraphicShape::configuration() const
 void KarbonCalligraphicShape::setConfiguration(KisPropertiesConfigurationSP setting)
 {
     m_strokeConfig = setting;
+    m_sizeOption = KisPressureSizeOption();
+    m_sizeOption.readOptionSetting(setting);
+    m_rotationOption = KisPressureRotationOption();
+    m_rotationOption.readOptionSetting(setting);
+    m_sizeOption.resetAllSensors();
+    m_rotationOption.resetAllSensors();
+    m_rotationOption.setChecked(true);
+    m_sizeOption.setChecked(true);
     updatePath(this->size());
 }
 
@@ -97,21 +110,15 @@ void KarbonCalligraphicShape::appendPoint(KisPaintInformation &paintInfo)
     } else {
         updatePath(QSize());
     }
-    // make the angle of the first point more in line with the actual
-    // direction
-    if (m_points.count() == 4) {
-        //m_points[0]->setAngle(angle);
-        //m_points[1]->setAngle(angle);
-        //m_points[2]->setAngle(angle);
-    }
 }
 
 void KarbonCalligraphicShape::appendPointToPath(int index)
 {
     KarbonCalligraphicPoint *p = m_points.at(index);
     qreal width = calculateWidth(p->paintInfo());
-    qreal dx = std::cos(p->angle()) * width;
-    qreal dy = std::sin(p->angle()) * width;
+    qreal angle = calculateAngle(p->paintInfo());
+    qreal dx = std::cos(angle) * width;
+    qreal dy = std::sin(angle) * width;
 
     // find the outline points
     QPointF p1 = p->point() - QPointF(dx / 2, dy / 2);
@@ -138,11 +145,13 @@ void KarbonCalligraphicShape::appendPointToPath(int index)
     // if there was a flip add additional points
     if (flip) {
         qreal pm1width = calculateWidth(m_points.at(index-1)->paintInfo());
-        QPointF pm1vec = QPointF(cos(m_points.at(index-1)->angle())*pm1width / 2, sin(m_points.at(index-1)->angle())*pm1width / 2);
+        qreal pm1angle = calculateAngle(m_points.at(index-1)->paintInfo());
+        QPointF pm1vec = QPointF(cos(pm1angle)*pm1width / 2, sin(pm1angle)*pm1width / 2);
         QPointF p1m1 = m_points.at(index-1)->point() - pm1vec;
         QPointF p2m1 = m_points.at(index-1)->point() + pm1vec;
         qreal pp1width = calculateWidth(m_points.at(index+1)->paintInfo());
-        QPointF pp1vec = QPointF(cos(m_points.at(index+1)->angle())*pp1width / 2, sin(m_points.at(index+1)->angle())*pp1width / 2);
+        qreal pp1angle = calculateAngle(m_points.at(index+1)->paintInfo());
+        QPointF pp1vec = QPointF(cos(pp1angle)*pp1width / 2, sin(pp1angle)*pp1width / 2);
         QPointF p1p1 = m_points.at(index+1)->point() - pp1vec;
         QPointF p2p1 = m_points.at(index+1)->point() + pp1vec;
 
@@ -415,7 +424,7 @@ void KarbonCalligraphicShape::addCap(int index1, int index2, int pointIndex, boo
 
     KoPathPoint *newPoint = new KoPathPoint(this, p);
 
-    qreal angle = m_points[index2]->angle();
+    qreal angle = calculateAngle(m_points[index2]->paintInfo());
     if (inverted) {
         angle += M_PI;
     }
@@ -430,7 +439,18 @@ void KarbonCalligraphicShape::addCap(int index1, int index2, int pointIndex, boo
 
 qreal KarbonCalligraphicShape::calculateWidth(KisPaintInformation *p)
 {
-    return configuration()->getDouble("strokeWidth", 10) * p->pressure();
+    if (m_sizeOption.isCurveUsed()) {
+        return m_sizeOption.apply(*p)*configuration()->getDouble("strokeWidth", 10);
+    }
+    return configuration()->getDouble("strokeWidth", 10);
+}
+
+qreal KarbonCalligraphicShape::calculateAngle(KisPaintInformation *p)
+{
+    if (m_rotationOption.isCurveUsed()) {
+        return (2*M_PI)-m_rotationOption.apply(*p);
+    }
+    return 0;
 }
 
 QString KarbonCalligraphicShape::pathShapeId() const
@@ -476,7 +496,14 @@ bool KarbonCalligraphicShape::loadSvg(const KoXmlElement &element, SvgLoadingCon
         QDomElement root = doc.firstChildElement("path").firstChildElement("krita:calligraphic-stroke-data");
 
         QDomElement configElt = root.firstChildElement("config");
-        KisPropertiesConfigurationSP config = new KisPropertiesConfiguration();
+        KisPropertiesConfigurationSP config(new KisPropertiesConfiguration());
+
+        //attempt at debugging this...
+        for(int i=0;i< configElt.childNodes().count(); i++) {
+            qDebug()<<configElt.childNodes().at(i).toElement().attribute("name");
+            qDebug()<<configElt.childNodes().at(i).toElement().text();
+        }
+
         config->fromXML(configElt);
 
         QDomElement infoElt = root.firstChildElement("point");

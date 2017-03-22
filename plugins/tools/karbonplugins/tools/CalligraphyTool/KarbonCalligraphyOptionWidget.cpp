@@ -34,14 +34,20 @@
 #include <QCheckBox>
 #include <QDoubleSpinBox>
 #include <QLabel>
-#include <QGridLayout>
+#include <QVBoxLayout>
 #include <QToolButton>
+#include <QTabWidget>
+
+#include <kis_popup_button.h>
 
 #include "kis_double_parse_spin_box.h"
 #include "kis_int_parse_spin_box.h"
 #include "ui_karboncalligraphytooloptions.h"
 #include "kis_slider_spin_box.h"
-
+#include <kis_pressure_size_option.h>
+#include <kis_pressure_rotation_option.h>
+#include <kis_pressure_ratio_option.h>
+#include <kis_curve_option_widget.h>
 /*
 Profiles are saved in karboncalligraphyrc
 
@@ -91,9 +97,21 @@ KarbonCalligraphyOptionWidget::KarbonCalligraphyOptionWidget()
     m_options->sldCaps->setRange(0.0, 2.0, 2);
     m_options->sldCaps->setSingleStep(0.03);
 
-    m_options->tabWidget->setTabIcon(0, kisIcon("brush_size"));
-    m_options->tabWidget->setTabIcon(1, kisIcon("brush_rotation"));
-    m_options->tabWidget->setTabIcon(2, kisIcon("brush_ratio"));
+    m_sizeOption = new KisCurveOptionWidget(new KisPressureSizeOption(), i18n("0%"), i18n("100%"));
+    m_rotationOption = new KisCurveOptionWidget(new KisPressureRotationOption(), i18n("-180°"), i18n("180°"));
+    //m_ratioOption = new KisCurveOptionWidget(new KisPressureRatioOption(), i18n("0%"), i18n("100%"));
+    m_rotationOption->setChecked(true);
+    m_sizeOption->setChecked(true);
+
+    m_options->bnSize->setIcon(kisIcon("brush_size"));
+    m_options->bnSize->setPopupWidget(m_sizeOption->configurationPage());
+
+    m_options->bnRotation->setIcon(kisIcon("brush_rotation"));
+    m_options->bnRotation->setPopupWidget(m_rotationOption->configurationPage());
+
+    m_options->bnRatio->hide();
+    //m_options->bnRatio->setIcon(kisIcon("brush_ratio"));
+    //m_options->bnRatio->setPopupWidget(m_ratioOption->configurationPage());
 
     createConnections();
     addDefaultProfiles(); // if they are already added does nothing
@@ -108,7 +126,7 @@ KarbonCalligraphyOptionWidget::~KarbonCalligraphyOptionWidget()
 void KarbonCalligraphyOptionWidget::emitAll()
 {
     emit usePathChanged(m_options->rdAdjustPath->isChecked());
-    emit capsChanged(m_options->sldCaps->value());
+
     emit smoothTimeChanged(m_options->sldTimeInterval->value());
     emit smoothDistanceChanged(m_options->sldDistanceInterval->value());
 }
@@ -188,6 +206,15 @@ void KarbonCalligraphyOptionWidget::removeProfile()
     removeProfile(m_options->cmbProfiles->currentText());
 }
 
+void KarbonCalligraphyOptionWidget::generateSettings()
+{
+    KisPropertiesConfigurationSP settings = new KisPropertiesConfiguration();
+    settings->setProperty("capSize", m_options->sldCaps->value());
+    m_sizeOption->writeOptionSetting(settings);
+    m_rotationOption->writeOptionSetting(settings);
+    emit settingsChanged(settings);
+}
+
 /******************************************************************************
  ************************* Convenience Functions ******************************
  ******************************************************************************/
@@ -206,12 +233,15 @@ void KarbonCalligraphyOptionWidget::createConnections()
             SIGNAL(useNoAdjustChanged(bool)));
 
     connect(m_options->sldCaps, SIGNAL(valueChanged(double)),
-            SIGNAL(capsChanged(double)));
+            SLOT(generateSettings()));
 
     connect(m_options->sldTimeInterval, SIGNAL(valueChanged(double)),
             SIGNAL(smoothTimeChanged(double)));
     connect(m_options->sldDistanceInterval, SIGNAL(valueChanged(double)),
             SIGNAL(smoothDistanceChanged(double)));
+
+    connect(m_sizeOption, SIGNAL(sigSettingChanged()), SLOT(generateSettings()));
+    connect(m_rotationOption, SIGNAL(sigSettingChanged()), SLOT(generateSettings()));
 
     // update profile
     connect(m_options->rdAdjustPath, SIGNAL(toggled(bool)),

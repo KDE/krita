@@ -2,7 +2,7 @@
 <kpartgui xmlns="http://www.kde.org/standards/kxmlgui/1.0"
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 name="Krita"
-version="103"
+version="115"
 xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org/standards/kxmlgui/1.0/kxmlgui.xsd">
   <MenuBar>
     <Menu name="file">
@@ -293,7 +293,8 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
       <Action name="other_filters"/>
       <Separator/>
       <Action name="gmic"/>
-
+      <Action name="QMic"/>
+      <Action name="QMicAgain"/>
     </Menu>
     <Menu name="tools">
       <text>&amp;Tools</text>

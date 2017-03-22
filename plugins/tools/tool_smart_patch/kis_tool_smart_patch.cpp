@@ -162,7 +162,7 @@ void KisToolSmartPatch::endPrimaryAction(KoPointerEvent *event)
     //mask will be incomplete.
     image()->waitForDone();
 
-    m_d->maskDev = new KisPaintDevice(currentNode()->paintDevice()->colorSpace());
+    m_d->maskDev = new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8());
     m_d->maskDev->makeCloneFrom(currentNode()->paintDevice(), currentNode()->paintDevice()->extent());
 
     patchImage( m_d->imageDev, m_d->maskDev, 4 );

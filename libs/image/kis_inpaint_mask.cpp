@@ -29,7 +29,7 @@
 #include "kis_painter.h"
 #include "kis_node_visitor.h"
 #include "kis_processing_visitor.h"
-
+#include "KoColorSpaceRegistry.h"
 
 KisInpaintMask::KisInpaintMask()
         : KisTransparencyMask()
@@ -51,10 +51,11 @@ QRect KisInpaintMask::decorateRect(KisPaintDeviceSP &src,
                                         PositionToFilthy maskPos) const
 {
     Q_UNUSED(maskPos);
+    KIS_ASSERT(dst != src);
 
     if (src != dst) {
         KisPainter::copyAreaOptimized(rc.topLeft(), src, dst, rc);
-        src->fill(rc, KoColor(Qt::black, src->colorSpace()));
+        src->fill(rc, KoColor(Qt::magenta, src->colorSpace()));
     }
 
     return rc;

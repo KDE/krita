@@ -311,7 +311,7 @@ public:
 
         for (int i = 0; i < imageData.num_elements(); ++i) {
             quint8* maskPix = maskData.data() + i * maskData.pixel_size();
-            if (*maskPix == MASK_SET) {
+            if (*maskPix < MASK_CLEAR ) {
                 for (int k = 0; k < imageData.pixel_size(); k++)
                     *(imageData.data() + i * imageData.pixel_size() + k) = 0;
             } else {
@@ -765,16 +765,17 @@ MaskedImageSP Inpaint::patch()
 
     QRect size = source->size();
 
-    //std::cerr << "countMasked: " <<  source->countMasked() << "\n";
+    std::cerr << "countMasked: " <<  source->countMasked() << "\n";
     while ((size.width() > radius) && (size.height() > radius) && source->countMasked() > 0) {
-        //std::cerr << "countMasked: " <<  source->countMasked() << "\n";
+        std::cerr << "countMasked: " <<  source->countMasked() << "\n";
         source->downsample2x();
         //source->DebugDump("Pyramid");
+        std::cerr << "countMasked1: " <<  source->countMasked() << "\n";
         pyramid.append(source->copy());
         size = source->size();
     }
     int maxlevel = pyramid.size();
-    //std::cerr << "MaxLevel: " <<  maxlevel << "\n";
+    std::cerr << "MaxLevel: " <<  maxlevel << "\n";
 
     // The initial target is the same as the smallest source.
     // We consider that this target contains no masked pixels

@@ -366,7 +366,7 @@ protected:
     void resizeEvent(QResizeEvent * e);
 
     /// Set the active view, this will update the undo/redo actions
-    virtual void setActiveView(KisView *view);
+    void setActiveView(KisView *view);
 
     // QWidget overrides
     virtual void dragEnterEvent(QDragEnterEvent * event);

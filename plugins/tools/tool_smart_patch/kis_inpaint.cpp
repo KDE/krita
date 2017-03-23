@@ -151,11 +151,11 @@ public:
         return m_pixelSize;
     }
 
-    void saveToDevice(KisPaintDeviceSP outDev)
+    void saveToDevice(KisPaintDeviceSP outDev, QRect rect )
     {
-        QRect imSize(QPoint(0, 0), QSize(m_imageWidth, m_imageHeight));
+
         Q_ASSERT(outDev->colorSpace()->pixelSize() == (quint32) m_pixelSize);
-        outDev->writeBytes(m_data, imSize);
+        outDev->writeBytes(m_data, rect);
     }
 
     void DebugDump(const QString& fnamePrefix)
@@ -165,7 +165,7 @@ public:
                                  KoColorSpaceRegistry::instance()->alpha8() : (m_pixelSize == 3) ? KoColorSpaceRegistry::instance()->colorSpace("RGB", "U8", "") :
                                  KoColorSpaceRegistry::instance()->colorSpace("RGBA", "U8", "");
         KisPaintDeviceSP dbout = new KisPaintDevice(cs);
-        saveToDevice(dbout);
+        saveToDevice(dbout, imSize);
         KIS_DUMP_DEVICE_2(dbout, imSize, fnamePrefix, "/home/eugening/Projects/img");
     }
 };
@@ -249,9 +249,9 @@ private:
 
 public:
 
-    void toPaintDevice(KisPaintDeviceSP imageDev)
+    void toPaintDevice(KisPaintDeviceSP imageDev, QRect rect)
     {
-        imageData.saveToDevice(imageDev);
+        imageData.saveToDevice(imageDev, rect);
     }
 
     void DebugDump(const QString& name)
@@ -954,7 +954,7 @@ void patchImage(KisPaintDeviceSP imageDev, KisPaintDeviceSP maskDev, int patchRa
     QRect maskRect = maskDev->nonDefaultPixelArea();
     QRect imageRect = imageDev->exactBounds();
 
-    float scale = 1 + (accuracy / 25); //basically higher accuracy means we include more surrouding area around the patch
+    float scale = 1 + (accuracy / 25); //basically higher accuracy means we include more surrouding area around the patch. Minimum 2x padding.
     int dx = maskRect.width()*scale;
     int dy = maskRect.height()*scale;
     maskRect.adjust(-dx, -dy, dx, dy);
@@ -968,7 +968,7 @@ void patchImage(KisPaintDeviceSP imageDev, KisPaintDeviceSP maskDev, int patchRa
     Inpaint inpaint(tempImageDev, tempMaskDev, patchRadius);
     MaskedImageSP output = inpaint.patch();
 
-    output->toPaintDevice( imageDev );
+    output->toPaintDevice( imageDev, maskRect );
 }
 
 

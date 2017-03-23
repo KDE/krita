@@ -22,6 +22,7 @@
 #include <QColor>
 #include <QMimeData>
 #include <QPointer>
+#include <KoResourceModel.h>
 
 #include "kis_layer.h"
 #include "kis_config.h"
@@ -63,7 +64,7 @@ struct TimelineFramesModel::Private
 
     int activeLayerIndex;
 
-    KisDummiesFacadeBase *dummiesFacade;
+    QPointer<KisDummiesFacadeBase> dummiesFacade;
     KisImageWSP image;
     bool needFinishInsertRows;
     bool needFinishRemoveRows;
@@ -229,7 +230,7 @@ void TimelineFramesModel::setDummiesFacade(KisDummiesFacadeBase *dummiesFacade, 
 {
     KisDummiesFacadeBase *oldDummiesFacade = m_d->dummiesFacade;
 
-    if (m_d->dummiesFacade) {
+    if (m_d->dummiesFacade && m_d->image) {
         m_d->image->animationInterface()->disconnect(this);
         m_d->image->disconnect(this);
         m_d->dummiesFacade->disconnect(this);
@@ -336,10 +337,26 @@ QVariant TimelineFramesModel::data(const QModelIndex &index, int role) const
         return label > 0 ? label : QVariant();
     }
     case Qt::DisplayRole: {
-        return QVariant();
+        return m_d->layerName(index.row());
     }
     case Qt::TextAlignmentRole: {
         return QVariant(Qt::AlignHCenter | Qt::AlignVCenter);
+    }
+    case KoResourceModel::LargeThumbnailRole: {
+        KisNodeDummy *dummy = m_d->converter->dummyFromRow(index.row());
+        if (!dummy) {
+            return  QVariant();
+        }
+        const int maxSize = 200;
+
+        QSize size = dummy->node()->extent().size();
+        size.scale(maxSize, maxSize, Qt::KeepAspectRatio);
+        if (size.width() == 0 || size.height() == 0) {
+            // No thumbnail can be shown if there isn't width or height...
+            return QVariant();
+        }
+        QImage image(dummy->node()->createThumbnailForFrame(size.width(), size.height(), index.column()));
+        return image;
     }
     }
 

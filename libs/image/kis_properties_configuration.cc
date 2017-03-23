@@ -255,7 +255,7 @@ KoColor KisPropertiesConfiguration::getColor(const QString& name, const KoColor&
             QDomDocument doc;
             doc.setContent(v.toString());
             QDomElement e = doc.documentElement().firstChild().toElement();
-            return KoColor::fromXML(e, Integer16BitsColorDepthID.id(), QHash<QString, QString>());
+            return KoColor::fromXML(e, Integer16BitsColorDepthID.id());
         }
     } else {
         return color;

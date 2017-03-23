@@ -39,7 +39,7 @@ class KisImageViewConverter;
  * Do NOT give this canvas to tools or to the KoCanvasController, it's
  * not made for that.
  */
-class KisShapeLayerCanvas : public QObject, public KoCanvasBase
+class KisShapeLayerCanvas : public KoCanvasBase
 {
     Q_OBJECT
 public:

@@ -50,6 +50,7 @@ void testFiles(const QString& _dirname, const QStringList& exclusions, const QSt
     QStringList failuresCompare;
 
     Q_FOREACH (QFileInfo sourceFileInfo, dirSources.entryInfoList()) {
+        qDebug() << sourceFileInfo.fileName();
         if (exclusions.indexOf(sourceFileInfo.fileName()) > -1) {
             continue;
         }
@@ -107,9 +108,9 @@ void testFiles(const QString& _dirname, const QStringList& exclusions, const QSt
     if (failuresCompare.isEmpty() && failuresDocImage.isEmpty() && failuresFileInfo.isEmpty()) {
         return;
     }
-    dbgKrita << "Comparison failures: " << failuresCompare;
-    dbgKrita << "No image failures: " << failuresDocImage;
-    dbgKrita << "No comparison image: " <<  failuresFileInfo;
+    qWarning() << "Comparison failures: " << failuresCompare;
+    qWarning() << "No image failures: " << failuresDocImage;
+    qWarning() << "No comparison image: " <<  failuresFileInfo;
 
     QFAIL("Failed testing files");
 }

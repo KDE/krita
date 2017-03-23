@@ -20,8 +20,9 @@
 #define __KIS_PAINTOP_TRANSFORMATION_CONNECTOR_H
 
 #include <QObject>
+#include <QPointer>
 
-class KisCanvas2;
+#include <kis_canvas2.h>
 
 class KisPaintopTransformationConnector : public QObject
 {
@@ -36,7 +37,7 @@ public Q_SLOTS:
     void slotCanvasResourceChanged(int key, const QVariant &resource);
 
 private:
-    KisCanvas2 *m_canvas;
+    QPointer<KisCanvas2> m_canvas;
 };
 
 #endif /* __KIS_PAINTOP_TRANSFORMATION_CONNECTOR_H */

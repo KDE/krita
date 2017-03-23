@@ -60,7 +60,7 @@ class KoViewConverter;
  * the widget it contains, which may be either a QPainter based
  * canvas, or an OpenGL based canvas: that are the real widgets.
  */
-class KRITAUI_EXPORT KisCanvas2 : public QObject, public KoCanvasBase
+class KRITAUI_EXPORT KisCanvas2 : public KoCanvasBase
 {
 
     Q_OBJECT

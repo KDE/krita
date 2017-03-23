@@ -203,6 +203,7 @@ set(kritaflake_SRCS
     svg/parsers/SvgTransformParser.cpp
 
     FlakeDebug.cpp
+    tests/MockShapes.cpp
 )
 
 ki18n_wrap_ui(kritaflake_SRCS

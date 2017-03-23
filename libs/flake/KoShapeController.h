@@ -24,6 +24,7 @@
 
 #include "kritaflake_export.h"
 
+#include <QObject>
 #include <QList>
 #include <QMetaType>
 
@@ -42,8 +43,10 @@ class KoDocumentResourceManager;
  * from this class for maintaining the list of shapes in the document. So no tool gets
  * to access the application directly.
  */
-class KRITAFLAKE_EXPORT KoShapeController
+class KRITAFLAKE_EXPORT KoShapeController : public QObject
 {
+    Q_OBJECT
+
 public:
     /**
      * Create a new Controller; typically not called by applications, only
@@ -54,6 +57,11 @@ public:
     KoShapeController(KoCanvasBase *canvas, KoShapeBasedDocumentBase *shapeBasedDocument);
     /// destructor
     ~KoShapeController();
+
+    /**
+     * @brief reset sets the canvas and shapebased document to 0.
+     */
+    void reset();
 
     /**
      * @brief Add a shape to the document.

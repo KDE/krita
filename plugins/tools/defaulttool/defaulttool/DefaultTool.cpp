@@ -57,6 +57,7 @@
 
 #include <KoIcon.h>
 
+#include <QPointer>
 #include <QAction>
 #include <QKeyEvent>
 #include <QSignalMapper>
@@ -110,8 +111,8 @@ QPolygonF selectionPolygon(KoSelection *selection)
 class NopInteractionStrategy : public KoInteractionStrategy
 {
 public:
-    explicit NopInteractionStrategy(KoToolBase *parent) 
-        : KoInteractionStrategy(parent) 
+    explicit NopInteractionStrategy(KoToolBase *parent)
+        : KoInteractionStrategy(parent)
     {
     }
 
@@ -247,16 +248,18 @@ public:
         : KoToolSelection(parent)
         , m_selection(parent->koSelection())
     {
-        Q_ASSERT(m_selection);
     }
 
     bool hasSelection() override
     {
-        return m_selection->count();
+        if (m_selection) {
+            return m_selection->count();
+        }
+        return false;
     }
 
 private:
-    KoSelection *m_selection;
+    QPointer<KoSelection> m_selection;
 };
 
 DefaultTool::DefaultTool(KoCanvasBase *canvas)
@@ -672,7 +675,7 @@ void DefaultTool::mousePressEvent(KoPointerEvent *event)
 void DefaultTool::mouseMoveEvent(KoPointerEvent *event)
 {
     KoInteractionTool::mouseMoveEvent(event);
-    if (currentStrategy() == 0 && koSelection()->count() > 0) {
+    if (currentStrategy() == 0 && koSelection() && koSelection()->count() > 0) {
         QRectF bound = handlesSize();
 
         if (bound.contains(event->point)) {
@@ -806,8 +809,7 @@ void DefaultTool::keyPressEvent(QKeyEvent *event)
 
 void DefaultTool::repaintDecorations()
 {
-    Q_ASSERT(koSelection());
-    if (koSelection()->count() > 0) {
+    if (koSelection() && koSelection()->count() > 0) {
         canvas()->updateCanvas(handlesSize());
     }
 }

@@ -40,8 +40,8 @@ public:
 
     KisLiquifyProperties()
         : m_mode(MOVE),
-          m_size(50),
-          m_amount(0.2),
+          m_size(60),
+          m_amount(0.05),
           m_spacing(0.2),
           m_sizeHasPressure(false),
           m_amountHasPressure(false),

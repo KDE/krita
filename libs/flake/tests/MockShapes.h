@@ -31,7 +31,10 @@
 #include "KoSnapData.h"
 #include "KoUnit.h"
 
-class MockShape : public KoShape
+#include "kritaflake_export.h"
+
+
+class KRITAFLAKE_EXPORT MockShape : public KoShape
 {
 public:
     MockShape() : paintedCount(0) {}
@@ -48,7 +51,7 @@ public:
     int paintedCount;
 };
 
-class MockContainer : public KoShapeContainer
+class KRITAFLAKE_EXPORT MockContainer : public KoShapeContainer
 {
 public:
     MockContainer(KoShapeContainerModel *model = 0) : KoShapeContainer(model), paintedCount(0) {}
@@ -66,7 +69,7 @@ public:
     int paintedCount;
 };
 
-class MockGroup : public KoShapeGroup
+class KRITAFLAKE_EXPORT MockGroup : public KoShapeGroup
 {
     void paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &) {
         Q_UNUSED(painter);
@@ -76,7 +79,7 @@ class MockGroup : public KoShapeGroup
 
 class KoToolProxy;
 
-class MockShapeController : public KoShapeBasedDocumentBase
+class KRITAFLAKE_EXPORT MockShapeController : public KoShapeBasedDocumentBase
 {
 public:
     void addShape(KoShape* shape) {
@@ -112,8 +115,9 @@ private:
     KoShapeManager *m_shapeManager = 0;
 };
 
-class MockCanvas : public KoCanvasBase
+class KRITAFLAKE_EXPORT MockCanvas : public KoCanvasBase
 {
+    Q_OBJECT
 public:
     MockCanvas(KoShapeBasedDocumentBase *aKoShapeBasedDocumentBase =0)//made for TestSnapStrategy.cpp
             : KoCanvasBase(aKoShapeBasedDocumentBase),
@@ -173,7 +177,7 @@ public:
         qreal m_vert;
 };
 
-class MockContainerModel : public KoShapeContainerModel
+class KRITAFLAKE_EXPORT MockContainerModel : public KoShapeContainerModel
 {
 public:
     MockContainerModel() {

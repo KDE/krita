@@ -24,7 +24,9 @@
 
 #include <KoViewConverter.h>
 #include <KoFlake.h>
+
 #include <QPainter>
+#include <QPointer>
 
 class KoSelection;
 class KoCanvasResourceManager;

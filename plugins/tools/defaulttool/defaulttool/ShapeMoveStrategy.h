@@ -24,10 +24,12 @@
 
 #include <KoInteractionStrategy.h>
 
+#include <QPointer>
 #include <QPointF>
 #include <QList>
 
-class KoCanvasBase;
+#include <KoCanvasBase.h>
+
 class KoToolBase;
 class KoShape;
 
@@ -56,7 +58,7 @@ private:
     QList<QPointF> m_newPositions;
     QPointF m_start, m_finalMove, m_initialOffset;
     QList<KoShape *> m_selectedShapes;
-    KoCanvasBase *m_canvas;
+    QPointer<KoCanvasBase> m_canvas;
 };
 
 #endif

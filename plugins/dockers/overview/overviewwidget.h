@@ -22,11 +22,14 @@
 #include <QObject>
 #include <QWidget>
 #include <QPixmap>
+#include <QPointer>
+
 #include <QMutex>
 #include "kis_idle_watcher.h"
 #include "kis_simple_stroke_strategy.h"
 
-class KisCanvas2;
+#include <kis_canvas2.h>
+
 class KisSignalCompressor;
 class KoCanvasBase;
 
@@ -94,7 +97,7 @@ private:
     QPolygonF previewPolygon();
 
     QPixmap m_pixmap;
-    KisCanvas2 *m_canvas;
+    QPointer<KisCanvas2> m_canvas;
 
     bool m_dragging;
     QPointF m_lastPos;

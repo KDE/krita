@@ -121,7 +121,7 @@ void KisColorSelectorContainer::updateSettings()
     KConfigGroup cfg =  KSharedConfig::openConfig()->group("advancedColorSelector");
     m_onDockerResizeSetting =  (int)cfg.readEntry("onDockerResize", 0);
 
-    QString type = cfg.readEntry("shadeSelectorType", "MyPaint");
+    QString type = cfg.readEntry("shadeSelectorType", "Minimal");
 
     QWidget* newShadeSelector;
     if(type=="MyPaint")

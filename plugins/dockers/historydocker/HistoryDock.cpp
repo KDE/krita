@@ -50,12 +50,14 @@ HistoryDock::HistoryDock()
     setWindowTitle(i18n("Undo History"));
 }
 
-void HistoryDock::setCanvas(KoCanvasBase *canvas) {
-
+void HistoryDock::setCanvas(KoCanvasBase *canvas)
+{
     setEnabled(canvas != 0);
-
-    KisCanvas2* myCanvas = dynamic_cast<KisCanvas2*>( canvas );
-    if (myCanvas) {
+    QPointer<KisCanvas2> myCanvas = dynamic_cast<KisCanvas2*>(canvas);
+    if (myCanvas
+            && myCanvas->shapeController()
+            && myCanvas->shapeController()->resourceManager()
+            && myCanvas->shapeController()->resourceManager()->undoStack()) {
         KUndo2Stack* undoStack = canvas->shapeController()->resourceManager()->undoStack();
 
         m_undoView->setStack(undoStack);
@@ -72,4 +74,11 @@ void HistoryDock::configure()
 {
     DlgConfigureHistoryDock dlg(m_undoView, m_undoView->stack(), this);
     dlg.exec();
+}
+
+void HistoryDock::unsetCanvas()
+{
+    m_historyCanvas = 0;
+    setEnabled(false);
+    m_undoView->setStack(0);
 }

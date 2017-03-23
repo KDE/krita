@@ -204,7 +204,7 @@ void DlgClonesArray::reapplyClones()
 
     KisImageSP image = m_view->image();
 
-    if (!m_view->blockUntillOperationsFinished(image)) return;
+    if (!m_view->blockUntilOperationsFinished(image)) return;
 
     m_applicator =
         new KisProcessingApplicator(image, 0,

@@ -45,6 +45,7 @@
 #include <KoPathShape.h>
 #include <KoXmlWriter.h>
 #include <KoShapePainter.h>
+#include <KoXmlNS.h>
 
 #include <QFile>
 #include <QString>
@@ -108,7 +109,7 @@ bool SvgWriter::save(QIODevice &outputDevice)
 
     svgStream << "<svg xmlns=\"http://www.w3.org/2000/svg\" \n";
     svgStream << "    xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n";
-    svgStream << "    xmlns:krita=\"http://krita.org/kritasvg\"\n";
+    svgStream << QString("    xmlns:krita=\"%1\"\n").arg(KoXmlNS::krita);
     svgStream << "    xmlns:sodipodi=\"http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd\"\n";
     svgStream << "    width=\"" << m_pageSize.width() << "pt\"\n";
     svgStream << "    height=\"" << m_pageSize.height() << "pt\"\n";

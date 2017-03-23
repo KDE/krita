@@ -35,7 +35,7 @@
 
 #include "kis_debug.h"
 #include "kis_paint_device_debug_utils.h"
-#include "kis_random_accessor_ng.h"
+//#include "kis_random_accessor_ng.h"
 
 #include <QList>
 #include <kis_transform_worker.h>
@@ -47,13 +47,13 @@
 #include "KoColorModelStandardIds.h"
 #include "KoColorSpaceRegistry.h"
 
-#include <KisPart.h>
-#include <kis_group_layer.h>
+//#include <KisPart.h>
+//#include <kis_group_layer.h>
 
-#include <brushengine/kis_paint_information.h>
-#include <kis_canvas_resource_provider.h>
-#include <brushengine/kis_paintop_preset.h>
-#include <brushengine/kis_paintop_settings.h>
+//#include <brushengine/kis_paint_information.h>
+//#include <kis_canvas_resource_provider.h>
+//#include <brushengine/kis_paintop_preset.h>
+//#include <brushengine/kis_paintop_settings.h>
 
 
 const int MAX_DIST = 65535;
@@ -154,7 +154,7 @@ public:
     void saveToDevice(KisPaintDeviceSP outDev)
     {
         QRect imSize(QPoint(0, 0), QSize(m_imageWidth, m_imageHeight));
-        Q_ASSERT(outDev->colorSpace()->pixelSize() == m_pixelSize);
+        Q_ASSERT(outDev->colorSpace()->pixelSize() == (quint32) m_pixelSize);
         outDev->writeBytes(m_data, imSize);
     }
 
@@ -270,11 +270,6 @@ public:
         cacheImage(_imageDev);
         cacheMask(_maskDev);
     }
-
-//    void clone(const MaskeImageSP other)
-//    {
-//        return new MaskedImage(imageDev, maskDev);
-//    }
 
     MaskedImage(KisPaintDeviceSP _imageDev, KisPaintDeviceSP _maskDev)
     {
@@ -765,17 +760,16 @@ MaskedImageSP Inpaint::patch()
 
     QRect size = source->size();
 
-    std::cerr << "countMasked: " <<  source->countMasked() << "\n";
+    //qDebug() << "countMasked: " <<  source->countMasked() << "\n";
     while ((size.width() > radius) && (size.height() > radius) && source->countMasked() > 0) {
-        std::cerr << "countMasked: " <<  source->countMasked() << "\n";
         source->downsample2x();
         //source->DebugDump("Pyramid");
-        std::cerr << "countMasked1: " <<  source->countMasked() << "\n";
+        //qDebug() << "countMasked1: " <<  source->countMasked() << "\n";
         pyramid.append(source->copy());
         size = source->size();
     }
     int maxlevel = pyramid.size();
-    std::cerr << "MaxLevel: " <<  maxlevel << "\n";
+    //qDebug() << "MaxLevel: " <<  maxlevel << "\n";
 
     // The initial target is the same as the smallest source.
     // We consider that this target contains no masked pixels
@@ -801,7 +795,7 @@ MaskedImageSP Inpaint::patch()
 
         //Build an upscaled target by EM-like algorithm (see "PatchMatch" - page 6)
         target = NearestNeighborField::ExpectationMaximization(nnf_TargetToSource, level, radius, pyramid);
-        target->DebugDump( "target" );
+        //target->DebugDump( "target" );
     }
     return target;
 }
@@ -840,8 +834,6 @@ MaskedImageSP NearestNeighborField::ExpectationMaximization(NearestNeighborField
         //minimize the NNF
         nnf_TargetToSource->minimize(iterNNF);
 
-        //DebugSaver::instance()->debugDumpField("T2S", nnf_TargetToSource->field);
-
         //Now we rebuild the target using best patches from source
         MaskedImageSP newsource = nullptr;
         bool upscaled = false;
@@ -865,7 +857,6 @@ MaskedImageSP NearestNeighborField::ExpectationMaximization(NearestNeighborField
         ExpectationStep(nnf_TargetToSource, newsource, newtarget, upscaled);
     }
 
-    //DebugSaver::instance()->debugDumpField("T2S_Final", nnf_TargetToSource->field);
     return newtarget;
 }
 
@@ -956,9 +947,25 @@ void NearestNeighborField::ExpectationStep(NearestNeighborFieldSP nnf, MaskedIma
 
 
 
-void patchImage(KisPaintDeviceSP imageDev, KisPaintDeviceSP maskDev, int radius)
+void patchImage(KisPaintDeviceSP imageDev, KisPaintDeviceSP maskDev, int patchRadius, int accuracy)
 {
-    Inpaint inpaint(imageDev, maskDev, radius);
+    maskDev->setDefaultPixel( KoColor(Qt::white, maskDev->colorSpace()));
+
+    QRect maskRect = maskDev->nonDefaultPixelArea();
+    QRect imageRect = imageDev->exactBounds();
+
+    float scale = 1 + (accuracy / 25); //basically higher accuracy means we include more surrouding area around the patch
+    int dx = maskRect.width()*scale;
+    int dy = maskRect.height()*scale;
+    maskRect.adjust(-dx, -dy, dx, dy);
+    maskRect = maskRect.intersected(imageRect);
+
+    KisPaintDeviceSP tempImageDev = new KisPaintDevice( imageDev->colorSpace() );
+    KisPaintDeviceSP tempMaskDev = new KisPaintDevice( maskDev->colorSpace() );
+    tempImageDev->makeCloneFrom( imageDev, maskRect );
+    tempMaskDev->makeCloneFrom( maskDev, maskRect );
+
+    Inpaint inpaint(tempImageDev, tempMaskDev, patchRadius);
     MaskedImageSP output = inpaint.patch();
 
     output->toPaintDevice( imageDev );

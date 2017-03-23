@@ -36,25 +36,8 @@ public:
     KisToolSmartPatchOptionsWidget(KisCanvasResourceProvider *provider, QWidget *parent);
     ~KisToolSmartPatchOptionsWidget();
 
-private Q_SLOTS:
-    void entrySelected(QModelIndex index);
-    void slotCurrentFgColorChanged(const KoColor &color);
-    void slotCurrentNodeChanged(KisNodeSP node);
-    void slotColorLabelsChanged();
-
-    void slotMakeTransparent(bool value);
-    void slotRemove();
-
-    void slotUpdate();
-    void slotSetAutoUpdates(bool value);
-    void slotSetShowKeyStrokes(bool value);
-    void slotSetShowOutput(bool value);
-
-    void slotUpdateNodeProperties();
-
-protected:
-    void showEvent(QShowEvent *event);
-    void hideEvent(QHideEvent *event);
+    int getPatchRadius( void );
+    int getAccuracy( void );
 
 private:
     struct Private;

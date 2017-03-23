@@ -62,6 +62,7 @@ Q_SIGNALS:
 
 private:
     bool canCreateInpaintMask() const;
+    void inpaintImage( KisPaintDeviceSP maskDev, KisPaintDeviceSP imageDev );
 
 private:
     struct Private;

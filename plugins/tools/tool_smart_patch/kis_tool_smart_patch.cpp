@@ -43,7 +43,7 @@
 #include "kis_resources_snapshot.h"
 
 
-void patchImage(KisPaintDeviceSP imageDev, KisPaintDeviceSP maskDev, int radius);
+void patchImage(KisPaintDeviceSP imageDev, KisPaintDeviceSP maskDev, int radius, int accuracy);
 
 struct KisToolSmartPatch::Private
 {
@@ -53,6 +53,7 @@ struct KisToolSmartPatch::Private
     KisPaintDeviceSP maskDev = nullptr;
     KisResourcesSnapshotSP resources = nullptr;
     KoColor currentFgColor;
+    KisToolSmartPatchOptionsWidget *optionsWidget = nullptr;
 };
 
 
@@ -67,6 +68,7 @@ KisToolSmartPatch::KisToolSmartPatch(KoCanvasBase * canvas)
 
 KisToolSmartPatch::~KisToolSmartPatch()
 {
+    m_d->optionsWidget = nullptr;
 }
 
 void KisToolSmartPatch::activate(ToolActivation activation, const QSet<KoShape*> &shapes)
@@ -92,14 +94,23 @@ bool KisToolSmartPatch::canCreateInpaintMask() const
     return node && node->inherits("KisLayer");
 }
 
+void KisToolSmartPatch::inpaintImage(KisPaintDeviceSP maskDev, KisPaintDeviceSP imageDev)
+{
+    int accuracy = 0;
+    int patchRadius = 2;
+
+
+    if( !m_d.isNull() && m_d->optionsWidget ){
+        accuracy = m_d->optionsWidget->getAccuracy();
+        patchRadius = m_d->optionsWidget->getPatchRadius();
+    }
+    patchImage( imageDev, maskDev, patchRadius, accuracy );
+
+}
+
 void KisToolSmartPatch::activatePrimaryAction()
 {
     KisToolFreehand::activatePrimaryAction();
-
-//    if (!canCreateInpaintMask()) {
-//        QString message = i18n("Smart patch tool cannot paint on this layer.  Please select a paint layer.");
-//        static_cast<KisCanvas2*>(canvas())->viewManager()->showFloatingMessage(message, koIcon("object-locked"));
-//    }
 }
 
 void KisToolSmartPatch::deactivatePrimaryAction()
@@ -165,7 +176,10 @@ void KisToolSmartPatch::endPrimaryAction(KoPointerEvent *event)
     m_d->maskDev = new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8());
     m_d->maskDev->makeCloneFrom(currentNode()->paintDevice(), currentNode()->paintDevice()->extent());
 
-    patchImage( m_d->imageDev, m_d->maskDev, 4 );
+
+    inpaintImage( m_d->maskDev, m_d->imageDev );
+
+
     KIS_DUMP_DEVICE_2(m_d->imageDev, m_d->imageDev->extent(), "patched", "/home/eugening/Projects/Out");
     KIS_DUMP_DEVICE_2(m_d->maskDev, m_d->imageDev->extent(), "output", "/home/eugening/Projects/Out");
 
@@ -187,16 +201,10 @@ QWidget * KisToolSmartPatch::createOptionWidget()
 {
     KisCanvas2 * kiscanvas = dynamic_cast<KisCanvas2*>(canvas());
 
-    QWidget *optionsWidget = new KisToolSmartPatchOptionsWidget(kiscanvas->viewManager()->resourceProvider(), 0);
-    optionsWidget->setObjectName(toolId() + "option widget");
+    m_d->optionsWidget = new KisToolSmartPatchOptionsWidget(kiscanvas->viewManager()->resourceProvider(), 0);
+    m_d->optionsWidget->setObjectName(toolId() + "option widget");
 
-    // // See https://bugs.kde.org/show_bug.cgi?id=316896
-    // QWidget *specialSpacer = new QWidget(optionsWidget);
-    // specialSpacer->setObjectName("SpecialSpacer");
-    // specialSpacer->setFixedSize(0, 0);
-    // optionsWidget->layout()->addWidget(specialSpacer);
-
-    return optionsWidget;
+    return m_d->optionsWidget;
 }
 
 

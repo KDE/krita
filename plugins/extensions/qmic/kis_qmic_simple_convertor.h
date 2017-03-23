@@ -22,17 +22,9 @@
 #include <QVector>
 #include <QRect>
 #include <kis_paint_device.h>
+#include <gmic.h>
 
 class QImage;
-
-template<typename T> struct gmic_image {
-    unsigned int _width;       // Number of image columns (dimension along the X-axis).
-    unsigned int _height;      // Number of image lines (dimension along the Y-axis)
-    unsigned int _depth;       // Number of image slices (dimension along the Z-axis).
-    unsigned int _spectrum;    // Number of image channels (dimension along the C-axis).
-    bool _is_shared;           // Tells if the data buffer is shared by another structure.
-    T *_data;                  // Pointer to the first pixel value.
-};
 
 class KisQmicSimpleConvertor
 {

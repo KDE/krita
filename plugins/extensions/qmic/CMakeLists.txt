@@ -2,6 +2,7 @@ set(kritaqmic_SOURCES
     QMic.cpp 
     PluginSettings.cpp
     kis_qmic_simple_convertor.cpp
+    kis_input_output_mapper.cpp
 )
 
 ki18n_wrap_ui (

@@ -82,7 +82,7 @@ void WaveletDecompose::slotWaveletDecompose()
         KisImageSP image = m_view->image();
         if (!image) return;
 
-        if (!m_view->blockUntillOperationsFinished(image)) return;
+        if (!m_view->blockUntilOperationsFinished(image)) return;
 
         image->barrierLock();
 

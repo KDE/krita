@@ -552,7 +552,7 @@ void KisTool::deleteSelection()
 
     KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
     KisViewManager* viewManager = kiscanvas->viewManager();
-    viewManager->blockUntillOperationsFinished(image());
+    viewManager->blockUntilOperationsFinished(image());
 
     if (!KisToolUtils::clearImage(image(), resources->currentNode(), resources->activeSelection())) {
         KoToolBase::deleteSelection();

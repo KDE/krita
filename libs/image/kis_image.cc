@@ -755,7 +755,11 @@ void KisImage::rotateImage(double radians)
 
 void KisImage::rotateNode(KisNodeSP node, double radians)
 {
-    rotateImpl(kundo2_i18n("Rotate Layer"), node, false, radians);
+    if (node->inherits("KisMask")) {
+        rotateImpl(kundo2_i18n("Rotate Mask"), node, false, radians);
+    } else {
+        rotateImpl(kundo2_i18n("Rotate Layer"), node, false, radians);
+    }
 }
 
 void KisImage::shearImpl(const KUndo2MagicString &actionName,

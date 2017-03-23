@@ -69,8 +69,6 @@ private:
 
     void updateGUI();
 
-    void rotateLayer(double radians);
-
 private Q_SLOTS:
 
     void mergeLayer();

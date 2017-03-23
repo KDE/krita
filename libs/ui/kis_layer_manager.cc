@@ -563,18 +563,6 @@ void KisLayerManager::addGeneratorLayer(KisNodeSP activeNode)
 
 }
 
-void KisLayerManager::rotateLayer(double radians)
-{
-    if (!m_view->image()) return;
-
-    KisLayerSP layer = activeLayer();
-    if (!layer) return;
-
-    if (!m_view->blockUntilOperationsFinished(m_view->image())) return;
-
-    m_view->image()->rotateNode(layer, radians);
-}
-
 void KisLayerManager::flattenImage()
 {
     KisImageSP image = m_view->image();

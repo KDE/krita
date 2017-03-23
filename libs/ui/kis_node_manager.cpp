@@ -890,9 +890,14 @@ void KisNodeManager::mergeLayer()
 
 void KisNodeManager::rotate(double radians)
 {
-    // XXX: implement rotation for masks as well
-    m_d->layerManager.rotateLayer(radians);
+    if(!m_d->view->image()) return;
 
+    KisNodeSP node = activeNode();
+    if (!node) return;
+
+    if (!m_d->view->blockUntilOperationsFinished(m_d->view->image())) return;
+
+    m_d->view->image()->rotateNode(node, radians);
 }
 
 void KisNodeManager::rotate180()

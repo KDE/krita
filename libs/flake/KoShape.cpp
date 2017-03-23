@@ -157,11 +157,14 @@ KoShapePrivate::KoShapePrivate(const KoShapePrivate &rhs, KoShape *q)
 KoShapePrivate::~KoShapePrivate()
 {
     Q_Q(KoShape);
-    if (parent)
+    if (parent) {
         parent->removeShape(q);
-    Q_FOREACH (KoShapeManager *manager, shapeManagers) {
-        manager->remove(q);
     }
+
+    Q_FOREACH (KoShapeManager *manager, shapeManagers) {
+        manager->shapeInterface()->notifyShapeDestructed(q);
+    }
+    shapeManagers.clear();
 
     if (shadow && !shadow->deref())
         delete shadow;

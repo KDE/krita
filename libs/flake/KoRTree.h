@@ -76,6 +76,12 @@ public:
     virtual void insert(const QRectF& bb, const T& data);
 
     /**
+     * @brief Show if a shape is a part of the tree
+     * @param data
+     */
+    bool contains(const T &data);
+
+    /**
      * @brief Remove a data item from the tree
      *
      * This removed a data item from the tree. If necessary the tree will
@@ -434,6 +440,13 @@ void KoRTree<T>::insert(Node * node)
         adjustTree(newNodes.first, newNodes.second);
     }
 }
+
+template <typename T>
+bool KoRTree<T>::contains(const T &data)
+{
+    return m_leafMap[data];
+}
+
 
 template <typename T>
 void KoRTree<T>::remove(const T&data)

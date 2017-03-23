@@ -26,9 +26,9 @@
 #include "KoShape.h"
 #include "KoShape_p.h"
 #include "KoShapeContainer.h"
+#include "KoShapeManager.h"
 #include <KoRTree.h>
 
-class KoShapeManager;
 class KoCanvasBase;
 class KoShapeGroup;
 class KoShapePaintingContext;
@@ -41,7 +41,8 @@ public:
         : selection(new KoSelection()),
           canvas(c),
           tree(4, 2),
-          q(shapeManager)
+          q(shapeManager),
+          shapeInterface(shapeManager)
     {
     }
 
@@ -108,6 +109,7 @@ public:
     QSet<KoShape *> aggregate4update;
     QHash<KoShape*, int> shapeIndexesBeforeUpdate;
     KoShapeManager *q;
+    KoShapeManager::ShapeInterface shapeInterface;
 };
 
 #endif

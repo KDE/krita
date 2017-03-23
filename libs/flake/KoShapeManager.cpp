@@ -138,7 +138,6 @@ KoShapeManager::~KoShapeManager()
     delete d;
 }
 
-
 void KoShapeManager::setShapes(const QList<KoShape *> &shapes, Repaint repaint)
 {
     //clear selection
@@ -149,6 +148,7 @@ void KoShapeManager::setShapes(const QList<KoShape *> &shapes, Repaint repaint)
     d->aggregate4update.clear();
     d->tree.clear();
     d->shapes.clear();
+
     Q_FOREACH (KoShape *shape, shapes) {
         addShape(shape, repaint);
     }
@@ -160,10 +160,12 @@ void KoShapeManager::addShape(KoShape *shape, Repaint repaint)
         return;
     shape->priv()->addShapeManager(this);
     d->shapes.append(shape);
+
     if (d->shapeUsedInRenderingTree(shape)) {
         QRectF br(shape->boundingRect());
         d->tree.insert(br, shape);
     }
+
     if (repaint == PaintShapeOnAdd) {
         shape->update();
     }
@@ -192,6 +194,7 @@ void KoShapeManager::remove(KoShape *shape)
     shape->priv()->removeShapeManager(this);
     d->selection->deselect(shape);
     d->aggregate4update.remove(shape);
+
     if (d->shapeUsedInRenderingTree(shape)) {
         d->tree.remove(shape);
     }
@@ -204,11 +207,33 @@ void KoShapeManager::remove(KoShape *shape)
             remove(containerShape);
         }
     }
-
-    // This signal is used in the annotation shape.
-    // FIXME: Is this really what we want?  (and shouldn't it be called shapeDeleted()?)
-    shapeRemoved(shape);
 }
+
+KoShapeManager::ShapeInterface::ShapeInterface(KoShapeManager *_q)
+    : q(_q)
+{
+}
+
+void KoShapeManager::ShapeInterface::notifyShapeDestructed(KoShape *shape)
+{
+    q->d->selection->deselect(shape);
+    q->d->aggregate4update.remove(shape);
+
+    // we cannot access RTTI of the semi-destructed shape, so just
+    // unlink it lazily
+    if (q->d->tree.contains(shape)) {
+        q->d->tree.remove(shape);
+    }
+
+    q->d->shapes.removeAll(shape);
+}
+
+
+KoShapeManager::ShapeInterface *KoShapeManager::shapeInterface()
+{
+    return &d->shapeInterface;
+}
+
 
 void KoShapeManager::paint(QPainter &painter, const KoViewConverter &converter, bool forPrint)
 {

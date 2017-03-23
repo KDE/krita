@@ -161,7 +161,7 @@ void KisFreeTransformStrategy::Private::recalculateTransformedHandles()
 
 void KisFreeTransformStrategy::setTransformFunction(const QPointF &mousePos, bool perspectiveModifierActive)
 {
-    if (perspectiveModifierActive) {
+    if (perspectiveModifierActive && !m_d->transaction.hasShapeLayer()) {
         m_d->function = PERSPECTIVE;
         return;
     }

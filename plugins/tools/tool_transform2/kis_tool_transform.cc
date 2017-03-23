@@ -82,6 +82,9 @@
 #include "kis_transform_mask.h"
 #include "kis_transform_mask_adapter.h"
 
+#include "kis_layer_utils.h"
+#include "kis_shape_layer.h"
+
 #include "strokes/transform_stroke_strategy.h"
 
 KisToolTransform::KisToolTransform(KoCanvasBase * canvas)
@@ -256,8 +259,11 @@ void KisToolTransform::beginActionImpl(KoPointerEvent *event, bool usePrimaryAct
         return;
     }
 
-    if (currentNode()->inherits("KisShapeLayer") || currentNode()->inherits("KisFileLayer")) {
-        QString message = i18n("The transform tool cannot transform a vector or file layer. Use a transform mask instead.");
+    if ((currentNode()->inherits("KisShapeLayer") &&
+         !m_currentArgs.mode() == ToolTransformArgs::FREE_TRANSFORM)
+         || currentNode()->inherits("KisFileLayer")) {
+
+        QString message = i18n("The transform tool cannot transform a file layer. Use a transform mask instead.");
         KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
         kiscanvas->viewManager()->showFloatingMessage(message, koIcon("object-locked"));
         event->ignore();
@@ -693,8 +699,10 @@ bool KisToolTransform::tryFetchArgsFromCommandAndUndo(ToolTransformArgs *args, T
         args->saveContinuedState();
 
         image()->undoAdapter()->undoLastCommand();
+
         // FIXME: can we make it async?
         image()->waitForDone();
+        forceRepaintShapeLayers(oldRootNode);
 
         result = true;
     }
@@ -813,7 +821,7 @@ void KisToolTransform::activate(ToolActivation toolActivation, const QSet<KoShap
     KisTool::activate(toolActivation, shapes);
 
     if (currentNode()) {
-        m_transaction = TransformTransactionProperties(QRectF(), &m_currentArgs, currentNode());
+        m_transaction = TransformTransactionProperties(QRectF(), &m_currentArgs, KisNodeSP(), m_workRecursively);
     }
 
     startStroke(ToolTransformArgs::FREE_TRANSFORM, false);
@@ -911,7 +919,7 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode, bool f
         return;
     }
 
-    m_transaction = TransformTransactionProperties(srcRect, &m_currentArgs, currentNode);
+    m_transaction = TransformTransactionProperties(srcRect, &m_currentArgs, currentNode, m_workRecursively);
 
     initThumbnailImage(previewDevice);
     updateSelectionPath();
@@ -960,6 +968,7 @@ void KisToolTransform::endStroke()
 
     m_strokeData.clear();
     m_changesTracker.reset();
+    m_transaction = TransformTransactionProperties(QRectF(), &m_currentArgs, KisNodeSP(), false);
 }
 
 void KisToolTransform::cancelStroke()
@@ -973,6 +982,7 @@ void KisToolTransform::cancelStroke()
         image()->cancelStroke(m_strokeData.strokeId());
         m_strokeData.clear();
         m_changesTracker.reset();
+        m_transaction = TransformTransactionProperties(QRectF(), &m_currentArgs, KisNodeSP(), false);
     }
 }
 
@@ -1135,8 +1145,11 @@ void KisToolTransform::slotResetTransform()
             slotEditingFinished();
 
         } else {
+            KisNodeSP root = m_transaction.rootNode() ? m_transaction.rootNode() : image()->root();
+
             cancelStroke();
             image()->waitForDone();
+            forceRepaintShapeLayers(root);
             startStroke(savedMode, true);
 
             KIS_ASSERT_RECOVER_NOOP(!m_currentArgs.continuedTransform());
@@ -1151,11 +1164,35 @@ void KisToolTransform::slotRestartTransform()
 {
     if (!m_strokeData.strokeId()) return;
 
+    KisNodeSP root = m_transaction.rootNode();
+    KIS_ASSERT_RECOVER_RETURN(root); // the stroke is guaranteed to be started by an 'if' above
+
     ToolTransformArgs savedArgs(m_currentArgs);
     cancelStroke();
     image()->waitForDone();
+    forceRepaintShapeLayers(root);
     startStroke(savedArgs.mode(), true);
 }
+
+void KisToolTransform::forceRepaintShapeLayers(KisNodeSP root)
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(root);
+
+    auto forceUpdateFunction =
+        [] (KisNodeSP node) {
+            KisShapeLayer *shapeLayer = dynamic_cast<KisShapeLayer*>(node.data());
+            if (shapeLayer) {
+                shapeLayer->forceRepaint();
+            }
+        };
+
+    if (m_workRecursively) {
+        KisLayerUtils::recursiveApplyNodes(root, forceUpdateFunction);
+    } else {
+        forceUpdateFunction(root);
+    }
+}
+
 
 void KisToolTransform::slotEditingFinished()
 {

@@ -22,6 +22,7 @@
 #include <QRectF>
 #include <QPointF>
 #include "kis_node.h"
+#include "kis_layer_utils.h"
 
 class ToolTransformArgs;
 
@@ -33,11 +34,24 @@ public:
     {
     }
 
-TransformTransactionProperties(const QRectF &originalRect, ToolTransformArgs *currentConfig, KisNodeSP rootNode)
+TransformTransactionProperties(const QRectF &originalRect,
+                               ToolTransformArgs *currentConfig,
+                               KisNodeSP rootNode,
+                               bool workRecursively)
         : m_originalRect(originalRect),
           m_currentConfig(currentConfig),
-          m_rootNode(rootNode)
+          m_rootNode(rootNode),
+          m_hasShapeLayer(false)
     {
+        if (rootNode && workRecursively) {
+            m_hasShapeLayer =
+                KisLayerUtils::recursiveFindNode(rootNode,
+                    [] (KisNodeSP node) {
+                        return node->inherits("KisShapeLayer");
+                    });
+        } else if (rootNode && !workRecursively) {
+            m_hasShapeLayer = rootNode->inherits("KisShapeLayer");
+        }
     }
 
     qreal originalHalfWidth() const {
@@ -108,6 +122,10 @@ TransformTransactionProperties(const QRectF &originalRect, ToolTransformArgs *cu
         return 0.9 * qreal(m_rootNode->opacity()) / 255.0;
     }
 
+    bool hasShapeLayer() const {
+        return m_hasShapeLayer;
+    }
+
 private:
     /**
      * Information about the original selected rect
@@ -116,6 +134,7 @@ private:
     QRectF m_originalRect;
     ToolTransformArgs *m_currentConfig;
     KisNodeSP m_rootNode;
+    bool m_hasShapeLayer;
 };
 
 #endif /* __TRANSFORM_TRANSACTION_PROPERTIES_H */

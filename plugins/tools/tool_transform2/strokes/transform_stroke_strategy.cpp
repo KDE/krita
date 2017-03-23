@@ -167,11 +167,8 @@ void TransformStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
                   dynamic_cast<KisExternalLayer*>(td->node.data())) {
 
                 if (td->config.mode() == ToolTransformArgs::FREE_TRANSFORM ||
-                    td->config.mode() == ToolTransformArgs::PERSPECTIVE_4POINT) {
-
-                    if (td->config.aX() || td->config.aY()) {
-                        warnKrita << "Perspective transform of an external layer is not supported:" << extLayer->name();
-                    }
+                    (td->config.mode() == ToolTransformArgs::PERSPECTIVE_4POINT &&
+                     extLayer->supportsPerspectiveTransform())) {
 
                     QVector3D transformedCenter;
                     KisTransformWorker w = KisTransformUtils::createTransformWorker(td->config, 0, 0, &transformedCenter);

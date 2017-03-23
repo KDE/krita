@@ -220,8 +220,10 @@ public Q_SLOTS:
     void imageTooBigRequested(bool value);
 
 private:
-    bool clearDevices(KisNodeSP node, bool recursive);
-    void transformDevices(KisNodeSP node, bool recursive);
+    QList<KisNodeSP> fetchNodesList(ToolTransformArgs::TransformMode mode, KisNodeSP root, bool recursive);
+
+    bool clearDevices(const QList<KisNodeSP> &nodes);
+    void transformClearedDevices();
 
     void startStroke(ToolTransformArgs::TransformMode mode, bool forceReset);
     void endStroke();

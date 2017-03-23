@@ -259,17 +259,6 @@ void KisToolTransform::beginActionImpl(KoPointerEvent *event, bool usePrimaryAct
         return;
     }
 
-    if ((currentNode()->inherits("KisShapeLayer") &&
-         !m_currentArgs.mode() == ToolTransformArgs::FREE_TRANSFORM)
-         || currentNode()->inherits("KisFileLayer")) {
-
-        QString message = i18n("The transform tool cannot transform a file layer. Use a transform mask instead.");
-        KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
-        kiscanvas->viewManager()->showFloatingMessage(message, koIcon("object-locked"));
-        event->ignore();
-        return;
-    }
-
     if (!m_strokeData.strokeId()) {
         startStroke(m_currentArgs.mode(), false);
     } else {
@@ -821,7 +810,7 @@ void KisToolTransform::activate(ToolActivation toolActivation, const QSet<KoShap
     KisTool::activate(toolActivation, shapes);
 
     if (currentNode()) {
-        m_transaction = TransformTransactionProperties(QRectF(), &m_currentArgs, KisNodeSP(), m_workRecursively);
+        m_transaction = TransformTransactionProperties(QRectF(), &m_currentArgs, KisNodeSP(), {});
     }
 
     startStroke(ToolTransformArgs::FREE_TRANSFORM, false);
@@ -891,6 +880,19 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode, bool f
             !currentNode->paintDevice();
     }
 
+    QList<KisNodeSP> nodesList = fetchNodesList(mode, currentNode, m_workRecursively);
+
+    if (nodesList.isEmpty()) {
+        KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
+        kisCanvas->viewManager()->
+            showFloatingMessage(
+                i18nc("floating message in transformation tool",
+                      "Selected layer cannot be transformed with active transformation mode "),
+                 koIcon("object-locked"), 4000, KisFloatingMessage::High);
+        return;
+    }
+
+
     TransformStrokeStrategy *strategy = new TransformStrokeStrategy(currentNode, resources->activeSelection(), image().data());
     KisPaintDeviceSP previewDevice = strategy->previewDevice();
 
@@ -919,7 +921,7 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode, bool f
         return;
     }
 
-    m_transaction = TransformTransactionProperties(srcRect, &m_currentArgs, currentNode, m_workRecursively);
+    m_transaction = TransformTransactionProperties(srcRect, &m_currentArgs, currentNode, nodesList);
 
     initThumbnailImage(previewDevice);
     updateSelectionPath();
@@ -933,7 +935,7 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode, bool f
 
     m_strokeData = StrokeData(image()->startStroke(strategy));
 
-    bool haveInvisibleNodes = clearDevices(m_transaction.rootNode(), m_workRecursively);
+    bool haveInvisibleNodes = clearDevices(nodesList);
     if (haveInvisibleNodes) {
         KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
         kisCanvas->viewManager()->
@@ -953,13 +955,13 @@ void KisToolTransform::endStroke()
     if (!m_strokeData.strokeId()) return;
 
     if (!m_currentArgs.isIdentity()) {
-        transformDevices(m_transaction.rootNode(), m_workRecursively);
+        transformClearedDevices();
 
         image()->addJob(m_strokeData.strokeId(),
                         new TransformStrokeStrategy::TransformData(
                             TransformStrokeStrategy::TransformData::SELECTION,
                             m_currentArgs,
-                            m_transaction.rootNode()));
+                            m_transaction.rootNode())); // root node is used for progress only
 
         image()->endStroke(m_strokeData.strokeId());
     } else {
@@ -968,7 +970,8 @@ void KisToolTransform::endStroke()
 
     m_strokeData.clear();
     m_changesTracker.reset();
-    m_transaction = TransformTransactionProperties(QRectF(), &m_currentArgs, KisNodeSP(), false);
+    m_transaction = TransformTransactionProperties(QRectF(), &m_currentArgs, KisNodeSP(), {});
+    outlineChanged();
 }
 
 void KisToolTransform::cancelStroke()
@@ -982,7 +985,8 @@ void KisToolTransform::cancelStroke()
         image()->cancelStroke(m_strokeData.strokeId());
         m_strokeData.clear();
         m_changesTracker.reset();
-        m_transaction = TransformTransactionProperties(QRectF(), &m_currentArgs, KisNodeSP(), false);
+        m_transaction = TransformTransactionProperties(QRectF(), &m_currentArgs, KisNodeSP(), {});
+        outlineChanged();
     }
 }
 
@@ -999,51 +1003,60 @@ void KisToolTransform::slotTrackerChangedConfig()
     updateOptionWidget();
 }
 
-bool KisToolTransform::clearDevices(KisNodeSP node, bool recursive)
+QList<KisNodeSP> KisToolTransform::fetchNodesList(ToolTransformArgs::TransformMode mode, KisNodeSP root, bool recursive)
 {
-    bool haveInvisibleNodes = false;
-    if (!node->isEditable(false)) return haveInvisibleNodes;
+    QList<KisNodeSP> result;
 
-    haveInvisibleNodes = !node->visible(false);
+    auto fetchFunc =
+        [&result, mode] (KisNodeSP node) {
+            if (node->isEditable() &&
+                (!node->inherits("KisShapeLayer") || mode == ToolTransformArgs::FREE_TRANSFORM) &&
+                !node->inherits("KisFileLayer")) {
+
+                result << node;
+            }
+    };
 
     if (recursive) {
-        // simple tail-recursive iteration
-        KisNodeSP prevNode = node->lastChild();
-        while(prevNode) {
-            haveInvisibleNodes |= clearDevices(prevNode, recursive);
-            prevNode = prevNode->prevSibling();
-        }
+        KisLayerUtils::recursiveApplyNodes(root, fetchFunc);
+    } else {
+        fetchFunc(root);
     }
 
-    image()->addJob(m_strokeData.strokeId(),
-                    new TransformStrokeStrategy::ClearSelectionData(node));
+    return result;
+}
 
-    /**
-     * It might happen that the editablity state of the node would
-     * change during the stroke, so we need to save the set of
-     * applicable nodes right in the beginning of the processing
-     */
-    m_strokeData.addClearedNode(node);
+bool KisToolTransform::clearDevices(const QList<KisNodeSP> &nodes)
+{
+    bool haveInvisibleNodes = false;
+
+    Q_FOREACH (KisNodeSP node, nodes) {
+        haveInvisibleNodes |= !node->visible(false);
+
+        image()->addJob(m_strokeData.strokeId(),
+                        new TransformStrokeStrategy::ClearSelectionData(node));
+
+        /**
+         * It might happen that the editablity state of the node would
+         * change during the stroke, so we need to save the set of
+         * applicable nodes right in the beginning of the processing
+         */
+        m_strokeData.addClearedNode(node);
+    }
 
     return haveInvisibleNodes;
 }
 
-void KisToolTransform::transformDevices(KisNodeSP node, bool recursive)
+void KisToolTransform::transformClearedDevices()
 {
-    if (!node->isEditable()) return;
-
-    KIS_ASSERT_RECOVER_RETURN(recursive ||
-                              (m_strokeData.clearedNodes().size() == 1 &&
-                               KisNodeSP(m_strokeData.clearedNodes().first()) == node));
-
-    Q_FOREACH (KisNodeSP currentNode, m_strokeData.clearedNodes()) {
-        KIS_ASSERT_RECOVER_RETURN(currentNode);
+    Q_FOREACH (KisNodeSP node, m_strokeData.clearedNodes()) {
+        KIS_ASSERT_RECOVER_RETURN(node);
 
         image()->addJob(m_strokeData.strokeId(),
                         new TransformStrokeStrategy::TransformData(
                             TransformStrokeStrategy::TransformData::PAINT_DEVICE,
                             m_currentArgs,
-                            currentNode));
+                            node));
     }
 }
 

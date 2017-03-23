@@ -23,6 +23,7 @@
 #include <QPointF>
 #include "kis_node.h"
 #include "kis_layer_utils.h"
+#include "kis_external_layer_iface.h"
 
 class ToolTransformArgs;
 
@@ -37,20 +38,20 @@ public:
 TransformTransactionProperties(const QRectF &originalRect,
                                ToolTransformArgs *currentConfig,
                                KisNodeSP rootNode,
-                               bool workRecursively)
+                               const QList<KisNodeSP> &transformedNodes)
         : m_originalRect(originalRect),
           m_currentConfig(currentConfig),
           m_rootNode(rootNode),
-          m_hasShapeLayer(false)
+          m_shouldAvoidPerspectiveTransform(false),
+          m_transformedNodes(transformedNodes)
     {
-        if (rootNode && workRecursively) {
-            m_hasShapeLayer =
-                KisLayerUtils::recursiveFindNode(rootNode,
-                    [] (KisNodeSP node) {
-                        return node->inherits("KisShapeLayer");
-                    });
-        } else if (rootNode && !workRecursively) {
-            m_hasShapeLayer = rootNode->inherits("KisShapeLayer");
+        Q_FOREACH (KisNodeSP node, m_transformedNodes) {
+            if (KisExternalLayer *extLayer = dynamic_cast<KisExternalLayer*>(node.data())) {
+                if (!extLayer->supportsPerspectiveTransform()) {
+                    m_shouldAvoidPerspectiveTransform = true;
+                    break;
+                }
+            }
         }
     }
 
@@ -122,8 +123,12 @@ TransformTransactionProperties(const QRectF &originalRect,
         return 0.9 * qreal(m_rootNode->opacity()) / 255.0;
     }
 
-    bool hasShapeLayer() const {
-        return m_hasShapeLayer;
+    bool shouldAvoidPerspectiveTransform() const {
+        return m_shouldAvoidPerspectiveTransform;
+    }
+
+    QList<KisNodeSP> nodesList() const {
+        return m_transformedNodes;
     }
 
 private:
@@ -134,7 +139,8 @@ private:
     QRectF m_originalRect;
     ToolTransformArgs *m_currentConfig;
     KisNodeSP m_rootNode;
-    bool m_hasShapeLayer;
+    bool m_shouldAvoidPerspectiveTransform;
+    QList<KisNodeSP> m_transformedNodes;
 };
 
 #endif /* __TRANSFORM_TRANSACTION_PROPERTIES_H */

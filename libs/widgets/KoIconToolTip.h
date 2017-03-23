@@ -23,12 +23,14 @@
 
 #include "KoItemToolTip.h"
 
-class KoIconToolTip: public KoItemToolTip
+#include "kritawidgets_export.h"
+
+class KRITAWIDGETS_EXPORT KoIconToolTip: public KoItemToolTip
 {
 
     public:
-        KoIconToolTip() {}
-        virtual ~KoIconToolTip() {}
+        KoIconToolTip();
+        virtual ~KoIconToolTip();
 
     protected:
         virtual QTextDocument *createDocument( const QModelIndex &index );

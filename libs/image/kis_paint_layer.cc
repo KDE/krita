@@ -335,6 +335,7 @@ KisKeyframeChannel *KisPaintLayer::requestKeyframeChannel(const QString &id)
     if (id == KisKeyframeChannel::Content.id()) {
         m_d->contentChannel = m_d->paintDevice->createKeyframeChannel(KisKeyframeChannel::Content);
         m_d->contentChannel->setOnionSkinsEnabled(onionSkinEnabled());
+        enableAnimation();
         return m_d->contentChannel;
     }
 

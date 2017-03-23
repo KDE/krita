@@ -22,7 +22,7 @@
 
 #include <QOpenGLWidget>
 #include <QOpenGLFunctions_3_0>
-
+#include <QOpenGLFunctions_3_2_Core>
 #include "canvas/kis_canvas_widget_base.h"
 #include "opengl/kis_opengl_image_textures.h"
 
@@ -34,7 +34,14 @@ class KisDisplayColorConverter;
 class QOpenGLShaderProgram;
 class QPainterPath;
 
+#ifndef Q_MOC_RUN
+#ifndef Q_OS_MAC
+#define GLFunctions QOpenGLFunctions_3_0
+#else
+#define GLFunctions QOpenGLFunctions_3_2_Core
+#endif
 
+#endif
 /**
  * KisOpenGLCanvas is the widget that shows the actual image using OpenGL
  *
@@ -42,9 +49,13 @@ class QPainterPath;
  * in the qpainter canvas.
  *
  */
-class KRITAUI_EXPORT KisOpenGLCanvas2 : public QOpenGLWidget, protected QOpenGLFunctions_3_0, public KisCanvasWidgetBase
+class KRITAUI_EXPORT KisOpenGLCanvas2
+        : public QOpenGLWidget
+#ifndef Q_MOC_RUN
+        , protected GLFunctions
+#endif
+        , public KisCanvasWidgetBase
 {
-
     Q_OBJECT
 
 public:

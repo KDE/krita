@@ -38,11 +38,13 @@
 
 #include <kis_debug.h>
 
+#include <QThread>
+#include <QApplication>
+
 //#define DEBUG_REPAINT
 
 KisShapeLayerCanvas::KisShapeLayerCanvas(KisShapeLayer *parent, KisImageWSP image)
-        : QObject()
-        , KoCanvasBase(0)
+        : KoCanvasBase(0)
         , m_isDestroying(false)
         , m_viewConverter(new KisImageViewConverter(image))
         , m_shapeManager(new KoShapeManager(this))
@@ -183,5 +185,11 @@ KoUnit KisShapeLayerCanvas::unit() const
 {
     Q_ASSERT(false); // This should never be called as this canvas should have no tools.
     return KoUnit(KoUnit::Point);
+}
+
+void KisShapeLayerCanvas::forceRepaint()
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(qApp->thread() == QThread::currentThread());
+    repaint();
 }
 

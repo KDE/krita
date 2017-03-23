@@ -76,9 +76,9 @@ void ColorSetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & op
     painter->drawText(option.rect.x() + 5, option.rect.y() + painter->fontMetrics().ascent() + 5, colorSet->name());
 
     int size = 7;
-    for (int i = 0; i < colorSet->nColors() && i*size < option.rect.width(); i++) {
+    for (quint32 i = 0; i < colorSet->nColors() && i*size < (quint32)option.rect.width(); i++) {
         QRect rect(option.rect.x() + i*size, option.rect.y() + option.rect.height() - size, size, size);
-        painter->fillRect(rect, colorSet->getColor(i).color.toQColor());
+        painter->fillRect(rect, colorSet->getColorGlobal(i).color.toQColor());
     }
     
     painter->restore();

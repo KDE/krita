@@ -47,22 +47,21 @@ void TestSelection::testSelectedShapes()
     QCOMPARE(selection.count(), 3);
     QCOMPARE(selection.selectedShapes().count(), 3);
 
+    selection.deselectAll();
+
     MockGroup *group1 = new MockGroup();
     group1->addShape(shape1);
     group1->addShape(shape2);
     selection.select(group1);
-    QCOMPARE(selection.count(), 3);  // don't return the grouping shape.
-    // toplevel returns shape3 and group1
-    QCOMPARE(selection.selectedShapes().count(), 2);
+    QCOMPARE(selection.count(), 1);
+    QCOMPARE(selection.selectedShapes().count(), 1);
 
     MockGroup *group2 = new MockGroup();
     group2->addShape(shape3);
     group2->addShape(group1);
     selection.select(group2);
-    QCOMPARE(selection.count(), 3);  // thats 5 minus 2 grouping shapes.
-    // toplevel returns only group2
-    QCOMPARE(selection.selectedShapes().count(), 1);
-
+    QCOMPARE(selection.count(), 2);
+    QCOMPARE(selection.selectedShapes().count(), 2);
 
     group1->removeShape(shape1);
     group1->removeShape(shape2);
@@ -70,9 +69,8 @@ void TestSelection::testSelectedShapes()
     container->addShape(shape1);
     container->addShape(shape2);
     selection.select(container);
-    QCOMPARE(selection.count(), 4);  // thats 6 minus 2 grouping shapes.
-    // toplevel returns only group2 + container
-    QCOMPARE(selection.selectedShapes().count(), 2);
+    QCOMPARE(selection.count(), 3);
+    QCOMPARE(selection.selectedShapes().count(), 3);
 
     delete group2;
     delete container;

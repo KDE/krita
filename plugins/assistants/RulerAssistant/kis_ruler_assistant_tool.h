@@ -18,15 +18,17 @@
 #ifndef _KIS_RULER_ASSISTANT_TOOL_H_
 #define _KIS_RULER_ASSISTANT_TOOL_H_
 
-#include <kis_tool.h>
+#include <QPointer>
+
 #include <KoToolFactoryBase.h>
-#include "kis_painting_assistant.h"
-#include "ui_AssistantsToolOptions.h"
 #include <KoIcon.h>
+
+#include <kis_tool.h>
+#include "kis_painting_assistant.h"
 #include <kis_icon.h>
+#include <kis_canvas2.h>
 
-
-class KisCanvas2;
+#include "ui_AssistantsToolOptions.h"
 
 class KisRulerAssistantTool : public KisTool
 {
@@ -77,7 +79,7 @@ protected:
     virtual void paint(QPainter& gc, const KoViewConverter &converter);
 
 protected:
-    KisCanvas2* m_canvas;
+    QPointer<KisCanvas2> m_canvas;
     QList<KisPaintingAssistantHandleSP> m_handles, m_sideHandles;
     KisPaintingAssistantHandleSP m_handleDrag;
     KisPaintingAssistantHandleSP m_handleCombine;

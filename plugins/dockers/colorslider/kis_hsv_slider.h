@@ -22,6 +22,8 @@
 #ifndef KIS_HSVSLIDER_H
 #define KIS_HSVSLIDER_H
 
+#include <QPointer>
+
 #include <kselector.h>
 #include "KoColorDisplayRendererInterface.h"
 #include "kis_canvas2.h"
@@ -54,7 +56,7 @@ protected:
 private:
     qreal R, G, B, Gamma;
     KoColorDisplayRendererInterface *m_displayRenderer;
-    KisCanvas2* m_canvas;
+    QPointer<KisCanvas2> m_canvas;
 };
 
 #endif

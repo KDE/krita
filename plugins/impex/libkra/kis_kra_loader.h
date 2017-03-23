@@ -61,6 +61,9 @@ public:
     /// if empty, loading didn't fail...
     QStringList errorMessages() const;
 
+    /// if not empty, loading didn't fail, but there are problems
+    QStringList warningMessages() const;
+
 private:
 
     // this needs to be private, for neatness sake

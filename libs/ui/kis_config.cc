@@ -27,7 +27,8 @@
 #include <QFont>
 #include <QThread>
 #include <QStringList>
-
+#include <QSettings>
+#include <QStandardPaths>
 
 #include <kconfig.h>
 
@@ -600,8 +601,8 @@ bool KisConfig::useOpenGL(bool defaultValue) const
     }
 
     //dbgKrita << "use opengl" << m_cfg.readEntry("useOpenGL", true) << "success" << m_cfg.readEntry("canvasState", "OPENGL_SUCCESS");
-    QString canvasState = m_cfg.readEntry("canvasState", "OPENGL_SUCCESS");
-    return (m_cfg.readEntry("useOpenGL", true) && (canvasState == "OPENGL_SUCCESS" || canvasState == "TRY_OPENGL"));
+    QString cs = canvasState();
+    return (m_cfg.readEntry("useOpenGL", true) && (cs == "OPENGL_SUCCESS" || cs == "TRY_OPENGL"));
 }
 
 void KisConfig::setUseOpenGL(bool useOpenGL) const
@@ -970,7 +971,9 @@ void KisConfig::setShowFilterGalleryLayerMaskDialog(bool showFilterGallery) cons
 
 QString KisConfig::canvasState(bool defaultValue) const
 {
-    return (defaultValue ? "OPENGL_NOT_TRIED" : m_cfg.readEntry("canvasState", "OPENGL_NOT_TRIED"));
+    const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
+    QSettings kritarc(configPath + QStringLiteral("/kritadisplayrc"), QSettings::IniFormat);
+    return (defaultValue ? "OPENGL_NOT_TRIED" : kritarc.value("canvasState", "OPENGL_NOT_TRIED").toString());
 }
 
 void KisConfig::setCanvasState(const QString& state) const
@@ -980,8 +983,9 @@ void KisConfig::setCanvasState(const QString& state) const
         acceptableStates << "OPENGL_SUCCESS" << "TRY_OPENGL" << "OPENGL_NOT_TRIED" << "OPENGL_FAILED";
     }
     if (acceptableStates.contains(state)) {
-        m_cfg.writeEntry("canvasState", state);
-        m_cfg.sync();
+        const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
+        QSettings kritarc(configPath + QStringLiteral("/kritadisplayrc"), QSettings::IniFormat);
+        kritarc.setValue("canvasState", state);
     }
 }
 
@@ -1806,12 +1810,12 @@ KoColor KisConfig::readKoColor(const QString& name, const KoColor& color) const
     if (!m_cfg.readEntry(name).isNull()) {
         doc.setContent(m_cfg.readEntry(name));
         QDomElement e = doc.documentElement().firstChild().toElement();
-        return KoColor::fromXML(e, Integer16BitsColorDepthID.id(), QHash<QString, QString>());
+        return KoColor::fromXML(e, Integer16BitsColorDepthID.id());
     } else {
         QString blackColor = "<!DOCTYPE Color>\n<Color>\n <RGB r=\"0\" space=\"sRGB-elle-V2-srgbtrc.icc\" b=\"0\" g=\"0\"/>\n</Color>\n";
         doc.setContent(blackColor);
         QDomElement e = doc.documentElement().firstChild().toElement();
-        return KoColor::fromXML(e, Integer16BitsColorDepthID.id(), QHash<QString, QString>());
+        return KoColor::fromXML(e, Integer16BitsColorDepthID.id());
     }
     return color;
 

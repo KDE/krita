@@ -140,7 +140,7 @@ private:
     KisNodeSP findNonHidableNode(KisNodeSP startNode);
 private:
 
-    KisCanvas2* m_canvas;
+    QPointer<KisCanvas2> m_canvas;
     QMenu *m_newLayerMenu;
     KisImageWSP m_image;
     QPointer<KisNodeModel> m_nodeModel;

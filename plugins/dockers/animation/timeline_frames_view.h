@@ -99,6 +99,7 @@ protected:
     void mouseReleaseEvent(QMouseEvent *e);
     void wheelEvent(QWheelEvent *e);
     void rowsInserted(const QModelIndex& parent, int start, int end);
+    bool viewportEvent(QEvent *event);
 
 private:
     struct Private;

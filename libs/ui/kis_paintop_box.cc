@@ -583,7 +583,10 @@ void KisPaintopBox::setCurrentPaintop(KisPaintOpPresetSP preset)
     //qDebug() << "setCurrentPaintop(); " << preset->name();
 
     if (preset == m_resourceProvider->currentPreset()) {
-        return;
+
+        if (preset == m_tabletToolMap[m_currTabletToolID].preset) {
+            return;
+        }
     }
     Q_ASSERT(preset);
     const KoID& paintop = preset->paintOp();
@@ -760,6 +763,8 @@ void KisPaintopBox::slotInputDeviceChanged(const KoInputDevice& inputDevice)
 
     //qDebug() << "slotInputDeviceChanged()" << inputDevice.device() << inputDevice.uniqueTabletId();
 
+    m_currTabletToolID = TabletToolID(inputDevice);
+
     if (toolData == m_tabletToolMap.end()) {
         KisConfig cfg;
         KisPaintOpPresetResourceServer *rserver = KisResourceServerProvider::instance()->paintOpPresetServer(false);
@@ -792,8 +797,6 @@ void KisPaintopBox::slotInputDeviceChanged(const KoInputDevice& inputDevice)
             setCurrentPaintop(toolData->paintOpID);
         }
     }
-
-    m_currTabletToolID = TabletToolID(inputDevice);
 }
 
 void KisPaintopBox::slotCanvasResourceChanged(int key, const QVariant &value)

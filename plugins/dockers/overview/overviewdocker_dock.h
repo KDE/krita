@@ -18,11 +18,13 @@
 #ifndef _OVERVIEW_DOCK_H_
 #define _OVERVIEW_DOCK_H_
 
+#include <QPointer>
 #include <QDockWidget>
 #include <KoCanvasObserverBase.h>
 
+#include <kis_canvas2.h>
+
 class QVBoxLayout;
-class KisCanvas2;
 class OverviewWidget;
 
 class OverviewDockerDock : public QDockWidget, public KoCanvasObserverBase {
@@ -37,7 +39,7 @@ private:
     QVBoxLayout *m_layout;
     OverviewWidget *m_overviewWidget;
     QWidget *m_zoomSlider;
-    KisCanvas2 *m_canvas;
+    QPointer<KisCanvas2> m_canvas;
 };
 
 

@@ -20,15 +20,16 @@
 #ifndef TEXTPASTECOMMAND_H
 #define TEXTPASTECOMMAND_H
 
+#include <QPointer>
 #include <QClipboard>
 #include <QWeakPointer>
 #include <kundo2command.h>
+#include <KoCanvasBase.h>
 
 class QTextDocument;
 class KoDocumentRdfBase;
 class KoShapeController;
 class QMimeData;
-class KoCanvasBase;
 
 class TextPasteCommand : public KUndo2Command
 {
@@ -49,7 +50,7 @@ private:
     QWeakPointer<QTextDocument> m_document;
     KoDocumentRdfBase *m_rdf;
     KoShapeController *m_shapeController;
-    KoCanvasBase *m_canvas;
+    QPointer<KoCanvasBase> m_canvas;
     bool m_pasteAsText;
     bool m_first;
 };

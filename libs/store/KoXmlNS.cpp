@@ -47,7 +47,7 @@ const QString KoXmlNS::smil("urn:oasis:names:tc:opendocument:xmlns:smil-compatib
 const QString KoXmlNS::xhtml("http://www.w3.org/1999/xhtml");
 const QString KoXmlNS::xml("http://www.w3.org/XML/1998/namespace");
 const QString KoXmlNS::sodipodi("http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd");
-const QString KoXmlNS::krita("http://krita.org/kritasvg");
+const QString KoXmlNS::krita("http://krita.org/namespaces/svg/krita");
 
 const QString KoXmlNS::calligra = "http://www.calligra.org/2005/";
 const QString KoXmlNS::officeooo = "http://openoffice.org/2009/office";

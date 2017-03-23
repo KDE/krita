@@ -46,18 +46,23 @@ void KisTiffTest::testFiles()
 #ifndef CPU_32_BITS
     excludes << "flower-minisblack-06.tif";
 #endif
-    
+
 #ifdef HAVE_LCMS2
     excludes << "flower-separated-contig-08.tif"
              << "flower-separated-contig-16.tif"
              << "flower-separated-planar-08.tif"
              << "flower-separated-planar-16.tif"
+             << "flower-minisblack-02.tif"
+             << "flower-minisblack-04.tif"
+             << "flower-minisblack-08.tif"
              << "flower-minisblack-10.tif"
              << "flower-minisblack-12.tif"
              << "flower-minisblack-14.tif"
              << "flower-minisblack-16.tif"
              << "flower-minisblack-24.tif"
              << "flower-minisblack-32.tif"
+             << "jim___dg.tif"
+             << "jim___gg.tif"
              << "strike.tif";
 #endif
     excludes << "text.tif" << "ycbcr-cat.tif";

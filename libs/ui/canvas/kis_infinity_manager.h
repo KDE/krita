@@ -20,8 +20,12 @@
 #define __KIS_INFINITY_MANAGER_H
 
 #include "kis_canvas_decoration.h"
+
+#include <QPointer>
 #include <QPainterPath>
 #include <QCursor>
+
+#include <kis_canvas2.h>
 
 class KisView;
 
@@ -62,7 +66,7 @@ private:
 
     QVector<QRect> m_sideRects;
 
-    KisCanvas2 *m_canvas;
+    QPointer<KisCanvas2> m_canvas;
 };
 
 #endif /* __KIS_INFINITY_MANAGER_H */

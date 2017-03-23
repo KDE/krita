@@ -20,12 +20,14 @@
 
 #include <kritaui_export.h>
 
+#include <QPointer>
+
 #include "kundo2magicstring.h"
 #include "kis_layer.h"
 #include "kis_selection.h"
+#include "kis_canvas2.h"
 
 class KoShape;
-class KisCanvas2;
 
 /**
  * XXX: Doc!
@@ -49,7 +51,7 @@ public:
     bool tryDeselectCurrentSelection(const QRectF selectionViewRect, SelectionAction action);
 
 private:
-    KisCanvas2* m_canvas;
+    QPointer<KisCanvas2> m_canvas;
     KisImageSP m_image;
     KisLayerSP m_layer;
     KUndo2MagicString m_name;

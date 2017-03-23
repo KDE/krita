@@ -20,7 +20,9 @@
 #ifndef REVIEWTOOL_H
 #define REVIEWTOOL_H
 
-class KoCanvasBase;
+#include <QPointer>
+#include <KoCanvasBase.h>
+
 class KoPointerEvent;
 class KoTextEditor;
 class KoTextShapeData;
@@ -61,7 +63,7 @@ private:
 
     KoTextEditor *m_textEditor;
     KoTextShapeData *m_textShapeData;
-    KoCanvasBase *m_canvas;
+    QPointer<KoCanvasBase> m_canvas;
     TextShape *m_textShape;
     QAction *m_removeAnnotationAction;
     KoShape *m_currentAnnotationShape;

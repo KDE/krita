@@ -21,13 +21,14 @@
 
 #include <QWidget>
 #include <QLabel>
-
+#include <QPointer>
 #include <QDockWidget>
 
 #include <KoDockFactoryBase.h>
 #include <KoCanvasObserverBase.h>
 
 #include <kis_types.h>
+#include <kis_canvas2.h>
 
 #include "ui_wdglut.h"
 
@@ -37,8 +38,6 @@
 
 namespace OCIO = OCIO_NAMESPACE;
 
-
-class KisCanvas2;
 class BlackWhitePointChooser;
 
 #include "ocio_display_filter.h"
@@ -102,7 +101,7 @@ private:
 
     QWidget *m_page;
 
-    KisCanvas2 *m_canvas;
+    QPointer<KisCanvas2> m_canvas;
     OCIO::ConstConfigRcPtr m_ocioConfig;
     QSharedPointer<KisDisplayFilter> m_displayFilter;
 

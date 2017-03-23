@@ -269,9 +269,9 @@ KisView::~KisView()
             d->viewManager->filterManager()->cancel();
         }
     }
-
-    KisPart::instance()->removeView(this);
     KoToolManager::instance()->removeCanvasController(&d->canvasController);
+    KisPart::instance()->removeView(this);
+
     delete d;
 }
 

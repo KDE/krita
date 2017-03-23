@@ -376,6 +376,11 @@ void KisShapeLayer::setVisible(bool visible, bool isLoading)
     KisExternalLayer::setVisible(visible, isLoading);
 }
 
+void KisShapeLayer::forceRepaint()
+{
+    m_d->canvas->forceRepaint();
+}
+
 #include "SvgWriter.h"
 #include "SvgParser.h"
 #include <QXmlStreamReader>

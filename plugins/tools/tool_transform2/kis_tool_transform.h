@@ -30,6 +30,7 @@
 #include <QVector2D>
 #include <QVector3D>
 #include <QButtonGroup>
+#include <QPointer>
 
 #include <QKeySequence>
 
@@ -40,15 +41,12 @@
 #include <kis_types.h>
 #include <flake/kis_node_shape.h>
 #include <kis_tool.h>
+#include <kis_canvas2.h>
 
 #include "tool_transform_args.h"
 #include "tool_transform_changes_tracker.h"
 #include "kis_tool_transform_config_widget.h"
 #include "transform_transaction_properties.h"
-
-
-
-class KisCanvas2;
 
 class QTouchEvent;
 class KisTransformStrategyBase;
@@ -220,8 +218,10 @@ public Q_SLOTS:
     void imageTooBigRequested(bool value);
 
 private:
-    bool clearDevices(KisNodeSP node, bool recursive);
-    void transformDevices(KisNodeSP node, bool recursive);
+    QList<KisNodeSP> fetchNodesList(ToolTransformArgs::TransformMode mode, KisNodeSP root, bool recursive);
+
+    bool clearDevices(const QList<KisNodeSP> &nodes);
+    void transformClearedDevices();
 
     void startStroke(ToolTransformArgs::TransformMode mode, bool forceReset);
     void endStroke();
@@ -245,6 +245,8 @@ private:
     void initThumbnailImage(KisPaintDeviceSP previewDevice);
     void updateSelectionPath();
     void updateApplyResetAvailability();
+
+    void forceRepaintShapeLayers(KisNodeSP root);
 
 private:
     ToolTransformArgs m_currentArgs;
@@ -277,7 +279,7 @@ private:
     QPainterPath m_selectionPath; // original (unscaled) selection outline, used for painting decorations
 
     KisToolTransformConfigWidget *m_optionsWidget;
-    KisCanvas2 *m_canvas;
+    QPointer<KisCanvas2> m_canvas;
 
     TransformTransactionProperties m_transaction;
     TransformChangesTracker m_changesTracker;

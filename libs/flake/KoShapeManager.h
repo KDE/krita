@@ -173,6 +173,26 @@ public:
      */
     static void renderSingleShape(KoShape *shape, QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext);
 
+    /**
+     * A special interface for KoShape to use during shape destruction. Don't use this
+     * interface directly unless you are KoShape.
+     */
+    struct ShapeInterface {
+        ShapeInterface(KoShapeManager *_q);
+
+        /**
+         * Called by a shape when it is destructed. Please note that you cannot access
+         * any shape's method type or information during this call because the shape might be
+         * semi-destroyed.
+         */
+        void notifyShapeDestructed(KoShape *shape);
+
+    protected:
+        KoShapeManager *q;
+    };
+
+    ShapeInterface* shapeInterface();
+
 Q_SIGNALS:
     /// emitted when the selection is changed
     void selectionChanged();
@@ -180,8 +200,6 @@ Q_SIGNALS:
     void selectionContentChanged();
     /// emitted when any object changed (moved/rotated etc)
     void contentChanged();
-    /// emitted when a shape is removed.
-    void shapeRemoved(KoShape *);
     /// emitted when any shape changed.
     void shapeChanged(KoShape *);
 

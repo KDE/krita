@@ -101,7 +101,7 @@ KisAnimationCurveDocker::KisAnimationCurveDocker()
 KisAnimationCurveDocker::~KisAnimationCurveDocker()
 {}
 
-void KisAnimationCurveDocker::setCanvas(KoCanvasBase * canvas)
+void KisAnimationCurveDocker::setCanvas(KoCanvasBase *canvas)
 {
     if (canvas && m_d->canvas == canvas) return;
 
@@ -114,7 +114,7 @@ void KisAnimationCurveDocker::setCanvas(KoCanvasBase * canvas)
     m_d->canvas = dynamic_cast<KisCanvas2*>(canvas);
     setEnabled(m_d->canvas != 0);
 
-    if(m_d->canvas) {
+    if (m_d->canvas) {
         KisDocument *doc = static_cast<KisDocument*>(m_d->canvas->imageView()->document());
         KisShapeController *kritaShapeController = dynamic_cast<KisShapeController*>(doc->shapeController());
         m_d->channelListModel->setDummiesFacade(kritaShapeController);
@@ -128,6 +128,7 @@ void KisAnimationCurveDocker::setCanvas(KoCanvasBase * canvas)
             m_d->channelListModel, SLOT(selectedNodesChanged(KisNodeList))
         );
 
+        m_d->channelListModel->clear();
         m_d->channelListModel->selectedNodesChanged(m_d->canvas->viewManager()->nodeManager()->selectedNodes());
     }
 }

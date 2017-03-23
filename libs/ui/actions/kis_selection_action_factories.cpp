@@ -364,7 +364,7 @@ void KisCopyMergedActionFactory::run(KisViewManager *view)
 {
     KisImageWSP image = view->image();
     if (!image) return;
-    if (!view->blockUntillOperationsFinished(image)) return;
+    if (!view->blockUntilOperationsFinished(image)) return;
 
     image->barrierLock();
     KisPaintDeviceSP dev = image->root()->projection();

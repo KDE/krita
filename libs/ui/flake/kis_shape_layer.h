@@ -125,6 +125,18 @@ public:
     bool visible(bool recursive = false) const override;
     void setVisible(bool visible, bool isLoading = false) override;
 
+    /**
+     * Forces a repaint of a shape layer without waiting for an event loop
+     * calling a delayed timer update. If you want to see the result of the shape
+     * layer right here and right now, you should do:
+     *
+     * shapeLayer->setDirty();
+     * shapeLayer->image()->waitForDone();
+     * shapeLayer->forceRepaint();
+     *
+     */
+    void forceRepaint();
+
 protected:
     using KoShape::isVisible;
 

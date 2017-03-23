@@ -20,6 +20,8 @@
 */
 
 #include <QTransform>
+#include <QPointer>
+
 #include "KoShapeBasedDocumentBase.h"
 #include "KoDocumentResourceManager.h"
 #include "KoShapeRegistry.h"
@@ -54,7 +56,7 @@ public:
         delete resourceManager;
     }
 
-    KoDocumentResourceManager *resourceManager;
+    QPointer<KoDocumentResourceManager> resourceManager;
 };
 
 KoShapeBasedDocumentBase::KoShapeBasedDocumentBase()

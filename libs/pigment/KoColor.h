@@ -112,7 +112,6 @@ public:
     quint8 opacityU8() const;
     qreal opacityF() const;
 
-// what about making the next two methods static factory methods?
     /// Convenient function for converting from a QColor
     void fromQColor(const QColor& c) const;
 
@@ -153,12 +152,10 @@ public:
      *                   a preferred bit depth for creating the KoColor object (if that
      *                   bit depth isn't available, this function will randomly select
      *                   an other bit depth)
-     * @param profileAliases alias between the profile name specified by the "space"
-     *                       attribute and the profile name used inside pigment
      * @return the unserialize color, or an empty color object if the function failed
      *         to unserialize the color
      */
-    static KoColor fromXML(const QDomElement& elt, const QString & bitDepthId, const QHash<QString, QString> & aliases);
+    static KoColor fromXML(const QDomElement& elt, const QString & bitDepthId);
 
     static QString toQString(const KoColor &color);
 

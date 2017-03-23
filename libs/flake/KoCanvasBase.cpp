@@ -19,6 +19,8 @@
 */
 
 #include <QRectF>
+#include <QPointer>
+#include <QDebug>
 
 #include "KoCanvasBase.h"
 #include "KoCanvasResourceManager.h"
@@ -34,7 +36,8 @@
 class Q_DECL_HIDDEN KoCanvasBase::Private
 {
 public:
-    Private() : shapeController(0),
+    Private()
+        : shapeController(0),
         resourceManager(0),
         isResourceManagerShared(false),
         controller(0),
@@ -49,8 +52,8 @@ public:
         }
         delete snapGuide;
     }
-    KoShapeController *shapeController;
-    KoCanvasResourceManager *resourceManager;
+    QPointer<KoShapeController> shapeController;
+    QPointer<KoCanvasResourceManager> resourceManager;
     bool isResourceManagerShared;
     KoCanvasController *controller;
     KoSnapGuide *snapGuide;
@@ -69,6 +72,7 @@ KoCanvasBase::KoCanvasBase(KoShapeBasedDocumentBase *shapeBasedDocument, KoCanva
 
 KoCanvasBase::~KoCanvasBase()
 {
+    d->shapeController->reset();
     delete d;
 }
 
@@ -79,7 +83,10 @@ QPointF KoCanvasBase::viewToDocument(const QPointF &viewPoint) const
 
 KoShapeController *KoCanvasBase::shapeController() const
 {
-    return d->shapeController;
+    if (d->shapeController)
+        return d->shapeController;
+    else
+        return 0;
 }
 
 void KoCanvasBase::disconnectCanvasObserver(QObject *object)

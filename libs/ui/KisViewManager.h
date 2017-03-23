@@ -172,7 +172,7 @@ public:  // Krita specific interfaces
      * @return true if the image has finished execution of the actions, false if
      *         the user cancelled operation
      */
-    bool blockUntillOperationsFinished(KisImageSP image);
+    bool blockUntilOperationsFinished(KisImageSP image);
 
 
     /**

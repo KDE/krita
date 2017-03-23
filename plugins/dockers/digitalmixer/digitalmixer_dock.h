@@ -18,9 +18,13 @@
 #ifndef _DIGITALMIXER_DOCK_H_
 #define _DIGITALMIXER_DOCK_H_
 
+#include <QPointer>
 #include <QDockWidget>
+
 #include <KoColor.h>
 #include <KoCanvasObserverBase.h>
+
+#include <KoCanvasBase.h>
 
 class KoColorPopupAction;
 class KoColorSlider;
@@ -43,7 +47,7 @@ private Q_SLOTS:
     void colorSliderChanged(int i);
     void targetColorChanged(int);
 private:
-    KoCanvasBase* m_canvas;
+    QPointer<KoCanvasBase> m_canvas;
     KoColor m_currentColor;
     KoColorPatch* m_currentColorPatch;
     struct Mixer {

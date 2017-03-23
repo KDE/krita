@@ -626,23 +626,23 @@ void KisKraLoadVisitor::loadNodeKeyframes(KisNode *node)
     QString errorMsg;
     int errorLine;
     int errorColumn;
-    KoXmlDocument doc = KoXmlDocument(true);
 
-    bool ok = doc.setContent(m_store->device(), &errorMsg, &errorLine, &errorColumn);
+    QDomDocument dom;
+    bool ok = dom.setContent(m_store->device(), &errorMsg, &errorLine, &errorColumn);
     m_store->close();
+
 
     if (!ok) {
         m_errorMessages << i18n("parsing error in the keyframe file %1 at line %2, column %3\nError message: %4", location, errorLine, errorColumn, i18n(errorMsg.toUtf8()));
         return;
     }
 
-    QDomDocument dom;
-    KoXml::asQDomElement(dom, doc.documentElement());
     QDomElement root = dom.firstChildElement();
 
     for (QDomElement child = root.firstChildElement(); !child.isNull(); child = child.nextSiblingElement()) {
         if (child.nodeName().toUpper() == "CHANNEL") {
             QString id = child.attribute("name");
+
             KisKeyframeChannel *channel = node->getKeyframeChannel(id, true);
 
             if (!channel) {

@@ -41,6 +41,9 @@ private Q_SLOTS:
     void pluginStateChanged(QProcess::ProcessState);
     void pluginFinished(int exitCode, QProcess::ExitStatus exitStatus);
 private:
+
+    bool prepareCroppedImages(QByteArray &message, const QRect &rc, int inputMode);
+
     QProcess *m_pluginProcess {0};
     QLocalServer *m_localServer {0};
     QString m_key;

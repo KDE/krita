@@ -31,13 +31,21 @@
 #include <kpluginfactory.h>
 
 #include <KoDialog.h>
+#include <KoColorSpaceConstants.h>
 
 #include <KisViewManager.h>
 #include <kis_action.h>
 #include <kis_config.h>
 #include <kis_preference_set_registry.h>
 #include <kis_image.h>
+#include <kis_image.h>
+#include <kis_paint_device.h>
+#include <kis_layer.h>
+#include <kis_selection.h>
+#include <kis_paint_layer.h>
 
+#include <kis_input_output_mapper.h>
+#include <kis_qmic_simple_convertor.h>
 #include <PluginSettings.h>
 
 static const char ack[] = "ack";
@@ -109,7 +117,7 @@ void QMic::slotQMic(bool again)
 
     bool r = m_pluginProcess->waitForStarted();
     while (m_pluginProcess->waitForFinished(10)) {
-        qApp->processEvents();
+        qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     }
     qDebug() << "Plugin started" << r << m_pluginProcess->state();
 }
@@ -193,6 +201,9 @@ void QMic::connected()
             cropRect.setWidth(cr[2].toInt());
             cropRect.setHeight(cr[3].toInt());
         }
+        if (!prepareCroppedImages(ba, cropRect, mode)) {
+            qWarning() << "Failed to prepare images for gmic-qt";
+        }
     }
     else if (messageMap["command"] == "gmic_qt_output_images") {
         // Parse the message. read the shared memory segments, fix up the current image and send an ack
@@ -227,6 +238,21 @@ void QMic::pluginFinished(int exitCode, QProcess::ExitStatus exitStatus)
     m_localServer = 0;
     m_qmicAction->setEnabled(true);
     m_againAction->setEnabled(true);
+}
+
+bool QMic::prepareCroppedImages(QByteArray &message, const QRect &rc, int inputMode)
+{
+    m_view->image()->lock();
+
+    KisInputOutputMapper mapper(m_view->image(), m_view->activeNode());
+    KisNodeListSP layers = mapper.inputNodes(inputMode);
+    if (layers.isEmpty()) {
+        m_view->image()->unlock();
+        return false;
+    }
+
+
+    m_view->image()->unlock();
 }
 
 

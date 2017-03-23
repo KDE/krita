@@ -70,7 +70,6 @@ private:
     void updateGUI();
 
     void rotateLayer(double radians);
-    void shearLayer(double angleX, double angleY);
 
 private Q_SLOTS:
 

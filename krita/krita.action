@@ -2738,7 +2738,7 @@
       <whatsThis></whatsThis>
       <toolTip>Shear Layer</toolTip>
       <iconText>Shear Layer</iconText>
-      <activationFlags>100000</activationFlags>
+      <activationFlags>1000</activationFlags>
       <activationConditions>1</activationConditions>
       <shortcut></shortcut>
       <isCheckable>false</isCheckable>

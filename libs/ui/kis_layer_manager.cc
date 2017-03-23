@@ -575,18 +575,6 @@ void KisLayerManager::rotateLayer(double radians)
     m_view->image()->rotateNode(layer, radians);
 }
 
-void KisLayerManager::shearLayer(double angleX, double angleY)
-{
-    if (!m_view->image()) return;
-
-    KisLayerSP layer = activeLayer();
-    if (!layer) return;
-
-    if (!m_view->blockUntilOperationsFinished(m_view->image())) return;
-
-    m_view->image()->shearNode(layer, angleX, angleY);
-}
-
 void KisLayerManager::flattenImage()
 {
     KisImageSP image = m_view->image();

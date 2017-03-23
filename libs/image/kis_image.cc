@@ -822,8 +822,13 @@ void KisImage::shearNode(KisNodeSP node, double angleX, double angleY)
 {
     QPointF shearOrigin = QRectF(bounds()).center();
 
-    shearImpl(kundo2_i18n("Shear layer"), node, false,
-              angleX, angleY, shearOrigin);
+    if (node->inherits("KisMask")) {
+        shearImpl(kundo2_i18n("Shear Mask"), node, false,
+                  angleX, angleY, shearOrigin);
+    } else {
+        shearImpl(kundo2_i18n("Shear Layer"), node, false,
+                  angleX, angleY, shearOrigin);
+    }
 }
 
 void KisImage::shear(double angleX, double angleY)

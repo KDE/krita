@@ -912,8 +912,14 @@ void KisNodeManager::rotateRight90()
 
 void KisNodeManager::shear(double angleX, double angleY)
 {
-    // XXX: implement shear for masks as well
-    m_d->layerManager.shearLayer(angleX, angleY);
+    if (!m_d->view->image()) return;
+
+    KisNodeSP node = activeNode();
+    if (!node) return;
+
+    if(!m_d->view->blockUntilOperationsFinished(m_d->view->image())) return;
+
+    m_d->view->image()->shearNode(node, angleX, angleY);
 }
 
 void KisNodeManager::scale(double sx, double sy, KisFilterStrategy *filterStrategy)

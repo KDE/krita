@@ -559,7 +559,7 @@ KisNodeSP KisKraLoader::loadNodes(const KoXmlElement& element, KisImageSP image,
                     if (node) {
                         image->nextLayerName(); // Make sure the nameserver is current with the number of nodes.
                         image->addNode(node, parent);
-                        if (node->inherits("KisLayer") && child.childNodesCount() > 0) {
+                        if (node->inherits("KisLayer") && KoXml::childNodesCount(child) > 0) {
                             loadNodes(child.toElement(), image, node);
                         }
                     }

@@ -27,7 +27,7 @@
 class QImage;
 
 class KoOdfGradientBackgroundPrivate;
-class KoXmlElement;
+#include <KoXmlReaderForward.h>
 class KoGenStyles;
 class KoGenStyle;
 

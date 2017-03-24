@@ -51,23 +51,23 @@
 
 
 // The XML of a frame looks something like this:
-// 
+//
 // 1. <draw:frame ...attributes...>
 // 2.   <draw:object xlink:href="./Object1" ...more attributes>
 // 3.   <draw:image xlink:href="./ObjectReplacements/Object1" ...more attributes>
 // 4. </draw:frame>
 //
 // or
-// 
+//
 // 1. <draw:frame ...attributes...>
-// 2.   <math:math>...inline xml here...</math:math>    
+// 2.   <math:math>...inline xml here...</math:math>
 // 3.   <draw:image xlink:href="./ObjectReplacements/Object1" ...more attributes>
 // 4. </draw:frame>
 //
 // We define each Xml statement on lines 2 and 3 above as an "object".
 // (Strictly only the first child element is an object in the ODF sense,
 // but we have to have some terminology here.)
-// 
+//
 // In an ODF frame, only the first line, i.e. the first object
 // contains the real contents.  All the rest of the objects are used /
 // shown if we cannot handle the first one.  The most common cases are
@@ -76,7 +76,7 @@
 //
 // Sometimes, e.g. in the case of an embedded document, the reference
 // points not to a file but to a directory structure inside the ODF
-// store. 
+// store.
 //
 // When we load and save in the UnavailShape, we have to be general
 // enough to cover all possible cases of references and inline XML,
@@ -554,6 +554,7 @@ void KoUnavailShape::Private::storeXmlRecursive(const KoXmlElement &el, KoXmlWri
     const QByteArray name(el.nodeName().toLatin1());
     writer.startElement(name.constData());
 
+#ifndef KOXML_USE_QDOM
     // Copy all the attributes, including namespaces.
     QList< QPair<QString, QString> >  attributeNames = el.attributeFullNames();
     for (int i = 0; i < attributeNames.size(); ++i) {
@@ -581,7 +582,7 @@ void KoUnavailShape::Private::storeXmlRecursive(const KoXmlElement &el, KoXmlWri
                                                                attrPair.second));
         }
     }
-
+#endif
     // Child elements
     // Loop through all the child elements of the draw:frame.
     KoXmlNode n = el.firstChild();

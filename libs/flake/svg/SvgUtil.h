@@ -26,7 +26,7 @@
 class QString;
 class SvgGraphicsContext;
 class QTransform;
-class KoXmlElement;
+#include <KoXmlReaderForward.h>
 
 class KRITAFLAKE_EXPORT SvgUtil
 {

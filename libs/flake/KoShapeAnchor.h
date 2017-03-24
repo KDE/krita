@@ -25,7 +25,7 @@
 
 
 class KoShape;
-class KoXmlElement;
+#include <KoXmlReaderForward.h>
 class KoShapeLoadingContext;
 class KoShapeSavingContext;
 class KoShapeAnchorPrivate;

@@ -16,6 +16,7 @@ class TestXmlReaderWithoutSpaces : public QObject
 {
     Q_OBJECT
 private Q_SLOTS:
+#ifndef KOXML_USE_QDOM
     void testNode();
     void testElement();
     void testAttributes();
@@ -38,8 +39,10 @@ private Q_SLOTS:
     void testSimpleOpenDocumentFormula();
     void testLargeOpenDocumentSpreadsheet();
     void testExternalOpenDocumentSpreadsheet(const QString& filename);
+#endif
 };
 
+#ifndef KOXML_USE_QDOM
 void TestXmlReaderWithoutSpaces::testNode()
 {
     QString errorMsg;
@@ -2690,6 +2693,7 @@ void TestXmlReaderWithoutSpaces::testExternalOpenDocumentSpreadsheet(const QStri
     // uncomment to check the XML
     xmlfile.remove();
 }
+#endif
 
 QTEST_GUILESS_MAIN(TestXmlReaderWithoutSpaces)
 #include <TestXmlReaderWithoutSpaces.moc>

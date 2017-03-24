@@ -30,14 +30,6 @@
 
 class QIODevice;
 
-#ifndef KOXML_USE_QDOM
-
-class QXmlStreamReader;
-
-class KoXmlNodeData;
-class KoXmlDocumentData;
-class QDomDocument;
-class QStringList;
 
 /**
  * The office-text-content-prelude type.
@@ -47,6 +39,16 @@ enum KoXmlNamedItemType {
     //KoXmlTextContentMain, ///< office-text-content-main
     //KoXmlTextContentEpilogue ///< office-text-content-epilogue
 };
+
+#ifndef KOXML_USE_QDOM
+
+class QXmlStreamReader;
+
+class KoXmlNodeData;
+class KoXmlDocumentData;
+class QDomDocument;
+class QStringList;
+
 
 /**
 * KoXmlNode represents a node in a DOM tree.
@@ -394,7 +396,7 @@ KRITASTORE_EXPORT QStringList attributeNames(const KoXmlNode& node);
  * NOTE:
  * - If ownerDoc is not empty, this may fail, @see QDomDocument
  * - @p node must not be a KoXmlDocument, use asQDomDocument()
- * 
+ *
  * @see asQDomDocument, asQDomElement
  */
 KRITASTORE_EXPORT void asQDomNode(QDomDocument& ownerDoc, const KoXmlNode& node);
@@ -403,7 +405,7 @@ KRITASTORE_EXPORT void asQDomNode(QDomDocument& ownerDoc, const KoXmlNode& node)
  * Convert KoXmlNode classes to the corresponding QDom classes, which has
  * @p ownerDoc as the owner document (QDomDocument instance).
  * The converted @p element (and its children) is added to ownerDoc.
- * 
+ *
  * NOTE: If ownerDoc is not empty, this may fail, @see QDomDocument
  *
  */

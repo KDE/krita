@@ -163,7 +163,7 @@ public:
     Private()
         : canvas(0),
         active(true),
-        letUnitBeSet(true)
+		allowLocalUnitManagement(true)
     {
     }
 
@@ -181,7 +181,7 @@ public:
     KoCanvasBase *canvas;
 
     bool active;
-    bool letUnitBeSet;
+	bool allowLocalUnitManagement;
 };
 
 KoStrokeConfigWidget::KoStrokeConfigWidget(QWidget * parent)
@@ -379,8 +379,8 @@ void KoStrokeConfigWidget::updateControls(KoShapeStrokeModel *stroke, KoMarker *
 
 void KoStrokeConfigWidget::setUnit(const KoUnit &unit)
 {
-    if (!d->letUnitBeSet) {
-        return; //the unit management is completly transferd to the unitManagers.
+	if (!d->allowLocalUnitManagement) {
+		return; //the unit management is completly transfered to the unitManagers.
     }
 
     blockChildSignals(true);
@@ -434,7 +434,7 @@ void KoStrokeConfigWidget::setUnitManagers(KisSpinBoxUnitManager* managerLineWid
 {
     blockChildSignals(true);
 
-    d->letUnitBeSet = false;
+	d->allowLocalUnitManagement = false;
 
     d->lineWidth->setUnitManager(managerLineWidth);
     d->capNJoinMenu->miterLimit->setUnitManager(managerMitterLimit);

@@ -38,7 +38,7 @@ class KRITAWIDGETS_EXPORT  KisDoubleParseUnitSpinBox : public KisDoubleParseSpin
 
 public:
     KisDoubleParseUnitSpinBox(QWidget* parent = 0);
-	virtual ~KisDoubleParseUnitSpinBox();
+    virtual ~KisDoubleParseUnitSpinBox();
 
     void setUnitManager(KisSpinBoxUnitManager* unitManager);
 

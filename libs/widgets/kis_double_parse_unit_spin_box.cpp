@@ -177,7 +177,7 @@ void KisDoubleParseUnitSpinBox::setUnit( const KoUnit & unit)
 	}
 
 	if (d->unitManager->getUnitDimensionType() != KisSpinBoxUnitManager::LENGTH) {
-		d->unitManager->setUnitDim(KisSpinBoxUnitManager::LENGTH); //setting the unit using a KoUnit mean you want to use a length.
+		d->unitManager->setUnitDimension(KisSpinBoxUnitManager::LENGTH); //setting the unit using a KoUnit mean you want to use a length.
 	}
 
 	setUnit(unit.symbol());
@@ -229,7 +229,7 @@ void KisDoubleParseUnitSpinBox::setDimensionType(int dim)
 		return;
 	}
 
-	d->unitManager->setUnitDim((KisSpinBoxUnitManager::UnitDimension) dim);
+	d->unitManager->setUnitDimension((KisSpinBoxUnitManager::UnitDimension) dim);
 }
 
 double KisDoubleParseUnitSpinBox::value( ) const

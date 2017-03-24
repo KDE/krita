@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2016 Laurent Valentin Jospin <laurent.valentin@famillejospin.ch>
+ *  Copyright (c) 2017 Laurent Valentin Jospin <laurent.valentin@famillejospin.ch>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -31,6 +31,10 @@ public:
     KisSpinBoxUnitManager* buildUnitManager(QObject* parent);
 };
 
+/*!
+ * \brief The KisDocumentAwareSpinBoxUnitManager class is a KisSpinBoxUnitManager that is able to connect to the current document to compute transformation for document relative units (the ones that depend of the resolution, or the size in pixels of the image).
+ * \see KisSpinBoxUnitManager
+ */
 class KRITAUI_EXPORT KisDocumentAwareSpinBoxUnitManager : public KisSpinBoxUnitManager
 {
     Q_OBJECT
@@ -50,7 +54,9 @@ public:
 
     KisDocumentAwareSpinBoxUnitManager(QObject *parent = 0, int pPixDir = PIX_DIR_X);
 
+	//! \reimp \see KisSpinBoxUnitManager
 	virtual qreal getConversionFactor(int dim, QString symbol) const;
+	//! \reimp \see KisSpinBoxUnitManager
 	virtual qreal getConversionConstant(int dim, QString symbol) const;
 
 private:

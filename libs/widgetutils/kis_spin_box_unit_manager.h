@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2016 Laurent Valentin Jospin <laurent.valentin@famillejospin.ch>
+ *  Copyright (c) 2017 Laurent Valentin Jospin <laurent.valentin@famillejospin.ch>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -29,6 +29,10 @@ class KisSpinBoxUnitManager;
 class KisSpinBoxUnitManagerBuilder;
 class KisSpinBoxUnitManagerFactory;
 
+/*!
+ * \brief The KisSpinBoxUnitManagerFactory class is a factory that is used to build a default KisSpinBoxUnitManager.
+ * \see KisSpinBoxUnitManagerBuilder
+ */
 class KRITAWIDGETUTILS_EXPORT KisSpinBoxUnitManagerFactory
 {
 public:
@@ -44,6 +48,10 @@ private:
 
 };
 
+/*!
+ * \brief The KisSpinBoxUnitManagerBuilder class is the base class, used in the strategy pattern of KisSpinBoxUnitManagerFactory.
+ * \see KisSpinBoxUnitManagerFactory.
+ */
 class KRITAWIDGETUTILS_EXPORT KisSpinBoxUnitManagerBuilder
 {
 
@@ -59,10 +67,10 @@ public:
  *
  * The class make a difference between unit dimension (distance, angle, time).
  *
- * The class allow to convert values between reference unit and apparent unit, but also to get other information like possible units symbols.
+ * The class allow to convert values between reference unit and apparent unit, but also to get other informations like possible units symbols.
  *
- * This class don't allow to use relative units (units which conversion factor is dependant of the context), even if it's private data are prepared to manage it.
- * The reason for this is that from the library of this class it's very hard to acess easily the informations needed. So all will be managed by subclasses in other libs.
+ * This class don't allow to use relative units (units which conversion factor is dependant of the context), even if its private data are prepared to manage it.
+ * The reason for this is that from the library of this class it is very hard to acess easily the informations needed. So all will be managed by subclasses in other libs.
  *
  * The class is a subclass of QAbstractListModel, so that available list of units is easily acessed by other Qt standard components, like QComboBoxes.
  *
@@ -129,7 +137,7 @@ Q_SIGNALS:
 
 public Q_SLOTS:
 
-    void setUnitDim(UnitDimension dim);
+    void setUnitDimension(UnitDimension dimension);
     void setApparentUnitFromSymbol(QString pSymbol);
 	void selectApparentUnitFromIndex(int index);
 

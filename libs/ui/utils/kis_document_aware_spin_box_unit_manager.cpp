@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2016 Laurent Valentin Jospin <laurent.valentin@famillejospin.ch>
+ *  Copyright (c) 2017 Laurent Valentin Jospin <laurent.valentin@famillejospin.ch>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by

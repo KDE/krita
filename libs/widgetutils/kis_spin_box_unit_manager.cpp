@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2016 Laurent Valentin Jospin <laurent.valentin@famillejospin.ch>
+ *  Copyright (c) 2017 Laurent Valentin Jospin <laurent.valentin@famillejospin.ch>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -135,7 +135,7 @@ int KisSpinBoxUnitManager::getApparentUnitId() const
 
 QStringList KisSpinBoxUnitManager::getsUnitSymbolList(bool withName) const{
 
-    QStringList list; //TODO: cache
+    QStringList list;
 
     if (withName) {
         if (d->unitListWithNameCached) {
@@ -360,13 +360,13 @@ qreal KisSpinBoxUnitManager::getConversionFactor(int dim, QString symbol) const
 }
 
 
-void KisSpinBoxUnitManager::setUnitDim(UnitDimension dim)
+void KisSpinBoxUnitManager::setUnitDimension(UnitDimension dimension)
 {
-    if (dim == d->dim) {
+    if (dimension == d->dim) {
         return;
     }
 
-    d->dim = dim;
+    d->dim = dimension;
     d->unitSymbol = referenceUnitSymbols[d->dim]; //Active dim is reference dim when just changed.
     d->conversionFactor = 1.0;
 

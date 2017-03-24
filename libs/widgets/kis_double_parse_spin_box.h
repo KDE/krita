@@ -36,7 +36,7 @@ class KRITAWIDGETS_EXPORT KisDoubleParseSpinBox : public QDoubleSpinBox
     Q_OBJECT
 public:
     KisDoubleParseSpinBox(QWidget* parent = 0);
-	virtual ~KisDoubleParseSpinBox(); //KisDoubleParseSpinBox may be used polymorphycally as a QDoubleSpinBox.
+    virtual ~KisDoubleParseSpinBox(); //KisDoubleParseSpinBox may be used polymorphycally as a QDoubleSpinBox.
 
     virtual double valueFromText(const QString & text) const;
     virtual QString textFromValue(double val) const;
@@ -48,7 +48,7 @@ public:
 
     bool isLastValid() const{ return boolLastValid; }
 
-    //! \brief this virtual function is similar to cleanText(); for KisDoubleParseSpinBox. But child class may remove additionnal artifacts.
+    //! \brief this virtual function is similar to cleanText(); for KisDoubleParseSpinBox. But child class may remove additional artifacts.
     virtual QString veryCleanText() const;
 
 Q_SIGNALS:

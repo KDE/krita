@@ -66,8 +66,8 @@ DlgImageSize::DlgImageSize(QWidget *parent, int width, int height, double resolu
 	_heightUnitManager = new KisDocumentAwareSpinBoxUnitManager(this, KisDocumentAwareSpinBoxUnitManager::PIX_DIR_Y);
 
 	//configure the unit to image length, default unit is pixel and printing units are forbiden.
-	_widthUnitManager->setUnitDim(KisSpinBoxUnitManager::IMLENGTH);
-	_heightUnitManager->setUnitDim(KisSpinBoxUnitManager::IMLENGTH);
+	_widthUnitManager->setUnitDimension(KisSpinBoxUnitManager::IMLENGTH);
+	_heightUnitManager->setUnitDimension(KisSpinBoxUnitManager::IMLENGTH);
 
 	m_page->pixelWidthDouble->setUnitManager(_widthUnitManager);
 	m_page->pixelHeightDouble->setUnitManager(_heightUnitManager);

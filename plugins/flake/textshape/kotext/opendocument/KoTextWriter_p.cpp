@@ -386,6 +386,7 @@ QString KoTextWriter::Private::saveTableCellStyle(const QTextTableCellFormat& ce
 
 void KoTextWriter::Private::saveInlineRdf(KoTextInlineRdf* rdf, TagInformation* tagInfos)
 {
+#ifndef KOXML_USE_QDOM
     QBuffer rdfXmlData;
     KoXmlWriter rdfXmlWriter(&rdfXmlData);
     rdfXmlWriter.startDocument("rdf");
@@ -404,6 +405,7 @@ void KoTextWriter::Private::saveInlineRdf(KoTextInlineRdf* rdf, TagInformation* 
             attributeName.prepend("xml");
         tagInfos->addAttribute(attributeName, mainElement.attribute(attributeNameNS.second));
     }
+#endif
 }
 
 /*
@@ -1095,6 +1097,8 @@ void KoTextWriter::Private::addNameSpaceDefinitions(QString &generatedXmlString)
 
 void KoTextWriter::Private::writeAttributes(QTextStream &outputXmlStream, KoXmlElement &element)
 {
+#ifndef KOXML_USE_QDOM
+
     QList<QPair<QString, QString> > attributes = element.attributeFullNames();
 
     foreach (const Attribute &attributeNamePair, attributes) {
@@ -1105,6 +1109,7 @@ void KoTextWriter::Private::writeAttributes(QTextStream &outputXmlStream, KoXmlE
             //To Be Added when needed
         }
     }
+#endif
 }
 
 void KoTextWriter::Private::writeNode(QTextStream &outputXmlStream, KoXmlNode &node, bool writeOnlyChildren)
@@ -1113,7 +1118,7 @@ void KoTextWriter::Private::writeNode(QTextStream &outputXmlStream, KoXmlNode &n
         outputXmlStream  << node.toText().data();
     } else if (node.isElement()) {
         KoXmlElement element = node.toElement();
-        if ((element.localName() == "removed-content") && !element.childNodesCount()) {
+        if ((element.localName() == "removed-content") && !KoXml::childNodesCount(element)) {
             return;
         }
 

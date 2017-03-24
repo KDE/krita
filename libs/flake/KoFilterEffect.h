@@ -27,7 +27,7 @@ class QRectF;
 class KoXmlWriter;
 class KoFilterEffectRenderContext;
 class KoFilterEffectLoadingContext;
-class KoXmlElement;
+#include <KoXmlReaderForward.h>
 
 #include "kritaflake_export.h"
 #include <QList>

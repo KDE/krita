@@ -23,7 +23,7 @@
 #include "kritaflake_export.h"
 
 class KoShapeLoadingContext;
-class KoXmlElement;
+#include <KoXmlReaderForward.h>
 class QString;
 
 /**

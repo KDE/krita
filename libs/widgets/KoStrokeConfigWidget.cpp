@@ -86,7 +86,7 @@ CapNJoinMenu::CapNJoinMenu(QWidget *parent)
     QGridLayout *mainLayout = new QGridLayout();
     mainLayout->setMargin(2);
 
-     // The cap group
+    // The cap group
     capGroup = new QButtonGroup(this);
     capGroup->setExclusive(true);
 
@@ -162,8 +162,8 @@ class Q_DECL_HIDDEN KoStrokeConfigWidget::Private
 public:
     Private()
         : canvas(0),
-        active(true),
-		allowLocalUnitManagement(true)
+          active(true),
+          allowLocalUnitManagement(true)
     {
     }
 
@@ -181,7 +181,7 @@ public:
     KoCanvasBase *canvas;
 
     bool active;
-	bool allowLocalUnitManagement;
+    bool allowLocalUnitManagement;
 };
 
 KoStrokeConfigWidget::KoStrokeConfigWidget(QWidget * parent)
@@ -379,8 +379,8 @@ void KoStrokeConfigWidget::updateControls(KoShapeStrokeModel *stroke, KoMarker *
 
 void KoStrokeConfigWidget::setUnit(const KoUnit &unit)
 {
-	if (!d->allowLocalUnitManagement) {
-		return; //the unit management is completly transfered to the unitManagers.
+    if (!d->allowLocalUnitManagement) {
+        return; //the unit management is completly transfered to the unitManagers.
     }
 
     blockChildSignals(true);
@@ -430,11 +430,11 @@ void KoStrokeConfigWidget::setActive(bool active)
 }
 
 void KoStrokeConfigWidget::setUnitManagers(KisSpinBoxUnitManager* managerLineWidth,
-                                          KisSpinBoxUnitManager *managerMitterLimit)
+                                           KisSpinBoxUnitManager *managerMitterLimit)
 {
     blockChildSignals(true);
 
-	d->allowLocalUnitManagement = false;
+    d->allowLocalUnitManagement = false;
 
     d->lineWidth->setUnitManager(managerLineWidth);
     d->capNJoinMenu->miterLimit->setUnitManager(managerMitterLimit);
@@ -530,7 +530,7 @@ void KoStrokeConfigWidget::selectionChanged()
         KoPathShape *pathShape = dynamic_cast<KoPathShape *>(shape);
         if (pathShape) {
             updateControls(shape->stroke(), pathShape->marker(KoMarkerData::MarkerStart),
-                                             pathShape->marker(KoMarkerData::MarkerEnd));
+                           pathShape->marker(KoMarkerData::MarkerEnd));
         }
         else {
             updateControls(shape->stroke(), 0 ,0);

@@ -58,7 +58,7 @@ public:
 
 private Q_SLOTS:
     void slotWidthChanged(double w);
-	void slotHeightChanged(double h);
+    void slotHeightChanged(double h);
     void slotAspectChanged(bool keep);
 
 private:
@@ -72,8 +72,8 @@ private:
     const double m_resolution;
     bool m_keepAspect;
 
-	KisDocumentAwareSpinBoxUnitManager* _widthUnitManager;
-	KisDocumentAwareSpinBoxUnitManager* _heightUnitManager;
+    KisDocumentAwareSpinBoxUnitManager* _widthUnitManager;
+    KisDocumentAwareSpinBoxUnitManager* _heightUnitManager;
 };
 
 #endif // DLG_IMAGESIZE

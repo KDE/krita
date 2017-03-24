@@ -105,7 +105,7 @@ KisSpinBoxUnitManager::KisSpinBoxUnitManager(QObject *parent) : QAbstractListMod
 {
     d = new Private();
 
-	connect(this, (void (KisSpinBoxUnitManager::*)( QString )) &KisSpinBoxUnitManager::unitChanged, this, &KisSpinBoxUnitManager::newUnitSymbolToUnitIndex);
+    connect(this, (void (KisSpinBoxUnitManager::*)( QString )) &KisSpinBoxUnitManager::unitChanged, this, &KisSpinBoxUnitManager::newUnitSymbolToUnitIndex);
 }
 KisSpinBoxUnitManager::~KisSpinBoxUnitManager()
 {
@@ -173,25 +173,25 @@ QStringList KisSpinBoxUnitManager::getsUnitSymbolList(bool withName) const{
             }
         }
 
-		break;
+        break;
 
-	case IMLENGTH:
+    case IMLENGTH:
 
-		if (withName) {
-			list << KoUnit::unitDescription(KoUnit::Pixel);
-		} else {
-			list << "px";
-		}
+        if (withName) {
+            list << KoUnit::unitDescription(KoUnit::Pixel);
+        } else {
+            list << "px";
+        }
 
-		if (d->canAccessDocument) {
-			// ad document relative units
-			if (withName) {
-				list << i18n("view width (vw)") << i18n("view height (vh)");
-			} else {
-				list << "vw" << "vh";
-			}
-		}
-		break;
+        if (d->canAccessDocument) {
+            // ad document relative units
+            if (withName) {
+                list << i18n("view width (vw)") << i18n("view height (vh)");
+            } else {
+                list << "vw" << "vh";
+            }
+        }
+        break;
 
     case ANGLE:
 
@@ -236,8 +236,8 @@ QStringList KisSpinBoxUnitManager::getsUnitSymbolList(bool withName) const{
 
 qreal KisSpinBoxUnitManager::getConversionConstant(int dim, QString symbol) const
 {
-	Q_UNUSED(dim);
-	Q_UNUSED(symbol);
+    Q_UNUSED(dim);
+    Q_UNUSED(symbol);
 
     return 0; // all units managed here are transform via a linear function, so this wll alway be 0 in this class.
 }
@@ -255,7 +255,7 @@ qreal KisSpinBoxUnitManager::getReferenceValue(double apparentValue) const
     qreal v = (apparentValue - d->conversionConstant)/d->conversionFactor;
 
     if (d->constrains &= REFISINT) {
-       v = qFloor(v);
+        v = qFloor(v);
     }
 
     return v;
@@ -263,19 +263,19 @@ qreal KisSpinBoxUnitManager::getReferenceValue(double apparentValue) const
 }
 
 int KisSpinBoxUnitManager::rowCount(const QModelIndex &parent) const {
-	if (parent == QModelIndex()) {
-		return getsUnitSymbolList().size();
-	}
-	return 0;
+    if (parent == QModelIndex()) {
+        return getsUnitSymbolList().size();
+    }
+    return 0;
 }
 
 QVariant KisSpinBoxUnitManager::data(const QModelIndex &index, int role) const {
 
-	if (role == Qt::DisplayRole) {
-		return getsUnitSymbolList(false).at(index.row());
-	}
+    if (role == Qt::DisplayRole) {
+        return getsUnitSymbolList(false).at(index.row());
+    }
 
-	return QVariant();
+    return QVariant();
 }
 
 qreal KisSpinBoxUnitManager::getApparentValue(double refValue) const
@@ -319,11 +319,11 @@ qreal KisSpinBoxUnitManager::getConversionFactor(int dim, QString symbol) const
         } while (0) ;
         break;
 
-	case IMLENGTH:
-		if (symbol == "px") {
-			factor = 1;
-		}
-		break;
+    case IMLENGTH:
+        if (symbol == "px") {
+            factor = 1;
+        }
+        break;
 
     case ANGLE:
         if (symbol == "°") {
@@ -352,8 +352,8 @@ qreal KisSpinBoxUnitManager::getConversionFactor(int dim, QString symbol) const
         factor = 1.0;
         break;
 
-	default:
-		break;
+    default:
+        break;
     }
 
     return factor;
@@ -383,7 +383,7 @@ void KisSpinBoxUnitManager::setApparentUnitFromSymbol(QString pSymbol)
         return;
     }
 
-	emit unitAboutToChange();
+    emit unitAboutToChange();
 
     QString newSymb = "";
 
@@ -396,7 +396,7 @@ void KisSpinBoxUnitManager::setApparentUnitFromSymbol(QString pSymbol)
         }
         goto default_indentifier; //alway do default after handling possible special cases.
 
-    default_indentifier:
+default_indentifier:
     default:
         QStringList list = getsUnitSymbolList();
         if (list.contains(symbol, Qt::CaseInsensitive)) {
@@ -426,15 +426,15 @@ void KisSpinBoxUnitManager::setApparentUnitFromSymbol(QString pSymbol)
             speUnits = documentRelativeLengthUnitSymbols;
             goto default_identifier_conv_fact;
 
-		case IMLENGTH:
-			speUnits << "vw" << "vh";
-			goto default_identifier_conv_fact;
+        case IMLENGTH:
+            speUnits << "vw" << "vh";
+            goto default_identifier_conv_fact;
 
         case TIME:
             speUnits = documentRelativeTimeUnitSymbols;
             goto default_identifier_conv_fact;
 
-        default_identifier_conv_fact:
+default_identifier_conv_fact:
         default:
 
             if (speUnits.isEmpty()) {
@@ -474,18 +474,18 @@ void KisSpinBoxUnitManager::setApparentUnitFromSymbol(QString pSymbol)
 
 void KisSpinBoxUnitManager::selectApparentUnitFromIndex(int index) {
 
-	if (index >= 0 && index < rowCount()) {
-		setApparentUnitFromSymbol(getsUnitSymbolList().at(index));
-	}
+    if (index >= 0 && index < rowCount()) {
+        setApparentUnitFromSymbol(getsUnitSymbolList().at(index));
+    }
 
 }
 
 void KisSpinBoxUnitManager::newUnitSymbolToUnitIndex(QString symbol) {
-	int id = getsUnitSymbolList().indexOf(symbol);
+    int id = getsUnitSymbolList().indexOf(symbol);
 
-	if (id >= 0) {
-		emit unitChanged(id);
-	}
+    if (id >= 0) {
+        emit unitChanged(id);
+    }
 }
 
 void KisSpinBoxUnitManager::recomputeConversionFactor() const
@@ -513,9 +513,9 @@ void KisSpinBoxUnitManager::recomputeConvesrionConstant() const
 
     d->conversionConstant = getConversionConstant(d->dim, d->unitSymbol);
 
-	if (oldConversionConstant != d->conversionConstant) {
-		emit conversionConstantChanged(d->conversionConstant, oldConversionConstant);
-	}
+    if (oldConversionConstant != d->conversionConstant) {
+        emit conversionConstantChanged(d->conversionConstant, oldConversionConstant);
+    }
 }
 
 void KisSpinBoxUnitManager::grantDocumentRelativeUnits()

@@ -116,29 +116,29 @@ qreal KisDocumentAwareSpinBoxUnitManager::getConversionFactor(int dim, QString s
         }
         break;
 
-	case IMLENGTH:
+    case IMLENGTH:
 
-		if (symbol == "vw") {
-			factor = 100.0/sizeX; //1 vw is 1% of document width, 1 vw in pixel is sizeX/100 so 1 pixel in vw is the inverse.
+        if (symbol == "vw") {
+            factor = 100.0/sizeX; //1 vw is 1% of document width, 1 vw in pixel is sizeX/100 so 1 pixel in vw is the inverse.
 
-		} else if (symbol == "vh") {
-			factor = 100.0/sizeY;
-		}
-		break;
+        } else if (symbol == "vh") {
+            factor = 100.0/sizeY;
+        }
+        break;
 
     case TIME:
-        {
-            if (symbol == "s") {
-                qreal fps = img->animationInterface()->framerate();
+    {
+        if (symbol == "s") {
+            qreal fps = img->animationInterface()->framerate();
 
-                factor = 1/fps;
-            } else if (symbol == "%") {
-                const KisTimeRange & time_range = img->animationInterface()->fullClipRange();
-                qreal n_frame = time_range.end() - time_range.start();
+            factor = 1/fps;
+        } else if (symbol == "%") {
+            const KisTimeRange & time_range = img->animationInterface()->fullClipRange();
+            qreal n_frame = time_range.end() - time_range.start();
 
-                factor = 100/n_frame;
-            }
+            factor = 100/n_frame;
         }
+    }
         break;
 
     default:

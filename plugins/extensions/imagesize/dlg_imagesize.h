@@ -57,13 +57,13 @@ public:
 
 private Q_SLOTS:
     void slotPixelWidthChanged(double w);
-	void slotPixelHeightChanged(double h);
+    void slotPixelHeightChanged(double h);
     void slotPrintWidthChanged(double w);
-	void slotPrintHeightChanged(double h);
+    void slotPrintHeightChanged(double h);
     void slotAspectChanged(bool keep);
     void slotPrintResolutionChanged(double r);
     void slotPrintResolutionEditFinished();
-	void slotPrintResolutionUnitChanged();
+    void slotPrintResolutionUnitChanged();
 
 private:
     void updatePixelWidthUIValue(double value);
@@ -81,11 +81,11 @@ private:
     double m_resolution;
     bool m_keepAspect;
 
-	KisDocumentAwareSpinBoxUnitManager* _widthUnitManager;
-	KisDocumentAwareSpinBoxUnitManager* _heightUnitManager;
+    KisDocumentAwareSpinBoxUnitManager* _widthUnitManager;
+    KisDocumentAwareSpinBoxUnitManager* _heightUnitManager;
 
-	KisSpinBoxUnitManager* _printWidthUnitManager;
-	KisSpinBoxUnitManager* _printHeightUnitManager;
+    KisSpinBoxUnitManager* _printWidthUnitManager;
+    KisSpinBoxUnitManager* _printHeightUnitManager;
 };
 
 #endif // DLG_IMAGESIZE

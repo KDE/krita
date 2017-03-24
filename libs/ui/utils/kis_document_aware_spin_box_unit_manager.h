@@ -54,10 +54,10 @@ public:
 
     KisDocumentAwareSpinBoxUnitManager(QObject *parent = 0, int pPixDir = PIX_DIR_X);
 
-	//! \reimp \see KisSpinBoxUnitManager
-	virtual qreal getConversionFactor(int dim, QString symbol) const;
-	//! \reimp \see KisSpinBoxUnitManager
-	virtual qreal getConversionConstant(int dim, QString symbol) const;
+    //! \reimp \see KisSpinBoxUnitManager
+    virtual qreal getConversionFactor(int dim, QString symbol) const;
+    //! \reimp \see KisSpinBoxUnitManager
+    virtual qreal getConversionConstant(int dim, QString symbol) const;
 
 private:
 

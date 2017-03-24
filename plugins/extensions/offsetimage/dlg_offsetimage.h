@@ -51,8 +51,8 @@ public:
 
 private Q_SLOTS:
     void okClicked();
-	void slotOffsetXChanged(double);
-	void slotOffsetYChanged(double);
+    void slotOffsetXChanged(double);
+    void slotOffsetYChanged(double);
     void slotMiddleOffset();
 
 private:
@@ -62,8 +62,8 @@ private:
     bool m_lock;
     QSize m_offsetSize;
 
-	KisDocumentAwareSpinBoxUnitManager* _widthUnitManager;
-	KisDocumentAwareSpinBoxUnitManager* _heightUnitManager;
+    KisDocumentAwareSpinBoxUnitManager* _widthUnitManager;
+    KisDocumentAwareSpinBoxUnitManager* _heightUnitManager;
 
 };
 

@@ -204,7 +204,7 @@ void ConnectionTool::paint(QPainter &painter, const KoViewConverter &converter)
                 if (shape == findNonConnectionShapeAtPosition(transform.map(cp.value().position))) {
                     handleRect.moveCenter(transform.map(cp.value().position));
                     painter.setBrush(cp.key() == m_activeHandle && shape == m_currentShape ?
-                                     Qt::red : Qt::white);
+                                         Qt::red : Qt::white);
                     painter.drawRect(handleRect);
                 }
             }
@@ -242,7 +242,7 @@ void ConnectionTool::repaintDecorations()
         if (!m_resetPaint && m_currentShape->isVisible(true) && !connectionShape) {
             // only paint connection points of textShapes not inside a tos container and other shapes
             if (!(m_currentShape->shapeId() == TextShape_SHAPEID &&
-                    dynamic_cast<KoTosContainer *>(m_currentShape->parent()))) {
+                  dynamic_cast<KoTosContainer *>(m_currentShape->parent()))) {
                 KoConnectionPoints connectionPoints = m_currentShape->connectionPoints();
                 KoConnectionPoints::const_iterator cp = connectionPoints.constBegin();
                 KoConnectionPoints::const_iterator lastCp = connectionPoints.constEnd();

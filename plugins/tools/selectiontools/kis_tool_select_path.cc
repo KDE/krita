@@ -61,7 +61,7 @@ bool KisToolSelectPath::eventFilter(QObject *obj, QEvent *event)
 {
     Q_UNUSED(obj);
     if (event->type() == QEvent::MouseButtonPress ||
-        event->type() == QEvent::MouseButtonDblClick) {
+            event->type() == QEvent::MouseButtonDblClick) {
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
         if (mouseEvent->button() == Qt::RightButton) {
             localTool()->removeLastPoint();

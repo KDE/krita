@@ -59,13 +59,13 @@ public:
 
 private Q_SLOTS:
     void slotAspectChanged(bool keep);
-	void slotAnchorButtonClicked(int id);
+    void slotAnchorButtonClicked(int id);
 
     void slotWidthChanged(double v);
-	void slotHeightChanged(double v);
+    void slotHeightChanged(double v);
 
     void slotXOffsetChanged(double v);
-	void slotYOffsetChanged(double v);
+    void slotYOffsetChanged(double v);
 
     void slotCanvasPreviewXOffsetChanged(int v);
     void slotCanvasPreviewYOffsetChanged(int v);
@@ -89,11 +89,11 @@ private:
     QIcon m_anchorIcons[9];
     QButtonGroup *m_group;
 
-	KisDocumentAwareSpinBoxUnitManager* _widthUnitManager;
-	KisDocumentAwareSpinBoxUnitManager* _heightUnitManager;
+    KisDocumentAwareSpinBoxUnitManager* _widthUnitManager;
+    KisDocumentAwareSpinBoxUnitManager* _heightUnitManager;
 
-	KisDocumentAwareSpinBoxUnitManager* _xOffsetUnitManager;
-	KisDocumentAwareSpinBoxUnitManager* _yOffsetUnitManager;
+    KisDocumentAwareSpinBoxUnitManager* _xOffsetUnitManager;
+    KisDocumentAwareSpinBoxUnitManager* _yOffsetUnitManager;
 };
 
 

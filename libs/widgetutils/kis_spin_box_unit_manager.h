@@ -57,7 +57,7 @@ class KRITAWIDGETUTILS_EXPORT KisSpinBoxUnitManagerBuilder
 
 public:
 
-	virtual ~KisSpinBoxUnitManagerBuilder() {}
+    virtual ~KisSpinBoxUnitManagerBuilder() {}
 
     virtual KisSpinBoxUnitManager* buildUnitManager(QObject* parent) = 0; //this pure virtual function is used to build a unitmanager, it will be used by the unitManagerFactory.
 };
@@ -82,10 +82,10 @@ class KRITAWIDGETUTILS_EXPORT KisSpinBoxUnitManager : public  QAbstractListModel
 public:
 
     enum UnitDimension{
-		LENGTH = 0, //length, print size, reference is point
-		IMLENGTH = 1, //length, image size, reference is pixel. This dimension is used when the printing units must be avoided
-		ANGLE = 2,
-		TIME = 3
+        LENGTH = 0, //length, print size, reference is point
+        IMLENGTH = 1, //length, image size, reference is pixel. This dimension is used when the printing units must be avoided
+        ANGLE = 2,
+        TIME = 3
     };
 
     static inline bool isUnitId(int code) { return (code == LENGTH || code == ANGLE || code == TIME); }
@@ -103,7 +103,7 @@ public:
     Q_DECLARE_FLAGS(Constrains, Constrain)
 
     explicit KisSpinBoxUnitManager(QObject *parent = 0);
-	virtual ~KisSpinBoxUnitManager();
+    virtual ~KisSpinBoxUnitManager();
 
     int getUnitDimensionType() const;
     QString getReferenceUnitSymbol() const;
@@ -118,36 +118,36 @@ public:
     qreal getApparentValue(double refValue) const;
 
     //! \brief gets the conversion factor of a managed unit, or -1 in case of error. This method is the one that need to be overridden to extend the ability of the KisSpinBoxUnitManager.
-	virtual qreal getConversionFactor(int dim, QString symbol) const;
+    virtual qreal getConversionFactor(int dim, QString symbol) const;
     //! \brief some units conversions are done via an affine transform, not just a linear transform. This function gives the constant of this affine transform (usually 0).
-	virtual qreal getConversionConstant(int dim, QString symbol) const;
+    virtual qreal getConversionConstant(int dim, QString symbol) const;
 
-	virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
-	virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
 
 Q_SIGNALS:
 
     void unitDimensionChanged(int dimCode);
-	void unitAboutToChange();
+    void unitAboutToChange();
     void unitChanged(QString symbol);
-	void unitChanged(int index);
+    void unitChanged(int index);
     void conversionFactorChanged(qreal newConversionFactor, qreal oldConversionFactor) const;
-	void conversionConstantChanged(qreal newConversionFactor, qreal oldConversionFactor) const;
+    void conversionConstantChanged(qreal newConversionFactor, qreal oldConversionFactor) const;
     void unitListChanged();
 
 public Q_SLOTS:
 
     void setUnitDimension(UnitDimension dimension);
     void setApparentUnitFromSymbol(QString pSymbol);
-	void selectApparentUnitFromIndex(int index);
+    void selectApparentUnitFromIndex(int index);
 
 protected:
 
     class Private;
     Private * d;
 
-	//! \brief convert a unitChanged signal with a QString to one with an index.
-	void newUnitSymbolToUnitIndex(QString symbol);
+    //! \brief convert a unitChanged signal with a QString to one with an index.
+    void newUnitSymbolToUnitIndex(QString symbol);
 
     //unit's that may be used only if acess to the document informations exists.
     static const QStringList documentRelativeLengthUnitSymbols;

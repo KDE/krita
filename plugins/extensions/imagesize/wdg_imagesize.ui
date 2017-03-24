@@ -24,7 +24,7 @@
      </property>
      <layout class="QGridLayout" name="gridLayout_3">
       <item row="1" column="2">
-       <widget class="KisDoubleParseSpinBox" name="pixelHeightDouble">
+       <widget class="KisDoubleParseUnitSpinBox" name="pixelHeightDouble">
         <property name="minimumSize">
          <size>
           <width>80</width>
@@ -42,22 +42,6 @@
         </property>
         <property name="singleStep">
          <double>0.100000000000000</double>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="2">
-       <widget class="KisIntParseSpinBox" name="pixelHeight">
-        <property name="minimumSize">
-         <size>
-          <width>80</width>
-          <height>0</height>
-         </size>
-        </property>
-        <property name="minimum">
-         <number>1</number>
-        </property>
-        <property name="maximum">
-         <number>100000</number>
         </property>
        </widget>
       </item>
@@ -83,13 +67,10 @@
       <item row="0" column="1">
        <widget class="QLabel" name="lblPixelWidth">
         <property name="text">
-         <string>W&amp;idth:</string>
+         <string>Width:</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-        </property>
-        <property name="buddy">
-         <cstring>pixelWidth</cstring>
         </property>
        </widget>
       </item>
@@ -119,18 +100,15 @@
       <item row="1" column="1">
        <widget class="QLabel" name="lblPixelHeight">
         <property name="text">
-         <string>&amp;Height:</string>
+         <string>Height:</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
-        <property name="buddy">
-         <cstring>pixelHeight</cstring>
-        </property>
        </widget>
       </item>
       <item row="0" column="2">
-       <widget class="KisDoubleParseSpinBox" name="pixelWidthDouble">
+       <widget class="KisDoubleParseUnitSpinBox" name="pixelWidthDouble">
         <property name="minimumSize">
          <size>
           <width>80</width>
@@ -148,16 +126,6 @@
         </property>
         <property name="singleStep">
          <double>0.100000000000000</double>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="2">
-       <widget class="KisIntParseSpinBox" name="pixelWidth">
-        <property name="minimum">
-         <number>1</number>
-        </property>
-        <property name="maximum">
-         <number>100000</number>
         </property>
        </widget>
       </item>
@@ -209,7 +177,7 @@
        <widget class="QComboBox" name="printHeightUnit"/>
       </item>
       <item row="0" column="2">
-       <widget class="KisDoubleParseSpinBox" name="printWidth">
+       <widget class="KisDoubleParseUnitSpinBox" name="printWidth">
         <property name="minimumSize">
          <size>
           <width>80</width>
@@ -244,7 +212,7 @@
        </widget>
       </item>
       <item row="1" column="2">
-       <widget class="KisDoubleParseSpinBox" name="printHeight">
+       <widget class="KisDoubleParseUnitSpinBox" name="printHeight">
         <property name="minimumSize">
          <size>
           <width>80</width>
@@ -415,21 +383,19 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>KisIntParseSpinBox</class>
-   <extends>QSpinBox</extends>
-   <header>kis_int_parse_spin_box.h</header>
-  </customwidget>
-  <customwidget>
    <class>KisDoubleParseSpinBox</class>
    <extends>QDoubleSpinBox</extends>
    <header>kis_double_parse_spin_box.h</header>
   </customwidget>
+  <customwidget>
+   <class>KisDoubleParseUnitSpinBox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header>kis_double_parse_unit_spin_box.h</header>
+  </customwidget>
  </customwidgets>
  <tabstops>
-  <tabstop>pixelWidth</tabstop>
   <tabstop>pixelWidthDouble</tabstop>
   <tabstop>pixelWidthUnit</tabstop>
-  <tabstop>pixelHeight</tabstop>
   <tabstop>pixelHeightDouble</tabstop>
   <tabstop>pixelHeightUnit</tabstop>
   <tabstop>pixelFilterCmb</tabstop>

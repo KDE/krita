@@ -46,7 +46,7 @@
 K_PLUGIN_FACTORY_WITH_JSON(ImageSizeFactory, "kritaimagesize.json", registerPlugin<ImageSize>();)
 
 ImageSize::ImageSize(QObject *parent, const QVariantList &)
-        : KisViewPlugin(parent)
+    : KisViewPlugin(parent)
 {
     KisAction *action  = createAction("imagesize");
     connect(action, SIGNAL(triggered()), this, SLOT(slotImageSize()));

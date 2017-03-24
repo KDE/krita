@@ -55,6 +55,8 @@
 #include <KoShadowConfigWidget.h>
 #include "kis_action_registry.h"
 
+#include "kis_document_aware_spin_box_unit_manager.h"
+
 #include <KoIcon.h>
 
 #include <QPointer>
@@ -234,7 +236,7 @@ qreal DefaultTool::rotationOfHandle(KoFlake::SelectionHandle handle, bool useEdg
     case KoFlake::TopMiddleHandle:
         if (useEdgeRotation) {
             direction = koSelection()->absolutePosition(KoFlake::TopRightCorner)
-                        - koSelection()->absolutePosition(KoFlake::TopLeftCorner);
+                    - koSelection()->absolutePosition(KoFlake::TopLeftCorner);
         } else {
             QPointF handlePosition = koSelection()->absolutePosition(KoFlake::TopLeftCorner);
             handlePosition += 0.5 * (koSelection()->absolutePosition(KoFlake::TopRightCorner) - handlePosition);
@@ -247,7 +249,7 @@ qreal DefaultTool::rotationOfHandle(KoFlake::SelectionHandle handle, bool useEdg
     case KoFlake::RightMiddleHandle:
         if (useEdgeRotation) {
             direction = koSelection()->absolutePosition(KoFlake::BottomRightCorner)
-                        - koSelection()->absolutePosition(KoFlake::TopRightCorner);
+                    - koSelection()->absolutePosition(KoFlake::TopRightCorner);
         } else {
             QPointF handlePosition = koSelection()->absolutePosition(KoFlake::TopRightCorner);
             handlePosition += 0.5 * (koSelection()->absolutePosition(KoFlake::BottomRightCorner) - handlePosition);
@@ -260,7 +262,7 @@ qreal DefaultTool::rotationOfHandle(KoFlake::SelectionHandle handle, bool useEdg
     case KoFlake::BottomMiddleHandle:
         if (useEdgeRotation) {
             direction = koSelection()->absolutePosition(KoFlake::BottomLeftCorner)
-                        - koSelection()->absolutePosition(KoFlake::BottomRightCorner);
+                    - koSelection()->absolutePosition(KoFlake::BottomRightCorner);
         } else {
             QPointF handlePosition = koSelection()->absolutePosition(KoFlake::BottomLeftCorner);
             handlePosition += 0.5 * (koSelection()->absolutePosition(KoFlake::BottomRightCorner) - handlePosition);
@@ -274,7 +276,7 @@ qreal DefaultTool::rotationOfHandle(KoFlake::SelectionHandle handle, bool useEdg
     case KoFlake::LeftMiddleHandle:
         if (useEdgeRotation) {
             direction = koSelection()->absolutePosition(KoFlake::TopLeftCorner)
-                        - koSelection()->absolutePosition(KoFlake::BottomLeftCorner);
+                    - koSelection()->absolutePosition(KoFlake::BottomLeftCorner);
         } else {
             QPointF handlePosition = koSelection()->absolutePosition(KoFlake::TopLeftCorner);
             handlePosition += 0.5 * (koSelection()->absolutePosition(KoFlake::BottomLeftCorner) - handlePosition);
@@ -556,7 +558,7 @@ void DefaultTool::mouseDoubleClickEvent(KoPointerEvent *event)
     }
 
     KoToolManager::instance()->switchToolRequested(
-        KoToolManager::instance()->preferredToolForSelection(shapes2));
+                KoToolManager::instance()->preferredToolForSelection(shapes2));
 }
 
 bool DefaultTool::moveSelection(int direction, Qt::KeyboardModifiers modifiers)
@@ -1030,7 +1032,13 @@ QList<QPointer<QWidget> > DefaultTool::createOptionWidgets()
     DefaultToolWidget *defaultTool = new DefaultToolWidget(this);
     defaultTool->setWindowTitle(i18n("Geometry"));
     widgets.append(defaultTool);
+
     KoStrokeConfigWidget *strokeWidget = new KoStrokeConfigWidget(0);
+    KisDocumentAwareSpinBoxUnitManager* managerLineWidth = new KisDocumentAwareSpinBoxUnitManager(strokeWidget);
+    KisDocumentAwareSpinBoxUnitManager* managerMitterLimit = new KisDocumentAwareSpinBoxUnitManager(strokeWidget);
+    managerLineWidth->setApparentUnitFromSymbol("px");
+    managerMitterLimit->setApparentUnitFromSymbol("px"); //set unit to px by default
+    strokeWidget->setUnitManagers(managerLineWidth, managerMitterLimit);
     strokeWidget->setWindowTitle(i18n("Line"));
     strokeWidget->setCanvas(canvas());
     widgets.append(strokeWidget);
@@ -1041,6 +1049,9 @@ QList<QPointer<QWidget> > DefaultTool::createOptionWidgets()
     widgets.append(fillWidget);
 
     KoShadowConfigWidget *shadowWidget = new KoShadowConfigWidget(0);
+    KisDocumentAwareSpinBoxUnitManager* managerBlur = new KisDocumentAwareSpinBoxUnitManager(shadowWidget); //let the shadow widget be aware of document relative units.
+    KisDocumentAwareSpinBoxUnitManager* managerOffset = new KisDocumentAwareSpinBoxUnitManager(shadowWidget); //let the shadow widget be aware of document relative units.
+    shadowWidget->setUnitManagers(managerBlur, managerOffset);
     shadowWidget->setWindowTitle(i18n("Shadow"));
     shadowWidget->setCanvas(canvas());
     widgets.append(shadowWidget);

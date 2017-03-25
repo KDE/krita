@@ -79,7 +79,6 @@ void KarbonCalligraphyTool::paint(QPainter &painter, const KoViewConverter &conv
         QPointF p1 = converter.documentToView(rect.topLeft());
         QPointF p2 = converter.documentToView(rect.bottomRight());
         painter.drawRect(QRectF(p1, p2));
-        painter.drawPath(selected);
         painter.restore();
     }
 
@@ -232,7 +231,13 @@ void KarbonCalligraphyTool::addPoint(KoPointerEvent *event, bool lastPoint)
         }
     }
     if (lastPoint) {
+        qreal pressure = 0;
+        for (int j=0; j<m_intervalStore.count(); j++) {
+            pressure+=m_intervalStore.at(j).pressure();
+        }
+        paintInfo.setPressure(pressure / m_intervalStore.count());
         m_shape->appendPoint(paintInfo);
+        m_intervalStore.count();
         m_intervalStore.clear();
         m_intervalStoreOld.clear();
     }

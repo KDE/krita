@@ -498,12 +498,6 @@ bool KarbonCalligraphicShape::loadSvg(const KoXmlElement &element, SvgLoadingCon
         QDomElement configElt = root.firstChildElement("config");
         KisPropertiesConfigurationSP config(new KisPropertiesConfiguration());
 
-        //attempt at debugging this...
-        for(int i=0;i< configElt.childNodes().count(); i++) {
-            qDebug()<<configElt.childNodes().at(i).toElement().attribute("name");
-            qDebug()<<configElt.childNodes().at(i).toElement().text();
-        }
-
         config->fromXML(configElt);
 
         QDomElement infoElt = root.firstChildElement("point");

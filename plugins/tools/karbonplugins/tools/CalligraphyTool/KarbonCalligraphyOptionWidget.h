@@ -82,6 +82,7 @@ private:
         qreal caps;
         qreal timeInterval;
         qreal distanceInterval;
+        KisPropertiesConfigurationSP curveConfig;
     };
 
     // convenience functions:

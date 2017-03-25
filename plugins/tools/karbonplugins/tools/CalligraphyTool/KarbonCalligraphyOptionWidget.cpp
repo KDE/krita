@@ -126,7 +126,9 @@ KarbonCalligraphyOptionWidget::~KarbonCalligraphyOptionWidget()
 void KarbonCalligraphyOptionWidget::emitAll()
 {
     emit usePathChanged(m_options->rdAdjustPath->isChecked());
-
+    emit useAssistantChanged(m_options->rdAdjustAssistant->isChecked());
+    emit useNoAdjustChanged(m_options->rdNoAdjust->isChecked());
+    emit generateSettings();
     emit smoothTimeChanged(m_options->sldTimeInterval->value());
     emit smoothDistanceChanged(m_options->sldDistanceInterval->value());
 }
@@ -256,6 +258,8 @@ void KarbonCalligraphyOptionWidget::createConnections()
             SLOT(updateCurrentProfile()));
     connect(m_options->sldDistanceInterval, SIGNAL(valueChanged(double)),
             SLOT(updateCurrentProfile()));
+    connect(m_sizeOption, SIGNAL(sigSettingChanged()), SLOT(updateCurrentProfile()));
+    connect(m_rotationOption, SIGNAL(sigSettingChanged()), SLOT(updateCurrentProfile()));
 
     connect(m_options->bnSaveProfile, SIGNAL(clicked()), SLOT(saveProfileAs()));
     connect(m_options->bnRemoveProfile, SIGNAL(clicked()), SLOT(removeProfile()));
@@ -277,12 +281,73 @@ void KarbonCalligraphyOptionWidget::addDefaultProfiles()
     KConfigGroup profile0(&config, "Profile0");
     profile0.writeEntry("name", i18n("Mouse"));
     profile0.writeEntry("usePath", false);
+    profile0.writeEntry("useAssistants", false);
+    profile0.writeEntry("caps", 0.0);
+    profile0.writeEntry("timeInterval", 0);
+    profile0.writeEntry("distanceInterval", 0);
+    QString curveConfigMouse("<!DOCTYPE params>\n<params>\n<param type='bool' "
+                                       " name='PressureRotation'>true</param>\n <param type='bool' name='PressureSize'>"
+                                       "true</param>\n <param type='string' name='RotationSensor'><![CDATA[<!DOCTYPE params>"
+                                       "\n<params fanCornersEnabled='0' lockedAngleMode='0' angleOffset='90' "
+                                       " id='drawingangle' fanCornersStep='30'/>\n]]></param>\n"
+                                       "<param type='bool' name='RotationUseCurve'>false</param>\n"
+                                       "<param type='bool' name='RotationUseSameCurve'>true</param>\n"
+                                       "<param type='double' name='RotationValue'>1</param>\n"
+                                       "<param type='string' name='SizeSensor'>"
+                                       "<![CDATA[<!DOCTYPE params>\n<params id='pressure'>\n"
+                                       "<curve>0,0;1,1;</curve>\n</params>\n]]></param>"
+                                       "<param type='bool' name='SizeUseCurve'>false</param>\n"
+                                       "<param type='bool' name='SizeUseSameCurve'>true</param>\n"
+                                       "<param type='double' name='SizeValue'>1</param>\n</params>");
+    profile0.writeEntry("curveConfig", curveConfigMouse);
 
     KConfigGroup profile1(&config, "Profile1");
-    profile1.writeEntry("name", i18n("Graphics Pen"));
+    profile1.writeEntry("name", i18n("Brush"));
     profile1.writeEntry("usePath", false);
+    profile1.writeEntry("useAssistants", false);
+    profile1.writeEntry("caps", 0.0);
+    profile1.writeEntry("timeInterval", 50);
+    profile1.writeEntry("distanceInterval", 15);
+    QString curveConfigBrush("<!DOCTYPE params>\n<params>\n<param type='bool' "
+                                       " name='PressureRotation'>true</param>\n <param type='bool' name='PressureSize'>"
+                                       "true</param>\n <param type='string' name='RotationSensor'><![CDATA[<!DOCTYPE params>"
+                                       "\n<params fanCornersEnabled='0' lockedAngleMode='0' angleOffset='90' "
+                                       " id='drawingangle' fanCornersStep='30'/>\n]]></param>\n"
+                                       "<param type='bool' name='RotationUseCurve'>true</param>\n"
+                                       "<param type='bool' name='RotationUseSameCurve'>true</param>\n"
+                                       "<param type='double' name='RotationValue'>1</param>\n"
+                                       "<param type='string' name='SizeSensor'>"
+                                       "<![CDATA[<!DOCTYPE params>\n<params id='pressure'>\n"
+                                       "<curve>0,0;0.375,0.25;0.625,0.75;1,1;</curve>\n</params>\n]]></param>"
+                                       "<param type='bool' name='SizeUseCurve'>true</param>\n"
+                                       "<param type='bool' name='SizeUseSameCurve'>true</param>\n"
+                                       "<param type='double' name='SizeValue'>1</param>\n</params>");
+    profile1.writeEntry("curveConfig", curveConfigBrush);
 
-    generalGroup.writeEntry("profile", i18n("Mouse"));
+    KConfigGroup profile2(&config, "Profile2");
+    profile2.writeEntry("name", i18n("GPen"));
+    profile2.writeEntry("usePath", false);
+    profile2.writeEntry("useAssistants", false);
+    profile2.writeEntry("caps", 0.0);
+    profile2.writeEntry("timeInterval", 50);
+    profile2.writeEntry("distanceInterval", 15);
+    QString curveConfigGpen("<!DOCTYPE params>\n<params>\n<param type='bool' "
+                                      " name='PressureRotation'>true</param>\n <param type='bool' name='PressureSize'>"
+                                      "true</param>\n <param type='string' name='RotationSensor'><![CDATA[<!DOCTYPE params>"
+                                      "\n<params fanCornersEnabled='0' lockedAngleMode='0' angleOffset='90' "
+                                      " id='drawingangle' fanCornersStep='30'/>\n]]></param>\n"
+                                      "<param type='bool' name='RotationUseCurve'>true</param>\n"
+                                      "<param type='bool' name='RotationUseSameCurve'>true</param>\n"
+                                      "<param type='double' name='RotationValue'>1</param>\n"
+                                      "<param type='string' name='SizeSensor'>"
+                                      "<![CDATA[<!DOCTYPE params>\n<params id='pressure'>\n"
+                                      "<curve>0,0;0.625,0.375;1,1;</curve>\n</params>\n]]></param>"
+                                      "<param type='bool' name='SizeUseCurve'>true</param>\n"
+                                      "<param type='bool' name='SizeUseSameCurve'>true</param>\n"
+                                      "<param type='double' name='SizeValue'>1</param>\n</params>");
+    profile2.writeEntry("curveConfig", curveConfigGpen);
+
+    generalGroup.writeEntry("profile", i18n("Brush"));
     generalGroup.writeEntry("defaultProfilesAdded", true);
 
     config.sync();
@@ -309,6 +374,8 @@ void KarbonCalligraphyOptionWidget::loadProfiles()
         profile->caps =             profileGroup.readEntry("caps", 0.0);
         profile->timeInterval =     profileGroup.readEntry("timeInterval", 0.0);
         profile->distanceInterval = profileGroup.readEntry("distanceInterval", 0.0);
+        profile->curveConfig = new KisPropertiesConfiguration();
+        profile->curveConfig->fromXML(profileGroup.readEntry("curveConfig", QString()));
 
         m_profiles.insert(profile->name, profile);
         ++i;
@@ -350,6 +417,8 @@ void KarbonCalligraphyOptionWidget::loadCurrentProfile()
     m_options->sldCaps->setValue(profile->caps);
     m_options->sldTimeInterval->setValue(profile->timeInterval);
     m_options->sldDistanceInterval->setValue(profile->distanceInterval);
+    m_sizeOption->readOptionSetting(profile->curveConfig);
+    m_rotationOption->readOptionSetting(profile->curveConfig);
     m_changingProfile = false;
 }
 
@@ -362,6 +431,9 @@ void KarbonCalligraphyOptionWidget::saveProfile(const QString &name)
     profile->useAssistants = m_options->rdAdjustAssistant->isChecked();
     profile->timeInterval = m_options->sldTimeInterval->value();
     profile->distanceInterval = m_options->sldDistanceInterval->value();
+    profile->curveConfig = new KisPropertiesConfiguration();
+    m_sizeOption->writeOptionSetting(profile->curveConfig);
+    m_rotationOption->writeOptionSetting(profile->curveConfig);
 
     if (m_profiles.contains(name)) {
         // there is already a profile with the same name, overwrite
@@ -395,6 +467,7 @@ void KarbonCalligraphyOptionWidget::saveProfile(const QString &name)
     profileGroup.writeEntry("caps", profile->caps);
     profileGroup.writeEntry("timeInterval", profile->timeInterval);
     profileGroup.writeEntry("distanceInterval", profile->distanceInterval);
+    profileGroup.writeEntry("curveConfig", profile->curveConfig->toXML());
 
     KConfigGroup generalGroup(&config, "General");
     generalGroup.writeEntry("profile", name);

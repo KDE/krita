@@ -247,38 +247,6 @@ void KarbonCalligraphyTool::addPoint(KoPointerEvent *event, bool lastPoint)
 
 }
 
-/*
-void KarbonCalligraphyTool::setAngle(KoPointerEvent *event)
-{
-    if (!m_useAngle) {
-        m_angle = (360 - m_customAngle + 90) / 180.0 * M_PI;
-        return;
-    }
-
-    // setting m_angle to the angle of the device
-    if (event->xTilt() != 0 || event->yTilt() != 0) {
-        m_deviceSupportsTilt = false;
-    }
-
-    if (m_deviceSupportsTilt) {
-        if (event->xTilt() == 0 && event->yTilt() == 0) {
-            return;    // leave as is
-        }
-        qDebug() << "using tilt" << m_angle;
-
-        if (event->x() == 0) {
-            m_angle = M_PI / 2;
-            return;
-        }
-
-        // y is inverted in qt painting
-        m_angle = std::atan(static_cast<double>(-event->yTilt() / event->xTilt())) + M_PI / 2;
-    } else {
-        m_angle = event->rotation() + M_PI / 2;
-        qDebug() << "using rotation" << m_angle;
-    }
-}
-*/
 QPointF KarbonCalligraphyTool::calculateNewPoint(const QPointF &mousePos, QPointF firstPathPosition)
 {
     QPointF res = mousePos;
@@ -309,91 +277,6 @@ QPointF KarbonCalligraphyTool::calculateNewPoint(const QPointF &mousePos, QPoint
     }
     return res;
 }
-/*
-
-qreal KarbonCalligraphyTool::calculateWidth(qreal pressure)
-{
-    // calculate the modulo of the speed
-    qreal speed = std::sqrt(pow(m_speed.x(), 2) + pow(m_speed.y(), 2));
-    qreal thinning =  m_thinning * (speed + 1) / 10.0; // can be negative
-
-    if (thinning > 1) {
-        thinning = 1;
-    }
-
-    if (!m_usePressure) {
-        pressure = 1.0;
-    }
-
-    qreal strokeWidth = m_strokeWidth * pressure * (1 - thinning);
-
-    const qreal MINIMUM_STROKE_WIDTH = 1.0;
-    if (strokeWidth < MINIMUM_STROKE_WIDTH) {
-        strokeWidth = MINIMUM_STROKE_WIDTH;
-    }
-
-    return strokeWidth;
-}
-
-qreal KarbonCalligraphyTool::calculateAngle(const QPointF &oldSpeed, const QPointF &newSpeed)
-{
-    // calculate the avarage of the speed (sum of the normalized values)
-    qreal oldLength = QLineF(QPointF(0, 0), oldSpeed).length();
-    qreal newLength = QLineF(QPointF(0, 0), newSpeed).length();
-    QPointF oldSpeedNorm = !qFuzzyCompare(oldLength + 1, 1) ?
-                oldSpeed / oldLength : QPointF(0, 0);
-    QPointF newSpeedNorm = !qFuzzyCompare(newLength + 1, 1) ?
-                newSpeed / newLength : QPointF(0, 0);
-    QPointF speed = oldSpeedNorm + newSpeedNorm;
-
-    // angle solely based on the speed
-    qreal speedAngle = 0;
-    if (speed.x() != 0) { // avoid division by zero
-        speedAngle = std::atan(speed.y() / speed.x());
-    } else if (speed.y() > 0) {
-        // x == 0 && y != 0
-        speedAngle = M_PI / 2;
-    } else if (speed.y() < 0) {
-        // x == 0 && y != 0
-        speedAngle = -M_PI / 2;
-    }
-    if (speed.x() < 0) {
-        speedAngle += M_PI;
-    }
-
-    // move 90 degrees
-    speedAngle += M_PI / 2;
-
-    qreal fixedAngle = m_angle;
-    // check if the fixed angle needs to be flipped
-    qreal diff = fixedAngle - speedAngle;
-    while (diff >= M_PI) { // normalize diff between -180 and 180
-        diff -= 2 * M_PI;
-    }
-    while (diff < -M_PI) {
-        diff += 2 * M_PI;
-    }
-
-    if (std::abs(diff) > M_PI / 2) { // if absolute value < 90
-        fixedAngle += M_PI;    // += 180
-    }
-
-    qreal dAngle = speedAngle - fixedAngle;
-
-    // normalize dAngle between -90 and +90
-    while (dAngle >= M_PI / 2) {
-        dAngle -= M_PI;
-    }
-    while (dAngle < -M_PI / 2) {
-        dAngle += M_PI;
-    }
-
-    qreal angle = fixedAngle + dAngle * (1.0 - m_fixation);
-
-    return angle;
-}
-*/
-
 void KarbonCalligraphyTool::activate(ToolActivation activation, const QSet<KoShape*> &shapes)
 {
     KoToolBase::activate(activation, shapes);
@@ -428,9 +311,6 @@ QList<QPointer<QWidget> > KarbonCalligraphyTool::createOptionWidgets()
 
     connect(widget, SIGNAL(settingsChanged(KisPropertiesConfigurationSP)),
             this, SLOT(setSettings(KisPropertiesConfigurationSP)));
-
-    connect(this, SIGNAL(pathSelectedChanged(bool)),
-            widget, SLOT(setUsePathEnabled(bool)));
 
     connect(widget, SIGNAL(smoothTimeChanged(double)),
             this, SLOT(setSmoothIntervalTime(double)));

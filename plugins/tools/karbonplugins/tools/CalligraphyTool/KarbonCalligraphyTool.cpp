@@ -71,7 +71,7 @@ KarbonCalligraphyTool::~KarbonCalligraphyTool()
 
 void KarbonCalligraphyTool::paint(QPainter &painter, const KoViewConverter &converter)
 {
-    if (m_selectedPath) {
+    if (m_selectedPath && m_usePath) {
         painter.save();
         painter.setRenderHints(QPainter::Antialiasing, false);
         painter.setPen(Qt::red);   // TODO make configurable
@@ -79,6 +79,7 @@ void KarbonCalligraphyTool::paint(QPainter &painter, const KoViewConverter &conv
         QPointF p1 = converter.documentToView(rect.topLeft());
         QPointF p2 = converter.documentToView(rect.bottomRight());
         painter.drawRect(QRectF(p1, p2));
+        painter.drawPath(selected);
         painter.restore();
     }
 

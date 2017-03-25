@@ -24,19 +24,21 @@
 
 
 struct DirectDataAccessPolicy {
-    DirectDataAccessPolicy(KisDataManager *dataManager)
-        : m_dataManager(dataManager) {}
+    DirectDataAccessPolicy(KisDataManager *dataManager, KisIteratorCompleteListener *completionListener)
+        : m_dataManager(dataManager),
+          m_completionListener(completionListener){}
+
 
     KisHLineConstIteratorSP createConstIterator(const QRect &rect) {
         const int xOffset = 0;
         const int yOffset = 0;
-        return new KisHLineIterator2(m_dataManager, rect.x(), rect.y(), rect.width(), xOffset, yOffset, false);
+        return new KisHLineIterator2(m_dataManager, rect.x(), rect.y(), rect.width(), xOffset, yOffset, false, m_completionListener);
     }
 
     KisHLineIteratorSP createIterator(const QRect &rect) {
         const int xOffset = 0;
         const int yOffset = 0;
-        return new KisHLineIterator2(m_dataManager, rect.x(), rect.y(), rect.width(), xOffset, yOffset, true);
+        return new KisHLineIterator2(m_dataManager, rect.x(), rect.y(), rect.width(), xOffset, yOffset, true, m_completionListener);
     }
 
     int pixelSize() const {
@@ -44,6 +46,7 @@ struct DirectDataAccessPolicy {
     }
 
     KisDataManager *m_dataManager;
+    KisIteratorCompleteListener *m_completionListener;
 };
 
 class KisPaintDeviceData
@@ -53,7 +56,8 @@ public:
         : m_cache(paintDevice),
           m_x(0), m_y(0),
           m_colorSpace(0),
-          m_levelOfDetail(0)
+          m_levelOfDetail(0),
+          m_cacheInvalidator(this)
         {
         }
 
@@ -65,7 +69,8 @@ public:
           m_x(rhs->m_x),
           m_y(rhs->m_y),
           m_colorSpace(rhs->m_colorSpace),
-          m_levelOfDetail(rhs->m_levelOfDetail)
+          m_levelOfDetail(rhs->m_levelOfDetail),
+          m_cacheInvalidator(this)
         {
             m_cache.setupCache();
         }
@@ -153,8 +158,8 @@ public:
 
 
         if (!rc.isEmpty()) {
-            InternalSequentialConstIterator srcIt(DirectDataAccessPolicy(m_dataManager.data()), rc);
-            InternalSequentialIterator dstIt(DirectDataAccessPolicy(dstDataManager.data()), rc);
+            InternalSequentialConstIterator srcIt(DirectDataAccessPolicy(m_dataManager.data(), cacheInvalidator()), rc);
+            InternalSequentialIterator dstIt(DirectDataAccessPolicy(dstDataManager.data(), cacheInvalidator()), rc);
 
             int nConseqPixels = 0;
 
@@ -248,6 +253,23 @@ public:
         m_levelOfDetail = value;
     }
 
+    ALWAYS_INLINE KisIteratorCompleteListener* cacheInvalidator() {
+        return &m_cacheInvalidator;
+    }
+
+
+private:
+    struct CacheInvalidator : public KisIteratorCompleteListener {
+        CacheInvalidator(KisPaintDeviceData *_q) : q(_q) {}
+
+        void notifyWritableIteratorCompleted() {
+            q->cache()->invalidate();
+        }
+    private:
+        KisPaintDeviceData *q;
+    };
+
+
 private:
 
     KisDataManagerSP m_dataManager;
@@ -256,6 +278,7 @@ private:
     qint32 m_y;
     const KoColorSpace* m_colorSpace;
     qint32 m_levelOfDetail;
+    CacheInvalidator m_cacheInvalidator;
 };
 
 #endif /* __KIS_PAINT_DEVICE_DATA_H */

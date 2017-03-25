@@ -41,12 +41,15 @@
 #include "libs/image/kis_paint_device_debug_utils.h"
 
 #include "kis_resources_snapshot.h"
+#include "kis_layer.h"
 
+#include "kis_inpaint_mask.h"
 
 void patchImage(KisPaintDeviceSP imageDev, KisPaintDeviceSP maskDev, int radius, int accuracy);
 
 struct KisToolSmartPatch::Private
 {
+    KisMaskSP mask = nullptr;
     KisNodeSP maskNode = nullptr;
     KisNodeSP paintNode = nullptr;
     KisPaintDeviceSP imageDev = nullptr;
@@ -78,7 +81,6 @@ void KisToolSmartPatch::activate(ToolActivation activation, const QSet<KoShape*>
 
 void KisToolSmartPatch::deactivate()
 {
-
     KisToolFreehand::deactivate();
 }
 
@@ -99,7 +101,6 @@ void KisToolSmartPatch::inpaintImage(KisPaintDeviceSP maskDev, KisPaintDeviceSP 
     int accuracy = 0;
     int patchRadius = 2;
 
-
     if( !m_d.isNull() && m_d->optionsWidget ){
         accuracy = m_d->optionsWidget->getAccuracy();
         patchRadius = m_d->optionsWidget->getPatchRadius();
@@ -118,37 +119,54 @@ void KisToolSmartPatch::deactivatePrimaryAction()
     KisToolFreehand::deactivatePrimaryAction();
 }
 
+void KisToolSmartPatch::createInpaintMask( void )
+{
+    m_d->mask = new KisInpaintMask();
+    KisLayerSP parentLayer = qobject_cast<KisLayer*>(m_d->paintNode.data());
+    m_d->mask->initSelection(parentLayer);
+    image()->addNode( m_d->mask, m_d->paintNode );
+}
+
+void KisToolSmartPatch::deleteInpaintMask( void )
+{
+    KisLayerSP inpaintMaskLayer = qobject_cast<KisLayer*>( m_d->mask );
+    image()->removeNode(inpaintMaskLayer);
+
+    KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
+    KisViewManager* viewManager = kiscanvas->viewManager();
+
+    if( ! m_d->paintNode.isNull() )
+        viewManager->nodeManager()->slotNonUiActivatedNode( m_d->paintNode );
+
+    m_d->paintNode = nullptr;
+    m_d->mask = nullptr;
+}
+
 void KisToolSmartPatch::beginPrimaryAction(KoPointerEvent *event)
 {
-    qDebug() << __FUNCTION__ << " 0";
-
     KisNodeSP node = currentNode();
     if (!node) return;
     KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
     KisViewManager* viewManager = kiscanvas->viewManager();
 
-    if (!m_d->maskNode.isNull()) {
-        viewManager->nodeManager()->slotNonUiActivatedNode(m_d->maskNode);
-        qDebug() << __FUNCTION__ << " 1";
+    if (!m_d->mask.isNull()) {
+        viewManager->nodeManager()->slotNonUiActivatedNode(m_d->mask);
     } else {
-
         m_d->paintNode = viewManager->nodeManager()->activeNode();
         m_d->imageDev = m_d->paintNode->paintDevice();
-        viewManager->nodeManager()->createNode("KisInpaintMask", true);
-        m_d->maskNode = currentNode();
 
-        if ( ! m_d->maskNode.isNull() ){
-            m_d->maskNode->setProperty("visible", false);
-            m_d->maskNode->setProperty("temporary", true);
-            m_d->maskNode->setProperty("inpaintmask", true);
+        createInpaintMask();
+        viewManager->nodeManager()->slotNonUiActivatedNode(m_d->mask);
+
+        if ( ! m_d->mask.isNull() ){
+            m_d->mask->setProperty("visible", false);
+            m_d->mask->setProperty("temporary", true);
+            m_d->mask->setProperty("inpaintmask", true);
         }
-        viewManager->nodeManager()->slotNonUiActivatedNode(m_d->maskNode);
-        qDebug() << __FUNCTION__ << " 2";
         KisToolFreehand::beginPrimaryAction(event);
-        qDebug() << __FUNCTION__ << " 3";
 
-        m_d->currentFgColor = canvas()->resourceManager()->foregroundColor(); //resource(KoCanvasResourceManager::ForegroundColor).value<KoColor>();
-        canvas()->resourceManager()->setForegroundColor(KoColor(Qt::black, KoColorSpaceRegistry::instance()->alpha8())); //maybe we should use alpha color space here
+        m_d->currentFgColor = canvas()->resourceManager()->foregroundColor();
+        canvas()->resourceManager()->setForegroundColor(KoColor(Qt::black, KoColorSpaceRegistry::instance()->alpha8()));
     }
 }
 
@@ -160,14 +178,10 @@ void KisToolSmartPatch::continuePrimaryAction(KoPointerEvent *event)
 
 void KisToolSmartPatch::endPrimaryAction(KoPointerEvent *event)
 {
-    qDebug() << __FUNCTION__ << " 0";
     if( mode() != KisTool::PAINT_MODE )
         return;
 
     KisToolFreehand::endPrimaryAction(event);
-
-
-    qDebug() << __FUNCTION__ << " 1";
 
     //Next line is important. We need to wait for the paint operation to finish otherwise
     //mask will be incomplete.
@@ -176,25 +190,13 @@ void KisToolSmartPatch::endPrimaryAction(KoPointerEvent *event)
     m_d->maskDev = new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8());
     m_d->maskDev->makeCloneFrom(currentNode()->paintDevice(), currentNode()->paintDevice()->extent());
 
-
     inpaintImage( m_d->maskDev, m_d->imageDev );
 
+//    KIS_DUMP_DEVICE_2(m_d->imageDev, m_d->imageDev->extent(), "patched", "/home/eugening/Projects/Out");
+//    KIS_DUMP_DEVICE_2(m_d->maskDev, m_d->imageDev->extent(), "output", "/home/eugening/Projects/Out");
 
-    KIS_DUMP_DEVICE_2(m_d->imageDev, m_d->imageDev->extent(), "patched", "/home/eugening/Projects/Out");
-    KIS_DUMP_DEVICE_2(m_d->maskDev, m_d->imageDev->extent(), "output", "/home/eugening/Projects/Out");
-
-    KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
-    KisViewManager* viewManager = kiscanvas->viewManager();
-    if( ! m_d->maskNode.isNull() )
-        viewManager->nodeManager()->removeSingleNode(m_d->maskNode);
-    if( ! m_d->paintNode.isNull() )
-        viewManager->nodeManager()->slotNonUiActivatedNode( m_d->paintNode );
-    m_d->paintNode = nullptr;
-    m_d->maskNode = nullptr;
-
+    deleteInpaintMask();
     canvas()->resourceManager()->setForegroundColor(m_d->currentFgColor);
-
-    qDebug() << __FUNCTION__ << " 3";
 }
 
 QWidget * KisToolSmartPatch::createOptionWidget()

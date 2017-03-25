@@ -24,6 +24,7 @@
 
 #include "kis_tiled_data_manager.h"
 #include "kis_random_accessor_ng.h"
+#include "kis_iterator_complete_listener.h"
 
 
 class KisRandomAccessor2 : public KisRandomAccessorNG
@@ -39,7 +40,7 @@ class KisRandomAccessor2 : public KisRandomAccessorNG
 
 public:
 
-    KisRandomAccessor2(KisTiledDataManager *ktm, qint32 x, qint32 y, qint32 offsetX, qint32 offsetY, bool writable);
+    KisRandomAccessor2(KisTiledDataManager *ktm, qint32 x, qint32 y, qint32 offsetX, qint32 offsetY, bool writable, KisIteratorCompleteListener *completeListener);
     KisRandomAccessor2(const KisTiledRandomAccessor& lhs);
     ~KisRandomAccessor2();
 
@@ -92,6 +93,7 @@ private:
     bool m_writable;
     int m_lastX, m_lastY;
     qint32 m_offsetX, m_offsetY;
+    KisIteratorCompleteListener *m_completeListener;
     static const quint32 CACHESIZE; // Define the number of tiles we keep in cache
 
 };

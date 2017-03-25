@@ -27,7 +27,8 @@ public:
     KisWrappedLineIteratorBase(KisDataManager *dataManager,
                                const KisWrappedRect &splitRect,
                                qint32 offsetX, qint32 offsetY,
-                               bool writable)
+                               bool writable,
+                               KisIteratorCompleteListener *listener)
         : m_splitRect(splitRect)
     {
         Q_ASSERT(m_splitRect.isSplit());
@@ -40,7 +41,8 @@ public:
             m_iterators[i] = m_strategy.createIterator(dataManager,
                                                        rc,
                                                        offsetX, offsetY,
-                                                       writable);
+                                                       writable,
+                                                       listener);
         }
         m_strategy.completeInitialization(&m_iterators, &m_splitRect);
         m_iterationAreaSize =

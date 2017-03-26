@@ -42,6 +42,8 @@
 
 #include "kis_resources_snapshot.h"
 #include "kis_layer.h"
+#include "kis_transaction.h"
+#include "kis_node_commands_adapter.h"
 
 #include "kis_inpaint_mask.h"
 
@@ -106,7 +108,6 @@ void KisToolSmartPatch::inpaintImage(KisPaintDeviceSP maskDev, KisPaintDeviceSP 
         patchRadius = m_d->optionsWidget->getPatchRadius();
     }
     patchImage( imageDev, maskDev, patchRadius, accuracy );
-
 }
 
 void KisToolSmartPatch::activatePrimaryAction()
@@ -129,14 +130,12 @@ void KisToolSmartPatch::createInpaintMask( void )
 
 void KisToolSmartPatch::deleteInpaintMask( void )
 {
-    KisLayerSP inpaintMaskLayer = qobject_cast<KisLayer*>( m_d->mask );
-    image()->removeNode(inpaintMaskLayer);
-
     KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
     KisViewManager* viewManager = kiscanvas->viewManager();
-
     if( ! m_d->paintNode.isNull() )
         viewManager->nodeManager()->slotNonUiActivatedNode( m_d->paintNode );
+
+    image()->removeNode(m_d->mask);
 
     m_d->paintNode = nullptr;
     m_d->mask = nullptr;
@@ -189,13 +188,19 @@ void KisToolSmartPatch::endPrimaryAction(KoPointerEvent *event)
 
     m_d->maskDev = new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8());
     m_d->maskDev->makeCloneFrom(currentNode()->paintDevice(), currentNode()->paintDevice()->extent());
+    deleteInpaintMask();
 
+//    image()->undoAdapter()->beginMacro(kundo2_i18n("Inpaint"));
+    //KisTransaction inpaintTransaction(kundo2_i18n("Inpaint Paint"), m_d->imageDev);
     inpaintImage( m_d->maskDev, m_d->imageDev );
+    //inpaintTransaction.commit(image()->undoAdapter());
 
 //    KIS_DUMP_DEVICE_2(m_d->imageDev, m_d->imageDev->extent(), "patched", "/home/eugening/Projects/Out");
 //    KIS_DUMP_DEVICE_2(m_d->maskDev, m_d->imageDev->extent(), "output", "/home/eugening/Projects/Out");
 
-    deleteInpaintMask();
+
+//    image()->undoAdapter()->endMacro();
+
     canvas()->resourceManager()->setForegroundColor(m_d->currentFgColor);
 }
 

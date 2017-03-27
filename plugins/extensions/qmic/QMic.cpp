@@ -26,6 +26,8 @@
 #include <QLocalServer>
 #include <QVBoxLayout>
 #include <QUuid>
+#include <QList>
+#include <QSharedPointer>
 
 #include <klocalizedstring.h>
 #include <kpluginfactory.h>
@@ -245,13 +247,13 @@ bool QMic::prepareCroppedImages(QByteArray &message, const QRect &rc, int inputM
     m_view->image()->lock();
 
     KisInputOutputMapper mapper(m_view->image(), m_view->activeNode());
-    KisNodeListSP layers = mapper.inputNodes(inputMode);
-    if (layers.isEmpty()) {
+    KisNodeListSP layers = mapper.inputNodes((InputLayerMode)inputMode);
+    if (layers->isEmpty()) {
         m_view->image()->unlock();
         return false;
     }
 
-
+    return false;
     m_view->image()->unlock();
 }
 

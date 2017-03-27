@@ -600,7 +600,6 @@ void KoToolManager::Private::disconnectActiveTool()
         // repaint the decorations before we deactivate the tool as it might deleted
         // data needed for the repaint
         emit q->aboutToChangeTool(canvasData->canvas);
-        canvasData->canvas->notifyToolGoingToSwitch();
         canvasData->activeTool->deactivate();
         disconnect(canvasData->activeTool, SIGNAL(cursorChanged(const QCursor&)),
                    q, SLOT(updateCursor(const QCursor&)));

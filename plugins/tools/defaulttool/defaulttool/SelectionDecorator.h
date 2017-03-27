@@ -24,7 +24,9 @@
 
 #include <KoViewConverter.h>
 #include <KoFlake.h>
+
 #include <QPainter>
+#include <QPointer>
 
 class KoSelection;
 
@@ -72,7 +74,7 @@ private:
     bool m_rotationHandles, m_shearHandles;
     KoFlake::SelectionHandle m_arrows;
     static KoFlake::Position m_hotPosition;
-    KoSelection *m_selection;
+    QPointer<KoSelection> m_selection;
     int m_handleRadius;
     int m_lineWidth;
 };

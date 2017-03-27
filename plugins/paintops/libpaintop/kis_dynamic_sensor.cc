@@ -275,7 +275,7 @@ QString KisDynamicSensor::maximumLabel(DynamicSensorType sensorType, int max)
     case PERSPECTIVE:
         return i18n("Near");
     case TANGENTIAL_PRESSURE:
-    case PRESSURE_IN:        
+    case PRESSURE_IN:
         return i18n("High");
     default:
         return i18n("1.0");
@@ -404,7 +404,6 @@ void KisDynamicSensor::toXML(QDomDocument& doc, QDomElement& elt) const
 
 void KisDynamicSensor::fromXML(const QDomElement& e)
 {
-    Q_UNUSED(e);
     Q_ASSERT(e.attribute("id", "") == id(sensorType()));
     m_customCurve = false;
     QDomElement curve_elt = e.firstChildElement("curve");

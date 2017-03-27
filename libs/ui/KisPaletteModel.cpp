@@ -60,14 +60,14 @@ void KisPaletteModel::slotDisplayConfigurationChanged()
 QVariant KisPaletteModel::data(const QModelIndex& index, int role) const
 {
     if (m_colorSet) {
-        int i = index.row()*columnCount()+index.column();
+        quint32 i = (quint32)(index.row()*columnCount()+index.column());
         if (i < m_colorSet->nColors()) {
             switch (role) {
             case Qt::DisplayRole: {
-                return m_colorSet->getColor(i).name;
+                return m_colorSet->getColorGlobal(i).name;
             }
             case Qt::BackgroundRole: {
-                QColor color = m_displayRenderer->toQColor(m_colorSet->getColor(i).color);
+                QColor color = m_displayRenderer->toQColor(m_colorSet->getColorGlobal(i).color);
                 return QBrush(color);
             }
             }
@@ -104,7 +104,7 @@ Qt::ItemFlags KisPaletteModel::flags(const QModelIndex& /*index*/) const
 QModelIndex KisPaletteModel::index(int row, int column, const QModelIndex& parent) const
 {
     int index = row*columnCount()+column;
-    if (m_colorSet && index < m_colorSet->nColors()) {
+    if (m_colorSet && (quint32)index < m_colorSet->nColors()) {
         return QAbstractTableModel::index(row, column, parent);
     }
     return QModelIndex();

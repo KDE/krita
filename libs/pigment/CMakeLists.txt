@@ -115,6 +115,7 @@ target_include_directories( kritapigment
 target_link_libraries( kritapigment
     PUBLIC
         kritaplugin
+        kritastore
         ${EXTRA_LIBRARIES}
         KF5::I18n 
         KF5::ConfigCore

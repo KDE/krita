@@ -28,6 +28,14 @@
 
 // #include <WidgetsDebug.h>
 
+KoIconToolTip::KoIconToolTip()
+{
+}
+
+KoIconToolTip::~KoIconToolTip()
+{
+}
+
 QTextDocument *KoIconToolTip::createDocument( const QModelIndex &index )
 {
     QTextDocument *doc = new QTextDocument( this );
@@ -37,8 +45,8 @@ QTextDocument *KoIconToolTip::createDocument( const QModelIndex &index )
 
     QString name = index.data( Qt::DisplayRole ).toString();
 
-    const QString image = QString( "<image src=\"data:thumbnail\">" );
-    const QString body = QString( "<h3 align=\"center\">%1</h3>" ).arg( name ) + image;
+    const QString image = QString( "<table align=\"center\"><tr><td><img src=\"data:thumbnail\"></td></tr></table>" );
+    const QString body = QString( "<h3 align=\"center\">%1</h3>%2" ).arg( name ).arg(image);
     const QString html = QString( "<html><body>%1</body></html>" ).arg( body );
 
     doc->setHtml( html );

@@ -2062,6 +2062,7 @@ void KisMainWindow::setActiveSubWindow(QWidget *window)
         KisView *view = qobject_cast<KisView *>(subwin->widget());
         //dbgKrita << "\t" << view << activeView();
         if (view && view != activeView()) {
+             d->mdiArea->setActiveSubWindow(subwin);
             setActiveView(view);
         }
         d->activeSubWindow = subwin;

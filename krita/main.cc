@@ -121,10 +121,11 @@ extern "C" int main(int argc, char **argv)
 
     const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
 
-
+    bool singleApplication = true;
 #if QT_VERSION >= 0x050600
     {
-        QSettings kritarc(configPath + QStringLiteral("/kritaopenglrc"), QSettings::IniFormat);
+        QSettings kritarc(configPath + QStringLiteral("/kritadisplayrc"), QSettings::IniFormat);
+        singleApplication = kritarc.value("EnableSingleApplication").toBool();
         if (kritarc.value("EnableHiDPI", false).toBool()) {
             QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
         }
@@ -207,7 +208,7 @@ extern "C" int main(int argc, char **argv)
 
     KisApplicationArguments args(app);
 
-    if (app.isRunning()) {
+    if (singleApplication && app.isRunning()) {
         // only pass arguments to main instance if they are not for batch processing
         // any batch processing would be done in this separate instance
         const bool batchRun = (args.print() || args.exportAs() || args.exportAsPdf());
@@ -268,7 +269,7 @@ extern "C" int main(int argc, char **argv)
     int state = app.exec();
 
     {
-        QSettings kritarc(configPath + QStringLiteral("/kritaopenglrc"), QSettings::IniFormat);
+        QSettings kritarc(configPath + QStringLiteral("/kritadisplayrc"), QSettings::IniFormat);
         kritarc.setValue("canvasState", "OPENGL_SUCCESS");
     }
 

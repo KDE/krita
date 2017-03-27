@@ -364,7 +364,6 @@ protected:
     void closeEvent(QCloseEvent * e);
     void resizeEvent(QResizeEvent * e);
 
-
     // QWidget overrides
     virtual void dragEnterEvent(QDragEnterEvent * event);
     virtual void dropEvent(QDropEvent * event);

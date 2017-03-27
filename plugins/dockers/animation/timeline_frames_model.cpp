@@ -22,6 +22,7 @@
 #include <QColor>
 #include <QMimeData>
 #include <QPointer>
+#include <KoResourceModel.h>
 
 #include "kis_layer.h"
 #include "kis_config.h"
@@ -336,10 +337,26 @@ QVariant TimelineFramesModel::data(const QModelIndex &index, int role) const
         return label > 0 ? label : QVariant();
     }
     case Qt::DisplayRole: {
-        return QVariant();
+        return m_d->layerName(index.row());
     }
     case Qt::TextAlignmentRole: {
         return QVariant(Qt::AlignHCenter | Qt::AlignVCenter);
+    }
+    case KoResourceModel::LargeThumbnailRole: {
+        KisNodeDummy *dummy = m_d->converter->dummyFromRow(index.row());
+        if (!dummy) {
+            return  QVariant();
+        }
+        const int maxSize = 200;
+
+        QSize size = dummy->node()->extent().size();
+        size.scale(maxSize, maxSize, Qt::KeepAspectRatio);
+        if (size.width() == 0 || size.height() == 0) {
+            // No thumbnail can be shown if there isn't width or height...
+            return QVariant();
+        }
+        QImage image(dummy->node()->createThumbnailForFrame(size.width(), size.height(), index.column()));
+        return image;
     }
     }
 

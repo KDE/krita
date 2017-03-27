@@ -51,7 +51,7 @@ ki18n_wrap_ui(KRITA_ANIMATIONDOCKER_SOURCES
 add_library(kritaanimationdocker MODULE ${KRITA_ANIMATIONDOCKER_SOURCES})
 
 generate_export_header(kritaanimationdocker BASE_NAME kritaanimationdocker EXPORT_MACRO_NAME KRITAANIMATIONDOCKER_EXPORT)
-target_link_libraries(kritaanimationdocker kritaui)
+target_link_libraries(kritaanimationdocker kritaui kritawidgets)
 install(TARGETS kritaanimationdocker  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 
 

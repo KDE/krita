@@ -247,7 +247,7 @@ public:
 
     QByteArray canvasState;
 
-    bool blockUntillOperationsFinishedImpl(KisImageSP image, bool force);
+    bool blockUntilOperationsFinishedImpl(KisImageSP image, bool force);
 };
 
 
@@ -759,7 +759,7 @@ int KisViewManager::viewCount() const
     return 0;
 }
 
-bool KisViewManager::KisViewManagerPrivate::blockUntillOperationsFinishedImpl(KisImageSP image, bool force)
+bool KisViewManager::KisViewManagerPrivate::blockUntilOperationsFinishedImpl(KisImageSP image, bool force)
 {
     const int busyWaitDelay = 1000;
     KisDelayedSaveDialog dialog(image, !force ? KisDelayedSaveDialog::GeneralDialog : KisDelayedSaveDialog::ForcedDialog, busyWaitDelay, mainWindow);
@@ -769,14 +769,14 @@ bool KisViewManager::KisViewManagerPrivate::blockUntillOperationsFinishedImpl(Ki
 }
 
 
-bool KisViewManager::blockUntillOperationsFinished(KisImageSP image)
+bool KisViewManager::blockUntilOperationsFinished(KisImageSP image)
 {
-    return d->blockUntillOperationsFinishedImpl(image, false);
+    return d->blockUntilOperationsFinishedImpl(image, false);
 }
 
 void KisViewManager::blockUntillOperationsFinishedForced(KisImageSP image)
 {
-    d->blockUntillOperationsFinishedImpl(image, true);
+    d->blockUntilOperationsFinishedImpl(image, true);
 }
 
 void KisViewManager::slotCreateTemplate()

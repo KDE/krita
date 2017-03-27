@@ -81,7 +81,7 @@ public:
         return ps;
     }
     virtual QString id() const {
-        return "ColorSelectorSettings";
+        return "PyQtSettings";
     }
     PyQtPluginSettingsUpdateRepeater repeater;
     PyKrita::Engine *m_engine;

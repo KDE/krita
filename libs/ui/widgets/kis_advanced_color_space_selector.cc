@@ -214,7 +214,7 @@ void KisAdvancedColorSpaceSelector::fillDescription()
         if (currentColorSpace()->profile()->hasTRC()){
             for (int i=0; i<=10; i++) {
                 QVector <qreal> linear(3);
-                linear.fill(i*0.1);            
+                linear.fill(i*0.1);
                 currentColorSpace()->profile()->linearizeFloatValue(linear);
                 estimatedCurve = estimatedCurve + ", " + QString::number(linear[0]);
                 QPointF tonepoint(linear[0],i*0.1);
@@ -249,7 +249,7 @@ void KisAdvancedColorSpaceSelector::fillDescription()
         if (currentColorSpace()->profile()->hasTRC()){
             for (int i=0; i<=10; i++) {
                 QVector <qreal> linear(3);
-                linear.fill(i*0.1);            
+                linear.fill(i*0.1);
                 currentColorSpace()->profile()->linearizeFloatValue(linear);
                 estimatedCurve = estimatedCurve + ", " + QString::number(linear[0]);
                 QPointF tonepoint(linear[0],i*0.1);
@@ -277,7 +277,7 @@ void KisAdvancedColorSpaceSelector::fillDescription()
         if (currentColorSpace()->profile()->hasTRC()){
             for (int i=0; i<=10; i++) {
                 QVector <qreal> linear(3);
-                linear.fill(i*0.1);            
+                linear.fill(i*0.1);
                 currentColorSpace()->profile()->linearizeFloatValue(linear);
                 estimatedCurve = estimatedCurve + ", " + QString::number(linear[0]);
                 QPointF tonepoint(linear[0],i*0.1);
@@ -301,7 +301,7 @@ void KisAdvancedColorSpaceSelector::fillDescription()
         if (currentColorSpace()->profile()->hasTRC()){
             for (int i=0; i<=10; i++) {
                 QVector <qreal> linear(3);
-                linear.fill(i*0.1);            
+                linear.fill(i*0.1);
                 currentColorSpace()->profile()->linearizeFloatValue(linear);
                 estimatedCurve = estimatedCurve + ", " + QString::number(linear[0]);
                 QPointF tonepoint(linear[0],i*0.1);
@@ -323,7 +323,7 @@ void KisAdvancedColorSpaceSelector::fillDescription()
         if (currentColorSpace()->profile()->hasTRC()){
             for (int i=0; i<=10; i++) {
                 QVector <qreal> linear(3);
-                linear.fill(i*0.1);            
+                linear.fill(i*0.1);
                 currentColorSpace()->profile()->linearizeFloatValue(linear);
                 estimatedCurve = estimatedCurve + ", " + QString::number(linear[0]);
                 QPointF tonepoint(linear[0],i*0.1);
@@ -346,7 +346,7 @@ void KisAdvancedColorSpaceSelector::fillDescription()
         if (currentColorSpace()->profile()->hasTRC()){
             for (int i=0; i<=10; i++) {
                 QVector <qreal> linear(3);
-                linear.fill(i*0.1);            
+                linear.fill(i*0.1);
                 currentColorSpace()->profile()->linearizeFloatValue(linear);
                 estimatedCurve = estimatedCurve + ", " + QString::number(linear[0]);
                 QPointF tonepoint(linear[0],i*0.1);
@@ -754,6 +754,7 @@ void KisAdvancedColorSpaceSelector::setCurrentProfile(const QString& name)
 
 void KisAdvancedColorSpaceSelector::setCurrentColorSpace(const KoColorSpace* colorSpace)
 {
+    if (!colorSpace) return;
     setCurrentColorModel(colorSpace->colorModelId());
     setCurrentColorDepth(colorSpace->colorDepthId());
     setCurrentProfile(colorSpace->profile()->name());

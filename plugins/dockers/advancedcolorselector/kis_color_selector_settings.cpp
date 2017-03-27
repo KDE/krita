@@ -407,7 +407,7 @@ void KisColorSelectorSettings::loadPreferences()
         KisConfig kisconfig;
         const KoColorSpace *cs = kisconfig.customColorSelectorColorSpace();
 
-        if(cs) {
+        if (cs) {
             ui->useDifferentColorSpaceCheckbox->setChecked(true);
             ui->colorSpace->setEnabled(true);
             ui->colorSpace->setCurrentColorSpace(cs);

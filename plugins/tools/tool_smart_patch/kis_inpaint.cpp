@@ -947,7 +947,7 @@ void NearestNeighborField::ExpectationStep(NearestNeighborFieldSP nnf, MaskedIma
 
 
 
-void patchImage(KisPaintDeviceSP imageDev, KisPaintDeviceSP maskDev, int patchRadius, int accuracy)
+QRect patchImage(KisPaintDeviceSP imageDev, KisPaintDeviceSP maskDev, int patchRadius, int accuracy)
 {
     maskDev->setDefaultPixel( KoColor(Qt::white, maskDev->colorSpace()));
 
@@ -969,6 +969,7 @@ void patchImage(KisPaintDeviceSP imageDev, KisPaintDeviceSP maskDev, int patchRa
     MaskedImageSP output = inpaint.patch();
 
     output->toPaintDevice( imageDev, maskRect );
+    return maskRect;
 }
 
 

@@ -34,7 +34,8 @@
 
 #include "KoProperties.h"
 #include "KoColorSpaceRegistry.h"
-
+#include "KoShapeController.h"
+#include "KoDocumentResourceManager.h"
 #include "kis_node_manager.h"
 
 #include "kis_tool_smart_patch_options_widget.h"
@@ -47,7 +48,7 @@
 
 #include "kis_inpaint_mask.h"
 
-void patchImage(KisPaintDeviceSP imageDev, KisPaintDeviceSP maskDev, int radius, int accuracy);
+QRect patchImage(KisPaintDeviceSP imageDev, KisPaintDeviceSP maskDev, int radius, int accuracy);
 
 struct KisToolSmartPatch::Private
 {
@@ -98,7 +99,7 @@ bool KisToolSmartPatch::canCreateInpaintMask() const
     return node && node->inherits("KisLayer");
 }
 
-void KisToolSmartPatch::inpaintImage(KisPaintDeviceSP maskDev, KisPaintDeviceSP imageDev)
+QRect KisToolSmartPatch::inpaintImage(KisPaintDeviceSP maskDev, KisPaintDeviceSP imageDev)
 {
     int accuracy = 0;
     int patchRadius = 2;
@@ -107,7 +108,7 @@ void KisToolSmartPatch::inpaintImage(KisPaintDeviceSP maskDev, KisPaintDeviceSP 
         accuracy = m_d->optionsWidget->getAccuracy();
         patchRadius = m_d->optionsWidget->getPatchRadius();
     }
-    patchImage( imageDev, maskDev, patchRadius, accuracy );
+    return patchImage( imageDev, maskDev, patchRadius, accuracy );
 }
 
 void KisToolSmartPatch::activatePrimaryAction()
@@ -123,6 +124,7 @@ void KisToolSmartPatch::deactivatePrimaryAction()
 void KisToolSmartPatch::createInpaintMask( void )
 {
     m_d->mask = new KisInpaintMask();
+
     KisLayerSP parentLayer = qobject_cast<KisLayer*>(m_d->paintNode.data());
     m_d->mask->initSelection(parentLayer);
     image()->addNode( m_d->mask, m_d->paintNode );
@@ -136,23 +138,20 @@ void KisToolSmartPatch::deleteInpaintMask( void )
         viewManager->nodeManager()->slotNonUiActivatedNode( m_d->paintNode );
 
     image()->removeNode(m_d->mask);
-
-    m_d->paintNode = nullptr;
     m_d->mask = nullptr;
 }
 
 void KisToolSmartPatch::beginPrimaryAction(KoPointerEvent *event)
 {
-    KisNodeSP node = currentNode();
-    if (!node) return;
+    m_d->paintNode = currentNode();
+    if (m_d->paintNode.isNull())
+        return;
     KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
     KisViewManager* viewManager = kiscanvas->viewManager();
 
     if (!m_d->mask.isNull()) {
         viewManager->nodeManager()->slotNonUiActivatedNode(m_d->mask);
     } else {
-        m_d->paintNode = viewManager->nodeManager()->activeNode();
-        m_d->imageDev = m_d->paintNode->paintDevice();
 
         createInpaintMask();
         viewManager->nodeManager()->slotNonUiActivatedNode(m_d->mask);
@@ -162,6 +161,10 @@ void KisToolSmartPatch::beginPrimaryAction(KoPointerEvent *event)
             m_d->mask->setProperty("temporary", true);
             m_d->mask->setProperty("inpaintmask", true);
         }
+
+        //Collapse freehand drawing of the mask followed by inpaint operation into a single undo node
+        canvas()->shapeController()->resourceManager()->undoStack()->beginMacro(kundo2_i18n("Smart Patch"));
+
         KisToolFreehand::beginPrimaryAction(event);
 
         m_d->currentFgColor = canvas()->resourceManager()->foregroundColor();
@@ -190,16 +193,23 @@ void KisToolSmartPatch::endPrimaryAction(KoPointerEvent *event)
     m_d->maskDev->makeCloneFrom(currentNode()->paintDevice(), currentNode()->paintDevice()->extent());
     deleteInpaintMask();
 
-//    image()->undoAdapter()->beginMacro(kundo2_i18n("Inpaint"));
-    //KisTransaction inpaintTransaction(kundo2_i18n("Inpaint Paint"), m_d->imageDev);
-    inpaintImage( m_d->maskDev, m_d->imageDev );
-    //inpaintTransaction.commit(image()->undoAdapter());
+    image()->waitForDone();
+    m_d->imageDev = currentNode()->paintDevice();
+
+
+    KisTransaction inpaintTransaction(kundo2_i18n("Inpaint Operation"), m_d->imageDev);
+
+    //actual inpaint operation
+    QRect changedRect = inpaintImage( m_d->maskDev, m_d->imageDev );
+    currentNode()->setDirty( changedRect );
+
+    inpaintTransaction.commit(image()->undoAdapter());
+
+    //Matching endmacro for inpaint operation
+    canvas()->shapeController()->resourceManager()->undoStack()->endMacro();
 
 //    KIS_DUMP_DEVICE_2(m_d->imageDev, m_d->imageDev->extent(), "patched", "/home/eugening/Projects/Out");
 //    KIS_DUMP_DEVICE_2(m_d->maskDev, m_d->imageDev->extent(), "output", "/home/eugening/Projects/Out");
-
-
-//    image()->undoAdapter()->endMacro();
 
     canvas()->resourceManager()->setForegroundColor(m_d->currentFgColor);
 }

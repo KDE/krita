@@ -19,12 +19,7 @@
 #include "kis_tool_smart_patch.h"
 
 #include <klocalizedstring.h>
-#include <QAction>
-#include <QLabel>
-#include <kactioncollection.h>
-
 #include <KoCanvasBase.h>
-#include <KoCanvasController.h>
 
 #include <KisViewManager.h>
 #include "kis_canvas2.h"
@@ -44,7 +39,6 @@
 #include "kis_resources_snapshot.h"
 #include "kis_layer.h"
 #include "kis_transaction.h"
-#include "kis_node_commands_adapter.h"
 
 #include "kis_inpaint_mask.h"
 
@@ -156,19 +150,14 @@ void KisToolSmartPatch::beginPrimaryAction(KoPointerEvent *event)
         createInpaintMask();
         viewManager->nodeManager()->slotNonUiActivatedNode(m_d->mask);
 
-        if ( ! m_d->mask.isNull() ){
-            m_d->mask->setProperty("visible", false);
-            m_d->mask->setProperty("temporary", true);
-            m_d->mask->setProperty("inpaintmask", true);
-        }
-
         //Collapse freehand drawing of the mask followed by inpaint operation into a single undo node
         canvas()->shapeController()->resourceManager()->undoStack()->beginMacro(kundo2_i18n("Smart Patch"));
 
         KisToolFreehand::beginPrimaryAction(event);
 
+        //User will be drawing on an alpha mask. Show color matching inpaint mask color.
         m_d->currentFgColor = canvas()->resourceManager()->foregroundColor();
-        canvas()->resourceManager()->setForegroundColor(KoColor(Qt::black, KoColorSpaceRegistry::instance()->alpha8()));
+        canvas()->resourceManager()->setForegroundColor(KoColor(Qt::magenta, image()->colorSpace()));
     }
 }
 
@@ -189,13 +178,14 @@ void KisToolSmartPatch::endPrimaryAction(KoPointerEvent *event)
     //mask will be incomplete.
     image()->waitForDone();
 
+    //User drew a mask on the temporary inpaint mask layer. Get this mask to pass to the inpaint algorithm
     m_d->maskDev = new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8());
     m_d->maskDev->makeCloneFrom(currentNode()->paintDevice(), currentNode()->paintDevice()->extent());
+    //Once we get the mask we delete the temporary layer
     deleteInpaintMask();
 
     image()->waitForDone();
     m_d->imageDev = currentNode()->paintDevice();
-
 
     KisTransaction inpaintTransaction(kundo2_i18n("Inpaint Operation"), m_d->imageDev);
 

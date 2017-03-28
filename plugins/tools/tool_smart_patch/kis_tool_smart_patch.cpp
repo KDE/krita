@@ -18,6 +18,8 @@
 
 #include "kis_tool_smart_patch.h"
 
+#include "QApplication"
+
 #include <klocalizedstring.h>
 #include <KoCanvasBase.h>
 
@@ -32,6 +34,7 @@
 #include "KoShapeController.h"
 #include "KoDocumentResourceManager.h"
 #include "kis_node_manager.h"
+#include "kis_cursor.h"
 
 #include "kis_tool_smart_patch_options_widget.h"
 #include "libs/image/kis_paint_device_debug_utils.h"
@@ -189,14 +192,16 @@ void KisToolSmartPatch::endPrimaryAction(KoPointerEvent *event)
 
     KisTransaction inpaintTransaction(kundo2_i18n("Inpaint Operation"), m_d->imageDev);
 
+    QApplication::setOverrideCursor(KisCursor::waitCursor());
     //actual inpaint operation
     QRect changedRect = inpaintImage( m_d->maskDev, m_d->imageDev );
     currentNode()->setDirty( changedRect );
-
     inpaintTransaction.commit(image()->undoAdapter());
 
     //Matching endmacro for inpaint operation
     canvas()->shapeController()->resourceManager()->undoStack()->endMacro();
+
+    QApplication::restoreOverrideCursor();
 
 //    KIS_DUMP_DEVICE_2(m_d->imageDev, m_d->imageDev->extent(), "patched", "/home/eugening/Projects/Out");
 //    KIS_DUMP_DEVICE_2(m_d->maskDev, m_d->imageDev->extent(), "output", "/home/eugening/Projects/Out");

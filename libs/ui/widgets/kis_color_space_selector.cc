@@ -69,7 +69,7 @@ KisColorSpaceSelector::KisColorSpaceSelector(QWidget* parent) : QWidget(parent),
             this, SLOT(fillCmbProfiles()));
     connect(d->colorSpaceSelector->cmbProfile, SIGNAL(activated(const QString &)),
             this, SLOT(colorSpaceChanged()));
-    connect(d->colorSpaceSelector->bnInstallProfile, SIGNAL(clicked()), 
+    connect(d->colorSpaceSelector->bnInstallProfile, SIGNAL(clicked()),
             this, SLOT(installProfile()));
 
     d->defaultsuffix = " "+i18nc("This is appended to the color profile which is the default for the given colorspace and bit-depth","(Default)");
@@ -145,10 +145,10 @@ bool KisColorSpaceSelector::sortBitDepthsComparer(KoID depthOne, KoID depthTwo) 
         QString bitDepthTwoType = "";
 
         if (depthOne.name().split(" ").length() > 2) {
-             bitDepthOneType = depthOne.name().split(" ")[2];
+            bitDepthOneType = depthOne.name().split(" ")[2];
         }
         if (depthTwo.name().split(" ").length() > 2) {
-             bitDepthTwoType = depthTwo.name().split(" ")[2];
+            bitDepthTwoType = depthTwo.name().split(" ")[2];
         }
 
         if (bitDepthOneType.length() > bitDepthTwoType.length()) {
@@ -167,14 +167,14 @@ const KoColorSpace* KisColorSpaceSelector::currentColorSpace()
     if (profilenamestring.contains(d->defaultsuffix)) {
         profilenamestring.remove(d->defaultsuffix);
         return KoColorSpaceRegistry::instance()->colorSpace(
-               d->colorSpaceSelector->cmbColorModels->currentItem().id(),
-               d->colorSpaceSelector->cmbColorDepth->currentItem().id(),
-               profilenamestring);
+                    d->colorSpaceSelector->cmbColorModels->currentItem().id(),
+                    d->colorSpaceSelector->cmbColorDepth->currentItem().id(),
+                    profilenamestring);
     } else {
         return KoColorSpaceRegistry::instance()->colorSpace(
-               d->colorSpaceSelector->cmbColorModels->currentItem().id(),
-               d->colorSpaceSelector->cmbColorDepth->currentItem().id(),
-               profilenamestring);
+                    d->colorSpaceSelector->cmbColorModels->currentItem().id(),
+                    d->colorSpaceSelector->cmbColorDepth->currentItem().id(),
+                    profilenamestring);
     }
 }
 
@@ -197,13 +197,16 @@ void KisColorSpaceSelector::setCurrentProfile(const QString& name)
 
 void KisColorSpaceSelector::setCurrentColorSpace(const KoColorSpace* colorSpace)
 {
-  setCurrentColorModel(colorSpace->colorModelId());
-  setCurrentColorDepth(colorSpace->colorDepthId());
-  setCurrentProfile(colorSpace->profile()->name());
+    if (!colorSpace) {
+        return;
+    }
+    setCurrentColorModel(colorSpace->colorModelId());
+    setCurrentColorDepth(colorSpace->colorDepthId());
+    setCurrentProfile(colorSpace->profile()->name());
 }
 
 void KisColorSpaceSelector::showColorBrowserButton(bool showButton) {
- d->colorSpaceSelector->bnAdvanced->setVisible(showButton);
+    d->colorSpaceSelector->bnAdvanced->setVisible(showButton);
 }
 
 void KisColorSpaceSelector::colorSpaceChanged()
@@ -224,7 +227,7 @@ void KisColorSpaceSelector::installProfile()
     dialog.setCaption(i18n("Install Color Profiles"));
     dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::HomeLocation));
     dialog.setMimeTypeFilters(QStringList() << "application/vnd.iccprofile", "application/vnd.iccprofile");
-    
+
     QStringList profileNames = dialog.filenames();
 
     KoColorSpaceEngine *iccEngine = KoColorSpaceEngineRegistry::instance()->get("icc");
@@ -250,7 +253,9 @@ void KisColorSpaceSelector::slotOpenAdvancedSelector()
     if (!m_advancedSelector) {
         m_advancedSelector = new KisAdvancedColorSpaceSelector(this, "Select a Colorspace");
         m_advancedSelector->setModal(true);
-        m_advancedSelector->setCurrentColorSpace(currentColorSpace());
+        if (currentColorSpace()) {
+            m_advancedSelector->setCurrentColorSpace(currentColorSpace());
+        }
         connect(m_advancedSelector, SIGNAL(selectionChanged(bool)), this, SLOT(slotProfileValid(bool)) );
     }
 

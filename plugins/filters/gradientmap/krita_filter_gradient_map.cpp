@@ -35,7 +35,7 @@
 #include <kis_sequential_iterator.h>
 
 
-KritaFilterGradientMap::KritaFilterGradientMap() : KisFilter(id(), categoryMap(), i18n("&Gradient Map"))
+KritaFilterGradientMap::KritaFilterGradientMap() : KisFilter(id(), categoryMap(), i18n("&Gradient Map..."))
 {
     setColorSpaceIndependence(FULLY_INDEPENDENT);
     setShowConfigurationWidget(true);
@@ -78,7 +78,7 @@ void KritaFilterGradientMap::processImpl(KisPaintDeviceSP device,
     const int pixelSize = device->colorSpace()->pixelSize();
     do {
         grey = device->colorSpace()->intensity8(it.oldRawData());
-        outColor = gradientCache->getColor((quint32)grey).color;
+        outColor = gradientCache->getColorGlobal((quint32)grey).color;
         outColor.setOpacity(qMin(KoColor(it.oldRawData(), device->colorSpace()).opacityF(), outColor.opacityF()));
         outColor.convertTo(device->colorSpace());
         memcpy(it.rawData(), outColor.data(), pixelSize);

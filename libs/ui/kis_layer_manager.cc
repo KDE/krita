@@ -563,35 +563,11 @@ void KisLayerManager::addGeneratorLayer(KisNodeSP activeNode)
 
 }
 
-void KisLayerManager::rotateLayer(double radians)
-{
-    if (!m_view->image()) return;
-
-    KisLayerSP layer = activeLayer();
-    if (!layer) return;
-
-    if (!m_view->blockUntillOperationsFinished(m_view->image())) return;
-
-    m_view->image()->rotateNode(layer, radians);
-}
-
-void KisLayerManager::shearLayer(double angleX, double angleY)
-{
-    if (!m_view->image()) return;
-
-    KisLayerSP layer = activeLayer();
-    if (!layer) return;
-
-    if (!m_view->blockUntillOperationsFinished(m_view->image())) return;
-
-    m_view->image()->shearNode(layer, angleX, angleY);
-}
-
 void KisLayerManager::flattenImage()
 {
     KisImageSP image = m_view->image();
 
-    if (!m_view->blockUntillOperationsFinished(image)) return;
+    if (!m_view->blockUntilOperationsFinished(image)) return;
 
     if (image) {
         bool doIt = true;
@@ -646,7 +622,7 @@ void KisLayerManager::mergeLayer()
     KisLayerSP layer = activeLayer();
     if (!layer) return;
 
-    if (!m_view->blockUntillOperationsFinished(image)) return;
+    if (!m_view->blockUntilOperationsFinished(image)) return;
 
     QList<KisNodeSP> selectedNodes = m_view->nodeManager()->selectedNodes();
     if (selectedNodes.size() > 1) {
@@ -679,7 +655,7 @@ void KisLayerManager::flattenLayer()
     KisLayerSP layer = activeLayer();
     if (!layer) return;
 
-    if (!m_view->blockUntillOperationsFinished(image)) return;
+    if (!m_view->blockUntilOperationsFinished(image)) return;
 
     image->flattenLayer(layer);
     m_view->updateGUI();
@@ -693,7 +669,7 @@ void KisLayerManager::rasterizeLayer()
     KisLayerSP layer = activeLayer();
     if (!layer) return;
 
-    if (!m_view->blockUntillOperationsFinished(image)) return;
+    if (!m_view->blockUntilOperationsFinished(image)) return;
 
     KisPaintLayerSP paintLayer = new KisPaintLayer(image, layer->name(), layer->opacity());
     KisPainter gc(paintLayer->paintDevice());
@@ -817,7 +793,7 @@ void KisLayerManager::layerStyle()
     KisLayerSP layer = activeLayer();
     if (!layer) return;
 
-    if (!m_view->blockUntillOperationsFinished(image)) return;
+    if (!m_view->blockUntilOperationsFinished(image)) return;
 
     KisPSDLayerStyleSP oldStyle;
     if (layer->layerStyle()) {

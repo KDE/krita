@@ -219,7 +219,7 @@ void KisColorSelectorSettings::savePreferences() const
     cfg.writeEntry("shadeSelectorUpdateOnLeftClick", ui->shadeSelectorUpdateOnLeftClick->isChecked());
     cfg.writeEntry("shadeSelectorUpdateOnBackground", ui->shadeSelectorUpdateOnBackground->isChecked());
     cfg.writeEntry("hidePopupOnClickCheck", ui->hidePopupOnClickCheck->isChecked());
-    
+
     //mypaint model
 
     int shadeMyPaintComboBoxIndex  = ui->ACSshadeSelectorMyPaintColorModelComboBox->currentIndex();
@@ -243,15 +243,15 @@ void KisColorSelectorSettings::savePreferences() const
     //color selector
     KisColorSelectorComboBox* cstw = dynamic_cast<KisColorSelectorComboBox*>(ui->colorSelectorConfiguration);
     cfg.writeEntry("colorSelectorConfiguration", cstw->configuration().toString());
-    
+
     cfg.writeEntry("hsxSettingType", ui->colorSelectorTypeComboBox->currentIndex());
-    
+
     //luma//
     cfg.writeEntry("lumaR", ui->l_lumaR->value());
     cfg.writeEntry("lumaG", ui->l_lumaG->value());
     cfg.writeEntry("lumaB", ui->l_lumaB->value());
     cfg.writeEntry("gamma", ui->SP_Gamma->value());
-    
+
     //slider//
     hsxcfg.writeEntry("hsvH", ui->csl_hsvH->isChecked());
     hsxcfg.writeEntry("hsvS", ui->csl_hsvS->isChecked());
@@ -305,7 +305,7 @@ void KisColorSelectorSettings::changedColorDocker(int index)
         ui->advancedColorSelectorOptions->hide();
         ui->hotKeyOptions->hide();
         ui->colorSliderOptions->show();
-    } else { 
+    } else {
        ui->colorSliderOptions->hide();
        ui->advancedColorSelectorOptions->hide();
        ui->hotKeyOptions->show();
@@ -407,7 +407,7 @@ void KisColorSelectorSettings::loadPreferences()
         KisConfig kisconfig;
         const KoColorSpace *cs = kisconfig.customColorSelectorColorSpace();
 
-        if(cs) {
+        if (cs) {
             ui->useDifferentColorSpaceCheckbox->setChecked(true);
             ui->colorSpace->setEnabled(true);
             ui->colorSpace->setCurrentColorSpace(cs);
@@ -443,7 +443,7 @@ void KisColorSelectorSettings::loadPreferences()
     ui->commonColorsAutoUpdate->setChecked(cfg.readEntry("commonColorsAutoUpdate", false));
 
     //shade selector
-    QString shadeSelectorType=cfg.readEntry("shadeSelectorType", "MyPaint");
+    QString shadeSelectorType=cfg.readEntry("shadeSelectorType", "Minimal");
 
     if ( shadeSelectorType == "MyPaint") {
         ui->ACSShadeSelectorTypeComboBox->setCurrentIndex(0);
@@ -487,13 +487,13 @@ void KisColorSelectorSettings::loadPreferences()
     //color selector
     KisColorSelectorComboBox* cstw = dynamic_cast<KisColorSelectorComboBox*>(ui->colorSelectorConfiguration);
     cstw->setConfiguration(KisColorSelectorConfiguration::fromString(cfg.readEntry("colorSelectorConfiguration", "3|0|5|0"))); // triangle selector
-    
+
     //luma values//
     ui->l_lumaR->setValue(cfg.readEntry("lumaR", 0.2126));
     ui->l_lumaG->setValue(cfg.readEntry("lumaG", 0.7152));
     ui->l_lumaB->setValue(cfg.readEntry("lumaB", 0.0722));
     ui->SP_Gamma->setValue(cfg.readEntry("gamma", 2.2));
-    
+
     //color sliders//
     ui->csl_hsvH->setChecked(hsxcfg.readEntry("hsvH", false));
     ui->csl_hsvS->setChecked(hsxcfg.readEntry("hsvS", false));
@@ -515,7 +515,7 @@ void KisColorSelectorSettings::loadPreferences()
     ui->sb_rg->setValue(hotkeycfg.readEntry("steps_redgreen", 10));
     ui->sb_by->setValue(hotkeycfg.readEntry("steps_blueyellow", 10));
 
-    
+
 }
 
 void KisColorSelectorSettings::loadDefaultPreferences()
@@ -557,7 +557,7 @@ void KisColorSelectorSettings::loadDefaultPreferences()
     ui->commonColorsAutoUpdate->setChecked(false);
 
     //shade selector
-    ui->ACSShadeSelectorTypeComboBox->setCurrentIndex(0); // MyPaint
+    ui->ACSShadeSelectorTypeComboBox->setCurrentIndex(1); // Minimal
 
     ui->ACSshadeSelectorMyPaintColorModelComboBox->setCurrentIndex(0);
 
@@ -576,16 +576,16 @@ void KisColorSelectorSettings::loadDefaultPreferences()
 
     // set advanced color selector to use HSV
     ui->colorSelectorTypeComboBox->setCurrentIndex(0);
-    
+
     KisColorSelectorComboBox* cstw = dynamic_cast<KisColorSelectorComboBox*>(ui->colorSelectorConfiguration);
     cstw->setConfiguration(KisColorSelectorConfiguration("3|0|5|0")); // triangle selector
-    
+
     //luma//
     ui->l_lumaR->setValue(0.2126);
     ui->l_lumaG->setValue(0.7152);
     ui->l_lumaB->setValue(0.0722);
     ui->SP_Gamma->setValue(2.2);
-    
+
     //color sliders//
     ui->csl_hsvH->setChecked(false);
     ui->csl_hsvS->setChecked(false);

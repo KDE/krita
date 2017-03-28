@@ -49,7 +49,7 @@ void TestKoColor::testForModel(QString model)
             kc.toXML(doc, elt);
             doc.appendChild(elt);
             dbgPigment << doc.toString();
-            KoColor kcu = KoColor::fromXML(elt.firstChildElement(), depthId.id(), QHash<QString, QString>());
+            KoColor kcu = KoColor::fromXML(elt.firstChildElement(), depthId.id());
             QVERIFY2(*(kc.colorSpace()) == *(kcu.colorSpace()),
                      QString("Not identical color space (colorModelId = %1 depthId = %2) != (colorModelId = %3 depthId = %4) ")
                      .arg(kc.colorSpace()->colorModelId().id())

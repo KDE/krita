@@ -54,7 +54,7 @@ public:
 
     KisInputManager *q;
 
-    KisCanvas2 *canvas = 0;
+    QPointer<KisCanvas2> canvas = 0;
     KisToolProxy *toolProxy = 0;
 
     bool forwardAllEventsToTool = false;
@@ -118,7 +118,7 @@ public:
 
     private:
         KisInputManager::Private *d;
-        QMap<QObject*, KisCanvas2*> canvasResolver;
+        QMap<QObject*, QPointer<KisCanvas2>> canvasResolver;
         int eatOneMouseStroke;
         KisTimedSignalThreshold focusSwitchThreshold;
         KisSignalAutoConnectionsStore thresholdConnections;

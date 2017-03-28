@@ -215,6 +215,12 @@ QImage KisBaseNode::createThumbnail(qint32 w, qint32 h)
 
 }
 
+QImage KisBaseNode::createThumbnailForFrame(qint32 w, qint32 h, int time)
+{
+    Q_UNUSED(time)
+    return createThumbnail(w, h);
+}
+
 bool KisBaseNode::visible(bool recursive) const
 {
     bool isVisible = m_d->properties.boolProperty(KisLayerPropertiesIcons::visible.id(), true);

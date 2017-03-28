@@ -206,7 +206,7 @@ void KisMimeDatabase::fillMimeData()
 
         mimeType.mimeType = "application/x-gimp-color-palette";
         mimeType.description = i18nc("description of a file type", "Color Palette");
-        mimeType.suffixes = QStringList() << "*.gpl" << "*.pal" << "*.act" << "*.aco" << "*.colors" << "*.xml";
+        mimeType.suffixes = QStringList() << "*.gpl" << "*.pal" << "*.act" << "*.aco" << "*.colors" << "*.xml" << "*.sbz";
         s_mimeDatabase << mimeType;
 
         mimeType.mimeType = "application/x-opencolorio-configuration";

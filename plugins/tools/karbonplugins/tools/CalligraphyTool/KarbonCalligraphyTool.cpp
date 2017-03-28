@@ -257,7 +257,7 @@ QPointF KarbonCalligraphyTool::calculateNewPoint(const QPointF &mousePos, QPoint
     }
 
     QPointF res = m_selectedPathOutline.pointAtPercent(t)
-                  + m_selectedPath->position();
+            + m_selectedPath->position();
     *speed = res - m_lastPoint;
     return res;
 }
@@ -292,9 +292,9 @@ qreal KarbonCalligraphyTool::calculateAngle(const QPointF &oldSpeed, const QPoin
     qreal oldLength = QLineF(QPointF(0, 0), oldSpeed).length();
     qreal newLength = QLineF(QPointF(0, 0), newSpeed).length();
     QPointF oldSpeedNorm = !qFuzzyCompare(oldLength + 1, 1) ?
-                           oldSpeed / oldLength : QPointF(0, 0);
+                oldSpeed / oldLength : QPointF(0, 0);
     QPointF newSpeedNorm = !qFuzzyCompare(newLength + 1, 1) ?
-                           newSpeed / newLength : QPointF(0, 0);
+                newSpeed / newLength : QPointF(0, 0);
     QPointF speed = oldSpeedNorm + newSpeedNorm;
 
     // angle solely based on the speed
@@ -488,25 +488,26 @@ void KarbonCalligraphyTool::updateSelectedPath()
     KoPathShape *oldSelectedPath = m_selectedPath; // save old value
 
     KoSelection *selection = canvas()->shapeManager()->selection();
+    if (selection) {
+        // null pointer if it the selection isn't a KoPathShape
+        // or if the selection is empty
+        m_selectedPath =
+                dynamic_cast<KoPathShape *>(selection->firstSelectedShape());
 
-    // null pointer if it the selection isn't a KoPathShape
-    // or if the selection is empty
-    m_selectedPath =
-        dynamic_cast<KoPathShape *>(selection->firstSelectedShape());
+        // or if it's a KoPathShape but with no or more than one subpaths
+        if (m_selectedPath && m_selectedPath->subpathCount() != 1) {
+            m_selectedPath = 0;
+        }
 
-    // or if it's a KoPathShape but with no or more than one subpaths
-    if (m_selectedPath && m_selectedPath->subpathCount() != 1) {
-        m_selectedPath = 0;
-    }
+        // or if there ora none or more than 1 shapes selected
+        if (selection->count() != 1) {
+            m_selectedPath = 0;
+        }
 
-    // or if there ora none or more than 1 shapes selected
-    if (selection->count() != 1) {
-        m_selectedPath = 0;
-    }
-
-    // emit signal it there wasn't a selected path and now there is
-    // or the other way around
-    if ((m_selectedPath != 0) != (oldSelectedPath != 0)) {
-        emit pathSelectedChanged(m_selectedPath != 0);
+        // emit signal it there wasn't a selected path and now there is
+        // or the other way around
+        if ((m_selectedPath != 0) != (oldSelectedPath != 0)) {
+            emit pathSelectedChanged(m_selectedPath != 0);
+        }
     }
 }

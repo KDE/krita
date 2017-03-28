@@ -21,8 +21,10 @@
 #define INSERTINLINEOBJECTACTIONBASE_H
 
 #include <QAction>
+#include <QPointer>
 
-class KoCanvasBase;
+#include <KoCanvasBase.h>
+
 class KoInlineObject;
 
 /**
@@ -41,7 +43,7 @@ private Q_SLOTS:
 protected:
     virtual KoInlineObject *createInlineObject() = 0;
 
-    KoCanvasBase *m_canvas;
+    QPointer<KoCanvasBase> m_canvas;
 };
 
 #endif

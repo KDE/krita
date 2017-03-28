@@ -30,6 +30,7 @@
 #include <QVector2D>
 #include <QVector3D>
 #include <QButtonGroup>
+#include <QPointer>
 
 #include <QKeySequence>
 
@@ -40,15 +41,12 @@
 #include <kis_types.h>
 #include <flake/kis_node_shape.h>
 #include <kis_tool.h>
+#include <kis_canvas2.h>
 
 #include "tool_transform_args.h"
 #include "tool_transform_changes_tracker.h"
 #include "kis_tool_transform_config_widget.h"
 #include "transform_transaction_properties.h"
-
-
-
-class KisCanvas2;
 
 class QTouchEvent;
 class KisTransformStrategyBase;
@@ -277,7 +275,7 @@ private:
     QPainterPath m_selectionPath; // original (unscaled) selection outline, used for painting decorations
 
     KisToolTransformConfigWidget *m_optionsWidget;
-    KisCanvas2 *m_canvas;
+    QPointer<KisCanvas2> m_canvas;
 
     TransformTransactionProperties m_transaction;
     TransformChangesTracker m_changesTracker;

@@ -20,13 +20,14 @@
 #define _COLORSLIDER_DOCK_H_
 
 #include <QDockWidget>
+#include <QPointer>
 #include <KoCanvasObserverBase.h>
 #include "kis_signal_auto_connection.h"
 
 #include <kis_types.h>
+#include <kis_canvas2.h>
 
 class KisViewManager;
-class KisCanvas2;
 class KisColorSliderWidget;
 
 class ColorSliderDock : public QDockWidget, public KoCanvasObserverBase
@@ -42,7 +43,7 @@ public Q_SLOTS:
     void udpateSliders();
 
 private:
-    KisCanvas2 *m_canvas;
+    QPointer<KisCanvas2> m_canvas;
     KisViewManager *m_view;
     KisColorSliderWidget* m_colorSliders;
     KisSignalAutoConnectionsStore m_canvasConnections;

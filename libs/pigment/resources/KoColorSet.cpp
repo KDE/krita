@@ -1,5 +1,6 @@
 /*  This file is part of the KDE project
    Copyright (c) 2005 Boudewijn Rempt <boud@valdyas.org>
+   Copyright (c) 2016 L. E. Segovia <leo.segovia@siggraph.org>
 
 
     This library is free software; you can redistribute it and/or
@@ -30,23 +31,33 @@
 #include <QBuffer>
 #include <QByteArray>
 #include <QPainter>
+#include <QDomDocument>
+#include <QDomElement>
+#include <QDomNodeList>
 #include <QXmlStreamReader>
 #include <QTextCodec>
+#include <QMap>
+#include <QHash>
+#include <QStringList>
 
 #include <DebugPigment.h>
 #include <klocalizedstring.h>
 
+#include <KoStore.h>
 #include "KoColor.h"
+#include "KoColorProfile.h"
 #include "KoColorSpaceRegistry.h"
 #include "KoColorModelStandardIds.h"
 
 
 struct KoColorSet::Private {
+    KoColorSet::PaletteType paletteType;
     QByteArray data;
-    QString name;
     QString comment;
     qint32 columns;
-    QVector<KoColorSetEntry> colors;
+    QVector<KoColorSetEntry> colors; //ungrouped colors
+    QStringList groupNames; //names of the groups, this is used to determine the order they are in.
+    QMap<QString, QVector<KoColorSetEntry>> groups; //grouped colors.
 };
 
 KoColorSet::PaletteType detectFormat(const QString &fileName, const QByteArray &ba) {
@@ -74,7 +85,12 @@ KoColorSet::PaletteType detectFormat(const QString &fileName, const QByteArray &
     else if (fi.suffix().toLower() == "xml") {
         return KoColorSet::XML;
     }
-
+    else if (fi.suffix().toLower() == "kpl") {
+        return KoColorSet::KPL;
+    }
+    else if (fi.suffix().toLower() == "sbz") {
+        return KoColorSet::SBZ;
+    }
     return KoColorSet::UNKNOWN;
 }
 
@@ -100,10 +116,11 @@ KoColorSet::KoColorSet(const KoColorSet& rhs)
     , d(new Private())
 {
     setFilename(rhs.filename());
-    d->name = rhs.d->name;
     d->comment = rhs.d->comment;
     d->columns = rhs.d->columns;
     d->colors = rhs.d->colors;
+    d->groupNames = rhs.d->groupNames;
+    d->groups = rhs.d->groups;
     setValid(true);
 }
 
@@ -147,65 +164,27 @@ bool KoColorSet::save()
     return true;
 }
 
-qint32 KoColorSet::nColors()
-{
-    return d->colors.count();
-}
-
-qint32 KoColorSet::getIndexClosestColor(KoColor color, bool useGivenColorSpace)
-{
-    qint32 closestIndex = 0;
-    quint8 highestPercentage = 0;
-    quint8 testPercentage = 0;
-    KoColor compare = color;
-    for (qint32 i=0; i<nColors(); i++) {
-        KoColor entry = d->colors.at(i).color;
-        if (useGivenColorSpace==true && compare.colorSpace()!=entry.colorSpace()) {
-            entry.convertTo(compare.colorSpace());
-
-        } else if(compare.colorSpace()!=entry.colorSpace()) {
-            compare.convertTo(entry.colorSpace());
-        }
-        testPercentage = (255 - compare.colorSpace()->difference(compare.data(), entry.data()));
-        if (testPercentage>highestPercentage)
-        {
-            closestIndex = i;
-            highestPercentage = testPercentage;
-        }
-    }
-    return closestIndex;
-}
-
-QString KoColorSet::closestColorName(KoColor color, bool useGivenColorSpace)
-{
-    int i = getIndexClosestColor(color, useGivenColorSpace);
-    QString name = d->colors.at(i).name;
-    return name;
-}
-
 bool KoColorSet::saveToDevice(QIODevice *dev) const
 {
-    QTextStream stream(dev);
-    stream << "GIMP Palette\nName: " << name() << "\nColumns: " << d->columns << "\n#\n";
-
-    for (int i = 0; i < d->colors.size(); i++) {
-        const KoColorSetEntry& entry = d->colors.at(i);
-        QColor c = entry.color.toQColor();
-        stream << c.red() << " " << c.green() << " " << c.blue() << "\t";
-        if (entry.name.isEmpty())
-            stream << "Untitled\n";
-        else
-            stream << entry.name << "\n";
+    bool res;
+    switch(d->paletteType) {
+    case GPL:
+        res = saveGpl(dev);
+        break;
+    default:
+        res = saveKpl(dev);
     }
-
-    KoResource::saveToDevice(dev);
-
-    return true;
+    if (res) {
+        KoResource::saveToDevice(dev);
+    }
+    return res;
 }
 
 bool KoColorSet::init()
 {
     d->colors.clear(); // just in case this is a reload (eg by KoEditColorSetDialog),
+    d->groups.clear();
+    d->groupNames.clear();
 
     if (filename().isNull()) {
         warnPigment << "Cannot load palette" << name() << "there is no filename set";
@@ -223,8 +202,8 @@ bool KoColorSet::init()
     }
 
     bool res = false;
-    PaletteType paletteType = detectFormat(filename(), d->data);
-    switch(paletteType) {
+    d->paletteType = detectFormat(filename(), d->data);
+    switch(d->paletteType) {
     case GPL:
         res = loadGpl();
         break;
@@ -242,6 +221,12 @@ bool KoColorSet::init()
         break;
     case XML:
         res = loadXml();
+        break;
+    case KPL:
+        res = loadKpl();
+        break;
+    case SBZ:
+        res = loadSbz();
         break;
     default:
         res = false;
@@ -275,35 +260,214 @@ bool KoColorSet::init()
     return res;
 }
 
-void KoColorSet::add(const KoColorSetEntry & c)
+bool KoColorSet::saveGpl(QIODevice *dev) const
 {
-    d->colors.push_back(c);
+    QTextStream stream(dev);
+    stream << "GIMP Palette\nName: " << name() << "\nColumns: " << d->columns << "\n#\n";
+
+    for (int i = 0; i < d->colors.size(); i++) {
+        const KoColorSetEntry& entry = d->colors.at(i);
+        QColor c = entry.color.toQColor();
+        stream << c.red() << " " << c.green() << " " << c.blue() << "\t";
+        if (entry.name.isEmpty())
+            stream << "Untitled\n";
+        else
+            stream << entry.name << "\n";
+    }
+
+    return true;
 }
 
-void KoColorSet::remove(const KoColorSetEntry & c)
+quint32 KoColorSet::nColors()
 {
-    for (auto it = d->colors.begin(); it != d->colors.end(); /*noop*/) {
-        if ((*it) == c) {
-            it = d->colors.erase(it);
-            return;
+    quint32 total = d->colors.count();
+    if (!d->groups.empty()) {
+        Q_FOREACH (const QVector<KoColorSetEntry> &group, d->groups.values()) {
+            total += group.size();
         }
-        ++it;
+    }
+    return total;
+}
+
+quint32 KoColorSet::nColorsGroup(QString groupName) {
+    if (d->groups.contains(groupName)) {
+        return d->groups.value(groupName).size();
+    } else if (groupName.isEmpty()){
+        return d->colors.size();
+    } else {
+        return 0;
     }
 }
 
-void KoColorSet::removeAt(quint32 index)
+quint32 KoColorSet::getIndexClosestColor(const KoColor color, bool useGivenColorSpace)
 {
-    d->colors.remove(index);
+    quint32 closestIndex = 0;
+    quint8 highestPercentage = 0;
+    quint8 testPercentage = 0;
+    KoColor compare = color;
+    for (quint32 i=0; i<nColors(); i++) {
+        KoColor entry = getColorGlobal(i).color;
+        if (useGivenColorSpace == true && compare.colorSpace() != entry.colorSpace()) {
+            entry.convertTo(compare.colorSpace());
+
+        } else if(compare.colorSpace()!=entry.colorSpace()) {
+            compare.convertTo(entry.colorSpace());
+        }
+        testPercentage = (255 - compare.colorSpace()->difference(compare.data(), entry.data()));
+        if (testPercentage>highestPercentage)
+        {
+            closestIndex = i;
+            highestPercentage = testPercentage;
+        }
+    }
+    return closestIndex;
+}
+
+QString KoColorSet::closestColorName(const KoColor color, bool useGivenColorSpace)
+{
+    int i = getIndexClosestColor(color, useGivenColorSpace);
+    QString name = d->colors.at(i).name;
+    return name;
+}
+
+void KoColorSet::add(const KoColorSetEntry & c, QString groupName)
+{
+    if (d->groups.contains(groupName) || d->groupNames.contains(groupName)) {
+        d->groups[groupName].push_back(c);
+    } else {
+        d->colors.push_back(c);
+    }
+}
+
+quint32 KoColorSet::insertBefore(const KoColorSetEntry &c, qint32 index, const QString &groupName)
+{
+    quint32 newIndex = index;
+    if (d->groups.contains(groupName)) {
+        d->groups[groupName].insert(index, c);
+    } else if (groupName.isEmpty()){
+        d->colors.insert(index, c);;
+    } else {
+        warnPigment << "Couldn't find group to insert to";
+    }
+    return newIndex;
+}
+
+void KoColorSet::removeAt(quint32 index, QString groupName)
+{
+    if (d->groups.contains(groupName)){
+        if ((quint32)d->groups.value(groupName).size()>index) {
+            d->groups[groupName].remove(index);
+        }
+    } else {
+        if ((quint32)d->colors.size()>index) {
+            d->colors.remove(index);
+        }
+    }
 }
 
 void KoColorSet::clear()
 {
     d->colors.clear();
+    d->groups.clear();
 }
 
-KoColorSetEntry KoColorSet::getColor(quint32 index)
+KoColorSetEntry KoColorSet::getColorGlobal(quint32 index)
 {
-    return d->colors[index];
+    KoColorSetEntry e;
+    quint32 groupIndex = index;
+    QString groupName = findGroupByGlobalIndex(index, &groupIndex);
+    e = getColorGroup(groupIndex, groupName);
+    return e;
+}
+
+KoColorSetEntry KoColorSet::getColorGroup(quint32 index, QString groupName)
+{
+    KoColorSetEntry e;
+    if (d->groups.contains(groupName) && index<(quint32)d->groups.value(groupName).size()) {
+        e = d->groups.value(groupName).at(index);
+    } else if (groupName == QString() && index<(quint32)d->colors.size()) {
+        e = d->colors.at(index);
+    } else {
+        warnPigment << "Color group "<<groupName<<" not found";
+    }
+    return e;
+}
+
+QString KoColorSet::findGroupByGlobalIndex(quint32 globalIndex, quint32 *index)
+{
+    *index = globalIndex;
+    QString groupName = QString();
+    if ((quint32)d->colors.size()<=*index) {
+        *index -= (quint32)d->colors.size();
+        if (!d->groups.empty() || !d->groupNames.empty()) {
+            QStringList groupNames = getGroupNames();
+            Q_FOREACH (QString name, groupNames) {
+                quint32 size = (quint32)d->groups.value(name).size();
+                if (size<=*index) {
+                    *index -= size;
+                } else {
+                    groupName = name;
+                    return groupName;
+                }
+            }
+
+        }
+    }
+    return groupName;
+}
+
+QString KoColorSet::findGroupByColorName(const QString &name, quint32 *index)
+{
+    *index = 0;
+    QString groupName = QString();
+    for (int i = 0; i<d->colors.size(); i++) {
+        if(d->colors.at(i).name == name) {
+            *index = (quint32)i;
+            return groupName;
+        }
+    }
+    QStringList groupNames = getGroupNames();
+    Q_FOREACH (QString name, groupNames) {
+        for (int i=0; i<d->groups[name].size(); i++) {
+            if(d->groups[name].at(i).name == name) {
+                *index = (quint32)i;
+                groupName = name;
+                return groupName;
+            }
+        }
+    }
+    return groupName;
+}
+
+QString KoColorSet::findGroupByID(const QString &id, quint32 *index) {
+    *index = 0;
+    QString groupName = QString();
+    for (int i = 0; i<d->colors.size(); i++) {
+        if(d->colors.at(i).id == id) {
+            *index = (quint32)i;
+            return groupName;
+        }
+    }
+    QStringList groupNames = getGroupNames();
+    Q_FOREACH (QString name, groupNames) {
+        for (int i=0; i<d->groups[name].size(); i++) {
+            if(d->groups[name].at(i).id == id) {
+                *index = (quint32)i;
+                groupName = name;
+                return groupName;
+            }
+        }
+    }
+    return groupName;
+}
+
+QStringList KoColorSet::getGroupNames()
+{
+    if (d->groupNames.size()<d->groups.size()) {
+        warnPigment << "mismatch between groups and the groupnames list.";
+        return QStringList(d->groups.keys());
+    }
+    return d->groupNames;
 }
 
 void KoColorSet::setColumnCount(int columns)
@@ -316,9 +480,44 @@ int KoColorSet::columnCount()
     return d->columns;
 }
 
+QString KoColorSet::comment()
+{
+    return d->comment;
+}
+
+bool KoColorSet::addGroup(const QString &groupName)
+{
+    if (d->groups.contains(groupName) || d->groupNames.contains(groupName)) {
+        return false;
+    }
+    d->groupNames.append(groupName);
+    d->groups[groupName];
+    return true;
+}
+
+bool KoColorSet::removeGroup(const QString &groupName, bool keepColors)
+{
+    if (!d->groups.contains(groupName)) {
+        return false;
+    }
+    if (keepColors) {
+        for (int i = 0; i<d->groups.value(groupName).size(); i++) {
+            d->colors.append(d->groups.value(groupName).at(i));
+        }
+    }
+    for(int n = 0; n<d->groupNames.size(); n++) {
+        if (d->groupNames.at(n) == groupName) {
+            d->groupNames.removeAt(n);
+        }
+    }
+
+    d->groups.remove(groupName);
+    return true;
+}
+
 QString KoColorSet::defaultFileExtension() const
 {
-    return QString(".gpl");
+    return QString(".kpl");
 }
 
 
@@ -548,14 +747,14 @@ void scribusParseColor(KoColorSet *set, QXmlStreamReader *xml)
 
         colorValue = colorProperties.value("CMYK");
         if (colorValue.length() != 9 && colorValue.at(0) != '#') { // Color is a hexadecimal number
-            xml->raiseError("Invalid cmyk color (malformed): " + colorValue);
+            xml->raiseError("Invalid cmyk color (malformed): " % colorValue);
             return;
         }
         else {
             bool cmykOk;
             quint32 cmyk = colorValue.mid(1).toUInt(&cmykOk, 16); // cmyk uses the full 32 bits
             if  (!cmykOk) {
-                xml->raiseError("Invalid cmyk color (unable to convert): " + colorValue);
+                xml->raiseError("Invalid cmyk color (unable to convert): " % colorValue);
                 return;
             }
 
@@ -643,6 +842,194 @@ bool KoColorSet::loadXml() {
     }
 }
 
+bool KoColorSet::saveKpl(QIODevice *dev) const
+{
+    QScopedPointer<KoStore> store(KoStore::createStore(dev, KoStore::Write, "application/x-krita-palette", KoStore::Zip));
+    if (!store || store->bad()) return false;
+
+    QSet<const KoColorProfile *> profiles;
+    QMap<const KoColorProfile*, const KoColorSpace*> profileMap;
+
+    {
+        QDomDocument doc;
+        QDomElement root = doc.createElement("Colorset");
+        root.setAttribute("version", "1.0");
+        root.setAttribute("name", name());
+        root.setAttribute("comment", d->comment);
+        root.setAttribute("columns", d->columns);
+        Q_FOREACH(const KoColorSetEntry &entry, d->colors) {
+
+            // Only save non-builtin profiles.=
+            const KoColorProfile *profile = entry.color.colorSpace()->profile();
+            if (!profile->fileName().isEmpty()) {
+                profiles << profile;
+                profileMap[profile] = entry.color.colorSpace();
+            }
+            QDomElement el = doc.createElement("ColorSetEntry");
+            el.setAttribute("name", entry.name);
+            el.setAttribute("id", entry.id);
+            el.setAttribute("spot", entry.spotColor ? "true" : "false");
+            el.setAttribute("bitdepth", entry.color.colorSpace()->colorDepthId().id());
+            entry.color.toXML(doc, el);
+            root.appendChild(el);
+        }
+        Q_FOREACH(const QString &groupName, d->groupNames) {
+            QDomElement gl = doc.createElement("Group");
+            gl.setAttribute("name", groupName);
+            root.appendChild(gl);
+            Q_FOREACH(const KoColorSetEntry &entry, d->groups.value(groupName)) {
+
+                // Only save non-builtin profiles.=
+                const KoColorProfile *profile = entry.color.colorSpace()->profile();
+                if (!profile->fileName().isEmpty()) {
+                    profiles << profile;
+                    profileMap[profile] = entry.color.colorSpace();
+                }
+                QDomElement el = doc.createElement("ColorSetEntry");
+                el.setAttribute("name", entry.name);
+                el.setAttribute("id", entry.id);
+                el.setAttribute("spot", entry.spotColor ? "true" : "false");
+                el.setAttribute("bitdepth", entry.color.colorSpace()->colorDepthId().id());
+                entry.color.toXML(doc, el);
+                gl.appendChild(el);
+            }
+        }
+
+        doc.appendChild(root);
+        if (!store->open("colorset.xml")) { return false; }
+        QByteArray ba = doc.toByteArray();
+        if (store->write(ba) != ba.size()) { return false; }
+        if (!store->close()) { return false; }
+    }
+
+    QDomDocument doc;
+    QDomElement profileElement = doc.createElement("Profiles");
+
+    Q_FOREACH(const KoColorProfile *profile, profiles) {
+        QString fn = QFileInfo(profile->fileName()).fileName();
+        if (!store->open(fn)) { return false; }
+        QByteArray profileRawData = profile->rawData();
+        if (!store->write(profileRawData)) { return false; }
+        if (!store->close()) { return false; }
+        QDomElement el = doc.createElement("Profile");
+        el.setAttribute("filename", fn);
+        el.setAttribute("name", profile->name());
+        el.setAttribute("colorModelId", profileMap[profile]->colorModelId().id());
+        el.setAttribute("colorDepthId", profileMap[profile]->colorDepthId().id());
+        profileElement.appendChild(el);
+
+    }
+    doc.appendChild(profileElement);
+    if (!store->open("profiles.xml")) { return false; }
+    QByteArray ba = doc.toByteArray();
+    if (store->write(ba) != ba.size()) { return false; }
+    if (!store->close()) { return false; }
+
+    return store->finalize();
+}
+
+bool KoColorSet::loadKpl()
+{
+    QBuffer buf(&d->data);
+    buf.open(QBuffer::ReadOnly);
+
+    QScopedPointer<KoStore> store(KoStore::createStore(&buf, KoStore::Read, "application/x-krita-palette", KoStore::Zip));
+    if (!store || store->bad()) return false;
+
+    if (store->hasFile("profiles.xml")) {
+
+        if (!store->open("profiles.xml")) { return false; }
+        QByteArray data;
+        data.resize(store->size());
+        QByteArray ba = store->read(store->size());
+        store->close();
+
+        QDomDocument doc;
+        doc.setContent(ba);
+        QDomElement e = doc.documentElement();
+        QDomElement c = e.firstChildElement("Profiles");
+        while (!c.isNull()) {
+
+            QString name = c.attribute("name");
+            QString filename = c.attribute("filename");
+            QString colorModelId = c.attribute("colorModelId");
+            QString colorDepthId = c.attribute("colorDepthId");
+            if (!KoColorSpaceRegistry::instance()->profileByName(name)) {
+                store->open(filename);
+                QByteArray data;
+                data.resize(store->size());
+                data = store->read(store->size());
+                store->close();
+
+                const KoColorProfile *profile = KoColorSpaceRegistry::instance()->createColorProfile(colorModelId, colorDepthId, data);
+                if (profile && profile->valid()) {
+                    KoColorSpaceRegistry::instance()->addProfile(profile);
+                }
+            }
+
+            c = c.nextSiblingElement();
+
+        }
+    }
+
+    {
+        if (!store->open("colorset.xml")) { return false; }
+        QByteArray data;
+        data.resize(store->size());
+        QByteArray ba = store->read(store->size());
+        store->close();
+
+        QDomDocument doc;
+        doc.setContent(ba);
+        QDomElement e = doc.documentElement();
+        setName(e.attribute("name"));
+        d->comment = e.attribute("comment");
+        d->columns = e.attribute("columns").toInt();
+
+        QDomElement c = e.firstChildElement("ColorSetEntry");
+        while (!c.isNull()) {
+            QString colorDepthId = c.attribute("bitdepth", Integer8BitsColorDepthID.id());
+            KoColorSetEntry entry;
+
+
+            entry.color = KoColor::fromXML(c.firstChildElement(), colorDepthId);
+            entry.name = c.attribute("name");
+            entry.id = c.attribute("id");
+            entry.spotColor = c.attribute("spot", "false") == "true" ? true : false;
+            d->colors << entry;
+
+            c = c.nextSiblingElement("ColorSetEntry");
+
+        }
+        QDomElement g = e.firstChildElement("Group");
+        while (!g.isNull()) {
+            QString groupName = g.attribute("name");
+            addGroup(groupName);
+            QDomElement cg = g.firstChildElement("ColorSetEntry");
+            while (!cg.isNull()) {
+                QString colorDepthId = cg.attribute("bitdepth", Integer8BitsColorDepthID.id());
+                KoColorSetEntry entry;
+
+
+                entry.color = KoColor::fromXML(cg.firstChildElement(), colorDepthId);
+                entry.name = cg.attribute("name");
+                entry.id = cg.attribute("id");
+                entry.spotColor = cg.attribute("spot", "false") == "true" ? true : false;
+                add(entry, groupName);
+
+                cg = cg.nextSiblingElement("ColorSetEntry");
+
+            }
+            g = g.nextSiblingElement("Group");
+        }
+
+    }
+
+
+    buf.close();
+    return true;
+}
+
 quint16 readShort(QIODevice *io) {
     quint16 val;
     quint64 read = io->read((char*)&val, 2);
@@ -680,7 +1067,8 @@ bool KoColorSet::loadAco()
 
         bool skip = false;
         if (colorSpace == 0) { // RGB
-            e.color = KoColor(KoColorSpaceRegistry::instance()->rgb16());
+            const KoColorProfile *srgb = KoColorSpaceRegistry::instance()->rgb8()->profile();
+            e.color = KoColor(KoColorSpaceRegistry::instance()->rgb16(srgb));
             reinterpret_cast<quint16*>(e.color.data())[0] = ch3;
             reinterpret_cast<quint16*>(e.color.data())[1] = ch2;
             reinterpret_cast<quint16*>(e.color.data())[2] = ch1;
@@ -740,3 +1128,385 @@ bool KoColorSet::loadAco()
     return true;
 }
 
+bool KoColorSet::loadSbz() {
+    QBuffer buf(&d->data);
+    buf.open(QBuffer::ReadOnly);
+
+    // &buf is a subclass of QIODevice
+    QScopedPointer<KoStore> store(KoStore::createStore(&buf, KoStore::Read, "application/x-swatchbook", KoStore::Zip));
+    if (!store || store->bad()) return false;
+
+    if (store->hasFile("swatchbook.xml")) { // Try opening...
+
+        if (!store->open("swatchbook.xml")) { return false; }
+        QByteArray data;
+        data.resize(store->size());
+        QByteArray ba = store->read(store->size());
+        store->close();
+
+        dbgPigment << "XML palette: " << filename() << ", SwatchBooker format";
+
+        QDomDocument doc;
+        int errorLine, errorColumn;
+        QString errorMessage;
+        bool status = doc.setContent(ba, &errorMessage, &errorLine, &errorColumn);
+        if (!status) {
+            warnPigment << "Illegal XML palette:" << filename();
+            warnPigment << "Error (line" << errorLine << ", column" << errorColumn << "):" << errorMessage;
+            return false;
+        }
+
+        QDomElement e = doc.documentElement(); // SwatchBook
+
+        // Start reading properties...
+        QDomElement metadata = e.firstChildElement("metadata");
+
+        if (e.isNull()) {
+            warnPigment << "Palette metadata not found";
+            return false;
+        }
+
+        QDomElement title = metadata.firstChildElement("dc:title");
+        QString colorName = title.text();
+        colorName = colorName.isEmpty() ? i18n("Untitled") : colorName;
+        setName(colorName);
+        dbgPigment << "Processed name of palette:" << name();
+        // End reading properties
+
+        // Now read colors...
+        QDomElement materials = e.firstChildElement("materials");
+        if (materials.isNull()) {
+            warnPigment << "Materials (color definitions) not found";
+            return false;
+        }
+        // This one has lots of "color" elements
+        QDomElement colorElement = materials.firstChildElement("color");
+        if (colorElement.isNull()) {
+            warnPigment << "Color definitions not found (line" << materials.lineNumber() << ", column" << materials.columnNumber() << ")";
+            return false;
+        }
+
+        // Also read the swatch book...
+        QDomElement book = e.firstChildElement("book");
+        if (book.isNull()) {
+            warnPigment << "Palette book (swatch composition) not found (line" << e.lineNumber() << ", column" << e.columnNumber() << ")";
+            return false;
+        }
+        // Which has lots of "swatch"es (todo: support groups)
+        QDomElement swatch = book.firstChildElement();
+        if (swatch.isNull()) {
+            warnPigment << "Swatches/groups definition not found (line" << book.lineNumber() << ", column" << book.columnNumber() << ")";
+            return false;
+        }
+
+        // We'll store colors here, and as we process swatches
+        // we'll add them to the palette
+        QHash<QString, KoColorSetEntry> materialsBook;
+        QHash<QString, const KoColorSpace*> fileColorSpaces;
+
+        // Color processing
+        for(; !colorElement.isNull(); colorElement = colorElement.nextSiblingElement("color"))
+        {
+            KoColorSetEntry currentColor;
+            // Set if color is spot
+            currentColor.spotColor = colorElement.attribute("usage") == "spot";
+
+            // <metadata> inside contains id and name
+            // one or more <values> define the color
+            QDomElement currentColorMetadata = colorElement.firstChildElement("metadata");
+            QDomNodeList currentColorValues = colorElement.elementsByTagName("values");
+            // Get color name
+            QDomElement colorTitle = currentColorMetadata.firstChildElement("dc:title");
+            QDomElement colorId = currentColorMetadata.firstChildElement("dc:identifier");
+            // Is there an id? (we need that at the very least for identifying a color)
+            if (colorId.text().isEmpty()) {
+                warnPigment << "Unidentified color (line" << colorId.lineNumber()<< ", column" << colorId.columnNumber() << ")";
+                return false;
+            }
+            if (materialsBook.contains(colorId.text())) {
+                warnPigment << "Duplicated color definition (line" << colorId.lineNumber()<< ", column" << colorId.columnNumber() << ")";
+                return false;
+            }
+
+            // Get a valid color name
+            currentColor.id = colorId.text();
+            currentColor.name = colorTitle.text().isEmpty() ? colorId.text() : colorTitle.text();
+
+            // Get a valid color definition
+            if (currentColorValues.isEmpty()) {
+                warnPigment << "Color definitions not found (line" << colorElement.lineNumber() << ", column" << colorElement.columnNumber() << ")";
+                return false;
+            }
+
+            bool firstDefinition = false;
+            const KoColorProfile *srgb = KoColorSpaceRegistry::instance()->rgb8()->profile();
+            // Priority: Lab, otherwise the first definition found
+            for(int j = 0; j < currentColorValues.size(); j++) {
+                QDomNode colorValue = currentColorValues.at(j);
+                QDomElement colorValueE = colorValue.toElement();
+                QString model = colorValueE.attribute("model", QString());
+
+                // sRGB,RGB,HSV,HSL,CMY,CMYK,nCLR: 0 -> 1
+                // YIQ: Y 0 -> 1 : IQ -0.5 -> 0.5
+                // Lab: L 0 -> 100 : ab -128 -> 127
+                // XYZ: 0 -> ~100
+                if (model == "Lab") {
+                    QStringList lab = colorValueE.text().split(" ");
+                    if (lab.length() != 3) {
+                        warnPigment << "Invalid Lab color definition (line" << colorValueE.lineNumber() << ", column" << colorValueE.columnNumber() << ")";
+                    }
+                    float l = lab.at(0).toFloat(&status);
+                    float a = lab.at(1).toFloat(&status);
+                    float b = lab.at(2).toFloat(&status);
+                    if (!status) {
+                        warnPigment << "Invalid float definition (line" << colorValueE.lineNumber() << ", column" << colorValueE.columnNumber() << ")";
+                    }
+
+                    currentColor.color = KoColor(KoColorSpaceRegistry::instance()->colorSpace(LABAColorModelID.id(), Float32BitsColorDepthID.id(), QString()));
+                    reinterpret_cast<float*>(currentColor.color.data())[0] = l;
+                    reinterpret_cast<float*>(currentColor.color.data())[1] = a;
+                    reinterpret_cast<float*>(currentColor.color.data())[2] = b;
+                    currentColor.color.setOpacity(OPACITY_OPAQUE_F);
+                    firstDefinition = true;
+                    break; // Immediately add this one
+                }
+                else if (model == "sRGB" && !firstDefinition) {
+                    QStringList rgb = colorValueE.text().split(" ");
+                    if (rgb.length() != 3) {
+                        warnPigment << "Invalid sRGB color definition (line" << colorValueE.lineNumber() << ", column" << colorValueE.columnNumber() << ")";
+                    }
+                    float r = rgb.at(0).toFloat(&status);
+                    float g = rgb.at(1).toFloat(&status);
+                    float b = rgb.at(2).toFloat(&status);
+                    if (!status) {
+                        warnPigment << "Invalid float definition (line" << colorValueE.lineNumber() << ", column" << colorValueE.columnNumber() << ")";
+                    }
+
+                    currentColor.color = KoColor(KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), Float32BitsColorDepthID.id(), srgb));
+                    reinterpret_cast<float*>(currentColor.color.data())[0] = r;
+                    reinterpret_cast<float*>(currentColor.color.data())[1] = g;
+                    reinterpret_cast<float*>(currentColor.color.data())[2] = b;
+                    currentColor.color.setOpacity(OPACITY_OPAQUE_F);
+                    firstDefinition = true;
+                }
+                else if (model == "XYZ" && !firstDefinition) {
+                    QStringList xyz = colorValueE.text().split(" ");
+                    if (xyz.length() != 3) {
+                        warnPigment << "Invalid XYZ color definition (line" << colorValueE.lineNumber() << ", column" << colorValueE.columnNumber() << ")";
+                    }
+                    float x = xyz.at(0).toFloat(&status);
+                    float y = xyz.at(1).toFloat(&status);
+                    float z = xyz.at(2).toFloat(&status);
+                    if (!status) {
+                        warnPigment << "Invalid float definition (line" << colorValueE.lineNumber() << ", column" << colorValueE.columnNumber() << ")";
+                    }
+
+                    currentColor.color = KoColor(KoColorSpaceRegistry::instance()->colorSpace(XYZAColorModelID.id(), Float32BitsColorDepthID.id(), QString()));
+                    reinterpret_cast<float*>(currentColor.color.data())[0] = x;
+                    reinterpret_cast<float*>(currentColor.color.data())[1] = y;
+                    reinterpret_cast<float*>(currentColor.color.data())[2] = z;
+                    currentColor.color.setOpacity(OPACITY_OPAQUE_F);
+                    firstDefinition = true;
+                }
+                // The following color spaces admit an ICC profile (in SwatchBooker)
+                else if (model == "CMYK" && !firstDefinition) {
+                    QStringList cmyk = colorValueE.text().split(" ");
+                    if (cmyk.length() != 4) {
+                        warnPigment << "Invalid CMYK color definition (line" << colorValueE.lineNumber() << ", column" << colorValueE.columnNumber() << ")";
+                    }
+                    float c = cmyk.at(0).toFloat(&status);
+                    float m = cmyk.at(1).toFloat(&status);
+                    float y = cmyk.at(2).toFloat(&status);
+                    float k = cmyk.at(3).toFloat(&status);
+                    if (!status) {
+                        warnPigment << "Invalid float definition (line" << colorValueE.lineNumber() << ", column" << colorValueE.columnNumber() << ")";
+                    }
+
+                    QString space = colorValueE.attribute("space");
+                    const KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->colorSpace(CMYKAColorModelID.id(), Float32BitsColorDepthID.id(), QString());
+
+                    if (!space.isEmpty()) {
+                        // Try loading the profile and add it to the registry
+                        if (!fileColorSpaces.contains(space)) {
+                            store->enterDirectory("profiles");
+                            store->open(space);
+                            QByteArray data;
+                            data.resize(store->size());
+                            data = store->read(store->size());
+                            store->close();
+
+                            const KoColorProfile *profile = KoColorSpaceRegistry::instance()->createColorProfile(CMYKAColorModelID.id(), Float32BitsColorDepthID.id(), data);
+                            if (profile && profile->valid()) {
+                                KoColorSpaceRegistry::instance()->addProfile(profile);
+                                colorSpace = KoColorSpaceRegistry::instance()->colorSpace(CMYKAColorModelID.id(), Float32BitsColorDepthID.id(), profile);
+                                fileColorSpaces.insert(space, colorSpace);
+                            }
+                        }
+                        else {
+                            colorSpace = fileColorSpaces.value(space);
+                        }
+                    }
+
+                    currentColor.color = KoColor(colorSpace);
+                    reinterpret_cast<float*>(currentColor.color.data())[0] = c;
+                    reinterpret_cast<float*>(currentColor.color.data())[1] = m;
+                    reinterpret_cast<float*>(currentColor.color.data())[2] = y;
+                    reinterpret_cast<float*>(currentColor.color.data())[3] = k;
+                    currentColor.color.setOpacity(OPACITY_OPAQUE_F);
+                    firstDefinition = true;
+                }
+                else if (model == "GRAY" && !firstDefinition) {
+                    QString gray = colorValueE.text();
+
+                    float g = gray.toFloat(&status);
+                    if (!status) {
+                        warnPigment << "Invalid float definition (line" << colorValueE.lineNumber() << ", column" << colorValueE.columnNumber() << ")";
+                    }
+
+                    QString space = colorValueE.attribute("space");
+                    const KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->colorSpace(GrayAColorModelID.id(), Float32BitsColorDepthID.id(), QString());
+
+                    if (!space.isEmpty()) {
+                        // Try loading the profile and add it to the registry
+                        if (!fileColorSpaces.contains(space)) {
+                            store->enterDirectory("profiles");
+                            store->open(space);
+                            QByteArray data;
+                            data.resize(store->size());
+                            data = store->read(store->size());
+                            store->close();
+
+                            const KoColorProfile *profile = KoColorSpaceRegistry::instance()->createColorProfile(CMYKAColorModelID.id(), Float32BitsColorDepthID.id(), data);
+                            if (profile && profile->valid()) {
+                                KoColorSpaceRegistry::instance()->addProfile(profile);
+                                colorSpace = KoColorSpaceRegistry::instance()->colorSpace(CMYKAColorModelID.id(), Float32BitsColorDepthID.id(), profile);
+                                fileColorSpaces.insert(space, colorSpace);
+                            }
+                        }
+                        else {
+                            colorSpace = fileColorSpaces.value(space);
+                        }
+                    }
+
+                    currentColor.color = KoColor(colorSpace);
+                    reinterpret_cast<float*>(currentColor.color.data())[0] = g;
+                    currentColor.color.setOpacity(OPACITY_OPAQUE_F);
+                    firstDefinition = true;
+                }
+                else if (model == "RGB" && !firstDefinition) {
+                    QStringList rgb = colorValueE.text().split(" ");
+                    if (rgb.length() != 3) {
+                        warnPigment << "Invalid RGB color definition (line" << colorValueE.lineNumber() << ", column" << colorValueE.columnNumber() << ")";
+                    }
+                    float r = rgb.at(0).toFloat(&status);
+                    float g = rgb.at(1).toFloat(&status);
+                    float b = rgb.at(2).toFloat(&status);
+                    if (!status) {
+                        warnPigment << "Invalid float definition (line" << colorValueE.lineNumber() << ", column" << colorValueE.columnNumber() << ")";
+                    }
+
+                    QString space = colorValueE.attribute("space");
+                    const KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), Float32BitsColorDepthID.id(), srgb);
+
+                    if (!space.isEmpty()) {
+                        // Try loading the profile and add it to the registry
+                        if (!fileColorSpaces.contains(space)) {
+                            store->enterDirectory("profiles");
+                            store->open(space);
+                            QByteArray data;
+                            data.resize(store->size());
+                            data = store->read(store->size());
+                            store->close();
+
+                            const KoColorProfile *profile = KoColorSpaceRegistry::instance()->createColorProfile(RGBAColorModelID.id(), Float32BitsColorDepthID.id(), data);
+                            if (profile && profile->valid()) {
+                                KoColorSpaceRegistry::instance()->addProfile(profile);
+                                colorSpace = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), Float32BitsColorDepthID.id(), profile);
+                                fileColorSpaces.insert(space, colorSpace);
+                            }
+                        }
+                        else {
+                            colorSpace = fileColorSpaces.value(space);
+                        }
+                    }
+
+                    currentColor.color = KoColor(colorSpace);
+                    reinterpret_cast<float*>(currentColor.color.data())[0] = r;
+                    reinterpret_cast<float*>(currentColor.color.data())[1] = g;
+                    reinterpret_cast<float*>(currentColor.color.data())[2] = b;
+                    currentColor.color.setOpacity(OPACITY_OPAQUE_F);
+                    firstDefinition = true;
+                }
+                else {
+                    warnPigment << "Color space not implemented:" << model << "(line" << colorValueE.lineNumber() << ", column "<< colorValueE.columnNumber() << ")";
+                }
+            }
+            if (firstDefinition) {
+                materialsBook.insert(currentColor.id, currentColor);
+            }
+            else {
+                warnPigment << "No supported color  spaces for the current color (line" << colorElement.lineNumber() << ", column "<< colorElement.columnNumber() << ")";
+                return false;
+            }
+        }
+        // End colors
+        // Now decide which ones will go into the palette
+
+        for(;!swatch.isNull(); swatch = swatch.nextSiblingElement()) {
+            QString type = swatch.tagName();
+            if (type.isEmpty() || type.isNull()) {
+                warnPigment << "Invalid swatch/group definition (no id) (line" << swatch.lineNumber() << ", column" << swatch.columnNumber() << ")";
+                return false;
+            }
+            else if (type == "swatch") {
+                QString id = swatch.attribute("material");
+                if (id.isEmpty() || id.isNull()) {
+                    warnPigment << "Invalid swatch definition (no material id) (line" << swatch.lineNumber() << ", column" << swatch.columnNumber() << ")";
+                    return false;
+                }
+                if (materialsBook.contains(id)) {
+                    add(materialsBook.value(id));
+                }
+                else {
+                    warnPigment << "Invalid swatch definition (material not found) (line" << swatch.lineNumber() << ", column" << swatch.columnNumber() << ")";
+                    return false;
+                }
+            }
+            else if (type == "group") {
+                QDomElement groupMetadata = swatch.firstChildElement("metadata");
+                if (groupMetadata.isNull()) {
+                    warnPigment << "Invalid group definition (missing metadata) (line" << groupMetadata.lineNumber() << ", column" << groupMetadata.columnNumber() << ")";
+                    return false;
+                }
+                QDomElement groupTitle = metadata.firstChildElement("dc:title");
+                if (groupTitle.isNull()) {
+                    warnPigment << "Invalid group definition (missing title) (line" << groupTitle.lineNumber() << ", column" << groupTitle.columnNumber() << ")";
+                    return false;
+                }
+                QString currentGroupName = groupTitle.text();
+
+                QDomElement groupSwatch = swatch.firstChildElement("swatch");
+
+                while(!groupSwatch.isNull()) {
+                    QString id = groupSwatch.attribute("material");
+                    if (id.isEmpty() || id.isNull()) {
+                        warnPigment << "Invalid swatch definition (no material id) (line" << groupSwatch.lineNumber() << ", column" << groupSwatch.columnNumber() << ")";
+                        return false;
+                    }
+                    if (materialsBook.contains(id)) {
+                        add(materialsBook.value(id), currentGroupName);
+                    }
+                    else {
+                        warnPigment << "Invalid swatch definition (material not found) (line" << groupSwatch.lineNumber() << ", column" << groupSwatch.columnNumber() << ")";
+                        return false;
+                    }
+                    groupSwatch = groupSwatch.nextSiblingElement("swatch");
+                }
+            }
+        }
+        // End palette
+    }
+
+    buf.close();
+    return true;
+}

@@ -54,6 +54,7 @@
 #include <QTemporaryFile>
 #include <kbackup.h>
 
+#include <QTextBrowser>
 #include <QApplication>
 #include <QBuffer>
 #include <QDesktopServices>
@@ -301,6 +302,7 @@ public:
 
     QTimer autoSaveTimer;
     QString lastErrorMessage; // see openFile()
+    QString lastWarningMessage;
     int autoSaveDelay {300}; // in seconds, 0 to disable.
     bool modifiedAfterAutosave;
     bool isAutosaving;
@@ -1031,6 +1033,43 @@ bool KisDocument::openUrl(const QUrl &_url, KisDocument::OpenUrlFlags flags)
     return ret;
 }
 
+class DlgLoadMessages : public KoDialog {
+public:
+    DlgLoadMessages(const QString &title, const QString &message, const QStringList &warnings) {
+        setWindowTitle(title);
+        setWindowIcon(KisIconUtils::loadIcon("dialog-warning"));
+        QWidget *page = new QWidget(this);
+        QVBoxLayout *layout = new QVBoxLayout(page);
+        QHBoxLayout *hlayout = new QHBoxLayout();
+        QLabel *labelWarning= new QLabel();
+        labelWarning->setPixmap(KisIconUtils::loadIcon("dialog-warning").pixmap(32, 32));
+        hlayout->addWidget(labelWarning);
+        hlayout->addWidget(new QLabel(message));
+        layout->addLayout(hlayout);
+        QTextBrowser *browser = new QTextBrowser();
+        QString warning = "<html><body><p><b>";
+        if (warnings.size() == 1) {
+            warning += "</b> Reason:</p>";
+        }
+        else {
+            warning += "</b> Reasons:</p>";
+        }
+        warning += "<p/><ul>";
+
+        Q_FOREACH(const QString &w, warnings) {
+            warning += "\n<li>" + w + "</li>";
+        }
+        warning += "</ul>";
+        browser->setHtml(warning);
+        browser->setMinimumHeight(200);
+        browser->setMinimumWidth(400);
+        layout->addWidget(browser);
+        setMainWidget(page);
+        setButtons(KoDialog::Ok);
+        resize(minimumSize());
+    }
+};
+
 bool KisDocument::openFile()
 {
     //dbgUI <<"for" << localFilePath();
@@ -1071,11 +1110,20 @@ bool KisDocument::openFile()
     if (status != KisImportExportFilter::OK) {
         QString msg = KisImportExportFilter::conversionStatusString(status);
         if (!msg.isEmpty()) {
-            QString errorMsg(i18n("Could not open %2.\nReason: %1.\n%3", msg, prettyPathOrUrl(), errorMessage()));
-            QMessageBox::critical(0, i18nc("@title:window", "Krita"), errorMsg);
+            DlgLoadMessages dlg(i18nc("@title:window", "Krita"),
+                                i18n("Could not open %2.\nReason: %1.", msg, prettyPathOrUrl()),
+                                errorMessage().split("\n") + warningMessage().split("\n"));
+            dlg.exec();
         }
         clearFileProgressUpdater();
         return false;
+    }
+    else if (!warningMessage().isEmpty()) {
+        DlgLoadMessages dlg(i18nc("@title:window", "Krita"),
+                            i18n("There were problems opening %1.", prettyPathOrUrl()),
+                            warningMessage().split("\n"));
+        dlg.exec();
+        setUrl(QUrl());
     }
 
     setMimeTypeAfterLoading(typeName);
@@ -1258,6 +1306,17 @@ QString KisDocument::errorMessage() const
 {
     return d->lastErrorMessage;
 }
+
+void KisDocument::setWarningMessage(const QString& warningMsg)
+{
+    d->lastWarningMessage = warningMsg;
+}
+
+QString KisDocument::warningMessage() const
+{
+    return d->lastWarningMessage;
+}
+
 
 void KisDocument::removeAutoSaveFiles()
 {
@@ -1672,11 +1731,15 @@ bool KisDocument::isAutosaving() const
 bool KisDocument::prepareLocksForSaving()
 {
     KisImageSP copiedImage;
-
+    // XXX: Restore this when
+    // a) cloning works correctly and
+    // b) doesn't take ages because it needs to refresh its entire graph and finally,
+    // c) we do use the saving image to save in the background.
     {
         Private::SafeSavingLocker locker(d, this);
         if (locker.successfullyLocked()) {
-            copiedImage = d->image->clone(true);
+
+            copiedImage = d->image; //->clone(true);
         }
         else if (!isAutosaving()) {
             // even though it is a recovery operation, we should ensure we do not enter saving twice!
@@ -1685,8 +1748,8 @@ bool KisDocument::prepareLocksForSaving()
             if (l.owns_lock()) {
                 d->lastErrorMessage = i18n("The image was still busy while saving. Your saved image might be incomplete.");
                 d->image->lock();
-                copiedImage = d->image->clone(true);
-                copiedImage->initialRefreshGraph();
+                copiedImage = d->image; //->clone(true);
+                //copiedImage->initialRefreshGraph();
                 d->image->unlock();
             }
         }

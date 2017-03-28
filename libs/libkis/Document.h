@@ -41,7 +41,7 @@ public:
 
     bool operator==(const Document &other) const;
     bool operator!=(const Document &other) const;
-    
+
 public Q_SLOTS:
 
     /**
@@ -423,6 +423,43 @@ public Q_SLOTS:
      * @return a QImage representing the layer contents.
      */
     QImage thumbnail(int w, int h) const;
+
+
+    /**
+     * Why this should be used, When it should be used, How it should be used,
+     * and warnings about when not.
+     */
+    void lock();
+
+    /**
+     * Why this should be used, When it should be used, How it should be used,
+     * and warnings about when not.
+     */
+    void unlock();
+
+    /**
+     * Why this should be used, When it should be used, How it should be used,
+     * and warnings about when not.
+     */
+    void waitForDone();
+
+    /**
+     * Why this should be used, When it should be used, How it should be used,
+     * and warnings about when not.
+     */
+    bool tryBarrierLock();
+
+    /**
+     * Why this should be used, When it should be used, How it should be used,
+     * and warnings about when not.
+     */
+    bool isIdle();
+
+    /**
+     * Starts a synchronous recomposition of the projection: everything will
+     * wait until the image is fully recomputed.
+     */
+    void refreshProjection();
 
 private:
 

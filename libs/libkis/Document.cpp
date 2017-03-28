@@ -166,9 +166,7 @@ bool Document::setColorProfile(const QString &value)
     if (!d->document->image()) return false;
     const KoColorProfile *profile = KoColorSpaceRegistry::instance()->profileByName(value);
     if (!profile) return false;
-    d->document->image()->lock();
     bool retval = d->document->image()->assignImageProfile(profile);
-    d->document->image()->unlock();
     d->document->image()->setModified();
     d->document->image()->initialRefreshGraph();
     return retval;
@@ -180,13 +178,11 @@ bool Document::setColorSpace(const QString &colorModel, const QString &colorDept
     if (!d->document->image()) return false;
     const KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->colorSpace(colorModel, colorDepth, colorProfile);
     if (!colorSpace) return false;
-    d->document->image()->lock();
 
     d->document->image()->convertImageColorSpace(colorSpace,
                                                  KoColorConversionTransformation::IntentPerceptual,
                                                  KoColorConversionTransformation::HighQuality | KoColorConversionTransformation::NoOptimization);
 
-    d->document->image()->unlock();
     d->document->image()->setModified();
     d->document->image()->initialRefreshGraph();
     return true;
@@ -473,6 +469,43 @@ QImage Document::thumbnail(int w, int h) const
 {
     if (!d->document || !d->document->image()) return QImage();
     return d->document->generatePreview(QSize(w, h)).toImage();
+}
+
+
+void Document::lock()
+{
+    if (!d->document || !d->document->image()) return;
+    d->document->image()->barrierLock();
+}
+
+void Document::unlock()
+{
+    if (!d->document || !d->document->image()) return;
+    d->document->image()->unlock();
+}
+
+void Document::waitForDone()
+{
+    if (!d->document || !d->document->image()) return;
+    d->document->image()->waitForDone();
+}
+
+bool Document::tryBarrierLock()
+{
+    if (!d->document || !d->document->image()) return false;
+    return d->document->image()->tryBarrierLock();
+}
+
+bool Document::isIdle()
+{
+    if (!d->document || !d->document->image()) return false;
+    return d->document->image()->isIdle();
+}
+
+void Document::refreshProjection()
+{
+    if (!d->document || !d->document->image()) return;
+    d->document->image()->refreshGraph();
 }
 
 QPointer<KisDocument> Document::document() const

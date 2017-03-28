@@ -31,6 +31,7 @@ public:
     KisVideoExport(QObject *parent, const QVariantList &);
     virtual ~KisVideoExport();
 public:
+    virtual bool supportsIO() const { return false; }
     virtual KisImportExportFilter::ConversionStatus convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration = 0);
 
     KisPropertiesConfigurationSP defaultConfiguration(const QByteArray& from, const QByteArray& to) const;

@@ -22,7 +22,7 @@
 
 #include "KoStore.h"
 
-class KZip;
+class SaveZip;
 class KArchiveDirectory;
 class QUrl;
 
@@ -61,11 +61,10 @@ protected:
 
 private:
 
-    /// The archive
-    KZip * m_pZip;
+    // The archive
+    SaveZip * m_pZip;
 
-    /** In "Read" mode this pointer is pointing to the
-    current directory in the archive to speed up the verification process */
+    // In "Read" mode this pointer is pointing to the  current directory in the archive to speed up the verification process
     const KArchiveDirectory* m_currentDir;
 
     Q_DECLARE_PRIVATE(KoStore)

@@ -49,7 +49,7 @@ class KisBrushExport : public KisImportExportFilter
 public:
     KisBrushExport(QObject *parent, const QVariantList &);
     virtual ~KisBrushExport();
-public:
+    virtual bool supportsIO() const { return false; }
     virtual KisImportExportFilter::ConversionStatus convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration = 0);
     KisPropertiesConfigurationSP defaultConfiguration(const QByteArray& from = "", const QByteArray& to = "") const;
     KisPropertiesConfigurationSP lastSavedConfiguration(const QByteArray &from = "", const QByteArray &to = "") const;

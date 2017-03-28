@@ -30,18 +30,29 @@
 
 #include <QUrl>
 
+class SaveZip : public KZip {
+public:
+    SaveZip(const QString &filename) : KZip(filename) {}
+    SaveZip(QIODevice *dev) : KZip(dev) {}
+    virtual ~SaveZip() {}
+    void resetDevice() {
+        closeArchive();
+        setDevice(0);
+    }
+};
+
 KoZipStore::KoZipStore(const QString & _filename, Mode mode, const QByteArray & appIdentification,
                        bool writeMimetype)
     : KoStore(mode, writeMimetype)
 {
-    debugStore << "KoZipStore Constructor filename =" << _filename
-               << " mode = " << int(mode)
-               << " mimetype = " << appIdentification << endl;
+//    qDebug() << "KoZipStore Constructor filename =" << _filename
+//               << " mode = " << int(mode)
+//               << " mimetype = " << appIdentification;
     Q_D(KoStore);
 
     d->localFileName = _filename;
 
-    m_pZip = new KZip(_filename);
+    m_pZip = new SaveZip(_filename);
 
     init(appIdentification);   // open the zip file and init some vars
 }
@@ -50,7 +61,11 @@ KoZipStore::KoZipStore(QIODevice *dev, Mode mode, const QByteArray & appIdentifi
                        bool writeMimetype)
     : KoStore(mode, writeMimetype)
 {
-    m_pZip = new KZip(dev);
+//    qDebug() << "KoZipStore Constructor device =" << dev
+//               << " mode = " << int(mode)
+//               << " mimetype = " << appIdentification;
+
+    m_pZip = new SaveZip(dev);
     init(appIdentification);
 }
 
@@ -61,7 +76,7 @@ KoZipStore::KoZipStore(QWidget* window, const QUrl &_url, const QString & _filen
     debugStore << "KoZipStore Constructor url" << _url.url(QUrl::PreferLocalFile)
                << " filename = " << _filename
                << " mode = " << int(mode)
-               << " mimetype = " << appIdentification << endl;
+               << " mimetype = " << appIdentification;
     Q_D(KoStore);
 
     d->url = _url;
@@ -76,16 +91,27 @@ KoZipStore::KoZipStore(QWidget* window, const QUrl &_url, const QString & _filen
         f.close();
     }
 
-    m_pZip = new KZip(d->localFileName);
+    m_pZip = new SaveZip(d->localFileName);
     init(appIdentification);   // open the zip file and init some vars
 }
 
 KoZipStore::~KoZipStore()
 {
     Q_D(KoStore);
-    debugStore << "KoZipStore::~KoZipStore";
-    if (!d->finalized)
-        finalize(); // ### no error checking when the app forgot to call finalize itself
+    bool sf = false;
+    if (m_pZip && m_pZip->device()) {
+        sf = true;
+    }
+
+//    qDebug() << "KoZipStore::~KoZipStore" << d->localFileName << m_pZip << m_pZip->device() << "savefile" << sf;
+    if (m_pZip->device() && m_pZip->device()->inherits("QSaveFile")) {
+        m_pZip->resetDevice(); // otherwise, kzip's destructor will call close(), which aborts on a qsavefile
+    }
+    else {
+        if (!d->finalized) {
+            finalize(); // ### no error checking when the app forgot to call finalize itself
+        }
+    }
     delete m_pZip;
 
     // When writing, we write to a temp file that then gets copied over the original filename
@@ -136,7 +162,12 @@ void KoZipStore::setCompressionEnabled(bool e)
 
 bool KoZipStore::doFinalize()
 {
-    return m_pZip->close();
+    if (m_pZip && m_pZip->device() && !m_pZip->device()->inherits("QSaveFile")) {
+        return m_pZip->close();
+    }
+    else {
+        return true;
+    }
 }
 
 bool KoZipStore::openWrite(const QString& name)

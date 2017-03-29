@@ -89,30 +89,30 @@ public:
 
 
     virtual KisHLineIteratorSP createHLineIteratorNG(KisDataManager *dataManager, qint32 x, qint32 y, qint32 w, qint32 offsetX, qint32 offsetY) {
-        return new KisHLineIterator2(dataManager, x, y, w, offsetX, offsetY, true);
+        return new KisHLineIterator2(dataManager, x, y, w, offsetX, offsetY, true, m_d->cacheInvalidator());
     }
 
     virtual KisHLineConstIteratorSP createHLineConstIteratorNG(KisDataManager *dataManager, qint32 x, qint32 y, qint32 w, qint32 offsetX, qint32 offsetY) const {
-        return new KisHLineIterator2(dataManager, x, y, w, offsetX, offsetY, false);
+        return new KisHLineIterator2(dataManager, x, y, w, offsetX, offsetY, false, m_d->cacheInvalidator());
     }
 
 
     virtual KisVLineIteratorSP createVLineIteratorNG(qint32 x, qint32 y, qint32 w) {
         m_d->cache()->invalidate();
-        return new KisVLineIterator2(m_d->dataManager().data(), x, y, w, m_d->x(), m_d->y(), true);
+        return new KisVLineIterator2(m_d->dataManager().data(), x, y, w, m_d->x(), m_d->y(), true, m_d->cacheInvalidator());
     }
 
     virtual KisVLineConstIteratorSP createVLineConstIteratorNG(qint32 x, qint32 y, qint32 w) const {
-        return new KisVLineIterator2(m_d->dataManager().data(), x, y, w, m_d->x(), m_d->y(), false);
+        return new KisVLineIterator2(m_d->dataManager().data(), x, y, w, m_d->x(), m_d->y(), false, m_d->cacheInvalidator());
     }
 
     virtual KisRandomAccessorSP createRandomAccessorNG(qint32 x, qint32 y) {
         m_d->cache()->invalidate();
-        return new KisRandomAccessor2(m_d->dataManager().data(), x, y, m_d->x(), m_d->y(), true);
+        return new KisRandomAccessor2(m_d->dataManager().data(), x, y, m_d->x(), m_d->y(), true, m_d->cacheInvalidator());
     }
 
     virtual KisRandomConstAccessorSP createRandomConstAccessorNG(qint32 x, qint32 y) const {
-        return new KisRandomAccessor2(m_d->dataManager().data(), x, y, m_d->x(), m_d->y(), false);
+        return new KisRandomAccessor2(m_d->dataManager().data(), x, y, m_d->x(), m_d->y(), false, m_d->cacheInvalidator());
     }
 
     virtual void fastBitBlt(KisPaintDeviceSP src, const QRect &rect) {
@@ -287,7 +287,7 @@ public:
         if (!splitRect.isSplit()) {
             return KisPaintDeviceStrategy::createHLineIteratorNG(dataManager, x, y, w, offsetX, offsetY);
         }
-        return new KisWrappedHLineIterator(dataManager, splitRect, offsetX, offsetY, true);
+        return new KisWrappedHLineIterator(dataManager, splitRect, offsetX, offsetY, true, m_d->cacheInvalidator());
     }
 
     virtual KisHLineConstIteratorSP createHLineConstIteratorNG(KisDataManager *dataManager, qint32 x, qint32 y, qint32 w, qint32 offsetX, qint32 offsetY) const {
@@ -295,7 +295,7 @@ public:
         if (!splitRect.isSplit()) {
             return KisPaintDeviceStrategy::createHLineConstIteratorNG(dataManager, x, y, w, offsetX, offsetY);
         }
-        return new KisWrappedHLineIterator(dataManager, splitRect, offsetX, offsetY, false);
+        return new KisWrappedHLineIterator(dataManager, splitRect, offsetX, offsetY, false, m_d->cacheInvalidator());
     }
 
     virtual KisVLineIteratorSP createVLineIteratorNG(qint32 x, qint32 y, qint32 h) {
@@ -305,7 +305,7 @@ public:
         if (!splitRect.isSplit()) {
             return KisPaintDeviceStrategy::createVLineIteratorNG(x, y, h);
         }
-        return new KisWrappedVLineIterator(m_d->dataManager().data(), splitRect, m_d->x(), m_d->y(), true);
+        return new KisWrappedVLineIterator(m_d->dataManager().data(), splitRect, m_d->x(), m_d->y(), true, m_d->cacheInvalidator());
     }
 
     virtual KisVLineConstIteratorSP createVLineConstIteratorNG(qint32 x, qint32 y, qint32 h) const {
@@ -313,16 +313,16 @@ public:
         if (!splitRect.isSplit()) {
             return KisPaintDeviceStrategy::createVLineConstIteratorNG(x, y, h);
         }
-        return new KisWrappedVLineIterator(m_d->dataManager().data(), splitRect, m_d->x(), m_d->y(), false);
+        return new KisWrappedVLineIterator(m_d->dataManager().data(), splitRect, m_d->x(), m_d->y(), false, m_d->cacheInvalidator());
     }
 
     virtual KisRandomAccessorSP createRandomAccessorNG(qint32 x, qint32 y) {
         m_d->cache()->invalidate();
-        return new KisWrappedRandomAccessor(m_d->dataManager().data(), x, y, m_d->x(), m_d->y(), true, m_wrapRect);
+        return new KisWrappedRandomAccessor(m_d->dataManager().data(), x, y, m_d->x(), m_d->y(), true, m_d->cacheInvalidator(), m_wrapRect);
     }
 
     virtual KisRandomConstAccessorSP createRandomConstAccessorNG(qint32 x, qint32 y) const {
-        return new KisWrappedRandomAccessor(m_d->dataManager().data(), x, y, m_d->x(), m_d->y(), false, m_wrapRect);
+        return new KisWrappedRandomAccessor(m_d->dataManager().data(), x, y, m_d->x(), m_d->y(), false, m_d->cacheInvalidator(), m_wrapRect);
     }
 
     void fastBitBltImpl(KisDataManagerSP srcDataManager, const QRect &rect) {

@@ -82,6 +82,8 @@ KisInputManager::KisInputManager(QObject *parent)
 {
     d->setupActions();
 
+    connect(KoToolManager::instance(), SIGNAL(aboutToChangeTool(KoCanvasController*)),
+            SLOT(slotAboutToChangeTool()));
     connect(KoToolManager::instance(), SIGNAL(changedTool(KoCanvasController*,int)),
             SLOT(slotToolChanged()));
     connect(&d->moveEventCompressor, SIGNAL(timeout()), SLOT(slotCompressedMoveEvent()));
@@ -564,6 +566,14 @@ KisToolProxy* KisInputManager::toolProxy() const
 QTouchEvent *KisInputManager::lastTouchEvent() const
 {
     return d->lastTouchEvent;
+}
+
+void KisInputManager::slotAboutToChangeTool()
+{
+    QPointF currentLocalPos =
+        canvas()->canvasWidget()->mapFromGlobal(QCursor::pos());
+
+    d->matcher.lostFocusEvent(currentLocalPos);
 }
 
 void KisInputManager::slotToolChanged()

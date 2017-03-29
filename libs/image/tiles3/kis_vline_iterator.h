@@ -38,7 +38,7 @@ public:
 
 
 public:
-    KisVLineIterator2(KisDataManager *dataManager, qint32 x, qint32 y, qint32 h, qint32 offsetX, qint32 offsetY, bool writable);
+    KisVLineIterator2(KisDataManager *dataManager, qint32 x, qint32 y, qint32 h, qint32 offsetX, qint32 offsetY, bool writable, KisIteratorCompleteListener *completeListener);
     ~KisVLineIterator2();
 
     virtual void resetPixelPos();

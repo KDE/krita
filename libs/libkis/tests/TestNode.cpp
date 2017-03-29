@@ -90,7 +90,6 @@ void TestNode::testPixelData()
         for (int j = 0; j < 100 ; j++) {
             QColor pixel;
             layer->paintDevice()->pixel(i, j, &pixel);
-            qDebug() << i << j << pixel;
             QVERIFY(pixel == QColor(Qt::black));
         }
     }

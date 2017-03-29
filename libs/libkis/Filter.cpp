@@ -89,22 +89,9 @@ bool Filter::apply(Node *node, int x, int y, int w, int h)
     KisPaintDeviceSP dev = node->paintDevice();
     if (!dev) return false;
 
-
     QRect applyRect = QRect(x, y, w, h);
-
-    KisImageSP image = node->image();
-    if (image) {
-        image->lock();
-    }
-
     KisFilterConfigurationSP config = static_cast<KisFilterConfiguration*>(d->configuration->configuration().data());
-
     filter->process(dev, applyRect, config);
-
-    if (image) {
-        image->unlock();
-        image->initialRefreshGraph();
-    }
     return true;
 }
 

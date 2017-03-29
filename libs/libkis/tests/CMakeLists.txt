@@ -10,5 +10,6 @@ ecm_add_tests(
     TestChannel.cpp
     TestDocument.cpp
     TestNode.cpp
+    TestFilter.cpp
     NAME_PREFIX "libs-kritalibkis-"
     LINK_LIBRARIES kritalibkis Qt5::Test)

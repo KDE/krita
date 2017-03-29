@@ -1,6 +1,6 @@
 #!/bin/bash
 
-RELEASE=krita-3.0.99.90
+RELEASE=3.1.2.0
 
 # Enter a CentOS 6 chroot (you could use other methods)
 # git clone https://github.com/probonopd/AppImageKit.git
@@ -28,6 +28,8 @@ grep -r "CentOS release 6" /etc/redhat-release || exit 1
 # clean up
 rm -rf /out/*
 rm -rf /krita.appdir
+rm -rf /krita_build
+mkdir /krita_build
 
 # qjsonparser, used to add metadata to the plugins needs to work in a en_US.UTF-8 environment. That's
 # not always set correctly in CentOS 6.7
@@ -61,14 +63,16 @@ ln -s lib lib64
 
 # fetch and build krita
 cd /
-wget http://files.kde.org/krita/3/source/$RELEASE.tar.xz
-tar -xf $RELEASE.tar.xz
+#wget http://files.kde.org/krita/krita-$RELEASE.tar.gz
+#wget http://www.valdyas.org/~boud/krita-$RELEASE.tar.gz
+wget http://download.kde.org/unstable/krita/$RELEASE/krita-$RELEASE.tar.gz
+tar -xf krita-$RELEASE.tar.gz
 cd /krita_build
-rm -rf *
-cmake3 ../$RELEASE \
+cmake3 ../krita-$RELEASE \
     -DCMAKE_INSTALL_PREFIX:PATH=/krita.appdir/usr \
     -DDEFINE_NO_DEPRECATED=1 \
     -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+    -DPACKAGERS_BUILD=1 \
     -DBUILD_TESTING=FALSE \
     -DKDE4_BUILD_TESTS=FALSE \
     -DHAVE_MEMORY_LEAK_TRACKER=FALSE
@@ -184,6 +188,8 @@ rm -rf usr/share/ECM/ || true
 rm -rf usr/share/gettext || true
 rm -rf usr/share/pkgconfig || true
 
+mv usr/share/locale usr/share/krita || true
+
 strip usr/lib/kritaplugins/* usr/bin/* usr/lib/* || true
 
 # Since we set /krita.appdir as the prefix, we need to patch it away too (FIXME)
@@ -221,14 +227,6 @@ cd /
 
 APP=krita
 
-# Source functions
-wget -q https://github.com/probonopd/AppImages/raw/master/functions.sh -O ./functions.sh
-. ./functions.sh
-
-# Install desktopintegration in usr/bin/krita.wrapper -- feel free to edit it
-cd /krita.appdir
-get_desktopintegration krita
-
 cd /
 
 VER=$(grep "#define KRITA_VERSION_STRING" krita_build/libs/version/kritaversion.h | cut -d '"' -f 2)
@@ -250,9 +248,3 @@ rm -f /out/*.AppImage || true
 AppImageKit/AppImageAssistant.AppDir/package /krita.appdir/ /out/$APPIMAGE
 
 chmod a+rwx /out/$APPIMAGE # So that we can edit the AppImage outside of the Docker container
-
-cd /krita.appdir
-mv AppRun krita
-cd /
-mv krita.appdir $APP"-"$VERSION"-x86_64
-tar -czf $APP"-"$VERSION"-x86_64.tgz $APP"-"$VERSION"-x86_64

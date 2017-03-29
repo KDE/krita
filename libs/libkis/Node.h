@@ -26,9 +26,9 @@
 #include "libkis.h"
 
 /**
- * Node represents a layer or mask in a Krita image's Node hierarchy. Group layers can contain 
+ * Node represents a layer or mask in a Krita image's Node hierarchy. Group layers can contain
  * other layers and masks; layers can contain masks.
- * 
+ *
  */
 class KRITALIBKIS_EXPORT Node : public QObject
 {
@@ -162,7 +162,7 @@ public Q_SLOTS:
      * <li>F16: half, 16 bits floating point. Only available if Krita was built with OpenEXR</li>
      * <li>F32: 32 bits floating point</li>
      * </ul>
-     * @param colorProfile a valid color profile for this color model and color depth combinatiojn.
+     * @param colorProfile a valid color profile for this color model and color depth combination.
      */
     bool setColorSpace(const QString &colorModel, const QString &colorDepth, const QString &colorProfile);
 

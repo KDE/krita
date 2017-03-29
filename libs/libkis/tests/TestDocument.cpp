@@ -15,7 +15,7 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
-#include "TestKrita.h"
+#include "TestDocument.h"
 #include <QTest>
 
 #include <KritaVersionWrapper.h>
@@ -23,42 +23,18 @@
 #include <Window.h>
 #include <Document.h>
 
-void TestKrita::initTestCase()
+void TestDocument::initTestCase()
 {
-    Krita::instance();
 }
 
-void TestKrita::testKrita()
+void TestDocument::testDocument()
 {
-    Krita *krita = Krita::instance();
-    QVERIFY2(krita, "Could not create krita instance.");
-    QCOMPARE(krita->batchmode(), false);
-    krita->setBatchmode(true);
-    QCOMPARE(krita->batchmode(), true);
-
-    QVERIFY(krita->filters().size() > 0);
-    QVERIFY(krita->filter(krita->filters().first()) != 0);
-
-    //QVERIFY(krita->generators().size() > 0);
-    //QVERIFY(krita->generator(krita->generators().first()) != 0);
-
-    QStringList profiles = krita->profiles("RGBA", "U8");
-    QVERIFY(profiles.size() != 0);
-    Document *doc = krita->createDocument(100, 100, "test", "RGBA", "U8", profiles.first());
-    QVERIFY(doc);
-    QCOMPARE(krita->documents().size(), 1);
-
-
 }
 
-void TestKrita::cleanupTestCase()
+void TestDocument::cleanupTestCase()
 {
-    if (m_win) {
-        m_win->close();
-    }
-    QTest::qWait(1000);
 }
 
 
-QTEST_MAIN(TestKrita)
+QTEST_MAIN(TestDocument)
 

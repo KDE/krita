@@ -472,7 +472,7 @@ Node *Node::mergeDown()
 {
     if (!d->node) return 0;
     if (!qobject_cast<KisLayer*>(d->node.data())) return 0;
-    if (!d->node->prevSibling()) return 0;
+    if (!d->node->nextSibling()) return 0;
     if (!d->node->parent()) return 0;
 
     int index = d->node->parent()->index(d->node->prevSibling());

@@ -25,11 +25,10 @@ class TestDocument : public QObject
 {
     Q_OBJECT
 private Q_SLOTS:
-    void initTestCase();
-    void testDocument();
-    void cleanupTestCase();
-private:
-
+    void testSetColorSpace();
+    void testSetColorProfile();
+    void testPixelData();
+    void testThumbnail();
 };
 
 #endif

@@ -19,21 +19,114 @@
 #include <QTest>
 
 #include <KritaVersionWrapper.h>
+#include <QTest>
+#include <QColor>
+#include <QDataStream>
+
+#include <KritaVersionWrapper.h>
+#include <Node.h>
 #include <Krita.h>
-#include <Window.h>
 #include <Document.h>
 
-void TestDocument::initTestCase()
+#include <KoColorSpaceRegistry.h>
+#include <KoColorProfile.h>
+#include <KoColor.h>
+
+#include <KisDocument.h>
+#include <kis_image.h>
+#include <kis_fill_painter.h>
+#include <kis_paint_layer.h>
+#include <KisPart.h>
+
+void TestDocument::testSetColorSpace()
 {
+    KisDocument *kisdoc = KisPart::instance()->createDocument();
+    KisImageSP image = new KisImage(0, 100, 100, KoColorSpaceRegistry::instance()->rgb8(), "test");
+    KisNodeSP layer = new KisPaintLayer(image, "test1", 255);
+    image->addNode(layer);
+    kisdoc->setCurrentImage(image);
+
+    Document d(kisdoc);
+    QStringList profiles = Krita().profiles("GRAYA", "U16");
+    d.setColorSpace("GRAYA", "U16", profiles.first());
+
+    QVERIFY(layer->colorSpace()->colorModelId().id() == "GRAYA");
+    QVERIFY(layer->colorSpace()->colorDepthId().id() == "U16");
+    QVERIFY(layer->colorSpace()->profile()->name() == "gray built-in");
 }
 
-void TestDocument::testDocument()
+void TestDocument::testSetColorProfile()
 {
+    KisDocument *kisdoc = KisPart::instance()->createDocument();
+    KisImageSP image = new KisImage(0, 100, 100, KoColorSpaceRegistry::instance()->rgb8(), "test");
+    KisNodeSP layer = new KisPaintLayer(image, "test1", 255);
+    image->addNode(layer);
+    kisdoc->setCurrentImage(image);
+
+    Document d(kisdoc);
+
+    QStringList profiles = Krita().profiles("RGBA", "U8");
+    Q_FOREACH(const QString &profile, profiles) {
+        d.setColorProfile(profile);
+        QVERIFY(image->colorSpace()->profile()->name() == profile);
+    }
 }
 
-void TestDocument::cleanupTestCase()
+void TestDocument::testPixelData()
 {
+    KisDocument *kisdoc = KisPart::instance()->createDocument();
+    KisImageSP image = new KisImage(0, 100, 100, KoColorSpaceRegistry::instance()->rgb8(), "test");
+    KisNodeSP layer = new KisPaintLayer(image, "test1", 255);
+    KisFillPainter gc(layer->paintDevice());
+    gc.fillRect(0, 0, 100, 100, KoColor(Qt::red, layer->colorSpace()));
+    image->addNode(layer);
+    kisdoc->setCurrentImage(image);
+
+    Document d(kisdoc);
+    d.refreshProjection();
+
+    QByteArray ba = d.pixelData(0, 0, 100, 100);
+    QDataStream ds(ba);
+    do {
+        quint8 channelvalue;
+        ds >> channelvalue;
+        QVERIFY(channelvalue == 0);
+        ds >> channelvalue;
+        QVERIFY(channelvalue == 0);
+        ds >> channelvalue;
+        QVERIFY(channelvalue == 255);
+        ds >> channelvalue;
+        QVERIFY(channelvalue == 255);
+    } while (!ds.atEnd());
 }
+
+void TestDocument::testThumbnail()
+{
+    KisDocument *kisdoc = KisPart::instance()->createDocument();
+    KisImageSP image = new KisImage(0, 100, 100, KoColorSpaceRegistry::instance()->rgb8(), "test");
+    KisNodeSP layer = new KisPaintLayer(image, "test1", 255);
+    KisFillPainter gc(layer->paintDevice());
+    gc.fillRect(0, 0, 100, 100, KoColor(Qt::red, layer->colorSpace()));
+    image->addNode(layer);
+    kisdoc->setCurrentImage(image);
+
+    Document d(kisdoc);
+    d.refreshProjection();
+
+    QImage thumb = d.thumbnail(10, 10);
+    thumb.save("thumb.png");
+    QVERIFY(thumb.width() == 10);
+    QVERIFY(thumb.height() == 10);
+    // Our thumbnail calculater in KisPaintDevice cannot make a filled 10x10 thumbnail from a 100x100 device,
+    // it makes it 10x10 empty, then puts 8x8 pixels in there... Not a bug in the Node class
+    for (int i = 0; i < 8; ++i) {
+        for (int j = 0; j < 8; ++j) {
+            QVERIFY(thumb.pixelColor(i, j) == QColor(Qt::red));
+        }
+    }
+
+}
+
 
 
 QTEST_MAIN(TestDocument)

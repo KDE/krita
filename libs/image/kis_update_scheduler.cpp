@@ -325,13 +325,15 @@ void KisUpdateScheduler::waitForDone()
 
 bool KisUpdateScheduler::tryBarrierLock()
 {
-    if(!m_d->updatesQueue.isEmpty() || !m_d->strokesQueue.isEmpty())
+    if(!m_d->updatesQueue.isEmpty() || !m_d->strokesQueue.isEmpty()) {
         return false;
+    }
 
     m_d->processingBlocked = true;
     m_d->updaterContext.waitForDone();
     if(!m_d->updatesQueue.isEmpty() || !m_d->strokesQueue.isEmpty()) {
         m_d->processingBlocked = false;
+        processQueues();
         return false;
     }
 

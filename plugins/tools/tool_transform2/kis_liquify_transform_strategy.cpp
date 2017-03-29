@@ -288,7 +288,7 @@ void KisLiquifyTransformStrategy::Private::recalculateTransformations()
         QTransform imageToRealThumbTransform =
             useFlakeOptimization ?
             scaleTransform :
-            QTransform();
+            q->thumbToImageTransform().inverted();
 
         QPointF origTLInFlake =
             imageToRealThumbTransform.map(transaction.originalTopLeft());

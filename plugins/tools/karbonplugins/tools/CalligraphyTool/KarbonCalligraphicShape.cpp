@@ -336,8 +336,14 @@ int KarbonCalligraphicShape::ccw(const QPointF &p1, const QPointF &p2,const QPoi
 
 void KarbonCalligraphicShape::setSize(const QSizeF &newSize)
 {
-    // QSizeF oldSize = size();
-    // TODO: check
+    QTransform matrix(resizeMatrix(newSize));
+    for (int i = 0; i < m_points.size(); ++i) {
+        m_points[i]->setPoint(matrix.map(m_points[i]->point()));
+    }
+    QPointF width(m_strokeConfig->getDouble("strokeWidth", 10.0), 0.0);
+    width = matrix.map(width);
+    //qreal finalWidth = qMax(width.x()+width.y()/2, 1.0);
+    m_strokeConfig->setProperty("strokeWidth", width.x());
     KoParameterShape::setSize(newSize);
 }
 

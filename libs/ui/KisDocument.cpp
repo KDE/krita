@@ -677,10 +677,8 @@ bool KisDocument::saveFile(KisPropertiesConfigurationSP exportConfiguration)
     if (outputMimeType.isEmpty()) {
         outputMimeType = d->outputMimeType = nativeFormatMimeType();
     }
-
-    if (!QFileInfo(url().toLocalFile()).isWritable()) {
+    if (QFileInfo(url().toLocalFile()).exists() && !QFileInfo(url().toLocalFile()).isWritable()) {
         setErrorMessage(i18n("%1 cannot be written to. Please save under a different name.", localFilePath()));
-
     }
     else {
         QApplication::setOverrideCursor(Qt::WaitCursor);

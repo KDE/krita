@@ -97,8 +97,8 @@ void DlgOffsetImage::slotMiddleOffset()
 {
     int offsetX = m_offsetSize.width() / 2;
     int offsetY = m_offsetSize.height() / 2;
-    m_page->offsetXdoubleSpinBox->setValue(offsetX);
-    m_page->offsetYdoubleSpinBox->setValue(offsetY);
+    m_page->offsetXdoubleSpinBox->changeValue(offsetX);
+    m_page->offsetYdoubleSpinBox->changeValue(offsetY);
 }
 
 void DlgOffsetImage::okClicked()

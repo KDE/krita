@@ -68,14 +68,33 @@ void KisOpenGL::initialize()
     QOpenGLFunctions  *funcs = context.functions();
     funcs->initializeOpenGLFunctions();
 
+#ifndef GL_RENDERER
+#  define GL_RENDERER 0x1F01
+#endif
+    Renderer = QString((const char*)funcs->glGetString(GL_RENDERER));
+    /**
+     * Warn about Intel's broken video drivers
+     */
+#if defined Q_OS_WIN
+    KisConfig cfg;
+    if (cfg.useOpenGL() && Renderer.startsWith("Intel") && !cfg.readEntry("WarnedAboutIntel", false)) {
+        QMessageBox::information(0,
+                                 i18nc("@title:window", "Krita: Warning"),
+                                 i18n("You have an Intel(R) HD Graphics video adapter.\n"
+                                      "If you experience problems like a crash, a black or blank screen,"
+                                      "please update your display driver to the latest version.\n\n"
+                                      "If Krita crashes, it will disable OpenGL rendering. Please restart Krita in that case.\n After updating your drivers you can re-enable OpenGL in Krita's Settings.\n"));
+        cfg.writeEntry("WarnedAboutIntel", true);
+    }
+#endif
     qDebug() << "OpenGL Info";
     qDebug() << "  Vendor: " << reinterpret_cast<const char *>(funcs->glGetString(GL_VENDOR));
-    qDebug() << "  Renderer: " << reinterpret_cast<const char *>(funcs->glGetString(GL_RENDERER));
+    qDebug() << "  Renderer: " << Renderer;
     qDebug() << "  Version: " << reinterpret_cast<const char *>(funcs->glGetString(GL_VERSION));
     qDebug() << "  Shading language: " << reinterpret_cast<const char *>(funcs->glGetString(GL_SHADING_LANGUAGE_VERSION));
     qDebug() << "  Requested format: " << QSurfaceFormat::defaultFormat();
     qDebug() << "  Current format:   " << context.format();
-
+    
     glMajorVersion = context.format().majorVersion();
     glMinorVersion = context.format().minorVersion();
     supportsDeprecatedFunctions = (context.format().options() & QSurfaceFormat::DeprecatedFunctions);
@@ -88,6 +107,7 @@ void KisOpenGL::initialize()
 
 void KisOpenGL::initializeContext(QOpenGLContext *ctx)
 {
+    KisConfig cfg;
     initialize();
 
     dbgUI << "OpenGL: Opening new context";
@@ -96,11 +116,6 @@ void KisOpenGL::initializeContext(QOpenGLContext *ctx)
     QSurfaceFormat format = ctx->format();
     QOpenGLFunctions *f = ctx->functions();
     f->initializeOpenGLFunctions();
-
-#ifndef GL_RENDERER
-#  define GL_RENDERER 0x1F01
-#endif
-    Renderer = QString((const char*)f->glGetString(GL_RENDERER));
 
     QFile log(QDesktopServices::storageLocation(QDesktopServices::TempLocation) + "/krita-opengl.txt");
     log.open(QFile::WriteOnly);
@@ -118,7 +133,7 @@ void KisOpenGL::initializeContext(QOpenGLContext *ctx)
 #ifdef HAVE_X11
     isOnX11 = true;
 #endif
-    KisConfig cfg;
+    
     if ((isOnX11 && Renderer.startsWith("AMD")) || cfg.forceOpenGLFenceWorkaround()) {
         NeedsFenceWorkaround = true;
     }
@@ -149,21 +164,6 @@ void KisOpenGL::initializeContext(QOpenGLContext *ctx)
         QPixmapCache::setCacheLimit(qMax(minCacheSize, cacheSize));
     }
 
-
-    /**
-     * Warn about Intel's broken video drivers
-     */
-#if defined Q_OS_WIN
-    if (cfg.useOpenGL() && Renderer.startsWith("Intel") && !cfg.readEntry("WarnedAboutIntel", false)) {
-        QMessageBox::information(0,
-                                 i18nc("@title:window", "Krita: Warning"),
-                                 i18n("You have an Intel(R) HD Graphics video adapter.\n"
-                                      "If you experience problems like a crash, a black or blank screen,"
-                                      "please update your display driver to the latest version.\n\n"
-                                      "If Krita crashes, it will disable OpenGL rendering. Please restart Krita in that case.\n After updating your drivers you can re-enable OpenGL in Krita's Settings.\n"));
-        cfg.writeEntry("WarnedAboutIntel", true);
-    }
-#endif
 
 }
 

@@ -73,7 +73,7 @@ Q_SIGNALS:
     void currentLayerChanged(const KoShapeLayer*);
 
 public:
-    void addShape(KoShape* shape) override;
+    void addShapes(const QList<KoShape*> shapes) override;
     void removeShape(KoShape* shape) override;
 
     QRectF documentRectInPixels() const override;

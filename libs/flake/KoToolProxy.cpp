@@ -498,6 +498,8 @@ bool KoToolProxy::paste()
         const KoViewConverter *converter = canvas->viewConverter();
         if (imageList.length() > 0 && factory && canvasWidget) {
             KUndo2Command *cmd = new KUndo2Command(kundo2_i18n("Paste Image"));
+            QList<KoShape*> pastedShapes;
+
             Q_FOREACH (const QImage &image, imageList) {
                 if (!image.isNull()) {
                     QPointF p = converter->viewToDocument(canvasWidget->mapFromGlobal(QCursor::pos()) + canvas->canvasController()->documentOffset()- canvasWidget->pos());
@@ -506,14 +508,17 @@ bool KoToolProxy::paste()
 
                     KoShape *shape = factory->createShape(&params, canvas->shapeController()->resourceManager());
                     shape->setPosition(p);
-
-                    // add shape to the document
-                    canvas->shapeController()->addShapeDirect(shape, cmd);
+                    pastedShapes << shape;
 
                     success = true;
                 }
             }
-            canvas->addCommand(cmd);
+
+            if (!pastedShapes.isEmpty()) {
+                // add shape to the document
+                canvas->shapeController()->addShapesDirect(pastedShapes, cmd);
+                canvas->addCommand(cmd);
+            }
         }
     }
     return success;

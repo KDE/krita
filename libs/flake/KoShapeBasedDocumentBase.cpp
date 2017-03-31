@@ -69,6 +69,11 @@ KoShapeBasedDocumentBase::~KoShapeBasedDocumentBase()
     delete d;
 }
 
+void KoShapeBasedDocumentBase::addShape(KoShape *shape)
+{
+    addShapes({shape});
+}
+
 void KoShapeBasedDocumentBase::shapesRemoved(const QList<KoShape*> & /*shapes*/, KUndo2Command * /*command*/)
 {
 }

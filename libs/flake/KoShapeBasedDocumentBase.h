@@ -50,7 +50,15 @@ public:
      * if the shape is one that should be currently shown on screen.
      * @param shape the new shape
      */
-    virtual void addShape(KoShape *shape) = 0;
+    void addShape(KoShape *shape);
+
+    /**
+     * Add shapes to the shape controller, allowing it to be seen and saved.
+     * The controller should add the shape to the ShapeManager instance(s) manually
+     * if the shape is one that should be currently shown on screen.
+     * @param shape the new shape
+     */
+    virtual void addShapes(const QList<KoShape*> shapes) = 0;
 
     /**
      * Remove a shape from the shape controllers control, allowing it to be deleted shortly after

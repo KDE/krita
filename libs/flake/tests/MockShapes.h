@@ -82,10 +82,12 @@ class KoToolProxy;
 class KRITAFLAKE_EXPORT MockShapeController : public KoShapeBasedDocumentBase
 {
 public:
-    void addShape(KoShape* shape) {
-        m_shapes.insert(shape);
-        if (m_shapeManager) {
-            m_shapeManager->addShape(shape);
+    void addShapes(const QList<KoShape*> shapes) {
+        Q_FOREACH (KoShape *shape, shapes) {
+            m_shapes.insert(shape);
+            if (m_shapeManager) {
+                m_shapeManager->addShape(shape);
+            }
         }
     }
     void removeShape(KoShape* shape) {

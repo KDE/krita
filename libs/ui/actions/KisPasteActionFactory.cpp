@@ -83,10 +83,7 @@ bool tryPasteShapes(bool pasteAtCursorPosition, KisViewManager *view)
             shapeManager->selection()->deselectAll();
 
             KUndo2Command *parentCommand = new KUndo2Command(kundo2_i18n("Paste shapes"));
-
-            Q_FOREACH (KoShape *shape, shapes) {
-                canvas->shapeController()->addShapeDirect(shape, parentCommand);
-            }
+            canvas->shapeController()->addShapesDirect(shapes, parentCommand);
 
             QPointF finalShapesOffset;
 

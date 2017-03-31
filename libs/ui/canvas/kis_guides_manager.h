@@ -68,6 +68,9 @@ public Q_SLOTS:
     void setSnapBoundingBox(bool value);
     void setSnapImageBounds(bool value);
     void setSnapImageCenter(bool value);
+
+    void slotUploadConfigToDocument();
+
 private:
     void setGuidesConfigImpl(const KisGuidesConfig &value, bool emitModified = true);
     void attachEventFilterImpl(bool value);

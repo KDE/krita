@@ -2123,7 +2123,7 @@ void KisMainWindow::checkSanity()
     // print error if the lcms engine is not available
     if (!KoColorSpaceEngineRegistry::instance()->contains("icc")) {
         // need to wait 1 event since exiting here would not work.
-        m_errorMessage = i18n("The Calligra LittleCMS color management plugin is not installed. Krita will quit now.");
+        m_errorMessage = i18n("The Krita LittleCMS color management plugin is not installed. Krita will quit now.");
         m_dieOnError = true;
         QTimer::singleShot(0, this, SLOT(showErrorAndDie()));
         return;
